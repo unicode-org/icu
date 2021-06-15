@@ -214,6 +214,16 @@ hsb{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyyMd",
+            }
             availableFormats{
                 Ed{"E, d."}
                 Gy{"y G"}
@@ -329,6 +339,16 @@ hsb{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMd",
+                "yyMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}

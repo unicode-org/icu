@@ -165,6 +165,32 @@
 # DateTime patterns (4 x values)
 //ldml/dates/calendars/calendar[@type="(%A)"]/(dateTimeFormat)s/\2Length[@type="(%A)"]/\2[@type="%A"]/pattern[@type="%A"]
      ; /calendar/$1/DateTimePatterns
+
+# ---- /calendar/xxx/DateTimeSkeletons
+# This is similar to DateTimePatterns above except that for this we do not have the DateTime patterns (4 x values, plus the duplicate value at index 8).
+
+# Time patterns (4 x values)
+//ldml/dates/calendars/calendar[@type="(%A)"]/(timeFormat)s/\2Length[@type="(%A)"]/\2[@type="%A"]/datetimeSkeleton
+     ; /calendar/$1/DateTimeSkeletons
+
+# Date patterns (4 x values)
+//ldml/dates/calendars/calendar[@type="(%A)"]/(dateFormat)s/\2Length[@type="(full)"]/\2[@type="%A"]/datetimeSkeleton
+     ; /calendar/$1/DateTimeSkeletons
+//ldml/dates/calendars/calendar[@type="(%A)"]/(dateFormat)s/\2Length[@type="(full)"]/\2[@type="%A"]/datetimeSkeleton[@numbers="(%A)"]
+     ; /calendar/$1/DateTimeSkeletons ;  values="{value}" $4 ; group
+//ldml/dates/calendars/calendar[@type="(%A)"]/(dateFormat)s/\2Length[@type="(long)"]/\2[@type="%A"]/datetimeSkeleton
+     ; /calendar/$1/DateTimeSkeletons
+//ldml/dates/calendars/calendar[@type="(%A)"]/(dateFormat)s/\2Length[@type="(long)"]/\2[@type="%A"]/datetimeSkeleton[@numbers="(%A)"]
+     ; /calendar/$1/DateTimeSkeletons ;  values="{value}" $4 ; group
+//ldml/dates/calendars/calendar[@type="(%A)"]/(dateFormat)s/\2Length[@type="(medium)"]/\2[@type="%A"]/datetimeSkeleton
+     ; /calendar/$1/DateTimeSkeletons
+//ldml/dates/calendars/calendar[@type="(%A)"]/(dateFormat)s/\2Length[@type="(medium)"]/\2[@type="%A"]/datetimeSkeleton[@numbers="(%A)"]
+     ; /calendar/$1/DateTimeSkeletons ;  values="{value}" $4 ; group
+//ldml/dates/calendars/calendar[@type="(%A)"]/(dateFormat)s/\2Length[@type="(short)"]/\2[@type="%A"]/datetimeSkeleton
+     ; /calendar/$1/DateTimeSkeletons
+//ldml/dates/calendars/calendar[@type="(%A)"]/(dateFormat)s/\2Length[@type="(short)"]/\2[@type="%A"]/datetimeSkeleton[@numbers="(%A)"]
+     ; /calendar/$1/DateTimeSkeletons ;  values="{value}" $4 ; group
+
 # ----
 
 //ldml/dates/calendars/calendar[@type="(%A)"]/dateTimeFormats/appendItems/appendItem[@request="(%A)"] ; /calendar/$1/appendItems/$2

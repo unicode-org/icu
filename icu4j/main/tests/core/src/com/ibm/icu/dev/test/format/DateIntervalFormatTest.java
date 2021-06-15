@@ -799,8 +799,8 @@ public class DateIntervalFormatTest extends TestFmwk {
         "zh_HK", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "jj", "\\u4E0A\\u534812\\u6642\\u81F31\\u6642",
         "zh_HK", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "hB", "\\u4E0A\\u534810\\u6642 \\u2013 \\u4E0B\\u53481\\u6642",
         "zh_HK", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "hB", "\\u51CC\\u666812\\u20131\\u6642",
-        "zh_HK", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "CC", "\\u4E0A\\u534810\\u6642 \\u2013 \\u4E0B\\u53481\\u6642",
-        "zh_HK", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "CC", "\\u51CC\\u666812\\u20131\\u6642",
+        "zh_HK", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "CC", "\\u4E0A\\u534810\\u6642\\u81F3\\u4E0B\\u53481\\u6642",
+        "zh_HK", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "CC", "\\u4E0A\\u534812\\u6642\\u81F31\\u6642",
         "hi_IN", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "jj", "10 am \\u2013 1 pm",
         "hi_IN", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "jj", "12\\u20131 am",
         "hi_IN", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "hB", "\\u0938\\u0941\\u092C\\u0939 10 \\u2013 \\u0926\\u094B\\u092A\\u0939\\u0930 1",
@@ -2340,7 +2340,7 @@ public class DateIntervalFormatTest extends TestFmwk {
 
         formatted = g.formatToValue(BCtoAD);
         assertEquals("Gregorian - BC to AD",
-                     "4 5, 123 BC, 6 AM \u2013 4 5, 124 AD, 6 AM",
+                     "4/5/123 B, 6 AM \u2013 4/5/124 A, 6 AM",
                      formatted.toString());
     }
 
@@ -2393,19 +2393,19 @@ public class DateIntervalFormatTest extends TestFmwk {
 
         FormattedDateInterval formatted = roc.formatToValue(bothAfterMG);
         assertEquals("roc calendar - both dates in MG Era",
-                     "民國1/1/2 6 上午 – 民國2/1/2 6 上午",
+                     "民國1/1/2 上午6時 – 民國2/1/2 上午6時",
                      formatted.toString());
         List<Field> expectedFields = getFields(formatted);
 
         formatted = roc.formatToValue(beforeAfterMG);
         assertEquals("roc calendar - prior MG Era and in MG Era",
-                     "民國前1年1月2日 6 上午 – 民國2年1月2日 6 上午",
+                     "民國前1年1月2日 上午6時 – 民國2年1月2日 上午6時",
                      formatted.toString());
         verifyFields(formatted, expectedFields);
 
         formatted = roc.formatToValue(bothBeforeMG);
         assertEquals("roc calendar - both dates prior MG Era",
-                     "民國前2/1/2 6 上午 – 民國前1/1/2 6 上午",
+                     "民國前2/1/2 上午6時 – 民國前1/1/2 上午6時",
                      formatted.toString());
         verifyFields(formatted, expectedFields);
     }
@@ -2450,7 +2450,7 @@ public class DateIntervalFormatTest extends TestFmwk {
 
         formatted = japanese.formatToValue(beforeAfterReiwa);
         assertEquals("japanese calendar - date before and in Reiwa",
-                     "平成31年3月2日 午前6時～令和元年5月4日 午前6時",
+                     "H31/3/2 午前6時～R1/5/4 午前6時",
                      formatted.toString());
         verifyFields(formatted, expectedFields);
     }

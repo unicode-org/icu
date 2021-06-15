@@ -657,7 +657,6 @@ be{
         BRL{"R$"}
         BSD{"B$"}
         BWP{"P"}
-        BYN{"Br"}
         BZD{"BZ$"}
         CAD{"CA$"}
         CLP{"$"}

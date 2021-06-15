@@ -250,6 +250,16 @@ ko{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "ahmszzzz",
+                "ahmsz",
+                "ahmmss",
+                "ahmm",
+                "UMMMEEEEd",
+                "UMMMd",
+                "yMd",
+                "yMd",
+            }
             availableFormats{
                 Bh{"B h시"}
                 Bhm{"B h:mm"}
@@ -612,6 +622,16 @@ ko{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "ahmszzzz",
+                "ahmsz",
+                "ahmmss",
+                "ahmm",
+                "UMMMEEEEd",
+                "UMMMd",
+                "yMd",
+                "yMd",
+            }
             cyclicNameSets{
                 dayParts{
                     format{
@@ -966,6 +986,16 @@ ko{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "ahmszzzz",
+                "ahmsz",
+                "ahmmss",
+                "ahmm",
+                "GyMEEEEd",
+                "GyMd",
+                "GyMd",
+                "GyMd",
+            }
             availableFormats{
                 Bh{"B h시"}
                 Bhm{"B h:mm"}
@@ -1198,6 +1228,16 @@ ko{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "ahmszzzz",
+                "ahmsz",
+                "ahmmss",
+                "ahmm",
+                "yMEEEEd",
+                "yMd",
+                "yMd",
+                "yyMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}

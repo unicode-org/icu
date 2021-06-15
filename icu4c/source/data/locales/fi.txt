@@ -235,6 +235,16 @@ fi{
                 "{1} 'klo' {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMccccd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyMd",
+            }
             availableFormats{
                 Ed{"E d."}
                 Gy{"y G"}
@@ -281,6 +291,16 @@ fi{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "yMccccd",
+                "yMd",
+                "yMd",
+                "yMd",
             }
             availableFormats{
                 H{"H"}
@@ -452,6 +472,16 @@ fi{
                 "{1} 'klo' {0}",
                 "{1} 'klo' {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMccccd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyMd",
             }
             availableFormats{
                 Bh{"h B"}
@@ -684,6 +714,16 @@ fi{
                 "{1} 'klo' {0}",
                 "{1} 'klo' {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "yMMMMccccd",
+                "yMMMMd",
+                "yMd",
+                "yMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -1446,6 +1486,16 @@ fi{
                 "{1} 'klo' {0}",
                 "{1} 'klo' {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMccccd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyMd",
             }
         }
         persian{

@@ -59,12 +59,12 @@ public class DateTimeGeneratorTest extends TestFmwk {
     public void TestC() {
         String[][] tests = {
                 // These may change with actual data for Bhmm/bhmm skeletons
-                {"zh",     "Cm",      "Bh:mm"},
-                {"zh",     "CCm",     "Bhh:mm"},
-                {"zh",     "CCCm",    "BBBBh:mm"},
-                {"zh",     "CCCCm",   "BBBBhh:mm"},
-                {"zh",     "CCCCCm",  "BBBBBh:mm"},
-                {"zh",     "CCCCCCm", "BBBBBhh:mm"},
+                {"zh-TW",  "Cm",      "Bh:mm"},
+                {"zh-TW",  "CCm",     "Bhh:mm"},
+                {"zh-TW",  "CCCm",    "BBBBh:mm"},
+                {"zh-TW",  "CCCCm",   "BBBBhh:mm"},
+                {"zh-TW",  "CCCCCm",  "BBBBBh:mm"},
+                {"zh-TW",  "CCCCCCm", "BBBBBhh:mm"},
                 {"de",     "Cm",      "HH:mm"},
                 {"de",     "CCm",     "HH:mm"},
                 {"de",     "CCCm",    "HH:mm"},
@@ -512,13 +512,13 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"yQQQ", "1999\u5E74\u7B2C1\u5B63\u5EA6"},
         new String[] {"hhmm", "\u4E0B\u534811:58"},
         new String[] {"HHmm", "23:58"},
-        new String[] {"jjmm", "\u4E0B\u534811:58"},
+        new String[] {"jjmm", "23:58"},
         new String[] {"mmss", "58:59"},
         new String[] {"yyyyMMMM", "1999\u5E741\u6708"}, // (new item for testing 6872<-5702)
         new String[] {"MMMEd", "1\u670813\u65E5\u5468\u4E09"},
         new String[] {"Ed", "13\u65E5\u5468\u4E09"},
-        new String[] {"jmmssSSS", "\u4E0B\u534811:58:59.123"},
-        new String[] {"JJmm", "11:58"},
+        new String[] {"jmmssSSS", "23:58:59.123"},
+        new String[] {"JJmm", "23:58"},
 
         new ULocale("zh_TW@calendar=roc"), // (new locale for testing ticket 6872<-5702)
         new String[] {"yM", "\u6C11\u570B88/1"},
@@ -569,13 +569,13 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"yQQQ", "1998\u620A\u5BC5\u5E74\u7B2C\u56DB\u5B63\u5EA6"},
         new String[] {"hhmm", "\u4E0B\u534811:58"},
         new String[] {"HHmm", "23:58"},
-        new String[] {"jjmm", "\u4E0B\u534811:58"},
+        new String[] {"jjmm", "23:58"},
         new String[] {"mmss", "58:59"},
         new String[] {"yyyyMMMM", "1998\u620A\u5BC5\u5E74\u5341\u4E00\u6708"},
         new String[] {"MMMEd", "\u5341\u4E00\u670826\u65E5\u5468\u4E09"},
         new String[] {"Ed", "26\u65E5\u5468\u4E09"},
-        new String[] {"jmmssSSS", "\u4E0B\u534811:58:59.123"},
-        new String[] {"JJmm", "11:58"},
+        new String[] {"jmmssSSS", "23:58:59.123"},
+        new String[] {"JJmm", "23:58"},
 
         new ULocale("ja_JP_TRADITIONAL"),
         // TODO: This is different in C++ and Java.
@@ -1407,8 +1407,8 @@ public class DateTimeGeneratorTest extends TestFmwk {
                 new TestOptionsItem( "en@calendar=chinese",  "Gy",    "r(U)",     DateTimePatternGenerator.MATCH_NO_OPTIONS ),
                 new TestOptionsItem( "en@calendar=chinese",  "GU",    "r(U)",     DateTimePatternGenerator.MATCH_NO_OPTIONS ),
                 new TestOptionsItem( "en@calendar=chinese",  "ULLL",  "MMM U",    DateTimePatternGenerator.MATCH_NO_OPTIONS ),
-                new TestOptionsItem( "en@calendar=chinese",  "yMMM",  "MMM r(U)", DateTimePatternGenerator.MATCH_NO_OPTIONS ),
-                new TestOptionsItem( "en@calendar=chinese",  "GUMMM", "MMM r(U)", DateTimePatternGenerator.MATCH_NO_OPTIONS ),
+                new TestOptionsItem( "en@calendar=chinese",  "yMMM",  "MMM r",    DateTimePatternGenerator.MATCH_NO_OPTIONS ),
+                new TestOptionsItem( "en@calendar=chinese",  "GUMMM", "MMM r",    DateTimePatternGenerator.MATCH_NO_OPTIONS ),
                 new TestOptionsItem( "zh@calendar=chinese",  "yyyy",  "rU\u5E74",    DateTimePatternGenerator.MATCH_NO_OPTIONS ),
                 new TestOptionsItem( "zh@calendar=chinese",  "YYYY",  "YY\u5E74",    DateTimePatternGenerator.MATCH_NO_OPTIONS ), // not a good result, want r(Y) or r(U)
                 new TestOptionsItem( "zh@calendar=chinese",  "U",     "rU\u5E74",    DateTimePatternGenerator.MATCH_NO_OPTIONS ),

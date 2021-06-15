@@ -230,6 +230,16 @@ bg{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMd",
+                "GyyMMd",
+            }
             availableFormats{
                 Bh{"h 'ч'. B"}
                 Bhm{"h:mm 'ч'. B"}
@@ -470,6 +480,16 @@ bg{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMd",
+                "yyMMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}

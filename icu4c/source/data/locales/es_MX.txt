@@ -157,15 +157,23 @@ es_MX{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yyMMdd",
+            }
             availableFormats{
                 EHm{"E HH:mm"}
                 EHms{"E HH:mm:ss"}
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
                 GyMMMd{"d MMM y G"}
-                Hmsv{"HH:mm:ss v"}
                 Hmsvvvv{"HH:mm:ss (vvvv)"}
-                Hmv{"HH:mm v"}
                 MMMEd{"E d 'de' MMM"}
                 MMd{"d/MM"}
                 MMdd{"dd/MM"}

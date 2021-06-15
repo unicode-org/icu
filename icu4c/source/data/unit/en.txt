@@ -156,6 +156,11 @@ en{
             times{"{0}-{1}"}
         }
         concentr{
+            item{
+                dnam{"items"}
+                one{"{0} item"}
+                other{"{0} items"}
+            }
             karat{
                 dnam{"karats"}
                 one{"{0} karat"}
@@ -422,6 +427,11 @@ en{
             }
         }
         force{
+            kilowatt-hour-per-100-kilometer{
+                dnam{"kilowatt-hour per 100 kilometers"}
+                one{"{0} kilowatt-hour per 100 kilometers"}
+                other{"{0} kilowatt-hours per 100 kilometers"}
+            }
             newton{
                 dnam{"newtons"}
                 one{"{0} newton"}
@@ -1126,6 +1136,11 @@ en{
             }
         }
         concentr{
+            item{
+                dnam{"item"}
+                one{"{0}item"}
+                other{"{0}item"}
+            }
             karat{
                 dnam{"karat"}
                 one{"{0}kt"}
@@ -1384,6 +1399,11 @@ en{
             }
         }
         force{
+            kilowatt-hour-per-100-kilometer{
+                dnam{"kWh/100km"}
+                one{"{0}kWh/100km"}
+                other{"{0}kWh/100km"}
+            }
             newton{
                 dnam{"N"}
                 one{"{0}N"}
@@ -2084,6 +2104,11 @@ en{
             per{"{0}/{1}"}
         }
         concentr{
+            item{
+                dnam{"item"}
+                one{"{0} item"}
+                other{"{0} item"}
+            }
             karat{
                 dnam{"karats"}
                 one{"{0} kt"}
@@ -2350,6 +2375,11 @@ en{
             }
         }
         force{
+            kilowatt-hour-per-100-kilometer{
+                dnam{"kWh/100km"}
+                one{"{0} kWh/100km"}
+                other{"{0} kWh/100km"}
+            }
             newton{
                 dnam{"newton"}
                 one{"{0} N"}

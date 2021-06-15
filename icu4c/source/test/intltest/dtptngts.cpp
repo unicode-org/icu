@@ -252,13 +252,13 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         CharsToUnicodeString("1999\\u5E74\\u7B2C1\\u5B63\\u5EA6"),        // 07: yQQQ
         CharsToUnicodeString("\\u4E0B\\u534811:58"),                      // 08: hhmm
         UnicodeString("23:58"),                                           // 09: HHmm
-        CharsToUnicodeString("\\u4E0B\\u534811:58"),                      // 10: jjmm
+        CharsToUnicodeString("23:58"),                                    // 10: jjmm
         UnicodeString("58:59"),                                           // 11: mmss
         CharsToUnicodeString("1999\\u5E741\\u6708"),                      // 12: yyyyMMMM  -> yyyy\u5E74MMM
         CharsToUnicodeString("1\\u670813\\u65E5\\u5468\\u4E09"),          // 13: MMMEd -> MMMd\u65E5EEE
         CharsToUnicodeString("13\\u65E5\\u5468\\u4E09"),                  // 14: Ed    -> d\u65E5EEE
-        CharsToUnicodeString("\\u4E0B\\u534811:58:59.123"),               // 15: jmmssSSS -> "ah:mm:ss.SSS"
-        UnicodeString("11:58"),                                           // 16: JJmm
+        CharsToUnicodeString("23:58:59.123"),                             // 15: jmmssSSS -> "ah:mm:ss.SSS"
+        UnicodeString("23:58"),                                           // 16: JJmm
     };
 
     UnicodeString patternResults_zh_TW_roc[] = {
@@ -315,13 +315,13 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         CharsToUnicodeString("1998\\u620A\\u5BC5\\u5E74\\u7b2c\\u56db\\u5B63\\u5EA6"),  // 07: yQQQ
         CharsToUnicodeString("\\u4E0B\\u534811:58"),                            // 08: hhmm
         UnicodeString("23:58"),                                                 // 09: HHmm
-        CharsToUnicodeString("\\u4E0B\\u534811:58"),                            // 10: jjmm
+        CharsToUnicodeString("23:58"),                                          // 10: jjmm
         UnicodeString("58:59"),                                                 // 11: mmss
         CharsToUnicodeString("1998\\u620A\\u5BC5\\u5E74\\u5341\\u4E00\\u6708"), // 12: yyyyMMMM
         CharsToUnicodeString("\\u5341\\u4E00\\u670826\\u65E5\\u5468\\u4E09"),   // 13: MMMEd
         CharsToUnicodeString("26\\u65E5\\u5468\\u4E09"),                        // 14: Ed    -> d\u65E5EEE
-        CharsToUnicodeString("\\u4E0B\\u534811:58:59.123"),                     // 15: jmmssSS
-        UnicodeString("11:58"),                                                 // 16: JJmm
+        CharsToUnicodeString("23:58:59.123"),                                   // 15: jmmssSS
+        UnicodeString("23:58"),                                                 // 16: JJmm
     };
 
     UnicodeString patternResults_ja_jp_traditional[] = {
@@ -949,8 +949,8 @@ void IntlTestDateTimePatternGeneratorAPI::testOptions(/*char *par*/)
         { "en@calendar=chinese",  "Gy",    "r(U)",     UDATPG_MATCH_NO_OPTIONS },
         { "en@calendar=chinese",  "GU",    "r(U)",     UDATPG_MATCH_NO_OPTIONS },
         { "en@calendar=chinese",  "ULLL",  "MMM U",    UDATPG_MATCH_NO_OPTIONS },
-        { "en@calendar=chinese",  "yMMM",  "MMM r(U)", UDATPG_MATCH_NO_OPTIONS },
-        { "en@calendar=chinese",  "GUMMM", "MMM r(U)", UDATPG_MATCH_NO_OPTIONS },
+        { "en@calendar=chinese",  "yMMM",  "MMM r",    UDATPG_MATCH_NO_OPTIONS },
+        { "en@calendar=chinese",  "GUMMM", "MMM r",    UDATPG_MATCH_NO_OPTIONS },
         { "zh@calendar=chinese",  "yyyy",  "rU\\u5E74",    UDATPG_MATCH_NO_OPTIONS },
         { "zh@calendar=chinese",  "YYYY",  "YY\\u5E74",    UDATPG_MATCH_NO_OPTIONS }, // not a good result, may want r(Y) or r(U)
         { "zh@calendar=chinese",  "U",     "rU\\u5E74",    UDATPG_MATCH_NO_OPTIONS },
@@ -1159,12 +1159,12 @@ void IntlTestDateTimePatternGeneratorAPI::testStaticGetSkeleton(/*char *par*/)
 void IntlTestDateTimePatternGeneratorAPI::testC() {
     const char* tests[][3] = {
             // These may change with actual data for Bhmm/bhmm skeletons
-            {"zh",     "Cm",      "Bh:mm"},
-            {"zh",     "CCm",     "Bhh:mm"},
-            {"zh",     "CCCm",    "BBBBh:mm"},
-            {"zh",     "CCCCm",   "BBBBhh:mm"},
-            {"zh",     "CCCCCm",  "BBBBBh:mm"},
-            {"zh",     "CCCCCCm", "BBBBBhh:mm"},
+            {"zh-TW",  "Cm",      "Bh:mm"},
+            {"zh-TW",  "CCm",     "Bhh:mm"},
+            {"zh-TW",  "CCCm",    "BBBBh:mm"},
+            {"zh-TW",  "CCCCm",   "BBBBhh:mm"},
+            {"zh-TW",  "CCCCCm",  "BBBBBh:mm"},
+            {"zh-TW",  "CCCCCCm", "BBBBBhh:mm"},
             {"de",     "Cm",      "HH:mm"},
             {"de",     "CCm",     "HH:mm"},
             {"de",     "CCCm",    "HH:mm"},

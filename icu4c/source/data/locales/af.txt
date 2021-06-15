@@ -233,6 +233,16 @@ af{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMdd",
+                "GyMMMdd",
+                "GGGGGyMMdd",
+            }
             availableFormats{
                 Bh{"h B"}
                 Bhm{"hh:mm B"}
@@ -442,6 +452,16 @@ af{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEdd",
+                "yMMMMdd",
+                "yMMMdd",
+                "yMMdd",
             }
             appendItems{
                 Timezone{"{0} {1}"}

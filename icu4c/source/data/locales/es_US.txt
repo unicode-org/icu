@@ -142,15 +142,23 @@ es_US{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "ahmmsszzzz",
+                "ahmmssz",
+                "ahmmss",
+                "ahmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMd",
+            }
             availableFormats{
                 EHm{"E HH:mm"}
                 EHms{"E HH:mm:ss"}
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
                 GyMMMd{"d MMM y G"}
-                Hmsv{"HH:mm:ss v"}
                 Hmsvvvv{"HH:mm:ss (vvvv)"}
-                Hmv{"HH:mm v"}
                 MMMEd{"E, d 'de' MMM"}
                 MMd{"d/MM"}
                 MMdd{"dd/MM"}

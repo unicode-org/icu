@@ -197,6 +197,16 @@ id{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
+            }
             availableFormats{
                 Ed{"E, d"}
                 Gy{"y G"}
@@ -328,6 +338,16 @@ id{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "UMMMMEEEEdd",
+                "UMMMMd",
+                "UMMMd",
+                "yMd",
             }
             cyclicNameSets{
                 solarTerms{
@@ -499,6 +519,16 @@ id{
                 "{1} 'pukul' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyyMMdd",
             }
             availableFormats{
                 Bh{"h B"}
@@ -699,6 +729,16 @@ id{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEdd",
+                "yMMMMd",
+                "yMMMd",
+                "yyMMdd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -1219,6 +1259,16 @@ id{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
+            }
             availableFormats{
                 Ed{"E, d"}
                 Gy{"y G"}
@@ -1424,6 +1474,16 @@ id{
                 "{1} 'pukul' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
             }
             availableFormats{
                 MEd{"E, d/M"}
@@ -1690,6 +1750,16 @@ id{
                 "{1} 'pukul' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
             }
             availableFormats{
                 MEd{"E, d/M"}

@@ -238,6 +238,16 @@ hy{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMdd",
+                "GyMMMdd",
+                "GGGGGyMMdd",
+            }
             availableFormats{
                 Bh{"B h-ին"}
                 Bhm{"B h:mm-ին"}
@@ -413,6 +423,16 @@ hy{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMdd",
+                "yMMMdd",
+                "yyMMdd",
             }
             appendItems{
                 Timezone{"{0} {1}"}

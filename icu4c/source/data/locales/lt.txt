@@ -324,6 +324,16 @@ lt{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "UMMMMEEEEd",
+                "UMMMMd",
+                "UMMMd",
+                "yMMdd",
+            }
             availableFormats{
                 Ed{"d, E"}
                 Gy{"U"}
@@ -780,6 +790,16 @@ lt{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "UMMMMEEEEd",
+                "UMMMMd",
+                "UMMMd",
+                "yMMdd",
             }
             availableFormats{
                 Ed{"d, E"}
@@ -1248,6 +1268,16 @@ lt{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GyMMdd",
+            }
             availableFormats{
                 Bh{"h B"}
                 Bhm{"h:mm B"}
@@ -1415,6 +1445,16 @@ lt{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMdd",
+                "yMMdd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -1956,6 +1996,16 @@ lt{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GyMMdd",
             }
             eras{
                 abbreviated{

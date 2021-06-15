@@ -668,7 +668,6 @@ sq{
         BRL{"BRL"}
         BSD{"BSD"}
         BWP{"BWP"}
-        BYN{"BYN"}
         BZD{"BZD"}
         CAD{"CAD"}
         CLP{"CLP"}

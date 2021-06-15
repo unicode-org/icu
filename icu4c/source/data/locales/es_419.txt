@@ -183,6 +183,16 @@ es_419{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyyMMdd",
+            }
             availableFormats{
                 GyMMM{"MMM 'de' y G"}
                 GyMMMEd{"E, d 'de' MMM 'de' y G"}
@@ -260,6 +270,16 @@ es_419{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yyMd",
+            }
             availableFormats{
                 EHm{"E, HH:mm"}
                 EHms{"E, HH:mm:ss"}
@@ -267,11 +287,12 @@ es_419{
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
+                Hmsv{"HH:mm:ss v"}
+                Hmsvvvv{"HH:mm:ss vvvv"}
+                Hmv{"HH:mm v"}
                 MMMdd{"dd-MMM"}
                 yMEd{"E d/M/y"}
-                yMMM{"MMM 'de' y"}
-                yMMMEd{"E, d 'de' MMM 'de' y"}
-                yMMMd{"d 'de' MMM 'de' y"}
+                yMMMEd{"E, d MMM y"}
                 yQQQ{"QQQ 'de' y"}
             }
             dayNames{

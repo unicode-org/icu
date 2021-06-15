@@ -327,6 +327,16 @@ pl{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "UMMMMEEEEd",
+                "UMMMMd",
+                "UMMMd",
+                "yMMdd",
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -447,6 +457,16 @@ pl{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GyMMdd",
             }
             availableFormats{
                 Ed{"E, d"}
@@ -636,6 +656,16 @@ pl{
                 "{1} {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMMdd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -1401,6 +1431,16 @@ pl{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GyMMdd",
             }
         }
         persian{

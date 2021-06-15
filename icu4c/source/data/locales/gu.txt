@@ -507,6 +507,16 @@ gu{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "ahhmmsszzzz",
+                "ahhmmssz",
+                "ahhmmss",
+                "ahhmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMMd",
+            }
             availableFormats{
                 Bh{"h B"}
                 Bhm{"h:mm B"}
@@ -702,6 +712,16 @@ gu{
                 "{1} એ {0} વાગ્યે",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "ahhmmsszzzz",
+                "ahhmmssz",
+                "ahhmmss",
+                "ahhmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yyMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}

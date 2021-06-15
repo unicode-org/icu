@@ -1158,16 +1158,15 @@ public class NumberFormatterApiTest extends TestFmwk {
 
         // TODO(ICU-21504): We want to be able to format this, but "100-kilometer"
         // is not yet supported when it's not part of liter-per-100-kilometer:
-        lnf = NumberFormatter.with()
-                  .unit(MeasureUnit.forIdentifier("kilowatt-hour-per-100-kilometer"))
-                  .unitWidth(UnitWidth.FULL_NAME)
-                  .locale(new ULocale("en-ZA"));
-        try {
-            lnf.format(1);
-            fail("Expected failure for kilowatt-hour-per-100-kilometer, got: " + lnf.format(1) + ".");
-        } catch (UnsupportedOperationException e) {
-            // pass
-        }
+        // Actually now in CLDR 40 this is supported directly in data, so change test.
+        assertFormatSingle(
+            "kilowatt-hour-per-100-kilometer unit-width-full-name",
+            "unit/kilowatt-hour-per-100-kilometer unit-width-full-name",
+            "unit/kilowatt-hour-per-100-kilometer unit-width-full-name",
+            NumberFormatter.with()
+                .unit(MeasureUnit.forIdentifier("kilowatt-hour-per-100-kilometer"))
+                .unitWidth(UnitWidth.FULL_NAME),
+            new ULocale("en-ZA"), 2.4, "2,4 kilowatt-hours per 100 kilometers");
     }
 
     // TODO: merge these tests into NumberSkeletonTest.java instead of here:

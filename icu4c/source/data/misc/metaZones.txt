@@ -708,7 +708,7 @@ metaZones:table(nofallback){
             001{"Asia/Yerevan"}
         }
         Yukon{
-            001{"America/Yakutat"}
+            001{"America/Whitehorse"}
         }
     }
     metazoneInfo{
@@ -1133,11 +1133,6 @@ metaZones:table(nofallback){
                 "1983-10-30 11:00",
             }
             {
-                "Yukon",
-                "1983-10-30 11:00",
-                "1983-11-30 09:00",
-            }
-            {
                 "Alaska",
                 "1983-11-30 09:00",
                 "9999-12-31 23:59",
@@ -1553,17 +1548,12 @@ metaZones:table(nofallback){
         }
         "America:Dawson"{
             {
-                "Yukon",
-                "1970-01-01 00:00",
-                "1973-10-28 09:00",
-            }
-            {
                 "America_Pacific",
                 "1973-10-28 09:00",
                 "2020-11-01 07:00",
             }
             {
-                "America_Mountain",
+                "Yukon",
                 "2020-11-01 07:00",
                 "9999-12-31 23:59",
             }
@@ -1895,19 +1885,9 @@ metaZones:table(nofallback){
                 "1980-04-27 10:00",
             }
             {
-                "Yukon",
-                "1980-04-27 10:00",
-                "1980-10-26 10:00",
-            }
-            {
                 "America_Pacific",
                 "1980-10-26 10:00",
                 "1983-10-30 09:00",
-            }
-            {
-                "Yukon",
-                "1983-10-30 09:00",
-                "1983-11-30 09:00",
             }
             {
                 "Alaska",
@@ -2168,11 +2148,6 @@ metaZones:table(nofallback){
                 "Bering",
                 "1970-01-01 00:00",
                 "1983-10-30 12:00",
-            }
-            {
-                "Yukon",
-                "1983-10-30 12:00",
-                "1983-11-30 09:00",
             }
             {
                 "Alaska",
@@ -2448,11 +2423,6 @@ metaZones:table(nofallback){
                 "1983-10-30 09:00",
             }
             {
-                "Yukon",
-                "1983-10-30 09:00",
-                "1983-11-30 09:00",
-            }
-            {
                 "Alaska",
                 "1983-11-30 09:00",
                 "9999-12-31 23:59",
@@ -2542,7 +2512,7 @@ metaZones:table(nofallback){
                 "2020-11-01 07:00",
             }
             {
-                "America_Mountain",
+                "Yukon",
                 "2020-11-01 07:00",
                 "9999-12-31 23:59",
             }
@@ -2553,11 +2523,6 @@ metaZones:table(nofallback){
             }
         }
         "America:Yakutat"{
-            {
-                "Yukon",
-                "1970-01-01 00:00",
-                "1983-11-30 09:00",
-            }
             {
                 "Alaska",
                 "1983-11-30 09:00",

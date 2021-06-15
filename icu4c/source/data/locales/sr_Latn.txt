@@ -317,6 +317,16 @@ sr_Latn{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMd",
+                "GGGGGyMd",
+            }
             availableFormats{
                 Bh{"h B"}
                 Bhm{"hh:mm B"}
@@ -488,6 +498,16 @@ sr_Latn{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEdd",
+                "yMMMMdd",
+                "yMMdd",
+                "yyMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -1024,6 +1044,16 @@ sr_Latn{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GyyMd",
             }
             eras{
                 abbreviated{

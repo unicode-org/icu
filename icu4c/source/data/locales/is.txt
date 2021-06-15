@@ -239,6 +239,16 @@ is{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyMd",
+            }
             availableFormats{
                 E{"ccc"}
                 Ed{"E d."}
@@ -392,6 +402,16 @@ is{
                 "{1} 'kl'. {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyMd",
             }
             availableFormats{
                 E{"ccc"}
@@ -645,6 +665,16 @@ is{
                 "{1} 'kl'. {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyMd",
             }
             availableFormats{
                 E{"ccc"}
@@ -912,6 +942,16 @@ is{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyMd",
+            }
             availableFormats{
                 Bh{"h B"}
                 Bhm{"h:mm B"}
@@ -1120,6 +1160,16 @@ is{
                 "{1} 'kl'. {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -1628,6 +1678,16 @@ is{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyMd",
+            }
             availableFormats{
                 E{"ccc"}
                 Ed{"E d."}
@@ -1884,6 +1944,16 @@ is{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyMd",
+            }
             availableFormats{
                 E{"ccc"}
                 Ed{"E d."}
@@ -2127,6 +2197,16 @@ is{
                 "{1} 'kl'. {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyMd",
             }
             availableFormats{
                 E{"ccc"}
@@ -2372,6 +2452,16 @@ is{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyMd",
+            }
             availableFormats{
                 E{"ccc"}
                 Ed{"E d."}
@@ -2514,6 +2604,16 @@ is{
                 "{1} 'kl'. {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyMd",
             }
             availableFormats{
                 E{"ccc"}
@@ -2758,6 +2858,16 @@ is{
                 "{1} 'kl'. {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyMd",
             }
             availableFormats{
                 E{"ccc"}

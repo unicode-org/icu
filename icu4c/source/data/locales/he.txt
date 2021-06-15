@@ -556,6 +556,16 @@ he{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
+            }
             availableFormats{
                 Bh{"h B"}
                 Bhm{"h:mm B"}
@@ -756,6 +766,16 @@ he{
                 "{1} בשעה {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -1287,6 +1307,28 @@ he{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                {
+                    "yMMMMEEEEd",
+                    "hebr",
+                }
+                {
+                    "yMMMMd",
+                    "hebr",
+                }
+                {
+                    "yMMMMd",
+                    "hebr",
+                }
+                {
+                    "yMMMMd",
+                    "hebr",
+                }
+            }
             availableFormats{
                 Ed{"E d"}
                 Gy{"y G"}
@@ -1541,6 +1583,16 @@ he{
                 "{1} בשעה {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyyMMdd",
             }
             availableFormats{
                 E{"ccc"}
