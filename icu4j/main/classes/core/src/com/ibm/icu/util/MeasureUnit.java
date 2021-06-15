@@ -994,6 +994,12 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit SQUARE_YARD = MeasureUnit.internalGetInstance("area", "square-yard");
 
     /**
+     * Constant for unit of concentr: item
+     * @draft ICU 70
+     */
+    public static final MeasureUnit ITEM = MeasureUnit.internalGetInstance("concentr", "item");
+
+    /**
      * Constant for unit of concentr: karat
      * @stable ICU 54
      */
@@ -1310,6 +1316,12 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 65
      */
     public static final MeasureUnit THERM_US = MeasureUnit.internalGetInstance("energy", "therm-us");
+
+    /**
+     * Constant for unit of force: kilowatt-hour-per-100-kilometer
+     * @draft ICU 70
+     */
+    public static final MeasureUnit KILOWATT_HOUR_PER_100_KILOMETER = MeasureUnit.internalGetInstance("force", "kilowatt-hour-per-100-kilometer");
 
     /**
      * Constant for unit of force: newton

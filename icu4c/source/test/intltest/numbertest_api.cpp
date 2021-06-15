@@ -1239,12 +1239,18 @@ void NumberFormatterApiTest::unitArbitraryMeasureUnits() {
 
     // TODO(ICU-21504): We want to be able to format this, but "100-kilometer"
     // is not yet supported when it's not part of liter-per-100-kilometer:
-    lnf = NumberFormatter::with()
-              .unit(MeasureUnit::forIdentifier("kilowatt-hour-per-100-kilometer", status))
-              .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)
-              .locale("en-ZA");
-    lnf.formatInt(1, status);
-    status.expectErrorAndReset(U_UNSUPPORTED_ERROR);
+    // Actually now in CLDR 40 this is supported directly in data, so change test.
+    assertFormatSingle(
+            u"kilowatt-hour-per-100-kilometer unit-width-full-name",
+            u"unit/kilowatt-hour-per-100-kilometer unit-width-full-name",
+            u"unit/kilowatt-hour-per-100-kilometer unit-width-full-name",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("kilowatt-hour-per-100-kilometer",
+                                                 status))
+                .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("en-ZA"),
+            2.4,
+            u"2,4 kilowatt-hours per 100 kilometers");
 }
 
 // TODO: merge these tests into numbertest_skeletons.cpp instead of here:

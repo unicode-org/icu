@@ -2105,7 +2105,7 @@ supplementalData:table(nofallback){
             "islamic-tbla",
         }
     }
-    cldrVersion{"39"}
+    cldrVersion{"40"}
     codeMappings{
         {
             "AA",
@@ -7739,6 +7739,7 @@ supplementalData:table(nofallback){
                 "Cher",
                 "Chrs",
                 "Copt",
+                "Cpmn",
                 "Cprt",
                 "Cyrl",
                 "Deva",
@@ -7822,6 +7823,7 @@ supplementalData:table(nofallback){
                 "Orya",
                 "Osge",
                 "Osma",
+                "Ougr",
                 "Palm",
                 "Pauc",
                 "Perm",
@@ -7864,8 +7866,11 @@ supplementalData:table(nofallback){
                 "Thai",
                 "Tibt",
                 "Tirh",
+                "Tnsa",
+                "Toto",
                 "Ugar",
                 "Vaii",
+                "Vith",
                 "Wara",
                 "Wcho",
                 "Xpeo",
@@ -11357,6 +11362,7 @@ supplementalData:table(nofallback){
                 "energy-british-thermal-unit",
                 "force-pound-force",
                 "force-newton",
+                "force-kilowatt-hour-per-100-kilometer",
                 "frequency-gigahertz",
                 "frequency-hertz",
                 "frequency-kilohertz",
@@ -12485,8 +12491,6 @@ supplementalData:table(nofallback){
         ckb{
             primary{
                 scripts{"Arab"}
-            }
-            secondary{
                 territories{
                     "IQ",
                     "IR",
@@ -13691,6 +13695,10 @@ supplementalData:table(nofallback){
         hnj{
             primary{
                 scripts{"Laoo"}
+            }
+            secondary{
+                scripts{"Hmnp"}
+                territories{"US"}
             }
         }
         hnn{
@@ -15705,6 +15713,17 @@ supplementalData:table(nofallback){
         rgn{
             primary{
                 scripts{"Latn"}
+            }
+        }
+        rhg{
+            primary{
+                scripts{"Rohg"}
+            }
+            secondary{
+                scripts{
+                    "Arab",
+                    "Latn",
+                }
             }
         }
         ria{
@@ -19875,6 +19894,7 @@ supplementalData:table(nofallback){
         root{
             "az_Arab",
             "az_Cyrl",
+            "bal_Latn",
             "blt_Latn",
             "bm_Nkoo",
             "bs_Cyrl",
@@ -26665,6 +26685,9 @@ supplementalData:table(nofallback){
             my{
                 populationShareF:int{47210000}
             }
+            rhg{
+                populationShareF:int{47520000}
+            }
             rkt{
                 literacyShareF:int{49200000}
                 populationShareF:int{48650000}
@@ -30100,6 +30123,9 @@ supplementalData:table(nofallback){
                 officialStatus{"official"}
                 populationShareF:int{49640000}
             }
+            rhg{
+                populationShareF:int{48160000}
+            }
             shn{
                 populationShareF:int{48640000}
             }
@@ -33246,12 +33272,12 @@ supplementalData:table(nofallback){
         }
         CN{
             allowed{
+                "H",
                 "hB",
                 "hb",
                 "h",
-                "H",
             }
-            preferred{"h"}
+            preferred{"H"}
         }
         CO{
             allowed{
@@ -33615,9 +33641,9 @@ supplementalData:table(nofallback){
         }
         HK{
             allowed{
+                "h",
                 "hB",
                 "hb",
-                "h",
                 "H",
             }
             preferred{"h"}
@@ -34026,9 +34052,9 @@ supplementalData:table(nofallback){
         }
         MO{
             allowed{
+                "h",
                 "hB",
                 "hb",
-                "h",
                 "H",
             }
             preferred{"h"}

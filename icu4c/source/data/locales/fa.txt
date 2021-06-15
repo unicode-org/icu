@@ -462,6 +462,16 @@ fa{
                 "{1}،‏ {0}",
                 "{1}،‏ {0}",
             }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
+            }
             appendItems{
                 Day-Of-Week{"{1} {0}"}
                 Timezone{"{0} ({1})"}
@@ -681,6 +691,16 @@ fa{
                 "{1}، ساعت {0}",
                 "{1}،‏ {0}",
                 "{1}،‏ {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMd",
             }
             appendItems{
                 Day-Of-Week{"{1} {0}"}
@@ -1388,6 +1408,16 @@ fa{
                 "{1}، ساعت {0}",
                 "{1}،‏ {0}",
                 "{1}،‏ {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GyMd",
             }
             availableFormats{
                 E{"ccc"}
@@ -2327,6 +2357,16 @@ fa{
                 "{1}، ساعت {0}",
                 "{1}،‏ {0}",
                 "{1}،‏ {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMd",
             }
             availableFormats{
                 Ed{"E dم"}

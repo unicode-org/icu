@@ -37,10 +37,10 @@ bo{
     calendar{
         generic{
             DateTimePatterns{
-                "h:mm:ss a zzzz",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
                 "G y MMMM d, EEEE",
                 "G སྤྱི་ལོ་y MMMMའི་ཚེས་d",
                 "G y ལོའི་MMMཚེས་d",
@@ -50,6 +50,16 @@ bo{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "ahmmsszzzz",
+                "ahmmssz",
+                "ahmmss",
+                "ahmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMMdd",
             }
             availableFormats{
                 yMMMMd{"G སྤྱི་ལོ་y MMMMའི་ཚེས་d"}
@@ -67,10 +77,10 @@ bo{
                 "ཕྱི་དྲོ་",
             }
             DateTimePatterns{
-                "h:mm:ss a zzzz",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
                 "y MMMMའི་ཚེས་d, EEEE",
                 "སྤྱི་ལོ་y MMMMའི་ཚེས་d",
                 "y ལོའི་MMMཚེས་d",
@@ -80,6 +90,16 @@ bo{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "ahmmsszzzz",
+                "ahmmssz",
+                "ahmmss",
+                "ahmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMMdd",
             }
             availableFormats{
                 GyMMM{"G y LLLL"}

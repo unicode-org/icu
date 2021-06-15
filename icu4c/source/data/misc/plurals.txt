@@ -13,6 +13,7 @@ plurals:table(nofallback){
         asa{"set8"}
         ast{"set4"}
         az{"set8"}
+        bal{"set8"}
         be{"set27"}
         bem{"set8"}
         bez{"set8"}
@@ -64,6 +65,7 @@ plurals:table(nofallback){
         haw{"set8"}
         he{"set24"}
         hi{"set1"}
+        hnj{"set0"}
         hr{"set19"}
         hsb{"set23"}
         hu{"set8"}
@@ -197,6 +199,7 @@ plurals:table(nofallback){
         tl{"set12"}
         tn{"set8"}
         to{"set0"}
+        tpi{"set0"}
         tr{"set8"}
         ts{"set8"}
         tzm{"set7"}
@@ -226,6 +229,7 @@ plurals:table(nofallback){
         ar{"set37"}
         as{"set58"}
         az{"set56"}
+        bal{"set39"}
         be{"set42"}
         bg{"set37"}
         bn{"set58"}
@@ -312,6 +316,7 @@ plurals:table(nofallback){
         th{"set37"}
         tk{"set44"}
         tl{"set39"}
+        tpi{"set37"}
         tr{"set37"}
         uk{"set43"}
         ur{"set37"}
