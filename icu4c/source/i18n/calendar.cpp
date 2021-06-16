@@ -3163,8 +3163,8 @@ int32_t Calendar::computeZoneOffset(double millis, double millisInDay, UErrorCod
     UDate wall = millis + millisInDay;
     BasicTimeZone* btz = getBasicTimeZone();
     if (btz) {
-        int duplicatedTimeOpt = (fRepeatedWallTime == UCAL_WALLTIME_FIRST) ? BasicTimeZone::kFormer : BasicTimeZone::kLatter;
-        int nonExistingTimeOpt = (fSkippedWallTime == UCAL_WALLTIME_FIRST) ? BasicTimeZone::kLatter : BasicTimeZone::kFormer;
+        UTimeZoneLocalOption duplicatedTimeOpt = (fRepeatedWallTime == UCAL_WALLTIME_FIRST) ? UCAL_TZ_LOCAL_FORMER : UCAL_TZ_LOCAL_LATTER;
+        UTimeZoneLocalOption nonExistingTimeOpt = (fSkippedWallTime == UCAL_WALLTIME_FIRST) ? UCAL_TZ_LOCAL_LATTER : UCAL_TZ_LOCAL_FORMER;
         btz->getOffsetFromLocal(wall, nonExistingTimeOpt, duplicatedTimeOpt, rawOffset, dstOffset, ec);
     } else {
         const TimeZone& tz = getTimeZone();

@@ -2580,10 +2580,10 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
             if (btz != NULL) {
                 if (tzTimeType == UTZFMT_TIME_TYPE_STANDARD) {
                     btz->getOffsetFromLocal(localMillis,
-                        BasicTimeZone::kStandard, BasicTimeZone::kStandard, raw, dst, status);
+                        UCAL_TZ_LOCAL_STANDARD_FORMER, UCAL_TZ_LOCAL_STANDARD_LATTER, raw, dst, status);
                 } else {
                     btz->getOffsetFromLocal(localMillis,
-                        BasicTimeZone::kDaylight, BasicTimeZone::kDaylight, raw, dst, status);
+                        UCAL_TZ_LOCAL_DAYLIGHT_FORMER, UCAL_TZ_LOCAL_DAYLIGHT_LATTER, raw, dst, status);
                 }
             } else {
                 // No good way to resolve ambiguous time at transition,
