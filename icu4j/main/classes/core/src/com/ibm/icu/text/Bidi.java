@@ -44,7 +44,7 @@ import com.ibm.icu.lang.UProperty;
  *
  * This is an implementation of the Unicode Bidirectional Algorithm. The
  * algorithm is defined in the <a
- * href="http://www.unicode.org/unicode/reports/tr9/">Unicode Standard Annex #9</a>.
+ * href="https://www.unicode.org/reports/tr9/">Unicode Standard Annex #9</a>.
  * <p>
  *
  * Note: Libraries that perform a bidirectional algorithm and reorder strings
@@ -4264,7 +4264,7 @@ public class Bidi {
 
     /**
      * Perform the Unicode Bidi algorithm on a given paragraph, as defined in the
-     * <a href="http://www.unicode.org/unicode/reports/tr9/">Unicode Standard Annex #9</a>,
+     * <a href="https://www.unicode.org/reports/tr9/">Unicode Standard Annex #9</a>,
      * version 13,
      * also described in The Unicode Standard, Version 4.0 .<p>
      *

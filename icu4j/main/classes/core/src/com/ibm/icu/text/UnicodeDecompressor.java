@@ -12,7 +12,7 @@ package com.ibm.icu.text;
 /**
 * A decompression engine implementing the Standard Compression Scheme
 * for Unicode (SCSU) as outlined in <A
-* HREF="http://www.unicode.org/unicode/reports/tr6">Unicode Technical
+* HREF="https://www.unicode.org/reports/tr6">Unicode Technical
 * Report #6</A>.
 *
 * <P><STRONG>USAGE</STRONG></P>
@@ -63,7 +63,7 @@ package com.ibm.icu.text;
 * </PRE>
 *
 * <P>Decompression is performed according to the standard set forth in 
-* <A HREF="http://www.unicode.org/unicode/reports/tr6">Unicode Technical 
+* <A HREF="https://www.unicode.org/reports/tr6">Unicode Technical 
 * Report #6</A></P>
 *
 * @see UnicodeCompressor

@@ -45,7 +45,7 @@ import com.ibm.icu.util.VersionInfo;
  * <p>
  * RuleBasedCollator is a concrete subclass of Collator. It allows customization of the Collator via user-specified rule
  * sets. RuleBasedCollator is designed to be fully compliant to the <a
- * href="http://www.unicode.org/unicode/reports/tr10/">Unicode Collation Algorithm (UCA)</a> and conforms to ISO 14651.
+ * href="https://www.unicode.org/reports/tr10/">Unicode Collation Algorithm (UCA)</a> and conforms to ISO 14651.
  *
  * <p>A Collator is thread-safe only when frozen. See {{@link #isFrozen()} and {@link com.ibm.icu.util.Freezable}.
  *
@@ -589,7 +589,7 @@ public final class RuleBasedCollator extends Collator {
 
     /**
      * Sets the alternate handling for QUATERNARY strength to be either shifted or non-ignorable. See the UCA definition
-     * on <a href="http://www.unicode.org/unicode/reports/tr10/#Variable_Weighting">Variable Weighting</a>. This
+     * on <a href="https://www.unicode.org/reports/tr10/#Variable_Weighting">Variable Weighting</a>. This
      * attribute will only be effective when QUATERNARY strength is set. The default value for this mode is false,
      * corresponding to the NON_IGNORABLE mode in UCA. In the NON_IGNORABLE mode, the RuleBasedCollator treats all
      * the code points with non-ignorable primary weights in the same way. If the mode is set to true, the behavior

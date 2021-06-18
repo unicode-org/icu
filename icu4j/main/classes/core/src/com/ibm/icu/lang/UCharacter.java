@@ -4294,7 +4294,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * one-to-one mappings; it also omits information about context-sensitive
      * case mappings.<br> For more information about Unicode case mapping
      * please refer to the
-     * <a href=http://www.unicode.org/unicode/reports/tr21/>Technical report
+     * <a href=https://www.unicode.org/reports/tr21/>Technical report
      * #21</a>.<br>
      * Up-to-date Unicode implementation of java.lang.Character.isLowerCase()
      * @param ch code point to determine if it is in lowercase
@@ -4373,7 +4373,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * one-to-one mappings; it also omits information about context-sensitive
      * case mappings.<br>
      * For more information about Unicode case mapping please refer to the
-     * <a href=http://www.unicode.org/unicode/reports/tr21/>
+     * <a href=https://www.unicode.org/reports/tr21/>
      * Technical report #21</a>.<br>
      * Up-to-date Unicode implementation of java.lang.Character.isTitleCase().
      * @param ch code point to determine if it is in title case
@@ -4406,7 +4406,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * </ul>
      * Up-to-date Unicode implementation of
      * java.lang.Character.isUnicodeIdentifierPart().<br>
-     * See <a href=http://www.unicode.org/unicode/reports/tr8/>UTR #8</a>.
+     * See <a href=https://www.unicode.org/reports/tr8/>UTR #8</a>.
      * @param ch code point to determine if is can be part of a Unicode
      *        identifier
      * @return true if code point is any character belonging a unicode
@@ -4445,7 +4445,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * </ul>
      * Up-to-date Unicode implementation of
      * java.lang.Character.isUnicodeIdentifierStart().<br>
-     * See <a href=http://www.unicode.org/unicode/reports/tr8/>UTR #8</a>.
+     * See <a href=https://www.unicode.org/reports/tr8/>UTR #8</a>.
      * @param ch code point to determine if it can start a Unicode identifier
      * @return true if code point is the first character belonging a unicode
      *              identifier
@@ -4472,7 +4472,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * U+0000..U+0008, U+000E..U+001B, U+007F..U+009F.<br>
      * Up-to-date Unicode implementation of
      * java.lang.Character.isIdentifierIgnorable().<br>
-     * See <a href=http://www.unicode.org/unicode/reports/tr8/>UTR #8</a>.
+     * See <a href=https://www.unicode.org/reports/tr8/>UTR #8</a>.
      * <p>Note that Unicode just recommends to ignore Cf (format controls).
      * @param ch code point to be determined if it can be ignored in a Unicode
      *        identifier.
@@ -4501,7 +4501,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * For example, the case conversion for dot-less i and dotted I in Turkish,
      * or for final sigma in Greek.
      * For more information about Unicode case mapping please refer to the
-     * <a href=http://www.unicode.org/unicode/reports/tr21/>
+     * <a href=https://www.unicode.org/reports/tr21/>
      * Technical report #21</a>.<br>
      * Up-to-date Unicode implementation of java.lang.Character.isUpperCase().
      * @param ch code point to determine if it is in uppercase
