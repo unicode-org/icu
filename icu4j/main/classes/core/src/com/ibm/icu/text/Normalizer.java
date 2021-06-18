@@ -27,7 +27,7 @@ import com.ibm.icu.util.ICUCloneNotSupportedException;
  * <p><code>normalize</code> transforms Unicode text into an equivalent composed or
  * decomposed form, allowing for easier sorting and searching of text.
  * <code>normalize</code> supports the standard normalization forms described in
- * <a href="http://www.unicode.org/unicode/reports/tr15/" target="unicode">
+ * <a href="https://www.unicode.org/reports/tr15/" target="unicode">
  * Unicode Standard Annex #15 &mdash; Unicode Normalization Forms</a>.
  *
  * <p>Characters with accents or other adornments can be encoded in
@@ -366,7 +366,7 @@ public final class Normalizer implements Cloneable {
      * <p>
      * If all optional features (<i>e.g.</i> {@link #IGNORE_HANGUL}) are turned
      * off, this operation produces output that is in
-     * <a href=http://www.unicode.org/unicode/reports/tr15/>Unicode Canonical
+     * <a href=https://www.unicode.org/reports/tr15/>Unicode Canonical
      * Form</a>
      * <b>C</b>.
      * <p>
@@ -385,7 +385,7 @@ public final class Normalizer implements Cloneable {
      * <p>
      * If all optional features (<i>e.g.</i> {@link #IGNORE_HANGUL}) are turned
      * off, this operation produces output that is in
-     * <a href=http://www.unicode.org/unicode/reports/tr15/>Unicode Canonical
+     * <a href=https://www.unicode.org/reports/tr15/>Unicode Canonical
      * Form</a>
      * <b>KC</b>.
      * <p>
@@ -404,7 +404,7 @@ public final class Normalizer implements Cloneable {
      * <p>
      * If all optional features (<i>e.g.</i> {@link #IGNORE_HANGUL}) are turned
      * off, this operation produces output that is in
-     * <a href=http://www.unicode.org/unicode/reports/tr15/>Unicode Canonical
+     * <a href=https://www.unicode.org/reports/tr15/>Unicode Canonical
      * Form</a>
      * <b>D</b>.
      * <p>
@@ -423,7 +423,7 @@ public final class Normalizer implements Cloneable {
      * <p>
      * If all optional features (<i>e.g.</i> {@link #IGNORE_HANGUL}) are turned
      * off, this operation produces output that is in
-     * <a href=http://www.unicode.org/unicode/reports/tr15/>Unicode Canonical
+     * <a href=https://www.unicode.org/reports/tr15/>Unicode Canonical
      * Form</a>
      * <b>KD</b>.
      * <p>
@@ -446,7 +446,7 @@ public final class Normalizer implements Cloneable {
      * The Unicode standard treates Hangul to Jamo conversion as a
      * canonical decomposition, so this option must be turned <b>off</b> if you
      * wish to transform strings into one of the standard
-     * <a href="http://www.unicode.org/unicode/reports/tr15/" target="unicode">
+     * <a href="https://www.unicode.org/reports/tr15/" target="unicode">
      * Unicode Normalization Forms</a>.
      * <p>
      * @see #setOption

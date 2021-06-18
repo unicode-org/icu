@@ -118,7 +118,7 @@
 #
 # The general ordering is from specific and frequently used to more general
 # or rarely used at the bottom.
-{   UTR22           # Name format specified by http://www.unicode.org/unicode/reports/tr22/
+{   UTR22           # Name format specified by https://www.unicode.org/reports/tr22/
     # ICU             # Can also use ICU_FEATURE
     IBM             # The IBM CCSID number is specified by ibm-*
     WINDOWS         # The Microsoft code page identifier number is specified by windows-*. The rest are recognized IE names.
@@ -328,7 +328,7 @@ BOCU-1 { IANA* }
     ibm-1214 { IBM }  # BOCU-1 with IBM PUA
     ibm-1215 { IBM* } # BOCU-1
 
-# See http://www.unicode.org/unicode/reports/tr26 for this Compatibility Encoding Scheme for UTF-16
+# See https://www.unicode.org/reports/tr26 for this Compatibility Encoding Scheme for UTF-16
 # The Unicode Consortium does not encourage the use of CESU-8
 CESU-8 { IANA* } ibm-9400 { IBM* }
 

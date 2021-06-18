@@ -46,7 +46,7 @@ public class ConformanceTest extends TestFmwk {
 
     /**
      * Test the conformance of Normalizer to
-     * http://www.unicode.org/unicode/reports/tr15/conformance/Draft-TestSuite.txt.* http://www.unicode.org/Public/UNIDATA/NormalizationTest.txt
+     * https://www.unicode.org/reports/tr15/conformance/Draft-TestSuite.txt.* http://www.unicode.org/Public/UNIDATA/NormalizationTest.txt
      * This file must be located at the path specified as TEST_SUITE_FILE.
      */
     @Test

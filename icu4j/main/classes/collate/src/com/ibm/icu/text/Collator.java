@@ -41,7 +41,7 @@ import com.ibm.icu.util.VersionInfo;
 *
 * <p>Following the <a href=http://www.unicode.org>Unicode
 * Consortium</a>'s specifications for the
-* <a href="http://www.unicode.org/unicode/reports/tr10/">Unicode Collation
+* <a href="https://www.unicode.org/reports/tr10/">Unicode Collation
 * Algorithm (UCA)</a>, there are 5 different levels of strength used
 * in comparisons:
 *
@@ -223,7 +223,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * will be decomposed for collation.
      *
      * <p>CANONICAL_DECOMPOSITION corresponds to Normalization Form D as
-     * described in <a href="http://www.unicode.org/unicode/reports/tr15/">
+     * described in <a href="https://www.unicode.org/reports/tr15/">
      * Unicode Technical Report #15</a>.
      *
      * @see #NO_DECOMPOSITION

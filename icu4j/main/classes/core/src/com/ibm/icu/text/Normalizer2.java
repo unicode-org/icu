@@ -26,7 +26,7 @@ import com.ibm.icu.util.ICUUncheckedIOException;
  * The primary functions are to produce a normalized string and to detect whether
  * a string is already normalized.
  * The most commonly used normalization forms are those defined in
- * http://www.unicode.org/unicode/reports/tr15/
+ * https://www.unicode.org/reports/tr15/
  * However, this API supports additional normalization forms for specialized purposes.
  * For example, NFKC_Casefold is provided via getInstance("nfkc_cf", COMPOSE)
  * and can be used in implementations of UTS #46.
@@ -65,7 +65,7 @@ public abstract class Normalizer2 {
      * Constants for normalization modes.
      * For details about standard Unicode normalization forms
      * and about the algorithms which are also used with custom mapping tables
-     * see http://www.unicode.org/unicode/reports/tr15/
+     * see https://www.unicode.org/reports/tr15/
      * @stable ICU 4.4
      */
     public enum Mode {
@@ -74,7 +74,7 @@ public abstract class Normalizer2 {
          * Same as standard NFC when using an "nfc" instance.
          * Same as standard NFKC when using an "nfkc" instance.
          * For details about standard Unicode normalization forms
-         * see http://www.unicode.org/unicode/reports/tr15/
+         * see https://www.unicode.org/reports/tr15/
          * @stable ICU 4.4
          */
         COMPOSE,
@@ -83,7 +83,7 @@ public abstract class Normalizer2 {
          * Same as standard NFD when using an "nfc" instance.
          * Same as standard NFKD when using an "nfkc" instance.
          * For details about standard Unicode normalization forms
-         * see http://www.unicode.org/unicode/reports/tr15/
+         * see https://www.unicode.org/reports/tr15/
          * @stable ICU 4.4
          */
         DECOMPOSE,
