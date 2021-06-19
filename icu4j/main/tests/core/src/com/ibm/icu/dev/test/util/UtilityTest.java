@@ -52,11 +52,9 @@ public class UtilityTest extends TestFmwk {
 
         // Regression test for ICU-21645
         String s = "\\U0001DA8B\\U0001DF00-\\U0001DF1E";
-        int[] offset16 = new int[] { 1 };  // after the backslash
         // This returned U+B2F00 for the first _two_ escapes.
-        int c = Utility.unescapeAt(s, offset16);
-        assertEquals(s + " unescape at 1, code point", 0x1DA8B, c);
-        assertEquals(s + " unescape at 1, offset", 10, offset16[0]);
+        int cpAndLength = Utility.unescapeAndLengthAt(s, 1);  // index 1 = after the backslash
+        assertEquals(s + " unescape at 1, cpAndLength", 0x1DA8B09, cpAndLength);
         String pattern = "[" + s + "]";
         // This threw an IllegalArgumentException because the parser called Utility.unescapeAt()
         // and saw an invalid range of B2F00..1DF1E (start >= end).
