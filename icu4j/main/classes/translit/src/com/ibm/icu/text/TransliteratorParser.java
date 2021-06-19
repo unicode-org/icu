@@ -493,12 +493,12 @@ class TransliteratorParser {
                     if (pos == limit) {
                         syntaxError("Trailing backslash", rule, start);
                     }
-                    iref[0] = pos;
-                    int escaped = Utility.unescapeAt(rule, iref);
-                    pos = iref[0];
-                    if (escaped == -1) {
+                    int cpAndLength = Utility.unescapeAndLengthAt(rule, pos);
+                    if (cpAndLength < 0) {
                         syntaxError("Malformed escape", rule, start);
                     }
+                    int escaped = Utility.cpFromCodePointAndLength(cpAndLength);
+                    pos += Utility.lengthFromCodePointAndLength(cpAndLength);
                     parser.checkVariableRange(escaped, rule, start);
                     UTF16.append(buf, escaped);
                     continue;
@@ -902,16 +902,16 @@ class TransliteratorParser {
         boolean parsingIDs = true;
         int ruleCount = 0;
 
-        dataVector = new ArrayList<Data>();
-        idBlockVector = new ArrayList<String>();
+        dataVector = new ArrayList<>();
+        idBlockVector = new ArrayList<>();
         curData = null;
         direction = dir;
         compoundFilter = null;
-        variablesVector = new ArrayList<Object>();
-        variableNames = new HashMap<String, char[]>();
+        variablesVector = new ArrayList<>();
+        variableNames = new HashMap<>();
         parseData = new ParseData();
 
-        List<RuntimeException> errors = new ArrayList<RuntimeException>();
+        List<RuntimeException> errors = new ArrayList<>();
         int errorCount = 0;
 
         ruleArray.reset();
@@ -1079,7 +1079,7 @@ class TransliteratorParser {
             Data data = dataVector.get(i);
             data.variables = new Object[variablesVector.size()];
             variablesVector.toArray(data.variables);
-            data.variableNames = new HashMap<String, char[]>();
+            data.variableNames = new HashMap<>();
             data.variableNames.putAll(variableNames);
         }
         variablesVector = null;
@@ -1143,7 +1143,7 @@ class TransliteratorParser {
 
         // Set up segments data
         segmentStandins = new StringBuffer();
-        segmentObjects = new ArrayList<StringMatcher>();
+        segmentObjects = new ArrayList<>();
 
         RuleHalf left  = new RuleHalf();
         RuleHalf right = new RuleHalf();

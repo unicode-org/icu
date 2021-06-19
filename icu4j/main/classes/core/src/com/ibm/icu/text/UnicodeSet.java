@@ -2555,7 +2555,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         StringBuilder patBuf = new StringBuilder(), buf = null;
         boolean usePat = false;
         UnicodeSet scratch = null;
-        Object backup = null;
+        RuleCharacterIterator.Position backup = null;
 
         // mode: 0=before [, 1=between [...], 2=after ]
         // lastItem: 0=none, 1=char, 2=set
@@ -3673,7 +3673,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             int iterOpts) {
         boolean result = false;
         iterOpts &= ~RuleCharacterIterator.PARSE_ESCAPES;
-        Object pos = chars.getPos(null);
+        RuleCharacterIterator.Position pos = chars.getPos(null);
         int c = chars.next(iterOpts);
         if (c == '[' || c == '\\') {
             int d = chars.next(iterOpts & ~RuleCharacterIterator.SKIP_WHITESPACE);
@@ -3784,14 +3784,16 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      */
     private void applyPropertyPattern(RuleCharacterIterator chars,
             Appendable rebuiltPat, SymbolTable symbols) {
-        String patStr = chars.lookahead();
-        ParsePosition pos = new ParsePosition(0);
+        String patStr = chars.getCurrentBuffer();
+        int start = chars.getCurrentBufferPos();
+        ParsePosition pos = new ParsePosition(start);
         applyPropertyPattern(patStr, pos, symbols);
-        if (pos.getIndex() == 0) {
+        int length = pos.getIndex() - start;
+        if (length == 0) {
             syntaxError(chars, "Invalid property pattern");
         }
-        chars.jumpahead(pos.getIndex());
-        append(rebuiltPat, patStr.substring(0, pos.getIndex()));
+        chars.jumpahead(length);
+        append(rebuiltPat, patStr.substring(start, pos.getIndex()));
     }
 
     //----------------------------------------------------------------
