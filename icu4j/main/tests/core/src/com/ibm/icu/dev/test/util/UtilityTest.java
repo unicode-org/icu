@@ -49,6 +49,22 @@ public class UtilityTest extends TestFmwk {
         if (!result.equals(expect)) {
             errln("FAIL: Utility.unescape() returned " + result + ", exp. " + expect);
         }
+
+        // Regression test for ICU-21645
+        String s = "\\U0001DA8B\\U0001DF00-\\U0001DF1E";
+        int[] offset16 = new int[] { 1 };  // after the backslash
+        // This returned U+B2F00 for the first _two_ escapes.
+        int c = Utility.unescapeAt(s, offset16);
+        assertEquals(s + " unescape at 1, code point", 0x1DA8B, c);
+        assertEquals(s + " unescape at 1, offset", 10, offset16[0]);
+        String pattern = "[" + s + "]";
+        // This threw an IllegalArgumentException because the parser called Utility.unescapeAt()
+        // and saw an invalid range of B2F00..1DF1E (start >= end).
+        UnicodeSet set = new UnicodeSet(pattern);
+        assertEquals(pattern + " size", 32, set.size());
+        assertTrue(pattern + " contains U+1DA8B", set.contains(0x1DA8B));
+        assertTrue(pattern + " contains U+1DF00..U+1DF1E", set.contains(0x1DF00, 0x1DF1E));
+        assertFalse(pattern + " contains U+1DF1F", set.contains(0x1DF1F));
     }
 
     @Test
