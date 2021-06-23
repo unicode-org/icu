@@ -97,6 +97,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(roundingFigures);
         TESTCASE_AUTO(roundingFractionFigures);
         TESTCASE_AUTO(roundingOther);
+        TESTCASE_AUTO(roundingIncrementSkeleton);
         TESTCASE_AUTO(grouping);
         TESTCASE_AUTO(padding);
         TESTCASE_AUTO(integerWidth);
@@ -3072,6 +3073,28 @@ void NumberFormatterApiTest::roundingFractionFigures() {
             Locale::getEnglish(),
             1,
             u"1");
+}
+
+void NumberFormatterApiTest::roundingIncrementSkeleton() {
+    Locale locale = Locale::getEnglish();
+
+    for (int min_fraction_digits = 1; min_fraction_digits < 8; min_fraction_digits++) {
+        double increment = 0.05;
+        for (int i = 0; i < 8 ; i++, increment *= 10.0) {
+            const UnlocalizedNumberFormatter f =
+                NumberFormatter::with().precision(
+                    Precision::increment(increment).withMinFraction(
+                        min_fraction_digits));
+            const LocalizedNumberFormatter l = f.locale(locale);
+
+            UErrorCode status = U_ZERO_ERROR;
+            UnicodeString skeleton = f.toSkeleton(status);
+            std::string utf8;
+            printf("Precision::increment(%0.5f).withMinFraction(%d) '%s'\n",
+                   increment, min_fraction_digits,
+                   skeleton.toUTF8String<std::string>(utf8).c_str());
+        }
+    }
 }
 
 void NumberFormatterApiTest::roundingOther() {
