@@ -8,6 +8,7 @@
 */
 
 #include "unicode/utypes.h"
+#include "unicode/localpointer.h"
 
 #if !UCONFIG_NO_SERVICE
 
@@ -418,12 +419,6 @@ private:
     UBool fActive;
 };
 
-struct UVectorDeleter {
-    UVector* _obj;
-    UVectorDeleter() : _obj(NULL) {}
-    ~UVectorDeleter() { delete _obj; }
-};
-
 // called only by factories, treat as private
 UObject* 
 ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUServiceFactory* factory, UErrorCode& status) const 
@@ -454,6 +449,7 @@ ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUSer
         if (serviceCache == NULL) {
             ncthis->serviceCache = new Hashtable(status);
             if (ncthis->serviceCache == NULL) {
+                status = U_MEMORY_ALLOCATION_ERROR;
                 return NULL;
             }
             if (U_FAILURE(status)) {
@@ -464,7 +460,7 @@ ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUSer
         }
 
         UnicodeString currentDescriptor;
-        UVectorDeleter cacheDescriptorList;
+        LocalPointer<UVector> cacheDescriptorList;
         UBool putInCache = FALSE;
 
         int32_t startIndex = 0;
@@ -502,18 +498,17 @@ ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUSer
             int32_t index = startIndex;
             while (index < limit) {
                 ICUServiceFactory* f = (ICUServiceFactory*)factories->elementAt(index++);
-                UObject* service = f->create(key, this, status);
+                LocalPointer<UObject> service(f->create(key, this, status));
                 if (U_FAILURE(status)) {
-                    delete service;
                     return NULL;
                 }
-                if (service != NULL) {
-                    result = new CacheEntry(currentDescriptor, service);
+                if (service.isValid()) {
+                    result = new CacheEntry(currentDescriptor, service.getAlias());
                     if (result == NULL) {
-                        delete service;
                         status = U_MEMORY_ALLOCATION_ERROR;
                         return NULL;
                     }
+                    service.orphan(); // result now owns service.
 
                     goto outerEnd;
                 }
@@ -524,22 +519,26 @@ ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUSer
             // don't want to keep querying on an id that's going to
             // fallback to the one that succeeded, we want to hit the
             // cache the first time next goaround.
-            if (cacheDescriptorList._obj == NULL) {
-                cacheDescriptorList._obj = new UVector(uprv_deleteUObject, NULL, 5, status);
+            if (cacheDescriptorList.isNull()) {
+                cacheDescriptorList.adoptInsteadAndCheckErrorCode(new UVector(uprv_deleteUObject, NULL, 5, status), status);
                 if (U_FAILURE(status)) {
                     return NULL;
                 }
             }
-            UnicodeString* idToCache = new UnicodeString(currentDescriptor);
-            if (idToCache == NULL || idToCache->isBogus()) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                return NULL;
-            }
 
-            cacheDescriptorList._obj->addElement(idToCache, status);
+            LocalPointer<UnicodeString> idToCache(new UnicodeString(currentDescriptor), status);
             if (U_FAILURE(status)) {
                 return NULL;
             }
+            if (idToCache->isBogus()) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return NULL;
+            }
+            cacheDescriptorList->addElement(idToCache.getAlias(), status);
+            if (U_FAILURE(status)) {
+                return NULL;
+            }
+            idToCache.orphan(); // cacheDescriptorList now owns the string.
         } while (key.fallback());
 outerEnd:
 
@@ -550,9 +549,9 @@ outerEnd:
                     return NULL;
                 }
 
-                if (cacheDescriptorList._obj != NULL) {
-                    for (int32_t i = cacheDescriptorList._obj->size(); --i >= 0;) {
-                        UnicodeString* desc = (UnicodeString*)cacheDescriptorList._obj->elementAt(i);
+                if (cacheDescriptorList.isValid()) {
+                    for (int32_t i = cacheDescriptorList->size(); --i >= 0;) {
+                        UnicodeString* desc = (UnicodeString*)cacheDescriptorList->elementAt(i);
 
                         serviceCache->put(*desc, result, status);
                         if (U_FAILURE(status)) {
@@ -560,7 +559,7 @@ outerEnd:
                         }
 
                         result->ref();
-                        cacheDescriptorList._obj->removeElementAt(i);
+                        cacheDescriptorList->removeElementAt(i);
                     }
                 }
             }
