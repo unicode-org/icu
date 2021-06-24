@@ -47,7 +47,7 @@ import com.ibm.icu.util.VersionInfo;
  * sets. RuleBasedCollator is designed to be fully compliant to the <a
  * href="https://www.unicode.org/reports/tr10/">Unicode Collation Algorithm (UCA)</a> and conforms to ISO 14651.
  *
- * <p>A Collator is thread-safe only when frozen. See {{@link #isFrozen()} and {@link com.ibm.icu.util.Freezable}.
+ * <p>A Collator is thread-safe only when frozen. See {@link #isFrozen()} and {@link com.ibm.icu.util.Freezable}.
  *
  * <p>
  * Users are strongly encouraged to read the <a href="https://unicode-org.github.io/icu/userguide/collation">User
