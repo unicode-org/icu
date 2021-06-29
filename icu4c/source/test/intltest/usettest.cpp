@@ -99,6 +99,7 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestUnusedCcc);
     TESTCASE_AUTO(TestDeepPattern);
     TESTCASE_AUTO(TestEmptyString);
+    TESTCASE_AUTO(TestSkipToStrings);
     TESTCASE_AUTO_END;
 }
 
@@ -882,6 +883,8 @@ void UnicodeSetTest::TestStrings() {
     if (U_FAILURE(ec)) {
         errln("FAIL: couldn't construct test sets");
     }
+    assertFalse("[a-c].hasStrings()", testList[0]->hasStrings());
+    assertTrue("[{ll}{ch}a-z].hasStrings()", testList[2]->hasStrings());
 
     for (int32_t i = 0; testList[i] != NULL; i+=2) {
         if (U_SUCCESS(ec)) {
@@ -896,7 +899,7 @@ void UnicodeSetTest::TestStrings() {
         }
         delete testList[i];
         delete testList[i+1];
-    }        
+    }
 }
 
 /**
@@ -4058,4 +4061,50 @@ void UnicodeSetTest::TestEmptyString() {
     assertEquals("frozen spanBack", 2, set.spanBack(u"abc", 3, USET_SPAN_SIMPLE));
     assertTrue("frozen containsNone", set.containsNone(u"def"));
     assertFalse("frozen containsSome", set.containsSome(u"def"));
+}
+
+void UnicodeSetTest::assertNext(UnicodeSetIterator &iter, const UnicodeString &expected) {
+    assertTrue(expected + ".next()", iter.next());
+    assertEquals(expected + ".getString()", expected, iter.getString());
+}
+
+void UnicodeSetTest::TestSkipToStrings() {
+    IcuTestErrorCode errorCode(*this, "TestSkipToStrings");
+    UnicodeSet set(u"[0189{}{ch}]", errorCode);
+    UnicodeSetIterator iter(set);
+    assertNext(iter.skipToStrings(), u"");
+    assertNext(iter, u"ch");
+    assertFalse("no next", iter.next());
+
+    iter.reset();
+    assertNext(iter, u"0");
+    assertNext(iter, u"1");
+    assertNext(iter, u"8");
+    assertNext(iter, u"9");
+    assertNext(iter, u"");
+    assertNext(iter, u"ch");
+    assertFalse("no next", iter.next());
+
+    iter.reset();
+    assertNext(iter, u"0");
+    iter.skipToStrings();
+    assertNext(iter, u"");
+    assertNext(iter, u"ch");
+    assertFalse("no next", iter.next());
+
+    iter.reset();
+    iter.nextRange();
+    assertNext(iter, u"8");
+    iter.skipToStrings();
+    assertNext(iter, u"");
+    assertNext(iter, u"ch");
+    assertFalse("no next", iter.next());
+
+    iter.reset();
+    iter.nextRange();
+    iter.nextRange();
+    iter.nextRange();
+    iter.skipToStrings();
+    assertNext(iter, u"ch");
+    assertFalse("no next", iter.next());
 }

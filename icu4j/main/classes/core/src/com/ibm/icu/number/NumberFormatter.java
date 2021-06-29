@@ -487,9 +487,8 @@ public final class NumberFormatter {
      * <li>AUTO: 0.90, 1.00, 1.10
      * <li>HIDE_IF_WHOLE: 0.90, 1, 1.10
      * </ul>
-     * 
+     *
      * @draft ICU 69
-     * @provisional This API might change or be removed in a future release.
      */
     public static enum TrailingZeroDisplay {
         /**
@@ -498,7 +497,7 @@ public final class NumberFormatter {
          * @draft ICU 69
          */
         AUTO,
-    
+
         /**
          * Same as AUTO, but hide trailing zeros after the decimal separator if they are all zero.
          *

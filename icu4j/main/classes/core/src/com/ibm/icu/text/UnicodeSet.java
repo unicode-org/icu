@@ -829,10 +829,6 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         }
     }
 
-    boolean hasStrings() {
-        return !strings.isEmpty();
-    }
-
     /**
      * Returns the number of elements in this set (its cardinality)
      * Note than the elements of a set may include both individual
@@ -858,6 +854,14 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      */
     public boolean isEmpty() {
         return len == 1 && !hasStrings();
+    }
+
+    /**
+     * @return true if this set contains multi-character strings or the empty string.
+     * @draft ICU 70
+     */
+    public boolean hasStrings() {
+        return !strings.isEmpty();
     }
 
     /**

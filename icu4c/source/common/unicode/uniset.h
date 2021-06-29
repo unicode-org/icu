@@ -771,8 +771,12 @@ public:
      * Note than the elements of a set may include both individual
      * codepoints and strings.
      *
+     * This is slower than getRangeCount() because
+     * it counts the code points of all ranges.
+     *
      * @return the number of elements in this set (its cardinality).
      * @stable ICU 2.0
+     * @see getRangeCount
      */
     virtual int32_t size(void) const;
 
@@ -783,6 +787,14 @@ public:
      * @stable ICU 2.0
      */
     virtual UBool isEmpty(void) const;
+
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * @return true if this set contains multi-character strings or the empty string.
+     * @draft ICU 70
+     */
+    UBool hasStrings() const;
+#endif  // U_HIDE_DRAFT_API
 
     /**
      * Returns true if this set contains the given character.
@@ -1064,8 +1076,14 @@ public:
     /**
      * Returns the character at the given index within this set, where
      * the set is ordered by ascending code point.  If the index is
-     * out of range, return (UChar32)-1.  The inverse of this method is
-     * <code>indexOf()</code>.
+     * out of range for characters, returns (UChar32)-1.
+     * The inverse of this method is <code>indexOf()</code>.
+     *
+     * For iteration, this is slower than UnicodeSetIterator or
+     * getRangeCount()/getRangeStart()/getRangeEnd(),
+     * because for each call it skips linearly over <code>index</code>
+     * characters in the ranges.
+     *
      * @param index an index from 0..size()-1
      * @return the character at the given index, or (UChar32)-1.
      * @stable ICU 2.4
@@ -1567,7 +1585,6 @@ private:
     void swapBuffers(void);
 
     UBool allocateStrings(UErrorCode &status);
-    UBool hasStrings() const;
     int32_t stringsSize() const;
     UBool stringsContains(const UnicodeString &s) const;
 

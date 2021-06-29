@@ -19,6 +19,7 @@
 #include "unicode/unistr.h"
 #include "unicode/uniset.h"
 #include "unicode/ucnv_err.h"
+#include "unicode/usetiter.h"
 #include "intltest.h"
 #include "cmemory.h"
 
@@ -95,6 +96,9 @@ private:
     void TestUnusedCcc();
     void TestDeepPattern();
     void TestEmptyString();
+
+    void assertNext(UnicodeSetIterator &iter, const UnicodeString &expected);
+    void TestSkipToStrings();
 
 private:
 

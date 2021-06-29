@@ -60,6 +60,9 @@ class UnicodeString;
  *   }
  * }
  * </pre>
+ *
+ * To iterate over only the strings, start with <code>skipToStrings()</code>.
+ *
  * @author M. Davis
  * @stable ICU 2.4
  */
@@ -169,6 +172,25 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
      * @stable ICU 2.4
      */
     const UnicodeString& getString();
+
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Skips over the remaining code points/ranges, if any.
+     * A following call to next() or nextRange() will yield a string, if there is one.
+     * No-op if next() would return false, or if it would yield a string anyway.
+     *
+     * @return *this
+     * @draft ICU 70
+     * @see UnicodeSet#strings()
+     */
+    inline UnicodeSetIterator &skipToStrings() {
+        // Finish code point/range iteration.
+        range = endRange;
+        endElement = -1;
+        nextElement = 0;
+        return *this;
+    }
+#endif  // U_HIDE_DRAFT_API
 
     /**
      * Advances the iteration position to the next element in the set, 
@@ -281,12 +303,15 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
      */
     int32_t stringCount;
 
+ private:
+
     /**
      *  Points to the string to use when the caller asks for a
      *  string and the current iteration item is a code point, not a string.
-     *  @internal
      */
     UnicodeString *cpString;
+
+ protected:
 
     /** Copy constructor. Disallowed.
      * @stable ICU 2.4
@@ -306,7 +331,7 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
 };
 
 inline UBool UnicodeSetIterator::isString() const {
-    return codepoint == (UChar32)IS_STRING;
+    return codepoint < 0;
 }
 
 inline UChar32 UnicodeSetIterator::getCodepoint() const {

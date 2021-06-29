@@ -819,6 +819,8 @@ public class UnicodeSetTest extends TestFmwk {
                             {new UnicodeSet('a','z').add('A', 'Z').retain('M','m').complement('X'),
                                 new UnicodeSet("[[a-zA-Z]&[M-m]-[X]]")},
         };
+        assertFalse("[a-c].hasStrings()", testList[0][0].hasStrings());
+        assertTrue("[{ll}{ch}a-z].hasStrings()", testList[1][0].hasStrings());
 
         for (int i = 0; i < testList.length; ++i) {
             if (!testList[i][0].equals(testList[i][1])) {
@@ -2420,17 +2422,6 @@ public class UnicodeSetTest extends TestFmwk {
         return Utility.unescape(s);
     }
 
-    /* Test the method public UnicodeSet getSet() */
-    @Test
-    public void TestGetSet() {
-        UnicodeSetIterator us = new UnicodeSetIterator();
-        try {
-            us.getSet();
-        } catch (Exception e) {
-            errln("UnicodeSetIterator.getSet() was not suppose to given an " + "an exception.");
-        }
-    }
-
     /* Tests the method public UnicodeSet add(Collection<?> source) */
     @Test
     public void TestAddCollection() {
@@ -2839,5 +2830,51 @@ public class UnicodeSetTest extends TestFmwk {
         assertEquals("frozen spanBack", 2, set.spanBack("abc", SpanCondition.SIMPLE));
         assertTrue("frozen containsNone", set.containsNone("def"));
         assertFalse("frozen containsSome", set.containsSome("def"));
+    }
+
+    private void assertNext(UnicodeSetIterator iter, String expected) {
+        assertTrue(expected + ".next()", iter.next());
+        assertEquals(expected + ".getString()", expected, iter.getString());
+    }
+
+    @Test
+    public void TestSkipToStrings() {
+        UnicodeSet set = new UnicodeSet("[0189{}{ch}]");
+        UnicodeSetIterator iter = new UnicodeSetIterator(set).skipToStrings();
+        assertNext(iter, "");
+        assertNext(iter, "ch");
+        assertFalse("no next", iter.next());
+
+        iter.reset();
+        assertNext(iter, "0");
+        assertNext(iter, "1");
+        assertNext(iter, "8");
+        assertNext(iter, "9");
+        assertNext(iter, "");
+        assertNext(iter, "ch");
+        assertFalse("no next", iter.next());
+
+        iter.reset();
+        assertNext(iter, "0");
+        iter.skipToStrings();
+        assertNext(iter, "");
+        assertNext(iter, "ch");
+        assertFalse("no next", iter.next());
+
+        iter.reset();
+        iter.nextRange();
+        assertNext(iter, "8");
+        iter.skipToStrings();
+        assertNext(iter, "");
+        assertNext(iter, "ch");
+        assertFalse("no next", iter.next());
+
+        iter.reset();
+        iter.nextRange();
+        iter.nextRange();
+        iter.nextRange();
+        iter.skipToStrings();
+        assertNext(iter, "ch");
+        assertFalse("no next", iter.next());
     }
 }
