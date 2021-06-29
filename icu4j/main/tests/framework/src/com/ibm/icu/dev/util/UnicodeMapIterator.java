@@ -17,7 +17,7 @@ import com.ibm.icu.text.UTF16;
  * UnicodeSetIterator iterates over the contents of a UnicodeSet.  It
  * iterates over either code points or code point ranges.  After all
  * code points or ranges have been returned, it returns the
- * multicharacter strings of the UnicodSet, if any.
+ * multicharacter strings of the UnicodeSet, if any.
  *
  * <p>To iterate over code points, use a loop like this:
  * <pre>
@@ -106,7 +106,7 @@ public class UnicodeMapIterator<T> {
      * false.  If <tt>codepoint == IS_STRING</tt>, the value is a
      * string in the <tt>string</tt> field.  Otherwise the value is a
      * single code point in the <tt>codepoint</tt> field.
-     * 
+     *
      * <p>The order of iteration is all code points in sorted order,
      * followed by all strings sorted order.  <tt>codepointEnd</tt> is
      * undefined after calling this method.  <tt>string</tt> is
@@ -135,7 +135,7 @@ public class UnicodeMapIterator<T> {
 
         if (stringIterator == null) return false;
         codepoint = IS_STRING; // signal that value is actually a string
-        string = (String)stringIterator.next();
+        string = stringIterator.next();
         if (!stringIterator.hasNext()) stringIterator = null;
         return true;
     }
@@ -147,7 +147,7 @@ public class UnicodeMapIterator<T> {
      * string in the <tt>string</tt> field.  Otherwise the value is a
      * range of one or more code points from <tt>codepoint</tt> to
      * <tt>codepointeEnd</tt> inclusive.
-     * 
+     *
      * <p>The order of iteration is all code points ranges in sorted
      * order, followed by all strings sorted order.  Ranges are
      * disjoint and non-contiguous.  <tt>string</tt> is undefined
@@ -180,7 +180,7 @@ public class UnicodeMapIterator<T> {
 
         if (stringIterator == null) return false;
         codepoint = IS_STRING; // signal that value is actually a string
-        string = (String)stringIterator.next();
+        string = stringIterator.next();
         if (!stringIterator.hasNext()) stringIterator = null;
         return true;
     }
@@ -198,13 +198,13 @@ public class UnicodeMapIterator<T> {
 
     /**
      * Resets this iterator to the start of the set.
-     * @return 
+     * @return
      */
     public UnicodeMapIterator<T> reset() {
         endRange = map.getRangeCount() - 1;
         // both next*() methods will test: if (nextElement <= endElement)
         // we set them to fail this test, which will cause them to load the first range
-        nextElement = 0; 
+        nextElement = 0;
         endElement = -1;
         range = -1;
 
