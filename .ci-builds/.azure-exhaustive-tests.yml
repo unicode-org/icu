@@ -30,11 +30,11 @@ trigger:
 jobs:
 #-------------------------------------------------------------------------
 # Note: The exhaustive tests can take more than 1 hour to complete.
-- job: ICU4J_OpenJDK_Ubuntu_1604
-  displayName: 'J: Linux OpenJDK (Ubuntu 16.04)'
+- job: ICU4J_OpenJDK_Ubuntu_1804
+  displayName: 'J: Linux OpenJDK (Ubuntu 18.04)'
   timeoutInMinutes: 120
   pool:
-    vmImage: 'Ubuntu 16.04'
+    vmImage: 'ubuntu-18.04'
     demands: ant
   steps:
     - checkout: self
@@ -52,11 +52,11 @@ jobs:
       timeoutInMinutes: 2
 #-------------------------------------------------------------------------
 # Note: The exhaustive tests can take more than 1 hour to complete.
-- job: ICU4C_Clang_Exhaustive_Ubuntu_1604
-  displayName: 'C: Linux Clang Exhaustive Tests (Ubuntu 16.04)'
+- job: ICU4C_Clang_Exhaustive_Ubuntu_1804
+  displayName: 'C: Linux Clang Exhaustive Tests (Ubuntu 18.04)'
   timeoutInMinutes: 120
   pool:
-    vmImage: 'Ubuntu 16.04'
+    vmImage: 'ubuntu-18.04'
   steps:
     - checkout: self
       lfs: true
