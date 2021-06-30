@@ -297,13 +297,12 @@ Locale::Locale( const   char * newLanguage,
     else
     {
         UErrorCode status = U_ZERO_ERROR;
-        int32_t size = 0;
         int32_t lsize = 0;
         int32_t csize = 0;
         int32_t vsize = 0;
         int32_t ksize = 0;
 
-        // Calculate the size of the resulting string.
+        // Check the sizes of the input strings.
 
         // Language
         if ( newLanguage != NULL )
@@ -313,7 +312,6 @@ Locale::Locale( const   char * newLanguage,
                 setToBogus();
                 return;
             }
-            size = lsize;
         }
 
         CharString togo(newLanguage, lsize, status); // start with newLanguage
@@ -326,7 +324,6 @@ Locale::Locale( const   char * newLanguage,
                 setToBogus();
                 return;
             }
-            size += csize;
         }
 
         // _Variant
@@ -350,21 +347,6 @@ Locale::Locale( const   char * newLanguage,
             }
         }
 
-        if( vsize > 0 )
-        {
-            size += vsize;
-        }
-
-        // Separator rules:
-        if ( vsize > 0 )
-        {
-            size += 2;  // at least: __v
-        }
-        else if ( csize > 0 )
-        {
-            size += 1;  // at least: _v
-        }
-
         if ( newKeywords != NULL)
         {
             ksize = (int32_t)uprv_strlen(newKeywords);
@@ -372,11 +354,9 @@ Locale::Locale( const   char * newLanguage,
               setToBogus();
               return;
             }
-            size += ksize + 1;
         }
 
-        //  NOW we have the full locale string..
-        // Now, copy it back.
+        // We've checked the input sizes, now build up the full locale string..
 
         // newLanguage is already copied
 
