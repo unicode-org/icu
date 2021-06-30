@@ -1083,6 +1083,27 @@ public class NumberFormatterApiTest extends TestFmwk {
                            NumberFormatter.with().unit(MeasureUnit.forIdentifier("kibimeter")),
                            new ULocale("en-GB"), 2.4, "2.4 Kim");
 
+        assertFormatSingle(
+                "Extra-large prefix: exabyte",
+                "unit/exabyte",
+                "unit/exabyte",
+                NumberFormatter.with()
+                    .unit(MeasureUnit.forIdentifier("exabyte")),
+                new ULocale("en-GB"),
+                2.4,
+                "2.4 Ebyte");
+
+        assertFormatSingle(
+                "Extra-large prefix: exabyte (full-name)",
+                "unit/exabyte unit-width-full-name",
+                "unit/exabyte unit-width-full-name",
+                NumberFormatter.with()
+                    .unit(MeasureUnit.forIdentifier("exabyte"))
+                    .unitWidth(UnitWidth.FULL_NAME),
+                new ULocale("en-GB"),
+                2.4,
+                "2.4 exabytes");
+
         assertFormatSingle("SI prefix falling back to root: microohm", "unit/microohm", "unit/microohm",
                            NumberFormatter.with().unit(MeasureUnit.forIdentifier("microohm")),
                            new ULocale("de-CH"), 2.4, "2.4 μΩ");

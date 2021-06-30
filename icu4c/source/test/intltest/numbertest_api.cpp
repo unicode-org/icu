@@ -1131,6 +1131,27 @@ void NumberFormatterApiTest::unitArbitraryMeasureUnits() {
             u"2.4 Kim");
 
     assertFormatSingle(
+            u"Extra-large prefix: exabyte",
+            u"unit/exabyte",
+            u"unit/exabyte",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("exabyte", status)),
+            Locale("en-GB"),
+            2.4,
+            u"2.4 Ebyte");
+
+    assertFormatSingle(
+            u"Extra-large prefix: exabyte (full-name)",
+            u"unit/exabyte unit-width-full-name",
+            u"unit/exabyte unit-width-full-name",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("exabyte", status))
+                .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("en-GB"),
+            2.4,
+            u"2.4 exabytes");
+
+    assertFormatSingle(
             u"SI prefix falling back to root: microohm",
             u"unit/microohm",
             u"unit/microohm",
