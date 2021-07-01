@@ -16,6 +16,8 @@ use Dataset;
 # Test class
 my $TESTCLASS = 'com.ibm.icu.dev.test.perf.UCharacterPerf';
 
+my $CLASSES = './out/bin:../tools/misc/out/bin/:../icu4j.jar';
+
 # Methods to be tested.  Each pair represents a test method and
 # a baseline method which is used for comparison.
 my @METHODS  = (['JDKDigit',                    'Digit'],
@@ -278,7 +280,7 @@ sub callJava {
     
     my $n = ($n < 0) ? "-t ".(-$n) : "-i ".$n;
     
-    my $cmd = "java -cp classes $TESTCLASS $method $n -p $passes $pat";
+    my $cmd = "java -cp $CLASSES $TESTCLASS $method $n -p $passes $pat";
     print "[$cmd]\n"; # for debugging
     open(PIPE, "$cmd|") or die "Can't run \"$cmd\"";
     my @out;

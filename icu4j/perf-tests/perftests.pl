@@ -9,7 +9,7 @@
 use XML::LibXML;
 
 # Assume we are running within the icu4j root directory
-use lib 'src/com/ibm/icu/dev/test/perf';
+use lib '.';
 use Dataset;
 my $OS=$^O;
 

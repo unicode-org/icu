@@ -16,6 +16,8 @@ use Dataset;
 # Test class
 my $TESTCLASS = 'com.ibm.icu.dev.test.perf.NormalizerPerformanceTest'; 
 
+my $CLASSES = './out/bin:../tools/misc/out/bin/:../icu4j.jar';
+
 # Methods to be tested.  Each pair represents a test method and
 # a baseline method which is used for comparison.
 my @METHODS  = (
@@ -30,7 +32,7 @@ my @METHODS  = (
 
 # Patterns which define the set of characters used for testing.
 
-my $SOURCEDIR ="src/com/ibm/icu/dev/test/perf/data/collation/";
+my $SOURCEDIR ="data/collation/";
 
 my @OPTIONS = (
 #                      src text                     src encoding  mode  
@@ -88,7 +90,7 @@ my @OPTIONS = (
                     [ "TestNames_SerbianSH.txt",    "UTF-8", "l"],
                     [ "TestNames_SerbianSR.txt",    "UTF-8", "l"],
                     [ "TestNames_Thai.txt",         "UTF-8", "l"],
-                    [ "Testnames_Russian.txt",      "UTF-8", "l"], 
+                    [ "TestNames_Russian.txt",      "UTF-8", "l"], 
               );
 
 my $CALIBRATE = 2;  # duration in seconds for initial calibration
@@ -331,7 +333,7 @@ sub callJava {
     my $fileName = $SOURCEDIR . @$pat[0] ; 
     my $n = ($n < 0) ? "-t ".(-$n) : "-i ".$n;
     
-    my $cmd = "java -classpath classes $TESTCLASS $method $n -p $passes -f $fileName -e @$pat[1] -@$pat[2]";
+    my $cmd = "java -classpath $CLASSES $TESTCLASS $method $n -p $passes -f $fileName -e @$pat[1] -@$pat[2]";
     print "[$cmd]\n"; # for debugging
     open(PIPE, "$cmd|") or die "Can't run \"$cmd\"";
     my @out;
