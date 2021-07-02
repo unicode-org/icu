@@ -577,7 +577,6 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     MeasureUnit product(const MeasureUnit& other, UErrorCode& status) const;
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Gets the list of SINGLE units contained within a MIXED or COMPOUND unit.
      *
@@ -591,10 +590,9 @@ class U_I18N_API MeasureUnit: public UObject {
      *
      * @param status Set if an error occurs.
      * @return A pair with the list of units as a LocalArray and the number of units in the list.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     inline std::pair<LocalArray<MeasureUnit>, int32_t> splitToSingleUnits(UErrorCode& status) const;
-#endif // U_HIDE_DRAFT_API
 
     /**
      * getAvailable gets all of the available units.
@@ -1937,23 +1935,21 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit getMegahertz();
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of graphics: dot.
      * Caller owns returned value and must free it.
      * Also see {@link #getDot()}.
      * @param status ICU error code.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit *createDot(UErrorCode &status);
 
     /**
      * Returns by value, unit of graphics: dot.
      * Also see {@link #createDot()}.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit getDot();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of graphics: dot-per-centimeter.
@@ -2115,23 +2111,21 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit getDecimeter();
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of length: earth-radius.
      * Caller owns returned value and must free it.
      * Also see {@link #getEarthRadius()}.
      * @param status ICU error code.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit *createEarthRadius(UErrorCode &status);
 
     /**
      * Returns by value, unit of length: earth-radius.
      * Also see {@link #createEarthRadius()}.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit getEarthRadius();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of length: fathom.
@@ -2421,41 +2415,37 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit getYard();
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of light: candela.
      * Caller owns returned value and must free it.
      * Also see {@link #getCandela()}.
      * @param status ICU error code.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit *createCandela(UErrorCode &status);
 
     /**
      * Returns by value, unit of light: candela.
      * Also see {@link #createCandela()}.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit getCandela();
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of light: lumen.
      * Caller owns returned value and must free it.
      * Also see {@link #getLumen()}.
      * @param status ICU error code.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit *createLumen(UErrorCode &status);
 
     /**
      * Returns by value, unit of light: lumen.
      * Also see {@link #createLumen()}.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit getLumen();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of light: lux.
@@ -2537,23 +2527,21 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit getEarthMass();
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of mass: grain.
      * Caller owns returned value and must free it.
      * Also see {@link #getGrain()}.
      * @param status ICU error code.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit *createGrain(UErrorCode &status);
 
     /**
      * Returns by value, unit of mass: grain.
      * Also see {@link #createGrain()}.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit getGrain();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of mass: gram.
@@ -3371,77 +3359,69 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit getDeciliter();
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of volume: dessert-spoon.
      * Caller owns returned value and must free it.
      * Also see {@link #getDessertSpoon()}.
      * @param status ICU error code.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit *createDessertSpoon(UErrorCode &status);
 
     /**
      * Returns by value, unit of volume: dessert-spoon.
      * Also see {@link #createDessertSpoon()}.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit getDessertSpoon();
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of volume: dessert-spoon-imperial.
      * Caller owns returned value and must free it.
      * Also see {@link #getDessertSpoonImperial()}.
      * @param status ICU error code.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit *createDessertSpoonImperial(UErrorCode &status);
 
     /**
      * Returns by value, unit of volume: dessert-spoon-imperial.
      * Also see {@link #createDessertSpoonImperial()}.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit getDessertSpoonImperial();
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of volume: dram.
      * Caller owns returned value and must free it.
      * Also see {@link #getDram()}.
      * @param status ICU error code.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit *createDram(UErrorCode &status);
 
     /**
      * Returns by value, unit of volume: dram.
      * Also see {@link #createDram()}.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit getDram();
-#endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of volume: drop.
      * Caller owns returned value and must free it.
      * Also see {@link #getDrop()}.
      * @param status ICU error code.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit *createDrop(UErrorCode &status);
 
     /**
      * Returns by value, unit of volume: drop.
      * Also see {@link #createDrop()}.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit getDrop();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: fluid-ounce.
@@ -3523,23 +3503,21 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit getHectoliter();
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of volume: jigger.
      * Caller owns returned value and must free it.
      * Also see {@link #getJigger()}.
      * @param status ICU error code.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit *createJigger(UErrorCode &status);
 
     /**
      * Returns by value, unit of volume: jigger.
      * Also see {@link #createJigger()}.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit getJigger();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: liter.
@@ -3589,23 +3567,21 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit getMilliliter();
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of volume: pinch.
      * Caller owns returned value and must free it.
      * Also see {@link #getPinch()}.
      * @param status ICU error code.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit *createPinch(UErrorCode &status);
 
     /**
      * Returns by value, unit of volume: pinch.
      * Also see {@link #createPinch()}.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit getPinch();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: pint.
@@ -3655,23 +3631,21 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit getQuart();
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of volume: quart-imperial.
      * Caller owns returned value and must free it.
      * Also see {@link #getQuartImperial()}.
      * @param status ICU error code.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit *createQuartImperial(UErrorCode &status);
 
     /**
      * Returns by value, unit of volume: quart-imperial.
      * Also see {@link #createQuartImperial()}.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     static MeasureUnit getQuartImperial();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of volume: tablespoon.
@@ -3760,15 +3734,13 @@ private:
     friend class number::impl::LongNameHandler;
 };
 
-#ifndef U_HIDE_DRAFT_API
-// inline impl of @draft ICU 68 method
+// inline impl of @stable ICU 68 method
 inline std::pair<LocalArray<MeasureUnit>, int32_t>
 MeasureUnit::splitToSingleUnits(UErrorCode& status) const {
     int32_t length;
     auto array = splitToSingleUnitsImpl(length, status);
     return std::make_pair(std::move(array), length);
 }
-#endif // U_HIDE_DRAFT_API
 
 U_NAMESPACE_END
 

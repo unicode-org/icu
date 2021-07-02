@@ -373,7 +373,6 @@ public:
      */
     UnicodeString select(const number::FormattedNumber& number, UErrorCode& status) const;
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Given a formatted number range, returns the overall plural form of the
      * range. For example, "3-5" returns "other" in English.
@@ -388,10 +387,9 @@ public:
      *               This could happen if the FormattedNumberRange is invalid,
      *               or if plural ranges data is unavailable.
      * @return       The keyword of the selected rule.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     UnicodeString select(const number::FormattedNumberRange& range, UErrorCode& status) const;
-#endif // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_INTERNAL_API
     /**

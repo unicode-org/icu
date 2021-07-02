@@ -412,29 +412,27 @@ typedef enum UNumberFormatFields {
 } UNumberFormatFields;
 
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * Selectors with special numeric values to use locale default minimum grouping
  * digits for the DecimalFormat/UNumberFormat setMinimumGroupingDigits method.
  * Do not use these constants with the [U]NumberFormatter API.
  *
- * @draft ICU 68
+ * @stable ICU 68
  */
 typedef enum UNumberFormatMinimumGroupingDigits {
     /**
      * Display grouping using the default strategy for all locales.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     UNUM_MINIMUM_GROUPING_DIGITS_AUTO = -2,
     /**
      * Display grouping using locale defaults, except do not show grouping on
      * values smaller than 10000 (such that there is a minimum of two digits
      * before the first separator).
-     * @draft ICU 68
+     * @stable ICU 68
      */
     UNUM_MINIMUM_GROUPING_DIGITS_MIN2 = -3,
 } UNumberFormatMinimumGroupingDigits;
-#endif  // U_HIDE_DRAFT_API
 
 /**
  * Create and return a new UNumberFormat for formatting and parsing
