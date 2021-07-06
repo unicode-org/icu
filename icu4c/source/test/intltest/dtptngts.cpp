@@ -45,6 +45,7 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
         TESTCASE(9, testFallbackWithDefaultRootLocale);
         TESTCASE(10, testGetDefaultHourCycle_OnEmptyInstance);
         TESTCASE(11, test_jConsistencyOddLocales);
+        TESTCASE(12, testBestPattern);
         default: name = ""; break;
     }
 }
@@ -1553,6 +1554,71 @@ void IntlTestDateTimePatternGeneratorAPI::test_jConsistencyOddLocales() { // ICU
                     " expected same pattern from DateTimePatGen: " + dtpgPattern +
                     ", DateFmt-forSkel: " + dtfSkelPattern + ", DateFmt-short: "  + dtfShortPattern +
                     "; latter has validLoc " + dtfShortValidLoc + ", actualLoc " + dtfShortActualLoc);
+        }
+    }
+}
+
+void IntlTestDateTimePatternGeneratorAPI::testBestPattern() {
+    // generic test for DateTimePatternGenerator::getBestPattern() that can be used to test multiple
+    // bugs in the resource data
+    static const char* testCases[] = {
+        // ICU-21650: (See the "week day" section of https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table
+        // for a full explanation of why this is the desired behavior)
+        // if the user asks for E, the minimum field length is 3, but if he asks for c or e, it's 1
+        "en_US",      "E",           "ccc",
+        "en_US",      "c",           "c",
+        "en_US",      "e",           "c",
+        "en_US",      "EE",          "ccc",
+        "en_US",      "cc",          "cc",
+        "en_US",      "ee",          "cc",
+        "en_US",      "EEE",         "ccc",
+        "en_US",      "ccc",         "ccc",
+        "en_US",      "eee",         "ccc",
+        // and if the user asked for c or e and the field length is 1 or 2, the output pattern should contain
+        // e instead of E (e supports numeric abbreviations; E doesn't)
+        "en_US",      "yMEd",        "EEE, M/d/y",
+        "en_US",      "yMcd",        "e, M/d/y",
+        "en_US",      "yMed",        "e, M/d/y",
+        "en_US",      "yMMEEdd",     "EEE, MM/dd/y",
+        "en_US",      "yMMccdd",     "ee, MM/dd/y",
+        "en_US",      "yMMeedd",     "ee, MM/dd/y",
+        "en_US",      "yMMMEd",      "EEE, MMM d, y",
+        "en_US",      "yMMMcccd",    "EEE, MMM d, y",
+        "en_US",      "yMMMeeed",    "EEE, MMM d, y",
+        "en_US",      "yMMMMEEEEd",  "EEEE, MMMM d, y",
+        "en_US",      "yMMMMccccd",  "EEEE, MMMM d, y",
+        "en_US",      "yMMMMeeeed",  "EEEE, MMMM d, y",
+    };
+    
+    for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i += 3) {
+        const char* localeID(testCases[i]);
+        const char* skeleton(testCases[i + 1]);
+        const char* expectedPattern(testCases[i + 2]);
+        
+        UErrorCode err = U_ZERO_ERROR;
+        UnicodeString actualPattern;
+        
+        if (uprv_strcmp(skeleton, "full") != 0) {
+            LocalPointer<DateTimePatternGenerator> dtpg(DateTimePatternGenerator::createInstance(localeID, err), err);
+            actualPattern = dtpg->getBestPattern(UnicodeString(skeleton), err);
+        } else {
+            LocalPointer<DateFormat> df(DateFormat::createDateInstance(DateFormat::kFull, localeID));
+            SimpleDateFormat* sdf = dynamic_cast<SimpleDateFormat*>(df.getAlias());
+            
+            if (sdf != NULL) {
+                sdf->toPattern(actualPattern);
+            }
+        }
+        
+        if (U_FAILURE(err)) {
+            errln("Failure for test case %s/%s: %s", localeID, skeleton, u_errorName(err));
+        } else {
+            char failureMessage[100];
+            strcpy(failureMessage, "Wrong result for test case ");
+            strcat(failureMessage, localeID);
+            strcat(failureMessage, "/");
+            strcat(failureMessage, skeleton);
+            assertEquals(failureMessage, UnicodeString(expectedPattern), actualPattern);
         }
     }
 }
