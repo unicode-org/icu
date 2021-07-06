@@ -37,6 +37,7 @@ private:
     void testFallbackWithDefaultRootLocale();
     void testGetDefaultHourCycle_OnEmptyInstance();
     void test_jConsistencyOddLocales();
+    void testBestPattern();
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

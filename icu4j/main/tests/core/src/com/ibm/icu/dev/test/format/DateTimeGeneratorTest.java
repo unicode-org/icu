@@ -1793,4 +1793,61 @@ public class DateTimeGeneratorTest extends TestFmwk {
             }
         }
     }
+    
+    @Test
+    public void testBestPattern() {
+        // generic test for DateTimePatternGenerator::getBestPattern() that can be used to test multiple
+        // bugs in the resource data
+        String[] testCases = {
+            // ICU-21650: (See the "week day" section of https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table
+            // for a full explanation of why this is the desired behavior)
+            // if the user asks for E, the minimum field length is 3, but if he asks for c or e, it's 1
+            "en_US",      "E",           "ccc",
+            "en_US",      "c",           "c",
+            "en_US",      "e",           "c",
+            "en_US",      "EE",          "ccc",
+            "en_US",      "cc",          "cc",
+            "en_US",      "ee",          "cc",
+            "en_US",      "EEE",         "ccc",
+            "en_US",      "ccc",         "ccc",
+            "en_US",      "eee",         "ccc",
+            // and if the user asked for c or e and the field length is 1 or 2, the output pattern should contain
+            // e instead of E (e supports numeric abbreviations; E doesn't)
+            "en_US",      "yMEd",        "EEE, M/d/y",
+            "en_US",      "yMcd",        "e, M/d/y",
+            "en_US",      "yMed",        "e, M/d/y",
+            "en_US",      "yMMEEdd",     "EEE, MM/dd/y",
+            "en_US",      "yMMccdd",     "ee, MM/dd/y",
+            "en_US",      "yMMeedd",     "ee, MM/dd/y",
+            "en_US",      "yMMMEd",      "EEE, MMM d, y",
+            "en_US",      "yMMMcccd",    "EEE, MMM d, y",
+            "en_US",      "yMMMeeed",    "EEE, MMM d, y",
+            "en_US",      "yMMMMEEEEd",  "EEEE, MMMM d, y",
+            "en_US",      "yMMMMccccd",  "EEEE, MMMM d, y",
+            "en_US",      "yMMMMeeeed",  "EEEE, MMMM d, y",
+        };
+    
+        for (int i = 0; i < testCases.length; i += 3) {
+            String localeID = testCases[i];
+            ULocale locale = new ULocale(localeID);
+            String skeleton = testCases[i + 1];
+            String expectedPattern = testCases[i + 2];
+            String actualPattern = null;
+        
+            if (!skeleton.equals("full")) {
+                DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance(locale);
+                actualPattern = dtpg.getBestPattern(skeleton);
+            } else {
+                DateFormat df = DateFormat.getDateInstance(DateFormat.FULL, locale);
+                SimpleDateFormat sdf = (SimpleDateFormat)df;
+            
+                if (sdf != null) {
+                    actualPattern = sdf.toPattern();
+                }
+            }
+        
+            assertEquals("Wrong result for test case " + localeID + "/" + skeleton, expectedPattern, actualPattern);
+        }
+    }
+
 }

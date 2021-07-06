@@ -2200,7 +2200,11 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                             (type == MINUTE && (options & MATCH_MINUTE_FIELD_LENGTH)==0) ||
                             (type == SECOND && (options & MATCH_SECOND_FIELD_LENGTH)==0) ) {
                         adjFieldLen = fieldBuilder.length();
-                    } else if (matcherWithSkeleton != null) {
+                    } else if (matcherWithSkeleton != null && reqFieldChar != 'c' && reqFieldChar != 'e') {
+                        // (we skip this section for 'c' and 'e' because unlike the other characters considered in this function,
+                        // they have no minimum field length-- 'E' and 'EE' are equivalent to 'EEE', but 'e' and 'ee' are not
+                        // equivalent to 'eee' -- see the entries for "week day" in
+                        // https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table for more info)
                         int skelFieldLen = matcherWithSkeleton.original.getFieldLength(type);
                         boolean patFieldIsNumeric = variableField.isNumeric();
                         boolean skelFieldIsNumeric = matcherWithSkeleton.fieldIsNumeric(type);
@@ -2217,6 +2221,12 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                             && (type != YEAR || reqFieldChar=='Y'))
                             ? reqFieldChar
                             : fieldBuilder.charAt(0);
+                    if (c == 'E' && adjFieldLen < 3) {
+                        // see https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table:
+                        // If we want a numeric day-of-week field, we have to use 'e'-- 'E' doesn't support
+                        // numeric day-of-week abbreivations
+                        c = 'e';
+                    }
                     if (type == HOUR) {
                         // The adjustment here is required to match spec (https://www.unicode.org/reports/tr35/tr35-dates.html#dfst-hour).
                         // It is necessary to match the hour-cycle preferred by the Locale.
