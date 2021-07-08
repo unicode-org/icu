@@ -841,6 +841,7 @@ free(pattern);
     udat_close(fr);
     udat_close(def);
     udat_close(zhChiCal);
+    udat_close(esMX);
     if(result != NULL) {
         free(result);
         result = NULL;
