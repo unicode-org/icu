@@ -392,8 +392,10 @@ DateFormatSymbols::copyData(const DateFormatSymbols& other) {
     fTimeSeparator.fastCopyFrom(other.fTimeSeparator);  // fastCopyFrom() - see assignArray comments
     assignArray(fQuarters, fQuartersCount, other.fQuarters, other.fQuartersCount);
     assignArray(fShortQuarters, fShortQuartersCount, other.fShortQuarters, other.fShortQuartersCount);
+    assignArray(fNarrowQuarters, fNarrowQuartersCount, other.fNarrowQuarters, other.fNarrowQuartersCount);
     assignArray(fStandaloneQuarters, fStandaloneQuartersCount, other.fStandaloneQuarters, other.fStandaloneQuartersCount);
     assignArray(fStandaloneShortQuarters, fStandaloneShortQuartersCount, other.fStandaloneShortQuarters, other.fStandaloneShortQuartersCount);
+    assignArray(fStandaloneNarrowQuarters, fStandaloneNarrowQuartersCount, other.fStandaloneNarrowQuarters, other.fStandaloneNarrowQuartersCount);
     assignArray(fWideDayPeriods, fWideDayPeriodsCount,
                 other.fWideDayPeriods, other.fWideDayPeriodsCount);
     assignArray(fNarrowDayPeriods, fNarrowDayPeriodsCount,
@@ -485,8 +487,10 @@ void DateFormatSymbols::dispose()
     delete[] fNarrowAmPms;
     delete[] fQuarters;
     delete[] fShortQuarters;
+    delete[] fNarrowQuarters;
     delete[] fStandaloneQuarters;
     delete[] fStandaloneShortQuarters;
+    delete[] fStandaloneNarrowQuarters;
     delete[] fLeapMonthPatterns;
     delete[] fShortYearNames;
     delete[] fShortZodiacNames;
@@ -563,8 +567,10 @@ DateFormatSymbols::operator==(const DateFormatSymbols& other) const
         fNarrowAmPmsCount == other.fNarrowAmPmsCount &&
         fQuartersCount == other.fQuartersCount &&
         fShortQuartersCount == other.fShortQuartersCount &&
+        fNarrowQuartersCount == other.fNarrowQuartersCount &&
         fStandaloneQuartersCount == other.fStandaloneQuartersCount &&
         fStandaloneShortQuartersCount == other.fStandaloneShortQuartersCount &&
+        fStandaloneNarrowQuartersCount == other.fStandaloneNarrowQuartersCount &&
         fLeapMonthPatternsCount == other.fLeapMonthPatternsCount &&
         fShortYearNamesCount == other.fShortYearNamesCount &&
         fShortZodiacNamesCount == other.fShortZodiacNamesCount &&
@@ -599,8 +605,10 @@ DateFormatSymbols::operator==(const DateFormatSymbols& other) const
             fTimeSeparator == other.fTimeSeparator &&
             arrayCompare(fQuarters, other.fQuarters, fQuartersCount) &&
             arrayCompare(fShortQuarters, other.fShortQuarters, fShortQuartersCount) &&
+            arrayCompare(fNarrowQuarters, other.fNarrowQuarters, fNarrowQuartersCount) &&
             arrayCompare(fStandaloneQuarters, other.fStandaloneQuarters, fStandaloneQuartersCount) &&
             arrayCompare(fStandaloneShortQuarters, other.fStandaloneShortQuarters, fStandaloneShortQuartersCount) &&
+            arrayCompare(fStandaloneNarrowQuarters, other.fStandaloneNarrowQuarters, fStandaloneNarrowQuartersCount) &&
             arrayCompare(fLeapMonthPatterns, other.fLeapMonthPatterns, fLeapMonthPatternsCount) &&
             arrayCompare(fShortYearNames, other.fShortYearNames, fShortYearNamesCount) &&
             arrayCompare(fShortZodiacNames, other.fShortZodiacNames, fShortZodiacNamesCount) &&
@@ -809,8 +817,8 @@ DateFormatSymbols::getQuarters(int32_t &count, DtContextType context, DtWidthTyp
             returnValue = fShortQuarters;
             break;
         case NARROW :
-            count = 0;
-            returnValue = NULL;
+            count = fNarrowQuartersCount;
+            returnValue = fNarrowQuarters;
             break;
         case DT_WIDTH_COUNT :
             break;
@@ -828,8 +836,8 @@ DateFormatSymbols::getQuarters(int32_t &count, DtContextType context, DtWidthTyp
             returnValue = fStandaloneShortQuarters;
             break;
         case NARROW :
-            count = 0;
-            returnValue = NULL;
+            count = fStandaloneNarrowQuartersCount;
+            returnValue = fStandaloneNarrowQuarters;
             break;
         case DT_WIDTH_COUNT :
             break;
@@ -1178,13 +1186,11 @@ DateFormatSymbols::setQuarters(const UnicodeString* quartersArray, int32_t count
             fShortQuartersCount = count;
             break;
         case NARROW :
-        /*
             if (fNarrowQuarters)
                 delete[] fNarrowQuarters;
             fNarrowQuarters = newUnicodeStringArray(count);
             uprv_arrayCopy( quartersArray,fNarrowQuarters,count);
             fNarrowQuartersCount = count;
-        */
             break;
         default :
             break;
@@ -1207,13 +1213,11 @@ DateFormatSymbols::setQuarters(const UnicodeString* quartersArray, int32_t count
             fStandaloneShortQuartersCount = count;
             break;
         case NARROW :
-        /*
            if (fStandaloneNarrowQuarters)
                 delete[] fStandaloneNarrowQuarters;
             fStandaloneNarrowQuarters = newUnicodeStringArray(count);
             uprv_arrayCopy( quartersArray,fStandaloneNarrowQuarters,count);
             fStandaloneNarrowQuartersCount = count;
-        */
             break;
         default :
             break;
@@ -2067,10 +2071,14 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     fQuartersCount = 0;
     fShortQuarters = NULL;
     fShortQuartersCount = 0;
+    fNarrowQuarters = NULL;
+    fNarrowQuartersCount = 0;
     fStandaloneQuarters = NULL;
     fStandaloneQuartersCount = 0;
     fStandaloneShortQuarters = NULL;
     fStandaloneShortQuartersCount = 0;
+    fStandaloneNarrowQuarters = NULL;
+    fStandaloneNarrowQuartersCount = 0;
     fLeapMonthPatterns = NULL;
     fLeapMonthPatternsCount = 0;
     fShortYearNames = NULL;
@@ -2374,6 +2382,16 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
         assignArray(fStandaloneShortQuarters, fStandaloneShortQuartersCount, fShortQuarters, fShortQuartersCount);
     }
 
+    // unlike the fields above, narrow format quarters fall back on narrow standalone quarters
+    initField(&fStandaloneNarrowQuarters, fStandaloneNarrowQuartersCount, calendarSink,
+              buildResourcePath(path, gQuartersTag, gNamesStandaloneTag, gNamesNarrowTag, status), status);
+    initField(&fNarrowQuarters, fNarrowQuartersCount, calendarSink,
+              buildResourcePath(path, gQuartersTag, gNamesFormatTag, gNamesNarrowTag, status), status);
+    if(status == U_MISSING_RESOURCE_ERROR) {
+        status = U_ZERO_ERROR;
+        assignArray(fNarrowQuarters, fNarrowQuartersCount, fStandaloneNarrowQuarters, fStandaloneNarrowQuartersCount);
+    }
+    
     // ICU 3.8 or later version no longer uses localized date-time pattern characters by default (ticket#5597)
     /*
     // fastCopyFrom()/setTo() - see assignArray comments
@@ -2482,8 +2500,10 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
             initField(&fNarrowAmPms, fNarrowAmPmsCount, (const UChar *)gLastResortAmPmMarkers, kAmPmNum, kAmPmLen, status);
             initField(&fQuarters, fQuartersCount, (const UChar *)gLastResortQuarters, kQuarterNum, kQuarterLen, status);
             initField(&fShortQuarters, fShortQuartersCount, (const UChar *)gLastResortQuarters, kQuarterNum, kQuarterLen, status);
+            initField(&fNarrowQuarters, fNarrowQuartersCount, (const UChar *)gLastResortQuarters, kQuarterNum, kQuarterLen, status);
             initField(&fStandaloneQuarters, fStandaloneQuartersCount, (const UChar *)gLastResortQuarters, kQuarterNum, kQuarterLen, status);
             initField(&fStandaloneShortQuarters, fStandaloneShortQuartersCount, (const UChar *)gLastResortQuarters, kQuarterNum, kQuarterLen, status);
+            initField(&fStandaloneNarrowQuarters, fStandaloneNarrowQuartersCount, (const UChar *)gLastResortQuarters, kQuarterNum, kQuarterLen, status);
             fLocalPatternChars.setTo(TRUE, gPatternChars, PATTERN_CHARS_LEN);
         }
     }
