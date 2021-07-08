@@ -478,15 +478,19 @@ static const CanonicalizationMap CANONICALIZE_MAP[] = {
 /* Test if the locale id has BCP47 u extension and does not have '@' */
 #define _hasBCP47Extension(id) (id && uprv_strstr(id, "@") == NULL && getShortestSubtagLength(localeID) == 1)
 /* Converts the BCP47 id to Unicode id. Does nothing to id if conversion fails */
-#define _ConvertBCP47(finalID, id, buffer, length,err) UPRV_BLOCK_MACRO_BEGIN { \
-    if (uloc_forLanguageTag(id, buffer, length, NULL, err) <= 0 || \
-            U_FAILURE(*err) || *err == U_STRING_NOT_TERMINATED_WARNING) { \
-        finalID=id; \
-        if (*err == U_STRING_NOT_TERMINATED_WARNING) { *err = U_BUFFER_OVERFLOW_ERROR; } \
-    } else { \
-        finalID=buffer; \
-    } \
-} UPRV_BLOCK_MACRO_END
+static int32_t _ConvertBCP47(
+            const char*& finalID, const char* id, char* buffer, int32_t length, UErrorCode* err) {
+    int32_t localeIDSize = uloc_forLanguageTag(id, buffer, length, NULL, err);
+    if (localeIDSize <= 0 || U_FAILURE(*err) || *err == U_STRING_NOT_TERMINATED_WARNING) {
+        finalID=id;
+        if (*err == U_STRING_NOT_TERMINATED_WARNING) {
+            *err = U_BUFFER_OVERFLOW_ERROR;
+        }
+    } else {
+        finalID=buffer;
+    }
+    return localeIDSize;
+}
 /* Gets the size of the shortest subtag in the given localeID. */
 static int32_t getShortestSubtagLength(const char *localeID) {
     int32_t localeIDLength = static_cast<int32_t>(uprv_strlen(localeID));
@@ -1474,7 +1478,7 @@ _canonicalize(const char* localeID,
               uint32_t options,
               UErrorCode* err) {
     int32_t j, fieldCount=0, scriptSize=0, variantSize=0;
-    char tempBuffer[ULOC_FULLNAME_CAPACITY];
+    PreflightingLocaleIDBuffer tempBuffer;
     const char* origLocaleID;
     const char* tmpLocaleID;
     const char* keywordAssign = NULL;
@@ -1485,7 +1489,10 @@ _canonicalize(const char* localeID,
     }
 
     if (_hasBCP47Extension(localeID)) {
-        _ConvertBCP47(tmpLocaleID, localeID, tempBuffer, sizeof(tempBuffer), err);
+        do {
+            tempBuffer.requestedCapacity = _ConvertBCP47(tmpLocaleID, localeID,
+                tempBuffer.getBuffer(), tempBuffer.getCapacity(), err);
+        } while (tempBuffer.needToTryAgain(err));
     } else {
         if (localeID==NULL) {
            localeID=uloc_getDefault();
