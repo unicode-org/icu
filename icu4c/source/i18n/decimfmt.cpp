@@ -439,7 +439,7 @@ DecimalFormat::DecimalFormat(const DecimalFormat& source) : NumberFormat(source)
         return; // no way to report an error.
     }
     UErrorCode status = U_ZERO_ERROR;
-    fields->symbols.adoptInsteadAndCheckErrorCode(new DecimalFormatSymbols(*source.fields->symbols), status);
+    fields->symbols.adoptInsteadAndCheckErrorCode(new DecimalFormatSymbols(*source.getDecimalFormatSymbols()), status);
     // In order to simplify error handling logic in the various getters/setters/etc, we do not allow
     // any partially populated DecimalFormatFields object. We must have a fully complete fields object
     // or else we set it to nullptr.
@@ -463,7 +463,7 @@ DecimalFormat& DecimalFormat::operator=(const DecimalFormat& rhs) {
     fields->properties = rhs.fields->properties;
     fields->exportedProperties.clear();
     UErrorCode status = U_ZERO_ERROR;
-    LocalPointer<DecimalFormatSymbols> dfs(new DecimalFormatSymbols(*rhs.fields->symbols), status);
+    LocalPointer<DecimalFormatSymbols> dfs(new DecimalFormatSymbols(*rhs.getDecimalFormatSymbols()), status);
     if (U_FAILURE(status)) {
         // We failed to allocate DecimalFormatSymbols, release fields and its members.
         // We must have a fully complete fields object, we cannot have partially populated members.
@@ -507,7 +507,7 @@ UBool DecimalFormat::operator==(const Format& other) const {
     if (fields == nullptr || otherDF->fields == nullptr) {
         return false;
     }
-    return fields->properties == otherDF->fields->properties && *fields->symbols == *otherDF->fields->symbols;
+    return fields->properties == otherDF->fields->properties && *getDecimalFormatSymbols() == *otherDF->getDecimalFormatSymbols();
 }
 
 UnicodeString& DecimalFormat::format(double number, UnicodeString& appendTo, FieldPosition& pos) const {
@@ -794,7 +794,11 @@ const DecimalFormatSymbols* DecimalFormat::getDecimalFormatSymbols(void) const {
     if (fields == nullptr) {
         return nullptr;
     }
-    return fields->symbols.getAlias();
+    if (!fields->symbols.isNull()) {
+        return fields->symbols.getAlias();
+    } else {
+        return fields->formatter.getDecimalFormatSymbols();
+    }
 }
 
 void DecimalFormat::adoptDecimalFormatSymbols(DecimalFormatSymbols* symbolsToAdopt) {
@@ -1339,7 +1343,7 @@ UnicodeString& DecimalFormat::toLocalizedPattern(UnicodeString& result) const {
     }
     ErrorCode localStatus;
     result = toPattern(result);
-    result = PatternStringUtils::convertLocalized(result, *fields->symbols, true, localStatus);
+    result = PatternStringUtils::convertLocalized(result, *getDecimalFormatSymbols(), true, localStatus);
     return result;
 }
 
@@ -1375,7 +1379,7 @@ void DecimalFormat::applyLocalizedPattern(const UnicodeString& localizedPattern,
         return;
     }
     UnicodeString pattern = PatternStringUtils::convertLocalized(
-            localizedPattern, *fields->symbols, false, status);
+            localizedPattern, *getDecimalFormatSymbols(), false, status);
     applyPattern(pattern, status);
 }
 
@@ -1521,7 +1525,7 @@ void DecimalFormat::setCurrency(const char16_t* theCurrency, UErrorCode& ec) {
     NumberFormat::setCurrency(theCurrency, ec); // to set field for compatibility
     fields->properties.currency = currencyUnit;
     // In Java, the DecimalFormatSymbols is mutable. Why not in C++?
-    LocalPointer<DecimalFormatSymbols> newSymbols(new DecimalFormatSymbols(*fields->symbols), ec);
+    LocalPointer<DecimalFormatSymbols> newSymbols(new DecimalFormatSymbols(*getDecimalFormatSymbols()), ec);
     newSymbols->setCurrency(currencyUnit.getISOCurrency(), ec);
     fields->symbols.adoptInsteadAndCheckErrorCode(newSymbols.orphan(), ec);
     touch(ec);
@@ -1608,9 +1612,11 @@ void DecimalFormat::touch(UErrorCode& status) {
         return;
     }
 
-    // In C++, fields->symbols is the source of truth for the locale.
-    Locale locale = fields->symbols->getLocale();
-
+    // In C++, fields->symbols (or, if it's null, the DecimalFormatSymbols owned by the underlying LocalizedNumberFormatter)
+    // is the source of truth for the locale.
+    const DecimalFormatSymbols* symbols = getDecimalFormatSymbols();
+    Locale locale = symbols->getLocale();
+    
     // Note: The formatter is relatively cheap to create, and we need it to populate fields->exportedProperties,
     // so automatically recompute it here. The parser is a bit more expensive and is not needed until the
     // parse method is called, so defer that until needed.
@@ -1618,10 +1624,14 @@ void DecimalFormat::touch(UErrorCode& status) {
  
     // Since memory has already been allocated for the formatter, we can move assign a stack-allocated object
     // and don't need to call new. (Which is slower and could possibly fail).
+    // [Note that "symbols" above might point to the DecimalFormatSymbols object owned by fields->formatter.
+    // That's okay, because NumberPropertyMapper::create() will clone it before fields->formatter's assignment
+    // operator deletes it.  But it does mean that "symbols" can't be counted on to be good after this line.]
     fields->formatter = NumberPropertyMapper::create(
-        fields->properties, *fields->symbols, fields->warehouse, fields->exportedProperties, status
+        fields->properties, *symbols, fields->warehouse, fields->exportedProperties, status
     ).locale(locale);
-
+    fields->symbols.adoptInstead(nullptr); // the fields->symbols property is only temporary, until we can copy it into a new LocalizedNumberFormatter
+    
     // Do this after fields->exportedProperties are set up
     setupFastFormat();
 
@@ -1668,7 +1678,7 @@ const numparse::impl::NumberParserImpl* DecimalFormat::getParser(UErrorCode& sta
     }
 
     // Try computing the parser on our own
-    auto* temp = NumberParserImpl::createParserFromProperties(fields->properties, *fields->symbols, false, status);
+    auto* temp = NumberParserImpl::createParserFromProperties(fields->properties, *getDecimalFormatSymbols(), false, status);
     if (U_FAILURE(status)) {
         return nullptr;
     }
@@ -1701,7 +1711,7 @@ const numparse::impl::NumberParserImpl* DecimalFormat::getCurrencyParser(UErrorC
     }
 
     // Try computing the parser on our own
-    auto* temp = NumberParserImpl::createParserFromProperties(fields->properties, *fields->symbols, true, status);
+    auto* temp = NumberParserImpl::createParserFromProperties(fields->properties, *getDecimalFormatSymbols(), true, status);
     if (temp == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         // although we may still dereference, call sites should be guarded
@@ -1775,11 +1785,13 @@ void DecimalFormat::setupFastFormat() {
         return;
     }
 
+    const DecimalFormatSymbols* symbols = getDecimalFormatSymbols();
+    
     // Grouping (secondary grouping is forbidden in equalsDefaultExceptFastFormat):
     bool groupingUsed = fields->properties.groupingUsed;
     int32_t groupingSize = fields->properties.groupingSize;
     bool unusualGroupingSize = groupingSize > 0 && groupingSize != 3;
-    const UnicodeString& groupingString = fields->symbols->getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol);
+    const UnicodeString& groupingString = symbols->getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol);
     if (groupingUsed && (unusualGroupingSize || groupingString.length() != 1)) {
         trace("no fast format: grouping\n");
         fields->canUseFastFormat = false;
@@ -1805,8 +1817,8 @@ void DecimalFormat::setupFastFormat() {
     }
 
     // Other symbols:
-    const UnicodeString& minusSignString = fields->symbols->getConstSymbol(DecimalFormatSymbols::kMinusSignSymbol);
-    UChar32 codePointZero = fields->symbols->getCodePointZero();
+    const UnicodeString& minusSignString = symbols->getConstSymbol(DecimalFormatSymbols::kMinusSignSymbol);
+    UChar32 codePointZero = symbols->getCodePointZero();
     if (minusSignString.length() != 1 || U16_LENGTH(codePointZero) != 1) {
         trace("no fast format: symbols\n");
         fields->canUseFastFormat = false;
