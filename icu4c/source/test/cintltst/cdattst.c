@@ -1977,9 +1977,9 @@ static void TestNarrowQuarters(void) {
     
     UErrorCode err = U_ZERO_ERROR;
     UChar result[100];
-    UDate parsedDate;
-    UDate expectedFormatParsedDate;
-    UDate expectedStandaloneParsedDate;
+    UDate parsedDate = 0;
+    UDate expectedFormatParsedDate = 0;
+    UDate expectedStandaloneParsedDate = 0;
     
     for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i += 3) {
         const UChar* localeID = testCases[i];
