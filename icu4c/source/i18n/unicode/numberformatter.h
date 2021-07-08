@@ -2484,6 +2484,12 @@ class U_I18N_API LocalizedNumberFormatter
 
 #ifndef U_HIDE_INTERNAL_API
 
+            
+    /**
+     * @internal
+     */
+    const DecimalFormatSymbols* getDecimalFormatSymbols() const;
+    
     /** Internal method.
      * @internal
      */
