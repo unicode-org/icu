@@ -1181,13 +1181,13 @@ error:
     }
 }
 
-static UBool
+static int32_t
 do_canonicalize(const char*    localeID,
          char* buffer,
          int32_t bufferCapacity,
          UErrorCode* err)
 {
-    uloc_canonicalize(
+    int32_t canonicalizedSize = uloc_canonicalize(
         localeID,
         buffer,
         bufferCapacity,
@@ -1195,16 +1195,14 @@ do_canonicalize(const char*    localeID,
 
     if (*err == U_STRING_NOT_TERMINATED_WARNING ||
         *err == U_BUFFER_OVERFLOW_ERROR) {
-        *err = U_ILLEGAL_ARGUMENT_ERROR;
-
-        return FALSE;
+        return canonicalizedSize;
     }
     else if (U_FAILURE(*err)) {
 
-        return FALSE;
+        return -1;
     }
     else {
-        return TRUE;
+        return canonicalizedSize;
     }
 }
 
@@ -1243,8 +1241,16 @@ _ulocimp_addLikelySubtags(const char* localeID,
                           UErrorCode* status) {
     char localeBuffer[ULOC_FULLNAME_CAPACITY];
 
-    if (do_canonicalize(localeID, localeBuffer, sizeof localeBuffer, status)) {
-        return _uloc_addLikelySubtags(localeBuffer, sink, status);
+    int32_t canonicalizedSize = do_canonicalize(localeID, localeBuffer, sizeof localeBuffer, status);
+    if (*status == U_BUFFER_OVERFLOW_ERROR || *status == U_STRING_NOT_TERMINATED_WARNING) {
+        icu::LocalMemory<char> heapLocaleBuffer((char*)uprv_malloc(canonicalizedSize + 2));
+        *status = U_ZERO_ERROR;
+        do_canonicalize(localeID, heapLocaleBuffer.getAlias(), canonicalizedSize + 2, status);
+        if (U_SUCCESS(*status)) {
+            return _uloc_addLikelySubtags(heapLocaleBuffer.getAlias(), sink, status);
+        }
+    } else if (U_SUCCESS(*status)) {
+       return _uloc_addLikelySubtags(localeBuffer, sink, status);
     }
     return FALSE;
 }
@@ -1291,7 +1297,15 @@ ulocimp_minimizeSubtags(const char* localeID,
                         UErrorCode* status) {
     char localeBuffer[ULOC_FULLNAME_CAPACITY];
 
-    if (do_canonicalize(localeID, localeBuffer, sizeof localeBuffer, status)) {
+    int32_t canonicalizedSize = do_canonicalize(localeID, localeBuffer, sizeof localeBuffer, status);
+    if (*status == U_BUFFER_OVERFLOW_ERROR || *status == U_STRING_NOT_TERMINATED_WARNING) {
+        icu::LocalMemory<char> heapLocaleBuffer((char*)uprv_malloc(canonicalizedSize + 2));
+        *status = U_ZERO_ERROR;
+        do_canonicalize(localeID, heapLocaleBuffer.getAlias(), canonicalizedSize + 2, status);
+        if (U_SUCCESS(*status)) {
+            _uloc_minimizeSubtags(heapLocaleBuffer.getAlias(), sink, status);
+        }
+    } else if (U_SUCCESS(*status)) {
         _uloc_minimizeSubtags(localeBuffer, sink, status);
     }
 }
