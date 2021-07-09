@@ -2954,7 +2954,7 @@ ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status)
         UResourceBundle   *bund = NULL;
         UResourceBundle   *subPtr = NULL;
         UErrorCode subStatus = U_ZERO_ERROR; /* don't fail if a bundle is unopenable */
-        bund = ures_openDirect(path, locale, &subStatus);
+        bund = ures_open(path, locale, &subStatus);
         
 #if defined(URES_TREE_DEBUG)
         if(!bund || U_FAILURE(subStatus)) {
