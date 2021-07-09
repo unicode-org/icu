@@ -879,7 +879,12 @@ UBool RegexMatcher::find(UErrorCode &status) {
         }
 
     default:
-        UPRV_UNREACHABLE;
+        // Unknown value in fPattern->fStartType, should be from StartOfMatch enum.
+        // Should never use UPRV_UNREACHABLE (unconditional abort) in code
+        // that may be reached in production (as this can do in some
+        // circumstances). Instead, set error status and return.
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return FALSE;
     }
 
     UPRV_UNREACHABLE;
@@ -1135,7 +1140,12 @@ UBool RegexMatcher::findUsingChunk(UErrorCode &status) {
     }
 
     default:
-        UPRV_UNREACHABLE;
+        // Unknown value in fPattern->fStartType, should be from StartOfMatch enum.
+        // Should never use UPRV_UNREACHABLE (unconditional abort) in code
+        // that may be reached in production (as this can do in some
+        // circumstances). Instead, set error status and return.
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return FALSE;
     }
 
     UPRV_UNREACHABLE;
@@ -4234,7 +4244,11 @@ void RegexMatcher::MatchAt(int64_t startIdx, UBool toEnd, UErrorCode &status) {
         default:
             // Trouble.  The compiled pattern contains an entry with an
             //           unrecognized type tag.
-            UPRV_UNREACHABLE;
+            // Unknown opcode type in opType = URX_TYPE(pat[fp->fPatIdx]).
+            // Should never use UPRV_UNREACHABLE (unconditional abort) in code
+            // that may be reached in production (as this can do in some
+            // circumstances). Instead, set error status.
+            status = U_INTERNAL_PROGRAM_ERROR;
         }
 
         if (U_FAILURE(status)) {
@@ -5672,7 +5686,11 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
         default:
             // Trouble.  The compiled pattern contains an entry with an
             //           unrecognized type tag.
-            UPRV_UNREACHABLE;
+            // Unknown opcode type in opType = URX_TYPE(pat[fp->fPatIdx]).
+            // Should never use UPRV_UNREACHABLE (unconditional abort) in code
+            // that may be reached in production (as this can do in some
+            // circumstances). Instead, set error status.
+            status = U_INTERNAL_PROGRAM_ERROR;
         }
 
         if (U_FAILURE(status)) {
