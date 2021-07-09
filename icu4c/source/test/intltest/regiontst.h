@@ -38,6 +38,7 @@ public:
     void TestContains(void);
     void TestAvailableTerritories(void);
     void TestNoContainedRegions(void);
+    void TestGroupingChildren(void);
 
 private:
 
