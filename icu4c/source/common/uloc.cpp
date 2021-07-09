@@ -478,7 +478,8 @@ static const CanonicalizationMap CANONICALIZE_MAP[] = {
 /* Test if the locale id has BCP47 u extension and does not have '@' */
 #define _hasBCP47Extension(id) (id && uprv_strstr(id, "@") == NULL && getShortestSubtagLength(localeID) == 1)
 /* Converts the BCP47 id to Unicode id. Does nothing to id if conversion fails */
-static int32_t _ConvertBCP47(const char*& finalID, const char* id, char* buffer, int32_t length, UErrorCode* err) {
+static int32_t _ConvertBCP47(
+            const char*& finalID, const char* id, char* buffer, int32_t length, UErrorCode* err) {
     int32_t localeIDSize = uloc_forLanguageTag(id, buffer, length, NULL, err);
     if (localeIDSize <= 0 || U_FAILURE(*err) || *err == U_STRING_NOT_TERMINATED_WARNING) {
         finalID=id;
