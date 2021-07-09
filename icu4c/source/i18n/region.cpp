@@ -166,19 +166,6 @@ void U_CALLCONV Region::loadRegionData(UErrorCode &status) {
         continents->addElement(continentName,status);
     }
 
-    UResourceBundle *groupingBundle = nullptr;
-    while ( ures_hasNext(groupingContainment.getAlias()) ) {
-        groupingBundle = ures_getNextResource(groupingContainment.getAlias(), groupingBundle, &status);
-        if (U_FAILURE(status)) {
-            break;
-        }
-        UnicodeString *groupingName = new UnicodeString(ures_getKey(groupingBundle), -1, US_INV);
-        if (groupingName) {
-            groupings->addElement(groupingName,status);
-        }
-    }
-    ures_close(groupingBundle);
-
     for ( int32_t i = 0 ; i < allRegions->size() ; i++ ) {
         LocalPointer<Region> r(new Region(), status);
         if ( U_FAILURE(status) ) {
@@ -203,6 +190,29 @@ void U_CALLCONV Region::loadRegionData(UErrorCode &status) {
         uhash_put(newRegionIDMap.getAlias(),idStrAlias,(void *)(r.orphan()),&status); // regionIDMap takes ownership
     }
 
+    UResourceBundle *groupingBundle = nullptr;
+    while ( ures_hasNext(groupingContainment.getAlias()) ) {
+        groupingBundle = ures_getNextResource(groupingContainment.getAlias(), groupingBundle, &status);
+        if (U_FAILURE(status)) {
+            break;
+        }
+        UnicodeString *groupingName = new UnicodeString(ures_getKey(groupingBundle), -1, US_INV);
+        groupings->addElement(groupingName,status);
+        Region *grouping = (Region *) uhash_get(newRegionIDMap.getAlias(),groupingName);
+        if (grouping != NULL) {
+            for (int32_t i = 0; i < ures_getSize(groupingBundle); i++) {
+                UnicodeString child = ures_getUnicodeStringByIndex(groupingBundle, i, &status);
+                if (U_SUCCESS(status)) {
+                    if (grouping->containedRegions == NULL) {
+                        grouping->containedRegions = new UVector(uprv_deleteUObject, uhash_compareUnicodeString, status);
+                    }
+                    grouping->containedRegions->addElement(new UnicodeString(child), status);
+                }
+            }
+        }
+    }
+    ures_close(groupingBundle);
+    
     // Process the territory aliases
     while ( ures_hasNext(territoryAlias.getAlias()) ) {
         LocalUResourceBundlePointer res(ures_getNextResource(territoryAlias.getAlias(),NULL,&status));
