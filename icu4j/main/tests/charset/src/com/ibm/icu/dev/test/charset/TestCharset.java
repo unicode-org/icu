@@ -1735,7 +1735,7 @@ public class TestCharset extends TestFmwk {
             //put the valid byte array
             buffer.put(unibytes);
 
-            //reset postion
+            //reset position
             buffer.flip();
 
             decoder.onMalformedInput(CodingErrorAction.REPLACE);
@@ -2252,7 +2252,7 @@ public class TestCharset extends TestFmwk {
         try {
             final Thread t1 = new Thread() {
                 public void run() {
-                    // commented out since the mehtods on
+                    // commented out since the methods on
                     // Charset API are supposed to be thread
                     // safe ... to test it we don't sync
 

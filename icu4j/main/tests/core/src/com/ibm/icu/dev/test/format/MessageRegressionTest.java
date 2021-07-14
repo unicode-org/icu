@@ -90,7 +90,7 @@ public class MessageRegressionTest extends TestFmwk {
 
              tempBuffer = messageFormatter.format(paramArray);
              if (!tempBuffer.equals("Message without param"))
-                errln("Formatted with arguments > subsitution failed. result = " + tempBuffer.toString());
+                errln("Formatted with arguments > substitution failed. result = " + tempBuffer.toString());
              logln("Formatted with extra params : " + tempBuffer);
             //This statement gives an exception while formatting...
             //If we use pattern[1] for the message with param,

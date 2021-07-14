@@ -1853,7 +1853,7 @@ public class UnicodeSetTest extends TestFmwk {
             }
     }
 
-    // Following cod block is commented out to eliminate PrettyPrinter depenencies
+    // Following cod block is commented out to eliminate PrettyPrinter dependencies
 
     //    String[] prettyData = {
     //            "[\\uD7DE-\\uD90C \\uDCB5-\\uDD9F]", // special case

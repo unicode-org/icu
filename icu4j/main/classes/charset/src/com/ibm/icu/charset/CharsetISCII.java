@@ -121,7 +121,7 @@ class CharsetISCII extends CharsetICU {
         short currentMaskToUnicode;          /* mask for current state in toUnicode */
         short defMaskToUnicode;           /* mask for default state in toUnicode */
         boolean isFirstBuffer;          /* boolean for fromUnicode to see if we need to announce the first script */
-        boolean resetToDefaultToUnicode;    /* boolean for reseting to default delta and mask when a newline is encountered */
+        boolean resetToDefaultToUnicode;    /* boolean for resetting to default delta and mask when a newline is encountered */
         int prevToUnicodeStatus;        /* Hold the previous toUnicodeStatus. This is necessary because we may need to know the last two code points. */
 
         UConverterDataISCII(int option) {
@@ -804,12 +804,12 @@ class CharsetISCII extends CharsetICU {
      * ii) EXT : Extension code is used to declare switching to Sanskrit and for obscure,
      *     obsolete characters
      * Pre context
-     * i) Halant: if preceeded by a halant then it is a explicit halant
+     * i) Halant: if preceded by a halant then it is a explicit halant
      * ii) Nukta:
-     *     a) if preceeded by a halant then it is a soft halant
-     *     b) if preceeded by specific consonants and the ligatures have pre-composed
+     *     a) if preceded by a halant then it is a soft halant
+     *     b) if preceded by specific consonants and the ligatures have pre-composed
      *        characters in Unicode then convert to pre-composed characters
-     * iii) Danda: If Danda is preceeded by a Danda then convert to Double Danda
+     * iii) Danda: If Danda is preceded by a Danda then convert to Double Danda
      */
     class CharsetDecoderISCII extends CharsetDecoderICU {
         public CharsetDecoderISCII(CharsetICU cs) {

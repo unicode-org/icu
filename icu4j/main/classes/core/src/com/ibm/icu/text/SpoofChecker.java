@@ -765,7 +765,7 @@ public class SpoofChecker {
 
         /**
          * Limit the acceptable characters to those specified by a Unicode Set. Any previously specified character limit
-         * is is replaced by the new settings. This includes limits on characters that were set with the
+         * is replaced by the new settings. This includes limits on characters that were set with the
          * setAllowedLocales() function. Note that the RESTRICTED set is useful.
          *
          * The {@link #CHAR_LIMIT} test is automatically enabled for this SpoofChecker by this function.

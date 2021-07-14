@@ -137,12 +137,12 @@ public class BIG5Tool {
                             totalMbcsChars++;
                         }
                         if (ichar.charValue <= 255) {
-                            // Don't keep occurence statistics for the single byte range
+                            // Don't keep occurrence statistics for the single byte range
                             continue;
                         }
 
                         //
-                        //  Frequency of occurence statistics are accumulated in a map.
+                        //  Frequency of occurrence statistics are accumulated in a map.
                         //
                         ChEl  keyEl = new ChEl(ichar.charValue, 0);
                         ChEl  valEl = (ChEl)m.get(keyEl);
@@ -267,7 +267,7 @@ public class BIG5Tool {
     }
 
     //
-    // iteratedChar is copied and slightly hacked from the similar calss in CharsetRecog_mbcs
+    // iteratedChar is copied and slightly hacked from the similar class in CharsetRecog_mbcs
     //              Pulls out one logical char according to the rules of EUC encoding.
     //
     class iteratedChar {

@@ -82,7 +82,7 @@ class RBBINode {
     int           fLastPos;             //  Last position in the rule source string
                                         //    of any text associated with this node.
                                         //    If there's a right child, this will be the same
-                                        //    as that child's last postion.
+                                        //    as that child's last position.
 
     boolean      fNullable;            //  See Aho DFA table generation algorithm
     int           fVal;                 // For leafChar nodes, the value.
@@ -349,7 +349,7 @@ class RBBINode {
         }
         printNode(this);
             // Only dump the definition under a variable reference if asked to.
-            // Unconditinally dump children of all other node types.
+            // Unconditionally dump children of all other node types.
             if (fType != varRef) {
                 if (fLeftChild != null) {
                     fLeftChild.printTree(false);

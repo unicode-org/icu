@@ -950,7 +950,7 @@
 塵>'[dust]';
 塹>'[moat]';
 塾>'[village school]';
-境>'[boundery]';
+境>'[boundary]';
 墅>'[villa]';
 墓>'[grave]';
 増>'[increase]';

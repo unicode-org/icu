@@ -124,7 +124,7 @@ public class SerializableChecker implements URLHandler.URLVisitor
                                 out.close();
                                 byteOut.close();
                             } catch (IOException e) {
-                                System.out.println("Eror writing test objects:" + e.toString());
+                                System.out.println("Error writing test objects:" + e.toString());
                                 return;
                             }
 

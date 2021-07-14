@@ -556,7 +556,7 @@ public final class XLIFF2ICUConverter {
                     
                     if(!name.equals(idVal)){
                         System.out.println("WARNING: The id value != language name. " +
-                                           "Please compare the output with the orignal " +
+                                           "Please compare the output with the original " +
                                            "ICU ResourceBundle before proceeding.");
                     }
                 }

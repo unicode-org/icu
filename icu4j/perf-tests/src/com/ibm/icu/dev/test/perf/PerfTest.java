@@ -35,7 +35,7 @@ import com.ibm.icu.impl.LocaleUtility;
  *
  * PerfTest.Function testTheName()
  *
- * The actual performance test will execute on the returned Commond object
+ * The actual performance test will execute on the returned Command object
  * (refer to Command Pattern). To call a test from command line, the 'test'
  * prefix of the test method name can be ignored/removed.
  *
@@ -43,8 +43,8 @@ import com.ibm.icu.impl.LocaleUtility;
  * PerfTest.run() as defined here.
  *
  * If the subclasses uses any command line arguments (beyond those handled
- * automatically by this calss) then it should override PerfTest.setup() to
- * handle its arguments. If the subclasse needs more sophisticated management
+ * automatically by this class) then it should override PerfTest.setup() to
+ * handle its arguments. If the subclasses needs more sophisticated management
  * for controlling finding/calling test method, it can replace the default
  * implementation for PerfTest.testProvider before calling PerfTest.run().
  *

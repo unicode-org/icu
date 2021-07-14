@@ -1399,7 +1399,7 @@ public class DecimalFormat extends NumberFormat {
    *
    * <p>Minimum integer and minimum and maximum fraction digits can be specified via the pattern
    * string. For example, "#,#00.00#" has 2 minimum integer digits, 2 minimum fraction digits, and 3
-   * maximum fraction digits. Note that it is not possible to specify maximium integer digits in the
+   * maximum fraction digits. Note that it is not possible to specify maximum integer digits in the
    * pattern except in scientific notation.
    *
    * <p>If minimum and maximum integer, fraction, or significant digits conflict with each other,
@@ -1441,7 +1441,7 @@ public class DecimalFormat extends NumberFormat {
    *
    * <p>Minimum integer and minimum and maximum fraction digits can be specified via the pattern
    * string. For example, "#,#00.00#" has 2 minimum integer digits, 2 minimum fraction digits, and 3
-   * maximum fraction digits. Note that it is not possible to specify maximium integer digits in the
+   * maximum fraction digits. Note that it is not possible to specify maximum integer digits in the
    * pattern except in scientific notation.
    *
    * <p>If minimum and maximum integer, fraction, or significant digits conflict with each other,
@@ -1483,7 +1483,7 @@ public class DecimalFormat extends NumberFormat {
    *
    * <p>Minimum integer and minimum and maximum fraction digits can be specified via the pattern
    * string. For example, "#,#00.00#" has 2 minimum integer digits, 2 minimum fraction digits, and 3
-   * maximum fraction digits. Note that it is not possible to specify maximium integer digits in the
+   * maximum fraction digits. Note that it is not possible to specify maximum integer digits in the
    * pattern except in scientific notation.
    *
    * <p>If minimum and maximum integer, fraction, or significant digits conflict with each other,
@@ -1532,7 +1532,7 @@ public class DecimalFormat extends NumberFormat {
    *
    * <p>Minimum integer and minimum and maximum fraction digits can be specified via the pattern
    * string. For example, "#,#00.00#" has 2 minimum integer digits, 2 minimum fraction digits, and 3
-   * maximum fraction digits. Note that it is not possible to specify maximium integer digits in the
+   * maximum fraction digits. Note that it is not possible to specify maximum integer digits in the
    * pattern except in scientific notation.
    *
    * <p>If minimum and maximum integer, fraction, or significant digits conflict with each other,

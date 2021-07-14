@@ -129,7 +129,7 @@ import com.ibm.icu.util.UResourceBundle;
  * Pairs of transliterators may be inverses of one another. For example, if transliterator <b>A</b> transliterates
  * characters by incrementing their Unicode value (so "abc" -&gt; "def"), and transliterator <b>B</b> decrements character
  * values, then <b>A</b> is an inverse of <b>B</b> and vice versa. If we compose <b>A</b> with <b>B</b> in a compound
- * transliterator, the result is the indentity transliterator, that is, a transliterator that does not change its input
+ * transliterator, the result is the identity transliterator, that is, a transliterator that does not change its input
  * text.
  *
  * The <code>Transliterator</code> method <code>getInverse()</code> returns a transliterator's inverse, if one exists,
@@ -1857,7 +1857,7 @@ public abstract class Transliterator implements StringTransform  {
     /**
      * Returns the set of all characters that may be generated as
      * replacement text by this transliterator, filtered by BOTH the input filter, and the current getFilter().
-     * <p>SHOULD BE OVERRIDEN BY SUBCLASSES.
+     * <p>SHOULD BE OVERRIDDEN BY SUBCLASSES.
      * It is probably an error for any transliterator to NOT override this, but we can't force them to
      * for backwards compatibility.
      * <p>Other methods vector through this.
@@ -2208,7 +2208,7 @@ public abstract class Transliterator implements StringTransform  {
                 registry.put(ID, resString, true);
             } else {
                 // Unknown type
-                throw new RuntimeException("Unknow type: " + type);
+                throw new RuntimeException("Unknown type: " + type);
             }
         }
 

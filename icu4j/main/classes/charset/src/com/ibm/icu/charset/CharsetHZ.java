@@ -158,7 +158,7 @@ class CharsetHZ extends CharsetICU {
                              *   we stop the illegal sequence before the first one of those
                              *
                              * In HZ DBCS, if the second byte is in the 21..7e range,
-                             * we report ony the first byte as the illegal sequence.
+                             * we report only the first byte as the illegal sequence.
                              * Otherwise we convert of report the pair of bytes.
                              */
                             leadIsOk = (short)(UConverterConstants.UNSIGNED_BYTE_MASK & (leadByte - 0x21)) <= (0x7d - 0x21);

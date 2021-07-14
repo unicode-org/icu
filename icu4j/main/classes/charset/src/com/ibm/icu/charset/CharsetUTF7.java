@@ -218,7 +218,7 @@ class CharsetUTF7 extends CharsetICU {
                     /*
                      * In Direct Mode, most US-ASCII characters are encoded directly, i.e.,
                      * with their US-ASCII byte values.
-                     * Backslash and Tilde and most control characters are not alled in UTF-7.
+                     * Backslash and Tilde and most control characters are not called in UTF-7.
                      * A plus sign starts Unicode (or "escape") Mode.
                      * An ampersand starts Unicode Mode for IMAP.
                      *
@@ -453,7 +453,7 @@ class CharsetUTF7 extends CharsetICU {
                         toUBytesArray[0]=AMPERSAND;
                         byteIndex=1;
                     }
-                    /* else if (base64Counter!=-1) byteIndex remains 0 because ther is no particular byte sequence */
+                    /* else if (base64Counter!=-1) byteIndex remains 0 because there is no particular byte sequence */
                     inDirectMode=1;
                     cr=CoderResult.malformedForLength(sourceIndex);
                 }

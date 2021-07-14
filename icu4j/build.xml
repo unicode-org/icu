@@ -1767,7 +1767,7 @@
     <target name="checkAPIStatusConsistency" depends="info, build-tools, gatherapi"
         description="Check consistency between API class status and methods overriding java.lang.Object">
         <!--
-            If you need classes excluded from this check, define followig property in build-local.properties.
+            If you need classes excluded from this check, define following property in build-local.properties.
             e.g. checkAPIStatusConsistency.skip.classes=com.ibm.icu.text.Normalizer;com.ibm.icu.util.ULocale
         -->
         <property name="checkAPIStatusConsistency.skip.classes" value=""/>

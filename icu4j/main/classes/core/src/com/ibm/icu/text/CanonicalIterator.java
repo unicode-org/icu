@@ -132,7 +132,7 @@ public final class CanonicalIterator {
         int start = 0;
 
         // i should be the end of the first code point
-        // break up the string into segements
+        // break up the string into segments
 
         int i = UTF16.findOffsetFromCodePoint(source, 1);
 

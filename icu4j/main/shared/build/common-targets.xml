@@ -10,7 +10,7 @@
     <dirname property="common-targets.dir" file="${ant.file.common-targets}"/>
     <property file="${common-targets.dir}/locations.properties"/>
 
-    <!-- global (top-level) propeties - need locations.properties loaded first -->
+    <!-- global (top-level) properties - need locations.properties loaded first -->
     <property file="${global.build-local.properties}"/>
     <property file="${global.build.properties}"/>
 

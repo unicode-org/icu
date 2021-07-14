@@ -50,8 +50,8 @@ public class IntlTestDecimalFormatAPI extends TestFmwk
      * We solved the problem with the code at the bottom of this page however
      * this is not quite general purpose enough to include in icu4j. A static
      * setDefaultRoundingMode function would solve the problem nicely. Also
-     * decimal places past 20 are not handled properly. A small ammount of work
-     * would make bring this up to snuff.
+     * decimal places past 20 are not handled properly. A small amount of work
+     * would bring this up to snuff.
      */
     @Test
     public void testJB1871()

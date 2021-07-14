@@ -129,7 +129,7 @@ public class EthiopicTest extends CalendarTestFmwk
             //                      Ethiopic
             //          Julian Day  Era  Year  Month Day  WkDay Hour Min Sec
             //
-            // Dates from "Emporer Theodore..."
+            // Dates from "Emperor Theodore..."
 
             new TestCase(2401442.5,  1,  1855,    2,  20,  WED,   0,  0,  0), // Gregorian: 29/10/1862
             new TestCase(2402422.5,  1,  1857,   10,  29,  WED,   0,  0,  0), // Gregorian: 05/07/1865
@@ -178,7 +178,7 @@ public class EthiopicTest extends CalendarTestFmwk
                 //                      Ethiopic
                 //          Julian Day  Era  Year  Month Day  WkDay Hour Min Sec
                 //
-                // Dates from "Emporer Theodore..."
+                // Dates from "Emperor Theodore..."
 
                 new TestCase(2401442.5,  0,  7355,    2,  20,  WED,   0,  0,  0), // Gregorian: 29/10/1862
                 new TestCase(2402422.5,  0,  7357,   10,  29,  WED,   0,  0,  0), // Gregorian: 05/07/1865

@@ -347,7 +347,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      *       month, regardless of what day of the week it is (e.g., (-2, 0) is the
      *       next-to-last day of the month).
      *   <li>If dayOfWeek is negative and dayOfWeekInMonth is positive, they specify the
-     *       first specified day of the week on or after the specfied day of the month.
+     *       first specified day of the week on or after the specified day of the month.
      *       (e.g., (15, -SUNDAY) is the first Sunday after the 15th of the month
      *       [or the 15th itself if the 15th is a Sunday].)
      *   <li>If dayOfWeek and DayOfWeekInMonth are both negative, they specify the

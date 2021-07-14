@@ -49,7 +49,7 @@ public final class CharacterIteration {
         }
         
         if (c >= UTF16.SUPPLEMENTARY_MIN_VALUE && c != DONE32) {
-            // We got a supplementary char.  Back the iterator up to the postion
+            // We got a supplementary char.  Back the iterator up to the position
             // of the lead surrogate.
             ci.previous();   
         }

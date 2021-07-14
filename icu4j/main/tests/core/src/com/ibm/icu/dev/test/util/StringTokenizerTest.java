@@ -391,7 +391,7 @@ public final class StringTokenizerTest extends TestFmwk
 
         tokenizer = new StringTokenizer(str, "q", true);
         if (!tokenizer.nextElement().equals(str)) {
-            errln("Should have recieved the same string when there are no delimiters");
+            errln("Should have received the same string when there are no delimiters");
         }
     }
 

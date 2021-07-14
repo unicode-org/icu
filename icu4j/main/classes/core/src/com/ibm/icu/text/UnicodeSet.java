@@ -3629,7 +3629,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                             throw new IllegalArgumentException("Invalid property alias: " + propertyAlias + "=" + valueAlias);
                         }
                     } else {
-                        // Valid propery name, but it isn't binary, so the value
+                        // Valid property name, but it isn't binary, so the value
                         // must be supplied.
                         throw new IllegalArgumentException("Missing property value");
                     }

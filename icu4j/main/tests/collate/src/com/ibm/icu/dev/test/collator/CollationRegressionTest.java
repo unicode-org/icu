@@ -1122,7 +1122,7 @@ public class CollationRegressionTest extends TestFmwk {
         }
     }
 
-    //  CollationElementIterator set doesn't work propertly with next/prev
+    //  CollationElementIterator set doesn't work properly with next/prev
     @Test
     public void Test4663220() {
         RuleBasedCollator collator = (RuleBasedCollator)Collator.getInstance(Locale.US);

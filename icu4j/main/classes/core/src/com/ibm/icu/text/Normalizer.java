@@ -443,7 +443,7 @@ public final class Normalizer implements Cloneable {
      * Hangul, applications that process only Hangul text may wish to turn
      * this option on when decomposing text.
      * <p>
-     * The Unicode standard treates Hangul to Jamo conversion as a
+     * The Unicode standard treats Hangul to Jamo conversion as a
      * canonical decomposition, so this option must be turned <b>off</b> if you
      * wish to transform strings into one of the standard
      * <a href="https://www.unicode.org/reports/tr15/" target="unicode">

@@ -70,7 +70,7 @@ public class EUCTool {
                 continue;
             }
             if (args[i].startsWith("-")) {
-                System.err.println("Unrecongized option: " + args[i]);
+                System.err.println("Unrecognized option: " + args[i]);
                 System.exit(-1);
             }
             dirName = args[i];
@@ -267,7 +267,7 @@ public class EUCTool {
     }
 
     //
-    // iteratedChar is copied and slightly hacked from the similar calss in CharsetRecog_mbcs
+    // iteratedChar is copied and slightly hacked from the similar class in CharsetRecog_mbcs
     //              Pulls out one logical char according to the rules of EUC encoding.
     //
     class iteratedChar {

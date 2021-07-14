@@ -1323,7 +1323,7 @@ public class CollationMiscTest extends TestFmwk {
             coll.setStrength(Collator.TERTIARY);
             CollationTest.doTest(this, (RuleBasedCollator)coll, strA, strB, 1);
         }
-        /*  Test 4:  Imbedded nulls do not terminate a string when length is specified.*/
+        /*  Test 4:  Embedded nulls do not terminate a string when length is specified.*/
         // logln("Test 4 ....");
         /*
          * not a valid test since string are null-terminated in java{
@@ -1880,7 +1880,7 @@ public class CollationMiscTest extends TestFmwk {
         logln("Testing setting variable top to contractions");
         try {
             coll.setVariableTop("@P");
-            errln("Invalid contraction succeded in setting variable top!");
+            errln("Invalid contraction succeeded in setting variable top!");
         } catch(Exception expected) {
         }
 
@@ -2990,7 +2990,7 @@ public class CollationMiscTest extends TestFmwk {
 
         if(rck.compareTo(rck) != 0){
             errln("RawCollatonKey.compareTo(RawCollationKey) was suppose to return 0 " +
-                    "for two idential RawCollationKey objects.");
+                    "for two identical RawCollationKey objects.");
         }
 
         if(rck.compareTo(rck100) == 0){

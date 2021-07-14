@@ -610,7 +610,7 @@ public final class UCharacterTest extends TestFmwk
                 ch = 0xa0;
             }
             if (!UCharacter.isPrintable(ch)
-                && ch != 0x00AD/* Unicode 4.0 changed the defintion of soft hyphen to be a Cf*/) {
+                && ch != 0x00AD/* Unicode 4.0 changed the definition of soft hyphen to be a Cf*/) {
                 errln("Fail \\u" + hex(ch) +
                       " is a Latin-1 graphic character\n");
             }
@@ -2925,7 +2925,7 @@ public final class UCharacterTest extends TestFmwk
         /*  The code coverage for if(mant==0), else if(mant > 9), and default
          *  could not be covered even with input values from UTF16.CODEPOINT_MIN_VALUE
          *  to UTF16.CODEPOINT_MAX_VALUE. I also tested from UTF16.CODEPOINT_MAX_VALUE to
-         *  Integer.MAX_VALUE and didn't recieve any code coverage there too.
+         *  Integer.MAX_VALUE and didn't receive any code coverage there too.
          *  Therefore, the code could either be dead code or meaningless.
          */
     }
@@ -3292,7 +3292,7 @@ public final class UCharacterTest extends TestFmwk
             }
         }
 
-        // TODO: Testing when the case statment reaches "default"
+        // TODO: Testing when the case statement reaches "default"
         // After testing between values of UProperty.INT_START and
         // UProperty.INT_LIMIT are covered, none of the values reaches default.
     }

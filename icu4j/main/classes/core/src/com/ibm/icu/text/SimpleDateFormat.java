@@ -2373,7 +2373,7 @@ public class SimpleDateFormat extends DateFormat {
     private static final String NUMERIC_FORMAT_CHARS2 = "ceLMQq";
 
     /**
-     * Return true if the given format character, occuring count
+     * Return true if the given format character, occurring count
      * times, represents a numeric field.
      */
     private static final boolean isNumeric(char formatChar, int count) {
@@ -4255,9 +4255,9 @@ public class SimpleDateFormat extends DateFormat {
      * It is supposed to be used only by CLDR survey tool.
      *
      * @param fromCalendar      calendar set to the from date in date interval
-     *                          to be formatted into date interval stirng
+     *                          to be formatted into date interval string
      * @param toCalendar        calendar set to the to date in date interval
-     *                          to be formatted into date interval stirng
+     *                          to be formatted into date interval string
      * @param appendTo          Output parameter to receive result.
      *                          Result is appended to existing contents.
      * @param pos               On input: an alignment field, if desired.

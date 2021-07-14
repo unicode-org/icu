@@ -481,7 +481,7 @@ public class CurrencyTest extends TestFmwk {
 
         // but not one millisecond before the start of the first day
         Date eurFirstDateMinus1ms = new Date(eurFirstDate.getTime() - 1);
-        assertEquals("EUR not avilable before very start of first date", 1, metainfo.currencyInfo(filter.withDate(eurFirstDateMinus1ms)).size());
+        assertEquals("EUR not available before very start of first date", 1, metainfo.currencyInfo(filter.withDate(eurFirstDateMinus1ms)).size());
 
         // end time is last millisecond of day
         GregorianCalendar cal = new GregorianCalendar();
@@ -537,7 +537,7 @@ public class CurrencyTest extends TestFmwk {
 
         // but not one millisecond before the start of the first day
         long eurFirstDateMinus1ms = eurFirstDate - 1;
-        assertEquals("EUR not avilable before very start of first date", 1,
+        assertEquals("EUR not available before very start of first date", 1,
                      metainfo.currencyInfo(filter.withDate(eurFirstDateMinus1ms)).size());
 
         // Deutschmark available from first millisecond on
