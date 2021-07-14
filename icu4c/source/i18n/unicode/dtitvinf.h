@@ -45,7 +45,7 @@ U_NAMESPACE_BEGIN
  * <P>
  * For power users, who want to create their own date interval patterns,
  * or want to re-set date interval patterns, they could do so by
- * directly creating DateIntervalInfo and manupulating it.
+ * directly creating DateIntervalInfo and manipulating it.
  *
  * <P>
  * Logically, the interval patterns are mappings
@@ -114,7 +114,7 @@ U_NAMESPACE_BEGIN
  * the first date in the interval pattern for this locale is earlier date.
  * If the fallback format is &quot;{1} - {0}&quot;, it means the first date is the
  * later date.
- * For a particular interval pattern, the default order can be overriden
+ * For a particular interval pattern, the default order can be overridden
  * by prefixing &quot;latestFirst:&quot; or &quot;earliestFirst:&quot; to the interval pattern.
  * For example, if the fallback format is &quot;{0}-{1}&quot;,
  * but for skeleton &quot;yMMMd&quot;, the interval pattern when day is different is

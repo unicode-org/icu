@@ -184,7 +184,7 @@ static UBool doTestNames(const char *name, const char *standard, const char **ex
         return 0;
     }
     if (size < 0 && myEnum) {
-        log_err("FAIL: size < 0, but recieved an actual object\n");
+        log_err("FAIL: size < 0, but received an actual object\n");
         return 0;
     }
     log_verbose("\n%s %s\n", name, standard);
@@ -236,7 +236,7 @@ static UBool doTestUCharNames(const char *name, const char *standard, const char
         return 0;
     }
     if (size < 0 && myEnum) {
-        log_err("FAIL: size < 0, but recieved an actual object\n");
+        log_err("FAIL: size < 0, but received an actual object\n");
         return 0;
     }
     log_verbose("\n%s %s\n", name, standard);

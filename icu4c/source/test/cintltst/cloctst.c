@@ -853,14 +853,14 @@ static void TestGetDisplayScriptPreFlighting21160()
     free(result);
 }
 
-/* test for uloc_getAvialable()  and uloc_countAvilable()*/
+/* test for uloc_getAvailable()  and uloc_countAvailable()*/
 static void TestGetAvailableLocales()
 {
 
     const char *locList;
     int32_t locCount,i;
 
-    log_verbose("Testing the no of avialable locales\n");
+    log_verbose("Testing the no of available locales\n");
     locCount=uloc_countAvailable();
     if (locCount == 0)
         log_data_err("countAvailable() returned an empty list!\n");
@@ -6891,7 +6891,7 @@ static void TestBadLocaleIDs() {
 }
 
 // Test case for ICU-20370.
-// The issue shows as an Addresss Sanitizer failure.
+// The issue shows as an Address Sanitizer failure.
 static void TestBug20370() {
     const char *localeID = "x-privatebutreallylongtagfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobar";
     uint32_t lcid = uloc_getLCID(localeID);

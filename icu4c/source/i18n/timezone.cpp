@@ -311,7 +311,7 @@ void U_CALLCONV initStaticTimeZones() {
     // be valid even if we can't load the time zone UDataMemory.
     ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONE, timeZone_cleanup);
 
-    // new can't fail below, as we use placement new into staticly allocated space.
+    // new can't fail below, as we use placement new into statically allocated space.
     new(gRawGMT) SimpleTimeZone(0, UnicodeString(TRUE, GMT_ID, GMT_ID_LENGTH));
     new(gRawUNKNOWN) SimpleTimeZone(0, UnicodeString(TRUE, UNKNOWN_ZONE_ID, UNKNOWN_ZONE_ID_LENGTH));
 
@@ -445,7 +445,7 @@ TimeZone::createTimeZone(const UnicodeString& ID)
     if (result == NULL) {
         U_DEBUG_TZ_MSG(("failed to load time zone with id - falling to Etc/Unknown(GMT)"));
         const TimeZone& unknown = getUnknown();
-        // Unknown zone uses staticly allocated memory, so creation of it can never fail due to OOM.
+        // Unknown zone uses statically allocated memory, so creation of it can never fail due to OOM.
         result = unknown.clone();
     }
     return result;

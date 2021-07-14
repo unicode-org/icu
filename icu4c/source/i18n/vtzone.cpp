@@ -240,7 +240,7 @@ static UDate parseDateTimeString(const UnicodeString& str, int32_t offset, UErro
             break;
         }
         if (str.charAt(8) != 0x0054) {
-            // charcter "T" must be used for separating date and time
+            // character "T" must be used for separating date and time
             break;
         }
         if (length == 16) {
@@ -663,7 +663,7 @@ static TimeZoneRule* createRuleByRRULE(const UnicodeString& zonename, int rawOff
                     goto unsupportedRRule;
                 }
             }
-            // If ealier month, go through days to find the earliest day
+            // If earlier month, go through days to find the earliest day
             if (tmp_month == earliestMonth) {
                 for (j = 0; j < tmp_daysCount; j++) {
                     tmp_days[j] = tmp_days[j] > 0 ? tmp_days[j] : MONTHLENGTH[tmp_month] + tmp_days[j] + 1;
@@ -881,7 +881,7 @@ static DateTimeRule *toWallTimeRule(const DateTimeRule *rule, int32_t rawOffset,
 }
 
 /*
- * Minumum implementations of stream writer/reader, writing/reading
+ * Minimum implementations of stream writer/reader, writing/reading
  * UnicodeString.  For now, we do not want to introduce the dependency
  * on the ICU I/O stream in this module.  But we want to keep the code
  * equivalent to the ICU4J implementation, which utilizes java.io.Writer/
@@ -1609,7 +1609,7 @@ VTimeZone::parse(UErrorCode& status) {
                     if (startAvail && actualStart < firstStart) {
                         // save from offset information for the earliest rule
                         firstStart = actualStart;
-                        // If this is STD, assume the time before this transtion
+                        // If this is STD, assume the time before this transition
                         // is DST when the difference is 1 hour.  This might not be
                         // accurate, but VTIMEZONE data does not have such info.
                         if (dstSavings > 0) {
@@ -2521,7 +2521,7 @@ VTimeZone::writeZonePropsByDOW_LEQ_DOM(VTZWriter& writer, UBool isDst, const Uni
         writeZonePropsByDOW(writer, isDst, zonename, fromOffset, toOffset,
                 month, -1*((MONTHLENGTH[month] - dayOfMonth)/7 + 1), dayOfWeek, startTime, untilTime, status);
     } else if (month == UCAL_FEBRUARY && dayOfMonth == 29) {
-        // Specical case for February
+        // Special case for February
         writeZonePropsByDOW(writer, isDst, zonename, fromOffset, toOffset,
                 UCAL_FEBRUARY, -1, dayOfWeek, startTime, untilTime, status);
     } else {

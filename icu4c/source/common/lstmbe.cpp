@@ -28,7 +28,7 @@
 
 U_NAMESPACE_BEGIN
 
-// Uncomment the follwoing #define to debug.
+// Uncomment the following #define to debug.
 // #define LSTM_DEBUG 1
 // #define LSTM_VECTORIZER_DEBUG 1
 
@@ -554,7 +554,7 @@ GraphemeClusterVectorizer::~GraphemeClusterVectorizer()
 {
 }
 
-constexpr int32_t MAX_GRAPHEME_CLSTER_LENTH = 10;
+constexpr int32_t MAX_GRAPHEME_CLSTER_LENGTH = 10;
 
 void GraphemeClusterVectorizer::vectorize(
     UText *text, int32_t startPos, int32_t endPos,
@@ -576,13 +576,13 @@ void GraphemeClusterVectorizer::vectorize(
     }
     int32_t last = startPos;
     int32_t current = startPos;
-    UChar str[MAX_GRAPHEME_CLSTER_LENTH];
+    UChar str[MAX_GRAPHEME_CLSTER_LENGTH];
     while ((current = graphemeIter->next()) != BreakIterator::DONE) {
         if (current >= endPos) {
             break;
         }
         if (current > startPos) {
-            utext_extract(text, last, current, str, MAX_GRAPHEME_CLSTER_LENTH, &status);
+            utext_extract(text, last, current, str, MAX_GRAPHEME_CLSTER_LENGTH, &status);
             if (U_FAILURE(status)) return;
             offsets.addElement(last, status);
             indices.addElement(stringToIndex(str), status);
@@ -593,7 +593,7 @@ void GraphemeClusterVectorizer::vectorize(
     if (U_FAILURE(status) || last >= endPos) {
         return;
     }
-    utext_extract(text, last, endPos, str, MAX_GRAPHEME_CLSTER_LENTH, &status);
+    utext_extract(text, last, endPos, str, MAX_GRAPHEME_CLSTER_LENGTH, &status);
     if (U_SUCCESS(status)) {
         offsets.addElement(last, status);
         indices.addElement(stringToIndex(str), status);

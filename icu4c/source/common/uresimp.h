@@ -328,7 +328,7 @@ ures_getVersionNumberInternal(const UResourceBundle *resourceBundle);
  * you to query for the real locale of the resource. For example, if you requested 
  * "en_US_CALIFORNIA" and only "en_US" bundle exists, "en_US" will be returned. 
  * For subresources, the locale where this resource comes from will be returned.
- * If fallback has occured, getLocale will reflect this.
+ * If fallback has occurred, getLocale will reflect this.
  *
  * This internal version avoids deprecated-warnings in ICU code.
  *

@@ -99,7 +99,7 @@ int32_t CollationElementIterator::getOffset() const
 /**
 * Get the ordering priority of the next character in the string.
 * @return the next character's ordering. Returns NULLORDER if an error has 
-*         occured or if the end of string has been reached
+*         occurred or if the end of string has been reached
 */
 int32_t CollationElementIterator::next(UErrorCode& status)
 {
@@ -162,7 +162,7 @@ UBool CollationElementIterator::operator==(
 * Get the ordering priority of the previous collation element in the string.
 * @param status the error code status.
 * @return the previous element's ordering. Returns NULLORDER if an error has 
-*         occured or if the start of string has been reached.
+*         occurred or if the start of string has been reached.
 */
 int32_t CollationElementIterator::previous(UErrorCode& status)
 {

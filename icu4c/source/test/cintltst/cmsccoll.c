@@ -1043,7 +1043,7 @@ static void TestIncrementalNormalize(void) {
         doTest(coll, strA, strB, UCOL_GREATER);
     }
 
-    /*  Test 4:  Imbedded nulls do not terminate a string when length is specified.*/
+    /*  Test 4:  Embedded nulls do not terminate a string when length is specified.*/
 
     {
         static const UChar strA[] = {0x41, 0x00, 0x42, 0x00};
@@ -1790,7 +1790,7 @@ static void TestVariableTopSetting(void) {
     ucol_setVariableTop(coll, first, -1, &status);
 
     if(U_SUCCESS(status)) {
-      log_err("Invalid contraction succeded in setting variable top!\n");
+      log_err("Invalid contraction succeeded in setting variable top!\n");
     }
 
   }
@@ -2049,7 +2049,7 @@ static void TestPrefix(void) {
   }
 }
 
-/* This test uses data suplied by Masashiko Maedera to test the implementation */
+/* This test uses data supplied by Masashiko Maedera to test the implementation */
 /* JIS X 4061 collation order implementation                                   */
 static void TestNewJapanese(void) {
 
@@ -4361,7 +4361,7 @@ static void TestSameStrengthListQwerty(void)
     /* Quoted characters also will work if two quoted characters are not consecutive.  */
     "&\\u0071<*'\\u0077'\\u0065\\u0072 &\\u0077<<*\\u0074'\\u0079'\\u0075 &\\u0074<<<*\\u0069\\u006f'\\u0070' &'\\u006f'=*\\u0061\\u0073\\u0064",
 
-    /* Consecutive quoted charactes do not work, because a '' will be treated as a quote character. */
+    /* Consecutive quoted characters do not work, because a '' will be treated as a quote character. */
     /* "&\\u0071<*'\\u0077''\\u0065''\\u0072' &\\u0077<<*'\\u0074''\\u0079''\\u0075' &\\u0074<<<*'\\u0069''\\u006f''\\u0070' &'\\u006f'=*\\u0061\\u0073\\u0064",*/
 
  };
@@ -4597,7 +4597,7 @@ static void TestBeforeRuleWithScriptReordering(void)
     ucol_getSortKey(myCollation, base, baseLen, baseKey, 256);
     ucol_getSortKey(myCollation, before, beforeLen, beforeKey, 256);
     if (baseKey[0] != beforeKey[0]) {
-        log_err("Different lead byte for sort keys using before fule and after script reordering. base character lead byte = %02x, before character lead byte = %02x\n", baseKey[0], beforeKey[0]);
+        log_err("Different lead byte for sort keys using before rule and after script reordering. base character lead byte = %02x, before character lead byte = %02x\n", baseKey[0], beforeKey[0]);
     }
 
     ucol_close(myCollation);

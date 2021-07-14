@@ -163,7 +163,7 @@ void LSTMBETest::runTestFromFile(const char* filename) {
                     ss << actual.elementAti(i) << ", ";
                 }
                 ss << value.length();
-                // Turn the break points into a string for easy comparions
+                // Turn the break points into a string for easy comparison
                 // output.
                 actual_sep_str = "{" + ss.str() + "}";
             } else if (key == "Output:" && !actual_sep_str.empty()) {
@@ -183,7 +183,7 @@ void LSTMBETest::runTestFromFile(const char* filename) {
                     }
                     start = sep + 1;
                 }
-                // Turn the break points into a string for easy comparions
+                // Turn the break points into a string for easy comparison
                 // output.
                 std::string expected = "{" + ss.str() + "}";
                 std::string utf8;

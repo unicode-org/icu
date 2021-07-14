@@ -218,7 +218,7 @@ void CharsetDetectionTest::checkEncoding(const UnicodeString &testString, const 
     dLength = ucsdet_getUChars(matches[0], decoded, testLength, &status);
 
     if (testString.compare(decoded, dLength) != 0) {
-        errln("Round-trip error for " + id + ", " + eSplit[0] + ": getUChars() didn't yeild the original string.");
+        errln("Round-trip error for " + id + ", " + eSplit[0] + ": getUChars() didn't yield the original string.");
 
 #ifdef DEBUG_DETECT
         for(int32_t i = 0; i < testLength; i += 1) {

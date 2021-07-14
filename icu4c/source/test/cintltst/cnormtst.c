@@ -646,7 +646,7 @@ void TestCheckFCD()
   {
     UBool fcdresult = unorm_quickCheck(datastr[count], 4, UNORM_FCD, &status);
     if (U_FAILURE(status)) {
-      log_data_err("unorm_quickCheck(FCD) failed: exception occured at data set %d - (Are you missing data?)\n", count);
+      log_data_err("unorm_quickCheck(FCD) failed: exception occurred at data set %d - (Are you missing data?)\n", count);
       break;
     }
     else {
@@ -678,7 +678,7 @@ void TestCheckFCD()
       normsize += unorm_normalize(data + size, 1, UNORM_NFD, 0,
                                   norm + normsize, 100 - normsize, &status);
       if (U_FAILURE(status)) {
-        log_data_err("unorm_quickCheck(FCD) failed: exception occured at data generation - (Are you missing data?)\n");
+        log_data_err("unorm_quickCheck(FCD) failed: exception occurred at data generation - (Are you missing data?)\n");
         break;
       }
       size ++;
@@ -688,7 +688,7 @@ void TestCheckFCD()
     nfdsize = unorm_normalize(data, size, UNORM_NFD, 0,
                               nfd, 100, &status);
     if (U_FAILURE(status)) {
-      log_data_err("unorm_quickCheck(FCD) failed: exception occured at normalized data generation - (Are you missing data?)\n");
+      log_data_err("unorm_quickCheck(FCD) failed: exception occurred at normalized data generation - (Are you missing data?)\n");
     }
 
     if (nfdsize != normsize || u_memcmp(nfd, norm, nfdsize) != 0) {

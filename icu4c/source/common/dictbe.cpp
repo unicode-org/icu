@@ -181,7 +181,7 @@ static const int32_t THAI_ROOT_COMBINE_THRESHOLD = 3;
 // dictionary word, with a preceding word
 static const int32_t THAI_PREFIX_COMBINE_THRESHOLD = 3;
 
-// Ellision character
+// Elision character
 static const int32_t THAI_PAIYANNOI = 0x0E2F;
 
 // Repeat character
@@ -531,7 +531,7 @@ foundBest:
         }
         
         // We come here after having either found a word or not. We look ahead to the
-        // next word. If it's not a dictionary word, we will combine it withe the word we
+        // next word. If it's not a dictionary word, we will combine it with the word we
         // just found (if there is one), but only if the preceding word does not exceed
         // the threshold.
         // The text iterator should now be positioned at the end of the word we found.
@@ -724,7 +724,7 @@ foundBest:
         }
         
         // We come here after having either found a word or not. We look ahead to the
-        // next word. If it's not a dictionary word, we will combine it withe the word we
+        // next word. If it's not a dictionary word, we will combine it with the word we
         // just found (if there is one), but only if the preceding word does not exceed
         // the threshold.
         // The text iterator should now be positioned at the end of the word we found.

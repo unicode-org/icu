@@ -2224,7 +2224,7 @@ testInverse(void) {
 
     ubidi_close(pBiDi);
 
-    log_verbose("inverse Bidi: rountrips: %5u\nnon-roundtrips: %5u\n", countRoundtrips, countNonRoundtrips);
+    log_verbose("inverse Bidi: roundtrips: %5u\nnon-roundtrips: %5u\n", countRoundtrips, countNonRoundtrips);
 
     _testWriteReverse();
 

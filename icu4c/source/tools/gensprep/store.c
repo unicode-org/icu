@@ -64,7 +64,7 @@
  *
  * UTrie stringPrepTrie;                        -- size in bytes=indexes[_SPREP_INDEX_TRIE_SIZE]
  *
- * uint16_t mappingTable[];                     -- Contains the sequecence of code units that the code point maps to
+ * uint16_t mappingTable[];                     -- Contains the sequence of code units that the code point maps to
  *                                                 size in bytes = indexes[_SPREP_INDEX_MAPPING_DATA_SIZE]
  *
  * The indexes array contains the following values:

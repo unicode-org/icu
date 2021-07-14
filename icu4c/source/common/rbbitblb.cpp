@@ -79,7 +79,7 @@ void  RBBITableBuilder::buildForwardTable() {
 
     //
     // Walk through the tree, replacing any references to $variables with a copy of the
-    //   parse tree for the substition expression.
+    //   parse tree for the substitution expression.
     //
     fTree = fTree->flattenVariables();
 #ifdef RBBI_DEBUG
@@ -694,7 +694,7 @@ void RBBITableBuilder::buildStateTable() {
         }
     }
     return;
-    // delete local pointers only if error occured.
+    // delete local pointers only if error occurred.
 ExitBuildSTdeleteall:
     delete initialState;
     delete failState;
@@ -1445,7 +1445,7 @@ void RBBITableBuilder::buildSafeReverseTable(UErrorCode &status) {
     // the first of a pair. In each of these rows, the entry for the second character
     // of a safe pair is set to the stop state (0), indicating that a match was found.
     // All other table entries are set to the state corresponding the current input
-    // character, allowing that charcter to be the of a start following pair.
+    // character, allowing that character to be the of a start following pair.
     //
     // Because the safe rules are to be run in reverse, moving backwards in the text,
     // the first and second pair categories are swapped when building the table.
@@ -1490,7 +1490,7 @@ void RBBITableBuilder::buildSafeReverseTable(UErrorCode &status) {
     // The table as a whole is UVector<UnicodeString>
     // Each row is represented by a UnicodeString, being used as a Vector<int16>.
     // Row 0 is the stop state.
-    // Row 1 is the start sate.
+    // Row 1 is the start state.
     // Row 2 and beyond are other states, initially one per char class, but
     //   after initial construction, many of the states will be combined, compacting the table.
     // The String holds the nextState data only. The four leading fields of a row, fAccepting,

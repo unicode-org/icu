@@ -335,7 +335,7 @@ int32_t StringSearch::handleNext(int32_t position, UErrorCode &status)
                 // the flipping direction issue has already been handled
                 // in next()
                 // for boundary check purposes. this will ensure that the
-                // next match will not preceed the current offset
+                // next match will not precede the current offset
                 // note search->matchedIndex will always be set to something
                 // in the code
                 m_search_->matchedIndex = position - 1;

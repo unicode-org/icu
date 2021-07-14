@@ -273,7 +273,7 @@ bocu1Prev(int32_t c) {
  * Encode a difference -0x10ffff..0x10ffff in 1..4 bytes
  * and return a packed integer with them.
  *
- * The encoding favors small absolut differences with short encodings
+ * The encoding favors small absolute differences with short encodings
  * to compress runs of same-script characters.
  *
  * @param diff difference value -0x10ffff..0x10ffff

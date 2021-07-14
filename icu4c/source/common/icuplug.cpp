@@ -526,7 +526,7 @@ uplug_getPlugLoadStatus(UPlugData *plug) {
 
 
 /**
- * Initialize a plugin fron an entrypoint and library - but don't load it.
+ * Initialize a plugin from an entrypoint and library - but don't load it.
  */
 static UPlugData* uplug_initPlugFromEntrypointAndLibrary(UPlugEntrypoint *entrypoint, const char *config, void *lib, const char *sym,
                                                          UErrorCode *status) {

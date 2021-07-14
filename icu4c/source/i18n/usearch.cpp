@@ -3107,7 +3107,7 @@ usearch_getPattern(const UStringSearch *strsrch,
     return NULL;
 }
 
-// miscellanous methods --------------------------------------------------
+// miscellaneous methods --------------------------------------------------
 
 U_CAPI int32_t U_EXPORT2 usearch_first(UStringSearch *strsrch,
                                            UErrorCode    *status)
@@ -3262,7 +3262,7 @@ U_CAPI int32_t U_EXPORT2 usearch_next(UStringSearch *strsrch,
                 }
                 else {
                     // for boundary check purposes. this will ensure that the
-                    // next match will not preceed the current offset
+                    // next match will not precede the current offset
                     // note search->matchedIndex will always be set to something
                     // in the code
                     search->matchedIndex = offset - 1;
@@ -3900,7 +3900,7 @@ U_CAPI UBool U_EXPORT2 usearch_search(UStringSearch  *strsrch,
     // 2. An int64_t CE weight is determined for each resulting unit (high 16 bits are primary strength, next
     //    16 bits are secondary, next 16 (the high 16 bits of the low 32-bit half) are tertiary. Any of these
     //    fields that are for strengths below that of the collator are set to 0. If this makes the int64_t
-    //    CE weight 0 (as for a combining diacritic with secondary weight when the collator strentgh is primary),
+    //    CE weight 0 (as for a combining diacritic with secondary weight when the collator strength is primary),
     //    then the CE is deleted, so the following code sees only CEs that are relevant.
     // For each CE, the lowIndex and highIndex correspond to where this CE begins and ends in the original text.
     // If lowIndex==highIndex, either the CE resulted from an expansion/decomposition of one of the original text
@@ -4162,7 +4162,7 @@ U_CAPI UBool U_EXPORT2 usearch_searchBackwards(UStringSearch  *strsrch,
 
 #endif
     // Input parameter sanity check.
-    //  TODO:  should input indicies clip to the text length
+    //  TODO:  should input indices clip to the text length
     //         in the same way that UText does.
     if(strsrch->pattern.cesLength == 0         ||
        startIdx < 0                           ||

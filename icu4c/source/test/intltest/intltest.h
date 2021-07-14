@@ -142,7 +142,7 @@ public:
     IntlTest();
     // TestLog has a virtual destructor.
 
-    virtual UBool runTest( char* name = NULL, char* par = NULL, char *baseName = NULL); // not to be overidden
+    virtual UBool runTest( char* name = NULL, char* par = NULL, char *baseName = NULL); // not to be overridden
 
     virtual UBool setVerbose( UBool verbose = TRUE );
     virtual UBool setNoErrMsg( UBool no_err_msg = TRUE );
@@ -357,7 +357,7 @@ public:
         const std::vector<std::string>& expected, const std::vector<std::string>& actual);
     UBool assertNotEquals(const UnicodeString& message, int32_t expectedNot, int32_t actual);
 
-    virtual void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ); // overide !
+    virtual void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ); // override !
 
     virtual UBool runTestLoop( char* testname, char* par, char *baseName );
 

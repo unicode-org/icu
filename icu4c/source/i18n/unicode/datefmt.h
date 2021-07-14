@@ -291,12 +291,12 @@ public:
      * statfieldPositionus.getEndIndex will be set to 0 and 4, respectively.
      * <P> Notice
      * that if the same time field appears more than once in a pattern, the status will
-     * be set for the first occurence of that time field. For instance,
+     * be set for the first occurrence of that time field. For instance,
      * formatting a UDate to the time string "1 PM PDT (Pacific Daylight Time)"
      * using the pattern "h a z (zzzz)" and the alignment field
      * DateFormat::TIMEZONE_FIELD, the offsets fieldPosition.beginIndex and
      * fieldPosition.getEndIndex will be set to 5 and 8, respectively, for the first
-     * occurence of the timezone pattern character 'z'.
+     * occurrence of the timezone pattern character 'z'.
      *
      * @param cal           Calendar set to the date and time to be formatted
      *                      into a date/time string.  When the calendar type is
@@ -349,12 +349,12 @@ public:
      * statfieldPositionus.getEndIndex will be set to 0 and 4, respectively.
      * <P> Notice
      * that if the same time field appears more than once in a pattern, the status will
-     * be set for the first occurence of that time field. For instance,
+     * be set for the first occurrence of that time field. For instance,
      * formatting a UDate to the time string "1 PM PDT (Pacific Daylight Time)"
      * using the pattern "h a z (zzzz)" and the alignment field
      * DateFormat::TIMEZONE_FIELD, the offsets fieldPosition.beginIndex and
      * fieldPosition.getEndIndex will be set to 5 and 8, respectively, for the first
-     * occurence of the timezone pattern character 'z'.
+     * occurrence of the timezone pattern character 'z'.
      *
      * @param date          UDate to be formatted into a date/time string.
      * @param appendTo      Output parameter to receive result.

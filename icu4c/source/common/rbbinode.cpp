@@ -351,7 +351,7 @@ void RBBINode::printTree(const RBBINode *node, UBool printHeading) {
     printNode(node);
     if (node != NULL) {
         // Only dump the definition under a variable reference if asked to.
-        // Unconditinally dump children of all other node types.
+        // Unconditionally dump children of all other node types.
         if (node->fType != varRef) {
             if (node->fLeftChild != NULL) {
                 printTree(node->fLeftChild, FALSE);

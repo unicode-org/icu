@@ -1831,13 +1831,13 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * This means a minimum of 2 integer digits, 1 fraction digit, and
      * a maximum of 2 fraction digits.
      * <pre>
-     * .      Example: "#,#00.0#;(#,#00.0#)" for negatives in parantheses.
+     * .      Example: "#,#00.0#;(#,#00.0#)" for negatives in parentheses.
      * </pre>
      * In negative patterns, the minimum and maximum counts are ignored;
      * these are presumed to be set in the positive pattern.
      *
      * @param pattern    The pattern to be applied.
-     * @param parseError Struct to recieve information on position
+     * @param parseError Struct to receive information on position
      *                   of error if an error is encountered
      * @param status     Output param set to success/failure code on
      *                   exit. If the pattern is invalid, this will be
@@ -1873,13 +1873,13 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * This means a minimum of 2 integer digits, 1 fraction digit, and
      * a maximum of 2 fraction digits.
      *
-     * Example: "#,#00.0#;(#,#00.0#)" for negatives in parantheses.
+     * Example: "#,#00.0#;(#,#00.0#)" for negatives in parentheses.
      *
      * In negative patterns, the minimum and maximum counts are ignored;
      * these are presumed to be set in the positive pattern.
      *
      * @param pattern   The localized pattern to be applied.
-     * @param parseError Struct to recieve information on position
+     * @param parseError Struct to receive information on position
      *                   of error if an error is encountered
      * @param status    Output param set to success/failure code on
      *                  exit. If the pattern is invalid, this will be

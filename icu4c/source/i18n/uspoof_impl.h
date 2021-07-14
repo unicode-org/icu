@@ -31,7 +31,7 @@
 
 U_NAMESPACE_BEGIN
 
-// The maximium length (in UTF-16 UChars) of the skeleton replacement string resulting from
+// The maximum length (in UTF-16 UChars) of the skeleton replacement string resulting from
 //   a single input code point.  This is function of the unicode.org data.
 #define USPOOF_MAX_SKELETON_EXPANSION 20
 
@@ -248,7 +248,7 @@ class SpoofData: public UMemory {
     // Get the confusable skeleton transform for a single code point.
     // The result is a string with a length between 1 and 18 as of Unicode 9.
     // This is the main public endpoint for this class.
-    // @return   The length in UTF-16 code units of the substition string.
+    // @return   The length in UTF-16 code units of the substitution string.
     int32_t confusableLookup(UChar32 inChar, UnicodeString &dest) const;
 
     // Get the number of confusable entries in this SpoofData.

@@ -1323,7 +1323,7 @@ main(int argc, char* argv[])
                 "### IntlTest [-option1 -option2 ...] [testname1 testname2 ...] \n"
                 "### \n"
                 "### Options are: verbose (v), all (a), noerrormsg (n), \n"
-                "### exhaustive (e), leaks (l), -x xmlfile.xml, prop:<propery>=<value>, \n"
+                "### exhaustive (e), leaks (l), -x xmlfile.xml, prop:<property>=<value>, \n"
                 "### notime (T), \n"
                 "### threads:<threadCount>\n"
                 "###     (The default thread count is 12.),\n"

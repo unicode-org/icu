@@ -2236,7 +2236,7 @@ static void TestRefreshInput(void) {
 
 
 static void TestBug8421(void) {
-    /* Bug 8421:  setTimeLimit on a regular expresssion before setting text to be matched
+    /* Bug 8421:  setTimeLimit on a regular expression before setting text to be matched
      *             was failing. 
      */
     URegularExpression *re;

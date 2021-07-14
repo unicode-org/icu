@@ -479,7 +479,7 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
         buf.remove();
         buf.append((UnicodeString)"[" + cal.getType() + "] " + FIELD_NAME[f]);
 
-        // Minumum
+        // Minimum
         rangeLow = cal.getMinimum(f);
         rangeHigh = cal.getGreatestMinimum(f);
         if (limits[j][0] != rangeLow || limits[j][1] != rangeHigh) {

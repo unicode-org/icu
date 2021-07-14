@@ -165,7 +165,7 @@ U_CAPI double uprv_getMeanTime(double *times, uint32_t *timeCount, double *margi
   }
   meanTime /= n;
 
-  /* caculate standard deviation */
+  /* calculate standard deviation */
   double sd = 0;
   for(int i=0;i<n;i++) {
 #if U_DEBUG

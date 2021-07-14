@@ -24,7 +24,7 @@
   *  each setting. Each call to nextSettings resets the cases iterator.
   *  Individual test cases have to have the same number of fields as the
   *  number of entries in headers. Default headers can be specified in 
-  *  the TestDataModule info section. The default headers will be overriden
+  *  the TestDataModule info section. The default headers will be overridden
   *  by per-test headers. 
   *  Example:                                             
   *  DataMap *settings = NULL;                            

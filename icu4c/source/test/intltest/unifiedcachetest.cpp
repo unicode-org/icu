@@ -122,7 +122,7 @@ void UnifiedCacheTest::TestEvictionPolicy() {
     UnifiedCache cache(status);
     assertSuccess("", status);
 
-    // Don't allow unused entries to exeed more than 100% of in use entries.
+    // Don't allow unused entries to exceed more than 100% of in use entries.
     cache.setEvictionPolicy(0, 100, status);
 
     static const char *locales[] = {
@@ -152,7 +152,7 @@ void UnifiedCacheTest::TestEvictionPolicy() {
     }
     unusedReference->removeRef();
 
-    // unused count not to exeed in use count
+    // unused count not to exceed in use count
     assertEquals("T1", UPRV_LENGTHOF(usedReferences), cache.unusedCount());
     assertEquals("T2", 2*UPRV_LENGTHOF(usedReferences), cache.keyCount());
 

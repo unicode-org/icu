@@ -448,7 +448,7 @@ testTrieRanges(const char *testName,
                const CheckRange checkRanges[], int32_t countCheckRanges,
                UBool dataIs32, UBool latin1Linear) {
     union{
-        double bogus; /* needed for aligining the storage */
+        double bogus; /* needed for aligning the storage */
         uint8_t storage[32768];
     } storageHolder;
     UTrieGetFoldingOffset *getFoldingOffset;

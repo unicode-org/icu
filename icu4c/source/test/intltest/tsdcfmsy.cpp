@@ -281,7 +281,7 @@ void IntlTestDecimalFormatSymbols::testDigitSymbols() {
         symbols.setSymbol(key, UnicodeString(osmanyaDigitStrings[i]), FALSE);
     }
     // NOTE: in ICU4J, the calculation of codePointZero is smarter;
-    // in ICU4C, it is more conservative and is only set if propogateDigits is true.
+    // in ICU4C, it is more conservative and is only set if propagateDigits is true.
     if (-1 != symbols.getCodePointZero()) {
         errln("ERROR: Code point zero be invalid");
     }

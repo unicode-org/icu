@@ -554,7 +554,7 @@ TZGNCore::getGenericLocationName(const UnicodeString& tzCanonicalID) {
             // If this is not the primary zone in the country,
             // use the exemplar city name.
 
-            // getExemplarLocationName should retur non-empty string
+            // getExemplarLocationName should return non-empty string
             // if the time zone is associated with a region
 
             UnicodeString city;

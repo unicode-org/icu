@@ -874,7 +874,7 @@ static void TestCodepage(void) {
     myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, "absurd converter that can't be opened");
 
     if (myFile) {
-        log_err("Recieved a UFILE * with an invalid codepage parameter\n");
+        log_err("Received a UFILE * with an invalid codepage parameter\n");
         u_fclose(myFile);
     }
 
@@ -916,7 +916,7 @@ static void TestCodepage(void) {
     }
     retVal = u_file_read(testBuf, u_strlen(strBadConversion), myFile);
     if (u_strncmp(strBadConversion, testBuf, u_strlen(strBadConversion)) != 0) {
-        log_err("The test data wasn't subsituted as expected\n");
+        log_err("The test data wasn't substituted as expected\n");
     }
     u_fclose(myFile);
 

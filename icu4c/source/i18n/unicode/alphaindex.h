@@ -44,7 +44,7 @@ typedef enum UAlphabeticIndexLabelType {
     U_ALPHAINDEX_NORMAL    = 0,
 
     /**
-     * Undeflow Label.  The bucket with this label contains names
+     * Underflow Label.  The bucket with this label contains names
      * in scripts that sort before any of the bucket labels in this index.
      * @stable ICU 4.8
      */
@@ -61,7 +61,7 @@ typedef enum UAlphabeticIndexLabelType {
     U_ALPHAINDEX_INFLOW    = 2,
 
     /**
-     * Overflow Label. Te bucket with this label contains names in scripts
+     * Overflow Label. The bucket with this label contains names in scripts
      * that sort after all of the bucket labels in this index.
      * @stable ICU 4.8
      */

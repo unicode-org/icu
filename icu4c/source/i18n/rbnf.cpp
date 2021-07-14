@@ -1077,7 +1077,7 @@ RuleBasedNumberFormat::getRuleSetDisplayName(int32_t index, const Locale& locale
                 return name;
             }
             
-            // trim trailing portion, skipping over ommitted sections
+            // trim trailing portion, skipping over omitted sections
             do { --len;} while (len > 0 && localeStr[len] != 0x005f); // underscore
             while (len > 0 && localeStr[len-1] == 0x005F) --len;
         }

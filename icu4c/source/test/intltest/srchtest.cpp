@@ -37,7 +37,7 @@
         }                             \
         break;
 
-// public contructors and destructors --------------------------------------
+// public constructors and destructors --------------------------------------
 
 StringSearchTest::StringSearchTest() 
 #if !UCONFIG_NO_BREAK_ITERATION
@@ -1527,7 +1527,7 @@ void StringSearchTest::TestSetMatch()
                                                 search.size[index + 1] + 1, 
                                        status) != search.offset[index + 1] ||
                     U_FAILURE(status)) {
-                    errln("Error getting preceeding match at index %d", 
+                    errln("Error getting preceding match at index %d", 
                           search.offset[index + 1] + 1);
                 }
             }

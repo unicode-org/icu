@@ -222,7 +222,7 @@ void CollationThaiTest::TestCornerCases(void) {
         "\\u0e01\\u0e32",                        "=",    "\\u0e01\\u0e32-",
         "\\u0e01\\u0e32-",                       "<",    "\\u0e01\\u0e32\\u0e01\\u0e32",
 
-        // Doubler follows an indentical word without the doubler
+        // Doubler follows an identical word without the doubler
         "\\u0e01\\u0e32",                        "=",    "\\u0e01\\u0e32\\u0e46",
         "\\u0e01\\u0e32\\u0e46",                 "<",    "\\u0e01\\u0e32\\u0e01\\u0e32",
 

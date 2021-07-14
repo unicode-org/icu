@@ -589,7 +589,7 @@ public:
      * arguments. If numbered, the formatName is the
      * corresponding UnicodeStrings (e.g. "0", "1", "2"...).
      * The returned Format object should not be deleted by the caller,
-     * nor should the ponter of other object .  The pointer and its
+     * nor should the pointer of other object .  The pointer and its
      * contents remain valid only until the next call to any method
      * of this class is made with this object.
      * @param formatName the name or number specifying a format

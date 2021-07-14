@@ -264,8 +264,8 @@ static void TestNumberFormat()
     if(numlocales < 0)
         log_err("error in countAvailable");
     else{
-        log_verbose("unum_countAvialable() successful\n");
-        log_verbose("The no: of locales where number formattting is applicable is %d\n", numlocales);
+        log_verbose("unum_countAvailable() successful\n");
+        log_verbose("The no: of locales where number formatting is applicable is %d\n", numlocales);
     }
     for(i=0;i<numlocales;i++)
     {
@@ -673,17 +673,17 @@ free(result);
     unum_getTextAttribute(cur_fr, UNUM_NEGATIVE_SUFFIX, temp, resultlength, &status);
     if(U_FAILURE(status))
     {
-        log_err("Failure in gettting the Text attributes of number format: %s\n", myErrorName(status));
+        log_err("Failure in getting the Text attributes of number format: %s\n", myErrorName(status));
     }
     unum_setTextAttribute(cur_def, UNUM_NEGATIVE_SUFFIX, temp, u_strlen(temp), &status);
     if(U_FAILURE(status))
     {
-        log_err("Failure in gettting the Text attributes of number format: %s\n", myErrorName(status));
+        log_err("Failure in getting the Text attributes of number format: %s\n", myErrorName(status));
     }
     unum_getTextAttribute(cur_def, UNUM_NEGATIVE_SUFFIX, suffix, resultlength, &status);
     if(U_FAILURE(status))
     {
-        log_err("Failure in gettting the Text attributes of number format: %s\n", myErrorName(status));
+        log_err("Failure in getting the Text attributes of number format: %s\n", myErrorName(status));
     }
     if(u_strcmp(suffix,temp)!=0)
         log_err("Fail:Error in setTextAttribute or getTextAttribute in setting and getting suffix\n");
@@ -884,7 +884,7 @@ free(result);
         }
         u_austrncpy(desta, dest, DESTCAPACITY);
         if (strcmp(numFormatted, desta) != 0) {
-            log_err("File %s, Line %d, (expected, acutal) =  (\"%s\", \"%s\")\n",
+            log_err("File %s, Line %d, (expected, actual) =  (\"%s\", \"%s\")\n",
                     __FILE__, __LINE__, numFormatted, desta);
         }
         if ((int32_t)strlen(numFormatted) != resultSize) {
@@ -901,15 +901,15 @@ free(result);
         }
         u_austrncpy(desta, dest, DESTCAPACITY);
         if (strcmp(numFormatted, desta) != 0) {
-            log_err("File %s, Line %d, (expected, acutal) =  (\"%s\", \"%s\")\n",
+            log_err("File %s, Line %d, (expected, actual) =  (\"%s\", \"%s\")\n",
                     __FILE__, __LINE__, numFormatted, desta);
         }
         if (fieldPos.beginIndex != 26) {  /* index of "." in formatted number */
-            log_err("File %s, Line %d, (expected, acutal) =  (%d, %d)\n",
+            log_err("File %s, Line %d, (expected, actual) =  (%d, %d)\n",
                     __FILE__, __LINE__, 0, fieldPos.beginIndex);
         }
         if (fieldPos.endIndex != 27) {
-            log_err("File %s, Line %d, (expected, acutal) =  (%d, %d)\n",
+            log_err("File %s, Line %d, (expected, actual) =  (%d, %d)\n",
                     __FILE__, __LINE__, 0, fieldPos.endIndex);
         }
 
@@ -3549,28 +3549,28 @@ static void TestMinIntMinFracZero(void) {
             status = U_ZERO_ERROR;
             ulen = unum_formatDouble(unum, 10.0, ubuf, kUBufMax, NULL, &status);
             if ( U_FAILURE(status) ) {
-                log_err("unum_formatDouble (CURRRENCY) 10.0 ulen %d fails with %s\n", ulen, u_errorName(status));
+                log_err("unum_formatDouble (CURRENCY) 10.0 ulen %d fails with %s\n", ulen, u_errorName(status));
             } else if (u_strcmp(ubuf, u"$10") != 0) {
                 u_austrncpy(bbuf, ubuf, kUBufMax);
-                log_err("unum_formatDouble (CURRRENCY) 10.0 expected \"$10\", got \"%s\"\n", bbuf);
+                log_err("unum_formatDouble (CURRENCY) 10.0 expected \"$10\", got \"%s\"\n", bbuf);
             }
 
             status = U_ZERO_ERROR;
             ulen = unum_formatDouble(unum, 0.9, ubuf, kUBufMax, NULL, &status);
             if ( U_FAILURE(status) ) {
-                log_err("unum_formatDouble (CURRRENCY) 0.9 ulen %d fails with %s\n", ulen, u_errorName(status));
+                log_err("unum_formatDouble (CURRENCY) 0.9 ulen %d fails with %s\n", ulen, u_errorName(status));
             } else if (u_strcmp(ubuf, u"$.9") != 0) {
                 u_austrncpy(bbuf, ubuf, kUBufMax);
-                log_err("unum_formatDouble (CURRRENCY) 0.9 expected \"$.9\", got \"%s\"\n", bbuf);
+                log_err("unum_formatDouble (CURRENCY) 0.9 expected \"$.9\", got \"%s\"\n", bbuf);
             }
 
             status = U_ZERO_ERROR;
             ulen = unum_formatDouble(unum, 0.0, ubuf, kUBufMax, NULL, &status);
             if ( U_FAILURE(status) ) {
-                log_err("unum_formatDouble (CURRRENCY) 0.0 ulen %d fails with %s\n", ulen, u_errorName(status));
+                log_err("unum_formatDouble (CURRENCY) 0.0 ulen %d fails with %s\n", ulen, u_errorName(status));
             } else if (u_strcmp(ubuf, u"$0") != 0) {
                 u_austrncpy(bbuf, ubuf, kUBufMax);
-                log_err("unum_formatDouble (CURRRENCY) 0.0 expected \"$0\", got \"%s\"\n", bbuf);
+                log_err("unum_formatDouble (CURRENCY) 0.0 expected \"$0\", got \"%s\"\n", bbuf);
             }
 
             unum_close(unum);

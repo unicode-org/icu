@@ -228,7 +228,7 @@ static const int32_t gFieldRangeBias[] = {
 };
 
 // When calendar uses hebr numbering (i.e. he@calendar=hebrew),
-// offset the years within the current millenium down to 1-999
+// offset the years within the current millennium down to 1-999
 static const int32_t HEBREW_CAL_CUR_MILLENIUM_START_YEAR = 5000;
 static const int32_t HEBREW_CAL_CUR_MILLENIUM_END_YEAR = 6000;
 
@@ -2211,7 +2211,7 @@ SimpleDateFormat::zeroPaddingNumber(
 //----------------------------------------------------------------------
 
 /**
- * Return true if the given format character, occuring count
+ * Return true if the given format character, occurring count
  * times, represents a numeric field.
  */
 UBool SimpleDateFormat::isNumeric(UChar formatChar, int32_t count) {
@@ -2850,7 +2850,7 @@ UBool SimpleDateFormat::matchLiterals(const UnicodeString &pattern,
                     continue;  // Do not update p.
                 }
             }
-            // hack around oldleniency being a bit of a catch-all bucket and we're just adding support specifically for paritial matches
+            // hack around oldleniency being a bit of a catch-all bucket and we're just adding support specifically for partial matches
             if(partialMatchLenient && oldLeniency) {
                 break;
             }

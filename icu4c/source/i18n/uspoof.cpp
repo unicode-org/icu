@@ -486,7 +486,7 @@ uspoof_areConfusableUnicodeString(const USpoofChecker *sc,
     //   and for definitions of the types (single, whole, mixed-script) of confusables.
     
     // We only care about a few of the check flags.  Ignore the others.
-    // If no tests relavant to this function have been specified, return an error.
+    // If no tests relevant to this function have been specified, return an error.
     // TODO:  is this really the right thing to do?  It's probably an error on the caller's part,
     //        but logically we would just return 0 (no error).
     if ((This->fChecks & USPOOF_CONFUSABLE) == 0) {
@@ -606,7 +606,7 @@ int32_t checkImpl(const SpoofImpl* This, const UnicodeString& id, CheckResult* c
         gNfdNormalizer->normalize(id, nfdText, *status);
         int32_t nfdLength = nfdText.length();
 
-        // scan for more than one occurence of the same non-spacing mark
+        // scan for more than one occurrence of the same non-spacing mark
         // in a sequence of non-spacing marks.
         int32_t     i;
         UChar32     c;

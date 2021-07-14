@@ -77,7 +77,7 @@ enum ENumberFormatTestTupleField {
  * field means and how the data drive tests work, please see
  * https://docs.google.com/document/d/1T2P0p953_Lh1pRwo-5CuPVrHlIBa_wcXElG-Hhg_WHM/edit?usp=sharing
  * Each field is optional. That is, a certain field may be unset for a given
- * test. The UBool fields ending in "Flag" indicate whether the corrresponding
+ * test. The UBool fields ending in "Flag" indicate whether the corresponding
  * field is set or not. TRUE means set; FALSE means unset. An unset field
  * generally means that the corresponding setter method is not called on
  * the NumberFormat object.

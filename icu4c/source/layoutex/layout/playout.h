@@ -69,7 +69,7 @@ typedef void pl_visualRun;
  * @param fontRuns a pointer to a <code>pl_fontRuns</code> object representing the font runs.
  *
  * @param levelRuns is a pointer to a <code>pl_valueRuns</code> object representing the directional levels.
- *        If this pointer in <code>NULL</code> the levels will be determined by running the Unicde
+ *        If this pointer in <code>NULL</code> the levels will be determined by running the Unicode
  *        Bidi algorithm.
  *
  * @param scriptRuns is a pointer to a <code>pl_valueRuns</code> object representing script runs.

@@ -1004,7 +1004,7 @@ static void TestSmallBuffer()
 }
 
 /**
-* Testing the discontigous contractions
+* Testing the discontiguous contractions
 */
 static void TestDiscontiguos() {
     const char               *rulestr    =

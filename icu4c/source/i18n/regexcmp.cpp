@@ -473,7 +473,7 @@ UBool RegexCompile::doParseActions(int32_t action)
             appendOp(URX_START_CAPTURE, varsLoc);
             appendOp(URX_NOP, 0);
 
-            // On the Parentheses stack, start a new frame and add the postions
+            // On the Parentheses stack, start a new frame and add the positions
             //   of the two NOPs.  Depending on what follows in the pattern, the
             //   NOPs may be changed to SAVE_STATE or JMP ops, with a target
             //   address of the end of the parenthesized group.
@@ -515,7 +515,7 @@ UBool RegexCompile::doParseActions(int32_t action)
             appendOp(URX_NOP, 0);
             appendOp(URX_NOP, 0);
 
-            // On the Parentheses stack, start a new frame and add the postions
+            // On the Parentheses stack, start a new frame and add the positions
             //   of the two NOPs.
             fParenStack.push(fModeFlags, *fStatus);                       // Match mode state
             fParenStack.push(plain,      *fStatus);                       // Begin a new frame.
@@ -540,7 +540,7 @@ UBool RegexCompile::doParseActions(int32_t action)
             appendOp(URX_STO_SP, varLoc);
             appendOp(URX_NOP, 0);
 
-            // On the Parentheses stack, start a new frame and add the postions
+            // On the Parentheses stack, start a new frame and add the positions
             //   of the two NOPs.  Depending on what follows in the pattern, the
             //   NOPs may be changed to SAVE_STATE or JMP ops, with a target
             //   address of the end of the parenthesized group.
@@ -594,7 +594,7 @@ UBool RegexCompile::doParseActions(int32_t action)
             appendOp(URX_NOP, 0);
             appendOp(URX_NOP, 0);
 
-            // On the Parentheses stack, start a new frame and add the postions
+            // On the Parentheses stack, start a new frame and add the positions
             //   of the NOPs.
             fParenStack.push(fModeFlags, *fStatus);                       // Match mode state
             fParenStack.push(lookAhead, *fStatus);                        // Frame type.
@@ -627,7 +627,7 @@ UBool RegexCompile::doParseActions(int32_t action)
             appendOp(URX_STATE_SAVE, 0);    // dest address will be patched later.
             appendOp(URX_NOP, 0);
 
-            // On the Parentheses stack, start a new frame and add the postions
+            // On the Parentheses stack, start a new frame and add the positions
             //   of the StateSave and NOP.
             fParenStack.push(fModeFlags, *fStatus);                       // Match mode state
             fParenStack.push(negLookAhead, *fStatus);                    // Frame type
@@ -679,7 +679,7 @@ UBool RegexCompile::doParseActions(int32_t action)
             appendOp(URX_NOP, 0);
             appendOp(URX_NOP, 0);
 
-            // On the Parentheses stack, start a new frame and add the postions
+            // On the Parentheses stack, start a new frame and add the positions
             //   of the URX_LB_CONT and the NOP.
             fParenStack.push(fModeFlags, *fStatus);                       // Match mode state
             fParenStack.push(lookBehind, *fStatus);                       // Frame type
@@ -734,7 +734,7 @@ UBool RegexCompile::doParseActions(int32_t action)
             appendOp(URX_NOP, 0);
             appendOp(URX_NOP, 0);
 
-            // On the Parentheses stack, start a new frame and add the postions
+            // On the Parentheses stack, start a new frame and add the positions
             //   of the URX_LB_CONT and the NOP.
             fParenStack.push(fModeFlags, *fStatus);                       // Match mode state
             fParenStack.push(lookBehindN, *fStatus);                      // Frame type
@@ -1009,7 +1009,7 @@ UBool RegexCompile::doParseActions(int32_t action)
 
     case doIntervalInit:
         // The '{' opening an interval quantifier was just scanned.
-        // Init the counter varaiables that will accumulate the values as the digits
+        // Init the counter variables that will accumulate the values as the digits
         //    are scanned.
         fIntervalLow = 0;
         fIntervalUpper = -1;
@@ -1522,9 +1522,9 @@ UBool RegexCompile::doParseActions(int32_t action)
             appendOp(URX_NOP, 0);
             appendOp(URX_NOP, 0);
 
-            // On the Parentheses stack, start a new frame and add the postions
+            // On the Parentheses stack, start a new frame and add the positions
             //   of the two NOPs (a normal non-capturing () frame, except for the
-            //   saving of the orignal mode flags.)
+            //   saving of the original mode flags.)
             fParenStack.push(fModeFlags, *fStatus);
             fParenStack.push(flags, *fStatus);                            // Frame Marker
             fParenStack.push(fRXPat->fCompiledPat->size()-2, *fStatus);   // The first NOP
@@ -2396,7 +2396,7 @@ void        RegexCompile::compileSet(UnicodeSet *theSet)
         return;
     }
     //  Remove any strings from the set.
-    //  There shoudn't be any, but just in case.
+    //  There shouldn't be any, but just in case.
     //     (Case Closure can add them; if we had a simple case closure available that
     //      ignored strings, that would be better.)
     theSet->removeAllStrings();
@@ -3927,7 +3927,7 @@ void RegexCompile::error(UErrorCode e) {
         UErrorCode status = U_ZERO_ERROR; // throwaway status for extracting context
 
         // Fill in the context.
-        //   Note: extractBetween() pins supplied indicies to the string bounds.
+        //   Note: extractBetween() pins supplied indices to the string bounds.
         uprv_memset(fParseErr->preContext,  0, sizeof(fParseErr->preContext));
         uprv_memset(fParseErr->postContext, 0, sizeof(fParseErr->postContext));
         utext_extract(fRXPat->fPattern, fScanIndex-U_PARSE_CONTEXT_LEN+1, fScanIndex, fParseErr->preContext, U_PARSE_CONTEXT_LEN, &status);
@@ -4057,7 +4057,7 @@ void RegexCompile::nextChar(RegexPatternChar &c) {
             //
             // We are in free-spacing and comments mode.
             //  Scan through any white space and comments, until we
-            //  reach a significant character or the end of inut.
+            //  reach a significant character or the end of input.
             for (;;) {
                 if (c.fChar == (UChar32)-1) {
                     break;     // End of Input
@@ -4385,7 +4385,7 @@ static inline void addIdentifierIgnorable(UnicodeSet *set, UErrorCode& ec) {
 
 //
 //  Create a Unicode Set from a Unicode Property expression.
-//     This is common code underlying both \p{...} ane [:...:] expressions.
+//     This is common code underlying both \p{...} and [:...:] expressions.
 //     Includes trying the Java "properties" that aren't supported as
 //     normal ICU UnicodeSet properties
 //

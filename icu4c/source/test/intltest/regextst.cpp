@@ -654,7 +654,7 @@ void RegexTest::Basic() {
     REGEX_TESTLM("a[0-9]*b", "a123b", TRUE, TRUE);
     REGEX_TESTLM("a[0-9]*b", "abc", TRUE, FALSE);
     REGEX_TESTLM("[\\p{Nd}]*", "123456", TRUE, TRUE);
-    REGEX_TESTLM("[\\p{Nd}]*", "a123456", TRUE, FALSE);   // note that * matches 0 occurences.
+    REGEX_TESTLM("[\\p{Nd}]*", "a123456", TRUE, FALSE);   // note that * matches 0 occurrences.
     REGEX_TESTLM("[a][b][[:Zs:]]*", "ab   ", TRUE, TRUE);
 
     //
@@ -1231,7 +1231,7 @@ void RegexTest::API_Match() {
     {
         UErrorCode status = U_ZERO_ERROR;
         //    Enough 'a's in the string to cause the match to time out.
-        //       (Each on additonal 'a' doubles the time)
+        //       (Each on additional 'a' doubles the time)
         UnicodeString testString("aaaaaaaaaaaaaaaaaaaaa");
         RegexMatcher matcher("(a+)+b", testString, 0, status);
         REGEX_CHECK_STATUS;
@@ -1460,7 +1460,7 @@ void RegexTest::API_Replace() {
         REGEX_CHECK_STATUS;
         UnicodeString result;
 
-        // Multiple finds do NOT bump up the previous appendReplacement postion.
+        // Multiple finds do NOT bump up the previous appendReplacement position.
         m.reset(s);
         m.find();
         m.find();
@@ -2728,7 +2728,7 @@ const char str_ooh[] = { 0x6f, 0x6f, 0x68, 0x00 }; /* ooh */
         UText resultText = UTEXT_INITIALIZER;
         utext_openUnicodeString(&resultText, &result, &status);
 
-        // Multiple finds do NOT bump up the previous appendReplacement postion.
+        // Multiple finds do NOT bump up the previous appendReplacement position.
         m.reset(&dataText);
         m.find();
         m.find();
@@ -4128,7 +4128,7 @@ void RegexTest::PerlTests() {
 
         while (perlExpr.length() > 0) {
 #if !SUPPORT_MUTATING_INPUT_STRING
-            //  Perferred usage.  Reset after any modification to input string.
+            //  Preferred usage.  Reset after any modification to input string.
             groupsMat->reset(perlExpr);
             cgMat->reset(perlExpr);
 #endif
@@ -5466,7 +5466,7 @@ void RegexTest::Bug7029() {
 //
 //   At the time of this writing there are none. If any should appear in a subsequent release
 //   of Unicode, the code in regular expressions compilation that determines the longest
-//   posssible match for a literal string  will need to be enhanced.
+//   possible match for a literal string  will need to be enhanced.
 //
 //   See file regexcmp.cpp, case URX_STRING_I in RegexCompile::maxMatchLength()
 //   for details on what to do in case of a failure of this test.
@@ -5748,7 +5748,7 @@ void RegexTest::TestBug12884() {
 
 // Bug 13631. A find() of a pattern with a zero length look-behind assertions
 //            can cause a read past the end of the input text.
-//            The failure is seen when running this test with Clang's Addresss Sanitizer.
+//            The failure is seen when running this test with Clang's Address Sanitizer.
 
 void RegexTest::TestBug13631() {
     const UChar *pats[] = { u"(?<!^)",

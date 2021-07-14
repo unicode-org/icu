@@ -2005,7 +2005,7 @@ static UText *utext_extract_replace(UText *src, UText *dest, int64_t start, int6
         return dest;
     }
 
-    // Caller did not provide a prexisting UText.
+    // Caller did not provide a preexisting UText.
     // Open a new one, and have it adopt the text buffer storage.
     if (U_FAILURE(*status)) {
         return NULL;
@@ -3717,7 +3717,7 @@ void RegexMatcher::MatchAt(int64_t startIdx, UBool toEnd, UErrorCode &status) {
                 }
 
                 if (success && inputItr.inExpansion()) {
-                    // We otained a match by consuming part of a string obtained from
+                    // We obtained a match by consuming part of a string obtained from
                     // case-folding a single code point of the input text.
                     // This does not count as an overall match.
                     success = FALSE;
@@ -3962,7 +3962,7 @@ void RegexMatcher::MatchAt(int64_t startIdx, UBool toEnd, UErrorCode &status) {
                     break;
                 }
 
-                // Look-behind match is good.  Restore the orignal input string region,
+                // Look-behind match is good.  Restore the original input string region,
                 //   which had been truncated to pin the end of the lookbehind match to the
                 //   position being looked-behind.
                 fActiveStart = fData[opValue+2];
@@ -4051,7 +4051,7 @@ void RegexMatcher::MatchAt(int64_t startIdx, UBool toEnd, UErrorCode &status) {
                 // Look-behind expression matched, which means look-behind test as
                 //   a whole Fails
 
-                //   Restore the orignal input string length, which had been truncated
+                //   Restore the original input string length, which had been truncated
                 //   inorder to pin the end of the lookbehind match
                 //   to the position being looked-behind.
                 fActiveStart = fData[opValue+2];
@@ -5187,7 +5187,7 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
                 }
 
                 if (success && inputItr.inExpansion()) {
-                    // We otained a match by consuming part of a string obtained from
+                    // We obtained a match by consuming part of a string obtained from
                     // case-folding a single code point of the input text.
                     // This does not count as an overall match.
                     success = FALSE;
@@ -5409,7 +5409,7 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
                     break;
                 }
 
-                // Look-behind match is good.  Restore the orignal input string region,
+                // Look-behind match is good.  Restore the original input string region,
                 //   which had been truncated to pin the end of the lookbehind match to the
                 //   position being looked-behind.
                 fActiveStart = fData[opValue+2];
@@ -5489,7 +5489,7 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
                 // Look-behind expression matched, which means look-behind test as
                 //   a whole Fails
 
-                //   Restore the orignal input string length, which had been truncated
+                //   Restore the original input string length, which had been truncated
                 //   inorder to pin the end of the lookbehind match
                 //   to the position being looked-behind.
                 fActiveStart = fData[opValue+2];

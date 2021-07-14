@@ -64,7 +64,7 @@ sub getMean {
 }
 
 # Return a 99% error based on the t distribution.  The dataset
-# is desribed as getMean() +/- getError().
+# is described as getMean() +/- getError().
 sub getError {
     my $self = shift;
     return $self->{_error} * $self->{_scale};

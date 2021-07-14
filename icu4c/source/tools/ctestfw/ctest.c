@@ -436,7 +436,7 @@ static void iterateTestsWithLevel ( const TestNode* root,
 
     INDENT_LEVEL = depth-1; /* root */
 
-    /* we want these messages to be at 0 indent. so just push the indent level breifly. */
+    /* we want these messages to be at 0 indent. so just push the indent level briefly. */
     if(mode==SHOWTESTS) {
     	log_testinfo("---%s%c\n",pathToFunction, nodeList[i]->test?' ':TEST_SEPARATOR );
     }

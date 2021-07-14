@@ -828,7 +828,7 @@ static void ctest_setICU_DATA() {
 U_CDECL_BEGIN
 /*
  * Note: this assumes that context is a pointer to STANDARD_TEST_FILE. It would be
- * cleaner to define an acutal context with a string pointer in it and set STANDARD_TEST_FILE
+ * cleaner to define an actual context with a string pointer in it and set STANDARD_TEST_FILE
  * after the call to initArgs()...
  */
 static int U_CALLCONV argHandler(int arg, int /*argc*/, const char * const argv[], void *context)

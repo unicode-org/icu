@@ -28,7 +28,7 @@
  * breaks.
  *
  * NOTE: by it's very nature, Thai word breaking is not exact, so it is
- * exptected that this program will always report some differences.
+ * expected that this program will always report some differences.
  */
 
 /*
@@ -208,7 +208,7 @@ inline int32_t ThaiWordbreakTest::getWordCount()
 }
 
 /*
- * This method does the acutal break comparison and reports the results.
+ * This method does the actual break comparison and reports the results.
  * It uses a SpaceBreakIterator to iterate over the text with spaces,
  * and a word instance of a Thai BreakIterator to iterate over the text
  * without spaces.

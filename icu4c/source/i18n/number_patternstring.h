@@ -245,7 +245,7 @@ class U_I18N_API PatternStringUtils {
      *
      * This test is needed for both NumberPropertyMapper::oldToNew and 
      * PatternStringUtils::propertiesToPatternString. In Java it cannot be
-     * exported by NumberPropertyMapper (package provate) so it is in
+     * exported by NumberPropertyMapper (package private) so it is in
      * PatternStringUtils, do the same in C.
      *
      * @param roundIncr

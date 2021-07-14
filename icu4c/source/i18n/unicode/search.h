@@ -59,7 +59,7 @@ U_NAMESPACE_BEGIN
  * <p>
  * <tt>SearchIterator</tt> provides an API that is similar to that of
  * other text iteration classes such as <tt>BreakIterator</tt>. Using 
- * this class, it is easy to scan through text looking for all occurances of 
+ * this class, it is easy to scan through text looking for all occurrences of 
  * a given pattern. The following example uses a <tt>StringSearch</tt> 
  * object to find all instances of "fox" in the target string. Any other 
  * subclass of <tt>SearchIterator</tt> can be used in an identical 

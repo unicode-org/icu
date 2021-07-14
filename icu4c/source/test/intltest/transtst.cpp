@@ -305,7 +305,7 @@ void TransliteratorTest::TestSimpleRules(void) {
     /* Example: rules 1. ab>x|y
      *                2. yc>z
      *
-     * []|eabcd  start - no match, copy e to tranlated buffer
+     * []|eabcd  start - no match, copy e to translated buffer
      * [e]|abcd  match rule 1 - copy output & adjust cursor
      * [ex|y]cd  match rule 2 - copy output & adjust cursor
      * [exz]|d   no match, copy d to transliterated buffer
@@ -1688,7 +1688,7 @@ void TransliteratorTest::TestCompoundRBT(void) {
 }
 
 /**
- * Compound filter semantics were orginially not implemented
+ * Compound filter semantics were originally not implemented
  * correctly.  Originally, each component filter f(i) is replaced by
  * f'(i) = f(i) && g, where g is the filter for the compound
  * transliterator.

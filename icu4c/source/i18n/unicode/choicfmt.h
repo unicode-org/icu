@@ -528,7 +528,7 @@ private:
             const UnicodeString &source, int32_t sourceOffset);
 
     /**
-     * Some of the ChoiceFormat constructors do not have a UErrorCode paramater.
+     * Some of the ChoiceFormat constructors do not have a UErrorCode parameter.
      * We need _some_ way to provide one for the MessagePattern constructor.
      * Alternatively, the MessagePattern could be a pointer field, but that is
      * not nice either.

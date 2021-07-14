@@ -10,7 +10,7 @@
 * File spooftest.c
 *
 *********************************************************************************/
-/*C API TEST for the uspoof Unicode Indentifier Spoofing and Security API */
+/*C API TEST for the uspoof Unicode Identifier Spoofing and Security API */
 /**
 *   This is an API test for ICU spoof detection in plain C.  It doesn't test very many cases, and doesn't
 *   try to test the full functionality.  It just calls each function and verifies that it
@@ -111,7 +111,7 @@ const UChar lll_Latin_b[] = {(UChar)0xff29, (UChar)0x217c, (UChar)0x196, 0};
 
 const UChar lll_Cyrl[]    = {(UChar)0x0406, (UChar)0x04C0, (UChar)0x31, 0};
 
-/* The skeleton transform for all of thes 'lll' lookalikes is all lower case l. */
+/* The skeleton transform for all of these 'lll' lookalikes is all lower case l. */
 const UChar lll_Skel[]    = {(UChar)0x6c, (UChar)0x6c, (UChar)0x6c, 0};  
 
 const UChar han_Hiragana[] = {(UChar)0x3086, (UChar)0x308A, (UChar)0x0020, (UChar)0x77F3, (UChar)0x7530, 0};

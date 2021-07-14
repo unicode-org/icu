@@ -932,7 +932,7 @@ void IntlCalendarTest::TestPersianFormat() {
         logln("Parsed OK: " + expected);
     }
 
-    CHECK(status, "Error occured testing Persian Calendar in English "); 
+    CHECK(status, "Error occurred testing Persian Calendar in English "); 
 }
 
 void IntlCalendarTest::TestConsistencyGregorian() {

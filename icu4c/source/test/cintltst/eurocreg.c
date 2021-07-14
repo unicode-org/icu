@@ -27,7 +27,7 @@ void addTestEuroRegression(TestNode** root)
  *
  * After updating all ibm-*.ucm files with precise fallback indicators (|0, |1, |3),
  * some of these codepages failed the Euro regression test.
- * This means that the actuall mappings changed when only the preciseness of fallback
+ * This means that the actual mappings changed when only the preciseness of fallback
  * mappings should have changed.
  * My (Markus) suspicion is that some files got Euro sign mappings added manually,
  * changing their contents compared to the NLTC (IBM Toronto codepage database) definition.
@@ -156,7 +156,7 @@ UBool isEuroAware(UConverter* myConv)
             &err);
     if (U_FAILURE(err))
     {
-      log_err("Failure Occured in ucnv_fromUChars euro roundtrip test\n");
+      log_err("Failure occurred in ucnv_fromUChars euro roundtrip test\n");
       return FALSE;
     }
     euroBackSize = ucnv_toUChars(myConv,
@@ -168,17 +168,17 @@ UBool isEuroAware(UConverter* myConv)
     (void)euroBackSize;    /* Suppress set but not used warning. */
     if (U_FAILURE(err))
     {
-        log_err("Failure Occured in ucnv_toUChars euro roundtrip test\n");
+        log_err("Failure occurred in ucnv_toUChars euro roundtrip test\n");
         return FALSE;
     }
     if (u_strcmp(euroString, euroBack)) 
     {
-        /*      log_err("%s FAILED Euro rountrip\n", myName);*/
+        /*      log_err("%s FAILED Euro roundtrip\n", myName);*/
         return FALSE;
     }
     else 
     {
-        /*      log_verbose("%s PASSED Euro rountrip\n", myName);*/
+        /*      log_verbose("%s PASSED Euro roundtrip\n", myName);*/
         return TRUE;
     }
 

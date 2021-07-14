@@ -494,7 +494,7 @@ Hashtable *CanonicalIterator::getEquivalents2(Hashtable *fillinResult, const UCh
 
 /**
  * See if the decomposition of cp2 is at segment starting at segmentPos 
- * (with canonical rearrangment!)
+ * (with canonical rearrangement!)
  * If so, take the remainder, and return the equivalents 
  */
 Hashtable *CanonicalIterator::extract(Hashtable *fillinResult, UChar32 comp, const UChar *segment, int32_t segLen, int32_t segmentPos, UErrorCode &status) {

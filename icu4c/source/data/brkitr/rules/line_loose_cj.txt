@@ -199,7 +199,7 @@ $GL $CM* .;
 
 
 
-# LB 13   Don't break before ']' or '!' or or '/', even after spaces.
+# LB 13   Don't break before ']' or '!' or '/', even after spaces.
 #
 # Do not include $EXX here
 $LB8NonBreaks $CL;

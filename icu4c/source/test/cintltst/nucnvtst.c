@@ -592,7 +592,7 @@ static ETestConvertResult testConvertToU( const uint8_t *source, int sourcelen, 
                 &src,
                 srcLimit,
                 checkOffsets ? offs : NULL,
-                (UBool)(srcLimit == realSourceEnd), /* flush if we're at the end of hte source data */
+                (UBool)(srcLimit == realSourceEnd), /* flush if we're at the end of the source data */
                 &status);
 
         /*        offs += (targ-oldTarg); */
@@ -698,7 +698,7 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
      { 0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0007, 0x000a, 0x000d, 0x000e, 0x000e };
 
 #ifdef U_ENABLE_GENERIC_ISO_2022
-    /* Same as UTF8, but with ^[%B preceeding */
+    /* Same as UTF8, but with ^[%B preceding */
     static const const uint8_t expectedISO2022[] =
      { 0x1b, 0x25, 0x42, 0x31, 0x32, 0x33, 0x00, 0xe4, 0xb8, 0x80, 0xe4, 0xba, 0x8c, 0xe4, 0xb8, 0x89, 0x2E };
     static const int32_t toISO2022Offs[]     =
@@ -4707,7 +4707,7 @@ TestEBCDIC_STATEFUL() {
      /* Test the condition when source >= sourceLimit */
     TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
     ucnv_reset(cnv);
-    /*Test for the condition where source > sourcelimit after consuming the shift chracter */
+    /*Test for the condition where source > sourcelimit after consuming the shift character */
     {
         static const uint8_t source1[]={0x0f};
         TestNextUCharError(cnv, (const char*)source1, (const char*)source1+sizeof(source1), U_INDEX_OUTOFBOUNDS_ERROR, "a character is truncated");
@@ -5487,7 +5487,7 @@ static void TestJitterbug1293(){
         numNeeded = bytes_needed;
     } while (status == U_BUFFER_OVERFLOW_ERROR);
     if(U_FAILURE(status)){
-      log_err("An error occured in ucnv_fromUChars. Error: %s", u_errorName(status));
+      log_err("An error occurred in ucnv_fromUChars. Error: %s", u_errorName(status));
       return;
     }
     ucnv_close(conv);

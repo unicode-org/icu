@@ -1311,7 +1311,7 @@ void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *
     //  Each kind of token is recognized in its own capture group; what type of item was scanned
     //     is identified by which group had a match.
     //
-    //    Caputure Group #                  1          2            3            4           5
+    //    Capture Group  #                  1          2            3            4           5
     //    Parses this item:               divide       x      hex digits   comment \n  unrecognized \n
     //
     UnicodeString tokenExpr("[ \t]*(?:(\\u00F7)|(\\u00D7)|([0-9a-fA-F]+)|((?:#.*?)?$.)|(.*?$.))", -1, US_INV);
@@ -1331,7 +1331,7 @@ void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *
     int spin = 0;
     while (tokenMatcher.find()) {
         if(tokenMatcher.hitEnd()) {
-          /* Shouldnt Happen(TM).  This means we didn't find the symbols we were looking for.
+          /* Shouldn't Happen(TM).  This means we didn't find the symbols we were looking for.
              This occurred when the text file was corrupt (wasn't marked as UTF-8)
              and caused an infinite loop here on EBCDIC systems!
           */
@@ -1455,7 +1455,7 @@ void RBBITest::checkUnicodeTestCase(const char *testFileName, int lineNumber,
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
 //---------------------------------------------------------------------------------------
 //
-//   classs RBBIMonkeyKind
+//   class RBBIMonkeyKind
 //
 //      Monkey Test for Break Iteration
 //      Abstract interface class.   Concrete derived classes independently
@@ -1474,7 +1474,7 @@ public:
     // Set the test text on which subsequent calls to next() will operate
     virtual  void      setText(const UnicodeString &s) = 0;
 
-    // Find the next break postion, starting from the prev break position, or from zero.
+    // Find the next break position, starting from the prev break position, or from zero.
     // Return -1 after reaching end of string.
     virtual  int32_t   next(int32_t i) = 0;
 
@@ -3939,8 +3939,8 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
     numCharClasses = mk.charClasses()->size();
     chClasses      = mk.charClasses();
 
-    // Check for errors that occured during the construction of the MonkeyKind object.
-    //  Can't report them where they occured because errln() is a method coming from intlTest,
+    // Check for errors that occurred during the construction of the MonkeyKind object.
+    //  Can't report them where they occurred because errln() is a method coming from intlTest,
     //  and is not visible outside of RBBITest :-(
     if (U_FAILURE(mk.deferredStatus)) {
         errln("status of \"%s\" in creation of RBBIMonkeyKind.", u_errorName(mk.deferredStatus));
@@ -4953,7 +4953,7 @@ void RBBITest::TestTable_8_16_Bits() {
         int32_t result = bi.preceding(ruleLen);
         assertEquals(WHERE, 0, result);
 
-        // Verify that the range of rule lengths being tested cover the transations
+        // Verify that the range of rule lengths being tested cover the translations
         // from 8 to 16 bit data.
         bool has8BitRowData = bi.fData->fForwardTable->fFlags & RBBI_8BITS_ROWS;
         bool has8BitsTrie = ucptrie_getValueWidth(bi.fData->fTrie) == UCPTRIE_VALUE_BITS_8;
@@ -5348,7 +5348,7 @@ void RBBITest::runLSTMTestFromFile(const char* filename, UScriptCode script) {
                 }
 
                 utext_close(&ut);
-                // Turn the break points into a string for easy comparions
+                // Turn the break points into a string for easy comparison
                 // output.
                 actual_sep_str = "{" + ss.str() + "}";
             } else if (key == "Output:" && !actual_sep_str.empty()) {
@@ -5359,7 +5359,7 @@ void RBBITest::runLSTMTestFromFile(const char* filename, UScriptCode script) {
                 int32_t start = 0;
                 int32_t curr = 0;
                 std::stringstream ss;
-                // Incude 0 as the break point.
+                // Include 0 as the break point.
                 ss << "0, ";
                 while ((sep = input.indexOf(u'|', start)) >= 0) {
                     int32_t len = sep - start;
@@ -5374,7 +5374,7 @@ void RBBITest::runLSTMTestFromFile(const char* filename, UScriptCode script) {
                 }
                 // Include end of the string as break point.
                 ss << ", " << curr + input.length() - start;
-                // Turn the break points into a string for easy comparions
+                // Turn the break points into a string for easy comparison
                 // output.
                 std::string expected = "{" + ss.str() + "}";
                 std::string utf8;

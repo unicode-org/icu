@@ -67,7 +67,7 @@ void TestTwoDigitYearDSTParse()
             myErrorName(status) );
     }
     else {
-        log_verbose("PASS: creating dateformat using udat_openPattern() succesful\n");
+        log_verbose("PASS: creating dateformat using udat_openPattern() successful\n");
     
         u_uastrcpy(pattern, "dd-MMM-yy h:mm:ss 'o''clock' a z");
         fmt= udat_open(UDAT_PATTERN,UDAT_PATTERN,"en_US", NULL, 0,pattern, u_strlen(pattern), &status);

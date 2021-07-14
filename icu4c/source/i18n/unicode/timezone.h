@@ -923,7 +923,7 @@ private:
      * Parses the given custom time zone identifier
      * @param id id A string of the form GMT[+-]hh:mm, GMT[+-]hhmm, or
      * GMT[+-]hh.
-     * @param sign Receves parsed sign, 1 for positive, -1 for negative.
+     * @param sign Receives parsed sign, 1 for positive, -1 for negative.
      * @param hour Receives parsed hour field
      * @param minute Receives parsed minute field
      * @param second Receives parsed second field
@@ -951,7 +951,7 @@ private:
      * @param min offset minutes
      * @param sec offset seconds
      * @param negative sign of the offset, true for negative offset.
-     * @param id Receves the format result (normalized custom ID)
+     * @param id Receives the format result (normalized custom ID)
      * @return The reference to id
      */
     static UnicodeString& formatCustomID(int32_t hour, int32_t min, int32_t sec,

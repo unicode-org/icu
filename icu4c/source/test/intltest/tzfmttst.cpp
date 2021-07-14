@@ -233,7 +233,7 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
                         UnicodeString canonicalID;
                         TimeZone::getCanonicalID(*tzid, canonicalID, status);
                         if (U_FAILURE(status)) {
-                            // Uknown ID - we should not get here
+                            // Unknown ID - we should not get here
                             errln((UnicodeString)"Unknown ID " + *tzid);
                             status = U_ZERO_ERROR;
                         } else if (outtzid != canonicalID) {
@@ -266,7 +266,7 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
                         UnicodeString canonical;
                         TimeZone::getCanonicalID(*tzid, canonical, status);
                         if (U_FAILURE(status)) {
-                            // Uknown ID - we should not get here
+                            // Unknown ID - we should not get here
                             errln((UnicodeString)"Unknown ID " + *tzid);
                             status = U_ZERO_ERROR;
                         } else if (outtzid != canonical) {

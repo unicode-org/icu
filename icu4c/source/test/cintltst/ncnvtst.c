@@ -1436,7 +1436,7 @@ static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *
                 (const char **)&src,
                 (const char *)srcLimit,
                 offs,
-                doFlush, /* flush if we're at the end of hte source data */
+                doFlush, /* flush if we're at the end of the source data */
                 &status);
         if(testReset) 
             ucnv_resetFromUnicode(conv);

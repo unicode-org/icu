@@ -60,9 +60,9 @@ in addition to platform-specific settings (like a specific mandir or
 sysconfdir). Note that the use of --disable-rpath assumes that the
 packaging is made for a standard location, or that the package
 installation/deinstallation will correctly manage the configuration
-of the system's dyanmic loader. This is the right way of doing things.
+of the system's dynamic loader. This is the right way of doing things.
 
-The configure script invokation should also be done with
+The configure script invocation should also be done with
 
   CFLAGS="-O2"
 
@@ -119,7 +119,7 @@ This package contains:
 
 + The ICU development package
 
-The ICU developpment package is named `libicu-dev'. It provides all
+The ICU development package is named `libicu-dev'. It provides all
 the files necessary to write applications that use ICU, along with
 examples and some documentation.
 
@@ -130,7 +130,7 @@ headers.
 - The .so symbolic links used by the linker to link against the
 latest version of the libraries.
 - A sample Makefile fragment that can be included by applications
-using ICU, to faciliate their building, along with a platform-specific
+using ICU, to facilitate their building, along with a platform-specific
 configuration file included by this fragment.
 - The sample applications from the ICU source tree, in an appropriate
 location for the system that the package is installed on (for example,

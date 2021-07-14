@@ -11,7 +11,7 @@
 *
 * Modification History:
 *      Name              Date                  Description            
-* Madhu Katragadda    06/23/2000     Tests for Conveter FallBack API and Functionality
+* Madhu Katragadda    06/23/2000     Tests for Converter FallBack API and Functionality
 ******************************************************************************
 */
 #include <stdio.h>
@@ -376,7 +376,7 @@ static UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const U
                 (const char **)&src,
                 (const char *)srcLimit,
                 checkOffsets ? offs : NULL,
-                (UBool)(srcLimit == realSourceEnd), /* flush if we're at the end of hte source data */
+                (UBool)(srcLimit == realSourceEnd), /* flush if we're at the end of the source data */
                 &status);
     } while ( (status == U_BUFFER_OVERFLOW_ERROR) || (srcLimit < realSourceEnd) ); /* while we just need another buffer */
 
@@ -574,7 +574,7 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
         retrievedMBCSText, UPRV_LENGTHOF(retrievedMBCSText),"ibm-950", TRUE, fromIBM950offs ))
         log_err("ibm-950->u(MBCS) with Fallback did not match.\n");
     
-   /*commented untill data table is available*/
+   /*commented until data table is available*/
     log_verbose("toUnicode fallback with fallback data for MBCS\n");
     {
         const uint8_t IBM950input[] =   {  

@@ -188,7 +188,7 @@ $GL $CM* .;
 
 
 
-# LB 13   Don't break before ']' or '!' or or '/', even after spaces.
+# LB 13   Don't break before ']' or '!' or '/', even after spaces.
 #
 $LB8NonBreaks $CL;
 $CAN_CM $CM*  $CL;

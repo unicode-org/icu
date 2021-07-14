@@ -719,7 +719,7 @@ uset_retainAll(USet* set, const USet* retain);
  * possible space, without changing this object's value.
  * A frozen set will not be modified.
  *
- * @param set the object on which to perfrom the compact
+ * @param set the object on which to perform the compact
  * @stable ICU 3.2
  */
 U_CAPI void U_EXPORT2

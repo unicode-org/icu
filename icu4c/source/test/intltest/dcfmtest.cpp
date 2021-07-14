@@ -371,7 +371,7 @@ void DecimalFormatTest::execParseTest(int32_t lineNum,
       case 'i': expectType = Formattable::kLong;   break;
       case 'l': expectType = Formattable::kInt64;  break;
       default:
-          errln("file dcfmtest.tx, line %d: unrecongized expected type \"%s\"",
+          errln("file dcfmtest.tx, line %d: unrecognized expected type \"%s\"",
               lineNum, InvariantStringPiece(expectedType).data());
           return;
     }

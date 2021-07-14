@@ -208,7 +208,7 @@ try_le:
 
 
     if (strcmp(name, "UTF-16LE") != 0) {
-        log_err("Enconding detection failure for UTF-16LE: got %s\n", name);
+        log_err("Encoding detection failure for UTF-16LE: got %s\n", name);
     }
 
     if (conf != 100) {

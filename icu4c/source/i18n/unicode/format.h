@@ -88,7 +88,7 @@ U_NAMESPACE_BEGIN
  * 0xFFFD is returned.
  * <P>
  * If there is no match when parsing, a parse failure UErrorCode is
- * retured for methods which take no ParsePosition.  For the method
+ * returned for methods which take no ParsePosition.  For the method
  * that takes a ParsePosition, the index parameter is left unchanged.
  * <P>
  * <em>User subclasses are not supported.</em> While clients may write
@@ -288,7 +288,7 @@ protected:
      * Simple function for initializing a UParseError from a UnicodeString.
      *
      * @param pattern The pattern to copy into the parseError
-     * @param pos The position in pattern where the error occured
+     * @param pos The position in pattern where the error occurred
      * @param parseError The UParseError object to fill in
      * @stable ICU 2.4
      */

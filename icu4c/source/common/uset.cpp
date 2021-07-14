@@ -360,7 +360,7 @@ uset_getItem(const USet* uset, int32_t itemIndex,
  * therefore all BMP code points precede all supplementary code points.
  *
  * Store each supplementary code point in 2 16-bit units,
- * simply with higher-then-lower 16-bit halfs.
+ * simply with higher-then-lower 16-bit halves.
  *
  * Precede the entire list with the length.
  * If there are supplementary code points, then set bit 15 in the length

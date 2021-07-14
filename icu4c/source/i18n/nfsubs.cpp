@@ -845,7 +845,7 @@ ModulusSubstitution::ModulusSubstitution(int32_t _pos,
   }
 
   if (0 == description.compare(gGreaterGreaterGreaterThan, 3)) {
-    // the >>> token doesn't alter how this substituion calculates the
+    // the >>> token doesn't alter how this substitution calculates the
     // values it uses for formatting and parsing, but it changes
     // what's done with that value after it's obtained: >>> short-
     // circuits the rule-search process and goes straight to the

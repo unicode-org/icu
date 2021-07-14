@@ -729,7 +729,7 @@ void NumberFormatRegressionTest::Test4090504 (void)
             //sb = new StringBuffer("");
             fp.setField(0);
             logln(UnicodeString("  getMaximumFractionDigits() = ") + i);
-            logln(UnicodeString("  formated: ") + df->format(d, sb, fp));
+            logln(UnicodeString("  formatted: ") + df->format(d, sb, fp));
         }
     /*} catch (Exception foo) {
         errln("Bug 4090504 regression test failed. Message : " + foo.getMessage());
@@ -1268,7 +1268,7 @@ void NumberFormatRegressionTest::Test4074454(void)
  * Tests all different comments.
  * Response to some comments :
  * [1] DecimalFormat.parse API documentation is more than just one line.
- * This is not a reproducable doc error in 116 source code.
+ * This is not a reproducible doc error in 116 source code.
  * [2] See updated javadoc.
  * [3] Fixed.
  * [4] NumberFormat.parse(String, ParsePosition) : If parsing fails,
@@ -1571,7 +1571,7 @@ void NumberFormatRegressionTest::Test4106664(void)
     df->setGroupingUsed(FALSE);
     UnicodeString temp;
     FieldPosition pos(FieldPosition::DONT_CARE);
-    logln("formated: " +
+    logln("formatted: " +
         df->format(n, temp, pos));
     
     char buf [128];

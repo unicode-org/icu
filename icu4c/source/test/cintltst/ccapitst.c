@@ -163,7 +163,7 @@ static void ListNames(void) {
     uenum_close(allNamesEnum);
     err = U_ZERO_ERROR;
 
-    /*Tests ucnv_getAvailableName(), getAvialableCount()*/
+    /*Tests ucnv_getAvailableName(), getAvailableCount()*/
 
     log_verbose("Testing ucnv_countAvailable()...");
 
@@ -3262,7 +3262,7 @@ static void TestFromUCountPending(){
             continue;
         }
         if(len != fromUnicodeTests[i].exp){
-            log_err("Did not get the expeced output for ucnv_fromUInputConsumed.\n");
+            log_err("Did not get the expected output for ucnv_fromUInputConsumed.\n");
         }
     }
     status = U_ZERO_ERROR;
@@ -3368,7 +3368,7 @@ TestToUCountPending(){
             continue;
         }
         if(len != toUnicodeTests[i].exp){
-            log_err("Did not get the expeced output for ucnv_toUInputConsumed.\n");
+            log_err("Did not get the expected output for ucnv_toUInputConsumed.\n");
         }
     }
     status = U_ZERO_ERROR;    
