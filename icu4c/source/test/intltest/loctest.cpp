@@ -265,6 +265,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestKnownCanonicalizedListCorrect);
     TESTCASE_AUTO(TestConstructorAcceptsBCP47);
     TESTCASE_AUTO(TestForLanguageTag);
+    TESTCASE_AUTO(TestForLanguageTagLegacyTagBug21676);
     TESTCASE_AUTO(TestToLanguageTag);
     TESTCASE_AUTO(TestToLanguageTagOmitTrue);
     TESTCASE_AUTO(TestMoveAssign);
@@ -5675,6 +5676,26 @@ void LocaleTest::TestForLanguageTag() {
                        u_errorName(status));
         }
     }
+}
+
+void LocaleTest::TestForLanguageTagLegacyTagBug21676() {
+    IcuTestErrorCode status(*this, "TestForLanguageTagLegacyTagBug21676()");
+  std::string tag(
+      "i-enochian-1nochian-129-515VNTR-64863775-X3il6-110Y101-29-515VNTR-"
+      "64863775-153zu-u-Y4-H0-t6-X3-u6-110Y101-X");
+  std::string input(tag);
+  input += "EXTRA MEMORY AFTER NON-NULL TERMINATED STRING";
+  StringPiece stringp(input.c_str(), tag.length());
+  std::string name = Locale::forLanguageTag(stringp, status).getName();
+  std::string expected(
+      "@x=i-enochian-1nochian-129-515vntr-64863775-x3il6-110y101-29-515vntr-"
+      "64863775-153zu-u-y4-h0-t6-x3-u6-110y101-x");
+  if (name != expected) {
+      errcheckln(
+          status,
+          "FAIL: forLanguageTag('%s', \n%d).getName() should be \n'%s' but got %s",
+          tag.c_str(), tag.length(), expected.c_str(), name.c_str());
+  }
 }
 
 void LocaleTest::TestToLanguageTag() {

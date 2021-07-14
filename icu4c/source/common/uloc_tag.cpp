@@ -2089,6 +2089,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
             legacyLen = checkLegacyLen;  /* back up for output parsedLen */
             int32_t replacementLen = static_cast<int32_t>(uprv_strlen(LEGACY[i+1]));
             newTagLength = replacementLen + tagLen - checkLegacyLen;
+            int32_t oldTagLength = tagLen;
             if (tagLen < newTagLength) {
                 uprv_free(tagBuf);
                 tagBuf = (char*)uprv_malloc(newTagLength + 1);
@@ -2102,7 +2103,10 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
             parsedLenDelta = checkLegacyLen - replacementLen;
             uprv_strcpy(t->buf, LEGACY[i + 1]);
             if (checkLegacyLen != tagLen) {
-                uprv_strcpy(t->buf + replacementLen, tag + checkLegacyLen);
+                uprv_memcpy(t->buf + replacementLen, tag + checkLegacyLen,
+                            oldTagLength - checkLegacyLen);
+                // NUL-terminate after memcpy().
+                t->buf[replacementLen + oldTagLength - checkLegacyLen] = 0;
             }
             break;
         }
