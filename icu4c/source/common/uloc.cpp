@@ -1493,8 +1493,13 @@ _canonicalize(const char* localeID,
         int32_t convertedSize = _ConvertBCP47(tmpLocaleID, localeID, tempBuffer, sizeof(tempBuffer), err);
         if (*err == U_BUFFER_OVERFLOW_ERROR || *err == U_STRING_NOT_TERMINATED_WARNING) {
             heapTempBuffer.adoptInstead((char*)uprv_malloc(convertedSize + 2));
-            *err = U_ZERO_ERROR;
-            _ConvertBCP47(tmpLocaleID, localeID, heapTempBuffer.getAlias(), convertedSize + 2, err);
+            if (heapTempBuffer.isNull()) {
+                *err = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            } else{
+                *err = U_ZERO_ERROR;
+                _ConvertBCP47(tmpLocaleID, localeID, heapTempBuffer.getAlias(), convertedSize + 2, err);
+            }
         }
     } else {
         if (localeID==NULL) {
