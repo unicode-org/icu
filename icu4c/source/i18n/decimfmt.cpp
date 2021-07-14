@@ -1612,7 +1612,8 @@ void DecimalFormat::touch(UErrorCode& status) {
         return;
     }
 
-    // In C++, fields->symbols is the source of truth for the locale.
+    // In C++, fields->symbols (or, if it's null, the DecimalFormatSymbols owned by the underlying LocalizedNumberFormatter)
+    // is the source of truth for the locale.
     const DecimalFormatSymbols* symbols = getDecimalFormatSymbols();
     Locale locale = symbols->getLocale();
     
