@@ -866,7 +866,7 @@ CalendarTest::TestDisambiguation765()
      * desired.  Using YEAR in combination with WOY is ambiguous, and
      * results in the first WOY/DOW day of the year satisfying the
      * given fields (there may be up to two such days). In this case,
-     * it propertly resolves to Tue Dec 30 1997, which has a WOY value
+     * it properly resolves to Tue Dec 30 1997, which has a WOY value
      * of 1 (for YEAR_WOY 1998) and a DOW of Tuesday, and falls in the
      * _calendar_ year 1997, as specified. - aliu */
     c->clear();

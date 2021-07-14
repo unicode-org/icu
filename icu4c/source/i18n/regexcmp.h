@@ -209,7 +209,7 @@ private:
                                                      //   initially scanned.  Each new interval
                                                      //   encountered overwrites these values.
                                                      //   -1 for the upper interval value means none
-                                                     //   was specified (unlimited occurences.)
+                                                     //   was specified (unlimited occurrences.)
 
     int64_t                       fNameStartPos;     // Starting position of a \N{NAME} name in a
                                                      //   pattern, valid while remainder of name is

@@ -48,7 +48,7 @@ class FieldsSet {
     public:
     
       /**
-       * Compare two sets. In typical test usage, 'this' is the resul of 
+       * Compare two sets. In typical test usage, 'this' is the result of 
        * a tested operation, and 'other' is the predefined expected value.
        * 
        * @param other the set to compare against.

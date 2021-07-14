@@ -355,7 +355,7 @@ public:
      * Sets the localized GMT format pattern. The pattern must contain
      * a single argument {0}, for example "GMT {0}".
      * @param pattern The localized GMT format pattern to be used by this object.
-     * @param status Recieves the status.
+     * @param status Receives the status.
      * @see #getGMTPattern
      * @stable ICU 50
      */
@@ -437,7 +437,7 @@ public:
      * Sets the default parse options.
      * <p><b>Note</b>: By default, an instance of <code>TimeZoneFormat</code>
      * created by {@link #createInstance} has no parse options set (UTZFMT_PARSE_OPTION_NONE).
-     * To specify multipe options, use bitwise flags of UTimeZoneFormatParseOption.
+     * To specify multiple options, use bitwise flags of UTimeZoneFormatParseOption.
      * @see #UTimeZoneFormatParseOption
      * @stable ICU 50
      */
@@ -590,7 +590,7 @@ public:
      * @param text The text contains a time zone string at the position.
      * @param style The format style
      * @param pos The position.
-     * @param parseOptions The parse options repesented by bitwise flags of UTimeZoneFormatParseOption.
+     * @param parseOptions The parse options represented by bitwise flags of UTimeZoneFormatParseOption.
      * @param timeType The output argument for receiving the time type (standard/daylight/unknown),
      * or NULL if the information is not necessary.
      * @return A <code>TimeZone</code>, or null if the input could not be parsed.
@@ -1058,7 +1058,7 @@ private:
      * Returns the time zone ID of a match at the specified index within
      * the MatchInfoCollection.
      * @param matches the collection of matches
-     * @param idx the index withing matches
+     * @param idx the index within matches
      * @param tzID receives the resolved time zone ID
      * @return a reference to tzID.
      */

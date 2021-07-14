@@ -894,7 +894,7 @@ public:
   using NumberFormat::parse;
 
   /**
-   * Parses the specfied string, beginning at the specified position, according
+   * Parses the specified string, beginning at the specified position, according
    * to this formatter's rules.  This will match the string against all of the
    * formatter's public rule sets and return the value corresponding to the longest
    * parseable substring.  This function's behavior is affected by the lenient

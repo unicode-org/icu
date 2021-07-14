@@ -177,7 +177,7 @@ Formattable::Formattable(const UnicodeString& stringToCopy)
 
 // -------------------------------------
 // Creates a formattable object with a UnicodeString* value.
-// (adopting symantics)
+// (adopting semantics)
 
 Formattable::Formattable(UnicodeString* stringToAdopt)
 {

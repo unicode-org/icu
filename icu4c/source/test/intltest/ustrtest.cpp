@@ -301,7 +301,7 @@ UnicodeStringTest::TestCompare()
         test3.compare(0, 14, test2) != 0 ||
         test4.compare(12, 14, test2) != 0 ||
         test3.compare(0, 18, test1) <=0  )
-        errln("compare(offset, length, UnicodeString) failes");
+        errln("compare(offset, length, UnicodeString) fails");
 
     // test compare(UChar*)
     if (test2.compare(uniChars) != 0 || test3.compare(uniChars) <= 0 || test4.compare(uniChars) >= 0)

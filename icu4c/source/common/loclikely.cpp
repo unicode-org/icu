@@ -115,7 +115,7 @@ findLikelySubtags(const char* localeID,
  * @param tag The tag to add.
  * @param tagLength The length of the tag.
  * @param buffer The output buffer.
- * @param bufferLength The length of the output buffer.  This is an input/ouput parameter.
+ * @param bufferLength The length of the output buffer.  This is an input/output parameter.
  **/
 static void U_CALLCONV
 appendTag(

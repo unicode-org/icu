@@ -185,7 +185,7 @@ static void TestAPI() {
     uset_addAllCodePoints(set, STR_ab, STR_ab_LEN);
     expect(set, "ab", "def{ab}", NULL);
     if (uset_containsAllCodePoints(set, STR_bc, STR_bc_LEN)){
-        log_err("set should not conatin all characters of \"bc\" \n");
+        log_err("set should not contain all characters of \"bc\" \n");
     }
 
     /* [] */

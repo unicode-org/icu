@@ -806,7 +806,7 @@ OlsonTimeZone::initTransitionRules(UErrorCode& status) {
         }
     }
     if (finalZone != NULL) {
-        // Get the first occurence of final rule starts
+        // Get the first occurrence of final rule starts
         UDate startTime = (UDate)finalStartMillis;
         TimeZoneRule *firstFinalRule = NULL;
 

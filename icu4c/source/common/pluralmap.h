@@ -46,7 +46,7 @@ public:
 
     /**
      * Converts a category name such as "zero", "one", "two", "few", "many"
-     * or "other" to a category enum.  Returns NONE for urecongized
+     * or "other" to a category enum.  Returns NONE for unrecognized
      * category name.
      */
     static Category toCategory(const UnicodeString &categoryName);

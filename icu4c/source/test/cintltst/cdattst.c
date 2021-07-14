@@ -242,7 +242,7 @@ static void TestDateFormat()
         log_err("FAIL: Error in parsing using udat_parse(.....) %s\n", myErrorName(status) );
     }
     else
-        log_verbose("PASS: parsing succesful\n");
+        log_verbose("PASS: parsing successful\n");
     /*format it back and check for equality */
 
 
@@ -260,7 +260,7 @@ static void TestDateFormat()
         log_err("FAIL: udat_parse(\"bad string\") passed when it should have failed\n");
     }
     else
-        log_verbose("PASS: parsing succesful\n");
+        log_verbose("PASS: parsing successful\n");
 
 
 
@@ -275,7 +275,7 @@ static void TestDateFormat()
             myErrorName(status) );
     }
     else
-        log_verbose("PASS: creating dateformat using udat_openPattern() succesful\n");
+        log_verbose("PASS: creating dateformat using udat_openPattern() successful\n");
 
 
         /*Testing applyPattern and toPattern */
@@ -353,7 +353,7 @@ static void TestDateFormat()
     if(u_strcmp(myNumformat(numformat1, num), myNumformat(numformat2, num)) !=0)
         log_err("FAIL: error in setNumberFormat or getNumberFormat()\n");
     else
-        log_verbose("PASS:setNumberFormat and getNumberFormat succesful\n");
+        log_verbose("PASS:setNumberFormat and getNumberFormat successful\n");
 
     /*Test getNumberFormat() and adoptNumberFormat() */
     log_verbose("\nTesting the get and adopt NumberFormat properties of date format\n");
@@ -363,7 +363,7 @@ static void TestDateFormat()
     if(u_strcmp(myNumformat(adoptNF, num), myNumformat(numformat2, num)) !=0)
         log_err("FAIL: error in adoptNumberFormat or getNumberFormat()\n");
     else
-        log_verbose("PASS:adoptNumberFormat and getNumberFormat succesful\n");
+        log_verbose("PASS:adoptNumberFormat and getNumberFormat successful\n");
 
     /*try setting the number format to another format */
     numformat1=udat_getNumberFormat(def);
@@ -372,7 +372,7 @@ static void TestDateFormat()
     if(u_strcmp(myNumformat(numformat1, num), myNumformat(numformat2, num)) !=0)
         log_err("FAIL: error in setNumberFormat or getNumberFormat()\n");
     else
-        log_verbose("PASS: setNumberFormat and getNumberFormat succesful\n");
+        log_verbose("PASS: setNumberFormat and getNumberFormat successful\n");
 
 
 
@@ -658,7 +658,7 @@ static void TestSymbols()
         log_err("FAIL: Error in udat_getSymbols().... %s\n", myErrorName(status) );
     }
     else
-        log_verbose("PASS: getSymbols succesful\n");
+        log_verbose("PASS: getSymbols successful\n");
 
     if(u_strcmp(result, pattern)==0)
         log_verbose("PASS: getSymbols retrieved the right value\n");
@@ -780,7 +780,7 @@ free(pattern);
         log_err("FAIL: error in retrieving the value using getSymbols i.e roundtrip\n");
 
     if(u_strcmp(result, value)!=0)
-        log_data_err("FAIL: Error in settting and getting symbols\n");
+        log_data_err("FAIL: Error in setting and getting symbols\n");
     else
         log_verbose("PASS: setSymbols successful\n");
 

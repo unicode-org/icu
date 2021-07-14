@@ -124,7 +124,7 @@ def _Resolve(name, parents):
   # Check if already cached.
   exports = item.get("exports")
   if exports != None: return item
-  # Calculcate recursively.
+  # Calculate recursively.
   parents.append(name)
   imports = set()
   exports = set()

@@ -103,7 +103,7 @@ class UVector32;
 * to reset the status, shifting pointers to either the end or the start of
 * the string (reset() or setText()), or the specified position (setOffset()).
 * Hence at the next call of next() or previous(), the first or last collation order,
-* or collation order at the spefcifieid position will be returned. If a change of
+* or collation order at the specified position will be returned. If a change of
 * direction is done without one of these calls, the result is undefined.
 * <p>
 * The result of a forward iterate (next()) and reversed result of the backward
@@ -125,7 +125,7 @@ public:
 
     enum {
         /**
-         * NULLORDER indicates that an error has occured while processing
+         * NULLORDER indicates that an error has occurred while processing
          * @stable ICU 2.0
          */
         NULLORDER = (int32_t)0xffffffff
@@ -177,7 +177,7 @@ public:
     * Gets the ordering priority of the next character in the string.
     * @param status the error code status.
     * @return the next character's ordering. otherwise returns NULLORDER if an 
-    *         error has occured or if the end of string has been reached
+    *         error has occurred or if the end of string has been reached
     * @stable ICU 2.0
     */
     int32_t next(UErrorCode& status);
@@ -186,7 +186,7 @@ public:
     * Get the ordering priority of the previous collation element in the string.
     * @param status the error code status.
     * @return the previous element's ordering. otherwise returns NULLORDER if an 
-    *         error has occured or if the start of string has been reached
+    *         error has occurred or if the start of string has been reached
     * @stable ICU 2.0
     */
     int32_t previous(UErrorCode& status);

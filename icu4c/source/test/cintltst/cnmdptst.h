@@ -26,7 +26,7 @@
 
 #include "cintltst.h"
 
-/* The function used to test differnet format patterns*/
+/* The function used to test different format patterns*/
 static void TestPatterns(void);
 
 /*  Test the handling of quotes*/

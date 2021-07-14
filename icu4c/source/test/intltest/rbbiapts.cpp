@@ -308,7 +308,7 @@ void RBBIAPITest::TestGetSetAdoptText()
     if(rb->getText() != *text2)
         errln((UnicodeString)"ERROR:2 error in adoptText ");
 
-    // Adopt where iterator range is less than the entire orignal source string.
+    // Adopt where iterator range is less than the entire original source string.
     //   (With the change of the break engine to working with UText internally,
     //    CharacterIterators starting at positions other than zero are not supported)
     rb->adoptText(text3);
@@ -683,7 +683,7 @@ void RBBIAPITest::TestRuleStatus() {
          int32_t pos, tag;
          for (pos = bi->first(); pos != BreakIterator::DONE; pos = bi->next(), i++) {
              if (pos != bounds1[i]) {
-                 errln("%s:%d FAIL: unexpected word break at postion %d", __FILE__, __LINE__, pos);
+                 errln("%s:%d FAIL: unexpected word break at position %d", __FILE__, __LINE__, pos);
                  break;
              }
              tag = bi->getRuleStatus();

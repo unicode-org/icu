@@ -74,7 +74,7 @@ class U_I18N_API ZNStringPool: public UMemory {
  */
 struct CharacterNode {
     // No constructor or destructor.
-    // We malloc and free an uninitalized array of CharacterNode objects
+    // We malloc and free an uninitialized array of CharacterNode objects
     // and clear and delete them ourselves.
 
     void clear();

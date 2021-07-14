@@ -131,7 +131,7 @@ void MessageFormatRegressionTest::Test4074764() {
         tempBuffer.remove();
         tempBuffer = messageFormatter->format(params, 2, tempBuffer, pos, status);
          if (tempBuffer != "Message without param" || failure(status, "messageFormat->format"))
-            errln("Formatted with arguments > subsitution failed. result = " + tempBuffer);
+            errln("Formatted with arguments > substitution failed. result = " + tempBuffer);
          logln("Formatted with extra params : " + tempBuffer);
         //This statement gives an exception while formatting...
         //If we use pattern[1] for the message with param,

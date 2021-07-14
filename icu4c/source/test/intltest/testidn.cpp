@@ -316,7 +316,7 @@ testAllCodepoints(TestIDNA& test){
         }
     }
 
-    test.logln("Number of Unassinged code points : %i \n",unassigned);
+    test.logln("Number of Unassigned code points : %i \n",unassigned);
     test.logln("Number of Prohibited code points : %i \n",prohibited);
     test.logln("Number of Mapped code points : %i \n",mapped);
     test.logln("Number of Mapped with NFKC code points : %i \n",mappedWithNorm);

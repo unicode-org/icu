@@ -3776,7 +3776,7 @@ static void decToString(const decNumber *dn, char *string, Flag eng) {
 
   /* Finally add the E-part, if needed.  It will never be 0, has a
      base maximum and minimum of +999999999 through -999999999, but
-     could range down to -1999999998 for anormal numbers */
+     could range down to -1999999998 for abnormal numbers */
   if (e!=0) {
     Flag had=0;               /* 1=had non-zero  */
     *c='E'; c++;
@@ -5616,7 +5616,7 @@ static const uShort LNnn[90]={9016,  8652,  8316,  8008,  7724,  7456,  7208,
 /*    would certainly save at least one if it were made ten times     */
 /*    bigger, too (for truncated fractions 0.100 through 0.999).      */
 /*    However, for most practical evaluations, at least four or five  */
-/*    iterations will be neede -- so this would only speed up by      */
+/*    iterations will be needed -- so this would only speed up by      */
 /*    20-25% and that probably does not justify increasing the table  */
 /*    size.                                                           */
 /*                                                                    */

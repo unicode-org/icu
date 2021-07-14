@@ -1740,7 +1740,7 @@ CalendarRegressionTest::Test4149677()
     for (int32_t i=0; i < 3; ++i) {
         GregorianCalendar *calendar = new GregorianCalendar(zones[i], status);
         if(U_FAILURE(status)) {
-            dataerrln("Couldnt' create calendar.: %s", u_errorName(status));
+            dataerrln("Couldn't create calendar.: %s", u_errorName(status));
             return;
         }
 

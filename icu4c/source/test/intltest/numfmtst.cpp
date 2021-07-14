@@ -1759,7 +1759,7 @@ void NumberFormatTest::TestPad(void) {
     expectPad(fmt, "*P##.##", DecimalFormat::kPadBeforePrefix, 5, padString);
     fmt.setPadCharacter((UnicodeString)"^");
     expectPad(fmt, "*^#", DecimalFormat::kPadBeforePrefix, 1, (UnicodeString)"^");
-    //commented untill implementation is complete
+    //commented until implementation is complete
   /*  fmt.setPadCharacter((UnicodeString)"^^^");
     expectPad(fmt, "*^^^#", DecimalFormat::kPadBeforePrefix, 3, (UnicodeString)"^^^");
     padString.remove();

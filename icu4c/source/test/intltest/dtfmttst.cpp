@@ -1342,12 +1342,12 @@ DateFormatTest::TestLocaleDateFormat() // Bug 495
     }
 
     dfFrench->format(testDate, out);
-    logln((UnicodeString)"Date Formated with French Locale " + out);
+    logln((UnicodeString)"Date Formatted with French Locale " + out);
     if (!(out == expectedFRENCH))
         errln((UnicodeString)"FAIL: Expected " + expectedFRENCH);
     out.truncate(0);
     dfUS->format(testDate, out);
-    logln((UnicodeString)"Date Formated with US Locale " + out);
+    logln((UnicodeString)"Date Formatted with US Locale " + out);
     if (!(out == expectedUS))
         errln((UnicodeString)"FAIL: Expected " + expectedUS);
     delete dfUS;
@@ -4744,7 +4744,7 @@ void DateFormatTest::TestParseLeniencyAPIs() {
     // Set calendar to strict
     fmt->setCalendarLenient(FALSE);
 
-    assertFalse("isLeninent after setCalendarLenient(FALSE)", fmt->isLenient());
+    assertFalse("isLenient after setCalendarLenient(FALSE)", fmt->isLenient());
     assertFalse("isCalendarLenient after setCalendarLenient(FALSE)", fmt->isCalendarLenient());
     assertTrue("ALLOW_WHITESPACE after setCalendarLenient(FALSE)", fmt->getBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, status));
     assertTrue("ALLOW_NUMERIC  after setCalendarLenient(FALSE)", fmt->getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status));
@@ -4752,7 +4752,7 @@ void DateFormatTest::TestParseLeniencyAPIs() {
     // Set to strict
     fmt->setLenient(FALSE);
 
-    assertFalse("isLeninent after setLenient(FALSE)", fmt->isLenient());
+    assertFalse("isLenient after setLenient(FALSE)", fmt->isLenient());
     assertFalse("isCalendarLenient after setLenient(FALSE)", fmt->isCalendarLenient());
     assertFalse("ALLOW_WHITESPACE after setLenient(FALSE)", fmt->getBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, status));
     assertFalse("ALLOW_NUMERIC  after setLenient(FALSE)", fmt->getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status));
@@ -4763,7 +4763,7 @@ void DateFormatTest::TestParseLeniencyAPIs() {
     // Allow white space leniency
     fmt->setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, TRUE, status);
 
-    assertFalse("isLeninent after ALLOW_WHITESPACE/TRUE", fmt->isLenient());
+    assertFalse("isLenient after ALLOW_WHITESPACE/TRUE", fmt->isLenient());
     assertFalse("isCalendarLenient after ALLOW_WHITESPACE/TRUE", fmt->isCalendarLenient());
     assertTrue("ALLOW_WHITESPACE after ALLOW_WHITESPACE/TRUE", fmt->getBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, status));
     assertFalse("ALLOW_NUMERIC  after ALLOW_WHITESPACE/TRUE", fmt->getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status));
@@ -4836,7 +4836,7 @@ void DateFormatTest::TestNumberFormatOverride() {
             assertSuccess("adoptNumberFormat singleOverrideNF", status);
 
             fmt->adoptNumberFormat(overrideNF);
-        } else if (fields == (UnicodeString) "Mo"){ // o is invlid field
+        } else if (fields == (UnicodeString) "Mo"){ // o is invalid field
             fmt->adoptNumberFormat(fields, overrideNF, status);
             if(status == U_INVALID_FORMAT_ERROR) {
                 status = U_ZERO_ERROR;

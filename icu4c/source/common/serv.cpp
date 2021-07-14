@@ -238,7 +238,7 @@ public:
     * you're removing pointer to this somewhere.  Management of that
     * pointer will have to know how to deal with refcounts.  Once
     * the refcount drops to zero, the resource is released.  Return
-    * false if the resouce has been released.
+    * false if the resource has been released.
     */
     CacheEntry* unref() {
         if ((--refcount) == 0) {

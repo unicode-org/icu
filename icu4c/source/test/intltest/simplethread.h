@@ -25,7 +25,7 @@ class SimpleThread
   public:
     SimpleThread();
     virtual  ~SimpleThread();
-    int32_t   start();            // start the thread. Return 0 if successfull.
+    int32_t   start();            // start the thread. Return 0 if successful.
     void      join();             // A thread must be joined before deleting its SimpleThread.
 
     virtual void run() = 0;       // Override this to provide the code to run

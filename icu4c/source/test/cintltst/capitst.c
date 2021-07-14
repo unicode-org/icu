@@ -657,7 +657,7 @@ void TestSafeClone() {
     UCollator * someClonedCollators [CLONETEST_COLLATOR_COUNT];
     UCollator * col;
     UErrorCode err = U_ZERO_ERROR;
-    int8_t idx = 6;    /* Leave this here to test buffer alingment in memory*/
+    int8_t idx = 6;    /* Leave this here to test buffer alignment in memory*/
     uint8_t buffer [CLONETEST_COLLATOR_COUNT] [U_COL_SAFECLONE_BUFFERSIZE];
     int32_t bufferSize = U_COL_SAFECLONE_BUFFERSIZE;
     const char sampleRuleChars[] = "&Z < CH";
@@ -1376,7 +1376,7 @@ doAssert( (ucol_tertiaryOrder(order1) != ucol_tertiaryOrder(order3)), "The terti
         return;
     }
     /* this here, my friends, is either pure lunacy or something so obsolete that even it's mother
-     * doesn't care about it. Essentialy, this test complains if secondary values for 'I' and '_'
+     * doesn't care about it. Essentially, this test complains if secondary values for 'I' and '_'
      * are the same. According to the UCA, this is not true. Therefore, remove the test.
      * Besides, if primary strengths for two code points are different, it doesn't matter one bit
      * what is the relation between secondary or any other strengths.
@@ -2313,13 +2313,13 @@ TestOpenBinary(void)
     int32_t imageSize;
 
     if((coll==NULL)||(U_FAILURE(status))) {
-        log_data_err("could not load collators or error occured: %s\n",
+        log_data_err("could not load collators or error occurred: %s\n",
             u_errorName(status));
         return;
     }
     UCA = ucol_open("root", &status);
     if((UCA==NULL)||(U_FAILURE(status))) {
-        log_data_err("could not load UCA collator or error occured: %s\n",
+        log_data_err("could not load UCA collator or error occurred: %s\n",
             u_errorName(status));
         return;
     }

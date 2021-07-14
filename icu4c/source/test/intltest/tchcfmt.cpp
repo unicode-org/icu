@@ -339,7 +339,7 @@ TestChoiceFormat::TestComplexExample( void )
 
     const char* testPattern = "0#none|1#one|2#many";
     ChoiceFormat form_pat( testPattern, status );
-    if (!chkstatus( status, "***  ChoiceFormat contructor( newPattern, status)" )) {
+    if (!chkstatus( status, "***  ChoiceFormat constructor( newPattern, status)" )) {
         delete fileform;
         delete filenumform;
         delete pattform;
@@ -348,9 +348,9 @@ TestChoiceFormat::TestComplexExample( void )
 
     form_pat.toPattern( res1 );
     if (res1 == "0#none|1#one|2#many") {
-        it_logln("ChoiceFormat contructor( newPattern, status) tested");
+        it_logln("ChoiceFormat constructor( newPattern, status) tested");
     }else{
-        it_errln("***  ChoiceFormat contructor( newPattern, status) or toPattern result!");
+        it_errln("***  ChoiceFormat constructor( newPattern, status) or toPattern result!");
     }
 
     double d_a2[] = { 3.0, 4.0 };

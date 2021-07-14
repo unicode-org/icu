@@ -752,7 +752,7 @@ AliasDataBuilder::readLanguageAlias(
         alias, strings, types, replacementIndexes, length,
 #if U_DEBUG
         [](const char* type) {
-            // Assert the aliasFrom only contains the following possibilties
+            // Assert the aliasFrom only contains the following possibilities
             // language_REGION_variant
             // language_REGION
             // language_variant
@@ -1351,7 +1351,7 @@ AliasReplacer::replaceLanguage(
         }
         if (replacedExtensions != nullptr) {
             // DO NOTHING
-            // UTS35 does not specifiy what should we do if we have extensions in the
+            // UTS35 does not specify what should we do if we have extensions in the
             // replacement. Currently we know only the following 4 "BCP47 LegacyRules" have
             // extensions in them languageAlias:
             //  i_default => en_x_i_default
@@ -1710,7 +1710,7 @@ AliasReplacer::replace(const Locale& locale, CharString& out, UErrorCode& status
     }  // while(1)
 
     if (U_FAILURE(status)) { return false; }
-    // Nothing changed and we know the order of the vaiants are not change
+    // Nothing changed and we know the order of the variants are not change
     // because we have no variant or only one.
     const char* extensionsStr = locale_getKeywordsStart(locale.getName());
     if (changed == 0 && variants.size() <= 1 && extensionsStr == nullptr) {

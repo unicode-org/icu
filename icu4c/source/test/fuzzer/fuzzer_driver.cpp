@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
                   << " CXXFLAGS=\"-fsanitize=$SANITIZE\""
                   << " ./runConfigureICU ... " << std::endl
                   << "  where $SANITIZE is 'address' or 'memory'" << std::endl
-                  << "Plesae run the above step and make tests to rebuild" << std::endl;
+                  << "Please run the above step and make tests to rebuild" << std::endl;
         // Do not return -1 here so we will pass the unit test.
     }
     if (argc < 2) {

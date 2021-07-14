@@ -2103,7 +2103,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
 
     if (U_FAILURE(status)) return;
 
-    // Create a CalendarDataSink to process this data and the resouce bundles
+    // Create a CalendarDataSink to process this data and the resource bundles
     CalendarDataSink calendarSink(status);
     UResourceBundle *rb = ures_open(NULL, locale.getBaseName(), &status);
     UResourceBundle *cb = ures_getByKey(rb, gCalendarTag, NULL, &status);

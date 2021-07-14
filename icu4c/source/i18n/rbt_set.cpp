@@ -322,7 +322,7 @@ void TransliterationRuleSet::freeze(UParseError& parseError,UErrorCode& status) 
                 // If the indexValue is < 0, then the first key character is
                 // a set, and we must use the more time-consuming
                 // matchesIndexValue check.  In practice this happens
-                // rarely, so we seldom tread this code path.
+                // rarely, so we seldom treat this code path.
                 TransliterationRule* r = (TransliterationRule*) ruleVector->elementAt(j);
                 if (r->matchesIndexValue((uint8_t)x)) {
                     v.addElement(r, status);
@@ -396,7 +396,7 @@ void TransliterationRuleSet::freeze(UParseError& parseError,UErrorCode& status) 
  * @param text the text to be transliterated
  * @param pos the position indices, which will be updated
  * @param incremental if TRUE, assume new text may be inserted
- * at index.limit, and return FALSE if thre is a partial match.
+ * at index.limit, and return FALSE if there is a partial match.
  * @return TRUE unless a U_PARTIAL_MATCH has been obtained,
  * indicating that transliteration should stop until more text
  * arrives.

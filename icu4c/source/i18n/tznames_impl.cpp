@@ -533,7 +533,7 @@ const UChar *ZNStringPool::get(const UChar *s, UErrorCode &status) {
 //
 //  ZNStringPool::adopt()    Put a string into the hash, but do not copy the string data
 //                           into the pool's storage.  Used for strings from resource bundles,
-//                           which will perisist for the life of the zone string formatter, and
+//                           which will persist for the life of the zone string formatter, and
 //                           therefore can be used directly without copying.
 const UChar *ZNStringPool::adopt(const UChar * s, UErrorCode &status) {
     const UChar *pooledString;
@@ -776,7 +776,7 @@ struct ZNames::ZNamesLoader : public ResourceSink {
         clear();
         ures_getAllItemsWithFallback(zoneStrings, key, *this, localStatus);
 
-        // Ignore errors, but propogate possible warnings.
+        // Ignore errors, but propagate possible warnings.
         if (U_SUCCESS(localStatus)) {
             errorCode = localStatus;
         }

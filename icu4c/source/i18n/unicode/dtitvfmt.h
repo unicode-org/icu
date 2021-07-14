@@ -742,7 +742,7 @@ private:
          * Whether the first date in interval pattern is later date or not.
          * Fallback format set the default ordering.
          * And for a particular interval pattern, the order can be
-         * overriden by prefixing the interval pattern with "latestFirst:" or
+         * overridden by prefixing the interval pattern with "latestFirst:" or
          * "earliestFirst:"
          * For example, given 2 date, Jan 10, 2007 to Feb 10, 2007.
          * if the fallback format is "{0} - {1}",

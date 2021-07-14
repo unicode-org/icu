@@ -221,7 +221,7 @@ struct DecFmtSymDataSink : public ResourceSink {
     // Destination for data, modified via setters.
     DecimalFormatSymbols& dfs;
     // Boolean array of whether or not we have seen a particular symbol yet.
-    // Can't simpy check fSymbols because it is pre-populated with defaults.
+    // Can't simply check fSymbols because it is pre-populated with defaults.
     UBool seenSymbol[DecimalFormatSymbols::kFormatSymbolCount];
 
     // Constructor/Destructor

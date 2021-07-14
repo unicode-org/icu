@@ -1299,7 +1299,7 @@ private:
                            int32_t maxDigits) const;
 
     /**
-     * Return true if the given format character, occuring count
+     * Return true if the given format character, occurring count
      * times, represents a numeric field.
      */
     static UBool isNumeric(char16_t formatChar, int32_t count);
@@ -1386,7 +1386,7 @@ private:
      *
      * @param pattern the pattern string
      * @param patternOffset the starting offset into the pattern text. On
-     *        outupt will be set the offset of the first non-literal character in the pattern
+     *        output will be set the offset of the first non-literal character in the pattern
      * @param text the text being parsed
      * @param textOffset the starting offset into the text. On output
      *                   will be set to the offset of the character after the match

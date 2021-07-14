@@ -554,7 +554,7 @@ public:
     /**
      * Sets timezone strings. These strings are stored in a 2-dimensional array.
      * <p><b>Note:</b> SimpleDateFormat no longer use the zone strings stored in
-     * a DateFormatSymbols. Therefore, the time zone strings set by this mthod
+     * a DateFormatSymbols. Therefore, the time zone strings set by this method
      * have no effects in an instance of SimpleDateFormat for formatting time
      * zones.
      * @param strings       The timezone strings as a 2-d array to be copied. (not adopted; caller retains ownership)

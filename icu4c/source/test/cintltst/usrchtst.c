@@ -1562,7 +1562,7 @@ static void TestSetMatch(void)
                                                search.size[offsetIndex + 1] + 1, 
                                       &status) != search.offset[offsetIndex + 1] ||
                     U_FAILURE(status)) {
-                    log_err("Error getting preceeding match at index %d\n", 
+                    log_err("Error getting preceding match at index %d\n", 
                             search.offset[offsetIndex + 1] + 1);
                 }
             }
@@ -2648,7 +2648,7 @@ static void TestStrengthIdentical(void)
         len = usearch_getMatchedLength(search);
 
         if(pos != -1) {
-            log_err("Expected failure for strentgh = UCOL_IDENTICAL: got %d instead.\n", pos);
+            log_err("Expected failure for strength = UCOL_IDENTICAL: got %d instead.\n", pos);
         }
     }
 

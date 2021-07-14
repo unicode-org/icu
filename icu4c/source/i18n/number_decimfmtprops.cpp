@@ -21,7 +21,7 @@ char kRawDefaultProperties[sizeof(DecimalFormatProperties)];
 icu::UInitOnce gDefaultPropertiesInitOnce = U_INITONCE_INITIALIZER;
 
 void U_CALLCONV initDefaultProperties(UErrorCode&) {
-    // can't fail, uses placement new into staticly allocated space.
+    // can't fail, uses placement new into statically allocated space.
     new(kRawDefaultProperties) DecimalFormatProperties(); // set to the default instance
 }
 

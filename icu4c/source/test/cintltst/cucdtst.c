@@ -2322,7 +2322,7 @@ TestUScriptRunAPI()
         uscript_closeRun(scriptRun);
     
         /* 
-         * Now open an interator over the testString
+         * Now open an iterator over the testString
          * using uscript_openRun and make sure that it works
          */
         scriptRun = uscript_openRun(testString, stringLimit, &err);

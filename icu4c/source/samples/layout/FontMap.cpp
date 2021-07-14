@@ -144,7 +144,7 @@ le_int32 FontMap::getFontIndex(const char *fontName)
         // The font name table is full. Since there can
         // only be scriptCodeCount fonts in use at once,
         // there should be at least one that's not being
-        // referenced; find it and resue it's index.
+        // referenced; find it and reuse it's index.
 
         for (index = 0; index < fFontCount; index += 1) {
             le_int32 script;

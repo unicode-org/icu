@@ -1359,7 +1359,7 @@ fillReverse:
                 int32_t  sIx      = srcIx;  // ix of last byte of multi-byte u8 char
 
                 // Get the full character from the UTF8 string.
-                //   use code derived from tbe macros in utf8.h
+                //   use code derived from the macros in utf8.h
                 //   Leaves srcIx pointing at the first byte of the UTF-8 char.
                 //
                 c=utf8_prevCharSafeBody(s8, 0, &srcIx, c, -3);
@@ -1570,7 +1570,7 @@ utf8TextClone(UText *dest, const UText *src, UBool deep, UErrorCode *status)
     // For deep clones, make a copy of the string.
     //  The copied storage is owned by the newly created clone.
     //
-    // TODO:  There is an isssue with using utext_nativeLength().
+    // TODO:  There is an issue with using utext_nativeLength().
     //        That function is non-const in cases where the input was NUL terminated
     //          and the length has not yet been determined.
     //        This function (clone()) is const.

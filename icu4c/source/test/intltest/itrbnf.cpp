@@ -1862,7 +1862,7 @@ IntlTestRBNF::TestLocalizations(void)
                 "<<''>>", // empty string
                 "  x<<%main>>", // first non space char not open angle bracket
                 "<%main>", // missing inner array
-                "<<%main %other>>", // elements missing separating commma (spaces must be quoted)
+                "<<%main %other>>", // elements missing separating comma (spaces must be quoted)
                 "<<%main><en, Main>>", // arrays missing separating comma
                 "<<%main>,<en, main, foo>>", // too many elements in locale data
                 "<<%main>,<en>>", // too few elements in locale data

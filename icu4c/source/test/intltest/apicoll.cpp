@@ -914,7 +914,7 @@ CollationAPITest::TestDuplicate(/* char* par */)
         return;
     }
     Collator *col2 = col1->clone();
-    doAssert((*col1 == *col2), "Cloned object is not equal to the orginal");
+    doAssert((*col1 == *col2), "Cloned object is not equal to the original");
     UnicodeString ruleset("&9 < a, A < b, B < c, C < d, D, e, E");
     RuleBasedCollator *col3 = new RuleBasedCollator(ruleset, status);
     if (U_FAILURE(status)) {
@@ -923,7 +923,7 @@ CollationAPITest::TestDuplicate(/* char* par */)
     }
     doAssert((*col1 != *col3), "Cloned object is equal to some dummy");
     *col3 = *((RuleBasedCollator*)col1);
-    doAssert((*col1 == *col3), "Copied object is not equal to the orginal");
+    doAssert((*col1 == *col3), "Copied object is not equal to the original");
 
     UCollationResult res;
     UnicodeString first((UChar)0x0061);

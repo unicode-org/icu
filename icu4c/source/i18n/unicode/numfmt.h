@@ -685,7 +685,7 @@ public:
      * true, the string "1234." would be parsed as the integer value
      * 1234 and parsing would stop at the "." character.  Of course,
      * the exact format accepted by the parse operation is locale
-     * dependant and determined by sub-classes of NumberFormat.
+     * dependent and determined by sub-classes of NumberFormat.
      * @return    true if this format will parse numbers as integers
      *            only.
      * @stable ICU 2.0

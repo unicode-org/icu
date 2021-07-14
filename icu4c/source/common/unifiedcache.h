@@ -465,7 +465,7 @@ class U_COMMON_API UnifiedCache : public UnifiedCacheBase {
    /**
     * Register a primary cache entry. A primary key is the first key to create
     * a given  SharedObject value. Subsequent keys whose create function
-    * produce referneces to an already existing SharedObject are not primary -
+    * produce references to an already existing SharedObject are not primary -
     * they can be evicted and subsequently recreated.
     * 
     * On entry, gCacheMutex must be held.

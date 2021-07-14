@@ -82,7 +82,7 @@ class DataDrivenNumberFormatTestSuite : public IntlTest {
             UnicodeString &appendErrorMessage,
             UErrorCode &status);
     /**
-     * If subclass is testing formatting with copy and assignmet, it
+     * If subclass is testing formatting with copy and assignment, it
      * needs to override this method to return a newly allocated formatter.
      */
     virtual UObject *newFormatter(UErrorCode &status);

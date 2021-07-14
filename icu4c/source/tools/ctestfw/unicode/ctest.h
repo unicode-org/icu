@@ -174,7 +174,7 @@ T_CTEST_API void T_CTEST_EXPORT2
 cleanUpTestTree(TestNode *tn);
 
 /**
- * Retreive a specific subtest. (subtree).
+ * Retrieve a specific subtest. (subtree).
  *
  * @param root Pointer to the root.
  * @param path Path relative to the root, Ex. '/a/b'

@@ -228,7 +228,7 @@ static const char *domainNames[] = {
     //"www.\\u0021.com",
     //"www.\\u0024.com",
     //"\\u003f",
-    // These yeild U_IDNA_PROHIBITED_ERROR
+    // These yield U_IDNA_PROHIBITED_ERROR
     //"\\u00CF\\u0082.com",
     //"\\u00CE\\u00B2\\u00C3\\u009Fss.com",
     //"\\u00E2\\u0098\\u00BA.com",

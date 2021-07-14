@@ -283,7 +283,7 @@ void  RBBIDataWrapper::printData() {
     printTable("Forward State Transition Table", fForwardTable);
     printTable("Reverse State Transition Table", fReverseTable);
 
-    RBBIDebugPrintf("\nOrignal Rules source:\n");
+    RBBIDebugPrintf("\nOriginal Rules source:\n");
     for (int32_t c=0; fRuleSource[c] != 0; c++) {
         RBBIDebugPrintf("%c", fRuleSource[c]);
     }

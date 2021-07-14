@@ -77,7 +77,7 @@ static char *safeGetICUDataDirectory() {
 /*
  *  Test Heap Functions.
  *    Implemented on top of the standard malloc heap.
- *    All blocks increased in size by 8 to 16 bytes, and the poiner returned to ICU is
+ *    All blocks increased in size by 8 to 16 bytes, and the pointer returned to ICU is
  *       offset up by 8 to 16, which should cause a good heap corruption if one of our "blocks"
  *       ends up being freed directly, without coming through us.
  *    Allocations are counted, to check that ICU actually does call back to us.
@@ -134,7 +134,7 @@ static void TestHeapFunctions() {
 
     /* Verify that ICU can be cleaned up and reinitialized successfully.
      *  Failure here usually means that some ICU service didn't clean up successfully,
-     *  probably because some earlier test accidently left something open. */
+     *  probably because some earlier test accidentally left something open. */
     ctest_resetICU();
 
     /* Un-initialize ICU */

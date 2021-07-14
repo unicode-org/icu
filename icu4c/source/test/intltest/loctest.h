@@ -174,7 +174,7 @@ private:
      **/
     void doTestDisplayNames(Locale& inLocale, int32_t compareIndex);
     /**
-     * additional intialization for datatables storing expected values
+     * additional initialization for datatables storing expected values
      **/
     void setUpDataTable(void);
 

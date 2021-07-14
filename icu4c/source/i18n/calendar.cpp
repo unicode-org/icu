@@ -3083,7 +3083,7 @@ void Calendar::computeTime(UErrorCode& status) {
 }
 
 /**
- * Find the previous zone transtion near the given time.
+ * Find the previous zone transition near the given time.
  */
 UBool Calendar::getImmediatePreviousZoneTransition(UDate base, UDate *transitionTime, UErrorCode& status) const {
     BasicTimeZone *btz = getBasicTimeZone();
@@ -3197,7 +3197,7 @@ int32_t Calendar::computeZoneOffset(double millis, double millisInDay, UErrorCod
             // recalculate offsets from the resolved time (non-wall).
             // When the given wall time falls into skipped wall time,
             // the offsets will be based on the zone offsets AFTER
-            // the transition (which means, earliest possibe interpretation).
+            // the transition (which means, earliest possible interpretation).
             UDate tgmt = wall - (rawOffset + dstOffset);
             tz.getOffset(tgmt, FALSE, rawOffset, dstOffset, ec);
         }

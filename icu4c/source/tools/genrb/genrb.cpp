@@ -616,7 +616,7 @@ processFile(const char *filename, const char *cp,
         if(inputDir[dirlen-1] != U_FILE_SEP_CHAR) {
             /*
              * append the input dir to openFileName if the first char in
-             * filename is not file seperation char and the last char input directory is  not '.'.
+             * filename is not file separation char and the last char input directory is  not '.'.
              * This is to support :
              * genrb -s. /home/icu/data
              * genrb -s. icu/data

@@ -671,7 +671,7 @@ int32_t RuleBasedBreakIterator::preceding(int32_t offset) {
 }
 
 /**
- * Returns true if the specfied position is a boundary position.  As a side
+ * Returns true if the specified position is a boundary position.  As a side
  * effect, leaves the iterator pointing to the first boundary position at
  * or after "offset".
  *
@@ -1037,7 +1037,7 @@ int32_t RuleBasedBreakIterator::handleSafePrevious(int32_t fromPosition) {
 
         if (state == STOP_STATE) {
             // This is the normal exit from the lookup state machine.
-            // Transistion to state zero means we have found a safe point.
+            // Transition to state zero means we have found a safe point.
             break;
         }
     }

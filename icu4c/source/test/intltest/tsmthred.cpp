@@ -1108,7 +1108,7 @@ const UCTMultiThreadItem *LocaleCacheKey<UCTMultiThreadItem>::createObject(
             // until other have completed. Verifies that cache doesn't
             // deadlock when a creation is slow.
 
-            // Note that gObjectsCreated needs to be incremeneted from 0 to 1
+            // Note that gObjectsCreated needs to be incremented from 0 to 1
             // early, to keep subsequent threads from entering this path.
             gObjectsCreated = 1;
             while (gObjectsCreated < 3) {

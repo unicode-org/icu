@@ -149,7 +149,7 @@ public:
      * and handles the conversion.
      *
      * @param status the error code.
-     * @param resultLength a ponter to receive the length, can be NULL.
+     * @param resultLength a pointer to receive the length, can be NULL.
      * @return a pointer to the string, or NULL.
      *
      * @stable ICU 2.4 

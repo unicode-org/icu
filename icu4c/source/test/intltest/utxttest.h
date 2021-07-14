@@ -6,7 +6,7 @@
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
-*   Tests for the UText and UTextIterator text abstraction classses
+*   Tests for the UText and UTextIterator text abstraction classes
 *
 ************************************************************************/
 

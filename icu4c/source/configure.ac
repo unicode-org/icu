@@ -481,7 +481,7 @@ if test "$enable" = "yes"; then
    fi
 fi
 
-# Check for miscellanous functions.
+# Check for miscellaneous functions.
 # So, use for putil / tools only.
 # Note that this will generate HAVE_GETTIMEOFDAY, not U_HAVE_GETTIMEOFDAY
 AC_CHECK_FUNCS([gettimeofday])
@@ -541,7 +541,7 @@ AC_LANG_POP([C++])
 OLD_LIBS=${LIBS}
 
 # For Compaq Tru64 (OSF1), we must look for pthread_attr_init
-# and must do this before seaching for pthread_mutex_destroy, or
+# and must do this before searching for pthread_mutex_destroy, or
 # we will pick up libpthreads.so not libpthread.so
 # If this fails, then we must test for HPUX specials, before
 # moving on to a more generic test
@@ -1190,7 +1190,7 @@ fi
 
 datapackaging_dir=`eval echo $thedatadir`"/icu/${VERSION}"
 
-datapackaging_msg="(No explaination for mode $datapackaging.)"
+datapackaging_msg="(No explanation for mode $datapackaging.)"
 
 datapackaging_msg_path="ICU will look in $datapackaging_dir which is the installation location. Call u_setDataDirectory() or use the ICU_DATA environment variable to override."
 datapackaging_msg_set="ICU will use the linked data library. If linked with the stub library located in stubdata/, the application can use udata_setCommonData() or set a data path to override."

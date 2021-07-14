@@ -84,7 +84,7 @@ public:
      *              changes will be ignored, except either of them is zero.
      *              For example, a transition from rawoffset 3:00/dstsavings 1:00
      *              to rawoffset 2:00/dstsavings 2:00 is excluded from the comparison,
-     *              but a transtion from rawoffset 2:00/dstsavings 1:00 to
+     *              but a transition from rawoffset 2:00/dstsavings 1:00 to
      *              rawoffset 3:00/dstsavings 0:00 is included.
      * @param ec    Output param to filled in with a success or an error.
      * @return      true if the other time zone has the equivalent transitions in the

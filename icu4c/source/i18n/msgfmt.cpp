@@ -637,7 +637,7 @@ MessageFormat::adoptFormats(Format** newFormats,
 
 // -------------------------------------
 // Sets the new formats array and updates the array count.
-// This MessageFormat instance maks a copy of the new formats.
+// This MessageFormat instance makes a copy of the new formats.
 
 void
 MessageFormat::setFormats(const Format** newFormats,

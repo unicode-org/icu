@@ -286,7 +286,7 @@ void LocaleBuilderTest::TestLocaleBuilder() {
                 }
                 break;
             } else {
-                // Unknow test method
+                // Unknown test method
                 errln("Unknown test case method: There is an error in the test case data.");
                 break;
             }

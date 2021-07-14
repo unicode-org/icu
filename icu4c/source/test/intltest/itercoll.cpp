@@ -313,7 +313,7 @@ void CollationIteratorTest::TestSetText(/* char* par */)
         assertEqual(*iter1, *iter2);
     }
     iter1->reset();
-    //now use the overloaded setText(ChracterIterator&, UErrorCode) function to set the text
+    //now use the overloaded setText(CharacterIterator&, UErrorCode) function to set the text
     CharacterIterator* chariter = new StringCharacterIterator(test1);
     iter2->setText(*chariter, status);
     if (U_FAILURE(status))

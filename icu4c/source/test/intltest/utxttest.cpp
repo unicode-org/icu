@@ -6,7 +6,7 @@
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
-*   Tests for the UText and UTextIterator text abstraction classses
+*   Tests for the UText and UTextIterator text abstraction classes
 *
 ************************************************************************/
 
@@ -83,7 +83,7 @@ static uint32_t m_rand()
 //   TextTest()
 //
 //       Top Level function for UText testing.
-//       Specifies the strings to be tested, with the acutal testing itself
+//       Specifies the strings to be tested, with the actual testing itself
 //       being carried out in another function, TestString().
 //
 void  UTextTest::TextTest() {
@@ -296,13 +296,13 @@ void UTextTest::TestString(const UnicodeString &s) {
 //              nativeMap  Mapping from code points to native indexes for the UText.
 //              u16Map     Mapping from code points to UTF-16 indexes, for use with the UnicodeString.
 //
-//     This function runs a whole series of opertions on each incoming UText.
+//     This function runs a whole series of operations on each incoming UText.
 //     The UText is deep-cloned prior to each operation, so that the original UText remains unchanged.
 //
 void UTextTest::TestCMR(const UnicodeString &us, UText *ut, int cpCount, m *nativeMap, m *u16Map) {
     TEST_ASSERT(utext_isWritable(ut) == TRUE);
 
-    int  srcLengthType;       // Loop variables for selecting the postion and length
+    int  srcLengthType;       // Loop variables for selecting the position and length
     int  srcPosType;          //   of the block to operate on within the source text.
     int  destPosType;
 
@@ -443,7 +443,7 @@ void UTextTest::TestCopyMove(const UnicodeString &us, UText *ut, UBool move,
         TEST_SUCCESS(status);
 
         // Compare the results of the two parallel tests
-        int32_t  usi = 0;    // UnicodeString postion, utf-16 index.
+        int32_t  usi = 0;    // UnicodeString position, utf-16 index.
         int64_t  uti = 0;    // UText position, native index.
         int32_t  cpi;        // char32 position (code point index)
         UChar32  usc;        // code point from Unicode String
@@ -519,7 +519,7 @@ void UTextTest::TestReplace(
     //
     // Compare the results
     //
-    int32_t  usi = 0;    // UnicodeString postion, utf-16 index.
+    int32_t  usi = 0;    // UnicodeString position, utf-16 index.
     int64_t  uti = 0;    // UText position, native index.
     int32_t  cpi;        // char32 position (code point index)
     UChar32  usc;        // code point from Unicode String
@@ -716,7 +716,7 @@ void UTextTest::TestAccessNoClone(const UnicodeString &us, UText *ut, int cpCoun
     }
 
     //
-    //  next32From(), prevous32From(), Iterate in a somewhat random order.
+    //  next32From(), previous32From(), Iterate in a somewhat random order.
     //
     int  cpIndex = 0;
     for (i=0; i<cpCount; i++) {
@@ -846,7 +846,7 @@ void UTextTest::TestAccessNoClone(const UnicodeString &us, UText *ut, int cpCoun
 //
 void UTextTest::ErrorTest()
 {
-    // Close of an unitialized UText.  Shouldn't blow up.
+    // Close of an uninitialized UText.  Shouldn't blow up.
     {
         UText  ut;
         memset(&ut, 0, sizeof(UText));
@@ -967,7 +967,7 @@ void UTextTest::ErrorTest()
 
 
     //
-    //  isLengthExpensive - does it make the exptected transitions after
+    //  isLengthExpensive - does it make the expected transitions after
     //                      getting the length of a nul terminated string?
     //
     {

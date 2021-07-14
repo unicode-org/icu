@@ -345,7 +345,7 @@ TimeZoneNames::getDisplayName(const UnicodeString& tzID, UTimeZoneNameType type,
     return name;
 }
 
-// Empty default implementation, to be overriden in tznames_impl.cpp.
+// Empty default implementation, to be overridden in tznames_impl.cpp.
 void
 TimeZoneNames::loadAllDisplayNames(UErrorCode& /*status*/) {
 }

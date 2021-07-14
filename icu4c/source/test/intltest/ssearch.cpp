@@ -293,7 +293,7 @@ void SSearchTest::searchTest()
         if ((foundMatch && expectedMatchStart<0) ||
             (foundStart != expectedMatchStart)   ||
             (foundLimit != expectedMatchLimit)) {
-                TEST_ASSERT(FALSE);   //  ouput generic error position
+                TEST_ASSERT(FALSE);   //  output generic error position
                 infoln("Found, expected match start = %d, %d \n"
                        "Found, expected match limit = %d, %d",
                 foundStart, expectedMatchStart, foundLimit, expectedMatchLimit);
@@ -322,7 +322,7 @@ void SSearchTest::searchTest()
         if ((foundMatch && expectedMatchStart<0) ||
             (foundStart != expectedMatchStart)   ||
             (foundLimit != expectedMatchLimit)) {
-                TEST_ASSERT(FALSE);   //  ouput generic error position
+                TEST_ASSERT(FALSE);   //  output generic error position
                 infoln("Found, expected backwards match start = %d, %d \n"
                        "Found, expected backwards match limit = %d, %d",
                 foundStart, expectedMatchStart, foundLimit, expectedMatchLimit);

@@ -100,7 +100,7 @@ static void TestTrailingNull(void);
 static void TestGetLocale(void);
 
 /**
- * additional intialization for datatables storing expected values
+ * additional initialization for datatables storing expected values
  */
 static void setUpDataTable(void);
 static void cleanUpDataTable(void);

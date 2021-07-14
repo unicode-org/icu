@@ -79,7 +79,7 @@ public:
 
     /**
      * This method maps a single character to a glyph index, using the
-     * font's charcter to glyph map.
+     * font's character to glyph map.
      *
      * @param ch - the character
      *
