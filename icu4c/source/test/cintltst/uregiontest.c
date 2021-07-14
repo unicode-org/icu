@@ -442,7 +442,7 @@ static void TestGroupingChildren() {
                     if (expectedChildEnd == NULL) {
                         expectedChildEnd = expectedChildStart + uprv_strlen(expectedChildStart);
                     }
-                    if (uprv_strlen(actualChild) != expectedChildEnd - expectedChildStart || uprv_strncmp(actualChild, expectedChildStart, expectedChildEnd - expectedChildStart) != 0) {
+                    if (uprv_strlen(actualChild) != (size_t)(expectedChildEnd - expectedChildStart) || uprv_strncmp(actualChild, expectedChildStart, expectedChildEnd - expectedChildStart) != 0) {
                         log_err("Mismatch in child list for %s at position %d: expected %s, got %s\n", groupingCode, i, expectedChildStart, actualChild);
                     }
                     expectedChildStart = (*expectedChildEnd != '\0') ? expectedChildEnd + 1 : expectedChildEnd;
