@@ -97,7 +97,7 @@ abstract public class TestFmwk extends AbstractTestLog {
 
     /**
      * This method is called at the beginning of {@link #testTeardown()}.
-     * TestFmwk implementation class hould override this method, instead
+     * TestFmwk implementation class should override this method, instead
      * of annotating After.
      */
     protected void localTestTeardown() {

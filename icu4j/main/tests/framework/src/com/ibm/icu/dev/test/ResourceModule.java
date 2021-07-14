@@ -127,7 +127,7 @@ class ResourceModule implements TestDataModule {
         // 
         // Use the iterated resource itself as the result from next() call
         private boolean isStrRes = false;
-        private boolean isStrResPrepared = false; // for STRING resouce, we only prepare once
+        private boolean isStrResPrepared = false; // for STRING resource, we only prepare once
 
         IteratorAdapter(UResourceBundle theRes) {
             assert_not (theRes == null);
@@ -162,7 +162,7 @@ class ResourceModule implements TestDataModule {
             if (preparedNextElement != null) return true;
             UResourceBundle t = null;
             if (itr.hasNext()) {
-                // Notice, other RuntimeException may be throwed
+                // Notice, other RuntimeException may be thrown
                 t = itr.next();
             } else {
                 return false;
@@ -223,7 +223,7 @@ class ResourceModule implements TestDataModule {
      * and spreaded to our customer's code. 
      * 
      * Notice, the MissingResourceException for get() method is also a
-     * RuntimeException. The caller functions should avoid sepread the execption
+     * RuntimeException. The caller functions should avoid spreading the exception
      * silently also. The behavior is modified because some resource are 
      * optional and can be missed.
      */

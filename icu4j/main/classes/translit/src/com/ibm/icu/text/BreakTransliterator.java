@@ -92,7 +92,7 @@ final class BreakTransliterator extends Transliterator {
 
         for(boundary = bi.first(); boundary != BreakIterator.DONE && boundary < pos.limit; boundary = bi.next()) {
             if (boundary == 0) continue;
-            // HACK: Check to see that preceeding item was a letter
+            // HACK: Check to see that preceding item was a letter
 
             int cp = UTF16.charAt(text, boundary-1);
             int type = UCharacter.getType(cp);

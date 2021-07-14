@@ -135,7 +135,7 @@ interface UConverterConstants {
                                  code points.
                                  The error code U_INVALID_CHAR_FOUND will be set. */
          static final int RESET = 3;       /**< The callback is called with this reason when a
-                                 'reset' has occured. Callback should reset all
+                                 'reset' has occurred. Callback should reset all
                                  state. */
          static final int CLOSE = 4;        /**< Called when the converter is closed. The
                                  callback should release any allocated memory.*/

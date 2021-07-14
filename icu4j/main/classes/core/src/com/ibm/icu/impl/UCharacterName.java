@@ -22,8 +22,8 @@ import com.ibm.icu.text.UnicodeSet;
 /**
 * Internal class to manage character names.
 * Since data for names are stored
-* in an array of char, by default indexes used in this class is refering to
-* a 2 byte count, unless otherwise stated. Cases where the index is refering
+* in an array of char, by default indexes used in this class is referring to
+* a 2 byte count, unless otherwise stated. Cases where the index is referring
 * to a byte count, the index is halved and depending on whether the index is
 * even or odd, the MSB or LSB of the result char at the halved index is
 * returned. For indexes to an array of int, the index is multiplied by 2,

@@ -4,7 +4,7 @@
 # Copyright (c) 1999-2004, International Business Machines
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
-# Convert CJK characters, according to the defintions in CEDICT and Unihan.txt
+# Convert CJK characters, according to the definitions in CEDICT and Unihan.txt
 # Note: adds space between them and letters.
 { ([:Han:]) } [:L:] > | $1 ' ';
 [\.\,\?\!．，？！、。[:Pe:][:Pf:]] { } [:L:] > ' ';
@@ -7887,7 +7887,7 @@
 禁果 < forbidden\-fruit;
 郵遞 < to\-send\-by\-mail;
 板板六十四 < unaccommodating;
-析出 < to\-seperate\-out;
+析出 < to\-separate\-out;
 第一個層次 < the\-first\-stage;
 具體計劃 < a\-concrete\-plan;
 奔襲 < long\-range\-raid;
@@ -11438,7 +11438,7 @@
 特權 < prerogative;
 螺絲刀 < screwdriver;
 狗交媾般 < doggy\-style;
-分離 < to\-seperate;
+分離 < to\-separate;
 副作用 < side\-effect;
 禁令 < prohibition;
 不免 < unavoidable;
@@ -27957,7 +27957,7 @@
 沙石 > sand\-and\-stones;
 禁果 > forbidden\-fruit;
 郵遞 > to\-send\-by\-mail;
-析出 > to\-seperate\-out;
+析出 > to\-separate\-out;
 奔襲 > long\-range\-raid;
 板刷 > scrubbing\-brush;
 服從 > obey\-\(an\-order\);
@@ -29399,7 +29399,7 @@
 阻隔 > to\-separate;
 特權 > prerogative;
 太空 > outer\-space;
-分離 > to\-seperate;
+分離 > to\-separate;
 禁令 > prohibition;
 不免 > unavoidable;
 誓約 > honor\-bound;

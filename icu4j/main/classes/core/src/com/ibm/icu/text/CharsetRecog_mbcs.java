@@ -15,7 +15,7 @@ import java.util.Arrays;
  * CharsetRecognizer implementation for Asian  - double or multi-byte - charsets.
  *                   Match is determined mostly by the input data adhering to the
  *                   encoding scheme for the charset, and, optionally,
- *                   frequency-of-occurence of characters.
+ *                   frequency-of-occurrence of characters.
  * <p/>
  *                   Instances of this class are singletons, one per encoding
  *                   being recognized.  They are created in the main
@@ -108,7 +108,7 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
             }
 
             if (commonChars == null) {
-                // We have no statistics on frequently occuring characters.
+                // We have no statistics on frequently occurring characters.
                 //  Assess confidence purely on having a reasonable number of
                 //  multi-byte characters (the more the better
                 confidence = 30 + doubleByteCharCount - 20*badCharCount;
@@ -117,7 +117,7 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
                 }
             }else {
                 //
-                // Frequency of occurence statistics exist.
+                // Frequency of occurrence statistics exist.
                 //
                 double maxVal = Math.log((float)doubleByteCharCount / 4);
                 double scaleFactor = 90.0 / maxVal;
@@ -188,7 +188,7 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
      static class CharsetRecog_sjis extends CharsetRecog_mbcs {
          static int [] commonChars =
              // TODO:  This set of data comes from the character frequency-
-             //        of-occurence analysis tool.  The data needs to be moved
+             //        of-occurrence analysis tool.  The data needs to be moved
              //        into a resource and loaded from there.
             {0x8140, 0x8141, 0x8142, 0x8145, 0x815b, 0x8169, 0x816a, 0x8175, 0x8176, 0x82a0,
              0x82a2, 0x82a4, 0x82a9, 0x82aa, 0x82ab, 0x82ad, 0x82af, 0x82b1, 0x82b3, 0x82b5,
@@ -250,7 +250,7 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
      static class CharsetRecog_big5 extends CharsetRecog_mbcs {
          static int [] commonChars =
              // TODO:  This set of data comes from the character frequency-
-             //        of-occurence analysis tool.  The data needs to be moved
+             //        of-occurrence analysis tool.  The data needs to be moved
              //        into a resource and loaded from there.
             {0xa140, 0xa141, 0xa142, 0xa143, 0xa147, 0xa149, 0xa175, 0xa176, 0xa440, 0xa446,
              0xa447, 0xa448, 0xa451, 0xa454, 0xa457, 0xa464, 0xa46a, 0xa46c, 0xa477, 0xa4a3,
@@ -389,7 +389,7 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
          static class CharsetRecog_euc_jp extends CharsetRecog_euc {
              static int [] commonChars =
                  // TODO:  This set of data comes from the character frequency-
-                 //        of-occurence analysis tool.  The data needs to be moved
+                 //        of-occurrence analysis tool.  The data needs to be moved
                  //        into a resource and loaded from there.
                 {0xa1a1, 0xa1a2, 0xa1a3, 0xa1a6, 0xa1bc, 0xa1ca, 0xa1cb, 0xa1d6, 0xa1d7, 0xa4a2,
                  0xa4a4, 0xa4a6, 0xa4a8, 0xa4aa, 0xa4ab, 0xa4ac, 0xa4ad, 0xa4af, 0xa4b1, 0xa4b3,
@@ -426,7 +426,7 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
          static class CharsetRecog_euc_kr extends CharsetRecog_euc {
              static int [] commonChars =
                  // TODO:  This set of data comes from the character frequency-
-                 //        of-occurence analysis tool.  The data needs to be moved
+                 //        of-occurrence analysis tool.  The data needs to be moved
                  //        into a resource and loaded from there.
                 {0xb0a1, 0xb0b3, 0xb0c5, 0xb0cd, 0xb0d4, 0xb0e6, 0xb0ed, 0xb0f8, 0xb0fa, 0xb0fc,
                  0xb1b8, 0xb1b9, 0xb1c7, 0xb1d7, 0xb1e2, 0xb3aa, 0xb3bb, 0xb4c2, 0xb4cf, 0xb4d9,
@@ -526,7 +526,7 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
 
          static int [] commonChars =
              // TODO:  This set of data comes from the character frequency-
-             //        of-occurence analysis tool.  The data needs to be moved
+             //        of-occurrence analysis tool.  The data needs to be moved
              //        into a resource and loaded from there.
             {0xa1a1, 0xa1a2, 0xa1a3, 0xa1a4, 0xa1b0, 0xa1b1, 0xa1f1, 0xa1f3, 0xa3a1, 0xa3ac,
              0xa3ba, 0xb1a8, 0xb1b8, 0xb1be, 0xb2bb, 0xb3c9, 0xb3f6, 0xb4f3, 0xb5bd, 0xb5c4,

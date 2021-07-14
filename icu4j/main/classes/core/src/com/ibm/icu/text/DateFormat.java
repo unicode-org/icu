@@ -1925,7 +1925,7 @@ public abstract class DateFormat extends UFormat {
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     //-------------------------------------------------------------------------
-    // Public static interface for creating custon DateFormats for different
+    // Public static interface for creating custom DateFormats for different
     // types of Calendars.
     //-------------------------------------------------------------------------
 

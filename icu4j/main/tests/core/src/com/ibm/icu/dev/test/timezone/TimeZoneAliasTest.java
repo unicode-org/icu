@@ -249,7 +249,7 @@ public class TimeZoneAliasTest extends TestFmwk {
         private List inflectionPoints = new ArrayList();
         private Set purportedAliases = new TreeSet();
 
-        private Zone(String id) { // for interal use only; use make instead!
+        private Zone(String id) { // for internal use only; use make instead!
             zone = TimeZone.getTimeZone(id);
             this.id = id;
 

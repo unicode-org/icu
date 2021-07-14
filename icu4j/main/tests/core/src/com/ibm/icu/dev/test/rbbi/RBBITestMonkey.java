@@ -902,7 +902,7 @@ public class RBBITestMonkey extends TestFmwk {
             // Loop runs once per position in the test text, until a break position
             //  is found.  In each iteration, we are testing for a possible break
             //  just preceding the character at index "pos".  The character preceding
-            //  this char is at postion "prevPos"; because of combining sequences,
+            //  this char is at position "prevPos"; because of combining sequences,
             //  "prevPos" can be arbitrarily far before "pos".
             for (;;) {
                 // Advance to the next position to be tested.

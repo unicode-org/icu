@@ -378,7 +378,7 @@ public class NumberRegressionTests extends TestFmwk {
                 sb = new StringBuffer("");
                 fp = new FieldPosition(0);
                 logln("  getMaximumFractionDigits() = " + i);
-                logln("  formated: " + df.format(d, sb, fp));
+                logln("  formatted: " + df.format(d, sb, fp));
             }
         } catch (Exception foo) {
             errln("Bug 4090504 regression test failed. Message : " + foo.getMessage());
@@ -753,7 +753,7 @@ public class NumberRegressionTests extends TestFmwk {
      * Tests all different comments.
      * Response to some comments :
      * [1] DecimalFormat.parse API documentation is more than just one line.
-     * This is not a reproducable doc error in 116 source code.
+     * This is not a reproducible doc error in 116 source code.
      * [2] See updated javadoc.
      * [3] Fixed.
      * [4] NumberFormat.parse(String, ParsePosition) : If parsing fails,
@@ -952,7 +952,7 @@ public class NumberRegressionTests extends TestFmwk {
         bigN = bigN.multiply(BigInteger.valueOf(m));
         df.setMultiplier(m);
         df.setGroupingUsed(false);
-        logln("formated: " +
+        logln("formatted: " +
             df.format(n, new StringBuffer(), new FieldPosition(0)));
         logln("expected: " + bigN.toString());
     }

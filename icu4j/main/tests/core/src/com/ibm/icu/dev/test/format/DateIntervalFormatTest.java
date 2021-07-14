@@ -1506,7 +1506,7 @@ public class DateIntervalFormatTest extends TestFmwk {
         PatternInfo dp = new PatternInfo(null, null, false);
         if(dp.hashCode() != 0){
             errln("PatternInfo.hashCode() was suppose to return 0 for a null " +
-                    "paramter in the constructor.");
+                    "parameter in the constructor.");
         }
     }
 

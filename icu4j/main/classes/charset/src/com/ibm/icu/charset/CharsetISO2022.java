@@ -689,7 +689,7 @@ class CharsetISO2022 extends CharsetICU {
                  * Ticket 5691: consistent illegal sequences:
                  * - We include at least the first byte (ESC) in the illegal sequence.
                  * - If any of the non-initial bytes could be the start of a character,
-                 *   we stop the illegal sequece before the first one of those.
+                 *   we stop the illegal sequence before the first one of those.
                  *   In escape sequences, all following bytes are "printable", that is,
                  *   unless they are completely illegal (>7f in SBCS, outside 21..7e in DBCS),
                  *   they are valid single/lead bytes.
@@ -974,7 +974,7 @@ class CharsetISO2022 extends CharsetICU {
                                 if (mySourceChar <= 0x7f) {
                                     targetUniChar = mySourceChar + 0x80;
                                 }
-                                /* return from a single-shift state to the prevous one */
+                                /* return from a single-shift state to the previous one */
                                 myConverterData.toU2022State.g = myConverterData.toU2022State.prevG;
                                 break;
                             case ISO8859_7:
@@ -2114,7 +2114,7 @@ class CharsetISO2022 extends CharsetICU {
     /*
      * Rules for ISO-2022-CN Encoding:
      * i)   The designator sequence must appear once on a line before any instance
-     *      of chracter set it designates.
+     *      of character set it designates.
      * ii)  If two lines contain characters from the same character set, both lines
      *      must include the designator sequence.
      * iii) Once the designator sequence is known, a shifting sequence has to be found
@@ -2177,7 +2177,7 @@ class CharsetISO2022 extends CharsetICU {
      *       appears
      *
      *      As in ISO-2022-CN, each line starts in ASCII, and ends in ASCII, and
-     *      has its own designation information before any Chinese chracters
+     *      has its own designation information before any Chinese characters
      *      appears
      */
 
@@ -2534,7 +2534,7 @@ class CharsetISO2022 extends CharsetICU {
              * we need to be in ASCII mode at the very end
              *
              * conditions:
-             *   succesful
+             *   successful
              *   not in ASCII mode
              *   end of input and no truncated input
              */

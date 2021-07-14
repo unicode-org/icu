@@ -141,7 +141,7 @@ sub compareLoop {
     my $testCommand = @{ $tests{$i} }[$j];
       if ($testCommand =~/--/) {
       	$custArgs = $& . $';	#The matched part and the right part
-      	$testCommand = $`;		#The left part for furthur processing
+      	$testCommand = $`;		#The left part for further processing
       } else { $custArgs = ''; }
       ($program, @argsAndTest) = split(/\ /, $testCommand);
       my $commandLine;

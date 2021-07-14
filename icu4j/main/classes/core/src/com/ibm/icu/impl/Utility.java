@@ -1342,7 +1342,7 @@ public final class Utility {
      * position.  Return the identifier, or null if there is no
      * identifier.
      * @param str the string to parse
-     * @param pos INPUT-OUPUT parameter.  On INPUT, pos[0] is the
+     * @param pos INPUT-OUTPUT parameter.  On INPUT, pos[0] is the
      * first character to examine.  It must be less than str.length(),
      * and it must not point to a whitespace character.  That is, must
      * have pos[0] < str.length().  On

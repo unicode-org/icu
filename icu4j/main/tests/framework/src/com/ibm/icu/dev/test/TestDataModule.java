@@ -83,7 +83,7 @@ public interface TestDataModule {
 
     /**
      * Map-like interface for accessing key-value pairs by key.
-     * If the vaule is not found by given key, return null. 
+     * If the value is not found by given key, return null. 
      * The behavior is analogous the get() method of the Map interface.
      * 
      * @author Raymond Yang

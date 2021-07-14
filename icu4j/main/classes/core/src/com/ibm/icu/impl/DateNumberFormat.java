@@ -140,7 +140,7 @@ public final class DateNumberFormat extends NumberFormat {
     @Override
     public StringBuffer format(double number, StringBuffer toAppendTo,
             FieldPosition pos) {
-        throw new UnsupportedOperationException("StringBuffer format(double, StringBuffer, FieldPostion) is not implemented");
+        throw new UnsupportedOperationException("StringBuffer format(double, StringBuffer, FieldPosition) is not implemented");
     }
 
     @Override
@@ -186,19 +186,19 @@ public final class DateNumberFormat extends NumberFormat {
     @Override
     public StringBuffer format(BigInteger number, StringBuffer toAppendTo,
             FieldPosition pos) {
-        throw new UnsupportedOperationException("StringBuffer format(BigInteger, StringBuffer, FieldPostion) is not implemented");
+        throw new UnsupportedOperationException("StringBuffer format(BigInteger, StringBuffer, FieldPosition) is not implemented");
     }
 
     @Override
     public StringBuffer format(java.math.BigDecimal number, StringBuffer toAppendTo,
             FieldPosition pos) {
-        throw new UnsupportedOperationException("StringBuffer format(BigDecimal, StringBuffer, FieldPostion) is not implemented");
+        throw new UnsupportedOperationException("StringBuffer format(BigDecimal, StringBuffer, FieldPosition) is not implemented");
     }
 
     @Override
     public StringBuffer format(BigDecimal number,
             StringBuffer toAppendTo, FieldPosition pos) {
-        throw new UnsupportedOperationException("StringBuffer format(BigDecimal, StringBuffer, FieldPostion) is not implemented");
+        throw new UnsupportedOperationException("StringBuffer format(BigDecimal, StringBuffer, FieldPosition) is not implemented");
     }
 
     /*

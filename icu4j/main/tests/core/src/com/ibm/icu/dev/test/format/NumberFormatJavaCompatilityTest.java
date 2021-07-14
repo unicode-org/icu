@@ -68,8 +68,8 @@ public class NumberFormatJavaCompatilityTest {
         assertParsed("0.###E0", "1.1", 1.1);
         assertParsed("0.###E0", "1100", 1100);
 
-        // Test that the max of fraction, integer or signficant digits don't affect parsing
-        // Note that the max of signficant digits is 4 = min integer digits (1)
+        // Test that the max of fraction, integer or significant digits don't affect parsing
+        // Note that the max of significant digits is 4 = min integer digits (1)
         //   + max fraction digits (3)
         assertParsed("0.###E0", "1111.4E3", 1111400);
         assertParsed("0.###E0", "1111.9999E3", 1111999.9);

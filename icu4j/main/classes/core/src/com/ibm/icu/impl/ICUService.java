@@ -913,7 +913,7 @@ public class ICUService extends ICUNotifier {
 
     /**
      * ServiceListener is the listener that ICUService provides by default.
-     * ICUService will notifiy this listener when factories are added to
+     * ICUService will notify this listener when factories are added to
      * or removed from the service.  Subclasses can provide
      * different listener interfaces that extend EventListener, and modify
      * acceptsListener and notifyListener as appropriate.

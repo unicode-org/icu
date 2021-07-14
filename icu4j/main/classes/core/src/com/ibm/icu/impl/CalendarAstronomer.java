@@ -361,7 +361,7 @@ public class CalendarAstronomer {
      */
     public double getGreenwichSidereal() {
         if (siderealTime == INVALID) {
-            // See page 86 of "Practial Astronomy with your Calculator",
+            // See page 86 of "Practical Astronomy with your Calculator",
             // by Peter Duffet-Smith, for details on the algorithm.
 
             double UT = normalize((double)time/HOUR_MS, 24);
@@ -439,7 +439,7 @@ public class CalendarAstronomer {
      */
     public final Equatorial eclipticToEquatorial(double eclipLong, double eclipLat)
     {
-        // See page 42 of "Practial Astronomy with your Calculator",
+        // See page 42 of "Practical Astronomy with your Calculator",
         // by Peter Duffet-Smith, for details on the algorithm.
 
         double obliq = eclipticObliquity();
@@ -567,7 +567,7 @@ public class CalendarAstronomer {
      */
     public double getSunLongitude()
     {
-        // See page 86 of "Practial Astronomy with your Calculator",
+        // See page 86 of "Practical Astronomy with your Calculator",
         // by Peter Duffet-Smith, for details on the algorithm.
 
         if (sunLongitude == INVALID) {
@@ -583,7 +583,7 @@ public class CalendarAstronomer {
      */
     /*public*/ double[] getSunLongitude(double julian)
     {
-        // See page 86 of "Practial Astronomy with your Calculator",
+        // See page 86 of "Practical Astronomy with your Calculator",
         // by Peter Duffet-Smith, for details on the algorithm.
 
         double day = julian - JD_EPOCH;       // Days since epoch
@@ -1005,7 +1005,7 @@ public class CalendarAstronomer {
     public Equatorial getMoonPosition()
     {
         //
-        // See page 142 of "Practial Astronomy with your Calculator",
+        // See page 142 of "Practical Astronomy with your Calculator",
         // by Peter Duffet-Smith, for details on the algorithm.
         //
         if (moonPosition == null) {
@@ -1091,7 +1091,7 @@ public class CalendarAstronomer {
      * @internal
      */
     public double getMoonAge() {
-        // See page 147 of "Practial Astronomy with your Calculator",
+        // See page 147 of "Practical Astronomy with your Calculator",
         // by Peter Duffet-Smith, for details on the algorithm.
         //
         // Force the moon's position to be calculated.  We're going to use
@@ -1117,7 +1117,7 @@ public class CalendarAstronomer {
      * @internal
      */
     public double getMoonPhase() {
-        // See page 147 of "Practial Astronomy with your Calculator",
+        // See page 147 of "Practical Astronomy with your Calculator",
         // by Peter Duffet-Smith, for details on the algorithm.
         return 0.5 * (1 - Math.cos(getMoonAge()));
     }

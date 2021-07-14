@@ -269,10 +269,10 @@ public class TimeUnitTest extends TestFmwk {
      * Performs tests for Greek.
      * This tests that if the plural count listed in time unit format does not
      * match those in the plural rules for the locale, those plural count in
-     * time unit format will be ingored and subsequently, fall back will kick in
+     * time unit format will be ignored and subsequently, fall back will kick in
      * which is tested above.
      * Without data sanitization, setNumberFormat() would crash.
-     * As of CLDR shiped in ICU4.8, Greek is one such language.
+     * As of CLDR shipped in ICU4.8, Greek is one such language.
      */
     @Test
     public void TestGreekWithSanitization() {

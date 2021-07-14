@@ -1461,7 +1461,7 @@ public class RbnfSampleRuleSets {
     /**
      * Hebrew alphabetic numerals.  Before adoption of Arabic numerals, Hebrew speakers
      * used the letter of their alphabet as numerals.  The first nine letters of
-     * the alphabet repesented the values from 1 to 9, the second nine letters the
+     * the alphabet represented the values from 1 to 9, the second nine letters the
      * multiples of 10, and the remaining letters the multiples of 100.  Since they
      * ran out of letters at 400, the remaining multiples of 100 were represented
      * using combinations of the existing letters for the hundreds.  Numbers were
@@ -1917,7 +1917,7 @@ public class RbnfSampleRuleSets {
 
             "Hebrew alphabetic numerals.  Before adoption of Arabic numerals, Hebrew speakers "
             + "used the letter of their alphabet as numerals.  The first nine letters of "
-            + "the alphabet repesented the values from 1 to 9, the second nine letters the "
+            + "the alphabet represented the values from 1 to 9, the second nine letters the "
             + "multiples of 10, and the remaining letters the multiples of 100.  Since they "
             + "ran out of letters at 400, the remaining multiples of 100 were represented "
             + "using combinations of the existing letters for the hundreds.  Numbers were "

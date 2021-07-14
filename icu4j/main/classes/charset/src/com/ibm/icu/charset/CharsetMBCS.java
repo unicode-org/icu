@@ -669,7 +669,7 @@ class CharsetMBCS extends CharsetICU {
          * They do not lead to mappings.
          *
          * Bits 7..6
-         * 1 direct/initial state (stateful converters have mulitple)
+         * 1 direct/initial state (stateful converters have multiple)
          * 0 non-initial state with transitions or with nonignorable result actions
          * -1 final state with only ignorable actions
          *
@@ -3038,7 +3038,7 @@ class CharsetMBCS extends CharsetICU {
                              *
                              * For EUC encodings that use only either 0x8e or 0x8f as the first byte of their longest
                              * byte sequences, the first two bytes in this third stage indicate with their 7th bits
-                             * whether these bytes are to be written directly or actually need to be preceeded by one of
+                             * whether these bytes are to be written directly or actually need to be preceded by one of
                              * the two Single-Shift codes. With this, the third stage stores one byte fewer per
                              * character than the actual maximum length of EUC byte sequences.
                              *

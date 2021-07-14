@@ -135,7 +135,7 @@ class CharsetUTF8 extends CharsetICU {
                         }
 
                         /*
-                         * we're finished outputing, so now we need to read in the first byte of the
+                         * we're finished outputting, so now we need to read in the first byte of the
                          * next byte sequence that could form a code point
                          */
 
@@ -261,7 +261,7 @@ class CharsetUTF8 extends CharsetICU {
                         }
 
                         /*
-                         * we're finished outputing, so now we need to read in the first byte of the
+                         * we're finished outputting, so now we need to read in the first byte of the
                          * next byte sequence that could form a code point
                          */
 

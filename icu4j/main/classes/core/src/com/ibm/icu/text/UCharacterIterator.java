@@ -234,7 +234,7 @@ public abstract class UCharacterIterator implements Cloneable, UForwardCharacter
 
     /**
      * Retreat to the start of the previous code point in the text, and return it (pre-decrement semantics). If the
-     * index is not preceeded by a valid surrogate pair, the behavior is the same as <code>previous()</code>. Otherwise
+     * index is not preceded by a valid surrogate pair, the behavior is the same as <code>previous()</code>. Otherwise
      * the iterator is decremented to the start of the surrogate pair, and the code point represented by the pair is
      * returned.
      *

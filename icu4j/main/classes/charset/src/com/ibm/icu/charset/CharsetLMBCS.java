@@ -93,7 +93,7 @@ class CharsetLMBCS extends CharsetICU {
      * So, the beginning of understanding LMBCS is that IF the first byte of a LMBCS
      * character is one of those 12 values, you can interpret the remaining bytes of
      * that character as coming from one of those character sets. Since the lower
-     * ANSI bytes already are represented in singl bytes, using one of the chracter
+     * ANSI bytes already are represented in single bytes, using one of the character
      * set announcers is used to announce a character that starts with a byte of
      * 0x80 or greater.
      *
@@ -107,7 +107,7 @@ class CharsetLMBCS extends CharsetICU {
      * exceptions & optimizations made in service of the design goals.
      *
      * First, those of you who are character set mavens may have noticed that
-     * the 'double-byte' character sets are actually multi-byte chracter sets
+     * the 'double-byte' character sets are actually multi-byte character sets
      * that can have 1 or two bytes, even in upper-ascii range. To force
      * each group byte to introduce a fixed-width encoding (to make it faster to
      * count characters), we use a convention of doubling up on the group byte

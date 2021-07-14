@@ -1969,7 +1969,7 @@ public class TimeZoneTest extends TestFmwk
             }
 
             // setRawOffset
-            if (!(thawedZones[i] instanceof RuleBasedTimeZone)) {    // RuleBasedTimeZone does not supprot setRawOffset
+            if (!(thawedZones[i] instanceof RuleBasedTimeZone)) {    // RuleBasedTimeZone does not support setRawOffset
                 try {
                     int newOffset = -3600000;
                     thawedZones[i].setRawOffset(newOffset);
@@ -2074,7 +2074,7 @@ public class TimeZoneTest extends TestFmwk
             }
 
             // setRawOffset
-            if (!(frozenZones[i] instanceof RuleBasedTimeZone)) {    // RuleBasedTimeZone does not supprot setRawOffset
+            if (!(frozenZones[i] instanceof RuleBasedTimeZone)) {    // RuleBasedTimeZone does not support setRawOffset
                 try {
                     int newOffset = -3600000;
                     frozenZones[i].setRawOffset(newOffset);

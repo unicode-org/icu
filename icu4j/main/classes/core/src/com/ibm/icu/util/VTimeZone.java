@@ -719,7 +719,7 @@ public class VTimeZone extends BasicTimeZone {
                             if (actualStart.getTime() < firstStart) {
                                 // save from offset information for the earliest rule
                                 firstStart = actualStart.getTime();
-                                // If this is STD, assume the time before this transtion
+                                // If this is STD, assume the time before this transition
                                 // is DST when the difference is 1 hour.  This might not be
                                 // accurate, but VTIMEZONE data does not have such info.
                                 if (dstSavings > 0) {
@@ -989,7 +989,7 @@ public class VTimeZone extends BasicTimeZone {
                         return null;
                     }
                 }
-                // If ealier month, go through days to find the earliest day
+                // If earlier month, go through days to find the earliest day
                 if (fields[0] == earliestMonth) {
                     for (int j = 0; j < count; j++) {
                         int dom = fields[3 + j];
@@ -1674,7 +1674,7 @@ public class VTimeZone extends BasicTimeZone {
             writeZonePropsByDOW(writer, isDst, tzname, fromOffset, toOffset,
                     month, -1*((MONTHLENGTH[month] - dayOfMonth)/7 + 1), dayOfWeek, startTime, untilTime);
         } else if (month == Calendar.FEBRUARY && dayOfMonth == 29) {
-            // Specical case for February
+            // Special case for February
             writeZonePropsByDOW(writer, isDst, tzname, fromOffset, toOffset,
                     Calendar.FEBRUARY, -1, dayOfWeek, startTime, untilTime);
         } else {
@@ -1965,7 +1965,7 @@ public class VTimeZone extends BasicTimeZone {
                 break;
             }
             if (str.charAt(8) != 'T') {
-                // charcter "T" must be used for separating date and time
+                // character "T" must be used for separating date and time
                 break;
             }
             if (length == 16) {

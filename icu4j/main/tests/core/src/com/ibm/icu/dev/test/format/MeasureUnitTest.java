@@ -3800,7 +3800,7 @@ public class MeasureUnitTest extends TestFmwk {
         ULocale ulocale = ULocale.forLanguageTag("bn");
         MeasureFormat fmt = MeasureFormat.getInstance(ulocale, FormatWidth.NUMERIC);
         String actual = fmt.formatMeasures(new Measure(12, MeasureUnit.MINUTE), new Measure(39.12345, MeasureUnit.SECOND));
-        assertEquals("Incorect digits", "১২:৩৯.১২৩", actual);
+        assertEquals("Incorrect digits", "১২:৩৯.১২৩", actual);
     }
 
     @Test

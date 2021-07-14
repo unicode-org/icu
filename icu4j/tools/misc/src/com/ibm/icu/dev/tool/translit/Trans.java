@@ -143,7 +143,7 @@ public class Trans {
         System.out.println("<outfile> Name of output file");
         System.out.println("-html     Only transliterate text outside of <tags>");
         System.out.println("Input may come from the command line or a file.\n");
-        System.out.println("Ouput may go to stdout or a file.\n");
+        System.out.println("Output may go to stdout or a file.\n");
         System.exit(0);
     }
 }

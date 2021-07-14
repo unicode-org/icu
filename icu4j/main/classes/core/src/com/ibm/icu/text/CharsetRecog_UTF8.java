@@ -73,7 +73,7 @@ class CharsetRecog_UTF8 extends CharsetRecognizer {
             }
         }
 
-        // Cook up some sort of confidence score, based on presense of a BOM
+        // Cook up some sort of confidence score, based on presence of a BOM
         //    and the existence of valid and/or invalid multi-byte sequences.
         confidence = 0;
         if (hasBOM && numInvalid==0) {

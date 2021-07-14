@@ -76,7 +76,7 @@ public class CodeMangler {
         "\n" +
         "Directives are one of the following:\n" +
         "  #ifdef, #ifndef, #else, #endif, #if, #elif, #define, #undef\n" +
-        "These may optionally be preceeded by whitespace or //.\n" +
+        "These may optionally be preceded by whitespace or //.\n" +
         "#if, #elif args are of the form 'key == value' or 'key != value'.\n" +
         "Only exact character match key with value is performed.\n" +
         "#define args are 'key [==] value', the '==' is optional.\n";

@@ -837,7 +837,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * not <code>Locale</code>.
      *
      * <p>Returns a list of all installed locales. This is equivalent to calling
-     * {@link #getAvailableLocalesByType} with AvialableType.DEFAULT.
+     * {@link #getAvailableLocalesByType} with AvailableType.DEFAULT.
      *
      * @stable ICU 3.0
      */
@@ -3088,7 +3088,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
         if (trailing != null && trailing.length() > 1) {
             /*
              * The current ICU format expects two underscores
-             * will separate the variant from the preceeding
+             * will separate the variant from the preceding
              * parts of the tag, if there is no region.
              */
             int separators = 0;
@@ -3183,7 +3183,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
 
         /*
          * Search for the variant.  If there is one, then return the index of
-         * the preceeding separator.
+         * the preceding separator.
          * If there's no variant, search for the keyword delimiter,
          * and return its index.  Otherwise, return the length of the
          * string.

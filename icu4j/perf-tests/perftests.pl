@@ -172,7 +172,7 @@ sub main {
 	   );
 	
     #  Outer loop runs through the locales to test
-    #     (Edit this list dirctly to make changes)
+    #     (Edit this list directly to make changes)
     #
     foreach  $locale (
 	   "en_US",

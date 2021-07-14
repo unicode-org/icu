@@ -1166,7 +1166,7 @@ public class SearchTest extends TestFmwk {
         }
 
         if (strsrch.isOverlapping()) {
-            errln("Error default overlaping should be false");
+            errln("Error default overlapping should be false");
         }
         strsrch.setOverlapping(true);
         if (!strsrch.isOverlapping()) {
@@ -1813,7 +1813,7 @@ public class SearchTest extends TestFmwk {
                 }
                 if (index + 1 < size) {
                     if (strsrch.preceding(search.offset[index + 1] + search.size[index + 1] + 1) != search.offset[index + 1]) {
-                        errln("Error getting preceeding match at index " + (search.offset[index + 1] + 1));
+                        errln("Error getting preceding match at index " + (search.offset[index + 1] + 1));
                     }
                 }
                 index += 2;

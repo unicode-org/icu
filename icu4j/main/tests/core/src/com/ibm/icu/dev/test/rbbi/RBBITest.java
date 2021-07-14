@@ -839,7 +839,7 @@ public class RBBITest extends TestFmwk {
             int result = bi.preceding(ruleLen);
             assertEquals("Reverse iteration should find the boundary at 0", 0, result);
 
-            // Verify that the range of rule lengths being tested cover the transations
+            // Verify that the range of rule lengths being tested cover the translations
             // from 8 to 16 bit data.
             RBBIDataWrapper dw = bi.fRData;
             RBBIDataWrapper.RBBIStateTable fwtbl = dw.fFTable;

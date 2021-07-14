@@ -486,7 +486,7 @@ public class DateFormatTest extends TestFmwk {
                              EXPECTED[exp], field);
             }
 
-            // FieldPostion initialized by DateFormat.Field trac#6089
+            // FieldPosition initialized by DateFormat.Field trac#6089
             for(i = 0; i < DTFMT_FIELDS.length; i++) {
                 // The format method only set position for the first occurrence of
                 // the specified field.
@@ -2130,7 +2130,7 @@ public class DateFormatTest extends TestFmwk {
         String expectedUS = "Monday, September 15, 1997 at 12:00:00 AM Pacific Daylight Time";
         logln("Date set to : " + testDate);
         String out = dfFrench.format(testDate);
-        logln("Date Formated with French Locale " + out);
+        logln("Date Formatted with French Locale " + out);
         //fix the jdk resources differences between jdk 1.2 and jdk 1.3
         /* our own data only has GMT-xxxx information here
         String javaVersion = System.getProperty("java.version");
@@ -2145,7 +2145,7 @@ public class DateFormatTest extends TestFmwk {
         if (!out.equals(expectedFRENCH_JDK12))
             errln("FAIL: Expected " + expectedFRENCH_JDK12+" Got "+out);
         out = dfUS.format(testDate);
-        logln("Date Formated with US Locale " + out);
+        logln("Date Formatted with US Locale " + out);
         if (!out.equals(expectedUS))
             errln("FAIL: Expected " + expectedUS+" Got "+out);
     }
@@ -2189,7 +2189,7 @@ public class DateFormatTest extends TestFmwk {
         //String expectedFRENCH = "lundi 15 septembre 1997 00 h 00 PDT";
         logln("Date set to : " + testDate);
         String out = dfFrench.format(testDate);
-        logln("Date Formated with French Locale " + out);
+        logln("Date Formatted with French Locale " + out);
         if (!out.equals(expectedFRENCH_JDK12))
             errln("FAIL: Expected " + expectedFRENCH_JDK12+" Got "+out);
     }
@@ -4983,7 +4983,7 @@ public class DateFormatTest extends TestFmwk {
         // Set calendar to strict
         fmt.setCalendarLenient(false);
 
-        assertFalse("isLeninent after setCalendarLenient(FALSE)", fmt.isLenient());
+        assertFalse("isLenient after setCalendarLenient(FALSE)", fmt.isLenient());
         assertFalse("isCalendarLenient after setCalendarLenient(FALSE)", fmt.isCalendarLenient());
         assertTrue("ALLOW_WHITESPACE after setCalendarLenient(FALSE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE));
         assertTrue("ALLOW_NUMERIC  after setCalendarLenient(FALSE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC));
@@ -4991,7 +4991,7 @@ public class DateFormatTest extends TestFmwk {
         // Set to strict
         fmt.setLenient(false);
 
-        assertFalse("isLeninent after setLenient(FALSE)", fmt.isLenient());
+        assertFalse("isLenient after setLenient(FALSE)", fmt.isLenient());
         assertFalse("isCalendarLenient after setLenient(FALSE)", fmt.isCalendarLenient());
         assertFalse("ALLOW_WHITESPACE after setLenient(FALSE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE));
         assertFalse("ALLOW_NUMERIC  after setLenient(FALSE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC));
@@ -5002,7 +5002,7 @@ public class DateFormatTest extends TestFmwk {
         // Allow white space leniency
         fmt.setBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE, true);
 
-        assertFalse("isLeninent after ALLOW_WHITESPACE/TRUE", fmt.isLenient());
+        assertFalse("isLenient after ALLOW_WHITESPACE/TRUE", fmt.isLenient());
         assertFalse("isCalendarLenient after ALLOW_WHITESPACE/TRUE", fmt.isCalendarLenient());
         assertTrue("ALLOW_WHITESPACE after ALLOW_WHITESPACE/TRUE", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE));
         assertFalse("ALLOW_NUMERIC  after ALLOW_WHITESPACE/TRUE", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC));

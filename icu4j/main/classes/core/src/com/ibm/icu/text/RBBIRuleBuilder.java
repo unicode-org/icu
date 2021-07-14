@@ -289,7 +289,7 @@ class RBBIRuleBuilder {
     }
 
     /**
-     * Compile rules to the binary form, write that to an ouput stream.
+     * Compile rules to the binary form, write that to an output stream.
      *
      */
     void build(OutputStream os) throws IOException {

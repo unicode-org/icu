@@ -182,7 +182,7 @@ class TransliterationRuleSet {
      * @param text the text to be transliterated
      * @param pos the position indices, which will be updated
      * @param incremental if TRUE, assume new text may be inserted
-     * at index.limit, and return FALSE if thre is a partial match.
+     * at index.limit, and return FALSE if there is a partial match.
      * @return TRUE unless a U_PARTIAL_MATCH has been obtained,
      * indicating that transliteration should stop until more text
      * arrives.

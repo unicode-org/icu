@@ -1402,7 +1402,7 @@ public class NumberFormatTest extends TestFmwk {
         expectPad(fmt, "*P##.##", DecimalFormat.PAD_BEFORE_PREFIX, 5, padString);
         fmt.setPadCharacter('^');
         expectPad(fmt, "*^#", DecimalFormat.PAD_BEFORE_PREFIX, 1, '^');
-        //commented untill implementation is complete
+        //commented until implementation is complete
         /*  fmt.setPadCharacter((UnicodeString)"^^^");
           expectPad(fmt, "*^^^#", DecimalFormat.kPadBeforePrefix, 3, (UnicodeString)"^^^");
           padString.remove();
@@ -2460,7 +2460,7 @@ public class NumberFormatTest extends TestFmwk {
         assertEquals("cp begin", 7, cp.getBeginIndex());
         assertEquals("cp end", 14, cp.getEndIndex());
 
-        // Nagative value with PLURALCURRENCYSTYLE, Arabic digits.
+        // Negative value with PLURALCURRENCYSTYLE, Arabic digits.
         nf = (DecimalFormat) com.ibm.icu.text.NumberFormat.getCurrencyInstance(new Locale("ar", "eg"));
         plCurrencyFmt = NumberFormat.getInstance(new Locale("ar", "eg"), NumberFormat.PLURALCURRENCYSTYLE);
         StringBuffer buffer11 = new StringBuffer();
@@ -5314,8 +5314,8 @@ public class NumberFormatTest extends TestFmwk {
         StringBuffer sb = new StringBuffer();
         fmt.format(1234567, sb, pos);
         assertEquals("Should have multiple grouping separators", "0,001,234,567", sb.toString());
-        assertEquals("FieldPosition should report the first occurence", 1, pos.getBeginIndex());
-        assertEquals("FieldPosition should report the first occurence", 2, pos.getEndIndex());
+        assertEquals("FieldPosition should report the first occurrence", 1, pos.getBeginIndex());
+        assertEquals("FieldPosition should report the first occurrence", 2, pos.getEndIndex());
     }
 
     @Test

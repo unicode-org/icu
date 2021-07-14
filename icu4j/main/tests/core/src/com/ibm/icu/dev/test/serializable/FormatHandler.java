@@ -1078,7 +1078,7 @@ public class FormatHandler
             ULocale uloc = ULocale.forLocale(Locale.US);
             NumberFormat formats[] = {
                 /*
-                 * The code below was used to genereate the
+                 * The code below was used to generate the
                  * serialized NumberFormat objects in ICU 3.6:
                  *
                  *    NumberFormat.getInstance(Locale.US)

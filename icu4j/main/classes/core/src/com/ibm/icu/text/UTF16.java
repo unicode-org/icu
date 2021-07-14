@@ -2522,7 +2522,7 @@ public final class UTF16 {
         // private method ---------------------------------------------------
 
         /**
-         * Compares case insensitive. This is a direct port of ICU4C, to make maintainence life
+         * Compares case insensitive. This is a direct port of ICU4C, to make maintenance life
          * easier.
          *
          * @param s1
@@ -2537,7 +2537,7 @@ public final class UTF16 {
         }
 
         /**
-         * Compares case sensitive. This is a direct port of ICU4C, to make maintainence life
+         * Compares case sensitive. This is a direct port of ICU4C, to make maintenance life
          * easier.
          *
          * @param s1
@@ -2548,7 +2548,7 @@ public final class UTF16 {
          */
         private int compareCaseSensitive(String s1, String s2) {
             // compare identical prefixes - they do not need to be fixed up
-            // limit1 = start1 + min(lenght1, length2)
+            // limit1 = start1 + min(length1, length2)
             int length1 = s1.length();
             int length2 = s2.length();
             int minlength = length1;

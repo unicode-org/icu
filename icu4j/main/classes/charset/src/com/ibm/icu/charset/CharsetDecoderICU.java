@@ -23,7 +23,7 @@ import com.ibm.icu.impl.Assert;
 /**
  * An abstract class that provides framework methods of decoding operations for concrete
  * subclasses.
- * In the future this class will contain API that will implement converter sematics of ICU4C.
+ * In the future this class will contain API that will implement converter semantics of ICU4C.
  * @stable ICU 3.6
  */
 public abstract class CharsetDecoderICU extends CharsetDecoder{

@@ -54,7 +54,7 @@ public class EraRules {
             try {
                 eraIdx = Integer.parseInt(eraIdxStr);
             } catch (NumberFormatException e) {
-                throw new ICUException("Invald era rule key:" + eraIdxStr + " in era rule data for " + calType.getId());
+                throw new ICUException("Invalid era rule key:" + eraIdxStr + " in era rule data for " + calType.getId());
             }
             if (eraIdx < 0 || eraIdx >= numEras) {
                 throw new ICUException("Era rule key:" + eraIdxStr + " in era rule data for " + calType.getId()
