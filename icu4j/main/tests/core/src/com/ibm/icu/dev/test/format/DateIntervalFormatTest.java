@@ -1,6 +1,6 @@
 
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2001-2016, International Business Machines Corporation and    *
@@ -36,6 +36,7 @@ import com.ibm.icu.text.DateIntervalFormat;
 import com.ibm.icu.text.DateIntervalFormat.FormattedDateInterval;
 import com.ibm.icu.text.DateIntervalInfo;
 import com.ibm.icu.text.DateIntervalInfo.PatternInfo;
+import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.DateInterval;
@@ -429,7 +430,7 @@ public class DateIntervalFormatTest extends TestFmwk {
 
                 "zh", "CE 2007 10 10 10:10:10", "CE 2008 10 10 10:10:10", "EEEEdMMMMy", "2007\\u5e7410\\u670810\\u65e5\\u661f\\u671f\\u4e09\\u81f32008\\u5e7410\\u670810\\u65e5\\u661f\\u671f\\u4e94",
 
-                "zh", "CE 2007 10 10 10:10:10", "CE 2008 10 10 10:10:10", "hm", "2007/10/10 \\u4e0a\\u534810:10 \\u2013 2008/10/10 \\u4e0a\\u534810:10",
+                "zh", "CE 2007 10 10 10:10:10", "CE 2008 10 10 10:10:10", "hm", "2007/10/10\\u4e0a\\u534810:10 \\u2013 2008/10/10\\u4e0a\\u534810:10",
 
                 "zh", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "dMMMMy", "2007\\u5e7410\\u670810\\u65e5\\u81f311\\u670810\\u65e5",
 
@@ -439,7 +440,7 @@ public class DateIntervalFormatTest extends TestFmwk {
 
                 "zh", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "EEEEdMMMM", "10\\u670810\\u65e5\\u661f\\u671f\\u4e09\\u81f311\\u670810\\u65e5\\u661f\\u671f\\u516d",
 
-                "zh", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "hmv", "2007/10/10 \\u6D1B\\u6749\\u77F6\\u65F6\\u95F4 \\u4E0A\\u534810:10 \\u2013 2007/11/10 \\u6D1B\\u6749\\u77F6\\u65F6\\u95F4 \\u4E0A\\u534810:10",
+                "zh", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "hmv", "2007/10/10\\u6D1B\\u6749\\u77F6\\u65F6\\u95F4 \\u4E0A\\u534810:10 \\u2013 2007/11/10\\u6D1B\\u6749\\u77F6\\u65F6\\u95F4 \\u4E0A\\u534810:10",
 
                 "zh", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "EEEEdMMMMy", "2007\\u5e7411\\u670810\\u65e5\\u661f\\u671f\\u516d\\u81f320\\u65e5\\u661f\\u671f\\u4e8c",
 
@@ -472,29 +473,29 @@ public class DateIntervalFormatTest extends TestFmwk {
 
                 "zh", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "MMMM", "\\u5341\\u4E00\\u6708", // (fixed expected result per ticket 6872<-6626 and others)
 
-                "zh", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "hmz", "2007/11/10 GMT-8 \\u4e0a\\u534810:10 \\u2013 2007/11/20 GMT-8 \\u4e0a\\u534810:10",
+                "zh", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "hmz", "2007/11/10GMT-8 \\u4e0a\\u534810:10 \\u2013 2007/11/20GMT-8 \\u4e0a\\u534810:10",
 
-                "zh", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "h", "2007/11/10 \\u4e0a\\u534810\\u65f6 \\u2013 2007/11/20 \\u4e0a\\u534810\\u65f6",
+                "zh", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "h", "2007/11/10\\u4e0a\\u534810\\u65f6 \\u2013 2007/11/20\\u4e0a\\u534810\\u65f6",
 
                 "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 14:10:10", "EEEEdMMMMy", "2007\\u5e741\\u670810\\u65e5\\u661f\\u671f\\u4e09", // (fixed expected result per ticket 6872<-6626)
 
                 "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 14:10:10", "hm", "\\u4e0a\\u534810:00\\u81f3\\u4e0b\\u53482:10",
 
-                "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 14:10:10", "hmv", "\\u6D1B\\u6749\\u77F6\\u65F6\\u95F4\\u4E0A\\u534810:00\\u81F3\\u4E0B\\u53482:10",
+                "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 14:10:10", "hmv", "\\u6D1B\\u6749\\u77F6\\u65F6\\u95F4 \\u4E0A\\u534810:00\\u81F3\\u4E0B\\u53482:10",
 
-                "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 14:10:10", "hmz", "GMT-8\\u4e0a\\u534810:00\\u81f3\\u4e0b\\u53482:10",
+                "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 14:10:10", "hmz", "GMT-8 \\u4e0a\\u534810:00\\u81f3\\u4e0b\\u53482:10",
 
                 "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 14:10:10", "h", "\\u4e0a\\u534810\\u65F6\\u81f3\\u4e0b\\u53482\\u65f6",
 
-                "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 14:10:10", "hv", "\\u6D1B\\u6749\\u77F6\\u65F6\\u95F4\\u4E0A\\u534810\\u65F6\\u81F3\\u4E0B\\u53482\\u65F6",
+                "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 14:10:10", "hv", "\\u6D1B\\u6749\\u77F6\\u65F6\\u95F4 \\u4E0A\\u534810\\u65F6\\u81F3\\u4E0B\\u53482\\u65F6",
 
-                "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 14:10:10", "hz", "GMT-8\\u4e0a\\u534810\\u65F6\\u81f3\\u4e0b\\u53482\\u65f6",
+                "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 14:10:10", "hz", "GMT-8 \\u4e0a\\u534810\\u65F6\\u81f3\\u4e0b\\u53482\\u65f6",
 
                 "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 10:20:10", "dMMMM", "1\\u670810\\u65e5", // (fixed expected result per ticket 6872<-6626)
 
                 "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 10:20:10", "hm", "\\u4e0a\\u534810:00\\u81f310:20",
 
-                "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 10:20:10", "hmv", "\\u6D1B\\u6749\\u77F6\\u65F6\\u95F4\\u4E0A\\u534810:00\\u81F310:20",
+                "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 10:20:10", "hmv", "\\u6D1B\\u6749\\u77F6\\u65F6\\u95F4 \\u4E0A\\u534810:00\\u81F310:20",
 
                 "zh", "CE 2007 01 10 10:00:10", "CE 2007 01 10 10:20:10", "h", "\\u4e0a\\u534810\\u65f6",
 
@@ -721,6 +722,94 @@ public class DateIntervalFormatTest extends TestFmwk {
     }
 
 
+    /**
+     * Test handling of hour and day period metacharacters
+     */
+    @Test
+    public void TestHourMetacharacters() {
+        // first item is date pattern
+        // followed by a group of locale/from_data/to_data/skeleton/interval_data
+        // Note that from_data/to_data are specified using era names from root, for the calendar specified by locale.
+        String[] DATA = {
+            "GGGGG y MM dd HH:mm:ss", // pattern for from_data/to_data
+        
+            // This test is for tickets ICU-21154, ICU-21155, and ICU-21156 and is intended to verify
+            // that all of the special skeleton characters for hours and day periods work as expected
+            // with date intervals:
+            // - If a, b, or B is included in the skeleton, it correctly sets the length of the day-period field
+            // - If k or K is included, it behaves the same as H or h, except for the difference in the actual
+            //   number used for the hour.
+            // - If j is included, it behaves the same as either h or H as appropriate, and multiple j's have the
+            //   intended effect on the length of the day period field (if there is one)
+            // - If J is included, it correctly suppresses the day period field if j would include it
+            // - If C is included, it behaves the same as j and brings up the correct day period field
+            // - In all cases, if the day period of both ends of the range is the same, you only see it once
+
+            // baseline (h and H)
+            "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "hh", "12 \\u2013 1 AM",
+            "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "HH", "00\\u201301 Uhr",
+        
+            // k and K (ICU-21154 and ICU-21156)
+            "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "KK", "0 \\u2013 1 AM",
+            "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "kk", "24\\u201301 Uhr",
+
+            // different lengths of the 'a' field
+            "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "ha", "10 AM \\u2013 1 PM",
+            "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "ha", "12 \\u2013 1 AM",
+            "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 12:00:00", "haaaaa", "10 a \\u2013 12 p",
+            "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "haaaaa", "12 \\u2013 1 a",
+        
+            // j (ICU-21155)
+            "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "jj", "10 AM \\u2013 1 PM",
+            "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "jj", "12 \\u2013 1 AM",
+            "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "jjjjj", "10 a \\u2013 1 p",
+            "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "jjjjj", "12 \\u2013 1 a",
+            "de", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "jj", "10\\u201313 Uhr",
+            "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "jj", "00\\u201301 Uhr",
+            "de", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "jjjjj", "10\\u201313 Uhr",
+            "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "jjjjj", "00\\u201301 Uhr",
+        
+            // b and B
+            "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 12:00:00", "hb", "10 AM \\u2013 12 noon",
+            "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 12:00:00", "hbbbbb", "10 a \\u2013 12 n",
+            "en", "CE 2010 09 27 13:00:00", "CE 2010 09 27 14:00:00", "hb", "1 \\u2013 2 PM",
+            "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "hB", "10 in the morning \\u2013 1 in the afternoon",
+            "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "hB", "12 \\u2013 1 at night",
+        
+            // J
+            "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "J", "10 \\u2013 1",
+            "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "J", "12 \\u2013 1",
+            "de", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "J", "10\\u201313 Uhr",
+            "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "J", "00\\u201301 Uhr",
+        
+            // C
+            // (for English and German, C should do the same thing as j)
+            "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "CC", "10 AM \\u2013 1 PM",
+            "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "CC", "12 \\u2013 1 AM",
+            "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "CCCCC", "10 a \\u2013 1 p",
+            "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "CCCCC", "12 \\u2013 1 a",
+            "de", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "CC", "10\\u201313 Uhr",
+            "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "CC", "00\\u201301 Uhr",
+            "de", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "CCCCC", "10\\u201313 Uhr",
+            "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "CCCCC", "00\\u201301 Uhr",
+            // (for zh_HK and hi_IN, j maps to ha, but C maps to hB)
+        "zh_HK", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "jj", "\\u4E0A\\u534810\\u6642\\u81F3\\u4E0B\\u53481\\u6642",
+        "zh_HK", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "jj", "\\u4E0A\\u534812\\u6642\\u81F31\\u6642",
+        "zh_HK", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "hB", "\\u4E0A\\u534810\\u6642 \\u2013 \\u4E0B\\u53481\\u6642",
+        "zh_HK", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "hB", "\\u51CC\\u666812\\u20131\\u6642",
+        "zh_HK", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "CC", "\\u4E0A\\u534810\\u6642 \\u2013 \\u4E0B\\u53481\\u6642",
+        "zh_HK", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "CC", "\\u51CC\\u666812\\u20131\\u6642",
+        "hi_IN", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "jj", "10 am \\u2013 1 pm",
+        "hi_IN", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "jj", "12\\u20131 am",
+        "hi_IN", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "hB", "\\u0938\\u0941\\u092C\\u0939 10 \\u2013 \\u0926\\u094B\\u092A\\u0939\\u0930 1",
+        "hi_IN", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "hB", "\\u0930\\u093E\\u0924 12\\u20131",
+        "hi_IN", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "CC", "\\u0938\\u0941\\u092C\\u0939 10 \\u2013 \\u0926\\u094B\\u092A\\u0939\\u0930 1",
+        "hi_IN", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "CC", "\\u0930\\u093E\\u0924 12\\u20131",
+        };
+        expect(DATA, DATA.length);
+    }
+
+
     private void expect(String[] data, int data_length) {
         int i = 0;
         String pattern = data[i++];
@@ -804,17 +893,17 @@ public class DateIntervalFormatTest extends TestFmwk {
 
                 "de", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "10. Jan. 2007",
 
-                "es", "2007 10 10 10:10:10", "2008 10 10 10:10:10", "10 oct. 2007 --- 10 oct. 2008",
+                "es", "2007 10 10 10:10:10", "2008 10 10 10:10:10", "10 oct 2007 --- 10 oct 2008",
 
-                "es", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "2007 oct. 10 - nov. 2007",
+                "es", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "2007 oct 10 - nov 2007",
 
-                "es", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "10 nov. 2007 --- 20 nov. 2007",
+                "es", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "10 nov 2007 --- 20 nov 2007",
 
-                "es", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "10 ene. 2007",
+                "es", "2007 01 10 10:00:10", "2007 01 10 14:10:10", "10 ene 2007",
 
-                "es", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "10 ene. 2007",
+                "es", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "10 ene 2007",
 
-                "es", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "10 ene. 2007",
+                "es", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "10 ene 2007",
         };
         expectUserDII(DATA, DATA.length);
     }
@@ -855,7 +944,65 @@ public class DateIntervalFormatTest extends TestFmwk {
         }
     }
 
+    /*
+     * Test format using DisplayContext
+     */
+    @Test
+    public void TestContext() {
+        final long startDate = 1285599629000L; // 2010-Sep-27 0800 in America/Los_Angeles
+        final long day = 24*60*60*1000; // milliseconds in a day
 
+        class DateIntervalContextItem {
+            public String locale;
+            public String skeleton;
+            public DisplayContext context;
+            public long deltaDate;
+            public String expectResult;
+             // Simple constructor
+            public DateIntervalContextItem(String loc, String skel, DisplayContext ctxt, long delta, String expect) {
+                locale = loc;
+                skeleton = skel;
+                context = ctxt;
+                deltaDate = delta;
+                expectResult = expect;
+            }
+        };
+
+        final DateIntervalContextItem[] testItems = {
+           new DateIntervalContextItem( "cs", "MMMEd", DisplayContext.CAPITALIZATION_NONE,                      60*day, "po 27. 9. – pá 26. 11." ),
+           new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_NONE,                      60*day, "září–listopad 2010" ),
+           new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_NONE,                       1*day, "září 2010" ),
+           new DateIntervalContextItem( "cs", "MMMEd", DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, 60*day, "Po 27. 9. – pá 26. 11." ),
+           new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, 60*day, "Září–listopad 2010" ),
+           new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE,  1*day, "Září 2010" ),
+           new DateIntervalContextItem( "cs", "MMMEd", DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       60*day, "Po 27. 9. – pá 26. 11." ),
+           new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       60*day, "Září–listopad 2010" ),
+           new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,        1*day, "Září 2010" ),
+           new DateIntervalContextItem( "cs", "MMMEd", DisplayContext.CAPITALIZATION_FOR_STANDALONE,            60*day, "po 27. 9. – pá 26. 11." ),
+           new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_FOR_STANDALONE,            60*day, "září–listopad 2010" ),
+           new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_FOR_STANDALONE,             1*day, "září 2010" ),
+        };
+
+        for (DateIntervalContextItem item: testItems) {
+            DateIntervalFormat difmt = DateIntervalFormat.getInstance(item.skeleton, new ULocale(item.locale));
+            difmt.setTimeZone(TimeZone.getFrozenTimeZone("America/Los_Angeles"));
+
+            difmt.setContext(item.context);
+            DisplayContext getContext = difmt.getContext(DisplayContext.Type.CAPITALIZATION);
+            if (getContext != item.context) {
+                errln("For locale "  + item.locale + ", skeleton " + item.skeleton + ", context " + item.context +
+                        ": getContext returned " + getContext);
+            }
+            DateInterval interval = new DateInterval(startDate, startDate + item.deltaDate);
+            FieldPosition pos = new FieldPosition(0);
+            StringBuffer getResult = new StringBuffer();
+            difmt.format(interval, getResult, pos);
+            if (!getResult.toString().equals(item.expectResult)) {
+                errln("For locale "  + item.locale + ", skeleton " + item.skeleton + ", context " + item.context +
+                       ": expected " + item.expectResult + ", got " + getResult.toString());
+            }
+        }
+    }
 
     /*
      * Test format using user defined DateIntervalInfo
@@ -1253,10 +1400,10 @@ public class DateIntervalFormatTest extends TestFmwk {
     @Test
     public void TestGetIntervalPattern(){
         // Tests when "if ( field > MINIMUM_SUPPORTED_CALENDAR_FIELD )" is true
-        // MINIMUM_SUPPORTED_CALENDAR_FIELD = Calendar.SECOND;
+        // MINIMUM_SUPPORTED_CALENDAR_FIELD = Calendar.MILLISECOND;
         DateIntervalInfo dii = new DateIntervalInfo();
         try{
-            dii.getIntervalPattern("", Calendar.SECOND+1);
+            dii.getIntervalPattern("", Calendar.MILLISECOND+1);
             errln("DateIntervalInfo.getIntervalPattern(String,int) was suppose " +
                     "to return an exception for the 'int field' parameter " +
                     "when it exceeds MINIMUM_SUPPORTED_CALENDAR_FIELD.");
@@ -1279,10 +1426,10 @@ public class DateIntervalFormatTest extends TestFmwk {
         } catch(Exception e){}
 
         // Tests when "if ( lrgDiffCalUnit > MINIMUM_SUPPORTED_CALENDAR_FIELD )" is true
-        // MINIMUM_SUPPORTED_CALENDAR_FIELD = Calendar.SECOND;
+        // MINIMUM_SUPPORTED_CALENDAR_FIELD = Calendar.MILLISECOND;
         try{
             dii = dii.cloneAsThawed();
-            dii.setIntervalPattern("", Calendar.SECOND+1, "");
+            dii.setIntervalPattern("", Calendar.MILLISECOND+1, "");
             errln("DateIntervalInfo.setIntervalPattern(String,int,String) " +
                     "was suppose to return an exception when the " +
                     "variable 'lrgDiffCalUnit' is greater than " +
@@ -2048,6 +2195,102 @@ public class DateIntervalFormatTest extends TestFmwk {
                 ULocale l = locale.setKeywordValue("calendar", calendar);
                 fmt = DateIntervalFormat.getInstance("dMMMMy", l);
             }
+        }
+    }
+
+    @Test
+    public void testTicket20707() {
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        Locale locales[] = {
+            new Locale("en-u-hc-h24"),
+            new Locale("en-u-hc-h23"),
+            new Locale("en-u-hc-h12"),
+            new Locale("en-u-hc-h11"),
+            new Locale("en"),
+            new Locale("en-u-hc-h25"),
+            new Locale("hi-IN-u-hc-h11")
+        };
+
+        // Clomuns: hh, HH, kk, KK, jj, JJs, CC
+        String expected[][] = {
+            // Hour-cycle: k
+            {"12 AM", "24", "24", "12 AM", "24", "0 (hour: 24)", "12 AM"},
+            // Hour-cycle: H
+            {"12 AM", "00", "00", "12 AM", "00", "0 (hour: 00)", "12 AM"},
+            // Hour-cycle: h
+            {"12 AM", "00", "00", "12 AM", "12 AM", "0 (hour: 12)", "12 AM"},
+            // Hour-cycle: K
+            {"0 AM", "00", "00", "0 AM", "0 AM", "0 (hour: 00)", "0 AM"},
+            {"12 AM", "00", "00", "12 AM", "12 AM", "0 (hour: 12)", "12 AM"},
+            {"12 AM", "00", "00", "12 AM", "12 AM", "0 (hour: 12)", "12 AM"},
+            {"0 am", "00", "00", "0 am", "0 am", "0 (\u0918\u0902\u091F\u093E: 00)", "\u0930\u093E\u0924 0"}
+        };
+
+        int i = 0;
+        for (Locale locale : locales) {
+            int j = 0;
+            String skeletons[] = {"hh", "HH", "kk", "KK", "jj", "JJs", "CC"};
+            for (String skeleton : skeletons) {
+                DateIntervalFormat dateFormat = DateIntervalFormat.getInstance(skeleton, locale);
+                Calendar calendar = Calendar.getInstance(tz);
+                calendar.setTime(new Date(1563235200000L));
+                StringBuffer resultBuffer = dateFormat.format(calendar, calendar, new StringBuffer(""), new FieldPosition(0));
+
+                assertEquals("Formatted result for " + skeleton + " locale: " + locale.getDisplayName(), expected[i][j++], resultBuffer.toString());
+            }
+            i++;
+        }
+    }
+
+    @Test
+    public void testFormatMillisecond() {
+        Object[][] kTestCases = {
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 321, "ms",     "23:45"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 321, "msS",    "23:45.3"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 321, "msSS",   "23:45.32"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 321, "msSSS",  "23:45.321"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 987, "ms",     "23:45"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 987, "msS",    "23:45.3 – 23:45.9"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 987, "msSS",   "23:45.32 – 23:45.98"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 987, "msSSS",  "23:45.321 – 23:45.987"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 46), 987, "ms",     "23:45 – 23:46"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 46), 987, "msS",    "23:45.3 – 23:46.9"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 46), 987, "msSS",   "23:45.32 – 23:46.98"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 46), 987, "msSSS",  "23:45.321 – 23:46.987"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 2, 24, 45), 987, "ms",     "23:45 – 24:45"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 2, 24, 45), 987, "msS",    "23:45.3 – 24:45.9"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 2, 24, 45), 987, "msSS",   "23:45.32 – 24:45.98"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 2, 24, 45), 987, "msSSS",  "23:45.321 – 24:45.987"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 321, "s",      "45"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 321, "sS",     "45.3"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 321, "sSS",    "45.32"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 321, "sSSS",   "45.321"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 987, "s",      "45"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 987, "sS",     "45.3 – 45.9"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 987, "sSS",    "45.32 – 45.98"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 45), 987, "sSSS",   "45.321 – 45.987"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 46), 987, "s",      "45 – 46"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 46), 987, "sS",     "45.3 – 46.9"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 46), 987, "sSS",    "45.32 – 46.98"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 1, 23, 46), 987, "sSSS",   "45.321 – 46.987"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 2, 24, 45), 987, "s",      "45 – 45"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 2, 24, 45), 987, "sS",     "45.3 – 45.9"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 2, 24, 45), 987, "sSS",    "45.32 – 45.98"},
+            { new Date(2019, 2, 10, 1, 23, 45), 321, new Date(2019, 2, 10, 2, 24, 45), 987, "sSSS",   "45.321 – 45.987"},
+        };
+
+        Locale enLocale = Locale.ENGLISH;
+
+        for (Object[] testCase : kTestCases) {
+            DateIntervalFormat fmt = DateIntervalFormat.getInstance((String)testCase[4], enLocale);
+
+            Date fromDate = (Date)testCase[0];
+            long from = fromDate.getTime() + (Integer)testCase[1];
+            Date toDate = (Date)testCase[2];
+            long to = toDate.getTime() + (Integer)testCase[3];
+
+            FormattedDateInterval res = fmt.formatToValue(new DateInterval(from, to));
+            assertEquals("Formate for " + testCase[4], testCase[5], res.toString());
         }
     }
 }

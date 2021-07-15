@@ -4,11 +4,14 @@ package org.unicode.icu.tool.cldrtoicu;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.collect.ImmutableMap.toImmutableMap;
 import static java.lang.Character.DIRECTIONALITY_LEFT_TO_RIGHT;
 import static java.util.function.Function.identity;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import static org.unicode.cldr.api.CldrData.PathOrder.ARBITRARY;
 import static org.unicode.cldr.api.CldrDataSupplier.CldrResolution.RESOLVED;
+import static org.unicode.cldr.api.CldrDataSupplier.CldrResolution.UNRESOLVED;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -26,8 +29,11 @@ import org.unicode.cldr.api.CldrDataType;
 import org.unicode.cldr.api.CldrDraftStatus;
 import org.unicode.cldr.api.CldrPath;
 import org.unicode.cldr.api.CldrValue;
+import org.unicode.cldr.api.FilteredData;
+import org.unicode.cldr.api.PathMatcher;
 
 import com.google.common.base.CharMatcher;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -54,8 +60,20 @@ import com.google.common.collect.Sets;
  */
 // TODO(CLDR-13381): Move this all into the CLDR API once the dust has settled.
 public final class PseudoLocales {
+    // Right-to-left override character.
+    private static final String RLO = "\u202e";
+    // Arabic letter mark character.
+    private static final String ALM = "\u061C";
+    // Pop direction formatting character.
+    private static final String PDF = "\u202c";
+    // Prefix to add before each LTR word.
+    private static final String BIDI_PREFIX = ALM + RLO;
+    // Postfix to add after each LTR word.
+    private static final String BIDI_POSTFIX = PDF + ALM;
+
+    // See getExemplarValue() method for why we don't extract the exemplar list from "en".
     private enum PseudoType {
-        BIDI("ar_XB", PseudoLocales::bidi, "abcdefghijklmnopqrstuvwxyz"),
+        BIDI("ar_XB", PseudoLocales::bidi, "abcdefghijklmnopqrstuvwxyz" + ALM + RLO + PDF),
         EXPAND("en_XA", PseudoLocales::expanding,
             "a\u00e5b\u0180c\u00e7d\u00f0e\u00e9f\u0192g\u011dh\u0125i\u00eej\u0135k\u0137l\u013cm"
                 + "\u0271n\u00f1o\u00f6p\u00feq\u01ebr\u0155s\u0161t\u0163u\u00fbv\u1e7dw\u0175"
@@ -109,16 +127,32 @@ public final class PseudoLocales {
         private final CldrDataSupplier src;
         private final Set<String> srcIds;
         private final CldrData enData;
+        private final ImmutableSet<CldrPath> pathsToProcess;
 
         PseudoSupplier(CldrDataSupplier src) {
             this.src = checkNotNull(src);
             this.srcIds = src.getAvailableLocaleIds();
-            // Use resolved data to ensure we get all the values (e.g. values in "en_001").
+            // Start with resolved data so we can merge values from "en" and "en_001" for coverage
+            // and supply the unfiltered values if someone wants the resolved version of the pseudo
+            // locale data.
             this.enData = src.getDataForLocale("en", RESOLVED);
+            // But since we don't want to filter paths which come from the "root" locale (such as
+            // aliases) then we need to find the union of "English" paths we expect to filter.
+            this.pathsToProcess = getUnresolvedPaths(src, "en", "en_001");
             // Just check that we aren't wrapping an already wrapped supplier.
             PseudoType.getLocaleIds()
                 .forEach(id -> checkArgument(!srcIds.contains(id),
                     "pseudo locale %s already supported by given data supplier", id));
+        }
+
+        private static ImmutableSet<CldrPath> getUnresolvedPaths(
+            CldrDataSupplier src, String... ids) {
+
+            ImmutableSet.Builder<CldrPath> paths = ImmutableSet.builder();
+            for (String id : ids) {
+                src.getDataForLocale(id, UNRESOLVED).accept(ARBITRARY, v -> paths.add(v.getPath()));
+            }
+            return paths.build();
         }
 
         @Override public CldrDataSupplier withDraftStatusAtLeast(CldrDraftStatus draftStatus) {
@@ -127,7 +161,8 @@ public final class PseudoLocales {
 
         @Override public CldrData getDataForLocale(String localeId, CldrResolution resolution) {
             if (PseudoType.getLocaleIds().contains(localeId)) {
-                return new PseudoLocaleData(enData, resolution, PseudoType.fromId(localeId));
+                return new PseudoLocaleData(
+                    enData, pathsToProcess, resolution, PseudoType.fromId(localeId));
             } else {
                 return src.getDataForLocale(localeId, resolution);
             }
@@ -147,43 +182,55 @@ public final class PseudoLocales {
     }
 
     private static final class PseudoLocaleData extends FilteredData {
+        private static final PathMatcher LDML = PathMatcher.of("//ldml");
+
         private static final PathMatcher AUX_EXEMPLARS =
-            PathMatcher.of("ldml/characters/exemplarCharacters[@type=\"auxiliary\"]");
+            ldml("characters/exemplarCharacters[@type=\"auxiliary\"]");
 
         private static final PathMatcher NUMBERING_SYSTEM =
-            PathMatcher.of("ldml/numbers/defaultNumberingSystem");
+            ldml("numbers/defaultNumberingSystem");
+
+        private static final PathMatcher GREGORIAN_SHORT_STANDARD_PATTERN =
+            ldml("dates/calendars/calendar[@type=\"gregorian\"]/timeFormats/timeFormatLength[@type=\"short\"]/timeFormat[@type=\"standard\"]/pattern[@type=\"standard\"]");
 
         // These paths were mostly derived from looking at the previous implementation's behaviour
-        // and can be modified as needed. Notably there are no "units" here (but they were also
-        // excluded in the original code).
-        private static final PathMatcher PSEUDO_PATHS = PathMatcher.anyOf(
-            ldml("localeDisplayNames"),
-            ldml("delimiters"),
-            ldml("dates/calendars/calendar"),
-            ldml("dates/fields"),
-            ldml("dates/timeZoneNames"),
-            ldml("listPatterns"),
-            ldml("posix/messages"),
-            ldml("characterLabels"),
-            ldml("typographicNames"));
-
-        // Paths which contain non-localizable data. It is important that these paths catch all the
-        // non-localizable sub-paths of the list above. This list must be accurate.
-        private static final PathMatcher EXCLUDE_PATHS = PathMatcher.anyOf(
-            ldml("localeDisplayNames/localeDisplayPattern"),
-            ldml("dates/timeZoneNames/fallbackFormat"));
+        // and can be modified as needed.
+        private static final Predicate<CldrPath> IS_PSEUDO_PATH =
+            matchAnyLdmlPrefix(
+                "localeDisplayNames",
+                "delimiters",
+                "dates/calendars/calendar",
+                "dates/fields",
+                "dates/timeZoneNames",
+                "listPatterns",
+                "posix/messages",
+                "characterLabels",
+                "typographicNames",
+                "units")
+                .and(matchAnyLdmlPrefix(
+                    "localeDisplayNames/localeDisplayPattern",
+                    "dates/timeZoneNames/fallbackFormat")
+                    .negate());
 
         // The expectation is that all non-alias paths with values under these roots are "date/time
         // pattern like" (such as "E h:mm:ss B") in which care must be taken to not pseudo localize
         // the patterns in such as way as to break them. This list must be accurate.
-        private static final PathMatcher PATTERN_PATHS = PathMatcher.anyOf(
-            ldml("dates/calendars/calendar/timeFormats"),
-            ldml("dates/calendars/calendar/dateFormats"),
-            ldml("dates/calendars/calendar/dateTimeFormats"),
-            ldml("dates/timeZoneNames/hourFormat"));
+        private static final Predicate<CldrPath> IS_PATTERN_PATH = matchAnyLdmlPrefix(
+            "dates/calendars/calendar/timeFormats",
+            "dates/calendars/calendar/dateFormats",
+            "dates/calendars/calendar/dateTimeFormats",
+            "dates/timeZoneNames/hourFormat");
 
-        private static PathMatcher ldml(String matcherSuffix) {
-            return PathMatcher.of("ldml/" + matcherSuffix);
+        private static PathMatcher ldml(String paths) {
+            return LDML.withSuffix(paths);
+        }
+
+        private static Predicate<CldrPath> matchAnyLdmlPrefix(String... paths) {
+            ImmutableList<Predicate<CldrPath>> collect =
+                Arrays.stream(paths)
+                    .map(s -> (Predicate<CldrPath>) ldml(s)::matchesPrefixOf)
+                    .collect(toImmutableList());
+            return p -> collect.stream().anyMatch(e -> e.test(p));
         }
 
         // Look for any attribute in the path with "narrow" in its value. Since "narrow" values
@@ -197,11 +244,18 @@ public final class PseudoLocales {
 
         private final PseudoType type;
         private final boolean isResolved;
+        private final ImmutableSet<CldrPath> pathsToProcess;
 
-        private PseudoLocaleData(CldrData srcData, CldrResolution resolution, PseudoType type) {
+        private PseudoLocaleData(
+            CldrData srcData,
+            ImmutableSet<CldrPath> pathsToProcess,
+            CldrResolution resolution,
+            PseudoType type) {
+
             super(srcData);
             this.isResolved = checkNotNull(resolution) == RESOLVED;
             this.type = checkNotNull(type);
+            this.pathsToProcess = pathsToProcess;
         }
 
         @Override
@@ -223,7 +277,7 @@ public final class PseudoLocales {
 
             CldrValue defaultReturnValue = isResolved ? value : null;
             // This makes it look like we have explicit values only for the included paths.
-            if (!PSEUDO_PATHS.matchesPrefixOf(path) || EXCLUDE_PATHS.matchesPrefixOf(path)) {
+            if (!pathsToProcess.contains(path) || !IS_PSEUDO_PATH.test(path)) {
                 return defaultReturnValue;
             }
             String fullPath = value.getFullPath();
@@ -232,7 +286,15 @@ public final class PseudoLocales {
             if (IS_NARROW.test(fullPath)) {
                 return defaultReturnValue;
             }
-            String text = createMessage(value.getValue(), PATTERN_PATHS.matchesPrefixOf(path));
+            // Explicitly return 24 hrs format pattern for the Gregorian short standard pattern
+            // entry to be consistent with the time cycle specified in supplemental.xml for
+            // region 001. 001 is the region the pseudolocales en_XA/ar_XB default to.
+            // This prevents ICU unit test failure.
+            if (GREGORIAN_SHORT_STANDARD_PATTERN.matches(path)) {
+                return CldrValue.parseValue(fullPath, "[H:mm]");
+            }
+            String text = createMessage(value.getValue(), IS_PATTERN_PATH.test(path));
+
             return CldrValue.parseValue(fullPath, text);
         }
 
@@ -245,9 +307,23 @@ public final class PseudoLocales {
         private CldrValue getExemplarValue(CldrPath path) {
             StringBuilder exemplarList = new StringBuilder("[");
             type.getExemplars().codePoints()
-                .forEach(cp -> exemplarList.appendCodePoint(cp).append(' '));
+                .forEach(cp -> appendExemplarCodePoint(exemplarList, cp).append(' '));
             exemplarList.setCharAt(exemplarList.length() - 1, ']');
             return CldrValue.parseValue(path.toString(), exemplarList.toString());
+        }
+
+        // Append a (possibly escaped) representation of the exemaplar character.
+        private static StringBuilder appendExemplarCodePoint(StringBuilder out, int cp) {
+            // This could be fixed if needed, but for now it's safer to check.
+            checkArgument(
+                Character.isBmpCodePoint(cp),
+                "Only BMP code points are supported for exemplars: 0x%s", Integer.toHexString(cp));
+            if (Character.isAlphabetic(cp)) {
+                out.appendCodePoint(cp);
+            } else {
+                out.append(String.format("\\u%04X", cp));
+            }
+            return out;
         }
 
         private String createMessage(String text, boolean isPattern) {
@@ -333,17 +409,6 @@ public final class PseudoLocales {
 
     // ---- Bidi Pseudo-localizer (e.g. "November" --> "rebmevoN" using BiDi tags)----
 
-    // Right-to-left override character.
-    private static final String RLO = "\u202e";
-    // Arabic letter mark character.
-    private static final String ALM = "\u061C";
-    // Pop direction formatting character.
-    private static final String PDF = "\u202c";
-    // Prefix to add before each LTR word.
-    private static final String BIDI_PREFIX = ALM + RLO;
-    // Postfix to add after each LTR word.
-    private static final String BIDI_POSTFIX = PDF + ALM;
-
     // Bidi localization doesn't care if the fragment is a pattern or not.
     @SuppressWarnings("unused")
     private static PseudoText bidi(boolean isPattern) {
@@ -357,7 +422,7 @@ public final class PseudoLocales {
             public void addFragment(String text, boolean isLocalizable) {
                 if (isLocalizable) {
                     boolean wrapping = false;
-                    for (int index = 0; index < text.length();) {
+                    for (int index = 0; index < text.length(); ) {
                         int codePoint = text.codePointAt(index);
                         index += Character.charCount(codePoint);
                         byte directionality = Character.getDirectionality(codePoint);
@@ -383,5 +448,6 @@ public final class PseudoLocales {
         };
     }
 
-    private PseudoLocales() {}
+    private PseudoLocales() {
+    }
 }

@@ -537,7 +537,7 @@ TimeZoneTest::TestGetAvailableIDsNew()
     const UnicodeString *id1, *id2;
     UnicodeString canonicalID;
     UBool isSystemID;
-    char region[4];
+    char region[4] = {0};
     int32_t zoneCount;
 
     any = canonical = canonicalLoc = any_US = canonical_US = canonicalLoc_US = any_W5 = any_CA_W5 = any_US_E14 = NULL;
@@ -860,7 +860,9 @@ void TimeZoneTest::TestShortZoneIDs()
         {"PRT", -240, FALSE}, // ICU Link - America/Puerto_Rico
         {"CNT", -210, TRUE},  // ICU Link - America/St_Johns
         {"AGT", -180, FALSE}, // ICU Link - America/Argentina/Buenos_Aires
-        {"BET", -180, TRUE},  // ICU Link - America/Sao_Paulo
+        // Per https://mm.icann.org/pipermail/tz-announce/2019-July/000056.html
+        //      Brazil has canceled DST and will stay on standard time indefinitely.
+        {"BET", -180, FALSE},  // ICU Link - America/Sao_Paulo
         {"GMT", 0, FALSE},    // Olson etcetera Link - Etc/GMT
         {"UTC", 0, FALSE},    // Olson etcetera 0
         {"ECT", 60, TRUE},    // ICU Link - Europe/Paris
@@ -2251,8 +2253,11 @@ static struct   {
        
       {"America/Sao_Paulo",  "en", FALSE, TimeZone::SHORT, "GMT-3"/*"BRT"*/},
       {"America/Sao_Paulo",  "en", FALSE, TimeZone::LONG,  "Brasilia Standard Time"},
-      {"America/Sao_Paulo",  "en", TRUE,  TimeZone::SHORT, "GMT-2"/*"BRST"*/},
-      {"America/Sao_Paulo",  "en", TRUE,  TimeZone::LONG,  "Brasilia Summer Time"},
+
+      // Per https://mm.icann.org/pipermail/tz-announce/2019-July/000056.html
+      //      Brazil has canceled DST and will stay on standard time indefinitely.
+      // {"America/Sao_Paulo",  "en", TRUE,  TimeZone::SHORT, "GMT-2"/*"BRST"*/},
+      // {"America/Sao_Paulo",  "en", TRUE,  TimeZone::LONG,  "Brasilia Summer Time"},
        
       // No Summer Time, but had it before 1983.
       {"Pacific/Honolulu",   "en", FALSE, TimeZone::SHORT, "HST"},

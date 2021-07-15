@@ -1,5 +1,5 @@
 // © 2017 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.locale;
 
 import java.nio.ByteBuffer;
@@ -87,7 +87,8 @@ public final class XLikelySubtags {
             String[] lsrSubtags = getValue(likelyTable, "lsrs", value).getStringArray();
             LSR[] lsrs = new LSR[lsrSubtags.length / 3];
             for (int i = 0, j = 0; i < lsrSubtags.length; i += 3, ++j) {
-                lsrs[j] = new LSR(lsrSubtags[i], lsrSubtags[i + 1], lsrSubtags[i + 2]);
+                lsrs[j] = new LSR(lsrSubtags[i], lsrSubtags[i + 1], lsrSubtags[i + 2],
+                        LSR.IMPLICIT_LSR);
             }
 
             return new Data(languageAliases, regionAliases, trie, lsrs);
@@ -96,13 +97,18 @@ public final class XLikelySubtags {
         @Override
         public boolean equals(Object other) {
             if (this == other) { return true; }
-            if (!getClass().equals(other.getClass())) { return false; }
+            if (other == null || !getClass().equals(other.getClass())) { return false; }
             Data od = (Data)other;
             return
                     languageAliases.equals(od.languageAliases) &&
                     regionAliases.equals(od.regionAliases) &&
                     Arrays.equals(trie, od.trie) &&
                     Arrays.equals(lsrs, od.lsrs);
+        }
+
+        @Override
+        public int hashCode() {  // unused; silence ErrorProne
+            return 1;
         }
     }
 
@@ -185,7 +191,7 @@ public final class XLikelySubtags {
             String tag = locale.toLanguageTag();
             assert tag.startsWith("x-");
             // Private use language tag x-subtag-subtag...
-            return new LSR(tag, "", "");
+            return new LSR(tag, "", "", LSR.EXPLICIT_LSR);
         }
         return makeMaximizedLsr(locale.getLanguage(), locale.getScript(), locale.getCountry(),
                 locale.getVariant());
@@ -195,7 +201,7 @@ public final class XLikelySubtags {
         String tag = locale.toLanguageTag();
         if (tag.startsWith("x-")) {
             // Private use language tag x-subtag-subtag...
-            return new LSR(tag, "", "");
+            return new LSR(tag, "", "", LSR.EXPLICIT_LSR);
         }
         return makeMaximizedLsr(locale.getLanguage(), locale.getScript(), locale.getCountry(),
                 locale.getVariant());
@@ -209,29 +215,34 @@ public final class XLikelySubtags {
             switch (region.charAt(1)) {
             case 'A':
                 return new LSR(PSEUDO_ACCENTS_PREFIX + language,
-                        PSEUDO_ACCENTS_PREFIX + script, region);
+                        PSEUDO_ACCENTS_PREFIX + script, region, LSR.EXPLICIT_LSR);
             case 'B':
                 return new LSR(PSEUDO_BIDI_PREFIX + language,
-                        PSEUDO_BIDI_PREFIX + script, region);
+                        PSEUDO_BIDI_PREFIX + script, region, LSR.EXPLICIT_LSR);
             case 'C':
                 return new LSR(PSEUDO_CRACKED_PREFIX + language,
-                        PSEUDO_CRACKED_PREFIX + script, region);
+                        PSEUDO_CRACKED_PREFIX + script, region, LSR.EXPLICIT_LSR);
             default:  // normal locale
                 break;
             }
         }
 
         if (variant.startsWith("PS")) {
+            int lsrFlags = region.isEmpty() ?
+                    LSR.EXPLICIT_LANGUAGE | LSR.EXPLICIT_SCRIPT : LSR.EXPLICIT_LSR;
             switch (variant) {
             case "PSACCENT":
                 return new LSR(PSEUDO_ACCENTS_PREFIX + language,
-                        PSEUDO_ACCENTS_PREFIX + script, region.isEmpty() ? "XA" : region);
+                        PSEUDO_ACCENTS_PREFIX + script,
+                        region.isEmpty() ? "XA" : region, lsrFlags);
             case "PSBIDI":
                 return new LSR(PSEUDO_BIDI_PREFIX + language,
-                        PSEUDO_BIDI_PREFIX + script, region.isEmpty() ? "XB" : region);
+                        PSEUDO_BIDI_PREFIX + script,
+                        region.isEmpty() ? "XB" : region, lsrFlags);
             case "PSCRACK":
                 return new LSR(PSEUDO_CRACKED_PREFIX + language,
-                        PSEUDO_CRACKED_PREFIX + script, region.isEmpty() ? "XC" : region);
+                        PSEUDO_CRACKED_PREFIX + script,
+                        region.isEmpty() ? "XC" : region, lsrFlags);
             default:  // normal locale
                 break;
             }
@@ -257,7 +268,7 @@ public final class XLikelySubtags {
             region = "";
         }
         if (!script.isEmpty() && !region.isEmpty() && !language.isEmpty()) {
-            return new LSR(language, script, region);  // already maximized
+            return new LSR(language, script, region, LSR.EXPLICIT_LSR);  // already maximized
         }
 
         int retainOldMask = 0;
@@ -340,6 +351,7 @@ public final class XLikelySubtags {
         }
 
         if (retainOldMask == 0) {
+            assert result.flags == LSR.IMPLICIT_LSR;
             return result;
         }
         if ((retainOldMask & 4) == 0) {
@@ -351,7 +363,116 @@ public final class XLikelySubtags {
         if ((retainOldMask & 1) == 0) {
             region = result.region;
         }
-        return new LSR(language, script, region);
+        // retainOldMask flags = LSR explicit-subtag flags
+        return new LSR(language, script, region, retainOldMask);
+    }
+
+    /**
+     * Tests whether lsr is "more likely" than other.
+     * For example, fr-Latn-FR is more likely than fr-Latn-CH because
+     * FR is the default region for fr-Latn.
+     *
+     * <p>The likelyInfo caches lookup information between calls.
+     * The return value is an updated likelyInfo value,
+     * with bit 0 set if lsr is "more likely".
+     * The initial value of likelyInfo must be negative.
+     */
+    int compareLikely(LSR lsr, LSR other, int likelyInfo) {
+        // If likelyInfo >= 0:
+        // likelyInfo bit 1 is set if the previous comparison with lsr
+        // was for equal language and script.
+        // Otherwise the scripts differed.
+        if (!lsr.language.equals(other.language)) {
+            return 0xfffffffc;  // negative, lsr not better than other
+        }
+        if (!lsr.script.equals(other.script)) {
+            int index;
+            if (likelyInfo >= 0 && (likelyInfo & 2) == 0) {
+                index = likelyInfo >> 2;
+            } else {
+                index = getLikelyIndex(lsr.language, "");
+                likelyInfo = index << 2;
+            }
+            LSR likely = lsrs[index];
+            if (lsr.script.equals(likely.script)) {
+                return likelyInfo | 1;
+            } else {
+                return likelyInfo & ~1;
+            }
+        }
+        if (!lsr.region.equals(other.region)) {
+            int index;
+            if (likelyInfo >= 0 && (likelyInfo & 2) != 0) {
+                index = likelyInfo >> 2;
+            } else {
+                index = getLikelyIndex(lsr.language, lsr.region);
+                likelyInfo = (index << 2) | 2;
+            }
+            LSR likely = lsrs[index];
+            if (lsr.region.equals(likely.region)) {
+                return likelyInfo | 1;
+            } else {
+                return likelyInfo & ~1;
+            }
+        }
+        return likelyInfo & ~1;  // lsr not better than other
+    }
+
+    // Subset of maximize().
+    private int getLikelyIndex(String language, String script) {
+        if (language.equals("und")) {
+            language = "";
+        }
+        if (script.equals("Zzzz")) {
+            script = "";
+        }
+
+        BytesTrie iter = new BytesTrie(trie);
+        long state;
+        int value;
+        // Small optimization: Array lookup for first language letter.
+        int c0;
+        if (language.length() >= 2 && 0 <= (c0 = language.charAt(0) - 'a') && c0 <= 25 &&
+                (state = trieFirstLetterStates[c0]) != 0) {
+            value = trieNext(iter.resetToState64(state), language, 1);
+        } else {
+            value = trieNext(iter, language, 0);
+        }
+        if (value >= 0) {
+            state = iter.getState64();
+        } else {
+            iter.resetToState64(trieUndState);  // "und" ("*")
+            state = 0;
+        }
+
+        if (value > 0) {
+            // Intermediate or final value from just language.
+            if (value == SKIP_SCRIPT) {
+                value = 0;
+            }
+        } else {
+            value = trieNext(iter, script, 0);
+            if (value >= 0) {
+                state = iter.getState64();
+            } else {
+                if (state == 0) {
+                    iter.resetToState64(trieUndZzzzState);  // "und-Zzzz" ("**")
+                } else {
+                    iter.resetToState64(state);
+                    value = trieNext(iter, "", 0);
+                    assert value >= 0;
+                    state = iter.getState64();
+                }
+            }
+        }
+
+        if (value > 0) {
+            // Final value from just language or language+script.
+        } else {
+            value = trieNext(iter, "", 0);
+            assert value > 0;
+        }
+        return value;
     }
 
     private static final int trieNext(BytesTrie iter, String s, int i) {
@@ -411,9 +532,9 @@ public final class XLikelySubtags {
         boolean favorRegionOk = false;
         if (result.script.equals(value00.script)) { //script is default
             if (result.region.equals(value00.region)) {
-                return new LSR(result.language, "", "");
+                return new LSR(result.language, "", "", LSR.DONT_CARE_FLAGS);
             } else if (fieldToFavor == ULocale.Minimize.FAVOR_REGION) {
-                return new LSR(result.language, "", result.region);
+                return new LSR(result.language, "", result.region, LSR.DONT_CARE_FLAGS);
             } else {
                 favorRegionOk = true;
             }
@@ -423,9 +544,9 @@ public final class XLikelySubtags {
         // Maybe do later, but for now use the straightforward code.
         LSR result2 = maximize(languageIn, scriptIn, "");
         if (result2.equals(result)) {
-            return new LSR(result.language, result.script, "");
+            return new LSR(result.language, result.script, "", LSR.DONT_CARE_FLAGS);
         } else if (favorRegionOk) {
-            return new LSR(result.language, "", result.region);
+            return new LSR(result.language, "", result.region, LSR.DONT_CARE_FLAGS);
         }
         return result;
     }

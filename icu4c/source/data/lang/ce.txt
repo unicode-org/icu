@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ce{
     Keys{
         calendar{"Календарь"}
@@ -403,7 +404,6 @@ ce{
         zza{"заза"}
     }
     Languages%short{
-        az{"азербайджанийн"}
         en_GB{"ингалсан (Британи)"}
     }
     Scripts{
@@ -452,10 +452,6 @@ ce{
         Zyyy{"массара а тӀеэцна"}
         Zzzz{"доьвзуш доцу йоза"}
     }
-    Scripts%stand-alone{
-        Hans{"атта китайн"}
-        Hant{"ламастан китайн"}
-    }
     Types{
         calendar{
             gregorian{"григорианан"}
@@ -464,7 +460,6 @@ ce{
             persian{"гӀажарийн"}
         }
     }
-    Version{"36"}
     codePatterns{
         language{"Мотт: {0}"}
         script{"Скрипт: {0}"}

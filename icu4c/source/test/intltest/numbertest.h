@@ -54,6 +54,9 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     void notationCompact();
     void unitMeasure();
     void unitCompoundMeasure();
+    void unitUsage();
+    void unitUsageErrorCodes();
+    void unitUsageSkeletons();
     void unitCurrency();
     void unitPercent();
     void percentParity();
@@ -68,6 +71,7 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     // TODO: Add this method if currency symbols override support is added.
     //void symbolsOverride();
     void sign();
+    void signNearZero();
     void signCoverage();
     void decimal();
     void scale();
@@ -83,6 +87,7 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     void localPointerCAPI();
     void toObject();
     void toDecimalNumber();
+    void microPropsInternals();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 
@@ -94,6 +99,9 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     CurrencyUnit ESP;
     CurrencyUnit PTE;
     CurrencyUnit RON;
+    CurrencyUnit TWD;
+    CurrencyUnit TRY;
+    CurrencyUnit CNY;
 
     MeasureUnit METER;
     MeasureUnit DAY;
@@ -113,16 +121,38 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     DecimalFormatSymbols SWISS_SYMBOLS;
     DecimalFormatSymbols MYANMAR_SYMBOLS;
 
-    void assertFormatDescending(const char16_t* message, const char16_t* skeleton,
-                                const UnlocalizedNumberFormatter& f, Locale locale, ...);
+    /**
+     * skeleton is the full length skeleton, which must round-trip.
+     *
+     * conciseSkeleton should be the shortest available skeleton.
+     * The concise skeleton can be read but not printed.
+     */
+    void assertFormatDescending(
+      const char16_t* message,
+      const char16_t* skeleton,
+      const char16_t* conciseSkeleton,
+      const UnlocalizedNumberFormatter& f,
+      Locale locale,
+      ...);
 
-    void assertFormatDescendingBig(const char16_t* message, const char16_t* skeleton,
-                                   const UnlocalizedNumberFormatter& f, Locale locale, ...);
+    /** See notes above regarding skeleton vs conciseSkeleton */
+    void assertFormatDescendingBig(
+      const char16_t* message,
+      const char16_t* skeleton,
+      const char16_t* conciseSkeleton,
+      const UnlocalizedNumberFormatter& f,
+      Locale locale,
+      ...);
 
-    FormattedNumber
-    assertFormatSingle(const char16_t* message, const char16_t* skeleton,
-                       const UnlocalizedNumberFormatter& f, Locale locale, double input,
-                       const UnicodeString& expected);
+    /** See notes above regarding skeleton vs conciseSkeleton */
+    FormattedNumber assertFormatSingle(
+      const char16_t* message,
+      const char16_t* skeleton,
+      const char16_t* conciseSkeleton,
+      const UnlocalizedNumberFormatter& f,
+      Locale locale,
+      double input,
+      const UnicodeString& expected);
 
     void assertUndefinedSkeleton(const UnlocalizedNumberFormatter& f);
 
@@ -145,6 +175,8 @@ class DecimalQuantityTest : public IntlTest {
     void testToDouble();
     void testMaxDigits();
     void testNickelRounding();
+    void testCompactDecimalSuppressedExponent();
+    void testSuppressedExponentUnchangedByInitialScaling();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 
@@ -231,6 +263,8 @@ class NumberSkeletonTest : public IntlTest {
     void stemsRequiringOption();
     void defaultTokens();
     void flexibleSeparators();
+    void wildcardCharacters();
+    void perUnitInArabic();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 
@@ -252,6 +286,7 @@ class NumberRangeFormatterTest : public IntlTestWithFieldPosition {
     void testFieldPositions();
     void testCopyMove();
     void toObject();
+    void testGetDecimalNumbers();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 

@@ -4,7 +4,7 @@ image: Visual Studio 2017
 platform: x64
 
 # Don't clone the entire repo.
-clone_depth: 1
+clone_depth: 10
 
 # Cache things between builds to speed things up and save bandwidth.
 cache:
@@ -14,22 +14,23 @@ cache:
 #  - The VS2017 build is disabled (commented out) below, as we build both VS2015 and VS2017
 #    on Azure Pipelines instead, since that is much faster.
 #
-#  - For the Cygwin build, the CYG_MIRROR URL below is from the "Cygwin Time Machine" archive,
-#    and that URL maps to the 64-bit version of Cygwin 2.11.2-1 (with timestamp 1550062412).
-#    This was the last release of Cygwin 2.11 before version 3.0.0 was released.
-#    See: http://www.crouchingtigerhiddenfruitbat.org/Cygwin/timemachine.html
+#  - For the Cygwin build, the CYG_MIRROR URL used to use the "Cygwin Time Machine" archive
+#    in order to pull a previous version of Cygwin, v2.11.2-1 (with timestamp 1550062412).
+#    This was done as version 3 had issues and didn't build at all.
+#    The previous URL was:
+#      http://ctm.crouchingtigerhiddenfruitbat.org/pub/cygwin/circa/64bit/2019/02/13/045332
 #
-#    Note: The archived Cygwin repo does not keep or retain any file signature files, so we
-#    must use the "-X" or "--no-verify" option below in the setup command.
+#    In order to speed the builds up we use the "-X" or "--no-verify" option to skip checking
+#    the signatures on packages.
 
 environment:
   global:
     ICU_CI_CACHE: c:\icu-ci-cache
     CYG_URL: https://cygwin.com/setup-x86_64.exe
-    CYG_MIRROR: http://ctm.crouchingtigerhiddenfruitbat.org/pub/cygwin/circa/64bit/2019/02/13/045332
+    CYG_MIRROR: http://mirrors.kernel.org/sourceware/cygwin/
     CYG_PACKAGES: automake,gcc-core,gcc-g++,make,pkg-config,perl,python3
     CYG_ROOT: c:\cygwin-root
-    CYG_CACHE: '%ICU_CI_CACHE%\cygwin64'
+    CYG_CACHE: '%ICU_CI_CACHE%\cygwin64-v3'
     CYG_CACHED_SETUP: '%CYG_CACHE%\setup.exe'
 
   matrix:
@@ -65,7 +66,7 @@ for:
       - "%CYG_ROOT%\\bin\\sh -lc 'uname -a'"
 
     build_script:
-      - '%CYG_ROOT%\\bin\\bash -lc "cd $(cygpath ${APPVEYOR_BUILD_FOLDER}) && cd icu4c/source && ./runConfigureICU Cygwin && make check"'
+      - '%CYG_ROOT%\\bin\\bash -lc "cd $(cygpath ${APPVEYOR_BUILD_FOLDER}) && cd icu4c/source && ./runConfigureICU Cygwin && make -j2 check"'
 
 #  -
 #    matrix:

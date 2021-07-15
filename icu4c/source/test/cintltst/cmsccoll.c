@@ -3212,7 +3212,7 @@ static void TestSeparateTrees(void) {
     }
 
     /*
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
                              const char* locale, UBool* isAvailable,
                              UErrorCode* status);

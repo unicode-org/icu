@@ -2,13 +2,19 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package org.unicode.icu.tool.cldrtoicu;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.CREATE_NEW;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.util.stream.Collectors.joining;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -34,11 +40,18 @@ final class IcuTextWriter {
     private static final Pattern STRING_ESCAPE = Pattern.compile("(?!')\\\\\\\\(?!')");
     private static final Pattern QUOTE_ESCAPE = Pattern.compile("\\\\?\"");
 
+    private static final OpenOption[] ONLY_NEW_FILES = { CREATE_NEW };
+    private static final OpenOption[] OVERWRITE_FILES = { CREATE, TRUNCATE_EXISTING };
+
     /** Write a file in ICU data format with the specified header. */
-    static void writeToFile(IcuData icuData, Path outDir, List<String> header) {
+    static void writeToFile(
+        IcuData icuData, Path outDir, List<String> header, boolean allowOverwrite) {
+
         try {
             Files.createDirectories(outDir);
-            try (Writer w = Files.newBufferedWriter(outDir.resolve(icuData.getName() + ".txt"));
+            Path file = outDir.resolve(icuData.getName() + ".txt");
+            OpenOption[] fileOptions = allowOverwrite ? OVERWRITE_FILES : ONLY_NEW_FILES;
+            try (Writer w = Files.newBufferedWriter(file, UTF_8, fileOptions);
                 PrintWriter out = new PrintWriter(w)) {
                 new IcuTextWriter(icuData).writeTo(out, header);
             }
@@ -120,7 +133,7 @@ final class IcuTextWriter {
     }
 
     private void open(String label, PrintWriter out) {
-        newLineAndIndent(out);
+        newLineAndIndent(out, FormatOptions.PATH_FORMAT);
         depth++;
         // This handles the "magic" pseudo indexing paths that are added by RegexTransformer.
         // These take the form of "<any-string>" and are used to ensure that path order can be
@@ -133,14 +146,16 @@ final class IcuTextWriter {
 
     private void close(PrintWriter out) {
         depth--;
-        newLineAndIndent(out);
+        newLineAndIndent(out, FormatOptions.PATH_FORMAT);
         out.print('}');
     }
 
-    private void newLineAndIndent(PrintWriter out) {
+    private void newLineAndIndent(PrintWriter out, FormatOptions format) {
         out.println();
-        for (int i = 0; i < depth; i++) {
-            out.print(INDENT);
+        if (format.shouldIndent) {
+            for (int i = 0; i < depth; i++) {
+                out.print(INDENT);
+            }
         }
     }
 
@@ -157,20 +172,42 @@ final class IcuTextWriter {
         }
     }
 
+    private static final class FormatOptions {
+        // Only the indent flag is used
+        final static FormatOptions PATH_FORMAT = new FormatOptions(true, true, true);
+
+        static FormatOptions forPath(RbPath rbPath) {
+            return new FormatOptions(
+                    !rbPath.isIntPath() && !rbPath.isBinPath(),
+                    !rbPath.endsWith(RB_SEQUENCE) && !rbPath.isBinPath(),
+                    !rbPath.isBinPath());
+        }
+
+        final boolean shouldQuote;
+        final boolean shouldUseComma;
+        final boolean shouldIndent;
+
+        private FormatOptions(boolean shouldQuote, boolean shouldUseComma, boolean shouldIndent) {
+            this.shouldQuote = shouldQuote;
+            this.shouldUseComma = shouldUseComma;
+            this.shouldIndent = shouldIndent;
+        }
+    }
+
     /** Inserts padding and values between braces. */
+    // TODO: Get rid of the need for icuDataName by adding type information to RbPath.
     private boolean appendValues(
-        String name, RbPath rbPath, List<RbValue> values, PrintWriter out) {
+        String icuDataName, RbPath rbPath, List<RbValue> values, PrintWriter out) {
 
         RbValue onlyValue;
         boolean wasSingular = false;
-        boolean quote = !rbPath.isIntPath();
-        boolean isSequence = rbPath.endsWith(RB_SEQUENCE);
-        if (values.size() == 1 && !mustBeArray(true, name, rbPath)) {
+        FormatOptions format = FormatOptions.forPath(rbPath);
+        if (values.size() == 1 && !mustBeArray(true, icuDataName, rbPath)) {
             onlyValue = values.get(0);
-            if (onlyValue.isSingleton() && !mustBeArray(false, name, rbPath)) {
+            if (onlyValue.isSingleton() && !mustBeArray(false, icuDataName, rbPath)) {
                 // Value has a single element and is not being forced to be an array.
                 String onlyElement = Iterables.getOnlyElement(onlyValue.getElements());
-                if (quote) {
+                if (format.shouldQuote) {
                     onlyElement = quoteInside(onlyElement);
                 }
                 // The numbers below are simply tuned to match the line wrapping in the original
@@ -180,7 +217,7 @@ final class IcuTextWriter {
                 int maxWidth = Math.max(68, 80 - Math.min(4, rbPath.length()) * INDENT.length());
                 if (onlyElement.length() <= maxWidth) {
                     // Single element for path: don't add newlines.
-                    printValue(out, onlyElement, quote);
+                    printValue(out, onlyElement, format);
                     wasSingular = true;
                 } else {
                     // Element too long to fit in one line, so wrap.
@@ -188,23 +225,23 @@ final class IcuTextWriter {
                     for (int i = 0; i < onlyElement.length(); i = end) {
                         end = goodBreak(onlyElement, i + maxWidth);
                         String part = onlyElement.substring(i, end);
-                        newLineAndIndent(out);
-                        printValue(out, part, quote);
+                        newLineAndIndent(out, format);
+                        printValue(out, part, format);
                     }
                 }
             } else {
                 // Only one array for the rbPath, so don't add an extra set of braces.
-                printArray(onlyValue, quote, isSequence, out);
+                printElements(out, onlyValue, format);
             }
         } else {
             for (RbValue value : values) {
                 if (value.isSingleton()) {
                     // Single-value array: print normally.
-                    printArray(value, quote, isSequence, out);
+                    printElements(out, value, format);
                 } else {
                     // Enclose this array in braces to separate it from other values.
                     open("", out);
-                    printArray(value, quote, isSequence, out);
+                    printElements(out, value, format);
                     close(out);
                 }
             }
@@ -240,18 +277,32 @@ final class IcuTextWriter {
             || rbPath.startsWith(RB_METAZONE_INFO);
     }
 
-    private void printArray(RbValue rbValue, boolean quote, boolean isSequence, PrintWriter out) {
-        for (String v : rbValue.getElements()) {
-            newLineAndIndent(out);
-            printValue(out, quoteInside(v), quote);
-            if (!isSequence) {
-                out.print(",");
+    private void printElements(PrintWriter out, RbValue rbValue, FormatOptions format) {
+        // TODO: If "shouldUseComma" is made obsolete, just use the "else" block always.
+        if (rbValue.getElementsPerLine() == 1) {
+            for (String v : rbValue.getElements()) {
+                newLineAndIndent(out, format);
+                printValue(out, quoteInside(v), format);
+                if (format.shouldUseComma) {
+                    out.print(",");
+                }
+            }
+        } else {
+            checkArgument(format.shouldUseComma, "cannot group non-sequence values");
+            Iterable<List<String>> partitions =
+                    Iterables.partition(rbValue.getElements(), rbValue.getElementsPerLine());
+            for (List<String> tuple : partitions) {
+                newLineAndIndent(out, format);
+                for (String v : tuple) {
+                    printValue(out, quoteInside(v), format);
+                    out.print(",");
+                }
             }
         }
     }
 
-    private static void printValue(PrintWriter out, String value, boolean quote) {
-        if (quote) {
+    private static void printValue(PrintWriter out, String value, FormatOptions format) {
+        if (format.shouldQuote) {
             out.append('"').append(value).append('"');
         } else {
             out.append(value);

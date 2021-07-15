@@ -920,7 +920,7 @@ private:
     int32_t            argTypeCapacity;
 
     /**
-     * TRUE if there are different argTypes for the same argument.
+     * true if there are different argTypes for the same argument.
      * This only matters when the MessageFormat is used in the plain C (umsg_xxx) API
      * where the pattern argTypes determine how the va_arg list is read.
      */

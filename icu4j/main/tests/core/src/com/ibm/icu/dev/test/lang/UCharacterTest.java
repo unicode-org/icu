@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /**
  *******************************************************************************
  * Copyright (C) 1996-2016, International Business Machines Corporation and
@@ -56,7 +56,7 @@ public final class UCharacterTest extends TestFmwk
     /**
      * Expected Unicode version.
      */
-    private final VersionInfo VERSION_ = VersionInfo.getInstance(12, 1);
+    private final VersionInfo VERSION_ = VersionInfo.getInstance(13);
 
     // constructor ===================================================
 

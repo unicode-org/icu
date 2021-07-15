@@ -19,6 +19,7 @@
 #include "unicode/ures.h"
 #include "unicode/numfmt.h"
 #include "unicode/decimfmt.h"
+#include "unicode/numberrangeformatter.h"
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -36,6 +37,8 @@
 #include "unifiedcache.h"
 #include "number_decimalquantity.h"
 #include "util.h"
+#include "pluralranges.h"
+#include "numrange_impl.h"
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -56,6 +59,7 @@ static const UChar PK_VAR_N[]={LOW_N,0};
 static const UChar PK_VAR_I[]={LOW_I,0};
 static const UChar PK_VAR_F[]={LOW_F,0};
 static const UChar PK_VAR_T[]={LOW_T,0};
+static const UChar PK_VAR_E[]={LOW_E,0};
 static const UChar PK_VAR_V[]={LOW_V,0};
 static const UChar PK_WITHIN[]={LOW_W,LOW_I,LOW_T,LOW_H,LOW_I,LOW_N,0};
 static const UChar PK_DECIMAL[]={LOW_D,LOW_E,LOW_C,LOW_I,LOW_M,LOW_A,LOW_L,0};
@@ -67,6 +71,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralKeywordEnumeration)
 PluralRules::PluralRules(UErrorCode& /*status*/)
 :   UObject(),
     mRules(nullptr),
+    mStandardPluralRanges(nullptr),
     mInternalStatus(U_ZERO_ERROR)
 {
 }
@@ -74,6 +79,7 @@ PluralRules::PluralRules(UErrorCode& /*status*/)
 PluralRules::PluralRules(const PluralRules& other)
 : UObject(other),
     mRules(nullptr),
+    mStandardPluralRanges(nullptr),
     mInternalStatus(U_ZERO_ERROR)
 {
     *this=other;
@@ -81,6 +87,7 @@ PluralRules::PluralRules(const PluralRules& other)
 
 PluralRules::~PluralRules() {
     delete mRules;
+    delete mStandardPluralRanges;
 }
 
 SharedPluralRules::~SharedPluralRules() {
@@ -89,14 +96,20 @@ SharedPluralRules::~SharedPluralRules() {
 
 PluralRules*
 PluralRules::clone() const {
-    PluralRules* newObj = new PluralRules(*this);
     // Since clone doesn't have a 'status' parameter, the best we can do is return nullptr if
     // the newly created object was not fully constructed properly (an error occurred).
-    if (newObj != nullptr && U_FAILURE(newObj->mInternalStatus)) {
-        delete newObj;
-        newObj = nullptr;
+    UErrorCode localStatus = U_ZERO_ERROR;
+    return clone(localStatus);
+}
+
+PluralRules*
+PluralRules::clone(UErrorCode& status) const {
+    LocalPointer<PluralRules> newObj(new PluralRules(*this), status);
+    if (U_SUCCESS(status) && U_FAILURE(newObj->mInternalStatus)) {
+        status = newObj->mInternalStatus;
+        newObj.adoptInstead(nullptr);
     }
-    return newObj;
+    return newObj.orphan();
 }
 
 PluralRules&
@@ -104,6 +117,8 @@ PluralRules::operator=(const PluralRules& other) {
     if (this != &other) {
         delete mRules;
         mRules = nullptr;
+        delete mStandardPluralRanges;
+        mStandardPluralRanges = nullptr;
         mInternalStatus = other.mInternalStatus;
         if (U_FAILURE(mInternalStatus)) {
             // bail out early if the object we were copying from was already 'invalid'.
@@ -118,6 +133,11 @@ PluralRules::operator=(const PluralRules& other) {
                 // If the RuleChain wasn't fully copied, then set our status to failure as well.
                 mInternalStatus = mRules->fInternalStatus;
             }
+        }
+        if (other.mStandardPluralRanges != nullptr) {
+            mStandardPluralRanges = other.mStandardPluralRanges->copy(mInternalStatus)
+                .toPointer(mInternalStatus)
+                .orphan();
         }
     }
     return *this;
@@ -211,11 +231,8 @@ PluralRules::forLocale(const Locale& locale, UPluralType type, UErrorCode& statu
     if (U_FAILURE(status)) {
         return nullptr;
     }
-    PluralRules *result = (*shared)->clone();
+    PluralRules *result = (*shared)->clone(status);
     shared->removeRef();
-    if (result == nullptr) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-    }
     return result;
 }
 
@@ -252,6 +269,10 @@ PluralRules::internalForLocale(const Locale& locale, UPluralType type, UErrorCod
         //        Original impl used default rules.
         //        Ask the question to ICU Core.
 
+    newObj->mStandardPluralRanges = StandardPluralRanges::forLocale(locale, status)
+        .toPointer(status)
+        .orphan();
+
     return newObj.orphan();
 }
 
@@ -272,6 +293,10 @@ PluralRules::select(const number::FormattedNumber& number, UErrorCode& status) c
     if (U_FAILURE(status)) {
         return ICU_Utility::makeBogusString();
     }
+    if (U_FAILURE(mInternalStatus)) {
+        status = mInternalStatus;
+        return ICU_Utility::makeBogusString();
+    }
     return select(dq);
 }
 
@@ -285,6 +310,33 @@ PluralRules::select(const IFixedDecimal &number) const {
     }
 }
 
+UnicodeString
+PluralRules::select(const number::FormattedNumberRange& range, UErrorCode& status) const {
+    return select(range.getData(status), status);
+}
+
+UnicodeString
+PluralRules::select(const number::impl::UFormattedNumberRangeData* impl, UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return ICU_Utility::makeBogusString();
+    }
+    if (U_FAILURE(mInternalStatus)) {
+        status = mInternalStatus;
+        return ICU_Utility::makeBogusString();
+    }
+    if (mStandardPluralRanges == nullptr) {
+        // Happens if PluralRules was constructed via createRules()
+        status = U_UNSUPPORTED_ERROR;
+        return ICU_Utility::makeBogusString();
+    }
+    auto form1 = StandardPlural::fromString(select(impl->quantity1), status);
+    auto form2 = StandardPlural::fromString(select(impl->quantity2), status);
+    if (U_FAILURE(status)) {
+        return ICU_Utility::makeBogusString();
+    }
+    auto result = mStandardPluralRanges->resolve(form1, form2);
+    return UnicodeString(StandardPlural::getKeyword(result), -1, US_INV);
+}
 
 
 StringEnumeration*
@@ -600,6 +652,7 @@ PluralRuleParser::parse(const UnicodeString& ruleData, PluralRules *prules, UErr
         case tVariableI:
         case tVariableF:
         case tVariableT:
+        case tVariableE:
         case tVariableV:
             U_ASSERT(curAndConstraint != nullptr);
             curAndConstraint->digitsType = type;
@@ -984,6 +1037,8 @@ static UnicodeString tokenString(tokenType tok) {
         s.append(LOW_V); break;
       case tVariableT:
         s.append(LOW_T); break;
+      case tVariableE:
+        s.append(LOW_E); break;
       default:
         s.append(TILDE);
     }
@@ -1160,6 +1215,7 @@ PluralRuleParser::checkSyntax(UErrorCode &status)
     case tVariableI:
     case tVariableF:
     case tVariableT:
+    case tVariableE:
     case tVariableV:
         if (type != tIs && type != tMod && type != tIn &&
             type != tNot && type != tWithin && type != tEqual && type != tNotEqual) {
@@ -1176,6 +1232,7 @@ PluralRuleParser::checkSyntax(UErrorCode &status)
               type == tVariableI ||
               type == tVariableF ||
               type == tVariableT ||
+              type == tVariableE ||
               type == tVariableV ||
               type == tAt)) {
             status = U_UNEXPECTED_TOKEN;
@@ -1207,6 +1264,7 @@ PluralRuleParser::checkSyntax(UErrorCode &status)
              type != tVariableI &&
              type != tVariableF &&
              type != tVariableT &&
+             type != tVariableE &&
              type != tVariableV) {
             status = U_UNEXPECTED_TOKEN;
         }
@@ -1384,6 +1442,8 @@ PluralRuleParser::getKeyType(const UnicodeString &token, tokenType keyType)
         keyType = tVariableF;
     } else if (0 == token.compare(PK_VAR_T, 1)) {
         keyType = tVariableT;
+    } else if (0 == token.compare(PK_VAR_E, 1)) {
+        keyType = tVariableE;
     } else if (0 == token.compare(PK_VAR_V, 1)) {
         keyType = tVariableV;
     } else if (0 == token.compare(PK_IS, 2)) {
@@ -1481,6 +1541,8 @@ PluralOperand tokenTypeToPluralOperand(tokenType tt) {
         return PLURAL_OPERAND_V;
     case tVariableT:
         return PLURAL_OPERAND_T;
+    case tVariableE:
+        return PLURAL_OPERAND_E;
     default:
         UPRV_UNREACHABLE;  // unexpected.
     }
@@ -1661,7 +1723,9 @@ int64_t FixedDecimal::getFractionalDigits(double n, int32_t v) {
       case 3: return (int64_t)(fract*1000.0 + 0.5);
       default:
           double scaled = floor(fract * pow(10.0, (double)v) + 0.5);
-          if (scaled > U_INT64_MAX) {
+          if (scaled >= static_cast<double>(U_INT64_MAX)) {
+              // Note: a double cannot accurately represent U_INT64_MAX. Casting it to double
+              //       will round up to the next representable value, which is U_INT64_MAX + 1.
               return U_INT64_MAX;
           } else {
               return (int64_t)scaled;
@@ -1693,6 +1757,7 @@ double FixedDecimal::getPluralOperand(PluralOperand operand) const {
         case PLURAL_OPERAND_F: return static_cast<double>(decimalDigits);
         case PLURAL_OPERAND_T: return static_cast<double>(decimalDigitsWithoutTrailingZeros);
         case PLURAL_OPERAND_V: return visibleDecimalDigitCount;
+        case PLURAL_OPERAND_E: return 0;
         default:
              UPRV_UNREACHABLE;  // unexpected.
     }

@@ -43,14 +43,17 @@ private:
     void TestLowerOrdinal();
     void Test_UTF8_COUNT_TRAIL_BYTES();
     void TestStringPiece();
+    void TestStringPieceFind();
     void TestStringPieceComparisons();
     void TestStringPieceOther();
 #ifdef U_HAVE_STRING_VIEW
     void TestStringPieceStringView();
 #endif
+    void TestStringPieceU8();
     void TestByteSink();
     void TestCheckedArrayByteSink();
     void TestStringByteSink();
+    void TestStringByteSinkAppendU8();
     void TestSTLCompatibility();
     void TestCharString();
     void TestCStr();

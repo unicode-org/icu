@@ -1,5 +1,5 @@
 # © 2017 and later: Unicode, Inc. and others.
-# License & terms of use: http://www.unicode.org/copyright.html#License
+# License & terms of use: http://www.unicode.org/copyright.html
 #
 # Data-driven test for XLocaleDistance.
 # Format
@@ -18,10 +18,10 @@ zh ; 	cmn ; 	0
 # fallback languages get closer distances, between script (40) and region (4)
  
 @debug
-to ; 	en ; 	14 ; 	100
+to ; 	en ; 	34 ; 	100
 no ; 	no-DE ; 	4
-nn ; 	no ; 	10
-no-DE ; 	nn ; 	14
+nn ; 	no ; 	20
+no-DE ; 	nn ; 	24
 no ; 	no ; 	0
 no ; 	da ; 	12
 da ; 	zh-Hant ; 	100

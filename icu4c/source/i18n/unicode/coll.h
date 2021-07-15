@@ -236,21 +236,21 @@ public:
     // Collator public methods --------------------------------------------
 
     /**
-     * Returns TRUE if "other" is the same as "this".
+     * Returns true if "other" is the same as "this".
      *
-     * The base class implementation returns TRUE if "other" has the same type/class as "this":
+     * The base class implementation returns true if "other" has the same type/class as "this":
      * `typeid(*this) == typeid(other)`.
      *
      * Subclass implementations should do something like the following:
      *
-     *     if (this == &other) { return TRUE; }
-     *     if (!Collator::operator==(other)) { return FALSE; }  // not the same class
+     *     if (this == &other) { return true; }
+     *     if (!Collator::operator==(other)) { return false; }  // not the same class
      *
      *     const MyCollator &o = (const MyCollator&)other;
      *     (compare this vs. o's subclass fields)
      *
      * @param other Collator object to be compared
-     * @return TRUE if other is the same as this.
+     * @return true if other is the same as this.
      * @stable ICU 2.0
      */
     virtual UBool operator==(const Collator& other) const;
@@ -259,7 +259,7 @@ public:
      * Returns true if "other" is not the same as "this".
      * Calls ! operator==(const Collator&) const which works for all subclasses.
      * @param other Collator object to be compared
-     * @return TRUE if other is not the same as this.
+     * @return true if other is not the same as this.
      * @stable ICU 2.0
      */
     virtual UBool operator!=(const Collator& other) const;
@@ -841,7 +841,7 @@ public:
      * Collator::createInstance to avoid undefined behavior.
      * @param key the registry key returned by a previous call to registerInstance
      * @param status the in/out status code, no special meanings are assigned
-     * @return TRUE if the collator for the key was successfully unregistered
+     * @return true if the collator for the key was successfully unregistered
      * @stable ICU 2.6
      */
     static UBool U_EXPORT2 unregister(URegistryKey key, UErrorCode& status);

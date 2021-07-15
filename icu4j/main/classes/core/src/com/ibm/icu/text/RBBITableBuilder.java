@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 **********************************************************************
 *   Copyright (c) 2002-2016, International Business Machines
@@ -53,8 +53,8 @@ class RBBITableBuilder {
                                                    //   in RBBITableBuilder.fDStates
 
         RBBIStateDescriptor(int maxInputSymbol) {
-            fTagVals = new TreeSet<Integer>();
-            fPositions = new HashSet<RBBINode>();
+            fTagVals = new TreeSet<>();
+            fPositions = new HashSet<>();
             fDtran = new int[maxInputSymbol+1];    // fDtran needs to be pre-sized.
                                                     //   It is indexed by input symbols, and will
                                                     //   hold  the next state number for each
@@ -74,6 +74,17 @@ class RBBITableBuilder {
     /** Synthesized safe table, a List of row arrays.  */
     private List<short[]>    fSafeTable;
 
+    private static final int MAX_STATE_FOR_8BITS_TABLE = 255;
+
+    /** Map from rule number (fVal in look ahead nodes) to sequential lookahead index. */
+    int[] fLookAheadRuleMap;
+
+    /** Counter used when assigning lookahead rule numbers.
+     * Contains the last look-ahead number already in use.
+     * The first look-ahead number is 2; Number 1 (ACCEPTING_UNCONDITIONAL) is reserved
+     * for non-lookahead accepting states. See the declarations of RBBIStateTableRowT.   */
+    int  fLASlotsInUse = RBBIDataWrapper.ACCEPTING_UNCONDITIONAL;
+
     //-----------------------------------------------------------------------------
     //
     //  Constructor    for RBBITableBuilder.
@@ -84,7 +95,7 @@ class RBBITableBuilder {
     RBBITableBuilder(RBBIRuleBuilder rb,  int rootNodeIx)  {
            fRootIx     = rootNodeIx;
            fRB         = rb;
-           fDStates    = new ArrayList<RBBIStateDescriptor>();
+           fDStates    = new ArrayList<>();
         }
 
 
@@ -137,7 +148,7 @@ class RBBITableBuilder {
            RBBINode cn = new RBBINode(RBBINode.opCat);
            cn.fLeftChild = fRB.fTreeRoots[fRootIx];
            fRB.fTreeRoots[fRootIx].fParent = cn;
-           cn.fRightChild = new RBBINode(RBBINode.endMark);
+           RBBINode endMarkerNode = cn.fRightChild = new RBBINode(RBBINode.endMark);
            cn.fRightChild.fParent = cn;
            fRB.fTreeRoots[fRootIx] = cn;
 
@@ -172,7 +183,7 @@ class RBBITableBuilder {
            //  For "chained" rules, modify the followPos sets
            //
            if (fRB.fChainRules) {
-               calcChainedFollowPos(fRB.fTreeRoots[fRootIx]);
+               calcChainedFollowPos(fRB.fTreeRoots[fRootIx], endMarkerNode);
            }
 
            //
@@ -186,6 +197,7 @@ class RBBITableBuilder {
            // Build the DFA state transition tables.
            //
            buildStateTable();
+           mapLookAheadRules();
            flagAcceptingStates();
            flagLookAheadStates();
            flagTaggedStates();
@@ -390,13 +402,9 @@ class RBBITableBuilder {
        //                            to implement rule chaining.  NOT described by Aho
        //
        //-----------------------------------------------------------------------------
-       void calcChainedFollowPos(RBBINode tree) {
+       void calcChainedFollowPos(RBBINode tree, RBBINode endMarkNode) {
 
-           List<RBBINode> endMarkerNodes = new ArrayList<RBBINode>();
-           List<RBBINode> leafNodes      = new ArrayList<RBBINode>();
-
-            // get a list of all endmarker nodes.
-           tree.findNodes(endMarkerNodes, RBBINode.endMark);
+           List<RBBINode> leafNodes      = new ArrayList<>();
 
            // get a list all leaf nodes
            tree.findNodes(leafNodes, RBBINode.leafChar);
@@ -405,10 +413,10 @@ class RBBITableBuilder {
            // with inbound chaining enabled, which is the union of the
            // firstPosition sets from each of the rule root nodes.
 
-           List<RBBINode> ruleRootNodes = new ArrayList<RBBINode>();
+           List<RBBINode> ruleRootNodes = new ArrayList<>();
            addRuleRootNodes(ruleRootNodes, tree);
 
-           Set<RBBINode> matchStartNodes = new HashSet<RBBINode>();
+           Set<RBBINode> matchStartNodes = new HashSet<>();
            for (RBBINode node: ruleRootNodes) {
                if (node.fChainIn) {
                    matchStartNodes.addAll(node.fFirstPosSet);
@@ -417,28 +425,26 @@ class RBBITableBuilder {
 
            // Iterate over all leaf nodes,
            //
-           for (RBBINode tNode : leafNodes) {
-               RBBINode endNode = null;
+           for (RBBINode endNode : leafNodes) {
 
                // Identify leaf nodes that correspond to overall rule match positions.
-               //   These include an endMarkerNode in their followPos sets.
-               for (RBBINode endMarkerNode : endMarkerNodes) {
-                   if (tNode.fFollowPos.contains(endMarkerNode)) {
-                       endNode = tNode;
-                       break;
-                   }
-               }
-               if (endNode == null) {
-                   // node wasn't an end node.  Try again with the next.
+               //   These include the endMarkNode in their followPos sets.
+               //
+               // Note: do not consider other end marker nodes, those that are added to
+               //       look-ahead rules. These can't chain; a match immediately stops
+               //       further matching. This leaves exactly one end marker node, the one
+               //       at the end of the complete tree.
+
+               if (!endNode.fFollowPos.contains(endMarkNode)) {
                    continue;
                }
 
                // We've got a node that can end a match.
 
-               // Line Break Specific hack:  If this node's val correspond to the $CM char class,
-               //                            don't chain from it.
-               // TODO:  Add rule syntax for this behavior, get specifics out of here and
-               //        into the rule file.
+               // !!LBCMNoChain implementation:  If this node's val correspond to
+               // the Line Break $CM char class, don't chain from it.
+               // TODO:  Remove this. !!LBCMNoChain is deprecated, and is not used
+               //             by any of the standard ICU rules.
                if (fRB.fLBCMNoChain) {
                    int c = this.fRB.fSetBuilder.getFirstChar(endNode.fVal);
                    if (c != -1) {
@@ -571,7 +577,7 @@ class RBBITableBuilder {
                    for (RBBINode p : T.fPositions) {
                        if ((p.fType == RBBINode.leafChar) &&  (p.fVal == a)) {
                            if (U == null) {
-                               U = new HashSet<RBBINode>();
+                               U = new HashSet<>();
                            }
                            U.addAll(p.fFollowPos);
                        }
@@ -610,7 +616,65 @@ class RBBITableBuilder {
            }
        }
 
+      /**
+       * mapLookAheadRules
+       *
+       */
+      void mapLookAheadRules() {
+          fLookAheadRuleMap =  new int[fRB.fScanner.numRules() + 1];
 
+          for (RBBIStateDescriptor sd: fDStates) {
+              int laSlotForState = 0;
+
+              // Establish the look-ahead slot for this state, if the state covers
+              // any look-ahead nodes - corresponding to the '/' in look-ahead rules.
+
+              // If any of the look-ahead nodes already have a slot assigned, use it,
+              // otherwise assign a new one.
+
+              boolean sawLookAheadNode = false;
+              for (RBBINode node: sd.fPositions) {
+                  if (node.fType != RBBINode.lookAhead) {
+                      continue;
+                  }
+                  sawLookAheadNode = true;
+                  int ruleNum = node.fVal;     // Set when rule was originally parsed.
+                  assert(ruleNum < fLookAheadRuleMap.length);
+                  assert(ruleNum > 0);
+                  int laSlot = fLookAheadRuleMap[ruleNum];
+                  if (laSlot != 0) {
+                      if (laSlotForState == 0) {
+                          laSlotForState = laSlot;
+                      } else {
+                          // TODO: figure out if this can fail, change to setting an error code if so.
+                          assert(laSlot == laSlotForState);
+                      }
+                  }
+              }
+              if (!sawLookAheadNode) {
+                  continue;
+              }
+
+              if (laSlotForState == 0) {
+                  laSlotForState = ++fLASlotsInUse;
+              }
+
+              // For each look ahead node covered by this state,
+              // set the mapping from the node's rule number to the look ahead slot.
+              // There can be multiple nodes/rule numbers going to the same la slot.
+
+              for (RBBINode node: sd.fPositions) {
+                  if (node.fType != RBBINode.lookAhead) {
+                      continue;
+                  }
+                  int ruleNum = node.fVal;     // Set when rule was originally parsed.
+                  int existingVal = fLookAheadRuleMap[ruleNum];
+                  assert(existingVal == 0 || existingVal == laSlotForState);
+                  fLookAheadRuleMap[ruleNum] = laSlotForState;
+              }
+          }
+
+      }
 
        //-----------------------------------------------------------------------------
        //
@@ -622,7 +686,7 @@ class RBBITableBuilder {
        //
        //-----------------------------------------------------------------------------
        void     flagAcceptingStates() {
-           List<RBBINode> endMarkerNodes = new ArrayList<RBBINode>();
+           List<RBBINode> endMarkerNodes = new ArrayList<>();
            RBBINode    endMarker;
            int     i;
            int     n;
@@ -633,36 +697,26 @@ class RBBITableBuilder {
                endMarker = endMarkerNodes.get(i);
                for (n=0; n<fDStates.size(); n++) {
                    RBBIStateDescriptor sd = fDStates.get(n);
-                   //if (sd.fPositions.indexOf(endMarker) >= 0) {
                    if (sd.fPositions.contains(endMarker)) {
                        // Any non-zero value for fAccepting means this is an accepting node.
                        // The value is what will be returned to the user as the break status.
-                       // If no other value was specified, force it to -1.
+                       // If no other value was specified, force it to ACCEPTING_UNCONDITIONAL (1).
 
                        if (sd.fAccepting==0) {
-                        // State hasn't been marked as accepting yet.  Do it now.
-                           sd.fAccepting = endMarker.fVal;
+                           // State hasn't been marked as accepting yet.  Do it now.
+                           sd.fAccepting = fLookAheadRuleMap[endMarker.fVal];
                            if (sd.fAccepting == 0) {
-                               sd.fAccepting = -1;
-                        }
+                               sd.fAccepting = RBBIDataWrapper.ACCEPTING_UNCONDITIONAL;
+                           }
                        }
-                       if (sd.fAccepting==-1 && endMarker.fVal != 0) {
-                        // Both lookahead and non-lookahead accepting for this state.
-                        // Favor the look-ahead.  Expedient for line break.
-                        // TODO:  need a more elegant resolution for conflicting rules.
-                        sd.fAccepting = endMarker.fVal;
-                    }
-                        // implicit else:
-                        // if sd.fAccepting already had a value other than 0 or -1, leave it be.
-
-                       // If the end marker node is from a look-ahead rule, set
-                       //   the fLookAhead field for this state also.
-                       if (endMarker.fLookAheadEnd) {
-                        // TODO:  don't change value if already set?
-                        // TODO:  allow for more than one active look-ahead rule in engine.
-                        //        Make value here an index to a side array in engine?
-                           sd.fLookAhead = sd.fAccepting;
+                       if (sd.fAccepting==RBBIDataWrapper.ACCEPTING_UNCONDITIONAL && endMarker.fVal != 0) {
+                           // Both lookahead and non-lookahead accepting for this state.
+                           // Favor the look-ahead, because a look-ahead match needs to
+                           // immediately stop the run-time engine. First match, not longest.
+                           sd.fAccepting = fLookAheadRuleMap[endMarker.fVal];
                        }
+                       // implicit else:
+                       // if sd.fAccepting already had a value other than 0 or 1, leave it be.
                    }
                }
            }
@@ -675,7 +729,7 @@ class RBBITableBuilder {
        //
        //-----------------------------------------------------------------------------
        void     flagLookAheadStates() {
-           List<RBBINode> lookAheadNodes = new ArrayList<RBBINode>();
+           List<RBBINode> lookAheadNodes = new ArrayList<>();
            RBBINode    lookAheadNode;
            int     i;
            int     n;
@@ -683,11 +737,12 @@ class RBBITableBuilder {
            fRB.fTreeRoots[fRootIx].findNodes(lookAheadNodes, RBBINode.lookAhead);
            for (i=0; i<lookAheadNodes.size(); i++) {
                lookAheadNode = lookAheadNodes.get(i);
-
                for (n=0; n<fDStates.size(); n++) {
                    RBBIStateDescriptor sd = fDStates.get(n);
                    if (sd.fPositions.contains(lookAheadNode)) {
-                       sd.fLookAhead = lookAheadNode.fVal;
+                       int lookaheadSlot = fLookAheadRuleMap[lookAheadNode.fVal];
+                       assert(sd.fLookAhead == 0 || sd.fLookAhead == lookaheadSlot);
+                       sd.fLookAhead = lookaheadSlot;
                    }
                }
            }
@@ -702,7 +757,7 @@ class RBBITableBuilder {
        //
        //-----------------------------------------------------------------------------
        void     flagTaggedStates() {
-           List<RBBINode> tagNodes = new ArrayList<RBBINode>();
+           List<RBBINode> tagNodes = new ArrayList<>();
            RBBINode    tagNode;
            int     i;
            int     n;
@@ -765,12 +820,12 @@ class RBBITableBuilder {
                fRB.fRuleStatusVals.add(Integer.valueOf(1));    // Num of statuses in group
                fRB.fRuleStatusVals.add(Integer.valueOf(0));    //   and our single status of zero
 
-               SortedSet<Integer> s0 = new TreeSet<Integer>();
-               Integer izero = Integer.valueOf(0);
-               fRB.fStatusSets.put(s0, izero);
-               SortedSet<Integer> s1 = new TreeSet<Integer>();
-               s1.add(izero);
-               fRB.fStatusSets.put(s0, izero);
+               SortedSet<Integer> s0 = new TreeSet<>();        // mapping for rules with no explicit tagging
+               fRB.fStatusSets.put(s0, Integer.valueOf(0));    //   (key is an empty set).
+
+               SortedSet<Integer> s1 = new TreeSet<>();        // mapping for rules with explicit tagging of {0}
+               s1.add(Integer.valueOf(0));
+               fRB.fStatusSets.put(s1, Integer.valueOf(0));
            }
 
            //    For each state, check whether the state's status tag values are
@@ -850,7 +905,13 @@ class RBBITableBuilder {
            int table_base = 0;
            int table_dupl = 0;
            for (; categories.first < numCols-1; ++categories.first) {
-               for (categories.second=categories.first+1; categories.second < numCols; ++categories.second) {
+               // Note: dictionary & non-dictionary columns cannot be merged.
+               //       The limitSecond value prevents considering mixed pairs.
+               //       Dictionary categories are >= DictCategoriesStart.
+               //       Non dict categories are   <  DictCategoriesStart.
+               int limitSecond = categories.first < fRB.fSetBuilder.getDictCategoriesStart() ?
+                   fRB.fSetBuilder.getDictCategoriesStart() : numCols;
+               for (categories.second=categories.first+1; categories.second < limitSecond; ++categories.second) {
                    for (int state=0; state<numStates; state++) {
                        RBBIStateDescriptor sd = fDStates.get(state);
                        table_base = sd.fDtran[categories.first];
@@ -986,16 +1047,6 @@ class RBBITableBuilder {
                    }
                    sd.fDtran[col] = newVal;
                }
-               if (sd.fAccepting == duplState) {
-                   sd.fAccepting = keepState;
-               } else if (sd.fAccepting > duplState) {
-                   sd.fAccepting--;
-               }
-               if (sd.fLookAhead == duplState) {
-                   sd.fLookAhead = keepState;
-               } else if (sd.fLookAhead > duplState) {
-                   sd.fLookAhead--;
-               }
            }
        }
 
@@ -1058,10 +1109,11 @@ class RBBITableBuilder {
            if (fRB.fTreeRoots[fRootIx] == null) {
                return 0;
            }
-           int size    = 16;    // The header of 4 ints, with no rows to the table.
+           int size    = RBBIDataWrapper.RBBIStateTable.fHeaderSize;    // The header, with no rows to the table.
            int numRows = fDStates.size();
            int numCols = fRB.fSetBuilder.getNumCharCategories();
-           int rowSize = 8 + 2*numCols;
+           boolean use8Bits = numRows <= MAX_STATE_FOR_8BITS_TABLE;
+           int rowSize = (use8Bits ? 1 : 2 ) * (RBBIDataWrapper.NEXTSTATES + numCols);
            size   += numRows * rowSize;
            size = (size + 7) & ~7;   // round up to a multiple of 8 bytes
            return size;
@@ -1086,13 +1138,23 @@ class RBBITableBuilder {
            Assert.assrt(fRB.fSetBuilder.getNumCharCategories() < 0x7fff &&
                fDStates.size() < 0x7fff);
            table.fNumStates = fDStates.size();
+           table.fDictCategoriesStart = fRB.fSetBuilder.getDictCategoriesStart();
+           table.fLookAheadResultsSize =
+                   fLASlotsInUse == RBBIDataWrapper.ACCEPTING_UNCONDITIONAL ? 0 : fLASlotsInUse + 1;
+           boolean use8Bits = table.fNumStates <= MAX_STATE_FOR_8BITS_TABLE;
 
            // Size of table size in shorts.
-           //  the "4" is the size of struct RBBIStateTableRow, the row header part only.
-           int rowLen = 4 + fRB.fSetBuilder.getNumCharCategories();   // Row Length in shorts.
-           int tableSize = (getTableSize() - 16) / 2;       // fTable length in shorts.
-           table.fTable = new short[tableSize];
-           table.fRowLen = rowLen * 2;                      // Row length in bytes.
+           int rowLen = RBBIDataWrapper.NEXTSTATES + fRB.fSetBuilder.getNumCharCategories();   // Row Length in shorts.
+           int tableSize;
+           if (use8Bits) {
+               tableSize = (getTableSize() - RBBIDataWrapper.RBBIStateTable.fHeaderSize);       // fTable length in bytes.
+               table.fTable = new char[tableSize];
+               table.fRowLen = rowLen;                          // Row length in bytes.
+           } else {
+               tableSize = (getTableSize() - RBBIDataWrapper.RBBIStateTable.fHeaderSize) / 2;   // fTable length in shorts.
+               table.fTable = new char[tableSize];
+               table.fRowLen = rowLen * 2;                      // Row length in bytes.
+           }
 
            if (fRB.fLookAheadHardBreak) {
                table.fFlags  |= RBBIDataWrapper.RBBI_LOOKAHEAD_HARD_BREAK;
@@ -1100,18 +1162,29 @@ class RBBITableBuilder {
            if (fRB.fSetBuilder.sawBOF()) {
                table.fFlags  |= RBBIDataWrapper.RBBI_BOF_REQUIRED;
            }
+           if (use8Bits) {
+               table.fFlags  |= RBBIDataWrapper.RBBI_8BITS_ROWS;
+           }
 
            int numCharCategories = fRB.fSetBuilder.getNumCharCategories();
            for (state=0; state<table.fNumStates; state++) {
                RBBIStateDescriptor sd = fDStates.get(state);
                int row = state*rowLen;
-               Assert.assrt (-32768 < sd.fAccepting && sd.fAccepting <= 32767);
-               Assert.assrt (-32768 < sd.fLookAhead && sd.fLookAhead <= 32767);
-               table.fTable[row + RBBIDataWrapper.ACCEPTING] = (short)sd.fAccepting;
-               table.fTable[row + RBBIDataWrapper.LOOKAHEAD] = (short)sd.fLookAhead;
-               table.fTable[row + RBBIDataWrapper.TAGIDX]    = (short)sd.fTagsIdx;
+               if (use8Bits) {
+                   Assert.assrt (0 <= sd.fAccepting && sd.fAccepting <= 255);
+                   Assert.assrt (0 <= sd.fLookAhead && sd.fLookAhead <= 255);
+               } else {
+                   Assert.assrt (0 <= sd.fAccepting && sd.fAccepting <= 0xffff);
+                   Assert.assrt (0 <= sd.fLookAhead && sd.fLookAhead <= 0xffff);
+               }
+               table.fTable[row + RBBIDataWrapper.ACCEPTING] = (char)sd.fAccepting;
+               table.fTable[row + RBBIDataWrapper.LOOKAHEAD] = (char)sd.fLookAhead;
+               table.fTable[row + RBBIDataWrapper.TAGSIDX]   = (char)sd.fTagsIdx;
                for (col=0; col<numCharCategories; col++) {
-                   table.fTable[row + RBBIDataWrapper.NEXTSTATES + col] = (short)sd.fDtran[col];
+                   if (use8Bits) {
+                       Assert.assrt (0 <= sd.fDtran[col] && sd.fDtran[col] <= MAX_STATE_FOR_8BITS_TABLE);
+                   }
+                   table.fTable[row + RBBIDataWrapper.NEXTSTATES + col] = (char)sd.fDtran[col];
                }
            }
            return table;
@@ -1167,7 +1240,7 @@ class RBBITableBuilder {
            // fLookAhead, etc. are not needed for the safe table, and are omitted at this stage of building.
 
            assert(fSafeTable == null);
-           fSafeTable = new ArrayList<short[]>();
+           fSafeTable = new ArrayList<>();
            for (int row=0; row<numCharClasses + 2; ++row) {
                fSafeTable.add(new short[numCharClasses]);
            }
@@ -1211,10 +1284,12 @@ class RBBITableBuilder {
            if (fSafeTable == null) {
                return 0;
            }
-           int size    = 16;    // The header of 4 ints, with no rows to the table.
+           int size    = RBBIDataWrapper.RBBIStateTable.fHeaderSize;    // The header, with no rows to the table.
            int numRows = fSafeTable.size();
            int numCols = fSafeTable.get(0).length;
-           int rowSize = 8 + 2*numCols;
+           boolean use8Bits = numRows <= MAX_STATE_FOR_8BITS_TABLE;
+
+           int rowSize = (use8Bits ? 1 : 2 ) * (RBBIDataWrapper.NEXTSTATES + numCols);
            size += numRows * rowSize;
            // TODO: there are redundant round-up. Figure out best place, get rid of the rest.
            size = (size + 7) & ~7;   // round up to a multiple of 8 bytes
@@ -1230,23 +1305,33 @@ class RBBITableBuilder {
        RBBIDataWrapper.RBBIStateTable exportSafeTable() {
            RBBIDataWrapper.RBBIStateTable table = new RBBIDataWrapper.RBBIStateTable();
            table.fNumStates = fSafeTable.size();
+           boolean use8Bits = table.fNumStates <= MAX_STATE_FOR_8BITS_TABLE;
            int numCharCategories = fSafeTable.get(0).length;
 
            // Size of table size in shorts.
-           //  the "4" is the size of struct RBBIStateTableRow, the row header part only.
-           int rowLen = 4 + numCharCategories;
+           int rowLen = RBBIDataWrapper.NEXTSTATES + numCharCategories;
            // TODO: tableSize is basically numStates * numCharCategories,
            //       except for alignment padding. Clean up here, and in main exportTable().
-           int tableSize = (getSafeTableSize() - 16) / 2;   // fTable length in shorts.
-           table.fTable = new short[tableSize];
-           table.fRowLen = rowLen * 2;                      // Row length in bytes.
+           int tableSize = (getSafeTableSize() - RBBIDataWrapper.RBBIStateTable.fHeaderSize);     // fTable length in bytes.
+           if (use8Bits) {
+               table.fFlags  |= RBBIDataWrapper.RBBI_8BITS_ROWS;
+               table.fTable = new char[tableSize];
+               table.fRowLen = rowLen;                          // Row length in bytes.
+           } else {
+               tableSize /= 2;   // fTable length in shorts.
+               table.fTable = new char[tableSize];
+               table.fRowLen = rowLen * 2;                      // Row length in bytes.
+           }
 
            for (int state=0; state<table.fNumStates; state++) {
                short[] rowArray = fSafeTable.get(state);
                int row = state * rowLen;
 
                for (int col=0; col<numCharCategories; col++) {
-                   table.fTable[row + RBBIDataWrapper.NEXTSTATES + col] = rowArray[col];
+                   if (use8Bits) {
+                       Assert.assrt (rowArray[col] <= MAX_STATE_FOR_8BITS_TABLE);
+                   }
+                   table.fTable[row + RBBIDataWrapper.NEXTSTATES + col] = (char)rowArray[col];
                }
            }
            return table;
@@ -1281,12 +1366,12 @@ class RBBITableBuilder {
            System.out.print("state |           i n p u t     s y m b o l s \n");
            System.out.print("      | Acc  LA    Tag");
            for (c=0; c<fRB.fSetBuilder.getNumCharCategories(); c++) {
-               RBBINode.printInt(c, 3);
+               RBBINode.printInt(c, 4);
            }
            System.out.print("\n");
            System.out.print("      |---------------");
            for (c=0; c<fRB.fSetBuilder.getNumCharCategories(); c++) {
-               System.out.print("---");
+               System.out.print("----");
            }
            System.out.print("\n");
 
@@ -1300,7 +1385,7 @@ class RBBITableBuilder {
                RBBINode.printInt(sd.fTagsIdx, 6);
                System.out.print(" ");
                for (c=0; c<fRB.fSetBuilder.getNumCharCategories(); c++) {
-                   RBBINode.printInt(sd.fDtran[c], 3);
+                   RBBINode.printInt(sd.fDtran[c], 4);
                }
                System.out.print("\n");
            }

@@ -51,6 +51,7 @@ void NumberRangeFormatterTest::runIndexedTest(int32_t index, UBool exec, const c
         TESTCASE_AUTO(testFieldPositions);
         TESTCASE_AUTO(testCopyMove);
         TESTCASE_AUTO(toObject);
+        TESTCASE_AUTO(testGetDecimalNumbers);
     TESTCASE_AUTO_END;
 }
 
@@ -857,6 +858,48 @@ void NumberRangeFormatterTest::toObject() {
     // make sure no memory leaks
     {
         NumberRangeFormatter::with().clone();
+    }
+}
+
+void NumberRangeFormatterTest::testGetDecimalNumbers() {
+    IcuTestErrorCode status(*this, "testGetDecimalNumbers");
+
+    LocalizedNumberRangeFormatter lnf = NumberRangeFormatter::withLocale("en")
+        .numberFormatterBoth(NumberFormatter::with().unit(USD));
+
+    // Range of numbers
+    {
+        FormattedNumberRange range = lnf.formatFormattableRange(1, 5, status);
+        assertEquals("Range: Formatted string should be as expected",
+            u"$1.00 \u2013 $5.00",
+            range.toString(status));
+        auto decimalNumbers = range.getDecimalNumbers<std::string>(status);
+        // TODO(ICU-21281): DecNum doesn't retain trailing zeros. Is that a problem?
+        if (logKnownIssue("ICU-21281")) {
+            assertEquals("First decimal number", "1", decimalNumbers.first.c_str());
+            assertEquals("Second decimal number", "5", decimalNumbers.second.c_str());
+        } else {
+            assertEquals("First decimal number", "1.00", decimalNumbers.first.c_str());
+            assertEquals("Second decimal number", "5.00", decimalNumbers.second.c_str());
+        }
+    }
+
+    // Identity fallback
+    {
+        FormattedNumberRange range = lnf.formatFormattableRange(3, 3, status);
+        assertEquals("Identity: Formatted string should be as expected",
+            u"~$3.00",
+            range.toString(status));
+        auto decimalNumbers = range.getDecimalNumbers<std::string>(status);
+        // NOTE: DecNum doesn't retain trailing zeros. Is that a problem?
+        // TODO(ICU-21281): DecNum doesn't retain trailing zeros. Is that a problem?
+        if (logKnownIssue("ICU-21281")) {
+            assertEquals("First decimal number", "3", decimalNumbers.first.c_str());
+            assertEquals("Second decimal number", "3", decimalNumbers.second.c_str());
+        } else {
+            assertEquals("First decimal number", "3.00", decimalNumbers.first.c_str());
+            assertEquals("Second decimal number", "3.00", decimalNumbers.second.c_str());
+        }
     }
 }
 

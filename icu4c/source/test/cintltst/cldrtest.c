@@ -555,19 +555,18 @@ TestLocaleStructure(void) {
             ures_close(currentLocale);
             continue;
         }
-        ures_getStringByKey(currentLocale, "Version", NULL, &errorCode);
-        if(errorCode != U_ZERO_ERROR) {
+        const UChar *version = ures_getStringByKey(currentLocale, "Version", NULL, &errorCode);
+        if(U_FAILURE(errorCode)) {
             log_err("No version information is available for locale %s, and it should be!\n",
                 currLoc);
         }
-        else if (ures_getStringByKey(currentLocale, "Version", NULL, &errorCode)[0] == (UChar)(0x78)) {
-            log_verbose("WARNING: The locale %s is experimental! It shouldn't be listed as an installed locale.\n",
-                currLoc);
+        else if (version[0] == u'x') {
+            log_verbose("WARNING: The locale %s is experimental! "
+                        "It shouldn't be listed as an installed locale.\n",
+                        currLoc);
         }
         resolvedLoc = ures_getLocaleByType(currentLocale, ULOC_ACTUAL_LOCALE, &errorCode);
         if (strcmp(resolvedLoc, currLoc) != 0) {
-            /* All locales have at least a Version resource.
-               If it's absolutely empty, then the previous test will fail too.*/
             log_err("Locale resolves to different locale. Is %s an alias of %s?\n",
                 currLoc, resolvedLoc);
         }
@@ -1092,11 +1091,11 @@ static void VerifyTranslation(void) {
                if (U_FAILURE(errorCode)) {
                    log_err("ulocdata_getMeasurementSystem failed for locale %s with error: %s \n", currLoc, u_errorName(errorCode));
                } else {
-                   if ( strstr(fullLoc, "_US")!=NULL || strstr(fullLoc, "_MM")!=NULL || strstr(fullLoc, "_LR")!=NULL ) {
+                   if ( strstr(fullLoc, "_US")!=NULL || strstr(fullLoc, "_LR")!=NULL ) {
                        if(measurementSystem != UMS_US){
                             log_err("ulocdata_getMeasurementSystem did not return expected data for locale %s \n", currLoc);
                        }
-                   } else if ( strstr(fullLoc, "_GB")!=NULL ) {
+                   } else if ( strstr(fullLoc, "_GB")!=NULL || strstr(fullLoc, "_MM")!=NULL ) {
                        if(measurementSystem != UMS_UK){
                             log_err("ulocdata_getMeasurementSystem did not return expected data for locale %s \n", currLoc);
                        }

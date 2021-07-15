@@ -59,6 +59,7 @@ public:
     void TestT10334(void);
     void TestT10619(void);
     void TestT10855(void);
+    void TestT10858(void);
     void TestT10906(void);
     void TestT13380(void);
  };

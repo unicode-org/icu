@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 he{
     AuxExemplarCharacters{
         "[\u05BD\u05C4\u200E\u200F \u05B0 \u05B1 \u05B2 \u05B3 \u05B4 \u05B5 \u05B6 "
@@ -301,7 +302,6 @@ he{
         native{"latn"}
         traditional{"hebr"}
     }
-    Version{"36"}
     calendar{
         buddhist{
             eras{
@@ -2971,7 +2971,7 @@ he{
                 "0"{"השבוע"}
                 "1"{"השבוע הבא"}
             }
-            relativePeriod{"השבוע של"}
+            relativePeriod{"השבוע של {0}"}
             relativeTime{
                 future{
                     many{"בעוד {0} שבועות"}

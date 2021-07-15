@@ -107,6 +107,8 @@ public:
 
     void TestCanonicalization(void);
 
+    void TestCanonicalize(void);
+
 #if !UCONFIG_NO_FORMATTING
     static UDate date(int32_t y, int32_t m, int32_t d, int32_t hr = 0, int32_t min = 0, int32_t sec = 0);
 #endif
@@ -119,6 +121,9 @@ public:
     void TestBug13277();
     void TestBug13554();
     void TestBug20410();
+    void TestBug20900();
+    void TestLocaleCanonicalizationFromFile();
+    void TestKnownCanonicalizedListCorrect();
     void TestConstructorAcceptsBCP47();
 
     void TestAddLikelySubtags();
@@ -127,6 +132,7 @@ public:
 
     void TestForLanguageTag();
     void TestToLanguageTag();
+    void TestToLanguageTagOmitTrue();
 
     void TestMoveAssign();
     void TestMoveCtor();

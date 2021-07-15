@@ -40,8 +40,12 @@ public class PseudoLocalesTest {
                 value(excluded, "Skipped"),
                 value(pattern, "'plus' HH:mm; 'minus' HH:mm"),
                 value(narrow, "Skipped"))
-            .addInheritedData("en",
-                value(inherited, "UTC"));
+            .addLocaleData("en_001", value(inherited, "UTC"))
+            .setLocaleParent("en", "en_001")
+            // Root is the eventual parent of everything but its value should not appear, even
+            // though the expansion would apply if the paths were overridden.
+            .addLocaleData("root", value(ldmlPath("delimiters/quotationStart"), "“"))
+            .addLocaleData("root", value(ldmlPath("delimiters/quotationEnd"), "”"));
 
         CldrDataSupplier pseudo = PseudoLocales.addPseudoLocalesTo(src);
         assertThat(pseudo.getAvailableLocaleIds()).containsAtLeast("en_XA", "ar_XB");
@@ -75,12 +79,12 @@ public class PseudoLocalesTest {
             .addLocaleData("en",
                 value(included, "{Hello} {0} {World} 100x"),
                 value(pattern, "'plus' HH:mm; 'minus' HH:mm"))
-            .addInheritedData("en",
-                value(inherited, "UTC"));
+            .addLocaleData("en_001", value(inherited, "UTC"))
+            .setLocaleParent("en", "en_001");
 
         CldrDataSupplier pseudo = PseudoLocales.addPseudoLocalesTo(src);
 
-        // The pseudo locale should combine both explicit and inherited data from 'en'.
+        // The pseudo locale should combine both explicit and inherited data from 'en' and 'en_001'.
         CldrData unresolved = pseudo.getDataForLocale("ar_XB", UNRESOLVED);
 
         // These are a kind of golden data test because it's super hard to really reason about
@@ -101,7 +105,7 @@ public class PseudoLocalesTest {
     @Test
     public void testLatinNumbering() {
         CldrValue latn = value(ldmlPath("numbers/defaultNumberingSystem"), "latn");
-        FakeDataSupplier src = new FakeDataSupplier().addInheritedData("en", latn);
+        FakeDataSupplier src = new FakeDataSupplier().addLocaleData("root", latn);
 
         CldrDataSupplier pseudo = PseudoLocales.addPseudoLocalesTo(src);
 
@@ -118,7 +122,7 @@ public class PseudoLocalesTest {
         CldrDataSupplier pseudo = PseudoLocales.addPseudoLocalesTo(src);
 
         assertValuesUnordered(pseudo.getDataForLocale("ar_XB", UNRESOLVED),
-            value(exemplarsPath, "[a b c d e f g h i j k l m n o p q r s t u v w x y z]"));
+            value(exemplarsPath, "[a b c d e f g h i j k l m n o p q r s t u v w x y z \\u061C \\u202E \\u202C]"));
         assertValuesUnordered(pseudo.getDataForLocale("en_XA", UNRESOLVED),
             value(exemplarsPath,
                 "[a å b ƀ c ç d ð e é f ƒ g ĝ h ĥ i î j ĵ k ķ l ļ m ɱ"

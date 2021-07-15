@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ro{
-    Version{"36"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -15,7 +15,7 @@ ro{
                 one{"{0} forță g"}
                 other{"{0} forță g"}
             }
-            meter-per-second-squared{
+            meter-per-square-second{
                 dnam{"metri pe secundă la pătrat"}
                 few{"{0} metri pe secundă la pătrat"}
                 one{"{0} metru pe secundă la pătrat"}
@@ -150,12 +150,6 @@ ro{
                 one{"{0} mol"}
                 other{"{0} de moli"}
             }
-            part-per-million{
-                dnam{"părți pe milion"}
-                few{"{0} părți pe milion"}
-                one{"{0} parte pe milion"}
-                other{"{0} de părți pe milion"}
-            }
             percent{
                 dnam{"procent"}
                 few{"{0} procente"}
@@ -168,6 +162,12 @@ ro{
                 one{"la mie"}
                 other{"{0} la mie"}
             }
+            permillion{
+                dnam{"părți pe milion"}
+                few{"{0} părți pe milion"}
+                one{"{0} parte pe milion"}
+                other{"{0} de părți pe milion"}
+            }
             permyriad{
                 few{"{0} la zece mii"}
                 one{"{0} la zece mii"}
@@ -175,7 +175,7 @@ ro{
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"litri la suta de kilometri"}
                 few{"{0} litri la suta de kilometri"}
                 one{"{0} litru la suta de kilometri"}
@@ -479,8 +479,14 @@ ro{
             }
         }
         graphics{
+            dot{
+                dnam{"punct"}
+                few{"{0} puncte"}
+                one{"{0} punct"}
+                other{"{0} de puncte"}
+            }
             dot-per-centimeter{
-                dnam{"puncte pe centimeru"}
+                dnam{"puncte pe centimetru"}
                 few{"{0} puncte pe centimetru"}
                 one{"{0} punct pe centimetru"}
                 other{"{0} de puncte pe centimetru"}
@@ -539,12 +545,30 @@ ro{
                 one{"{0} decimetru"}
                 other{"{0} de decimetri"}
             }
+            earth-radius{
+                dnam{"rază terestră"}
+                few{"{0} raze terestre"}
+                one{"{0} rază terestră"}
+                other{"{0} de raze terestre"}
+            }
+            fathom{
+                dnam{"fathomi"}
+                few{"{0} fathomi"}
+                one{"{0} fathom"}
+                other{"{0} de fathomi"}
+            }
             foot{
                 dnam{"picioare"}
                 few{"{0} picioare"}
                 one{"{0} picior"}
                 other{"{0} de picioare"}
                 per{"{0} pe picior"}
+            }
+            furlong{
+                dnam{"furlongi"}
+                few{"{0} furlongi"}
+                one{"{0} furlong"}
+                other{"{0} de furlongi"}
             }
             inch{
                 dnam{"inchi"}
@@ -623,9 +647,9 @@ ro{
             }
             point{
                 dnam{"puncte"}
-                few{"{0} puncte"}
-                one{"{0} punct"}
-                other{"{0} de puncte"}
+                few{"{0} puncte tipografice"}
+                one{"{0} punct tipografic"}
+                other{"{0} de puncte tipografice"}
             }
             solar-radius{
                 dnam{"raze solare"}
@@ -641,6 +665,18 @@ ro{
             }
         }
         light{
+            candela{
+                dnam{"candelă"}
+                few{"{0} candele"}
+                one{"{0} candelă"}
+                other{"{0} de candele"}
+            }
+            lumen{
+                dnam{"lumen"}
+                few{"{0} lumeni"}
+                one{"{0} lumen"}
+                other{"{0} de lumeni"}
+            }
             lux{
                 dnam{"lucși"}
                 few{"{0} lucși"}
@@ -672,6 +708,12 @@ ro{
                 few{"{0} mase terestre"}
                 one{"{0} masă terestră"}
                 other{"{0} de mase terestre"}
+            }
+            grain{
+                dnam{"boabă"}
+                few{"{0} boabe"}
+                one{"{0} boabă"}
+                other{"{0} de boabe"}
             }
             gram{
                 dnam{"grame"}
@@ -730,6 +772,12 @@ ro{
                 few{"{0} mase solare"}
                 one{"{0} masă solară"}
                 other{"{0} de mase solare"}
+            }
+            stone{
+                dnam{"stone"}
+                few{"{0} stone"}
+                one{"{0} stone"}
+                other{"{0} de stone"}
             }
             ton{
                 dnam{"tone scurte"}
@@ -795,7 +843,7 @@ ro{
                 one{"{0} hectopascal"}
                 other{"{0} de hectopascali"}
             }
-            inch-hg{
+            inch-ofhg{
                 dnam{"inchi coloană de mercur"}
                 few{"{0} inchi coloană de mercur"}
                 one{"{0} inch coloană de mercur"}
@@ -819,7 +867,7 @@ ro{
                 one{"{0} milibar"}
                 other{"{0} de milibari"}
             }
-            millimeter-of-mercury{
+            millimeter-ofhg{
                 dnam{"milimetri coloană de mercur"}
                 few{"{0} milimetri coloană de mercur"}
                 one{"{0} milimetru coloană de mercur"}
@@ -831,7 +879,7 @@ ro{
                 one{"{0} pascal"}
                 other{"{0} de pascali"}
             }
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 dnam{"livre pe inch pătrat"}
                 few{"{0} livre pe inch pătrat"}
                 one{"{0} livră pe inch pătrat"}
@@ -897,7 +945,7 @@ ro{
                 one{"{0} newton metru"}
                 other{"{0} de newton metri"}
             }
-            pound-foot{
+            pound-force-foot{
                 dnam{"livră-forță picioare"}
                 few{"{0} livră-forță picioare"}
                 one{"{0} livră-forță picior"}
@@ -916,6 +964,12 @@ ro{
                 few{"{0} barili"}
                 one{"{0} baril"}
                 other{"{0} de barili"}
+            }
+            bushel{
+                dnam{"banițe"}
+                few{"{0} banițe"}
+                one{"{0} baniță"}
+                other{"{0} de banițe"}
             }
             centiliter{
                 dnam{"centilitri"}
@@ -985,6 +1039,30 @@ ro{
                 one{"{0} decilitru"}
                 other{"{0} de decilitri"}
             }
+            dessert-spoon{
+                dnam{"lingură de desert"}
+                few{"{0} linguri de desert"}
+                one{"{0} lingură de desert"}
+                other{"{0} de linguri de desert"}
+            }
+            dessert-spoon-imperial{
+                dnam{"Lingură de desert imperială"}
+                few{"{0} linguri de desert imperiale"}
+                one{"{0} lingură de desert imperială"}
+                other{"{0} de linguri de desert imperiale"}
+            }
+            dram{
+                dnam{"dram lichid"}
+                few{"{0} drami lichizi"}
+                one{"{0} dram lichid"}
+                other{"{0} de drami lichizi"}
+            }
+            drop{
+                dnam{"picătură"}
+                few{"{0} picături"}
+                one{"{0} picătură"}
+                other{"{0} de picături"}
+            }
             fluid-ounce{
                 dnam{"uncii lichide"}
                 few{"{0} uncii lichide"}
@@ -1017,6 +1095,12 @@ ro{
                 one{"{0} hectolitru"}
                 other{"{0} de hectolitri"}
             }
+            jigger{
+                dnam{"jigger"}
+                few{"{0} jiggere"}
+                one{"{0} jigger"}
+                other{"{0} de jiggere"}
+            }
             liter{
                 dnam{"litri"}
                 few{"{0} litri"}
@@ -1036,6 +1120,12 @@ ro{
                 one{"{0} mililitru"}
                 other{"{0} de mililitri"}
             }
+            pinch{
+                dnam{"vârf de cuțit"}
+                few{"{0} vârfuri de cuțit"}
+                one{"{0} vârf de cuțit"}
+                other{"{0} de vârfuri de cuțit"}
+            }
             pint{
                 dnam{"pinte"}
                 few{"{0} pinte"}
@@ -1053,6 +1143,12 @@ ro{
                 few{"{0} quarte"}
                 one{"{0} quart"}
                 other{"{0} de quarte"}
+            }
+            quart-imperial{
+                dnam{"quart imperial"}
+                few{"{0} quarte imperiale"}
+                one{"{0} quart imperial"}
+                other{"{0} de quarte imperiale"}
             }
             tablespoon{
                 dnam{"linguri"}
@@ -1075,7 +1171,7 @@ ro{
                 one{"{0} G"}
                 other{"{0} G"}
             }
-            meter-per-second-squared{
+            meter-per-square-second{
                 dnam{"m/s²"}
                 few{"{0} m/s²"}
                 one{"{0} m/s²"}
@@ -1144,7 +1240,7 @@ ro{
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"l/100 km"}
                 few{"{0} l/100 km"}
                 one{"{0} l/100 km"}
@@ -1444,7 +1540,7 @@ ro{
                 one{"{0} hPa"}
                 other{"{0} hPa"}
             }
-            inch-hg{
+            inch-ofhg{
                 dnam{"in Hg"}
             }
             millibar{
@@ -1453,13 +1549,13 @@ ro{
                 one{"{0} mb"}
                 other{"{0} mb"}
             }
-            millimeter-of-mercury{
+            millimeter-ofhg{
                 dnam{"mm Hg"}
                 few{"{0} mm Hg"}
                 one{"{0} mm Hg"}
                 other{"{0} mm Hg"}
             }
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 dnam{"psi"}
                 few{"{0} psi"}
                 one{"{0} psi"}
@@ -1542,7 +1638,7 @@ ro{
                 one{"{0} G"}
                 other{"{0} G"}
             }
-            meter-per-second-squared{
+            meter-per-square-second{
                 dnam{"m/s²"}
                 few{"{0} m/s²"}
                 one{"{0} m/s²"}
@@ -1676,12 +1772,6 @@ ro{
                 one{"{0} mol"}
                 other{"{0} moli"}
             }
-            part-per-million{
-                dnam{"ppm"}
-                few{"{0} ppm"}
-                one{"{0} ppm"}
-                other{"{0} ppm"}
-            }
             percent{
                 dnam{"%"}
                 few{"{0}%"}
@@ -1694,9 +1784,15 @@ ro{
                 one{"{0}‰"}
                 other{"{0}‰"}
             }
+            permillion{
+                dnam{"ppm"}
+                few{"{0} ppm"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
+            }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"l/100 km"}
                 few{"{0} l/100 km"}
                 one{"{0} l/100 km"}
@@ -1997,6 +2093,12 @@ ro{
             }
         }
         graphics{
+            dot{
+                dnam{"pct."}
+                few{"{0} pct."}
+                one{"{0} pct"}
+                other{"{0} de pct."}
+            }
             dot-per-centimeter{
                 dnam{"dpc"}
                 few{"{0} dpc"}
@@ -2033,12 +2135,18 @@ ro{
                 one{"{0} dm"}
                 other{"{0} dm"}
             }
+            fathom{
+                dnam{"fathomi"}
+            }
             foot{
                 dnam{"ft"}
                 few{"{0} ft"}
                 one{"{0} ft"}
                 other{"{0} ft"}
                 per{"{0}/ft"}
+            }
+            furlong{
+                dnam{"furlongi"}
             }
             inch{
                 dnam{"in"}
@@ -2161,6 +2269,12 @@ ro{
                 one{"{0} M⊕"}
                 other{"{0} M⊕"}
             }
+            grain{
+                dnam{"boabă"}
+                few{"{0} boabe"}
+                one{"{0} boabă"}
+                other{"{0} boabe"}
+            }
             gram{
                 dnam{"grame"}
                 few{"{0} g"}
@@ -2280,7 +2394,7 @@ ro{
                 one{"{0} hPa"}
                 other{"{0} hPa"}
             }
-            inch-hg{
+            inch-ofhg{
                 dnam{"in Hg"}
                 few{"{0} in Hg"}
                 one{"{0} in Hg"}
@@ -2304,13 +2418,13 @@ ro{
                 one{"{0} mbar"}
                 other{"{0} mbar"}
             }
-            millimeter-of-mercury{
+            millimeter-ofhg{
                 dnam{"mm Hg"}
                 few{"{0} mm Hg"}
                 one{"{0} mm Hg"}
                 other{"{0} mm Hg"}
             }
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 dnam{"psi"}
                 few{"{0} psi"}
                 one{"{0} psi"}
@@ -2376,7 +2490,7 @@ ro{
                 one{"{0} N⋅m"}
                 other{"{0} N⋅m"}
             }
-            pound-foot{
+            pound-force-foot{
                 dnam{"livră-forță picior"}
             }
         }
@@ -2389,6 +2503,9 @@ ro{
             }
             barrel{
                 dnam{"baril"}
+            }
+            bushel{
+                dnam{"banițe"}
             }
             centiliter{
                 dnam{"cl"}
@@ -2458,6 +2575,15 @@ ro{
                 one{"{0} dl"}
                 other{"{0} dl"}
             }
+            dram{
+                dnam{"dram lichid"}
+            }
+            drop{
+                dnam{"picătură"}
+                few{"{0} picături"}
+                one{"{0} picătură"}
+                other{"{0} de picături"}
+            }
             fluid-ounce{
                 dnam{"fl oz"}
                 few{"{0} fl oz"}
@@ -2490,6 +2616,9 @@ ro{
                 one{"{0} hl"}
                 other{"{0} hl"}
             }
+            jigger{
+                dnam{"jigger"}
+            }
             liter{
                 dnam{"litri"}
                 few{"{0} l"}
@@ -2508,6 +2637,12 @@ ro{
                 few{"{0} ml"}
                 one{"{0} ml"}
                 other{"{0} ml"}
+            }
+            pinch{
+                dnam{"vârf"}
+                few{"{0} vârfuri"}
+                one{"{0} vârf"}
+                other{"{0} de vârfuri"}
             }
             pint{
                 dnam{"pinte"}

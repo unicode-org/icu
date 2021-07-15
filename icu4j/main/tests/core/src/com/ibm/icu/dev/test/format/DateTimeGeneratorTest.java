@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2006-2016, Google, International Business Machines Corporation
@@ -446,11 +446,11 @@ public class DateTimeGeneratorTest extends TestFmwk {
 
         new ULocale("es"),
         new String[] {"yM", "1/1999"},
-        new String[] {"yMMM", "ene. 1999"},
+        new String[] {"yMMM", "ene 1999"},
         new String[] {"yMd", "13/1/1999"},
-        new String[] {"yMMMd", "13 ene. 1999"},
+        new String[] {"yMMMd", "13 ene 1999"},
         new String[] {"Md", "13/1"},
-        new String[] {"MMMd", "13 ene."},
+        new String[] {"MMMd", "13 ene"},
         new String[] {"MMMMd", "13 de enero"},
         new String[] {"yQQQ", "T1 1999"},
         new String[] {"hhmm", "11:58 p.\u00A0m."},
@@ -458,8 +458,8 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"jjmm", "23:58"},
         new String[] {"mmss", "58:59"},
         new String[] {"yyyyMMMM", "enero de 1999"},
-        new String[] {"MMMEd", "mi\u00E9., 13 ene."},
-        new String[] {"Ed", "mi\u00E9. 13"},
+        new String[] {"MMMEd", "mi\u00E9, 13 ene"},
+        new String[] {"Ed", "mi\u00E9 13"},
         new String[] {"jmmssSSS", "23:58:59,123"},
         new String[] {"JJmm", "23:58"},
 
@@ -1733,14 +1733,13 @@ public class DateTimeGeneratorTest extends TestFmwk {
         String[][] cases = new String[][]{
             // ars is interesting because it does not have a region, but it aliases
             // to ar_SA, which has a region.
-            {"ars", "h a", "h:mm a"},
+            {"ars", "h a", "h:mm a", "HOUR_CYCLE_12"},
             // en_NH is interesting because NH is a depregated region code.
-            {"en_NH", "h a", "h:mm a"},
+            {"en_NH", "h a", "h:mm a", "HOUR_CYCLE_12"},
             // ch_ZH is a typo (should be zh_CN), but we should fail gracefully.
-            // {"cn_ZH", "HH", "H:mm"}, // TODO(ICU-20653): Desired behavior
-            {"cn_ZH", "HH", "h:mm a"}, // Actual behavior
+            {"cn_ZH", "HH", "HH:mm", "HOUR_CYCLE_23"}, // Desired & now actual behavior (does this fix ICU-20653?)
             // a non-BCP47 locale without a country code should not fail
-            {"ja_TRADITIONAL", "H時", "H:mm"},
+            {"ja_TRADITIONAL", "H時", "H:mm", "HOUR_CYCLE_23"},
         };
 
         for (String[] cas : cases) {
@@ -1755,6 +1754,43 @@ public class DateTimeGeneratorTest extends TestFmwk {
                 cas[1], dtpgPattern);
             assertEquals("timePattern " + cas[1],
                 cas[2], timePattern);
+            assertEquals("default hour cycle " + cas[3],
+                cas[3], dtpg.getDefaultHourCycle().toString());
+        }
+    }
+
+    @Test
+    public void test_jConsistencyOddLocales() { // ICU-20590
+        String[] localeIDs = {
+            "en", "ro", // known languages 12h / 24h
+            "en-RO", "ro-US",  // known languages with known regions, hour conflict language vs region
+            "en-XZ", "ro-XZ", // known languages 12h / 24h, unknown region
+            "xz-RO", "xz-US",  // unknown language with known regions
+            "xz", // unknown language
+            "xz-ZX",  // unknown language with unknown country
+            "ars", "wuu" // aliased locales
+        };
+        final String skeleton = "jm";
+        for (String localeID : localeIDs) {
+            ULocale locale = new ULocale(localeID);
+
+            DateFormat dtfShort = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
+            String dtfShortPattern = ((SimpleDateFormat)dtfShort).toPattern();
+
+            DateFormat dtfSkel = DateFormat.getInstanceForSkeleton(skeleton, locale);
+            String dtfSkelPattern = ((SimpleDateFormat)dtfSkel).toPattern();
+
+            DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance(locale);
+            String dtpgPattern = dtpg.getBestPattern(skeleton);
+
+            if (!dtfShortPattern.equals(dtfSkelPattern) || !dtfSkelPattern.equals(dtpgPattern)) {
+                String dtfShortValidLoc = dtfShort.getLocale(ULocale.VALID_LOCALE).getName();
+                String dtfShortActualLoc = dtfShort.getLocale(ULocale.ACTUAL_LOCALE).getName();
+                errln("For locale " + localeID +
+                        " expected same pattern from DateTimePatGen: " + dtpgPattern +
+                        ", DateFmt-forSkel: " + dtfSkelPattern + ", DateFmt-short: "  + dtfShortPattern +
+                        "; latter has validLoc " + dtfShortValidLoc + ", actualLoc " + dtfShortActualLoc);
+            }
         }
     }
 }

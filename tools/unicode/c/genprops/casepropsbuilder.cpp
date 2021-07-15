@@ -533,7 +533,11 @@ CasePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
         }
         newExcProps->props.scf=scf;
         newExcProps->delta=delta;
-        newExcProps->hasConditionalCaseMappings=newValues.contains(PPUCD_CONDITIONAL_CASE_MAPPINGS);
+        newExcProps->hasConditionalCaseMappings=
+            newValues.contains(PPUCD_CONDITIONAL_CASE_MAPPINGS) ||
+            // See ICU-13416: և ligature ech-yiwn has language-specific
+            // uppercase and titlecase mappings.
+            start==0x0587;
         newExcProps->hasTurkicCaseFolding=newValues.contains(PPUCD_TURKIC_CASE_FOLDING);
         newExcProps->hasNoSimpleCaseFolding=hasNoSimpleCaseFolding;
         value|=(uint32_t)excPropsCount<<UGENCASE_EXC_SHIFT;

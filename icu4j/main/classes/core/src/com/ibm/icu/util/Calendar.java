@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *   Copyright (C) 1996-2016, International Business Machines
  *   Corporation and others.  All Rights Reserved.
@@ -27,6 +27,7 @@ import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.SoftCache;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
+import com.ibm.icu.text.DateTimePatternGenerator;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.ULocale.Category;
 
@@ -1764,7 +1765,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             locale = ULocale.getDefault(Category.FORMAT);
         }
         if (tz == null) {
-            tz = TimeZone.getDefault();
+            tz = TimeZone.forULocaleOrDefault(locale);
         }
 
         Calendar cal = createInstance(locale);
@@ -1796,7 +1797,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     private static Calendar createInstance(ULocale locale) {
         Calendar cal = null;
-        TimeZone zone = TimeZone.getDefault();
+        TimeZone zone = TimeZone.forULocaleOrDefault(locale);
         CalType calType = getCalendarTypeForLocale(locale);
         if (calType == CalType.UNKNOWN) {
             // fallback to Gregorian
@@ -3514,6 +3515,13 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         "{1} {0}",
         "{1} {0}"
     };
+    // final fallback patterns
+    private static final String[] TIME_SKELETONS = {
+        "jmmsszzzz",    // Full
+        "jmmssz",       // Long
+        "jmmss",        // Medium
+        "jmm"           // Short
+    };
 
     static private DateFormat formatHelper(Calendar cal, ULocale loc, int dateStyle,
             int timeStyle) {
@@ -3615,7 +3623,39 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         int patternsSize = dtPatternsRb.getSize();
         String[] dateTimePatterns = new String[patternsSize];
         String[] dateTimePatternsOverrides = new String[patternsSize];
-        for (int i = 0; i < patternsSize; i++) {
+        int i = 0; // index for dateTimePatterns, dateTimePatternsOverrides
+
+        String baseLocID = locale.getBaseName();
+        if (baseLocID.length() > 0 && !baseLocID.equals("und")) {
+            ULocale baseLoc = new ULocale(baseLocID);
+            // The following is different from ICU4C, where we can get the valid locale
+            // for the SimpleDateFormat object. Here we do not have a SimpleDateFormat and
+            // valid locale for the Calendar is a bit meaningless.
+            ULocale validLoc = ULocale.addLikelySubtags(dtPatternsRb.getULocale());
+            if (validLoc != baseLoc) {
+                String baseReg = baseLoc.getCountry();
+                if ((baseReg.length() > 0 && !baseReg.equals(validLoc.getCountry()))
+                        || !baseLoc.getLanguage().equals(validLoc.getLanguage())) {
+                    // use DTPG if the standard time formats may have the wrong time cycle,
+                    // because the valid locale differs in important ways (region, language)
+                    // from the base locale.
+                    // We could *also* check whether they do actually have a mismatch with
+                    // the time cycle preferences for the region, but that is a lot more
+                    // work for little or no additional benefit, since just going ahead
+                    // and always synthesizing the time format as per the following should
+                    // create a locale-appropriate pattern with cycle that matches the
+                    // region preferences anyway.
+                    // In this case we get the first 4 entries of dateTimePatterns using
+                    // DateTimePatternGenerator, not resource data.
+                    DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstanceNoStdPat(locale);
+                    for (; i < 4; i++) {
+                        dateTimePatterns[i] = dtpg.getBestPattern(TIME_SKELETONS[i]);
+                    }
+                }
+            }
+        }
+
+        for (; i < patternsSize; i++) { // get all or remaining dateTimePatterns entries
             ICUResourceBundle concatenationPatternRb = (ICUResourceBundle) dtPatternsRb.get(i);
             switch (concatenationPatternRb.getType()) {
                 case UResourceBundle.STRING:
@@ -4666,7 +4706,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * Simple, immutable struct-like class for access to the CLDR weekend data.
+     * Simple, immutable struct-like class for access to the CLDR week data.
      *
      * @stable ICU 54
      */
@@ -4783,7 +4823,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * {@icu} Return simple, immutable struct-like class for access to the CLDR weekend data.
+     * {@icu} Return simple, immutable struct-like class for access to the CLDR week data.
      * @param region The input region. The results are undefined if the region code is not valid.
      * @return the WeekData for the input region. It is never null.
      *
@@ -4794,7 +4834,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     }
 
     /**
-     * {@icu} Return simple, immutable struct-like class for access to the weekend data in this calendar.
+     * {@icu} Return simple, immutable struct-like class for access to the week data in this calendar.
      * @return the WeekData for this calendar.
      *
      * @stable ICU 54
@@ -4865,7 +4905,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     private static final WeekDataCache WEEK_DATA_CACHE = new WeekDataCache();
 
     /*
-     * Set this calendar to contain week and weekend data for the given region.
+     * Set this calendar to contain week and week data for the given region.
      */
     private void setWeekData(String region) {
         if (region == null) {

@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2005-2016, International Business Machines Corporation and
@@ -177,7 +177,7 @@ public final class EthiopicCalendar extends CECalendar
      * @stable ICU 3.4
      */
     public EthiopicCalendar(Locale aLocale) {
-        this(TimeZone.getDefault(), aLocale);
+        this(TimeZone.forLocaleOrDefault(aLocale), aLocale);
     }
 
     /**
@@ -188,7 +188,7 @@ public final class EthiopicCalendar extends CECalendar
      * @stable ICU 3.4
      */
     public EthiopicCalendar(ULocale locale) {
-        this(TimeZone.getDefault(), locale);
+        this(TimeZone.forULocaleOrDefault(locale), locale);
     }
 
     /**

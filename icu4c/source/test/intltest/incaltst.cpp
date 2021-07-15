@@ -9,6 +9,7 @@
 /* Test Internationalized Calendars for C++ */
 
 #include "unicode/utypes.h"
+#include "cmemory.h"
 #include "string.h"
 #include "unicode/locid.h"
 #include "japancal.h"
@@ -71,20 +72,40 @@ static UnicodeString escape( const UnicodeString&src)
 void IntlCalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite IntlCalendarTest");
-    switch (index) {
-    CASE(0,TestTypes);
-    CASE(1,TestGregorian);
-    CASE(2,TestBuddhist);
-    CASE(3,TestJapanese);
-    CASE(4,TestBuddhistFormat);
-    CASE(5,TestJapaneseFormat);
-    CASE(6,TestJapanese3860);
-    CASE(7,TestForceGannenNumbering);
-    CASE(8,TestPersian);
-    CASE(9,TestPersianFormat);
-    CASE(10,TestTaiwan);
-    default: name = ""; break;
-    }
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(TestTypes);
+    TESTCASE_AUTO(TestGregorian);
+    TESTCASE_AUTO(TestBuddhist);
+    TESTCASE_AUTO(TestBug21043Indian);
+    TESTCASE_AUTO(TestBug21044Hebrew);
+    TESTCASE_AUTO(TestBug21045Islamic);
+    TESTCASE_AUTO(TestBug21046IslamicUmalqura);
+    TESTCASE_AUTO(TestJapanese);
+    TESTCASE_AUTO(TestBuddhistFormat);
+    TESTCASE_AUTO(TestJapaneseFormat);
+    TESTCASE_AUTO(TestJapanese3860);
+    TESTCASE_AUTO(TestForceGannenNumbering);
+    TESTCASE_AUTO(TestPersian);
+    TESTCASE_AUTO(TestPersianFormat);
+    TESTCASE_AUTO(TestTaiwan);
+    TESTCASE_AUTO(TestConsistencyGregorian);
+    TESTCASE_AUTO(TestConsistencyCoptic);
+    TESTCASE_AUTO(TestConsistencyEthiopic);
+    TESTCASE_AUTO(TestConsistencyROC);
+    TESTCASE_AUTO(TestConsistencyChinese);
+    TESTCASE_AUTO(TestConsistencyDangi);
+    TESTCASE_AUTO(TestConsistencyBuddhist);
+    TESTCASE_AUTO(TestConsistencyEthiopicAmeteAlem);
+    TESTCASE_AUTO(TestConsistencyHebrew);
+    TESTCASE_AUTO(TestConsistencyIndian);
+    TESTCASE_AUTO(TestConsistencyIslamic);
+    TESTCASE_AUTO(TestConsistencyIslamicCivil);
+    TESTCASE_AUTO(TestConsistencyIslamicRGSA);
+    TESTCASE_AUTO(TestConsistencyIslamicTBLA);
+    TESTCASE_AUTO(TestConsistencyIslamicUmalqura);
+    TESTCASE_AUTO(TestConsistencyPersian);
+    TESTCASE_AUTO(TestConsistencyJapanese);
+    TESTCASE_AUTO_END;
 }
 
 #undef CASE
@@ -914,6 +935,169 @@ void IntlCalendarTest::TestPersianFormat() {
     CHECK(status, "Error occured testing Persian Calendar in English "); 
 }
 
+void IntlCalendarTest::TestConsistencyGregorian() {
+    checkConsistency("en@calendar=gregorian");
+}
+void IntlCalendarTest::TestConsistencyIndian() {
+    checkConsistency("en@calendar=indian");
+}
+void IntlCalendarTest::TestConsistencyHebrew() {
+    checkConsistency("en@calendar=hebrew");
+}
+void IntlCalendarTest::TestConsistencyIslamic() {
+    checkConsistency("en@calendar=islamic");
+}
+void IntlCalendarTest::TestConsistencyIslamicRGSA() {
+    checkConsistency("en@calendar=islamic-rgsa");
+}
+void IntlCalendarTest::TestConsistencyIslamicTBLA() {
+    checkConsistency("en@calendar=islamic-tbla");
+}
+void IntlCalendarTest::TestConsistencyIslamicUmalqura() {
+    checkConsistency("en@calendar=islamic-umalqura");
+}
+void IntlCalendarTest::TestConsistencyIslamicCivil() {
+    checkConsistency("en@calendar=islamic-civil");
+}
+void IntlCalendarTest::TestConsistencyCoptic() {
+    checkConsistency("en@calendar=coptic");
+}
+void IntlCalendarTest::TestConsistencyEthiopic() {
+    checkConsistency("en@calendar=ethiopic");
+}
+void IntlCalendarTest::TestConsistencyROC() {
+    checkConsistency("en@calendar=roc");
+}
+void IntlCalendarTest::TestConsistencyChinese() {
+    checkConsistency("en@calendar=chinese");
+}
+void IntlCalendarTest::TestConsistencyDangi() {
+    checkConsistency("en@calendar=dangi");
+}
+void IntlCalendarTest::TestConsistencyPersian() {
+    checkConsistency("en@calendar=persian");
+}
+void IntlCalendarTest::TestConsistencyBuddhist() {
+    checkConsistency("en@calendar=buddhist");
+}
+void IntlCalendarTest::TestConsistencyJapanese() {
+    checkConsistency("en@calendar=japanese");
+}
+void IntlCalendarTest::TestConsistencyEthiopicAmeteAlem() {
+    checkConsistency("en@calendar=ethiopic-amete-alem");
+}
+void IntlCalendarTest::checkConsistency(const char* locale) {
+    // Check 2.5 years in quick mode and 8000 years in exhaustive mode.
+    int32_t numOfDaysToTest = (quick ? 2.5 : 8000) * 365;
+    constexpr int32_t msInADay = 1000*60*60*24;
+    std::string msg("TestConsistency");
+    IcuTestErrorCode status(*this, (msg + locale).c_str());
+    // g is just for debugging messages.
+    std::unique_ptr<Calendar> g(Calendar::createInstance("en", status));
+    g->setTimeZone(*(TimeZone::getGMT()));
+    std::unique_ptr<Calendar> base(Calendar::createInstance(locale, status));
+    if (status.errIfFailureAndReset("Cannot create calendar %s", locale)) {
+        return;
+    }
+    UDate test = Calendar::getNow();
+    base->setTimeZone(*(TimeZone::getGMT()));
+    int32_t j;
+    int lastDay = 1;
+    std::unique_ptr<Calendar> r(base->clone());
+    for (j = 0; j < numOfDaysToTest; j++, test -= msInADay) {
+        status.errIfFailureAndReset();
+        g->setTime(test, status);
+        if (status.errIfFailureAndReset("Cannot set time")) {
+            return;
+        }
+        base->clear();
+        base->setTime(test, status);
+        if (status.errIfFailureAndReset("Cannot set time")) {
+            return;
+        }
+        // First, we verify the date from base is decrease one day from the
+        // last day unless the last day is 1.
+        int32_t cday = base->get(UCAL_DATE, status);
+        if (U_FAILURE(status)) {
+           UErrorCode localStatus = U_ZERO_ERROR;
+           if (status.errIfFailureAndReset(
+               "Cannot get the %dth date for %f %d %d/%d/%d\n",
+               j,
+               test,
+               g->get(UCAL_ERA, localStatus),
+               g->get(UCAL_YEAR, localStatus),
+               (g->get(UCAL_MONTH, localStatus) + 1),
+               g->get(UCAL_DATE, localStatus))) {
+               return;
+           }
+        }
+        if (lastDay == 1) {
+            lastDay = cday;
+        } else {
+            if (cday != lastDay-1) {
+                // Ignore if it is the last day before Gregorian Calendar switch on
+                // 1582 Oct 4
+                if (g->get(UCAL_YEAR, status) == 1582 &&
+                    (g->get(UCAL_MONTH, status) + 1) == 10 &&
+                    g->get(UCAL_DATE, status) == 4) {
+                    lastDay = 5;
+                } else {
+                    errln((UnicodeString)
+                        "Day is not one less from previous date for "
+                        "Gregorian(e=" + g->get(UCAL_ERA, status) + " " +
+                        g->get(UCAL_YEAR, status) + "/" +
+                        (g->get(UCAL_MONTH, status) + 1) + "/" +
+                        g->get(UCAL_DATE, status) + ") " + locale + "(" +
+                        base->get(UCAL_ERA, status) + " " +
+                        base->get(UCAL_YEAR, status) + "/" +
+                        (base->get(UCAL_MONTH, status) + 1 ) + "/" +
+                        base->get(UCAL_DATE, status) + ")");
+                    status.errIfFailureAndReset();
+                    return;
+                }
+            }
+            lastDay--;
+        }
+        // Second, we verify the month is in reasonale range.
+        int32_t cmonth = base->get(UCAL_MONTH, status);
+        if (cmonth < 0 || cmonth > 13) {
+            errln((UnicodeString)
+                "Month is out of range Gregorian(e=" +
+                g->get(UCAL_ERA, status) + " " +
+                g->get(UCAL_YEAR, status) + "/" +
+                (g->get(UCAL_MONTH, status) + 1) + "/" +
+                g->get(UCAL_DATE, status) + ") " + locale + "(" +
+                base->get(UCAL_ERA, status) + " " +
+                base->get(UCAL_YEAR, status) + "/" +
+                (base->get(UCAL_MONTH, status) + 1 ) + "/" +
+                base->get(UCAL_DATE, status) + ")");
+            status.errIfFailureAndReset();
+            return;
+        }
+        // Third, we verify the set function can round trip the time back.
+        r->clear();
+        for (int32_t f = 0; f < UCAL_FIELD_COUNT; f++) {
+            UCalendarDateFields ut = (UCalendarDateFields)f;
+            r->set(ut, base->get(ut, status));
+        }
+        UDate result = r->getTime(status);
+        if (status.errIfFailureAndReset("Cannot get time %s", locale)) {
+            return;
+        }
+        if (test != result) {
+            errln((UnicodeString)"Round trip conversion produces different "
+                  "time from " + test + " to  " + result + " delta: " +
+                  (result - test) +
+                  " Gregorian(e=" + g->get(UCAL_ERA, status) + " " +
+                  g->get(UCAL_YEAR, status) + "/" +
+                  (g->get(UCAL_MONTH, status) + 1) + "/" +
+                  g->get(UCAL_DATE, status) + ") ");
+            status.errIfFailureAndReset();
+            return;
+        }
+    }
+    status.errIfFailureAndReset();
+}
 
 void IntlCalendarTest::simpleTest(const Locale& loc, const UnicodeString& expect, UDate expectDate, UErrorCode& status)
 {
@@ -944,6 +1128,97 @@ void IntlCalendarTest::simpleTest(const Locale& loc, const UnicodeString& expect
     delete fmt0;
 }
 
+void IntlCalendarTest::TestBug21043Indian() {
+    IcuTestErrorCode status(*this, "TestBug21043Indian");
+    std::unique_ptr<Calendar> cal(
+        Calendar::createInstance("en@calendar=indian", status));
+    std::unique_ptr<Calendar> g(
+        Calendar::createInstance("en@calendar=gregorian", status));
+    // set to 10 BC
+    g->set(UCAL_ERA, 0);
+    g->set(UCAL_YEAR, 10);
+    g->set(UCAL_MONTH, 1);
+    g->set(UCAL_DATE, 1);
+    cal->setTime(g->getTime(status), status);
+    int32_t m = cal->get(UCAL_MONTH, status);
+    if (m < 0 || m > 11) {
+        errln(
+              u"Month should be between 0 and 11 in India calendar");
+    }
+}
+
+void IntlCalendarTest::TestBug21044Hebrew() {
+    IcuTestErrorCode status(*this, "TestBug21044Hebrew");
+    std::unique_ptr<Calendar> cal(
+        Calendar::createInstance("en@calendar=hebrew", status));
+    std::unique_ptr<Calendar> g(
+        Calendar::createInstance("en@calendar=gregorian", status));
+    // set to 3771/10/27 BC which is before 3760 BC.
+    g->set(UCAL_ERA, 0);
+    g->set(UCAL_YEAR, 3771);
+    g->set(UCAL_MONTH, 9);
+    g->set(UCAL_DATE, 27);
+    cal->setTime(g->getTime(status), status);
+
+    if (status.errIfFailureAndReset(
+        "Cannot set date. Got error %s", u_errorName(status))) {
+        return;
+    }
+    int32_t y = cal->get(UCAL_YEAR, status);
+    int32_t m = cal->get(UCAL_MONTH, status);
+    int32_t d = cal->get(UCAL_DATE, status);
+    if (status.errIfFailureAndReset(
+        "Cannot get date. Got error %s", u_errorName(status))) {
+        return;
+   }
+    if (y > 0 || m < 0 || m > 12 || d < 0 || d > 32) {
+        errln((UnicodeString)"Out of rage!\nYear " +  y + " should be " +
+              "negative number before 1AD.\nMonth " + m + " should " +
+              "be between 0 and 12 in Hebrew calendar.\nDate " + d +
+              " should be between 0 and 32 in Islamic calendar.");
+    }
+}
+
+void IntlCalendarTest::TestBug21045Islamic() {
+    IcuTestErrorCode status(*this, "TestBug21045Islamic");
+    std::unique_ptr<Calendar> cal(
+        Calendar::createInstance("en@calendar=islamic", status));
+    std::unique_ptr<Calendar> g(
+        Calendar::createInstance("en@calendar=gregorian", status));
+    // set to 500 AD before 622 AD.
+    g->set(UCAL_ERA, 1);
+    g->set(UCAL_YEAR, 500);
+    g->set(UCAL_MONTH, 1);
+    g->set(UCAL_DATE, 1);
+    cal->setTime(g->getTime(status), status);
+    int32_t m = cal->get(UCAL_MONTH, status);
+    if (m < 0 || m > 11) {
+        errln(u"Month should be between 1 and 12 in Islamic calendar");
+    }
+}
+
+void IntlCalendarTest::TestBug21046IslamicUmalqura() {
+    IcuTestErrorCode status(*this, "TestBug21046IslamicUmalqura");
+    std::unique_ptr<Calendar> cal(
+        Calendar::createInstance("en@calendar=islamic-umalqura", status));
+    std::unique_ptr<Calendar> g(
+        Calendar::createInstance("en@calendar=gregorian", status));
+    // set to 195366 BC
+    g->set(UCAL_ERA, 0);
+    g->set(UCAL_YEAR, 195366);
+    g->set(UCAL_MONTH, 1);
+    g->set(UCAL_DATE, 1);
+    cal->setTime(g->getTime(status), status);
+    int32_t y = cal->get(UCAL_YEAR, status);
+    int32_t m = cal->get(UCAL_MONTH, status);
+    int32_t d = cal->get(UCAL_DATE, status);
+    if (y > 0 || m < 0 || m > 11 || d < 0 || d > 32) {
+        errln((UnicodeString)"Out of rage!\nYear " +  y + " should be " +
+              "negative number before 1AD.\nMonth " + m + " should " +
+              "be between 0 and 11 in Islamic calendar.\nDate " + d +
+              " should be between 0 and 32 in Islamic calendar.");
+    }
+}
 #undef CHECK
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

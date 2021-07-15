@@ -33,13 +33,12 @@ public final class LocaleMapper extends AbstractPathValueMapper {
     /**
      * Processes data from the given supplier to generate general locale data for the given locale.
      *
-     * @param localeId the locale ID to generate data for.
-     * @param src the CLDR data supplier to process.
+     * @param icuData the ICU data to be filled in.
+     * @param unresolved the unresolved CLDR source data (to determine which paths to add).
+     * @param resolved the resolved CLDR source data (from which the actual data is processed).
      * @param icuSpecialData additional ICU data (in the "icu:" namespace)
      * @param transformer the transformer to match and transform each CLDR path/value pair.
-     * @param supplementalData additional necessary data derived from
-     *        {@link org.unicode.cldr.api.CldrDataType#SUPPLEMENTAL SUPPLEMENTAL} data.
-     * @return IcuData containing locale data for the given locale ID.
+     * @param defaultCalendar the default calendar (obtained separately from supplemental data).
      */
     public static void process(
         IcuData icuData,

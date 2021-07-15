@@ -1,0 +1,7 @@
+# Exclude the Maven local repository but keep the lib directory and the top-level readme.
+/lib/**
+!/lib/README.txt
+
+# Ignore the default Maven target directory.
+/cldr-to-icu/target
+

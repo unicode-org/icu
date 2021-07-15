@@ -1183,11 +1183,11 @@ public:
     /**
      * This is for ICU internal use only. Please do not use.
      * Check whether the 'field' is smaller than all the fields covered in
-     * pattern, return TRUE if it is. The sequence of calendar field,
+     * pattern, return true if it is. The sequence of calendar field,
      * from large to small is: ERA, YEAR, MONTH, DATE, AM_PM, HOUR, MINUTE,...
      * @param field    the calendar field need to check against
-     * @return         TRUE if the 'field' is smaller than all the fields
-     *                 covered in pattern. FALSE otherwise.
+     * @return         true if the 'field' is smaller than all the fields
+     *                 covered in pattern. false otherwise.
      * @internal ICU 4.0
      */
     UBool isFieldUnitIgnored(UCalendarDateFields field) const;
@@ -1196,12 +1196,12 @@ public:
     /**
      * This is for ICU internal use only. Please do not use.
      * Check whether the 'field' is smaller than all the fields covered in
-     * pattern, return TRUE if it is. The sequence of calendar field,
+     * pattern, return true if it is. The sequence of calendar field,
      * from large to small is: ERA, YEAR, MONTH, DATE, AM_PM, HOUR, MINUTE,...
      * @param pattern  the pattern to check against
      * @param field    the calendar field need to check against
-     * @return         TRUE if the 'field' is smaller than all the fields
-     *                 covered in pattern. FALSE otherwise.
+     * @return         true if the 'field' is smaller than all the fields
+     *                 covered in pattern. false otherwise.
      * @internal ICU 4.0
      */
     static UBool isFieldUnitIgnored(const UnicodeString& pattern,
@@ -1274,6 +1274,7 @@ private:
                    int32_t count,
                    UDisplayContext capitalizationContext,
                    int32_t fieldNum,
+                   char16_t fieldToOutput,
                    FieldPositionHandler& handler,
                    Calendar& cal,
                    UErrorCode& status) const; // in case of illegal argument
@@ -1304,12 +1305,12 @@ private:
     static UBool isNumeric(char16_t formatChar, int32_t count);
 
     /**
-     * Returns TRUE if the patternOffset is at the start of a numeric field.
+     * Returns true if the patternOffset is at the start of a numeric field.
      */
     static UBool isAtNumericField(const UnicodeString &pattern, int32_t patternOffset);
 
     /**
-     * Returns TRUE if the patternOffset is right after a non-numeric field.
+     * Returns true if the patternOffset is right after a non-numeric field.
      */
     static UBool isAfterNonNumericField(const UnicodeString &pattern, int32_t patternOffset);
 
@@ -1389,11 +1390,11 @@ private:
      * @param text the text being parsed
      * @param textOffset the starting offset into the text. On output
      *                   will be set to the offset of the character after the match
-     * @param whitespaceLenient <code>TRUE</code> if whitespace parse is lenient, <code>FALSE</code> otherwise.
-     * @param partialMatchLenient <code>TRUE</code> if partial match parse is lenient, <code>FALSE</code> otherwise.
-     * @param oldLeniency <code>TRUE</code> if old leniency control is lenient, <code>FALSE</code> otherwise.
+     * @param whitespaceLenient <code>true</code> if whitespace parse is lenient, <code>false</code> otherwise.
+     * @param partialMatchLenient <code>true</code> if partial match parse is lenient, <code>false</code> otherwise.
+     * @param oldLeniency <code>true</code> if old leniency control is lenient, <code>false</code> otherwise.
      *
-     * @return <code>TRUE</code> if the literal text could be matched, <code>FALSE</code> otherwise.
+     * @return <code>true</code> if the literal text could be matched, <code>false</code> otherwise.
      */
     static UBool matchLiterals(const UnicodeString &pattern, int32_t &patternOffset,
                                const UnicodeString &text, int32_t &textOffset,

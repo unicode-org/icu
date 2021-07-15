@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  * @(#)TimeZone.java    1.51 00/01/19
  *
@@ -913,6 +913,37 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      */
     public static String getEquivalentID(String id, int index) {
         return ZoneMeta.getEquivalentID(id, index);
+    }
+
+    /**
+     * If the locale contains the timezone keyword, creates a copy of that
+     * <code>TimeZone</code>.
+     * Otherwise, create the default <code>TimeZone</code>.
+     * @param locale a locale which may contains 'timezone' keyword/value.
+     * @return A <code>TimeZone</code>. Clients are responsible for deleting the
+     *   <code>TimeZone</code> object returned.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static TimeZone forULocaleOrDefault(ULocale locale) {
+        String tz = locale.getKeywordValue("timezone");
+        return (tz == null) ? getDefault() : getTimeZone(tz);
+    }
+
+    /**
+     * If the locale contains the timezone keyword, creates a copy of that
+     * <code>TimeZone</code>.
+     * Otherwise, create the default <code>TimeZone</code>.
+     * @param locale a locale which may contains 'timezone' keyword/value.
+     * @return A <code>TimeZone</code>. Clients are responsible for deleting the
+     *   <code>TimeZone</code> object returned.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static TimeZone forLocaleOrDefault(Locale locale) {
+        return forULocaleOrDefault(ULocale.forLocale(locale));
     }
 
     /**

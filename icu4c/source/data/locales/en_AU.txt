@@ -1,8 +1,8 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 en_AU{
     %%Parent{"en_001"}
-    ExemplarCharactersNumbers{"[↑]"}
     NumberElements{
         latn{
             miscPatterns{
@@ -13,7 +13,6 @@ en_AU{
             }
         }
     }
-    Version{"36"}
     calendar{
         chinese{
             monthNames{
@@ -85,6 +84,18 @@ en_AU{
                 yMd{"dd/MM/y"}
             }
             intervalFormats{
+                GyMEd{
+                    G{"E dd/MM/y GGGGG – E dd/MM/y GGGGG"}
+                    M{"E dd/MM/y – E dd/MM/y GGGGG"}
+                    d{"E dd/MM/y – E dd/MM/y GGGGG"}
+                    y{"E dd/MM/y – E dd/MM/y GGGGG"}
+                }
+                GyMMMEd{
+                    G{"E d MMM y G – E d MMM y G"}
+                    M{"E d MMM – E d MMM y G"}
+                    d{"E d MMM – E d MMM y G"}
+                    y{"E d MMM y – E d MMM y G"}
+                }
                 MEd{
                     M{"E, d/M – E, d/M"}
                     d{"E, d/M – E, d/M"}
@@ -259,6 +270,20 @@ en_AU{
             }
             monthNames{
                 format{
+                    abbreviated{
+                        "Jan",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "May",
+                        "June",
+                        "July",
+                        "Aug",
+                        "Sept",
+                        "Oct",
+                        "Nov",
+                        "Dec",
+                    }
                     narrow{
                         "J",
                         "F",

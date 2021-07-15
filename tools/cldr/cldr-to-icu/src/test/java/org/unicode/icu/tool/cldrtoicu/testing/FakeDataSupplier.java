@@ -2,10 +2,10 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package org.unicode.icu.tool.cldrtoicu.testing;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -17,7 +17,9 @@ import org.unicode.cldr.api.CldrDraftStatus;
 import org.unicode.cldr.api.CldrPath;
 import org.unicode.cldr.api.CldrValue;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 import com.google.common.collect.TreeBasedTable;
 
@@ -27,20 +29,17 @@ import com.google.common.collect.TreeBasedTable;
 public final class FakeDataSupplier extends CldrDataSupplier {
     private final Map<CldrPath, CldrValue> nonLocaleData = new LinkedHashMap<>();
     private final Table<String, CldrPath, CldrValue> unresolvedData = TreeBasedTable.create();
-    private final Table<String, CldrPath, CldrValue> resolvedData = TreeBasedTable.create();
+    private final Map<String, String> parentLocales = new HashMap<>();
 
     public FakeDataSupplier addLocaleData(String localeId, CldrValue... values) {
         Arrays.stream(values).forEach(v -> {
             unresolvedData.put(localeId, v.getPath(), v);
-            resolvedData.put(localeId, v.getPath(), v);
         });
         return this;
     }
 
-    public FakeDataSupplier addInheritedData(String localeId, CldrValue... values) {
-        Arrays.stream(values)
-            .forEach(v -> checkArgument(resolvedData.put(localeId, v.getPath(), v) == null,
-                "path already present in unresolved CLDR data: %s", v.getPath()));
+    public FakeDataSupplier setLocaleParent(String localeId, String parentId) {
+        parentLocales.put(localeId, parentId);
         return this;
     }
 
@@ -50,9 +49,27 @@ public final class FakeDataSupplier extends CldrDataSupplier {
     }
 
     @Override public CldrData getDataForLocale(String localeId, CldrResolution resolution) {
-        Table<String, CldrPath, CldrValue> data =
-            resolution == CldrResolution.UNRESOLVED ? unresolvedData : resolvedData;
-        return CldrDataSupplier.forValues(data.row(localeId).values());
+        Collection<CldrValue> values;
+        if (resolution == CldrResolution.UNRESOLVED) {
+            values = unresolvedData.row(localeId).values();
+        } else {
+            // This is not "real" resolving since it doesn't handle aliases etc. but it's good
+            // enough for tests.
+            Map<CldrPath, CldrValue> resolved = new HashMap<>();
+            while (true) {
+                unresolvedData.row(localeId).forEach((p, v) -> {
+                    if (!resolved.containsKey(p)) {
+                        resolved.put(p, v);
+                    }
+                });
+                if (localeId.equals("root")) {
+                    break;
+                }
+                localeId = parentLocales.getOrDefault(localeId, "root");
+            }
+            values = resolved.values();
+        }
+        return CldrDataSupplier.forValues(values);
     }
 
     @Override public CldrData getDataForType(CldrDataType type) {
@@ -61,7 +78,8 @@ public final class FakeDataSupplier extends CldrDataSupplier {
     }
 
     @Override public Set<String> getAvailableLocaleIds() {
-        return Collections.unmodifiableSet(resolvedData.rowKeySet());
+        return Collections.unmodifiableSet(
+            Sets.union(unresolvedData.rowKeySet(), ImmutableSet.of("root")));
     }
 
     @Override public CldrDataSupplier withDraftStatusAtLeast(CldrDraftStatus cldrDraftStatus) {

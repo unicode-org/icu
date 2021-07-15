@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/tools/toolutil",
+                "${workspaceFolder}/tools/ctestfw",
+                "${workspaceFolder}/common",
+                "${workspaceFolder}/i18n"
+            ],
+            "defines": [
+                "U_DISABLE_RENAMING=1"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}

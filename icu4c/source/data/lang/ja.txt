@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ja{
     Keys{
         calendar{"暦法"}
@@ -179,6 +180,7 @@ ja{
         ewo{"エウォンド語"}
         ext{"エストレマドゥーラ語"}
         fa{"ペルシア語"}
+        fa_AF{"ダリー語"}
         fan{"ファング語"}
         fat{"ファンティー語"}
         ff{"フラ語"}
@@ -407,7 +409,7 @@ ja{
         niu{"ニウーエイ語"}
         njo{"アオ・ナガ語"}
         nl{"オランダ語"}
-        nl_BE{"フレミッシュ語"}
+        nl_BE{"フラマン語"}
         nmg{"クワシオ語"}
         nn{"ノルウェー語(ニーノシュク)"}
         nnh{"ンジエムブーン語"}
@@ -638,6 +640,8 @@ ja{
         zh_Hant{"標準中国語 (繁体字)"}
     }
     Languages%menu{
+        ars{"アラビア語（ナジュド地方）"}
+        ckb{"クルド語（中央）"}
         yue{"中国語 (広東語)"}
         zh{"中国語 (標準語)"}
     }
@@ -647,6 +651,7 @@ ja{
         en_US{"英語(米国)"}
     }
     Languages%variant{
+        ckb{"クルド語（ソラニー）"}
         ps{"パシュトゥ語"}
         ug{"ウィグル語"}
     }
@@ -654,6 +659,7 @@ ja{
         Afak{"アファカ文字"}
         Aghb{"カフカス・アルバニア文字"}
         Arab{"アラビア文字"}
+        Aran{"ナスタアリーク体"}
         Armi{"帝国アラム文字"}
         Armn{"アルメニア文字"}
         Avst{"アヴェスター文字"}
@@ -1022,7 +1028,6 @@ ja{
         KSCOR{"標準コーンウォール語正書法"}
         LAUKIKA{"ラウキカ"}
         LIPAW{"レージア方言 リポヴァツ方言"}
-        LUNA1918{"LUNA1918"}
         METELKO{"メテルチッツァ"}
         MONOTON{"モノトニック"}
         NDYUKA{"ンジュカ方言"}
@@ -1031,7 +1036,6 @@ ja{
         NULIK{"現代ヴォラピュク語"}
         OSOJS{"オゼアッコ/オソヤネ方言"}
         PAMAKA{"パマカ方言"}
-        PETR1708{"PETR1708"}
         PINYIN{"ピン音(ローマ字表記法)"}
         POLYTON{"ポリトニック"}
         POSIX{"コンピュータ"}
@@ -1039,7 +1043,6 @@ ja{
         REVISED{"改訂版"}
         RIGIK{"古典ヴォラピュク語"}
         ROZAJ{"レシア方言"}
-        RUMGR{"RUMGR"}
         SAAHO{"サホ語"}
         SCOTLAND{"スコットランド標準英語"}
         SCOUSE{"リバプール方言"}
@@ -1056,7 +1059,6 @@ ja{
         VALLADER{"ヴァラダー"}
         WADEGILE{"ウェード式ローマ字表記法"}
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — すべて"}
         category-list{"{0}: {1}"}
@@ -1070,6 +1072,8 @@ ja{
         strokes{
             other{"{0} 画"}
         }
+        subscript{"下付き文字 {0}"}
+        superscript{"上付き文字 {0}"}
     }
     codePatterns{
         language{"言語: {0}"}

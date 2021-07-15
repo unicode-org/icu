@@ -1,7 +1,7 @@
 /*************************************************************************
 *
 *   © 2016 and later: Unicode, Inc. and others.
-*   License & terms of use: http://www.unicode.org/copyright.html#License
+*   License & terms of use: http://www.unicode.org/copyright.html
 *
 **************************************************************************
 **************************************************************************
@@ -342,7 +342,7 @@ UErrorCode convsample_05()
         
         ucnv_toUnicode(conv, &target, targetLimit, 
                        &source, sourceLimit, NULL,
-                       feof(f)?TRUE:FALSE,         /* pass 'flush' when eof */
+                       feof(f)?true:false,         /* pass 'flush' when eof */
                                    /* is true (when no more data will come) */
                        &status);
       
@@ -719,7 +719,7 @@ UBool convsample_21_didSubstitute(const char *source)
   UConverter *conv = NULL, *cloneCnv = NULL;
   UErrorCode status = U_ZERO_ERROR;
   uint32_t len, len2;
-  UBool  flagVal = FALSE;
+  UBool  flagVal = false;
   UConverterFromUCallback junkCB;
   
   FromUFLAGContext *flagCtx = NULL, 
@@ -930,7 +930,7 @@ UErrorCode convsample_40()
         
         ucnv_toUnicode( conv, &target, targetLimit, 
                        &source, sourceLimit, NULL,
-                       feof(f)?TRUE:FALSE,         /* pass 'flush' when eof */
+                       feof(f)?true:false,         /* pass 'flush' when eof */
                                    /* is true (when no more data will come) */
                          &status);
       
@@ -1035,7 +1035,7 @@ UErrorCode convsample_46()
         
         ucnv_fromUnicode( conv, &target, targetLimit, 
                        &source, sourceLimit, NULL,
-                       feof(f)?TRUE:FALSE,         /* pass 'flush' when eof */
+                       feof(f)?true:false,         /* pass 'flush' when eof */
                                    /* is true (when no more data will come) */
                          &status);
       
@@ -1079,7 +1079,7 @@ void convsample_50() {
 
   //! [ucnv_detectUnicodeSignature]
   UErrorCode err = U_ZERO_ERROR;
-  UBool discardSignature = TRUE; /* set to TRUE to throw away the initial U+FEFF */
+  UBool discardSignature = true; /* set to true to throw away the initial U+FEFF */
   char input[] = { '\xEF','\xBB', '\xBF','\x41','\x42','\x43' };
   int32_t signatureLength = 0;
   const char *encoding = ucnv_detectUnicodeSignature(input,sizeof(input),&signatureLength,&err);
@@ -1094,7 +1094,7 @@ void convsample_50() {
     ucnv_toUnicode(conv,
                    &target, output + UPRV_LENGTHOF(output),
                    &source, input + sizeof(input),
-                   NULL, TRUE, &err);
+                   NULL, true, &err);
     out = output;
     if (discardSignature){
       ++out; // ignore initial U+FEFF

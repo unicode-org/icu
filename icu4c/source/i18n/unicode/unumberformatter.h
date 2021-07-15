@@ -1,11 +1,12 @@
 // © 2018 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#ifndef __UNUMBERFORMATTER_H__
+#define __UNUMBERFORMATTER_H__
+
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
-#ifndef __UNUMBERFORMATTER_H__
-#define __UNUMBERFORMATTER_H__
 
 #include "unicode/parseerr.h"
 #include "unicode/ufieldpositer.h"
@@ -146,6 +147,30 @@ typedef enum UNumberUnitWidth {
      * @stable ICU 60
      */
             UNUM_UNIT_WIDTH_ISO_CODE,
+
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Use the formal variant of the currency symbol; for example, "NT$" for the New Taiwan
+     * dollar in zh-TW.
+     *
+     * <p>
+     * Behavior of this option with non-currency units is not defined at this time.
+     *
+     * @draft ICU 68
+     */
+            UNUM_UNIT_WIDTH_FORMAL,
+
+    /**
+     * Use the alternate variant of the currency symbol; for example, "TL" for the Turkish
+     * lira (TRY).
+     *
+     * <p>
+     * Behavior of this option with non-currency units is not defined at this time.
+     *
+     * @draft ICU 68
+     */
+            UNUM_UNIT_WIDTH_VARIANT,
+#endif  // U_HIDE_DRAFT_API
 
     /**
      * Format the number according to the specified unit, but do not display the unit. For currencies, apply
@@ -336,7 +361,7 @@ typedef enum UNumberSignDisplay {
 
     /**
      * Show the minus sign on negative numbers and the plus sign on positive numbers. Do not show a
-     * sign on zero or NaN, unless the sign bit is set (-0.0 gets a sign).
+     * sign on zero, numbers that round to zero, or NaN.
      *
      * @stable ICU 61
      */
@@ -344,9 +369,8 @@ typedef enum UNumberSignDisplay {
 
     /**
      * Use the locale-dependent accounting format on negative numbers, and show the plus sign on
-     * positive numbers. Do not show a sign on zero or NaN, unless the sign bit is set (-0.0 gets a
-     * sign). For more information on the accounting format, see the ACCOUNTING sign display
-     * strategy.
+     * positive numbers. Do not show a sign on zero, numbers that round to zero, or NaN. For more
+     * information on the accounting format, see the ACCOUNTING sign display strategy.
      *
      * @stable ICU 61
      */
@@ -428,33 +452,31 @@ typedef struct UFormattedNumber UFormattedNumber;
  * NOTE: This is a C-compatible API; C++ users should build against numberformatter.h instead.
  *
  * @param skeleton The skeleton string, like u"percent precision-integer"
- * @param skeletonLen The number of UChars in the skeleton string, or -1 it it is NUL-terminated.
+ * @param skeletonLen The number of UChars in the skeleton string, or -1 if it is NUL-terminated.
  * @param locale The NUL-terminated locale ID.
  * @param ec Set if an error occurs.
  * @stable ICU 62
  */
-U_STABLE UNumberFormatter* U_EXPORT2
+U_CAPI UNumberFormatter* U_EXPORT2
 unumf_openForSkeletonAndLocale(const UChar* skeleton, int32_t skeletonLen, const char* locale,
                                UErrorCode* ec);
 
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * Like unumf_openForSkeletonAndLocale, but accepts a UParseError, which will be populated with the
  * location of a skeleton syntax error if such a syntax error exists.
  *
  * @param skeleton The skeleton string, like u"percent precision-integer"
- * @param skeletonLen The number of UChars in the skeleton string, or -1 it it is NUL-terminated.
+ * @param skeletonLen The number of UChars in the skeleton string, or -1 if it is NUL-terminated.
  * @param locale The NUL-terminated locale ID.
  * @param perror A parse error struct populated if an error occurs when parsing. Can be NULL.
  *               If no error occurs, perror->offset will be set to -1.
  * @param ec Set if an error occurs.
- * @draft ICU 64
+ * @stable ICU 64
  */
-U_DRAFT UNumberFormatter* U_EXPORT2
+U_CAPI UNumberFormatter* U_EXPORT2
 unumf_openForSkeletonAndLocaleWithError(
        const UChar* skeleton, int32_t skeletonLen, const char* locale, UParseError* perror, UErrorCode* ec);
-#endif  // U_HIDE_DRAFT_API
 
 
 /**
@@ -465,7 +487,7 @@ unumf_openForSkeletonAndLocaleWithError(
  * @param ec Set if an error occurs.
  * @stable ICU 62
  */
-U_STABLE UFormattedNumber* U_EXPORT2
+U_CAPI UFormattedNumber* U_EXPORT2
 unumf_openResult(UErrorCode* ec);
 
 
@@ -484,7 +506,7 @@ unumf_openResult(UErrorCode* ec);
  * @param ec Set if an error occurs.
  * @stable ICU 62
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 unumf_formatInt(const UNumberFormatter* uformatter, int64_t value, UFormattedNumber* uresult,
                 UErrorCode* ec);
 
@@ -504,7 +526,7 @@ unumf_formatInt(const UNumberFormatter* uformatter, int64_t value, UFormattedNum
  * @param ec Set if an error occurs.
  * @stable ICU 62
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 unumf_formatDouble(const UNumberFormatter* uformatter, double value, UFormattedNumber* uresult,
                    UErrorCode* ec);
 
@@ -528,11 +550,10 @@ unumf_formatDouble(const UNumberFormatter* uformatter, double value, UFormattedN
  * @param ec Set if an error occurs.
  * @stable ICU 62
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 unumf_formatDecimal(const UNumberFormatter* uformatter, const char* value, int32_t valueLen,
                     UFormattedNumber* uresult, UErrorCode* ec);
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * Returns a representation of a UFormattedNumber as a UFormattedValue,
  * which can be subsequently passed to any API requiring that type.
@@ -545,11 +566,10 @@ unumf_formatDecimal(const UNumberFormatter* uformatter, const char* value, int32
  * @param uresult The object containing the formatted string.
  * @param ec Set if an error occurs.
  * @return A UFormattedValue owned by the input object.
- * @draft ICU 64
+ * @stable ICU 64
  */
-U_DRAFT const UFormattedValue* U_EXPORT2
+U_CAPI const UFormattedValue* U_EXPORT2
 unumf_resultAsValue(const UFormattedNumber* uresult, UErrorCode* ec);
-#endif  /* U_HIDE_DRAFT_API */
 
 
 /**
@@ -571,7 +591,7 @@ unumf_resultAsValue(const UFormattedNumber* uresult, UErrorCode* ec);
  * @return The required length.
  * @stable ICU 62
  */
-U_STABLE int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 unumf_resultToString(const UFormattedNumber* uresult, UChar* buffer, int32_t bufferCapacity,
                      UErrorCode* ec);
 
@@ -605,11 +625,11 @@ unumf_resultToString(const UFormattedNumber* uresult, UChar* buffer, int32_t buf
  *            "beginIndex" field is set to the beginning of the first occurrence of the field after the
  *            input "endIndex", and "endIndex" is set to the end of that occurrence of the field
  *            (exclusive index). If a field position is not found, the FieldPosition is not changed and
- *            the method returns FALSE.
+ *            the method returns false.
  * @param ec Set if an error occurs.
  * @stable ICU 62
  */
-U_STABLE UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 unumf_resultNextFieldPosition(const UFormattedNumber* uresult, UFieldPosition* ufpos, UErrorCode* ec);
 
 
@@ -634,16 +654,37 @@ unumf_resultNextFieldPosition(const UFormattedNumber* uresult, UFieldPosition* u
  * @param ec Set if an error occurs.
  * @stable ICU 62
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 unumf_resultGetAllFieldPositions(const UFormattedNumber* uresult, UFieldPositionIterator* ufpositer,
                                  UErrorCode* ec);
 
 
-// TODO(ICU-20775): Propose this as API.
-// NOTE: This is not currently implemented.
-// U_DRAFT int32_t U_EXPORT2
-// unumf_resultToDecimalNumber(const UFormattedNumber* uresult, char* buffer, int32_t bufferCapacity,
-//                             UErrorCode* ec);
+#ifndef U_HIDE_DRAFT_API
+/**
+ * Extracts the formatted number as a "numeric string" conforming to the
+ * syntax defined in the Decimal Arithmetic Specification, available at
+ * http://speleotrove.com/decimal
+ *
+ * This endpoint is useful for obtaining the exact number being printed
+ * after scaling and rounding have been applied by the number formatter.
+ *
+ * @param uresult        The input object containing the formatted number.
+ * @param  dest          the 8-bit char buffer into which the decimal number is placed
+ * @param  destCapacity  The size, in chars, of the destination buffer.  May be zero
+ *                       for precomputing the required size.
+ * @param  ec            receives any error status.
+ *                       If U_BUFFER_OVERFLOW_ERROR: Returns number of chars for
+ *                       preflighting.
+ * @return Number of chars in the data.  Does not include a trailing NUL.
+ * @draft ICU 68
+ */
+U_CAPI int32_t U_EXPORT2
+unumf_resultToDecimalNumber(
+       const UFormattedNumber* uresult,
+       char* dest,
+       int32_t destCapacity,
+       UErrorCode* ec);
+#endif // U_HIDE_DRAFT_API
 
 
 /**
@@ -652,7 +693,7 @@ unumf_resultGetAllFieldPositions(const UFormattedNumber* uresult, UFieldPosition
  * @param uformatter An object created by unumf_openForSkeletonAndLocale().
  * @stable ICU 62
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 unumf_close(UNumberFormatter* uformatter);
 
 
@@ -662,7 +703,7 @@ unumf_close(UNumberFormatter* uformatter);
  * @param uresult An object created by unumf_openResult().
  * @stable ICU 62
  */
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 unumf_closeResult(UFormattedNumber* uresult);
 
 
@@ -706,5 +747,5 @@ U_DEFINE_LOCAL_OPEN_POINTER(LocalUFormattedNumberPointer, UFormattedNumber, unum
 U_NAMESPACE_END
 #endif // U_SHOW_CPLUSPLUS_API
 
-#endif //__UNUMBERFORMATTER_H__
 #endif /* #if !UCONFIG_NO_FORMATTING */
+#endif //__UNUMBERFORMATTER_H__

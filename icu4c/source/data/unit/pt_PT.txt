@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 pt_PT{
-    Version{"36"}
     units{
         acceleration{
             g-force{
@@ -9,7 +9,7 @@ pt_PT{
                 one{"{0} força G"}
                 other{"{0} força G"}
             }
-            meter-per-second-squared{
+            meter-per-square-second{
                 dnam{"metros por segundo quadrado"}
                 one{"{0} metro por segundo quadrado"}
                 other{"{0} metros por segundo quadrado"}
@@ -36,7 +36,7 @@ pt_PT{
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"litros por 100 quilómetros"}
                 one{"{0} litro por 100 quilómetros"}
                 other{"{0} litros por 100 quilómetros"}
@@ -134,6 +134,12 @@ pt_PT{
                 other{"{0} picómetros"}
             }
         }
+        light{
+            lumen{
+                one{"{0} lúmen"}
+                other{"{0} lúmenes"}
+            }
+        }
         mass{
             earth-mass{
                 one{"{0} massa da Terra"}
@@ -141,7 +147,7 @@ pt_PT{
             }
         }
         pressure{
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 dnam{"psi"}
                 one{"{0} psi"}
                 other{"{0} psi"}
@@ -179,6 +185,18 @@ pt_PT{
                 one{"{0} chávena métrica"}
                 other{"{0} chávenas métricas"}
             }
+            dessert-spoon-imperial{
+                dnam{"colher de sobremesa imperial"}
+            }
+            dram{
+                one{"{0} dracma"}
+                other{"{0} dracmas"}
+            }
+            jigger{
+                dnam{"doseador"}
+                one{"{0} doseador"}
+                other{"{0} doseadores"}
+            }
         }
     }
     unitsNarrow{
@@ -214,7 +232,7 @@ pt_PT{
             per{"{0}/{1}"}
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 one{"{0}l/100km"}
                 other{"{0}l/100km"}
             }
@@ -353,7 +371,7 @@ pt_PT{
                 one{"{0} G"}
                 other{"{0} G"}
             }
-            meter-per-second-squared{
+            meter-per-square-second{
                 dnam{"m/s²"}
                 one{"{0} m/s²"}
                 other{"{0} m/s²"}
@@ -437,7 +455,7 @@ pt_PT{
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"l/100km"}
                 one{"{0} l/100km"}
                 other{"{0} l/100km"}
@@ -601,6 +619,10 @@ pt_PT{
             }
         }
         graphics{
+            dot{
+                one{"{0} p"}
+                other{"{0} p"}
+            }
             dot-per-inch{
                 dnam{"ppp"}
                 one{"{0} ppp"}
@@ -623,6 +645,10 @@ pt_PT{
                 dnam{"dm"}
                 one{"{0} dm"}
                 other{"{0} dm"}
+            }
+            fathom{
+                one{"{0} fth"}
+                other{"{0} fth"}
             }
             inch{
                 dnam{"polegadas"}
@@ -760,22 +786,12 @@ pt_PT{
                 one{"{0} hPa"}
                 other{"{0} hPa"}
             }
-            inch-hg{
-                dnam{"in Hg"}
-                one{"{0} inHg"}
-                other{"{0} inHg"}
-            }
             millibar{
                 dnam{"mbar"}
                 one{"{0} mb"}
                 other{"{0} mb"}
             }
-            millimeter-of-mercury{
-                dnam{"mm Hg"}
-                one{"{0} mm Hg"}
-                other{"{0} mm Hg"}
-            }
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 dnam{"psi"}
                 one{"{0} psi"}
                 other{"{0} psi"}
@@ -862,6 +878,11 @@ pt_PT{
                 one{"{0} chám"}
                 other{"{0} chám"}
             }
+            dram{
+                dnam{"dracma fluido"}
+                one{"{0} dram fl"}
+                other{"{0} dram fl"}
+            }
             fluid-ounce-imperial{
                 dnam{"onças fluidas imp."}
                 one{"{0} onça fluida imp."}
@@ -872,6 +893,11 @@ pt_PT{
                 one{"{0} gal imp."}
                 other{"{0} gal imp."}
                 per{"{0}/gal imp."}
+            }
+            jigger{
+                dnam{"doseador"}
+                one{"{0} doseadores"}
+                other{"{0} doseadores"}
             }
             liter{
                 one{"{0} l"}
@@ -889,6 +915,11 @@ pt_PT{
             quart{
                 one{"{0} qt"}
                 other{"{0} qt"}
+            }
+            quart-imperial{
+                dnam{"quarto imp."}
+                one{"{0} quarto imp."}
+                other{"{0} quartos imp."}
             }
             tablespoon{
                 dnam{"cs"}

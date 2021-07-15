@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ta{
     Keys{
         calendar{"நாள்காட்டி"}
@@ -154,6 +155,7 @@ ta{
         eu{"பாஸ்க்"}
         ewo{"எவோன்டோ"}
         fa{"பெர்ஷியன்"}
+        fa_AF{"தாரி"}
         fan{"ஃபேங்க்"}
         fat{"ஃபான்டி"}
         ff{"ஃபுலா"}
@@ -848,7 +850,6 @@ ta{
         PINYIN{"பின்யின் ரோமானைசெஷன்"}
         WADEGILE{"வேட்-கைல்ஸ் ரோமனைஷேசன்"}
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — அனைத்தும்"}
         category-list{"{0}: {1}"}
@@ -863,6 +864,8 @@ ta{
             one{"{0} கோடு"}
             other{"{0} கோடுகள்"}
         }
+        subscript{"துணைஸ்கிரிப்ட் {0}"}
+        superscript{"சூப்பர்ஸ்கிரிப்ட் {0}"}
     }
     codePatterns{
         language{"மொழி: {0}"}

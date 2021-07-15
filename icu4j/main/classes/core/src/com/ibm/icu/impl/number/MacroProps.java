@@ -1,5 +1,5 @@
 // © 2017 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
 
 import java.math.RoundingMode;
@@ -30,6 +30,7 @@ public class MacroProps implements Cloneable {
     public SignDisplay sign;
     public DecimalSeparatorDisplay decimal;
     public Scale scale;
+    public String usage;
     public AffixPatternProvider affixProvider; // not in API; for JDK compatibility mode only
     public PluralRules rules; // not in API; could be made public in the future
     public Long threshold; // not in API; controls internal self-regulation threshold
@@ -70,6 +71,8 @@ public class MacroProps implements Cloneable {
             affixProvider = fallback.affixProvider;
         if (scale == null)
             scale = fallback.scale;
+        if (usage == null)
+            usage = fallback.usage;
         if (rules == null)
             rules = fallback.rules;
         if (loc == null)
@@ -92,6 +95,7 @@ public class MacroProps implements Cloneable {
                 decimal,
                 affixProvider,
                 scale,
+                usage,
                 rules,
                 loc);
     }
@@ -119,6 +123,7 @@ public class MacroProps implements Cloneable {
                 && Objects.equals(decimal, other.decimal)
                 && Objects.equals(affixProvider, other.affixProvider)
                 && Objects.equals(scale, other.scale)
+                && Objects.equals(usage, other.usage)
                 && Objects.equals(rules, other.rules)
                 && Objects.equals(loc, other.loc);
     }

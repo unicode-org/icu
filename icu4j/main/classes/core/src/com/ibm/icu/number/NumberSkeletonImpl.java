@@ -1,5 +1,5 @@
 // © 2018 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.number;
 
 import java.math.BigDecimal;
@@ -33,10 +33,12 @@ import com.ibm.icu.util.StringTrieBuilder;
  */
 class NumberSkeletonImpl {
 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    // NOTE: For an example of how to add a new stem to the number skeleton parser, see: //
-    // http://bugs.icu-project.org/trac/changeset/41193                                  //
-    ///////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // NOTE: For examples of how to add a new stem to the number skeleton parser, see:      //
+    // https://github.com/unicode-org/icu/commit/a2a7982216b2348070dc71093775ac7195793d73   //
+    // and                                                                                  //
+    // https://github.com/unicode-org/icu/commit/6fe86f3934a8a5701034f648a8f7c5087e84aa28   //
+    //////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * While parsing a skeleton, this enum records what type of option we expect to find next.
@@ -53,6 +55,8 @@ class NumberSkeletonImpl {
         STATE_INCREMENT_PRECISION,
         STATE_MEASURE_UNIT,
         STATE_PER_MEASURE_UNIT,
+        STATE_IDENTIFIER_UNIT,
+        STATE_UNIT_USAGE,
         STATE_CURRENCY_UNIT,
         STATE_INTEGER_WIDTH,
         STATE_NUMBERING_SYSTEM,
@@ -76,6 +80,7 @@ class NumberSkeletonImpl {
         STEM_BASE_UNIT,
         STEM_PERCENT,
         STEM_PERMILLE,
+        STEM_PERCENT_100, // concise-only
         STEM_PRECISION_INTEGER,
         STEM_PRECISION_UNLIMITED,
         STEM_PRECISION_CURRENCY_STANDARD,
@@ -98,6 +103,8 @@ class NumberSkeletonImpl {
         STEM_UNIT_WIDTH_SHORT,
         STEM_UNIT_WIDTH_FULL_NAME,
         STEM_UNIT_WIDTH_ISO_CODE,
+        STEM_UNIT_WIDTH_FORMAL,
+        STEM_UNIT_WIDTH_VARIANT,
         STEM_UNIT_WIDTH_HIDDEN,
         STEM_SIGN_AUTO,
         STEM_SIGN_ALWAYS,
@@ -113,11 +120,24 @@ class NumberSkeletonImpl {
         STEM_PRECISION_INCREMENT,
         STEM_MEASURE_UNIT,
         STEM_PER_MEASURE_UNIT,
+        STEM_UNIT,
+        STEM_UNIT_USAGE,
         STEM_CURRENCY,
         STEM_INTEGER_WIDTH,
         STEM_NUMBERING_SYSTEM,
         STEM_SCALE,
     };
+
+    /** Default wildcard char, accepted on input and printed in output */
+    static final char WILDCARD_CHAR = '*';
+
+    /** Alternative wildcard char, accept on input but not printed in output */
+    static final char ALT_WILDCARD_CHAR = '+';
+
+    /** Checks whether the char is a wildcard on input */
+    static boolean isWildcardChar(char c) {
+        return c == WILDCARD_CHAR || c == ALT_WILDCARD_CHAR;
+    }
 
     /** For mapping from ordinal back to StemEnum in Java. */
     static final StemEnum[] STEM_ENUM_VALUES = StemEnum.values();
@@ -159,6 +179,8 @@ class NumberSkeletonImpl {
         b.add("unit-width-short", StemEnum.STEM_UNIT_WIDTH_SHORT.ordinal());
         b.add("unit-width-full-name", StemEnum.STEM_UNIT_WIDTH_FULL_NAME.ordinal());
         b.add("unit-width-iso-code", StemEnum.STEM_UNIT_WIDTH_ISO_CODE.ordinal());
+        b.add("unit-width-formal", StemEnum.STEM_UNIT_WIDTH_FORMAL.ordinal());
+        b.add("unit-width-variant", StemEnum.STEM_UNIT_WIDTH_VARIANT.ordinal());
         b.add("unit-width-hidden", StemEnum.STEM_UNIT_WIDTH_HIDDEN.ordinal());
         b.add("sign-auto", StemEnum.STEM_SIGN_AUTO.ordinal());
         b.add("sign-always", StemEnum.STEM_SIGN_ALWAYS.ordinal());
@@ -174,10 +196,27 @@ class NumberSkeletonImpl {
         b.add("precision-increment", StemEnum.STEM_PRECISION_INCREMENT.ordinal());
         b.add("measure-unit", StemEnum.STEM_MEASURE_UNIT.ordinal());
         b.add("per-measure-unit", StemEnum.STEM_PER_MEASURE_UNIT.ordinal());
+        b.add("unit", StemEnum.STEM_UNIT.ordinal());
+        b.add("usage", StemEnum.STEM_UNIT_USAGE.ordinal());
         b.add("currency", StemEnum.STEM_CURRENCY.ordinal());
         b.add("integer-width", StemEnum.STEM_INTEGER_WIDTH.ordinal());
         b.add("numbering-system", StemEnum.STEM_NUMBERING_SYSTEM.ordinal());
         b.add("scale", StemEnum.STEM_SCALE.ordinal());
+
+        // Section 3 (concise tokens):
+        b.add("K", StemEnum.STEM_COMPACT_SHORT.ordinal());
+        b.add("KK", StemEnum.STEM_COMPACT_LONG.ordinal());
+        b.add("%", StemEnum.STEM_PERCENT.ordinal());
+        b.add("%x100", StemEnum.STEM_PERCENT_100.ordinal());
+        b.add(",_", StemEnum.STEM_GROUP_OFF.ordinal());
+        b.add(",?", StemEnum.STEM_GROUP_MIN2.ordinal());
+        b.add(",!", StemEnum.STEM_GROUP_ON_ALIGNED.ordinal());
+        b.add("+!", StemEnum.STEM_SIGN_ALWAYS.ordinal());
+        b.add("+_", StemEnum.STEM_SIGN_NEVER.ordinal());
+        b.add("()", StemEnum.STEM_SIGN_ACCOUNTING.ordinal());
+        b.add("()!", StemEnum.STEM_SIGN_ACCOUNTING_ALWAYS.ordinal());
+        b.add("+?", StemEnum.STEM_SIGN_EXCEPT_ZERO.ordinal());
+        b.add("()?", StemEnum.STEM_SIGN_ACCOUNTING_EXCEPT_ZERO.ordinal());
 
         // Build the CharsTrie
         // TODO: Use SLOW or FAST here?
@@ -285,6 +324,10 @@ class NumberSkeletonImpl {
                 return UnitWidth.FULL_NAME;
             case STEM_UNIT_WIDTH_ISO_CODE:
                 return UnitWidth.ISO_CODE;
+            case STEM_UNIT_WIDTH_FORMAL:
+                return UnitWidth.FORMAL;
+            case STEM_UNIT_WIDTH_VARIANT:
+                return UnitWidth.VARIANT;
             case STEM_UNIT_WIDTH_HIDDEN:
                 return UnitWidth.HIDDEN;
             default:
@@ -397,6 +440,12 @@ class NumberSkeletonImpl {
                 break;
             case ISO_CODE:
                 sb.append("unit-width-iso-code");
+                break;
+            case FORMAL:
+                sb.append("unit-width-formal");
+                break;
+            case VARIANT:
+                sb.append("unit-width-variant");
                 break;
             case HIDDEN:
                 sb.append("unit-width-hidden");
@@ -569,6 +618,7 @@ class NumberSkeletonImpl {
                 case STATE_INCREMENT_PRECISION:
                 case STATE_MEASURE_UNIT:
                 case STATE_PER_MEASURE_UNIT:
+                case STATE_UNIT_USAGE:
                 case STATE_CURRENCY_UNIT:
                 case STATE_INTEGER_WIDTH:
                 case STATE_NUMBERING_SYSTEM:
@@ -603,6 +653,14 @@ class NumberSkeletonImpl {
         case '@':
             checkNull(macros.precision, segment);
             BlueprintHelpers.parseDigitsStem(segment, macros);
+            return ParseState.STATE_NULL;
+        case 'E':
+            checkNull(macros.notation, segment);
+            BlueprintHelpers.parseScientificStem(segment, macros);
+            return ParseState.STATE_NULL;
+        case '0':
+            checkNull(macros.notation, segment);
+            BlueprintHelpers.parseIntegerStem(segment, macros);
             return ParseState.STATE_NULL;
         }
 
@@ -639,6 +697,13 @@ class NumberSkeletonImpl {
         case STEM_PERMILLE:
             checkNull(macros.unit, segment);
             macros.unit = StemToObject.unit(stem);
+            return ParseState.STATE_NULL;
+
+        case STEM_PERCENT_100:
+            checkNull(macros.scale, segment);
+            checkNull(macros.unit, segment);
+            macros.scale = Scale.powerOfTen(2);
+            macros.unit = NoUnit.PERCENT;
             return ParseState.STATE_NULL;
 
         case STEM_PRECISION_INTEGER:
@@ -684,6 +749,8 @@ class NumberSkeletonImpl {
         case STEM_UNIT_WIDTH_SHORT:
         case STEM_UNIT_WIDTH_FULL_NAME:
         case STEM_UNIT_WIDTH_ISO_CODE:
+        case STEM_UNIT_WIDTH_FORMAL:
+        case STEM_UNIT_WIDTH_VARIANT:
         case STEM_UNIT_WIDTH_HIDDEN:
             checkNull(macros.unitWidth, segment);
             macros.unitWidth = StemToObject.unitWidth(stem);
@@ -719,6 +786,15 @@ class NumberSkeletonImpl {
         case STEM_PER_MEASURE_UNIT:
             checkNull(macros.perUnit, segment);
             return ParseState.STATE_PER_MEASURE_UNIT;
+
+        case STEM_UNIT:
+            checkNull(macros.unit, segment);
+            checkNull(macros.perUnit, segment);
+            return ParseState.STATE_IDENTIFIER_UNIT;
+
+        case STEM_UNIT_USAGE:
+            checkNull(macros.usage, segment);
+            return ParseState.STATE_UNIT_USAGE;
 
         case STEM_CURRENCY:
             checkNull(macros.unit, segment);
@@ -760,6 +836,12 @@ class NumberSkeletonImpl {
             return ParseState.STATE_NULL;
         case STATE_PER_MEASURE_UNIT:
             BlueprintHelpers.parseMeasurePerUnitOption(segment, macros);
+            return ParseState.STATE_NULL;
+        case STATE_IDENTIFIER_UNIT:
+            BlueprintHelpers.parseIdentifierUnitOption(segment, macros);
+            return ParseState.STATE_NULL;
+        case STATE_UNIT_USAGE:
+            BlueprintHelpers.parseUnitUsageOption(segment, macros);
             return ParseState.STATE_NULL;
         case STATE_INCREMENT_PRECISION:
             BlueprintHelpers.parseIncrementOption(segment, macros);
@@ -825,6 +907,9 @@ class NumberSkeletonImpl {
         if (macros.perUnit != null && GeneratorHelpers.perUnit(macros, sb)) {
             sb.append(' ');
         }
+        if (macros.usage != null && GeneratorHelpers.usage(macros, sb)) {
+            sb.append(' ');
+        }
         if (macros.precision != null && GeneratorHelpers.precision(macros, sb)) {
             sb.append(' ');
         }
@@ -882,7 +967,7 @@ class NumberSkeletonImpl {
 
         /** @return Whether we successfully found and parsed an exponent width option. */
         private static boolean parseExponentWidthOption(StringSegment segment, MacroProps macros) {
-            if (segment.charAt(0) != '+') {
+            if (!isWildcardChar(segment.charAt(0))) {
                 return false;
             }
             int offset = 1;
@@ -903,7 +988,7 @@ class NumberSkeletonImpl {
         }
 
         private static void generateExponentWidthOption(int minExponentDigits, StringBuilder sb) {
-            sb.append('+');
+            sb.append(WILDCARD_CHAR);
             appendMultiple(sb, 'e', minExponentDigits);
         }
 
@@ -970,12 +1055,33 @@ class NumberSkeletonImpl {
         }
 
         private static void parseMeasurePerUnitOption(StringSegment segment, MacroProps macros) {
-            // A little bit of a hack: safe the current unit (numerator), call the main measure unit
+            // A little bit of a hack: save the current unit (numerator), call the main measure unit
             // parsing code, put back the numerator unit, and put the new unit into per-unit.
             MeasureUnit numerator = macros.unit;
             parseMeasureUnitOption(segment, macros);
             macros.perUnit = macros.unit;
             macros.unit = numerator;
+        }
+
+        /**
+         * Parses unit identifiers like "meter-per-second" and "foot-and-inch", as
+         * specified via a "unit/" concise skeleton.
+         */
+        private static void parseIdentifierUnitOption(StringSegment segment, MacroProps macros) {
+            MeasureUnit[] units = MeasureUnit.parseCoreUnitIdentifier(segment.asString());
+            if (units == null) {
+                throw new SkeletonSyntaxException("Invalid core unit identifier", segment);
+            }
+            macros.unit = units[0];
+            if (units.length == 2) {
+                macros.perUnit = units[1];
+            }
+        }
+
+        private static void parseUnitUsageOption(StringSegment segment, MacroProps macros) {
+            macros.usage = segment.asString();
+            // We do not do any validation of the usage string: it depends on the
+            // unitPreferenceData in the units resources.
         }
 
         private static void parseFractionStem(StringSegment segment, MacroProps macros) {
@@ -991,7 +1097,7 @@ class NumberSkeletonImpl {
                 }
             }
             if (offset < segment.length()) {
-                if (segment.charAt(offset) == '+') {
+                if (isWildcardChar(segment.charAt(offset))) {
                     maxFrac = -1;
                     offset++;
                 } else {
@@ -1012,7 +1118,11 @@ class NumberSkeletonImpl {
             }
             // Use the public APIs to enforce bounds checking
             if (maxFrac == -1) {
-                macros.precision = Precision.minFraction(minFrac);
+                if (minFrac == 0) {
+                    macros.precision = Precision.unlimited();
+                } else {
+                    macros.precision = Precision.minFraction(minFrac);
+                }
             } else {
                 macros.precision = Precision.minMaxFraction(minFrac, maxFrac);
             }
@@ -1026,7 +1136,7 @@ class NumberSkeletonImpl {
             sb.append('.');
             appendMultiple(sb, '0', minFrac);
             if (maxFrac == -1) {
-                sb.append('+');
+                sb.append(WILDCARD_CHAR);
             } else {
                 appendMultiple(sb, '#', maxFrac - minFrac);
             }
@@ -1045,7 +1155,7 @@ class NumberSkeletonImpl {
                 }
             }
             if (offset < segment.length()) {
-                if (segment.charAt(offset) == '+') {
+                if (isWildcardChar(segment.charAt(offset))) {
                     maxSig = -1;
                     offset++;
                 } else {
@@ -1075,10 +1185,75 @@ class NumberSkeletonImpl {
         private static void generateDigitsStem(int minSig, int maxSig, StringBuilder sb) {
             appendMultiple(sb, '@', minSig);
             if (maxSig == -1) {
-                sb.append('+');
+                sb.append(WILDCARD_CHAR);
             } else {
                 appendMultiple(sb, '#', maxSig - minSig);
             }
+        }
+
+        private static void parseScientificStem(StringSegment segment, MacroProps macros) {
+            assert(segment.charAt(0) == 'E');
+            block:
+            {
+                int offset = 1;
+                if (segment.length() == offset) {
+                    break block;
+                }
+                boolean isEngineering = false;
+                if (segment.charAt(offset) == 'E') {
+                    isEngineering = true;
+                    offset++;
+                    if (segment.length() == offset) {
+                        break block;
+                    }
+                }
+                SignDisplay signDisplay = SignDisplay.AUTO;
+                if (segment.charAt(offset) == '+') {
+                    offset++;
+                    if (segment.length() == offset) {
+                        break block;
+                    }
+                    if (segment.charAt(offset) == '!') {
+                        signDisplay = SignDisplay.ALWAYS;
+                    } else if (segment.charAt(offset) == '?') {
+                        signDisplay = SignDisplay.EXCEPT_ZERO;
+                    } else {
+                        break block;
+                    }
+                    offset++;
+                    if (segment.length() == offset) {
+                        break block;
+                    }
+                }
+                int minDigits = 0;
+                for (; offset < segment.length(); offset++) {
+                    if (segment.charAt(offset) != '0') {
+                        break block;
+                    }
+                    minDigits++;
+                }
+                macros.notation = (isEngineering ? Notation.engineering() : Notation.scientific())
+                    .withExponentSignDisplay(signDisplay)
+                    .withMinExponentDigits(minDigits);
+                return;
+            }
+            throw new SkeletonSyntaxException("Invalid scientific stem", segment);
+        }
+
+        private static void parseIntegerStem(StringSegment segment, MacroProps macros) {
+            assert(segment.charAt(0) == '0');
+            int offset = 1;
+            for (; offset < segment.length(); offset++) {
+                if (segment.charAt(offset) != '0') {
+                    offset--;
+                    break;
+                }
+            }
+            if (offset < segment.length()) {
+                 throw new SkeletonSyntaxException("Invalid integer stem", segment);
+            }
+            macros.integerWidth = IntegerWidth.zeroFillTo(offset);
+            return;
         }
 
         /** @return Whether we successfully found and parsed a frac-sig option. */
@@ -1102,7 +1277,7 @@ class NumberSkeletonImpl {
             // Invalid: @, @@, @@@
             // Invalid: @@#, @@##, @@@#
             if (offset < segment.length()) {
-                if (segment.charAt(offset) == '+') {
+                if (isWildcardChar(segment.charAt(offset))) {
                     maxSig = -1;
                     offset++;
                 } else if (minSig > 1) {
@@ -1156,7 +1331,7 @@ class NumberSkeletonImpl {
             int offset = 0;
             int minInt = 0;
             int maxInt;
-            if (segment.charAt(0) == '+') {
+            if (isWildcardChar(segment.charAt(0))) {
                 maxInt = -1;
                 offset++;
             } else {
@@ -1194,7 +1369,7 @@ class NumberSkeletonImpl {
 
         private static void generateIntegerWidthOption(int minInt, int maxInt, StringBuilder sb) {
             if (maxInt == -1) {
-                sb.append('+');
+                sb.append(WILDCARD_CHAR);
             } else {
                 appendMultiple(sb, '#', maxInt - minInt);
             }
@@ -1287,28 +1462,25 @@ class NumberSkeletonImpl {
                 sb.append("currency/");
                 BlueprintHelpers.generateCurrencyOption((Currency) macros.unit, sb);
                 return true;
-            } else if (macros.unit instanceof NoUnit) {
-                if (macros.unit == NoUnit.PERCENT) {
-                    sb.append("percent");
-                    return true;
-                } else if (macros.unit == NoUnit.PERMILLE) {
-                    sb.append("permille");
-                    return true;
-                } else {
-                    assert macros.unit == NoUnit.BASE;
-                    // Default value is not shown in normalized form
-                    return false;
-                }
-            } else {
+            } else if (macros.unit == MeasureUnit.PERCENT) {
+                sb.append("percent");
+                return true;
+            } else if (macros.unit == MeasureUnit.PERMILLE) {
+                sb.append("permille");
+                return true;
+            } else if (macros.unit.getType() != null) {
                 sb.append("measure-unit/");
                 BlueprintHelpers.generateMeasureUnitOption(macros.unit, sb);
                 return true;
+            } else {
+                // TODO(icu-units#35): add support for not-built-in units.
+                throw new UnsupportedOperationException();
             }
         }
 
         private static boolean perUnit(MacroProps macros, StringBuilder sb) {
             // Per-units are currently expected to be only MeasureUnits.
-            if (macros.perUnit instanceof Currency || macros.perUnit instanceof NoUnit) {
+            if (macros.perUnit instanceof Currency) {
                 throw new UnsupportedOperationException(
                         "Cannot generate number skeleton with per-unit that is not a standard measure unit");
             } else {
@@ -1316,6 +1488,16 @@ class NumberSkeletonImpl {
                 BlueprintHelpers.generateMeasureUnitOption(macros.perUnit, sb);
                 return true;
             }
+        }
+
+        private static boolean usage(MacroProps macros, StringBuilder sb) {
+            if (macros.usage != null  && macros.usage.length() > 0) {
+                sb.append("usage/");
+                sb.append(macros.usage);
+
+                return true;
+            }
+            return false;
         }
 
         private static boolean precision(MacroProps macros, StringBuilder sb) {

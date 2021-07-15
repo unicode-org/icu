@@ -1,4 +1,4 @@
-© 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html#License
+© 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html
 Copyright (C) 1996-2004, International Business Machines Corporation and
 others. All Rights Reserved.
 

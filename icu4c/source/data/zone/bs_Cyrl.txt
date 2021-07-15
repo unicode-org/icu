@@ -1,8 +1,8 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 bs_Cyrl{
     %%Parent{"root"}
-    Version{"36"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиџан"}
@@ -1749,7 +1749,9 @@ bs_Cyrl{
             ls{"Ниуе вријеме"}
         }
         "meta:Norfolk"{
-            ls{"Норфолк Острво вријеме"}
+            ld{"Норфолк Острво љетње рачунање вријеме"}
+            lg{"Норфолк Острво вријеме"}
+            ls{"Норфолк Острво стандардно вријеме"}
         }
         "meta:Noronha"{
             ld{"Фернандо де Нороња љетње рачунање времена"}

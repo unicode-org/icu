@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 1996-2016, International Business Machines Corporation and
@@ -29,7 +29,9 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.RBBIDataWrapper;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.RuleBasedBreakIterator;
+import com.ibm.icu.util.CodePointTrie;
 import com.ibm.icu.util.ULocale;
+
 
 @RunWith(JUnit4.class)
 public class RBBITest extends TestFmwk {
@@ -406,7 +408,7 @@ public class RBBITest extends TestFmwk {
             }
         }
 
-        List<Thread> threads = new ArrayList<Thread>();
+        List<Thread> threads = new ArrayList<>();
         for (int n = 0; n<4; ++n) {
             threads.add(new Thread(new WorkerThread()));
         }
@@ -511,7 +513,7 @@ public class RBBITest extends TestFmwk {
         }
         private static final BreakIterator BREAK_ITERATOR_CACHE = BreakIterator.getWordInstance(ULocale.ROOT);
         public static List<Integer> getBoundary(String toParse) {
-            List<Integer> retVal = new ArrayList<Integer>();
+            List<Integer> retVal = new ArrayList<>();
             BreakIterator bi = (BreakIterator) BREAK_ITERATOR_CACHE.clone();
             bi.setText(toParse);
             for (int boundary=bi.first(); boundary != BreakIterator.DONE; boundary = bi.next()) {
@@ -562,7 +564,7 @@ public class RBBITest extends TestFmwk {
 
         RuleBasedBreakIterator bi  = new RuleBasedBreakIterator(rules);
         String rtRules = bi.toString();        // getRules() in C++
-        assertEquals("Break Iterator rule stripping test", "!!forward; $x = [ab#]; '#' '?'; ",  rtRules);
+        assertEquals("Break Iterator rule stripping test", "!!forward;$x=[ab#];'#''?';",  rtRules);
     }
 
     @Test
@@ -577,19 +579,20 @@ public class RBBITest extends TestFmwk {
         int numCharClasses = dw.fHeader.fCatCount;
 
         // Check for duplicate columns (character categories)
-        List<String> columns = new ArrayList<String>();
+        List<String> columns = new ArrayList<>();
         for (int column=0; column<numCharClasses; column++) {
             StringBuilder s = new StringBuilder();
             for (int r = 1; r < fwtbl.fNumStates; r++) {
                 int row = dw.getRowIndex(r);
-                short tableVal = fwtbl.fTable[row + RBBIDataWrapper.NEXTSTATES + column];
-                s.append((char)tableVal);
+                char tableVal = fwtbl.fTable[row + RBBIDataWrapper.NEXTSTATES + column];
+                s.append(tableVal);
             }
             columns.add(s.toString());
         }
         // Ignore column (char class) 0 while checking; it's special, and may have duplicates.
         for (int c1=1; c1<numCharClasses; c1++) {
-            for (int c2 = c1+1; c2 < numCharClasses; c2++) {
+            int limit = c1 < fwtbl.fDictCategoriesStart ? fwtbl.fDictCategoriesStart : numCharClasses;
+            for (int c2 = c1+1; c2 < limit; c2++) {
                 assertFalse(String.format("Duplicate columns (%d, %d)", c1, c2), columns.get(c1).equals(columns.get(c2)));
                 // if (columns.get(c1).equals(columns.get(c2))) {
                 //    System.out.printf("Duplicate columns (%d, %d)\n", c1, c2);
@@ -598,17 +601,16 @@ public class RBBITest extends TestFmwk {
         }
 
         // Check for duplicate states.
-        List<String> rows = new ArrayList<String>();
+        List<String> rows = new ArrayList<>();
         for (int r=0; r<fwtbl.fNumStates; r++) {
             StringBuilder s = new StringBuilder();
             int row = dw.getRowIndex(r);
-            assertTrue("Accepting < -1", fwtbl.fTable[row + RBBIDataWrapper.ACCEPTING] >= -1);
             s.append(fwtbl.fTable[row + RBBIDataWrapper.ACCEPTING]);
             s.append(fwtbl.fTable[row + RBBIDataWrapper.LOOKAHEAD]);
-            s.append(fwtbl.fTable[row + RBBIDataWrapper.TAGIDX]);
+            s.append(fwtbl.fTable[row + RBBIDataWrapper.TAGSIDX]);
             for (int column=0; column<numCharClasses; column++) {
-                short tableVal = fwtbl.fTable[row + RBBIDataWrapper.NEXTSTATES + column];
-                s.append((char)tableVal);
+                char tableVal = fwtbl.fTable[row + RBBIDataWrapper.NEXTSTATES + column];
+                s.append(tableVal);
             }
             rows.add(s.toString());
         }
@@ -642,7 +644,7 @@ public class RBBITest extends TestFmwk {
     public void TestTableRebuild() {
         // Test to verify that rebuilding the state tables from rule source for the standard
         // break iterator types yields the same tables as are imported from ICU4C as part of the default data.
-        List<RuleBasedBreakIterator> breakIterators = new ArrayList<RuleBasedBreakIterator>();
+        List<RuleBasedBreakIterator> breakIterators = new ArrayList<>();
         breakIterators.add((RuleBasedBreakIterator)BreakIterator.getCharacterInstance(Locale.ENGLISH));
         breakIterators.add((RuleBasedBreakIterator)BreakIterator.getWordInstance(Locale.ENGLISH));
         breakIterators.add((RuleBasedBreakIterator)BreakIterator.getSentenceInstance(Locale.ENGLISH));
@@ -655,4 +657,252 @@ public class RBBITest extends TestFmwk {
             assertTrue("Reverse Table",      RBBIDataWrapper.equals(bi.fRData.fRTable, bi2.fRData.fRTable));
         }
     }
+
+    // Helper function to test 8/16 bits of trie and 8/16 bits of state table.
+    private void testTrieStateTable(int numChar, boolean expectUCPTrieValueWidthIn8Bits,
+        boolean expectStateRowIn8Bits) {
+        // Text are duplicate characters from U+4E00 to U+4FFF
+        StringBuilder builder = new StringBuilder(2 * (0x5000 - 0x4e00));
+        for (char c = 0x4e00; c < 0x5000; c++) {
+            builder.append(c).append(c);
+        }
+        String text = builder.toString();
+
+        // Generate rule which will caused length+4 character classes and
+        // length+3 states
+
+        builder = new StringBuilder(100 + 6 * numChar);
+        builder.append("!!quoted_literals_only;");
+        for (char c = 0x4e00; c < 0x4e00 + numChar; c++) {
+            builder.append("\'").append(c).append(c).append("';");
+        }
+        builder.append(".;");
+        String rules = builder.toString();
+
+        RuleBasedBreakIterator bi = new RuleBasedBreakIterator(rules);
+
+        RBBIDataWrapper dw = bi.fRData;
+        RBBIDataWrapper.RBBIStateTable fwtbl = dw.fFTable;
+        RBBIDataWrapper.RBBIStateTable rvtbl = dw.fRTable;
+
+        boolean has8BitRowDataForwardTable = (fwtbl.fFlags & RBBIDataWrapper.RBBI_8BITS_ROWS) != 0;
+        boolean has8BitRowDataReverseTable = (rvtbl.fFlags & RBBIDataWrapper.RBBI_8BITS_ROWS) != 0;
+        boolean has8BitsTrie = dw.fTrie.getValueWidth() == CodePointTrie.ValueWidth.BITS_8;
+
+        assertEquals("Number of char classes mismatch numChar=" + numChar, numChar + 4, dw.fHeader.fCatCount);
+        assertEquals("Number of states in Forward Table mismatch numChar=" + numChar, numChar + 3, fwtbl.fNumStates);
+        assertEquals("Number of states in Reverse Table mismatch numChar=" + numChar, numChar + 3, rvtbl.fNumStates);
+        assertEquals("Trie width mismatch numChar=" + numChar, expectUCPTrieValueWidthIn8Bits, has8BitsTrie);
+        assertEquals("Bits of Forward State table mismatch numChar=" + numChar,
+                     expectStateRowIn8Bits, has8BitRowDataForwardTable);
+        assertEquals("Bits of Reverse State table mismatch numChar=" + numChar,
+                     expectStateRowIn8Bits, has8BitRowDataReverseTable);
+
+        bi.setText(text);
+
+        int pos;
+        int i = 0;
+        while ((pos = bi.next()) > 0) {
+            // The first numChar should not break between the pair
+            if (i++ < numChar) {
+                assertEquals("next() mismatch numChar=" + numChar, i * 2, pos);
+            } else {
+                // After the first numChar next(), break on each character.
+                assertEquals("next() mismatch numChar=" + numChar, i + numChar, pos);
+            }
+        }
+        while ((pos = bi.previous()) > 0) {
+            // The first numChar should not break between the pair
+            if (--i < numChar) {
+                assertEquals("previous() mismatch numChar=" + numChar, i * 2, pos);
+            } else {
+                // After the first numChar next(), break on each character.
+                assertEquals("previous() mismatch numChar=" + numChar, i + numChar, pos);
+            }
+        }
+    }
+
+    @Test
+    public void Test8BitsTrieWith8BitStateTable() {
+        testTrieStateTable(251,  true /* expectUCPTrieValueWidthIn8Bits */,  true /* expectStateRowIn8Bits */);
+    }
+
+    @Test
+    public void Test16BitsTrieWith8BitStateTable() {
+        testTrieStateTable(252, false /* expectUCPTrieValueWidthIn8Bits */,  true /* expectStateRowIn8Bits */);
+    }
+
+    @Test
+    public void Test16BitsTrieWith16BitStateTable() {
+        testTrieStateTable(253, false /* expectUCPTrieValueWidthIn8Bits */, false /* expectStateRowIn8Bits */);
+    }
+
+    @Test
+    public void Test8BitsTrieWith16BitStateTable() {
+        // Test UCPTRIE_VALUE_BITS_8 with 16 bits rows. Use a different approach to
+        // create state table in 16 bits.
+
+        // Generate 510 'a' as text
+        StringBuilder builder = new StringBuilder(510);
+        for (int i = 0; i < 510; i++) {
+            builder.append('a');
+        }
+        String text = builder.toString();
+
+        builder = new StringBuilder(550);
+        builder.append("!!quoted_literals_only;'");
+        // 254 'a' in the rule will cause 256 states
+        for (int i = 0; i < 254; i++) {
+            builder.append('a');
+        }
+        builder.append("';.;");
+        String rules = builder.toString();
+
+        RuleBasedBreakIterator bi = new RuleBasedBreakIterator(rules);
+
+        RBBIDataWrapper dw = bi.fRData;
+        RBBIDataWrapper.RBBIStateTable fwtbl = dw.fFTable;
+
+        boolean has8BitRowData = (fwtbl.fFlags & RBBIDataWrapper.RBBI_8BITS_ROWS) != 0;
+        boolean has8BitsTrie = dw.fTrie.getValueWidth() == CodePointTrie.ValueWidth.BITS_8;
+        assertFalse("State table should be in 16 bits", has8BitRowData);
+        assertTrue("Trie should be in 8 bits", has8BitsTrie);
+
+        bi.setText(text);
+
+        // break positions:
+        // 254, 508, 509, 510
+        assertEquals("next()", 254, bi.next());
+        int i = 0;
+        int pos;
+        while ((pos = bi.next()) > 0) {
+            assertEquals("next()", 508 + i , pos);
+            i++;
+        }
+        i = 0;
+        while ((pos = bi.previous()) > 0) {
+             i++;
+            if (pos >= 508) {
+                assertEquals("previous()", 510 - i , pos);
+            } else {
+                assertEquals("previous()", 254 , pos);
+            }
+        }
+    }
+
+    /**
+     * Test that both compact (8 bit) and full sized (16 bit) rbbi tables work, and
+     * that there are no problems with rules at the size that transitions between the two.
+     *
+     * A rule that matches a literal string, like 'abcdefghij', will require one state and
+     * one character class per character in the string. So we can make a rule to tickle the
+     * boundaries by using literal strings of various lengths.
+     *
+     * For both the number of states and the number of character classes, the eight bit format
+     * only has 7 bits available, allowing for 128 values. For both, a few values are reserved,
+     * leaving 120 something available. This test runs the string over the range of 120 - 130,
+     * which allows some margin for changes to the number of values reserved by the rule builder
+     * without breaking the test.
+     */
+    @Test
+    public void TestTable_8_16_Bits() {
+        // testStr serves as both the source of the rule string (truncated to the desired length)
+        // and as test data to check matching behavior. A break rule consisting of the first 120
+        // characters of testStr will match the first 120 chars of the full-length testStr.
+        StringBuilder builder = new StringBuilder(0x200);
+        for (char c=0x3000; c<0x3200; ++c) {
+            builder.append(c);
+        }
+        String testStr = builder.toString();
+
+        int startLength = 120;   // The shortest rule string to test.
+        int endLength = 260;     // The longest rule string to test
+        int increment = 1;
+        for (int ruleLen=startLength; ruleLen <= endLength; ruleLen += increment) {
+            String ruleString = (new String("!!quoted_literals_only; '#';"))
+                .replace("#", testStr.substring(0, ruleLen));
+            RuleBasedBreakIterator bi = new RuleBasedBreakIterator(ruleString);
+
+            // Verify that the break iterator is functioning - that the first boundary found
+            // in testStr is at the length of the rule string.
+            bi.setText(testStr);
+            assertEquals("The first boundary found in testStr should be at the length of the rule string",
+                ruleLen, bi.next());
+
+            // Reverse iteration. Do a setText() first, to flush the break iterator's internal cache
+            // of previously detected boundaries, thus forcing the engine to run the safe reverse rules.
+            bi.setText(testStr);
+            int result = bi.preceding(ruleLen);
+            assertEquals("Reverse iteration should find the boundary at 0", 0, result);
+
+            // Verify that the range of rule lengths being tested cover the transations
+            // from 8 to 16 bit data.
+            RBBIDataWrapper dw = bi.fRData;
+            RBBIDataWrapper.RBBIStateTable fwtbl = dw.fFTable;
+
+            boolean has8BitRowData = (fwtbl.fFlags & RBBIDataWrapper.RBBI_8BITS_ROWS) != 0;
+            boolean has8BitsTrie = dw.fTrie.getValueWidth() == CodePointTrie.ValueWidth.BITS_8;
+            if (ruleLen == startLength) {
+                assertTrue("State table should be in 8 bits", has8BitRowData);
+                assertTrue("Trie should be in 8 bits", has8BitsTrie);
+            }
+            if (ruleLen == endLength) {
+                assertFalse("State table should be in 16 bits", has8BitRowData);
+                assertFalse("Trie should be in 16 bits", has8BitsTrie);
+            }
+        }
+    }
+
+    /* Test handling of a large number of look-ahead rules.
+     * The number of rules in the test exceeds the implementation limits prior to the
+     * improvements introduced with #13590.
+     *
+     * The test look-ahead rules have the form "AB / CE"; "CD / EG"; ...
+     * The text being matched is sequential, "ABCDEFGHI..."
+     *
+     * The upshot is that the look-ahead rules all match on their preceding context,
+     * and consequently must save a potential result, but then fail to match on their
+     * trailing context, so that they don't actually cause a boundary.
+     *
+     * Additionally, add a ".*" rule, so there are no boundaries unless a
+     * look-ahead hard-break rule forces one.
+     */
+    @Test
+    public void TestBug13590() {
+        StringBuilder rules = new StringBuilder("!!quoted_literals_only; !!chain; .*;\n");
+
+        int NUM_LOOKAHEAD_RULES = 50;
+        char STARTING_CHAR = '\u5000';
+        char firstChar = 0;
+        for (int ruleNum = 0; ruleNum < NUM_LOOKAHEAD_RULES; ++ruleNum) {
+            firstChar = (char) (STARTING_CHAR + ruleNum*2);
+            rules.append('\'') .append(firstChar) .append((char)(firstChar+1)) .append('\'')
+                 .append(' ') .append('/') .append(' ')
+                 .append('\'') .append((char)(firstChar+2)) .append((char)(firstChar+4)) .append('\'')
+                 .append(';') .append('\n');
+        }
+
+        // Change the last rule added from the form "UV / WY" to "UV / WX".
+        // Changes the rule so that it will match - all 4 chars are in ascending sequence.
+        String rulesStr = rules.toString().replace((char)(firstChar+4), (char)(firstChar+3));
+
+        RuleBasedBreakIterator bi = new RuleBasedBreakIterator(rulesStr);
+        // bi.dump(System.out);
+
+        StringBuilder testString = new StringBuilder();
+        for (char c = (char) (STARTING_CHAR-200); c < STARTING_CHAR + NUM_LOOKAHEAD_RULES*4; ++c) {
+            testString.append(c);
+        }
+        bi.setText(testString);
+
+        int breaksFound = 0;
+        while (bi.next() != BreakIterator.DONE) {
+            ++breaksFound;
+        }
+
+        // Two matches are expected, one from the last rule that was explicitly modified,
+        // and one at the end of the text.
+        assertEquals("Wrong number of breaks found", 2, breaksFound);
+    }
+
 }

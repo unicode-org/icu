@@ -1,5 +1,5 @@
 // © 2017 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.number;
 
 import static org.junit.Assert.assertEquals;
@@ -127,10 +127,10 @@ public class ModifierTest {
         // If this test starts failing, please update the method #getUnicodeSet() in
         // BOTH CurrencySpacingEnabledModifier.java AND in C++.
         DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance(new ULocale("en-US"));
-        assertEquals("[:^S:]",
+        assertEquals("[[:^S:]&[:^Z:]]",
                 dfs.getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_CURRENCY_MATCH,
                         true));
-        assertEquals("[:^S:]",
+        assertEquals("[[:^S:]&[:^Z:]]",
                 dfs.getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_CURRENCY_MATCH,
                         false));
         assertEquals("[:digit:]",

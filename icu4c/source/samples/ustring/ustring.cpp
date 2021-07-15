@@ -2,7 +2,7 @@
 *******************************************************************************
 *
 *   © 2016 and later: Unicode, Inc. and others.
-*   License & terms of use: http://www.unicode.org/copyright.html#License
+*   License & terms of use: http://www.unicode.org/copyright.html
 *
 *******************************************************************************
 *******************************************************************************
@@ -135,7 +135,7 @@ demo_utf_h_macros() {
 
     puts("");
 
-    isError=FALSE;
+    isError=false;
     i=1; /* write position, gets post-incremented so needs to be in an l-value */
     U16_APPEND(input, i, UPRV_LENGTHOF(input), 0x0062, isError);
 
@@ -226,7 +226,7 @@ static void demoCaseMapInC() {
     printUString("input string: ", input, -1);
 
     /* uppercase */
-    isError=FALSE;
+    isError=false;
     for(i=j=0; j<UPRV_LENGTHOF(buffer) && !isError; /* U16_NEXT post-increments */) {
         U16_NEXT(input, i, INT32_MAX, c); /* without length because NUL-terminated */
         if(c==0) {
@@ -237,7 +237,7 @@ static void demoCaseMapInC() {
     }
     printUString("simple-uppercased: ", buffer, j);
     /* lowercase */
-    isError=FALSE;
+    isError=false;
     for(i=j=0; j<UPRV_LENGTHOF(buffer) && !isError; /* U16_NEXT post-increments */) {
         U16_NEXT(input, i, INT32_MAX, c); /* without length because NUL-terminated */
         if(c==0) {
@@ -248,7 +248,7 @@ static void demoCaseMapInC() {
     }
     printUString("simple-lowercased: ", buffer, j);
     /* titlecase */
-    isError=FALSE;
+    isError=false;
     for(i=j=0; j<UPRV_LENGTHOF(buffer) && !isError; /* U16_NEXT post-increments */) {
         U16_NEXT(input, i, INT32_MAX, c); /* without length because NUL-terminated */
         if(c==0) {
@@ -259,7 +259,7 @@ static void demoCaseMapInC() {
     }
     printUString("simple-titlecased: ", buffer, j);
     /* case-fold/default */
-    isError=FALSE;
+    isError=false;
     for(i=j=0; j<UPRV_LENGTHOF(buffer) && !isError; /* U16_NEXT post-increments */) {
         U16_NEXT(input, i, INT32_MAX, c); /* without length because NUL-terminated */
         if(c==0) {
@@ -270,7 +270,7 @@ static void demoCaseMapInC() {
     }
     printUString("simple-case-folded/default: ", buffer, j);
     /* case-fold/Turkic */
-    isError=FALSE;
+    isError=false;
     for(i=j=0; j<UPRV_LENGTHOF(buffer) && !isError; /* U16_NEXT post-increments */) {
         U16_NEXT(input, i, INT32_MAX, c); /* without length because NUL-terminated */
         if(c==0) {
@@ -456,7 +456,7 @@ demoUnicodeStringStorage() {
 
     // * UnicodeString using readonly-alias to a const UChar array
     // construct a string that aliases a readonly buffer
-    UnicodeString three(FALSE, readonly, UPRV_LENGTHOF(readonly));
+    UnicodeString three(false, readonly, UPRV_LENGTHOF(readonly));
     printUnicodeString("readonly-alias string: ", three);
     // copy-on-write: any modification to the string results in
     // a copy to either the internal buffer or to a newly allocated one
@@ -468,7 +468,7 @@ demoUnicodeStringStorage() {
                i, readonly[i]);
     }
     // setTo() readonly alias
-    one.setTo(FALSE, writeable, UPRV_LENGTHOF(writeable));
+    one.setTo(false, writeable, UPRV_LENGTHOF(writeable));
     // copying the readonly-alias object with fastCopyFrom() (new in ICU 2.4)
     // will readonly-alias the same buffer
     two.fastCopyFrom(one);
@@ -549,7 +549,7 @@ demoUnicodeStringInit() {
     U_STRING_INIT(invString, "such characters are safe 123 %-.", 32);
 
     // compare the C and C++ strings
-    printf("C and C++ Unicode strings are equal: %d\n", invariantOnly==UnicodeString(TRUE, invString, 32));
+    printf("C and C++ Unicode strings are equal: %d\n", invariantOnly==UnicodeString(true, invString, 32));
 
     /*
      * convert between char * and UChar * strings that

@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 ******************************************************************************
 * Copyright (C) 2003-2012, International Business Machines Corporation and   *
@@ -70,7 +70,8 @@ import com.ibm.icu.impl.locale.UnicodeLocaleExtension;
  * Canonicalization additionally performs the following:
  * <ul>
  * <li>POSIX ids are converted to ICU format IDs</li>
- * <li>'grandfathered' 3066 ids are converted to ICU standard form</li>
+ * <li>Legacy language tags (marked as “Type: grandfathered” in BCP 47)
+ * are converted to ICU standard form</li>
  * <li>'PREEURO' and 'EURO' variants are converted to currency keyword form,
  * with the currency
  * id appropriate to the country of the locale (for PREEURO) or EUR (for EURO).
@@ -1033,7 +1034,7 @@ public final class ULocale implements Serializable {
 
     /**
      * {@icu} Returns the canonical name for the specified locale ID.  This is used to
-     * convert POSIX and other grandfathered IDs to standard ICU form.
+     * convert POSIX and other legacy IDs to standard ICU form.
      * @param localeID the locale id
      * @return the canonicalized id
      * @stable ICU 3.0
@@ -2666,60 +2667,18 @@ public final class ULocale implements Serializable {
      * script to title case, country to upper case, variant to upper case,
      * and extensions to lower case.
      *
-     * <p>This implements the 'Language-Tag' production of BCP47, and
-     * so supports grandfathered (regular and irregular) as well as
-     * private use language tags.  Stand alone private use tags are
-     * represented as empty language and extension 'x-whatever',
-     * and grandfathered tags are converted to their canonical replacements
-     * where they exist.  
+     * <p>This implements the 'Language-Tag' production of BCP 47, and so
+     * supports legacy language tags (marked as “Type: grandfathered” in BCP 47)
+     * (regular and irregular) as well as private use language tags.
      *
-     * <p>Grandfathered tags with canonical replacements are as follows:
+     * <p>Stand-alone private use tags are represented as empty language and extension 'x-whatever',
+     * and legacy tags are converted to their canonical replacements where they exist.
      *
-     * <table>
-     * <tbody align="center">
-     * <tr><th>grandfathered tag</th><th>&nbsp;</th><th>modern replacement</th></tr>
-     * <tr><td>art-lojban</td><td>&nbsp;</td><td>jbo</td></tr>
-     * <tr><td>i-ami</td><td>&nbsp;</td><td>ami</td></tr>
-     * <tr><td>i-bnn</td><td>&nbsp;</td><td>bnn</td></tr>
-     * <tr><td>i-hak</td><td>&nbsp;</td><td>hak</td></tr>
-     * <tr><td>i-klingon</td><td>&nbsp;</td><td>tlh</td></tr>
-     * <tr><td>i-lux</td><td>&nbsp;</td><td>lb</td></tr>
-     * <tr><td>i-navajo</td><td>&nbsp;</td><td>nv</td></tr>
-     * <tr><td>i-pwn</td><td>&nbsp;</td><td>pwn</td></tr>
-     * <tr><td>i-tao</td><td>&nbsp;</td><td>tao</td></tr>
-     * <tr><td>i-tay</td><td>&nbsp;</td><td>tay</td></tr>
-     * <tr><td>i-tsu</td><td>&nbsp;</td><td>tsu</td></tr>
-     * <tr><td>no-bok</td><td>&nbsp;</td><td>nb</td></tr>
-     * <tr><td>no-nyn</td><td>&nbsp;</td><td>nn</td></tr>
-     * <tr><td>sgn-BE-FR</td><td>&nbsp;</td><td>sfb</td></tr>
-     * <tr><td>sgn-BE-NL</td><td>&nbsp;</td><td>vgt</td></tr>
-     * <tr><td>sgn-CH-DE</td><td>&nbsp;</td><td>sgg</td></tr>
-     * <tr><td>zh-guoyu</td><td>&nbsp;</td><td>cmn</td></tr>
-     * <tr><td>zh-hakka</td><td>&nbsp;</td><td>hak</td></tr>
-     * <tr><td>zh-min-nan</td><td>&nbsp;</td><td>nan</td></tr>
-     * <tr><td>zh-xiang</td><td>&nbsp;</td><td>hsn</td></tr>
-     * </tbody>
-     * </table>
+     * <p>Note that a few legacy tags have no modern replacement;
+     * these will be converted using the fallback described in
+     * the first paragraph, so some information might be lost.
      *
-     * <p>Grandfathered tags with no modern replacement will be
-     * converted as follows:
-     *
-     * <table>
-     * <tbody align="center">
-     * <tr><th>grandfathered tag</th><th>&nbsp;</th><th>converts to</th></tr>
-     * <tr><td>cel-gaulish</td><td>&nbsp;</td><td>xtg-x-cel-gaulish</td></tr>
-     * <tr><td>en-GB-oed</td><td>&nbsp;</td><td>en-GB-x-oed</td></tr>
-     * <tr><td>i-default</td><td>&nbsp;</td><td>en-x-i-default</td></tr>
-     * <tr><td>i-enochian</td><td>&nbsp;</td><td>und-x-i-enochian</td></tr>
-     * <tr><td>i-mingo</td><td>&nbsp;</td><td>see-x-i-mingo</td></tr>
-     * <tr><td>zh-min</td><td>&nbsp;</td><td>nan-x-zh-min</td></tr>
-     * </tbody>
-     * </table>
-     *
-     * <p>For a list of all grandfathered tags, see the
-     * IANA Language Subtag Registry (search for "Type: grandfathered").
-     *
-     * <p><b>Note</b>: there is no guarantee that <code>toLanguageTag</code>
+     * <p><b>Note</b>: There is no guarantee that <code>toLanguageTag</code>
      * and <code>forLanguageTag</code> will round-trip.
      *
      * @param languageTag the language tag
@@ -2821,7 +2780,7 @@ public final class ULocale implements Serializable {
          * Resets the Builder to match the provided IETF BCP 47
          * language tag.  Discards the existing state.  Null and the
          * empty string cause the builder to be reset, like {@link
-         * #clear}.  Grandfathered tags (see {@link
+         * #clear}.  Legacy tags (see {@link
          * ULocale#forLanguageTag}) are converted to their canonical
          * form before being processed.  Otherwise, the language tag
          * must be well-formed (see {@link ULocale}) or an exception is

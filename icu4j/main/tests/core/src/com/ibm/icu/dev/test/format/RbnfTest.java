@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 1996-2015, International Business Machines Corporation and    *
@@ -296,6 +296,17 @@ public class RbnfTest extends TestFmwk {
         };
 
         doTest(formatter, testData, true);
+
+        String[][] testDataLenient = {
+                { "fifty-7", "57" },
+                { " fifty-7", "57" },
+                { "  fifty-7", "57" },
+                { "2 thousand six    HUNDRED fifty-7", "2,657" },
+                { "fifteen hundred and zero", "1,500" },
+                { "FOurhundred     thiRTY six", "436" }
+        };
+
+        doParsingTest(formatter, testDataLenient, true);
     }
 
     /**
@@ -350,6 +361,12 @@ public class RbnfTest extends TestFmwk {
         };
 
         doTest(formatter, testData, true);
+
+        String[][] testDataLenient = {
+                { "2-51-33", "10,293" },
+        };
+
+        doParsingTest(formatter, testDataLenient, true);
     }
 
     /**
@@ -425,6 +442,13 @@ public class RbnfTest extends TestFmwk {
         };
 
         doTest(formatter, testData, true);
+
+        String[][] testDataLenient = {
+                { "trente-et-un", "31" },
+                { "un cent quatre vingt dix huit", "198" },
+        };
+
+        doParsingTest(formatter, testDataLenient, true);
     }
 
     /**
@@ -529,6 +553,12 @@ public class RbnfTest extends TestFmwk {
         };
 
         doTest(formatter, testData, true);
+
+        String[][] testDataLenient = {
+                { "ein Tausend sechs Hundert fuenfunddreissig", "1,635" },
+        };
+
+        doParsingTest(formatter, testDataLenient, true);
     }
 
     /**
@@ -1117,6 +1147,10 @@ public class RbnfTest extends TestFmwk {
                 " (ordinal) "
                 //" (duration) " // English only
         };
+        boolean[] lenientMode = {
+                false, // non-lenient mode
+                true // lenient mode
+        };
         double[] numbers = {45.678, 1, 2, 10, 11, 100, 110, 200, 1000, 1111, -1111};
         int count = numbers.length;
         Random r = (count <= numbers.length ? null : createRandom());
@@ -1142,25 +1176,25 @@ public class RbnfTest extends TestFmwk {
                         logln(loc.getName() + names[j] + "success format: " + n + " -> " + s);
                     }
 
-                    try {
-                        // RBNF parse is extremely slow when lenient option is enabled.
-                        // non-lenient parse
-                        fmt.setLenientParseMode(false);
-                        Number num = fmt.parse(s);
-                        if (isVerbose()) {
-                            logln(loc.getName() + names[j] + "success parse: " + s + " -> " + num);
+                    for (int k = 0; k < lenientMode.length; k++) {
+                        try {
+                            fmt.setLenientParseMode(lenientMode[k]);
+                            Number num = fmt.parse(s);
+                            if (isVerbose()) {
+                                logln(loc.getName() + names[j] + "success parse: " + s + " -> " + num);
+                            }
+                            if (j != 0) {
+                                // TODO: Fix the ordinal rules.
+                                continue;
+                            }
+                            if (n != num.doubleValue()) {
+                                errors.append("\n" + loc + names[j] + "got " + num + " expected " + n);
+                            }
+                        } catch (ParseException pe) {
+                            String msg = loc.getName() + names[j] + "ERROR:" + pe.getMessage();
+                            logln(msg);
+                            errors.append("\n" + msg);
                         }
-                        if (j != 0) {
-                            // TODO: Fix the ordinal rules.
-                            continue;
-                        }
-                        if (n != num.doubleValue()) {
-                            errors.append("\n" + loc + names[j] + "got " + num + " expected " + n);
-                        }
-                    } catch (ParseException pe) {
-                        String msg = loc.getName() + names[j] + "ERROR:" + pe.getMessage();
-                        logln(msg);
-                        errors.append("\n" + msg);
                     }
                 }
             }
@@ -1170,10 +1204,12 @@ public class RbnfTest extends TestFmwk {
         }
     }
 
-    void doTest(RuleBasedNumberFormat formatter, String[][] testData,
-                boolean testParsing) {
-        //        NumberFormat decFmt = NumberFormat.getInstance(Locale.US);
-        NumberFormat decFmt = new DecimalFormat("#,###.################");
+    NumberFormat createDecimalFormatter() {
+        return new DecimalFormat("#,###.################");
+    }
+
+    void doTest(RuleBasedNumberFormat formatter, String[][] testData, boolean testParsing) {
+        NumberFormat decFmt = createDecimalFormatter();
         try {
             for (int i = 0; i < testData.length; i++) {
                 String number = testData[i][0];
@@ -1204,6 +1240,35 @@ public class RbnfTest extends TestFmwk {
         catch (Throwable e) {
             e.printStackTrace();
             errln("Test failed with exception: " + e.toString());
+        }
+    }
+
+    void doParsingTest(RuleBasedNumberFormat formatter, String[][] testData, boolean lenient) {
+        NumberFormat decFmt = createDecimalFormatter();
+
+        if (lenient) {
+            formatter.setLenientParseMode(true);
+        }
+        for (int i = 0; i < testData.length; i++) {
+            try {
+                String s = testData[i][0];
+                Number expectedNumber = decFmt.parse(testData[i][1]);
+                if (isVerbose()) {
+                    logln("test[" + i + "] spellout value: (" + s + ") target: " + expectedNumber);
+                }
+
+                Number num = formatter.parse(s);
+                if (isVerbose()) {
+                    logln("success parse: (" + s + ") -> " + num);
+                }
+
+                if (expectedNumber.doubleValue() != num.doubleValue()) {
+                    errln("\nParsing (" + s + ") failed: got " + num + " expected " + expectedNumber);
+                }
+            } catch (Throwable e) {
+                e.printStackTrace();
+                errln("Test failed with exception: " + e.toString());
+            }
         }
     }
 

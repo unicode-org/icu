@@ -21,7 +21,7 @@ Install this project's dependencies locally:
 
 Optional: save your Jira credentials in a `.env` file in this directory:
 
-    JIRA_USERNAME=hello
+    JIRA_USERNAME=hello@example.com
     JIRA_PASSWORD=world
 
 This is required if you want to process sensitive tickets.  Note: JIRA_PASSWORD needs to be an API Token generated according to the following instructions:

@@ -4,10 +4,9 @@ package org.unicode.icu.tool.cldrtoicu.mapper;
 
 import static com.google.common.base.CharMatcher.whitespace;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static java.nio.file.StandardOpenOption.CREATE;
-import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.StandardOpenOption.CREATE_NEW;
 import static org.unicode.cldr.api.AttributeKey.keyOf;
-import static org.unicode.cldr.api.CldrData.PathOrder.DTD;
 import static org.unicode.cldr.api.CldrDataType.SUPPLEMENTAL;
 
 import java.io.IOException;
@@ -21,14 +20,13 @@ import java.util.function.Function;
 
 import org.unicode.cldr.api.AttributeKey;
 import org.unicode.cldr.api.CldrData;
-import org.unicode.cldr.api.CldrData.ValueVisitor;
 import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDataType;
 import org.unicode.cldr.api.CldrValue;
 import org.unicode.icu.tool.cldrtoicu.IcuData;
-import org.unicode.icu.tool.cldrtoicu.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.RbPath;
 import org.unicode.icu.tool.cldrtoicu.RbValue;
+import org.unicode.icu.tool.cldrtoicu.CldrDataProcessor;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
@@ -44,8 +42,15 @@ import com.ibm.icu.text.Transliterator;
  * <p>This mapper also writes out the transform rule files into a specified directory.
  */
 public final class TransformsMapper {
-    private static final PathMatcher TRULE =
-        PathMatcher.of("supplementalData/transforms/transform/tRule");
+
+    private static final CldrDataProcessor<TransformsMapper> CLDR_PROCESSOR;
+    static {
+        CldrDataProcessor.Builder<TransformsMapper> processor = CldrDataProcessor.builder();
+        processor.addValueAction(
+            "//supplementalData/transforms/transform/tRule", TransformsMapper::processRule);
+        CLDR_PROCESSOR = processor.build();
+    }
+
     private static final AttributeKey TRANSFORM_SOURCE = keyOf("transform", "source");
     private static final AttributeKey TRANSFORM_TARGET = keyOf("transform", "target");
     private static final AttributeKey TRANSFORM_DIRECTION = keyOf("transform", "direction");
@@ -86,7 +91,8 @@ public final class TransformsMapper {
         Function<Path, PrintWriter> fileWriterFn = p -> {
             Path file = ruleFileOutputDir.resolve(p);
             try {
-                return new PrintWriter(Files.newBufferedWriter(file, CREATE, TRUNCATE_EXISTING));
+                // Specify "CREATE_NEW" since we don't want to overwrite any existing files.
+                return new PrintWriter(Files.newBufferedWriter(file, UTF_8, CREATE_NEW));
             } catch (IOException e) {
                 throw new RuntimeException("error opening file: " + file, e);
             }
@@ -99,74 +105,68 @@ public final class TransformsMapper {
     static IcuData process(
         CldrData cldrData, Function<Path, PrintWriter> fileWriterFn, List<String> header) {
 
-        RuleVisitor visitor = new RuleVisitor(fileWriterFn, header);
-        cldrData.accept(DTD, visitor);
-        addSpecialCaseValues(visitor.icuData);
-        return visitor.icuData;
+        TransformsMapper mapper = new TransformsMapper(fileWriterFn, header);
+        CLDR_PROCESSOR.process(cldrData, mapper);
+        addSpecialCaseValues(mapper.icuData);
+        return mapper.icuData;
     }
 
-    private static class RuleVisitor implements ValueVisitor {
-        private final IcuData icuData = new IcuData("root", false);
-        private final Function<Path, PrintWriter> outFn;
-        private final ImmutableList<String> header;
+    private final IcuData icuData = new IcuData("root", false);
+    private final Function<Path, PrintWriter> outFn;
+    private final ImmutableList<String> header;
 
-        RuleVisitor(Function<Path, PrintWriter> outFn, List<String> header) {
-            this.outFn = checkNotNull(outFn);
-            this.header = ImmutableList.copyOf(header);
-            icuData.setFileComment("File: root.txt");
+    private TransformsMapper(Function<Path, PrintWriter> outFn, List<String> header) {
+        this.outFn = checkNotNull(outFn);
+        this.header = ImmutableList.copyOf(header);
+        icuData.setFileComment("File: root.txt");
+    }
+
+    private void processRule(CldrValue value) {
+        String source = getExpectedOptionalAttribute(value, TRANSFORM_SOURCE);
+        String target = getExpectedOptionalAttribute(value, TRANSFORM_TARGET);
+        Optional<String> variant = TRANSFORM_VARIANT.optionalValueFrom(value);
+        String baseFilename = source + "_" + target;
+        String filename = variant.map(v -> baseFilename + "_" + v).orElse(baseFilename) + ".txt";
+        writeRootIndexEntry(value, source, target, variant, filename);
+        writeDataFile(filename, value);
+    }
+
+    private void writeDataFile(String filename, CldrValue value) {
+        try (PrintWriter out = outFn.apply(Paths.get(filename))) {
+            out.print("\uFEFF");
+            header.forEach(s -> out.println("# " + s));
+            out.println("#");
+            out.println("# File: " + filename);
+            out.println("# Generated from CLDR");
+            out.println("#");
+            out.println();
+            out.println(FIXUP.transliterate(whitespace().trimFrom(value.getValue())));
+            out.println();
         }
+    }
 
-        @Override public void visit(CldrValue value) {
-            // The other possible element is "comment" but we currently ignore those.
-            if (TRULE.matches(value.getPath())) {
-                String source = getExpectedOptionalAttribute(value, TRANSFORM_SOURCE);
-                String target = getExpectedOptionalAttribute(value, TRANSFORM_TARGET);
-                Optional<String> variant = TRANSFORM_VARIANT.optionalValueFrom(value);
-                String baseFilename = source + "_" + target;
-                String filename =
-                    variant.map(v -> baseFilename + "_" + v).orElse(baseFilename) + ".txt";
-                writeRootIndexEntry(value, source, target, variant, filename);
-                writeDataFile(filename, value);
-            }
+    private void writeRootIndexEntry(
+        CldrValue value, String source, String target, Optional<String> variant, String filename) {
+        Visibility visibility = TRANSFORM_VISIBILITY.valueFrom(value, Visibility.class);
+        String status = visibility == Visibility.internal ? "internal" : "file";
+
+        Direction dir = TRANSFORM_DIRECTION.valueFrom(value, Direction.class);
+        // TODO: Consider checks for unused data (e.g. forward aliases in a backward rule).
+        if (dir != Direction.backward) {
+            String id = getId(source, target, variant);
+            TRANSFORM_ALIAS.listOfValuesFrom(value)
+                .forEach(a -> icuData.add(RB_TRANSLITERATOR_IDS.extendBy(a, "alias"), id));
+            RbPath rbPrefix = RB_TRANSLITERATOR_IDS.extendBy(id, status);
+            icuData.add(rbPrefix.extendBy("resource:process(transliterator)"), filename);
+            icuData.add(rbPrefix.extendBy("direction"), "FORWARD");
         }
-
-        private void writeDataFile(String filename, CldrValue value) {
-            try (PrintWriter out = outFn.apply(Paths.get(filename))) {
-                out.print("\uFEFF");
-                header.forEach(s -> out.println("# " + s));
-                out.println("#");
-                out.println("# File: " + filename);
-                out.println("# Generated from CLDR");
-                out.println("#");
-                out.println();
-                out.println(FIXUP.transliterate(whitespace().trimFrom(value.getValue())));
-                out.println();
-            }
-        }
-
-        private void writeRootIndexEntry(
-            CldrValue value, String source, String target, Optional<String> variant, String filename) {
-            Visibility visibility = TRANSFORM_VISIBILITY.valueFrom(value, Visibility.class);
-            String status = visibility == Visibility.internal ? "internal" : "file";
-
-            Direction dir = TRANSFORM_DIRECTION.valueFrom(value, Direction.class);
-            // TODO: Consider checks for unused data (e.g. forward aliases in a backward rule).
-            if (dir != Direction.backward) {
-                String id = getId(source, target, variant);
-                TRANSFORM_ALIAS.listOfValuesFrom(value)
-                    .forEach(a -> icuData.add(RB_TRANSLITERATOR_IDS.extendBy(a, "alias"), id));
-                RbPath rbPrefix = RB_TRANSLITERATOR_IDS.extendBy(id, status);
-                icuData.add(rbPrefix.extendBy("resource:process(transliterator)"), filename);
-                icuData.add(rbPrefix.extendBy("direction"), "FORWARD");
-            }
-            if (dir != Direction.forward) {
-                String id = getId(target, source, variant);
-                TRANSFORM_BACKALIAS.listOfValuesFrom(value)
-                    .forEach(a -> icuData.add(RB_TRANSLITERATOR_IDS.extendBy(a, "alias"), id));
-                RbPath rbPrefix = RB_TRANSLITERATOR_IDS.extendBy(id, status);
-                icuData.add(rbPrefix.extendBy("resource:process(transliterator)"), filename);
-                icuData.add(rbPrefix.extendBy("direction"), "REVERSE");
-            }
+        if (dir != Direction.forward) {
+            String id = getId(target, source, variant);
+            TRANSFORM_BACKALIAS.listOfValuesFrom(value)
+                .forEach(a -> icuData.add(RB_TRANSLITERATOR_IDS.extendBy(a, "alias"), id));
+            RbPath rbPrefix = RB_TRANSLITERATOR_IDS.extendBy(id, status);
+            icuData.add(rbPrefix.extendBy("resource:process(transliterator)"), filename);
+            icuData.add(rbPrefix.extendBy("direction"), "REVERSE");
         }
     }
 

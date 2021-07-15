@@ -975,20 +975,20 @@ void NumberFormatRegressionTest::Test4071005 (void)
     UnicodeString tempString;
     /* User error :
     String expectedDefault = "-5\u00a0789,987";
-    String expectedCurrency = "5\u00a0789,98\u00a0$";
+    String expectedCurrency = "5\u00a0789,98\u00a0$\u00a0CA";
     String expectedPercent = "-578\u00a0998%";
     */
     UChar chars1 [] = {
         0x2d, 0x35, 0x00a0, 0x37, 0x38, 0x39, 0x2c, 0x39, 0x38, 0x38
     };
     UChar chars2 [] = {
-        0x35, 0x00a0, 0x37, 0x38, 0x39, 0x2c, 0x39, 0x39, 0x00a0, 0x24
+        0x35, 0x00a0, 0x37, 0x38, 0x39, 0x2c, 0x39, 0x39, 0x00a0, 0x24, 0x00a0, 0x43, 0x41
     };
     UChar chars3 [] = {
         0x2d, 0x35, 0x37, 0x38, 0x00a0, 0x39, 0x39, 0x39, 0x00a0, 0x25
     };
     UnicodeString expectedDefault(chars1, 10, 10);
-    UnicodeString expectedCurrency(chars2, 10, 10);
+    UnicodeString expectedCurrency(chars2, 13, 13);
     UnicodeString expectedPercent(chars3, 10, 10);
 
     UErrorCode status = U_ZERO_ERROR;

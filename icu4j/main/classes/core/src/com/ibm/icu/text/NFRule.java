@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 1996-2015, International Business Machines Corporation and    *
@@ -41,9 +41,9 @@ final class NFRule {
     static final int PROPER_FRACTION_RULE = -3;
 
     /**
-     * Special base value used to identify a master rule
+     * Special base value used to identify a default rule
      */
-    static final int MASTER_RULE = -4;
+    static final int DEFAULT_RULE = -4;
 
     /**
      * Special base value used to identify an infinity rule
@@ -169,7 +169,7 @@ final class NFRule {
             if ((rule1.baseValue > 0
                  && rule1.baseValue % (power(rule1.radix, rule1.exponent)) == 0)
                 || rule1.baseValue == IMPROPER_FRACTION_RULE
-                || rule1.baseValue == MASTER_RULE)
+                || rule1.baseValue == DEFAULT_RULE)
             {
 
                 // if it passes that test, new up the second rule.  If the
@@ -190,9 +190,9 @@ final class NFRule {
                     // the proper fraction rule
                     rule2.baseValue = PROPER_FRACTION_RULE;
                 }
-                else if (rule1.baseValue == MASTER_RULE) {
+                else if (rule1.baseValue == DEFAULT_RULE) {
                     // if the description began with "x.0" and contains bracketed
-                    // text, it describes both the master rule and the
+                    // text, it describes both the default rule and the
                     // improper fraction rule
                     rule2.baseValue = rule1.baseValue;
                     rule1.baseValue = IMPROPER_FRACTION_RULE;
@@ -378,7 +378,7 @@ final class NFRule {
                     decimalPoint = descriptor.charAt(1);
                 }
                 else if (firstChar == 'x' && lastChar == '0') {
-                    setBaseValue(MASTER_RULE);
+                    setBaseValue(DEFAULT_RULE);
                     decimalPoint = descriptor.charAt(1);
                 }
                 else if (descriptor.equals("NaN")) {
@@ -651,7 +651,7 @@ final class NFRule {
         else if (baseValue == PROPER_FRACTION_RULE) {
             result.append('0').append(decimalPoint == 0 ? '.' : decimalPoint).append("x: ");
         }
-        else if (baseValue == MASTER_RULE) {
+        else if (baseValue == DEFAULT_RULE) {
             result.append('x').append(decimalPoint == 0 ? '.' : decimalPoint).append("0: ");
         }
         else if (baseValue == INFINITY_RULE) {
@@ -1241,6 +1241,10 @@ final class NFRule {
 
         RbnfLenientScanner scanner = formatter.getLenientScanner();
         if (scanner != null) {
+            // Check if non-lenient rule finds the text before call lenient parsing
+            if (str.startsWith(prefix)) {
+                return prefix.length();
+            }
             return scanner.prefixLength(str, prefix);
         }
 
@@ -1290,9 +1294,14 @@ final class NFRule {
         }
 
         if (scanner != null) {
-            // if lenient parsing is turned ON, we've got some work
-            // ahead of us
-            return scanner.findText(str, key, startingAt);
+            // Check if non-lenient rule finds the text before call lenient parsing
+            int pos[] = new int[] { str.indexOf(key, startingAt), key.length() };
+            if (pos[0] >= 0) {
+                return pos;
+            } else {
+                // if lenient parsing is turned ON, we've got some work ahead of us
+                return scanner.findText(str, key, startingAt);
+            }
         }
         // if lenient parsing is turned off, this is easy. Just call
         // String.indexOf() and we're done

@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 en{
     Keys{
         calendar{"Calendar"}
@@ -15,6 +16,7 @@ en{
         collation{"Sort Order"}
         currency{"Currency"}
         d0{"Transform Destination"}
+        dx{"Dictionary Break Exclusions"}
         em{"Emoji Presentation Style"}
         fw{"First day of week"}
         h0{"Mixed-in"}
@@ -666,6 +668,8 @@ en{
         zh_Hant{"Traditional Mandarin Chinese"}
     }
     Languages%menu{
+        ars{"Arabic, Najdi"}
+        ckb{"Kurdish, Central"}
         yue{"Chinese, Cantonese"}
         zh{"Chinese, Mandarin"}
     }
@@ -675,6 +679,7 @@ en{
         en_US{"US English"}
     }
     Languages%variant{
+        ckb{"Kurdish, Sorani"}
         ky{"Kirghiz"}
         my{"Myanmar Language"}
         ps{"Pushto"}
@@ -686,6 +691,7 @@ en{
         Aghb{"Caucasian Albanian"}
         Ahom{"Ahom"}
         Arab{"Arabic"}
+        Aran{"Nastaliq"}
         Armi{"Imperial Aramaic"}
         Armn{"Armenian"}
         Avst{"Avestan"}
@@ -706,12 +712,14 @@ en{
         Cari{"Carian"}
         Cham{"Cham"}
         Cher{"Cherokee"}
+        Chrs{"Chorasmian"}
         Cirt{"Cirth"}
         Copt{"Coptic"}
         Cprt{"Cypriot"}
         Cyrl{"Cyrillic"}
         Cyrs{"Old Church Slavonic Cyrillic"}
         Deva{"Devanagari"}
+        Diak{"Dives Akuru"}
         Dogr{"Dogra"}
         Dsrt{"Deseret"}
         Dupl{"Duployan shorthand"}
@@ -756,6 +764,7 @@ en{
         Khar{"Kharoshthi"}
         Khmr{"Khmer"}
         Khoj{"Khojki"}
+        Kits{"Khitan small script"}
         Knda{"Kannada"}
         Kore{"Korean"}
         Kpel{"Kpelle"}
@@ -862,6 +871,7 @@ en{
         Wole{"Woleai"}
         Xpeo{"Old Persian"}
         Xsux{"Sumero-Akkadian Cuneiform"}
+        Yezi{"Yezidi"}
         Yiii{"Yi"}
         Zanb{"Zanabazar Square"}
         Zinh{"Inherited"}
@@ -1111,6 +1121,7 @@ en{
             cham{"Cham Digits"}
             cyrl{"Cyrillic Numerals"}
             deva{"Devanagari Digits"}
+            diak{"Dives Akuru Digits"}
             ethi{"Ethiopic Numerals"}
             finance{"Financial Numerals"}
             fullwide{"Full-Width Digits"}
@@ -1166,6 +1177,7 @@ en{
             roman{"Roman Numerals"}
             romanlow{"Roman Lowercase Numerals"}
             saur{"Saurashtra Digits"}
+            segment{"Segmented Digits"}
             shrd{"Sharada Digits"}
             sind{"Khudawadi Digits"}
             sinh{"Sinhala Lith Digits"}
@@ -1265,7 +1277,6 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — all"}
         category-list{"{0}: {1}"}

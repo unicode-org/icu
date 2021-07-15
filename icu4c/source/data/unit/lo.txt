@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 lo{
-    Version{"36"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -13,9 +13,9 @@ lo{
                 dnam{"ແຮງຕົກຕາມລຳພັງ"}
                 other{"{0} ແຮງຕົກຕາມລຳພັງ"}
             }
-            meter-per-second-squared{
-                dnam{"m/s²"}
-                other{"{0} m/s²"}
+            meter-per-square-second{
+                dnam{"ແມັດຕໍ່ວິນາທີກໍາລັງສອງ"}
+                other{"{0} ແມັດຕໍ່ວິນາທີກໍາລັງສອງ"}
             }
         }
         angle{
@@ -107,10 +107,6 @@ lo{
                 dnam{"ໂມ​ລ"}
                 other{"{0} ໂມ​ລ"}
             }
-            part-per-million{
-                dnam{"ພາດຕໍ່ລ້ານ"}
-                other{"{0} ພາດຕໍ່ລ້ານ"}
-            }
             percent{
                 dnam{"ເປີເຊັນ"}
                 other{"{0} ເປີເຊັນ"}
@@ -119,13 +115,17 @@ lo{
                 dnam{"ຕໍ່ພັນ"}
                 other{"{0} ຕໍ່ພັນ"}
             }
+            permillion{
+                dnam{"ພາດຕໍ່ລ້ານ"}
+                other{"{0} ພາດຕໍ່ລ້ານ"}
+            }
             permyriad{
                 dnam{"ເປີ​ມີ​ຣຽດ"}
                 other{"{0} ເປີ​ມີ​ຣຽດ"}
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"ລິດ ຕໍ່ 100 ກິໂລເເມັດ"}
                 other{"{0} ລິດຕໍ່ 100 ກີໂລແມັດ"}
             }
@@ -332,6 +332,12 @@ lo{
                 other{"{0} MHz"}
             }
         }
+        graphics{
+            dot{
+                dnam{"ດັອດ"}
+                other{"{0} ດັອດ"}
+            }
+        }
         length{
             astronomical-unit{
                 dnam{"astronomical units"}
@@ -345,6 +351,10 @@ lo{
             decimeter{
                 dnam{"ເດຊີແມັດ"}
                 other{"{0} ເດຊີແມັດ"}
+            }
+            fathom{
+                dnam{"ftm"}
+                other{"{0} ftm"}
             }
             foot{
                 dnam{"ຟຸດ"}
@@ -416,6 +426,14 @@ lo{
             }
         }
         light{
+            candela{
+                dnam{"ແຄນເດລາ"}
+                other{"{0} ແຄນເດລາ"}
+            }
+            lumen{
+                dnam{"ລູເມນ"}
+                other{"{0} ລູເມນ"}
+            }
             lux{
                 dnam{"lux"}
                 other{"{0} lux"}
@@ -438,6 +456,10 @@ lo{
                 dnam{"ມວນ​ສານ​ໜ່ວຍ​ໂລກ"}
                 other{"{0} ມວນ​ສານ​ໜ່ວຍ​ໂລກ"}
             }
+            grain{
+                dnam{"ເກຣນ"}
+                other{"{0} ເກຣນ"}
+            }
             gram{
                 dnam{"ກຣາມ"}
                 other{"{0} ກຣາມ"}
@@ -457,8 +479,8 @@ lo{
                 other{"{0} µg"}
             }
             milligram{
-                dnam{"mg"}
-                other{"{0} mg"}
+                dnam{"ມິນລີກຣາມ"}
+                other{"{0} ມິນລີກຣາມ"}
             }
             ounce{
                 dnam{"ອອນສ"}
@@ -477,6 +499,10 @@ lo{
             solar-mass{
                 dnam{"ມວນ​ສານດວງ​ຕາ​ເວັນ"}
                 other{"{0} ມວນ​ສານດວງ​ຕາ​ເວັນ"}
+            }
+            stone{
+                dnam{"stones"}
+                other{"{0} stones"}
             }
             ton{
                 dnam{"ໂຕນ"}
@@ -518,9 +544,9 @@ lo{
                 dnam{"hectopascals"}
                 other{"{0} hectopascals"}
             }
-            inch-hg{
-                dnam{"in Hg"}
-                other{"{0} inches of mercury"}
+            inch-ofhg{
+                dnam{"ນິ້ວໃນບາຫຼອດ"}
+                other{"{0} ນິ້ວໃນບາຫຼອດ"}
             }
             kilopascal{
                 dnam{"ກິ​ໂລ​ປາ​ສ​ການ"}
@@ -534,13 +560,13 @@ lo{
                 dnam{"ມິນລິບາ"}
                 other{"{0} ມິນລິບາ"}
             }
-            millimeter-of-mercury{
-                dnam{"mm Hg"}
-                other{"{0} mm Hg"}
+            millimeter-ofhg{
+                dnam{"ມິນລີແມັດໃນບາຫຼອດ"}
+                other{"{0} ມິນລີແມັດໃນບາຫຼອດ"}
             }
-            pound-per-square-inch{
-                dnam{"pounds per square inch"}
-                other{"{0} pounds per square inch"}
+            pound-force-per-square-inch{
+                dnam{"ປອນຕໍ່ຕະລາງນິ້້ວ"}
+                other{"{0} ປອນຕໍ່ຕະລາງນິ້້ວ"}
             }
         }
         speed{
@@ -584,7 +610,7 @@ lo{
                 dnam{"ນິວ​ເຕິນ​ແມັດ"}
                 other{"{0} ນິວ​ເຕິນ​ແມັດ"}
             }
-            pound-foot{
+            pound-force-foot{
                 dnam{"ປອນ​-ຟຸດ"}
                 other{"{0} ປອນ​-ຟຸດ"}
             }
@@ -644,6 +670,14 @@ lo{
                 dnam{"dL"}
                 other{"{0} dL"}
             }
+            dram{
+                dnam{"ແດຣມ"}
+                other{"{0} ແດຣມ"}
+            }
+            drop{
+                dnam{"ຢອດ"}
+                other{"{0} ຢອດ"}
+            }
             fluid-ounce{
                 dnam{"fl oz"}
                 other{"{0} fl oz"}
@@ -674,6 +708,10 @@ lo{
             milliliter{
                 dnam{"mL"}
                 other{"{0} mL"}
+            }
+            pinch{
+                dnam{"ຢິບ"}
+                other{"{0} ຢິບ"}
             }
             pint{
                 dnam{"pt"}
@@ -741,7 +779,7 @@ lo{
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"ລ/ 100 ກມ"}
                 other{"{0} ລ / 100 ກມ"}
             }
@@ -861,7 +899,7 @@ lo{
                 dnam{"hPA"}
                 other{"{0} hPA"}
             }
-            inch-hg{
+            inch-ofhg{
                 dnam{"in Hg"}
                 other{"{0} in Hg"}
             }
@@ -910,9 +948,9 @@ lo{
                 dnam{"ແຮງຕົກຕາມລຳພັງ"}
                 other{"{0} G"}
             }
-            meter-per-second-squared{
-                dnam{"m/s²"}
-                other{"{0} m/s²"}
+            meter-per-square-second{
+                dnam{"ແມັດ/ວິນາທີ²"}
+                other{"{0} ມ/ວນທ²"}
             }
         }
         angle{
@@ -1000,10 +1038,6 @@ lo{
                 dnam{"ມິລິໂມນ/ລິດ"}
                 other{"{0} mmol/L"}
             }
-            part-per-million{
-                dnam{"ພາດ/ລ້ານ"}
-                other{"{0} ppm"}
-            }
             percent{
                 dnam{"ເປີເຊັນ"}
                 other{"{0}%"}
@@ -1012,9 +1046,13 @@ lo{
                 dnam{"ຕໍ່ພັນ"}
                 other{"{0}‰"}
             }
+            permillion{
+                dnam{"ພາດ/ລ້ານ"}
+                other{"{0} ppm"}
+            }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"ລ/ 100 ກມ"}
                 other{"{0} L/100km"}
             }
@@ -1203,6 +1241,12 @@ lo{
                 other{"{0} MHz"}
             }
         }
+        graphics{
+            dot{
+                dnam{"ດັອດ"}
+                other{"{0} ດັອດ"}
+            }
+        }
         length{
             astronomical-unit{
                 dnam{"au"}
@@ -1216,6 +1260,10 @@ lo{
             decimeter{
                 dnam{"ດມ"}
                 other{"{0} ດມ"}
+            }
+            fathom{
+                dnam{"ftm"}
+                other{"{0} ftm"}
             }
             foot{
                 dnam{"ຟຸດ"}
@@ -1293,6 +1341,10 @@ lo{
                 dnam{"CD"}
                 other{"{0} CD"}
             }
+            grain{
+                dnam{"gr"}
+                other{"{0} gr"}
+            }
             gram{
                 dnam{"ກຣາມ"}
                 other{"{0} ກຼ"}
@@ -1369,7 +1421,7 @@ lo{
                 dnam{"hPA"}
                 other{"{0} hPA"}
             }
-            inch-hg{
+            inch-ofhg{
                 dnam{"in Hg"}
                 other{"{0} in Hg"}
             }
@@ -1377,11 +1429,11 @@ lo{
                 dnam{"mbar"}
                 other{"{0} mbar"}
             }
-            millimeter-of-mercury{
+            millimeter-ofhg{
                 dnam{"mm Hg"}
                 other{"{0} mm Hg"}
             }
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 dnam{"psi"}
                 other{"{0} psi"}
             }
@@ -1473,6 +1525,14 @@ lo{
                 dnam{"dL"}
                 other{"{0} dL"}
             }
+            dram{
+                dnam{"dr fl"}
+                other{"{0} dr fl"}
+            }
+            drop{
+                dnam{"ຢອດ"}
+                other{"{0} ຢອດ"}
+            }
             fluid-ounce{
                 dnam{"fl oz"}
                 other{"{0} fl oz"}
@@ -1503,6 +1563,10 @@ lo{
             milliliter{
                 dnam{"mL"}
                 other{"{0} mL"}
+            }
+            pinch{
+                dnam{"ຢິບ"}
+                other{"{0} ຢິບ"}
             }
             pint{
                 dnam{"pt"}

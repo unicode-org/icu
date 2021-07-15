@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ur{
     Keys{
         calendar{"کیلنڈر"}
@@ -121,6 +122,7 @@ ur{
         eu{"باسکی"}
         ewo{"ایوانڈو"}
         fa{"فارسی"}
+        fa_AF{"دری"}
         ff{"فولہ"}
         fi{"فینیش"}
         fil{"فلیپینو"}
@@ -133,7 +135,7 @@ ur{
         frc{"کاجن فرانسیسی"}
         fur{"فریولیائی"}
         fy{"مغربی فریسیئن"}
-        ga{"آئیرِش"}
+        ga{"آئرش"}
         gaa{"گا"}
         gag{"غاغاوز"}
         gan{"gan"}
@@ -149,7 +151,6 @@ ur{
         gv{"مینکس"}
         gwi{"گوئچ ان"}
         ha{"ہؤسا"}
-        hak{"hak"}
         haw{"ہوائی"}
         he{"عبرانی"}
         hi{"ہندی"}
@@ -157,7 +158,6 @@ ur{
         hmn{"ہمانگ"}
         hr{"کراتی"}
         hsb{"اپر سربیائی"}
-        hsn{"hsn"}
         ht{"ہیتی"}
         hu{"ہنگیرین"}
         hup{"ہیوپا"}
@@ -273,7 +273,6 @@ ur{
         myv{"ارزیا"}
         mzn{"مزندرانی"}
         na{"ناؤرو"}
-        nan{"nan"}
         nap{"نیاپولیٹن"}
         naq{"ناما"}
         nb{"نارویجین بوکمل"}
@@ -416,7 +415,6 @@ ur{
         war{"وارے"}
         wbp{"وارلپیری"}
         wo{"وولوف"}
-        wuu{"wuu"}
         xal{"کالمیک"}
         xh{"ژوسا"}
         xog{"سوگا"}
@@ -448,6 +446,7 @@ ur{
     }
     Scripts{
         Arab{"عربی"}
+        Aran{"نستعلیق"}
         Armn{"آرمینیائی"}
         Beng{"بنگالی"}
         Bopo{"بوپوموفو"}
@@ -565,7 +564,7 @@ ur{
             phonetic{"صوتی چھٹائی کی ترتیب"}
             pinyin{"پن ین کی چھٹنی کی ترتیب"}
             reformed{"دوبارہ تشکیل شدہ چھٹنی کی ترتیب"}
-            search{"عام-مقصد کی تلاش"}
+            search{"عمومی تلاش"}
             searchjl{"Hangul Initial Consonant کے لحاظ سے تلاش کریں"}
             standard{"معیاری چھانٹی کی ترتیب"}
             stroke{"سٹروک کی چھٹنی کی ترتیب"}
@@ -640,7 +639,6 @@ ur{
             vaii{"وائی ہندسے"}
         }
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — تمام"}
         category-list{"{0}: {1}"}
@@ -655,6 +653,8 @@ ur{
             one{"{0} اسٹروک"}
             other{"{0} اسٹروک"}
         }
+        subscript{"سب اسکرپٹ {0}"}
+        superscript{"سپر اسکرپٹ {0}"}
     }
     codePatterns{
         language{"زبان:{0}"}

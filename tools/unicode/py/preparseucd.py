@@ -88,7 +88,9 @@ _ignored_properties = set((
   "cjkIRG_KPSource",
   "cjkIRG_KSource",
   "cjkIRG_MSource",
+  "cjkIRG_SSource",
   "cjkIRG_TSource",
+  "cjkIRG_UKSource",
   "cjkIRG_USource",
   "cjkIRG_VSource",
   "cjkRSUnicode"
@@ -660,7 +662,7 @@ def ParseUnicodeData(in_file):
         # Remember algorithmic name ranges.
         if "Ideograph" in name:
           prefix = "CJK UNIFIED IDEOGRAPH-"
-          if c == 0x17000: prefix = "TANGUT IDEOGRAPH-"
+          if c == 0x17000 or c == 0x18D00: prefix = "TANGUT IDEOGRAPH-"
           _alg_names_ranges.append([c, end, "han", prefix])
         elif name == "Hangul Syllable":
           _alg_names_ranges.append([c, end, "hangul"])
@@ -1605,7 +1607,7 @@ _files = {
   "EastAsianWidth.txt": (DontCopy, ParseEastAsianWidth),
   "emoji-data.txt": (DontCopy, ParseNamedProperties),
   "GraphemeBreakProperty.txt": (DontCopy, ParseGraphemeBreakProperty),
-  "GraphemeBreakTest.txt": (CopyOnly, "testdata"),
+  "GraphemeBreakTest-cldr.txt": (CopyOnly, "testdata"),
   "IdnaTestV2.txt": (CopyOnly, "testdata"),
   "IndicPositionalCategory.txt": (DontCopy, ParseIndicPositionalCategory),
   "IndicSyllabicCategory.txt": (DontCopy, ParseIndicSyllabicCategory),
@@ -1638,7 +1640,7 @@ _files_to_parse = [[], [], [], [], [], [], [], [], [], []]
 # Get the standard basename from a versioned filename.
 # For example, match "UnicodeData-6.1.0d8.txt"
 # so we can turn it into "UnicodeData.txt".
-_file_version_re = re.compile("([a-zA-Z0-9]+)" +
+_file_version_re = re.compile("([a-zA-Z0-9_-]+)" +
                               "-[0-9]+(?:\\.[0-9]+)*(?:d[0-9]+)?" +
                               "(\\.[a-z]+)$")
 
@@ -1681,7 +1683,11 @@ def PreprocessFiles(source_files, icu4c_src_root):
         value = value[1:]
       dest_path = folder_to_path[dest_folder]
       if not os.path.exists(dest_path): os.makedirs(dest_path)
-      dest_file = os.path.join(dest_path, basename)
+      dest_basename = basename
+      # Source GraphemeBreakTest-cldr.txt --> destination GraphemeBreakTest.txt.
+      if basename.endswith("-cldr.txt"):
+        dest_basename = basename[:-9] + basename[-4:]
+      dest_file = os.path.join(dest_path, dest_basename)
       parse_file = preprocessor(source_file, dest_file)
       if value:
         order = 9 if len(value) < 2 else value[1]

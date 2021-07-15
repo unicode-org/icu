@@ -1,5 +1,5 @@
 // © 2017 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl;
 
 import com.ibm.icu.lang.UCharacter;
@@ -221,8 +221,14 @@ public class StringSegment implements CharSequence {
         return Utility.charSequenceHashCode(this);
     }
 
+    /** Returns a string representation useful for debugging. */
     @Override
     public String toString() {
         return str.substring(0, start) + "[" + str.substring(start, end) + "]" + str.substring(end);
+    }
+
+    /** Returns a String that is equivalent to the CharSequence representation. */
+    public String asString() {
+        return str.substring(start, end);
     }
 }

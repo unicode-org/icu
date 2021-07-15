@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 af{
     Keys{
         calendar{"Kalender"}
@@ -116,6 +117,7 @@ af{
         eu{"Baskies"}
         ewo{"Ewondo"}
         fa{"Persies"}
+        fa_AF{"Dari"}
         ff{"Fulah"}
         fi{"Fins"}
         fil{"Filippyns"}
@@ -170,7 +172,7 @@ af{
         io{"Ido"}
         is{"Yslands"}
         it{"Italiaans"}
-        iu{"Inuïties"}
+        iu{"Inoektitoet"}
         ja{"Japannees"}
         jbo{"Lojban"}
         jgo{"Ngomba"}
@@ -435,6 +437,7 @@ af{
         az{"Azeri"}
     }
     Languages%variant{
+        ckb{"Koerdies Sorani"}
         ps{"Pushto"}
     }
     Scripts{
@@ -628,7 +631,6 @@ af{
             vaii{"Vai-syfers"}
         }
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} – alle"}
         category-list{"{0}: {1}"}
@@ -643,6 +645,8 @@ af{
             one{"{0} haal"}
             other{"{0} hale"}
         }
+        subscript{"onderskrif {0}"}
+        superscript{"boskrif {0}"}
     }
     codePatterns{
         language{"Taal: {0}"}

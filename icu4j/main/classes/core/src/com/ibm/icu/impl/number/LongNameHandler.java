@@ -1,5 +1,5 @@
 // © 2017 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
 
 import java.util.EnumMap;
@@ -12,6 +12,7 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.UResource;
+import com.ibm.icu.impl.number.Modifier.Signum;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.PluralRules;
@@ -21,11 +22,12 @@ import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
-public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
+public class LongNameHandler
+    implements MicroPropsGenerator, ModifierStore, LongNameMultiplexer.ParentlessMicroPropsGenerator {
 
     private static final int DNAM_INDEX = StandardPlural.COUNT;
     private static final int PER_INDEX = StandardPlural.COUNT + 1;
-    private static final int ARRAY_LENGTH = StandardPlural.COUNT + 2;
+    static final int ARRAY_LENGTH = StandardPlural.COUNT + 2;
 
     private static int getIndex(String pluralKeyword) {
         // pluralKeyword can also be "dnam" or "per"
@@ -38,7 +40,7 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
         }
     }
 
-    private static String getWithPlural(String[] strings, StandardPlural plural) {
+    static String getWithPlural(String[] strings, StandardPlural plural) {
         String result = strings[plural.ordinal()];
         if (result == null) {
             result = strings[StandardPlural.OTHER.ordinal()];
@@ -78,7 +80,7 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
 
     // NOTE: outArray MUST have at least ARRAY_LENGTH entries. No bounds checking is performed.
 
-    private static void getMeasureData(
+    static void getMeasureData(
             ULocale locale,
             MeasureUnit unit,
             UnitWidth width,
@@ -100,7 +102,7 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
 
         // Map duration-year-person, duration-week-person, etc. to duration-year, duration-week, ...
         // TODO(ICU-20400): Get duration-*-person data properly with aliases.
-        if (unit.getSubtype().endsWith("-person")) {
+        if (unit.getSubtype() != null && unit.getSubtype().endsWith("-person")) {
             key.append(unit.getSubtype(), 0, unit.getSubtype().length() - 7);
         } else {
             key.append(unit.getSubtype());
@@ -190,6 +192,22 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
         return result;
     }
 
+    /**
+     * Construct a localized LongNameHandler for the specified MeasureUnit.
+     * <p>
+     * Compound units can be constructed via `unit` and `perUnit`. Both of these
+     * must then be built-in units.
+     * <p>
+     * Mixed units are not supported, use MixedUnitLongNameHandler.forMeasureUnit.
+     *
+     * @param locale The desired locale.
+     * @param unit The measure unit to construct a LongNameHandler for. If
+     *     `perUnit` is also defined, `unit` must not be a mixed unit.
+     * @param perUnit If `unit` is a mixed unit, `perUnit` must be null.
+     * @param width Specifies the desired unit rendering.
+     * @param rules Plural rules.
+     * @param parent Plural rules.
+     */
     public static LongNameHandler forMeasureUnit(
             ULocale locale,
             MeasureUnit unit,
@@ -197,6 +215,12 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
             UnitWidth width,
             PluralRules rules,
             MicroPropsGenerator parent) {
+        if (unit.getType() == null || (perUnit != null && perUnit.getType() == null)) {
+            // TODO(ICU-20941): Unsanctioned unit. Not yet fully supported. Set an
+            // error code. Once we support not-built-in units here, unitRef may be
+            // anything, but if not built-in, perUnit has to be "none".
+            throw new UnsupportedOperationException("Unsanctioned units, not yet supported");
+        }
         if (perUnit != null) {
             // Compound unit: first try to simplify (e.g., meters per second is its own unit).
             MeasureUnit simplified = MeasureUnit.resolveUnitPerUnit(unit, perUnit);
@@ -240,8 +264,10 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
             String compiled = SimpleFormatterImpl
                     .compileToStringMinMaxArguments(rawPerUnitFormat, sb, 2, 2);
             String secondaryFormat = getWithPlural(secondaryData, StandardPlural.ONE);
+
+            // Some "one" pattern may not contain "{0}". For example in "ar" or "ne" locale.
             String secondaryCompiled = SimpleFormatterImpl
-                    .compileToStringMinMaxArguments(secondaryFormat, sb, 1, 1);
+                    .compileToStringMinMaxArguments(secondaryFormat, sb, 0, 1);
             String secondaryString = SimpleFormatterImpl.getTextWithNoArguments(secondaryCompiled)
                     .trim();
             perUnitFormat = SimpleFormatterImpl.formatCompiledPattern(compiled, "{0}", secondaryString);
@@ -262,7 +288,7 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
             String compiled = SimpleFormatterImpl.compileToStringMinMaxArguments(simpleFormat, sb, 0, 1);
             Modifier.Parameters parameters = new Modifier.Parameters();
             parameters.obj = this;
-            parameters.signum = 0;
+            parameters.signum = null;// Signum ignored
             parameters.plural = plural;
             modifiers.put(plural, new SimpleModifier(compiled, field, false, parameters));
         }
@@ -281,7 +307,7 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
                     .compileToStringMinMaxArguments(compoundFormat, sb, 0, 1);
             Modifier.Parameters parameters = new Modifier.Parameters();
             parameters.obj = this;
-            parameters.signum = 0;
+            parameters.signum = null; // Signum ignored
             parameters.plural = plural;
             modifiers.put(plural, new SimpleModifier(compoundCompiled, field, false, parameters));
         }
@@ -295,8 +321,23 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
         return micros;
     }
 
+    /**
+     * Produces a plural-appropriate Modifier for a unit: `quantity` is taken as
+     * the final smallest unit, while the larger unit values must be provided
+     * via `micros.mixedMeasures`.
+     *
+     * Does not call parent.processQuantity, so cannot get a MicroProps instance
+     * that way. Instead, the instance is passed in as a parameter.
+     */
+    public MicroProps processQuantityWithMicros(DecimalQuantity quantity, MicroProps micros) {
+        StandardPlural pluralForm = RoundingUtils.getPluralSafe(micros.rounder, rules, quantity);
+        micros.modOuter = modifiers.get(pluralForm);
+        return micros;
+    }
+
     @Override
-    public Modifier getModifier(int signum, StandardPlural plural) {
+    public Modifier getModifier(Signum signum, StandardPlural plural) {
+        // Signum ignored
         return modifiers.get(plural);
     }
 }

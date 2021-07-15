@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 *   Copyright (C) 2008-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
@@ -230,7 +230,7 @@ import com.ibm.icu.util.UResourceBundle;
  *
  *     // a series of set interval patterns.
  *     // Only ERA, YEAR, MONTH, DATE,  DAY_OF_MONTH, DAY_OF_WEEK, AM_PM,  HOUR, HOUR_OF_DAY,
- *     MINUTE and SECOND are supported.
+ *     MINUTE, SECOND and MILLISECOND are supported.
  *     dtitvinf.setIntervalPattern("yMMMd", Calendar.YEAR, "'y ~ y'");
  *     dtitvinf.setIntervalPattern("yMMMd", Calendar.MONTH, "yyyy 'diff' MMM d - MMM d");
  *     dtitvinf.setIntervalPattern("yMMMd", Calendar.DATE, "yyyy MMM d ~ d");
@@ -276,8 +276,7 @@ public class DateIntervalFormat extends UFormat {
      *
      * Not intended for public subclassing.
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final class FormattedDateInterval implements FormattedValue {
         private final String string;
@@ -290,8 +289,7 @@ public class DateIntervalFormat extends UFormat {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         @Override
         public String toString() {
@@ -300,8 +298,7 @@ public class DateIntervalFormat extends UFormat {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         @Override
         public int length() {
@@ -310,8 +307,7 @@ public class DateIntervalFormat extends UFormat {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         @Override
         public char charAt(int index) {
@@ -320,8 +316,7 @@ public class DateIntervalFormat extends UFormat {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         @Override
         public CharSequence subSequence(int start, int end) {
@@ -330,8 +325,7 @@ public class DateIntervalFormat extends UFormat {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         @Override
         public <A extends Appendable> A appendTo(A appendable) {
@@ -340,8 +334,7 @@ public class DateIntervalFormat extends UFormat {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         @Override
         public boolean nextPosition(ConstrainedFieldPosition cfpos) {
@@ -350,8 +343,7 @@ public class DateIntervalFormat extends UFormat {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         @Override
         public AttributedCharacterIterator toCharacterIterator() {
@@ -362,8 +354,7 @@ public class DateIntervalFormat extends UFormat {
     /**
      * Class for span fields in FormattedDateInterval.
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static final class SpanField extends UFormat.SpanField {
         private static final long serialVersionUID = -6330879259553618133L;
@@ -375,8 +366,7 @@ public class DateIntervalFormat extends UFormat {
          * 0, the date fields within the span are for the "from" date; if 1,
          * the date fields within the span are for the "to" date.
          *
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         public static final SpanField DATE_INTERVAL_SPAN = new SpanField("date-interval-span");
 
@@ -385,7 +375,7 @@ public class DateIntervalFormat extends UFormat {
         }
 
         /**
-         * serizalization method resolve instances to the constant
+         * serialization method resolve instances to the constant
          * DateIntervalFormat.SpanField values
          * @draft ICU 64
          * @provisional This API might change or be removed in a future release.
@@ -494,6 +484,10 @@ public class DateIntervalFormat extends UFormat {
     private String fTimePattern = null;
     private String fDateTimeFormat = null;
 
+    /*
+     * Capitalization context, new in ICU 68
+     */
+    private DisplayContext fCapitalizationSetting = DisplayContext.CAPITALIZATION_NONE;
 
     /*
      * default constructor; private because we don't want anyone to use
@@ -732,6 +726,7 @@ public class DateIntervalFormat extends UFormat {
         other.fDatePattern = fDatePattern;
         other.fTimePattern = fTimePattern;
         other.fDateTimeFormat = fDateTimeFormat;
+        other.fCapitalizationSetting = fCapitalizationSetting;
         return other;
     }
 
@@ -795,8 +790,7 @@ public class DateIntervalFormat extends UFormat {
      *
      * @param dtInterval        DateInterval to be formatted.
      * @return                  A FormattedDateInterval containing the format result.
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public FormattedDateInterval formatToValue(DateInterval dtInterval) {
         StringBuffer sb = new StringBuffer();
@@ -856,6 +850,9 @@ public class DateIntervalFormat extends UFormat {
         } else if ( fromCalendar.get(Calendar.SECOND) !=
                     toCalendar.get(Calendar.SECOND) ) {
             field = Calendar.SECOND;
+        } else if ( fromCalendar.get(Calendar.MILLISECOND) !=
+                    toCalendar.get(Calendar.MILLISECOND) ) {
+            field = Calendar.MILLISECOND;
         } else {
             return null;
         }
@@ -900,8 +897,7 @@ public class DateIntervalFormat extends UFormat {
      * @param toCalendar        calendar set to the to date in date interval
      *                          to be formatted into date interval string
      * @return                  A FormattedDateInterval containing the format result.
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public FormattedDateInterval formatToValue(Calendar fromCalendar, Calendar toCalendar) {
         StringBuffer sb = new StringBuffer();
@@ -929,6 +925,10 @@ public class DateIntervalFormat extends UFormat {
             throw new IllegalArgumentException("can not format on two different calendars");
         }
 
+        // Set up fDateFormat to handle the first or only part of the interval
+        // (override later for any second part).
+        fDateFormat.setContext(fCapitalizationSetting);
+
         // First, find the largest different calendar field.
         int field = -1; //init with an invalid value.
 
@@ -952,16 +952,19 @@ public class DateIntervalFormat extends UFormat {
         } else if ( fromCalendar.get(Calendar.MINUTE) !=
                     toCalendar.get(Calendar.MINUTE) ) {
             field = Calendar.MINUTE;
-         } else if ( fromCalendar.get(Calendar.SECOND) !=
+        } else if ( fromCalendar.get(Calendar.SECOND) !=
                     toCalendar.get(Calendar.SECOND) ) {
             field = Calendar.SECOND;
-       } else {
+        } else if ( fromCalendar.get(Calendar.MILLISECOND) !=
+                    toCalendar.get(Calendar.MILLISECOND) ) {
+            field = Calendar.MILLISECOND;
+        } else {
             /* ignore the millisecond etc. small fields' difference.
              * use single date when all the above are the same.
              */
             return fDateFormat.format(fromCalendar, appendTo, pos, attributes);
         }
-        boolean fromToOnSameDay = (field==Calendar.AM_PM || field==Calendar.HOUR || field==Calendar.MINUTE || field==Calendar.SECOND);
+        boolean fromToOnSameDay = (field==Calendar.AM_PM || field==Calendar.HOUR || field==Calendar.MINUTE || field==Calendar.SECOND || field==Calendar.MILLISECOND);
 
         // get interval pattern
         PatternInfo intervalPattern = fIntervalPatterns.get(
@@ -1014,6 +1017,8 @@ public class DateIntervalFormat extends UFormat {
         }
         if ( intervalPattern.getSecondPart() != null ) {
             fDateFormat.applyPattern(intervalPattern.getSecondPart());
+            // No capitalization for second part of interval
+            fDateFormat.setContext(DisplayContext.CAPITALIZATION_NONE);
             fDateFormat.format(secondCal, appendTo, pos, attributes);
         }
         fDateFormat.applyPattern(originalPattern);
@@ -1032,11 +1037,11 @@ public class DateIntervalFormat extends UFormat {
                 fInfo.getFallbackIntervalPattern(), patternSB, 2, 2);
         long state = 0;
         while (true) {
-            state = SimpleFormatterImpl.Int64Iterator.step(compiledPattern, state, appendTo);
-            if (state == SimpleFormatterImpl.Int64Iterator.DONE) {
+            state = SimpleFormatterImpl.IterInternal.step(state, compiledPattern, appendTo);
+            if (state == SimpleFormatterImpl.IterInternal.DONE) {
                 break;
             }
-            if (SimpleFormatterImpl.Int64Iterator.getArgIndex(state) == 0) {
+            if (SimpleFormatterImpl.IterInternal.getArgIndex(state) == 0) {
                 if (output != null) {
                     output.register(0);
                 }
@@ -1051,6 +1056,8 @@ public class DateIntervalFormat extends UFormat {
             if (pos.getEndIndex() > 0) {
                 pos = new FieldPosition(0);
             }
+            // No capitalization for second portion
+            fDateFormat.setContext(DisplayContext.CAPITALIZATION_NONE);
         }
     }
 
@@ -1090,11 +1097,11 @@ public class DateIntervalFormat extends UFormat {
             // {1} is single date portion
             long state = 0;
             while (true) {
-                state = SimpleFormatterImpl.Int64Iterator.step(compiledPattern, state, appendTo);
-                if (state == SimpleFormatterImpl.Int64Iterator.DONE) {
+                state = SimpleFormatterImpl.IterInternal.step(state, compiledPattern, appendTo);
+                if (state == SimpleFormatterImpl.IterInternal.DONE) {
                     break;
                 }
-                if (SimpleFormatterImpl.Int64Iterator.getArgIndex(state) == 0) {
+                if (SimpleFormatterImpl.IterInternal.getArgIndex(state) == 0) {
                     fDateFormat.applyPattern(fTimePattern);
                     fallbackFormatRange(fromCalendar, toCalendar, appendTo, patternSB, pos, output, attributes);
                 } else {
@@ -1105,6 +1112,8 @@ public class DateIntervalFormat extends UFormat {
                 if (pos.getEndIndex() > 0) {
                     pos = new FieldPosition(0);
                 }
+                // No capitalization for second portion
+                fDateFormat.setContext(DisplayContext.CAPITALIZATION_NONE);
             }
 
             // restore full pattern
@@ -1240,7 +1249,7 @@ public class DateIntervalFormat extends UFormat {
         if (fDateFormat != null) {
             fDateFormat.setTimeZone(zoneToSet);
         }
-        // fDateFormat has the master calendar for the DateIntervalFormat;
+        // fDateFormat has the primary calendar for the DateIntervalFormat;
         // fFromCalendar and fToCalendar are internal work clones of that calendar.
         if (fFromCalendar != null) {
             fFromCalendar.setTimeZone(zoneToSet);
@@ -1248,6 +1257,39 @@ public class DateIntervalFormat extends UFormat {
         if (fToCalendar != null) {
             fToCalendar.setTimeZone(zoneToSet);
         }
+    }
+
+    /**
+     * {@icu} Set a particular DisplayContext value in the formatter,
+     * such as CAPITALIZATION_FOR_STANDALONE. This causes the formatted
+     * result to be capitalized appropriately for the context in which
+     * it is intended to be used, considering both the locale and the
+     * type of field at the beginning of the formatted result.
+     *
+     * @param context The DisplayContext value to set.
+     * @draft ICU 68
+     * @provisional This API might change or be removed in a future release.
+     */
+    public void setContext(DisplayContext context)
+    {
+        if (context.type() == DisplayContext.Type.CAPITALIZATION) {
+            fCapitalizationSetting = context;
+        }
+    }
+
+    /**
+     * {@icu} Get the formatter's DisplayContext value for the specified DisplayContext.Type,
+     * such as CAPITALIZATION.
+     *
+     * @param type the DisplayContext.Type whose value to return
+     * @return the current DisplayContext setting for the specified type
+     * @draft ICU 68
+     * @provisional This API might change or be removed in a future release.
+     */
+    public DisplayContext getContext(DisplayContext.Type type)
+    {
+        return (type == DisplayContext.Type.CAPITALIZATION && fCapitalizationSetting != null)?
+                fCapitalizationSetting: DisplayContext.CAPITALIZATION_NONE;
     }
 
     /**
@@ -1337,7 +1379,7 @@ public class DateIntervalFormat extends UFormat {
             // or by getInstance(String skeleton, .... )
             fSkeleton = dtpng.getSkeleton(fullPattern);
         }
-        String skeleton = fSkeleton;
+        String skeleton = normalizeHourMetacharacters(fSkeleton, locale);
 
         HashMap<String, PatternInfo> intervalPatterns = new HashMap<>();
 
@@ -1553,6 +1595,89 @@ public class DateIntervalFormat extends UFormat {
     }
     */
 
+    private String normalizeHourMetacharacters(String skeleton, ULocale locale) {
+        StringBuilder result = new StringBuilder(skeleton);
+    
+        char hourMetachar = '\0';
+        int metacharStart = 0;
+        int metacharCount = 0;
+        for (int i = 0; i < result.length(); i++) {
+            char c = result.charAt(i);
+            if (c == 'j' || c == 'J' || c == 'C') {
+                if (hourMetachar == '\0') {
+                    hourMetachar = c;
+                    metacharStart = i;
+                }
+                ++metacharCount;
+            } else {
+                if (hourMetachar != '\0') {
+                    break;
+                }
+            }
+        }
+    
+        if (hourMetachar != '\0') {
+            char hourChar = 'H';
+            char dayPeriodChar = 'a';
+
+            DateTimePatternGenerator dtptng = DateTimePatternGenerator.getInstance(locale);
+            String convertedPattern = dtptng.getBestPattern(String.valueOf(hourMetachar));
+
+            // strip literal text from the pattern (so literal characters don't get mistaken for pattern
+            // characters-- such as the 'h' in 'Uhr' in German)
+            int firstQuotePos;
+            while ((firstQuotePos = convertedPattern.indexOf('\'')) != -1) {
+                int secondQuotePos = convertedPattern.indexOf('\'', firstQuotePos + 1);
+                if (secondQuotePos == -1) {
+                    secondQuotePos = firstQuotePos;
+                }
+                convertedPattern = convertedPattern.substring(0, firstQuotePos) + convertedPattern.substring(secondQuotePos + 1);
+            }
+    
+            if (convertedPattern.indexOf('h') != -1) {
+                hourChar = 'h';
+            } else if (convertedPattern.indexOf('K') != -1) {
+                hourChar = 'K';
+            } else if (convertedPattern.indexOf('k') != -1) {
+                hourChar = 'k';
+            }
+        
+            if (convertedPattern.indexOf('b') != -1) {
+                dayPeriodChar = 'b';
+            } else if (convertedPattern.indexOf('B') != -1) {
+                dayPeriodChar = 'B';
+            }
+        
+            if (hourChar == 'H' || hourChar == 'k') {
+                result.replace(metacharStart, metacharStart + metacharCount, String.valueOf(hourChar));
+            } else {
+                StringBuilder hourAndDayPeriod = new StringBuilder();
+                hourAndDayPeriod.append(hourChar);
+                switch (metacharCount) {
+                    case 1:
+                    case 2:
+                    default:
+                        hourAndDayPeriod.append(dayPeriodChar);
+                        break;
+                    case 3:
+                    case 4:
+                        for (int i = 0; i < 4; i++) {
+                            hourAndDayPeriod.append(dayPeriodChar);
+                        }
+                        break;
+                    case 5:
+                    case 6:
+                        for (int i = 0; i < 5; i++) {
+                            hourAndDayPeriod.append(dayPeriodChar);
+                        }
+                        break;
+                }
+                result.replace(metacharStart, metacharStart + metacharCount, hourAndDayPeriod.toString());
+            }
+        }
+        return result.toString();
+    }
+
     /*
      * get separated date and time skeleton from a combined skeleton.
      *
@@ -1589,11 +1714,10 @@ public class DateIntervalFormat extends UFormat {
         int dCount = 0;
         int MCount = 0;
         int yCount = 0;
-        int hCount = 0;
-        int HCount = 0;
         int mCount = 0;
         int vCount = 0;
         int zCount = 0;
+        char hourChar = '\0';
 
         for (i = 0; i < skeleton.length(); ++i) {
             char ch = skeleton.charAt(i);
@@ -1633,17 +1757,14 @@ public class DateIntervalFormat extends UFormat {
                 normalizedDateSkeleton.append(ch);
                 dateSkeleton.append(ch);
                 break;
-              case 'a':
-                // 'a' is implicitly handled
-                timeSkeleton.append(ch);
-                break;
               case 'h':
-                timeSkeleton.append(ch);
-                ++hCount;
-                break;
               case 'H':
+              case 'k':
+              case 'K':
                 timeSkeleton.append(ch);
-                ++HCount;
+                if (hourChar == '\0') {
+                    hourChar = ch;
+                }
                 break;
               case 'm':
                 timeSkeleton.append(ch);
@@ -1657,14 +1778,15 @@ public class DateIntervalFormat extends UFormat {
                 ++vCount;
                 timeSkeleton.append(ch);
                 break;
+              case 'a':
               case 'V':
               case 'Z':
-              case 'k':
-              case 'K':
               case 'j':
               case 's':
               case 'S':
               case 'A':
+              case 'b':
+              case 'B':
                 timeSkeleton.append(ch);
                 normalizedTimeSkeleton.append(ch);
                 break;
@@ -1700,11 +1822,8 @@ public class DateIntervalFormat extends UFormat {
         }
 
         /* generate normalized form for time */
-        if ( HCount != 0 ) {
-            normalizedTimeSkeleton.append('H');
-        }
-        else if ( hCount != 0 ) {
-            normalizedTimeSkeleton.append('h');
+        if ( hourChar != '\0' ) {
+            normalizedTimeSkeleton.append(hourChar);
         }
         if ( mCount != 0 ) {
             normalizedTimeSkeleton.append('m');
@@ -1900,10 +2019,11 @@ public class DateIntervalFormat extends UFormat {
         }
         if ( pattern != null ) {
             if ( differenceInfo != 0 ) {
+                boolean suppressDayPeriodField = fSkeleton.indexOf('J') != -1;
                 String part1 = adjustFieldWidth(skeleton, bestSkeleton,
-                                   pattern.getFirstPart(), differenceInfo);
+                                   pattern.getFirstPart(), differenceInfo, suppressDayPeriodField);
                 String part2 = adjustFieldWidth(skeleton, bestSkeleton,
-                                   pattern.getSecondPart(), differenceInfo);
+                                   pattern.getSecondPart(), differenceInfo, suppressDayPeriodField);
                 pattern =  new PatternInfo(part1, part2,
                                            pattern.firstDateInPtnIsLaterDate());
             } else {
@@ -1942,12 +2062,14 @@ public class DateIntervalFormat extends UFormat {
      * @param differenceInfo           the difference between 2 skeletons
      *                                 1 means only field width differs
      *                                 2 means v/z exchange
+     * @param suppressDayPeriodField   if true, remove the day period field from the result
      * @return the adjusted interval pattern
      */
     private static String adjustFieldWidth(String inputSkeleton,
                                     String bestMatchSkeleton,
                                     String bestMatchIntervalPattern,
-                                    int differenceInfo ) {
+                                    int differenceInfo,
+                                    boolean suppressDayPeriodField ) {
 
         if ( bestMatchIntervalPattern == null ) {
             return null; // the 2nd part could be null
@@ -1969,19 +2091,45 @@ public class DateIntervalFormat extends UFormat {
         */
 
 
+        int PATTERN_CHAR_BASE = 0x41;
+
         DateIntervalInfo.parseSkeleton(inputSkeleton, inputSkeletonFieldWidth);
         DateIntervalInfo.parseSkeleton(bestMatchSkeleton, bestMatchSkeletonFieldWidth);
+        if (suppressDayPeriodField) {
+            if (bestMatchIntervalPattern.indexOf(" a") != -1) {
+                bestMatchIntervalPattern = bestMatchIntervalPattern.replace(" a", "");
+            } else if (bestMatchIntervalPattern.indexOf("a ") != -1) {
+                bestMatchIntervalPattern = bestMatchIntervalPattern.replace("a ", "");
+            }
+            bestMatchIntervalPattern = bestMatchIntervalPattern.replace("a", "");
+        }
         if ( differenceInfo == 2 ) {
-            bestMatchIntervalPattern = bestMatchIntervalPattern.replace('v', 'z');
+            if (inputSkeleton.indexOf('z') != -1) {
+                bestMatchIntervalPattern = bestMatchIntervalPattern.replace('v', 'z');
+            }
+            if (inputSkeleton.indexOf('K') != -1) {
+                bestMatchIntervalPattern = bestMatchIntervalPattern.replace('h', 'K');
+            }
+            if (inputSkeleton.indexOf('k') != -1) {
+                bestMatchIntervalPattern = bestMatchIntervalPattern.replace('H', 'k');
+            }
+            if (inputSkeleton.indexOf('b') != -1) {
+                bestMatchIntervalPattern = bestMatchIntervalPattern.replace('a', 'b');
+            }
+        }
+        if (bestMatchIntervalPattern.indexOf('a') != -1 && bestMatchSkeletonFieldWidth['a' - PATTERN_CHAR_BASE] == 0) {
+            bestMatchSkeletonFieldWidth['a' - PATTERN_CHAR_BASE] = 1;
+        }
+        if (bestMatchIntervalPattern.indexOf('b') != -1 && bestMatchSkeletonFieldWidth['b' - PATTERN_CHAR_BASE] == 0) {
+            bestMatchSkeletonFieldWidth['b' - PATTERN_CHAR_BASE] = 1;
         }
 
         StringBuilder adjustedPtn = new StringBuilder(bestMatchIntervalPattern);
 
+
         boolean inQuote = false;
         char prevCh = 0;
         int count = 0;
-
-        int PATTERN_CHAR_BASE = 0x41;
 
         // loop through the pattern string character by character
         int adjustedPtnLength = adjustedPtn.length();
@@ -2097,6 +2245,10 @@ public class DateIntervalFormat extends UFormat {
         throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
         initializePattern(isDateIntervalInfoDefault ? LOCAL_PATTERN_CACHE : null);
+        // if deserialized from a release that didn't have fCapitalizationSetting, set it to default
+        if (fCapitalizationSetting == null) {
+            fCapitalizationSetting = DisplayContext.CAPITALIZATION_NONE;
+        }
     }
 
     /**

@@ -6,6 +6,7 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include <algorithm>
 #include <functional>
 #include <iterator>
 #include <set>
@@ -31,6 +32,8 @@
 #include "putilimp.h"
 #include "hash.h"
 #include "locmap.h"
+#include "uparse.h"
+#include "ulocimp.h"
 
 static const char* const rawData[33][8] = {
 
@@ -255,9 +258,13 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestBug13277);
     TESTCASE_AUTO(TestBug13554);
     TESTCASE_AUTO(TestBug20410);
+    TESTCASE_AUTO(TestBug20900);
+    TESTCASE_AUTO(TestLocaleCanonicalizationFromFile);
+    TESTCASE_AUTO(TestKnownCanonicalizedListCorrect);
     TESTCASE_AUTO(TestConstructorAcceptsBCP47);
     TESTCASE_AUTO(TestForLanguageTag);
     TESTCASE_AUTO(TestToLanguageTag);
+    TESTCASE_AUTO(TestToLanguageTagOmitTrue);
     TESTCASE_AUTO(TestMoveAssign);
     TESTCASE_AUTO(TestMoveCtor);
     TESTCASE_AUTO(TestBug20407iVariantPreferredValue);
@@ -273,6 +280,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestCapturingTagConvertingIterator);
     TESTCASE_AUTO(TestSetUnicodeKeywordValueInLongLocale);
     TESTCASE_AUTO(TestSetUnicodeKeywordValueNullInLongLocale);
+    TESTCASE_AUTO(TestCanonicalize);
     TESTCASE_AUTO_END;
 }
 
@@ -909,8 +917,8 @@ LocaleTest::TestGetLangsAndCountries()
       ;
 
     /* TODO: Change this test to be more like the cloctst version? */
-    if (testCount != 596)
-        errln("Expected getISOLanguages() to return 596 languages; it returned %d", testCount);
+    if (testCount != 597)
+        errln("Expected getISOLanguages() to return 597 languages; it returned %d", testCount);
     else {
         for (i = 0; i < 15; i++) {
             int32_t j;
@@ -1707,7 +1715,2111 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
             "und_Moon_AQ",
             "_Moon_AQ",
             "_Moon_AQ"
-        },
+        }, {
+            "aa",
+            "aa_Latn_ET",
+            "aa"
+        }, {
+            "af",
+            "af_Latn_ZA",
+            "af"
+        }, {
+            "ak",
+            "ak_Latn_GH",
+            "ak"
+        }, {
+            "am",
+            "am_Ethi_ET",
+            "am"
+        }, {
+            "ar",
+            "ar_Arab_EG",
+            "ar"
+        }, {
+            "as",
+            "as_Beng_IN",
+            "as"
+        }, {
+            "az",
+            "az_Latn_AZ",
+            "az"
+        }, {
+            "be",
+            "be_Cyrl_BY",
+            "be"
+        }, {
+            "bg",
+            "bg_Cyrl_BG",
+            "bg"
+        }, {
+            "bn",
+            "bn_Beng_BD",
+            "bn"
+        }, {
+            "bo",
+            "bo_Tibt_CN",
+            "bo"
+        }, {
+            "bs",
+            "bs_Latn_BA",
+            "bs"
+        }, {
+            "ca",
+            "ca_Latn_ES",
+            "ca"
+        }, {
+            "ch",
+            "ch_Latn_GU",
+            "ch"
+        }, {
+            "chk",
+            "chk_Latn_FM",
+            "chk"
+        }, {
+            "cs",
+            "cs_Latn_CZ",
+            "cs"
+        }, {
+            "cy",
+            "cy_Latn_GB",
+            "cy"
+        }, {
+            "da",
+            "da_Latn_DK",
+            "da"
+        }, {
+            "de",
+            "de_Latn_DE",
+            "de"
+        }, {
+            "dv",
+            "dv_Thaa_MV",
+            "dv"
+        }, {
+            "dz",
+            "dz_Tibt_BT",
+            "dz"
+        }, {
+            "ee",
+            "ee_Latn_GH",
+            "ee"
+        }, {
+            "el",
+            "el_Grek_GR",
+            "el"
+        }, {
+            "en",
+            "en_Latn_US",
+            "en"
+        }, {
+            "es",
+            "es_Latn_ES",
+            "es"
+        }, {
+            "et",
+            "et_Latn_EE",
+            "et"
+        }, {
+            "eu",
+            "eu_Latn_ES",
+            "eu"
+        }, {
+            "fa",
+            "fa_Arab_IR",
+            "fa"
+        }, {
+            "fi",
+            "fi_Latn_FI",
+            "fi"
+        }, {
+            "fil",
+            "fil_Latn_PH",
+            "fil"
+        }, {
+            "fj",
+            "fj_Latn_FJ",
+            "fj"
+        }, {
+            "fo",
+            "fo_Latn_FO",
+            "fo"
+        }, {
+            "fr",
+            "fr_Latn_FR",
+            "fr"
+        }, {
+            "fur",
+            "fur_Latn_IT",
+            "fur"
+        }, {
+            "ga",
+            "ga_Latn_IE",
+            "ga"
+        }, {
+            "gaa",
+            "gaa_Latn_GH",
+            "gaa"
+        }, {
+            "gl",
+            "gl_Latn_ES",
+            "gl"
+        }, {
+            "gn",
+            "gn_Latn_PY",
+            "gn"
+        }, {
+            "gu",
+            "gu_Gujr_IN",
+            "gu"
+        }, {
+            "ha",
+            "ha_Latn_NG",
+            "ha"
+        }, {
+            "haw",
+            "haw_Latn_US",
+            "haw"
+        }, {
+            "he",
+            "he_Hebr_IL",
+            "he"
+        }, {
+            "hi",
+            "hi_Deva_IN",
+            "hi"
+        }, {
+            "hr",
+            "hr_Latn_HR",
+            "hr"
+        }, {
+            "ht",
+            "ht_Latn_HT",
+            "ht"
+        }, {
+            "hu",
+            "hu_Latn_HU",
+            "hu"
+        }, {
+            "hy",
+            "hy_Armn_AM",
+            "hy"
+        }, {
+            "id",
+            "id_Latn_ID",
+            "id"
+        }, {
+            "ig",
+            "ig_Latn_NG",
+            "ig"
+        }, {
+            "ii",
+            "ii_Yiii_CN",
+            "ii"
+        }, {
+            "is",
+            "is_Latn_IS",
+            "is"
+        }, {
+            "it",
+            "it_Latn_IT",
+            "it"
+        }, {
+            "ja",
+            "ja_Jpan_JP",
+            "ja"
+        }, {
+            "ka",
+            "ka_Geor_GE",
+            "ka"
+        }, {
+            "kaj",
+            "kaj_Latn_NG",
+            "kaj"
+        }, {
+            "kam",
+            "kam_Latn_KE",
+            "kam"
+        }, {
+            "kk",
+            "kk_Cyrl_KZ",
+            "kk"
+        }, {
+            "kl",
+            "kl_Latn_GL",
+            "kl"
+        }, {
+            "km",
+            "km_Khmr_KH",
+            "km"
+        }, {
+            "kn",
+            "kn_Knda_IN",
+            "kn"
+        }, {
+            "ko",
+            "ko_Kore_KR",
+            "ko"
+        }, {
+            "kok",
+            "kok_Deva_IN",
+            "kok"
+        }, {
+            "kpe",
+            "kpe_Latn_LR",
+            "kpe"
+        }, {
+            "ku",
+            "ku_Latn_TR",
+            "ku"
+        }, {
+            "ky",
+            "ky_Cyrl_KG",
+            "ky"
+        }, {
+            "la",
+            "la_Latn_VA",
+            "la"
+        }, {
+            "ln",
+            "ln_Latn_CD",
+            "ln"
+        }, {
+            "lo",
+            "lo_Laoo_LA",
+            "lo"
+        }, {
+            "lt",
+            "lt_Latn_LT",
+            "lt"
+        }, {
+            "lv",
+            "lv_Latn_LV",
+            "lv"
+        }, {
+            "mg",
+            "mg_Latn_MG",
+            "mg"
+        }, {
+            "mh",
+            "mh_Latn_MH",
+            "mh"
+        }, {
+            "mk",
+            "mk_Cyrl_MK",
+            "mk"
+        }, {
+            "ml",
+            "ml_Mlym_IN",
+            "ml"
+        }, {
+            "mn",
+            "mn_Cyrl_MN",
+            "mn"
+        }, {
+            "mr",
+            "mr_Deva_IN",
+            "mr"
+        }, {
+            "ms",
+            "ms_Latn_MY",
+            "ms"
+        }, {
+            "mt",
+            "mt_Latn_MT",
+            "mt"
+        }, {
+            "my",
+            "my_Mymr_MM",
+            "my"
+        }, {
+            "na",
+            "na_Latn_NR",
+            "na"
+        }, {
+            "ne",
+            "ne_Deva_NP",
+            "ne"
+        }, {
+            "niu",
+            "niu_Latn_NU",
+            "niu"
+        }, {
+            "nl",
+            "nl_Latn_NL",
+            "nl"
+        }, {
+            "nn",
+            "nn_Latn_NO",
+            "nn"
+        }, {
+            "nr",
+            "nr_Latn_ZA",
+            "nr"
+        }, {
+            "nso",
+            "nso_Latn_ZA",
+            "nso"
+        }, {
+            "om",
+            "om_Latn_ET",
+            "om"
+        }, {
+            "or",
+            "or_Orya_IN",
+            "or"
+        }, {
+            "pa",
+            "pa_Guru_IN",
+            "pa"
+        }, {
+            "pa_Arab",
+            "pa_Arab_PK",
+            "pa_PK"
+        }, {
+            "pa_PK",
+            "pa_Arab_PK",
+            "pa_PK"
+        }, {
+            "pap",
+            "pap_Latn_AW",
+            "pap"
+        }, {
+            "pau",
+            "pau_Latn_PW",
+            "pau"
+        }, {
+            "pl",
+            "pl_Latn_PL",
+            "pl"
+        }, {
+            "ps",
+            "ps_Arab_AF",
+            "ps"
+        }, {
+            "pt",
+            "pt_Latn_BR",
+            "pt"
+        }, {
+            "rn",
+            "rn_Latn_BI",
+            "rn"
+        }, {
+            "ro",
+            "ro_Latn_RO",
+            "ro"
+        }, {
+            "ru",
+            "ru_Cyrl_RU",
+            "ru"
+        }, {
+            "rw",
+            "rw_Latn_RW",
+            "rw"
+        }, {
+            "sa",
+            "sa_Deva_IN",
+            "sa"
+        }, {
+            "se",
+            "se_Latn_NO",
+            "se"
+        }, {
+            "sg",
+            "sg_Latn_CF",
+            "sg"
+        }, {
+            "si",
+            "si_Sinh_LK",
+            "si"
+        }, {
+            "sid",
+            "sid_Latn_ET",
+            "sid"
+        }, {
+            "sk",
+            "sk_Latn_SK",
+            "sk"
+        }, {
+            "sl",
+            "sl_Latn_SI",
+            "sl"
+        }, {
+            "sm",
+            "sm_Latn_WS",
+            "sm"
+        }, {
+            "so",
+            "so_Latn_SO",
+            "so"
+        }, {
+            "sq",
+            "sq_Latn_AL",
+            "sq"
+        }, {
+            "sr",
+            "sr_Cyrl_RS",
+            "sr"
+        }, {
+            "ss",
+            "ss_Latn_ZA",
+            "ss"
+        }, {
+            "st",
+            "st_Latn_ZA",
+            "st"
+        }, {
+            "sv",
+            "sv_Latn_SE",
+            "sv"
+        }, {
+            "sw",
+            "sw_Latn_TZ",
+            "sw"
+        }, {
+            "ta",
+            "ta_Taml_IN",
+            "ta"
+        }, {
+            "te",
+            "te_Telu_IN",
+            "te"
+        }, {
+            "tet",
+            "tet_Latn_TL",
+            "tet"
+        }, {
+            "tg",
+            "tg_Cyrl_TJ",
+            "tg"
+        }, {
+            "th",
+            "th_Thai_TH",
+            "th"
+        }, {
+            "ti",
+            "ti_Ethi_ET",
+            "ti"
+        }, {
+            "tig",
+            "tig_Ethi_ER",
+            "tig"
+        }, {
+            "tk",
+            "tk_Latn_TM",
+            "tk"
+        }, {
+            "tkl",
+            "tkl_Latn_TK",
+            "tkl"
+        }, {
+            "tn",
+            "tn_Latn_ZA",
+            "tn"
+        }, {
+            "to",
+            "to_Latn_TO",
+            "to"
+        }, {
+            "tpi",
+            "tpi_Latn_PG",
+            "tpi"
+        }, {
+            "tr",
+            "tr_Latn_TR",
+            "tr"
+        }, {
+            "ts",
+            "ts_Latn_ZA",
+            "ts"
+        }, {
+            "tt",
+            "tt_Cyrl_RU",
+            "tt"
+        }, {
+            "tvl",
+            "tvl_Latn_TV",
+            "tvl"
+        }, {
+            "ty",
+            "ty_Latn_PF",
+            "ty"
+        }, {
+            "uk",
+            "uk_Cyrl_UA",
+            "uk"
+        }, {
+            "und",
+            "en_Latn_US",
+            "en"
+        }, {
+            "und_AD",
+            "ca_Latn_AD",
+            "ca_AD"
+        }, {
+            "und_AE",
+            "ar_Arab_AE",
+            "ar_AE"
+        }, {
+            "und_AF",
+            "fa_Arab_AF",
+            "fa_AF"
+        }, {
+            "und_AL",
+            "sq_Latn_AL",
+            "sq"
+        }, {
+            "und_AM",
+            "hy_Armn_AM",
+            "hy"
+        }, {
+            "und_AO",
+            "pt_Latn_AO",
+            "pt_AO"
+        }, {
+            "und_AR",
+            "es_Latn_AR",
+            "es_AR"
+        }, {
+            "und_AS",
+            "sm_Latn_AS",
+            "sm_AS"
+        }, {
+            "und_AT",
+            "de_Latn_AT",
+            "de_AT"
+        }, {
+            "und_AW",
+            "nl_Latn_AW",
+            "nl_AW"
+        }, {
+            "und_AX",
+            "sv_Latn_AX",
+            "sv_AX"
+        }, {
+            "und_AZ",
+            "az_Latn_AZ",
+            "az"
+        }, {
+            "und_Arab",
+            "ar_Arab_EG",
+            "ar"
+        }, {
+            "und_Arab_IN",
+            "ur_Arab_IN",
+            "ur_IN"
+        }, {
+            "und_Arab_PK",
+            "ur_Arab_PK",
+            "ur"
+        }, {
+            "und_Arab_SN",
+            "ar_Arab_SN",
+            "ar_SN"
+        }, {
+            "und_Armn",
+            "hy_Armn_AM",
+            "hy"
+        }, {
+            "und_BA",
+            "bs_Latn_BA",
+            "bs"
+        }, {
+            "und_BD",
+            "bn_Beng_BD",
+            "bn"
+        }, {
+            "und_BE",
+            "nl_Latn_BE",
+            "nl_BE"
+        }, {
+            "und_BF",
+            "fr_Latn_BF",
+            "fr_BF"
+        }, {
+            "und_BG",
+            "bg_Cyrl_BG",
+            "bg"
+        }, {
+            "und_BH",
+            "ar_Arab_BH",
+            "ar_BH"
+        }, {
+            "und_BI",
+            "rn_Latn_BI",
+            "rn"
+        }, {
+            "und_BJ",
+            "fr_Latn_BJ",
+            "fr_BJ"
+        }, {
+            "und_BN",
+            "ms_Latn_BN",
+            "ms_BN"
+        }, {
+            "und_BO",
+            "es_Latn_BO",
+            "es_BO"
+        }, {
+            "und_BR",
+            "pt_Latn_BR",
+            "pt"
+        }, {
+            "und_BT",
+            "dz_Tibt_BT",
+            "dz"
+        }, {
+            "und_BY",
+            "be_Cyrl_BY",
+            "be"
+        }, {
+            "und_Beng",
+            "bn_Beng_BD",
+            "bn"
+        }, {
+            "und_Beng_IN",
+            "bn_Beng_IN",
+            "bn_IN"
+        }, {
+            "und_CD",
+            "sw_Latn_CD",
+            "sw_CD"
+        }, {
+            "und_CF",
+            "fr_Latn_CF",
+            "fr_CF"
+        }, {
+            "und_CG",
+            "fr_Latn_CG",
+            "fr_CG"
+        }, {
+            "und_CH",
+            "de_Latn_CH",
+            "de_CH"
+        }, {
+            "und_CI",
+            "fr_Latn_CI",
+            "fr_CI"
+        }, {
+            "und_CL",
+            "es_Latn_CL",
+            "es_CL"
+        }, {
+            "und_CM",
+            "fr_Latn_CM",
+            "fr_CM"
+        }, {
+            "und_CN",
+            "zh_Hans_CN",
+            "zh"
+        }, {
+            "und_CO",
+            "es_Latn_CO",
+            "es_CO"
+        }, {
+            "und_CR",
+            "es_Latn_CR",
+            "es_CR"
+        }, {
+            "und_CU",
+            "es_Latn_CU",
+            "es_CU"
+        }, {
+            "und_CV",
+            "pt_Latn_CV",
+            "pt_CV"
+        }, {
+            "und_CY",
+            "el_Grek_CY",
+            "el_CY"
+        }, {
+            "und_CZ",
+            "cs_Latn_CZ",
+            "cs"
+        }, {
+            "und_Cyrl",
+            "ru_Cyrl_RU",
+            "ru"
+        }, {
+            "und_Cyrl_KZ",
+            "ru_Cyrl_KZ",
+            "ru_KZ"
+        }, {
+            "und_DE",
+            "de_Latn_DE",
+            "de"
+        }, {
+            "und_DJ",
+            "aa_Latn_DJ",
+            "aa_DJ"
+        }, {
+            "und_DK",
+            "da_Latn_DK",
+            "da"
+        }, {
+            "und_DO",
+            "es_Latn_DO",
+            "es_DO"
+        }, {
+            "und_DZ",
+            "ar_Arab_DZ",
+            "ar_DZ"
+        }, {
+            "und_Deva",
+            "hi_Deva_IN",
+            "hi"
+        }, {
+            "und_EC",
+            "es_Latn_EC",
+            "es_EC"
+        }, {
+            "und_EE",
+            "et_Latn_EE",
+            "et"
+        }, {
+            "und_EG",
+            "ar_Arab_EG",
+            "ar"
+        }, {
+            "und_EH",
+            "ar_Arab_EH",
+            "ar_EH"
+        }, {
+            "und_ER",
+            "ti_Ethi_ER",
+            "ti_ER"
+        }, {
+            "und_ES",
+            "es_Latn_ES",
+            "es"
+        }, {
+            "und_ET",
+            "am_Ethi_ET",
+            "am"
+        }, {
+            "und_Ethi",
+            "am_Ethi_ET",
+            "am"
+        }, {
+            "und_Ethi_ER",
+            "am_Ethi_ER",
+            "am_ER"
+        }, {
+            "und_FI",
+            "fi_Latn_FI",
+            "fi"
+        }, {
+            "und_FM",
+            "en_Latn_FM",
+            "en_FM"
+        }, {
+            "und_FO",
+            "fo_Latn_FO",
+            "fo"
+        }, {
+            "und_FR",
+            "fr_Latn_FR",
+            "fr"
+        }, {
+            "und_GA",
+            "fr_Latn_GA",
+            "fr_GA"
+        }, {
+            "und_GE",
+            "ka_Geor_GE",
+            "ka"
+        }, {
+            "und_GF",
+            "fr_Latn_GF",
+            "fr_GF"
+        }, {
+            "und_GL",
+            "kl_Latn_GL",
+            "kl"
+        }, {
+            "und_GN",
+            "fr_Latn_GN",
+            "fr_GN"
+        }, {
+            "und_GP",
+            "fr_Latn_GP",
+            "fr_GP"
+        }, {
+            "und_GQ",
+            "es_Latn_GQ",
+            "es_GQ"
+        }, {
+            "und_GR",
+            "el_Grek_GR",
+            "el"
+        }, {
+            "und_GT",
+            "es_Latn_GT",
+            "es_GT"
+        }, {
+            "und_GU",
+            "en_Latn_GU",
+            "en_GU"
+        }, {
+            "und_GW",
+            "pt_Latn_GW",
+            "pt_GW"
+        }, {
+            "und_Geor",
+            "ka_Geor_GE",
+            "ka"
+        }, {
+            "und_Grek",
+            "el_Grek_GR",
+            "el"
+        }, {
+            "und_Gujr",
+            "gu_Gujr_IN",
+            "gu"
+        }, {
+            "und_Guru",
+            "pa_Guru_IN",
+            "pa"
+        }, {
+            "und_HK",
+            "zh_Hant_HK",
+            "zh_HK"
+        }, {
+            "und_HN",
+            "es_Latn_HN",
+            "es_HN"
+        }, {
+            "und_HR",
+            "hr_Latn_HR",
+            "hr"
+        }, {
+            "und_HT",
+            "ht_Latn_HT",
+            "ht"
+        }, {
+            "und_HU",
+            "hu_Latn_HU",
+            "hu"
+        }, {
+            "und_Hani",
+            "zh_Hani_CN",
+            "zh_Hani"
+        }, {
+            "und_Hans",
+            "zh_Hans_CN",
+            "zh"
+        }, {
+            "und_Hant",
+            "zh_Hant_TW",
+            "zh_TW"
+        }, {
+            "und_Hebr",
+            "he_Hebr_IL",
+            "he"
+        }, {
+            "und_ID",
+            "id_Latn_ID",
+            "id"
+        }, {
+            "und_IL",
+            "he_Hebr_IL",
+            "he"
+        }, {
+            "und_IN",
+            "hi_Deva_IN",
+            "hi"
+        }, {
+            "und_IQ",
+            "ar_Arab_IQ",
+            "ar_IQ"
+        }, {
+            "und_IR",
+            "fa_Arab_IR",
+            "fa"
+        }, {
+            "und_IS",
+            "is_Latn_IS",
+            "is"
+        }, {
+            "und_IT",
+            "it_Latn_IT",
+            "it"
+        }, {
+            "und_JO",
+            "ar_Arab_JO",
+            "ar_JO"
+        }, {
+            "und_JP",
+            "ja_Jpan_JP",
+            "ja"
+        }, {
+            "und_Jpan",
+            "ja_Jpan_JP",
+            "ja"
+        }, {
+            "und_KG",
+            "ky_Cyrl_KG",
+            "ky"
+        }, {
+            "und_KH",
+            "km_Khmr_KH",
+            "km"
+        }, {
+            "und_KM",
+            "ar_Arab_KM",
+            "ar_KM"
+        }, {
+            "und_KP",
+            "ko_Kore_KP",
+            "ko_KP"
+        }, {
+            "und_KR",
+            "ko_Kore_KR",
+            "ko"
+        }, {
+            "und_KW",
+            "ar_Arab_KW",
+            "ar_KW"
+        }, {
+            "und_KZ",
+            "ru_Cyrl_KZ",
+            "ru_KZ"
+        }, {
+            "und_Khmr",
+            "km_Khmr_KH",
+            "km"
+        }, {
+            "und_Knda",
+            "kn_Knda_IN",
+            "kn"
+        }, {
+            "und_Kore",
+            "ko_Kore_KR",
+            "ko"
+        }, {
+            "und_LA",
+            "lo_Laoo_LA",
+            "lo"
+        }, {
+            "und_LB",
+            "ar_Arab_LB",
+            "ar_LB"
+        }, {
+            "und_LI",
+            "de_Latn_LI",
+            "de_LI"
+        }, {
+            "und_LK",
+            "si_Sinh_LK",
+            "si"
+        }, {
+            "und_LS",
+            "st_Latn_LS",
+            "st_LS"
+        }, {
+            "und_LT",
+            "lt_Latn_LT",
+            "lt"
+        }, {
+            "und_LU",
+            "fr_Latn_LU",
+            "fr_LU"
+        }, {
+            "und_LV",
+            "lv_Latn_LV",
+            "lv"
+        }, {
+            "und_LY",
+            "ar_Arab_LY",
+            "ar_LY"
+        }, {
+            "und_Laoo",
+            "lo_Laoo_LA",
+            "lo"
+        }, {
+            "und_Latn_ES",
+            "es_Latn_ES",
+            "es"
+        }, {
+            "und_Latn_ET",
+            "en_Latn_ET",
+            "en_ET"
+        }, {
+            "und_Latn_GB",
+            "en_Latn_GB",
+            "en_GB"
+        }, {
+            "und_Latn_GH",
+            "ak_Latn_GH",
+            "ak"
+        }, {
+            "und_Latn_ID",
+            "id_Latn_ID",
+            "id"
+        }, {
+            "und_Latn_IT",
+            "it_Latn_IT",
+            "it"
+        }, {
+            "und_Latn_NG",
+            "en_Latn_NG",
+            "en_NG"
+        }, {
+            "und_Latn_TR",
+            "tr_Latn_TR",
+            "tr"
+        }, {
+            "und_Latn_ZA",
+            "en_Latn_ZA",
+            "en_ZA"
+        }, {
+            "und_MA",
+            "ar_Arab_MA",
+            "ar_MA"
+        }, {
+            "und_MC",
+            "fr_Latn_MC",
+            "fr_MC"
+        }, {
+            "und_MD",
+            "ro_Latn_MD",
+            "ro_MD"
+        }, {
+            "und_ME",
+            "sr_Latn_ME",
+            "sr_ME"
+        }, {
+            "und_MG",
+            "mg_Latn_MG",
+            "mg"
+        }, {
+            "und_MK",
+            "mk_Cyrl_MK",
+            "mk"
+        }, {
+            "und_ML",
+            "bm_Latn_ML",
+            "bm"
+        }, {
+            "und_MM",
+            "my_Mymr_MM",
+            "my"
+        }, {
+            "und_MN",
+            "mn_Cyrl_MN",
+            "mn"
+        }, {
+            "und_MO",
+            "zh_Hant_MO",
+            "zh_MO"
+        }, {
+            "und_MQ",
+            "fr_Latn_MQ",
+            "fr_MQ"
+        }, {
+            "und_MR",
+            "ar_Arab_MR",
+            "ar_MR"
+        }, {
+            "und_MT",
+            "mt_Latn_MT",
+            "mt"
+        }, {
+            "und_MV",
+            "dv_Thaa_MV",
+            "dv"
+        }, {
+            "und_MX",
+            "es_Latn_MX",
+            "es_MX"
+        }, {
+            "und_MY",
+            "ms_Latn_MY",
+            "ms"
+        }, {
+            "und_MZ",
+            "pt_Latn_MZ",
+            "pt_MZ"
+        }, {
+            "und_Mlym",
+            "ml_Mlym_IN",
+            "ml"
+        }, {
+            "und_Mymr",
+            "my_Mymr_MM",
+            "my"
+        }, {
+            "und_NC",
+            "fr_Latn_NC",
+            "fr_NC"
+        }, {
+            "und_NE",
+            "ha_Latn_NE",
+            "ha_NE"
+        }, {
+            "und_NG",
+            "en_Latn_NG",
+            "en_NG"
+        }, {
+            "und_NI",
+            "es_Latn_NI",
+            "es_NI"
+        }, {
+            "und_NL",
+            "nl_Latn_NL",
+            "nl"
+        }, {
+            "und_NO",
+            "nb_Latn_NO",
+            "nb"
+        }, {
+            "und_NP",
+            "ne_Deva_NP",
+            "ne"
+        }, {
+            "und_NR",
+            "en_Latn_NR",
+            "en_NR"
+        }, {
+            "und_OM",
+            "ar_Arab_OM",
+            "ar_OM"
+        }, {
+            "und_Orya",
+            "or_Orya_IN",
+            "or"
+        }, {
+            "und_PA",
+            "es_Latn_PA",
+            "es_PA"
+        }, {
+            "und_PE",
+            "es_Latn_PE",
+            "es_PE"
+        }, {
+            "und_PF",
+            "fr_Latn_PF",
+            "fr_PF"
+        }, {
+            "und_PG",
+            "tpi_Latn_PG",
+            "tpi"
+        }, {
+            "und_PH",
+            "fil_Latn_PH",
+            "fil"
+        }, {
+            "und_PL",
+            "pl_Latn_PL",
+            "pl"
+        }, {
+            "und_PM",
+            "fr_Latn_PM",
+            "fr_PM"
+        }, {
+            "und_PR",
+            "es_Latn_PR",
+            "es_PR"
+        }, {
+            "und_PS",
+            "ar_Arab_PS",
+            "ar_PS"
+        }, {
+            "und_PT",
+            "pt_Latn_PT",
+            "pt_PT"
+        }, {
+            "und_PW",
+            "pau_Latn_PW",
+            "pau"
+        }, {
+            "und_PY",
+            "gn_Latn_PY",
+            "gn"
+        }, {
+            "und_QA",
+            "ar_Arab_QA",
+            "ar_QA"
+        }, {
+            "und_RE",
+            "fr_Latn_RE",
+            "fr_RE"
+        }, {
+            "und_RO",
+            "ro_Latn_RO",
+            "ro"
+        }, {
+            "und_RS",
+            "sr_Cyrl_RS",
+            "sr"
+        }, {
+            "und_RU",
+            "ru_Cyrl_RU",
+            "ru"
+        }, {
+            "und_RW",
+            "rw_Latn_RW",
+            "rw"
+        }, {
+            "und_SA",
+            "ar_Arab_SA",
+            "ar_SA"
+        }, {
+            "und_SD",
+            "ar_Arab_SD",
+            "ar_SD"
+        }, {
+            "und_SE",
+            "sv_Latn_SE",
+            "sv"
+        }, {
+            "und_SG",
+            "en_Latn_SG",
+            "en_SG"
+        }, {
+            "und_SI",
+            "sl_Latn_SI",
+            "sl"
+        }, {
+            "und_SJ",
+            "nb_Latn_SJ",
+            "nb_SJ"
+        }, {
+            "und_SK",
+            "sk_Latn_SK",
+            "sk"
+        }, {
+            "und_SM",
+            "it_Latn_SM",
+            "it_SM"
+        }, {
+            "und_SN",
+            "fr_Latn_SN",
+            "fr_SN"
+        }, {
+            "und_SO",
+            "so_Latn_SO",
+            "so"
+        }, {
+            "und_SR",
+            "nl_Latn_SR",
+            "nl_SR"
+        }, {
+            "und_ST",
+            "pt_Latn_ST",
+            "pt_ST"
+        }, {
+            "und_SV",
+            "es_Latn_SV",
+            "es_SV"
+        }, {
+            "und_SY",
+            "ar_Arab_SY",
+            "ar_SY"
+        }, {
+            "und_Sinh",
+            "si_Sinh_LK",
+            "si"
+        }, {
+            "und_Syrc",
+            "syr_Syrc_IQ",
+            "syr"
+        }, {
+            "und_TD",
+            "fr_Latn_TD",
+            "fr_TD"
+        }, {
+            "und_TG",
+            "fr_Latn_TG",
+            "fr_TG"
+        }, {
+            "und_TH",
+            "th_Thai_TH",
+            "th"
+        }, {
+            "und_TJ",
+            "tg_Cyrl_TJ",
+            "tg"
+        }, {
+            "und_TK",
+            "tkl_Latn_TK",
+            "tkl"
+        }, {
+            "und_TL",
+            "pt_Latn_TL",
+            "pt_TL"
+        }, {
+            "und_TM",
+            "tk_Latn_TM",
+            "tk"
+        }, {
+            "und_TN",
+            "ar_Arab_TN",
+            "ar_TN"
+        }, {
+            "und_TO",
+            "to_Latn_TO",
+            "to"
+        }, {
+            "und_TR",
+            "tr_Latn_TR",
+            "tr"
+        }, {
+            "und_TV",
+            "tvl_Latn_TV",
+            "tvl"
+        }, {
+            "und_TW",
+            "zh_Hant_TW",
+            "zh_TW"
+        }, {
+            "und_Taml",
+            "ta_Taml_IN",
+            "ta"
+        }, {
+            "und_Telu",
+            "te_Telu_IN",
+            "te"
+        }, {
+            "und_Thaa",
+            "dv_Thaa_MV",
+            "dv"
+        }, {
+            "und_Thai",
+            "th_Thai_TH",
+            "th"
+        }, {
+            "und_Tibt",
+            "bo_Tibt_CN",
+            "bo"
+        }, {
+            "und_UA",
+            "uk_Cyrl_UA",
+            "uk"
+        }, {
+            "und_UY",
+            "es_Latn_UY",
+            "es_UY"
+        }, {
+            "und_UZ",
+            "uz_Latn_UZ",
+            "uz"
+        }, {
+            "und_VA",
+            "it_Latn_VA",
+            "it_VA"
+        }, {
+            "und_VE",
+            "es_Latn_VE",
+            "es_VE"
+        }, {
+            "und_VN",
+            "vi_Latn_VN",
+            "vi"
+        }, {
+            "und_VU",
+            "bi_Latn_VU",
+            "bi"
+        }, {
+            "und_WF",
+            "fr_Latn_WF",
+            "fr_WF"
+        }, {
+            "und_WS",
+            "sm_Latn_WS",
+            "sm"
+        }, {
+            "und_YE",
+            "ar_Arab_YE",
+            "ar_YE"
+        }, {
+            "und_YT",
+            "fr_Latn_YT",
+            "fr_YT"
+        }, {
+            "und_Yiii",
+            "ii_Yiii_CN",
+            "ii"
+        }, {
+            "ur",
+            "ur_Arab_PK",
+            "ur"
+        }, {
+            "uz",
+            "uz_Latn_UZ",
+            "uz"
+        }, {
+            "uz_AF",
+            "uz_Arab_AF",
+            "uz_AF"
+        }, {
+            "uz_Arab",
+            "uz_Arab_AF",
+            "uz_AF"
+        }, {
+            "ve",
+            "ve_Latn_ZA",
+            "ve"
+        }, {
+            "vi",
+            "vi_Latn_VN",
+            "vi"
+        }, {
+            "wal",
+            "wal_Ethi_ET",
+            "wal"
+        }, {
+            "wo",
+            "wo_Latn_SN",
+            "wo"
+        }, {
+            "wo_SN",
+            "wo_Latn_SN",
+            "wo"
+        }, {
+            "xh",
+            "xh_Latn_ZA",
+            "xh"
+        }, {
+            "yo",
+            "yo_Latn_NG",
+            "yo"
+        }, {
+            "zh",
+            "zh_Hans_CN",
+            "zh"
+        }, {
+            "zh_HK",
+            "zh_Hant_HK",
+            "zh_HK"
+        }, {
+            "zh_Hani",
+            "zh_Hani_CN",
+            "zh_Hani"
+        }, {
+            "zh_Hant",
+            "zh_Hant_TW",
+            "zh_TW"
+        }, {
+            "zh_MO",
+            "zh_Hant_MO",
+            "zh_MO"
+        }, {
+            "zh_TW",
+            "zh_Hant_TW",
+            "zh_TW"
+        }, {
+            "zu",
+            "zu_Latn_ZA",
+            "zu"
+        }, {
+            "und",
+            "en_Latn_US",
+            "en"
+        }, {
+            "und_ZZ",
+            "en_Latn_US",
+            "en"
+        }, {
+            "und_CN",
+            "zh_Hans_CN",
+            "zh"
+        }, {
+            "und_TW",
+            "zh_Hant_TW",
+            "zh_TW"
+        }, {
+            "und_HK",
+            "zh_Hant_HK",
+            "zh_HK"
+        }, {
+            "und_AQ",
+            "_Latn_AQ",
+            "_AQ"
+        }, {
+            "und_Zzzz",
+            "en_Latn_US",
+            "en"
+        }, {
+            "und_Zzzz_ZZ",
+            "en_Latn_US",
+            "en"
+        }, {
+            "und_Zzzz_CN",
+            "zh_Hans_CN",
+            "zh"
+        }, {
+            "und_Zzzz_TW",
+            "zh_Hant_TW",
+            "zh_TW"
+        }, {
+            "und_Zzzz_HK",
+            "zh_Hant_HK",
+            "zh_HK"
+        }, {
+            "und_Zzzz_AQ",
+            "_Latn_AQ",
+            "_AQ"
+        }, {
+            "und_Latn",
+            "en_Latn_US",
+            "en"
+        }, {
+            "und_Latn_ZZ",
+            "en_Latn_US",
+            "en"
+        }, {
+            "und_Latn_CN",
+            "za_Latn_CN",
+            "za"
+        }, {
+            "und_Latn_TW",
+            "trv_Latn_TW",
+            "trv"
+        }, {
+            "und_Latn_HK",
+            "zh_Latn_HK",
+            "zh_Latn_HK"
+        }, {
+            "und_Latn_AQ",
+            "_Latn_AQ",
+            "_AQ"
+        }, {
+            "und_Hans",
+            "zh_Hans_CN",
+            "zh"
+        }, {
+            "und_Hans_ZZ",
+            "zh_Hans_CN",
+            "zh"
+        }, {
+            "und_Hans_CN",
+            "zh_Hans_CN",
+            "zh"
+        }, {
+            "und_Hans_TW",
+            "zh_Hans_TW",
+            "zh_Hans_TW"
+        }, {
+            "und_Hans_HK",
+            "zh_Hans_HK",
+            "zh_Hans_HK"
+        }, {
+            "und_Hans_AQ",
+            "zh_Hans_AQ",
+            "zh_AQ"
+        }, {
+            "und_Hant",
+            "zh_Hant_TW",
+            "zh_TW"
+        }, {
+            "und_Hant_ZZ",
+            "zh_Hant_TW",
+            "zh_TW"
+        }, {
+            "und_Hant_CN",
+            "zh_Hant_CN",
+            "zh_Hant_CN"
+        }, {
+            "und_Hant_TW",
+            "zh_Hant_TW",
+            "zh_TW"
+        }, {
+            "und_Hant_HK",
+            "zh_Hant_HK",
+            "zh_HK"
+        }, {
+            "und_Hant_AQ",
+            "zh_Hant_AQ",
+            "zh_Hant_AQ"
+        }, {
+            "und_Moon",
+            "en_Moon_US",
+            "en_Moon"
+        }, {
+            "und_Moon_ZZ",
+            "en_Moon_US",
+            "en_Moon"
+        }, {
+            "und_Moon_CN",
+            "zh_Moon_CN",
+            "zh_Moon"
+        }, {
+            "und_Moon_TW",
+            "zh_Moon_TW",
+            "zh_Moon_TW"
+        }, {
+            "und_Moon_HK",
+            "zh_Moon_HK",
+            "zh_Moon_HK"
+        }, {
+            "und_Moon_AQ",
+            "_Moon_AQ",
+            "_Moon_AQ"
+        }, {
+            "es",
+            "es_Latn_ES",
+            "es"
+        }, {
+            "es_ZZ",
+            "es_Latn_ES",
+            "es"
+        }, {
+            "es_CN",
+            "es_Latn_CN",
+            "es_CN"
+        }, {
+            "es_TW",
+            "es_Latn_TW",
+            "es_TW"
+        }, {
+            "es_HK",
+            "es_Latn_HK",
+            "es_HK"
+        }, {
+            "es_AQ",
+            "es_Latn_AQ",
+            "es_AQ"
+        }, {
+            "es_Zzzz",
+            "es_Latn_ES",
+            "es"
+        }, {
+            "es_Zzzz_ZZ",
+            "es_Latn_ES",
+            "es"
+        }, {
+            "es_Zzzz_CN",
+            "es_Latn_CN",
+            "es_CN"
+        }, {
+            "es_Zzzz_TW",
+            "es_Latn_TW",
+            "es_TW"
+        }, {
+            "es_Zzzz_HK",
+            "es_Latn_HK",
+            "es_HK"
+        }, {
+            "es_Zzzz_AQ",
+            "es_Latn_AQ",
+            "es_AQ"
+        }, {
+            "es_Latn",
+            "es_Latn_ES",
+            "es"
+        }, {
+            "es_Latn_ZZ",
+            "es_Latn_ES",
+            "es"
+        }, {
+            "es_Latn_CN",
+            "es_Latn_CN",
+            "es_CN"
+        }, {
+            "es_Latn_TW",
+            "es_Latn_TW",
+            "es_TW"
+        }, {
+            "es_Latn_HK",
+            "es_Latn_HK",
+            "es_HK"
+        }, {
+            "es_Latn_AQ",
+            "es_Latn_AQ",
+            "es_AQ"
+        }, {
+            "es_Hans",
+            "es_Hans_ES",
+            "es_Hans"
+        }, {
+            "es_Hans_ZZ",
+            "es_Hans_ES",
+            "es_Hans"
+        }, {
+            "es_Hans_CN",
+            "es_Hans_CN",
+            "es_Hans_CN"
+        }, {
+            "es_Hans_TW",
+            "es_Hans_TW",
+            "es_Hans_TW"
+        }, {
+            "es_Hans_HK",
+            "es_Hans_HK",
+            "es_Hans_HK"
+        }, {
+            "es_Hans_AQ",
+            "es_Hans_AQ",
+            "es_Hans_AQ"
+        }, {
+            "es_Hant",
+            "es_Hant_ES",
+            "es_Hant"
+        }, {
+            "es_Hant_ZZ",
+            "es_Hant_ES",
+            "es_Hant"
+        }, {
+            "es_Hant_CN",
+            "es_Hant_CN",
+            "es_Hant_CN"
+        }, {
+            "es_Hant_TW",
+            "es_Hant_TW",
+            "es_Hant_TW"
+        }, {
+            "es_Hant_HK",
+            "es_Hant_HK",
+            "es_Hant_HK"
+        }, {
+            "es_Hant_AQ",
+            "es_Hant_AQ",
+            "es_Hant_AQ"
+        }, {
+            "es_Moon",
+            "es_Moon_ES",
+            "es_Moon"
+        }, {
+            "es_Moon_ZZ",
+            "es_Moon_ES",
+            "es_Moon"
+        }, {
+            "es_Moon_CN",
+            "es_Moon_CN",
+            "es_Moon_CN"
+        }, {
+            "es_Moon_TW",
+            "es_Moon_TW",
+            "es_Moon_TW"
+        }, {
+            "es_Moon_HK",
+            "es_Moon_HK",
+            "es_Moon_HK"
+        }, {
+            "es_Moon_AQ",
+            "es_Moon_AQ",
+            "es_Moon_AQ"
+        }, {
+            "zh",
+            "zh_Hans_CN",
+            "zh"
+        }, {
+            "zh_ZZ",
+            "zh_Hans_CN",
+            "zh"
+        }, {
+            "zh_CN",
+            "zh_Hans_CN",
+            "zh"
+        }, {
+            "zh_TW",
+            "zh_Hant_TW",
+            "zh_TW"
+        }, {
+            "zh_HK",
+            "zh_Hant_HK",
+            "zh_HK"
+        }, {
+            "zh_AQ",
+            "zh_Hans_AQ",
+            "zh_AQ"
+        }, {
+            "zh_Zzzz",
+            "zh_Hans_CN",
+            "zh"
+        }, {
+            "zh_Zzzz_ZZ",
+            "zh_Hans_CN",
+            "zh"
+        }, {
+            "zh_Zzzz_CN",
+            "zh_Hans_CN",
+            "zh"
+        }, {
+            "zh_Zzzz_TW",
+            "zh_Hant_TW",
+            "zh_TW"
+        }, {
+            "zh_Zzzz_HK",
+            "zh_Hant_HK",
+            "zh_HK"
+        }, {
+            "zh_Zzzz_AQ",
+            "zh_Hans_AQ",
+            "zh_AQ"
+        }, {
+            "zh_Latn",
+            "zh_Latn_CN",
+            "zh_Latn"
+        }, {
+            "zh_Latn_ZZ",
+            "zh_Latn_CN",
+            "zh_Latn"
+        }, {
+            "zh_Latn_CN",
+            "zh_Latn_CN",
+            "zh_Latn"
+        }, {
+            "zh_Latn_TW",
+            "zh_Latn_TW",
+            "zh_Latn_TW"
+        }, {
+            "zh_Latn_HK",
+            "zh_Latn_HK",
+            "zh_Latn_HK"
+        }, {
+            "zh_Latn_AQ",
+            "zh_Latn_AQ",
+            "zh_Latn_AQ"
+        }, {
+            "zh_Hans",
+            "zh_Hans_CN",
+            "zh"
+        }, {
+            "zh_Hans_ZZ",
+            "zh_Hans_CN",
+            "zh"
+        }, {
+            "zh_Hans_TW",
+            "zh_Hans_TW",
+            "zh_Hans_TW"
+        }, {
+            "zh_Hans_HK",
+            "zh_Hans_HK",
+            "zh_Hans_HK"
+        }, {
+            "zh_Hans_AQ",
+            "zh_Hans_AQ",
+            "zh_AQ"
+        }, {
+            "zh_Hant",
+            "zh_Hant_TW",
+            "zh_TW"
+        }, {
+            "zh_Hant_ZZ",
+            "zh_Hant_TW",
+            "zh_TW"
+        }, {
+            "zh_Hant_CN",
+            "zh_Hant_CN",
+            "zh_Hant_CN"
+        }, {
+            "zh_Hant_AQ",
+            "zh_Hant_AQ",
+            "zh_Hant_AQ"
+        }, {
+            "zh_Moon",
+            "zh_Moon_CN",
+            "zh_Moon"
+        }, {
+            "zh_Moon_ZZ",
+            "zh_Moon_CN",
+            "zh_Moon"
+        }, {
+            "zh_Moon_CN",
+            "zh_Moon_CN",
+            "zh_Moon"
+        }, {
+            "zh_Moon_TW",
+            "zh_Moon_TW",
+            "zh_Moon_TW"
+        }, {
+            "zh_Moon_HK",
+            "zh_Moon_HK",
+            "zh_Moon_HK"
+        }, {
+            "zh_Moon_AQ",
+            "zh_Moon_AQ",
+            "zh_Moon_AQ"
+        }, {
+            "art",
+            "",
+            ""
+        }, {
+            "art_ZZ",
+            "",
+            ""
+        }, {
+            "art_CN",
+            "",
+            ""
+        }, {
+            "art_TW",
+            "",
+            ""
+        }, {
+            "art_HK",
+            "",
+            ""
+        }, {
+            "art_AQ",
+            "",
+            ""
+        }, {
+            "art_Zzzz",
+            "",
+            ""
+        }, {
+            "art_Zzzz_ZZ",
+            "",
+            ""
+        }, {
+            "art_Zzzz_CN",
+            "",
+            ""
+        }, {
+            "art_Zzzz_TW",
+            "",
+            ""
+        }, {
+            "art_Zzzz_HK",
+            "",
+            ""
+        }, {
+            "art_Zzzz_AQ",
+            "",
+            ""
+        }, {
+            "art_Latn",
+            "",
+            ""
+        }, {
+            "art_Latn_ZZ",
+            "",
+            ""
+        }, {
+            "art_Latn_CN",
+            "",
+            ""
+        }, {
+            "art_Latn_TW",
+            "",
+            ""
+        }, {
+            "art_Latn_HK",
+            "",
+            ""
+        }, {
+            "art_Latn_AQ",
+            "",
+            ""
+        }, {
+            "art_Hans",
+            "",
+            ""
+        }, {
+            "art_Hans_ZZ",
+            "",
+            ""
+        }, {
+            "art_Hans_CN",
+            "",
+            ""
+        }, {
+            "art_Hans_TW",
+            "",
+            ""
+        }, {
+            "art_Hans_HK",
+            "",
+            ""
+        }, {
+            "art_Hans_AQ",
+            "",
+            ""
+        }, {
+            "art_Hant",
+            "",
+            ""
+        }, {
+            "art_Hant_ZZ",
+            "",
+            ""
+        }, {
+            "art_Hant_CN",
+            "",
+            ""
+        }, {
+            "art_Hant_TW",
+            "",
+            ""
+        }, {
+            "art_Hant_HK",
+            "",
+            ""
+        }, {
+            "art_Hant_AQ",
+            "",
+            ""
+        }, {
+            "art_Moon",
+            "",
+            ""
+        }, {
+            "art_Moon_ZZ",
+            "",
+            ""
+        }, {
+            "art_Moon_CN",
+            "",
+            ""
+        }, {
+            "art_Moon_TW",
+            "",
+            ""
+        }, {
+            "art_Moon_HK",
+            "",
+            ""
+        }, {
+            "art_Moon_AQ",
+            "",
+            ""
+        }, {
+            "aae_Latn_IT",
+            "aae_Latn_IT",
+            "aae_Latn_IT"
+        }, {
+            "aae_Thai_CO",
+            "aae_Thai_CO",
+            "aae_Thai_CO"
+        }, {
+            "und_CW",
+            "pap_Latn_CW",
+            "pap_CW"
+        }, {
+            "zh_Hant",
+            "zh_Hant_TW",
+            "zh_TW"
+        }, {
+            "zh_Hani",
+            "zh_Hani_CN",
+            "zh_Hani"
+        }, {
+            "und",
+            "en_Latn_US",
+            "en"
+        }, {
+            "und_Thai",
+            "th_Thai_TH",
+            "th"
+        }, {
+            "und_419",
+            "es_Latn_419",
+            "es_419"
+        }, {
+            "und_150",
+            "ru_Cyrl_RU",
+            "ru"
+        }, {
+            "und_AT",
+            "de_Latn_AT",
+            "de_AT"
+        }, {
+            "und_US",
+            "en_Latn_US",
+            "en"
+        }
     };
 
     for (const auto& item : full_data) {
@@ -1716,7 +3828,11 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
         Locale res(org);
         res.addLikelySubtags(status);
         status.errIfFailureAndReset("\"%s\"", org);
-        assertEquals("addLikelySubtags", exp, res.getName());
+        if (exp[0]) {
+            assertEquals("addLikelySubtags", exp, res.getName());
+        } else {
+            assertEquals("addLikelySubtags", org, res.getName());
+        }
     }
 
     for (const auto& item : full_data) {
@@ -1725,7 +3841,11 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
         Locale res(org);
         res.minimizeSubtags(status);
         status.errIfFailureAndReset("\"%s\"", org);
-        assertEquals("minimizeSubtags", exp, res.getName());
+        if (exp[0]) {
+            assertEquals("minimizeSubtags", exp, res.getName());
+        } else {
+            assertEquals("minimizeSubtags", org, res.getName());
+        }
     }
 }
 
@@ -2591,15 +4711,15 @@ void LocaleTest::TestCanonicalization(void)
     } testCases[] = {
         { "ca_ES-with-extra-stuff-that really doesn't make any sense-unless-you're trying to increase code coverage",
           "ca_ES_WITH_EXTRA_STUFF_THAT REALLY DOESN'T MAKE ANY SENSE_UNLESS_YOU'RE TRYING TO INCREASE CODE COVERAGE",
-          "ca_ES_WITH_EXTRA_STUFF_THAT REALLY DOESN'T MAKE ANY SENSE_UNLESS_YOU'RE TRYING TO INCREASE CODE COVERAGE"},
+          "ca_ES_EXTRA_STUFF_THAT REALLY DOESN'T MAKE ANY SENSE_UNLESS_WITH_YOU'RE TRYING TO INCREASE CODE COVERAGE"},
         { "zh@collation=pinyin", "zh@collation=pinyin", "zh@collation=pinyin" },
         { "zh_CN@collation=pinyin", "zh_CN@collation=pinyin", "zh_CN@collation=pinyin" },
         { "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin" },
         { "en_US_POSIX", "en_US_POSIX", "en_US_POSIX" }, 
         { "hy_AM_REVISED", "hy_AM_REVISED", "hy_AM_REVISED" }, 
-        { "no_NO_NY", "no_NO_NY", "no_NO_NY" /* not: "nn_NO" [alan ICU3.0] */ },
-        { "no@ny", "no@ny", "no__NY" /* not: "nn" [alan ICU3.0] */ }, /* POSIX ID */
-        { "no-no.utf32@B", "no_NO.utf32@B", "no_NO_B" /* not: "nb_NO_B" [alan ICU3.0] */ }, /* POSIX ID */
+        { "no_NO_NY", "no_NO_NY", "nb_NO_NY" /* not: "nn_NO" [alan ICU3.0] */ },
+        { "no@ny", "no@ny", "nb__NY" /* not: "nn" [alan ICU3.0] */ }, /* POSIX ID */
+        { "no-no.utf32@B", "no_NO.utf32@B", "nb_NO_B" /* not: "nb_NO_B" [alan ICU3.0] */ }, /* POSIX ID */
         { "qz-qz@Euro", "qz_QZ@Euro", "qz_QZ_EURO" }, /* qz-qz uses private use iso codes */
         // NOTE: uloc_getName() works on en-BOONT, but Locale() parser considers it BOGUS
         // TODO: unify this behavior
@@ -2613,15 +4733,19 @@ void LocaleTest::TestCanonicalization(void)
         { "x-piglatin_ML.MBE", "x-piglatin_ML.MBE", "x-piglatin_ML" },
         { "i-cherokee_US.utf7", "i-cherokee_US.utf7", "i-cherokee_US" },
         { "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA" },
-        { "no-no-ny.utf8@B", "no_NO_NY.utf8@B", "no_NO_NY_B" /* not: "nn_NO" [alan ICU3.0] */ }, /* @ ignored unless variant is empty */
+        { "no-no-ny.utf8@B", "no_NO_NY.utf8@B", "nb_NO_B_NY" /* not: "nn_NO" [alan ICU3.0] */ }, /* @ ignored unless variant is empty */
 
         /* fleshing out canonicalization */
         /* trim space and sort keywords, ';' is separator so not present at end in canonical form */
-        { "en_Hant_IL_VALLEY_GIRL@ currency = EUR; calendar = Japanese ;", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR" },
+        { "en_Hant_IL_VALLEY_GIRL@ currency = EUR; calendar = Japanese ;",
+          "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR",
+          "en_Hant_IL_GIRL_VALLEY@calendar=Japanese;currency=EUR" },
         /* already-canonical ids are not changed */
-        { "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR" },
+        { "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR",
+          "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR",
+          "en_Hant_IL_GIRL_VALLEY@calendar=Japanese;currency=EUR" },
         /* norwegian is just too weird, if we handle things in their full generality */
-        { "no-Hant-GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$" /* not: "nn_Hant_GB@currency=$$$" [alan ICU3.0] */ },
+        { "no-Hant-GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$", "nb_Hant_GB_NY@currency=$$$" /* not: "nn_Hant_GB@currency=$$$" [alan ICU3.0] */ },
 
         /* test cases reflecting internal resource bundle usage */
         { "root@kw=foo", "root@kw=foo", "root@kw=foo" },
@@ -2664,7 +4788,7 @@ void LocaleTest::TestCanonicalization(void)
         { "zh__PINYIN", "zh__PINYIN", "zh__PINYIN" },
         { "sr-SP-Cyrl", "sr_SP_CYRL", "sr_SP_CYRL" }, /* .NET name */
         { "sr-SP-Latn", "sr_SP_LATN", "sr_SP_LATN" }, /* .NET name */
-        { "sr_YU_CYRILLIC", "sr_YU_CYRILLIC", "sr_YU_CYRILLIC" }, /* Linux name */
+        { "sr_YU_CYRILLIC", "sr_YU_CYRILLIC", "sr_RS_CYRILLIC" }, /* Linux name */
         { "uz-UZ-Cyrl", "uz_UZ_CYRL", "uz_UZ_CYRL" }, /* .NET name */
         { "uz-UZ-Latn", "uz_UZ_LATN", "uz_UZ_LATN" }, /* .NET name */
         { "zh-CHS", "zh_CHS", "zh_CHS" }, /* .NET name */
@@ -2693,6 +4817,97 @@ void LocaleTest::TestCanonicalization(void)
                 logln("Ok: %s(%s) => \"%s\"",
                       label[j], testCases[i].localeID, getName);
             }
+        }
+    }
+}
+
+void LocaleTest::TestCanonicalize(void)
+{
+    static const struct {
+        const char *localeID;    /* input */
+        const char *canonicalID; /* expected canonicalize() result */
+    } testCases[] = {
+        // language _ variant -> language
+        { "no-BOKMAL", "nb" },
+        // also test with script, country and extensions
+        { "no-Cyrl-ID-BOKMAL-u-ca-japanese", "nb-Cyrl-ID-u-ca-japanese" },
+        { "no-Cyrl-ID-1901-BOKMAL-xsistemo-u-ca-japanese", "nb-Cyrl-ID-1901-xsistemo-u-ca-japanese" },
+        { "no-Cyrl-ID-1901-BOKMAL-u-ca-japanese", "nb-Cyrl-ID-1901-u-ca-japanese" },
+        { "no-Cyrl-ID-BOKMAL-xsistemo-u-ca-japanese", "nb-Cyrl-ID-xsistemo-u-ca-japanese" },
+        { "no-NYNORSK", "nn" },
+        { "no-Cyrl-ID-NYNORSK-u-ca-japanese", "nn-Cyrl-ID-u-ca-japanese" },
+        { "aa-SAAHO", "ssy" },
+        // also test with script, country and extensions
+        { "aa-Deva-IN-SAAHO-u-ca-japanese", "ssy-Deva-IN-u-ca-japanese" },
+
+        // language -> language
+        { "aam", "aas" },
+        // also test with script, country, variants and extensions
+        { "aam-Cyrl-ID-3456-u-ca-japanese", "aas-Cyrl-ID-3456-u-ca-japanese" },
+
+        // language -> language _ Script
+        { "sh", "sr-Latn" },
+        // also test with script
+        { "sh-Cyrl", "sr-Cyrl" },
+        // also test with country, variants and extensions
+        { "sh-ID-3456-u-ca-roc", "sr-Latn-ID-3456-u-ca-roc" },
+
+        // language -> language _ country
+        { "prs", "fa-AF" },
+        // also test with country
+        { "prs-RU", "fa-RU" },
+        // also test with script, variants and extensions
+        { "prs-Cyrl-1009-u-ca-roc", "fa-Cyrl-AF-1009-u-ca-roc" },
+
+        { "pa-IN", "pa-IN" },
+        // also test with script
+        { "pa-Latn-IN", "pa-Latn-IN" },
+        // also test with variants and extensions
+        { "pa-IN-5678-u-ca-hindi", "pa-IN-5678-u-ca-hindi" },
+
+        { "ky-Cyrl-KG", "ky-Cyrl-KG" },
+        // also test with variants and extensions
+        { "ky-Cyrl-KG-3456-u-ca-roc", "ky-Cyrl-KG-3456-u-ca-roc" },
+
+        // Test replacement of scriptAlias
+        { "en-Qaai", "en-Zinh" },
+
+        // Test replacement of territoryAlias
+        // 554 has one replacement
+        { "en-554", "en-NZ" },
+        { "en-554-u-nu-arab", "en-NZ-u-nu-arab" },
+        // 172 has multiple replacements
+        // also test with variants
+        { "ru-172-1234", "ru-RU-1234" },
+        // also test with extensions
+        { "ru-172-1234-u-nu-latn", "ru-RU-1234-u-nu-latn" },
+        // also test with scripts
+        { "uz-172", "uz-UZ" },
+        { "uz-Cyrl-172", "uz-Cyrl-UZ" },
+        { "uz-Bopo-172", "uz-Bopo-UZ" },
+        // also test with variants and scripts
+        { "uz-Cyrl-172-5678-u-nu-latn", "uz-Cyrl-UZ-5678-u-nu-latn" },
+        // a language not used in this region
+        { "fr-172", "fr-RU" },
+
+        // variant
+        { "ja-Latn-hepburn-heploc", "ja-Latn-alalc97"},
+
+        { "aaa-Fooo-SU", "aaa-Fooo-RU"},
+    };
+    int32_t i;
+    for (i=0; i < UPRV_LENGTHOF(testCases); i++) {
+        UErrorCode status = U_ZERO_ERROR;
+        std::string otag = testCases[i].localeID;
+        Locale loc = Locale::forLanguageTag(otag.c_str(), status);
+        loc.canonicalize(status);
+        std::string tag = loc.toLanguageTag<std::string>(status);
+        if (tag != testCases[i].canonicalID) {
+            errcheckln(status, "FAIL: %s should be canonicalized to %s but got %s - %s",
+                       otag.c_str(),
+                       testCases[i].canonicalID,
+                       tag.c_str(),
+                       u_errorName(status));
         }
     }
 }
@@ -3099,13 +5314,106 @@ void LocaleTest::TestBug20410() {
 
     static const char locid3[] = "art__lojban@x=0";
     Locale result3 = Locale::createCanonical(locid3);
-    static const Locale expected3("art__LOJBAN@x=0");
+    static const Locale expected3("jbo@x=0");
     assertEquals(locid3, expected3.getName(), result3.getName());
 
     static const char locid4[] = "art-lojban-x-0";
     Locale result4 = Locale::createCanonical(locid4);
     static const Locale expected4("jbo@x=0");
     assertEquals(locid4, expected4.getName(), result4.getName());
+}
+
+void LocaleTest::TestBug20900() {
+    static const struct {
+        const char *localeID;    /* input */
+        const char *canonicalID; /* expected canonicalize() result */
+    } testCases[] = {
+        { "art-lojban", "jbo" },
+        { "zh-guoyu", "zh" },
+        { "zh-hakka", "hak" },
+        { "zh-xiang", "hsn" },
+        { "zh-min-nan", "nan" },
+        { "zh-gan", "gan" },
+        { "zh-wuu", "wuu" },
+        { "zh-yue", "yue" },
+    };
+
+    IcuTestErrorCode status(*this, "TestBug20900");
+    for (int32_t i=0; i < UPRV_LENGTHOF(testCases); i++) {
+        Locale loc = Locale::createCanonical(testCases[i].localeID);
+        std::string result = loc.toLanguageTag<std::string>(status);
+        const char* tag = loc.isBogus() ? "BOGUS" : result.c_str();
+        status.errIfFailureAndReset("FAIL: createCanonical(%s).toLanguageTag() expected \"%s\"",
+                    testCases[i].localeID, tag);
+        assertEquals("createCanonical", testCases[i].canonicalID, tag);
+    }
+}
+
+U_DEFINE_LOCAL_OPEN_POINTER(LocalStdioFilePointer, FILE, fclose);
+void LocaleTest::TestLocaleCanonicalizationFromFile()
+{
+    IcuTestErrorCode status(*this, "TestLocaleCanonicalizationFromFile");
+    const char *sourceTestDataPath=getSourceTestData(status);
+    if(status.errIfFailureAndReset("unable to find the source/test/testdata "
+                                      "folder (getSourceTestData())")) {
+        return;
+    }
+    char testPath[400];
+    char line[256];
+    strcpy(testPath, sourceTestDataPath);
+    strcat(testPath, "localeCanonicalization.txt");
+    LocalStdioFilePointer testFile(fopen(testPath, "r"));
+    if(testFile.isNull()) {
+        errln("unable to open %s", testPath);
+        return;
+    }
+    // Format:
+    // <source locale identifier>	;	<expected canonicalized locale identifier>
+    while (fgets(line, (int)sizeof(line), testFile.getAlias())!=NULL) {
+        if (line[0] == '#') {
+            // ignore any lines start with #
+            continue;
+        }
+        char *semi = strchr(line, ';');
+        if (semi == nullptr) {
+            // ignore any lines without ;
+            continue;
+        }
+        *semi = '\0'; // null terminiate on the spot of semi
+        const char* from = u_skipWhitespace((const char*)line);
+        u_rtrim((char*)from);
+        const char* to = u_skipWhitespace((const char*)semi + 1);
+        u_rtrim((char*)to);
+        std::string expect(to);
+        // Change the _ to -
+        std::transform(expect.begin(), expect.end(), expect.begin(),
+                       [](unsigned char c){ return c == '_' ? '-' : c; });
+
+        Locale loc = Locale::createCanonical(from);
+        std::string result = loc.toLanguageTag<std::string>(status);
+        const char* tag = loc.isBogus() ? "BOGUS" : result.c_str();
+        status.errIfFailureAndReset(
+            "FAIL: createCanonical(%s).toLanguageTag() expected \"%s\" locale is %s",
+            from, tag, loc.getName());
+        std::string msg("createCanonical(");
+        msg += from;
+        msg += ") locale = ";
+        msg += loc.getName();
+        assertEquals(msg.c_str(), expect.c_str(), tag);
+    }
+}
+
+void LocaleTest::TestKnownCanonicalizedListCorrect()
+{
+    IcuTestErrorCode status(*this, "TestKnownCanonicalizedListCorrect");
+    int32_t numOfKnownCanonicalized;
+    const char* const* knownCanonicalized =
+        ulocimp_getKnownCanonicalizedLocaleForTest(&numOfKnownCanonicalized);
+    for (int32_t i = 0; i < numOfKnownCanonicalized; i++) {
+        std::string msg("Known Canonicalized Locale is not canonicalized: ");
+        assertTrue((msg + knownCanonicalized[i]).c_str(),
+                   ulocimp_isCanonicalizedLocaleForTest(knownCanonicalized[i]));
+    }
 }
 
 void LocaleTest::TestConstructorAcceptsBCP47() {
@@ -3264,6 +5572,32 @@ void LocaleTest::TestToLanguageTag() {
     std::string result_bogus = loc_bogus.toLanguageTag<std::string>(status);
     assertEquals("bogus", U_ILLEGAL_ARGUMENT_ERROR, status.reset());
     assertTrue(result_bogus.c_str(), result_bogus.empty());
+}
+
+/* ICU-20310 */
+void LocaleTest::TestToLanguageTagOmitTrue() {
+    IcuTestErrorCode status(*this, "TestToLanguageTagOmitTrue()");
+    assertEquals("en-u-kn should drop true",
+                 "en-u-kn", Locale("en-u-kn-true").toLanguageTag<std::string>(status).c_str());
+    status.errIfFailureAndReset();
+    assertEquals("en-u-kn should drop true",
+                 "en-u-kn", Locale("en-u-kn").toLanguageTag<std::string>(status).c_str());
+    status.errIfFailureAndReset();
+
+    assertEquals("de-u-co should drop true",
+                 "de-u-co", Locale("de-u-co").toLanguageTag<std::string>(status).c_str());
+    status.errIfFailureAndReset();
+    assertEquals("de-u-co should drop true",
+                 "de-u-co", Locale("de-u-co-yes").toLanguageTag<std::string>(status).c_str());
+    status.errIfFailureAndReset();
+    assertEquals("de@collation=yes should drop true",
+                 "de-u-co", Locale("de@collation=yes").toLanguageTag<std::string>(status).c_str());
+    status.errIfFailureAndReset();
+
+    assertEquals("cmn-Hans-CN-t-ca-u-ca-x-t-u should drop true",
+                 "cmn-Hans-CN-t-ca-u-ca-x-t-u",
+                 Locale("cmn-hans-cn-u-ca-t-ca-x-t-u").toLanguageTag<std::string>(status).c_str());
+    status.errIfFailureAndReset();
 }
 
 void LocaleTest::TestMoveAssign() {

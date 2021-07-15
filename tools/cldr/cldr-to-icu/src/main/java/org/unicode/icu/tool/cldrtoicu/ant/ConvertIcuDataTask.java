@@ -7,17 +7,23 @@ import static com.google.common.base.CharMatcher.is;
 import static com.google.common.base.CharMatcher.whitespace;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.ImmutableList.toImmutableList;
+import static com.google.common.collect.ImmutableMap.toImmutableMap;
+import static com.google.common.collect.ImmutableTable.toImmutableTable;
+import static com.google.common.collect.Tables.immutableCell;
 import static java.util.stream.Collectors.joining;
 import static org.unicode.cldr.api.CldrPath.parseDistinguishingPath;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -38,9 +44,13 @@ import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.SetMultimap;
+import com.google.common.collect.Sets;
+import com.google.common.collect.Table.Cell;
 
 // Note: Auto-magical Ant methods are listed as "unused" by IDEs, unless the warning is suppressed.
 public final class ConvertIcuDataTask extends Task {
@@ -55,24 +65,42 @@ public final class ConvertIcuDataTask extends Task {
     private Path cldrPath;
     private CldrDraftStatus minimumDraftStatus;
     // Set of default locale ID specifiers (wildcard IDs which are expanded).
-    private ImmutableSet<String> localeIdSpec;
+    private LocaleIds localeIds = null;
     // Per directory overrides (fully specified locale IDs).
     private final SetMultimap<IcuLocaleDir, String> perDirectoryIds = HashMultimap.create();
+    private final SetMultimap<IcuLocaleDir, String> inheritLanguageSubtag = HashMultimap.create();
     private final IcuConverterConfig.Builder config = IcuConverterConfig.builder();
     // Don't try and resolve actual paths until inside the execute method.
-    private final Map<String, String> altPathMap = new HashMap<>();
+    private final List<AltPath> altPaths = new ArrayList<>();
     // TODO(CLDR-13381): Move into CLDR API; e.g. withPseudoLocales()
     private boolean includePseudoLocales = false;
     private Predicate<String> idFilter = id -> true;
 
     @SuppressWarnings("unused")
-    public void setOutputDir(Path path) {
-        config.setOutputDir(path);
+    public void setOutputDir(String path) {
+        // Use String here since on some systems Ant doesn't support automatically converting Path instances.
+        config.setOutputDir(Paths.get(path));
     }
 
     @SuppressWarnings("unused")
-    public void setCldrDir(Path path) {
-        this.cldrPath = checkNotNull(path);
+    public void setCldrDir(String path) {
+        // Use String here since on some systems Ant doesn't support automatically converting Path instances.
+        this.cldrPath = checkNotNull(Paths.get(path));
+    }
+
+    @SuppressWarnings("unused")
+    public void setIcuVersion(String icuVersion) {
+        config.setIcuVersion(icuVersion);
+    }
+
+    @SuppressWarnings("unused")
+    public void setIcuDataVersion(String icuDataVersion) {
+        config.setIcuDataVersion(icuDataVersion);
+    }
+
+    @SuppressWarnings("unused")
+    public void setCldrVersion(String cldrVersion) {
+        config.setCldrVersion(cldrVersion);
     }
 
     @SuppressWarnings("unused")
@@ -93,8 +121,9 @@ public final class ConvertIcuDataTask extends Task {
     }
 
     @SuppressWarnings("unused")
-    public void setSpecialsDir(Path path) {
-        config.setSpecialsDir(path);
+    public void setSpecialsDir(String path) {
+        // Use String here since on some systems Ant doesn't support automatically converting Path instances.
+        config.setSpecialsDir(Paths.get(path));
     }
 
     @SuppressWarnings("unused")
@@ -126,9 +155,11 @@ public final class ConvertIcuDataTask extends Task {
         }
     }
 
-    public static final class DirectoryFilter extends Task {
+    public static final class Directory extends Task {
         private IcuLocaleDir dir;
-        private ImmutableSet<String> ids;
+        private ImmutableSet<String> inheritLanguageSubtag = ImmutableSet.of();
+        private final List<ForcedAlias> forcedAliases = new ArrayList<>();
+        private LocaleIds localeIds = null;
 
         @SuppressWarnings("unused")
         public void setDir(String directory) {
@@ -136,26 +167,32 @@ public final class ConvertIcuDataTask extends Task {
         }
 
         @SuppressWarnings("unused")
-        public void addText(String localeIds) {
-            this.ids = parseLocaleIds(localeIds);
+        public void setInheritLanguageSubtag(String localeIds) {
+            this.inheritLanguageSubtag = parseLocaleIds(localeIds);
+        }
+
+        @SuppressWarnings("unused")
+        public void addConfiguredForcedAlias(ForcedAlias alias) {
+            forcedAliases.add(alias);
+        }
+
+        @SuppressWarnings("unused")
+        public void addConfiguredLocaleIds(LocaleIds localeIds) {
+            checkBuild(this.localeIds == null,
+                "Cannot add more that one <localeIds> element for <directory>: %s", dir);
+            this.localeIds =  localeIds;
         }
 
         @Override
         public void init() throws BuildException {
-            checkBuild(dir != null, "Directory must be specified");
-            checkBuild(!ids.isEmpty(), "Locale IDs must be specified");
+            checkBuild(dir != null, "Directory attribute 'dir' must be specified");
+            checkBuild(localeIds != null, "<localeIds> must be specified for <directory>: %s", dir);
         }
     }
 
     public static final class ForcedAlias extends Task {
-        private Optional<IcuLocaleDir> dir = Optional.empty();
         private String source = "";
         private String target = "";
-
-        @SuppressWarnings("unused")
-        public void setDir(String directory) {
-            this.dir = resolveDir(directory);
-        }
 
         @SuppressWarnings("unused")
         public void setSource(String source) {
@@ -174,10 +211,10 @@ public final class ConvertIcuDataTask extends Task {
         }
     }
 
-
     public static final class AltPath extends Task {
         private String source = "";
         private String target = "";
+        private ImmutableSet<String> localeIds = ImmutableSet.of();
 
         @SuppressWarnings("unused")
         public void setTarget(String target) {
@@ -189,6 +226,11 @@ public final class ConvertIcuDataTask extends Task {
             this.source = source.replace('\'', '"');
         }
 
+        @SuppressWarnings("unused")
+        public void setLocales(String localeIds) {
+            this.localeIds = parseLocaleIds(localeIds);
+        }
+
         @Override
         public void init() throws BuildException {
             checkBuild(!source.isEmpty(), "Source path not be empty");
@@ -198,23 +240,58 @@ public final class ConvertIcuDataTask extends Task {
 
     @SuppressWarnings("unused")
     public void addConfiguredLocaleIds(LocaleIds localeIds) {
-        checkBuild(this.localeIdSpec == null, "Cannot add more that one <localeIds> element");
-        this.localeIdSpec =  localeIds.ids;
+        checkBuild(this.localeIds == null, "Cannot add more that one <localeIds> element");
+        this.localeIds =  localeIds;
     }
 
     @SuppressWarnings("unused")
-    public void addConfiguredDirectoryFilter(DirectoryFilter filter) {
-        perDirectoryIds.putAll(filter.dir, filter.ids);
+    public void addConfiguredDirectory(Directory filter) {
+        checkState(!perDirectoryIds.containsKey(filter.dir),
+            "directory %s specified twice", filter.dir);
+        ImmutableSet<String> ids = filter.localeIds.ids;
+        perDirectoryIds.putAll(filter.dir, ids);
+
+        // Check that any locale IDs marked to inherit the base language (instead of root) are
+        // listed in the set of generated locales.
+        inheritLanguageSubtag.putAll(filter.dir, filter.inheritLanguageSubtag);
+        if (!ids.containsAll(filter.inheritLanguageSubtag)) {
+            log(String.format(
+                "WARNING: Locale IDs listed in 'inheritLanguageSubtag' should also be listed "
+                    + "in <localeIds> for that directory (%s): %s",
+                filter.dir, String.join(", ", Sets.difference(filter.inheritLanguageSubtag, ids))));
+            perDirectoryIds.putAll(filter.dir, filter.inheritLanguageSubtag);
+        }
+
+        // Check that locales specified for forced aliases in this directory are also listed in
+        // the set of generated locales.
+        filter.forcedAliases.forEach(a -> config.addForcedAlias(filter.dir, a.source, a.target));
+        Set<String> sourceIds =
+            filter.forcedAliases.stream().map(a -> a.source).collect(Collectors.toSet());
+        if (!ids.containsAll(sourceIds)) {
+            Set<String> missingIds = Sets.difference(sourceIds, ids);
+            log(String.format(
+                "WARNING: Locale IDs listed as sources of a <forcedAlias> should also be listed "
+                    + "in <localeIds> for that directory (%s): %s",
+                filter.dir, String.join(", ", missingIds)));
+            perDirectoryIds.putAll(filter.dir, missingIds);
+        }
+        Set<String> targetIds =
+            filter.forcedAliases.stream().map(a -> a.target).collect(Collectors.toSet());
+        if (!ids.containsAll(targetIds)) {
+            Set<String> missingIds = Sets.difference(targetIds, ids);
+            log(String.format(
+                "WARNING: Locale IDs listed as targets of a <forcedAlias> should also be listed "
+                    + "in <localeIds> for that directory (%s): %s",
+                filter.dir, String.join(", ", missingIds)));
+            perDirectoryIds.putAll(filter.dir, missingIds);
+        }
     }
 
+    // Aliases on the outside are applied to all directories.
     @SuppressWarnings("unused")
     public void addConfiguredForcedAlias(ForcedAlias alias) {
-        if (alias.dir.isPresent()) {
-            config.addForcedAlias(alias.dir.get(), alias.source, alias.target);
-        } else {
-            for (IcuLocaleDir dir : IcuLocaleDir.values()) {
-                config.addForcedAlias(dir, alias.source, alias.target);
-            }
+        for (IcuLocaleDir dir : IcuLocaleDir.values()) {
+            config.addForcedAlias(dir, alias.source, alias.target);
         }
     }
 
@@ -223,12 +300,13 @@ public final class ConvertIcuDataTask extends Task {
         // Don't convert to CldrPath here (it triggers a bunch of CLDR data loading for the DTDs).
         // Wait until the "execute()" method since in future we expect to use the configured CLDR
         // directory explicitly there.
-        checkBuild(this.altPathMap.put(altPath.target, altPath.source) == null,
-            "Duplicate <altPath> elements (same target): %s", altPath.target);
+        altPaths.add(altPath);
     }
 
     @SuppressWarnings("unused")
     public void execute() throws BuildException {
+        checkBuild(localeIds != null, "<localeIds> must be specified");
+
         CldrDataSupplier src = CldrDataSupplier
             .forCldrFilesIn(cldrPath)
             .withDraftStatusAtLeast(minimumDraftStatus);
@@ -236,11 +314,8 @@ public final class ConvertIcuDataTask extends Task {
         // We must do this wrapping of the data supplier _before_ creating the supplemental data
         // instance since adding pseudo locales affects the set of available locales.
         // TODO: Move some/all of this into the base converter and control it via the config.
-        if (!altPathMap.isEmpty()) {
-            Map<CldrPath, CldrPath> pathMap = new HashMap<>();
-            altPathMap.forEach(
-                (t, s) -> pathMap.put(parseDistinguishingPath(t), parseDistinguishingPath(s)));
-            src = AlternateLocaleData.transform(src, pathMap);
+        if (!altPaths.isEmpty()) {
+            src = AlternateLocaleData.transform(src, getGlobalAltPaths(), getLocaleAltPaths());
         }
         if (includePseudoLocales) {
             src = PseudoLocales.addPseudoLocalesTo(src);
@@ -248,13 +323,44 @@ public final class ConvertIcuDataTask extends Task {
 
         SupplementalData supplementalData = SupplementalData.create(src);
         ImmutableSet<String> defaultTargetIds =
-            LocaleIdResolver.expandTargetIds(this.localeIdSpec, supplementalData);
+            LocaleIdResolver.expandTargetIds(this.localeIds.ids, supplementalData);
         for (IcuLocaleDir dir : IcuLocaleDir.values()) {
             Iterable<String> ids = perDirectoryIds.asMap().getOrDefault(dir, defaultTargetIds);
             config.addLocaleIds(dir, Iterables.filter(ids, idFilter::test));
+
+            // We should only have locale IDs like "zh_Hant" here (language + script) and only
+            // those which would naturally inherit to "root"
+            inheritLanguageSubtag.get(dir).forEach(id -> {
+                checkArgument(id.matches("[a-z]{2}_[A-Z][a-z]{3}"),
+                    "Invalid locale ID for inheritLanguageSubtag (expect '<lang>_<Script>'): ", id);
+                checkArgument(supplementalData.getParent(id).equals("root"),
+                    "Invalid locale ID for inheritLanguageSubtag (parent must be 'root'): ", id);
+                config.addForcedParent(dir, id, id.substring(0, 2));
+            });
         }
         config.setMinimumDraftStatus(minimumDraftStatus);
         LdmlConverter.convert(src, supplementalData, config.build());
+    }
+
+    private ImmutableMap<CldrPath, CldrPath> getGlobalAltPaths() {
+        // This fails if the same key appears more than once.
+        return altPaths.stream()
+            .filter(a -> a.localeIds.isEmpty())
+            .collect(toImmutableMap(
+                a -> parseDistinguishingPath(a.target),
+                a -> parseDistinguishingPath(a.source)));
+    }
+
+    private ImmutableTable<String, CldrPath, CldrPath> getLocaleAltPaths() {
+        return altPaths.stream()
+            .flatMap(
+                a -> a.localeIds.stream().map(
+                    id -> immutableCell(
+                        id,
+                        parseDistinguishingPath(a.target),
+                        parseDistinguishingPath(a.source))))
+            // Weirdly there's no collector method to just collect cells.
+            .collect(toImmutableTable(Cell::getRowKey, Cell::getColumnKey, Cell::getValue));
     }
 
     private static void checkBuild(boolean condition, String message, Object... args) {
@@ -268,10 +374,6 @@ public final class ConvertIcuDataTask extends Task {
         // inadvertantly joining two elements.
         localeIds = localeIds.replaceAll("//[^\n]*\n", "\n");
         return ImmutableSet.copyOf(LIST_SPLITTER.splitToList(localeIds));
-    }
-
-    private static Optional<IcuLocaleDir> resolveDir(String name) {
-        return !name.isEmpty() ? Optional.of(resolve(IcuLocaleDir.class, name)) : Optional.empty();
     }
 
     private static <T extends Enum<T>> T resolve(Class<T> enumClass, String name) {

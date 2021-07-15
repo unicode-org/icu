@@ -22,10 +22,12 @@ struct SeenMacroProps;
 // namespace for enums and entrypoint functions
 namespace skeleton {
 
-///////////////////////////////////////////////////////////////////////////////////////
-// NOTE: For an example of how to add a new stem to the number skeleton parser, see: //
-// http://bugs.icu-project.org/trac/changeset/41193                                  //
-///////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+// NOTE: For examples of how to add a new stem to the number skeleton parser, see:    //
+// https://github.com/unicode-org/icu/commit/a2a7982216b2348070dc71093775ac7195793d73 //
+// and                                                                                //
+// https://github.com/unicode-org/icu/commit/6fe86f3934a8a5701034f648a8f7c5087e84aa28 //
+////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * While parsing a skeleton, this enum records what type of option we expect to find next.
@@ -46,6 +48,8 @@ enum ParseState {
     STATE_INCREMENT_PRECISION,
     STATE_MEASURE_UNIT,
     STATE_PER_MEASURE_UNIT,
+    STATE_IDENTIFIER_UNIT,
+    STATE_UNIT_USAGE,
     STATE_CURRENCY_UNIT,
     STATE_INTEGER_WIDTH,
     STATE_NUMBERING_SYSTEM,
@@ -71,6 +75,7 @@ enum StemEnum {
     STEM_BASE_UNIT,
     STEM_PERCENT,
     STEM_PERMILLE,
+    STEM_PERCENT_100, // concise-only
     STEM_PRECISION_INTEGER,
     STEM_PRECISION_UNLIMITED,
     STEM_PRECISION_CURRENCY_STANDARD,
@@ -93,6 +98,8 @@ enum StemEnum {
     STEM_UNIT_WIDTH_SHORT,
     STEM_UNIT_WIDTH_FULL_NAME,
     STEM_UNIT_WIDTH_ISO_CODE,
+    STEM_UNIT_WIDTH_FORMAL,
+    STEM_UNIT_WIDTH_VARIANT,
     STEM_UNIT_WIDTH_HIDDEN,
     STEM_SIGN_AUTO,
     STEM_SIGN_ALWAYS,
@@ -109,11 +116,24 @@ enum StemEnum {
     STEM_PRECISION_INCREMENT,
     STEM_MEASURE_UNIT,
     STEM_PER_MEASURE_UNIT,
+    STEM_UNIT,
+    STEM_UNIT_USAGE,
     STEM_CURRENCY,
     STEM_INTEGER_WIDTH,
     STEM_NUMBERING_SYSTEM,
     STEM_SCALE,
 };
+
+/** Default wildcard char, accepted on input and printed in output */
+constexpr char16_t kWildcardChar = u'*';
+
+/** Alternative wildcard char, accept on input but not printed in output */
+constexpr char16_t kAltWildcardChar = u'+';
+
+/** Checks whether the char is a wildcard on input */
+inline bool isWildcardChar(char16_t c) {
+    return c == kWildcardChar || c == kAltWildcardChar;
+}
 
 /**
  * Creates a NumberFormatter corresponding to the given skeleton string.
@@ -226,6 +246,14 @@ void generateMeasureUnitOption(const MeasureUnit& measureUnit, UnicodeString& sb
 
 void parseMeasurePerUnitOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
+/**
+ * Parses unit identifiers like "meter-per-second" and "foot-and-inch", as
+ * specified via a "unit/" concise skeleton.
+ */
+void parseIdentifierUnitOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
+
+void parseUnitUsageOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
+
 void parseFractionStem(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
 void generateFractionStem(int32_t minFrac, int32_t maxFrac, UnicodeString& sb, UErrorCode& status);
@@ -233,6 +261,14 @@ void generateFractionStem(int32_t minFrac, int32_t maxFrac, UnicodeString& sb, U
 void parseDigitsStem(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
 void generateDigitsStem(int32_t minSig, int32_t maxSig, UnicodeString& sb, UErrorCode& status);
+
+void parseScientificStem(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
+
+// Note: no generateScientificStem since this syntax was added later in ICU 67
+
+void parseIntegerStem(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
+
+// Note: no generateIntegerStem since this syntax was added later in ICU 67
 
 /** @return Whether we successfully found and parsed a frac-sig option. */
 bool parseFracSigOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
@@ -280,6 +316,8 @@ class GeneratorHelpers {
 
     static bool perUnit(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 
+    static bool usage(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
+
     static bool precision(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 
     static bool roundingMode(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
@@ -308,6 +346,7 @@ struct SeenMacroProps {
     bool notation = false;
     bool unit = false;
     bool perUnit = false;
+    bool usage = false;
     bool precision = false;
     bool roundingMode = false;
     bool grouper = false;
@@ -319,6 +358,24 @@ struct SeenMacroProps {
     bool decimal = false;
     bool scale = false;
 };
+
+namespace {
+
+#define SKELETON_UCHAR_TO_CHAR(dest, src, start, end, status) (void)(dest); \
+UPRV_BLOCK_MACRO_BEGIN { \
+    UErrorCode conversionStatus = U_ZERO_ERROR; \
+    (dest).appendInvariantChars({false, (src).getBuffer() + (start), (end) - (start)}, conversionStatus); \
+    if (conversionStatus == U_INVARIANT_CONVERSION_ERROR) { \
+        /* Don't propagate the invariant conversion error; it is a skeleton syntax error */ \
+        (status) = U_NUMBER_SKELETON_SYNTAX_ERROR; \
+        return; \
+    } else if (U_FAILURE(conversionStatus)) { \
+        (status) = conversionStatus; \
+        return; \
+    } \
+} UPRV_BLOCK_MACRO_END
+
+} // namespace
 
 } // namespace impl
 } // namespace number

@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <cmath>
+#include <math.h>
 
 #include "unicode/ctest.h" // for str_timeDelta
 #include "unicode/curramt.h"
@@ -44,6 +45,7 @@
 #include "udbgutil.h"
 #include "umutex.h"
 #include "uoptions.h"
+#include "number_decnum.h"
 
 #ifdef XP_MAC_CONSOLE
 #include <console.h>
@@ -1016,7 +1018,7 @@ UBool IntlTest::logKnownIssue(const char *ticket, const UnicodeString &msg) {
   UBool firstForTicket = TRUE, firstForWhere = TRUE;
   knownList = udbg_knownIssue_openU(knownList, ticket, fullpath, msg2.getTerminatedBuffer(), &firstForTicket, &firstForWhere);
 
-  msg2 = UNICODE_STRING_SIMPLE("(Known issue #") +
+  msg2 = UNICODE_STRING_SIMPLE("(Known issue ") +
       UnicodeString(ticket, -1, US_INV) + UNICODE_STRING_SIMPLE(") ") + msg;
   if(firstForTicket || firstForWhere) {
     infoln(msg2);
@@ -2038,7 +2040,6 @@ UBool IntlTest::assertEquals(const char* message,
     return TRUE;
 }
 
-
 UBool IntlTest::assertEquals(const char* message,
                              UBool expected,
                              UBool actual) {
@@ -2155,6 +2156,47 @@ UBool IntlTest::assertEquals(const char* message,
     return TRUE;
 }
 
+UBool IntlTest::assertNotEquals(const char* message,
+                                int32_t expectedNot,
+                                int32_t actual) {
+    if (expectedNot == actual) {
+        errln((UnicodeString)("FAIL: ") + message + "; got " + actual + "=0x" + toHex(actual) +
+              "; expected != " + expectedNot);
+        return FALSE;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        logln((UnicodeString)("Ok: ") + message + "; got " + actual + "=0x" + toHex(actual) +
+              " != " + expectedNot);
+    }
+#endif
+    return TRUE;
+}
+
+UBool IntlTest::assertEqualsNear(const char* message,
+                                 double expected,
+                                 double actual,
+                                 double delta) {
+    if (std::isnan(delta) || std::isinf(delta)) {
+        errln((UnicodeString)("FAIL: ") + message + "; nonsensical delta " + delta +
+              " - delta may not be NaN or Inf");
+        return FALSE;
+    }
+    bool bothNaN = std::isnan(expected) && std::isnan(actual);
+    double difference = std::abs(expected - actual);
+    if (expected != actual && (difference > delta || std::isnan(difference)) && !bothNaN) {
+        errln((UnicodeString)("FAIL: ") + message + "; got " + actual + "; expected " + expected +
+              "; acceptable delta " + delta);
+        return FALSE;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        logln((UnicodeString)("Ok: ") + message + "; got " + actual);
+    }
+#endif
+    return TRUE;
+}
+
 static char ASSERT_BUF[256];
 
 static const char* extractToAssertBuf(const UnicodeString& message) {
@@ -2223,6 +2265,17 @@ UBool IntlTest::assertEquals(const UnicodeString& message,
                              const std::vector<std::string>& expected,
                              const std::vector<std::string>& actual) {
     return assertEquals(extractToAssertBuf(message), expected, actual);
+}
+UBool IntlTest::assertNotEquals(const UnicodeString &message,
+                                int32_t expectedNot,
+                                int32_t actual) {
+    return assertNotEquals(extractToAssertBuf(message), expectedNot, actual);
+}
+UBool IntlTest::assertEqualsNear(const UnicodeString& message,
+                                 double expected,
+                                 double actual,
+                                 double delta) {
+    return assertEqualsNear(extractToAssertBuf(message), expected, actual, delta);
 }
 
 #if !UCONFIG_NO_FORMATTING

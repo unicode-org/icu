@@ -1,6 +1,6 @@
 {
   "localeFilter": {
-    "filterType": "language",
+    "filterType": "locale",
     "whitelist": [
       "en",
       "de",
@@ -8,16 +8,29 @@
     ]
   },
 // Test mixed feature filter and resource filter
+// Exclude translit data so we can run test for ICU-20673
+// Also test for "whitelist" versus "includelist"
   "featureFilters": {
     "misc": {
       "whitelist": ["supplementalData"]
+    },
+    "translit": "exclude",
+    "curr_tree": {
+      "filterType": "locale",
+      "includelist": ["my"]
+    },
+    "brkitr_rules": {
+      "excludelist": ["line"]
+    },
+    "brkitr_dictionaries": {
+      "blacklist": ["cjdict"]
     }
   },
   "resourceFilters": [
     {
       "categories": ["misc"],
       "files": {
-	"whitelist": ["supplementalData"]
+        "includelist": ["supplementalData"]
       },
       "rules": ["+/*"]
     }
@@ -27,8 +40,8 @@
     "directory": "$SRC",
     "replacements": [
       {
-	"src": "translit/Zawgyi_my.txt",
-	"dest": "translit/Zawgyi_my.txt"
+        "src": "brkitr/rules/line.txt",
+        "dest": "brkitr/rules/line_normal.txt"
       },
       "misc/dayPeriods.txt"
     ]

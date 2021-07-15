@@ -1,3 +1,14 @@
+2020-02-16:
+  Add support for quiet and signaling NaNs to ieee header.
+
+2019-10-31:
+  Add support for xtensa architecture.
+  Add support for nios2 architecture.
+
+2019-10-12:
+  Really add support for microblaze. A previous commit was lacking
+	the necessary line.
+
 2019-09-02:
   Add support for e2k architectur. Thanks to Michael Shigorin.
 

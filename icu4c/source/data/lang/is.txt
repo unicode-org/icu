@@ -1,8 +1,9 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 is{
     Keys{
-        calendar{"Dagatal"}
+        calendar{"Tímatal"}
         cf{"Gjaldmiðilssnið"}
         colAlternate{"Röðun óháð táknum"}
         colBackwards{"Röðun með viðsnúnum áherslum"}
@@ -154,6 +155,7 @@ is{
         eu{"baskneska"}
         ewo{"evondó"}
         fa{"persneska"}
+        fa_AF{"darí"}
         fan{"fang"}
         fat{"fantí"}
         ff{"fúla"}
@@ -181,7 +183,7 @@ is{
         gd{"skosk gelíska"}
         gez{"gís"}
         gil{"gilberska"}
-        gl{"galíanska"}
+        gl{"galisíska"}
         gmh{"miðháþýska"}
         gn{"gvaraní"}
         goh{"fornháþýska"}
@@ -197,7 +199,6 @@ is{
         gwi{"gvísín"}
         ha{"hása"}
         hai{"haída"}
-        hak{"hak"}
         haw{"havaíska"}
         he{"hebreska"}
         hi{"hindí"}
@@ -207,13 +208,12 @@ is{
         ho{"hírímótú"}
         hr{"króatíska"}
         hsb{"hásorbneska"}
-        hsn{"hsn"}
         ht{"haítíska"}
         hu{"ungverska"}
         hup{"húpa"}
         hy{"armenska"}
         hz{"hereró"}
-        ia{"alþjóðatunga"}
+        ia{"interlingua"}
         iba{"íban"}
         ibb{"ibibio"}
         id{"indónesíska"}
@@ -337,11 +337,10 @@ is{
         mus{"krík"}
         mwl{"mirandesíska"}
         mwr{"marvarí"}
-        my{"burmneska"}
+        my{"búrmneska"}
         myv{"ersja"}
         mzn{"masanderaní"}
         na{"nárúska"}
-        nan{"nan"}
         nap{"napólíska"}
         naq{"nama"}
         nb{"norskt bókmál"}
@@ -520,7 +519,6 @@ is{
         was{"vasjó"}
         wbp{"varlpiri"}
         wo{"volof"}
-        wuu{"wuu"}
         xal{"kalmúkska"}
         xh{"sósa"}
         xog{"sóga"}
@@ -553,7 +551,6 @@ is{
         zh{"kínverska, mandarín"}
     }
     Languages%short{
-        az{"aserska"}
         en_GB{"enska (bresk)"}
     }
     Scripts{
@@ -619,22 +616,22 @@ is{
     }
     Types{
         calendar{
-            buddhist{"Búddískt dagatal"}
-            chinese{"Kínverskt dagatal"}
+            buddhist{"Búddískt tímatal"}
+            chinese{"Kínversk tímatal"}
             coptic{"Koptískt tímatal"}
-            dangi{"Dangi dagatal"}
-            ethiopic{"Eþíópískt dagatal"}
+            dangi{"Dangi tímatal"}
+            ethiopic{"Eþíópískt tímatal"}
             ethiopic-amete-alem{"Eþíópískt ‘amete alem’ tímatal"}
-            gregorian{"Gregorískt dagatal"}
-            hebrew{"Hebreskt dagatal"}
+            gregorian{"Gregorískt tímatal"}
+            hebrew{"Hebreskt tímatal"}
             indian{"indverskt dagatal"}
-            islamic{"Íslamskt dagatal"}
+            islamic{"Íslamskt tímatal"}
             islamic-civil{"Íslamskt borgaradagatal"}
             islamic-umalqura{"Íslamskt dagatal (Umm al-Qura)"}
-            iso8601{"ISO-8601 dagatal"}
-            japanese{"Japanskt dagatal"}
-            persian{"Persneskt dagatal"}
-            roc{"Minguo dagatal"}
+            iso8601{"ISO-8601 tímatal"}
+            japanese{"Japanskt tímatal"}
+            persian{"Persneskt tímatal"}
+            roc{"Minguo tímatal"}
         }
         cf{
             account{"Bókhaldsgjaldmiðill"}
@@ -759,7 +756,6 @@ is{
             vaii{"Vai-tölustafir"}
         }
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — allt"}
         category-list{"{0}: {1}"}
@@ -774,6 +770,8 @@ is{
             one{"{0} slag"}
             other{"{0} slög"}
         }
+        subscript{"hnéletur {0}"}
+        superscript{"brjóstletur {0}"}
     }
     codePatterns{
         language{"tungumál: {0}"}

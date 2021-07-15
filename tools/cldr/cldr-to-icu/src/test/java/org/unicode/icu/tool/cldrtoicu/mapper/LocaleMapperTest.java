@@ -65,7 +65,7 @@ public class LocaleMapperTest {
             ldml("units/durationUnit[@type=\"foo\"]/durationUnitPattern", "Bar"),
             simpleResult("/durationUnits/foo", "Bar"));
         //ldml/localeDisplayNames/keys/key[@type="(%A)"] ; /Keys/$1
-        addInheritedMapping("xx",
+        addRootMapping(
             ldml("localeDisplayNames/keys/key[@type=\"sometype\"]", "Value"),
             simpleResult("/Keys/sometype", "Value"));
 
@@ -86,7 +86,7 @@ public class LocaleMapperTest {
         // This is included because the resource bundle path is the same as above. Note that we
         // have to use the index to distinguish results here (this corresponds to the line number
         // or the real when the real regex based config is used and determines result ordering).
-        addInheritedMapping("xx",
+        addRootMapping(
             ldml("numbers/currencies/currency[@type=\"USD\"]/displayName", "US Dollar"),
             simpleResult("/Currencies/USD", 2, "US Dollar"));
 
@@ -110,7 +110,7 @@ public class LocaleMapperTest {
             ldml("dates/calendars/calendar[@type=\"foo\"]/dateTimeFormats"
                 + "/availableFormats/dateFormatItem[@id=\"bar\"]", "Foo"),
             simpleResult("/calendar/foo/availableFormats/bar", "Foo"));
-        addInheritedMapping("xx",
+        addRootMapping(
             ldml("dates/calendars/calendar[@type=\"foo\"]/dateTimeFormats"
                 + "/availableFormats/dateFormatItem[@id=\"bar\"][@count=\"one\"]", "Bar"),
             simpleResult("/calendar/foo/availableFormats/bar/one", "Bar"));
@@ -125,7 +125,7 @@ public class LocaleMapperTest {
     @Test
     public void testParentPathsNotIncludedByDefault() {
         // Same as above but swapping inherited vs explicit mappings.
-        addInheritedMapping("xx",
+        addRootMapping(
             ldml("dates/calendars/calendar[@type=\"foo\"]/dateTimeFormats"
                 + "/availableFormats/dateFormatItem[@id=\"bar\"]", "Foo"),
             simpleResult("/calendar/foo/availableFormats/bar", "Foo"));
@@ -154,11 +154,11 @@ public class LocaleMapperTest {
     public void testHiddenLabelsIncludeParentPaths() {
         // Testing that the existence of a child element using a hidden label *does* trigger the
         // parent element to be included.
-        addInheritedMapping("xx",
+        addRootMapping(
             ldml("dates/calendars/calendar[@type=\"foo\"]/dateTimeFormats"
                 + "/availableFormats/dateFormatItem[@id=\"bar\"]", "Parent"),
             simpleResult("/calendar/foo/availableFormats/bar", "Parent"));
-        addInheritedMapping("xx",
+        addRootMapping(
             ldml("dates/calendars/calendar[@type=\"foo\"]/dateTimeFormats"
                 + "/availableFormats/dateFormatItem[@id=\"bar\"][@count=\"one\"]", "Child-1"),
             simpleResult("/calendar/foo/availableFormats/bar/<HIDDEN>", 1, "Child-1"));
@@ -226,13 +226,13 @@ public class LocaleMapperTest {
             ldml("dates/calendars/calendar[@type=\"foo\"]/dateTimeFormats"
                 + "/availableFormats/dateFormatItem[@id=\"bar\"]", "Parent"),
             simpleResult("/calendar/foo/availableFormats/bar", "Parent"));
-        addInheritedMapping("xx",
+        addRootMapping(
             ldml("dates/calendars/calendar[@type=\"foo\"]/dateTimeFormats"
                 + "/availableFormats/dateFormatItem[@id=\"bar\"][@count=\"one\"]", "Child-1"),
             simpleResult("/calendar/foo/availableFormats/bar/<HIDDEN>", 1, "Child-1"));
 
         // This is the only explicit mapping and it triggers the sibling _and_ the parent.
-        addInheritedMapping("xx",
+        addRootMapping(
             ldml("dates/calendars/calendar[@type=\"foo\"]/dateTimeFormats"
                 + "/availableFormats/dateFormatItem[@id=\"bar\"][@count=\"many\"]", "Child-2"),
             simpleResult("/calendar/foo/availableFormats/bar/<HIDDEN>", 2, "Child-2"));
@@ -375,8 +375,8 @@ public class LocaleMapperTest {
         transformer.addResults(value, results);
     }
 
-    private void addInheritedMapping(String locale, CldrValue value, Result... results) {
-        src.addInheritedData(locale, value);
+    private void addRootMapping(CldrValue value, Result... results) {
+        src.addLocaleData("root", value);
         transformer.addResults(value, results);
     }
 

@@ -1,5 +1,5 @@
 // © 2017 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.number;
 
 import com.ibm.icu.util.Currency;
@@ -34,6 +34,7 @@ public abstract class CurrencyPrecision extends Precision {
      * @param currency
      *            The currency to associate with this rounding strategy.
      * @return A Precision for chaining or passing to the NumberFormatter rounding() setter.
+     * @throws IllegalArgumentException for null Currency
      * @stable ICU 60
      * @see NumberFormatter
      */

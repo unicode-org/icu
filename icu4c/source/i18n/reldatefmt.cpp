@@ -728,11 +728,11 @@ const RelativeDateTimeCacheData *LocaleCacheKey<RelativeDateTimeCacheData>::crea
 
 
 
-static constexpr number::impl::Field kRDTNumericField
-    = StringBuilderFieldUtils::compress<UFIELD_CATEGORY_RELATIVE_DATETIME, UDAT_REL_NUMERIC_FIELD>();
+static constexpr FormattedStringBuilder::Field kRDTNumericField
+    = {UFIELD_CATEGORY_RELATIVE_DATETIME, UDAT_REL_NUMERIC_FIELD};
 
-static constexpr number::impl::Field kRDTLiteralField
-    = StringBuilderFieldUtils::compress<UFIELD_CATEGORY_RELATIVE_DATETIME, UDAT_REL_LITERAL_FIELD>();
+static constexpr FormattedStringBuilder::Field kRDTLiteralField
+    = {UFIELD_CATEGORY_RELATIVE_DATETIME, UDAT_REL_LITERAL_FIELD};
 
 class FormattedRelativeDateTimeData : public FormattedValueStringBuilderImpl {
 public:
@@ -1326,7 +1326,7 @@ ureldatefmt_formatNumeric( const URelativeDateTimeFormatter* reldatefmt,
     return res.extract(result, resultCapacity, *status);
 }
 
-U_STABLE void U_EXPORT2
+U_CAPI void U_EXPORT2
 ureldatefmt_formatNumericToResult(
         const URelativeDateTimeFormatter* reldatefmt,
         double                            offset,
@@ -1369,7 +1369,7 @@ ureldatefmt_format( const URelativeDateTimeFormatter* reldatefmt,
     return res.extract(result, resultCapacity, *status);
 }
 
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 ureldatefmt_formatToResult(
         const URelativeDateTimeFormatter* reldatefmt,
         double                            offset,

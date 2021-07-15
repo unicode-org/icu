@@ -12,14 +12,14 @@
 
 ##############################################################################
 # Keep the following in sync with the version - see common/unicode/uvernum.h
-U_ICUDATA_NAME=icudt66
+U_ICUDATA_NAME=icudt68
 ##############################################################################
 !IF "$(UWP)" == "UWP"
 # Optionally change the name of the data file for the UWP version.
-U_ICUDATA_NAME=icudt66
+U_ICUDATA_NAME=icudt68
 !ENDIF
 U_ICUDATA_ENDIAN_SUFFIX=l
-UNICODE_VERSION=12.1
+UNICODE_VERSION=13.0
 ICU_LIB_TARGET=$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll
 
 #  ICUMAKE
@@ -161,14 +161,21 @@ ARM_CROSSBUILD_TS=$(ICUTMP)\$(ARM_CROSS_BUILD).timestamp
 #
 #  TOOLS CFG PATH
 #      Generally the tools want to run on the same architecture as is being built.
-#      Thus ARM and ARM64 need to use another build of the other tools, so make sure to get an usable cfg path.
+#      Thus ARM and ARM64 need to use another build of the other tools, so make sure to get an usable CFG path.
 #      Since tools, particularly pkggen, have architecture built-in, we made x64 on
-#      Windows be machine-independent and use those tools.
+#      Windows be machine-independent and use those tools for both ARM and ARM64.
+#      Note: If we're building ARM/ARM64 Debug, then we'll use the x64 Debug tools.
+#      If we're building ARM/ARM64 Release, then we'll use the x64 Release tools.
 #
 !IF "$(ARM_CROSS_BUILD)" == ""
 CFGTOOLS=$(CFG)
 !ELSE
+!IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM64\Release"
 CFGTOOLS=x64\Release
+!ENDIF
+!IF "$(CFG)" == "ARM\Debug" || "$(CFG)" == "ARM64\Debug"
+CFGTOOLS=x64\Debug
+!ENDIF
 !ENDIF
 !MESSAGE ICU tools CFG subpath is $(CFGTOOLS)
 
@@ -214,6 +221,9 @@ COMMON_ICUDATA_ARGUMENTS=-f -e $(U_ICUDATA_NAME) -v $(ICU_PACKAGE_MODE) -c -p $(
 !IF "$(UWP)" == "UWP"
 COMMON_ICUDATA_ARGUMENTS=$(COMMON_ICUDATA_ARGUMENTS) -u
 !ENDIF
+!IF "$(CFG)" == "x64\Release" || "$(CFG)" == "x64\Debug"
+COMMON_ICUDATA_ARGUMENTS=$(COMMON_ICUDATA_ARGUMENTS) -a X64
+!ENDIF
 !IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM\Debug"
 COMMON_ICUDATA_ARGUMENTS=$(COMMON_ICUDATA_ARGUMENTS) -a ARM
 !ENDIF
@@ -245,6 +255,13 @@ ALL : GODATA "$(ICU_LIB_TARGET)" "$(TESTDATAOUT)\testdata.dat" $(ARM_CROSSBUILD_
 
 !ENDIF
 
+# Verbose output when building the data for Debug builds.
+!IF "$(DEBUG)" == "true"
+ICU_DATA_BUILD_VERBOSE=--verbose
+!ELSE
+ICU_DATA_BUILD_VERBOSE=
+!ENDIF
+
 # Three main targets: tools, core data, and test data.
 # Keep track of whether they are built via timestamp files.
 
@@ -274,6 +291,7 @@ $(COREDATA_TS):
 		--out_dir "$(ICUBLD_PKG)" \
 		--tmp_dir "$(ICUTMP)" \
 		--filter_file "$(ICU_DATA_FILTER_FILE)" \
+		$(ICU_DATA_BUILD_VERBOSE) \
 		$(ICU_DATA_BUILDTOOL_OPTS)
 	@echo "timestamp" > $(COREDATA_TS)
 
@@ -375,7 +393,7 @@ icu4j-data-install :
 #
 # testdata - nmake will invoke pkgdata, which will create testdata.dat
 #
-"$(TESTDATAOUT)\testdata.dat": "$(TESTDATA)\*" $(TOOLS_TS) $(COREDATA_TS)
+"$(TESTDATAOUT)\testdata.dat": "$(TESTDATA)\*" $(TOOLS_TS)
 	@cd "$(TESTDATA)"
 	@echo building testdata...
 	nmake /nologo /f "$(TESTDATA)\testdata.mak" TESTDATA=. ICUTOOLS="$(ICUTOOLS)" ICUPBIN="$(ICUPBIN)" ICUP="$(ICUP)" CFG=$(CFGTOOLS) TESTDATAOUT="$(TESTDATAOUT)" TESTDATABLD="$(TESTDATABLD)" ICUSRCDATA="$(ICUSRCDATA)" DLL_OUTPUT="$(DLL_OUTPUT)"

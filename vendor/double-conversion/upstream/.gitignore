@@ -27,3 +27,5 @@ _deps
 *.cmake
 *.kdev4
 DartConfiguration.tcl
+bazel-*
+

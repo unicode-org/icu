@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 yue{
     Keys{
         calendar{"曆法"}
@@ -173,6 +174,7 @@ yue{
         ewo{"依汪都文"}
         ext{"埃斯特雷馬杜拉文"}
         fa{"波斯文"}
+        fa_AF{"達里文"}
         fan{"芳族文"}
         fat{"芳蒂文"}
         ff{"富拉文"}
@@ -634,9 +636,6 @@ yue{
         yue{"中文 (粵語)"}
         zh{"中文 (普通話)"}
     }
-    Languages%short{
-        az{"亞塞拜然文"}
-    }
     Scripts{
         Afak{"阿法卡文字"}
         Aghb{"高加索阿爾巴尼亞文"}
@@ -1033,7 +1032,6 @@ yue{
         VALLADER{"瑞士瓦勒德方言"}
         WADEGILE{"威妥瑪式拼音"}
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — 全部"}
         category-list{"{0}: {1}"}
@@ -1047,6 +1045,8 @@ yue{
         strokes{
             other{"{0}斜線"}
         }
+        subscript{"下標 {0}"}
+        superscript{"上標 {0}"}
     }
     codePatterns{
         language{"語言：{0}"}

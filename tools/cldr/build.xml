@@ -1,0 +1,79 @@
+<!-- © 2020 and later: Unicode, Inc. and others.
+     License & terms of use: http://www.unicode.org/copyright.html -->
+
+<!-- This build file is intended to become the single mechanism for working with CLDR
+     code and data when building ICU data.
+     
+     Eventually it will encompass:
+     * Building ICU data form CLDR data via cldr-to-icu.
+     * Building the CLDR libraries needed to support ICU data conversion.
+     * Copying CLDR test data for ICU regression tests.
+
+     It's not complete yet, so for now follow the instructions in:
+       icu4c/source/data/cldr-icu-readme.txt
+     -->
+
+<!-- Using the directory of this build.xml file as ${basedir}. -->
+<project name="CLDR" basedir=".">
+
+    <!-- Initialize any properties not already set on the command line. -->
+    <target name="init-args">
+        <property environment="env"/>
+        <!-- Inherit properties from environment variable unless specified. As usual
+             with Ant, this is messier than it should be. All we are saying here is:
+             "Use the property if explicitly set, otherwise use the environment variable."
+             We cannot just set the property to the environment variable, since expansion
+             fails for non existant properties, and you are left with a literal value of
+             "${env.CLDR_DIR}". -->
+        <condition property="cldrDir" value="${env.CLDR_DIR}">
+            <isset property="env.CLDR_DIR"/>
+        </condition>
+        <fail unless="cldrDir"
+             message="Set the CLDR_DIR environment variable (or cldrDir property) to the top level CLDR source directory (containing 'common')."/>
+        <property name="testDataDir4C" value="${basedir}/../../icu4c/source/test/testdata/cldr"/>
+        <property name="testDataDir4J" value="${basedir}/../../icu4j/main/tests/core/src/com/ibm/icu/dev/data/cldr"/>
+    </target>
+
+    <!-- Copies CLDR test data directories, after deleting previous
+         contents to prevent inconsistent state. -->
+    <target name="copy-cldr-testdata" depends="init-args, clean-cldr-testdata">
+        <!-- CLDR test data directories to be copied into ICU. -->
+        <fileset id="cldrTestData" dir="${cldrDir}/common/testData">
+            <!-- Add directories here to control which test data is installed. -->
+            <include name="units/**"/> <!-- Used in UnitsTest tests -->
+        </fileset>
+
+        <copy todir="${testDataDir4C}">
+            <fileset refid="cldrTestData"/>
+        </copy>
+        <copy todir="${testDataDir4J}">
+            <fileset refid="cldrTestData"/>
+        </copy>
+    </target>
+
+    <!-- Deletes CLDR test data -->
+    <target name="clean-cldr-testdata" depends="init-args">
+        <delete dir="${testDataDir4C}"/>
+        <delete dir="${testDataDir4J}"/>
+    </target>
+
+    <!-- Builds the ICU data, using the Ant build file in the cldr-to-icu directory and passing.
+         through any specified arguments for controlling the build. If you need more control when
+         building ICU data (such as incrementally building parts of the data), you should use the
+         build-icu-data.xml file directly. -->
+    <target name="build-icu-data">
+        <ant dir="cldr-to-icu" antfile="build-icu-data.xml" target="all" inheritAll="true"/>
+    </target>
+
+    <!-- Deletes generated ICU data by invoking "clean" in cldr-to-icu/build-icu-data.xml -->
+    <target name="clean-icu-data">
+        <ant dir="cldr-to-icu" antfile="build-icu-data.xml" target="clean" inheritAll="true"/>
+    </target>
+
+    <!-- Installs the CLDR library dependencies needed for building ICU data. -->
+    <target name="install-cldr-libs" depends="init-args">
+        <exec dir="lib" executable="install-cldr-jars.sh" resolveexecutable="true" failonerror="true">
+            <arg line="${cldrDir}"/>
+        </exec>
+    </target>
+</project>

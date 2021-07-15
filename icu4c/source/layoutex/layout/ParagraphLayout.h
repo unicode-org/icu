@@ -382,7 +382,7 @@ public:
      *
      * @param paragraphLevel is the directionality of the paragraph, as in the UBiDi object.
      *
-     * @param vertical is <code>TRUE</code> if the paragraph should be set vertically.
+     * @param vertical is <code>true</code> if the paragraph should be set vertically.
      *
      * @param status will be set to any error code encountered during construction.
      *
@@ -424,7 +424,7 @@ public:
      *
      * @param fontRuns is a pointer to a <code>FontRuns</code> object representing the font runs.
      *
-     * @return <code>TRUE</code> if the paragraph contains complex text.
+     * @return <code>true</code> if the paragraph contains complex text.
      *
      * @stable ICU 3.2
      */
@@ -438,7 +438,7 @@ public:
      *
      * @param count is the number of characters in the paragraph.
      *
-     * @return <code>TRUE</code> if any of the text requires complex processing.
+     * @return <code>true</code> if any of the text requires complex processing.
      *
      * @stable ICU 3.2
      */

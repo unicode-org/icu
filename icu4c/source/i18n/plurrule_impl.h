@@ -138,6 +138,7 @@ enum tokenType {
   tVariableF,
   tVariableV,
   tVariableT,
+  tVariableE,
   tDecimal,
   tInteger,
   tEOF
@@ -215,6 +216,12 @@ enum PluralOperand {
     PLURAL_OPERAND_W,
 
     /**
+     * Suppressed exponent for compact notation (exponent needed in
+     * scientific notation with compact notation to approximate i).
+     */
+    PLURAL_OPERAND_E,
+
+    /**
      * THIS OPERAND IS DEPRECATED AND HAS BEEN REMOVED FROM THE SPEC.
      *
      * <p>Returns the integer value, but will fail if the number has fraction digits.
@@ -288,7 +295,7 @@ class U_I18N_API FixedDecimal: public IFixedDecimal, public UObject {
     void init(double n, int32_t v, int64_t f);
     void init(double n);
     UBool quickInit(double n);  // Try a fast-path only initialization,
-                                //    return TRUE if successful.
+                                //    return true if successful.
     void adjustForMinFractionDigits(int32_t min);
     static int64_t getFractionalDigits(double n, int32_t v);
     static int32_t decimals(double n);
@@ -314,8 +321,8 @@ public:
     int32_t opNum = -1;             // for mod expressions, the right operand of the mod.
     int32_t value = -1;             // valid for 'is' rules only.
     UVector32 *rangeList = nullptr; // for 'in', 'within' rules. Null otherwise.
-    UBool negated = FALSE;          // TRUE for negated rules.
-    UBool integerOnly = FALSE;      // TRUE for 'within' rules.
+    UBool negated = false;          // true for negated rules.
+    UBool integerOnly = false;      // true for 'within' rules.
     tokenType digitsType = none;    // n | i | v | f constraint.
     AndConstraint *next = nullptr;
     // Internal error status, used for errors that occur during the copy constructor.
@@ -351,8 +358,8 @@ public:
     OrConstraint   *ruleHeader = nullptr;
     UnicodeString   fDecimalSamples;  // Samples strings from rule source
     UnicodeString   fIntegerSamples;  //   without @decimal or @integer, otherwise unprocessed.
-    UBool           fDecimalSamplesUnbounded = FALSE;
-    UBool           fIntegerSamplesUnbounded = FALSE;
+    UBool           fDecimalSamplesUnbounded = false;
+    UBool           fIntegerSamplesUnbounded = false;
     // Internal error status, used for errors that occur during the copy constructor.
     UErrorCode      fInternalStatus = U_ZERO_ERROR;
 

@@ -869,7 +869,9 @@ library: i18n
     dayperiodrules
     listformatter
     formatting formattable_cnv regex regex_cnv translit
-    double_conversion number_representation number_output numberformatter numberparser
+    double_conversion number_representation number_output numberformatter
+    number_skeletons number_usageprefs numberparser
+    units_extra unitsformatter
     universal_time_scale
     uclean_i18n
 
@@ -945,7 +947,7 @@ group: dayperiodrules
 group: listformatter
     listformatter.o ulistformatter.o
   deps
-    resourcebundle simpleformatter format uclean_i18n formatted_value_iterimpl
+    uchar resourcebundle simpleformatter format uclean_i18n formatted_value_sbimpl
 
 group: double_conversion
     double-conversion-bignum.o double-conversion-double-to-string.o
@@ -957,7 +959,7 @@ group: double_conversion
 
 group: number_representation
     number_decimalquantity.o string_segment.o number_utils.o
-    # TODO(ICU-20429) Move formatted_string_builder to its own unit.
+    # TODO(ICU-21058) Move formatted_string_builder to its own unit.
     formatted_string_builder.o
   deps
     decnumber double_conversion
@@ -972,30 +974,69 @@ group: number_representation
 group: number_output
     # PluralRules and FormattedNumber
     number_output.o
-    standardplural.o plurrule.o
+    standardplural.o plurrule.o pluralranges.o
   deps
     # FormattedNumber internals:
-    number_representation format formatted_value_sbimpl
+    number_representation format formatted_value_sbimpl units
     # PluralRules internals:
     unifiedcache
 
 group: numberformatter
     # ICU 60+ NumberFormatter API
-    number_affixutils.o number_asformat.o
-    number_capi.o number_compact.o number_currencysymbols.o
+    number_affixutils.o
+    number_compact.o number_currencysymbols.o
     number_decimfmtprops.o
     number_fluent.o number_formatimpl.o
     number_grouping.o number_integerwidth.o number_longnames.o
-    number_mapper.o number_modifiers.o number_multiplier.o
+    number_mapper.o number_modifiers.o
     number_notation.o number_padding.o
-    number_patternmodifier.o number_patternstring.o number_rounding.o
-    number_scientific.o number_skeletons.o
-    currpinf.o dcfmtsym.o numsys.o
+    number_patternmodifier.o number_patternstring.o
+    number_scientific.o
+    currpinf.o
     numrange_fluent.o numrange_impl.o
   deps
-    decnumber double_conversion formattable units
-    number_representation number_output
+    decnumber double_conversion formattable units unitsformatter
+    listformatter number_representation number_output
+    numsys
+    number_usageprefs
+    number_rounding
+    number_symbolswrapper
     uclean_i18n common
+
+group: numsys
+    dcfmtsym.o
+    numsys.o
+  deps
+    currency
+    resourcebundle
+    uclean_i18n
+
+group: number_usageprefs
+    number_multiplier.o
+    number_usageprefs.o
+  deps
+    number_rounding
+    number_symbolswrapper
+    unitsformatter
+
+group: number_rounding
+    number_rounding.o
+  deps
+    currency
+    number_representation
+
+group: number_skeletons
+    # Number skeleton support; separated from numberformatter
+    number_skeletons.o number_capi.o number_asformat.o numrange_capi.o
+  deps
+    numberformatter
+    units_extra
+
+group: number_symbolswrapper
+    number_symbolswrapper.o
+  deps
+    platform
+    numsys
 
 group: numberparser
     numparse_affixes.o numparse_compositions.o numparse_currency.o
@@ -1037,7 +1078,8 @@ group: formatting
     # messageformat
     choicfmt.o msgfmt.o plurfmt.o selfmt.o umsg.o
   deps
-    decnumber formattable format units numberformatter numberparser formatted_value_sbimpl
+    decnumber formattable format units numberformatter number_skeletons numberparser
+    formatted_value_sbimpl
     listformatter
     dayperiodrules
     collation collation_builder  # for rbnf
@@ -1047,16 +1089,28 @@ group: formatting
     sharedbreakiterator # for reldatefmt.o
     uclean_i18n
     region
+    formatted_value_iterimpl  # NOTE (2020-08-27): Not currently used.
 
 group: sharedbreakiterator
     sharedbreakiterator.o
   deps
     breakiterator
 
-group: units
-    measunit.o currunit.o nounit.o
+group: units_extra
+    measunit_extra.o
   deps
-    stringenumeration
+    units bytestriebuilder bytestrie resourcebundle uclean_i18n
+
+group: units
+    measunit.o currunit.o
+  deps
+    stringenumeration errorcode
+
+group: unitsformatter
+    units_data.o units_converter.o units_complexconverter.o units_router.o
+  deps
+    resourcebundle units_extra double_conversion number_representation formattable sort
+    number_rounding
 
 group: decnumber
     decContext.o decNumber.o

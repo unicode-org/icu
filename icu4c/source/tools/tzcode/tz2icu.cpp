@@ -1790,7 +1790,7 @@ int main(int argc, char *argv[]) {
     if (file) {
         file << "//---------------------------------------------------------" << endl
              << "// Copyright (C) 2016 and later: Unicode, Inc. and others." << endl
-             << "// License & terms of use: http://www.unicode.org/copyright.html#License" << endl
+             << "// License & terms of use: http://www.unicode.org/copyright.html" << endl
              << "//---------------------------------------------------------" << endl
              << "// Build tool:  tz2icu" << endl
              << "// Build date:  " << asctime(now) /* << endl -- asctime emits CR */

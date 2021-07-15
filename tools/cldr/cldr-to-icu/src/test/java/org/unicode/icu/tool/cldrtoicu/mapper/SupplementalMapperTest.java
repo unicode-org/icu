@@ -5,12 +5,15 @@ package org.unicode.icu.tool.cldrtoicu.mapper;
 import static org.unicode.cldr.api.CldrValue.parseValue;
 import static org.unicode.icu.tool.cldrtoicu.testing.IcuDataSubjectFactory.assertThat;
 
+import java.util.function.Predicate;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.unicode.cldr.api.CldrPath;
 import org.unicode.cldr.api.CldrValue;
+import org.unicode.cldr.api.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.IcuData;
-import org.unicode.icu.tool.cldrtoicu.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.PathValueTransformer.Result;
 import org.unicode.icu.tool.cldrtoicu.testing.FakeDataSupplier;
 import org.unicode.icu.tool.cldrtoicu.testing.FakeResult;
@@ -29,8 +32,7 @@ public class SupplementalMapperTest {
             supplementalData("likelySubtags/likelySubtag[@from=\"Foo\"][@to=\"Bar\"]"),
             simpleResult("/Foo", "Bar"));
 
-        PathMatcher allPaths = PathMatcher.of("supplementalData");
-        IcuData icuData = SupplementalMapper.process(src, transformer, "name", allPaths);
+        IcuData icuData = SupplementalMapper.process(src, transformer, "name", p -> true);
 
         assertThat(icuData).getPaths().hasSize(1);
         assertThat(icuData).hasValuesFor("/Foo", "Bar");
@@ -55,8 +57,7 @@ public class SupplementalMapperTest {
             supplementalData("currencyData/region[@iso3166=\"US\"]/currency[@iso4217=\"USD\"]"),
             simpleResult("/CurrencyMap/US/<FIFO>/id", "USD"));
 
-        PathMatcher allPaths = PathMatcher.of("supplementalData");
-        IcuData icuData = SupplementalMapper.process(src, transformer, "name", allPaths);
+        IcuData icuData = SupplementalMapper.process(src, transformer, "name", p -> true);
 
         assertThat(icuData).getPaths().hasSize(3);
         assertThat(icuData).hasValuesFor("/CurrencyMap/US/<0000>/id", "USD");
@@ -73,7 +74,8 @@ public class SupplementalMapperTest {
             supplementalData("currencyData/region[@iso3166=\"US\"]/currency[@iso4217=\"USN\"]"),
             simpleResult("/CurrencyMap/US/<FIFO>/id", "USN"));
 
-        PathMatcher filter = PathMatcher.of("supplementalData/likelySubtags");
+        Predicate<CldrPath> filter =
+            PathMatcher.of("//supplementalData/likelySubtags")::matchesPrefixOf;
         IcuData icuData = SupplementalMapper.process(src, transformer, "name", filter);
 
         assertThat(icuData).getPaths().hasSize(1);

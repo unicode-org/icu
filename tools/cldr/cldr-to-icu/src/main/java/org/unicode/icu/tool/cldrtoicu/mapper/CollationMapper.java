@@ -11,15 +11,13 @@ import java.util.Optional;
 
 import org.unicode.cldr.api.AttributeKey;
 import org.unicode.cldr.api.CldrData;
-import org.unicode.cldr.api.CldrData.PrefixVisitor;
-import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDataType;
-import org.unicode.cldr.api.CldrPath;
 import org.unicode.cldr.api.CldrValue;
 import org.unicode.icu.tool.cldrtoicu.IcuData;
-import org.unicode.icu.tool.cldrtoicu.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.RbPath;
 import org.unicode.icu.tool.cldrtoicu.RbValue;
+import org.unicode.icu.tool.cldrtoicu.CldrDataProcessor;
+import org.unicode.icu.tool.cldrtoicu.CldrDataProcessor.SubProcessor;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
@@ -33,18 +31,22 @@ import com.google.common.base.Splitter;
  * }</pre>
  */
 public final class CollationMapper {
-    private static final PathMatcher COLLATIONS = PathMatcher.of("ldml/collations");
 
-    // Note that the 'type' attribute is optional, so cannot be in the path matcher.
-    // However since the CLDR data never actually omits the value, it would be easy to change the
-    // attribute metadata to stop it being an implicit attribute and then it could appear.
-    private static final PathMatcher COLLATION_RULE = PathMatcher.of("collation/cr");
+    private static final CldrDataProcessor<CollationMapper> CLDR_PROCESSOR;
+    static {
+        CldrDataProcessor.Builder<CollationMapper> processor = CldrDataProcessor.builder();
+        SubProcessor<CollationMapper> collations = processor.addSubprocessor("//ldml/collations");
+        collations.addValueAction("collation/cr", CollationMapper::collectRule);
+        collations.addValueAction("defaultCollation", CollationMapper::collectDefault);
+        // This could be a separate processor, since the specials data only contains these paths,
+        // but it's not clear if in future it could also contain any collation rules.
+        processor.addValueAction("//ldml/special/*", CollationMapper::maybeAddSpecial);
+        CLDR_PROCESSOR = processor.build();
+    }
+
     private static final AttributeKey COLLATION_TYPE = keyOf("collation", "type");
     private static final AttributeKey COLLATION_RULE_ALT = keyOf("cr", "alt");
 
-    private static final PathMatcher DEFAULT_COLLATION = PathMatcher.of("defaultCollation");
-
-    private static final PathMatcher SPECIAL = PathMatcher.of("ldml/special");
     private static final AttributeKey SPECIAL_RULES = keyOf("icu:UCARules", "icu:uca_rules");
     private static final AttributeKey SPECIAL_DEP = keyOf("icu:depends", "icu:dependency");
 
@@ -62,94 +64,83 @@ public final class CollationMapper {
      *
      * @param icuData the ICU data to be filled.
      * @param cldrData the unresolved CLDR data to process.
-     * @param icuSpecialData additional ICU data (in the "icu:" namespace)
+     * @param icuSpecialData additional ICU data (in the "icu:" namespace).
+     * @param cldrVersion version string to add to ICU data.
      * @return IcuData containing RBNF data for the given locale ID.
      */
     public static IcuData process(
-        IcuData icuData, CldrData cldrData, Optional<CldrData> icuSpecialData) {
+        IcuData icuData, CldrData cldrData, Optional<CldrData> icuSpecialData, String cldrVersion) {
 
-        CollationVisitor visitor = new CollationVisitor(icuData);
-        icuSpecialData.ifPresent(s -> s.accept(DTD, visitor));
-        cldrData.accept(DTD, visitor);
-        return visitor.icuData;
+        CollationMapper mapper = new CollationMapper(icuData, cldrVersion);
+        icuSpecialData.ifPresent(specialData -> CLDR_PROCESSOR.process(specialData, mapper, DTD));
+        CLDR_PROCESSOR.process(cldrData, mapper, DTD);
+        return icuData;
     }
 
-    final static class CollationVisitor implements PrefixVisitor {
-        private final IcuData icuData;
+    private final IcuData icuData;
+    private final String cldrVersion;
 
-        CollationVisitor(IcuData icuData) {
-            this.icuData = checkNotNull(icuData);
-            // Super special hack case because the XML data is a bit broken for the root collation
-            // data (there's an empty <collation> element that's a non-leaf element and thus not
-            // visited, but we should add an empty sequence to the output data.
-            // TODO: Fix CLDR (https://unicode-org.atlassian.net/projects/CLDR/issues/CLDR-13131)
-            if (icuData.getName().equals("root")) {
-                icuData.replace(RB_STANDARD_SEQUENCE, "");
-                // TODO: Collation versioning probably needs to be improved.
-                icuData.replace(RB_STANDARD_VERSION, CldrDataSupplier.getCldrVersionString());
-            }
+    private CollationMapper(IcuData icuData, String cldrVersion) {
+        this.icuData = checkNotNull(icuData);
+        this.cldrVersion = checkNotNull(cldrVersion);
+        // Super special hack case because the XML data is a bit broken for the root collation
+        // data (there's an empty <collation> element that's a non-leaf element and thus not
+        // visited, but we should add an empty sequence to the output data.
+        // TODO: Fix CLDR (https://unicode-org.atlassian.net/projects/CLDR/issues/CLDR-13131)
+        if (icuData.getName().equals("root")) {
+            icuData.replace(RB_STANDARD_SEQUENCE, "");
+            // TODO: Collation versioning probably needs to be improved.
+            icuData.replace(RB_STANDARD_VERSION, cldrVersion);
         }
+    }
 
-        @Override
-        public void visitPrefixStart(CldrPath prefix, Context ctx) {
-            if (COLLATIONS.matchesPrefixOf(prefix)) {
-                ctx.install(this::collectRules);
-            } else if (SPECIAL.matchesPrefixOf(prefix)) {
-                ctx.install(this::maybeAddSpecial);
-            }
+    private void collectRule(CldrValue v) {
+        String type = COLLATION_TYPE.valueFrom(v);
+        RbPath rbPath = RbPath.of("collations", type, "Sequence");
+
+        // WARNING: This is almost certainly a bug, since while @type can have the value
+        // "short" it can also have other values. This code was copied from CollationMapper
+        // which has the line;
+        //   isShort = attr.getValue("alt") != null;
+        // TODO: Raise a ticket to examine this.
+        boolean isShort = COLLATION_RULE_ALT.optionalValueFrom(v).isPresent();
+
+        // Note that it's not clear why there's a check for "contains()" here. The code
+        // from which this was derived is largely undocumented and this check could have
+        // been overly defensive (perhaps a duplicate key should be an error?).
+        if (isShort || !icuData.getPaths().contains(rbPath)) {
+            RbValue rules = RbValue.of(
+                LINE_SPLITTER.splitToList(v.getValue()).stream()
+                    .map(CollationMapper::removeComment)
+                    .filter(s -> !s.isEmpty())::iterator);
+            icuData.replace(rbPath, rules);
+            icuData.replace(RbPath.of("collations", type, "Version"), cldrVersion);
         }
+    }
 
-        private void collectRules(CldrValue v) {
-            CldrPath p = v.getPath();
-            if (COLLATION_RULE.matchesSuffixOf(p)) {
-                String type = COLLATION_TYPE.valueFrom(v);
-                RbPath rbPath = RbPath.of("collations", type, "Sequence");
+    private void collectDefault(CldrValue v) {
+        icuData.add(RB_COLLATIONS_DEFAULT, v.getValue());
+    }
 
-                // WARNING: This is almost certainly a bug, since while @type can have the value
-                // "short" it can also have other values. This code was copied from CollationMapper
-                // which has the line;
-                //   isShort = attr.getValue("alt") != null;
-                // TODO: Raise a ticket to examine this.
-                boolean isShort = COLLATION_RULE_ALT.optionalValueFrom(v).isPresent();
-
-                // Note that it's not clear why there's a check for "contains()" here. The code
-                // from which this was derived is largely undocumented and this check could have
-                // been overly defensive (perhaps a duplicate key should be an error?).
-                if (isShort || !icuData.getPaths().contains(rbPath)) {
-                    RbValue rules = RbValue.of(
-                        LINE_SPLITTER.splitToList(v.getValue()).stream()
-                            .map(CollationMapper::removeComment)
-                            .filter(s -> !s.isEmpty())::iterator);
-                    icuData.replace(rbPath, rules);
-                    icuData.replace(
-                        RbPath.of("collations", type, "Version"),
-                        CldrDataSupplier.getCldrVersionString());
-                }
-            } else if (DEFAULT_COLLATION.matchesSuffixOf(p)) {
-                icuData.add(RB_COLLATIONS_DEFAULT, v.getValue());
-            }
+    // This is a bit special since the attribute we want to add depends on the element we are
+    // visiting (which is somewhat unusual in the transformation classes).
+    private void maybeAddSpecial(CldrValue value) {
+        AttributeKey key;
+        switch (value.getPath().getName()) {
+        case "icu:UCARules":
+            key = SPECIAL_RULES;
+            break;
+        case "icu:depends":
+            key = SPECIAL_DEP;
+            break;
+        default:
+            return;
         }
-
-        // This is a bit special since the attribute we want to add depends on the element we are
-        // visiting (which is somewhat unusual in the transformation classes).
-        private void maybeAddSpecial(CldrValue value) {
-            AttributeKey key;
-            switch (value.getPath().getName()) {
-            case "icu:UCARules":
-                key = SPECIAL_RULES;
-                break;
-            case "icu:depends":
-                key = SPECIAL_DEP;
-                break;
-            default:
-                return;
-            }
-            // substring(4) just removes the "icu:" prefix (which we know is present in the key).
-            RbPath rbPath = RbPath.of(
-                String.format("%s:process(%s)",
-                    key.getElementName().substring(4), key.getAttributeName().substring(4)));
-            icuData.add(rbPath, key.valueFrom(value));
-        }
+        // substring(4) just removes the "icu:" prefix (which we know is present in the key).
+        RbPath rbPath = RbPath.of(
+            String.format("%s:process(%s)",
+                key.getElementName().substring(4), key.getAttributeName().substring(4)));
+        icuData.add(rbPath, key.valueFrom(value));
     }
 
     // Collation data can contain # to mark an end-of-line comment, but it can also contain data
@@ -195,6 +186,4 @@ public final class CollationMapper {
         checkArgument(!quoted, "mismatched quotes in: %s", s);
         return -1;
     }
-
-    private CollationMapper() {}
 }

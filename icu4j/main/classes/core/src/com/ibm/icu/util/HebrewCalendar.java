@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 1996-2016, International Business Machines Corporation and
@@ -305,7 +305,7 @@ public class HebrewCalendar extends Calendar {
      * @stable ICU 2.8
      */
     public HebrewCalendar(Locale aLocale) {
-        this(TimeZone.getDefault(), aLocale);
+        this(TimeZone.forLocaleOrDefault(aLocale), aLocale);
     }
 
     /**
@@ -316,7 +316,7 @@ public class HebrewCalendar extends Calendar {
      * @stable ICU 3.2
      */
     public HebrewCalendar(ULocale locale) {
-        this(TimeZone.getDefault(), locale);
+        this(TimeZone.forULocaleOrDefault(locale), locale);
     }
 
     /**
@@ -608,7 +608,8 @@ public class HebrewCalendar extends Calendar {
         long day = cache.get(year);
         
         if (day == CalendarCache.EMPTY) {
-            int months = (235 * year - 234) / 19;           // # of months before year
+            // # of months before year
+            int months = (int)floorDivide((235 * (long)year - 234), (long)19);
 
             long frac = months * MONTH_FRACT + BAHARAD;     // Fractional part of day #
             day  = months * 29 + (frac / DAY_PARTS);        // Whole # part of calculation
@@ -793,8 +794,8 @@ public class HebrewCalendar extends Calendar {
      */
     protected void handleComputeFields(int julianDay) {
         long d = julianDay - 347997;
-        long m = (d * DAY_PARTS) / MONTH_PARTS;         // Months (approx)
-        int year = (int)((19 * m + 234) / 235) + 1;     // Years (approx)
+        long m = floorDivide((d * (long)DAY_PARTS), (long)MONTH_PARTS); // Months (approx)
+        int year = (int)(floorDivide((19 * m + 234), (long)235) + 1);   // Years (approx)
         long ys  = startOfYear(year);                   // 1st day of year
         int dayOfYear = (int)(d - ys);
 

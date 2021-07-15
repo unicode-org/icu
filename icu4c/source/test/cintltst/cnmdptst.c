@@ -419,7 +419,7 @@ static void TestCurrency(void)
     UChar res[100];
     UErrorCode status = U_ZERO_ERROR;
     const char* locale[]={"fr_CA", "de_DE@currency=DEM", "fr_FR@currency=FRF"};
-    const char* result[]={"1,50\\u00a0$", "1,50\\u00a0DM", "1,50\\u00a0F"};
+    const char* result[]={"1,50\\u00a0$\\u00a0CA", "1,50\\u00a0DM", "1,50\\u00a0F"};
     log_verbose("\nTesting the number format with different currency patterns\n");
     for(i=0; i < 3; i++)
     {

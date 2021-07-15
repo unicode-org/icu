@@ -30,6 +30,8 @@ void DecimalQuantityTest::runIndexedTest(int32_t index, UBool exec, const char *
         TESTCASE_AUTO(testToDouble);
         TESTCASE_AUTO(testMaxDigits);
         TESTCASE_AUTO(testNickelRounding);
+        TESTCASE_AUTO(testCompactDecimalSuppressedExponent);
+        TESTCASE_AUTO(testSuppressedExponentUnchangedByInitialScaling);
     TESTCASE_AUTO_END;
 }
 
@@ -233,8 +235,6 @@ void DecimalQuantityTest::testConvertToAccurateDouble() {
     // based on https://github.com/google/double-conversion/issues/28
     static double hardDoubles[] = {
             1651087494906221570.0,
-            -5074790912492772E-327,
-            83602530019752571E-327,
             2.207817077636718750000000000000,
             1.818351745605468750000000000000,
             3.941719055175781250000000000000,
@@ -259,9 +259,11 @@ void DecimalQuantityTest::testConvertToAccurateDouble() {
             1.305290222167968750000000000000,
             3.834922790527343750000000000000,};
 
-    static double integerDoubles[] = {
+    static double exactDoubles[] = {
             51423,
             51423e10,
+            -5074790912492772E-327,
+            83602530019752571E-327,
             4.503599627370496E15,
             6.789512076111555E15,
             9.007199254740991E15,
@@ -271,7 +273,7 @@ void DecimalQuantityTest::testConvertToAccurateDouble() {
         checkDoubleBehavior(d, true);
     }
 
-    for (double d : integerDoubles) {
+    for (double d : exactDoubles) {
         checkDoubleBehavior(d, false);
     }
 
@@ -465,6 +467,189 @@ void DecimalQuantityTest::testNickelRounding() {
     dq.setToDouble(7.1);
     dq.roundToNickel(-1, UNUM_ROUND_UNNECESSARY, status);
     status.expectErrorAndReset(U_FORMAT_INEXACT_ERROR);
+}
+
+void DecimalQuantityTest::testCompactDecimalSuppressedExponent() {
+    IcuTestErrorCode status(*this, "testCompactDecimalSuppressedExponent");
+    Locale ulocale("fr-FR");
+
+    struct TestCase {
+        UnicodeString skeleton;
+        double input;
+        const char16_t* expectedString;
+        int64_t expectedLong;
+        double expectedDouble;
+        const char16_t* expectedPlainString;
+        int32_t expectedSuppressedExponent;
+    } cases[] = {
+        // unlocalized formatter skeleton, input, string output, long output, double output, BigDecimal output, plain string, suppressed exponent
+        {u"",              123456789, u"123 456 789",  123456789L, 123456789.0, u"123456789", 0},
+        {u"compact-long",  123456789, u"123 millions", 123000000L, 123000000.0, u"123000000", 6},
+        {u"compact-short", 123456789, u"123 M",        123000000L, 123000000.0, u"123000000", 6},
+        {u"scientific",    123456789, u"1,234568E8",   123456800L, 123456800.0, u"123456800", 8},
+
+        {u"",              1234567, u"1 234 567",   1234567L, 1234567.0, u"1234567", 0},
+        {u"compact-long",  1234567, u"1,2 million", 1200000L, 1200000.0, u"1200000", 6},
+        {u"compact-short", 1234567, u"1,2 M",       1200000L, 1200000.0, u"1200000", 6},
+        {u"scientific",    1234567, u"1,234567E6",  1234567L, 1234567.0, u"1234567", 6},
+
+        {u"",              123456, u"123 456",   123456L, 123456.0, u"123456", 0},
+        {u"compact-long",  123456, u"123 mille", 123000L, 123000.0, u"123000", 3},
+        {u"compact-short", 123456, u"123 k",     123000L, 123000.0, u"123000", 3},
+        {u"scientific",    123456, u"1,23456E5", 123456L, 123456.0, u"123456", 5},
+
+        {u"",              123, u"123",    123L, 123.0, u"123", 0},
+        {u"compact-long",  123, u"123",    123L, 123.0, u"123", 0},
+        {u"compact-short", 123, u"123",    123L, 123.0, u"123", 0},
+        {u"scientific",    123, u"1,23E2", 123L, 123.0, u"123", 2},
+
+        {u"",              1.2, u"1,2",   1L, 1.2, u"1.2", 0},
+        {u"compact-long",  1.2, u"1,2",   1L, 1.2, u"1.2", 0},
+        {u"compact-short", 1.2, u"1,2",   1L, 1.2, u"1.2", 0},
+        {u"scientific",    1.2, u"1,2E0", 1L, 1.2, u"1.2", 0},
+
+        {u"",              0.12, u"0,12",   0L, 0.12, u"0.12", 0},
+        {u"compact-long",  0.12, u"0,12",   0L, 0.12, u"0.12", 0},
+        {u"compact-short", 0.12, u"0,12",   0L, 0.12, u"0.12", 0},
+        {u"scientific",    0.12, u"1,2E-1", 0L, 0.12, u"0.12", -1},
+
+        {u"",              0.012, u"0,012",   0L, 0.012, u"0.012", 0},
+        {u"compact-long",  0.012, u"0,012",   0L, 0.012, u"0.012", 0},
+        {u"compact-short", 0.012, u"0,012",   0L, 0.012, u"0.012", 0},
+        {u"scientific",    0.012, u"1,2E-2",  0L, 0.012, u"0.012", -2},
+
+        {u"",              999.9, u"999,9",     999L,  999.9,  u"999.9", 0},
+        {u"compact-long",  999.9, u"1 millier", 1000L, 1000.0, u"1000",  3},
+        {u"compact-short", 999.9, u"1 k",       1000L, 1000.0, u"1000",  3},
+        {u"scientific",    999.9, u"9,999E2",   999L,  999.9,  u"999.9", 2},
+
+        {u"",              1000.0, u"1 000",     1000L, 1000.0, u"1000", 0},
+        {u"compact-long",  1000.0, u"1 millier", 1000L, 1000.0, u"1000", 3},
+        {u"compact-short", 1000.0, u"1 k",       1000L, 1000.0, u"1000", 3},
+        {u"scientific",    1000.0, u"1E3",       1000L, 1000.0, u"1000", 3},
+    };
+    for (const auto& cas : cases) {
+        // test the helper methods used to compute plural operand values
+
+        LocalizedNumberFormatter formatter =
+            NumberFormatter::forSkeleton(cas.skeleton, status)
+              .locale(ulocale);
+        FormattedNumber fn = formatter.formatDouble(cas.input, status);
+        DecimalQuantity dq;
+        fn.getDecimalQuantity(dq, status);
+        UnicodeString actualString = fn.toString(status);
+        int64_t actualLong = dq.toLong();
+        double actualDouble = dq.toDouble();
+        UnicodeString actualPlainString = dq.toPlainString();
+        int32_t actualSuppressedExponent = dq.getExponent();
+
+        assertEquals(
+                u"formatted number " + cas.skeleton + u" toString: " + cas.input,
+                cas.expectedString,
+                actualString);
+        assertEquals(
+                u"compact decimal " + cas.skeleton + u" toLong: " + cas.input,
+                cas.expectedLong,
+                actualLong);
+        assertDoubleEquals(
+                u"compact decimal " + cas.skeleton + u" toDouble: " + cas.input,
+                cas.expectedDouble,
+                actualDouble);
+        assertEquals(
+                u"formatted number " + cas.skeleton + u" toPlainString: " + cas.input,
+                cas.expectedPlainString,
+                actualPlainString);
+        assertEquals(
+                u"compact decimal " + cas.skeleton + u" suppressed exponent: " + cas.input,
+                cas.expectedSuppressedExponent,
+                actualSuppressedExponent);
+
+        // test the actual computed values of the plural operands
+
+        double expectedNOperand = cas.expectedDouble;
+        double expectedIOperand = cas.expectedLong;
+        double expectedEOperand = cas.expectedSuppressedExponent;
+        double actualNOperand = dq.getPluralOperand(PLURAL_OPERAND_N);
+        double actualIOperand = dq.getPluralOperand(PLURAL_OPERAND_I);
+        double actualEOperand = dq.getPluralOperand(PLURAL_OPERAND_E);
+
+        assertDoubleEquals(
+                u"compact decimal " + cas.skeleton + u" n operand: " + cas.input,
+                expectedNOperand,
+                actualNOperand);
+        assertDoubleEquals(
+                u"compact decimal " + cas.skeleton + u" i operand: " + cas.input,
+                expectedIOperand,
+                actualIOperand);
+        assertDoubleEquals(
+                u"compact decimal " + cas.skeleton + " e operand: " + cas.input,
+                expectedEOperand,
+                actualEOperand);
+    }
+}
+
+void DecimalQuantityTest::testSuppressedExponentUnchangedByInitialScaling() {
+    IcuTestErrorCode status(*this, "testCompactDecimalSuppressedExponent");
+    Locale ulocale("fr-FR");
+    LocalizedNumberFormatter withLocale = NumberFormatter::withLocale(ulocale);
+    LocalizedNumberFormatter compactLong =
+        withLocale.notation(Notation::compactLong());
+    LocalizedNumberFormatter compactScaled =
+        compactLong.scale(Scale::powerOfTen(3));
+    
+    struct TestCase {
+        int32_t input;
+        UnicodeString expectedString;
+        double expectedNOperand;
+        double expectedIOperand;
+        double expectedEOperand;
+    } cases[] = {
+        // input, compact long string output,
+        // compact n operand, compact i operand, compact e operand
+        {123456789, "123 millions", 123000000.0, 123000000.0, 6.0},
+        {1234567,   "1,2 million",  1200000.0,   1200000.0,   6.0},
+        {123456,    "123 mille",    123000.0,    123000.0,    3.0},
+        {123,       "123",          123.0,       123.0,       0.0},
+    };
+
+    for (const auto& cas : cases) {
+        FormattedNumber fnCompactScaled = compactScaled.formatInt(cas.input, status);
+        DecimalQuantity dqCompactScaled;
+        fnCompactScaled.getDecimalQuantity(dqCompactScaled, status);
+        double compactScaledEOperand = dqCompactScaled.getPluralOperand(PLURAL_OPERAND_E);
+
+        FormattedNumber fnCompact = compactLong.formatInt(cas.input, status);
+        DecimalQuantity dqCompact;
+        fnCompact.getDecimalQuantity(dqCompact, status);
+        UnicodeString actualString = fnCompact.toString(status);
+        double compactNOperand = dqCompact.getPluralOperand(PLURAL_OPERAND_N);
+        double compactIOperand = dqCompact.getPluralOperand(PLURAL_OPERAND_I);
+        double compactEOperand = dqCompact.getPluralOperand(PLURAL_OPERAND_E);
+        assertEquals(
+                u"formatted number " + Int64ToUnicodeString(cas.input) + " compactLong toString: ",
+                cas.expectedString,
+                actualString);
+        assertDoubleEquals(
+                u"compact decimal " + DoubleToUnicodeString(cas.input) + ", n operand vs. expected",
+                cas.expectedNOperand,
+                compactNOperand);
+        assertDoubleEquals(
+                u"compact decimal " + DoubleToUnicodeString(cas.input) + ", i operand vs. expected",
+                cas.expectedIOperand,
+                compactIOperand);
+        assertDoubleEquals(
+                u"compact decimal " + DoubleToUnicodeString(cas.input) + ", e operand vs. expected",
+                cas.expectedEOperand,
+                compactEOperand);
+
+        // By scaling by 10^3 in a locale that has words / compact notation
+        // based on powers of 10^3, we guarantee that the suppressed
+        // exponent will differ by 3.
+        assertDoubleEquals(
+                u"decimal " + DoubleToUnicodeString(cas.input) + ", e operand for compact vs. compact scaled",
+                compactEOperand + 3,
+                compactScaledEOperand);
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

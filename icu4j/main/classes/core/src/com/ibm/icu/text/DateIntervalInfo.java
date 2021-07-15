@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2008-2016, International Business Machines Corporation and
@@ -143,7 +143,7 @@ import com.ibm.icu.util.UResourceBundle;
  * the interval patterns using setIntervalPattern function as so desired.
  * Currently, users can only set interval patterns when the following
  * calendar fields are different: ERA, YEAR, MONTH, DATE,  DAY_OF_MONTH,
- * DAY_OF_WEEK, AM_PM,  HOUR, HOUR_OF_DAY, MINUTE and SECOND.
+ * DAY_OF_WEEK, AM_PM,  HOUR, HOUR_OF_DAY, MINUTE, SECOND, and MILLISECOND.
  * Interval patterns when other calendar fields are different is not supported.
  * <P>
  * DateIntervalInfo objects are cloneable.
@@ -298,7 +298,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
 
     private static final long serialVersionUID = 1;
     private static final int MINIMUM_SUPPORTED_CALENDAR_FIELD =
-                                                          Calendar.SECOND;
+                                                          Calendar.MILLISECOND;
     //private static boolean DEBUG = true;
 
     private static String CALENDAR_KEY = "calendar";
@@ -425,8 +425,9 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
          * Calendar.HOUR_OF_DAY
          * Calendar.MINUTE
          * Calendar.SECOND
+         * Calendar.MILLISECOND
          */
-        private static final String ACCEPTED_PATTERN_LETTERS = "GyMdahHms";
+        private static final String ACCEPTED_PATTERN_LETTERS = "GyMdahHmsS";
 
         // Output data
         DateIntervalInfo dateIntervalInfo;
@@ -531,13 +532,19 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
 
             // Check that the pattern letter is accepted
             char letter = patternLetter.charAt(0);
-            if (ACCEPTED_PATTERN_LETTERS.indexOf(letter) < 0) {
+            if (ACCEPTED_PATTERN_LETTERS.indexOf(letter) < 0 && letter != 'B') {
                 return null;
             }
 
             // Replace 'h' for 'H'
             if (letter == CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.HOUR_OF_DAY].charAt(0)) {
                 patternLetter = CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.HOUR];
+            }
+            
+            // Replace 'a' for 'B'
+            // TODO: Using AM/PM as a proxy for flexible day period isn’t really correct, but it’s close
+            if (letter == 'B') {
+                patternLetter = CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.AM_PM];
             }
 
             return patternLetter;
@@ -705,7 +712,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      * Restriction:
      * Currently, users can only set interval patterns when the following
      * calendar fields are different: ERA, YEAR, MONTH, DATE,  DAY_OF_MONTH,
-     * DAY_OF_WEEK, AM_PM,  HOUR, HOUR_OF_DAY, MINUTE, and SECOND.
+     * DAY_OF_WEEK, AM_PM,  HOUR, HOUR_OF_DAY, MINUTE, SECOND, and MILLISECOND.
      * Interval patterns when other calendar fields are different are
      * not supported.
      *
@@ -850,7 +857,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
     public PatternInfo getIntervalPattern(String skeleton, int field)
     {
         if ( field > MINIMUM_SUPPORTED_CALENDAR_FIELD ) {
-            throw new IllegalArgumentException("no support for field less than SECOND");
+            throw new IllegalArgumentException("no support for field less than MILLISECOND");
         }
         Map<String, PatternInfo> patternsOfOneSkeleton = fIntervalPatterns.get(skeleton);
         if ( patternsOfOneSkeleton != null ) {
@@ -1080,20 +1087,25 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
         final int STRING_NUMERIC_DIFFERENCE = 0x100;
         final int BASE = 0x41;
 
-        // TODO: this is a hack for 'v' and 'z'
-        // resource bundle only have time skeletons ending with 'v',
-        // but not for time skeletons ending with 'z'.
-        boolean replaceZWithV = false;
-        if ( inputSkeleton.indexOf('z') != -1 ) {
+        // hack for certain alternate characters
+        // resource bundles only have time skeletons containing 'v', 'h', and 'H'
+        // but not time skeletons containing 'z', 'K', or 'k'
+        // the skeleton may also include 'a' or 'b', which never occur in the resource bundles, so strip them out too
+        boolean replacedAlternateChars = false;
+        if ( inputSkeleton.indexOf('z') != -1 || inputSkeleton.indexOf('k') != -1 || inputSkeleton.indexOf('K') != -1 || inputSkeleton.indexOf('a') != -1 || inputSkeleton.indexOf('b') != -1 ) {
             inputSkeleton = inputSkeleton.replace('z', 'v');
-            replaceZWithV = true;
+            inputSkeleton = inputSkeleton.replace('k', 'H');
+            inputSkeleton = inputSkeleton.replace('K', 'h');
+            inputSkeleton = inputSkeleton.replace("a", "");
+            inputSkeleton = inputSkeleton.replace("b", "");
+            replacedAlternateChars = true;
         }
 
         parseSkeleton(inputSkeleton, inputSkeletonFieldWidth);
         int bestDistance = Integer.MAX_VALUE;
         // 0 means exact the same skeletons;
         // 1 means having the same field, but with different length,
-        // 2 means only z/v differs
+        // 2 means only z/v, h/K, or H/k differs
         // -1 means having different field.
         int bestFieldDifference = 0;
         for (String skeleton : fIntervalPatterns.keySet()) {
@@ -1134,7 +1146,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
                 break;
             }
         }
-        if ( replaceZWithV && bestFieldDifference != -1 ) {
+        if ( replacedAlternateChars && bestFieldDifference != -1 ) {
             bestFieldDifference = 2;
         }
         return new DateIntervalFormat.BestMatchInfo(bestSkeleton, bestFieldDifference);

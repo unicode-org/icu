@@ -20,6 +20,7 @@
 
 #include "unicode/uobject.h"
 #include "unicode/rbbi.h"
+#include "rbbidata.h"
 #include "rbbirb.h"
 #include "rbbinode.h"
 
@@ -53,6 +54,9 @@ public:
      */
     void     exportTable(void *where);
 
+    /** Use 8 bits to encode the forward table */
+    bool     use8BitsForTable() const;
+
     /**
      *  Find duplicate (redundant) character classes. Begin looking with categories.first.
      *  Duplicate, if found are returned in the categories parameter.
@@ -85,15 +89,18 @@ public:
      */
     void     exportSafeTable(void *where);
 
+    /** Use 8 bits to encode the safe reverse table */
+    bool     use8BitsForSafeTable() const;
 
 private:
     void     calcNullable(RBBINode *n);
     void     calcFirstPos(RBBINode *n);
     void     calcLastPos(RBBINode  *n);
     void     calcFollowPos(RBBINode *n);
-    void     calcChainedFollowPos(RBBINode *n);
+    void     calcChainedFollowPos(RBBINode *n, RBBINode *endMarkNode);
     void     bofFixup();
     void     buildStateTable();
+    void     mapLookAheadRules();
     void     flagAcceptingStates();
     void     flagLookAheadStates();
     void     flagTaggedStates();
@@ -175,9 +182,18 @@ private:
     /** Synthesized safe table, UVector of UnicodeString, one string per table row.   */
     UVector          *fSafeTable;
 
+    /** Map from rule number (fVal in look ahead nodes) to sequential lookahead index. */
+    UVector32        *fLookAheadRuleMap = nullptr;
 
-    RBBITableBuilder(const RBBITableBuilder &other); // forbid copying of this class
-    RBBITableBuilder &operator=(const RBBITableBuilder &other); // forbid copying of this class
+    /* Counter used when assigning lookahead rule numbers.
+     * Contains the last look-ahead number already in use.
+     * The first look-ahead number is 2; Number 1 (ACCEPTING_UNCONDITIONAL) is reserved
+     * for non-lookahead accepting states. See the declarations of RBBIStateTableRowT.   */
+    int32_t          fLASlotsInUse = ACCEPTING_UNCONDITIONAL;
+
+
+    RBBITableBuilder(const RBBITableBuilder &other) = delete; // forbid copying of this class
+    RBBITableBuilder &operator=(const RBBITableBuilder &other) = delete; // forbid copying of this class
 };
 
 //
@@ -186,8 +202,8 @@ private:
 class RBBIStateDescriptor : public UMemory {
 public:
     UBool            fMarked;
-    int32_t          fAccepting;
-    int32_t          fLookAhead;
+    uint32_t         fAccepting;
+    uint32_t         fLookAhead;
     UVector          *fTagVals;
     int32_t          fTagsIdx;
     UVector          *fPositions;          // Set of parse tree positions associated

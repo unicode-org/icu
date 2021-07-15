@@ -16,6 +16,8 @@
 .travis.yml
 .appveyor.yml
 .ci-builds/*
+# PGP Keys
+KEYS
 # suffix matches - start with '*'.  They are turned into as RE, '.brk$'
 *.brk
 *.bz2
@@ -95,6 +97,11 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/confusablesWholeScript.tx
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/UnicodeData.txt
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/duration/testdata/*
 icu4j/perf-tests/data/conversion/*
+#
+# docs
+#
+docs/ide4c/vscode/*.json
+docs/Gemfile.lock
 #
 # tools
 #

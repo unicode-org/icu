@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 gu{
     Keys{
         calendar{"કેલેન્ડર"}
@@ -157,6 +158,7 @@ gu{
         eu{"બાસ્ક"}
         ewo{"ઇવોન્ડો"}
         fa{"ફારસી"}
+        fa_AF{"ડારી"}
         fan{"ફેંગ"}
         fat{"ફન્ટી"}
         ff{"ફુલાહ"}
@@ -202,7 +204,6 @@ gu{
         gwi{"ગ્વિચ’ઇન"}
         ha{"હૌસા"}
         hai{"હૈડા"}
-        hak{"hak"}
         haw{"હવાઇયન"}
         he{"હીબ્રુ"}
         hi{"હિન્દી"}
@@ -213,7 +214,6 @@ gu{
         ho{"હિરી મોટૂ"}
         hr{"ક્રોએશિયન"}
         hsb{"અપર સોર્બિયન"}
-        hsn{"hsn"}
         ht{"હૈતિઅન ક્રેઓલે"}
         hu{"હંગેરિયન"}
         hup{"હૂપા"}
@@ -349,7 +349,6 @@ gu{
         myv{"એર્ઝયા"}
         mzn{"મઝાન્દેરાની"}
         na{"નાઉરૂ"}
-        nan{"nan"}
         nap{"નેપોલિટાન"}
         naq{"નમા"}
         nb{"નોર્વેજિયન બોકમાલ"}
@@ -530,7 +529,6 @@ gu{
         was{"વાશો"}
         wbp{"વાર્લ્પીરી"}
         wo{"વોલોફ"}
-        wuu{"wuu"}
         xal{"કાલ્મિક"}
         xh{"ખોસા"}
         xog{"સોગા"}
@@ -803,8 +801,8 @@ gu{
             strict{"ચુસ્ત રેખા વિરામ પ્રકાર"}
         }
         m0{
-            bgn{"BGN"}
-            ungegn{"UNGEGN"}
+            bgn{"US BGN"}
+            ungegn{"UN GEGN"}
         }
         ms{
             metric{"દશાંશ પદ્ધતિ"}
@@ -858,7 +856,6 @@ gu{
         PINYIN{"પિનયિન રોમનાઇઝેશન"}
         WADEGILE{"વેડ-ગિલ્સ રોમનાઇઝેશન"}
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — તમામ"}
         category-list{"{0}: {1}"}
@@ -873,6 +870,8 @@ gu{
             one{"{0} સ્ટ્રોક્સ"}
             other{"{0} સ્ટ્રોક્સ"}
         }
+        subscript{"સબસ્ક્રિપ્ટ {0}"}
+        superscript{"સુપરસ્ક્રિપ્ટ {0}"}
     }
     codePatterns{
         language{"ભાષા: {0}"}

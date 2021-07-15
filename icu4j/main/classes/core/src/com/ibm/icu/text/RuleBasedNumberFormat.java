@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 1996-2016, International Business Machines Corporation and
@@ -275,7 +275,7 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *   <tr>
  *     <td style="width: 5%; vertical-align: top;"></td>
  *     <td style="width: 8%; vertical-align: top;">x.0:</td>
- *     <td valign="top">The rule is a <em>master rule</em>. If the full stop in
+ *     <td valign="top">The rule is a <em>default rule</em>. If the full stop in
  *     the middle of the rule name is replaced with the decimal point
  *     that is used in the language or DecimalFormatSymbols, then that rule will
  *     have precedence when formatting and parsing this rule. For example, some
@@ -313,9 +313,9 @@ import com.ibm.icu.util.UResourceBundleIterator;
  * algorithms: If the rule set is a regular rule set, do the following:
  *
  * <ul>
- *   <li>If the rule set includes a master rule (and the number was passed in as a <tt>double</tt>),
- *     use the master rule.&nbsp; (If the number being formatted was passed in as a <tt>long</tt>,
- *     the master rule is ignored.)</li>
+ *   <li>If the rule set includes a default rule (and the number was passed in as a <tt>double</tt>),
+ *     use the default rule.&nbsp; (If the number being formatted was passed in as a <tt>long</tt>,
+ *     the default rule is ignored.)</li>
  *   <li>If the number is negative, use the negative-number rule.</li>
  *   <li>If the number has a fractional part and is greater than 1, use the improper fraction
  *     rule.</li>
@@ -377,7 +377,7 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *   <tr>
  *     <td style="width: 37;"></td>
  *     <td style="width: 23;"></td>
- *     <td style="width: 165; vertical-align: top;">in fraction or master rule</td>
+ *     <td style="width: 165; vertical-align: top;">in fraction or default rule</td>
  *     <td>Isolate the number's fractional part and format it.</td>
  *   </tr>
  *   <tr>
@@ -415,7 +415,7 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *   <tr>
  *     <td style="width: 37;"></td>
  *     <td style="width: 23;"></td>
- *     <td style="width: 165; vertical-align: top;">in fraction or master rule</td>
+ *     <td style="width: 165; vertical-align: top;">in fraction or default rule</td>
  *     <td>Isolate the number's integral part and format it.</td>
  *   </tr>
  *   <tr>
@@ -452,7 +452,7 @@ import com.ibm.icu.util.UResourceBundleIterator;
  *   <tr>
  *     <td style="width: 37;"></td>
  *     <td style="width: 23;"></td>
- *     <td style="width: 165; vertical-align: top;">in master rule</td>
+ *     <td style="width: 165; vertical-align: top;">in default rule</td>
  *     <td>Omit the optional text if the number is an integer (same as specifying both an x.x
  *     rule and an x.0 rule)</td>
  *   </tr>
@@ -1153,7 +1153,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
     /**
      * Formats the specified number according to the specified rule set.
-     * (If the specified rule set specifies a master ["x.0"] rule, this function
+     * (If the specified rule set specifies a default ["x.0"] rule, this function
      * ignores it.  Convert the number to a double first if you ned it.)  This
      * function preserves all the precision in the long-- it doesn't convert it
      * to a double.
@@ -1199,7 +1199,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
     /**
      * Formats the specified number using the formatter's default rule set.
      * (The default rule set is the last public rule set defined in the description.)
-     * (If the specified rule set specifies a master ["x.0"] rule, this function
+     * (If the specified rule set specifies a default ["x.0"] rule, this function
      * ignores it.  Convert the number to a double first if you ned it.)  This
      * function preserves all the precision in the long-- it doesn't convert it
      * to a double.

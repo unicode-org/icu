@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 1996-2010, International Business Machines Corporation and    *
@@ -45,6 +45,7 @@ import java.text.ParsePosition;
 import java.util.Locale;
 
 import com.ibm.icu.dev.demo.impl.DemoApplet;
+import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 
 public class RbnfDemo extends DemoApplet {
@@ -66,10 +67,12 @@ public class RbnfDemo extends DemoApplet {
         new RbnfDemo().showDemo();
     }
 
+    @Override
     protected Dimension getDefaultFrameSize(DemoApplet applet, Frame f) {
         return new Dimension(430,270);
     }
 
+    @Override
     protected Frame createDemoFrame(DemoApplet applet) {
         final Frame window = new Frame("Number Spellout Demo");
         window.setSize(800, 600);
@@ -89,7 +92,7 @@ public class RbnfDemo extends DemoApplet {
         populateRuleSetMenu();
         numberFormatter = new DecimalFormat("#,##0.##########");
         parsePosition = new ParsePosition(0);
-        theNumber = 0;
+        theNumber = BigDecimal.ZERO;
 
         numberField = new TextField();
         numberField.setFont(new Font("Serif", Font.PLAIN, 24));
@@ -100,6 +103,7 @@ public class RbnfDemo extends DemoApplet {
         lenientParseButton = new Checkbox("Lenient parse", lenientParse);
 
         numberField.addTextListener(new TextListener() {
+            @Override
             public void textValueChanged(TextEvent e) {
                 if (!numberFieldHasFocus)
                     return;
@@ -108,22 +112,25 @@ public class RbnfDemo extends DemoApplet {
                 parsePosition.setIndex(0);
                 Number temp = numberFormatter.parse(fieldText, parsePosition);
                 if (temp == null || parsePosition.getIndex() == 0) {
-                    theNumber = 0;
+                    theNumber = BigDecimal.ZERO;
                     textField.setText("PARSE ERROR");
                 }
                 else {
-                    theNumber = temp.doubleValue();
-                    textField.setText(spelloutFormatter.format(theNumber, ruleSetName));
+                    theNumber = new BigDecimal(temp instanceof Long ? temp.longValue() : temp.doubleValue());
+                    textField.setText(spelloutFormatter.format(
+                            theNumber.scale() == 0 ? theNumber.longValue() : theNumber.doubleValue(), ruleSetName));
                 }
             }
         } );
 
         numberField.addFocusListener(new FocusAdapter() {
+            @Override
             public void focusLost(FocusEvent e) {
                 numberFieldHasFocus = false;
                 numberField.setText(numberFormatter.format(theNumber));
             }
 
+            @Override
             public void focusGained(FocusEvent e) {
                 numberFieldHasFocus = true;
                 numberField.selectAll();
@@ -131,14 +138,15 @@ public class RbnfDemo extends DemoApplet {
         } );
 
         textField.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyTyped(KeyEvent e) {
                 if (e.getKeyChar() == '\t') {
                     String fieldText = ((TextComponent)(e.getSource())).getText();
                     parsePosition.setIndex(0);
-                    theNumber = spelloutFormatter.parse(fieldText, parsePosition)
-                                        .doubleValue();
+                    theNumber = new BigDecimal(spelloutFormatter.parse(fieldText, parsePosition)
+                                    .doubleValue());
                     if (parsePosition.getIndex() == 0) {
-                        theNumber = 0;
+                        theNumber = BigDecimal.ZERO;
                         numberField.setText("PARSE ERROR");
                         textField.selectAll();
                     }
@@ -156,11 +164,12 @@ public class RbnfDemo extends DemoApplet {
         } );
 
         textField.addFocusListener(new FocusAdapter() {
+            @Override
             public void focusLost(FocusEvent e) {
                 String fieldText = ((TextComponent)(e.getSource())).getText();
                 parsePosition.setIndex(0);
-                theNumber = spelloutFormatter.parse(fieldText, parsePosition)
-                                .doubleValue();
+                theNumber = new BigDecimal(spelloutFormatter.parse(fieldText, parsePosition)
+                                .doubleValue());
                 if (parsePosition.getIndex() == 0)
                     numberField.setText("PARSE ERROR");
                 else
@@ -168,12 +177,14 @@ public class RbnfDemo extends DemoApplet {
                 textField.setText(textField.getText()); // textField.repaint() didn't work right
             }
 
+            @Override
             public void focusGained(FocusEvent e) {
                 textField.selectAll();
             }
         } );
 
         rulesField.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyTyped(KeyEvent e) {
                 if (e.getKeyChar() == '\t') {
                     String fieldText = ((TextComponent)(e.getSource())).getText();
@@ -201,6 +212,7 @@ public class RbnfDemo extends DemoApplet {
         } );
 
         rulesField.addFocusListener(new FocusAdapter() {
+            @Override
             public void focusLost(FocusEvent e) {
                 String fieldText = ((TextComponent)(e.getSource())).getText();
                 if (formatterMenu.getSelectedItem().equals("Custom") || !fieldText.equals(
@@ -223,6 +235,7 @@ public class RbnfDemo extends DemoApplet {
         } );
 
         lenientParseButton.addItemListener(new ItemListener() {
+            @Override
             public void itemStateChanged(ItemEvent e) {
                 lenientParse = lenientParseButton.getState();
                 spelloutFormatter.setLenientParseMode(lenientParse);
@@ -231,7 +244,8 @@ public class RbnfDemo extends DemoApplet {
 
         numberField.setText(numberFormatter.format(theNumber));
         numberField.selectAll();
-        textField.setText(spelloutFormatter.format(theNumber, ruleSetName));
+        textField.setText(spelloutFormatter
+                .format(theNumber.scale() == 0 ? theNumber.longValue() : theNumber.doubleValue(), ruleSetName));
 
         Panel leftPanel = new Panel();
         leftPanel.setLayout(new BorderLayout());
@@ -247,6 +261,7 @@ public class RbnfDemo extends DemoApplet {
         panel2.setLayout(new GridLayout(3, 3));
         Button button = new Button("+100");
         button.addActionListener( new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 roll(100);
             }
@@ -254,6 +269,7 @@ public class RbnfDemo extends DemoApplet {
         panel2.add(button);
         button = new Button("+10");
         button.addActionListener( new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 roll(10);
             }
@@ -261,6 +277,7 @@ public class RbnfDemo extends DemoApplet {
         panel2.add(button);
         button = new Button("+1");
         button.addActionListener( new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 roll(1);
             }
@@ -268,8 +285,9 @@ public class RbnfDemo extends DemoApplet {
         panel2.add(button);
         button = new Button("<");
         button.addActionListener( new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
-                theNumber *= 10;
+                theNumber = new BigDecimal(theNumber.toString()).multiply(new BigDecimal("10"));
                 redisplay();
             }
         } );
@@ -277,14 +295,16 @@ public class RbnfDemo extends DemoApplet {
         panel2.add(new Panel());
         button = new Button(">");
         button.addActionListener( new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
-                theNumber /= 10;
+                theNumber = new BigDecimal(theNumber.toString()).multiply(new BigDecimal("0.1"));
                 redisplay();
             }
         } );
         panel2.add(button);
         button = new Button("-100");
         button.addActionListener( new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 roll(-100);
             }
@@ -292,6 +312,7 @@ public class RbnfDemo extends DemoApplet {
         panel2.add(button);
         button = new Button("-10");
         button.addActionListener( new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 roll(-10);
             }
@@ -299,6 +320,7 @@ public class RbnfDemo extends DemoApplet {
         panel2.add(button);
         button = new Button("-1");
         button.addActionListener( new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 roll(-1);
             }
@@ -315,6 +337,7 @@ public class RbnfDemo extends DemoApplet {
             formatterMenu.addItem(RbnfSampleRuleSets.sampleRuleSetNames[i]);
         formatterMenu.addItem("Custom");
         formatterMenu.addItemListener(new ItemListener() {
+            @Override
             public void itemStateChanged(ItemEvent e) {
                 Choice source = (Choice)(e.getSource());
                 int item = source.getSelectedIndex();
@@ -344,6 +367,7 @@ public class RbnfDemo extends DemoApplet {
         populateRuleSetMenu();
 
         ruleSetMenu.addItemListener(new ItemListener() {
+            @Override
             public void itemStateChanged(ItemEvent e) {
                 ruleSetName = ruleSetMenu.getSelectedItem();
                 redisplay();
@@ -370,6 +394,7 @@ public class RbnfDemo extends DemoApplet {
         final DemoApplet theApplet = applet;
         window.addWindowListener(
                 new WindowAdapter() {
+                    @Override
                     public void windowClosing(WindowEvent e) {
                         setVisible(false);
                         window.dispose();
@@ -383,13 +408,14 @@ public class RbnfDemo extends DemoApplet {
     }
 
     void roll(int delta) {
-        theNumber += delta;
+        theNumber = theNumber.add(new BigDecimal(delta));
         redisplay();
     }
 
     void redisplay() {
         numberField.setText(numberFormatter.format(theNumber));
-        textField.setText(spelloutFormatter.format(theNumber, ruleSetName));
+        textField.setText(spelloutFormatter
+                .format(theNumber.scale() == 0 ? theNumber.longValue() : theNumber.doubleValue(), ruleSetName));
     }
 
     void makeNewSpelloutFormatter() {
@@ -444,7 +470,7 @@ public class RbnfDemo extends DemoApplet {
 
     private boolean lenientParse = true;
 
-    private double theNumber = 0;
+    private BigDecimal theNumber = BigDecimal.ZERO;
 //    private boolean canEdit = true;
 
     private Choice formatterMenu;
@@ -471,6 +497,7 @@ class DemoTextField extends Component {
         return text;
     }
 
+    @Override
     public void paint(Graphics g) {
         Font font = getFont();
         FontMetrics fm = g.getFontMetrics();
@@ -542,10 +569,12 @@ class DemoTextFieldHolder extends Panel {
         add(sp, "ScrollPane");
     }
 
+    @Override
     public void addFocusListener(FocusListener l) {
         tf1.addFocusListener(l);
     }
 
+    @Override
     public void addKeyListener(KeyListener l) {
         tf1.addKeyListener(l);
     }

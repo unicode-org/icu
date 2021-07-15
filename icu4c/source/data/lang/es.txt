@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 es{
     Keys{
         calendar{"calendario"}
@@ -160,6 +161,7 @@ es{
         eu{"euskera"}
         ewo{"ewondo"}
         fa{"persa"}
+        fa_AF{"darí"}
         fan{"fang"}
         fat{"fanti"}
         ff{"fula"}
@@ -568,11 +570,13 @@ es{
         az{"azerí"}
     }
     Languages%variant{
+        ckb{"kurdo central"}
         ps{"pastú"}
         ug{"uygur"}
     }
     Scripts{
         Arab{"árabe"}
+        Aran{"nastaliq"}
         Armn{"armenio"}
         Avst{"avéstico"}
         Bali{"balinés"}
@@ -657,6 +661,7 @@ es{
         Phag{"phags-pa"}
         Phnx{"fenicio"}
         Plrd{"Pollard Miao"}
+        Qaag{"zawgyi"}
         Rjng{"rejang"}
         Roro{"rongo-rongo"}
         Runr{"rúnico"}
@@ -858,7 +863,6 @@ es{
         VALENCIA{"Valenciano"}
         WADEGILE{"Romanización Wade-Giles"}
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — Todo"}
         category-list{"{0}: {1}"}
@@ -873,6 +877,8 @@ es{
             one{"{0} trazo"}
             other{"{0} trazos"}
         }
+        subscript{"Subíndice {0}"}
+        superscript{"Superíndice {0}"}
     }
     codePatterns{
         language{"Idioma: {0}"}

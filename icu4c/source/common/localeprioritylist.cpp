@@ -1,5 +1,5 @@
 // © 2019 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 
 // localeprioritylist.cpp
 // created: 2019jul11 Markus W. Scherer
@@ -133,7 +133,7 @@ LocalePriorityList::LocalePriorityList(StringPiece s, UErrorCode &errorCode) {
         if (U_FAILURE(errorCode)) { return; }
         Locale locale = Locale(tag.data());
         if (locale.isBogus()) {
-            errorCode = U_MEMORY_ALLOCATION_ERROR;
+            errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
         int32_t weight = WEIGHT_ONE;

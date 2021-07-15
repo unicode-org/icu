@@ -1,0 +1,95 @@
+# © 2020 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+
+title: ICU Documentation
+email: icu-support@icu-project.org
+description: >- # this means to ignore newlines until "baseurl:"
+  ICU is a mature, widely used set of C/C++ and Java libraries providing Unicode
+  and Globalization support for software applications. The ICU User Guide provides
+  documentation on how to use ICU.
+
+baseurl: "/icu" # the subpath for the site
+url: "https://unicode-org.github.io" # the base hostname & protocol for your site
+
+twitter_username: unicode
+github_username:  unicode-org
+
+remote_theme: pmarsceill/just-the-docs
+
+# GitHub uses its own markdown renderer called CommonMarkGhPages.
+#
+# To use this we'd need to set the following options:
+#     markdown: CommonMarkGhPages
+#     Plugins:
+#       jekyll-commonmark-ghpages
+#  
+#     commonmark:
+#       options: ["SMART", "FOOTNOTES"]
+#       extensions: ["strikethrough", "autolink", "table", "tagfilter"]
+#
+# However, it doesn't work well with Jekyll and the Just-The-Docs theme,
+# and causes too many formatting problems. Additionally, it also doesn't
+# have any support for auto-generating a Table of Contents (TOC) section
+# for a page. Due to these reasons, we instead use the recommended
+# markdown renderer for Jekyll, called kramdown.
+#
+markdown: kramdown
+
+# Notes on plugins:
+#  - GitHub Pages ignores all plugins included in the Gemfile.
+#    - Only the ones listed in the _config.yml file (this file) are used.
+#  - There is a very limited set of plugins that GH Pages supports (for security
+#    reasons). The listing is here: https://pages.github.com/versions
+#  - The jekyll-sitemap plugin generates a "sitemap.xml" for search engines.
+#  - We need the "jemoji" plugin for rendering emoji like ":point_right:".
+plugins:
+  - jekyll-remote-theme
+  - jekyll-sitemap
+  - jemoji
+
+search_enabled: true
+
+# Color scheme currently only supports "dark" or nil (light).
+color_scheme: nil
+
+# Aux links for the upper right navigation
+aux_links:
+  "API Docs":
+    - "https://unicode-org.github.io/icu-docs"
+  "ICU on GitHub":
+    - "https://github.com/unicode-org/icu"
+  "ICU Home Page":
+    - "http://site.icu-project.org/"
+  "Unicode Home Page":
+    - "https://www.unicode.org"
+
+# Makes Aux links open in a new tab.
+aux_links_new_tab: true
+
+# Add a "Back to top" link at the bottom of each page.
+back_to_top: true
+back_to_top_text: "Back to top"
+
+# Enable heading anchors
+heading_anchors: true
+
+# Footer content: appears at the bottom of every page after the main content.
+footer_content: "&copy; 2016 and later: Unicode, Inc. and others. License &amp; terms of use: <a href=\"http://www.unicode.org/copyright.html\">http://www.unicode.org/copyright.html</a>"
+
+# Footer content: Add a "Edit this page on GitHub" link.
+# Note: I think this would be better at the *top* of the page, but it isn't possible to do that by default with just-the-docs.
+gh_edit_link: true # show or hide edit this page link
+gh_edit_link_text: "Edit this page on GitHub."
+gh_edit_repository: "https://github.com/unicode-org/icu"
+# NOTE: Since we serve the docs out of the "docs" folder, we need to include that here even though
+# it is technically *not* part of the branch name.
+gh_edit_branch: "master/docs"
+# Can be "tree" or "edit". Edit takes the user to jump into the editor immediately.
+gh_edit_view_mode: "tree"
+
+# Exclude from processing.
+# Excluded items can be processed by explicitly listing the directories or
+# their entries' file path in the `include:` list.
+exclude:
+  - Gemfile
+  - Gemfile.lock

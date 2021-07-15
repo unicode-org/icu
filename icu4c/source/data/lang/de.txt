@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 de{
     Keys{
         calendar{"Kalender"}
@@ -58,7 +59,7 @@ de{
         as{"Assamesisch"}
         asa{"Asu"}
         ase{"Amerikanische Gebärdensprache"}
-        ast{"Asturianisch"}
+        ast{"Asturisch"}
         av{"Awarisch"}
         avk{"Kotava"}
         awa{"Awadhi"}
@@ -68,11 +69,11 @@ de{
         bal{"Belutschisch"}
         ban{"Balinesisch"}
         bar{"Bairisch"}
-        bas{"Basaa"}
+        bas{"Bassa"}
         bax{"Bamun"}
         bbc{"Batak Toba"}
         bbj{"Ghomala"}
-        be{"Weißrussisch"}
+        be{"Belarussisch"}
         bej{"Bedauye"}
         bem{"Bemba"}
         bew{"Betawi"}
@@ -175,6 +176,7 @@ de{
         ewo{"Ewondo"}
         ext{"Extremadurisch"}
         fa{"Persisch"}
+        fa_AF{"Dari"}
         fan{"Pangwe"}
         fat{"Fanti"}
         ff{"Ful"}
@@ -200,7 +202,7 @@ de{
         gay{"Gayo"}
         gba{"Gbaya"}
         gbz{"Gabri"}
-        gd{"Schottisches Gälisch"}
+        gd{"Gälisch (Schottland)"}
         gez{"Geez"}
         gil{"Kiribatisch"}
         gl{"Galicisch"}
@@ -360,7 +362,7 @@ de{
         men{"Mende"}
         mer{"Meru"}
         mfe{"Morisyen"}
-        mg{"Madagassisch"}
+        mg{"Malagasy"}
         mga{"Mittelirisch"}
         mgh{"Makhuwa-Meetto"}
         mgo{"Meta’"}
@@ -393,7 +395,7 @@ de{
         nan{"Min Nan"}
         nap{"Neapolitanisch"}
         naq{"Nama"}
-        nb{"Norwegisch Bokmål"}
+        nb{"Norwegisch (Bokmål)"}
         nd{"Nord-Ndebele"}
         nds{"Niederdeutsch"}
         nds_NL{"Niedersächsisch"}
@@ -406,7 +408,7 @@ de{
         nl{"Niederländisch"}
         nl_BE{"Flämisch"}
         nmg{"Kwasio"}
-        nn{"Norwegisch Nynorsk"}
+        nn{"Norwegisch (Nynorsk)"}
         nnh{"Ngiemboon"}
         no{"Norwegisch"}
         nog{"Nogai"}
@@ -631,18 +633,21 @@ de{
     }
     Languages%long{
         zh_Hans{"Mandarin (Vereinfacht)"}
+        zh_Hant{"Mandarin (traditionell)"}
     }
     Languages%menu{
+        ckb{"Kurdisch (Sorani)"}
         yue{"Chinesisch (Kantonesisch)"}
         zh{"Chinesisch (Mandarin)"}
     }
     Languages%short{
-        az{"Aserbaidschanisch"}
+        en_GB{"Englisch (GB)"}
     }
     Scripts{
         Afak{"Afaka"}
         Aghb{"Kaukasisch-Albanisch"}
         Arab{"Arabisch"}
+        Aran{"Nastaliq"}
         Armn{"Armenisch"}
         Avst{"Avestisch"}
         Bali{"Balinesisch"}
@@ -681,6 +686,7 @@ de{
         Grek{"Griechisch"}
         Gujr{"Gujarati"}
         Guru{"Gurmukhi"}
+        Hanb{"Han mit Bopomofo"}
         Hang{"Hangul"}
         Hani{"Chinesisch"}
         Hano{"Hanunoo"}
@@ -753,6 +759,7 @@ de{
         Phnx{"Phönizisch"}
         Plrd{"Pollard Phonetisch"}
         Prti{"Parthisch"}
+        Qaag{"Zawgyi"}
         Rjng{"Rejang"}
         Roro{"Rongorongo"}
         Runr{"Runenschrift"}
@@ -1010,21 +1017,22 @@ de{
         VALENCIA{"Valencianisch"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"36"}
     characterLabelPattern{
-        all{"{0} — Alle"}
+        all{"{0} — alle"}
         category-list{"{0}: {1}"}
         compatibility{"{0} — Kompatibilität"}
-        enclosed{"{0} — Verschachtelt"}
-        extended{"{0} — Erweitert"}
-        historic{"{0} — Historisch"}
-        miscellaneous{"{0} — Verschiedene"}
-        other{"{0} — Andere"}
+        enclosed{"{0} — verschachtelt"}
+        extended{"{0} — erweitert"}
+        historic{"{0} — historisch"}
+        miscellaneous{"{0} — verschiedene"}
+        other{"{0} — sonstige"}
         scripts{"Schriften — {0}"}
         strokes{
             one{"{0} Strich"}
             other{"{0} Striche"}
         }
+        subscript{"tiefgestellt {0}"}
+        superscript{"hochgestellt {0}"}
     }
     codePatterns{
         language{"Sprache: {0}"}

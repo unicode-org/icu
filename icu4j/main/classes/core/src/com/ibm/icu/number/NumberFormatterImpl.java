@@ -1,10 +1,9 @@
 // © 2017 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.number;
 
-import com.ibm.icu.impl.CurrencyData;
-import com.ibm.icu.impl.CurrencyData.CurrencyFormatInfo;
 import com.ibm.icu.impl.FormattedStringBuilder;
+import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.CompactData.CompactType;
 import com.ibm.icu.impl.number.ConstantAffixModifier;
@@ -12,15 +11,20 @@ import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.Grouper;
 import com.ibm.icu.impl.number.LongNameHandler;
+import com.ibm.icu.impl.number.LongNameMultiplexer;
 import com.ibm.icu.impl.number.MacroProps;
 import com.ibm.icu.impl.number.MicroProps;
 import com.ibm.icu.impl.number.MicroPropsGenerator;
+import com.ibm.icu.impl.number.MixedUnitLongNameHandler;
 import com.ibm.icu.impl.number.MultiplierFormatHandler;
 import com.ibm.icu.impl.number.MutablePatternModifier;
+import com.ibm.icu.impl.number.MutablePatternModifier.ImmutablePatternModifier;
 import com.ibm.icu.impl.number.Padder;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
 import com.ibm.icu.impl.number.RoundingUtils;
+import com.ibm.icu.impl.number.UnitConversionHandler;
+import com.ibm.icu.impl.number.UsagePrefsHandler;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
@@ -42,7 +46,9 @@ import com.ibm.icu.util.MeasureUnit;
  */
 class NumberFormatterImpl {
 
-    /** Builds a "safe" MicroPropsGenerator, which is thread-safe and can be used repeatedly. */
+    /**
+     * Builds a "safe" MicroPropsGenerator, which is thread-safe and can be used repeatedly.
+     */
     public NumberFormatterImpl(MacroProps macros) {
         micros = new MicroProps(true);
         microPropsGenerator = macrosToMicroGenerator(macros, micros, true);
@@ -51,14 +57,14 @@ class NumberFormatterImpl {
     /**
      * Builds and evaluates an "unsafe" MicroPropsGenerator, which is cheaper but can be used only once.
      */
-    public static int formatStatic(
+    public static MicroProps formatStatic(
             MacroProps macros,
             DecimalQuantity inValue,
             FormattedStringBuilder outString) {
         MicroProps micros = preProcessUnsafe(macros, inValue);
         int length = writeNumber(micros, inValue, outString, 0);
-        length += writeAffixes(micros, outString, 0, length);
-        return length;
+        writeAffixes(micros, outString, 0, length);
+        return micros;
     }
 
     /**
@@ -85,11 +91,11 @@ class NumberFormatterImpl {
     /**
      * Evaluates the "safe" MicroPropsGenerator created by "fromMacros".
      */
-    public int format(DecimalQuantity inValue, FormattedStringBuilder outString) {
+    public MicroProps format(DecimalQuantity inValue, FormattedStringBuilder outString) {
         MicroProps micros = preProcess(inValue);
         int length = writeNumber(micros, inValue, outString, 0);
-        length += writeAffixes(micros, outString, 0, length);
-        return length;
+        writeAffixes(micros, outString, 0, length);
+        return micros;
     }
 
     /**
@@ -97,7 +103,6 @@ class NumberFormatterImpl {
      */
     public MicroProps preProcess(DecimalQuantity inValue) {
         MicroProps micros = microPropsGenerator.processQuantity(inValue);
-        micros.rounder.apply(inValue);
         if (micros.integerWidth.maxInt == -1) {
             inValue.setMinInteger(micros.integerWidth.minInt);
         } else {
@@ -111,7 +116,6 @@ class NumberFormatterImpl {
         MicroProps micros = new MicroProps(false);
         MicroPropsGenerator microPropsGenerator = macrosToMicroGenerator(macros, micros, false);
         micros = microPropsGenerator.processQuantity(inValue);
-        micros.rounder.apply(inValue);
         if (micros.integerWidth.maxInt == -1) {
             inValue.setMinInteger(micros.integerWidth.minInt);
         } else {
@@ -149,10 +153,8 @@ class NumberFormatterImpl {
         return unit != null && "currency".equals(unit.getType());
     }
 
-    private static boolean unitIsNoUnit(MeasureUnit unit) {
-        // NOTE: In ICU4C, units cannot be null, and the default unit is a NoUnit.
-        // In ICU4J, return TRUE for a null unit from this method.
-        return unit == null || "none".equals(unit.getType());
+    private static boolean unitIsBaseUnit(MeasureUnit unit) {
+        return unit == null;
     }
 
     private static boolean unitIsPercent(MeasureUnit unit) {
@@ -184,9 +186,10 @@ class NumberFormatterImpl {
 
         // Pre-compute a few values for efficiency.
         boolean isCurrency = unitIsCurrency(macros.unit);
-        boolean isNoUnit = unitIsNoUnit(macros.unit);
+        boolean isBaseUnit = unitIsBaseUnit(macros.unit);
         boolean isPercent = unitIsPercent(macros.unit);
         boolean isPermille = unitIsPermille(macros.unit);
+        boolean isCompactNotation = (macros.notation instanceof CompactNotation);
         boolean isAccounting = macros.sign == SignDisplay.ACCOUNTING
                 || macros.sign == SignDisplay.ACCOUNTING_ALWAYS
                 || macros.sign == SignDisplay.ACCOUNTING_EXCEPT_ZERO;
@@ -195,8 +198,21 @@ class NumberFormatterImpl {
         if (macros.unitWidth != null) {
             unitWidth = macros.unitWidth;
         }
-        boolean isCldrUnit = !isCurrency && !isNoUnit &&
-            (unitWidth == UnitWidth.FULL_NAME || !(isPercent || isPermille));
+        // Use CLDR unit data for all MeasureUnits (not currency and not
+        // no-unit), except use the dedicated percent pattern for percent and
+        // permille. However, use the CLDR unit data for percent/permille if a
+        // long name was requested OR if compact notation is being used, since
+        // compact notation overrides the middle modifier (micros.modMiddle)
+        // normally used for the percent pattern.
+        boolean isCldrUnit = !isCurrency
+            && !isBaseUnit
+            && (unitWidth == UnitWidth.FULL_NAME
+                || !(isPercent || isPermille)
+                || isCompactNotation
+            );
+        boolean isMixedUnit = isCldrUnit && macros.unit.getType() == null &&
+                              macros.unit.getComplexity() == MeasureUnit.Complexity.MIXED;
+
         PluralRules rules = macros.rules;
 
         // Select the numbering system.
@@ -214,21 +230,16 @@ class NumberFormatterImpl {
             micros.symbols = (DecimalFormatSymbols) macros.symbols;
         } else {
             micros.symbols = DecimalFormatSymbols.forNumberingSystem(macros.loc, ns);
+            if (isCurrency) {
+                micros.symbols.setCurrency(currency);
+            }
         }
 
         // Load and parse the pattern string. It is used for grouping sizes and affixes only.
         // If we are formatting currency, check for a currency-specific pattern.
         String pattern = null;
-        if (isCurrency) {
-            CurrencyFormatInfo info = CurrencyData.provider.getInstance(macros.loc, true)
-                    .getFormatInfo(currency.getCurrencyCode());
-            if (info != null) {
-                pattern = info.currencyPattern;
-                // It's clunky to clone an object here, but this code is not frequently executed.
-                micros.symbols = (DecimalFormatSymbols) micros.symbols.clone();
-                micros.symbols.setMonetaryDecimalSeparatorString(info.monetaryDecimalSeparator);
-                micros.symbols.setMonetaryGroupingSeparatorString(info.monetaryGroupingSeparator);
-            }
+        if (isCurrency && micros.symbols.getCurrencyPattern() != null) {
+            pattern = micros.symbols.getCurrencyPattern();
         }
         if (pattern == null) {
             int patternStyle;
@@ -254,6 +265,20 @@ class NumberFormatterImpl {
         /// START POPULATING THE DEFAULT MICROPROPS AND BUILDING THE MICROPROPS GENERATOR ///
         /////////////////////////////////////////////////////////////////////////////////////
 
+        // Unit Preferences and Conversions as our first step
+        UsagePrefsHandler usagePrefsHandler = null;
+        if (macros.usage != null) {
+            if (!isCldrUnit) {
+                throw new IllegalIcuArgumentException(
+                        "We only support \"usage\" when the input unit is specified, and is a CLDR Unit.");
+            }
+            chain = usagePrefsHandler = new UsagePrefsHandler(macros.loc, macros.unit, macros.usage, chain);
+        } else if (isMixedUnit) {
+            // TODO(icu-units#97): The input unit should be the largest unit, not the first unit, in the identifier.
+            MeasureUnit inputUnit = macros.unit.splitToSingleUnits().get(0);
+            chain = new UnitConversionHandler(inputUnit, macros.unit, chain);
+        }
+
         // Multiplier
         if (macros.scale != null) {
             chain = new MultiplierFormatHandler(macros.scale, chain);
@@ -262,10 +287,13 @@ class NumberFormatterImpl {
         // Rounding strategy
         if (macros.precision != null) {
             micros.rounder = macros.precision;
-        } else if (macros.notation instanceof CompactNotation) {
+        } else if (isCompactNotation) {
             micros.rounder = Precision.COMPACT_STRATEGY;
         } else if (isCurrency) {
             micros.rounder = Precision.MONETARY_STANDARD;
+        } else if (macros.usage != null) {
+            // Bogus Precision - it will get set in the UsagePrefsHandler instead
+            micros.rounder = Precision.BOGUS_PRECISION;
         } else {
             micros.rounder = Precision.DEFAULT_MAX_FRAC_6;
         }
@@ -280,7 +308,7 @@ class NumberFormatterImpl {
             micros.grouping = (Grouper) macros.grouping;
         } else if (macros.grouping instanceof GroupingStrategy) {
             micros.grouping = Grouper.forStrategy((GroupingStrategy) macros.grouping);
-        } else if (macros.notation instanceof CompactNotation) {
+        } else if (isCompactNotation) {
             // Compact notation uses minGrouping by default since ICU 59
             micros.grouping = Grouper.forStrategy(GroupingStrategy.MIN2);
         } else {
@@ -341,10 +369,9 @@ class NumberFormatterImpl {
         } else {
             patternMod.setSymbols(micros.symbols, currency, unitWidth, null);
         }
+        ImmutablePatternModifier immPatternMod = null;
         if (safe) {
-            chain = patternMod.createImmutableAndChain(chain);
-        } else {
-            chain = patternMod.addToChain(chain);
+            immPatternMod = patternMod.createImmutable();
         }
 
         // Outer modifier (CLDR units and currency long names)
@@ -353,8 +380,33 @@ class NumberFormatterImpl {
                 // Lazily create PluralRules
                 rules = PluralRules.forLocale(macros.loc);
             }
-            chain = LongNameHandler
-                    .forMeasureUnit(macros.loc, macros.unit, macros.perUnit, unitWidth, rules, chain);
+            PluralRules pluralRules = macros.rules != null ?
+                    macros.rules :
+                    PluralRules.forLocale(macros.loc);
+
+            if (macros.usage != null) {
+                assert usagePrefsHandler != null;
+                chain = LongNameMultiplexer.forMeasureUnits(
+                        macros.loc,
+                        usagePrefsHandler.getOutputUnits(),
+                        unitWidth,
+                        pluralRules,
+                        chain);
+            } else if (isMixedUnit) {
+                chain = MixedUnitLongNameHandler.forMeasureUnit(
+                        macros.loc,
+                        macros.unit,
+                        unitWidth,
+                        pluralRules,
+                        chain);
+            } else {
+                chain = LongNameHandler.forMeasureUnit(macros.loc,
+                        macros.unit,
+                        macros.perUnit,
+                        unitWidth,
+                        pluralRules,
+                        chain);
+            }
         } else if (isCurrency && unitWidth == UnitWidth.FULL_NAME) {
             if (rules == null) {
                 // Lazily create PluralRules
@@ -367,9 +419,7 @@ class NumberFormatterImpl {
         }
 
         // Compact notation
-        // NOTE: Compact notation can (but might not) override the middle modifier and rounding.
-        // It therefore needs to go at the end of the chain.
-        if (macros.notation instanceof CompactNotation) {
+        if (isCompactNotation) {
             if (rules == null) {
                 // Lazily create PluralRules
                 rules = PluralRules.forLocale(macros.loc);
@@ -381,8 +431,16 @@ class NumberFormatterImpl {
                     micros.nsName,
                     compactType,
                     rules,
-                    safe ? patternMod : null,
+                    patternMod,
+                    safe,
                     chain);
+        }
+
+        // Always add the pattern modifier as the last element of the chain.
+        if (safe) {
+            chain = immPatternMod.addToChain(chain);
+        } else {
+            chain = patternMod.addToChain(chain);
         }
 
         return chain;
@@ -440,6 +498,19 @@ class NumberFormatterImpl {
 
             // Add the fraction digits
             length += writeFractionDigits(micros, quantity, string, length + index);
+
+            if (length == 0) {
+                // Force output of the digit for value 0
+                if (micros.symbols.getCodePointZero() != -1) {
+                    length += string.insertCodePoint(index,
+                            micros.symbols.getCodePointZero(),
+                            NumberFormat.Field.INTEGER);
+                } else {
+                    length += string.insert(index,
+                            micros.symbols.getDigitStringsLocal()[0],
+                            NumberFormat.Field.INTEGER);
+                }
+            }
         }
 
         return length;

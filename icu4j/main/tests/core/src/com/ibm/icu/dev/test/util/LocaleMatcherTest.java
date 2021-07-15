@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  ******************************************************************************************
  * Copyright (C) 2009-2015, Google, Inc.; International Business Machines Corporation and *
@@ -194,7 +194,7 @@ public class LocaleMatcherTest extends TestFmwk {
         assertEquals("getBestMatchResult(ja_JP).supp",
                      "en_GB", locString(result.getSupportedULocale()));
         assertEquals("getBestMatchResult(ja_JP).suppIndex",
-                     1, result.getSupportedIndex());
+                     -1, result.getSupportedIndex());
     }
 
     @Test
@@ -217,6 +217,30 @@ public class LocaleMatcherTest extends TestFmwk {
         LocaleMatcher.Result result = matcher.getBestMatchResult(new ULocale("ja_JP"));
         assertEquals("getBestMatchResult(ja_JP).supp",
                      "de", locString(result.getSupportedULocale()));
+        assertEquals("getBestMatchResult(ja_JP).suppIndex",
+                     -1, result.getSupportedIndex());
+    }
+
+    @Test
+    public void testNoDefault() {
+        // We want null instead of any default locale.
+        List<ULocale> locales = Arrays.asList(
+                new ULocale("fr"), new ULocale("en_GB"), new ULocale("en"));
+        LocaleMatcher matcher = LocaleMatcher.builder().
+            setSupportedULocales(locales).
+            setNoDefaultLocale().
+            build();
+        ULocale best = matcher.getBestMatch("en_GB");
+        assertEquals("getBestMatch(en_GB)", "en_GB", locString(best));
+        best = matcher.getBestMatch("en_US");
+        assertEquals("getBestMatch(en_US)", "en", locString(best));
+        best = matcher.getBestMatch("fr_FR");
+        assertEquals("getBestMatch(fr_FR)", "fr", locString(best));
+        best = matcher.getBestMatch("ja_JP");
+        assertEquals("getBestMatch(ja_JP)", "(null)", locString(best));
+        LocaleMatcher.Result result = matcher.getBestMatchResult(new ULocale("ja_JP"));
+        assertEquals("getBestMatchResult(ja_JP).supp",
+                     "(null)", locString(result.getSupportedULocale()));
         assertEquals("getBestMatchResult(ja_JP).suppIndex",
                      -1, result.getSupportedIndex());
     }
@@ -341,7 +365,7 @@ public class LocaleMatcherTest extends TestFmwk {
     }
 
     @Test
-    public void testMatchGrandfatheredCode() {
+    public void testMatchLegacyCode() {
         final LocaleMatcher matcher = newLocaleMatcher("fr, i_klingon, en_Latn_US");
         assertEquals("en_Latn_US", matcher.getBestMatch("en_GB_oed").toString());
         // assertEquals("tlh", matcher.getBestMatch("i_klingon").toString());
@@ -636,6 +660,44 @@ public class LocaleMatcherTest extends TestFmwk {
                 setSupportedULocales(supported.getULocales()).
                 setDemotionPerDesiredLocale(LocaleMatcher.Demotion.REGION).build();
         assertEquals("region demotion", ULocale.FRENCH, regionDemotion.getBestMatch(desired));
+    }
+
+    @Test
+    public void testDirection() {
+        List<ULocale> desired = Arrays.asList(new ULocale("arz-EG"), new ULocale("nb-DK"));
+        LocaleMatcher.Builder builder =
+                LocaleMatcher.builder().setSupportedLocales("ar, nn");
+        // arz is a close one-way match to ar, and the region matches.
+        // (Egyptian Arabic vs. Arabic)
+        LocaleMatcher withOneWay = builder.build();
+        assertEquals("with one-way", "ar", withOneWay.getBestMatch(desired).toString());
+        // nb is a less close two-way match to nn, and the regions differ.
+        // (Norwegian Bokmal vs. Nynorsk)
+        LocaleMatcher onlyTwoWay = builder.setDirection(LocaleMatcher.Direction.ONLY_TWO_WAY).build();
+        assertEquals("only two-way", "nn", onlyTwoWay.getBestMatch(desired).toString());
+    }
+
+    @Test
+    public void testMaxDistanceAndIsMatch() {
+        LocaleMatcher.Builder builder = LocaleMatcher.builder();
+        LocaleMatcher standard = builder.build();
+        ULocale germanLux = new ULocale("de-LU");
+        ULocale germanPhoenician = new ULocale("de-Phnx-AT");
+        ULocale greek = new ULocale("el");
+        assertTrue("standard de-LU / de", standard.isMatch(germanLux, ULocale.GERMAN));
+        assertFalse("standard de-Phnx-AT / de", standard.isMatch(germanPhoenician, ULocale.GERMAN));
+
+        // Allow a script difference to still match.
+        LocaleMatcher loose = builder.setMaxDistance(germanPhoenician, ULocale.GERMAN).build();
+        assertTrue("loose de-LU / de", loose.isMatch(germanLux, ULocale.GERMAN));
+        assertTrue("loose de-Phnx-AT / de", loose.isMatch(germanPhoenician, ULocale.GERMAN));
+        assertFalse("loose el / de", loose.isMatch(greek, ULocale.GERMAN));
+
+        // Allow at most a regional difference.
+        LocaleMatcher regional = builder.setMaxDistance(new Locale("de", "AT"), Locale.GERMAN).build();
+        assertTrue("regional de-LU / de", regional.isMatch(new Locale("de", "LU"), Locale.GERMAN));
+        assertFalse("regional da / no", regional.isMatch(new Locale("da"), new Locale("no")));
+        assertFalse("regional zh-Hant / zh", regional.isMatch(Locale.CHINESE, Locale.TRADITIONAL_CHINESE));
     }
 
     @Test

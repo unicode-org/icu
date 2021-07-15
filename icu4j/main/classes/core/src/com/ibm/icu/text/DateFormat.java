@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *   Copyright (C) 1996-2016, International Business Machines
  *   Corporation and others.  All Rights Reserved.
@@ -534,6 +534,36 @@ public abstract class DateFormat extends UFormat {
      * boolean attributes for this instance. Inclusion in this is indicates a true condition.
      */
     private EnumSet<BooleanAttribute> booleanAttributes = EnumSet.allOf(BooleanAttribute.class);
+
+    /**
+     * Hour Cycle
+     * @draft ICU 67
+     */
+    public enum HourCycle {
+        /**
+         * hour in am/pm (0~11)
+         * @draft ICU 67
+         */
+        HOUR_CYCLE_11,
+
+        /**
+         * hour in am/pm (1~12)
+         * @draft ICU 67
+         */
+        HOUR_CYCLE_12,
+
+        /**
+         * hour in day (0~23)
+         * @draft ICU 67
+         */
+        HOUR_CYCLE_23,
+
+        /**
+         * hour in day (1~24)
+         * @draft ICU 67
+         */
+        HOUR_CYCLE_24;
+    };
 
     /*
      * Capitalization setting, hoisted to DateFormat ICU 53

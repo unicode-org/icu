@@ -1,11 +1,10 @@
 // © 2018 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.number;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.AttributedCharacterIterator;
-import java.text.FieldPosition;
 import java.util.Arrays;
 
 import com.ibm.icu.impl.FormattedStringBuilder;
@@ -14,6 +13,7 @@ import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.number.NumberRangeFormatter.RangeIdentityResult;
 import com.ibm.icu.text.ConstrainedFieldPosition;
 import com.ibm.icu.text.FormattedValue;
+import com.ibm.icu.text.PluralRules.IFixedDecimal;
 import com.ibm.icu.util.ICUUncheckedIOException;
 
 /**
@@ -69,8 +69,7 @@ public class FormattedNumberRange implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     @Override
     public char charAt(int index) {
@@ -80,8 +79,7 @@ public class FormattedNumberRange implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     @Override
     public int length() {
@@ -91,8 +89,7 @@ public class FormattedNumberRange implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     @Override
     public CharSequence subSequence(int start, int end) {
@@ -102,45 +99,11 @@ public class FormattedNumberRange implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     @Override
     public boolean nextPosition(ConstrainedFieldPosition cfpos) {
         return FormattedValueStringBuilderImpl.nextPosition(string, cfpos, null);
-    }
-
-    /**
-     * Determines the start (inclusive) and end (exclusive) indices of the next occurrence of the given
-     * <em>field</em> in the output string. This allows you to determine the locations of, for example,
-     * the integer part, fraction part, or symbols.
-     * <p>
-     * If both sides of the range have the same field, the field will occur twice, once before the range separator and
-     * once after the range separator, if applicable.
-     * <p>
-     * If a field occurs just once, calling this method will find that occurrence and return it. If a field occurs
-     * multiple times, this method may be called repeatedly with the following pattern:
-     *
-     * <pre>
-     * FieldPosition fpos = new FieldPosition(NumberFormat.Field.INTEGER);
-     * while (formattedNumberRange.nextFieldPosition(fpos, status)) {
-     *     // do something with fpos.
-     * }
-     * </pre>
-     * <p>
-     * This method is useful if you know which field to query. If you want all available field position information, use
-     * {@link #toCharacterIterator()}.
-     *
-     * @param fieldPosition
-     *            Input+output variable. See {@link FormattedNumber#nextFieldPosition(FieldPosition)}.
-     * @return true if a new occurrence of the field was found; false otherwise.
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
-     * @see com.ibm.icu.text.NumberFormat.Field
-     * @see NumberRangeFormatter
-     */
-    public boolean nextFieldPosition(FieldPosition fieldPosition) {
-        return FormattedValueStringBuilderImpl.nextFieldPosition(string, fieldPosition);
     }
 
     /**
@@ -196,8 +159,7 @@ public class FormattedNumberRange implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     @Override
     public int hashCode() {
@@ -210,8 +172,7 @@ public class FormattedNumberRange implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 63
      */
     @Override
     public boolean equals(Object other) {
@@ -228,5 +189,23 @@ public class FormattedNumberRange implements FormattedValue {
                 && Arrays.equals(string.toFieldArray(), _other.string.toFieldArray())
                 && quantity1.toBigDecimal().equals(_other.quantity1.toBigDecimal())
                 && quantity2.toBigDecimal().equals(_other.quantity2.toBigDecimal());
+    }
+
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public IFixedDecimal getFirstFixedDecimal() {
+        return quantity1;
+    }
+
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public IFixedDecimal getSecondFixedDecimal() {
+        return quantity2;
     }
 }

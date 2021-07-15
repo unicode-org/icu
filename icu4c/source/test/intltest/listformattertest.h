@@ -45,18 +45,16 @@ class ListFormatterTest : public IntlTestWithFieldPosition {
     void TestZulu();
     void TestOutOfOrderPatterns();
     void Test9946();
-    void TestFieldPositionIteratorWontCrash();
     void TestFieldPositionIteratorWith1Item();
     void TestFieldPositionIteratorWith2Items();
     void TestFieldPositionIteratorWith3Items();
-    void TestFieldPositionIteratorWith1ItemAndDataBefore();
-    void TestFieldPositionIteratorWith2ItemsAndDataBefore();
-    void TestFieldPositionIteratorWith3ItemsAndDataBefore();
     void TestFieldPositionIteratorWith2ItemsPatternShift();
     void TestFieldPositionIteratorWith3ItemsPatternShift();
     void TestFormattedValue();
     void TestDifferentStyles();
     void TestBadStylesFail();
+    void TestCreateStyled();
+    void TestContextual();
 
   private:
     void CheckFormatting(
@@ -66,15 +64,15 @@ class ListFormatterTest : public IntlTestWithFieldPosition {
         const UnicodeString& expected_result,
         const char* testName);
     void ExpectPositions(
-        FieldPositionIterator& iter,
+        const FormattedList& iter,
         int32_t *values,
-        int32_t tupleCount);
+        int32_t tupleCount,
+        UErrorCode& status);
     void RunTestFieldPositionIteratorWithNItems(
         UnicodeString *data,
         int32_t n,
         int32_t *values,
         int32_t tupleCount,
-        UnicodeString& appendTo,
         const char16_t *expectedFormatted,
         const char* testName);
     void RunTestFieldPositionIteratorWithNItemsPatternShift(
@@ -82,7 +80,6 @@ class ListFormatterTest : public IntlTestWithFieldPosition {
         int32_t n,
         int32_t *values,
         int32_t tupleCount,
-        UnicodeString& appendTo,
         const char16_t *expectedFormatted,
         const char* testName);
     void RunTestFieldPositionIteratorWithFormatter(
@@ -91,7 +88,6 @@ class ListFormatterTest : public IntlTestWithFieldPosition {
         int32_t n,
         int32_t *values,
         int32_t tupleCount,
-        UnicodeString& appendTo,
         const char16_t *expectedFormatted,
         const char* testName);
     void CheckFourCases(

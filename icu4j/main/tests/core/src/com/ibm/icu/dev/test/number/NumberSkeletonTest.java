@@ -1,5 +1,5 @@
 // © 2018 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.number;
 
 import static org.junit.Assert.assertEquals;
@@ -28,26 +28,35 @@ public class NumberSkeletonTest {
                 "precision-integer",
                 "precision-unlimited",
                 "@@@##",
+                "@@*",
                 "@@+",
                 ".000##",
+                ".00*",
                 ".00+",
                 ".",
+                ".*",
                 ".+",
                 ".######",
+                ".00/@@*",
                 ".00/@@+",
                 ".00/@##",
                 "precision-increment/3.14",
                 "precision-currency-standard",
                 "precision-integer rounding-mode-half-up",
                 ".00# rounding-mode-ceiling",
+                ".00/@@* rounding-mode-floor",
                 ".00/@@+ rounding-mode-floor",
                 "scientific",
+                "scientific/*ee",
                 "scientific/+ee",
                 "scientific/sign-always",
+                "scientific/*ee/sign-always",
                 "scientific/+ee/sign-always",
+                "scientific/sign-always/*ee",
                 "scientific/sign-always/+ee",
                 "scientific/sign-except-zero",
                 "engineering",
+                "engineering/*eee",
                 "engineering/+eee",
                 "compact-short",
                 "compact-long",
@@ -57,6 +66,7 @@ public class NumberSkeletonTest {
                 "measure-unit/length-meter",
                 "measure-unit/area-square-meter",
                 "measure-unit/energy-joule per-measure-unit/length-meter",
+                "unit/square-meter-per-square-meter",
                 "currency/XXX",
                 "currency/ZZZ",
                 "currency/usd",
@@ -67,6 +77,7 @@ public class NumberSkeletonTest {
                 "group-thousands",
                 "integer-width/00",
                 "integer-width/#0",
+                "integer-width/*00",
                 "integer-width/+00",
                 "sign-always",
                 "sign-auto",
@@ -92,7 +103,20 @@ public class NumberSkeletonTest {
                 "numbering-system/latn",
                 "precision-integer/@##",
                 "precision-integer rounding-mode-ceiling",
-                "precision-currency-cash rounding-mode-ceiling" };
+                "precision-currency-cash rounding-mode-ceiling",
+                "0",
+                "00",
+                "000",
+                "E0",
+                "E00",
+                "E000",
+                "EE0",
+                "EE00",
+                "EE+?0",
+                "EE+?00",
+                "EE+!0",
+                "EE+!00",
+        };
 
         for (String cas : cases) {
             try {
@@ -108,16 +132,22 @@ public class NumberSkeletonTest {
         String[] cases = {
                 ".00x",
                 ".00##0",
+                ".##*",
+                ".00##*",
+                ".0#*",
+                "@#*",
                 ".##+",
                 ".00##+",
                 ".0#+",
+                "@#+",
                 "@@x",
                 "@@##0",
-                "@#+",
                 ".00/@",
                 ".00/@@",
                 ".00/@@x",
                 ".00/@@#",
+                ".00/@@#*",
+                ".00/floor/@@*", // wrong order
                 ".00/@@#+",
                 ".00/floor/@@+", // wrong order
                 "precision-increment/français", // non-invariant characters for C++
@@ -133,11 +163,29 @@ public class NumberSkeletonTest {
                 "currency/ççç", // three characters but not ASCII
                 "measure-unit/foo",
                 "integer-width/xxx",
+                "integer-width/0*",
+                "integer-width/*0#",
+                "integer-width/*#",
+                "integer-width/*#0",
                 "integer-width/0+",
                 "integer-width/+0#",
                 "integer-width/+#",
                 "integer-width/+#0",
-                "scientific/foo" };
+                "scientific/foo",
+                "E",
+                "E1",
+                "E+",
+                "E+?",
+                "E+!",
+                "E+0",
+                "EE",
+                "EE+",
+                "EEE",
+                "EEE0",
+                "001",
+                "00*",
+                "00+",
+        };
 
         for (String cas : cases) {
             try {
@@ -270,6 +318,26 @@ public class NumberSkeletonTest {
     }
 
     @Test
+    public void wildcardCharacters() {
+        String[][] cases = {
+            { ".00*", ".00+" },
+            { "@@*", "@@+" },
+            { ".00/@@*", ".00/@@+" },
+            { "scientific/*ee", "scientific/+ee" },
+            { "integer-width/*00", "integer-width/+00" },
+        };
+    
+        for (String[] cas : cases) {
+            String star = cas[0];
+            String plus = cas[1];
+    
+            String normalized = NumberFormatter.forSkeleton(plus)
+                .toSkeleton();
+            assertEquals("Plus should normalize to star", star, normalized);
+        }
+    }
+
+    @Test
     public void roundingModeNames() {
         for (RoundingMode mode : RoundingMode.values()) {
             if (mode == RoundingMode.HALF_EVEN) {
@@ -279,6 +347,67 @@ public class NumberSkeletonTest {
             String skeleton = NumberFormatter.with().roundingMode(mode).toSkeleton();
             String modeString = mode.toString().toLowerCase().replace('_', '-');
             assertEquals(mode.toString(), modeString, skeleton.substring(14));
+        }
+    }
+
+    @Test
+    public void perUnitInArabic() {
+        String[][] cases = {
+                {"area", "acre"},
+                {"digital", "bit"},
+                {"digital", "byte"},
+                {"temperature", "celsius"},
+                {"length", "centimeter"},
+                {"duration", "day"},
+                {"angle", "degree"},
+                {"temperature", "fahrenheit"},
+                {"volume", "fluid-ounce"},
+                {"length", "foot"},
+                {"volume", "gallon"},
+                {"digital", "gigabit"},
+                {"digital", "gigabyte"},
+                {"mass", "gram"},
+                {"area", "hectare"},
+                {"duration", "hour"},
+                {"length", "inch"},
+                {"digital", "kilobit"},
+                {"digital", "kilobyte"},
+                {"mass", "kilogram"},
+                {"length", "kilometer"},
+                {"volume", "liter"},
+                {"digital", "megabit"},
+                {"digital", "megabyte"},
+                {"length", "meter"},
+                {"length", "mile"},
+                {"length", "mile-scandinavian"},
+                {"volume", "milliliter"},
+                {"length", "millimeter"},
+                {"duration", "millisecond"},
+                {"duration", "minute"},
+                {"duration", "month"},
+                {"mass", "ounce"},
+                {"concentr", "percent"},
+                {"digital", "petabyte"},
+                {"mass", "pound"},
+                {"duration", "second"},
+                {"mass", "stone"},
+                {"digital", "terabit"},
+                {"digital", "terabyte"},
+                {"duration", "week"},
+                {"length", "yard"},
+                {"duration", "year"},
+        };
+
+        ULocale arabic = new ULocale("ar");
+        for (String[] cas1 : cases) {
+            for (String[] cas2 : cases) {
+                String skeleton = "measure-unit/";
+                skeleton += cas1[0] + "-" + cas1[1] + " per-measure-unit/" + cas2[0] + "-" + cas2[1];
+
+                String actual = NumberFormatter.forSkeleton(skeleton).locale(arabic).format(5142.3)
+                        .toString();
+                // Just make sure it won't throw exception
+            }
         }
     }
 }

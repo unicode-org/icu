@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2010-2011, International Business Machines Corporation and    *
@@ -38,13 +38,13 @@ public class LanguageTag {
     private List<String> _variants = Collections.emptyList();   // variant subtags
     private List<String> _extensions = Collections.emptyList(); // extensions
 
-    // Map contains grandfathered tags and its preferred mappings from
-    // http://www.ietf.org/rfc/rfc5646.txt
-    private static final Map<AsciiUtil.CaseInsensitiveKey, String[]> GRANDFATHERED =
+    // The Map contains legacy language tags (marked as “Type: grandfathered” in BCP 47)
+    // and their preferred mappings from BCP 47.
+    private static final Map<AsciiUtil.CaseInsensitiveKey, String[]> LEGACY =
         new HashMap<AsciiUtil.CaseInsensitiveKey, String[]>();
 
     static {
-        // grandfathered = irregular           ; non-redundant tags registered
+        // legacy        = irregular           ; non-redundant tags registered
         //               / regular             ; during the RFC 3066 era
         //
         // irregular     = "en-GB-oed"         ; irregular tags do not match
@@ -105,57 +105,17 @@ public class LanguageTag {
             {"zh-xiang",    "hsn"},
         };
         for (String[] e : entries) {
-            GRANDFATHERED.put(new AsciiUtil.CaseInsensitiveKey(e[0]), e);
+            LEGACY.put(new AsciiUtil.CaseInsensitiveKey(e[0]), e);
         }
     }
 
     private LanguageTag() {
     }
 
-    /*
-     * BNF in RFC5464
-     *  
-     * Language-Tag  = langtag             ; normal language tags
-     *               / privateuse          ; private use tag
-     *               / grandfathered       ; grandfathered tags
-     *
-     * 
-     * langtag       = language
-     *                 ["-" script]
-     *                 ["-" region]
-     *                 *("-" variant)
-     *                 *("-" extension)
-     *                 ["-" privateuse]
-     * 
-     * language      = 2*3ALPHA            ; shortest ISO 639 code
-     *                 ["-" extlang]       ; sometimes followed by
-     *                                     ; extended language subtags
-     *               / 4ALPHA              ; or reserved for future use
-     *               / 5*8ALPHA            ; or registered language subtag
-     * 
-     * extlang       = 3ALPHA              ; selected ISO 639 codes
-     *                 *2("-" 3ALPHA)      ; permanently reserved
-     * 
-     * script        = 4ALPHA              ; ISO 15924 code
-     * 
-     * region        = 2ALPHA              ; ISO 3166-1 code
-     *               / 3DIGIT              ; UN M.49 code
-     * 
-     * variant       = 5*8alphanum         ; registered variants
-     *               / (DIGIT 3alphanum)
-     * 
-     * extension     = singleton 1*("-" (2*8alphanum))
-     * 
-     *                                     ; Single alphanumerics
-     *                                     ; "x" reserved for private use
-     * singleton     = DIGIT               ; 0 - 9
-     *               / %x41-57             ; A - W
-     *               / %x59-5A             ; Y - Z
-     *               / %x61-77             ; a - w
-     *               / %x79-7A             ; y - z
-     * 
-     * privateuse    = "x" 1*("-" (1*8alphanum))
-     * 
+    /**
+     * See BCP 47 “Tags for Identifying Languages”:
+     * https://www.rfc-editor.org/info/bcp47 -->
+     * https://www.rfc-editor.org/rfc/rfc5646.html#section-2.1
      */
     public static LanguageTag parse(String languageTag, ParseStatus sts) {
         if (sts == null) {
@@ -166,8 +126,7 @@ public class LanguageTag {
 
         StringTokenIterator itr;
 
-        // Check if the tag is grandfathered
-        String[] gfmap = GRANDFATHERED.get(new AsciiUtil.CaseInsensitiveKey(languageTag));
+        String[] gfmap = LEGACY.get(new AsciiUtil.CaseInsensitiveKey(languageTag));
         if (gfmap != null) {
             // use preferred mapping
             itr = new StringTokenIterator(gfmap[1], SEP);

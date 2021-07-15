@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2011-2016, International Business Machines Corporation
@@ -215,7 +215,7 @@ public class Region implements Comparable<Region> {
 
         regions = new ArrayList<Region>(regionCodes.size());
 
-        // First process the region codes and create the master array of regions.
+        // First process the region codes and create the primary array of regions.
         for ( String id : regionCodes) {
             Region r = new Region();
             r.id = id;
@@ -244,7 +244,7 @@ public class Region implements Comparable<Region> {
                 Region r;
                 if ( regionIDMap.containsKey(aliasFrom) ) {  // This is a deprecated region
                     r = regionIDMap.get(aliasFrom);
-                } else { // Deprecated region code not in the master codes list - so need to create a deprecated region for it.
+                } else { // Deprecated region code not in the primary codes list - so need to create a deprecated region for it.
                     r = new Region();
                     r.id = aliasFrom;
                     regionIDMap.put(aliasFrom, r);

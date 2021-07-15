@@ -2162,13 +2162,13 @@ static void TestFallback()
         UErrorCode err =U_ZERO_ERROR;
         UResourceBundle* myResB = ures_open(NULL,"no_NO_NY",&err);
         UResourceBundle* resLocID = ures_getByKey(myResB, "Version", NULL, &err);
-        UResourceBundle* tResB;
-        UResourceBundle* zoneResource;
         const UChar* version = NULL;
-        static const UChar versionStr[] = u"36"; // 36 in nn_NO
+        static const UChar versionStr[] = u"38"; // 38 in nn_NO or in a parent bundle/root
 
-        if(err != U_ZERO_ERROR){
-            log_data_err("Expected U_ZERO_ERROR when trying to test no_NO_NY aliased to nn_NO for Version err=%s\n",u_errorName(err));
+        if(U_FAILURE(err)) {
+            log_data_err("Expected success when trying to test no_NO_NY aliased to nn_NO for Version "
+                         "err=%s\n",
+                         u_errorName(err));
             return;
         }
         version = tres_getString(resLocID, -1, NULL, &resultLen, &err);
@@ -2177,11 +2177,12 @@ static void TestFallback()
             char g[100];
             u_austrcpy(x, versionStr);
             u_austrcpy(g, version);
-            log_data_err("ures_getString(resLocID, &resultLen, &err) returned an unexpected version value. Expected '%s', but got '%s'\n",
-                    x, g);
+            log_data_err("ures_getString(resLocID, &resultLen, &err) returned an unexpected "
+                         "version value. Expected '%s', but got '%s'\n",
+                         x, g);
         }
-        zoneResource = ures_open(U_ICUDATA_ZONE, "no_NO_NY", &err);
-        tResB = ures_getByKey(zoneResource, "zoneStrings", NULL, &err);
+        UResourceBundle* zoneResource = ures_open(U_ICUDATA_ZONE, "no_NO_NY", &err);
+        UResourceBundle* tResB = ures_getByKey(zoneResource, "zoneStrings", NULL, &err);
         if(err != U_USING_FALLBACK_WARNING){
             log_err("Expected U_USING_FALLBACK_ERROR when trying to test no_NO_NY aliased with nn_NO_NY for zoneStrings err=%s\n",u_errorName(err));
         }

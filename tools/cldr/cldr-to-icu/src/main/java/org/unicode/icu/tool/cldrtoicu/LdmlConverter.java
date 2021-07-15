@@ -5,6 +5,7 @@ package org.unicode.icu.tool.cldrtoicu;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableList.toImmutableList;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.unicode.cldr.api.CldrDataSupplier.CldrResolution.RESOLVED;
 import static org.unicode.cldr.api.CldrDataSupplier.CldrResolution.UNRESOLVED;
 import static org.unicode.cldr.api.CldrDataType.BCP47;
@@ -20,27 +21,26 @@ import static org.unicode.icu.tool.cldrtoicu.LdmlConverterConfig.IcuLocaleDir.RE
 import static org.unicode.icu.tool.cldrtoicu.LdmlConverterConfig.IcuLocaleDir.UNIT;
 import static org.unicode.icu.tool.cldrtoicu.LdmlConverterConfig.IcuLocaleDir.ZONE;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.unicode.cldr.api.CldrData;
 import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDataType;
+import org.unicode.cldr.api.CldrPath;
+import org.unicode.cldr.api.PathMatcher;
 import org.unicode.icu.tool.cldrtoicu.LdmlConverterConfig.IcuLocaleDir;
+import org.unicode.icu.tool.cldrtoicu.LdmlConverterConfig.IcuVersionInfo;
+import org.unicode.icu.tool.cldrtoicu.localedistance.LocaleDistanceMapper;
 import org.unicode.icu.tool.cldrtoicu.mapper.Bcp47Mapper;
 import org.unicode.icu.tool.cldrtoicu.mapper.BreakIteratorMapper;
 import org.unicode.icu.tool.cldrtoicu.mapper.CollationMapper;
@@ -80,15 +80,15 @@ import com.google.common.io.CharStreams;
  */
 public final class LdmlConverter {
     // TODO: Do all supplemental data in one go and split similarly to locale data (using RbPath).
-    private static final PathMatcher GENDER_LIST_PATHS =
+    private static final Predicate<CldrPath> GENDER_LIST_PATHS =
         supplementalMatcher("gender");
-    private static final PathMatcher LIKELY_SUBTAGS_PATHS =
+    private static final Predicate<CldrPath> LIKELY_SUBTAGS_PATHS =
         supplementalMatcher("likelySubtags");
-    private static final PathMatcher METAZONE_PATHS =
+    private static final Predicate<CldrPath> METAZONE_PATHS =
         supplementalMatcher("metaZones", "primaryZones");
-    private static final PathMatcher METADATA_PATHS =
+    private static final Predicate<CldrPath> METADATA_PATHS =
         supplementalMatcher("metadata");
-    private static final PathMatcher SUPPLEMENTAL_DATA_PATHS =
+    private static final Predicate<CldrPath> SUPPLEMENTAL_DATA_PATHS =
         supplementalMatcher(
             "calendarData",
             "calendarPreferenceData",
@@ -103,25 +103,31 @@ public final class LdmlConverter {
             "territoryContainment",
             "territoryInfo",
             "timeData",
-            "unitPreferenceData",
             "weekData",
             "weekOfPreference");
-    private static final PathMatcher CURRENCY_DATA_PATHS =
+    private static final Predicate<CldrPath> CURRENCY_DATA_PATHS =
         supplementalMatcher("currencyData");
-    private static final PathMatcher NUMBERING_SYSTEMS_PATHS =
+    private static final Predicate<CldrPath> UNITS_DATA_PATHS =
+        supplementalMatcher(
+            "convertUnits",
+            "unitConstants",
+            "unitQuantities",
+            "unitPreferenceData");
+    private static final Predicate<CldrPath> NUMBERING_SYSTEMS_PATHS =
         supplementalMatcher("numberingSystems");
-    private static final PathMatcher WINDOWS_ZONES_PATHS =
+    private static final Predicate<CldrPath> WINDOWS_ZONES_PATHS =
         supplementalMatcher("windowsZones");
 
-    private static PathMatcher supplementalMatcher(String... spec) {
+    private static Predicate<CldrPath> supplementalMatcher(String... spec) {
         checkArgument(spec.length > 0, "must supply at least one matcher spec");
         if (spec.length == 1) {
-            return PathMatcher.of("supplementalData/" + spec[0]);
+            return PathMatcher.of("//supplementalData/" + spec[0])::matchesPrefixOf;
         }
-        return PathMatcher.anyOf(
+        return
             Arrays.stream(spec)
-                .map(s -> PathMatcher.of("supplementalData/" + s))
-                .toArray(PathMatcher[]::new));
+                .map(s -> PathMatcher.of("//supplementalData/" + s))
+                .map(m -> ((Predicate<CldrPath>) m::matchesPrefixOf))
+                .reduce(p -> false, Predicate::or);
     }
 
     private static RbPath RB_PARENT = RbPath.of("%%Parent");
@@ -146,6 +152,7 @@ public final class LdmlConverter {
         GENDER_LIST(SUPPLEMENTAL),
         LIKELY_SUBTAGS(SUPPLEMENTAL),
         SUPPLEMENTAL_DATA(SUPPLEMENTAL),
+        UNITS(SUPPLEMENTAL),
         CURRENCY_DATA(SUPPLEMENTAL),
         METADATA(SUPPLEMENTAL),
         META_ZONES(SUPPLEMENTAL),
@@ -154,6 +161,8 @@ public final class LdmlConverter {
         PLURAL_RANGES(SUPPLEMENTAL),
         WINDOWS_ZONES(SUPPLEMENTAL),
         TRANSFORMS(SUPPLEMENTAL),
+        LOCALE_DISTANCE(SUPPLEMENTAL),
+        VERSION(SUPPLEMENTAL),
         KEY_TYPE_DATA(BCP47);
 
         public static final ImmutableSet<OutputType> ALL = ImmutableSet.copyOf(OutputType.values());
@@ -221,7 +230,7 @@ public final class LdmlConverter {
         this.localeTransformer =
             RegexTransformer.fromConfigLines(readLinesFromResource("/ldml2icu_locale.txt"),
                 IcuFunctions.CONTEXT_TRANSFORM_INDEX_FN);
-        this.fileHeader = ImmutableList.copyOf(readLinesFromResource("/ldml2icu_header.txt"));
+        this.fileHeader = readLinesFromResource("/ldml2icu_header.txt");
     }
 
     private void convertAll() {
@@ -233,9 +242,9 @@ public final class LdmlConverter {
         }
     }
 
-    private static List<String> readLinesFromResource(String name) {
+    private static ImmutableList<String> readLinesFromResource(String name) {
         try (InputStream in = LdmlConverter.class.getResourceAsStream(name)) {
-            return CharStreams.readLines(new InputStreamReader(in));
+            return ImmutableList.copyOf(CharStreams.readLines(new InputStreamReader(in, UTF_8)));
         } catch (IOException e) {
             throw new RuntimeException("cannot read resource: " + name, e);
         }
@@ -264,6 +273,14 @@ public final class LdmlConverter {
                 .filter(t -> t.getCldrType() == LDML)
                 .flatMap(t -> TYPE_TO_DIR.get(t).stream())
                 .collect(toImmutableList());
+        if (splitDirs.isEmpty()) {
+            return;
+        }
+
+        String cldrVersion = config.getVersionInfo().getCldrVersion();
+
+        Map<IcuLocaleDir, DependencyGraph> graphMetadata = new HashMap<>();
+        splitDirs.forEach(d -> graphMetadata.put(d, new DependencyGraph(cldrVersion)));
 
         SetMultimap<IcuLocaleDir, String> writtenLocaleIds = HashMultimap.create();
         Path baseDir = config.getOutputDir();
@@ -273,6 +290,11 @@ public final class LdmlConverter {
             if (!availableIds.contains(id)) {
                 continue;
             }
+            // TODO: Remove the following skip when ICU-20997 is fixed
+            if (id.contains("VALENCIA")) {
+                System.out.println("(skipping " + id + " until ICU-20997 is fixed)");
+                continue;
+            }
 
             IcuData icuData = new IcuData(id, true);
 
@@ -280,7 +302,7 @@ public final class LdmlConverter {
             CldrData unresolved = src.getDataForLocale(id, UNRESOLVED);
 
             BreakIteratorMapper.process(icuData, unresolved, specials);
-            CollationMapper.process(icuData, unresolved, specials);
+            CollationMapper.process(icuData, unresolved, specials, cldrVersion);
             RbnfMapper.process(icuData, unresolved, specials);
 
             CldrData resolved = src.getDataForLocale(id, RESOLVED);
@@ -294,6 +316,7 @@ public final class LdmlConverter {
                 splitPaths.put(LOCALE_SPLIT_INFO.getOrDefault(rootName, LOCALES), p);
             }
 
+            Optional<String> parent = supplementalData.getExplicitParentLocaleOf(id);
             // We always write base languages (even if empty).
             boolean isBaseLanguage = !id.contains("_");
             // Run through all directories (not just the keySet() of the split path map) since we
@@ -308,16 +331,27 @@ public final class LdmlConverter {
                     }
                     continue;
                 }
+
                 Path outDir = baseDir.resolve(dir.getOutputDir());
                 IcuData splitData = new IcuData(icuData.getName(), icuData.hasFallback());
-                // The split data can still be empty for this directory, but that's expected.
+
+                // The split data can still be empty for this directory, but that's expected (it
+                // might only be written because it has an explicit parent added below).
                 splitPaths.get(dir).forEach(p -> splitData.add(p, icuData.get(p)));
-                // Adding a parent locale makes the data non-empty and forces it to be written.
-                supplementalData.getExplicitParentLocaleOf(splitData.getName())
-                    .ifPresent(p -> splitData.add(RB_PARENT, p));
+
+                // If we add an explicit parent locale, it forces the data to be written. This is
+                // where we check for forced overrides of the parent relationship (which is a per
+                // directory thing).
+                getIcuParent(id, parent, dir).ifPresent(p -> {
+                    splitData.add(RB_PARENT, p);
+                    graphMetadata.get(dir).addParent(id, p);
+                });
+
                 if (!splitData.getPaths().isEmpty() || isBaseLanguage || dir.includeEmpty()) {
-                    splitData.setVersion(CldrDataSupplier.getCldrVersionString());
-                    write(splitData, outDir);
+                    if (id.equals("root")) {
+                        splitData.setVersion(cldrVersion);
+                    }
+                    write(splitData, outDir, false);
                     writtenLocaleIds.put(dir, id);
                 }
             }
@@ -326,20 +360,26 @@ public final class LdmlConverter {
         for (IcuLocaleDir dir : splitDirs) {
             Path outDir = baseDir.resolve(dir.getOutputDir());
             Set<String> targetIds = config.getTargetLocaleIds(dir);
+            DependencyGraph depGraph = graphMetadata.get(dir);
 
+            // TODO: Maybe calculate alias map directly into the dependency graph?
             Map<String, String> aliasMap = getAliasMap(targetIds, dir);
             aliasMap.forEach((s, t) -> {
+                depGraph.addAlias(s, t);
+                writeAliasFile(s, t, outDir);
                 // It's only important to record which alias files are written because of forced
                 // aliases, but since it's harmless otherwise, we just do it unconditionally.
                 // Normal alias files don't affect the empty file calculation, but forced ones can.
                 writtenLocaleIds.put(dir, s);
-                writeAliasFile(s, t, outDir);
             });
 
             calculateEmptyFiles(writtenLocaleIds.get(dir), aliasMap.values())
                 .forEach(id -> writeEmptyFile(id, outDir, aliasMap.values()));
+
+            writeDependencyGraph(outDir, depGraph);
         }
     }
+
 
     private static final CharMatcher PATH_MODIFIER = CharMatcher.anyOf(":%");
 
@@ -350,22 +390,23 @@ public final class LdmlConverter {
         return idx == -1 ? segment : segment.substring(0, idx);
     }
 
+    /*
+     * There are four reasons for treating a locale ID as an alias.
+     * 1: It contains deprecated subtags (e.g. "sr_YU", which should be "sr_Cyrl_RS").
+     * 2: It has no CLDR data but is missing a script subtag.
+     * 3: It is one of the special "phantom" alias which cannot be represented normally
+     *    and must be manually mapped (e.g. legacy locale IDs which don't even parse).
+     * 4: It is a "super special" forced alias, which might replace existing aliases in
+     *    some output directories.
+     */
     private Map<String, String> getAliasMap(Set<String> localeIds, IcuLocaleDir dir) {
-        // There are four reasons for treating a locale ID as an alias.
-        // 1: It contains deprecated subtags (e.g. "sr_YU", which should be "sr_Cyrl_RS").
-        // 2: It has no CLDR data but is missing a script subtag.
-        // 3: It is one of the special "phantom" alias which cannot be represented normally
-        //    and must be manually mapped (e.g. legacy locale IDs which don't even parse).
-        // 4: It is a "super special" forced alias, which might replace existing aliases in
-        //    some output directories.
-
         // Even forced aliases only apply if they are in the set of locale IDs for the directory.
         Map<String, String> forcedAliases =
             Maps.filterKeys(config.getForcedAliases(dir), localeIds::contains);
 
         Map<String, String> aliasMap = new LinkedHashMap<>();
         for (String id : localeIds) {
-            if (forcedAliases.keySet().contains(id)) {
+            if (forcedAliases.containsKey(id)) {
                 // Forced aliases will be added later and don't need to be processed here. This
                 // is especially necessary if the ID is not structurally valid (e.g. "no_NO_NY")
                 // since that cannot be processed by the code below.
@@ -396,6 +437,23 @@ public final class LdmlConverter {
         return aliasMap;
     }
 
+    /*
+     * Helper to determine the correct parent ID to be written into the ICU data file. The rules
+     * are:
+     * 1: If no forced parent exists (common) write the explicit parent (if that exists)
+     * 2: If a forced parent exists, but the forced value is what you would get by just truncating
+     *    the current locale ID, write nothing (ICU libraries truncate when no parent is set).
+     * 3: Write the forced parent (this is an exceptional case, and may not even occur in data).
+     */
+    private Optional<String> getIcuParent(String id, Optional<String> parent, IcuLocaleDir dir) {
+        String forcedParentId = config.getForcedParents(dir).get(id);
+        if (forcedParentId == null) {
+            return parent;
+        }
+        return id.contains("_") && forcedParentId.regionMatches(0, id, 0, id.lastIndexOf('_'))
+            ? Optional.empty() : Optional.of(forcedParentId);
+    }
+
     private void processSupplemental() {
         for (OutputType type : config.getOutputTypes()) {
             if (type.getCldrType() == LDML) {
@@ -416,6 +474,10 @@ public final class LdmlConverter {
 
             case SUPPLEMENTAL_DATA:
                 processSupplemental("supplementalData", SUPPLEMENTAL_DATA_PATHS, "misc", true);
+                break;
+
+            case UNITS:
+                processSupplemental("units", UNITS_DATA_PATHS, "misc", true);
                 break;
 
             case CURRENCY_DATA:
@@ -442,13 +504,21 @@ public final class LdmlConverter {
                 write(PluralRangesMapper.process(src), "misc");
                 break;
 
+            case LOCALE_DISTANCE:
+                write(LocaleDistanceMapper.process(src), "misc");
+                break;
+
             case WINDOWS_ZONES:
                 processSupplemental("windowsZones", WINDOWS_ZONES_PATHS, "misc", false);
                 break;
 
             case TRANSFORMS:
                 Path transformDir = createDirectory(config.getOutputDir().resolve("translit"));
-                write(TransformsMapper.process(src, transformDir, fileHeader), transformDir);
+                write(TransformsMapper.process(src, transformDir, fileHeader), transformDir, false);
+                break;
+
+            case VERSION:
+                writeIcuVersionInfo();
                 break;
 
             case KEY_TYPE_DATA:
@@ -464,13 +534,14 @@ public final class LdmlConverter {
     private static final RbPath RB_CLDR_VERSION = RbPath.of("cldrVersion");
 
     private void processSupplemental(
-        String label, PathMatcher paths, String dir, boolean addCldrVersion) {
+        String label, Predicate<CldrPath> paths, String dir, boolean addCldrVersion) {
         IcuData icuData =
             SupplementalMapper.process(src, supplementalTransformer, label, paths);
         // A hack for "supplementalData.txt" since the "cldrVersion" value doesn't come from the
         // supplemental data XML files.
         if (addCldrVersion) {
-            icuData.add(RB_CLDR_VERSION, CldrDataSupplier.getCldrVersionString());
+            // Not the same path as used by "setVersion()"
+            icuData.add(RB_CLDR_VERSION, config.getVersionInfo().getCldrVersion());
         }
         write(icuData, dir);
     }
@@ -478,7 +549,9 @@ public final class LdmlConverter {
     private void writeAliasFile(String srcId, String destId, Path dir) {
         IcuData icuData = new IcuData(srcId, true);
         icuData.add(RB_ALIAS, destId);
-        write(icuData, dir);
+        // Allow overwrite for aliases since some are "forced" and overwrite existing targets.
+        // TODO: Maybe tighten this up so only forced aliases for existing targets are overwritten.
+        write(icuData, dir, true);
     }
 
     private void writeEmptyFile(String id, Path dir, Collection<String> aliasTargets) {
@@ -490,18 +563,41 @@ public final class LdmlConverter {
         } else {
             // These empty files only exist because the target of an alias has a parent locale
             // which is itself not in the set of written ICU files. An "indirect alias target".
-            icuData.setVersion(CldrDataSupplier.getCldrVersionString());
+            // No need to add data: Just write a resource bundle with an empty top-level table.
         }
-        write(icuData, dir);
+        write(icuData, dir, false);
     }
 
+    private void writeIcuVersionInfo() {
+        IcuVersionInfo versionInfo = config.getVersionInfo();
+        IcuData versionData = new IcuData("icuver", false);
+        versionData.add(RbPath.of("ICUVersion"), versionInfo.getIcuVersion());
+        versionData.add(RbPath.of("DataVersion"), versionInfo.getIcuDataVersion());
+        versionData.add(RbPath.of("CLDRVersion"), versionInfo.getCldrVersion());
+        // Write file via non-helper methods since we need to include a legacy copyright.
+        Path miscDir = config.getOutputDir().resolve("misc");
+        createDirectory(miscDir);
+        ImmutableList<String> versionHeader = ImmutableList.<String>builder()
+            .addAll(fileHeader)
+            .add(
+                "***************************************************************************",
+                "*",
+                "* Copyright (C) 2010-2016 International Business Machines",
+                "* Corporation and others.  All Rights Reserved.",
+                "*",
+                "***************************************************************************")
+            .build();
+        IcuTextWriter.writeToFile(versionData, miscDir, versionHeader, false);
+    }
+
+    // Commonest case for writing data files in "normal" directories.
     private void write(IcuData icuData, String dir) {
-        write(icuData, config.getOutputDir().resolve(dir));
+        write(icuData, config.getOutputDir().resolve(dir), false);
     }
 
-    private void write(IcuData icuData, Path dir) {
+    private void write(IcuData icuData, Path dir, boolean allowOverwrite) {
         createDirectory(dir);
-        IcuTextWriter.writeToFile(icuData, dir, fileHeader);
+        IcuTextWriter.writeToFile(icuData, dir, fileHeader, allowOverwrite);
     }
 
     private Path createDirectory(Path dir) {
@@ -511,6 +607,17 @@ public final class LdmlConverter {
             throw new RuntimeException("cannot create directory: " + dir, e);
         }
         return dir;
+    }
+
+    private void writeDependencyGraph(Path dir, DependencyGraph depGraph) {
+        createDirectory(dir);
+        try (BufferedWriter w = Files.newBufferedWriter(dir.resolve("LOCALE_DEPS.json"), UTF_8);
+            PrintWriter out = new PrintWriter(w)) {
+            depGraph.writeJsonTo(out, fileHeader);
+            out.flush();
+        } catch (IOException e) {
+            throw new RuntimeException("cannot write dependency graph file: " + dir, e);
+        }
     }
 
     // The set of IDs to process is:

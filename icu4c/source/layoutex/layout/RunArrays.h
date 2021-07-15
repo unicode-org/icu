@@ -222,19 +222,19 @@ private:
 };
 
 inline RunArray::RunArray()
-    : UObject(), fClientArrays(FALSE), fLimits(NULL), fCount(0), fCapacity(0)
+    : UObject(), fClientArrays(false), fLimits(NULL), fCount(0), fCapacity(0)
 {
     // nothing else to do...
 }
 
 inline RunArray::RunArray(const RunArray & /*other*/)
-    : UObject(), fClientArrays(FALSE), fLimits(NULL), fCount(0), fCapacity(0)
+    : UObject(), fClientArrays(false), fLimits(NULL), fCount(0), fCapacity(0)
 {
     // nothing else to do...
 }
 
 inline RunArray::RunArray(const le_int32 *limits, le_int32 count)
-    : UObject(), fClientArrays(TRUE), fLimits(limits), fCount(count), fCapacity(count)
+    : UObject(), fClientArrays(true), fLimits(limits), fCount(count), fCapacity(count)
 {
     // nothing else to do...
 }

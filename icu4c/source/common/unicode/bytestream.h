@@ -71,6 +71,40 @@ public:
    */
   virtual void Append(const char* bytes, int32_t n) = 0;
 
+#ifndef U_HIDE_DRAFT_API
+  /**
+   * Appends n bytes to this. Same as Append().
+   * Call AppendU8() with u8"string literals" which are const char * in C++11
+   * but const char8_t * in C++20.
+   * If the compiler does support char8_t as a distinct type,
+   * then an AppendU8() overload for that is defined and will be chosen.
+   *
+   * @param bytes the pointer to the bytes
+   * @param n the number of bytes; must be non-negative
+   * @draft ICU 67
+   */
+  inline void AppendU8(const char* bytes, int32_t n) {
+    Append(bytes, n);
+  }
+
+#if defined(__cpp_char8_t) || defined(U_IN_DOXYGEN)
+  /**
+   * Appends n bytes to this. Same as Append() but for a const char8_t * pointer.
+   * Call AppendU8() with u8"string literals" which are const char * in C++11
+   * but const char8_t * in C++20.
+   * If the compiler does support char8_t as a distinct type,
+   * then this AppendU8() overload for that is defined and will be chosen.
+   *
+   * @param bytes the pointer to the bytes
+   * @param n the number of bytes; must be non-negative
+   * @draft ICU 67
+   */
+  inline void AppendU8(const char8_t* bytes, int32_t n) {
+    Append(reinterpret_cast<const char*>(bytes), n);
+  }
+#endif
+#endif  // U_HIDE_DRAFT_API
+
   /**
    * Returns a writable buffer for appending and writes the buffer's capacity to
    * *result_capacity. Guarantees *result_capacity>=min_capacity.
@@ -163,7 +197,7 @@ public:
    * Returns the sink to its original state, without modifying the buffer.
    * Useful for reusing both the buffer and the sink for multiple streams.
    * Resets the state to NumberOfBytesWritten()=NumberOfBytesAppended()=0
-   * and Overflowed()=FALSE.
+   * and Overflowed()=false.
    * @return *this
    * @stable ICU 4.6
    */
@@ -202,7 +236,7 @@ public:
   /**
    * Returns true if any bytes were discarded, i.e., if there was an
    * attempt to write more than 'capacity' bytes.
-   * @return TRUE if more than 'capacity' bytes were Append()ed
+   * @return true if more than 'capacity' bytes were Append()ed
    * @stable ICU 4.2
    */
   UBool Overflowed() const { return overflowed_; }

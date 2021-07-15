@@ -12,6 +12,7 @@
 #include "unicode/numberrangeformatter.h"
 #include "numrange_impl.h"
 #include "patternprops.h"
+#include "pluralranges.h"
 #include "uresimp.h"
 #include "util.h"
 
@@ -106,91 +107,8 @@ void getNumberRangeData(const char* localeName, const char* nsName, NumberRangeD
     sink.fillInDefaults(status);
 }
 
-class PluralRangesDataSink : public ResourceSink {
-  public:
-    PluralRangesDataSink(StandardPluralRanges& output) : fOutput(output) {}
-
-    void put(const char* /*key*/, ResourceValue& value, UBool /*noFallback*/, UErrorCode& status) U_OVERRIDE {
-        ResourceArray entriesArray = value.getArray(status);
-        if (U_FAILURE(status)) { return; }
-        fOutput.setCapacity(entriesArray.getSize());
-        for (int i = 0; entriesArray.getValue(i, value); i++) {
-            ResourceArray pluralFormsArray = value.getArray(status);
-            if (U_FAILURE(status)) { return; }
-            pluralFormsArray.getValue(0, value);
-            StandardPlural::Form first = StandardPlural::fromString(value.getUnicodeString(status), status);
-            if (U_FAILURE(status)) { return; }
-            pluralFormsArray.getValue(1, value);
-            StandardPlural::Form second = StandardPlural::fromString(value.getUnicodeString(status), status);
-            if (U_FAILURE(status)) { return; }
-            pluralFormsArray.getValue(2, value);
-            StandardPlural::Form result = StandardPlural::fromString(value.getUnicodeString(status), status);
-            if (U_FAILURE(status)) { return; }
-            fOutput.addPluralRange(first, second, result);
-        }
-    }
-
-  private:
-    StandardPluralRanges& fOutput;
-};
-
-void getPluralRangesData(const Locale& locale, StandardPluralRanges& output, UErrorCode& status) {
-    if (U_FAILURE(status)) { return; }
-    LocalUResourceBundlePointer rb(ures_openDirect(nullptr, "pluralRanges", &status));
-    if (U_FAILURE(status)) { return; }
-
-    CharString dataPath;
-    dataPath.append("locales/", -1, status);
-    dataPath.append(locale.getLanguage(), -1, status);
-    if (U_FAILURE(status)) { return; }
-    int32_t setLen;
-    // Not all languages are covered: fail gracefully
-    UErrorCode internalStatus = U_ZERO_ERROR;
-    const UChar* set = ures_getStringByKeyWithFallback(rb.getAlias(), dataPath.data(), &setLen, &internalStatus);
-    if (U_FAILURE(internalStatus)) { return; }
-
-    dataPath.clear();
-    dataPath.append("rules/", -1, status);
-    dataPath.appendInvariantChars(set, setLen, status);
-    if (U_FAILURE(status)) { return; }
-    PluralRangesDataSink sink(output);
-    ures_getAllItemsWithFallback(rb.getAlias(), dataPath.data(), sink, status);
-    if (U_FAILURE(status)) { return; }
-}
-
 } // namespace
 
-
-void StandardPluralRanges::initialize(const Locale& locale, UErrorCode& status) {
-    getPluralRangesData(locale, *this, status);
-}
-
-void StandardPluralRanges::addPluralRange(
-        StandardPlural::Form first,
-        StandardPlural::Form second,
-        StandardPlural::Form result) {
-    U_ASSERT(fTriplesLen < fTriples.getCapacity());
-    fTriples[fTriplesLen] = {first, second, result};
-    fTriplesLen++;
-}
-
-void StandardPluralRanges::setCapacity(int32_t length) {
-    if (length > fTriples.getCapacity()) {
-        fTriples.resize(length, 0);
-    }
-}
-
-StandardPlural::Form
-StandardPluralRanges::resolve(StandardPlural::Form first, StandardPlural::Form second) const {
-    for (int32_t i=0; i<fTriplesLen; i++) {
-        const auto& triple = fTriples[i];
-        if (triple.first == first && triple.second == second) {
-            return triple.result;
-        }
-    }
-    // Default fallback
-    return StandardPlural::OTHER;
-}
 
 
 NumberRangeFormatterImpl::NumberRangeFormatterImpl(const RangeMacroProps& macros, UErrorCode& status)
@@ -210,10 +128,10 @@ NumberRangeFormatterImpl::NumberRangeFormatterImpl(const RangeMacroProps& macros
     getNumberRangeData(macros.locale.getName(), nsName, data, status);
     if (U_FAILURE(status)) { return; }
     fRangeFormatter = data.rangePattern;
-    fApproximatelyModifier = {data.approximatelyPattern, UNUM_FIELD_COUNT, false};
+    fApproximatelyModifier = {data.approximatelyPattern, kUndefinedField, false};
 
     // TODO: Get locale from PluralRules instead?
-    fPluralRanges.initialize(macros.locale, status);
+    fPluralRanges = StandardPluralRanges::forLocale(macros.locale, status);
     if (U_FAILURE(status)) { return; }
 }
 
@@ -368,7 +286,8 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
                 // Only collapse if the modifier is a unit.
                 // TODO: Make a better way to check for a unit?
                 // TODO: Handle case where the modifier has both notation and unit (compact currency)?
-                if (!mm->containsField(UNUM_CURRENCY_FIELD) && !mm->containsField(UNUM_PERCENT_FIELD)) {
+                if (!mm->containsField({UFIELD_CATEGORY_NUMBER, UNUM_CURRENCY_FIELD})
+                        && !mm->containsField({UFIELD_CATEGORY_NUMBER, UNUM_PERCENT_FIELD})) {
                     collapseMiddle = false;
                 }
             } else if (fCollapse == UNUM_RANGE_COLLAPSE_AUTO) {
@@ -416,7 +335,7 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
         0,
         &lengthPrefix,
         &lengthSuffix,
-        UNUM_FIELD_COUNT,
+        kUndefinedField,
         status);
     if (U_FAILURE(status)) { return; }
     lengthInfix = lengthRange - lengthPrefix - lengthSuffix;
@@ -434,10 +353,10 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
         if (repeatInner || repeatMiddle || repeatOuter) {
             // Add spacing if there is not already spacing
             if (!PatternProps::isWhiteSpace(string.charAt(UPRV_INDEX_1))) {
-                lengthInfix += string.insertCodePoint(UPRV_INDEX_1, u'\u0020', UNUM_FIELD_COUNT, status);
+                lengthInfix += string.insertCodePoint(UPRV_INDEX_1, u'\u0020', kUndefinedField, status);
             }
             if (!PatternProps::isWhiteSpace(string.charAt(UPRV_INDEX_2 - 1))) {
-                lengthInfix += string.insertCodePoint(UPRV_INDEX_2, u'\u0020', UNUM_FIELD_COUNT, status);
+                lengthInfix += string.insertCodePoint(UPRV_INDEX_2, u'\u0020', kUndefinedField, status);
             }
         }
     }

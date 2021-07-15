@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 pa_Arab{
     %%Parent{"root"}
     Languages{
@@ -7,7 +8,7 @@ pa_Arab{
     }
     Scripts{
         Arab{"عربی"}
+        Aran{"نستعلیق"}
         Guru{"گُرمُکھی"}
     }
-    Version{"36"}
 }

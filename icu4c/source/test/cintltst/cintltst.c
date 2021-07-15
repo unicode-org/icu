@@ -696,6 +696,12 @@ U_CFUNC UBool assertTrue(const char* msg, int /*not UBool*/ condition) {
 
 U_CFUNC UBool assertEquals(const char* message, const char* expected,
                            const char* actual) {
+    if (expected == NULL) {
+        expected = "(null)";
+    }
+    if (actual == NULL) {
+        actual = "(null)";
+    }
     if (uprv_strcmp(expected, actual) != 0) {
         log_err("FAIL: %s; got \"%s\"; expected \"%s\"\n",
                 message, actual, expected);
@@ -711,6 +717,12 @@ U_CFUNC UBool assertEquals(const char* message, const char* expected,
 
 U_CFUNC UBool assertUEquals(const char* message, const UChar* expected,
                             const UChar* actual) {
+    if (expected == NULL) {
+        expected = u"(null)";
+    }
+    if (actual == NULL) {
+        actual = u"(null)";
+    }
     for (int32_t i=0;; i++) {
         if (expected[i] != actual[i]) {
             log_err("FAIL: %s; got \"%s\"; expected \"%s\"\n",

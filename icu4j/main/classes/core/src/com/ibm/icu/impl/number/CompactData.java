@@ -1,5 +1,5 @@
 // © 2017 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
 
 import java.util.Arrays;
@@ -176,6 +176,11 @@ public class CompactData implements MultiplierProducer {
                 // Iterate over the plural variants ("one", "other", etc)
                 UResource.Table pluralVariantsTable = value.getTable();
                 for (int i4 = 0; pluralVariantsTable.getKeyAndValue(i4, key, value); ++i4) {
+
+                    if ("0".equals(key.toString()) || "1".equals(key.toString())) {
+                        // TODO(ICU-21258): Handle this case. For now, skip.
+                        continue;
+                    }
 
                     // Skip this magnitude/plural if we already have it from a child locale.
                     // Note: This also skips USE_FALLBACK entries.

@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 or{
     AuxExemplarCharacters{"[\u200C\u200D]"}
     Ellipsis{
@@ -240,7 +241,6 @@ or{
             }
         }
     }
-    Version{"36"}
     calendar{
         generic{
             DateTimePatterns{
@@ -1216,6 +1216,11 @@ or{
         }
         quarter-narrow{
             dn{"ତ୍ରୟ."}
+            relative{
+                "-1"{"ଗତ ତିନିମାସ"}
+                "0"{"ଏହି ତିନିମାସ"}
+                "1"{"ଆଗାମୀ ତିନିମାସ"}
+            }
             relativeTime{
                 future{
                     one{"{0} ତ୍ରୟ. ରେ"}
@@ -1229,6 +1234,11 @@ or{
         }
         quarter-short{
             dn{"ତ୍ରୟ."}
+            relative{
+                "-1"{"ଗତ ତିନିମାସ"}
+                "0"{"ଏହି ତ୍ରୟମାସ"}
+                "1"{"ଆଗାମୀ ତ୍ରୟମାସ"}
+            }
             relativeTime{
                 future{
                     one{"{0} ତ୍ରୟ. ରେ"}

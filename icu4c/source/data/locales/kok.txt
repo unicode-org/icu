@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 kok{
     AuxExemplarCharacters{"[\u200C\u200D]"}
     ExemplarCharacters{
@@ -36,6 +37,7 @@ kok{
         }
         latn{
             miscPatterns{
+                approximately{"~{0}"}
                 atLeast{"{0}+"}
                 atMost{"≤{0}"}
                 range{"{0}–{1}"}
@@ -189,7 +191,6 @@ kok{
         minimumGroupingDigits{"1"}
         native{"deva"}
     }
-    Version{"36"}
     calendar{
         generic{
             DateTimePatterns{
@@ -199,7 +200,7 @@ kok{
                 "h:mm a",
                 "EEEE d MMMM y G",
                 "d MMMM y G",
-                "dd-MM-y G",
+                "d-M-y G",
                 "d-M-y GGGGG",
                 "{1} {0}",
                 "{1} {0}",
@@ -227,12 +228,12 @@ kok{
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
-                MEd{"E, dd-MM"}
+                MEd{"E, d-M"}
                 MMM{"LLL"}
                 MMMEd{"E d, MMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
-                Md{"dd-MM"}
+                Md{"d-M"}
                 d{"d"}
                 h{"h a"}
                 hm{"h:mm a"}
@@ -240,13 +241,13 @@ kok{
                 ms{"mm:ss"}
                 y{"y G"}
                 yyyy{"y G"}
-                yyyyM{"MM-y GGGG"}
+                yyyyM{"M-y GGGG"}
                 yyyyMEd{"E, d/M/y GGGGG"}
                 yyyyMMM{"MMM y G"}
                 yyyyMMMEd{"E, d MMM y G"}
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"d MMM y G"}
-                yyyyMd{"d/M/y GGGGG"}
+                yyyyMd{"d-M-y GGGGG"}
                 yyyyQQQ{"QQQ y G"}
                 yyyyQQQQ{"QQQQ y G"}
             }
@@ -265,14 +266,14 @@ kok{
                     y{"y–y G"}
                 }
                 GyM{
-                    G{"MM-yGGGG – MM-y GGGG"}
-                    M{"MM-y GGGGG – MM y"}
-                    y{"MM-y GGGGG – MM-y"}
+                    G{"M-y GGGG – M-y GGGG"}
+                    M{"M-y GGGGG – M y"}
+                    y{"M-y GGGGG – M-y"}
                 }
                 GyMEd{
-                    G{"E, dd-MM-y GGGGG – E, dd-MM-y GGGGG"}
-                    M{"E,dd-MM-y GGGGG – E, dd-MM-y"}
-                    d{"E, dd-MM-Y GGGGG – E-dd-MM-y"}
+                    G{"E, d-M-y GGGGG – E, d-M-y GGGGG"}
+                    M{"E, d-M-y GGGGG – E, d-M-y"}
+                    d{"E, d-M-Y GGGGG – E-d-M-y"}
                     y{"E,dd-MM-y GGGGG – E,dd-MM-y"}
                 }
                 GyMMM{
@@ -293,17 +294,17 @@ kok{
                     y{"d MMM y G – d MMM y"}
                 }
                 GyMd{
-                    G{"dd-MM-y GGGGG – dd-MM-Y GGGGG"}
-                    M{"dd-MM-y GGGGG – dd-MM-y"}
-                    d{"dd-MM-y GGGGG – dd-MM-y"}
+                    G{"d-M-y GGGGG – d-M-Y GGGGG"}
+                    M{"d-M-y GGGGG – d-M-y"}
+                    d{"d-M-y GGGGG – d-M-y"}
                     y{"d-M-y – d-M-y GGGGG"}
                 }
                 M{
-                    M{"MM–MM"}
+                    M{"M–M"}
                 }
                 MEd{
-                    M{"E, dd-MM, E dd-MM"}
-                    d{"E, d/M – E, d/M"}
+                    M{"E, d-M, E d-M"}
+                    d{"E, d-M – E, d-M"}
                 }
                 MMM{
                     M{"MMM–MMM"}
@@ -317,8 +318,8 @@ kok{
                     d{"d–d MMM"}
                 }
                 Md{
-                    M{"d/M – d/M"}
-                    d{"d/M–d/M"}
+                    M{"d-M – d-M"}
+                    d{"d-M – d-M"}
                 }
                 d{
                     d{"d–d"}
@@ -328,7 +329,7 @@ kok{
                     y{"y–y G"}
                 }
                 yM{
-                    M{"M/y – M/y GGGGG"}
+                    M{"M-y – M-y GGGGG"}
                     y{"M/y – M/y GGGGG"}
                 }
                 yMEd{
@@ -355,8 +356,8 @@ kok{
                     y{"d, MMM y – d, MMM y G"}
                 }
                 yMd{
-                    M{"d/M/y – d/M/y GGGGG"}
-                    d{"d/M/y – d/M/y GGGGG"}
+                    M{"d-M-y – d-M-y GGGGG"}
+                    d{"d-M-y – d-M-y GGGGG"}
                     y{"d/M/y – d/M/y GGGGG"}
                 }
             }
@@ -381,7 +382,7 @@ kok{
                 "h:mm a",
                 "EEEE d MMMM y",
                 "d MMMM y",
-                "dd-MM-y",
+                "d-MMM-y",
                 "d-M-yy",
                 "{1} {0}",
                 "{1} {0}",
@@ -414,15 +415,15 @@ kok{
                 Hmsv{"HH:mm:ss v"}
                 Hmv{"HH:mm v"}
                 M{"L"}
-                MEd{"MM-dd, E"}
+                MEd{"d-M, E"}
                 MMM{"LLL"}
-                MMMEd{"MMM d, E"}
+                MMMEd{"E, d MMM"}
                 MMMMW{
                     other{"'week' W 'of' MMMM"}
                 }
-                MMMMd{"MMMM d"}
+                MMMMd{"d MMMM"}
                 MMMd{"MMM d"}
-                Md{"MM-dd"}
+                Md{"d-M"}
                 d{"d"}
                 h{"h a"}
                 hm{"h:mm a"}
@@ -431,13 +432,13 @@ kok{
                 hmv{"h:mm a v"}
                 ms{"mm:ss"}
                 y{"y"}
-                yM{"y-MM"}
-                yMEd{"y-MM-dd, E"}
+                yM{"M-y"}
+                yMEd{"d-M-y, E"}
                 yMMM{"y MMM"}
                 yMMMEd{"y MMM d, E"}
-                yMMMM{"y MMMM"}
+                yMMMM{"MMMM, y"}
                 yMMMd{"y MMM d"}
-                yMd{"y-MM-dd"}
+                yMd{"d-M-y"}
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
                 yw{
@@ -451,7 +452,7 @@ kok{
                         "सोमार",
                         "मंगळार",
                         "बुधवार",
-                        "गुरुवार",
+                        "बिरेस्तार",
                         "शुक्रार",
                         "शेनवार",
                     }
@@ -460,7 +461,7 @@ kok{
                         "सो",
                         "मं",
                         "बु",
-                        "गु",
+                        "बि",
                         "शु",
                         "शे",
                     }
@@ -469,7 +470,7 @@ kok{
                         "सोम",
                         "मंगळ",
                         "बुध",
-                        "गुरु",
+                        "बिरे",
                         "शुक्र",
                         "शेन",
                     }
@@ -478,7 +479,7 @@ kok{
                         "सोमार",
                         "मंगळार",
                         "बुधवार",
-                        "गुरुवार",
+                        "बिरेस्तार",
                         "शुक्रार",
                         "शेनवार",
                     }
@@ -489,7 +490,7 @@ kok{
                         "सोमार",
                         "मंगळार",
                         "बुधवार",
-                        "गुरुवार",
+                        "बिरेस्तार",
                         "शुक्रार",
                         "शेनवार",
                     }
@@ -498,7 +499,7 @@ kok{
                         "सो",
                         "मं",
                         "बु",
-                        "गु",
+                        "ब",
                         "शु",
                         "शे",
                     }
@@ -507,7 +508,7 @@ kok{
                         "सोम",
                         "मंगळ",
                         "बुध",
-                        "गुरु",
+                        "बिरे",
                         "शुक्र",
                         "शेन",
                     }
@@ -516,7 +517,7 @@ kok{
                         "सोमार",
                         "मंगळार",
                         "बुधवार",
-                        "गुरुवार",
+                        "बिरेस्तार",
                         "शुक्रार",
                         "शेनवार",
                     }
@@ -571,15 +572,15 @@ kok{
                     y{"G y–y"}
                 }
                 GyM{
-                    G{"GGGGG y-MM – GGGGG y-MM"}
-                    M{"GGGGG y-MM – y-MM"}
-                    y{"GGGGG y-MM – y-MM"}
+                    G{"GGGGG M-y – GGGGG M-y"}
+                    M{"GGGGG M-y – M-y"}
+                    y{"GGGGG M-y – M-y"}
                 }
                 GyMEd{
-                    G{"GGGGG y-MM-dd, E – GGGGG y-MM-dd, E"}
-                    M{"GGGGG y-MM-dd, E – y-MM-dd, E"}
-                    d{"GGGGG y-MM-dd, E – y-MM-dd, E"}
-                    y{"GGGGG y-MM-dd, E – y-MM-dd, E"}
+                    G{"GGGGG d-M-y, E – GGGGG d-M-y, E"}
+                    M{"GGGGG d-M-y, E – d-M-y, E"}
+                    d{"GGGGG d-M-y, E – d-M-y, E"}
+                    y{"GGGGG d-M-y, E – d-M-y, E"}
                 }
                 GyMMM{
                     G{"G y MMM – G y MMM"}
@@ -599,10 +600,10 @@ kok{
                     y{"G y MMM d – y MMM d"}
                 }
                 GyMd{
-                    G{"GGGGG y-MM-dd – GGGGG y-MM-dd"}
-                    M{"GGGGG y-MM-dd – y-MM-dd"}
-                    d{"GGGGG y-MM-dd – y-MM-dd"}
-                    y{"GGGGG y-MM-dd – y-MM-dd"}
+                    G{"GGGGG d-M-y – GGGGG d-M-y"}
+                    M{"GGGGG d-M-y – d-M-y"}
+                    d{"GGGGG d-M-y – d-M-y"}
+                    y{"GGGGG d-M-y – d-M-y"}
                 }
                 H{
                     H{"HH–HH"}
@@ -619,11 +620,11 @@ kok{
                     H{"HH–HH v"}
                 }
                 M{
-                    M{"MM–MM"}
+                    M{"M–M"}
                 }
                 MEd{
-                    M{"MM-dd, E – MM-dd, E"}
-                    d{"MM-dd, E – MM-dd, E"}
+                    M{"d-M, E – d-M, E"}
+                    d{"d-M, E – d-M, E"}
                 }
                 MMM{
                     M{"MMM – MMM"}
@@ -637,8 +638,8 @@ kok{
                     d{"MMM d–d"}
                 }
                 Md{
-                    M{"dd-MM –dd-MM"}
-                    d{"dd-MM –dd-MM"}
+                    M{"d-M –d-M"}
+                    d{"d-M –d-M"}
                 }
                 d{
                     d{"d–d"}
@@ -666,13 +667,13 @@ kok{
                     y{"y–y"}
                 }
                 yM{
-                    M{"MM-y – MM-y"}
-                    y{"MM-y – MM-y"}
+                    M{"M-y – M-y"}
+                    y{"M-y – M-y"}
                 }
                 yMEd{
-                    M{"dd-MM-y, E – dd-MM-y, E"}
-                    d{"dd-MM-y, E – dd-MM-y, E"}
-                    y{"dd-MM-y, E – dd-MM-y, E"}
+                    M{"d-M-y, E – d-M-y, E"}
+                    d{"d-M-y, E – d-M-y, E"}
+                    y{"d-M-y, E – d-M-y, E"}
                 }
                 yMMM{
                     M{"MMM–MMM y"}
@@ -693,9 +694,9 @@ kok{
                     y{"d MMM y – d MMM y"}
                 }
                 yMd{
-                    M{"dd-MM-y – dd-MM-y"}
-                    d{"dd-MM-y – dd-MM-y"}
-                    y{"dd-MM-y – dd-MM-y"}
+                    M{"d-M-y – d-M-y"}
+                    d{"d-M-y – d-M-y"}
+                    y{"d-M-y – d-M-y"}
                 }
             }
             monthNames{
@@ -704,11 +705,11 @@ kok{
                         "जानेवारी",
                         "फेब्रुवारी",
                         "मार्च",
-                        "एप्रिल",
+                        "एप्रील",
                         "मे",
                         "जून",
-                        "जुलाय",
-                        "आगोस्त",
+                        "जुलय",
+                        "ऑगस्ट",
                         "सप्टेंबर",
                         "ऑक्टोबर",
                         "नोव्हेंबर",
@@ -732,11 +733,11 @@ kok{
                         "जानेवारी",
                         "फेब्रुवारी",
                         "मार्च",
-                        "एप्रिल",
+                        "एप्रील",
                         "मे",
                         "जून",
-                        "जुलाय",
-                        "आगोस्त",
+                        "जुलय",
+                        "ऑगस्ट",
                         "सप्टेंबर",
                         "ऑक्टोबर",
                         "नोव्हेंबर",
@@ -745,18 +746,18 @@ kok{
                 }
                 stand-alone{
                     abbreviated{
-                        "जानेवारी",
-                        "फेब्रुवारी",
+                        "जाने",
+                        "फेब्रु",
                         "मार्च",
-                        "एप्रिल",
+                        "एप्री",
                         "मे",
                         "जून",
-                        "जुलाय",
-                        "आगोस्त",
-                        "सप्टेंबर",
-                        "ऑक्टोबर",
-                        "नोव्हेंबर",
-                        "डिसेंबर",
+                        "जुल",
+                        "ऑग",
+                        "सप्टें",
+                        "ऑक्टो",
+                        "नो",
+                        "डिसे",
                     }
                     narrow{
                         "1",
@@ -776,11 +777,11 @@ kok{
                         "जानेवारी",
                         "फेब्रुवारी",
                         "मार्च",
-                        "एप्रिल",
+                        "एप्रील",
                         "मे",
                         "जून",
-                        "जुलाय",
-                        "आगोस्त",
+                        "जुलय",
+                        "ऑगस्ट",
                         "सप्टेंबर",
                         "ऑक्टोबर",
                         "नोव्हेंबर",
@@ -810,23 +811,11 @@ kok{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
                     narrow{
                         "1",
                         "2",
                         "3",
                         "4",
-                    }
-                    wide{
-                        "1लें त्रैमासीक",
-                        "2रें त्रैमासीक",
-                        "3रें त्रैमासीक",
-                        "4थें त्रैमासीक",
                     }
                 }
             }
@@ -853,6 +842,7 @@ kok{
         downwards_arrows{"सकयल दर्शोवपी बाण"}
         downwards_upwards_arrows{"सकयल वयर दर्शोवपी बाण"}
         east_asian_scripts{"उदेंत आशियाई लिपी"}
+        emoji{"इमोजी"}
         european_scripts{"युरोपियन लिपी"}
         female{"बायल"}
         flag{"बावटो"}
@@ -887,11 +877,11 @@ kok{
         modifier{"मॉडिफायर"}
         musical_symbols{"संगिताचें चिन्न"}
         nature{"सैम"}
-        nonspacing{"सुवातना"}
+        nonspacing{"सुवात ना"}
         numbers{"आंकडे"}
         objects{"ऑब्जॅक्ट"}
         other{"हेर"}
-        paired{"जोडी लायिल्लें"}
+        paired{"जोडी"}
         person{"व्यक्ती"}
         phonetic_alphabet{"फोनेटिक अक्षर"}
         pictographs{"पिक्टोग्राफ"}
@@ -903,20 +893,20 @@ kok{
         small_form_variant{"ल्हान वेरीयंट"}
         smiley{"स्मायली"}
         smileys_people{"स्मायली वा व्यक्ती"}
-        south_asian_scripts{"दक्षिण आशियाई लिपी"}
+        south_asian_scripts{"दक्षीण आशियायी लिपी"}
         southeast_asian_scripts{"आग्नेय आशियाई लिपी"}
         spacing{"सुवात घेवप"}
-        sport{"क्रिडा"}
-        symbols{"कुरू"}
-        technical_symbols{"तांत्रिक कुरू"}
+        sport{"खेळ"}
+        symbols{"चिन्न"}
+        technical_symbols{"तांत्रीक चिन्न"}
         tone_marks{"स्वर खूण"}
-        travel{"भोंवडी"}
-        travel_places{"भोंवडी वा सुवात"}
+        travel{"प्रवास"}
+        travel_places{"प्रवास वा ठिकाण"}
         upwards_arrows{"वयर दर्शोवपी बाण"}
         variant_forms{"वेरीयंट"}
         vocalic_jamo{"स्वरयुक्त जामो"}
         weather{"हवामान"}
-        western_asian_scripts{"अस्तंत आशियाई लिपी"}
+        western_asian_scripts{"पश्चिमी आशियायी लिपी"}
         whitespace{"धवीसुवात"}
     }
     delimiters{
@@ -1289,7 +1279,6 @@ kok{
             }
         }
         second-narrow{
-            dn{"सेकंद"}
             relativeTime{
                 future{
                     other{"{0} सेकंदानीं"}
@@ -1613,10 +1602,14 @@ kok{
         or-narrow{
             2{"{0} वा {1}"}
             end{"{0}, वा {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         or-short{
             2{"{0} वा {1}"}
             end{"{0}, वा {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         standard{
             2{"{0}, {1}"}
@@ -1624,13 +1617,35 @@ kok{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
+        standard-narrow{
+            2{"{0}, {1}"}
+            end{"{0}, {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
         standard-short{
             2{"{0} & {1}"}
+            end{"{0}, & {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        unit{
+            2{"{0}, {1}"}
+            end{"{0}, {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
         unit-narrow{
+            2{"{0} {1}"}
             end{"{0} {1}"}
             middle{"{0} {1}"}
             start{"{0} {1}"}
+        }
+        unit-short{
+            2{"{0}, {1}"}
+            end{"{0}, {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
     }
     measurementSystemNames{

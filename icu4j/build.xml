@@ -1,6 +1,6 @@
 <!--
 * © 2016 and later: Unicode, Inc. and others.
-* License & terms of use: http://www.unicode.org/copyright.html#License
+* License & terms of use: http://www.unicode.org/copyright.html
 *******************************************************************************
 * Copyright (C) 1997-2016, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
@@ -197,7 +197,7 @@
     </target>
 
     <!-- Ivy Targets -->
-    <property name="ivy.install.version" value="2.1.0-rc2" />
+    <property name="ivy.install.version" value="2.5.0" />
     <condition property="ivy.home" value="${env.IVY_HOME}">
         <isset property="env.IVY_HOME" />
     </condition>
@@ -266,7 +266,10 @@
             <delete dir="${junit.out.dir}/checkTest"/>
             <mkdir dir="${junit.out.dir}/checkTest"/>
 
-            <junit printsummary="yes">
+            <junit printsummary="yes" fork="yes">
+                <jvmarg value="-ea"/>
+                <jvmarg value="-Djava.awt.headless=true"/>
+                <jvmarg value="-DICU.exhaustive=10"/>
                 <classpath>
                     <path refid="junit.jars"/>
                     <path refid="junit.icu.jars"/>

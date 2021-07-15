@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 yue{
-    Version{"36"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -13,7 +13,7 @@ yue{
                 dnam{"G 力"}
                 other{"{0} G 力"}
             }
-            meter-per-second-squared{
+            meter-per-square-second{
                 dnam{"米/平方秒"}
                 other{"每平方秒 {0} 米"}
             }
@@ -107,10 +107,6 @@ yue{
                 dnam{"摩爾"}
                 other{"{0} 摩爾"}
             }
-            part-per-million{
-                dnam{"百萬分率"}
-                other{"{0} 百萬分率"}
-            }
             percent{
                 dnam{"%"}
                 other{"{0}%"}
@@ -119,13 +115,17 @@ yue{
                 dnam{"‰"}
                 other{"{0}‰"}
             }
+            permillion{
+                dnam{"百萬分率"}
+                other{"{0} 百萬分率"}
+            }
             permyriad{
                 dnam{"點子"}
                 other{"{0} 點子"}
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"公升/100 公里"}
                 other{"{0} 公升/100 公里"}
             }
@@ -337,6 +337,10 @@ yue{
             }
         }
         graphics{
+            dot{
+                dnam{"圓點"}
+                other{"{0} 個圓點"}
+            }
             dot-per-centimeter{
                 dnam{"每厘米點數"}
                 other{"{0} 點/厘米"}
@@ -379,6 +383,10 @@ yue{
             decimeter{
                 dnam{"公寸"}
                 other{"{0} 公寸"}
+            }
+            earth-radius{
+                dnam{"地球半徑"}
+                other{"{0} 地球半徑"}
             }
             fathom{
                 dnam{"英尋"}
@@ -458,6 +466,14 @@ yue{
             }
         }
         light{
+            candela{
+                dnam{"坎德拉"}
+                other{"{0} 坎德拉"}
+            }
+            lumen{
+                dnam{"流明"}
+                other{"{0} 流明"}
+            }
             lux{
                 dnam{"勒克斯"}
                 other{"{0} 勒克斯"}
@@ -479,6 +495,10 @@ yue{
             earth-mass{
                 dnam{"地球質量"}
                 other{"{0} 地球質量"}
+            }
+            grain{
+                dnam{"喱"}
+                other{"{0}格令"}
             }
             gram{
                 dnam{"克"}
@@ -568,7 +588,7 @@ yue{
                 dnam{"百帕"}
                 other{"{0} 百帕"}
             }
-            inch-hg{
+            inch-ofhg{
                 dnam{"英吋汞柱"}
                 other{"{0} 英吋汞柱"}
             }
@@ -584,7 +604,7 @@ yue{
                 dnam{"毫巴"}
                 other{"{0} 毫巴"}
             }
-            millimeter-of-mercury{
+            millimeter-ofhg{
                 dnam{"毫米汞柱"}
                 other{"{0} 毫米汞柱"}
             }
@@ -592,7 +612,7 @@ yue{
                 dnam{"帕斯卡"}
                 other{"{0} 帕斯卡"}
             }
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 dnam{"磅力/平方英吋"}
                 other{"每平方吋 {0} 磅"}
             }
@@ -638,7 +658,7 @@ yue{
                 dnam{"牛頓米"}
                 other{"{0} 牛頓米"}
             }
-            pound-foot{
+            pound-force-foot{
                 dnam{"尺磅"}
                 other{"{0} 尺磅"}
             }
@@ -702,6 +722,22 @@ yue{
                 dnam{"公合"}
                 other{"{0} 公合"}
             }
+            dessert-spoon{
+                dnam{"甜品匙"}
+                other{"{0}甜品匙"}
+            }
+            dessert-spoon-imperial{
+                dnam{"英制甜品匙"}
+                other{"英制甜品匙{0}匙"}
+            }
+            dram{
+                dnam{"英制液量打蘭"}
+                other{"{0}英制液量打蘭"}
+            }
+            drop{
+                dnam{"滴"}
+                other{"{0}滴"}
+            }
             fluid-ounce{
                 dnam{"液盎司"}
                 other{"{0} 液盎司"}
@@ -724,6 +760,10 @@ yue{
                 dnam{"公石"}
                 other{"{0} 公石"}
             }
+            jigger{
+                dnam{"量酒杯"}
+                other{"量酒器{0}杯"}
+            }
             liter{
                 dnam{"公升"}
                 other{"{0} 公升"}
@@ -737,6 +777,10 @@ yue{
                 dnam{"毫升"}
                 other{"{0} 毫升"}
             }
+            pinch{
+                dnam{"小撮"}
+                other{"{0} 小撮"}
+            }
             pint{
                 dnam{"品脫"}
                 other{"{0} 品脫"}
@@ -748,6 +792,10 @@ yue{
             quart{
                 dnam{"夸脫"}
                 other{"{0} 夸脫"}
+            }
+            quart-imperial{
+                dnam{"英制夸脫"}
+                other{"{0} 英制夸脫"}
             }
             tablespoon{
                 dnam{"湯匙"}
@@ -764,7 +812,7 @@ yue{
             g-force{
                 other{"{0}G"}
             }
-            meter-per-second-squared{
+            meter-per-square-second{
                 other{"{0}m/s²"}
             }
         }
@@ -824,7 +872,7 @@ yue{
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"公升/100 公里"}
                 other{"{0}L/100km"}
             }
@@ -1091,16 +1139,16 @@ yue{
             hectopascal{
                 other{"{0}百帕"}
             }
-            inch-hg{
+            inch-ofhg{
                 other{"{0}″ Hg"}
             }
             millibar{
                 other{"{0}毫巴"}
             }
-            millimeter-of-mercury{
+            millimeter-ofhg{
                 other{"{0}mmHg"}
             }
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 other{"{0}psi"}
             }
         }
@@ -1206,7 +1254,7 @@ yue{
                 dnam{"G 力"}
                 other{"{0} G 力"}
             }
-            meter-per-second-squared{
+            meter-per-square-second{
                 dnam{"米/平方秒"}
                 other{"每平方秒{0}米"}
             }
@@ -1300,10 +1348,6 @@ yue{
                 dnam{"摩爾"}
                 other{"{0} 摩爾"}
             }
-            part-per-million{
-                dnam{"百萬分率"}
-                other{"{0} 百萬分率"}
-            }
             percent{
                 dnam{"%"}
                 other{"{0}%"}
@@ -1312,13 +1356,17 @@ yue{
                 dnam{"‰"}
                 other{"{0}‰"}
             }
+            permillion{
+                dnam{"百萬分率"}
+                other{"{0} 百萬分率"}
+            }
             permyriad{
                 dnam{"點子"}
                 other{"{0} 點子"}
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"公升/100 公里"}
                 other{"{0} 公升/100 公里"}
             }
@@ -1530,6 +1578,10 @@ yue{
             }
         }
         graphics{
+            dot{
+                dnam{"圓點"}
+                other{"{0} 個圓點"}
+            }
             dot-per-centimeter{
                 dnam{"每厘米點數"}
                 other{"{0} 點/厘米"}
@@ -1572,6 +1624,10 @@ yue{
             decimeter{
                 dnam{"公寸"}
                 other{"{0} 公寸"}
+            }
+            earth-radius{
+                dnam{"地球半徑"}
+                other{"{0} 地球半徑"}
             }
             fathom{
                 dnam{"fm"}
@@ -1651,6 +1707,14 @@ yue{
             }
         }
         light{
+            candela{
+                dnam{"坎德拉"}
+                other{"{0} 坎德拉"}
+            }
+            lumen{
+                dnam{"流明"}
+                other{"{0} 流明"}
+            }
             lux{
                 dnam{"勒克斯"}
                 other{"{0} 勒克斯"}
@@ -1672,6 +1736,10 @@ yue{
             earth-mass{
                 dnam{"地球質量"}
                 other{"{0} 地球質量"}
+            }
+            grain{
+                dnam{"喱"}
+                other{"{0} 喱"}
             }
             gram{
                 dnam{"克"}
@@ -1761,7 +1829,7 @@ yue{
                 dnam{"百帕"}
                 other{"{0} 百帕"}
             }
-            inch-hg{
+            inch-ofhg{
                 dnam{"英吋汞柱"}
                 other{"{0} 英吋汞柱"}
             }
@@ -1777,7 +1845,7 @@ yue{
                 dnam{"毫巴"}
                 other{"{0} 毫巴"}
             }
-            millimeter-of-mercury{
+            millimeter-ofhg{
                 dnam{"毫米汞柱"}
                 other{"{0} 毫米汞柱"}
             }
@@ -1785,7 +1853,7 @@ yue{
                 dnam{"帕斯卡"}
                 other{"{0} 帕斯卡"}
             }
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 dnam{"磅力/平方英吋"}
                 other{"每平方吋{0}磅"}
             }
@@ -1831,7 +1899,7 @@ yue{
                 dnam{"牛頓米"}
                 other{"{0} 牛頓米"}
             }
-            pound-foot{
+            pound-force-foot{
                 dnam{"尺磅"}
                 other{"{0} 尺磅"}
             }
@@ -1846,7 +1914,7 @@ yue{
                 other{"{0} 桶"}
             }
             bushel{
-                dnam{"bu"}
+                dnam{"蒲式耳"}
                 other{"{0} 蒲式耳"}
             }
             centiliter{
@@ -1895,6 +1963,22 @@ yue{
                 dnam{"公合"}
                 other{"{0} 公合"}
             }
+            dessert-spoon{
+                dnam{"甜品匙"}
+                other{"{0}甜品匙"}
+            }
+            dessert-spoon-imperial{
+                dnam{"英制甜品匙"}
+                other{"{0}英制甜品匙"}
+            }
+            dram{
+                dnam{"英制液量打蘭"}
+                other{"{0}英制液量打蘭"}
+            }
+            drop{
+                dnam{"滴"}
+                other{"{0}滴"}
+            }
             fluid-ounce{
                 dnam{"液盎司"}
                 other{"{0} 液盎司"}
@@ -1917,6 +2001,10 @@ yue{
                 dnam{"公石"}
                 other{"{0} 公石"}
             }
+            jigger{
+                dnam{"量酒杯"}
+                other{"量酒器{0}杯"}
+            }
             liter{
                 dnam{"公升"}
                 other{"{0} 公升"}
@@ -1930,6 +2018,10 @@ yue{
                 dnam{"毫升"}
                 other{"{0} 毫升"}
             }
+            pinch{
+                dnam{"小撮"}
+                other{"{0} 小撮"}
+            }
             pint{
                 dnam{"品脫"}
                 other{"{0} 品脫"}
@@ -1941,6 +2033,10 @@ yue{
             quart{
                 dnam{"夸脫"}
                 other{"{0} 夸脫"}
+            }
+            quart-imperial{
+                dnam{"英制夸脫"}
+                other{"{0} 英制夸脫"}
             }
             tablespoon{
                 dnam{"湯匙"}
