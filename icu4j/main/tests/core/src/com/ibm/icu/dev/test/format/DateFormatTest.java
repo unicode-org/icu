@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2001-2016, International Business Machines Corporation and
@@ -49,6 +49,7 @@ import com.ibm.icu.text.ChineseDateFormatSymbols;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormat.BooleanAttribute;
 import com.ibm.icu.text.DateFormatSymbols;
+import com.ibm.icu.text.DateTimePatternGenerator;
 import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -778,6 +779,93 @@ public class DateFormatTest extends TestFmwk {
         }
     }
 
+    @Test
+    public void TestTimeZoneInLocale() {
+        String TESTS[][] = {
+            { "en-u-tz-usden",                     "America/Denver",             "gregorian" },
+            { "es-u-tz-usden",                     "America/Denver",             "gregorian" },
+            { "ms-u-tz-mykul",                     "Asia/Kuala_Lumpur",          "gregorian" },
+            { "zh-u-tz-mykul",                     "Asia/Kuala_Lumpur",          "gregorian" },
+            { "fr-u-ca-buddhist-tz-phmnl",         "Asia/Manila",                "buddhist" },
+            { "th-u-ca-chinese-tz-gblon",          "Europe/London",              "chinese" },
+            { "de-u-ca-coptic-tz-ciabj",           "Africa/Abidjan",             "coptic" },
+            { "ja-u-ca-dangi-tz-hkhkg",            "Asia/Hong_Kong",             "dangi" },
+            { "da-u-ca-ethioaa-tz-ruunera",        "Asia/Ust-Nera",              "ethiopic-amete-alem" },
+            { "ko-u-ca-ethiopic-tz-cvrai",         "Atlantic/Cape_Verde",        "ethiopic" },
+            { "fil-u-ca-gregory-tz-aubne",         "Australia/Brisbane",         "gregorian" },
+            { "fa-u-ca-hebrew-tz-brrbr",           "America/Rio_Branco",         "hebrew" },
+            { "gr-u-ca-indian-tz-lccas",           "America/St_Lucia",           "indian" },
+            { "or-u-ca-islamic-tz-cayyn",          "America/Swift_Current",      "islamic" },
+            { "my-u-ca-islamic-umalqura-tz-kzala", "Asia/Almaty",                "islamic-umalqura" },
+            { "lo-u-ca-islamic-tbla-tz-bmbda",     "Atlantic/Bermuda",           "islamic-tbla" },
+            { "km-u-ca-islamic-civil-tz-aqplm",    "Antarctica/Palmer",          "islamic-civil" },
+            { "kk-u-ca-islamic-rgsa-tz-usanc",     "America/Anchorage",          "islamic" },
+            { "ar-u-ca-iso8601-tz-bjptn",          "Africa/Porto-Novo",          "gregorian" },
+            { "he-u-ca-japanese-tz-tzdar",         "Africa/Dar_es_Salaam",       "japanese" },
+            { "bs-u-ca-persian-tz-etadd",          "Africa/Addis_Ababa",         "persian" },
+            { "it-u-ca-roc-tz-aruaq",              "America/Argentina/San_Juan", "roc" },
+        };
+        for (int i = 0; i < TESTS.length; ++i) {
+            ULocale ulocale = new ULocale(TESTS[i][0]);
+            Locale locale = new Locale(TESTS[i][0]);
+            SimpleDateFormat smptfmt = new SimpleDateFormat("Z", locale);
+            assertEquals(
+                "TimeZone from SimpleDateFormat(\"Z\", Locale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][1], smptfmt.getTimeZone().getID());
+            assertEquals(
+                "Calendar from SimpleDateFormat(\"Z\", Locale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][2], smptfmt.getCalendar().getType());
+
+            smptfmt = new SimpleDateFormat("Z", "", ulocale);
+            assertEquals(
+                "TimeZone from SimpleDateFormat(\"Z\", \"\", ULocale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][1], smptfmt.getTimeZone().getID());
+            assertEquals(
+                "Calendar from SimpleDateFormat(\"Z\", \"\", ULocale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][2], smptfmt.getCalendar().getType());
+
+            smptfmt = new SimpleDateFormat("Z", ulocale);
+            assertEquals(
+                "TimeZone from SimpleDateFormat(\"Z\", ULocale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][1], smptfmt.getTimeZone().getID());
+            assertEquals(
+                "Calendar from SimpleDateFormat(\"Z\", ULocale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][2], smptfmt.getCalendar().getType());
+
+            DateFormat dfmt = DateFormat.getInstanceForSkeleton("Z", locale);
+            assertEquals(
+                "TimeZone from DateFormat.getInstanceForSkeleton(\"Z\", Locale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][1], dfmt.getTimeZone().getID());
+            assertEquals(
+                "Calendar from DateFormat.getInstanceForSkeleton(\"Z\", Locale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][2], dfmt.getCalendar().getType());
+
+            dfmt = DateFormat.getInstanceForSkeleton("Z", ulocale);
+            assertEquals(
+                "TimeZone from DateFormat.getInstanceForSkeleton(\"Z\", ULocale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][1], dfmt.getTimeZone().getID());
+            assertEquals(
+                "Calendar from DateFormat.getInstanceForSkeleton(\"Z\", ULocale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][2], dfmt.getCalendar().getType());
+
+            dfmt = DateFormat.getPatternInstance("Z", locale);
+            assertEquals(
+                "TimeZone from DateFormat.getPatternInstance(\"Z\", Locale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][1], dfmt.getTimeZone().getID());
+            assertEquals(
+                "Calendar from DateFormat.getPatternInstance(\"Z\", Locale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][2], dfmt.getCalendar().getType());
+
+            dfmt = DateFormat.getPatternInstance("Z", ulocale);
+            assertEquals(
+                "TimeZone from DateFormat.getPatternInstance(\"Z\", ULocale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][1], dfmt.getTimeZone().getID());
+            assertEquals(
+                "Calendar from DateFormat.getPatternInstance(\"Z\", ULocale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][2], dfmt.getCalendar().getType());
+        }
+    }
+
     private static final String GMT_BG = "\u0413\u0440\u0438\u043D\u0443\u0438\u0447";
     private static final String GMT_ZH = "GMT";
     //private static final String GMT_ZH = "\u683C\u6797\u5C3C\u6CBB\u6807\u51C6\u65F6\u95F4";
@@ -1006,13 +1094,13 @@ public class DateFormatTest extends TestFmwk {
         { "de", "Asia/Calcutta", "2004-01-15T00:00:00Z", "Z", "+0530", "+5:30" },
         { "de", "Asia/Calcutta", "2004-01-15T00:00:00Z", "ZZZZ", "GMT+05:30", "+5:30" },
         { "de", "Asia/Calcutta", "2004-01-15T00:00:00Z", "z", "GMT+5:30", "+5:30" },
-        { "de", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "Indische Zeit", "+5:30" },
+        { "de", "Asia/Calcutta", "2004-01-15T00:00:00Z", "zzzz", "Indische Normalzeit", "+5:30" },
         { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "Z", "+0530", "+5:30" },
         { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+05:30", "+5:30" },
         { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "z", "GMT+5:30", "+05:30" },
-        { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "Indische Zeit", "+5:30" },
+        { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "Indische Normalzeit", "+5:30" },
         { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "Indien Zeit", "Asia/Calcutta" },
-        { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "Indische Zeit", "Asia/Calcutta" },
+        { "de", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "Indische Normalzeit", "Asia/Calcutta" },
 
         // ==========
 
@@ -1511,7 +1599,7 @@ public class DateFormatTest extends TestFmwk {
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "Z", "+0100", "+1:00" },
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+01:00", "+1:00" },
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "z", "GMT+1", "+1:00" },
-        { "ti", "Europe/London", "2004-07-15T00:00:00Z", "zzzz", "GMT+01:00", "+1:00" },
+        { "ti", "Europe/London", "2004-07-15T00:00:00Z", "zzzz", "British Summer Time", "+1:00" },
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "v", "\u12A5\u1295\u130D\u120A\u12DD", "Europe/London" },
         { "ti", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "\u12A5\u1295\u130D\u120A\u12DD", "Europe/London" },
 
@@ -5430,5 +5518,83 @@ public class DateFormatTest extends TestFmwk {
         final String inDate = "4/27/18";    // date only, no time
         dfmt.parse(inDate, pos);
         assertEquals("Error index", inDate.length(), pos.getErrorIndex());
+    }
+
+    @Test
+    public void test20739_MillisecondsWithoutSeconds() {
+        String[][] cases = new String[][]{
+            // Ticket #20739
+            // minutes+milliseconds, seconds missing, should be repaired
+            {"SSSSm", "mm:ss.SSSS"},
+            {"mSSSS", "mm:ss.SSSS"},
+            {"SSSm", "mm:ss.SSS"},
+            {"mSSS", "mm:ss.SSS"},
+            {"SSm", "mm:ss.SS"},
+            {"mSS", "mm:ss.SS"},
+            {"Sm", "mm:ss.S"},
+            {"mS", "mm:ss.S"},
+            // only milliseconds, untouched, no repairs
+            {"S", "S"},
+            {"SS", "SS"},
+            {"SSS", "SSS"},
+            {"SSSS", "SSSS"},
+            // hour:minute+seconds+milliseconds, correct, no repairs, proper pattern
+            {"jmsSSS", "h:mm:ss.SSS a"},
+            {"jmSSS", "h:mm:ss.SSS a"},
+            // Ticket #20738
+            // seconds+milliseconds, correct, no repairs, proper pattern
+            {"sS", "s.S"},
+            {"sSS", "s.SS"},
+            {"sSSS", "s.SSS"},
+            {"sSSSS", "s.SSSS"},
+            // minutes+seconds+milliseconds, correct, no repairs, proper pattern
+            {"msS", "mm:ss.S"},
+            {"msSS", "mm:ss.SS"},
+            {"msSSS", "mm:ss.SSS"},
+            {"msSSSS", "mm:ss.SSSS"}
+        };
+
+        ULocale locale = ULocale.ENGLISH;
+        for (String[] cas : cases) {
+            DateFormat fmt = DateFormat.getInstanceForSkeleton( cas[0], locale);
+            String pattern = ((SimpleDateFormat) fmt).toPattern();
+            assertEquals("Format pattern", cas[1], pattern);
+        }
+    }
+
+    @Test
+    public void test20741_ABFields() {
+        String [] skeletons = {"EEEEEBBBBB", "EEEEEbbbbb"};
+        ULocale[] locales = ULocale.getAvailableLocales();
+        for (String skeleton : skeletons) {
+            for (int i = 0; i < locales.length; i++) {
+                ULocale locale = locales[i];
+                if (isQuick() && (i % 17 != 0)) continue;
+
+                DateTimePatternGenerator gen = DateTimePatternGenerator.getInstance(locale);
+                String pattern = gen.getBestPattern(skeleton);
+                SimpleDateFormat dateFormat = new SimpleDateFormat(pattern, locale);
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("PST8PDT"));
+                calendar.setTime(new Date(0));
+
+                FieldPosition pos_c = new FieldPosition(DateFormat.Field.DAY_OF_WEEK);
+                dateFormat.format(calendar, new StringBuffer(""), pos_c);
+                assertFalse("'Day of week' field was not found", pos_c.getBeginIndex() == 0 && pos_c.getEndIndex() == 0);
+
+                if (skeleton.equals("EEEEEBBBBB")) {
+                    FieldPosition pos_B = new FieldPosition(DateFormat.Field.FLEXIBLE_DAY_PERIOD);
+                    dateFormat.format(calendar, new StringBuffer(""), pos_B);
+                    assertFalse("'Flexible day period' field was not found", pos_B.getBeginIndex() == 0 && pos_B.getEndIndex() == 0);
+                } else {
+                    FieldPosition pos_b = new FieldPosition(DateFormat.Field.AM_PM_MIDNIGHT_NOON);
+                    dateFormat.format(calendar, new StringBuffer(""), pos_b);
+                    assertFalse("'AM/PM/Midnight/Noon' field was not found", pos_b.getBeginIndex() == 0 && pos_b.getEndIndex() == 0);
+                }
+
+                FieldPosition pos_a = new FieldPosition(DateFormat.Field.AM_PM);
+                dateFormat.format(calendar, new StringBuffer(""), pos_a);
+                assertTrue("'AM/PM' field was found", pos_a.getBeginIndex() == 0 && pos_a.getEndIndex() == 0);
+            }
+        }
     }
 }

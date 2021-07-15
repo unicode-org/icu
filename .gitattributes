@@ -75,9 +75,12 @@ configure text !eol
 *.utf16be -text
 
 # The following file types are stored in Git-LFS.
+# Only .jars
 *.jar filter=lfs diff=lfs merge=lfs -text
-*.dat filter=lfs diff=lfs merge=lfs -text
-*.zip filter=lfs diff=lfs merge=lfs -text
-*.gz filter=lfs diff=lfs merge=lfs -text
-*.bz2 filter=lfs diff=lfs merge=lfs -text
-*.gif filter=lfs diff=lfs merge=lfs -text
+
+# Enable syntax highlighting on GitHub.com
+.cpyskip.txt linguist-language=Ignore-List
+
+# Use JSONC for syntax highlighting on GitHub.com
+*.json linguist-language=jsonc
+

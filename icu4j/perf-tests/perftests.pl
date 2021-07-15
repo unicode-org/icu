@@ -1,6 +1,6 @@
 #!/usr/local/bin/perl
 # * © 2016 and later: Unicode, Inc. and others.
-# * License & terms of use: http://www.unicode.org/copyright.html#License
+# * License & terms of use: http://www.unicode.org/copyright.html
 # *******************************************************************************
 # * Copyright (C) 2002-2012 International Business Machines Corporation and     *
 # * others. All Rights Reserved.                                                *

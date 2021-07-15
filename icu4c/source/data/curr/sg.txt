@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 sg{
     Currencies{
         AED{
@@ -211,7 +212,7 @@ sg{
             "farânga CFA (BEAC)",
         }
         XOF{
-            "CFA",
+            "F CFA",
             "farânga CFA (BCEAO)",
         }
         ZAR{
@@ -231,5 +232,4 @@ sg{
             "dolära tî Zimbäbwe",
         }
     }
-    Version{"36"}
 }

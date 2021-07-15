@@ -2,10 +2,11 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package org.unicode.icu.tool.cldrtoicu.testing;
 
+import org.unicode.icu.tool.cldrtoicu.RbPath;
+
 import com.google.common.truth.FailureMetadata;
 import com.google.common.truth.Subject;
 import com.google.common.truth.Truth;
-import org.unicode.icu.tool.cldrtoicu.RbPath;
 
 /** Truth subject for asserting about resource bundle paths (makes tests much more readable). */
 public final class RbPathSubjectFactory implements Subject.Factory<RbPathSubject, RbPath> {

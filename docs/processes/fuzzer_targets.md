@@ -12,7 +12,7 @@ target for an ICU API and its integration into the ICU build process.
 ### Directory and naming conventions
 
 Fuzzer targets are exclusively in directory
-[`source/test/fuzzer/`](https://github.com/unicode-org/icu/tree/master/icu4c/source/test/fuzzer)
+[`source/test/fuzzer/`](https://github.com/unicode-org/icu/tree/main/icu4c/source/test/fuzzer)
 and end with `_fuzzer.cpp`. Only files with such ending are recognized and executed as fuzzer
 targets by the OSS-Fuzz system.
 
@@ -32,7 +32,7 @@ fuzzer-controlled data of size `size` bytes. Part or all of this data is then pa
 ICU API under test.
 
 Fuzzer target
-[`collator_rulebased_fuzzer.cpp`](https://github.com/unicode-org/icu/blob/master/icu4c/source/test/fuzzer/collator_rulebased_fuzzer.cpp)
+[`collator_rulebased_fuzzer.cpp`](https://github.com/unicode-org/icu/blob/main/icu4c/source/test/fuzzer/collator_rulebased_fuzzer.cpp)
 illustrates the basic elements.
 
 ```
@@ -76,7 +76,7 @@ to assure that the code is syntactically correct and, as a sanity check, execute
 manner, i.e. with minimal testdata and without ASAN or MSAN analysis.
 
 Add the new fuzzer target to the list of targets in the `FUZZER_TARGETS` variable in
-[`Makefile.in`](https://github.com/unicode-org/icu/blob/master/icu4c/source/test/fuzzer/Makefile.in).
+[`Makefile.in`](https://github.com/unicode-org/icu/blob/main/icu4c/source/test/fuzzer/Makefile.in).
 The new fuzzer target will then be built and executed as part of a normal ICU4C unit test run. Note
 that each fuzzer target becomes executable on its own. As such it is linked with the code in
 `fuzzer_driver.cpp`, which contains the `main()` function.
@@ -86,13 +86,13 @@ that each fuzzer target becomes executable on its own. As such it is linked with
 Any fuzzer seed data for a fuzzer target goes into a file with name `<fuzzer_target>_seed_corpus.txt`.
 In many cases the input parameter of the ICU API under test is of type `UnicodeString`, in case
 of which the seed data should be in UTF-16 format. As an example,see
-[collator_rulebased_fuzzer_seed_corpus.txt](https://github.com/unicode-org/icu/blob/master/icu4c/source/test/fuzzer/collator_rulebased_fuzzer_seed_corpus.txt).
+[collator_rulebased_fuzzer_seed_corpus.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/test/fuzzer/collator_rulebased_fuzzer_seed_corpus.txt).
 
 ### Guidelines and tips
 
 *   Leave all randomness to the fuzzer. If a random selection of any kind is needed (e.g., of a
     locale), then use bytes from the fuzzer data to make the selection
-    ([example](https://github.com/unicode-org/icu/blob/master/icu4c/source/test/fuzzer/break_iterator_fuzzer.cpp)).
+    ([example](https://github.com/unicode-org/icu/blob/main/icu4c/source/test/fuzzer/break_iterator_fuzzer.cpp)).
 *   In many cases ICU unit tests can provide seed data or at least ideas for seed data. If the API
     under test requires a Unicode string then make sure that the seed data is in UTF-16 encoding.
     This can be achieved with e.g. the 'iconv' command or using an editor that saves text in UTF-16.

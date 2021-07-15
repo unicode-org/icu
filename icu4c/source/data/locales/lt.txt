@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 lt{
     AuxExemplarCharacters{
         "[á à ã {ą\u0301} {ą\u0303} {ch} {dz} {dž} é è ẽ {ę\u0301} {ę\u0303} {ė"
@@ -44,96 +45,72 @@ lt{
                         many{"0 tūkstančio"}
                         one{"0 tūkstantis"}
                         other{"0 tūkstančių"}
-                        two{"0 tūkst'.'"}
-                        zero{"0 tūkst'.'"}
                     }
                     10000{
                         few{"00 tūkstančiai"}
                         many{"00 tūkstančio"}
                         one{"00 tūkstantis"}
                         other{"00 tūkstančių"}
-                        two{"00 tūkst'.'"}
-                        zero{"00 tūkst'.'"}
                     }
                     100000{
                         few{"000 tūkstančiai"}
                         many{"000 tūkstančio"}
                         one{"000 tūkstantis"}
                         other{"000 tūkstančių"}
-                        two{"000 tūkst'.'"}
-                        zero{"000 tūkst'.'"}
                     }
                     1000000{
                         few{"0 milijonai"}
                         many{"0 milijono"}
                         one{"0 milijonas"}
                         other{"0 milijonų"}
-                        two{"0 mln'.'"}
-                        zero{"0 mln'.'"}
                     }
                     10000000{
                         few{"00 milijonai"}
                         many{"00 milijono"}
                         one{"00 milijonas"}
                         other{"00 milijonų"}
-                        two{"00 mln'.'"}
-                        zero{"00 mln'.'"}
                     }
                     100000000{
                         few{"000 milijonai"}
                         many{"000 milijono"}
                         one{"000 milijonas"}
                         other{"000 milijonų"}
-                        two{"000 mln'.'"}
-                        zero{"000 mln'.'"}
                     }
                     1000000000{
                         few{"0 milijardai"}
                         many{"0 milijardo"}
                         one{"0 milijardas"}
                         other{"0 milijardų"}
-                        two{"0 mlrd'.'"}
-                        zero{"0 mlrd'.'"}
                     }
                     10000000000{
                         few{"00 milijardai"}
                         many{"00 milijardo"}
                         one{"00 milijardas"}
                         other{"00 milijardų"}
-                        two{"00 mlrd'.'"}
-                        zero{"00 mlrd'.'"}
                     }
                     100000000000{
                         few{"000 milijardai"}
                         many{"000 milijardo"}
                         one{"000 milijardas"}
                         other{"000 milijardų"}
-                        two{"000 mlrd'.'"}
-                        zero{"000 mlrd'.'"}
                     }
                     1000000000000{
                         few{"0 trilijonai"}
                         many{"0 trilijono"}
                         one{"0 trilijonas"}
                         other{"0 trilijonų"}
-                        two{"0 trln'.'"}
-                        zero{"0 trln'.'"}
                     }
                     10000000000000{
                         few{"00 trilijonai"}
                         many{"00 trilijono"}
                         one{"00 trilijonas"}
                         other{"00 trilijonų"}
-                        two{"00 trln'.'"}
-                        zero{"00 trln'.'"}
                     }
                     100000000000000{
                         few{"000 trilijonai"}
                         many{"000 trilijono"}
                         one{"000 trilijonas"}
                         other{"000 trilijonų"}
-                        two{"000 trln'.'"}
-                        zero{"000 trln'.'"}
                     }
                 }
             }
@@ -218,100 +195,77 @@ lt{
                         many{"0 tūkst'.'"}
                         one{"0 tūkst'.'"}
                         other{"0 tūkst'.'"}
-                        two{"0 tūkst'.'"}
-                        zero{"0 tūkst'.'"}
                     }
                     10000{
                         few{"00 tūkst'.'"}
                         many{"00 tūkst'.'"}
                         one{"00 tūkst'.'"}
                         other{"00 tūkst'.'"}
-                        two{"00 tūkst'.'"}
-                        zero{"00 tūkst'.'"}
                     }
                     100000{
                         few{"000 tūkst'.'"}
                         many{"000 tūkst'.'"}
                         one{"000 tūkst'.'"}
                         other{"000 tūkst'.'"}
-                        two{"000 tūkst'.'"}
-                        zero{"000 tūkst'.'"}
                     }
                     1000000{
                         few{"0 mln'.'"}
                         many{"0 mln'.'"}
                         one{"0 mln'.'"}
                         other{"0 mln'.'"}
-                        two{"0 mln'.'"}
-                        zero{"0 mln'.'"}
                     }
                     10000000{
                         few{"00 mln'.'"}
                         many{"00 mln'.'"}
                         one{"00 mln'.'"}
                         other{"00 mln'.'"}
-                        two{"00 mln'.'"}
-                        zero{"00 mln'.'"}
                     }
                     100000000{
                         few{"000 mln'.'"}
                         many{"000 mln'.'"}
                         one{"000 mln'.'"}
                         other{"000 mln'.'"}
-                        two{"000 mln'.'"}
-                        zero{"000 mln'.'"}
                     }
                     1000000000{
                         few{"0 mlrd'.'"}
                         many{"0 mlrd'.'"}
                         one{"0 mlrd'.'"}
                         other{"0 mlrd'.'"}
-                        two{"0 mlrd'.'"}
-                        zero{"0 mlrd'.'"}
                     }
                     10000000000{
                         few{"00 mlrd'.'"}
                         many{"00 mlrd'.'"}
                         one{"00 mlrd'.'"}
                         other{"00 mlrd'.'"}
-                        two{"00 mlrd'.'"}
-                        zero{"00 mlrd'.'"}
                     }
                     100000000000{
                         few{"000 mlrd'.'"}
                         many{"000 mlrd'.'"}
                         one{"000 mlrd'.'"}
                         other{"000 mlrd'.'"}
-                        two{"000 mlrd'.'"}
-                        zero{"000 mlrd'.'"}
                     }
                     1000000000000{
                         few{"0 trln'.'"}
                         many{"0 trln'.'"}
                         one{"0 trln'.'"}
                         other{"0 trln'.'"}
-                        two{"0 trln'.'"}
-                        zero{"0 trln'.'"}
                     }
                     10000000000000{
                         few{"00 trln'.'"}
                         many{"00 trln'.'"}
                         one{"00 trln'.'"}
                         other{"00 trln'.'"}
-                        two{"00 trln'.'"}
-                        zero{"00 trln'.'"}
                     }
                     100000000000000{
                         few{"000 trln'.'"}
                         many{"000 trln'.'"}
                         one{"000 trln'.'"}
                         other{"000 trln'.'"}
-                        two{"000 trln'.'"}
-                        zero{"000 trln'.'"}
                     }
                 }
             }
             symbols{
+                approximatelySign{"∼"}
                 decimal{","}
                 exponential{"×10^"}
                 group{" "}
@@ -340,7 +294,6 @@ lt{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"36"}
     calendar{
         buddhist{
             eras{
@@ -370,6 +323,16 @@ lt{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "UMMMMEEEEd",
+                "UMMMMd",
+                "UMMMd",
+                "yMMdd",
             }
             availableFormats{
                 Ed{"d, E"}
@@ -827,6 +790,16 @@ lt{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "UMMMMEEEEd",
+                "UMMMMd",
+                "UMMMd",
+                "yMMdd",
             }
             availableFormats{
                 Ed{"d, E"}
@@ -1295,6 +1268,16 @@ lt{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GyMMdd",
+            }
             availableFormats{
                 Bh{"h B"}
                 Bhm{"h:mm B"}
@@ -1462,6 +1445,16 @@ lt{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMdd",
+                "yMMdd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -2003,6 +1996,16 @@ lt{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GyMMdd",
             }
             eras{
                 abbreviated{

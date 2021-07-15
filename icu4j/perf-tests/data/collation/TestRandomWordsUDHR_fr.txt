@@ -1,0 +1,10022 @@
+/**
+# * © 2021 and later: Unicode, Inc. and others.
+# * License & terms of use: http://www.unicode.org/copyright.html
+# *******************************************************************************
+#  Copyright (C) 2013, International Business Machines Corporation and
+#  others. All Rights Reserved.
+# *******************************************************************************
+#
+# This test data file was generated from the UDHR translated to French.
+#
+# Each line consists from one or more words collected from the UDHR, and concatenated randomly.
+# Therefore, the generated phrase does not make sense literally.
+#
+# Source file: http://www.unicode.org/udhr/d/udhr_fra.txt
+#
+inhumains
+poursuites vieillesse
+nouveau
+public sont
+interdits
+inhérente
+justes valeur
+visant ressortissante établies
+l’âge
+impliquant fraternité découlant
+impartial
+résidence
+plan constituaient constitution
+qui grâce
+pays
+travaille L’enseignement actes
+universelle soient tribunal
+politique
+d’atteintes lors conclu
+tribunal d’un ordre
+partir Tous ainsi
+règne
+résultent proclamé
+établie
+les maintien pays
+maintien d’atteintes foi
+Article équitablement
+l’ordre placés
+arts universelle
+équitablement peuples lors
+commises
+poursuites Toute idées
+liberté social
+enfants
+satisfaisante
+tenu travail
+nubile
+son enfants congés
+développement professionnel reconnaissance
+humains futurs
+médicaux
+aucun
+cruels devoirs
+été l’organisation
+constamment protection satisfaire
+autres circonstances
+amicales littéraire Article
+uns choisir
+révoltent générale
+vie
+assurer L’éducation
+d’atteintes
+Nations satisfaisantes contre
+détenu
+moyens
+conduit maladie
+régime obligatoire
+ayant telle telles
+formes dont
+frontières aussi violerait
+provocation Aucune
+engagement afin
+ressources garanties esprit
+conduit nubile
+individu fonder répandre
+groupement acte
+établie tenu salaire
+d’expression veuvage l’acte
+l’oppression
+rémunération ait
+interdits
+proclamé autres honneur
+recevoir Elle intérêts
+générale été volonté
+élémentaire l’alimentation
+services Considérant
+moment droit commun
+manifester publics
+avec
+buts
+esprit secret
+contre
+ont
+matériels ait
+accéder études d’en
+lors
+l’enfance privée souveraineté
+suprême des
+démocratique
+complétée cours chercher
+obligatoire quitter
+telle
+d’invalidité immixtions s’il
+commun
+son juridictions Toute
+salaire omissions
+périodiques progrès
+effet réellement l’ordre
+notamment Nations tolérance
+crime réputation partie
+possible entre L’individu
+interprétée trouver valeur
+misère culturelle
+d’autres compte
+effectives légalement tolérance
+celles même religieux
+délictueux
+Ces
+tolérance
+secret d’un
+satisfaisantes épanouissement auront
+l’habillement
+femmes chacun choisis
+n’est
+ait représentants mariage
+ainsi doivent seule
+droit d’égalité dirigée
+littéraire
+uns
+L’enseignement peuples impliquant
+social esclavage services
+notamment
+contre principes
+Nations fonder
+jouir
+entendue
+établies
+frontières
+mesures effet opinions
+l’organisation implique
+travail méconnaissance religion
+moyens indépendant par
+n’est immixtions l’organisation
+misère matériels devant
+fonder maternité
+assurer obligé
+présumée
+Elle secret
+L’individu progressives directement
+défense toutes haute
+humains sûreté
+partie persécution
+ressources progressives matériels
+publiquement actes
+plan
+fonction
+nationalité
+remplir
+constitue grande suite
+indépendantes telles
+monde entre suite
+tribunal
+bien couleur progrès
+l’accomplissement arts
+obtenir
+changer
+toutes tolérance toutes
+d’égalité Ils aucune
+respect toutes
+n’est afin celles
+était
+indépendant
+repos
+devoirs
+effectif aucun instaurer
+été
+assurées Charte commune
+plein
+arbitrairement procédure pourront
+obligé commises Aucune
+aucune hors
+nationales haute devoirs
+uns grâce
+fraternité
+tout
+découlant volonté peuples
+obligé
+l’humanité pour engagement
+autonome moyens marier
+libérés Quiconque pacifiques
+d’éducation
+sociaux représentants
+pouvoirs pratiques
+donner nécessaires interdits
+Ces Membres
+Unies d’autres
+hommes cours
+nouveau prendre direction
+reconnaissance
+race d’encourager Considérant
+participer satisfaisantes
+prévaloir liberté
+fonder Déclaration
+Charte
+fait
+l’asile jouir
+d’ordre
+soient justice
+personnalité
+êtres universel
+statut
+ont procès constitution
+Devant
+inaliénables
+atteindre d’éducation dégradants
+actes lors
+arrêté circonstances
+périodiques destruction
+autre territoire
+proclamés social médicaux
+constitution Ils conditions
+pays représentants pour
+parents aussi
+fraternité logement
+esclaves visant décidera
+moyen
+protégés
+chercher l’autorité commune
+naissent obtenir
+invoqué directement
+l’habillement reconnaissance
+élémentaire
+plus
+ces
+l’esclavage seront possible
+entendue d’après
+concerne
+l’enseignement
+périodiquement
+engagés l’autorité Dans
+peut terreur indispensables
+organes essentiel
+futurs conviction
+est
+traite
+salaire
+conduit libres
+qu’il
+considérations
+livrer d’une compris
+entendue
+lors
+atteintes
+assurées technique compétentes
+notamment libres
+doivent Déclaration jusqu’à
+limitation compris
+d’un universel
+toute
+aux d’expression celle
+leur
+fraternité
+régime plein
+Quiconque l’homme littéraire
+autres équivalente quelconque
+indispensables avec autres
+Proclame
+qu’il groupement
+recevoir
+indépendant choix l’accomplissement
+sûreté
+tant résultent
+direction d’éducation santé
+fondamentales
+ayant conviction
+toutes humains
+déclarés gratuite l’organisation
+fondamentales
+d’ordre ses
+constitution nationale matériels
+vieillesse
+sera
+travail
+impliquant production
+êtres compris s’exprimer
+d’encourager limitation d’expression
+bien accusée
+fondamentaux
+entre
+trouver universelle
+juridiction
+satisfaisante engagés
+énoncés progrès L’enseignement
+périodiques
+développer
+nationale mépris travaille
+barbarie futurs inhérente
+l’esprit veuvage celles
+enfants
+résolus femmes qu’à
+femme remplir
+établie traitements
+périodiques
+assurant équitables pour
+d’en
+qu’en
+artistique nés loi
+devant publics juridique
+destruction
+obligations l’autorité
+l’enfance
+Devant veuvage
+recevoir elles économiques
+sociaux
+universel
+tous l’enfance inquiété
+communauté famille
+droit esclavage
+secret engagés Quiconque
+épanouissement indépendant
+fondement peut ses
+fondamentales juridiction satisfaisantes
+droits misère constamment
+Tous congés
+lieu conception contrairement
+égaux nubile naissent
+jusqu’à quelque
+méconnaissance lieux
+tout d’égalité
+qu’une ayant scientifique
+naturel d’après
+exilé juridiction
+nécessaires développer conforme
+répandre
+cours
+doit
+État
+Nations
+élections populations fondée
+exilé culturelle universel
+omissions dirigée universelle
+uns
+veuvage auront crime
+applicable choisis
+rites
+l’idéal exilé
+logement
+d’autres
+d’encourager résolus
+équivalente reconnus esclaves
+personnalité l’accès poursuites
+époux
+Charte
+peuples
+populations entendue ouvert
+réunion l’auteur engagés
+participer gratuite
+concerne
+d’atteintes
+scientifique publiques qu’à
+partie autres
+dirigée impliquant personnalité
+progrès sous
+résidence
+d’accomplir puissent
+avoir
+commun
+organes
+uns lieux
+satisfaisante souveraineté
+soins plein pour
+l’Organisation participer
+considérations littéraire choisir
+suffisant l’amitié Dans
+reconnaissance travaille envers
+obligé acte
+jouissance
+suivant soient situation
+rites
+effectives nubile
+une
+progressives Tous
+asile pratiques
+commune constitue
+procès
+servitude durant que
+les
+procédure d’atteintes
+directement
+telles l’enseignement
+fondamentaux l’accomplissement
+satisfaire
+librement
+économiques
+amicales atteindre
+entre perte
+culturels
+naissent d’opinion lieu
+l’organisation l’autorité n’est
+juridiction société
+légalement naissent nouveau
+raciaux États
+poursuites celle
+national
+constituaient choisir quelconque
+juridique tyrannie recours
+culte
+été commun
+discrimination national
+libre
+égalité
+populations êtres
+peuples
+n’est hommes générale
+dissolution
+d’invalidité prendre
+vieillesse
+constituaient
+genre
+spéciales mariage vieillesse
+essentiel
+leur Nul parmi
+réellement garanties ont
+qu’ils
+personne
+celle terreur énoncés
+privée sous
+des
+l’auteur indépendantes l’État
+l’acte seul
+humaine
+méconnaissance
+toute pourront élémentaire
+moins
+d’un morale
+économiques
+développer qui
+intérêts
+l’habillement
+bienfaits l’homme
+périodiques nés
+individus opinions exigences
+défense équitable
+tenu réellement
+personnalité opinion telle
+établie futurs
+des religieux
+conclu respect membres
+statut
+social
+établies plein
+individu
+nationales commune
+États accusation Charte
+pour
+sécurité
+établie quitter commises
+interprétée grâce
+mêmes décidera nouveau
+pour ressortissante relations
+Quiconque
+vieillesse liberté
+effectif constitution
+plein
+valeur partie
+immixtions hors populations
+sera syndicats
+Article international territoires
+proclamés doués
+volonté
+aussi actions d’après
+membre
+suprême
+international compréhension
+équitablement plus
+qu’une distinction
+arrêté aux Unies
+aux couleur
+l’accès Tout avec
+auront compte nubile
+pouvoirs
+époux aussi cruels
+d’une Aucune
+d’expression garanties
+organes complétée
+jouir
+élémentaire trouver
+ces quelque que
+rites généralisé nationalité
+favoriser Membres
+immixtions commun
+direction atteintes
+informations changer barbarie
+déclarés garanties
+conclu omissions mépris
+culturels
+d’encourager
+fondamentaux publics instaurer
+limitations crime
+collectivité n’est
+leur parler
+résidence inhumains résidence
+tyrannie indépendant
+fondamental
+poursuites
+l’accomplissement impliquant
+compris États
+services matière pour
+grande constitue commun
+parler implique d’invalidité
+Article
+énoncés torture inhérente
+Aucune groupes
+prendre limitation l’objet
+liberté fraternité enfants
+Proclame d’expression sien
+revenir jouissent volonté
+intérêts représentants
+raison
+social résultent tous
+assurées esprit
+culturelle ainsi équitable
+ceux opinions s’exprimer
+détenu hors essentiel
+L’enseignement volonté implique
+l’accomplissement livrer
+maternité traitements développement
+sera établies
+sien
+réellement des
+conduit l’Organisation développer
+compétentes élections d’après
+l’effort qu’avec
+l’habillement procédure
+entre conduit reconnaissance
+êtres compétentes
+telle qu’en
+fondée
+Déclaration
+l’auteur élémentaire
+pour prendre
+participer sien
+part règne découlant
+général
+fondé
+secret manifester
+l’égalité liberté littéraire
+uns États
+ordre
+consentement
+constitution
+actions l’exercice
+circuler relations
+nationalité partie publics
+l’objet
+l’accès interprétée choisir
+juridique dirigée ont
+ainsi nations
+moyen
+traitements raciaux futurs
+tutelle assurer l’esclavage
+celui
+progrès l’avènement
+mariage
+production
+Unies soumis
+professionnel Quiconque indispensables
+enfants énoncés
+cause commis association
+pénale Chacun
+dissolution s’efforcent
+subsistance
+fonder
+nationale interdits l’enfance
+l’idéal effectives généralisé
+l’éducation fondement leur
+honnêtes
+détenu inquiété équitablement
+implique être atteindre
+lieu
+prévaloir
+pouvoirs équitable interdits
+accusée limitations réputation
+choix
+atteintes suffisant résolus
+celles tel d’atteintes
+d’égalité matière impartial
+eux
+opinion
+dissolution lieu ouvert
+naissent effectif jouissance
+plus agir
+suffrage
+artistique
+résolus
+par
+notamment ceux esclavage
+internationale l’acte n’est
+pratiques Unies épanouissement
+d’association culpabilité ordre
+que recours
+protégés
+fondement
+donner ouvert
+moins nés
+plein commun
+professionnel religion Article
+possible groupement auront
+Les
+médicaux
+maternité contraint êtres
+détenu nécessaires
+d’encourager
+groupement esprit statut
+Elle impliquant
+laquelle d’ordre
+fait
+L’enseignement importance constamment
+l’acte association règne
+ainsi d’invalidité
+territoire que
+ainsi
+tout
+niveau recours groupes
+frontières
+jouir arbitraires peut
+spéciales cas
+qu’il femmes non
+commun aussi d’après
+commis compte
+cause part littéraire
+maladie religion
+naissance regard Proclame
+tous choix avoir
+choisir Ces assurer
+accusation femme Dans
+périodiques l’égalité raciaux
+qu’à tutelle
+l’intérieur suffrage ont
+condamné
+soumis équitables privé
+traitements privée
+fondamentaux
+volonté
+réunion doit circuler
+autonome services fondamentaux
+L’éducation détenu
+peuples règne l’avènement
+plein veuvage religieux
+invoqué fortune
+atteindre faire territoires
+misère effet
+traitements
+raciaux jusqu’à que
+supérieures
+Quiconque
+pays était libertés
+revenir durant social
+comme
+parents Ils paix
+foi restriction
+informations
+peines
+cours périodiquement
+sûreté universelle
+impartial réellement
+situation statut vie
+essentiel l’amitié
+soumis
+moyen
+l’esprit placés
+limitation circonstances
+relations
+pacifiques jouissent sera
+moment fondées
+qu’à
+statut
+fonctions
+faire fonctions
+volonté tel nationale
+volonté Tout humaine
+l’effort durant son
+social conviction
+d’encourager humaine s’il
+durant leurs l’Organisation
+équitable
+mariage Tous
+sont visant équitablement
+religieux pouvoirs
+fortune
+frontières celui
+accusation
+sexe
+égaux eux naissance
+que
+reconnaissance
+démocratique honneur
+règne fondamental
+suite développement restriction
+autonome sien Charte
+autres honneur
+reconnaissance exilé hors
+nationalité
+aucune tutelle
+époux moyens
+avec Nations
+changer choix informations
+États importance
+équitables
+d’égalité pourront
+chacun constitution violant
+public tel populations
+torture libre afin
+d’association résolus concerne
+artistique traite
+international interdits pleine
+territoires contraires torture
+interprétée
+accusée
+nationales celles
+égale
+devoirs participer d’autrui
+indépendantes matière garanties
+tolérance
+domicile qui Préambule
+circonstances d’assurer peine
+livrer l’accomplissement
+États
+conduit destruction l’organisation
+affaires fonctions
+égalité association
+mérite intérêts l’habillement
+Ces
+Ces marier peuples
+religion
+assurer accéder
+limitation
+maladie
+notamment juridiction
+reconnaissance impliquant
+d’autrui rites instaurer
+renforcement
+compte
+cas l’acte
+obligé
+d’en naturel l’asile
+femme l’âge autre
+effectif décidera
+ses esprit L’enseignement
+qu’ils parents
+limitation
+fondée publics
+ordre
+l’intermédiaire
+pays
+protection
+accusation
+contraint privée
+qu’il doit
+assurées
+économiques
+aucun
+gratuite telles
+libres tenu
+provocation
+monde informations détenu
+l’amitié
+conduit
+veuvage conditions
+énoncés provocation
+comme
+découlant
+genre
+cause public
+cas restriction
+instaurer
+choisir l’objet
+conforme générale
+prévaloir populations
+périodiques ressources privée
+contre
+l’éducation proclamés
+Quiconque
+genre l’esprit
+premier soient
+sous
+contraires condamné
+ordre autre
+crime respect
+frontières prendre
+groupes envers égale
+déclarés présente impartial
+Aucune
+justes l’habillement jouissance
+culpabilité l’enfance fondamentales
+mêmes
+Elle fortune
+protection nouveau
+aspiration internationale d’immixtions
+exilé Quiconque
+pas relations d’ordre
+territoires provocation puissent
+nubile
+tel
+indispensables
+plan Article tel
+services même scientifique
+effectif obligations liberté
+l’exercice
+existence l’esprit
+valeur national propriété
+priorité naturel
+était équitablement
+genre
+naturel
+l’enfance raciaux
+aussi s’affilier avec
+fortune
+protection tel des
+circuler prévaloir
+dont celui impartial
+même d’un Ces
+justes lors discrimination
+pensée Membres
+d’une
+chômage
+national
+asile invoqué
+règne l’asile présumée
+accusée
+logement
+acte servitude
+fraternité arts d’opinion
+soins
+opinion commun
+jouissent conviction
+esclavage
+États ayant soumis
+race gratuite
+d’expression
+acte fondées doivent
+d’opinion fondée ceux
+fonctions collectivité
+famille juridictions nationales
+perte visant invoqué
+formes toute
+plus
+directement résolus
+payés chaque
+Quiconque tant
+interprétée personne
+épanouissement l’esclavage
+laquelle
+ont
+vieillesse juridiction importance
+l’exercice
+conception
+universelle l’homme
+tout toutes nationales
+société
+souveraineté
+Considérant travaille l’humanité
+violant devant
+engagés
+torture
+condamné servitude part
+établies
+fondé tolérance
+ceux qu’en Préambule
+culte
+satisfaction assurant
+grâce
+disposition pourront
+l’objet seront l’exercice
+régime recevoir chercher
+choisir peuples pratiques
+devoirs Dans
+l’organisation race genre
+procédure considérations
+pleinement relations relations
+intérêts
+maternité
+méconnaissance
+d’après cause
+territoires
+asile
+arbitrairement fondement
+moins tutelle
+lieux peine conception
+libres
+eux
+Dans juridiction
+présente
+priorité
+jusqu’à qui
+d’immixtions l’organisation progrès
+accusation pouvoirs l’idéal
+situation ordre
+parler l’accomplissement
+obligatoire L’individu matière
+limitations bien engagement
+personnalité
+aspiration
+race s’il tel
+payés populations
+révoltent
+relations
+culpabilité barbarie
+d’atteintes
+une cause
+artistique
+barbarie Ces
+honnêtes satisfaction
+cet seront mariage
+disposition obtenir
+pensée
+production
+compétentes
+raison
+maladie
+intérêts l’intermédiaire sécurité
+individus
+pensée
+salaire découlant résolus
+vue l’auteur
+les maladie
+droit
+obligatoire renforcement
+consentement idées
+doivent fondée impliquant
+humaine comme
+assurer
+quant
+entre moyens réellement
+L’enseignement
+devoirs
+l’amitié Ils donner
+réunion personnalité
+conviction ait était
+couleur hors lieu
+réputation répandre
+inquiété l’esclavage
+immixtions
+époux seul ces
+conscience
+justice
+soins garanties
+membres celles
+qui parmi
+spéciales choix l’égalité
+volonté
+librement d’origine loi
+obtenir
+religion pourront
+implique été
+association constitution
+langue
+impartial déclarés
+mêmes peines spéciales
+moraux
+chacun aucune inaliénables
+L’éducation donner
+spéciales
+découlant esprit spéciales
+constitution
+sociaux
+moyen compte une
+seule opinions conforme
+conception
+actions protection procédure
+circuler Tous études
+celui nouveau
+communauté donner
+l’intermédiaire
+pays
+collectivité
+payés été compréhension
+informations
+l’humanité d’expression
+accusation compréhension
+une
+regard travail premier
+pleinement littéraire
+interdits
+procès chacun indépendant
+remplir
+maintien
+soit
+naissance naturel
+inquiété territoires d’après
+l’élément circonstances résolus
+droits plan
+s’exercer
+développement mesures vie
+exclusivement
+non tout généralisé
+envers Quiconque
+déclarés
+rémunération L’individu femme
+suivant
+aux ont
+engagés n’est
+protégés production
+raisonnable
+groupement lieu naissent
+sans
+délictueux
+travail par statut
+d’une humaine satisfaire
+ayant
+suffisant groupes applicable
+politique
+pas parents collectivité
+Tous découlant révoltent
+l’objet remplir
+atteindre agir
+équitable personne
+considérations impartial
+marier
+l’objet
+esclaves
+repos fortune
+arrêté
+fondamentales découlant Ils
+tolérance
+satisfaisantes satisfaisante nés
+généralisé grande qu’avec
+correspondance choisir violant
+cas implique
+d’invalidité
+restriction telle
+sont opinion invoqué
+juridiction persécution existence
+informations l’idéal aide
+esprit prévaloir
+sous misère statut
+acte n’est moraux
+l’enseignement sera engagement
+communauté forte
+d’encourager secret placés
+qu’ils s’efforcent fortune
+favoriser personnalité aucun
+non l’Organisation premier
+arts buts
+Considérant ayant
+l’accès épanouissement soient
+était compris
+bienfaits l’homme résidence
+lieu l’organisation
+personne commises
+l’idéal médicaux
+mépris peuples
+supérieures
+suivant
+salaire
+Devant Proclame l’accès
+arbitraires
+droit
+interprétée quant
+immixtions repos
+progressives lieux avec
+nécessaires ait commun
+collectivité
+technique agissements relations
+commises niveau doit
+pourront
+subsistance établies toutes
+condamné L’enseignement peine
+perte eux arrêté
+Nul
+groupes
+publics jouissance informations
+provocation
+l’intérieur privé
+partie
+considérations individus
+découlant invoqué
+maladie
+obligations
+équitablement Charte cause
+satisfaisantes accusation
+d’encourager aucun
+collectivité
+inhérente professionnel culturels
+fait consentement défense
+devoirs
+forte enfants parler
+nations élections parler
+parler l’acte soit
+pleinement
+obtenir
+périodiquement libre entendue
+formes chacun
+détenu qu’une
+l’objet
+constituaient Unies conduit
+membres
+qu’en
+condamné L’individu
+s’il progressives
+librement
+fondamental
+nécessaires son terreur
+persécution
+esclavage élections
+sont
+favoriser
+marier
+reconnaissance
+travaille
+groupement territoire compréhension
+Devant
+son Charte
+l’homme
+possible
+hors tutelle d’égalité
+vieillesse existence
+propriété honneur l’exercice
+L’Assemblée
+notamment leur recevoir
+l’objet
+Préambule matériels qu’avec
+vue
+leur situation sociale
+peuple naissance moment
+pratiques
+lui arts
+nationalité plein accusée
+bienfaits ces l’auteur
+essentiel innocente
+l’autorité
+compris principes
+pouvoirs telle
+l’accès
+nouveau pas d’en
+Charte
+limitations
+accusée sont coopération
+grâce sur
+maladie tout
+veuvage n’est décidera
+national progrès
+logement l’âge
+d’en
+n’est entendue suite
+populations
+interdits d’un indépendantes
+égale Tous commis
+collectivité collectivité
+vote
+peuples Chacun
+autonome jouissance quitter
+l’Organisation générale actions
+son
+applicable autre
+était publics
+raciaux
+suffisant exilé équitables
+réunion révoltent
+mesures ont
+persécution déclarés collectivité
+protection intérêts
+tutelle production résolus
+congés commis études
+sécurité
+agir celles
+même congés satisfaire
+premier paix esclavage
+pas
+scientifique limitations juridiction
+omissions telles
+seront décidera durant
+organes
+élections provocation contraires
+d’assurer prévaloir
+d’origine Ces s’exercer
+activité
+vie l’autorité
+aspiration
+l’asile l’Organisation
+Nations payés
+révoltent sont résidence
+fonctions haute
+obligé
+d’immixtions
+uns
+contrairement l’acte
+persécution nations
+premier renforcement
+rites
+s’il Ces d’autrui
+remplir Toute des
+moraux d’ordre individu
+fondée
+universelles
+restriction
+d’atteintes enfants opinions
+ont équitable d’opinion
+disposition aspiration l’oppression
+innocente
+leur asile quelconque
+qu’à esclaves
+reconnaissance l’enfance Quiconque
+loisirs fondement Charte
+L’éducation
+doit progressives
+universelles
+soient
+déclarés proclamé s’affilier
+publics seul constituaient
+arbitraires lieux langue
+grande
+inhumains
+lors choix
+lui
+élections monde
+fonction naissance moment
+limitation moment toute
+Chacun une
+d’atteintes été
+soient conviction
+Elle avec
+partir
+général culpabilité
+matière fonder
+protection tous
+élections tyrannie condamné
+internationale
+entendue dont
+d’une progressives
+honnêtes Ils dont
+politique accéder
+l’auteur uns mesures
+résidence jouir
+hors
+salaire monde
+déclarés
+nationalité santé
+culturels condamné résultent
+jusqu’à hors ont
+qu’aux
+contrairement domicile reconnus
+généralisé
+représentants commune communauté
+social quitter
+envers vieillesse l’État
+qu’à équivalente
+travail démocratique religieux
+honnêtes
+prévaloir
+pourront amicales honneur
+réputation arts
+dont aucune culturelle
+nationalité
+invoqué l’oppression volonté
+bienfaits justice Chacun
+d’un
+international honneur
+individu délictueux épanouissement
+secret
+plein immixtions
+égalité actions
+affaires économiques s’exercer
+impartial
+obtenir collectivité correspondance
+atteintes droit opinions
+l’accomplissement d’association satisfaire
+genre conception raciaux
+spéciales loisirs
+suffrage compte
+conviction
+futurs violerait
+aux
+d’autres périodiques
+raciaux inhérente
+privé l’enseignement
+d’un prévaloir ouvert
+disposition
+Ces interprétée
+soit
+essentiel payés
+individu droit
+chômage hors cas
+maternité
+toute démocratique
+commune nubile privée
+statut juridique
+association
+internationale sexe
+lieu celui développement
+statut race d’expression
+territoire
+suffisant
+droit l’idéal laquelle
+loi
+professionnel honneur privé
+parler qu’ils
+l’oppression destruction
+d’origine publiques
+interdits forte
+considérations
+meilleures langue nationales
+chacun applicable
+services ayant
+artistique travaille
+nations compte
+interprétée
+par
+indispensables droits consentement
+lors d’opinion
+entendue s’il
+études
+Ils
+fonctions
+uns lors informations
+obligations
+elles
+privée fondamental énoncés
+importance quitter
+production
+maternité
+exclusivement
+l’Organisation domicile
+haute
+elle sûreté Les
+sera respect
+résultent
+des
+soient scientifique
+discrimination d’égalité universelles
+justes Déclaration
+juridictions
+l’enfance regard
+reconnus
+interdits manifester soins
+honneur
+contrairement discrimination tenu
+arrêté délictueux
+opinions l’esclavage
+placés
+santé genre statut
+logement sexe infligé
+que commis premier
+social
+Déclaration qu’à d’égalité
+santé avoir contraires
+buts manifester
+morale
+L’Assemblée formes
+telles aspiration
+acte publics
+d’après soit tutelle
+fondées compris nationale
+dont
+regard
+mariage foi
+faire dignité conscience
+rites grâce défense
+durée détenu maintien
+naissent s’il s’exprimer
+L’individu
+suffrage
+fondement hommes laquelle
+sera tenu
+inaliénables niveau genre
+nationales États
+qu’en procès fonction
+proclamés
+satisfaisante recevoir
+toutes commun atteindre
+cause l’accomplissement parmi
+acte circuler
+ressortissante d’encourager
+État
+fraternité s’exprimer technique
+grande existence morale
+international
+pouvoirs remplir
+moins autonome moyen
+une ayant paix
+distinction toutes indispensables
+Charte groupes organes
+d’association d’invalidité tous
+esclavage
+moyens
+obligé chacun
+culturels
+langue protégés
+fondé territoires
+pacifiques L’individu essentiel
+compris
+consentement L’enseignement
+pratiques d’éducation
+Considérant culturelle
+qu’avec telles
+commises
+l’auteur aucune
+privé arts asile
+eux sociaux qu’ils
+Les applicable suffisant
+ayant seule
+des
+décidera Devant périodiques
+sûreté culturelle d’accomplir
+possible l’esclavage religion
+assistance
+aux
+découlant l’effort part
+résultent
+énoncés disposition
+manifester
+était
+traite ordre
+livrer
+l’idéal
+sien hommes
+L’éducation lieux ses
+concerne actes
+correspondance salaire
+moraux
+suffisant
+autonome moment
+tant
+égalité femmes
+revenir pacifiques qu’une
+rites
+n’est
+technique s’exprimer
+priorité Elle humaine
+publiquement peuples individus
+cas laquelle entendue
+proclamés
+établies
+réunion vie
+l’oppression
+partir résolus
+fait
+dégradants
+haute
+quelque cruels
+défense internationale d’autres
+territoire bienfaits faire
+famille national satisfaisantes
+obligations
+dignité aucun
+regard
+prendre
+sans limitation personne
+conduit situation production
+fraternité privée Les
+Proclame destruction avec
+travail
+suffisant
+syndicats coopération dignité
+toute
+paix légalement quitter
+d’origine choix
+jouissance économiques
+payés qu’ils
+naissent visant tel
+correspondance
+sera l’objet hommes
+violerait considérations
+amicales ayant que
+regard études public
+lieu
+ayant
+qu’aux mesures
+premier
+tel L’enseignement religion
+liberté conforme
+non dirigée général
+jouir national
+générale
+couleur aide
+race
+d’origine
+engagés périodiques
+ont fondamental privé
+public formes
+dont l’humanité secret
+Considérant moyen rites
+conception
+consentement moyen respect
+technique
+ont constitution
+fondamentaux gratuite
+activités juridictions spéciales
+vue l’avènement s’il
+parler toute
+limitation personne autres
+honneur l’Organisation libres
+idées
+fondamentaux restriction
+aucune nationales ses
+Déclaration
+esclaves pratiques logement
+meilleures
+nations société
+partie
+culpabilité pénale
+d’un
+être
+participer juridique
+hors
+libérés suprême
+démocratique mariage arbitraires
+actes
+culte
+affaires
+mépris
+une
+n’est
+grâce que équitablement
+correspondance coopération
+mêmes opinion nations
+progrès groupement monde
+collectivité commises
+satisfaire groupes
+opinions
+États nationale
+Article indépendant libre
+fondé
+toutes effectif
+peines
+conditions entre participer
+commun
+Préambule prévaloir sûreté
+chômage
+Ces
+Membres
+organes
+buts
+Considérant libertés notamment
+d’éducation plus
+d’une
+d’immixtions sera
+privé les donner
+humaine amicales suite
+fondamentaux peut
+naissance assurées opinions
+ses
+qu’aux nations importance
+jouissent fondamentaux
+travail résolus
+mariage l’oppression
+grâce
+nationale fonder
+partie libres
+l’objet conviction
+fonction fonctions
+esclavage conscience internationale
+conscience
+déclarés peut
+reconnus
+volonté membres
+compétentes son futurs
+consentement atteintes règne
+égalité justes
+répandre
+qu’avec sur compris
+propriété
+qu’une Charte pour
+arrêté actes
+Déclaration
+satisfaction protection elle
+établies vie
+buts
+impliquant
+nés
+Membres uns
+libérés d’éducation
+l’homme naturel
+mariage omissions
+fait prendre
+conforme
+moins suprême d’ordre
+intérêts
+invoqué auront arbitraires
+renforcement
+Tout doit
+avoir publics
+fondamentaux universelle
+libertés une
+être société
+légalement l’effort
+l’asile individus pays
+nouveau impartial ont
+équitable résidence
+activités entendue dissolution
+d’autres obligations Nations
+Devant elles omissions
+fondé conception gratuite
+d’autrui matériels
+conscience souveraineté l’esclavage
+égaux
+méconnaissance lieux n’est
+d’origine exclusivement
+tenu
+l’accomplissement s’affilier accusation
+leurs jouir
+barbarie elle
+crime pénale
+pratiques
+révoltent prévaloir les
+impliquant changer constamment
+assurées aucune
+spéciales une
+telles puissent
+une quelque l’exercice
+L’individu
+lui crime grâce
+privé d’assurer
+obligé
+suffrage procès
+médicaux
+Ces
+s’il lieu
+telle
+l’enseignement périodiques
+l’organisation restriction établies
+peuple sans favoriser
+société
+chômage territoires
+l’idéal pas ressortissante
+obligé
+même États
+Devant aucune
+publics
+scientifique
+sans indépendant d’autrui
+participer
+regard
+son
+direction périodiques
+affaires
+instaurer indispensables
+l’État aucune
+vote
+tolérance
+fondé indispensables actes
+maternité Tous l’amitié
+comme
+pleine
+égalité pratiques affaires
+partir règne
+personnalité sur Préambule
+organes
+loi essentiel cours
+complétée l’auteur priorité
+fondamentaux payés marier
+économiques bienfaits
+peuple avec fonder
+impliquant
+Nul
+cas délictueux
+importance statut
+est
+consentement
+libres
+social langue
+l’esclavage établie effectif
+cours
+foi tel
+pénale qu’avec
+État chaque dont
+entendue applicable
+fraternité buts d’immixtions
+asile peines quelconque
+suivant prévaloir
+justes
+universel
+pourront infligé qu’avec
+innocente répandre
+suprême regard interprétée
+toutes
+aucun
+effectives culturelle périodiques
+l’État
+omissions juridiction
+humaine secret
+peuple l’objet ait
+exclusivement pénale race
+prévaloir
+qu’à
+périodiques Proclame matière
+moyens d’autrui
+fondée
+artistique activités
+autre
+L’éducation
+déclarés durant
+contraires activités travaille
+territoires telle congés
+restriction durée opinions
+littéraire
+ait pays
+sans ait
+librement
+réellement
+présente agissements par
+territoires violant
+conviction
+Tout compétentes
+aide
+loi grâce
+libertés niveau arts
+l’intérieur
+favoriser soumis
+élections
+peine avoir marier
+aide
+actes
+ait compréhension
+repos
+opinions autonome assurées
+hors domicile
+d’invalidité
+pleinement
+territoires quant
+défense
+compris qu’ils circuler
+jouissent
+fondé démocratique
+race
+revenir barbarie
+organes répandre
+race devoirs
+torture devoirs
+tous
+buts
+public prendre
+existence interdits l’esprit
+été tutelle s’il
+circonstances
+fondamentaux
+celles
+fondées sien
+rémunération
+universelles progressives d’une
+sans premier
+membres
+jouir
+équitable
+services leur
+devant
+représentants
+Nations L’Assemblée
+moyens fondamental périodiquement
+production par
+distinction loisirs
+l’esprit
+arrêté Elle
+discrimination
+technique
+non chercher
+populations Considérant
+l’âge sexe sera
+universelles sera invoqué
+l’éducation
+développer accéder arbitrairement
+pensée
+circonstances nécessaires nouveau
+fondement
+quant
+maternité
+quant
+changer l’amitié
+réputation
+tyrannie effectif satisfaction
+mérite
+membre paix toute
+représentants
+asile pays arbitraires
+Charte satisfaisantes Dans
+s’efforcent
+Toute
+d’association groupement contraires
+compétentes
+fondement
+travail proclamés société
+laquelle atteintes communauté
+Aucune naissent
+tel
+d’éducation production
+fondamentaux artistique effectives
+l’esclavage raciaux
+immixtions idées
+obligatoire
+d’un
+contraint arts
+suffrage territoires inhumains
+activités
+national élections
+fondamental universel
+revenir violant jouir
+enfants d’égalité
+justes l’Organisation faire
+Ces
+violerait
+visant
+Elle terreur seule
+politique uns s’efforcent
+mesures langue politique
+croire
+fonction protection nés
+seul provocation
+dirigée
+maternité regard quant
+cause périodiques
+l’enseignement dans
+conscience
+d’ordre autres
+logement
+pourront forte
+l’éducation protection premier
+jusqu’à vote
+eux contraint partie
+aspiration
+moraux
+sûreté constituaient
+elle
+privé l’ordre
+populations
+générale obligatoire résolus
+croire
+intérêts équitablement
+domicile morale
+culturelle mérite
+aucun
+conviction conviction accusation
+mérite consentement
+subsistance universelles toutes
+l’humanité
+celui viser barbarie
+genre devant territoires
+directement méconnaissance sous
+meilleures autonome afin
+d’égalité contre
+manifester prévaloir l’esclavage
+équitable telle
+premier lui
+L’enseignement personne elles
+l’âge moyens changer
+qu’il conscience concerne
+équivalente sera
+honneur applicable
+culpabilité
+conduit périodiques démocratique
+cruels
+effectives
+obligé
+manifester durant servitude
+équitablement devoirs pleinement
+l’asile est qu’en
+égaux
+l’intérieur dans
+religion raison esprit
+arrêté situation
+autre l’application
+s’exercer Tout
+collectivité État aucune
+concerne relations personne
+servitude
+elles l’asile
+amicales nationales
+sexe
+tyrannie interdits publiques
+chaque assurées
+fondée ayant
+culte restriction développement
+autre
+l’auteur d’autres
+Ils naturel généralisé
+assurées d’en
+égale L’individu parmi
+droit traitements effectives
+d’autrui maladie l’organisation
+futurs Tout
+infligé
+chercher moment
+quitter d’un droits
+Tout circonstances l’égalité
+jouissent
+destruction religieux aux
+compétentes humains
+atteintes
+juridique
+moyens hors
+êtres l’homme l’alimentation
+choix limitations
+forte par
+l’application organes
+bienfaits cours
+foi
+déclarés universelles
+envers pénale
+populations qu’à
+nécessaires matière
+personne
+inhérente satisfaction exigences
+impartial nouveau organes
+d’accomplir
+Devant avec matière
+sûreté raison
+s’exprimer
+donner droits
+parmi résolus
+l’esclavage
+dans affaires
+ces asile
+juridique qu’une pensée
+garanties cas
+commun L’éducation l’ordre
+culte
+lui
+quelconque statut l’effort
+opinion
+omissions
+l’objet
+fonction
+l’avènement innocente
+résultent seule esclavage
+l’amitié humaine
+torture indépendant
+leur universel suivant
+résidence travaille
+conviction
+d’invalidité Déclaration esclavage
+d’égalité atteintes
+suprême qu’avec uns
+contraires moment
+suffrage chacun Elle
+établies regard médicaux
+ressortissante ainsi
+trouver
+culturels raciaux contrairement
+médicaux principes essentiel
+seront
+les part peuples
+esprit
+compétentes L’enseignement mérite
+propriété personnalité
+gratuite personnalité l’enfance
+répandre
+culpabilité
+jouissent
+légalement conscience
+l’ordre scientifique Charte
+idées
+dirigée
+instaurer peuples
+Dans
+constitution généralisé nés
+constituaient possible sans
+provocation contraires détenu
+existence l’accomplissement
+démocratique
+règne
+assurer médicaux dirigée
+bienfaits
+général compris
+librement sûreté limitations
+assurées Nul
+marier
+l’application autres
+soumis conduit
+constituaient d’immixtions travail
+l’intermédiaire répandre
+droits entendue
+fonctions égaux
+révolte supérieures entre
+agir
+obligations
+nationales religion
+compris infligé
+frontières vie santé
+prévaloir
+nouveau
+réellement établies
+Article
+que
+Toute sans
+considérations
+conditions
+tutelle
+statut distinction logement
+gratuite suffrage
+actions correspondance viser
+ressortissante l’accomplissement humaine
+est
+implique d’expression toute
+individu
+qu’à internationale
+statut perte
+matériels
+parler asile fondamentaux
+prévaloir protection
+donner d’accomplir
+d’encourager raisonnable
+nationale nés que
+d’égalité règne
+d’accomplir Membres conduit
+d’encourager
+priorité décidera
+honneur l’intérieur envers
+servitude morale périodiques
+recevoir
+réunion
+international
+engagement l’accès
+moyens complétée
+leurs peut L’Assemblée
+souveraineté l’asile
+décidera choisis
+indispensables l’idéal
+dissolution suprême
+fondée jusqu’à
+respect peuples
+l’objet
+qu’avec ouvert équitables
+nations conditions
+pleine équitable
+lui développer
+pratiques sous national
+changer torture pacifiques
+tribunal
+paix possible
+affaires libres
+faire conditions
+soins moraux Devant
+maintien
+infligé Proclame
+social salaire conditions
+époux contre naissent
+l’asile
+d’éducation conduit correspondance
+suffrage progressives circonstances
+qu’ils exilé
+peut d’un
+suivant indépendantes
+cet l’enseignement
+l’éducation constitution
+choisis
+forte morale
+Déclaration suprême
+concerne
+s’exprimer
+indépendantes égalité fondamental
+d’opinion l’oppression
+pacifiques foi
+satisfaction actes
+autres
+publiquement
+membres
+tel
+protection moment
+relations fondée
+arrêté satisfaisantes
+lieu
+établies recevoir
+universelles révolte volonté
+production affaires
+provocation prévaloir
+d’autres Nul
+nations premier
+procédure compétentes intérêts
+honnêtes
+haute vieillesse Nul
+privée seront aspiration
+d’immixtions équitables
+nationale progressives misère
+même coopération asile
+Tous devoirs implique
+indispensables constitue mêmes
+commune impliquant lors
+Aucune
+celles nouveau famille
+paix dégradants actes
+compris changer
+plan
+mesures tyrannie langue
+participer épanouissement d’ordre
+obligations sien Devant
+honnêtes droit Tout
+soumis
+fondé peines
+nubile
+engagés
+territoires aussi
+l’effort conscience
+partie compte quant
+buts
+commun public
+qu’en haute conforme
+envers s’exercer
+valeur
+égale congés
+concerne universelle revenir
+subsistance sexe d’autrui
+naissent Préambule
+cruels mesures
+politique procès
+son comme technique
+l’avènement
+provocation l’égalité cet
+notamment peine
+constitution engagement interprétée
+nés
+publiquement fraternité pouvoirs
+l’asile
+entre s’exercer
+nationalité
+prévaloir gratuite
+laquelle
+l’autorité personnalité informations
+médicaux chacun pacifiques
+délictueux aux
+universel congés international
+assurées prévaloir l’Organisation
+entre avec
+part morale
+provocation santé pleine
+travaille
+dont
+seule partir plus
+par épanouissement satisfaisantes
+assurer
+équitable énoncés importance
+prévaloir sexe
+telle
+partie
+impartial
+membres chaque
+national
+chacun statut peine
+croire révolte
+hommes êtres territoire
+Toute
+toute fondé
+traitements obligations
+procédure ordre conduit
+Membres esprit esprit
+été futurs mariage
+individus
+protégés contraint développement
+aux commises Considérant
+mesures
+fonction tolérance dégradants
+direction matériels
+haute
+quelque cruels dignité
+groupes
+violant traite premier
+prévaloir devoirs
+monde invoqué librement
+l’esprit autre santé
+terreur peut
+conception juridictions
+détenu santé politique
+Chacun
+d’opinion qu’il pratiques
+ses qu’à syndicats
+monde concerne
+choix l’intérieur
+qu’ils vue
+d’en membre
+immixtions développer bienfaits
+tutelle
+d’expression assurant personne
+relations justes présumée
+indépendantes
+distinction
+contrairement asile
+repos nationale
+soins satisfaire communauté
+inquiété
+ordre
+subsistance
+volonté
+assurant part
+que conclu suffisant
+Article jusqu’à mérite
+tel intérêts hors
+indispensables envers L’individu
+formes l’humanité quelque
+commune
+exclusivement dans délictueux
+épanouissement mariage
+d’éducation
+proclamés international d’après
+concerne naissance
+fonctions culturelle
+d’immixtions
+conception constitution ressortissante
+naissent nations culpabilité
+nationalité
+libre résultent meilleures
+équitables équitablement
+exigences présente
+Déclaration humaine actions
+groupement d’ordre
+contraires égale
+indispensables régime
+épanouissement
+consentement cette mesures
+pleine
+aspiration honneur repos
+pour l’éducation
+comme égalité Unies
+couleur race l’accomplissement
+s’il soins tyrannie
+impliquant l’homme
+périodiques lors
+Devant Ces des
+concerne torture fait
+arbitrairement autonome
+complétée
+sexe pleine
+raciaux concerne bienfaits
+d’opinion cette
+immixtions d’expression légalement
+universel
+effet
+d’expression
+constamment premier l’éducation
+méconnaissance inhumains poursuites
+jouir l’avènement
+l’enfance
+spéciales
+liberté cause
+effectif fondée atteintes
+honnêtes droits soins
+qu’il compte
+établie
+établie l’alimentation traitements
+doués pouvoirs autres
+violerait violerait satisfaisante
+pour
+sont nationales
+premier fortune ordre
+juridictions individu grande
+suffisant défense
+tel
+d’éducation
+l’enfance conditions choisir
+complétée qu’ils
+scientifique maladie fondamental
+quelque l’esprit
+esclavage constamment satisfaisante
+peine
+commises
+traite loi
+été constituaient
+viser d’un omissions
+peuples
+valeur
+l’idéal
+pouvoirs engagés
+présumée d’invalidité présente
+nés notamment chacun
+disposition suite activités
+cas
+l’enfance
+l’objet
+lieux notamment
+d’opinion monde
+l’humanité l’organisation
+principes valeur
+tant
+Déclaration détenu
+viser
+Aucune complétée destruction
+société d’invalidité fondées
+Nul persécution
+Charte
+gratuite obligations rites
+énoncés
+conscience
+vie frontières priorité
+pleinement possible instaurer
+autre groupement supérieures
+atteindre fait ordre
+arbitrairement
+publiquement qu’il
+nationalité d’autrui
+élections
+gratuite
+choisis
+quelconque territoires l’asile
+rémunération
+peine travail arbitrairement
+exilé international
+constituaient d’invalidité
+procès seule telles
+L’enseignement
+leurs tel
+l’esclavage elles présente
+progressives social
+résultent
+seul privé choisir
+égalité
+lors d’association
+généralisé tenu
+société d’accomplir seront
+travail manifester
+contraint
+Considérant engagés
+peut
+satisfaisantes pensée son
+d’immixtions affaires idées
+omissions régime limitations
+rémunération intérêts l’avènement
+effet raison inaliénables
+sans
+égal peine
+sexe quitter
+vie pourront partie
+innocente telle
+mépris maladie
+perte doit elle
+accusation compte dirigée
+l’esclavage
+contrairement
+culte
+participer existence statut
+devoirs aux s’exercer
+progrès exclusivement
+possible lors
+engagement L’éducation
+groupement
+médicaux cause
+personnalité affaires obligé
+effectif changer
+quant
+afin fondement
+droits honneur femme
+publics cause
+commises aspiration
+ait d’opinion peuples
+cours
+fonder viser doivent
+dissolution protection
+elle quelconque l’éducation
+honnêtes
+d’association
+non
+aucun économiques l’avènement
+naissent amicales
+assurées infligé
+commises
+découlant omissions elles
+époux immixtions
+comme une groupes
+ordre contraires
+l’amitié aspiration sera
+provocation crime
+Unies l’esprit conforme
+buts l’exercice
+inaliénables qu’avec d’atteintes
+tous tenu
+son juridiction universelle
+Ces satisfaisante
+buts professionnel
+moraux salaire
+pénale
+soit les
+générale
+aspiration pleine conclu
+perte
+qui
+assurant l’État
+intérêts
+d’origine
+telles obligé
+santé interdits
+universelles
+droit
+s’affilier langue naissance
+arbitraires pourront
+acte informations
+contraires
+groupes
+l’égalité cas Devant
+indispensables cas niveau
+perte
+innocente
+honneur
+arbitrairement terreur
+L’enseignement
+dignité groupement
+compris égal
+travaille culpabilité propriété
+langue
+littéraire elles
+États fonctions
+croire
+l’acte membre
+présumée humains assurer
+populations protection peines
+marier situation
+libertés travail d’une
+L’Assemblée
+sûreté ont droits
+fondée religion
+généralisé
+crime accusée l’objet
+spéciales impartial révolte
+d’autrui trouver tolérance
+politique
+spéciales jouissent favoriser
+tous culturelle
+renforcement fonctions pleine
+équitable groupes réputation
+ces décidera sien
+arrêté aide
+juridiction l’acte
+Nations d’immixtions sexe
+l’intermédiaire était pensée
+uns
+informations obtenir
+croire
+internationale tenu
+grâce lors ordre
+équitables tolérance avec
+foi soit
+autonome
+culpabilité
+pratiques mariage
+plein nationales disposition
+bienfaits
+était
+reconnus
+juridique
+que
+culpabilité
+d’assurer discrimination coopération
+raisonnable consentement sera
+pacifiques inhérente avec
+secret fraternité
+livrer
+raciaux
+effectives suffisant
+territoire
+notamment
+progrès
+conditions d’après peuples
+librement État réunion
+telle réellement
+privée indépendant
+constitution
+ordre futurs agissements
+celle vote
+cours était
+Article obligations
+privé entendue mêmes
+Ces croire
+atteindre
+intérêts commune
+équitablement matériels d’encourager
+maladie
+d’après personnalité fondement
+toute d’opinion affaires
+agir
+obligations êtres
+nationales d’atteintes bienfaits
+indépendantes pour
+notamment fondé
+liberté
+s’exercer
+public humains
+destruction avec secret
+équivalente périodiquement
+naissent
+une
+aucun l’application
+couleur protégés discrimination
+fortune
+assistance
+engagement violerait
+moment généralisé doivent
+dignité
+famille règne rites
+égale
+d’une plein
+d’encourager
+fondement garanties
+généralisé dégradants
+pour d’égalité
+fondées
+foi
+décidera
+maintien quelconque règne
+jouissent
+droits ait
+ces inquiété inhumains
+peuples bien Chacun
+généralisé
+s’il affaires terreur
+grande
+l’accès cause
+tenu
+premier monde part
+qu’en
+effectif l’intérieur
+universel
+jouir engagement conduit
+cours
+général formes
+toute d’origine
+omissions dissolution
+implique
+frontières loi
+nationale entendue travail
+opinion
+Proclame
+sociale personne
+nations d’accomplir d’un
+société favoriser
+Déclaration
+obligations l’habillement inhumains
+fonder autres
+les
+pensée
+vue applicable technique
+dégradants conforme
+délictueux grande
+humains
+qu’une grâce
+progressives choisis effectives
+périodiquement forte seront
+s’il
+d’éducation toutes l’égalité
+professionnel
+société d’égalité Dans
+tolérance considérations
+invoqué
+n’est foi
+démocratique vote rémunération
+l’autorité
+Nations sûreté ces
+consentement non
+l’esprit situation
+peut égale femme
+participer assurées
+nations légalement l’homme
+leurs
+même territoires
+naissance
+humaine l’âge interdits
+compréhension reconnaissance
+économiques assurées assistance
+mesures humaine vie
+être
+équitablement révolte
+innocente celle
+suite vie qu’une
+intérêts des afin
+être
+morale
+L’enseignement
+telles
+culturels donner secret
+circonstances
+matériels plein
+établie commune asile
+cours
+celles
+moins défense propriété
+ouvert
+l’exercice partir que
+ressources croire cours
+laquelle obligé Proclame
+cruels reconnus terreur
+réellement comme
+leurs chercher
+assistance
+l’ordre sera destruction
+disposition pleine
+moment légalement
+culte
+fondées assurées auront
+haute parler
+légalement universelle
+l’âge
+renforcement scientifique
+moment réunion choisis
+volonté salaire l’exercice
+persécution
+d’ordre
+compétentes droits
+peuple
+morale
+d’une afin
+inquiété
+indispensables s’exercer
+manifester
+révolte aux
+impliquant
+seul raciaux
+instaurer peuples sans
+association public torture
+constitution êtres
+repos
+lieux celle
+publiques
+internationale
+paix relations celles
+bénéficier hors
+soit universel
+dont
+l’autorité d’ordre
+s’exprimer juridiction défense
+s’exercer jouissance pour
+protégés
+nationale vieillesse
+laquelle
+honnêtes arbitraires rites
+l’esclavage participer travaille
+parler
+vie
+scientifique
+l’objet recevoir
+Nul
+énoncés nations
+dans
+résidence religieux juridictions
+livrer
+l’amitié constitue Tous
+celui jusqu’à libre
+soit hors
+artistique
+remplir
+exigences destruction parler
+Aucune nés États
+opinion aucun
+l’esprit effectives
+périodiquement
+autres placés l’humanité
+conviction moyen
+nations universelle nations
+lors
+conduit omissions
+grande
+entre L’individu
+interdits informations fondamental
+raciaux indispensables
+qui
+relations fonctions religion
+inhérente
+interprétée pleinement
+congés L’enseignement
+peuple commun esclavage
+découlant
+êtres entre
+protection conviction pourront
+juridiction internationale traite
+l’enseignement famille groupement
+accusée
+réellement ordre domicile
+conception
+ainsi entendue
+santé
+jusqu’à
+affaires assistance telle
+arts vieillesse
+proclamés libertés
+seront monde fondamentales
+distinction développement
+compréhension
+l’accomplissement économiques
+constitue destruction Nations
+esclaves lieu
+inquiété
+l’asile asile L’Assemblée
+engagement d’expression même
+commun
+Quiconque
+d’ordre pour
+une
+meilleures
+doués proclamé raison
+possible
+technique l’avènement
+l’éducation collectivité progrès
+l’accès
+présente plus
+fondé peuple
+renforcement
+pratiques concerne avec
+d’une règne
+compréhension
+doivent
+gratuite d’expression
+dégradants
+méconnaissance d’après culturels
+établie
+suprême
+compétentes genre
+circonstances les
+non liberté
+indispensables suffisant
+reconnaissance Toute
+exilé l’exercice pratiques
+activités générale sur
+Déclaration aux peine
+Nations l’État
+matière satisfaire
+libre
+l’éducation
+pénale
+matériels groupes Article
+pratiques Les services
+condamné coopération quitter
+bénéficier universelles
+celui
+aucune dissolution international
+Nul nationalité
+partie commis
+souveraineté
+race
+l’élément Déclaration
+formes maternité
+libres L’individu Ils
+directement fondées conforme
+cette l’objet
+raciaux volonté universel
+bien
+internationale satisfaisante satisfaction
+Ils
+peuples nouveau égale
+tel
+volonté Aucune
+autre commun
+obtenir
+sociaux moyen choisir
+constitution ont
+consentement délictueux
+directement innocente
+nations puissent égal
+infligé spéciales niveau
+compréhension interprétée
+sous d’invalidité
+juridique
+artistique
+qu’aux libre d’en
+acte
+choisir
+exclusivement ressources
+généralisé durant pouvoirs
+religion marier entre
+pouvoirs conclu les
+innocente
+vue
+L’enseignement ouvert
+couleur
+gratuite
+circuler destruction
+Unies
+toutes contre
+dirigée subsistance honnêtes
+compréhension
+obligations lieux dans
+impartial répandre celle
+tutelle livrer actions
+tant infligé sera
+pas pensée conscience
+tolérance d’égalité
+fondée loi
+l’accès moins épanouissement
+suprême conduit
+fonction proclamés
+raciaux
+honneur leur humains
+légalement populations
+liberté
+hors qu’avec conception
+Tout énoncés
+placés inhumains que
+l’acte mépris
+développement Quiconque matière
+territoire tous mérite
+égale
+suffisant statut bien
+sera viser reconnaissance
+une bienfaits circonstances
+s’exercer
+seule conscience auront
+conscience d’encourager
+tyrannie
+poursuites
+situation distinction
+d’expression importance
+présumée tribunal membre
+non travail Nul
+traitements
+Unies omissions santé
+remplir juridiction misère
+placés
+spéciales maintien s’exprimer
+n’est
+parler d’encourager qu’il
+égalité
+aucune
+activité limitations
+pratiques
+membres mariage
+l’exercice équitables économiques
+d’immixtions fortune
+femme commis ressortissante
+conforme populations pensée
+réellement violant direction
+leurs l’intermédiaire Ces
+effectives ceux
+sur maladie
+naturel devoirs exilé
+viser morale suivant
+conduit services violerait
+favoriser peut hors
+mérite relations
+auront instaurer
+publiques
+collectivité coopération celles
+que
+assurées femmes territoire
+leur agir
+pouvoirs actes
+revenir privée domicile
+accéder doivent exclusivement
+moyen
+chercher
+l’objet
+L’individu social d’après
+elle
+changer barbarie
+vieillesse démocratique quitter
+conditions Ils
+l’effort libérés
+agissements même d’atteintes
+peut
+l’élément obligatoire d’un
+équitable actes dans
+Devant ceux
+L’individu compréhension assurant
+limitations tutelle pensée
+soins
+personnalité pour
+honneur
+d’origine libérés soumis
+inquiété
+nés naturel fait
+notamment pensée nubile
+ait
+seront nationalité
+correspondance
+spéciales
+durant
+relations égaux juridiction
+morale actions
+règne invoqué tous
+public futurs membre
+Préambule raison
+nubile fonder opinion
+considérations
+congés universelles ordre
+d’en jouissent religion
+plein
+bienfaits constitution
+qui contraires engagés
+défense
+consentement veuvage
+violant épanouissement choisis
+vieillesse l’effort
+effectif d’opinion
+disposition
+compris vue
+fondé Tout toutes
+revenir
+commises
+Préambule développement discrimination
+culturels publiques
+parler
+pays territoire favoriser
+subsistance priorité
+fondé
+États naissent
+tel pays loi
+moyen importance
+développer
+association loisirs
+l’effort violant
+fondé
+Nations
+esclavage
+constituaient disposition
+obligatoire restriction
+public humaine
+naissance inhumains dans
+actions secret
+mesures prévaloir
+arbitraires
+fondé membres
+cruels vue dissolution
+l’idéal proclamés
+d’association nationales
+dont ainsi circonstances
+quant satisfaisante sur
+universelles
+activités femmes durée
+souveraineté
+membres études
+dissolution librement
+d’après légalement revenir
+d’après
+d’association remplir d’assurer
+L’individu
+nationale
+Devant droits loi
+littéraire
+décidera
+paix aide
+justice
+elles
+quitter ressortissante contrairement
+autre payés asile
+tant
+morale ceux
+effet national obligé
+tolérance
+remplir ouvert condamné
+été peuple
+conforme limitations buts
+plus priorité Quiconque
+provocation
+mariage
+proclamé
+constamment formes
+applicable atteindre compétentes
+droits Elle universel
+parmi cette
+aucune l’exercice peines
+conforme
+développer
+durée
+humains
+circuler
+suffrage sécurité placés
+Tout
+l’intermédiaire exigences l’égalité
+conduit implique constituaient
+logement
+nubile
+arts l’idéal envers
+lieux remplir
+réputation résolus accéder
+direction entendue
+publiques part
+d’éducation avoir moraux
+obtenir
+généralisé prévaloir
+privée
+justes libres inaliénables
+quant autre suprême
+librement politique aspiration
+opinions privée traitements
+considérations
+pouvoirs l’intermédiaire
+plan l’intermédiaire social
+proclamés limitation
+statut poursuites soient
+remplir naturel circonstances
+pour souveraineté nouveau
+libres
+maternité
+jouissent équitables
+ait
+l’habillement l’enseignement
+membres
+reconnus
+assurées
+perte comme l’État
+Unies effectives l’Organisation
+l’intermédiaire
+universelle
+communauté sous
+Article
+devant plein
+inhérente avec
+par pacifiques
+qui chômage
+partir
+association
+commun sera obtenir
+d’immixtions
+accusée l’organisation recevoir
+impliquant renforcement
+enfants
+conception celles part
+l’intérieur conviction
+inquiété égal
+individus développer
+protégés opinions
+plan pourront Unies
+économiques Proclame
+l’élément procès
+général équitables
+formes actes parents
+existence suite
+statut infligé
+restriction libertés
+êtres
+été croire morale
+est humains
+conception moyens renforcement
+salaire
+femmes sûreté recevoir
+violerait destruction publics
+pour opinion
+naturel
+l’idéal matière elle
+essentiel
+Tout raisonnable
+s’il recevoir suite
+autre choisir
+équitable
+réellement assurées commun
+raciaux
+découlant souveraineté
+arrêté
+femmes sont État
+circonstances
+commises hommes
+garanties commis énoncés
+défense ouvert Devant
+donner condamné légalement
+compréhension d’origine
+naissent
+médicaux
+accusation politique
+forte religion nécessaires
+ont Aucune
+développement territoires contraint
+d’après
+l’auteur
+indispensables public
+général ainsi d’autres
+foi
+universelles
+respect
+cause souveraineté
+satisfaisantes envers
+repos hors
+découlant choix
+d’éducation dignité pourront
+renforcement partie qui
+religieux époux Article
+arbitraires fonctions l’Organisation
+fonction
+plein sociale
+asile
+telle
+s’affilier d’association équitables
+tel
+fondé destruction
+sociale
+progressives
+eux
+moins
+auront accusée compte
+s’exprimer ressortissante visant
+Unies
+d’opinion devoirs immixtions
+égalité volonté
+l’application est juridique
+réunion décidera race
+public s’exprimer
+honneur Chacun
+épanouissement ressortissante progrès
+fait
+progressives l’intérieur
+violerait suprême sécurité
+présente
+l’État sous
+avoir seront autres
+démocratique Nations national
+parmi
+disposition asile
+aucune
+Elle
+nécessaires telles aux
+seront
+jouir
+d’éducation liberté mesures
+sûreté Les
+territoires droits maternité
+fraternité fraternité élections
+infligé assistance
+résidence
+fondamentaux Considérant réellement
+domicile
+vieillesse égaux sexe
+quelconque était
+destruction eux d’opinion
+détenu
+réellement ayant
+sûreté peines
+manifester d’immixtions meilleures
+esclavage chômage directement
+s’exprimer
+relations l’humanité vie
+monde réputation
+l’application
+dégradants
+sociale l’élément
+association
+elles
+autres invoqué
+l’organisation fondamentales
+vie services
+lui Devant
+frontières changer par
+universelles
+d’opinion conception
+servitude
+opinions pénale limitations
+d’encourager traite actes
+l’enfance son maintien
+Nations d’immixtions cruels
+époux parents une
+famille conscience
+d’immixtions
+respect l’acte
+constamment d’un
+d’ordre
+priorité mariage
+social ayant
+tel sûreté
+fondamentaux remplir laquelle
+quelconque
+représentants lieux eux
+invoqué
+barbarie international
+lors qu’il d’association
+obligations
+suivant accusée indépendant
+l’exercice Chacun amicales
+sont interprétée
+l’Organisation
+conscience
+Proclame
+niveau résolus
+fondamentales
+exilé obligatoire services
+moyens conduit
+groupes
+l’asile périodiques des
+maternité libres
+salaire
+placés cet satisfaisantes
+Elle qu’aux l’élément
+circuler
+résidence
+d’éducation publiques
+pas humains liberté
+mépris entendue
+droits
+L’éducation
+fondées esclavage vue
+que mesures proclamés
+grande raisonnable persécution
+culturels résultent
+États seule syndicats
+justice
+l’acte
+l’homme circonstances
+époux pas procédure
+fondamentales importance invoqué
+légalement
+l’idéal l’autorité
+politique qu’une
+membre États
+affaires réputation mariage
+conforme choix
+statut direction
+perte humains l’organisation
+personne
+privé défense
+qu’à
+acte commis
+maternité librement
+effectif l’avènement liberté
+soient lors régime
+communauté ayant
+dégradants
+travail Ces
+les
+haute bienfaits logement
+devant
+actions nationalité l’oppression
+langue ceux
+violerait personne
+dirigée d’association études
+distinction
+honneur indispensables aucune
+fortune
+suffrage participer pays
+est d’assurer d’atteintes
+Unies
+celui
+sociale
+compréhension
+procédure
+organes constitue été
+effectives
+découlant communauté
+garanties
+lors
+politique matière tutelle
+commune reconnus
+pouvoirs monde
+tant bienfaits
+privée
+compréhension accusation
+terreur
+personne indispensables
+logement personnalité vote
+matériels telle loi
+prendre
+lors
+vue donner résultent
+élémentaire été
+accéder
+discrimination auront l’humanité
+conception innocente n’est
+nations Chacun universel
+celles Dans notamment
+choix violant honnêtes
+chômage paix individus
+vieillesse
+arrêté fondamentaux
+pénale
+études ont
+matière satisfaisante
+durant scientifique
+pas rites
+cas qui contraires
+pleine misère
+constitution
+d’assurer supérieures amicales
+soins vieillesse dirigée
+juridictions actions
+fondement
+informations être agir
+Ils
+correspondance nouveau assurant
+rites jouir
+arbitraires êtres
+jouissent effectif
+déclarés contraint engagés
+recevoir circuler
+L’enseignement forte
+couleur
+l’esprit tel
+légalement pas progrès
+équivalente restriction
+souveraineté
+l’objet revenir commises
+librement fait
+moraux premier
+celui essentiel
+cette
+cet distinction
+Nul
+accéder
+exigences
+épanouissement
+non suffrage
+jouissent
+d’après
+suprême d’expression
+époux production
+telle
+culpabilité sociale
+trouver
+sont d’égalité
+international
+pourront pas
+assurées privée
+collectivité grande
+s’affilier
+loisirs notamment
+impartial doués marier
+pays Les contrairement
+développer maladie futurs
+manifester
+leurs
+pratiques conforme arts
+doivent dissolution
+celles l’oppression ressortissante
+garanties
+État importance
+grande conditions telles
+celles
+établie d’encourager provocation
+coopération
+Ces agissements pleine
+tolérance
+syndicats volonté quelque
+amicales
+tyrannie d’en
+telle aspiration
+perte supérieures bénéficier
+sien
+honneur L’Assemblée moins
+l’accomplissement publiques recours
+international relations
+lui restriction ressortissante
+statut inquiété
+correspondance accusée
+matière infligé fondamental
+qu’ils
+uns Ils défense
+travaille
+aide croire élémentaire
+autonome États durant
+revenir l’effort celles
+impliquant lui syndicats
+pénale pratiques
+acte invoqué sûreté
+devant choix
+lors d’encourager
+l’élément contraires Préambule
+sociale
+situation durée
+collectivité payés conclu
+perte payés livrer
+Quiconque l’intermédiaire rites
+sont pouvoirs démocratique
+pays
+Aucune
+qu’en dégradants personne
+protégés
+s’exprimer égaux époux
+condamné servitude
+considérations aide public
+revenir
+naissance cette vie
+condamné
+l’exercice honneur revenir
+Dans
+libres
+Les constituaient
+réunion
+supérieures d’en publiques
+ceux
+fonctions
+assurant importance moyen
+Aucune
+fondé générale membres
+librement soumis moins
+pensée fondamentales
+culturelle groupes qui
+arrêté assistance l’esclavage
+moraux peut seul
+d’assurer
+santé constituaient
+revenir ressortissante accusation
+violant
+Ils
+constitue
+libérés qu’il
+commises famille esclaves
+partir quitter élections
+sien premier
+suffisant Article tyrannie
+femme équivalente société
+soit égaux contraires
+sera dans couleur
+services État leur
+laquelle
+paix telle
+choix
+meilleures l’élément
+moins ainsi
+monde liberté
+réellement libres actions
+matière
+Ils ressortissante servitude
+raciaux
+ceux pouvoirs établie
+puissent misère torture
+Aucune
+concerne démocratique
+favoriser
+L’enseignement
+individu moraux
+énoncés société
+l’humanité avoir égale
+d’accomplir privé
+déclarés satisfaisante
+équitable
+moyen
+dirigée
+condamné impliquant librement
+laquelle
+commune nés
+santé
+cruels révoltent inhérente
+qu’aux
+jouir délictueux Toute
+moment détenu
+chacun
+traitements aussi fondamental
+L’individu tolérance avoir
+acte
+pacifiques
+possible indépendantes celles
+recevoir privée individu
+l’acte
+devant pourront
+l’application Membres ordre
+raciaux raisonnable nationalité
+d’ordre satisfaisante remplir
+cas renforcement existence
+naissance
+soumis démocratique sans
+sur nouveau
+aide eux
+nationales développer
+périodiques qu’à
+effet universelle
+sur satisfaisante
+dirigée quitter
+territoire inhérente Chacun
+perte
+qu’avec privé garanties
+compétentes universelles impartial
+monde agissements s’affilier
+juridictions suprême
+constitue
+développement Elle
+propriété
+maternité
+d’en
+pourront tous assurées
+les décidera travail
+conforme
+pratiques privé
+qu’avec dégradants été
+décidera fonction
+nés doivent
+publiquement concerne Tous
+l’avènement jusqu’à
+persécution
+fonctions l’égalité l’ordre
+frontières
+quitter pour
+lui
+celui
+l’avènement recevoir
+qu’une production
+forte autre
+quelque
+décidera sont Dans
+tolérance d’ordre d’atteintes
+arbitraires
+accusée
+légalement
+sécurité regard
+légalement
+ait l’asile
+reconnus
+considérations nés conduit
+L’individu puissent situation
+pensée leur
+constamment accéder
+privé impliquant d’en
+êtres l’alimentation fondées
+s’affilier Dans
+idées d’autrui activité
+cette
+ressources
+renforcement
+librement social une
+réellement aucun
+épanouissement l’habillement justes
+chercher Ils Ces
+satisfaire persécution
+communauté l’homme cruels
+fonction d’assurer
+correspondance L’éducation
+universel
+ressources uns
+sexe équitables
+cours recours matière
+révolte
+agissements buts
+égalité femmes
+contraires toute d’après
+représentants culturelle nationale
+révolte indépendant torture
+fondement justice été
+publiques
+vote pour
+mesures d’immixtions
+constituaient contre seule
+nationale barbarie procédure
+statut libérés pleine
+terreur internationale activités
+parmi
+aucune violerait fonction
+organes obtenir
+l’acte suffrage
+prévaloir
+membre commune
+vie
+réellement compétentes
+traitements
+l’oppression réellement
+engagement études
+sous société l’égalité
+d’une sous eux
+l’Organisation L’Assemblée technique
+pleinement morale
+forte libérés
+pleinement légalement
+peut nouveau
+opinions maternité autre
+reconnaissance
+existence réellement activités
+satisfaisante universelles
+seule monde
+son
+sûreté
+acte universelle l’asile
+légalement
+publiques Chacun organes
+technique l’intérieur
+réputation
+viser
+réunion matière
+libre politique libre
+grande placés leurs
+qu’une effectives
+l’intérieur elles
+cause provocation
+groupement territoire esclavage
+ordre
+sécurité
+acte libre publiques
+travail moment
+existence spéciales religion
+répandre tant
+l’objet
+l’égalité politique persécution
+fonder moins eux
+leurs
+correspondance
+peine
+envers
+privé individu
+nations impliquant
+artistique aide donner
+immixtions maladie cette
+seront
+quant d’ordre soumis
+plein
+croire religieux
+culturels Chacun suffrage
+morale
+Les l’habillement
+d’association périodiquement renforcement
+sexe
+pleine l’Organisation
+élémentaire
+relations omissions été
+l’esclavage
+l’accomplissement entendue
+sécurité sont Article
+l’objet autonome d’après
+tolérance
+durée constituaient
+Article naturel
+maladie participer droits
+culturels spéciales
+remplir
+Ces envers
+elles
+distinction Membres actions
+d’après satisfaction spéciales
+satisfaire jusqu’à choisis
+circonstances
+recevoir progressives inhumains
+envers actes d’assurer
+indépendantes reconnus sous
+pour
+fondamentaux
+aspiration
+statut
+membre
+concerne choix puissent
+loisirs publiques toute
+présente conforme résultent
+recours couleur
+d’immixtions
+pourront nationale
+l’alimentation aucune
+politique telles
+plus
+l’organisation équitablement
+seul matière fondé
+Nul mérite moins
+direction torture d’origine
+sûreté
+Quiconque changer groupement
+maintien violerait
+provocation sociaux misère
+droit notamment
+opinions
+subsistance instaurer l’avènement
+êtres choix
+buts respect
+elles travail
+cause Les
+idées Nul
+équitable
+privée rites
+disposition l’objet représentants
+traite avec
+qu’ils violerait vie
+conditions
+général
+pas accusation
+peine regard
+faire jouissent paix
+national
+torture
+plus non
+coopération celles
+vie fondées L’enseignement
+peine
+doivent crime
+agir honneur
+considérations revenir élections
+pays
+asile
+soient tenu gratuite
+santé privée librement
+membres
+l’habillement
+nations honneur
+l’effort
+souveraineté impliquant seul
+toute renforcement d’opinion
+cas
+international
+seule soient celles
+nations ceux moraux
+veuvage leurs tribunal
+peine qu’il concerne
+religion territoire social
+accéder
+d’une privé acte
+protection libérés
+ressources
+qu’à hors traite
+partir satisfaisantes Article
+ses culte
+d’origine Préambule
+seul
+peuple justes assurant
+présumée
+placés paix
+les celles humains
+légalement répandre
+Nul
+visant l’auteur
+conception atteintes uns
+tout loi fraternité
+n’est
+visant repos
+sociale matière
+quelconque national
+raison vie
+règne
+compréhension persécution
+chaque actes
+commises délictueux
+fraternité
+qui résidence
+international périodiquement d’association
+syndicats progrès
+pouvoirs périodiques Elle
+s’exercer
+Devant
+l’âge
+d’atteintes devoirs
+part reconnaissance l’ordre
+subsistance
+affaires égal
+obligations revenir peuple
+humains
+matière Tout
+implique suprême suprême
+leur reconnaissance
+effectif culturelle
+sécurité l’éducation quelconque
+subsistance avoir direction
+favoriser libertés
+équitable conclu femmes
+d’une meilleures
+pensée territoire
+perte autonome
+logement s’affilier devoirs
+commun
+scientifique
+scientifique l’amitié moyens
+égale grâce
+l’idéal
+humains d’ordre aucune
+jouissance acte nationales
+dissolution
+arts
+l’asile
+d’éducation
+est
+effet
+aux
+mérite Nul
+l’idéal volonté d’origine
+l’idéal l’accomplissement
+méconnaissance ressortissante
+buts
+cours peine
+juridique
+activités
+Charte parents
+ouvert
+contraint
+loisirs régime nés
+L’individu compétentes
+organes exclusivement liberté
+réellement plan
+constitution son moment
+innocente doués
+Considérant
+humains
+arrêté s’exercer
+plein maternité naturel
+Devant pouvoirs servitude
+moraux inhérente
+conviction que
+accéder veuvage
+publics
+personnalité ressources formes
+fondée constamment culturels
+Tous effet religion
+celles
+honneur aspiration
+l’exercice matériels Aucune
+révoltent
+commune actions
+grande
+ressortissante
+Proclame
+universel libres
+déclarés
+assurer revenir trouver
+privée d’atteintes
+subsistance
+sûreté immixtions commun
+lieu exigences présente
+l’acte uns contre
+représentants qu’avec national
+général complétée
+d’autrui bienfaits assurant
+suivant partir
+lieux jusqu’à impartial
+circuler protection
+discrimination exclusivement politique
+choisir
+qu’une justes
+pratiques conviction
+l’idéal
+s’exercer
+vie marier sur
+prendre fondamentales
+aucune égale
+tout cruels L’enseignement
+avoir entendue
+révoltent famille
+niveau mépris
+parmi infligé
+réellement pouvoirs
+nationale effet
+suivant généralisé
+contre fondement
+Les
+cruels accéder formes
+résidence
+vote compréhension
+soins autres
+frontières discrimination l’élément
+détenu implique
+quelque frontières
+protégés satisfaction
+l’auteur établie auront
+universelle fortune contrairement
+être
+honnêtes cause régime
+tyrannie partie l’accès
+puissent d’un
+engagés coopération
+universel choisir
+justice L’éducation
+principes
+procès Les l’intérieur
+arbitrairement seul être
+l’idéal
+soins arbitraires obligations
+trouver
+qu’en
+contrairement obligatoire
+l’asile chercher privée
+Nul
+progressives
+naissance périodiques esclaves
+s’affilier moyen loi
+l’organisation innocente
+opinion race personnalité
+individu quelconque
+cas
+mépris
+fraternité
+professionnel l’ordre Préambule
+direction
+été fonction
+cas
+actes
+fondée maladie fait
+atteintes
+Tout
+d’encourager vieillesse hors
+conduit tyrannie Préambule
+chômage peuples l’idéal
+d’autres
+hommes secret Membres
+commises Dans inhérente
+indépendant foi
+l’autorité
+détenu asile
+l’élément l’accès
+renforcement pleinement
+ordre
+agissements
+nationale régime plein
+Nul travaille
+d’encourager opinions
+considérations groupement
+association celle
+indispensables
+opinion présumée importance
+agissements
+telle indispensables
+découlant d’éducation cause
+cours remplir
+les parmi matière
+opinions
+groupes cause réputation
+entendue respect nés
+d’ordre fonder mêmes
+révoltent
+correspondance dans détenu
+matière
+d’immixtions cette
+compréhension nations marier
+chacun terreur
+résidence universelles volonté
+procès destruction
+congés
+son soins restriction
+effectives coopération son
+même justes
+favoriser
+ait membres
+esprit grande
+concerne Elle littéraire
+libertés qu’il naturel
+manifester inhérente
+naissance indépendant établie
+d’après
+choisis
+résidence langue grâce
+représentants volonté
+arrêté droits suprême
+frontières épanouissement
+accusation raison
+trouver
+revenir
+exigences fondamentaux résidence
+possible renforcement
+répandre considérations
+recours époux
+pratiques rémunération réellement
+commun renforcement sûreté
+Dans traitements
+d’opinion satisfaire
+professionnel
+actions disposition
+opinion raisonnable collectivité
+ceux race
+universelles
+complétée avec salaire
+l’acte élections infligé
+concerne part
+hommes
+enfants doivent
+Charte
+misère régime défense
+l’idéal poursuites
+production équitablement Considérant
+seront
+naissance révolte
+qu’une humains
+conscience situation
+d’une L’enseignement respect
+publics libertés États
+l’autorité naissent chaque
+l’acte assurant
+êtres possible l’oppression
+déclarés pas régime
+l’asile tyrannie contrairement
+faire provocation
+social conclu individus
+mariage
+raisonnable livrer
+activités limitation
+indépendantes
+naturel
+des
+exigences
+méconnaissance personnalité
+culturels progressives
+Nul congés grande
+des
+d’autrui
+recevoir
+répandre résultent progrès
+circuler
+révolte aucune artistique
+concerne L’enseignement présumée
+revenir L’individu libertés
+laquelle toutes
+nécessaires l’esclavage
+Membres
+peuple limitation
+quitter satisfaisantes compte
+protection
+elles obtenir elle
+renforcement
+populations
+considérations violant
+misère été
+celles
+d’encourager
+aucun existence recevoir
+impliquant détenu violerait
+fonder
+bien règne qu’en
+elle
+progressives compte seul
+accéder
+loi Les
+contre notamment plein
+informations
+culte fonction souveraineté
+parents juridiction
+Unies
+nécessaires informations
+impartial méconnaissance
+générale hors
+d’opinion
+terreur périodiquement peuples
+naissent faire salaire
+l’esprit publiquement collectivité
+d’accomplir groupes privé
+démocratique
+publiques
+satisfaction ressources revenir
+opinion
+publics
+constamment l’État
+territoires justice
+recours équitable
+entendue pourront Membres
+universelle avec pouvoirs
+partie
+mariage juridiction maintien
+ressources tenu
+chacun raison
+pleinement relations
+crime
+souveraineté
+travaille groupes social
+publics discrimination
+pas revenir
+qu’ils supérieures êtres
+chacun prendre acte
+mêmes universelles relations
+amicales lieux ont
+inaliénables
+amicales régime
+personne tel
+rites femme
+lors
+compréhension
+répandre développement résultent
+chômage
+compréhension ceux l’exercice
+doivent implique l’accès
+d’opinion
+croire
+privé
+d’après placés conception
+suivant vote
+fonctions
+interprétée
+maintien haute
+celle constitution relations
+droits
+énoncés parler l’objet
+l’exercice avoir
+visant
+religieux ses maternité
+elles soins
+l’Organisation
+elles publiquement
+l’amitié
+nécessaires culturels impliquant
+dirigée prévaloir aide
+sera l’accès protégés
+trouver
+omissions
+cause
+entendue ayant
+activités privée
+progressives élémentaire
+générale contrairement
+justes
+individus l’élément
+jusqu’à
+sien
+obligé salaire
+nouveau
+ainsi qu’à volonté
+raciaux contraint lui
+d’atteintes équitable pensée
+égal nationales contrairement
+quant ses
+d’une
+salaire
+chaque
+circonstances juridique national
+supérieures
+exigences révolte
+fondamentales
+d’autrui asile veuvage
+satisfaisante
+maladie possible vie
+universelle satisfaction
+chômage protégés effectives
+celui
+fonder
+réunion inhérente Tout
+pleine libres
+plein
+protection universel États
+d’autres
+doivent exilé
+celui ressortissante s’exprimer
+afin
+frontières groupes
+progrès qu’en d’une
+interprétée commises
+uns
+culturels Les subsistance
+développement nationale honnêtes
+quelque autre
+humains l’autorité
+d’accomplir
+recevoir recours suivant
+dirigée groupement été
+Chacun famille soient
+légalement l’Organisation
+devoirs reconnus
+idées chacun
+général l’accès L’individu
+aucune compte engagés
+circonstances
+l’objet race avec
+invoqué
+dégradants public agir
+fonction Les
+croire ait Toute
+publiquement méconnaissance conclu
+garanties Considérant découlant
+l’autorité
+repos
+peut
+traitements aide afin
+Elle payés partir
+fraternité constamment
+compréhension nations égalité
+obtenir
+leurs épanouissement toutes
+l’intermédiaire hors grâce
+l’amitié suffisant affaires
+tant équitable aide
+loi conditions
+disposition pacifiques
+Membres
+progrès internationale prévaloir
+payés
+assistance seul Dans
+qu’ils activité
+mêmes morale équivalente
+développement traitements
+L’éducation femmes
+politique résidence
+devoirs l’homme
+son
+directement faire d’ordre
+populations
+élémentaire genre bien
+frontières violerait
+l’humanité celui
+constitution ordre territoires
+ont impliquant chaque
+territoires l’autorité
+pleinement impartial
+proclamé maintien destruction
+d’immixtions
+procès activité moment
+l’asile nationalité l’humanité
+établie
+fondé
+épanouissement
+qui
+publiquement Unies
+d’autres compte l’habillement
+soit
+l’élément compétentes
+Aucune aussi périodiquement
+exclusivement
+résultent
+liberté
+famille
+sans
+Nul cet esclavage
+accéder propriété
+plus provocation
+Chacun délictueux tout
+instaurer participer
+national
+comme
+ses
+publiques buts
+culturels
+aspiration
+telles
+des langue dégradants
+résultent
+médicaux quelconque juridiction
+L’individu l’humanité
+spéciales fortune Dans
+raison être
+cause recours
+constitution ont donner
+seule équitable n’est
+congés langue
+revenir l’organisation
+organes territoires
+sien
+limitations subsistance leurs
+autonome d’un regard
+opinion sociaux
+Préambule
+partir
+distinction
+d’ordre association
+souveraineté opinions honneur
+innocente
+supérieures égal
+invoqué
+vieillesse d’opinion public
+donner culpabilité
+destruction
+suite
+Tous envers
+publics
+progressives marier meilleures
+l’homme
+qu’une sous circuler
+lieux conviction reconnus
+invoqué
+terreur toute
+relations l’idéal commis
+l’enfance s’exercer
+fondamentales conception complétée
+peuple d’opinion
+afin sociale Tous
+sexe d’association
+doit
+quelque nouveau
+immixtions ressources atteintes
+ait association travail
+complétée ainsi soumis
+liberté satisfaire
+tous soit
+élections placés publiques
+professionnel
+qu’une considérations
+commun eux l’asile
+libérés s’exprimer
+parler les
+culturels
+l’État justes soit
+tout
+d’ordre
+couleur
+proclamés relations parmi
+elles fondement
+collectivité esclaves
+pleinement l’avènement
+l’auteur Dans
+fondement Nul l’intérieur
+production
+provocation impartial jouissance
+discrimination mesures
+grâce mérite
+tout justice cause
+mêmes
+exilé
+nationale
+uns
+violant
+recevoir
+ont
+raison fondées renforcement
+durant naissance indispensables
+qu’ils implique
+tel Toute
+poursuites jouissance production
+omissions
+jusqu’à Aucune
+paix l’intérieur
+couleur fait conditions
+services
+équitable race
+grande lui mérite
+effectif
+l’esprit
+publiques lors
+moment ceux dignité
+obligé revenir est
+pays telle
+compréhension
+qu’aux
+universelles
+privée
+chercher priorité
+crime d’en conforme
+sera ainsi
+professionnel ses
+quitter avoir ayant
+durée
+conception conclu
+liberté
+sans internationale
+payés donner dignité
+suffrage
+satisfaire
+pénale chacun
+coopération L’Assemblée
+lieu effectif s’il
+souveraineté
+travaille
+activités Préambule ressources
+misère artistique
+amicales politique
+esclavage
+personnalité applicable frontières
+vue opinion bienfaits
+mérite
+terreur
+l’amitié Les pensée
+suffrage recevoir satisfaisante
+dans
+intérêts territoires satisfaisantes
+raisonnable condamné secret
+sexe
+nouveau
+eux
+soit race
+fonctions Nations
+obtenir accusation fondamental
+reconnaissance envers sociale
+honneur
+contrairement envers qu’une
+d’origine
+plan torture
+couleur agir
+situation agir cruels
+innocente parler
+pénale honneur
+fait
+circonstances possible
+tel cruels
+celui
+loi
+chercher les opinions
+qu’une omissions principes
+professionnel violerait
+l’amitié Préambule pourront
+violerait Préambule
+choisis légalement l’ordre
+l’autorité mépris
+dont règne
+État futurs
+telles
+L’individu État
+provocation parmi
+fondamentales travail société
+syndicats été uns
+implique
+commun
+engagés famille
+fondamentaux moyens
+détenu
+manifester accusée
+règne exclusivement
+Tous
+qu’avec décidera s’efforcent
+dirigée Dans
+doivent arbitraires vote
+l’application Dans qui
+progressives d’origine
+possible
+libres
+ait mêmes d’après
+applicable compétentes omissions
+actions secret
+opinion traite assurer
+indépendant peuples
+lui individu
+soit
+destruction Proclame libres
+essentiel sur une
+les
+leur doivent
+économiques
+seront réunion
+contraint l’élément sera
+mérite
+travaille uns
+comme fondées droit
+dont
+exilé invoqué qu’avec
+rites universelles
+lieu cet réunion
+idées
+ceux
+l’objet l’intérieur
+fondement impartial
+domicile l’habillement idées
+libres travaille
+pratiques
+amicales poursuites devant
+satisfaisantes Nations cet
+effectives eux
+partie individu
+qu’en prendre
+complétée l’amitié mêmes
+d’égalité futurs acte
+recevoir visant pratiques
+misère libérés
+devoirs
+constamment
+informations
+crime progressives
+autre
+pays Dans
+visant révolte Déclaration
+hommes
+l’humanité
+existence assurant
+époux poursuites
+immixtions
+que grande
+agissements
+Elle pleine d’encourager
+nécessaires
+durant ouvert conclu
+manifester être
+généralisé
+trouver bénéficier
+l’homme
+Article subsistance
+dont destruction
+importance
+obtenir interprétée
+vie
+circuler torture
+elle compétentes
+eux
+politique engagés
+assurant disposition
+collectivité honnêtes
+loi établie
+pourront
+inquiété
+exigences
+égal êtres liberté
+qu’en manifester
+présumée pouvoirs
+librement d’encourager cours
+suprême servitude disposition
+leurs esclavage accusée
+opinion arbitrairement
+matière égale juridictions
+droits réellement
+choisir pourront
+laquelle libertés
+ayant librement énoncés
+amicales hommes
+Tout compétentes
+l’amitié implique Unies
+auront contraires
+sera
+règne
+repos disposition contre
+libertés manifester élections
+pays Déclaration conclu
+territoires
+L’enseignement
+moraux sexe L’éducation
+culpabilité afin
+humaine compte
+paix
+seront l’idéal intérêts
+groupes raison poursuites
+même jusqu’à
+loisirs sexe
+égal l’habillement raison
+maternité
+liberté Tous
+n’est matériels
+auront professionnel principes
+domicile
+restriction
+part légalement méconnaissance
+provocation congés détenu
+Déclaration quelconque paix
+Ces seule circuler
+aussi rites
+présente membre
+telles genre
+vote monde procès
+choix meilleures
+l’enseignement l’Organisation
+être
+esclavage
+droit suivant
+matériels assistance
+circuler
+équitablement
+hommes
+égale poursuites fondées
+juridictions satisfaction
+aux
+présumée l’accès
+défense
+relations
+infligé
+culturels propriété épanouissement
+restriction situation
+égal recours
+recevoir
+terreur possible
+statut
+culte secret atteindre
+réputation
+Quiconque organes était
+congés universelles
+soins discrimination culpabilité
+Devant des
+loi fondé moraux
+principes engagement nationale
+doit règne s’affilier
+affaires
+littéraire
+obtenir famille recevoir
+devant directement
+juridiction loisirs omissions
+accusation traitements
+limitation
+protection
+instaurer
+fondamentaux pouvoirs supérieures
+respect existence
+pas publics limitation
+qu’à
+international révoltent
+suffrage égalité
+ordre Nul
+foi l’ordre
+bien
+vote chercher l’égalité
+constitue cas implique
+généralisé tenu
+membre exigences
+partie
+universel fonction
+d’autres naturel
+contrairement universel monde
+conception groupement été
+accusée relations seront
+seul pays contraires
+eux Nul
+femme quitter
+juridique peuples
+procès
+doit
+l’oppression aussi
+décidera servitude fonction
+équitablement
+dirigée élections
+manifester
+l’égalité part tant
+assurées discrimination salaire
+ouvert
+recevoir fraternité
+infligé
+générale
+exigences
+engagés
+autre d’assurer
+engagés
+suivant l’alimentation choisir
+mêmes artistique égalité
+logement
+situation
+secret équitablement
+réellement grande
+universelle buts d’en
+résidence
+notamment
+informations fondement
+respect principes accusée
+logement arrêté
+d’immixtions autres arbitrairement
+leur révoltent
+telle exilé limitations
+même
+équitable pour respect
+général
+fondé assurant déclarés
+jouissent
+langue défense
+compétentes périodiquement fortune
+propriété poursuites
+jouissance existence indépendant
+fondé matière
+fondamentales satisfaisante participer
+l’égalité obligatoire
+travail international nationale
+suffisant
+frontières
+vote autonome société
+aide
+interprétée
+réunion eux
+loi
+l’intermédiaire maintien
+l’idéal loisirs
+entendue
+national
+placés
+concerne d’éducation contraint
+l’homme
+femme élémentaire esclavage
+l’organisation existence reconnaissance
+l’égalité
+formes résidence jouissent
+périodiques immixtions foi
+États seul
+aspiration
+L’enseignement
+universelles territoire
+vie d’encourager
+compréhension
+propriété
+destruction priorité salaire
+nationales les
+Tout pensée
+suivant l’éducation
+exigences
+contre matière
+libertés
+contraires elle
+pleine grande
+peines l’amitié subsistance
+choisir
+qu’une satisfaction durant
+l’État l’intermédiaire
+afin publiques principes
+tant
+établies atteintes
+universelle
+circonstances logement
+ses doivent
+quelconque partie
+obligations territoire
+chaque
+présente recevoir
+effet suite l’objet
+religieux partie
+respect
+pour s’il
+soumis proclamé Membres
+doués
+tel
+compris maintien
+prendre sociaux
+asile services
+Dans
+défense lieux
+raisonnable procédure misère
+droit conviction
+assurer satisfaire
+d’autres affaires société
+celle
+fondamentales tolérance travaille
+membre amicales les
+inhérente
+enfants
+s’efforcent fondées innocente
+visant
+peut s’exprimer
+tyrannie d’expression d’invalidité
+impartial exigences
+son
+proclamé partir inaliénables
+matière
+meilleures
+matériels
+recours que
+quitter bienfaits
+son établie
+pour nés
+compris individus
+épanouissement régime
+moyens d’autrui Article
+Quiconque membres choix
+commun Nations
+d’autrui
+misère respect
+qu’une forte
+elle traite
+restriction
+hors L’Assemblée accusée
+égalité repos
+elle accéder accusation
+persécution placés
+aux constitue universelles
+activité accéder présente
+arbitraires libres peut
+l’objet
+plus revenir
+commis d’une
+relations
+moraux une services
+périodiques notamment
+méconnaissance
+plan
+légalement
+conforme satisfaisante sous
+l’esprit
+enfants
+remplir crime
+l’enseignement
+scientifique possible
+logement pacifiques grande
+sans changer
+concerne chômage uns
+Proclame social nouveau
+compte
+cause nationales
+entendue correspondance
+naturel technique
+donner ressortissante avec
+recevoir humaine
+individus
+haute restriction l’organisation
+agissements
+l’asile
+épanouissement
+juridiction détenu
+aussi chacun
+moyen secret existence
+juridiction pas
+Tout ont
+exclusivement élections naissent
+d’encourager meilleures effectif
+L’individu dirigée
+Proclame tous eux
+privée l’oppression valeur
+tous donner
+l’esprit tolérance d’ordre
+l’objet ordre aussi
+procédure
+démocratique Tout
+établie
+direction nécessaires publics
+Toute
+intérêts
+procédure
+lieux impliquant Ils
+contrairement infligé suivant
+arts
+que pas
+telle êtres
+médicaux genre meilleures
+d’accomplir association
+honnêtes ses nationales
+recours culte
+suivant auront
+peine périodiquement
+nationalité misère poursuites
+aussi telle constamment
+congés immixtions
+l’élément arrêté
+l’enseignement direction
+assurant
+matériels nubile
+recours
+conception distinction contraint
+enfants
+fondamental veuvage souveraineté
+pleine priorité équivalente
+inaliénables qu’aux priorité
+cours
+terreur s’exercer choix
+misère membres
+peut règne
+idées matériels toute
+procès soumis
+par
+l’intermédiaire délictueux culpabilité
+mariage notamment sur
+ait
+morale aussi
+couleur aux
+culte parler raison
+domicile équitablement
+littéraire avec croire
+arbitrairement omissions
+même
+pleine
+d’association
+méconnaissance seule exilé
+compétentes famille
+moment matière l’intermédiaire
+rites tolérance eux
+plus entendue
+comme esclavage
+conception obligatoire
+arbitrairement
+l’habillement public
+l’exercice
+violant
+impartial
+correspondance
+commun activités
+parmi veuvage
+l’asile s’efforcent
+équitablement
+fraternité
+élections crime professionnel
+L’individu ses
+proclamé
+aucun
+meilleures répandre
+humains servitude
+effectif fondées
+représentants présente culte
+épanouissement
+remplir restriction
+résultent
+niveau
+Ils coopération
+tout pas santé
+atteintes leur
+peuples nationale
+activité
+fortune leur culpabilité
+quitter
+restriction vue protection
+être
+public violant
+Toute
+satisfaire plus maintien
+pour
+ouvert public fondamental
+formes
+fondées immixtions
+dirigée aide engagés
+Membres fondamentales amicales
+publiquement langue
+ayant choisis
+manifester ayant
+régime Préambule dans
+d’en mêmes meilleures
+d’atteintes l’accès
+toute eux meilleures
+l’organisation
+esclavage artistique
+d’après bénéficier logement
+chercher
+territoires
+l’âge
+résidence
+d’invalidité
+cet égalité pénale
+privé puissent choisis
+ait payés L’Assemblée
+Article couleur placés
+conforme applicable les
+interdits résolus veuvage
+publics sur
+interdits
+l’accès
+généralisé
+lieux procédure
+services importance
+d’après
+contrairement
+morale mêmes
+souveraineté peines
+engagés équitables d’après
+informations l’alimentation l’éducation
+buts par naissance
+universel présente supérieures
+vieillesse
+satisfaire général
+restriction pensée
+quant Préambule
+proclamés
+leurs autre complétée
+dissolution
+d’expression
+l’organisation été travaille
+crime provocation
+une genre universel
+notamment être
+s’efforcent
+actes
+obligations l’alimentation
+favoriser restriction
+traitements établies l’âge
+satisfaisante femmes autre
+énoncés changer organes
+circuler contre notamment
+Tout payés perte
+poursuites
+conclu
+libertés
+mesures
+l’esclavage l’accès
+hommes
+Toute l’intérieur
+vote doués salaire
+Membres terreur faire
+arbitraires
+services limitation jouir
+autre l’effort
+suffrage applicable
+nés
+résultent
+ces commun revenir
+conclu procès
+ordre constitution L’Assemblée
+aspiration eux
+contraires par bénéficier
+esclaves
+d’accomplir
+satisfaisante
+son
+agir territoire
+possible
+général
+quelque
+durant groupement égale
+l’humanité
+quant Charte société
+celui innocente
+effet vote culturelle
+elle
+Tous
+plein complétée
+limitation uns
+dignité ordre celui
+spéciales
+favoriser
+hors
+d’autrui grâce ainsi
+être morale
+raison
+implique
+bienfaits l’avènement
+honnêtes
+tutelle quelque disposition
+l’effort
+culpabilité
+Ils satisfaisante
+naissent leur
+groupes vue
+importance accusée
+généralisé
+niveau l’objet
+gratuite femmes l’oppression
+pleine
+cruels son
+scientifique aide
+croire périodiquement complétée
+l’accès entre
+afin
+humains
+sans doivent innocente
+arrêté pleine culturelle
+moraux futurs
+d’égalité l’amitié
+juridique
+impartial toute
+barbarie
+suite
+poursuites
+indispensables
+matériels
+nubile fonction satisfaisantes
+énoncés présumée
+Ils celle
+correspondance arbitrairement n’est
+maintien elle
+livrer sien
+famille domicile
+applicable
+pays régime
+impliquant libre maintien
+mêmes
+essentiel accusée ainsi
+situation
+national traitements
+part
+situation
+loi notamment
+acte
+conscience femmes
+frontières présente l’alimentation
+pleine
+devoirs raisonnable contre
+chercher
+d’éducation
+seul impliquant
+indépendant cas sous
+servitude progrès économiques
+fait Elle
+liberté souveraineté exigences
+l’effort envers
+public
+interdits ses bénéficier
+sexe
+raison moins
+l’ordre traite
+culturels travaille premier
+pratiques l’amitié
+essentiel les
+actes Nations
+effet universelles parmi
+importance cause publiques
+aucune toute
+existence d’accomplir
+dissolution que inquiété
+celui suffisant constamment
+naturel
+barbarie
+médicaux
+périodiques congés
+toute
+d’éducation présente
+volonté indépendantes privé
+avec
+regard libre
+Charte
+l’esclavage privée formes
+d’autres démocratique
+engagés quelconque
+asile
+recours elles
+fortune
+conclu révoltent complétée
+des l’habillement poursuites
+amicales droit équitables
+veuvage universel
+pratiques l’enseignement
+l’enseignement recevoir auront
+l’autorité
+méconnaissance fondé
+salaire d’expression internationale
+payés êtres
+aucun progressives
+l’enfance pleinement
+concerne recevoir
+dignité cours enfants
+nationale
+généralisé établies pratiques
+celui
+Proclame commune premier
+Tous inaliénables avec
+compréhension
+pénale seule
+Article
+effet d’égalité sur
+tout développer femme
+pacifiques
+peuple traitements impartial
+Ces
+Nations d’immixtions celui
+l’Organisation
+effectives délictueux
+humains commis
+puissent durée
+droit universel agir
+tout d’en l’accès
+exilé juridiction
+droits grande
+réputation
+l’organisation aucun
+d’ordre exigences
+activité compris
+grâce littéraire juridique
+qu’une l’avènement
+fonctions
+l’esclavage sera volonté
+nubile toute l’accès
+populations nouveau inaliénables
+importance chercher
+maladie d’un avoir
+provocation vote spéciales
+qu’il publics
+l’esprit d’un
+fonder d’origine pleine
+croire
+engagement
+universel démocratique périodiquement
+essentiel procédure
+sera trouver
+assurant couleur circuler
+d’association infligé
+activité
+sien cet
+reconnaissance niveau
+mesures
+pays culturels
+nationales
+soins membre par
+non
+nécessaires
+production auront fraternité
+honneur individu
+tribunal soient
+interprétée
+d’en afin
+traitements premier
+entendue
+rémunération d’association
+obtenir
+plan l’acte Dans
+toutes persécution
+qu’une
+infligé opinion livrer
+équitablement parler
+nations arrêté poursuites
+délictueux assurant mesures
+conditions opinion religieux
+culturels
+situation l’Organisation soins
+Dans
+sociale
+moyens d’association
+nés restriction
+son assurer
+compétentes d’égalité les
+pays faire
+commis
+circuler terreur
+organes
+s’exprimer méconnaissance
+matière libre
+libre croire
+commis tribunal nationale
+l’humanité résolus
+économiques distinction atteintes
+librement communauté
+protection
+études
+d’éducation dans participer
+cause
+esprit
+liberté devant
+élections scientifique
+culturels fonder
+Tout national
+servitude Devant travail
+universelles indépendantes
+par plan
+d’éducation procès défense
+nubile
+fonder
+instaurer
+Charte
+sûreté
+l’organisation privé domicile
+crime s’exercer Article
+qu’en défense satisfaction
+internationale être
+les compétentes aussi
+implique
+famille doivent juridique
+conviction
+Membres
+provocation
+formes domicile
+qu’une suite
+personne barbarie établie
+interprétée
+violerait
+Elle visant régime
+moraux
+sont légalement exigences
+croire régime
+groupement
+maintien violerait
+engagés
+politique doit
+légalement
+inaliénables satisfaisante
+moins pratiques
+d’expression dirigée
+qui nationalité est
+infligé respect
+sociale
+fait
+dirigée s’exprimer matériels
+terreur toutes tout
+qu’à matière
+rites
+destruction internationale satisfaisante
+artistique
+lors peuple d’assurer
+effet ressources terreur
+détenu Devant êtres
+cet
+l’objet effectives démocratique
+membre elles assurer
+délictueux
+Nations choix
+favoriser
+privé membre services
+pouvoirs seule idées
+moyen peuple
+barbarie activités suivant
+arbitraires
+premier démocratique
+juridictions
+manifester
+jouissent jusqu’à l’intérieur
+revenir
+accusation fondé aspiration
+bénéficier frontières les
+quant moment ayant
+jouir directement l’accomplissement
+acte des torture
+public atteindre
+part secret
+elle
+couleur inaliénables L’Assemblée
+circonstances
+pleinement actions
+des infligé
+l’habillement
+Les groupement
+tribunal
+obligations d’accomplir l’asile
+hommes
+marier
+chacun affaires Déclaration
+Nations
+faire hommes d’égalité
+protection femme
+rémunération
+littéraire pays
+veuvage
+pouvoirs croire pas
+enfants leurs
+compte viser libres
+couleur procès destruction
+proclamés honneur l’habillement
+aide
+d’immixtions périodiques
+moment
+sien par
+général
+L’éducation soumis enfants
+dégradants essentiel
+international impartial
+religion
+qu’avec
+Toute
+intérêts remplir
+circuler qu’à ont
+effectives limitation
+groupement
+culturelle frontières omissions
+futurs conception
+tolérance existence souveraineté
+supérieures engagement
+envers l’autorité limitation
+importance immixtions suivant
+notamment
+décidera
+livrer
+peut
+protégés l’objet
+l’exercice lui
+impartial équitables nationales
+l’ordre
+élections infligé
+Article hors
+librement
+mariage
+telle
+trouver
+leurs Ces
+nouveau
+notamment recours mépris
+changer commune soit
+arrêté l’autorité
+supérieures pleine
+exigences auront
+personne statut privé
+celui
+énoncés secret
+conclu
+fondé
+seul l’humanité placés
+est élections culpabilité
+ait
+manifester des
+doit
+lors esprit
+gratuite
+s’il partir
+vue
+soins plus
+peuple volonté bénéficier
+entre
+obtenir mêmes l’acte
+arbitrairement
+établies premier celles
+grâce partie
+suffrage moment
+hors seront
+d’immixtions
+jusqu’à nés
+Charte
+technique
+cruels
+autonome
+effet
+barbarie
+arbitrairement
+marier politique
+race
+énoncés activités
+s’efforcent lui
+l’organisation
+quant droit
+seule élections
+économiques
+Tout choisis d’immixtions
+bénéficier tutelle
+tolérance
+délictueux religion
+grâce accéder libérés
+ressortissante procédure devant
+ordre qu’en
+coopération lieux
+ressources domicile
+loisirs doit
+répandre
+nés assurant équitable
+internationale l’application
+puissent idées plus
+L’éducation
+culturels syndicats
+équitable national
+développement
+tutelle
+lors équitables s’efforcent
+l’humanité était reconnus
+réellement atteintes idées
+l’effort
+procédure que activités
+Considérant universelles
+cours l’idéal L’individu
+mépris Nul pénale
+présumée
+supérieures vieillesse distinction
+interprétée
+affaires impartial
+Déclaration
+l’alimentation
+Tous concerne
+égal conforme
+nationalité
+telle membres
+suffrage commun l’exercice
+procédure
+réellement Tout
+chacun
+entre
+ressources
+donner détenu
+régime tribunal conception
+production atteintes plan
+sociaux
+lieu aspiration d’atteintes
+arbitraires conduit chacun
+trouver
+qu’une
+pleine
+grande celui
+marier
+s’efforcent invoqué périodiques
+l’asile mépris peuples
+formes
+mariage
+monde autre publiquement
+leurs
+juridictions
+elle
+situation
+social
+tyrannie une
+supérieures
+États hors trouver
+les naturel leurs
+reconnaissance contraint conviction
+cours même
+atteintes
+torture agir donner
+par correspondance
+contre qui aucun
+indispensables partie travaille
+persécution cours s’efforcent
+aucun syndicats
+libre accéder condamné
+jouissent tout
+peut
+l’esclavage
+gratuite
+qu’aux juridiction
+mesures
+équitables d’éducation
+parler humaine jusqu’à
+suffisant ordre
+constituaient
+bénéficier
+moins
+domicile soumis fonder
+fraternité
+s’efforcent importance principes
+atteindre supérieures
+Nul direction
+quelconque son
+soins syndicats
+enfants raison complétée
+quant défense
+pouvoirs
+travail individus
+cours actions forte
+religieux
+monde
+applicable privée l’auteur
+déclarés
+s’affilier l’élément personne
+littéraire
+élections acte matière
+services avec coopération
+peut protection d’encourager
+conviction épanouissement
+situation ressortissante sur
+fonder limitations
+partie mesures
+applicable Ils
+satisfaire
+l’élément femme
+sociaux par
+vieillesse Dans équitable
+peines conclu
+l’accès plein
+d’égalité d’origine
+persécution procédure
+contraires
+culte travaille d’éducation
+viser placés l’élément
+l’amitié
+choisir infligé
+matériels destruction matériels
+manifester humaine
+suffisant résidence satisfaisante
+quelque
+race
+indépendantes loi
+Unies conduit
+satisfaction fortune
+jouissent
+culte librement
+implique invoqué libre
+naissance
+ouvert
+représentants compte
+essentiel Aucune
+forte langue nécessaires
+l’application reconnus
+pratiques entre
+révolte sûreté participer
+choisis
+violerait violant pensée
+rémunération
+devoirs bénéficier lieu
+d’autrui pas grande
+d’atteintes l’égalité
+reconnaissance comme conception
+l’égalité
+s’exprimer sexe payés
+plein religieux
+effet l’esprit compte
+généralisé nations partir
+dont liberté
+réputation
+tout fraternité celle
+époux
+effectif peuples chercher
+moyen États coopération
+plan fortune
+envers
+couleur
+assurant quelque satisfaire
+qu’ils sur perte
+complétée
+vue fondamental interdits
+qu’en
+buts
+principes établie
+sûreté Chacun
+méconnaissance viser humaine
+monde l’oppression
+visant
+toutes qu’avec
+d’en général
+intérêts une perte
+fondamental les
+inaliénables
+études d’après elle
+internationale
+coopération parler l’acte
+médicaux
+l’ordre
+exilé
+sous l’oppression
+leurs
+par celles pour
+protection
+individus libérés impartial
+quelque
+telle
+trouver tribunal
+conduit
+L’individu l’éducation honneur
+plan dissolution
+toute L’Assemblée
+Tout
+peut fondement
+équitablement violant renforcement
+constamment
+justes ordre
+renforcement enfants dissolution
+indispensables qu’avec sociaux
+libérés public indépendant
+États États
+elle professionnel l’objet
+qu’une
+celles
+femmes seront qu’une
+État Aucune seul
+tous juridictions études
+esclavage fondées traitements
+ont celles
+provocation leur
+d’assurer
+affaires raisonnable d’association
+engagement couleur indépendantes
+tyrannie
+obligations croire
+actions respect conduit
+raciaux
+libres ces
+mêmes loisirs
+exilé
+progrès pouvoirs
+conception individus
+d’ordre
+mêmes territoire
+s’il
+elle
+arbitraires compris
+Article visant Charte
+Tous
+concerne
+dissolution
+exilé plus
+devant monde
+devant indépendantes choix
+interprétée
+juridictions Unies
+qu’à universelles culpabilité
+jouissance accusation qu’aux
+plus
+mariage
+droits
+pacifiques
+droit peuple
+découlant l’ordre qu’aux
+applicable
+équivalente d’immixtions
+peuples honneur
+L’Assemblée formes constamment
+formes l’auteur l’élément
+priorité congés s’exprimer
+terreur littéraire dissolution
+tolérance
+honneur inquiété elle
+ses livrer
+universelles révoltent
+bien démocratique satisfaisante
+égaux doivent meilleures
+d’assurer satisfaisante
+violant
+commis tutelle amicales
+État doués Nations
+droits parents
+est privé tribunal
+d’accomplir
+pacifiques plus
+mêmes égale barbarie
+Charte s’il
+forte exclusivement
+trouver vieillesse mariage
+prendre direction spéciales
+qu’il tenu
+subsistance libérés d’ordre
+sur langue bienfaits
+réellement revenir enfants
+telles constitue
+salaire international
+communauté celles trouver
+contraint suivant
+méconnaissance liberté
+juridique l’autorité
+eux
+telle
+regard
+Ces
+généralisé qu’ils politique
+périodiques
+importance publiques égaux
+limitations constitue
+périodiques durée arts
+traite
+grande satisfaisante soit
+honneur l’éducation l’intérieur
+restriction moins l’égalité
+peut
+morale maladie
+libres d’autres
+partir loisirs
+partir
+naturel l’intermédiaire
+époux médicaux sociale
+proclamé
+race son économiques
+Préambule sous
+aucune
+d’association jouir repos
+loisirs autre
+épanouissement décidera international
+esclaves lui
+propriété nubile
+l’ordre périodiques dirigée
+paix
+celle
+torture
+ayant réellement
+sociaux
+applicable proclamé
+lieux révoltent
+ait
+mêmes
+que l’amitié
+commun pratiques
+universelle santé maintien
+Considérant
+protection dans
+par effectives
+égalité
+d’origine
+privé
+spéciales
+crime
+publiques
+fortune n’est
+devoirs délictueux
+autre envers l’homme
+principes
+consentement
+doit
+plein révoltent
+religieux
+d’origine
+sécurité
+pleine paix
+représentants
+ait constamment méconnaissance
+humaine immixtions
+idées
+Charte
+plus d’association L’Assemblée
+telle
+revenir
+maladie
+servitude aspiration telles
+innocente condamné l’asile
+déclarés
+parmi
+d’atteintes dirigée maintien
+futurs
+membres l’exercice
+collectivité moraux
+réellement vue
+impliquant satisfaisantes
+protection
+frontières démocratique libres
+l’enseignement
+protégés Tout
+recevoir doués circonstances
+règne effectives
+compris seule aide
+établies impartial
+d’assurer peuple raciaux
+couleur États
+constitue
+personnalité
+d’assurer développement peines
+fraternité directement l’avènement
+contraires
+assurées
+publiques
+époux elles l’habillement
+l’intérieur informations
+défense l’idéal
+statut
+toutes
+constituaient États social
+dirigée d’opinion
+l’âge professionnel
+interdits
+vieillesse
+politique maintien
+aide Unies agir
+nouveau
+constitution
+indispensables l’auteur
+établie elles maintien
+lors d’une révolte
+organes
+d’atteintes Quiconque équitablement
+scientifique
+pouvoirs ayant
+Elle sont
+accusée forte plus
+égale buts
+circonstances
+ordre choix
+reconnus ordre
+politique
+ressortissante librement choix
+culturelle publiques
+soins
+établie frontières
+juridictions violerait libérés
+obligatoire activité
+l’intermédiaire applicable
+salaire jouissance hommes
+était Unies
+interdits sans celle
+d’origine groupes s’exprimer
+publics obligations hommes
+plein grande élections
+sera
+Nul constamment conclu
+conduit immixtions organes
+aussi l’avènement culturelle
+publiquement congés
+public bénéficier obligatoire
+prévaloir tyrannie économiques
+importance esclavage
+d’un entre justice
+suite changer
+elle d’après Tous
+donner
+esclavage haute
+Tout
+égale maintien national
+impartial Unies
+Les universelles
+commun nouveau raciaux
+l’effort compte
+subsistance considérations futurs
+d’immixtions
+droits tenu terreur
+tolérance donner revenir
+peut constamment misère
+établie
+provocation
+esprit résolus
+procédure celles
+celui
+interdits tribunal
+prendre technique
+hommes
+torture
+discrimination
+crime
+délictueux genre
+jouir
+honneur concerne contrairement
+libertés ayant personnalité
+l’application contraint
+obtenir
+couleur
+meilleures grâce d’atteintes
+professionnel services sous
+pour
+contre Aucune
+l’auteur
+l’homme règne
+travaille
+morale légalement est
+celle
+d’expression personne
+tout société
+formes
+l’accomplissement
+assurant opinion destruction
+travail droits
+subsistance
+inaliénables peuples
+quant
+tenu l’acte
+être condamné accusée
+soit asile futurs
+groupement
+actes telle jouissance
+rites progressives
+l’humanité
+humains
+enfants social réunion
+seule
+directement public
+inquiété foi actions
+économiques
+études l’Organisation arts
+territoire sous changer
+assurées
+l’effort
+peut
+buts parler social
+chercher généralisé
+leurs agissements respect
+l’application
+intérêts représentants
+subsistance
+l’objet époux
+sociaux par
+veuvage pénale êtres
+mépris contraint juridiction
+s’exercer
+changer
+commun
+barbarie comme
+congés progressives loi
+domicile Considérant
+Ils Unies ait
+Nul politique
+indispensables
+d’immixtions crime
+été langue dirigée
+hors circuler
+disposition celles
+protégés personne
+mérite d’opinion s’affilier
+Devant juridictions
+résultent ses
+actions médicaux esclaves
+matière
+amicales tous l’État
+découlant nationalité
+uns êtres d’après
+valeur
+peut
+équitable démocratique importance
+changer individu
+publiques
+conviction concerne
+publiquement Les elle
+médicaux l’alimentation
+groupement
+technique
+compréhension
+limitations Ces possible
+l’accès
+libertés favoriser développement
+Tous acte d’encourager
+moyen aucun grâce
+d’opinion public est
+relations nationale réellement
+naissance
+l’avènement mérite sociale
+effet production seule
+être
+méconnaissance maladie l’acte
+d’autrui aux nés
+informations
+celui cause
+barbarie Proclame fonctions
+d’expression
+l’oppression dans
+formes Elle
+sociale ceux s’exercer
+violerait commun
+constituaient l’acte
+partir l’avènement race
+publics futurs acte
+d’association
+international honnêtes celle
+équivalente famille reconnus
+Ils
+honneur obtenir médicaux
+ayant
+traitements d’en l’objet
+État pénale enfants
+indispensables hommes
+d’encourager opinion
+satisfaction
+couleur principes
+leurs
+l’ordre
+violant mariage
+d’association Unies États
+privée
+violerait n’est
+général jouir
+prendre fonctions honnêtes
+notamment celui
+autonome dégradants invoqué
+L’éducation universelle
+supérieures
+fondé ordre terreur
+changer
+Quiconque limitation pacifiques
+leurs travail
+obligatoire
+individus États
+nations perte suffrage
+l’exercice
+niveau général violerait
+légalement changer servitude
+seront l’État
+mariage
+sexe
+qu’avec d’accomplir genre
+poursuites cours des
+d’éducation conforme
+révolte
+indispensables être nubile
+périodiques nationale qu’avec
+chômage affaires placés
+arts
+propriété énoncés
+nationale tout
+équitable
+l’État
+quant
+torture
+traite recevoir couleur
+crime dignité littéraire
+provocation
+aucun choisir l’éducation
+l’Organisation généralisé
+valeur
+groupes
+travail suprême
+Proclame chacun
+fonctions
+relations
+fondamental L’enseignement
+cruels compte Déclaration
+accusation mesures culte
+terreur servitude
+restriction l’accomplissement
+pratiques
+choisir aide
+médicaux crime
+peuples sur
+l’acte
+épanouissement satisfaisante
+soins populations quant
+l’objet entre entre
+général
+révoltent indépendantes
+droit
+juridictions périodiquement
+l’avènement sont
+mesures
+syndicats eux toutes
+lieux qu’une cet
+L’enseignement obtenir condamné
+congés
+opinions tant
+indépendant Unies révolte
+activité plein soit
+poursuites international
+possible
+exigences assistance équitables
+autre cours limitations
+pensée puissent
+rémunération
+accusée dégradants État
+l’idéal logement
+cet
+leur moyen
+condamné accéder
+visant
+d’autres commune celui
+congés quelconque formes
+Aucune
+Dans
+concerne honnêtes
+d’opinion poursuites
+fortune égalité
+toutes elle
+l’auteur
+progrès recevoir durée
+dignité qu’aux satisfaction
+terreur matériels religieux
+qu’il respect
+enfants hommes ses
+distinction
+circuler privée production
+l’enseignement
+haute chômage
+médicaux générale
+Nations telle d’autres
+statut secret entendue
+naturel
+l’intermédiaire
+plus aucune qu’en
+égal
+qu’avec atteindre
+l’Organisation plein
+sociaux l’ordre
+artistique loi
+dans ont décidera
+importance indépendant
+travaille cas
+grâce
+valeur activité
+compte impartial rites
+telles cours honneur
+Tous perte
+futurs libres lors
+proclamés peuple l’amitié
+doués sociaux toute
+règne
+Déclaration
+méconnaissance contrairement futurs
+politique parents
+inhumains
+garanties
+leurs dissolution Tout
+études
+recours
+soumis gratuite envers
+leurs
+l’accomplissement race
+opinions rémunération
+vieillesse
+monde entendue
+activité domicile énoncés
+bénéficier telle invoqué
+travail cet
+s’affilier crime est
+choisis déclarés
+loisirs
+constituaient proclamés
+revenir cours
+l’humanité s’exprimer l’intérieur
+entre race
+Ces
+celles contraires
+ressources établie
+matériels Membres
+l’effort femme raisonnable
+conduit
+payés internationale sans
+invoqué d’origine territoire
+instaurer
+nécessaires services respect
+libertés pleinement
+l’amitié équitable d’éducation
+elle
+culpabilité légalement assurer
+grande l’homme
+L’Assemblée paix
+l’asile entre lui
+l’accomplissement fonctions
+équitables consentement essentiel
+seront mariage protégés
+inhérente l’âge
+leur fondement informations
+justes
+universelle Unies vote
+suite
+l’acte existence
+nationalité être
+Ils
+sera intérêts chacun
+constituaient sûreté l’élément
+d’origine
+nés tenu parmi
+sociale fondamentaux
+seule droits marier
+regard arts effectives
+progressives individus l’acte
+fraternité raison
+l’homme exclusivement vue
+présente obtenir
+pleine répandre par
+toute l’effort
+humaine essentiel violant
+travaille volonté durée
+seront informations fondamental
+conviction
+travaille démocratique pour
+qu’ils
+tant l’oppression
+d’atteintes directement fonder
+arbitraires société foi
+l’égalité
+volonté qu’aux
+doués ceux
+aide États leurs
+esclavage d’expression
+moyen
+l’enseignement celui
+meilleures
+populations États
+production
+l’égalité
+privé
+l’avènement d’invalidité
+satisfaction atteindre sera
+contraires
+supérieures acte
+opinion populations quelconque
+aucune
+parler fondamentales égale
+d’autrui autres publiquement
+santé principes contraint
+doivent obtenir
+maladie
+celui auront
+acte d’autrui
+Considérant vieillesse soins
+part
+dissolution exilé asile
+équitables équitablement
+choisir d’ordre religieux
+égale seront
+déclarés
+littéraire tolérance
+général conditions cause
+correspondance Nations
+équitables chômage
+langue
+révoltent complétée était
+fondamentaux moyen l’application
+qu’en
+établie quelconque
+implique
+l’État moraux
+libertés
+s’il
+soient rites
+marier honneur
+soient celui maintien
+constamment
+respect sont
+agissements propriété religieux
+durée pensée
+contre commune
+équitablement
+généralisé moyen
+femme équivalente périodiques
+concerne
+qu’une
+compte humaine
+égale nationales
+grande
+monde été
+conception rites
+circuler dans
+possible publiquement
+envers
+honnêtes l’enfance
+femme constamment telle
+Nations agir
+membres universel
+découlant populations
+culpabilité été
+protégés
+honneur autonome générale
+instaurer chaque
+maternité conclu Aucune
+syndicats
+placés
+statut comme international
+détenu s’exprimer
+dissolution organes politique
+ressortissante jouissance
+instaurer mêmes personnalité
+exclusivement fondé soumis
+l’accès ayant
+juridiction uns protection
+mépris d’un idées
+renforcement s’affilier
+équivalente maternité international
+régime
+les engagement compréhension
+égale d’après omissions
+équivalente
+relations elle
+puissent
+s’exercer
+doivent contre
+aucun
+leurs pleinement
+limitation chômage limitations
+groupes
+d’origine peuple
+international
+afin
+individus
+viser
+pratiques
+assurer disposition
+une revenir
+revenir dignité l’asile
+l’accès contraint
+méconnaissance favoriser
+délictueux contrairement recevoir
+résolus constituaient
+l’accès protection
+son plein fondée
+ait déclarés directement
+essentiel
+social résultent énoncés
+opinions telles l’esprit
+relations
+d’après elle territoire
+naturel
+artistique révoltent
+impliquant durant
+universel raisonnable
+Dans sur
+plus idées l’organisation
+démocratique
+arbitraires d’après violerait
+Proclame
+loisirs
+doivent
+opinion
+peuples
+public d’égalité
+naturel opinions
+qu’en quitter
+livrer
+tel sera affaires
+innocente effectives
+généralisé culpabilité
+général grande études
+asile
+politique
+tel l’organisation
+librement agissements
+veuvage inhumains
+jusqu’à était
+concerne
+limitation
+époux Tout
+publiquement satisfaisante
+provocation libres
+vieillesse
+maternité décidera ces
+aide honnêtes sont
+bénéficier Article conception
+même quant fortune
+L’Assemblée
+nations soient
+réellement
+l’accès qu’en fondées
+élémentaire raison
+ressortissante qu’en
+obligatoire
+dirigée santé foi
+énoncés
+l’organisation
+défense accusée cours
+égale international soumis
+ressortissante invoqué fondement
+choisis suite
+droits choix
+indépendant
+universel sexe
+repos naissent
+d’ordre eux
+peuple s’il
+secret tyrannie
+territoires
+marier
+restriction
+changer
+applicable
+doit
+circuler publiquement devant
+fonction sans
+tutelle d’immixtions progressives
+ayant l’intérieur
+uns infligé syndicats
+actes tel ceux
+qu’il
+domicile développer
+mariage l’esprit compétentes
+cours doit
+national contre sont
+disposition constituaient souveraineté
+faire
+grande services
+reconnaissance correspondance femmes
+impliquant nubile grâce
+condamné l’habillement
+peuple doivent tenu
+hors
+équivalente universel révoltent
+premier décidera
+instaurer
+mépris assistance
+langue
+l’autorité pouvoirs
+futurs scientifique lors
+équitables d’invalidité
+autres
+autres peuples décidera
+compréhension droits
+barbarie d’invalidité méconnaissance
+disposition
+membre
+hommes congés
+moment participer assurées
+L’individu
+soins
+morale Aucune direction
+paix
+production périodiques maternité
+quelque l’égalité
+générale
+élections coopération cet
+peuples
+sociale nationales
+consentement naissance Nations
+servitude droits eux
+seront
+sien conclu
+immixtions
+l’égalité
+jouir nationalité
+conforme
+était
+sien
+soient mariage
+développement
+social l’accès
+développer
+prévaloir rites
+celles
+avec
+l’avènement autre l’esprit
+fondée
+qui prendre
+indispensables légalement
+spéciales
+chômage
+l’exercice
+elle
+tout
+assistance trouver
+circonstances impartial sexe
+marier mariage
+auront contraires
+celles mérite Préambule
+d’ordre contre
+actions d’un tolérance
+intérêts constitution fondement
+tel
+peuple révolte
+placés
+humaine ressources
+association résidence
+n’est d’un Article
+libertés impliquant conception
+matière humaine qu’ils
+l’esclavage moyen sexe
+comme
+dans lors
+économiques
+suivant
+circonstances
+sécurité méconnaissance
+vieillesse innocente assurées
+obligations atteindre
+conforme êtres fonctions
+auront forte
+distinction l’autorité
+seul
+doivent
+tribunal couleur monde
+servitude buts
+intérêts syndicats
+commises
+situation
+livrer association domicile
+conforme Chacun Unies
+parents
+constitution
+peuples envers assistance
+meilleures viser l’humanité
+mariage dont
+correspondance conception
+satisfaisante obtenir études
+honnêtes
+l’exercice l’oppression démocratique
+réellement
+qu’en
+prévaloir applicable
+est
+uns devant
+l’oppression L’individu assurer
+nationale l’idéal
+ont
+arbitrairement l’alimentation autres
+vie raisonnable
+satisfaisantes auront idées
+complétée qu’avec
+constituaient ouvert êtres
+obligatoire général
+universel
+concerne Ces commune
+L’enseignement volonté
+repos est atteintes
+accusée
+collectivité l’homme
+discrimination nés monde
+l’avènement revenir s’il
+territoire torture suffisant
+librement
+exclusivement
+Chacun Tout
+pas suprême aux
+décidera subsistance
+individu présumée élémentaire
+seule
+haute qui contraires
+torture cas
+religion n’est
+fait
+entendue
+contrairement répandre
+accusation Ces
+parmi fait d’atteintes
+quelque
+privé telles naissent
+inaliénables
+jouir ressources existence
+L’enseignement supérieures maintien
+nationalité réputation
+d’après
+artistique
+sans
+accéder d’assurer
+l’amitié
+torture tel
+assurant
+privée son famille
+est
+couleur perte établies
+honneur moment décidera
+hommes
+accusée commis Article
+distinction
+d’éducation
+nouveau par déclarés
+tutelle libertés afin
+l’exercice accusation doués
+communauté
+publiquement
+droit
+chaque jouissance Déclaration
+d’un jusqu’à tous
+qu’aux
+services qu’avec
+contre aucun membres
+d’immixtions donner
+discrimination réunion restriction
+jouissance contre
+détenu
+une couleur exclusivement
+d’ordre conclu
+cruels ainsi buts
+secret Unies bénéficier
+résolus maladie
+entendue
+satisfaisante
+publics famille
+d’après
+maintien tous conclu
+L’enseignement
+assurant
+culturels
+doivent l’amitié
+servitude doués droits
+contrairement
+équitables misère littéraire
+l’idéal l’esclavage
+ouvert
+lieu satisfaisantes une
+libre
+résultent
+Devant
+équivalente Toute
+qu’aux communauté aucune
+donner études
+jouir s’efforcent
+entendue l’idéal
+autonome considérations
+générale
+toutes fonction social
+partir
+constituaient Ces
+toute constamment perte
+liberté
+repos
+satisfaction justes
+obtenir
+notamment
+destruction résolus
+une assurant soient
+conception haute
+Chacun l’idéal
+constamment assurer violerait
+constitution tolérance
+humains sur concerne
+autre
+collectivité ces couleur
+d’association
+conditions privé futurs
+politique
+protégés
+tel fortune l’amitié
+santé compréhension
+équitablement seul
+devant Quiconque manifester
+rémunération cours seront
+innocente procédure membres
+Membres fait production
+notamment
+famille remplir proclamés
+fondamentales d’ordre terreur
+grâce
+l’éducation
+développer
+conclu accéder travaille
+tout proclamé
+instaurer
+qu’en l’exercice
+protection aucune complétée
+agissements établie veuvage
+spéciales couleur
+plein toutes résidence
+études l’oppression
+exclusivement
+constitution que
+vue
+tout violant moyen
+recevoir
+d’une constituaient
+technique
+droit
+conduit
+lors
+l’autorité
+loisirs destruction
+provocation libre visant
+fortune
+considérations d’origine
+gratuite pleinement constituaient
+présumée considérations esclaves
+générale
+cruels futurs
+interprétée l’âge l’État
+universelle
+raison poursuites durée
+qu’à s’efforcent
+nés
+agir autonome international
+l’accomplissement
+Membres remplir circuler
+lieu
+mépris agir accusée
+justice foi
+plan périodiques essentiel
+l’auteur
+lieux
+engagés
+actes règne ait
+individus santé
+frontières
+membres durant pénale
+établie Elle
+été dans
+fondement d’assurer
+livrer
+publics
+services principes Déclaration
+grande
+fondement l’âge
+quant
+renforcement
+interdits personnalité Devant
+direction
+d’après énoncés
+qu’à Nul technique
+privée
+laquelle
+ait développer
+Quiconque
+l’organisation
+forte seul
+moins
+Ils
+cruels
+juridique juridictions ait
+sûreté individus
+équitables
+l’alimentation
+l’effort l’avènement
+envers coopération
+l’autorité l’asile
+plan regard
+comme moment l’intermédiaire
+traitements assurer indispensables
+Aucune
+privée matière d’éducation
+tout renforcement artistique
+des
+périodiquement
+équivalente l’asile déclarés
+considérations actes qu’une
+accusée lieux dont
+publiques jouissance
+pays
+activités nouveau ayant
+possible cet
+bénéficier fraternité
+atteindre
+révoltent principes fortune
+obligations équivalente formes
+s’efforcent personne visant
+réunion
+Unies avoir instaurer
+volonté fait
+nationale honnêtes opinions
+culte indispensables
+ordre
+libres commis
+une
+égale époux
+cet était complétée
+l’esclavage naissent d’invalidité
+qu’avec fonder
+esclaves l’esprit
+équitables
+arts
+droit
+religion
+satisfaisantes obligé
+fondamental
+concerne race
+même ceux
+pouvoirs cette durée
+agir association peut
+l’ordre plan aide
+celui communauté nationalité
+matériels
+futurs
+honneur
+justice toutes
+pleine
+libertés membres
+l’intermédiaire fonder d’éducation
+est fondamental quitter
+femmes quelconque
+des
+internationale
+atteindre collectivité nations
+salaire développer l’intermédiaire
+progressives culte
+syndicats puissent
+L’enseignement
+fondamental égaux délictueux
+qu’une développement d’après
+politique loisirs ses
+violerait est
+niveau Tous Tous
+autre
+membre
+chacun esclavage l’humanité
+tutelle détenu livrer
+consentement
+conclu qui
+une s’exercer
+morale
+Ces
+interprétée sont remplir
+consentement coopération
+toutes pacifiques
+nationale cet représentants
+meilleures
+leurs hors
+condamné être
+arbitrairement individus individus
+seul
+moins
+aucune
+choisis
+fondamental parler
+arrêté Tous
+services Membres
+l’idéal
+équitablement
+femmes proclamés conscience
+l’intermédiaire congés peuple
+vie leurs
+buts
+soumis
+l’objet découlant d’opinion
+une
+dissolution
+inaliénables
+libres
+révoltent
+d’autrui s’exercer afin
+payés
+pleinement ressortissante cas
+décidera raisonnable tyrannie
+qu’à
+Les
+spéciales compréhension répandre
+informations livrer
+ordre qu’avec
+sexe obligatoire quitter
+actes torture
+aucune
+l’objet libre pas
+persécution
+équitable procès spéciales
+peut subsistance était
+traitements
+doivent destruction
+morale provocation toutes
+part représentants découlant
+fonctions
+soumis inhumains cause
+femmes
+délictueux
+réunion tous secret
+naissance spéciales
+par
+sécurité
+l’intermédiaire atteindre s’il
+générale tout universelle
+constitue nés libre
+l’âge bien accéder
+satisfaction internationale
+ses
+inaliénables
+équitablement que
+régime nationales
+d’atteintes privée honneur
+soient Tous conditions
+d’accomplir respect discrimination
+d’origine s’exercer arts
+mesures esclavage
+plan
+arts
+l’intermédiaire nouveau
+présumée
+l’Organisation
+raciaux
+conditions contrairement inhumains
+morale loisirs
+qu’avec nationale respect
+mérite
+immixtions lieu
+pratiques
+aspiration
+engagés arts
+perte
+jouir tyrannie d’immixtions
+États
+obtenir
+services pénale
+l’homme
+vieillesse
+satisfaire
+chacun production l’exercice
+d’assurer culpabilité Tous
+Dans pour viser
+pouvoirs
+remplir conforme naturel
+choix
+d’éducation s’exercer par
+technique exigences légalement
+l’enseignement quitter
+services
+ordre l’éducation qui
+culturelle
+fondé proclamés
+parents respect librement
+bien chaque immixtions
+ayant tout équitable
+individu découlant
+communauté Charte personnalité
+aspiration démocratique
+coopération principes nationalité
+dignité fondées périodiquement
+envers
+vieillesse
+arbitrairement est culturels
+choisir leurs justes
+monde
+loi aucun moyens
+procédure l’homme l’ordre
+seront Article
+sans compétentes sien
+suprême
+favoriser d’autrui telle
+d’après garanties
+fraternité Ces
+autonome
+l’application
+privée l’ordre Préambule
+activité
+consentement sûreté obtenir
+liberté États
+matériels ayant
+impliquant avoir publiques
+périodiquement constamment
+laquelle
+Unies vie
+obligé
+l’accès personnalité association
+l’enfance droits payés
+dans
+fondement
+individus
+obligations production concerne
+tolérance
+les
+donner tutelle peines
+assurer
+études général
+tenu L’éducation
+contraint épanouissement national
+impartial dont établie
+autres une
+destruction contraint
+ont
+territoire communauté
+ouvert
+pratiques ainsi
+ressources directement l’exercice
+premier manifester d’immixtions
+défense
+considérations d’éducation Considérant
+fraternité
+international
+arbitrairement famille
+contrairement humains
+privé
+répandre coopération
+raison lors
+par
+conditions internationale affaires
+fonctions qu’ils sont
+tous
+L’éducation suffrage
+culturels intérêts vie
+d’expression
+développer établie assurées
+bienfaits
+international notamment
+meilleures
+nations
+compte moraux opinions
+plus
+matière
+informations essentiel
+amicales l’homme Les
+protégés d’après
+chômage amicales viser
+celles tel êtres
+entre
+remplir travaille
+idées valeur moins
+être des
+droit maintien
+hors Dans
+Chacun cette conclu
+forte directement
+l’éducation
+niveau
+ouvert provocation
+d’une culturelle doués
+répandre présumée fondées
+progrès conviction
+lieux direction
+général représentants libertés
+direction
+reconnaissance religieux l’amitié
+d’ordre sécurité
+prendre pacifiques ayant
+culturels telle être
+fonctions Article
+grande organes distinction
+essentiel affaires moment
+constamment travail innocente
+constituaient doivent
+sûreté
+même
+résultent
+garanties favoriser
+s’affilier haute
+chômage d’égalité suffisant
+L’individu
+peines
+meilleures
+possible
+Déclaration
+qu’aux d’ordre par
+révoltent essentiel
+sera Aucune garanties
+sien médicaux sien
+esclaves trouver exigences
+violerait était paix
+l’intermédiaire équitable
+une légalement
+procès culpabilité suffrage
+déclarés effet
+qu’avec
+commune conforme
+destruction
+association naissance l’enseignement
+fondamental mêmes uns
+affaires
+moraux
+considérations
+spéciales
+qu’il
+doivent territoires
+époux
+repos laquelle services
+sous
+développer
+repos seul généralisé
+reconnus
+l’Organisation affaires comme
+toutes d’en inaliénables
+tel
+compte
+résultent torture importance
+viser Unies faire
+contraires bénéficier réputation
+travaille international
+perte
+d’après L’individu garanties
+restriction activités
+nationalité d’opinion proclamé
+internationale opinions
+plus êtres
+l’alimentation L’enseignement
+elles fonctions
+esclaves
+publiques pleinement priorité
+Considérant actes
+littéraire nationalité arbitraires
+Article l’enfance
+souveraineté reconnus
+d’assurer culpabilité
+est
+enfants
+Aucune révolte
+satisfaisante engagement secret
+professionnel Les universelles
+décidera conscience détenu
+humaine libre
+chacun L’Assemblée
+sous
+arbitrairement
+choisir
+mépris réputation leur
+Membres légalement privée
+Nul
+Elle conscience ordre
+visant crime activité
+violerait seront fondamentales
+cruels pleine social
+dissolution d’un peut
+bénéficier
+qu’en décidera
+activité
+libres elle
+implique sien
+importance réunion importance
+assistance fondamentaux
+consentement mêmes
+servitude commune elles
+torture
+qu’en
+Membres démocratique veuvage
+équitablement dont instaurer
+puissent
+artistique dans
+invoqué donner
+opinions donner faire
+autre priorité
+s’efforcent
+Nul
+tel croire
+que médicaux quitter
+résolus actions
+qu’aux
+époux
+individu femmes
+quitter protection politique
+Tout devoirs
+toutes
+l’avènement Tous
+jouissance
+toutes
+devant
+équitables
+tenu
+justice
+lieu langue l’idéal
+d’ordre
+peuples
+applicable naturel
+esclavage
+placés d’en suffrage
+tutelle l’autorité public
+haute Unies
+exigences
+pleine
+protection
+tyrannie chacun
+Tout public s’il
+instaurer ont
+Chacun
+l’âge constamment traitements
+toute applicable
+uns mêmes tolérance
+direction futurs international
+défense circonstances s’exercer
+parmi
+contrairement rémunération assistance
+l’Organisation défense impliquant
+dignité internationale
+constituaient
+sur l’acte
+accéder devoirs
+s’exprimer
+générale misère auront
+qu’ils Unies suivant
+révolte sécurité d’origine
+même
+délictueux
+décidera
+consentement futurs
+fortune
+seul
+suprême l’éducation interdits
+été satisfaisantes
+membres
+ayant limitation
+inaliénables
+l’Organisation
+par
+activités moment exigences
+sécurité présumée persécution
+monde privée d’ordre
+publiquement
+atteintes
+lieu
+obligatoire intérêts
+L’individu d’un qu’aux
+morale valeur
+reconnus tel
+accéder assistance
+tyrannie laquelle salaire
+artistique misère
+universel services
+pourront crime
+sans propriété
+l’homme réputation
+l’éducation livrer
+humaine Déclaration
+secret
+opinions celles
+peuples
+d’encourager
+l’esprit travaille
+aspiration
+concerne d’assurer
+L’enseignement pays
+toutes juridictions
+Tout tolérance
+idées
+détenu vie laquelle
+premier ceux lors
+honnêtes compréhension fondement
+d’autres contre loisirs
+payés
+les
+ceux
+omissions langue sont
+d’autrui l’idéal naturel
+progressives femmes assurer
+universelle
+ceux
+famille
+niveau
+l’égalité
+révolte
+engagés générale tribunal
+foi qu’ils assurant
+cet sur disposition
+sans
+nationale
+ouvert soient
+qu’avec
+agissements études
+économiques d’opinion conception
+suprême communauté d’invalidité
+correspondance ceux
+marier libre accusée
+personne nationales
+leur
+assurant concerne satisfaction
+choisir
+fortune actions
+États
+prévaloir services partir
+l’âge cause ayant
+recours
+fondamentales
+compréhension raisonnable
+dignité les
+l’esclavage livrer
+Chacun culte
+tutelle quelque
+non satisfaire
+international impliquant l’amitié
+territoires celle
+perte d’autrui
+choisir tutelle
+vieillesse
+jouissance conditions l’objet
+notamment commune
+autres d’ordre études
+fortune commises régime
+marier participer pays
+publics culturelle
+lieux l’idéal membre
+travaille indépendant violerait
+liberté constitue
+organes
+monde pénale fondé
+faire qu’une nouveau
+esprit tolérance contre
+satisfaisantes quant direction
+garanties
+sur réunion
+servitude reconnus
+mesures
+peuples frontières des
+défense fonctions frontières
+les comme
+inaliénables
+devant
+L’individu chercher littéraire
+niveau
+proclamés arrêté
+égalité
+cet nés
+chômage contraint foi
+santé
+Membres conviction l’esprit
+justes son
+contre
+choix moins
+est était devoirs
+d’invalidité individu soient
+l’Organisation seront réellement
+privé
+disposition moment établies
+dirigée
+nationales
+développer
+hommes juridique
+famille résultent violerait
+accusée résidence
+ayant
+Proclame jouissent toutes
+d’assurer
+est l’État santé
+disposition
+exilé disposition membres
+nubile
+Préambule communauté
+d’autrui doit satisfaisante
+librement
+nationalité
+inhumains considérations quelconque
+tutelle tolérance lieux
+L’éducation payés
+choix maintien satisfaisantes
+social actes
+aux opinion littéraire
+disposition doués
+résultent l’organisation conscience
+généralisé hors
+garanties chacun
+assistance couleur
+secret amicales vote
+viser mesures plan
+restriction restriction
+priorité présente
+asile
+d’invalidité déclarés
+ceux
+grande quelconque matériels
+égale
+culpabilité chacun
+égaux peines
+dignité protection doués
+servitude
+fondé secret
+Article équitables
+discrimination idées
+sociaux torture
+l’acte
+l’esclavage pour d’immixtions
+faire égaux
+d’un individus assurant
+prévaloir disposition
+parents présumée mépris
+cas l’humanité
+moyens ses
+revenir indépendant
+partir essentiel
+nationalité recevoir
+nubile groupement principes
+famille équitablement
+race équitables lieux
+ait
+est
+avoir recevoir
+violant inhérente
+époux
+sera
+raisonnable
+remplir Aucune
+réputation eux
+congés conviction partir
+obligé
+tutelle Charte
+nationalité jusqu’à
+justes
+société quelconque
+fait
+part professionnel esprit
+progressives l’oppression
+études atteindre inhumains
+aide
+aucun relations
+plan
+l’humanité contre complétée
+contre son non
+cette privée matière
+ceux
+son affaires pourront
+constamment compris
+personne distinction d’encourager
+maladie
+innocente avoir
+seront
+d’assurer pratiques
+maladie relations pacifiques
+limitation importance ont
+indispensables
+interprétée devant quant
+inquiété sien
+circuler
+toute
+s’il son pour
+conception l’accomplissement
+d’éducation fondement ceux
+celles
+d’invalidité
+quelconque morale
+démocratique
+toutes esclaves humaine
+valeur l’enseignement
+intérêts pacifiques
+servitude
+d’en morale
+futurs torture l’effort
+raison
+droits veuvage fonction
+librement cause dissolution
+être Préambule
+libre peine
+moment générale
+ceux l’acte mesures
+quitter arts
+son
+tutelle choisir
+universelle l’accès
+ressortissante
+d’accomplir obligations pourront
+public persécution
+Elle
+d’assurer moyens subsistance
+juridiction
+n’est libre l’alimentation
+méconnaissance
+libre sécurité
+ordre
+protégés vue
+études L’individu dont
+salaire
+d’invalidité d’opinion priorité
+pour indépendantes
+revenir méconnaissance époux
+d’après
+l’Organisation décidera
+prendre
+activité s’exprimer arts
+marier détenu
+justes tant
+tyrannie perte
+ressources
+asile
+actes monde cette
+mêmes équitable accusation
+professionnel inaliénables était
+barbarie matériels distinction
+accéder fonder femme
+d’atteintes communauté religion
+constitution été
+durée l’asile l’élément
+l’acte d’association protégés
+restriction déclarés uns
+exclusivement établies naissance
+inhérente
+privée
+repos
+invoqué nationalité
+qui dont exilé
+cruels plus
+applicable maladie
+ayant
+qui
+artistique suffisant toutes
+genre commis représentants
+reconnus Les moins
+d’en l’avènement accéder
+sécurité implique implique
+nouveau personne État
+s’efforcent
+conforme collectivité
+opinions bien obligatoire
+assistance acte
+procès
+subsistance omissions livrer
+collectivité Ces libertés
+universel l’exercice
+omissions dont
+l’intérieur compte
+satisfaisante innocente qui
+êtres raison
+doués disposition satisfaisantes
+relations raison limitations
+maternité
+périodiquement durant
+peuple
+race sont prendre
+jouissance l’exercice
+équitables innocente telle
+puissent indépendant
+constitue Ces tolérance
+groupement réunion
+sans acte dont
+reconnaissance impliquant
+lui dont naturel
+engagement
+élections persécution
+culturels fonction
+doués assurant national
+partie
+travaille droits atteindre
+professionnel avec
+international fait
+l’ordre satisfaction
+d’origine pensée
+territoires obligatoire
+fondamental aux effectif
+doivent règne
+gratuite barbarie actes
+misère qu’une l’âge
+périodiquement paix
+suffrage
+délictueux jusqu’à présente
+démocratique Article
+immixtions
+l’amitié fondamentaux
+devoirs soins
+exclusivement
+sur détenu placés
+l’organisation d’éducation
+eux qu’à misère
+envers
+esclavage territoire
+fondamentales
+celui
+reconnus Ils manifester
+grande
+renforcement correspondance satisfaction
+nationale
+culpabilité sociale
+arbitrairement effet souveraineté
+non lui
+constamment inhumains dégradants
+actes contre Les
+ait
+idées États l’autorité
+opinions
+peine interprétée
+fortune
+seul
+été soins
+tolérance
+d’après privé complétée
+d’autres moraux
+constitue
+mérite États
+artistique l’asile
+pleine sur
+limitation choisis naturel
+infligé
+Article
+esclavage
+libertés
+paix premier quelque
+qu’une l’enseignement
+plus suffrage l’enfance
+distinction religion travaille
+autonome généralisé l’amitié
+aucun humains fonder
+actes gratuite
+généralisé violerait individu
+disposition
+élections
+l’effort quitter
+doivent répandre
+médicaux morale indispensables
+humaine
+contrairement L’individu
+prévaloir situation fondamental
+nationale non
+librement mérite religion
+haute
+nouveau femmes
+privée
+équitable leurs devoirs
+Chacun vie
+d’éducation indispensables
+équitables obligations
+universelles
+être commises
+devoirs activité traite
+visant pouvoirs compte
+publics activité conforme
+général démocratique
+fondamental Nul forte
+ainsi compte
+être discrimination
+équitablement remplir non
+satisfaisante progressives inaliénables
+coopération partir puissent
+élections cruels
+viser
+l’auteur inhérente élémentaire
+honnêtes révolte
+chacun congés son
+artistique discrimination reconnaissance
+conditions sexe
+arbitrairement
+librement l’âge suffrage
+peine d’autres
+s’efforcent lui
+obligatoire
+sociaux
+démocratique mariage Toute
+indépendantes religion d’égalité
+peine suffisant l’oppression
+relations
+progrès asile seul
+pleine
+prendre juridique entre
+dégradants mariage
+maladie ait
+eux établies soient
+égal l’intérieur
+l’égalité Tous aucune
+Considérant époux
+L’éducation activités fondamentaux
+ressortissante s’exprimer jouissent
+esprit interprétée
+mérite élections sien
+public limitations
+légalement
+santé moins
+d’ordre peines famille
+frontières Quiconque
+traite justes d’assurer
+compris afin
+eux concerne
+l’organisation l’organisation
+manifester conditions
+tutelle
+revenir
+recours favoriser
+envers
+payés
+activités procès d’invalidité
+d’en des amicales
+tous infligé
+pensée dirigée effet
+esclaves matériels suffisant
+travail sera arbitraires
+parents naturel juridique
+culturelle
+livrer logement informations
+consentement ressources peine
+celles circonstances répandre
+moraux aspiration
+aussi États
+procès d’association
+prévaloir
+grande
+grande
+découlant limitation professionnel
+restriction doivent
+Ils seul
+équivalente sûreté Article
+démocratique
+périodiques inhumains
+contraires violant implique
+buts Tout
+quitter frontières
+périodiquement propriété
+d’immixtions perte mépris
+exilé telles mêmes
+perte seule
+Ces dans l’amitié
+doués
+études moins
+souveraineté
+été libérés
+uns
+celui groupes
+interprétée
+limitations directement Considérant
+favoriser l’ordre traitements
+pleinement commis
+culte
+l’enseignement
+telles
+constitution
+équitable Dans
+d’après
+progressives recours
+enfants misère
+Nul commises égale
+découlant
+universelles avec
+raisonnable salaire exigences
+Chacun
+servitude provocation cours
+marier participer
+par découlant
+l’asile
+gratuite croire
+parents mêmes
+moment l’ordre politique
+par
+eux égale
+constitue agissements femmes
+obligations
+réunion
+équivalente mérite
+Dans
+énoncés nationalité
+d’atteintes territoire juridictions
+honnêtes Ces
+accusation
+partir
+salaire naissance autres
+Préambule pénale applicable
+choisis internationale
+nés
+satisfaisante
+partir tous
+proclamés
+établie
+peines barbarie toutes
+ordre qu’aux
+détenu Membres parmi
+ainsi implique Elle
+race situation crime
+Ils
+indépendantes
+Considérant
+commises ressortissante
+s’il conditions
+obligé
+part
+atteindre n’est
+ordre
+résultent communauté
+l’idéal partie
+changer nationalité
+proclamé
+jusqu’à limitations activités
+loi
+fondamental domicile égalité
+commun
+d’un devant d’opinion
+Quiconque
+justice vote
+mesures mariage forte
+délictueux tyrannie
+jouissance règne l’accomplissement
+résultent
+ceux
+nationale
+afin
+découlant élémentaire
+librement
+êtres l’élément
+générale sont l’homme
+d’atteintes garanties laquelle
+l’accomplissement activités
+personne
+actions
+niveau quant arbitrairement
+tribunal artistique toute
+d’assurer
+afin assurant culturels
+suffrage
+règne assurer
+effectives qui viser
+chacun accéder
+obligatoire périodiquement inhérente
+fondamentales l’exercice
+naturel légalement premier
+participer intérêts
+l’homme
+justes recours loisirs
+jusqu’à pleine
+qu’il Unies
+d’éducation
+l’intermédiaire populations
+tyrannie l’effort
+crime l’amitié commune
+ayant constitue avec
+Elle travaille asile
+même nubile arbitrairement
+choisis quelconque
+d’immixtions terreur humaine
+destruction l’éducation
+international qu’aux publics
+naissance privé
+l’esprit
+direction atteindre
+régime viser
+lieu
+jouir résultent doit
+jusqu’à
+conditions placés
+complétée soins
+grâce durant suite
+Article économiques communauté
+l’effort priorité
+participer membres changer
+aspiration immixtions changer
+Ces
+mépris activités supérieures
+uns notamment
+juridique durée
+d’expression satisfaction aucun
+moment
+pacifiques
+fonder d’encourager interprétée
+revenir fonction
+considérations doivent Déclaration
+raciaux actes
+implique Unies accéder
+moyen parents
+essentiel recevoir seront
+l’application réellement
+suite propriété
+international
+libertés était interprétée
+agir esclaves niveau
+ainsi elles d’atteintes
+constituaient
+concerne moment renforcement
+équitablement
+conforme femmes membres
+honneur celles
+concerne
+grande
+n’est
+études
+moyen
+ceux l’accès
+peuple scientifique
+traite marier plein
+production peuples avoir
+vie littéraire salaire
+l’enfance d’autres
+dans moment limitations
+fondement complétée égal
+association
+toute
+situation
+l’esclavage
+groupes services suivant
+celui
+infligé
+maladie groupes restriction
+Nul cet
+compréhension
+constitue
+commis engagement d’opinion
+médicaux l’avènement
+cas
+tolérance l’habillement délictueux
+accusation défense
+avoir
+religieux
+constamment social
+nés conduit suite
+engagés indépendantes
+pourront
+d’encourager
+indépendantes visant croire
+grâce
+payés
+l’effort qu’ils
+immixtions
+misère
+priorité production
+souveraineté
+groupement
+soins
+lors égalité
+Dans bénéficier
+secret quant
+sien arrêté Devant
+Proclame l’homme d’association
+qu’il
+Les veuvage
+fait
+seule l’exercice été
+dirigée Proclame
+peuple travaille compréhension
+elles vote
+assistance langue
+indépendant pays leurs
+culte
+l’accès dans afin
+culturels toute
+bienfaits publiques dans
+doués
+Déclaration l’accès d’autres
+public
+choix
+conditions
+doués protégés
+mêmes aux
+procédure
+nationalité
+l’éducation
+parmi commun
+suite volonté tyrannie
+perte mêmes
+matière celles constitue
+d’une
+fondamentaux Unies
+tribunal part
+esclavage l’ordre
+juridictions salaire
+coopération
+son cruels contre
+pratiques
+fonction nationale
+juridique perte
+puissent dissolution
+périodiquement morale
+compris regard l’idéal
+professionnel statut gratuite
+durant parler
+sur
+études activités Article
+elles conviction individus
+peines
+constitue
+tenu
+possible
+librement national
+énoncés violant personne
+aux ressortissante
+l’accès non cours
+par
+liberté assurées
+ses
+qu’il
+fonction tyrannie
+activité souveraineté
+auront restriction
+Les ses volonté
+suprême langue niveau
+circonstances
+collectivité
+Proclame complétée honneur
+privée organes satisfaisante
+affaires son grâce
+légalement couleur découlant
+moins services
+changer implique
+jusqu’à moment inaliénables
+établie sexe égale
+Aucune commis Quiconque
+mesures circuler activités
+ressources accusation implique
+l’application engagement actions
+concerne
+naissance l’État aussi
+l’égalité L’éducation Dans
+commis Aucune placés
+été maternité dont
+dont ait présumée
+pouvoirs
+arbitrairement
+favoriser envers
+poursuites seule
+Elle peuple assistance
+activité traitements Aucune
+repos publiques foi
+interprétée
+toute
+tel mariage
+assurant
+faire persécution
+assurer
+littéraire sexe d’un
+résolus Membres relations
+d’opinion puissent
+sont soient
+contrairement
+quelque
+développer d’immixtions
+légalement
+n’est est
+pouvoirs barbarie futurs
+compétentes l’exercice
+obligatoire salaire congés
+l’esprit suffrage nécessaires
+intérêts omissions réunion
+mêmes travaille
+droits
+formes participer constitue
+culturels
+ordre
+satisfaire placés
+affaires
+raison complétée donner
+syndicats omissions meilleures
+inhumains
+devant l’accès vue
+secret suite
+arbitraires innocente
+cruels
+parler agir constamment
+jouissance juridictions obligé
+l’ordre satisfaisante Ils
+recours révolte
+consentement distinction
+réellement l’intermédiaire Chacun
+l’accès d’après
+justice revenir principes
+esclavage assurant l’effort
+femme Proclame
+général
+territoire
+moyens
+égale équitablement
+inhumains considérations
+protection réunion omissions
+dirigée relations jusqu’à
+générale nationales
+reconnaissance
+tous égale
+implique
+régime
+tolérance haute soient
+raciaux société Proclame
+territoire tribunal sera
+honnêtes
+tout suite statut
+destruction contraires été
+regard contre arbitraires
+répandre effectives groupement
+Déclaration représentants
+tribunal invoqué
+femme l’accomplissement Nul
+disposition pacifiques
+constitue
+développer
+bien effet
+compris l’enfance
+peut
+l’auteur social
+telle généralisé
+réunion publiquement obligations
+avec proclamés vieillesse
+égaux recevoir
+coopération universelle
+circonstances d’ordre
+exclusivement
+tutelle
+suivant morale publics
+bienfaits
+relations
+agir l’accès grâce
+priorité nationalité procès
+instaurer humaine
+fortune moment
+moraux
+concerne prévaloir vote
+économiques
+économiques relations uns
+l’humanité
+hors dignité
+qu’avec langue recevoir
+affaires devoirs obligations
+l’accès pénale repos
+destruction compris
+collectivité langue
+répandre maintien formes
+mesures
+vue torture
+afin
+résultent
+effectif
+respect frontières activités
+ont statut
+buts obligations
+d’expression
+plus compétentes progrès
+d’assurer périodiques faire
+afin qu’il liberté
+haute
+d’atteintes activités
+destruction
+soit
+l’acte commises
+l’enseignement
+vie
+fraternité regard
+légalement fondée
+renforcement durant d’encourager
+conception fondée s’efforcent
+sont impliquant cruels
+suite opinion
+réellement
+pas changer
+bienfaits proclamé amicales
+autre
+tel syndicats
+jusqu’à durée
+nationalité
+découlant lieu
+autres périodiquement
+culturels
+recevoir agir
+suffrage inaliénables meilleures
+réunion
+applicable
+amicales qu’aux
+généralisé
+sont indépendantes
+valeur
+justice professionnel
+obligations jouir soit
+plus
+supérieures fondamentales
+Charte sont artistique
+Préambule tant devant
+publiques
+veuvage nécessaires
+secret
+répandre organes respect
+enfants aspiration
+qui
+conviction
+privée humaine entendue
+Devant
+individus
+conditions
+actes
+respect conception consentement
+sécurité aide
+lieu aide monde
+restriction
+membre croire livrer
+d’origine elles croire
+recevoir
+d’immixtions omissions souveraineté
+auront l’esprit
+l’accomplissement commis
+dignité toutes
+dégradants
+compétentes l’effort pleine
+satisfaction
+sien
+son
+compte peut
+buts
+exclusivement religion Devant
+travaille violerait
+Tout
+Considérant
+acte morale femmes
+national
+méconnaissance personnalité
+genre
+effet
+souveraineté laquelle
+coopération informations procès
+langue payés
+Membres
+indépendantes
+puissent inaliénables Devant
+d’origine sociaux
+matériels hommes
+l’égalité culturelle restriction
+recevoir volonté
+scientifique
+son repos fondé
+d’une d’autres
+tous réunion
+grâce national applicable
+conclu
+morale
+l’objet États l’organisation
+conscience atteintes
+l’organisation
+international
+femme périodiques dégradants
+l’organisation constituaient
+instaurer
+trouver opinion auront
+envers d’association être
+esprit l’auteur
+suite personne plus
+changer société
+consentement suite territoire
+bien
+d’association d’éducation
+soient circuler
+moins ses international
+l’élément ordre
+territoires non qu’une
+d’égalité fondé
+nécessaires
+compris l’élément
+universelles statut gratuite
+discrimination économiques loi
+soient
+l’homme circuler
+conviction
+monde situation
+était manifester humaine
+contre effectives durée
+contrairement
+Toute
+envers interdits
+favoriser garanties internationale
+naissent statut
+dignité
+résultent
+égaux
+syndicats
+régime culte Quiconque
+seul sociale
+considérations amicales
+trouver
+qu’aux
+toutes chômage libérés
+contrairement crime librement
+aide déclarés
+qu’en Article
+seul
+trouver
+religion
+privé Unies bienfaits
+complétée vue droits
+s’exercer importance équitables
+impliquant eux loisirs
+culturelle
+ont ayant nationales
+leur qu’ils
+partir suffrage démocratique
+sociale égale représentants
+doit libérés
+d’éducation femme
+peines êtres compris
+juridictions s’exprimer congés
+compréhension
+grande
+droit des
+arts
+élémentaire haute
+inhumains interdits pénale
+l’enfance
+religion pourront correspondance
+loisirs L’individu
+s’efforcent gratuite
+droit puissent satisfaire
+Charte tant viser
+seule matériels perte
+Ils concerne
+résolus dans l’accomplissement
+conditions seront
+dégradants Considérant liberté
+qu’aux
+sur
+choix l’exercice infligé
+logement cet
+résidence L’Assemblée
+peines matériels violant
+inquiété privé nationales
+Toute que sûreté
+tutelle
+femme mépris
+raison tant
+qu’en agissements
+recevoir contre
+sous
+indispensables
+proclamés sous
+qu’aux plan naissance
+durée
+situation
+congés établies
+obligations volonté
+situation
+bien
+formes innocente violerait
+sous ses révoltent
+revenir innocente situation
+amicales innocente
+poursuites cette distinction
+santé
+acte égale
+d’en équitables
+provocation
+peut
+publiquement commun établie
+payés Dans été
+doués
+privé
+vote traite pourront
+établies commis d’assurer
+d’encourager quant
+satisfaction moyen secret
+scientifique tolérance l’exercice
+sociale d’encourager bien
+compétentes laquelle puissent
+jouir
+pourront
+esclaves publiques instaurer
+d’invalidité atteintes arts
+règne futurs satisfaire
+production grande
+L’Assemblée nationales détenu
+Charte
+elle
+d’autrui
+ont
+misère l’intérieur groupement
+remplir qu’une l’ordre
+artistique ont commune
+esprit sexe
+indépendantes concerne
+culturelle
+existence énoncés aucun
+raisonnable
+privé Devant
+fondée correspondance
+niveau
+une
+meilleures nouveau livrer
+arrêté elles distinction
+association association représentants
+tenu
+culte
+famille l’humanité
+forte indispensables privé
+chaque
+privée L’enseignement
+aide loi cette
+nationalité fondamental Tous
+ses monde proclamés
+idées essentiel
+procès Article
+libre égale
+moins des asile
+fraternité accéder
+réunion arrêté
+faire
+celles fondamentaux chômage
+formes Elle
+maintien elles l’homme
+satisfaction
+obligations
+violant d’ordre
+privé recevoir logement
+libertés Nations
+trouver quelque
+tous
+l’oppression
+publiquement
+mesures suprême
+ceux ouvert
+visant
+chercher défense puissent
+soit découlant
+être santé s’exprimer
+idées cas pour
+qu’avec
+présente
+libres
+domicile satisfaisante
+pacifiques misère nationale
+congés arbitrairement
+visant territoires autres
+pour
+cet production
+compréhension
+actes
+développer
+atteintes haute
+dissolution l’esclavage
+effectif cas
+travaille repos
+nouveau
+toutes Ils prévaloir
+assistance déclarés
+disposition raisonnable peut
+recevoir
+humains social agir
+religieux provocation sexe
+partie défense qu’ils
+salaire peines obligations
+principes droit violerait
+dirigée
+considérations sien congés
+doit production constamment
+bénéficier sécurité
+doit trouver paix
+procédure toute priorité
+qui l’État laquelle
+juridique
+jusqu’à concerne perte
+nouveau
+qu’une effet déclarés
+auront
+eux
+syndicats bien
+amicales
+femmes État
+qu’il l’égalité exclusivement
+part
+niveau
+qu’avec publiques ceux
+circonstances
+constamment l’intermédiaire
+valeur l’enseignement
+lieu
+nationalité
+être association fondées
+changer culte raisonnable
+sous
+association publics Ils
+participer
+membres l’avènement ceux
+l’organisation l’élément complétée
+tout loi
+une
+organes
+Chacun technique matière
+comme était
+dissolution travaille que
+Quiconque
+énoncés
+l’habillement
+nouveau chacun territoire
+implique
+compris remplir
+priorité
+légalement assurant
+constituaient premier fondées
+repos l’élément satisfaire
+arbitrairement parmi
+universel
+participer haute
+tyrannie plus l’exercice
+fait constamment
+crime libres social
+choix pas impliquant
+agir constitution
+lui auront même
+universelle
+culturels Quiconque
+l’esprit personnalité
+l’élément
+congés
+soins
+supérieures compris raciaux
+niveau
+pratiques l’élément détenu
+gratuite inaliénables démocratique
+commis agir
+hors
+établie quelque nés
+condamné déclarés indispensables
+légalement suffrage maintien
+l’accès personne
+applicable fondement
+régime haute sexe
+opinions limitation
+avoir
+tyrannie compréhension
+choisis assurer généralisé
+envers
+destruction société fondée
+ressortissante
+personnalité
+l’accès
+gratuite
+elles affaires
+nationales privé tel
+pleine partir
+d’atteintes fondamental
+devoirs
+cours fait Toute
+l’homme présumée littéraire
+cet ouvert
+faire lors l’âge
+Ces
+proclamé travail
+pourront moyens
+cas
+suivant
+libertés loisirs
+telles moyens
+moins Toute
+procès groupement esclaves
+l’objet laquelle maternité
+vie L’individu
+non parents mépris
+plus soins
+nés d’autrui relations
+international
+grâce
+lui
+publiques
+progressives forte mépris
+servitude épanouissement populations
+générale terreur
+mesures
+périodiquement
+nationalité obligatoire
+secret foi tous
+l’accomplissement
+Tous publiques sécurité
+par ressortissante
+possible
+commune trouver entre
+veuvage provocation traite
+pleinement vieillesse
+moraux
+Devant aspiration
+raciaux celles association
+d’un propriété
+fondées
+ces peuple populations
+enfants
+notamment
+ont congés
+élections
+directement
+entendue opinion
+soins uns
+Ils satisfaction
+tenu
+fondées
+groupes international
+esclaves
+telle matériels
+d’une dégradants cause
+gratuite Ils
+barbarie laquelle barbarie
+chacun sexe enfants
+universel l’esprit
+exilé l’exercice études
+aussi couleur satisfaire
+dirigée
+envers celle domicile
+crime
+d’opinion régime
+politique possible
+religion
+qu’une ressources
+aucune
+pratiques qu’à
+fonder
+maladie Proclame
+ordre
+choisir fondées
+secret dissolution
+aux domicile
+équivalente tutelle meilleures
+inaliénables
+coopération suprême
+concerne production discrimination
+comme telles
+implique sera
+satisfaisante destruction
+procès faire d’en
+l’oppression d’autrui
+accusée qu’à
+constituaient
+répandre
+souveraineté famille générale
+loi sans croire
+morale défense ressortissante
+indépendantes nés
+générale plus
+nubile
+l’accomplissement
+s’efforcent
+syndicats procédure
+générale idées
+d’en
+constamment moraux travaille
+L’éducation
+ses plan changer
+revenir compétentes
+genre
+durant mesures cet
+violant justes
+choisir
+tel universel
+membres actes
+d’origine limitations justice
+situation son
+veuvage procès culturels
+était épanouissement niveau
+lors Article
+accusation
+l’esprit syndicats
+celles services partir
+lieux
+l’égalité
+spéciales
+l’éducation résidence elles
+l’amitié pleine
+sans progrès soit
+esprit circonstances chercher
+satisfaisantes pensée l’égalité
+artistique nécessaires
+ressortissante Tout sociale
+cette
+sécurité l’exercice défense
+l’idéal
+prévaloir
+livrer
+collectivité êtres
+comme forte
+hommes
+telles
+paix sociaux
+Tout
+sûreté
+Dans l’application égaux
+esclaves
+d’égalité époux
+effectives résolus
+prévaloir changer
+inquiété cruels ressortissante
+libertés pour
+suite
+situation
+leurs
+raison avoir
+traitements Membres
+Nations infligé
+esclavage
+libres
+fonder
+dirigée généralisé
+esclaves devant Préambule
+conduit
+l’égalité secret
+peut chômage
+l’acte pratiques
+proclamé
+son maternité
+peine
+groupement
+conviction tout conviction
+constituaient d’association Unies
+reconnaissance niveau membre
+l’intermédiaire protégés
+démocratique d’un Considérant
+sociale opinion
+énoncés culpabilité
+restriction lors
+d’association
+coopération l’idéal
+suffisant fondée nouveau
+conduit omissions jouissent
+commun Devant sans
+époux tenu public
+cet
+traitements croire
+foi
+tant d’invalidité
+maladie Nul salaire
+elle
+privée
+violerait actes
+aspiration bienfaits
+tribunal poursuites notamment
+pouvoirs
+communauté d’autres seront
+s’affilier ont résidence
+exclusivement d’association
+quitter d’atteintes
+d’encourager ont assurer
+l’accès services honnêtes
+secret commun seule
+secret mariage
+prendre l’État démocratique
+uns l’asile d’association
+Déclaration
+réellement obligatoire bien
+aux contraint sous
+Tout constituaient
+autres l’auteur assurer
+Aucune
+peines proclamé l’amitié
+des
+doit liberté
+contraint indépendantes
+exilé justes satisfaction
+est
+qu’ils progressives
+Quiconque
+satisfaction
+pratiques
+fondé secret
+Nations les pour
+grande
+sociaux
+moins bénéficier
+lors laquelle
+indépendant
+obtenir seule
+immixtions buts l’esprit
+d’éducation égaux tout
+lors
+dissolution valeur
+équitables individu
+suivant premier
+Ils
+lieu
+cette
+hommes doit s’exprimer
+quitter souveraineté recevoir
+opinion morale droit
+compréhension raciaux
+essentiel révolte
+forte jusqu’à viser
+foi d’assurer
+fortune Chacun
+sociaux ait contraint
+qu’en honnêtes
+accusation soit
+nouveau honneur qu’avec
+égalité
+égaux établies fondées
+l’ordre
+doit cas durée
+honnêtes
+assurer par privée
+leur
+favoriser arts leur
+parents publics
+obligé mêmes
+chacun suffisant suprême
+droits
+conscience considérations garanties
+actions commis autonome
+raciaux
+Proclame syndicats ordre
+l’autorité
+réellement
+loi l’esprit
+eux ont parents
+groupement
+femme
+mesures l’homme cours
+entre
+l’application périodiquement
+renforcement culturelle
+poursuites
+exilé sociale
+Déclaration
+accéder
+logement territoires
+territoires méconnaissance
+révolte esclaves
+chômage
+groupes naturel puissent
+littéraire
+lors
+viser celle justice
+d’immixtions
+parmi nubile mérite
+engagés asile indépendantes
+progressives
+donner
+ouvert directement
+envers membres
+bienfaits
+entre bien rémunération
+recours procédure santé
+une sexe
+équitablement accusée
+mesures État amicales
+professionnel une
+hors barbarie littéraire
+était
+Préambule l’intermédiaire que
+assurer égal implique
+l’effort
+participer
+l’intérieur
+paix
+pas crime
+Les agir libres
+choisir dirigée conscience
+l’esclavage autonome
+pays coopération
+elle raciaux servitude
+d’association payés propriété
+d’association
+quitter
+spéciales libres effet
+collectivité égale
+l’idéal droits impliquant
+assurant
+instaurer inaliénables
+seront tyrannie l’accès
+niveau
+effectives suite
+provocation
+privée qu’à
+culpabilité
+distinction autonome
+association vue
+quelconque culte instaurer
+statut barbarie
+parler ses soins
+domicile effectif conclu
+établie effectif d’invalidité
+plein dans effectif
+l’enfance avec était
+élémentaire fonctions
+celui crime l’intermédiaire
+Les rémunération
+qui
+matériels
+ouvert
+publiquement leur
+juridiction production condamné
+entre
+elle secret
+tribunal culturelle compétentes
+loisirs quelconque bienfaits
+d’encourager humains Déclaration
+race
+toutes soumis
+défense
+agissements celui
+résultent avoir
+fondées Les commises
+humains directement
+d’association
+l’oppression lieu
+Quiconque
+libre résolus durant
+envers seule maternité
+nationalité Tous premier
+élémentaire propriété individus
+commun
+découlant monde
+culturelle formes
+Toute est possible
+constitue
+bienfaits
+laquelle justice Déclaration
+individus plan volonté
+êtres
+santé
+toutes
+exclusivement économiques
+assurant
+formes compte
+accusée provocation règne
+populations constitution
+souveraineté compétentes
+ceux
+son Nul compréhension
+pourront
+famille membre
+d’égalité hors fonction
+volonté
+rémunération lieu
+Toute
+reconnus circuler l’ordre
+aux violant distinction
+grande justice
+religieux
+parler
+ressources État
+recours l’homme syndicats
+économiques L’éducation satisfaire
+doit
+nationale
+sécurité dégradants peines
+aspiration
+travaille agir
+généralisé
+procès suite
+bénéficier tenu publics
+tyrannie
+spéciales avoir assistance
+sécurité nations présente
+collectivité
+pour loisirs
+dignité
+futurs chacun
+L’éducation
+d’opinion
+compréhension elles générale
+État chaque
+sexe qu’avec liberté
+durant indispensables
+garanties ait haute
+ressortissante situation esclavage
+idées
+publiquement uns
+inhérente membre
+traitements des directement
+s’il
+informations qu’avec
+Quiconque
+cette égal entendue
+national rémunération
+principes travaille
+remplir
+l’accomplissement d’assurer général
+l’auteur
+uns Article compris
+directement ouvert conforme
+d’expression inquiété
+ayant Charte protection
+telles par
+sont
+torture national jouissent
+conditions s’il contraires
+l’intérieur
+réunion Elle
+esclaves
+publiquement
+grâce
+payés
+fondement l’auteur regard
+développer
+égale meilleures l’accès
+artistique l’accès
+plus l’amitié
+aux nationales
+monde soumis
+tout situation restriction
+d’une tous
+développer
+Proclame
+conviction
+commun obligatoire
+naturel L’Assemblée commises
+Charte l’humanité infligé
+réunion publics
+vote fait
+démocratique manifester
+son soit d’égalité
+une Ces
+Membres défense
+méconnaissance peine
+autre cette
+assurant compétentes
+instaurer provocation
+êtres quant
+résultent situation recevoir
+morale résultent importance
+chercher l’esprit
+puissent
+traite
+l’habillement fonction part
+chaque conscience
+même
+doit
+ressources doivent placés
+l’accès misère
+social applicable conditions
+coopération auront
+affaires comme cours
+soit
+libertés subsistance
+cause membres
+s’efforcent
+devant opinions librement
+groupement
+agir non
+l’accès démocratique peut
+supérieures
+devant personne
+qu’aux avoir
+équitablement immixtions formes
+suite n’est
+Nul non l’asile
+eux
+regard
+consentement fondée
+juridique groupement humaine
+l’éducation humains nécessaires
+chercher innocente
+violerait l’éducation
+l’élément volonté
+jusqu’à conception
+justice santé
+commis
+révoltent
+activité suprême
+l’exercice
+peuples Tout femme
+naissent effectif
+payés parler d’atteintes
+peine raisonnable
+l’intermédiaire
+torture fortune
+intérêts
+morale vote d’assurer
+travail effectif
+haute économiques restriction
+livrer plein
+sous
+enfants époux religieux
+accusation territoires inhérente
+s’exercer libres nationale
+traitements arrêté
+l’organisation elles
+disposition professionnel
+reconnus misère
+opinion
+procédure Elle
+l’esclavage déclarés honnêtes
+général
+concerne manifester
+frontières
+provocation ont
+d’atteintes l’acte
+vue
+suite
+loi pénale
+économiques
+poursuites
+sur
+égaux essentiel
+crime maternité inhumains
+chercher ait perte
+bien protection meilleures
+Quiconque arbitrairement
+réputation
+durant tribunal
+reconnus
+représentants assistance quelque
+égale
+peines
+services haute
+n’est l’intérieur pays
+procès
+tout moyen
+mépris secret l’ordre
+distinction ayant effectif
+fondé élémentaire L’individu
+conduit
+syndicats instaurer cruels
+propriété culturels donner
+inhérente territoires résidence
+sociaux par
+L’éducation toute l’égalité
+l’humanité
+d’ordre accusée assistance
+révoltent
+persécution
+Tout
+l’égalité applicable
+soumis
+placés durant
+conviction Aucune
+d’après interdits
+celui territoires recours
+qu’une plein
+traite
+association
+rémunération internationale
+l’intermédiaire gratuite
+envers instaurer
+l’Organisation ayant
+démocratique gratuite
+violerait hors
+misère mêmes
+satisfaisantes jouissent
+constituaient race
+agissements importance
+moyens qu’ils
+régime
+bénéficier raciaux
+durée loi
+cas
+monde l’État
+celles
+tel recevoir d’opinion
+contrairement
+femme sont aide
+sera commun
+impartial
+plan inaliénables
+parmi ces
+égal vieillesse Quiconque
+entendue fortune
+Aucune lors
+frontières sexe été
+décidera
+équivalente doit maladie
+indépendant d’après pensée
+dans par
+torture humains
+religion
+non
+Membres atteintes remplir
+bienfaits honneur circuler
+effet raison
+ressortissante
+l’habillement égalité
+s’affilier syndicats l’esclavage
+moyens
+suprême pas
+l’accès
+nationale pensée morale
+prendre l’humanité favoriser
+quelconque qu’ils
+honnêtes
+peut
+notamment obtenir dirigée
+développer
+scientifique discrimination intérêts
+personnalité contre
+satisfaisantes
+comme
+applicable collectivité domicile
+auront
+quitter
+atteindre proclamé supérieures
+l’amitié contraires ressources
+futurs cruels
+présente l’homme proclamés
+plus suffisant exigences
+dignité restriction
+êtres
+personne
+parents
+ceux l’État
+représentants quelque rémunération
+pouvoirs durée
+langue telles réputation
+Tous
+misère eux
+constamment
+social
+Membres
+Membres publiques naissent
+opinion
+tant
+d’autres
+esclaves
+sien résultent faire
+nécessaires innocente
+obligé
+arbitraires sûreté suivant
+technique informations établie
+cas eux
+humaine quitter Préambule
+indépendant
+d’atteintes sans commune
+accusation périodiquement privé
+nationalité dont honneur
+l’auteur qu’en l’accès
+femme
+services conception
+obtenir discrimination assurées
+religion maintien indépendant
+l’éducation eux hors
+l’homme loi
+inhérente
+cause l’enfance
+sexe fait l’accomplissement
+suivant non partir
+servitude équitables indispensables
+importance établie recevoir
+trouver pays êtres
+d’encourager
+résultent individu ressortissante
+suprême
+même torture
+artistique
+universelles activité
+privée
+cas donner dignité
+pensée obtenir
+scientifique
+assistance
+procès doit
+livrer
+correspondance manifester
+cause
+l’intérieur travail affaires
+grâce aucun doivent
+toutes égalité
+s’exercer devoirs
+considérations libre publiques
+cause
+vote sociaux
+L’éducation
+elle proclamé qu’une
+mérite misère
+élections naturel
+atteintes
+engagés arbitrairement lors
+sous cas
+moment inaliénables
+découlant l’alimentation
+conviction résolus
+dissolution accusation constamment
+protection
+toute
+d’éducation
+cet État s’il
+importance obligations
+monde
+l’exercice humaine
+compréhension peine esclavage
+peut honnêtes
+Chacun juridictions commun
+Elle parents notamment
+tribunal élémentaire mariage
+d’atteintes
+État quelconque
+commis
+prévaloir
+fonction
+religieux qu’en
+vote l’habillement
+individu placés
+personnalité
+assurer l’idéal
+social
+équivalente
+sur contre acte
+Aucune
+peut principes
+fortune juridictions priorité
+discrimination doit nationales
+l’oppression résolus
+frontières moyen association
+constamment proclamé
+affaires raison constamment
+nationale État notamment
+asile équitable
+économiques
+l’homme femme soins
+nationalité
+d’origine commun
+ait vote
+secret
+infligé
+Charte s’efforcent poursuites
+morale seule esprit
+humaine qu’avec êtres
+médicaux
+État
+soumis vue doués
+d’une littéraire regard
+traitements livrer reconnaissance
+l’intermédiaire
+avec l’accomplissement protégés
+justes élémentaire
+Dans
+raisonnable l’égalité
+social d’accomplir économiques
+futurs
+l’idéal Ils
+présente
+accusation
+d’autres compétentes conclu
+États
+ait
+crime manifester
+L’Assemblée direction sien
+moment choisis
+tel eux
+tous conforme
+culpabilité arts
+moyen
+conforme technique assurer
+visant l’esclavage l’idéal
+opinion barbarie l’âge
+idées
+ainsi
+tout femme
+indépendantes collectivité égal
+commises qui
+l’exercice l’esclavage
+même Proclame satisfaisante
+l’objet l’humanité
+périodiques égale activités
+effet meilleures
+hommes choix juridique
+choisis compris participer
+ayant laquelle souveraineté
+compris l’enfance
+gratuite l’idéal
+marier
+conclu
+assurant
+sera présumée même
+d’opinion
+qu’en
+contraires valeur esprit
+nations élémentaire développer
+inhérente aspiration était
+l’amitié leurs l’intérieur
+dissolution direction
+travaille l’accomplissement l’intermédiaire
+Ces périodiquement fondamentaux
+marier
+universelle publics
+épanouissement n’est
+barbarie
+croire ressortissante restriction
+suite vote technique
+autres
+peut littéraire
+l’alimentation ait
+d’ordre fondées choisis
+honnêtes enfants Préambule
+naissance
+Elle innocente trouver
+recevoir
+opinion
+cas discrimination réellement
+avec suffrage vote
+procédure ayant juridictions
+pays
+reconnus interprétée
+grande bien l’intérieur
+Charte
+instaurer
+l’esprit association
+sur
+Nations loisirs
+qu’il établie Charte
+social libertés
+l’État
+devant culpabilité envers
+plein invoqué des
+égalité moment direction
+seront
+d’encourager liberté
+contrairement qu’il
+d’autrui puissent
+l’accomplissement
+torture
+constitution formes salaire
+revenir honneur
+reconnaissance congés
+rémunération
+études vie
+parmi culpabilité
+distinction raisonnable
+implique l’enseignement
+aucun
+développement partie tribunal
+autre exclusivement opinions
+commis
+maintien culpabilité l’égalité
+travail accusation
+avec vieillesse existence
+direction groupement l’accomplissement
+affaires
+peuples renforcement parmi
+l’accomplissement d’autres statut
+doit
+subsistance ceux
+secret Tous
+idées
+engagés s’il suprême
+limitation découlant médicaux
+cours fonction inquiété
+n’est découlant toute
+périodiques Tous
+lieux activités
+dirigée
+raciaux
+ses
+professionnel sont inhérente
+morale condamné
+ces pour
+Tous Aucune
+libérés Devant atteintes
+lui indépendant
+hommes
+libres satisfaire
+obligé L’éducation démocratique
+l’intérieur limitation
+l’effort seront autonome
+régime l’État concerne
+tyrannie élections
+trouver
+fondamentaux
+asile pratiques qu’aux
+eux qu’avec omissions
+conclu
+développement
+conforme limitation
+équitables résolus
+l’exercice bienfaits
+Tous direction
+livrer
+essentiel participer Ces
+résidence indépendantes
+soumis exilé pénale
+dirigée
+communauté choisis suffrage
+maladie implique constamment
+Membres l’égalité honneur
+d’opinion asile
+fortune suffisant
+effectif l’enseignement énoncés
+d’opinion
+autre tribunal distinction
+généralisé omissions l’intérieur
+mérite êtres
+nécessaires dans
+aide premier ouvert
+relations
+l’égalité subsistance
+impartial
+l’habillement
+quitter humaine
+favoriser aussi l’asile
+buts souveraineté êtres
+jouissance esclavage
+vie restriction
+l’asile revenir
+pacifiques détenu
+situation fortune exigences
+quelconque sont littéraire
+l’enseignement
+exclusivement obligé
+volonté
+activité
+nationalité Considérant maternité
+international niveau
+quelconque
+elles fraternité études
+d’une généralisé
+religieux s’il
+engagement découlant aucune
+activités démocratique naissent
+doués
+asile
+supérieures
+l’effort
+aux
+obtenir
+directement
+autre foi
+l’avènement
+importance pleinement l’enfance
+opinions L’éducation
+Les
+production esclavage souveraineté
+l’ordre n’est
+l’accomplissement inhumains bienfaits
+supérieures importance
+arbitraires matière assurer
+l’ordre
+doit pourront
+être
+informations constitution
+manifester l’humanité viser
+indépendant l’idéal règne
+impliquant nubile
+persécution reconnaissance uns
+une équitable infligé
+devant proclamé
+sont raciaux maternité
+accusation d’invalidité aucune
+droit informations
+d’autres domicile égalité
+exilé jouissance nouveau
+chômage violerait
+acte général complétée
+cas commune fondement
+couleur naissance
+femmes
+femme
+asile nations réellement
+couleur universel culturels
+infligé déclarés
+sont
+qu’une quitter seront
+inaliénables généralisé activité
+d’un par l’application
+arts d’encourager
+consentement
+membres innocente obligé
+raison engagés choisir
+décidera ainsi
+aussi économiques
+vie veuvage
+engagement
+jouir choisir équitables
+méconnaissance
+s’exercer
+consentement contrairement
+direction autres droits
+relations pour complétée
+mêmes reconnus ait
+périodiques époux l’application
+ouvert l’Organisation États
+constituaient
+fondées obligatoire effet
+nationalité quelconque qu’aux
+informations culturels obligatoire
+révoltent jouir qu’avec
+morale justice
+sociaux d’autrui
+suprême pleine crime
+l’exercice tribunal pénale
+universelles trouver ayant
+salaire d’égalité Quiconque
+manifester
+pensée chacun plus
+l’organisation
+ordre tout ayant
+chômage
+vieillesse d’expression
+équitablement
+culturels égale raison
+l’habillement pacifiques ceux
+violant fondamental durée
+moyens libérés
+naissance peuples
+maintien ressources croire
+considérations
+visant sociale
+visant raciaux spéciales
+coopération
+d’autrui égaux durant
+membre revenir informations
+disposition méconnaissance
+humains pour paix
+mépris
+circonstances choisis
+constamment libre
+cas privée
+effet Nul
+Tout autre public
+égalité Préambule social
+reconnus
+maladie Quiconque grâce
+suffisant
+suffrage conduit nationale
+forte été
+engagement
+esclaves futurs
+l’âge religieux traitements
+nationale
+indispensables être
+impartial
+généralisé
+quitter
+conscience implique
+l’Organisation fait justes
+nations
+ressortissante
+association
+égale hors épanouissement
+L’éducation
+tolérance
+effet mépris Ces
+conception
+direction auront
+Tout leur libérés
+mérite couleur tribunal
+avec réunion atteintes
+inaliénables effectives l’asile
+bien sécurité
+limitation traite
+lui
+Toute lieux
+toute
+arbitraires professionnel
+avoir
+l’application fondées
+n’est race aux
+compte
+quelconque membre opinions
+partir l’asile
+l’homme concerne haute
+elles publics partir
+aucune
+pouvoirs d’association
+acte sexe
+s’il
+remplir terreur indépendantes
+moyens
+s’il accusée
+disposition même pays
+perte soumis
+matériels
+par
+d’autrui médicaux implique
+celles l’acte d’accomplir
+sien
+afin
+compréhension commis secret
+afin découlant des
+innocente public
+universelle moins
+actes
+s’exprimer
+individus
+fonctions souveraineté conception
+existence violerait
+buts arrêté pacifiques
+essentiel Nations
+atteintes quitter
+regard
+esclavage librement
+parler assurant fonctions
+l’organisation pensée obtenir
+fonder
+groupes
+niveau l’humanité enfants
+tyrannie l’alimentation
+défense déclarés
+traite
+qu’aux
+personnalité d’immixtions
+plein indépendant énoncés
+coopération faire
+lors honnêtes statut
+fondamentales indépendantes
+telle l’égalité développer
+d’accomplir social
+hommes moment
+pleine ressources
+progrès logement
+groupes humaine d’après
+santé l’esprit
+essentiel peine
+indépendantes
+raisonnable seule conditions
+quant
+consentement comme liberté
+commun commises littéraire
+favoriser
+sien services n’est
+culpabilité
+fondamentales naturel
+formes fraternité mépris
+ressources
+soit leur
+travaille esclavage
+publics
+méconnaissance
+l’asile fonctions indépendant
+son
+peuples situation reconnus
+développement dissolution
+Nul privée
+mêmes sur
+payés
+politique agissements
+l’oppression jouissent nationales
+engagés chacun visant
+jouissance direction
+politique conforme situation
+mêmes
+décidera
+rémunération lieux sociale
+réellement conscience actions
+l’égalité placés peuples
+ressortissante territoires l’éducation
+démocratique territoires
+soumis distinction équitable
+domicile satisfaire premier
+périodiquement mépris
+renforcement aussi
+représentants
+reconnus race
+qu’à s’exercer
+supérieures prévaloir
+mérite Ces
+naissent
+compréhension assurées
+s’il
+traite
+dans règne l’application
+sont
+l’organisation
+pratiques
+mépris ressources
+peut l’habillement libres
+croire Dans ressortissante
+Toute pensée perte
+destruction prévaloir
+jouissent
+conviction révolte
+équivalente auront
+eux arbitrairement
+même ordre
+juridique
+seule
+secret
+aucune Charte chômage
+production concerne
+limitation limitations
+l’asile aucun
+autre eux
+élections l’élément suivant
+ordre
+syndicats
+n’est fondement
+qu’il décidera
+être
+consentement qu’il
+actes
+que ordre
+seront
+arts
+moment
+l’application durée
+religieux assurer que
+buts universel littéraire
+esclaves sous
+cause
+l’application
+pays territoire humains
+décidera d’une
+humains qu’aux
+Devant l’autorité Nations
+complétée
+moyen l’enseignement
+fortune assurant soins
+religion
+artistique genre
+l’intermédiaire comme
+limitation constitue présumée
+sécurité avoir
+fonder Tout
+indépendant
+l’intermédiaire l’âge
+soins durée
+générale ayant reconnus
+sociaux
+pour droits
+dans l’avènement fondement
+ainsi culturels
+manifester époux eux
+parents
+les conception maintien
+impartial l’homme
+haute
+atteintes
+populations librement arrêté
+raisonnable
+infligé chercher nationalité
+règne réunion tribunal
+monde démocratique domicile
+durant aspiration
+est bienfaits
+droits ayant nationale
+naturel publics
+effectives rémunération paix
+territoires jouissance
+changer uns pleine
+prévaloir auront
+Nations implique peines
+autres
+n’est sien protection
+époux ses
+d’association tous compréhension
+contraint persécution
+procédure
+interdits obtenir fondamentaux
+raciaux
+logement esclavage naturel
+remplir
+choisis fonder race
+esprit trouver
+hors
+opinion
+arts immixtions régime
+périodiquement égale Déclaration
+perte
+économiques
+satisfaction personne l’homme
+peuple contraint tribunal
+travaille
+l’âge démocratique
+omissions ont universelles
+L’éducation
+croire ressortissante atteintes
+laquelle
+hommes
+maternité cas contre
+manifester pleinement constituaient
+liberté
+collectivité autre individus
+régime L’enseignement société
+entre services révoltent
+populations femme
+spéciales rémunération
+culturelle fondamental
+humains aucune
+l’exercice qu’aux leurs
+des violerait non
+barbarie
+résultent sociale
+plein
+traite
+justice pratiques
+seul
+scientifique
+chaque
+omissions autonome groupement
+satisfaire commun sécurité
+esprit équitablement
+droits possible afin
+fonctions
+cet
+Nul l’amitié
+territoire consentement
+Membres poursuites
+élémentaire bénéficier aspiration
+moyens tutelle chaque
+l’intermédiaire par
+dirigée
+loisirs entre aussi
+autonome celles
+qu’aux l’esclavage
+États langue favoriser
+droits
+travaille médicaux travaille
+membres aspiration choisis
+contraires
+juridictions justes
+recours compte
+distinction disposition Unies
+d’encourager leurs Unies
+accusation décidera futurs
+groupes représentants international
+jusqu’à l’élément conclu
+fortune limitations internationale
+l’intérieur hommes atteindre
+énoncés
+règne idées
+meilleures
+interprétée dirigée protégés
+internationale qu’il notamment
+technique était
+laquelle eux
+l’esprit
+d’après d’origine naissent
+direction
+commun recevoir
+nubile
+satisfaisantes croire membre
+dignité
+suffrage favoriser raison
+remplir applicable
+buts territoire
+déclarés travaille par
+importance suite général
+égal ouvert protection
+culpabilité
+d’immixtions
+satisfaction
+participer
+satisfaisantes L’éducation toutes
+librement
+équivalente général
+services résolus
+l’élément
+groupement
+l’humanité
+d’après national
+limitations nubile
+accusation progressives l’accès
+coopération buts fonctions
+raciaux ordre s’affilier
+règne effectif travail
+futurs
+Unies s’il actions
+membre uns
+essentiel celle
+individus fondamentaux
+libres leur réellement
+puissent
+mérite libre
+leur association Quiconque
+atteindre raciaux
+êtres obtenir
+agissements parmi sociale
+consentement libre actes
+commis individu monde
+contre
+déclarés fraternité
+tenu
+nubile soins l’intermédiaire
+niveau celle
+démocratique barbarie
+d’origine effectif
+qu’une maladie
+peut
+chercher sous
+technique jouissent
+ces
+servitude fondées
+équivalente études réellement
+contre s’il
+inhérente l’asile concerne
+payés
+populations
+disposition provocation priorité
+raisonnable pourront souveraineté
+mêmes Quiconque
+respect nations l’application
+lieux ressources s’exercer
+quitter
+haute
+Article directement
+valeur universelle conviction
+social énoncés culpabilité
+commises épanouissement
+ainsi
+suffisant Ils manifester
+l’accès d’une
+principes
+dégradants aide
+nubile national organes
+humains
+peuple d’origine
+omissions publiquement
+barbarie devoirs Ces
+quelque
+d’invalidité vie dissolution
+elles
+justice pleine découlant
+devoirs engagés
+fondamentaux chaque niveau
+L’individu d’association
+peuple
+cas
+d’encourager réellement
+inaliénables participer
+raciaux territoires
+maternité ressortissante
+violerait statut
+assurées fraternité
+d’une moyens
+correspondance exigences soumis
+indépendantes établies
+volonté
+compris librement protégés
+idées supérieures
+pénale monde groupes
+chercher cet médicaux
+équitables l’amitié indispensables
+s’exercer
+l’État
+aussi religieux
+repos devoirs bien
+pouvoirs qu’avec moyens
+universelle limitation
+Charte logement élections
+s’il
+universelle
+perte humaine peuple
+internationale durée
+telles hors
+devant services droit
+premier hommes résolus
+régime l’Organisation
+idées
+est
+membres fonction
+Les
+l’élément
+Unies personnalité
+lui
+hors
+principes circonstances rites
+tolérance constamment futurs
+exclusivement l’exercice sien
+qu’une idées payés
+arbitraires librement
+bienfaits tolérance territoires
+laquelle peine
+tant présente méconnaissance
+fondées
+obtenir
+esprit
+hommes existence
+résidence l’objet
+libertés l’alimentation assurées
+d’opinion
+élémentaire dans l’idéal
+langue
+organes comme commune
+suite vieillesse artistique
+obtenir engagés violerait
+invoqué invoqué
+assistance moment gratuite
+développer
+méconnaissance constitution lieu
+viser qu’une État
+innocente ont d’accomplir
+proclamés
+religion été
+humaine national
+établies procédure recevoir
+progrès
+hommes
+égale révoltent
+est paix
+Devant
+littéraire
+vieillesse
+répandre
+découlant
+coopération fraternité
+part été esprit
+Considérant
+elle
+buts
+traite torture
+l’accomplissement exilé forte
+seront
+contrairement
+Nul
+Dans internationale établie
+maternité l’alimentation
+détenu arbitraires
+protégés d’une
+respect
+commun
+suffisant l’intermédiaire
+arbitrairement privée
+fait rémunération reconnus
+règne
+famille
+durant
+international
+forte concerne arbitrairement
+tel
+naissance gratuite
+juridiction lieux
+procédure peines
+régime
+l’application inhérente
+obtenir Charte
+commun
+d’après possible détenu
+l’auteur meilleures
+l’enfance L’Assemblée grande
+faire
+quant engagés
+jouissance
+publics
+ordre
+conforme sur l’auteur
+individu
+découlant
+viser commune toute
+l’exercice principes
+entendue
+État
+avoir misère universelle
+Nations
+applicable discrimination
+mêmes personnalité
+fraternité
+constitue enfants
+qu’ils groupes
+esprit coopération
+satisfaction fonction groupes
+inquiété
+littéraire
+mariage
+celles consentement suprême
+l’application
+paix genre
+agissements
+prévaloir public
+coopération proclamé
+distinction obtenir tous
+qu’ils sûreté culturels
+d’association
+personnalité aucun
+progressives fonction
+placés morale
+élémentaire
+développer viser seul
+dirigée d’ordre exilé
+que exclusivement Considérant
+commune organes
+l’accès propriété
+l’accès internationale
+enfants cet
+fonctions cruels
+inaliénables chaque commune
+suffrage l’auteur
+lors
+pays
+peines organes
+droits trouver
+exclusivement
+l’enseignement sexe opinions
+association poursuites pourront
+groupement tel
+suffrage souveraineté syndicats
+femme effet développer
+production
+santé
+générale d’un
+qu’une
+conviction
+toute énoncés l’intermédiaire
+égaux présumée protection
+culpabilité d’origine mépris
+discrimination d’origine notamment
+internationale invoqué ayant
+frontières
+prévaloir
+est
+progrès nationalité générale
+égalité seule
+peuples
+général nationales sécurité
+limitation fraternité
+communauté
+tout justes
+d’ordre inquiété
+suivant
+professionnel
+notamment
+universel Aucune
+Tout priorité
+culte femme
+sur formes fondamentales
+accusation droits s’il
+ainsi bienfaits
+suffrage toutes
+culte
+#
+# Data Statistics:
+#   Number of Unique Words              [614]
+#   Word Length (min/max/avg)           [3 / 17 / 7.62]
+#   Word Count per Phrase (min/max/avg) [1 / 3 / 2.00]
+#   Phrase Length (min/max/avg)         [3 / 43 / 16.28]
+#

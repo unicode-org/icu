@@ -1,26 +1,18 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 fr_CA{
-    Version{"36"}
     units{
         acceleration{
             g-force{
-                dnam{"force G"}
+                dnam{"force g"}
             }
-            meter-per-second-squared{
+            meter-per-square-second{
                 one{"{0} mètre par seconde carrée"}
                 other{"{0} mètres par seconde carrée"}
             }
         }
         angle{
-            arc-minute{
-                one{"{0} minute d’angle"}
-                other{"{0} minutes d’angle"}
-            }
-            arc-second{
-                one{"{0} seconde d’angle"}
-                other{"{0} secondes d’angle"}
-            }
             degree{
                 one{"{0} degré"}
                 other{"{0} degrés"}
@@ -72,18 +64,18 @@ fr_CA{
             }
         }
         concentr{
-            part-per-million{
-                dnam{"parties par million"}
-                one{"{0} partie par million"}
-                other{"{0} parties par million"}
-            }
             permille{
                 one{"{0} pour mille"}
                 other{"{0} pour mille"}
             }
+            permillion{
+                dnam{"parties par million"}
+                one{"{0} partie par million"}
+                other{"{0} parties par million"}
+            }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"litres aux 100 kilomètres"}
                 one{"{0} litre aux 100 kilomètres"}
                 other{"{0} litres aux 100 kilomètres"}
@@ -320,11 +312,15 @@ fr_CA{
             }
             yard{
                 dnam{"verges"}
+                gender{"feminine"}
                 one{"{0} verge"}
                 other{"{0} verges"}
             }
         }
         light{
+            candela{
+                dnam{"candela"}
+            }
             lux{
                 one{"{0} lux"}
                 other{"{0} lux"}
@@ -334,6 +330,9 @@ fr_CA{
             carat{
                 one{"{0} carat"}
                 other{"{0} carats"}
+            }
+            grain{
+                dnam{"grain"}
             }
             gram{
                 one{"{0} gramme"}
@@ -408,7 +407,7 @@ fr_CA{
                 one{"{0} hectopascal"}
                 other{"{0} hectopascals"}
             }
-            inch-hg{
+            inch-ofhg{
                 one{"{0} pouce de mercure"}
                 other{"{0} pouces de mercure"}
             }
@@ -485,6 +484,11 @@ fr_CA{
                 one{"{0} hectolitre"}
                 other{"{0} hectolitres"}
             }
+            jigger{
+                dnam{"gobelet doseur"}
+                one{"{0} gobelet doseur"}
+                other{"{0} gobelets doseurs"}
+            }
             liter{
                 one{"{0} litre"}
                 other{"{0} litres"}
@@ -500,8 +504,15 @@ fr_CA{
             }
             quart{
                 dnam{"pintes"}
+                gender{"feminine"}
                 one{"{0} pinte"}
                 other{"{0} pintes"}
+            }
+            quart-imperial{
+                dnam{"pinte impériale"}
+                gender{"feminine"}
+                one{"{0} pinte impériale"}
+                other{"{0} pintes impériales"}
             }
             teaspoon{
                 dnam{"cuillères à thé"}
@@ -512,7 +523,7 @@ fr_CA{
     }
     unitsNarrow{
         acceleration{
-            meter-per-second-squared{
+            meter-per-square-second{
                 one{"{0}m/s²"}
                 other{"{0}m/s²"}
             }
@@ -524,7 +535,7 @@ fr_CA{
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"L/100 km"}
                 one{"{0} L/100 km"}
                 other{"{0} L/100 km"}
@@ -536,8 +547,8 @@ fr_CA{
                 other{"´{0}s."}
             }
             microsecond{
-                one{"{0}µs"}
-                other{"{0}µs"}
+                one{"{0}μs"}
+                other{"{0}μs"}
             }
             minute{
                 one{"{0}m"}
@@ -578,8 +589,8 @@ fr_CA{
                 other{"{0}al"}
             }
             micrometer{
-                one{"{0}µm"}
-                other{"{0}µm"}
+                one{"{0}μm"}
+                other{"{0}μm"}
             }
             mile-scandinavian{
                 one{"{0}smi"}
@@ -614,8 +625,8 @@ fr_CA{
                 other{"{0}t"}
             }
             microgram{
-                one{"{0}µg"}
-                other{"{0}µg"}
+                one{"{0}μg"}
+                other{"{0}μg"}
             }
             milligram{
                 one{"{0}mg"}
@@ -632,14 +643,14 @@ fr_CA{
             }
         }
         pressure{
-            inch-hg{
+            inch-ofhg{
                 dnam{"inHg"}
             }
-            millimeter-of-mercury{
+            millimeter-ofhg{
                 one{"{0}mmHg"}
                 other{"{0}mmHg"}
             }
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 dnam{"psi"}
                 one{"{0}psi"}
                 other{"{0}psi"}
@@ -676,7 +687,7 @@ fr_CA{
                 one{"{0} G"}
                 other{"{0} G"}
             }
-            meter-per-second-squared{
+            meter-per-square-second{
                 one{"{0} m/s²"}
                 other{"{0} m/s²"}
             }
@@ -740,7 +751,7 @@ fr_CA{
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"L/100 km"}
                 one{"{0} L/100 km"}
                 other{"{0} L/100 km"}
@@ -756,6 +767,8 @@ fr_CA{
             }
             mile-per-gallon-imperial{
                 dnam{"mi/gal Imp"}
+                one{"{0} mi/gal Imp"}
+                other{"{0} mi/gal Imp"}
             }
         }
         digital{
@@ -915,6 +928,23 @@ fr_CA{
                 other{"{0} MHz"}
             }
         }
+        graphics{
+            dot{
+                dnam{"p"}
+                one{"{0} p"}
+                other{"{0} p"}
+            }
+            dot-per-centimeter{
+                dnam{"ppcm"}
+                one{"{0} ppcm"}
+                other{"{0} ppcm"}
+            }
+            dot-per-inch{
+                dnam{"ppp"}
+                one{"{0} ppp"}
+                other{"{0} ppp"}
+            }
+        }
         length{
             astronomical-unit{
                 one{"{0} ua"}
@@ -949,8 +979,8 @@ fr_CA{
                 other{"{0} m"}
             }
             micrometer{
-                one{"{0} µm"}
-                other{"{0} µm"}
+                one{"{0} μm"}
+                other{"{0} μm"}
             }
             mile{
                 one{"{0} mi"}
@@ -994,6 +1024,10 @@ fr_CA{
                 one{"{0} ct"}
                 other{"{0} ct"}
             }
+            grain{
+                one{"{0} grain"}
+                other{"{0} grains"}
+            }
             gram{
                 one{"{0} g"}
                 other{"{0} g"}
@@ -1007,8 +1041,8 @@ fr_CA{
                 other{"{0} t"}
             }
             microgram{
-                one{"{0} µg"}
-                other{"{0} µg"}
+                one{"{0} μg"}
+                other{"{0} μg"}
             }
             milligram{
                 one{"{0} mg"}
@@ -1063,7 +1097,7 @@ fr_CA{
                 one{"{0} hPa"}
                 other{"{0} hPa"}
             }
-            inch-hg{
+            inch-ofhg{
                 dnam{"po Hg"}
                 one{"{0} po Hg"}
                 other{"{0} po Hg"}
@@ -1072,12 +1106,12 @@ fr_CA{
                 one{"{0} mbar"}
                 other{"{0} mbar"}
             }
-            millimeter-of-mercury{
+            millimeter-ofhg{
                 dnam{"mm Hg"}
                 one{"{0} mm Hg"}
                 other{"{0} mm Hg"}
             }
-            pound-per-square-inch{
+            pound-force-per-square-inch{
                 dnam{"psi"}
                 one{"{0} psi"}
                 other{"{0} psi"}
@@ -1112,7 +1146,7 @@ fr_CA{
             }
         }
         torque{
-            pound-foot{
+            pound-force-foot{
                 dnam{"lb-pi"}
                 one{"{0} lb-pi"}
                 other{"{0} lb-pi"}
@@ -1158,6 +1192,26 @@ fr_CA{
                 one{"{0} dL"}
                 other{"{0} dL"}
             }
+            dessert-spoon{
+                dnam{"cuill. à d."}
+                one{"{0} cuill. à d."}
+                other{"{0} cuill. à d."}
+            }
+            dessert-spoon-imperial{
+                dnam{"cuill. à d. imp."}
+                one{"{0} cuill. à d. imp."}
+                other{"{0} cuill. à d. imp."}
+            }
+            dram{
+                dnam{"dram liquide"}
+                one{"{0} dram liq"}
+                other{"{0} dram liq"}
+            }
+            drop{
+                dnam{"goutte"}
+                one{"{0} goutte"}
+                other{"{0} gouttes"}
+            }
             fluid-ounce{
                 dnam{"oz liq."}
                 one{"{0} oz liq."}
@@ -1178,6 +1232,11 @@ fr_CA{
                 dnam{"hL"}
                 one{"{0} hL"}
                 other{"{0} hL"}
+            }
+            jigger{
+                dnam{"gobelet doseur"}
+                one{"{0} gobelet doseur"}
+                other{"{0} gobelets doseurs"}
             }
             liter{
                 dnam{"L"}
@@ -1204,6 +1263,11 @@ fr_CA{
                 dnam{"pte"}
                 one{"{0} pte"}
                 other{"{0} pte"}
+            }
+            quart-imperial{
+                dnam{"pte Imp"}
+                one{"{0} pte Imp"}
+                other{"{0} pte Imp"}
             }
             teaspoon{
                 dnam{"c. à t."}

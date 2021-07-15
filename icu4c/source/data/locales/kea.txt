@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 kea{
     AuxExemplarCharacters{
         "[ª á à ă â å ä ã ā æ c ç é è ĕ ê ë ẽ ē í ì ĭ î ï ĩ ī {n\u0308} º ó ò ŏ ô ö õ"
@@ -38,51 +39,39 @@ kea{
             patternsLong{
                 decimalFormat{
                     1000{
-                        one{"0 mil"}
                         other{"0 mil"}
                     }
                     10000{
-                        one{"00 mil"}
                         other{"00 mil"}
                     }
                     100000{
-                        one{"000 mil"}
                         other{"000 mil"}
                     }
                     1000000{
-                        one{"0 M"}
                         other{"0 milhãu"}
                     }
                     10000000{
-                        one{"00 M"}
                         other{"00 milhãu"}
                     }
                     100000000{
-                        one{"000 M"}
                         other{"000 milhãu"}
                     }
                     1000000000{
-                        one{"0 MM"}
                         other{"0 mil milhãu"}
                     }
                     10000000000{
-                        one{"00 MM"}
                         other{"00 mil milhãu"}
                     }
                     100000000000{
-                        one{"000 MM"}
                         other{"000 mil milhãu"}
                     }
                     1000000000000{
-                        one{"0 Bi"}
                         other{"0 bilhãu"}
                     }
                     10000000000000{
-                        one{"00 Bi"}
                         other{"00 bilhãu"}
                     }
                     100000000000000{
-                        one{"000 Bi"}
                         other{"000 bilhãu"}
                     }
                 }
@@ -90,51 +79,39 @@ kea{
             patternsShort{
                 decimalFormat{
                     1000{
-                        one{"0 mil"}
                         other{"0 mil"}
                     }
                     10000{
-                        one{"00 mil"}
                         other{"00 mil"}
                     }
                     100000{
-                        one{"000 mil"}
                         other{"000 mil"}
                     }
                     1000000{
-                        one{"0 M"}
                         other{"0 M"}
                     }
                     10000000{
-                        one{"00 M"}
                         other{"00 M"}
                     }
                     100000000{
-                        one{"000 M"}
                         other{"000 M"}
                     }
                     1000000000{
-                        one{"0 MM"}
                         other{"0 MM"}
                     }
                     10000000000{
-                        one{"00 MM"}
                         other{"00 MM"}
                     }
                     100000000000{
-                        one{"000 MM"}
                         other{"000 MM"}
                     }
                     1000000000000{
-                        one{"0 Bi"}
                         other{"0 Bi"}
                     }
                     10000000000000{
-                        one{"00 Bi"}
                         other{"00 Bi"}
                     }
                     100000000000000{
-                        one{"000 Bi"}
                         other{"000 Bi"}
                     }
                 }
@@ -165,7 +142,6 @@ kea{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"36"}
     calendar{
         generic{
             DateTimePatterns{
@@ -182,6 +158,16 @@ kea{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMMdd",
             }
             availableFormats{
                 E{"ccc"}
@@ -392,6 +378,16 @@ kea{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMMdd",
+            }
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -483,7 +479,7 @@ kea{
                         "kuarta-fera",
                         "kinta-fera",
                         "sesta-fera",
-                        "sabadu",
+                        "sábadu",
                     }
                 }
                 stand-alone{

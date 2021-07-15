@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 numberingSystems:table(nofallback){
     numberingSystems{
         adlm{
@@ -70,6 +71,11 @@ numberingSystems:table(nofallback){
         deva{
             algorithmic:int{0}
             desc{"०१२३४५६७८९"}
+            radix:int{10}
+        }
+        diak{
+            algorithmic:int{0}
+            desc{"𑥐𑥑𑥒𑥓𑥔𑥕𑥖𑥗𑥘𑥙"}
             radix:int{10}
         }
         ethi{
@@ -335,6 +341,11 @@ numberingSystems:table(nofallback){
         saur{
             algorithmic:int{0}
             desc{"꣐꣑꣒꣓꣔꣕꣖꣗꣘꣙"}
+            radix:int{10}
+        }
+        segment{
+            algorithmic:int{0}
+            desc{"🯰🯱🯲🯳🯴🯵🯶🯷🯸🯹"}
             radix:int{10}
         }
         shrd{

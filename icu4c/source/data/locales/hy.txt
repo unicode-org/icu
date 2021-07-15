@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 hy{
     AuxExemplarCharacters{"[և]"}
     Ellipsis{
@@ -220,7 +221,6 @@ hy{
         native{"latn"}
         traditional{"armn"}
     }
-    Version{"36"}
     calendar{
         generic{
             DateTimePatterns{
@@ -237,6 +237,16 @@ hy{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMdd",
+                "GyMMMdd",
+                "GGGGGyMMdd",
             }
             availableFormats{
                 Bh{"B h-ին"}
@@ -413,6 +423,16 @@ hy{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMdd",
+                "yMMMdd",
+                "yyMMdd",
             }
             appendItems{
                 Timezone{"{0} {1}"}

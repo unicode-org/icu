@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ru{
     AuxExemplarCharacters{
         "[{а\u0301} {е\u0301} {и\u0301} {о\u0301} {у\u0301} {ы\u0301} {э\u0301} {ю"
@@ -44,96 +45,72 @@ ru{
                         many{"0 тысяч"}
                         one{"0 тысяча"}
                         other{"0 тысячи"}
-                        two{"0 тыс'.'"}
-                        zero{"0 тыс'.'"}
                     }
                     10000{
                         few{"00 тысячи"}
                         many{"00 тысяч"}
                         one{"00 тысяча"}
                         other{"00 тысячи"}
-                        two{"00 тыс'.'"}
-                        zero{"00 тыс'.'"}
                     }
                     100000{
                         few{"000 тысячи"}
                         many{"000 тысяч"}
                         one{"000 тысяча"}
                         other{"000 тысячи"}
-                        two{"000 тыс'.'"}
-                        zero{"000 тыс'.'"}
                     }
                     1000000{
                         few{"0 миллиона"}
                         many{"0 миллионов"}
                         one{"0 миллион"}
                         other{"0 миллиона"}
-                        two{"0 млн"}
-                        zero{"0 млн"}
                     }
                     10000000{
                         few{"00 миллиона"}
                         many{"00 миллионов"}
                         one{"00 миллион"}
                         other{"00 миллиона"}
-                        two{"00 млн"}
-                        zero{"00 млн"}
                     }
                     100000000{
                         few{"000 миллиона"}
                         many{"000 миллионов"}
                         one{"000 миллион"}
                         other{"000 миллиона"}
-                        two{"000 млн"}
-                        zero{"000 млн"}
                     }
                     1000000000{
                         few{"0 миллиарда"}
                         many{"0 миллиардов"}
                         one{"0 миллиард"}
                         other{"0 миллиарда"}
-                        two{"0 млрд"}
-                        zero{"0 млрд"}
                     }
                     10000000000{
                         few{"00 миллиарда"}
                         many{"00 миллиардов"}
                         one{"00 миллиард"}
                         other{"00 миллиарда"}
-                        two{"00 млрд"}
-                        zero{"00 млрд"}
                     }
                     100000000000{
                         few{"000 миллиарда"}
                         many{"000 миллиардов"}
                         one{"000 миллиард"}
                         other{"000 миллиарда"}
-                        two{"000 млрд"}
-                        zero{"000 млрд"}
                     }
                     1000000000000{
                         few{"0 триллиона"}
                         many{"0 триллионов"}
                         one{"0 триллион"}
                         other{"0 триллиона"}
-                        two{"0 трлн"}
-                        zero{"0 трлн"}
                     }
                     10000000000000{
                         few{"00 триллиона"}
                         many{"00 триллионов"}
                         one{"00 триллион"}
                         other{"00 триллиона"}
-                        two{"00 трлн"}
-                        zero{"00 трлн"}
                     }
                     100000000000000{
                         few{"000 триллиона"}
                         many{"000 триллионов"}
                         one{"000 триллион"}
                         other{"000 триллиона"}
-                        two{"000 трлн"}
-                        zero{"000 трлн"}
                     }
                 }
             }
@@ -218,100 +195,77 @@ ru{
                         many{"0 тыс'.'"}
                         one{"0 тыс'.'"}
                         other{"0 тыс'.'"}
-                        two{"0 тыс'.'"}
-                        zero{"0 тыс'.'"}
                     }
                     10000{
                         few{"00 тыс'.'"}
                         many{"00 тыс'.'"}
                         one{"00 тыс'.'"}
                         other{"00 тыс'.'"}
-                        two{"00 тыс'.'"}
-                        zero{"00 тыс'.'"}
                     }
                     100000{
                         few{"000 тыс'.'"}
                         many{"000 тыс'.'"}
                         one{"000 тыс'.'"}
                         other{"000 тыс'.'"}
-                        two{"000 тыс'.'"}
-                        zero{"000 тыс'.'"}
                     }
                     1000000{
                         few{"0 млн"}
                         many{"0 млн"}
                         one{"0 млн"}
                         other{"0 млн"}
-                        two{"0 млн"}
-                        zero{"0 млн"}
                     }
                     10000000{
                         few{"00 млн"}
                         many{"00 млн"}
                         one{"00 млн"}
                         other{"00 млн"}
-                        two{"00 млн"}
-                        zero{"00 млн"}
                     }
                     100000000{
                         few{"000 млн"}
                         many{"000 млн"}
                         one{"000 млн"}
                         other{"000 млн"}
-                        two{"000 млн"}
-                        zero{"000 млн"}
                     }
                     1000000000{
                         few{"0 млрд"}
                         many{"0 млрд"}
                         one{"0 млрд"}
                         other{"0 млрд"}
-                        two{"0 млрд"}
-                        zero{"0 млрд"}
                     }
                     10000000000{
                         few{"00 млрд"}
                         many{"00 млрд"}
                         one{"00 млрд"}
                         other{"00 млрд"}
-                        two{"00 млрд"}
-                        zero{"00 млрд"}
                     }
                     100000000000{
                         few{"000 млрд"}
                         many{"000 млрд"}
                         one{"000 млрд"}
                         other{"000 млрд"}
-                        two{"000 млрд"}
-                        zero{"000 млрд"}
                     }
                     1000000000000{
                         few{"0 трлн"}
                         many{"0 трлн"}
                         one{"0 трлн"}
                         other{"0 трлн"}
-                        two{"0 трлн"}
-                        zero{"0 трлн"}
                     }
                     10000000000000{
                         few{"00 трлн"}
                         many{"00 трлн"}
                         one{"00 трлн"}
                         other{"00 трлн"}
-                        two{"00 трлн"}
-                        zero{"00 трлн"}
                     }
                     100000000000000{
                         few{"000 трлн"}
                         many{"000 трлн"}
                         one{"000 трлн"}
                         other{"000 трлн"}
-                        two{"000 трлн"}
-                        zero{"000 трлн"}
                     }
                 }
             }
             symbols{
+                approximatelySign{"≈"}
                 decimal{","}
                 exponential{"E"}
                 group{" "}
@@ -327,6 +281,19 @@ ru{
             }
         }
         minimalPairs{
+            case{
+                accusative{"Вижу {0}"}
+                dative{"Верю {0}"}
+                genitive{"Не хватает {0}"}
+                instrumental{"Занимаюсь {0}"}
+                locative{"Сижу на {0}"}
+                nominative{"{0} здесь"}
+                vocative{"Эй, {0}"}
+            }
+            gender{
+                feminine{"эта {0}"}
+                masculine{"этот {0}"}
+            }
             ordinal{
                 other{"Сверните направо на {0}-м перекрестке."}
             }
@@ -340,7 +307,6 @@ ru{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"36"}
     calendar{
         buddhist{
             eras{
@@ -370,6 +336,16 @@ ru{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "UMMMMEEEEd",
+                "UMMMMd",
+                "UMMdd",
+                "yMMdd",
             }
             availableFormats{
                 E{"ccc"}
@@ -707,6 +683,16 @@ ru{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GyMMdd",
+            }
             availableFormats{
                 Bh{"h B"}
                 Bhm{"h:mm B"}
@@ -918,6 +904,16 @@ ru{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMMdd",
             }
             appendItems{
                 Timezone{"{0} {1}"}

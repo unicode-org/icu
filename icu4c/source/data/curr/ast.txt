@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ast{
     Currencies{
         ADP{
@@ -1111,7 +1112,7 @@ ast{
             "Francu UIC francés",
         }
         XOF{
-            "CFA",
+            "F CFA",
             "francu CFA BCEAO",
         }
         XPD{
@@ -1220,7 +1221,6 @@ ast{
         BRL{"R$"}
         BSD{"$"}
         BWP{"P"}
-        BYN{"BYN"}
         BZD{"$"}
         CAD{"$"}
         CLP{"$"}
@@ -1282,7 +1282,6 @@ ast{
         PLN{"PLN"}
         PYG{"₲"}
         RUB{"₽"}
-        RUR{"RUR"}
         RWF{"RF"}
         SBD{"$"}
         SEK{"SEK"}
@@ -2520,5 +2519,4 @@ ast{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"36"}
 }

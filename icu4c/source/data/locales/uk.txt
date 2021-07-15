@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 uk{
     AuxExemplarCharacters{
         "[{а\u0301} {е\u0301} ё {є\u0301} {и\u0301} {і\u0301} {ї\u0301} {о\u0301} {у"
@@ -44,96 +45,72 @@ uk{
                         many{"0 тисяч"}
                         one{"0 тисяча"}
                         other{"0 тисячі"}
-                        two{"0 тис'.'"}
-                        zero{"0 тис'.'"}
                     }
                     10000{
                         few{"00 тисячі"}
                         many{"00 тисяч"}
                         one{"00 тисяча"}
                         other{"00 тисячі"}
-                        two{"00 тис'.'"}
-                        zero{"00 тис'.'"}
                     }
                     100000{
                         few{"000 тисячі"}
                         many{"000 тисяч"}
                         one{"000 тисяча"}
                         other{"000 тисячі"}
-                        two{"000 тис'.'"}
-                        zero{"000 тис'.'"}
                     }
                     1000000{
                         few{"0 мільйони"}
                         many{"0 мільйонів"}
                         one{"0 мільйон"}
                         other{"0 мільйона"}
-                        two{"0 млн"}
-                        zero{"0 млн"}
                     }
                     10000000{
                         few{"00 мільйони"}
                         many{"00 мільйонів"}
                         one{"00 мільйон"}
                         other{"00 мільйона"}
-                        two{"00 млн"}
-                        zero{"00 млн"}
                     }
                     100000000{
                         few{"000 мільйони"}
                         many{"000 мільйонів"}
                         one{"000 мільйон"}
                         other{"000 мільйона"}
-                        two{"000 млн"}
-                        zero{"000 млн"}
                     }
                     1000000000{
                         few{"0 мільярди"}
                         many{"0 мільярдів"}
                         one{"0 мільярд"}
                         other{"0 мільярда"}
-                        two{"0 млрд"}
-                        zero{"0 млрд"}
                     }
                     10000000000{
                         few{"00 мільярди"}
                         many{"00 мільярдів"}
                         one{"00 мільярд"}
                         other{"00 мільярда"}
-                        two{"00 млрд"}
-                        zero{"00 млрд"}
                     }
                     100000000000{
                         few{"000 мільярди"}
                         many{"000 мільярдів"}
                         one{"000 мільярд"}
                         other{"000 мільярда"}
-                        two{"000 млрд"}
-                        zero{"000 млрд"}
                     }
                     1000000000000{
                         few{"0 трильйони"}
                         many{"0 трильйонів"}
                         one{"0 трильйон"}
                         other{"0 трильйона"}
-                        two{"0 трлн"}
-                        zero{"0 трлн"}
                     }
                     10000000000000{
                         few{"00 трильйони"}
                         many{"00 трильйонів"}
                         one{"00 трильйон"}
                         other{"00 трильйона"}
-                        two{"00 трлн"}
-                        zero{"00 трлн"}
                     }
                     100000000000000{
                         few{"000 трильйони"}
                         many{"000 трильйонів"}
                         one{"000 трильйон"}
                         other{"000 трильйона"}
-                        two{"000 трлн"}
-                        zero{"000 трлн"}
                     }
                 }
             }
@@ -218,96 +195,72 @@ uk{
                         many{"0 тис'.'"}
                         one{"0 тис'.'"}
                         other{"0 тис'.'"}
-                        two{"0 тис'.'"}
-                        zero{"0 тис'.'"}
                     }
                     10000{
                         few{"00 тис'.'"}
                         many{"00 тис'.'"}
                         one{"00 тис'.'"}
                         other{"00 тис'.'"}
-                        two{"00 тис'.'"}
-                        zero{"00 тис'.'"}
                     }
                     100000{
                         few{"000 тис'.'"}
                         many{"000 тис'.'"}
                         one{"000 тис'.'"}
                         other{"000 тис'.'"}
-                        two{"000 тис'.'"}
-                        zero{"000 тис'.'"}
                     }
                     1000000{
                         few{"0 млн"}
                         many{"0 млн"}
                         one{"0 млн"}
                         other{"0 млн"}
-                        two{"0 млн"}
-                        zero{"0 млн"}
                     }
                     10000000{
                         few{"00 млн"}
                         many{"00 млн"}
                         one{"00 млн"}
                         other{"00 млн"}
-                        two{"00 млн"}
-                        zero{"00 млн"}
                     }
                     100000000{
                         few{"000 млн"}
                         many{"000 млн"}
                         one{"000 млн"}
                         other{"000 млн"}
-                        two{"000 млн"}
-                        zero{"000 млн"}
                     }
                     1000000000{
                         few{"0 млрд"}
                         many{"0 млрд"}
                         one{"0 млрд"}
                         other{"0 млрд"}
-                        two{"0 млрд"}
-                        zero{"0 млрд"}
                     }
                     10000000000{
                         few{"00 млрд"}
                         many{"00 млрд"}
                         one{"00 млрд"}
                         other{"00 млрд"}
-                        two{"00 млрд"}
-                        zero{"00 млрд"}
                     }
                     100000000000{
                         few{"000 млрд"}
                         many{"000 млрд"}
                         one{"000 млрд"}
                         other{"000 млрд"}
-                        two{"000 млрд"}
-                        zero{"000 млрд"}
                     }
                     1000000000000{
                         few{"0 трлн"}
                         many{"0 трлн"}
                         one{"0 трлн"}
                         other{"0 трлн"}
-                        two{"0 трлн"}
-                        zero{"0 трлн"}
                     }
                     10000000000000{
                         few{"00 трлн"}
                         many{"00 трлн"}
                         one{"00 трлн"}
                         other{"00 трлн"}
-                        two{"00 трлн"}
-                        zero{"00 трлн"}
                     }
                     100000000000000{
                         few{"000 трлн"}
                         many{"000 трлн"}
                         one{"000 трлн"}
                         other{"000 трлн"}
-                        two{"000 трлн"}
-                        zero{"000 трлн"}
                     }
                 }
             }
@@ -341,7 +294,6 @@ uk{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"36"}
     calendar{
         buddhist{
             eras{
@@ -566,6 +518,16 @@ uk{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyyMMdd",
+            }
             availableFormats{
                 Bh{"h B"}
                 Bhm{"h:mm B"}
@@ -781,6 +743,16 @@ uk{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yyMMdd",
+            }
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -973,7 +945,6 @@ uk{
                         afternoon1{"день"}
                         am{"дп"}
                         evening1{"вечір"}
-                        midnight{"опівніч"}
                         morning1{"ранок"}
                         night1{"ніч"}
                         noon{"полудень"}
@@ -983,10 +954,6 @@ uk{
             }
             eras{
                 abbreviated{
-                    "до н. е.",
-                    "н. е.",
-                }
-                abbreviated%variant{
                     "до н. е.",
                     "н. е.",
                 }
@@ -1866,8 +1833,8 @@ uk{
         han_characters{"китайський ієрогліф"}
         han_radicals{"ієрогліфічний ключ"}
         hanja{"ханча"}
-        hanzi_simplified{"ханьцзи (спрощена)"}
-        hanzi_traditional{"ханьцзи (традиційна)"}
+        hanzi_simplified{"ханьцзи (спрощене письмо)"}
+        hanzi_traditional{"ханьцзи (традиційне письмо)"}
         heart{"серце"}
         historic_scripts{"історичне письмо"}
         ideographic_desc_characters{"ідеографічний описовий знак"}
@@ -2084,16 +2051,16 @@ uk{
             }
             relativeTime{
                 future{
-                    few{"через {0} пʼятниці"}
-                    many{"через {0} пʼятниць"}
-                    one{"через {0} пʼятницю"}
-                    other{"через {0} пʼятниці"}
+                    few{"через {0} пт"}
+                    many{"через {0} пт"}
+                    one{"через {0} пт"}
+                    other{"через {0} пт"}
                 }
                 past{
-                    few{"{0} пʼятниці тому"}
-                    many{"{0} пʼятниць тому"}
-                    one{"{0} пʼятницю тому"}
-                    other{"{0} пʼятниці тому"}
+                    few{"{0} пт тому"}
+                    many{"{0} пт тому"}
+                    one{"{0} пт тому"}
+                    other{"{0} пт тому"}
                 }
             }
         }

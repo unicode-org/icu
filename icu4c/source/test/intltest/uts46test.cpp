@@ -29,6 +29,7 @@
 #include "charstr.h"
 #include "cmemory.h"
 #include "intltest.h"
+#include "punycode.h"
 #include "uparse.h"
 
 class UTS46Test : public IntlTest {
@@ -39,6 +40,9 @@ public:
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL);
     void TestAPI();
     void TestNotSTD3();
+    void TestInvalidPunycodeDigits();
+    void TestACELabelEdgeCases();
+    void TestTooLong();
     void TestSomeCases();
     void IdnaTest();
 
@@ -82,6 +86,9 @@ void UTS46Test::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(TestAPI);
     TESTCASE_AUTO(TestNotSTD3);
+    TESTCASE_AUTO(TestInvalidPunycodeDigits);
+    TESTCASE_AUTO(TestACELabelEdgeCases);
+    TESTCASE_AUTO(TestTooLong);
     TESTCASE_AUTO(TestSomeCases);
     TESTCASE_AUTO(IdnaTest);
     TESTCASE_AUTO_END;
@@ -160,7 +167,7 @@ void UTS46Test::TestAPI() {
     char buffer[100];
     TestCheckedArrayByteSink sink(buffer, UPRV_LENGTHOF(buffer));
     errorCode=U_ZERO_ERROR;
-    nontrans->labelToUnicodeUTF8(StringPiece(NULL, 5), sink, info, errorCode);
+    nontrans->labelToUnicodeUTF8(StringPiece((const char *)NULL, 5), sink, info, errorCode);
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR || sink.NumberOfBytesWritten()!=0) {
         errln("N.labelToUnicodeUTF8(StringPiece(NULL, 5)) did not set illegal-argument-error ",
               "or did output something - %s",
@@ -243,6 +250,114 @@ void UTS46Test::TestNotSTD3() {
         errln("notSTD3.nameToUnicode(equiv to non-LDH ASCII) unexpected errors %04lx string %s",
               (long)info.getErrors(), buffer);
     }
+}
+
+void UTS46Test::TestInvalidPunycodeDigits() {
+    IcuTestErrorCode errorCode(*this, "TestInvalidPunycodeDigits()");
+    LocalPointer<IDNA> idna(IDNA::createUTS46Instance(0, errorCode));
+    if(errorCode.isFailure()) {
+        return;
+    }
+    UnicodeString result;
+    {
+        IDNAInfo info;
+        idna->nameToUnicode(u"xn--pleP", result, info, errorCode);  // P=U+0050
+        assertFalse("nameToUnicode() should succeed",
+                    (info.getErrors()&UIDNA_ERROR_PUNYCODE)!=0);
+        assertEquals("normal result", u"ᔼᔴ", result);
+    }
+    {
+        IDNAInfo info;
+        idna->nameToUnicode(u"xn--pleѐ", result, info, errorCode);  // ends with non-ASCII U+0450
+        assertTrue("nameToUnicode() should detect non-ASCII",
+                   (info.getErrors()&UIDNA_ERROR_PUNYCODE)!=0);
+    }
+
+    // Test with ASCII characters adjacent to LDH.
+    {
+        IDNAInfo info;
+        idna->nameToUnicode(u"xn--ple/", result, info, errorCode);
+        assertTrue("nameToUnicode() should detect '/'",
+                   (info.getErrors()&UIDNA_ERROR_PUNYCODE)!=0);
+    }
+
+    {
+        IDNAInfo info;
+        idna->nameToUnicode(u"xn--ple:", result, info, errorCode);
+        assertTrue("nameToUnicode() should detect ':'",
+                   (info.getErrors()&UIDNA_ERROR_PUNYCODE)!=0);
+    }
+
+    {
+        IDNAInfo info;
+        idna->nameToUnicode(u"xn--ple@", result, info, errorCode);
+        assertTrue("nameToUnicode() should detect '@'",
+                   (info.getErrors()&UIDNA_ERROR_PUNYCODE)!=0);
+    }
+
+    {
+        IDNAInfo info;
+        idna->nameToUnicode(u"xn--ple[", result, info, errorCode);
+        assertTrue("nameToUnicode() should detect '['",
+                   (info.getErrors()&UIDNA_ERROR_PUNYCODE)!=0);
+    }
+
+    {
+        IDNAInfo info;
+        idna->nameToUnicode(u"xn--ple`", result, info, errorCode);
+        assertTrue("nameToUnicode() should detect '`'",
+                   (info.getErrors()&UIDNA_ERROR_PUNYCODE)!=0);
+    }
+
+    {
+        IDNAInfo info;
+        idna->nameToUnicode(u"xn--ple{", result, info, errorCode);
+        assertTrue("nameToUnicode() should detect '{'",
+                   (info.getErrors()&UIDNA_ERROR_PUNYCODE)!=0);
+    }
+}
+
+void UTS46Test::TestACELabelEdgeCases() {
+    // In IDNA2008, these labels fail the round-trip validation from comparing
+    // the ToUnicode input with the back-to-ToASCII output.
+    IcuTestErrorCode errorCode(*this, "TestACELabelEdgeCases()");
+    LocalPointer<IDNA> idna(IDNA::createUTS46Instance(0, errorCode));
+    if(errorCode.isFailure()) {
+        return;
+    }
+    UnicodeString result;
+    {
+        IDNAInfo info;
+        idna->labelToUnicode(u"xn--", result, info, errorCode);
+        assertTrue("empty xn--", (info.getErrors()&UIDNA_ERROR_INVALID_ACE_LABEL)!=0);
+    }
+    {
+        IDNAInfo info;
+        idna->labelToUnicode(u"xN--ASCII-", result, info, errorCode);
+        assertTrue("nothing but ASCII", (info.getErrors()&UIDNA_ERROR_INVALID_ACE_LABEL)!=0);
+    }
+    {
+        // Different error: The Punycode decoding procedure does not consume the last delimiter
+        // if it is right after the xn-- so the main decoding loop fails because the hyphen
+        // is not a valid Punycode digit.
+        IDNAInfo info;
+        idna->labelToUnicode(u"Xn---", result, info, errorCode);
+        assertTrue("empty Xn---", (info.getErrors()&UIDNA_ERROR_PUNYCODE)!=0);
+    }
+}
+
+void UTS46Test::TestTooLong() {
+    // ICU-13727: Limit input length for n^2 algorithm
+    // where well-formed strings are at most 59 characters long.
+    int32_t count = 50000;
+    UnicodeString s(count, u'a', count);  // capacity, code point, count
+    char16_t dest[60000];
+    UErrorCode errorCode = U_ZERO_ERROR;
+    u_strToPunycode(s.getBuffer(), s.length(), dest, UPRV_LENGTHOF(dest), nullptr, &errorCode);
+    assertEquals("encode: expected an error for too-long input", U_INPUT_TOO_LONG_ERROR, errorCode);
+    errorCode = U_ZERO_ERROR;
+    u_strFromPunycode(s.getBuffer(), s.length(), dest, UPRV_LENGTHOF(dest), nullptr, &errorCode);
+    assertEquals("decode: expected an error for too-long input", U_INPUT_TOO_LONG_ERROR, errorCode);
 }
 
 struct TestCase {
@@ -491,13 +606,13 @@ static const TestCase testCases[]={
       UIDNA_ERROR_EMPTY_LABEL|UIDNA_ERROR_LEADING_HYPHEN|UIDNA_ERROR_TRAILING_HYPHEN|
       UIDNA_ERROR_HYPHEN_3_4 },
     { "a..c", "B", "a..c", UIDNA_ERROR_EMPTY_LABEL },
-    { "a.xn--.c", "B", "a..c", UIDNA_ERROR_EMPTY_LABEL },
+    { "a.xn--.c", "B", "a.xn--\\uFFFD.c", UIDNA_ERROR_INVALID_ACE_LABEL },
     { "a.-b.", "B", "a.-b.", UIDNA_ERROR_LEADING_HYPHEN },
     { "a.b-.c", "B", "a.b-.c", UIDNA_ERROR_TRAILING_HYPHEN },
     { "a.-.c", "B", "a.-.c", UIDNA_ERROR_LEADING_HYPHEN|UIDNA_ERROR_TRAILING_HYPHEN },
     { "a.bc--de.f", "B", "a.bc--de.f", UIDNA_ERROR_HYPHEN_3_4 },
     { "\\u00E4.\\u00AD.c", "B", "\\u00E4..c", UIDNA_ERROR_EMPTY_LABEL },
-    { "\\u00E4.xn--.c", "B", "\\u00E4..c", UIDNA_ERROR_EMPTY_LABEL },
+    { "\\u00E4.xn--.c", "B", "\\u00E4.xn--\\uFFFD.c", UIDNA_ERROR_INVALID_ACE_LABEL },
     { "\\u00E4.-b.", "B", "\\u00E4.-b.", UIDNA_ERROR_LEADING_HYPHEN },
     { "\\u00E4.b-.c", "B", "\\u00E4.b-.c", UIDNA_ERROR_TRAILING_HYPHEN },
     { "\\u00E4.-.c", "B", "\\u00E4.-.c", UIDNA_ERROR_LEADING_HYPHEN|UIDNA_ERROR_TRAILING_HYPHEN },
@@ -935,7 +1050,7 @@ void UTS46Test::checkIdnaTestResult(const char *line, const char *type,
         if (*status != u'[') {
             errln("%s  status field does not start with '[': %s\n    %s", type, status, line);
         }
-        if (strcmp(status, u8"[]") != 0) {
+        if (strcmp(status, reinterpret_cast<const char*>(u8"[]")) != 0) {
             expectedHasErrors = TRUE;
         }
     }

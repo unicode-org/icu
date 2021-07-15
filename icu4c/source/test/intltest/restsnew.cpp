@@ -7,6 +7,7 @@
 
 #include "unicode/utypes.h"
 
+#include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "unicode/unistr.h"
@@ -14,6 +15,7 @@
 #include "unicode/brkiter.h"
 #include "unicode/utrace.h"
 #include "unicode/ucurr.h"
+#include "uresimp.h"
 #include "restsnew.h"
 
 #include <stdlib.h>
@@ -40,6 +42,7 @@ void NewResourceBundleTest::runIndexedTest( int32_t index, UBool exec, const cha
 
     TESTCASE_AUTO(TestGetByFallback);
     TESTCASE_AUTO(TestFilter);
+    TESTCASE_AUTO(TestIntervalAliasFallbacks);
 
 #if U_ENABLE_TRACING
     TESTCASE_AUTO(TestTrace);
@@ -532,26 +535,28 @@ NewResourceBundleTest::TestOtherAPI(){
         errln("copy construction failed\n");
     }
 
-    ResourceBundle defaultSub = defaultresource.get((int32_t)0, err);
-    ResourceBundle defSubCopy(defaultSub);
-    if(strcmp(defSubCopy.getName(), defaultSub.getName() ) !=0  ||
-        strcmp(defSubCopy.getLocale().getName(), defaultSub.getLocale().getName() ) !=0  ){
-        errln("copy construction for subresource failed\n");
+    {
+        LocalPointer<ResourceBundle> p(defaultresource.clone());
+        if(p.getAlias() == &defaultresource || !equalRB(*p, defaultresource)) {
+            errln("ResourceBundle.clone() failed");
+        }
     }
 
-    ResourceBundle *p;
-
-    p = defaultresource.clone();
-    if(p == &defaultresource || !equalRB(*p, defaultresource)) {
-        errln("ResourceBundle.clone() failed");
+    // The following tests involving defaultSub may no longer be exercised if
+    // defaultresource is for a locale like en_US with an empty resource bundle.
+    // (Before ICU-21028 such a bundle would have contained at least a Version string.)
+    if(defaultresource.getSize() != 0) {
+        ResourceBundle defaultSub = defaultresource.get((int32_t)0, err);
+        ResourceBundle defSubCopy(defaultSub);
+        if(strcmp(defSubCopy.getName(), defaultSub.getName()) != 0 ||
+                strcmp(defSubCopy.getLocale().getName(), defaultSub.getLocale().getName() ) != 0) {
+            errln("copy construction for subresource failed\n");
+        }
+        LocalPointer<ResourceBundle> p(defaultSub.clone());
+        if(p.getAlias() == &defaultSub || !equalRB(*p, defaultSub)) {
+            errln("2nd ResourceBundle.clone() failed");
+        }
     }
-    delete p;
-
-    p = defaultSub.clone();
-    if(p == &defaultSub || !equalRB(*p, defaultSub)) {
-        errln("2nd ResourceBundle.clone() failed");
-    }
-    delete p;
 
     UVersionInfo ver;
     copyRes.getVersion(ver);
@@ -1096,7 +1101,7 @@ NewResourceBundleTest::TestNewTypes() {
     /* if everything is working correctly, the size of this string */
     /* should be 7. Everything else is a wrong answer, esp. 3 and 6*/
 
-    strcpy(action, "getting and testing of string with embeded zero");
+    strcpy(action, "getting and testing of string with embedded zero");
     ResourceBundle res = theBundle.get("zerotest", status);
     CONFIRM_UErrorCode(status, U_ZERO_ERROR);
     CONFIRM_EQ(res.getType(), URES_STRING);
@@ -1389,6 +1394,79 @@ void NewResourceBundleTest::TestFilter() {
         assertEquals("northDakota", northDakota.getType(), URES_STRING);
         assertEquals("northDakota", u"west-virginia", northDakota.getString(status));
         REQUIRE_SUCCESS(status);
+    }
+}
+
+/*
+ * The following test for ICU-20706 has infinite loops on certain inputs for
+ * locales and calendars.  In order to unblock the build (ICU-21055), those
+ * specific values are temporarily removed.
+ * The issue of the infinite loops and its blocking dependencies were captured
+ * in ICU-21080.
+ */
+
+void NewResourceBundleTest::TestIntervalAliasFallbacks() {
+    const char* locales[] = {
+        // Thee will not cause infinity loop
+        "en",
+        "ja",
+
+        // These will cause infinity loop
+#if 0
+        "fr_CA",
+        "en_150",
+        "es_419",
+        "id",
+        "in",
+        "pl",
+        "pt_PT",
+        "sr_ME",
+        "zh_Hant",
+        "zh_Hant_TW",
+        "zh_TW",
+#endif
+    };
+    const char* calendars[] = {
+        // These won't cause infinity loop
+        "gregorian",
+        "chinese",
+
+        // These will cause infinity loop
+#if 0
+        "islamic",
+        "islamic-civil",
+        "islamic-tbla",
+        "islamic-umalqura",
+        "ethiopic-amete-alem",
+        "islamic-rgsa",
+        "japanese",
+        "roc",
+#endif
+    };
+
+    for (int lidx = 0; lidx < UPRV_LENGTHOF(locales); lidx++) {
+        UErrorCode status = U_ZERO_ERROR;
+        UResourceBundle *rb = ures_open(NULL, locales[lidx], &status);
+        if (U_FAILURE(status)) {
+            errln("Cannot open bundle for locale %s", locales[lidx]);
+            break;
+        }
+        for (int cidx = 0; cidx < UPRV_LENGTHOF(calendars); cidx++) {
+            CharString key;
+            key.append("calendar/", status);
+            key.append(calendars[cidx], status);
+            key.append("/intervalFormats/fallback", status);
+            if (! logKnownIssue("20400")) {
+                int32_t resStrLen = 0;
+                ures_getStringByKeyWithFallback(rb, key.data(), &resStrLen, &status);
+            }
+            if (U_FAILURE(status)) {
+                errln("Cannot ures_getStringByKeyWithFallback('%s') on locale %s",
+                      key.data(), locales[lidx]);
+                break;
+            }
+        }
+        ures_close(rb);
     }
 }
 

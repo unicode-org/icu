@@ -1,7 +1,7 @@
 /*
  ***********************************************************************
  * © 2016 and later: Unicode, Inc. and others.
- * License & terms of use: http://www.unicode.org/copyright.html#License
+ * License & terms of use: http://www.unicode.org/copyright.html
  ***********************************************************************
  ***********************************************************************
  * Copyright (c) 2011-2016,International Business Machines
@@ -500,7 +500,7 @@ protected:
     case kApplyPattern:
       {
         UNumberFormat *fmt = unum_open(UNUM_DECIMAL, NULL, -1, TEST_LOCALE, 0, &setupStatus);
-        unum_applyPattern(fmt, FALSE, fPat.getTerminatedBuffer(), -1, NULL, &setupStatus);
+        unum_applyPattern(fmt, false, fPat.getTerminatedBuffer(), -1, NULL, &setupStatus);
         return fmt;
       }
     case kGroupOff:
@@ -512,7 +512,7 @@ protected:
     case kApplyGroupOff:
       {
         UNumberFormat *fmt = unum_open(UNUM_DECIMAL, NULL, -1, TEST_LOCALE, 0, &setupStatus);
-        unum_applyPattern(fmt, FALSE, fPat.getTerminatedBuffer(), -1, NULL, &setupStatus);
+        unum_applyPattern(fmt, false, fPat.getTerminatedBuffer(), -1, NULL, &setupStatus);
         unum_setAttribute(fmt, UNUM_GROUPING_USED, UNUM_NO);
         return fmt;
       }

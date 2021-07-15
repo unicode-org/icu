@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 1996-2007, International Business Machines Corporation and    *
@@ -82,7 +82,7 @@ public class RbnfSampleRuleSets {
                // beginning at 20, we use the >> to mark the position where
                // the result of formatting the number's ones digit.  Thus,
                // we only need a new rule at every multiple of 10.  Text in
-               // backets is omitted if the value being formatted is an
+               // brackets is omitted if the value being formatted is an
                // even multiple of 10.
         + "    20: twenty[->>];\n"
         + "    30: thirty[->>];\n"
@@ -432,7 +432,7 @@ public class RbnfSampleRuleSets {
         + "    40: quarante[->%%alt-ones>];\n"
         + "    50: cinquante[->%%alt-ones>];\n"
                // rule for 60.  The /20 causes this rule's multiplier to be
-               // 20 rather than 10, allowinhg us to recurse for all values
+               // 20 rather than 10, allowing us to recurse for all values
                // from 60 to 79...
         + "    60/20: soixante[->%%alt-ones>];\n"
                // ...except for 71, which must be special-cased
@@ -455,7 +455,7 @@ public class RbnfSampleRuleSets {
                // of 1,000.  This prevents us from getting "onze cents cent
                // vingt-deux" ("eleven hundred one hundred twenty-two").
         + "    1100>: onze cents[ >>];\n"
-               // at 1,200, we go back to formating in thousands, so we
+               // at 1,200, we go back to formatting in thousands, so we
                // repeat the rule for 1,000
         + "    1200: mille >>;\n"
                // at 2,000, the multiplier is added
@@ -712,7 +712,7 @@ public class RbnfSampleRuleSets {
      * that are harder to alter than the traditional numerals (one could
      * fairly easily change a one to
      * a three just by adding two strokes, for example).  This is also done in
-     * the other countries using Chinese idographs, but different ideographs
+     * the other countries using Chinese ideographs, but different ideographs
      * are used in those places.
      */
     public static final String japanese =
@@ -997,7 +997,7 @@ public class RbnfSampleRuleSets {
         + "    1,000,000,000,000: << trillion[ >>];\n"
         + "    1,000,000,000,000,000: =#,##0=;\n"
         // the rule set that formats the fractional part of the number.
-        // The rule that is used is the one that, when its baase value is
+        // The rule that is used is the one that, when its base value is
         // multiplied by the fractional part of the number being formatted,
         // produces the result closest to zero.  Thus, the base values are
         // prospective denominators of the fraction.  The << marks the place
@@ -1609,7 +1609,7 @@ public class RbnfSampleRuleSets {
                // for values below 10,000, just use %%low-order
         + "    =%%low-order=;\n"
                // for values above 10,000, split into two groups of four digits
-               // and format each with %%high-order (putting an M in betwen)
+               // and format each with %%high-order (putting an M in between)
         + "    10,000: <%%high-order<\u039c>%%high-order>;\n"
                // for values above 100,000,000, add another group onto the front
                // and another M
@@ -1687,7 +1687,7 @@ public class RbnfSampleRuleSets {
           "Words for digits",
           "Chinese place-value notation",
           "Roman numerals",
-          "Hebrew ahlphabetic numerals",
+          "Hebrew alphabetic numerals",
           "Greek alphabetic numerals" };
 
     /**
@@ -1810,7 +1810,7 @@ public class RbnfSampleRuleSets {
             + "that are harder to alter than the traditional numerals (one could "
             + "fairly easily change a one to "
             + "a three just by adding two strokes, for example).  This is also done in "
-            + "the other countries using Chinese idographs, but different ideographs "
+            + "the other countries using Chinese ideographs, but different ideographs "
             + "are used in those places.",
 
             "Again in Greek we have to supply the words "

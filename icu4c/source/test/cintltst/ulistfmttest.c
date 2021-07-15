@@ -19,6 +19,7 @@
 
 static void TestUListFmt(void);
 static void TestUListFmtToValue(void);
+static void TestUListOpenStyled(void);
 
 void addUListFmtTest(TestNode** root);
 
@@ -28,6 +29,7 @@ void addUListFmtTest(TestNode** root)
 {
     TESTCASE(TestUListFmt);
     TESTCASE(TestUListFmtToValue);
+    TESTCASE(TestUListOpenStyled);
 }
 
 static const UChar str0[] = { 0x41,0 }; /* "A" */
@@ -198,6 +200,44 @@ static void TestUListFmtToValue() {
             {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 16, 22},
             {UFIELD_CATEGORY_LIST_SPAN, 6, 22, 23},
             {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 22, 23}};
+        checkMixedFormattedValue(
+            message,
+            ulistfmt_resultAsValue(fl, &ec),
+            expectedString,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
+    }
+
+    ulistfmt_close(fmt);
+    ulistfmt_closeResult(fl);
+}
+
+static void TestUListOpenStyled() {
+    UErrorCode ec = U_ZERO_ERROR;
+    UListFormatter* fmt = ulistfmt_openForType("en", ULISTFMT_TYPE_OR, ULISTFMT_WIDTH_SHORT, &ec);
+    UFormattedList* fl = ulistfmt_openResult(&ec);
+    assertSuccess("Opening", &ec);
+
+    {
+        const char* message = "openStyled test 1";
+        const UChar* expectedString = u"A, B, or C";
+        const UChar* inputs[] = {
+            u"A",
+            u"B",
+            u"C",
+        };
+        ulistfmt_formatStringsToResult(fmt, inputs, NULL, UPRV_LENGTHOF(inputs), fl, &ec);
+        assertSuccess("Formatting", &ec);
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            // field, begin index, end index
+            {UFIELD_CATEGORY_LIST_SPAN, 0, 0,  1},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 0,  1},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 1,  3},
+            {UFIELD_CATEGORY_LIST_SPAN, 1, 3,  4},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 3,  4},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 4,  9},
+            {UFIELD_CATEGORY_LIST_SPAN, 2, 9, 10},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 9, 10}};
         checkMixedFormattedValue(
             message,
             ulistfmt_resultAsValue(fl, &ec),

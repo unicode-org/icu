@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /**
  *******************************************************************************
  * Copyright (C) 2000-2016, International Business Machines Corporation and    *
@@ -2287,7 +2287,7 @@ public class CalendarRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         gc.setFirstDayOfWeek(Calendar.MONDAY);
         gc.setMinimalDaysInFirstWeek(4);
 
-        // Force the calender to resolve the fields once.
+        // Force the calendar to resolve the fields once.
         // The maximum week number in 2011 is 52.
         gc.set(Calendar.YEAR, 2011);
         gc.get(Calendar.YEAR);
@@ -2553,6 +2553,70 @@ public class CalendarRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         int resultYear = cal.get(Calendar.YEAR);
         if (year != resultYear) {
             errln("Fail: Expected year=" + year + ", actual=" + resultYear);
+        }
+    }
+
+    @Test
+    public void TestTimeZoneInLocale20465() {
+        String TESTS[][] = {
+            { "en-u-tz-usden",                     "America/Denver",             "gregorian" },
+            { "es-u-tz-usden",                     "America/Denver",             "gregorian" },
+            { "ms-u-tz-mykul",                     "Asia/Kuala_Lumpur",          "gregorian" },
+            { "zh-u-tz-mykul",                     "Asia/Kuala_Lumpur",          "gregorian" },
+            { "fr-u-ca-buddhist-tz-phmnl",         "Asia/Manila",                "buddhist" },
+            { "th-u-ca-chinese-tz-gblon",          "Europe/London",              "chinese" },
+            { "de-u-ca-coptic-tz-ciabj",           "Africa/Abidjan",             "coptic" },
+            { "ja-u-ca-dangi-tz-hkhkg",            "Asia/Hong_Kong",             "dangi" },
+            { "da-u-ca-ethioaa-tz-ruunera",        "Asia/Ust-Nera",              "ethiopic-amete-alem" },
+            { "ko-u-ca-ethiopic-tz-cvrai",         "Atlantic/Cape_Verde",        "ethiopic" },
+            { "fil-u-ca-gregory-tz-aubne",         "Australia/Brisbane",         "gregorian" },
+            { "fa-u-ca-hebrew-tz-brrbr",           "America/Rio_Branco",         "hebrew" },
+            { "gr-u-ca-indian-tz-lccas",           "America/St_Lucia",           "indian" },
+            { "or-u-ca-islamic-tz-cayyn",          "America/Swift_Current",      "islamic" },
+            { "my-u-ca-islamic-umalqura-tz-kzala", "Asia/Almaty",                "islamic-umalqura" },
+            { "lo-u-ca-islamic-tbla-tz-bmbda",     "Atlantic/Bermuda",           "islamic-tbla" },
+            { "km-u-ca-islamic-civil-tz-aqplm",    "Antarctica/Palmer",          "islamic-civil" },
+            { "kk-u-ca-islamic-rgsa-tz-usanc",     "America/Anchorage",          "islamic" },
+            { "ar-u-ca-iso8601-tz-bjptn",          "Africa/Porto-Novo",          "gregorian" },
+            { "he-u-ca-japanese-tz-tzdar",         "Africa/Dar_es_Salaam",       "japanese" },
+            { "bs-u-ca-persian-tz-etadd",          "Africa/Addis_Ababa",         "persian" },
+            { "it-u-ca-roc-tz-aruaq",              "America/Argentina/San_Juan", "roc" },
+        };
+        TimeZone other = TimeZone.getTimeZone("America/Louisville");
+        for (int i = 0; i < TESTS.length; ++i) {
+            ULocale ulocale = new ULocale(TESTS[i][0]);
+            Locale locale = new Locale(TESTS[i][0]);
+            Calendar cal = Calendar.getInstance(locale);
+            assertEquals(
+                "TimeZone from Calendar.getInstance(Locale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][1], cal.getTimeZone().getID());
+            assertEquals(
+                "Calendar from Calendar.getInstance(Locale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][2], cal.getType());
+
+            cal = Calendar.getInstance(ulocale);
+            assertEquals(
+                "TimeZone from Calendar.getInstance(ULocale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][1], cal.getTimeZone().getID());
+            assertEquals(
+                "Calendar from Calendar.getInstance(ULocale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][2], cal.getType());
+
+            cal = Calendar.getInstance(other, locale);
+            assertEquals(
+                "TimeZone from Calendar.getInstance(TimeZone zone=\"uslui\", Locale loc=\"" + TESTS[i][0] + "\")",
+                         other.getID(), cal.getTimeZone().getID());
+            assertEquals(
+                "Calendar from Calendar.getInstance(TimeZone zone=\"uslui\", Locale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][2], cal.getType());
+
+            cal = Calendar.getInstance(other, ulocale);
+            assertEquals(
+                "TimeZone from Calendar.getInstance(TimeZone zone=\"uslui\", ULocale loc=\"" + TESTS[i][0] + "\")",
+                         other.getID(), cal.getTimeZone().getID());
+            assertEquals(
+                "Calendar from Calendar.getInstance(TimeZone zone=\"uslui\", ULocale loc=\"" + TESTS[i][0] + "\")",
+                         TESTS[i][2], cal.getType());
         }
     }
 }

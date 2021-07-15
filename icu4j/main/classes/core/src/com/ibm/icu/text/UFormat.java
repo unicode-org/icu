@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2003-2015, International Business Machines Corporation and
@@ -30,8 +30,7 @@ public abstract class UFormat extends Format {
      * A field that represents a span of text that may be composed with other fields.
      * SpanField classes usually have an associated value.
      *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 64
      */
     public static abstract class SpanField extends Format.Field {
         private static final long serialVersionUID = -4732719509273350606L;
@@ -39,8 +38,7 @@ public abstract class UFormat extends Format {
         /**
          * Construct a new instance.
          *
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 64
          */
         protected SpanField(String name) {
             super(name);
@@ -78,7 +76,6 @@ public abstract class UFormat extends Format {
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8 (retain)
-     * @provisional This API might change or be removed in a future release.
      */
     public final ULocale getLocale(ULocale.Type type) {
         return type == ULocale.ACTUAL_LOCALE ?

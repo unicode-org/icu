@@ -115,7 +115,7 @@ int main(int argc, char* argv[]) {
           test = test->prev();
         }
       }
-      delete[] arg_copy;
+      free(arg_copy);
     }
   }
   if (print_run_count && tests_run != 1)

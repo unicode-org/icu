@@ -1,78 +1,138 @@
 # Azure Pipelines (VSTS) configuration for CI builds for ICU.
 
-resources:
-  - repo: self
-    lfs: true
-    fetchDepth: 1
-
 jobs:
 #-------------------------------------------------------------------------
-- job: ICU4J_OpenJDK_Ubuntu_1604
-  displayName: 'J: Linux OpenJDK (Ubuntu 16.04)'
+- job: ICU4J_OpenJDK_Ubuntu_1804
+  displayName: 'J: Linux OpenJDK (Ubuntu 18.04)'
   timeoutInMinutes: 20
   pool:
-    vmImage: 'Ubuntu 16.04'
+    vmImage: 'ubuntu-18.04'
     demands: ant
   steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
     - script: |
         echo "Building ICU4J" && cd icu4j && ant init && ant check 
       displayName: 'Build and Test'
       env:
         BUILD: ICU4J
+    # exit with a non-zero status in order to make this step show as a red X in the UI.
     - script: |
-        cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`
+        [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;` && exit 1
       condition: failed() # only run if the build fails.
       displayName: 'List failures (if any)'
 #-------------------------------------------------------------------------
-- job: ICU4C_Clang_Ubuntu_1604
-  displayName: 'C: Linux Clang (Ubuntu 16.04)'
+- job: ICU4C_Clang_Ubuntu_1804
+  displayName: 'C: Linux Clang (Ubuntu 18.04)'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'Ubuntu 16.04'
+    vmImage: 'ubuntu-18.04'
   steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
     - script: |
         cd icu4c/source && ./runConfigureICU Linux && make -j2 check
       displayName: 'Build and Test'
       env:
         CC: clang
         CXX: clang++
+    - script: |
+        cd icu4c/source/test/cintltst && LANG=C LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./cintltst /tsutil/cloctst/TestCDefaultLocale
+      displayName: 'Test C Default locale'
+    - script: |
+        cd icu4c/source/test/cintltst && LANG=C.UTF-8 LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./cintltst /tsutil/cloctst/TestCDefaultLocale
+      displayName: 'Test C.UTF-8 Default locale'
 #-------------------------------------------------------------------------
-- job: ICU4C_Clang_Ubuntu_1604_WarningsAsErrors
-  displayName: 'C: Linux Clang WarningsAsErrors (Ubuntu 16.04)'
+- job: ICU4C_Clang_Ubuntu_1804_WarningsAsErrors
+  displayName: 'C: Linux Clang WarningsAsErrors (Ubuntu 18.04)'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'Ubuntu 16.04'
+    vmImage: 'ubuntu-18.04'
   steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
     - script: |
-        export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi" && cd icu4c/source && ./runConfigureICU Linux && make -j2 tests
+        export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor" && cd icu4c/source && ./runConfigureICU Linux && make -j2 tests
       displayName: 'Build only (WarningsAsErrors)'
       env:
         CC: clang
         CXX: clang++
 #-------------------------------------------------------------------------
-- job: ICU4C_Clang_Ubuntu_DataFilter_1604
-  displayName: 'C: Linux Clang DataFilter (Ubuntu 16.04)'
+- job: ICU4C_Clang_Ubuntu_DataFilter_1804
+  displayName: 'C: Linux Clang DataFilter (Ubuntu 18.04)'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'Ubuntu 16.04'
+    vmImage: 'ubuntu-18.04'
   steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
     - script: |
-        cd icu4c/source && ICU_DATA_FILTER_FILE=../../.ci-builds/data-filter.json ./runConfigureICU Linux && make -j2
+        cd icu4c/source && \
+        ICU_DATA_FILTER_FILE=../../.ci-builds/data-filter.json ./runConfigureICU Linux && \
+        make -j2 tests && \
+        \[ ! -d data/out/build/icudt66l/translit \] && \
+        (cd test/intltest && LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./intltest translit/TransliteratorTest/TestBasicTransliteratorEvenWithoutData)
       displayName: 'Build with Data Filter'
       env:
         CC: clang
         CXX: clang++
 #-------------------------------------------------------------------------
-- job: ICU4C_MSVC_x64_Release_Distrelease
-  displayName: 'C: MSVC 64-bit Release (VS 2017) + Distrelease'
+- job: ICU4C_Clang_Cpp14_Debug_Ubuntu_1804
+  displayName: 'C: Linux Clang C++14 Debug (Ubuntu 18.04)'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'vs2017-win2016'
+    vmImage: 'ubuntu-18.04'
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    # This is to work-around issue: https://github.com/actions/virtual-environments/issues/3376
+    # Once the Ubuntu 18.04 build bot image is fixed, we can remove this work-around.
+    - script: |
+        sudo apt remove libgcc-11-dev gcc-11
+      displayName: Remove GCC 11 (work-around)
+    - script: |
+        export CXXFLAGS="-std=c++14 -Winvalid-constexpr" && cd icu4c/source && ./runConfigureICU --enable-debug --disable-release Linux && make -j2 check
+      displayName: 'Build and Test C++14'
+      env:
+        CC: clang
+        CXX: clang++
+#-------------------------------------------------------------------------
+- job: ICU4C_GCC_Ubuntu_2004
+  displayName: 'C: Linux GCC (Ubuntu 20.04)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'ubuntu-20.04'
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    - script: |
+        cd icu4c/source && ./runConfigureICU Linux && make -j2 check
+      displayName: 'Build and Test'
+      env:
+        CC: gcc
+        CXX: g++
+#-------------------------------------------------------------------------
+# VS 2019 Builds
+#-------------------------------------------------------------------------
+- job: ICU4C_MSVC_x64_Release_Distrelease
+  displayName: 'C: MSVC 64-bit Release (VS 2019) + Distrelease'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'windows-2019'
     demands: 
       - msbuild
       - visualstudio
       - Cmd
   steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
     - task: VSBuild@1
       displayName: 'Build Solution'
       inputs:
@@ -98,21 +158,29 @@ jobs:
         ArtifactName: '$(Build.BuildNumber)_ICU4C_MSVC_x64_Release'
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x86_Release_Distrelease
-  displayName: 'C: MSVC 32-bit Release (VS 2017) + Distrelease'
+  displayName: 'C: MSVC 32-bit Release (VS 2019) + Distrelease'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'vs2017-win2016'
+    vmImage: 'windows-2019'
     demands: 
       - msbuild
       - visualstudio
       - Cmd
   steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
     - task: VSBuild@1
       displayName: 'Build Solution'
       inputs:
         solution: icu4c/source/allinone/allinone.sln
         platform: Win32
         configuration: Release
+    - task: BatchScript@1
+      displayName: 'Run Tests (icucheck.bat)'
+      inputs:
+        filename: icu4c/source/allinone/icucheck.bat
+        arguments: 'x86 Release'
     - task: PowerShell@2
       displayName: 'PowerShell: Distrelease script (x86)'
       inputs:
@@ -126,16 +194,19 @@ jobs:
         PathtoPublish: 'icu4c/source/dist/icu-windows.zip'
         ArtifactName: '$(Build.BuildNumber)_ICU4C_MSVC_x86_Release'
 #-------------------------------------------------------------------------
-- job: ICU4C_MSVC_x64_ARM32_ARM64_Release
-  displayName: 'C: MSVC x64 ARM32 ARM64 Release (VS 2017)'
+- job: ICU4C_MSVC_x64_ARM32_ARM64_Release_Distrelease
+  displayName: 'C: MSVC x64 ARM32 ARM64 Release (VS 2019) + Distrelease ARM64'
   timeoutInMinutes: 60
   pool:
-    vmImage: 'vs2017-win2016'
+    vmImage: 'windows-2019'
     demands: 
       - msbuild
       - visualstudio
       - Cmd
   steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
     - task: VSBuild@1
       displayName: 'Build Solution'
       inputs:
@@ -154,9 +225,54 @@ jobs:
         solution: icu4c/source/allinone/allinone.sln
         platform: ARM64
         configuration: Release
+    - task: PowerShell@2
+      displayName: 'PowerShell: Distrelease script (ARM64)'
+      inputs:
+        targetType: filePath
+        filePath: 'icu4c/packaging/distrelease.ps1'
+        arguments: '-arch ARM64'
+        workingDirectory: icu4c
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish ARM64 Artifacts: icu-windows.zip'
+      inputs:
+        PathtoPublish: 'icu4c/source/dist/icu-windows.zip'
+        ArtifactName: '$(Build.BuildNumber)_ICU4C_MSVC_ARM64_Release'
 #-------------------------------------------------------------------------
-- job: ICU4C_MSVC_x64_Release_DataFilter
-  displayName: 'C: MSVC 64-bit Release DataFilter (VS 2017)'
+- job: ICU4C_MSVC_x64_ARM64_Debug
+  displayName: 'C: MSVC x64 ARM64 Debug (VS 2019)'
+  timeoutInMinutes: 45
+  pool:
+    vmImage: 'windows-2019'
+    demands: 
+      - msbuild
+      - visualstudio
+      - Cmd
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    - task: VSBuild@1
+      displayName: 'Build Solution'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: x64
+        configuration: Debug
+    - task: BatchScript@1
+      displayName: 'Run x64 Debug Tests (icucheck.bat)'
+      inputs:
+        filename: icu4c/source/allinone/icucheck.bat
+        arguments: 'x64 Debug'
+    - task: VSBuild@1
+      displayName: 'Build ARM64 Debug'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: ARM64
+        configuration: Debug
+#-------------------------------------------------------------------------
+# VS 2017 Builds
+#-------------------------------------------------------------------------
+- job: ICU4C_MSVC_x64_Release_VS2017
+  displayName: 'C: MSVC 64-bit Release (VS 2017)'
   timeoutInMinutes: 30
   pool:
     vmImage: 'vs2017-win2016'
@@ -165,19 +281,22 @@ jobs:
       - visualstudio
       - Cmd
   steps:
-    - powershell: |
-        $filterPath = $Env:BUILD_SOURCESDIRECTORY + "\.ci-builds\data-filter.json"
-        $vstsCommandString = "vso[task.setvariable variable=ICU_DATA_FILTER_FILE]" + $filterPath
-        Write-Host "##$vstsCommandString"
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
     - task: VSBuild@1
-      displayName: 'Build Solution with Data Filter'
+      displayName: 'Build Solution'
       inputs:
         solution: icu4c/source/allinone/allinone.sln
         platform: x64
         configuration: Release
-        msbuildArgs: '/p:SkipUWP=true'
+    - task: BatchScript@1
+      displayName: 'Run Tests (icucheck.bat)'
+      inputs:
+        filename: icu4c/source/allinone/icucheck.bat
+        arguments: 'x64 Release'
 #-------------------------------------------------------------------------
-- job: ICU4C_MSVC_x86_Debug
+- job: ICU4C_MSVC_x86_Debug_VS2017
   displayName: 'C: MSVC 32-bit Debug (VS 2017)'
   timeoutInMinutes: 60
   pool:
@@ -187,6 +306,9 @@ jobs:
       - visualstudio
       - Cmd
   steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
     - task: VSBuild@1
       displayName: 'Build Solution'
       inputs:
@@ -199,35 +321,28 @@ jobs:
         filename: icu4c/source/allinone/icucheck.bat
         arguments: 'x86 Debug'
 #-------------------------------------------------------------------------
-# Using a manual install of Python 3, until the vs2015 image has it 
-# by default.
-#
+# VS2019 using the VS2015 toolset
+#-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x64_Release_VS2015
   displayName: 'C: MSVC 64-bit Release (VS 2015)'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'vs2015-win2012r2'
+    vmImage: 'windows-2019'
     demands: 
       - msbuild
       - visualstudio
       - Cmd
   steps:
-    - powershell: 'Invoke-WebRequest https://www.python.org/ftp/python/3.7.2/python-3.7.2-amd64-webinstall.exe -OutFile c:\py3-setup.exe'
-    - script: |
-        c:\py3-setup.exe /quiet PrependPath=1 InstallAllUsers=1 Include_launcher=1 InstallLauncherAllUsers=1 Include_test=0 Include_doc=0 Include_dev=0 Include_debug=0 Include_tcltk=0 TargetDir=c:\py3
-    - script: |
-        @echo ##vso[task.prependpath]C:\py3
-        @echo ##vso[task.prependpath]C:\py3\Scripts
-    - script: |
-        python --version
-        py -3 --version
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
     - task: VSBuild@1
       displayName: 'Build Solution'
       inputs:
         solution: icu4c/source/allinone/allinone.sln
         platform: x64
         configuration: Release
-        msbuildArgs: '/p:SkipUWP=true'
+        msbuildArgs: /p:SkipUWP=true /p:DefaultPlatformToolset=v140 /p:AutodetectWin10SDK=true
     - task: BatchScript@1
       displayName: 'Run Tests (icucheck.bat)'
       inputs:
@@ -242,6 +357,9 @@ jobs:
     demands:
       - Cmd
   steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
     - script: |
        choco install -y msys2
        rem refreshenv
@@ -254,8 +372,17 @@ jobs:
       displayName: 'Install mingw-w64-x86_64-toolchain'
     - script: |
        set MSYSTEM=MINGW64
-       c:\tools\msys64\usr\bin\bash.exe -lc "cd $BUILD_SOURCESDIRECTORY && cd icu4c/source && ./runConfigureICU MinGW && make -j2 check"
-      displayName: 'Build and Test ICU4C'
+       c:\tools\msys64\usr\bin\bash.exe -lc "cd $BUILD_SOURCESDIRECTORY && cd icu4c/source && ./runConfigureICU MinGW --prefix='/tmp/build-icu' && make -j2 check"
+      displayName: 'Build and Test'
+    - script: |
+       set MSYSTEM=MINGW64
+       c:\tools\msys64\usr\bin\bash.exe -lc "cd $BUILD_SOURCESDIRECTORY && cd icu4c/source && make install && cd /tmp/build-icu && echo 'Recursive ls' && ls -lR"
+      displayName: 'make install'
+    - script: |
+       set MSYSTEM=MINGW64
+       c:\tools\msys64\usr\bin\bash.exe -lc "echo 'Run icuinfo from MSYS shell' && cd /tmp/build-icu/bin && ./icuinfo.exe"
+       echo 'Run icuinfo from CMD shell' && cd /d C:\tools\msys64\tmp\build-icu\bin && set PATH=C:\tools\msys64\mingw64\bin;%PATH% && icuinfo.exe"
+      displayName: 'run icuinfo'
 #-------------------------------------------------------------------------
 - job: ICU4C_Clang_MacOSX_WarningsAsErrors
   displayName: 'C: macOSX Clang WarningsAsErrors (Mojave 10.14)'
@@ -263,9 +390,80 @@ jobs:
   pool:
     vmImage: 'macOS-10.14'
   steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
     - script: |
-        export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi" && cd icu4c/source && ./runConfigureICU MacOSX && make -j2 tests
-      displayName: 'Build only (WarningsAsErrors)'
+        export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor" && cd icu4c/source && ./runConfigureICU MacOSX && make -j2 check
+      displayName: 'Build and Test (WarningsAsErrors)'
       env:
         CC: clang
         CXX: clang++
+#-------------------------------------------------------------------------
+- job: ICU4C_Cygwin_GCC_x86_64_Release
+  displayName: 'C: Cygwin GCC x86_64 Release'
+  timeoutInMinutes: 180
+  pool:
+    vmImage: 'windows-2019'
+  variables:
+    ICU_CI_CACHE: c:\icu-ci-cache
+    CYG_URL: https://cygwin.com/setup-x86_64.exe
+    CYG_MIRROR: http://mirrors.kernel.org/sourceware/cygwin/
+    CYG_PACKAGES: automake,gcc-core,gcc-g++,make,pkg-config,perl,python3
+    CYG_ROOT: c:\cygwin-root
+    CYG_CACHE: '$(ICU_CI_CACHE)\cygwin64-v3'
+    CYG_CACHED_SETUP: '$(CYG_CACHE)\setup.exe'
+    CYG_VERSION_KEY: cygwin-3.2
+  steps:
+    # Use 'autocrlf input' since checked-in files may already be using CRLF.
+    - script: |
+        git config --global core.autocrlf input
+      displayName: 'Configure Git to checkout with Unix line endings (LF)'
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    # Cache expires after 7 days of no activity.
+    - task: Cache@2
+      displayName: 'Restore Cygwin cache'
+      inputs:
+        # Use the contents of the file ".azure-pipelines.yml" as part of the key, as that contains the list of CYG_PACKAGES.
+        # Also include the Cygwin version as part of the key. If we want to use a newer version of Cygwin, we can update CYG_VERSION_KEY.
+        # Note: CYG_VERSION_KEY may become out of sync with (older than) the version we actually use if we update this file
+        #       without updating CYG_VERSION_KEY. Any updates to this file guarantees that we're using the latest version.
+        key: '"$(CYG_VERSION_KEY)" | .ci-builds/.azure-pipelines.yml'
+        path: "$(CYG_CACHE)"
+    - task: PowerShell@2
+      displayName: 'Download Cygwin setup'
+      inputs:
+        targetType: inline
+        script: |
+          if ( !(Test-Path "${env:CYG_CACHED_SETUP}" -NewerThan (Get-Date).AddDays(-7)) )
+          {
+            Write-Host "Cached Cygwin setup does not exist or is older than 7 days, downloading from external site."
+
+            New-Item -Force -Type Directory $env:CYG_CACHE
+            Write-Host "Downloading Cygwin setup..."
+
+            $start_time = Get-Date
+            (New-Object System.Net.WebClient).DownloadFile($env:CYG_URL, $env:CYG_CACHED_SETUP)
+
+            Write-Output "Download took: $((Get-Date).Subtract($start_time).Seconds) second(s)."
+          }
+    - script: |
+        %CYG_CACHED_SETUP% --no-verify --quiet-mode --no-shortcuts --no-startmenu --no-desktop --upgrade-also --only-site --site "%CYG_MIRROR%" --root "%CYG_ROOT%" --local-package-dir "%CYG_CACHE%" --packages "%CYG_PACKAGES%"
+      displayName: 'Install Cygwin'
+    - script: |
+        %CYG_ROOT%\\bin\\sh -lc 'echo Hello' && %CYG_ROOT%\\bin\\sh -lc 'uname -a'
+      displayName: 'Check Cygwin environment'
+    - script: |
+        %CYG_ROOT%\\bin\\bash -lc "cd $(cygpath \"$(Build.SourcesDirectory)\") && cd icu4c/source && ./runConfigureICU Cygwin && make tests"
+      displayName: 'Build ICU (source and test)'
+      env:
+        CC: gcc
+        CXX: g++
+    - script: |
+        %CYG_ROOT%\\bin\\bash -lc "cd $(cygpath \"$(Build.SourcesDirectory)\") && cd icu4c/source && make check"
+      displayName: 'Run Tests'
+      env:
+        CC: gcc
+        CXX: g++

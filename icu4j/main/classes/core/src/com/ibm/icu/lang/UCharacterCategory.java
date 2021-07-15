@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /**
  *******************************************************************************
  * Copyright (C) 1996-2004, International Business Machines Corporation and    *
@@ -105,7 +105,7 @@ public final class UCharacterCategory implements ECharacterCategory
     // private constructor -----------------------------------------------
     ///CLOVER:OFF 
     /**
-     * Private constructor to prevent initialisation
+     * Private constructor to prevent initialization
      */
     private UCharacterCategory()
     {

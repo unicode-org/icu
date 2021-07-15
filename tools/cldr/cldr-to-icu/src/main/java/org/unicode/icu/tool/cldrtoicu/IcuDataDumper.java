@@ -260,14 +260,14 @@ final class IcuDataDumper {
 
         private RbPath getPathFromStack() {
             if (pathStack.isEmpty()) {
-                return RbPath.empty();
+                return RbPath.of();
             }
             List<String> segments = new ArrayList<>();
             Iterables.addAll(segments, pathStack);
             if (segments.get(0).matches("<[0-9]{4}>")) {
                 segments.remove(0);
             }
-            return segments.isEmpty() ? RbPath.empty() : RbPath.of(Lists.reverse(segments));
+            return RbPath.of(Lists.reverse(segments));
         }
 
         private String getSegment(String segmentOrNull) {

@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 smn{
     AuxExemplarCharacters{"[à ç é è í ñ ń ó ò q ú ü w x æ ø å ã ö]"}
     ExemplarCharacters{"[a â b c č d đ e f g h i j k l m n ŋ o p r s š t u v y z ž ä á]"}
@@ -21,100 +22,64 @@ smn{
             patternsLong{
                 decimalFormat{
                     1000{
-                        few{"0K"}
-                        many{"0K"}
                         one{"0 tuhháát"}
                         other{"0 tuhháát"}
                         two{"0 tuhháát"}
-                        zero{"0K"}
                     }
                     10000{
-                        few{"00K"}
-                        many{"00K"}
                         one{"00 tuhháát"}
                         other{"00 tuhháát"}
                         two{"00 tuhháát"}
-                        zero{"00K"}
                     }
                     100000{
-                        few{"000K"}
-                        many{"000K"}
                         one{"000 tuhháát"}
                         other{"000 tuhháát"}
                         two{"000 tuhháát"}
-                        zero{"000K"}
                     }
                     1000000{
-                        few{"0M"}
-                        many{"0M"}
                         one{"0 miljovn"}
                         other{"0 miljovn"}
                         two{"0 miljovn"}
-                        zero{"0M"}
                     }
                     10000000{
-                        few{"00M"}
-                        many{"00M"}
                         one{"00 miljovn"}
                         other{"00 miljovn"}
                         two{"00 miljovn"}
-                        zero{"00M"}
                     }
                     100000000{
-                        few{"000M"}
-                        many{"000M"}
                         one{"000 miljovn"}
                         other{"000 miljovn"}
                         two{"000 miljovn"}
-                        zero{"000M"}
                     }
                     1000000000{
-                        few{"0G"}
-                        many{"0G"}
                         one{"0 miljard"}
                         other{"0 miljard"}
                         two{"0 miljard"}
-                        zero{"0G"}
                     }
                     10000000000{
-                        few{"00G"}
-                        many{"00G"}
                         one{"00 miljard"}
                         other{"00 miljard"}
                         two{"00 miljard"}
-                        zero{"00G"}
                     }
                     100000000000{
-                        few{"000G"}
-                        many{"000G"}
                         one{"000 miljard"}
                         other{"000 miljard"}
                         two{"000 miljard"}
-                        zero{"000G"}
                     }
                     1000000000000{
-                        few{"0T"}
-                        many{"0T"}
                         one{"0 biljovn"}
                         other{"0 biljovn"}
                         two{"0 biljovn"}
-                        zero{"0T"}
                     }
                     10000000000000{
-                        few{"00T"}
-                        many{"00T"}
                         one{"00 biljovn"}
                         other{"00 biljovn"}
                         two{"00 biljovn"}
-                        zero{"00T"}
                     }
                     100000000000000{
-                        few{"000T"}
-                        many{"000T"}
                         one{"000 biljovn"}
                         other{"000 biljovn"}
                         two{"000 biljovn"}
-                        zero{"000T"}
                     }
                 }
             }
@@ -134,7 +99,6 @@ smn{
         }
         minimumGroupingDigits{"1"}
     }
-    Version{"36"}
     calendar{
         generic{
             DateTimePatterns{
@@ -151,6 +115,16 @@ smn{
                 "{1} 'tme' {0}",
                 "{1} 'tme' {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMccccd",
+                "GyMMMMd",
+                "GyMd",
+                "GGGGGyMd",
             }
             availableFormats{
                 E{"ccc"}
@@ -270,6 +244,16 @@ smn{
                 "{1} 'tme' {0}",
                 "{1} 'tme' {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "yMMMMccccd",
+                "yMMMMd",
+                "yMMMd",
+                "yMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}

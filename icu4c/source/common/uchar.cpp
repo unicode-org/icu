@@ -194,7 +194,7 @@ u_isISOControl(UChar32 c) {
 
 /* Some control characters that are used as space. */
 #define IS_THAT_CONTROL_SPACE(c) \
-    (c<=0x9f && ((c>=TAB && c<=CR) || (c>=0x1c && c <=0x1f) || c==NL))
+    (c<=0x9f && ((c>=TAB && c<=CR) || (c>=0x1c && c <=0x1f) || c==0x85))
 
 /* Java has decided that U+0085 New Line is not whitespace any more. */
 #define IS_THAT_ASCII_CONTROL_SPACE(c) \
@@ -556,7 +556,6 @@ u_charAge(UChar32 c, UVersionInfo versionArray) {
 
 U_CAPI UScriptCode U_EXPORT2
 uscript_getScript(UChar32 c, UErrorCode *pErrorCode) {
-    uint32_t scriptX;
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return USCRIPT_INVALID_CODE;
     }
@@ -564,48 +563,46 @@ uscript_getScript(UChar32 c, UErrorCode *pErrorCode) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return USCRIPT_INVALID_CODE;
     }
-    scriptX=u_getUnicodeProperties(c, 0)&UPROPS_SCRIPT_X_MASK;
+    uint32_t scriptX=u_getUnicodeProperties(c, 0)&UPROPS_SCRIPT_X_MASK;
+    uint32_t codeOrIndex=uprops_mergeScriptCodeOrIndex(scriptX);
     if(scriptX<UPROPS_SCRIPT_X_WITH_COMMON) {
-        return (UScriptCode)scriptX;
+        return (UScriptCode)codeOrIndex;
     } else if(scriptX<UPROPS_SCRIPT_X_WITH_INHERITED) {
         return USCRIPT_COMMON;
     } else if(scriptX<UPROPS_SCRIPT_X_WITH_OTHER) {
         return USCRIPT_INHERITED;
     } else {
-        return (UScriptCode)scriptExtensions[scriptX&UPROPS_SCRIPT_MASK];
+        return (UScriptCode)scriptExtensions[codeOrIndex];
     }
 }
 
 U_CAPI UBool U_EXPORT2
 uscript_hasScript(UChar32 c, UScriptCode sc) {
-    const uint16_t *scx;
     uint32_t scriptX=u_getUnicodeProperties(c, 0)&UPROPS_SCRIPT_X_MASK;
+    uint32_t codeOrIndex=uprops_mergeScriptCodeOrIndex(scriptX);
     if(scriptX<UPROPS_SCRIPT_X_WITH_COMMON) {
-        return sc==(UScriptCode)scriptX;
+        return sc==(UScriptCode)codeOrIndex;
     }
 
-    scx=scriptExtensions+(scriptX&UPROPS_SCRIPT_MASK);
+    const uint16_t *scx=scriptExtensions+codeOrIndex;
     if(scriptX>=UPROPS_SCRIPT_X_WITH_OTHER) {
         scx=scriptExtensions+scx[1];
     }
-    if(sc>=USCRIPT_CODE_LIMIT) {
+    uint32_t sc32=sc;
+    if(sc32>0x7fff) {
         /* Guard against bogus input that would make us go past the Script_Extensions terminator. */
         return FALSE;
     }
-    while(sc>*scx) {
+    while(sc32>*scx) {
         ++scx;
     }
-    return sc==(*scx&0x7fff);
+    return sc32==(*scx&0x7fff);
 }
 
 U_CAPI int32_t U_EXPORT2
 uscript_getScriptExtensions(UChar32 c,
                             UScriptCode *scripts, int32_t capacity,
                             UErrorCode *pErrorCode) {
-    uint32_t scriptX;
-    int32_t length;
-    const uint16_t *scx;
-    uint16_t sx;
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
     }
@@ -613,21 +610,23 @@ uscript_getScriptExtensions(UChar32 c,
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-    scriptX=u_getUnicodeProperties(c, 0)&UPROPS_SCRIPT_X_MASK;
+    uint32_t scriptX=u_getUnicodeProperties(c, 0)&UPROPS_SCRIPT_X_MASK;
+    uint32_t codeOrIndex=uprops_mergeScriptCodeOrIndex(scriptX);
     if(scriptX<UPROPS_SCRIPT_X_WITH_COMMON) {
         if(capacity==0) {
             *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
         } else {
-            scripts[0]=(UScriptCode)scriptX;
+            scripts[0]=(UScriptCode)codeOrIndex;
         }
         return 1;
     }
 
-    scx=scriptExtensions+(scriptX&UPROPS_SCRIPT_MASK);
+    const uint16_t *scx=scriptExtensions+codeOrIndex;
     if(scriptX>=UPROPS_SCRIPT_X_WITH_OTHER) {
         scx=scriptExtensions+scx[1];
     }
-    length=0;
+    int32_t length=0;
+    uint16_t sx;
     do {
         sx=*scx++;
         if(length<capacity) {
@@ -678,14 +677,14 @@ uchar_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
     sa->add(sa->set, CR+1); /* range TAB..CR */
     sa->add(sa->set, 0x1c);
     sa->add(sa->set, 0x1f+1);
-    USET_ADD_CP_AND_NEXT(sa, NL);
+    USET_ADD_CP_AND_NEXT(sa, 0x85);  // NEXT LINE (NEL)
 
     /* add for u_isIDIgnorable() what was not added above */
-    sa->add(sa->set, DEL); /* range DEL..NBSP-1, NBSP added below */
+    sa->add(sa->set, 0x7f); /* range DEL..NBSP-1, NBSP added below */
     sa->add(sa->set, HAIRSP);
     sa->add(sa->set, RLM+1);
-    sa->add(sa->set, INHSWAP);
-    sa->add(sa->set, NOMDIG+1);
+    sa->add(sa->set, 0x206a);  // INHIBIT SYMMETRIC SWAPPING
+    sa->add(sa->set, 0x206f+1);  // NOMINAL DIGIT SHAPES
     USET_ADD_CP_AND_NEXT(sa, ZWNBSP);
 
     /* add no-break spaces for u_isWhitespace() what was not added above */
@@ -694,23 +693,25 @@ uchar_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
     USET_ADD_CP_AND_NEXT(sa, NNBSP);
 
     /* add for u_digit() */
-    sa->add(sa->set, U_a);
-    sa->add(sa->set, U_z+1);
-    sa->add(sa->set, U_A);
-    sa->add(sa->set, U_Z+1);
-    sa->add(sa->set, U_FW_a);
-    sa->add(sa->set, U_FW_z+1);
-    sa->add(sa->set, U_FW_A);
-    sa->add(sa->set, U_FW_Z+1);
+    sa->add(sa->set, u'a');
+    sa->add(sa->set, u'z'+1);
+    sa->add(sa->set, u'A');
+    sa->add(sa->set, u'Z'+1);
+    // fullwidth
+    sa->add(sa->set, u'ａ');
+    sa->add(sa->set, u'ｚ'+1);
+    sa->add(sa->set, u'Ａ');
+    sa->add(sa->set, u'Ｚ'+1);
 
     /* add for u_isxdigit() */
-    sa->add(sa->set, U_f+1);
-    sa->add(sa->set, U_F+1);
-    sa->add(sa->set, U_FW_f+1);
-    sa->add(sa->set, U_FW_F+1);
+    sa->add(sa->set, u'f'+1);
+    sa->add(sa->set, u'F'+1);
+    // fullwidth
+    sa->add(sa->set, u'ｆ'+1);
+    sa->add(sa->set, u'Ｆ'+1);
 
     /* add for UCHAR_DEFAULT_IGNORABLE_CODE_POINT what was not added above */
-    sa->add(sa->set, WJ); /* range WJ..NOMDIG */
+    sa->add(sa->set, 0x2060); /* range 2060..206f */
     sa->add(sa->set, 0xfff0);
     sa->add(sa->set, 0xfffb+1);
     sa->add(sa->set, 0xe0000);

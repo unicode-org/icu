@@ -1,5 +1,5 @@
 // © 2018 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.number;
 
 import com.ibm.icu.impl.number.DecimalQuantity;
@@ -69,6 +69,7 @@ public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<
      * @param second
      *            The second number in the range, usually to the right in LTR locales.
      * @return A FormattedNumberRange object; call .toString() to get the string.
+     * @throws IllegalArgumentException if first or second is null
      * @stable ICU 63
      * @see NumberRangeFormatter
      */

@@ -1,14 +1,20 @@
 cmake_minimum_required(VERSION 3.0)
-project(double-conversion VERSION 3.1.4)
+project(double-conversion VERSION 3.1.5)
+
+if(BUILD_SHARED_LIBS AND MSVC)
+  set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
 
 set(headers
     double-conversion/bignum.h
     double-conversion/cached-powers.h
     double-conversion/diy-fp.h
     double-conversion/double-conversion.h
+    double-conversion/double-to-string.h
     double-conversion/fast-dtoa.h
     double-conversion/fixed-dtoa.h
     double-conversion/ieee.h
+    double-conversion/string-to-double.h
     double-conversion/strtod.h
     double-conversion/utils.h)
 
@@ -16,10 +22,10 @@ add_library(double-conversion
             double-conversion/bignum.cc
             double-conversion/bignum-dtoa.cc
             double-conversion/cached-powers.cc
-            double-conversion/diy-fp.cc
-            double-conversion/double-conversion.cc
+            double-conversion/double-to-string.cc
             double-conversion/fast-dtoa.cc
             double-conversion/fixed-dtoa.cc
+            double-conversion/string-to-double.cc
             double-conversion/strtod.cc
             ${headers})
 target_include_directories(
@@ -40,12 +46,13 @@ endif()
 ####
 # Installation (https://github.com/forexample/package-example)
 
+include(GNUInstallDirs)
+
 # Layout. This works for all platforms:
 #   * <prefix>/lib/cmake/<PROJECT-NAME>
 #   * <prefix>/lib/
 #   * <prefix>/include/
-set(config_install_dir "lib/cmake/${PROJECT_NAME}")
-set(include_install_dir "include")
+set(config_install_dir "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
 
 set(generated_dir "${CMAKE_CURRENT_BINARY_DIR}/generated")
 
@@ -81,17 +88,17 @@ configure_package_config_file(
 install(
     TARGETS double-conversion
     EXPORT "${targets_export_name}"
-    LIBRARY DESTINATION "lib"
-    ARCHIVE DESTINATION "lib"
-    RUNTIME DESTINATION "bin"
-    INCLUDES DESTINATION "${include_install_dir}"
+    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+    INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
 )
 
 # Headers:
 #   * double-conversion/*.h -> <prefix>/include/double-conversion/*.h
 install(
     FILES ${headers}
-    DESTINATION "${include_install_dir}/double-conversion"
+    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/double-conversion"
 )
 
 # Config

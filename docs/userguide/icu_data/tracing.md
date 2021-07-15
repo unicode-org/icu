@@ -1,10 +1,26 @@
+---
+layout: default
+title: Resource and Data Tracing
+nav_order: 2
+parent: ICU Data
+---
 <!--
 © 2019 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html
 -->
 
-Resource and Data Tracing
-=========================
+# Resource and Data Tracing
+{: .no_toc }
+
+## Contents
+{: .no_toc .text-delta }
+
+1. TOC
+{:toc}
+
+---
+
+## Overview
 
 When building an [ICU data filter specification](buildtool.md), it is useful to
 see what resources are being used by your application so that you can select

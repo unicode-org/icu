@@ -18,19 +18,28 @@ Requirements:
 
 To use the utility:
  1. Put both old and new ICU source trees on your system
- 2. Run "configure" in both old and new (you can use any mixture of in-source and out-of-source builds). Doxygen must be found during the configure phase, but you do not need to build the standard API docs.
- 3. create a Makefile.local in this readme's directory (tools/trunk/release/java/) 
-            with just these two lines:
-			OLD_ICU=/xsrl/E/icu-1.0
+
+2. Run "configure" in both old and new (you can use any mixture of in-source and out-of-source builds). Doxygen must be found during the configure phase, but you do not need to build the standard API docs.
+
+3. create a Makefile.local in this readme's directory (tools/trunk/release/java/) 
+            with just these two lines, for example:
+			OLD_ICU=/xsrl/E/icu-6.7
 			NEW_ICU=/xsrl/E/icu-6.8
-	   ( where these are the paths to the parent of 'source', etc)     
+
+           Set these paths to the location of parent directory of the
+	   ICU4C sources in the previous version (OLD) and the
+	   source of the current release (NEW)
+	   
            If your ICU is an out-of-source-build, add these two lines
            indicating the build location:
                         OLD_ICU_BUILD=/xsrl/E/icu-build-m48
                         NEW_ICU_BUILD=/xsrl/E/icu-build
- 4. from this directory, (tools/release/java/) run Make to build docs: (the tool will be built automatically)
-            make
- 5. This will create an 'APIChangeReport.html' file in this directory. Look it over, and then check it in to ${NEW_ICU}/APIChangeReport.html (parent of icu/source).
 
-Note: the ant build and makefile do not attempt to rebuild the jar. Run 'mvn package' separately if
-developing on the Java tool.
+4. from this directory, (tools/release/java/) run Make to build docs: (the tool will be built automatically)
+            make APIChangeReport.html
+            make APIChangeReport.md
+
+5. This will create 'APIChangeReport.html' and 'APIChangeReport.md" files in
+this directory. Look them over, and then check them into ${NEW_ICU}/APIChangeReport.* (parent of icu4c's source).
+
+Note: the ant build and makefile do not attempt to rebuild the jar. Run 'mvn package' separately if developing on the Java tool.

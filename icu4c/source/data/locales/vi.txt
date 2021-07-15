@@ -1,10 +1,12 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 vi{
+    AuxExemplarCharacters{"[f j w z]"}
     ExemplarCharacters{
-        "[a à ả ã á ạ ă ằ ẳ ẵ ắ ặ â ầ ẩ ẫ ấ ậ b c d đ e è ẻ ẽ é ẹ ê ề ể ễ ế ệ f g h i"
-        " ì ỉ ĩ í ị j k l m n o ò ỏ õ ó ọ ô ồ ổ ỗ ố ộ ơ ờ ở ỡ ớ ợ p q r s t u ù ủ ũ ú"
-        " ụ ư ừ ử ữ ứ ự v w x y ỳ ỷ ỹ ý ỵ z]"
+        "[a à ả ã á ạ ă ằ ẳ ẵ ắ ặ â ầ ẩ ẫ ấ ậ b c d đ e è ẻ ẽ é ẹ ê ề ể ễ ế ệ g h i ì"
+        " ỉ ĩ í ị k l m n o ò ỏ õ ó ọ ô ồ ổ ỗ ố ộ ơ ờ ở ỡ ớ ợ p q r s t u ù ủ ũ ú ụ ư"
+        " ừ ử ữ ứ ự v x y ỳ ỷ ỹ ý ỵ]"
     }
     ExemplarCharactersIndex{"[A Ă Â B C D Đ E Ê F G H I J K L M N O Ô Ơ P Q R S T U Ư V W X Y Z]"}
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
@@ -30,51 +32,39 @@ vi{
             patternsLong{
                 decimalFormat{
                     1000{
-                        one{"0 N"}
                         other{"0 nghìn"}
                     }
                     10000{
-                        one{"00 N"}
                         other{"00 nghìn"}
                     }
                     100000{
-                        one{"000 N"}
                         other{"000 nghìn"}
                     }
                     1000000{
-                        one{"0 Tr"}
                         other{"0 triệu"}
                     }
                     10000000{
-                        one{"00 Tr"}
                         other{"00 triệu"}
                     }
                     100000000{
-                        one{"000 Tr"}
                         other{"000 triệu"}
                     }
                     1000000000{
-                        one{"0 T"}
                         other{"0 tỷ"}
                     }
                     10000000000{
-                        one{"00 T"}
                         other{"00 tỷ"}
                     }
                     100000000000{
-                        one{"000 T"}
                         other{"000 tỷ"}
                     }
                     1000000000000{
-                        one{"0 NT"}
                         other{"0 nghìn tỷ"}
                     }
                     10000000000000{
-                        one{"00 NT"}
                         other{"00 nghìn tỷ"}
                     }
                     100000000000000{
-                        one{"000 NT"}
                         other{"000 nghìn tỷ"}
                     }
                 }
@@ -120,56 +110,45 @@ vi{
                 }
                 decimalFormat{
                     1000{
-                        one{"0 N"}
                         other{"0 N"}
                     }
                     10000{
-                        one{"00 N"}
                         other{"00 N"}
                     }
                     100000{
-                        one{"000 N"}
                         other{"000 N"}
                     }
                     1000000{
-                        one{"0 Tr"}
                         other{"0 Tr"}
                     }
                     10000000{
-                        one{"00 Tr"}
                         other{"00 Tr"}
                     }
                     100000000{
-                        one{"000 Tr"}
                         other{"000 Tr"}
                     }
                     1000000000{
-                        one{"0 T"}
                         other{"0 T"}
                     }
                     10000000000{
-                        one{"00 T"}
                         other{"00 T"}
                     }
                     100000000000{
-                        one{"000 T"}
                         other{"000 T"}
                     }
                     1000000000000{
-                        one{"0 NT"}
                         other{"0 NT"}
                     }
                     10000000000000{
-                        one{"00 NT"}
                         other{"00 NT"}
                     }
                     100000000000000{
-                        one{"000 NT"}
                         other{"000 NT"}
                     }
                 }
             }
             symbols{
+                approximatelySign{"~"}
                 decimal{","}
                 exponential{"E"}
                 group{"."}
@@ -183,19 +162,8 @@ vi{
                 superscriptingExponent{"×"}
             }
         }
-        minimalPairs{
-            ordinal{
-                one{"Rẽ vào lối rẽ thứ nhất bên phải."}
-                other{"Rẽ vào lối rẽ thứ {0} bên phải."}
-            }
-            plural{
-                one{"Rẽ vào lối rẽ thứ nhất bên phải."}
-                other{"Rẽ vào lối rẽ thứ {0} bên phải."}
-            }
-        }
         minimumGroupingDigits{"1"}
     }
-    Version{"36"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -212,6 +180,16 @@ vi{
                 "{1} 'lúc' {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMdd",
+                "GyMMdd",
+                "GGGGGyMMdd",
             }
             availableFormats{
                 M{"'tháng' L"}
@@ -240,6 +218,16 @@ vi{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "UMMMMEEEEdd",
+                "UMdd",
+                "UMMdd",
+                "yMMdd",
             }
             availableFormats{
                 Bh{"h B"}
@@ -701,6 +689,16 @@ vi{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMEEEEdd",
+                "GyMdd",
+                "GyMMdd",
+                "GGGGGyMMdd",
+            }
             availableFormats{
                 Bh{"h B"}
                 Bhm{"h:mm B"}
@@ -918,6 +916,16 @@ vi{
                 "{0}, {1}",
                 "{0}, {1}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMMdd",
+            }
             appendItems{
                 Timezone{"{0} {1}"}
             }
@@ -1118,7 +1126,7 @@ vi{
             eras{
                 abbreviated{
                     "Trước CN",
-                    "sau CN",
+                    "Sau CN",
                 }
                 abbreviated%variant{
                     "trước CN",
@@ -1129,12 +1137,12 @@ vi{
                     "sau CN",
                 }
                 wide{
-                    "Trước CN",
-                    "sau CN",
+                    "Trước Thiên Chúa",
+                    "Sau Công Nguyên",
                 }
                 wide%variant{
-                    "trước CN",
-                    "CN",
+                    "Trước Công Nguyên",
+                    "Công Nguyên",
                 }
             }
             intervalFormats{
@@ -1553,6 +1561,16 @@ vi{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMdd",
+                "GyMMdd",
+                "GyMMdd",
+            }
         }
         persian{
             monthNames{
@@ -1633,6 +1651,16 @@ vi{
                 "{1} 'lúc' {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMdd",
+                "GyMMdd",
+                "GGGGGyMMdd",
             }
             availableFormats{
                 M{"'tháng' L"}
@@ -1785,7 +1813,10 @@ vi{
         day-short{
             dn{"Ngày"}
             relative{
+                "-1"{"hôm qua"}
                 "-2"{"Hôm kia"}
+                "0"{"hôm nay"}
+                "1"{"ngày mai"}
                 "2"{"Ngày kia"}
             }
             relativeTime{
@@ -2506,6 +2537,10 @@ vi{
             middle{"{0} {1}"}
             start{"{0} {1}"}
         }
+        unit-short{
+            2{"{0}, {1}"}
+            end{"{0}, {1}"}
+        }
     }
     measurementSystemNames{
         UK{"Hệ Anh"}
@@ -2535,7 +2570,7 @@ vi{
         number{
             lenient{
                 "[\\-‒⁻₋−➖﹣－]",
-                "[,،٫、︐︑﹐﹑，､]",
+                "[,،٫⹁、︐︑﹐﹑，､]",
                 "[+⁺₊➕﬩﹢＋]",
             }
         }

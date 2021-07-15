@@ -4,22 +4,25 @@ package org.unicode.icu.tool.cldrtoicu;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.stream.Collectors.joining;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDraftStatus;
 import org.unicode.icu.tool.cldrtoicu.LdmlConverter.OutputType;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.SetMultimap;
+import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 import com.google.common.collect.TreeBasedTable;
 import com.google.common.collect.TreeMultimap;
@@ -29,11 +32,6 @@ import com.google.common.collect.TreeMultimap;
  * that was configured by text files such as "icu-locale-deprecates.xml" and "icu-config.
  */
 public final class IcuConverterConfig implements LdmlConverterConfig {
-
-    private static final Optional<Path> DEFAULT_CLDR_DIR =
-        Optional.ofNullable(System.getProperty("CLDR_DIR", null))
-            .map(d -> Paths.get(d).toAbsolutePath());
-
     private static final Optional<Path> DEFAULT_ICU_DIR =
         Optional.ofNullable(System.getProperty("ICU_DIR", null))
             .map(d -> Paths.get(d).toAbsolutePath());
@@ -41,25 +39,19 @@ public final class IcuConverterConfig implements LdmlConverterConfig {
     /** The builder with which to specify configuration for the {@link LdmlConverter}. */
     @SuppressWarnings("UnusedReturnValue")
     public static final class Builder {
-        private Path cldrDir = DEFAULT_CLDR_DIR.orElse(null);
         private Path outputDir =
             DEFAULT_ICU_DIR.map(d -> d.resolve("icu4c/source/data")).orElse(null);
         private Path specialsDir =
             DEFAULT_ICU_DIR.map(d -> d.resolve("icu4c/source/data/xml")).orElse(null);
         private ImmutableSet<OutputType> outputTypes = OutputType.ALL;
-        private CldrDraftStatus minimalDraftStatus = CldrDraftStatus.CONTRIBUTED;
+        private Optional<String> icuVersion = Optional.empty();
+        private Optional<String> icuDataVersion = Optional.empty();
+        private Optional<String> cldrVersion = Optional.empty();
+        private CldrDraftStatus minimumDraftStatus = CldrDraftStatus.CONTRIBUTED;
         private boolean emitReport = false;
         private final SetMultimap<IcuLocaleDir, String> localeIdsMap = TreeMultimap.create();
         private final Table<IcuLocaleDir, String, String> forcedAliases = TreeBasedTable.create();
-
-        /**
-         * Sets the CLDR base directory from which to load all CLDR data. This is optional if the
-         * {@code CLDR_DIR} environment variable is set, which will be used instead.
-         */
-        public Builder setCldrDir(Path cldrDir) {
-            this.cldrDir = checkNotNull(cldrDir.toAbsolutePath());
-            return this;
-        }
+        private final Table<IcuLocaleDir, String, String> forcedParents = TreeBasedTable.create();
 
         /**
          * Sets the output directory in which the ICU data directories and files will go. This is
@@ -91,14 +83,29 @@ public final class IcuConverterConfig implements LdmlConverterConfig {
             return this;
         }
 
-        /**
-         * Sets the minimum draft status for CLDR data to be converted (paths below this status are
-         * ignored during conversion). This is optional and defaults to {@link
-         * CldrDraftStatus#CONTRIBUTED}.
-         */
-        public Builder setMinimalDraftStatus(CldrDraftStatus minimalDraftStatus) {
-            this.minimalDraftStatus = checkNotNull(minimalDraftStatus);
+        public Builder setIcuVersion(String version) {
+            if (!version.isEmpty()) {
+                this.icuVersion = Optional.of(version);
+            }
             return this;
+        }
+
+        public Builder setIcuDataVersion(String version) {
+            if (!version.isEmpty()) {
+                this.icuDataVersion = Optional.of(version);
+            }
+            return this;
+        }
+
+        public Builder setCldrVersion(String version) {
+            if (!version.isEmpty()) {
+                this.cldrVersion = Optional.of(version);
+            }
+            return this;
+        }
+
+        public void setMinimumDraftStatus(CldrDraftStatus minimumDraftStatus) {
+            this.minimumDraftStatus = checkNotNull(minimumDraftStatus);
         }
 
         public Builder setEmitReport(boolean emitReport) {
@@ -116,32 +123,29 @@ public final class IcuConverterConfig implements LdmlConverterConfig {
             return this;
         }
 
+        public Builder addForcedParent(IcuLocaleDir dir, String localeId, String parent) {
+            forcedParents.put(dir, localeId, parent);
+            return this;
+        }
+
         /** Returns a converter config from the current builder state. */
         public LdmlConverterConfig build() {
             return new IcuConverterConfig(this);
         }
     }
 
-    private final Path cldrDir;
     private final Path outputDir;
     private final Path specialsDir;
     private final ImmutableSet<OutputType> outputTypes;
-    private final CldrDraftStatus minimalDraftStatus;
+    private final IcuVersionInfo versionInfo;
+    private final CldrDraftStatus minimumDraftStatus;
     private final boolean emitReport;
+    private final ImmutableSet<String> allLocaleIds;
     private final ImmutableSetMultimap<IcuLocaleDir, String> localeIdsMap;
     private final ImmutableTable<IcuLocaleDir, String, String> forcedAliases;
+    private final ImmutableTable<IcuLocaleDir, String, String> forcedParents;
 
     private IcuConverterConfig(Builder builder) {
-        this.cldrDir = checkNotNull(builder.cldrDir,
-            "must set a CLDR directory, or the CLDR_DIR system property");
-        if (DEFAULT_CLDR_DIR.isPresent() && !this.cldrDir.equals(DEFAULT_CLDR_DIR.get())) {
-            System.err.format(
-                "Warning: Specified CLDR base directory does not appear to match the"
-                    + " directory inferred by the 'CLDR_DIR' system property.\n"
-                    + "Specified: %s\n"
-                    + "Inferred: %s\n",
-                this.cldrDir, DEFAULT_CLDR_DIR.get());
-        }
         this.outputDir = checkNotNull(builder.outputDir);
         checkArgument(!Files.isRegularFile(outputDir),
             "specified output directory if not a directory: %s", outputDir);
@@ -153,19 +157,21 @@ public final class IcuConverterConfig implements LdmlConverterConfig {
         checkArgument(!this.outputTypes.isEmpty(),
             "must specify at least one output type to be generated (possible values are: %s)",
             Arrays.asList(OutputType.values()));
-        this.minimalDraftStatus = builder.minimalDraftStatus;
+        this.versionInfo = new IcuVersionInfo(
+            builder.icuVersion.orElseThrow(() -> new IllegalStateException("missing ICU version")),
+            builder.icuDataVersion.orElseThrow(() -> new IllegalStateException("missing ICU data version")),
+            builder.cldrVersion.orElse(CldrDataSupplier.getCldrVersionString()));
+        this.minimumDraftStatus = checkNotNull(builder.minimumDraftStatus);
         this.emitReport = builder.emitReport;
+        // getAllLocaleIds() returns the union of all the specified IDs in the map.
+        this.allLocaleIds = ImmutableSet.copyOf(builder.localeIdsMap.values());
         this.localeIdsMap = ImmutableSetMultimap.copyOf(builder.localeIdsMap);
         this.forcedAliases = ImmutableTable.copyOf(builder.forcedAliases);
+        this.forcedParents = ImmutableTable.copyOf(builder.forcedParents);
     }
 
     public static Builder builder() {
         return new Builder();
-    }
-
-    @Override
-    public Path getCldrDirectory() {
-        return cldrDir;
     }
 
     @Override
@@ -179,13 +185,18 @@ public final class IcuConverterConfig implements LdmlConverterConfig {
     }
 
     @Override
-    public CldrDraftStatus getMinimumDraftStatus() {
-        return minimalDraftStatus;
+    public Path getSpecialsDir() {
+        return specialsDir;
     }
 
     @Override
-    public Path getSpecialsDir() {
-        return specialsDir;
+    public IcuVersionInfo getVersionInfo() {
+        return versionInfo;
+    }
+
+    @Override
+    public CldrDraftStatus getMinimumDraftStatus() {
+        return minimumDraftStatus;
     }
 
     @Override
@@ -194,8 +205,17 @@ public final class IcuConverterConfig implements LdmlConverterConfig {
     }
 
     @Override
-    public Map<String, String> getForcedAliases(IcuLocaleDir dir) {
+    public ImmutableMap<String, String> getForcedAliases(IcuLocaleDir dir) {
         return forcedAliases.row(dir);
+    }
+
+    @Override
+    public ImmutableMap<String, String> getForcedParents(IcuLocaleDir dir) {
+        return forcedParents.row(dir);
+    }
+
+    @Override public ImmutableSet<String> getAllLocaleIds() {
+        return allLocaleIds;
     }
 
     @Override public ImmutableSet<String> getTargetLocaleIds(IcuLocaleDir dir) {

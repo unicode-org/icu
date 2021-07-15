@@ -1,8 +1,8 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 en_AU{
     %%Parent{"en_001"}
-    Version{"36"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -10,11 +10,6 @@ en_AU{
     }
     units{
         concentr{
-            percent{
-                dnam{"per cent"}
-                one{"{0} per cent"}
-                other{"{0} per cent"}
-            }
             permille{
                 dnam{"per mill"}
                 one{"{0} per mill"}
@@ -38,16 +33,27 @@ en_AU{
         }
         mass{
             metric-ton{
-                dnam{"tonnes"}
                 one{"tonne"}
                 other{"{0} tonnes"}
+            }
+        }
+        pressure{
+            pound-force-per-square-inch{
+                dnam{"pounds per square inch"}
+                one{"{0} pound per square inch"}
+                other{"{0} pounds per square inch"}
             }
         }
         temperature{
             generic{
                 dnam{"degrees"}
-                one{"{0} degree"}
-                other{"{0} degrees"}
+            }
+        }
+        volume{
+            fluid-ounce{
+                dnam{"fluid ounces"}
+                one{"{0} fluid ounce"}
+                other{"{0} fluid ounces"}
             }
         }
     }
@@ -56,7 +62,7 @@ en_AU{
             per{"{0}/{1}"}
         }
         concentr{
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 one{"{0}mg/dL"}
                 other{"{0}mg/dL"}
@@ -68,7 +74,7 @@ en_AU{
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"L/100km"}
                 one{"{0}L/100km"}
                 other{"{0}L/100km"}
@@ -98,11 +104,6 @@ en_AU{
             kilometer-per-hour{
                 one{"{0} km/h"}
                 other{"{0} km/h"}
-            }
-            mile-per-hour{
-                dnam{"m.p.h."}
-                one{"{0} m.p.h."}
-                other{"{0} m.p.h."}
             }
         }
         temperature{
@@ -166,7 +167,7 @@ en_AU{
             }
         }
         concentr{
-            milligram-per-deciliter{
+            milligram-ofglucose-per-deciliter{
                 dnam{"mg/dL"}
                 one{"{0} mg/dL"}
                 other{"{0} mg/dL"}
@@ -175,15 +176,12 @@ en_AU{
                 one{"{0} mmol/L"}
                 other{"{0} mmol/L"}
             }
-            percent{
-                dnam{"per cent"}
-            }
             permille{
                 dnam{"per mill"}
             }
         }
         consumption{
-            liter-per-100kilometers{
+            liter-per-100-kilometer{
                 dnam{"L/100 km"}
                 one{"{0} L/100 km"}
                 other{"{0} L/100 km"}
@@ -209,9 +207,6 @@ en_AU{
                 one{"{0} C."}
                 other{"{0} C."}
             }
-            hour{
-                per{"{0} phr"}
-            }
             microsecond{
                 dnam{"μsec."}
             }
@@ -221,12 +216,8 @@ en_AU{
             minute{
                 dnam{"min."}
                 one{"{0} min."}
-                other{"{0} min."}
+                other{"{0} mins"}
                 per{"{0}/min."}
-            }
-            month{
-                one{"{0} m."}
-                other{"{0} m."}
             }
             nanosecond{
                 dnam{"nanosec."}
@@ -234,7 +225,7 @@ en_AU{
             second{
                 dnam{"sec."}
                 one{"{0} sec."}
-                other{"{0} sec."}
+                other{"{0} secs"}
                 per{"{0} ps."}
             }
         }
@@ -266,10 +257,18 @@ en_AU{
             }
         }
         pressure{
+            inch-ofhg{
+                dnam{"in Hg"}
+            }
             millibar{
                 dnam{"mb"}
                 one{"{0} mb"}
                 other{"{0} mb"}
+            }
+            millimeter-ofhg{
+                dnam{"mm Hg"}
+                one{"{0} mm Hg"}
+                other{"{0} mm Hg"}
             }
         }
         speed{
@@ -277,10 +276,6 @@ en_AU{
                 dnam{"metres/sec."}
                 one{"{0} m/s."}
                 other{"{0} m/s."}
-            }
-            mile-per-hour{
-                one{"{0} m.p.h."}
-                other{"{0} m.p.h."}
             }
         }
         temperature{
@@ -304,6 +299,11 @@ en_AU{
                 dnam{"dL"}
                 one{"{0} dL"}
                 other{"{0} dL"}
+            }
+            fluid-ounce{
+                dnam{"fl oz"}
+                one{"{0} fl oz"}
+                other{"{0} fl oz"}
             }
             gallon{
                 dnam{"US gal."}

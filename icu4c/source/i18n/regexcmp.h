@@ -104,7 +104,7 @@ private:
                                int32_t LoopOp);
     UBool       compileInlineInterval();             // Generate inline code for a {min,max} quantifier
     void        literalChar(UChar32 c);              // Compile a literal char
-    void        fixLiterals(UBool split=FALSE);      // Generate code for pending literal characters.
+    void        fixLiterals(UBool split=false);      // Generate code for pending literal characters.
     void        insertOp(int32_t where);             // Open up a slot for a new op in the
                                                      //   generated code at the specified location.
     void        appendOp(int32_t op);                // Append a new op to the compiled pattern.
@@ -228,7 +228,7 @@ private:
                                                      //   in this string while being scanned.
 };
 
-// Constant values to be pushed onto fSetOpStack while scanning & evalueating [set expressions]
+// Constant values to be pushed onto fSetOpStack while scanning & evaluating [set expressions]
 //   The high 16 bits are the operator precedence, and the low 16 are a code for the operation itself.
 
 enum SetOperations {

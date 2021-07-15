@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 zgh{
     Currencies{
         AED{
@@ -211,7 +212,7 @@ zgh{
             "ⴼⵔⴰⵏⴽ ⵚⵉⴼⴰ",
         }
         XOF{
-            "CFA",
+            "F CFA",
             "ⴼⵔⴰⵏⴽ ⵚⵉⴼⴰ ⴱⵉⵙⴰⵡ",
         }
         ZAR{
@@ -242,5 +243,4 @@ zgh{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"36"}
 }

@@ -1,8 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
-/**
- * ICU <specials> source: <path>/common/main/root.xml
- */
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 root{
     AuxExemplarCharacters{"[]"}
     Ellipsis{
@@ -25,6 +23,7 @@ root{
                 percentFormat{"#,##0%"}
             }
             symbols{
+                approximatelySign{"~"}
                 decimal{"٫"}
                 exponential{"اس"}
                 group{"٬"}
@@ -41,6 +40,7 @@ root{
         }
         arabext{
             symbols{
+                approximatelySign{"~"}
                 decimal{"٫"}
                 exponential{"×۱۰^"}
                 group{"٬"}
@@ -149,6 +149,7 @@ root{
                 }
             }
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -174,7 +175,7 @@ root{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"36"}
+    Version{"40"}
     calendar{
         buddhist{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
@@ -214,6 +215,16 @@ root{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "rMMMMEEEEd",
+                "rMMMMd",
+                "rMMMd",
+                "rMMdd",
+            }
             NoonMarker:alias{"/LOCALE/calendar/gregorian/NoonMarker"}
             NoonMarkerNarrow:alias{"/LOCALE/calendar/gregorian/NoonMarkerNarrow"}
             appendItems{
@@ -238,8 +249,11 @@ root{
                 EBhms{"E h:mm:ss B"}
                 Ed{"d, E"}
                 Gy{"r U"}
-                GyMMM{"r(U) MMM"}
-                GyMMMEd{"r(U) MMM d, E"}
+                GyMMM{"r MMM"}
+                GyMMMEd{"r MMM d, E"}
+                GyMMMM{"r(U) MMMM"}
+                GyMMMMEd{"r(U) MMMM d, E"}
+                GyMMMMd{"r(U) MMMM d"}
                 GyMMMd{"r MMM d"}
                 H{"HH"}
                 Hm{"HH:mm"}
@@ -265,9 +279,11 @@ root{
                 yyyy{"r(U)"}
                 yyyyM{"r-MM"}
                 yyyyMEd{"r-MM-dd, E"}
-                yyyyMMM{"r(U) MMM"}
-                yyyyMMMEd{"r(U) MMM d, E"}
+                yyyyMMM{"r MMM"}
+                yyyyMMMEd{"r MMM d, E"}
                 yyyyMMMM{"r(U) MMMM"}
+                yyyyMMMMEd{"r(U) MMMM d, E"}
+                yyyyMMMMd{"r(U) MMMM d"}
                 yyyyMMMd{"r MMM d"}
                 yyyyMd{"r-MM-dd"}
                 yyyyQQQ{"r(U) QQQ"}
@@ -750,6 +766,16 @@ root{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMMdd",
+            }
             NoonMarker:alias{"/LOCALE/calendar/gregorian/NoonMarker"}
             NoonMarkerNarrow:alias{"/LOCALE/calendar/gregorian/NoonMarkerNarrow"}
             appendItems{
@@ -781,6 +807,7 @@ root{
                 GyMMM{"G y MMM"}
                 GyMMMEd{"G y MMM d, E"}
                 GyMMMd{"G y MMM d"}
+                GyMd{"GGGGG y-MM-dd"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -1021,6 +1048,16 @@ root{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMMdd",
+            }
             appendItems{
                 Day{"{0} ({2}: {1})"}
                 Day-Of-Week{"{0} {1}"}
@@ -1050,6 +1087,7 @@ root{
                 GyMMM{"G y MMM"}
                 GyMMMEd{"G y MMM d, E"}
                 GyMMMd{"G y MMM d"}
+                GyMd{"GGGGG y-MM-dd"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -2621,11 +2659,11 @@ root{
         number{
             lenient{
                 "[\\-‐‒–⁻₋−➖﹣－]",
-                "[,،٫、︐︑﹐﹑，､]",
+                "[,،٫⹁、︐︑﹐﹑，､]",
                 "[+⁺₊➕﬩﹢＋]",
             }
             stricter{
-                "[,٫︐﹐，]",
+                "[,٫⹁︐﹐，]",
                 "[.․﹒．｡]",
             }
         }

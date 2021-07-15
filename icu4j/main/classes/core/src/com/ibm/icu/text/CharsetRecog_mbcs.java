@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  ****************************************************************************
  * Copyright (C) 2005-2012, International Business Machines Corporation and *
@@ -12,7 +12,7 @@ package com.ibm.icu.text;
 import java.util.Arrays;
 
 /**
- * CharsetRecognizer implemenation for Asian  - double or multi-byte - charsets.
+ * CharsetRecognizer implementation for Asian  - double or multi-byte - charsets.
  *                   Match is determined mostly by the input data adhering to the
  *                   encoding scheme for the charset, and, optionally,
  *                   frequency-of-occurence of characters.
@@ -86,7 +86,7 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
                 if (doubleByteCharCount == 0 && totalCharCount < 10) {
                     // There weren't any multibyte sequences, and there was a low density of non-ASCII single bytes.
                     // We don't have enough data to have any confidence.
-                    // Statistical analysis of single byte non-ASCII charcters would probably help here.
+                    // Statistical analysis of single byte non-ASCII characters would probably help here.
                     confidence = 0;
                 }
                 else {

@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 el{
     Keys{
         calendar{"Ημερολόγιο"}
@@ -160,6 +161,7 @@ el{
         eu{"Βασκικά"}
         ewo{"Εγουόντο"}
         fa{"Περσικά"}
+        fa_AF{"Νταρί"}
         fan{"Φανγκ"}
         fat{"Φάντι"}
         ff{"Φουλά"}
@@ -328,7 +330,7 @@ el{
         mi{"Μαορί"}
         mic{"Μικμάκ"}
         min{"Μινανγκαμπάου"}
-        mk{"Μακεδονικά"}
+        mk{"Σλαβομακεδονικά"}
         ml{"Μαλαγιαλαμικά"}
         mn{"Μογγολικά"}
         mnc{"Μαντσού"}
@@ -414,7 +416,6 @@ el{
         ro_MD{"Μολδαβικά"}
         rof{"Ρόμπο"}
         rom{"Ρομανί"}
-        root{"Ρίζα"}
         ru{"Ρωσικά"}
         rup{"Αρομανικά"}
         rw{"Κινιαρουάντα"}
@@ -508,7 +509,7 @@ el{
         tyv{"Τουβινικά"}
         tzm{"Ταμαζίτ Κεντρικού Μαρόκο"}
         udm{"Ουντμούρτ"}
-        ug{"Ουιγκουρικά"}
+        ug{"Ουιγουρικά"}
         uga{"Ουγκαριτικά"}
         uk{"Ουκρανικά"}
         umb{"Ουμπούντου"}
@@ -570,6 +571,7 @@ el{
     }
     Scripts{
         Arab{"Αραβικό"}
+        Aran{"Νασταλίκ"}
         Armi{"Αυτοκρατορικό Αραμαϊκό"}
         Armn{"Αρμενικό"}
         Avst{"Αβεστάν"}
@@ -891,7 +893,6 @@ el{
         VALENCIA{"Βαλενθιανά"}
         WADEGILE{"Εκλατινισμένα Γουάντ-Γκιλς"}
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — όλα"}
         category-list{"{0}: {1}"}
@@ -906,6 +907,8 @@ el{
             one{"{0} γραμμή"}
             other{"{0} γραμμές"}
         }
+        subscript{"δείκτης {0}"}
+        superscript{"εκθέτης {0}"}
     }
     codePatterns{
         language{"Γλώσσα: {0}"}

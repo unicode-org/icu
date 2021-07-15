@@ -1,8 +1,8 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 en_GB{
     %%Parent{"en_001"}
-    Version{"36"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -532,24 +532,6 @@ en_GB{
         "America:Sitka"{
             ec{"Sitka"}
         }
-        "America:St_Barthelemy"{
-            ec{"St Barthélemy"}
-        }
-        "America:St_Johns"{
-            ec{"St John’s"}
-        }
-        "America:St_Kitts"{
-            ec{"St Kitts"}
-        }
-        "America:St_Lucia"{
-            ec{"St Lucia"}
-        }
-        "America:St_Thomas"{
-            ec{"St Thomas"}
-        }
-        "America:St_Vincent"{
-            ec{"St Vincent"}
-        }
         "America:Swift_Current"{
             ec{"Swift Current"}
         }
@@ -630,9 +612,6 @@ en_GB{
         }
         "Asia:Anadyr"{
             ec{"Anadyr"}
-        }
-        "Asia:Aqtau"{
-            ec{"Aqtau"}
         }
         "Asia:Aqtobe"{
             ec{"Aqtobe"}
@@ -861,9 +840,6 @@ en_GB{
         }
         "Atlantic:South_Georgia"{
             ec{"South Georgia"}
-        }
-        "Atlantic:St_Helena"{
-            ec{"St Helena"}
         }
         "Atlantic:Stanley"{
             ec{"Stanley"}
@@ -1216,11 +1192,6 @@ en_GB{
             sd{"WEST"}
             sg{"WET"}
             ss{"WET"}
-        }
-        "meta:Pierre_Miquelon"{
-            ld{"St Pierre & Miquelon Daylight Time"}
-            lg{"St Pierre & Miquelon Time"}
-            ls{"St Pierre & Miquelon Standard Time"}
         }
         gmtZeroFormat{"GMT"}
     }

@@ -262,67 +262,41 @@ UBool LegalGreek::isRho(UChar c) {
     return FALSE;
 }
 
-// AbbreviatedUnicodeSetIterator Interface ---------------------------------------------
-//
-//      Iterate over a UnicodeSet, only returning a sampling of the contained code points.
-//        density is the approximate total number of code points to returned for the entire set.
-//
+namespace {
 
-class AbbreviatedUnicodeSetIterator : public UnicodeSetIterator {
-public :
-
-    AbbreviatedUnicodeSetIterator();
-    virtual ~AbbreviatedUnicodeSetIterator();
-    void reset(UnicodeSet& set, UBool abb = FALSE, int32_t density = 100);
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-private :
-    UBool abbreviated;
-    int32_t perRange;           // The maximum number of code points to be returned from each range
-    virtual void loadRange(int32_t range);
-
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
-};
-
-// AbbreviatedUnicodeSetIterator Implementation ---------------------------------------
-
-const char AbbreviatedUnicodeSetIterator::fgClassID=0;
-
-AbbreviatedUnicodeSetIterator::AbbreviatedUnicodeSetIterator() :
-    UnicodeSetIterator(), abbreviated(FALSE) {
-}
-
-AbbreviatedUnicodeSetIterator::~AbbreviatedUnicodeSetIterator() {
-}
-        
-void AbbreviatedUnicodeSetIterator::reset(UnicodeSet& newSet, UBool abb, int32_t density) {
-    UnicodeSetIterator::reset(newSet);
-    abbreviated = abb;
-    perRange = newSet.getRangeCount();
+/**
+ * If abbreviated=true, returns a set which only a sampling of the original code points.
+ * density is the approximate total number of code points to returned for the entire set.
+ */
+const UnicodeSet &abbreviateSet(const UnicodeSet &set, bool abbreviated, int density,
+                                UnicodeSet &copy) {
+    if (!abbreviated) {
+        return set;
+    }
+    int32_t rangeCount = set.getRangeCount();
+    int32_t perRange = rangeCount;
     if (perRange != 0) {
         perRange = density / perRange;
     }
+    const UnicodeSet *p = &set;
+    bool unchanged = true;
+    for (int32_t i = 0; i < rangeCount; ++i) {
+        int32_t start = set.getRangeStart(i);
+        int32_t end = set.getRangeEnd(i);
+        int32_t newEnd = start + perRange;
+        if (end > newEnd) {
+            if (unchanged) {
+                copy = set;
+                p = &copy;
+                unchanged = false;
+            }
+            copy.remove(newEnd + 1, end);
+        }
+    }
+    return *p;
 }
 
-void AbbreviatedUnicodeSetIterator::loadRange(int32_t myRange) {
-    UnicodeSetIterator::loadRange(myRange);
-    if (abbreviated && (endElement > nextElement + perRange)) {
-        endElement = nextElement + perRange;
-    }
-}
+}  // namespace
 
 //--------------------------------------------------------------------
 // RTTest Interface
@@ -587,8 +561,8 @@ void RTTest::test2(UBool quickRt, int32_t density) {
         return;
     }
 
-    AbbreviatedUnicodeSetIterator usi;
-    AbbreviatedUnicodeSetIterator usi2;
+    UnicodeSetIterator usi;
+    UnicodeSetIterator usi2;
 
     parent->logln("Checking that at least one irrelevant character is not NFC'ed");
     // string is from NFC_NO in the UCD
@@ -702,13 +676,14 @@ void RTTest::test2(UBool quickRt, int32_t density) {
 
     UnicodeSet sourceRangeMinusFailures(sourceRange);
     sourceRangeMinusFailures.removeAll(failSourceTarg);
-            
-    usi.reset(sourceRangeMinusFailures, quickRt, density);
+
+    UnicodeSet copy, copy2;
+    usi.reset(abbreviateSet(sourceRangeMinusFailures, quickRt, density, copy));
     for (;;) { 
         if (!usi.next() || usi.isString()) break;
         UChar32 c = usi.getCodepoint();
              
-        usi2.reset(sourceRangeMinusFailures, quickRt, density);
+        usi2.reset(abbreviateSet(sourceRangeMinusFailures, quickRt, density, copy2));
         for (;;) {
             if (!usi2.next() || usi2.isString()) break;
             UChar32 d = usi2.getCodepoint();
@@ -816,7 +791,7 @@ void RTTest::test2(UBool quickRt, int32_t density) {
     targetRangeMinusFailures.removeAll(failTargSource);
     targetRangeMinusFailures.removeAll(failRound);
 
-    usi.reset(targetRangeMinusFailures, quickRt, density);
+    usi.reset(abbreviateSet(targetRangeMinusFailures, quickRt, density, copy));
     UnicodeString targ2;
     UnicodeString reverse2;
     UnicodeString targD;
@@ -830,7 +805,7 @@ void RTTest::test2(UBool quickRt, int32_t density) {
             return;
         }
 
-        usi2.reset(targetRangeMinusFailures, quickRt, density);
+        usi2.reset(abbreviateSet(targetRangeMinusFailures, quickRt, density, copy2));
         for (;;) {
             if (!usi2.next() || usi2.isString())
                 break;

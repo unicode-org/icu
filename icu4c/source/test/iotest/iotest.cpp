@@ -360,6 +360,43 @@ static void U_CALLCONV DataDrivenPrintf(void)
 U_CDECL_END
 
 U_CDECL_BEGIN
+static void U_CALLCONV ScanfMultipleIntegers(void)
+{
+#if !UCONFIG_NO_FORMATTING && !UCONFIG_NO_FILE_IO
+    UnicodeString input = UNICODE_STRING("[1.2.3]", 7);
+    UnicodeString fmt = UNICODE_STRING("[%d.%d.%d]", 10);
+    DataDrivenLogger logger;
+
+    const int32_t expectedFirst = 1;
+    const int32_t expectedSecond = 2;
+    const int32_t expectedThird = 3;
+    const int32_t expectedResult = 3;
+    int32_t first = 0;
+    int32_t second = 0;
+    int32_t third = 0;
+    int32_t result = u_sscanf_u(input.getBuffer(), fmt.getBuffer(), &first, &second, &third);
+
+    if(first != expectedFirst){
+        log_err("error in scanfmultipleintegers test 'first' Got: %d Exp: %d\n", 
+                first, expectedFirst);
+    }
+    if(second != expectedSecond){
+        log_err("error in scanfmultipleintegers test 'second' Got: %d Exp: %d\n",
+                second, expectedSecond);
+    }
+    if(third != expectedThird){
+        log_err("error in scanfmultipleintegers test 'third' Got: %d Exp: %d\n",
+                third, expectedThird);
+    }
+    if(result != expectedResult){
+        log_err("error in scanfmultipleintegers test 'result'  Got: %d Exp: %d\n",
+                result, expectedResult);
+    }
+#endif
+}
+U_CDECL_END
+
+U_CDECL_BEGIN
 static void U_CALLCONV DataDrivenScanf(void)
 {
 #if !UCONFIG_NO_FORMATTING && !UCONFIG_NO_FILE_IO
@@ -697,6 +734,7 @@ static void addAllTests(TestNode** root) {
     addTest(root, &DataDrivenPrintf, "datadriv/DataDrivenPrintf");
     addTest(root, &DataDrivenPrintfPrecision, "datadriv/DataDrivenPrintfPrecision");
     addTest(root, &DataDrivenScanf, "datadriv/DataDrivenScanf");
+    addTest(root, &ScanfMultipleIntegers, "ScanfMultipleIntegers");
 #endif
     addStreamTests(root);
 }
@@ -853,15 +891,20 @@ int main(int argc, char* argv[])
     nerrors = runTestRequest(root, argc, argv);
 
 #if 1
+    static const char* filenamesToRemove[] = { STANDARD_TEST_FILE, MEDIUMNAME_TEST_FILE, LONGNAME_TEST_FILE, nullptr };
+    const char** filenamesToRemovePtr = filenamesToRemove;
+    const char* filenameToRemove;
+    while ((filenameToRemove = *filenamesToRemovePtr++) != nullptr)
     {
-        FILE* fileToRemove = fopen(STANDARD_TEST_FILE, "r");
+
+        FILE* fileToRemove = fopen(filenameToRemove, "r");
         /* This should delete any temporary files. */
         if (fileToRemove) {
             fclose(fileToRemove);
-            log_verbose("Deleting: %s\n", STANDARD_TEST_FILE);
-            if (remove(STANDARD_TEST_FILE) != 0) {
+            log_verbose("Deleting: %s\n", filenameToRemove);
+            if (remove(filenameToRemove) != 0) {
                 /* Maybe someone didn't close the file correctly. */
-                fprintf(stderr, "FAIL: Could not delete %s\n", STANDARD_TEST_FILE);
+                fprintf(stderr, "FAIL: Could not delete %s\n", filenameToRemove);
                 nerrors += 1;
             }
         }

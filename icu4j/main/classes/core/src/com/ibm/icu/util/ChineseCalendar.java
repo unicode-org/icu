@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*********************************************************************
  * Copyright (C) 2000-2014, International Business Machines
  * Corporation and others. All Rights Reserved.
@@ -284,7 +284,7 @@ public class ChineseCalendar extends Calendar {
      * @stable ICU 4.0
      */
     public ChineseCalendar(Locale aLocale) {
-        this(TimeZone.getDefault(), ULocale.forLocale(aLocale), CHINESE_EPOCH_YEAR, CHINA_ZONE);
+        this(TimeZone.forLocaleOrDefault(aLocale), ULocale.forLocale(aLocale), CHINESE_EPOCH_YEAR, CHINA_ZONE);
     }
 
     /**
@@ -317,7 +317,7 @@ public class ChineseCalendar extends Calendar {
      * @stable ICU 4.0
      */
     public ChineseCalendar(ULocale locale) {
-        this(TimeZone.getDefault(), locale, CHINESE_EPOCH_YEAR, CHINA_ZONE);
+        this(TimeZone.forULocaleOrDefault(locale), locale, CHINESE_EPOCH_YEAR, CHINA_ZONE);
     }
 
     /**

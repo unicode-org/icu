@@ -1,4 +1,4 @@
-# Copyright (C) 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html#License
+# Copyright (C) 2016 and later: Unicode, Inc. and others. License & terms of use: http://www.unicode.org/copyright.html
 #
 # Copyright (C) 2006-2009, Google, International Business Machines Corporation and others. All Rights Reserved.
 # Regex for recognizing RFC 4646 well-formed tags
@@ -38,14 +38,15 @@ $extension  = $singleton (?: $s $alphanum{2,8} )+ ; # singleton 1*("-" (2*8alpha
 
 $privateUse = $x (?: $s $alphanum{1,8} )+ ; # "x" 1*("-" (1*8alphanum))
 
-# Define certain grandfathered codes, since otherwise the regex is pretty useless.
+# Define certain legacy language tags (marked as “Type: grandfathered” in BCP 47),
+# since otherwise the regex is pretty useless.
 # Since these are limited, this is safe even later changes to the registry --
 # the only oddity is that it might change the type of the tag, and thus
 # the results from the capturing groups.
 # http://www.iana.org/assignments/language-subtag-registry
 # Note that these have to be compared case insensitively, requiring (?i) below.
 
-$grandfathered  = en $s GB $s oed
+$legacy  = en $s GB $s oed
       | i $s (?: ami | bnn | default | enochian | hak | klingon | lux | mingo | navajo | pwn | tao | tay | tsu )
       | no $s (?: bok | nyn )
       | sgn $s (?: BE $s (?: fr | nl) | CH $s de )
@@ -55,7 +56,7 @@ $grandfathered  = en $s GB $s oed
 # For well-formedness, we don't need the ones that would otherwise pass.
 # For validity, they need to be checked.
 
-# $grandfatheredWellFormed = (?:
+# $legacyWellFormed = (?:
 #         art $s lojban
 #     | cel $s gaulish
 #     | zh $s (?: guoyu | hakka | xiang )
@@ -78,12 +79,12 @@ $langtag = (?: ( $language )
       (?: $s ( $privateUse ) )? 5%);
 
 # Here is the final breakdown, with capturing groups for each of these components
-# The variants, extensions, grandfathered, and private-use may have interior '-'
+# The variants, extensions, legacy, and private-use may have interior '-'
  
 $root = (?i) # case-insensitive
   (?:
       $langtag 90%
     | ( $privateUse ) 5%
-    | ( $grandfathered ) 5%)
+    | ( $legacy ) 5%)
 #    (?: \@ $keywords )? 5%
     ;

@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 en{
     Keys{
         calendar{"Calendar"}
@@ -15,6 +16,7 @@ en{
         collation{"Sort Order"}
         currency{"Currency"}
         d0{"Transform Destination"}
+        dx{"Dictionary Break Exclusions"}
         em{"Emoji Presentation Style"}
         fw{"First day of week"}
         h0{"Mixed-in"}
@@ -393,7 +395,7 @@ en{
         mgh{"Makhuwa-Meetto"}
         mgo{"Metaʼ"}
         mh{"Marshallese"}
-        mi{"Maori"}
+        mi{"Māori"}
         mic{"Mi'kmaq"}
         min{"Minangkabau"}
         mk{"Macedonian"}
@@ -489,6 +491,7 @@ en{
         rap{"Rapanui"}
         rar{"Rarotongan"}
         rgn{"Romagnol"}
+        rhg{"Rohingya"}
         rif{"Riffian"}
         rm{"Romansh"}
         rn{"Rundi"}
@@ -496,7 +499,6 @@ en{
         ro_MD{"Moldavian"}
         rof{"Rombo"}
         rom{"Romany"}
-        root{"Root"}
         rtm{"Rotuman"}
         ru{"Russian"}
         rue{"Rusyn"}
@@ -666,6 +668,8 @@ en{
         zh_Hant{"Traditional Mandarin Chinese"}
     }
     Languages%menu{
+        ars{"Arabic, Najdi"}
+        ckb{"Kurdish, Central"}
         yue{"Chinese, Cantonese"}
         zh{"Chinese, Mandarin"}
     }
@@ -675,6 +679,7 @@ en{
         en_US{"US English"}
     }
     Languages%variant{
+        ckb{"Kurdish, Sorani"}
         ky{"Kirghiz"}
         my{"Myanmar Language"}
         ps{"Pushto"}
@@ -686,6 +691,7 @@ en{
         Aghb{"Caucasian Albanian"}
         Ahom{"Ahom"}
         Arab{"Arabic"}
+        Aran{"Nastaliq"}
         Armi{"Imperial Aramaic"}
         Armn{"Armenian"}
         Avst{"Avestan"}
@@ -706,12 +712,15 @@ en{
         Cari{"Carian"}
         Cham{"Cham"}
         Cher{"Cherokee"}
+        Chrs{"Chorasmian"}
         Cirt{"Cirth"}
         Copt{"Coptic"}
+        Cpmn{"Cypro-Minoan"}
         Cprt{"Cypriot"}
         Cyrl{"Cyrillic"}
         Cyrs{"Old Church Slavonic Cyrillic"}
         Deva{"Devanagari"}
+        Diak{"Dives Akuru"}
         Dogr{"Dogra"}
         Dsrt{"Deseret"}
         Dupl{"Duployan shorthand"}
@@ -756,6 +765,7 @@ en{
         Khar{"Kharoshthi"}
         Khmr{"Khmer"}
         Khoj{"Khojki"}
+        Kits{"Khitan small script"}
         Knda{"Kannada"}
         Kore{"Korean"}
         Kpel{"Kpelle"}
@@ -804,6 +814,7 @@ en{
         Orya{"Odia"}
         Osge{"Osage"}
         Osma{"Osmanya"}
+        Ougr{"Old Uyghur"}
         Palm{"Palmyrene"}
         Pauc{"Pau Cin Hau"}
         Perm{"Old Permic"}
@@ -816,7 +827,7 @@ en{
         Prti{"Inscriptional Parthian"}
         Qaag{"Zawgyi"}
         Rjng{"Rejang"}
-        Rohg{"Hanifi Rohingya"}
+        Rohg{"Hanifi"}
         Roro{"Rongorongo"}
         Runr{"Runic"}
         Samr{"Samaritan"}
@@ -854,14 +865,18 @@ en{
         Thai{"Thai"}
         Tibt{"Tibetan"}
         Tirh{"Tirhuta"}
+        Tnsa{"Tangsa"}
+        Toto{"Toto"}
         Ugar{"Ugaritic"}
         Vaii{"Vai"}
         Visp{"Visible Speech"}
+        Vith{"Vithkuqi"}
         Wara{"Varang Kshiti"}
         Wcho{"Wancho"}
         Wole{"Woleai"}
         Xpeo{"Old Persian"}
         Xsux{"Sumero-Akkadian Cuneiform"}
+        Yezi{"Yezidi"}
         Yiii{"Yi"}
         Zanb{"Zanabazar Square"}
         Zinh{"Inherited"}
@@ -879,6 +894,7 @@ en{
     Scripts%stand-alone{
         Hans{"Simplified Han"}
         Hant{"Traditional Han"}
+        Rohg{"Hanifi Rohingya"}
     }
     Scripts%variant{
         Arab{"Perso-Arabic"}
@@ -1111,6 +1127,7 @@ en{
             cham{"Cham Digits"}
             cyrl{"Cyrillic Numerals"}
             deva{"Devanagari Digits"}
+            diak{"Dives Akuru Digits"}
             ethi{"Ethiopic Numerals"}
             finance{"Financial Numerals"}
             fullwide{"Full-Width Digits"}
@@ -1166,6 +1183,7 @@ en{
             roman{"Roman Numerals"}
             romanlow{"Roman Lowercase Numerals"}
             saur{"Saurashtra Digits"}
+            segment{"Segmented Digits"}
             shrd{"Sharada Digits"}
             sind{"Khudawadi Digits"}
             sinh{"Sinhala Lith Digits"}
@@ -1265,7 +1283,6 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — all"}
         category-list{"{0}: {1}"}

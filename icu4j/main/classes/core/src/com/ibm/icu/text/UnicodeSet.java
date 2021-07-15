@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 1996-2016, International Business Machines Corporation and
@@ -185,8 +185,6 @@ import com.ibm.icu.util.VersionInfo;
  * <td>The set of characters <em>not</em> having the given
  * Unicode property
  * </table>
- *
- * <p><b>Warning</b>: you cannot add an empty string ("") to a UnicodeSet.</p>
  *
  * <p><b>Formal syntax</b></p>
  *
@@ -516,7 +514,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * Make this object represent the range <code>start - end</code>.
-     * If <code>end &gt; start</code> then this object is set to an empty range.
+     * If <code>start &gt; end</code> then this object is set to an empty range.
      *
      * @param start first character in the set, inclusive
      * @param end last character in the set, inclusive
@@ -831,10 +829,6 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         }
     }
 
-    boolean hasStrings() {
-        return !strings.isEmpty();
-    }
-
     /**
      * Returns the number of elements in this set (its cardinality)
      * Note than the elements of a set may include both individual
@@ -860,6 +854,14 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      */
     public boolean isEmpty() {
         return len == 1 && !hasStrings();
+    }
+
+    /**
+     * @return true if this set contains multi-character strings or the empty string.
+     * @draft ICU 70
+     */
+    public boolean hasStrings() {
+        return !strings.isEmpty();
     }
 
     /**
@@ -892,11 +894,9 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         }
         if (hasStrings()) {
             for (String s : strings) {
-                //if (s.length() == 0) {
-                //    // Empty strings match everything
-                //    return true;
-                //}
-                // assert(s.length() != 0); // We enforce this elsewhere
+                if (s.isEmpty()) {
+                    continue;  // skip the empty string
+                }
                 int c = UTF16.charAt(s, 0);
                 if ((c & 0xFF) == v) {
                     return true;
@@ -918,9 +918,6 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             boolean incremental) {
 
         if (offset[0] == limit) {
-            // Strings, if any, have length != 0, so we don't worry
-            // about them here.  If we ever allow zero-length strings
-            // we much check for them here.
             if (contains(UnicodeMatcher.ETHER)) {
                 return incremental ? U_PARTIAL_MATCH : U_MATCH;
             } else {
@@ -948,10 +945,9 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                 int highWaterLength = 0;
 
                 for (String trial : strings) {
-                    //if (trial.length() == 0) {
-                    //    return U_MATCH; // null-string always matches
-                    //}
-                    // assert(trial.length() != 0); // We ensure this elsewhere
+                    if (trial.isEmpty()) {
+                        continue;  // skip the empty string
+                    }
 
                     char c = trial.charAt(forward ? 0 : trial.length() - 1);
 
@@ -1167,7 +1163,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     /**
      * Adds the specified range to this set if it is not already
      * present.  If this set already contains the specified range,
-     * the call leaves this set unchanged.  If <code>end &gt; start</code>
+     * the call leaves this set unchanged.  If <code>start &gt; end</code>
      * then an empty range is added, leaving the set unchanged.
      *
      * @param start first character, inclusive, of range to be added
@@ -1321,7 +1317,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         else if (i > 0 && c == list[i-1]) {
             // c is after end of prior range
             list[i-1]++;
-            // no need to chcek for collapse here
+            // no need to check for collapse here
         }
 
         else {
@@ -1363,7 +1359,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * present.  If this set already contains the multicharacter,
      * the call leaves this set unchanged.
      * Thus "ch" =&gt; {"ch"}
-     * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
+     *
      * @param s the source string
      * @return this object, for chaining
      * @stable ICU 2.0
@@ -1392,22 +1388,19 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * Utility for getting code point from single code point CharSequence.
-     * See the public UTF16.getSingleCodePoint()
+     * See the public UTF16.getSingleCodePoint() (which returns -1 for null rather than throwing NPE).
+     *
      * @return a code point IF the string consists of a single one.
      * otherwise returns -1.
      * @param s to test
      */
     private static int getSingleCP(CharSequence s) {
-        if (s.length() < 1) {
-            throw new IllegalArgumentException("Can't use zero-length strings in UnicodeSet");
-        }
-        if (s.length() > 2) return -1;
         if (s.length() == 1) return s.charAt(0);
-
-        // at this point, len = 2
-        int cp = UTF16.charAt(s, 0);
-        if (cp > 0xFFFF) { // is surrogate pair
-            return cp;
+        if (s.length() == 2) {
+            int cp = Character.codePointAt(s, 0);
+            if (cp > 0xFFFF) { // is surrogate pair
+                return cp;
+            }
         }
         return -1;
     }
@@ -1478,7 +1471,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * Makes a set from a multicharacter string. Thus "ch" =&gt; {"ch"}
-     * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
+     *
      * @param s the source string
      * @return a newly created set containing the given string
      * @stable ICU 2.0
@@ -1501,13 +1494,11 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     /**
      * Retain only the elements in this set that are contained in the
-     * specified range.  If <code>end &gt; start</code> then an empty range is
+     * specified range.  If <code>start &gt; end</code> then an empty range is
      * retained, leaving the set empty.
      *
-     * @param start first character, inclusive, of range to be retained
-     * to this set.
-     * @param end last character, inclusive, of range to be retained
-     * to this set.
+     * @param start first character, inclusive, of range
+     * @param end last character, inclusive, of range
      * @stable ICU 2.0
      */
     public UnicodeSet retain(int start, int end) {
@@ -1552,11 +1543,15 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             checkFrozen();
             String s = cs.toString();
             boolean isIn = strings.contains(s);
-            if (isIn && size() == 1) {
+            // Check for getRangeCount() first to avoid somewhat-expensive size()
+            // when there are single code points.
+            if (isIn && getRangeCount() == 0 && size() == 1) {
                 return this;
             }
             clear();
-            addString(s);
+            if (isIn) {
+                addString(s);
+            }
             pat = null;
         } else {
             retain(cp, cp);
@@ -1567,7 +1562,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     /**
      * Removes the specified range from this set if it is present.
      * The set will not contain the specified range once the call
-     * returns.  If <code>end &gt; start</code> then an empty range is
+     * returns.  If <code>start &gt; end</code> then an empty range is
      * removed, leaving the set unchanged.
      *
      * @param start first character, inclusive, of range to be removed
@@ -1628,13 +1623,11 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     /**
      * Complements the specified range in this set.  Any character in
      * the range will be removed if it is in this set, or will be
-     * added if it is not in this set.  If <code>end &gt; start</code>
+     * added if it is not in this set.  If <code>start &gt; end</code>
      * then an empty range is complemented, leaving the set unchanged.
      *
-     * @param start first character, inclusive, of range to be removed
-     * from this set.
-     * @param end last character, inclusive, of range to be removed
-     * from this set.
+     * @param start first character, inclusive, of range
+     * @param end last character, inclusive, of range
      * @stable ICU 2.0
      */
     public UnicodeSet complement(int start, int end) {
@@ -1686,7 +1679,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Complement the specified string in this set.
      * The set will not contain the specified string once the call
      * returns.
-     * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
+     *
      * @param s the string to complement
      * @return this object, for chaining
      * @stable ICU 2.0
@@ -2056,7 +2049,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             return true;
         }
         for (String setStr : strings) {
-            if (s.startsWith(setStr, i) &&  containsAll(s, i+setStr.length())) {
+            if (!setStr.isEmpty() &&  // skip the empty string
+                    s.startsWith(setStr, i) &&  containsAll(s, i+setStr.length())) {
                 return true;
             }
         }
@@ -2565,7 +2559,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         StringBuilder patBuf = new StringBuilder(), buf = null;
         boolean usePat = false;
         UnicodeSet scratch = null;
-        Object backup = null;
+        RuleCharacterIterator.Position backup = null;
 
         // mode: 0=before [, 1=between [...], 2=after ]
         // lastItem: 0=none, 1=char, 2=set
@@ -2801,7 +2795,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                         }
                         appendCodePoint(buf, c);
                     }
-                    if (buf.length() < 1 || !ok) {
+                    if (!ok) {
                         syntaxError(chars, "Invalid multicharacter string");
                     }
                     // We have new string. Add it to set and continue;
@@ -3683,7 +3677,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             int iterOpts) {
         boolean result = false;
         iterOpts &= ~RuleCharacterIterator.PARSE_ESCAPES;
-        Object pos = chars.getPos(null);
+        RuleCharacterIterator.Position pos = chars.getPos(null);
         int c = chars.next(iterOpts);
         if (c == '[' || c == '\\') {
             int d = chars.next(iterOpts & ~RuleCharacterIterator.SKIP_WHITESPACE);
@@ -3794,14 +3788,16 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      */
     private void applyPropertyPattern(RuleCharacterIterator chars,
             Appendable rebuiltPat, SymbolTable symbols) {
-        String patStr = chars.lookahead();
-        ParsePosition pos = new ParsePosition(0);
+        String patStr = chars.getCurrentBuffer();
+        int start = chars.getCurrentBufferPos();
+        ParsePosition pos = new ParsePosition(start);
         applyPropertyPattern(patStr, pos, symbols);
-        if (pos.getIndex() == 0) {
+        int length = pos.getIndex() - start;
+        if (length == 0) {
             syntaxError(chars, "Invalid property pattern");
         }
-        chars.jumpahead(pos.getIndex());
-        append(rebuiltPat, patStr.substring(0, pos.getIndex()));
+        chars.jumpahead(length);
+        append(rebuiltPat, patStr.substring(start, pos.getIndex()));
     }
 
     //----------------------------------------------------------------
@@ -3984,20 +3980,17 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Internal class for customizing UnicodeSet parsing of properties.
      * TODO: extend to allow customizing of codepoint ranges
      * @draft ICU3.8 (retain)
-     * @provisional This API might change or be removed in a future release.
      * @author medavis
      */
     abstract public static class XSymbolTable implements SymbolTable {
         /**
          * Default constructor
          * @draft ICU3.8 (retain)
-         * @provisional This API might change or be removed in a future release.
          */
         public XSymbolTable(){}
         /**
          * Supplies default implementation for SymbolTable (no action).
          * @draft ICU3.8 (retain)
-         * @provisional This API might change or be removed in a future release.
          */
         @Override
         public UnicodeMatcher lookupMatcher(int i) {
@@ -4021,7 +4014,6 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
          *         with that property have been added to the UnicodeSet, and returns false if the
          *         propertyName+propertyValue combination is not recognized (in which case result is unaltered).
          * @draft ICU3.8 (retain)
-         * @provisional This API might change or be removed in a future release.
          */
         public boolean applyPropertyAlias(String propertyName, String propertyValue, UnicodeSet result) {
             return false;
@@ -4029,7 +4021,6 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         /**
          * Supplies default implementation for SymbolTable (no action).
          * @draft ICU3.8 (retain)
-         * @provisional This API might change or be removed in a future release.
          */
         @Override
         public char[] lookup(String s) {
@@ -4038,7 +4029,6 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         /**
          * Supplies default implementation for SymbolTable (no action).
          * @draft ICU3.8 (retain)
-         * @provisional This API might change or be removed in a future release.
          */
         @Override
         public String parseReference(String text, ParsePosition pos, int limit) {
@@ -4555,7 +4545,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     }
 
     /**
-     * Compares UnicodeSets, where shorter come first, and otherwise lexigraphically
+     * Compares UnicodeSets, where shorter come first, and otherwise lexicographically
      * (according to the comparison of the first characters that differ).
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      * @stable ICU 4.4

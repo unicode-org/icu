@@ -11,12 +11,15 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/testlog.h"
 #include "ustrfmt.h"
 #include "charstr.h"
 #include "cstring.h"
 #include "cmemory.h"
 
-static NumberFormatTestTuple *gNullPtr = NULL;
+static NumberFormatTestTuple emptyObject;
+
+static NumberFormatTestTuple *gNullPtr = &emptyObject;
 
 #define FIELD_OFFSET(fieldName) ((int32_t) (((char *) &gNullPtr->fieldName) - ((char *) gNullPtr)))
 #define FIELD_FLAG_OFFSET(fieldName) ((int32_t) (((char *) &gNullPtr->fieldName##Flag) - ((char *) gNullPtr)))

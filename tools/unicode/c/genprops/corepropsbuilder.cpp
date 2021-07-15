@@ -47,7 +47,7 @@ the udata API for loading ICU data. Especially, a UDataInfo structure
 precedes the actual data. It contains platform properties values and the
 file format version.
 
-The following is a description of format version 7.5 .
+The following is a description of format version 7.7 .
 
 Data contents:
 
@@ -108,7 +108,7 @@ Formally, the file contains the following structures:
       A (Script code, Script_Extensions index) pair is the main UScriptCode (Script value)
       followed by the index of the Script_Extensions list.
       If the propsVectors[] column 0 value indicates that there are Script_Extensions,
-      then the UPROPS_SCRIPT_MASK bit field is an index to either a list or a pair in SCX,
+      then the script-code-or-index bit fields are an index to either a list or a pair in SCX,
       rather than the Script itself. The high bits in the UPROPS_SCRIPT_X_MASK fields
       indicate whether the main Script value is Common or Inherited (and the index is to a list)
       vs. another value (and the index is to a pair).
@@ -281,6 +281,11 @@ http://www.unicode.org/reports/tr51/#Emoji_Properties
 
 ICU 64 adds fraction-32 numeric values for new Unicode 12 Tamil fraction characters.
 
+--- Changes in format version 7.7 ---
+
+ICU 66 adds two bits for the UScriptCode or Script_Extensions index in vector word 0.
+The value is split across bits 21..20 & 7..0.
+
 ----------------------------------------------------------------------------- */
 
 U_NAMESPACE_USE
@@ -296,9 +301,15 @@ static UDataInfo dataInfo={
     0,
 
     { 0x55, 0x50, 0x72, 0x6f },                 /* dataFormat="UPro" */
-    { 7, 6, 0, 0 },                             /* formatVersion */
+    { 7, 7, 0, 0 },                             /* formatVersion */
     { 10, 0, 0, 0 }                             /* dataVersion */
 };
+
+inline uint32_t splitScriptCodeOrIndex(uint32_t v) {
+    return
+        ((v << UPROPS_SCRIPT_HIGH_SHIFT) & UPROPS_SCRIPT_HIGH_MASK) |
+        (v & UPROPS_SCRIPT_LOW_MASK);
+}
 
 class CorePropsBuilder : public PropsBuilder {
 public:
@@ -396,10 +407,10 @@ encodeNumericValue(UChar32 start, const char *s, UErrorCode &errorCode) {
     /* get a possible minus sign */
     UBool isNegative;
     if(*s=='-') {
-        isNegative=TRUE;
+        isNegative=true;
         ++s;
     } else {
-        isNegative=FALSE;
+        isNegative=false;
     }
 
     int32_t value=0, den=0, exp=0, ntv=0;
@@ -557,7 +568,7 @@ CorePropsBuilder::setGcAndNumeric(const UniProps &props, const UnicodeSet &newVa
     if(start==end) {
         utrie2_set32(pTrie, start, value, &errorCode);
     } else {
-        utrie2_setRange32(pTrie, start, end, value, TRUE, &errorCode);
+        utrie2_setRange32(pTrie, start, end, value, true, &errorCode);
     }
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "error: utrie2_setRange32(properties trie %04lX..%04lX) failed - %s\n",
@@ -631,10 +642,6 @@ struct PropToEnum {
 
 static const PropToEnum
 propToEnums[]={
-    // Use UPROPS_SCRIPT_X_MASK not UPROPS_SCRIPT_MASK:
-    // When writing a Script code, remove Script_Extensions bits as well.
-    // If needed, they will get written again.
-    { UCHAR_SCRIPT,                     0, 0, UPROPS_SCRIPT_X_MASK },
     { UCHAR_BLOCK,                      0, UPROPS_BLOCK_SHIFT, UPROPS_BLOCK_MASK },
     { UCHAR_EAST_ASIAN_WIDTH,           0, UPROPS_EA_SHIFT, UPROPS_EA_MASK },
     { UCHAR_DECOMPOSITION_TYPE,         2, 0, UPROPS_DT_MASK },
@@ -670,23 +677,11 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
     }
 
     // Set int property values.
-    // This includes setting the script value if the Script_Extensions revert to {Script}.
-    // Otherwise we would have to duplicate the code for doing so.
-    // Script and Script_Extensions share a bit field, so that by setting it to just the script
-    // we remove the Script_Extensions.
-    // (We do not just set the script bit in newValues because that is const.)
-    // For example, for U+3000:
-    // block;3000..303F;age=1.1;...;sc=Zyyy;scx=Bopo Hang Hani Hira Kana Yiii;vo=U
-    // cp;3000;...;gc=Zs;lb=BA;na=IDEOGRAPHIC SPACE;...;SB=SP;scx=<script>;WSpace
-    UBool revertToScript=
-        newValues.contains(UCHAR_SCRIPT_EXTENSIONS) && props.scx.isEmpty() &&
-        !newValues.contains(UCHAR_SCRIPT);
-
-    if(newValues.containsSome(UCHAR_INT_START, UCHAR_INT_LIMIT-1) || revertToScript) {
+    if(newValues.containsSome(UCHAR_INT_START, UCHAR_INT_LIMIT-1)) {
         for(int32_t i=0; i<LENGTHOF(propToEnums); ++i) {
             const PropToEnum &p2e=propToEnums[i];
             U_ASSERT(p2e.vecShift<32);
-            if(newValues.contains(p2e.prop) || (p2e.prop==UCHAR_SCRIPT && revertToScript)) {
+            if(newValues.contains(p2e.prop)) {
                 uint32_t mask=p2e.vecMask;
                 uint32_t value=(uint32_t)(props.getIntProp(p2e.prop)<<p2e.vecShift);
                 U_ASSERT((value&mask)==value);
@@ -706,6 +701,26 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
         upvec_setValue(pv, start, end,
                        0, version<<UPROPS_AGE_SHIFT, UPROPS_AGE_MASK,
                        &errorCode);
+    }
+
+    // Set the script value if the Script_Extensions revert to {Script}.
+    // Otherwise we would have to duplicate the code for doing so.
+    // Script and Script_Extensions share a bit field, so that by setting it to just the script
+    // we remove the Script_Extensions.
+    // (We do not just set the script bit in newValues because that is const.)
+    // For example, for U+3000:
+    // block;3000..303F;age=1.1;...;sc=Zyyy;scx=Bopo Hang Hani Hira Kana Yiii;vo=U
+    // cp;3000;...;gc=Zs;lb=BA;na=IDEOGRAPHIC SPACE;...;SB=SP;scx=<script>;WSpace
+    UBool revertToScript=
+        newValues.contains(UCHAR_SCRIPT_EXTENSIONS) && props.scx.isEmpty() &&
+        !newValues.contains(UCHAR_SCRIPT);
+    if(newValues.contains(UCHAR_SCRIPT) || revertToScript) {
+        int32_t script=props.getIntProp(UCHAR_SCRIPT);
+        uint32_t value=splitScriptCodeOrIndex(script);
+        // Use UPROPS_SCRIPT_X_MASK:
+        // When writing a Script code, remove Script_Extensions bits as well.
+        // If needed, they will get written again.
+        upvec_setValue(pv, start, end, 0, value, UPROPS_SCRIPT_X_MASK, &errorCode);
     }
     // Write a new (Script, Script_Extensions) value if there are Script_Extensions
     // and either Script or Script_Extensions are new on the current line.
@@ -731,9 +746,9 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
         int32_t script=props.getIntProp(UCHAR_SCRIPT);
         uint32_t scriptX;
         if(script==USCRIPT_COMMON) {
-            scriptX=UPROPS_SCRIPT_X_WITH_COMMON|(uint32_t)index;
+            scriptX=UPROPS_SCRIPT_X_WITH_COMMON;
         } else if(script==USCRIPT_INHERITED) {
-            scriptX=UPROPS_SCRIPT_X_WITH_INHERITED|(uint32_t)index;
+            scriptX=UPROPS_SCRIPT_X_WITH_INHERITED;
         } else {
             // Store an additional pair of 16-bit units for an unusual main Script code
             // together with the Script_Extensions index.
@@ -744,13 +759,14 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
                 index=scriptExtensions.length();
                 scriptExtensions.append(codeIndexPair);
             }
-            scriptX=UPROPS_SCRIPT_X_WITH_OTHER|(uint32_t)index;
+            scriptX=UPROPS_SCRIPT_X_WITH_OTHER;
         }
-        if(index>UPROPS_SCRIPT_MASK) {
-            fprintf(stderr, "genprops: Script_Extensions indexes overflow bit field\n");
+        if(index>UPROPS_MAX_SCRIPT) {
+            fprintf(stderr, "genprops: Script_Extensions indexes overflow bit fields\n");
             errorCode=U_BUFFER_OVERFLOW_ERROR;
             return;
         }
+        scriptX|=splitScriptCodeOrIndex(index);
         upvec_setValue(pv, start, end, 0, scriptX, UPROPS_SCRIPT_X_MASK, &errorCode);
     }
     if(U_FAILURE(errorCode)) {
@@ -811,7 +827,7 @@ CorePropsBuilder::build(UErrorCode &errorCode) {
     }
 
     int32_t pvRows;
-    const uint32_t *pvArray=upvec_getArray(pv, &pvRows, NULL);
+    upvec_getArray(pv, &pvRows, NULL);
     int32_t pvCount=pvRows*UPROPS_VECTOR_WORDS;
 
     /* round up scriptExtensions to multiple of 4 bytes */
@@ -841,7 +857,7 @@ CorePropsBuilder::build(UErrorCode &errorCode) {
     indexes[UPROPS_MAX_VALUES_INDEX]=
         (((int32_t)U_EA_COUNT-1)<<UPROPS_EA_SHIFT)|
         (((int32_t)UBLOCK_COUNT-1)<<UPROPS_BLOCK_SHIFT)|
-        (((int32_t)USCRIPT_CODE_LIMIT-1)&UPROPS_SCRIPT_MASK);
+        (int32_t)splitScriptCodeOrIndex(USCRIPT_CODE_LIMIT-1);
     indexes[UPROPS_MAX_VALUES_2_INDEX]=
         (((int32_t)U_LB_COUNT-1)<<UPROPS_LB_SHIFT)|
         (((int32_t)U_SB_COUNT-1)<<UPROPS_SB_SHIFT)|
@@ -878,6 +894,7 @@ CorePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
     usrc_writeArray(f,
         "static const UVersionInfo dataVersion={",
         dataInfo.dataVersion, 8, 4,
+        "",
         "};\n\n");
     usrc_writeUTrie2Arrays(f,
         "static const uint16_t propsTrie_index[%ld]={\n", NULL,
@@ -900,6 +917,7 @@ CorePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
     usrc_writeArray(f,
         "static const uint32_t propsVectors[%ld]={\n",
         pvArray, 32, pvCount,
+        "",
         "};\n\n");
     fprintf(f, "static const int32_t countPropsVectors=%ld;\n", (long)pvCount);
     fprintf(f, "static const int32_t propsVectorsColumns=%ld;\n", (long)UPROPS_VECTOR_WORDS);
@@ -907,11 +925,13 @@ CorePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
     usrc_writeArray(f,
         "static const uint16_t scriptExtensions[%ld]={\n",
         scriptExtensions.getBuffer(), 16, scriptExtensions.length(),
+        "",
         "};\n\n");
 
     usrc_writeArray(f,
         "static const int32_t indexes[UPROPS_INDEX_COUNT]={",
         indexes, 32, UPROPS_INDEX_COUNT,
+        "",
         "};\n\n");
     fputs("#endif  // INCLUDED_FROM_UCHAR_C\n", f);
     fclose(f);

@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2002-2014, International Business Machines Corporation and
@@ -612,7 +612,7 @@ public class CollationIteratorTest extends TestFmwk {
                     int ce = resultiter.next();
                     while (ce != CollationElementIterator.NULLORDER) {
                         if (ce != iter.next()) {
-                            errln("Discontiguos contraction test mismatch at"
+                            errln("Discontiguous contraction test mismatch at"
                                   + count);
                             return;
                         }

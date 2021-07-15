@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 *******************************************************************************
 *   Copyright (C) 2011-2014, International Business Machines
@@ -398,7 +398,7 @@ public final class MessagePatternUtil {
 
     /**
      * A Node representing a nested message (nested inside an argument)
-     * with its selection criterium.
+     * with its selection criterion.
      * @stable ICU 49
      */
     public static class VariantNode extends Node {

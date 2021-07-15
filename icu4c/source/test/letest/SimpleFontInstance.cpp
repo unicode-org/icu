@@ -135,6 +135,6 @@ float SimpleFontInstance::getScaleFactorY() const
 
 le_bool SimpleFontInstance::getGlyphPoint(LEGlyphID /*glyph*/, le_int32 /*pointNumber*/, LEPoint &/*point*/) const
 {
-    return FALSE;
+    return false;
 }
 

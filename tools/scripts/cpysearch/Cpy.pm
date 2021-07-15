@@ -107,7 +107,7 @@ our $ignore_exts = join '|',
                    @ignore_extensions;
 
 # ignore regex
-our $ignore_regex = "data/out/build|CVS|\\~|\\#|Debug|Release|positions|unidata|$ignore_exts";
+our $ignore_regex = "data/out/build|CVS|\\~|\\#|Debug|Release|positions|unidata|sources\.txt|$ignore_exts";
 
 # Check if this file should be ignored.
 sub should_ignore($) {

@@ -1,8 +1,9 @@
 // © 2017 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number;
 
 import com.ibm.icu.impl.StandardPlural;
+import com.ibm.icu.impl.number.Modifier.Signum;
 
 /**
  * This implementation of ModifierStore adopts references to Modifiers.
@@ -11,7 +12,8 @@ import com.ibm.icu.impl.StandardPlural;
  */
 public class AdoptingModifierStore implements ModifierStore {
     private final Modifier positive;
-    private final Modifier zero;
+    private final Modifier posZero;
+    private final Modifier negZero;
     private final Modifier negative;
     final Modifier[] mods;
     boolean frozen;
@@ -22,9 +24,10 @@ public class AdoptingModifierStore implements ModifierStore {
      * <p>
      * If this constructor is used, a plural form CANNOT be passed to {@link #getModifier}.
      */
-    public AdoptingModifierStore(Modifier positive, Modifier zero, Modifier negative) {
+    public AdoptingModifierStore(Modifier positive, Modifier posZero, Modifier negZero, Modifier negative) {
         this.positive = positive;
-        this.zero = zero;
+        this.posZero = posZero;
+        this.negZero = negZero;
         this.negative = negative;
         this.mods = null;
         this.frozen = true;
@@ -39,13 +42,14 @@ public class AdoptingModifierStore implements ModifierStore {
      */
     public AdoptingModifierStore() {
         this.positive = null;
-        this.zero = null;
+        this.posZero = null;
+        this.negZero = null;
         this.negative = null;
-        this.mods = new Modifier[3 * StandardPlural.COUNT];
+        this.mods = new Modifier[4 * StandardPlural.COUNT];
         this.frozen = false;
     }
 
-    public void setModifier(int signum, StandardPlural plural, Modifier mod) {
+    public void setModifier(Signum signum, StandardPlural plural, Modifier mod) {
         assert !frozen;
         mods[getModIndex(signum, plural)] = mod;
     }
@@ -54,21 +58,34 @@ public class AdoptingModifierStore implements ModifierStore {
         frozen = true;
     }
 
-    public Modifier getModifierWithoutPlural(int signum) {
+    public Modifier getModifierWithoutPlural(Signum signum) {
         assert frozen;
         assert mods == null;
-        return signum == 0 ? zero : signum < 0 ? negative : positive;
+        assert signum != null;
+        switch (signum) {
+            case POS:
+                return positive;
+            case POS_ZERO:
+                return posZero;
+            case NEG_ZERO:
+                return negZero;
+            case NEG:
+                return negative;
+            default:
+                throw new AssertionError("Unreachable");
+        }
     }
 
-    public Modifier getModifier(int signum, StandardPlural plural) {
+    @Override
+    public Modifier getModifier(Signum signum, StandardPlural plural) {
         assert frozen;
         assert positive == null;
         return mods[getModIndex(signum, plural)];
     }
 
-    private static int getModIndex(int signum, StandardPlural plural) {
-        assert signum >= -1 && signum <= 1;
+    private static int getModIndex(Signum signum, StandardPlural plural) {
+        assert signum != null;
         assert plural != null;
-        return plural.ordinal() * 3 + (signum + 1);
+        return plural.ordinal() * Signum.COUNT + signum.ordinal();
     }
 }

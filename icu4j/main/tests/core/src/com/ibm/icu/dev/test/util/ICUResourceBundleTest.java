@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /**
  *******************************************************************************
  * Copyright (C) 2001-2016, International Business Machines Corporation and
@@ -699,19 +699,18 @@ public final class ICUResourceBundleTest extends TestFmwk {
     public void TestLocaleDisplayNames() {
         ULocale[] locales = ULocale.getAvailableLocales();
 
-        Set<String> localCountryExceptions = new HashSet<String>();
+        Set<String> localCountryExceptions = new HashSet<>();
         if (logKnownIssue("cldrbug:8903",
-                "No localized region name for lrc_IQ, lrc_IR, nus_SS, nds_DE, ti_ER, ti_ET")) {
+                "No localized region name for lrc_IQ, lrc_IR, nus_SS, nds_DE, su_Latn_ID")) {
             localCountryExceptions.add("lrc_IQ");
             localCountryExceptions.add("lrc_IR");
             localCountryExceptions.add("nus_SS");
             localCountryExceptions.add("nds_DE");
             localCountryExceptions.add("nds_NL");
-            localCountryExceptions.add("ti_ER");
-            localCountryExceptions.add("ti_ET");
+            localCountryExceptions.add("su_Latn_ID");
         }
 
-        Set<String> localLangExceptions = new HashSet<String>();
+        Set<String> localLangExceptions = new HashSet<>();
         if (logKnownIssue("cldrbug:8903", "No localized language name for nmg, nds")) {
             localLangExceptions.add("nmg");
             localLangExceptions.add("nds");
@@ -987,7 +986,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
     }
     private Set<String> setFromEnumeration(Enumeration<String> e) {
-        TreeSet<String> set = new TreeSet<String>();
+        TreeSet<String> set = new TreeSet<>();
         while (e.hasMoreElements()) {
             set.add(e.nextElement());
         }
@@ -1118,7 +1117,10 @@ public final class ICUResourceBundleTest extends TestFmwk {
         if (rb7.getKey() != null) {
             errln("getKey() call should have returned null.");
         }
-        if (((ICUResourceBundle)rb1).findTopLevel(0) == null) {
+        // The following test may no longer be exercised if
+        // rb1 is for a locale like en_US with an empty resource bundle.
+        // (Before ICU-21028 such a bundle would have contained at least a Version string.)
+        if (rb1.getSize() != 0 && ((ICUResourceBundle)rb1).findTopLevel(0) == null) {
             errln("Error calling findTopLevel().");
         }
         if (ICUResourceBundle.getFullLocaleNameSet() == null) {

@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 dz{
     AuxExemplarCharacters{
         "[\u0F84 ཊ ཋ ཌ ཎ \u0F7E ཥ \u0F80 \u0F7B \u0F7D \u0F9A \u0F9B \u0F9C \u0F9E "
@@ -35,51 +36,39 @@ dz{
             patternsLong{
                 decimalFormat{
                     1000{
-                        one{"0K"}
                         other{"སྟོང་ཕྲག 0"}
                     }
                     10000{
-                        one{"00K"}
                         other{"ཁྲི་ཕྲག 0"}
                     }
                     100000{
-                        one{"000K"}
                         other{"འབུམ་ཕྲག 0"}
                     }
                     1000000{
-                        one{"0M"}
                         other{"ས་ཡ་ 0"}
                     }
                     10000000{
-                        one{"00M"}
                         other{"བྱེ་བ་ 0"}
                     }
                     100000000{
-                        one{"000M"}
                         other{"དུང་ཕྱུར་ 0"}
                     }
                     1000000000{
-                        one{"0G"}
                         other{"དུང་ཕྱུར་ 00"}
                     }
                     10000000000{
-                        one{"00G"}
                         other{"དུང་ཕྱུར་བརྒྱ་ 0"}
                     }
                     100000000000{
-                        one{"000G"}
                         other{"དུང་ཕྱུར་སྟོང 0"}
                     }
                     1000000000000{
-                        one{"0T"}
                         other{"དུང་ཕྱུར་ཁྲི་ 0"}
                     }
                     10000000000000{
-                        one{"00T"}
                         other{"དུང་ཕྱུར་འབུམ་ 0"}
                     }
                     100000000000000{
-                        one{"000T"}
                         other{"དུང་ཕྱུར་ས་ཡ་ 0"}
                     }
                 }
@@ -99,7 +88,7 @@ dz{
         }
         minimalPairs{
             plural{
-                other{"ཉིནམ་ {0} "}
+                other{"ཉིནམ་ {0}"}
             }
         }
         native{"tibt"}
@@ -118,7 +107,6 @@ dz{
             }
         }
     }
-    Version{"36"}
     calendar{
         generic{
             DateTimePatterns{
@@ -135,6 +123,16 @@ dz{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "ahmmsszzzz",
+                "ahmmssz",
+                "ahmmss",
+                "ahmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMdd",
+                "GyMMMdd",
+                "GGGGGyMMdd",
             }
             availableFormats{
                 Ed{"d E"}
@@ -290,6 +288,16 @@ dz{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "ahmmsszzzz",
+                "ahmmssz",
+                "ahmmss",
+                "ahmm",
+                "yMMMMEEEEdd",
+                "yMMMMdd",
+                "yMMMdd",
+                "yMMdd",
             }
             availableFormats{
                 Ed{"d E"}

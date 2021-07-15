@@ -33,8 +33,8 @@
 
 U_NAMESPACE_USE
 
-UBool beVerbose=FALSE;
-UBool beQuiet=FALSE;
+UBool beVerbose=false;
+UBool beQuiet=false;
 
 PropsBuilder::PropsBuilder() {}
 PropsBuilder::~PropsBuilder() {}

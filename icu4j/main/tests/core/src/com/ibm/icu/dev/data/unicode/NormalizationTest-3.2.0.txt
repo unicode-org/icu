@@ -1,5 +1,5 @@
 # © 2002 and later: Unicode, Inc. and others.
-# License & terms of use: http://www.unicode.org/copyright.html#License
+# License & terms of use: http://www.unicode.org/copyright.html
 #
 # NormalizationTest-3.2.0.txt
 # Date: 2002-03-19,23:31:18 GMT [MD]

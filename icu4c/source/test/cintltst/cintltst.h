@@ -78,10 +78,18 @@ U_CFUNC char *aescstrdup(const UChar* unichars, int32_t length);
 U_CFUNC void *ctst_malloc(size_t size);
 
 /**
- * Return the path to cintltst's data ( icu/source/data/testdata ) directory. 
+ * Return the path to cintltst's data ( icu/source/data/testdata ) directory.
+ * The path may be in the out/ directory.
  * Return value is allocated by ctst_malloc and should not be deleted.
  */
 U_CFUNC const char* loadTestData(UErrorCode* err);
+
+/*
+ * Returns the path to the icu/source/test/testdata directory.
+ * The path is always the source directory.
+ * Return value is static and should not be deleted.
+ */
+U_CFUNC const char* loadSourceTestData(UErrorCode* err);
 
 /**
  * function used to specify the error

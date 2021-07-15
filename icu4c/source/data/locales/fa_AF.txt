@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 fa_AF{
     AuxExemplarCharacters{
         "[\u200E\u200F \u064E \u0650 \u064F \u0652 \u0656 \u0670 \u200C \u200D إ ټ ځ "
@@ -18,7 +19,6 @@ fa_AF{
             }
         }
     }
-    Version{"36"}
     calendar{
         gregorian{
             appendItems{
@@ -74,18 +74,14 @@ fa_AF{
                     }
                     narrow{
                         afternoon1{"بعد از چاشت"}
-                        afternoon2{"ع"}
                         morning1{"ب"}
-                        morning2{"ص"}
                         night1{"ش"}
-                        night2{"ن"}
                     }
                     wide{
                         afternoon1{"ظهر"}
                         afternoon2{"بعدازچاشت"}
                         morning1{"بامداد"}
                         morning2{"صبح"}
-                        night1{"شب"}
                         night2{"نیمه‌شب"}
                     }
                 }

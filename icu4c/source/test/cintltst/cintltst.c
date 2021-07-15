@@ -210,7 +210,7 @@ int main(int argc, const char* const argv[])
         root = NULL;
         addAllTests(&root);
 
-        /*  Tests acutally run HERE.   TODO:  separate command line option parsing & setting from test execution!! */
+        /*  Tests actually run HERE.   TODO:  separate command line option parsing & setting from test execution!! */
         nerrors = runTestRequest(root, argc, argv);
 
         setTestOption(REPEAT_TESTS_OPTION, DECREMENT_OPTION_VALUE);
@@ -576,6 +576,31 @@ const char* loadTestData(UErrorCode* err){
     return _testDataPath;
 }
 
+/**
+ * Returns the path to icu/source/test/testdata/
+ * Note: this function is parallel with C++ getSourceTestData in intltest.cpp
+ */
+const char *loadSourceTestData(UErrorCode* err) {
+    (void)err;
+    const char *srcDataDir = NULL;
+#ifdef U_TOPSRCDIR
+    srcDataDir = U_TOPSRCDIR U_FILE_SEP_STRING"test" U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING;
+#else
+    srcDataDir = ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "test" U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING;
+    FILE *f = fopen(".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "test" U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING "rbbitst.txt", "r");
+    if (f) {
+        /* We're in icu/source/test/intltest/ */
+        fclose(f);
+    }
+    else {
+        /* We're in icu/source/test/intltest/Platform/(Debug|Release) */
+        srcDataDir = ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING
+                     "test" U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING;
+    }
+#endif
+    return srcDataDir;
+}
+
 #define CTEST_MAX_TIMEZONE_SIZE 256
 static UChar gOriginalTimeZone[CTEST_MAX_TIMEZONE_SIZE] = {0};
 
@@ -696,6 +721,12 @@ U_CFUNC UBool assertTrue(const char* msg, int /*not UBool*/ condition) {
 
 U_CFUNC UBool assertEquals(const char* message, const char* expected,
                            const char* actual) {
+    if (expected == NULL) {
+        expected = "(null)";
+    }
+    if (actual == NULL) {
+        actual = "(null)";
+    }
     if (uprv_strcmp(expected, actual) != 0) {
         log_err("FAIL: %s; got \"%s\"; expected \"%s\"\n",
                 message, actual, expected);
@@ -711,6 +742,12 @@ U_CFUNC UBool assertEquals(const char* message, const char* expected,
 
 U_CFUNC UBool assertUEquals(const char* message, const UChar* expected,
                             const UChar* actual) {
+    if (expected == NULL) {
+        expected = u"(null)";
+    }
+    if (actual == NULL) {
+        actual = u"(null)";
+    }
     for (int32_t i=0;; i++) {
         if (expected[i] != actual[i]) {
             log_err("FAIL: %s; got \"%s\"; expected \"%s\"\n",

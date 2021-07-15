@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 id{
     AuxExemplarCharacters{"[å]"}
     Ellipsis{
@@ -13,7 +14,10 @@ id{
     ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
-    ExemplarCharactersPunctuation{"[\\- ‐ ‑ – — , ; \\: ! ? . … ' ‘ ’ “ ” ( ) \\[ \\] /]"}
+    ExemplarCharactersPunctuation{
+        "[\\- ‐ ‑ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ "
+        "′ ″]"
+    }
     MoreInformation{"?"}
     NumberElements{
         default{"latn"}
@@ -34,51 +38,39 @@ id{
             patternsLong{
                 decimalFormat{
                     1000{
-                        one{"0 rb"}
                         other{"0 ribu"}
                     }
                     10000{
-                        one{"00 rb"}
                         other{"00 ribu"}
                     }
                     100000{
-                        one{"000 rb"}
                         other{"000 ribu"}
                     }
                     1000000{
-                        one{"0 jt"}
                         other{"0 juta"}
                     }
                     10000000{
-                        one{"00 jt"}
                         other{"00 juta"}
                     }
                     100000000{
-                        one{"000 jt"}
                         other{"000 juta"}
                     }
                     1000000000{
-                        one{"0 M"}
                         other{"0 miliar"}
                     }
                     10000000000{
-                        one{"00 M"}
                         other{"00 miliar"}
                     }
                     100000000000{
-                        one{"000 M"}
                         other{"000 miliar"}
                     }
                     1000000000000{
-                        one{"0 T"}
                         other{"0 triliun"}
                     }
                     10000000000000{
-                        one{"00 T"}
                         other{"00 triliun"}
                     }
                     100000000000000{
-                        one{"000 T"}
                         other{"000 triliun"}
                     }
                 }
@@ -124,56 +116,45 @@ id{
                 }
                 decimalFormat{
                     1000{
-                        one{"0 rb"}
                         other{"0 rb"}
                     }
                     10000{
-                        one{"00 rb"}
                         other{"00 rb"}
                     }
                     100000{
-                        one{"000 rb"}
                         other{"000 rb"}
                     }
                     1000000{
-                        one{"0 jt"}
                         other{"0 jt"}
                     }
                     10000000{
-                        one{"00 jt"}
                         other{"00 jt"}
                     }
                     100000000{
-                        one{"000 jt"}
                         other{"000 jt"}
                     }
                     1000000000{
-                        one{"0 M"}
                         other{"0 M"}
                     }
                     10000000000{
-                        one{"00 M"}
                         other{"00 M"}
                     }
                     100000000000{
-                        one{"000 M"}
                         other{"000 M"}
                     }
                     1000000000000{
-                        one{"0 T"}
                         other{"0 T"}
                     }
                     10000000000000{
-                        one{"00 T"}
                         other{"00 T"}
                     }
                     100000000000000{
-                        one{"000 T"}
                         other{"000 T"}
                     }
                 }
             }
             symbols{
+                approximatelySign{"~"}
                 decimal{","}
                 exponential{"E"}
                 group{"."}
@@ -199,7 +180,6 @@ id{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"36"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -216,6 +196,16 @@ id{
                 "{1} 'pukul' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
             }
             availableFormats{
                 Ed{"E, d"}
@@ -348,6 +338,16 @@ id{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "UMMMMEEEEdd",
+                "UMMMMd",
+                "UMMMd",
+                "yMd",
             }
             cyclicNameSets{
                 solarTerms{
@@ -519,6 +519,16 @@ id{
                 "{1} 'pukul' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyyMMdd",
             }
             availableFormats{
                 Bh{"h B"}
@@ -719,6 +729,16 @@ id{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEdd",
+                "yMMMMd",
+                "yMMMd",
+                "yyMMdd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -1239,6 +1259,16 @@ id{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
+            }
             availableFormats{
                 Ed{"E, d"}
                 Gy{"y G"}
@@ -1444,6 +1474,16 @@ id{
                 "{1} 'pukul' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
             }
             availableFormats{
                 MEd{"E, d/M"}
@@ -1711,6 +1751,16 @@ id{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
+            }
             availableFormats{
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
@@ -1736,9 +1786,9 @@ id{
         }
     }
     characterLabel{
-        activities{"Aktivitas"}
-        african_scripts{"Skrip Afrika"}
-        american_scripts{"Skrip Amerika"}
+        activities{"aktivitas"}
+        african_scripts{"skrip Afrika"}
+        american_scripts{"skrip Amerika"}
         animal{"hewan"}
         animals_nature{"satwa atau alam"}
         arrows{"panah"}
@@ -1755,9 +1805,9 @@ id{
         divination_symbols{"simbol ramalan"}
         downwards_arrows{"panah bawah"}
         downwards_upwards_arrows{"panah atas bawah"}
-        east_asian_scripts{"Skrip Asia Timur"}
+        east_asian_scripts{"skrip Asia Timur"}
         emoji{"emoji"}
-        european_scripts{"Skrip Eropa"}
+        european_scripts{"skrip Eropa"}
         female{"perempuan"}
         flag{"bendera"}
         flags{"bendera"}
@@ -1767,15 +1817,15 @@ id{
         full_width_form_variant{"varian lebar penuh"}
         geometric_shapes{"bentuk geometris"}
         half_width_form_variant{"varian setengah lebar"}
-        han_characters{"Aksara Han"}
-        han_radicals{"Han Radikal"}
+        han_characters{"aksara Han"}
+        han_radicals{"Han radikal"}
         hanja{"Hanja"}
-        hanzi_simplified{"Hanzi (Aksara Sederhana)"}
-        hanzi_traditional{"Hanzi (Aksara Tradisional)"}
+        hanzi_simplified{"Hanzi (sederhana)"}
+        hanzi_traditional{"Hanzi (tradisional)"}
         heart{"hati"}
         historic_scripts{"skrip historis"}
         ideographic_desc_characters{"karakter desk. ideografis"}
-        japanese_kana{"Huruf Kana Jepang"}
+        japanese_kana{"huruf Kana Jepang"}
         kanbun{"kanbun"}
         kanji{"kanji"}
         keycap{"keycap"}
@@ -1785,7 +1835,7 @@ id{
         limited_use{"penggunaan terbatas"}
         male{"pria"}
         math_symbols{"simbol matematika"}
-        middle_eastern_scripts{"Skrip Timur Tengah"}
+        middle_eastern_scripts{"skrip Timur Tengah"}
         miscellaneous{"lain-lain"}
         modern_scripts{"skrip modern"}
         modifier{"pengubah"}
@@ -1807,8 +1857,8 @@ id{
         small_form_variant{"varian kecil"}
         smiley{"wajah tersenyum"}
         smileys_people{"smiley atau orang"}
-        south_asian_scripts{"Skrip Asia Selatan"}
-        southeast_asian_scripts{"Skrip Asia Tenggara"}
+        south_asian_scripts{"skrip Asia Selatan"}
+        southeast_asian_scripts{"skrip Asia Tenggara"}
         spacing{"spasi"}
         sport{"olahraga"}
         symbols{"simbol"}
@@ -1820,7 +1870,7 @@ id{
         variant_forms{"varian"}
         vocalic_jamo{"jamo vokal"}
         weather{"cuaca"}
-        western_asian_scripts{"Skrip Asia Bagian Barat"}
+        western_asian_scripts{"skrip Asia Bagian Barat"}
         whitespace{"spasi kosong"}
     }
     contextTransforms{
