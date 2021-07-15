@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ee{
     Keys{
         calendar{"kalenda"}
@@ -182,6 +183,10 @@ ee{
         zu{"zulugbe"}
         zxx{"gbegbɔgblɔ manɔmee"}
     }
+    Languages%short{
+        en_GB{"Yevugbe (GB)"}
+        en_US{"Yevugbe (US)"}
+    }
     Scripts{
         Arab{"Arabiagbeŋɔŋlɔ"}
         Armn{"armeniagbeŋɔŋlɔ"}
@@ -295,7 +300,6 @@ ee{
             tibt{"tibet digitwo"}
         }
     }
-    Version{"36"}
     codePatterns{
         language{"gbegbɔgblɔ {0}"}
         script{"gbeŋɔŋlɔ {0}"}

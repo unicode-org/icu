@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /**
  *******************************************************************************
  * Copyright (C) 2002-2010, International Business Machines Corporation and    *
@@ -35,7 +35,7 @@ public class CanonicalCharacterData
             
             for (String equiv = iterator.next(); equiv != null; equiv = iterator.next()) {
                 // Skip all equivalents of length 1; it's either the original
-                // characeter or something like Angstrom for A-Ring, which we don't care about
+                // character or something like Angstrom for A-Ring, which we don't care about
                 if (UTF16.countCodePoint(equiv) > 1) {
                     equivs.add(equiv);
                 }

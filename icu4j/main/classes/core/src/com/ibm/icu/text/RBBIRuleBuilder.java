@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 //
 //    Copyright (C) 2002-2014, International Business Machines Corporation and others.
 //    All Rights Reserved.
@@ -11,6 +11,7 @@ package com.ibm.icu.text;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,7 +67,7 @@ class RBBIRuleBuilder {
     //
     // Status {tag} values.   These structures are common to all of the rule sets (Forward, Reverse, etc.).
     //
-    Map<Set<Integer>, Integer> fStatusSets = new HashMap<Set<Integer>, Integer>(); // Status value sets encountered so far.
+    Map<Set<Integer>, Integer> fStatusSets = new HashMap<>(); // Status value sets encountered so far.
                                                                                    //  Map Key is the set of values.
                                                                                    //  Map Value is the runtime array index.
 
@@ -84,6 +85,9 @@ class RBBIRuleBuilder {
     //    using these simplified the porting, and consolidated the
     //    creation of Java exceptions
     //
+    static final int U_ILLEGAL_CHAR_FOUND = 12;
+    /**< Character conversion: Illegal input sequence/combination of input units. */
+
     static final int U_BRK_ERROR_START = 0x10200;
     /**< Start of codes indicating Break Iterator failures */
 
@@ -145,8 +149,8 @@ class RBBIRuleBuilder {
                             ICUDebug.value("rbbi") : null;
         fRules          = rules;
         fStrippedRules  = new StringBuilder(rules);
-        fUSetNodes      = new ArrayList<RBBINode>();
-        fRuleStatusVals = new ArrayList<Integer>();
+        fUSetNodes      = new ArrayList<>();
+        fRuleStatusVals = new ArrayList<>();
         fScanner        = new RBBIRuleScanner(this);
         fSetBuilder     = new RBBISetBuilder(this);
     }
@@ -182,7 +186,9 @@ class RBBIRuleBuilder {
         int reverseTableSize = align8(fForwardTable.getSafeTableSize());
         int trieSize         = align8(fSetBuilder.getTrieSize());
         int statusTableSize  = align8(fRuleStatusVals.size() * 4);
-        int rulesSize        = align8((strippedRules.length()) * 2);
+
+        byte[] strippedRulesUTF8 = strippedRules.getBytes(StandardCharsets.UTF_8);
+        int rulesSize        = align8(strippedRulesUTF8.length + 1);
 
         int totalSize = headerSize
                 + forwardTableSize
@@ -202,7 +208,7 @@ class RBBIRuleBuilder {
         header[RBBIDataWrapper.DH_MAGIC]         = 0xb1a0;
         header[RBBIDataWrapper.DH_FORMATVERSION] = RBBIDataWrapper.FORMAT_VERSION;
         header[RBBIDataWrapper.DH_LENGTH]        = totalSize;            // fLength, the total size of all rule sections.
-        header[RBBIDataWrapper.DH_CATCOUNT]      = fSetBuilder.getNumCharCategories(); // fCatCount.
+        header[RBBIDataWrapper.DH_CATCOUNT]      = fSetBuilder.getNumCharCategories();
 
         header[RBBIDataWrapper.DH_FTABLE]        = headerSize;           // fFTable
         header[RBBIDataWrapper.DH_FTABLELEN]     = forwardTableSize;     // fTableLen
@@ -214,11 +220,11 @@ class RBBIRuleBuilder {
                                                      + header[RBBIDataWrapper.DH_RTABLELEN]; // fTrie
         header[RBBIDataWrapper.DH_TRIELEN]       = fSetBuilder.getTrieSize(); // fTrieLen
         header[RBBIDataWrapper.DH_STATUSTABLE]   = header[RBBIDataWrapper.DH_TRIE]
-                                                     + header[RBBIDataWrapper.DH_TRIELEN];
+                                                     + trieSize;
         header[RBBIDataWrapper.DH_STATUSTABLELEN] = statusTableSize; // fStatusTableLen
         header[RBBIDataWrapper.DH_RULESOURCE]    = header[RBBIDataWrapper.DH_STATUSTABLE]
                                                      + statusTableSize;
-        header[RBBIDataWrapper.DH_RULESOURCELEN] = strippedRules.length() * 2;
+        header[RBBIDataWrapper.DH_RULESOURCELEN] = strippedRulesUTF8.length;
         for (i = 0; i < header.length; i++) {
             dos.writeInt(header[i]);
             outputPos += 4;
@@ -257,8 +263,9 @@ class RBBIRuleBuilder {
         // Write out the stripped rules (rules with extra spaces removed
         //   These go last in the data area, even though they are not last in the header.
         Assert.assrt(outputPos == header[RBBIDataWrapper.DH_RULESOURCE]);
-        dos.writeChars(strippedRules);
-        outputPos += strippedRules.length() * 2;
+        dos.write(strippedRulesUTF8, 0, strippedRulesUTF8.length);
+        dos.write(0);  // Null termination
+        outputPos += strippedRulesUTF8.length + 1;
         while (outputPos % 8 != 0) { // pad to an 8 byte boundary
             dos.write(0);
             outputPos += 1;
@@ -290,9 +297,7 @@ class RBBIRuleBuilder {
 
         //
         // UnicodeSet processing.
-        //    Munge the Unicode Sets to create a set of character categories.
-        //    Generate the mapping tables (TRIE) from input code points to
-        //    the character categories.
+        //    Munge the Unicode Sets to create an initial set of character categories.
         //
         fSetBuilder.buildRanges();
 
@@ -301,6 +306,10 @@ class RBBIRuleBuilder {
         //
         fForwardTable = new RBBITableBuilder(this, fForwardTree);
         fForwardTable.buildForwardTable();
+        // State table and character category optimization.
+        // Merge equivalent rows and columns.
+        // Note that this process alters the the initial set of character categories,
+        // causing the representation of UnicodeSets in the parse tree to become invalid.
         optimizeTables();
         fForwardTable.buildSafeReverseTable();
 
@@ -311,7 +320,9 @@ class RBBIRuleBuilder {
             fForwardTable.printRuleStatusTable();
             fForwardTable.printReverseTable();
         }
-
+        //    Generate the mapping tables (TRIE) from input code points to
+        //    the character categories.
+        //
         fSetBuilder.buildTrie();
         //
         //   Package up the compiled data, writing it to an output stream

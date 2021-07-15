@@ -184,6 +184,16 @@ template<class T> void umtx_initOnce(UInitOnce &uio, void (U_CALLCONV *fp)(T, UE
     }
 }
 
+// UMutex should be constexpr-constructible, so that no initialization code
+// is run during startup.
+// This works on all C++ libraries except MS VS before VS2019.
+#if (defined(_CPPLIB_VER) && !defined(_MSVC_STL_VERSION)) || \
+    (defined(_MSVC_STL_VERSION) && _MSVC_STL_VERSION < 142)
+    // (VS std lib older than VS2017) || (VS std lib version < VS2019)
+#   define UMUTEX_CONSTEXPR
+#else
+#   define UMUTEX_CONSTEXPR constexpr
+#endif
 
 /**
  * UMutex - ICU Mutex class.
@@ -212,7 +222,7 @@ template<class T> void umtx_initOnce(UInitOnce &uio, void (U_CALLCONV *fp)(T, UE
 
 class U_COMMON_API UMutex {
 public:
-    UMutex() = default;
+    UMUTEX_CONSTEXPR UMutex() {}
     ~UMutex() = default;
 
     UMutex(const UMutex &other) = delete;
@@ -230,13 +240,13 @@ public:
     static void cleanup();
 
 private:
-    alignas(std::mutex) char fStorage[sizeof(std::mutex)];
-    std::atomic<std::mutex *> fMutex;
+    alignas(std::mutex) char fStorage[sizeof(std::mutex)] {};
+    std::atomic<std::mutex *> fMutex { nullptr };
 
     /** All initialized UMutexes are kept in a linked list, so that they can be found,
      * and the underlying std::mutex destructed, by u_cleanup().
      */
-    UMutex *fListLink;
+    UMutex *fListLink { nullptr };
     static UMutex *gListHead;
 
     /** Out-of-line function to lazily initialize a UMutex on first use.
@@ -252,13 +262,13 @@ private:
  *              the global ICU mutex.  Recursive locks are an error
  *              and may cause a deadlock on some platforms.
  */
-U_INTERNAL void U_EXPORT2 umtx_lock(UMutex* mutex);
+U_CAPI void U_EXPORT2 umtx_lock(UMutex* mutex);
 
 /* Unlock a mutex.
  * @param mutex The given mutex to be unlocked.  Pass NULL to specify
  *              the global ICU mutex.
  */
-U_INTERNAL void U_EXPORT2 umtx_unlock (UMutex* mutex);
+U_CAPI void U_EXPORT2 umtx_unlock (UMutex* mutex);
 
 
 U_NAMESPACE_END

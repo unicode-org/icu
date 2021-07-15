@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2009-2013, International Business Machines Corporation and    *
@@ -229,11 +229,11 @@ public class LocaleIDs {
         "zxx", "zza" };
         
     private static final String[] _replacementLanguages = {
-        "id", "he", "yi", "jv", "sr", "nb",/* replacement language codes */
+        "id", "he", "yi", "jv", "sr", /* replacement language codes */
     };
     
     private static final String[] _obsoleteLanguages = {
-        "in", "iw", "ji", "jw", "sh", "no",    /* obsolete language codes */
+        "in", "iw", "ji", "jw", "sh", /* obsolete language codes */
     };
     
     /* This list MUST contain a three-letter code for every two-letter code in the

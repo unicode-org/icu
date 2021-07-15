@@ -524,7 +524,7 @@ public:
 
 private:
      /**
-      * @internal
+      * @internal (private)
       */
     class U_I18N_API PluralSelector : public UMemory {
       public:
@@ -536,14 +536,11 @@ private:
          * @param number The number to be plural-formatted.
          * @param ec Error code.
          * @return The selected PluralFormat keyword.
-         * @internal
+         * @internal (private)
          */
         virtual UnicodeString select(void *context, double number, UErrorCode& ec) const = 0;
     };
 
-    /**
-     * @internal
-     */
     class U_I18N_API PluralSelectorAdapter : public PluralSelector {
       public:
         PluralSelectorAdapter() : pluralRules(NULL) {
@@ -551,7 +548,7 @@ private:
 
         virtual ~PluralSelectorAdapter();
 
-        virtual UnicodeString select(void *context, double number, UErrorCode& /*ec*/) const; /**< @internal */
+        virtual UnicodeString select(void *context, double number, UErrorCode& /*ec*/) const;
 
         void reset();
 
@@ -575,7 +572,7 @@ private:
     UnicodeString& format(const Formattable& numberObject, double number,
                           UnicodeString& appendTo,
                           FieldPosition& pos,
-                          UErrorCode& status) const; /**< @internal */
+                          UErrorCode& status) const;
 
     /**
      * Finds the PluralFormat sub-message for the given number, or the "other" sub-message.
@@ -590,7 +587,7 @@ private:
      */
     static int32_t findSubMessage(
          const MessagePattern& pattern, int32_t partIndex,
-         const PluralSelector& selector, void *context, double number, UErrorCode& ec); /**< @internal */
+         const PluralSelector& selector, void *context, double number, UErrorCode& ec);
 
     void parseType(const UnicodeString& source, const NFRule *rbnfLenientScanner,
         Formattable& result, FieldPosition& pos) const;

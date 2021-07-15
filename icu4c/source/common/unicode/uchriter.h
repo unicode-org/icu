@@ -56,7 +56,7 @@ public:
    * The starting
    * position is specified by "position". If "position" is outside the valid
    * iteration range, the behavior of this object is undefined.
-   * @param textPtr The char16_t array to be iteratd over
+   * @param textPtr The char16_t array to be iterated over
    * @param length The length of the char16_t array
    * @param position The starting position of the iteration
    * @stable ICU 2.0
@@ -274,11 +274,11 @@ public:
   virtual UChar32       next32PostInc(void);
 
   /**
-   * Returns FALSE if there are no more code units or code points
+   * Returns false if there are no more code units or code points
    * at or after the current position in the iteration range.
    * This is used with nextPostInc() or next32PostInc() in forward
    * iteration.
-   * @return FALSE if there are no more code units or code points
+   * @return false if there are no more code units or code points
    * at or after the current position in the iteration range.
    * @stable ICU 2.0
    */
@@ -303,11 +303,11 @@ public:
   virtual UChar32       previous32(void);
 
   /**
-   * Returns FALSE if there are no more code units or code points
+   * Returns false if there are no more code units or code points
    * before the current position in the iteration range.
    * This is used with previous() or previous32() in backward
    * iteration.
-   * @return FALSE if there are no more code units or code points
+   * @return false if there are no more code units or code points
    * before the current position in the iteration range.
    * @stable ICU 2.0
    */

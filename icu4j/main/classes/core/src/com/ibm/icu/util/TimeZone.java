@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  * @(#)TimeZone.java    1.51 00/01/19
  *
@@ -916,6 +916,37 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
     }
 
     /**
+     * If the locale contains the timezone keyword, creates a copy of that
+     * <code>TimeZone</code>.
+     * Otherwise, create the default <code>TimeZone</code>.
+     * @param locale a locale which may contains 'timezone' keyword/value.
+     * @return A <code>TimeZone</code>. Clients are responsible for deleting the
+     *   <code>TimeZone</code> object returned.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static TimeZone forULocaleOrDefault(ULocale locale) {
+        String tz = locale.getKeywordValue("timezone");
+        return (tz == null) ? getDefault() : getTimeZone(tz);
+    }
+
+    /**
+     * If the locale contains the timezone keyword, creates a copy of that
+     * <code>TimeZone</code>.
+     * Otherwise, create the default <code>TimeZone</code>.
+     * @param locale a locale which may contains 'timezone' keyword/value.
+     * @return A <code>TimeZone</code>. Clients are responsible for deleting the
+     *   <code>TimeZone</code> object returned.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static TimeZone forLocaleOrDefault(Locale locale) {
+        return forULocaleOrDefault(ULocale.forLocale(locale));
+    }
+
+    /**
      * Gets the default <code>TimeZone</code> for this host.
      * The source of the default <code>TimeZone</code>
      * may vary with implementation.
@@ -1174,7 +1205,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      *
      * <p>This implementation utilizes <a href="http://unicode.org/cldr/charts/supplemental/zone_tzid.html">
      * Zone-Tzid mapping data</a>. The mapping data is updated time to time. To get the latest changes,
-     * please read the ICU user guide section <a href="http://userguide.icu-project.org/datetime/timezone#TOC-Updating-the-Time-Zone-Data">
+     * please read the ICU user guide section <a href="https://unicode-org.github.io/icu/userguide/datetime/timezone#updating-the-time-zone-data">
      * Updating the Time Zone Data</a>.
      *
      * @param id A system time zone ID
@@ -1234,7 +1265,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      *
      * <p>This implementation utilizes <a href="http://unicode.org/cldr/charts/supplemental/zone_tzid.html">
      * Zone-Tzid mapping data</a>. The mapping data is updated time to time. To get the latest changes,
-     * please read the ICU user guide section <a href="http://userguide.icu-project.org/datetime/timezone#TOC-Updating-the-Time-Zone-Data">
+     * please read the ICU user guide section <a href="https://unicode-org.github.io/icu/userguide/datetime/timezone#updating-the-time-zone-data">
      * Updating the Time Zone Data</a>.
      *
      * @param winid A Windows time zone ID

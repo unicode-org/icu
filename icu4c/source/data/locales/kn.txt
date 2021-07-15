@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 kn{
     AuxExemplarCharacters{"[\u200C\u200D ೞ]"}
     Ellipsis{
@@ -240,7 +241,6 @@ kn{
         minimumGroupingDigits{"1"}
         native{"knda"}
     }
-    Version{"36"}
     calendar{
         buddhist{
             eras{
@@ -495,6 +495,16 @@ kn{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "ahhmmsszzzz",
+                "ahhmmssz",
+                "ahhmmss",
+                "ahhmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMMdd",
+            }
             availableFormats{
                 Bh{"h B"}
                 Bhm{"h:mm B"}
@@ -663,6 +673,16 @@ kn{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "ahhmmsszzzz",
+                "ahhmmssz",
+                "ahhmmss",
+                "ahhmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yyMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}

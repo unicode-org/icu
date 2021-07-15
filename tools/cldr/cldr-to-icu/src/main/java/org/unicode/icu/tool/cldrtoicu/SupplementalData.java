@@ -17,20 +17,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.unicode.cldr.api.AttributeKey;
-import org.unicode.cldr.api.CldrData;
+import org.unicode.cldr.api.CldrDataSupplier;
+import org.unicode.cldr.api.CldrDataType;
+import org.unicode.cldr.api.PathMatcher;
 
 import com.google.common.base.Ascii;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableTable;
+import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
 /**
@@ -43,25 +48,32 @@ import com.google.common.collect.Table;
  */
 // TODO: This should be moved into the API and leverage some of the existing utility functions.
 public final class SupplementalData {
+    // Special IDs which are not supported via CLDR, but for which synthetic data is injected.
+    // The "TRADITIONAL" variants are here because their calendar differs from the non-variant
+    // locale. However CLDR cannot represent this currently because calendar defaults are in
+    // supplemental data (rather than locale data) and are keyed only on territory.
+    private static final ImmutableSet<String> PHANTOM_LOCALE_IDS =
+        ImmutableSet.of("ja_JP_TRADITIONAL", "th_TH_TRADITIONAL");
+
     private static final Pattern SCRIPT_SUBTAG = Pattern.compile("[A-Z][a-z]{3}");
 
     private static final PathMatcher ALIAS =
-        PathMatcher.of("supplementalData/metadata/alias/*[@type=*]");
+        PathMatcher.of("//supplementalData/metadata/alias/*[@type=*]");
 
     private static final PathMatcher PARENT_LOCALE =
-        PathMatcher.of("supplementalData/parentLocales/parentLocale[@parent=*]");
+        PathMatcher.of("//supplementalData/parentLocales/parentLocale[@parent=*]");
     private static final AttributeKey PARENT = keyOf("parentLocale", "parent");
     private static final AttributeKey LOCALES = keyOf("parentLocale", "locales");
 
     private static final PathMatcher CALENDER_PREFERENCE =
-        PathMatcher.of("supplementalData/calendarPreferenceData/calendarPreference[@territories=*]");
+        PathMatcher.of("//supplementalData/calendarPreferenceData/calendarPreference[@territories=*]");
     private static final AttributeKey CALENDER_TERRITORIES =
         keyOf("calendarPreference", "territories");
     private static final AttributeKey CALENDER_ORDERING =
         keyOf("calendarPreference", "ordering");
 
     private static final PathMatcher LIKELY_SUBTAGS =
-        PathMatcher.of("supplementalData/likelySubtags/likelySubtag[@from=*]");
+        PathMatcher.of("//supplementalData/likelySubtags/likelySubtag[@from=*]");
     private static final AttributeKey SUBTAG_FROM = keyOf("likelySubtag", "from");
     private static final AttributeKey SUBTAG_TO = keyOf("likelySubtag", "to");
 
@@ -88,18 +100,18 @@ public final class SupplementalData {
     }
 
     /**
-     * Creates a supplemental data API instance from the given CLDR data.
+     * Creates a supplemental data API instance from the given CLDR data supplier.
      *
-     * @param supplementalData the raw CLDR supplemental data instance.
+     * @param src the CLDR data supplier.
      * @return the supplemental data API.
      */
-    static SupplementalData create(CldrData supplementalData) {
+    public static SupplementalData create(CldrDataSupplier src) {
         Table<Alias, String, String> aliasTable = HashBasedTable.create();
         Map<String, String> parentLocaleMap = new HashMap<>();
         Map<String, String> defaultCalendarMap = new HashMap<>();
         Map<String, String> likelySubtagMap = new HashMap<>();
 
-        supplementalData.accept(
+        src.getDataForType(CldrDataType.SUPPLEMENTAL).accept(
             ARBITRARY,
             v -> {
                 if (ALIAS.matches(v.getPath())) {
@@ -122,17 +134,9 @@ public final class SupplementalData {
                 }
             });
 
-        // WARNING: The original mapper code determines the full set of deprecated territories and
-        // then removes the following hard-coded list without any explanation as to why. While this
-        // is presumably to "undeprecate" them for the purposes of the locale processing, there's
-        // no explanation of where this list comes from, and thus no way to maintain it.
-        //
-        // asList("062", "172", "200", "830", "AN", "CS", "QU")
-        //     .forEach(t -> aliasTable.remove(Alias.TERRITORY, t));
-        // TODO: Understand and document what on Earth this is all about or delete this comment.
-
+        Set<String> availableIds = Sets.union(src.getAvailableLocaleIds(), PHANTOM_LOCALE_IDS);
         return new SupplementalData(
-            aliasTable, parentLocaleMap, defaultCalendarMap, likelySubtagMap);
+            availableIds, aliasTable, parentLocaleMap, defaultCalendarMap, likelySubtagMap);
     }
 
     // A simple-as-possible, mutable, locale ID data "struct" to handle the IDs used during ICU
@@ -256,20 +260,28 @@ public final class SupplementalData {
         }
     }
 
+    private final ImmutableSet<String> availableIds;
     private final ImmutableTable<Alias, String, String> aliasTable;
     private final ImmutableMap<String, String> parentLocaleMap;
     private final ImmutableMap<String, String> defaultCalendarMap;
     private final ImmutableMap<String, String> likelySubtagMap;
 
     private SupplementalData(
+        Set<String> availableIds,
         Table<Alias, String, String> aliasTable,
         Map<String, String> parentLocaleMap,
         Map<String, String> defaultCalendarMap,
         Map<String, String> likelySubtagMap) {
+
+        this.availableIds = ImmutableSet.copyOf(availableIds);
         this.aliasTable = ImmutableTable.copyOf(aliasTable);
         this.parentLocaleMap = ImmutableMap.copyOf(parentLocaleMap);
         this.defaultCalendarMap = ImmutableMap.copyOf(defaultCalendarMap);
         this.likelySubtagMap = ImmutableMap.copyOf(likelySubtagMap);
+    }
+
+    public ImmutableSet<String> getAvailableLocaleIds() {
+        return availableIds;
     }
 
     /**
@@ -458,6 +470,11 @@ public final class SupplementalData {
      */
     public String getParent(String localeId) {
         checkState(!localeId.equals("root"), "cannot ask for parent of 'root' locale");
+        // We probably want to fully canonicalize here. But in the absence of that we
+        // at least need to do the following canonicalization:
+        if (localeId.equals("no_NO_NY")) {
+            localeId = "nn_NO";
+        }
         // Always defer to an explicit parent locale set in the CLDR data.
         Optional<String> explicitParent = getExplicitParentLocaleOf(localeId);
         if (explicitParent.isPresent()) {
@@ -515,7 +532,8 @@ public final class SupplementalData {
     // ...
     // Remove the script code 'Zzzz' and the region code 'ZZ' if they occur.
     //
-    // Note that this implementation does not need to handle "grandfathered" tags.
+    // Note that this implementation does not need to handle
+    // legacy language tags (marked as “Type: grandfathered” in BCP 47).
     private Optional<LocaleId> addLikelySubtags(String localeId) {
         if (localeId.equals("root")) {
             return Optional.empty();

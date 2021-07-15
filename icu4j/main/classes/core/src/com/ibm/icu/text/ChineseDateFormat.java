@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*********************************************************************
  * Copyright (C) 2000-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
@@ -126,12 +126,13 @@ public class ChineseDateFormat extends SimpleDateFormat {
                              char ch, int count, int beginOffset,
                              int fieldNum, DisplayContext capitalizationContext,
                              FieldPosition pos,
+                             char patternCharToOutput,
                              Calendar cal) {
 
         // Logic to handle 'G' for chinese calendar is moved into SimpleDateFormat,
         // and obsolete pattern char 'l' is now ignored in SimpleDateFormat, so we
         // just use its implementation
-        super.subFormat(buf, ch, count, beginOffset, fieldNum, capitalizationContext, pos, cal);
+        super.subFormat(buf, ch, count, beginOffset, fieldNum, capitalizationContext, pos, patternCharToOutput, cal);
 
         // The following is no longer an issue for this subclass...
         // TODO: add code to set FieldPosition for 'G' and 'l' fields. This

@@ -1,6 +1,6 @@
 /********************************************************************
  *   © 2016 and later: Unicode, Inc. and others.
- *   License & terms of use: http://www.unicode.org/copyright.html#License
+ *   License & terms of use: http://www.unicode.org/copyright.html
  *************************************************************************
  *************************************************************************
  * COPYRIGHT:
@@ -35,8 +35,8 @@ int main(int argc, char **argv) {
     printf("C API\n");
     capi();
 
-    showCurrencyFormatting(FALSE);
-    showCurrencyFormatting(TRUE);
+    showCurrencyFormatting(false);
+    showCurrencyFormatting(true);
 
     u_cleanup();    // Release any additional storage held by ICU.  
 

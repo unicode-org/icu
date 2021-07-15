@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 sr_Latn{
     %%Parent{"root"}
     Keys{
@@ -9,9 +10,9 @@ sr_Latn{
         colBackwards{"Sortiranje prema obrnutim akcentima"}
         colCaseFirst{"Ređanje prema malom/velikom slovu"}
         colCaseLevel{"Sortiranje prema malom/velikom slovu"}
-        colNormalization{"Normalizovano sortiranje"}
-        colNumeric{"Numeričko sortiranje"}
-        colStrength{"Sortiranje prema jačini"}
+        colNormalization{"normalizovano sortiranje"}
+        colNumeric{"numeričko sortiranje"}
+        colStrength{"sortiranje prema jačini"}
         collation{"redosled sortiranja"}
         currency{"valuta"}
         hc{"prikazivanje vremena (12- ili 24-časovno)"}
@@ -84,7 +85,7 @@ sr_Latn{
         cad{"kado"}
         car{"karipski"}
         cch{"atsam"}
-        ccp{"ccp"}
+        ccp{"čakma"}
         ce{"čečenski"}
         ceb{"sebuanski"}
         cgg{"čiga"}
@@ -114,6 +115,7 @@ sr_Latn{
         dar{"darginski"}
         dav{"taita"}
         de{"nemački"}
+        de_AT{"austrijski nemački"}
         de_CH{"švajcarski visoki nemački"}
         del{"delaverski"}
         den{"slejvi"}
@@ -121,7 +123,7 @@ sr_Latn{
         din{"dinka"}
         dje{"zarma"}
         doi{"dogri"}
-        dsb{"donji lužičkosrpski"}
+        dsb{"donjolužičkosrpski"}
         dua{"duala"}
         dum{"srednjeholandski"}
         dv{"maldivski"}
@@ -147,6 +149,7 @@ sr_Latn{
         eu{"baskijski"}
         ewo{"evondo"}
         fa{"persijski"}
+        fa_AF{"dari"}
         fan{"fang"}
         fat{"fanti"}
         ff{"fula"}
@@ -195,7 +198,7 @@ sr_Latn{
         hmn{"hmonški"}
         ho{"hiri motu"}
         hr{"hrvatski"}
-        hsb{"gornji lužičkosrpski"}
+        hsb{"gornjolužičkosrpski"}
         ht{"haićanski"}
         hu{"mađarski"}
         hup{"hupa"}
@@ -395,7 +398,6 @@ sr_Latn{
         ro_MD{"moldavski"}
         rof{"rombo"}
         rom{"romski"}
-        root{"rut"}
         ru{"ruski"}
         rup{"cincarski"}
         rw{"kinjaruanda"}
@@ -529,6 +531,14 @@ sr_Latn{
         zun{"zuni"}
         zxx{"bez lingvističkog sadržaja"}
         zza{"zaza"}
+    }
+    Languages%long{
+        zh_Hans{"pojednostavljeni mandarinski kineski"}
+        zh_Hant{"tradicionalni mandarinski kineski"}
+    }
+    Languages%menu{
+        yue{"kantonski kineski"}
+        zh{"mandarinski kineski"}
     }
     Languages%short{
         az{"azerski"}
@@ -848,7 +858,6 @@ sr_Latn{
         TARASK{"Taraskijevička ortografija"}
         VALENCIA{"Valencijska"}
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — sve"}
         category-list{"{0}: {1}"}
@@ -864,6 +873,8 @@ sr_Latn{
             one{"{0} potez"}
             other{"{0} poteza"}
         }
+        subscript{"napisano ispod {0}"}
+        superscript{"napisano iznad {0}"}
     }
     codePatterns{
         language{"Jezik: {0}"}

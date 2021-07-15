@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 fo{
     AuxExemplarCharacters{"[c q w x z]"}
     Ellipsis{
@@ -21,6 +22,7 @@ fo{
             miscPatterns{
                 approximately{"~{0}"}
                 atLeast{"{0}+"}
+                atMost{"≤{0}"}
                 range{"{0}–{1}"}
             }
             patterns{
@@ -211,7 +213,6 @@ fo{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"36"}
     calendar{
         generic{
             DateTimePatterns{
@@ -228,6 +229,16 @@ fo{
                 "{1} 'kl'. {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMMdd",
             }
             availableFormats{
                 Bh{"h B"}
@@ -450,6 +461,16 @@ fo{
                 "{1} 'kl'. {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMdd",
+                "yyMMdd",
             }
             appendItems{
                 Timezone{"{0} {1}"}

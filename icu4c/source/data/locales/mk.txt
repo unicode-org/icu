@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 mk{
     AuxExemplarCharacters{"[ѐ ѝ]"}
     Ellipsis{
@@ -86,16 +87,16 @@ mk{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"0 илј'.' ¤ "}
-                        other{"0 илј'.' ¤ "}
+                        one{"0 илј'.' ¤"}
+                        other{"0 илј'.' ¤"}
                     }
                     10000{
-                        one{"00 илј'.' ¤ "}
-                        other{"00 илј'.' ¤ "}
+                        one{"00 илј'.' ¤"}
+                        other{"00 илј'.' ¤"}
                     }
                     100000{
-                        one{"000 илј'.' ¤ "}
-                        other{"000 илј'.' ¤ "}
+                        one{"000 илј'.' ¤"}
+                        other{"000 илј'.' ¤"}
                     }
                     1000000{
                         one{"0 мил'.' ¤"}
@@ -186,6 +187,7 @@ mk{
                 }
             }
             symbols{
+                approximatelySign{"≈"}
                 decimal{","}
                 exponential{"E"}
                 group{"."}
@@ -214,7 +216,6 @@ mk{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"36"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -231,6 +232,16 @@ mk{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMdd",
+                "GyMdd",
+                "GGGGGyMdd",
             }
             availableFormats{
                 E{"E"}
@@ -336,6 +347,16 @@ mk{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMdd",
+                "GyMdd",
+                "GGGGGyMdd",
             }
             eras{
                 abbreviated{
@@ -515,6 +536,16 @@ mk{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMdd",
+                "GyMdd",
+                "GGGGGyMdd",
             }
             availableFormats{
                 Bh{"h B"}
@@ -728,11 +759,21 @@ mk{
                 "d MMMM y",
                 "d.M.y",
                 "d.M.yy",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}, 'во' {0}",
+                "{1}, 'во' {0}",
+                "{1}, 'во' {0}",
+                "{1}, 'во' {0}",
+                "{1}, 'во' {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMd",
+                "yyMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -789,8 +830,8 @@ mk{
                 yQQQ{"QQQ y 'г'."}
                 yQQQQ{"QQQQ y 'г'."}
                 yw{
-                    one{"w 'седмица' 'од' Y"}
-                    other{"w 'седмица' 'од' Y"}
+                    one{"w. 'седмица' 'од' Y"}
+                    other{"w. 'седмица' 'од' Y"}
                 }
             }
             dayNames{
@@ -874,11 +915,11 @@ mk{
             dayPeriod{
                 format{
                     abbreviated{
-                        afternoon1{"попл."}
+                        afternoon1{"попладне"}
                         evening1{"навечер"}
                         midnight{"полноќ"}
                         morning1{"наутро"}
-                        morning2{"претпл."}
+                        morning2{"претпладне"}
                         night1{"ноќе"}
                         noon{"напладне"}
                     }
@@ -939,15 +980,11 @@ mk{
             }
             eras{
                 abbreviated{
-                    "пр.н.е.",
-                    "н.е.",
-                }
-                abbreviated%variant{
                     "п.н.е.",
                     "н.е.",
                 }
                 narrow{
-                    "пр.н.е.",
+                    "п.н.е.",
                     "н.е.",
                 }
                 wide{
@@ -1252,6 +1289,16 @@ mk{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMdd",
+                "GyMdd",
+                "GGGGGyMdd",
+            }
             availableFormats{
                 E{"E"}
                 Ed{"d E"}
@@ -1501,6 +1548,16 @@ mk{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMdd",
+                "GyMdd",
+                "GGGGGyMdd",
             }
             availableFormats{
                 E{"E"}

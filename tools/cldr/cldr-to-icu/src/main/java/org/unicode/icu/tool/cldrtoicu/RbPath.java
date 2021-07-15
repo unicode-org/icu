@@ -54,20 +54,25 @@ public final class RbPath implements Comparable<RbPath> {
     private static final CharMatcher UNQUOTED_SEGMENT_CHARS =
         QUOTED_SEGMENT_CHARS.and(whitespace().negate());
 
-    private static final RbPath EMPTY = new RbPath(ImmutableList.of());
-
-    public static RbPath empty() {
-        return EMPTY;
-    }
-
+    /**
+     * Returns a path with the specified segments in (possibly empty). Note that unlike
+     * {@link #parse(String)}, {@code '/'} is not treated specially and can be present in a path
+     * element constructed by this method.
+     */
     public static RbPath of(String... segments) {
         return of(Arrays.asList(segments));
     }
 
+    /**
+     * Returns a path with the specified segments in (possibly empty). Note that unlike
+     * {@link #parse(String)}, {@code '/'} is not treated specially and can be present in a path
+     * element constructed by this method.
+     */
     public static RbPath of(Iterable<String> segments) {
         return new RbPath(segments);
     }
 
+    /** Parses the given path string, assuming {@code '/'} as a path separator. */
     public static RbPath parse(String path) {
         checkArgument(!path.isEmpty(), "cannot parse an empty path string");
         // Allow leading '/', but don't allow empty segments anywhere else.
@@ -77,7 +82,8 @@ public final class RbPath implements Comparable<RbPath> {
         return new RbPath(PATH_SPLITTER.split(path));
     }
 
-    static int getCommonPrefixLength(RbPath lhs, RbPath rhs) {
+    /** Returns the common prefix length of two paths (useful when thinking of path hierarchies). */
+    public static int getCommonPrefixLength(RbPath lhs, RbPath rhs) {
         int maxLength = Math.min(lhs.length(), rhs.length());
         int n = 0;
         while (n < maxLength && lhs.getSegment(n).equals(rhs.getSegment(n))) {
@@ -91,6 +97,7 @@ public final class RbPath implements Comparable<RbPath> {
 
     private RbPath(Iterable<String> segments) {
         this.segments = ImmutableList.copyOf(segments);
+        // Use "this.segments" since the incoming list can have a different hash!
         this.hashCode = Objects.hash(this.segments);
         for (String segment : this.segments) {
             checkArgument(!segment.isEmpty(), "path segments must not be empty: %s", this.segments);
@@ -122,43 +129,32 @@ public final class RbPath implements Comparable<RbPath> {
         }
     }
 
+    /** Returns the number of segments in this path. */
     public int length() {
         return segments.size();
     }
 
+    /** Returns the Nth segments in this path. */
     public String getSegment(int n) {
         return segments.get(n);
     }
 
-    public RbPath getParent() {
-        checkState(length() > 0, "cannot get parent of the empty path");
-        return length() > 1 ? new RbPath(segments.subList(0, length() - 1)) : EMPTY;
-    }
-
-    public boolean isAnonymous() {
-        return length() > 0 && segments.get(length() - 1).charAt(0) == '<';
-    }
-
+    /** Returns a new path extended at the end by the specified segments. */
     public RbPath extendBy(String... parts) {
         return new RbPath(Iterables.concat(segments, Arrays.asList(parts)));
     }
 
-    public RbPath extendBy(RbPath suffix) {
-        return new RbPath(Iterables.concat(segments, suffix.segments));
-    }
-
-    public RbPath mapSegments(Function<? super String, String> fn) {
-        return new RbPath(segments.stream().map(fn).collect(toImmutableList()));
-    }
-
+    /** Returns whether this path starts with the specified prefix. */
     public boolean startsWith(RbPath prefix) {
         return prefix.length() <= length() && matchesSublist(prefix, 0);
     }
 
+    /** Returns whether this path ends with the specified suffix. */
     public boolean endsWith(RbPath suffix) {
         return suffix.length() <= length() && matchesSublist(suffix, length() - suffix.length());
     }
 
+    /** Returns whether this path contains the specified path. */
     public boolean contains(RbPath path) {
         int maxOffset = length() - path.length();
         for (int i = 0; i <= maxOffset; i++) {
@@ -179,9 +175,42 @@ public final class RbPath implements Comparable<RbPath> {
         return true;
     }
 
-    boolean isIntPath() {
-        String lastElement = segments.get(segments.size() - 1);
-        return lastElement.endsWith(":int") || lastElement.endsWith(":intvector");
+    // TODO: Remove this and isAnonymous() since they are only called once each, in the same place.
+    public RbPath getParent() {
+        checkState(length() > 0, "cannot get parent of the empty path");
+        return new RbPath(segments.subList(0, length() - 1));
+    }
+
+    public boolean isAnonymous() {
+        return length() > 0 && segments.get(length() - 1).charAt(0) == '<';
+    }
+
+    // TODO: Remove this special case code (called exactly once).
+    public RbPath mapSegments(Function<? super String, String> fn) {
+        return new RbPath(segments.stream().map(fn).collect(toImmutableList()));
+    }
+
+    // TODO: Remove this and isAlias() in favour of having properly typed paths.
+    public boolean isIntPath() {
+        return typeSuffixIsAnyOf(":int", ":intvector");
+    }
+
+    public boolean isBinPath() {
+        return typeSuffixIsAnyOf(":bin");
+    }
+
+    public boolean isAlias() {
+        return typeSuffixIsAnyOf(":alias");
+    }
+
+    private boolean typeSuffixIsAnyOf(String... types) {
+        String lastElement = getSegment(length() - 1);
+        for (String type : types) {
+            if (lastElement.endsWith(type)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override public int compareTo(RbPath other) {

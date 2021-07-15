@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 yi{
     AuxExemplarCharacters{"[\u200E\u200F]"}
     ExemplarCharacters{
@@ -29,7 +30,6 @@ yi{
         native{"latn"}
         traditional{"hebr"}
     }
-    Version{"36"}
     calendar{
         generic{
             DateTimePatterns{
@@ -74,6 +74,16 @@ yi{
                 "{1} {0}",
                 "{1}, {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yyMMdd",
             }
             appendItems{
                 Timezone{"{1} {0}"}
@@ -309,11 +319,33 @@ yi{
                     "d בMMMM y",
                     "hebr",
                 }
-                "{1}, {0}",
                 "{1} {0}",
                 "{1} {0}",
-                "{1}, {0}",
-                "{1}, {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                {
+                    "yMMMMEEEEd",
+                    "hebr",
+                }
+                {
+                    "yMMMMd",
+                    "hebr",
+                }
+                {
+                    "yMMMMd",
+                    "hebr",
+                }
+                {
+                    "yMMMMd",
+                    "hebr",
+                }
             }
             availableFormats{
                 Gy{"y G"}

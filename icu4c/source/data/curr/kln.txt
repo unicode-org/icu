@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 kln{
     Currencies{
         AED{
@@ -211,7 +212,7 @@ kln{
             "Rabisiekab CFA BEAC",
         }
         XOF{
-            "CFA",
+            "F CFA",
             "Rabisiekab CFA BCEAO",
         }
         ZAR{
@@ -231,5 +232,4 @@ kln{
             "Dolaitab ya Zimbabwe",
         }
     }
-    Version{"36"}
 }

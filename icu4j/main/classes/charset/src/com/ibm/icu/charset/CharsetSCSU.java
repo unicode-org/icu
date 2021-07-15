@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2008-2011, International Business Machines Corporation and    *
@@ -111,7 +111,7 @@ class CharsetSCSU extends CharsetICU{
   //  };
 
     private final static class SCSUData {
-        /* dynamic window offsets, intitialize to default values from initialDynamicOffsets */
+        /* dynamic window offsets, initialize to default values from initialDynamicOffsets */
         int toUDynamicOffsets[] = new int[8] ;
         int fromUDynamicOffsets[] = new int[8] ;
 

@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 or{
     Keys{
         calendar{"କ୍ୟାଲେଣ୍ଡର୍"}
@@ -140,6 +141,7 @@ or{
         eu{"ବାସ୍କ୍ୱି"}
         ewo{"ଇୱୋଣ୍ଡୋ"}
         fa{"ପର୍ସିଆନ୍"}
+        fa_AF{"ଦାରି"}
         fan{"ଫାଙ୍ଗ"}
         fat{"ଫାଣ୍ଟି"}
         ff{"ଫୁଲାହ"}
@@ -385,7 +387,6 @@ or{
         ro_MD{"ମୋଲଡୋଭିଆନ୍"}
         rof{"ରୋମ୍ବୋ"}
         rom{"ରୋମାନି"}
-        root{"ରୋଟ୍"}
         ru{"ରୁଷିୟ"}
         rup{"ଆରୋମାନିଆନ୍"}
         rw{"କିନ୍ୟାରୱାଣ୍ଡା"}
@@ -736,6 +737,7 @@ or{
             laoo{"ଲାଓ ଅଙ୍କଗୁଡ଼ିକ"}
             latn{"ପାଶ୍ଚାତ୍ୟ ଅଙ୍କଗୁଡ଼ିକ"}
             mlym{"ମଲୟାଲମ୍ ଅଙ୍କଗୁଡ଼ିକ"}
+            mong{"ମଙ୍ଗୋଲୀୟ ଡିଜିଟ୍"}
             mymr{"ମିଆଁମାର୍‌ ଅଙ୍କଗୁଡ଼ିକ"}
             orya{"ଓଡ଼ିଆ ଅଙ୍କଗୁଡ଼ିକ"}
             roman{"ରୋମାନ୍‌ ସଂଖ୍ୟାଗୁଡ଼ିକ"}
@@ -747,7 +749,16 @@ or{
             tibt{"ତିବତୀ ଅଙ୍କଗୁଡ଼ିକ"}
         }
     }
-    Version{"36"}
+    Variants{
+        1694ACAD{"ଆଦ୍ୟ ଆଧୁନିକ ଫରାସୀ"}
+        1901{"ପାରମ୍ପରିକ ଜର୍ମାନ ବର୍ଣ୍ଣପ୍ରକରଣ"}
+        1959ACAD{"ଏକାଡେମିକ"}
+        1996{"1996ର ଜର୍ମାନ ବର୍ଣ୍ଣପ୍ରକରଣ"}
+        ALUKU{"ଆଲୁକୁ ଉପଭାଷା"}
+        UNIFON{"ୟୁନିଫନ୍ ଫନେଟିକ୍ ଆଲଫାବେଟ୍"}
+        VAIDIKA{"ବୈଦିକ"}
+        VALENCIA{"ଭେଲେନସିଆନ୍"}
+    }
     characterLabelPattern{
         all{"{0} — ସମସ୍ତ"}
         category-list{"{0}: {1}"}

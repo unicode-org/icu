@@ -1,0 +1,15 @@
+// © 2021 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
+//
+// Include Burmese and Thai lstm models.
+{
+  "featureFilters": {
+    "brkitr_lstm": {
+      "includelist": [
+	"Thai_graphclust_model4_heavy",
+	"Burmese_graphclust_model5_heavy"
+      ]
+    }
+  }
+}

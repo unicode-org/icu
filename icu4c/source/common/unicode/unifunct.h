@@ -93,7 +93,7 @@ public:
      *
      * <p>Concrete subclasses of UnicodeFunctor should use the macro
      *    UOBJECT_DEFINE_RTTI_IMPLEMENTATION from uobject.h to
-     *    provide definitios getStaticClassID and getDynamicClassID.
+     *    provide definitions getStaticClassID and getDynamicClassID.
      *
      * @return The class ID for this object. All objects of a given
      * class have the same class ID.  Objects of other classes have

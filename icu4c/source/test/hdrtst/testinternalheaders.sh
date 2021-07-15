@@ -9,27 +9,38 @@
 CC=clang
 CXX=clang++
 
+ERROR_EXIT=0
+
 # Runtime libraries
 
 for file in `ls common/*.h`; do
     echo $file
     echo '#include "'$file'"' > ht_temp.cpp ;
     echo 'void noop() {}' >> ht_temp.cpp ;
-    $CXX -c -std=c++11 -I common -O0 ht_temp.cpp ;
+    $CXX -c -std=c++11 -I common -DU_COMMON_IMPLEMENTATION -O0 ht_temp.cpp ;
+    if [ $? != 0 ] ; then
+        ERROR_EXIT=1
+    fi
 done ;
 
 for file in `ls i18n/*.h`; do
     echo $file
     echo '#include "'$file'"' > ht_temp.cpp ;
     echo 'void noop() {}' >> ht_temp.cpp ;
-    $CXX -c -std=c++11 -I common -I i18n -O0 ht_temp.cpp ;
+    $CXX -c -std=c++11 -I common -I i18n -DU_I18N_IMPLEMENTATION -O0 ht_temp.cpp ;
+    if [ $? != 0 ] ; then
+        ERROR_EXIT=1
+    fi
 done ;
 
 for file in `ls io/*.h`; do
     echo $file
     echo '#include "'$file'"' > ht_temp.cpp ;
     echo 'void noop() {}' >> ht_temp.cpp ;
-    $CXX -c -std=c++11 -I common -I i18n -I io -O0 ht_temp.cpp ;
+    $CXX -c -std=c++11 -I common -I i18n -I io -DU_IO_IMPLEMENTATION -O0 ht_temp.cpp ;
+    if [ $? != 0 ] ; then
+        ERROR_EXIT=1
+    fi
 done ;
 
 # layout is removed.
@@ -51,6 +62,9 @@ for file in `ls tools/toolutil/*.h`; do
     echo '#include "'$file'"' > ht_temp.cpp ;
     echo 'void noop() {}' >> ht_temp.cpp ;
     $CXX -c -std=c++11 -I common -I i18n -I io -I tools/toolutil -O0 ht_temp.cpp ;
+    if [ $? != 0 ] ; then
+        ERROR_EXIT=1
+    fi
 done ;
 
 # Exclude tzcode: tools/tzcode/private.h uses an argument "new" in a function declaration.
@@ -65,6 +79,9 @@ for tool in escapesrc genccode gencmn gencolusb gennorm2 genren gentest icupkg i
         echo '#include "'$file'"' > ht_temp.cpp ;
         echo 'void noop() {}' >> ht_temp.cpp ;
         $CXX -c -std=c++11 -I common -I i18n -I io -I tools/toolutil -I tools/$tool -O0 ht_temp.cpp ;
+        if [ $? != 0 ] ; then
+            ERROR_EXIT=1
+        fi
     done ;
 done ;
 
@@ -75,6 +92,9 @@ for file in `ls tools/ctestfw/unicode/*.h`; do
     echo '#include "'$file'"' > ht_temp.cpp ;
     echo 'void noop() {}' >> ht_temp.cpp ;
     $CXX -c -std=c++11 -I common -I i18n -I io -I tools/toolutil -I tools/ctestfw -O0 ht_temp.cpp ;
+    if [ $? != 0 ] ; then
+        ERROR_EXIT=1
+    fi
 done ;
 
 # C not C++ for cintltst
@@ -83,6 +103,9 @@ for file in `ls test/cintltst/*.h`; do
     echo '#include "'$file'"' > ht_temp.c ;
     echo 'void noop() {}' >> ht_temp.c ;
     $CC -c -std=c11 -I common -I i18n -I io -I tools/toolutil -I tools/ctestfw -I test/cintltst -O0 ht_temp.c ;
+    if [ $? != 0 ] ; then
+        ERROR_EXIT=1
+    fi
 done ;
 
 for test in intltest iotest testmap thaitest fuzzer; do
@@ -91,6 +114,9 @@ for test in intltest iotest testmap thaitest fuzzer; do
         echo '#include "'$file'"' > ht_temp.cpp ;
         echo 'void noop() {}' >> ht_temp.cpp ;
         $CXX -c -std=c++11 -I common -I i18n -I io -I tools/toolutil -I tools/ctestfw -I test/$test -O0 ht_temp.cpp ;
+        if [ $? != 0 ] ; then
+            ERROR_EXIT=1
+        fi
     done ;
 done ;
 
@@ -106,3 +132,6 @@ done ;
 # TODO: perf/*/*.h
 
 rm ht_temp.cpp ht_temp.c ht_temp.o
+
+echo $ERROR_EXIT
+exit $ERROR_EXIT

@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 zh_Hant_HK{
     Currencies{
         AED{
@@ -242,10 +243,6 @@ zh_Hant_HK{
             "TZS",
             "坦桑尼亞先令",
         }
-        VES{
-            "VES",
-            "VES",
-        }
         VUV{
             "VUV",
             "瓦努阿圖瓦圖",
@@ -259,7 +256,7 @@ zh_Hant_HK{
             "東加勒比元",
         }
         XOF{
-            "CFA",
+            "F CFA",
             "多哥非洲共同體法郎",
         }
         XPF{
@@ -472,5 +469,4 @@ zh_Hant_HK{
             other{"贊比亞克瓦查"}
         }
     }
-    Version{"36"}
 }

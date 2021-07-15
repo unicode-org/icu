@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 se{
     AuxExemplarCharacters{"[à ç é è í ń ñ ó ò q ú w x y ü ø æ å ä ã ö]"}
     ExemplarCharacters{"[a á b c č d đ e f g h i j k l m n ŋ o p r s š t ŧ u v z ž]"}
@@ -24,200 +25,128 @@ se{
             patternsLong{
                 decimalFormat{
                     1000{
-                        few{"0 dt"}
-                        many{"0 dt"}
                         one{"0 duhát"}
                         other{"0 duháhat"}
                         two{"0 duháhat"}
-                        zero{"0 dt"}
                     }
                     10000{
-                        few{"00 dt"}
-                        many{"00 dt"}
                         one{"00 duhát"}
                         other{"00 duháhat"}
                         two{"00 duháhat"}
-                        zero{"00 dt"}
                     }
                     100000{
-                        few{"000 dt"}
-                        many{"000 dt"}
                         one{"000 duhát"}
                         other{"000 duháhat"}
                         two{"000 duháhat"}
-                        zero{"000 dt"}
                     }
                     1000000{
-                        few{"0 mn"}
-                        many{"0 mn"}
                         one{"0 miljona"}
                         other{"0 miljonat"}
                         two{"0 miljonat"}
-                        zero{"0 mn"}
                     }
                     10000000{
-                        few{"00 mn"}
-                        many{"00 mn"}
                         one{"00 miljona"}
                         other{"00 miljonat"}
                         two{"00 miljonat"}
-                        zero{"00 mn"}
                     }
                     100000000{
-                        few{"000 mn"}
-                        many{"000 mn"}
                         one{"000 miljona"}
                         other{"000 miljonat"}
                         two{"000 miljonat"}
-                        zero{"000 mn"}
                     }
                     1000000000{
-                        few{"0 md"}
-                        many{"0 md"}
                         one{"0 miljardi"}
                         other{"0 miljardit"}
                         two{"0 miljardit"}
-                        zero{"0 md"}
                     }
                     10000000000{
-                        few{"00 md"}
-                        many{"00 md"}
                         one{"00 miljardi"}
                         other{"00 miljardit"}
                         two{"00 miljardit"}
-                        zero{"00 md"}
                     }
                     100000000000{
-                        few{"000 md"}
-                        many{"000 md"}
                         one{"000 miljardi"}
                         other{"000 miljardit"}
                         two{"000 miljardit"}
-                        zero{"000 md"}
                     }
                     1000000000000{
-                        few{"0 bn"}
-                        many{"0 bn"}
                         one{"0 biljona"}
                         other{"0 biljonat"}
                         two{"0 biljonat"}
-                        zero{"0 bn"}
                     }
                     10000000000000{
-                        few{"00 bn"}
-                        many{"00 bn"}
                         one{"00 biljona"}
                         other{"00 biljonat"}
                         two{"00 biljonat"}
-                        zero{"00 bn"}
                     }
                     100000000000000{
-                        few{"000 bn"}
-                        many{"000 bn"}
                         one{"000 biljona"}
                         other{"000 biljonat"}
                         two{"000 biljonat"}
-                        zero{"000 bn"}
                     }
                 }
             }
             patternsShort{
                 decimalFormat{
                     1000{
-                        few{"0 dt"}
-                        many{"0 dt"}
                         one{"0 dt"}
                         other{"0 dt"}
                         two{"0 dt"}
-                        zero{"0 dt"}
                     }
                     10000{
-                        few{"00 dt"}
-                        many{"00 dt"}
                         one{"00 dt"}
                         other{"00 dt"}
                         two{"00 dt"}
-                        zero{"00 dt"}
                     }
                     100000{
-                        few{"000 dt"}
-                        many{"000 dt"}
                         one{"000 dt"}
                         other{"000 dt"}
                         two{"000 dt"}
-                        zero{"000 dt"}
                     }
                     1000000{
-                        few{"0 mn"}
-                        many{"0 mn"}
                         one{"0 mn"}
                         other{"0 mn"}
                         two{"0 mn"}
-                        zero{"0 mn"}
                     }
                     10000000{
-                        few{"00 mn"}
-                        many{"00 mn"}
                         one{"00 mn"}
                         other{"00 mn"}
                         two{"00 mn"}
-                        zero{"00 mn"}
                     }
                     100000000{
-                        few{"000 mn"}
-                        many{"000 mn"}
                         one{"000 mn"}
                         other{"000 mn"}
                         two{"000 mn"}
-                        zero{"000 mn"}
                     }
                     1000000000{
-                        few{"0 md"}
-                        many{"0 md"}
                         one{"0 md"}
                         other{"0 md"}
                         two{"0 md"}
-                        zero{"0 md"}
                     }
                     10000000000{
-                        few{"00 md"}
-                        many{"00 md"}
                         one{"00 md"}
                         other{"00 md"}
                         two{"00 md"}
-                        zero{"00 md"}
                     }
                     100000000000{
-                        few{"000 md"}
-                        many{"000 md"}
                         one{"000 md"}
                         other{"000 md"}
                         two{"000 md"}
-                        zero{"000 md"}
                     }
                     1000000000000{
-                        few{"0 bn"}
-                        many{"0 bn"}
                         one{"0 bn"}
                         other{"0 bn"}
                         two{"0 bn"}
-                        zero{"0 bn"}
                     }
                     10000000000000{
-                        few{"00 bn"}
-                        many{"00 bn"}
                         one{"00 bn"}
                         other{"00 bn"}
                         two{"00 bn"}
-                        zero{"00 bn"}
                     }
                     100000000000000{
-                        few{"000 bn"}
-                        many{"000 bn"}
                         one{"000 bn"}
                         other{"000 bn"}
                         two{"000 bn"}
-                        zero{"000 bn"}
                     }
                 }
             }
@@ -238,7 +167,6 @@ se{
         }
         minimumGroupingDigits{"1"}
     }
-    Version{"36"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -267,6 +195,16 @@ se{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMMdd",
             }
             appendItems{
                 Timezone{"{0} {1}"}

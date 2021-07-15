@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 sr_Latn{
     %%Parent{"root"}
     AuxExemplarCharacters{"[å q w x y]"}
@@ -20,12 +21,15 @@ sr_Latn{
         default{"latn"}
         latn{
             miscPatterns{
+                approximately{"~{0}"}
                 atLeast{"≥{0}"}
+                atMost{"≤{0}"}
                 range{"{0}–{1}"}
             }
             patterns{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 currencyFormat{"#,##0.00 ¤"}
+                decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
             }
@@ -33,99 +37,63 @@ sr_Latn{
                 decimalFormat{
                     1000{
                         few{"0 hiljade"}
-                        many{"0 hilj'.'"}
                         one{"0 hiljada"}
                         other{"0 hiljada"}
-                        two{"0 hilj'.'"}
-                        zero{"0 hilj'.'"}
                     }
                     10000{
                         few{"00 hiljade"}
-                        many{"00 hilj'.'"}
                         one{"00 hiljada"}
                         other{"00 hiljada"}
-                        two{"00 hilj'.'"}
-                        zero{"00 hilj'.'"}
                     }
                     100000{
                         few{"000 hiljade"}
-                        many{"000 hilj'.'"}
                         one{"000 hiljada"}
                         other{"000 hiljada"}
-                        two{"000 hilj'.'"}
-                        zero{"000 hilj'.'"}
                     }
                     1000000{
                         few{"0 miliona"}
-                        many{"0 mil'.'"}
                         one{"0 milion"}
                         other{"0 miliona"}
-                        two{"0 mil'.'"}
-                        zero{"0 mil'.'"}
                     }
                     10000000{
                         few{"00 miliona"}
-                        many{"00 mil'.'"}
                         one{"00 milion"}
                         other{"00 miliona"}
-                        two{"00 mil'.'"}
-                        zero{"00 mil'.'"}
                     }
                     100000000{
                         few{"000 miliona"}
-                        many{"000 mil'.'"}
                         one{"000 milion"}
                         other{"000 miliona"}
-                        two{"000 mil'.'"}
-                        zero{"000 mil'.'"}
                     }
                     1000000000{
                         few{"0 milijarde"}
-                        many{"0 mlrd'.'"}
                         one{"0 milijarda"}
                         other{"0 milijardi"}
-                        two{"0 mlrd'.'"}
-                        zero{"0 mlrd'.'"}
                     }
                     10000000000{
                         few{"00 milijarde"}
-                        many{"00 mlrd'.'"}
                         one{"00 milijarda"}
                         other{"00 milijardi"}
-                        two{"00 mlrd'.'"}
-                        zero{"00 mlrd'.'"}
                     }
                     100000000000{
                         few{"000 milijarde"}
-                        many{"000 mlrd'.'"}
                         one{"000 milijarda"}
                         other{"000 milijardi"}
-                        two{"000 mlrd'.'"}
-                        zero{"000 mlrd'.'"}
                     }
                     1000000000000{
                         few{"0 biliona"}
-                        many{"0 bil'.'"}
                         one{"0 bilion"}
                         other{"0 biliona"}
-                        two{"0 bil'.'"}
-                        zero{"0 bil'.'"}
                     }
                     10000000000000{
                         few{"00 biliona"}
-                        many{"00 bil'.'"}
                         one{"00 bilion"}
                         other{"00 biliona"}
-                        two{"00 bil'.'"}
-                        zero{"00 bil'.'"}
                     }
                     100000000000000{
                         few{"000 biliona"}
-                        many{"000 bil'.'"}
                         one{"000 bilion"}
                         other{"000 biliona"}
-                        two{"000 bil'.'"}
-                        zero{"000 bil'.'"}
                     }
                 }
             }
@@ -195,99 +163,63 @@ sr_Latn{
                 decimalFormat{
                     1000{
                         few{"0 hilj'.'"}
-                        many{"0 hilj'.'"}
                         one{"0 hilj'.'"}
                         other{"0 hilj'.'"}
-                        two{"0 hilj'.'"}
-                        zero{"0 hilj'.'"}
                     }
                     10000{
                         few{"00 hilj'.'"}
-                        many{"00 hilj'.'"}
                         one{"00 hilj'.'"}
                         other{"00 hilj'.'"}
-                        two{"00 hilj'.'"}
-                        zero{"00 hilj'.'"}
                     }
                     100000{
                         few{"000 hilj'.'"}
-                        many{"000 hilj'.'"}
                         one{"000 hilj'.'"}
                         other{"000 hilj'.'"}
-                        two{"000 hilj'.'"}
-                        zero{"000 hilj'.'"}
                     }
                     1000000{
                         few{"0 mil'.'"}
-                        many{"0 mil'.'"}
                         one{"0 mil'.'"}
                         other{"0 mil'.'"}
-                        two{"0 mil'.'"}
-                        zero{"0 mil'.'"}
                     }
                     10000000{
                         few{"00 mil'.'"}
-                        many{"00 mil'.'"}
                         one{"00 mil'.'"}
                         other{"00 mil'.'"}
-                        two{"00 mil'.'"}
-                        zero{"00 mil'.'"}
                     }
                     100000000{
                         few{"000 mil'.'"}
-                        many{"000 mil'.'"}
                         one{"000 mil'.'"}
                         other{"000 mil'.'"}
-                        two{"000 mil'.'"}
-                        zero{"000 mil'.'"}
                     }
                     1000000000{
                         few{"0 mlrd'.'"}
-                        many{"0 mlrd'.'"}
                         one{"0 mlrd'.'"}
                         other{"0 mlrd'.'"}
-                        two{"0 mlrd'.'"}
-                        zero{"0 mlrd'.'"}
                     }
                     10000000000{
                         few{"00 mlrd'.'"}
-                        many{"00 mlrd'.'"}
                         one{"00 mlrd'.'"}
                         other{"00 mlrd'.'"}
-                        two{"00 mlrd'.'"}
-                        zero{"00 mlrd'.'"}
                     }
                     100000000000{
                         few{"000 mlrd'.'"}
-                        many{"000 mlrd'.'"}
                         one{"000 mlrd'.'"}
                         other{"000 mlrd'.'"}
-                        two{"000 mlrd'.'"}
-                        zero{"000 mlrd'.'"}
                     }
                     1000000000000{
                         few{"0 bil'.'"}
-                        many{"0 bil'.'"}
                         one{"0 bil'.'"}
                         other{"0 bil'.'"}
-                        two{"0 bil'.'"}
-                        zero{"0 bil'.'"}
                     }
                     10000000000000{
                         few{"00 bil'.'"}
-                        many{"00 bil'.'"}
                         one{"00 bil'.'"}
                         other{"00 bil'.'"}
-                        two{"00 bil'.'"}
-                        zero{"00 bil'.'"}
                     }
                     100000000000000{
                         few{"000 bil'.'"}
-                        many{"000 bil'.'"}
                         one{"000 bil'.'"}
                         other{"000 bil'.'"}
-                        two{"000 bil'.'"}
-                        zero{"000 bil'.'"}
                     }
                 }
             }
@@ -296,10 +228,14 @@ sr_Latn{
                 exponential{"E"}
                 group{"."}
                 infinity{"∞"}
+                list{";"}
+                minusSign{"-"}
                 nan{"NaN"}
                 perMille{"‰"}
                 percentSign{"%"}
+                plusSign{"+"}
                 superscriptingExponent{"×"}
+                timeSeparator{":"}
             }
         }
         minimalPairs{
@@ -315,7 +251,6 @@ sr_Latn{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"36"}
     calendar{
         buddhist{
             eras{
@@ -382,6 +317,16 @@ sr_Latn{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMd",
+                "GGGGGyMd",
+            }
             availableFormats{
                 Bh{"h B"}
                 Bhm{"hh:mm B"}
@@ -431,52 +376,12 @@ sr_Latn{
                 yyyyQQQQ{"QQQQ y. G"}
             }
             intervalFormats{
-                Bh{
-                    B{"h B – h B"}
-                    h{"h–h B"}
+                H{
+                    H{"HH–HH"}
                 }
-                Bhm{
-                    B{"h:mm B – h:mm B"}
-                    h{"h:mm–h:mm B"}
-                    m{"h:mm–h:mm B"}
-                }
-                Gy{
-                    G{"G y – G y"}
-                    y{"G y–y"}
-                }
-                GyM{
-                    G{"GGGGG y-MM – GGGGG y-MM"}
-                    M{"GGGGG y-MM – y-MM"}
-                    y{"GGGGG y-MM – y-MM"}
-                }
-                GyMEd{
-                    G{"GGGGG y-MM-dd, E – GGGGG y-MM-dd, E"}
-                    M{"GGGGG y-MM-dd, E – y-MM-dd, E"}
-                    d{"GGGGG y-MM-dd, E – y-MM-dd, E"}
-                    y{"GGGGG y-MM-dd, E – y-MM-dd, E"}
-                }
-                GyMMM{
-                    G{"G y MMM – G y MMM"}
-                    M{"G y MMM–MMM"}
-                    y{"G y MMM – y MMM"}
-                }
-                GyMMMEd{
-                    G{"G y MMM d, E – G y MMM d, E"}
-                    M{"G y MMM d, E – MMM d, E"}
-                    d{"G y MMM d, E – MMM d, E"}
-                    y{"G y MMM d, E – y MMM d, E"}
-                }
-                GyMMMd{
-                    G{"G y MMM d – G y MMM d"}
-                    M{"G y MMM d – MMM d"}
-                    d{"G y MMM d–d"}
-                    y{"G y MMM d – y MMM d"}
-                }
-                GyMd{
-                    G{"GGGGG y-MM-dd – GGGGG y-MM-dd"}
-                    M{"GGGGG y-MM-dd – y-MM-dd"}
-                    d{"GGGGG y-MM-dd – y-MM-dd"}
-                    y{"GGGGG y-MM-dd – y-MM-dd"}
+                Hm{
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
                 }
                 Hmv{
                     H{"HH:mm–HH:mm v"}
@@ -511,6 +416,15 @@ sr_Latn{
                     d{"d–d"}
                 }
                 fallback{"{0} – {1}"}
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
                 hmv{
                     a{"h:mm a – h:mm a v"}
                     h{"h:mm–h:mm a v"}
@@ -584,6 +498,16 @@ sr_Latn{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEdd",
+                "yMMMMdd",
+                "yMMdd",
+                "yyMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -792,10 +716,6 @@ sr_Latn{
                     "p. n. e.",
                     "n. e.",
                 }
-                abbreviated%variant{
-                    "BCE",
-                    "CE",
-                }
                 narrow{
                     "p.n.e.",
                     "n.e.",
@@ -805,58 +725,11 @@ sr_Latn{
                     "nove ere",
                 }
                 wide%variant{
-                    "BCE",
-                    "CE",
+                    "pre naše ere",
+                    "naše ere",
                 }
             }
             intervalFormats{
-                Bh{
-                    B{"h B – h B"}
-                    h{"h–h B"}
-                }
-                Bhm{
-                    B{"h:mm B – h:mm B"}
-                    h{"h:mm–h:mm B"}
-                    m{"h:mm–h:mm B"}
-                }
-                Gy{
-                    G{"G y – G y"}
-                    y{"G y–y"}
-                }
-                GyM{
-                    G{"GGGGG y-MM – GGGGG y-MM"}
-                    M{"GGGGG y-MM – y-MM"}
-                    y{"GGGGG y-MM – y-MM"}
-                }
-                GyMEd{
-                    G{"GGGGG y-MM-dd, E – GGGGG y-MM-dd, E"}
-                    M{"GGGGG y-MM-dd, E – y-MM-dd, E"}
-                    d{"GGGGG y-MM-dd, E – y-MM-dd, E"}
-                    y{"GGGGG y-MM-dd, E – y-MM-dd, E"}
-                }
-                GyMMM{
-                    G{"G y MMM – G y MMM"}
-                    M{"G y MMM–MMM"}
-                    y{"G y MMM – y MMM"}
-                }
-                GyMMMEd{
-                    G{"G y MMM d, E – G y MMM d, E"}
-                    M{"G y MMM d, E – MMM d, E"}
-                    d{"G y MMM d, E – MMM d, E"}
-                    y{"G y MMM d, E – y MMM d, E"}
-                }
-                GyMMMd{
-                    G{"G y MMM d – G y MMM d"}
-                    M{"G y MMM d – MMM d"}
-                    d{"G y MMM d–d"}
-                    y{"G y MMM d – y MMM d"}
-                }
-                GyMd{
-                    G{"GGGGG y-MM-dd – GGGGG y-MM-dd"}
-                    M{"GGGGG y-MM-dd – y-MM-dd"}
-                    d{"GGGGG y-MM-dd – y-MM-dd"}
-                    y{"GGGGG y-MM-dd – y-MM-dd"}
-                }
                 H{
                     H{"HH–HH"}
                 }
@@ -1171,6 +1044,16 @@ sr_Latn{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GyyMd",
             }
             eras{
                 abbreviated{
@@ -2087,9 +1970,7 @@ sr_Latn{
         }
         sun-narrow{
             relative{
-                "-1"{"pr. ned."}
                 "0"{"u ned"}
-                "1"{"sl. ned."}
             }
             relativeTime{
                 future{
@@ -2467,12 +2348,6 @@ sr_Latn{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
-        standard-narrow{
-            2{"{0} i {1}"}
-            end{"{0} i {1}"}
-            middle{"{0}, {1}"}
-            start{"{0}, {1}"}
-        }
         standard-short{
             2{"{0} i {1}"}
             end{"{0} i {1}"}
@@ -2526,7 +2401,7 @@ sr_Latn{
         number{
             lenient{
                 "[\\-‒⁻₋−➖﹣－]",
-                "[,،٫、︐︑﹐﹑，､]",
+                "[,،٫⹁、︐︑﹐﹑，､]",
                 "[+⁺₊➕﬩﹢＋]",
             }
         }

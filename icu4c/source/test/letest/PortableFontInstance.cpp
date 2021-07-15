@@ -394,7 +394,7 @@ void PortableFontInstance::getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) co
 
 le_bool PortableFontInstance::getGlyphPoint(LEGlyphID /*glyph*/, le_int32 /*pointNumber*/, LEPoint &/*point*/) const
 {
-    return FALSE;
+    return false;
 }
 
 le_int32 PortableFontInstance::getUnitsPerEM() const

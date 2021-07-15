@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 haw{
     AuxExemplarCharacters{"[b c d f g j q r s t v x y z]"}
     ExemplarCharacters{"[a ā e ē i ī o ō u ū h k l m n p w ʻ]"}
@@ -32,7 +33,6 @@ haw{
         }
         minimumGroupingDigits{"1"}
     }
-    Version{"36"}
     calendar{
         generic{
             DateTimePatterns{
@@ -52,6 +52,19 @@ haw{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "ahmmsszzzz",
+                "ahmmssz",
+                "ahmmss",
+                "ahmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                {
+                    "GGGGGyyMd",
+                    "M=romanlow",
+                }
             }
         }
         gregorian{
@@ -84,6 +97,19 @@ haw{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "ahmmsszzzz",
+                "ahmmssz",
+                "ahmmss",
+                "ahmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                {
+                    "yyMd",
+                    "M=romanlow",
+                }
             }
             appendItems{
                 Timezone{"{0} {1}"}

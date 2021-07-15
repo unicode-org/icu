@@ -555,19 +555,18 @@ TestLocaleStructure(void) {
             ures_close(currentLocale);
             continue;
         }
-        ures_getStringByKey(currentLocale, "Version", NULL, &errorCode);
-        if(errorCode != U_ZERO_ERROR) {
+        const UChar *version = ures_getStringByKey(currentLocale, "Version", NULL, &errorCode);
+        if(U_FAILURE(errorCode)) {
             log_err("No version information is available for locale %s, and it should be!\n",
                 currLoc);
         }
-        else if (ures_getStringByKey(currentLocale, "Version", NULL, &errorCode)[0] == (UChar)(0x78)) {
-            log_verbose("WARNING: The locale %s is experimental! It shouldn't be listed as an installed locale.\n",
-                currLoc);
+        else if (version[0] == u'x') {
+            log_verbose("WARNING: The locale %s is experimental! "
+                        "It shouldn't be listed as an installed locale.\n",
+                        currLoc);
         }
         resolvedLoc = ures_getLocaleByType(currentLocale, ULOC_ACTUAL_LOCALE, &errorCode);
         if (strcmp(resolvedLoc, currLoc) != 0) {
-            /* All locales have at least a Version resource.
-               If it's absolutely empty, then the previous test will fail too.*/
             log_err("Locale resolves to different locale. Is %s an alias of %s?\n",
                 currLoc, resolvedLoc);
         }
@@ -1092,11 +1091,11 @@ static void VerifyTranslation(void) {
                if (U_FAILURE(errorCode)) {
                    log_err("ulocdata_getMeasurementSystem failed for locale %s with error: %s \n", currLoc, u_errorName(errorCode));
                } else {
-                   if ( strstr(fullLoc, "_US")!=NULL || strstr(fullLoc, "_MM")!=NULL || strstr(fullLoc, "_LR")!=NULL ) {
+                   if ( strstr(fullLoc, "_US")!=NULL || strstr(fullLoc, "_LR")!=NULL ) {
                        if(measurementSystem != UMS_US){
                             log_err("ulocdata_getMeasurementSystem did not return expected data for locale %s \n", currLoc);
                        }
-                   } else if ( strstr(fullLoc, "_GB")!=NULL ) {
+                   } else if ( strstr(fullLoc, "_GB")!=NULL || strstr(fullLoc, "_MM")!=NULL ) {
                        if(measurementSystem != UMS_UK){
                             log_err("ulocdata_getMeasurementSystem did not return expected data for locale %s \n", currLoc);
                        }
@@ -1334,7 +1333,7 @@ static void TestCoverage(void){
         status = U_ZERO_ERROR;
         ulocdata_getDelimiter(uld, types[i], result, 32, &status);
         if (U_FAILURE(status)){
-            log_err("ulocdata_getgetDelimiter error with type %d", types[i]);
+            log_err("ulocdata_getDelimiter error with type %d", types[i]);
         }
     }
 
@@ -1342,6 +1341,49 @@ static void TestCoverage(void){
     ulocdata_setNoSubstitute(uld,sub);
     ulocdata_close(uld);
 }
+
+typedef struct {
+    const char*  locale;
+    const UChar* quoteStart;
+    const UChar* quoteEnd;
+} TestDelimitersItem;
+
+static const TestDelimitersItem testDelimsItems[] = {
+    { "fr_CA", u"«", u"»" }, // inherited from fr
+    { "de_CH", u"„", u"“" }, // inherited from de
+    { "es_MX", u"“", u"”" }, // inherited from es_419
+    { "ja",    u"「", u"」" },
+    { NULL, NULL, NULL }
+};
+
+enum { kUDelimMax = 8, kBDelimMax = 16 };
+static void TestDelimiters(void){
+    const TestDelimitersItem* itemPtr = testDelimsItems;
+    for (; itemPtr->locale != NULL; itemPtr++) {
+        UErrorCode status = U_ZERO_ERROR;
+        ULocaleData  *uld = ulocdata_open(itemPtr->locale, &status);
+        if (U_FAILURE(status)) {
+            log_data_err("ulocdata_open for locale %s fails: %s\n", itemPtr->locale, u_errorName(status));
+        } else {
+            UChar quoteStart[kUDelimMax], quoteEnd[kUDelimMax];
+            (void)ulocdata_getDelimiter(uld, ULOCDATA_QUOTATION_START, quoteStart, kUDelimMax, &status);
+            (void)ulocdata_getDelimiter(uld, ULOCDATA_QUOTATION_END,   quoteEnd,   kUDelimMax, &status);
+            if (U_FAILURE(status)) {
+                log_err("ulocdata_getDelimiter ULOCDATA_QUOTATION_START/END for locale %s fails: %s\n", itemPtr->locale, u_errorName(status));
+            } else if (u_strcmp(quoteStart,itemPtr->quoteStart)!=0 || u_strcmp(quoteEnd,itemPtr->quoteEnd)!=0) {
+                char expStart[kBDelimMax], expEnd[kBDelimMax], getStart[kBDelimMax], getEnd[kBDelimMax];
+                u_austrcpy(expStart, itemPtr->quoteStart);
+                u_austrcpy(expEnd, itemPtr->quoteEnd);
+                u_austrcpy(getStart, quoteStart);
+                u_austrcpy(getEnd, quoteEnd);
+                log_err("ulocdata_getDelimiter ULOCDATA_QUOTATION_START/END for locale %s, expect %s..%s, get %s..%s\n",
+                        itemPtr->locale, expStart, expEnd, getStart, getEnd);
+            }
+            ulocdata_close(uld);
+        }
+    }
+}
+
 
 static void TestIndexChars(void) {
     /* Very basic test of ULOCDATA_ES_INDEX.
@@ -1532,6 +1574,7 @@ void addCLDRTest(TestNode** root)
     TESTCASE(TestExemplarSet);
     TESTCASE(TestLocaleDisplayPattern);
     TESTCASE(TestCoverage);
+    TESTCASE(TestDelimiters);
     TESTCASE(TestIndexChars);
     TESTCASE(TestAvailableIsoCodes);
 }

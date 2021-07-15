@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 lv{
     AuxExemplarCharacters{"[y ō q ŗ w x]"}
     Ellipsis{
@@ -37,99 +38,63 @@ lv{
             patternsLong{
                 decimalFormat{
                     1000{
-                        few{"0 tūkst'.'"}
-                        many{"0 tūkst'.'"}
                         one{"0 tūkstotis"}
                         other{"0 tūkstoši"}
-                        two{"0 tūkst'.'"}
                         zero{"0 tūkstošu"}
                     }
                     10000{
-                        few{"00 tūkst'.'"}
-                        many{"00 tūkst'.'"}
                         one{"00 tūkstotis"}
                         other{"00 tūkstoši"}
-                        two{"00 tūkst'.'"}
                         zero{"00 tūkstoši"}
                     }
                     100000{
-                        few{"000 tūkst'.'"}
-                        many{"000 tūkst'.'"}
                         one{"000 tūkstotis"}
                         other{"000 tūkstoši"}
-                        two{"000 tūkst'.'"}
                         zero{"000 tūkstoši"}
                     }
                     1000000{
-                        few{"0 milj'.'"}
-                        many{"0 milj'.'"}
                         one{"0 miljons"}
                         other{"0 miljoni"}
-                        two{"0 milj'.'"}
                         zero{"0 miljonu"}
                     }
                     10000000{
-                        few{"00 milj'.'"}
-                        many{"00 milj'.'"}
                         one{"00 miljons"}
                         other{"00 miljoni"}
-                        two{"00 milj'.'"}
                         zero{"00 miljoni"}
                     }
                     100000000{
-                        few{"000 milj'.'"}
-                        many{"000 milj'.'"}
                         one{"000 miljons"}
                         other{"000 miljoni"}
-                        two{"000 milj'.'"}
                         zero{"000 miljoni"}
                     }
                     1000000000{
-                        few{"0 mljrd'.'"}
-                        many{"0 mljrd'.'"}
                         one{"0 miljards"}
                         other{"0 miljardi"}
-                        two{"0 mljrd'.'"}
                         zero{"0 miljardu"}
                     }
                     10000000000{
-                        few{"00 mljrd'.'"}
-                        many{"00 mljrd'.'"}
                         one{"00 miljards"}
                         other{"00 miljardi"}
-                        two{"00 mljrd'.'"}
                         zero{"00 miljardi"}
                     }
                     100000000000{
-                        few{"000 mljrd'.'"}
-                        many{"000 mljrd'.'"}
                         one{"000 miljards"}
                         other{"000 miljardi"}
-                        two{"000 mljrd'.'"}
                         zero{"000 miljardi"}
                     }
                     1000000000000{
-                        few{"0 trilj'.'"}
-                        many{"0 trilj'.'"}
                         one{"0 triljons"}
                         other{"0 triljoni"}
-                        two{"0 trilj'.'"}
                         zero{"0 triljonu"}
                     }
                     10000000000000{
-                        few{"00 trilj'.'"}
-                        many{"00 trilj'.'"}
                         one{"00 triljons"}
                         other{"00 triljoni"}
-                        two{"00 trilj'.'"}
                         zero{"00 triljoni"}
                     }
                     100000000000000{
-                        few{"000 trilj'.'"}
-                        many{"000 trilj'.'"}
                         one{"000 triljons"}
                         other{"000 triljoni"}
-                        two{"000 trilj'.'"}
                         zero{"000 triljoni"}
                     }
                 }
@@ -199,99 +164,63 @@ lv{
                 }
                 decimalFormat{
                     1000{
-                        few{"0 tūkst'.'"}
-                        many{"0 tūkst'.'"}
                         one{"0 tūkst'.'"}
                         other{"0 tūkst'.'"}
-                        two{"0 tūkst'.'"}
                         zero{"0 tūkst'.'"}
                     }
                     10000{
-                        few{"00 tūkst'.'"}
-                        many{"00 tūkst'.'"}
                         one{"00 tūkst'.'"}
                         other{"00 tūkst'.'"}
-                        two{"00 tūkst'.'"}
                         zero{"00 tūkst'.'"}
                     }
                     100000{
-                        few{"000 tūkst'.'"}
-                        many{"000 tūkst'.'"}
                         one{"000 tūkst'.'"}
                         other{"000 tūkst'.'"}
-                        two{"000 tūkst'.'"}
                         zero{"000 tūkst'.'"}
                     }
                     1000000{
-                        few{"0 milj'.'"}
-                        many{"0 milj'.'"}
                         one{"0 milj'.'"}
                         other{"0 milj'.'"}
-                        two{"0 milj'.'"}
                         zero{"0 milj'.'"}
                     }
                     10000000{
-                        few{"00 milj'.'"}
-                        many{"00 milj'.'"}
                         one{"00 milj'.'"}
                         other{"00 milj'.'"}
-                        two{"00 milj'.'"}
                         zero{"00 milj'.'"}
                     }
                     100000000{
-                        few{"000 milj'.'"}
-                        many{"000 milj'.'"}
                         one{"000 milj'.'"}
                         other{"000 milj'.'"}
-                        two{"000 milj'.'"}
                         zero{"000 milj'.'"}
                     }
                     1000000000{
-                        few{"0 mljrd'.'"}
-                        many{"0 mljrd'.'"}
                         one{"0 mljrd'.'"}
                         other{"0 mljrd'.'"}
-                        two{"0 mljrd'.'"}
                         zero{"0 mljrd'.'"}
                     }
                     10000000000{
-                        few{"00 mljrd'.'"}
-                        many{"00 mljrd'.'"}
                         one{"00 mljrd'.'"}
                         other{"00 mljrd'.'"}
-                        two{"00 mljrd'.'"}
                         zero{"00 mljrd'.'"}
                     }
                     100000000000{
-                        few{"000 mljrd'.'"}
-                        many{"000 mljrd'.'"}
                         one{"000 mljrd'.'"}
                         other{"000 mljrd'.'"}
-                        two{"000 mljrd'.'"}
                         zero{"000 mljrd'.'"}
                     }
                     1000000000000{
-                        few{"0 trilj'.'"}
-                        many{"0 trilj'.'"}
                         one{"0 trilj'.'"}
                         other{"0 trilj'.'"}
-                        two{"0 trilj'.'"}
                         zero{"0 trilj'.'"}
                     }
                     10000000000000{
-                        few{"00 trilj'.'"}
-                        many{"00 trilj'.'"}
                         one{"00 trilj'.'"}
                         other{"00 trilj'.'"}
-                        two{"00 trilj'.'"}
                         zero{"00 trilj'.'"}
                     }
                     100000000000000{
-                        few{"000 trilj'.'"}
-                        many{"000 trilj'.'"}
                         one{"000 trilj'.'"}
                         other{"000 trilj'.'"}
-                        two{"000 trilj'.'"}
                         zero{"000 trilj'.'"}
                     }
                 }
@@ -323,7 +252,6 @@ lv{
         minimumGroupingDigits{"2"}
         native{"latn"}
     }
-    Version{"36"}
     calendar{
         buddhist{
             eras{
@@ -518,6 +446,16 @@ lv{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMMdd",
+            }
             availableFormats{
                 Bh{"h B"}
                 Bhm{"h:mm B"}
@@ -670,6 +608,16 @@ lv{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yyMMdd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -839,7 +787,7 @@ lv{
                 }
                 stand-alone{
                     abbreviated{
-                        afternoon1{"pēcpusdiena"}
+                        afternoon1{"pēcpusd."}
                         am{"priekšp."}
                         evening1{"vakars"}
                         midnight{"pusnakts"}
@@ -872,10 +820,6 @@ lv{
             }
             eras{
                 abbreviated{
-                    "p.m.ē.",
-                    "m.ē.",
-                }
-                abbreviated%variant{
                     "p.m.ē.",
                     "m.ē.",
                 }
@@ -1427,7 +1371,7 @@ lv{
         currency_symbols{"valūtu simboli"}
         dash_connector{"svītras un savienotāji"}
         digits{"cipari"}
-        dingbats{"drukas ornamenti"}
+        dingbats{"dekorzīme"}
         divination_symbols{"okultie simboli"}
         downwards_arrows{"lejupvērstās bultiņas"}
         downwards_upwards_arrows{"lejupvērstās un augšupvērstās bultiņas"}
@@ -1723,7 +1667,7 @@ lv{
             }
         }
         minute-short{
-            dn{"min."}
+            dn{"min"}
             relativeTime{
                 future{
                     one{"pēc {0} min."}

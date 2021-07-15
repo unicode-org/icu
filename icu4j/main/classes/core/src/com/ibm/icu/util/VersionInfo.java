@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 1996-2016, International Business Machines Corporation and
@@ -194,6 +194,18 @@ public final class VersionInfo implements Comparable<VersionInfo>
     public static final VersionInfo UNICODE_12_1;
 
     /**
+     * Unicode 13.0 version
+     * @stable ICU 66
+     */
+    public static final VersionInfo UNICODE_13_0;
+
+    /**
+     * Unicode 14.0 version
+     * @stable ICU 70
+     */
+    public static final VersionInfo UNICODE_14_0;
+
+    /**
      * ICU4J current release version
      * @stable ICU 2.8
      */
@@ -206,7 +218,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public static final String ICU_DATA_VERSION_PATH = "65b";
+    public static final String ICU_DATA_VERSION_PATH = "70b";
 
     /**
      * Data version in ICU4J.
@@ -366,56 +378,6 @@ public final class VersionInfo implements Comparable<VersionInfo>
         return getInstance(major, 0, 0, 0);
     }
 
-    private static volatile VersionInfo javaVersion;
-
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public static VersionInfo javaVersion() {
-        if (javaVersion == null) {
-            synchronized(VersionInfo.class) {
-                if (javaVersion == null) {
-                    String s = System.getProperty("java.version");
-                    // clean string
-                    // preserve only digits, separated by single '.'
-                    // ignore over 4 digit sequences
-                    // does not test < 255, very odd...
-
-                    char[] chars = s.toCharArray();
-                    int r = 0, w = 0, count = 0;
-                    boolean numeric = false; // ignore leading non-numerics
-                    while (r < chars.length) {
-                        char c = chars[r++];
-                        if (c < '0' || c > '9') {
-                            if (numeric) {
-                                if (count == 3) {
-                                    // only four digit strings allowed
-                                    break;
-                                }
-                                numeric = false;
-                                chars[w++] = '.';
-                                ++count;
-                            }
-                        } else {
-                            numeric = true;
-                            chars[w++] = c;
-                        }
-                    }
-                    while (w > 0 && chars[w-1] == '.') {
-                        --w;
-                    }
-
-                    String vs = new String(chars, 0, w);
-
-                    javaVersion = VersionInfo.getInstance(vs);
-                }
-            }
-        }
-        return javaVersion;
-    }
-
     /**
      * Returns the String representative of VersionInfo in the format of
      * "major.minor.milli.micro"
@@ -515,7 +477,15 @@ public final class VersionInfo implements Comparable<VersionInfo>
     @Override
     public int compareTo(VersionInfo other)
     {
-        return m_version_ - other.m_version_;
+        // m_version_ is an int, a signed 32-bit integer.
+        // When the major version is >=128, then the version int is negative.
+        // Compare it in two steps to simulate an unsigned-int comparison.
+        // (Alternatively we could turn each int into a long and reset the upper 32 bits.)
+        // Compare the upper bits first, using logical shift right (unsigned).
+        int diff = (m_version_ >>> 1) - (other.m_version_ >>> 1);
+        if (diff != 0) { return diff; }
+        // Compare the remaining bits.
+        return (m_version_ & 1) - (other.m_version_ & 1);
     }
 
     // private data members ----------------------------------------------
@@ -587,10 +557,12 @@ public final class VersionInfo implements Comparable<VersionInfo>
         UNICODE_11_0   = getInstance(11, 0, 0, 0);
         UNICODE_12_0   = getInstance(12, 0, 0, 0);
         UNICODE_12_1   = getInstance(12, 1, 0, 0);
+        UNICODE_13_0   = getInstance(13, 0, 0, 0);
+        UNICODE_14_0   = getInstance(14, 0, 0, 0);
 
-        ICU_VERSION   = getInstance(65, 1, 0, 0);
+        ICU_VERSION   = getInstance(70, 0, 1, 0);
         ICU_DATA_VERSION = ICU_VERSION;
-        UNICODE_VERSION = UNICODE_12_1;
+        UNICODE_VERSION = UNICODE_14_0;
 
         UCOL_RUNTIME_VERSION = getInstance(9);
         UCOL_BUILDER_VERSION = getInstance(9);

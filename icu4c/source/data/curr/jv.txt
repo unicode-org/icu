@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 jv{
     Currencies{
         AED{
@@ -435,7 +436,7 @@ jv{
             "Kina Papua Nugini",
         }
         PHP{
-            "PHP",
+            "₱",
             "Piso Filipina",
         }
         PKR{
@@ -611,7 +612,7 @@ jv{
             "Dolar Karibia Wetan",
         }
         XOF{
-            "CFA",
+            "F CFA",
             "CFA Franc Afrika Kulon",
         }
         XPF{
@@ -906,9 +907,6 @@ jv{
         MNT{
             other{"Tugrik Mongol"}
         }
-        MOP{
-            other{"MOP"}
-        }
         MRO{
             other{"Ouguiya Mauritania (1973 - 2017)"}
         }
@@ -1117,5 +1115,4 @@ jv{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"36"}
 }

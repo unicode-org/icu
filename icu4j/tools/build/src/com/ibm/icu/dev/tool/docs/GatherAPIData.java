@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /**
  *******************************************************************************
  * Copyright (C) 2004-2014, International Business Machines Corporation and    *
@@ -234,7 +234,7 @@ public class GatherAPIData {
         if (doc.isMethod() && doc.containingClass().isEnum()) {
             // System.out.println("*** " + doc.qualifiedName() + " pos: " +
             //                    doc.position().line() +
-            //                    " containined by: " +
+            //                    " contained by: " +
             //                    doc.containingClass().name() +
             //                    " pos: " +
             //                    doc.containingClass().position().line());

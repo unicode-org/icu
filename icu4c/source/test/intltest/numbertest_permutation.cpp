@@ -71,7 +71,11 @@ static const double kNumbersToTest[]{0, 91827.3645, -0.22222};
  * Test permutations of 3 orthogonal skeleton parts from the list above.
  * Compare the results against the golden data file:
  *     numberpermutationtest.txt
- * To regenerate that file, run intltest with the -G option.
+ * To regenerate that file, run intltest with the -e and -G options.
+ * On Linux, from icu4c/source:
+ *     make -j8 tests && (cd test/intltest && LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./intltest -e -G format/NumberTest/NumberPermutationTest)
+ * After re-generating the file, copy it into icu4j:
+ *     cp test/testdata/numberpermutationtest.txt ../../icu4j/main/tests/core/src/com/ibm/icu/dev/data/numberpermutationtest.txt
  */
 void NumberPermutationTest::testPermutations() {
     IcuTestErrorCode status(*this, "testPermutations");

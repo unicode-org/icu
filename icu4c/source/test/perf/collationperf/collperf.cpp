@@ -1,6 +1,6 @@
 /***********************************************************************
  * © 2016 and later: Unicode, Inc. and others.
- * License & terms of use: http://www.unicode.org/copyright.html#License
+ * License & terms of use: http://www.unicode.org/copyright.html
  ***********************************************************************
  ***********************************************************************
  * COPYRIGHT:
@@ -110,31 +110,31 @@ char * opt_fName      = 0;
 const char * opt_locale     = "en_US";
 int    opt_langid     = 0;         // Defaults to value corresponding to opt_locale.
 char * opt_rules      = 0;
-UBool  opt_help       = FALSE;
+UBool  opt_help       = false;
 int    opt_loopCount  = 1;
 int    opt_iLoopCount = 1;
-UBool  opt_terse      = FALSE;
-UBool  opt_qsort      = FALSE;
-UBool  opt_binsearch  = FALSE;
-UBool  opt_icu        = TRUE;
-UBool  opt_win        = FALSE;      // Run with Windows native functions.
-UBool  opt_unix       = FALSE;      // Run with UNIX strcoll, strxfrm functions.
-UBool  opt_uselen     = FALSE;
-UBool  opt_usekeys    = FALSE;
-UBool  opt_strcmp     = FALSE;
-UBool  opt_strcmpCPO  = FALSE;
-UBool  opt_norm       = FALSE;
-UBool  opt_keygen     = FALSE;
-UBool  opt_french     = FALSE;
-UBool  opt_frenchoff  = FALSE;
-UBool  opt_shifted    = FALSE;
-UBool  opt_lower      = FALSE;
-UBool  opt_upper      = FALSE;
-UBool  opt_case       = FALSE;
+UBool  opt_terse      = false;
+UBool  opt_qsort      = false;
+UBool  opt_binsearch  = false;
+UBool  opt_icu        = true;
+UBool  opt_win        = false;      // Run with Windows native functions.
+UBool  opt_unix       = false;      // Run with UNIX strcoll, strxfrm functions.
+UBool  opt_uselen     = false;
+UBool  opt_usekeys    = false;
+UBool  opt_strcmp     = false;
+UBool  opt_strcmpCPO  = false;
+UBool  opt_norm       = false;
+UBool  opt_keygen     = false;
+UBool  opt_french     = false;
+UBool  opt_frenchoff  = false;
+UBool  opt_shifted    = false;
+UBool  opt_lower      = false;
+UBool  opt_upper      = false;
+UBool  opt_case       = false;
 int    opt_level      = 0;
-UBool  opt_keyhist    = FALSE;
-UBool  opt_itertest   = FALSE;
-UBool  opt_dump       = FALSE;
+UBool  opt_keyhist    = false;
+UBool  opt_itertest   = false;
+UBool  opt_dump       = false;
 
 
 
@@ -233,13 +233,13 @@ UBool ProcessOptions(int argc, const char **argv, OptSpec opts[])
             if (strcmp(pOpt->name, pArgName) == 0) {
                 switch (pOpt->type) {
                 case OptSpec::FLAG:
-                    *(UBool *)(pOpt->pVar) = TRUE;
+                    *(UBool *)(pOpt->pVar) = true;
                     break;
                 case OptSpec::STRING:
                     argNum ++;
                     if (argNum >= argc) {
                         fprintf(stderr, "value expected for \"%s\" option.\n", pOpt->name);
-                        return FALSE;
+                        return false;
                     }
                     *(const char **)(pOpt->pVar)  = argv[argNum];
                     break;
@@ -247,13 +247,13 @@ UBool ProcessOptions(int argc, const char **argv, OptSpec opts[])
                     argNum ++;
                     if (argNum >= argc) {
                         fprintf(stderr, "value expected for \"%s\" option.\n", pOpt->name);
-                        return FALSE;
+                        return false;
                     }
                     char *endp;
                     i = strtol(argv[argNum], &endp, 0);
                     if (endp == argv[argNum]) {
                         fprintf(stderr, "integer value expected for \"%s\" option.\n", pOpt->name);
-                        return FALSE;
+                        return false;
                     }
                     *(int *)(pOpt->pVar) = i;
                 }
@@ -263,10 +263,10 @@ UBool ProcessOptions(int argc, const char **argv, OptSpec opts[])
         if (pOpt->name == 0)
         {
             fprintf(stderr, "Unrecognized option \"%s\"\n", pArgName);
-            return FALSE;
+            return false;
         }
     }
-return TRUE;
+return true;
 }
 
 //---------------------------------------------------------------------------------------
@@ -425,7 +425,7 @@ void doKeyGen()
     unsigned long elapsedTime = timeGetTime() - startTime;
     int ns = (int)(float(1000000) * (float)elapsedTime / (float)(adj_loopCount*gNumFileLines));
 
-    if (opt_terse == FALSE) {
+    if (opt_terse == false) {
         printf("Sort Key Generation:  total # of keys = %d\n", loops*gNumFileLines);
         printf("Sort Key Generation:  time per key = %d ns\n", ns);
     }
@@ -448,7 +448,7 @@ void doKeyGen()
         }
 
     }
-    if (opt_terse == FALSE) {
+    if (opt_terse == false) {
         printf("Key Length / character = %f\n", (float)totalKeyLen / (float)totalChars);
     } else {
         printf("%f, ", (float)totalKeyLen / (float)totalChars);
@@ -483,7 +483,7 @@ void doBinarySearch()
 
 
     for (;;) {  // not really a loop, just allows "break" to work, to simplify
-                //   inadvertantly running more than one test through here.
+                //   inadvertently running more than one test through here.
         if (opt_strcmp || opt_strcmpCPO) 
         {
             unsigned long startTime = timeGetTime();
@@ -610,7 +610,7 @@ void doBinarySearch()
                                 r = CompareStringW(gWinLCID, 0, (gSortedLines[line])->name, lineLen, (gSortedLines[guess])->name, guessLen);
                             }
                             if (r == 0) {
-                                if (opt_terse == FALSE) {
+                                if (opt_terse == false) {
                                     fprintf(stderr, "Error returned from Windows CompareStringW.\n");
                                 }
                                 exit(-1);
@@ -679,7 +679,7 @@ void doBinarySearch()
     }
 
     int ns = (int)(float(1000000) * (float)elapsedTime / (float)gCount);
-    if (opt_terse == FALSE) {
+    if (opt_terse == false) {
         printf("binary search:  total # of string compares = %d\n", gCount);
         printf("binary search:  compares per loop = %d\n", gCount / loops);
         printf("binary search:  time per compare = %d ns\n", ns);
@@ -763,7 +763,7 @@ void doQSort() {
 
     unsigned long elapsedTime = timeGetTime() - startTime;
     int ns = (int)(float(1000000) * (float)elapsedTime / (float)gCount);
-    if (opt_terse == FALSE) {
+    if (opt_terse == false) {
         printf("qsort:  total # of string compares = %d\n", gCount);
         printf("qsort:  time per compare = %d ns\n", ns);
     } else {
@@ -925,7 +925,7 @@ void doForwardIterTest(UBool haslen) {
         int count5 = 5;
         strindex = 0;
         ucol_setOffset(iter, strindex, &error);
-        while (TRUE) {
+        while (true) {
             if (ucol_next(iter, &error) == UCOL_NULLORDER) {
                 break;
             }
@@ -954,7 +954,7 @@ void doForwardIterTest(UBool haslen) {
         int count5 = 5;
         strindex = 0;
         ucol_setOffset(iter, strindex, &error);
-        while (TRUE) {
+        while (true) {
             tempgCount ++;
             count5 --;
             if (count5 == 0) {
@@ -1088,7 +1088,7 @@ void doBackwardIterTest(UBool haslen) {
         int count5 = 5;
         strindex = 5;
         ucol_setOffset(iter, strindex, &error);
-        while (TRUE) {
+        while (true) {
             if (ucol_previous(iter, &error) == UCOL_NULLORDER) {
                 break;
             }
@@ -1117,7 +1117,7 @@ void doBackwardIterTest(UBool haslen) {
         int count5 = 5;
         strindex = 5;
         ucol_setOffset(iter, strindex, &error);
-        while (TRUE) {
+        while (true) {
              tempgCount ++;
              count5 --;
              if (count5 == 0) {
@@ -1229,14 +1229,14 @@ private:
 };
 
 UCharFile::UCharFile(const char * fileName) {
-    fEof                 = FALSE;
-    fError               = FALSE;
+    fEof                 = false;
+    fError               = false;
     fName                = fileName;
     fFile                = fopen(fName, "rb");
     fPending2ndSurrogate = 0;
     if (fFile == NULL) {
         fprintf(stderr, "Can not open file \"%s\"\n", opt_fName);
-        fError = TRUE;
+        fError = true;
         return;
     }
     //
@@ -1279,7 +1279,7 @@ UChar UCharFile::get() {
             c  = cL  | (cH << 8);
             if (cH == EOF) {
                 c   = 0;
-                fEof = TRUE;
+                fEof = true;
             }
             break;
         }
@@ -1291,7 +1291,7 @@ UChar UCharFile::get() {
             c  = cL  | (cH << 8);
             if (cL == EOF) {
                 c   = 0;
-                fEof = TRUE;
+                fEof = true;
             }
             break;
         }
@@ -1306,7 +1306,7 @@ UChar UCharFile::get() {
             int ch = fgetc(fFile);   // Note:  c and ch are separate cause eof test doesn't work on UChar type.
             if (ch == EOF) {
                 c = 0;
-                fEof = TRUE;
+                fEof = true;
                 break;
             }
             
@@ -1316,7 +1316,7 @@ UChar UCharFile::get() {
                 break;
             }
             
-            // Figure out the lenght of the char and read the rest of the bytes
+            // Figure out the length of the char and read the rest of the bytes
             //   into a temp array.
             int nBytes;
             if (ch >= 0xF0) {nBytes=4;}
@@ -1324,7 +1324,7 @@ UChar UCharFile::get() {
             else if (ch >= 0xC0) {nBytes=2;}
             else {
                 fprintf(stderr, "utf-8 encoded file contains corrupt data.\n");
-                fError = TRUE;
+                fError = true;
                 return 0;
             }
             
@@ -1335,7 +1335,7 @@ UChar UCharFile::get() {
                 bytes[i] = fgetc(fFile);
                 if (bytes[i] < 0x80 || bytes[i] >= 0xc0) {
                     fprintf(stderr, "utf-8 encoded file contains corrupt data.\n");
-                    fError = TRUE;
+                    fError = true;
                     return 0;
                 }
             }
@@ -1426,14 +1426,14 @@ UCollator *openRulesCollator() {
 //
 //----------------------------------------------------------------------------------------
 int main(int argc, const char** argv) {
-    if (ProcessOptions(argc, argv, opts) != TRUE || opt_help || opt_fName == 0) {
+    if (ProcessOptions(argc, argv, opts) != true || opt_help || opt_fName == 0) {
         printf(gUsageString);
         exit (1);
     }
 
     // Make sure that we've only got one API selected.
-    if (opt_unix || opt_win) opt_icu = FALSE;
-    if (opt_unix) opt_win = FALSE;
+    if (opt_unix || opt_win) opt_icu = false;
+    if (opt_unix) opt_win = false;
 
     //
     //  Set up an ICU collator
@@ -1451,10 +1451,10 @@ int main(int argc, const char** argv) {
             return -1;
         }
     }
-    if (status==U_USING_DEFAULT_WARNING && opt_terse==FALSE) {
+    if (status==U_USING_DEFAULT_WARNING && opt_terse==false) {
         fprintf(stderr, "Warning, U_USING_DEFAULT_WARNING for %s\n", opt_locale);
     }
-    if (status==U_USING_FALLBACK_WARNING && opt_terse==FALSE) {
+    if (status==U_USING_FALLBACK_WARNING && opt_terse==false) {
         fprintf(stderr, "Warning, U_USING_FALLBACK_ERROR for %s\n", opt_locale);
     }
 
@@ -1589,16 +1589,16 @@ int main(int argc, const char** argv) {
         buf[column++] = c;
         if (column >= 1023)
         {
-            static UBool warnFlag = TRUE;
+            static UBool warnFlag = true;
             if (warnFlag) {
                 fprintf(stderr, "Warning - file line longer than 1023 chars truncated.\n");
-                warnFlag = FALSE;
+                warnFlag = false;
             }
             column--;
         }
     }
 
-    if (opt_terse == FALSE) {
+    if (opt_terse == false) {
         printf("file \"%s\", %d lines.\n", opt_fName, gNumFileLines);
     }
 

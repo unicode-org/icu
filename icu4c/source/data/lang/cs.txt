@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 cs{
     Keys{
         calendar{"Kalendář"}
@@ -177,6 +178,7 @@ cs{
         ewo{"ewondo"}
         ext{"extremadurština"}
         fa{"perština"}
+        fa_AF{"darí"}
         fan{"fang"}
         fat{"fantština"}
         ff{"fulbština"}
@@ -469,7 +471,6 @@ cs{
         ro_MD{"moldavština"}
         rof{"rombo"}
         rom{"romština"}
-        root{"kořen"}
         rtm{"rotumanština"}
         ru{"ruština"}
         rue{"rusínština"}
@@ -636,17 +637,17 @@ cs{
         zh_Hant{"standardní čínština (tradiční)"}
     }
     Languages%menu{
-        yue{"jüe"}
+        yue{"čínština (kantonština)"}
         zh{"standardní čínština"}
     }
     Languages%short{
-        az{"ázerbájdžánština"}
         en_GB{"angličtina (VB)"}
     }
     Scripts{
         Afak{"afaka"}
         Aghb{"kavkazskoalbánské"}
         Arab{"arabské"}
+        Aran{"nastaliq"}
         Armi{"aramejské (imperiální)"}
         Armn{"arménské"}
         Avst{"avestánské"}
@@ -761,6 +762,7 @@ cs{
         Phnx{"fénické"}
         Plrd{"Pollardova fonetická abeceda"}
         Prti{"parthské klínové"}
+        Qaag{"zawgyi"}
         Rjng{"redžanské"}
         Roro{"rongorongo"}
         Runr{"runové"}
@@ -969,7 +971,6 @@ cs{
         SCOTLAND{"angličtina (Skotsko)"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} – vše"}
         category-list{"{0}: {1}"}
@@ -986,6 +987,8 @@ cs{
             one{"{0} tah"}
             other{"{0} tahů"}
         }
+        subscript{"{0} v dolním indexu"}
+        superscript{"{0} v horním indexu"}
     }
     codePatterns{
         language{"Jazyk: {0}"}

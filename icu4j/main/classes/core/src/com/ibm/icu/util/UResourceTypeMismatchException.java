@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 ******************************************************************************
 * Copyright (C) 2004-2006, International Business Machines Corporation and   *
@@ -20,7 +20,7 @@ public class UResourceTypeMismatchException extends RuntimeException {
     static final long serialVersionUID = 1286569061095434541L;
     
     /**
-     * Constuct the exception with the given message
+     * Construct the exception with the given message
      * @param msg the error message for this exception
      * @stable ICU 3.0
      */

@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 bs_Cyrl{
     %%Parent{"root"}
     Keys{
@@ -370,7 +371,6 @@ bs_Cyrl{
         ro_MD{"молдавски"}
         rof{"ромбо"}
         rom{"романи"}
-        root{"рут"}
         ru{"руски"}
         rup{"ароманијски"}
         rw{"кинјаруанда"}
@@ -777,7 +777,6 @@ bs_Cyrl{
         TARASK{"Тараскијевичка ортографија"}
         VALENCIA{"Валенцијска"}
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — све"}
         strokes{

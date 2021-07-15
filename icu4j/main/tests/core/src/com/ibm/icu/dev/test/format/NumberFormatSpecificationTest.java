@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2014, International Business Machines Corporation and         *
@@ -130,9 +130,7 @@ public class NumberFormatSpecificationTest extends TestFmwk {
             DecimalFormatSymbols sym = new DecimalFormatSymbols(ULocale.FRANCE);
             DecimalFormat fmt = new DecimalFormat("¤¤ **#######0", sym);
             fmt.setCurrency(Currency.getInstance("JPY"));
-            if (!logKnownIssue("11025", "Padding broken when used with currencies")) {
-                assertEquals("", "JPY ****433", fmt.format(433.22));
-            }
+            assertEquals("", "JPY ****433", fmt.format(433.22));
         }
         {
             DecimalFormatSymbols sym = new DecimalFormatSymbols(ULocale.US);

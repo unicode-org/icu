@@ -560,7 +560,9 @@ static const int32_t KW_COUNT = UPRV_LENGTHOF(KW);
 
 static const char* KWVAL[] = {
     "phonebook",
-    "stroke"
+    "stroke",
+    "emoji",
+    "eor"
 };
 static const int32_t KWVAL_COUNT = UPRV_LENGTHOF(KWVAL);
 

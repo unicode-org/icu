@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ko{
     Keys{
         calendar{"달력"}
@@ -150,7 +151,6 @@ ko{
         el{"그리스어"}
         elx{"엘람어"}
         en{"영어"}
-        en_AU{"영어(호주)"}
         enm{"중세 영어"}
         eo{"에스페란토어"}
         es{"스페인어"}
@@ -159,6 +159,7 @@ ko{
         eu{"바스크어"}
         ewo{"이원도어"}
         fa{"페르시아어"}
+        fa_AF{"다리어"}
         fan{"팡그어"}
         fat{"판티어"}
         ff{"풀라어"}
@@ -422,7 +423,6 @@ ko{
         ro_MD{"몰도바어"}
         rof{"롬보어"}
         rom{"집시어"}
-        root{"어근"}
         ru{"러시아어"}
         rue{"루신어"}
         rup{"아로마니아어"}
@@ -453,7 +453,7 @@ ko{
         shi{"타셸히트어"}
         shn{"샨어"}
         shu{"차디언 아라비아어"}
-        si{"스리랑카어"}
+        si{"싱할라어"}
         sid{"시다모어"}
         sk{"슬로바키아어"}
         sl{"슬로베니아어"}
@@ -566,16 +566,21 @@ ko{
         zh_Hant{"중국어(만다린, 번체)"}
     }
     Languages%menu{
+        ckb{"쿠르드어(소라니)"}
         yue{"중국어(광둥어)"}
         zh{"중국어(만다린)"}
     }
     Languages%short{
         az{"아제리어"}
     }
+    Languages%variant{
+        ckb{"쿠르드어(소라니)"}
+    }
     Scripts{
         Afak{"아파카 문자"}
         Aghb{"코카시안 알바니아 문자"}
         Arab{"아랍 문자"}
+        Aran{"나스탈리크체"}
         Armi{"아랍제국 문자"}
         Armn{"아르메니아 문자"}
         Avst{"아베스타 문자"}
@@ -640,7 +645,7 @@ ko{
         Khmr{"크메르 문자"}
         Khoj{"코즈키 문자"}
         Knda{"칸나다 문자"}
-        Kore{"한국어"}
+        Kore{"한국 문자"}
         Kpel{"크펠레 문자"}
         Kthi{"카이시 문자"}
         Lana{"란나 문자"}
@@ -688,6 +693,7 @@ ko{
         Phnx{"페니키아 문자"}
         Plrd{"폴라드 표음 문자"}
         Prti{"명문 파라티아 문자"}
+        Qaag{"저지 문자"}
         Rjng{"레장 문자"}
         Roro{"롱고롱고"}
         Runr{"룬 문자"}
@@ -930,7 +936,6 @@ ko{
         VAIDIKA{"바이디카"}
         VALLADER{"발라더"}
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — 전체"}
         category-list{"{0}: {1}"}
@@ -944,6 +949,8 @@ ko{
         strokes{
             other{"{0}획"}
         }
+        subscript{"아래 첨자 {0}"}
+        superscript{"위 첨자 {0}"}
     }
     codePatterns{
         language{"언어: {0}"}

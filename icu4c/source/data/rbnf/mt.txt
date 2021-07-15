@@ -1,8 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
-/**
- * ICU <specials> source: <path>/xml/rbnf/mt.xml
- */
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 mt{
     RBNFRules{
         DurationRules{
@@ -268,5 +266,4 @@ mt{
             "10: g\u0127axart;",
         }
     }
-    Version{"36"}
 }

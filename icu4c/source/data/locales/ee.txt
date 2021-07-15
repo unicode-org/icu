@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ee{
     AuxExemplarCharacters{"[ă â å ä ā æ c ç ĕ ê ë ĭ î ï j ñ ŏ ô ö ø œ q ŭ û ü ÿ]"}
     ExemplarCharacters{
@@ -200,25 +201,7 @@ ee{
         }
         minimumGroupingDigits{"3"}
     }
-    Version{"36"}
     calendar{
-        chinese{
-            DateTimePatterns{
-                "a 'ga' h:mm:ss zzzz",
-                "a 'ga' h:mm:ss z",
-                "a 'ga' h:mm:ss",
-                "a 'ga' h:mm",
-                "r(U) MMMM d, EEEE",
-                "r(U) MMMM d",
-                "r MMM d",
-                "r-MM-dd",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-        }
         generic{
             DateTimePatterns{
                 "a 'ga' h:mm:ss zzzz",
@@ -234,6 +217,16 @@ ee{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "ahmmsszzzz",
+                "ahmmssz",
+                "ahmmss",
+                "ahmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
             }
             availableFormats{
                 E{"ccc"}
@@ -393,6 +386,16 @@ ee{
                 "{0} {1}",
                 "{0} {1}",
                 "{0} {1}",
+            }
+            DateTimeSkeletons{
+                "ahmmsszzzz",
+                "ahmmssz",
+                "ahmmss",
+                "ahmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yyMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -828,40 +831,6 @@ ee{
                         "kɔta enelia",
                     }
                 }
-            }
-        }
-        japanese{
-            DateTimePatterns{
-                "a 'ga' h:mm:ss zzzz",
-                "a 'ga' h:mm:ss z",
-                "a 'ga' h:mm:ss",
-                "a 'ga' h:mm",
-                "EEEE, MMMM d 'lia' y G",
-                "MMMM d 'lia' y G",
-                "MMM d 'lia', y G",
-                "M/d/y GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-        }
-        roc{
-            DateTimePatterns{
-                "a 'ga' h:mm:ss zzzz",
-                "a 'ga' h:mm:ss z",
-                "a 'ga' h:mm:ss",
-                "a 'ga' h:mm",
-                "EEEE, MMMM d 'lia' y G",
-                "MMMM d 'lia' y G",
-                "MMM d 'lia', y G",
-                "M/d/y GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
             }
         }
     }

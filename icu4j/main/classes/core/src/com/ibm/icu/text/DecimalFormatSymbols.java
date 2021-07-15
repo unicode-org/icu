@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 1996-2016, International Business Machines Corporation and
@@ -200,7 +200,6 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @return An array of <code>ULocale</code>s for which localized
      * <code>DecimalFormatSymbols</code> instances are available.
      * @stable ICU 3.8 (retain)
-     * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales() {
         return ICUResourceBundle.getAvailableULocales();
@@ -888,9 +887,32 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         if (currency == null) {
             throw new NullPointerException();
         }
+        if (currency.equals(this.currency)) {
+            return;
+        }
+        CurrencyDisplayInfo displayInfo = CurrencyData.provider.getInstance(ulocale, true);
+        setCurrencyOrNull(currency, displayInfo);
+    }
+
+    private void setCurrencyOrNull(Currency currency, CurrencyDisplayInfo displayInfo) {
         this.currency = currency;
+
+        if (currency == null) {
+            intlCurrencySymbol = "XXX";
+            currencySymbol = "\u00A4"; // 'OX' currency symbol
+            currencyPattern = null;
+            return;
+        }
+
         intlCurrencySymbol = currency.getCurrencyCode();
-        currencySymbol = currency.getSymbol(requestedLocale);
+        currencySymbol = currency.getSymbol(ulocale);
+
+        CurrencyFormatInfo formatInfo = displayInfo.getFormatInfo(currency.getCurrencyCode());
+        if (formatInfo != null) {
+            setMonetaryDecimalSeparatorString(formatInfo.monetaryDecimalSeparator);
+            setMonetaryGroupingSeparatorString(formatInfo.monetaryGroupingSeparator);
+            currencyPattern = formatInfo.currencyPattern;
+        }
     }
 
     /**
@@ -943,7 +965,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         if (sep.length() == 1) {
             this.monetarySeparator = sep.charAt(0);
         } else {
-            // Use default decimap separator character as fallbacl
+            // Use default decimal separator character as fallback
             this.monetarySeparator = DEF_DECIMAL_SEPARATOR;
         }
     }
@@ -1004,11 +1026,12 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-    }
      * Internal API for NumberFormat
      * @return String currency pattern string
+     * @deprecated This API is for ICU internal use only
      */
-    String getCurrencyPattern() {
+    @Deprecated
+    public String getCurrencyPattern() {
         return currencyPattern;
     }
 
@@ -1396,30 +1419,10 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         padEscape = '*';
         sigDigit  = '@';
 
+        CurrencyDisplayInfo displayInfo = CurrencyData.provider.getInstance(ulocale, true);
+        initSpacingInfo(displayInfo.getSpacingInfo());
 
-        CurrencyDisplayInfo info = CurrencyData.provider.getInstance(locale, true);
-
-        // Obtain currency data from the currency API.  This is strictly
-        // for backward compatibility; we don't use DecimalFormatSymbols
-        // for currency data anymore.
-        currency = Currency.getInstance(locale);
-        if (currency != null) {
-            intlCurrencySymbol = currency.getCurrencyCode();
-            currencySymbol = currency.getName(locale, Currency.SYMBOL_NAME, null);
-            CurrencyFormatInfo fmtInfo = info.getFormatInfo(intlCurrencySymbol);
-            if (fmtInfo != null) {
-                currencyPattern = fmtInfo.currencyPattern;
-                setMonetaryDecimalSeparatorString(fmtInfo.monetaryDecimalSeparator);
-                setMonetaryGroupingSeparatorString(fmtInfo.monetaryGroupingSeparator);
-            }
-        } else {
-            intlCurrencySymbol = "XXX";
-            currencySymbol = "\u00A4"; // 'OX' currency symbol
-        }
-
-
-        // Get currency spacing data.
-        initSpacingInfo(info.getSpacingInfo());
+        setCurrencyOrNull(Currency.getInstance(ulocale), displayInfo);
     }
 
     private static CacheData loadData(ULocale locale) {
@@ -1952,7 +1955,6 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8 (retain)
-     * @provisional This API might change or be removed in a future release.
      */
     public final ULocale getLocale(ULocale.Type type) {
         return type == ULocale.ACTUAL_LOCALE ?

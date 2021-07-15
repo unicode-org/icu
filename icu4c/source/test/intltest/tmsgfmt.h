@@ -83,7 +83,7 @@ public:
         UnicodeString pattern ,Locale locale , UErrorCode& err, char* errMsg);
 
     /**
-     * Verify that MessageFormat accomodates more than 10 arguments
+     * Verify that MessageFormat accommodates more than 10 arguments
      * and more than 10 subformats.
      */
     void TestUnlimitedArgsAndSubformats();

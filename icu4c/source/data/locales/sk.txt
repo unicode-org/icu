@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 sk{
     AuxExemplarCharacters{"[à ă â å ā æ ç è ĕ ê ë ē ì ĭ î ï ī ñ ò ŏ ö ő ø ō œ ř ù ŭ û ü ű ū ÿ]"}
     Ellipsis{
@@ -41,96 +42,72 @@ sk{
                         many{"0 tisíca"}
                         one{"0 tisíc"}
                         other{"0 tisíc"}
-                        two{"0 tis'.'"}
-                        zero{"0 tis'.'"}
                     }
                     10000{
                         few{"00 tisíc"}
                         many{"00 tisíca"}
                         one{"00 tisíc"}
                         other{"00 tisíc"}
-                        two{"00 tis'.'"}
-                        zero{"00 tis'.'"}
                     }
                     100000{
                         few{"000 tisíc"}
                         many{"000 tisíca"}
                         one{"000 tisíc"}
                         other{"000 tisíc"}
-                        two{"000 tis'.'"}
-                        zero{"000 tis'.'"}
                     }
                     1000000{
                         few{"0 milióny"}
                         many{"0 milióna"}
                         one{"0 milión"}
                         other{"0 miliónov"}
-                        two{"0 mil'.'"}
-                        zero{"0 mil'.'"}
                     }
                     10000000{
                         few{"00 miliónov"}
                         many{"00 milióna"}
                         one{"00 miliónov"}
                         other{"00 miliónov"}
-                        two{"00 mil'.'"}
-                        zero{"00 mil'.'"}
                     }
                     100000000{
                         few{"000 miliónov"}
                         many{"000 milióna"}
                         one{"000 miliónov"}
                         other{"000 miliónov"}
-                        two{"000 mil'.'"}
-                        zero{"000 mil'.'"}
                     }
                     1000000000{
                         few{"0 miliardy"}
                         many{"0 miliardy"}
                         one{"0 miliarda"}
                         other{"0 miliárd"}
-                        two{"0 mld'.'"}
-                        zero{"0 mld'.'"}
                     }
                     10000000000{
                         few{"00 miliárd"}
                         many{"00 miliardy"}
                         one{"00 miliárd"}
                         other{"00 miliárd"}
-                        two{"00 mld'.'"}
-                        zero{"00 mld'.'"}
                     }
                     100000000000{
                         few{"000 miliárd"}
                         many{"000 miliardy"}
                         one{"000 miliárd"}
                         other{"000 miliárd"}
-                        two{"000 mld'.'"}
-                        zero{"000 mld'.'"}
                     }
                     1000000000000{
                         few{"0 bilióny"}
                         many{"0 bilióna"}
                         one{"0 bilión"}
                         other{"0 biliónov"}
-                        two{"0 bil'.'"}
-                        zero{"0 bil'.'"}
                     }
                     10000000000000{
                         few{"00 biliónov"}
                         many{"00 bilióna"}
                         one{"00 biliónov"}
                         other{"00 biliónov"}
-                        two{"00 bil'.'"}
-                        zero{"00 bil'.'"}
                     }
                     100000000000000{
                         few{"000 biliónov"}
                         many{"000 bilióna"}
                         one{"000 biliónov"}
                         other{"000 biliónov"}
-                        two{"000 bil'.'"}
-                        zero{"000 bil'.'"}
                     }
                 }
             }
@@ -215,100 +192,77 @@ sk{
                         many{"0 tis'.'"}
                         one{"0 tis'.'"}
                         other{"0 tis'.'"}
-                        two{"0 tis'.'"}
-                        zero{"0 tis'.'"}
                     }
                     10000{
                         few{"00 tis'.'"}
                         many{"00 tis'.'"}
                         one{"00 tis'.'"}
                         other{"00 tis'.'"}
-                        two{"00 tis'.'"}
-                        zero{"00 tis'.'"}
                     }
                     100000{
                         few{"000 tis'.'"}
                         many{"000 tis'.'"}
                         one{"000 tis'.'"}
                         other{"000 tis'.'"}
-                        two{"000 tis'.'"}
-                        zero{"000 tis'.'"}
                     }
                     1000000{
                         few{"0 mil'.'"}
                         many{"0 mil'.'"}
                         one{"0 mil'.'"}
                         other{"0 mil'.'"}
-                        two{"0 mil'.'"}
-                        zero{"0 mil'.'"}
                     }
                     10000000{
                         few{"00 mil'.'"}
                         many{"00 mil'.'"}
                         one{"00 mil'.'"}
                         other{"00 mil'.'"}
-                        two{"00 mil'.'"}
-                        zero{"00 mil'.'"}
                     }
                     100000000{
                         few{"000 mil'.'"}
                         many{"000 mil'.'"}
                         one{"000 mil'.'"}
                         other{"000 mil'.'"}
-                        two{"000 mil'.'"}
-                        zero{"000 mil'.'"}
                     }
                     1000000000{
                         few{"0 mld'.'"}
                         many{"0 mld'.'"}
                         one{"0 mld'.'"}
                         other{"0 mld'.'"}
-                        two{"0 mld'.'"}
-                        zero{"0 mld'.'"}
                     }
                     10000000000{
                         few{"00 mld'.'"}
                         many{"00 mld'.'"}
                         one{"00 mld'.'"}
                         other{"00 mld'.'"}
-                        two{"00 mld'.'"}
-                        zero{"00 mld'.'"}
                     }
                     100000000000{
                         few{"000 mld'.'"}
                         many{"000 mld'.'"}
                         one{"000 mld'.'"}
                         other{"000 mld'.'"}
-                        two{"000 mld'.'"}
-                        zero{"000 mld'.'"}
                     }
                     1000000000000{
                         few{"0 bil'.'"}
                         many{"0 bil'.'"}
                         one{"0 bil'.'"}
                         other{"0 bil'.'"}
-                        two{"0 bil'.'"}
-                        zero{"0 bil'.'"}
                     }
                     10000000000000{
                         few{"00 bil'.'"}
                         many{"00 bil'.'"}
                         one{"00 bil'.'"}
                         other{"00 bil'.'"}
-                        two{"00 bil'.'"}
-                        zero{"00 bil'.'"}
                     }
                     100000000000000{
                         few{"000 bil'.'"}
                         many{"000 bil'.'"}
                         one{"000 bil'.'"}
                         other{"000 bil'.'"}
-                        two{"000 bil'.'"}
-                        zero{"000 bil'.'"}
                     }
                 }
             }
             symbols{
+                approximatelySign{"~"}
                 decimal{","}
                 exponential{"e"}
                 group{" "}
@@ -337,7 +291,6 @@ sk{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"36"}
     calendar{
         buddhist{
             eras{
@@ -531,6 +484,16 @@ sk{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMEEEEd",
+                "GyMd",
+                "GyMd",
+                "GGGGGyMd",
             }
             availableFormats{
                 Bh{"h B"}
@@ -750,6 +713,16 @@ sk{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMd",
+                "yMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -2611,10 +2584,10 @@ sk{
             dn{"deň týždňa v mesiaci"}
         }
         weekdayOfMonth-narrow{
-            dn{"d.  týž. v mes."}
+            dn{"d. týž. v mes."}
         }
         weekdayOfMonth-short{
-            dn{"d.  týž. v mes."}
+            dn{"d. týž. v mes."}
         }
         year{
             dn{"rok"}

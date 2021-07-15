@@ -2913,7 +2913,7 @@ void CalendarRegressionTest::TestT8596(void) {
     gc->setFirstDayOfWeek(UCAL_MONDAY);
     gc->setMinimalDaysInFirstWeek(4);
 
-    // Force the calender to resolve the fields once.
+    // Force the calendar to resolve the fields once.
     // The maximum week number in 2011 is 52.
     gc->set(UCAL_YEAR, 2011);
     gc->get(UCAL_YEAR, status);

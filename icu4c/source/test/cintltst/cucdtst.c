@@ -1227,7 +1227,7 @@ enumDefaultsRange(const void *context, UChar32 start, UChar32 limit, UCharCatego
         { 0x07C0, U_RIGHT_TO_LEFT_ARABIC },
         { 0x0860, U_RIGHT_TO_LEFT },
         { 0x0870, U_RIGHT_TO_LEFT_ARABIC },  // Unicode 10 changes U+0860..U+086F from R to AL.
-        { 0x08A0, U_RIGHT_TO_LEFT },
+        { 0x08A0, U_RIGHT_TO_LEFT_ARABIC },  // Unicode 14 changes U+0870..U+089F from R to AL.
         { 0x0900, U_RIGHT_TO_LEFT_ARABIC },  /* Unicode 6.1 changes U+08A0..U+08FF from R to AL */
         { 0x20A0, U_LEFT_TO_RIGHT },
         { 0x20D0, U_EUROPEAN_NUMBER_TERMINATOR },  /* Unicode 6.3 changes the currency symbols block U+20A0..U+20CF to default to ET not L */
@@ -2548,7 +2548,6 @@ TestAdditionalProperties() {
         { 0x05ed, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
         { 0x07f2, UCHAR_BIDI_CLASS, U_DIR_NON_SPACING_MARK }, /* Nko, new in Unicode 5.0 */
         { 0x07fe, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT }, /* unassigned R */
-        { 0x089f, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
         { 0xfb37, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
         { 0xfb42, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
         { 0x10806, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
@@ -2568,7 +2567,7 @@ TestAdditionalProperties() {
         { 0x155A, UCHAR_BLOCK, UBLOCK_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS },
         { 0x1717, UCHAR_BLOCK, UBLOCK_TAGALOG },
         { 0x1900, UCHAR_BLOCK, UBLOCK_LIMBU },
-        { 0x0870, UCHAR_BLOCK, UBLOCK_NO_BLOCK },
+        { 0x2FE0, UCHAR_BLOCK, UBLOCK_NO_BLOCK },
         { 0x3040, UCHAR_BLOCK, UBLOCK_HIRAGANA },
         { 0x1D0FF, UCHAR_BLOCK, UBLOCK_BYZANTINE_MUSICAL_SYMBOLS },
         { 0x50000, UCHAR_BLOCK, UBLOCK_NO_BLOCK },

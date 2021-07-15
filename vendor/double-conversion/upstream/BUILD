@@ -1,5 +1,7 @@
 # Bazel(http://bazel.io) BUILD file
 
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+
 licenses(["notice"])
 
 exports_files(["LICENSE"])
@@ -10,12 +12,11 @@ cc_library(
         "double-conversion/bignum.cc",
         "double-conversion/bignum-dtoa.cc",
         "double-conversion/cached-powers.cc",
-        "double-conversion/diy-fp.cc",
-        "double-conversion/double-conversion.cc",
+        "double-conversion/double-to-string.cc",
         "double-conversion/fast-dtoa.cc",
         "double-conversion/fixed-dtoa.cc",
+        "double-conversion/string-to-double.cc",
         "double-conversion/strtod.cc",
-        "double-conversion/utils.h",
     ],
     hdrs = [
         "double-conversion/bignum.h",
@@ -23,10 +24,13 @@ cc_library(
         "double-conversion/cached-powers.h",
         "double-conversion/diy-fp.h",
         "double-conversion/double-conversion.h",
+        "double-conversion/double-to-string.h",
         "double-conversion/fast-dtoa.h",
         "double-conversion/fixed-dtoa.h",
         "double-conversion/ieee.h",
+        "double-conversion/string-to-double.h",
         "double-conversion/strtod.h",
+        "double-conversion/utils.h",
     ],
     linkopts = [
         "-lm",

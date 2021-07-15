@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 vai_Latn{
     %%Parent{"root"}
     ExemplarCharacters{
@@ -23,7 +24,6 @@ vai_Latn{
         }
         native{"vaii"}
     }
-    Version{"36"}
     calendar{
         generic{
             DateTimePatterns{
@@ -40,6 +40,16 @@ vai_Latn{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "ahmmsszzzz",
+                "ahmmssz",
+                "ahmmss",
+                "ahmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GyMMdd",
             }
             availableFormats{
                 Ed{"E d"}
@@ -82,6 +92,16 @@ vai_Latn{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "ahmmsszzzz",
+                "ahmmssz",
+                "ahmmss",
+                "ahmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMMdd",
+            }
             availableFormats{
                 Ed{"E d"}
                 Hm{"HH:mm"}
@@ -116,24 +136,6 @@ vai_Latn{
                         "aimisa",
                         "aijima",
                         "siɓiti",
-                    }
-                }
-            }
-            monthNames{
-                format{
-                    wide{
-                        "luukao kemã",
-                        "ɓandaɓu",
-                        "vɔɔ",
-                        "fulu",
-                        "goo",
-                        "6",
-                        "7",
-                        "kɔnde",
-                        "saah",
-                        "galo",
-                        "kenpkato ɓololɔ",
-                        "luukao lɔma",
                     }
                 }
             }

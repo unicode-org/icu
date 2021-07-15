@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 lo{
     Keys{
         calendar{"ປະຕິທິນ"}
@@ -81,6 +82,7 @@ lo{
         car{"ຄາຣິບ"}
         cay{"ຄາຢູກາ"}
         cch{"ອາດແຊມ"}
+        ccp{"Chakma"}
         ce{"ຊີເຄນ"}
         ceb{"ຊີບູໂນ"}
         cgg{"ຊີກາ"}
@@ -148,6 +150,7 @@ lo{
         eu{"ບັສກີ"}
         ewo{"ອີວອນດູ"}
         fa{"ເປີຊຽນ"}
+        fa_AF{"ດາຣີ"}
         fan{"ແຟງ"}
         fat{"ແຟນຕີ"}
         ff{"ຟູລາ"}
@@ -209,7 +212,7 @@ lo{
         id{"ອິນໂດເນຊຽນ"}
         ie{"ອິນເຕີລິງກຣີ"}
         ig{"ອິກໂບ"}
-        ii{"ເຊສວຍຢີ"}
+        ii{"ເສສວນ ອີ"}
         ik{"ອິນນູປຽກ"}
         ilo{"ໄອໂລໂກ"}
         inh{"ອິນກັຊ"}
@@ -400,7 +403,6 @@ lo{
         ro_MD{"ໂມດາວຽນ"}
         rof{"ຣົມໂບ"}
         rom{"ໂຣເມນີ"}
-        root{"ລູດ"}
         ru{"ລັດເຊຍ"}
         rup{"ອາໂຣມານຽນ"}
         rw{"ຄິນຢາວານດາ"}
@@ -542,6 +544,7 @@ lo{
         zh_Hant{"ພາສາຈີນແມນດາຣິນດັ້ງເດີມ"}
     }
     Languages%menu{
+        yue{"ພາສາຈີນ, ຈີກວາງຕຸ້ງ"}
         zh{"ພາສາຈີນ, ພາສາຈີນກາງ"}
     }
     Languages%short{
@@ -884,7 +887,6 @@ lo{
         VALLADER{"ວັລລາເດີ"}
         WADEGILE{"ການຖອດອັກສອນແບບເວດ-ໄຈລ໌"}
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — ທັງໝົດ"}
         category-list{"{0}: {1}"}
@@ -898,6 +900,8 @@ lo{
         strokes{
             other{"{0} ຈັງຫວະ"}
         }
+        subscript{"ໂຕຫ້ອຍ {0}"}
+        superscript{"ໂຕຍົກກໍາລັງ {0}"}
     }
     codePatterns{
         language{"{0}"}

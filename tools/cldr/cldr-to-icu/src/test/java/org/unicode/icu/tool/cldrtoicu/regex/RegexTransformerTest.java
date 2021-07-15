@@ -9,8 +9,6 @@ import static org.unicode.icu.tool.cldrtoicu.testing.ResultSubjectFactory.assert
 
 import java.util.List;
 
-import javax.annotation.concurrent.Immutable;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -21,7 +19,6 @@ import org.unicode.icu.tool.cldrtoicu.PathValueTransformer.Result;
 import org.unicode.icu.tool.cldrtoicu.RbPath;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 
 /**
  * Tests for the regex transformer class. Note that in most cases, the rules used here are taken

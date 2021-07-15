@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 naq{
     Currencies{
         AED{
@@ -215,7 +216,7 @@ naq{
             "CFA Franc BEAC",
         }
         XOF{
-            "CFA",
+            "F CFA",
             "CFA Franc BCEAO",
         }
         ZAR{
@@ -235,5 +236,4 @@ naq{
             "Zimbabwe Dollari",
         }
     }
-    Version{"36"}
 }

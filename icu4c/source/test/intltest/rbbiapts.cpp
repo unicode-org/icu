@@ -551,7 +551,7 @@ void RBBIAPITest::TestIteration()
     //
     bi->first();
     if (bi->isBoundary(3) != TRUE) {
-        errln("%s:%d Incorrect value from bi->isBoudary().  Expected TRUE, got FALSE", __FILE__, __LINE__, i);
+        errln("%s:%d Incorrect value from bi->isBoundary().  Expected TRUE, got FALSE", __FILE__, __LINE__, i);
     }
     i = bi->current();
     if (i != 3) {
@@ -560,7 +560,7 @@ void RBBIAPITest::TestIteration()
 
 
     if (bi->isBoundary(11) != FALSE) {
-        errln("%s:%d Incorrect value from bi->isBoudary().  Expected FALSE, got TRUE", __FILE__, __LINE__, i);
+        errln("%s:%d Incorrect value from bi->isBoundary().  Expected FALSE, got TRUE", __FILE__, __LINE__, i);
     }
     i = bi->current();
     if (i != 10) {
@@ -1030,7 +1030,7 @@ void RBBIAPITest::RoundtripRule(const char *dataFile) {
     parseError.offset = 0;
     LocalUDataMemoryPointer data(udata_open(U_ICUDATA_BRKITR, "brk", dataFile, &status));
     uint32_t length;
-    const UChar *builtSource;
+    const char *builtSource;
     const uint8_t *rbbiRules;
     const uint8_t *builtRules;
 
@@ -1040,7 +1040,7 @@ void RBBIAPITest::RoundtripRule(const char *dataFile) {
     }
 
     builtRules = (const uint8_t *)udata_getMemory(data.getAlias());
-    builtSource = (const UChar *)(builtRules + ((RBBIDataHeader*)builtRules)->fRuleSource);
+    builtSource = (const char *)(builtRules + ((RBBIDataHeader*)builtRules)->fRuleSource);
     LocalPointer<RuleBasedBreakIterator> brkItr (new RuleBasedBreakIterator(builtSource, parseError, status));
     if (U_FAILURE(status)) {
         errln("%s:%d createRuleBasedBreakIterator: ICU Error \"%s\"  at line %d, column %d\n",

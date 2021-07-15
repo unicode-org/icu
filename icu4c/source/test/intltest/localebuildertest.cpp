@@ -136,7 +136,7 @@ void LocaleBuilderTest::TestLocaleBuilder() {
         {"U", "ja_JP@calendar=japanese;currency=JPY", "E", "u",
           "attr1-ca-gregory", "T", "ja-JP-u-attr1-ca-gregory",
           "ja_JP@attribute=attr1;calendar=gregorian"},
-        {"U", "en@colnumeric=yes", "K", "kn", "true", "T", "en-u-kn-true",
+        {"U", "en@colnumeric=yes", "K", "kn", "true", "T", "en-u-kn",
           "en@colnumeric=yes"},
         {"L", "th", "R", "th", "K", "nu", "thai", "T", "th-TH-u-nu-thai",
           "th_TH@numbers=thai"},
@@ -152,7 +152,7 @@ void LocaleBuilderTest::TestLocaleBuilder() {
         // However, once the legacy keyword is translated back to BCP 47 u extension, key "0a" is unknown,
         // so "yes" is preserved - not mapped to "true". We could change the code to automatically transform
         // key = alphanum alpha
-        {"L", "en", "E", "u", "bbb-aaa-0a", "T", "en-u-aaa-bbb-0a-yes",
+        {"L", "en", "E", "u", "bbb-aaa-0a", "T", "en-u-aaa-bbb-0a",
          "en@0a=yes;attribute=aaa-bbb"},
         {"L", "fr", "R", "FR", "P", "Yoshito-ICU", "T", "fr-FR-x-yoshito-icu",
           "fr_FR@x=yoshito-icu"},
@@ -166,13 +166,13 @@ void LocaleBuilderTest::TestLocaleBuilder() {
         {"L", "en", "K", "tz", "usnyc", "R", "US", "T", "en-US-u-tz-usnyc",
           "en_US@timezone=America/New_York"},
         {"L", "de", "K", "co", "phonebk", "K", "ks", "level1", "K", "kk",
-          "true", "T", "de-u-co-phonebk-kk-true-ks-level1",
+          "true", "T", "de-u-co-phonebk-kk-ks-level1",
           "de@collation=phonebook;colnormalization=yes;colstrength=primary"},
         {"L", "en", "R", "US", "K", "ca", "gregory", "T", "en-US-u-ca-gregory",
           "en_US@calendar=gregorian"},
         {"L", "en", "R", "US", "K", "cal", "gregory", "X"},
         {"L", "en", "R", "US", "K", "ca", "gregorian", "X"},
-        {"L", "en", "R", "US", "K", "kn", "true", "T", "en-US-u-kn-true",
+        {"L", "en", "R", "US", "K", "kn", "true", "T", "en-US-u-kn",
           "en_US@colnumeric=yes"},
         {"B", "de-DE-u-co-phonebk", "C", "L", "pt", "T", "pt", "pt"},
         {"B", "ja-jp-u-ca-japanese", "N", "T", "ja-JP", "ja_JP"},
@@ -425,7 +425,7 @@ void LocaleBuilderTest::TestSetLanguageIllFormed() {
         "F",
         "2",
         "0",
-        "9"
+        "9",
         "{",
         ".",
         "[",
@@ -520,7 +520,7 @@ void LocaleBuilderTest::TestSetScriptIllFormed() {
         "F",
         "2",
         "0",
-        "9"
+        "9",
         "{",
         ".",
         "[",
@@ -619,7 +619,7 @@ void LocaleBuilderTest::TestSetRegionIllFormed() {
         "F",
         "2",
         "0",
-        "9"
+        "9",
         "{",
         ".",
         "[",
@@ -763,7 +763,7 @@ void LocaleBuilderTest::TestSetVariantIllFormed() {
         "F",
         "2",
         "0",
-        "9"
+        "9",
         "{",
         ".",
         "[",
@@ -1375,7 +1375,7 @@ void LocaleBuilderTest::TestSetExtensionValidateTIllFormed() {
         "9-",
         "-9",
         "-z",
-        // "Latn", // Per 2019-01-23 ICUTC, still accept 4alpha. See ICU-20321
+        "Latn",
         "Latn-",
         "en-",
         "nob-",
@@ -1400,6 +1400,8 @@ void LocaleBuilderTest::TestSetExtensionValidateTIllFormed() {
         "gab-Thai-TH-0bde-z9-abcde123-a1-",
         "gab-Thai-TH-0bde-z9-abcde123-a1-a",
         "gab-Thai-TH-0bde-z9-abcde123-a1-ab",
+        // ICU-21408
+        "root",
     };
     for (const char* ill : illFormed) {
         UErrorCode status = U_ZERO_ERROR;

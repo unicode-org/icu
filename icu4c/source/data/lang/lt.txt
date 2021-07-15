@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 lt{
     Keys{
         calendar{"kalendorius"}
@@ -476,7 +477,6 @@ lt{
         ro_MD{"moldavų"}
         rof{"rombo"}
         rom{"romų"}
-        root{"rūt"}
         rtm{"rotumanų"}
         ru{"rusų"}
         rue{"rusinų"}
@@ -644,7 +644,6 @@ lt{
         zh_Hant{"tradicinė mandarinų kinų"}
     }
     Languages%menu{
-        yue{"kinų kalbos Kantono tarmė"}
         zh{"kinų, mandarinų"}
     }
     Languages%short{
@@ -1030,7 +1029,6 @@ lt{
         VALENCIA{"Valenciečiai"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} – visi"}
         category-list{"{0}: {1}"}
@@ -1047,6 +1045,8 @@ lt{
             one{"{0} brūkšnys"}
             other{"{0} brūkšnių"}
         }
+        subscript{"apatinis indeksas {0}"}
+        superscript{"viršutinis indeksas {0}"}
     }
     codePatterns{
         language{"Kalba: {0}"}

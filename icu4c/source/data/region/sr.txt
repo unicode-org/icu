@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 sr{
     Countries{
         001{"свет"}
@@ -287,6 +288,8 @@ sr{
         VU{"Вануату"}
         WF{"Валис и Футуна"}
         WS{"Самоа"}
+        XA{"Псеудоакценти"}
+        XB{"Псеудобиди"}
         XK{"Косово"}
         YE{"Јемен"}
         YT{"Мајот"}
@@ -309,8 +312,6 @@ sr{
         CI{"Обала Слоноваче"}
         CZ{"Чешка Република"}
         FK{"Фокландска (Малвинска) острва"}
-        SZ{"Свазиленд"}
         TL{"Источни Тимор"}
     }
-    Version{"36"}
 }

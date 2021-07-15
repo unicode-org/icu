@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2003-2014, International Business Machines Corporation and
@@ -11,9 +11,10 @@ package com.ibm.icu.impl;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.StringPrepParseException;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.util.ICUInputTooLongException;
 
 /**
- * Ported code from ICU punycode.c 
+ * Ported code from ICU punycode.c
  * @author ram
  */
 public final class Punycode {
@@ -26,17 +27,17 @@ public final class Punycode {
     private static final int DAMP           = 700;
     private static final int INITIAL_BIAS   = 72;
     private static final int INITIAL_N      = 0x80;
-    
+
     /* "Basic" Unicode/ASCII code points */
     private static final char HYPHEN        = 0x2d;
     private static final char DELIMITER     = HYPHEN;
-    
+
     private static final int ZERO           = 0x30;
     //private static final int NINE           = 0x39;
-    
+
     private static final int SMALL_A        = 0x61;
     private static final int SMALL_Z        = 0x7a;
-    
+
     private static final int CAPITAL_A      = 0x41;
     private static final int CAPITAL_Z      = 0x5a;
 
@@ -53,39 +54,30 @@ public final class Punycode {
             delta/=(BASE-TMIN);
         }
 
-        return count+(((BASE-TMIN+1)*delta)/(delta+SKEW));         
+        return count+(((BASE-TMIN+1)*delta)/(delta+SKEW));
     }
 
     /**
-     * basicToDigit[] contains the numeric value of a basic code
-     * point (for use in representing integers) in the range 0 to
-     * BASE-1, or -1 if b is does not represent a value.
+     * @return the numeric value of a basic code point (for use in representing integers)
+     *         in the range 0 to BASE-1, or a negative value if cp is invalid.
      */
-    static final int[]    basicToDigit= new int[]{
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-    
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        26, 27, 28, 29, 30, 31, 32, 33, 34, 35, -1, -1, -1, -1, -1, -1,
-    
-        -1,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
-        15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1,
-    
-        -1,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
-        15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1,
-    
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-    
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-    
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-    
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
-    };
+    private static final int decodeDigit(int cp) {
+        if(cp<='Z') {
+            if(cp<='9') {
+                if(cp<'0') {
+                    return -1;
+                } else {
+                    return cp-'0'+26;  // 0..9 -> 26..35
+                }
+            } else {
+                return cp-'A';  // A-Z -> 0..25
+            }
+        } else if(cp<='z') {
+            return cp-'a';  // a..z -> 0..25
+        } else {
+            return -1;
+        }
+    }
 
     ///CLOVER:OFF
     private static char asciiCaseMap(char b, boolean uppercase) {
@@ -99,7 +91,7 @@ public final class Punycode {
             }
         }
         return b;
-    }    
+    }
     ///CLOVER:ON
     /**
      * digitToBasic() returns the basic code point whose value
@@ -120,11 +112,17 @@ public final class Punycode {
             return (char)((ZERO-26)+digit);
         }
     }
+
+    // ICU-13727: Limit input length for n^2 algorithm
+    // where well-formed strings are at most 59 characters long.
+    private static final int ENCODE_MAX_CODE_UNITS = 1000;
+    private static final int DECODE_MAX_CHARS = 2000;
+
     /**
      * Converts Unicode to Punycode.
      * The input string must not contain single, unpaired surrogates.
      * The output will be represented as an array of ASCII code points.
-     * 
+     *
      * @param src The source of the String Buffer passed.
      * @param caseFlags The boolean array of case flags.
      * @return An array of ASCII code points.
@@ -133,6 +131,10 @@ public final class Punycode {
         int n, delta, handledCPCount, basicLength, bias, j, m, q, k, t, srcCPCount;
         char c, c2;
         int srcLength = src.length();
+        if (srcLength > ENCODE_MAX_CODE_UNITS) {
+            throw new ICUInputTooLongException(
+                    "input too long: " + srcLength + " UTF-16 code units");
+        }
         int[] cpBuffer = new int[srcLength];
         StringBuilder dest = new StringBuilder(srcLength);
         /*
@@ -140,7 +142,7 @@ public final class Punycode {
          * convert extended ones to UTF-32 in cpBuffer (caseFlag in sign bit):
          */
         srcCPCount=0;
-        
+
         for(j=0; j<srcLength; ++j) {
             c=src.charAt(j);
             if(isBasic(c)) {
@@ -152,7 +154,7 @@ public final class Punycode {
                     n|=c;
                 } else if(UTF16.isLeadSurrogate(c) && (j+1)<srcLength && UTF16.isTrailSurrogate(c2=src.charAt(j+1))) {
                     ++j;
-                    
+
                     n|=UCharacter.getCodePoint(c, c2);
                 } else {
                     /* error: unmatched surrogate */
@@ -196,7 +198,7 @@ public final class Punycode {
              * Increase delta enough to advance the decoder's
              * <n,i> state to <m,0>, but guard against overflow:
              */
-            if(m-n>(0x7fffffff-delta)/(handledCPCount+1)) {
+            if(m-n>(0x7fffffff-handledCPCount-delta)/(handledCPCount+1)) {
                 throw new IllegalStateException("Internal program error");
             }
             delta+=(m-n)*(handledCPCount+1);
@@ -211,7 +213,7 @@ public final class Punycode {
                     /* Represent delta as a generalized variable-length integer: */
                     for(q=delta, k=BASE; /* no condition */; k+=BASE) {
 
-                        /** RAM: comment out the old code for conformance with draft-ietf-idn-punycode-03.txt   
+                        /** RAM: comment out the old code for conformance with draft-ietf-idn-punycode-03.txt
 
                         t=k-bias;
                         if(t<TMIN) {
@@ -220,7 +222,7 @@ public final class Punycode {
                             t=TMAX;
                         }
                         */
-                    
+
                         t=k-bias;
                         if(t<TMIN) {
                             t=TMIN;
@@ -249,7 +251,7 @@ public final class Punycode {
 
         return dest;
     }
-    
+
     private static boolean isBasic(int ch){
         return (ch < INITIAL_N);
     }
@@ -264,14 +266,17 @@ public final class Punycode {
     /**
      * Converts Punycode to Unicode.
      * The Unicode string will be at most as long as the Punycode string.
-     * 
+     *
      * @param src The source of the string buffer being passed.
      * @param caseFlags The array of boolean case flags.
      * @return StringBuilder string.
      */
-    public static StringBuilder decode(CharSequence src, boolean[] caseFlags) 
+    public static StringBuilder decode(CharSequence src, boolean[] caseFlags)
                                throws StringPrepParseException{
         int srcLength = src.length();
+        if (srcLength > DECODE_MAX_CHARS) {
+            throw new ICUInputTooLongException("input too long: " + srcLength + " characters");
+        }
         StringBuilder dest = new StringBuilder(src.length());
         int n, i, bias, basicLength, j, in, oldi, w, k, digit, t,
                 destCPCount, firstSupplementaryIndex, cpLength;
@@ -330,7 +335,7 @@ public final class Punycode {
                     throw new StringPrepParseException("Illegal char found", StringPrepParseException.ILLEGAL_CHAR_FOUND);
                 }
 
-                digit=basicToDigit[src.charAt(in++) & 0xFF];
+                digit=decodeDigit(src.charAt(in++));
                 if(digit<0) {
                     throw new StringPrepParseException("Invalid char found", StringPrepParseException.INVALID_CHAR_FOUND);
                 }

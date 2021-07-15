@@ -746,6 +746,26 @@ static WithQuantityExpectedRelativeDateTimeUnit kEnglishFormat[] = {
         {-2.0, UDAT_REL_UNIT_SATURDAY, "2 Saturdays ago"}
 };
 
+static WithQuantityExpected kAfrikaans[] = {
+        {1.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_MONTHS, "oor 1 maand"},
+        {2.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_MONTHS, "oor 2 maande"},
+        {1.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_MONTHS, "1 maand gelede"},
+        {2.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_MONTHS, "2 maande gelede"},
+};
+
+static WithoutQuantityExpected kAfrikaansNoQuantity[] = {
+        {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_MONTH, "volgende maand"},
+        {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_MONTH, "verlede maand"},
+};
+
+static WithQuantityExpectedRelativeDateTimeUnit kAfrikaansFormatNumeric[] = {
+        {0.0, UDAT_REL_UNIT_MONTH, "oor 0 maande"},
+        {1.0, UDAT_REL_UNIT_MONTH, "oor 1 maand"},
+        {2.0, UDAT_REL_UNIT_MONTH, "oor 2 maande"},
+        {-0.0, UDAT_REL_UNIT_MONTH, "0 maande gelede"},
+        {-1.0, UDAT_REL_UNIT_MONTH, "1 maand gelede"},
+        {-2.0, UDAT_REL_UNIT_MONTH, "2 maande gelede"},
+};
 
 class RelativeDateTimeFormatterTest : public IntlTestWithFieldPosition {
 public:
@@ -765,6 +785,7 @@ private:
     void TestEnglishNoQuantityShort();
     void TestEnglishNoQuantityNarrow();
     void TestSpanishNoQuantity();
+    void TestAfrikaans();
     void TestFormatWithQuantityIllegalArgument();
     void TestFormatWithoutQuantityIllegalArgument();
     void TestCustomNumberFormat();
@@ -857,6 +878,7 @@ void RelativeDateTimeFormatterTest::runIndexedTest(
     TESTCASE_AUTO(TestEnglishNoQuantityShort);
     TESTCASE_AUTO(TestEnglishNoQuantityNarrow);
     TESTCASE_AUTO(TestSpanishNoQuantity);
+    TESTCASE_AUTO(TestAfrikaans);
     TESTCASE_AUTO(TestFormatWithQuantityIllegalArgument);
     TESTCASE_AUTO(TestFormatWithoutQuantityIllegalArgument);
     TESTCASE_AUTO(TestCustomNumberFormat);
@@ -953,6 +975,12 @@ void RelativeDateTimeFormatterTest::TestEnglishNoQuantityNarrow() {
 
 void RelativeDateTimeFormatterTest::TestSpanishNoQuantity() {
     RunTest("es", kSpanishNoQuantity, UPRV_LENGTHOF(kSpanishNoQuantity));
+}
+
+void RelativeDateTimeFormatterTest::TestAfrikaans() {
+    RunTest("af", kAfrikaans, UPRV_LENGTHOF(kAfrikaans));
+    RunTest("af", kAfrikaansNoQuantity, UPRV_LENGTHOF(kAfrikaansNoQuantity));
+    RunTest("af", kAfrikaansFormatNumeric, UPRV_LENGTHOF(kAfrikaansFormatNumeric), true);
 }
 
 void RelativeDateTimeFormatterTest::TestFormatWithQuantityIllegalArgument() {

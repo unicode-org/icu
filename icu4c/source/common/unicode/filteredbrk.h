@@ -85,8 +85,8 @@ class U_COMMON_API FilteredBreakIteratorBuilder : public UObject {
    * by the iterator.
    * @param string the string to suppress, such as "Mr."
    * @param status error code
-   * @return returns TRUE if the string was not present and now added,
-   * FALSE if the call was a no-op because the string was already being suppressed.
+   * @return returns true if the string was not present and now added,
+   * false if the call was a no-op because the string was already being suppressed.
    * @stable ICU 56
    */
   virtual UBool suppressBreakAfter(const UnicodeString& string, UErrorCode& status) = 0;
@@ -98,12 +98,13 @@ class U_COMMON_API FilteredBreakIteratorBuilder : public UObject {
    * locale data which may be suppressing certain strings.
    * @param string the exception to remove
    * @param status error code
-   * @return returns TRUE if the string was present and now removed,
-   * FALSE if the call was a no-op because the string was not being suppressed.
+   * @return returns true if the string was present and now removed,
+   * false if the call was a no-op because the string was not being suppressed.
    * @stable ICU 56
    */
   virtual UBool unsuppressBreakAfter(const UnicodeString& string, UErrorCode& status) = 0;
 
+#ifndef U_FORCE_HIDE_DEPRECATED_API
   /**
    * This function has been deprecated in favor of wrapIteratorWithFilter()
    * The behavior is identical.
@@ -114,6 +115,7 @@ class U_COMMON_API FilteredBreakIteratorBuilder : public UObject {
    * @see wrapBreakIteratorWithFilter()
    */
   virtual BreakIterator *build(BreakIterator* adoptBreakIterator, UErrorCode& status) = 0;
+#endif  // U_FORCE_HIDE_DEPRECATED_API
 
   /**
    * Wrap (adopt) an existing break iterator in a new filtered instance.

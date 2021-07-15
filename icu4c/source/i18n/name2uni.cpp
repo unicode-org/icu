@@ -119,7 +119,7 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
         return;
     }
 
-    // Accomodate the longest possible name
+    // Accommodate the longest possible name
     ++maxLen; // allow for temporary trailing space
     char* cbuf = (char*) uprv_malloc(maxLen);
     if (cbuf == NULL) {
@@ -190,6 +190,7 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
                 }
 
                 if (uprv_isInvariantUString(name.getBuffer(), len)) {
+                    cbuf[0] = 0;
                     name.extract(0, len, cbuf, maxLen, US_INV);
 
                     UErrorCode status = U_ZERO_ERROR;

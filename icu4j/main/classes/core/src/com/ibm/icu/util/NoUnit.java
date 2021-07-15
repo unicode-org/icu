@@ -1,5 +1,5 @@
 // © 2017 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.util;
 
 import com.ibm.icu.number.NumberFormatter;
@@ -7,47 +7,42 @@ import com.ibm.icu.number.NumberFormatter;
 /**
  * Dimensionless unit for percent and permille.
  * @see NumberFormatter
- * @draft ICU 60
- * @provisional This API might change or be removed in a future release.
+ * @draft ICU 68
  */
-public class NoUnit extends MeasureUnit {
-    private static final long serialVersionUID = 2467174286237024095L;
-
+public final class NoUnit {
     /**
      * Constant for the base unit (dimensionless and no scaling).
      *
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * Prior to ICU 68, this constant equaled an instance of NoUnit.
+     *
+     * Since ICU 68, this constant equals null.
+     *
+     * @draft ICU 68
      */
-    public static final NoUnit BASE =
-        (NoUnit) MeasureUnit.internalGetInstance("none", "base");
+    public static final MeasureUnit BASE = null;
 
     /**
      * Constant for the percent unit, or 1/100 of a base unit.
      *
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * Prior to ICU 68, this constant equaled an instance of NoUnit.
+     *
+     * Since ICU 68, this constant is equivalent to MeasureUnit.PERCENT.
+     *
+     * @draft ICU 68
      */
-    public static final NoUnit PERCENT =
-        (NoUnit) MeasureUnit.internalGetInstance("none", "percent");
+    public static final MeasureUnit PERCENT = MeasureUnit.PERCENT;
 
     /**
      * Constant for the permille unit, or 1/100 of a base unit.
      *
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
-     */
-    public static final NoUnit PERMILLE =
-        (NoUnit) MeasureUnit.internalGetInstance("none", "permille");
-
-
-    /**
-     * Package local constructor. This class is not designed for subclassing
-     * by ICU users.
+     * Prior to ICU 68, this constant equaled an instance of NoUnit.
      *
-     * @param subType   The unit subtype.
+     * Since ICU 68, this constant is equivalent to MeasureUnit.PERMILLE.
+     *
+     * @draft ICU 68
      */
-    NoUnit(String subType) {
-        super("none", subType);
-    }
+    public static final MeasureUnit PERMILLE = MeasureUnit.PERMILLE;
+
+    // This class is a namespace not intended to be instantiated:
+    private NoUnit() {}
 }

@@ -2,7 +2,7 @@
 *******************************************************************************
 *
 *   © 2016 and later: Unicode, Inc. and others.
-*   License & terms of use: http://www.unicode.org/copyright.html#License
+*   License & terms of use: http://www.unicode.org/copyright.html
 *
 *******************************************************************************
 *******************************************************************************
@@ -113,7 +113,7 @@ compareIterators(UCharIterator *iter1, const char *n1,
         return;
     }
     if(!iter1->hasNext(iter1)) {
-        log_err("%s->hasNext() at the start returns FALSE\n", n1);
+        log_err("%s->hasNext() at the start returns false\n", n1);
         return;
     }
 
@@ -123,7 +123,7 @@ compareIterators(UCharIterator *iter1, const char *n1,
         return;
     }
     if(!iter2->hasNext(iter2)) {
-        log_err("%s->hasNext() at the start returns FALSE\n", n2);
+        log_err("%s->hasNext() at the start returns false\n", n2);
         return;
     }
 
@@ -137,11 +137,11 @@ compareIterators(UCharIterator *iter1, const char *n1,
     } while(c1>=0);
 
     if(iter1->hasNext(iter1)) {
-        log_err("%s->hasNext() at the end returns TRUE\n", n1);
+        log_err("%s->hasNext() at the end returns true\n", n1);
         return;
     }
     if(iter2->hasNext(iter2)) {
-        log_err("%s->hasNext() at the end returns TRUE\n", n2);
+        log_err("%s->hasNext() at the end returns true\n", n2);
         return;
     }
 
@@ -178,7 +178,7 @@ compareIterators(UCharIterator *iter1, const char *n1,
         return;
     }
     if(!iter1->hasPrevious(iter1)) {
-        log_err("%s->hasPrevious() at the end returns FALSE\n", n1);
+        log_err("%s->hasPrevious() at the end returns false\n", n1);
         return;
     }
 
@@ -188,7 +188,7 @@ compareIterators(UCharIterator *iter1, const char *n1,
         return;
     }
     if(!iter2->hasPrevious(iter2)) {
-        log_err("%s->hasPrevious() at the end returns FALSE\n", n2);
+        log_err("%s->hasPrevious() at the end returns false\n", n2);
         return;
     }
 
@@ -202,11 +202,11 @@ compareIterators(UCharIterator *iter1, const char *n1,
     } while(c1>=0);
 
     if(iter1->hasPrevious(iter1)) {
-        log_err("%s->hasPrevious() at the start returns TRUE\n", n1);
+        log_err("%s->hasPrevious() at the start returns true\n", n1);
         return;
     }
     if(iter2->hasPrevious(iter2)) {
-        log_err("%s->hasPrevious() at the start returns TRUE\n", n2);
+        log_err("%s->hasPrevious() at the start returns true\n", n2);
         return;
     }
 }

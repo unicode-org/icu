@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 gd{
     AuxExemplarCharacters{
         "[á ă â å ä ã ā æ ċ ç ḋ é ĕ ê ë ē ḟ ġ í ĭ î ï ī ı j k ł ṁ ñ ó ŏ ô ö ø ō œ ṗ q"
@@ -22,8 +23,26 @@ gd{
     }
     MoreInformation{"?"}
     NumberElements{
+        adlm{
+            symbols{
+                approximatelySign{"~"}
+                decimal{"."}
+                exponential{"E"}
+                group{","}
+                infinity{"∞"}
+                list{";"}
+                minusSign{"-"}
+                nan{"NaN"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+                superscriptingExponent{"×"}
+                timeSeparator{":"}
+            }
+        }
         arab{
             symbols{
+                approximatelySign{"~"}
                 decimal{"٫"}
                 exponential{"اس"}
                 group{"٬"}
@@ -40,6 +59,7 @@ gd{
         }
         arabext{
             symbols{
+                approximatelySign{"~"}
                 decimal{"٫"}
                 exponential{"×۱۰^"}
                 group{"٬"}
@@ -56,6 +76,7 @@ gd{
         }
         bali{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -72,6 +93,7 @@ gd{
         }
         beng{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -88,6 +110,7 @@ gd{
         }
         brah{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -104,6 +127,7 @@ gd{
         }
         cakm{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -120,6 +144,7 @@ gd{
         }
         cham{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -137,6 +162,7 @@ gd{
         default{"latn"}
         deva{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -316,6 +342,7 @@ gd{
                 }
             }
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -332,6 +359,7 @@ gd{
         }
         gong{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -348,6 +376,7 @@ gd{
         }
         gonm{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -364,6 +393,7 @@ gd{
         }
         gujr{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -380,6 +410,7 @@ gd{
         }
         guru{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -396,6 +427,7 @@ gd{
         }
         hanidec{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -412,6 +444,7 @@ gd{
         }
         java{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -428,6 +461,7 @@ gd{
         }
         kali{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -444,6 +478,7 @@ gd{
         }
         khmr{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -460,6 +495,7 @@ gd{
         }
         knda{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -476,6 +512,7 @@ gd{
         }
         lana{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -492,6 +529,7 @@ gd{
         }
         lanatham{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -508,6 +546,7 @@ gd{
         }
         laoo{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -540,99 +579,75 @@ gd{
                 decimalFormat{
                     1000{
                         few{"0 mìltean"}
-                        many{"0K"}
                         one{"0 mhìle"}
                         other{"0 mìle"}
                         two{"0 mhìle"}
-                        zero{"0K"}
                     }
                     10000{
                         few{"00 mìltean"}
-                        many{"00K"}
                         one{"00 mhìle"}
                         other{"00 mìle"}
                         two{"00 mhìle"}
-                        zero{"00K"}
                     }
                     100000{
                         few{"000 mìltean"}
-                        many{"000K"}
                         one{"000 mhìle"}
                         other{"000 mìle"}
                         two{"000 mhìle"}
-                        zero{"000K"}
                     }
                     1000000{
                         few{"0 milleanan"}
-                        many{"0M"}
                         one{"0 mhillean"}
                         other{"0 millean"}
                         two{"0 mhillean"}
-                        zero{"0M"}
                     }
                     10000000{
                         few{"00 milleanan"}
-                        many{"00M"}
                         one{"00 mhillean"}
                         other{"00 millean"}
                         two{"00 mhillean"}
-                        zero{"00M"}
                     }
                     100000000{
                         few{"000 milleanan"}
-                        many{"000M"}
                         one{"000 mhillean"}
                         other{"000 millean"}
                         two{"000 mhillean"}
-                        zero{"000M"}
                     }
                     1000000000{
                         few{"0 billeanan"}
-                        many{"0B"}
                         one{"0 bhillean"}
                         other{"0 billean"}
                         two{"0 bhillean"}
-                        zero{"0B"}
                     }
                     10000000000{
                         few{"00 billeanan"}
-                        many{"00B"}
                         one{"00 bhillean"}
                         other{"00 billean"}
                         two{"00 bhillean"}
-                        zero{"00B"}
                     }
                     100000000000{
                         few{"000 billeanan"}
-                        many{"000B"}
                         one{"000 bhillean"}
                         other{"000 billean"}
                         two{"000 bhillean"}
-                        zero{"000B"}
                     }
                     1000000000000{
                         few{"0 trilleanan"}
-                        many{"0T"}
                         one{"0 trillean"}
                         other{"0 trillean"}
                         two{"0 thrillean"}
-                        zero{"0T"}
                     }
                     10000000000000{
                         few{"00 trilleanan"}
-                        many{"00T"}
                         one{"00 trillean"}
                         other{"00 trillean"}
                         two{"00 thrillean"}
-                        zero{"00T"}
                     }
                     100000000000000{
                         few{"000 trilleanan"}
-                        many{"000T"}
                         one{"000 trillean"}
                         other{"000 trillean"}
                         two{"000 thrillean"}
-                        zero{"000T"}
                     }
                 }
             }
@@ -714,99 +729,75 @@ gd{
                 decimalFormat{
                     1000{
                         few{"0K"}
-                        many{"0K"}
                         one{"0K"}
                         other{"0K"}
                         two{"0K"}
-                        zero{"0K"}
                     }
                     10000{
                         few{"00K"}
-                        many{"00K"}
                         one{"00K"}
                         other{"00K"}
                         two{"00K"}
-                        zero{"00K"}
                     }
                     100000{
                         few{"000K"}
-                        many{"000K"}
                         one{"000K"}
                         other{"000K"}
                         two{"000K"}
-                        zero{"000K"}
                     }
                     1000000{
                         few{"0M"}
-                        many{"0M"}
                         one{"0M"}
                         other{"0M"}
                         two{"0M"}
-                        zero{"0M"}
                     }
                     10000000{
                         few{"00M"}
-                        many{"00M"}
                         one{"00M"}
                         other{"00M"}
                         two{"00M"}
-                        zero{"00M"}
                     }
                     100000000{
                         few{"000M"}
-                        many{"000M"}
                         one{"000M"}
                         other{"000M"}
                         two{"000M"}
-                        zero{"000M"}
                     }
                     1000000000{
                         few{"0B"}
-                        many{"0B"}
                         one{"0B"}
                         other{"0B"}
                         two{"0B"}
-                        zero{"0B"}
                     }
                     10000000000{
                         few{"00B"}
-                        many{"00B"}
                         one{"00B"}
                         other{"00B"}
                         two{"00B"}
-                        zero{"00B"}
                     }
                     100000000000{
                         few{"000B"}
-                        many{"000B"}
                         one{"000B"}
                         other{"000B"}
                         two{"000B"}
-                        zero{"000B"}
                     }
                     1000000000000{
                         few{"0T"}
-                        many{"0T"}
                         one{"0T"}
                         other{"0T"}
                         two{"0T"}
-                        zero{"0T"}
                     }
                     10000000000000{
                         few{"00T"}
-                        many{"00T"}
                         one{"00T"}
                         other{"00T"}
                         two{"00T"}
-                        zero{"00T"}
                     }
                     100000000000000{
                         few{"000T"}
-                        many{"000T"}
                         one{"000T"}
                         other{"000T"}
                         two{"000T"}
-                        zero{"000T"}
                     }
                 }
             }
@@ -827,6 +818,7 @@ gd{
         }
         lepc{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -843,6 +835,7 @@ gd{
         }
         limb{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -862,12 +855,13 @@ gd{
                 few{"{0} brògan"}
                 one{"{0} bhròg"}
                 other{"{0} bròg"}
-                two{"{0}  bhròig"}
+                two{"{0} bhròig"}
             }
         }
         minimumGroupingDigits{"1"}
         mlym{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -884,6 +878,7 @@ gd{
         }
         mong{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -900,6 +895,7 @@ gd{
         }
         mtei{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -916,6 +912,7 @@ gd{
         }
         mymr{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -932,6 +929,7 @@ gd{
         }
         mymrshan{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -949,6 +947,7 @@ gd{
         native{"latn"}
         nkoo{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -965,6 +964,7 @@ gd{
         }
         olck{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -981,6 +981,7 @@ gd{
         }
         orya{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -997,6 +998,7 @@ gd{
         }
         osma{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -1013,6 +1015,7 @@ gd{
         }
         rohg{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -1029,6 +1032,7 @@ gd{
         }
         saur{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -1045,6 +1049,7 @@ gd{
         }
         shrd{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -1061,6 +1066,7 @@ gd{
         }
         sora{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -1077,6 +1083,7 @@ gd{
         }
         sund{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -1093,6 +1100,7 @@ gd{
         }
         takr{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -1109,6 +1117,7 @@ gd{
         }
         talu{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -1125,6 +1134,7 @@ gd{
         }
         tamldec{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -1141,6 +1151,7 @@ gd{
         }
         telu{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -1157,6 +1168,7 @@ gd{
         }
         thai{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -1173,6 +1185,7 @@ gd{
         }
         tibt{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -1189,6 +1202,7 @@ gd{
         }
         vaii{
             symbols{
+                approximatelySign{"~"}
                 decimal{"."}
                 exponential{"E"}
                 group{","}
@@ -1204,7 +1218,6 @@ gd{
             }
         }
     }
-    Version{"36"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -1221,6 +1234,16 @@ gd{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
             }
             availableFormats{
                 MMMMd{"d'mh' MMMM"}
@@ -1264,6 +1287,16 @@ gd{
                 "{1} 'aig' {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "rMMMMEEEEd",
+                "rMMMMd",
+                "rMMMd",
+                "rMd",
             }
             availableFormats{
                 Bh{"hB"}
@@ -1641,6 +1674,16 @@ gd{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
+            }
             availableFormats{
                 MMMMd{"d'mh' MMMM"}
                 yMM{"LL/y"}
@@ -1668,6 +1711,16 @@ gd{
                 "{1} 'aig' {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "rMMMMEEEEd",
+                "rMMMMd",
+                "rMMMd",
+                "rMd",
             }
             availableFormats{
                 E{"ccc"}
@@ -2033,6 +2086,16 @@ gd{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
+            }
             availableFormats{
                 MMMMd{"d'mh' MMMM"}
                 yMM{"LL/y"}
@@ -2060,6 +2123,16 @@ gd{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -2282,6 +2355,16 @@ gd{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMMdd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -2745,6 +2828,16 @@ gd{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
+            }
             availableFormats{
                 MMMMd{"d'mh' MMMM"}
                 yMM{"LL/y"}
@@ -2772,6 +2865,16 @@ gd{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
             }
             availableFormats{
                 MMMMd{"d'mh' MMMM"}
@@ -2801,6 +2904,16 @@ gd{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
+            }
             availableFormats{
                 MMMMd{"d'mh' MMMM"}
                 yMM{"LL/y"}
@@ -2828,6 +2941,16 @@ gd{
                 "{1} 'aig' {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
             }
             availableFormats{
                 MMMMd{"d'mh' MMMM"}
@@ -2857,6 +2980,16 @@ gd{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
+            }
             availableFormats{
                 MMMMd{"d'mh' MMMM"}
                 yMM{"LL/y"}
@@ -2884,6 +3017,16 @@ gd{
                 "{1} 'aig' {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
             }
             availableFormats{
                 Ed{"E, d"}
@@ -3125,10 +3268,10 @@ gd{
                     two{"an ceann {0} DhihAoine"}
                 }
                 past{
-                    few{"o chionn {0} DihAoine"}
-                    one{"o chionn {0} DihAoine"}
-                    other{"o chionn {0} DihAoine"}
-                    two{"o chionn {0} DhihAoine"}
+                    few{"{0} DihAoine air ais"}
+                    one{"{0} DihAoine air ais"}
+                    other{"{0} DihAoine air ais"}
+                    two{"{0} DhihAoine air ais"}
                 }
             }
         }
@@ -3167,10 +3310,10 @@ gd{
                     two{"an ceann {0} Dhih."}
                 }
                 past{
-                    few{"o chionn {0} Dih."}
-                    one{"o chionn {0} Dih."}
-                    other{"o chionn {0} Dih."}
-                    two{"o chionn {0} Dhih."}
+                    few{"{0} Dih. air ais"}
+                    one{"{0} Dih. air ais"}
+                    other{"{0} Dih. air ais"}
+                    two{"{0} Dhih. air ais"}
                 }
             }
         }
@@ -3308,10 +3451,10 @@ gd{
                     two{"an ceann {0} DhiLuain"}
                 }
                 past{
-                    few{"o chionn {0} DiLuain"}
-                    one{"o chionn {0} DiLuain"}
-                    other{"o chionn {0} DiLuain"}
-                    two{"o chionn {0} DhiLuain"}
+                    few{"{0} DiLuain air ais"}
+                    one{"{0} DiLuain air ais"}
+                    other{"{0} DiLuain air ais"}
+                    two{"{0} DhiLuain air ais"}
                 }
             }
         }
@@ -3350,10 +3493,10 @@ gd{
                     two{"an ceann {0} DhiL."}
                 }
                 past{
-                    few{"o chionn {0} DiL."}
-                    one{"o chionn {0} DiL."}
-                    other{"o chionn {0} DiL."}
-                    two{"o chionn {0} DhiL."}
+                    few{"{0} DiL. air ais"}
+                    one{"{0} DiL. air ais"}
+                    other{"{0} DiL. air ais"}
+                    two{"{0} DhiL. air ais"}
                 }
             }
         }
@@ -3438,10 +3581,10 @@ gd{
                     two{"an ceann {0} chairteil"}
                 }
                 past{
-                    few{"o chionn {0} cairtealan"}
-                    one{"o chionn {0} chairteil"}
-                    other{"o chionn {0} cairteil"}
-                    two{"o chionn {0} chairteil"}
+                    few{"{0} cairtealan air ais"}
+                    one{"{0} chairteal air ais"}
+                    other{"{0} cairteal air ais"}
+                    two{"{0} chairteal air ais"}
                 }
             }
         }
@@ -3503,10 +3646,10 @@ gd{
                     two{"an ceann {0} DhiSathairne"}
                 }
                 past{
-                    few{"o chionn {0} DiSathairne"}
-                    one{"o chionn {0} DiSathairne"}
-                    other{"o chionn {0} DiSathairne"}
-                    two{"o chionn {0} DhiSathairne"}
+                    few{"{0} DiSathairne air ais"}
+                    one{"{0} DiSathairne air ais"}
+                    other{"{0} DiSathairne air ais"}
+                    two{"{0} DhiSathairne air ais"}
                 }
             }
         }
@@ -3545,10 +3688,10 @@ gd{
                     two{"an ceann {0} DhiS."}
                 }
                 past{
-                    few{"o chionn {0} DiS."}
-                    one{"o chionn {0} DiS."}
-                    other{"o chionn {0} DiS."}
-                    two{"o chionn {0} DhiS."}
+                    few{"{0} DiS. air ais"}
+                    one{"{0} DiS. air ais"}
+                    other{"{0} DiS. air ais"}
+                    two{"{0} DhiS. air ais"}
                 }
             }
         }
@@ -3626,10 +3769,10 @@ gd{
                     two{"an ceann {0} DhiDòmhnaich"}
                 }
                 past{
-                    few{"o chionn {0} DiDòmhnaich"}
-                    one{"o chionn {0} DiDòmhnaich"}
-                    other{"o chionn {0} DiDòmhnaich"}
-                    two{"o chionn {0} DhiDòmhnaich"}
+                    few{"{0} DiDòmhnaich air ais"}
+                    one{"{0} DiDòmhnaich air ais"}
+                    other{"{0} DiDòmhnaich air ais"}
+                    two{"{0} DhiDòmhnaich air ais"}
                 }
             }
         }
@@ -3668,10 +3811,10 @@ gd{
                     two{"an ceann {0} DhiD."}
                 }
                 past{
-                    few{"o chionn {0} DiDòmhnaich"}
-                    one{"o chionn {0} DiD."}
-                    other{"o chionn {0} DiDòmhnaich"}
-                    two{"o chionn {0} DhiD."}
+                    few{"{0} DiD. air ais"}
+                    one{"{0} DiD. air ais"}
+                    other{"{0} DiD. air ais"}
+                    two{"{0} DhiD. air ais"}
                 }
             }
         }
@@ -3689,10 +3832,10 @@ gd{
                     two{"an ceann {0} DhiarDaoin"}
                 }
                 past{
-                    few{"o chionn {0} DiarDaoin"}
-                    one{"o chionn {0} DiarDaoin"}
-                    other{"o chionn {0} DiarDaoin"}
-                    two{"o chionn {0} DhiarDaoin"}
+                    few{"{0} DiarDaoin air ais"}
+                    one{"{0} DiarDaoin air ais"}
+                    other{"{0} DiarDaoin air ais"}
+                    two{"{0} DhiarDaoin air ais"}
                 }
             }
         }
@@ -3731,10 +3874,10 @@ gd{
                     two{"an ceann {0} Dhia."}
                 }
                 past{
-                    few{"o chionn {0} Dia."}
-                    one{"o chionn {0} Dia."}
-                    other{"o chionn {0} Dia."}
-                    two{"o chionn {0} Dhia."}
+                    few{"{0} Dia. air ais"}
+                    one{"{0} Dia. air ais"}
+                    other{"{0} Dia. air ais"}
+                    two{"{0} Dhia. air ais"}
                 }
             }
         }
@@ -3752,10 +3895,10 @@ gd{
                     two{"an ceann {0} DhiMàirt"}
                 }
                 past{
-                    few{"o chionn {0} DiMàirt"}
-                    one{"o chionn {0} DiMàirt"}
-                    other{"o chionn {0} DiMàirt"}
-                    two{"o chionn {0} DhiMàirt"}
+                    few{"{0} DiMàirt air ais"}
+                    one{"{0} DiMàirt air ais"}
+                    other{"{0} DiMàirt air ais"}
+                    two{"{0} DhiMàirt air ais"}
                 }
             }
         }
@@ -3794,10 +3937,10 @@ gd{
                     two{"an ceann {0} DhiM."}
                 }
                 past{
-                    few{"o chionn {0} DiM."}
-                    one{"o chionn {0} DiM."}
-                    other{"o chionn {0} DiM."}
-                    two{"o chionn {0} DhiM."}
+                    few{"{0} DiM. air ais"}
+                    one{"{0} DiM. air ais"}
+                    other{"{0} DiM. air ais"}
+                    two{"{0} DhiM. air ais"}
                 }
             }
         }
@@ -3815,10 +3958,10 @@ gd{
                     two{"an ceann {0} DhiCiadain"}
                 }
                 past{
-                    few{"o chionn {0} DiCiadain"}
-                    one{"o chionn {0} DiCiadain"}
-                    other{"o chionn {0} DiCiadain"}
-                    two{"o chionn {0} DhiCiadain"}
+                    few{"{0} DiCiadain air ais"}
+                    one{"{0} DiCiadain air ais"}
+                    other{"{0} DiCiadain air ais"}
+                    two{"{0} DhiCiadain air ais"}
                 }
             }
         }
@@ -3857,10 +4000,10 @@ gd{
                     two{"an ceann {0} DhiC."}
                 }
                 past{
-                    few{"o chionn {0} DiC."}
-                    one{"o chionn {0} DiC."}
-                    other{"o chionn {0} DiC."}
-                    two{"o chionn {0} DhiC."}
+                    few{"{0} DiC. air ais"}
+                    one{"{0} DiC. air ais"}
+                    other{"{0} DiC. air ais"}
+                    two{"{0} DhiC. air ais"}
                 }
             }
         }

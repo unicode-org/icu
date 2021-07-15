@@ -344,7 +344,7 @@ public:
     UBool isLeapYear(int32_t year) const;
 
     /**
-     * Returns TRUE if the given Calendar object is equivalent to this
+     * Returns true if the given Calendar object is equivalent to this
      * one.  Calendar override.
      *
      * @param other the Calendar to be compared with this Calendar   
@@ -352,6 +352,7 @@ public:
      */
     virtual UBool isEquivalentTo(const Calendar& other) const;
 
+#ifndef U_FORCE_HIDE_DEPRECATED_API
     /**
      * (Overrides Calendar) Rolls up or down by the given amount in the specified field.
      * For more information, see the documentation for Calendar::roll().
@@ -364,6 +365,7 @@ public:
      * @deprecated ICU 2.6. Use roll(UCalendarDateFields field, int32_t amount, UErrorCode& status) instead.
      */
     virtual void roll(EDateFields field, int32_t amount, UErrorCode& status);
+#endif  // U_FORCE_HIDE_DEPRECATED_API
 
     /**
      * (Overrides Calendar) Rolls up or down by the given amount in the specified field.
@@ -754,7 +756,7 @@ public:
  public: // internal implementation
 
     /**
-     * @return TRUE if this calendar has the notion of a default century
+     * @return true if this calendar has the notion of a default century
      * @internal 
      */
     virtual UBool haveDefaultCentury() const;

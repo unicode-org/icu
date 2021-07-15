@@ -2,7 +2,7 @@
 *******************************************************************************
 *
 *   © 2016 and later: Unicode, Inc. and others.
-*   License & terms of use: http://www.unicode.org/copyright.html#License
+*   License & terms of use: http://www.unicode.org/copyright.html
 *
 *******************************************************************************
 *******************************************************************************
@@ -58,7 +58,7 @@ static const UDataInfo dataInfo={
 };
 
 
-/* Excersise: add writing out other data types */
+/* Exercise: add writing out other data types */
 /* see icu/source/tools/toolutil/unewdata.h    */
 /* for other possibilities                     */
 

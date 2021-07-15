@@ -1,6 +1,6 @@
 # ************************************************************************
 # Copyright (C) 2016 and later: Unicode, Inc. and others.
-# License & terms of use: http://www.unicode.org/copyright.html#License
+# License & terms of use: http://www.unicode.org/copyright.html
 # ************************************************************************
 @rem = '--*-Perl-*--
 @echo off
@@ -253,7 +253,7 @@ sub convertIndex {
     print C_INDEX <<END;
 //--------------------------------------------------------------------
 // N.B.: This file has been generated mechanically from the
-// corresponding ICU4J file, which is the master file that receives
+// corresponding ICU4J file, which is the primary file that receives
 // primary updates.  The colon-delimited fields have been split into
 // separate strings.  For 'file' and 'internal' lines, the encoding
 // field has been deleted, since the encoding is processed at build

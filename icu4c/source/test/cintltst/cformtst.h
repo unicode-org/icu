@@ -28,7 +28,7 @@
 #include "unicode/uformattedvalue.h"
 
 
-/* Internal fucntion used by all the test format files */
+/* Internal function used by all the test format files */
 UChar* myDateFormat(UDateFormat *dat, UDate d); 
 
 

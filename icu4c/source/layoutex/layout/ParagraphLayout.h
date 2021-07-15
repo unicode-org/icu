@@ -46,7 +46,7 @@ U_NAMESPACE_BEGIN
  * You may use this class with the HarfBuzz icu-le-hb wrapper,
  *  see http://www.freedesktop.org/wiki/Software/HarfBuzz/
  *
- *  See http://userguide.icu-project.org/layoutengine for special build instructions.
+ *  See https://unicode-org.github.io/icu/userguide/layoutengine for special build instructions.
  */
 class U_LAYOUTEX_API ParagraphLayout : public UObject
 {
@@ -377,12 +377,12 @@ public:
      *        Unicode code points.
      *
      * @param localeRuns is a pointer to a <code>LocaleRuns</code> object representing locale runs.
-     *        The <code>Locale</code> objects are used to determind the language of the text. If this
+     *        The <code>Locale</code> objects are used to determine the language of the text. If this
      *        pointer is <code>NULL</code> the default locale will be used for all of the text. 
      *
      * @param paragraphLevel is the directionality of the paragraph, as in the UBiDi object.
      *
-     * @param vertical is <code>TRUE</code> if the paragraph should be set vertically.
+     * @param vertical is <code>true</code> if the paragraph should be set vertically.
      *
      * @param status will be set to any error code encountered during construction.
      *
@@ -424,7 +424,7 @@ public:
      *
      * @param fontRuns is a pointer to a <code>FontRuns</code> object representing the font runs.
      *
-     * @return <code>TRUE</code> if the paragraph contains complex text.
+     * @return <code>true</code> if the paragraph contains complex text.
      *
      * @stable ICU 3.2
      */
@@ -438,7 +438,7 @@ public:
      *
      * @param count is the number of characters in the paragraph.
      *
-     * @return <code>TRUE</code> if any of the text requires complex processing.
+     * @return <code>true</code> if any of the text requires complex processing.
      *
      * @stable ICU 3.2
      */

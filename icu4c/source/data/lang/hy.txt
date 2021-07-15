@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 hy{
     Keys{
         calendar{"օրացույց"}
@@ -67,6 +68,7 @@ hy{
         bug{"բուգիերեն"}
         byn{"բիլին"}
         ca{"կատալաներեն"}
+        ccp{"չակմա"}
         ce{"չեչեներեն"}
         ceb{"սեբուերեն"}
         cgg{"չիգա"}
@@ -120,6 +122,7 @@ hy{
         eu{"բասկերեն"}
         ewo{"էվոնդո"}
         fa{"պարսկերեն"}
+        fa_AF{"դարի"}
         ff{"ֆուլահ"}
         fi{"ֆիններեն"}
         fil{"ֆիլիպիներեն"}
@@ -347,7 +350,6 @@ hy{
         ro_MD{"մոլդովերեն"}
         rof{"ռոմբո"}
         rom{"ռոմաներեն"}
-        root{"ռուտերեն"}
         rtm{"ռոտուման"}
         ru{"ռուսերեն"}
         rue{"ռուսիներեն"}
@@ -485,12 +487,18 @@ hy{
         zxx{"առանց լեզվային բովանդակության"}
         zza{"զազաերեն"}
     }
+    Languages%long{
+        zh_Hant{"չինարեն (ավանդական չինարեն)"}
+    }
     Languages%menu{
+        ckb{"քրդերեն (սորանի)"}
         yue{"չինարեն, կանտոներեն"}
     }
     Languages%short{
-        az{"ադրբեջաներեն"}
         en_GB{"անգլերեն (Բրիտանիա)"}
+    }
+    Languages%variant{
+        ckb{"սորանի"}
     }
     Scripts{
         Arab{"արաբական"}
@@ -537,10 +545,6 @@ hy{
         Zxxx{"չգրված"}
         Zyyy{"ընդհանուր"}
         Zzzz{"անհայտ գիր"}
-    }
-    Scripts%stand-alone{
-        Hans{"պարզեցված չինական"}
-        Hant{"ավանդական չինական"}
     }
     Types{
         calendar{
@@ -623,7 +627,6 @@ hy{
         AREVELA{"արևելահայերեն"}
         AREVMDA{"արեւմտահայերէն"}
     }
-    Version{"36"}
     characterLabelPattern{
         all{"{0} — բոլորը"}
         category-list{"{0}․ {1}"}
@@ -638,6 +641,7 @@ hy{
             one{"{0} — Գծեր"}
             other{"{0} — Գծեր"}
         }
+        subscript{"ենթատողային {0}"}
     }
     codePatterns{
         language{"Լեզու՝ {0}"}

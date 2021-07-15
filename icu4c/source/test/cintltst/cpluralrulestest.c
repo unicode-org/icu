@@ -14,6 +14,7 @@
 #include "unicode/ustring.h"
 #include "unicode/uenum.h"
 #include "unicode/unumberformatter.h"
+#include "unicode/unumberrangeformatter.h"
 #include "cintltst.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -22,6 +23,7 @@ static void TestPluralRules(void);
 static void TestOrdinalRules(void);
 static void TestGetKeywords(void);
 static void TestFormatted(void);
+static void TestSelectRange(void);
 
 void addPluralRulesTest(TestNode** root);
 
@@ -33,6 +35,7 @@ void addPluralRulesTest(TestNode** root)
     TESTCASE(TestOrdinalRules);
     TESTCASE(TestGetKeywords);
     TESTCASE(TestFormatted);
+    TESTCASE(TestSelectRange);
 }
 
 typedef struct {
@@ -180,7 +183,7 @@ typedef struct {
 static const KeywordsForLang getKeywordsItems[] = {
     { "zh", { "other" } },
     { "en", { "one", "other" } },
-    { "fr", { "one", "other" } },
+    { "fr", { "one", "many", "other" } },
     { "lv", { "zero", "one", "other" } },
     { "hr", { "one", "few", "other" } },
     { "sl", { "one", "two", "few", "other" } },
@@ -293,6 +296,58 @@ cleanup:
     uplrules_close(uplrules);
     unumf_close(unumf);
     unumf_closeResult(uresult);
+}
+
+static void TestSelectRange() {
+    UErrorCode ec = U_ZERO_ERROR;
+    UNumberRangeFormatter* unumrf = NULL;
+    UFormattedNumberRange* uresult = NULL;
+    UPluralRules* uplrules = NULL;
+
+    int32_t d1 = 102;
+    int32_t d2 = 201;
+
+    // Locale sl has interesting data: one + two => few
+    uplrules = uplrules_open("sl", &ec);
+    if (!assertSuccess("open plural rules", &ec)) {
+        goto cleanup;
+    }
+
+    unumrf = unumrf_openForSkeletonWithCollapseAndIdentityFallback(
+        u"",
+        0,
+        UNUM_RANGE_COLLAPSE_AUTO,
+        UNUM_IDENTITY_FALLBACK_APPROXIMATELY,
+        "sl",
+        NULL,
+        &ec);
+    if (!assertSuccess("open unumrf", &ec)) {
+        goto cleanup;
+    }
+
+    uresult = unumrf_openResult(&ec);
+    if (!assertSuccess("open result", &ec)) {
+        goto cleanup;
+    }
+
+    unumrf_formatDoubleRange(unumrf, d1, d2, uresult, &ec);
+    if (!assertSuccess("format", &ec)) {
+        goto cleanup;
+    }
+
+    UChar buffer[40];
+    int32_t len = uplrules_selectForRange(uplrules, uresult, buffer, 40, &ec);
+    if (!assertSuccess("select", &ec)) {
+        goto cleanup;
+    }
+
+    assertUEquals("102-201 is plural category 'few' in sl", u"few", buffer);
+    assertIntEquals("Length should be as expected", u_strlen(buffer), len);
+
+cleanup:
+    uplrules_close(uplrules);
+    unumrf_close(unumrf);
+    unumrf_closeResult(uresult);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

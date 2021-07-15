@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 es_AR{
     %%Parent{"es_419"}
     NumberElements{
@@ -14,7 +15,6 @@ es_AR{
             }
         }
     }
-    Version{"36"}
     calendar{
         generic{
             availableFormats{
@@ -23,26 +23,14 @@ es_AR{
             }
         }
         gregorian{
-            AmPmMarkers{
-                "a. m.",
-                "p. m.",
-            }
-            AmPmMarkersAbbr{
-                "a. m.",
-                "p. m.",
-            }
             availableFormats{
                 GyMMMEd{"E, d 'de' MMM 'de' y G"}
                 GyMMMd{"d MMM y G"}
-                Hmsv{"HH:mm:ss v"}
                 Hmsvvvv{"HH:mm:ss (vvvv)"}
-                Hmv{"HH:mm v"}
                 MEd{"E d-M"}
                 hms{"hh:mm:ss"}
                 yM{"M-y"}
                 yMEd{"E, d/M/y"}
-                yMMM{"MMM y"}
-                yMMMEd{"E, d MMM y"}
                 yMMMd{"d 'de' MMM 'de' y"}
             }
             dayNames{
@@ -76,16 +64,8 @@ es_AR{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        am{"a. m."}
-                        pm{"p. m."}
-                    }
                     narrow{
                         noon{"m."}
-                    }
-                    wide{
-                        am{"a. m."}
-                        pm{"p. m."}
                     }
                 }
             }
@@ -209,9 +189,6 @@ es_AR{
                     other{"hace {0} días"}
                 }
             }
-        }
-        dayperiod{
-            dn{"a. m./p. m."}
         }
         second-narrow{
             dn{"seg."}

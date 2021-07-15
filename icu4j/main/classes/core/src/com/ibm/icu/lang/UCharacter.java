@@ -1,5 +1,5 @@
 // © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
 /**
  *******************************************************************************
  * Copyright (C) 1996-2016, International Business Machines Corporation and
@@ -1223,6 +1223,52 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 64 */
         public static final int WANCHO_ID = 300; /*[1E2C0]*/
 
+        // New blocks in Unicode 13.0
+
+        /** @stable ICU 66 */
+        public static final int CHORASMIAN_ID = 301; /*[10FB0]*/
+        /** @stable ICU 66 */
+        public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_G_ID = 302; /*[30000]*/
+        /** @stable ICU 66 */
+        public static final int DIVES_AKURU_ID = 303; /*[11900]*/
+        /** @stable ICU 66 */
+        public static final int KHITAN_SMALL_SCRIPT_ID = 304; /*[18B00]*/
+        /** @stable ICU 66 */
+        public static final int LISU_SUPPLEMENT_ID = 305; /*[11FB0]*/
+        /** @stable ICU 66 */
+        public static final int SYMBOLS_FOR_LEGACY_COMPUTING_ID = 306; /*[1FB00]*/
+        /** @stable ICU 66 */
+        public static final int TANGUT_SUPPLEMENT_ID = 307; /*[18D00]*/
+        /** @stable ICU 66 */
+        public static final int YEZIDI_ID = 308; /*[10E80]*/
+
+        // New blocks in Unicode 14.0
+
+        /** @stable ICU 70 */
+        public static final int ARABIC_EXTENDED_B_ID = 309; /*[0870]*/
+        /** @stable ICU 70 */
+        public static final int CYPRO_MINOAN_ID = 310; /*[12F90]*/
+        /** @stable ICU 70 */
+        public static final int ETHIOPIC_EXTENDED_B_ID = 311; /*[1E7E0]*/
+        /** @stable ICU 70 */
+        public static final int KANA_EXTENDED_B_ID = 312; /*[1AFF0]*/
+        /** @stable ICU 70 */
+        public static final int LATIN_EXTENDED_F_ID = 313; /*[10780]*/
+        /** @stable ICU 70 */
+        public static final int LATIN_EXTENDED_G_ID = 314; /*[1DF00]*/
+        /** @stable ICU 70 */
+        public static final int OLD_UYGHUR_ID = 315; /*[10F70]*/
+        /** @stable ICU 70 */
+        public static final int TANGSA_ID = 316; /*[16A70]*/
+        /** @stable ICU 70 */
+        public static final int TOTO_ID = 317; /*[1E290]*/
+        /** @stable ICU 70 */
+        public static final int UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED_A_ID = 318; /*[11AB0]*/
+        /** @stable ICU 70 */
+        public static final int VITHKUQI_ID = 319; /*[10570]*/
+        /** @stable ICU 70 */
+        public static final int ZNAMENNY_MUSICAL_NOTATION_ID = 320; /*[1CF00]*/
+
         /**
          * One more than the highest normal UnicodeBlock value.
          * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.BLOCK).
@@ -1230,7 +1276,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
         @Deprecated
-        public static final int COUNT = 301;
+        public static final int COUNT = 321;
 
         // blocks objects ---------------------------------------------------
 
@@ -2571,6 +2617,72 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 64 */
         public static final UnicodeBlock WANCHO = new UnicodeBlock("WANCHO", WANCHO_ID); /*[1E2C0]*/
 
+        // New blocks in Unicode 13.0
+
+        /** @stable ICU 66 */
+        public static final UnicodeBlock CHORASMIAN =
+                new UnicodeBlock("CHORASMIAN", CHORASMIAN_ID); /*[10FB0]*/
+        /** @stable ICU 66 */
+        public static final UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_G =
+                new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_G",
+                        CJK_UNIFIED_IDEOGRAPHS_EXTENSION_G_ID); /*[30000]*/
+        /** @stable ICU 66 */
+        public static final UnicodeBlock DIVES_AKURU =
+                new UnicodeBlock("DIVES_AKURU", DIVES_AKURU_ID); /*[11900]*/
+        /** @stable ICU 66 */
+        public static final UnicodeBlock KHITAN_SMALL_SCRIPT =
+                new UnicodeBlock("KHITAN_SMALL_SCRIPT", KHITAN_SMALL_SCRIPT_ID); /*[18B00]*/
+        /** @stable ICU 66 */
+        public static final UnicodeBlock LISU_SUPPLEMENT =
+                new UnicodeBlock("LISU_SUPPLEMENT", LISU_SUPPLEMENT_ID); /*[11FB0]*/
+        /** @stable ICU 66 */
+        public static final UnicodeBlock SYMBOLS_FOR_LEGACY_COMPUTING =
+                new UnicodeBlock("SYMBOLS_FOR_LEGACY_COMPUTING", SYMBOLS_FOR_LEGACY_COMPUTING_ID); /*[1FB00]*/
+        /** @stable ICU 66 */
+        public static final UnicodeBlock TANGUT_SUPPLEMENT =
+                new UnicodeBlock("TANGUT_SUPPLEMENT", TANGUT_SUPPLEMENT_ID); /*[18D00]*/
+        /** @stable ICU 66 */
+        public static final UnicodeBlock YEZIDI = new UnicodeBlock("YEZIDI", YEZIDI_ID); /*[10E80]*/
+
+        // New blocks in Unicode 14.0
+
+        /** @stable ICU 70 */
+        public static final UnicodeBlock ARABIC_EXTENDED_B =
+                new UnicodeBlock("ARABIC_EXTENDED_B", ARABIC_EXTENDED_B_ID); /*[0870]*/
+        /** @stable ICU 70 */
+        public static final UnicodeBlock CYPRO_MINOAN =
+                new UnicodeBlock("CYPRO_MINOAN", CYPRO_MINOAN_ID); /*[12F90]*/
+        /** @stable ICU 70 */
+        public static final UnicodeBlock ETHIOPIC_EXTENDED_B =
+                new UnicodeBlock("ETHIOPIC_EXTENDED_B", ETHIOPIC_EXTENDED_B_ID); /*[1E7E0]*/
+        /** @stable ICU 70 */
+        public static final UnicodeBlock KANA_EXTENDED_B =
+                new UnicodeBlock("KANA_EXTENDED_B", KANA_EXTENDED_B_ID); /*[1AFF0]*/
+        /** @stable ICU 70 */
+        public static final UnicodeBlock LATIN_EXTENDED_F =
+                new UnicodeBlock("LATIN_EXTENDED_F", LATIN_EXTENDED_F_ID); /*[10780]*/
+        /** @stable ICU 70 */
+        public static final UnicodeBlock LATIN_EXTENDED_G =
+                new UnicodeBlock("LATIN_EXTENDED_G", LATIN_EXTENDED_G_ID); /*[1DF00]*/
+        /** @stable ICU 70 */
+        public static final UnicodeBlock OLD_UYGHUR =
+                new UnicodeBlock("OLD_UYGHUR", OLD_UYGHUR_ID); /*[10F70]*/
+        /** @stable ICU 70 */
+        public static final UnicodeBlock TANGSA = new UnicodeBlock("TANGSA", TANGSA_ID); /*[16A70]*/
+        /** @stable ICU 70 */
+        public static final UnicodeBlock TOTO = new UnicodeBlock("TOTO", TOTO_ID); /*[1E290]*/
+        /** @stable ICU 70 */
+        public static final UnicodeBlock UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED_A =
+                new UnicodeBlock("UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED_A",
+                        UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED_A_ID); /*[11AB0]*/
+        /** @stable ICU 70 */
+        public static final UnicodeBlock VITHKUQI =
+                new UnicodeBlock("VITHKUQI", VITHKUQI_ID); /*[10570]*/
+        /** @stable ICU 70 */
+        public static final UnicodeBlock ZNAMENNY_MUSICAL_NOTATION =
+                new UnicodeBlock("ZNAMENNY_MUSICAL_NOTATION",
+                        ZNAMENNY_MUSICAL_NOTATION_ID); /*[1CF00]*/
+
         /**
          * @stable ICU 2.4
          */
@@ -3204,6 +3316,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 62 */
         public static final int HANIFI_ROHINGYA_PA = 101;
 
+        /** @stable ICU 70 */
+        public static final int THIN_YEH = 102;
+        /** @stable ICU 70 */
+        public static final int VERTICAL_TAIL = 103;
+
         /**
          * One more than the highest normal JoiningGroup value.
          * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.JoiningGroup).
@@ -3211,7 +3328,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
         @Deprecated
-        public static final int COUNT = 102;
+        public static final int COUNT = 104;
     }
 
     /**
@@ -3780,6 +3897,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final int TOP_AND_RIGHT = 13;
         /** @stable ICU 63 */
         public static final int VISUAL_ORDER_LEFT = 14;
+        /** @stable ICU 66 */
+        public static final int TOP_AND_BOTTOM_AND_LEFT = 15;
     }
 
     /**
@@ -4246,7 +4365,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * one-to-one mappings; it also omits information about context-sensitive
      * case mappings.<br> For more information about Unicode case mapping
      * please refer to the
-     * <a href=http://www.unicode.org/unicode/reports/tr21/>Technical report
+     * <a href=https://www.unicode.org/reports/tr21/>Technical report
      * #21</a>.<br>
      * Up-to-date Unicode implementation of java.lang.Character.isLowerCase()
      * @param ch code point to determine if it is in lowercase
@@ -4325,7 +4444,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * one-to-one mappings; it also omits information about context-sensitive
      * case mappings.<br>
      * For more information about Unicode case mapping please refer to the
-     * <a href=http://www.unicode.org/unicode/reports/tr21/>
+     * <a href=https://www.unicode.org/reports/tr21/>
      * Technical report #21</a>.<br>
      * Up-to-date Unicode implementation of java.lang.Character.isTitleCase().
      * @param ch code point to determine if it is in title case
@@ -4358,7 +4477,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * </ul>
      * Up-to-date Unicode implementation of
      * java.lang.Character.isUnicodeIdentifierPart().<br>
-     * See <a href=http://www.unicode.org/unicode/reports/tr8/>UTR #8</a>.
+     * See <a href=https://www.unicode.org/reports/tr8/>UTR #8</a>.
      * @param ch code point to determine if is can be part of a Unicode
      *        identifier
      * @return true if code point is any character belonging a unicode
@@ -4397,7 +4516,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * </ul>
      * Up-to-date Unicode implementation of
      * java.lang.Character.isUnicodeIdentifierStart().<br>
-     * See <a href=http://www.unicode.org/unicode/reports/tr8/>UTR #8</a>.
+     * See <a href=https://www.unicode.org/reports/tr8/>UTR #8</a>.
      * @param ch code point to determine if it can start a Unicode identifier
      * @return true if code point is the first character belonging a unicode
      *              identifier
@@ -4424,7 +4543,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * U+0000..U+0008, U+000E..U+001B, U+007F..U+009F.<br>
      * Up-to-date Unicode implementation of
      * java.lang.Character.isIdentifierIgnorable().<br>
-     * See <a href=http://www.unicode.org/unicode/reports/tr8/>UTR #8</a>.
+     * See <a href=https://www.unicode.org/reports/tr8/>UTR #8</a>.
      * <p>Note that Unicode just recommends to ignore Cf (format controls).
      * @param ch code point to be determined if it can be ignored in a Unicode
      *        identifier.
@@ -4453,7 +4572,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * For example, the case conversion for dot-less i and dotted I in Turkish,
      * or for final sigma in Greek.
      * For more information about Unicode case mapping please refer to the
-     * <a href=http://www.unicode.org/unicode/reports/tr21/>
+     * <a href=https://www.unicode.org/reports/tr21/>
      * Technical report #21</a>.<br>
      * Up-to-date Unicode implementation of java.lang.Character.isUpperCase().
      * @param ch code point to determine if it is in uppercase
@@ -4785,7 +4904,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * UCharacter.MIN_VALUE and UCharacter.MAX_VALUE or does not have a name.
      * <br>
      * Note calling any methods related to code point names, e.g. get*Name*()
-     * incurs a one-time initialisation cost to construct the name tables.
+     * incurs a one-time initialization cost to construct the name tables.
      * @param ch the code point for which to get the name
      * @return most current Unicode name
      * @stable ICU 2.1
@@ -4842,7 +4961,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      *      "&lt;codepoint_type-codepoint_hex_digits&gt;". E.g., &lt;noncharacter-fffe&gt;
      * </ul>
      * Note calling any methods related to code point names, e.g. get*Name*()
-     * incurs a one-time initialisation cost to construct the name tables.
+     * incurs a one-time initialization cost to construct the name tables.
      * @param ch the code point for which to get the name
      * @return a name for the argument codepoint
      * @stable ICU 2.6
@@ -4857,7 +4976,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * UCharacter.MIN_VALUE and UCharacter.MAX_VALUE or does not have a name.
      * <br>
      * Note calling any methods related to code point names, e.g. get*Name*()
-     * incurs a one-time initialisation cost to construct the name tables.
+     * incurs a one-time initialization cost to construct the name tables.
      * @param ch the code point for which to get the name alias
      * @return Unicode name alias, or null
      * @stable ICU 4.4
@@ -4887,7 +5006,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * {@icu} <p>Finds a Unicode code point by its most current Unicode name and
      * return its code point value. All Unicode names are in uppercase.
      * Note calling any methods related to code point names, e.g. get*Name*()
-     * incurs a one-time initialisation cost to construct the name tables.
+     * incurs a one-time initialization cost to construct the name tables.
      * @param name most current Unicode character name whose code point is to
      *        be returned
      * @return code point or -1 if name is not found
@@ -4926,7 +5045,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      *      "&lt;codepoint_type-codepoint_hex_digits&gt;". E.g. &lt;noncharacter-FFFE&gt;
      * </ul>
      * Note calling any methods related to code point names, e.g. get*Name*()
-     * incurs a one-time initialisation cost to construct the name tables.
+     * incurs a one-time initialization cost to construct the name tables.
      * @param name codepoint name
      * @return code point associated with the name or -1 if the name is not
      *         found.
@@ -4941,7 +5060,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * {@icu} <p>Find a Unicode character by its corrected name alias and return
      * its code point value. All Unicode names are in uppercase.
      * Note calling any methods related to code point names, e.g. get*Name*()
-     * incurs a one-time initialisation cost to construct the name tables.
+     * incurs a one-time initialization cost to construct the name tables.
      * @param name Unicode name alias whose code point is to be returned
      * @return code point or -1 if name is not found
      * @stable ICU 4.4

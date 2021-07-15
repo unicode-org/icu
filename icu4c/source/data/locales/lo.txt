@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 lo{
     AuxExemplarCharacters{"[\u200B ໐ ໑ ໒ ໓ ໔ ໕ ໖ ໗ ໘ ໙]"}
     Ellipsis{
@@ -125,51 +126,39 @@ lo{
             patternsLong{
                 decimalFormat{
                     1000{
-                        one{"0 ພັນ"}
                         other{"0 ພັນ"}
                     }
                     10000{
-                        one{"00 ພັນ"}
                         other{"00 ພັນ"}
                     }
                     100000{
-                        one{"000 ກີບ"}
                         other{"0 ແສນ"}
                     }
                     1000000{
-                        one{"0 ລ້ານ"}
                         other{"0 ລ້ານ"}
                     }
                     10000000{
-                        one{"00 ລ້ານ"}
                         other{"00 ລ້ານ"}
                     }
                     100000000{
-                        one{"000 ລ້ານ"}
                         other{"000 ລ້ານ"}
                     }
                     1000000000{
-                        one{"0 ຕື້"}
                         other{"0 ຕື້"}
                     }
                     10000000000{
-                        one{"00 ຕື້"}
                         other{"00 ຕື້"}
                     }
                     100000000000{
-                        one{"000 ຕື້"}
                         other{"000 ຕື້"}
                     }
                     1000000000000{
-                        one{"0 ລ້ານລ້ານ"}
                         other{"0 ລ້ານລ້ານ"}
                     }
                     10000000000000{
-                        one{"00ລລ"}
                         other{"00 ລ້ານລ້ານ"}
                     }
                     100000000000000{
-                        one{"000ລລ"}
                         other{"000 ລ້ານລ້ານ"}
                     }
                 }
@@ -215,51 +204,39 @@ lo{
                 }
                 decimalFormat{
                     1000{
-                        one{"0 ພັນ"}
                         other{"0 ພັນ"}
                     }
                     10000{
-                        one{"00 ພັນ"}
                         other{"00 ພັນ"}
                     }
                     100000{
-                        one{"000 ກີບ"}
                         other{"000 ກີບ"}
                     }
                     1000000{
-                        one{"0 ລ້ານ"}
                         other{"0 ລ້ານ"}
                     }
                     10000000{
-                        one{"00 ລ້ານ"}
                         other{"00 ລ້ານ"}
                     }
                     100000000{
-                        one{"000 ລ້ານ"}
                         other{"000 ລ້ານ"}
                     }
                     1000000000{
-                        one{"0 ຕື້"}
                         other{"0 ຕື້"}
                     }
                     10000000000{
-                        one{"00 ຕື້"}
                         other{"00 ຕື້"}
                     }
                     100000000000{
-                        one{"000 ຕື້"}
                         other{"000 ຕື້"}
                     }
                     1000000000000{
-                        one{"0 ລ້ານລ້ານ"}
                         other{"0 ລ້ານລ້ານ"}
                     }
                     10000000000000{
-                        one{"00ລລ"}
                         other{"00ລລ"}
                     }
                     100000000000000{
-                        one{"000ລລ"}
                         other{"000ລລ"}
                     }
                 }
@@ -273,12 +250,11 @@ lo{
                 nan{"ບໍ່​ແມ່ນ​ໂຕ​ເລກ"}
                 perMille{"‰"}
                 percentSign{"%"}
-                superscriptingExponent{"×"}
             }
         }
         minimalPairs{
             ordinal{
-                one{"ລ້ຽວຂວາທຳອິດ."}
+                one{"ລ້ຽວຂວາໂຕທີ {0}."}
                 other{"ລ້ຽວຂວາທີ {0}."}
             }
             plural{
@@ -287,8 +263,14 @@ lo{
         }
         native{"laoo"}
     }
-    Version{"36"}
     calendar{
+        buddhist{
+            eras{
+                abbreviated{
+                    "ພ.ສ.",
+                }
+            }
+        }
         chinese{
             DateTimePatterns{
                 "H ໂມງ m ນາທີ ss ວິນາທີ zzzz",
@@ -304,6 +286,16 @@ lo{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "Hmsszzzz",
+                "Hmssz",
+                "Hmmss",
+                "Hmm",
+                "UMMMMEEEEdd",
+                "UMMMMd",
+                "UMMMd",
+                "yMd",
             }
             cyclicNameSets{
                 dayParts{
@@ -712,6 +704,16 @@ lo{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "Hmsszzzz",
+                "Hmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
+            }
             availableFormats{
                 Bh{"h B"}
                 Bhm{"h:mm B"}
@@ -760,6 +762,22 @@ lo{
                     G{"GGGGG M/y – GGGGG M/y"}
                     M{"GGGGG M/y – M/y"}
                     y{"GGGGG M/y – M/y"}
+                }
+                GyMEd{
+                    G{"E, d/M GGGGG y – E, d/M GGGGG y"}
+                    M{"E, d/M GGGGG y – E, d/M GGGGG y"}
+                    d{"E, d/M GGGGG y – E, d/M GGGGG y"}
+                }
+                GyMMMEd{
+                    G{"E, d MMM G y – E, d MMM G y"}
+                    M{"E, d MMM – E, d MMM G y"}
+                    d{"E, d MMM – E, d MMM G y"}
+                    y{"E, d MMM G y – E, d MMM G y"}
+                }
+                GyMMMd{
+                    G{"d MMM G y– d MMM G y"}
+                    M{"d MMM – d MMM G y"}
+                    y{"d MMM G y– d MMM G y"}
                 }
                 GyMd{
                     G{"GGGGG d/M/y – GGGGG d/M/y"}
@@ -885,6 +903,16 @@ lo{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "Hmsszzzz",
+                "Hmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -1550,6 +1578,16 @@ lo{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "Hmsszzzz",
+                "Hmssz",
+                "Hmmss",
+                "Hmm",
+                "yMMMMEEEEdd",
+                "yMMMMd",
+                "yMMMd",
+                "yMMdd",
+            }
             availableFormats{
                 H{"H"}
                 Hm{"H:mm"}
@@ -2096,7 +2134,7 @@ lo{
         sport{"ກິລາ"}
         symbols{"ສັນຍາລັກ"}
         technical_symbols{"ສັນຍາລັກທາງເຕັກນິກ"}
-        tone_marks{"ັວັນນະຍຸດ"}
+        tone_marks{"ວັນນະຍຸດ"}
         travel{"ທ່ອງທ່ຽວ"}
         travel_places{"ທ່ອງທ່ຽວ ແລະ ສະຖານທີ່ຕ່າງໆ"}
         upwards_arrows{"ລູກສອນຊີ້ຂຶ້ນເທິງ"}
@@ -2788,9 +2826,12 @@ lo{
             end{"{0}, {1}"}
             start{"{0}, {1}"}
         }
+        standard-narrow{
+            end{"{0}, {1}"}
+        }
         standard-short{
             2{"{0} ແລະ {1}"}
-            end{"{0}, {1}"}
+            end{"{0} ແລະ {1}"}
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }

@@ -1,5 +1,6 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html#License
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 sl{
     AuxExemplarCharacters{
         "[á à ă â å ä ā æ ç ć đ é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ö ø ō œ q ú ù ŭ û ü"
@@ -38,99 +39,75 @@ sl{
                 decimalFormat{
                     1000{
                         few{"0 tisoč"}
-                        many{"0 tis'.'"}
                         one{"0 tisoč"}
                         other{"0 tisoč"}
                         two{"0 tisoč"}
-                        zero{"0 tis'.'"}
                     }
                     10000{
                         few{"00 tisoč"}
-                        many{"00 tis'.'"}
                         one{"00 tisoč"}
                         other{"00 tisoč"}
                         two{"00 tisoč"}
-                        zero{"00 tis'.'"}
                     }
                     100000{
                         few{"000 tisoč"}
-                        many{"000 tis'.'"}
                         one{"000 tisoč"}
                         other{"000 tisoč"}
                         two{"000 tisoč"}
-                        zero{"000 tis'.'"}
                     }
                     1000000{
                         few{"0 milijone"}
-                        many{"0 mio'.'"}
                         one{"0 milijon"}
                         other{"0 milijonov"}
                         two{"0 milijona"}
-                        zero{"0 mio'.'"}
                     }
                     10000000{
                         few{"00 milijoni"}
-                        many{"00 mio'.'"}
                         one{"00 milijon"}
                         other{"00 milijonov"}
                         two{"00 milijona"}
-                        zero{"00 mio'.'"}
                     }
                     100000000{
                         few{"000 milijoni"}
-                        many{"000 mio'.'"}
                         one{"000 milijon"}
                         other{"000 milijonov"}
                         two{"000 milijona"}
-                        zero{"000 mio'.'"}
                     }
                     1000000000{
                         few{"0 milijarde"}
-                        many{"0 mrd'.'"}
                         one{"0 milijarda"}
                         other{"0 milijard"}
                         two{"0 milijardi"}
-                        zero{"0 mrd'.'"}
                     }
                     10000000000{
                         few{"00 milijarde"}
-                        many{"00 mrd'.'"}
                         one{"00 milijarda"}
                         other{"00 milijard"}
                         two{"00 milijardi"}
-                        zero{"00 mrd'.'"}
                     }
                     100000000000{
                         few{"000 milijarde"}
-                        many{"000 mrd'.'"}
                         one{"000 milijarda"}
                         other{"000 milijard"}
                         two{"000 milijardi"}
-                        zero{"000 mrd'.'"}
                     }
                     1000000000000{
                         few{"0 bilijoni"}
-                        many{"0 bil'.'"}
                         one{"0 bilijon"}
                         other{"0 bilijonov"}
                         two{"0 bilijona"}
-                        zero{"0 bil'.'"}
                     }
                     10000000000000{
                         few{"00 bilijoni"}
-                        many{"00 bil'.'"}
                         one{"00 bilijon"}
                         other{"00 bilijonov"}
                         two{"00 bilijona"}
-                        zero{"00 bil'.'"}
                     }
                     100000000000000{
                         few{"000 bilijoni"}
-                        many{"000 bil'.'"}
                         one{"000 bilijon"}
                         other{"000 bilijonov"}
                         two{"000 bilijona"}
-                        zero{"000 bil'.'"}
                     }
                 }
             }
@@ -212,99 +189,75 @@ sl{
                 decimalFormat{
                     1000{
                         few{"0 tis'.'"}
-                        many{"0 tis'.'"}
                         one{"0 tis'.'"}
                         other{"0 tis'.'"}
                         two{"0 tis'.'"}
-                        zero{"0 tis'.'"}
                     }
                     10000{
                         few{"00 tis'.'"}
-                        many{"00 tis'.'"}
                         one{"00 tis'.'"}
                         other{"00 tis'.'"}
                         two{"00 tis'.'"}
-                        zero{"00 tis'.'"}
                     }
                     100000{
                         few{"000 tis'.'"}
-                        many{"000 tis'.'"}
                         one{"000 tis'.'"}
                         other{"000 tis'.'"}
                         two{"000 tis'.'"}
-                        zero{"000 tis'.'"}
                     }
                     1000000{
                         few{"0 mio'.'"}
-                        many{"0 mio'.'"}
                         one{"0 mio'.'"}
                         other{"0 mio'.'"}
                         two{"0 mio'.'"}
-                        zero{"0 mio'.'"}
                     }
                     10000000{
                         few{"00 mio'.'"}
-                        many{"00 mio'.'"}
                         one{"00 mio'.'"}
                         other{"00 mio'.'"}
                         two{"00 mio'.'"}
-                        zero{"00 mio'.'"}
                     }
                     100000000{
                         few{"000 mio'.'"}
-                        many{"000 mio'.'"}
                         one{"000 mio'.'"}
                         other{"000 mio'.'"}
                         two{"000 mio'.'"}
-                        zero{"000 mio'.'"}
                     }
                     1000000000{
                         few{"0 mrd'.'"}
-                        many{"0 mrd'.'"}
                         one{"0 mrd'.'"}
                         other{"0 mrd'.'"}
                         two{"0 mrd'.'"}
-                        zero{"0 mrd'.'"}
                     }
                     10000000000{
                         few{"00 mrd'.'"}
-                        many{"00 mrd'.'"}
                         one{"00 mrd'.'"}
                         other{"00 mrd'.'"}
                         two{"00 mrd'.'"}
-                        zero{"00 mrd'.'"}
                     }
                     100000000000{
                         few{"000 mrd'.'"}
-                        many{"000 mrd'.'"}
                         one{"000 mrd'.'"}
                         other{"000 mrd'.'"}
                         two{"000 mrd'.'"}
-                        zero{"000 mrd'.'"}
                     }
                     1000000000000{
                         few{"0 bil'.'"}
-                        many{"0 bil'.'"}
                         one{"0 bil'.'"}
                         other{"0 bil'.'"}
                         two{"0 bil'.'"}
-                        zero{"0 bil'.'"}
                     }
                     10000000000000{
                         few{"00 bil'.'"}
-                        many{"00 bil'.'"}
                         one{"00 bil'.'"}
                         other{"00 bil'.'"}
                         two{"00 bil'.'"}
-                        zero{"00 bil'.'"}
                     }
                     100000000000000{
                         few{"000 bil'.'"}
-                        many{"000 bil'.'"}
                         one{"000 bil'.'"}
                         other{"000 bil'.'"}
                         two{"000 bil'.'"}
-                        zero{"000 bil'.'"}
                     }
                 }
             }
@@ -327,16 +280,15 @@ sl{
                 other{"V {0}. križišču zavijte desno."}
             }
             plural{
-                few{"{0} ure"}
-                one{"{0} ura"}
-                other{"{0} ur"}
-                two{"{0} uri"}
+                few{"{0} dnevi"}
+                one{"{0} dan"}
+                other{"{0} dni"}
+                two{"{0} dneva"}
             }
         }
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"36"}
     calendar{
         buddhist{
             eras{
@@ -366,6 +318,16 @@ sl{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEdd",
+                "GyMMMMdd",
+                "GyMMMd",
+                "GGGGGyyMMd",
             }
             availableFormats{
                 Bh{"h B"}
@@ -578,6 +540,16 @@ sl{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEdd",
+                "yMMMMdd",
+                "yMMMd",
+                "yyMMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
