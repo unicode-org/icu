@@ -281,6 +281,19 @@ ru{
             }
         }
         minimalPairs{
+            case{
+                accusative{"Вижу {0}"}
+                dative{"Верю {0}"}
+                genitive{"Не хватает {0}"}
+                instrumental{"Занимаюсь {0}"}
+                locative{"Сижу на {0}"}
+                nominative{"{0} здесь"}
+                vocative{"Эй, {0}"}
+            }
+            gender{
+                feminine{"эта {0}"}
+                masculine{"этот {0}"}
+            }
             ordinal{
                 other{"Сверните направо на {0}-м перекрестке."}
             }
@@ -323,6 +336,16 @@ ru{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "UMMMMEEEEd",
+                "UMMMMd",
+                "UMMdd",
+                "yMMdd",
             }
             availableFormats{
                 E{"ccc"}
@@ -660,6 +683,16 @@ ru{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GyMMdd",
+            }
             availableFormats{
                 Bh{"h B"}
                 Bhm{"h:mm B"}
@@ -871,6 +904,16 @@ ru{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMMdd",
             }
             appendItems{
                 Timezone{"{0} {1}"}

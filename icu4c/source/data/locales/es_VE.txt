@@ -26,13 +26,20 @@ es_VE{
                 "d MMM y",
                 "d/M/yy",
                 "{1} {0}",
-                "{1} 'a' 'las' {0}",
-                "{1} 'a' 'las' {0}",
+                "{1}, {0}",
+                "{1}, {0}",
                 "{1} {0}",
                 "{1} {0}",
             }
-            availableFormats{
-                yMMMd{"d MMM y"}
+            DateTimeSkeletons{
+                "ahmmsszzzz",
+                "ahmmssz",
+                "ahmmss",
+                "ahmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yyMd",
             }
             dayNames{
                 format{

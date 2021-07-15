@@ -55,7 +55,8 @@ void BasicNormalizerTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestCustomFCC);
 #endif
     TESTCASE_AUTO(TestFilteredNormalizer2Coverage);
-    TESTCASE_AUTO(TestNormalizeUTF8WithEdits);
+    TESTCASE_AUTO(TestComposeUTF8WithEdits);
+    TESTCASE_AUTO(TestDecomposeUTF8WithEdits);
     TESTCASE_AUTO(TestLowMappingToEmpty_D);
     TESTCASE_AUTO(TestLowMappingToEmpty_FCD);
     TESTCASE_AUTO(TestNormalizeIllFormedText);
@@ -1568,8 +1569,8 @@ BasicNormalizerTest::TestFilteredNormalizer2Coverage() {
 }
 
 void
-BasicNormalizerTest::TestNormalizeUTF8WithEdits() {
-    IcuTestErrorCode errorCode(*this, "TestNormalizeUTF8WithEdits");
+BasicNormalizerTest::TestComposeUTF8WithEdits() {
+    IcuTestErrorCode errorCode(*this, "TestComposeUTF8WithEdits");
     const Normalizer2 *nfkc_cf=Normalizer2::getNFKCCasefoldInstance(errorCode);
     if(errorCode.errDataIfFailureAndReset("Normalizer2::getNFKCCasefoldInstance() call failed")) {
         return;
@@ -1589,12 +1590,12 @@ BasicNormalizerTest::TestNormalizeUTF8WithEdits() {
         { TRUE, 2, 2 },  // Ä→ä
         { TRUE, 3, 2 },  // A\u0308→ä
         { TRUE, 7, 5 },  // A\u0308\u00ad\u0323→ạ\u0308 removes the soft hyphen
-        { TRUE, 4, 5 },  // Ä\u0323→ ạ\u0308
+        { TRUE, 4, 5 },  // Ä\u0323→ạ\u0308
         { FALSE, 1, 1 },  // comma
         { TRUE, 2, 0 },  // U+00AD soft hyphen maps to empty
-        { TRUE, 6, 3 },  // \u1100\u1161→ 가
-        { TRUE, 6, 3 },  // 가\u11A8→ 각
-        { TRUE, 6, 3 },  // 가\u3133→ 갃
+        { TRUE, 6, 3 },  // \u1100\u1161→가
+        { TRUE, 6, 3 },  // 가\u11A8→각
+        { TRUE, 6, 3 },  // 가\u3133→갃
         { FALSE, 2, 2 }  // 2 spaces
     };
     assertTrue("normalizeUTF8 with Edits hasChanges", edits.hasChanges());
@@ -1635,12 +1636,12 @@ BasicNormalizerTest::TestNormalizeUTF8WithEdits() {
         { TRUE, 2, 2 },  // Ä→ä
         { FALSE, 4, 4 },  // A\u0308A
         { TRUE, 6, 4 },  // \u0308\u00ad\u0323→\u0323\u0308 removes the soft hyphen
-        { TRUE, 4, 5 },  // Ä\u0323→ ạ\u0308
+        { TRUE, 4, 5 },  // Ä\u0323→ạ\u0308
         { FALSE, 1, 1 },  // comma
         { TRUE, 2, 0 },  // U+00AD soft hyphen maps to empty
-        { TRUE, 6, 3 },  // \u1100\u1161→ 가
-        { TRUE, 6, 3 },  // 가\u11A8→ 각
-        { TRUE, 6, 3 },  // 가\u3133→ 갃
+        { TRUE, 6, 3 },  // \u1100\u1161→가
+        { TRUE, 6, 3 },  // 가\u11A8→각
+        { TRUE, 6, 3 },  // 가\u3133→갃
         { FALSE, 2, 2 }  // 2 spaces
     };
     assertTrue("filtered normalizeUTF8 hasChanges", edits.hasChanges());
@@ -1668,6 +1669,72 @@ BasicNormalizerTest::TestNormalizeUTF8WithEdits() {
             edits.getFineIterator(), edits.getFineIterator(),
             filteredChanges, UPRV_LENGTHOF(filteredChanges),
             TRUE, errorCode);
+}
+
+void
+BasicNormalizerTest::TestDecomposeUTF8WithEdits() {
+    IcuTestErrorCode errorCode(*this, "TestDecomposeUTF8WithEdits");
+    const Normalizer2 *nfkd_cf =
+        Normalizer2::getInstance(nullptr, "nfkc_cf", UNORM2_DECOMPOSE, errorCode);
+    if(errorCode.errDataIfFailureAndReset("Normalizer2::getInstance(nfkc_cf/decompose) call failed")) {
+        return;
+    }
+    static const StringPiece src =
+        u8"  AÄA\u0308A\u0308\u00ad\u0323Ä\u0323,\u00ad\u1100\u1161가\u11A8가\u3133  ";
+    StringPiece expected =
+        u8"  aa\u0308a\u0308a\u0323\u0308a\u0323\u0308,"
+        u8"\u1100\u1161\u1100\u1161\u11A8\u1100\u1161\u11AA  ";
+    std::string result;
+    StringByteSink<std::string> sink(&result, static_cast<int32_t>(expected.length()));
+    Edits edits;
+    nfkd_cf->normalizeUTF8(0, src, sink, &edits, errorCode);
+    assertSuccess("normalizeUTF8 with Edits", errorCode.get());
+    assertEquals("normalizeUTF8 with Edits", expected.data(), result.c_str());
+    static const EditChange expectedChanges[] = {
+        { FALSE, 2, 2 },  // 2 spaces
+        { TRUE, 1, 1 },  // A→a
+        { TRUE, 2, 3 },  // Ä→a\u0308
+        { TRUE, 1, 1 },  // A→a
+        { FALSE, 2, 2 },  // \u0308→\u0308 unchanged
+        { TRUE, 1, 1 },  // A→a
+        { TRUE, 6, 4 },  // \u0308\u00ad\u0323→\u0323\u0308 removes the soft hyphen
+        { TRUE, 4, 5 },  // Ä\u0323→a\u0323\u0308
+        { FALSE, 1, 1 },  // comma
+        { TRUE, 2, 0 },  // U+00AD soft hyphen maps to empty
+        { FALSE, 6, 6 },  // \u1100\u1161 unchanged
+        { TRUE, 3, 6 },  // 가→\u1100\u1161
+        { FALSE, 3, 3 },  // \u11A8 unchanged
+        { TRUE, 3, 6 },  // 가→\u1100\u1161
+        { TRUE, 3, 3 },  // \u3133→\u11AA
+        { FALSE, 2, 2 }  // 2 spaces
+    };
+    assertTrue("normalizeUTF8 with Edits hasChanges", edits.hasChanges());
+    assertEquals("normalizeUTF8 with Edits numberOfChanges", 10, edits.numberOfChanges());
+    TestUtility::checkEditsIter(*this, u"normalizeUTF8 with Edits",
+            edits.getFineIterator(), edits.getFineIterator(),
+            expectedChanges, UPRV_LENGTHOF(expectedChanges),
+            TRUE, errorCode);
+
+    assertFalse("isNormalizedUTF8(source)", nfkd_cf->isNormalizedUTF8(src, errorCode));
+    assertTrue("isNormalizedUTF8(normalized)", nfkd_cf->isNormalizedUTF8(result, errorCode));
+
+    // Omit unchanged text.
+    expected = u8"aa\u0308aa\u0323\u0308a\u0323\u0308\u1100\u1161\u1100\u1161\u11AA";
+    result.clear();
+    edits.reset();
+    nfkd_cf->normalizeUTF8(U_OMIT_UNCHANGED_TEXT, src, sink, &edits, errorCode);
+    assertSuccess("normalizeUTF8 omit unchanged", errorCode.get());
+    assertEquals("normalizeUTF8 omit unchanged", expected.data(), result.c_str());
+    assertTrue("normalizeUTF8 omit unchanged hasChanges", edits.hasChanges());
+    assertEquals("normalizeUTF8 omit unchanged numberOfChanges", 10, edits.numberOfChanges());
+    TestUtility::checkEditsIter(*this, u"normalizeUTF8 omit unchanged",
+            edits.getFineIterator(), edits.getFineIterator(),
+            expectedChanges, UPRV_LENGTHOF(expectedChanges),
+            TRUE, errorCode);
+
+    // Not testing FilteredNormalizer2:
+    // The code there is the same for all normalization modes, and
+    // TestComposeUTF8WithEdits() covers it well.
 }
 
 void

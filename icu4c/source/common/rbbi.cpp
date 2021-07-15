@@ -262,7 +262,7 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
     fCharIter = &fSCharIter;
 
     if (that.fCharIter != NULL && that.fCharIter != &that.fSCharIter) {
-        // This is a little bit tricky - it will intially appear that
+        // This is a little bit tricky - it will initially appear that
         //  this->fCharIter is adopted, even if that->fCharIter was
         //  not adopted.  That's ok.
         fCharIter = that.fCharIter->clone();
@@ -812,7 +812,7 @@ int32_t RuleBasedBreakIterator::handleNext() {
         }
     #endif
 
-    // handleNext alway sets the break tag value.
+    // handleNext always sets the break tag value.
     // Set the default for it.
     fRuleStatusIndex = 0;
 

@@ -407,10 +407,10 @@ encodeNumericValue(UChar32 start, const char *s, UErrorCode &errorCode) {
     /* get a possible minus sign */
     UBool isNegative;
     if(*s=='-') {
-        isNegative=TRUE;
+        isNegative=true;
         ++s;
     } else {
-        isNegative=FALSE;
+        isNegative=false;
     }
 
     int32_t value=0, den=0, exp=0, ntv=0;
@@ -568,7 +568,7 @@ CorePropsBuilder::setGcAndNumeric(const UniProps &props, const UnicodeSet &newVa
     if(start==end) {
         utrie2_set32(pTrie, start, value, &errorCode);
     } else {
-        utrie2_setRange32(pTrie, start, end, value, TRUE, &errorCode);
+        utrie2_setRange32(pTrie, start, end, value, true, &errorCode);
     }
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "error: utrie2_setRange32(properties trie %04lX..%04lX) failed - %s\n",
@@ -827,7 +827,7 @@ CorePropsBuilder::build(UErrorCode &errorCode) {
     }
 
     int32_t pvRows;
-    const uint32_t *pvArray=upvec_getArray(pv, &pvRows, NULL);
+    upvec_getArray(pv, &pvRows, NULL);
     int32_t pvCount=pvRows*UPROPS_VECTOR_WORDS;
 
     /* round up scriptExtensions to multiple of 4 bytes */
@@ -894,6 +894,7 @@ CorePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
     usrc_writeArray(f,
         "static const UVersionInfo dataVersion={",
         dataInfo.dataVersion, 8, 4,
+        "",
         "};\n\n");
     usrc_writeUTrie2Arrays(f,
         "static const uint16_t propsTrie_index[%ld]={\n", NULL,
@@ -916,6 +917,7 @@ CorePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
     usrc_writeArray(f,
         "static const uint32_t propsVectors[%ld]={\n",
         pvArray, 32, pvCount,
+        "",
         "};\n\n");
     fprintf(f, "static const int32_t countPropsVectors=%ld;\n", (long)pvCount);
     fprintf(f, "static const int32_t propsVectorsColumns=%ld;\n", (long)UPROPS_VECTOR_WORDS);
@@ -923,11 +925,13 @@ CorePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
     usrc_writeArray(f,
         "static const uint16_t scriptExtensions[%ld]={\n",
         scriptExtensions.getBuffer(), 16, scriptExtensions.length(),
+        "",
         "};\n\n");
 
     usrc_writeArray(f,
         "static const int32_t indexes[UPROPS_INDEX_COUNT]={",
         indexes, 32, UPROPS_INDEX_COUNT,
+        "",
         "};\n\n");
     fputs("#endif  // INCLUDED_FROM_UCHAR_C\n", f);
     fclose(f);

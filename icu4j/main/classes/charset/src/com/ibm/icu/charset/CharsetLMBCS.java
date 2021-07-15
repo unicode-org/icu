@@ -90,7 +90,7 @@ class CharsetLMBCS extends CharsetICU {
     private static final short ULMBCS_GRP_TW   = 0x12; /* Chinese SC   :ibm-950    */
     private static final short ULMBCS_GRP_CN   = 0x13; /* Chinese TC   :ibm-1386   */
     /*
-     * So, the beginnning of understanding LMBCS is that IF the first byte of a LMBCS
+     * So, the beginning of understanding LMBCS is that IF the first byte of a LMBCS
      * character is one of those 12 values, you can interpret the remaining bytes of
      * that character as coming from one of those character sets. Since the lower
      * ANSI bytes already are represented in singl bytes, using one of the chracter
@@ -953,7 +953,7 @@ class CharsetLMBCS extends CharsetICU {
              * 2. Look up group in table & try that (could b
              *     A) Unicode group
              *     B) control group
-             *     C) national encodeing
+             *     C) national encoding
              *        or ambiguous SBCS or MBCS group (on to step 4...)
              * 3. If its ambiguous, try this order:
              *     A) The optimization group

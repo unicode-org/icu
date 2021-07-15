@@ -102,7 +102,7 @@ outerLoop:
 
     This function performs a conformance test for implementations of the
     Unicode Bidirectional Algorithm, specified in UAX #9: Unicode
-    Bidirectional Algorithm, at http://www.unicode.org/unicode/reports/tr9/
+    Bidirectional Algorithm, at https://www.unicode.org/reports/tr9/
 
     Each test case is represented in a single line which is read from a file
     named BidiCharacter.txt.  Empty, blank and comment lines may also appear

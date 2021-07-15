@@ -5,6 +5,7 @@ package com.ibm.icu.number;
 import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.FormattedStringBuilder;
+import com.ibm.icu.impl.FormattedValueStringBuilderImpl;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.PatternProps;
@@ -297,7 +298,7 @@ class NumberRangeFormatterImpl {
                 // INNER MODIFIER
                 collapseInner = micros1.modInner.semanticallyEquivalent(micros2.modInner);
 
-                // All done checking for collapsability.
+                // All done checking for collapsibility.
                 break;
             }
 
@@ -341,31 +342,48 @@ class NumberRangeFormatterImpl {
         // TODO: Support padding?
 
         if (collapseInner) {
-            // Note: this is actually a mix of prefix and suffix, but adding to infix length works
             Modifier mod = resolveModifierPlurals(micros1.modInner, micros2.modInner);
-            h.lengthInfix += mod.apply(string, h.index0(), h.index3());
+            h.lengthSuffix += mod.apply(string, h.index0(), h.index4());
+            h.lengthPrefix += mod.getPrefixLength();
+            h.lengthSuffix -= mod.getPrefixLength();
         } else {
             h.length1 += micros1.modInner.apply(string, h.index0(), h.index1());
-            h.length2 += micros2.modInner.apply(string, h.index2(), h.index3());
+            h.length2 += micros2.modInner.apply(string, h.index2(), h.index4());
         }
 
         if (collapseMiddle) {
-            // Note: this is actually a mix of prefix and suffix, but adding to infix length works
             Modifier mod = resolveModifierPlurals(micros1.modMiddle, micros2.modMiddle);
-            h.lengthInfix += mod.apply(string, h.index0(), h.index3());
+            h.lengthSuffix += mod.apply(string, h.index0(), h.index4());
+            h.lengthPrefix += mod.getPrefixLength();
+            h.lengthSuffix -= mod.getPrefixLength();
         } else {
             h.length1 += micros1.modMiddle.apply(string, h.index0(), h.index1());
-            h.length2 += micros2.modMiddle.apply(string, h.index2(), h.index3());
+            h.length2 += micros2.modMiddle.apply(string, h.index2(), h.index4());
         }
 
         if (collapseOuter) {
-            // Note: this is actually a mix of prefix and suffix, but adding to infix length works
             Modifier mod = resolveModifierPlurals(micros1.modOuter, micros2.modOuter);
-            h.lengthInfix += mod.apply(string, h.index0(), h.index3());
+            h.lengthSuffix += mod.apply(string, h.index0(), h.index4());
+            h.lengthPrefix += mod.getPrefixLength();
+            h.lengthSuffix -= mod.getPrefixLength();
         } else {
             h.length1 += micros1.modOuter.apply(string, h.index0(), h.index1());
-            h.length2 += micros2.modOuter.apply(string, h.index2(), h.index3());
+            h.length2 += micros2.modOuter.apply(string, h.index2(), h.index4());
         }
+
+        // Now that all pieces are added, save the span info.
+        FormattedValueStringBuilderImpl.applySpanRange(
+            string,
+            NumberRangeFormatter.SpanField.NUMBER_RANGE_SPAN,
+            0,
+            h.index0(),
+            h.index1());
+        FormattedValueStringBuilderImpl.applySpanRange(
+            string,
+            NumberRangeFormatter.SpanField.NUMBER_RANGE_SPAN,
+            1,
+            h.index2(),
+            h.index3());
     }
 
     Modifier resolveModifierPlurals(Modifier first, Modifier second) {

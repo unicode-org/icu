@@ -158,7 +158,7 @@
 䰙 < an\-ancient\-unit\-of\-capacity\-with\-three\-feet\-and\-a\-big\-opening;
 䔹 < a\-fungus\-which\-grows\-on\-rotten\-plants\-and\-is\-eaten\-when\-fresh;
 㯣 < a\-kind\-of\-fragrant\-tree\-used\-to\-produce\-perfume\-by\-burning\-it;
-㯡 < to\-lacquer\-some\-kind\-of\-ashes\-on\-wooden\-articals\-or\-furniture;
+㯡 < to\-lacquer\-some\-kind\-of\-ashes\-on\-wooden\-articles\-or\-furniture;
 悲天憫人 < bemoan\-the\-state\-of\-the\-universe\-and\-pity\-the\-fate\-of\-mankind;
 惋惜 < to\-feel\-sorry\-for\-a\-person\-over\-sth\-that\-should\-have\-happened;
 峋 < ranges\-of\-hills\-stretching\-on\-beyond\-another\-irregular\-peaks;
@@ -711,7 +711,7 @@
 㶬 < bright\-lights\-and\-illuminations\-of\-the\-fire;
 㶆 < name\-of\-a\-stream\-in\-hebei\-province\-hengshan;
 斯佩林 < spelling\-\(eg\,\-spelling\-entertainment\-group\);
-㮫 < a\-wooden\-artical\-to\-be\-used\-to\-adjust\-a\-bow;
+㮫 < a\-wooden\-article\-to\-be\-used\-to\-adjust\-a\-bow;
 㫍 < the\-scallops\-along\-the\-lower\-edge\-of\-a\-flag;
 㧏 < to\-carry\-on\-the\-shouldersof\-two\-or\-more\-men;
 星體 < celestial\-body\-\(eg\,\-planet\,\-satellite\,\-etc\);
@@ -1060,7 +1060,7 @@
 經營 < engage\-in\-\(a\-business\-activity\,\-etc\.\);
 集成 < integrated\-\(as\-in\-integrated\-circuit\);
 麅 < a\-small\-spotted\-deer\-found\-in\-n\.china;
-內懮外患 < domestic\-strife\-and\-foreign\-agression;
+內懮外患 < domestic\-strife\-and\-foreign\-aggression;
 安全與交換委員會 < securities\-and\-exchange\-communication;
 政委 < political\-commissar\-\(within\-the\-army\);
 沈國放 < chinese\-foreign\-ministry\-spokesperson;
@@ -2913,7 +2913,7 @@
 媒體接口連接器 < medium\-interface\-connector;
 底特律 < detroit\-\(a\-city\-in\-the\-us\);
 䬱 < coarse\-grains\-such\-as\-corn;
-中國科學院 < chinese\-acadamy\-of\-science;
+中國科學院 < chinese\-academy\-of\-science;
 䩲 < a\-tool\-used\-to\-cut\-leather;
 䩚 < to\-mend\-the\-soles\-of\-shoes;
 百發百中 < every\-shot\-hits\-the\-target;
@@ -12205,7 +12205,7 @@
 憀 < to\-rely\-on;
 引人注意 < attractive;
 手稿 < manuscript;
-抹油 < to\-annoint;
+抹油 < to\-anoint;
 愓 < profligate;
 表尺 < rear\-sight;
 惏 < avaricious;
@@ -21693,7 +21693,7 @@
 願意不願意 > whether\-one\-wants\-to\-or\-not;
 發展核武器 > to\-develop\-nuclear\-weapons;
 叛變的省份 > renegade\-province\-\(taiwan\);
-中國科學院 > chinese\-acadamy\-of\-science;
+中國科學院 > chinese\-academy\-of\-science;
 用戶端設備 > customer\-premise\-equipment;
 不等價交換 > exchange\-of\-unequal\-values;
 永久虛電路 > permanent\-virtual\-circuit;
@@ -22030,7 +22030,7 @@
 不遠千里 > make\-light\-of\-travelling\-a\-thousand\-li;
 安居樂業 > live\-and\-work\-in\-peace\-and\-contentment;
 遍體鱗傷 > covered\-all\-over\-with\-cuts\-and\-bruises;
-內懮外患 > domestic\-strife\-and\-foreign\-agression;
+內懮外患 > domestic\-strife\-and\-foreign\-aggression;
 治病救人 > cure\-the\-sickness\-to\-save\-the\-patient;
 哀鴻遍野 > a\-land\-swarming\-with\-disaster\-victims;
 病從口入 > illness\-finds\-its\-way\-in\-by\-the\-mouth;
@@ -29760,7 +29760,7 @@
 聖靈 > holy\-ghost;
 指控 > accusation;
 手稿 > manuscript;
-抹油 > to\-annoint;
+抹油 > to\-anoint;
 表尺 > rear\-sight;
 畢業 > graduation;
 固執 > persistent;
@@ -36162,7 +36162,7 @@
 䰙 > an\-ancient\-unit\-of\-capacity\-with\-three\-feet\-and\-a\-big\-opening;
 䔹 > a\-fungus\-which\-grows\-on\-rotten\-plants\-and\-is\-eaten\-when\-fresh;
 㯣 > a\-kind\-of\-fragrant\-tree\-used\-to\-produce\-perfume\-by\-burning\-it;
-㯡 > to\-lacquer\-some\-kind\-of\-ashes\-on\-wooden\-articals\-or\-furniture;
+㯡 > to\-lacquer\-some\-kind\-of\-ashes\-on\-wooden\-articles\-or\-furniture;
 峋 > ranges\-of\-hills\-stretching\-on\-beyond\-another\-irregular\-peaks;
 歃 > smear\-one''s\-mouth\-with\-blood\-of\-a\-victim\-when\-taking\-an\-oath;
 羗 > tribes\-in\-west\-china\-strong\.\-educated\.\-obstinate\.\-a\-particle;
@@ -36486,7 +36486,7 @@
 㶬 > bright\-lights\-and\-illuminations\-of\-the\-fire;
 㶡 > bright\-lights\-and\-illuminations\-of\-the\-fire;
 㶆 > name\-of\-a\-stream\-in\-hebei\-province\-hengshan;
-㮫 > a\-wooden\-artical\-to\-be\-used\-to\-adjust\-a\-bow;
+㮫 > a\-wooden\-article\-to\-be\-used\-to\-adjust\-a\-bow;
 㫍 > the\-scallops\-along\-the\-lower\-edge\-of\-a\-flag;
 㧏 > to\-carry\-on\-the\-shouldersof\-two\-or\-more\-men;
 㛶 > do\-not\-care\-about\-appearance\-and\-deportment;

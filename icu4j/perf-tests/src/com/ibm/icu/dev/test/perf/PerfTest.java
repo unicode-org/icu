@@ -152,7 +152,7 @@ public abstract class PerfTest {
                     }
                 }
             }
-            return orgNames; // begining with 'test', keeping case
+            return orgNames; // beginning with 'test', keeping case
         }
 
         /**

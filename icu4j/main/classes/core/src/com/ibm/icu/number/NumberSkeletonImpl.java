@@ -14,7 +14,9 @@ import com.ibm.icu.impl.number.MacroProps;
 import com.ibm.icu.impl.number.RoundingUtils;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
+import com.ibm.icu.number.NumberFormatter.RoundingPriority;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
+import com.ibm.icu.number.NumberFormatter.TrailingZeroDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberingSystem;
@@ -50,6 +52,7 @@ class NumberSkeletonImpl {
         // Section 1: We might accept an option, but it is not required:
         STATE_SCIENTIFIC,
         STATE_FRACTION_PRECISION,
+        STATE_PRECISION,
 
         // Section 2: An option is required:
         STATE_INCREMENT_PRECISION,
@@ -113,6 +116,8 @@ class NumberSkeletonImpl {
         STEM_SIGN_ACCOUNTING_ALWAYS,
         STEM_SIGN_EXCEPT_ZERO,
         STEM_SIGN_ACCOUNTING_EXCEPT_ZERO,
+        STEM_SIGN_NEGATIVE,
+        STEM_SIGN_ACCOUNTING_NEGATIVE,
         STEM_DECIMAL_AUTO,
         STEM_DECIMAL_ALWAYS,
 
@@ -189,6 +194,8 @@ class NumberSkeletonImpl {
         b.add("sign-accounting-always", StemEnum.STEM_SIGN_ACCOUNTING_ALWAYS.ordinal());
         b.add("sign-except-zero", StemEnum.STEM_SIGN_EXCEPT_ZERO.ordinal());
         b.add("sign-accounting-except-zero", StemEnum.STEM_SIGN_ACCOUNTING_EXCEPT_ZERO.ordinal());
+        b.add("sign-negative", StemEnum.STEM_SIGN_NEGATIVE.ordinal());
+        b.add("sign-accounting-negative", StemEnum.STEM_SIGN_ACCOUNTING_NEGATIVE.ordinal());
         b.add("decimal-auto", StemEnum.STEM_DECIMAL_AUTO.ordinal());
         b.add("decimal-always", StemEnum.STEM_DECIMAL_ALWAYS.ordinal());
 
@@ -217,6 +224,8 @@ class NumberSkeletonImpl {
         b.add("()!", StemEnum.STEM_SIGN_ACCOUNTING_ALWAYS.ordinal());
         b.add("+?", StemEnum.STEM_SIGN_EXCEPT_ZERO.ordinal());
         b.add("()?", StemEnum.STEM_SIGN_ACCOUNTING_EXCEPT_ZERO.ordinal());
+        b.add("+-", StemEnum.STEM_SIGN_NEGATIVE.ordinal());
+        b.add("()-", StemEnum.STEM_SIGN_ACCOUNTING_NEGATIVE.ordinal());
 
         // Build the CharsTrie
         // TODO: Use SLOW or FAST here?
@@ -351,6 +360,10 @@ class NumberSkeletonImpl {
                 return SignDisplay.EXCEPT_ZERO;
             case STEM_SIGN_ACCOUNTING_EXCEPT_ZERO:
                 return SignDisplay.ACCOUNTING_EXCEPT_ZERO;
+            case STEM_SIGN_NEGATIVE:
+                return SignDisplay.NEGATIVE;
+            case STEM_SIGN_ACCOUNTING_NEGATIVE:
+                return SignDisplay.ACCOUNTING_NEGATIVE;
             default:
                 return null; // for objects, throw; for enums, return null
             }
@@ -477,6 +490,12 @@ class NumberSkeletonImpl {
                 break;
             case ACCOUNTING_EXCEPT_ZERO:
                 sb.append("sign-accounting-except-zero");
+                break;
+            case NEGATIVE:
+                sb.append("sign-negative");
+                break;
+            case ACCOUNTING_NEGATIVE:
+                sb.append("sign-accounting-negative");
                 break;
             default:
                 throw new AssertionError();
@@ -618,6 +637,7 @@ class NumberSkeletonImpl {
                 case STATE_INCREMENT_PRECISION:
                 case STATE_MEASURE_UNIT:
                 case STATE_PER_MEASURE_UNIT:
+                case STATE_IDENTIFIER_UNIT:
                 case STATE_UNIT_USAGE:
                 case STATE_CURRENCY_UNIT:
                 case STATE_INTEGER_WIDTH:
@@ -653,13 +673,13 @@ class NumberSkeletonImpl {
         case '@':
             checkNull(macros.precision, segment);
             BlueprintHelpers.parseDigitsStem(segment, macros);
-            return ParseState.STATE_NULL;
+            return ParseState.STATE_PRECISION;
         case 'E':
             checkNull(macros.notation, segment);
             BlueprintHelpers.parseScientificStem(segment, macros);
             return ParseState.STATE_NULL;
         case '0':
-            checkNull(macros.notation, segment);
+            checkNull(macros.integerWidth, segment);
             BlueprintHelpers.parseIntegerStem(segment, macros);
             return ParseState.STATE_NULL;
         }
@@ -716,7 +736,7 @@ class NumberSkeletonImpl {
             case STEM_PRECISION_INTEGER:
                 return ParseState.STATE_FRACTION_PRECISION; // allows for "precision-integer/@##"
             default:
-                return ParseState.STATE_NULL;
+                return ParseState.STATE_PRECISION;
             }
 
         case STEM_ROUNDING_MODE_CEILING:
@@ -763,6 +783,8 @@ class NumberSkeletonImpl {
         case STEM_SIGN_ACCOUNTING_ALWAYS:
         case STEM_SIGN_EXCEPT_ZERO:
         case STEM_SIGN_ACCOUNTING_EXCEPT_ZERO:
+        case STEM_SIGN_NEGATIVE:
+        case STEM_SIGN_ACCOUNTING_NEGATIVE:
             checkNull(macros.sign, segment);
             macros.sign = StemToObject.signDisplay(stem);
             return ParseState.STATE_NULL;
@@ -784,6 +806,11 @@ class NumberSkeletonImpl {
             return ParseState.STATE_MEASURE_UNIT;
 
         case STEM_PER_MEASURE_UNIT:
+            // In C++, STEM_CURRENCY's checks mark perUnit as "seen". Here we do
+            // the inverse: checking that macros.unit is not set to a currency.
+            if (macros.unit instanceof Currency) {
+                throw new SkeletonSyntaxException("Duplicated setting", segment);
+            }
             checkNull(macros.perUnit, segment);
             return ParseState.STATE_PER_MEASURE_UNIT;
 
@@ -798,6 +825,7 @@ class NumberSkeletonImpl {
 
         case STEM_CURRENCY:
             checkNull(macros.unit, segment);
+            checkNull(macros.perUnit, segment);
             return ParseState.STATE_CURRENCY_UNIT;
 
         case STEM_INTEGER_WIDTH:
@@ -845,7 +873,7 @@ class NumberSkeletonImpl {
             return ParseState.STATE_NULL;
         case STATE_INCREMENT_PRECISION:
             BlueprintHelpers.parseIncrementOption(segment, macros);
-            return ParseState.STATE_NULL;
+            return ParseState.STATE_PRECISION;
         case STATE_INTEGER_WIDTH:
             BlueprintHelpers.parseIntegerWidthOption(segment, macros);
             return ParseState.STATE_NULL;
@@ -879,6 +907,19 @@ class NumberSkeletonImpl {
         switch (stem) {
         case STATE_FRACTION_PRECISION:
             if (BlueprintHelpers.parseFracSigOption(segment, macros)) {
+                return ParseState.STATE_PRECISION;
+            }
+            // If the fracSig option was not found, try normal precision options.
+            stem = ParseState.STATE_PRECISION;
+            break;
+        default:
+            break;
+        }
+
+        // Trailing zeros option
+        switch (stem) {
+        case STATE_PRECISION:
+            if (BlueprintHelpers.parseTrailingZeroOption(segment, macros)) {
                 return ParseState.STATE_NULL;
             }
             break;
@@ -902,9 +943,6 @@ class NumberSkeletonImpl {
             sb.append(' ');
         }
         if (macros.unit != null && GeneratorHelpers.unit(macros, sb)) {
-            sb.append(' ');
-        }
-        if (macros.perUnit != null && GeneratorHelpers.perUnit(macros, sb)) {
             sb.append(' ');
         }
         if (macros.usage != null && GeneratorHelpers.usage(macros, sb)) {
@@ -942,6 +980,10 @@ class NumberSkeletonImpl {
         if (macros.padder != null) {
             throw new UnsupportedOperationException(
                     "Cannot generate number skeleton with custom padder");
+        }
+        if (macros.unitDisplayCase != null && !macros.unitDisplayCase.isEmpty()) {
+            throw new UnsupportedOperationException(
+                    "Cannot generate number skeleton with custom unit display case");
         }
         if (macros.affixProvider != null) {
             throw new UnsupportedOperationException(
@@ -1026,6 +1068,7 @@ class NumberSkeletonImpl {
             sb.append(currency.getCurrencyCode());
         }
 
+        // "measure-unit/" is deprecated in favour of "unit/".
         private static void parseMeasureUnitOption(StringSegment segment, MacroProps macros) {
             // NOTE: The category (type) of the unit is guaranteed to be a valid subtag (alphanumeric)
             // http://unicode.org/reports/tr35/#Validity_Data
@@ -1048,12 +1091,7 @@ class NumberSkeletonImpl {
             throw new SkeletonSyntaxException("Unknown measure unit", segment);
         }
 
-        private static void generateMeasureUnitOption(MeasureUnit unit, StringBuilder sb) {
-            sb.append(unit.getType());
-            sb.append("-");
-            sb.append(unit.getSubtype());
-        }
-
+        // "per-measure-unit/" is deprecated in favour of "unit/".
         private static void parseMeasurePerUnitOption(StringSegment segment, MacroProps macros) {
             // A little bit of a hack: save the current unit (numerator), call the main measure unit
             // parsing code, put back the numerator unit, and put the new unit into per-unit.
@@ -1068,13 +1106,10 @@ class NumberSkeletonImpl {
          * specified via a "unit/" concise skeleton.
          */
         private static void parseIdentifierUnitOption(StringSegment segment, MacroProps macros) {
-            MeasureUnit[] units = MeasureUnit.parseCoreUnitIdentifier(segment.asString());
-            if (units == null) {
-                throw new SkeletonSyntaxException("Invalid core unit identifier", segment);
-            }
-            macros.unit = units[0];
-            if (units.length == 2) {
-                macros.perUnit = units[1];
+            try {
+                macros.unit = MeasureUnit.forIdentifier(segment.asString());
+            } catch (IllegalArgumentException e) {
+                throw new SkeletonSyntaxException("Invalid unit stem", segment);
             }
         }
 
@@ -1218,6 +1253,7 @@ class NumberSkeletonImpl {
                     } else if (segment.charAt(offset) == '?') {
                         signDisplay = SignDisplay.EXCEPT_ZERO;
                     } else {
+                        // NOTE: Other sign displays are not included because they aren't useful in this context
                         break block;
                     }
                     offset++;
@@ -1271,20 +1307,14 @@ class NumberSkeletonImpl {
                     break;
                 }
             }
-            // For the frac-sig option, there must be minSig or maxSig but not both.
-            // Valid: @+, @@+, @@@+
-            // Valid: @#, @##, @###
-            // Invalid: @, @@, @@@
-            // Invalid: @@#, @@##, @@@#
             if (offset < segment.length()) {
                 if (isWildcardChar(segment.charAt(offset))) {
+                    // @+, @@+, @@@+
                     maxSig = -1;
                     offset++;
-                } else if (minSig > 1) {
-                    // @@#, @@##, @@@#
-                    throw new SkeletonSyntaxException("Invalid digits option for fraction rounder",
-                            segment);
                 } else {
+                    // @#, @##, @###
+                    // @@#, @@##, @@@#
                     maxSig = minSig;
                     for (; offset < segment.length(); offset++) {
                         if (segment.charAt(offset) == '#') {
@@ -1296,19 +1326,53 @@ class NumberSkeletonImpl {
                 }
             } else {
                 // @, @@, @@@
-                throw new SkeletonSyntaxException("Invalid digits option for fraction rounder", segment);
+                maxSig = minSig;
             }
+            RoundingPriority priority;
             if (offset < segment.length()) {
-                throw new SkeletonSyntaxException("Invalid digits option for fraction rounder", segment);
+                if (maxSig == -1) {
+                    throw new SkeletonSyntaxException(
+                        "Invalid digits option: Wildcard character not allowed with the priority annotation", segment);
+                }
+                if (segment.codePointAt(offset) == 'r') {
+                    priority = RoundingPriority.RELAXED;
+                    offset++;
+                } else if (segment.codePointAt(offset) == 's') {
+                    priority = RoundingPriority.STRICT;
+                    offset++;
+                } else {
+                    assert offset < segment.length();
+                    priority = RoundingPriority.RELAXED; // make compiler happy (uninitialized variable)
+                }
+                if (offset < segment.length()) {
+                    throw new SkeletonSyntaxException(
+                        "Invalid digits option for fraction rounder", segment);
+                }
+            } else if (maxSig == -1) {
+                // withMinDigits
+                maxSig = minSig;
+                minSig = 1;
+                priority = RoundingPriority.RELAXED;
+            } else if (minSig == 1) {
+                // withMaxDigits
+                priority = RoundingPriority.STRICT;
+            } else {
+                throw new SkeletonSyntaxException(
+                    "Invalid digits option: Priority annotation required", segment);
             }
 
             FractionPrecision oldRounder = (FractionPrecision) macros.precision;
-            if (maxSig == -1) {
-                macros.precision = oldRounder.withMinDigits(minSig);
-            } else {
-                macros.precision = oldRounder.withMaxDigits(maxSig);
-            }
+            macros.precision = oldRounder.withSignificantDigits(minSig, maxSig, priority);
             return true;
+        }
+
+        /** @return Whether we successfully found and parsed a trailing zero option. */
+        private static boolean parseTrailingZeroOption(StringSegment segment, MacroProps macros) {
+            if (segment.contentEquals("w")) {
+                macros.precision = macros.precision.trailingZeroDisplay(TrailingZeroDisplay.HIDE_IF_WHOLE);
+                return true;
+            }
+            return false;
         }
 
         private static void parseIncrementOption(StringSegment segment, MacroProps macros) {
@@ -1458,34 +1522,27 @@ class NumberSkeletonImpl {
         }
 
         private static boolean unit(MacroProps macros, StringBuilder sb) {
-            if (macros.unit instanceof Currency) {
+            MeasureUnit unit = macros.unit;
+            if (macros.perUnit != null) {
+                if (macros.unit instanceof Currency || macros.perUnit instanceof Currency) {
+                    throw new UnsupportedOperationException(
+                        "Cannot generate number skeleton with currency unit and per-unit");
+                }
+                unit = unit.product(macros.perUnit.reciprocal());
+            }
+            if (unit instanceof Currency) {
                 sb.append("currency/");
-                BlueprintHelpers.generateCurrencyOption((Currency) macros.unit, sb);
+                BlueprintHelpers.generateCurrencyOption((Currency)unit, sb);
                 return true;
-            } else if (macros.unit == MeasureUnit.PERCENT) {
+            } else if (unit.equals(MeasureUnit.PERCENT)) {
                 sb.append("percent");
                 return true;
-            } else if (macros.unit == MeasureUnit.PERMILLE) {
+            } else if (unit.equals(MeasureUnit.PERMILLE)) {
                 sb.append("permille");
                 return true;
-            } else if (macros.unit.getType() != null) {
-                sb.append("measure-unit/");
-                BlueprintHelpers.generateMeasureUnitOption(macros.unit, sb);
-                return true;
             } else {
-                // TODO(icu-units#35): add support for not-built-in units.
-                throw new UnsupportedOperationException();
-            }
-        }
-
-        private static boolean perUnit(MacroProps macros, StringBuilder sb) {
-            // Per-units are currently expected to be only MeasureUnits.
-            if (macros.perUnit instanceof Currency) {
-                throw new UnsupportedOperationException(
-                        "Cannot generate number skeleton with per-unit that is not a standard measure unit");
-            } else {
-                sb.append("per-measure-unit/");
-                BlueprintHelpers.generateMeasureUnitOption(macros.perUnit, sb);
+                sb.append("unit/");
+                sb.append(unit.getIdentifier());
                 return true;
             }
         }
@@ -1513,10 +1570,11 @@ class NumberSkeletonImpl {
                 Precision.FracSigRounderImpl impl = (Precision.FracSigRounderImpl) macros.precision;
                 BlueprintHelpers.generateFractionStem(impl.minFrac, impl.maxFrac, sb);
                 sb.append('/');
-                if (impl.minSig == -1) {
-                    BlueprintHelpers.generateDigitsStem(1, impl.maxSig, sb);
+                BlueprintHelpers.generateDigitsStem(impl.minSig, impl.maxSig, sb);
+                if (impl.priority == RoundingPriority.RELAXED) {
+                    sb.append('r');
                 } else {
-                    BlueprintHelpers.generateDigitsStem(impl.minSig, -1, sb);
+                    sb.append('s');
                 }
             } else if (macros.precision instanceof Precision.IncrementRounderImpl) {
                 Precision.IncrementRounderImpl impl = (Precision.IncrementRounderImpl) macros.precision;
@@ -1530,6 +1588,10 @@ class NumberSkeletonImpl {
                 } else {
                     sb.append("precision-currency-cash");
                 }
+            }
+
+            if (macros.precision.trailingZeroDisplay == TrailingZeroDisplay.HIDE_IF_WHOLE) {
+                sb.append("/w");
             }
 
             // NOTE: Always return true for rounding because the default value depends on other options.

@@ -255,7 +255,7 @@ public class TestMessageFormat{
             sb = mf.format(objectsToFormat, sb, fp);
             System.out.println(sb.toString());
         }catch(IllegalArgumentException e){
-            System.out.println("Exception during formating of type :" +e);
+            System.out.println("Exception during formatting of type :" +e);
         }
     }
 

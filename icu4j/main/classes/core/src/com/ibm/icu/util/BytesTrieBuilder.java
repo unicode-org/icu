@@ -35,8 +35,11 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
             s=sequence;
             len=length;
         }
+        @Override
         public char charAt(int i) { return (char)(s[i]&0xff); }
+        @Override
         public int length() { return len; }
+        @Override
         public CharSequence subSequence(int start, int end) { return null; }
 
         private byte[] s;
@@ -278,30 +281,41 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
         assert(i>=0);
         if(i<=BytesTrie.kMaxOneByteDelta) {
             return write(i);
+        } else {
+            return write(intBytes, internalEncodeDelta(i, intBytes));
         }
-        int length;
+    }
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static final int internalEncodeDelta(int i, byte[] intBytes) {
+        assert(i>=0);
+        if(i<=BytesTrie.kMaxOneByteDelta) {
+            intBytes[0]=(byte)i;
+            return 1;
+        }
+        int length=1;
         if(i<=BytesTrie.kMaxTwoByteDelta) {
             intBytes[0]=(byte)(BytesTrie.kMinTwoByteDeltaLead+(i>>8));
-            length=1;
         } else {
             if(i<=BytesTrie.kMaxThreeByteDelta) {
                 intBytes[0]=(byte)(BytesTrie.kMinThreeByteDeltaLead+(i>>16));
-                length=2;
             } else {
                 if(i<=0xffffff) {
                     intBytes[0]=(byte)BytesTrie.kFourByteDeltaLead;
-                    length=3;
                 } else {
                     intBytes[0]=(byte)BytesTrie.kFiveByteDeltaLead;
                     intBytes[1]=(byte)(i>>24);
-                    length=4;
+                    length=2;
                 }
-                intBytes[1]=(byte)(i>>16);
+                intBytes[length++]=(byte)(i>>16);
             }
-            intBytes[1]=(byte)(i>>8);
+            intBytes[length++]=(byte)(i>>8);
         }
         intBytes[length++]=(byte)i;
-        return write(intBytes, length);
+        return length;
     }
 
     // Byte serialization of the trie.

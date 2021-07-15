@@ -2,257 +2,262 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<!-- © 2020 and later: Unicode, Inc. and others. -->
+<!-- © 2021 and later: Unicode, Inc. and others. -->
 <!-- License & terms of use: http://www.unicode.org/copyright.html -->
-<title>ICU4J API Comparison: ICU4J 66.1 with ICU4J 67.1</title>
+<title>ICU4J API Comparison: ICU4J 68.1 with ICU4J 69.1</title>
 </head>
 <body>
-<h1>ICU4J API Comparison: ICU4J 66.1 with ICU4J 67.1</h1>
+<h1>ICU4J API Comparison: ICU4J 68.1 with ICU4J 69.1</h1>
 
 <hr/>
-<h2>Removed from ICU4J 66.1</h2>
-
-<h3>Package com.ibm.icu.number</h3>
-<ul>
-FormattedNumber
-<ul>
-<li><span style='color:orange'>(draft)</span> public boolean <i>equals</i>(java.lang.Object)</li>
-<li><span style='color:orange'>(draft)</span> public int <i>hashCode</i>()</li>
-<li><span style='color:orange'>(draft)</span> public boolean <i>nextFieldPosition</i>(java.text.FieldPosition)</li>
-</ul>
-FormattedNumberRange
-<ul>
-<li><span style='color:orange'>(draft)</span> public boolean <i>nextFieldPosition</i>(java.text.FieldPosition)</li>
-</ul>
-Precision
-<ul>
-<li><span style='color:orange'>(draft)</span> public java.lang.Object <i>clone</i>()</li>
-</ul>
-ScientificNotation
-<ul>
-<li><span style='color:orange'>(draft)</span> public java.lang.Object <i>clone</i>()</li>
-</ul>
-</ul>
-
-
-<hr/>
-<h2>Deprecated or Obsoleted in ICU4J 67.1</h2>
-<p>(no API obsoleted)</p>
-
-<hr/>
-<h2>Changed in ICU4J 67.1 (old, new)</h2>
-
-<h3>Package com.ibm.icu.number</h3>
-<ul>
-<li>    <span style='color:green'>(stable)</span> public abstract class <i>Precision</i> extends java.lang.Object implements java.lang.Cloneable</br>
-<span style='color:green'>(stable)</span> public abstract class <i>Precision</i> extends java.lang.Object</li>
-<li>    <span style='color:green'>(stable)</span> public class <i>ScientificNotation</i> extends com.ibm.icu.number.Notation implements java.lang.Cloneable</br>
-<span style='color:green'>(stable)</span> public class <i>ScientificNotation</i> extends com.ibm.icu.number.Notation</li>
-</ul>
-
-
-<hr/>
-<h2>Promoted to stable in ICU4J 67.1</h2>
-
-<h3>Package com.ibm.icu.number</h3>
-<ul>
-FormattedNumber
-<ul>
-<li><span style='color:green'>(stable)</span> public char <i>charAt</i>(int)</li>
-<li><span style='color:green'>(stable)</span> public int <i>length</i>()</li>
-<li><span style='color:green'>(stable)</span> public boolean <i>nextPosition</i>(ConstrainedFieldPosition)</li>
-<li><span style='color:green'>(stable)</span> public java.lang.CharSequence <i>subSequence</i>(int, int)</li>
-</ul>
-FormattedNumberRange
-<ul>
-<li><span style='color:green'>(stable)</span> public char <i>charAt</i>(int)</li>
-<li><span style='color:green'>(stable)</span> public boolean <i>equals</i>(java.lang.Object)</li>
-<li><span style='color:green'>(stable)</span> public int <i>hashCode</i>()</li>
-<li><span style='color:green'>(stable)</span> public int <i>length</i>()</li>
-<li><span style='color:green'>(stable)</span> public boolean <i>nextPosition</i>(ConstrainedFieldPosition)</li>
-<li><span style='color:green'>(stable)</span> public java.lang.CharSequence <i>subSequence</i>(int, int)</li>
-</ul>
-</ul>
+<h2>Removed from ICU4J 68.1</h2>
 
 <h3>Package com.ibm.icu.text</h3>
 <ul>
-<li><span style='color:green'>(stable)</span> public class <i>ConstrainedFieldPosition</i></li>
-<li><span style='color:green'>(stable)</span> public static final class <i>DateIntervalFormat.FormattedDateInterval</i></li>
-<li><span style='color:green'>(stable)</span> public static final class <i>DateIntervalFormat.SpanField</i></li>
-<li><span style='color:green'>(stable)</span> public interface <i>FormattedValue</i></li>
-<li><span style='color:green'>(stable)</span> public static class <i>RelativeDateTimeFormatter.Field</i></li>
-<li><span style='color:green'>(stable)</span> public static class <i>RelativeDateTimeFormatter.FormattedRelativeDateTime</i></li>
-<li><span style='color:green'>(stable)</span> public static abstract class <i>UFormat.SpanField</i></li>
-DateFormatSymbols
+DateIntervalFormat.SpanField
 <ul>
-<li><span style='color:green'>(stable)</span> public java.lang.String[] <i>getNarrowEras</i>()</li>
-<li><span style='color:green'>(stable)</span> public void <i>setNarrowEras</i>(java.lang.String[])</li>
+<li><span style='color:orange'>(draft)</span> protected java.lang.Object <i>readResolve</i>()</li>
 </ul>
-DateIntervalFormat
+ListFormatter.Field
 <ul>
-<li><span style='color:green'>(stable)</span> public DateIntervalFormat.FormattedDateInterval <i>formatToValue</i>(Calendar, Calendar)</li>
-<li><span style='color:green'>(stable)</span> public DateIntervalFormat.FormattedDateInterval <i>formatToValue</i>(DateInterval)</li>
+<li><span style='color:orange'>(draft)</span> protected java.lang.Object <i>readResolve</i>()</li>
 </ul>
-DecimalFormat
+RelativeDateTimeFormatter.Field
 <ul>
-<li><span style='color:green'>(stable)</span> public synchronized int <i>getMinimumGroupingDigits</i>()</li>
-<li><span style='color:green'>(stable)</span> public synchronized boolean <i>isParseCaseSensitive</i>()</li>
-<li><span style='color:green'>(stable)</span> public synchronized boolean <i>isParseNoExponent</i>()</li>
-<li><span style='color:green'>(stable)</span> public synchronized boolean <i>isSignAlwaysShown</i>()</li>
-<li><span style='color:green'>(stable)</span> public synchronized void <i>setMinimumGroupingDigits</i>(int)</li>
-<li><span style='color:green'>(stable)</span> public synchronized void <i>setParseCaseSensitive</i>(boolean)</li>
-<li><span style='color:green'>(stable)</span> public synchronized void <i>setParseNoExponent</i>(boolean)</li>
-<li><span style='color:green'>(stable)</span> public synchronized void <i>setSignAlwaysShown</i>(boolean)</li>
-</ul>
-NumberFormat.Field
-<ul>
-<li><span style='color:green'>(stable)</span> public static final NumberFormat.Field COMPACT</li>
-<li><span style='color:green'>(stable)</span> public static final NumberFormat.Field MEASURE_UNIT</li>
-</ul>
-PluralRules
-<ul>
-<li><span style='color:green'>(stable)</span> public java.lang.String <i>select</i>(FormattedNumber)</li>
-</ul>
-RelativeDateTimeFormatter
-<ul>
-<li><span style='color:green'>(stable)</span> public RelativeDateTimeFormatter.FormattedRelativeDateTime <i>formatNumericToValue</i>(double, RelativeDateTimeFormatter.RelativeDateTimeUnit)</li>
-<li><span style='color:green'>(stable)</span> public RelativeDateTimeFormatter.FormattedRelativeDateTime <i>formatToValue</i>(RelativeDateTimeFormatter.Direction, RelativeDateTimeFormatter.AbsoluteUnit)</li>
-<li><span style='color:green'>(stable)</span> public RelativeDateTimeFormatter.FormattedRelativeDateTime <i>formatToValue</i>(double, RelativeDateTimeFormatter.Direction, RelativeDateTimeFormatter.RelativeUnit)</li>
-<li><span style='color:green'>(stable)</span> public RelativeDateTimeFormatter.FormattedRelativeDateTime <i>formatToValue</i>(double, RelativeDateTimeFormatter.RelativeDateTimeUnit)</li>
-</ul>
-RelativeDateTimeFormatter.AbsoluteUnit
-<ul>
-<li><span style='color:green'>(stable)</span> public static final RelativeDateTimeFormatter.AbsoluteUnit QUARTER</li>
+<li><span style='color:orange'>(draft)</span> protected java.lang.Object <i>readResolve</i>()</li>
 </ul>
 </ul>
 
 <h3>Package com.ibm.icu.util</h3>
 <ul>
-BytesTrie
-<ul>
-<li><span style='color:green'>(stable)</span> public <i>BytesTrie</i>(BytesTrie)</li>
-<li><span style='color:green'>(stable)</span> public long <i>getState64</i>()</li>
-<li><span style='color:green'>(stable)</span> public BytesTrie <i>resetToState64</i>(long)</li>
-</ul>
-CharsTrie
-<ul>
-<li><span style='color:green'>(stable)</span> public <i>CharsTrie</i>(CharsTrie)</li>
-<li><span style='color:green'>(stable)</span> public long <i>getState64</i>()</li>
-<li><span style='color:green'>(stable)</span> public CharsTrie <i>resetToState64</i>(long)</li>
-</ul>
+<li><span style='color:orange'>(draft)</span> public static enum <i>MeasureUnit.SIPrefix</i></li>
 MeasureUnit
 <ul>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit BARREL</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit BRITISH_THERMAL_UNIT</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit DALTON</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit DAY_PERSON</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit DUNAM</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit EARTH_MASS</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit ELECTRONVOLT</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit FLUID_OUNCE_IMPERIAL</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit KILOPASCAL</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit MEGAPASCAL</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit MOLE</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit MONTH_PERSON</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit NEWTON</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit NEWTON_METER</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit PERMYRIAD</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit POUND_FOOT</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit POUND_FORCE</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit SOLAR_LUMINOSITY</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit SOLAR_MASS</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit SOLAR_RADIUS</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit WEEK_PERSON</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit YEAR_PERSON</li>
+<li><span style='color:orange'>(draft)</span> public MeasureUnit.SIPrefix <i>getSIPrefix</i>()</li>
+<li><span style='color:orange'>(draft)</span> public MeasureUnit <i>withSIPrefix</i>(MeasureUnit.SIPrefix)</li>
+</ul>
+MeasureUnit.SIPrefix
+<ul>
+<li><span style='color:orange'>(draft)</span> public int <i>getPower</i>()</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.SIPrefix ATTO</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.SIPrefix CENTI</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.SIPrefix DECI</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.SIPrefix DEKA</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.SIPrefix EXA</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.SIPrefix FEMTO</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.SIPrefix GIGA</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.SIPrefix HECTO</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.SIPrefix KILO</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.SIPrefix MEGA</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.SIPrefix MICRO</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.SIPrefix MILLI</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.SIPrefix NANO</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.SIPrefix ONE</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.SIPrefix PETA</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.SIPrefix PICO</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.SIPrefix TERA</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.SIPrefix YOCTO</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.SIPrefix YOTTA</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.SIPrefix ZEPTO</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.SIPrefix ZETTA</li>
 </ul>
 </ul>
 
 
 <hr/>
-<h2>Added in ICU4J 67.1</h2>
+<h2>Deprecated or Obsoleted in ICU4J 69.1</h2>
+<p>(no API obsoleted)</p>
+
+<hr/>
+<h2>Changed in ICU4J 69.1 (old, new)</h2>
+<p>(no API changed)</p>
+
+<hr/>
+<h2>Promoted to stable in ICU4J 69.1</h2>
 
 <h3>Package com.ibm.icu.number</h3>
 <ul>
 NumberFormatter.UnitWidth
 <ul>
-<li><span style='color:orange'>(draft)</span> public static final NumberFormatter.UnitWidth FORMAL</li>
-<li><span style='color:orange'>(draft)</span> public static final NumberFormatter.UnitWidth VARIANT</li>
+<li><span style='color:green'>(stable)</span> public static final NumberFormatter.UnitWidth FORMAL</li>
+<li><span style='color:green'>(stable)</span> public static final NumberFormatter.UnitWidth VARIANT</li>
 </ul>
 </ul>
 
 <h3>Package com.ibm.icu.text</h3>
 <ul>
-<li><span style='color:orange'>(draft)</span> public static final class <i>ListFormatter.Field</i></li>
-<li><span style='color:orange'>(draft)</span> public static final class <i>ListFormatter.FormattedList</i></li>
-<li><span style='color:orange'>(draft)</span> public static final class <i>ListFormatter.SpanField</i></li>
-<li><span style='color:orange'>(draft)</span> public static enum <i>DateFormat.HourCycle</i></li>
-<li><span style='color:orange'>(draft)</span> public static enum <i>ListFormatter.Type</i></li>
-<li><span style='color:orange'>(draft)</span> public static enum <i>ListFormatter.Width</i></li>
+<li><span style='color:green'>(stable)</span> public static final class <i>ListFormatter.Field</i></li>
+<li><span style='color:green'>(stable)</span> public static final class <i>ListFormatter.FormattedList</i></li>
+<li><span style='color:green'>(stable)</span> public static final class <i>ListFormatter.SpanField</i></li>
+<li><span style='color:green'>(stable)</span> public static enum <i>DateFormat.HourCycle</i></li>
+<li><span style='color:green'>(stable)</span> public static enum <i>ListFormatter.Type</i></li>
+<li><span style='color:green'>(stable)</span> public static enum <i>ListFormatter.Width</i></li>
 CurrencyDisplayNames
 <ul>
-<li><span style='color:orange'>(draft)</span> public abstract java.lang.String <i>getFormalSymbol</i>(java.lang.String)</li>
-<li><span style='color:orange'>(draft)</span> public abstract java.lang.String <i>getVariantSymbol</i>(java.lang.String)</li>
+<li><span style='color:green'>(stable)</span> public abstract java.lang.String <i>getFormalSymbol</i>(java.lang.String)</li>
+<li><span style='color:green'>(stable)</span> public abstract java.lang.String <i>getVariantSymbol</i>(java.lang.String)</li>
 </ul>
 DateFormat.HourCycle
 <ul>
-<li><span style='color:orange'>(draft)</span> public static final DateFormat.HourCycle HOUR_CYCLE_11</li>
-<li><span style='color:orange'>(draft)</span> public static final DateFormat.HourCycle HOUR_CYCLE_12</li>
-<li><span style='color:orange'>(draft)</span> public static final DateFormat.HourCycle HOUR_CYCLE_23</li>
-<li><span style='color:orange'>(draft)</span> public static final DateFormat.HourCycle HOUR_CYCLE_24</li>
+<li><span style='color:green'>(stable)</span> public static final DateFormat.HourCycle HOUR_CYCLE_11</li>
+<li><span style='color:green'>(stable)</span> public static final DateFormat.HourCycle HOUR_CYCLE_12</li>
+<li><span style='color:green'>(stable)</span> public static final DateFormat.HourCycle HOUR_CYCLE_23</li>
+<li><span style='color:green'>(stable)</span> public static final DateFormat.HourCycle HOUR_CYCLE_24</li>
 </ul>
 DateTimePatternGenerator
 <ul>
-<li><span style='color:orange'>(draft)</span> public DateFormat.HourCycle <i>getDefaultHourCycle</i>()</li>
-</ul>
-DecimalFormatSymbols
-<ul>
-<li><span style='color:gray'>(deprecated)</span> public java.lang.String <i>getCurrencyPattern</i>()</li>
+<li><span style='color:green'>(stable)</span> public DateFormat.HourCycle <i>getDefaultHourCycle</i>()</li>
 </ul>
 ListFormatter
 <ul>
-<li><span style='color:orange'>(draft)</span> public ListFormatter.FormattedList <i>formatToValue</i>(java.lang.Object...)</li>
-<li><span style='color:orange'>(draft)</span> public ListFormatter.FormattedList <i>formatToValue</i>(java.util.Collection&lt;?&gt;)</li>
-<li><span style='color:orange'>(draft)</span> public static ListFormatter <i>getInstance</i>(ULocale, ListFormatter.Type, ListFormatter.Width)</li>
-<li><span style='color:orange'>(draft)</span> public static ListFormatter <i>getInstance</i>(java.util.Locale, ListFormatter.Type, ListFormatter.Width)</li>
+<li><span style='color:green'>(stable)</span> public ListFormatter.FormattedList <i>formatToValue</i>(java.lang.Object...)</li>
+<li><span style='color:green'>(stable)</span> public ListFormatter.FormattedList <i>formatToValue</i>(java.util.Collection&lt;?&gt;)</li>
+<li><span style='color:green'>(stable)</span> public static ListFormatter <i>getInstance</i>(ULocale, ListFormatter.Type, ListFormatter.Width)</li>
+<li><span style='color:green'>(stable)</span> public static ListFormatter <i>getInstance</i>(java.util.Locale, ListFormatter.Type, ListFormatter.Width)</li>
 </ul>
 ListFormatter.Type
 <ul>
-<li><span style='color:orange'>(draft)</span> public static final ListFormatter.Type AND</li>
-<li><span style='color:orange'>(draft)</span> public static final ListFormatter.Type OR</li>
-<li><span style='color:orange'>(draft)</span> public static final ListFormatter.Type UNITS</li>
+<li><span style='color:green'>(stable)</span> public static final ListFormatter.Type AND</li>
+<li><span style='color:green'>(stable)</span> public static final ListFormatter.Type OR</li>
+<li><span style='color:green'>(stable)</span> public static final ListFormatter.Type UNITS</li>
 </ul>
 ListFormatter.Width
 <ul>
-<li><span style='color:orange'>(draft)</span> public static final ListFormatter.Width NARROW</li>
-<li><span style='color:orange'>(draft)</span> public static final ListFormatter.Width SHORT</li>
-<li><span style='color:orange'>(draft)</span> public static final ListFormatter.Width WIDE</li>
+<li><span style='color:green'>(stable)</span> public static final ListFormatter.Width NARROW</li>
+<li><span style='color:green'>(stable)</span> public static final ListFormatter.Width SHORT</li>
+<li><span style='color:green'>(stable)</span> public static final ListFormatter.Width WIDE</li>
 </ul>
 </ul>
 
 <h3>Package com.ibm.icu.util</h3>
 <ul>
-<li><span style='color:orange'>(draft)</span> public static enum <i>LocaleMatcher.Direction</i></li>
+<li><span style='color:green'>(stable)</span> public static enum <i>LocaleMatcher.Direction</i></li>
 Currency
 <ul>
-<li><span style='color:orange'>(draft)</span> public static final int FORMAL_SYMBOL_NAME</li>
-<li><span style='color:orange'>(draft)</span> public static final int VARIANT_SYMBOL_NAME</li>
+<li><span style='color:green'>(stable)</span> public static final int FORMAL_SYMBOL_NAME</li>
+<li><span style='color:green'>(stable)</span> public static final int VARIANT_SYMBOL_NAME</li>
 </ul>
 LocaleMatcher.Builder
 <ul>
-<li><span style='color:orange'>(draft)</span> public LocaleMatcher.Builder <i>setDirection</i>(LocaleMatcher.Direction)</li>
+<li><span style='color:green'>(stable)</span> public LocaleMatcher.Builder <i>setDirection</i>(LocaleMatcher.Direction)</li>
 </ul>
 LocaleMatcher.Direction
 <ul>
-<li><span style='color:orange'>(draft)</span> public static final LocaleMatcher.Direction ONLY_TWO_WAY</li>
-<li><span style='color:orange'>(draft)</span> public static final LocaleMatcher.Direction WITH_ONE_WAY</li>
+<li><span style='color:green'>(stable)</span> public static final LocaleMatcher.Direction ONLY_TWO_WAY</li>
+<li><span style='color:green'>(stable)</span> public static final LocaleMatcher.Direction WITH_ONE_WAY</li>
 </ul>
 ULocale
 <ul>
-<li><span style='color:orange'>(draft)</span> public static ULocale <i>createCanonical</i>(ULocale)</li>
+<li><span style='color:green'>(stable)</span> public static ULocale <i>createCanonical</i>(ULocale)</li>
+</ul>
+</ul>
+
+
+<hr/>
+<h2>Added in ICU4J 69.1</h2>
+
+<h3>Package com.ibm.icu.number</h3>
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final class <i>NumberRangeFormatter.SpanField</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>NumberFormatter.RoundingPriority</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>NumberFormatter.TrailingZeroDisplay</i></li>
+FractionPrecision
+<ul>
+<li><span style='color:orange'>(draft)</span> public Precision <i>withSignificantDigits</i>(int, int, NumberFormatter.RoundingPriority)</li>
+</ul>
+NumberFormatter.RoundingPriority
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final NumberFormatter.RoundingPriority RELAXED</li>
+<li><span style='color:orange'>(draft)</span> public static final NumberFormatter.RoundingPriority STRICT</li>
+</ul>
+NumberFormatter.SignDisplay
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final NumberFormatter.SignDisplay ACCOUNTING_NEGATIVE</li>
+<li><span style='color:orange'>(draft)</span> public static final NumberFormatter.SignDisplay NEGATIVE</li>
+</ul>
+NumberFormatter.TrailingZeroDisplay
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final NumberFormatter.TrailingZeroDisplay AUTO</li>
+<li><span style='color:orange'>(draft)</span> public static final NumberFormatter.TrailingZeroDisplay HIDE_IF_WHOLE</li>
+</ul>
+Precision
+<ul>
+<li><span style='color:orange'>(draft)</span> public Precision <i>trailingZeroDisplay</i>(NumberFormatter.TrailingZeroDisplay)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+<li><span style='color:orange'>(draft)</span> public static enum <i>BasicTimeZone.LocalOption</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>MeasureUnit.MeasurePrefix</i></li>
+BasicTimeZone
+<ul>
+<li><span style='color:orange'>(draft)</span> public void <i>getOffsetFromLocal</i>(long, BasicTimeZone.LocalOption, BasicTimeZone.LocalOption, int[])</li>
+</ul>
+BasicTimeZone.LocalOption
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final BasicTimeZone.LocalOption DAYLIGHT_FORMER</li>
+<li><span style='color:orange'>(draft)</span> public static final BasicTimeZone.LocalOption DAYLIGHT_LATTER</li>
+<li><span style='color:orange'>(draft)</span> public static final BasicTimeZone.LocalOption FORMER</li>
+<li><span style='color:orange'>(draft)</span> public static final BasicTimeZone.LocalOption LATTER</li>
+<li><span style='color:orange'>(draft)</span> public static final BasicTimeZone.LocalOption STANDARD_FORMER</li>
+<li><span style='color:orange'>(draft)</span> public static final BasicTimeZone.LocalOption STANDARD_LATTER</li>
+</ul>
+MeasureUnit
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit MILLIGRAM_OFGLUCOSE_PER_DECILITER</li>
+<li><span style='color:orange'>(draft)</span> public MeasureUnit.MeasurePrefix <i>getPrefix</i>()</li>
+<li><span style='color:orange'>(draft)</span> public MeasureUnit <i>withPrefix</i>(MeasureUnit.MeasurePrefix)</li>
+</ul>
+MeasureUnit.MeasurePrefix
+<ul>
+<li><span style='color:orange'>(draft)</span> public int <i>getBase</i>()</li>
+<li><span style='color:orange'>(draft)</span> public int <i>getPower</i>()</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix ATTO</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix CENTI</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix DECI</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix DEKA</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix EXA</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix EXBI</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix FEMTO</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix GIBI</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix GIGA</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix HECTO</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix KIBI</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix KILO</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix MEBI</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix MEGA</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix MICRO</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix MILLI</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix NANO</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix ONE</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix PEBI</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix PETA</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix PICO</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix TEBI</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix TERA</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix YOBI</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix YOCTO</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix YOTTA</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix ZEBI</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix ZEPTO</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit.MeasurePrefix ZETTA</li>
+</ul>
+RuleBasedTimeZone
+<ul>
+<li><span style='color:orange'>(draft)</span> public void <i>getOffsetFromLocal</i>(long, BasicTimeZone.LocalOption, BasicTimeZone.LocalOption, int[])</li>
+</ul>
+SimpleTimeZone
+<ul>
+<li><span style='color:orange'>(draft)</span> public void <i>getOffsetFromLocal</i>(long, BasicTimeZone.LocalOption, BasicTimeZone.LocalOption, int[])</li>
+</ul>
+VTimeZone
+<ul>
+<li><span style='color:orange'>(draft)</span> public void <i>getOffsetFromLocal</i>(long, BasicTimeZone.LocalOption, BasicTimeZone.LocalOption, int[])</li>
 </ul>
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Wed Apr 01 16:15:30 EDT 2020<br/>© 2020 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a></font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Thu Mar 11 17:12:02 PST 2021<br/>© 2021 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a></font></i></p>
 </body>
 </html>

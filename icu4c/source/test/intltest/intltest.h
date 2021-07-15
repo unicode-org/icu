@@ -192,6 +192,11 @@ public:
      */
     UBool logKnownIssue( const char *ticket, const char *fmt, ...);
 
+#if !UCONFIG_NO_BREAK_ITERATION
+    UBool skipDictionaryTest();
+    UBool skipLSTMTest();
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */
+
     virtual void info( const UnicodeString &message );
 
     virtual void infoln( const UnicodeString &message );
@@ -416,6 +421,8 @@ public:
     virtual const char* getTestDataPath(UErrorCode& err);
     static const char* getSourceTestData(UErrorCode& err);
     static char *getUnidataPath(char path[]);
+    UChar *ReadAndConvertFile(const char *fileName, int &ulen, const char *encoding, UErrorCode &status);
+
 
 // static members
 public:

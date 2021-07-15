@@ -24,6 +24,7 @@
 #include "unicode/uidna.h"
 #include "unicode/utf16.h"
 #include "idnaconf.h"
+#include "charstr.h"
 
 static const UChar C_TAG[] = {0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0}; // =====
 static const UChar C_NAMEZONE[] = {0x6E, 0x61, 0x6D, 0x65, 0x7A, 0x6F, 0x6E, 0x65, 0}; // namezone 
@@ -55,82 +56,6 @@ IdnaConfTest::~IdnaConfTest(){
 }
 
 #if !UCONFIG_NO_IDNA
-/* this function is modified from RBBITest::ReadAndConvertFile() 
- *
- */
-UBool IdnaConfTest::ReadAndConvertFile(){
-    
-    char * source = NULL;
-    size_t source_len;
-
-    // read the test data file to memory
-    FILE* f    = NULL;
-    UErrorCode  status  = U_ZERO_ERROR;
-
-    const char *path = IntlTest::getSourceTestData(status);
-    if (U_FAILURE(status)) {
-        errln("%s", u_errorName(status));
-        return FALSE;
-    }
-
-    const char* name = "idna_conf.txt";     // test data file
-    int t = static_cast<int>(strlen(path) + strlen(name) + 1);
-    char* absolute_name = new char[t];
-    strcpy(absolute_name, path);
-    strcat(absolute_name, name);
-    f = fopen(absolute_name, "rb");
-    delete [] absolute_name;
-
-    if (f == NULL){
-        dataerrln("fopen error on %s", name);
-        return FALSE;
-    }
-
-    fseek( f, 0, SEEK_END);
-    if ((source_len = ftell(f)) <= 0){
-        errln("Error reading test data file.");
-        fclose(f);
-        return FALSE;
-    }
-
-    source = new char[source_len];
-    fseek(f, 0, SEEK_SET);
-    if (fread(source, 1, source_len, f) != source_len) {
-        errln("Error reading test data file.");
-        delete [] source;
-        fclose(f);
-        return FALSE;
-    }
-    fclose(f);
-
-    // convert the UTF-8 encoded stream to UTF-16 stream
-    UConverter* conv = ucnv_open("utf-8", &status);
-    int dest_len = ucnv_toUChars(conv,
-                                NULL,           //  dest,
-                                0,              //  destCapacity,
-                                source,
-                                static_cast<int32_t>(source_len),
-                                &status);
-    if (status == U_BUFFER_OVERFLOW_ERROR) {
-        // Buffer Overflow is expected from the preflight operation.
-        status = U_ZERO_ERROR;
-        UChar * dest = NULL;
-        dest = new UChar[ dest_len + 1];
-        ucnv_toUChars(conv, dest, dest_len + 1, source, static_cast<int32_t>(source_len), &status);
-        // Do not know the "if possible" behavior of ucnv_toUChars()
-        // Do it by ourself.
-        dest[dest_len] = 0; 
-        len = dest_len;
-        base = dest;
-        delete [] source;
-        ucnv_close(conv);
-        return TRUE;    // The buffer will owned by caller.
-    }
-    errln("UConverter error: %s", u_errorName(status));
-    delete [] source;
-    ucnv_close(conv);
-    return FALSE;
-}
 
 int IdnaConfTest::isNewlineMark(){
     static const UChar LF        = 0x0a;
@@ -280,7 +205,18 @@ void IdnaConfTest::Call(){
 }
 
 void IdnaConfTest::Test(void){
-    if (!ReadAndConvertFile())return;
+    UErrorCode  status  = U_ZERO_ERROR;
+    //
+    //  Open and read the test data file.
+    //
+    const char *testDataDirectory = IntlTest::getSourceTestData(status);
+    CharString testFileName(testDataDirectory, -1, status);
+    testFileName.append("idna_conf.txt", -1, status);
+
+    base = ReadAndConvertFile(testFileName.data(), len, "UTF-8", status);
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     UnicodeString s;
     UnicodeString key;

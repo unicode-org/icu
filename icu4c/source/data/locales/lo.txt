@@ -287,6 +287,16 @@ lo{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "Hmsszzzz",
+                "Hmssz",
+                "Hmmss",
+                "Hmm",
+                "UMMMMEEEEdd",
+                "UMMMMd",
+                "UMMMd",
+                "yMd",
+            }
             cyclicNameSets{
                 dayParts{
                     format{
@@ -694,6 +704,16 @@ lo{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "Hmsszzzz",
+                "Hmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyMd",
+            }
             availableFormats{
                 Bh{"h B"}
                 Bhm{"h:mm B"}
@@ -883,6 +903,16 @@ lo{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "Hmsszzzz",
+                "Hmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -1547,6 +1577,16 @@ lo{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "Hmsszzzz",
+                "Hmssz",
+                "Hmmss",
+                "Hmm",
+                "yMMMMEEEEdd",
+                "yMMMMd",
+                "yMMMd",
+                "yMMdd",
             }
             availableFormats{
                 H{"H"}

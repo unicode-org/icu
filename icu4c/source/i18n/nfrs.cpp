@@ -231,7 +231,7 @@ NFRuleSet::parseRules(UnicodeString& description, UErrorCode& status)
 
     // (this isn't a for loop because we might be deleting items from
     // the vector-- we want to make sure we only increment i when
-    // we _didn't_ delete aything from the vector)
+    // we _didn't_ delete anything from the vector)
     int32_t rulesSize = rules.size();
     for (int32_t i = 0; i < rulesSize; i++) {
         NFRule* rule = rules[i];
@@ -630,7 +630,7 @@ NFRuleSet::findFractionRuleSetRule(double number) const
     // value, then the first one (the one we found above) is used if
     // the numerator of the fraction is 1 and the second one is used if
     // the numerator of the fraction is anything else (this lets us
-    // do things like "one third"/"two thirds" without haveing to define
+    // do things like "one third"/"two thirds" without having to define
     // a whole bunch of extra rule sets)
     if ((unsigned)(winner + 1) < rules.size() &&
         rules[winner + 1]->getBaseValue() == rules[winner]->getBaseValue()) {
@@ -647,7 +647,7 @@ NFRuleSet::findFractionRuleSetRule(double number) const
 /**
  * Parses a string.  Matches the string to be parsed against each
  * of its rules (with a base value less than upperBound) and returns
- * the value produced by the rule that matched the most charcters
+ * the value produced by the rule that matched the most characters
  * in the source string.
  * @param text The string to parse
  * @param parsePosition The initial position is ignored and assumed

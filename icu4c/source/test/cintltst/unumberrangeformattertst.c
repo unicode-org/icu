@@ -65,10 +65,10 @@ static void TestExampleCode() {
     // Get the result string:
     int32_t len;
     const UChar* str = ufmtval_getString(unumrf_resultAsValue(uresult, &ec), &len, &ec);
-    if (assertSuccessCheck("There should not be a failure in the example code", &ec, TRUE)) {
-        assertUEquals("Should produce expected string result", u"$3 – $5", str);
-        assertIntEquals("Length should be as expected", u_strlen(str), len);
-    }
+    assertSuccessCheck("There should not be a failure in the example code", &ec, TRUE);
+    assertUEquals("Should produce expected string result", u"$3 – $5", str);
+    int32_t resultLength = str != NULL ? u_strlen(str) : 0;
+    assertIntEquals("Length should be as expected", resultLength, len);
 
     // Cleanup:
     unumrf_close(uformatter);
@@ -96,17 +96,18 @@ static void TestFormattedValue() {
     if (assertSuccessCheck("Should format without error", &ec, TRUE)) {
         const UFormattedValue* fv = unumrf_resultAsValue(uresult, &ec);
         assertSuccess("Should convert without error", &ec);
-        static const UFieldPosition expectedFieldPositions[] = {
-            // field, begin index, end index
-            {UNUM_INTEGER_FIELD, 0, 2},
-            {UNUM_COMPACT_FIELD, 2, 3},
-            {UNUM_INTEGER_FIELD, 6, 9},
-            {UNUM_COMPACT_FIELD, 9, 10}};
-        checkFormattedValue(
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            // category, field, begin index, end index
+            {UFIELD_CATEGORY_NUMBER_RANGE_SPAN, 0, 0, 3},
+            {UFIELD_CATEGORY_NUMBER, UNUM_INTEGER_FIELD, 0, 2},
+            {UFIELD_CATEGORY_NUMBER, UNUM_COMPACT_FIELD, 2, 3},
+            {UFIELD_CATEGORY_NUMBER_RANGE_SPAN, 1, 6, 10},
+            {UFIELD_CATEGORY_NUMBER, UNUM_INTEGER_FIELD, 6, 9},
+            {UFIELD_CATEGORY_NUMBER, UNUM_COMPACT_FIELD, 9, 10}};
+        checkMixedFormattedValue(
             "FormattedNumber as FormattedValue",
             fv,
             u"55K – 150K",
-            UFIELD_CATEGORY_NUMBER,
             expectedFieldPositions,
             UPRV_LENGTHOF(expectedFieldPositions));
     }

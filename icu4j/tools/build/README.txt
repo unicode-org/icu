@@ -77,7 +77,7 @@ particular ICU4J release.
 The format of the API data file is straightforward.  The first line of
 the file is the header, successive lines are the api information.
 Each line consists of a number of tokens, each followed by a
-semi-colon (incuding the last token on the line).
+semi-colon (including the last token on the line).
 
 The header line contains the version number, the 'name' of the version
 of ICU4J represented by the file, and a 'base directory' field

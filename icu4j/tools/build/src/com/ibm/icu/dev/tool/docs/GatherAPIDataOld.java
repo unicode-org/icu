@@ -37,9 +37,9 @@
  *   com.ibm.icu.lang com.ibm.icu.math com.ibm.icu.text com.ibm.icu.util
  *
  * todo: provide command-line control of filters of which subclasses/packages to process
- * todo: record full inheritance heirarchy, not just immediate inheritance 
+ * todo: record full inheritance hierarchy, not just immediate inheritance 
  * todo: allow for aliasing comparisons (force (pkg.)*class to be treated as though it 
- *       were in a different pkg/class heirarchy (facilitates comparison of icu4j and java)
+ *       were in a different pkg/class hierarchy (facilitates comparison of icu4j and java)
  */
 
 package com.ibm.icu.dev.tool.docs;

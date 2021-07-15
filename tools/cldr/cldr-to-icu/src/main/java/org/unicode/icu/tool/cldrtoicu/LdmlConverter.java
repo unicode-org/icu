@@ -113,6 +113,8 @@ public final class LdmlConverter {
             "unitConstants",
             "unitQuantities",
             "unitPreferenceData");
+    private static final Predicate<CldrPath> GRAMMATICAL_FEATURES_PATHS =
+        supplementalMatcher("grammaticalData");
     private static final Predicate<CldrPath> NUMBERING_SYSTEMS_PATHS =
         supplementalMatcher("numberingSystems");
     private static final Predicate<CldrPath> WINDOWS_ZONES_PATHS =
@@ -154,6 +156,7 @@ public final class LdmlConverter {
         SUPPLEMENTAL_DATA(SUPPLEMENTAL),
         UNITS(SUPPLEMENTAL),
         CURRENCY_DATA(SUPPLEMENTAL),
+        GRAMMATICAL_FEATURES(SUPPLEMENTAL),
         METADATA(SUPPLEMENTAL),
         META_ZONES(SUPPLEMENTAL),
         NUMBERING_SYSTEMS(SUPPLEMENTAL),
@@ -285,6 +288,7 @@ public final class LdmlConverter {
         SetMultimap<IcuLocaleDir, String> writtenLocaleIds = HashMultimap.create();
         Path baseDir = config.getOutputDir();
 
+        System.out.println("processing standard ldml files");
         for (String id : config.getAllLocaleIds()) {
             // Skip "target" IDs that are aliases (they are handled later).
             if (!availableIds.contains(id)) {
@@ -357,6 +361,7 @@ public final class LdmlConverter {
             }
         }
 
+        System.out.println("processing alias ldml files");
         for (IcuLocaleDir dir : splitDirs) {
             Path outDir = baseDir.resolve(dir.getOutputDir());
             Set<String> targetIds = config.getTargetLocaleIds(dir);
@@ -459,6 +464,7 @@ public final class LdmlConverter {
             if (type.getCldrType() == LDML) {
                 continue;
             }
+            System.out.println("processing supplemental type " + type);
             switch (type) {
             case DAY_PERIODS:
                 write(DayPeriodsMapper.process(src), "misc");
@@ -482,6 +488,10 @@ public final class LdmlConverter {
 
             case CURRENCY_DATA:
                 processSupplemental("supplementalData", CURRENCY_DATA_PATHS, "curr", false);
+                break;
+
+            case GRAMMATICAL_FEATURES:
+                processSupplemental("grammaticalFeatures", GRAMMATICAL_FEATURES_PATHS, "misc", false);
                 break;
 
             case METADATA:

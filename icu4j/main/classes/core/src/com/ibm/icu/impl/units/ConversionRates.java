@@ -37,16 +37,20 @@ public class ConversionRates {
      * @param singleUnit
      * @return
      */
-    private UnitConverter.Factor getFactorToBase(SingleUnitImpl singleUnit) {
+    // In ICU4C, this is called loadCompoundFactor().
+    private UnitsConverter.Factor getFactorToBase(SingleUnitImpl singleUnit) {
         int power = singleUnit.getDimensionality();
-        MeasureUnit.SIPrefix siPrefix = singleUnit.getSiPrefix();
-        UnitConverter.Factor result = UnitConverter.Factor.processFactor(mapToConversionRate.get(singleUnit.getSimpleUnit()).getConversionRate());
+        MeasureUnit.MeasurePrefix unitPrefix = singleUnit.getPrefix();
+        UnitsConverter.Factor result = UnitsConverter.Factor.processFactor(mapToConversionRate.get(singleUnit.getSimpleUnitID()).getConversionRate());
 
-        return result.applySiPrefix(siPrefix).power(power); // NOTE: you must apply the SI prefixes before the power.
+        // Prefix before power, because:
+        // - square-kilometer to square-meter: (1000)^2
+        // - square-kilometer to square-foot (approximate): (3.28*1000)^2
+        return result.applyPrefix(unitPrefix).power(power);
     }
 
-    public UnitConverter.Factor getFactorToBase(MeasureUnitImpl measureUnit) {
-        UnitConverter.Factor result = new UnitConverter.Factor();
+    public UnitsConverter.Factor getFactorToBase(MeasureUnitImpl measureUnit) {
+        UnitsConverter.Factor result = new UnitsConverter.Factor();
         for (SingleUnitImpl singleUnit :
                 measureUnit.getSingleUnits()) {
             result = result.multiply(getFactorToBase(singleUnit));
@@ -55,13 +59,14 @@ public class ConversionRates {
         return result;
     }
 
-    protected BigDecimal getOffset(MeasureUnitImpl source, MeasureUnitImpl target, UnitConverter.Factor
-            sourceToBase, UnitConverter.Factor targetToBase, UnitConverter.Convertibility convertibility) {
-        if (convertibility != UnitConverter.Convertibility.CONVERTIBLE) return BigDecimal.valueOf(0);
+    // In ICU4C, this functionality is found in loadConversionRate().
+    protected BigDecimal getOffset(MeasureUnitImpl source, MeasureUnitImpl target, UnitsConverter.Factor
+            sourceToBase, UnitsConverter.Factor targetToBase, UnitsConverter.Convertibility convertibility) {
+        if (convertibility != UnitsConverter.Convertibility.CONVERTIBLE) return BigDecimal.valueOf(0);
         if (!(checkSimpleUnit(source) && checkSimpleUnit(target))) return BigDecimal.valueOf(0);
 
-        String sourceSimpleIdentifier = source.getSingleUnits().get(0).getSimpleUnit();
-        String targetSimpleIdentifier = target.getSingleUnits().get(0).getSimpleUnit();
+        String sourceSimpleIdentifier = source.getSingleUnits().get(0).getSimpleUnitID();
+        String targetSimpleIdentifier = target.getSingleUnits().get(0).getSimpleUnitID();
 
         BigDecimal sourceOffset = this.mapToConversionRate.get(sourceSimpleIdentifier).getOffset();
         BigDecimal targetOffset = this.mapToConversionRate.get(targetSimpleIdentifier).getOffset();
@@ -96,14 +101,14 @@ public class ConversionRates {
     }
 
     /**
-     * @param singleUnit
-     * @return The bese units in the `SingleUnitImpl` with applying the dimensionality only and not the SI prefix.
+     * @param singleUnit An instance of SingleUnitImpl.
+     * @return The base units in the `SingleUnitImpl` with applying the dimensionality only and not the SI prefix.
      * <p>
      * NOTE:
      * This method is helpful when checking the convertibility because no need to check convertibility.
      */
     public ArrayList<SingleUnitImpl> extractBaseUnits(SingleUnitImpl singleUnit) {
-        String target = mapToConversionRate.get(singleUnit.getSimpleUnit()).getTarget();
+        String target = mapToConversionRate.get(singleUnit.getSimpleUnitID()).getTarget();
         MeasureUnitImpl targetImpl = MeasureUnitImpl.UnitsParser.parseForIdentifier(target);
 
         // Each unit must be powered by the same dimension
@@ -124,7 +129,7 @@ public class ConversionRates {
         if (measureUnitImpl.getComplexity() != MeasureUnit.Complexity.SINGLE) return false;
         SingleUnitImpl singleUnit = measureUnitImpl.getSingleUnits().get(0);
 
-        if (singleUnit.getSiPrefix() != MeasureUnit.SIPrefix.ONE) return false;
+        if (singleUnit.getPrefix() != MeasureUnit.MeasurePrefix.ONE) return false;
         if (singleUnit.getDimensionality() != 1) return false;
 
         return true;
@@ -184,6 +189,7 @@ public class ConversionRates {
 
     public static class ConversionRateInfo {
 
+        @SuppressWarnings("unused")
         private final String simpleUnit;
         private final String target;
         private final String conversionRate;

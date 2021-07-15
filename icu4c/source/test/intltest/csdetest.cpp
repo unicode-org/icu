@@ -396,7 +396,7 @@ void CharsetDetectionTest::UTF16Test()
     conf = ucsdet_getConfidence(match, &status);
 
     if (strcmp(name, "UTF-16LE") != 0) {
-        errln("Enconding detection failure for UTF-16LE: got %s", name);
+        errln("Encoding detection failure for UTF-16LE: got %s", name);
         return;
     }
 
@@ -780,7 +780,7 @@ void CharsetDetectionTest::Ticket6394Test() {
         return;
     }
 
-    UnicodeSet  setOfCharsetNames;    // UnicodSets can hold strings.
+    UnicodeSet  setOfCharsetNames;    // UnicodeSets can hold strings.
     int32_t i;
     for (i=0; i<matchCount; i++) {
         UnicodeString charSetName(ucsdet_getName(matches[i], &status));

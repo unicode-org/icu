@@ -93,7 +93,7 @@ static void TestPatterns(void)
         }
         u_uastrcpy(unewpat, newpat[i]);
         if(u_strcmp(unewp, unewpat) != 0)
-            log_err("FAIL: Pattern  %s should be transmute to %s; %s seen instead\n", pat[i], newpat[i],  austrdup(unewp) );
+            log_err("FAIL: Pattern  %s should be transmuted to %s; %s seen instead\n", pat[i], newpat[i],  austrdup(unewp) );
 
         lneed=0;
         lneed=unum_format(fmt, 0, NULL, lneed, NULL, &status);
@@ -131,7 +131,7 @@ static void TestQuotes(void)
     u_uastrcpy(pat, "a'fo''o'b#");
     fmt =unum_open(UNUM_IGNORE,pat, u_strlen(pat), "en_US",NULL, &status);
     if(U_FAILURE(status)){
-        log_err_status(status, "Error in number format costruction using pattern \"a'fo''o'b#\" -> %s\n", u_errorName(status));
+        log_err_status(status, "Error in number format construction using pattern \"a'fo''o'b#\" -> %s\n", u_errorName(status));
     }
     lneed=0;
     lneed=unum_format(fmt, 123, NULL, lneed, NULL, &status);
@@ -160,7 +160,7 @@ static void TestQuotes(void)
 
     fmt =unum_open(UNUM_IGNORE,pat, u_strlen(pat), "en_US",NULL, &status);
     if(U_FAILURE(status)){
-        log_err("Error in number format costruction using pattern \"a''b#\"\n");
+        log_err("Error in number format construction using pattern \"a''b#\"\n");
     }
     lneed=0;
     lneed=unum_format(fmt, 123, NULL, lneed, NULL, &status);
@@ -968,7 +968,12 @@ static void TestRounding5350(void)
     roundingTest2(nnf, -0.125, UNUM_ROUND_FLOOR, "-0.13");
     roundingTest2(nnf, -0.125, UNUM_ROUND_DOWN, "-0.12");
     roundingTest2(nnf, -0.125, UNUM_ROUND_UP, "-0.13");
-    roundingTest2(nnf, 0.125, UNUM_FOUND_HALFEVEN, "0.12");
+    roundingTest2(nnf, 0.125, UNUM_ROUND_HALFEVEN, "0.12");
+    roundingTest2(nnf, 0.135, UNUM_ROUND_HALF_ODD, "0.13");
+    roundingTest2(nnf, 0.135, UNUM_ROUND_HALF_CEILING, "0.14");
+    roundingTest2(nnf, -0.135, UNUM_ROUND_HALF_CEILING, "-0.13");
+    roundingTest2(nnf, 0.135, UNUM_ROUND_HALF_FLOOR, "0.13");
+    roundingTest2(nnf, -0.135, UNUM_ROUND_HALF_FLOOR, "-0.14");
     roundingTest2(nnf, 0.135, UNUM_ROUND_HALFDOWN, "0.13");
     roundingTest2(nnf, 0.125, UNUM_ROUND_HALFUP, "0.13");
     roundingTest2(nnf, 0.135, UNUM_FOUND_HALFEVEN, "0.14");
@@ -984,6 +989,9 @@ static void TestRounding5350(void)
     roundingTest2(nnf, 1.0000001, UNUM_ROUND_DOWN, "1");
     roundingTest2(nnf, 1.0000001, UNUM_ROUND_UP, "1.01");
     roundingTest2(nnf, 1.0000001, UNUM_FOUND_HALFEVEN, "1");
+    roundingTest2(nnf, 1.0000001, UNUM_ROUND_HALF_ODD, "1");
+    roundingTest2(nnf, 1.0000001, UNUM_ROUND_HALF_CEILING, "1");
+    roundingTest2(nnf, 1.0000001, UNUM_ROUND_HALF_FLOOR, "1");
     roundingTest2(nnf, 1.0000001, UNUM_ROUND_HALFDOWN, "1");
     roundingTest2(nnf, 1.0000001, UNUM_ROUND_HALFUP, "1");
 
@@ -992,6 +1000,9 @@ static void TestRounding5350(void)
     roundingTest2(nnf, -1.0000001, UNUM_ROUND_DOWN, "-1");
     roundingTest2(nnf, -1.0000001, UNUM_ROUND_UP, "-1.01");
     roundingTest2(nnf, -1.0000001, UNUM_FOUND_HALFEVEN, "-1");
+    roundingTest2(nnf, -1.0000001, UNUM_ROUND_HALF_ODD, "-1");
+    roundingTest2(nnf, -1.0000001, UNUM_ROUND_HALF_CEILING, "-1");
+    roundingTest2(nnf, -1.0000001, UNUM_ROUND_HALF_FLOOR, "-1");
     roundingTest2(nnf, -1.0000001, UNUM_ROUND_HALFDOWN, "-1");
     roundingTest2(nnf, -1.0000001, UNUM_ROUND_HALFUP, "-1");
 

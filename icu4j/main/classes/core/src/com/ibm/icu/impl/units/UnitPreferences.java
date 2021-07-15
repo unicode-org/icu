@@ -64,7 +64,9 @@ public class UnitPreferences {
             result = getUnitPreferences(category, subUsage, region);
             if (result != null) break;
         }
-
+        // TODO: if a category is missing, we get an assertion failure, or we
+        // return null, causing a NullPointerException. In C++, we return an
+        // U_MISSING_RESOURCE_ERROR error.
         assert (result != null) : "At least the category must be exist";
         return result;
     }

@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Layout Engine
-nav_order: 12
+nav_order: 1500
 has_children: true
 ---
 <!--
@@ -28,13 +28,14 @@ License & terms of use: http://www.unicode.org/copyright.html
 >
 > Users of ICU Layout are **strongly** encouraged to consider the HarfBuzz project
 > as a replacement for the ICU Layout Engine. An ICU team member responsible for
-> the Layout Engine is contributing fixes and features to HarfBuzz, and a drop in
-> wrapper is available to allow use of HarfBuzz as a direct replacement for the
-> ICU layout engine.
+> the Layout Engine is contributing fixes and features to HarfBuzz, and a 
+> [drop in wrapper](https://github.com/harfbuzz/icu-le-hb) is available to allow
+> use of HarfBuzz as a direct replacement for the ICU layout engine.
 >
 > HarfBuzz has its own active mailing lists, please use those for discussion of
 > HarfBuzz and its use as a replacement for the ICU layout engine.
-> See: [http://www.freedesktop.org/wiki/Software/HarfBuzz](http://www.freedesktop.org/wiki/Software/HarfBuzz)
+> See: [https://harfbuzz.github.io/](https://harfbuzz.github.io/).
+> 
 
 
 > :point_right: **Users of the "layoutex" ParagraphLayout library**: Please see information
@@ -91,7 +92,7 @@ points.
 A concrete instance of this base class must be written for each target platform.
 For a simple example which uses the standard C library to access a TrueType
 font, look at the PortableFontInstance class in
-[icu/source/test/letest](https://github.com/unicode-org/icu/tree/master/icu4c/source/test/letest)
+[icu/source/test/letest](https://github.com/unicode-org/icu/tree/main/icu4c/source/test/letest)
 .
 
 The ICU LayoutEngine supports complex text in the following ways:
@@ -126,7 +127,7 @@ font. It is written in a single direction (left-to-right or right-to-left), and
 is written in a single script. Clients can use ICU's
 [Bidi](../transforms/bidi.md) processing to determine the direction of the text
 and use the ScriptRun class in
-[icu/source/extra/scrptrun](https://github.com/unicode-org/icu/tree/master/icu4c/source/extra/scrptrun)
+[icu/source/extra/scrptrun](https://github.com/unicode-org/icu/tree/main/icu4c/source/extra/scrptrun)
 to find a run of text in the same script. Since the representation of font
 information is application specific, ICU cannot help clients find these runs of
 text.
@@ -188,7 +189,7 @@ users must draw the bitmaps themselves.
 > basic types.
 
 For a more detailed example of how to call the LayoutEngine, look at
-[icu/source/test/letest/letest.cpp](https://github.com/unicode-org/icu/tree/master/icu4c/source/test/letest/letest.cpp)
+[icu/source/test/letest/letest.cpp](https://github.com/unicode-org/icu/tree/main/icu4c/source/test/letest/letest.cpp)
 . This is a simple test used to verify that the LayoutEngine is working
 properly. It does not do any complex text rendering.
 

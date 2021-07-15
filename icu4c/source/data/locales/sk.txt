@@ -485,6 +485,16 @@ sk{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "GyMEEEEd",
+                "GyMd",
+                "GyMd",
+                "GGGGGyMd",
+            }
             availableFormats{
                 Bh{"h B"}
                 Bhm{"h:mm B"}
@@ -703,6 +713,16 @@ sk{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "Hmmsszzzz",
+                "Hmmssz",
+                "Hmmss",
+                "Hmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMd",
+                "yMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -2564,10 +2584,10 @@ sk{
             dn{"deň týždňa v mesiaci"}
         }
         weekdayOfMonth-narrow{
-            dn{"d.  týž. v mes."}
+            dn{"d. týž. v mes."}
         }
         weekdayOfMonth-short{
-            dn{"d.  týž. v mes."}
+            dn{"d. týž. v mes."}
         }
         year{
             dn{"rok"}

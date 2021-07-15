@@ -2,7 +2,7 @@
 layout: default
 title: Coding Guidelines
 nav_order: 1
-parent: Misc
+parent: Contributors
 ---
 <!--
 © 2020 and later: Unicode, Inc. and others.
@@ -295,8 +295,12 @@ We do not `#ifndef` APIs where that would be problematic:
   struct/class fields, virtual methods)
 * enum constants where that would modify the numeric values of following
   constants
-* C++ class boilerplate (e.g., default/copy constructors) because otherwise
-  the compiler would create public ones
+  * actually, best to use `#ifndef` together with explicitly defining the
+    numeric value of the next constant
+* C++ class boilerplate (e.g., default/copy constructors), if
+  the compiler would auto-create public functions to replace `#ifndef`’ed ones
+  * For example, the compiler automatically creates a default constructor if
+    the class does not specify any other constructors.
 * private class members
 * definitions in internal/test/tools header files (that would be pointless;
   they should probably not have API tags in the first place)
@@ -1167,16 +1171,16 @@ pointers to owned memory must always be either NULL or point to owned objects.
 
 Internally:
 
-[cmemory.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/cmemory.h)
+[cmemory.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/cmemory.h)
 defines the `LocalMemory` class for chunks of memory of primitive types which
 will be `uprv_free()`'ed.
 
-[cmemory.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/cmemory.h)
+[cmemory.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/cmemory.h)
 also defines `MaybeStackArray` and `MaybeStackHeaderAndArray` which automate
 management of arrays.
 
 Use `CharString`
-([charstr.h](https://github.com/unicode-org/icu/blob/master/icu4c/source/common/charstr.h))
+([charstr.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/charstr.h))
 for `char *` strings that you build and modify.
 
 #### Global Inline Functions
@@ -1722,8 +1726,7 @@ must be set to 0 (default).
 ### Building cintltst
 
 To compile this test suite using Microsoft Visual C++ (MSVC), follow the
-instructions in `icu4c/source/readme.html#HowToInstall` for building the `allC`
-workspace. This builds the libraries as well as the `cintltst` executable.
+instructions in [How To Build And Install On Windows](../icu4c/build#how-to-build-and-install-on-windows). This builds the libraries as well as the `cintltst` executable.
 
 ### Executing cintltst
 

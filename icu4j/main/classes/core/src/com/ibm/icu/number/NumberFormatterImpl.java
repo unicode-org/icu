@@ -36,6 +36,7 @@ import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.MeasureUnit;
 
+
 /**
  * This is the "brain" of the number formatting pipeline. It ties all the pieces together, taking in a
  * MacroProps and a DecimalQuantity and outputting a properly formatted number string.
@@ -61,10 +62,10 @@ class NumberFormatterImpl {
             MacroProps macros,
             DecimalQuantity inValue,
             FormattedStringBuilder outString) {
-        MicroProps micros = preProcessUnsafe(macros, inValue);
-        int length = writeNumber(micros, inValue, outString, 0);
-        writeAffixes(micros, outString, 0, length);
-        return micros;
+        MicroProps result = preProcessUnsafe(macros, inValue);
+        int length = writeNumber(result, inValue, outString, 0);
+        writeAffixes(result, outString, 0, length);
+        return result;
     }
 
     /**
@@ -92,10 +93,10 @@ class NumberFormatterImpl {
      * Evaluates the "safe" MicroPropsGenerator created by "fromMacros".
      */
     public MicroProps format(DecimalQuantity inValue, FormattedStringBuilder outString) {
-        MicroProps micros = preProcess(inValue);
-        int length = writeNumber(micros, inValue, outString, 0);
-        writeAffixes(micros, outString, 0, length);
-        return micros;
+        MicroProps result = preProcess(inValue);
+        int length = writeNumber(result, inValue, outString, 0);
+        writeAffixes(result, outString, 0, length);
+        return result;
     }
 
     /**
@@ -192,7 +193,8 @@ class NumberFormatterImpl {
         boolean isCompactNotation = (macros.notation instanceof CompactNotation);
         boolean isAccounting = macros.sign == SignDisplay.ACCOUNTING
                 || macros.sign == SignDisplay.ACCOUNTING_ALWAYS
-                || macros.sign == SignDisplay.ACCOUNTING_EXCEPT_ZERO;
+                || macros.sign == SignDisplay.ACCOUNTING_EXCEPT_ZERO
+                || macros.sign == SignDisplay.ACCOUNTING_NEGATIVE;
         Currency currency = isCurrency ? (Currency) macros.unit : DEFAULT_CURRENCY;
         UnitWidth unitWidth = UnitWidth.SHORT;
         if (macros.unitWidth != null) {
@@ -224,6 +226,9 @@ class NumberFormatterImpl {
             ns = NumberingSystem.getInstance(macros.loc);
         }
         micros.nsName = ns.getName();
+
+        // Default gender: none.
+        micros.gender = "";
 
         // Resolve the symbols. Do this here because currency may need to customize them.
         if (macros.symbols instanceof DecimalFormatSymbols) {
@@ -274,9 +279,7 @@ class NumberFormatterImpl {
             }
             chain = usagePrefsHandler = new UsagePrefsHandler(macros.loc, macros.unit, macros.usage, chain);
         } else if (isMixedUnit) {
-            // TODO(icu-units#97): The input unit should be the largest unit, not the first unit, in the identifier.
-            MeasureUnit inputUnit = macros.unit.splitToSingleUnits().get(0);
-            chain = new UnitConversionHandler(inputUnit, macros.unit, chain);
+            chain = new UnitConversionHandler(macros.unit, chain);
         }
 
         // Multiplier
@@ -376,6 +379,10 @@ class NumberFormatterImpl {
 
         // Outer modifier (CLDR units and currency long names)
         if (isCldrUnit) {
+            String unitDisplayCase = null;
+            if (macros.unitDisplayCase != null) {
+                unitDisplayCase = macros.unitDisplayCase;
+            }
             if (rules == null) {
                 // Lazily create PluralRules
                 rules = PluralRules.forLocale(macros.loc);
@@ -390,6 +397,7 @@ class NumberFormatterImpl {
                         macros.loc,
                         usagePrefsHandler.getOutputUnits(),
                         unitWidth,
+                        unitDisplayCase,
                         pluralRules,
                         chain);
             } else if (isMixedUnit) {
@@ -397,13 +405,27 @@ class NumberFormatterImpl {
                         macros.loc,
                         macros.unit,
                         unitWidth,
+                        unitDisplayCase,
                         pluralRules,
                         chain);
             } else {
-                chain = LongNameHandler.forMeasureUnit(macros.loc,
-                        macros.unit,
-                        macros.perUnit,
+                MeasureUnit unit = macros.unit;
+                if (macros.perUnit != null) {
+                    unit = unit.product(macros.perUnit.reciprocal());
+                    // This isn't strictly necessary, but was what we specced
+                    // out when perUnit became a backward-compatibility thing:
+                    // unit/perUnit use case is only valid if both units are
+                    // built-ins, or the product is a built-in.
+                    if (unit.getType() == null && (macros.unit.getType() == null || macros.perUnit.getType() == null)) {
+                        throw new UnsupportedOperationException(
+                            "perUnit() can only be used if unit and perUnit are both built-ins, or the combination is a built-in");
+                    }
+                }
+                chain = LongNameHandler.forMeasureUnit(
+                        macros.loc,
+                        unit,
                         unitWidth,
+                        unitDisplayCase,
                         pluralRules,
                         chain);
             }

@@ -263,7 +263,7 @@ abstract class CECalendar extends Calendar {
 
         c4 = floorDivide(julianDay - jdEpochOffset, 1461, r4);
 
-        // exteded year
+        // extended year
         fields[0] = 4 * c4 + (r4[0]/365 - r4[0]/1460); // 4 * <number of 4year cycle> + <years within the last cycle>
 
         int doy = (r4[0] == 1460) ? 365 : (r4[0] % 365); // days in present year

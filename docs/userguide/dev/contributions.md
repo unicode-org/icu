@@ -2,7 +2,7 @@
 layout: default
 title: Contributions
 nav_order: 4
-parent: Misc
+parent: Contributors
 ---
 <!--
 © 2020 and later: Unicode, Inc. and others.
@@ -61,7 +61,7 @@ of the copyright assignment.
 
 If you would like to make a contribution only once or infrequently, please use
 the *Joint Copyright Assignment - One-time Contribution* form.
-(<https://github.com/unicode-org/icu-docs/blob/master/legal/contributions/Copyright_Assignment.rtf>).
+(<https://github.com/unicode-org/icu-docs/blob/main/legal/contributions/Copyright_Assignment.rtf>).
 The contribution will be identified by a bug ID which is unique to the
 contribution and entered into the form. Therefore, please make sure that there
 is an appropriate bug (or Request For Enhancement) in the ICU bug database, or
@@ -96,7 +96,7 @@ The process for ongoing contributors involves two types of forms: Initially, and
 only once, an ongoing contributor submits a *Joint Copyright Assignment by
 Ongoing Contributor* form, agreeing to essentially the same terms as in the
 one-time contributor form, for all future contributions. (See the form at
-<https://github.com/unicode-org/icu-docs/blob/master/legal/contributions/Copyright_Assignment_ongoing.rtf>).
+<https://github.com/unicode-org/icu-docs/blob/main/legal/contributions/Copyright_Assignment_ongoing.rtf>).
 
 The contributor must also send another form, *Addendum to Joint Copyright
 Assignment by Ongoing Contributor: Authors*, for the initial set and each
@@ -106,7 +106,7 @@ additional authors need to be listed on each such form.) The contributor agrees
 to ensure that all of these authors agree to adhere to the terms of the
 associated *Joint Copyright Assignment by Ongoing Contributor Agreement*. (See
 the Authors Addendum form at
-<https://github.com/unicode-org/icu-docs/blob/master/legal/contributions/Copyright_Assignment_authors.rtf>).
+<https://github.com/unicode-org/icu-docs/blob/main/legal/contributions/Copyright_Assignment_authors.rtf>).
 
 Some of an ongoing contributor's authors will have commit access to the ICU
 source code repository. Their committer IDs need to be established before
@@ -122,7 +122,7 @@ identified by their association with the contributor's committer IDs.
 All previous "one-off" contributions from non-IBM sources to ICU are listed on
 the code contributions page in ICU's source code repository. The page contains
 links to the softcopies of the Joint Copyright Assignment forms. See
-<https://htmlpreview.github.io/?https://github.com/unicode-org/icu-docs/blob/master/legal/contributions/code_contributions.html>
+<https://htmlpreview.github.io/?https://github.com/unicode-org/icu-docs/blob/main/legal/contributions/code_contributions.html>
 
 In addition, the following non-IBM companies are registered as Ongoing
 Contributors:
@@ -134,4 +134,4 @@ See the repository folder that contains the contributions page for the full set
 of softcopies of contributor agreements including one-off contributions,
 ongoing-contributor agreements and author-addendum documents to
 ongoing-contributor agreements:
-<https://github.com/unicode-org/icu-docs/tree/master/legal/contributions>
+<https://github.com/unicode-org/icu-docs/tree/main/legal/contributions>

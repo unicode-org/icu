@@ -82,6 +82,7 @@ void LocaleDisplayNamesTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE(12, TestUldnDisplayContext);
         TESTCASE(13, TestUldnWithGarbage);
         TESTCASE(14, TestSubstituteHandling);
+        TESTCASE(15, TestNumericRegionID);
 #endif
         default:
             name = "";
@@ -407,7 +408,7 @@ void LocaleDisplayNamesTest::TestRootEtc() {
   UnicodeString temp;
   LocaleDisplayNames *ldn = LocaleDisplayNames::createInstance(Locale::getUS());
   const char *locname = "@collation=phonebook";
-  const char *target = "Root (Phonebook Sort Order)";
+  const char *target = "root (Phonebook Sort Order)";
   ldn->localeDisplayName(locname, temp);
   test_assert_equal(target, temp);
 
@@ -418,6 +419,23 @@ void LocaleDisplayNamesTest::TestRootEtc() {
   test_assert_equal("en_GB", temp);
 
   delete ldn;
+}
+
+void LocaleDisplayNamesTest::TestNumericRegionID() {
+    UErrorCode err = U_ZERO_ERROR;
+    ULocaleDisplayNames* ldn = uldn_open("es_MX", ULDN_STANDARD_NAMES, &err);
+    UChar displayName[200];
+    uldn_regionDisplayName(ldn, "019", displayName, 200, &err);
+    test_assert(U_SUCCESS(err));
+    test_assert_equal(UnicodeString(u"América"), UnicodeString(displayName));
+    uldn_close(ldn);    
+
+    err = U_ZERO_ERROR; // reset in case the test above returned an error code
+    ldn = uldn_open("en_AU", ULDN_STANDARD_NAMES, &err);
+    uldn_regionDisplayName(ldn, "002", displayName, 200, &err);
+    test_assert(U_SUCCESS(err));
+    test_assert_equal(UnicodeString(u"Africa"), UnicodeString(displayName));
+    uldn_close(ldn);    
 }
 
 static const char unknown_region[] = "wx";

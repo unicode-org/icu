@@ -53,12 +53,15 @@ NumberFormatterApiTest::NumberFormatterApiTest(UErrorCode& status)
     }
     METER = *unit;
 
+    METER_PER_SECOND = *LocalPointer<MeasureUnit>(MeasureUnit::createMeterPerSecond(status));
     DAY = *LocalPointer<MeasureUnit>(MeasureUnit::createDay(status));
     SQUARE_METER = *LocalPointer<MeasureUnit>(MeasureUnit::createSquareMeter(status));
     FAHRENHEIT = *LocalPointer<MeasureUnit>(MeasureUnit::createFahrenheit(status));
     SECOND = *LocalPointer<MeasureUnit>(MeasureUnit::createSecond(status));
     POUND = *LocalPointer<MeasureUnit>(MeasureUnit::createPound(status));
+    POUND_FORCE = *LocalPointer<MeasureUnit>(MeasureUnit::createPoundForce(status));
     SQUARE_MILE = *LocalPointer<MeasureUnit>(MeasureUnit::createSquareMile(status));
+    SQUARE_INCH = *LocalPointer<MeasureUnit>(MeasureUnit::createSquareInch(status));
     JOULE = *LocalPointer<MeasureUnit>(MeasureUnit::createJoule(status));
     FURLONG = *LocalPointer<MeasureUnit>(MeasureUnit::createFurlong(status));
     KELVIN = *LocalPointer<MeasureUnit>(MeasureUnit::createKelvin(status));
@@ -77,10 +80,14 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(notationCompact);
         TESTCASE_AUTO(unitMeasure);
         TESTCASE_AUTO(unitCompoundMeasure);
+        TESTCASE_AUTO(unitArbitraryMeasureUnits);
+        TESTCASE_AUTO(unitSkeletons);
         TESTCASE_AUTO(unitUsage);
         TESTCASE_AUTO(unitUsageErrorCodes);
         TESTCASE_AUTO(unitUsageSkeletons);
         TESTCASE_AUTO(unitCurrency);
+        TESTCASE_AUTO(unitInflections);
+        TESTCASE_AUTO(unitGender);
         TESTCASE_AUTO(unitPercent);
         if (!quick) {
             // Slow test: run in exhaustive mode only
@@ -491,16 +498,14 @@ void NumberFormatterApiTest::notationCompact() {
             1e7,
             u"1000\u842C");
 
-    if (!logKnownIssue("21258", "StandardPlural cannot handle keywords 1, 0")) {
-        assertFormatSingle(
-                u"Compact with plural form =1 (ICU-21258)",
-                u"compact-long",
-                u"K",
-                NumberFormatter::with().notation(Notation::compactLong()),
-                Locale("fr-FR"),
-                1e3,
-                u"mille");
-    }
+    assertFormatSingle(
+            u"Compact with plural form =1 (ICU-21258)",
+            u"compact-long",
+            u"KK",
+            NumberFormatter::with().notation(Notation::compactLong()),
+            Locale("fr-FR"),
+            1e3,
+            u"mille");
 
     assertFormatSingle(
             u"Compact Infinity",
@@ -577,6 +582,22 @@ void NumberFormatterApiTest::unitMeasure() {
             u"0.088 meters",
             u"0.0088 meters",
             u"0 meters");
+
+    assertFormatDescending(
+            u"Hectometers",
+            u"unit/hectometer",
+            u"unit/hectometer",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("hectometer", status)),
+            Locale::getEnglish(),
+            u"87,650 hm",
+            u"8,765 hm",
+            u"876.5 hm",
+            u"87.65 hm",
+            u"8.765 hm",
+            u"0.8765 hm",
+            u"0.08765 hm",
+            u"0.008765 hm",
+            u"0 hm");
 
 //    TODO: Implement Measure in C++
 //    assertFormatSingleMeasure(
@@ -694,10 +715,18 @@ void NumberFormatterApiTest::unitMeasure() {
             5,
             u"5 a\u00F1os");
 
-    // TODO(icu-units#35): skeleton generation.
+    assertFormatSingle(
+            u"Hubble Constant - usually expressed in km/s/Mpc",
+            u"unit/kilometer-per-megaparsec-second",
+            u"unit/kilometer-per-megaparsec-second",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("kilometer-per-second-per-megaparsec", status)),
+            Locale("en"),
+            74, // Approximate 2019-03-18 measurement
+            u"74 km/Mpc⋅sec");
+
     assertFormatSingle(
             u"Mixed unit",
-            nullptr,
+            u"unit/yard-and-foot-and-inch",
             u"unit/yard-and-foot-and-inch",
             NumberFormatter::with()
                 .unit(MeasureUnit::forIdentifier("yard-and-foot-and-inch", status)),
@@ -705,10 +734,9 @@ void NumberFormatterApiTest::unitMeasure() {
             3.65,
             "3 yd, 1 ft, 11.4 in");
 
-    // TODO(icu-units#35): skeleton generation.
     assertFormatSingle(
             u"Mixed unit, Scientific",
-            nullptr,
+            u"unit/yard-and-foot-and-inch E0",
             u"unit/yard-and-foot-and-inch E0",
             NumberFormatter::with()
                 .unit(MeasureUnit::forIdentifier("yard-and-foot-and-inch", status))
@@ -717,10 +745,9 @@ void NumberFormatterApiTest::unitMeasure() {
             3.65,
             "3 yd, 1 ft, 1.14E1 in");
 
-    // TODO(icu-units#35): skeleton generation.
     assertFormatSingle(
             u"Mixed Unit (Narrow Version)",
-            nullptr,
+            u"unit/metric-ton-and-kilogram-and-gram unit-width-narrow",
             u"unit/metric-ton-and-kilogram-and-gram unit-width-narrow",
             NumberFormatter::with()
                 .unit(MeasureUnit::forIdentifier("metric-ton-and-kilogram-and-gram", status))
@@ -729,10 +756,9 @@ void NumberFormatterApiTest::unitMeasure() {
             4.28571,
             u"4t 285kg 710g");
 
-    // TODO(icu-units#35): skeleton generation.
     assertFormatSingle(
             u"Mixed Unit (Short Version)",
-            nullptr,
+            u"unit/metric-ton-and-kilogram-and-gram unit-width-short",
             u"unit/metric-ton-and-kilogram-and-gram unit-width-short",
             NumberFormatter::with()
                 .unit(MeasureUnit::forIdentifier("metric-ton-and-kilogram-and-gram", status))
@@ -741,10 +767,9 @@ void NumberFormatterApiTest::unitMeasure() {
             4.28571,
             u"4 t, 285 kg, 710 g");
 
-    // TODO(icu-units#35): skeleton generation.
     assertFormatSingle(
             u"Mixed Unit (Full Name Version)",
-            nullptr,
+            u"unit/metric-ton-and-kilogram-and-gram unit-width-full-name",
             u"unit/metric-ton-and-kilogram-and-gram unit-width-full-name",
             NumberFormatter::with()
                 .unit(MeasureUnit::forIdentifier("metric-ton-and-kilogram-and-gram", status))
@@ -753,10 +778,71 @@ void NumberFormatterApiTest::unitMeasure() {
             4.28571,
             u"4 metric tons, 285 kilograms, 710 grams");
 
+    assertFormatSingle(u"Mixed Unit (Not Sorted) [metric]",                               //
+                       u"unit/gram-and-kilogram unit-width-full-name",                    //
+                       u"unit/gram-and-kilogram unit-width-full-name",                    //
+                       NumberFormatter::with()                                            //
+                           .unit(MeasureUnit::forIdentifier("gram-and-kilogram", status)) //
+                           .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),                         //
+                       Locale("en-US"),                                                   //
+                       4.28571,                                                           //
+                       u"285.71 grams, 4 kilograms");                                     //
+
+    assertFormatSingle(u"Mixed Unit (Not Sorted) [imperial]",                                  //
+                       u"unit/inch-and-yard-and-foot unit-width-full-name",                    //
+                       u"unit/inch-and-yard-and-foot unit-width-full-name",                    //
+                       NumberFormatter::with()                                                 //
+                           .unit(MeasureUnit::forIdentifier("inch-and-yard-and-foot", status)) //
+                           .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),                              //
+                       Locale("en-US"),                                                        //
+                       4.28571,                                                                //
+                       u"10.28556 inches, 4 yards, 0 feet");                                   //
+
+    assertFormatSingle(u"Mixed Unit (Not Sorted) [imperial full]",                             //
+                       u"unit/inch-and-yard-and-foot unit-width-full-name",                    //
+                       u"unit/inch-and-yard-and-foot unit-width-full-name",                    //
+                       NumberFormatter::with()                                                 //
+                           .unit(MeasureUnit::forIdentifier("inch-and-yard-and-foot", status)) //
+                           .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),                              //
+                       Locale("en-US"),                                                        //
+                       4.38571,                                                                //
+                       u"1.88556 inches, 4 yards, 1 foot");                                    //
+
+    assertFormatSingle(u"Mixed Unit (Not Sorted) [imperial full integers]",                    //
+                       u"unit/inch-and-yard-and-foot @# unit-width-full-name",                 //
+                       u"unit/inch-and-yard-and-foot @# unit-width-full-name",                 //
+                       NumberFormatter::with()                                                 //
+                           .unit(MeasureUnit::forIdentifier("inch-and-yard-and-foot", status)) //
+                           .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)                               //
+                           .precision(Precision::maxSignificantDigits(2)),                     //
+                       Locale("en-US"),                                                        //
+                       4.36112,                                                                //
+                       u"1 inch, 4 yards, 1 foot");                                            //
+
+    assertFormatSingle(u"Mixed Unit (Not Sorted) [imperial full] with `And` in the end",       //
+                       u"unit/inch-and-yard-and-foot unit-width-full-name",                    //
+                       u"unit/inch-and-yard-and-foot unit-width-full-name",                    //
+                       NumberFormatter::with()                                                 //
+                           .unit(MeasureUnit::forIdentifier("inch-and-yard-and-foot", status)) //
+                           .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),                              //
+                       Locale("fr-FR"),                                                        //
+                       4.38571,                                                                //
+                       u"1,88556\u00A0pouce, 4\u00A0yards et 1\u00A0pied");                    //
+
+    assertFormatSingle(u"Mixed unit, Scientific [Not in Order]",                               //
+                       u"unit/foot-and-inch-and-yard E0",                                      //
+                       u"unit/foot-and-inch-and-yard E0",                                      //
+                       NumberFormatter::with()                                                 //
+                           .unit(MeasureUnit::forIdentifier("foot-and-inch-and-yard", status)) //
+                           .notation(Notation::scientific()),                                  //
+                       Locale("en-US"),                                                        //
+                       3.65,                                                                   //
+                       "1 ft, 1.14E1 in, 3 yd");                                               //
+
     assertFormatSingle(
             u"Testing  \"1 foot 12 inches\"",
-            nullptr,
-            u"unit/foot-and-inch",
+            u"unit/foot-and-inch @### unit-width-full-name",
+            u"unit/foot-and-inch @### unit-width-full-name",
             NumberFormatter::with()
                 .unit(MeasureUnit::forIdentifier("foot-and-inch", status))
                 .precision(Precision::maxSignificantDigits(4))
@@ -764,6 +850,66 @@ void NumberFormatterApiTest::unitMeasure() {
             Locale("en-US"),
             1.9999,
             u"2 feet, 0 inches");
+
+    assertFormatSingle(
+            u"Negative numbers: temperature",
+            u"measure-unit/temperature-celsius",
+            u"unit/celsius",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("celsius", status)),
+            Locale("nl-NL"),
+            -6.5,
+            u"-6,5°C");
+
+    assertFormatSingle(
+            u"Negative numbers: time",
+            u"unit/hour-and-minute-and-second",
+            u"unit/hour-and-minute-and-second",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("hour-and-minute-and-second", status)),
+            Locale("de-DE"),
+            -1.24,
+            u"-1 Std., 14 Min. und 24 Sek.");
+
+    assertFormatSingle(
+            u"Zero out the unit field",
+            u"",
+            u"",
+            NumberFormatter::with().unit(KELVIN).unit(MeasureUnit()),
+            Locale("en"),
+            100,
+            u"100");
+
+    // TODO: desired behaviour for this "pathological" case?
+    // Since this is pointless, we don't test that its behaviour doesn't change.
+    // As of January 2021, the produced result has a missing sign: 23.5 Kelvin
+    // is "23 Kelvin and -272.65 degrees Celsius":
+//     assertFormatSingle(
+//             u"Meaningless: kelvin-and-celcius",
+//             u"unit/kelvin-and-celsius",
+//             u"unit/kelvin-and-celsius",
+//             NumberFormatter::with().unit(MeasureUnit::forIdentifier("kelvin-and-celsius", status)),
+//             Locale("en"),
+//             23.5,
+//             u"23 K, 272.65°C");
+
+    if (uprv_getNaN() != 0.0) {
+        assertFormatSingle(
+                u"Measured -Inf",
+                u"measure-unit/electric-ampere",
+                u"unit/ampere",
+                NumberFormatter::with().unit(MeasureUnit::getAmpere()),
+                Locale("en"),
+                -uprv_getInfinity(),
+                u"-∞ A");
+
+        assertFormatSingle(
+                u"Measured NaN",
+                u"measure-unit/temperature-celsius",
+                u"unit/celsius",
+                NumberFormatter::with().unit(MeasureUnit::forIdentifier("celsius", status)),
+                Locale("en"),
+                uprv_getNaN(),
+                u"NaN°C");
+    }
 }
 
 void NumberFormatterApiTest::unitCompoundMeasure() {
@@ -785,16 +931,21 @@ void NumberFormatterApiTest::unitCompoundMeasure() {
             u"0.008765 m/s",
             u"0 m/s");
 
-    // TODO(icu-units#35): does not normalize as desired: while "unit/*" does
-    // get split into unit/perUnit, ".unit(*)" and "measure-unit/*" don't:
-    assertFormatSingle(
-        u"Built-in unit, meter-per-second",
-        u"measure-unit/speed-meter-per-second",
-        u"~unit/meter-per-second",
-        NumberFormatter::with().unit(MeasureUnit::getMeterPerSecond()),
-        Locale("en-GB"),
-        2.4,
-        u"2.4 m/s");
+    assertFormatDescending(
+            u"Meters Per Second Short, built-in m/s",
+            u"measure-unit/speed-meter-per-second",
+            u"unit/meter-per-second",
+            NumberFormatter::with().unit(METER_PER_SECOND),
+            Locale::getEnglish(),
+            u"87,650 m/s",
+            u"8,765 m/s",
+            u"876.5 m/s",
+            u"87.65 m/s",
+            u"8.765 m/s",
+            u"0.8765 m/s",
+            u"0.08765 m/s",
+            u"0.008765 m/s",
+            u"0 m/s");
 
     assertFormatDescending(
             u"Pounds Per Square Mile Short (secondary unit has per-format) and adoptPerUnit method",
@@ -828,40 +979,71 @@ void NumberFormatterApiTest::unitCompoundMeasure() {
             u"0.008765 J/fur",
             u"0 J/fur");
 
-    // TODO(ICU-20941): Support constructions such as this one.
-    // assertFormatDescending(
-    //         u"Joules Per Furlong Short with unit identifier via API",
-    //         u"measure-unit/energy-joule per-measure-unit/length-furlong",
-    //         u"unit/joule-per-furlong",
-    //         NumberFormatter::with().unit(MeasureUnit::forIdentifier("joule-per-furlong", status)),
-    //         Locale::getEnglish(),
-    //         u"87,650 J/fur",
-    //         u"8,765 J/fur",
-    //         u"876.5 J/fur",
-    //         u"87.65 J/fur",
-    //         u"8.765 J/fur",
-    //         u"0.8765 J/fur",
-    //         u"0.08765 J/fur",
-    //         u"0.008765 J/fur",
-    //         u"0 J/fur");
+    assertFormatDescending(
+            u"Joules Per Furlong Short with unit identifier via API",
+            u"measure-unit/energy-joule per-measure-unit/length-furlong",
+            u"unit/joule-per-furlong",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("joule-per-furlong", status)),
+            Locale::getEnglish(),
+            u"87,650 J/fur",
+            u"8,765 J/fur",
+            u"876.5 J/fur",
+            u"87.65 J/fur",
+            u"8.765 J/fur",
+            u"0.8765 J/fur",
+            u"0.08765 J/fur",
+            u"0.008765 J/fur",
+            u"0 J/fur");
 
-    // TODO(icu-units#59): THIS UNIT TEST DEMONSTRATES UNDESIREABLE BEHAVIOUR!
-    // When specifying built-in types, one can give both a unit and a perUnit.
-    // Resolving to a built-in unit does not always work.
-    //
-    // (Unit-testing philosophy: do we leave this enabled to demonstrate current
-    // behaviour, and changing behaviour in the future? Or comment it out to
-    // avoid asserting this is "correct"?)
+    assertFormatDescending(
+            u"Pounds per Square Inch: composed",
+            u"measure-unit/force-pound-force per-measure-unit/area-square-inch",
+            u"unit/pound-force-per-square-inch",
+            NumberFormatter::with().unit(POUND_FORCE).perUnit(SQUARE_INCH),
+            Locale::getEnglish(),
+            u"87,650 psi",
+            u"8,765 psi",
+            u"876.5 psi",
+            u"87.65 psi",
+            u"8.765 psi",
+            u"0.8765 psi",
+            u"0.08765 psi",
+            u"0.008765 psi",
+            u"0 psi");
+
+    assertFormatDescending(
+            u"Pounds per Square Inch: built-in",
+            u"measure-unit/force-pound-force per-measure-unit/area-square-inch",
+            u"unit/pound-force-per-square-inch",
+            NumberFormatter::with().unit(MeasureUnit::getPoundPerSquareInch()),
+            Locale::getEnglish(),
+            u"87,650 psi",
+            u"8,765 psi",
+            u"876.5 psi",
+            u"87.65 psi",
+            u"8.765 psi",
+            u"0.8765 psi",
+            u"0.08765 psi",
+            u"0.008765 psi",
+            u"0 psi");
+
     assertFormatSingle(
-            u"DEMONSTRATING BAD BEHAVIOUR, TODO(icu-units#59)",
+            u"m/s/s simplifies to m/s^2",
             u"measure-unit/speed-meter-per-second per-measure-unit/duration-second",
-            u"measure-unit/speed-meter-per-second per-measure-unit/duration-second",
-            NumberFormatter::with()
-                .unit(MeasureUnit::getMeterPerSecond())
-                .perUnit(MeasureUnit::getSecond()),
+            u"unit/meter-per-square-second",
+            NumberFormatter::with().unit(METER_PER_SECOND).perUnit(SECOND),
             Locale("en-GB"),
             2.4,
-            "2.4 m/s/s");
+            u"2.4 m/s\u00B2");
+
+    assertFormatSingle(
+            u"Negative numbers: acceleration",
+            u"measure-unit/acceleration-meter-per-square-second",
+            u"unit/meter-per-second-second",
+            NumberFormatter::with().unit(MeasureUnit::forIdentifier("meter-per-pow2-second", status)),
+            Locale("af-ZA"),
+            -9.81,
+            u"-9,81 m/s\u00B2");
 
     // Testing the rejection of invalid specifications
 
@@ -875,17 +1057,15 @@ void NumberFormatterApiTest::unitCompoundMeasure() {
     status.assertSuccess(); // Error is only returned once we try to format.
     FormattedNumber num = nf.formatDouble(2.4, status);
     if (!status.expectErrorAndReset(U_UNSUPPORTED_ERROR)) {
-        errln(UnicodeString("Expected failure, got: \"") +
+        errln(UnicodeString("Expected failure for unit/furlong-pascal per-unit/length-meter, got: \"") +
               nf.formatDouble(2.4, status).toString(status) + "\".");
         status.assertSuccess();
     }
 
-    // .perUnit() may only be passed a built-in type, "square-second" is not a
-    // built-in type.
-    nf = NumberFormatter::with()
-             .unit(MeasureUnit::getMeter())
-             .perUnit(MeasureUnit::forIdentifier("square-second", status))
-             .locale("en-GB");
+    // .perUnit() may only be passed a built-in type, or something that combines
+    // to a built-in type together with .unit().
+    MeasureUnit SQUARE_SECOND = MeasureUnit::forIdentifier("square-second", status);
+    nf = NumberFormatter::with().unit(FURLONG).perUnit(SQUARE_SECOND).locale("en-GB");
     status.assertSuccess(); // Error is only returned once we try to format.
     num = nf.formatDouble(2.4, status);
     if (!status.expectErrorAndReset(U_UNSUPPORTED_ERROR)) {
@@ -893,6 +1073,356 @@ void NumberFormatterApiTest::unitCompoundMeasure() {
               nf.formatDouble(2.4, status).toString(status) + "\".");
         status.assertSuccess();
     }
+    // As above, "square-second" is not a built-in type, however this time,
+    // meter-per-square-second is a built-in type.
+    assertFormatSingle(
+            u"meter per square-second works as a composed unit",
+            u"measure-unit/speed-meter-per-second per-measure-unit/duration-second",
+            u"unit/meter-per-square-second",
+            NumberFormatter::with().unit(METER).perUnit(SQUARE_SECOND),
+            Locale("en-GB"),
+            2.4,
+            u"2.4 m/s\u00B2");
+}
+
+void NumberFormatterApiTest::unitArbitraryMeasureUnits() {
+    IcuTestErrorCode status(*this, "unitArbitraryMeasureUnits()");
+
+    // TODO: fix after data bug is resolved? See CLDR-14510.
+//     assertFormatSingle(
+//             u"Binary unit prefix: kibibyte",
+//             u"unit/kibibyte",
+//             u"unit/kibibyte",
+//             NumberFormatter::with().unit(MeasureUnit::forIdentifier("kibibyte", status)),
+//             Locale("en-GB"),
+//             2.4,
+//             u"2.4 KiB");
+
+    assertFormatSingle(
+            u"Binary unit prefix: kibibyte full-name",
+            u"unit/kibibyte unit-width-full-name",
+            u"unit/kibibyte unit-width-full-name",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("kibibyte", status))
+                .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("en-GB"),
+            2.4,
+            u"2.4 kibibytes");
+
+    assertFormatSingle(
+            u"Binary unit prefix: kibibyte full-name",
+            u"unit/kibibyte unit-width-full-name",
+            u"unit/kibibyte unit-width-full-name",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("kibibyte", status))
+                .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("de"),
+            2.4,
+            u"2,4 Kibibyte");
+
+    assertFormatSingle(
+            u"Binary prefix for non-digital units: kibimeter",
+            u"unit/kibimeter",
+            u"unit/kibimeter",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("kibimeter", status)),
+            Locale("en-GB"),
+            2.4,
+            u"2.4 Kim");
+
+    assertFormatSingle(
+            u"Extra-large prefix: exabyte",
+            u"unit/exabyte",
+            u"unit/exabyte",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("exabyte", status)),
+            Locale("en-GB"),
+            2.4,
+            u"2.4 Ebyte");
+
+    assertFormatSingle(
+            u"Extra-large prefix: exabyte (full-name)",
+            u"unit/exabyte unit-width-full-name",
+            u"unit/exabyte unit-width-full-name",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("exabyte", status))
+                .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("en-GB"),
+            2.4,
+            u"2.4 exabytes");
+
+    assertFormatSingle(
+            u"SI prefix falling back to root: microohm",
+            u"unit/microohm",
+            u"unit/microohm",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("microohm", status)),
+            Locale("de-CH"),
+            2.4,
+            u"2.4 μΩ");
+
+    assertFormatSingle(
+            u"de-CH fallback to de: microohm unit-width-full-name",
+            u"unit/microohm unit-width-full-name",
+            u"unit/microohm unit-width-full-name",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("microohm", status))
+                .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("de-CH"),
+            2.4,
+            u"2.4\u00A0Mikroohm");
+
+    assertFormatSingle(
+            u"No prefixes, 'times' pattern: joule-furlong",
+            u"unit/joule-furlong",
+            u"unit/joule-furlong",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("joule-furlong", status)),
+            Locale("en"),
+            2.4,
+            u"2.4 J⋅fur");
+
+    assertFormatSingle(
+            u"No numeratorUnitString: per-second",
+            u"unit/per-second",
+            u"unit/per-second",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("per-second", status)),
+            Locale("de-CH"),
+            2.4,
+            u"2.4/s");
+
+    assertFormatSingle(
+            u"No numeratorUnitString: per-second unit-width-full-name",
+            u"unit/per-second unit-width-full-name",
+            u"unit/per-second unit-width-full-name",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("per-second", status))
+                .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("de-CH"),
+            2.4,
+            u"2.4 pro Sekunde");
+
+    assertFormatSingle(
+            u"Prefix in the denominator: nanogram-per-picobarrel",
+            u"unit/nanogram-per-picobarrel",
+            u"unit/nanogram-per-picobarrel",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("nanogram-per-picobarrel", status)),
+            Locale("en-ZA"),
+            2.4,
+            u"2,4 ng/pbbl");
+
+    assertFormatSingle(
+            u"Prefix in the denominator: nanogram-per-picobarrel unit-width-full-name",
+            u"unit/nanogram-per-picobarrel unit-width-full-name",
+            u"unit/nanogram-per-picobarrel unit-width-full-name",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("nanogram-per-picobarrel", status))
+                .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("en-ZA"),
+            2.4,
+            u"2,4 nanograms per picobarrel");
+
+    // Valid MeasureUnit, but unformattable, because we only have patterns for
+    // pow2 and pow3 at this time:
+    LocalizedNumberFormatter lnf = NumberFormatter::with()
+              .unit(MeasureUnit::forIdentifier("pow4-mile", status))
+              .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)
+              .locale("en-ZA");
+    lnf.operator=(lnf);  // self-assignment should be a no-op
+    lnf.formatInt(1, status);
+    status.expectErrorAndReset(U_RESOURCE_TYPE_MISMATCH);
+
+    assertFormatSingle(
+            u"kibijoule-foot-per-cubic-gigafurlong-square-second unit-width-full-name",
+            u"unit/kibijoule-foot-per-cubic-gigafurlong-square-second unit-width-full-name",
+            u"unit/kibijoule-foot-per-cubic-gigafurlong-square-second unit-width-full-name",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("kibijoule-foot-per-cubic-gigafurlong-square-second",
+                                                 status))
+                .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("en-ZA"),
+            2.4,
+            u"2,4 kibijoule-feet per cubic gigafurlong-square second");
+
+    assertFormatSingle(
+            u"kibijoule-foot-per-cubic-gigafurlong-square-second unit-width-full-name",
+            u"unit/kibijoule-foot-per-cubic-gigafurlong-square-second unit-width-full-name",
+            u"unit/kibijoule-foot-per-cubic-gigafurlong-square-second unit-width-full-name",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("kibijoule-foot-per-cubic-gigafurlong-square-second",
+                                                 status))
+                .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("de-CH"),
+            2.4,
+            u"2.4\u00A0Kibijoule⋅Fuss pro Kubikgigafurlong⋅Quadratsekunde");
+
+    // TODO(ICU-21504): We want to be able to format this, but "100-kilometer"
+    // is not yet supported when it's not part of liter-per-100-kilometer:
+    // Actually now in CLDR 40 this is supported directly in data, so change test.
+    assertFormatSingle(
+            u"kilowatt-hour-per-100-kilometer unit-width-full-name",
+            u"unit/kilowatt-hour-per-100-kilometer unit-width-full-name",
+            u"unit/kilowatt-hour-per-100-kilometer unit-width-full-name",
+            NumberFormatter::with()
+                .unit(MeasureUnit::forIdentifier("kilowatt-hour-per-100-kilometer",
+                                                 status))
+                .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("en-ZA"),
+            2.4,
+            u"2,4 kilowatt-hours per 100 kilometers");
+}
+
+// TODO: merge these tests into numbertest_skeletons.cpp instead of here:
+void NumberFormatterApiTest::unitSkeletons() {
+    const struct TestCase {
+        const char *msg;
+        const char16_t *inputSkeleton;
+        const char16_t *normalizedSkeleton;
+    } cases[] = {
+        {"old-form built-in compound unit",      //
+         u"measure-unit/speed-meter-per-second", //
+         u"unit/meter-per-second"},
+
+        {"old-form compound construction, converts to built-in",        //
+         u"measure-unit/length-meter per-measure-unit/duration-second", //
+         u"unit/meter-per-second"},
+
+        {"old-form compound construction which does not simplify to a built-in", //
+         u"measure-unit/energy-joule per-measure-unit/length-meter",             //
+         u"unit/joule-per-meter"},
+
+        {"old-form compound-compound ugliness resolves neatly",                   //
+         u"measure-unit/speed-meter-per-second per-measure-unit/duration-second", //
+         u"unit/meter-per-square-second"},
+
+        {"short-form built-in units stick with the built-in", //
+         u"unit/meter-per-second",                            //
+         u"unit/meter-per-second"},
+
+        {"short-form compound units stay as is", //
+         u"unit/square-meter-per-square-meter",  //
+         u"unit/square-meter-per-square-meter"},
+
+        {"short-form compound units stay as is", //
+         u"unit/joule-per-furlong",              //
+         u"unit/joule-per-furlong"},
+
+        {"short-form that doesn't consist of built-in units", //
+         u"unit/hectometer-per-second",                       //
+         u"unit/hectometer-per-second"},
+
+        {"short-form that doesn't consist of built-in units", //
+         u"unit/meter-per-hectosecond",                       //
+         u"unit/meter-per-hectosecond"},
+
+        {"percent compound skeletons handled correctly", //
+         u"unit/percent-per-meter",                      //
+         u"unit/percent-per-meter"},
+
+        {"permille compound skeletons handled correctly",                 //
+         u"measure-unit/concentr-permille per-measure-unit/length-meter", //
+         u"unit/permille-per-meter"},
+
+        {"percent simple unit is not actually considered a unit", //
+         u"unit/percent",                                         //
+         u"percent"},
+
+        {"permille simple unit is not actually considered a unit", //
+         u"measure-unit/concentr-permille",                        //
+         u"permille"},
+
+        {"Round-trip example from icu-units#35", //
+         u"unit/kibijoule-per-furlong",          //
+         u"unit/kibijoule-per-furlong"},
+    };
+    for (auto &cas : cases) {
+        IcuTestErrorCode status(*this, cas.msg);
+        auto nf = NumberFormatter::forSkeleton(cas.inputSkeleton, status);
+        if (status.errIfFailureAndReset("NumberFormatter::forSkeleton failed")) {
+            continue;
+        }
+        assertEquals(                                                       //
+            UnicodeString(TRUE, cas.inputSkeleton, -1) + u" normalization", //
+            cas.normalizedSkeleton,                                         //
+            nf.toSkeleton(status));
+        status.errIfFailureAndReset("NumberFormatter::toSkeleton failed");
+    }
+
+    const struct FailCase {
+        const char *msg;
+        const char16_t *inputSkeleton;
+        UErrorCode expectedForSkelStatus;
+        UErrorCode expectedToSkelStatus;
+    } failCases[] = {
+        {"Parsing measure-unit/* results in failure if not built-in unit",
+         u"measure-unit/hectometer",     //
+         U_NUMBER_SKELETON_SYNTAX_ERROR, //
+         U_ZERO_ERROR},
+
+        {"Parsing per-measure-unit/* results in failure if not built-in unit",
+         u"measure-unit/meter per-measure-unit/hectosecond", //
+         U_NUMBER_SKELETON_SYNTAX_ERROR,                     //
+         U_ZERO_ERROR},
+
+        {"\"currency/EUR measure-unit/length-meter\" fails, conflicting skeleton.",
+         u"currency/EUR measure-unit/length-meter", //
+         U_NUMBER_SKELETON_SYNTAX_ERROR,            //
+         U_ZERO_ERROR},
+
+        {"\"measure-unit/length-meter currency/EUR\" fails, conflicting skeleton.",
+         u"measure-unit/length-meter currency/EUR", //
+         U_NUMBER_SKELETON_SYNTAX_ERROR,            //
+         U_ZERO_ERROR},
+
+        {"\"currency/EUR per-measure-unit/meter\" fails, conflicting skeleton.",
+         u"currency/EUR per-measure-unit/length-meter", //
+         U_NUMBER_SKELETON_SYNTAX_ERROR,                //
+         U_ZERO_ERROR},
+    };
+    for (auto &cas : failCases) {
+        IcuTestErrorCode status(*this, cas.msg);
+        auto nf = NumberFormatter::forSkeleton(cas.inputSkeleton, status);
+        if (status.expectErrorAndReset(cas.expectedForSkelStatus, cas.msg)) {
+            continue;
+        }
+        nf.toSkeleton(status);
+        status.expectErrorAndReset(cas.expectedToSkelStatus, cas.msg);
+    }
+
+    IcuTestErrorCode status(*this, "unitSkeletons");
+    assertEquals(                                //
+        ".unit(METER_PER_SECOND) normalization", //
+        u"unit/meter-per-second",                //
+        NumberFormatter::with().unit(METER_PER_SECOND).toSkeleton(status));
+    assertEquals(                                     //
+        ".unit(METER).perUnit(SECOND) normalization", //
+        u"unit/meter-per-second",
+        NumberFormatter::with().unit(METER).perUnit(SECOND).toSkeleton(status));
+    assertEquals(                                                                  //
+        ".unit(MeasureUnit::forIdentifier(\"hectometer\", status)) normalization", //
+        u"unit/hectometer",
+        NumberFormatter::with()
+            .unit(MeasureUnit::forIdentifier("hectometer", status))
+            .toSkeleton(status));
+    assertEquals(                                                                  //
+        ".unit(MeasureUnit::forIdentifier(\"hectometer\", status)) normalization", //
+        u"unit/meter-per-hectosecond",
+        NumberFormatter::with()
+            .unit(METER)
+            .perUnit(MeasureUnit::forIdentifier("hectosecond", status))
+            .toSkeleton(status));
+
+    status.assertSuccess();
+    assertEquals(                                                //
+        ".unit(CURRENCY) produces a currency/CURRENCY skeleton", //
+        u"currency/GBP",                                         //
+        NumberFormatter::with().unit(GBP).toSkeleton(status));
+    status.assertSuccess();
+    // .unit(CURRENCY).perUnit(ANYTHING) is not supported.
+    NumberFormatter::with().unit(GBP).perUnit(METER).toSkeleton(status);
+    status.expectErrorAndReset(U_UNSUPPORTED_ERROR);
 }
 
 void NumberFormatterApiTest::unitUsage() {
@@ -940,7 +1470,7 @@ void NumberFormatterApiTest::unitUsage() {
             u"8,8 km",
             u"900 m",
             u"90 m",
-            u"10 m",
+            u"9 m",
             u"0 m");
 
     uTestCase = u"unitUsage() en-GB road";
@@ -975,8 +1505,8 @@ void NumberFormatterApiTest::unitUsage() {
             u"54 mi",
             u"5.4 mi",
             u"0.54 mi",
-            u"96 yd",
-            u"9.6 yd",
+            u"100 yd",
+            u"10 yd",
             u"0 yd");
 
     uTestCase = u"unitUsage() en-US road";
@@ -1135,6 +1665,63 @@ void NumberFormatterApiTest::unitUsage() {
             u"0E0 square centimetres");
 
     assertFormatSingle(
+            u"Negative Infinity with Unit Preferences",
+            u"measure-unit/area-acre usage/default",
+            u"unit/acre usage/default",
+            NumberFormatter::with().unit(MeasureUnit::getAcre()).usage("default"),
+            Locale::getEnglish(),
+            -uprv_getInfinity(),
+            u"-∞ km²");
+
+//     // TODO(icu-units#131): do we care about NaN?
+//     // TODO: on some platforms with MSVC, "-NaN sec" is returned.
+//     assertFormatSingle(
+//             u"NaN with Unit Preferences",
+//             u"measure-unit/area-acre usage/default",
+//             u"unit/acre usage/default",
+//             NumberFormatter::with().unit(MeasureUnit::getAcre()).usage("default"),
+//             Locale::getEnglish(),
+//             uprv_getNaN(),
+//             u"NaN cm²");
+
+    assertFormatSingle(
+            u"Negative numbers: minute-and-second",
+            u"measure-unit/duration-second usage/media",
+            u"unit/second usage/media",
+            NumberFormatter::with().unit(SECOND).usage("media"),
+            Locale("nl-NL"),
+            -77.7,
+            u"-1 min, 18 sec");
+
+    assertFormatSingle(
+            u"Negative numbers: media seconds",
+            u"measure-unit/duration-second usage/media",
+            u"unit/second usage/media",
+            NumberFormatter::with().unit(SECOND).usage("media"),
+            Locale("nl-NL"),
+            -2.7,
+            u"-2,7 sec");
+
+//     // TODO: on some platforms with MSVC, "-NaN sec" is returned.
+//     assertFormatSingle(
+//             u"NaN minute-and-second",
+//             u"measure-unit/duration-second usage/media",
+//             u"unit/second usage/media",
+//             NumberFormatter::with().unit(SECOND).usage("media"),
+//             Locale("nl-NL"),
+//             uprv_getNaN(),
+//             u"NaN sec");
+
+    assertFormatSingle(
+            u"NaN meter-and-centimeter",
+            u"measure-unit/length-meter usage/person-height",
+            u"unit/meter usage/person-height",
+            NumberFormatter::with().unit(METER).usage("person-height"),
+            Locale("sv-SE"),
+            uprv_getNaN(),
+            u"0 m, NaN cm");
+
+    assertFormatSingle(
             u"Rounding Mode propagates: rounding down",
             u"usage/road measure-unit/length-centimeter rounding-mode-floor",
             u"usage/road unit/centimeter rounding-mode-floor",
@@ -1157,6 +1744,43 @@ void NumberFormatterApiTest::unitUsage() {
             Locale("en-ZA"),
             30500,
             u"350 m");
+
+    // Test calling `.usage("")` should unset the existing usage.
+    // First: without usage
+    assertFormatSingle(u"Rounding Mode propagates: rounding up",
+                       u"measure-unit/length-centimeter rounding-mode-ceiling",
+                       u"unit/centimeter rounding-mode-ceiling",
+                       NumberFormatter::with()
+                           .unit(MeasureUnit::forIdentifier("centimeter", status))
+                           .roundingMode(UNUM_ROUND_CEILING),
+                       Locale("en-US"), //
+                       3048,            //
+                       u"3,048 cm");
+
+    // Second: with "road" usage
+    assertFormatSingle(u"Rounding Mode propagates: rounding up",
+                       u"usage/road measure-unit/length-centimeter rounding-mode-ceiling",
+                       u"usage/road unit/centimeter rounding-mode-ceiling",
+                       NumberFormatter::with()
+                           .unit(MeasureUnit::forIdentifier("centimeter", status))
+                           .usage("road")
+                           .roundingMode(UNUM_ROUND_CEILING),
+                       Locale("en-US"), //
+                       3048,            //
+                       u"100 ft");
+
+    // Third: with "road" usage, then the usage unsetted by calling .usage("")
+    assertFormatSingle(u"Rounding Mode propagates: rounding up",
+                       u"measure-unit/length-centimeter rounding-mode-ceiling",
+                       u"unit/centimeter rounding-mode-ceiling",
+                       NumberFormatter::with()
+                           .unit(MeasureUnit::forIdentifier("centimeter", status))
+                           .usage("road")
+                           .roundingMode(UNUM_ROUND_CEILING)
+                           .usage(""),  // unset
+                       Locale("en-US"), //
+                       3048,            //
+                       u"3,048 cm");
 
     // TODO(icu-units#38): improve unit testing coverage. E.g. add vehicle-fuel
     // triggering inversion conversion code. Test with 0 too, to see
@@ -1182,6 +1806,13 @@ void NumberFormatterApiTest::unitUsageErrorCodes() {
     // Adding the unit as part of the fluent chain leads to success.
     unloc_formatter.unit(MeasureUnit::getMeter()).locale("en-GB").formatInt(1, status);
     status.assertSuccess();
+
+    // Setting unit to the "base dimensionless unit" is like clearing unit.
+    unloc_formatter = NumberFormatter::with().unit(MeasureUnit()).usage("default");
+    // This does not give an error, because usage-vs-unit isn't resolved yet.
+    status.errIfFailureAndReset("Expected behaviour: no immediate error for invalid unit");
+    unloc_formatter.locale("en-GB").formatInt(1, status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
 }
 
 // Tests for the "skeletons" field in unitPreferenceData, as well as precision
@@ -1520,6 +2151,463 @@ void NumberFormatterApiTest::unitCurrency() {
             u"123,12 CN¥");
 }
 
+void NumberFormatterApiTest::runUnitInflectionsTestCases(UnlocalizedNumberFormatter unf,
+                                                         UnicodeString skeleton,
+                                                         const UnitInflectionTestCase *cases,
+                                                         int32_t numCases,
+                                                         IcuTestErrorCode &status) {
+    for (int32_t i = 0; i < numCases; i++) {
+        UnitInflectionTestCase t = cases[i];
+        status.assertSuccess();
+        MeasureUnit mu = MeasureUnit::forIdentifier(t.unitIdentifier, status);
+        if (status.errIfFailureAndReset("MeasureUnit::forIdentifier(\"%s\", ...) failed",
+                                        t.unitIdentifier)) {
+            continue;
+        };
+        UnicodeString skelString = UnicodeString("unit/") + t.unitIdentifier + u" " + skeleton;
+        const UChar *skel;
+        if (t.unitDisplayCase == nullptr || t.unitDisplayCase[0] == 0) {
+            unf = unf.unit(mu).unitDisplayCase("");
+            skel = skelString.getTerminatedBuffer();
+        } else {
+            unf = unf.unit(mu).unitDisplayCase(t.unitDisplayCase);
+            // No skeleton support for unitDisplayCase yet.
+            skel = nullptr;
+        }
+        assertFormatSingle((UnicodeString("Unit: \"") + t.unitIdentifier + ("\", \"") + skeleton +
+                            u"\", locale=\"" + t.locale + u"\", case=\"" +
+                            (t.unitDisplayCase ? t.unitDisplayCase : "") + u"\", value=" + t.value)
+                               .getTerminatedBuffer(),
+                           skel, skel, unf, Locale(t.locale), t.value, t.expected);
+        status.assertSuccess();
+    }
+}
+
+void NumberFormatterApiTest::unitInflections() {
+    IcuTestErrorCode status(*this, "unitInflections");
+
+    UnlocalizedNumberFormatter unf;
+    const UChar *skeleton;
+    {
+        // Simple inflected form test - test case based on the example in CLDR's
+        // grammaticalFeatures.xml
+        unf = NumberFormatter::with().unitWidth(UNUM_UNIT_WIDTH_FULL_NAME);
+        skeleton = u"unit-width-full-name";
+        const UnitInflectionTestCase percentCases[] = {
+            {"percent", "ru", nullptr, 10, u"10 процентов"},    // many
+            {"percent", "ru", "genitive", 10, u"10 процентов"}, // many
+            {"percent", "ru", nullptr, 33, u"33 процента"},     // few
+            {"percent", "ru", "genitive", 33, u"33 процентов"}, // few
+            {"percent", "ru", nullptr, 1, u"1 процент"},        // one
+            {"percent", "ru", "genitive", 1, u"1 процента"},    // one
+        };
+        runUnitInflectionsTestCases(unf, skeleton, percentCases, UPRV_LENGTHOF(percentCases), status);
+    }
+    {
+        // General testing of inflection rules
+        unf = NumberFormatter::with().unitWidth(UNUM_UNIT_WIDTH_FULL_NAME);
+        skeleton = u"unit-width-full-name";
+        const UnitInflectionTestCase testCases[] = {
+            // Check up on the basic values that the compound patterns below are
+            // derived from:
+            {"meter", "de", nullptr, 1, u"1 Meter"},
+            {"meter", "de", "genitive", 1, u"1 Meters"},
+            {"meter", "de", nullptr, 2, u"2 Meter"},
+            {"meter", "de", "dative", 2, u"2 Metern"},
+            {"mile", "de", nullptr, 1, u"1 Meile"},
+            {"mile", "de", nullptr, 2, u"2 Meilen"},
+            {"day", "de", nullptr, 1, u"1 Tag"},
+            {"day", "de", "genitive", 1, u"1 Tages"},
+            {"day", "de", nullptr, 2, u"2 Tage"},
+            {"day", "de", "dative", 2, u"2 Tagen"},
+            {"decade", "de", nullptr, 1, u"1\u00A0Jahrzehnt"},
+            {"decade", "de", nullptr, 2, u"2\u00A0Jahrzehnte"},
+
+            // Testing de "per" rules:
+            //   <deriveComponent feature="case" structure="per" value0="compound" value1="accusative"/>
+            //   <deriveComponent feature="plural" structure="per" value0="compound" value1="one"/>
+            // per-patterns use accusative, but since the accusative form
+            // matches the nominative form, we're not effectively testing value1
+            // in the "case & per" rule above.
+
+            // We have a perUnitPattern for "day" in de, so "per" rules are not
+            // applied for these:
+            {"meter-per-day", "de", nullptr, 1, u"1 Meter pro Tag"},
+            {"meter-per-day", "de", "genitive", 1, u"1 Meters pro Tag"},
+            {"meter-per-day", "de", nullptr, 2, u"2 Meter pro Tag"},
+            {"meter-per-day", "de", "dative", 2, u"2 Metern pro Tag"},
+
+            // testing code path that falls back to "root" grammaticalFeatures
+            // but does not inflect:
+            {"meter-per-day", "af", nullptr, 1, u"1 meter per dag"},
+            {"meter-per-day", "af", "dative", 1, u"1 meter per dag"},
+
+            // Decade does not have a perUnitPattern at this time (CLDR 39 / ICU
+            // 69), so we can use it to test for selection of correct plural form.
+            // - Note: fragile test cases, these cases will break when
+            //   whitespace is more consistently applied.
+            {"parsec-per-decade", "de", nullptr, 1, u"1\u00A0Parsec pro Jahrzehnt"},
+            {"parsec-per-decade", "de", "genitive", 1, u"1 Parsec pro Jahrzehnt"},
+            {"parsec-per-decade", "de", nullptr, 2, u"2\u00A0Parsec pro Jahrzehnt"},
+            {"parsec-per-decade", "de", "dative", 2, u"2 Parsec pro Jahrzehnt"},
+
+            // Testing de "times", "power" and "prefix" rules:
+            //
+            //   <deriveComponent feature="plural" structure="times" value0="one"  value1="compound"/>
+            //   <deriveComponent feature="case" structure="times" value0="nominative"  value1="compound"/>
+            //
+            //   <deriveComponent feature="plural" structure="prefix" value0="one"  value1="compound"/>
+            //   <deriveComponent feature="case" structure="prefix" value0="nominative"  value1="compound"/>
+            //
+            // Prefixes in German don't change with plural or case, so these
+            // tests can't test value0 of the following two rules:
+            //   <deriveComponent feature="plural" structure="power" value0="one"  value1="compound"/>
+            //   <deriveComponent feature="case" structure="power" value0="nominative"  value1="compound"/>
+            {"square-decimeter-dekameter", "de", nullptr, 1, u"1 Quadratdezimeter⋅Dekameter"},
+            {"square-decimeter-dekameter", "de", "genitive", 1, u"1 Quadratdezimeter⋅Dekameters"},
+            {"square-decimeter-dekameter", "de", nullptr, 2, u"2 Quadratdezimeter⋅Dekameter"},
+            {"square-decimeter-dekameter", "de", "dative", 2, u"2 Quadratdezimeter⋅Dekametern"},
+            // Feminine "Meile" better demonstrates singular-vs-plural form:
+            {"cubic-mile-dekamile", "de", nullptr, 1, u"1 Kubikmeile⋅Dekameile"},
+            {"cubic-mile-dekamile", "de", nullptr, 2, u"2 Kubikmeile⋅Dekameilen"},
+
+            // French handles plural "times" and "power" structures differently:
+            // plural form impacts all "numerator" units (denominator remains
+            // singular like German), and "pow2" prefixes have different forms
+            //   <deriveComponent feature="plural" structure="times" value0="compound"  value1="compound"/>
+            //   <deriveComponent feature="plural" structure="power" value0="compound"  value1="compound"/>
+            {"square-decimeter-square-second", "fr", nullptr, 1, u"1\u00A0décimètre carré-seconde carrée"},
+            {"square-decimeter-square-second", "fr", nullptr, 2, u"2\u00A0décimètres carrés-secondes carrées"},
+        };
+        runUnitInflectionsTestCases(unf, skeleton, testCases, UPRV_LENGTHOF(testCases), status);
+    }
+    {
+        // Testing inflection of mixed units:
+        unf = NumberFormatter::with().unitWidth(UNUM_UNIT_WIDTH_FULL_NAME);
+        skeleton = u"unit-width-full-name";
+        const UnitInflectionTestCase testCases[] = {
+            {"meter", "de", nullptr, 1, u"1 Meter"},
+            {"meter", "de", "genitive", 1, u"1 Meters"},
+            {"meter", "de", "dative", 2, u"2 Metern"},
+            {"centimeter", "de", nullptr, 1, u"1 Zentimeter"},
+            {"centimeter", "de", "genitive", 1, u"1 Zentimeters"},
+            {"centimeter", "de", "dative", 10, u"10 Zentimetern"},
+            // TODO(CLDR-14502): check that these inflections are correct, and
+            // whether CLDR needs any rules for them (presumably CLDR spec
+            // should mention it, if it's a consistent rule):
+            {"meter-and-centimeter", "de", nullptr, 1.01, u"1 Meter, 1 Zentimeter"},
+            {"meter-and-centimeter", "de", "genitive", 1.01, u"1 Meters, 1 Zentimeters"},
+            {"meter-and-centimeter", "de", "genitive", 1.1, u"1 Meters, 10 Zentimeter"},
+            {"meter-and-centimeter", "de", "dative", 1.1, u"1 Meter, 10 Zentimetern"},
+            {"meter-and-centimeter", "de", "dative", 2.1, u"2 Metern, 10 Zentimetern"},
+        };
+        runUnitInflectionsTestCases(unf, skeleton, testCases, UPRV_LENGTHOF(testCases),
+                                    status);
+    }
+    // TODO: add a usage case that selects between preferences with different
+    // genders (e.g. year, month, day, hour).
+    // TODO: look at "↑↑↑" cases: check that inheritance is done right.
+}
+
+void NumberFormatterApiTest::unitGender() {
+    IcuTestErrorCode status(*this, "unitGender");
+
+    const struct TestCase {
+        const char *locale;
+        const char *unitIdentifier;
+        const char *expectedGender;
+    } cases[] = {
+        {"de", "inch", "masculine"},
+        {"de", "yard", "neuter"},
+        {"de", "meter", "masculine"},
+        {"de", "liter", "masculine"},
+        {"de", "second", "feminine"},
+        {"de", "minute", "feminine"},
+        {"de", "hour", "feminine"},
+        {"de", "day", "masculine"},
+        {"de", "year", "neuter"},
+        {"de", "gram", "neuter"},
+        {"de", "watt", "neuter"},
+        {"de", "bit", "neuter"},
+        {"de", "byte", "neuter"},
+
+        {"fr", "inch", "masculine"},
+        {"fr", "yard", "masculine"},
+        {"fr", "meter", "masculine"},
+        {"fr", "liter", "masculine"},
+        {"fr", "second", "feminine"},
+        {"fr", "minute", "feminine"},
+        {"fr", "hour", "feminine"},
+        {"fr", "day", "masculine"},
+        {"fr", "year", "masculine"},
+        {"fr", "gram", "masculine"},
+
+        // grammaticalFeatures deriveCompound "per" rule takes the gender of the
+        // numerator unit:
+        {"de", "meter-per-hour", "masculine"},
+        {"fr", "meter-per-hour", "masculine"},
+        {"af", "meter-per-hour", ""}, // ungendered language
+
+        // French "times" takes gender from first value, German takes the
+        // second. Prefix and power does not have impact on gender for these
+        // languages:
+        {"de", "square-decimeter-square-second", "feminine"},
+        {"fr", "square-decimeter-square-second", "masculine"},
+
+        // TODO(icu-units#149): percent and permille bypasses LongNameHandler
+        // when unitWidth is not FULL_NAME:
+        // // Gender of per-second might be that of percent? TODO(icu-units#28)
+        // {"de", "percent", "neuter"},
+        // {"fr", "percent", "masculine"},
+
+        // Built-in units whose simple units lack gender in the CLDR data file
+        {"de", "kilopascal", "neuter"},
+        {"fr", "kilopascal", "masculine"},
+        // {"de", "pascal", ""},
+        // {"fr", "pascal", ""},
+
+        // Built-in units that lack gender in the CLDR data file
+        // {"de", "revolution", ""},
+        // {"de", "radian", ""},
+        // {"de", "arc-minute", ""},
+        // {"de", "arc-second", ""},
+        {"de", "square-yard", "neuter"},    // POWER
+        {"de", "square-inch", "masculine"}, // POWER
+        // {"de", "dunam", ""},
+        // {"de", "karat", ""},
+        // {"de", "milligram-ofglucose-per-deciliter", ""}, // COMPOUND, ofglucose
+        // {"de", "millimole-per-liter", ""},               // COMPOUND, mole
+        // {"de", "permillion", ""},
+        // {"de", "permille", ""},
+        // {"de", "permyriad", ""},
+        // {"de", "mole", ""},
+        {"de", "liter-per-kilometer", "masculine"}, // COMPOUND
+        {"de", "petabyte", "neuter"},               // PREFIX
+        {"de", "terabit", "neuter"},                // PREFIX
+        // {"de", "century", ""},
+        // {"de", "decade", ""},
+        {"de", "millisecond", "feminine"}, // PREFIX
+        {"de", "microsecond", "feminine"}, // PREFIX
+        {"de", "nanosecond", "feminine"},  // PREFIX
+        // {"de", "ampere", ""},
+        // {"de", "milliampere", ""}, // PREFIX, ampere
+        // {"de", "ohm", ""},
+        // {"de", "calorie", ""},
+        // {"de", "kilojoule", ""}, // PREFIX, joule
+        // {"de", "joule", ""},
+        {"de", "kilowatt-hour", "feminine"}, // COMPOUND
+        // {"de", "electronvolt", ""},
+        // {"de", "british-thermal-unit", ""},
+        // {"de", "therm-us", ""},
+        // {"de", "pound-force", ""},
+        // {"de", "newton", ""},
+        // {"de", "gigahertz", ""}, // PREFIX, hertz
+        // {"de", "megahertz", ""}, // PREFIX, hertz
+        // {"de", "kilohertz", ""}, // PREFIX, hertz
+        // {"de", "hertz", ""},
+        // {"de", "em", ""},
+        // {"de", "pixel", ""},
+        // {"de", "megapixel", ""},
+        // {"de", "pixel-per-centimeter", ""}, // COMPOUND, pixel
+        // {"de", "pixel-per-inch", ""},       // COMPOUND, pixel
+        // {"de", "dot-per-centimeter", ""},   // COMPOUND, dot
+        // {"de", "dot-per-inch", ""},         // COMPOUND, dot
+        // {"de", "dot", ""},
+        // {"de", "earth-radius", ""},
+        {"de", "decimeter", "masculine"},  // PREFIX
+        {"de", "micrometer", "masculine"}, // PREFIX
+        {"de", "nanometer", "masculine"},  // PREFIX
+        // {"de", "light-year", ""},
+        // {"de", "astronomical-unit", ""},
+        // {"de", "furlong", ""},
+        // {"de", "fathom", ""},
+        // {"de", "nautical-mile", ""},
+        // {"de", "mile-scandinavian", ""},
+        // {"de", "point", ""},
+        // {"de", "lux", ""},
+        // {"de", "candela", ""},
+        // {"de", "lumen", ""},
+        // {"de", "metric-ton", ""},
+        // {"de", "microgram", "neuter"}, // PREFIX
+        // {"de", "ton", ""},
+        // {"de", "stone", ""},
+        // {"de", "ounce-troy", ""},
+        // {"de", "carat", ""},
+        {"de", "gigawatt", "neuter"},  // PREFIX
+        {"de", "milliwatt", "neuter"}, // PREFIX
+        // {"de", "horsepower", ""},
+        // {"de", "millimeter-ofhg", ""},
+        // {"de", "pound-force-per-square-inch", ""}, // COMPOUND, pound-force
+        // {"de", "inch-ofhg", ""},
+        // {"de", "bar", ""},
+        // {"de", "millibar", ""}, // PREFIX, bar
+        // {"de", "atmosphere", ""},
+        // {"de", "pascal", ""},      // PREFIX, kilopascal? neuter?
+        // {"de", "hectopascal", ""}, // PREFIX, pascal, neuter?
+        // {"de", "megapascal", ""},  // PREFIX, pascal, neuter?
+        // {"de", "knot", ""},
+        {"de", "pound-force-foot", "masculine"}, // COMPOUND
+        {"de", "newton-meter", "masculine"},     // COMPOUND
+        {"de", "cubic-kilometer", "masculine"},  // POWER
+        {"de", "cubic-yard", "neuter"},          // POWER
+        {"de", "cubic-inch", "masculine"},       // POWER
+        {"de", "megaliter", "masculine"},        // PREFIX
+        {"de", "hectoliter", "masculine"},       // PREFIX
+        // {"de", "pint-metric", ""},
+        // {"de", "cup-metric", ""},
+        {"de", "acre-foot", "masculine"}, // COMPOUND
+        // {"de", "bushel", ""},
+        // {"de", "barrel", ""},
+        // Units missing gender in German also misses gender in French:
+        // {"fr", "revolution", ""},
+        // {"fr", "radian", ""},
+        // {"fr", "arc-minute", ""},
+        // {"fr", "arc-second", ""},
+        {"fr", "square-yard", "masculine"}, // POWER
+        {"fr", "square-inch", "masculine"}, // POWER
+        // {"fr", "dunam", ""},
+        // {"fr", "karat", ""},
+        {"fr", "milligram-ofglucose-per-deciliter", "masculine"}, // COMPOUND
+        // {"fr", "millimole-per-liter", ""},                        // COMPOUND, mole
+        // {"fr", "permillion", ""},
+        // {"fr", "permille", ""},
+        // {"fr", "permyriad", ""},
+        // {"fr", "mole", ""},
+        {"fr", "liter-per-kilometer", "masculine"}, // COMPOUND
+        // {"fr", "petabyte", ""},                     // PREFIX
+        // {"fr", "terabit", ""},                      // PREFIX
+        // {"fr", "century", ""},
+        // {"fr", "decade", ""},
+        {"fr", "millisecond", "feminine"}, // PREFIX
+        {"fr", "microsecond", "feminine"}, // PREFIX
+        {"fr", "nanosecond", "feminine"},  // PREFIX
+        // {"fr", "ampere", ""},
+        // {"fr", "milliampere", ""}, // PREFIX, ampere
+        // {"fr", "ohm", ""},
+        // {"fr", "calorie", ""},
+        // {"fr", "kilojoule", ""}, // PREFIX, joule
+        // {"fr", "joule", ""},
+        // {"fr", "kilowatt-hour", ""}, // COMPOUND
+        // {"fr", "electronvolt", ""},
+        // {"fr", "british-thermal-unit", ""},
+        // {"fr", "therm-us", ""},
+        // {"fr", "pound-force", ""},
+        // {"fr", "newton", ""},
+        // {"fr", "gigahertz", ""}, // PREFIX, hertz
+        // {"fr", "megahertz", ""}, // PREFIX, hertz
+        // {"fr", "kilohertz", ""}, // PREFIX, hertz
+        // {"fr", "hertz", ""},
+        // {"fr", "em", ""},
+        // {"fr", "pixel", ""},
+        // {"fr", "megapixel", ""},
+        // {"fr", "pixel-per-centimeter", ""}, // COMPOUND, pixel
+        // {"fr", "pixel-per-inch", ""},       // COMPOUND, pixel
+        // {"fr", "dot-per-centimeter", ""},   // COMPOUND, dot
+        // {"fr", "dot-per-inch", ""},         // COMPOUND, dot
+        // {"fr", "dot", ""},
+        // {"fr", "earth-radius", ""},
+        {"fr", "decimeter", "masculine"},  // PREFIX
+        {"fr", "micrometer", "masculine"}, // PREFIX
+        {"fr", "nanometer", "masculine"},  // PREFIX
+        // {"fr", "light-year", ""},
+        // {"fr", "astronomical-unit", ""},
+        // {"fr", "furlong", ""},
+        // {"fr", "fathom", ""},
+        // {"fr", "nautical-mile", ""},
+        // {"fr", "mile-scandinavian", ""},
+        // {"fr", "point", ""},
+        // {"fr", "lux", ""},
+        // {"fr", "candela", ""},
+        // {"fr", "lumen", ""},
+        // {"fr", "metric-ton", ""},
+        // {"fr", "microgram", "masculine"}, // PREFIX
+        // {"fr", "ton", ""},
+        // {"fr", "stone", ""},
+        // {"fr", "ounce-troy", ""},
+        // {"fr", "carat", ""},
+        // {"fr", "gigawatt", ""}, // PREFIX
+        // {"fr", "milliwatt", ""},
+        // {"fr", "horsepower", ""},
+        {"fr", "millimeter-ofhg", "masculine"},
+        // {"fr", "pound-force-per-square-inch", ""}, // COMPOUND, pound-force
+        {"fr", "inch-ofhg", "masculine"},
+        // {"fr", "bar", ""},
+        // {"fr", "millibar", ""}, // PREFIX, bar
+        // {"fr", "atmosphere", ""},
+        // {"fr", "pascal", ""},      // PREFIX, kilopascal?
+        // {"fr", "hectopascal", ""}, // PREFIX, pascal
+        // {"fr", "megapascal", ""},  // PREFIX, pascal
+        // {"fr", "knot", ""},
+        // {"fr", "pound-force-foot", ""},
+        // {"fr", "newton-meter", ""},
+        {"fr", "cubic-kilometer", "masculine"}, // POWER
+        {"fr", "cubic-yard", "masculine"},      // POWER
+        {"fr", "cubic-inch", "masculine"},      // POWER
+        {"fr", "megaliter", "masculine"},       // PREFIX
+        {"fr", "hectoliter", "masculine"},      // PREFIX
+        // {"fr", "pint-metric", ""},
+        // {"fr", "cup-metric", ""},
+        {"fr", "acre-foot", "feminine"}, // COMPOUND
+        // {"fr", "bushel", ""},
+        // {"fr", "barrel", ""},
+        // Some more French units missing gender:
+        // {"fr", "degree", ""},
+        {"fr", "square-meter", "masculine"}, // POWER
+        // {"fr", "terabyte", ""},              // PREFIX, byte
+        // {"fr", "gigabyte", ""},              // PREFIX, byte
+        // {"fr", "gigabit", ""},               // PREFIX, bit
+        // {"fr", "megabyte", ""},              // PREFIX, byte
+        // {"fr", "megabit", ""},               // PREFIX, bit
+        // {"fr", "kilobyte", ""},              // PREFIX, byte
+        // {"fr", "kilobit", ""},               // PREFIX, bit
+        // {"fr", "byte", ""},
+        // {"fr", "bit", ""},
+        // {"fr", "volt", ""},
+        // {"fr", "watt", ""},
+        {"fr", "cubic-meter", "masculine"}, // POWER
+
+        // gender-lacking builtins within compound units
+        {"de", "newton-meter-per-second", "masculine"},
+
+        // TODO(ICU-21494): determine whether list genders behave as follows,
+        // and implement proper getListGender support (covering more than just
+        // two genders):
+        // // gender rule for lists of people: de "neutral", fr "maleTaints"
+        // {"de", "day-and-hour-and-minute", "neuter"},
+        // {"de", "hour-and-minute", "feminine"},
+        // {"fr", "day-and-hour-and-minute", "masculine"},
+        // {"fr", "hour-and-minute", "feminine"},
+    };
+    LocalizedNumberFormatter formatter;
+    FormattedNumber fn;
+    for (const TestCase &t : cases) {
+        formatter = NumberFormatter::with()
+                        .unit(MeasureUnit::forIdentifier(t.unitIdentifier, status))
+                        .locale(Locale(t.locale));
+        fn = formatter.formatDouble(1.1, status);
+        assertEquals(UnicodeString("Testing gender with default width, unit: ") + t.unitIdentifier +
+                         ", locale: " + t.locale,
+                     t.expectedGender, fn.getGender(status));
+        status.assertSuccess();
+
+        formatter = NumberFormatter::with()
+                        .unit(MeasureUnit::forIdentifier(t.unitIdentifier, status))
+                        .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)
+                        .locale(Locale(t.locale));
+        fn = formatter.formatDouble(1.1, status);
+        assertEquals(UnicodeString("Testing gender with UNUM_UNIT_WIDTH_FULL_NAME, unit: ") +
+                         t.unitIdentifier + ", locale: " + t.locale,
+                     t.expectedGender, fn.getGender(status));
+        status.assertSuccess();
+    }
+
+    // Make sure getGender does not return garbage for genderless languages
+    formatter = NumberFormatter::with().locale(Locale::getEnglish());
+    fn = formatter.formatDouble(1.1, status);
+    status.assertSuccess();
+    assertEquals("getGender for a genderless language", "", fn.getGender(status));
+}
+
 void NumberFormatterApiTest::unitPercent() {
     assertFormatDescending(
             u"Percent",
@@ -1750,6 +2838,26 @@ void NumberFormatterApiTest::roundingFraction() {
             u"0.088",
             u"0.009",
             u"0.0");
+
+    assertFormatSingle(
+            u"Hide If Whole A",
+            u".00/w",
+            u".00/w",
+            NumberFormatter::with().precision(Precision::fixedFraction(2)
+                .trailingZeroDisplay(UNUM_TRAILING_ZERO_HIDE_IF_WHOLE)),
+            Locale::getEnglish(),
+            1.2,
+            "1.20");
+
+    assertFormatSingle(
+            u"Hide If Whole B",
+            u".00/w",
+            u".00/w",
+            NumberFormatter::with().precision(Precision::fixedFraction(2)
+                .trailingZeroDisplay(UNUM_TRAILING_ZERO_HIDE_IF_WHOLE)),
+            Locale::getEnglish(),
+            1,
+            "1");
 }
 
 void NumberFormatterApiTest::roundingFigures() {
@@ -1910,6 +3018,81 @@ void NumberFormatterApiTest::roundingFractionFigures() {
             Locale::getEnglish(),
             0.0999999,
             u"0.10");
+
+    assertFormatDescending(
+            u"FracSig withSignificantDigits RELAXED",
+            u"precision-integer/@#r",
+            u"./@#r",
+            NumberFormatter::with().precision(Precision::maxFraction(0)
+                .withSignificantDigits(1, 2, UNUM_ROUNDING_PRIORITY_RELAXED)),
+            Locale::getEnglish(),
+            u"87,650",
+            u"8,765",
+            u"876",
+            u"88",
+            u"8.8",
+            u"0.88",
+            u"0.088",
+            u"0.0088",
+            u"0");
+
+    assertFormatDescending(
+            u"FracSig withSignificantDigits STRICT",
+            u"precision-integer/@#s",
+            u"./@#",
+            NumberFormatter::with().precision(Precision::maxFraction(0)
+                .withSignificantDigits(1, 2, UNUM_ROUNDING_PRIORITY_STRICT)),
+            Locale::getEnglish(),
+            u"88,000",
+            u"8,800",
+            u"880",
+            u"88",
+            u"9",
+            u"1",
+            u"0",
+            u"0",
+            u"0");
+
+    assertFormatSingle(
+            u"FracSig withSignificantDigits Trailing Zeros RELAXED",
+            u".0/@@@r",
+            u".0/@@@r",
+            NumberFormatter::with().precision(Precision::fixedFraction(1)
+                .withSignificantDigits(3, 3, UNUM_ROUNDING_PRIORITY_RELAXED)),
+            Locale::getEnglish(),
+            1,
+            u"1.00");
+
+    // Trailing zeros are always retained:
+    assertFormatSingle(
+            u"FracSig withSignificantDigits Trailing Zeros STRICT",
+            u".0/@@@s",
+            u".0/@@@s",
+            NumberFormatter::with().precision(Precision::fixedFraction(1)
+                .withSignificantDigits(3, 3, UNUM_ROUNDING_PRIORITY_STRICT)),
+            Locale::getEnglish(),
+            1,
+            u"1.00");
+
+    assertFormatSingle(
+            u"FracSig withSignificantDigits at rounding boundary",
+            u"precision-integer/@@@s",
+            u"./@@@s",
+            NumberFormatter::with().precision(Precision::fixedFraction(0)
+                    .withSignificantDigits(3, 3, UNUM_ROUNDING_PRIORITY_STRICT)),
+            Locale::getEnglish(),
+            9.99,
+            u"10.0");
+
+    assertFormatSingle(
+            u"FracSig with Trailing Zero Display",
+            u".00/@@@*/w",
+            u".00/@@@+/w",
+            NumberFormatter::with().precision(Precision::fixedFraction(2).withMinDigits(3)
+                .trailingZeroDisplay(UNUM_TRAILING_ZERO_HIDE_IF_WHOLE)),
+            Locale::getEnglish(),
+            1,
+            u"1");
 }
 
 void NumberFormatterApiTest::roundingOther() {
@@ -2025,6 +3208,25 @@ void NumberFormatterApiTest::roundingOther() {
             u"CZK 1",
             u"CZK 0",
             u"CZK 0",
+            u"CZK 0");
+
+    assertFormatDescending(
+            u"Currency Standard with Trailing Zero Display",
+            u"currency/CZK precision-currency-standard/w",
+            u"currency/CZK precision-currency-standard/w",
+            NumberFormatter::with().precision(
+                        Precision::currency(UCurrencyUsage::UCURR_USAGE_STANDARD)
+                        .trailingZeroDisplay(UNUM_TRAILING_ZERO_HIDE_IF_WHOLE))
+                    .unit(CZK),
+            Locale::getEnglish(),
+            u"CZK 87,650",
+            u"CZK 8,765",
+            u"CZK 876.50",
+            u"CZK 87.65",
+            u"CZK 8.76",
+            u"CZK 0.88",
+            u"CZK 0.09",
+            u"CZK 0.01",
             u"CZK 0");
 
     assertFormatDescending(
@@ -2985,6 +4187,60 @@ void NumberFormatterApiTest::sign() {
             u"$0.00");
 
     assertFormatSingle(
+            u"Sign Negative Positive",
+            u"sign-negative",
+            u"+-",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_NEGATIVE),
+            Locale::getEnglish(),
+            444444,
+            u"444,444");
+
+    assertFormatSingle(
+            u"Sign Negative Negative",
+            u"sign-negative",
+            u"+-",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_NEGATIVE),
+            Locale::getEnglish(),
+            -444444,
+            u"-444,444");
+
+    assertFormatSingle(
+            u"Sign Negative Negative Zero",
+            u"sign-negative",
+            u"+-",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_NEGATIVE),
+            Locale::getEnglish(),
+            -0.0000001,
+            u"0");
+
+    assertFormatSingle(
+            u"Sign Accounting-Negative Positive",
+            u"currency/USD sign-accounting-negative",
+            u"currency/USD ()-",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_ACCOUNTING_NEGATIVE).unit(USD),
+            Locale::getEnglish(),
+            444444,
+            u"$444,444.00");
+        
+    assertFormatSingle(
+            u"Sign Accounting-Negative Negative",
+            u"currency/USD sign-accounting-negative",
+            u"currency/USD ()-",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_ACCOUNTING_NEGATIVE).unit(USD),
+            Locale::getEnglish(),
+            -444444,
+            "($444,444.00)");
+
+    assertFormatSingle(
+            u"Sign Accounting-Negative Negative Zero",
+            u"currency/USD sign-accounting-negative",
+            u"currency/USD ()-",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_ACCOUNTING_NEGATIVE).unit(USD),
+            Locale::getEnglish(),
+            -0.0000001,
+            u"$0.00");
+
+    assertFormatSingle(
             u"Sign Accounting Negative Hidden",
             u"currency/USD unit-width-hidden sign-accounting",
             u"currency/USD unit-width-hidden ()",
@@ -3073,6 +4329,12 @@ void NumberFormatterApiTest::signNearZero() {
         { UNUM_SIGN_EXCEPT_ZERO, -0.1, u"0" }, // interesting case
         { UNUM_SIGN_EXCEPT_ZERO, -0.9, u"-1" },
         { UNUM_SIGN_EXCEPT_ZERO, -1.1, u"-1" },
+        { UNUM_SIGN_NEGATIVE,  1.1, u"1" },
+        { UNUM_SIGN_NEGATIVE,  0.9, u"1" },
+        { UNUM_SIGN_NEGATIVE,  0.1, u"0" },
+        { UNUM_SIGN_NEGATIVE, -0.1, u"0" }, // interesting case
+        { UNUM_SIGN_NEGATIVE, -0.9, u"-1" },
+        { UNUM_SIGN_NEGATIVE, -1.1, u"-1" },
     };
     for (auto& cas : cases) {
         auto sign = cas.sign;
@@ -3495,12 +4757,34 @@ void NumberFormatterApiTest::fieldPositionCoverage() {
     }
 
     {
-        const char16_t* message = u"Measure unit field position with prefix and suffix";
+        const char16_t* message = u"Measure unit field position with prefix and suffix, composed m/s";
         FormattedNumber result = assertFormatSingle(
                 message,
                 u"measure-unit/length-meter per-measure-unit/duration-second unit-width-full-name",
-                u"unit/meter-per-second unit-width-full-name",
+                u"measure-unit/length-meter per-measure-unit/duration-second unit-width-full-name",
                 NumberFormatter::with().unit(METER).perUnit(SECOND).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+                "ky", // locale with the interesting data
+                68,
+                u"секундасына 68 метр");
+        static const UFieldPosition expectedFieldPositions[] = {
+                // field, begin index, end index
+                {UNUM_MEASURE_UNIT_FIELD, 0, 11},
+                {UNUM_INTEGER_FIELD, 12, 14},
+                {UNUM_MEASURE_UNIT_FIELD, 15, 19}};
+        assertNumberFieldPositions(
+                message,
+                result,
+                expectedFieldPositions,
+                UPRV_LENGTHOF(expectedFieldPositions));
+    }
+
+    {
+        const char16_t* message = u"Measure unit field position with prefix and suffix, built-in m/s";
+        FormattedNumber result = assertFormatSingle(
+                message,
+                u"measure-unit/speed-meter-per-second unit-width-full-name",
+                u"unit/meter-per-second unit-width-full-name",
+                NumberFormatter::with().unit(METER_PER_SECOND).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
                 "ky", // locale with the interesting data
                 68,
                 u"секундасына 68 метр");
@@ -4104,6 +5388,15 @@ void NumberFormatterApiTest::microPropsInternals() {
     assertEquals("Copy Assigned capacity", 4, copyAssigned.mixedMeasures.getCapacity());
 }
 
+/* For skeleton comparisons: this checks the toSkeleton output for `f` and for
+ * `conciseSkeleton` against the normalized version of `uskeleton` - this does
+ * not round-trip uskeleton itself.
+ *
+ * If `conciseSkeleton` starts with a "~", its round-trip check is skipped.
+ *
+ * If `uskeleton` is nullptr, toSkeleton is expected to return an
+ * U_UNSUPPORTED_ERROR.
+ */
 void NumberFormatterApiTest::assertFormatDescending(
         const char16_t* umessage,
         const char16_t* uskeleton,
@@ -4165,6 +5458,15 @@ void NumberFormatterApiTest::assertFormatDescending(
     }
 }
 
+/* For skeleton comparisons: this checks the toSkeleton output for `f` and for
+ * `conciseSkeleton` against the normalized version of `uskeleton` - this does
+ * not round-trip uskeleton itself.
+ *
+ * If `conciseSkeleton` starts with a "~", its round-trip check is skipped.
+ *
+ * If `uskeleton` is nullptr, toSkeleton is expected to return an
+ * U_UNSUPPORTED_ERROR.
+ */
 void NumberFormatterApiTest::assertFormatDescendingBig(
         const char16_t* umessage,
         const char16_t* uskeleton,
@@ -4226,6 +5528,15 @@ void NumberFormatterApiTest::assertFormatDescendingBig(
     }
 }
 
+/* For skeleton comparisons: this checks the toSkeleton output for `f` and for
+ * `conciseSkeleton` against the normalized version of `uskeleton` - this does
+ * not round-trip uskeleton itself.
+ *
+ * If `conciseSkeleton` starts with a "~", its round-trip check is skipped.
+ *
+ * If `uskeleton` is nullptr, toSkeleton is expected to return an
+ * U_UNSUPPORTED_ERROR.
+ */
 FormattedNumber
 NumberFormatterApiTest::assertFormatSingle(
         const char16_t* umessage,

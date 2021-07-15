@@ -269,6 +269,10 @@ public class DecimalQuantityTest extends TestFmwk {
                 q0.toBigDecimal(),
                 q1.toBigDecimal());
 
+        assertEquals("Different long values (" + q0 + ", " + q1 + ")",
+                q0.toLong(true),
+                q1.toLong(true));
+
         q0.roundToInfinity();
         q1.roundToInfinity();
 
@@ -456,8 +460,16 @@ public class DecimalQuantityTest extends TestFmwk {
         assertTrue("One less than max long should fit", quantity.fitsInLong());
         quantity.setToLong(9223372036854775807L);
         assertTrue("Max long should fit", quantity.fitsInLong());
+        assertEquals("Max long should equal toLong", 9223372036854775807L, quantity.toLong(false));
         quantity.setToBigInteger(new BigInteger("9223372036854775808"));
-        assertFalse("One greater than max long long should not fit", quantity.fitsInLong());
+        assertFalse("One greater than max long should not fit", quantity.fitsInLong());
+        assertEquals("toLong(true) should truncate", 223372036854775808L, quantity.toLong(true));
+        try {
+            quantity.toLong(false);
+            fail("One greater than max long is not convertible to long");
+        } catch (ArithmeticException | AssertionError e) {
+            // expected
+        }
         quantity.setToBigInteger(new BigInteger("9223372046854775806"));
         assertFalse("A number between max long and 10^20 should not fit", quantity.fitsInLong());
         quantity.setToBigInteger(new BigInteger("9223372046800000000"));
@@ -609,55 +621,57 @@ public class DecimalQuantityTest extends TestFmwk {
     }
 
     @Test
-    public void testCompactDecimalSuppressedExponent() {
+    public void testScientificAndCompactSuppressedExponent() {
         ULocale locale = new ULocale("fr-FR");
 
         Object[][] casesData = {
-                // unlocalized formatter skeleton, input, string output, long output, double output, BigDecimal output, plain string, suppressed exponent
-                {"",              123456789, "123 456 789",  123456789L, 123456789.0, new BigDecimal("123456789"), "123456789", 0},
-                {"compact-long",  123456789, "123 millions", 123000000L, 123000000.0, new BigDecimal("123000000"), "123000000", 6},
-                {"compact-short", 123456789, "123 M",        123000000L, 123000000.0, new BigDecimal("123000000"), "123000000", 6},
-                {"scientific",    123456789, "1,234568E8",   123456800L, 123456800.0, new BigDecimal("123456800"), "123456800", 8},
+                // unlocalized formatter skeleton, input, string output, long output,
+                // double output, BigDecimal output, plain string,
+                // suppressed scientific exponent, suppressed compact exponent
+                {"",              123456789, "123 456 789",  123456789L, 123456789.0, new BigDecimal("123456789"), "123456789", 0, 0},
+                {"compact-long",  123456789, "123 millions", 123000000L, 123000000.0, new BigDecimal("123000000"), "123000000", 6, 6},
+                {"compact-short", 123456789, "123 M",        123000000L, 123000000.0, new BigDecimal("123000000"), "123000000", 6, 6},
+                {"scientific",    123456789, "1,234568E8",   123456800L, 123456800.0, new BigDecimal("123456800"), "123456800", 8, 8},
 
-                {"",              1234567, "1 234 567",   1234567L, 1234567.0, new BigDecimal("1234567"), "1234567", 0},
-                {"compact-long",  1234567, "1,2 million", 1200000L, 1200000.0, new BigDecimal("1200000"), "1200000", 6},
-                {"compact-short", 1234567, "1,2 M",       1200000L, 1200000.0, new BigDecimal("1200000"), "1200000", 6},
-                {"scientific",    1234567, "1,234567E6",  1234567L, 1234567.0, new BigDecimal("1234567"), "1234567", 6},
+                {"",              1234567, "1 234 567",   1234567L, 1234567.0, new BigDecimal("1234567"), "1234567", 0, 0},
+                {"compact-long",  1234567, "1,2 million", 1200000L, 1200000.0, new BigDecimal("1200000"), "1200000", 6, 6},
+                {"compact-short", 1234567, "1,2 M",       1200000L, 1200000.0, new BigDecimal("1200000"), "1200000", 6, 6},
+                {"scientific",    1234567, "1,234567E6",  1234567L, 1234567.0, new BigDecimal("1234567"), "1234567", 6, 6},
 
-                {"",              123456, "123 456",   123456L, 123456.0, new BigDecimal("123456"), "123456", 0},
-                {"compact-long",  123456, "123 mille", 123000L, 123000.0, new BigDecimal("123000"), "123000", 3},
-                {"compact-short", 123456, "123 k",     123000L, 123000.0, new BigDecimal("123000"), "123000", 3},
-                {"scientific",    123456, "1,23456E5", 123456L, 123456.0, new BigDecimal("123456"), "123456", 5},
+                {"",              123456, "123 456",   123456L, 123456.0, new BigDecimal("123456"), "123456", 0, 0},
+                {"compact-long",  123456, "123 mille", 123000L, 123000.0, new BigDecimal("123000"), "123000", 3, 3},
+                {"compact-short", 123456, "123 k",     123000L, 123000.0, new BigDecimal("123000"), "123000", 3, 3},
+                {"scientific",    123456, "1,23456E5", 123456L, 123456.0, new BigDecimal("123456"), "123456", 5, 5},
 
-                {"",              123, "123",    123L, 123.0, new BigDecimal("123"), "123", 0},
-                {"compact-long",  123, "123",    123L, 123.0, new BigDecimal("123"), "123", 0},
-                {"compact-short", 123, "123",    123L, 123.0, new BigDecimal("123"), "123", 0},
-                {"scientific",    123, "1,23E2", 123L, 123.0, new BigDecimal("123"), "123", 2},
+                {"",              123, "123",    123L, 123.0, new BigDecimal("123"), "123", 0, 0},
+                {"compact-long",  123, "123",    123L, 123.0, new BigDecimal("123"), "123", 0, 0},
+                {"compact-short", 123, "123",    123L, 123.0, new BigDecimal("123"), "123", 0, 0},
+                {"scientific",    123, "1,23E2", 123L, 123.0, new BigDecimal("123"), "123", 2, 2},
 
-                {"",              1.2, "1,2",   1L, 1.2, new BigDecimal("1.2"), "1.2", 0},
-                {"compact-long",  1.2, "1,2",   1L, 1.2, new BigDecimal("1.2"), "1.2", 0},
-                {"compact-short", 1.2, "1,2",   1L, 1.2, new BigDecimal("1.2"), "1.2", 0},
-                {"scientific",    1.2, "1,2E0", 1L, 1.2, new BigDecimal("1.2"), "1.2", 0},
+                {"",              1.2, "1,2",   1L, 1.2, new BigDecimal("1.2"), "1.2", 0, 0},
+                {"compact-long",  1.2, "1,2",   1L, 1.2, new BigDecimal("1.2"), "1.2", 0, 0},
+                {"compact-short", 1.2, "1,2",   1L, 1.2, new BigDecimal("1.2"), "1.2", 0, 0},
+                {"scientific",    1.2, "1,2E0", 1L, 1.2, new BigDecimal("1.2"), "1.2", 0, 0},
 
-                {"",              0.12, "0,12",   0L, 0.12, new BigDecimal("0.12"), "0.12", 0},
-                {"compact-long",  0.12, "0,12",   0L, 0.12, new BigDecimal("0.12"), "0.12", 0},
-                {"compact-short", 0.12, "0,12",   0L, 0.12, new BigDecimal("0.12"), "0.12", 0},
-                {"scientific",    0.12, "1,2E-1", 0L, 0.12, new BigDecimal("0.12"), "0.12", -1},
+                {"",              0.12, "0,12",   0L, 0.12, new BigDecimal("0.12"), "0.12",  0,  0},
+                {"compact-long",  0.12, "0,12",   0L, 0.12, new BigDecimal("0.12"), "0.12",  0,  0},
+                {"compact-short", 0.12, "0,12",   0L, 0.12, new BigDecimal("0.12"), "0.12",  0,  0},
+                {"scientific",    0.12, "1,2E-1", 0L, 0.12, new BigDecimal("0.12"), "0.12", -1, -1},
 
-                {"",              0.012, "0,012",   0L, 0.012, new BigDecimal("0.012"), "0.012", 0},
-                {"compact-long",  0.012, "0,012",   0L, 0.012, new BigDecimal("0.012"), "0.012", 0},
-                {"compact-short", 0.012, "0,012",   0L, 0.012, new BigDecimal("0.012"), "0.012", 0},
-                {"scientific",    0.012, "1,2E-2",  0L, 0.012, new BigDecimal("0.012"), "0.012", -2},
+                {"",              0.012, "0,012",   0L, 0.012, new BigDecimal("0.012"), "0.012",  0,  0},
+                {"compact-long",  0.012, "0,012",   0L, 0.012, new BigDecimal("0.012"), "0.012",  0,  0},
+                {"compact-short", 0.012, "0,012",   0L, 0.012, new BigDecimal("0.012"), "0.012",  0,  0},
+                {"scientific",    0.012, "1,2E-2",  0L, 0.012, new BigDecimal("0.012"), "0.012", -2, -2},
 
-                {"",              999.9, "999,9",     999L,  999.9,  new BigDecimal("999.9"), "999.9", 0},
-                {"compact-long",  999.9, "1 millier", 1000L, 1000.0, new BigDecimal("1000"),  "1000",  3},
-                {"compact-short", 999.9, "1 k",       1000L, 1000.0, new BigDecimal("1000"),  "1000",  3},
-                {"scientific",    999.9, "9,999E2",   999L,  999.9,  new BigDecimal("999.9"), "999.9", 2},
+                {"",              999.9, "999,9",     999L,  999.9,  new BigDecimal("999.9"), "999.9", 0, 0},
+                {"compact-long",  999.9, "mille",     1000L, 1000.0, new BigDecimal("1000"),  "1000",  3, 3},
+                {"compact-short", 999.9, "1 k",       1000L, 1000.0, new BigDecimal("1000"),  "1000",  3, 3},
+                {"scientific",    999.9, "9,999E2",   999L,  999.9,  new BigDecimal("999.9"), "999.9", 2, 2},
 
-                {"",              1000.0, "1 000",     1000L, 1000.0, new BigDecimal("1000"), "1000", 0},
-                {"compact-long",  1000.0, "1 millier", 1000L, 1000.0, new BigDecimal("1000"), "1000", 3},
-                {"compact-short", 1000.0, "1 k",       1000L, 1000.0, new BigDecimal("1000"), "1000", 3},
-                {"scientific",    1000.0, "1E3",       1000L, 1000.0, new BigDecimal("1000"), "1000", 3},
+                {"",              1000.0, "1 000",     1000L, 1000.0, new BigDecimal("1000"), "1000", 0, 0},
+                {"compact-long",  1000.0, "mille",     1000L, 1000.0, new BigDecimal("1000"), "1000", 3, 3},
+                {"compact-short", 1000.0, "1 k",       1000L, 1000.0, new BigDecimal("1000"), "1000", 3, 3},
+                {"scientific",    1000.0, "1E3",       1000L, 1000.0, new BigDecimal("1000"), "1000", 3, 3},
         };
 
         for (Object[] caseDatum : casesData) {
@@ -673,7 +687,8 @@ public class DecimalQuantityTest extends TestFmwk {
             double expectedDouble = (double) caseDatum[4];
             BigDecimal expectedBigDecimal = (BigDecimal) caseDatum[5];
             String expectedPlainString = (String) caseDatum[6];
-            int expectedSuppressedExponent = (int) caseDatum[7];
+            int expectedSuppressedScientificExponent = (int) caseDatum[7];
+            int expectedSuppressedCompactExponent = (int) caseDatum[8];
 
             FormattedNumber fn = formatter.format(input);
             DecimalQuantity_DualStorageBCD dq = (DecimalQuantity_DualStorageBCD)
@@ -683,22 +698,23 @@ public class DecimalQuantityTest extends TestFmwk {
             double actualDouble = dq.toDouble();
             BigDecimal actualBigDecimal = dq.toBigDecimal();
             String actualPlainString = dq.toPlainString();
-            int actualSuppressedExponent = dq.getExponent();
+            int actualSuppressedScientificExponent = dq.getExponent();
+            int actualSuppressedCompactExponent = dq.getExponent();
 
             assertEquals(
                     String.format("formatted number %s toString: %f", skeleton, input),
                     expectedString,
                     actualString);
             assertEquals(
-                    String.format("compact decimal %s toLong: %f", skeleton, input),
+                    String.format("formatted number %s toLong: %f", skeleton, input),
                     expectedLong,
                     actualLong);
             assertDoubleEquals(
-                    String.format("compact decimal %s toDouble: %f", skeleton, input),
+                    String.format("formatted number %s toDouble: %f", skeleton, input),
                     expectedDouble,
                     actualDouble);
             assertBigDecimalEquals(
-                    String.format("compact decimal %s toBigDecimal: %f", skeleton, input),
+                    String.format("formatted number %s toBigDecimal: %f", skeleton, input),
                     expectedBigDecimal,
                     actualBigDecimal);
             assertEquals(
@@ -706,35 +722,45 @@ public class DecimalQuantityTest extends TestFmwk {
                     expectedPlainString,
                     actualPlainString);
             assertEquals(
-                    String.format("compact decimal %s suppressed exponent: %f", skeleton, input),
-                    expectedSuppressedExponent,
-                    actualSuppressedExponent);
+                    String.format("formatted number %s suppressed scientific exponent: %f", skeleton, input),
+                    expectedSuppressedScientificExponent,
+                    actualSuppressedScientificExponent);
+            assertEquals(
+                    String.format("formatted number %s suppressed compact exponent: %f", skeleton, input),
+                    expectedSuppressedCompactExponent,
+                    actualSuppressedCompactExponent);
 
             // test the actual computed values of the plural operands
 
             double expectedNOperand = expectedDouble;
             double expectedIOperand = expectedLong;
-            double expectedEOperand = expectedSuppressedExponent;
+            double expectedEOperand = expectedSuppressedScientificExponent;
+            double expectedCOperand = expectedSuppressedCompactExponent;
             double actualNOperand = dq.getPluralOperand(Operand.n);
             double actualIOperand = dq.getPluralOperand(Operand.i);
             double actualEOperand = dq.getPluralOperand(Operand.e);
+            double actualCOperand = dq.getPluralOperand(Operand.c);
 
             assertEquals(
                     String.format("formatted number %s toString: %s", skeleton, input),
                     expectedString,
                     actualString);
             assertDoubleEquals(
-                    String.format("compact decimal %s n operand: %f", skeleton, input),
+                    String.format("formatted number %s n operand: %f", skeleton, input),
                     expectedNOperand,
                     actualNOperand);
             assertDoubleEquals(
-                    String.format("compact decimal %s i operand: %f", skeleton, input),
+                    String.format("formatted number %s i operand: %f", skeleton, input),
                     expectedIOperand,
                     actualIOperand);
             assertDoubleEquals(
-                    String.format("compact decimal %s e operand: %f", skeleton, input),
+                    String.format("formatted number %s e operand: %f", skeleton, input),
                     expectedEOperand,
                     actualEOperand);
+            assertDoubleEquals(
+                    String.format("formatted number %s c operand: %f", skeleton, input),
+                    expectedCOperand,
+                    actualCOperand);
         }
     }
 
@@ -760,6 +786,7 @@ public class DecimalQuantityTest extends TestFmwk {
         double expectedVOperand = 2;
         double expectedWOperand = 1;
         double expectedEOperand = 3;
+        double expectedCOperand = 3;
         String expectedString = "1,23450 millier";
         double actualNOperand = dq.getPluralOperand(Operand.n);
         double actualIOperand = dq.getPluralOperand(Operand.i);
@@ -768,6 +795,7 @@ public class DecimalQuantityTest extends TestFmwk {
         double actualVOperand = dq.getPluralOperand(Operand.v);
         double actualWOperand = dq.getPluralOperand(Operand.w);
         double actualEOperand = dq.getPluralOperand(Operand.e);
+        double actualCOperand = dq.getPluralOperand(Operand.c);
         String actualString = fn.toString();
 
         assertDoubleEquals(
@@ -798,6 +826,10 @@ public class DecimalQuantityTest extends TestFmwk {
                 String.format("compact decimal fraction e operand: %f", inputVal),
                 expectedEOperand,
                 actualEOperand);
+        assertDoubleEquals(
+                String.format("compact decimal fraction c operand: %f", inputVal),
+                expectedCOperand,
+                actualCOperand);
         assertEquals(
                 String.format("compact decimal fraction toString: %f", inputVal),
                 expectedString,
@@ -815,11 +847,12 @@ public class DecimalQuantityTest extends TestFmwk {
 
         Object[][] casesData = {
                 // input, compact long string output,
-                // compact n operand, compact i operand, compact e operand
-                {123456789, "123 millions", 123000000.0, 123000000.0, 6.0},
-                {1234567,   "1,2 million",  1200000.0,   1200000.0,   6.0},
-                {123456,    "123 mille",    123000.0,    123000.0,    3.0},
-                {123,       "123",          123.0,       123.0,       0.0},
+                // compact n operand, compact i operand, compact e operand,
+                // compact c operand
+                {123456789, "123 millions", 123000000.0, 123000000.0, 6.0, 6.0},
+                {1234567,   "1,2 million",  1200000.0,   1200000.0,   6.0, 6.0},
+                {123456,    "123 mille",    123000.0,    123000.0,    3.0, 3.0},
+                {123,       "123",          123.0,       123.0,       0.0, 0.0},
         };
 
         for (Object[] caseDatum : casesData) {
@@ -828,11 +861,12 @@ public class DecimalQuantityTest extends TestFmwk {
             double expectedNOperand = (double) caseDatum[2];
             double expectedIOperand = (double) caseDatum[3];
             double expectedEOperand = (double) caseDatum[4];
+            double expectedCOperand = (double) caseDatum[5];
 
             FormattedNumber fnCompactScaled = compactScaled.format(input);
             DecimalQuantity_DualStorageBCD dqCompactScaled =
                     (DecimalQuantity_DualStorageBCD) fnCompactScaled.getFixedDecimal();
-            double compactScaledEOperand = dqCompactScaled.getPluralOperand(Operand.e);
+            double compactScaledCOperand = dqCompactScaled.getPluralOperand(Operand.c);
 
             FormattedNumber fnCompact = compactLong.format(input);
             DecimalQuantity_DualStorageBCD dqCompact =
@@ -841,6 +875,7 @@ public class DecimalQuantityTest extends TestFmwk {
             double compactNOperand = dqCompact.getPluralOperand(Operand.n);
             double compactIOperand = dqCompact.getPluralOperand(Operand.i);
             double compactEOperand = dqCompact.getPluralOperand(Operand.e);
+            double compactCOperand = dqCompact.getPluralOperand(Operand.c);
             assertEquals(
                     String.format("formatted number compactLong toString: %s", input),
                     expectedString,
@@ -857,14 +892,18 @@ public class DecimalQuantityTest extends TestFmwk {
                     String.format("compact decimal %d, e operand vs. expected", input),
                     expectedEOperand,
                     compactEOperand);
+            assertDoubleEquals(
+                    String.format("compact decimal %d, c operand vs. expected", input),
+                    expectedCOperand,
+                    compactCOperand);
 
             // By scaling by 10^3 in a locale that has words / compact notation
             // based on powers of 10^3, we guarantee that the suppressed
             // exponent will differ by 3.
             assertDoubleEquals(
-                    String.format("decimal %d, e operand for compact vs. compact scaled", input),
-                    compactEOperand + 3,
-                    compactScaledEOperand);
+                    String.format("decimal %d, c operand for compact vs. compact scaled", input),
+                    compactCOperand + 3,
+                    compactScaledCOperand);
         }
     }
 

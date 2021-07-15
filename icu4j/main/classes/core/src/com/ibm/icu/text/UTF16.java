@@ -2416,7 +2416,7 @@ public final class UTF16 {
          * Sets the Comparator to case-insensitive comparison mode if argument is true, otherwise
          * case sensitive comparison mode if set to false.
          *
-         * @param ignorecase True for case-insitive comparison, false for case sensitive comparison
+         * @param ignorecase True for case-insensitive comparison, false for case sensitive comparison
          * @param foldcaseoption FOLD_CASE_DEFAULT or FOLD_CASE_EXCLUDE_SPECIAL_I. This option is used only
          *            when ignorecase is set to true. If ignorecase is false, this option is
          *            ignored.

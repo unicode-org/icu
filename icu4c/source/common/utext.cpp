@@ -382,7 +382,7 @@ utext_previous32From(UText *ut, int64_t index) {
     //
     UChar32     cPrev;    // The character preceding cCurr, which is what we will return.
 
-    // Address the chunk containg the position preceding the incoming index
+    // Address the chunk containing the position preceding the incoming index
     // A tricky edge case:
     //   We try to test the requested native index against the chunkNativeStart to determine
     //    whether the character preceding the one at the index is in the current chunk.
@@ -689,7 +689,7 @@ utext_close(UText *ut) {
     }
 
     // Zero out function table of the closed UText.  This is a defensive move,
-    //   inteded to cause applications that inadvertantly use a closed
+    //   intended to cause applications that inadvertently use a closed
     //   utext to crash with null pointer errors.
     ut->pFuncs        = NULL;
 
@@ -894,7 +894,7 @@ struct UTF8Buf {
                                                      //    one for a supplementary starting in the last normal position,
                                                      //    and one for an entry for the buffer limit position.
     uint8_t   mapToUChars[UTF8_TEXT_CHUNK_SIZE*3+6]; // Map native offset from bufNativeStart to
-                                                     //   correspoding offset in filled part of buf.
+                                                     //   corresponding offset in filled part of buf.
     int32_t   align;
 };
 
@@ -1046,7 +1046,7 @@ utf8TextAccess(UText *ut, int64_t index, UBool forward) {
 
     //
     // Dispatch to the appropriate action for a
-    //   Backwards Diretion iteration request.
+    //   Backwards Direction iteration request.
     //
     if (ix==ut->chunkNativeStart) {
         // Check for normal sequential iteration cases first.
@@ -1545,7 +1545,7 @@ utf8TextMapOffsetToNative(const UText *ut) {
 }
 
 //
-// Map a native index to the corrsponding chunk offset
+// Map a native index to the corresponding chunk offset
 //
 static int32_t U_CALLCONV
 utf8TextMapIndexToUTF16(const UText *ut, int64_t index64) {
@@ -2394,9 +2394,9 @@ ucstrTextClose(UText *ut) {
 static int64_t U_CALLCONV
 ucstrTextLength(UText *ut) {
     if (ut->a < 0) {
-        // null terminated, we don't yet know the length.  Scan for it.
+        // null terminated, we don't yet know the length. Scan for it.
         //    Access is not convenient for doing this
-        //    because the current interation postion can't be changed.
+        //    because the current iteration position can't be changed.
         const UChar  *str = (const UChar *)ut->context;
         for (;;) {
             if (str[ut->chunkNativeLimit] == 0) {

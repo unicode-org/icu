@@ -82,6 +82,7 @@
     <ClCompile Include="regiontst.cpp" />
     <ClCompile Include="ucharstrietest.cpp" />
     <ClCompile Include="itrbbi.cpp" />
+    <ClCompile Include="lstmbetst.cpp" />
     <ClCompile Include="rbbiapts.cpp">
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
     </ClCompile>

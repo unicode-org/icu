@@ -1353,7 +1353,7 @@ static const struct {
 
 #if !UCONFIG_NO_BREAK_ITERATION
     {"char",                     "brk", ubrk_swap},
-    {"thaidict",                 "dict",udict_swap},
+    {"laodict",                  "dict",udict_swap},
 #endif
 
 #if 0

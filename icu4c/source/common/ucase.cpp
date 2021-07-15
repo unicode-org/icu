@@ -351,7 +351,7 @@ strcmpMax(const UChar *s, int32_t length, const UChar *t, int32_t max) {
     if(max==0 || *t==0) {
         return 0; /* equal to length of both strings */
     } else {
-        return -max; /* return lengh difference */
+        return -max; /* return length difference */
     }
 }
 
@@ -681,7 +681,7 @@ ucase_isCaseSensitive(UChar32 c) {
  *   - In [CoreProps], C has one of the properties Uppercase, or Lowercase
  *   - Given D = NFD(C), then it is not the case that:
  *     D = UCD_lower(D) = UCD_upper(D) = UCD_title(D)
- *     (This third criterium does not add any characters to the list
+ *     (This third criterion does not add any characters to the list
  *      for Unicode 3.2. Ignored.)
  *
  * D2. A character C is defined to be case-ignorable

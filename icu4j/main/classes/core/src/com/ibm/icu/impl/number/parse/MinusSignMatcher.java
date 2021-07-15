@@ -2,8 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number.parse;
 
-import static com.ibm.icu.impl.number.parse.ParsingUtils.safeContains;
-
 import com.ibm.icu.impl.StaticUnicodeSets;
 import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -19,7 +17,7 @@ public class MinusSignMatcher extends SymbolMatcher {
 
     public static MinusSignMatcher getInstance(DecimalFormatSymbols symbols, boolean allowTrailing) {
         String symbolString = symbols.getMinusSignString();
-        if (safeContains(DEFAULT.uniSet, symbolString)) {
+        if (DEFAULT.uniSet.contains(symbolString)) {
             return allowTrailing ? DEFAULT_ALLOW_TRAILING : DEFAULT;
         } else {
             return new MinusSignMatcher(symbolString, allowTrailing);

@@ -138,7 +138,7 @@ pl_getFontRunLimit(const pl_fontRuns *fontRuns,
                    le_int32 run);
 
 /**
- * Get the <code>le_font</code> object assoicated with the given run
+ * Get the <code>le_font</code> object associated with the given run
  * of text. Use <code>pl_getFontRunLimit(run)</code> to get the corresponding
  * limit index.
  *
@@ -271,7 +271,7 @@ pl_getValueRunLimit(const pl_valueRuns *valueRuns,
                      le_int32 run);
 
 /**
- * Get the value assoicated with the given run * of text. Use
+ * Get the value associated with the given run * of text. Use
  * <code>pl_getValueRunLimit(run)</code> to get the corresponding
  * limit index.
  *
@@ -403,7 +403,7 @@ pl_getLocaleRunLimit(const pl_localeRuns *localeRuns,
                      le_int32 run);
 
 /**
- * Get the <code>le_font</code> object assoicated with the given run
+ * Get the <code>le_font</code> object associated with the given run
  * of text. Use <code>pl_getLocaleRunLimit(run)</code> to get the corresponding
  * limit index.
  *

@@ -327,7 +327,7 @@ public:
     const TimeZoneNames* getTimeZoneNames() const;
 
     /**
-     * Sets the time zone display name data to this format instnace.
+     * Sets the time zone display name data to this format instance.
      * The caller should not delete the TimeZoenNames object after it is adopted
      * by this call.
      * @param tznames TimeZoneNames object to be adopted.
@@ -336,7 +336,7 @@ public:
     void adoptTimeZoneNames(TimeZoneNames *tznames);
 
     /**
-     * Sets the time zone display name data to this format instnace.
+     * Sets the time zone display name data to this format instance.
      * @param tznames TimeZoneNames object to be set.
      * @stable ICU 50
      */

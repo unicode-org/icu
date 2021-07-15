@@ -23,7 +23,7 @@
              with Ant, this is messier than it should be. All we are saying here is:
              "Use the property if explicitly set, otherwise use the environment variable."
              We cannot just set the property to the environment variable, since expansion
-             fails for non existant properties, and you are left with a literal value of
+             fails for non existent properties, and you are left with a literal value of
              "${env.CLDR_DIR}". -->
         <condition property="cldrDir" value="${env.CLDR_DIR}">
             <isset property="env.CLDR_DIR"/>

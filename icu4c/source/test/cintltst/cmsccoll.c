@@ -3522,7 +3522,7 @@ TestJ5223(void)
   ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_PRIMARY, &status);
   ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
   if (U_FAILURE(status)) {
-    log_err("Failed setting atributes\n");
+    log_err("Failed setting attributes\n");
     return;
   }
   sortkey_length = ucol_getSortKey(coll, ustr, ustr_length, NULL, 0);
@@ -4007,7 +4007,7 @@ TestOutOfBuffer5468(void)
     ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_PRIMARY, &status);
     ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
     if (U_FAILURE(status)) {
-      log_err("Failed setting atributes\n");
+      log_err("Failed setting attributes\n");
       return;
     }
 

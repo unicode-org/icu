@@ -26,6 +26,14 @@
 
 /* miscellaneous definitions ---------------------------------------------- */
 
+// ICU-20853=ICU-20935 Solaris #defines CS and ES in sys/regset.h
+#ifdef CS
+#   undef CS
+#endif
+#ifdef ES
+#   undef ES
+#endif
+
 typedef uint8_t DirProp;
 typedef uint32_t Flags;
 

@@ -41,6 +41,7 @@ void TestGetWindowsTimeZoneID(void);
 void TestGetTimeZoneIDByWindowsID(void);
 void TestJpnCalAddSetNextEra(void);
 void TestUcalOpenBufferRead(void);
+void TestGetTimeZoneOffsetFromLocal(void);
 
 void addCalTest(TestNode** root);
 
@@ -65,6 +66,7 @@ void addCalTest(TestNode** root)
     addTest(root, &TestGetTimeZoneIDByWindowsID, "tsformat/ccaltst/TestGetTimeZoneIDByWindowsID");
     addTest(root, &TestJpnCalAddSetNextEra, "tsformat/ccaltst/TestJpnCalAddSetNextEra");
     addTest(root, &TestUcalOpenBufferRead, "tsformat/ccaltst/TestUcalOpenBufferRead");
+    addTest(root, &TestGetTimeZoneOffsetFromLocal, "tsformat/ccaltst/TestGetTimeZoneOffsetFromLocal");
 }
 
 /* "GMT" */
@@ -1027,7 +1029,7 @@ static void TestAddRollExtensive()
     checkDate(cal, y, m, d);
     ucal_roll(cal, (UCalendarDateFields)-1, 10, &status);
     if(status==U_ILLEGAL_ARGUMENT_ERROR)
-        log_verbose("Pass: illegal arguement error as expected\n");
+        log_verbose("Pass: illegal argument error as expected\n");
     else{
         log_err("Fail: no illegal argument error got..: %s\n", u_errorName(status));
         return;
@@ -2550,6 +2552,222 @@ void TestUcalOpenBufferRead() {
     // string length: 157 + 1 + 100 = 258
     const char *localeID = "x-privatebutreallylongtagfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobar-foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoorbarfoobarfoo";
     UCalendar *cal = ucal_open(NULL, 0, localeID, UCAL_GREGORIAN, &status);
+    ucal_close(cal);
+}
+
+
+/*
+ * Testing ucal_getTimeZoneOffsetFromLocal
+ */
+void
+TestGetTimeZoneOffsetFromLocal() {
+    static const UChar utc[] = u"Etc/GMT";
+
+    const int32_t HOUR = 60*60*1000;
+    const int32_t MINUTE = 60*1000;
+
+    const int32_t DATES[][6] = {
+        {2006, UCAL_APRIL, 2, 1, 30, 1*HOUR+30*MINUTE},
+        {2006, UCAL_APRIL, 2, 2, 00, 2*HOUR},
+        {2006, UCAL_APRIL, 2, 2, 30, 2*HOUR+30*MINUTE},
+        {2006, UCAL_APRIL, 2, 3, 00, 3*HOUR},
+        {2006, UCAL_APRIL, 2, 3, 30, 3*HOUR+30*MINUTE},
+        {2006, UCAL_OCTOBER, 29, 0, 30, 0*HOUR+30*MINUTE},
+        {2006, UCAL_OCTOBER, 29, 1, 00, 1*HOUR},
+        {2006, UCAL_OCTOBER, 29, 1, 30, 1*HOUR+30*MINUTE},
+        {2006, UCAL_OCTOBER, 29, 2, 00, 2*HOUR},
+        {2006, UCAL_OCTOBER, 29, 2, 30, 2*HOUR+30*MINUTE},
+    };
+
+    // Expected offsets by
+    // void U_ucal_getTimeZoneOffsetFromLocal(
+    //   const UCalendar* cal,
+    //   UTimeZoneLocalOption nonExistingTimeOpt,
+    //   UTimeZoneLocalOption duplicatedTimeOpt,
+    //   int32_t* rawOffset, int32_t* dstOffset, UErrorCode* status);
+    // with nonExistingTimeOpt=UCAL_TZ_LOCAL_STANDARD and
+    // duplicatedTimeOpt=UCAL_TZ_LOCAL_STANDARD
+    const int32_t OFFSETS2[][2] = {
+        // April 2, 2006
+        {-8*HOUR, 0},
+        {-8*HOUR, 0},
+        {-8*HOUR, 0},
+        {-8*HOUR, 1*HOUR},
+        {-8*HOUR, 1*HOUR},
+
+        // Oct 29, 2006
+        {-8*HOUR, 1*HOUR},
+        {-8*HOUR, 0},
+        {-8*HOUR, 0},
+        {-8*HOUR, 0},
+        {-8*HOUR, 0},
+    };
+
+    // Expected offsets by
+    // void U_ucal_getTimeZoneOffsetFromLocal(
+    //   const UCalendar* cal,
+    //   UTimeZoneLocalOption nonExistingTimeOpt,
+    //   UTimeZoneLocalOption duplicatedTimeOpt,
+    //   int32_t* rawOffset, int32_t* dstOffset, UErrorCode* status);
+    // with nonExistingTimeOpt=UCAL_TZ_LOCAL_DAYLIGHT and
+    // duplicatedTimeOpt=UCAL_TZ_LOCAL_DAYLIGHT
+    const int32_t OFFSETS3[][2] = {
+        // April 2, 2006
+        {-8*HOUR, 0},
+        {-8*HOUR, 1*HOUR},
+        {-8*HOUR, 1*HOUR},
+        {-8*HOUR, 1*HOUR},
+        {-8*HOUR, 1*HOUR},
+
+        // October 29, 2006
+        {-8*HOUR, 1*HOUR},
+        {-8*HOUR, 1*HOUR},
+        {-8*HOUR, 1*HOUR},
+        {-8*HOUR, 0},
+        {-8*HOUR, 0},
+    };
+
+    UErrorCode status = U_ZERO_ERROR;
+
+    int32_t rawOffset, dstOffset;
+    UCalendar *cal = ucal_open(utc, -1, "en", UCAL_GREGORIAN, &status);
+    if (U_FAILURE(status)) {
+        log_data_err("ucal_open: %s", u_errorName(status));
+        return;
+    }
+
+    // Calculate millis
+    UDate MILLIS[UPRV_LENGTHOF(DATES)];
+    for (int32_t i = 0; i < UPRV_LENGTHOF(DATES); i++) {
+        ucal_setDateTime(cal, DATES[i][0], DATES[i][1], DATES[i][2],
+                         DATES[i][3], DATES[i][4], 0, &status);
+        MILLIS[i] = ucal_getMillis(cal, &status);
+        if (U_FAILURE(status)) {
+            log_data_err("ucal_getMillis failed");
+            return;
+        }
+    }
+    ucal_setTimeZone(cal, AMERICA_LOS_ANGELES, -1, &status);
+
+    // Test void ucal_getTimeZoneOffsetFromLocal(
+    // const UCalendar* cal,
+    // UTimeZoneLocalOption nonExistingTimeOpt,
+    // UTimeZoneLocalOption duplicatedTimeOpt,
+    // int32_t* rawOffset, int32_t* dstOffset, UErrorCode* status);
+    // with nonExistingTimeOpt=UCAL_TZ_LOCAL_STANDARD and
+    // duplicatedTimeOpt=UCAL_TZ_LOCAL_STANDARD
+    for (int m = 0; m < UPRV_LENGTHOF(DATES); m++) {
+        status = U_ZERO_ERROR;
+        ucal_setMillis(cal, MILLIS[m], &status);
+        if (U_FAILURE(status)) {
+            log_data_err("ucal_setMillis: %s\n", u_errorName(status));
+        }
+
+        ucal_getTimeZoneOffsetFromLocal(cal, UCAL_TZ_LOCAL_STANDARD_FORMER, UCAL_TZ_LOCAL_STANDARD_LATTER,
+            &rawOffset, &dstOffset, &status);
+        if (U_FAILURE(status)) {
+            log_err("ERROR: ucal_getTimeZoneOffsetFromLocal((%d-%d-%d %d:%d:0),"
+                    "UCAL_TZ_LOCAL_STANDARD_FORMER, UCAL_TZ_LOCAL_STANDARD_LATTER: %s\n",
+                    DATES[m][0], DATES[m][1], DATES[m][2], DATES[m][3], DATES[m][4],
+                    u_errorName(status));
+        } else if (rawOffset != OFFSETS2[m][0] || dstOffset != OFFSETS2[m][1]) {
+            log_err("Bad offset returned at (%d-%d-%d %d:%d:0) "
+                    "(wall/UCAL_TZ_LOCAL_STANDARD_FORMER/UCAL_TZ_LOCAL_STANDARD_LATTER) \n- Got: %d / %d "
+                    " Expected %d / %d\n",
+                    DATES[m][0], DATES[m][1], DATES[m][2], DATES[m][3], DATES[m][4],
+                    rawOffset, dstOffset, OFFSETS2[m][0], OFFSETS2[m][1]);
+        }
+    }
+
+    // Test void ucal_getTimeZoneOffsetFromLocal(
+    // const UCalendar* cal,
+    // UTimeZoneLocalOption nonExistingTimeOpt,
+    // UTimeZoneLocalOption duplicatedTimeOpt,
+    // int32_t* rawOffset, int32_t* dstOffset, UErrorCode* status);
+    // with nonExistingTimeOpt=UCAL_TZ_LOCAL_DAYLIGHT and
+    // duplicatedTimeOpt=UCAL_TZ_LOCAL_DAYLIGHT
+    for (int m = 0; m < UPRV_LENGTHOF(DATES); m++) {
+        status = U_ZERO_ERROR;
+        ucal_setMillis(cal, MILLIS[m], &status);
+        if (U_FAILURE(status)) {
+            log_data_err("ucal_setMillis: %s\n", u_errorName(status));
+        }
+
+        ucal_getTimeZoneOffsetFromLocal(cal, UCAL_TZ_LOCAL_DAYLIGHT_LATTER, UCAL_TZ_LOCAL_DAYLIGHT_FORMER,
+            &rawOffset, &dstOffset, &status);
+        if (U_FAILURE(status)) {
+            log_err("ERROR: ucal_getTimeZoneOffsetFromLocal((%d-%d-%d %d:%d:0),"
+                    "UCAL_TZ_LOCAL_DAYLIGHT_LATTER, UCAL_TZ_LOCAL_DAYLIGHT_FORMER: %s\n",
+                    DATES[m][0], DATES[m][1], DATES[m][2], DATES[m][3], DATES[m][4],
+                    u_errorName(status));
+        } else if (rawOffset != OFFSETS3[m][0] || dstOffset != OFFSETS3[m][1]) {
+            log_err("Bad offset returned at (%d-%d-%d %d:%d:0) "
+                    "(wall/UCAL_TZ_LOCAL_DAYLIGHT_LATTER/UCAL_TZ_LOCAL_DAYLIGHT_FORMER) \n- Got: %d / %d "
+                    " Expected %d / %d\n",
+                    DATES[m][0], DATES[m][1], DATES[m][2], DATES[m][3], DATES[m][4],
+                    rawOffset, dstOffset, OFFSETS3[m][0], OFFSETS3[m][1]);
+        }
+    }
+
+    // Test void ucal_getTimeZoneOffsetFromLocal(
+    // const UCalendar* cal,
+    // UTimeZoneLocalOption nonExistingTimeOpt,
+    // UTimeZoneLocalOption duplicatedTimeOpt,
+    // int32_t* rawOffset, int32_t* dstOffset, UErrorCode* status);
+    // with nonExistingTimeOpt=UCAL_TZ_LOCAL_FORMER and
+    // duplicatedTimeOpt=UCAL_TZ_LOCAL_LATTER
+    for (int m = 0; m < UPRV_LENGTHOF(DATES); m++) {
+        status = U_ZERO_ERROR;
+        ucal_setMillis(cal, MILLIS[m], &status);
+        if (U_FAILURE(status)) {
+            log_data_err("ucal_setMillis: %s\n", u_errorName(status));
+        }
+
+        ucal_getTimeZoneOffsetFromLocal(cal, UCAL_TZ_LOCAL_FORMER, UCAL_TZ_LOCAL_LATTER,
+            &rawOffset, &dstOffset, &status);
+        if (U_FAILURE(status)) {
+            log_err("ERROR: ucal_getTimeZoneOffsetFromLocal((%d-%d-%d %d:%d:0),"
+                    "UCAL_TZ_LOCAL_FORMER, UCAL_TZ_LOCAL_LATTER: %s\n",
+                    DATES[m][0], DATES[m][1], DATES[m][2], DATES[m][3], DATES[m][4],
+                    u_errorName(status));
+        } else if (rawOffset != OFFSETS2[m][0] || dstOffset != OFFSETS2[m][1]) {
+            log_err("Bad offset returned at (%d-%d-%d %d:%d:0) "
+                    "(wall/UCAL_TZ_LOCAL_FORMER/UCAL_TZ_LOCAL_LATTER) \n- Got: %d / %d "
+                    " Expected %d / %d\n",
+                    DATES[m][0], DATES[m][1], DATES[m][2], DATES[m][3], DATES[m][4],
+                    rawOffset, dstOffset, OFFSETS2[m][0], OFFSETS2[m][1]);
+        }
+    }
+
+    // Test void ucal_getTimeZoneOffsetFromLocal(
+    // const UCalendar* cal,
+    // UTimeZoneLocalOption nonExistingTimeOpt,
+    // UTimeZoneLocalOption duplicatedTimeOpt,
+    // int32_t* rawOffset, int32_t* dstOffset, UErrorCode* status);
+    // with nonExistingTimeOpt=UCAL_TZ_LOCAL_LATTER and
+    // duplicatedTimeOpt=UCAL_TZ_LOCAL_FORMER
+    for (int m = 0; m < UPRV_LENGTHOF(DATES); m++) {
+        status = U_ZERO_ERROR;
+        ucal_setMillis(cal, MILLIS[m], &status);
+        if (U_FAILURE(status)) {
+            log_data_err("ucal_setMillis: %s\n", u_errorName(status));
+        }
+
+        ucal_getTimeZoneOffsetFromLocal(cal, UCAL_TZ_LOCAL_LATTER, UCAL_TZ_LOCAL_FORMER,
+            &rawOffset, &dstOffset, &status);
+        if (U_FAILURE(status)) {
+            log_err("ERROR: ucal_getTimeZoneOffsetFromLocal((%d-%d-%d %d:%d:0),"
+                    "UCAL_TZ_LOCAL_LATTER, UCAL_TZ_LOCAL_FORMER: %s\n",
+                    DATES[m][0], DATES[m][1], DATES[m][2], DATES[m][3], DATES[m][4],
+                    u_errorName(status));
+        } else if (rawOffset != OFFSETS3[m][0] || dstOffset != OFFSETS3[m][1]) {
+            log_err("Bad offset returned at (%d-%d-%d %d:%d:0) "
+                    "(wall/UCAL_TZ_LOCAL_LATTER/UCAL_TZ_LOCAL_FORMER) \n- Got: %d / %d "
+                    " Expected %d / %d\n",
+                    DATES[m][0], DATES[m][1], DATES[m][2], DATES[m][3], DATES[m][4],
+                    rawOffset, dstOffset, OFFSETS3[m][0], OFFSETS3[m][1]);
+        }
+    }
     ucal_close(cal);
 }
 

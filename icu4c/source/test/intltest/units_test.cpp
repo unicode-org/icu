@@ -16,6 +16,7 @@
 #include "putilimp.h"
 #include "unicode/ctest.h"
 #include "unicode/measunit.h"
+#include "unicode/measure.h"
 #include "unicode/unistr.h"
 #include "unicode/unum.h"
 #include "unicode/ures.h"
@@ -43,15 +44,13 @@ class UnitsTest : public IntlTest {
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL);
 
     void testUnitConstantFreshness();
-    void testConversionCapability();
-    void testConversions();
+    void testExtractConvertibility();
+    void testConversionInfo();
+    void testConverterWithCLDRTests();
     void testComplexUnitsConverter();
-    void testComplexUnitConverterSorting();
-    void testPreferences();
-    void testSiPrefixes();
-    void testMass();
-    void testTemperature();
-    void testArea();
+    void testComplexUnitsConverterSorting();
+    void testUnitPreferencesWithCLDRTests();
+    void testConverter();
 };
 
 extern IntlTest *createUnitsTest() { return new UnitsTest(); }
@@ -62,15 +61,13 @@ void UnitsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     }
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testUnitConstantFreshness);
-    TESTCASE_AUTO(testConversionCapability);
-    TESTCASE_AUTO(testConversions);
+    TESTCASE_AUTO(testExtractConvertibility);
+    TESTCASE_AUTO(testConversionInfo);
+    TESTCASE_AUTO(testConverterWithCLDRTests);
     TESTCASE_AUTO(testComplexUnitsConverter);
-    TESTCASE_AUTO(testComplexUnitConverterSorting);
-    TESTCASE_AUTO(testPreferences);
-    TESTCASE_AUTO(testSiPrefixes);
-    TESTCASE_AUTO(testMass);
-    TESTCASE_AUTO(testTemperature);
-    TESTCASE_AUTO(testArea);
+    TESTCASE_AUTO(testComplexUnitsConverterSorting);
+    TESTCASE_AUTO(testUnitPreferencesWithCLDRTests);
+    TESTCASE_AUTO(testConverter);
     TESTCASE_AUTO_END;
 }
 
@@ -92,7 +89,8 @@ void UnitsTest::testUnitConstantFreshness() {
         if (status.errDataIfFailureAndReset(
                 "addSingleFactorConstant(<%s>, ...).\n\n"
                 "If U_INVALID_FORMAT_ERROR, please check that \"icu4c/source/i18n/units_converter.cpp\" "
-                "has all constants? Is \"%s\" a new constant?\n",
+                "has all constants? Is \"%s\" a new constant?\n"
+                "See docs/processes/release/tasks/updating-measure-unit.md for more information.\n",
                 constant, constant)) {
             continue;
         }
@@ -122,7 +120,9 @@ void UnitsTest::testUnitConstantFreshness() {
     }
 }
 
-void UnitsTest::testConversionCapability() {
+void UnitsTest::testExtractConvertibility() {
+    IcuTestErrorCode status(*this, "UnitsTest::testExtractConvertibility");
+
     struct TestCase {
         const char *const source;
         const char *const target;
@@ -137,16 +137,37 @@ void UnitsTest::testConversionCapability() {
         {"square-hectare", "pow4-foot", CONVERTIBLE},                                //
         {"square-kilometer-per-second", "second-per-square-meter", RECIPROCAL},      //
         {"cubic-kilometer-per-second-meter", "second-per-square-meter", RECIPROCAL}, //
+        {"square-meter-per-square-hour", "hectare-per-square-second", CONVERTIBLE},  //
+        {"hertz", "revolution-per-second", CONVERTIBLE},                             //
+        {"millimeter", "meter", CONVERTIBLE},                                        //
+        {"yard", "meter", CONVERTIBLE},                                              //
+        {"ounce-troy", "kilogram", CONVERTIBLE},                                     //
+        {"percent", "portion", CONVERTIBLE},                                         //
+        {"ofhg", "kilogram-per-square-meter-square-second", CONVERTIBLE},            //
+        {"second-per-meter", "meter-per-second", RECIPROCAL},                        //
     };
 
     for (const auto &testCase : testCases) {
-        UErrorCode status = U_ZERO_ERROR;
-
         MeasureUnitImpl source = MeasureUnitImpl::forIdentifier(testCase.source, status);
+        if (status.errIfFailureAndReset("source MeasureUnitImpl::forIdentifier(\"%s\", ...)",
+                                        testCase.source)) {
+            continue;
+        }
         MeasureUnitImpl target = MeasureUnitImpl::forIdentifier(testCase.target, status);
+        if (status.errIfFailureAndReset("target MeasureUnitImpl::forIdentifier(\"%s\", ...)",
+                                        testCase.target)) {
+            continue;
+        }
 
         ConversionRates conversionRates(status);
+        if (status.errIfFailureAndReset("conversionRates(status)")) {
+            continue;
+        }
         auto convertibility = extractConvertibility(source, target, conversionRates, status);
+        if (status.errIfFailureAndReset("extractConvertibility(<%s>, <%s>, ...)", testCase.source,
+                                        testCase.target)) {
+            continue;
+        }
 
         assertEquals(UnicodeString("Conversion Capability: ") + testCase.source + " to " +
                          testCase.target,
@@ -154,43 +175,96 @@ void UnitsTest::testConversionCapability() {
     }
 }
 
-void UnitsTest::testSiPrefixes() {
-    IcuTestErrorCode status(*this, "Units testSiPrefixes");
+void UnitsTest::testConversionInfo() {
+    IcuTestErrorCode status(*this, "UnitsTest::testExtractConvertibility");
     // Test Cases
     struct TestCase {
         const char *source;
         const char *target;
-        const double inputValue;
-        const double expectedValue;
+        const ConversionInfo expectedConversionInfo;
     } testCases[]{
-        {"gram", "kilogram", 1.0, 0.001},            //
-        {"milligram", "kilogram", 1.0, 0.000001},    //
-        {"microgram", "kilogram", 1.0, 0.000000001}, //
-        {"megagram", "gram", 1.0, 1000000},          //
-        {"megagram", "kilogram", 1.0, 1000},         //
-        {"gigabyte", "byte", 1.0, 1000000000},       //
-        // TODO: Fix `watt` probelms.
-        // {"megawatt", "watt", 1.0, 1000000},          //
-        // {"megawatt", "kilowatt", 1.0, 1000},         //
+        {
+            "meter",
+            "meter",
+            {1.0, 0, false},
+        },
+        {
+            "meter",
+            "foot",
+            {3.28084, 0, false},
+        },
+        {
+            "foot",
+            "meter",
+            {0.3048, 0, false},
+        },
+        {
+            "celsius",
+            "kelvin",
+            {1, 273.15, false},
+        },
+        {
+            "fahrenheit",
+            "kelvin",
+            {5.0 / 9.0, 255.372, false},
+        },
+        {
+            "fahrenheit",
+            "celsius",
+            {5.0 / 9.0, -17.7777777778, false},
+        },
+        {
+            "celsius",
+            "fahrenheit",
+            {9.0 / 5.0, 32, false},
+        },
+        {
+            "fahrenheit",
+            "fahrenheit",
+            {1.0, 0, false},
+        },
+        {
+            "mile-per-gallon",
+            "liter-per-100-kilometer",
+            {0.00425143707, 0, true},
+        },
     };
 
+    ConversionRates rates(status);
     for (const auto &testCase : testCases) {
-        UErrorCode status = U_ZERO_ERROR;
+        auto sourceImpl = MeasureUnitImpl::forIdentifier(testCase.source, status);
+        auto targetImpl = MeasureUnitImpl::forIdentifier(testCase.target, status);
+        UnitsConverter unitsConverter(sourceImpl, targetImpl, rates, status);
 
-        MeasureUnitImpl source = MeasureUnitImpl::forIdentifier(testCase.source, status);
-        MeasureUnitImpl target = MeasureUnitImpl::forIdentifier(testCase.target, status);
+        if (status.errIfFailureAndReset()) {
+            continue;
+        }
 
-        ConversionRates conversionRates(status);
-        UnitConverter converter(source, target, conversionRates, status);
+        ConversionInfo actualConversionInfo = unitsConverter.getConversionInfo();
+        UnicodeString message =
+            UnicodeString("testConverter: ") + testCase.source + " to " + testCase.target;
 
-        assertEqualsNear(UnicodeString("testSiPrefixes: ") + testCase.source + " to " + testCase.target,
-                         testCase.expectedValue, converter.convert(testCase.inputValue),
-                         0.0001 * testCase.expectedValue);
+        double maxDelta = 1e-6 * uprv_fabs(testCase.expectedConversionInfo.conversionRate);
+        if (testCase.expectedConversionInfo.conversionRate == 0) {
+            maxDelta = 1e-12;
+        }
+        assertEqualsNear(message + ", conversion rate: ", testCase.expectedConversionInfo.conversionRate,
+                         actualConversionInfo.conversionRate, maxDelta);
+
+        maxDelta = 1e-6 * uprv_fabs(testCase.expectedConversionInfo.offset);
+        if (testCase.expectedConversionInfo.offset == 0) {
+            maxDelta = 1e-12;
+        }
+        assertEqualsNear(message + ", offset: ", testCase.expectedConversionInfo.offset, actualConversionInfo.offset,
+                         maxDelta);
+
+        assertEquals(message + ", reciprocal: ", testCase.expectedConversionInfo.reciprocal,
+                     actualConversionInfo.reciprocal);
     }
 }
 
-void UnitsTest::testMass() {
-    IcuTestErrorCode status(*this, "Units testMass");
+void UnitsTest::testConverter() {
+    IcuTestErrorCode status(*this, "UnitsTest::testConverter");
 
     // Test Cases
     struct TestCase {
@@ -199,100 +273,120 @@ void UnitsTest::testMass() {
         const double inputValue;
         const double expectedValue;
     } testCases[]{
-        {"gram", "kilogram", 1.0, 0.001},      //
-        {"pound", "kilogram", 1.0, 0.453592},  //
-        {"pound", "kilogram", 2.0, 0.907185},  //
-        {"ounce", "pound", 16.0, 1.0},         //
-        {"ounce", "kilogram", 16.0, 0.453592}, //
-        {"ton", "pound", 1.0, 2000},           //
-        {"stone", "pound", 1.0, 14},           //
-        {"stone", "kilogram", 1.0, 6.35029}    //
+        // SI Prefixes
+        {"gram", "kilogram", 1.0, 0.001},
+        {"milligram", "kilogram", 1.0, 0.000001},
+        {"microgram", "kilogram", 1.0, 0.000000001},
+        {"megagram", "gram", 1.0, 1000000},
+        {"megagram", "kilogram", 1.0, 1000},
+        {"gigabyte", "byte", 1.0, 1000000000},
+        {"megawatt", "watt", 1.0, 1000000},
+        {"megawatt", "kilowatt", 1.0, 1000},
+        // Binary Prefixes
+        {"kilobyte", "byte", 1, 1000},
+        {"kibibyte", "byte", 1, 1024},
+        {"mebibyte", "byte", 1, 1048576},
+        {"gibibyte", "kibibyte", 1, 1048576},
+        {"pebibyte", "tebibyte", 4, 4096},
+        {"zebibyte", "pebibyte", 1.0 / 16, 65536.0},
+        {"yobibyte", "exbibyte", 1, 1048576},
+        // Mass
+        {"gram", "kilogram", 1.0, 0.001},
+        {"pound", "kilogram", 1.0, 0.453592},
+        {"pound", "kilogram", 2.0, 0.907185},
+        {"ounce", "pound", 16.0, 1.0},
+        {"ounce", "kilogram", 16.0, 0.453592},
+        {"ton", "pound", 1.0, 2000},
+        {"stone", "pound", 1.0, 14},
+        {"stone", "kilogram", 1.0, 6.35029},
+        // Temperature
+        {"celsius", "fahrenheit", 0.0, 32.0},
+        {"celsius", "fahrenheit", 10.0, 50.0},
+        {"celsius", "fahrenheit", 1000, 1832},
+        {"fahrenheit", "celsius", 32.0, 0.0},
+        {"fahrenheit", "celsius", 89.6, 32},
+        {"fahrenheit", "fahrenheit", 1000, 1000},
+        {"kelvin", "fahrenheit", 0.0, -459.67},
+        {"kelvin", "fahrenheit", 300, 80.33},
+        {"kelvin", "celsius", 0.0, -273.15},
+        {"kelvin", "celsius", 300.0, 26.85},
+        // Area
+        {"square-meter", "square-yard", 10.0, 11.9599},
+        {"hectare", "square-yard", 1.0, 11959.9},
+        {"square-mile", "square-foot", 0.0001, 2787.84},
+        {"hectare", "square-yard", 1.0, 11959.9},
+        {"hectare", "square-meter", 1.0, 10000},
+        {"hectare", "square-meter", 0.0, 0.0},
+        {"square-mile", "square-foot", 0.0001, 2787.84},
+        {"square-yard", "square-foot", 10, 90},
+        {"square-yard", "square-foot", 0, 0},
+        {"square-yard", "square-foot", 0.000001, 0.000009},
+        {"square-mile", "square-foot", 0.0, 0.0},
+        // Fuel Consumption
+        {"cubic-meter-per-meter", "mile-per-gallon", 2.1383143939394E-6, 1.1},
+        {"cubic-meter-per-meter", "mile-per-gallon", 2.6134953703704E-6, 0.9},
     };
 
     for (const auto &testCase : testCases) {
-        UErrorCode status = U_ZERO_ERROR;
-
         MeasureUnitImpl source = MeasureUnitImpl::forIdentifier(testCase.source, status);
+        if (status.errIfFailureAndReset("source MeasureUnitImpl::forIdentifier(\"%s\", ...)",
+                                        testCase.source)) {
+            continue;
+        }
         MeasureUnitImpl target = MeasureUnitImpl::forIdentifier(testCase.target, status);
+        if (status.errIfFailureAndReset("target MeasureUnitImpl::forIdentifier(\"%s\", ...)",
+                                        testCase.target)) {
+            continue;
+        }
 
         ConversionRates conversionRates(status);
-        UnitConverter converter(source, target, conversionRates, status);
+        if (status.errIfFailureAndReset("conversionRates(status)")) {
+            continue;
+        }
+        UnitsConverter converter(source, target, conversionRates, status);
+        if (status.errIfFailureAndReset("UnitsConverter(<%s>, <%s>, ...)", testCase.source,
+                                        testCase.target)) {
+            continue;
+        }
 
-        assertEqualsNear(UnicodeString("testMass: ") + testCase.source + " to " + testCase.target,
-                         testCase.expectedValue, converter.convert(testCase.inputValue),
-                         0.0001 * testCase.expectedValue);
-    }
-}
+        double maxDelta = 1e-6 * uprv_fabs(testCase.expectedValue);
+        if (testCase.expectedValue == 0) {
+            maxDelta = 1e-12;
+        }
+        assertEqualsNear(UnicodeString("testConverter: ") + testCase.source + " to " + testCase.target,
+                         testCase.expectedValue, converter.convert(testCase.inputValue), maxDelta);
 
-void UnitsTest::testTemperature() {
-    IcuTestErrorCode status(*this, "Units testTemperature");
-    // Test Cases
-    struct TestCase {
-        const char *source;
-        const char *target;
-        const double inputValue;
-        const double expectedValue;
-    } testCases[]{
-        {"celsius", "fahrenheit", 0.0, 32.0},   //
-        {"celsius", "fahrenheit", 10.0, 50.0},  //
-        {"fahrenheit", "celsius", 32.0, 0.0},   //
-        {"fahrenheit", "celsius", 89.6, 32},    //
-        {"kelvin", "fahrenheit", 0.0, -459.67}, //
-        {"kelvin", "fahrenheit", 300, 80.33},   //
-        {"kelvin", "celsius", 0.0, -273.15},    //
-        {"kelvin", "celsius", 300.0, 26.85}     //
-    };
+        maxDelta = 1e-6 * uprv_fabs(testCase.inputValue);
+        if (testCase.inputValue == 0) {
+            maxDelta = 1e-12;
+        }
+        assertEqualsNear(
+            UnicodeString("testConverter inverse: ") + testCase.target + " back to " + testCase.source,
+            testCase.inputValue, converter.convertInverse(testCase.expectedValue), maxDelta);
 
-    for (const auto &testCase : testCases) {
-        UErrorCode status = U_ZERO_ERROR;
 
-        MeasureUnitImpl source = MeasureUnitImpl::forIdentifier(testCase.source, status);
-        MeasureUnitImpl target = MeasureUnitImpl::forIdentifier(testCase.target, status);
+        // TODO: Test UnitsConverter created using CLDR separately.
+        // Test UnitsConverter created by CLDR unit identifiers
+        UnitsConverter converter2(testCase.source, testCase.target, status);
+        if (status.errIfFailureAndReset("UnitsConverter(<%s>, <%s>, ...)", testCase.source,
+                                        testCase.target)) {
+            continue;
+        }
 
-        ConversionRates conversionRates(status);
-        UnitConverter converter(source, target, conversionRates, status);
+        maxDelta = 1e-6 * uprv_fabs(testCase.expectedValue);
+        if (testCase.expectedValue == 0) {
+            maxDelta = 1e-12;
+        }
+        assertEqualsNear(UnicodeString("testConverter2: ") + testCase.source + " to " + testCase.target,
+                         testCase.expectedValue, converter2.convert(testCase.inputValue), maxDelta);
 
-        assertEqualsNear(UnicodeString("testTemperature: ") + testCase.source + " to " + testCase.target,
-                         testCase.expectedValue, converter.convert(testCase.inputValue),
-                         0.0001 * uprv_fabs(testCase.expectedValue));
-    }
-}
-
-void UnitsTest::testArea() {
-    IcuTestErrorCode status(*this, "Units Area");
-
-    // Test Cases
-    struct TestCase {
-        const char *source;
-        const char *target;
-        const double inputValue;
-        const double expectedValue;
-    } testCases[]{
-        {"square-meter", "square-yard", 10.0, 11.9599},     //
-        {"hectare", "square-yard", 1.0, 11959.9},           //
-        {"square-mile", "square-foot", 0.0001, 2787.84},    //
-        {"hectare", "square-yard", 1.0, 11959.9},           //
-        {"hectare", "square-meter", 1.0, 10000},            //
-        {"hectare", "square-meter", 0.0, 0.0},              //
-        {"square-mile", "square-foot", 0.0001, 2787.84},    //
-        {"square-yard", "square-foot", 10, 90},             //
-        {"square-yard", "square-foot", 0, 0},               //
-        {"square-yard", "square-foot", 0.000001, 0.000009}, //
-        {"square-mile", "square-foot", 0.0, 0.0},           //
-    };
-
-    for (const auto &testCase : testCases) {
-        UErrorCode status = U_ZERO_ERROR;
-
-        MeasureUnitImpl source = MeasureUnitImpl::forIdentifier(testCase.source, status);
-        MeasureUnitImpl target = MeasureUnitImpl::forIdentifier(testCase.target, status);
-
-        ConversionRates conversionRates(status);
-        UnitConverter converter(source, target, conversionRates, status);
-
-        assertEqualsNear(UnicodeString("testArea: ") + testCase.source + " to " + testCase.target,
-                         testCase.expectedValue, converter.convert(testCase.inputValue),
-                         0.0001 * testCase.expectedValue);
+        maxDelta = 1e-6 * uprv_fabs(testCase.inputValue);
+        if (testCase.inputValue == 0) {
+            maxDelta = 1e-12;
+        }
+        assertEqualsNear(
+            UnicodeString("testConverter2 inverse: ") + testCase.target + " back to " + testCase.source,
+            testCase.inputValue, converter2.convertInverse(testCase.expectedValue), maxDelta);
     }
 }
 
@@ -399,9 +493,9 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
     unitsTest->assertNotEquals(msg.data(), UNCONVERTIBLE, convertibility);
 
     // Conversion:
-    UnitConverter converter(sourceUnit, targetUnit, *ctx->conversionRates, status);
-    if (status.errIfFailureAndReset("constructor: UnitConverter(<%s>, <%s>, status)",
-                                    sourceIdent.data(), targetIdent.data())) {
+    UnitsConverter converter(sourceUnit, targetUnit, *ctx->conversionRates, status);
+    if (status.errIfFailureAndReset("UnitsConverter(<%s>, <%s>, ...)", sourceIdent.data(),
+                                    targetIdent.data())) {
         return;
     }
     double got = converter.convert(1000);
@@ -418,12 +512,12 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
  * Runs data-driven unit tests for unit conversion. It looks for the test cases
  * in source/test/testdata/cldr/units/unitsTest.txt, which originates in CLDR.
  */
-void UnitsTest::testConversions() {
+void UnitsTest::testConverterWithCLDRTests() {
     const char *filename = "unitsTest.txt";
     const int32_t kNumFields = 5;
     char *fields[kNumFields][2];
 
-    IcuTestErrorCode errorCode(*this, "UnitsTest::testConversions");
+    IcuTestErrorCode errorCode(*this, "UnitsTest::testConverterWithCLDRTests");
     const char *sourceTestDataPath = getSourceTestData(errorCode);
     if (errorCode.errIfFailureAndReset("unable to find the source/test/testdata "
                                        "folder (getSourceTestData())")) {
@@ -444,116 +538,233 @@ void UnitsTest::testConversions() {
 
 void UnitsTest::testComplexUnitsConverter() {
     IcuTestErrorCode status(*this, "UnitsTest::testComplexUnitsConverter");
+
+    // DBL_EPSILON is approximately 2.22E-16, and is the precision of double for
+    // values in the range [1.0, 2.0), but half the precision of double for
+    // [2.0, 4.0).
+    U_ASSERT(1.0 + DBL_EPSILON > 1.0);
+    U_ASSERT(2.0 - DBL_EPSILON < 2.0);
+    U_ASSERT(2.0 + DBL_EPSILON == 2.0);
+
+    struct TestCase {
+        const char* msg;
+        const char* input;
+        const char* output;
+        double value;
+        Measure expected[2];
+        int32_t expectedCount;
+        // For mixed units, accuracy of the smallest unit
+        double accuracy;
+    } testCases[]{
+        // Significantly less than 2.0.
+        {"1.9999",
+         "foot",
+         "foot-and-inch",
+         1.9999,
+         {Measure(1, MeasureUnit::createFoot(status), status),
+          Measure(11.9988, MeasureUnit::createInch(status), status)},
+         2,
+         0},
+
+        // A minimal nudge under 2.0, rounding up to 2.0 ft, 0 in.
+        {"2-eps",
+         "foot",
+         "foot-and-inch",
+         2.0 - DBL_EPSILON,
+         {Measure(2, MeasureUnit::createFoot(status), status),
+          Measure(0, MeasureUnit::createInch(status), status)},
+         2,
+         0},
+
+        // A slightly bigger nudge under 2.0, *not* rounding up to 2.0 ft!
+        {"2-3eps",
+         "foot",
+         "foot-and-inch",
+         2.0 - 3 * DBL_EPSILON,
+         {Measure(1, MeasureUnit::createFoot(status), status),
+          // We expect 12*3*DBL_EPSILON inches (7.92e-15) less than 12.
+          Measure(12 - 36 * DBL_EPSILON, MeasureUnit::createInch(status), status)},
+         2,
+         // Might accuracy be lacking with some compilers or on some systems? In
+         // case it is somehow lacking, we'll allow a delta of 12 * DBL_EPSILON.
+         12 * DBL_EPSILON},
+
+        // Testing precision with meter and light-year.
+        //
+        // DBL_EPSILON light-years, ~2.22E-16 light-years, is ~2.1 meters
+        // (maximum precision when exponent is 0).
+        //
+        // 1e-16 light years is 0.946073 meters.
+
+        // A 2.1 meter nudge under 2.0 light years, rounding up to 2.0 ly, 0 m.
+        {"2-eps",
+         "light-year",
+         "light-year-and-meter",
+         2.0 - DBL_EPSILON,
+         {Measure(2, MeasureUnit::createLightYear(status), status),
+          Measure(0, MeasureUnit::createMeter(status), status)},
+         2,
+         0},
+
+        // A 2.1 meter nudge under 1.0 light years, rounding up to 1.0 ly, 0 m.
+        {"1-eps",
+         "light-year",
+         "light-year-and-meter",
+         1.0 - DBL_EPSILON,
+         {Measure(1, MeasureUnit::createLightYear(status), status),
+          Measure(0, MeasureUnit::createMeter(status), status)},
+         2,
+         0},
+
+        // 1e-15 light years is 9.46073 meters (calculated using "bc" and the
+        // CLDR conversion factor). With double-precision maths in C++, we get
+        // 10.5. In this case, we're off by a bit more than 1 meter. With Java
+        // BigDecimal, we get accurate results.
+        {"1 + 1e-15",
+         "light-year",
+         "light-year-and-meter",
+         1.0 + 1e-15,
+         {Measure(1, MeasureUnit::createLightYear(status), status),
+          Measure(9.46073, MeasureUnit::createMeter(status), status)},
+         2,
+         1.5 /* meters, precision */},
+
+        // 2.1 meters more than 1 light year is not rounded away.
+        {"1 + eps",
+         "light-year",
+         "light-year-and-meter",
+         1.0 + DBL_EPSILON,
+         {Measure(1, MeasureUnit::createLightYear(status), status),
+          Measure(2.1, MeasureUnit::createMeter(status), status)},
+         2,
+         0.001},
+    };
+    status.assertSuccess();
+
     ConversionRates rates(status);
-    MeasureUnit input = MeasureUnit::getFoot();
-    MeasureUnit output = MeasureUnit::forIdentifier("foot-and-inch", status);
+    MeasureUnit input, output;
     MeasureUnitImpl tempInput, tempOutput;
-    const MeasureUnitImpl &inputImpl = MeasureUnitImpl::forMeasureUnit(input, tempInput, status);
-    const MeasureUnitImpl &outputImpl = MeasureUnitImpl::forMeasureUnit(output, tempOutput, status);
-    auto converter = ComplexUnitsConverter(inputImpl, outputImpl, rates, status);
+    MaybeStackVector<Measure> measures;
+    auto testATestCase = [&](const ComplexUnitsConverter& converter ,StringPiece initMsg , const TestCase &testCase) {
+        measures = converter.convert(testCase.value, nullptr, status);
 
-    // Significantly less than 2.0.
-    MaybeStackVector<Measure> measures = converter.convert(1.9999, nullptr, status);
-    assertEquals("measures length", 2, measures.length());
-    if (2 == measures.length()) {
-        assertEquals("1.9999: measures[0] value", 1.0, measures[0]->getNumber().getDouble(status));
-        assertEquals("1.9999: measures[0] unit", MeasureUnit::getFoot().getIdentifier(),
-                     measures[0]->getUnit().getIdentifier());
-        assertEqualsNear("1.9999: measures[1] value", 11.9988, measures[1]->getNumber().getDouble(status), 0.0001);
-        assertEquals("1.9999: measures[1] unit", MeasureUnit::getInch().getIdentifier(),
-                     measures[1]->getUnit().getIdentifier());
+        CharString msg(initMsg, status);
+        msg.append(testCase.msg, status);
+        msg.append(" ", status);
+        msg.append(testCase.input, status);
+        msg.append(" -> ", status);
+        msg.append(testCase.output, status);
+
+        CharString msgCount(msg, status);
+        msgCount.append(", measures.length()", status);
+        assertEquals(msgCount.data(), testCase.expectedCount, measures.length());
+        for (int i = 0; i < measures.length() && i < testCase.expectedCount; i++) {
+            if (i == testCase.expectedCount-1) {
+                assertEqualsNear(msg.data(), testCase.expected[i].getNumber().getDouble(status),
+                                 measures[i]->getNumber().getDouble(status), testCase.accuracy);
+            } else {
+                assertEquals(msg.data(), testCase.expected[i].getNumber().getDouble(status),
+                             measures[i]->getNumber().getDouble(status));
+            }
+            assertEquals(msg.data(), testCase.expected[i].getUnit().getIdentifier(),
+                         measures[i]->getUnit().getIdentifier());
+        }
+    };
+
+    for (const auto &testCase : testCases)
+    {
+        input = MeasureUnit::forIdentifier(testCase.input, status);
+        output = MeasureUnit::forIdentifier(testCase.output, status);
+        const MeasureUnitImpl& inputImpl = MeasureUnitImpl::forMeasureUnit(input, tempInput, status);
+        const MeasureUnitImpl& outputImpl = MeasureUnitImpl::forMeasureUnit(output, tempOutput, status);
+
+        ComplexUnitsConverter converter1(inputImpl, outputImpl, rates, status);
+        testATestCase(converter1, "ComplexUnitsConverter #1 " , testCase);
+
+        // Test ComplexUnitsConverter created with CLDR units identifiers.
+        ComplexUnitsConverter converter2( testCase.input, testCase.output, status);
+        testATestCase(converter2, "ComplexUnitsConverter #1 " , testCase);
     }
-
-    // TODO(icu-units#100): consider factoring out the set of tests to make this function more
-    // data-driven, *after* dealing appropriately with the memory leaks that can
-    // be demonstrated by this code.
-
-    // TODO(icu-units#100): reusing measures results in a leak.
-    // A minimal nudge under 2.0.
-    MaybeStackVector<Measure> measures2 = converter.convert((2.0 - DBL_EPSILON), nullptr, status);
-    assertEquals("measures length", 2, measures2.length());
-    if (2 == measures2.length()) {
-        assertEquals("1 - eps: measures[0] value", 2.0, measures2[0]->getNumber().getDouble(status));
-        assertEquals("1 - eps: measures[0] unit", MeasureUnit::getFoot().getIdentifier(),
-                     measures2[0]->getUnit().getIdentifier());
-        assertEquals("1 - eps: measures[1] value", 0.0, measures2[1]->getNumber().getDouble(status));
-        assertEquals("1 - eps: measures[1] unit", MeasureUnit::getInch().getIdentifier(),
-                     measures2[1]->getUnit().getIdentifier());
-    }
-
-    // Testing precision with meter and light-year. 1e-16 light years is
-    // 0.946073 meters, and double precision can provide only ~15 decimal
-    // digits, so we don't expect to get anything less than 1 meter.
-
-    // An epsilon's nudge under one light-year: should give 1 ly, 0 m.
-    input = MeasureUnit::getLightYear();
-    output = MeasureUnit::forIdentifier("light-year-and-meter", status);
-    // TODO(icu-units#100): reusing tempInput and tempOutput results in a leak.
-    MeasureUnitImpl tempInput3, tempOutput3;
-    const MeasureUnitImpl &inputImpl3 = MeasureUnitImpl::forMeasureUnit(input, tempInput3, status);
-    const MeasureUnitImpl &outputImpl3 = MeasureUnitImpl::forMeasureUnit(output, tempOutput3, status);
-    // TODO(icu-units#100): reusing converter results in a leak.
-    ComplexUnitsConverter converter3 = ComplexUnitsConverter(inputImpl3, outputImpl3, rates, status);
-    // TODO(icu-units#100): reusing measures results in a leak.
-    MaybeStackVector<Measure> measures3 = converter3.convert((2.0 - DBL_EPSILON), nullptr, status);
-    assertEquals("measures length", 2, measures3.length());
-    if (2 == measures3.length()) {
-        assertEquals("light-year test: measures[0] value", 2.0, measures3[0]->getNumber().getDouble(status));
-        assertEquals("light-year test: measures[0] unit", MeasureUnit::getLightYear().getIdentifier(),
-                     measures3[0]->getUnit().getIdentifier());
-        assertEquals("light-year test: measures[1] value", 0.0, measures3[1]->getNumber().getDouble(status));
-        assertEquals("light-year test: measures[1] unit", MeasureUnit::getMeter().getIdentifier(),
-                     measures3[1]->getUnit().getIdentifier());
-    }
-
-    // 1e-15 light years is 9.46073 meters (calculated using "bc" and the CLDR
-    // conversion factor). With double-precision maths, we get 10.5. In this
-    // case, we're off by almost 1 meter.
-    MaybeStackVector<Measure> measures4 = converter3.convert((1.0 + 1e-15), nullptr, status);
-    assertEquals("measures length", 2, measures4.length());
-    if (2 == measures4.length()) {
-        assertEquals("light-year test: measures[0] value", 1.0, measures4[0]->getNumber().getDouble(status));
-        assertEquals("light-year test: measures[0] unit", MeasureUnit::getLightYear().getIdentifier(),
-                     measures4[0]->getUnit().getIdentifier());
-        assertEqualsNear("light-year test: measures[1] value", 10,
-                         measures4[1]->getNumber().getDouble(status), 1);
-        assertEquals("light-year test: measures[1] unit", MeasureUnit::getMeter().getIdentifier(),
-                     measures4[1]->getUnit().getIdentifier());
-    }
-
-    // 2e-16 light years is 1.892146 meters. We consider this in the noise, and
-    // thus expect a 0. (This test fails when 2e-16 is increased to 4e-16.)
-    MaybeStackVector<Measure> measures5 = converter3.convert((1.0 + 2e-16), nullptr, status);
-    assertEquals("measures length", 2, measures5.length());
-    if (2 == measures5.length()) {
-        assertEquals("light-year test: measures[0] value", 1.0, measures5[0]->getNumber().getDouble(status));
-        assertEquals("light-year test: measures[0] unit", MeasureUnit::getLightYear().getIdentifier(),
-                     measures5[0]->getUnit().getIdentifier());
-        assertEquals("light-year test: measures[1] value", 0.0,
-                         measures5[1]->getNumber().getDouble(status));
-        assertEquals("light-year test: measures[1] unit", MeasureUnit::getMeter().getIdentifier(),
-                     measures5[1]->getUnit().getIdentifier());
-    }
+    
+    
+    status.assertSuccess();
 
     // TODO(icu-units#63): test negative numbers!
 }
 
-void UnitsTest::testComplexUnitConverterSorting() {
-    IcuTestErrorCode status(*this, "UnitsTest::testComplexUnitConverterSorting");
-
-    MeasureUnitImpl source = MeasureUnitImpl::forIdentifier("meter", status);
-    MeasureUnitImpl target = MeasureUnitImpl::forIdentifier("inch-and-foot", status);
+void UnitsTest::testComplexUnitsConverterSorting() {
+    IcuTestErrorCode status(*this, "UnitsTest::testComplexUnitsConverterSorting");
     ConversionRates conversionRates(status);
 
-    ComplexUnitsConverter complexConverter(source, target, conversionRates, status);
-    auto measures = complexConverter.convert(10.0, nullptr, status);
+    status.assertSuccess();
 
-    if (2 == measures.length()) {
-        assertEquals("inch-and-foot unit 0", "inch", measures[0]->getUnit().getIdentifier());
-        assertEquals("inch-and-foot unit 1", "foot", measures[1]->getUnit().getIdentifier());
+    struct TestCase {
+        const char *msg;
+        const char *input;
+        const char *output;
+        double inputValue;
+        Measure expected[3];
+        int32_t expectedCount;
+        // For mixed units, accuracy of the smallest unit
+        double accuracy;
+    } testCases[]{{"inch-and-foot",
+                   "meter",
+                   "inch-and-foot",
+                   10.0,
+                   {
+                       Measure(9.70079, MeasureUnit::createInch(status), status),
+                       Measure(32, MeasureUnit::createFoot(status), status),
+                       Measure(0, MeasureUnit::createBit(status), status),
+                   },
+                   2,
+                   0.00001},
+                  {"inch-and-yard-and-foot",
+                   "meter",
+                   "inch-and-yard-and-foot",
+                   100.0,
+                   {
+                       Measure(1.0079, MeasureUnit::createInch(status), status),
+                       Measure(109, MeasureUnit::createYard(status), status),
+                       Measure(1, MeasureUnit::createFoot(status), status),
+                   },
+                   3,
+                   0.0001}};
 
-        assertEqualsNear("inch-and-foot value 0", 9.7008, measures[0]->getNumber().getDouble(), 0.0001);
-        assertEqualsNear("inch-and-foot value 1", 32, measures[1]->getNumber().getInt64(), 0.00001);
+    for (const auto &testCase : testCases) {
+        MeasureUnitImpl inputImpl = MeasureUnitImpl::forIdentifier(testCase.input, status);
+        if (status.errIfFailureAndReset()) {
+            continue;
+        }
+        MeasureUnitImpl outputImpl = MeasureUnitImpl::forIdentifier(testCase.output, status);
+        if (status.errIfFailureAndReset()) {
+            continue;
+        }
+        ComplexUnitsConverter converter(inputImpl, outputImpl, conversionRates, status);
+        if (status.errIfFailureAndReset()) {
+            continue;
+        }
+
+        auto actual = converter.convert(testCase.inputValue, nullptr, status);
+        if (status.errIfFailureAndReset()) {
+            continue;
+        }
+        if (actual.length() < testCase.expectedCount) {
+            errln("converter.convert(...) returned too few Measures");
+            continue;
+        }
+
+        for (int i = 0; i < testCase.expectedCount; i++) {
+            assertEquals(testCase.msg, testCase.expected[i].getUnit().getIdentifier(),
+                         actual[i]->getUnit().getIdentifier());
+
+            if (testCase.expected[i].getNumber().getType() == Formattable::Type::kInt64) {
+                assertEquals(testCase.msg, testCase.expected[i].getNumber().getInt64(),
+                             actual[i]->getNumber().getInt64());
+            } else {
+                assertEqualsNear(testCase.msg, testCase.expected[i].getNumber().getDouble(),
+                                 actual[i]->getNumber().getDouble(), testCase.accuracy);
+            }
+        }
     }
 }
 
@@ -753,6 +964,35 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
     }
     // TODO: revisit this experimentally chosen precision:
     checkOutput(unitsTest, msg.data(), expected, routeResult.measures, 0.0000000001);
+
+    // Test UnitsRouter created with CLDR units identifiers.
+    CharString inputUnitIdentifier(inputUnit, status);
+    UnitsRouter router2(inputUnitIdentifier.data(), region, usage, status);
+    if (status.errIfFailureAndReset("UnitsRouter2(<%s>, \"%.*s\", \"%.*s\", status)",
+                                    inputUnitIdentifier.data(), region.length(), region.data(),
+                                    usage.length(), usage.data())) {
+        return;
+    }
+
+    CharString msg2(quantity, status);
+    msg2.append(" ", status);
+    msg2.append(usage, status);
+    msg2.append(" ", status);
+    msg2.append(region, status);
+    msg2.append(" ", status);
+    msg2.append(inputD, status);
+    msg2.append(" ", status);
+    msg2.append(inputUnitIdentifier.data(), status);
+    if (status.errIfFailureAndReset("Failure before router2.route")) {
+        return;
+    }
+
+    RouteResult routeResult2 = router2.route(inputAmount, nullptr, status);
+    if (status.errIfFailureAndReset("router2.route(inputAmount, ...)")) {
+        return;
+    }
+    // TODO: revisit this experimentally chosen precision:
+    checkOutput(unitsTest, msg2.data(), expected, routeResult.measures, 0.0000000001);
 }
 
 /**
@@ -862,12 +1102,12 @@ void parsePreferencesTests(const char *filename, char delimiter, char *fields[][
  * in source/test/testdata/cldr/units/unitPreferencesTest.txt, which originates
  * in CLDR.
  */
-void UnitsTest::testPreferences() {
+void UnitsTest::testUnitPreferencesWithCLDRTests() {
     const char *filename = "unitPreferencesTest.txt";
     const int32_t maxFields = 11;
     char *fields[maxFields][2];
 
-    IcuTestErrorCode errorCode(*this, "UnitsTest::testPreferences");
+    IcuTestErrorCode errorCode(*this, "UnitsTest::testUnitPreferencesWithCLDRTests");
     const char *sourceTestDataPath = getSourceTestData(errorCode);
     if (errorCode.errIfFailureAndReset("unable to find the source/test/testdata "
                                        "folder (getSourceTestData())")) {

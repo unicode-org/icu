@@ -801,7 +801,7 @@ class CharsetISCII extends CharsetICU {
      * Post context
      * i) ATR : Attribute code is used to declare the font and script switching.
      *    Currently we only switch scripts and font codes consumed without generating an error
-     * ii) EXT : Extention code is used to declare switching to Sanskrit and for obscure,
+     * ii) EXT : Extension code is used to declare switching to Sanskrit and for obscure,
      *     obsolete characters
      * Pre context
      * i) Halant: if preceeded by a halant then it is a explicit halant
@@ -1176,7 +1176,7 @@ class CharsetISCII extends CharsetICU {
             /* is the code point valid in current script? */
             if (sourceChar > ASCII_END &&
                     (validityTable[targetUniChar & 0x7F] & data.currentMaskToUnicode) == 0) {
-                /* Vocallic RR is assigne in ISCII Telugu and Unicode */
+                /* Vocallic RR is assigned in ISCII Telugu and Unicode */
                 if (data.currentDeltaToUnicode != (TELUGU_DELTA) || targetUniChar != VOCALLIC_RR) {
                     targetUniChar = UConverterConstants.missingCharMarker;
                 }
@@ -1300,7 +1300,7 @@ class CharsetISCII extends CharsetICU {
                             }
                             if (converterData.currentDeltaFromUnicode == PNJ_DELTA) {
                                 if (sourceChar == PNJ_TIPPI) {
-                                    /* Make sure Tippi is converterd to Bindi. */
+                                    /* Make sure Tippi is converted to Bindi. */
                                     sourceChar = PNJ_BINDI;
                                 } else if (sourceChar == PNJ_ADHAK) {
                                     /* This is for consonant cluster handling. */

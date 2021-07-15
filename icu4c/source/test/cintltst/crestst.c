@@ -149,6 +149,15 @@ void TestAliasConflict(void) {
 
 void TestResourceBundles()
 {
+    // The test expectation only works if the default locale is not one of the
+    // locale bundle in the testdata which have those info. Therefore, we skip
+    // the test if the default locale is te, sh, mc, or them with subtags.
+    if (    uprv_strncmp(uloc_getDefault(), "te", 2) == 0 ||
+            uprv_strncmp(uloc_getDefault(), "sh", 2) == 0 ||
+            uprv_strncmp(uloc_getDefault(), "mc", 2) == 0) {
+        return;
+    }
+
     UErrorCode status = U_ZERO_ERROR;
     loadTestData(&status);
     if(U_FAILURE(status)) {
@@ -595,16 +604,19 @@ TestOpenDirect(void) {
     ures_close(casing);
 
     /*
-     * verify that ures_open("ne") finds the root bundle but
-     * ures_openDirect("ne") does not
+     * verify that ures_open("ne") finds the root bundle or default locale
+     * bundle but ures_openDirect("ne") does not.
      */
     errorCode=U_ZERO_ERROR;
     ne=ures_open("testdata", "ne", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_data_err("ures_open(\"ne\") failed (expected to get root): %s\n", u_errorName(errorCode));
     }
-    if(errorCode!=U_USING_DEFAULT_WARNING || 0!=uprv_strcmp("root", ures_getLocale(ne, &errorCode))) {
-        log_err("ures_open(\"ne\") found something other than \"root\" - %s\n", u_errorName(errorCode));
+    if(    errorCode!=U_USING_DEFAULT_WARNING ||
+           (0!=uprv_strcmp("root", ures_getLocale(ne, &errorCode)) &&
+            0!=uprv_strcmp(uloc_getDefault(), ures_getLocale(ne, &errorCode)))) {
+        log_err("ures_open(\"ne\") found something other than \"root\" "
+                "or default locale \"%s\" - %s\n", uloc_getDefault(), u_errorName(errorCode));
     }
     ures_close(ne);
 

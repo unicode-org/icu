@@ -25,7 +25,7 @@ CLDR_DIR:   This is the path to the to root of standard CLDR sources, below
 CLDR_DATA_DIR: The top-level directory for the CLDR production data (typically
                the "production" directory in the staging repository). Usually
                generated locally or obtained from:
-               https://github.com/unicode-org/cldr-staging/tree/master/production
+               https://github.com/unicode-org/cldr-staging/tree/main/production
 
 In Posix systems, it's best to set these as exported shell variables, and any
 following instructions assume they have been set accordingly:

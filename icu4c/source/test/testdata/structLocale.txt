@@ -6,11 +6,10 @@
 // * Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
-// This is a pristine locale structure.
+// This is a pristine locale structure. It is manually maintained.
 // This is used to validate all keys and general structure is correct.
 // Since ICU doesn't follow the traditional fallback model where all keys fallback to root,
 // root can't be used to validate the structure.
-// This file was generated from en.txt, and all ".*" were replaced with "".
 structLocale:table(nofallback){
     %%Parent{""}
     BreakDictionaryData:bin {00}
@@ -107,11 +106,13 @@ structLocale:table(nofallback){
         CY{""}
         CZ{""}
         DE{""}
+        DG{""}
         DJ{""}
         DK{""}
         DM{""}
         DO{""}
         DZ{""}
+        EA{""}
         EC{""}
         EE{""}
         EG{""}
@@ -150,6 +151,7 @@ structLocale:table(nofallback){
         HR{""}
         HT{""}
         HU{""}
+        IC{""}
         ID{""}
         IE{""}
         IL{""}
@@ -296,6 +298,7 @@ structLocale:table(nofallback){
         VU{""}
         WF{""}
         WS{""}
+        XK{""}
         YE{""}
         YT{""}
         ZA{""}
@@ -5806,7 +5809,6 @@ structLocale:table(nofallback){
         mn{""}
         mnc{""}
         mni{""}
-        mo{""}
         moh{""}
         mos{""}
         mr{""}
@@ -5964,7 +5966,6 @@ structLocale:table(nofallback){
         sv{""}
         sw{""}
         swb{""}
-        swc{""}
         syc{""}
         syr{""}
         szl{""}
@@ -5983,7 +5984,6 @@ structLocale:table(nofallback){
         tk{""}
         tkl{""}
         tkr{""}
-        tl{""}
         tlh{""}
         tli{""}
         tly{""}
@@ -14367,6 +14367,22 @@ structLocale:table(nofallback){
             }
         }
         minimalPairs{
+            case{
+                accusative{""}
+                dative{""}
+                genitive{""}
+                instrumental{""}
+                locative{""}
+                nominative{""}
+                vocative{""}
+            }
+            gender {
+                common{""}
+                feminine{""}
+                inanimate{""}
+                masculine{""}
+                neuter{""}
+            }
             ordinal{
                 zero{""}
                 one{""}
@@ -21681,6 +21697,16 @@ structLocale:table(nofallback){
                 "A4",
                 "A4",
             }
+            DateTimeSkeletons{
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+            }
             eras{
                 abbreviated{
                     "",
@@ -21796,20 +21822,24 @@ structLocale:table(nofallback){
                 }
                 fallback{""}
                 h{
+                    B{""}
                     a{""}
                     h{""}
                 }
                 hm{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hmv{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hv{
+                    B{""}
                     a{""}
                     h{""}
                 }
@@ -21908,6 +21938,16 @@ structLocale:table(nofallback){
                 "A4",
                 "A4",
                 "A4",
+            }
+            DateTimeSkeletons{
+                "",
+                "",
+                "",
+                "",
+                "A2",
+                "A2",
+                "A2",
+                "A2",
             }
             cyclicNameSets{
                 dayParts{
@@ -22759,20 +22799,24 @@ structLocale:table(nofallback){
                 }
                 fallback{""}
                 h{
+                    B{""}
                     a{""}
                     h{""}
                 }
                 hm{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hmv{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hv{
+                    B{""}
                     a{""}
                     h{""}
                 }
@@ -22979,6 +23023,16 @@ structLocale:table(nofallback){
                 "A4",
                 "A4",
             }
+            DateTimeSkeletons{
+                "",
+                "",
+                "",
+                "",
+                "A2",
+                "A2",
+                "A2",
+                "A2",
+            }
             availableFormats{
                 HHmm{""}
                 HHmmss{""}
@@ -23112,20 +23166,24 @@ structLocale:table(nofallback){
                 }
                 fallback{""}
                 h{
+                    B{""}
                     a{""}
                     h{""}
                 }
                 hm{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hmv{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hv{
+                    B{""}
                     a{""}
                     h{""}
                 }
@@ -23322,6 +23380,16 @@ structLocale:table(nofallback){
                 "A4",
                 "A4",
                 "A4",
+            }
+            DateTimeSkeletons{
+                "",
+                "",
+                "",
+                "",
+                "A2",
+                "A2",
+                "A2",
+                "A2",
             }
             cyclicNameSets{
                 dayParts{
@@ -24173,20 +24241,24 @@ structLocale:table(nofallback){
                 }
                 fallback{""}
                 h{
+                    B{""}
                     a{""}
                     h{""}
                 }
                 hm{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hmv{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hv{
+                    B{""}
                     a{""}
                     h{""}
                 }
@@ -24398,6 +24470,16 @@ structLocale:table(nofallback){
                 "A4",
                 "A4",
             }
+            DateTimeSkeletons{
+                "",
+                "",
+                "",
+                "",
+                "A2",
+                "A2",
+                "A2",
+                "A2",
+            }
             availableFormats{
                 HHmm{""}
                 HHmmss{""}
@@ -24531,20 +24613,24 @@ structLocale:table(nofallback){
                 }
                 fallback{""}
                 h{
+                    B{""}
                     a{""}
                     h{""}
                 }
                 hm{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hmv{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hv{
+                    B{""}
                     a{""}
                     h{""}
                 }
@@ -24846,20 +24932,24 @@ structLocale:table(nofallback){
                 }
                 fallback{""}
                 h{
+                    B{""}
                     a{""}
                     h{""}
                 }
                 hm{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hmv{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hv{
+                    B{""}
                     a{""}
                     h{""}
                 }
@@ -25046,6 +25136,16 @@ structLocale:table(nofallback){
                 "A4",
                 "A4",
             }
+            DateTimeSkeletons{
+                "",
+                "",
+                "",
+                "",
+                "A2",
+                "A2",
+                "A2",
+                "A2",
+            }
             appendItems{
                 Day{"{0} ({2}: {1})"}
                 Day-Of-Week{"{0} {1}"}
@@ -25212,20 +25312,24 @@ structLocale:table(nofallback){
                 }
                 fallback{""}
                 h{
+                    B{""}
                     a{""}
                     h{""}
                 }
                 hm{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hmv{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hv{
+                    B{""}
                     a{""}
                     h{""}
                 }
@@ -25325,6 +25429,16 @@ structLocale:table(nofallback){
                 "A4",
                 "A4",
                 "A4",
+            }
+            DateTimeSkeletons{
+                "",
+                "",
+                "",
+                "",
+                "A2",
+                "A2",
+                "A2",
+                "A2",
             }
             NoonMarker{""}
             NoonMarkerAbbr{""}
@@ -25678,20 +25792,24 @@ structLocale:table(nofallback){
                 }
                 fallback{""}
                 h{
+                    B{""}
                     a{""}
                     h{""}
                 }
                 hm{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hmv{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hv{
+                    B{""}
                     a{""}
                     h{""}
                 }
@@ -25917,6 +26035,16 @@ structLocale:table(nofallback){
                 "A4",
                 "A4",
             }
+            DateTimeSkeletons{
+                "",
+                "",
+                "",
+                "",
+                "A2",
+                "A2",
+                "A2",
+                "A2",
+            }
             availableFormats{
                 HHmm{""}
                 HHmmss{""}
@@ -26047,20 +26175,24 @@ structLocale:table(nofallback){
                 }
                 fallback{""}
                 h{
+                    B{""}
                     a{""}
                     h{""}
                 }
                 hm{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hmv{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hv{
+                    B{""}
                     a{""}
                     h{""}
                 }
@@ -26265,6 +26397,16 @@ structLocale:table(nofallback){
                 "A4",
                 "A4",
             }
+            DateTimeSkeletons{
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+            }
             eras{
                 abbreviated{
                     "",
@@ -26380,20 +26522,24 @@ structLocale:table(nofallback){
                 }
                 fallback{""}
                 h{
+                    B{""}
                     a{""}
                     h{""}
                 }
                 hm{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hmv{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hv{
+                    B{""}
                     a{""}
                     h{""}
                 }
@@ -26590,6 +26736,16 @@ structLocale:table(nofallback){
                 "A4",
                 "A4",
             }
+            DateTimeSkeletons{
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+            }
             eras{
                 abbreviated{
                     "",
@@ -26705,20 +26861,24 @@ structLocale:table(nofallback){
                 }
                 fallback{""}
                 h{
+                    B{""}
                     a{""}
                     h{""}
                 }
                 hm{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hmv{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hv{
+                    B{""}
                     a{""}
                     h{""}
                 }
@@ -26915,6 +27075,16 @@ structLocale:table(nofallback){
                 "A4",
                 "A4",
             }
+            DateTimeSkeletons{
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+            }
             eras{
                 abbreviated{
                     "",
@@ -27030,20 +27200,24 @@ structLocale:table(nofallback){
                 }
                 fallback{""}
                 h{
+                    B{""}
                     a{""}
                     h{""}
                 }
                 hm{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hmv{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hv{
+                    B{""}
                     a{""}
                     h{""}
                 }
@@ -27237,6 +27411,16 @@ structLocale:table(nofallback){
                 "A4",
                 "A4",
             }
+            DateTimeSkeletons{
+                "",
+                "",
+                "",
+                "",
+                "A2",
+                "A2",
+                "A2",
+                "A2",
+            }
             eras{
                 abbreviated{
                     "",
@@ -28060,20 +28244,24 @@ structLocale:table(nofallback){
                 }
                 fallback{""}
                 h{
+                    B{""}
                     a{""}
                     h{""}
                 }
                 hm{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hmv{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hv{
+                    B{""}
                     a{""}
                     h{""}
                 }
@@ -28177,6 +28365,16 @@ structLocale:table(nofallback){
                 "A4",
                 "A4",
             }
+            DateTimeSkeletons{
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+            }
             eras{
                 abbreviated{
                     "",
@@ -28295,20 +28493,24 @@ structLocale:table(nofallback){
                 }
                 fallback{""}
                 h{
+                    B{""}
                     a{""}
                     h{""}
                 }
                 hm{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hmv{
+                    B{""}
                     a{""}
                     h{""}
                     m{""}
                 }
                 hv{
+                    B{""}
                     a{""}
                     h{""}
                 }

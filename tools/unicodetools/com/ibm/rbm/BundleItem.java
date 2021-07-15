@@ -29,7 +29,7 @@ public class BundleItem {
     private Date modified;                                 // The last modification date of the item
     private String creator;                                // The name of the person who created the item
     private String modifier;                               // The name of the person who last modified the item
-    private Hashtable lookups;                             // A hastable of lookups for the item (i.e. ({#}, Meaning) pairs)
+    private Hashtable lookups;                             // A hash table of lookups for the item (i.e. ({#}, Meaning) pairs)
     private BundleGroup group;                             // The parent group of the item
 		
     /**

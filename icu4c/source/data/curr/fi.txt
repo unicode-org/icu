@@ -1120,7 +1120,7 @@ fi{
             "Ranskan UIC-frangi",
         }
         XOF{
-            "CFA",
+            "F CFA",
             "CFA-frangi BCEAO",
         }
         XPD{
@@ -1292,7 +1292,6 @@ fi{
         PYG{"PYG"}
         RON{"RON"}
         RUB{"₽"}
-        RUR{"RUR"}
         RWF{"RWF"}
         SBD{"SBD"}
         SEK{"SEK"}

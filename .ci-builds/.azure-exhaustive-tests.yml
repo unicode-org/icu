@@ -3,14 +3,14 @@
 # Note: The exhaustive test configuration is in a separate file
 # so that it can be run independently from the regular builds.
 #
-# Only run the exhaustive tests on the master and maint branches, and
+# Only run the exhaustive tests on the main and maint branches, and
 # also batch up any pending changes so that we will only have at most
 # one build running at a given time (since they take a long time).
 trigger:
   batch: true
   branches:
     include:
-    - master
+    - main
     - maint/maint-*
   paths:
     include:
@@ -22,7 +22,6 @@ trigger:
     - docs/*
     - tools/*
     - vendor/*
-    - .appveyor.xml
     - .cpyskip.txt
     - .travis.yml
     - KEYS
@@ -31,11 +30,11 @@ trigger:
 jobs:
 #-------------------------------------------------------------------------
 # Note: The exhaustive tests can take more than 1 hour to complete.
-- job: ICU4J_OpenJDK_Ubuntu_1604
-  displayName: 'J: Linux OpenJDK (Ubuntu 16.04)'
+- job: ICU4J_OpenJDK_Ubuntu_1804
+  displayName: 'J: Linux OpenJDK (Ubuntu 18.04)'
   timeoutInMinutes: 120
   pool:
-    vmImage: 'Ubuntu 16.04'
+    vmImage: 'ubuntu-18.04'
     demands: ant
   steps:
     - checkout: self
@@ -53,11 +52,11 @@ jobs:
       timeoutInMinutes: 2
 #-------------------------------------------------------------------------
 # Note: The exhaustive tests can take more than 1 hour to complete.
-- job: ICU4C_Clang_Exhaustive_Ubuntu_1604
-  displayName: 'C: Linux Clang Exhaustive Tests (Ubuntu 16.04)'
+- job: ICU4C_Clang_Exhaustive_Ubuntu_1804
+  displayName: 'C: Linux Clang Exhaustive Tests (Ubuntu 18.04)'
   timeoutInMinutes: 120
   pool:
-    vmImage: 'Ubuntu 16.04'
+    vmImage: 'ubuntu-18.04'
   steps:
     - checkout: self
       lfs: true

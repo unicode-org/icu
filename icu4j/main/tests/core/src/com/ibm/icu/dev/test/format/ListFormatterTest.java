@@ -193,9 +193,9 @@ public class ListFormatterTest extends TestFmwk {
     }
 
 
-    void DoTheRealListStyleTesting(ULocale locale, String items[], ListFormatter.Style style, String expected) {
-        ListFormatter listFormatter = ListFormatter.getInstance(locale, style);
-        assertEquals("Style \"" + style + "\"", expected, listFormatter.format((Object[])items));
+    void DoTheRealListStyleTesting(ULocale locale, String items[], ListFormatter.Type type, ListFormatter.Width width, String expected) {
+        ListFormatter listFormatter = ListFormatter.getInstance(locale, type, width);
+        assertEquals("Style \"" + type + "/" + width + "\"", expected, listFormatter.format((Object[])items));
     }
 
     @Test
@@ -203,11 +203,11 @@ public class ListFormatterTest extends TestFmwk {
         ULocale locale = ULocale.FRENCH;
         String[] input = { "rouge", "jaune", "bleu", "vert" };
 
-        DoTheRealListStyleTesting(locale, input, ListFormatter.Style.STANDARD, "rouge, jaune, bleu et vert");
-        DoTheRealListStyleTesting(locale, input, ListFormatter.Style.OR, "rouge, jaune, bleu ou vert");
-        DoTheRealListStyleTesting(locale, input, ListFormatter.Style.UNIT, "rouge, jaune, bleu et vert");
-        DoTheRealListStyleTesting(locale, input, ListFormatter.Style.UNIT_NARROW, "rouge jaune bleu vert");
-        DoTheRealListStyleTesting(locale, input, ListFormatter.Style.UNIT_SHORT, "rouge, jaune, bleu et vert");
+        DoTheRealListStyleTesting(locale, input, ListFormatter.Type.AND, ListFormatter.Width.WIDE, "rouge, jaune, bleu et vert");
+        DoTheRealListStyleTesting(locale, input, ListFormatter.Type.OR, ListFormatter.Width.WIDE, "rouge, jaune, bleu ou vert");
+        DoTheRealListStyleTesting(locale, input, ListFormatter.Type.UNITS, ListFormatter.Width.WIDE, "rouge, jaune, bleu et vert");
+        DoTheRealListStyleTesting(locale, input, ListFormatter.Type.UNITS, ListFormatter.Width.NARROW, "rouge jaune bleu vert");
+        DoTheRealListStyleTesting(locale, input, ListFormatter.Type.UNITS, ListFormatter.Width.SHORT, "rouge, jaune, bleu et vert");
     }
 
     private boolean isDefaultLocaleEnglishLike() {
@@ -217,9 +217,8 @@ public class ListFormatterTest extends TestFmwk {
 
     @Test
     public void TestFormattedValue() {
-        ListFormatter fmt = ListFormatter.getInstance(ULocale.ENGLISH);
-
         {
+            ListFormatter fmt = ListFormatter.getInstance(ULocale.ENGLISH);
             String message = "Field position test 1";
             String expectedString = "hello, wonderful, and world";
             String[] inputs = {
@@ -238,6 +237,85 @@ public class ListFormatterTest extends TestFmwk {
                 {ListFormatter.Field.LITERAL, 16, 22},
                 {ListFormatter.SpanField.LIST_SPAN, 22, 27, 2},
                 {ListFormatter.Field.ELEMENT, 22, 27}};
+            FormattedValueTest.checkFormattedValue(
+                message,
+                result,
+                expectedString,
+                expectedFieldPositions);
+        }
+
+        {
+            ListFormatter fmt = ListFormatter.getInstance(ULocale.CHINESE, Type.UNITS, Width.SHORT);
+            String message = "Field position test 2 (ICU-21340)";
+            String expectedString = "aabbbbbbbccc";
+            String inputs[] = {
+                "aa",
+                "bbbbbbb",
+                "ccc"
+            };
+            FormattedList result = fmt.formatToValue(Arrays.asList(inputs));
+            Object[][] expectedFieldPositions = {
+                // field, begin index, end index
+                {ListFormatter.SpanField.LIST_SPAN, 0, 2, 0},
+                {ListFormatter.Field.ELEMENT, 0, 2},
+                {ListFormatter.SpanField.LIST_SPAN, 2, 9, 1},
+                {ListFormatter.Field.ELEMENT, 2, 9},
+                {ListFormatter.SpanField.LIST_SPAN, 9, 12, 2},
+                {ListFormatter.Field.ELEMENT, 9, 12}};
+            FormattedValueTest.checkFormattedValue(
+                message,
+                result,
+                expectedString,
+                expectedFieldPositions,
+                // Adjacent fields: skip AttributedCharacterIterator test
+                true);
+        }
+
+        {
+            ListFormatter fmt = ListFormatter.getInstance(ULocale.ENGLISH, Type.UNITS, Width.SHORT);
+            String message = "ICU-21383 Long list";
+            String expectedString = "a, b, c, d, e, f, g, h, i";
+            String inputs[] = {
+                "a",
+                "b",
+                "c",
+                "d",
+                "e",
+                "f",
+                "g",
+                "h",
+                "i",
+            };
+            FormattedList result = fmt.formatToValue(Arrays.asList(inputs));
+            Object[][] expectedFieldPositions = {
+                // field, begin index, end index
+                {ListFormatter.SpanField.LIST_SPAN, 0, 1, 0},
+                {ListFormatter.Field.ELEMENT, 0, 1},
+                {ListFormatter.Field.LITERAL, 1, 3},
+                {ListFormatter.SpanField.LIST_SPAN, 3, 4, 1},
+                {ListFormatter.Field.ELEMENT, 3, 4},
+                {ListFormatter.Field.LITERAL, 4, 6},
+                {ListFormatter.SpanField.LIST_SPAN, 6, 7, 2},
+                {ListFormatter.Field.ELEMENT, 6, 7},
+                {ListFormatter.Field.LITERAL, 7, 9},
+                {ListFormatter.SpanField.LIST_SPAN, 9, 10, 3},
+                {ListFormatter.Field.ELEMENT, 9, 10},
+                {ListFormatter.Field.LITERAL, 10, 12},
+                {ListFormatter.SpanField.LIST_SPAN, 12, 13, 4},
+                {ListFormatter.Field.ELEMENT, 12, 13},
+                {ListFormatter.Field.LITERAL, 13, 15},
+                {ListFormatter.SpanField.LIST_SPAN, 15, 16, 5},
+                {ListFormatter.Field.ELEMENT, 15, 16},
+                {ListFormatter.Field.LITERAL, 16, 18},
+                {ListFormatter.SpanField.LIST_SPAN, 18, 19, 6},
+                {ListFormatter.Field.ELEMENT, 18, 19},
+                {ListFormatter.Field.LITERAL, 19, 21},
+                {ListFormatter.SpanField.LIST_SPAN, 21, 22, 7},
+                {ListFormatter.Field.ELEMENT, 21, 22},
+                {ListFormatter.Field.LITERAL, 22, 24},
+                {ListFormatter.SpanField.LIST_SPAN, 24, 25, 8},
+                {ListFormatter.Field.ELEMENT, 24, 25},
+                };
             FormattedValueTest.checkFormattedValue(
                 message,
                 result,

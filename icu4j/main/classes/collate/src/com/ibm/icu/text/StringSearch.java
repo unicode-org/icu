@@ -1448,7 +1448,7 @@ public final class StringSearch extends SearchIterator {
                 // * do NOT require that match limit be on a breakIter boundary
 
                 // Advance the match end position to the first acceptable match boundary.
-                // This advances the index over any combining charcters.
+                // This advances the index over any combining characters.
                 if (minLimit < maxLimit) {
                     int nba = nextBoundaryAfter(minLimit);
                     // Note that we can have nba < maxLimit && nba >= minLImit, in which

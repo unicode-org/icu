@@ -81,7 +81,7 @@ class LocalizedNumberFormatter;
  * the date and time formatting algorithm and pattern letters defined by
  * <a href="http://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table">UTS#35
  * Unicode Locale Data Markup Language (LDML)</a> and further documented for ICU in the
- * <a href="https://sites.google.com/site/icuprojectuserguide/formatparse/datetime?pli=1#TOC-Date-Field-Symbol-Table">ICU
+ * <a href="https://unicode-org.github.io/icu/userguide/format_parse/datetime/#date-field-symbol-table">ICU
  * User Guide</a>. The following pattern letters are currently available (note that the actual
  * values depend on CLDR and may change from the examples shown here):</p>
  *
@@ -756,7 +756,7 @@ public:
      * names of the months), but not to provide the pattern.
      * <P>
      * A numbering system override is a string containing either the name of a known numbering system,
-     * or a set of field and numbering system pairs that specify which fields are to be formattied with
+     * or a set of field and numbering system pairs that specify which fields are to be formatted with
      * the alternate numbering system.  For example, to specify that all numeric fields in the specified
      * date or time pattern are to be rendered using Thai digits, simply specify the numbering system override
      * as "thai".  To specify that just the year portion of the date be formatted using Hebrew numbering,
@@ -797,7 +797,7 @@ public:
      * names of the months), but not to provide the pattern.
      * <P>
      * A numbering system override is a string containing either the name of a known numbering system,
-     * or a set of field and numbering system pairs that specify which fields are to be formattied with
+     * or a set of field and numbering system pairs that specify which fields are to be formatted with
      * the alternate numbering system.  For example, to specify that all numeric fields in the specified
      * date or time pattern are to be rendered using Thai digits, simply specify the numbering system override
      * as "thai".  To specify that just the year portion of the date be formatted using Hebrew numbering,

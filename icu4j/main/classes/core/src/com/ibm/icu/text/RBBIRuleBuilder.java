@@ -85,6 +85,9 @@ class RBBIRuleBuilder {
     //    using these simplified the porting, and consolidated the
     //    creation of Java exceptions
     //
+    static final int U_ILLEGAL_CHAR_FOUND = 12;
+    /**< Character conversion: Illegal input sequence/combination of input units. */
+
     static final int U_BRK_ERROR_START = 0x10200;
     /**< Start of codes indicating Break Iterator failures */
 

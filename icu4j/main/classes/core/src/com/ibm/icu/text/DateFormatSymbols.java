@@ -332,7 +332,6 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @return An array of <code>ULocale</code>s for which localized
      * <code>DateFormatSymbols</code> instances are available.
      * @draft ICU 3.8 (retain)
-     * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales() {
         return ICUResourceBundle.getAvailableULocales();
@@ -1503,7 +1502,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                 && arrayOfArrayEquals(zoneStrings, that.zoneStrings)
                 // getDiplayName maps deprecated country and language codes to the current ones
                 // too bad there is no way to get the current codes!
-                // I thought canolicalize() would map the codes but .. alas! it doesn't.
+                // I thought canonicalize() would map the codes but .. alas! it doesn't.
                 && requestedLocale.getDisplayName().equals(that.requestedLocale.getDisplayName())
                 && Utility.arrayEquals(localPatternChars,
                                        that.localPatternChars));
@@ -2346,7 +2345,6 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8 (retain)
-     * @provisional This API might change or be removed in a future release.
      */
     public final ULocale getLocale(ULocale.Type type) {
         return type == ULocale.ACTUAL_LOCALE ?

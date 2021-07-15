@@ -140,7 +140,7 @@ public:
      *
      * @param limit is the limit index to add to the array.
      *
-     * @return the run index where the limit index was stored, or -1 if the limit index cannt be stored.
+     * @return the run index where the limit index was stored, or -1 if the limit index cannot be stored.
      *
      * @see init
      * @see grow
@@ -310,7 +310,7 @@ public:
     virtual ~FontRuns();
 
     /**
-     * Get the <code>LEFontInstance</code> object assoicated with the given run
+     * Get the <code>LEFontInstance</code> object associated with the given run
      * of text. Use <code>RunArray::getLimit(run)</code> to get the corresponding
      * limit index.
      *
@@ -447,7 +447,7 @@ public:
     virtual ~LocaleRuns();
 
     /**
-     * Get the <code>Locale</code> object assoicated with the given run
+     * Get the <code>Locale</code> object associated with the given run
      * of text. Use <code>RunArray::getLimit(run)</code> to get the corresponding
      * limit index.
      *
@@ -585,7 +585,7 @@ public:
     virtual ~ValueRuns();
 
     /**
-     * Get the integer value assoicated with the given run
+     * Get the integer value associated with the given run
      * of text. Use <code>RunArray::getLimit(run)</code> to get the corresponding
      * limit index.
      *

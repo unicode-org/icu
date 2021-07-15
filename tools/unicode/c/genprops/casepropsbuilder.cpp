@@ -237,12 +237,12 @@ enum {
 
 struct ExcProps {
     ExcProps() :
-            delta(0), hasConditionalCaseMappings(FALSE), hasTurkicCaseFolding(FALSE),
-            hasNoSimpleCaseFolding(FALSE) {}
+            delta(0), hasConditionalCaseMappings(false), hasTurkicCaseFolding(false),
+            hasNoSimpleCaseFolding(false) {}
     ExcProps(const UniProps &otherProps) :
             props(otherProps),
-            delta(0), hasConditionalCaseMappings(FALSE), hasTurkicCaseFolding(FALSE),
-            hasNoSimpleCaseFolding(FALSE) {}
+            delta(0), hasConditionalCaseMappings(false), hasTurkicCaseFolding(false),
+            hasNoSimpleCaseFolding(false) {}
 
     UniProps props;
     UnicodeSet closure;
@@ -399,7 +399,7 @@ CasePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
 
     /* default: map to self */
     int32_t delta=0;
-    UBool noDelta=FALSE;
+    UBool noDelta=false;
 
     uint32_t type;
     if(props.binProps[UCHAR_LOWERCASE]) {
@@ -414,32 +414,32 @@ CasePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
     uint32_t value=type;
 
     // Examine simple case mappings.
-    UBool hasMapping=FALSE;
+    UBool hasMapping=false;
     if(props.suc>=0) {
         /* uppercase mapping as delta if the character is lowercase */
-        hasMapping=TRUE;
+        hasMapping=true;
         if(type==UCASE_LOWER) {
             delta=props.suc-start;
         } else {
-            noDelta=TRUE;
+            noDelta=true;
             value|=UCASE_EXCEPTION;
         }
     }
     if(props.slc>=0) {
         /* lowercase mapping as delta if the character is uppercase or titlecase */
-        hasMapping=TRUE;
+        hasMapping=true;
         if(type>=UCASE_UPPER) {
             delta=props.slc-start;
         } else {
-            noDelta=TRUE;
+            noDelta=true;
             value|=UCASE_EXCEPTION;
         }
     }
     if(props.stc>=0) {
-        hasMapping=TRUE;
+        hasMapping=true;
     }
     if(props.suc!=props.stc) {
-        noDelta=TRUE;
+        noDelta=true;
         value|=UCASE_EXCEPTION;
     }
 
@@ -447,7 +447,7 @@ CasePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
     // If they differ, then store them separately.
     UChar32 scf=props.scf;
     if(scf>=0 && scf!=props.slc) {
-        hasMapping=noDelta=TRUE;
+        hasMapping=noDelta=true;
         value|=UCASE_EXCEPTION;
     }
 
@@ -457,9 +457,9 @@ CasePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
     // (Full case folding falls back to simple case folding,
     // not to full lowercasing, so we need not also handle it specially
     // for such cases.)
-    UBool hasNoSimpleCaseFolding=FALSE;
+    UBool hasNoSimpleCaseFolding=false;
     if(scf<0 && props.slc>=0) {
-        hasNoSimpleCaseFolding=TRUE;
+        hasNoSimpleCaseFolding=true;
         value|=UCASE_EXCEPTION;
     }
 
@@ -475,13 +475,13 @@ CasePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
     if(!props.lc.isEmpty() || !props.uc.isEmpty() || !props.tc.isEmpty() ||
         newValues.contains(PPUCD_CONDITIONAL_CASE_MAPPINGS)
     ) {
-        hasMapping=TRUE;
+        hasMapping=true;
         value|=UCASE_EXCEPTION;
     }
     if( (!props.cf.isEmpty() && props.cf!=UnicodeString(props.scf)) ||
         newValues.contains(PPUCD_TURKIC_CASE_FOLDING)
     ) {
-        hasMapping=TRUE;
+        hasMapping=true;
         value|=UCASE_EXCEPTION;
     }
 
@@ -547,7 +547,7 @@ CasePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
         value|=((uint32_t)delta<<UCASE_DELTA_SHIFT)&UCASE_DELTA_MASK;
     }
 
-    utrie2_setRange32(pTrie, start, end, value, TRUE, &errorCode);
+    utrie2_setRange32(pTrie, start, end, value, true, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "genprops error: unable to set case mapping values: %s\n",
                 u_errorName(errorCode));
@@ -635,7 +635,7 @@ CasePropsBuilder::makeUnfoldData(UErrorCode &errorCode) {
     int32_t unfoldRows=unfoldLength/UGENCASE_UNFOLD_WIDTH-1;
     UChar *unfoldBuffer=unfold.getBuffer(-1);
     uprv_sortArray(unfoldBuffer+UGENCASE_UNFOLD_WIDTH, unfoldRows, UGENCASE_UNFOLD_WIDTH*2,
-                   compareUnfold, NULL, FALSE, &errorCode);
+                   compareUnfold, NULL, false, &errorCode);
 
     /* make unique-string rows by merging adjacent ones' code point columns */
 
@@ -753,15 +753,15 @@ CasePropsBuilder::addClosureMapping(UChar32 src, UChar32 dest, UErrorCode &error
  * each code point will in the end have some mapping to each other
  * code point in the group.
  *
- * @return TRUE if a closure mapping was added
+ * @return true if a closure mapping was added
  */
 UBool
 CasePropsBuilder::addClosure(UChar32 orig, UChar32 prev2, UChar32 prev, UChar32 c, uint32_t value,
                              UErrorCode &errorCode) {
-    if(U_FAILURE(errorCode)) { return FALSE; }
+    if(U_FAILURE(errorCode)) { return false; }
 
     UChar32 next;
-    UBool someMappingsAdded=FALSE;
+    UBool someMappingsAdded=false;
 
     if(c!=orig) {
         /* get the properties for c */
@@ -804,7 +804,7 @@ CasePropsBuilder::addClosure(UChar32 orig, UChar32 prev2, UChar32 prev, UChar32 
             next=iter.getCodepoint(); /* next!=c */
 
             if(next==orig) {
-                mapsToOrig=TRUE; /* remember that we map to orig */
+                mapsToOrig=true; /* remember that we map to orig */
             } else if(prev2<0 && next!=prev) {
                 /*
                  * recurse unless
@@ -817,7 +817,7 @@ CasePropsBuilder::addClosure(UChar32 orig, UChar32 prev2, UChar32 prev, UChar32 
 
         if(!mapsToOrig) {
             addClosureMapping(c, orig, errorCode);
-            return TRUE;
+            return true;
         }
     } else {
         if((value&UCASE_TYPE_MASK)>UCASE_NONE) {
@@ -836,7 +836,7 @@ CasePropsBuilder::addClosure(UChar32 orig, UChar32 prev2, UChar32 prev, UChar32 
                 if(c!=orig && next!=orig) {
                     /* c does not map to orig, add a closure mapping c->orig */
                     addClosureMapping(c, orig, errorCode);
-                    return TRUE;
+                    return true;
                 }
             }
         }
@@ -880,7 +880,7 @@ CasePropsBuilder::makeCaseClosure(UErrorCode &errorCode) {
     /* add further closure mappings from analyzing simple mappings */
     UBool someMappingsAdded;
     do {
-        someMappingsAdded=FALSE;
+        someMappingsAdded=false;
 
         for(UChar32 c=0; c<=0x10ffff; ++c) {
             uint32_t value=utrie2_get32(pTrie, c);
@@ -1195,10 +1195,12 @@ CasePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
     usrc_writeArray(f,
         "static const UVersionInfo ucase_props_dataVersion={",
         dataInfo.dataVersion, 8, 4,
+        "",
         "};\n\n");
     usrc_writeArray(f,
         "static const int32_t ucase_props_indexes[UCASE_IX_TOP]={",
         indexes, 32, UCASE_IX_TOP,
+        "",
         "};\n\n");
     usrc_writeUTrie2Arrays(f,
         "static const uint16_t ucase_props_trieIndex[%ld]={\n", NULL,
@@ -1207,10 +1209,12 @@ CasePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
     usrc_writeArray(f,
         "static const uint16_t ucase_props_exceptions[%ld]={\n",
         exceptions.getBuffer(), 16, exceptions.length(),
+        "",
         "\n};\n\n");
     usrc_writeArray(f,
         "static const uint16_t ucase_props_unfold[%ld]={\n",
         unfold.getBuffer(), 16, unfold.length(),
+        "",
         "\n};\n\n");
     fputs(
         "static const UCaseProps ucase_props_singleton={\n"
@@ -1223,7 +1227,7 @@ CasePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
         "  {\n",
         pTrie, "ucase_props_trieIndex", NULL,
         "  },\n");
-    usrc_writeArray(f, "  { ", dataInfo.formatVersion, 8, 4, " }\n");
+    usrc_writeArray(f, "  { ", dataInfo.formatVersion, 8, 4, "", " }\n");
     fputs("};\n\n"
           "#endif  // INCLUDED_FROM_UCASE_CPP\n", f);
     fclose(f);

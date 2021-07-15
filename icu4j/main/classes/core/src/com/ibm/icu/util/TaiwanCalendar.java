@@ -45,7 +45,7 @@ public class TaiwanCalendar extends GregorianCalendar {
 
     /**
      * Constant for the Taiwan Era for years before Minguo 1.
-     * Brefore Minuo 1 is Gregorian 1911, Before Minguo 2 is Gregorian 1910
+     * Before Minuo 1 is Gregorian 1911, Before Minguo 2 is Gregorian 1910
      * and so on.
      *
      * @see com.ibm.icu.util.Calendar#ERA

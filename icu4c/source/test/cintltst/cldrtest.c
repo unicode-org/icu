@@ -1333,7 +1333,7 @@ static void TestCoverage(void){
         status = U_ZERO_ERROR;
         ulocdata_getDelimiter(uld, types[i], result, 32, &status);
         if (U_FAILURE(status)){
-            log_err("ulocdata_getgetDelimiter error with type %d", types[i]);
+            log_err("ulocdata_getDelimiter error with type %d", types[i]);
         }
     }
 
@@ -1341,6 +1341,49 @@ static void TestCoverage(void){
     ulocdata_setNoSubstitute(uld,sub);
     ulocdata_close(uld);
 }
+
+typedef struct {
+    const char*  locale;
+    const UChar* quoteStart;
+    const UChar* quoteEnd;
+} TestDelimitersItem;
+
+static const TestDelimitersItem testDelimsItems[] = {
+    { "fr_CA", u"«", u"»" }, // inherited from fr
+    { "de_CH", u"„", u"“" }, // inherited from de
+    { "es_MX", u"“", u"”" }, // inherited from es_419
+    { "ja",    u"「", u"」" },
+    { NULL, NULL, NULL }
+};
+
+enum { kUDelimMax = 8, kBDelimMax = 16 };
+static void TestDelimiters(void){
+    const TestDelimitersItem* itemPtr = testDelimsItems;
+    for (; itemPtr->locale != NULL; itemPtr++) {
+        UErrorCode status = U_ZERO_ERROR;
+        ULocaleData  *uld = ulocdata_open(itemPtr->locale, &status);
+        if (U_FAILURE(status)) {
+            log_data_err("ulocdata_open for locale %s fails: %s\n", itemPtr->locale, u_errorName(status));
+        } else {
+            UChar quoteStart[kUDelimMax], quoteEnd[kUDelimMax];
+            (void)ulocdata_getDelimiter(uld, ULOCDATA_QUOTATION_START, quoteStart, kUDelimMax, &status);
+            (void)ulocdata_getDelimiter(uld, ULOCDATA_QUOTATION_END,   quoteEnd,   kUDelimMax, &status);
+            if (U_FAILURE(status)) {
+                log_err("ulocdata_getDelimiter ULOCDATA_QUOTATION_START/END for locale %s fails: %s\n", itemPtr->locale, u_errorName(status));
+            } else if (u_strcmp(quoteStart,itemPtr->quoteStart)!=0 || u_strcmp(quoteEnd,itemPtr->quoteEnd)!=0) {
+                char expStart[kBDelimMax], expEnd[kBDelimMax], getStart[kBDelimMax], getEnd[kBDelimMax];
+                u_austrcpy(expStart, itemPtr->quoteStart);
+                u_austrcpy(expEnd, itemPtr->quoteEnd);
+                u_austrcpy(getStart, quoteStart);
+                u_austrcpy(getEnd, quoteEnd);
+                log_err("ulocdata_getDelimiter ULOCDATA_QUOTATION_START/END for locale %s, expect %s..%s, get %s..%s\n",
+                        itemPtr->locale, expStart, expEnd, getStart, getEnd);
+            }
+            ulocdata_close(uld);
+        }
+    }
+}
+
 
 static void TestIndexChars(void) {
     /* Very basic test of ULOCDATA_ES_INDEX.
@@ -1531,6 +1574,7 @@ void addCLDRTest(TestNode** root)
     TESTCASE(TestExemplarSet);
     TESTCASE(TestLocaleDisplayPattern);
     TESTCASE(TestCoverage);
+    TESTCASE(TestDelimiters);
     TESTCASE(TestIndexChars);
     TESTCASE(TestAvailableIsoCodes);
 }

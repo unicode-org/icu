@@ -12,7 +12,7 @@ package com.ibm.icu.text;
 /**
  * An interface defining  constants for the Standard Compression Scheme
  * for Unicode (SCSU) as outlined in <A
- * HREF="http://www.unicode.org/unicode/reports/tr6">Unicode Technical
+ * HREF="https://www.unicode.org/reports/tr6">Unicode Technical
  * Report #6</A>.
  *
  * @author Stephen F. Booth
@@ -177,7 +177,7 @@ interface SCSU
         0x0100,  // Latin Extended-A
         0x0300,  // Combining Diacritical Marks
         0x2000,  // General Punctuation
-        0x2080,  // Curency Symbols
+        0x2080,  // Currency Symbols
         0x2100,  // Letterlike Symbols and Number Forms
         0x3000   // CJK Symbols and Punctuation
     };

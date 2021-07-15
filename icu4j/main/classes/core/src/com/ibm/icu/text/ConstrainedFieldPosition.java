@@ -295,7 +295,9 @@ public class ConstrainedFieldPosition {
      */
     public void setState(Field field, Object value, int start, int limit) {
         // Check matchesField only as an assertion (debug build)
-        assert matchesField(field, value);
+        if (field != null) {
+            assert matchesField(field, value);
+        }
 
         fField = field;
         fValue = value;

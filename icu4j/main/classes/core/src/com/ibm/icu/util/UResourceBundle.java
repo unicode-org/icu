@@ -136,7 +136,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      *                    If null the default ICU package name is used.
      * @param localeName the locale for which a resource bundle is desired
      * @param root the class object from which to load the resource bundle
-     * @param disableFallback Option to disable locale inheritence.
+     * @param disableFallback Option to disable locale inheritance.
      *                          If true the fallback chain will not be built.
      * @throws MissingResourceException
      *     if no resource bundle for the specified base name can be found

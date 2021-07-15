@@ -26,6 +26,7 @@
 #include "unicode/numberrangeformatter.h"
 
 #include "cmemory.h"
+#include "cstr.h"
 #include "plurrule_impl.h"
 #include "plurults.h"
 #include "uhash.h"
@@ -49,13 +50,17 @@ void PluralRulesTest::runIndexedTest( int32_t index, UBool exec, const char* &na
     TESTCASE_AUTO(testAPI);
     // TESTCASE_AUTO(testGetUniqueKeywordValue);
     TESTCASE_AUTO(testGetSamples);
+    TESTCASE_AUTO(testGetFixedDecimalSamples);
+    TESTCASE_AUTO(testSamplesWithExponent);
+    TESTCASE_AUTO(testSamplesWithCompactNotation);
     TESTCASE_AUTO(testWithin);
     TESTCASE_AUTO(testGetAllKeywordValues);
+    TESTCASE_AUTO(testScientificPluralKeyword);
     TESTCASE_AUTO(testCompactDecimalPluralKeyword);
     TESTCASE_AUTO(testOrdinal);
     TESTCASE_AUTO(testSelect);
     TESTCASE_AUTO(testSelectRange);
-    TESTCASE_AUTO(testAvailbleLocales);
+    TESTCASE_AUTO(testAvailableLocales);
     TESTCASE_AUTO(testParseErrors);
     TESTCASE_AUTO(testFixedDecimal);
     TESTCASE_AUTO(testSelectTrailingZeros);
@@ -356,124 +361,283 @@ UBool testEquality(const PluralRules &test) {
 
 void
 PluralRulesTest::assertRuleValue(const UnicodeString& rule, double expected) {
-  assertRuleKeyValue("a:" + rule, "a", expected);
+    assertRuleKeyValue("a:" + rule, "a", expected);
 }
 
 void
 PluralRulesTest::assertRuleKeyValue(const UnicodeString& rule,
                                     const UnicodeString& key, double expected) {
-  UErrorCode status = U_ZERO_ERROR;
-  PluralRules *pr = PluralRules::createRules(rule, status);
-  double result = pr->getUniqueKeywordValue(key);
-  delete pr;
-  if (expected != result) {
-    errln("expected %g but got %g", expected, result);
-  }
+    UErrorCode status = U_ZERO_ERROR;
+    PluralRules *pr = PluralRules::createRules(rule, status);
+    double result = pr->getUniqueKeywordValue(key);
+    delete pr;
+    if (expected != result) {
+        errln("expected %g but got %g", expected, result);
+    }
 }
 
 // TODO: UniqueKeywordValue() is not currently supported.
 //       If it never will be, this test code should be removed.
 void PluralRulesTest::testGetUniqueKeywordValue() {
-  assertRuleValue("n is 1", 1);
-  assertRuleValue("n in 2..2", 2);
-  assertRuleValue("n within 2..2", 2);
-  assertRuleValue("n in 3..4", UPLRULES_NO_UNIQUE_VALUE);
-  assertRuleValue("n within 3..4", UPLRULES_NO_UNIQUE_VALUE);
-  assertRuleValue("n is 2 or n is 2", 2);
-  assertRuleValue("n is 2 and n is 2", 2);
-  assertRuleValue("n is 2 or n is 3", UPLRULES_NO_UNIQUE_VALUE);
-  assertRuleValue("n is 2 and n is 3", UPLRULES_NO_UNIQUE_VALUE);
-  assertRuleValue("n is 2 or n in 2..3", UPLRULES_NO_UNIQUE_VALUE);
-  assertRuleValue("n is 2 and n in 2..3", 2);
-  assertRuleKeyValue("a: n is 1", "not_defined", UPLRULES_NO_UNIQUE_VALUE); // key not defined
-  assertRuleKeyValue("a: n is 1", "other", UPLRULES_NO_UNIQUE_VALUE); // key matches default rule
+    assertRuleValue("n is 1", 1);
+    assertRuleValue("n in 2..2", 2);
+    assertRuleValue("n within 2..2", 2);
+    assertRuleValue("n in 3..4", UPLRULES_NO_UNIQUE_VALUE);
+    assertRuleValue("n within 3..4", UPLRULES_NO_UNIQUE_VALUE);
+    assertRuleValue("n is 2 or n is 2", 2);
+    assertRuleValue("n is 2 and n is 2", 2);
+    assertRuleValue("n is 2 or n is 3", UPLRULES_NO_UNIQUE_VALUE);
+    assertRuleValue("n is 2 and n is 3", UPLRULES_NO_UNIQUE_VALUE);
+    assertRuleValue("n is 2 or n in 2..3", UPLRULES_NO_UNIQUE_VALUE);
+    assertRuleValue("n is 2 and n in 2..3", 2);
+    assertRuleKeyValue("a: n is 1", "not_defined", UPLRULES_NO_UNIQUE_VALUE); // key not defined
+    assertRuleKeyValue("a: n is 1", "other", UPLRULES_NO_UNIQUE_VALUE); // key matches default rule
 }
 
 void PluralRulesTest::testGetSamples() {
-  // TODO: fix samples, re-enable this test.
+    // TODO: fix samples, re-enable this test.
 
-  // no get functional equivalent API in ICU4C, so just
-  // test every locale...
-  UErrorCode status = U_ZERO_ERROR;
-  int32_t numLocales;
-  const Locale* locales = Locale::getAvailableLocales(numLocales);
+    // no get functional equivalent API in ICU4C, so just
+    // test every locale...
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t numLocales;
+    const Locale* locales = Locale::getAvailableLocales(numLocales);
 
-  double values[1000];
-  for (int32_t i = 0; U_SUCCESS(status) && i < numLocales; ++i) {
-    if (uprv_strcmp(locales[i].getLanguage(), "fr") == 0 &&
-            logKnownIssue("21299", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
-        continue;
-    }
-    PluralRules *rules = PluralRules::forLocale(locales[i], status);
-    if (U_FAILURE(status)) {
-      break;
-    }
-    StringEnumeration *keywords = rules->getKeywords(status);
-    if (U_FAILURE(status)) {
-      delete rules;
-      break;
-    }
-    const UnicodeString* keyword;
-    while (NULL != (keyword = keywords->snext(status))) {
-      int32_t count = rules->getSamples(*keyword, values, UPRV_LENGTHOF(values), status);
-      if (U_FAILURE(status)) {
-        errln(UNICODE_STRING_SIMPLE("getSamples() failed for locale ") +
-              locales[i].getName() +
-              UNICODE_STRING_SIMPLE(", keyword ") + *keyword);
-        continue;
-      }
-      if (count == 0) {
-        // TODO: Lots of these. 
-        //   errln(UNICODE_STRING_SIMPLE("no samples for keyword ") + *keyword + UNICODE_STRING_SIMPLE(" in locale ") + locales[i].getName() );
-      }
-      if (count > UPRV_LENGTHOF(values)) {
-        errln(UNICODE_STRING_SIMPLE("getSamples()=") + count +
-              UNICODE_STRING_SIMPLE(", too many values, for locale ") +
-              locales[i].getName() +
-              UNICODE_STRING_SIMPLE(", keyword ") + *keyword);
-        count = UPRV_LENGTHOF(values);
-      }
-      for (int32_t j = 0; j < count; ++j) {
-        if (values[j] == UPLRULES_NO_UNIQUE_VALUE) {
-          errln("got 'no unique value' among values");
-        } else {
-          UnicodeString resultKeyword = rules->select(values[j]);
-          // if (strcmp(locales[i].getName(), "uk") == 0) {    // Debug only.
-          //     std::cout << "  uk " << US(resultKeyword).cstr() << " " << values[j] << std::endl;
-          // }
-          if (*keyword != resultKeyword) {
-            errln("file %s, line %d, Locale %s, sample for keyword \"%s\":  %g, select(%g) returns keyword \"%s\"",
-                __FILE__, __LINE__, locales[i].getName(), US(*keyword).cstr(), values[j], values[j], US(resultKeyword).cstr());
-          }
+    double values[1000];
+    for (int32_t i = 0; U_SUCCESS(status) && i < numLocales; ++i) {
+        if (uprv_strcmp(locales[i].getLanguage(), "fr") == 0 &&
+                logKnownIssue("21322", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
+            continue;
         }
-      }
+        LocalPointer<PluralRules> rules(PluralRules::forLocale(locales[i], status));
+        if (U_FAILURE(status)) {
+            break;
+        }
+        LocalPointer<StringEnumeration> keywords(rules->getKeywords(status));
+        if (U_FAILURE(status)) {
+            break;
+        }
+        const UnicodeString* keyword;
+        while (NULL != (keyword = keywords->snext(status))) {
+            int32_t count = rules->getSamples(*keyword, values, UPRV_LENGTHOF(values), status);
+            if (U_FAILURE(status)) {
+                errln(UnicodeString(u"getSamples() failed for locale ") +
+                      locales[i].getName() +
+                      UnicodeString(u", keyword ") + *keyword);
+                continue;
+            }
+            if (count == 0) {
+                // TODO: Lots of these.
+                //   errln(UnicodeString(u"no samples for keyword ") + *keyword + UnicodeString(u" in locale ") + locales[i].getName() );
+            }
+            if (count > UPRV_LENGTHOF(values)) {
+                errln(UnicodeString(u"getSamples()=") + count +
+                      UnicodeString(u", too many values, for locale ") +
+                      locales[i].getName() +
+                      UnicodeString(u", keyword ") + *keyword);
+                count = UPRV_LENGTHOF(values);
+            }
+            for (int32_t j = 0; j < count; ++j) {
+                if (values[j] == UPLRULES_NO_UNIQUE_VALUE) {
+                    errln("got 'no unique value' among values");
+                } else {
+                    UnicodeString resultKeyword = rules->select(values[j]);
+                    // if (strcmp(locales[i].getName(), "uk") == 0) {    // Debug only.
+                    //     std::cout << "  uk " << US(resultKeyword).cstr() << " " << values[j] << std::endl;
+                    // }
+                    if (*keyword != resultKeyword) {
+                        errln("file %s, line %d, Locale %s, sample for keyword \"%s\":  %g, select(%g) returns keyword \"%s\"",
+                              __FILE__, __LINE__, locales[i].getName(), US(*keyword).cstr(), values[j], values[j], US(resultKeyword).cstr());
+                    }
+                }
+            }
+        }
     }
-    delete keywords;
-    delete rules;
-  }
+}
+
+void PluralRulesTest::testGetFixedDecimalSamples() {
+    // TODO: fix samples, re-enable this test.
+
+    // no get functional equivalent API in ICU4C, so just
+    // test every locale...
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t numLocales;
+    const Locale* locales = Locale::getAvailableLocales(numLocales);
+
+    FixedDecimal values[1000];
+    for (int32_t i = 0; U_SUCCESS(status) && i < numLocales; ++i) {
+        if (uprv_strcmp(locales[i].getLanguage(), "fr") == 0 &&
+                logKnownIssue("21322", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
+            continue;
+        }
+        LocalPointer<PluralRules> rules(PluralRules::forLocale(locales[i], status));
+        if (U_FAILURE(status)) {
+            break;
+        }
+        LocalPointer<StringEnumeration> keywords(rules->getKeywords(status));
+        if (U_FAILURE(status)) {
+            break;
+        }
+        const UnicodeString* keyword;
+        while (NULL != (keyword = keywords->snext(status))) {
+            int32_t count = rules->getSamples(*keyword, values, UPRV_LENGTHOF(values), status);
+            if (U_FAILURE(status)) {
+                errln(UnicodeString(u"getSamples() failed for locale ") +
+                      locales[i].getName() +
+                      UnicodeString(u", keyword ") + *keyword);
+                continue;
+            }
+            if (count == 0) {
+                // TODO: Lots of these.
+                //   errln(UnicodeString(u"no samples for keyword ") + *keyword + UnicodeString(u" in locale ") + locales[i].getName() );
+            }
+            if (count > UPRV_LENGTHOF(values)) {
+                errln(UnicodeString(u"getSamples()=") + count +
+                      UnicodeString(u", too many values, for locale ") +
+                      locales[i].getName() +
+                      UnicodeString(u", keyword ") + *keyword);
+                count = UPRV_LENGTHOF(values);
+            }
+            for (int32_t j = 0; j < count; ++j) {
+                if (values[j] == UPLRULES_NO_UNIQUE_VALUE_DECIMAL) {
+                    errln("got 'no unique value' among values");
+                } else {
+                    UnicodeString resultKeyword = rules->select(values[j]);
+                    // if (strcmp(locales[i].getName(), "uk") == 0) {    // Debug only.
+                    //     std::cout << "  uk " << US(resultKeyword).cstr() << " " << values[j] << std::endl;
+                    // }
+                    if (*keyword != resultKeyword) {
+                        errln("file %s, line %d, Locale %s, sample for keyword \"%s\":  %s, select(%s) returns keyword \"%s\"",
+                                  __FILE__, __LINE__, locales[i].getName(), US(*keyword).cstr(), values[j].toString().getBuffer(), values[j].toString().getBuffer(), US(resultKeyword).cstr());
+                    }
+                }
+            }
+        }
+    }
+}
+
+void PluralRulesTest::testSamplesWithExponent() {
+    // integer samples
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString description(
+        u"one: i = 0,1 @integer 0, 1, 1e5 @decimal 0.0~1.5, 1.1e5; "
+        u"many: e = 0 and i != 0 and i % 1000000 = 0 and v = 0 or e != 0..5"
+        u" @integer 1000000, 2e6, 3e6, 4e6, 5e6, 6e6, 7e6, … @decimal 2.1e6, 3.1e6, 4.1e6, 5.1e6, 6.1e6, 7.1e6, …; "
+        u"other:  @integer 2~17, 100, 1000, 10000, 100000, 2e5, 3e5, 4e5, 5e5, 6e5, 7e5, …"
+        u" @decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 2.1e5, 3.1e5, 4.1e5, 5.1e5, 6.1e5, 7.1e5, …"
+    );
+    LocalPointer<PluralRules> test(PluralRules::createRules(description, status));
+    if (U_FAILURE(status)) {
+        errln("Couldn't create plural rules from a string using exponent notation, with error = %s", u_errorName(status));
+        return;
+    }
+    checkNewSamples(description, test, u"one", u"@integer 0, 1, 1e5", FixedDecimal(0));
+    checkNewSamples(description, test, u"many", u"@integer 1000000, 2e6, 3e6, 4e6, 5e6, 6e6, 7e6, …", FixedDecimal(1000000));
+    checkNewSamples(description, test, u"other", u"@integer 2~17, 100, 1000, 10000, 100000, 2e5, 3e5, 4e5, 5e5, 6e5, 7e5, …", FixedDecimal(2));
+
+    // decimal samples
+    status = U_ZERO_ERROR;
+    UnicodeString description2(
+        u"one: i = 0,1 @decimal 0.0~1.5, 1.1e5; "
+        u"many: e = 0 and i != 0 and i % 1000000 = 0 and v = 0 or e != 0..5"
+        u" @decimal 2.1e6, 3.1e6, 4.1e6, 5.1e6, 6.1e6, 7.1e6, …; "
+        u"other:  @decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 2.1e5, 3.1e5, 4.1e5, 5.1e5, 6.1e5, 7.1e5, …"
+    );
+    LocalPointer<PluralRules> test2(PluralRules::createRules(description2, status));
+    if (U_FAILURE(status)) {
+        errln("Couldn't create plural rules from a string using exponent notation, with error = %s", u_errorName(status));
+        return;
+    }
+    checkNewSamples(description2, test2, u"one", u"@decimal 0.0~1.5, 1.1e5", FixedDecimal(0, 1));
+    checkNewSamples(description2, test2, u"many", u"@decimal 2.1e6, 3.1e6, 4.1e6, 5.1e6, 6.1e6, 7.1e6, …", FixedDecimal::createWithExponent(2.1, 1, 6));
+    checkNewSamples(description2, test2, u"other", u"@decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 2.1e5, 3.1e5, 4.1e5, 5.1e5, 6.1e5, 7.1e5, …", FixedDecimal(2.0, 1));
+}
+
+
+void PluralRulesTest::testSamplesWithCompactNotation() {
+    // integer samples
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString description(
+        u"one: i = 0,1 @integer 0, 1, 1c5 @decimal 0.0~1.5, 1.1c5; "
+        u"many: c = 0 and i != 0 and i % 1000000 = 0 and v = 0 or c != 0..5"
+        u" @integer 1000000, 2c6, 3c6, 4c6, 5c6, 6c6, 7c6, … @decimal 2.1c6, 3.1c6, 4.1c6, 5.1c6, 6.1c6, 7.1c6, …; "
+        u"other:  @integer 2~17, 100, 1000, 10000, 100000, 2c5, 3c5, 4c5, 5c5, 6c5, 7c5, …"
+        u" @decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 2.1c5, 3.1c5, 4.1c5, 5.1c5, 6.1c5, 7.1c5, …"
+    );
+    LocalPointer<PluralRules> test(PluralRules::createRules(description, status));
+    if (U_FAILURE(status)) {
+        errln("Couldn't create plural rules from a string using exponent notation, with error = %s", u_errorName(status));
+        return;
+    }
+    checkNewSamples(description, test, u"one", u"@integer 0, 1, 1c5", FixedDecimal(0));
+    checkNewSamples(description, test, u"many", u"@integer 1000000, 2c6, 3c6, 4c6, 5c6, 6c6, 7c6, …", FixedDecimal(1000000));
+    checkNewSamples(description, test, u"other", u"@integer 2~17, 100, 1000, 10000, 100000, 2c5, 3c5, 4c5, 5c5, 6c5, 7c5, …", FixedDecimal(2));
+
+    // decimal samples
+    status = U_ZERO_ERROR;
+    UnicodeString description2(
+        u"one: i = 0,1 @decimal 0.0~1.5, 1.1c5; "
+        u"many: c = 0 and i != 0 and i % 1000000 = 0 and v = 0 or c != 0..5"
+        u" @decimal 2.1c6, 3.1c6, 4.1c6, 5.1c6, 6.1c6, 7.1c6, …; "
+        u"other:  @decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 2.1c5, 3.1c5, 4.1c5, 5.1c5, 6.1c5, 7.1c5, …"
+    );
+    LocalPointer<PluralRules> test2(PluralRules::createRules(description2, status));
+    if (U_FAILURE(status)) {
+        errln("Couldn't create plural rules from a string using exponent notation, with error = %s", u_errorName(status));
+        return;
+    }
+    checkNewSamples(description2, test2, u"one", u"@decimal 0.0~1.5, 1.1c5", FixedDecimal(0, 1));
+    checkNewSamples(description2, test2, u"many", u"@decimal 2.1c6, 3.1c6, 4.1c6, 5.1c6, 6.1c6, 7.1c6, …", FixedDecimal::createWithExponent(2.1, 1, 6));
+    checkNewSamples(description2, test2, u"other", u"@decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 2.1c5, 3.1c5, 4.1c5, 5.1c5, 6.1c5, 7.1c5, …", FixedDecimal(2.0, 1));
+}
+
+void PluralRulesTest::checkNewSamples(
+        UnicodeString description, 
+        const LocalPointer<PluralRules> &test,
+        UnicodeString keyword,
+        UnicodeString samplesString,
+        FixedDecimal firstInRange) {
+
+    UErrorCode status = U_ZERO_ERROR;
+    FixedDecimal samples[1000];
+    
+    test->getSamples(keyword, samples, UPRV_LENGTHOF(samples), status);
+    if (U_FAILURE(status)) {
+        errln("Couldn't retrieve plural samples, with error = %s", u_errorName(status));
+        return;
+    }
+    FixedDecimal actualFirstSample = samples[0];
+
+    if (!(firstInRange == actualFirstSample)) {
+        CStr descCstr(description);
+        CStr samplesCstr(samplesString);
+        char errMsg[1000];
+        snprintf(errMsg, sizeof(errMsg), "First parsed sample FixedDecimal not equal to expected for samples: %s in rule string: %s\n", descCstr(), samplesCstr());
+        errln(errMsg);
+    }
 }
 
 void PluralRulesTest::testWithin() {
-  // goes to show you what lack of testing will do.
-  // of course, this has been broken for two years and no one has noticed...
-  UErrorCode status = U_ZERO_ERROR;
-  PluralRules *rules = PluralRules::createRules("a: n mod 10 in 5..8", status);
-  if (!rules) {
-    errln("couldn't instantiate rules");
-    return;
-  }
+    // goes to show you what lack of testing will do.
+    // of course, this has been broken for two years and no one has noticed...
+    UErrorCode status = U_ZERO_ERROR;
+    PluralRules *rules = PluralRules::createRules("a: n mod 10 in 5..8", status);
+    if (!rules) {
+        errln("couldn't instantiate rules");
+        return;
+    }
 
-  UnicodeString keyword = rules->select((int32_t)26);
-  if (keyword != "a") {
-    errln("expected 'a' for 26 but didn't get it.");
-  }
+    UnicodeString keyword = rules->select((int32_t)26);
+    if (keyword != "a") {
+        errln("expected 'a' for 26 but didn't get it.");
+    }
 
-  keyword = rules->select(26.5);
-  if (keyword != "other") {
-    errln("expected 'other' for 26.5 but didn't get it.");
-  }
+    keyword = rules->select(26.5);
+    if (keyword != "other") {
+        errln("expected 'other' for 26.5 but didn't get it.");
+    }
 
-  delete rules;
+    delete rules;
 }
 
 void
@@ -558,7 +722,7 @@ PluralRulesTest::testGetAllKeywordValues() {
                 ok = FALSE;
             }
 
-            // We'll cheat a bit here.  The samples happend to be in order and so are our
+            // We'll cheat a bit here.  The samples happened to be in order and so are our
             // expected values, so we'll just test in order until a failure.  If the
             // implementation changes to return samples in an arbitrary order, this test
             // must change.  There's no actual restriction on the order of the samples.
@@ -603,13 +767,77 @@ PluralRulesTest::testGetAllKeywordValues() {
     }
 }
 
+// For the time being, the  compact notation exponent operand `c` is an alias
+// for the scientific exponent operand `e` and compact notation.
+void
+PluralRulesTest::testScientificPluralKeyword() {
+    IcuTestErrorCode errorCode(*this, "testScientificPluralKeyword");
+
+    LocalPointer<PluralRules> rules(PluralRules::createRules(
+        u"one: i = 0,1 @integer 0, 1 @decimal 0.0~1.5;  "
+        u"many: e = 0 and i % 1000000 = 0 and v = 0 or e != 0 .. 5;  "
+        u"other:  @integer 2~17, 100, 1000, 10000, 100000, 1000000,  "
+        u"  @decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, …", errorCode));
+
+    if (U_FAILURE(errorCode)) {
+        errln("Couldn't instantiate plurals rules from string, with error = %s", u_errorName(errorCode));
+        return;
+    }
+
+    const char* localeName = "fr-FR";
+    Locale locale = Locale::createFromName(localeName);
+
+    struct TestCase {
+        const char16_t* skeleton;
+        const int input;
+        const char16_t* expectedFormattedOutput;
+        const char16_t* expectedPluralRuleKeyword;
+    } cases[] = {
+        // unlocalized formatter skeleton, input, string output, plural rule keyword
+        {u"",           0, u"0", u"one"},
+        {u"scientific", 0, u"0", u"one"},
+
+        {u"",           1, u"1", u"one"},
+        {u"scientific", 1, u"1", u"one"},
+
+        {u"",           2, u"2", u"other"},
+        {u"scientific", 2, u"2", u"other"},
+
+        {u"",           1000000, u"1 000 000", u"many"},
+        {u"scientific", 1000000, u"1 million", u"many"},
+
+        {u"",           1000001, u"1 000 001", u"other"},
+        {u"scientific", 1000001, u"1 million", u"many"},
+
+        {u"",           120000,  u"1 200 000",    u"other"},
+        {u"scientific", 1200000, u"1,2 millions", u"many"},
+
+        {u"",           1200001, u"1 200 001",    u"other"},
+        {u"scientific", 1200001, u"1,2 millions", u"many"},
+
+        {u"",           2000000, u"2 000 000",  u"many"},
+        {u"scientific", 2000000, u"2 millions", u"many"},
+    };
+    for (const auto& cas : cases) {
+        const char16_t* skeleton = cas.skeleton;
+        const int input = cas.input;
+        const char16_t* expectedPluralRuleKeyword = cas.expectedPluralRuleKeyword;
+
+        UnicodeString actualPluralRuleKeyword =
+            getPluralKeyword(rules, locale, input, skeleton);
+
+        UnicodeString message(UnicodeString(localeName) + u" " + DoubleToUnicodeString(input));
+        assertEquals(message, expectedPluralRuleKeyword, actualPluralRuleKeyword);
+    }
+}
+
 void
 PluralRulesTest::testCompactDecimalPluralKeyword() {
     IcuTestErrorCode errorCode(*this, "testCompactDecimalPluralKeyword");
 
     LocalPointer<PluralRules> rules(PluralRules::createRules(
         u"one: i = 0,1 @integer 0, 1 @decimal 0.0~1.5;  "
-        u"many: e = 0 and i % 1000000 = 0 and v = 0 or e != 0 .. 5;  "
+        u"many: c = 0 and i % 1000000 = 0 and v = 0 or c != 0 .. 5;  "
         u"other:  @integer 2~17, 100, 1000, 10000, 100000, 1000000,  "
         u"  @decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, …", errorCode));
 
@@ -975,7 +1203,7 @@ void PluralRulesTest::testSelectRange() {
 }
 
 
-void PluralRulesTest::testAvailbleLocales() {
+void PluralRulesTest::testAvailableLocales() {
     
     // Hash set of (char *) strings.
     UErrorCode status = U_ZERO_ERROR;
@@ -1078,7 +1306,7 @@ void PluralRulesTest::testParseErrors() {
             "A: n is 13",          // Uppercase keywords not allowed.
             "a: n ! = 3",          // spaces in != operator
             "a: n = not 3",        // '=' not exact equivalent of 'is'
-            "a: n ! in 3..4"       // '!' not exact equivalent of 'not'
+            "a: n ! in 3..4",      // '!' not exact equivalent of 'not'
             "a: n % 37 ! in 3..4"
 
             };

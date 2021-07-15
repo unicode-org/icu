@@ -16,6 +16,11 @@
 #include "unicode/numberformatter.h"
 #include "unicode/numberrangeformatter.h"
 
+// ICU-20241 Solaris #defines ESP in sys/regset.h
+#ifdef ESP
+#   undef ESP
+#endif
+
 using namespace icu::number;
 using namespace icu::number::impl;
 using namespace icu::numparse;
@@ -54,10 +59,14 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     void notationCompact();
     void unitMeasure();
     void unitCompoundMeasure();
+    void unitArbitraryMeasureUnits();
+    void unitSkeletons();
     void unitUsage();
     void unitUsageErrorCodes();
     void unitUsageSkeletons();
     void unitCurrency();
+    void unitInflections();
+    void unitGender();
     void unitPercent();
     void percentParity();
     void roundingFraction();
@@ -104,12 +113,15 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     CurrencyUnit CNY;
 
     MeasureUnit METER;
+    MeasureUnit METER_PER_SECOND;
     MeasureUnit DAY;
     MeasureUnit SQUARE_METER;
     MeasureUnit FAHRENHEIT;
     MeasureUnit SECOND;
     MeasureUnit POUND;
+    MeasureUnit POUND_FORCE;
     MeasureUnit SQUARE_MILE;
+    MeasureUnit SQUARE_INCH;
     MeasureUnit JOULE;
     MeasureUnit FURLONG;
     MeasureUnit KELVIN;
@@ -161,6 +173,20 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
       const FormattedNumber& formattedNumber,
       const UFieldPosition* expectedFieldPositions,
       int32_t length);
+
+    struct UnitInflectionTestCase {
+        const char *unitIdentifier;
+        const char *locale;
+        const char *unitDisplayCase;
+        double value;
+        const UChar *expected;
+    };
+
+    void runUnitInflectionsTestCases(UnlocalizedNumberFormatter unf,
+                                     UnicodeString skeleton,
+                                     const UnitInflectionTestCase *cases,
+                                     int32_t numCases,
+                                     IcuTestErrorCode &status);
 };
 
 class DecimalQuantityTest : public IntlTest {
@@ -172,10 +198,11 @@ class DecimalQuantityTest : public IntlTest {
     void testConvertToAccurateDouble();
     void testUseApproximateDoubleWhenAble();
     void testHardDoubleConversion();
+    void testFitsInLong();
     void testToDouble();
     void testMaxDigits();
     void testNickelRounding();
-    void testCompactDecimalSuppressedExponent();
+    void testScientificAndCompactSuppressedExponent();
     void testSuppressedExponentUnchangedByInitialScaling();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
@@ -265,6 +292,7 @@ class NumberSkeletonTest : public IntlTest {
     void flexibleSeparators();
     void wildcardCharacters();
     void perUnitInArabic();
+    void perUnitToSkeleton();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 

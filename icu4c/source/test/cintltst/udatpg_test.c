@@ -531,7 +531,7 @@ static void TestGetDefaultHourCycle() {
         { "fi",       UDAT_HOUR_CYCLE_23 },
         { "fr",       UDAT_HOUR_CYCLE_23 },
         { "ja_JP",    UDAT_HOUR_CYCLE_23 },
-        { "zh_CN",    UDAT_HOUR_CYCLE_12 },
+        { "zh_CN",    UDAT_HOUR_CYCLE_23 },
         { "zh_HK",    UDAT_HOUR_CYCLE_12 },
         { "zh_TW",    UDAT_HOUR_CYCLE_12 },
         { "ko_KR",    UDAT_HOUR_CYCLE_12 },
@@ -548,7 +548,7 @@ static void TestGetDefaultHourCycle() {
         } else {
             UDateFormatHourCycle actual = udatpg_getDefaultHourCycle(dtpgen, &status);
             if (U_FAILURE(status) || testDataPtr->expected != actual) {
-                log_err("ERROR dtpgen locale %s udatpg_getDefaultHourCycle expecte to get %d but get %d\n",
+                log_err("ERROR dtpgen locale %s udatpg_getDefaultHourCycle expected to get %d but get %d\n",
                         testDataPtr->locale, testDataPtr->expected, actual);
             }
             udatpg_close(dtpgen);

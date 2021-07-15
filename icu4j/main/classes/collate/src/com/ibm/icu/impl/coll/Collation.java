@@ -252,7 +252,7 @@ public final class Collation {
      * Tag for a lead surrogate code unit.
      * Optional optimization for UTF-16 string processing.
      * Bits 31..10: Unused, 0.
-     *       9.. 8: =0: All associated supplementary code points are unassigned-implict.
+     *       9.. 8: =0: All associated supplementary code points are unassigned-implicit.
      *              =1: All associated supplementary code points fall back to the base data.
      *              else: (Normally 2) Look up the data for the supplementary code point.
      */

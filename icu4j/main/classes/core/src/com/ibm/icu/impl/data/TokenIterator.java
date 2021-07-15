@@ -87,7 +87,7 @@ public class TokenIterator {
     public int getLineNumber() {
         return reader.getLineNumber();
     }
-    
+
     /**
      * Return a string description of the position of the last line
      * returned by readLine() or readLineSkippingComments().
@@ -95,7 +95,7 @@ public class TokenIterator {
     public String describePosition() {
         return reader.describePosition() + ':' + (lastpos+1);
     }
-    
+
     /**
      * Read the next token from 'this.line' and append it to
      * 'this.buf'.  Tokens are separated by Pattern_White_Space.  Tokens
@@ -127,22 +127,17 @@ public class TokenIterator {
             buf.append(c);
             break;
         }
-        int[] posref = null;
         while (position < line.length()) {
             c = line.charAt(position); // 16-bit ok
             if (c == '\\') {
-                if (posref == null) {
-                    posref = new int[1];
-                }
-                posref[0] = position+1;
-                int c32 = Utility.unescapeAt(line, posref);
-                if (c32 < 0) {
+                int cpAndLength = Utility.unescapeAndLengthAt(line, position + 1);
+                if (cpAndLength < 0) {
                     throw new RuntimeException("Invalid escape at " +
                                                reader.describePosition() + ':' +
                                                position);
                 }
-                UTF16.append(buf, c32);
-                position = posref[0];
+                UTF16.append(buf, Utility.cpFromCodePointAndLength(cpAndLength));
+                position += 1 + Utility.lengthFromCodePointAndLength(cpAndLength);
             } else if ((quote != 0 && c == quote) ||
                        (quote == 0 && PatternProps.isWhiteSpace(c))) {
                 return ++position;

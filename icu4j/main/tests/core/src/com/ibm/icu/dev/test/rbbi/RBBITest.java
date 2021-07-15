@@ -26,6 +26,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.RBBIDataWrapper;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.RuleBasedBreakIterator;
@@ -42,6 +43,9 @@ public class RBBITest extends TestFmwk {
 
     @Test
    public void TestThaiDictionaryBreakIterator() {
+       // The expectations in this test heavily depends on the Thai dictionary.
+       // Therefore, we skip this test under the LSTM configuration.
+       org.junit.Assume.assumeTrue(!TestUtil.skipDictionaryTest());
        int position;
        int index;
        int result[] = { 1, 2, 5, 10, 11, 12, 11, 10, 5, 2, 1, 0 };
@@ -905,4 +909,41 @@ public class RBBITest extends TestFmwk {
         assertEquals("Wrong number of breaks found", 2, breaksFound);
     }
 
+    /* Test handling of unpair surrogate.
+     */
+    @Test
+    public void TestUnpairedSurrogate() {
+        // make sure the simple one work first.
+        String rules = "ab;";
+        RuleBasedBreakIterator bi = new RuleBasedBreakIterator(rules);
+        assertEquals("Rules does not match", rules, bi.toString());
+
+        try {
+            new RuleBasedBreakIterator("a\ud800b;");
+            fail("TestUnpairedSurrogate: RuleBasedBreakIterator() failed to throw an exception with unpair low surrogate.");
+        }
+        catch (IllegalArgumentException e) {
+            // expected exception with unpair surrogate.
+        }
+        catch (Exception e) {
+            fail("TestUnpairedSurrogate: Unexpected exception while new RuleBasedBreakIterator() with unpair low surrogate: " + e);
+        }
+
+        try {
+            new RuleBasedBreakIterator("a\ude00b;");
+            fail("TestUnpairedSurrogate: RuleBasedBreakIterator() failed to throw an exception with unpair high surrogate.");
+        }
+        catch (IllegalArgumentException e) {
+            // expected exception with unpair surrogate.
+        }
+        catch (Exception e) {
+            fail("TestUnpairedSurrogate: Unexpected exception while new RuleBasedBreakIterator() with unpair high surrogate: " + e);
+        }
+
+
+        // make sure the surrogate one work too.
+        rules = "a😀b;";
+        bi = new RuleBasedBreakIterator(rules);
+        assertEquals("Rules does not match", rules, bi.toString());
+    }
 }

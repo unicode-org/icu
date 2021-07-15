@@ -22,7 +22,6 @@ import java.util.Date;
  *
  * @see SimpleDateRule
  * @draft ICU 2.8 (retainAll)
- * @provisional This API might change or be removed in a future release.
  */
 public interface DateRule
 {
@@ -37,7 +36,6 @@ public interface DateRule
      *
      * @see #firstBetween
      * @draft ICU 2.8
-     * @provisional This API might change or be removed in a future release.
      */
     abstract public Date    firstAfter(Date start);
 
@@ -54,7 +52,6 @@ public interface DateRule
      *
      * @see #firstAfter
      * @draft ICU 2.8
-     * @provisional This API might change or be removed in a future release.
      */
     abstract public Date    firstBetween(Date start, Date end);
 
@@ -68,7 +65,6 @@ public interface DateRule
      * @param date  The date to check.
      * @return      true if this event occurs on the given date.
      * @draft ICU 2.8
-     * @provisional This API might change or be removed in a future release.
      */
     abstract public boolean isOn(Date date);
 
@@ -76,7 +72,6 @@ public interface DateRule
      * Check whether this event occurs at least once between the two
      * dates given.
      * @draft ICU 2.8
-     * @provisional This API might change or be removed in a future release.
      */
     abstract public boolean isBetween(Date start, Date end);
 }

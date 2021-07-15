@@ -1395,7 +1395,7 @@ openFragmentedUnicodeString(UText *ut, UnicodeString *s, UErrorCode *status) {
 //      (UTF-8 wrapper, for example)
 //
 //   The test:
-//     1.  Create an inital UText
+//     1.  Create an initial UText
 //     2.  Deep clone it.  Contents should match original.
 //     3.  Reset original to something different.
 //     4.  Check that clone contents did not change.

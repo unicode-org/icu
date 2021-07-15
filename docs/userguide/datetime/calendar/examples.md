@@ -143,7 +143,7 @@ UErrorCode status = U_ZERO_ERROR;
 UDate time;
 Calendar *cal1, *cal2;
 // Create a new Gregorian Calendar.
-cal1 = Calendar::createInstance("en_US@calender=gregorian", status);
+cal1 = Calendar::createInstance("en_US@calendar=gregorian", status);
 if (U_FAILURE(status)) {
     printf("Error creating Gregorian calendar.\n");
     return;

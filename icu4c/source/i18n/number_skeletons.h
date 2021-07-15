@@ -42,6 +42,7 @@ enum ParseState {
 
     STATE_SCIENTIFIC,
     STATE_FRACTION_PRECISION,
+    STATE_PRECISION,
 
     // Section 2: An option is required:
 
@@ -85,6 +86,9 @@ enum StemEnum {
     STEM_ROUNDING_MODE_DOWN,
     STEM_ROUNDING_MODE_UP,
     STEM_ROUNDING_MODE_HALF_EVEN,
+    STEM_ROUNDING_MODE_HALF_ODD,
+    STEM_ROUNDING_MODE_HALF_CEILING,
+    STEM_ROUNDING_MODE_HALF_FLOOR,
     STEM_ROUNDING_MODE_HALF_DOWN,
     STEM_ROUNDING_MODE_HALF_UP,
     STEM_ROUNDING_MODE_UNNECESSARY,
@@ -108,6 +112,8 @@ enum StemEnum {
     STEM_SIGN_ACCOUNTING_ALWAYS,
     STEM_SIGN_EXCEPT_ZERO,
     STEM_SIGN_ACCOUNTING_EXCEPT_ZERO,
+    STEM_SIGN_NEGATIVE,
+    STEM_SIGN_ACCOUNTING_NEGATIVE,
     STEM_DECIMAL_AUTO,
     STEM_DECIMAL_ALWAYS,
 
@@ -240,10 +246,10 @@ void parseCurrencyOption(const StringSegment& segment, MacroProps& macros, UErro
 
 void generateCurrencyOption(const CurrencyUnit& currency, UnicodeString& sb, UErrorCode& status);
 
+// "measure-unit/" is deprecated in favour of "unit/".
 void parseMeasureUnitOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
-void generateMeasureUnitOption(const MeasureUnit& measureUnit, UnicodeString& sb, UErrorCode& status);
-
+// "per-measure-unit/" is deprecated in favour of "unit/".
 void parseMeasurePerUnitOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
 /**
@@ -272,6 +278,9 @@ void parseIntegerStem(const StringSegment& segment, MacroProps& macros, UErrorCo
 
 /** @return Whether we successfully found and parsed a frac-sig option. */
 bool parseFracSigOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
+
+/** @return Whether we successfully found and parsed a trailing zero option. */
+bool parseTrailingZeroOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
 void parseIncrementOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
@@ -313,8 +322,6 @@ class GeneratorHelpers {
     static bool notation(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 
     static bool unit(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
-
-    static bool perUnit(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 
     static bool usage(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 

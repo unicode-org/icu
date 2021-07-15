@@ -138,6 +138,18 @@ public final class VersionInfoTest extends TestFmwk
         }
     }
 
+    @Test
+    public void TestCompareLarge() {
+        // One version with major<128, one >=128.
+        VersionInfo small = VersionInfo.getInstance(13);
+        VersionInfo large = VersionInfo.getInstance(222);  // >=128
+        assertTrue(small + " < " + large, small.compareTo(large) < 0);
+        // Difference only in the last bit.
+        small = VersionInfo.getInstance(222, 0, 1, 2);
+        large = VersionInfo.getInstance(222, 0, 1, 3);
+        assertTrue(small + " < " + large, small.compareTo(large) < 0);
+    }
+
     /**
      * Test that the getter function works
      */

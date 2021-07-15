@@ -2,8 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.number;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,6 +11,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.format.FormattedValueTest;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -40,7 +39,7 @@ import com.ibm.icu.util.UResourceBundle;
  * @author sffc
  *
  */
-public class NumberRangeFormatterTest {
+public class NumberRangeFormatterTest extends TestFmwk {
 
     private static final Currency USD = Currency.getInstance("USD");
     private static final Currency GBP = Currency.getInstance("GBP");
@@ -664,6 +663,26 @@ public class NumberRangeFormatterTest {
     }
 
     @Test
+    public void test21397_UnsetNull() {
+        assertFormatRange(
+            "Unset identity fallback",
+            NumberRangeFormatter.with()
+                .identityFallback(RangeIdentityFallback.RANGE)
+                .identityFallback(null),
+            new ULocale("en-us"),
+            "1–5",
+            "~5",
+            "~5",
+            "0–3",
+            "~0",
+            "3–3,000",
+            "3,000–5,000",
+            "4,999–5,001",
+            "~5,000",
+            "5,000–5,000,000");
+    }
+
+    @Test
     public void testPlurals() {
         // Locale sl has interesting plural forms:
         // GBP{
@@ -735,8 +754,10 @@ public class NumberRangeFormatterTest {
                     5000,
                     expectedString);
             Object[][] expectedFieldPositions = new Object[][]{
+                    {NumberRangeFormatter.SpanField.NUMBER_RANGE_SPAN, 0, 2, 0},
                     {NumberFormat.Field.INTEGER, 0, 1},
                     {NumberFormat.Field.COMPACT, 1, 2},
+                    {NumberRangeFormatter.SpanField.NUMBER_RANGE_SPAN, 5, 7, 1},
                     {NumberFormat.Field.INTEGER, 5, 6},
                     {NumberFormat.Field.COMPACT, 6, 7},
                     {NumberFormat.Field.MEASURE_UNIT, 8, 9}};
@@ -753,9 +774,11 @@ public class NumberRangeFormatterTest {
                     98765432,
                     expectedString);
             Object[][] expectedFieldPositions = new Object[][]{
+                    {NumberRangeFormatter.SpanField.NUMBER_RANGE_SPAN, 0, 10, 0},
                     {NumberFormat.Field.GROUPING_SEPARATOR, 2, 3},
                     {NumberFormat.Field.GROUPING_SEPARATOR, 6, 7},
                     {NumberFormat.Field.INTEGER, 0, 10},
+                    {NumberRangeFormatter.SpanField.NUMBER_RANGE_SPAN, 11, 21, 1},
                     {NumberFormat.Field.GROUPING_SEPARATOR, 13, 14},
                     {NumberFormat.Field.GROUPING_SEPARATOR, 17, 18},
                     {NumberFormat.Field.INTEGER, 11, 21}};
@@ -823,6 +846,9 @@ public class NumberRangeFormatterTest {
     public void testNumberingSystemRangeData() {
         RangePatternSink sink = new RangePatternSink();
         for (ULocale locale : ULocale.getAvailableLocales()) {
+            if (locale.getLanguage().equals("nn") && logKnownIssue("cldrbug:14477", "nn inherits inconsistent number range patterns")) {
+                continue;
+            }
             ICUResourceBundle resource = (ICUResourceBundle)
                     UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale);
             resource.getAllItemsWithFallback("NumberElements", sink);

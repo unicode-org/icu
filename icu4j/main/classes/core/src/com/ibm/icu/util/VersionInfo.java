@@ -200,6 +200,12 @@ public final class VersionInfo implements Comparable<VersionInfo>
     public static final VersionInfo UNICODE_13_0;
 
     /**
+     * Unicode 14.0 version
+     * @stable ICU 70
+     */
+    public static final VersionInfo UNICODE_14_0;
+
+    /**
      * ICU4J current release version
      * @stable ICU 2.8
      */
@@ -212,7 +218,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public static final String ICU_DATA_VERSION_PATH = "68b";
+    public static final String ICU_DATA_VERSION_PATH = "70b";
 
     /**
      * Data version in ICU4J.
@@ -471,7 +477,15 @@ public final class VersionInfo implements Comparable<VersionInfo>
     @Override
     public int compareTo(VersionInfo other)
     {
-        return m_version_ - other.m_version_;
+        // m_version_ is an int, a signed 32-bit integer.
+        // When the major version is >=128, then the version int is negative.
+        // Compare it in two steps to simulate an unsigned-int comparison.
+        // (Alternatively we could turn each int into a long and reset the upper 32 bits.)
+        // Compare the upper bits first, using logical shift right (unsigned).
+        int diff = (m_version_ >>> 1) - (other.m_version_ >>> 1);
+        if (diff != 0) { return diff; }
+        // Compare the remaining bits.
+        return (m_version_ & 1) - (other.m_version_ & 1);
     }
 
     // private data members ----------------------------------------------
@@ -544,10 +558,11 @@ public final class VersionInfo implements Comparable<VersionInfo>
         UNICODE_12_0   = getInstance(12, 0, 0, 0);
         UNICODE_12_1   = getInstance(12, 1, 0, 0);
         UNICODE_13_0   = getInstance(13, 0, 0, 0);
+        UNICODE_14_0   = getInstance(14, 0, 0, 0);
 
-        ICU_VERSION   = getInstance(68, 1, 0, 0);
+        ICU_VERSION   = getInstance(70, 0, 1, 0);
         ICU_DATA_VERSION = ICU_VERSION;
-        UNICODE_VERSION = UNICODE_13_0;
+        UNICODE_VERSION = UNICODE_14_0;
 
         UCOL_RUNTIME_VERSION = getInstance(9);
         UCOL_BUILDER_VERSION = getInstance(9);

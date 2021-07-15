@@ -190,6 +190,16 @@ ha{
                 "{0}, {1}",
                 "{0}, {1}",
             }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GGGGGyyMd",
+            }
             availableFormats{
                 MEd{"E, M/d"}
                 MMMEd{"E, MMM d"}
@@ -228,6 +238,16 @@ ha{
                 "{1} 'da' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yyMd",
             }
             availableFormats{
                 Ed{"E, d"}

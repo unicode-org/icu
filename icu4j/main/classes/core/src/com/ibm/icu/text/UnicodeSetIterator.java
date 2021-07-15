@@ -14,7 +14,7 @@ import java.util.Iterator;
  * UnicodeSetIterator iterates over the contents of a UnicodeSet.  It
  * iterates over either code points or code point ranges.  After all
  * code points or ranges have been returned, it returns the
- * multicharacter strings of the UnicodSet, if any.
+ * multicharacter strings of the UnicodeSet, if any.
  *
  * <p>To iterate over code points and multicharacter strings,
  * use a loop like this:
@@ -34,10 +34,16 @@ import java.util.Iterator;
  *   }
  * }
  * </pre>
+ *
+ * <p>To iterate over only the strings, start with <code>new UnicodeSetIterator(set).skipToStrings()</code>.
+ *
  * <p><b>Warning: </b>For speed, UnicodeSet iteration does not check for concurrent modification.
  * Do not alter the UnicodeSet while iterating.
  * @author M. Davis
  * @stable ICU 2.0
+ * @see UnicodeSet#ranges()
+ * @see UnicodeSet#strings()
+ * @see UnicodeSet#iterator()
  */
 public class UnicodeSetIterator {
 
@@ -92,6 +98,23 @@ public class UnicodeSetIterator {
      */
     public UnicodeSetIterator() {
         reset(new UnicodeSet());
+    }
+
+    /**
+     * Skips over the remaining code points/ranges, if any.
+     * A following call to next() or nextRange() will yield a string, if there is one.
+     * No-op if next() would return false, or if it would yield a string anyway.
+     *
+     * @return this
+     * @draft ICU 70
+     * @see UnicodeSet#strings()
+     */
+    public UnicodeSetIterator skipToStrings() {
+        // Finish code point/range iteration.
+        range = endRange;
+        endElement = -1;
+        nextElement = 0;
+        return this;
     }
 
     /**
@@ -234,39 +257,15 @@ public class UnicodeSetIterator {
     private int endRange = 0;
     private int range = 0;
 
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public UnicodeSet getSet() {
-        return set;
-    }
-
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    protected int endElement;
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    protected int nextElement;
-    private Iterator<String> stringIterator = null;
+    private int endElement;
+    private int nextElement;
 
     /**
      * Invariant: stringIterator is null when there are no (more) strings remaining
      */
+    private Iterator<String> stringIterator = null;
 
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    protected void loadRange(int aRange) {
+    private void loadRange(int aRange) {
         nextElement = set.getRangeStart(aRange);
         endElement = set.getRangeEnd(aRange);
     }

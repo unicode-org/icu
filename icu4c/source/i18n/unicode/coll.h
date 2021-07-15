@@ -304,7 +304,7 @@ public:
      * Starting with ICU 54, collation attributes can be specified via locale keywords as well,
      * in the old locale extension syntax ("el@colCaseFirst=upper")
      * or in language tag syntax ("el-u-kf-upper").
-     * See <a href="http://userguide.icu-project.org/collation/api">User Guide: Collation API</a>.
+     * See <a href="https://unicode-org.github.io/icu/userguide/collation/api">User Guide: Collation API</a>.
      *
      * The UErrorCode& err parameter is used to return status information to the user.
      * To check whether the construction succeeded or not, you should check
@@ -788,7 +788,7 @@ public:
      * applications who wish to cache collators, or otherwise reuse
      * collators when possible.  The functional equivalent may change
      * over time.  For more information, please see the <a
-     * href="http://userguide.icu-project.org/locale#TOC-Locales-and-Services">
+     * href="https://unicode-org.github.io/icu/userguide/locale#locales-and-services">
      * Locales and Services</a> section of the ICU User Guide.
      * @param keyword a particular keyword as enumerated by
      * ucol_getKeywords.
@@ -1094,7 +1094,7 @@ protected:
     /**
     * Default constructor.
     * Constructor is different from the old default Collator constructor.
-    * The task for determing the default collation strength and normalization
+    * The task for determining the default collation strength and normalization
     * mode is left to the child class.
     * @stable ICU 2.0
     */
@@ -1139,7 +1139,7 @@ public:
      *  This string will be normalized.
      *  The structure and the syntax of the string is defined in the "Naming collators"
      *  section of the users guide:
-     *  http://userguide.icu-project.org/collation/concepts#TOC-Collator-naming-scheme
+     *  https://unicode-org.github.io/icu/userguide/collation/concepts#collator-naming-scheme
      *  This function supports preflighting.
      *
      *  This is internal, and intended to be used with delegate converters.

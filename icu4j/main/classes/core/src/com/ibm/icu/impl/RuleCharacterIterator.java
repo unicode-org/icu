@@ -52,7 +52,7 @@ public class RuleCharacterIterator {
     /**
      * Current variable expansion, or null if none.
      */
-    private char[] buf;
+    private String buf;
 
     /**
      * Position within buf[].  Meaningless if buf == null.
@@ -79,7 +79,7 @@ public class RuleCharacterIterator {
     /**
      * Bitmask option to enable parsing of escape sequences.  If (options &
      * PARSE_ESCAPES) != 0, then an embedded escape sequence will be expanded
-     * to its value.  Escapes are parsed using Utility.unescapeAt().
+     * to its value.  Escapes are parsed using Utility.unescapeAndLengthAt().
      */
     public static final int PARSE_ESCAPES   = 2;
 
@@ -90,12 +90,19 @@ public class RuleCharacterIterator {
      */
     public static final int SKIP_WHITESPACE = 4;
 
+    /** For use with {@link #getPos(Position)} & {@link #setPos(Position)}. */
+    public static final class Position {
+        private String buf;
+        private int bufPos;
+        private int posIndex;
+    };
+
     /**
      * Constructs an iterator over the given text, starting at the given
      * position.
      * @param text the text to be iterated
      * @param sym the symbol table, or null if there is none.  If sym is null,
-     * then variables will not be deferenced, even if the PARSE_VARIABLES
+     * then variables will not be dereferenced, even if the PARSE_VARIABLES
      * option is set.
      * @param pos upon input, the index of the next character to return.  If a
      * variable has been dereferenced, then pos will <em>not</em> increment as
@@ -144,15 +151,17 @@ public class RuleCharacterIterator {
                     break;
                 }
                 bufPos = 0;
-                buf = sym.lookup(name);
-                if (buf == null) {
+                char[] chars = sym.lookup(name);
+                if (chars == null) {
+                    buf = null;
                     throw new IllegalArgumentException(
                                 "Undefined variable: " + name);
                 }
                 // Handle empty variable value
-                if (buf.length == 0) {
+                if (chars.length == 0) {
                     buf = null;
                 }
+                buf = new String(chars);
                 continue;
             }
 
@@ -162,13 +171,14 @@ public class RuleCharacterIterator {
             }
 
             if (c == '\\' && (options & PARSE_ESCAPES) != 0) {
-                int offset[] = new int[] { 0 };
-                c = Utility.unescapeAt(lookahead(), offset);
-                jumpahead(offset[0]);
-                isEscaped = true;
-                if (c < 0) {
+                int cpAndLength = Utility.unescapeAndLengthAt(
+                        getCurrentBuffer(), getCurrentBufferPos());
+                if (cpAndLength < 0) {
                     throw new IllegalArgumentException("Invalid escape");
                 }
+                c = Utility.cpFromCodePointAndLength(cpAndLength);
+                jumpahead(Utility.lengthFromCodePointAndLength(cpAndLength));
+                isEscaped = true;
             }
 
             break;
@@ -199,7 +209,7 @@ public class RuleCharacterIterator {
      * restore this iterator's position.  Usage idiom:
      *
      * RuleCharacterIterator iterator = ...;
-     * Object pos = iterator.getPos(null); // allocate position object
+     * Position pos = iterator.getPos(null); // allocate position object
      * for (;;) {
      *   pos = iterator.getPos(pos); // reuse position object
      *   int c = iterator.next(...);
@@ -213,15 +223,13 @@ public class RuleCharacterIterator {
      * @return a position object which may be passed to setPos(),
      * either `p,' or if `p' == null, a newly-allocated object
      */
-    public Object getPos(Object p) {
+    public Position getPos(Position p) {
         if (p == null) {
-            return new Object[] {buf, new int[] {pos.getIndex(), bufPos}};
+            p = new Position();
         }
-        Object[] a = (Object[]) p;
-        a[0] = buf;
-        int[] v = (int[]) a[1];
-        v[0] = pos.getIndex();
-        v[1] = bufPos;
+        p.buf = buf;
+        p.bufPos = bufPos;
+        p.posIndex = pos.getIndex();
         return p;
     }
 
@@ -230,12 +238,10 @@ public class RuleCharacterIterator {
      * returned the given object.
      * @param p a position object previously returned by getPos()
      */
-    public void setPos(Object p) {
-        Object[] a = (Object[]) p;
-        buf = (char[]) a[0];
-        int[] v = (int[]) a[1];
-        pos.setIndex(v[0]);
-        bufPos = v[1];
+    public void setPos(Position p) {
+        buf = p.buf;
+        pos.setIndex(p.posIndex);
+        bufPos = p.bufPos;
     }
 
     /**
@@ -260,25 +266,35 @@ public class RuleCharacterIterator {
      * Returns a string containing the remainder of the characters to be
      * returned by this iterator, without any option processing.  If the
      * iterator is currently within a variable expansion, this will only
-     * extend to the end of the variable expansion.  This method is provided
-     * so that iterators may interoperate with string-based APIs.  The typical
-     * sequence of calls is to call skipIgnored(), then call lookahead(), then
-     * parse the string returned by lookahead(), then call jumpahead() to
+     * extend to the end of the variable expansion.
+     * This method, together with getCurrentBufferPos() (which replace the former lookahead()),
+     * is provided so that iterators may interoperate with string-based APIs. The typical
+     * sequence of calls is to call skipIgnored(), then call these methods, then
+     * parse that substring, then call jumpahead() to
      * resynchronize the iterator.
      * @return a string containing the characters to be returned by future
      * calls to next()
      */
-    public String lookahead() {
+    public String getCurrentBuffer() {
         if (buf != null) {
-            return new String(buf, bufPos, buf.length - bufPos);
+            return buf;
         } else {
-            return text.substring(pos.getIndex());
+            return text;
+        }
+    }
+
+    public int getCurrentBufferPos() {
+        if (buf != null) {
+            return bufPos;
+        } else {
+            return pos.getIndex();
         }
     }
 
     /**
      * Advances the position by the given number of 16-bit code units.
-     * This is useful in conjunction with the lookahead() method.
+     * This is useful in conjunction with getCurrentBuffer()+getCurrentBufferPos()
+     * (formerly lookahead()).
      * @param count the number of 16-bit code units to jump over
      */
     public void jumpahead(int count) {
@@ -287,10 +303,10 @@ public class RuleCharacterIterator {
         }
         if (buf != null) {
             bufPos += count;
-            if (bufPos > buf.length) {
+            if (bufPos > buf.length()) {
                 throw new IllegalArgumentException();
             }
-            if (bufPos == buf.length) {
+            if (bufPos == buf.length()) {
                 buf = null;
             }
         } else {
@@ -321,7 +337,7 @@ public class RuleCharacterIterator {
      */
     private int _current() {
         if (buf != null) {
-            return UTF16.charAt(buf, 0, buf.length, bufPos);
+            return UTF16.charAt(buf, bufPos);
         } else {
             int i = pos.getIndex();
             return (i < text.length()) ? UTF16.charAt(text, i) : DONE;
@@ -335,7 +351,7 @@ public class RuleCharacterIterator {
     private void _advance(int count) {
         if (buf != null) {
             bufPos += count;
-            if (bufPos == buf.length) {
+            if (bufPos == buf.length()) {
                 buf = null;
             }
         } else {

@@ -14,6 +14,7 @@
 #include "unicode/utypes.h"
 #if !UCONFIG_NO_BREAK_ITERATION
 
+#include <algorithm>
 #include <sstream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,6 +43,7 @@
 #include "cmemory.h"
 #include "cstr.h"
 #include "intltest.h"
+#include "lstmbe.h"
 #include "rbbitst.h"
 #include "rbbidata.h"
 #include "utypeinfo.h"  // for 'typeid' to work
@@ -134,6 +136,9 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(Test16BitsTrieWith16BitStateTable);
     TESTCASE_AUTO(TestTable_8_16_Bits);
     TESTCASE_AUTO(TestBug13590);
+    TESTCASE_AUTO(TestUnpairedSurrogate);
+    TESTCASE_AUTO(TestLSTMThai);
+    TESTCASE_AUTO(TestLSTMBurmese);
 
 #if U_ENABLE_TRACING
     TESTCASE_AUTO(TestTraceCreateCharacter);
@@ -714,8 +719,12 @@ void RBBITest::executeTest(TestParams *t, UErrorCode &status) {
     }
 }
 
-
 void RBBITest::TestExtended() {
+     // The expectations in this test heavily depends on the Thai dictionary.
+     // Therefore, we skip this test under the LSTM configuration.
+     if (skipDictionaryTest()) {
+         return;
+     }
   // Skip test for now when UCONFIG_NO_FILTERED_BREAK_ITERATION is set. This
   // data driven test closely entangles filtered and regular data.
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_FILTERED_BREAK_ITERATION
@@ -1125,7 +1134,6 @@ end_test:
 #endif
 }
 
-
 //-------------------------------------------------------------------------------
 //
 //  TestDictRules   create a break iterator from source rules that includes a
@@ -1160,126 +1168,6 @@ void RBBITest::TestDictRules() {
     } else {
         dataerrln("Error creating RuleBasedBreakIterator: %s", u_errorName(status));
     }
-}
-
-
-
-//-------------------------------------------------------------------------------
-//
-//    ReadAndConvertFile   Read a text data file, convert it to UChars, and
-//    return the data in one big UChar * buffer, which the caller must delete.
-//
-//    parameters:
-//          fileName:   the name of the file, with no directory part.  The test data directory
-//                      is assumed.
-//          ulen        an out parameter, receives the actual length (in UChars) of the file data.
-//          encoding    The file encoding.  If the file contains a BOM, that will override the encoding
-//                      specified here.  The BOM, if it exists, will be stripped from the returned data.
-//                      Pass NULL for the system default encoding.
-//          status
-//    returns:
-//                      The file data, converted to UChar.
-//                      The caller must delete this when done with
-//                           delete [] theBuffer;
-//
-//    TODO:  This is a clone of RegexTest::ReadAndConvertFile.
-//           Move this function to some common place.
-//
-//--------------------------------------------------------------------------------
-UChar *RBBITest::ReadAndConvertFile(const char *fileName, int &ulen, const char *encoding, UErrorCode &status) {
-    UChar       *retPtr  = NULL;
-    char        *fileBuf = NULL;
-    UConverter* conv     = NULL;
-    FILE        *f       = NULL;
-
-    ulen = 0;
-    if (U_FAILURE(status)) {
-        return retPtr;
-    }
-
-    //
-    //  Open the file.
-    //
-    f = fopen(fileName, "rb");
-    if (f == 0) {
-        dataerrln("Error opening test data file %s\n", fileName);
-        status = U_FILE_ACCESS_ERROR;
-        return NULL;
-    }
-    //
-    //  Read it in
-    //
-    int   fileSize;
-    int   amt_read;
-
-    fseek( f, 0, SEEK_END);
-    fileSize = ftell(f);
-    fileBuf = new char[fileSize];
-    fseek(f, 0, SEEK_SET);
-    amt_read = static_cast<int>(fread(fileBuf, 1, fileSize, f));
-    if (amt_read != fileSize || fileSize <= 0) {
-        errln("Error reading test data file.");
-        goto cleanUpAndReturn;
-    }
-
-    //
-    // Look for a Unicode Signature (BOM) on the data just read
-    //
-    int32_t        signatureLength;
-    const char *   fileBufC;
-    const char*    bomEncoding;
-
-    fileBufC = fileBuf;
-    bomEncoding = ucnv_detectUnicodeSignature(
-        fileBuf, fileSize, &signatureLength, &status);
-    if(bomEncoding!=NULL ){
-        fileBufC  += signatureLength;
-        fileSize  -= signatureLength;
-        encoding = bomEncoding;
-    }
-
-    //
-    // Open a converter to take the rule file to UTF-16
-    //
-    conv = ucnv_open(encoding, &status);
-    if (U_FAILURE(status)) {
-        goto cleanUpAndReturn;
-    }
-
-    //
-    // Convert the rules to UChar.
-    //  Preflight first to determine required buffer size.
-    //
-    ulen = ucnv_toUChars(conv,
-        NULL,           //  dest,
-        0,              //  destCapacity,
-        fileBufC,
-        fileSize,
-        &status);
-    if (status == U_BUFFER_OVERFLOW_ERROR) {
-        // Buffer Overflow is expected from the preflight operation.
-        status = U_ZERO_ERROR;
-
-        retPtr = new UChar[ulen+1];
-        ucnv_toUChars(conv,
-            retPtr,       //  dest,
-            ulen+1,
-            fileBufC,
-            fileSize,
-            &status);
-    }
-
-cleanUpAndReturn:
-    fclose(f);
-    delete []fileBuf;
-    ucnv_close(conv);
-    if (U_FAILURE(status)) {
-        errln("ucnv_toUChars: ICU Error \"%s\"\n", u_errorName(status));
-        delete []retPtr;
-        retPtr = 0;
-        ulen   = 0;
-    }
-    return retPtr;
 }
 
 
@@ -3347,21 +3235,15 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
 
         if ((fJL->contains(prevChar) || fJV->contains(prevChar) ||
             fJT->contains(prevChar) || fH2->contains(prevChar) || fH3->contains(prevChar)) &&
-            fIN->contains(thisChar)) {
-            setAppliedRule(pos, "LB 27 Treat a Korean Syllable Block the same as ID.");
-            continue;
-            }
-        if ((fJL->contains(prevChar) || fJV->contains(prevChar) ||
-            fJT->contains(prevChar) || fH2->contains(prevChar) || fH3->contains(prevChar)) &&
             fPO->contains(thisChar)) {
             setAppliedRule(pos, "LB 27 Treat a Korean Syllable Block the same as ID.");
             continue;
-            }
+        }
         if (fPR->contains(prevChar) && (fJL->contains(thisChar) || fJV->contains(thisChar) ||
             fJT->contains(thisChar) || fH2->contains(thisChar) || fH3->contains(thisChar))) {
             setAppliedRule(pos, "LB 27 Treat a Korean Syllable Block the same as ID.");
             continue;
-            }
+        }
 
 
 
@@ -5322,5 +5204,198 @@ void RBBITest::TestTraceCreateBreakEngine(void) {
 
 }
 #endif
+
+void RBBITest::TestUnpairedSurrogate() {
+    UnicodeString rules(u"ab;");
+
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError pe;
+    RuleBasedBreakIterator bi1(rules, pe, status);
+    assertSuccess(WHERE, status);
+    UnicodeString rtRules = bi1.getRules();
+    // make sure the simple one work first.
+    assertEquals(WHERE, rules,  rtRules);
+
+
+    rules = UnicodeString(u"a\\ud800b;").unescape();
+    pe.line = 0;
+    pe.offset = 0;
+    RuleBasedBreakIterator bi2(rules, pe, status);
+    assertEquals(WHERE "unpaired lead surrogate", U_ILLEGAL_CHAR_FOUND , status);
+    if (pe.line != 1 || pe.offset != 1) {
+        errln("pe (line, offset) expected (1, 1), got (%d, %d)", pe.line, pe.offset);
+    }
+
+    status = U_ZERO_ERROR;
+    rules = UnicodeString(u"a\\ude00b;").unescape();
+    pe.line = 0;
+    pe.offset = 0;
+    RuleBasedBreakIterator bi3(rules, pe, status);
+    assertEquals(WHERE "unpaired tail surrogate", U_ILLEGAL_CHAR_FOUND , status);
+    if (pe.line != 1 || pe.offset != 1) {
+        errln("pe (line, offset) expected (1, 1), got (%d, %d)", pe.line, pe.offset);
+    }
+
+    // make sure the surrogate one work too.
+    status = U_ZERO_ERROR;
+    rules = UnicodeString(u"a😀b;");
+    RuleBasedBreakIterator bi4(rules, pe, status);
+    rtRules = bi4.getRules();
+    assertEquals(WHERE, rules, rtRules);
+}
+
+// Read file generated by
+// https://github.com/unicode-org/lstm_word_segmentation/blob/master/segment_text.py
+// as test cases and compare the Output.
+// Format of the file
+//   Model:\t[Model Name (such as 'Thai_graphclust_model4_heavy')]
+//   Embedding:\t[Embedding type (such as 'grapheme_clusters_tf')]
+//   Input:\t[source text]
+//   Output:\t[expected output separated by | ]
+//   Input: ...
+//   Output: ...
+
+void RBBITest::runLSTMTestFromFile(const char* filename, UScriptCode script) {
+    // The expectation in this test depends on LSTM, skip the test if the
+    // configuration is not build with LSTM data.
+    if (skipLSTMTest()) {
+        return;
+    }
+    UErrorCode   status = U_ZERO_ERROR;
+    LocalPointer<BreakIterator> iterator(BreakIterator::createWordInstance(Locale(), status));
+    if (U_FAILURE(status)) {
+        errln("%s:%d Error %s Cannot create Word BreakIterator", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
+    //  Open and read the test data file.
+    const char *testDataDirectory = IntlTest::getSourceTestData(status);
+    CharString testFileName(testDataDirectory, -1, status);
+    testFileName.append(filename, -1, status);
+
+    int len;
+    UChar *testFile = ReadAndConvertFile(testFileName.data(), len, "UTF-8", status);
+    if (U_FAILURE(status)) {
+        errln("%s:%d Error %s opening test file %s", __FILE__, __LINE__, u_errorName(status), filename);
+        return;
+    }
+
+    //  Put the test data into a UnicodeString
+    UnicodeString testString(FALSE, testFile, len);
+
+    int32_t start = 0;
+
+    UnicodeString line;
+    int32_t end;
+    std::string actual_sep_str;
+    int32_t caseNum = 0;
+    // Iterate through all the lines in the test file.
+    do {
+        int32_t cr = testString.indexOf(u'\r', start);
+        int32_t lf = testString.indexOf(u'\n', start);
+        end = cr >= 0 ? (lf >= 0 ? std::min(cr, lf) : cr) : lf;
+        line = testString.tempSubString(start, end < 0 ? INT32_MAX : end - start);
+        if (line.length() > 0) {
+            // Separate each line to key and value by TAB.
+            int32_t tab = line.indexOf(u'\t');
+            UnicodeString key = line.tempSubString(0, tab);
+            const UnicodeString value = line.tempSubString(tab+1);
+
+            if (key == "Model:") {
+                // Verify the expectation in the test file match the LSTM model
+                // we are using now.
+                const LSTMData* data = CreateLSTMDataForScript(script, status);
+                if (U_FAILURE(status)) {
+                    dataerrln("%s:%d Error %s Cannot create LSTM data for script %s",
+                              __FILE__, __LINE__, u_errorName(status), uscript_getName(script));
+                    return;
+                }
+                UnicodeString name(LSTMDataName(data));
+                DeleteLSTMData(data);
+                if (value != name) {
+                    std::string utf8Name, utf8Value;
+                    dataerrln("%s:%d Error %s The LSTM data for script %s is %s instead of %s",
+                              __FILE__, __LINE__, u_errorName(status), uscript_getName(script),
+                              name.toUTF8String<std::string>(utf8Name).c_str(),
+                              value.toUTF8String<std::string>(utf8Value).c_str());
+                    return;
+                }
+            } else if (key == "Input:") {
+                UnicodeString input("prefix ");
+                input += value + " suffix";
+                std::stringstream ss;
+
+                // Construct the UText which is expected by the the engine as
+                // input from the UnicodeString.
+                UText ut = UTEXT_INITIALIZER;
+                utext_openConstUnicodeString(&ut, &input, &status);
+                if (U_FAILURE(status)) {
+                    dataerrln("Could not utext_openConstUnicodeString for " + value + UnicodeString(u_errorName(status)));
+                    return;
+                }
+
+                iterator->setText(&ut, status);
+                if (U_FAILURE(status)) {
+                    errln("%s:%d Error %s Could not setText to BreakIterator", __FILE__, __LINE__, u_errorName(status));
+                    return;
+                }
+
+                int32_t bp;
+                for (bp = iterator->first(); bp != BreakIterator::DONE; bp = iterator->next()) {
+                    ss << bp;
+                    if (bp != input.length()) {
+                        ss << ", ";
+                    }
+                }
+
+                utext_close(&ut);
+                // Turn the break points into a string for easy comparions
+                // output.
+                actual_sep_str = "{" + ss.str() + "}";
+            } else if (key == "Output:" && !actual_sep_str.empty()) {
+                UnicodeString input("prefix| |");
+                input += value + "| |suffix";
+                std::string d;
+                int32_t sep;
+                int32_t start = 0;
+                int32_t curr = 0;
+                std::stringstream ss;
+                // Incude 0 as the break point.
+                ss << "0, ";
+                while ((sep = input.indexOf(u'|', start)) >= 0) {
+                    int32_t len = sep - start;
+                    if (len > 0) {
+                        if (curr > 0) {
+                            ss << ", ";
+                        }
+                        curr += len;
+                        ss << curr;
+                    }
+                    start = sep + 1;
+                }
+                // Include end of the string as break point.
+                ss << ", " << curr + input.length() - start;
+                // Turn the break points into a string for easy comparions
+                // output.
+                std::string expected = "{" + ss.str() + "}";
+                std::string utf8;
+
+                assertEquals((input + " Test Case#" + caseNum).toUTF8String<std::string>(utf8).c_str(),
+                             expected.c_str(), actual_sep_str.c_str());
+                actual_sep_str.clear();
+            }
+        }
+        start = std::max(cr, lf) + 1;
+    } while (end >= 0);
+
+    delete [] testFile;
+}
+
+void RBBITest::TestLSTMThai() {
+    runLSTMTestFromFile("Thai_graphclust_model4_heavy_Test.txt", USCRIPT_THAI);
+}
+
+void RBBITest::TestLSTMBurmese() {
+    runLSTMTestFromFile("Burmese_graphclust_model5_heavy_Test.txt", USCRIPT_MYANMAR);
+}
 
 #endif // #if !UCONFIG_NO_BREAK_ITERATION

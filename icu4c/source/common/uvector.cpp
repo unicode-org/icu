@@ -312,7 +312,7 @@ int32_t UVector::indexOf(UElement key, int32_t startIndex, int8_t hint) const {
     } else {
         for (i=startIndex; i<count; ++i) {
             /* Pointers are not always the same size as ints so to perform
-             * a valid comparision we need to know whether we are being
+             * a valid comparison we need to know whether we are being
              * provided an int or a pointer. */
             if (hint & HINT_KEY_POINTER) {
                 if (key.pointer == elements[i].pointer) {
@@ -466,7 +466,7 @@ void UVector::sortedInsert(UElement e, UElementComparator *compare, UErrorCode& 
     int32_t min = 0, max = count;
     while (min != max) {
         int32_t probe = (min + max) / 2;
-        int8_t c = (*compare)(elements[probe], e);
+        int32_t c = (*compare)(elements[probe], e);
         if (c > 0) {
             max = probe;
         } else {
@@ -518,7 +518,7 @@ sortiComparator(const void * /*context */, const void *left, const void *right) 
 }
 
 /**
-  * Sort the vector, assuming it constains ints.
+  * Sort the vector, assuming it contains ints.
   *     (A more general sort would take a comparison function, but it's
   *     not clear whether UVector's UElementComparator or
   *     UComparator from uprv_sortAray would be more appropriate.)
@@ -539,7 +539,7 @@ void UVector::sorti(UErrorCode &ec) {
  *    required by uprv_sortArray().  This is handled by passing the
  *    the UVector sort function pointer via the context pointer to a
  *    sortArray() comparator function, which can then call back to
- *    the original user functtion.
+ *    the original user function.
  *
  *    An additional twist is that it's not safe to pass a pointer-to-function
  *    as  a (void *) data pointer, so instead we pass a (data) pointer to a

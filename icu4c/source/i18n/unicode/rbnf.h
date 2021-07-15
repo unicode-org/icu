@@ -108,7 +108,7 @@ enum URBNFRuleSetTag {
  * <p>In these rules, the <em>base value</em> is spelled out explicitly and set off from the
  * rule's output text with a colon. The rules are in a sorted list, and a rule is applicable
  * to all numbers from its own base value to one less than the next rule's base value. The
- * &quot;&gt;&gt;&quot; token is called a <em>substitution</em> and tells the fomatter to
+ * &quot;&gt;&gt;&quot; token is called a <em>substitution</em> and tells the formatter to
  * isolate the number's ones digit, format it using this same set of rules, and place the
  * result at the position of the &quot;&gt;&gt;&quot; token. Text in brackets is omitted if
  * the number being formatted is an even multiple of 10 (the hyphen is a literal hyphen; 24
@@ -543,7 +543,7 @@ enum URBNFRuleSetTag {
  * names in this array will be treated as public rule set names by the API.  Each subsequent
  * element is an array of localizations of these names.  The first element of one of these
  * subarrays is the locale name, and the remaining elements are localizations of the
- * public rule set names, in the same order as they were listed in the first arrray.</p>
+ * public rule set names, in the same order as they were listed in the first array.</p>
  * <p>In the syntax, angle brackets '<', '>' are used to delimit the arrays, and comma ',' is used
  * to separate elements of an array.  Whitespace is ignored, unless quoted.</p>
  * <p>For example:<pre>
@@ -653,7 +653,7 @@ public:
 
   /**
    * Creates a RuleBasedNumberFormat from a predefined ruleset.  The selector
-   * code choosed among three possible predefined formats: spellout, ordinal,
+   * code chose among three possible predefined formats: spellout, ordinal,
    * and duration.
    * @param tag A selector code specifying which kind of formatter to create for that
    * locale.  There are four legal values: URBNF_SPELLOUT, which creates a formatter that

@@ -149,8 +149,7 @@ public abstract class CurrencyDisplayNames {
      *
      * @param isoCode the three-letter ISO code.
      * @return the formal symbol.
-     * @draft ICU 67
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 67
      */
     public abstract String getFormalSymbol(String isoCode);
 
@@ -165,8 +164,7 @@ public abstract class CurrencyDisplayNames {
      *
      * @param isoCode the three-letter ISO code.
      * @return the variant symbol.
-     * @draft ICU 67
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 67
      */
     public abstract String getVariantSymbol(String isoCode);
 

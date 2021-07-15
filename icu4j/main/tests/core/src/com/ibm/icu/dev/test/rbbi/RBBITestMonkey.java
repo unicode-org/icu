@@ -1258,12 +1258,6 @@ public class RBBITestMonkey extends TestFmwk {
 
                 if ((fJL.contains(prevChar) || fJV.contains(prevChar) ||
                         fJT.contains(prevChar) || fH2.contains(prevChar) || fH3.contains(prevChar)) &&
-                        fIN.contains(thisChar)) {
-                    setAppliedRule(pos, "LB 27  Treat a Korean Syllable Block the same as ID.");
-                    continue;
-                }
-                if ((fJL.contains(prevChar) || fJV.contains(prevChar) ||
-                        fJT.contains(prevChar) || fH2.contains(prevChar) || fH3.contains(prevChar)) &&
                         fPO.contains(thisChar)) {
                     setAppliedRule(pos, "LB 27  Treat a Korean Syllable Block the same as ID.");
                     continue;
@@ -1895,6 +1889,7 @@ public class RBBITestMonkey extends TestFmwk {
 
     // Helper function for formatting error output.
     // Display a code point in "\\uxxxx" or "\Uxxxxxxxx" format
+    @SuppressWarnings("unused")
     private static void appendCharToBuf(StringBuffer dest, int c, int fieldLen) {
         String hexChars = "0123456789abcdef";
         if (c < 0x10000) {
@@ -1927,6 +1922,7 @@ public class RBBITestMonkey extends TestFmwk {
         StringBuffer     testText         = new StringBuffer();
         int              numCharClasses;
         List             chClasses;
+        @SuppressWarnings("unused")
         int              expectedCount    = 0;
         boolean[]        expectedBreaks   = new boolean[TESTSTRINGLEN*2 + 1];
         boolean[]        forwardBreaks    = new boolean[TESTSTRINGLEN*2 + 1];
@@ -2201,13 +2197,13 @@ public class RBBITestMonkey extends TestFmwk {
 
                         // BMP or SMP character in hex
                         if (c >= 0x10000) {
-                            buffer.append("\\U").append(String.format("%08x", (int) c));
+                            buffer.append("\\U").append(String.format("%08x", c));
                         } else {
-                            buffer.append("    \\u").append(String.format("%04x", (int) c));
+                            buffer.append("    \\u").append(String.format("%04x", c));
                         }
 
                         buffer.append(
-                            String.format(String.format(" %%-%ds", (int) classNameSize),
+                            String.format(String.format(" %%-%ds", classNameSize),
                               mk.classNameFromCodepoint(c)))
                             .append(String.format(" %-40s", mk.getAppliedRule(ci)))
                             .append(String.format(" %-40s\n", UCharacter.getExtendedName(c)));

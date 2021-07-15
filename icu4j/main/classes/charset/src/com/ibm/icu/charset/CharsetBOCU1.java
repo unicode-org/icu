@@ -403,7 +403,7 @@ class CharsetBOCU1 extends CharsetICU {
                 prev = BOCU1_ASCII_PREV;
             }
 
-            /*sourceIndex ==-1 if the current characte began in the previous buffer*/
+            /*sourceIndex ==-1 if the current character began in the previous buffer*/
             sourceIndex = c == 0 ? 0: -1;
             nextSourceIndex = 0;
 

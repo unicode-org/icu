@@ -612,9 +612,9 @@ public class ICULocaleService extends ICUService {
         if (loc != fallbackLocale) {
             synchronized (this) {
                 if (loc != fallbackLocale) {
-                    fallbackLocale = loc;
                     fallbackLocaleName = loc.getBaseName();
                     clearServiceCache();
+                    fallbackLocale = loc;
                 }
             }
         }

@@ -250,6 +250,16 @@ ko{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "ahmszzzz",
+                "ahmsz",
+                "ahmmss",
+                "ahmm",
+                "UMMMEEEEd",
+                "UMMMd",
+                "yMd",
+                "yMd",
+            }
             availableFormats{
                 Bh{"B h시"}
                 Bhm{"B h:mm"}
@@ -612,6 +622,16 @@ ko{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "ahmszzzz",
+                "ahmsz",
+                "ahmmss",
+                "ahmm",
+                "UMMMEEEEd",
+                "UMMMd",
+                "yMd",
+                "yMd",
+            }
             cyclicNameSets{
                 dayParts{
                     format{
@@ -966,6 +986,16 @@ ko{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimeSkeletons{
+                "ahmszzzz",
+                "ahmsz",
+                "ahmmss",
+                "ahmm",
+                "GyMEEEEd",
+                "GyMd",
+                "GyMd",
+                "GyMd",
+            }
             availableFormats{
                 Bh{"B h시"}
                 Bhm{"B h:mm"}
@@ -1198,6 +1228,16 @@ ko{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "ahmszzzz",
+                "ahmsz",
+                "ahmmss",
+                "ahmm",
+                "yMEEEEd",
+                "yMd",
+                "yMd",
+                "yyMd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -2043,7 +2083,7 @@ ko{
                     "분쇼 (1466 ~ 1467)",
                     "오닌 (1467 ~ 1469)",
                     "분메이 (1469 ~ 1487)",
-                    "조쿄 (1487 ~ 1489)<",
+                    "조쿄 (1487 ~ 1489)",
                     "엔토쿠 (1489 ~ 1492)",
                     "메이오 (1492 ~ 1501)",
                     "분키 (1501 ~ 1504)",

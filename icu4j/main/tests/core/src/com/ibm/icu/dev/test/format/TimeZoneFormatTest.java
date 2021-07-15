@@ -385,7 +385,7 @@ public class TimeZoneFormatTest extends TestFmwk {
 
                 Set<String> ids = null;
                 if (JDKTZ) {
-                    ids = new TreeSet<String>();
+                    ids = new TreeSet<>();
                     String[] jdkIDs = java.util.TimeZone.getAvailableIDs();
                     for (String jdkID : jdkIDs) {
                         if (EXCL_TZ_PATTERN.matcher(jdkID).matches()) {
@@ -659,7 +659,7 @@ public class TimeZoneFormatTest extends TestFmwk {
             TimeType expType = (TimeType)test[7];
 
             TimeZoneFormat tzfmt = TimeZoneFormat.getInstance(loc);
-            Output<TimeType> timeType = new Output<TimeType>(TimeType.UNKNOWN);
+            Output<TimeType> timeType = new Output<>(TimeType.UNKNOWN);
             ParsePosition pos = new ParsePosition(inPos);
             TimeZone tz = tzfmt.parse(style, text, pos, options, timeType);
 
@@ -950,7 +950,7 @@ public class TimeZoneFormatTest extends TestFmwk {
 
         for (Object[] testCase : TESTDATA) {
             TimeZone tz = TimeZone.getTimeZone((String)testCase[1]);
-            Output<TimeType> timeType = new Output<TimeType>();
+            Output<TimeType> timeType = new Output<>();
 
             ULocale uloc = new ULocale((String)testCase[0]);
             TimeZoneFormat tzfmt = TimeZoneFormat.getInstance(uloc);
@@ -1046,7 +1046,7 @@ public class TimeZoneFormatTest extends TestFmwk {
             tzfmt.setTimeZoneNames(tzdbNames);
 
             TimeZone tz = TimeZone.getTimeZone((String)testCase[1]);
-            Output<TimeType> timeType = new Output<TimeType>();
+            Output<TimeType> timeType = new Output<>();
             String out = tzfmt.format((Style)testCase[3], tz, ((Date)testCase[2]).getTime(), timeType);
 
             if (!out.equals(testCase[4]) || timeType.value != testCase[5]) {
@@ -1102,7 +1102,7 @@ public class TimeZoneFormatTest extends TestFmwk {
     public void TestTZDBNamesThreading() {
         final TZDBTimeZoneNames names = new TZDBTimeZoneNames(ULocale.ENGLISH);
         final AtomicInteger found = new AtomicInteger();
-        List<Thread> threads = new ArrayList<Thread>();
+        List<Thread> threads = new ArrayList<>();
         final int numIteration = 1000;
 
         try {
@@ -1313,6 +1313,44 @@ public class TimeZoneFormatTest extends TestFmwk {
             assertTrue("MatchInfo doesn't throw IllegalArgumentException", false);
         } catch (IllegalArgumentException e) {
             assertEquals("MatchInfo constructor exception", "matchLength must be positive value", e.getMessage());
+        }
+    }
+
+    // Test for checking parse results are same for a same input string
+    // using SimpleDateFormat initialized with different regional locales - US and Belize.
+    // Belize did not observe DST from 1968 to 1973, 1975 to 1982, and 1985 and later.
+    @Test
+    public void TestCentralTime() throws ParseException {
+        final String pattern = "y-MM-dd HH:mm:ss zzzz";
+        final String[] testInputs = {
+            // 1970-01-01 - Chicago:STD/Belize:STD
+            "1970-01-01 12:00:00 Central Standard Time",
+            "1970-01-01 12:00:00 Central Daylight Time",
+
+            // 1970-07-01 - Chicago:STD/Belize:STD
+            "1970-07-01 12:00:00 Central Standard Time",
+            "1970-07-01 12:00:00 Central Daylight Time",
+
+            // 1974-01-01 - Chicago:STD/Belize:DST
+            "1974-01-01 12:00:00 Central Standard Time",
+            "1974-01-01 12:00:00 Central Daylight Time",
+
+            // 2020-01-01 - Chicago:STD/Belize:STD
+            "2020-01-01 12:00:00 Central Standard Time",
+            "2020-01-01 12:00:00 Central Daylight Time",
+
+            // 2020-01-01 - Chicago:DST/Belize:STD
+            "2020-07-01 12:00:00 Central Standard Time",
+            "2020-07-01 12:00:00 Central Daylight Time",
+        };
+
+        SimpleDateFormat sdfUS = new SimpleDateFormat(pattern, new ULocale("en_US"));
+        SimpleDateFormat sdfBZ = new SimpleDateFormat(pattern, new ULocale("en_BZ"));
+
+        for (String testInput : testInputs) {
+            Date dUS = sdfUS.parse(testInput);
+            Date dBZ = sdfBZ.parse(testInput);
+            assertEquals("Parse results should be same for input: " + testInput, dUS, dBZ);
         }
     }
 }

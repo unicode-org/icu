@@ -165,6 +165,32 @@
 # DateTime patterns (4 x values)
 //ldml/dates/calendars/calendar[@type="(%A)"]/(dateTimeFormat)s/\2Length[@type="(%A)"]/\2[@type="%A"]/pattern[@type="%A"]
      ; /calendar/$1/DateTimePatterns
+
+# ---- /calendar/xxx/DateTimeSkeletons
+# This is similar to DateTimePatterns above except that for this we do not have the DateTime patterns (4 x values, plus the duplicate value at index 8).
+
+# Time patterns (4 x values)
+//ldml/dates/calendars/calendar[@type="(%A)"]/(timeFormat)s/\2Length[@type="(%A)"]/\2[@type="%A"]/datetimeSkeleton
+     ; /calendar/$1/DateTimeSkeletons
+
+# Date patterns (4 x values)
+//ldml/dates/calendars/calendar[@type="(%A)"]/(dateFormat)s/\2Length[@type="(full)"]/\2[@type="%A"]/datetimeSkeleton
+     ; /calendar/$1/DateTimeSkeletons
+//ldml/dates/calendars/calendar[@type="(%A)"]/(dateFormat)s/\2Length[@type="(full)"]/\2[@type="%A"]/datetimeSkeleton[@numbers="(%A)"]
+     ; /calendar/$1/DateTimeSkeletons ;  values="{value}" $4 ; group
+//ldml/dates/calendars/calendar[@type="(%A)"]/(dateFormat)s/\2Length[@type="(long)"]/\2[@type="%A"]/datetimeSkeleton
+     ; /calendar/$1/DateTimeSkeletons
+//ldml/dates/calendars/calendar[@type="(%A)"]/(dateFormat)s/\2Length[@type="(long)"]/\2[@type="%A"]/datetimeSkeleton[@numbers="(%A)"]
+     ; /calendar/$1/DateTimeSkeletons ;  values="{value}" $4 ; group
+//ldml/dates/calendars/calendar[@type="(%A)"]/(dateFormat)s/\2Length[@type="(medium)"]/\2[@type="%A"]/datetimeSkeleton
+     ; /calendar/$1/DateTimeSkeletons
+//ldml/dates/calendars/calendar[@type="(%A)"]/(dateFormat)s/\2Length[@type="(medium)"]/\2[@type="%A"]/datetimeSkeleton[@numbers="(%A)"]
+     ; /calendar/$1/DateTimeSkeletons ;  values="{value}" $4 ; group
+//ldml/dates/calendars/calendar[@type="(%A)"]/(dateFormat)s/\2Length[@type="(short)"]/\2[@type="%A"]/datetimeSkeleton
+     ; /calendar/$1/DateTimeSkeletons
+//ldml/dates/calendars/calendar[@type="(%A)"]/(dateFormat)s/\2Length[@type="(short)"]/\2[@type="%A"]/datetimeSkeleton[@numbers="(%A)"]
+     ; /calendar/$1/DateTimeSkeletons ;  values="{value}" $4 ; group
+
 # ----
 
 //ldml/dates/calendars/calendar[@type="(%A)"]/dateTimeFormats/appendItems/appendItem[@request="(%A)"] ; /calendar/$1/appendItems/$2
@@ -298,6 +324,8 @@
 //ldml/numbers/decimalFormats[@numberSystem="(%W)"]/decimalFormatLength[@type="long"]/decimalFormat[@type="standard"]/pattern[@type="(%N)"][@count="(%W)"] ; /NumberElements/$1/patternsLong/decimalFormat/$2/$3
 
 //ldml/numbers/miscPatterns[@numberSystem="(%W)"]/pattern[@type="(%W)"] ; /NumberElements/$1/miscPatterns/$2
+//ldml/numbers/minimalPairs/caseMinimalPairs[@case="(%A)"] ; /NumberElements/minimalPairs/case/$1
+//ldml/numbers/minimalPairs/genderMinimalPairs[@gender="(%A)"] ; /NumberElements/minimalPairs/gender/$1
 //ldml/numbers/minimalPairs/ordinalMinimalPairs[@ordinal="(%A)"] ; /NumberElements/minimalPairs/ordinal/$1
 //ldml/numbers/minimalPairs/pluralMinimalPairs[@count="(%A)"] ; /NumberElements/minimalPairs/plural/$1
 
@@ -318,13 +346,42 @@
 //ldml/units/unitLength[@type="short"]/unit[@type="(\w++)-(%A)"]/displayName ; /unitsShort/$1/$2/dnam
 //ldml/units/unitLength[@type="long"]/unit[@type="(\w++)-(%A)"]/displayName ; /units/$1/$2/dnam
 
+# TODO(icu-units#138): homogenize with compoundUnitPattern1 rules below by using "_" as case when case is absent in XML.
+//ldml/units/unitLength[@type="narrow"]/unit[@type="(\w++)-(%A)"]/unitPattern[@count="(%A)"][@case="(%A)"] ; /unitsNarrow/$1/$2/case/$4/$3
+//ldml/units/unitLength[@type="short"]/unit[@type="(\w++)-(%A)"]/unitPattern[@count="(%A)"][@case="(%A)"] ; /unitsShort/$1/$2/case/$4/$3
+//ldml/units/unitLength[@type="long"]/unit[@type="(\w++)-(%A)"]/unitPattern[@count="(%A)"][@case="(%A)"] ; /units/$1/$2/case/$4/$3
 //ldml/units/unitLength[@type="narrow"]/unit[@type="(\w++)-(%A)"]/unitPattern[@count="(%A)"] ; /unitsNarrow/$1/$2/$3
 //ldml/units/unitLength[@type="short"]/unit[@type="(\w++)-(%A)"]/unitPattern[@count="(%A)"] ; /unitsShort/$1/$2/$3
 //ldml/units/unitLength[@type="long"]/unit[@type="(\w++)-(%A)"]/unitPattern[@count="(%A)"] ; /units/$1/$2/$3
 
+//ldml/units/unitLength[@type="narrow"]/unit[@type="(\w++)-(%A)"]/gender ; /unitsNarrow/$1/$2/gender
+//ldml/units/unitLength[@type="short"]/unit[@type="(\w++)-(%A)"]/gender ; /unitsShort/$1/$2/gender
+//ldml/units/unitLength[@type="long"]/unit[@type="(\w++)-(%A)"]/gender ; /units/$1/$2/gender
+
+//ldml/units/unitLength[@type="narrow"]/compoundUnit[@type="(%A)"]/compoundUnitPattern[@case="(%A)"] ; /unitsNarrow/compound/$1
+//ldml/units/unitLength[@type="short"]/compoundUnit[@type="(%A)"]/compoundUnitPattern[@case="(%A)"] ; /unitsShort/compound/$1
+//ldml/units/unitLength[@type="long"]/compoundUnit[@type="(%A)"]/compoundUnitPattern[@case="(%A)"] ; /units/compound/$1/
 //ldml/units/unitLength[@type="narrow"]/compoundUnit[@type="(%A)"]/compoundUnitPattern ; /unitsNarrow/compound/$1
 //ldml/units/unitLength[@type="short"]/compoundUnit[@type="(%A)"]/compoundUnitPattern ; /unitsShort/compound/$1
 //ldml/units/unitLength[@type="long"]/compoundUnit[@type="(%A)"]/compoundUnitPattern ; /units/compound/$1
+
+# TODO(icu-units#138): the style of output paths used in these rules is the proposed format for all count/gender/case lateral inheritance rules.
+//ldml/units/unitLength[@type="narrow"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"][@gender="(%A)"][@case="(%A)"] ; /unitsNarrow/compound/$1/$2/$3/$4
+//ldml/units/unitLength[@type="short"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"][@gender="(%A)"][@case="(%A)"] ; /unitsShort/compound/$1/$2/$3/$4
+//ldml/units/unitLength[@type="long"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"][@gender="(%A)"][@case="(%A)"] ; /units/compound/$1/$2/$3/$4
+//ldml/units/unitLength[@type="narrow"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"][@case="(%A)"] ; /unitsNarrow/compound/$1/$2/_/$3
+//ldml/units/unitLength[@type="short"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"][@case="(%A)"] ; /unitsShort/compound/$1/$2/_/$3
+//ldml/units/unitLength[@type="long"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"][@case="(%A)"] ; /units/compound/$1/$2/_/$3
+//ldml/units/unitLength[@type="narrow"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"][@gender="(%A)"] ; /unitsNarrow/compound/$1/$2/$3/_
+//ldml/units/unitLength[@type="short"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"][@gender="(%A)"] ; /unitsShort/compound/$1/$2/$3/_
+//ldml/units/unitLength[@type="long"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"][@gender="(%A)"] ; /units/compound/$1/$2/$3/_
+//ldml/units/unitLength[@type="narrow"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"] ; /unitsNarrow/compound/$1/$2/_/_
+//ldml/units/unitLength[@type="short"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"] ; /unitsShort/compound/$1/$2/_/_
+//ldml/units/unitLength[@type="long"]/compoundUnit[@type="(%A)"]/compoundUnitPattern1[@count="(%A)"] ; /units/compound/$1/$2/_/_
+
+//ldml/units/unitLength[@type="narrow"]/compoundUnit[@type="(%A)"]/unitPrefixPattern ; /unitsNarrow/compound/$1
+//ldml/units/unitLength[@type="short"]/compoundUnit[@type="(%A)"]/unitPrefixPattern ; /unitsShort/compound/$1
+//ldml/units/unitLength[@type="long"]/compoundUnit[@type="(%A)"]/unitPrefixPattern ; /units/compound/$1
 
 //ldml/units/unitLength[@type="narrow"]/coordinateUnit/displayName ; /unitsNarrow/coordinate/dnam
 //ldml/units/unitLength[@type="short"]/coordinateUnit/displayName ; /unitsShort/coordinate/dnam
@@ -345,5 +402,5 @@
 //ldml/units/unitLength[@type="long"]/unit[@type="(\w++)-(%A)"]/alias[@source="locale"][@path="../unit[@type='(\w++)-(%A)']"] ; /units/$1/$2:alias ; values=/LOCALE/units/$3/$4
 
 //ldml/characterLabels/characterLabelPattern[@type="(%A)"][@count="(%A)"] ; /characterLabelPattern/$1/$2
-//ldml/characterLabels/characterLabelPattern[@type="(%A)"] ; /characterLabelPattern/$1 
-//ldml/characterLabels/characterLabel[@type="(%A)"] ; /characterLabel/$1 
+//ldml/characterLabels/characterLabelPattern[@type="(%A)"] ; /characterLabelPattern/$1
+//ldml/characterLabels/characterLabel[@type="(%A)"] ; /characterLabel/$1

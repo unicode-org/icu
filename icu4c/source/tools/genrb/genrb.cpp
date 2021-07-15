@@ -564,7 +564,7 @@ main(int argc,
 
     u_cleanup();
 
-    /* Dont return warnings as a failure */
+    /* Don't return warnings as a failure */
     if (U_SUCCESS(status)) {
         return 0;
     }

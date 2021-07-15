@@ -103,6 +103,8 @@ final class LocaleIdResolver {
     }
 
     private void addRecursively(String id, Set<String> dst) {
+        // One of the strings we get here is "no_NO_NY", need to make sure that
+        // supplementalData.getParent properly canonicalizes that before determining parent
         while (!id.equals("root") && dst.add(id)) {
             id = supplementalData.getParent(id);
         }
@@ -114,7 +116,12 @@ final class LocaleIdResolver {
             return false;
         }
         String parentId = supplementalData.getParent(id);
-        if (isWildcard.test(parentId) || addWildcardMatches(parentId, isWildcard, dst)) {
+        int index = parentId.indexOf("_");
+        String parentIdLang = (index < 0)? parentId: parentId.substring(0, index);
+        index = id.indexOf("_");
+        String idLang = (index < 0)? id: id.substring(0, index);
+        if (parentIdLang.equals(idLang) && (isWildcard.test(parentId) || addWildcardMatches(parentId, isWildcard, dst))) {
+            // Only add child locales here if their language matches their parent; need this to handle nn (child of no)
             dst.add(id);
             return true;
         }

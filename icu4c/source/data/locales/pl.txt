@@ -271,6 +271,20 @@ pl{
             }
         }
         minimalPairs{
+            case{
+                accusative{"Widzę {0}"}
+                dative{"Ufam {0}"}
+                genitive{"Nie widzę {0}"}
+                instrumental{"Interesuję się {0}"}
+                locative{"Siedzę na {0}"}
+                nominative{"{0} jest/są tutaj"}
+                vocative{"Pani(e) {0}!"}
+            }
+            gender{
+                feminine{"ta {0}"}
+                inanimate{"ten {0}"}
+                neuter{"to {0}"}
+            }
             ordinal{
                 other{"Skręć w {0}. w prawo."}
             }
@@ -312,6 +326,16 @@ pl{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "UMMMMEEEEd",
+                "UMMMMd",
+                "UMMMd",
+                "yMMdd",
             }
             monthNames{
                 format{
@@ -433,6 +457,16 @@ pl{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GyMMdd",
             }
             availableFormats{
                 Ed{"E, d"}
@@ -622,6 +656,16 @@ pl{
                 "{1} {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "yMMMMEEEEd",
+                "yMMMMd",
+                "yMMMd",
+                "yMMdd",
             }
             appendItems{
                 Timezone{"{0} {1}"}
@@ -1387,6 +1431,16 @@ pl{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+            }
+            DateTimeSkeletons{
+                "HHmmsszzzz",
+                "HHmmssz",
+                "HHmmss",
+                "HHmm",
+                "GyMMMMEEEEd",
+                "GyMMMMd",
+                "GyMMMd",
+                "GyMMdd",
             }
         }
         persian{

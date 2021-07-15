@@ -10,15 +10,17 @@ The ICU project is under the stewardship of [The Unicode Consortium](https://www
 
 ![ICU Logo](./tools/images/iculogo_64.png)
 
-### Build Status (`master` branch)
+### 🔴🔴🔴 Special Notice About Branch Renaming 🔴🔴🔴
+Around March 24-25, 2021 we renamed the `master` branch to `main`. You may need to rename your branch in your local git repo and change your normal git command to reflect this change. See also https://github.com/github/renaming
+
+### Build Status (`main` branch)
 
 Build | Status
 ------|-------
-TravisCI | [![Build Status](https://travis-ci.org/unicode-org/icu.svg?branch=master)](https://travis-ci.org/unicode-org/icu)
-Azure Pipelines | [![Build Status](https://dev.azure.com/ms/icu/_apis/build/status/unicode-org/CI?branchName=master)](https://dev.azure.com/ms/icu/_build/latest?definitionId=360&branchName=master)
-Azure Pipelines (Exhaustive Tests) | [![Build Status](https://dev.azure.com/ms/icu/_apis/build/status/unicode-org/CI-Exhaustive-Main?branchName=master)](https://dev.azure.com/ms/icu/_build/latest?definitionId=361&branchName=master)
-Azure Pipelines (Valgrind ICU4C) | [![Build Status](https://dev.azure.com/ms/icu/_apis/build/status/unicode-org/CI-Valgrind-Main?branchName=master)](https://dev.azure.com/ms/icu/_build/latest?definitionId=362&branchName=master)
-AppVeyor | [![Build status](https://ci.appveyor.com/api/projects/status/6ev1ssb6efahsvs2/branch/master?svg=true)](https://ci.appveyor.com/project/unicode-org/icu/branch/master)
+GitHub Actions | [![GHA CI](https://github.com/unicode-org/icu/workflows/GHA%20CI/badge.svg)](https://github.com/unicode-org/icu/actions?query=workflow%3A%22GHA+CI%22)
+Azure Pipelines | [![Build Status](https://dev.azure.com/ms/icu/_apis/build/status/unicode-org/CI?branchName=main)](https://dev.azure.com/ms/icu/_build/latest?definitionId=360&branchName=main)
+Azure Pipelines (Exhaustive Tests) | [![Build Status](https://dev.azure.com/ms/icu/_apis/build/status/unicode-org/CI-Exhaustive-Main?branchName=main)](https://dev.azure.com/ms/icu/_build/latest?definitionId=361&branchName=main)
+Azure Pipelines (Valgrind ICU4C) | [![Build Status](https://dev.azure.com/ms/icu/_apis/build/status/unicode-org/CI-Valgrind-Main?branchName=main)](https://dev.azure.com/ms/icu/_build/latest?definitionId=362&branchName=main)
 Fuzzing | [![Fuzzing Status](https://oss-fuzz-build-logs.storage.googleapis.com/badges/icu.svg)](https://bugs.chromium.org/p/oss-fuzz/issues/list?sort=-opened&can=1&q=proj:icu)
 
 

@@ -13,6 +13,7 @@ plurals:table(nofallback){
         asa{"set8"}
         ast{"set4"}
         az{"set8"}
+        bal{"set8"}
         be{"set27"}
         bem{"set8"}
         bez{"set8"}
@@ -64,6 +65,7 @@ plurals:table(nofallback){
         haw{"set8"}
         he{"set24"}
         hi{"set1"}
+        hnj{"set0"}
         hr{"set19"}
         hsb{"set23"}
         hu{"set8"}
@@ -197,6 +199,7 @@ plurals:table(nofallback){
         tl{"set12"}
         tn{"set8"}
         to{"set0"}
+        tpi{"set0"}
         tr{"set8"}
         ts{"set8"}
         tzm{"set7"}
@@ -226,6 +229,7 @@ plurals:table(nofallback){
         ar{"set37"}
         as{"set58"}
         az{"set56"}
+        bal{"set39"}
         be{"set42"}
         bg{"set37"}
         bn{"set58"}
@@ -286,6 +290,7 @@ plurals:table(nofallback){
         nb{"set37"}
         ne{"set41"}
         nl{"set37"}
+        no{"set37"}
         or{"set59"}
         pa{"set37"}
         pl{"set37"}
@@ -311,6 +316,7 @@ plurals:table(nofallback){
         th{"set37"}
         tk{"set44"}
         tl{"set39"}
+        tpi{"set37"}
         tr{"set37"}
         uk{"set43"}
         ur{"set37"}
@@ -460,14 +466,14 @@ plurals:table(nofallback){
         set20{
             many{
                 "e = 0 and i != 0 and i % 1000000 = 0 and v = 0 or e != 0..5 @integer"
-                " 1000000, 2e6, 3e6, 4e6, 5e6, 6e6, 7e6, … @decimal 2.1e6, 3.1e6, 4.1"
-                "e6, 5.1e6, 6.1e6, 7.1e6, …"
+                " 1000000, 1c6, 2c6, 3c6, 4c6, 5c6, 6c6, … @decimal 1.0000001c6, 1.1c"
+                "6, 2.0000001c6, 2.1c6, 3.0000001c6, 3.1c6, …"
             }
-            one{"i = 0,1 @integer 0, 1, 1e5 @decimal 0.0~1.5, 1.1e5"}
+            one{"i = 0,1 @integer 0, 1 @decimal 0.0~1.5"}
             other{
-                " @integer 2~17, 100, 1000, 10000, 100000, 2e5, 3e5, 4e5, 5e5, 6e5, 7"
-                "e5, … @decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000"
-                "000.0, 2.1e5, 3.1e5, 4.1e5, 5.1e5, 6.1e5, 7.1e5, …"
+                " @integer 2~17, 100, 1000, 10000, 100000, 1c3, 2c3, 3c3, 4c3, 5c3, 6"
+                "c3, … @decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000"
+                "000.0, 1.0001c3, 1.1c3, 2.0001c3, 2.1c3, 3.0001c3, 3.1c3, …"
             }
         }
         set21{

@@ -255,6 +255,7 @@ void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, ch
     TESTCASE_AUTO(TestStringByteSinkAppendU8);
     TESTCASE_AUTO(TestCharString);
     TESTCASE_AUTO(TestCStr);
+    TESTCASE_AUTO(TestCharStrAppendNumber);
     TESTCASE_AUTO(Testctou);
     TESTCASE_AUTO_END;
 }
@@ -840,6 +841,36 @@ StringTest::TestCStr() {
     if (0 != strcmp(CStr(us)(), cs)) {
         errln("%s:%d CStr(s)() failed. Expected \"%s\", got \"%s\"", __FILE__, __LINE__, cs, CStr(us)());
     }
+}
+
+void StringTest::TestCharStrAppendNumber() {
+    IcuTestErrorCode errorCode(*this, "TestCharStrAppendNumber()");
+
+    CharString testString;
+    testString.appendNumber(1, errorCode);
+    assertEquals("TestAppendNumber 1", "1", testString.data());
+
+    testString.clear();
+    testString.appendNumber(-1, errorCode);
+    assertEquals("TestAppendNumber -1", "-1", testString.data());
+
+    testString.clear();
+    testString.appendNumber(12345, errorCode);
+    assertEquals("TestAppendNumber 12345", "12345", testString.data());
+    testString.appendNumber(123, errorCode);
+    assertEquals("TestAppendNumber 12345 and then 123", "12345123", testString.data());
+
+    testString.clear();
+    testString.appendNumber(2147483647, errorCode);
+    assertEquals("TestAppendNumber when appending the biggest int32", "2147483647", testString.data());
+
+    testString.clear();
+    testString.appendNumber(-2147483648, errorCode);
+    assertEquals("TestAppendNumber when appending the smallest int32", "-2147483648", testString.data());
+
+    testString.clear();
+    testString.appendNumber(0, errorCode);
+    assertEquals("TestAppendNumber when appending zero", "0", testString.data());
 }
 
 void

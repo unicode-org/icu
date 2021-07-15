@@ -77,7 +77,7 @@ typedef void pl_visualRun;
  *        Unicode code points.
  *
  * @param localeRuns is a pointer to a <code>pl_localeRuns</code> object representing locale runs.
- *        The <code>Locale</code> objects are used to determind the language of the text. If this
+ *        The <code>Locale</code> objects are used to determine the language of the text. If this
  *        pointer is <code>NULL</code> the default locale will be used for all of the text. 
  *
  * @param paragraphLevel is the directionality of the paragraph, as in the UBiDi object.
@@ -164,11 +164,6 @@ U_CAPI UBiDiDirection U_EXPORT2
 pl_getTextDirection(pl_paragraph *paragraph);
 
 /**
- * Get the max ascent value for all the fonts
- * in the paragraph.
- *
- * @param paragraph the <code>pl_paragraph</code>
- *
  * Return the max ascent value for all the fonts
  * in the paragraph.
  *

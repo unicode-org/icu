@@ -199,7 +199,7 @@ public class ICUService extends ICUNotifier {
          * If the key has a fallback, modify the key and return true,
          * otherwise return false.  The current ID will change if there
          * is a fallback.  No currentIDs should be repeated, and fallback
-         * must eventually return false.  This implmentation has no fallbacks
+         * must eventually return false.  This implementation has no fallbacks
          * and always returns false.
          */
         public boolean fallback() {

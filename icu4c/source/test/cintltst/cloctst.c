@@ -280,6 +280,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestBug20370);
     TESTCASE(TestBug20321UnicodeLocaleKey);
     TESTCASE(TestUsingDefaultWarning);
+    TESTCASE(TestBug21449InfiniteLoop);
 }
 
 
@@ -704,9 +705,19 @@ static void TestDisplayNames()
     /* test that the default locale has a display name for its own language */
     errorCode=U_ZERO_ERROR;
     length=uloc_getDisplayLanguage(NULL, NULL, buffer, UPRV_LENGTHOF(buffer), &errorCode);
+    /* check <=3 to reject getting the language code as a display name */
     if(U_FAILURE(errorCode) || (length<=3 && buffer[0]<=0x7f)) {
-        /* check <=3 to reject getting the language code as a display name */
-        log_data_err("unable to get a display string for the language of the default locale - %s (Are you missing data?)\n", u_errorName(errorCode));
+        const char* defaultLocale = uloc_getDefault();
+        for (int32_t i = 0, count = uloc_countAvailable(); i < count; i++) {
+            /* Only report error if the default locale is in the available list */
+            if (uprv_strcmp(defaultLocale, uloc_getAvailable(i)) == 0) {
+                log_data_err(
+                    "unable to get a display string for the language of the "
+                    "default locale - %s (Are you missing data?)\n",
+                    u_errorName(errorCode));
+                break;
+            }
+        }
     }
 
     /* test that we get the language code itself for an unknown language, and a default warning */
@@ -1233,6 +1244,7 @@ static void TestDisplayNameBrackets()
 
 static void TestIllegalArgumentWhenNoDataWithNoSubstitute()
 {
+#if !UCONFIG_NO_FORMATTING
     UErrorCode status = U_ZERO_ERROR;
     UChar getName[kDisplayNameBracketsMax];
     UDisplayContext contexts[] = {
@@ -1289,6 +1301,7 @@ static void TestIllegalArgumentWhenNoDataWithNoSubstitute()
     }
 
     uldn_close(ldn);
+#endif
 }
 
 /*------------------------------
@@ -2233,12 +2246,7 @@ static void TestKeywordSetError(void)
         strcpy(buffer,kwSetTestCases[i].l);
         status = U_ZERO_ERROR;
         res = uloc_setKeywordValue(kwSetTestCases[i].k, kwSetTestCases[i].v, buffer, blen, &status);
-        if(res == blen) {
-            if(status != U_STRING_NOT_TERMINATED_WARNING) {
-                log_err("expected not terminated warning on buffer %d got %s, len %d (%s + [%s=%s])\n", blen, u_errorName(status), res, kwSetTestCases[i].l, kwSetTestCases[i].k, kwSetTestCases[i].v);
-                return;
-            }
-        } else if(status != U_BUFFER_OVERFLOW_ERROR) {
+        if(status != U_BUFFER_OVERFLOW_ERROR) {
             log_err("expected buffer overflow on buffer %d got %s, len %d (%s + [%s=%s])\n", blen, u_errorName(status), res, kwSetTestCases[i].l, kwSetTestCases[i].k, kwSetTestCases[i].v);
             return;
         }
@@ -4100,6 +4108,10 @@ const char* const full_data[][3] = {
     "nn",
     "nn_Latn_NO",
     "nn"
+  }, {
+    "no",
+    "no_Latn_NO",
+    "no"
   }, {
     "nr",
     "nr_Latn_ZA",
@@ -6157,7 +6169,7 @@ const char* const locale_to_langtag[][3] = {
     {"it@collation=badcollationtype;colStrength=identical;cu=usd-eur", "it-u-cu-usd-eur-ks-identic",  NULL},
     {"en_US_POSIX", "en-US-u-va-posix", "en-US-u-va-posix"},
     {"en_US_POSIX@calendar=japanese;currency=EUR","en-US-u-ca-japanese-cu-eur-va-posix", "en-US-u-ca-japanese-cu-eur-va-posix"},
-    {"@x=elmer",    "x-elmer",      "x-elmer"},
+    {"@x=elmer",    "und-x-elmer",      "und-x-elmer"},
     {"en@x=elmer",  "en-x-elmer",   "en-x-elmer"},
     {"@x=elmer;a=exta", "und-a-exta-x-elmer",   "und-a-exta-x-elmer"},
     {"en_US@attribute=attr1-attr2;calendar=gregorian", "en-US-u-attr1-attr2-ca-gregory", "en-US-u-attr1-attr2-ca-gregory"},
@@ -6971,11 +6983,12 @@ static void TestUsingDefaultWarning() {
         log_err("ERROR: in uloc_getDisplayKeywordValue %s %s return len:%d %s with status %d %s\n",
                 keyword_value, keyword, length, errorOutputBuff, status, myErrorName(status));
       }
-}      
+}
+
 // Test case for ICU-20575
 // This test checks if the environment variable LANG is set, 
 // and if so ensures that both C and C.UTF-8 cause ICU's default locale to be en_US_POSIX.
-static void TestCDefaultLocale(){
+static void TestCDefaultLocale() {
     const char *defaultLocale = uloc_getDefault();
     char *env_var = getenv("LANG");
     if (env_var == NULL) {
@@ -6985,4 +6998,14 @@ static void TestCDefaultLocale(){
     if ((strcmp(env_var, "C") == 0 || strcmp(env_var, "C.UTF-8") == 0) && strcmp(defaultLocale, "en_US_POSIX") != 0) {
       log_err("The default locale for LANG=%s should be en_US_POSIX, not %s\n", env_var, defaultLocale);
     }
+}
+
+// Test case for ICU-21449
+static void TestBug21449InfiniteLoop() {
+    UErrorCode status = U_ZERO_ERROR;
+    const char* invalidLocaleId = RES_PATH_SEPARATOR_S;
+
+    // The issue causes an infinite loop to occur when looking up a non-existent resource for the invalid locale ID,
+    // so the test is considered passed if the call to the API below returns anything at all.
+    uloc_getDisplayLanguage(invalidLocaleId, invalidLocaleId, NULL, 0, &status);
 }

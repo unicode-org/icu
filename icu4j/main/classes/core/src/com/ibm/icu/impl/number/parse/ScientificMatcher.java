@@ -2,8 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.number.parse;
 
-import static com.ibm.icu.impl.number.parse.ParsingUtils.safeContains;
-
 import com.ibm.icu.impl.StaticUnicodeSets;
 import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
@@ -36,9 +34,9 @@ public class ScientificMatcher implements NumberParseMatcher {
         ignorablesMatcher = IgnorablesMatcher.getInstance(ParsingUtils.PARSE_FLAG_STRICT_IGNORABLES);
 
         String minusSign = symbols.getMinusSignString();
-        customMinusSign = safeContains(minusSignSet(), minusSign) ? null : minusSign;
+        customMinusSign = minusSignSet().contains(minusSign) ? null : minusSign;
         String plusSign = symbols.getPlusSignString();
-        customPlusSign = safeContains(plusSignSet(), plusSign) ? null : plusSign;
+        customPlusSign = plusSignSet().contains(plusSign) ? null : plusSign;
     }
 
     private static UnicodeSet minusSignSet() {

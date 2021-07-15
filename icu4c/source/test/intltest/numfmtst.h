@@ -304,6 +304,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test21134_ToNumberFormatter();
     void Test13733_StrictAndLenient();
     void Test21232_ParseTimeout();
+    void Test10997_FormatCurrency();
 
  private:
     UBool testFormattableAsUFormattable(const char *file, int line, Formattable &f);

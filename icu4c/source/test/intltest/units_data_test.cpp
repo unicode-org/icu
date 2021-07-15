@@ -5,11 +5,14 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "measunit_impl.h"
 #include "units_data.h"
+
 #include "intltest.h"
 
 using namespace ::icu::units;
 
+// These test are no in ICU4J. TODO: consider porting them to Java?
 class UnitsDataTest : public IntlTest {
   public:
     UnitsDataTest() {}
@@ -38,19 +41,22 @@ void UnitsDataTest::testGetUnitCategory() {
         const char *expectedCategory;
     } testCases[]{
         {"kilogram-per-cubic-meter", "mass-density"},
+        {"cubic-meter-per-kilogram", "specific-volume"},
+        {"meter-per-second", "speed"},
+        // TODO(icu-units#130): inverse-speed
+        // {"second-per-meter", "speed"},
+        // Consumption specifically supports inverse units (mile-per-galon,
+        // liter-per-100-kilometer):
         {"cubic-meter-per-meter", "consumption"},
-        // TODO(CLDR-13787,hugovdm): currently we're treating
-        // consumption-inverse as a separate category. Once consumption
-        // preference handling has been clarified by CLDR-13787, this function
-        // should be fixed.
-        {"meter-per-cubic-meter", "consumption-inverse"},
+        {"meter-per-cubic-meter", "consumption"},
     };
 
     IcuTestErrorCode status(*this, "testGetUnitCategory");
     for (const auto &t : testCases) {
-        CharString category = getUnitCategory(t.unit, status);
-        status.errIfFailureAndReset("getUnitCategory(%s)", t.unit);
-        assertEquals("category", t.expectedCategory, category.data());
+        CharString category = getUnitQuantity(t.unit, status);
+        if (!status.errIfFailureAndReset("getUnitCategory(%s)", t.unit)) {
+            assertEquals("category", t.expectedCategory, category.data());
+        }
     }
 }
 
@@ -107,10 +113,9 @@ void UnitsDataTest::testGetPreferencesFor() {
         {"XX default falls back to 001", "length", "default", "XX", WorldLenMax, WorldLenMin},
         {"Unknown usage US", "length", "foobar", "US", USLenMax, USLenMin},
         {"Unknown usage 001", "length", "foobar", "XX", WorldLenMax, WorldLenMin},
-        {"Fallback", "length", "person-height-xyzzy", "DE", "meter-and-centimeter",
-         "meter-and-centimeter"},
-        {"Fallback twice", "length", "person-height-xyzzy-foo", "DE", "meter-and-centimeter",
-         "meter-and-centimeter"},
+        {"Fallback", "length", "person-height-xyzzy", "DE", "centimeter", "centimeter"},
+        {"Fallback twice", "length", "person-height-xyzzy-foo", "DE", "centimeter",
+         "centimeter"},
         // Confirming results for some unitPreferencesTest.txt test cases
         {"001 area", "area", "default", "001", "square-kilometer", "square-centimeter"},
         {"GB area", "area", "default", "GB", "square-mile", "square-inch"},

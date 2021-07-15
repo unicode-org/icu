@@ -18,5 +18,6 @@
       initial bad system performance when a new build is launched.
 
 NOTE:
-Run the [`./runConfigureICU` command](http://userguide.icu-project.org/icufaq)
+Run the
+[`./runConfigureICU` command](https://unicode-org.github.io/icu/userguide/icufaq)
 before building `icu4c` from VSCode.

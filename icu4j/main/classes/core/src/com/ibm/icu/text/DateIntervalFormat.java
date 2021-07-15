@@ -377,9 +377,10 @@ public class DateIntervalFormat extends UFormat {
         /**
          * serialization method resolve instances to the constant
          * DateIntervalFormat.SpanField values
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * @internal
+         * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         @Override
         protected Object readResolve() throws InvalidObjectException {
             if (this.getName().equals(DATE_INTERVAL_SPAN.getName()))
@@ -1268,7 +1269,6 @@ public class DateIntervalFormat extends UFormat {
      *
      * @param context The DisplayContext value to set.
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public void setContext(DisplayContext context)
     {
@@ -1284,7 +1284,6 @@ public class DateIntervalFormat extends UFormat {
      * @param type the DisplayContext.Type whose value to return
      * @return the current DisplayContext setting for the specified type
      * @draft ICU 68
-     * @provisional This API might change or be removed in a future release.
      */
     public DisplayContext getContext(DisplayContext.Type type)
     {
@@ -1450,6 +1449,12 @@ public class DateIntervalFormat extends UFormat {
                     // share interval pattern
                     intervalPatterns.put(DateIntervalInfo.
                         CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.YEAR], ptn);
+
+                    pattern =dtpng.getBestPattern(timeSkeleton + "G");
+                    ptn = new PatternInfo(null, pattern, fInfo.getDefaultOrder());
+                    // share interval pattern
+                    intervalPatterns.put(DateIntervalInfo.
+                        CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.ERA], ptn);
                 } else {
                     //genFallbackForNotFound(Calendar.DATE, skeleton);
                     //genFallbackForNotFound(Calendar.MONTH, skeleton);
@@ -1492,6 +1497,11 @@ public class DateIntervalFormat extends UFormat {
                 CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.MONTH], ptn);
             intervalPatterns.put(DateIntervalInfo.
                 CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.YEAR], ptn);
+
+            pattern =dtpng.getBestPattern(timeSkeleton + "G");
+            ptn = new PatternInfo(null, pattern, fInfo.getDefaultOrder());
+            intervalPatterns.put(DateIntervalInfo.
+                CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.ERA], ptn);
         } else {
             /* if both present,
              * 1) when the year, month, or day differs,
@@ -1500,7 +1510,7 @@ public class DateIntervalFormat extends UFormat {
              * range expression for the time.
              */
             /*
-             * 1) when the year, month, or day differs,
+             * 1) when the era, year, month, or day differs,
              * concatenate the two original expressions with a separator between,
              */
             // if field exists, use fall back
@@ -1521,6 +1531,12 @@ public class DateIntervalFormat extends UFormat {
                 skeleton = DateIntervalInfo.
                     CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.YEAR] + skeleton;
                 genFallbackPattern(Calendar.YEAR, skeleton, intervalPatterns, dtpng);
+            }
+            if ( !fieldExistsInSkeleton(Calendar.ERA, dateSkeleton) ) {
+                // then prefix skeleton with 'G'
+                skeleton = DateIntervalInfo.
+                    CALENDAR_FIELD_TO_PATTERN_LETTER[Calendar.ERA] + skeleton;
+                genFallbackPattern(Calendar.ERA, skeleton, intervalPatterns, dtpng);
             }
 
             /*
@@ -1597,7 +1613,7 @@ public class DateIntervalFormat extends UFormat {
 
     private String normalizeHourMetacharacters(String skeleton, ULocale locale) {
         StringBuilder result = new StringBuilder(skeleton);
-    
+
         char hourMetachar = '\0';
         int metacharStart = 0;
         int metacharCount = 0;
@@ -1615,7 +1631,7 @@ public class DateIntervalFormat extends UFormat {
                 }
             }
         }
-    
+
         if (hourMetachar != '\0') {
             char hourChar = 'H';
             char dayPeriodChar = 'a';
@@ -1633,7 +1649,7 @@ public class DateIntervalFormat extends UFormat {
                 }
                 convertedPattern = convertedPattern.substring(0, firstQuotePos) + convertedPattern.substring(secondQuotePos + 1);
             }
-    
+
             if (convertedPattern.indexOf('h') != -1) {
                 hourChar = 'h';
             } else if (convertedPattern.indexOf('K') != -1) {
@@ -1641,13 +1657,13 @@ public class DateIntervalFormat extends UFormat {
             } else if (convertedPattern.indexOf('k') != -1) {
                 hourChar = 'k';
             }
-        
+
             if (convertedPattern.indexOf('b') != -1) {
                 dayPeriodChar = 'b';
             } else if (convertedPattern.indexOf('B') != -1) {
                 dayPeriodChar = 'B';
             }
-        
+
             if (hourChar == 'H' || hourChar == 'k') {
                 result.replace(metacharStart, metacharStart + metacharCount, String.valueOf(hourChar));
             } else {
@@ -1982,6 +1998,14 @@ public class DateIntervalFormat extends UFormat {
                  pattern = fInfo.getIntervalPattern(bestSkeleton,
                                                          Calendar.HOUR);
                  if ( pattern != null ) {
+                    boolean suppressDayPeriodField = fSkeleton.indexOf('J') != -1;
+                    String part1 = adjustFieldWidth(skeleton, bestSkeleton,
+                                       pattern.getFirstPart(), differenceInfo, suppressDayPeriodField);
+                    String part2 = adjustFieldWidth(skeleton, bestSkeleton,
+                                       pattern.getSecondPart(), differenceInfo, suppressDayPeriodField);
+                    pattern =  new PatternInfo(part1, part2,
+                                               pattern.firstDateInPtnIsLaterDate());
+
                       // share
                       intervalPatterns.put(DateIntervalInfo.
                           CALENDAR_FIELD_TO_PATTERN_LETTER[field],
@@ -2097,24 +2121,24 @@ public class DateIntervalFormat extends UFormat {
         DateIntervalInfo.parseSkeleton(bestMatchSkeleton, bestMatchSkeletonFieldWidth);
         if (suppressDayPeriodField) {
             if (bestMatchIntervalPattern.indexOf(" a") != -1) {
-                bestMatchIntervalPattern = bestMatchIntervalPattern.replace(" a", "");
+                bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, " a", "");
             } else if (bestMatchIntervalPattern.indexOf("a ") != -1) {
-                bestMatchIntervalPattern = bestMatchIntervalPattern.replace("a ", "");
+                bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "a ", "");
             }
-            bestMatchIntervalPattern = bestMatchIntervalPattern.replace("a", "");
+            bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "a", "");
         }
         if ( differenceInfo == 2 ) {
             if (inputSkeleton.indexOf('z') != -1) {
-                bestMatchIntervalPattern = bestMatchIntervalPattern.replace('v', 'z');
+                bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "v", "z");
             }
             if (inputSkeleton.indexOf('K') != -1) {
-                bestMatchIntervalPattern = bestMatchIntervalPattern.replace('h', 'K');
+                bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "h", "K");
             }
             if (inputSkeleton.indexOf('k') != -1) {
-                bestMatchIntervalPattern = bestMatchIntervalPattern.replace('H', 'k');
+                bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "H", "k");
             }
             if (inputSkeleton.indexOf('b') != -1) {
-                bestMatchIntervalPattern = bestMatchIntervalPattern.replace('a', 'b');
+                bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "a", "b");
             }
         }
         if (bestMatchIntervalPattern.indexOf('a') != -1 && bestMatchSkeletonFieldWidth['a' - PATTERN_CHAR_BASE] == 0) {
@@ -2189,6 +2213,43 @@ public class DateIntervalFormat extends UFormat {
         }
         return adjustedPtn.toString();
     }
+
+    /**
+     * Does the same thing as String.replace(), except that it won't perform the
+     * substitution inside quoted literal text.
+     * @param targetString The string to perform the find-replace operation on.
+     * @param strToReplace The string to search for and replace in the target string.
+     * @param strToReplaceWith The string to substitute in wherever `stringToReplace` was found.
+     */
+    private static String findReplaceInPattern(String targetString,
+                                               String strToReplace,
+                                               String strToReplaceWith) {
+        int firstQuoteIndex = targetString.indexOf("\'");
+        if (firstQuoteIndex < 0) {
+            return targetString.replace(strToReplace, strToReplaceWith);
+        } else {
+            StringBuilder result = new StringBuilder();
+            String source = targetString;
+
+            while (firstQuoteIndex >= 0) {
+                int secondQuoteIndex = source.indexOf("\'", firstQuoteIndex + 1);
+                if (secondQuoteIndex < 0) {
+                    secondQuoteIndex = source.length() - 1;
+                }
+
+                String unquotedText = source.substring(0, firstQuoteIndex);
+                String quotedText = source.substring(firstQuoteIndex, secondQuoteIndex + 1);
+
+                result.append(unquotedText.replace(strToReplace, strToReplaceWith));
+                result.append(quotedText);
+
+                source = source.substring(secondQuoteIndex + 1);
+                firstQuoteIndex = source.indexOf("\'");
+            }
+            result.append(source.replace(strToReplace, strToReplaceWith));
+            return result.toString();
+        }
+  }
 
 
     /*

@@ -470,6 +470,11 @@ public final class SupplementalData {
      */
     public String getParent(String localeId) {
         checkState(!localeId.equals("root"), "cannot ask for parent of 'root' locale");
+        // We probably want to fully canonicalize here. But in the absence of that we
+        // at least need to do the following canonicalization:
+        if (localeId.equals("no_NO_NY")) {
+            localeId = "nn_NO";
+        }
         // Always defer to an explicit parent locale set in the CLDR data.
         Optional<String> explicitParent = getExplicitParentLocaleOf(localeId);
         if (explicitParent.isPresent()) {

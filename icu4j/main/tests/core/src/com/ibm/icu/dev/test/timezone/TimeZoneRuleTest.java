@@ -24,6 +24,7 @@ import org.junit.runners.JUnit4;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.AnnualTimeZoneRule;
 import com.ibm.icu.util.BasicTimeZone;
+import com.ibm.icu.util.BasicTimeZone.LocalOption;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.DateTimeRule;
 import com.ibm.icu.util.GregorianCalendar;
@@ -1235,7 +1236,7 @@ public class TimeZoneRuleTest extends TestFmwk {
 
         int[] offsets_vtzc = new int[2];
         VTimeZone vtzc = VTimeZone.create("PST");
-        vtzc.getOffsetFromLocal(Calendar.getInstance(vtzc).getTimeInMillis(), VTimeZone.LOCAL_STD, VTimeZone.LOCAL_STD, offsets_vtzc);
+        vtzc.getOffsetFromLocal(Calendar.getInstance(vtzc).getTimeInMillis(), LocalOption.STANDARD_FORMER, LocalOption.STANDARD_LATTER, offsets_vtzc);
         if (offsets_vtzc[0] > offsets_vtzc[1]) {
             errln("Error getOffsetFromLocal()");
         }
@@ -1469,7 +1470,7 @@ public class TimeZoneRuleTest extends TestFmwk {
             BasicTimeZone btz = (BasicTimeZone)tz;
             int []offsets = new int[2];
 
-            btz.getOffsetFromLocal(Calendar.getInstance().getTimeInMillis(), BasicTimeZone.LOCAL_STD, BasicTimeZone.LOCAL_STD, offsets);
+            btz.getOffsetFromLocal(Calendar.getInstance().getTimeInMillis(), LocalOption.STANDARD_FORMER, LocalOption.STANDARD_LATTER, offsets);
             if (offsets[0] > offsets[1]) {
                 errln("Error calling getOffsetFromLocal().");
             }

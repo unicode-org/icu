@@ -19,6 +19,7 @@ system_symbols:
     PIC system_misc system_debug malloc_functions ubsan
     c_strings c_string_formatting
     int_functions floating_point trigonometry
+    exp_and_tanhf
     stdlib_qsort
     system_locale
     stdio_input stdio_output file_io readlink_function dir_io mmap_functions dlfcn
@@ -58,6 +59,8 @@ group: c_strings
     # We must not use tolower and toupper because they are system-locale-sensitive (Turkish i).
     strlen strchr strrchr strstr strcmp strncmp strcpy strncpy strcat strncat
     memchr memcmp memcpy memmove memset
+    # BSD version of memcmp().
+    bcmp
     # Additional symbols in an optimized build.
     __strcpy_chk __strncpy_chk __strcat_chk __strncat_chk
     __rawmemchr __memcpy_chk __memmove_chk __memset_chk
@@ -73,6 +76,9 @@ group: int_functions
 
 group: floating_point
     abs fabs floor ceil modf fmod log pow round sqrt trunc
+
+group: exp_and_tanhf
+    expf tanhf
 
 group: trigonometry
     acos asin atan atan2 cos sin tan
@@ -184,7 +190,7 @@ library: common
     uinit utypes errorcode
     icuplug
     platform
-    localebuilder localematcher
+    localematcher
 
 group: pluralmap
     # TODO: Move to i18n library, ticket #11926.
@@ -205,7 +211,7 @@ group: breakiterator
     brkiter.o brkeng.o ubrk.o
     rbbi.o rbbinode.o rbbiscan.o rbbisetb.o rbbistbl.o rbbitblb.o
     rbbidata.o rbbirb.o rbbi_cache.o
-    dictionarydata.o dictbe.o
+    dictionarydata.o dictbe.o lstmbe.o
     # BreakIterator::makeInstance() factory implementation makes for circular dependency
     # between BreakIterator base and FilteredBreakIteratorBuilder.
     filteredbrk.o
@@ -217,6 +223,7 @@ group: breakiterator
     ucharstriebuilder  # for filteredbrk.o
     normlzr  # for dictbe.o, should switch to Normalizer2
     uvector32 # for dictbe.o
+    exp_and_tanhf # for lstmbe.o
 
 group: unormcmp  # unorm_compare()
     unormcmp.o
@@ -634,6 +641,7 @@ group: resourcebundle
     # Do we need class LocaleBased? https://unicode-org.atlassian.net/browse/ICU-8608
     locbased.o
     loclikely.o
+    localebuilder.o
   deps
     udata ucol_swp
     sort stringenumeration uhash uvector
@@ -641,15 +649,10 @@ group: resourcebundle
     bytesinkutil
     errorcode
 
-group: localebuilder
-    localebuilder.o
-  deps
-    resourcebundle
-
 group: localematcher
     localematcher.o
   deps
-    localebuilder localeprioritylist loclikelysubtags locdistance lsr
+    resourcebundle localeprioritylist loclikelysubtags locdistance lsr
 
 group: localeprioritylist
     localeprioritylist.o

@@ -44,9 +44,10 @@ struct UConverter;          // unicode/ucnv.h
 #ifndef USTRING_H
 /**
  * \ingroup ustring_ustrlen
+ * @param s Pointer to sequence of UChars.
+ * @return Length of sequence.
  */
-U_CAPI int32_t U_EXPORT2
-u_strlen(const UChar *s);
+U_CAPI int32_t U_EXPORT2 u_strlen(const UChar *s);
 #endif
 
 U_NAMESPACE_BEGIN
@@ -227,7 +228,7 @@ class UnicodeStringAppendable;  // unicode/appendable.h
  * The UnicodeString class is not suitable for subclassing.
  *
  * For an overview of Unicode strings in C and C++ see the
- * [User Guide Strings chapter](http://userguide.icu-project.org/strings#TOC-Strings-in-C-C-).
+ * [User Guide Strings chapter](https://unicode-org.github.io/icu/userguide/strings#strings-in-cc).
  *
  * In ICU, a Unicode string consists of 16-bit Unicode *code units*.
  * A Unicode character may be stored with either one code unit
@@ -285,7 +286,7 @@ class UnicodeStringAppendable;  // unicode/appendable.h
  * significant performance improvements.
  * Also, the internal buffer is accessible via special functions.
  * For details see the
- * [User Guide Strings chapter](http://userguide.icu-project.org/strings#TOC-Maximizing-Performance-with-the-UnicodeString-Storage-Model).
+ * [User Guide Strings chapter](https://unicode-org.github.io/icu/userguide/strings#maximizing-performance-with-the-unicodestring-storage-model).
  *
  * @see utf.h
  * @see CharacterIterator
@@ -2766,7 +2767,6 @@ public:
    * @param options   Options bit set, usually 0. See U_TITLECASE_NO_LOWERCASE,
    *                  U_TITLECASE_NO_BREAK_ADJUSTMENT, U_TITLECASE_ADJUST_TO_CASED,
    *                  U_TITLECASE_WHOLE_STRING, U_TITLECASE_SENTENCES.
-   * @param options Options bit set, see ucasemap_open().
    * @return A reference to this.
    * @stable ICU 3.8
    */
@@ -3614,7 +3614,7 @@ private:
   // turn a bogus string into an empty one
   void unBogus();
 
-  // implements assigment operator, copy constructor, and fastCopyFrom()
+  // implements assignment operator, copy constructor, and fastCopyFrom()
   UnicodeString &copyFrom(const UnicodeString &src, UBool fastCopy=false);
 
   // Copies just the fields without memory management.
