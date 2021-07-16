@@ -168,12 +168,11 @@ initFromResourceBundle(UErrorCode& sts) {
         }
 
         // look up type map for the key, and walk through the mapping data
-        tmpSts = U_ZERO_ERROR;
-        LocalUResourceBundlePointer typeMapResByKey(ures_getByKey(typeMapRes.getAlias(), legacyKeyId, NULL, &tmpSts));
-        if (U_FAILURE(tmpSts)) {
-            // type map for each key must exist
-            UPRV_UNREACHABLE;
-        } else {
+        LocalUResourceBundlePointer typeMapResByKey(ures_getByKey(typeMapRes.getAlias(), legacyKeyId, NULL, &sts));
+        // We fail here if typeMap does not have an entry corresponding to every entry in keyMap (should
+        // not happen for valid keyTypeData), or if ures_getByKeyfails fails for some other reason.
+        // Either way, we should just return the error, not invoke UPRV_UNREACHABLE i.e. abort().
+        if (U_SUCCESS(sts)) {
             LocalUResourceBundlePointer typeMapEntry;
 
             while (ures_hasNext(typeMapResByKey.getAlias())) {
