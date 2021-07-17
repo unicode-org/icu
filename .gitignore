@@ -95,6 +95,7 @@ icu4c/source/tools/genrb/derb_*
 icu4c/source/tools/genren/urename.*
 icu4c/source/tools/makeconv/*.1
 icu4c/source/tools/pkgdata/*.1
+icu4c/source/tools/propdump/*.1
 icu4j/*.jar
 icu4j/lib/*.jar
 tools/multi/packages/*.jar

@@ -23,7 +23,10 @@
 
 #include <stdio.h>
 #include "unicode/utypes.h"
+#include "unicode/ucpmap.h"
 #include "unicode/ucptrie.h"
+#include "unicode/umutablecptrie.h"
+#include "unicode/uset.h"
 #include "utrie2.h"
 
 /**
@@ -130,6 +133,30 @@ usrc_writeUCPTrieStruct(FILE *f,
  */
 U_CAPI void U_EXPORT2
 usrc_writeUCPTrie(FILE *f, const char *name, const UCPTrie *pTrie, UTargetSyntax syntax);
+
+/**
+ * Writes the UnicodeSet serialized bytes and ranges list.
+ */
+U_CAPI void U_EXPORT2
+usrc_writeUnicodeSet(
+    FILE *f,
+    const char *name,
+    const USet *pSet,
+    UTargetSyntax syntax);
+
+/**
+ * Writes the UCPMap ranges list.
+ *
+ * The "uproperty" argument is optional; ignored if UCHAR_INVALID_CODE. If present, it will be used
+ * to look up string names for the values in the UCPMap.
+ */
+U_CAPI void U_EXPORT2
+usrc_writeUCPMap(
+    FILE *f,
+    const char *name,
+    const UCPMap *pMap,
+    UProperty uproperty,
+    UTargetSyntax syntax);
 
 /**
  * Writes the contents of an array of mostly invariant characters.
