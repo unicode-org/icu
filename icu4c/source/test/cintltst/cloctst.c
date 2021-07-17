@@ -58,6 +58,7 @@ static void TestBug20370(void);
 static void TestBug20321UnicodeLocaleKey(void);
 
 static void TestUsingDefaultWarning(void);
+static void TestExcessivelyLongIDs(void);
 
 void PrintDataTable();
 
@@ -281,6 +282,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestBug20321UnicodeLocaleKey);
     TESTCASE(TestUsingDefaultWarning);
     TESTCASE(TestBug21449InfiniteLoop);
+    TESTCASE(TestExcessivelyLongIDs);
 }
 
 
@@ -7008,4 +7010,46 @@ static void TestBug21449InfiniteLoop() {
     // The issue causes an infinite loop to occur when looking up a non-existent resource for the invalid locale ID,
     // so the test is considered passed if the call to the API below returns anything at all.
     uloc_getDisplayLanguage(invalidLocaleId, invalidLocaleId, NULL, 0, &status);
+}
+
+// rdar://79296849 and https://unicode-org.atlassian.net/browse/ICU-21639
+static void TestExcessivelyLongIDs(void) {
+    const char* reallyLongID =
+        "de-u-cu-eur-em-default-hc-h23-ks-level1-lb-strict-lw-normal-ms-metric"
+        "-nu-latn-rg-atzzzz-sd-atat1-ss-none-tz-atvie-va-posix";
+    char minimizedID[ULOC_FULLNAME_CAPACITY];
+    char maximizedID[ULOC_FULLNAME_CAPACITY];
+    int32_t actualMinimizedLength = 0;
+    int32_t actualMaximizedLength = 0;
+    UErrorCode err = U_ZERO_ERROR;
+    
+    actualMinimizedLength = uloc_minimizeSubtags(reallyLongID, minimizedID, ULOC_FULLNAME_CAPACITY, &err);
+    assertTrue("uloc_minimizeSubtags() with too-small buffer didn't fail as expected",
+            U_FAILURE(err) && actualMinimizedLength > ULOC_FULLNAME_CAPACITY);
+    
+    err = U_ZERO_ERROR;
+    actualMaximizedLength = uloc_addLikelySubtags(reallyLongID, maximizedID, ULOC_FULLNAME_CAPACITY, &err);
+    assertTrue("uloc_addLikelySubtags() with too-small buffer didn't fail as expected",
+            U_FAILURE(err) && actualMaximizedLength > ULOC_FULLNAME_CAPACITY);
+    
+    err = U_ZERO_ERROR;
+    char* realMinimizedID = (char*)uprv_malloc(actualMinimizedLength + 1);
+    uloc_minimizeSubtags(reallyLongID, realMinimizedID, actualMinimizedLength + 1, &err);
+    if (assertSuccess("uloc_minimizeSubtags() failed", &err)) {
+        assertEquals("Wrong result from uloc_minimizeSubtags()",
+                     "de__POSIX@colstrength=primary;currency=eur;em=default;hours=h23;lb=strict;"
+                         "lw=normal;measure=metric;numbers=latn;rg=atzzzz;sd=atat1;ss=none;timezone=Europe/Vienna",
+                     realMinimizedID);
+    }
+    uprv_free(realMinimizedID);
+
+    char* realMaximizedID = (char*)uprv_malloc(actualMaximizedLength + 1);
+    uloc_addLikelySubtags(reallyLongID, realMaximizedID, actualMaximizedLength + 1, &err);
+    if (assertSuccess("uloc_addLikelySubtags() failed", &err)) {
+        assertEquals("Wrong result from uloc_addLikelySubtags()",
+                     "de_Latn_DE_POSIX@colstrength=primary;currency=eur;em=default;hours=h23;lb=strict;"
+                         "lw=normal;measure=metric;numbers=latn;rg=atzzzz;sd=atat1;ss=none;timezone=Europe/Vienna",
+                     realMaximizedID);
+    }
+    uprv_free(realMaximizedID);
 }
