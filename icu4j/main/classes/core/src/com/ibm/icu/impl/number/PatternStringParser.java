@@ -174,6 +174,11 @@ public class PatternStringParser {
         public boolean hasBody() {
             return positive.integerTotal > 0;
         }
+
+        @Override
+        public boolean currencyAsDecimal() {
+            return positive.hasCurrencyDecimal;
+        }
     }
 
     public static class ParsedSubpatternInfo {
@@ -195,6 +200,7 @@ public class PatternStringParser {
         public boolean hasPercentSign = false;
         public boolean hasPerMilleSign = false;
         public boolean hasCurrencySign = false;
+        public boolean hasCurrencyDecimal = false;
         public boolean hasMinusSign = false;
         public boolean hasPlusSign = false;
 
@@ -217,6 +223,7 @@ public class PatternStringParser {
             this.offset = 0;
         }
 
+        /** Returns the next code point, or -1 if string is too short. */
         int peek() {
             if (offset == pattern.length()) {
                 return -1;
@@ -225,6 +232,20 @@ public class PatternStringParser {
             }
         }
 
+        /** Returns the code point after the next code point, or -1 if string is too short. */
+        int peek2() {
+            if (offset == pattern.length()) {
+                return -1;
+            }
+            int cp1 = pattern.codePointAt(offset);
+            int offset2 = offset + Character.charCount(cp1);
+            if (offset2 == pattern.length()) {
+                return -1;
+            }
+            return pattern.codePointAt(offset2);
+        }
+
+        /** Returns the next code point and then steps forward. */
         int next() {
             int codePoint = peek();
             offset += Character.charCount(codePoint);
@@ -365,6 +386,34 @@ public class PatternStringParser {
             state.next(); // consume the decimal point
             result.hasDecimal = true;
             result.widthExceptAffixes += 1;
+            consumeFractionFormat(state, result);
+        } else if (state.peek() == '¤') {
+            // Check if currency is a decimal separator
+            switch (state.peek2()) {
+                case '#':
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    break;
+                default:
+                    // Currency symbol followed by a non-numeric character;
+                    // treat as a normal affix.
+                    return;
+            }
+            // Currency symbol is followed by a numeric character;
+            // treat as a decimal separator.
+            result.hasCurrencySign = true;
+            result.hasCurrencyDecimal = true;
+            result.hasDecimal = true;
+            result.widthExceptAffixes += 1;
+            state.next(); // consume the symbol
             consumeFractionFormat(state, result);
         }
     }
@@ -627,6 +676,9 @@ public class PatternStringParser {
         } else {
             properties.setDecimalSeparatorAlwaysShown(false);
         }
+
+        // Persist the currency as decimal separator
+        properties.setCurrencyAsDecimal(positive.hasCurrencyDecimal);
 
         // Scientific notation settings
         if (positive.exponentZeros > 0) {
