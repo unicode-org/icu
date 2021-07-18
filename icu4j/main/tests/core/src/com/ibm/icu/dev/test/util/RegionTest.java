@@ -587,4 +587,44 @@ public class RegionTest extends TestFmwk {
                     "Contained in World = " + containedInWorld.toString());
         }
     }
+    
+    @Test
+    public void TestGroupingChildren() {
+        String[][][] testGroupings = {
+            { { "003" }, { "013", "021", "029" } },
+            { { "419" }, { "005", "013", "029" } },
+            { { "EU" },  { "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR",
+                           "GR", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL",
+                           "PT", "RO", "SE", "SI", "SK" } }
+        };
+        
+        for (String[][] testCase : testGroupings) {
+            String groupingCode = testCase[0][0];
+            String[] expectedChildren = testCase[1];
+            
+            try {
+                Region grouping = Region.getInstance(groupingCode);
+                Set<Region> actualChildren = grouping.getContainedRegions();
+                List<String> actualChildIDs = new java.util.ArrayList();
+                for (Region childRegion : actualChildren) {
+                    actualChildIDs.add(childRegion.toString());
+                }
+                actualChildIDs.sort(null);
+                
+                for (int i = 0; i < actualChildIDs.size() && i < expectedChildren.length; i++) {
+                    if (!expectedChildren[i].equals(actualChildIDs.get(i))) {
+                        errln("Mismatch in child list for " + groupingCode + " at position "
+                            + i + ": expected " + expectedChildren[i] + ", got " + actualChildIDs.get(i));
+                    }
+                }
+                if (expectedChildren.length != actualChildIDs.size()) {
+                    errln("Wrong number of children for " + groupingCode + ": expected "
+                            + expectedChildren.length + ", got " + actualChildIDs.size());
+                }
+                
+            } catch (IllegalArgumentException ex) {
+                errln("Known region " + groupingCode + " was not recognized");
+            }
+        }
+    }
 }

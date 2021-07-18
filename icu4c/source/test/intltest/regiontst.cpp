@@ -358,6 +358,7 @@ RegionTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* 
    TESTCASE_AUTO(TestContains);
    TESTCASE_AUTO(TestAvailableTerritories);
    TESTCASE_AUTO(TestNoContainedRegions);
+   TESTCASE_AUTO(TestGroupingChildren);
    TESTCASE_AUTO_END;
 }
 
@@ -731,6 +732,55 @@ void RegionTest::TestNoContainedRegions(void) {
     logln("Success - BM has no subregions\n");
   }
   delete containedRegions;
+}
+
+void RegionTest::TestGroupingChildren(void) {
+    const char* testGroupings[] = {
+        "003", "021,013,029",
+        "419", "013,029,005",
+        "EU",  "AT,BE,CY,CZ,DE,DK,EE,ES,FI,FR,GR,HR,HU,IE,IT,LT,LU,LV,MT,NL,PL,PT,SE,SI,SK,BG,RO"
+    };
+
+    for (int32_t i = 0; i < UPRV_LENGTHOF(testGroupings); i += 2) {
+        const char* groupingCode = testGroupings[i];
+        const char* expectedChildren = testGroupings[i + 1];
+        
+        UErrorCode err = U_ZERO_ERROR;
+        const Region* grouping = Region::getInstance(groupingCode, err);
+        if (U_SUCCESS(err)) {
+            StringEnumeration* actualChildren = grouping->getContainedRegions(err);
+            if (U_SUCCESS(err)) {
+                int32_t numActualChildren = actualChildren->count(err);
+                int32_t numExpectedChildren = 0;
+                const char* expectedChildStart = expectedChildren;
+                const char* expectedChildEnd = NULL;
+                const char* actualChild = NULL;
+                while ((actualChild = actualChildren->next(NULL, err)) != NULL && *expectedChildStart != '\0') {
+                    expectedChildEnd = uprv_strchr(expectedChildStart, ',');
+                    if (expectedChildEnd == NULL) {
+                        expectedChildEnd = expectedChildStart + uprv_strlen(expectedChildStart);
+                    }
+                    if (uprv_strlen(actualChild) != size_t(expectedChildEnd - expectedChildStart) || uprv_strncmp(actualChild, expectedChildStart, expectedChildEnd - expectedChildStart) != 0) {
+                        errln("Mismatch in child list for %s at position %d: expected %s, got %s\n", groupingCode, numExpectedChildren, expectedChildStart, actualChild);
+                    }
+                    expectedChildStart = (*expectedChildEnd != '\0') ? expectedChildEnd + 1 : expectedChildEnd;
+                    ++numExpectedChildren;
+                }
+                while (expectedChildEnd != NULL && *expectedChildEnd != '\0') {
+                    expectedChildEnd = uprv_strchr(expectedChildEnd + 1, ',');
+                    ++numExpectedChildren;
+                }
+                if (numExpectedChildren != numActualChildren) {
+                    errln("Wrong number of children for %s: expected %d, got %d\n", groupingCode, numExpectedChildren, numActualChildren);
+                }
+                delete actualChildren;
+            } else {
+                errln("Couldn't create iterator for children of %s\n", groupingCode);
+            }
+        } else {
+            errln("Region %s not found\n", groupingCode);
+        }
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -24,6 +24,7 @@
 
 static void TestKnownRegions(void);
 static void TestGetContainedRegions(void);
+static void TestGroupingChildren(void);
 static void TestGetContainedRegionsWithType(void);
 static void TestGetContainingRegion(void);
 static void TestGetContainingRegionWithType(void);
@@ -38,6 +39,7 @@ void addURegionTest(TestNode** root)
 {
     TESTCASE(TestKnownRegions);
     TESTCASE(TestGetContainedRegions);
+    TESTCASE(TestGroupingChildren);
     TESTCASE(TestGetContainedRegionsWithType);
     TESTCASE(TestGetContainingRegion);
     TESTCASE(TestGetContainingRegionWithType);
@@ -410,6 +412,58 @@ static void TestGetContainedRegions() {
             }
         } else {
             log_data_err("ERROR: Known region %s was not recognized.\n", rd->code);
+        }
+    }
+}
+
+static void TestGroupingChildren() {
+    const char* testGroupings[] = {
+        "003", "021,013,029",
+        "419", "013,029,005",
+        "EU",  "AT,BE,CY,CZ,DE,DK,EE,ES,FI,FR,GR,HR,HU,IE,IT,LT,LU,LV,MT,NL,PL,PT,SE,SI,SK,BG,RO"
+    };
+
+    for (int32_t i = 0; i < UPRV_LENGTHOF(testGroupings); i += 2) {
+        const char* groupingCode = testGroupings[i];
+        const char* expectedChildren = testGroupings[i + 1];
+        
+        UErrorCode err = U_ZERO_ERROR;
+        const URegion* grouping = uregion_getRegionFromCode(groupingCode, &err);
+        if (U_SUCCESS(err)) {
+            UEnumeration* actualChildren = uregion_getContainedRegions(grouping, &err);
+            if (U_SUCCESS(err)) {
+                int32_t numActualChildren = uenum_count(actualChildren, &err);
+                int32_t numExpectedChildren = 0;
+                const char* expectedChildStart = expectedChildren;
+                const char* expectedChildEnd = NULL;
+                const char* actualChild = NULL;
+                while ((actualChild = uenum_next(actualChildren, NULL, &err)) != NULL && *expectedChildStart != '\0') {
+                    expectedChildEnd = uprv_strchr(expectedChildStart, ',');
+                    if (expectedChildEnd == NULL) {
+                        expectedChildEnd = expectedChildStart + uprv_strlen(expectedChildStart);
+                    }
+                    if (uprv_strlen(actualChild) != (size_t)(expectedChildEnd - expectedChildStart) || uprv_strncmp(actualChild, expectedChildStart, expectedChildEnd - expectedChildStart) != 0) {
+                        log_err("Mismatch in child list for %s at position %d: expected %s, got %s\n", groupingCode, i, expectedChildStart, actualChild);
+                    }
+                    expectedChildStart = (*expectedChildEnd != '\0') ? expectedChildEnd + 1 : expectedChildEnd;
+                    ++numExpectedChildren;
+                }
+                if (expectedChildEnd == NULL) {
+                    expectedChildEnd = expectedChildren;
+                }
+                while (expectedChildEnd != NULL && *expectedChildEnd != '\0') {
+                    expectedChildEnd = uprv_strchr(expectedChildEnd + 1, ',');
+                    ++numExpectedChildren;
+                }
+                if (numExpectedChildren != numActualChildren) {
+                    log_err("Wrong number of children for %s: expected %d, got %d\n", groupingCode, numExpectedChildren, numActualChildren);
+                }
+                uenum_close(actualChildren);
+            } else {
+                log_err("Couldn't create iterator for children of %s\n", groupingCode);
+            }
+        } else {
+            log_err("Region %s not found\n", groupingCode);
         }
     }
 }
