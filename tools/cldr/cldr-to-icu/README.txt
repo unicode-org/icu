@@ -50,13 +50,11 @@ based system, this should be as simple as:
 
 $ sudo apt-get install maven ant
 
-You must also install an additional CLDR JAR file the local Maven repository at
-$TOOLS_ROOT/cldr/lib (see the README.txt in that directory for more
-information).
+You will need to set up your Maven client as per the following link.
+In particular, the githubicu and githubcldr server configurations need to
+be present.
 
-$ cd "$TOOLS_ROOT/cldr/lib"
-$ ./install-cldr-jars.sh "$CLDR_DIR"
-
+<http://cldr.unicode.org/development/maven#TOC-Configuring-Maven>
 
 Generating all ICU data
 -----------------------

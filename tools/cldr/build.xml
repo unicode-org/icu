@@ -69,11 +69,4 @@
     <target name="clean-icu-data">
         <ant dir="cldr-to-icu" antfile="build-icu-data.xml" target="clean" inheritAll="true"/>
     </target>
-
-    <!-- Installs the CLDR library dependencies needed for building ICU data. -->
-    <target name="install-cldr-libs" depends="init-args">
-        <exec dir="lib" executable="install-cldr-jars.sh" resolveexecutable="true" failonerror="true">
-            <arg line="${cldrDir}"/>
-        </exec>
-    </target>
 </project>
