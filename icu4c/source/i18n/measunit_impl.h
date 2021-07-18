@@ -96,6 +96,7 @@ struct U_I18N_API SingleUnitImpl : public UMemory {
         if (dimensionality > 0 && other.dimensionality < 0) {
             return -1;
         }
+
         // Sort by official quantity order
         int32_t thisQuantity = this->getUnitCategoryIndex();
         int32_t otherQuantity = other.getUnitCategoryIndex();
@@ -105,6 +106,7 @@ struct U_I18N_API SingleUnitImpl : public UMemory {
         if (thisQuantity > otherQuantity) {
             return 1;
         }
+
         // If quantity order didn't help, then we go by index.
         if (index < other.index) {
             return -1;
@@ -112,15 +114,52 @@ struct U_I18N_API SingleUnitImpl : public UMemory {
         if (index > other.index) {
             return 1;
         }
-        // TODO: revisit if the spec dictates prefix sort order - it doesn't
-        // currently. For now we're sorting binary prefixes before SI prefixes,
-        // as per enum values order.
-        if (unitPrefix < other.unitPrefix) {
+
+        // When comparing binary prefixes vs SI prefixes, instead of comparing the actual values, we can
+        // multiply the binary prefix power by 3 and compare the powers. if they are equal, we can can
+        // compare the bases.
+        // NOTE: this methodology will fail if the binary prefix more than or equal 98.
+        int32_t unitBase = umeas_getPrefixBase(unitPrefix);
+        int32_t otherUnitBase = umeas_getPrefixBase(other.unitPrefix);
+
+        // Values for comparison purposes only.
+        int32_t unitPowerCompAbs =
+            unitBase == 1024 /* Binary Prefix */ ? std::abs(umeas_getPrefixPower(unitPrefix)) * 3
+                                                 : std::abs(umeas_getPrefixPower(unitPrefix));
+        int32_t otherUnitPowerCompAbs =
+            otherUnitBase == 1024 /* Binary Prefix */ ? std::abs(
+                                                            umeas_getPrefixPower(other.unitPrefix)) *
+                                                            3
+                                                      : std::abs(umeas_getPrefixPower(other.unitPrefix));
+        // Signs of the power
+        int32_t unitPowerSign = umeas_getPrefixPower(unitPrefix) > 0 ? 1 : -1;
+        int32_t otherUnitPowerSign = umeas_getPrefixPower(other.unitPrefix) > 0 ? 1 : -1;
+
+        if (unitPowerSign < otherUnitPowerSign) {
             return -1;
         }
-        if (unitPrefix > other.unitPrefix) {
+        if (unitPowerSign > otherUnitPowerSign) {
             return 1;
         }
+
+        // NOTE: if the unitPowerCompAbs is less than the other,
+        // we return 1 not -1. Thus because we want th sorting order
+        // for the bigger prefix to be before the smaller.
+        // Example: megabyte should come before kilobyte.
+        if (unitPowerCompAbs < otherUnitPowerCompAbs) {
+            return 1;
+        }
+        if (unitPowerCompAbs > otherUnitPowerCompAbs) {
+            return -1;
+        }
+
+        if (unitBase < otherUnitBase) {
+            return 1;
+        }
+        if (unitBase > otherUnitBase) {
+            return -1;
+        }
+
         return 0;
     }
 

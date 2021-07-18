@@ -4472,12 +4472,10 @@ void MeasureFormatTest::TestIdentifiers() {
         {"exbibyte", "exbibyte"},
         {"zebibyte", "zebibyte"},
         {"yobibyte", "yobibyte"},
-
         // Testing sort order of prefixes.
-        //
-        // TODO(icu-units#70): revisit when fixing normalization. For now we're
-        // just checking some consistency between C&J.
-        {"megafoot-mebifoot-kibifoot-kilofoot", "kibifoot-mebifoot-kilofoot-megafoot"},
+        {"megafoot-mebifoot-kibifoot-kilofoot", "mebifoot-megafoot-kibifoot-kilofoot"},
+        // Testing sort of units.
+        {"inch-foot-yard", "foot-inch-yard"}, // TODO: the result should be "yard-foot-inch"
     };
     for (const auto &cas : cases) {
         status.setScope(cas.id);

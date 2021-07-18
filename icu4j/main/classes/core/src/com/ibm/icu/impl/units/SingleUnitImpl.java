@@ -122,21 +122,49 @@ public class SingleUnitImpl {
         if (index > other.index) {
             return 1;
         }
-        // TODO: revisit if the spec dictates prefix sort order - it doesn't
-        // currently. For now we're sorting binary prefixes before SI prefixes,
-        // as per ICU4C's enum values order.
-        if (this.getPrefix().getBase() < other.getPrefix().getBase()) {
-            return 1;
-        }
-        if (this.getPrefix().getBase() > other.getPrefix().getBase()) {
+
+        // When comparing binary prefixes vs SI prefixes, instead of comparing the actual values, we can
+        // multiply the binary prefix power by 3 and compare the powers. if they are equal, we can can
+        // compare the bases.
+        // NOTE: this methodology will fail if the binary prefix more than or equal 98.
+        int unitBase = this.unitPrefix.getBase();
+        int otherUnitBase = other.unitPrefix.getBase();
+        // Values for comparison purposes only.
+        int unitPowerCompAbs =
+                unitBase == 1024 /* Binary Prefix */ ? Math.abs(this.unitPrefix.getPower()) * 3
+                        : Math.abs(this.unitPrefix.getPower());
+        int otherUnitPowerCompAbs =
+                otherUnitBase == 1024 /* Binary Prefix */ ? Math.abs(other.unitPrefix.getPower()) * 3
+                        : Math.abs(other.unitPrefix.getPower());
+        // Signs of the power
+        int unitPowerSign = this.unitPrefix.getPower() > 0 ? 1 : -1;
+        int otherUnitPowerSign = other.unitPrefix.getPower() > 0 ? 1 : -1;
+
+        if (unitPowerSign < otherUnitPowerSign) {
             return -1;
         }
-        if (this.getPrefix().getPower() < other.getPrefix().getPower()) {
-            return -1;
-        }
-        if (this.getPrefix().getPower() > other.getPrefix().getPower()) {
+        if (unitPowerSign > otherUnitPowerSign) {
             return 1;
         }
+
+        // NOTE: if the unitPowerCompAbs is less than the other,
+        // we return 1 not -1. Thus because we want th sorting order
+        // for the bigger prefix to be before the smaller.
+        // Example: megabyte should come before kilobyte.
+        if (unitPowerCompAbs < otherUnitPowerCompAbs) {
+            return 1;
+        }
+        if (unitPowerCompAbs > otherUnitPowerCompAbs) {
+            return -1;
+        }
+
+        if (unitBase < otherUnitBase) {
+            return 1;
+        }
+        if (unitBase > otherUnitBase) {
+            return -1;
+        }
+
         return 0;
     }
 
