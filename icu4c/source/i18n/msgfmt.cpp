@@ -1639,6 +1639,7 @@ void MessageFormat::cacheExplicitFormats(UErrorCode& status) {
         Formattable::Type formattableType;
 
         switch (argType) {
+        case UMSGPAT_ARG_TYPE_SELECT:
         case UMSGPAT_ARG_TYPE_NONE:
             formattableType = Formattable::kString;
             break;
@@ -1660,9 +1661,6 @@ void MessageFormat::cacheExplicitFormats(UErrorCode& status) {
         case UMSGPAT_ARG_TYPE_PLURAL:
         case UMSGPAT_ARG_TYPE_SELECTORDINAL:
             formattableType = Formattable::kDouble;
-            break;
-        case UMSGPAT_ARG_TYPE_SELECT:
-            formattableType = Formattable::kString;
             break;
         default:
             status = U_INTERNAL_PROGRAM_ERROR;  // Should be unreachable.
