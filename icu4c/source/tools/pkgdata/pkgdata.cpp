@@ -527,13 +527,13 @@ static int runCommand(const char* command, UBool specialHandling) {
     }
 
     if (!specialHandling) {
-#if defined(USING_CYGWIN) || U_PLATFORM == U_PF_MINGW || U_PLATFORM == U_PF_OS400
+#if defined(USING_CYGWIN) || U_PLATFORM == U_PF_OS400
         if ((len + BUFFER_PADDING_SIZE) >= SMALL_BUFFER_MAX_SIZE) {
             cmd = (char *)uprv_malloc(len + BUFFER_PADDING_SIZE);
         } else {
             cmd = cmdBuffer;
         }
-#if defined(USING_CYGWIN) || U_PLATFORM == U_PF_MINGW
+#if defined(USING_CYGWIN)
         sprintf(cmd, "bash -c \"%s\"", command);
 
 #elif U_PLATFORM == U_PF_OS400
@@ -543,7 +543,7 @@ static int runCommand(const char* command, UBool specialHandling) {
         goto normal_command_mode;
 #endif
     } else {
-#if !(defined(USING_CYGWIN) || U_PLATFORM == U_PF_MINGW || U_PLATFORM == U_PF_OS400)
+#if !(defined(USING_CYGWIN) || U_PLATFORM == U_PF_OS400)
 normal_command_mode:
 #endif
         cmd = (char *)command;
