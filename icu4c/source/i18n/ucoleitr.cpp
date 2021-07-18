@@ -289,8 +289,11 @@ ucol_openElements(const UCollator  *coll,
         return NULL;
     }
 
+    // Note: This is the UnicodeString readonly-aliasing constructor.
     UnicodeString s((UBool)(textLength < 0), text, textLength);
-    CollationElementIterator *cei = rbc->createCollationElementIterator(s);
+    // The caller must not modify or delete the input text while being used, so we use
+    // the read-only alias CollationElementIterator.
+    CollationElementIterator *cei = rbc->createCollationElementIteratorReadOnlyAlias(s);
     if (cei == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
@@ -298,7 +301,6 @@ ucol_openElements(const UCollator  *coll,
 
     return cei->toUCollationElements();
 }
-
 
 U_CAPI void U_EXPORT2
 ucol_closeElements(UCollationElements *elems)
@@ -488,8 +490,11 @@ ucol_setText(      UCollationElements *elems,
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
+    // Note: This is the UnicodeString readonly-aliasing constructor.
     UnicodeString s((UBool)(textLength < 0), text, textLength);
-    return CollationElementIterator::fromUCollationElements(elems)->setText(s, *status);
+    // The caller must not modify or delete the input text while being used, so we set readOnly
+    // to true when calling setText.
+    return CollationElementIterator::fromUCollationElements(elems)->setText(s, true, *status);
 }
 
 U_CAPI int32_t U_EXPORT2

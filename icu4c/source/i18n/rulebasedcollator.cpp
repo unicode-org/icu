@@ -1631,6 +1631,19 @@ RuleBasedCollator::createCollationElementIterator(const UnicodeString& source) c
     return cei;
 }
 
+// Same as the above method, but uses a real-only alias of the input source string.
+CollationElementIterator *
+RuleBasedCollator::createCollationElementIteratorReadOnlyAlias(const UnicodeString& source) const {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    if(!initMaxExpansions(errorCode)) { return NULL; }
+    CollationElementIterator *cei = new CollationElementIterator(source, true, this, errorCode);
+    if(U_FAILURE(errorCode)) {
+        delete cei;
+        return NULL;
+    }
+    return cei;
+}
+
 CollationElementIterator *
 RuleBasedCollator::createCollationElementIterator(const CharacterIterator& source) const {
     UErrorCode errorCode = U_ZERO_ERROR;
