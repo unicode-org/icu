@@ -44,6 +44,7 @@ static void TestParseErrorReturnValue(void);
 static void TestFormatForFields(void);
 static void TestForceGannenNumbering(void);
 static void TestMapDateToCalFields(void);
+static void TestNarrowQuarters(void);
 
 void addDateForTest(TestNode** root);
 
@@ -65,6 +66,7 @@ void addDateForTest(TestNode** root)
     TESTCASE(TestFormatForFields);
     TESTCASE(TestForceGannenNumbering);
     TESTCASE(TestMapDateToCalFields);
+    TESTCASE(TestNarrowQuarters);
 }
 /* Testing the DateFormat API */
 static void TestDateFormat()
@@ -579,7 +581,7 @@ static void TestRelativeDateFormat()
 /*Testing udat_getSymbols() and udat_setSymbols() and udat_countSymbols()*/
 static void TestSymbols()
 {
-    UDateFormat *def, *fr, *zhChiCal;
+    UDateFormat *def, *fr, *zhChiCal, *esMX;
     UErrorCode status = U_ZERO_ERROR;
     UChar *value=NULL;
     UChar *result = NULL;
@@ -618,7 +620,15 @@ static void TestSymbols()
             myErrorName(status) );
         return;
     }
-
+    /*creating a dateformat with es_MX locale */
+    log_verbose("\ncreating a date format with es_MX locale\n");
+    esMX = udat_open(UDAT_SHORT, UDAT_NONE, "es_MX", NULL, 0, NULL, 0, &status);
+    if(U_FAILURE(status))
+    {
+        log_data_err("error in creating the dateformat using no date, short time, locale es_MX -> %s (Are you missing data?)\n",
+            myErrorName(status) );
+        return;
+    }
 
     /*Testing countSymbols, getSymbols and setSymbols*/
     log_verbose("\nTesting countSymbols\n");
@@ -683,6 +693,8 @@ static void TestSymbols()
     VerifygetSymbols(def, UDAT_QUARTERS, 3, "4th quarter");
     VerifygetSymbols(fr, UDAT_SHORT_QUARTERS, 1, "T2");
     VerifygetSymbols(def, UDAT_SHORT_QUARTERS, 2, "Q3");
+    VerifygetSymbols(esMX, UDAT_STANDALONE_NARROW_QUARTERS, 1, "2T");
+    VerifygetSymbols(def, UDAT_NARROW_QUARTERS, 2, "3");
     VerifygetSymbols(zhChiCal, UDAT_CYCLIC_YEARS_ABBREVIATED, 0, "\\u7532\\u5B50");
     VerifygetSymbols(zhChiCal, UDAT_CYCLIC_YEARS_NARROW, 59, "\\u7678\\u4EA5");
     VerifygetSymbols(zhChiCal, UDAT_ZODIAC_NAMES_ABBREVIATED, 0, "\\u9F20");
@@ -803,8 +815,10 @@ free(pattern);
     VerifysetSymbols(fr, UDAT_STANDALONE_NARROW_MONTHS, 2, "M");
     VerifysetSymbols(fr, UDAT_QUARTERS, 0, "1. Quart");
     VerifysetSymbols(fr, UDAT_SHORT_QUARTERS, 1, "QQ2");
+    VerifysetSymbols(fr, UDAT_NARROW_QUARTERS, 1, "!2");
     VerifysetSymbols(fr, UDAT_STANDALONE_QUARTERS, 2, "3rd Quar.");
     VerifysetSymbols(fr, UDAT_STANDALONE_SHORT_QUARTERS, 3, "4QQ");
+    VerifysetSymbols(fr, UDAT_STANDALONE_NARROW_QUARTERS, 3, "!4");
     VerifysetSymbols(zhChiCal, UDAT_CYCLIC_YEARS_ABBREVIATED, 1, "yi-chou");
     VerifysetSymbols(zhChiCal, UDAT_ZODIAC_NAMES_ABBREVIATED, 1, "Ox");
 
@@ -827,6 +841,7 @@ free(pattern);
     udat_close(fr);
     udat_close(def);
     udat_close(zhChiCal);
+    udat_close(esMX);
     if(result != NULL) {
         free(result);
         result = NULL;
@@ -1940,6 +1955,65 @@ static void TestMapDateToCalFields(void){
             log_err("for pattern char 0x%04X, dateField %d, expect calField %d and got %d\n",
                     itemPtr->patternChar, itemPtr->dateField, itemPtr->calField, calField);
         }
+    }
+}
+
+static void TestNarrowQuarters(void) {
+    // Test for rdar://79238094
+    const UChar* testCases[] = {
+        u"en_US", u"QQQQ y",  u"1st quarter 1970",
+        u"en_US", u"QQQ y",   u"Q1 1970",
+        u"en_US", u"QQQQQ y", u"1 1970",
+        u"es_MX", u"QQQQ y",  u"1.er trimestre 1970",
+        u"es_MX", u"QQQ y",   u"T1 1970",
+        u"es_MX", u"QQQQQ y", u"1 1970",
+        u"en_US", u"qqqq",    u"1st quarter",
+        u"en_US", u"qqq",     u"Q1",
+        u"en_US", u"qqqqq",   u"1",
+        u"es_MX", u"qqqq",    u"1.er trimestre",
+        u"es_MX", u"qqq",     u"T1",
+        u"es_MX", u"qqqqq",   u"1T",
+    };
+    
+    UErrorCode err = U_ZERO_ERROR;
+    UChar result[100];
+    UDate parsedDate = 0;
+    UDate expectedFormatParsedDate = 0;
+    UDate expectedStandaloneParsedDate = 0;
+    
+    for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i += 3) {
+        const UChar* localeID = testCases[i];
+        const UChar* pattern = testCases[i + 1];
+        const UChar* expectedResult = testCases[i + 2];
+        
+        err = U_ZERO_ERROR;
+        
+        UDateFormat* df = udat_open(UDAT_PATTERN, UDAT_PATTERN, austrdup(localeID), u"UTC", 0, pattern, -1, &err);
+        
+        udat_format(df, 0, result, 100, NULL, &err);
+        
+        if (assertSuccess("Formatting date failed", &err)) {
+            assertUEquals("Wrong formatting result", expectedResult, result);
+        }
+        
+        bool patternIsStandaloneQuarter = u_strchr(pattern, u'q') != NULL;
+        
+        parsedDate = udat_parse(df, expectedResult, -1, NULL, &err);
+        if (!patternIsStandaloneQuarter && expectedFormatParsedDate == 0) {
+            expectedFormatParsedDate = parsedDate;
+        } else if (patternIsStandaloneQuarter && expectedStandaloneParsedDate == 0) {
+            expectedStandaloneParsedDate = parsedDate;
+        }
+        
+        if (assertSuccess("Parsing date failed", &err)) {
+            if (patternIsStandaloneQuarter) {
+                assertIntEquals("Wrong parsing result", expectedStandaloneParsedDate, parsedDate);
+            } else {
+                assertIntEquals("Wrong parsing result", expectedFormatParsedDate, parsedDate);
+            }
+        }
+        
+        udat_close(df);
     }
 }
 

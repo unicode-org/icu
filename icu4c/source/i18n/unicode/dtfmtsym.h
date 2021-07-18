@@ -388,8 +388,7 @@ public:
      * Gets quarter strings by width and context. For example: "1st Quarter", "2nd Quarter", etc.
      * @param count Filled in with length of the array.
      * @param context The formatting context, either FORMAT or STANDALONE
-     * @param width   The width of returned strings, either WIDE or ABBREVIATED. There
-     *                are no NARROW quarters.
+     * @param width   The width of returned strings, either WIDE, ABBREVIATED, or NARROW.
      * @return the quarter strings. (DateFormatSymbols retains ownership.)
      * @stable ICU 3.6
      */
@@ -401,8 +400,7 @@ public:
      * @param quarters  The new quarter strings. (not adopted; caller retains ownership)
      * @param count   Filled in with length of the array.
      * @param context The formatting context, either FORMAT or STANDALONE
-     * @param width   The width of returned strings, either WIDE or ABBREVIATED. There
-     *                are no NARROW quarters.
+     * @param width   The width of returned strings, either WIDE, ABBREVIATED, or NARROW.
      * @stable ICU 3.6
      */
     void setQuarters(const UnicodeString* quarters, int32_t count, DtContextType context, DtWidthType width);
@@ -776,6 +774,13 @@ private:
     int32_t         fShortQuartersCount;
 
     /**
+     * Narrow quarters. For example: "1", "2", etc.
+     * (In many, but not all, locales, this is the same as "Q", but there are locales for which this isn't true.)
+     */
+    UnicodeString  *fNarrowQuarters;
+    int32_t         fNarrowQuartersCount;
+    
+    /**
      * Standalone quarter strings. For example: "1st quarter", "2nd quarter", etc.
      */
     UnicodeString  *fStandaloneQuarters;
@@ -787,6 +792,13 @@ private:
     UnicodeString  *fStandaloneShortQuarters;
     int32_t         fStandaloneShortQuartersCount;
 
+    /**
+     * Standalone narrow quarter strings. For example: "1", "2", etc.
+     * (In many, but not all, locales, this is the same as "q", but there are locales for which this isn't true.)
+     */
+    UnicodeString  *fStandaloneNarrowQuarters;
+    int32_t         fStandaloneNarrowQuartersCount;
+    
     /**
      * All leap month patterns, for example "{0}bis".
      */

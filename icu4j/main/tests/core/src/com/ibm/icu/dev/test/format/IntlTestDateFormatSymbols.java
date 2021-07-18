@@ -451,6 +451,21 @@ public class IntlTestDateFormatSymbols extends TestFmwk
             }
         }
 
+        final String[] narrowQuarters = en.getQuarters(DateFormatSymbols.FORMAT,DateFormatSymbols.NARROW);
+        fr2.setQuarters(narrowQuarters,DateFormatSymbols.FORMAT,DateFormatSymbols.NARROW);
+        final String[] narrowQuarters1 = fr2.getQuarters(DateFormatSymbols.FORMAT,DateFormatSymbols.NARROW);
+        count = narrowQuarters.length;
+        if( count != narrowQuarters1.length) {
+            errln("ERROR: setQuarters(FORMAT, NARROW) failed (different size array)");
+        }
+        else {
+            for(int i = 0; i < count; i++) {
+                if(! narrowQuarters[i].equals(narrowQuarters1[i])) {
+                    errln("ERROR: setQuarters(FORMAT, NARROW) failed (different string values)");
+                }
+            }
+        }
+
         final String[] standaloneQuarters = en.getQuarters(DateFormatSymbols.STANDALONE,DateFormatSymbols.WIDE);
         fr.setQuarters(standaloneQuarters,DateFormatSymbols.STANDALONE,DateFormatSymbols.WIDE);
         final String[] standaloneQuarters1 = fr.getQuarters(DateFormatSymbols.STANDALONE,DateFormatSymbols.WIDE);
@@ -477,6 +492,21 @@ public class IntlTestDateFormatSymbols extends TestFmwk
             for(int i = 0; i < count; i++) {
                 if(! standaloneShortQuarters[i].equals(standaloneShortQuarters1[i])) {
                     errln("ERROR: setQuarters(STANDALONE, ABBREVIATED) failed (different string values)");
+                }
+            }
+        }
+
+        final String[] standaloneNarrowQuarters = en.getQuarters(DateFormatSymbols.STANDALONE,DateFormatSymbols.NARROW);
+        fr2.setQuarters(standaloneNarrowQuarters,DateFormatSymbols.STANDALONE,DateFormatSymbols.NARROW);
+        final String[] standaloneNarrowQuarters1 = fr2.getQuarters(DateFormatSymbols.STANDALONE,DateFormatSymbols.NARROW);
+        count = standaloneNarrowQuarters.length;
+        if( count != standaloneNarrowQuarters1.length) {
+            errln("ERROR: setQuarters(STANDALONE, NARROW) failed (different size array)");
+        }
+        else {
+            for(int i = 0; i < count; i++) {
+                if(! standaloneNarrowQuarters[i].equals(standaloneNarrowQuarters1[i])) {
+                    errln("ERROR: setQuarters(STANDALONE, NARROW) failed (different string values)");
                 }
             }
         }
