@@ -23,6 +23,7 @@
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "currencydisplaynames.h"
 #include "static_unicode_sets.h"
 #include "uassert.h"
 #include "umutex.h"
@@ -90,9 +91,6 @@ static const char VAR_DELIM = '_';
 
 // Tag for localized display names (symbols) of currencies
 static const char CURRENCIES[] = "Currencies";
-static const char CURRENCIES_NARROW[] = "Currencies%narrow";
-static const char CURRENCIES_FORMAL[] = "Currencies%formal";
-static const char CURRENCIES_VARIANT[] = "Currencies%variant";
 static const char CURRENCYPLURALS[] = "CurrencyPlurals";
 
 // ISO codes mapping table
@@ -635,111 +633,16 @@ ucurr_getName(const UChar* currency,
               int32_t* len, // fillin
               UErrorCode* ec) {
 
-    // Look up the Currencies resource for the given locale.  The
-    // Currencies locale data looks like this:
-    //|en {
-    //|  Currencies {
-    //|    USD { "US$", "US Dollar" }
-    //|    CHF { "Sw F", "Swiss Franc" }
-    //|    INR { "=0#Rs|1#Re|1<Rs", "=0#Rupees|1#Rupee|1<Rupees" }
-    //|    //...
-    //|  }
-    //|}
-
-    if (U_FAILURE(*ec)) {
-        return 0;
-    }
-
-    int32_t choice = (int32_t) nameStyle;
-    if (choice < 0 || choice > 4) {
-        *ec = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-
-    // In the future, resource bundles may implement multi-level
-    // fallback.  That is, if a currency is not found in the en_US
-    // Currencies data, then the en Currencies data will be searched.
-    // Currently, if a Currencies datum exists in en_US and en, the
-    // en_US entry hides that in en.
-
-    // We want multi-level fallback for this resource, so we implement
-    // it manually.
-
-    // Use a separate UErrorCode here that does not propagate out of
-    // this function.
-    UErrorCode ec2 = U_ZERO_ERROR;
-
-    char loc[ULOC_FULLNAME_CAPACITY];
-    uloc_getName(locale, loc, sizeof(loc), &ec2);
-    if (U_FAILURE(ec2) || ec2 == U_STRING_NOT_TERMINATED_WARNING) {
-        *ec = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-
-    char buf[ISO_CURRENCY_CODE_LENGTH+1];
-    myUCharsToChars(buf, currency);
-    
-    /* Normalize the keyword value to uppercase */
-    T_CString_toUpperCase(buf);
-    
-    const UChar* s = NULL;
-    ec2 = U_ZERO_ERROR;
-    LocalUResourceBundlePointer rb(ures_open(U_ICUDATA_CURR, loc, &ec2));
-
-    if (nameStyle == UCURR_NARROW_SYMBOL_NAME || nameStyle == UCURR_FORMAL_SYMBOL_NAME || nameStyle == UCURR_VARIANT_SYMBOL_NAME) {
-        CharString key;
-        switch (nameStyle) {
-        case UCURR_NARROW_SYMBOL_NAME:
-            key.append(CURRENCIES_NARROW, ec2);
-            break;
-        case UCURR_FORMAL_SYMBOL_NAME:
-            key.append(CURRENCIES_FORMAL, ec2);
-            break;
-        case UCURR_VARIANT_SYMBOL_NAME:
-            key.append(CURRENCIES_VARIANT, ec2);
-            break;
-        default:
-            *ec = U_UNSUPPORTED_ERROR;
-            return 0;
-        }
-        key.append("/", ec2);
-        key.append(buf, ec2);
-        s = ures_getStringByKeyWithFallback(rb.getAlias(), key.data(), len, &ec2);
-        if (ec2 == U_MISSING_RESOURCE_ERROR) {
-            *ec = U_USING_FALLBACK_WARNING;
-            ec2 = U_ZERO_ERROR;
-            choice = UCURR_SYMBOL_NAME;
-        }
-    }
-    if (s == NULL) {
-        ures_getByKey(rb.getAlias(), CURRENCIES, rb.getAlias(), &ec2);
-        ures_getByKeyWithFallback(rb.getAlias(), buf, rb.getAlias(), &ec2);
-        s = ures_getStringByIndex(rb.getAlias(), choice, len, &ec2);
-    }
-
-    // If we've succeeded we're done.  Otherwise, try to fallback.
-    // If that fails (because we are already at root) then exit.
-    if (U_SUCCESS(ec2)) {
-        if (ec2 == U_USING_DEFAULT_WARNING
-            || (ec2 == U_USING_FALLBACK_WARNING && *ec != U_USING_DEFAULT_WARNING)) {
-            *ec = ec2;
-        }
-    }
-
     // We no longer support choice format data in names.  Data should not contain
     // choice patterns.
     if (isChoiceFormat != NULL) {
         *isChoiceFormat = FALSE;
     }
-    if (U_SUCCESS(ec2)) {
-        U_ASSERT(s != NULL);
-        return s;
-    }
-
-    // If we fail to find a match, use the ISO 4217 code
-    *len = u_strlen(currency); // Should == ISO_CURRENCY_CODE_LENGTH, but maybe not...?
-    *ec = U_USING_DEFAULT_WARNING;
-    return currency;
+    const Locale loc = Locale::createFromName(locale);
+    const CurrencyDisplayNames *currencyDisplayNames = CurrencyDisplayNames::getInstance(&loc, *ec);
+    const UChar *displayName = currencyDisplayNames->getName(currency, nameStyle, *ec);
+    *len = u_strlen(displayName);
+    return displayName;
 }
 
 U_CAPI const UChar* U_EXPORT2
@@ -749,73 +652,18 @@ ucurr_getPluralName(const UChar* currency,
                     const char* pluralCount,
                     int32_t* len, // fillin
                     UErrorCode* ec) {
-    // Look up the Currencies resource for the given locale.  The
-    // Currencies locale data looks like this:
-    //|en {
-    //|  CurrencyPlurals {
-    //|    USD{
-    //|      one{"US dollar"}
-    //|      other{"US dollars"}
-    //|    }
-    //|  }
-    //|}
 
-    if (U_FAILURE(*ec)) {
-        return 0;
+    // We no longer support choice format data in names.  Data should not contain
+    // choice patterns.
+    if (isChoiceFormat != NULL) {
+        *isChoiceFormat = FALSE;
     }
-
-    // Use a separate UErrorCode here that does not propagate out of
-    // this function.
-    UErrorCode ec2 = U_ZERO_ERROR;
-
-    char loc[ULOC_FULLNAME_CAPACITY];
-    uloc_getName(locale, loc, sizeof(loc), &ec2);
-    if (U_FAILURE(ec2) || ec2 == U_STRING_NOT_TERMINATED_WARNING) {
-        *ec = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-
-    char buf[ISO_CURRENCY_CODE_LENGTH+1];
-    myUCharsToChars(buf, currency);
-
-    const UChar* s = NULL;
-    ec2 = U_ZERO_ERROR;
-    UResourceBundle* rb = ures_open(U_ICUDATA_CURR, loc, &ec2);
-
-    rb = ures_getByKey(rb, CURRENCYPLURALS, rb, &ec2);
-
-    // Fetch resource with multi-level resource inheritance fallback
-    rb = ures_getByKeyWithFallback(rb, buf, rb, &ec2);
-
-    s = ures_getStringByKeyWithFallback(rb, pluralCount, len, &ec2);
-    if (U_FAILURE(ec2)) {
-        //  fall back to "other"
-        ec2 = U_ZERO_ERROR;
-        s = ures_getStringByKeyWithFallback(rb, "other", len, &ec2);     
-        if (U_FAILURE(ec2)) {
-            ures_close(rb);
-            // fall back to long name in Currencies
-            return ucurr_getName(currency, locale, UCURR_LONG_NAME, 
-                                 isChoiceFormat, len, ec);
-        }
-    }
-    ures_close(rb);
-
-    // If we've succeeded we're done.  Otherwise, try to fallback.
-    // If that fails (because we are already at root) then exit.
-    if (U_SUCCESS(ec2)) {
-        if (ec2 == U_USING_DEFAULT_WARNING
-            || (ec2 == U_USING_FALLBACK_WARNING && *ec != U_USING_DEFAULT_WARNING)) {
-            *ec = ec2;
-        }
-        U_ASSERT(s != NULL);
-        return s;
-    }
-
-    // If we fail to find a match, use the ISO 4217 code
-    *len = u_strlen(currency); // Should == ISO_CURRENCY_CODE_LENGTH, but maybe not...?
-    *ec = U_USING_DEFAULT_WARNING;
-    return currency;
+    const Locale loc = Locale::createFromName(locale);
+    const CurrencyDisplayNames *currencyDisplayNames = CurrencyDisplayNames::getInstance(&loc, *ec);
+    const UChar *pluralName =
+        currencyDisplayNames->getPluralName(currency, PluralMapBase::toCategory(pluralCount), *ec);
+    *len = u_strlen(pluralName);
+    return pluralName;
 }
 
 

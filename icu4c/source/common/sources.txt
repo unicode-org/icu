@@ -14,6 +14,7 @@ charstr.cpp
 cmemory.cpp
 cstr.cpp
 cstring.cpp
+currencydisplaynames.cpp
 cwchar.cpp
 dictbe.cpp
 dictionarydata.cpp

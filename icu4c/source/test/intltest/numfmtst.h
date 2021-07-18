@@ -155,6 +155,8 @@ class NumberFormatTest: public CalendarTimeZoneTest {
 
     void TestCurrencyVariants(void);
 
+    void TestCurrencyPlurals(void);
+
     void TestCurrencyAmount(void);
 
     void TestCurrencyUnit(void);
@@ -304,6 +306,9 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test21134_ToNumberFormatter();
     void Test13733_StrictAndLenient();
     void Test21232_ParseTimeout();
+    void Test8144_TestCurrencyNames();
+    void Test8144_TestCurrencyVariants();
+    void Test8144_TestCurrencyPlurals();
     void Test10997_FormatCurrency();
 
  private:

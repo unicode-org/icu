@@ -640,6 +640,9 @@
     <ClCompile Include="restrace.cpp">
       <Filter>data &amp; memory</Filter>
     </ClCompile>
+    <ClCompile Include="currencydisplaynames.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ubidi_props.h">
@@ -1001,6 +1004,9 @@
     </ClInclude>
     <ClInclude Include="restrace.h">
       <Filter>data &amp; memory</Filter>
+    </ClInclude>
+    <ClInclude Include="currencydisplaynames.h">
+      <Filter>formatting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
