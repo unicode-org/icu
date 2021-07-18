@@ -1115,7 +1115,9 @@ conversion:table(nofallback) {
         {
           "ibm-943",
           "a\x1ac\u30a1\x7ff",
-          :bin{       617f6383401c66 },
+    //	  https://unicode-org.atlassian.net/browse/ICU-20688 : SHIFT-JIS PATCH 
+    //     :bin{       617f6383401c66 },
+          :bin{       611a6383407f66 },
           :intvector{ 0,1,2,3,3,4,5 },
           :int{1}, :int{0}, "", "?", ""
         }
