@@ -22,6 +22,8 @@
  * @return a service-specific hook, or NULL on failure.
  */
 U_CAPI void* uprv_svc_hook(const char *what, UErrorCode *status);
+
+U_CAPI void uprv_setup_svc_hook(void*(*svc_hook)(const char *what, UErrorCode *status));
 #endif
 
 #endif
