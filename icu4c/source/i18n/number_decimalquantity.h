@@ -167,6 +167,11 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
     void adjustExponent(int32_t delta);
 
     /**
+     * Resets the DecimalQuantity to the value before adjustMagnitude and adjustExponent.
+     */
+    void resetExponent();
+
+    /**
      * @return Whether the value represented by this {@link DecimalQuantity} is
      * zero, infinity, or NaN.
      */

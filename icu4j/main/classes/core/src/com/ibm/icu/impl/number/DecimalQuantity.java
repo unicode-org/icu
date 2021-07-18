@@ -143,6 +143,11 @@ public interface DecimalQuantity extends PluralRules.IFixedDecimal {
     public void adjustExponent(int delta);
 
     /**
+     * Resets the DecimalQuantity to the value before adjustMagnitude and adjustExponent.
+     */
+    public void resetExponent();
+
+    /**
      * @return Whether the value represented by this {@link DecimalQuantity} is
      * zero, infinity, or NaN.
      */

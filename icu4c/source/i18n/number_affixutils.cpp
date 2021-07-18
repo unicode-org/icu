@@ -134,6 +134,9 @@ Field AffixUtils::getFieldForType(AffixPatternType type) {
             return {UFIELD_CATEGORY_NUMBER, UNUM_SIGN_FIELD};
         case TYPE_PLUS_SIGN:
             return {UFIELD_CATEGORY_NUMBER, UNUM_SIGN_FIELD};
+        case TYPE_APPROXIMATELY_SIGN:
+            // TODO: Introduce a new field for the approximately sign?
+            return {UFIELD_CATEGORY_NUMBER, UNUM_SIGN_FIELD};
         case TYPE_PERCENT:
             return {UFIELD_CATEGORY_NUMBER, UNUM_PERCENT_FIELD};
         case TYPE_PERMILLE:
@@ -295,6 +298,8 @@ AffixTag AffixUtils::nextToken(AffixTag tag, const UnicodeString &patternString,
                         return makeTag(offset + count, TYPE_MINUS_SIGN, STATE_BASE, 0);
                     case u'+':
                         return makeTag(offset + count, TYPE_PLUS_SIGN, STATE_BASE, 0);
+                    case u'~':
+                        return makeTag(offset + count, TYPE_APPROXIMATELY_SIGN, STATE_BASE, 0);
                     case u'%':
                         return makeTag(offset + count, TYPE_PERCENT, STATE_BASE, 0);
                     case u'‰':

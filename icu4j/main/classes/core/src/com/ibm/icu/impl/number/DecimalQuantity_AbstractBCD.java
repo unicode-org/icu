@@ -234,6 +234,12 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     }
 
     @Override
+    public void resetExponent() {
+        adjustMagnitude(exponent);
+        exponent = 0;
+    }
+
+    @Override
     public boolean isHasIntegerValue() {
         return scale >= 0;
     }

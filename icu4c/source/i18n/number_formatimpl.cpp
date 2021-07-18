@@ -356,7 +356,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
             macros.affixProvider != nullptr ? macros.affixProvider
                                             : static_cast<const AffixPatternProvider*>(fPatternInfo.getAlias()),
             kUndefinedField);
-    patternModifier->setPatternAttributes(fMicros.sign, isPermille);
+    patternModifier->setPatternAttributes(fMicros.sign, isPermille, macros.approximately);
     if (patternModifier->needsPlurals()) {
         patternModifier->setSymbols(
                 fMicros.symbols,
