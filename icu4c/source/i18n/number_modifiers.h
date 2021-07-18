@@ -203,6 +203,14 @@ class U_I18N_API CurrencySpacingEnabledModifier : public ConstantMultiFieldModif
                          int32_t suffixStart, int32_t suffixLen, const DecimalFormatSymbols &symbols,
                          UErrorCode &status);
 
+    static int32_t
+    applyCurrencySpacingToAffixPattern(
+      FormattedStringBuilder &output,
+      int32_t position,
+      bool currencyAfter,
+      const DecimalFormatSymbols &symbols,
+      UErrorCode& status);
+
   private:
     UnicodeSet fAfterPrefixUnicodeSet;
     UnicodeString fAfterPrefixInsert;

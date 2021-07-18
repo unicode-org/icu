@@ -409,6 +409,17 @@ void NumberFormatterApiTest::notationCompact() {
             u"0 US dollars");
 
     assertFormatSingle(
+            u"Compact Short with trailing currency symbol",
+            u"compact-short currency/USD .#",
+            u"K currency/USD .#",
+            NumberFormatter::with().notation(Notation::compactShort())
+                    .unit(USD)
+                    .precision(Precision::maxFraction(1)),
+            Locale("es"),
+            123400000,
+            u"123,4 M US$");
+
+    assertFormatSingle(
             u"Compact Plural One",
             u"compact-long",
             u"KK",
