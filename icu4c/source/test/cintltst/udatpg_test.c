@@ -45,6 +45,7 @@ static void TestOptions(void);
 static void TestGetFieldDisplayNames(void);
 static void TestGetDefaultHourCycle(void);
 static void TestGetDefaultHourCycleOnEmptyInstance(void);
+static void TestEras(void);
 
 void addDateTimePatternGeneratorTest(TestNode** root) {
     TESTCASE(TestOpenClose);
@@ -54,6 +55,7 @@ void addDateTimePatternGeneratorTest(TestNode** root) {
     TESTCASE(TestGetFieldDisplayNames);
     TESTCASE(TestGetDefaultHourCycle);
     TESTCASE(TestGetDefaultHourCycleOnEmptyInstance);
+    TESTCASE(TestEras);
 }
 
 /*
@@ -578,6 +580,38 @@ static void TestGetDefaultHourCycleOnEmptyInstance() {
     }
 
     udatpg_close(dtpgen);
+}
+
+// Test for ICU-21202: Make sure DateTimePatternGenerator supplies an era field for year formats using the
+// Buddhist and Japanese calendars for all English-speaking locales.
+static void TestEras(void) {
+    const char* localeIDs[] = {
+        "en_US@calendar=japanese",
+        "en_GB@calendar=japanese",
+        "en_150@calendar=japanese",
+        "en_001@calendar=japanese",
+        "en@calendar=japanese",
+        "en_US@calendar=buddhist",
+        "en_GB@calendar=buddhist",
+        "en_150@calendar=buddhist",
+        "en_001@calendar=buddhist",
+        "en@calendar=buddhist",
+    };
+    
+    UErrorCode err = U_ZERO_ERROR;
+    for (int32_t i = 0; i < UPRV_LENGTHOF(localeIDs); i++) {
+        const char* locale = localeIDs[i];
+        UDateTimePatternGenerator* dtpg = udatpg_open(locale, &err);
+        if (U_SUCCESS(err)) {
+            UChar pattern[200];
+            udatpg_getBestPattern(dtpg, u"y", 1, pattern, 200, &err);
+            
+            if (u_strchr(pattern, u'G') == NULL) {
+                log_err("missing era field for locale %s\n", locale);
+            }
+        }
+        udatpg_close(dtpg);
+    }
 }
 
 #endif

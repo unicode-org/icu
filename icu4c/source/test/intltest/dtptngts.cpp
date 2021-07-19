@@ -1588,6 +1588,11 @@ void IntlTestDateTimePatternGeneratorAPI::testBestPattern() {
         "en_US",      "yMMMMEEEEd",  "EEEE, MMMM d, y",
         "en_US",      "yMMMMccccd",  "EEEE, MMMM d, y",
         "en_US",      "yMMMMeeeed",  "EEEE, MMMM d, y",
+        // ICU-21428: Bad patterns for nonstandard calendars
+        "en_GB",                   "yMd", "dd/MM/y",
+        "en_GB@calendar=coptic",   "yMd", "dd/MM/y GGGGG",
+        "en_GB@calendar=japanese", "yMd", "dd/MM/y GGGGG",
+        "en_GB@calendar=buddhist", "yMd", "dd/MM/y GGGGG",
     };
     
     for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i += 3) {

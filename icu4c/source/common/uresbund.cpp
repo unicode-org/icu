@@ -1146,6 +1146,17 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                                     r = res_findResource(&(dataEntry->fData), r, &myPath, &temp);
                                     if(r != RES_BOGUS) { /* found a resource, but it might be an indirection */
                                         resB = init_resb_result(&(dataEntry->fData), r, temp, -1, dataEntry, result, noAlias+1, resB, status);
+                                        if (temp == NULL || uprv_strcmp(keyPath, temp) != 0) {
+                                            // the call to init_resb_result() above will set resB->fKeyPath to be
+                                            // the same as resB->fKey, throwing away any additional path elements if we
+                                            // had them-- if the key path wasn't just a single resource ID, clear out
+                                            // the bundle's key path and re-set it to be equal to keyPath
+                                            ures_freeResPath(resB);
+                                            ures_appendResPath(resB, keyPath, (int32_t)uprv_strlen(keyPath), status);
+                                            if(resB->fResPath[resB->fResPathLen-1] != RES_PATH_SEPARATOR) {
+                                                ures_appendResPath(resB, RES_PATH_SEPARATOR_S, 1, status);
+                                            }
+                                        }
                                         result = resB;
                                         if(result) {
                                             r = result->fRes; /* switch to a new resource, possibly a new tree */
