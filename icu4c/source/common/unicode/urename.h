@@ -58,6 +58,11 @@
 
 /* C exports renaming data */
 
+#define CreateLSTMBreakEngine U_ICU_ENTRY_POINT_RENAME(CreateLSTMBreakEngine)
+#define CreateLSTMData U_ICU_ENTRY_POINT_RENAME(CreateLSTMData)
+#define CreateLSTMDataForScript U_ICU_ENTRY_POINT_RENAME(CreateLSTMDataForScript)
+#define DeleteLSTMData U_ICU_ENTRY_POINT_RENAME(DeleteLSTMData)
+#define LSTMDataName U_ICU_ENTRY_POINT_RENAME(LSTMDataName)
 #define T_CString_int64ToString U_ICU_ENTRY_POINT_RENAME(T_CString_int64ToString)
 #define T_CString_integerToString U_ICU_ENTRY_POINT_RENAME(T_CString_integerToString)
 #define T_CString_stringToInteger U_ICU_ENTRY_POINT_RENAME(T_CString_stringToInteger)
@@ -1696,9 +1701,11 @@
 #define uset_freeze U_ICU_ENTRY_POINT_RENAME(uset_freeze)
 #define uset_getItem U_ICU_ENTRY_POINT_RENAME(uset_getItem)
 #define uset_getItemCount U_ICU_ENTRY_POINT_RENAME(uset_getItemCount)
+#define uset_getRangeCount U_ICU_ENTRY_POINT_RENAME(uset_getRangeCount)
 #define uset_getSerializedRange U_ICU_ENTRY_POINT_RENAME(uset_getSerializedRange)
 #define uset_getSerializedRangeCount U_ICU_ENTRY_POINT_RENAME(uset_getSerializedRangeCount)
 #define uset_getSerializedSet U_ICU_ENTRY_POINT_RENAME(uset_getSerializedSet)
+#define uset_hasStrings U_ICU_ENTRY_POINT_RENAME(uset_hasStrings)
 #define uset_indexOf U_ICU_ENTRY_POINT_RENAME(uset_indexOf)
 #define uset_isEmpty U_ICU_ENTRY_POINT_RENAME(uset_isEmpty)
 #define uset_isFrozen U_ICU_ENTRY_POINT_RENAME(uset_isFrozen)
