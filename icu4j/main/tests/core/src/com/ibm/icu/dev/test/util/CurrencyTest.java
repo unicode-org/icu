@@ -570,6 +570,17 @@ public class CurrencyTest extends TestFmwk {
                 metainfo.currencies(filter.withTender()));
     }
 
+    @Test
+    public void TestFullCurrencyList() {
+        CurrencyMetaInfo metainfo = CurrencyMetaInfo.getInstance();
+        if (metainfo == null) {
+            errln("Unable to get CurrencyMetaInfo instance.");
+            return;
+        }
+        List<String> currencies = metainfo.currencies(null);
+        assertTrue("Full currencies list should include UYW", currencies.contains("UYW")); // ICU-21622
+    }
+
     // Coverage-only test of the CurrencyMetaInfo class
     @Test
     public void TestCurrencyMetaInfo() {
