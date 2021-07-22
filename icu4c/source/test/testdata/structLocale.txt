@@ -1363,6 +1363,10 @@ structLocale:table(nofallback){
             "",
             "",
         }
+        UYW{
+            "",
+            "",
+        }
         UZS{
             "",
             "",
@@ -1630,6 +1634,7 @@ structLocale:table(nofallback){
         UAH{""}
         USD{""}
         UYU{""}
+        UYW{""}
         VEF{""}
         VND{""}
         XCD{""}
@@ -3676,6 +3681,14 @@ structLocale:table(nofallback){
             other{""}
         }
         UYU{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        UYW{
             zero{""}
             one{""}
             two{""}
