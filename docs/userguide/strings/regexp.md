@@ -132,7 +132,7 @@ complete a complete description of the API.
 | \\G       | ✓               | ✓               | Match if the current position is at the end of the previous match.
 | \\h       | ✓               | ✓               | Match a Horizontal White Space character.  They are characters with Unicode General Category of Space_Separator plus the ASCII tab (\\u0009).
 | \\H       | ✓               | ✓               | Match a non-Horizontal White Space character.
-| \\k<name> | ✓               |                 | Named Capture Back Reference.
+| \\k\<name\> | ✓               |                 | Named Capture Back Reference.
 | \\n       | ✓               | ✓               | Match a LINE FEED, \\u000A.
 | \\N{UNICODE CHARACTER NAME} | ✓  | ✓          | Match the named character.
 | \\p{UNICODE PROPERTY NAME} | ✓   | ✓          | Match any character with the specified Unicode Property.
