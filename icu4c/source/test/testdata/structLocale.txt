@@ -675,10 +675,6 @@ structLocale:table(nofallback){
             "",
             "",
         }
-        EQE{
-            "",
-            "",
-        }
         ERN{
             "",
             "",
@@ -1379,6 +1375,10 @@ structLocale:table(nofallback){
             "",
             "",
         }
+        VES{
+            "",
+            "",
+        }
         VND{
             "",
             "",
@@ -1636,6 +1636,7 @@ structLocale:table(nofallback){
         UYU{""}
         UYW{""}
         VEF{""}
+        VES{""}
         VND{""}
         XCD{""}
         ZAR{""}
@@ -2329,14 +2330,6 @@ structLocale:table(nofallback){
             other{""}
         }
         EGP{
-            zero{""}
-            one{""}
-            two{""}
-            few{""}
-            many{""}
-            other{""}
-        }
-        EQE{
             zero{""}
             one{""}
             two{""}
@@ -3713,6 +3706,14 @@ structLocale:table(nofallback){
             other{""}
         }
         VEF{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        VES{
             zero{""}
             one{""}
             two{""}
