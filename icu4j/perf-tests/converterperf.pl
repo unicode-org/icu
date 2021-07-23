@@ -8,7 +8,7 @@
 
 use strict;
 
-# Assume we are running within the icu4j root directory
+# Assume we are running within the icu4j/perf-tests root directory
 use lib 'src/com/ibm/icu/dev/test/perf';
 use Dataset;
 
@@ -16,8 +16,11 @@ use Dataset;
 # Test class
 my $TESTCLASS = 'com.ibm.icu.dev.test.perf.ConverterPerformanceTest';
 
+my $CLASSES = './out/bin:../tools/misc/out/bin/:../icu4j.jar:../icu4j-charset.jar';
+
 # Methods to be tested.  Each pair represents a test method and
 # a baseline method which is used for comparison.
+# Some tests do not compile at this time.
 my @METHODS  = (
 ##               ['TestByteToCharConverter', 'TestByteToCharConverterICU'],
 ##               ['TestCharToByteConverter', 'TestCharToByteConverterICU'],
@@ -27,33 +30,34 @@ my @METHODS  = (
 
 # Patterns which define the set of characters used for testing.
 
-my $SOURCEDIR ="src/com/ibm/icu/dev/test/perf/data/conversion/";
+my $SOURCEDIR ="./data/conversion/";
 
+# Note that some tests are unavailable
 my @OPTIONS = (
-#                                 src text          src encoding    test encoding  
-                                [ "arabic.txt",     "UTF-8",        "csisolatinarabic"],
-                                [ "french.txt",     "UTF-8",        "csisolatin1"],
-                                [ "greek.txt",      "UTF-8",        "csisolatingreek"],
-                                [ "hebrew.txt",     "UTF-8",        "csisolatinhebrew"],
-#                               [ "hindi.txt" ,     "UTF-8",        "iscii"],
-                                [ "japanese.txt",   "UTF-8",        "EUC-JP"],
-#                               [ "japanese.txt",   "UTF-8",        "csiso2022jp"],
-                                [ "japanese.txt",   "UTF-8",        "shift_jis"],
-#                               [ "korean.txt",     "UTF-8",        "csiso2022kr"],
-                                [ "korean.txt",     "UTF-8",        "EUC-KR"],
-                                [ "s-chinese.txt",  "UTF-8",        "EUC_CN"],
-                                [ "arabic.txt",     "UTF-8",        "UTF-8"],
-                                [ "french.txt",     "UTF-8",        "UTF-8"],                                
-                                [ "greek.txt",      "UTF-8",        "UTF-8"],
-                                [ "hebrew.txt",     "UTF-8",        "UTF-8"],
-                                [ "hindi.txt" ,     "UTF-8",        "UTF-8"],
-                                [ "japanese.txt",   "UTF-8",        "UTF-8"],
-                                [ "korean.txt",     "UTF-8",        "UTF-8"],
-                                [ "s-chinese.txt",  "UTF-8",        "UTF-8"],
-                                [ "french.txt",     "UTF-8",        "UTF-16BE"],
-                                [ "french.txt",     "UTF-8",        "UTF-16LE"],
-                                [ "english.txt",    "UTF-8",        "US-ASCII"],
-                          );
+#   src text          src encoding    test encoding
+  [ "arabic.txt",     "UTF-8",        "csisolatinarabic"],
+  [ "french.txt",     "UTF-8",        "csisolatin1"],
+  [ "greek.txt",      "UTF-8",        "csisolatingreek"],
+  [ "hebrew.txt",     "UTF-8",        "csisolatinhebrew"],
+#  [ "hindi.txt" ,     "UTF-8",        "iscii"],
+  [ "japanese.txt",   "UTF-8",        "EUC-JP"],
+  [ "japanese.txt",   "UTF-8",        "csiso2022jp"],
+# [ "japanese.txt",   "UTF-8",        "shift_jis"],
+  [ "korean.txt",     "UTF-8",        "csiso2022kr"],
+#  [ "korean.txt",     "UTF-8",        "EUC-KR"],
+  [ "s-chinese.txt",  "UTF-8",        "EUC_CN"],
+  [ "arabic.txt",     "UTF-8",        "UTF-8"],
+  [ "french.txt",     "UTF-8",        "UTF-8"],
+  [ "greek.txt",      "UTF-8",        "UTF-8"],
+  [ "hebrew.txt",     "UTF-8",        "UTF-8"],
+  [ "hindi.txt" ,     "UTF-8",        "UTF-8"],
+  [ "japanese.txt",   "UTF-8",        "UTF-8"],
+  [ "korean.txt",     "UTF-8",        "UTF-8"],
+  [ "s-chinese.txt",  "UTF-8",        "UTF-8"],
+  [ "french.txt",     "UTF-8",        "UTF-16BE"],
+  [ "french.txt",     "UTF-8",        "UTF-16LE"],
+  [ "english.txt",    "UTF-8",        "US-ASCII"],
+  );
 
 my $CALIBRATE = 2;  # duration in seconds for initial calibration
 my $DURATION  = 10; # duration in seconds for each pass
@@ -108,7 +112,7 @@ EOF
 
         print HTML "<P><TABLE $TABLEATTR><TR><TD>\n";
         print HTML "<P><B>$testMethod vs. $baselineMethod</B></P>\n";
-        
+
         print HTML "<P><TABLE $TABLEATTR BGCOLOR=\"#CCFFFF\">\n";
         print HTML "<TR><TD>Options</TD><TD>$testMethod</TD>";
         print HTML "<TD>$baselineMethod</TD><TD>Ratio</TD></TR>\n";
@@ -213,17 +217,19 @@ sub measure2 {
 sub measure1 {
     my $method = shift;
     my $pat = shift;
-    my $iterCount = shift; # actually might be -seconds/pass
+    my $param3 = shift;  # Either -seconds/pass or iteration count
+
+    my $iterCount = 0;  # Set later based on param3.
 
     out("<P>Measuring $method for input file @$pat[0] for encoding @$pat[2] , ");
-    if ($iterCount > 0) {
+    if ($param3 > 0) {
+        $iterCount = $param3;
         out("$iterCount iterations/pass, $NUMPASSES passes</P>\n");
     } else {
-        out(-$iterCount, " seconds/pass, $NUMPASSES passes</P>\n");
-    }
+        my $timePerPass = -$param3;
+        out(-$timePerPass, " seconds/pass, $NUMPASSES passes</P>\n");
 
-    # is $iterCount actually -seconds/pass?
-    if ($iterCount < 0) {
+        # Value given was -seconds/pass
 
         # calibrate: estimate ms/iteration
         print "Calibrating...";
@@ -234,16 +240,16 @@ sub measure1 {
         $data[0] *= 1.0e+3;
 
         my $timePerIter = 1.0e-3 * $data[0] / $data[1];
-        
-        # determine iterations/pass
-        $iterCount = int(-$iterCount / $timePerIter + 0.5);
-        
+
+        # determine iterations/pass from timePerPass and timePerIteration
+        $iterCount = int($timePerPass / $timePerIter + 0.5);
+
         out("<P>Calibration pass ($CALIBRATE sec): ");
         out("$data[0] ms, ");
         out("$data[1] iterations = ");
         out(formatSeconds(4, $timePerIter), "/iteration<BR>\n");
     }
-    
+
     # run passes
     print "Measuring $iterCount iterations x $NUMPASSES passes...";
     my @t = callJava($method, $pat, $iterCount, $NUMPASSES);
@@ -291,11 +297,11 @@ sub callJava {
     my $pat = shift;
     my $n = shift;
     my $passes = shift;
-    
+
     my $fileName = $SOURCEDIR.@$pat[0] ;
     my $n = ($n < 0) ? "-t ".(-$n) : "-i ".$n;
-    
-    my $cmd = "java -classpath classes $TESTCLASS $method $n -p $passes -f $fileName -e @$pat[1] -T @$pat[2]";
+
+    my $cmd = "java -classpath $CLASSES $TESTCLASS $method $n -p $passes -f $fileName -e @$pat[1] -T @$pat[2]";
     print "[$cmd]\n"; # for debugging
     open(PIPE, "$cmd|") or die "Can't run \"$cmd\"";
     my @out;
@@ -406,7 +412,7 @@ sub formatNumber {
     my $mult = shift;
     my $a = shift;
     my $delta = shift; # may be undef
-    
+
     my $result = formatSigDig($sigdig, $a*$mult);
     if (defined($delta)) {
         my $d = formatSigDig($sigdig, $delta*$mult);
@@ -441,13 +447,13 @@ sub formatSeconds {
     my $a = shift;
     my $delta = shift; # may be undef
 
-    my @MULT = (1   , 1e3,  1e6,  1e9);
-    my @SUFF = ('s' , 'ms', 'us', 'ns');
+    my @MULT = (1   , 1e3,  1e6,  1e9,  1e12);
+    my @SUFF = ('s' , 'ms', 'us', 'ns', 'ps');
 
     # Determine our scale
     my $i = 0;
     ++$i while ($a*$MULT[$i] < 1 && $i < @MULT);
-    
+
     formatNumber($sigdig, $MULT[$i], $a, $delta) . ' ' . $SUFF[$i];
 }
 
@@ -465,7 +471,7 @@ sub formatPercent {
     my $sigdig = shift;
     my $a = shift;
     my $delta = shift; # may be undef
-    
+
     formatNumber($sigdig, 100, $a, $delta) . ' %';
 }
 

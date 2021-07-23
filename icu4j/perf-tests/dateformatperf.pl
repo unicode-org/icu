@@ -16,6 +16,8 @@ use Dataset;
 # Test class
 my $TESTCLASS = 'com.ibm.icu.dev.test.perf.DateFormatPerformanceTest';
 
+my $CLASSES = './out/bin:../tools/misc/out/bin/:../icu4j.jar';
+
 # Methods to be tested.  Each pair represents a test method and
 # a baseline method which is used for comparison.
 my @METHODS  = (
@@ -281,7 +283,7 @@ sub callJava {
     
     my $n = ($n < 0) ? "-t ".(-$n) : "-i ".$n;
     
-    my $cmd = "java -classpath classes $TESTCLASS $method $n -p $passes -L @$pat[0] \"@$pat[1]\" \"@$pat[2]\" -r $THREADS";
+    my $cmd = "java -classpath $CLASSES $TESTCLASS $method $n -p $passes -L @$pat[0] \"@$pat[1]\" \"@$pat[2]\" -r $THREADS";
     print "[$cmd]\n"; # for debugging
     open(PIPE, "$cmd|") or die "Can't run \"$cmd\"";
     my @out;
