@@ -934,15 +934,11 @@ struct DateTimePatternGenerator::AppendItemFormatsSink : public ResourceSink {
 
     virtual void put(const char *key, ResourceValue &value, UBool /*noFallback*/,
             UErrorCode &errorCode) {
-        ResourceTable itemsTable = value.getTable(errorCode);
-        if (U_FAILURE(errorCode)) { return; }
-        for (int32_t i = 0; itemsTable.getKeyAndValue(i, key, value); ++i) {
-            UDateTimePatternField field = dtpg.getAppendFormatNumber(key);
-            if (field == UDATPG_FIELD_COUNT) { continue; }
-            const UnicodeString& valueStr = value.getUnicodeString(errorCode);
-            if (dtpg.getAppendItemFormat(field).isEmpty() && !valueStr.isEmpty()) {
-                dtpg.setAppendItemFormat(field, valueStr);
-            }
+        UDateTimePatternField field = dtpg.getAppendFormatNumber(key);
+        if (field == UDATPG_FIELD_COUNT) { return; }
+        const UnicodeString& valueStr = value.getUnicodeString(errorCode);
+        if (dtpg.getAppendItemFormat(field).isEmpty() && !valueStr.isEmpty()) {
+            dtpg.setAppendItemFormat(field, valueStr);
         }
     }
 
@@ -967,22 +963,15 @@ struct DateTimePatternGenerator::AppendItemNamesSink : public ResourceSink {
 
     virtual void put(const char *key, ResourceValue &value, UBool /*noFallback*/,
             UErrorCode &errorCode) {
-        ResourceTable itemsTable = value.getTable(errorCode);
+        UDateTimePGDisplayWidth width;
+        UDateTimePatternField field = dtpg.getFieldAndWidthIndices(key, &width);
+        if (field == UDATPG_FIELD_COUNT) { return; }
+        ResourceTable detailsTable = value.getTable(errorCode);
         if (U_FAILURE(errorCode)) { return; }
-        for (int32_t i = 0; itemsTable.getKeyAndValue(i, key, value); ++i) {
-            UDateTimePGDisplayWidth width;
-            UDateTimePatternField field = dtpg.getFieldAndWidthIndices(key, &width);
-            if (field == UDATPG_FIELD_COUNT) { continue; }
-            ResourceTable detailsTable = value.getTable(errorCode);
-            if (U_FAILURE(errorCode)) { return; }
-            for (int32_t j = 0; detailsTable.getKeyAndValue(j, key, value); ++j) {
-                if (uprv_strcmp(key, "dn") != 0) { continue; }
-                const UnicodeString& valueStr = value.getUnicodeString(errorCode);
-                if (dtpg.getFieldDisplayName(field,width).isEmpty() && !valueStr.isEmpty()) {
-                    dtpg.setFieldDisplayName(field,width,valueStr);
-                }
-                break;
-            }
+        if (!detailsTable.findValue("dn", value)) { return; }
+        const UnicodeString& valueStr = value.getUnicodeString(errorCode);
+        if (U_SUCCESS(errorCode) && dtpg.getFieldDisplayName(field,width).isEmpty() && !valueStr.isEmpty()) {
+            dtpg.setFieldDisplayName(field,width,valueStr);
         }
     }
 
@@ -1026,18 +1015,14 @@ struct DateTimePatternGenerator::AvailableFormatsSink : public ResourceSink {
 
     virtual void put(const char *key, ResourceValue &value, UBool isRoot,
             UErrorCode &errorCode) {
-        ResourceTable itemsTable = value.getTable(errorCode);
-        if (U_FAILURE(errorCode)) { return; }
-        for (int32_t i = 0; itemsTable.getKeyAndValue(i, key, value); ++i) {
-            const UnicodeString formatKey(key, -1, US_INV);
-            if (!dtpg.isAvailableFormatSet(formatKey) ) {
-                dtpg.setAvailableFormat(formatKey, errorCode);
-                // Add pattern with its associated skeleton. Override any duplicate
-                // derived from std patterns, but not a previous availableFormats entry:
-                const UnicodeString& formatValue = value.getUnicodeString(errorCode);
-                conflictingPattern.remove();
-                dtpg.addPatternWithSkeleton(formatValue, &formatKey, !isRoot, conflictingPattern, errorCode);
-            }
+        const UnicodeString formatKey(key, -1, US_INV);
+        if (!dtpg.isAvailableFormatSet(formatKey) ) {
+            dtpg.setAvailableFormat(formatKey, errorCode);
+            // Add pattern with its associated skeleton. Override any duplicate
+            // derived from std patterns, but not a previous availableFormats entry:
+            const UnicodeString& formatValue = value.getUnicodeString(errorCode);
+            conflictingPattern.remove();
+            dtpg.addPatternWithSkeleton(formatValue, &formatKey, !isRoot, conflictingPattern, errorCode);
         }
     }
 };
@@ -1072,13 +1057,13 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale, UErrorCode& errorCod
         .append('/', errorCode)
         .append(DT_DateTimeAppendItemsTag, errorCode); // i.e., calendar/xxx/appendItems
     if (U_FAILURE(errorCode)) { return; }
-    ures_getAllItemsWithFallback(rb.getAlias(), path.data(), appendItemFormatsSink, err);
+    ures_getAllChildrenWithFallback(rb.getAlias(), path.data(), appendItemFormatsSink, err);
     appendItemFormatsSink.fillInMissing();
 
     // Load CLDR item names.
     err = U_ZERO_ERROR;
     AppendItemNamesSink appendItemNamesSink(*this);
-    ures_getAllItemsWithFallback(rb.getAlias(), DT_DateTimeFieldsTag, appendItemNamesSink, err);
+    ures_getAllChildrenWithFallback(rb.getAlias(), DT_DateTimeFieldsTag, appendItemNamesSink, err);
     appendItemNamesSink.fillInMissing();
 
     // Load the available formats from CLDR.
@@ -1093,7 +1078,7 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale, UErrorCode& errorCod
         .append('/', errorCode)
         .append(DT_DateTimeAvailableFormatsTag, errorCode); // i.e., calendar/xxx/availableFormats
     if (U_FAILURE(errorCode)) { return; }
-    ures_getAllItemsWithFallback(rb.getAlias(), path.data(), availableFormatsSink, err);
+    ures_getAllChildrenWithFallback(rb.getAlias(), path.data(), availableFormatsSink, err);
 }
 
 void

@@ -213,13 +213,10 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     private class AppendItemFormatsSink extends UResource.Sink {
         @Override
         public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
-            UResource.Table itemsTable = value.getTable();
-            for (int i = 0; itemsTable.getKeyAndValue(i, key, value); ++i) {
-                int field = getAppendFormatNumber(key);
-                assert field != -1;
-                if (getAppendItemFormat(field) == null) {
-                    setAppendItemFormat(field, value.toString());
-                }
+            int field = getAppendFormatNumber(key);
+            if (field < 0) { return; }
+            if (getAppendItemFormat(field) == null) {
+                setAppendItemFormat(field, value.toString());
             }
         }
     }
@@ -227,26 +224,14 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     private class AppendItemNamesSink extends UResource.Sink {
         @Override
         public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
-            UResource.Table itemsTable = value.getTable();
-            for (int i = 0; itemsTable.getKeyAndValue(i, key, value); ++i) {
-                if (value.getType() != UResourceBundle.TABLE) {
-                    // Typically get either UResourceBundle.TABLE = 2 or ICUResourceBundle.ALIAS = 3.
-                    // Currently fillInMissing() is being used instead of following the ALIAS, so
-                    // skip ALIAS entries which cause UResourceTypeMismatchException in the line
-                    // UResource.Table detailsTable = value.getTable()
-                    continue;
-                }
-                int fieldAndWidth = getCLDRFieldAndWidthNumber(key);
-                if (fieldAndWidth == -1) { continue; }
-                int field = fieldAndWidth / DisplayWidth.COUNT;
-                DisplayWidth width = CLDR_FIELD_WIDTH[fieldAndWidth % DisplayWidth.COUNT];
-                UResource.Table detailsTable = value.getTable();
-                for (int j = 0; detailsTable.getKeyAndValue(j, key, value); ++j) {
-                    if (!key.contentEquals("dn")) continue;
-                    if (getFieldDisplayName(field, width) == null) {
-                        setFieldDisplayName(field, width, value.toString());
-                    }
-                    break;
+            int fieldAndWidth = getCLDRFieldAndWidthNumber(key);
+            if (fieldAndWidth == -1) { return; }
+            int field = fieldAndWidth / DisplayWidth.COUNT;
+            DisplayWidth width = CLDR_FIELD_WIDTH[fieldAndWidth % DisplayWidth.COUNT];
+            UResource.Table detailsTable = value.getTable();
+            if (detailsTable.findValue("dn", value)) {
+                if (getFieldDisplayName(field, width) == null) {
+                    setFieldDisplayName(field, width, value.toString());
                 }
             }
         }
@@ -277,16 +262,13 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
         @Override
         public void put(UResource.Key key, UResource.Value value, boolean isRoot) {
-            UResource.Table formatsTable = value.getTable();
-            for (int i = 0; formatsTable.getKeyAndValue(i, key, value); ++i) {
-                String formatKey = key.toString();
-                if (!isAvailableFormatSet(formatKey)) {
-                    setAvailableFormat(formatKey);
-                    // Add pattern with its associated skeleton. Override any duplicate derived from std patterns,
-                    // but not a previous availableFormats entry:
-                    String formatValue = value.toString();
-                    addPatternWithSkeleton(formatValue, formatKey, !isRoot, returnInfo);
-                }
+            String formatKey = key.toString();
+            if (!isAvailableFormatSet(formatKey)) {
+                setAvailableFormat(formatKey);
+                // Add pattern with its associated skeleton. Override any duplicate derived from std patterns,
+                // but not a previous availableFormats entry:
+                String formatValue = value.toString();
+                addPatternWithSkeleton(formatValue, formatKey, !isRoot, returnInfo);
             }
         }
     }
@@ -305,7 +287,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         // Load append item formats.
         AppendItemFormatsSink appendItemFormatsSink = new AppendItemFormatsSink();
         try {
-            rb.getAllItemsWithFallback(
+            rb.getAllChildrenWithFallback(
                     "calendar/" + calendarTypeToUse + "/appendItems",
                     appendItemFormatsSink);
         }catch(MissingResourceException e) {
@@ -314,7 +296,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         // Load CLDR item names.
         AppendItemNamesSink appendItemNamesSink = new AppendItemNamesSink();
         try {
-            rb.getAllItemsWithFallback(
+            rb.getAllChildrenWithFallback(
                     "fields",
                     appendItemNamesSink);
         }catch(MissingResourceException e) {
@@ -323,7 +305,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         // Load the available formats from CLDR.
         AvailableFormatsSink availableFormatsSink = new AvailableFormatsSink(returnInfo);
         try {
-            rb.getAllItemsWithFallback(
+            rb.getAllChildrenWithFallback(
                     "calendar/" + calendarTypeToUse + "/availableFormats",
                     availableFormatsSink);
         } catch (MissingResourceException e) {

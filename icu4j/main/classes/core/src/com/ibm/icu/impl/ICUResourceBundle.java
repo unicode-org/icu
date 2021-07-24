@@ -395,6 +395,13 @@ public  class ICUResourceBundle extends UResourceBundle {
         }
     }
 
+    /**
+     * Locates the resource specified by `path` in this resource bundle (performing any necessary fallback and
+     * following any aliases) and calls the specified `sink`'s `put()` method with that resource.  Then walks the
+     * bundle's parent chain, calling `put()` on the sink for each item in the parent chain.
+     * @param path The path of the desired resource
+     * @param sink A `UResource.Sink` that gets called for each resource in the parent chain
+     */
     public void getAllItemsWithFallback(String path, UResource.Sink sink)
             throws MissingResourceException {
         // Collect existing and parsed key objects into an array of keys,
@@ -419,6 +426,47 @@ public  class ICUResourceBundle extends UResourceBundle {
         UResource.Key key = new UResource.Key();
         ReaderValue readerValue = new ReaderValue();
         rb.getAllItemsWithFallback(key, readerValue, sink);
+    }
+
+    /**
+     * Locates the resource specified by `path` in this resource bundle (performing any necessary fallback and
+     * following any aliases) and, if the resource is a table resource, iterates over its immediate child resources (again,
+     * following any aliases to get the individual resource values), and calls the specified `sink`'s `put()` method
+     * for each child resource (passing it that resource's key and either its actual value or, if that value is an
+     * alias, the value you get by following the alias).  Then walks back over the bundle's parent chain,
+     * similarly iterating over each parent table resource's child resources.
+     * Does not descend beyond one level of table children.
+     * @param path The path of the desired resource
+     * @param sink A `UResource.Sink` that gets called for each child resource of the specified resource (and each child
+     * of the resources in its parent chain).
+     */
+    public void getAllChildrenWithFallback(final String path, final UResource.Sink sink)
+            throws MissingResourceException {
+        class AllChildrenSink extends UResource.Sink {
+            @Override
+            public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
+                UResource.Table itemsTable = value.getTable();
+                for (int i = 0; itemsTable.getKeyAndValue(i, key, value); ++i) {
+                    if (value.getType() == ALIAS) {
+                        // if the current entry in the table is an alias, re-fetch it using getAliasedResource():
+                        // this will follow the alias (and any aliases it points to) and bring back the real value
+                        String aliasPath = value.getAliasString();
+                        ICUResourceBundle aliasedResource = getAliasedResource(aliasPath, wholeBundle.loader,
+                                "", null, 0, null,
+                                null, ICUResourceBundle.this);
+                        ICUResourceBundleImpl aliasedResourceImpl = (ICUResourceBundleImpl)aliasedResource;
+                        ReaderValue aliasedValue = new ReaderValue();
+                        aliasedValue.reader = aliasedResourceImpl.wholeBundle.reader;
+                        aliasedValue.res = aliasedResourceImpl.getResource();
+                        sink.put(key, aliasedValue, noFallback);
+                    } else {
+                        sink.put(key, value, noFallback);
+                    }
+                }
+            }
+        }
+
+        getAllItemsWithFallback(path, new AllChildrenSink());
     }
 
     private void getAllItemsWithFallback(
@@ -1481,10 +1529,27 @@ public  class ICUResourceBundle extends UResourceBundle {
             UResourceBundle requested) {
         WholeBundle wholeBundle = base.wholeBundle;
         ClassLoader loaderToUse = wholeBundle.loader;
+        String rpath = wholeBundle.reader.getAlias(_resource);
+        String baseName = wholeBundle.baseName;
+
+        // TODO: We need not build the baseKeyPath array if the rpath includes a keyPath
+        // (except for an exception message string).
+        // Try to avoid unnecessary work+allocation.
+        int baseDepth = base.getResDepth();
+        String[] baseKeyPath = new String[baseDepth + 1];
+        base.getResPathKeys(baseKeyPath, baseDepth);
+        baseKeyPath[baseDepth] = key;
+        return getAliasedResource(rpath, loaderToUse, baseName, keys, depth, baseKeyPath, aliasesVisited, requested);
+    }
+
+    protected static ICUResourceBundle getAliasedResource(
+            String rpath, ClassLoader loaderToUse, String baseName,
+            String[] keys, int depth, String[] baseKeyPath,
+            HashMap<String, String> aliasesVisited,
+            UResourceBundle requested) {
         String locale;
         String keyPath = null;
         String bundleName;
-        String rpath = wholeBundle.reader.getAlias(_resource);
         if (aliasesVisited == null) {
             aliasesVisited = new HashMap<>();
         }
@@ -1523,12 +1588,12 @@ public  class ICUResourceBundle extends UResourceBundle {
             } else {
                 locale = rpath;
             }
-            bundleName = wholeBundle.baseName;
+            bundleName = baseName;
         }
         ICUResourceBundle bundle = null;
         ICUResourceBundle sub = null;
         if(bundleName.equals(LOCALE)){
-            bundleName = wholeBundle.baseName;
+            bundleName = baseName;
             keyPath = rpath.substring(LOCALE.length() + 2/* prepending and appending / */, rpath.length());
 
             // Get the top bundle of the requested bundle
@@ -1550,11 +1615,8 @@ public  class ICUResourceBundle extends UResourceBundle {
             } else if (keys != null) {
                 numKeys = depth;
             } else {
-                depth = base.getResDepth();
-                numKeys = depth + 1;
-                keys = new String[numKeys];
-                base.getResPathKeys(keys, depth);
-                keys[depth] = key;
+                keys = baseKeyPath;
+                numKeys = baseKeyPath.length;
             }
             if (numKeys > 0) {
                 sub = bundle;
@@ -1564,7 +1626,7 @@ public  class ICUResourceBundle extends UResourceBundle {
             }
         }
         if (sub == null) {
-            throw new MissingResourceException(wholeBundle.localeID, wholeBundle.baseName, key);
+            throw new MissingResourceException(locale, baseName, baseKeyPath[baseKeyPath.length - 1]);
         }
         // TODO: If we know that sub is not cached,
         // then we should set its container and key to the alias' location,
