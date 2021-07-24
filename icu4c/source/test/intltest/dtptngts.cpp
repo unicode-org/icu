@@ -1561,53 +1561,56 @@ void IntlTestDateTimePatternGeneratorAPI::test_jConsistencyOddLocales() { // ICU
 void IntlTestDateTimePatternGeneratorAPI::testBestPattern() {
     // generic test for DateTimePatternGenerator::getBestPattern() that can be used to test multiple
     // bugs in the resource data
-    static const char* testCases[] = {
+    const struct TestCase {
+        const char* localeID;
+        const char* skeleton;
+        const UChar* expectedPattern;
+    } testCases[] = {
         // ICU-21650: (See the "week day" section of https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table
         // for a full explanation of why this is the desired behavior)
         // if the user asks for E, the minimum field length is 3, but if he asks for c or e, it's 1
-        "en_US",      "E",           "ccc",
-        "en_US",      "c",           "c",
-        "en_US",      "e",           "c",
-        "en_US",      "EE",          "ccc",
-        "en_US",      "cc",          "cc",
-        "en_US",      "ee",          "cc",
-        "en_US",      "EEE",         "ccc",
-        "en_US",      "ccc",         "ccc",
-        "en_US",      "eee",         "ccc",
+        { "en_US",      "E",           u"ccc"    },
+        { "en_US",      "c",           u"c"      },
+        { "en_US",      "e",           u"c"      },
+        { "en_US",      "EE",          u"ccc"    },
+        { "en_US",      "cc",          u"cc"     },
+        { "en_US",      "ee",          u"cc"     },
+        { "en_US",      "EEE",         u"ccc"    },
+        { "en_US",      "ccc",         u"ccc"    },
+        { "en_US",      "eee",         u"ccc"    },
         // and if the user asked for c or e and the field length is 1 or 2, the output pattern should contain
         // e instead of E (e supports numeric abbreviations; E doesn't)
-        "en_US",      "yMEd",        "EEE, M/d/y",
-        "en_US",      "yMcd",        "e, M/d/y",
-        "en_US",      "yMed",        "e, M/d/y",
-        "en_US",      "yMMEEdd",     "EEE, MM/dd/y",
-        "en_US",      "yMMccdd",     "ee, MM/dd/y",
-        "en_US",      "yMMeedd",     "ee, MM/dd/y",
-        "en_US",      "yMMMEd",      "EEE, MMM d, y",
-        "en_US",      "yMMMcccd",    "EEE, MMM d, y",
-        "en_US",      "yMMMeeed",    "EEE, MMM d, y",
-        "en_US",      "yMMMMEEEEd",  "EEEE, MMMM d, y",
-        "en_US",      "yMMMMccccd",  "EEEE, MMMM d, y",
-        "en_US",      "yMMMMeeeed",  "EEEE, MMMM d, y",
+        { "en_US",      "yMEd",        u"EEE, M/d/y"         },
+        { "en_US",      "yMcd",        u"e, M/d/y"           },
+        { "en_US",      "yMed",        u"e, M/d/y"           },
+        { "en_US",      "yMMEEdd",     u"EEE, MM/dd/y"       },
+        { "en_US",      "yMMccdd",     u"ee, MM/dd/y"        },
+        { "en_US",      "yMMeedd",     u"ee, MM/dd/y"        },
+        { "en_US",      "yMMMEd",      u"EEE, MMM d, y"      },
+        { "en_US",      "yMMMcccd",    u"EEE, MMM d, y"      },
+        { "en_US",      "yMMMeeed",    u"EEE, MMM d, y"      },
+        { "en_US",      "yMMMMEEEEd",  u"EEEE, MMMM d, y"    },
+        { "en_US",      "yMMMMccccd",  u"EEEE, MMMM d, y"    },
+        { "en_US",      "yMMMMeeeed",  u"EEEE, MMMM d, y"    },
         // ICU-21428: Bad patterns for nonstandard calendars
-        "en_GB",                   "yMd", "dd/MM/y",
-        "en_GB@calendar=coptic",   "yMd", "dd/MM/y GGGGG",
-        "en_GB@calendar=japanese", "yMd", "dd/MM/y GGGGG",
-        "en_GB@calendar=buddhist", "yMd", "dd/MM/y GGGGG",
+        { "en_GB",                   "yMd", u"dd/MM/y"          },
+        { "en_GB@calendar=coptic",   "yMd", u"dd/MM/y GGGGG"    },
+        { "en_GB@calendar=japanese", "yMd", u"dd/MM/y GGGGG"    },
+        { "en_GB@calendar=buddhist", "yMd", u"dd/MM/y GGGGG"    },
+        // ICU-20992: Bad patterns for missing fields
+        { "ckb_IR",     "mmSSS",       u"mm:ss\u066bSSS"     },
+        { "ckb_IR",     "BSSS",        u"SSS \u251c'Dayperiod': B\u2524" },
     };
     
-    for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i += 3) {
-        const char* localeID(testCases[i]);
-        const char* skeleton(testCases[i + 1]);
-        const char* expectedPattern(testCases[i + 2]);
-        
+    for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i++) {
         UErrorCode err = U_ZERO_ERROR;
         UnicodeString actualPattern;
         
-        if (uprv_strcmp(skeleton, "full") != 0) {
-            LocalPointer<DateTimePatternGenerator> dtpg(DateTimePatternGenerator::createInstance(localeID, err), err);
-            actualPattern = dtpg->getBestPattern(UnicodeString(skeleton), err);
+        if (uprv_strcmp(testCases[i].skeleton, "full") != 0) {
+            LocalPointer<DateTimePatternGenerator> dtpg(DateTimePatternGenerator::createInstance(testCases[i].localeID, err), err);
+            actualPattern = dtpg->getBestPattern(UnicodeString(testCases[i].skeleton), err);
         } else {
-            LocalPointer<DateFormat> df(DateFormat::createDateInstance(DateFormat::kFull, localeID));
+            LocalPointer<DateFormat> df(DateFormat::createDateInstance(DateFormat::kFull, testCases[i].localeID));
             SimpleDateFormat* sdf = dynamic_cast<SimpleDateFormat*>(df.getAlias());
             
             if (sdf != NULL) {
@@ -1616,14 +1619,14 @@ void IntlTestDateTimePatternGeneratorAPI::testBestPattern() {
         }
         
         if (U_FAILURE(err)) {
-            errln("Failure for test case %s/%s: %s", localeID, skeleton, u_errorName(err));
+            errln("Failure for test case %s/%s: %s", testCases[i].localeID, testCases[i].skeleton, u_errorName(err));
         } else {
             char failureMessage[100];
             strcpy(failureMessage, "Wrong result for test case ");
-            strcat(failureMessage, localeID);
+            strcat(failureMessage, testCases[i].localeID);
             strcat(failureMessage, "/");
-            strcat(failureMessage, skeleton);
-            assertEquals(failureMessage, UnicodeString(expectedPattern), actualPattern);
+            strcat(failureMessage, testCases[i].skeleton);
+            assertEquals(failureMessage, testCases[i].expectedPattern, actualPattern);
         }
     }
 }

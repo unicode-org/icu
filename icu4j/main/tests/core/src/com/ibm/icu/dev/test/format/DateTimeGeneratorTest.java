@@ -1825,6 +1825,10 @@ public class DateTimeGeneratorTest extends TestFmwk {
             "en_US",      "yMMMMEEEEd",  "EEEE, MMMM d, y",
             "en_US",      "yMMMMccccd",  "EEEE, MMMM d, y",
             "en_US",      "yMMMMeeeed",  "EEEE, MMMM d, y",
+
+            // ICU-20992: Bad patterns for missing fields
+            "ckb_IR",     "mmSSS",       "mm:ss٫SSS",
+            "ckb_IR",     "BSSS",        "SSS ├'Dayperiod': B┤",
         };
     
         for (int i = 0; i < testCases.length; i += 3) {

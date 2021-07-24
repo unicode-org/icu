@@ -399,6 +399,8 @@ typedef struct ResourceData {
     UBool useNativeStrcmp;
 } ResourceData;
 
+struct UResourceDataEntry;   // forward declared for ResoureDataValue below; actually defined in uresimp.h
+
 /*
  * Read a resource bundle from memory.
  */
@@ -512,12 +514,17 @@ class ResourceDataValue : public ResourceValue {
 public:
     ResourceDataValue() :
         pResData(nullptr),
+        validLocaleDataEntry(nullptr),
         res(static_cast<Resource>(URES_NONE)),
         fTraceInfo() {}
     virtual ~ResourceDataValue();
 
     void setData(const ResourceData &data) {
         pResData = &data;
+    }
+    
+    void setValidLocaleDataEntry(UResourceDataEntry *entry) {
+        validLocaleDataEntry = entry;
     }
 
     void setResource(Resource r, ResourceTracer&& traceInfo) {
@@ -526,6 +533,8 @@ public:
     }
 
     const ResourceData &getData() const { return *pResData; }
+    UResourceDataEntry *getValidLocaleDataEntry() const { return validLocaleDataEntry; }
+    Resource getResource() const { return res; }
     virtual UResType getType() const;
     virtual const UChar *getString(int32_t &length, UErrorCode &errorCode) const;
     virtual const UChar *getAliasString(int32_t &length, UErrorCode &errorCode) const;
@@ -544,6 +553,7 @@ public:
 
 private:
     const ResourceData *pResData;
+    UResourceDataEntry *validLocaleDataEntry;
     Resource res;
     ResourceTracer fTraceInfo;
 };

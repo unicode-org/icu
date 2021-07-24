@@ -294,9 +294,38 @@ ures_getValueWithFallback(const UResourceBundle *bundle, const char *path,
                           UResourceBundle *tempFillIn,
                           icu::ResourceDataValue &value, UErrorCode &errorCode);
 
+/**
+ * Locates the resource specified by `path` in the resource bundle specified by `bundle` (performing any
+ * necessary fallback and following any aliases) and calls the specified `sink`'s `put()` method with that
+ * resource.  Then walks the bundle's parent chain, calling `put()` on the sink for each item in the
+ * parent chain.
+ * @param bundle The bundle to search
+ * @param path The path of the desired resource
+ * @param sink A `ResourceSink` that gets called for each resource in the parent chain
+ * @param errorCode The error code
+ */
 U_CAPI void U_EXPORT2
 ures_getAllItemsWithFallback(const UResourceBundle *bundle, const char *path,
                              icu::ResourceSink &sink, UErrorCode &errorCode);
+
+/**
+ * Locates the resource specified by `path` in the resource bundle specified by `bundle` (performing any
+ * necessary fallback and following any aliases) and, if the resource is a table resource, iterates over its
+ * immediate child resources (again, following any aliases to get the individual resource values), and calls the specified
+ * `sink`'s `put()` method for each child resource (passing it that resource's key and either its actual value or,
+ * if that value is an alias, the value you get by following the alias).  Then walks back over the bundle's
+ * parent chain, similarly iterating over each parent table resource's child resources.
+ * Does not descend beyond one level of table children.
+ * @param bundle The bundle to search
+ * @param path The path of the desired resource
+ * @param sink A `ResourceSink` that gets called for each child resource of the specified resource (and each child
+ * of the resources in its parent chain).
+ * @param errorCode The error code.  This will be U_RESOURCE_TYPE_MISMATCH if the resource the caller
+ * is asking for isn't a table resource.
+ */
+U_CAPI void U_EXPORT2
+ures_getAllChildrenWithFallback(const UResourceBundle *bundle, const char *path,
+                                icu::ResourceSink &sink, UErrorCode &errorCode);
 
 #endif  /* __cplusplus */
 

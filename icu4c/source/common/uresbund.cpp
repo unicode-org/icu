@@ -2015,6 +2015,7 @@ void getAllItemsWithFallback(
     // then it would remove the parent's item.
     // We would deserialize parent values even though they are overridden in a child bundle.
     value.setData(bundle->getResData());
+    value.setValidLocaleDataEntry(bundle->fValidLocaleDataEntry);
     UResourceDataEntry *parentEntry = bundle->fData->fParent;
     UBool hasParent = parentEntry != NULL && U_SUCCESS(parentEntry->fBogus);
     value.setResource(bundle->fRes, ResourceTracer(bundle));
@@ -2055,6 +2056,49 @@ void getAllItemsWithFallback(
     }
 }
 
+struct GetAllChildrenSink : public ResourceSink {
+    // Destination sink
+    ResourceSink& dest;
+
+    GetAllChildrenSink(ResourceSink& dest)
+        : dest(dest) {}
+    virtual ~GetAllChildrenSink() override;
+    virtual void put(const char *key, ResourceValue &value, UBool isRoot,
+           UErrorCode &errorCode) override {
+        ResourceTable itemsTable = value.getTable(errorCode);
+        if (U_FAILURE(errorCode)) { return; }
+        for (int32_t i = 0; itemsTable.getKeyAndValue(i, key, value); ++i) {
+            if (value.getType() == URES_ALIAS) {
+                ResourceDataValue& rdv = static_cast<ResourceDataValue&>(value);
+                StackUResourceBundle stackTempBundle;
+                UResourceBundle* aliasRB = getAliasTargetAsResourceBundle(rdv.getData(), rdv.getResource(), nullptr, -1,
+                                                                          rdv.getValidLocaleDataEntry(), nullptr, 0,
+                                                                          stackTempBundle.getAlias(), &errorCode);
+                if (U_SUCCESS(errorCode)) {
+                    ResourceDataValue aliasedValue;
+                    aliasedValue.setData(aliasRB->getResData());
+                    aliasedValue.setValidLocaleDataEntry(aliasRB->fValidLocaleDataEntry);
+                    aliasedValue.setResource(aliasRB->fRes, ResourceTracer(aliasRB));
+                    dest.put(key, aliasedValue, isRoot, errorCode);
+                }
+            } else {
+                dest.put(key, value, isRoot, errorCode);
+            }
+            if (U_FAILURE(errorCode)) { return; }
+        }
+    }
+};
+
+// Virtual destructors must be defined out of line.
+GetAllChildrenSink::~GetAllChildrenSink() {}
+
+U_CAPI void U_EXPORT2
+ures_getAllChildrenWithFallback(const UResourceBundle *bundle, const char *path,
+                                icu::ResourceSink &sink, UErrorCode &errorCode) {
+    GetAllChildrenSink allChildrenSink(sink);
+    ures_getAllItemsWithFallback(bundle, path, allChildrenSink, errorCode);
+}
+
 }  // namespace
 
 // Requires a ResourceDataValue fill-in, so that we need not cast from a ResourceValue.
@@ -2086,6 +2130,7 @@ ures_getValueWithFallback(const UResourceBundle *bundle, const char *path,
         }
     }
     value.setData(rb->getResData());
+    value.setValidLocaleDataEntry(rb->fValidLocaleDataEntry);
     value.setResource(rb->fRes, ResourceTracer(rb));
 }
 
