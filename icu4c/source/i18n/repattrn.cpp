@@ -131,7 +131,7 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
             fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
             break;
         }
-        fSets->addElement(newSet, fDeferredStatus);
+        fSets->addElementX(newSet, fDeferredStatus);
         fSets8[i] = other.fSets8[i];
     }
 

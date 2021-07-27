@@ -419,7 +419,7 @@ TimeZoneNames::MatchInfoCollection::addZone(UTimeZoneNameType nameType, int32_t 
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    matches(status)->addElement(matchInfo, status);
+    matches(status)->addElementX(matchInfo, status);
     if (U_FAILURE(status)) {
         delete matchInfo;
     }
@@ -436,7 +436,7 @@ TimeZoneNames::MatchInfoCollection::addMetaZone(UTimeZoneNameType nameType, int3
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    matches(status)->addElement(matchInfo, status);
+    matches(status)->addElementX(matchInfo, status);
     if (U_FAILURE(status)) {
         delete matchInfo;
     }

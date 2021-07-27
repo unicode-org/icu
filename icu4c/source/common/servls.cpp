@@ -179,7 +179,7 @@ private:
 
             length = other._ids.size();
             for(i = 0; i < length; ++i) {
-                _ids.addElement(((UnicodeString *)other._ids.elementAt(i))->clone(), status);
+                _ids.addElementX(((UnicodeString *)other._ids.elementAt(i))->clone(), status);
             }
 
             if(U_SUCCESS(status)) {

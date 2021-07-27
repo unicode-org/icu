@@ -558,7 +558,7 @@ class TestMultipleKeyStringFactory : public ICUServiceFactory {
         , _factoryID(factoryID + ": ") 
     {
         for (int i = 0; i < count; ++i) {
-            _ids.addElement(new UnicodeString(ids[i]), _status);
+            _ids.addElementX(new UnicodeString(ids[i]), _status);
         }
     }
   

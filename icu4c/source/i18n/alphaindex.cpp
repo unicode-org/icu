@@ -455,7 +455,7 @@ BucketList *AlphabeticIndex::createBucketList(UErrorCode &errorCode) const {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
-    bucketList->addElement(bucket, errorCode);
+    bucketList->addElementX(bucket, errorCode);
     if (U_FAILURE(errorCode)) { return NULL; }
 
     UnicodeString temp;
@@ -485,7 +485,7 @@ BucketList *AlphabeticIndex::createBucketList(UErrorCode &errorCode) const {
                     errorCode = U_MEMORY_ALLOCATION_ERROR;
                     return NULL;
                 }
-                bucketList->addElement(bucket, errorCode);
+                bucketList->addElementX(bucket, errorCode);
             }
         }
         // Add a bucket with the current label.
@@ -494,7 +494,7 @@ BucketList *AlphabeticIndex::createBucketList(UErrorCode &errorCode) const {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
             return NULL;
         }
-        bucketList->addElement(bucket, errorCode);
+        bucketList->addElementX(bucket, errorCode);
         // Remember ASCII and Pinyin buckets for Pinyin redirects.
         UChar c;
         if (current.length() == 1 && 0x41 <= (c = current.charAt(0)) && c <= 0x5A) {  // A-Z
@@ -533,7 +533,7 @@ BucketList *AlphabeticIndex::createBucketList(UErrorCode &errorCode) const {
                         return NULL;
                     }
                     bucket->displayBucket_ = singleBucket;
-                    bucketList->addElement(bucket, errorCode);
+                    bucketList->addElementX(bucket, errorCode);
                     hasInvisibleBuckets = TRUE;
                     break;
                 }
@@ -557,7 +557,7 @@ BucketList *AlphabeticIndex::createBucketList(UErrorCode &errorCode) const {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
-    bucketList->addElement(bucket, errorCode); // final
+    bucketList->addElementX(bucket, errorCode); // final
 
     if (hasPinyin) {
         // Redirect Pinyin buckets.
@@ -610,7 +610,7 @@ BucketList *AlphabeticIndex::createBucketList(UErrorCode &errorCode) const {
     for (int32_t j = 0; j < bucketList->size(); ++j) {
         bucket = getBucket(*bucketList, j);
         if (bucket->displayBucket_ == NULL) {
-            publicBucketList->addElement(bucket, errorCode);
+            publicBucketList->addElementX(bucket, errorCode);
         }
     }
     if (U_FAILURE(errorCode)) { return NULL; }
@@ -684,7 +684,7 @@ void AlphabeticIndex::initBuckets(UErrorCode &errorCode) {
                 return;
             }
         }
-        bucket->records_->addElement(r, errorCode);
+        bucket->records_->addElementX(r, errorCode);
     }
 }
 
@@ -1015,7 +1015,7 @@ UVector *AlphabeticIndex::firstStringsInScript(UErrorCode &status) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return NULL;
         }
-        dest->addElement(s, status);
+        dest->addElementX(s, status);
     }
     return dest.orphan();
 }
@@ -1078,7 +1078,7 @@ AlphabeticIndex & AlphabeticIndex::addRecord(const UnicodeString &name, const vo
         status = U_MEMORY_ALLOCATION_ERROR;
         return *this;
     }
-    inputList_->addElement(r, status);
+    inputList_->addElementX(r, status);
     clearBuckets();
     //std::string ss;
     //std::string ss2;

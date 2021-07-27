@@ -124,7 +124,11 @@ public:
     // java.util.Vector API
     //------------------------------------------------------------
 
-    void addElement(void* obj, UErrorCode &status);
+    /*
+     * Old version of addElement, with non-standard error handling.
+     * Will be removed once all uses have been switched to the new addElement().
+     */
+    void addElementX(void* obj, UErrorCode &status);
 
     void addElement(int32_t elem, UErrorCode &status);
 
@@ -172,7 +176,11 @@ public:
 
     inline UBool isEmpty(void) const;
 
-    UBool ensureCapacity(int32_t minimumCapacity, UErrorCode &status);
+    /*
+     * Old version of ensureCapacity, with non-standard error handling.
+     * Will be removed once all uses have been switched to the new ensureCapacity().
+     */
+    UBool ensureCapacityX(int32_t minimumCapacity, UErrorCode &status);
 
     /**
      * Change the size of this vector as follows: If newSize is
@@ -401,7 +409,7 @@ inline int32_t UStack::peeki(void) const {
 }
 
 inline void* UStack::push(void* obj, UErrorCode &status) {
-    addElement(obj, status);
+    addElementX(obj, status);
     return obj;
 }
 

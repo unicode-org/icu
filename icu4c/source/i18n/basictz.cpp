@@ -328,7 +328,7 @@ BasicTimeZone::getTimeZoneRulesAfter(UDate start, InitialTimeZoneRule*& initial,
         goto error;
     }
     for (i = 0; i < ruleCount; i++) {
-        orgRules->addElement(orgtrs[i]->clone(), status);
+        orgRules->addElementX(orgtrs[i]->clone(), status);
         if (U_FAILURE(status)) {
             goto error;
         }
@@ -418,7 +418,7 @@ BasicTimeZone::getTimeZoneRulesAfter(UDate start, InitialTimeZoneRule*& initial,
                 tar->getFirstStart(tzt.getFrom()->getRawOffset(), tzt.getFrom()->getDSTSavings(), firstStart);
                 if (firstStart > start) {
                     // Just add the rule as is
-                    filteredRules->addElement(tar->clone(), status);
+                    filteredRules->addElementX(tar->clone(), status);
                     if (U_FAILURE(status)) {
                         goto error;
                     }
@@ -461,7 +461,7 @@ BasicTimeZone::getTimeZoneRulesAfter(UDate start, InitialTimeZoneRule*& initial,
                         TimeArrayTimeZoneRule *newTar = new TimeArrayTimeZoneRule(name,
                             tar->getRawOffset(), tar->getDSTSavings(), newTimes, asize, timeType);
                         uprv_free(newTimes);
-                        filteredRules->addElement(newTar, status);
+                        filteredRules->addElementX(newTar, status);
                         if (U_FAILURE(status)) {
                             goto error;
                         }
@@ -472,7 +472,7 @@ BasicTimeZone::getTimeZoneRulesAfter(UDate start, InitialTimeZoneRule*& initial,
             ar->getFirstStart(tzt.getFrom()->getRawOffset(), tzt.getFrom()->getDSTSavings(), firstStart);
             if (firstStart == tzt.getTime()) {
                 // Just add the rule as is
-                filteredRules->addElement(ar->clone(), status);
+                filteredRules->addElementX(ar->clone(), status);
                 if (U_FAILURE(status)) {
                     goto error;
                 }
@@ -484,7 +484,7 @@ BasicTimeZone::getTimeZoneRulesAfter(UDate start, InitialTimeZoneRule*& initial,
                 ar->getName(name);
                 AnnualTimeZoneRule *newAr = new AnnualTimeZoneRule(name, ar->getRawOffset(), ar->getDSTSavings(),
                     *(ar->getRule()), year, ar->getEndYear());
-                filteredRules->addElement(newAr, status);
+                filteredRules->addElementX(newAr, status);
                 if (U_FAILURE(status)) {
                     goto error;
                 }

@@ -1211,7 +1211,7 @@ AliasReplacer::parseLanguageReplacement(
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    toBeFreed.addElement(str, status);
+    toBeFreed.addElementX(str, status);
     char* data = str->data();
     replacedLanguage = (const char*) data;
     char* endOfField = uprv_strchr(data, '_');
@@ -1425,7 +1425,7 @@ AliasReplacer::replaceTerritory(UVector& toBeFreed, UErrorCode& status)
             return false;
         }
         replacedRegion = item->data();
-        toBeFreed.addElement(item.orphan(), status);
+        toBeFreed.addElementX(item.orphan(), status);
     }
     U_ASSERT(!same(region, replacedRegion));
     region = replacedRegion;
@@ -1659,10 +1659,10 @@ AliasReplacer::replace(const Locale& locale, CharString& out, UErrorCode& status
         while ((end = uprv_strchr(start, SEP_CHAR)) != nullptr &&
                U_SUCCESS(status)) {
             *end = NULL_CHAR;  // null terminate inside variantsBuff
-            variants.addElement(start, status);
+            variants.addElementX(start, status);
             start = end + 1;
         }
-        variants.addElement(start, status);
+        variants.addElementX(start, status);
     }
     if (U_FAILURE(status)) { return false; }
 

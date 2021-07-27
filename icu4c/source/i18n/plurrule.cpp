@@ -1545,7 +1545,7 @@ PluralKeywordEnumeration::PluralKeywordEnumeration(RuleChain *header, UErrorCode
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
-        fKeywordNames.addElement(newElem, status);
+        fKeywordNames.addElementX(newElem, status);
         if (U_FAILURE(status)) {
             delete newElem;
             return;
@@ -1562,7 +1562,7 @@ PluralKeywordEnumeration::PluralKeywordEnumeration(RuleChain *header, UErrorCode
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
-        fKeywordNames.addElement(newElem, status);
+        fKeywordNames.addElementX(newElem, status);
         if (U_FAILURE(status)) {
             delete newElem;
             return;
