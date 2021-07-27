@@ -527,7 +527,7 @@ CollationDataBuilder::addConditionalCE32(const UnicodeString &context, uint32_t 
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return -1;
     }
-    conditionalCE32s.addElement(cond, errorCode);
+    conditionalCE32s.addElementX(cond, errorCode);
     return index;
 }
 

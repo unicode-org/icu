@@ -1109,7 +1109,7 @@ Transliterator::createFromRules(const UnicodeString& ID,
                         return nullptr;
                     }
                     if (temp != NULL && typeid(*temp) != typeid(NullTransliterator))
-                        transliterators.addElement(temp, status);
+                        transliterators.addElementX(temp, status);
                     else
                         delete temp;
                 }
@@ -1126,7 +1126,7 @@ Transliterator::createFromRules(const UnicodeString& ID,
                     }
                     return t;
                 }
-                transliterators.addElement(temprbt, status);
+                transliterators.addElementX(temprbt, status);
             }
         }
 

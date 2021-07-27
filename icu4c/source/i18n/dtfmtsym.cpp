@@ -1575,7 +1575,7 @@ struct CalendarDataSink : public ResourceSink {
                     if (U_FAILURE(errorCode)) { return; }
                 }
                 LocalPointer<UnicodeString> aliasRelativePathCopy(new UnicodeString(aliasRelativePath), errorCode);
-                resourcesToVisitNext->addElement(aliasRelativePathCopy.getAlias(), errorCode);
+                resourcesToVisitNext->addElementX(aliasRelativePathCopy.getAlias(), errorCode);
                 if (U_FAILURE(errorCode)) { return; }
                 // Only release ownership after resourcesToVisitNext takes it (no error happened):
                 aliasRelativePathCopy.orphan();
@@ -1585,12 +1585,12 @@ struct CalendarDataSink : public ResourceSink {
                 // Register same-calendar alias
                 if (arrays.get(aliasRelativePath) == NULL && maps.get(aliasRelativePath) == NULL) {
                     LocalPointer<UnicodeString> aliasRelativePathCopy(new UnicodeString(aliasRelativePath), errorCode);
-                    aliasPathPairs.addElement(aliasRelativePathCopy.getAlias(), errorCode);
+                    aliasPathPairs.addElementX(aliasRelativePathCopy.getAlias(), errorCode);
                     if (U_FAILURE(errorCode)) { return; }
                     // Only release ownership after aliasPathPairs takes it (no error happened):
                     aliasRelativePathCopy.orphan();
                     LocalPointer<UnicodeString> keyUStringCopy(new UnicodeString(keyUString), errorCode);
-                    aliasPathPairs.addElement(keyUStringCopy.getAlias(), errorCode);
+                    aliasPathPairs.addElementX(keyUStringCopy.getAlias(), errorCode);
                     if (U_FAILURE(errorCode)) { return; }
                     // Only release ownership after aliasPathPairs takes it (no error happened):
                     keyUStringCopy.orphan();
@@ -1761,12 +1761,12 @@ struct CalendarDataSink : public ResourceSink {
             if (aliasType == SAME_CALENDAR) {
                 // Store the alias path and the current path on aliasPathPairs
                 LocalPointer<UnicodeString> aliasRelativePathCopy(new UnicodeString(aliasRelativePath), errorCode);
-                aliasPathPairs.addElement(aliasRelativePathCopy.getAlias(), errorCode);
+                aliasPathPairs.addElementX(aliasRelativePathCopy.getAlias(), errorCode);
                 if (U_FAILURE(errorCode)) { return; }
                 // Only release ownership after aliasPathPairs takes it (no error happened):
                 aliasRelativePathCopy.orphan();
                 LocalPointer<UnicodeString> pathCopy(new UnicodeString(path), errorCode);
-                aliasPathPairs.addElement(pathCopy.getAlias(), errorCode);
+                aliasPathPairs.addElementX(pathCopy.getAlias(), errorCode);
                 if (U_FAILURE(errorCode)) { return; }
                 // Only release ownership after aliasPathPairs takes it (no error happened):
                 pathCopy.orphan();

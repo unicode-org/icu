@@ -983,7 +983,7 @@ VTimeZone::VTimeZone(const VTimeZone& source)
         if (U_SUCCESS(status)) {
             for (int32_t i = 0; i < size; i++) {
                 UnicodeString *line = (UnicodeString*)source.vtzlines->elementAt(i);
-                vtzlines->addElement(line->clone(), status);
+                vtzlines->addElementX(line->clone(), status);
                 if (U_FAILURE(status)) {
                     break;
                 }
@@ -1028,7 +1028,7 @@ VTimeZone::operator=(const VTimeZone& right) {
             if (vtzlines != nullptr && U_SUCCESS(status)) {
                 for (int32_t i = 0; i < size; i++) {
                     UnicodeString *line = (UnicodeString*)right.vtzlines->elementAt(i);
-                    vtzlines->addElement(line->clone(), status);
+                    vtzlines->addElementX(line->clone(), status);
                     if (U_FAILURE(status)) {
                         break;
                     }
@@ -1293,7 +1293,7 @@ VTimeZone::load(VTZReader& reader, UErrorCode& status) {
                 if (U_FAILURE(status)) {
                     goto cleanupVtzlines;
                 }
-                vtzlines->addElement(element.getAlias(), status);
+                vtzlines->addElementX(element.getAlias(), status);
                 if (U_FAILURE(status)) {
                     goto cleanupVtzlines;
                 }
@@ -1315,7 +1315,7 @@ VTimeZone::load(VTZReader& reader, UErrorCode& status) {
                         if (U_FAILURE(status)) {
                             goto cleanupVtzlines;
                         }
-                        vtzlines->addElement(element.getAlias(), status);
+                        vtzlines->addElementX(element.getAlias(), status);
                         if (U_FAILURE(status)) {
                             goto cleanupVtzlines;
                         }
@@ -1338,7 +1338,7 @@ VTimeZone::load(VTZReader& reader, UErrorCode& status) {
                         if (U_FAILURE(status)) {
                             goto cleanupVtzlines;
                         }
-                        vtzlines->addElement(element.getAlias(), status);
+                        vtzlines->addElementX(element.getAlias(), status);
                         if (U_FAILURE(status)) {
                             goto cleanupVtzlines;
                         }
@@ -1352,7 +1352,7 @@ VTimeZone::load(VTZReader& reader, UErrorCode& status) {
                         if (U_FAILURE(status)) {
                             goto cleanupVtzlines;
                         }
-                        vtzlines->addElement(element.getAlias(), status);
+                        vtzlines->addElementX(element.getAlias(), status);
                         if (U_FAILURE(status)) {
                             goto cleanupVtzlines;
                         }
@@ -1527,7 +1527,7 @@ VTimeZone::parse(UErrorCode& status) {
                     if (dstr == nullptr) {
                         status = U_MEMORY_ALLOCATION_ERROR;
                     } else {
-                        dates->addElement(dstr, status);
+                        dates->addElementX(dstr, status);
                     }
                     if (U_FAILURE(status)) {
                         goto cleanupParse;
@@ -1544,7 +1544,7 @@ VTimeZone::parse(UErrorCode& status) {
                 if (U_FAILURE(status)) {
                     goto cleanupParse;
                 }
-                dates->addElement(element.getAlias(), status);
+                dates->addElementX(element.getAlias(), status);
                 if (U_FAILURE(status)) {
                     goto cleanupParse;
                 }
@@ -1626,7 +1626,7 @@ VTimeZone::parse(UErrorCode& status) {
                         }
                     }
                 }
-                rules->addElement(rule, status);
+                rules->addElementX(rule, status);
                 if (U_FAILURE(status)) {
                     goto cleanupParse;
                 }
@@ -1732,7 +1732,7 @@ VTimeZone::parse(UErrorCode& status) {
                 goto cleanupParse;
             }
             rules->removeElementAt(finalRuleIdx);
-            rules->addElement(newRule, status);
+            rules->addElementX(newRule, status);
             if (U_FAILURE(status)) {
                 delete newRule;
                 goto cleanupParse;
@@ -1809,7 +1809,7 @@ VTimeZone::write(VTZWriter& writer, UErrorCode& status) const {
             icutzprop.append(u'[');
             icutzprop.append(icutzver);
             icutzprop.append(u']');
-            customProps.addElement(&icutzprop, status);
+            customProps.addElementX(&icutzprop, status);
         }
         writeZone(writer, *tz, &customProps, status);
     }
@@ -1862,7 +1862,7 @@ VTimeZone::write(UDate start, VTZWriter& writer, UErrorCode& status) const {
         icutzprop->append(ICU_TZINFO_PARTIAL, -1);
         appendMillis(start, *icutzprop);
         icutzprop->append((UChar)0x005D/*']'*/);
-        customProps.addElement(icutzprop, status);
+        customProps.addElementX(icutzprop, status);
         if (U_FAILURE(status)) {
             delete icutzprop;
             goto cleanupWritePartial;
@@ -1921,7 +1921,7 @@ VTimeZone::writeSimple(UDate time, VTZWriter& writer, UErrorCode& status) const 
             icutzprop->append(ICU_TZINFO_SIMPLE, -1);
             appendMillis(time, *icutzprop);
             icutzprop->append((UChar)0x005D/*']'*/);
-            customProps.addElement(icutzprop, status);
+            customProps.addElementX(icutzprop, status);
             if (U_FAILURE(status)) {
                 delete icutzprop;
                 goto cleanupWriteSimple;

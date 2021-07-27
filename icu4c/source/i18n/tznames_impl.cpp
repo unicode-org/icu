@@ -155,12 +155,12 @@ CharacterNode::addValue(void *value, UObjectDeleter *valueDeleter, UErrorCode &s
                 }
                 return;
             }
-            values->addElement(fValues, status);
+            values->addElementX(fValues, status);
             fValues = values;
             fHasValuesVector = TRUE;
         }
         // Add the new value.
-        ((UVector *)fValues)->addElement(value, status);
+        ((UVector *)fValues)->addElementX(value, status);
     }
 }
 
@@ -233,7 +233,7 @@ TextTrieMap::put(const UChar *key, void *value, UErrorCode &status) {
     U_ASSERT(fLazyContents != NULL);
 
     UChar *s = const_cast<UChar *>(key);
-    fLazyContents->addElement(s, status);
+    fLazyContents->addElementX(s, status);
     if (U_FAILURE(status)) {
         if (fValueDeleter) {
             fValueDeleter((void*) key);
@@ -241,7 +241,7 @@ TextTrieMap::put(const UChar *key, void *value, UErrorCode &status) {
         return;
     }
 
-    fLazyContents->addElement(value, status);
+    fLazyContents->addElementX(value, status);
 }
 
 void
@@ -1165,7 +1165,7 @@ TimeZoneNamesImpl::_getAvailableMetaZoneIDs(const UnicodeString& tzID, UErrorCod
             OlsonToMetaMappingEntry *map = (OlsonToMetaMappingEntry *)mappings->elementAt(i);
             const UChar *mzID = map->mzid;
             if (!mzIDs->contains((void *)mzID)) {
-                mzIDs->addElement((void *)mzID, status);
+                mzIDs->addElementX((void *)mzID, status);
             }
         }
         if (U_SUCCESS(status)) {

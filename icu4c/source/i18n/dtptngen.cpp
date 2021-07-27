@@ -2807,7 +2807,7 @@ DTSkeletonEnumeration::DTSkeletonEnumeration(PatternMap& patternMap, dtStrEnum t
                 if (U_FAILURE(status)) { 
                     return;
                 }
-                fSkeletons->addElement(newElem.getAlias(), status);
+                fSkeletons->addElementX(newElem.getAlias(), status);
                 if (U_FAILURE(status)) {
                     fSkeletons.adoptInstead(nullptr);
                     return;
@@ -2880,7 +2880,7 @@ DTRedundantEnumeration::add(const UnicodeString& pattern, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return;
     }
-    fPatterns->addElement(newElem.getAlias(), status);
+    fPatterns->addElementX(newElem.getAlias(), status);
     if (U_FAILURE(status)) {
         fPatterns.adoptInstead(nullptr);
         return;

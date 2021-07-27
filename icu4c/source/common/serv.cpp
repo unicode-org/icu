@@ -534,7 +534,7 @@ ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUSer
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return NULL;
             }
-            cacheDescriptorList->addElement(idToCache.getAlias(), status);
+            cacheDescriptorList->addElementX(idToCache.getAlias(), status);
             if (U_FAILURE(status)) {
                 return NULL;
             }
@@ -638,7 +638,7 @@ ICUService::getVisibleIDs(UVector& result, const UnicodeString* matchID, UErrorC
                     status = U_MEMORY_ALLOCATION_ERROR;
                     break;
                 }
-                result.addElement(idClone, status);
+                result.addElementX(idClone, status);
                 if (U_FAILURE(status)) {
                     delete idClone;
                     break;
@@ -797,7 +797,7 @@ ICUService::getDisplayNames(UVector& result,
         }
         const UnicodeString* dn = (const UnicodeString*)entry->key.pointer;
         StringPair* sp = StringPair::create(*id, *dn, status);
-        result.addElement(sp, status);
+        result.addElementX(sp, status);
         if (U_FAILURE(status)) {
             result.removeAllElements();
             break;

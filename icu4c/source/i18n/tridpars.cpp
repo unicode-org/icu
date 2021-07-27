@@ -392,7 +392,7 @@ UBool TransliteratorIDParser::parseCompoundID(const UnicodeString& id, int32_t d
             break;
         }
         if (dir == FORWARD) {
-            list.addElement(single, ec);
+            list.addElementX(single, ec);
         } else {
             list.insertElementAt(single, 0, ec);
         }
@@ -494,7 +494,7 @@ void TransliteratorIDParser::instantiateList(UVector& list,
                 ec = U_INVALID_ID;
                 goto RETURN;
             }
-            tlist.addElement(t, ec);
+            tlist.addElementX(t, ec);
             if (U_FAILURE(ec)) {
                 delete t;
                 goto RETURN;
@@ -509,7 +509,7 @@ void TransliteratorIDParser::instantiateList(UVector& list,
             // Should never happen
             ec = U_INTERNAL_TRANSLITERATOR_ERROR;
         }
-        tlist.addElement(t, ec);
+        tlist.addElementX(t, ec);
         if (U_FAILURE(ec)) {
             delete t;
         }
@@ -525,7 +525,7 @@ void TransliteratorIDParser::instantiateList(UVector& list,
 
         while (tlist.size() > 0) {
             t = (Transliterator*) tlist.orphanElementAt(0);
-            list.addElement(t, ec);
+            list.addElementX(t, ec);
             if (U_FAILURE(ec)) {
                 delete t;
                 list.removeAllElements();

@@ -225,7 +225,7 @@ void BreakRules::addRule(const UnicodeString &name, const UnicodeString &definit
     }
 
     // Put this new rule into the vector of all Rules.
-    fBreakRules.addElement(thisRule.orphan(), status);
+    fBreakRules.addElementX(thisRule.orphan(), status);
 }
 
 
@@ -359,7 +359,7 @@ void BreakRules::compileRules(UCHARBUF *rules, UErrorCode &status) {
         if (*ccName == UnicodeString("dictionary")) {
             fDictionarySet = *set;
         } else {
-            fCharClassList->addElement(cclass, status);
+            fCharClassList->addElementX(cclass, status);
         }
     }
 
@@ -367,7 +367,7 @@ void BreakRules::compileRules(UCHARBUF *rules, UErrorCode &status) {
         // fprintf(stderr, "have an other set.\n");
         UnicodeString pattern;
         CharClass *cclass = addCharClass(UnicodeString("__Others"), otherSet.toPattern(pattern), status);
-        fCharClassList->addElement(cclass, status);
+        fCharClassList->addElementX(cclass, status);
     }
 }
 
@@ -962,7 +962,7 @@ void RBBIMonkeyTest::testMonkey() {
             break;
         }
         test->startTest();
-        startedTests.addElement(test.orphan(), status);
+        startedTests.addElementX(test.orphan(), status);
         if (U_FAILURE(status)) {
             errln("%s:%d: error %s while starting test %s.", __FILE__, __LINE__, u_errorName(status), tests[i]);
             break;

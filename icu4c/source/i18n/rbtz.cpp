@@ -131,7 +131,7 @@ RuleBasedTimeZone::addTransitionRule(TimeZoneRule* rule, UErrorCode& status) {
             status = U_INVALID_STATE_ERROR;
             return;
         }
-        fFinalRules->addElement((void*)rule, status);
+        fFinalRules->addElementX((void*)rule, status);
     } else {
         // Non-final rule
         if (fHistoricRules == NULL) {
@@ -140,7 +140,7 @@ RuleBasedTimeZone::addTransitionRule(TimeZoneRule* rule, UErrorCode& status) {
                 return;
             }
         }
-        fHistoricRules->addElement((void*)rule, status);
+        fHistoricRules->addElementX((void*)rule, status);
     }
     // Mark dirty, so transitions are recalculated at next complete() call
     fUpToDate = FALSE;
@@ -280,7 +280,7 @@ RuleBasedTimeZone::complete(UErrorCode& status) {
                 trst->time = nextTransitionTime;
                 trst->from = curRule;
                 trst->to = nextRule;
-                fHistoricTransitions->addElement(trst, status);
+                fHistoricTransitions->addElementX(trst, status);
                 if (U_FAILURE(status)) {
                     goto cleanup;
                 }
@@ -332,11 +332,11 @@ RuleBasedTimeZone::complete(UErrorCode& status) {
                 final1->from = rule1;
                 final1->to = rule0;
             }
-            fHistoricTransitions->addElement(final0, status);
+            fHistoricTransitions->addElementX(final0, status);
             if (U_FAILURE(status)) {
                 goto cleanup;
             }
-            fHistoricTransitions->addElement(final1, status);
+            fHistoricTransitions->addElementX(final1, status);
             if (U_FAILURE(status)) {
                 goto cleanup;
             }
@@ -669,7 +669,7 @@ RuleBasedTimeZone::copyRules(UVector* source) {
     }
     int32_t i;
     for (i = 0; i < size; i++) {
-        rules->addElement(((TimeZoneRule*)source->elementAt(i))->clone(), ec);
+        rules->addElementX(((TimeZoneRule*)source->elementAt(i))->clone(), ec);
         if (U_FAILURE(ec)) {
             break;
         }

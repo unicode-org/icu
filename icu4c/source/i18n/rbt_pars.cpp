@@ -976,7 +976,7 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
             if (!parsingIDs) {
                 if (curData != NULL) {
                     if (direction == UTRANS_FORWARD)
-                        dataVector.addElement(curData, status);
+                        dataVector.addElementX(curData, status);
                     else
                         dataVector.insertElementAt(curData, 0, status);
                     curData = NULL;
@@ -1032,7 +1032,7 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
                     return;
                 }
                 if (direction == UTRANS_FORWARD)
-                    idBlockVector.addElement(tempstr, status);
+                    idBlockVector.addElementX(tempstr, status);
                 else
                     idBlockVector.insertElementAt(tempstr, 0, status);
                 idBlockResult.remove();
@@ -1073,13 +1073,13 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
             return;
         }
         if (direction == UTRANS_FORWARD)
-            idBlockVector.addElement(tempstr, status);
+            idBlockVector.addElementX(tempstr, status);
         else
             idBlockVector.insertElementAt(tempstr, 0, status);
     }
     else if (!parsingIDs && curData != NULL) {
         if (direction == UTRANS_FORWARD)
-            dataVector.addElement(curData, status);
+            dataVector.addElementX(curData, status);
         else
             dataVector.insertElementAt(curData, 0, status);
     }
@@ -1537,7 +1537,7 @@ UChar TransliteratorParser::generateStandInFor(UnicodeFunctor* adopted, UErrorCo
         status = U_VARIABLE_RANGE_EXHAUSTED;
         return 0;
     }
-    variablesVector.addElement(adopted, status);
+    variablesVector.addElementX(adopted, status);
     return variableNext++;
 }
 
@@ -1560,7 +1560,7 @@ UChar TransliteratorParser::getSegmentStandin(int32_t seg, UErrorCode& status) {
         // Set a placeholder in the primary variables vector that will be
         // filled in later by setSegmentObject().  We know that we will get
         // called first because setSegmentObject() will call us.
-        variablesVector.addElement((void*) NULL, status);
+        variablesVector.addElementX((void*) NULL, status);
         segmentStandins.setCharAt(seg-1, c);
     }
     return c;

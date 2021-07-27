@@ -2427,7 +2427,7 @@ void        RegexCompile::compileSet(UnicodeSet *theSet)
             //  Put it into the compiled pattern as a set.
             theSet->freeze();
             int32_t setNumber = fRXPat->fSets->size();
-            fRXPat->fSets->addElement(theSet, *fStatus);
+            fRXPat->fSets->addElementX(theSet, *fStatus);
             appendOp(URX_SETREF, setNumber);
         }
     }

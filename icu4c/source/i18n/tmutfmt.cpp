@@ -327,7 +327,7 @@ TimeUnitFormat::setup(UErrorCode& err) {
     }
     UnicodeString* pluralCount;
     while ((pluralCount = const_cast<UnicodeString*>(keywords->snext(err))) != NULL) {
-      pluralCounts.addElement(pluralCount, err);
+      pluralCounts.addElementX(pluralCount, err);
     }
     readFromCurrentLocale(UTMUTFMT_FULL_STYLE, gUnitsTag, pluralCounts, err);
     checkConsistency(UTMUTFMT_FULL_STYLE, gUnitsTag, err);

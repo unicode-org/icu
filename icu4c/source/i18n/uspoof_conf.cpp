@@ -145,7 +145,7 @@ SPUString *SPUStringPool::addString(UnicodeString *src, UErrorCode &status) {
             return NULL;
         }
         uhash_put(fHash, src, hashedString, &status);
-        fVec->addElement(hashedString, status);
+        fVec->addElementX(hashedString, status);
     }
     return hashedString;
 }
