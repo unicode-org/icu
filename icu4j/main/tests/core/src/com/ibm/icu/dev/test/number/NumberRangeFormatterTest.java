@@ -846,9 +846,6 @@ public class NumberRangeFormatterTest extends TestFmwk {
     public void testNumberingSystemRangeData() {
         RangePatternSink sink = new RangePatternSink();
         for (ULocale locale : ULocale.getAvailableLocales()) {
-            if (locale.getLanguage().equals("nn") && logKnownIssue("cldrbug:14477", "nn inherits inconsistent number range patterns")) {
-                continue;
-            }
             ICUResourceBundle resource = (ICUResourceBundle)
                     UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale);
             resource.getAllItemsWithFallback("NumberElements", sink);
