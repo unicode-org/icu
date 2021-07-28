@@ -90,7 +90,6 @@ class U_COMMON_API UStringSet : public UVector {
     } else {
       sortedInsert(str, compareUnicodeString, status);
       if(U_FAILURE(status)) {
-        delete str;
         return false;
       }
       return true;
