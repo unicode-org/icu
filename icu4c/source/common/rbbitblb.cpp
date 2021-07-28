@@ -1042,6 +1042,8 @@ void RBBITableBuilder::sortedAdd(UVector **vector, int32_t val) {
 //
 //-----------------------------------------------------------------------------
 void RBBITableBuilder::setAdd(UVector *dest, UVector *source) {
+    U_ASSERT(!dest->hasDeleter());
+    U_ASSERT(!source->hasDeleter());
     int32_t destOriginalSize = dest->size();
     int32_t sourceSize       = source->size();
     int32_t di           = 0;
@@ -1070,6 +1072,9 @@ void RBBITableBuilder::setAdd(UVector *dest, UVector *source) {
     (void) source->toArray(sourcePtr);
 
     dest->setSize(sourceSize+destOriginalSize, *fStatus);
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
 
     while (sourcePtr < sourceLim && destPtr < destLim) {
         if (*destPtr == *sourcePtr) {

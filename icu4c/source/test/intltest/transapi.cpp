@@ -620,6 +620,9 @@ void TransliteratorAPITest::TestNullTransliterator(){
     UErrorCode status=U_ZERO_ERROR;
     UnicodeString s("Transliterate using null transliterator");
     Transliterator *nullTrans=Transliterator::createInstance("Any-Null", UTRANS_FORWARD, status);
+    if (!assertSuccess(WHERE, status)) {
+        return;
+    }
     int32_t transLimit;
     int32_t start=0;
     int32_t limit=s.length();

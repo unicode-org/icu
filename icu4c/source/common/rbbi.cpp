@@ -1260,6 +1260,7 @@ RuleBasedBreakIterator::getLanguageBreakEngine(UChar32 c) {
         // first.
         fLanguageBreakEngines->insertElementAt(fUnhandledBreakEngine, 0, status);
         // If we can't insert it, or creation failed, get rid of it
+        U_ASSERT(!fLanguageBreakEngines->hasDeleter());
         if (U_FAILURE(status)) {
             delete fUnhandledBreakEngine;
             fUnhandledBreakEngine = 0;

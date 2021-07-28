@@ -293,6 +293,7 @@ int32_t AlphabeticIndex::getRecordCount(UErrorCode &status) {
 }
 
 void AlphabeticIndex::initLabels(UVector &indexCharacters, UErrorCode &errorCode) const {
+    U_ASSERT(indexCharacters.hasDeleter());
     const Normalizer2 *nfkdNormalizer = Normalizer2::getNFKDInstance(errorCode);
     if (U_FAILURE(errorCode)) { return; }
 
@@ -305,7 +306,7 @@ void AlphabeticIndex::initLabels(UVector &indexCharacters, UErrorCode &errorCode
     // That is, we might have c, ch, d, where "ch" sorts just like "c", "h".
     // We filter out those cases.
     UnicodeSetIterator iter(*initialLabels_);
-    while (iter.next()) {
+    while (U_SUCCESS(errorCode) && iter.next()) {
         const UnicodeString *item = &iter.getString();
         LocalPointer<UnicodeString> ownedItem;
         UBool checkDistinct;
