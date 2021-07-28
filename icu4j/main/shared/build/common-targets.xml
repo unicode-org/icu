@@ -186,7 +186,10 @@
     </target>
 
     <!-- core -->
-    <path id="javac.classpathref.core"/>
+    <path id="javac.classpathref.core">
+        <pathelement location="${icu4j.lib.dir}/osgi.annotation-8.0.0.jar"/>
+        <pathelement location="${icu4j.lib.dir}/biz.aQute.bnd.annotation-5.3.0.jar"/>
+    </path>
 
     <target name="_all.core">
         <ant dir="${icu4j.core.dir}" inheritAll="false"/>
@@ -338,6 +341,7 @@
     <!-- build-tools -->
     <path id="javac.classpathref.build-tools">
         <pathelement location="${env.JAVA_HOME}/lib/tools.jar"/>
+        <pathelement location="${icu4j.lib.dir}/biz.aQute.bnd-5.3.0.jar"/>
     </path>
 
     <target name="_all.build-tools">
