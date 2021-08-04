@@ -143,6 +143,14 @@ public:
      */
     bool operator!=(const Format& other) const;
 
+#if defined(__cpp_impl_three_way_comparison) && \
+       __cpp_impl_three_way_comparison >= 201711
+    // Manually resolve C++20 reversed argument order ambiguity.
+    inline bool operator!=(const TimeUnitFormat& other) const {
+        return operator!=(static_cast<const Format&>(other));
+    }
+#endif
+
     /**
      * Set the locale used for formatting or parsing.
      * @param locale  the locale to be set

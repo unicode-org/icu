@@ -13,6 +13,8 @@
 #ifndef __UNIFIED_CACHE_H__
 #define __UNIFIED_CACHE_H__
 
+#include <type_traits>
+
 #include "utypeinfo.h"  // for 'typeid' to work
 
 #include "unicode/uobject.h"
@@ -158,6 +160,17 @@ class LocaleCacheKey : public CacheKey<T> {
                static_cast<const LocaleCacheKey<T> *>(&other);
        return fLoc == fOther->fLoc;
    }
+
+#if defined(__cpp_impl_three_way_comparison) && \
+       __cpp_impl_three_way_comparison >= 201711
+    // Manually resolve C++20 reversed argument order ambiguity.
+    template <typename U,
+              typename = typename std::enable_if_t<!std::is_same_v<T, U>>>
+    inline bool operator==(const LocaleCacheKey<U>& other) const {
+        return operator==(static_cast<const CacheKeyBase&>(other));
+    }
+#endif
+
    virtual CacheKeyBase *clone() const {
        return new LocaleCacheKey<T>(*this);
    }
