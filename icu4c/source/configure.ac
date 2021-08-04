@@ -1317,6 +1317,16 @@ fi
 # Now that we're done using CPPFLAGS etc. for tests, we can change it
 # for build.
 
+AC_LANG_PUSH([C++])
+# Silence a Clang warning about ambiguous operators with C++20 rewritten
+# expressions that possibly or maybe even probably is a mistake (ICU-20973).
+AX_CHECK_COMPILE_FLAG(
+  [-Wambiguous-reversed-operator],
+  [CXXFLAGS+=" -Wno-ambiguous-reversed-operator"],
+  [],
+  [-Werror])
+AC_LANG_POP([C++])
+
 if test "${CC}" = "clang"; then
    CLANGCFLAGS="-Qunused-arguments -Wno-parentheses-equality"
 else
