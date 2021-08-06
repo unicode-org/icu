@@ -1910,10 +1910,83 @@ static Resource getTableItemByKeyPath(const ResourceData *pResData, Resource tab
   return resource;
 }
 
-U_CAPI UResourceBundle* U_EXPORT2 
-ures_getByKeyWithFallback(const UResourceBundle *resB, 
-                          const char* inKey, 
-                          UResourceBundle *fillIn, 
+static void createPath(const char* origResPath,
+                       int32_t     origResPathLen,
+                       const char* resPath,
+                       int32_t     resPathLen,
+                       const char* inKey,
+                       CharString& path,
+                       UErrorCode* status) {
+    // This is a utility function used by ures_getByKeyWithFallback() below.  This function builds a path from
+    // resPath and inKey, returning the result in `path`.  Originally, this function just cleared `path` and
+    // appended resPath and inKey to it, but that caused problems for horizontal inheritance.
+    //
+    // In normal cases, resPath is the same as origResPath, but if ures_getByKeyWithFallback() has followed an
+    // alias, resPath may be different from origResPath.  Not only may the existing path elements be different,
+    // but resPath may also have MORE path elements than origResPath did.  If it does, those additional path
+    // elements SUPERSEDE the corresponding elements of inKey.  So this code counts the number of elements in
+    // resPath and origResPath and, for each path element in resPath that doesn't have a counterpart in origResPath,
+    // deletes a path element from the beginning of inKey.  The remainder of inKey is then appended to
+    // resPath to form the result.  (We're not using uprv_strchr() here because resPath and origResPath may
+    // not be zero-terminated.)
+    path.clear();
+    const char* key = inKey;
+    if (resPathLen > 0) {
+        path.append(resPath, resPathLen, *status);
+        if (U_SUCCESS(*status)) {
+            const char* resPathLimit = resPath + resPathLen;
+            const char* origResPathLimit = origResPath + origResPathLen;
+            const char* resPathPtr = resPath;
+            const char* origResPathPtr = origResPath;
+            
+            // Remove from the beginning of resPath the number of segments that are contained in origResPath.
+            // If origResPath has MORE segments than resPath, this will leave resPath as the empty string.
+            while (origResPathPtr < origResPathLimit && resPathPtr < resPathLimit) {
+                while (origResPathPtr < origResPathLimit && *origResPathPtr != RES_PATH_SEPARATOR) {
+                    ++origResPathPtr;
+                }
+                if (origResPathPtr < origResPathLimit && *origResPathPtr == RES_PATH_SEPARATOR) {
+                    ++origResPathPtr;
+                }
+                while (resPathPtr < resPathLimit && *resPathPtr != RES_PATH_SEPARATOR) {
+                    ++resPathPtr;
+                }
+                if (resPathPtr < resPathLimit && *resPathPtr == RES_PATH_SEPARATOR) {
+                    ++resPathPtr;
+                }
+            }
+            
+            // New remove from the beginning of `key` the number of segments remaining in resPath.
+            // If resPath has more segments than `key` does, `key` will end up empty.
+            while (resPathPtr < resPathLimit && *key != '\0') {
+                while (resPathPtr < resPathLimit && *resPathPtr != RES_PATH_SEPARATOR) {
+                    ++resPathPtr;
+                }
+                if (resPathPtr < resPathLimit && *resPathPtr == RES_PATH_SEPARATOR) {
+                    ++resPathPtr;
+                }
+                while (*key != '\0' && *key != RES_PATH_SEPARATOR) {
+                    ++key;
+                }
+                if (*key == RES_PATH_SEPARATOR) {
+                    ++key;
+                }
+            }
+        }
+        // Finally, append what's left of `key` to `path`.  What you end up with here is `resPath`, plus
+        // any pieces of `key` that aren't superseded by `resPath`.
+        // Or, to put it another way, calculate <#-segments-in-key> - (<#-segments-in-resPath> - <#-segments-in-origResPath>),
+        // and append that many segments from the end of `key` to `resPath` to produce the result.
+        path.append(key, *status);
+    } else {
+        path.append(inKey, *status);
+    }
+}
+
+U_CAPI UResourceBundle* U_EXPORT2
+ures_getByKeyWithFallback(const UResourceBundle *resB,
+                          const char* inKey,
+                          UResourceBundle *fillIn,
                           UErrorCode *status) {
     Resource res = RES_BOGUS, rootRes = RES_BOGUS;
     UResourceBundle *helper = NULL;
@@ -1928,24 +2001,32 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
 
     int32_t type = RES_GET_TYPE(resB->fRes);
     if(URES_IS_TABLE(type)) {
+        const char* origResPath = resB->fResPath;
+        int32_t origResPathLen = resB->fResPathLen;
         res = getTableItemByKeyPath(&resB->getResData(), resB->fRes, inKey);
         const char* key = inKey;
+        bool didRootOnce = false;
         if(res == RES_BOGUS) {
             UResourceDataEntry *dataEntry = resB->fData;
             CharString path;
             char *myPath = NULL;
             const char* resPath = resB->fResPath;
             int32_t len = resB->fResPathLen;
-            while(res == RES_BOGUS && dataEntry->fParent != NULL) { /* Otherwise, we'll look in parents */
-                dataEntry = dataEntry->fParent;
+            while(res == RES_BOGUS && (dataEntry->fParent != NULL || !didRootOnce)) { /* Otherwise, we'll look in parents */
+                if (dataEntry->fParent != NULL) {
+                    dataEntry = dataEntry->fParent;
+                } else {
+                    // We can't just stop when we get to a bundle whose fParent is NULL.  That'll work most of the time,
+                    // but if the bundle that the caller passed to us was "root" (which happens in getAllItemsWithFallback(),
+                    // this function will drop right out without doing anything if "root" doesn't contain the exact key path
+                    // specified.  In that case, we need one extra time through this loop to make sure we follow any
+                    // applicable aliases at the root level.
+                    didRootOnce = true;
+                }
                 rootRes = dataEntry->fData.rootRes;
 
                 if(dataEntry->fBogus == U_ZERO_ERROR) {
-                    path.clear();
-                    if (len > 0) {
-                        path.append(resPath, len, *status);
-                    }
-                    path.append(inKey, *status);
+                    createPath(origResPath, origResPathLen, resPath, len, inKey, path, status);
                     if (U_FAILURE(*status)) {
                         ures_close(helper);
                         return fillIn;
@@ -1956,7 +2037,7 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
                         res = res_findResource(&(dataEntry->fData), rootRes, &myPath, &key);
                         if (RES_GET_TYPE(res) == URES_ALIAS && *myPath) {
                             /* We hit an alias, but we didn't finish following the path. */
-                            helper = init_resb_result(dataEntry, res, NULL, -1, resB, helper, status); 
+                            helper = init_resb_result(dataEntry, res, NULL, -1, resB, helper, status);
                             /*helper = init_resb_result(dataEntry, res, inKey, -1, resB, helper, status);*/
                             if(helper) {
                               dataEntry = helper->fData;
@@ -1982,7 +2063,26 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
                     *status = U_USING_FALLBACK_WARNING;
                 }
 
-                fillIn = init_resb_result(dataEntry, res, inKey, -1, resB, fillIn, status);
+                fillIn = init_resb_result(dataEntry, res, key, -1, resB, fillIn, status);
+                if (resPath != nullptr) {
+                    createPath(origResPath, origResPathLen, resPath, len, inKey, path, status);
+                } else {
+                    const char* separator = nullptr;
+                    if (fillIn->fResPath != nullptr) {
+                        separator = uprv_strchr(fillIn->fResPath, RES_PATH_SEPARATOR);
+                    }
+                    if (separator != nullptr && separator[1] != '\0') {
+                        createPath(origResPath, origResPathLen, fillIn->fResPath,
+                                   static_cast<int32_t>(uprv_strlen(fillIn->fResPath)), inKey, path, status);
+                    } else {
+                        createPath(origResPath, origResPathLen, "", 0, inKey, path, status);
+                    }
+                }
+                ures_freeResPath(fillIn);
+                ures_appendResPath(fillIn, path.data(), path.length(), status);
+                if(fillIn->fResPath[fillIn->fResPathLen-1] != RES_PATH_SEPARATOR) {
+                    ures_appendResPath(fillIn, RES_PATH_SEPARATOR_S, 1, status);
+                }
             } else {
                 *status = U_MISSING_RESOURCE_ERROR;
             }
@@ -2001,8 +2101,7 @@ namespace {
 
 void getAllItemsWithFallback(
         const UResourceBundle *bundle, ResourceDataValue &value,
-        ResourceSink &sink,
-        UErrorCode &errorCode) {
+        ResourceSink &sink, UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) { return; }
     // We recursively enumerate child-first,
     // only storing parent items in the absence of child items.

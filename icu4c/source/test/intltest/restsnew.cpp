@@ -1399,22 +1399,10 @@ void NewResourceBundleTest::TestFilter() {
     }
 }
 
-/*
- * The following test for ICU-20706 has infinite loops on certain inputs for
- * locales and calendars.  In order to unblock the build (ICU-21055), those
- * specific values are temporarily removed.
- * The issue of the infinite loops and its blocking dependencies were captured
- * in ICU-21080.
- */
-
 void NewResourceBundleTest::TestIntervalAliasFallbacks() {
     const char* locales[] = {
-        // Thee will not cause infinity loop
         "en",
         "ja",
-
-        // These will cause infinity loop
-#if 0
         "fr_CA",
         "en_150",
         "es_419",
@@ -1426,15 +1414,10 @@ void NewResourceBundleTest::TestIntervalAliasFallbacks() {
         "zh_Hant",
         "zh_Hant_TW",
         "zh_TW",
-#endif
     };
     const char* calendars[] = {
-        // These won't cause infinity loop
         "gregorian",
         "chinese",
-
-        // These will cause infinity loop
-#if 0
         "islamic",
         "islamic-civil",
         "islamic-tbla",
@@ -1443,7 +1426,6 @@ void NewResourceBundleTest::TestIntervalAliasFallbacks() {
         "islamic-rgsa",
         "japanese",
         "roc",
-#endif
     };
 
     for (int lidx = 0; lidx < UPRV_LENGTHOF(locales); lidx++) {
@@ -1458,10 +1440,8 @@ void NewResourceBundleTest::TestIntervalAliasFallbacks() {
             key.append("calendar/", status);
             key.append(calendars[cidx], status);
             key.append("/intervalFormats/fallback", status);
-            if (! logKnownIssue("20400")) {
-                int32_t resStrLen = 0;
-                ures_getStringByKeyWithFallback(rb, key.data(), &resStrLen, &status);
-            }
+            int32_t resStrLen = 0;
+            ures_getStringByKeyWithFallback(rb, key.data(), &resStrLen, &status);
             if (U_FAILURE(status)) {
                 errln("Cannot ures_getStringByKeyWithFallback('%s') on locale %s",
                       key.data(), locales[lidx]);
