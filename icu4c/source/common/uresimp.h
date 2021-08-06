@@ -264,7 +264,6 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
                           UResourceBundle *fillIn, 
                           UErrorCode *status);
 
-
 /**
  * Get a String with multi-level fallback. Normally only the top level resources will
  * fallback to its parent. This performs fallback on subresources. For example, when a table

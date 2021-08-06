@@ -1232,7 +1232,7 @@ void NumberFormatterApiTest::unitArbitraryMeasureUnits() {
               .locale("en-ZA");
     lnf.operator=(lnf);  // self-assignment should be a no-op
     lnf.formatInt(1, status);
-    status.expectErrorAndReset(U_RESOURCE_TYPE_MISMATCH);
+    status.expectErrorAndReset(U_INTERNAL_PROGRAM_ERROR);
 
     assertFormatSingle(
             u"kibijoule-foot-per-cubic-gigafurlong-square-second unit-width-full-name",

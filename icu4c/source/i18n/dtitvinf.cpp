@@ -50,7 +50,6 @@ U_NAMESPACE_BEGIN
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DateIntervalInfo)
 
 static const char gCalendarTag[]="calendar";
-static const char gGenericTag[]="generic";
 static const char gGregorianTag[]="gregorian";
 static const char gIntervalDateTimePatternTag[]="intervalFormats";
 static const char gFallbackPatternTag[]="fallback";
@@ -435,23 +434,6 @@ DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& status)
         if ( U_SUCCESS(status) ) {
             resStr = ures_getStringByKeyWithFallback(itvDtPtnResource, gFallbackPatternTag,
                                                      &resStrLen, &status);
-            if ( U_FAILURE(status) ) {
-                // Try to find "fallback" from "generic" to work around the bug in
-                // ures_getByKeyWithFallback
-                UErrorCode localStatus = U_ZERO_ERROR;
-                UResourceBundle *genericCalBundle =
-                    ures_getByKeyWithFallback(calBundle, gGenericTag, nullptr, &localStatus);
-                UResourceBundle *genericItvDtPtnResource =
-                    ures_getByKeyWithFallback(
-                        genericCalBundle, gIntervalDateTimePatternTag, nullptr, &localStatus);
-                resStr = ures_getStringByKeyWithFallback(
-                    genericItvDtPtnResource, gFallbackPatternTag, &resStrLen, &localStatus);
-                ures_close(genericItvDtPtnResource);
-                ures_close(genericCalBundle);
-                if ( U_SUCCESS(localStatus) ) {
-                    status = U_USING_FALLBACK_WARNING;;
-                }
-            }
         }
 
         if ( U_SUCCESS(status) && (resStr != nullptr)) {
