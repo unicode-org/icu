@@ -446,8 +446,10 @@ includes other header files. The most common types are `uint8_t`, `uint16_t`,
 The language built-in type `bool` and constants `true` and `false` may be used
 internally, for local variables and parameters of internal functions. The ICU
 type `UBool` must be used in public APIs and in the definition of any persistent
-data structures. `UBool` is guaranteed to be one byte in size and signed; `bool` is
-not.
+data structures. `UBool` is guaranteed to be one byte in size and signed; `bool`
+is not. **Except**: Starting with ICU 70 (2021q4), `operator==()` and
+`operator!=()` must return `bool`, not `UBool`, because of a change in C++20,
+see [ICU-20973](https://unicode-org.atlassian.net/browse/ICU-20973).
 
 Traditionally, ICU4C has defined its own `FALSE`=0 / `TRUE`=1 macros for use with `UBool`.
 Starting with ICU 68 (2020q4), we no longer define these in public header files
@@ -458,7 +460,8 @@ with these names.
 Instead, the versions of the C and C++ standards we require now do define type `bool`
 and values `false` & `true`, and we and our users can use these values.
 
-As of ICU 68, we are not changing ICU4C API from `UBool` to `bool`.
+As of ICU 70, we are not changing ICU4C API from `UBool` to `bool`, except on
+equality operators (see above).
 Doing so in C API, or in structs that cross the library boundary,
 would break binary compatibility.
 Doing so only in other places in C++ could be confusingly inconsistent.
