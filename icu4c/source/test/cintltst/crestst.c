@@ -496,7 +496,7 @@ static void TestFallback()
 
 static void
 TestOpenDirect(void) {
-    UResourceBundle *idna_rules, *casing, *te_IN, *ne, *item;
+    UResourceBundle *idna_rules, *casing, *te_IN, *ne, *item, *defaultLocale;
     UErrorCode errorCode;
 
     /*
@@ -641,6 +641,12 @@ TestOpenDirect(void) {
         ures_close(item);
     }
     ures_close(te_IN);
+
+    // ICU-21705
+    // Verify that calling ures_openDirect() with a NULL localeID doesn't crash or assert.
+    errorCode = U_ZERO_ERROR;
+    defaultLocale = ures_openDirect(NULL, NULL, &errorCode);
+    ures_close(defaultLocale);
 }
 
 static void
