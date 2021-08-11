@@ -118,6 +118,24 @@ jobs:
         CC: gcc
         CXX: g++
 #-------------------------------------------------------------------------
+- job: ICU4C_Clang_Ubuntu_2004_LANG
+  displayName: 'C: Linux Clang (Ubuntu 20.04) - LANG has extension tags'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'ubuntu-20.04'
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    - script: |
+        cd icu4c/source && ./runConfigureICU Linux && make -j2 check
+      displayName: 'Build and Test'
+      env:
+        CC: clang
+        CXX: clang++
+        LANG: "en_US@calendar=gregorian;hours=h12"
+
+#-------------------------------------------------------------------------
 # VS 2019 Builds
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x64_Release_Distrelease
