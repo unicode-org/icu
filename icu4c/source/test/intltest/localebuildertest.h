@@ -20,6 +20,7 @@ class LocaleBuilderTest: public IntlTest {
     void TestAddUnicodeLocaleAttributeIllFormed(void);
     void TestLocaleBuilder(void);
     void TestLocaleBuilderBasic(void);
+    void TestLocaleBuilderBasicWithExtensionsOnDefaultLocale(void);
     void TestPosixCases(void);
     void TestSetExtensionOthers(void);
     void TestSetExtensionPU(void);
