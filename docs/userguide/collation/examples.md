@@ -268,8 +268,8 @@ Werner's text searching article for more details
 (<http://icu-project.org/docs/papers/efficient_text_searching_in_java.html>).
 
 However, implementing collation-based search with the Boyer-Moore method
-while getting correct results is very tricky,
-and ICU no longer uses this method.
+while getting correct results is very tricky, and ICU no longer uses this method
+(as of ICU4C 4.0 and ICU4J 53).
 
 Please see the [String Search Service](./string-search) chapter.
 
