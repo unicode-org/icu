@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2003-2013, International Business Machines Corporation 
+ * Copyright (c) 2003-2021, International Business Machines Corporation 
  * and others. All Rights Reserved.
  ********************************************************************
  * Calendar Case Test is a type of CalendarTest which compares the 
@@ -19,6 +19,7 @@
 #include "indiancal.h"
 #include "coptccal.h"
 #include "ethpccal.h"
+#include "tibetancal.h"
 #include "unicode/datefmt.h"
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break
@@ -33,6 +34,7 @@ void CalendarCaseTest::runIndexedTest( int32_t index, UBool exec, const char* &n
     CASE(2,Indian);
     CASE(3,Coptic);
     CASE(4,Ethiopic);
+    CASE(5,Tibetan);
     default: name = ""; break;
     }
 }
@@ -499,5 +501,81 @@ void CalendarCaseTest::Ethiopic() {
     delete c;
 }
 
+void CalendarCaseTest::Tibetan() {
+
+    //Testing Phugpa calculations 
+
+    static const TestCase tests1[] = {
+
+    // A huge list of test cases to make sure that computeTime and computeFields
+    // work properly for a wide range of data in the Tibetan calendar.
+    //
+    // Julian Day   Era Year     Month         Day  WkDay Hour Min Sec
+       {2458166.5,  0,  2145,         1,        1,  FRI,   0,  0,  0}, // Gregorian: 16/02/2018 - not a leap month - not a leap day - Losar
+       {2432758.5,  0,  2075,         6,       19,  SUN,   0,  0,  0}, // Gregorian: 25/07/1948 - not a leap month - not a leap day - Shakyamuni Buddha Day New Moon
+       {2361501.5,  1,  1880,         5,       84,  WED,   0,  0,  0}, // Gregorian: 20/06/1753 - not a leap month - leap day
+       {1740676.5,  0,   180,         9,       16,  MON,   0,  0,  0}, // Gregorian: 15/09/0053 - not a leap month - not a leap day
+       {1807769.5,  0,   364,         5,       15,  SAT,   0,  0,  0}, // Gregorian: 27/05/0237 - not a leap month - not a leap day
+       {1849958.5,  0,   479,        12,        5,  SAT,   0,  0,  0}, // Gregorian: 29/11/0352 - not a leap month - not a leap day
+       {1896793.5,  1,   608,         2,       69,  THU,   0,  0,  0}, // Gregorian: 20/02/0481 - not a leap month - leap day
+       {1919639.5,  0,   670,         8,       24,  TUE,   0,  0,  0}, // Gregorian: 10/09/0543 - not a leap month - not a leap day
+       {1952574.5,  0,   760,        11,        2,  TUE,   0,  0,  0}, // Gregorian: 12/11/0633 - not a leap month - not a leap day
+       {1975739.5,  0,   824,         4,       15,  THU,   0,  0,  0}, // Gregorian: 15/04/0697 - not a leap month - not a leap day - Amitabha Buddha Day Full Moon
+
+       {1995560.5,  0,   878,        71,       22,  MON,   0,  0,  0}, // Gregorian: 23/07/0751 - leap month - not a leap day
+       {1995583.5,  0,   878,         7,       15,  WED,   0,  0,  0}, // Gregorian: 15/08/0751 - not a leap month - not a leap day - Amitabha Buddha Day Full Moon
+       {2013762.5,  0,   928,         5,        3,  WED,   0,  0,  0}, // Gregorian: 23/05/0801 - not a leap month - not a leap day
+       {2041047.5,  0,  1003,        66,        1,  TUE,   0,  0,  0}, // Gregorian: 04/02/0876 - leap month - not a leap day
+       {2053145.5,  0,  1036,         2,       21,  THU,   0,  0,  0}, // Gregorian: 21/03/0909 - not a leap month - not a leap day
+       {2085852.5,  0,  1125,         9,        9,  SUN,   0,  0,  0}, // Gregorian: 07/10/0998 - not a leap month - not a leap day
+       {2095540.5,  0,  1152,         3,       11,  SUN,   0,  0,  0}, // Gregorian: 17/04/1025 - not a leap month - not a leap day
+       {2150153.5,  0,  1301,         9,       87,  SAT,   0,  0,  0}, // Gregorian: 26/10/1174 - not a leap month - leap day
+       {2176923.5,  0,  1375,         1,        7,  MON,   0,  0,  0}, // Gregorian: 10/02/1248 - not a leap month - not a leap day
+       {2225643.5,  0,  1508,         6,        2,  MON,   0,  0,  0}, // Gregorian: 02/07/1381 - not a leap month - not a leap day
+
+       {2247877.5,  0,  1569,         3,       29,  WED,   0,  0,  0}, // Gregorian: 18/05/1442 - not a leap month - not a leap day - Dharmapala Day
+       {2304268.5,  0,  1723,         8,       17,  TUE,   0,  0,  0}, // Gregorian: 08/10/1596 - not a leap month - not a leap day
+       {2327497.5,  0,  1787,         4,        5,  FRI,   0,  0,  0}, // Gregorian: 14/05/1660 - not a leap month - not a leap day
+       {2372681.5,  0,  1910,        12,        8,  THU,   0,  0,  0}, // Gregorian: 29/01/1784 - not a leap month - not a leap day - Medicine Buddha & Tara Day
+       {2401910.5,  0,  1991,         1,        1,  MON,   0,  0,  0}, // Gregorian: 08/02/1864 - not a leap month - not a leap day - Losar
+       {2436066.5,  0,  2084,         6,       20,  THU,   0,  0,  0}, // Gregorian: 15/08/1957 - not a leap month - not a leap day
+       {2473029.5,  0,  2185,         9,       11,  SUN,   0,  0,  0}, // Gregorian: 27/10/2058 - not a leap month - not a leap day 
+       {2496850.5,  0,  2250,        11,       30,  SUN,   0,  0,  0}, // Gregorian: 16/01/2124 - not a leap month - not a leap day - Shakyamuni Buddha Day New Moon
+       {2524704.5,  0,  2327,         3,        7,  MON,   0,  0,  0}, // Gregorian: 21/04/2200 - not a leap month - not a leap day
+       {2567015.5,  0,  2442,        12,       30,  THU,   0,  0,  0}, // Gregorian: 24/02/2316 - not a leap month - not a leap day - Shakyamuni Buddha Day New Moon
+       { -1,-1,-1,-1,-1,-1,-1,-1,-1 }
+    };
+
+    UErrorCode status = U_ZERO_ERROR;
+    Calendar *c = Calendar::createInstance("bo_IN@calendar=tibetan", status);
+    if (failure(status, "Calendar::createInstance", TRUE)) return;
+    c->setLenient(TRUE);
+    doTestCases(tests1, c);
+    delete c;
+
+
+    //Testing Tsurphu calculations 
+
+    static const TestCase tests2[] = {
+
+    // A huge list of test cases to make sure that computeTime and computeFields
+    // work properly for a wide range of data in the Tibetan calendar.
+    //
+    // Julian Day   Era Year     Month         Day  WkDay Hour Min Sec
+       {2451581.5,  0,  2127,         1,        1,  SUN,   0,  0,  0}, // Gregorian: 06/02/2000 - not a leap month - not a leap day - Losar
+       {2453089.5,  1,  2131,         2,       68,  WED,   0,  0,  0}, // Gregorian: 24/03/2004 - not a leap month - leap day
+       {2451998.5,  0,  2128,         2,        4,  THU,   0,  0,  0}, // Gregorian: 29/03/2001 - not a leap month - not a leap day     
+       {-1,-1,-1,-1,-1,-1,-1,-1,-1}
+    };
+
+    status = U_ZERO_ERROR;
+    c = Calendar::createInstance("bo_IN@calendar=tibetan-tsurphu", status);
+    if (failure(status, "Calendar::createInstance", TRUE)) return;
+    c->setLenient(TRUE);
+    doTestCases(tests2, c);
+
+    delete c;
+
+}
 
 #endif

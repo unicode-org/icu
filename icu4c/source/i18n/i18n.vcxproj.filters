@@ -282,6 +282,9 @@
     <ClCompile Include="taiwncal.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="tibetancal.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="timezone.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -1020,6 +1023,9 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="taiwncal.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="tibetancal.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="umsg_imp.h">

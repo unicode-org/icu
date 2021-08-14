@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2015, International Business Machines Corporation
+ * Copyright (c) 1997-2021, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -170,7 +170,9 @@ TestCase TestCases[] = {
         {"indian",          FALSE,      DEFAULT_START, DEFAULT_END},
         {"coptic",          FALSE,      DEFAULT_START, DEFAULT_END},
         {"ethiopic",        FALSE,      DEFAULT_START, DEFAULT_END},
-        {"ethiopic-amete-alem", FALSE,  DEFAULT_START, DEFAULT_END}
+        {"ethiopic-amete-alem", FALSE,  DEFAULT_START, DEFAULT_END},
+        {"tibetan",         FALSE,      DEFAULT_START, DEFAULT_END},
+        {"tibetan-tsurphu", FALSE,      DEFAULT_START, DEFAULT_END}
 };
     
 struct {
