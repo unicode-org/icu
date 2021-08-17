@@ -118,6 +118,28 @@ jobs:
         CC: gcc
         CXX: g++
 #-------------------------------------------------------------------------
+- job: ICU4C_GCC11_Cpp20_Ubuntu_2004
+  displayName: 'C: Linux GCC-11 C++20 (Ubuntu 20.04)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'ubuntu-20.04'
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    - script: |
+        sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+        sudo apt-get update
+        sudo apt-get install gcc-11 g++-11
+      displayName: 'Install GCC-11'
+    - script: |
+        cd icu4c/source && ./runConfigureICU Linux && make -j2 check
+      displayName: 'Build and Test'
+      env:
+        CC: gcc-11
+        CXX: g++-11
+        CXXFLAGS: '-std=c++20 -fext-numeric-literals'
+#-------------------------------------------------------------------------
 - job: ICU4C_Clang_Ubuntu_2004_LANG
   displayName: 'C: Linux Clang (Ubuntu 20.04) - LANG has extension tags'
   timeoutInMinutes: 30
@@ -134,7 +156,30 @@ jobs:
         CC: clang
         CXX: clang++
         LANG: "en_US@calendar=gregorian;hours=h12"
-
+#-------------------------------------------------------------------------
+- job: ICU4C_Clang13_Cpp20_Ubuntu_2004
+  displayName: 'C: Linux Clang-13 C++20 (Ubuntu 20.04)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'ubuntu-20.04'
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    # Install Clang-13 from https://apt.llvm.org/
+    - script: |
+        curl -Ls https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+        sudo apt-add-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-13 main'
+        sudo apt update
+        sudo apt install -qy clang-13 lld-13 libc++-13-dev libc++abi-13-dev
+      displayName: 'Install Clang-13'
+    - script: |
+        cd icu4c/source && ./runConfigureICU Linux && make -j2 check
+      displayName: 'Build and Test'
+      env:
+        CC: clang-13
+        CXX: clang++-13
+        CXXFLAGS: '-std=c++20'
 #-------------------------------------------------------------------------
 # VS 2019 Builds
 #-------------------------------------------------------------------------
@@ -286,6 +331,34 @@ jobs:
         solution: icu4c/source/allinone/allinone.sln
         platform: ARM64
         configuration: Debug
+#-------------------------------------------------------------------------
+# There is no /std:c++20 yet, so use c++latest as that includes many of
+# the C++20 compiler and library changes.
+- job: ICU4C_MSVC_x64_Release_CppLatest
+  displayName: 'C: MSVC 64-bit Release (VS 2019) /std:c++latest'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'windows-2019'
+    demands: 
+      - msbuild
+      - visualstudio
+      - Cmd
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    - task: VSBuild@1
+      displayName: 'Build Solution'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: x64
+        configuration: Release
+        msbuildArgs: '/p:LanguageStandard="stdcpplatest"'
+    - task: BatchScript@1
+      displayName: 'Run Tests (icucheck.bat)'
+      inputs:
+        filename: icu4c/source/allinone/icucheck.bat
+        arguments: 'x64 Release'
 #-------------------------------------------------------------------------
 # VS 2017 Builds
 #-------------------------------------------------------------------------
