@@ -135,23 +135,6 @@ public:
     TimeUnitFormat& operator=(const TimeUnitFormat& other);
 
     /**
-     * Return true if the given Format objects are not semantically equal.
-     * Objects of different subclasses are considered unequal.
-     * @param other the object to be compared with.
-     * @return      true if the given Format objects are not semantically equal.
-     * @deprecated ICU 53
-     */
-    bool operator!=(const Format& other) const;
-
-#if defined(__cpp_impl_three_way_comparison) && \
-       __cpp_impl_three_way_comparison >= 201711
-    // Manually resolve C++20 reversed argument order ambiguity.
-    inline bool operator!=(const TimeUnitFormat& other) const {
-        return operator!=(static_cast<const Format&>(other));
-    }
-#endif
-
-    /**
      * Set the locale used for formatting or parsing.
      * @param locale  the locale to be set
      * @param status  output param set to success/failure code on exit
@@ -243,11 +226,6 @@ private:
 
     friend struct TimeUnitFormatReadSink;
 };
-
-inline bool
-TimeUnitFormat::operator!=(const Format& other) const  {
-    return !operator==(other);
-}
 
 U_NAMESPACE_END
 
