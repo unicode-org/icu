@@ -3723,13 +3723,13 @@ const char* const basic_maximize_data[][2] = {
     ""
   }, {
      "de_u_co_phonebk",
-     "de_Latn_DE_U_CO_PHONEBK"
+     "de_Latn_DE@collation=phonebook"
   }, {
      "de_Latn_u_co_phonebk",
-     "de_Latn_DE_U_CO_PHONEBK"
+      "de_Latn_DE@collation=phonebook"
   }, {
      "de_Latn_DE_u_co_phonebk",
-     "de_Latn_DE_U_CO_PHONEBK"
+      "de_Latn_DE@collation=phonebook"
   }, {
     "_Arab@em=emoji",
     "ar_Arab_EG@em=emoji"
@@ -6377,7 +6377,7 @@ static const struct {
     {"hant-cmn-cn", "hant", 4},
     {"zh-cmn-TW", "cmn_TW", FULL_LENGTH},
     {"zh-x_t-ab", "zh", 2},
-    {"zh-hans-cn-u-ca-x_t-u", "zh_Hans_CN@calendar=yes",  15},
+    {"zh-hans-cn-u-ca-x_t-u", "zh_Hans_CN@calendar=yes", 15},
     /* #20140 dupe keys in U-extension */
     {"zh-u-ca-chinese-ca-gregory", "zh@calendar=chinese", FULL_LENGTH},
     {"zh-u-ca-gregory-co-pinyin-ca-chinese", "zh@calendar=gregorian;collation=pinyin", FULL_LENGTH},
