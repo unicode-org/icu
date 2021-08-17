@@ -86,27 +86,27 @@ public class MeasureUnit implements Serializable {
      * The complexity determines which operations are available. For example, you cannot set the power
      * or prefix of a compound unit.
      *
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public enum Complexity {
         /**
          * A single unit, like kilojoule.
          *
-         * @draft ICU 68
+         * @stable ICU 68
          */
         SINGLE,
 
         /**
          * A compound unit, like meter-per-second.
          *
-         * @draft ICU 68
+         * @stable ICU 68
          */
         COMPOUND,
 
         /**
          * A mixed unit, like hour-and-minute.
          *
-         * @draft ICU 68
+         * @stable ICU 68
          */
         MIXED
     }
@@ -121,147 +121,147 @@ public class MeasureUnit implements Serializable {
         /**
          * SI prefix: yotta, 10^24.
          *
-         * @draft ICU 68
+         * @draft ICU 69
          */
         YOTTA(24, "yotta", 10),
 
         /**
          * SI prefix: zetta, 10^21.
          *
-         * @draft ICU 68
+         * @draft ICU 69
          */
         ZETTA(21, "zetta", 10),
 
         /**
          * SI prefix: exa, 10^18.
          *
-         * @draft ICU 68
+         * @draft ICU 69
          */
         EXA(18, "exa", 10),
 
         /**
          * SI prefix: peta, 10^15.
          *
-         * @draft ICU 68
+         * @draft ICU 69
          */
         PETA(15, "peta", 10),
 
         /**
          * SI prefix: tera, 10^12.
          *
-         * @draft ICU 68
+         * @draft ICU 69
          */
         TERA(12, "tera", 10),
 
         /**
          * SI prefix: giga, 10^9.
          *
-         * @draft ICU 68
+         * @draft ICU 69
          */
         GIGA(9, "giga", 10),
 
         /**
          * SI prefix: mega, 10^6.
          *
-         * @draft ICU 68
+         * @draft ICU 69
          */
         MEGA(6, "mega", 10),
 
         /**
          * SI prefix: kilo, 10^3.
          *
-         * @draft ICU 68
+         * @draft ICU 69
          */
         KILO(3, "kilo", 10),
 
         /**
          * SI prefix: hecto, 10^2.
          *
-         * @draft ICU 68
+         * @draft ICU 69
          */
         HECTO(2, "hecto", 10),
 
         /**
          * SI prefix: deka, 10^1.
          *
-         * @draft ICU 68
+         * @draft ICU 69
          */
         DEKA(1, "deka", 10),
 
         /**
          * The absence of an SI prefix.
          *
-         * @draft ICU 68
+         * @draft ICU 69
          */
         ONE(0, "", 10),
 
         /**
          * SI prefix: deci, 10^-1.
          *
-         * @draft ICU 68
+         * @draft ICU 69
          */
         DECI(-1, "deci", 10),
 
         /**
          * SI prefix: centi, 10^-2.
          *
-         * @draft ICU 68
+         * @draft ICU 69
          */
         CENTI(-2, "centi", 10),
 
         /**
          * SI prefix: milli, 10^-3.
          *
-         * @draft ICU 68
+         * @draft ICU 69
          */
         MILLI(-3, "milli", 10),
 
         /**
          * SI prefix: micro, 10^-6.
          *
-         * @draft ICU 68
+         * @draft ICU 69
          */
         MICRO(-6, "micro", 10),
 
         /**
          * SI prefix: nano, 10^-9.
          *
-         * @draft ICU 68
+         * @draft ICU 69
          */
         NANO(-9, "nano", 10),
 
         /**
          * SI prefix: pico, 10^-12.
          *
-         * @draft ICU 68
+         * @draft ICU 69
          */
         PICO(-12, "pico", 10),
 
         /**
          * SI prefix: femto, 10^-15.
          *
-         * @draft ICU 68
+         * @draft ICU 69
          */
         FEMTO(-15, "femto", 10),
 
         /**
          * SI prefix: atto, 10^-18.
          *
-         * @draft ICU 68
+         * @draft ICU 69
          */
         ATTO(-18, "atto", 10),
 
         /**
          * SI prefix: zepto, 10^-21.
          *
-         * @draft ICU 68
+         * @draft ICU 69
          */
         ZEPTO(-21, "zepto", 10),
 
         /**
          * SI prefix: yocto, 10^-24.
          *
-         * @draft ICU 68
+         * @draft ICU 69
          */
         YOCTO(-24, "yocto", 10),
 
@@ -388,7 +388,7 @@ public class MeasureUnit implements Serializable {
      *
      * @param identifier CLDR Unit Identifier
      * @throws IllegalArgumentException if the identifier is invalid.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public static MeasureUnit forIdentifier(String identifier) {
         if (identifier == null || identifier.isEmpty()) {
@@ -445,7 +445,7 @@ public class MeasureUnit implements Serializable {
      * Get CLDR Unit Identifier for this MeasureUnit, as defined in UTS 35.
      *
      * @return The string form of this unit.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public String getIdentifier() {
         String result = measureUnitImpl == null ? getSubtype() : measureUnitImpl.getIdentifier();
@@ -456,7 +456,7 @@ public class MeasureUnit implements Serializable {
      * Compute the complexity of the unit. See Complexity for more information.
      *
      * @return The unit complexity.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public Complexity getComplexity() {
         if (measureUnitImpl == null) {
@@ -511,7 +511,7 @@ public class MeasureUnit implements Serializable {
      *
      * @return The dimensionality (power) of this simple unit.
      * @throws UnsupportedOperationException if the unit is COMPOUND or MIXED.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public int getDimensionality() {
         return getSingleUnitImpl().getDimensionality();
@@ -527,7 +527,7 @@ public class MeasureUnit implements Serializable {
      * @param dimensionality The dimensionality (power).
      * @return A new SINGLE unit.
      * @throws UnsupportedOperationException if the unit is COMPOUND or MIXED.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public MeasureUnit withDimensionality(int dimensionality) {
         SingleUnitImpl singleUnit = getSingleUnitImpl();
@@ -545,7 +545,7 @@ public class MeasureUnit implements Serializable {
      *
      * @return The reciprocal of the target unit.
      * @throws UnsupportedOperationException if the unit is MIXED.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public MeasureUnit reciprocal() {
         MeasureUnitImpl measureUnit = getCopyOfMeasureUnitImpl();
@@ -568,7 +568,7 @@ public class MeasureUnit implements Serializable {
      * @param other The MeasureUnit to multiply with the target.
      * @return The product of the target unit with the provided unit.
      * @throws UnsupportedOperationException if the unit is MIXED.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public MeasureUnit product(MeasureUnit other) {
         MeasureUnitImpl implCopy = getCopyOfMeasureUnitImpl();
@@ -602,7 +602,7 @@ public class MeasureUnit implements Serializable {
      * If this is a SINGLE unit, a list of length 1 will be returned.
      *
      * @return An unmodifiable list of single units
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public List<MeasureUnit> splitToSingleUnits() {
         final ArrayList<SingleUnitImpl> singleUnits =
@@ -1361,7 +1361,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of graphics: dot
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public static final MeasureUnit DOT = MeasureUnit.internalGetInstance("graphics", "dot");
 
@@ -1427,7 +1427,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of length: earth-radius
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public static final MeasureUnit EARTH_RADIUS = MeasureUnit.internalGetInstance("length", "earth-radius");
 
@@ -1541,13 +1541,13 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of light: candela
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public static final MeasureUnit CANDELA = MeasureUnit.internalGetInstance("light", "candela");
 
     /**
      * Constant for unit of light: lumen
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public static final MeasureUnit LUMEN = MeasureUnit.internalGetInstance("light", "lumen");
 
@@ -1583,7 +1583,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of mass: grain
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public static final MeasureUnit GRAIN = MeasureUnit.internalGetInstance("mass", "grain");
 
@@ -1895,25 +1895,25 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of volume: dessert-spoon
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public static final MeasureUnit DESSERT_SPOON = MeasureUnit.internalGetInstance("volume", "dessert-spoon");
 
     /**
      * Constant for unit of volume: dessert-spoon-imperial
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public static final MeasureUnit DESSERT_SPOON_IMPERIAL = MeasureUnit.internalGetInstance("volume", "dessert-spoon-imperial");
 
     /**
      * Constant for unit of volume: dram
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public static final MeasureUnit DRAM = MeasureUnit.internalGetInstance("volume", "dram");
 
     /**
      * Constant for unit of volume: drop
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public static final MeasureUnit DROP = MeasureUnit.internalGetInstance("volume", "drop");
 
@@ -1949,7 +1949,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of volume: jigger
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public static final MeasureUnit JIGGER = MeasureUnit.internalGetInstance("volume", "jigger");
 
@@ -1973,7 +1973,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of volume: pinch
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public static final MeasureUnit PINCH = MeasureUnit.internalGetInstance("volume", "pinch");
 
@@ -1997,7 +1997,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of volume: quart-imperial
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public static final MeasureUnit QUART_IMPERIAL = MeasureUnit.internalGetInstance("volume", "quart-imperial");
 
