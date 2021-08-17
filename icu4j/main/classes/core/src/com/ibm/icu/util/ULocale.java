@@ -1131,10 +1131,13 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @stable ICU 3.0
      */
     public static String getName(String localeID){
-        String tmpLocaleID;
+        String tmpLocaleID = localeID;
         // Convert BCP47 id if necessary
         if (localeID != null && !localeID.contains("@") && getShortestSubtagLength(localeID) == 1) {
-            tmpLocaleID = forLanguageTag(localeID).getName();
+            if (localeID.indexOf('_') >= 0 && localeID.charAt(1) != '_' && localeID.charAt(1) != '-') {
+                tmpLocaleID = localeID.replace('_', '-');
+            }
+            tmpLocaleID = forLanguageTag(tmpLocaleID).getName();
             if (tmpLocaleID.length() == 0) {
                 tmpLocaleID = localeID;
             }

@@ -1477,21 +1477,37 @@ _canonicalize(const char* localeID,
               ByteSink& sink,
               uint32_t options,
               UErrorCode* err) {
+    if (U_FAILURE(*err)) {
+        return;
+    }
+
     int32_t j, fieldCount=0, scriptSize=0, variantSize=0;
-    PreflightingLocaleIDBuffer tempBuffer;
+    PreflightingLocaleIDBuffer tempBuffer;  // if localeID has a BCP47 extension, tmpLocaleID points to this
     const char* origLocaleID;
     const char* tmpLocaleID;
     const char* keywordAssign = NULL;
     const char* separatorIndicator = NULL;
 
-    if (U_FAILURE(*err)) {
-        return;
-    }
-
     if (_hasBCP47Extension(localeID)) {
+        CharString localeIDWithHyphens;
+        const char* localeIDPtr = localeID;
+
+        // convert all underbars to hyphens, unless the "BCP47 extension" comes at the beginning of the string
+        if (uprv_strchr(localeID, '_') != nullptr && localeID[1] != '-' && localeID[1] != '_') {
+            localeIDWithHyphens.append(localeID, -1, *err);
+            if (U_SUCCESS(*err)) {
+                for (char* p = localeIDWithHyphens.data(); *p != '\0'; ++p) {
+                    if (*p == '_') {
+                        *p = '-';
+                    }
+                }
+                localeIDPtr = localeIDWithHyphens.data();
+            }
+        }
+        
         do {
-            tempBuffer.requestedCapacity = _ConvertBCP47(tmpLocaleID, localeID,
-                tempBuffer.getBuffer(), tempBuffer.getCapacity(), err);
+            tempBuffer.requestedCapacity = _ConvertBCP47(tmpLocaleID, localeIDPtr, tempBuffer.getBuffer(),
+                                                         tempBuffer.getCapacity(), err);
         } while (tempBuffer.needToTryAgain(err));
     } else {
         if (localeID==NULL) {

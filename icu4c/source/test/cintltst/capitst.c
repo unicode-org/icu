@@ -90,6 +90,7 @@ void addCollAPITest(TestNode** root)
     addTest(root, &TestBengaliSortKey, "tscoll/capitst/TestBengaliSortKey");
     addTest(root, &TestGetKeywordValuesForLocale, "tscoll/capitst/TestGetKeywordValuesForLocale");
     addTest(root, &TestStrcollNull, "tscoll/capitst/TestStrcollNull");
+    addTest(root, &TestLocaleIDWithUnderscoreAndExtension, "tscoll/capitst/TestLocaleIDWithUnderscoreAndExtension");
 }
 
 void TestGetSetAttr(void) {
@@ -2563,6 +2564,20 @@ static void TestStrcollNull(void) {
     }
 
     ucol_close(coll);
+}
+
+static void TestLocaleIDWithUnderscoreAndExtension(void) {
+    UErrorCode err = U_ZERO_ERROR;
+    UCollator* c1 = ucol_open("en-US-u-kn-true", &err);
+    UCollator* c2 = ucol_open("en_US-u-kn-true", &err);
+    
+    if (assertSuccess("Failed to create collators", &err)) {
+        assertTrue("Comparison using \"normal\" collator failed", !ucol_greater(c1, u"2", -1, u"10", -1));
+        assertTrue("Comparison using \"bad\" collator failed", !ucol_greater(c2, u"2", -1, u"10", -1));
+    }
+    
+    ucol_close(c1);
+    ucol_close(c2);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
