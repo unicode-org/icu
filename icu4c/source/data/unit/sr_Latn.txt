@@ -4,15 +4,16 @@
 sr_Latn{
     %%Parent{"root"}
     durationUnits{
-        hm{"h:mm"}
-        hms{"h:mm:ss"}
-        ms{"m:ss"}
+        hm{"h.mm"}
+        hms{"h.mm.ss"}
+        ms{"m.ss"}
     }
     units{
         acceleration{
             g-force{
                 dnam{"ge sila"}
                 few{"{0} ge sila"}
+                gender{"feminine"}
                 one{"{0} ge sila"}
                 other{"{0} ge sila"}
             }
@@ -27,30 +28,35 @@ sr_Latn{
             arc-minute{
                 dnam{"lučni minuti"}
                 few{"{0} lučna minuta"}
+                gender{"inanimate"}
                 one{"{0} lučni minut"}
                 other{"{0} lučnih minuta"}
             }
             arc-second{
                 dnam{"lučne sekunde"}
                 few{"{0} lučne sekunde"}
+                gender{"feminine"}
                 one{"{0} lučna sekunda"}
                 other{"{0} lučnih sekundi"}
             }
             degree{
                 dnam{"stepeni"}
                 few{"{0} stepena"}
+                gender{"inanimate"}
                 one{"{0} stepen"}
                 other{"{0} stepeni"}
             }
             radian{
                 dnam{"radijani"}
                 few{"{0} radijana"}
+                gender{"inanimate"}
                 one{"{0} radijan"}
                 other{"{0} radijana"}
             }
             revolution{
                 dnam{"obrtaj"}
                 few{"{0} obrtaja"}
+                gender{"inanimate"}
                 one{"{0} obrtaj"}
                 other{"{0} obrtaja"}
             }
@@ -71,6 +77,7 @@ sr_Latn{
             hectare{
                 dnam{"hektari"}
                 few{"{0} hektara"}
+                gender{"inanimate"}
                 one{"{0} hektar"}
                 other{"{0} hektara"}
             }
@@ -186,12 +193,19 @@ sr_Latn{
                     }
                 }
             }
-            times{"{0}⋅{1}"}
+            times{"{0}-{1}"}
         }
         concentr{
+            item{
+                dnam{"stavke"}
+                few{"{0} stavke"}
+                one{"{0} stavka"}
+                other{"{0} stavki"}
+            }
             karat{
                 dnam{"karati"}
                 few{"{0} karata"}
+                gender{"inanimate"}
                 one{"{0} karat"}
                 other{"{0} karata"}
             }
@@ -210,26 +224,33 @@ sr_Latn{
             mole{
                 dnam{"moli"}
                 few{"{0} mola"}
+                gender{"inanimate"}
                 one{"{0} mol"}
                 other{"{0} mola"}
             }
             percent{
                 dnam{"procenat"}
                 few{"{0} procenata"}
+                gender{"inanimate"}
                 one{"{0} procenat"}
                 other{"{0} procenata"}
             }
             permille{
                 dnam{"promil"}
                 few{"{0} promila"}
+                gender{"inanimate"}
                 one{"{0} promil"}
                 other{"{0} promila"}
             }
             permillion{
                 dnam{"čestica na milion"}
                 few{"{0} čestice na milion"}
+                gender{"feminine"}
                 one{"{0} čestica na milion"}
                 other{"{0} čestica na milion"}
+            }
+            permyriad{
+                gender{"inanimate"}
             }
         }
         consumption{
@@ -269,12 +290,14 @@ sr_Latn{
             bit{
                 dnam{"bitovi"}
                 few{"{0} bita"}
+                gender{"inanimate"}
                 one{"{0} bit"}
                 other{"{0} bitova"}
             }
             byte{
                 dnam{"bajtovi"}
                 few{"{0} bajta"}
+                gender{"inanimate"}
                 one{"{0} bajt"}
                 other{"{0} bajtova"}
             }
@@ -337,25 +360,54 @@ sr_Latn{
             century{
                 dnam{"vekovi"}
                 few{"{0} veka"}
+                gender{"inanimate"}
                 one{"{0} vek"}
                 other{"{0} vekova"}
             }
             day{
                 dnam{"dani"}
                 few{"{0} dana"}
+                gender{"inanimate"}
                 one{"{0} dan"}
                 other{"{0} dana"}
                 per{"{0}/dnevno"}
             }
+            day-person{
+                case{
+                    accusative{
+                        few{"{0} dana"}
+                    }
+                    genitive{
+                        one{"{0} dana"}
+                    }
+                    instrumental{
+                        one{"{0} danom"}
+                    }
+                }
+                gender{"inanimate"}
+            }
             decade{
+                case{
+                    accusative{
+                        few{"{0} decenije"}
+                    }
+                    genitive{
+                        few{"{0} decenije"}
+                    }
+                    instrumental{
+                        few{"{0} decenije"}
+                    }
+                }
                 dnam{"decenije"}
-                few{"{0} dec."}
+                few{"{0} decenije"}
+                gender{"feminine"}
                 one{"{0} decenija"}
                 other{"{0} decenija"}
             }
             hour{
                 dnam{"sati"}
                 few{"{0} sata"}
+                gender{"inanimate"}
                 one{"{0} sat"}
                 other{"{0} sati"}
                 per{"{0}/sat"}
@@ -375,6 +427,7 @@ sr_Latn{
             minute{
                 dnam{"minuti"}
                 few{"{0} minuta"}
+                gender{"inanimate"}
                 one{"{0} minut"}
                 other{"{0} minuta"}
                 per{"{0} u minutu"}
@@ -382,6 +435,7 @@ sr_Latn{
             month{
                 dnam{"meseci"}
                 few{"{0} meseca"}
+                gender{"inanimate"}
                 one{"{0} mesec"}
                 other{"{0} meseci"}
                 per{"{0} mesečno"}
@@ -395,6 +449,7 @@ sr_Latn{
             second{
                 dnam{"sekunde"}
                 few{"{0} sekunde"}
+                gender{"feminine"}
                 one{"{0} sekunda"}
                 other{"{0} sekundi"}
                 per{"{0}/u sekundi"}
@@ -402,6 +457,7 @@ sr_Latn{
             week{
                 dnam{"nedelje"}
                 few{"{0} nedelje"}
+                gender{"feminine"}
                 one{"{0} nedelja"}
                 other{"{0} nedelja"}
                 per{"{0} nedeljno"}
@@ -409,6 +465,7 @@ sr_Latn{
             year{
                 dnam{"godine"}
                 few{"{0} godine"}
+                gender{"feminine"}
                 one{"{0} godina"}
                 other{"{0} godina"}
                 per{"{0} godišnje"}
@@ -418,6 +475,7 @@ sr_Latn{
             ampere{
                 dnam{"amperi"}
                 few{"{0} ampera"}
+                gender{"inanimate"}
                 one{"{0} amper"}
                 other{"{0} ampera"}
             }
@@ -430,12 +488,14 @@ sr_Latn{
             ohm{
                 dnam{"omi"}
                 few{"{0} oma"}
+                gender{"inanimate"}
                 one{"{0} om"}
                 other{"{0} oma"}
             }
             volt{
                 dnam{"volti"}
                 few{"{0} volta"}
+                gender{"inanimate"}
                 one{"{0} volt"}
                 other{"{0} volti"}
             }
@@ -447,6 +507,7 @@ sr_Latn{
             calorie{
                 dnam{"kalorije"}
                 few{"{0} kalorije"}
+                gender{"feminine"}
                 one{"{0} kalorija"}
                 other{"{0} kalorija"}
             }
@@ -465,6 +526,7 @@ sr_Latn{
             joule{
                 dnam{"džuli"}
                 few{"{0} džula"}
+                gender{"inanimate"}
                 one{"{0} džul"}
                 other{"{0} džula"}
             }
@@ -497,6 +559,7 @@ sr_Latn{
             newton{
                 dnam{"njutni"}
                 few{"{0} njutna"}
+                gender{"inanimate"}
                 one{"{0} njutn"}
                 other{"{0} njutna"}
             }
@@ -517,6 +580,7 @@ sr_Latn{
             hertz{
                 dnam{"herci"}
                 few{"{0} herca"}
+                gender{"inanimate"}
                 one{"{0} herc"}
                 other{"{0} herca"}
             }
@@ -538,6 +602,12 @@ sr_Latn{
                 dnam{"tačka"}
                 few{"{0} tačke"}
                 one{"{0} tačka"}
+            }
+            em{
+                gender{"inanimate"}
+            }
+            pixel{
+                gender{"inanimate"}
             }
         }
         length{
@@ -607,6 +677,7 @@ sr_Latn{
             meter{
                 dnam{"metri"}
                 few{"{0} metra"}
+                gender{"inanimate"}
                 one{"{0} metar"}
                 other{"{0} metara"}
                 per{"{0}/m"}
@@ -626,6 +697,7 @@ sr_Latn{
             mile-scandinavian{
                 dnam{"skandinavska milja"}
                 few{"{0} skandinavske milje"}
+                gender{"feminine"}
                 one{"{0} skandinavska milja"}
                 other{"{0} skandinavskih milja"}
             }
@@ -682,18 +754,21 @@ sr_Latn{
             candela{
                 dnam{"kandela"}
                 few{"{0} kandele"}
+                gender{"feminine"}
                 one{"{0} kandela"}
                 other{"{0} kandela"}
             }
             lumen{
                 dnam{"lumen"}
                 few{"{0} lumena"}
+                gender{"inanimate"}
                 one{"{0} lumen"}
                 other{"{0} lumena"}
             }
             lux{
                 dnam{"luks"}
                 few{"{0} luksa"}
+                gender{"inanimate"}
                 one{"{0} luks"}
                 other{"{0} luksa"}
             }
@@ -702,6 +777,7 @@ sr_Latn{
             carat{
                 dnam{"karati"}
                 few{"{0} karata"}
+                gender{"inanimate"}
                 one{"{0} karat"}
                 other{"{0} karata"}
             }
@@ -726,6 +802,7 @@ sr_Latn{
             gram{
                 dnam{"grami"}
                 few{"{0} grama"}
+                gender{"inanimate"}
                 one{"{0} gram"}
                 other{"{0} grama"}
                 per{"{0} po gramu"}
@@ -733,6 +810,7 @@ sr_Latn{
             kilogram{
                 dnam{"kilogrami"}
                 few{"{0} kilograma"}
+                gender{"inanimate"}
                 one{"{0} kilogram"}
                 other{"{0} kilograma"}
                 per{"{0} po kilogramu"}
@@ -740,6 +818,7 @@ sr_Latn{
             metric-ton{
                 dnam{"metričke tone"}
                 few{"{0} metričke tone"}
+                gender{"feminine"}
                 one{"{0} metrička tona"}
                 other{"{0} metričkih tona"}
             }
@@ -828,6 +907,7 @@ sr_Latn{
             watt{
                 dnam{"vati"}
                 few{"{0} vata"}
+                gender{"inanimate"}
                 one{"{0} vat"}
                 other{"{0} vati"}
             }
@@ -836,12 +916,14 @@ sr_Latn{
             atmosphere{
                 dnam{"atmosfere"}
                 few{"{0} atmosfere"}
+                gender{"feminine"}
                 one{"{0} atmosfera"}
                 other{"{0} atmosfera"}
             }
             bar{
                 dnam{"bari"}
                 few{"{0} bara"}
+                gender{"inanimate"}
                 one{"{0} bar"}
                 other{"{0} bara"}
             }
@@ -884,6 +966,7 @@ sr_Latn{
             pascal{
                 dnam{"paskali"}
                 few{"{0} paskala"}
+                gender{"inanimate"}
                 one{"{0} paskal"}
                 other{"{0} paskala"}
             }
@@ -924,6 +1007,7 @@ sr_Latn{
             celsius{
                 dnam{"stepeni Celzijusa"}
                 few{"{0} stepena Celzijusa"}
+                gender{"inanimate"}
                 one{"{0} stepen Celzijusa"}
                 other{"{0} stepeni Celzijusa"}
             }
@@ -936,12 +1020,14 @@ sr_Latn{
             generic{
                 dnam{"°"}
                 few{"{0}°"}
+                gender{"inanimate"}
                 one{"{0}°"}
                 other{"{0}°"}
             }
             kelvin{
                 dnam{"kelvin"}
                 few{"{0} kelvina"}
+                gender{"inanimate"}
                 one{"{0} kelvin"}
                 other{"{0} kelvina"}
             }
@@ -1038,6 +1124,7 @@ sr_Latn{
             cup-metric{
                 dnam{"metrička šolja"}
                 few{"{0} metričke šolje"}
+                gender{"feminine"}
                 one{"{0} metrička šolja"}
                 other{"{0} metričkih šolja"}
             }
@@ -1112,6 +1199,7 @@ sr_Latn{
             liter{
                 dnam{"litri"}
                 few{"{0} litra"}
+                gender{"inanimate"}
                 one{"{0} litar"}
                 other{"{0} litara"}
                 per{"{0} po litri"}
@@ -1143,6 +1231,7 @@ sr_Latn{
             pint-metric{
                 dnam{"metričke pinte"}
                 few{"{0} metričke pinte"}
+                gender{"feminine"}
                 one{"{0} metrička pinta"}
                 other{"{0} metričkih pinti"}
             }
@@ -1246,6 +1335,12 @@ sr_Latn{
             times{"{0}⋅{1}"}
         }
         concentr{
+            item{
+                dnam{"stavka"}
+                few{"{0} stavke"}
+                one{"{0} stavka"}
+                other{"{0} stavki"}
+            }
             percent{
                 dnam{"%"}
                 few{"{0}%"}
@@ -1259,6 +1354,12 @@ sr_Latn{
                 few{"{0} L/100km"}
                 one{"{0} L/100km"}
                 other{"{0} L/100km"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mpg Imp"}
+                few{"{0} mpg Imp"}
+                one{"{0} mpg Imp"}
+                other{"{0} mpg Imp"}
             }
         }
         coordinate{
@@ -1332,9 +1433,10 @@ sr_Latn{
                 other{"{0} ft"}
             }
             inch{
-                few{"{0} inča"}
-                one{"{0} inč"}
-                other{"{0} inča"}
+                dnam{"in"}
+                few{"{0} in"}
+                one{"{0} in"}
+                other{"{0} in"}
             }
             kilometer{
                 dnam{"km"}
@@ -1343,9 +1445,9 @@ sr_Latn{
                 other{"{0} km"}
             }
             light-year{
-                few{"{0} sg"}
-                one{"{0} sg"}
-                other{"{0} sg"}
+                few{"{0} ly"}
+                one{"{0} ly"}
+                other{"{0} ly"}
             }
             meter{
                 dnam{"m"}
@@ -1370,9 +1472,10 @@ sr_Latn{
                 other{"{0} pm"}
             }
             yard{
-                few{"{0} jrd"}
-                one{"{0} jrd"}
-                other{"{0} jrd"}
+                dnam{"yd"}
+                few{"{0} yd"}
+                one{"{0} yd"}
+                other{"{0} yd"}
             }
         }
         mass{
@@ -1475,11 +1578,39 @@ sr_Latn{
                 one{"{0} mi³"}
                 other{"{0} mi³"}
             }
+            dessert-spoon-imperial{
+                few{"{0} dstspn Imp"}
+                one{"{0} dstspn Imp"}
+                other{"{0}dsp-Imp"}
+            }
+            fluid-ounce-imperial{
+                dnam{"Imp fl oz"}
+                few{"{0} fl oz Imp"}
+                one{"{0} fl oz Imp"}
+                other{"{0} fl oz Imp"}
+            }
+            gallon-imperial{
+                dnam{"Imp gal"}
+                few{"{0}/gal Imp"}
+                one{"{0}/gal Imp"}
+                other{"{0}/gal Imp"}
+                per{"{0}/gal Imp"}
+            }
             liter{
                 dnam{"l"}
                 few{"{0} l"}
                 one{"{0} l"}
                 other{"{0} l"}
+            }
+            pinch{
+                few{"{0} pn"}
+                one{"{0} pn"}
+                other{"{0} pn"}
+            }
+            quart-imperial{
+                few{"{0} qt Imp"}
+                one{"{0} qt Imp"}
+                other{"{0} qt Imp"}
             }
         }
     }
@@ -1619,6 +1750,12 @@ sr_Latn{
             times{"{0}⋅{1}"}
         }
         concentr{
+            item{
+                dnam{"stavka"}
+                few{"{0} stavke"}
+                one{"{0} stavka"}
+                other{"{0} stavki"}
+            }
             karat{
                 dnam{"kt"}
                 few{"{0} kt"}
@@ -2011,6 +2148,7 @@ sr_Latn{
                 dnam{"hv"}
                 few{"{0} fth"}
                 one{"{0} fth"}
+                other{"{0} fth"}
             }
             foot{
                 dnam{"ft"}
@@ -2022,6 +2160,8 @@ sr_Latn{
             furlong{
                 dnam{"furlonzi"}
                 few{"{0} fur"}
+                one{"{0} fur"}
+                other{"{0} fur"}
             }
             inch{
                 dnam{"inči"}

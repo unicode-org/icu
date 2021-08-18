@@ -27,6 +27,11 @@ si{
     }
     MoreInformation{"?"}
     NumberElements{
+        arab{
+            symbols{
+                timeSeparator{":"}
+            }
+        }
         default{"latn"}
         latn{
             miscPatterns{
@@ -266,6 +271,7 @@ si{
                 GyMMM{"G y MMM"}
                 GyMMMEd{"G y MMM d, E"}
                 GyMMMd{"G y MMM d"}
+                GyMd{"GGGGG y-MM-dd"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -493,6 +499,7 @@ si{
                 GyMMM{"G y MMM"}
                 GyMMMEd{"G y MMM d, E"}
                 GyMMMd{"G y MMM d"}
+                GyMd{"GGGGG y-MM-dd"}
                 H{"HH"}
                 Hm{"HH.mm"}
                 Hms{"HH.mm.ss"}

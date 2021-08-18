@@ -281,6 +281,18 @@ lt{
             }
         }
         minimalPairs{
+            case{
+                accusative{"{0} metrą"}
+                dative{"{0} metrui"}
+                genitive{"{0} metro"}
+                instrumental{"{0} metru"}
+                locative{"{0} metre"}
+                nominative{"{0} metras"}
+            }
+            gender{
+                feminine{"{0} metras"}
+                masculine{"{0} metras"}
+            }
             ordinal{
                 other{"{0}-ame posūkyje sukite į dešinę."}
             }

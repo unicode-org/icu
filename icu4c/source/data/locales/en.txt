@@ -1270,7 +1270,7 @@ en{
         roc{
             eras{
                 abbreviated{
-                    "Before R.O.C.",
+                    "B.R.O.C.",
                     "Minguo",
                 }
             }

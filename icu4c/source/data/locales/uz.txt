@@ -282,6 +282,7 @@ uz{
                 GyMMM{"MMM, y (G)"}
                 GyMMMEd{"E, d-MMM, y (G)"}
                 GyMMMd{"d-MMM, y (G)"}
+                GyMd{"dd.MM.y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -477,6 +478,7 @@ uz{
                 GyMMM{"MMM, G y"}
                 GyMMMEd{"E, d-MMM, G y"}
                 GyMMMd{"d-MMM, G y"}
+                GyMd{"dd.MM.y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -948,6 +950,7 @@ uz{
         }
         islamic{
             availableFormats{
+                GyMd{"dd.MM.y GGGGG"}
                 yyyyMMM{"MMM, y (G)"}
                 yyyyMMMM{"MMMM, y G"}
                 yyyyMMMd{"d-MMM, y G"}
@@ -956,7 +959,7 @@ uz{
             }
             eras{
                 abbreviated{
-                    "Hijriy yil",
+                    "Hijriy",
                 }
             }
             monthNames{

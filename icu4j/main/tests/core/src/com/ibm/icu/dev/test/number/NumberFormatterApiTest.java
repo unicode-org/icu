@@ -4251,7 +4251,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().sign(SignDisplay.ACCOUNTING).unit(USD).unitWidth(UnitWidth.FULL_NAME),
                 ULocale.CANADA,
                 -444444,
-                "-444,444.00 US dollars");
+                "-444,444.00 U.S. dollars");
     }
 
     @Test

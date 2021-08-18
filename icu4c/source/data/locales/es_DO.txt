@@ -20,7 +20,7 @@ es_DO{
                 "EEEE, d 'de' MMMM 'de' y G",
                 "d 'de' MMMM 'de' y G",
                 "dd/MM/y G",
-                "dd/MM/yy GGGGG",
+                "d/M/y GGGGG",
                 "{1} {0}",
                 "{1}, {0}",
                 "{1}, {0}",
@@ -52,7 +52,7 @@ es_DO{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
             }
             DateTimeSkeletons{
                 "ahmmsszzzz",

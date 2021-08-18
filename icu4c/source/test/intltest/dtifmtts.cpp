@@ -1728,7 +1728,7 @@ void DateIntervalFormatTest::testTicket11583_2() {
     DateInterval interval((UDate) 1232364615000.0, (UDate) 1328787015000.0);
     UnicodeString appendTo;
     FieldPosition fpos(FieldPosition::DONT_CARE);
-    UnicodeString expected("ene. de 2009 \\u2013 feb. de 2012");
+    UnicodeString expected("ene de 2009 \\u2013 feb de 2012");
     assertEquals(
             "",
             expected.unescape(),
@@ -2271,7 +2271,7 @@ void DateIntervalFormatTest::testTicket21222ROCEraDiff() {
 
     formatted = roc->formatToValue(beforeAfterMG, status);
     assertEquals("roc calendar - prior MG Era and in MG Era",
-                 u"民國前1年1月2日 上午6時 – 民國2年1月2日 上午6時",
+                 u"民國前1/1/2 上午6時 – 民國2/1/2 上午6時",
                  formatted.toString(status));
     verifyCategoryAndField(formatted, expectedCategory, expectedField, status);
 

@@ -128,7 +128,7 @@ yue{
             patternsLong{
                 decimalFormat{
                     1000{
-                        other{"0"}
+                        other{"0千"}
                     }
                     10000{
                         other{"0萬"}
@@ -168,7 +168,7 @@ yue{
             patternsShort{
                 currencyFormat{
                     1000{
-                        other{"0"}
+                        other{"¤0千"}
                     }
                     10000{
                         other{"¤0萬"}
@@ -206,7 +206,7 @@ yue{
                 }
                 decimalFormat{
                     1000{
-                        other{"0"}
+                        other{"0千"}
                     }
                     10000{
                         other{"0萬"}

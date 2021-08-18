@@ -10,6 +10,20 @@ bn{
     units{
         acceleration{
             g-force{
+                case{
+                    accusative{
+                        one{"{0} জি-বল"}
+                        other{"{0} জি-বল"}
+                    }
+                    genitive{
+                        one{"{0} জি-বল"}
+                        other{"{0} জি-বল"}
+                    }
+                    locative{
+                        one{"{0} জি-বল"}
+                        other{"{0} জি-বল"}
+                    }
+                }
                 dnam{"জি-বল"}
                 one{"{0} জি-বল"}
                 other{"{0} জি-বল"}
@@ -22,29 +36,99 @@ bn{
         }
         angle{
             arc-minute{
+                case{
+                    accusative{
+                        one{"{0} আর্ক-মিনিট"}
+                        other{"{0} আর্ক-মিনিট"}
+                    }
+                    genitive{
+                        one{"{0} আর্ক-মিনিট"}
+                        other{"{0} আর্ক-মিনিট"}
+                    }
+                    locative{
+                        one{"{0} আর্ক-মিনিট"}
+                        other{"{0} আর্ক-মিনিট"}
+                    }
+                }
                 dnam{"আর্ক-মিনিট"}
                 one{"{0} আর্ক-মিনিট"}
                 other{"{0} আর্ক-মিনিট"}
             }
             arc-second{
+                case{
+                    accusative{
+                        one{"{0} আর্কসেকেন্ড"}
+                        other{"{0} আর্কসেকেন্ড"}
+                    }
+                    genitive{
+                        one{"{0} আর্কসেকেন্ড"}
+                        other{"{0} আর্কসেকেন্ড"}
+                    }
+                    locative{
+                        one{"{0} আর্কসেকেন্ড"}
+                        other{"{0} আর্কসেকেন্ড"}
+                    }
+                }
                 dnam{"আর্কসেকেন্ড"}
                 one{"{0} আর্কসেকেন্ড"}
                 other{"{0} আর্কসেকেন্ড"}
             }
             degree{
+                case{
+                    accusative{
+                        one{"{0} ডিগ্রী"}
+                        other{"{0} ডিগ্রী"}
+                    }
+                    genitive{
+                        one{"{0} ডিগ্রী"}
+                        other{"{0} ডিগ্রী"}
+                    }
+                    locative{
+                        one{"{0} ডিগ্রী"}
+                        other{"{0} ডিগ্রী"}
+                    }
+                }
                 dnam{"ডিগ্রী"}
                 one{"{0} ডিগ্রী"}
                 other{"{0} ডিগ্রী"}
             }
             radian{
+                case{
+                    accusative{
+                        one{"{0} রেডিয়্যান"}
+                        other{"{0} রেডিয়্যান্স"}
+                    }
+                    genitive{
+                        one{"{0} রেডিয়্যান"}
+                        other{"{0} রেডিয়্যান্স"}
+                    }
+                    locative{
+                        one{"{0} রেডিয়্যান"}
+                        other{"{0} রেডিয়্যান্স"}
+                    }
+                }
                 dnam{"রেডিয়্যান"}
                 one{"{0} রেডিয়্যান"}
                 other{"{0} রেডিয়্যান্স"}
             }
             revolution{
+                case{
+                    accusative{
+                        one{"{0} ঘুর্ণন"}
+                        other{"{0} ঘুর্ণন"}
+                    }
+                    genitive{
+                        one{"{0} ঘুর্ণন"}
+                        other{"{0} ঘুর্ণন"}
+                    }
+                    locative{
+                        one{"{0} ঘুর্ণন"}
+                        other{"{0} ঘুর্ণন"}
+                    }
+                }
                 dnam{"ঘূর্ণন"}
-                one{"{0} রিভোলিউশন"}
-                other{"{0} ঘূর্ণন"}
+                one{"{0} ঘুর্ণন"}
+                other{"{0} ঘুর্ণন"}
             }
         }
         area{
@@ -59,6 +143,20 @@ bn{
                 other{"{0} দুনাম্স"}
             }
             hectare{
+                case{
+                    accusative{
+                        one{"{0} হেক্টর"}
+                        other{"{0} হেক্টর"}
+                    }
+                    genitive{
+                        one{"{0} হেক্টর"}
+                        other{"{0} হেক্টর"}
+                    }
+                    locative{
+                        one{"{0} হেক্টর"}
+                        other{"{0} হেক্টর"}
+                    }
+                }
                 dnam{"হেক্টর"}
                 one{"{0} হেক্টর"}
                 other{"{0} হেক্টর"}
@@ -153,7 +251,26 @@ bn{
             }
         }
         concentr{
+            item{
+                dnam{"আইটেম"}
+                one{"{0} আইটেম"}
+                other{"{0} আইটেম"}
+            }
             karat{
+                case{
+                    accusative{
+                        one{"{0} ক্যারেট"}
+                        other{"{0} ক্যারেট"}
+                    }
+                    genitive{
+                        one{"{0} ক্যারেট"}
+                        other{"{0} ক্যারেট"}
+                    }
+                    locative{
+                        one{"{0} ক্যারেট"}
+                        other{"{0} ক্যারেট"}
+                    }
+                }
                 dnam{"ক্যারেট"}
                 one{"{0} ক্যারেট"}
                 other{"{0} ক্যারেট"}
@@ -168,20 +285,99 @@ bn{
                 one{"{0} মিলিমোল, প্রতি লিটারে"}
                 other{"{0} মিলিমোল, প্রতি লিটারে"}
             }
+            mole{
+                case{
+                    accusative{
+                        one{"{0} মোল"}
+                        other{"{0} মোল্স"}
+                    }
+                    genitive{
+                        one{"{0} মোল"}
+                        other{"{0} মোল্স"}
+                    }
+                    locative{
+                        one{"{0} মোল"}
+                        other{"{0} মোল্স"}
+                    }
+                }
+                dnam{"মোল্স"}
+                one{"{0} মোল"}
+                other{"{0} মোল্স"}
+            }
             percent{
+                case{
+                    accusative{
+                        one{"{0}শতাংশ"}
+                        other{"{0}শতাংশ"}
+                    }
+                    genitive{
+                        one{"{0}শতাংশ"}
+                        other{"{0}শতাংশ"}
+                    }
+                    locative{
+                        one{"{0}শতাংশ"}
+                        other{"{0}শতাংশ"}
+                    }
+                }
                 dnam{"শতাংশ"}
                 one{"{0}শতাংশ"}
                 other{"{0}শতাংশ"}
             }
             permille{
+                case{
+                    accusative{
+                        one{"{0} প্রতিমাইল"}
+                        other{"{0}প্রতিমাইল"}
+                    }
+                    genitive{
+                        one{"{0} প্রতিমাইল"}
+                        other{"{0}প্রতিমাইল"}
+                    }
+                    locative{
+                        one{"{0} প্রতিমাইল"}
+                        other{"{0}প্রতিমাইল"}
+                    }
+                }
                 dnam{"প্রতিমাইল"}
                 one{"{0} প্রতিমাইল"}
                 other{"{0}প্রতিমাইল"}
             }
             permillion{
+                case{
+                    accusative{
+                        one{"{0} ভাগ, প্রতি মিলিয়নে"}
+                        other{"{0} ভাগ, প্রতি মিলিয়নে"}
+                    }
+                    genitive{
+                        one{"{0} ভাগ, প্রতি মিলিয়নে"}
+                        other{"{0} ভাগ, প্রতি মিলিয়নে"}
+                    }
+                    locative{
+                        one{"{0} ভাগ, প্রতি মিলিয়নে"}
+                        other{"{0} ভাগ, প্রতি মিলিয়নে"}
+                    }
+                }
                 dnam{"ভাগ, প্রতি মিলিয়নে"}
                 one{"{0} ভাগ, প্রতি মিলিয়নে"}
                 other{"{0} ভাগ, প্রতি মিলিয়নে"}
+            }
+            permyriad{
+                case{
+                    accusative{
+                        one{"{0} পারমিরিয়াড"}
+                        other{"{0} পারমিরিয়াড"}
+                    }
+                    genitive{
+                        one{"{0} পারমিরিয়াড"}
+                        other{"{0} পারমিরিয়াড"}
+                    }
+                    locative{
+                        one{"{0} পারমিরিয়াড"}
+                        other{"{0} পারমিরিয়াড"}
+                    }
+                }
+                one{"{0} পারমিরিয়াড"}
+                other{"{0} পারমিরিয়াড"}
             }
         }
         consumption{
@@ -215,11 +411,39 @@ bn{
         }
         digital{
             bit{
+                case{
+                    accusative{
+                        one{"{0} বিট"}
+                        other{"{0} বিট"}
+                    }
+                    genitive{
+                        one{"{0} বিট"}
+                        other{"{0} বিট"}
+                    }
+                    locative{
+                        one{"{0} বিট"}
+                        other{"{0} বিট"}
+                    }
+                }
                 dnam{"বিট"}
                 one{"{0} বিট"}
                 other{"{0} বিট"}
             }
             byte{
+                case{
+                    accusative{
+                        one{"{0} বাইট"}
+                        other{"{0} বাইট"}
+                    }
+                    genitive{
+                        one{"{0} বাইট"}
+                        other{"{0} বাইট"}
+                    }
+                    locative{
+                        one{"{0} বাইট"}
+                        other{"{0} বাইট"}
+                    }
+                }
                 dnam{"বাইট"}
                 one{"{0} বাইট"}
                 other{"{0} বাইট"}
@@ -272,22 +496,96 @@ bn{
         }
         duration{
             century{
+                case{
+                    accusative{
+                        one{"{0} শতাব্দী"}
+                        other{"{0} শতাব্দী"}
+                    }
+                    genitive{
+                        one{"{0} শতাব্দী"}
+                        other{"{0} শতাব্দী"}
+                    }
+                    locative{
+                        one{"{0} শতাব্দী"}
+                        other{"{0} শতাব্দী"}
+                    }
+                }
                 dnam{"শতাব্দী"}
                 one{"{0} শতাব্দী"}
                 other{"{0} শতাব্দী"}
             }
             day{
+                case{
+                    accusative{
+                        one{"{0} দিন"}
+                        other{"{0} দিন"}
+                    }
+                    genitive{
+                        one{"{0} দিন"}
+                        other{"{0} দিন"}
+                    }
+                    locative{
+                        one{"{0} দিন"}
+                        other{"{0} দিন"}
+                    }
+                }
                 dnam{"দিন"}
                 one{"{0} দিন"}
                 other{"{0} দিন"}
                 per{"{0} প্রতি দিন"}
             }
+            day-person{
+                case{
+                    accusative{
+                        one{"{0} দিন"}
+                        other{"{0} দিন"}
+                    }
+                    genitive{
+                        one{"{0} দিন"}
+                        other{"{0} দিন"}
+                    }
+                    locative{
+                        one{"{0} দিন"}
+                        other{"{0} দিন"}
+                    }
+                }
+                one{"{0} দিন"}
+                other{"{0} দিন"}
+            }
             decade{
+                case{
+                    accusative{
+                        one{"{0} দশক"}
+                        other{"{0} দশক"}
+                    }
+                    genitive{
+                        one{"{0} দশক"}
+                        other{"{0} দশক"}
+                    }
+                    locative{
+                        one{"{0} দশক"}
+                        other{"{0} দশক"}
+                    }
+                }
                 dnam{"দশক"}
                 one{"{0} দশক"}
                 other{"{0} দশক"}
             }
             hour{
+                case{
+                    accusative{
+                        one{"{0} ঘন্টা"}
+                        other{"{0} ঘন্টা"}
+                    }
+                    genitive{
+                        one{"{0} ঘন্টা"}
+                        other{"{0} ঘন্টা"}
+                    }
+                    locative{
+                        one{"{0} ঘন্টা"}
+                        other{"{0} ঘন্টা"}
+                    }
+                }
                 dnam{"ঘন্টা"}
                 one{"{0} ঘন্টা"}
                 other{"{0} ঘন্টা"}
@@ -304,12 +602,40 @@ bn{
                 other{"{0} মিলিসেকেন্ড"}
             }
             minute{
+                case{
+                    accusative{
+                        one{"{0} মিনিট"}
+                        other{"{0} মিনিট"}
+                    }
+                    genitive{
+                        one{"{0} মিনিট"}
+                        other{"{0} মিনিট"}
+                    }
+                    locative{
+                        one{"{0} মিনিট"}
+                        other{"{0} মিনিট"}
+                    }
+                }
                 dnam{"মিনিট"}
                 one{"{0} মিনিট"}
                 other{"{0} মিনিট"}
                 per{"{0} প্রতি মিনিট"}
             }
             month{
+                case{
+                    accusative{
+                        one{"{0} মাস"}
+                        other{"{0} মাস"}
+                    }
+                    genitive{
+                        one{"{0} মাস"}
+                        other{"{0} মাস"}
+                    }
+                    locative{
+                        one{"{0} মাস"}
+                        other{"{0} মাস"}
+                    }
+                }
                 dnam{"মাস"}
                 one{"{0} মাস"}
                 other{"{0} মাস"}
@@ -321,18 +647,60 @@ bn{
                 other{"{0} ন্যানোসেকেন্ড"}
             }
             second{
+                case{
+                    accusative{
+                        one{"{0} সেকেন্ড"}
+                        other{"{0} সেকেন্ড"}
+                    }
+                    genitive{
+                        one{"{0} সেকেন্ড"}
+                        other{"{0} সেকেন্ড"}
+                    }
+                    locative{
+                        one{"{0} সেকেন্ড"}
+                        other{"{0} সেকেন্ড"}
+                    }
+                }
                 dnam{"সেকেন্ড"}
                 one{"{0} সেকেন্ড"}
                 other{"{0} সেকেন্ড"}
                 per{"{0} প্রতি সেকেন্ড"}
             }
             week{
+                case{
+                    accusative{
+                        one{"{0} সপ্তাহ"}
+                        other{"{0} সপ্তাহ"}
+                    }
+                    genitive{
+                        one{"{0} সপ্তাহ"}
+                        other{"{0} সপ্তাহ"}
+                    }
+                    locative{
+                        one{"{0} সপ্তাহ"}
+                        other{"{0} সপ্তাহ"}
+                    }
+                }
                 dnam{"সপ্তাহ"}
                 one{"{0} সপ্তাহ"}
                 other{"{0} সপ্তাহ"}
                 per{"{0} প্রতি সপ্তাহ"}
             }
             year{
+                case{
+                    accusative{
+                        one{"{0} বছর"}
+                        other{"{0} বছর"}
+                    }
+                    genitive{
+                        one{"{0} বছর"}
+                        other{"{0} বছর"}
+                    }
+                    locative{
+                        one{"{0} বছর"}
+                        other{"{0} বছর"}
+                    }
+                }
                 dnam{"বছর"}
                 one{"{0} বছর"}
                 other{"{0} বছর"}
@@ -341,6 +709,20 @@ bn{
         }
         electric{
             ampere{
+                case{
+                    accusative{
+                        one{"{0} অ্যাম্পিয়ার"}
+                        other{"{0} অ্যাম্পিয়ার"}
+                    }
+                    genitive{
+                        one{"{0} অ্যাম্পিয়ার"}
+                        other{"{0} অ্যাম্পিয়ার"}
+                    }
+                    locative{
+                        one{"{0} অ্যাম্পিয়ার"}
+                        other{"{0} অ্যাম্পিয়ার"}
+                    }
+                }
                 dnam{"অ্যাম্পিয়ার"}
                 one{"{0} অ্যাম্পিয়ার"}
                 other{"{0} অ্যাম্পিয়ার"}
@@ -351,11 +733,39 @@ bn{
                 other{"{0} মিলি-অ্যাম্পিয়ার"}
             }
             ohm{
+                case{
+                    accusative{
+                        one{"{0} ওহম"}
+                        other{"{0} ওহম"}
+                    }
+                    genitive{
+                        one{"{0} ওহম"}
+                        other{"{0} ওহম"}
+                    }
+                    locative{
+                        one{"{0} ওহম"}
+                        other{"{0} ওহম"}
+                    }
+                }
                 dnam{"ওহম"}
                 one{"{0} ওহম"}
                 other{"{0} ওহম"}
             }
             volt{
+                case{
+                    accusative{
+                        one{"{0} ভোল্ট"}
+                        other{"{0} ভোল্ট"}
+                    }
+                    genitive{
+                        one{"{0} ভোল্ট"}
+                        other{"{0} ভোল্ট"}
+                    }
+                    locative{
+                        one{"{0} ভোল্ট"}
+                        other{"{0} ভোল্ট"}
+                    }
+                }
                 dnam{"ভোল্ট"}
                 one{"{0} ভোল্ট"}
                 other{"{0} ভোল্ট"}
@@ -368,6 +778,20 @@ bn{
                 other{"{0} ব্রিটিশ থার্মাল ইউনিট"}
             }
             calorie{
+                case{
+                    accusative{
+                        one{"{0} ক্যালোরি"}
+                        other{"{0} ক্যালোরি"}
+                    }
+                    genitive{
+                        one{"{0} ক্যালোরি"}
+                        other{"{0} ক্যালোরি"}
+                    }
+                    locative{
+                        one{"{0} ক্যালোরি"}
+                        other{"{0} ক্যালোরি"}
+                    }
+                }
                 dnam{"ক্যালোরি"}
                 one{"{0} ক্যালোরি"}
                 other{"{0} ক্যালোরি"}
@@ -383,6 +807,20 @@ bn{
                 other{"{0} ক্যালোরি"}
             }
             joule{
+                case{
+                    accusative{
+                        one{"{0} জুল"}
+                        other{"{0} জুল"}
+                    }
+                    genitive{
+                        one{"{0} জুল"}
+                        other{"{0} জুল"}
+                    }
+                    locative{
+                        one{"{0} জুল"}
+                        other{"{0} জুল"}
+                    }
+                }
                 dnam{"জুল"}
                 one{"{0} জুল"}
                 other{"{0} জুল"}
@@ -409,7 +847,26 @@ bn{
             }
         }
         force{
+            kilowatt-hour-per-100-kilometer{
+                dnam{"কিলোওয়াট-ঘণ্টা প্রতি 100 কিলোমিটার"}
+                one{"{0} কিলোওয়াট-ঘণ্টা প্রতি 100 কিলোমিটার"}
+                other{"{0} কিলোওয়াট-ঘণ্টা প্রতি 100 কিলোমিটার"}
+            }
             newton{
+                case{
+                    accusative{
+                        one{"{0} নিউটন"}
+                        other{"{0} নিউটন্স"}
+                    }
+                    genitive{
+                        one{"{0} নিউটন"}
+                        other{"{0} নিউটন্স"}
+                    }
+                    locative{
+                        one{"{0} নিউটন"}
+                        other{"{0} নিউটন্স"}
+                    }
+                }
                 dnam{"নিউটন্স"}
                 one{"{0} নিউটন"}
                 other{"{0} নিউটন্স"}
@@ -422,6 +879,20 @@ bn{
                 other{"{0} গিগাহার্জ"}
             }
             hertz{
+                case{
+                    accusative{
+                        one{"{0} হার্জ"}
+                        other{"{0} হার্জ"}
+                    }
+                    genitive{
+                        one{"{0} হার্জ"}
+                        other{"{0} হার্জ"}
+                    }
+                    locative{
+                        one{"{0} হার্জ"}
+                        other{"{0} হার্জ"}
+                    }
+                }
                 dnam{"হার্জ"}
                 one{"{0} হার্জ"}
                 other{"{0} হার্জ"}
@@ -438,6 +909,11 @@ bn{
             }
         }
         graphics{
+            dot{
+                dnam{"ডট"}
+                one{"{0} ডট"}
+                other{"{0} ডট"}
+            }
             dot-per-centimeter{
                 dnam{"সেন্টিমিটার প্রতি বিন্দু"}
                 one{"সেন্টিমিটার প্রতি {0} বিন্দু"}
@@ -449,7 +925,23 @@ bn{
                 other{"ইঞ্চি প্রতি {0} বিন্দু"}
             }
             em{
+                case{
+                    accusative{
+                        one{"{0} em"}
+                        other{"{0} ems"}
+                    }
+                    genitive{
+                        one{"{0} em"}
+                        other{"{0} ems"}
+                    }
+                    locative{
+                        one{"{0} em"}
+                        other{"{0} ems"}
+                    }
+                }
                 dnam{"টাইপোগ্রাফিক em"}
+                one{"{0} em"}
+                other{"{0} ems"}
             }
             megapixel{
                 dnam{"মেগাপিক্সেল"}
@@ -457,6 +949,20 @@ bn{
                 other{"{0} মেগাপিক্সেল"}
             }
             pixel{
+                case{
+                    accusative{
+                        one{"{0} পিক্সেল"}
+                        other{"{0} পিক্সেল"}
+                    }
+                    genitive{
+                        one{"{0} পিক্সেল"}
+                        other{"{0} পিক্সেল"}
+                    }
+                    locative{
+                        one{"{0} পিক্সেল"}
+                        other{"{0} পিক্সেল"}
+                    }
+                }
                 dnam{"পিক্সেল"}
                 one{"{0} পিক্সেল"}
                 other{"{0} পিক্সেল"}
@@ -488,6 +994,11 @@ bn{
                 dnam{"ডেসিমিটার"}
                 one{"{0} ডেসিমিটার"}
                 other{"{0} ডেসিমিটার"}
+            }
+            earth-radius{
+                dnam{"পৃথিবীর ব্যাসার্ধ"}
+                one{"{0} পৃথিবীর ব্যাসার্ধ"}
+                other{"{0} পৃথিবীর ব্যাসার্ধ"}
             }
             fathom{
                 dnam{"fm"}
@@ -523,6 +1034,20 @@ bn{
                 other{"{0} আলোকবর্ষ"}
             }
             meter{
+                case{
+                    accusative{
+                        one{"{0} মিটার"}
+                        other{"{0} মিটার"}
+                    }
+                    genitive{
+                        one{"{0} মিটার"}
+                        other{"{0} মিটার"}
+                    }
+                    locative{
+                        one{"{0} মিটার"}
+                        other{"{0} মিটার"}
+                    }
+                }
                 dnam{"মিটার"}
                 one{"{0} মিটার"}
                 other{"{0} মিটার"}
@@ -539,6 +1064,20 @@ bn{
                 other{"{0} মাইল"}
             }
             mile-scandinavian{
+                case{
+                    accusative{
+                        one{"{0} মাইল-স্ক্যান্ডিনেভিয়ান"}
+                        other{"{0} মাইল-স্ক্যান্ডিনেভিয়ান"}
+                    }
+                    genitive{
+                        one{"{0} মাইল-স্ক্যান্ডিনেভিয়ান"}
+                        other{"{0} মাইল-স্ক্যান্ডিনেভিয়ান"}
+                    }
+                    locative{
+                        one{"{0} মাইল-স্ক্যান্ডিনেভিয়ান"}
+                        other{"{0} মাইল-স্ক্যান্ডিনেভিয়ান"}
+                    }
+                }
                 dnam{"মাইল-স্ক্যান্ডিনেভিয়ান"}
                 one{"{0} মাইল-স্ক্যান্ডিনেভিয়ান"}
                 other{"{0} মাইল-স্ক্যান্ডিনেভিয়ান"}
@@ -586,23 +1125,84 @@ bn{
         }
         light{
             candela{
+                case{
+                    accusative{
+                        one{"{0} ক্যান্ডেলা"}
+                        other{"{0} ক্যান্ডেলা"}
+                    }
+                    genitive{
+                        one{"{0} ক্যান্ডেলা"}
+                        other{"{0} ক্যান্ডেলা"}
+                    }
+                    locative{
+                        one{"{0} ক্যান্ডেলা"}
+                        other{"{0} ক্যান্ডেলা"}
+                    }
+                }
                 dnam{"ক্যান্ডেলা"}
                 one{"{0} ক্যান্ডেলা"}
                 other{"{0} ক্যান্ডেলা"}
             }
             lumen{
+                case{
+                    accusative{
+                        one{"{0} লুমেন"}
+                        other{"{0} লুমেন"}
+                    }
+                    genitive{
+                        one{"{0} লুমেন"}
+                        other{"{0} লুমেন"}
+                    }
+                    locative{
+                        one{"{0} লুমেন"}
+                        other{"{0} লুমেন"}
+                    }
+                }
                 dnam{"লুমেন"}
                 one{"{0} লুমেন"}
                 other{"{0} লুমেন"}
             }
             lux{
+                case{
+                    accusative{
+                        one{"{0} লাক্স"}
+                        other{"{0} লাক্স"}
+                    }
+                    genitive{
+                        one{"{0} লাক্স"}
+                        other{"{0} লাক্স"}
+                    }
+                    locative{
+                        one{"{0} লাক্স"}
+                        other{"{0} লাক্স"}
+                    }
+                }
                 dnam{"লাক্স"}
                 one{"{0} লাক্স"}
                 other{"{0} লাক্স"}
             }
+            solar-luminosity{
+                dnam{"সৌর ঔজ্জ্বল্য"}
+                one{"{0} সৌর ঔজ্জ্বল্য"}
+                other{"{0} সৌর ঔজ্জ্বল্যতাগুলি"}
+            }
         }
         mass{
             carat{
+                case{
+                    accusative{
+                        one{"{0} ক্যারেট"}
+                        other{"{0} ক্যারেট"}
+                    }
+                    genitive{
+                        one{"{0} ক্যারেট"}
+                        other{"{0} ক্যারেট"}
+                    }
+                    locative{
+                        one{"{0} ক্যারেট"}
+                        other{"{0} ক্যারেট"}
+                    }
+                }
                 dnam{"ক্যারেট"}
                 one{"{0} ক্যারেট"}
                 other{"{0} ক্যারেট"}
@@ -612,19 +1212,66 @@ bn{
                 one{"{0} ড্যালটন্স"}
                 other{"{0} ড্যালটন্স"}
             }
+            earth-mass{
+                dnam{"পৃথিবীর ভর"}
+                one{"{0} পৃথিবীর ভর"}
+                other{"{0} পৃথিবীর ভর"}
+            }
             gram{
+                case{
+                    accusative{
+                        one{"{0} গ্রাম"}
+                        other{"{0} গ্রাম"}
+                    }
+                    genitive{
+                        one{"{0} গ্রাম"}
+                        other{"{0} গ্রাম"}
+                    }
+                    locative{
+                        one{"{0} গ্রাম"}
+                        other{"{0} গ্রাম"}
+                    }
+                }
                 dnam{"গ্রাম"}
                 one{"{0} গ্রাম"}
                 other{"{0} গ্রাম"}
                 per{"{0} প্রতি গ্রাম"}
             }
             kilogram{
+                case{
+                    accusative{
+                        one{"{0} কিলোগ্রাম"}
+                        other{"{0} কিলোগ্রাম"}
+                    }
+                    genitive{
+                        one{"{0} কিলোগ্রাম"}
+                        other{"{0} কিলোগ্রাম"}
+                    }
+                    locative{
+                        one{"{0} কিলোগ্রাম"}
+                        other{"{0} কিলোগ্রাম"}
+                    }
+                }
                 dnam{"কিলোগ্রাম"}
                 one{"{0} কিলোগ্রাম"}
                 other{"{0} কিলোগ্রাম"}
                 per{"{0} প্রতি কিলোগ্রাম"}
             }
             metric-ton{
+                case{
+                    accusative{
+                        one{"{0} মেট্রিক টন"}
+                        other{"{0} মেট্রিক টন"}
+                    }
+                    genitive{
+                        one{"{0} মেট্রিক টন"}
+                        other{"{0} মেট্রিক টন"}
+                    }
+                    locative{
+                        one{"{0} মেট্রিক টন"}
+                        other{"{0} মেট্রিক টন"}
+                    }
+                }
                 dnam{"মেট্রিক টন"}
                 one{"{0} মেট্রিক টন"}
                 other{"{0} মেট্রিক টন"}
@@ -655,6 +1302,11 @@ bn{
                 one{"{0} পাউন্ড"}
                 other{"{0} পাউন্ড"}
                 per{"{0} প্রতি পাউন্ড"}
+            }
+            solar-mass{
+                dnam{"সৌর ভর"}
+                one{"{0} M☉"}
+                other{"{0} সৌর ভর"}
             }
             stone{
                 dnam{"st"}
@@ -694,6 +1346,20 @@ bn{
                 other{"{0} মিলিওয়াট"}
             }
             watt{
+                case{
+                    accusative{
+                        one{"{0} ওয়াট"}
+                        other{"{0} ওয়াট"}
+                    }
+                    genitive{
+                        one{"{0} ওয়াট"}
+                        other{"{0} ওয়াট"}
+                    }
+                    locative{
+                        one{"{0} ওয়াট"}
+                        other{"{0} ওয়াট"}
+                    }
+                }
                 dnam{"ওয়াট"}
                 one{"{0} ওয়াট"}
                 other{"{0} ওয়াট"}
@@ -701,11 +1367,39 @@ bn{
         }
         pressure{
             atmosphere{
+                case{
+                    accusative{
+                        one{"{0} atm"}
+                        other{"{0} atm"}
+                    }
+                    genitive{
+                        one{"{0} atm"}
+                        other{"{0} atm"}
+                    }
+                    locative{
+                        one{"{0} atm"}
+                        other{"{0} atm"}
+                    }
+                }
                 dnam{"atm"}
                 one{"{0} atm"}
                 other{"{0} atm"}
             }
             bar{
+                case{
+                    accusative{
+                        one{"{0} বার"}
+                        other{"{0} বার"}
+                    }
+                    genitive{
+                        one{"{0} বার"}
+                        other{"{0} বার"}
+                    }
+                    locative{
+                        one{"{0} বার"}
+                        other{"{0} বার"}
+                    }
+                }
                 dnam{"বার"}
                 one{"{0} বার"}
                 other{"{0} বার"}
@@ -741,6 +1435,20 @@ bn{
                 other{"{0} মিলিমিটার পারদ"}
             }
             pascal{
+                case{
+                    accusative{
+                        one{"{0} প্যাসকেল"}
+                        other{"{0} প্যাসকেল"}
+                    }
+                    genitive{
+                        one{"{0} প্যাসকেল"}
+                        other{"{0} প্যাসকেল"}
+                    }
+                    locative{
+                        one{"{0} প্যাসকেল"}
+                        other{"{0} প্যাসকেল"}
+                    }
+                }
                 dnam{"প্যাসকেল"}
                 one{"{0} প্যাসকেল"}
                 other{"{0} প্যাসকেল"}
@@ -775,6 +1483,20 @@ bn{
         }
         temperature{
             celsius{
+                case{
+                    accusative{
+                        one{"{0} ডিগ্রী সেলসিয়াস"}
+                        other{"{0} ডিগ্রী সেলসিয়াস"}
+                    }
+                    genitive{
+                        one{"{0} ডিগ্রী সেলসিয়াস"}
+                        other{"{0} ডিগ্রী সেলসিয়াস"}
+                    }
+                    locative{
+                        one{"{0} ডিগ্রী সেলসিয়াস"}
+                        other{"{0} ডিগ্রী সেলসিয়াস"}
+                    }
+                }
                 dnam{"ডিগ্রী সেলসিয়াস"}
                 one{"{0} ডিগ্রী সেলসিয়াস"}
                 other{"{0} ডিগ্রী সেলসিয়াস"}
@@ -785,11 +1507,39 @@ bn{
                 other{"{0} ডিগ্রী ফারেনহাইট"}
             }
             generic{
+                case{
+                    accusative{
+                        one{"{0}°"}
+                        other{"{0}°"}
+                    }
+                    genitive{
+                        one{"{0}°"}
+                        other{"{0}°"}
+                    }
+                    locative{
+                        one{"{0}°"}
+                        other{"{0}°"}
+                    }
+                }
                 dnam{"°"}
                 one{"{0}°"}
                 other{"{0}°"}
             }
             kelvin{
+                case{
+                    accusative{
+                        one{"{0} কেলভিন"}
+                        other{"{0} কেলভিন"}
+                    }
+                    genitive{
+                        one{"{0} কেলভিন"}
+                        other{"{0} কেলভিন"}
+                    }
+                    locative{
+                        one{"{0} কেলভিন"}
+                        other{"{0} কেলভিন"}
+                    }
+                }
                 dnam{"কেলভিন"}
                 one{"{0} কেলভিন"}
                 other{"{0} কেলভিন"}
@@ -803,7 +1553,7 @@ bn{
             }
             pound-force-foot{
                 dnam{"পাউন্ড-ফিট"}
-                one{"{0} lbf⋅ft"}
+                one{"{0} পাউন্ড-ফোর্স-ফিট"}
                 other{"{0} পাউন্ড-ফিট"}
             }
         }
@@ -817,6 +1567,11 @@ bn{
                 dnam{"ব্যারেল"}
                 one{"{0} ব্য়ারেল"}
                 other{"{0} ব্যারেল"}
+            }
+            bushel{
+                dnam{"বুশেল"}
+                one{"{0} বুশেল"}
+                other{"{0} বুশেল"}
             }
             centiliter{
                 dnam{"সেন্টিলিটার"}
@@ -866,6 +1621,20 @@ bn{
                 other{"{0} কাপ"}
             }
             cup-metric{
+                case{
+                    accusative{
+                        one{"{0} মেট্রিক কাপ"}
+                        other{"{0} মেট্রিক কাপ"}
+                    }
+                    genitive{
+                        one{"{0} মেট্রিক কাপ"}
+                        other{"{0} মেট্রিক কাপ"}
+                    }
+                    locative{
+                        one{"{0} মেট্রিক কাপ"}
+                        other{"{0} মেট্রিক কাপ"}
+                    }
+                }
                 dnam{"মেট্রিক কাপ"}
                 one{"{0} মেট্রিক কাপ"}
                 other{"{0} মেট্রিক কাপ"}
@@ -874,6 +1643,25 @@ bn{
                 dnam{"ডেসিলিটার"}
                 one{"{0} ডেসিলিটার"}
                 other{"{0} ডেসিলিটার"}
+            }
+            dessert-spoon{
+                dnam{"ডেসার্ট চামচ"}
+                one{"{0} ডেসার্ট চামচ"}
+                other{"{0} ডেসার্ট চামচ"}
+            }
+            dessert-spoon-imperial{
+                dnam{"ইম্পেরিয়েল ডেসার্ট চামচ"}
+                one{"{0} ইম্পেরিয়েল ডেসার্ট চামচ"}
+                other{"{0} ইম্পেরিয়েল ডেসার্ট চামচ"}
+            }
+            dram{
+                dnam{"ড্র্যাম"}
+                one{"{0} ড্র্যাম"}
+                other{"{0} ড্র্য়াম"}
+            }
+            drop{
+                one{"{0} ফোঁটা"}
+                other{"{0} ফোঁটা"}
             }
             fluid-ounce{
                 dnam{"ফ্লুইড আউন্স"}
@@ -901,7 +1689,25 @@ bn{
                 one{"{0} হেক্টোলিটার"}
                 other{"{0} হেক্টোলিটার"}
             }
+            jigger{
+                one{"{0} জিগার"}
+                other{"{0} জিগার"}
+            }
             liter{
+                case{
+                    accusative{
+                        one{"{0} লিটার"}
+                        other{"{0} লিটার"}
+                    }
+                    genitive{
+                        one{"{0} লিটার"}
+                        other{"{0} লিটার"}
+                    }
+                    locative{
+                        one{"{0} লিটার"}
+                        other{"{0} লিটার"}
+                    }
+                }
                 dnam{"লিটার"}
                 one{"{0} লিটার"}
                 other{"{0} লিটার"}
@@ -928,6 +1734,20 @@ bn{
                 other{"{0} পিন্ট"}
             }
             pint-metric{
+                case{
+                    accusative{
+                        one{"{0} মেট্রিক পিন্ট"}
+                        other{"{0} মেট্রিক পিন্ট"}
+                    }
+                    genitive{
+                        one{"{0} মেট্রিক পিন্ট"}
+                        other{"{0} মেট্রিক পিন্ট"}
+                    }
+                    locative{
+                        one{"{0} মেট্রিক পিন্ট"}
+                        other{"{0} মেট্রিক পিন্ট"}
+                    }
+                }
                 dnam{"মেট্রিক পিন্ট"}
                 one{"{0} মেট্রিক পিন্ট"}
                 other{"{0} মেট্রিক পিন্ট"}
@@ -936,6 +1756,11 @@ bn{
                 dnam{"কোয়ার্ট"}
                 one{"{0} কোয়ার্ট"}
                 other{"{0} কোয়ার্ট"}
+            }
+            quart-imperial{
+                dnam{"Imp. quart"}
+                one{"{0} Imp. quart"}
+                other{"{0} Imp. quart"}
             }
             tablespoon{
                 dnam{"টেবিল-চামচ"}
@@ -975,6 +1800,9 @@ bn{
                 one{"{0}ডিগ্রী"}
                 other{"{0}ডিগ্রী"}
             }
+            revolution{
+                dnam{"ঘুর্ণন"}
+            }
         }
         area{
             acre{
@@ -994,7 +1822,7 @@ bn{
                 other{"{0} বর্গ কিমি"}
             }
             square-meter{
-                one{"{0} m²"}
+                one{"{0}m²"}
                 other{"{0} m²"}
             }
             square-mile{
@@ -1052,10 +1880,22 @@ bn{
             }
         }
         concentr{
+            item{
+                dnam{"আইটেম"}
+                one{"{0} আইটেম"}
+                other{"{0} আইটেম"}
+            }
+            mole{
+                one{"{0} মোল"}
+                other{"{0} মোল"}
+            }
             percent{
                 dnam{"শতাংশ"}
                 one{"{0}%"}
                 other{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
             }
         }
         consumption{
@@ -1063,6 +1903,11 @@ bn{
                 dnam{"লি/100কিমি"}
                 one{"{0} লি/100কিমি"}
                 other{"{0} লি/100কিমি"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mpg UK"}
+                one{"{0}m/gUK"}
+                other{"{0}m/gUK"}
             }
         }
         coordinate{
@@ -1136,6 +1981,33 @@ bn{
                 per{"{0}/বছর"}
             }
         }
+        force{
+            kilowatt-hour-per-100-kilometer{
+                one{"{0}kWh/100km"}
+                other{"{0}kWh/100km"}
+            }
+        }
+        graphics{
+            dot{
+                dnam{"ডট"}
+                one{"{0}ডট"}
+                other{"{0}ডট"}
+            }
+            dot-per-centimeter{
+                dnam{"dpcm"}
+                one{"{0}dpcm"}
+                other{"{0}dpcm"}
+            }
+            dot-per-inch{
+                dnam{"dpi"}
+                one{"{0}dpi"}
+                other{"{0}dpi"}
+            }
+            pixel{
+                one{"{0} পিক্সেল"}
+                other{"{0} পিক্সেল"}
+            }
+        }
         length{
             astronomical-unit{
                 dnam{"au"}
@@ -1193,6 +2065,7 @@ bn{
                 per{"{0}/মি"}
             }
             micrometer{
+                dnam{"μm"}
                 one{"{0} μm"}
                 other{"{0} μm"}
             }
@@ -1235,6 +2108,9 @@ bn{
                 dnam{"pts"}
                 one{"{0} pt"}
                 other{"{0} pt"}
+            }
+            solar-radius{
+                dnam{"R☉"}
             }
             yard{
                 dnam{"গজ"}
@@ -1389,6 +2265,12 @@ bn{
             }
         }
         volume{
+            acre-foot{
+                dnam{"acre ft"}
+            }
+            barrel{
+                dnam{"bbl"}
+            }
             cubic-kilometer{
                 one{"{0}km³"}
                 other{"{0}km³"}
@@ -1397,10 +2279,50 @@ bn{
                 one{"{0}mi³"}
                 other{"{0}mi³"}
             }
+            dessert-spoon{
+                dnam{"dsp"}
+                one{"{0}dsp"}
+                other{"{0}dsp"}
+            }
+            dessert-spoon-imperial{
+                dnam{"dsp Imp"}
+                one{"{0}dsp-Imp"}
+                other{"{0}dsp-Imp"}
+            }
+            dram{
+                dnam{"fl.dr."}
+                one{"{0}fl.dr."}
+                other{"{0}fl.dr."}
+            }
+            drop{
+                dnam{"dr"}
+                one{"{0}dr"}
+                other{"{0}dr"}
+            }
+            fluid-ounce-imperial{
+                one{"{0}fl oz Im"}
+                other{"{0}fl oz Im"}
+            }
+            gallon{
+                per{"{0}/gal"}
+            }
+            gallon-imperial{
+                one{"{0}galIm"}
+                other{"{0}galIm"}
+                per{"{0}/galIm"}
+            }
+            jigger{
+                dnam{"জিগার"}
+                one{"{0} জিগার"}
+                other{"{0} জিগার"}
+            }
             liter{
                 dnam{"লিটার"}
                 one{"{0} লিটার"}
                 other{"{0} লিটার"}
+            }
+            pint-metric{
+                dnam{"pt"}
             }
         }
     }
@@ -1550,6 +2472,11 @@ bn{
             }
         }
         concentr{
+            item{
+                dnam{"আইটেম"}
+                one{"{0} আইটেম"}
+                other{"{0} আইটেম"}
+            }
             karat{
                 dnam{"ক্যারেট"}
                 one{"{0} kt"}
@@ -1565,6 +2492,11 @@ bn{
                 one{"{0} mmol/L"}
                 other{"{0} mmol/L"}
             }
+            mole{
+                dnam{"মোল"}
+                one{"{0} মোল"}
+                other{"{0} মোল"}
+            }
             percent{
                 dnam{"শতাংশ"}
                 one{"{0}%"}
@@ -1579,6 +2511,9 @@ bn{
                 dnam{"ppm"}
                 one{"{0} ppm"}
                 other{"{0} ppm"}
+            }
+            permyriad{
+                dnam{"পারমিরিয়াড"}
             }
         }
         consumption{
@@ -1826,6 +2761,16 @@ bn{
             }
         }
         graphics{
+            dot-per-centimeter{
+                dnam{"dpcm"}
+                one{"{0} dpcm"}
+                other{"{0} dpcm"}
+            }
+            dot-per-inch{
+                dnam{"dpi"}
+                one{"{0} dpi"}
+                other{"{0} dpi"}
+            }
             megapixel{
                 dnam{"মেগাপিক্সেল"}
             }
@@ -1952,6 +2897,9 @@ bn{
                 one{"{0} lx"}
                 other{"{0} lx"}
             }
+            solar-luminosity{
+                dnam{"সৌর ঔজ্জ্বল্য"}
+            }
         }
         mass{
             carat{
@@ -1961,6 +2909,9 @@ bn{
             }
             dalton{
                 dnam{"ড্যালটন্স"}
+            }
+            earth-mass{
+                dnam{"পৃথিবীর ভর"}
             }
             gram{
                 dnam{"গ্রাম"}
@@ -2005,6 +2956,9 @@ bn{
                 one{"{0} পাউন্ড"}
                 other{"{0} lb"}
                 per{"{0}/lb"}
+            }
+            solar-mass{
+                dnam{"সৌর ভর"}
             }
             stone{
                 dnam{"st"}
@@ -2196,6 +3150,14 @@ bn{
                 one{"{0} dL"}
                 other{"{0} dL"}
             }
+            dram{
+                dnam{"ড্র্যাম ফ্লুইড"}
+            }
+            drop{
+                dnam{"ফোঁটা"}
+                one{"{0} ফোঁটা"}
+                other{"{0} ফোঁটা"}
+            }
             fluid-ounce{
                 dnam{"fl oz"}
                 one{"{0} fl oz"}
@@ -2221,6 +3183,11 @@ bn{
                 one{"{0} hL"}
                 other{"{0} hL"}
             }
+            jigger{
+                dnam{"জিগার"}
+                one{"{0} জিগার"}
+                other{"{0} জিগার"}
+            }
             liter{
                 dnam{"লিটার"}
                 one{"{0} লিটার"}
@@ -2243,7 +3210,7 @@ bn{
                 other{"{0} চিমটে"}
             }
             pint{
-                dnam{"pt"}
+                dnam{"পিন্ট"}
                 one{"{0} pt"}
                 other{"{0} pt"}
             }

@@ -4300,7 +4300,7 @@ void NumberFormatterApiTest::sign() {
                 .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
             Locale::getCanada(),
             -444444,
-            u"-444,444.00 US dollars");
+            u"-444,444.00 U.S. dollars");
 }
 
 void NumberFormatterApiTest::signNearZero() {

@@ -10,7 +10,34 @@ gu{
     units{
         acceleration{
             g-force{
+                case{
+                    accusative{
+                        one{"{0} ગુ-બળ"}
+                        other{"{0} ગુ-બળ"}
+                    }
+                    dative{
+                        one{"{0} ગુ-બળ"}
+                        other{"{0} ગુ-બળ"}
+                    }
+                    genitive{
+                        one{"{0} ગુ-બળ"}
+                        other{"{0} ગુ-બળ"}
+                    }
+                    instrumental{
+                        one{"{0} ગુ-બળ"}
+                        other{"{0} ગુ-બળ"}
+                    }
+                    locative{
+                        one{"{0} ગુ-બળ"}
+                        other{"{0} ગુ-બળ"}
+                    }
+                    vocative{
+                        one{"{0} ગુ-બળ"}
+                        other{"{0} ગુ-બળ"}
+                    }
+                }
                 dnam{"ગુ-બળ"}
+                gender{"masculine"}
                 one{"{0} ગુ-બળ"}
                 other{"{0} ગુ-બળ"}
             }
@@ -22,27 +49,162 @@ gu{
         }
         angle{
             arc-minute{
+                case{
+                    accusative{
+                        one{"{0} ચાપમિનિટ"}
+                        other{"{0} ચાપમિનિટ"}
+                    }
+                    dative{
+                        one{"{0} ચાપમિનિટ"}
+                        other{"{0} ચાપમિનિટ"}
+                    }
+                    genitive{
+                        one{"{0} ચાપમિનિટ"}
+                        other{"{0} ચાપમિનિટ"}
+                    }
+                    instrumental{
+                        one{"{0} ચાપમિનિટ"}
+                        other{"{0} ચાપમિનિટ"}
+                    }
+                    locative{
+                        one{"{0} ચાપમિનિટ"}
+                        other{"{0} ચાપમિનિટ"}
+                    }
+                    vocative{
+                        one{"{0} ચાપમિનિટ"}
+                        other{"{0} ચાપમિનિટ"}
+                    }
+                }
                 dnam{"ચાપમિનિટ"}
+                gender{"feminine"}
                 one{"{0} ચાપમિનિટ"}
                 other{"{0} ચાપમિનિટ"}
             }
             arc-second{
+                case{
+                    accusative{
+                        one{"{0} ચાપસેકન્ડ"}
+                        other{"{0} ચાપસેકન્ડ"}
+                    }
+                    dative{
+                        one{"{0} ચાપસેકન્ડ"}
+                        other{"{0} ચાપસેકન્ડ"}
+                    }
+                    genitive{
+                        one{"{0} ચાપસેકન્ડ"}
+                        other{"{0} ચાપસેકન્ડ"}
+                    }
+                    instrumental{
+                        one{"{0} ચાપસેકન્ડ"}
+                        other{"{0} ચાપસેકન્ડ"}
+                    }
+                    locative{
+                        one{"{0} ચાપસેકન્ડ"}
+                        other{"{0} ચાપસેકન્ડ"}
+                    }
+                    vocative{
+                        one{"{0} ચાપસેકન્ડ"}
+                        other{"{0} ચાપસેકન્ડ"}
+                    }
+                }
                 dnam{"ચાપસેકન્ડ"}
+                gender{"feminine"}
                 one{"{0} ચાપસેકન્ડ"}
                 other{"{0} ચાપસેકન્ડ"}
             }
             degree{
+                case{
+                    accusative{
+                        one{"{0} અંશ"}
+                        other{"{0} અંશ"}
+                    }
+                    dative{
+                        one{"{0} અંશ"}
+                        other{"{0} અંશ"}
+                    }
+                    genitive{
+                        one{"{0} અંશ"}
+                        other{"{0} અંશ"}
+                    }
+                    instrumental{
+                        one{"{0} અંશ"}
+                        other{"{0} અંશ"}
+                    }
+                    locative{
+                        one{"{0} અંશ"}
+                        other{"{0} અંશ"}
+                    }
+                    vocative{
+                        one{"{0} અંશ"}
+                        other{"{0} અંશ"}
+                    }
+                }
                 dnam{"અંશ"}
+                gender{"masculine"}
                 one{"{0} અંશ"}
                 other{"{0} અંશ"}
             }
             radian{
+                case{
+                    accusative{
+                        one{"{0} સમત્રિજ્યાકોણ"}
+                        other{"{0} સમત્રિજ્યાકોણ"}
+                    }
+                    dative{
+                        one{"{0} સમત્રિજ્યાકોણ"}
+                        other{"{0} સમત્રિજ્યાકોણ"}
+                    }
+                    genitive{
+                        one{"{0} સમત્રિજ્યાકોણ"}
+                        other{"{0} સમત્રિજ્યાકોણ"}
+                    }
+                    instrumental{
+                        one{"{0} સમત્રિજ્યાકોણ"}
+                        other{"{0} સમત્રિજ્યાકોણ"}
+                    }
+                    locative{
+                        one{"{0} સમત્રિજ્યાકોણ"}
+                        other{"{0} સમત્રિજ્યાકોણ"}
+                    }
+                    vocative{
+                        one{"{0} સમત્રિજ્યાકોણ"}
+                        other{"{0} સમત્રિજ્યાકોણ"}
+                    }
+                }
                 dnam{"સમત્રિજ્યાકોણ"}
+                gender{"masculine"}
                 one{"{0} સમત્રિજ્યાકોણ"}
                 other{"{0} સમત્રિજ્યાકોણ"}
             }
             revolution{
+                case{
+                    accusative{
+                        one{"{0} પરિભ્રમણ"}
+                        other{"{0} પરિભ્રમણ"}
+                    }
+                    dative{
+                        one{"{0} પરિભ્રમણ"}
+                        other{"{0} પરિભ્રમણ"}
+                    }
+                    genitive{
+                        one{"{0} પરિભ્રમણ"}
+                        other{"{0} પરિભ્રમણ"}
+                    }
+                    instrumental{
+                        one{"{0} પરિભ્રમણ"}
+                        other{"{0} પરિભ્રમણ"}
+                    }
+                    locative{
+                        one{"{0} પરિભ્રમણ"}
+                        other{"{0} પરિભ્રમણ"}
+                    }
+                    vocative{
+                        one{"{0} પરિભ્રમણ"}
+                        other{"{0} પરિભ્રમણ"}
+                    }
+                }
                 dnam{"પરિભ્રમણ"}
+                gender{"masculine"}
                 one{"{0} પરિભ્રમણ"}
                 other{"{0} પરિભ્રમણ"}
             }
@@ -59,7 +221,34 @@ gu{
                 other{"{0} ડનમ"}
             }
             hectare{
+                case{
+                    accusative{
+                        one{"{0} હેક્ટર"}
+                        other{"{0} હેક્ટર"}
+                    }
+                    dative{
+                        one{"{0} હેક્ટર"}
+                        other{"{0} હેક્ટર"}
+                    }
+                    genitive{
+                        one{"{0} હેક્ટર"}
+                        other{"{0} હેક્ટર"}
+                    }
+                    instrumental{
+                        one{"{0} હેક્ટર"}
+                        other{"{0} હેક્ટર"}
+                    }
+                    locative{
+                        one{"{0} હેક્ટર"}
+                        other{"{0} હેક્ટર"}
+                    }
+                    vocative{
+                        one{"{0} હેક્ટર"}
+                        other{"{0} હેક્ટર"}
+                    }
+                }
                 dnam{"હેક્ટર"}
+                gender{"masculine"}
                 one{"{0} હેક્ટર"}
                 other{"{0} હેક્ટર"}
             }
@@ -138,31 +327,159 @@ gu{
                 one{
                     _{
                         _{"ચોરસ {0}"}
+                        accusative{"ચોરસ {0}"}
+                        dative{"ચોરસ {0}"}
+                        genitive{"ચોરસ {0}"}
+                        instrumental{"ચોરસ {0}"}
+                        locative{"ચોરસ {0}"}
+                        vocative{"ચોરસ {0}"}
+                    }
+                    feminine{
+                        _{"ચોરસ {0}"}
+                        accusative{"ચોરસ {0}"}
+                        dative{"ચોરસ {0}"}
+                        genitive{"ચોરસ {0}"}
+                        instrumental{"ચોરસ {0}"}
+                        locative{"ચોરસ {0}"}
+                        vocative{"ચોરસ {0}"}
+                    }
+                    masculine{
+                        _{"ચોરસ {0}"}
+                        accusative{"ચોરસ {0}"}
+                        dative{"ચોરસ {0}"}
+                        genitive{"ચોરસ {0}"}
+                        instrumental{"ચોરસ {0}"}
+                        locative{"ચોરસ {0}"}
+                        vocative{"ચોરસ {0}"}
                     }
                 }
                 other{
                     _{
                         _{"ચોરસ {0}"}
+                        accusative{"ચોરસ {0}"}
+                        dative{"ચોરસ {0}"}
+                        genitive{"ચોરસ {0}"}
+                        instrumental{"ચોરસ {0}"}
+                        locative{"ચોરસ {0}"}
+                        vocative{"ચોરસ {0}"}
+                    }
+                    feminine{
+                        _{"ચોરસ {0}"}
+                        accusative{"ચોરસ {0}"}
+                        dative{"ચોરસ {0}"}
+                        genitive{"ચોરસ {0}"}
+                        instrumental{"ચોરસ {0}"}
+                        locative{"ચોરસ {0}"}
+                        vocative{"ચોરસ {0}"}
+                    }
+                    masculine{
+                        _{"ચોરસ {0}"}
+                        accusative{"ચોરસ {0}"}
+                        dative{"ચોરસ {0}"}
+                        genitive{"ચોરસ {0}"}
+                        instrumental{"ચોરસ {0}"}
+                        locative{"ચોરસ {0}"}
+                        vocative{"ચોરસ {0}"}
                     }
                 }
             }
             power3{
                 one{
                     _{
-                        _{"ક્યુબિક {0}"}
+                        _{"ઘન {0}"}
+                        accusative{"ઘન {0}"}
+                        dative{"ઘન {0}"}
+                        genitive{"ઘન {0}"}
+                        instrumental{"ઘન {0}"}
+                        locative{"ઘન {0}"}
+                        vocative{"ઘન {0}"}
+                    }
+                    feminine{
+                        _{"ઘન {0}"}
+                        accusative{"ઘન {0}"}
+                        dative{"ઘન {0}"}
+                        genitive{"ઘન {0}"}
+                        instrumental{"ઘન {0}"}
+                        locative{"ઘન {0}"}
+                        vocative{"ઘન {0}"}
+                    }
+                    masculine{
+                        _{"ઘન {0}"}
+                        accusative{"ઘન {0}"}
+                        dative{"ઘન {0}"}
+                        genitive{"ઘન {0}"}
+                        instrumental{"ઘન {0}"}
+                        locative{"ઘન {0}"}
+                        vocative{"ઘન {0}"}
                     }
                 }
                 other{
                     _{
-                        _{"ક્યુબિક {0}"}
+                        _{"ઘન {0}"}
+                        accusative{"ઘન {0}"}
+                        dative{"ઘન {0}"}
+                        genitive{"ઘન {0}"}
+                        instrumental{"ઘન {0}"}
+                        locative{"ઘન {0}"}
+                        vocative{"ઘન {0}"}
+                    }
+                    feminine{
+                        _{"ઘન {0}"}
+                        accusative{"ઘન {0}"}
+                        dative{"ઘન {0}"}
+                        genitive{"ઘન {0}"}
+                        instrumental{"ઘન {0}"}
+                        locative{"ઘન {0}"}
+                        vocative{"ઘન {0}"}
+                    }
+                    masculine{
+                        _{"ઘન {0}"}
+                        accusative{"ઘન {0}"}
+                        dative{"ઘન {0}"}
+                        genitive{"ઘન {0}"}
+                        instrumental{"ઘન {0}"}
+                        locative{"ઘન {0}"}
+                        vocative{"ઘન {0}"}
                     }
                 }
             }
             times{"{0}-{1}"}
         }
         concentr{
+            item{
+                dnam{"વસ્તુ"}
+                one{"{0} વસ્તુ"}
+                other{"{0} વસ્તુ"}
+            }
             karat{
+                case{
+                    accusative{
+                        one{"{0} કૅરેટ"}
+                        other{"{0} કૅરેટ"}
+                    }
+                    dative{
+                        one{"{0} કૅરેટ"}
+                        other{"{0} કૅરેટ"}
+                    }
+                    genitive{
+                        one{"{0} કૅરેટ"}
+                        other{"{0} કૅરેટ"}
+                    }
+                    instrumental{
+                        one{"{0} કૅરેટ"}
+                        other{"{0} કૅરેટ"}
+                    }
+                    locative{
+                        one{"{0} કૅરેટ"}
+                        other{"{0} કૅરેટ"}
+                    }
+                    vocative{
+                        one{"{0} કૅરેટ"}
+                        other{"{0} કૅરેટ"}
+                    }
+                }
                 dnam{"કૅરેટ"}
+                gender{"feminine"}
                 one{"{0} કૅરેટ"}
                 other{"{0} કૅરેટ"}
             }
@@ -177,27 +494,162 @@ gu{
                 other{"{0} મિલિમોલ પ્રતિ લિટર"}
             }
             mole{
+                case{
+                    accusative{
+                        one{"{0} મોલ"}
+                        other{"{0} મોલ"}
+                    }
+                    dative{
+                        one{"{0} મોલ"}
+                        other{"{0} મોલ"}
+                    }
+                    genitive{
+                        one{"{0} મોલ"}
+                        other{"{0} મોલ"}
+                    }
+                    instrumental{
+                        one{"{0} મોલ"}
+                        other{"{0} મોલ"}
+                    }
+                    locative{
+                        one{"{0} મોલ"}
+                        other{"{0} મોલ"}
+                    }
+                    vocative{
+                        one{"{0} મોલ"}
+                        other{"{0} મોલ"}
+                    }
+                }
                 dnam{"મોલ"}
+                gender{"masculine"}
                 one{"{0} મોલ"}
                 other{"{0} મોલ"}
             }
             percent{
+                case{
+                    accusative{
+                        one{"{0} ટકા"}
+                        other{"{0} ટકા"}
+                    }
+                    dative{
+                        one{"{0} ટકા"}
+                        other{"{0} ટકા"}
+                    }
+                    genitive{
+                        one{"{0} ટકા"}
+                        other{"{0} ટકા"}
+                    }
+                    instrumental{
+                        one{"{0} ટકા"}
+                        other{"{0} ટકા"}
+                    }
+                    locative{
+                        one{"{0} ટકા"}
+                        other{"{0} ટકા"}
+                    }
+                    vocative{
+                        one{"{0} ટકા"}
+                        other{"{0} ટકા"}
+                    }
+                }
                 dnam{"ટકા"}
+                gender{"masculine"}
                 one{"{0} ટકા"}
                 other{"{0} ટકા"}
             }
             permille{
+                case{
+                    accusative{
+                        one{"{0} પ્રતિમાઈલ"}
+                        other{"{0} પ્રતિમાઈલ"}
+                    }
+                    dative{
+                        one{"{0} પ્રતિમાઈલ"}
+                        other{"{0} પ્રતિમાઈલ"}
+                    }
+                    genitive{
+                        one{"{0} પ્રતિમાઈલ"}
+                        other{"{0} પ્રતિમાઈલ"}
+                    }
+                    instrumental{
+                        one{"{0} પ્રતિમાઈલ"}
+                        other{"{0} પ્રતિમાઈલ"}
+                    }
+                    locative{
+                        one{"{0} પ્રતિમાઈલ"}
+                        other{"{0} પ્રતિમાઈલ"}
+                    }
+                    vocative{
+                        one{"{0} પ્રતિમાઈલ"}
+                        other{"{0} પ્રતિમાઈલ"}
+                    }
+                }
                 dnam{"પ્રતિમાઈલ"}
+                gender{"feminine"}
                 one{"{0} પ્રતિમાઈલ"}
                 other{"{0} પ્રતિમાઈલ"}
             }
             permillion{
+                case{
+                    accusative{
+                        one{"{0} કણ પ્રતિ મિલિયન"}
+                        other{"{0} કણ પ્રતિ મિલિયન"}
+                    }
+                    dative{
+                        one{"{0} કણ પ્રતિ મિલિયન"}
+                        other{"{0} કણ પ્રતિ મિલિયન"}
+                    }
+                    genitive{
+                        one{"{0} કણ પ્રતિ મિલિયન"}
+                        other{"{0} કણ પ્રતિ મિલિયન"}
+                    }
+                    instrumental{
+                        one{"{0} કણ પ્રતિ મિલિયન"}
+                        other{"{0} કણ પ્રતિ મિલિયન"}
+                    }
+                    locative{
+                        one{"{0} કણ પ્રતિ મિલિયન"}
+                        other{"{0} કણ પ્રતિ મિલિયન"}
+                    }
+                    vocative{
+                        one{"{0} કણ પ્રતિ મિલિયન"}
+                        other{"{0} કણ પ્રતિ મિલિયન"}
+                    }
+                }
                 dnam{"કણ પ્રતિ મિલિયન"}
+                gender{"masculine"}
                 one{"{0} કણ પ્રતિ મિલિયન"}
                 other{"{0} કણ પ્રતિ મિલિયન"}
             }
             permyriad{
+                case{
+                    accusative{
+                        one{"{0} પરમિરિયડ"}
+                        other{"{0} પરમિરિયડ"}
+                    }
+                    dative{
+                        one{"{0} પરમિરિયડ"}
+                        other{"{0} પરમિરિયડ"}
+                    }
+                    genitive{
+                        one{"{0} પરમિરિયડ"}
+                        other{"{0} પરમિરિયડ"}
+                    }
+                    instrumental{
+                        one{"{0} પરમિરિયડ"}
+                        other{"{0} પરમિરિયડ"}
+                    }
+                    locative{
+                        one{"{0} પરમિરિયડ"}
+                        other{"{0} પરમિરિયડ"}
+                    }
+                    vocative{
+                        one{"{0} પરમિરિયડ"}
+                        other{"{0} પરમિરિયડ"}
+                    }
+                }
                 dnam{"પરમિરિયડ"}
+                gender{"masculine"}
                 one{"{0} પરમિરિયડ"}
                 other{"{0} પરમિરિયડ"}
             }
@@ -233,12 +685,66 @@ gu{
         }
         digital{
             bit{
+                case{
+                    accusative{
+                        one{"{0} બિટ"}
+                        other{"{0} બિટ"}
+                    }
+                    dative{
+                        one{"{0} બિટ"}
+                        other{"{0} બિટ"}
+                    }
+                    genitive{
+                        one{"{0} બિટ"}
+                        other{"{0} બિટ"}
+                    }
+                    instrumental{
+                        one{"{0} બિટ"}
+                        other{"{0} બિટ"}
+                    }
+                    locative{
+                        one{"{0} બિટ"}
+                        other{"{0} બિટ"}
+                    }
+                    vocative{
+                        one{"{0} બિટ"}
+                        other{"{0} બિટ"}
+                    }
+                }
                 dnam{"બિટ"}
+                gender{"feminine"}
                 one{"{0} બિટ"}
                 other{"{0} બિટ"}
             }
             byte{
+                case{
+                    accusative{
+                        one{"{0} બાઇટ"}
+                        other{"{0} બાઇટ"}
+                    }
+                    dative{
+                        one{"{0} બાઇટ"}
+                        other{"{0} બાઇટ"}
+                    }
+                    genitive{
+                        one{"{0} બાઇટ"}
+                        other{"{0} બાઇટ"}
+                    }
+                    instrumental{
+                        one{"{0} બાઇટ"}
+                        other{"{0} બાઇટ"}
+                    }
+                    locative{
+                        one{"{0} બાઇટ"}
+                        other{"{0} બાઇટ"}
+                    }
+                    vocative{
+                        one{"{0} બાઇટ"}
+                        other{"{0} બાઇટ"}
+                    }
+                }
                 dnam{"બાઇટ"}
+                gender{"feminine"}
                 one{"{0} બાઇટ"}
                 other{"{0} બાઇટ"}
             }
@@ -290,23 +796,134 @@ gu{
         }
         duration{
             century{
+                case{
+                    accusative{
+                        one{"{0} સદી"}
+                        other{"{0} સદીઓ"}
+                    }
+                    dative{
+                        one{"{0} સદી"}
+                        other{"{0} સદીઓ"}
+                    }
+                    genitive{
+                        one{"{0} સદી"}
+                        other{"{0} સદીઓ"}
+                    }
+                    instrumental{
+                        one{"{0} સદી"}
+                        other{"{0} સદીઓ"}
+                    }
+                    locative{
+                        one{"{0} સદી"}
+                        other{"{0} સદીઓ"}
+                    }
+                    vocative{
+                        one{"{0} સદી"}
+                        other{"{0} સદીઓ"}
+                    }
+                }
                 dnam{"સદીઓ"}
+                gender{"feminine"}
                 one{"{0} સદી"}
                 other{"{0} સદીઓ"}
             }
             day{
+                case{
+                    accusative{
+                        one{"{0} દિવસ"}
+                        other{"{0} દિવસ"}
+                    }
+                    dative{
+                        one{"{0} દિવસ"}
+                        other{"{0} દિવસ"}
+                    }
+                    genitive{
+                        one{"{0} દિવસ"}
+                        other{"{0} દિવસ"}
+                    }
+                    instrumental{
+                        one{"{0} દિવસ"}
+                        other{"{0} દિવસ"}
+                    }
+                    locative{
+                        one{"{0} દિવસ"}
+                        other{"{0} દિવસ"}
+                    }
+                    vocative{
+                        one{"{0} દિવસ"}
+                        other{"{0} દિવસ"}
+                    }
+                }
                 dnam{"દિવસ"}
+                gender{"masculine"}
                 one{"{0} દિવસ"}
                 other{"{0} દિવસ"}
                 per{"{0} પ્રતિ દિવસ"}
             }
+            day-person{
+                gender{"masculine"}
+            }
             decade{
+                case{
+                    accusative{
+                        one{"{0} દાયકો"}
+                        other{"{0} દાયકા"}
+                    }
+                    dative{
+                        one{"{0} દાયકો"}
+                        other{"{0} દાયકા"}
+                    }
+                    genitive{
+                        one{"{0} દાયકો"}
+                        other{"{0} દાયકા"}
+                    }
+                    instrumental{
+                        one{"{0} દાયકો"}
+                        other{"{0} દાયકા"}
+                    }
+                    locative{
+                        one{"{0} દાયકો"}
+                        other{"{0} દાયકા"}
+                    }
+                    vocative{
+                        one{"{0} દાયકો"}
+                        other{"{0} દાયકા"}
+                    }
+                }
                 dnam{"દાયકા"}
+                gender{"masculine"}
                 one{"{0} દાયકો"}
                 other{"{0} દાયકા"}
             }
             hour{
+                case{
+                    accusative{
+                        one{"{0} કલાક"}
+                        other{"{0} કલાક"}
+                    }
+                    dative{
+                        one{"{0} કલાક"}
+                        other{"{0} કલાક"}
+                    }
+                    genitive{
+                        one{"{0} કલાક"}
+                        other{"{0} કલાક"}
+                    }
+                    instrumental{
+                        one{"{0} કલાક"}
+                        other{"{0} કલાક"}
+                    }
+                    locative{
+                        one{"{0} કલાક"}
+                        other{"{0} કલાક"}
+                    }
+                    vocative{
+                        one{"{0} કલાક"}
+                        other{"{0} કલાક"}
+                    }
+                }
                 dnam{"કલાક"}
+                gender{"masculine"}
                 one{"{0} કલાક"}
                 other{"{0} કલાક"}
                 per{"{0} પ્રતિ કલાક"}
@@ -322,13 +939,67 @@ gu{
                 other{"{0} મિલિસેકન્ડ"}
             }
             minute{
+                case{
+                    accusative{
+                        one{"{0} મિનિટ"}
+                        other{"{0} મિનિટ"}
+                    }
+                    dative{
+                        one{"{0} મિનિટ"}
+                        other{"{0} મિનિટ"}
+                    }
+                    genitive{
+                        one{"{0} મિનિટ"}
+                        other{"{0} મિનિટ"}
+                    }
+                    instrumental{
+                        one{"{0} મિનિટ"}
+                        other{"{0} મિનિટ"}
+                    }
+                    locative{
+                        one{"{0} મિનિટ"}
+                        other{"{0} મિનિટ"}
+                    }
+                    vocative{
+                        one{"{0} મિનિટ"}
+                        other{"{0} મિનિટ"}
+                    }
+                }
                 dnam{"મિનિટ"}
+                gender{"masculine"}
                 one{"{0} મિનિટ"}
                 other{"{0} મિનિટ"}
                 per{"{0} પ્રતિ મિનિટ"}
             }
             month{
+                case{
+                    accusative{
+                        one{"{0} મહિનો"}
+                        other{"{0} મહિના"}
+                    }
+                    dative{
+                        one{"{0} મહિનો"}
+                        other{"{0} મહિના"}
+                    }
+                    genitive{
+                        one{"{0} મહિનો"}
+                        other{"{0} મહિના"}
+                    }
+                    instrumental{
+                        one{"{0} મહિનો"}
+                        other{"{0} મહિના"}
+                    }
+                    locative{
+                        one{"{0} મહિનો"}
+                        other{"{0} મહિના"}
+                    }
+                    vocative{
+                        one{"{0} મહિનો"}
+                        other{"{0} મહિના"}
+                    }
+                }
                 dnam{"મહિના"}
+                gender{"masculine"}
                 one{"{0} મહિનો"}
                 other{"{0} મહિના"}
                 per{"{0} પ્રતિ મહિનો"}
@@ -339,19 +1010,100 @@ gu{
                 other{"{0} નેનોસેકંડ"}
             }
             second{
+                case{
+                    accusative{
+                        one{"{0} સેકંડ"}
+                        other{"{0} સેકંડ"}
+                    }
+                    dative{
+                        one{"{0} સેકંડ"}
+                        other{"{0} સેકંડ"}
+                    }
+                    genitive{
+                        one{"{0} સેકંડ"}
+                        other{"{0} સેકંડ"}
+                    }
+                    instrumental{
+                        one{"{0} સેકંડ"}
+                        other{"{0} સેકંડ"}
+                    }
+                    locative{
+                        one{"{0} સેકંડ"}
+                        other{"{0} સેકંડ"}
+                    }
+                    vocative{
+                        one{"{0} સેકંડ"}
+                        other{"{0} સેકંડ"}
+                    }
+                }
                 dnam{"સેકંડ"}
+                gender{"masculine"}
                 one{"{0} સેકંડ"}
                 other{"{0} સેકંડ"}
                 per{"{0} પ્રતિ સેકંડ"}
             }
             week{
+                case{
+                    accusative{
+                        one{"{0} અઠવાડિયું"}
+                        other{"{0} અઠવાડિયા"}
+                    }
+                    dative{
+                        one{"{0} અઠવાડિયું"}
+                        other{"{0} અઠવાડિયા"}
+                    }
+                    genitive{
+                        one{"{0} અઠવાડિયું"}
+                        other{"{0} અઠવાડિયા"}
+                    }
+                    instrumental{
+                        one{"{0} અઠવાડિયું"}
+                        other{"{0} અઠવાડિયા"}
+                    }
+                    locative{
+                        one{"{0} અઠવાડિયું"}
+                        other{"{0} અઠવાડિયા"}
+                    }
+                    vocative{
+                        one{"{0} અઠવાડિયું"}
+                        other{"{0} અઠવાડિયા"}
+                    }
+                }
                 dnam{"અઠવાડિયા"}
+                gender{"masculine"}
                 one{"{0} અઠવાડિયું"}
                 other{"{0} અઠવાડિયા"}
                 per{"{0} પ્રતિ અઠવાડિયું"}
             }
             year{
+                case{
+                    accusative{
+                        one{"{0} વર્ષ"}
+                        other{"{0} વર્ષ"}
+                    }
+                    dative{
+                        one{"{0} વર્ષ"}
+                        other{"{0} વર્ષ"}
+                    }
+                    genitive{
+                        one{"{0} વર્ષ"}
+                        other{"{0} વર્ષ"}
+                    }
+                    instrumental{
+                        one{"{0} વર્ષ"}
+                        other{"{0} વર્ષ"}
+                    }
+                    locative{
+                        one{"{0} વર્ષ"}
+                        other{"{0} વર્ષ"}
+                    }
+                    vocative{
+                        one{"{0} વર્ષ"}
+                        other{"{0} વર્ષ"}
+                    }
+                }
                 dnam{"વર્ષ"}
+                gender{"masculine"}
                 one{"{0} વર્ષ"}
                 other{"{0} વર્ષ"}
                 per{"{0} પ્રતિ વર્ષ"}
@@ -359,7 +1111,34 @@ gu{
         }
         electric{
             ampere{
+                case{
+                    accusative{
+                        one{"{0} એમ્પીયર"}
+                        other{"{0} એમ્પીયર"}
+                    }
+                    dative{
+                        one{"{0} એમ્પીયર"}
+                        other{"{0} એમ્પીયર"}
+                    }
+                    genitive{
+                        one{"{0} એમ્પીયર"}
+                        other{"{0} એમ્પીયર"}
+                    }
+                    instrumental{
+                        one{"{0} એમ્પીયર"}
+                        other{"{0} એમ્પીયર"}
+                    }
+                    locative{
+                        one{"{0} એમ્પીયર"}
+                        other{"{0} એમ્પીયર"}
+                    }
+                    vocative{
+                        one{"{0} એમ્પીયર"}
+                        other{"{0} એમ્પીયર"}
+                    }
+                }
                 dnam{"એમ્પીયર"}
+                gender{"feminine"}
                 one{"{0} એમ્પીયર"}
                 other{"{0} એમ્પીયર"}
             }
@@ -369,13 +1148,67 @@ gu{
                 other{"{0} મિલિએમ્પીયર"}
             }
             ohm{
+                case{
+                    accusative{
+                        one{"{0} ઓહ્મ"}
+                        other{"{0} ઓહ્મ"}
+                    }
+                    dative{
+                        one{"{0} ઓહ્મ"}
+                        other{"{0} ઓહ્મ"}
+                    }
+                    genitive{
+                        one{"{0} ઓહ્મ"}
+                        other{"{0} ઓહ્મ"}
+                    }
+                    instrumental{
+                        one{"{0} ઓહ્મ"}
+                        other{"{0} ઓહ્મ"}
+                    }
+                    locative{
+                        one{"{0} ઓહ્મ"}
+                        other{"{0} ઓહ્મ"}
+                    }
+                    vocative{
+                        one{"{0} ઓહ્મ"}
+                        other{"{0} ઓહ્મ"}
+                    }
+                }
                 dnam{"ઓહ્મ"}
+                gender{"masculine"}
                 one{"{0} ઓહ્મ"}
                 other{"{0} ઓહ્મ"}
             }
             volt{
-                dnam{"વૉલ્ટ્સ"}
-                one{"{0} વૉલ્ટ્"}
+                case{
+                    accusative{
+                        one{"{0} વૉલ્ટ"}
+                        other{"{0} વૉલ્ટ"}
+                    }
+                    dative{
+                        one{"{0} વૉલ્ટ"}
+                        other{"{0} વૉલ્ટ"}
+                    }
+                    genitive{
+                        one{"{0} વૉલ્ટ"}
+                        other{"{0} વૉલ્ટ"}
+                    }
+                    instrumental{
+                        one{"{0} વૉલ્ટ"}
+                        other{"{0} વૉલ્ટ"}
+                    }
+                    locative{
+                        one{"{0} વૉલ્ટ"}
+                        other{"{0} વૉલ્ટ"}
+                    }
+                    vocative{
+                        one{"{0} વૉલ્ટ"}
+                        other{"{0} વૉલ્ટ"}
+                    }
+                }
+                dnam{"વૉલ્ટ"}
+                gender{"masculine"}
+                one{"{0} વૉલ્ટ"}
                 other{"{0} વૉલ્ટ્"}
             }
         }
@@ -386,7 +1219,34 @@ gu{
                 other{"{0} બ્રિટીશ થર્મલ યુનિટ"}
             }
             calorie{
+                case{
+                    accusative{
+                        one{"{0} કેલરી"}
+                        other{"{0} કેલરી"}
+                    }
+                    dative{
+                        one{"{0} કેલરી"}
+                        other{"{0} કેલરી"}
+                    }
+                    genitive{
+                        one{"{0} કેલરી"}
+                        other{"{0} કેલરી"}
+                    }
+                    instrumental{
+                        one{"{0} કેલરી"}
+                        other{"{0} કેલરી"}
+                    }
+                    locative{
+                        one{"{0} કેલરી"}
+                        other{"{0} કેલરી"}
+                    }
+                    vocative{
+                        one{"{0} કેલરી"}
+                        other{"{0} કેલરી"}
+                    }
+                }
                 dnam{"કેલરી"}
+                gender{"feminine"}
                 one{"{0} કેલરી"}
                 other{"{0} કેલરી"}
             }
@@ -401,7 +1261,34 @@ gu{
                 other{"{0} કેલરી"}
             }
             joule{
+                case{
+                    accusative{
+                        one{"{0} જૂલ"}
+                        other{"{0} જૂલ"}
+                    }
+                    dative{
+                        one{"{0} જૂલ"}
+                        other{"{0} જૂલ"}
+                    }
+                    genitive{
+                        one{"{0} જૂલ"}
+                        other{"{0} જૂલ"}
+                    }
+                    instrumental{
+                        one{"{0} જૂલ"}
+                        other{"{0} જૂલ"}
+                    }
+                    locative{
+                        one{"{0} જૂલ"}
+                        other{"{0} જૂલ"}
+                    }
+                    vocative{
+                        one{"{0} જૂલ"}
+                        other{"{0} જૂલ"}
+                    }
+                }
                 dnam{"જૂલ"}
+                gender{"masculine"}
                 one{"{0} જૂલ"}
                 other{"{0} જૂલ"}
             }
@@ -427,8 +1314,40 @@ gu{
             }
         }
         force{
+            kilowatt-hour-per-100-kilometer{
+                dnam{"કિલોવૉટ કલાક પ્રતિ 100 કિલોમીટર"}
+                one{"{0} કિલોવૉટ કલાક પ્રતિ 100 કિલોમીટર"}
+                other{"{0} કિલોવૉટ કલાક પ્રતિ 100 કિલોમીટર"}
+            }
             newton{
+                case{
+                    accusative{
+                        one{"{0} ન્યૂટન"}
+                        other{"{0} ન્યૂટન"}
+                    }
+                    dative{
+                        one{"{0} ન્યૂટન"}
+                        other{"{0} ન્યૂટન"}
+                    }
+                    genitive{
+                        one{"{0} ન્યૂટન"}
+                        other{"{0} ન્યૂટન"}
+                    }
+                    instrumental{
+                        one{"{0} ન્યૂટન"}
+                        other{"{0} ન્યૂટન"}
+                    }
+                    locative{
+                        one{"{0} ન્યૂટન"}
+                        other{"{0} ન્યૂટન"}
+                    }
+                    vocative{
+                        one{"{0} ન્યૂટન"}
+                        other{"{0} ન્યૂટન"}
+                    }
+                }
                 dnam{"ન્યૂટન"}
+                gender{"masculine"}
                 one{"{0} ન્યૂટન"}
                 other{"{0} ન્યૂટન"}
             }
@@ -445,7 +1364,34 @@ gu{
                 other{"{0} ગીગાહર્ટ્ઝ"}
             }
             hertz{
+                case{
+                    accusative{
+                        one{"{0} હર્ટ્ઝ"}
+                        other{"{0} હર્ટ્ઝ"}
+                    }
+                    dative{
+                        one{"{0} હર્ટ્ઝ"}
+                        other{"{0} હર્ટ્ઝ"}
+                    }
+                    genitive{
+                        one{"{0} હર્ટ્ઝ"}
+                        other{"{0} હર્ટ્ઝ"}
+                    }
+                    instrumental{
+                        one{"{0} હર્ટ્ઝ"}
+                        other{"{0} હર્ટ્ઝ"}
+                    }
+                    locative{
+                        one{"{0} હર્ટ્ઝ"}
+                        other{"{0} હર્ટ્ઝ"}
+                    }
+                    vocative{
+                        one{"{0} હર્ટ્ઝ"}
+                        other{"{0} હર્ટ્ઝ"}
+                    }
+                }
                 dnam{"હર્ટ્ઝ"}
+                gender{"feminine"}
                 one{"{0} હર્ટ્ઝ"}
                 other{"{0} હર્ટ્ઝ"}
             }
@@ -478,9 +1424,37 @@ gu{
             }
             em{
                 dnam{"ટાઇપોગ્રાફિક એમ"}
+                gender{"masculine"}
             }
             pixel{
+                case{
+                    accusative{
+                        one{"{0} પિક્સેલ"}
+                        other{"{0} પિક્સેલ"}
+                    }
+                    dative{
+                        one{"{0} પિક્સેલ"}
+                        other{"{0} પિક્સેલ"}
+                    }
+                    genitive{
+                        one{"{0} પિક્સેલ"}
+                        other{"{0} પિક્સેલ"}
+                    }
+                    instrumental{
+                        one{"{0} પિક્સેલ"}
+                        other{"{0} પિક્સેલ"}
+                    }
+                    locative{
+                        one{"{0} પિક્સેલ"}
+                        other{"{0} પિક્સેલ"}
+                    }
+                    vocative{
+                        one{"{0} પિક્સેલ"}
+                        other{"{0} પિક્સેલ"}
+                    }
+                }
                 dnam{"પિક્સેલ"}
+                gender{"masculine"}
                 one{"{0} પિક્સેલ"}
                 other{"{0} પિક્સેલ"}
             }
@@ -546,7 +1520,34 @@ gu{
                 other{"{0} પ્રકાશ વર્ષ"}
             }
             meter{
+                case{
+                    accusative{
+                        one{"{0} મીટર"}
+                        other{"{0} મીટર"}
+                    }
+                    dative{
+                        one{"{0} મીટર"}
+                        other{"{0} મીટર"}
+                    }
+                    genitive{
+                        one{"{0} મીટર"}
+                        other{"{0} મીટર"}
+                    }
+                    instrumental{
+                        one{"{0} મીટર"}
+                        other{"{0} મીટર"}
+                    }
+                    locative{
+                        one{"{0} મીટર"}
+                        other{"{0} મીટર"}
+                    }
+                    vocative{
+                        one{"{0} મીટર"}
+                        other{"{0} મીટર"}
+                    }
+                }
                 dnam{"મીટર"}
+                gender{"masculine"}
                 one{"{0} મીટર"}
                 other{"{0} મીટર"}
                 per{"{0} પ્રતિ મીટર"}
@@ -562,7 +1563,34 @@ gu{
                 other{"{0} માઇલ"}
             }
             mile-scandinavian{
+                case{
+                    accusative{
+                        one{"{0} માઈલ-સ્કૅન્ડિનેવિઅન"}
+                        other{"{0} માઈલ-સ્કૅન્ડિનેવિઅન"}
+                    }
+                    dative{
+                        one{"{0} માઈલ-સ્કૅન્ડિનેવિઅન"}
+                        other{"{0} માઈલ-સ્કૅન્ડિનેવિઅન"}
+                    }
+                    genitive{
+                        one{"{0} માઈલ-સ્કૅન્ડિનેવિઅન"}
+                        other{"{0} માઈલ-સ્કૅન્ડિનેવિઅન"}
+                    }
+                    instrumental{
+                        one{"{0} માઈલ-સ્કૅન્ડિનેવિઅન"}
+                        other{"{0} માઈલ-સ્કૅન્ડિનેવિઅન"}
+                    }
+                    locative{
+                        one{"{0} માઈલ-સ્કૅન્ડિનેવિઅન"}
+                        other{"{0} માઈલ-સ્કૅન્ડિનેવિઅન"}
+                    }
+                    vocative{
+                        one{"{0} માઈલ-સ્કૅન્ડિનેવિઅન"}
+                        other{"{0} માઈલ-સ્કૅન્ડિનેવિઅન"}
+                    }
+                }
                 dnam{"માઈલ સ્કૅન્ડિનેવિઅન"}
+                gender{"feminine"}
                 one{"{0} માઈલ-સ્કૅન્ડિનેવિઅન"}
                 other{"{0} માઈલ-સ્કૅન્ડિનેવિઅન"}
             }
@@ -608,13 +1636,99 @@ gu{
             }
         }
         light{
+            candela{
+                case{
+                    accusative{
+                        one{"{0} કેન્ડેલા"}
+                        other{"{0} કેન્ડેલા"}
+                    }
+                    dative{
+                        one{"{0} કેન્ડેલા"}
+                        other{"{0} કેન્ડેલા"}
+                    }
+                    genitive{
+                        one{"{0} કેન્ડેલા"}
+                        other{"{0} કેન્ડેલા"}
+                    }
+                    instrumental{
+                        one{"{0} કેન્ડેલા"}
+                        other{"{0} કેન્ડેલા"}
+                    }
+                    locative{
+                        one{"{0} કેન્ડેલા"}
+                        other{"{0} કેન્ડેલા"}
+                    }
+                    vocative{
+                        one{"{0} કેન્ડેલા"}
+                        other{"{0} કેન્ડેલા"}
+                    }
+                }
+                dnam{"કેન્ડેલા"}
+                gender{"masculine"}
+                one{"{0} કેન્ડેલા"}
+                other{"{0} કેન્ડેલા"}
+            }
             lumen{
+                case{
+                    accusative{
+                        one{"{0} લૂમેન"}
+                        other{"{0} લૂમેન"}
+                    }
+                    dative{
+                        one{"{0} લૂમેન"}
+                        other{"{0} લૂમેન"}
+                    }
+                    genitive{
+                        one{"{0} લૂમેન"}
+                        other{"{0} લૂમેન"}
+                    }
+                    instrumental{
+                        one{"{0} લૂમેન"}
+                        other{"{0} લૂમેન"}
+                    }
+                    locative{
+                        one{"{0} લૂમેન"}
+                        other{"{0} લૂમેન"}
+                    }
+                    vocative{
+                        one{"{0} લૂમેન"}
+                        other{"{0} લૂમેન"}
+                    }
+                }
                 dnam{"લૂમેન"}
+                gender{"feminine"}
                 one{"{0} લૂમેન"}
                 other{"{0} લૂમેન"}
             }
             lux{
+                case{
+                    accusative{
+                        one{"{0} લક્સ"}
+                        other{"{0} લક્સ"}
+                    }
+                    dative{
+                        one{"{0} લક્સ"}
+                        other{"{0} લક્સ"}
+                    }
+                    genitive{
+                        one{"{0} લક્સ"}
+                        other{"{0} લક્સ"}
+                    }
+                    instrumental{
+                        one{"{0} લક્સ"}
+                        other{"{0} લક્સ"}
+                    }
+                    locative{
+                        one{"{0} લક્સ"}
+                        other{"{0} લક્સ"}
+                    }
+                    vocative{
+                        one{"{0} લક્સ"}
+                        other{"{0} લક્સ"}
+                    }
+                }
                 dnam{"લક્સ"}
+                gender{"masculine"}
                 one{"{0} લક્સ"}
                 other{"{0} લક્સ"}
             }
@@ -626,7 +1740,34 @@ gu{
         }
         mass{
             carat{
+                case{
+                    accusative{
+                        one{"{0} કેરેટ"}
+                        other{"{0} કેરેટ"}
+                    }
+                    dative{
+                        one{"{0} કેરેટ"}
+                        other{"{0} કેરેટ"}
+                    }
+                    genitive{
+                        one{"{0} કેરેટ"}
+                        other{"{0} કેરેટ"}
+                    }
+                    instrumental{
+                        one{"{0} કેરેટ"}
+                        other{"{0} કેરેટ"}
+                    }
+                    locative{
+                        one{"{0} કેરેટ"}
+                        other{"{0} કેરેટ"}
+                    }
+                    vocative{
+                        one{"{0} કેરેટ"}
+                        other{"{0} કેરેટ"}
+                    }
+                }
                 dnam{"કેરેટ"}
+                gender{"masculine"}
                 one{"{0} કેરેટ"}
                 other{"{0} કેરેટ"}
             }
@@ -646,19 +1787,100 @@ gu{
                 other{"{0} ગ્રેન"}
             }
             gram{
+                case{
+                    accusative{
+                        one{"{0} ગ્રામ"}
+                        other{"{0} ગ્રામ"}
+                    }
+                    dative{
+                        one{"{0} ગ્રામ"}
+                        other{"{0} ગ્રામ"}
+                    }
+                    genitive{
+                        one{"{0} ગ્રામ"}
+                        other{"{0} ગ્રામ"}
+                    }
+                    instrumental{
+                        one{"{0} ગ્રામ"}
+                        other{"{0} ગ્રામ"}
+                    }
+                    locative{
+                        one{"{0} ગ્રામ"}
+                        other{"{0} ગ્રામ"}
+                    }
+                    vocative{
+                        one{"{0} ગ્રામ"}
+                        other{"{0} ગ્રામ"}
+                    }
+                }
                 dnam{"ગ્રામ"}
+                gender{"masculine"}
                 one{"{0} ગ્રામ"}
                 other{"{0} ગ્રામ"}
                 per{"{0} પ્રતિ ગ્રામ"}
             }
             kilogram{
+                case{
+                    accusative{
+                        one{"{0} કિલોગ્રામ"}
+                        other{"{0} કિલોગ્રામ"}
+                    }
+                    dative{
+                        one{"{0} કિલોગ્રામ"}
+                        other{"{0} કિલોગ્રામ"}
+                    }
+                    genitive{
+                        one{"{0} કિલોગ્રામ"}
+                        other{"{0} કિલોગ્રામ"}
+                    }
+                    instrumental{
+                        one{"{0} કિલોગ્રામ"}
+                        other{"{0} કિલોગ્રામ"}
+                    }
+                    locative{
+                        one{"{0} કિલોગ્રામ"}
+                        other{"{0} કિલોગ્રામ"}
+                    }
+                    vocative{
+                        one{"{0} કિલોગ્રામ"}
+                        other{"{0} કિલોગ્રામ"}
+                    }
+                }
                 dnam{"કિલોગ્રામ"}
+                gender{"masculine"}
                 one{"{0} કિલોગ્રામ"}
                 other{"{0} કિલોગ્રામ"}
                 per{"{0} પ્રતિ કિલોગ્રામ"}
             }
             metric-ton{
+                case{
+                    accusative{
+                        one{"{0} મેટ્રિક ટન"}
+                        other{"{0} મેટ્રિક ટન"}
+                    }
+                    dative{
+                        one{"{0} મેટ્રિક ટન"}
+                        other{"{0} મેટ્રિક ટન"}
+                    }
+                    genitive{
+                        one{"{0} મેટ્રિક ટન"}
+                        other{"{0} મેટ્રિક ટન"}
+                    }
+                    instrumental{
+                        one{"{0} મેટ્રિક ટન"}
+                        other{"{0} મેટ્રિક ટન"}
+                    }
+                    locative{
+                        one{"{0} મેટ્રિક ટન"}
+                        other{"{0} મેટ્રિક ટન"}
+                    }
+                    vocative{
+                        one{"{0} મેટ્રિક ટન"}
+                        other{"{0} મેટ્રિક ટન"}
+                    }
+                }
                 dnam{"મેટ્રિક ટન"}
+                gender{"masculine"}
                 one{"{0} મેટ્રિક ટન"}
                 other{"{0} મેટ્રિક ટન"}
             }
@@ -695,9 +1917,8 @@ gu{
                 other{"{0} સૌર ઘનતા"}
             }
             stone{
-                dnam{"સ્ટોન્સ"}
                 one{"{0} સ્ટોન"}
-                other{"{0} સ્ટોન્સ"}
+                other{"{0} સ્ટોન"}
             }
             ton{
                 dnam{"ટન"}
@@ -732,19 +1953,100 @@ gu{
                 other{"{0} મિલિવૉટ"}
             }
             watt{
+                case{
+                    accusative{
+                        one{"{0} વૉટ"}
+                        other{"{0} વૉટ"}
+                    }
+                    dative{
+                        one{"{0} વૉટ"}
+                        other{"{0} વૉટ"}
+                    }
+                    genitive{
+                        one{"{0} વૉટ"}
+                        other{"{0} વૉટ"}
+                    }
+                    instrumental{
+                        one{"{0} વૉટ"}
+                        other{"{0} વૉટ"}
+                    }
+                    locative{
+                        one{"{0} વૉટ"}
+                        other{"{0} વૉટ"}
+                    }
+                    vocative{
+                        one{"{0} વૉટ"}
+                        other{"{0} વૉટ"}
+                    }
+                }
                 dnam{"વૉટ"}
+                gender{"masculine"}
                 one{"{0} વૉટ"}
                 other{"{0} વૉટ"}
             }
         }
         pressure{
             atmosphere{
+                case{
+                    accusative{
+                        one{"{0} વાતાવરણ"}
+                        other{"{0} વાતાવરણ"}
+                    }
+                    dative{
+                        one{"{0} વાતાવરણ"}
+                        other{"{0} વાતાવરણ"}
+                    }
+                    genitive{
+                        one{"{0} વાતાવરણ"}
+                        other{"{0} વાતાવરણ"}
+                    }
+                    instrumental{
+                        one{"{0} વાતાવરણ"}
+                        other{"{0} વાતાવરણ"}
+                    }
+                    locative{
+                        one{"{0} વાતાવરણ"}
+                        other{"{0} વાતાવરણ"}
+                    }
+                    vocative{
+                        one{"{0} વાતાવરણ"}
+                        other{"{0} વાતાવરણ"}
+                    }
+                }
                 dnam{"વાતાવરણ"}
+                gender{"masculine"}
                 one{"{0} વાતાવરણ"}
                 other{"{0} વાતાવરણ"}
             }
             bar{
+                case{
+                    accusative{
+                        one{"{0} બાર"}
+                        other{"{0} બાર"}
+                    }
+                    dative{
+                        one{"{0} બાર"}
+                        other{"{0} બાર"}
+                    }
+                    genitive{
+                        one{"{0} બાર"}
+                        other{"{0} બાર"}
+                    }
+                    instrumental{
+                        one{"{0} બાર"}
+                        other{"{0} બાર"}
+                    }
+                    locative{
+                        one{"{0} બાર"}
+                        other{"{0} બાર"}
+                    }
+                    vocative{
+                        one{"{0} બાર"}
+                        other{"{0} બાર"}
+                    }
+                }
                 dnam{"બાર"}
+                gender{"masculine"}
                 one{"{0} બાર"}
                 other{"{0} બાર"}
             }
@@ -779,7 +2081,34 @@ gu{
                 other{"{0} પારાનું મિલિમીટર"}
             }
             pascal{
+                case{
+                    accusative{
+                        one{"{0} પાસ્કલ"}
+                        other{"{0} પાસ્કલ"}
+                    }
+                    dative{
+                        one{"{0} પાસ્કલ"}
+                        other{"{0} પાસ્કલ"}
+                    }
+                    genitive{
+                        one{"{0} પાસ્કલ"}
+                        other{"{0} પાસ્કલ"}
+                    }
+                    instrumental{
+                        one{"{0} પાસ્કલ"}
+                        other{"{0} પાસ્કલ"}
+                    }
+                    locative{
+                        one{"{0} પાસ્કલ"}
+                        other{"{0} પાસ્કલ"}
+                    }
+                    vocative{
+                        one{"{0} પાસ્કલ"}
+                        other{"{0} પાસ્કલ"}
+                    }
+                }
                 dnam{"પાસ્કલ"}
+                gender{"masculine"}
                 one{"{0} પાસ્કલ"}
                 other{"{0} પાસ્કલ"}
             }
@@ -813,7 +2142,34 @@ gu{
         }
         temperature{
             celsius{
+                case{
+                    accusative{
+                        one{"{0} ડિગ્રી સેલ્સિયસ"}
+                        other{"{0} ડિગ્રી સેલ્સિયસ"}
+                    }
+                    dative{
+                        one{"{0} ડિગ્રી સેલ્સિયસ"}
+                        other{"{0} ડિગ્રી સેલ્સિયસ"}
+                    }
+                    genitive{
+                        one{"{0} ડિગ્રી સેલ્સિયસ"}
+                        other{"{0} ડિગ્રી સેલ્સિયસ"}
+                    }
+                    instrumental{
+                        one{"{0} ડિગ્રી સેલ્સિયસ"}
+                        other{"{0} ડિગ્રી સેલ્સિયસ"}
+                    }
+                    locative{
+                        one{"{0} ડિગ્રી સેલ્સિયસ"}
+                        other{"{0} ડિગ્રી સેલ્સિયસ"}
+                    }
+                    vocative{
+                        one{"{0} ડિગ્રી સેલ્સિયસ"}
+                        other{"{0} ડિગ્રી સેલ્સિયસ"}
+                    }
+                }
                 dnam{"ડિગ્રી સેલ્સિયસ"}
+                gender{"feminine"}
                 one{"{0} ડિગ્રી સેલ્સિયસ"}
                 other{"{0} ડિગ્રી સેલ્સિયસ"}
             }
@@ -823,12 +2179,66 @@ gu{
                 other{"{0} ડિગ્રી ફેરનહીટ"}
             }
             generic{
+                case{
+                    accusative{
+                        one{"{0}°"}
+                        other{"{0}°"}
+                    }
+                    dative{
+                        one{"{0}°"}
+                        other{"{0}°"}
+                    }
+                    genitive{
+                        one{"{0}°"}
+                        other{"{0}°"}
+                    }
+                    instrumental{
+                        one{"{0}°"}
+                        other{"{0}°"}
+                    }
+                    locative{
+                        one{"{0}°"}
+                        other{"{0}°"}
+                    }
+                    vocative{
+                        one{"{0}°"}
+                        other{"{0}°"}
+                    }
+                }
                 dnam{"°"}
+                gender{"feminine"}
                 one{"{0}°"}
                 other{"{0}°"}
             }
             kelvin{
+                case{
+                    accusative{
+                        one{"{0} કેલ્વિન"}
+                        other{"{0} કેલ્વિન"}
+                    }
+                    dative{
+                        one{"{0} કેલ્વિન"}
+                        other{"{0} કેલ્વિન"}
+                    }
+                    genitive{
+                        one{"{0} કેલ્વિન"}
+                        other{"{0} કેલ્વિન"}
+                    }
+                    instrumental{
+                        one{"{0} કેલ્વિન"}
+                        other{"{0} કેલ્વિન"}
+                    }
+                    locative{
+                        one{"{0} કેલ્વિન"}
+                        other{"{0} કેલ્વિન"}
+                    }
+                    vocative{
+                        one{"{0} કેલ્વિન"}
+                        other{"{0} કેલ્વિન"}
+                    }
+                }
                 dnam{"કેલ્વિન"}
+                gender{"feminine"}
                 one{"{0} કેલ્વિન"}
                 other{"{0} કેલ્વિન"}
             }
@@ -909,7 +2319,34 @@ gu{
                 other{"{0} કપ"}
             }
             cup-metric{
+                case{
+                    accusative{
+                        one{"{0} મેટ્રિક કપ"}
+                        other{"{0} મેટ્રિક કપ"}
+                    }
+                    dative{
+                        one{"{0} મેટ્રિક કપ"}
+                        other{"{0} મેટ્રિક કપ"}
+                    }
+                    genitive{
+                        one{"{0} મેટ્રિક કપ"}
+                        other{"{0} મેટ્રિક કપ"}
+                    }
+                    instrumental{
+                        one{"{0} મેટ્રિક કપ"}
+                        other{"{0} મેટ્રિક કપ"}
+                    }
+                    locative{
+                        one{"{0} મેટ્રિક કપ"}
+                        other{"{0} મેટ્રિક કપ"}
+                    }
+                    vocative{
+                        one{"{0} મેટ્રિક કપ"}
+                        other{"{0} મેટ્રિક કપ"}
+                    }
+                }
                 dnam{"મેટ્રિક કપ"}
+                gender{"masculine"}
                 one{"{0} મેટ્રિક કપ"}
                 other{"{0} મેટ્રિક કપ"}
             }
@@ -971,7 +2408,34 @@ gu{
                 other{"{0} જિગર"}
             }
             liter{
+                case{
+                    accusative{
+                        one{"{0} લિટર"}
+                        other{"{0} લિટર"}
+                    }
+                    dative{
+                        one{"{0} લિટર"}
+                        other{"{0} લિટર"}
+                    }
+                    genitive{
+                        one{"{0} લિટર"}
+                        other{"{0} લિટર"}
+                    }
+                    instrumental{
+                        one{"{0} લિટર"}
+                        other{"{0} લિટર"}
+                    }
+                    locative{
+                        one{"{0} લિટર"}
+                        other{"{0} લિટર"}
+                    }
+                    vocative{
+                        one{"{0} લિટર"}
+                        other{"{0} લિટર"}
+                    }
+                }
                 dnam{"લિટર"}
+                gender{"masculine"}
                 one{"{0} લિટર"}
                 other{"{0} લિટર"}
                 per{"{0} પ્રતિ લિટર"}
@@ -997,7 +2461,34 @@ gu{
                 other{"{0} પિન્ટ"}
             }
             pint-metric{
+                case{
+                    accusative{
+                        one{"{0} મેટ્રિક પિન્ટ"}
+                        other{"{0} મેટ્રિક પિન્ટ"}
+                    }
+                    dative{
+                        one{"{0} મેટ્રિક પિન્ટ"}
+                        other{"{0} મેટ્રિક પિન્ટ"}
+                    }
+                    genitive{
+                        one{"{0} મેટ્રિક પિન્ટ"}
+                        other{"{0} મેટ્રિક પિન્ટ"}
+                    }
+                    instrumental{
+                        one{"{0} મેટ્રિક પિન્ટ"}
+                        other{"{0} મેટ્રિક પિન્ટ"}
+                    }
+                    locative{
+                        one{"{0} મેટ્રિક પિન્ટ"}
+                        other{"{0} મેટ્રિક પિન્ટ"}
+                    }
+                    vocative{
+                        one{"{0} મેટ્રિક પિન્ટ"}
+                        other{"{0} મેટ્રિક પિન્ટ"}
+                    }
+                }
                 dnam{"મેટ્રિક પિન્ટ"}
+                gender{"feminine"}
                 one{"{0} મેટ્રિક પિન્ટ"}
                 other{"{0} મેટ્રિક પિન્ટ"}
             }
@@ -1029,6 +2520,9 @@ gu{
                 one{"{0} G"}
                 other{"{0} G"}
             }
+            meter-per-square-second{
+                dnam{"મી/સે²"}
+            }
         }
         angle{
             arc-minute{
@@ -1041,6 +2535,24 @@ gu{
             }
             degree{
                 dnam{"અંશ"}
+            }
+            radian{
+                one{"{0} સમત્રિ."}
+                other{"{0} સમત્રિ."}
+            }
+        }
+        area{
+            square-centimeter{
+                one{"{0}ચો.સેમી"}
+                other{"{0}ચો.સેમી"}
+            }
+            square-kilometer{
+                one{"{0}ચો.કિમી"}
+                other{"{0}ચો.કિમી"}
+            }
+            square-meter{
+                one{"{0}ચો.મીટર"}
+                other{"{0}ચો.મીટર"}
             }
         }
         compound{
@@ -1074,10 +2586,27 @@ gu{
             per{"{0}/{1}"}
         }
         concentr{
+            item{
+                dnam{"વસ્તુ"}
+                one{"{0} વસ્તુ"}
+                other{"{0} વસ્તુ"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/L"}
+            }
             percent{
                 dnam{"%"}
                 one{"{0}%"}
                 other{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
+            }
+            permillion{
+                dnam{"ppm"}
+            }
+            permyriad{
+                dnam{"‱"}
             }
         }
         consumption{
@@ -1086,6 +2615,10 @@ gu{
                 one{"{0}લિ/100કિમી"}
                 other{"{0}લિ/100કિમી"}
             }
+            mile-per-gallon-imperial{
+                one{"{0} માઈલ/ઈમ્પે. ગેલન"}
+                other{"{0} માઈલ/ઈમ્પે. ગેલન"}
+            }
         }
         coordinate{
             dnam{"દિશા"}
@@ -1093,6 +2626,14 @@ gu{
             north{"{0}ઉ"}
             south{"{0}દ"}
             west{"{0}પ"}
+        }
+        digital{
+            gigabit{
+                dnam{"Gb"}
+            }
+            petabyte{
+                dnam{"PB"}
+            }
         }
         duration{
             day{
@@ -1123,6 +2664,9 @@ gu{
                 one{"{0} મ"}
                 other{"{0} મ"}
             }
+            nanosecond{
+                dnam{"ns"}
+            }
             second{
                 dnam{"સેકંડ"}
                 one{"{0} સે"}
@@ -1140,6 +2684,28 @@ gu{
                 other{"{0} વ"}
             }
         }
+        electric{
+            volt{
+                dnam{"વૉલ્ટ"}
+            }
+        }
+        energy{
+            electronvolt{
+                dnam{"eV"}
+            }
+        }
+        force{
+            kilowatt-hour-per-100-kilometer{
+                one{"{0}kWh/100km"}
+                other{"{0}kWh/100km"}
+            }
+            newton{
+                dnam{"N"}
+            }
+            pound-force{
+                dnam{"lbf"}
+            }
+        }
         length{
             centimeter{
                 dnam{"સેમી"}
@@ -1153,10 +2719,8 @@ gu{
                 other{"{0} ડેમી"}
             }
             foot{
-                dnam{"ફૂટ"}
                 one{"{0} '"}
                 other{"{0} '"}
-                per{"{0}/ફૂટ"}
             }
             inch{
                 dnam{"ઇંચ"}
@@ -1199,13 +2763,30 @@ gu{
                 one{"{0}પિસૉ.મી"}
                 other{"{0}પિસૉ.મી"}
             }
+            point{
+                dnam{"પોઈન્ટ"}
+            }
+            solar-radius{
+                dnam{"R☉"}
+            }
             yard{
                 dnam{"વાર"}
                 one{"{0} વાર"}
                 other{"{0} વાર"}
             }
         }
+        light{
+            solar-luminosity{
+                dnam{"L☉"}
+            }
+        }
         mass{
+            dalton{
+                dnam{"Da"}
+            }
+            earth-mass{
+                dnam{"M⊕"}
+            }
             gram{
                 dnam{"ગ્રામ"}
                 one{"{0} ગ્રા"}
@@ -1230,8 +2811,11 @@ gu{
                 other{"{0} પાઉન્ડ"}
                 per{"{0}/પાઉન્ડ"}
             }
+            solar-mass{
+                dnam{"M☉"}
+            }
             stone{
-                dnam{"સ્ટોન્સ"}
+                dnam{"સ્ટોન"}
                 one{"{0}સ્ટોન"}
                 other{"{0}સ્ટોન"}
             }
@@ -1289,6 +2873,22 @@ gu{
             }
         }
         volume{
+            dessert-spoon-imperial{
+                one{"{0} dstspn-Imp"}
+                other{"{0} dstspn-Imp"}
+            }
+            fluid-ounce{
+                one{"{0} પ્ર. ઔંસ"}
+                other{"{0} પ્ર. ઔંસ"}
+            }
+            fluid-ounce-imperial{
+                one{"{0} પ્રવાહી ઔંસ ઈમ્પિ."}
+                other{"{0} પ્રવાહી ઔંસ ઈમ્પિ."}
+            }
+            gallon-imperial{
+                one{"{0} ગૅ. ઈમ્પિ."}
+                other{"{0} ગૅ. ઈમ્પિ."}
+            }
             liter{
                 dnam{"લિટર"}
                 one{"{0} લિ"}
@@ -1327,8 +2927,8 @@ gu{
             }
             radian{
                 dnam{"સમત્રિજ્યાકોણ"}
-                one{"{0} સમત્રિજ્યાકોણ"}
-                other{"{0} સમત્રિજ્યાકોણ"}
+                one{"{0} સમત્રિ."}
+                other{"{0} સમત્રિ."}
             }
             revolution{
                 dnam{"પરિભ્રમણ"}
@@ -1424,6 +3024,11 @@ gu{
             per{"{0}/{1}"}
         }
         concentr{
+            item{
+                dnam{"વસ્તુ"}
+                one{"{0} વસ્તુ"}
+                other{"{0} વસ્તુ"}
+            }
             karat{
                 dnam{"કૅરેટ"}
                 one{"{0} કૅરેટ"}
@@ -1536,7 +3141,7 @@ gu{
                 other{"{0} MB"}
             }
             petabyte{
-                dnam{"પીબાઈટ"}
+                dnam{"PByte"}
                 one{"{0} PB"}
                 other{"{0} PB"}
             }
@@ -1637,7 +3242,7 @@ gu{
                 other{"{0} Ω"}
             }
             volt{
-                dnam{"volt"}
+                dnam{"વૉલ્ટ"}
                 one{"{0} V"}
                 other{"{0} V"}
             }
@@ -1826,7 +3431,7 @@ gu{
                 other{"{0} પિસૉમીટર"}
             }
             point{
-                dnam{"પોઈન્ટ્સ"}
+                dnam{"પોઈન્ટ"}
                 one{"{0} પોઈન્ટ"}
                 other{"{0} પોઈન્ટ"}
             }

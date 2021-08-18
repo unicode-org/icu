@@ -295,7 +295,7 @@ public final class LdmlConverter {
                 continue;
             }
             // TODO: Remove the following skip when ICU-20997 is fixed
-            if (id.contains("VALENCIA")) {
+            if (id.contains("VALENCIA") || id.contains("TARASK")) {
                 System.out.println("(skipping " + id + " until ICU-20997 is fixed)");
                 continue;
             }

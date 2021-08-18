@@ -207,6 +207,12 @@ fi{
             }
         }
         minimalPairs{
+            case{
+                elative{"{0} päivästä"}
+                illative{"{0} päivään"}
+                nominative{"{0} päivä"}
+                partitive{"{0} päivää"}
+            }
             ordinal{
                 other{"Käänny {0}. risteyksestä oikealle."}
             }
@@ -499,6 +505,7 @@ fi{
                 GyMMM{"LLL y G"}
                 GyMMMEd{"E d. MMM y G"}
                 GyMMMd{"d. MMM y G"}
+                GyMd{"d.M.y G"}
                 H{"H"}
                 Hm{"H.mm"}
                 Hms{"H.mm.ss"}
@@ -746,6 +753,7 @@ fi{
                 GyMMMMEd{"E d. MMMM y G"}
                 GyMMMMd{"d. MMMM y G"}
                 GyMMMd{"d. MMM y G"}
+                GyMd{"M.d.y G"}
                 H{"H"}
                 Hm{"H.mm"}
                 Hms{"H.mm.ss"}

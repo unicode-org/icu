@@ -670,6 +670,11 @@ en{
     Languages%menu{
         ars{"Arabic, Najdi"}
         ckb{"Kurdish, Central"}
+        se{"Sami, Northern"}
+        sma{"Sami, Southern"}
+        smj{"Sami, Lule"}
+        smn{"Sami, Inari"}
+        sms{"Sami, Skolt"}
         yue{"Chinese, Cantonese"}
         zh{"Chinese, Mandarin"}
     }
@@ -1197,6 +1202,7 @@ en{
             thai{"Thai Digits"}
             tibt{"Tibetan Digits"}
             tirh{"Tirhuta Digits"}
+            tnsa{"Tangsa Digits"}
             traditional{"Traditional Numerals"}
             vaii{"Vai Digits"}
             wara{"Warang Citi Digits"}

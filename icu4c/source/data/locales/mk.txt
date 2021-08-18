@@ -563,6 +563,7 @@ mk{
                 GyMMM{"MMM y 'г'. G"}
                 GyMMMEd{"E, dd MMM y 'г'. G"}
                 GyMMMd{"dd MMM y 'г'. G"}
+                GyMd{"d.M.y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -794,6 +795,7 @@ mk{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM y G"}
+                GyMd{"d.M.y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -839,7 +841,7 @@ mk{
                     abbreviated{
                         "нед.",
                         "пон.",
-                        "вт.",
+                        "вто.",
                         "сре.",
                         "чет.",
                         "пет.",
@@ -1006,13 +1008,13 @@ mk{
                     m{"h:mm – h:mm B"}
                 }
                 Gy{
-                    G{"G y – G y"}
-                    y{"G y – y"}
+                    G{"y G – y G"}
+                    y{"y – y G"}
                 }
                 GyM{
-                    G{"GGGGG y-MM – GGGGG y-MM"}
-                    M{"GGGGG y-MM – y-MM"}
-                    y{"GGGGG y-MM – y-MM"}
+                    G{"M.y GGGGG – M.y GGGGG"}
+                    M{"M.y – M.y GGGGG"}
+                    y{"M.y – M.y GGGGG"}
                 }
                 GyMEd{
                     G{"GGGGG y-MM-dd, E – GGGGG y-MM-dd, E"}

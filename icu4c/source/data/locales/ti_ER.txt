@@ -10,12 +10,12 @@ ti_ER{
                 "h:mm:ss a",
                 "h:mm a",
                 "EEEE፡ dd MMMM መዓልቲ y G",
-                "dd MMMM y G",
-                "dd-MMM-y G",
+                "d MMMM y G",
+                "d MMM y G",
                 "dd/MM/yy GGGGG",
                 "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1} ሰዓት {0}",
+                "{1} ሰዓት {0}",
                 "{1} {0}",
                 "{1} {0}",
             }
@@ -31,23 +31,10 @@ ti_ER{
             }
         }
         gregorian{
-            dayNames{
-                stand-alone{
-                    narrow{
-                        "ሰ",
-                        "ሰ",
-                        "ሰ",
-                        "ረ",
-                        "ሓ",
-                        "ዓ",
-                        "ቀ",
-                    }
-                }
-            }
             eras{
                 wide{
                     "ዓመተ ዓለም",
-                    "ዓመተ ምህረት",
+                    "ዓመተ ምሕረት",
                 }
                 wide%variant{
                     "ቅድሚ ልደተ ክርስቶስ",
@@ -57,8 +44,6 @@ ti_ER{
         }
     }
     delimiters{
-        alternateQuotationEnd{"”"}
-        alternateQuotationStart{"“"}
         quotationEnd{"’"}
         quotationStart{"‘"}
     }

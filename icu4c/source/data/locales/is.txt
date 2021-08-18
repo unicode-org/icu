@@ -211,6 +211,9 @@ is{
             }
         }
         minimalPairs{
+            case{
+                genitive{"til {0}"}
+            }
             ordinal{
                 other{"Taktu {0}. beygju til hægri."}
             }
@@ -968,6 +971,7 @@ is{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d. MMM y G"}
                 GyMMMd{"d. MMM y G"}
+                GyMd{"d/M/y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -1190,6 +1194,7 @@ is{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d. MMM y G"}
                 GyMMMd{"d. MMM y G"}
+                GyMd{"d/M/y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -3135,16 +3140,6 @@ is{
                 "1"{"á morgun"}
                 "2"{"eftir tvo daga"}
             }
-            relativeTime{
-                future{
-                    one{"+{0} dag"}
-                    other{"+{0} daga"}
-                }
-                past{
-                    one{"-{0} degi"}
-                    other{"-{0} dögum"}
-                }
-            }
         }
         day-short{
             dn{"dagur"}
@@ -3827,17 +3822,6 @@ is{
                 "-1"{"í síðustu viku"}
                 "0"{"í þessari viku"}
                 "1"{"í næstu viku"}
-            }
-            relativePeriod{"vika {0}"}
-            relativeTime{
-                future{
-                    one{"+{0} viku"}
-                    other{"+{0} vikur"}
-                }
-                past{
-                    one{"-{0} viku"}
-                    other{"-{0} vikur"}
-                }
             }
         }
         week-short{

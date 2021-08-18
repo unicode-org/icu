@@ -315,8 +315,9 @@ void TimeUnitTest::testGreekWithFallback() {
     const UChar oneSecond[] = {0x0031, 0x0020, 0x03b4, 0x03b5, 0x03c5, 0x03c4, 0x03b5, 0x03c1, 0x03cc, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03bf, 0};
     const UChar oneSecondShort[] = {0x0031, 0x0020, 0x03b4, 0x03b5, 0x03c5, 0x03c4, 0x002e, 0};
     const UChar oneMinute[] = {0x0031, 0x0020, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03cc, 0};
-    const UChar oneMinuteShort[] = {0x0031, 0x0020, 0x03bb, 0x03b5, 0x03c0, 0x002e, 0};
+    const UChar oneMinuteShort[] = {0x0031, 0x0020, 0x03bb, 0x002e, 0};
     const UChar oneHour[] = {0x0031, 0x0020, 0x03ce, 0x03c1, 0x03b1, 0};
+    const UChar oneHourShort[] = {0x0031, 0x0020, 0x03ce, 0x002e, 0};
     const UChar oneDay[] = {0x0031, 0x0020, 0x03b7, 0x03bc, 0x03ad, 0x03c1, 0x03b1, 0};
     const UChar oneMonth[] = {0x0031, 0x0020, 0x03bc, 0x03ae, 0x03bd, 0x03b1, 0x03c2, 0};
     const UChar oneMonthShort[] = {0x0031, 0x0020, 0x03bc, 0x03ae, 0x03bd, 0x002e, 0};
@@ -325,9 +326,9 @@ void TimeUnitTest::testGreekWithFallback() {
     const UChar sevenSeconds[] = {0x0037, 0x0020, 0x03b4, 0x03b5, 0x03c5, 0x03c4, 0x03b5, 0x03c1, 0x03cc, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03b1, 0};
     const UChar sevenSecondsShort[] = {0x0037, 0x0020, 0x03b4, 0x03b5, 0x03c5, 0x03c4, 0x002e, 0};
     const UChar sevenMinutes[] = {0x0037, 0x0020, 0x03bb, 0x03b5, 0x03c0, 0x03c4, 0x03ac, 0};
-    const UChar sevenMinutesShort[] = {0x0037, 0x0020, 0x03bb, 0x03b5, 0x03c0, 0x002e, 0};
+    const UChar sevenMinutesShort[] = {0x0037, 0x0020, 0x03bb, 0x002e, 0};
     const UChar sevenHours[] = {0x0037, 0x0020, 0x03ce, 0x03c1, 0x03b5, 0x03c2, 0};
-    const UChar sevenHoursShort[] = {0x0037, 0x0020, 0x03ce, 0x03c1, 0x002e, 0};
+    const UChar sevenHoursShort[] = {0x0037, 0x0020, 0x03ce, 0x002e, 0};
     const UChar sevenDays[] = {0x0037, 0x0020, 0x03b7, 0x03bc, 0x03ad, 0x03c1, 0x03b5, 0x03c2, 0};
     const UChar sevenMonths[] = {0x0037, 0x0020, 0x03bc, 0x03ae, 0x03bd, 0x03b5, 0x3c2, 0};
     const UChar sevenMonthsShort[] = {0x0037, 0x0020, 0x03bc, 0x03ae, 0x03bd, 0x002e, 0};
@@ -339,6 +340,7 @@ void TimeUnitTest::testGreekWithFallback() {
     const UnicodeString oneMinuteStr(oneMinute);
     const UnicodeString oneMinuteShortStr(oneMinuteShort);
     const UnicodeString oneHourStr(oneHour);
+    const UnicodeString oneHourShortStr(oneHourShort);
     const UnicodeString oneDayStr(oneDay);
     const UnicodeString oneMonthStr(oneMonth);
     const UnicodeString oneMonthShortStr(oneMonthShort);
@@ -358,12 +360,12 @@ void TimeUnitTest::testGreekWithFallback() {
 
     const UnicodeString expected[] = {
             oneSecondStr, oneMinuteStr, oneHourStr, oneDayStr, oneMonthStr, oneYearStr,
-            oneSecondShortStr, oneMinuteShortStr, oneHourStr, oneDayStr, oneMonthShortStr, oneYearShortStr,
+            oneSecondShortStr, oneMinuteShortStr, oneHourShortStr, oneDayStr, oneMonthShortStr, oneYearShortStr,
             sevenSecondsStr, sevenMinutesStr, sevenHoursStr, sevenDaysStr, sevenMonthsStr, sevenYearsStr,
             sevenSecondsShortStr, sevenMinutesShortStr, sevenHoursShortStr, sevenDaysStr, sevenMonthsShortStr, sevenYearsShortStr,
 
             oneSecondStr, oneMinuteStr, oneHourStr, oneDayStr, oneMonthStr, oneYearStr,
-            oneSecondShortStr, oneMinuteShortStr, oneHourStr, oneDayStr, oneMonthShortStr, oneYearShortStr,
+            oneSecondShortStr, oneMinuteShortStr, oneHourShortStr, oneDayStr, oneMonthShortStr, oneYearShortStr,
             sevenSecondsStr, sevenMinutesStr, sevenHoursStr, sevenDaysStr, sevenMonthsStr, sevenYearsStr,
             sevenSecondsShortStr, sevenMinutesShortStr, sevenHoursShortStr, sevenDaysStr, sevenMonthsShortStr, sevenYearsShortStr};
 

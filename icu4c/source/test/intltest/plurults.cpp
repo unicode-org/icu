@@ -405,10 +405,10 @@ void PluralRulesTest::testGetSamples() {
 
     double values[1000];
     for (int32_t i = 0; U_SUCCESS(status) && i < numLocales; ++i) {
-        if (uprv_strcmp(locales[i].getLanguage(), "fr") == 0 &&
-                logKnownIssue("21322", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
-            continue;
-        }
+        //if (uprv_strcmp(locales[i].getLanguage(), "fr") == 0 &&
+        //        logKnownIssue("21322", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
+        //    continue;
+        //}
         LocalPointer<PluralRules> rules(PluralRules::forLocale(locales[i], status));
         if (U_FAILURE(status)) {
             break;
@@ -466,10 +466,10 @@ void PluralRulesTest::testGetFixedDecimalSamples() {
 
     FixedDecimal values[1000];
     for (int32_t i = 0; U_SUCCESS(status) && i < numLocales; ++i) {
-        if (uprv_strcmp(locales[i].getLanguage(), "fr") == 0 &&
-                logKnownIssue("21322", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
-            continue;
-        }
+        //if (uprv_strcmp(locales[i].getLanguage(), "fr") == 0 &&
+        //        logKnownIssue("21322", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
+        //    continue;
+        //}
         LocalPointer<PluralRules> rules(PluralRules::forLocale(locales[i], status));
         if (U_FAILURE(status)) {
             break;
@@ -507,8 +507,13 @@ void PluralRulesTest::testGetFixedDecimalSamples() {
                     //     std::cout << "  uk " << US(resultKeyword).cstr() << " " << values[j] << std::endl;
                     // }
                     if (*keyword != resultKeyword) {
-                        errln("file %s, line %d, Locale %s, sample for keyword \"%s\":  %s, select(%s) returns keyword \"%s\"",
-                                  __FILE__, __LINE__, locales[i].getName(), US(*keyword).cstr(), values[j].toString().getBuffer(), values[j].toString().getBuffer(), US(resultKeyword).cstr());
+                        if (values[j].exponent == 0 || !logKnownIssue("21714", "PluralRules::select treats 1c6 as 1")) {
+                            UnicodeString valueString(values[j].toString());
+                            char valueBuf[16];
+                            valueString.extract(0, valueString.length(), valueBuf, sizeof(valueBuf));
+                            errln("file %s, line %d, Locale %s, sample for keyword \"%s\":  %s, select(%s) returns keyword \"%s\"",
+                                      __FILE__, __LINE__, locales[i].getName(), US(*keyword).cstr(), valueBuf, valueBuf, US(resultKeyword).cstr());
+                        }
                     }
                 }
             }

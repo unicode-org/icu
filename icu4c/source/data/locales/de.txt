@@ -715,6 +715,7 @@ de{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d. MMM y G"}
                 GyMMMd{"d. MMM y G"}
+                GyMd{"dd.MM.y GGGGG"}
                 H{"HH 'Uhr'"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -1854,7 +1855,7 @@ de{
         musical_symbols{"Musikalische Zeichen"}
         nature{"Natur"}
         nonspacing{"Geschützte Zeichen"}
-        numbers{"Ziffern"}
+        numbers{"Zahlen"}
         objects{"Objekte"}
         other{"Andere"}
         paired{"Paarig"}
@@ -2753,8 +2754,6 @@ de{
         }
     }
     measurementSystemNames{
-        UK{"Englisches"}
-        US{"Angloamerikanisches"}
         metric{"Internationales (SI)"}
     }
     parse{

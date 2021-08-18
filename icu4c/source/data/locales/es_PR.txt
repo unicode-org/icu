@@ -52,7 +52,7 @@ es_PR{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
             }
             DateTimeSkeletons{
                 "ahmmsszzzz",

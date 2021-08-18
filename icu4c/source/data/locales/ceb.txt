@@ -70,6 +70,7 @@ ceb{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, MMM d, y G"}
                 GyMMMd{"MMM d, y G"}
+                GyMd{"M/d/y GGGGG"}
                 MEd{"E, M/d"}
                 MMMEd{"E, MMM d"}
                 Md{"M/d"}
@@ -237,6 +238,7 @@ ceb{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, MMM d, y G"}
                 GyMMMd{"MMM d, y G"}
+                GyMd{"M/d/y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}

@@ -288,14 +288,16 @@ ru{
                 instrumental{"Занимаюсь {0}"}
                 locative{"Сижу на {0}"}
                 nominative{"{0} здесь"}
+                prepositional{"Думаю о {0}"}
                 vocative{"Эй, {0}"}
             }
             gender{
                 feminine{"эта {0}"}
                 masculine{"этот {0}"}
+                neuter{"это {0}"}
             }
             ordinal{
-                other{"Сверните направо на {0}-м перекрестке."}
+                other{"{0}-й перекресток — поворот направо."}
             }
             plural{
                 few{"из {0} книг за {0} дня"}
@@ -709,6 +711,7 @@ ru{
                 GyMMM{"LLL y 'г'. G"}
                 GyMMMEd{"E, d MMM y 'г'. G"}
                 GyMMMd{"d MMM y 'г'. G"}
+                GyMd{"dd.MM.y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -931,9 +934,10 @@ ru{
                 Ehm{"E h:mm a"}
                 Ehms{"E h:mm:ss a"}
                 Gy{"y 'г'. G"}
-                GyMMM{"LLL y G"}
+                GyMMM{"LLL y 'г'. G"}
                 GyMMMEd{"E, d MMM y 'г'. G"}
                 GyMMMd{"d MMM y 'г'. G"}
+                GyMd{"dd.MM.y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -981,15 +985,6 @@ ru{
             dayNames{
                 format{
                     abbreviated{
-                        "вс",
-                        "пн",
-                        "вт",
-                        "ср",
-                        "чт",
-                        "пт",
-                        "сб",
-                    }
-                    narrow{
                         "вс",
                         "пн",
                         "вт",
@@ -3297,7 +3292,7 @@ ru{
     }
     measurementSystemNames{
         UK{"Английская"}
-        US{"Англо-американская"}
+        US{"Американская"}
         metric{"Метрическая"}
     }
     parse{
