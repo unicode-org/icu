@@ -2,15 +2,47 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 en_CA{
-    %%Parent{"en_001"}
     Currencies{
         CAD{
             "$",
             "Canadian Dollar",
         }
+        STN{
+            "STN",
+            "São Tomé and Príncipe Dobra",
+        }
+        TTD{
+            "TTD",
+            "Trinidad and Tobago Dollar",
+        }
+        USD{
+            "US$",
+            "U.S. Dollar",
+        }
         VES{
             "VES",
             "Venezuelan Bolívar",
+        }
+    }
+    Currencies%narrow{
+        USD{"$"}
+    }
+    CurrencyPlurals{
+        AED{
+            one{"U.A.E. dirham"}
+            other{"U.A.E. dirhams"}
+        }
+        STN{
+            one{"São Tomé and Príncipe dobra"}
+            other{"São Tomé and Príncipe dobras"}
+        }
+        TTD{
+            one{"Trinidad and Tobago dollar"}
+            other{"Trinidad and Tobago dollars"}
+        }
+        USD{
+            one{"U.S. dollar"}
+            other{"U.S. dollars"}
         }
     }
 }

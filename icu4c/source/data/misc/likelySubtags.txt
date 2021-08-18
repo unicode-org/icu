@@ -566,7 +566,7 @@ likelySubtags:table(nofallback){
     kcl{"kcl_Latn_ZZ"}
     kct{"kct_Latn_ZZ"}
     kde{"kde_Latn_TZ"}
-    kdh{"kdh_Arab_TG"}
+    kdh{"kdh_Latn_TG"}
     kdl{"kdl_Latn_ZZ"}
     kdt{"kdt_Thai_TH"}
     kea{"kea_Latn_CV"}
@@ -1378,6 +1378,8 @@ likelySubtags:table(nofallback){
     und_Cher{"chr_Cher_US"}
     und_Chrs{"xco_Chrs_UZ"}
     und_Copt{"cop_Copt_EG"}
+    und_Cpmn{"und_Cpmn_CY"}
+    und_Cpmn_CY{"und_Cpmn_CY"}
     und_Cprt{"grc_Cprt_CY"}
     und_Cyrl{"ru_Cyrl_RU"}
     und_Cyrl_AL{"mk_Cyrl_AL"}

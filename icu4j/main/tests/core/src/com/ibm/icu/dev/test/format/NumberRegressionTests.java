@@ -552,7 +552,7 @@ public class NumberRegressionTests extends TestFmwk {
         String expectedPercent = "-578 998%";
     */
         String expectedDefault = "-5\u00a0789,988";
-        String expectedCurrency = "5\u00a0789,99\u00a0$\u00a0CA";
+        String expectedCurrency = "5\u00a0789,99\u00a0$";
         String expectedPercent = "-578\u00a0999\u00A0%";
 
         formatter = NumberFormat.getNumberInstance(Locale.CANADA_FRENCH);

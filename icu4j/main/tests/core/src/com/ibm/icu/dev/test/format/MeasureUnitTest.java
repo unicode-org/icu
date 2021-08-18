@@ -2548,8 +2548,8 @@ public class MeasureUnitTest extends TestFmwk {
                 "1 έτος",
                 // "el_GR" 1 short
                 "1 δευτ.",
-                "1 λεπ.",
-                "1 ώρα",
+                "1 λ.",
+                "1 ώ.",
                 "1 ημέρα",
                 "1 εβδ.",
                 "1 μήν.",
@@ -2564,8 +2564,8 @@ public class MeasureUnitTest extends TestFmwk {
                 "7 έτη",
                 // "el_GR" 7 short
                 "7 δευτ.",
-                "7 λεπ.",
-                "7 ώρ.",		    // hour (other)
+                "7 λ.",
+                "7 ώ.",		       // hour (other)
                 "7 ημέρες",
                 "7 εβδ.",
                 "7 μήν.",
@@ -2580,8 +2580,8 @@ public class MeasureUnitTest extends TestFmwk {
                 "1 έτος",
                 // "el" 1 short
                 "1 δευτ.",
-                "1 λεπ.",
-                "1 ώρα",
+                "1 λ.",
+                "1 ώ.",
                 "1 ημέρα",
                 "1 εβδ.",
                 "1 μήν.",
@@ -2596,8 +2596,8 @@ public class MeasureUnitTest extends TestFmwk {
                 "7 έτη",
                 // "el" 7 short
                 "7 δευτ.",
-                "7 λεπ.",
-                "7 ώρ.",		    // hour (other)
+                "7 λ.",
+                "7 ώ.",		        // hour (other)
                 "7 ημέρες",
                 "7 εβδ.",
                 "7 μήν.",
@@ -2677,7 +2677,7 @@ public class MeasureUnitTest extends TestFmwk {
                 {ULocale.ENGLISH, FormatWidth.NARROW, "2mi 1\u2032 2.3\u2033"},
                 {russia, FormatWidth.WIDE,   "2 \u043C\u0438\u043B\u0438 1 \u0444\u0443\u0442 2,3 \u0434\u044E\u0439\u043C\u0430"},
                 {russia, FormatWidth.SHORT,  "2 \u043C\u0438 1 \u0444\u0442 2,3 \u0434\u044E\u0439\u043C."},
-                {russia, FormatWidth.NARROW, "2 \u043C\u0438\u043B\u044C 1 \u0444\u0442 2,3 \u0434\u044E\u0439\u043C\u0430"},
+                {russia, FormatWidth.NARROW, "2 \u043C\u0438 1 \u0444\u0442 2,3 \u0434\u044E\u0439\u043C."},
    };
         for (Object[] row : data) {
             MeasureFormat mf = MeasureFormat.getInstance(

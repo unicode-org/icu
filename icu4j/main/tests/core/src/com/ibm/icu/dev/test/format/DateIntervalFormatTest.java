@@ -2399,7 +2399,7 @@ public class DateIntervalFormatTest extends TestFmwk {
 
         formatted = roc.formatToValue(beforeAfterMG);
         assertEquals("roc calendar - prior MG Era and in MG Era",
-                     "民國前1年1月2日 上午6時 – 民國2年1月2日 上午6時",
+                     "民國前1/1/2 上午6時 – 民國2/1/2 上午6時",
                      formatted.toString());
         verifyFields(formatted, expectedFields);
 

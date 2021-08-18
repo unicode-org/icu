@@ -43,12 +43,16 @@ public final class BreakIteratorMapper {
         specials.addValueAction("icu:boundaries/*", BreakIteratorMapper::addBoundary);
         specials.addValueAction(
             "icu:dictionaries/icu:dictionary", BreakIteratorMapper::addDictionary);
+        specials.addValueAction(
+            "icu:lstm/icu:lstmdata", BreakIteratorMapper::addLstmdata);
         CLDR_PROCESSOR = processor.build();
     }
 
     private static final AttributeKey SEGMENTATION_TYPE = keyOf("segmentation", "type");
     private static final AttributeKey DICTIONARY_DEP = keyOf("icu:dictionary", "icu:dependency");
     private static final AttributeKey DICTIONARY_TYPE = keyOf("icu:dictionary", "type");
+    private static final AttributeKey LSTMDATA_DEP = keyOf("icu:lstmdata", "icu:dependency");
+    private static final AttributeKey LSTMDATA_TYPE = keyOf("icu:lstmdata", "type");
 
     /**
      * Processes data from the given supplier to generate break-iterator data for a set of locale
@@ -87,13 +91,23 @@ public final class BreakIteratorMapper {
     }
 
     private void addDictionary(CldrValue v) {
+        //System.out.println("addDictionary: " + v.toString());
         addDependency(
             getDependencyName(v),
             DICTIONARY_TYPE.valueFrom(v),
             DICTIONARY_DEP.optionalValueFrom(v));
     }
 
+    private void addLstmdata(CldrValue v) {
+        //System.out.println("addLstmdata: " + v.toString());
+        addDependency(
+            getDependencyName(v),
+            LSTMDATA_TYPE.valueFrom(v),
+            LSTMDATA_DEP.optionalValueFrom(v));
+    }
+
     private void addDependency(String name, String type, Optional<String> dependency) {
+        //System.out.println("addDependency: name " + name + ", type " + type + ", dependency " + dependency);
         icuData.add(
             RbPath.of(name, type + ":process(dependency)"),
             dependency.orElseThrow(() -> new IllegalArgumentException("missing dependency")));

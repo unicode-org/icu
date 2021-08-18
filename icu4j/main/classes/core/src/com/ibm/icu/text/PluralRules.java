@@ -1077,6 +1077,10 @@ public class PluralRules implements Serializable {
          */
         @Deprecated
         public long getShiftedValue() {
+            if (exponent != 0 && visibleDecimalDigitCount == 0 && decimalDigits == 0) {
+                // Need to taxe exponent into account if we have it
+                return (long)(source * Math.pow(10, exponent));
+            }
             return integerValue * baseFactor + decimalDigits;
         }
 

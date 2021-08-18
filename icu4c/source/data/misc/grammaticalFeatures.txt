@@ -395,10 +395,6 @@ grammaticalFeatures:table(nofallback){
                             "feminine",
                             "neuter",
                         }
-                        units{
-                            "masculine",
-                            "feminine",
-                        }
                     }
                 }
             }
@@ -602,7 +598,6 @@ grammaticalFeatures:table(nofallback){
                             "feminine",
                             "neuter",
                         }
-                        units{"neuter"}
                     }
                 }
             }
@@ -708,7 +703,11 @@ grammaticalFeatures:table(nofallback){
                             "feminine",
                             "neuter",
                         }
-                        units{"neuter"}
+                        units{
+                            "inanimate",
+                            "feminine",
+                            "neuter",
+                        }
                     }
                 }
             }
@@ -732,7 +731,6 @@ grammaticalFeatures:table(nofallback){
                             "feminine",
                             "neuter",
                         }
-                        units{"neuter"}
                     }
                 }
             }
@@ -912,10 +910,6 @@ grammaticalFeatures:table(nofallback){
                             "masculine",
                             "feminine",
                             "neuter",
-                        }
-                        units{
-                            "masculine",
-                            "feminine",
                         }
                     }
                 }
@@ -1141,10 +1135,6 @@ grammaticalFeatures:table(nofallback){
                             "masculine",
                             "feminine",
                             "neuter",
-                        }
-                        units{
-                            "masculine",
-                            "feminine",
                         }
                     }
                 }

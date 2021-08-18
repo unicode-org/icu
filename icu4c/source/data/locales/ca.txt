@@ -205,6 +205,10 @@ ca{
             }
         }
         minimalPairs{
+            gender{
+                feminine{"La {0} és"}
+                masculine{"El {0} és"}
+            }
             ordinal{
                 few{"Agafa el {0}t a la dreta."}
                 one{"Agafa el {0}r a la dreta."}
@@ -399,6 +403,7 @@ ca{
                 GyMMMMEd{"E, d MMMM 'de' y G"}
                 GyMMMMd{"d MMMM 'de' y G"}
                 GyMMMd{"d MMM y G"}
+                GyMd{"dd-MM-y GGGGG"}
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
@@ -634,6 +639,7 @@ ca{
                 GyMMMMEd{"E, d MMMM 'de' y G"}
                 GyMMMMd{"d MMMM 'de' y G"}
                 GyMMMd{"d MMM 'de' y G"}
+                GyMd{"dd-MM-y GGGGG"}
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}

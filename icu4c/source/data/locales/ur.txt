@@ -235,6 +235,14 @@ ur{
             }
         }
         minimalPairs{
+            case{
+                nominative{"دن باقی ہے۔ {0}"}
+                oblique{"باقی {0} دن۔"}
+            }
+            gender{
+                feminine{"{0} دنوں کی وارنٹی"}
+                masculine{"استعمال کے {0} دن"}
+            }
             ordinal{
                 other{"دایاں موڑ نمبر {0} مڑیں۔"}
             }
@@ -466,6 +474,7 @@ ur{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E، d MMM، y G"}
                 GyMMMd{"d MMM، y G"}
+                GyMd{"d/M/y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -693,6 +702,7 @@ ur{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E، d MMM، y G"}
                 GyMMMd{"d MMM، y G"}
+                GyMd{"d/M/y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -1321,6 +1331,9 @@ ur{
             }
         }
         islamic{
+            availableFormats{
+                GyMd{"d/M/y GGGGG"}
+            }
             eras{
                 abbreviated{
                     "ہجری",

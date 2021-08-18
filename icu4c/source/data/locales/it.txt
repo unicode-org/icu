@@ -210,6 +210,7 @@ it{
                 other{"Prendi la {0}° a destra."}
             }
             plural{
+                many{"{0} di giorni"}
                 one{"{0} giorno"}
                 other{"{0} giorni"}
             }
@@ -294,6 +295,7 @@ it{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E d MMM y G"}
                 GyMMMd{"d MMM y G"}
+                GyMd{"d/M/y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -521,6 +523,7 @@ it{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E d MMM y G"}
                 GyMMMd{"d MMM y G"}
+                GyMd{"d/M/y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}

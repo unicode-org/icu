@@ -162,6 +162,14 @@ vi{
                 superscriptingExponent{"×"}
             }
         }
+        minimalPairs{
+            ordinal{
+                other{"Theo lối rẽ thứ {0} bên phải."}
+            }
+            plural{
+                other{"{0} ngày"}
+            }
+        }
         minimumGroupingDigits{"1"}
     }
     calendar{
@@ -240,6 +248,9 @@ vi{
                 Gy{"r U"}
                 GyMMM{"r(U) MMM"}
                 GyMMMEd{"r(U) MMM d, E"}
+                GyMMMM{"r(U) MMMM"}
+                GyMMMMEd{"E, d/MMMM r(U)"}
+                GyMMMMd{"d/MMMM r(U)"}
                 GyMMMd{"r MMM d"}
                 H{"HH"}
                 Hm{"HH:mm"}
@@ -268,6 +279,8 @@ vi{
                 yyyyMMM{"r(U) MMM"}
                 yyyyMMMEd{"r(U) MMM d, E"}
                 yyyyMMMM{"r(U) MMMM"}
+                yyyyMMMMEd{"E, d/MMMM r(U)"}
+                yyyyMMMMd{"d/MMMM r(U)"}
                 yyyyMMMd{"r MMM d"}
                 yyyyMd{"r-MM-dd"}
                 yyyyQQQ{"r(U) QQQ"}
@@ -715,6 +728,7 @@ vi{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d MMM, y G"}
                 GyMMMd{"d MMM, y G"}
+                GyMd{"dd/MM/y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -945,6 +959,7 @@ vi{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, dd/MM/y G"}
                 GyMMMd{"dd MMM, y G"}
+                GyMd{"dd/MM/y GGGGG"}
                 H{"HH"}
                 Hm{"H:mm"}
                 Hms{"HH:mm:ss"}

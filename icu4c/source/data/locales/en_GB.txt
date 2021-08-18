@@ -59,6 +59,7 @@ en_GB{
             availableFormats{
                 EBhm{"E h:mm B"}
                 EBhms{"E h:mm:ss B"}
+                GyMd{"d/M/y GGGGG"}
             }
             dayNames{
                 format{

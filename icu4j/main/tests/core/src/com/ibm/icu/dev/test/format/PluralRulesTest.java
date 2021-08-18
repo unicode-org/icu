@@ -386,6 +386,8 @@ public class PluralRulesTest extends TestFmwk {
         }
     }
 
+    private static final Set<String> compactExponentLocales = new HashSet(Arrays.asList("es", "fr", "it", "pt"));
+
     @Test
     public void testUniqueRules() {
         main: for (ULocale locale : factory.getAvailableULocales()) {
@@ -412,6 +414,9 @@ public class PluralRulesTest extends TestFmwk {
                 }
                 keywordToRule.put(keyword, singleRule);
             }
+            if (compactExponentLocales.contains(locale.getLanguage()) && logKnownIssue("21714", "PluralRules.select treats 1c6 as 1")) {
+                continue;
+            }
             Map<FixedDecimal, String> collisionTest = new TreeMap();
             for (FixedDecimalSamples sample3 : samples) {
                 Set<FixedDecimalRange> samples2 = sample3.getSamples();
@@ -430,10 +435,7 @@ public class PluralRulesTest extends TestFmwk {
                             }
                             String old = collisionTest.get(item);
                             if (old != null) {
-                                if (!locale.getLanguage().equals("fr") ||
-                                        !logKnownIssue("21322", "fr Non-unique rules: 1e6 => one & many")) {
-                                    errln(locale + "\tNon-unique rules: " + item + " => " + old + " & " + foundKeyword);
-                                }
+                                errln(locale + "\tNon-unique rules: " + item + " => " + old + " & " + foundKeyword);
                                 rule.select(item);
                             } else {
                                 collisionTest.put(item, foundKeyword);
@@ -743,10 +745,10 @@ public class PluralRulesTest extends TestFmwk {
             uniqueRuleSet.add(PluralRules.getFunctionalEquivalent(locale, null));
         }
         for (ULocale locale : uniqueRuleSet) {
-            if (locale.getLanguage().equals("fr") &&
-                    logKnownIssue("21322", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
-                continue;
-            }
+            //if (locale.getLanguage().equals("fr") &&
+            //        logKnownIssue("21322", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
+            //    continue;
+            //}
             PluralRules rules = factory.forLocale(locale);
             logln("\nlocale: " + (locale == ULocale.ROOT ? "root" : locale.toString()) + ", rules: " + rules);
             Set<String> keywords = rules.getKeywords();
@@ -1167,6 +1169,10 @@ public class PluralRulesTest extends TestFmwk {
                 ULocale locale = new ULocale(localeString);
                 if (factory.hasOverride(locale)) {
                     continue; // skip for now
+                }
+                if (compactExponentLocales.contains(locale.getLanguage()) && logKnownIssue("21322", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
+                    // or logKnownIssue("21714", "PluralRules.select treats 1c6 as 1") ?
+                    continue;
                 }
                 PluralRules rules = factory.forLocale(locale);
                 for (int i = 1; i < parts.length; ++i) {

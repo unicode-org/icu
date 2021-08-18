@@ -927,6 +927,9 @@ zh{
                 Gy{"rU年"}
                 GyMMM{"rU年MMM"}
                 GyMMMEd{"rU年MMMdE"}
+                GyMMMM{"rU年MMMM"}
+                GyMMMMEd{"rU年MMMdE"}
+                GyMMMMd{"rU年MMMMd"}
                 GyMMMd{"r年MMMd"}
                 H{"HH"}
                 Hm{"HH:mm"}
@@ -955,6 +958,8 @@ zh{
                 yyyyMMM{"rU年MMM"}
                 yyyyMMMEd{"rU年MMMdE"}
                 yyyyMMMM{"rU年MMMM"}
+                yyyyMMMMEd{"rU年MMMMdE"}
+                yyyyMMMMd{"rU年MMMMd"}
                 yyyyMMMd{"r年MMMd"}
                 yyyyMd{"r年MMMd"}
                 yyyyQQQ{"rU年QQQQ"}

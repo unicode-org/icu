@@ -373,10 +373,6 @@ kok{
             }
         }
         gregorian{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             AmPmMarkersAbbr{
                 "AM",
                 "PM",

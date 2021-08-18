@@ -1691,6 +1691,9 @@ nl{
                 Gy{"U"}
                 GyMMM{"MMM U"}
                 GyMMMEd{"E d MMM U"}
+                GyMMMM{"MMMM r(U)"}
+                GyMMMMEd{"E d MMMM r(U)"}
+                GyMMMMd{"d MMMM r(U)"}
                 GyMMMd{"d MMM U"}
                 H{"HH"}
                 Hm{"HH:mm"}
@@ -1719,6 +1722,8 @@ nl{
                 yyyyMMM{"MMM U"}
                 yyyyMMMEd{"E d MMM U"}
                 yyyyMMMM{"MMMM U"}
+                yyyyMMMMEd{"E d MMMM r(U)"}
+                yyyyMMMMd{"d MMMM r(U)"}
                 yyyyMMMd{"d MMM U"}
                 yyyyMd{"d-M-y"}
                 yyyyQQQ{"QQQ U"}
@@ -4283,6 +4288,7 @@ nl{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E d MMM y G"}
                 GyMMMd{"d MMM y G"}
+                GyMd{"d/M/y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -4504,6 +4510,7 @@ nl{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E d MMM y G"}
                 GyMMMd{"d MMM y G"}
+                GyMd{"d/M/y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}

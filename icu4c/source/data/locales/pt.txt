@@ -210,6 +210,7 @@ pt{
                 other{"Pegue a {0}ª à direita."}
             }
             plural{
+                many{"{0} de dias"}
                 one{"{0} dia"}
                 other{"{0} dias"}
             }
@@ -623,6 +624,7 @@ pt{
                 GyMMM{"MMM 'de' y G"}
                 GyMMMEd{"E, d 'de' MMM 'de' y G"}
                 GyMMMd{"d 'de' MMM 'de' y G"}
+                GyMd{"d/M/y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}

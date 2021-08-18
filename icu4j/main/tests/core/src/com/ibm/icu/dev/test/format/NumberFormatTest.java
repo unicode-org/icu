@@ -679,7 +679,7 @@ public class NumberFormatTest extends TestFmwk {
     @Test
     public void TestCurrency() {
         String[] DATA = {
-                "fr_CA", "1,50\u00a0$\u00a0CA",
+                "fr_CA", "1,50\u00a0$",
                 "de_DE", "1,50\u00a0\u20AC",
                 "de_DE@currency=DEM", "1,50\u00a0DM",
                 "fr_FR", "1,50\u00a0\u20AC",

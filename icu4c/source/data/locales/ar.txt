@@ -371,6 +371,10 @@ ar{
             }
         }
         minimalPairs{
+            gender{
+                feminine{"{0} واحدة"}
+                masculine{"{0} واحد"}
+            }
             ordinal{
                 other{"اتجه إلى المنعطف الـ {0} يمينًا."}
             }
@@ -783,6 +787,7 @@ ar{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E، d MMM y G"}
                 GyMMMd{"d MMM y G"}
+                GyMd{"dd-MM-y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -1407,6 +1412,7 @@ ar{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E، d MMM y G"}
                 GyMMMd{"d MMM y G"}
+                GyMd{"d‏/M‏/y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}

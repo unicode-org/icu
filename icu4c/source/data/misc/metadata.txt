@@ -5088,6 +5088,7 @@ metadata:table(nofallback){
     }
     defaultContent{
         "aa_ET",
+        "ab_GE",
         "af_ZA",
         "agq_CM",
         "ak_GH",
