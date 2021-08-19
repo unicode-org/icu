@@ -23,13 +23,6 @@ en_AU{
                 other{"{0} kilowatt hours"}
             }
         }
-        force{
-            kilowatt-hour-per-100-kilometer{
-                dnam{"kilowatt-hour per 100 kilometres"}
-                one{"{0} kilowatt-hour per 100 kilometres"}
-                other{"{0} kilowatt-hours per 100 kilometres"}
-            }
-        }
         length{
             kilometer{
                 dnam{"kilometre"}

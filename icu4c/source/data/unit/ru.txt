@@ -1859,45 +1859,6 @@ ru{
                 other{"{0} дня"}
                 per{"{0} в день"}
             }
-            day-person{
-                case{
-                    accusative{
-                        few{"{0} суток"}
-                        many{"{0} суток"}
-                        one{"{0} сутки"}
-                        other{"{0} суток"}
-                    }
-                    dative{
-                        few{"{0} суткам"}
-                        many{"{0} суткам"}
-                        one{"{0} суткам"}
-                        other{"{0} суток"}
-                    }
-                    genitive{
-                        few{"{0} суток"}
-                        many{"{0} суток"}
-                        one{"{0} суток"}
-                        other{"{0} суток"}
-                    }
-                    instrumental{
-                        few{"{0} сутками"}
-                        many{"{0} сутками"}
-                        one{"{0} сутками"}
-                        other{"{0} суток"}
-                    }
-                    prepositional{
-                        few{"{0} сутках"}
-                        many{"{0} сутках"}
-                        one{"{0} сутках"}
-                        other{"{0} суток"}
-                    }
-                }
-                few{"{0} суток"}
-                gender{"masculine"}
-                many{"{0} суток"}
-                one{"{0} сутки"}
-                other{"{0} суток"}
-            }
             decade{
                 case{
                     accusative{

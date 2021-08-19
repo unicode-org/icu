@@ -5401,6 +5401,7 @@ metadata:table(nofallback){
         "yav_CM",
         "yi_001",
         "yo_NG",
+        "yrl_BR",
         "yue_Hans_CN",
         "yue_Hant",
         "yue_Hant_HK",

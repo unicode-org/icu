@@ -10,24 +10,6 @@ te{
     units{
         acceleration{
             g-force{
-                case{
-                    accusative{
-                        one{"{0} గు-శక్తి"}
-                        other{"{0} గు-శక్తి"}
-                    }
-                    dative{
-                        one{"{0} గు-శక్తి"}
-                        other{"{0} గు-శక్తి"}
-                    }
-                    instrumental{
-                        one{"{0} గు-శక్తి"}
-                        other{"{0} గు-శక్తి"}
-                    }
-                    locative{
-                        one{"{0} గు-శక్తి"}
-                        other{"{0} గు-శక్తి"}
-                    }
-                }
                 dnam{"గు-శక్తి"}
                 one{"{0} గు-శక్తి"}
                 other{"{0} గు-శక్తి"}
@@ -40,116 +22,26 @@ te{
         }
         angle{
             arc-minute{
-                case{
-                    accusative{
-                        one{"{0} ఆర్క్ నిమిషం"}
-                        other{"{0} ఆర్క్ నిమిషాలు"}
-                    }
-                    dative{
-                        one{"{0} ఆర్క్ నిమిషం"}
-                        other{"{0} ఆర్క్ నిమిషాలు"}
-                    }
-                    instrumental{
-                        one{"{0} ఆర్క్ నిమిషం"}
-                        other{"{0} ఆర్క్ నిమిషాలు"}
-                    }
-                    locative{
-                        one{"{0} ఆర్క్ నిమిషం"}
-                        other{"{0} ఆర్క్ నిమిషాలు"}
-                    }
-                }
                 dnam{"ఆర్క్ నిమిషాలు"}
                 one{"{0} ఆర్క్ నిమిషం"}
                 other{"{0} ఆర్క్ నిమిషాలు"}
             }
             arc-second{
-                case{
-                    accusative{
-                        one{"{0} ఆర్క్ సెకను"}
-                        other{"{0} ఆర్క్ సెకన్లు"}
-                    }
-                    dative{
-                        one{"{0} ఆర్క్ సెకను"}
-                        other{"{0} ఆర్క్ సెకన్లు"}
-                    }
-                    instrumental{
-                        one{"{0} ఆర్క్ సెకను"}
-                        other{"{0} ఆర్క్ సెకన్లు"}
-                    }
-                    locative{
-                        one{"{0} ఆర్క్ సెకను"}
-                        other{"{0} ఆర్క్ సెకన్లు"}
-                    }
-                }
                 dnam{"ఆర్క్ సెకన్లు"}
                 one{"{0} ఆర్క్ సెకను"}
                 other{"{0} ఆర్క్ సెకన్లు"}
             }
             degree{
-                case{
-                    accusative{
-                        one{"{0} డిగ్రీ"}
-                        other{"{0} డిగ్రీలు"}
-                    }
-                    dative{
-                        one{"{0} డిగ్రీ"}
-                        other{"{0} డిగ్రీలు"}
-                    }
-                    instrumental{
-                        one{"{0} డిగ్రీ"}
-                        other{"{0} డిగ్రీలు"}
-                    }
-                    locative{
-                        one{"{0} డిగ్రీ"}
-                        other{"{0} డిగ్రీలు"}
-                    }
-                }
                 dnam{"డిగ్రీలు"}
                 one{"{0} డిగ్రీ"}
                 other{"{0} డిగ్రీలు"}
             }
             radian{
-                case{
-                    accusative{
-                        one{"{0} రేడియన్"}
-                        other{"{0} రేడియన్లు"}
-                    }
-                    dative{
-                        one{"{0} రేడియన్"}
-                        other{"{0} రేడియన్లు"}
-                    }
-                    instrumental{
-                        one{"{0} రేడియన్"}
-                        other{"{0} రేడియన్లు"}
-                    }
-                    locative{
-                        one{"{0} రేడియన్"}
-                        other{"{0} రేడియన్లు"}
-                    }
-                }
                 dnam{"రేడియన్లు"}
                 one{"{0} రేడియన్"}
                 other{"{0} రేడియన్లు"}
             }
             revolution{
-                case{
-                    accusative{
-                        one{"{0} భ్రమణం"}
-                        other{"{0} భ్రమణాలు"}
-                    }
-                    dative{
-                        one{"{0} భ్రమణం"}
-                        other{"{0} భ్రమణాలు"}
-                    }
-                    instrumental{
-                        one{"{0} భ్రమణం"}
-                        other{"{0} భ్రమణాలు"}
-                    }
-                    locative{
-                        one{"{0} భ్రమణం"}
-                        other{"{0} భ్రమణాలు"}
-                    }
-                }
                 dnam{"భ్రమణాలు"}
                 one{"{0} భ్రమణం"}
                 other{"{0} భ్రమణాలు"}
@@ -166,24 +58,6 @@ te{
                 other{"{0} డునామ్‌లు"}
             }
             hectare{
-                case{
-                    accusative{
-                        one{"{0} హెక్టారు"}
-                        other{"{0} హెక్టార్లు"}
-                    }
-                    dative{
-                        one{"{0} హెక్టారు"}
-                        other{"{0} హెక్టార్లు"}
-                    }
-                    instrumental{
-                        one{"{0} హెక్టారు"}
-                        other{"{0} హెక్టార్లు"}
-                    }
-                    locative{
-                        one{"{0} హెక్టారు"}
-                        other{"{0} హెక్టార్లు"}
-                    }
-                }
                 dnam{"హెక్టార్లు"}
                 one{"{0} హెక్టారు"}
                 other{"{0} హెక్టార్లు"}
@@ -292,24 +166,6 @@ te{
                 other{"{0} ఐటమ్‌లు"}
             }
             karat{
-                case{
-                    accusative{
-                        one{"{0} కేరట్"}
-                        other{"{0} కేరట్లు"}
-                    }
-                    dative{
-                        one{"{0} కేరట్"}
-                        other{"{0} కేరట్లు"}
-                    }
-                    instrumental{
-                        one{"{0} కేరట్"}
-                        other{"{0} కేరట్లు"}
-                    }
-                    locative{
-                        one{"{0} కేరట్"}
-                        other{"{0} కేరట్లు"}
-                    }
-                }
                 dnam{"కేరట్లు"}
                 one{"{0} కేరట్"}
                 other{"{0} కేరట్లు"}
@@ -325,116 +181,26 @@ te{
                 other{"{0} మిల్లీమోల్‌లు/లీటర్"}
             }
             mole{
-                case{
-                    accusative{
-                        one{"{0} మోల్"}
-                        other{"{0} మోల్‌లు"}
-                    }
-                    dative{
-                        one{"{0} మోల్"}
-                        other{"{0} మోల్‌లు"}
-                    }
-                    instrumental{
-                        one{"{0} మోల్"}
-                        other{"{0} మోల్‌లు"}
-                    }
-                    locative{
-                        one{"{0} మోల్"}
-                        other{"{0} మోల్‌లు"}
-                    }
-                }
                 dnam{"మోల్‌లు"}
                 one{"{0} మోల్"}
                 other{"{0} మోల్‌లు"}
             }
             percent{
-                case{
-                    accusative{
-                        one{"{0} శాతం"}
-                        other{"{0} శాతం"}
-                    }
-                    dative{
-                        one{"{0} శాతం"}
-                        other{"{0} శాతం"}
-                    }
-                    instrumental{
-                        one{"{0} శాతం"}
-                        other{"{0} శాతం"}
-                    }
-                    locative{
-                        one{"{0} శాతం"}
-                        other{"{0} శాతం"}
-                    }
-                }
                 dnam{"శాతం"}
                 one{"{0} శాతం"}
                 other{"{0} శాతం"}
             }
             permille{
-                case{
-                    accusative{
-                        one{"{0}/మైలుకు"}
-                        other{"{0}/మైలుకు"}
-                    }
-                    dative{
-                        one{"{0}/మైలుకు"}
-                        other{"{0}/మైలుకు"}
-                    }
-                    instrumental{
-                        one{"{0}/మైలుకు"}
-                        other{"{0}/మైలుకు"}
-                    }
-                    locative{
-                        one{"{0}/మైలుకు"}
-                        other{"{0}/మైలుకు"}
-                    }
-                }
                 dnam{"మైలుకు"}
                 one{"{0}/మైలుకు"}
                 other{"{0}/మైలుకు"}
             }
             permillion{
-                case{
-                    accusative{
-                        one{"{0} భాగం/మిలియన్"}
-                        other{"{0} భాగాలు/మిలియన్"}
-                    }
-                    dative{
-                        one{"{0} భాగం/మిలియన్"}
-                        other{"{0} భాగాలు/మిలియన్"}
-                    }
-                    instrumental{
-                        one{"{0} భాగం/మిలియన్"}
-                        other{"{0} భాగాలు/మిలియన్"}
-                    }
-                    locative{
-                        one{"{0} భాగం/మిలియన్"}
-                        other{"{0} భాగాలు/మిలియన్"}
-                    }
-                }
                 dnam{"భాగాలు/మిలియన్"}
                 one{"{0} భాగం/మిలియన్"}
                 other{"{0} భాగాలు/మిలియన్"}
             }
             permyriad{
-                case{
-                    accusative{
-                        one{"{0} పెర్మేరియాడ్"}
-                        other{"{0} పెర్మేరియాడ్"}
-                    }
-                    dative{
-                        one{"{0} పెర్మేరియాడ్"}
-                        other{"{0} పెర్మేరియాడ్"}
-                    }
-                    instrumental{
-                        one{"{0} పెర్మేరియాడ్"}
-                        other{"{0} పెర్మేరియాడ్"}
-                    }
-                    locative{
-                        one{"{0} పెర్మేరియాడ్"}
-                        other{"{0} పెర్మేరియాడ్"}
-                    }
-                }
                 dnam{"పెర్మేరియాడ్"}
                 one{"{0} పెర్మేరియాడ్"}
                 other{"{0} పెర్మేరియాడ్"}
@@ -471,47 +237,11 @@ te{
         }
         digital{
             bit{
-                case{
-                    accusative{
-                        one{"{0} బిట్"}
-                        other{"{0} బిట్‌లు"}
-                    }
-                    dative{
-                        one{"{0} బిట్"}
-                        other{"{0} బిట్‌లు"}
-                    }
-                    instrumental{
-                        one{"{0} బిట్"}
-                        other{"{0} బిట్‌లు"}
-                    }
-                    locative{
-                        one{"{0} బిట్"}
-                        other{"{0} బిట్‌లు"}
-                    }
-                }
                 dnam{"బిట్‌లు"}
                 one{"{0} బిట్"}
                 other{"{0} బిట్‌లు"}
             }
             byte{
-                case{
-                    accusative{
-                        one{"{0} బైట్"}
-                        other{"{0} బైట్‌లు"}
-                    }
-                    dative{
-                        one{"{0} బైట్"}
-                        other{"{0} బైట్‌లు"}
-                    }
-                    instrumental{
-                        one{"{0} బైట్"}
-                        other{"{0} బైట్‌లు"}
-                    }
-                    locative{
-                        one{"{0} బైట్"}
-                        other{"{0} బైట్‌లు"}
-                    }
-                }
                 dnam{"బైట్‌లు"}
                 one{"{0} బైట్"}
                 other{"{0} బైట్‌లు"}
@@ -564,94 +294,22 @@ te{
         }
         duration{
             century{
-                case{
-                    accusative{
-                        one{"{0} శతాబ్దం"}
-                        other{"{0} శతాబ్దాలు"}
-                    }
-                    dative{
-                        one{"{0} శతాబ్దం"}
-                        other{"{0} శతాబ్దాలు"}
-                    }
-                    instrumental{
-                        one{"{0} శతాబ్దం"}
-                        other{"{0} శతాబ్దాలు"}
-                    }
-                    locative{
-                        one{"{0} శతాబ్దం"}
-                        other{"{0} శతాబ్దాలు"}
-                    }
-                }
                 dnam{"శతాబ్దాలు"}
                 one{"{0} శతాబ్దం"}
                 other{"{0} శతాబ్దాలు"}
             }
             day{
-                case{
-                    accusative{
-                        one{"{0} రోజు"}
-                        other{"{0} రోజులు"}
-                    }
-                    dative{
-                        one{"{0} రోజు"}
-                        other{"{0} రోజులు"}
-                    }
-                    instrumental{
-                        one{"{0} రోజు"}
-                        other{"{0} రోజులు"}
-                    }
-                    locative{
-                        one{"{0} రోజు"}
-                        other{"{0} రోజులు"}
-                    }
-                }
                 dnam{"రోజులు"}
                 one{"{0} రోజు"}
                 other{"{0} రోజులు"}
                 per{"రోజుకు {0}"}
             }
             decade{
-                case{
-                    accusative{
-                        one{"{0} దశాబ్దం"}
-                        other{"{0} దశాబ్దాలు"}
-                    }
-                    dative{
-                        one{"{0} దశాబ్దం"}
-                        other{"{0} దశాబ్దాలు"}
-                    }
-                    instrumental{
-                        one{"{0} దశాబ్దం"}
-                        other{"{0} దశాబ్దాలు"}
-                    }
-                    locative{
-                        one{"{0} దశాబ్దం"}
-                        other{"{0} దశాబ్దాలు"}
-                    }
-                }
                 dnam{"దశాబ్దాలు"}
                 one{"{0} దశాబ్దం"}
                 other{"{0} దశాబ్దాలు"}
             }
             hour{
-                case{
-                    accusative{
-                        one{"{0} గంట"}
-                        other{"{0} గంటలు"}
-                    }
-                    dative{
-                        one{"{0} గంట"}
-                        other{"{0} గంటలు"}
-                    }
-                    instrumental{
-                        one{"{0} గంట"}
-                        other{"{0} గంటలు"}
-                    }
-                    locative{
-                        one{"{0} గంట"}
-                        other{"{0} గంటలు"}
-                    }
-                }
                 dnam{"గంటలు"}
                 one{"{0} గంట"}
                 other{"{0} గంటలు"}
@@ -668,48 +326,12 @@ te{
                 other{"{0} మిల్లీసెకన్లు"}
             }
             minute{
-                case{
-                    accusative{
-                        one{"{0} నిమిషం"}
-                        other{"{0} నిమిషాలు"}
-                    }
-                    dative{
-                        one{"{0} నిమిషం"}
-                        other{"{0} నిమిషాలు"}
-                    }
-                    instrumental{
-                        one{"{0} నిమిషం"}
-                        other{"{0} నిమిషాలు"}
-                    }
-                    locative{
-                        one{"{0} నిమిషం"}
-                        other{"{0} నిమిషాలు"}
-                    }
-                }
                 dnam{"నిమిషాలు"}
                 one{"{0} నిమిషం"}
                 other{"{0} నిమిషాలు"}
                 per{"నిమిషానికి {0}"}
             }
             month{
-                case{
-                    accusative{
-                        one{"{0} నెల"}
-                        other{"{0} నెలలు"}
-                    }
-                    dative{
-                        one{"{0} నెల"}
-                        other{"{0} నెలలు"}
-                    }
-                    instrumental{
-                        one{"{0} నెల"}
-                        other{"{0} నెలలు"}
-                    }
-                    locative{
-                        one{"{0} నెల"}
-                        other{"{0} నెలలు"}
-                    }
-                }
                 dnam{"నెలలు"}
                 one{"{0} నెల"}
                 other{"{0} నెలలు"}
@@ -721,72 +343,18 @@ te{
                 other{"{0} నానోసెకన్లు"}
             }
             second{
-                case{
-                    accusative{
-                        one{"{0} సెకను"}
-                        other{"{0} సెకన్లు"}
-                    }
-                    dative{
-                        one{"{0} సెకను"}
-                        other{"{0} సెకన్లు"}
-                    }
-                    instrumental{
-                        one{"{0} సెకను"}
-                        other{"{0} సెకన్లు"}
-                    }
-                    locative{
-                        one{"{0} సెకను"}
-                        other{"{0} సెకన్లు"}
-                    }
-                }
                 dnam{"సెకన్లు"}
                 one{"{0} సెకను"}
                 other{"{0} సెకన్లు"}
                 per{"సెకనుకు {0}"}
             }
             week{
-                case{
-                    accusative{
-                        one{"{0} వారం"}
-                        other{"{0} వారాలు"}
-                    }
-                    dative{
-                        one{"{0} వారం"}
-                        other{"{0} వారాలు"}
-                    }
-                    instrumental{
-                        one{"{0} వారం"}
-                        other{"{0} వారాలు"}
-                    }
-                    locative{
-                        one{"{0} వారం"}
-                        other{"{0} వారాలు"}
-                    }
-                }
                 dnam{"వారాలు"}
                 one{"{0} వారం"}
                 other{"{0} వారాలు"}
                 per{"వారానికి {0}"}
             }
             year{
-                case{
-                    accusative{
-                        one{"{0} సంవత్సరం"}
-                        other{"{0} సంవత్సరాలు"}
-                    }
-                    dative{
-                        one{"{0} సంవత్సరం"}
-                        other{"{0} సంవత్సరాలు"}
-                    }
-                    instrumental{
-                        one{"{0} సంవత్సరం"}
-                        other{"{0} సంవత్సరాలు"}
-                    }
-                    locative{
-                        one{"{0} సంవత్సరం"}
-                        other{"{0} సంవత్సరాలు"}
-                    }
-                }
                 dnam{"సంవత్సరాలు"}
                 one{"{0} సంవత్సరం"}
                 other{"{0} సంవత్సరాలు"}
@@ -795,24 +363,6 @@ te{
         }
         electric{
             ampere{
-                case{
-                    accusative{
-                        one{"{0} ఆంపియర్"}
-                        other{"{0} ఆంపియర్స్"}
-                    }
-                    dative{
-                        one{"{0} ఆంపియర్"}
-                        other{"{0} ఆంపియర్స్"}
-                    }
-                    instrumental{
-                        one{"{0} ఆంపియర్"}
-                        other{"{0} ఆంపియర్స్"}
-                    }
-                    locative{
-                        one{"{0} ఆంపియర్"}
-                        other{"{0} ఆంపియర్స్"}
-                    }
-                }
                 dnam{"ఆంపియర్స్"}
                 one{"{0} ఆంపియర్"}
                 other{"{0} ఆంపియర్స్"}
@@ -823,47 +373,11 @@ te{
                 other{"{0} మిల్లీ ఆంపియర్స్"}
             }
             ohm{
-                case{
-                    accusative{
-                        one{"{0} ఓమ్"}
-                        other{"{0} ఓమ్స్"}
-                    }
-                    dative{
-                        one{"{0} ఓమ్"}
-                        other{"{0} ఓమ్స్"}
-                    }
-                    instrumental{
-                        one{"{0} ఓమ్"}
-                        other{"{0} ఓమ్స్"}
-                    }
-                    locative{
-                        one{"{0} ఓమ్"}
-                        other{"{0} ఓమ్స్"}
-                    }
-                }
                 dnam{"ఓమ్స్"}
                 one{"{0} ఓమ్"}
                 other{"{0} ఓమ్స్"}
             }
             volt{
-                case{
-                    accusative{
-                        one{"{0} వోల్ట్"}
-                        other{"{0} వోల్ట్స్"}
-                    }
-                    dative{
-                        one{"{0} వోల్ట్"}
-                        other{"{0} వోల్ట్స్"}
-                    }
-                    instrumental{
-                        one{"{0} వోల్ట్"}
-                        other{"{0} వోల్ట్స్"}
-                    }
-                    locative{
-                        one{"{0} వోల్ట్"}
-                        other{"{0} వోల్ట్స్"}
-                    }
-                }
                 dnam{"వోల్ట్స్"}
                 one{"{0} వోల్ట్"}
                 other{"{0} వోల్ట్స్"}
@@ -876,24 +390,6 @@ te{
                 other{"{0} బ్రిటీష్ థెర్మల్ యూనిట్లు"}
             }
             calorie{
-                case{
-                    accusative{
-                        one{"{0} కేలరీ"}
-                        other{"{0} కేలరీలు"}
-                    }
-                    dative{
-                        one{"{0} కేలరీ"}
-                        other{"{0} కేలరీలు"}
-                    }
-                    instrumental{
-                        one{"{0} కేలరీ"}
-                        other{"{0} కేలరీలు"}
-                    }
-                    locative{
-                        one{"{0} కేలరీ"}
-                        other{"{0} కేలరీలు"}
-                    }
-                }
                 dnam{"కేలరీలు"}
                 one{"{0} కేలరీ"}
                 other{"{0} కేలరీలు"}
@@ -909,24 +405,6 @@ te{
                 other{"{0} కేలరీలు"}
             }
             joule{
-                case{
-                    accusative{
-                        one{"{0} జౌల్"}
-                        other{"{0} జౌల్స్"}
-                    }
-                    dative{
-                        one{"{0} జౌల్"}
-                        other{"{0} జౌల్స్"}
-                    }
-                    instrumental{
-                        one{"{0} జౌల్"}
-                        other{"{0} జౌల్స్"}
-                    }
-                    locative{
-                        one{"{0} జౌల్"}
-                        other{"{0} జౌల్స్"}
-                    }
-                }
                 dnam{"జౌల్స్"}
                 one{"{0} జౌల్"}
                 other{"{0} జౌల్స్"}
@@ -959,24 +437,6 @@ te{
                 other{"{0} 100 కిలోమీటర్లకు కిలోవాట్-గంటలు"}
             }
             newton{
-                case{
-                    accusative{
-                        one{"{0} న్యూటన్"}
-                        other{"{0} న్యూటన్‌లు"}
-                    }
-                    dative{
-                        one{"{0} న్యూటన్"}
-                        other{"{0} న్యూటన్‌లు"}
-                    }
-                    instrumental{
-                        one{"{0} న్యూటన్"}
-                        other{"{0} న్యూటన్‌లు"}
-                    }
-                    locative{
-                        one{"{0} న్యూటన్"}
-                        other{"{0} న్యూటన్‌లు"}
-                    }
-                }
                 dnam{"న్యూటన్‌లు"}
                 one{"{0} న్యూటన్"}
                 other{"{0} న్యూటన్‌లు"}
@@ -994,24 +454,6 @@ te{
                 other{"{0} గిగాహెర్ట్‌జ్"}
             }
             hertz{
-                case{
-                    accusative{
-                        one{"{0} హెర్ట్‌జ్"}
-                        other{"{0} హెర్ట్‌జ్"}
-                    }
-                    dative{
-                        one{"{0} హెర్ట్‌జ్"}
-                        other{"{0} హెర్ట్‌జ్"}
-                    }
-                    instrumental{
-                        one{"{0} హెర్ట్‌జ్"}
-                        other{"{0} హెర్ట్‌జ్"}
-                    }
-                    locative{
-                        one{"{0} హెర్ట్‌జ్"}
-                        other{"{0} హెర్ట్‌జ్"}
-                    }
-                }
                 dnam{"హెర్ట్‌జ్"}
                 one{"{0} హెర్ట్‌జ్"}
                 other{"{0} హెర్ట్‌జ్"}
@@ -1044,24 +486,6 @@ te{
                 other{"{0} బిందువులు ప్రతి అంగుళానికి"}
             }
             em{
-                case{
-                    accusative{
-                        one{"{0} em"}
-                        other{"{0} emలు"}
-                    }
-                    dative{
-                        one{"{0} em"}
-                        other{"{0} emలు"}
-                    }
-                    instrumental{
-                        one{"{0} em"}
-                        other{"{0} emలు"}
-                    }
-                    locative{
-                        one{"{0} em"}
-                        other{"{0} emలు"}
-                    }
-                }
                 one{"{0} em"}
                 other{"{0} emలు"}
             }
@@ -1071,24 +495,6 @@ te{
                 other{"{0} మెగా పిక్సెల్స్"}
             }
             pixel{
-                case{
-                    accusative{
-                        one{"{0} పిక్సెల్"}
-                        other{"{0} పిక్సెల్స్"}
-                    }
-                    dative{
-                        one{"{0} పిక్సెల్"}
-                        other{"{0} పిక్సెల్స్"}
-                    }
-                    instrumental{
-                        one{"{0} పిక్సెల్"}
-                        other{"{0} పిక్సెల్స్"}
-                    }
-                    locative{
-                        one{"{0} పిక్సెల్"}
-                        other{"{0} పిక్సెల్స్"}
-                    }
-                }
                 dnam{"పిక్సెల్స్"}
                 one{"{0} పిక్సెల్"}
                 other{"{0} పిక్సెల్స్"}
@@ -1160,24 +566,6 @@ te{
                 other{"{0} కాంతి సంవత్సరాలు"}
             }
             meter{
-                case{
-                    accusative{
-                        one{"{0} మీటరు"}
-                        other{"{0} మీటర్లు"}
-                    }
-                    dative{
-                        one{"{0} మీటరు"}
-                        other{"{0} మీటర్లు"}
-                    }
-                    instrumental{
-                        one{"{0} మీటరు"}
-                        other{"{0} మీటర్లు"}
-                    }
-                    locative{
-                        one{"{0} మీటరు"}
-                        other{"{0} మీటర్లు"}
-                    }
-                }
                 dnam{"మీటర్లు"}
                 one{"{0} మీటరు"}
                 other{"{0} మీటర్లు"}
@@ -1194,24 +582,6 @@ te{
                 other{"{0} మైళ్లు"}
             }
             mile-scandinavian{
-                case{
-                    accusative{
-                        one{"{0} స్కాండినేవియన్ మైలు"}
-                        other{"{0} స్కాండినేవియన్ మైళ్లు"}
-                    }
-                    dative{
-                        one{"{0} స్కాండినేవియన్ మైలు"}
-                        other{"{0} స్కాండినేవియన్ మైళ్లు"}
-                    }
-                    instrumental{
-                        one{"{0} స్కాండినేవియన్ మైలు"}
-                        other{"{0} స్కాండినేవియన్ మైళ్లు"}
-                    }
-                    locative{
-                        one{"{0} స్కాండినేవియన్ మైలు"}
-                        other{"{0} స్కాండినేవియన్ మైళ్లు"}
-                    }
-                }
                 dnam{"స్కాండినేవియన్ మైలు"}
                 one{"{0} స్కాండినేవియన్ మైలు"}
                 other{"{0} స్కాండినేవియన్ మైళ్లు"}
@@ -1259,70 +629,16 @@ te{
         }
         light{
             candela{
-                case{
-                    accusative{
-                        one{"{0} క్యాండేలా"}
-                        other{"{0} క్యాండేలా"}
-                    }
-                    dative{
-                        one{"{0} క్యాండేలా"}
-                        other{"{0} క్యాండేలా"}
-                    }
-                    instrumental{
-                        one{"{0} క్యాండేలా"}
-                        other{"{0} క్యాండేలా"}
-                    }
-                    locative{
-                        one{"{0} క్యాండేలా"}
-                        other{"{0} క్యాండేలా"}
-                    }
-                }
                 dnam{"క్యాడెలా"}
                 one{"{0} క్యాడెలా"}
                 other{"{0} క్యాడెలా"}
             }
             lumen{
-                case{
-                    accusative{
-                        one{"{0} లుమెన్"}
-                        other{"{0} లుమెన్"}
-                    }
-                    dative{
-                        one{"{0} లుమెన్"}
-                        other{"{0} లుమెన్"}
-                    }
-                    instrumental{
-                        one{"{0} లుమెన్"}
-                        other{"{0} లుమెన్"}
-                    }
-                    locative{
-                        one{"{0} లుమెన్"}
-                        other{"{0} లుమెన్"}
-                    }
-                }
                 dnam{"లుమెన్"}
                 one{"{0} లుమెన్"}
                 other{"{0} లుమెన్"}
             }
             lux{
-                case{
-                    accusative{
-                        one{"{0} లక్స్"}
-                        other{"{0} లక్స్"}
-                    }
-                    dative{
-                        one{"{0} లక్స్"}
-                        other{"{0} లక్స్"}
-                    }
-                    instrumental{
-                        one{"{0} లక్స్"}
-                        other{"{0} లక్స్"}
-                    }
-                    locative{
-                        one{"{0} లక్స్"}
-                        other{"{0} లక్స్"}
-                    }
-                }
                 dnam{"లక్స్"}
                 one{"{0} లక్స్"}
                 other{"{0} లక్స్"}
@@ -1335,24 +651,6 @@ te{
         }
         mass{
             carat{
-                case{
-                    accusative{
-                        one{"{0} క్యారెట్"}
-                        other{"{0} క్యారెట్లు"}
-                    }
-                    dative{
-                        one{"{0} క్యారెట్"}
-                        other{"{0} క్యారెట్లు"}
-                    }
-                    instrumental{
-                        one{"{0} క్యారెట్"}
-                        other{"{0} క్యారెట్లు"}
-                    }
-                    locative{
-                        one{"{0} క్యారెట్"}
-                        other{"{0} క్యారెట్లు"}
-                    }
-                }
                 dnam{"క్యారెట్లు"}
                 one{"{0} క్యారెట్"}
                 other{"{0} క్యారెట్లు"}
@@ -1373,72 +671,18 @@ te{
                 other{"{0} ధాన్యము"}
             }
             gram{
-                case{
-                    accusative{
-                        one{"{0} గ్రాము"}
-                        other{"{0} గ్రాములు"}
-                    }
-                    dative{
-                        one{"{0} గ్రాము"}
-                        other{"{0} గ్రాములు"}
-                    }
-                    instrumental{
-                        one{"{0} గ్రాము"}
-                        other{"{0} గ్రాములు"}
-                    }
-                    locative{
-                        one{"{0} గ్రాము"}
-                        other{"{0} గ్రాములు"}
-                    }
-                }
                 dnam{"గ్రాములు"}
                 one{"{0} గ్రాము"}
                 other{"{0} గ్రాములు"}
                 per{"గ్రాముకు {0}"}
             }
             kilogram{
-                case{
-                    accusative{
-                        one{"{0} కిలోగ్రాము"}
-                        other{"{0} కిలోగ్రాములు"}
-                    }
-                    dative{
-                        one{"{0} కిలోగ్రాము"}
-                        other{"{0} కిలోగ్రాములు"}
-                    }
-                    instrumental{
-                        one{"{0} కిలోగ్రాము"}
-                        other{"{0} కిలోగ్రాములు"}
-                    }
-                    locative{
-                        one{"{0} కిలోగ్రాము"}
-                        other{"{0} కిలోగ్రాములు"}
-                    }
-                }
                 dnam{"కిలోగ్రాములు"}
                 one{"{0} కిలోగ్రాము"}
                 other{"{0} కిలోగ్రాములు"}
                 per{"కిలోగ్రాముకు {0}"}
             }
             metric-ton{
-                case{
-                    accusative{
-                        one{"{0} మెట్రిక్ టన్ను"}
-                        other{"{0} మెట్రిక్ టన్నులు"}
-                    }
-                    dative{
-                        one{"{0} మెట్రిక్ టన్ను"}
-                        other{"{0} మెట్రిక్ టన్నులు"}
-                    }
-                    instrumental{
-                        one{"{0} మెట్రిక్ టన్ను"}
-                        other{"{0} మెట్రిక్ టన్నులు"}
-                    }
-                    locative{
-                        one{"{0} మెట్రిక్ టన్ను"}
-                        other{"{0} మెట్రిక్ టన్నులు"}
-                    }
-                }
                 dnam{"మెట్రిక్ టన్నులు"}
                 one{"{0} మెట్రిక్ టన్ను"}
                 other{"{0} మెట్రిక్ టన్నులు"}
@@ -1513,24 +757,6 @@ te{
                 other{"{0} మిల్లీవాట్లు"}
             }
             watt{
-                case{
-                    accusative{
-                        one{"{0} వాట్"}
-                        other{"{0} వాట్‌లు"}
-                    }
-                    dative{
-                        one{"{0} వాట్"}
-                        other{"{0} వాట్‌లు"}
-                    }
-                    instrumental{
-                        one{"{0} వాట్"}
-                        other{"{0} వాట్‌లు"}
-                    }
-                    locative{
-                        one{"{0} వాట్"}
-                        other{"{0} వాట్‌లు"}
-                    }
-                }
                 dnam{"వాట్లు"}
                 one{"{0} వాట్"}
                 other{"{0} వాట్‌లు"}
@@ -1538,47 +764,11 @@ te{
         }
         pressure{
             atmosphere{
-                case{
-                    accusative{
-                        one{"{0} వాతావరణం"}
-                        other{"{0} వాతావరణాలు"}
-                    }
-                    dative{
-                        one{"{0} వాతావరణం"}
-                        other{"{0} వాతావరణాలు"}
-                    }
-                    instrumental{
-                        one{"{0} వాతావరణం"}
-                        other{"{0} వాతావరణాలు"}
-                    }
-                    locative{
-                        one{"{0} వాతావరణం"}
-                        other{"{0} వాతావరణాలు"}
-                    }
-                }
                 dnam{"వాతావరణాలు"}
                 one{"{0} వాతావరణం"}
                 other{"{0} వాతావరణాలు"}
             }
             bar{
-                case{
-                    accusative{
-                        one{"{0} బార్"}
-                        other{"{0} బార్‌లు"}
-                    }
-                    dative{
-                        one{"{0} బార్"}
-                        other{"{0} బార్‌లు"}
-                    }
-                    instrumental{
-                        one{"{0} బార్"}
-                        other{"{0} బార్‌లు"}
-                    }
-                    locative{
-                        one{"{0} బార్"}
-                        other{"{0} బార్‌లు"}
-                    }
-                }
                 dnam{"బార్"}
                 one{"{0} బార్"}
                 other{"{0} బార్‌లు"}
@@ -1614,24 +804,6 @@ te{
                 other{"{0} మిల్లీమీటర్ల పాదరసం"}
             }
             pascal{
-                case{
-                    accusative{
-                        one{"{0} పాస్కల్"}
-                        other{"{0} పాస్కల్‌లు"}
-                    }
-                    dative{
-                        one{"{0} పాస్కల్"}
-                        other{"{0} పాస్కల్‌లు"}
-                    }
-                    instrumental{
-                        one{"{0} పాస్కల్"}
-                        other{"{0} పాస్కల్‌లు"}
-                    }
-                    locative{
-                        one{"{0} పాస్కల్"}
-                        other{"{0} పాస్కల్‌లు"}
-                    }
-                }
                 dnam{"పాస్కల్‌లు"}
                 one{"{0} పాస్కల్"}
                 other{"{0} పాస్కల్‌లు"}
@@ -1666,24 +838,6 @@ te{
         }
         temperature{
             celsius{
-                case{
-                    accusative{
-                        one{"{0} డిగ్రీ సెల్సియస్"}
-                        other{"{0} డిగ్రీల సెల్సియస్"}
-                    }
-                    dative{
-                        one{"{0} డిగ్రీ సెల్సియస్"}
-                        other{"{0} డిగ్రీల సెల్సియస్"}
-                    }
-                    instrumental{
-                        one{"{0} డిగ్రీ సెల్సియస్"}
-                        other{"{0} డిగ్రీల సెల్సియస్"}
-                    }
-                    locative{
-                        one{"{0} డిగ్రీ సెల్సియస్"}
-                        other{"{0} డిగ్రీల సెల్సియస్"}
-                    }
-                }
                 dnam{"డిగ్రీల సెల్సియస్"}
                 one{"{0} డిగ్రీ సెల్సియస్"}
                 other{"{0} డిగ్రీల సెల్సియస్"}
@@ -1694,47 +848,11 @@ te{
                 other{"{0} డిగ్రీల ఫారెన్‌హీట్"}
             }
             generic{
-                case{
-                    accusative{
-                        one{"{0} డిగ్రీ"}
-                        other{"{0} డిగ్రీలు"}
-                    }
-                    dative{
-                        one{"{0} డిగ్రీ"}
-                        other{"{0} డిగ్రీలు"}
-                    }
-                    instrumental{
-                        one{"{0} డిగ్రీ"}
-                        other{"{0} డిగ్రీలు"}
-                    }
-                    locative{
-                        one{"{0} డిగ్రీ"}
-                        other{"{0} డిగ్రీలు"}
-                    }
-                }
                 dnam{"°"}
                 one{"{0} డిగ్రీ"}
                 other{"{0} డిగ్రీలు"}
             }
             kelvin{
-                case{
-                    accusative{
-                        one{"{0} కెల్విన్"}
-                        other{"{0} కెల్విన్స్"}
-                    }
-                    dative{
-                        one{"{0} కెల్విన్"}
-                        other{"{0} కెల్విన్స్"}
-                    }
-                    instrumental{
-                        one{"{0} కెల్విన్"}
-                        other{"{0} కెల్విన్స్"}
-                    }
-                    locative{
-                        one{"{0} కెల్విన్"}
-                        other{"{0} కెల్విన్స్"}
-                    }
-                }
                 dnam{"కెల్విన్స్"}
                 one{"{0} కెల్విన్"}
                 other{"{0} కెల్విన్స్"}
@@ -1816,24 +934,6 @@ te{
                 other{"{0} కప్పులు"}
             }
             cup-metric{
-                case{
-                    accusative{
-                        one{"{0} మెట్రిక్ కప్పు"}
-                        other{"{0} మెట్రిక్ కప్పులు"}
-                    }
-                    dative{
-                        one{"{0} మెట్రిక్ కప్పు"}
-                        other{"{0} మెట్రిక్ కప్పులు"}
-                    }
-                    instrumental{
-                        one{"{0} మెట్రిక్ కప్పు"}
-                        other{"{0} మెట్రిక్ కప్పులు"}
-                    }
-                    locative{
-                        one{"{0} మెట్రిక్ కప్పు"}
-                        other{"{0} మెట్రిక్ కప్పులు"}
-                    }
-                }
                 dnam{"మెట్రిక్ కప్పులు"}
                 one{"{0} మెట్రిక్ కప్పు"}
                 other{"{0} మెట్రిక్ కప్పులు"}
@@ -1896,24 +996,6 @@ te{
                 other{"{0} జిగ్గర్"}
             }
             liter{
-                case{
-                    accusative{
-                        one{"{0} లీటరు"}
-                        other{"{0} లీటర్లు"}
-                    }
-                    dative{
-                        one{"{0} లీటరు"}
-                        other{"{0} లీటర్లు"}
-                    }
-                    instrumental{
-                        one{"{0} లీటరు"}
-                        other{"{0} లీటర్లు"}
-                    }
-                    locative{
-                        one{"{0} లీటరు"}
-                        other{"{0} లీటర్లు"}
-                    }
-                }
                 dnam{"లీటర్లు"}
                 one{"{0} లీటరు"}
                 other{"{0} లీటర్లు"}
@@ -1940,24 +1022,6 @@ te{
                 other{"{0} పింట్లు"}
             }
             pint-metric{
-                case{
-                    accusative{
-                        one{"{0} మెట్రిక్ పింటు"}
-                        other{"{0} మెట్రిక్ పింట్లు"}
-                    }
-                    dative{
-                        one{"{0} మెట్రిక్ పింటు"}
-                        other{"{0} మెట్రిక్ పింట్లు"}
-                    }
-                    instrumental{
-                        one{"{0} మెట్రిక్ పింటు"}
-                        other{"{0} మెట్రిక్ పింట్లు"}
-                    }
-                    locative{
-                        one{"{0} మెట్రిక్ పింటు"}
-                        other{"{0} మెట్రిక్ పింట్లు"}
-                    }
-                }
                 dnam{"మెట్రిక్ పింట్లు"}
                 one{"{0} మెట్రిక్ పింటు"}
                 other{"{0} మెట్రిక్ పింట్లు"}

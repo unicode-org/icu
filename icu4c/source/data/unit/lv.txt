@@ -813,34 +813,6 @@ lv{
                 per{"{0} dienā"}
                 zero{"{0} dienu"}
             }
-            day-person{
-                case{
-                    accusative{
-                        one{"{0} dienu"}
-                        other{"{0} dienas"}
-                        zero{"{0} dienas"}
-                    }
-                    dative{
-                        one{"{0} dienai"}
-                        other{"{0} dienām"}
-                        zero{"{0} dienām"}
-                    }
-                    genitive{
-                        one{"{0} dienas"}
-                        other{"{0} dienu"}
-                        zero{"{0} dienu"}
-                    }
-                    locative{
-                        one{"{0} dienā"}
-                        other{"{0} dienās"}
-                        zero{"{0} dienu"}
-                    }
-                }
-                gender{"feminine"}
-                one{"{0} diena"}
-                other{"{0} dienas"}
-                zero{"{0} dienu"}
-            }
             decade{
                 case{
                     accusative{

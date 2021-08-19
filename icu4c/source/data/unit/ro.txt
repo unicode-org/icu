@@ -49,7 +49,7 @@ ro{
                 case{
                     genitive{
                         few{"{0} secunde de arc"}
-                        one{"{0} secundă de arc"}
+                        one{"{0} secunde de arc"}
                         other{"{0} de secunde de arc"}
                     }
                 }
@@ -91,7 +91,7 @@ ro{
                 case{
                     genitive{
                         few{"{0} revoluții"}
-                        one{"{0} revoluție"}
+                        one{"{0} revoluții"}
                         other{"{0} de revoluții"}
                     }
                 }
@@ -375,7 +375,7 @@ ro{
                 case{
                     genitive{
                         few{"{0} părți pe milion"}
-                        one{"{0} parte pe milion"}
+                        one{"{0} părți pe milion"}
                         other{"{0} de părți pe milion"}
                     }
                 }
@@ -535,7 +535,7 @@ ro{
                 case{
                     genitive{
                         few{"{0} zile"}
-                        one{"{0} zi"}
+                        one{"{0} zile"}
                         other{"{0} de zile"}
                     }
                 }
@@ -545,19 +545,6 @@ ro{
                 one{"{0} zi"}
                 other{"{0} de zile"}
                 per{"{0} pe zi"}
-            }
-            day-person{
-                case{
-                    genitive{
-                        few{"{0} zile"}
-                        one{"{0} zi"}
-                        other{"{0} zile"}
-                    }
-                }
-                few{"{0} zile"}
-                gender{"feminine"}
-                one{"{0} zi"}
-                other{"{0} zile"}
             }
             decade{
                 case{
@@ -577,7 +564,7 @@ ro{
                 case{
                     genitive{
                         few{"{0} ore"}
-                        one{"{0} oră"}
+                        one{"{0} ore"}
                         other{"{0} de ore"}
                     }
                 }
@@ -619,7 +606,7 @@ ro{
                 case{
                     genitive{
                         few{"{0} luni"}
-                        one{"{0} lună"}
+                        one{"{0} luni"}
                         other{"{0} de luni"}
                     }
                 }
@@ -640,7 +627,7 @@ ro{
                 case{
                     genitive{
                         few{"{0} secunde"}
-                        one{"{0} secundă"}
+                        one{"{0} secunde"}
                         other{"{0} de secunde"}
                     }
                 }
@@ -655,7 +642,7 @@ ro{
                 case{
                     genitive{
                         few{"{0} săptămâni"}
-                        one{"{0} săptămână"}
+                        one{"{0} săptămâni"}
                         other{"{0} de săptămâni"}
                     }
                 }
@@ -743,7 +730,7 @@ ro{
                 case{
                     genitive{
                         few{"{0} calorii"}
-                        one{"{0} calorie"}
+                        one{"{0} calorii"}
                         other{"{0} de calorii"}
                     }
                 }
@@ -1018,7 +1005,7 @@ ro{
                 case{
                     genitive{
                         few{"{0} mile scandinave"}
-                        one{"{0} milă scandinavă"}
+                        one{"{0} mile scandinave"}
                         other{"{0} de mile scandinave"}
                     }
                 }
@@ -1306,7 +1293,7 @@ ro{
                 case{
                     genitive{
                         few{"{0} atmosfere"}
-                        one{"{0} atmosferă"}
+                        one{"{0} atmosfere"}
                         other{"{0} de atmosfere"}
                     }
                 }
@@ -1556,7 +1543,7 @@ ro{
                 case{
                     genitive{
                         few{"{0} căni metrice"}
-                        one{"{0} cană metrică"}
+                        one{"{0} căni metrice"}
                         other{"{0} de căni metrice"}
                     }
                 }
@@ -1677,7 +1664,7 @@ ro{
                 case{
                     genitive{
                         few{"{0} pinte metrice"}
-                        one{"{0} pintă metrică"}
+                        one{"{0} pinte metrice"}
                         other{"{0} de pinte metrice"}
                     }
                 }

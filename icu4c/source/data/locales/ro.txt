@@ -239,7 +239,7 @@ ro{
         }
         minimalPairs{
             case{
-                genitive{"... ale {0} ..."}
+                genitive{"... ale (celor) {0} ..."}
                 nominative{"{0} este ..."}
             }
             gender{

@@ -542,24 +542,6 @@ fi{
                 other{"{0} päivää"}
                 per{"{0} / päivä"}
             }
-            day-person{
-                case{
-                    elative{
-                        one{"{0} vuorokaudesta"}
-                        other{"{0} vuorokaudesta"}
-                    }
-                    illative{
-                        one{"{0} vuorokauteen"}
-                        other{"{0} vuorokauteen"}
-                    }
-                    partitive{
-                        one{"{0} vuorokautta"}
-                        other{"{0} vuorokautta"}
-                    }
-                }
-                one{"{0} vuorokausi"}
-                other{"{0} vuorokautta"}
-            }
             decade{
                 case{
                     elative{

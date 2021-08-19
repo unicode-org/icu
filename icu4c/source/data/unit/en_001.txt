@@ -87,6 +87,13 @@ en_001{
                 one{"{0} kilowatt-hour"}
             }
         }
+        force{
+            kilowatt-hour-per-100-kilometer{
+                dnam{"kilowatt-hour per 100 kilometres"}
+                one{"{0} kilowatt-hour per 100 kilometres"}
+                other{"{0} kilowatt-hours per 100 kilometres"}
+            }
+        }
         graphics{
             dot-per-centimeter{
                 dnam{"dots per centimetre"}
@@ -303,6 +310,11 @@ en_001{
             }
         }
         concentr{
+            karat{
+                dnam{"carat"}
+                one{"{0}ct"}
+                other{"{0}ct"}
+            }
             milligram-ofglucose-per-deciliter{
                 dnam{"mg/dl"}
                 one{"{0}mg/dl"}
@@ -376,6 +388,21 @@ en_001{
                 one{"{0}dl"}
                 other{"{0}dl"}
             }
+            dessert-spoon{
+                dnam{"US dsp"}
+                one{"{0}US dsp"}
+                other{"{0}US dsp"}
+            }
+            dessert-spoon-imperial{
+                dnam{"dsp"}
+                one{"{0}dsp"}
+                other{"{0}dsp"}
+            }
+            fluid-ounce-imperial{
+                dnam{"fl oz"}
+                one{"{0}fl oz"}
+                other{"{0}fl oz"}
+            }
             gallon{
                 dnam{"US gal"}
                 one{"{0}galUS"}
@@ -393,6 +420,9 @@ en_001{
                 one{"{0}hl"}
                 other{"{0}hl"}
             }
+            jigger{
+                other{"{0}jiggers"}
+            }
             liter{
                 dnam{"litre"}
                 one{"{0}l"}
@@ -408,6 +438,11 @@ en_001{
                 dnam{"ml"}
                 one{"{0}ml"}
                 other{"{0}ml"}
+            }
+            quart-imperial{
+                dnam{"qt"}
+                one{"{0}qt"}
+                other{"{0}qt"}
             }
         }
     }

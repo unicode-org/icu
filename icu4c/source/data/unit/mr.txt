@@ -939,41 +939,6 @@ mr{
                 other{"{0} दिवस"}
                 per{"{0} दर दिवशी"}
             }
-            day-person{
-                case{
-                    ablative{
-                        one{"{0} दिवसापासून"}
-                        other{"{0} दिवसांपासून"}
-                    }
-                    accusative{
-                        one{"{0} दिवसाला"}
-                        other{"ते {0} दिवस"}
-                    }
-                    dative{
-                        one{"{0} दिवसासाठी"}
-                        other{"{0} दिवसांसाठी"}
-                    }
-                    ergative{
-                        one{"{0} दिवसाने"}
-                        other{"{0} दिवसांनी"}
-                    }
-                    genitive{
-                        one{"{0} दिवसाचा"}
-                        other{"{0} दिवसांचा"}
-                    }
-                    locative{
-                        one{"{0} दिवशी"}
-                        other{"{0} दिवशी"}
-                    }
-                    oblique{
-                        one{"तो {0} दिवस"}
-                        other{"ते {0} दिवस"}
-                    }
-                }
-                gender{"neuter"}
-                one{"तो {0} दिवस"}
-                other{"ते {0} दिवस"}
-            }
             decade{
                 case{
                     ablative{

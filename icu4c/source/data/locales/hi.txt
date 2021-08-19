@@ -224,6 +224,10 @@ hi{
             }
         }
         minimalPairs{
+            case{
+                nominative{"{0} का समय लगेगा"}
+                oblique{"{0} लगेगा/लगेंगे"}
+            }
             gender{
                 feminine{"{0} बड़ी है."}
                 masculine{"{0} बड़ा है."}

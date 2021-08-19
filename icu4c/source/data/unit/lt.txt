@@ -1038,45 +1038,6 @@ lt{
                 other{"{0} dienų"}
                 per{"{0} per dieną"}
             }
-            day-person{
-                case{
-                    accusative{
-                        few{"{0} paras"}
-                        many{"{0} paros"}
-                        one{"{0} parą"}
-                        other{"{0} parų"}
-                    }
-                    dative{
-                        few{"{0} paroms"}
-                        many{"{0} paros"}
-                        one{"{0} parai"}
-                        other{"{0} parų"}
-                    }
-                    genitive{
-                        few{"{0} parų"}
-                        many{"{0} paros"}
-                        one{"{0} paros"}
-                        other{"{0} parų"}
-                    }
-                    instrumental{
-                        few{"{0} paromis"}
-                        many{"{0} paros"}
-                        one{"{0} para"}
-                        other{"{0} parų"}
-                    }
-                    locative{
-                        few{"{0} parose"}
-                        many{"{0} paros"}
-                        one{"{0} paroje"}
-                        other{"{0} parų"}
-                    }
-                }
-                few{"{0} paros"}
-                gender{"feminine"}
-                many{"{0} paros"}
-                one{"{0} para"}
-                other{"{0} parų"}
-            }
             decade{
                 case{
                     accusative{

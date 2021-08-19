@@ -443,17 +443,6 @@ pa{
                 other{"{0} ਦਿਨ"}
                 per{"{0} ਪ੍ਰਤੀ ਦਿਨ"}
             }
-            day-person{
-                case{
-                    oblique{
-                        one{"{0} ਦਿਨ"}
-                        other{"{0} ਦਿਨਾਂ"}
-                    }
-                }
-                gender{"masculine"}
-                one{"{0} ਦਿਨ"}
-                other{"{0} ਦਿਨ"}
-            }
             decade{
                 case{
                     oblique{

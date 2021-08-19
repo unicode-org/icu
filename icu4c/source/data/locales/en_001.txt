@@ -262,6 +262,7 @@ en_001{
                 Ed{"E d"}
                 GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM y G"}
+                GyMd{"d/M/y GGGGG"}
                 MEd{"E, dd/MM"}
                 MMMEd{"E, d MMM"}
                 MMMMd{"d MMMM"}
@@ -382,6 +383,40 @@ en_001{
                     M{"dd/MM/y – dd/MM/y"}
                     d{"dd/MM/y – dd/MM/y"}
                     y{"dd/MM/y – dd/MM/y"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Jan",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "May",
+                        "Jun",
+                        "Jul",
+                        "Aug",
+                        "Sept",
+                        "Oct",
+                        "Nov",
+                        "Dec",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Jan",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "May",
+                        "Jun",
+                        "Jul",
+                        "Aug",
+                        "Sept",
+                        "Oct",
+                        "Nov",
+                        "Dec",
+                    }
                 }
             }
         }
