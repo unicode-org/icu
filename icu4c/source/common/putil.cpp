@@ -727,12 +727,21 @@ static char *gTimeZoneBufferPtr = NULL;
 
 #if !U_PLATFORM_USES_ONLY_WIN32_API
 #define isNonDigit(ch) (ch < '0' || '9' < ch)
+#define isDigit(ch) ('0' <= ch && ch <= '9')
 static UBool isValidOlsonID(const char *id) {
     int32_t idx = 0;
+    int32_t idxMax = 0;
 
     /* Determine if this is something like Iceland (Olson ID)
     or AST4ADT (non-Olson ID) */
     while (id[idx] && isNonDigit(id[idx]) && id[idx] != ',') {
+        idx++;
+    }
+
+    /* Allow at maximum 2 numbers at the end of the id to support zone id's
+    like GMT+11. */
+    idxMax = idx + 2;
+    while (id[idx] && isDigit(id[idx]) && idx < idxMax) {
         idx++;
     }
 
