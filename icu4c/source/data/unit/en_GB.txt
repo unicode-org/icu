@@ -14,53 +14,11 @@ en_GB{
                 dnam{"carats"}
             }
         }
-        force{
-            kilowatt-hour-per-100-kilometer{
-                dnam{"kilowatt-hour per 100 kilometres"}
-                one{"{0} kilowatt-hour per 100 kilometres"}
-                other{"{0} kilowatt-hours per 100 kilometres"}
-            }
-        }
         volume{
             fluid-ounce-imperial{
                 dnam{"fluid ounces"}
                 one{"{0} fluid ounce"}
                 other{"{0} fluid ounces"}
-            }
-        }
-    }
-    unitsNarrow{
-        concentr{
-            karat{
-                dnam{"carat"}
-                one{"{0}ct"}
-                other{"{0}ct"}
-            }
-        }
-        volume{
-            dessert-spoon{
-                dnam{"US dsp"}
-                one{"{0}US dsp"}
-                other{"{0}US dsp"}
-            }
-            dessert-spoon-imperial{
-                dnam{"dsp"}
-                one{"{0}dsp"}
-                other{"{0}dsp"}
-            }
-            fluid-ounce-imperial{
-                dnam{"fl oz"}
-                one{"{0}fl oz"}
-                other{"{0}fl oz"}
-            }
-            jigger{
-                one{"{0}jigger"}
-                other{"{0}jiggers"}
-            }
-            quart-imperial{
-                dnam{"qt"}
-                one{"{0}qt"}
-                other{"{0}qt"}
             }
         }
     }

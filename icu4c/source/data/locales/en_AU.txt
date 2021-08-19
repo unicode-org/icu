@@ -140,7 +140,6 @@ en_AU{
                 "yyMd",
             }
             availableFormats{
-                GyMd{"d/M/y GGGGG"}
                 MEd{"E, d/M"}
                 Md{"d/M"}
             }

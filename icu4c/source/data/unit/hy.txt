@@ -610,28 +610,6 @@ hy{
                 other{"{0} օր"}
                 per{"օրական {0}"}
             }
-            day-person{
-                case{
-                    ablative{
-                        one{"{0} օրից"}
-                        other{"{0} օրից"}
-                    }
-                    dative{
-                        one{"{0} օրվան"}
-                        other{"{0} օրվան"}
-                    }
-                    instrumental{
-                        one{"{0} օրով"}
-                        other{"{0} օրով"}
-                    }
-                    locative{
-                        one{"{0} օրում"}
-                        other{"{0} օրում"}
-                    }
-                }
-                one{"{0} օր"}
-                other{"{0} օր"}
-            }
             decade{
                 case{
                     ablative{

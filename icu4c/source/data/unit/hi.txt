@@ -67,7 +67,7 @@ hi{
                     }
                 }
                 dnam{"अंश"}
-                gender{"feminine"}
+                gender{"masculine"}
                 one{"{0} अंश"}
                 other{"{0} अंश"}
             }
@@ -496,8 +496,8 @@ hi{
             day{
                 case{
                     oblique{
-                        one{"{0} दिन"}
-                        other{"{0} दिन"}
+                        one{"{0} दिनों"}
+                        other{"{0} दिनों"}
                     }
                 }
                 dnam{"दिन"}
@@ -505,17 +505,6 @@ hi{
                 one{"{0} दिन"}
                 other{"{0} दिन"}
                 per{"{0} प्रति दिन"}
-            }
-            day-person{
-                case{
-                    oblique{
-                        one{"{0} दिन"}
-                        other{"{0} दिनों"}
-                    }
-                }
-                gender{"masculine"}
-                one{"{0} दिन"}
-                other{"{0} दिन"}
             }
             decade{
                 case{
@@ -568,15 +557,15 @@ hi{
             month{
                 case{
                     oblique{
-                        one{"{0} महीने"}
-                        other{"{0} माह"}
+                        one{"{0} महीना"}
+                        other{"{0} महीना"}
                     }
                 }
-                dnam{"माह"}
+                dnam{"महीना"}
                 gender{"masculine"}
-                one{"{0} माह"}
-                other{"{0} माह"}
-                per{"{0} प्रति माह"}
+                one{"{0} महीना"}
+                other{"{0} महीना"}
+                per{"{0} प्रति महीना"}
             }
             nanosecond{
                 dnam{"नैनो सेकंड"}
@@ -586,8 +575,8 @@ hi{
             second{
                 case{
                     oblique{
-                        one{"{0} सेकेंड"}
-                        other{"{0} सेकेंड"}
+                        one{"{0} सेकंड"}
+                        other{"{0} सेकंड"}
                     }
                 }
                 dnam{"सेकंड"}
@@ -746,7 +735,7 @@ hi{
                 case{
                     oblique{
                         one{"{0} न्यूटन"}
-                        other{"{0} न्यूटनों"}
+                        other{"{0} न्यूटन"}
                     }
                 }
                 dnam{"न्यूटन"}

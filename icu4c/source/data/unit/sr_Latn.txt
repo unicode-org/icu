@@ -372,20 +372,6 @@ sr_Latn{
                 other{"{0} dana"}
                 per{"{0}/dnevno"}
             }
-            day-person{
-                case{
-                    accusative{
-                        few{"{0} dana"}
-                    }
-                    genitive{
-                        one{"{0} dana"}
-                    }
-                    instrumental{
-                        one{"{0} danom"}
-                    }
-                }
-                gender{"inanimate"}
-            }
             decade{
                 case{
                     accusative{

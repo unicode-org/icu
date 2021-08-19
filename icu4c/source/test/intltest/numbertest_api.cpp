@@ -1271,7 +1271,7 @@ void NumberFormatterApiTest::unitArbitraryMeasureUnits() {
                 .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
             Locale("en-ZA"),
             2.4,
-            u"2,4 kilowatt-hours per 100 kilometers");
+            u"2,4 kilowatt-hours per 100 kilometres");
 }
 
 // TODO: merge these tests into numbertest_skeletons.cpp instead of here:

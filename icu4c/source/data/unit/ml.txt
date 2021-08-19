@@ -332,45 +332,9 @@ ml{
                         locative{"വർഗ്ഗം {0}"}
                         sociative{"വർഗ്ഗം {0}"}
                     }
-                    feminine{
-                        _{"വർഗ്ഗം {0}"}
-                        accusative{"വർഗ്ഗം {0}"}
-                        dative{"വർഗ്ഗം {0}"}
-                        genitive{"വർഗ്ഗം {0}"}
-                        instrumental{"വർഗ്ഗം {0}"}
-                        locative{"വർഗ്ഗം {0}"}
-                        sociative{"വർഗ്ഗം {0}"}
-                    }
-                    inanimate{
-                        _{"വർഗ്ഗം {0}"}
-                        accusative{"വർഗ്ഗം {0}"}
-                        dative{"വർഗ്ഗം {0}"}
-                        genitive{"വർഗ്ഗം {0}"}
-                        instrumental{"വർഗ്ഗം {0}"}
-                        locative{"വർഗ്ഗം {0}"}
-                        sociative{"വർഗ്ഗം {0}"}
-                    }
                 }
                 other{
                     _{
-                        _{"വർഗ്ഗം {0}"}
-                        accusative{"വർഗ്ഗം {0}"}
-                        dative{"വർഗ്ഗം {0}"}
-                        genitive{"വർഗ്ഗം {0}"}
-                        instrumental{"വർഗ്ഗം {0}"}
-                        locative{"വർഗ്ഗം {0}"}
-                        sociative{"വർഗ്ഗം {0}"}
-                    }
-                    feminine{
-                        _{"വർഗ്ഗം {0}"}
-                        accusative{"വർഗ്ഗം {0}"}
-                        dative{"വർഗ്ഗം {0}"}
-                        genitive{"വർഗ്ഗം {0}"}
-                        instrumental{"വർഗ്ഗം {0}"}
-                        locative{"വർഗ്ഗം {0}"}
-                        sociative{"വർഗ്ഗം {0}"}
-                    }
-                    inanimate{
                         _{"വർഗ്ഗം {0}"}
                         accusative{"വർഗ്ഗം {0}"}
                         dative{"വർഗ്ഗം {0}"}
@@ -392,45 +356,9 @@ ml{
                         locative{"ക്യുബിക് {0}"}
                         sociative{"ക്യുബിക് {0}"}
                     }
-                    feminine{
-                        _{"ക്യുബിക് {0}"}
-                        accusative{"ക്യുബിക് {0}"}
-                        dative{"ക്യുബിക് {0}"}
-                        genitive{"ക്യുബിക് {0}"}
-                        instrumental{"ക്യുബിക് {0}"}
-                        locative{"ക്യുബിക് {0}"}
-                        sociative{"ക്യുബിക് {0}"}
-                    }
-                    inanimate{
-                        _{"ക്യുബിക് {0}"}
-                        accusative{"ക്യുബിക് {0}"}
-                        dative{"ക്യുബിക് {0}"}
-                        genitive{"ക്യുബിക് {0}"}
-                        instrumental{"ക്യുബിക് {0}"}
-                        locative{"ക്യുബിക് {0}"}
-                        sociative{"ക്യുബിക് {0}"}
-                    }
                 }
                 other{
                     _{
-                        _{"ക്യുബിക് {0}"}
-                        accusative{"ക്യുബിക് {0}"}
-                        dative{"ക്യുബിക് {0}"}
-                        genitive{"ക്യുബിക് {0}"}
-                        instrumental{"ക്യുബിക് {0}"}
-                        locative{"ക്യുബിക് {0}"}
-                        sociative{"ക്യുബിക് {0}"}
-                    }
-                    feminine{
-                        _{"ക്യുബിക് {0}"}
-                        accusative{"ക്യുബിക് {0}"}
-                        dative{"ക്യുബിക് {0}"}
-                        genitive{"ക്യുബിക് {0}"}
-                        instrumental{"ക്യുബിക് {0}"}
-                        locative{"ക്യുബിക് {0}"}
-                        sociative{"ക്യുബിക് {0}"}
-                    }
-                    inanimate{
                         _{"ക്യുബിക് {0}"}
                         accusative{"ക്യുബിക് {0}"}
                         dative{"ക്യുബിക് {0}"}
@@ -855,37 +783,6 @@ ml{
                 one{"{0} ദിവസം"}
                 other{"{0} ദിവസം"}
                 per{"{0} / ദിവസം"}
-            }
-            day-person{
-                case{
-                    accusative{
-                        one{"{0} മണിക്കൂർ കാലയളവിനെ"}
-                        other{"{0} മണിക്കൂർ കാലയളവിലെ"}
-                    }
-                    dative{
-                        one{"{0} മണിക്കൂറിന്"}
-                        other{"{0} മണിക്കൂർ കാലയളവിന്"}
-                    }
-                    genitive{
-                        one{"{0} മണിക്കൂറിന്റെ"}
-                        other{"{0} മണിക്കൂറിന്റെ"}
-                    }
-                    instrumental{
-                        one{"{0} മണിക്കൂറിനാൽ"}
-                        other{"{0} മണിക്കൂർ കാലയളവിനാൽ"}
-                    }
-                    locative{
-                        one{"{0} മണിക്കൂറിൽ"}
-                        other{"{0} മണിക്കൂറിൽ"}
-                    }
-                    sociative{
-                        one{"{0} മണിക്കൂർ കാലയളവിനോട്"}
-                        other{"{0} കാലയളവിനോട്"}
-                    }
-                }
-                gender{"neuter"}
-                one{"{0} ദിവസം‌"}
-                other{"{0} മണിക്കൂർ കാലയളവ്"}
             }
             decade{
                 case{

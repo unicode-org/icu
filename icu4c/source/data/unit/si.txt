@@ -10,24 +10,6 @@ si{
     units{
         acceleration{
             g-force{
-                case{
-                    ablative{
-                        one{"g-බලය {0}"}
-                        other{"g-බලය {0}"}
-                    }
-                    accusative{
-                        one{"g-බලය {0}"}
-                        other{"g-බලය {0}"}
-                    }
-                    dative{
-                        one{"g-බලය {0}"}
-                        other{"g-බලය {0}"}
-                    }
-                    genitive{
-                        one{"g-බලය {0}"}
-                        other{"g-බලය {0}"}
-                    }
-                }
                 dnam{"g-බලය"}
                 one{"g-බලය {0}"}
                 other{"g-බලය {0}"}
@@ -40,116 +22,26 @@ si{
         }
         angle{
             arc-minute{
-                case{
-                    ablative{
-                        one{"චාපමිනිත්තු {0}"}
-                        other{"චාපමිනිත්තු {0}"}
-                    }
-                    accusative{
-                        one{"චාපමිනිත්තු {0}"}
-                        other{"චාපමිනිත්තු {0}"}
-                    }
-                    dative{
-                        one{"චාපමිනිත්තු {0}"}
-                        other{"චාපමිනිත්තු {0}"}
-                    }
-                    genitive{
-                        one{"චාපමිනිත්තු {0}"}
-                        other{"චාපමිනිත්තු {0}"}
-                    }
-                }
                 dnam{"චාපමිනිත්තු"}
                 one{"චාපමිනිත්තු {0}"}
                 other{"චාපමිනිත්තු {0}"}
             }
             arc-second{
-                case{
-                    ablative{
-                        one{"චාපතත්පර {0}"}
-                        other{"චාපතත්පර {0}"}
-                    }
-                    accusative{
-                        one{"චාපතත්පර {0}"}
-                        other{"චාපතත්පර {0}"}
-                    }
-                    dative{
-                        one{"චාපතත්පර {0}"}
-                        other{"චාපතත්පර {0}"}
-                    }
-                    genitive{
-                        one{"චාපතත්පර {0}"}
-                        other{"චාපතත්පර {0}"}
-                    }
-                }
                 dnam{"චාපතත්පර"}
                 one{"චාපතත්පර {0}"}
                 other{"චාපතත්පර {0}"}
             }
             degree{
-                case{
-                    ablative{
-                        one{"අංශක {0}"}
-                        other{"අංශක {0}"}
-                    }
-                    accusative{
-                        one{"අංශක {0}"}
-                        other{"අංශක {0}"}
-                    }
-                    dative{
-                        one{"අංශක {0}"}
-                        other{"අංශක {0}"}
-                    }
-                    genitive{
-                        one{"අංශක {0}"}
-                        other{"අංශක {0}"}
-                    }
-                }
                 dnam{"අංශක"}
                 one{"අංශක {0}"}
                 other{"අංශක {0}"}
             }
             radian{
-                case{
-                    ablative{
-                        one{"රේඩියන් {0}"}
-                        other{"රේඩියන් {0}"}
-                    }
-                    accusative{
-                        one{"රේඩියන් {0}"}
-                        other{"රේඩියන් {0}"}
-                    }
-                    dative{
-                        one{"රේඩියන් {0}"}
-                        other{"රේඩියන් {0}"}
-                    }
-                    genitive{
-                        one{"රේඩියන් {0}"}
-                        other{"රේඩියන් {0}"}
-                    }
-                }
                 dnam{"රේඩියන්"}
                 one{"රේඩියන් {0}"}
                 other{"රේඩියන් {0}"}
             }
             revolution{
-                case{
-                    ablative{
-                        one{"පරිභ්‍රමණ {0}"}
-                        other{"පරිභ්‍රමණය {0}"}
-                    }
-                    accusative{
-                        one{"පරිභ්‍රමණ {0}"}
-                        other{"පරිභ්‍රමණය {0}"}
-                    }
-                    dative{
-                        one{"පරිභ්‍රමණ {0}"}
-                        other{"පරිභ්‍රමණය {0}"}
-                    }
-                    genitive{
-                        one{"පරිභ්‍රමණ {0}"}
-                        other{"පරිභ්‍රමණය {0}"}
-                    }
-                }
                 dnam{"පරිභ්‍රමණය"}
                 one{"පරිභ්‍රමණ {0}"}
                 other{"පරිභ්‍රමණය {0}"}
@@ -167,24 +59,6 @@ si{
                 other{"{0} ඩනම්ස්"}
             }
             hectare{
-                case{
-                    ablative{
-                        one{"හෙක්ටයාර් {0}"}
-                        other{"හෙක්ටයාර් {0}"}
-                    }
-                    accusative{
-                        one{"හෙක්ටයාර් {0}"}
-                        other{"හෙක්ටයාර් {0}"}
-                    }
-                    dative{
-                        one{"හෙක්ටයාර් {0}"}
-                        other{"හෙක්ටයාර් {0}"}
-                    }
-                    genitive{
-                        one{"හෙක්ටයාර් {0}"}
-                        other{"හෙක්ටයාර් {0}"}
-                    }
-                }
                 dnam{"හෙක්ටයාර්"}
                 one{"හෙක්ටයාර් {0}"}
                 other{"හෙක්ටයාර් {0}"}
@@ -292,24 +166,6 @@ si{
                 other{"අයිතම {0}ක්"}
             }
             karat{
-                case{
-                    ablative{
-                        one{"ක්‍රාත් {0}"}
-                        other{"ක්‍රාත් {0}"}
-                    }
-                    accusative{
-                        one{"ක්‍රාත් {0}"}
-                        other{"ක්‍රාත් {0}"}
-                    }
-                    dative{
-                        one{"ක්‍රාත් {0}"}
-                        other{"ක්‍රාත් {0}"}
-                    }
-                    genitive{
-                        one{"ක්‍රාත් {0}"}
-                        other{"ක්‍රාත් {0}"}
-                    }
-                }
                 dnam{"ක්‍රාත්"}
                 one{"ක්‍රාත් {0}"}
                 other{"ක්‍රාත් {0}"}
@@ -325,116 +181,26 @@ si{
                 other{"ලීටරයකට මිලිමෝල් {0}"}
             }
             mole{
-                case{
-                    ablative{
-                        one{"{0} මවුල"}
-                        other{"{0} මවුල"}
-                    }
-                    accusative{
-                        one{"{0} මවුල"}
-                        other{"{0} මවුල"}
-                    }
-                    dative{
-                        one{"{0} මවුල"}
-                        other{"{0} මවුල"}
-                    }
-                    genitive{
-                        one{"{0} මවුල"}
-                        other{"{0} මවුල"}
-                    }
-                }
                 dnam{"මවුල"}
                 one{"{0} මවුල"}
                 other{"{0} මවුල"}
             }
             percent{
-                case{
-                    ablative{
-                        one{"ප්‍රතිශතය {0}"}
-                        other{"ප්‍රතිශතය {0}"}
-                    }
-                    accusative{
-                        one{"ප්‍රතිශතය {0}"}
-                        other{"ප්‍රතිශතය {0}"}
-                    }
-                    dative{
-                        one{"ප්‍රතිශතය {0}"}
-                        other{"ප්‍රතිශතය {0}"}
-                    }
-                    genitive{
-                        one{"ප්‍රතිශතය {0}"}
-                        other{"ප්‍රතිශතය {0}"}
-                    }
-                }
                 dnam{"ප්‍රතිශතය"}
                 one{"ප්‍රතිශතය {0}"}
                 other{"ප්‍රතිශතය {0}"}
             }
             permille{
-                case{
-                    ablative{
-                        one{"ප්‍රතිසහශ්‍රක {0}"}
-                        other{"ප්‍රතිසහශ්‍රක {0}"}
-                    }
-                    accusative{
-                        one{"ප්‍රතිසහශ්‍රක {0}"}
-                        other{"ප්‍රතිසහශ්‍රක {0}"}
-                    }
-                    dative{
-                        one{"ප්‍රතිසහශ්‍රක {0}"}
-                        other{"ප්‍රතිසහශ්‍රක {0}"}
-                    }
-                    genitive{
-                        one{"ප්‍රතිසහශ්‍රක {0}"}
-                        other{"ප්‍රතිසහශ්‍රක {0}"}
-                    }
-                }
                 dnam{"ප්‍රතිසහශ්‍රක"}
                 one{"ප්‍රතිසහශ්‍රක {0}"}
                 other{"ප්‍රතිසහශ්‍රක {0}"}
             }
             permillion{
-                case{
-                    ablative{
-                        one{"මිලියනයට කොටස් {0}"}
-                        other{"මිලියනයට කොටස් {0}"}
-                    }
-                    accusative{
-                        one{"මිලියනයට කොටස් {0}"}
-                        other{"මිලියනයට කොටස් {0}"}
-                    }
-                    dative{
-                        one{"මිලියනයට කොටස් {0}"}
-                        other{"මිලියනයට කොටස් {0}"}
-                    }
-                    genitive{
-                        one{"මිලියනයට කොටස් {0}"}
-                        other{"මිලියනයට කොටස් {0}"}
-                    }
-                }
                 dnam{"මිලියනයට කොටස්"}
                 one{"මිලියනයට කොටස් {0}"}
                 other{"මිලියනයට කොටස් {0}"}
             }
             permyriad{
-                case{
-                    ablative{
-                        one{"{0} පර්මැරියඩ්"}
-                        other{"{0} පර්මැරියඩ්"}
-                    }
-                    accusative{
-                        one{"{0} පර්මැරියඩ්"}
-                        other{"{0} පර්මැරියඩ්"}
-                    }
-                    dative{
-                        one{"{0} පර්මැරියඩ්"}
-                        other{"{0} පර්මැරියඩ්"}
-                    }
-                    genitive{
-                        one{"{0} පර්මැරියඩ්"}
-                        other{"{0} පර්මැරියඩ්"}
-                    }
-                }
                 dnam{"පර්මැරියඩ්"}
                 one{"{0} පර්මැරියඩ්"}
                 other{"{0} පර්මැරියඩ්"}
@@ -471,47 +237,11 @@ si{
         }
         digital{
             bit{
-                case{
-                    ablative{
-                        one{"බීට් {0}"}
-                        other{"බීට් {0}"}
-                    }
-                    accusative{
-                        one{"බීට් {0}"}
-                        other{"බීට් {0}"}
-                    }
-                    dative{
-                        one{"බීට් {0}"}
-                        other{"බීට් {0}"}
-                    }
-                    genitive{
-                        one{"බීට් {0}"}
-                        other{"බීට් {0}"}
-                    }
-                }
                 dnam{"බීට්"}
                 one{"බීට් {0}"}
                 other{"බීට් {0}"}
             }
             byte{
-                case{
-                    ablative{
-                        one{"බයිට් {0}"}
-                        other{"බයිට් {0}"}
-                    }
-                    accusative{
-                        one{"බයිට් {0}"}
-                        other{"බයිට් {0}"}
-                    }
-                    dative{
-                        one{"බයිට් {0}"}
-                        other{"බයිට් {0}"}
-                    }
-                    genitive{
-                        one{"බයිට් {0}"}
-                        other{"බයිට් {0}"}
-                    }
-                }
                 dnam{"බයිට්"}
                 one{"බයිට් {0}"}
                 other{"බයිට් {0}"}
@@ -564,116 +294,22 @@ si{
         }
         duration{
             century{
-                case{
-                    ablative{
-                        one{"සියවස් {0}"}
-                        other{"සියවස් {0}"}
-                    }
-                    accusative{
-                        one{"සියවස් {0}"}
-                        other{"සියවස් {0}"}
-                    }
-                    dative{
-                        one{"සියවස් {0}"}
-                        other{"සියවස් {0}"}
-                    }
-                    genitive{
-                        one{"සියවස් {0}"}
-                        other{"සියවස් {0}"}
-                    }
-                }
                 dnam{"සියවස"}
                 one{"සියවස් {0}"}
                 other{"සියවස් {0}"}
             }
             day{
-                case{
-                    ablative{
-                        one{"දින {0}"}
-                        other{"දින {0}"}
-                    }
-                    accusative{
-                        one{"දින {0}"}
-                        other{"දින {0}"}
-                    }
-                    dative{
-                        one{"දින {0}"}
-                        other{"දින {0}"}
-                    }
-                    genitive{
-                        one{"දින {0}"}
-                        other{"දින {0}"}
-                    }
-                }
                 dnam{"දින"}
                 one{"දින {0}"}
                 other{"දින {0}"}
                 per{"දිනයට {0}"}
             }
-            day-person{
-                case{
-                    ablative{
-                        one{"{0} දිනක්"}
-                        other{"දින {0}ක්"}
-                    }
-                    accusative{
-                        one{"{0} දිනක්"}
-                        other{"දින {0}ක්"}
-                    }
-                    dative{
-                        one{"{0} දිනක්"}
-                        other{"දින {0}ක්"}
-                    }
-                    genitive{
-                        one{"{0} දිනක්"}
-                        other{"දින {0}ක්"}
-                    }
-                }
-                one{"{0} දිනක්"}
-                other{"දින {0}ක්"}
-            }
             decade{
-                case{
-                    ablative{
-                        one{"දශක {0}"}
-                        other{"දශක {0}"}
-                    }
-                    accusative{
-                        one{"දශක {0}"}
-                        other{"දශක {0}"}
-                    }
-                    dative{
-                        one{"දශක {0}"}
-                        other{"දශක {0}"}
-                    }
-                    genitive{
-                        one{"දශක {0}"}
-                        other{"දශක {0}"}
-                    }
-                }
                 dnam{"දශක"}
                 one{"දශක {0}"}
                 other{"දශක {0}"}
             }
             hour{
-                case{
-                    ablative{
-                        one{"පැය {0}"}
-                        other{"පැය {0}"}
-                    }
-                    accusative{
-                        one{"පැය {0}"}
-                        other{"පැය {0}"}
-                    }
-                    dative{
-                        one{"පැය {0}"}
-                        other{"පැය {0}"}
-                    }
-                    genitive{
-                        one{"පැය {0}"}
-                        other{"පැය {0}"}
-                    }
-                }
                 dnam{"පැය"}
                 one{"පැය {0}"}
                 other{"පැය {0}"}
@@ -690,48 +326,12 @@ si{
                 other{"මිලිතත්පර {0}"}
             }
             minute{
-                case{
-                    ablative{
-                        one{"මිනිත්තු {0}"}
-                        other{"මිනිත්තු {0}"}
-                    }
-                    accusative{
-                        one{"මිනිත්තු {0}"}
-                        other{"මිනිත්තු {0}"}
-                    }
-                    dative{
-                        one{"මිනිත්තු {0}"}
-                        other{"මිනිත්තු {0}"}
-                    }
-                    genitive{
-                        one{"මිනිත්තු {0}"}
-                        other{"මිනිත්තු {0}"}
-                    }
-                }
                 dnam{"මිනිත්තු"}
                 one{"මිනිත්තු {0}"}
                 other{"මිනිත්තු {0}"}
                 per{"මිනිත්තුවට {0}"}
             }
             month{
-                case{
-                    ablative{
-                        one{"මාස {0}"}
-                        other{"මාස {0}"}
-                    }
-                    accusative{
-                        one{"මාස {0}"}
-                        other{"මාස {0}"}
-                    }
-                    dative{
-                        one{"මාස {0}"}
-                        other{"මාස {0}"}
-                    }
-                    genitive{
-                        one{"මාස {0}"}
-                        other{"මාස {0}"}
-                    }
-                }
                 dnam{"මාස"}
                 one{"මාස {0}"}
                 other{"මාස {0}"}
@@ -743,72 +343,18 @@ si{
                 other{"නැනෝතත්පර {0}"}
             }
             second{
-                case{
-                    ablative{
-                        one{"තත්පර {0}"}
-                        other{"තත්පර {0}"}
-                    }
-                    accusative{
-                        one{"තත්පර {0}"}
-                        other{"තත්පර {0}"}
-                    }
-                    dative{
-                        one{"තත්පර {0}"}
-                        other{"තත්පර {0}"}
-                    }
-                    genitive{
-                        one{"තත්පර {0}"}
-                        other{"තත්පර {0}"}
-                    }
-                }
                 dnam{"තත්පර"}
                 one{"තත්පර {0}"}
                 other{"තත්පර {0}"}
                 per{"තත්පරයට {0}"}
             }
             week{
-                case{
-                    ablative{
-                        one{"සති {0}"}
-                        other{"සති {0}"}
-                    }
-                    accusative{
-                        one{"සති {0}"}
-                        other{"සති {0}"}
-                    }
-                    dative{
-                        one{"සති {0}"}
-                        other{"සති {0}"}
-                    }
-                    genitive{
-                        one{"සති {0}"}
-                        other{"සති {0}"}
-                    }
-                }
                 dnam{"සති"}
                 one{"සති {0}"}
                 other{"සති {0}"}
                 per{"සතියට {0}"}
             }
             year{
-                case{
-                    ablative{
-                        one{"වසර {0}"}
-                        other{"වසර {0}"}
-                    }
-                    accusative{
-                        one{"වසර {0}"}
-                        other{"වසර {0}"}
-                    }
-                    dative{
-                        one{"වසර {0}"}
-                        other{"වසර {0}"}
-                    }
-                    genitive{
-                        one{"වසර {0}"}
-                        other{"වසර {0}"}
-                    }
-                }
                 dnam{"වසර"}
                 one{"වසර {0}"}
                 other{"වසර {0}"}
@@ -817,24 +363,6 @@ si{
         }
         electric{
             ampere{
-                case{
-                    ablative{
-                        one{"ඇම්පියර {0}"}
-                        other{"ඇම්පියර {0}"}
-                    }
-                    accusative{
-                        one{"ඇම්පියර {0}"}
-                        other{"ඇම්පියර {0}"}
-                    }
-                    dative{
-                        one{"ඇම්පියර {0}"}
-                        other{"ඇම්පියර {0}"}
-                    }
-                    genitive{
-                        one{"ඇම්පියර {0}"}
-                        other{"ඇම්පියර {0}"}
-                    }
-                }
                 dnam{"ඇම්පියර"}
                 one{"ඇම්පියර {0}"}
                 other{"ඇම්පියර {0}"}
@@ -845,47 +373,11 @@ si{
                 other{"මිලි ඇම්පියරය {0}"}
             }
             ohm{
-                case{
-                    ablative{
-                        one{"ඕම් {0}"}
-                        other{"ඕම් {0}"}
-                    }
-                    accusative{
-                        one{"ඕම් {0}"}
-                        other{"ඕම් {0}"}
-                    }
-                    dative{
-                        one{"ඕම් {0}"}
-                        other{"ඕම් {0}"}
-                    }
-                    genitive{
-                        one{"ඕම් {0}"}
-                        other{"ඕම් {0}"}
-                    }
-                }
                 dnam{"ඕම්"}
                 one{"ඕම් {0}"}
                 other{"ඕම් {0}"}
             }
             volt{
-                case{
-                    ablative{
-                        one{"වෝල්ට් {0}"}
-                        other{"වෝල්ට් {0}"}
-                    }
-                    accusative{
-                        one{"වෝල්ට් {0}"}
-                        other{"වෝල්ට් {0}"}
-                    }
-                    dative{
-                        one{"වෝල්ට් {0}"}
-                        other{"වෝල්ට් {0}"}
-                    }
-                    genitive{
-                        one{"වෝල්ට් {0}"}
-                        other{"වෝල්ට් {0}"}
-                    }
-                }
                 dnam{"වෝල්ට්"}
                 one{"වෝල්ට් {0}"}
                 other{"වෝල්ට් {0}"}
@@ -898,24 +390,6 @@ si{
                 other{"{0} බ්‍රිතාන්‍ය තාප ඒකක"}
             }
             calorie{
-                case{
-                    ablative{
-                        one{"කැලරි {0}"}
-                        other{"කැලරි {0}"}
-                    }
-                    accusative{
-                        one{"කැලරි {0}"}
-                        other{"කැලරි {0}"}
-                    }
-                    dative{
-                        one{"කැලරි {0}"}
-                        other{"කැලරි {0}"}
-                    }
-                    genitive{
-                        one{"කැලරි {0}"}
-                        other{"කැලරි {0}"}
-                    }
-                }
                 dnam{"කැලරි"}
                 one{"කැලරි {0}"}
                 other{"කැලරි {0}"}
@@ -931,24 +405,6 @@ si{
                 other{"කැලරි {0}"}
             }
             joule{
-                case{
-                    ablative{
-                        one{"ජුල් {0}"}
-                        other{"ජුල් {0}"}
-                    }
-                    accusative{
-                        one{"ජුල් {0}"}
-                        other{"ජුල් {0}"}
-                    }
-                    dative{
-                        one{"ජුල් {0}"}
-                        other{"ජුල් {0}"}
-                    }
-                    genitive{
-                        one{"ජුල් {0}"}
-                        other{"ජුල් {0}"}
-                    }
-                }
                 dnam{"ජුල්"}
                 one{"ජුල් {0}"}
                 other{"ජුල් {0}"}
@@ -981,24 +437,6 @@ si{
                 other{"කිලෝමීටර 100 කට කිලෝවොට් පැය {0}"}
             }
             newton{
-                case{
-                    ablative{
-                        one{"{0} නිව්ටන්"}
-                        other{"{0} නිව්ටන්"}
-                    }
-                    accusative{
-                        one{"{0} නිව්ටන්"}
-                        other{"{0} නිව්ටන්"}
-                    }
-                    dative{
-                        one{"{0} නිව්ටන්"}
-                        other{"{0} නිව්ටන්"}
-                    }
-                    genitive{
-                        one{"{0} නිව්ටන්"}
-                        other{"{0} නිව්ටන්"}
-                    }
-                }
                 dnam{"නිව්ටන්"}
                 one{"{0} නිව්ටන්"}
                 other{"{0} නිව්ටන්"}
@@ -1016,24 +454,6 @@ si{
                 other{"ගිගාහට්ස් {0}"}
             }
             hertz{
-                case{
-                    ablative{
-                        one{"හට්ස් {0}"}
-                        other{"හට්ස් {0}"}
-                    }
-                    accusative{
-                        one{"හට්ස් {0}"}
-                        other{"හට්ස් {0}"}
-                    }
-                    dative{
-                        one{"හට්ස් {0}"}
-                        other{"හට්ස් {0}"}
-                    }
-                    genitive{
-                        one{"හට්ස් {0}"}
-                        other{"හට්ස් {0}"}
-                    }
-                }
                 dnam{"හට්ස්"}
                 one{"හට්ස් {0}"}
                 other{"හට්ස් {0}"}
@@ -1074,24 +494,6 @@ si{
                 other{"මෙගාපික්සල් {0}"}
             }
             pixel{
-                case{
-                    ablative{
-                        one{"පික්සල් {0}"}
-                        other{"පික්සල් {0}"}
-                    }
-                    accusative{
-                        one{"පික්සල් {0}"}
-                        other{"පික්සල් {0}"}
-                    }
-                    dative{
-                        one{"පික්සල් {0}"}
-                        other{"පික්සල් {0}"}
-                    }
-                    genitive{
-                        one{"පික්සල් {0}"}
-                        other{"පික්සල් {0}"}
-                    }
-                }
                 dnam{"පික්සල්"}
                 one{"පික්සල් {0}"}
                 other{"පික්සල් {0}"}
@@ -1163,24 +565,6 @@ si{
                 other{"ආලෝක වර්ෂ {0}"}
             }
             meter{
-                case{
-                    ablative{
-                        one{"මීටර් {0}"}
-                        other{"මීටර් {0}"}
-                    }
-                    accusative{
-                        one{"මීටර් {0}"}
-                        other{"මීටර් {0}"}
-                    }
-                    dative{
-                        one{"මීටර් {0}"}
-                        other{"මීටර් {0}"}
-                    }
-                    genitive{
-                        one{"මීටර් {0}"}
-                        other{"මීටර් {0}"}
-                    }
-                }
                 dnam{"මීටර්"}
                 one{"මීටර් {0}"}
                 other{"මීටර් {0}"}
@@ -1197,24 +581,6 @@ si{
                 other{"සැතපුම් {0}"}
             }
             mile-scandinavian{
-                case{
-                    ablative{
-                        one{"ස්කැන්ඩිනේවියානු සැතපුම් {0}"}
-                        other{"ස්කැන්ඩිනේවියානු සැතපුම් {0}"}
-                    }
-                    accusative{
-                        one{"ස්කැන්ඩිනේවියානු සැතපුම් {0}"}
-                        other{"ස්කැන්ඩිනේවියානු සැතපුම් {0}"}
-                    }
-                    dative{
-                        one{"ස්කැන්ඩිනේවියානු සැතපුම් {0}"}
-                        other{"ස්කැන්ඩිනේවියානු සැතපුම් {0}"}
-                    }
-                    genitive{
-                        one{"ස්කැන්ඩිනේවියානු සැතපුම් {0}"}
-                        other{"ස්කැන්ඩිනේවියානු සැතපුම් {0}"}
-                    }
-                }
                 dnam{"ස්කැන්ඩිනේවියානු සැතපුම්"}
                 one{"ස්කැන්ඩිනේවියානු සැතපුම් {0}"}
                 other{"ස්කැන්ඩිනේවියානු සැතපුම් {0}"}
@@ -1262,70 +628,16 @@ si{
         }
         light{
             candela{
-                case{
-                    ablative{
-                        one{"{0} කැන්ඩෙලා"}
-                        other{"කැන්ඩෙලා {0}"}
-                    }
-                    accusative{
-                        one{"{0} කැන්ඩෙලා"}
-                        other{"කැන්ඩෙලා {0}"}
-                    }
-                    dative{
-                        one{"{0} කැන්ඩෙලා"}
-                        other{"කැන්ඩෙලා {0}"}
-                    }
-                    genitive{
-                        one{"{0} කැන්ඩෙලා"}
-                        other{"කැන්ඩෙලා {0}"}
-                    }
-                }
                 dnam{"කැන්ඩෙලා"}
                 one{"{0} කැන්ඩෙලා"}
                 other{"කැන්ඩෙලා {0}"}
             }
             lumen{
-                case{
-                    ablative{
-                        one{"{0} ලූමනය"}
-                        other{"ලූමන {0}"}
-                    }
-                    accusative{
-                        one{"{0} ලූමනය"}
-                        other{"ලූමන {0}"}
-                    }
-                    dative{
-                        one{"{0} ලූමනය"}
-                        other{"ලූමන {0}"}
-                    }
-                    genitive{
-                        one{"{0} ලූමනය"}
-                        other{"ලූමන {0}"}
-                    }
-                }
                 dnam{"ලූමනය"}
                 one{"{0} ලූමනය"}
                 other{"ලූමන {0}"}
             }
             lux{
-                case{
-                    ablative{
-                        one{"ලක්ස් {0}"}
-                        other{"ලක්ස් {0}"}
-                    }
-                    accusative{
-                        one{"ලක්ස් {0}"}
-                        other{"ලක්ස් {0}"}
-                    }
-                    dative{
-                        one{"ලක්ස් {0}"}
-                        other{"ලක්ස් {0}"}
-                    }
-                    genitive{
-                        one{"ලක්ස් {0}"}
-                        other{"ලක්ස් {0}"}
-                    }
-                }
                 dnam{"ලක්ස්"}
                 one{"ලක්ස් {0}"}
                 other{"ලක්ස් {0}"}
@@ -1338,24 +650,6 @@ si{
         }
         mass{
             carat{
-                case{
-                    ablative{
-                        one{"කැරට් {0}"}
-                        other{"කැරට් {0}"}
-                    }
-                    accusative{
-                        one{"කැරට් {0}"}
-                        other{"කැරට් {0}"}
-                    }
-                    dative{
-                        one{"කැරට් {0}"}
-                        other{"කැරට් {0}"}
-                    }
-                    genitive{
-                        one{"කැරට් {0}"}
-                        other{"කැරට් {0}"}
-                    }
-                }
                 dnam{"කැරට්"}
                 one{"කැරට් {0}"}
                 other{"කැරට් {0}"}
@@ -1376,72 +670,18 @@ si{
                 other{"ඇබිති {0}"}
             }
             gram{
-                case{
-                    ablative{
-                        one{"ග්‍රෑම් {0}"}
-                        other{"ග්‍රෑම් {0}"}
-                    }
-                    accusative{
-                        one{"ග්‍රෑම් {0}"}
-                        other{"ග්‍රෑම් {0}"}
-                    }
-                    dative{
-                        one{"ග්‍රෑම් {0}"}
-                        other{"ග්‍රෑම් {0}"}
-                    }
-                    genitive{
-                        one{"ග්‍රෑම් {0}"}
-                        other{"ග්‍රෑම් {0}"}
-                    }
-                }
                 dnam{"ග්‍රෑම්"}
                 one{"ග්‍රෑම් {0}"}
                 other{"ග්‍රෑම් {0}"}
                 per{"ග්‍රෑමයට {0}"}
             }
             kilogram{
-                case{
-                    ablative{
-                        one{"කිලෝග්‍රෑම් {0}"}
-                        other{"කිලෝග්‍රෑම් {0}"}
-                    }
-                    accusative{
-                        one{"කිලෝග්‍රෑම් {0}"}
-                        other{"කිලෝග්‍රෑම් {0}"}
-                    }
-                    dative{
-                        one{"කිලෝග්‍රෑම් {0}"}
-                        other{"කිලෝග්‍රෑම් {0}"}
-                    }
-                    genitive{
-                        one{"කිලෝග්‍රෑම් {0}"}
-                        other{"කිලෝග්‍රෑම් {0}"}
-                    }
-                }
                 dnam{"කිලෝග්‍රෑම්"}
                 one{"කිලෝග්‍රෑම් {0}"}
                 other{"කිලෝග්‍රෑම් {0}"}
                 per{"කිලෝග්‍රෑමයට {0}"}
             }
             metric-ton{
-                case{
-                    ablative{
-                        one{"මෙට්ට්‍රික් ටොන් {0}"}
-                        other{"මෙට්ට්‍රික් ටොන් {0}"}
-                    }
-                    accusative{
-                        one{"මෙට්ට්‍රික් ටොන් {0}"}
-                        other{"මෙට්ට්‍රික් ටොන් {0}"}
-                    }
-                    dative{
-                        one{"මෙට්ට්‍රික් ටොන් {0}"}
-                        other{"මෙට්ට්‍රික් ටොන් {0}"}
-                    }
-                    genitive{
-                        one{"මෙට්ට්‍රික් ටොන් {0}"}
-                        other{"මෙට්ට්‍රික් ටොන් {0}"}
-                    }
-                }
                 dnam{"මෙට්ට්‍රික් ටොන්"}
                 one{"මෙට්ට්‍රික් ටොන් {0}"}
                 other{"මෙට්ට්‍රික් ටොන් {0}"}
@@ -1516,24 +756,6 @@ si{
                 other{"මිලිවොට් {0}"}
             }
             watt{
-                case{
-                    ablative{
-                        one{"වොට් {0}"}
-                        other{"වොට් {0}"}
-                    }
-                    accusative{
-                        one{"වොට් {0}"}
-                        other{"වොට් {0}"}
-                    }
-                    dative{
-                        one{"වොට් {0}"}
-                        other{"වොට් {0}"}
-                    }
-                    genitive{
-                        one{"වොට් {0}"}
-                        other{"වොට් {0}"}
-                    }
-                }
                 dnam{"වොට්"}
                 one{"වොට් {0}"}
                 other{"වොට් {0}"}
@@ -1541,47 +763,11 @@ si{
         }
         pressure{
             atmosphere{
-                case{
-                    ablative{
-                        one{"වායුගෝල {0}"}
-                        other{"වායුගෝල {0}"}
-                    }
-                    accusative{
-                        one{"වායුගෝල {0}"}
-                        other{"වායුගෝල {0}"}
-                    }
-                    dative{
-                        one{"වායුගෝල {0}"}
-                        other{"වායුගෝල {0}"}
-                    }
-                    genitive{
-                        one{"වායුගෝල {0}"}
-                        other{"වායුගෝල {0}"}
-                    }
-                }
                 dnam{"වායුගෝල"}
                 one{"වායුගෝල {0}"}
                 other{"වායුගෝල {0}"}
             }
             bar{
-                case{
-                    ablative{
-                        one{"බාර් {0}"}
-                        other{"බාර් {0}"}
-                    }
-                    accusative{
-                        one{"බාර් {0}"}
-                        other{"බාර් {0}"}
-                    }
-                    dative{
-                        one{"බාර් {0}"}
-                        other{"බාර් {0}"}
-                    }
-                    genitive{
-                        one{"බාර් {0}"}
-                        other{"බාර් {0}"}
-                    }
-                }
                 dnam{"බාර්"}
                 one{"බාර් {0}"}
                 other{"බාර් {0}"}
@@ -1617,24 +803,6 @@ si{
                 other{"රසදිය මිලිමීටර {0}"}
             }
             pascal{
-                case{
-                    ablative{
-                        one{"පැස්කල් {0}"}
-                        other{"පැස්කල් {0}"}
-                    }
-                    accusative{
-                        one{"පැස්කල් {0}"}
-                        other{"පැස්කල් {0}"}
-                    }
-                    dative{
-                        one{"පැස්කල් {0}"}
-                        other{"පැස්කල් {0}"}
-                    }
-                    genitive{
-                        one{"පැස්කල් {0}"}
-                        other{"පැස්කල් {0}"}
-                    }
-                }
                 dnam{"පැස්කල්"}
                 one{"පැස්කල් {0}"}
                 other{"පැස්කල් {0}"}
@@ -1669,24 +837,6 @@ si{
         }
         temperature{
             celsius{
-                case{
-                    ablative{
-                        one{"සෙල්සියස් අංශක {0}"}
-                        other{"සෙල්සියස් අංශක {0}"}
-                    }
-                    accusative{
-                        one{"සෙල්සියස් අංශක {0}"}
-                        other{"සෙල්සියස් අංශක {0}"}
-                    }
-                    dative{
-                        one{"සෙල්සියස් අංශක {0}"}
-                        other{"සෙල්සියස් අංශක {0}"}
-                    }
-                    genitive{
-                        one{"සෙල්සියස් අංශක {0}"}
-                        other{"සෙල්සියස් අංශක {0}"}
-                    }
-                }
                 dnam{"සෙල්සියස් අංශක"}
                 one{"සෙල්සියස් අංශක {0}"}
                 other{"සෙල්සියස් අංශක {0}"}
@@ -1697,47 +847,11 @@ si{
                 other{"ෆැරන්හයිට් අංශක {0}"}
             }
             generic{
-                case{
-                    ablative{
-                        one{"{0}°"}
-                        other{"{0}°"}
-                    }
-                    accusative{
-                        one{"{0}°"}
-                        other{"{0}°"}
-                    }
-                    dative{
-                        one{"{0}°"}
-                        other{"{0}°"}
-                    }
-                    genitive{
-                        one{"{0}°"}
-                        other{"{0}°"}
-                    }
-                }
                 dnam{"°"}
                 one{"{0}°"}
                 other{"{0}°"}
             }
             kelvin{
-                case{
-                    ablative{
-                        one{"කෙල්වින් අංශක {0}"}
-                        other{"කෙල්වින් අංශක {0}"}
-                    }
-                    accusative{
-                        one{"කෙල්වින් අංශක {0}"}
-                        other{"කෙල්වින් අංශක {0}"}
-                    }
-                    dative{
-                        one{"කෙල්වින් අංශක {0}"}
-                        other{"කෙල්වින් අංශක {0}"}
-                    }
-                    genitive{
-                        one{"කෙල්වින් අංශක {0}"}
-                        other{"කෙල්වින් අංශක {0}"}
-                    }
-                }
                 dnam{"කෙල්වින් අංශක"}
                 one{"කෙල්වින් අංශක {0}"}
                 other{"කෙල්වින් අංශක {0}"}
@@ -1819,24 +933,6 @@ si{
                 other{"කෝප්ප {0}"}
             }
             cup-metric{
-                case{
-                    ablative{
-                        one{"මෙට්‍රික් කෝප්ප {0}"}
-                        other{"මෙට්‍රික් කෝප්ප {0}"}
-                    }
-                    accusative{
-                        one{"මෙට්‍රික් කෝප්ප {0}"}
-                        other{"මෙට්‍රික් කෝප්ප {0}"}
-                    }
-                    dative{
-                        one{"මෙට්‍රික් කෝප්ප {0}"}
-                        other{"මෙට්‍රික් කෝප්ප {0}"}
-                    }
-                    genitive{
-                        one{"මෙට්‍රික් කෝප්ප {0}"}
-                        other{"මෙට්‍රික් කෝප්ප {0}"}
-                    }
-                }
                 dnam{"මෙට්‍රික් කෝප්ප"}
                 one{"මෙට්‍රික් කෝප්ප {0}"}
                 other{"මෙට්‍රික් කෝප්ප {0}"}
@@ -1899,24 +995,6 @@ si{
                 other{"තැටි වාහක {0}"}
             }
             liter{
-                case{
-                    ablative{
-                        one{"ලීටර් {0}"}
-                        other{"ලීටර් {0}"}
-                    }
-                    accusative{
-                        one{"ලීටර් {0}"}
-                        other{"ලීටර් {0}"}
-                    }
-                    dative{
-                        one{"ලීටර් {0}"}
-                        other{"ලීටර් {0}"}
-                    }
-                    genitive{
-                        one{"ලීටර් {0}"}
-                        other{"ලීටර් {0}"}
-                    }
-                }
                 dnam{"ලීටර්"}
                 one{"ලීටර් {0}"}
                 other{"ලීටර් {0}"}
@@ -1943,24 +1021,6 @@ si{
                 other{"පයින්ට් {0}"}
             }
             pint-metric{
-                case{
-                    ablative{
-                        one{"මෙට්‍රික් පයින්ට් {0}"}
-                        other{"මෙට්‍රික් පයින්ට් {0}"}
-                    }
-                    accusative{
-                        one{"මෙට්‍රික් පයින්ට් {0}"}
-                        other{"මෙට්‍රික් පයින්ට් {0}"}
-                    }
-                    dative{
-                        one{"මෙට්‍රික් පයින්ට් {0}"}
-                        other{"මෙට්‍රික් පයින්ට් {0}"}
-                    }
-                    genitive{
-                        one{"මෙට්‍රික් පයින්ට් {0}"}
-                        other{"මෙට්‍රික් පයින්ට් {0}"}
-                    }
-                }
                 dnam{"මෙට්‍රික් පයින්ට්"}
                 one{"මෙට්‍රික් පයින්ට් {0}"}
                 other{"මෙට්‍රික් පයින්ට් {0}"}

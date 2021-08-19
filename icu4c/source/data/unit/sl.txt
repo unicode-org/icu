@@ -1138,45 +1138,6 @@ sl{
                 per{"{0} na dan"}
                 two{"{0} dneva"}
             }
-            day-person{
-                case{
-                    accusative{
-                        few{"{0} dni"}
-                        one{"{0} dan"}
-                        other{"{0} dni"}
-                        two{"{0} dneva"}
-                    }
-                    dative{
-                        few{"{0} dnem"}
-                        one{"{0} dnevu"}
-                        other{"{0} dnem"}
-                        two{"{0} dnema"}
-                    }
-                    genitive{
-                        few{"{0} dni"}
-                        one{"{0} dneva"}
-                        other{"{0} dni"}
-                        two{"{0} dni"}
-                    }
-                    instrumental{
-                        few{"{0} dnevi"}
-                        one{"{0} dnevom"}
-                        other{"{0} dnevi"}
-                        two{"{0} dnema"}
-                    }
-                    locative{
-                        few{"{0} dneh"}
-                        one{"{0} dnevu"}
-                        other{"{0} dneh"}
-                        two{"{0} dneh"}
-                    }
-                }
-                few{"{0} dnevi"}
-                gender{"masculine"}
-                one{"{0} dan"}
-                other{"{0} dni"}
-                two{"{0} dneva"}
-            }
             decade{
                 case{
                     accusative{

@@ -329,9 +329,6 @@ no{
                 other{"{0} døgn"}
                 per{"{0} per døgn"}
             }
-            day-person{
-                gender{"masculine"}
-            }
             decade{
                 dnam{"tiår"}
                 gender{"neuter"}

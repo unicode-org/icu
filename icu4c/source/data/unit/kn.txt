@@ -305,42 +305,10 @@ kn{
                         locative{"ಚದರದಲ್ಲಿ {0}"}
                         vocative{"ಚದರ {0}"}
                     }
-                    feminine{
-                        _{"ಚದರ {0}"}
-                        accusative{"ಚದರವನ್ನು {0}"}
-                        dative{"ಚದರಕ್ಕೆ {0}"}
-                        genitive{"ಚದರದ {0}"}
-                        locative{"ಚದರದಲ್ಲಿ {0}"}
-                        vocative{"ಚದರ {0}"}
-                    }
-                    masculine{
-                        _{"ಚದರ {0}"}
-                        accusative{"ಚದರವನ್ನು {0}"}
-                        dative{"ಚದರಕ್ಕೆ {0}"}
-                        genitive{"ಚದರದ {0}"}
-                        locative{"ಚದರದಲ್ಲಿ {0}"}
-                        vocative{"ಚದರ {0}"}
-                    }
                 }
                 other{
                     _{
                         _{"ಚ. {0}"}
-                        accusative{"ಚದರಗಳಲ್ಲಿ {0}"}
-                        dative{"ಚದರಗಳಿಗೆ {0}"}
-                        genitive{"ಚದರಗಳ {0}"}
-                        locative{"ಚದರಗಳಲ್ಲಿ {0}"}
-                        vocative{"ಚದರಗಳು {0}"}
-                    }
-                    feminine{
-                        _{"ಚದರಗಳು {0}"}
-                        accusative{"ಚದರಗಳಲ್ಲಿ {0}"}
-                        dative{"ಚದರಗಳಿಗೆ {0}"}
-                        genitive{"ಚದರಗಳ {0}"}
-                        locative{"ಚದರಗಳಲ್ಲಿ {0}"}
-                        vocative{"ಚದರಗಳು {0}"}
-                    }
-                    masculine{
-                        _{"ಚದರಗಳು {0}"}
                         accusative{"ಚದರಗಳಲ್ಲಿ {0}"}
                         dative{"ಚದರಗಳಿಗೆ {0}"}
                         genitive{"ಚದರಗಳ {0}"}
@@ -359,22 +327,6 @@ kn{
                         locative{"ಕ್ಯೂಬಿಕ್‌ನಲ್ಲಿ {0}"}
                         vocative{"ಕ್ಯೂಬಿಕ್ {0}"}
                     }
-                    feminine{
-                        _{"ಕ್ಯೂಬಿಕ್ {0}"}
-                        accusative{"ಕ್ಯೂಬಿಕ್ ಅನ್ನು {0}"}
-                        dative{"ಕ್ಯೂಬಿಕ್‌ಗೆ {0}"}
-                        genitive{"ಕ್ಯೂಬಿಕ್‌ನ {0}"}
-                        locative{"ಕ್ಯೂಬಿಕ್‌ನಲ್ಲಿ {0}"}
-                        vocative{"ಕ್ಯೂಬಿಕ್ {0}"}
-                    }
-                    masculine{
-                        _{"ಕ್ಯೂಬಿಕ್ {0}"}
-                        accusative{"ಕ್ಯೂಬಿಕ್ ಅನ್ನು {0}"}
-                        dative{"ಕ್ಯೂಬಿಕ್‌ಗೆ {0}"}
-                        genitive{"ಕ್ಯೂಬಿಕ್‌ನ {0}"}
-                        locative{"ಕ್ಯೂಬಿಕ್‌ನಲ್ಲಿ {0}"}
-                        vocative{"ಕ್ಯೂಬಿಕ್ {0}"}
-                    }
                 }
                 other{
                     _{
@@ -384,22 +336,6 @@ kn{
                         genitive{"ಕ್ಯೂಬಿಕ್‌ಗಳ {0}"}
                         locative{"ಕ್ಯೂಬಿಕ್‌ಗಳಲ್ಲಿ {0}"}
                         vocative{"ಕ್ಯೂಬಿಕ್‌ಗಳು {0}"}
-                    }
-                    feminine{
-                        _{"ಕ್ಯೂಬಿಕ್‌ಗಳು {0}"}
-                        accusative{"ಕ್ಯೂಬಿಕ್‌ಗಳನ್ನು {0}"}
-                        dative{"ಕ್ಯೂಬಿಕ್‌ಗಳಿಗೆ {0}"}
-                        genitive{"ಕ್ಯೂಬಿಕ್‌ಗಳ {0}"}
-                        locative{"ಕ್ಯೂಬಿಕ್‌ಗಳಲ್ಲಿ {0}"}
-                        vocative{"ಕ್ಯೂಬಿಕ್ {0}"}
-                    }
-                    masculine{
-                        _{"ಕ್ಯೂಬಿಕ್‌ಗಳು {0}"}
-                        accusative{"ಕ್ಯೂಬಿಕ್‌ಗಳನ್ನು {0}"}
-                        dative{"ಕ್ಯೂಬಿಕ್‌ಗಳಿಗೆ {0}"}
-                        genitive{"ಕ್ಯೂಬಿಕ್‌ಗಳ {0}"}
-                        locative{"ಕ್ಯೂಬಿಕ್‌ಗಳಲ್ಲಿ {0}"}
-                        vocative{"ಕ್ಯೂಬಿಕ್ {0}"}
                     }
                 }
             }
@@ -778,33 +714,6 @@ kn{
                 one{"{0} ದಿನ"}
                 other{"{0} ದಿನಗಳು"}
                 per{"{0} ಪ್ರತಿ ದಿನಕ್ಕೆ"}
-            }
-            day-person{
-                case{
-                    accusative{
-                        one{"{0} ದಿನವನ್ನು"}
-                        other{"{0} ದಿನಗಳನ್ನು"}
-                    }
-                    dative{
-                        one{"{0} ದಿನಕ್ಕೆ"}
-                        other{"{0} ದಿನಗಳಿಗೆ"}
-                    }
-                    genitive{
-                        one{"{0} ದಿನದ"}
-                        other{"{0} ದಿನಗಳ"}
-                    }
-                    locative{
-                        one{"{0} ದಿನದಲ್ಲಿ"}
-                        other{"{0} ದಿನಗಳಲ್ಲಿ"}
-                    }
-                    vocative{
-                        one{"{0} ದಿನ"}
-                        other{"{0} ದಿನಗಳು"}
-                    }
-                }
-                gender{"neuter"}
-                one{"{0} ದಿನವು"}
-                other{"{0} ದಿನಗಳು"}
             }
             decade{
                 case{
