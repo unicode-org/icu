@@ -999,7 +999,7 @@ static void VerifyTranslation(void) {
                     end = 0;
                 }
                 if ((uprv_strncmp(currLoc,"mai",3) == 0 || uprv_strncmp(currLoc,"sd_Deva",7) == 0) && 
-                        log_knownIssue("cldrbug:14995", "mai/sd_Deva day/month names use chars not in exemplars")) {
+                        log_knownIssue("cldrbug:14995", "mai/sd_Deva day names use chars not in exemplars")) {
                     end = 0;
                 }
 
@@ -1030,6 +1030,10 @@ static void VerifyTranslation(void) {
                 }
                 else {
                     end = ures_getSize(resArray);
+                }
+                if (uprv_strncmp(currLoc,"sd_Deva",7) == 0 && 
+                        log_knownIssue("cldrbug:14995", "sd_Deva month names use chars not in exemplars")) {
+                    end = 0;
                 }
 
                 for (idx = 0; idx < end; idx++) {
