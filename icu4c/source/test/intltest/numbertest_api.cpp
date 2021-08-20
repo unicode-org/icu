@@ -3838,6 +3838,41 @@ void NumberFormatterApiTest::integerWidth() {
             // Note: this double produces all 17 significant digits
             10000000000000002000.0,
             u"00");
+
+    assertFormatDescending(
+            u"Integer Width Double Zero (ICU-21590)",
+            u"integer-width-trunc",
+            u"integer-width-trunc",
+            NumberFormatter::with()
+                .integerWidth(IntegerWidth::zeroFillTo(0).truncateAt(0)),
+            Locale::getEnglish(),
+            u"0",
+            u"0",
+            u".5",
+            u".65",
+            u".765",
+            u".8765",
+            u".08765",
+            u".008765",
+            u"0");
+
+    assertFormatDescending(
+            u"Integer Width Double Zero with minFraction (ICU-21590)",
+            u"integer-width-trunc .0*",
+            u"integer-width-trunc .0*",
+            NumberFormatter::with()
+                .integerWidth(IntegerWidth::zeroFillTo(0).truncateAt(0))
+                .precision(Precision::minFraction(1)),
+            Locale::getEnglish(),
+            u".0",
+            u".0",
+            u".5",
+            u".65",
+            u".765",
+            u".8765",
+            u".08765",
+            u".008765",
+            u".0");
 }
 
 void NumberFormatterApiTest::symbols() {

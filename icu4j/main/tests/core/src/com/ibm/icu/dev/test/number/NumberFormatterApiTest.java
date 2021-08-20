@@ -3799,6 +3799,41 @@ public class NumberFormatterApiTest extends TestFmwk {
                 // Note: this double produces all 17 significant digits
                 10000000000000002000.0,
                 "00");
+
+        assertFormatDescending(
+                "Integer Width Double Zero (ICU-21590)",
+                "integer-width-trunc",
+                "integer-width-trunc",
+                NumberFormatter.with()
+                        .integerWidth(IntegerWidth.zeroFillTo(0).truncateAt(0)),
+                ULocale.ENGLISH,
+                "0",
+                "0",
+                ".5",
+                ".65",
+                ".765",
+                ".8765",
+                ".08765",
+                ".008765",
+                "0");
+
+        assertFormatDescending(
+                "Integer Width Double Zero with minFraction (ICU-21590)",
+                "integer-width-trunc .0*",
+                "integer-width-trunc .0*",
+                NumberFormatter.with()
+                        .integerWidth(IntegerWidth.zeroFillTo(0).truncateAt(0))
+                        .precision(Precision.minFraction(1)),
+                ULocale.ENGLISH,
+                ".0",
+                ".0",
+                ".5",
+                ".65",
+                ".765",
+                ".8765",
+                ".08765",
+                ".008765",
+                ".0");
     }
 
     @Test
