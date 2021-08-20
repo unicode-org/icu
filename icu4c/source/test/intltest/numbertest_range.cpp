@@ -827,6 +827,9 @@ void NumberRangeFormatterTest::testCopyMove() {
     assertEquals("FormattedNumberRange move constructor", u"1,00–5,00 $US", result.toString(status));
     result = l1.formatFormattableRange(3, 6, status);
     assertEquals("FormattedNumberRange move assignment", u"3,00–6,00 $US", result.toString(status));
+    FormattedNumberRange fnrdefault;
+    fnrdefault.toString(status);
+    status.expectErrorAndReset(U_INVALID_STATE_ERROR);
 }
 
 void NumberRangeFormatterTest::toObject() {
