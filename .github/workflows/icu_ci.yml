@@ -67,7 +67,7 @@ jobs:
           paste -sd "=" < $RUNNER_TEMP/draft >  icu4j/build-local.properties
       - name: ICU4J
         run: |
-          export JAVA_HOME=java7-tarball/java-se-7u75-ri/bin
+          export JAVA_HOME=$(pwd)/java7-tarball/java-se-7u75-ri/bin
           cd icu4j;
           ant init;
           ant check;
