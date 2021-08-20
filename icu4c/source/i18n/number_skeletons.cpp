@@ -74,6 +74,7 @@ void U_CALLCONV initNumberSkeletons(UErrorCode& status) {
     b.add(u"rounding-mode-half-down", STEM_ROUNDING_MODE_HALF_DOWN, status);
     b.add(u"rounding-mode-half-up", STEM_ROUNDING_MODE_HALF_UP, status);
     b.add(u"rounding-mode-unnecessary", STEM_ROUNDING_MODE_UNNECESSARY, status);
+    b.add(u"integer-width-trunc", STEM_INTEGER_WIDTH_TRUNC, status);
     b.add(u"group-off", STEM_GROUP_OFF, status);
     b.add(u"group-min2", STEM_GROUP_MIN2, status);
     b.add(u"group-auto", STEM_GROUP_AUTO, status);
@@ -698,6 +699,11 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
         case STEM_ROUNDING_MODE_UNNECESSARY:
             CHECK_NULL(seen, roundingMode, status);
             macros.roundingMode = stem_to_object::roundingMode(stem);
+            return STATE_NULL;
+
+        case STEM_INTEGER_WIDTH_TRUNC:
+            CHECK_NULL(seen, integerWidth, status);
+            macros.integerWidth = IntegerWidth::zeroFillTo(0).truncateAt(0);
             return STATE_NULL;
 
         case STEM_GROUP_OFF:
@@ -1677,10 +1683,15 @@ bool GeneratorHelpers::integerWidth(const MacroProps& macros, UnicodeString& sb,
         // Error or Default
         return false;
     }
+    const auto& minMaxInt = macros.integerWidth.fUnion.minMaxInt;
+    if (minMaxInt.fMinInt == 0 && minMaxInt.fMaxInt == 0) {
+        sb.append(u"integer-width-trunc", -1);
+        return true;
+    }
     sb.append(u"integer-width/", -1);
     blueprint_helpers::generateIntegerWidthOption(
-            macros.integerWidth.fUnion.minMaxInt.fMinInt,
-            macros.integerWidth.fUnion.minMaxInt.fMaxInt,
+            minMaxInt.fMinInt,
+            minMaxInt.fMaxInt,
             sb,
             status);
     return true;
