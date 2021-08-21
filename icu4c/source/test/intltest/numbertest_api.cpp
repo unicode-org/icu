@@ -5378,6 +5378,12 @@ void NumberFormatterApiTest::toDecimalNumber() {
         u"৯৮,৭৬,৫০,০০,০০,০০,০০০", fn.toString(status));
     assertEquals(u"Should have expected toDecimalNumber string result",
         "9.8765E+14", fn.toDecimalNumber<std::string>(status).c_str());
+
+    fn = NumberFormatter::withLocale("bn-BD").formatDouble(0, status);
+    assertEquals("Should have expected localized string result",
+        u"০", fn.toString(status));
+    assertEquals(u"Should have expected toDecimalNumber string result",
+        "0", fn.toDecimalNumber<std::string>(status).c_str());
 }
 
 void NumberFormatterApiTest::microPropsInternals() {
