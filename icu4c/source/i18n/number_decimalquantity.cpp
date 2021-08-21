@@ -639,6 +639,7 @@ DecNum& DecimalQuantity::toDecNum(DecNum& output, UErrorCode& status) const {
     // Special handling for zero
     if (precision == 0) {
         output.setTo("0", status);
+        return output;
     }
 
     // Use the BCD constructor. We need to do a little bit of work to convert, though.
