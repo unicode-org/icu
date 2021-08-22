@@ -189,6 +189,8 @@ public class Region implements Comparable<Region> {
         List<String> continents = Arrays.asList(continentsArr);
         Enumeration<String> groupings = groupingContainment.getKeys();
         List<String> regionCodes = new ArrayList<String>();
+        List<String> regionCodes2 = new ArrayList<String>();
+        regionCodes2.sort(null);
 
         List<String> allRegions = new ArrayList<String>();
         allRegions.addAll(Arrays.asList(regionRegular.getStringArray()));
