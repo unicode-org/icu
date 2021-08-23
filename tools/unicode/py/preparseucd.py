@@ -1,4 +1,4 @@
-#!/usr/bin/python -B
+#!/usr/bin/python3 -B
 # -*- coding: utf-8 -*-
 # © 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html
@@ -1033,7 +1033,7 @@ def CompactBlock(b, i):
         # For two values with the same savings, pick the one that compares lower,
         # to make this deterministic (avoid flip-flopping).
         if (savings > max_savings or
-            (savings == max_savings and value < max_value)):
+            (savings > 0 and savings == max_savings and value < max_value)):
           max_value = value
           max_count = count
           max_savings = savings

@@ -1,5 +1,5 @@
 ﻿# UCA_Rules_SHORT.txt
-# Date: 2021-06-08, 19:47:07 GMT
+# Date: 2021-08-17, 17:34:16 GMT
 # © 2021 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see http://www.unicode.org/terms_of_use.html

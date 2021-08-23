@@ -1299,7 +1299,9 @@ cp;0027;bc=ON;CI;gc=Po;lb=QU;na=APOSTROPHE;Pat_Syn;QMark;SB=CL;WB=SQ
 cp;0028;bc=ON;Bidi_M;bmg=0029;bpb=0029;bpt=o;gc=Ps;lb=OP;na=LEFT PARENTHESIS;Pat_Syn;SB=CL
 cp;0029;bc=ON;Bidi_M;bmg=0028;bpb=0028;bpt=c;gc=Pe;lb=CP;na=RIGHT PARENTHESIS;Pat_Syn;SB=CL
 cp;002A;bc=ON;EComp;Emoji;gc=Po;na=ASTERISK;Pat_Syn
+# ASCII math operator
 cp;002B;bc=ES;gc=Sm;lb=PR;Math;na=PLUS SIGN;Pat_Syn
+# ASCII punctuation
 cp;002C;bc=CS;gc=Po;lb=IS;na=COMMA;Pat_Syn;SB=SC;Term;WB=MN
 cp;002D;bc=ES;Dash;gc=Pd;Hyphen;InSC=Consonant_Placeholder;lb=HY;na=HYPHEN-MINUS;Pat_Syn;SB=SC
 cp;002E;bc=CS;CI;gc=Po;lb=IS;na=FULL STOP;Pat_Syn;SB=AT;STerm;Term;WB=MB
@@ -1315,12 +1317,14 @@ cp;0036;AHex;bc=EN;EComp;Emoji;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT SIX;nt=D
 cp;0037;AHex;bc=EN;EComp;Emoji;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT SEVEN;nt=De;nv=7;SB=NU;WB=NU;XIDC
 cp;0038;AHex;bc=EN;EComp;Emoji;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT EIGHT;nt=De;nv=8;SB=NU;WB=NU;XIDC
 cp;0039;AHex;bc=EN;EComp;Emoji;gc=Nd;Hex;IDC;InSC=Number;lb=NU;na=DIGIT NINE;nt=De;nv=9;SB=NU;WB=NU;XIDC
-# ASCII punctuation and symbols
+# ASCII punctuation
 cp;003A;bc=CS;CI;gc=Po;lb=IS;na=COLON;Pat_Syn;SB=SC;Term;WB=ML
 cp;003B;bc=ON;gc=Po;lb=IS;na=SEMICOLON;Pat_Syn;Term;WB=MN
+# ASCII mathematical operators
 cp;003C;bc=ON;Bidi_M;bmg=003E;gc=Sm;Math;na=LESS-THAN SIGN;Pat_Syn
 cp;003D;bc=ON;gc=Sm;Math;na=EQUALS SIGN;Pat_Syn
 cp;003E;bc=ON;Bidi_M;bmg=003C;gc=Sm;Math;na=GREATER-THAN SIGN;Pat_Syn
+# ASCII punctuation
 cp;003F;bc=ON;gc=Po;lb=EX;na=QUESTION MARK;Pat_Syn;SB=ST;STerm;Term
 cp;0040;bc=ON;gc=Po;na=COMMERCIAL AT;Pat_Syn
 # Uppercase Latin alphabet
@@ -22849,13 +22853,13 @@ cp;10766;na=LINEAR A SIGN A806
 cp;10767;na=LINEAR A SIGN A807
 unassigned;10768..1077F
 
-block;10780..107BF;age=14.0;Alpha;blk=Latin_Ext_F;CI;CWKCF;Dia;dt=Sup;gc=Lm;Gr_Base;IDC;IDS;lb=AL;NFKC_QC=N;NFKD_QC=N;SB=LE;sc=Latn;WB=LE;XIDC;XIDS
+block;10780..107BF;age=14.0;Alpha;blk=Latin_Ext_F;Cased;CI;CWKCF;Dia;dt=Sup;gc=Lm;Gr_Base;IDC;IDS;lb=AL;Lower;NFKC_QC=N;NFKD_QC=N;SB=LO;sc=Latn;WB=LE;XIDC;XIDS
 # 10780..107BF Latin Extended-F
 # Modifier letter for VoQS
 cp;10780;-CWKCF;dt=None;na=MODIFIER LETTER SMALL CAPITAL AA;NFKC_QC=Y;NFKD_QC=Y
 # Modifier letters for IPA
-cp;10781;dm=02D0;Ext;na=MODIFIER LETTER SUPERSCRIPT TRIANGULAR COLON;NFKC_CF=02D0
-cp;10782;dm=02D1;Ext;na=MODIFIER LETTER SUPERSCRIPT HALF TRIANGULAR COLON;NFKC_CF=02D1
+cp;10781;-Cased;dm=02D0;Ext;-Lower;na=MODIFIER LETTER SUPERSCRIPT TRIANGULAR COLON;NFKC_CF=02D0;SB=LE
+cp;10782;-Cased;dm=02D1;Ext;-Lower;na=MODIFIER LETTER SUPERSCRIPT HALF TRIANGULAR COLON;NFKC_CF=02D1;SB=LE
 cp;10783;dm=00E6;na=MODIFIER LETTER SMALL AE;NFKC_CF=00E6
 cp;10784;dm=0299;na=MODIFIER LETTER SMALL CAPITAL B;NFKC_CF=0299
 cp;10785;dm=0253;na=MODIFIER LETTER SMALL B WITH HOOK;NFKC_CF=0253
@@ -25705,8 +25709,8 @@ cp;1171D;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Bottom;InSC=Consonant_Media
 cp;1171E;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top_And_Bottom_And_Left;InSC=Consonant_Medial;jt=T;na=AHOM CONSONANT SIGN MEDIAL RA;SB=EX;WB=Extend
 cp;1171F;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top;InSC=Consonant_Medial;jt=T;na=AHOM CONSONANT SIGN MEDIAL LIGATING RA;SB=EX;WB=Extend
 # Vowel signs
-cp;11720;gc=Mc;GCB=SM;InPC=Right;InSC=Vowel_Dependent;na=AHOM VOWEL SIGN A;SB=EX;WB=Extend
-cp;11721;gc=Mc;GCB=SM;InPC=Right;InSC=Vowel_Dependent;na=AHOM VOWEL SIGN AA;SB=EX;WB=Extend
+cp;11720;gc=Mc;InPC=Right;InSC=Vowel_Dependent;na=AHOM VOWEL SIGN A;SB=EX;WB=Extend
+cp;11721;gc=Mc;InPC=Right;InSC=Vowel_Dependent;na=AHOM VOWEL SIGN AA;SB=EX;WB=Extend
 cp;11722;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top;InSC=Vowel_Dependent;jt=T;na=AHOM VOWEL SIGN I;SB=EX;WB=Extend
 cp;11723;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top;InSC=Vowel_Dependent;jt=T;na=AHOM VOWEL SIGN II;SB=EX;WB=Extend
 cp;11724;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Bottom;InSC=Vowel_Dependent;jt=T;na=AHOM VOWEL SIGN U;SB=EX;WB=Extend
@@ -36040,7 +36044,7 @@ cp;1DAAF;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;IDC;jt=T;lb=CM;na=SIGNWRITING RO
 
 block;1DF00..1DFFF;age=14.0;Alpha;blk=Latin_Ext_G;Cased;gc=Ll;Gr_Base;IDC;IDS;lb=AL;Lower;SB=LO;sc=Latn;WB=LE;XIDC;XIDS
 # 1DF00..1DFFF Latin Extended-G
-# IPA letters for disordered speech
+# Extended IPA for disordered speech
 cp;1DF00;na=LATIN SMALL LETTER FENG DIGRAPH WITH TRILL
 cp;1DF01;na=LATIN SMALL LETTER REVERSED SCRIPT G
 cp;1DF02;na=LATIN LETTER SMALL CAPITAL TURNED G
@@ -36329,9 +36333,9 @@ cp;1E7E5;na=ETHIOPIC SYLLABLE HHYE
 cp;1E7E6;na=ETHIOPIC SYLLABLE HHYO
 unassigned;1E7E7
 cp;1E7E8;na=ETHIOPIC SYLLABLE GURAGE HHWA
-cp;1E7E9;na=ETHIOPIC SYLLABLE HWI
-cp;1E7EA;na=ETHIOPIC SYLLABLE HWEE
-cp;1E7EB;na=ETHIOPIC SYLLABLE HWE
+cp;1E7E9;na=ETHIOPIC SYLLABLE HHWI
+cp;1E7EA;na=ETHIOPIC SYLLABLE HHWEE
+cp;1E7EB;na=ETHIOPIC SYLLABLE HHWE
 unassigned;1E7EC
 cp;1E7ED;na=ETHIOPIC SYLLABLE GURAGE MWI
 cp;1E7EE;na=ETHIOPIC SYLLABLE GURAGE MWEE

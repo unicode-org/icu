@@ -94,6 +94,8 @@ $ZWJ = [:LineBreak = ZWJ:];
 $OP30 = [$OP - [\p{ea=F}\p{ea=W}\p{ea=H}]];
 $CP30 = [$CP - [\p{ea=F}\p{ea=W}\p{ea=H}]];
 
+$ExtPictUnassigned = [\p{Extended_Pictographic} & \p{Cn}];
+
 # By LB9, a ZWJ also behaves as a CM. Including it in the definition of CM avoids having to explicitly
 #         list it in the numerous rules that use CM.
 # By LB1, SA characters with general categor of Mn or Mc also resolve to CM.
@@ -379,8 +381,9 @@ $RI $CM* $RI $CM* [$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $
 #       because of the chain-out behavior difference. The rule must chain out only from the [set characters],
 #       not from the preceding $RI or $CM, which it would be able to do if the set were optional.
 
-# LB 30b Do not break between an Emoji Base and an Emoji Modifier
+# LB30b Do not break between an emoji base (or potential emoji) and an emoji modifier.
 $EB $CM* $EM;
+$ExtPictUnassigned $CM* $EM;
 
 # LB 31 Break everywhere else.
 #       Match a single code point if no other rule applies.
