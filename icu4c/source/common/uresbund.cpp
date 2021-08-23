@@ -2924,6 +2924,7 @@ typedef struct ULocalesContext {
 
 static void U_CALLCONV
 ures_loc_closeLocales(UEnumeration *enumerator) {
+    if (enumerator == nullptr) { return; }
     ULocalesContext* ctx = static_cast<ULocalesContext*>(enumerator->context);
     ures_close(&ctx->curr);
     ures_close(&ctx->installed);
