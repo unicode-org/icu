@@ -38,7 +38,7 @@ https://unicode-org.atlassian.net/browse/ICU-21635
 
 * Command-line environment setup
 
-export UNICODE_DATA=~/unidata/uni14/20210609
+export UNICODE_DATA=~/unidata/uni14/20210819
 export CLDR_SRC=~/cldr/uni/src
 export ICU_ROOT=~/icu/uni
 export ICU_SRC=$ICU_ROOT/src
@@ -198,6 +198,11 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
 
 * run & fix ICU4C tests
 - fix Unicode Tools class Segmenter to generate correct *BreakTest.txt files
+- update CLDR GraphemeBreakTest.txt
+    cd ~/unitools/mine/Generated
+    cp UCD/d22d/cldr/GraphemeBreakTest-cldr.txt $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt
+    cp UCD/d22d/cldr/GraphemeBreakTest-cldr.html $CLDR_SRC/common/properties/segments/GraphemeBreakTest.html
+    cp $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt $ICU_SRC/icu4c/source/test/testdata
 - Andy helps with RBBI & spoof check test failures
 
 * collation: CLDR collation root, UCA DUCET

@@ -1,5 +1,5 @@
 # IdnaTestV2.txt
-# Date: 2021-05-29, 21:48:17 GMT
+# Date: 2021-08-17, 19:34:01 GMT
 # © 2021 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
@@ -16,7 +16,7 @@
 # This file is in UTF-8, where characters may be escaped using the \uXXXX or \x{XXXX}
 # convention where they could otherwise have a confusing display.
 # These characters include control codes and combining marks.
-# 
+#
 # Columns (c1, c2,...) are separated by semicolons.
 # Leading and trailing spaces and tabs in each column are ignored.
 # Comments are indicated with hash marks.
@@ -40,21 +40,21 @@
 #                             A blank value means the same as the toAsciiNStatus value.
 #                             An explicit [] means no errors.
 #
-# The line comments currently show visible characters that have been escaped. 
-# 
+# The line comments currently show visible characters that have been escaped.
+#
 # CONFORMANCE:
 #
 # To test for conformance to UTS #46, an implementation will perform the toUnicode, toAsciiN, and
-# toAsciiT operations on the source string, then verify the resulting strings and relevant status 
+# toAsciiT operations on the source string, then verify the resulting strings and relevant status
 # values.
 #
 # If the implementation converts illegal code points into U+FFFD (as per
-# http://www.unicode.org/reports/tr46/proposed.html#Processing) then the string comparisons need to
-# account for that by treating U+FFFD in the actual value as a wildcard when comparing to the 
+# https://www.unicode.org/reports/tr46/#Processing) then the string comparisons need to
+# account for that by treating U+FFFD in the actual value as a wildcard when comparing to the
 # expected value in the test file.
 #
 # A status in toUnicode, toAsciiN or toAsciiT is indicated by a value in square brackets,
-# such as "[B5 B6]". In such a case, the contents is a list of status codes based on the step 
+# such as "[B5 B6]". In such a case, the contents is a list of status codes based on the step
 # numbers in UTS #46 and IDNA2008, with the following formats.
 #
 #   Pn for Section 4 Processing step n
@@ -65,7 +65,7 @@
 #   Cn for ContextJ (in IDNA2008)
 #   Xn for toUnicode issues (see below)
 #
-# Thus C1 = Appendix A.1. ZERO WIDTH NON-JOINER, and C2 = Appendix A.2. ZERO WIDTH JOINER. 
+# Thus C1 = Appendix A.1. ZERO WIDTH NON-JOINER, and C2 = Appendix A.2. ZERO WIDTH JOINER.
 # (The CONTEXTO tests are optional for client software, and not tested here.)
 #
 # Implementations that allow values of particular input flags to be false would ignore
