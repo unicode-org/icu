@@ -89,13 +89,15 @@ int32_t LSR::indexForRegion(const char *region) {
         int32_t b = region[1] - '0';
         if (b < 0 || 9 < b) { return 0; }
         c = region[2] - '0';
-        if (c < 0 || 9 < c || region[3] != 0) { return 0; }
+        if (uprv_strlen(region) > 3) { return 0; }
+        if (c < 0 || 9 < c) { return 0; }
         return (10 * a + b) * 10 + c + 1;
     } else {  // letters: "DE"
         a = uprv_upperOrdinal(c);
         if (a < 0 || 25 < a) { return 0; }
         int32_t b = uprv_upperOrdinal(region[1]);
-        if (b < 0 || 25 < b || region[2] != 0) { return 0; }
+        if (uprv_strlen(region) > 2) { return 0; }
+        if (b < 0 || 25 < b) { return 0; }
         return 26 * a + b + 1001;
     }
     return 0;

@@ -86,7 +86,7 @@
                          /* range: -1999999997 through 999999999      */
     uint8_t bits;        /* Indicator bits (see above)                */
                          /* Coefficient, from least significant unit  */
-    decNumberUnit lsu[DECNUMUNITS];
+    decNumberUnit lsu[DECNUMUNITS+2];
     } decNumber;
 
   /* Notes:                                                           */

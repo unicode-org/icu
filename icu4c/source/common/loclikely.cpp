@@ -1408,7 +1408,9 @@ ulocimp_getRegionForSupplementalData(const char *localeID, UBool inferRegion,
         }
     }
 
-    rgBuf[rgLen] = 0;
+    if (rgLen >= 0) {
+        rgBuf[rgLen] = 0;
+    }
     uprv_strncpy(region, rgBuf, regionCapacity);
     return u_terminateChars(region, regionCapacity, rgLen, status);
 }

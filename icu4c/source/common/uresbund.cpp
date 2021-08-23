@@ -2515,7 +2515,9 @@ typedef struct ULocalesContext {
 static void U_CALLCONV
 ures_loc_closeLocales(UEnumeration *enumerator) {
     ULocalesContext *ctx = (ULocalesContext *)enumerator->context;
+    /* coverity[address_free] */
     ures_close(&ctx->curr);
+    /* coverity[address_free] */
     ures_close(&ctx->installed);
     uprv_free(ctx);
     uprv_free(enumerator);

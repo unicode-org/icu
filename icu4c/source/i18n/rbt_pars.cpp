@@ -557,6 +557,7 @@ int32_t RuleHalf::parseSection(const UnicodeString& rule, int32_t pos, int32_t l
                 // The next character MUST be a segment open
                 if (single == NULL ||
                     !ICU_Utility::parseChar(rule, iref, SEGMENT_OPEN)) {
+                    delete single;
                     return syntaxError(U_INVALID_FUNCTION, rule, start, status);
                 }
                 

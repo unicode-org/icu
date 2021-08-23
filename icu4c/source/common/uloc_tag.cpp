@@ -2246,6 +2246,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
                 var = (VariantListEntry*)uprv_malloc(sizeof(VariantListEntry));
                 if (var == NULL) {
                     *status = U_MEMORY_ALLOCATION_ERROR;
+                    uprv_free(pExtension);
                     return NULL;
                 }
                 *pSep = 0;

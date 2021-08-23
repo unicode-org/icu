@@ -980,12 +980,12 @@ static void createFileNames(UPKGOptions *o, const char mode, const char *version
                     version_major);
 #else
         if (noVersion && !reverseExt) {
-            sprintf(libFileNames[LIB_FILE_VERSION_TMP], "%s%s%s",
+            snprintf(libFileNames[LIB_FILE_VERSION_TMP], sizeof(libFileNames[LIB_FILE_VERSION_TMP]), "%s%s%s",
                     libFileNames[LIB_FILE],
                     FILE_SUFFIX,
                     pkgDataFlags[SOBJ_EXT]);
         } else {
-            sprintf(libFileNames[LIB_FILE_VERSION_TMP], "%s%s%s%s%s",
+            snprintf(libFileNames[LIB_FILE_VERSION_TMP], sizeof(libFileNames[LIB_FILE_VERSION_TMP]), "%s%s%s%s%s",
                     libFileNames[LIB_FILE],
                     FILE_SUFFIX,
                     reverseExt ? version : pkgDataFlags[SOBJ_EXT],
@@ -994,24 +994,24 @@ static void createFileNames(UPKGOptions *o, const char mode, const char *version
         }
 #endif
         if (noVersion && !reverseExt) {
-            sprintf(libFileNames[LIB_FILE_VERSION_MAJOR], "%s%s%s",
+            snprintf(libFileNames[LIB_FILE_VERSION_MAJOR], sizeof(libFileNames[LIB_FILE_VERSION_MAJOR]), "%s%s%s",
                     libFileNames[LIB_FILE],
                     FILE_SUFFIX,
                     pkgDataFlags[SO_EXT]);
 
-            sprintf(libFileNames[LIB_FILE_VERSION], "%s%s%s",
+            snprintf(libFileNames[LIB_FILE_VERSION], sizeof(libFileNames[LIB_FILE_VERSION]), "%s%s%s",
                     libFileNames[LIB_FILE],
                     FILE_SUFFIX,
                     pkgDataFlags[SO_EXT]);
         } else {
-            sprintf(libFileNames[LIB_FILE_VERSION_MAJOR], "%s%s%s%s%s",
+            snprintf(libFileNames[LIB_FILE_VERSION_MAJOR], sizeof(libFileNames[LIB_FILE_VERSION_MAJOR]), "%s%s%s%s%s",
                     libFileNames[LIB_FILE],
                     FILE_SUFFIX,
                     reverseExt ? version_major : pkgDataFlags[SO_EXT],
                     FILE_EXTENSION_SEP,
                     reverseExt ? pkgDataFlags[SO_EXT] : version_major);
 
-            sprintf(libFileNames[LIB_FILE_VERSION], "%s%s%s%s%s",
+            snprintf(libFileNames[LIB_FILE_VERSION], sizeof(libFileNames[LIB_FILE_VERSION]), "%s%s%s%s%s",
                     libFileNames[LIB_FILE],
                     FILE_SUFFIX,
                     reverseExt ? version : pkgDataFlags[SO_EXT],
@@ -1029,7 +1029,7 @@ static void createFileNames(UPKGOptions *o, const char mode, const char *version
 #endif
 
         if(IN_STATIC_MODE(mode)) {
-            sprintf(libFileNames[LIB_FILE_VERSION], "%s.%s", libFileNames[LIB_FILE], pkgDataFlags[A_EXT]);
+            snprintf(libFileNames[LIB_FILE_VERSION], sizeof(libFileNames[LIB_FILE_VERSION]), "%s.%s", libFileNames[LIB_FILE], pkgDataFlags[A_EXT]);
             libFileNames[LIB_FILE_VERSION_MAJOR][0]=0;
             if(o->verbose) {
               fprintf(stdout, "# libFileName[LIB_FILE_VERSION] = %s  (static)\n", libFileNames[LIB_FILE_VERSION]);
@@ -1308,7 +1308,7 @@ static int32_t pkg_archiveLibrary(const char *targetDir, const char *version, UB
      * archive file suffix is the same, then the final library needs to be archived.
      */
     if (uprv_strcmp(pkgDataFlags[SOBJ_EXT], pkgDataFlags[SO_EXT]) != 0 && uprv_strcmp(pkgDataFlags[A_EXT], pkgDataFlags[SO_EXT]) == 0) {
-        sprintf(libFileNames[LIB_FILE_VERSION], "%s%s%s.%s",
+        snprintf(libFileNames[LIB_FILE_VERSION], sizeof(libFileNames[LIB_FILE_VERSION]), "%s%s%s.%s",
                 libFileNames[LIB_FILE],
                 pkgDataFlags[LIB_EXT_ORDER][0] == '.' ? "." : "",
                 reverseExt ? version : pkgDataFlags[SO_EXT],
