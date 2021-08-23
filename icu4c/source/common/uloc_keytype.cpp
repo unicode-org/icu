@@ -144,7 +144,7 @@ initFromResourceBundle(UErrorCode& sts) {
 
         bool isTZ = uprv_strcmp(legacyKeyId, "timezone") == 0;
 
-        UHashtable* typeDataMap = uhash_open(uhash_hashIChars, uhash_compareIChars, nullptr, &sts);
+        LocalUHashtablePointer typeDataMap(uhash_open(uhash_hashIChars, uhash_compareIChars, nullptr, &sts));
         if (U_FAILURE(sts)) {
             break;
         }
@@ -253,10 +253,10 @@ initFromResourceBundle(UErrorCode& sts) {
                 t->bcpId = bcpTypeId;
                 t->legacyId = legacyTypeId;
 
-                uhash_put(typeDataMap, (void*)legacyTypeId, t, &sts);
+                uhash_put(typeDataMap.getAlias(), (void*)legacyTypeId, t, &sts);
                 if (bcpTypeId != legacyTypeId) {
                     // different type value
-                    uhash_put(typeDataMap, (void*)bcpTypeId, t, &sts);
+                    uhash_put(typeDataMap.getAlias(), (void*)bcpTypeId, t, &sts);
                 }
                 if (U_FAILURE(sts)) {
                     break;
@@ -296,7 +296,7 @@ initFromResourceBundle(UErrorCode& sts) {
                                     from = fromBuf->data();
                                 }
                             }
-                            uhash_put(typeDataMap, (void*)from, t, &sts);
+                            uhash_put(typeDataMap.getAlias(), (void*)from, t, &sts);
                         }
                     }
                     if (U_FAILURE(sts)) {
@@ -318,7 +318,7 @@ initFromResourceBundle(UErrorCode& sts) {
                         // check if this is an alias of bcp type
                         if (uprv_compareInvWithUChar(nullptr, bcpTypeId, -1, to, toLen) == 0) {
                             const char* from = ures_getKey(bcpTypeAliasDataEntry.getAlias());
-                            uhash_put(typeDataMap, (void*)from, t, &sts);
+                            uhash_put(typeDataMap.getAlias(), (void*)from, t, &sts);
                         }
                     }
                     if (U_FAILURE(sts)) {
@@ -339,7 +339,7 @@ initFromResourceBundle(UErrorCode& sts) {
         keyData->bcpId = bcpKeyId;
         keyData->legacyId = legacyKeyId;
         keyData->specialTypes = specialTypes;
-        keyData->typeMap.adoptInstead(typeDataMap);
+        keyData->typeMap = std::move(typeDataMap);
 
         uhash_put(gLocExtKeyMap, (void*)legacyKeyId, keyData, &sts);
         if (legacyKeyId != bcpKeyId) {
