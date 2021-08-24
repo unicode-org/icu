@@ -63,6 +63,17 @@ public class UtilityTest extends TestFmwk {
         assertTrue(pattern + " contains U+1DA8B", set.contains(0x1DA8B));
         assertTrue(pattern + " contains U+1DF00..U+1DF1E", set.contains(0x1DF00, 0x1DF1E));
         assertFalse(pattern + " contains U+1DF1F", set.contains(0x1DF1F));
+
+        // ICU-21648 limit backslash-uhhhh escapes to ASCII hex digits
+        String euro = Utility.unescape("\\u20aC");
+        assertEquals("ASCII Euro", "€", euro);
+        try {
+            Utility.unescape("\\u୨෦ａＣ");
+            fail("unescape() accepted non-ASCII digits");
+        } catch(IllegalArgumentException expected) {
+        }
+        String euro2 = Utility.unescapeLeniently("\\u20aC\\u୨෦ａＣ");
+        assertEquals("lenient", "€\\u୨෦ａＣ", euro2);
     }
 
     @Test
