@@ -241,6 +241,21 @@ jobs:
         env:
           CPPFLAGS: -fsanitize=address
           LDFLAGS: -fsanitize=address
+  # Control Flow Integrity.
+  clang-cfi:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C with clang using CFI
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming --enable-tracing;
+          make -j2;
+          make -j2 check
+        env:
+          CPPFLAGS: -fsanitize=cfi
+          LDFLAGS: -fsanitize=cfi
 
   # Clang Linux with thread sanitizer.
   clang-tsan:
