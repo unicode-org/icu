@@ -250,12 +250,12 @@ jobs:
       - name: ICU4C with clang using CFI
         run: |
           cd icu4c/source;
-          ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming --enable-tracing;
+          ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming;
           make -j2;
           make -j2 check
         env:
-          CPPFLAGS: -fsanitize=cfi
-          LDFLAGS: -fsanitize=cfi
+          CPPFLAGS: -fsanitize=cfi -flto
+          LDFLAGS: -fsanitize=cfi -flto
 
   # Clang Linux with thread sanitizer.
   clang-tsan:
