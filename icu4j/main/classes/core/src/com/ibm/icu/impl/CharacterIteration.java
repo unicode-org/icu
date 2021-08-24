@@ -33,30 +33,30 @@ public final class CharacterIteration {
         //   which leaves it in position for underlying iterator's next() to work.
         int c = ci.current();
         if (c >= UTF16.LEAD_SURROGATE_MIN_VALUE && c<=UTF16.LEAD_SURROGATE_MAX_VALUE) {
-            c = ci.next();   
+            c = ci.next();
             if (c<UTF16.TRAIL_SURROGATE_MIN_VALUE || c>UTF16.TRAIL_SURROGATE_MAX_VALUE) {
-                ci.previous();   
+                ci.previous();
             }
         }
 
         // For BMP chars, this next() is the real deal.
         c = ci.next();
-        
-        // If we might have a lead surrogate, we need to peak ahead to get the trail 
+
+        // If we might have a lead surrogate, we need to peak ahead to get the trail
         //  even though we don't want to really be positioned there.
         if (c >= UTF16.LEAD_SURROGATE_MIN_VALUE) {
-            c = nextTrail32(ci, c);   
+            c = nextTrail32(ci, c);
         }
-        
+
         if (c >= UTF16.SUPPLEMENTARY_MIN_VALUE && c != DONE32) {
             // We got a supplementary char.  Back the iterator up to the position
             // of the lead surrogate.
-            ci.previous();   
+            ci.previous();
         }
         return c;
    }
 
-    
+
     // Out-of-line portion of the in-line Next32 code.
     // The call site does an initial ci.next() and calls this function
     //    if the 16 bit value it gets is >= LEAD_SURROGATE_MIN_VALUE.
@@ -81,36 +81,36 @@ public final class CharacterIteration {
         }
         return retVal;
     }
-       
+
     public static int previous32(CharacterIterator ci) {
         if (ci.getIndex() <= ci.getBeginIndex()) {
-            return DONE32;   
+            return DONE32;
         }
         char trail = ci.previous();
         int retVal = trail;
         if (UTF16.isTrailSurrogate(trail) && ci.getIndex()>ci.getBeginIndex()) {
             char lead = ci.previous();
             if (UTF16.isLeadSurrogate(lead)) {
-                retVal = (((int)lead  - UTF16.LEAD_SURROGATE_MIN_VALUE) << 10) +
-                          ((int)trail - UTF16.TRAIL_SURROGATE_MIN_VALUE) +
+                retVal = ((lead  - UTF16.LEAD_SURROGATE_MIN_VALUE) << 10) +
+                          (trail - UTF16.TRAIL_SURROGATE_MIN_VALUE) +
                           UTF16.SUPPLEMENTARY_MIN_VALUE;
             } else {
                 ci.next();
-            }           
+            }
         }
         return retVal;
     }
-   
+
     public static int current32(CharacterIterator ci) {
         char  lead   = ci.current();
         int   retVal = lead;
         if (retVal < UTF16.LEAD_SURROGATE_MIN_VALUE) {
-            return retVal;   
+            return retVal;
         }
         if (UTF16.isLeadSurrogate(lead)) {
-            int  trail = (int)ci.next();
+            int  trail = ci.next();
             ci.previous();
-            if (UTF16.isTrailSurrogate((char)trail)) {
+            if (UTF16.isTrailSurrogate(trail)) {
                 retVal = ((lead  - UTF16.LEAD_SURROGATE_MIN_VALUE) << 10) +
                          (trail - UTF16.TRAIL_SURROGATE_MIN_VALUE) +
                          UTF16.SUPPLEMENTARY_MIN_VALUE;
@@ -118,7 +118,7 @@ public final class CharacterIteration {
          } else {
             if (lead == CharacterIterator.DONE) {
                 if (ci.getIndex() >= ci.getEndIndex())   {
-                    retVal = DONE32;   
+                    retVal = DONE32;
                 }
             }
          }

@@ -287,7 +287,7 @@ public final class TrieTest extends TestFmwk
                               + Integer.toHexString(value2) + " instead of 0x"
                               + Integer.toHexString(value));
                     }
-                    if (!UTF16.isLeadSurrogate((char)start)) {
+                    if (!UTF16.isLeadSurrogate(start)) {
                         value2 = trie.getLeadValue((char)start);
                         if (value != value2) {
                             errln("serialized trie.getLeadValue(U+"
