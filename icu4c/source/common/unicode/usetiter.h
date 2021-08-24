@@ -33,9 +33,7 @@ class UnicodeString;
  * code points or ranges have been returned, it returns the
  * multicharacter strings of the UnicodeSet, if any.
  *
- * This class is not intended to be subclassed.  Consider any fields
- *  or methods declared as "protected" to be private.  The use of
- *  protected in this class is an artifact of history.
+ * This class is not intended for public subclassing.
  *
  * <p>To iterate over code points and strings, use a loop like this:
  * <pre>
@@ -66,22 +64,17 @@ class UnicodeString;
  * @author M. Davis
  * @stable ICU 2.4
  */
-class U_COMMON_API UnicodeSetIterator : public UObject {
-
- protected:
-
+class U_COMMON_API UnicodeSetIterator U_FINAL : public UObject {
     /**
      * Value of <tt>codepoint</tt> if the iterator points to a string.
      * If <tt>codepoint == IS_STRING</tt>, then examine
      * <tt>string</tt> for the current iteration result.
-     * @stable ICU 2.4
      */
     enum { IS_STRING = -1 };
 
     /**
      * Current code point, or the special value <tt>IS_STRING</tt>, if
      * the iterator points to a string.
-     * @stable ICU 2.4
      */
     UChar32 codepoint;
 
@@ -92,7 +85,6 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
      * iterating over code points using <tt>next()</tt>, or if
      * <tt>codepoint == IS_STRING</tt>, then the value of
      * <tt>codepointEnd</tt> is undefined.
-     * @stable ICU 2.4
      */
     UChar32 codepointEnd;
 
@@ -100,7 +92,6 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
      * If <tt>codepoint == IS_STRING</tt>, then <tt>string</tt> points
      * to the current string.  If <tt>codepoint != IS_STRING</tt>, the
      * value of <tt>string</tt> is undefined.
-     * @stable ICU 2.4
      */
     const UnicodeString* string;
 
@@ -268,42 +259,32 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
 
     // ======================= PRIVATES ===========================
 
- protected:
+private:
 
     // endElement and nextElements are really UChar32's, but we keep
     // them as signed int32_t's so we can do comparisons with
     // endElement set to -1.  Leave them as int32_t's.
     /** The set
-     * @stable ICU 2.4
      */
     const UnicodeSet* set;
     /** End range
-     * @stable ICU 2.4
      */
     int32_t endRange;
     /** Range
-     * @stable ICU 2.4
      */
     int32_t range;
     /** End element
-     * @stable ICU 2.4
      */
     int32_t endElement;
     /** Next element
-     * @stable ICU 2.4
      */
     int32_t nextElement;
-    //UBool abbreviated;
     /** Next string
-     * @stable ICU 2.4
      */
     int32_t nextString;
     /** String count
-     * @stable ICU 2.4
      */
     int32_t stringCount;
-
- private:
 
     /**
      *  Points to the string to use when the caller asks for a
@@ -311,23 +292,17 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
      */
     UnicodeString *cpString;
 
- protected:
-
     /** Copy constructor. Disallowed.
-     * @stable ICU 2.4
      */
-    UnicodeSetIterator(const UnicodeSetIterator&); // disallow
+    UnicodeSetIterator(const UnicodeSetIterator&) = delete;
 
     /** Assignment operator. Disallowed.
-     * @stable ICU 2.4
      */
-    UnicodeSetIterator& operator=(const UnicodeSetIterator&); // disallow
+    UnicodeSetIterator& operator=(const UnicodeSetIterator&) = delete;
 
     /** Load range
-     * @stable ICU 2.4
      */
-    virtual void loadRange(int32_t range);
-
+    void loadRange(int32_t range);
 };
 
 inline UBool UnicodeSetIterator::isString() const {
