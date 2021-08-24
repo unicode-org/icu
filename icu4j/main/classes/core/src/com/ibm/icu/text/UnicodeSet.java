@@ -225,9 +225,8 @@ import com.ibm.icu.util.VersionInfo;
  *     </tr>
  *     <tr style="vertical-align: top">
  *       <td style="white-space: nowrap; vertical-align: top;" align="right"><code>hex :=&nbsp; </code></td>
- *       <td style="vertical-align: top;"><em>any character for which
- *       </em><code>Character.digit(c, 16)</code><em>
- *       returns a non-negative result</em></td>
+ *       <td style="vertical-align: top;"><code>'0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' |<br>
+ *       &nbsp;&nbsp;&nbsp;&nbsp;'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f'</code></td>
  *     </tr>
  *     <tr>
  *       <td style="white-space: nowrap; vertical-align: top;" align="right"><code>property :=&nbsp; </code></td>

@@ -1345,6 +1345,12 @@ void UnicodeStringTest::TestUnescape(void) {
     if (!UNICODE_STRING("wrong \\u sequence", 17).unescape().isEmpty()) {
         errln("FAIL: unescaping of a string with an illegal escape sequence did not return an empty string");
     }
+
+    // ICU-21648 limit backslash-uhhhh escapes to ASCII hex digits
+    UnicodeString euro = UnicodeString(u"\\u20aC").unescape();
+    assertEquals("ASCII Euro", u"€", euro);
+    UnicodeString nonASCIIEuro = UnicodeString(u"\\u୨෦ａＣ").unescape();
+    assertTrue("unescape() accepted non-ASCII digits", nonASCIIEuro.isEmpty());
 }
 
 /* test code point counting functions --------------------------------------- */
