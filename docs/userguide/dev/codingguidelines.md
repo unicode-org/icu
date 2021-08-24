@@ -1551,6 +1551,22 @@ itself public can be placed in different places:
 4. If it is used by multiple packages, make it public and place the class in
    `the com.ibm.icu.impl` package.
 
+### ICU4J API Stability
+
+General discussion: See [ICU Design / ICU API compatibility](../icu/design.md#icu-api-compatibility).
+
+Occasionally, we “broaden” or “widen” a Java API by making a parameter broader
+(e.g., `char` (code unit) to `int` (code point), or `String` to `CharSequence`)
+or a return type narrower (e.g., `Object` to `UnicodeSet`).
+
+Such a change is source-compatible but not binary compatible.
+Before we do this, we need to check with users like Android whether this is ok.
+For example, in a class that Android exposes via its SDK,
+Android may need to retain hidden compatibility overloads with the old input types.
+
+In addition, we should test with code using both the old and new types,
+so that if someone has such compatibility overloads they all get exercised.
+
 ### Error Handling and Exceptions
 
 Errors should be indicated by throwing exceptions, not by returning “bogus”

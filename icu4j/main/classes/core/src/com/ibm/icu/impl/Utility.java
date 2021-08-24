@@ -865,7 +865,7 @@ public final class Utility {
             // if there is a trail surrogate after it, either as an
             // escape or as a literal.  If so, join them up into a
             // supplementary.
-            if (offset < length && result <= 0xffff && UTF16.isLeadSurrogate((char) result)) {
+            if (offset < length && UTF16.isLeadSurrogate(result)) {
                 int ahead = offset+1;
                 c = s.charAt(offset); // [sic] get 16-bit code unit
                 if (c == '\\' && ahead < length) {
@@ -875,7 +875,7 @@ public final class Utility {
                         ahead += cpAndLength & 0xff;
                     }
                 }
-                if (c <= 0xffff && UTF16.isTrailSurrogate((char) c)) {
+                if (UTF16.isTrailSurrogate(c)) {
                     offset = ahead;
                     result = Character.toCodePoint((char) result, (char) c);
                 }

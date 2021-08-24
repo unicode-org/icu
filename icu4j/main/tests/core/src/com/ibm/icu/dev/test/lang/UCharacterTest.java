@@ -1526,8 +1526,14 @@ public final class UCharacterTest extends TestFmwk
                 ch ++;
             }
         }
-        try
-        {
+        // Test with both char & int values.
+        try {
+            UCharacter.getCodePoint(0xD7ff, 0xDC00);
+            errln("Invalid surrogate characters should not form a " +
+                  "supplementary");
+        } catch(Exception e) {
+        }
+        try {
             UCharacter.getCodePoint((char)0xD7ff, (char)0xDC00);
             errln("Invalid surrogate characters should not form a " +
                   "supplementary");
