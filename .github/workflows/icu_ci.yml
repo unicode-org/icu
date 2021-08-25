@@ -254,8 +254,8 @@ jobs:
           make -j2;
           make -j2 check
         env:
-          CPPFLAGS: -fsanitize=cfi -flto
-          LDFLAGS: -fsanitize=cfi -flto
+          CXXFLAGS: -fsanitize=cfi -flto
+          LDFLAGS: -fsanitize=cfi -flto -fuse-ld=gold
 
   # Clang Linux with thread sanitizer.
   clang-tsan:
