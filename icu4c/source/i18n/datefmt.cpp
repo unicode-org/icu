@@ -68,6 +68,14 @@ const DateFmtBestPattern *LocaleCacheKey<DateFmtBestPattern>::createObject(
 class U_I18N_API DateFmtBestPatternKey : public LocaleCacheKey<DateFmtBestPattern> { 
 private:
     UnicodeString fSkeleton;
+protected:
+    virtual bool equals(const CacheKeyBase &other) const {
+       if (!LocaleCacheKey<DateFmtBestPattern>::equals(other)) {
+           return false;
+       }
+       // We know that this and other are of same class if we get this far.
+       return operator==(static_cast<const DateFmtBestPatternKey &>(other));
+    }
 public:
     DateFmtBestPatternKey(
         const Locale &loc,
@@ -82,18 +90,8 @@ public:
     virtual int32_t hashCode() const {
         return (int32_t)(37u * (uint32_t)LocaleCacheKey<DateFmtBestPattern>::hashCode() + (uint32_t)fSkeleton.hashCode());
     }
-    virtual bool operator==(const CacheKeyBase &other) const {
-       // reflexive
-       if (this == &other) { 	
-           return TRUE;
-       }
-       if (!LocaleCacheKey<DateFmtBestPattern>::operator==(other)) {
-           return FALSE;
-       }
-       // We know that this and other are of same class if we get this far.
-       const DateFmtBestPatternKey &realOther =
-               static_cast<const DateFmtBestPatternKey &>(other);
-       return (realOther.fSkeleton == fSkeleton);
+    inline bool operator==(const DateFmtBestPatternKey &other) const {
+        return fSkeleton == other.fSkeleton;
     }
     virtual CacheKeyBase *clone() const {
         return new DateFmtBestPatternKey(*this);
