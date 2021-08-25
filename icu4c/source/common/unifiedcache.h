@@ -13,8 +13,6 @@
 #ifndef __UNIFIED_CACHE_H__
 #define __UNIFIED_CACHE_H__
 
-#include <type_traits>
-
 #include "utypeinfo.h"  // for 'typeid' to work
 
 #include "unicode/uobject.h"
@@ -56,11 +54,6 @@ class U_COMMON_API CacheKeyBase : public UObject {
    virtual CacheKeyBase *clone() const = 0;
 
    /**
-    * Equality operator.
-    */
-   virtual bool operator == (const CacheKeyBase &other) const = 0;
-
-   /**
     * Create a new object for this key. Called by cache on cache miss.
     * createObject must add a reference to the object it returns. Note
     * that getting an object from the cache and returning it without calling
@@ -82,12 +75,19 @@ class U_COMMON_API CacheKeyBase : public UObject {
     */
    virtual char *writeDescription(char *buffer, int32_t bufSize) const = 0;
 
-   /**
-    * Inequality operator.
-    */
-   bool operator != (const CacheKeyBase &other) const {
-       return !(*this == other);
+   friend inline bool operator==(const CacheKeyBase& lhs,
+                                 const CacheKeyBase& rhs) {
+       return lhs.equals(rhs);
    }
+
+   friend inline bool operator!=(const CacheKeyBase& lhs,
+                                 const CacheKeyBase& rhs) {
+       return !lhs.equals(rhs);
+   }
+
+ protected:
+   virtual bool equals(const CacheKeyBase& other) const = 0;
+
  private:
    mutable UErrorCode fCreationStatus;
    mutable UBool fIsPrimary;
@@ -122,11 +122,12 @@ class CacheKey : public CacheKeyBase {
        return buffer;
    }
 
+ protected:
    /**
     * Two objects are equal if they are of the same type.
     */
-   virtual bool operator == (const CacheKeyBase &other) const {
-       return typeid(*this) == typeid(other);
+   virtual bool equals(const CacheKeyBase &other) const {
+       return this == &other || typeid(*this) == typeid(other);
    }
 };
 
@@ -138,6 +139,14 @@ template<typename T>
 class LocaleCacheKey : public CacheKey<T> {
  protected:
    Locale   fLoc;
+   virtual bool equals(const CacheKeyBase &other) const {
+       if (!CacheKey<T>::equals(other)) {
+           return false;
+       }
+       // We know this and other are of same class because equals() on
+       // CacheKey returned true.
+       return operator==(static_cast<const LocaleCacheKey<T> &>(other));
+   }
  public:
    LocaleCacheKey(const Locale &loc) : fLoc(loc) {}
    LocaleCacheKey(const LocaleCacheKey<T> &other)
@@ -146,31 +155,9 @@ class LocaleCacheKey : public CacheKey<T> {
    virtual int32_t hashCode() const {
        return (int32_t)(37u * (uint32_t)CacheKey<T>::hashCode() + (uint32_t)fLoc.hashCode());
    }
-   virtual bool operator == (const CacheKeyBase &other) const {
-       // reflexive
-       if (this == &other) {
-           return true;
-       }
-       if (!CacheKey<T>::operator == (other)) {
-           return false;
-       }
-       // We know this and other are of same class because operator== on
-       // CacheKey returned true.
-       const LocaleCacheKey<T> *fOther =
-               static_cast<const LocaleCacheKey<T> *>(&other);
-       return fLoc == fOther->fLoc;
+   inline bool operator == (const LocaleCacheKey<T> &other) const {
+       return fLoc == other.fLoc;
    }
-
-#if defined(__cpp_impl_three_way_comparison) && \
-       __cpp_impl_three_way_comparison >= 201711
-    // Manually resolve C++20 reversed argument order ambiguity.
-    template <typename U,
-              typename = typename std::enable_if_t<!std::is_same_v<T, U>>>
-    inline bool operator==(const LocaleCacheKey<U>& other) const {
-        return operator==(static_cast<const CacheKeyBase&>(other));
-    }
-#endif
-
    virtual CacheKeyBase *clone() const {
        return new LocaleCacheKey<T>(*this);
    }
