@@ -254,6 +254,8 @@ jobs:
           make -j2;
           make -j2 check
         env:
+          CC: clang
+          CXX: clang++
           CXXFLAGS: -flto -fsanitize=cfi -fvisibility=hidden
           LDFLAGS: -flto -fsanitize=cfi -fvisibility=hidden
 
