@@ -511,12 +511,13 @@ inline uint32_t res_getUInt(const ResourceTracer& traceInfo, Resource res) {
 class ResourceDataValue : public ResourceValue {
 public:
     ResourceDataValue() :
+        pResData(nullptr),
         res(static_cast<Resource>(URES_NONE)),
         fTraceInfo() {}
     virtual ~ResourceDataValue();
 
-    void setData(const ResourceData *data) {
-        resData = *data;
+    void setData(const ResourceData &data) {
+        pResData = &data;
     }
 
     void setResource(Resource r, ResourceTracer&& traceInfo) {
@@ -524,7 +525,7 @@ public:
         fTraceInfo = traceInfo;
     }
 
-    const ResourceData &getData() const { return resData; }
+    const ResourceData &getData() const { return *pResData; }
     virtual UResType getType() const;
     virtual const UChar *getString(int32_t &length, UErrorCode &errorCode) const;
     virtual const UChar *getAliasString(int32_t &length, UErrorCode &errorCode) const;
@@ -542,9 +543,7 @@ public:
     virtual UnicodeString getStringOrFirstOfArray(UErrorCode &errorCode) const;
 
 private:
-    // TODO(ICU-20769): If UResourceBundle.fResData becomes a pointer,
-    // then remove this value field again and just store a pResData pointer.
-    ResourceData resData;
+    const ResourceData *pResData;
     Resource res;
     ResourceTracer fTraceInfo;
 };

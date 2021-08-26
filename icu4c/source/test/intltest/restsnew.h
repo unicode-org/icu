@@ -46,6 +46,9 @@ public:
     void TestTrace(void);
 #endif
 
+    void TestOpenDirectFillIn();
+    void TestStackReuse();
+
 private:
     /**
      * The assignment operator has no real implementation.

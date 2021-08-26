@@ -31,7 +31,6 @@
 #define MAGIC2 19641227
 
 #define URES_MAX_ALIAS_LEVEL 256
-#define URES_MAX_BUFFER_SIZE 256
 
 #define EMPTY_SET 0x2205
 
@@ -61,16 +60,27 @@ struct UResourceDataEntry {
 #define RES_PATH_SEPARATOR   '/'
 #define RES_PATH_SEPARATOR_S   "/"
 
+U_CAPI void U_EXPORT2 ures_initStackObject(UResourceBundle* resB);
+
+#ifdef __cplusplus
+
 struct UResourceBundle {
     const char *fKey; /*tag*/
+    /**
+     * The dataEntry for the actual locale in which this item lives.
+     * Used for accessing the item's data.
+     * Non-const pointer for reference counting via entryIncrease().
+     */
     UResourceDataEntry *fData; /*for low-level access*/
     char *fVersion;
-    UResourceDataEntry *fTopLevelData; /* for getting the valid locale */
+    /**
+     * The dataEntry for the valid locale.
+     * Used for /LOCALE/path alias resolution that starts back from the valid locale,
+     * rather than from the actual locale of this item which might live in
+     * an ancestor bundle.
+     */
+    UResourceDataEntry *fValidLocaleDataEntry;
     char *fResPath; /* full path to the resource: "zh_TW/CollationElements/Sequence" */
-    // TODO(ICU-20769): Try to change the by-value fResData into a pointer,
-    // with the struct in only one place for each bundle.
-    // Also replace class ResourceDataValue.resData with a pResData pointer again.
-    ResourceData fResData;
     char fResBuf[RES_BUFSIZE];
     int32_t fResPathLen;
     Resource fRes;
@@ -81,12 +91,8 @@ struct UResourceBundle {
     int32_t fIndex;
     int32_t fSize;
 
-    /*const UResourceBundle *fParentRes;*/ /* needed to get the actual locale for a child resource */
+    inline const ResourceData &getResData() const { return fData->fData; }
 };
-
-U_CAPI void U_EXPORT2 ures_initStackObject(UResourceBundle* resB);
-
-#ifdef __cplusplus
 
 U_NAMESPACE_BEGIN
 
@@ -161,9 +167,6 @@ U_CFUNC const char* ures_getPath(const UResourceBundle* resB);
  */
 U_CAPI UBool U_EXPORT2 ures_dumpCacheContents(void);
 #endif
-/*U_CFUNC void ures_appendResPath(UResourceBundle *resB, const char* toAdd, int32_t lenToAdd);*/
-/*U_CFUNC void ures_setResPath(UResourceBundle *resB, const char* toAdd);*/
-/*U_CFUNC void ures_freeResPath(UResourceBundle *resB);*/
 
 /* Candidates for export */
 U_CFUNC UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle *original, UErrorCode *status);
