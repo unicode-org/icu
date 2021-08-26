@@ -13,7 +13,7 @@ jobs:
       lfs: true
       fetchDepth: 10
     - script: |
-        echo "Building ICU4J" && cd icu4j && ant init && ant check 
+        echo "Building ICU4J" && cd icu4j && ant init && ant check && ant localespiCheck
       displayName: 'Build and Test'
       env:
         BUILD: ICU4J

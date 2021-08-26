@@ -70,80 +70,30 @@ public class TestUtil {
         return o1.equals(o2);
     }
 
-    private static final boolean SUNJRE;
-    private static final boolean IBMJRE;
+    private static final Set<Locale> ICU_LOCALES = new HashSet<>();
 
     static {
-        String javaVendor = System.getProperty("java.vendor");
-        if (javaVendor != null) {
-            if (javaVendor.indexOf("Sun") >= 0) {
-                SUNJRE = true;
-                IBMJRE = false;
-            } else if (javaVendor.indexOf("IBM") >= 0) {
-                SUNJRE = false;
-                IBMJRE = true;
-            } else {
-                SUNJRE = false;
-                IBMJRE = false;
+        ULocale[] icuULocales = ULocale.getAvailableLocales();
+        for (ULocale icuULoc : icuULocales) {
+            Locale jdkLoc = icuULoc.toLocale();
+            // Make sure nothing lost
+            ULocale uloc = ULocale.forLocale(jdkLoc);
+            if (icuULoc.equals(uloc)) {
+                ICU_LOCALES.add(jdkLoc);
             }
-        } else {
-            SUNJRE = false;
-            IBMJRE = false;
         }
-    }
-
-    public static boolean isSUNJRE() {
-        return SUNJRE;
-    }
-    public static boolean isIBMJRE() {
-        return IBMJRE;
-    }
-
-    private static final Set<Locale> EXCLUDED_LOCALES = new HashSet<Locale>();
-    static {
-        EXCLUDED_LOCALES.add(Locale.ROOT);
-        // de-GR is supported by Java 8, but not supported by CLDR / ICU
-        EXCLUDED_LOCALES.add(new Locale("de", "GR"));
     }
 
     /*
      * Checks if the given locale is excluded from locale SPI test
      */
     public static boolean isExcluded(Locale loc) {
-        if (EXCLUDED_LOCALES.contains(loc)) {
+        if (Locale.ROOT.equals(loc)) {
             return true;
         }
-        return isProblematicIBMLocale(loc);
-    }
-
-    /*
-     * Ticket#6368
-     * 
-     * The ICU4J locale spi test cases reports many errors on IBM Java 6. There are two kinds
-     * of problems observed and both of them look like implementation problems in IBM Java 6.
-     * 
-     * - When a locale has variant field (for example, sr_RS_Cyrl, de_DE_PREEURO), adding ICU
-     *   suffix in the variant field (for example, sr_RS_Cyrl_ICU, de_DE_PREEURO_ICU) has no effects.
-     *   For these locales, IBM JRE 6 ignores installed Locale providers.
-     *   
-     * - For "sh" sublocales with "ICU" variant (for example, sh__ICU, sh_CS_ICU), IBM JRE 6 also
-     *   ignores installed ICU locale providers. Probably, "sh" is internally mapped to "sr_RS_Cyrl"
-     *   internally before locale look up.
-     * 
-     * For now, we exclude these problematic locales from locale spi test cases on IBM Java 6.
-     */
-    public static boolean isProblematicIBMLocale(Locale loc) {
-        if (!isIBMJRE()) {
+        if (isICUExtendedLocale(loc)) {
             return false;
         }
-        if (loc.getLanguage().equals("sh")) {
-            return true;
-        }
-        String variant = loc.getVariant();
-        if (variant.startsWith("EURO") || variant.startsWith("PREEURO")
-                || variant.startsWith("Cyrl") || variant.startsWith("Latn")) {
-            return true;
-        }
-        return false;
+        return !ICU_LOCALES.contains(loc);
     }
 }
