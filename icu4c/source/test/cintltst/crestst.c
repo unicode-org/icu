@@ -34,7 +34,6 @@
 #include "uresimp.h"
 
 static void TestOpenDirect(void);
-static void TestOpenDirectFillIn(void);
 static void TestFallback(void);
 static void TestTable32(void);
 static void TestFileStream(void);
@@ -112,7 +111,6 @@ void addResourceBundleTest(TestNode** root)
 #if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
     addTest(root, &TestConstruction1, "tsutil/crestst/TestConstruction1");
     addTest(root, &TestOpenDirect, "tsutil/crestst/TestOpenDirect");
-    addTest(root, &TestOpenDirectFillIn, "tsutil/crestst/TestOpenDirectFillIn");
     addTest(root, &TestResourceBundles, "tsutil/crestst/TestResourceBundles");
     addTest(root, &TestTable32, "tsutil/crestst/TestTable32");
     addTest(root, &TestFileStream, "tsutil/crestst/TestFileStream");
@@ -647,47 +645,6 @@ TestOpenDirect(void) {
     errorCode = U_ZERO_ERROR;
     defaultLocale = ures_openDirect(NULL, NULL, &errorCode);
     ures_close(defaultLocale);
-}
-
-static void
-TestOpenDirectFillIn(void) {
-    // Test that ures_openDirectFillIn() opens a stack allocated resource bundle, similar to ures_open().
-    // Since ures_openDirectFillIn is just a wrapper function, this is just a very basic test copied from
-    // the TestOpenDirect test above.
-    UErrorCode errorCode = U_ZERO_ERROR;
-    UResourceBundle *item;
-    UResourceBundle idna_rules;
-    ures_initStackObject(&idna_rules);
-
-    ures_openDirectFillIn(&idna_rules, loadTestData(&errorCode), "idna_rules", &errorCode);
-    if(U_FAILURE(errorCode)) {
-        log_data_err("ures_openDirectFillIn(\"idna_rules\") failed: %s\n", u_errorName(errorCode));
-        return;
-    }
-
-    if(0!=uprv_strcmp("idna_rules", ures_getLocale(&idna_rules, &errorCode))) {
-        log_err("ures_openDirectFillIn(\"idna_rules\").getLocale()!=idna_rules\n");
-    }
-    errorCode=U_ZERO_ERROR;
-
-    /* try an item in idna_rules, must work */
-    item=ures_getByKey(&idna_rules, "UnassignedSet", NULL, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        log_err("translit_index.getByKey(local key) failed: %s\n", u_errorName(errorCode));
-        errorCode=U_ZERO_ERROR;
-    } else {
-        ures_close(item);
-    }
-
-    /* try an item in root, must fail */
-    item=ures_getByKey(&idna_rules, "ShortLanguage", NULL, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        errorCode=U_ZERO_ERROR;
-    } else {
-        log_err("idna_rules.getByKey(root key) succeeded!\n");
-        ures_close(item);
-    }
-    ures_close(&idna_rules);
 }
 
 static int32_t
