@@ -220,6 +220,28 @@ jobs:
         PathtoPublish: 'icu4c/source/dist/icu-windows.zip'
         ArtifactName: '$(Build.BuildNumber)_ICU4C_MSVC_x64_Release'
 #-------------------------------------------------------------------------
+- job: ICU4C_MSVC_x64_Release_DataFilter
+  displayName: 'C: MSVC 64-bit Release DataFilter (VS 2019)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'windows-2019'
+    demands: 
+      - msbuild
+      - visualstudio
+      - Cmd
+  steps:
+    - powershell: |
+        $filterPath = $Env:BUILD_SOURCESDIRECTORY + "\.ci-builds\data-filter.json"
+        $vstsCommandString = "vso[task.setvariable variable=ICU_DATA_FILTER_FILE]" + $filterPath
+        Write-Host "##$vstsCommandString"
+    - task: VSBuild@1
+      displayName: 'Build Solution with Data Filter'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: x64
+        configuration: Release
+        msbuildArgs: '/p:SkipUWP=true'
+#-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x86_Release_Distrelease
   displayName: 'C: MSVC 32-bit Release (VS 2019) + Distrelease'
   timeoutInMinutes: 30
