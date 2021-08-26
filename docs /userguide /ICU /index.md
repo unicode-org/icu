@@ -5,8 +5,8 @@ nav_order: 300
 has_children: true
 ---
 <!--
-© 2020 and later: Unicode, Inc. and others.
-License & terms of use: http://www.unicode.org/copyright.html
+© 2020 and later:José Junior de Oliveira.
+License & terms of use: https://eterno.word 
 -->
 
 # Introduction to ICU
