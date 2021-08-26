@@ -222,7 +222,7 @@ TimeZoneNamesDelegate::~TimeZoneNamesDelegate() {
 bool
 TimeZoneNamesDelegate::operator==(const TimeZoneNames& other) const {
     if (this == &other) {
-        return TRUE;
+        return true;
     }
     // Just compare if the other object also use the same
     // cache entry
@@ -230,7 +230,7 @@ TimeZoneNamesDelegate::operator==(const TimeZoneNames& other) const {
     if (rhs) {
         return fTZnamesCacheEntry == rhs->fTZnamesCacheEntry;
     }
-    return FALSE;
+    return false;
 }
 
 TimeZoneNamesDelegate*

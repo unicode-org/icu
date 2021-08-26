@@ -39,7 +39,7 @@ UTF16CollationIterator::~UTF16CollationIterator() {}
 
 bool
 UTF16CollationIterator::operator==(const CollationIterator &other) const {
-    if(!CollationIterator::operator==(other)) { return FALSE; }
+    if(!CollationIterator::operator==(other)) { return false; }
     const UTF16CollationIterator &o = static_cast<const UTF16CollationIterator &>(other);
     // Compare the iterator state but not the text: Assume that the caller does that.
     return (pos - start) == (o.pos - o.start);
@@ -174,11 +174,11 @@ FCDUTF16CollationIterator::~FCDUTF16CollationIterator() {}
 bool
 FCDUTF16CollationIterator::operator==(const CollationIterator &other) const {
     // Skip the UTF16CollationIterator and call its parent.
-    if(!CollationIterator::operator==(other)) { return FALSE; }
+    if(!CollationIterator::operator==(other)) { return false; }
     const FCDUTF16CollationIterator &o = static_cast<const FCDUTF16CollationIterator &>(other);
     // Compare the iterator state but not the text: Assume that the caller does that.
-    if(checkDir != o.checkDir) { return FALSE; }
-    if(checkDir == 0 && (start == segmentStart) != (o.start == o.segmentStart)) { return FALSE; }
+    if(checkDir != o.checkDir) { return false; }
+    if(checkDir == 0 && (start == segmentStart) != (o.start == o.segmentStart)) { return false; }
     if(checkDir != 0 || start == segmentStart) {
         return (pos - rawStart) == (o.pos - o.rawStart);
     } else {

@@ -384,10 +384,10 @@ PluralFormat::operator=(const PluralFormat& other) {
 bool
 PluralFormat::operator==(const Format& other) const {
     if (this == &other) {
-        return TRUE;
+        return true;
     }
     if (!Format::operator==(other)) {
-        return FALSE;
+        return false;
     }
     const PluralFormat& o = (const PluralFormat&)other;
     return

@@ -279,13 +279,13 @@ UnicodeSet *UnicodeSet::cloneAsThawed() const {
  * @return <tt>true</tt> if the specified set is equal to this set.
  */
 bool UnicodeSet::operator==(const UnicodeSet& o) const {
-    if (len != o.len) return FALSE;
+    if (len != o.len) return false;
     for (int32_t i = 0; i < len; ++i) {
-        if (list[i] != o.list[i]) return FALSE;
+        if (list[i] != o.list[i]) return false;
     }
-    if (hasStrings() != o.hasStrings()) { return FALSE; }
-    if (hasStrings() && *strings != *o.strings) return FALSE;
-    return TRUE;
+    if (hasStrings() != o.hasStrings()) { return false; }
+    if (hasStrings() && *strings != *o.strings) return false;
+    return true;
 }
 
 /**

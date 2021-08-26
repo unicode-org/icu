@@ -146,7 +146,7 @@ bool RelativeDateFormat::operator==(const Format& other) const {
                 fTimePattern==that->fTimePattern   &&
                 fLocale==that->fLocale );
     }
-    return FALSE;
+    return false;
 }
 
 static const UChar APOSTROPHE = (UChar)0x0027;

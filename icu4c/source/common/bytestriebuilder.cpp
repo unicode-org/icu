@@ -346,10 +346,10 @@ BytesTrieBuilder::BTLinearMatchNode::BTLinearMatchNode(const char *bytes, int32_
 bool
 BytesTrieBuilder::BTLinearMatchNode::operator==(const Node &other) const {
     if(this==&other) {
-        return TRUE;
+        return true;
     }
     if(!LinearMatchNode::operator==(other)) {
-        return FALSE;
+        return false;
     }
     const BTLinearMatchNode &o=(const BTLinearMatchNode &)other;
     return 0==uprv_memcmp(s, o.s, length);

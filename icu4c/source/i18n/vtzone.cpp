@@ -1050,10 +1050,10 @@ VTimeZone::operator=(const VTimeZone& right) {
 bool
 VTimeZone::operator==(const TimeZone& that) const {
     if (this == &that) {
-        return TRUE;
+        return true;
     }
     if (typeid(*this) != typeid(that) || !BasicTimeZone::operator==(that)) {
-        return FALSE;
+        return false;
     }
     VTimeZone *vtz = (VTimeZone*)&that;
     if (*tz == *(vtz->tz)
@@ -1061,9 +1061,9 @@ VTimeZone::operator==(const TimeZone& that) const {
         && lastmod == vtz->lastmod
         /* && olsonzid = that.olsonzid */
         /* && icutzver = that.icutzver */) {
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 bool

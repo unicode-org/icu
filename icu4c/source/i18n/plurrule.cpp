@@ -561,34 +561,34 @@ PluralRules::operator==(const PluralRules& other) const  {
     UErrorCode status= U_ZERO_ERROR;
 
     if ( this == &other ) {
-        return TRUE;
+        return true;
     }
     LocalPointer<StringEnumeration> myKeywordList(getKeywords(status));
     LocalPointer<StringEnumeration> otherKeywordList(other.getKeywords(status));
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
 
     if (myKeywordList->count(status)!=otherKeywordList->count(status)) {
-        return FALSE;
+        return false;
     }
     myKeywordList->reset(status);
     while ((ptrKeyword=myKeywordList->snext(status))!=nullptr) {
         if (!other.isKeyword(*ptrKeyword)) {
-            return FALSE;
+            return false;
         }
     }
     otherKeywordList->reset(status);
     while ((ptrKeyword=otherKeywordList->snext(status))!=nullptr) {
         if (!this->isKeyword(*ptrKeyword)) {
-            return FALSE;
+            return false;
         }
     }
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 

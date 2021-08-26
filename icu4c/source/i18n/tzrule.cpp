@@ -229,10 +229,10 @@ AnnualTimeZoneRule::operator=(const AnnualTimeZoneRule& right) {
 bool
 AnnualTimeZoneRule::operator==(const TimeZoneRule& that) const {
     if (this == &that) {
-        return TRUE;
+        return true;
     }
     if (typeid(*this) != typeid(that)) {
-        return FALSE;
+        return false;
     }
     AnnualTimeZoneRule *atzr = (AnnualTimeZoneRule*)&that;
     return (*fDateTimeRule == *(atzr->fDateTimeRule) &&
@@ -448,21 +448,21 @@ TimeArrayTimeZoneRule::operator=(const TimeArrayTimeZoneRule& right) {
 bool
 TimeArrayTimeZoneRule::operator==(const TimeZoneRule& that) const {
     if (this == &that) {
-        return TRUE;
+        return true;
     }
-    if (typeid(*this) != typeid(that) || TimeZoneRule::operator==(that) == FALSE) {
-        return FALSE;
+    if (typeid(*this) != typeid(that) || !TimeZoneRule::operator==(that)) {
+        return false;
     }
     TimeArrayTimeZoneRule *tatzr = (TimeArrayTimeZoneRule*)&that;
     if (fTimeRuleType != tatzr->fTimeRuleType ||
         fNumStartTimes != tatzr->fNumStartTimes) {
-        return FALSE;
+        return false;
     }
     // Compare start times
-    UBool res = TRUE;
+    bool res = true;
     for (int32_t i = 0; i < fNumStartTimes; i++) {
         if (fStartTimes[i] != tatzr->fStartTimes[i]) {
-            res = FALSE;
+            res = false;
             break;
         }
     }

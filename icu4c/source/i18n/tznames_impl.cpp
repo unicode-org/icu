@@ -1107,10 +1107,10 @@ TimeZoneNamesImpl::cleanup() {
 bool
 TimeZoneNamesImpl::operator==(const TimeZoneNames& other) const {
     if (this == &other) {
-        return TRUE;
+        return true;
     }
     // No implementation for now
-    return FALSE;
+    return false;
 }
 
 TimeZoneNamesImpl*
@@ -2159,10 +2159,10 @@ TZDBTimeZoneNames::~TZDBTimeZoneNames() {
 bool
 TZDBTimeZoneNames::operator==(const TimeZoneNames& other) const {
     if (this == &other) {
-        return TRUE;
+        return true;
     }
     // No implementation for now
-    return FALSE;
+    return false;
 }
 
 TZDBTimeZoneNames*

@@ -180,12 +180,12 @@ CollationIterator::operator==(const CollationIterator &other) const {
             cesIndex == other.cesIndex &&
             numCpFwd == other.numCpFwd &&
             isNumeric == other.isNumeric)) {
-        return FALSE;
+        return false;
     }
     for(int32_t i = 0; i < ceBuffer.length; ++i) {
-        if(ceBuffer.get(i) != other.ceBuffer.get(i)) { return FALSE; }
+        if(ceBuffer.get(i) != other.ceBuffer.get(i)) { return false; }
     }
-    return TRUE;
+    return true;
 }
 
 void

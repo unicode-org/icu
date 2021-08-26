@@ -544,7 +544,7 @@ DateFormatSymbols::operator==(const DateFormatSymbols& other) const
 {
     // First do cheap comparisons
     if (this == &other) {
-        return TRUE;
+        return true;
     }
     if (fErasCount == other.fErasCount &&
         fEraNamesCount == other.fEraNamesCount &&
@@ -625,22 +625,22 @@ DateFormatSymbols::operator==(const DateFormatSymbols& other) const
             // Compare the contents of fZoneStrings
             if (fZoneStrings == NULL && other.fZoneStrings == NULL) {
                 if (fZSFLocale == other.fZSFLocale) {
-                    return TRUE;
+                    return true;
                 }
             } else if (fZoneStrings != NULL && other.fZoneStrings != NULL) {
                 if (fZoneStringsRowCount == other.fZoneStringsRowCount
                     && fZoneStringsColCount == other.fZoneStringsColCount) {
-                    UBool cmpres = TRUE;
+                    bool cmpres = true;
                     for (int32_t i = 0; (i < fZoneStringsRowCount) && cmpres; i++) {
                         cmpres = arrayCompare(fZoneStrings[i], other.fZoneStrings[i], fZoneStringsColCount);
                     }
                     return cmpres;
                 }
             }
-            return FALSE;
+            return false;
         }
     }
-    return FALSE;
+    return false;
 }
 
 //------------------------------------------------------

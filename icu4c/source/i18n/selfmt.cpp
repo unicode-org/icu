@@ -167,10 +167,10 @@ SelectFormat::operator=(const SelectFormat& other) {
 bool
 SelectFormat::operator==(const Format& other) const {
     if (this == &other) {
-        return TRUE;
+        return true;
     }
     if (!Format::operator==(other)) {
-        return FALSE;
+        return false;
     }
     const SelectFormat& o = (const SelectFormat&)other;
     return msgPattern == o.msgPattern;

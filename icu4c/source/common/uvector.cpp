@@ -112,16 +112,16 @@ void UVector::assign(const UVector& other, UElementAssigner *assign, UErrorCode 
 // This only does something sensible if this object has a non-null comparer
 bool UVector::operator==(const UVector& other) {
     int32_t i;
-    if (count != other.count) return FALSE;
+    if (count != other.count) return false;
     if (comparer != NULL) {
         // Compare using this object's comparer
         for (i=0; i<count; ++i) {
             if (!(*comparer)(elements[i], other.elements[i])) {
-                return FALSE;
+                return false;
             }
         }
     }
-    return TRUE;
+    return true;
 }
 
 void UVector::addElementX(void* obj, UErrorCode &status) {

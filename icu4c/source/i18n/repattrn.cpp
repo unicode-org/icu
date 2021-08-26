@@ -297,7 +297,7 @@ bool    RegexPattern::operator ==(const RegexPattern &other) const {
             return *(this->fPatternString) == *(other.fPatternString);
         } else if (this->fPattern == NULL) {
             if (other.fPattern == NULL) {
-                return TRUE;
+                return true;
             }
         } else if (other.fPattern != NULL) {
             UTEXT_SETNATIVEINDEX(this->fPattern, 0);
@@ -305,7 +305,7 @@ bool    RegexPattern::operator ==(const RegexPattern &other) const {
             return utext_equals(this->fPattern, other.fPattern);
         }
     }
-    return FALSE;
+    return false;
 }
 
 //---------------------------------------------------------------------
