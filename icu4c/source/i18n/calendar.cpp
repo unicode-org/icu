@@ -427,7 +427,7 @@ protected:
     //  return isStandardSupportedKeyword(keyword, status);
     //}
 
-    virtual void updateVisibleIDs(Hashtable& result, UErrorCode& status) const
+    virtual void updateVisibleIDs(Hashtable& result, UErrorCode& status) const override
     {
         if (U_SUCCESS(status)) {
             for(int32_t i=0;gCalTypes[i] != NULL;i++) {
@@ -439,7 +439,7 @@ protected:
         }
     }
 
-    virtual UObject* create(const ICUServiceKey& key, const ICUService* /*service*/, UErrorCode& status) const {
+    virtual UObject* create(const ICUServiceKey& key, const ICUService* /*service*/, UErrorCode& status) const override {
 #ifdef U_DEBUG_CALSVC
         if(dynamic_cast<const LocaleKey*>(&key) == NULL) {
             fprintf(stderr, "::create - not a LocaleKey!\n");
@@ -485,7 +485,7 @@ public:
     DefaultCalendarFactory() : ICUResourceBundleFactory() { }
     virtual ~DefaultCalendarFactory();
 protected:
-    virtual UObject* create(const ICUServiceKey& key, const ICUService* /*service*/, UErrorCode& status) const  {
+    virtual UObject* create(const ICUServiceKey& key, const ICUService* /*service*/, UErrorCode& status) const override {
 
         LocaleKey &lkey = (LocaleKey&)key;
         Locale loc;
@@ -517,7 +517,7 @@ public:
 
     virtual ~CalendarService();
 
-    virtual UObject* cloneInstance(UObject* instance) const {
+    virtual UObject* cloneInstance(UObject* instance) const override {
         UnicodeString *s = dynamic_cast<UnicodeString *>(instance);
         if(s != NULL) {
             return s->clone();
@@ -530,7 +530,7 @@ public:
         }
     }
 
-    virtual UObject* handleDefault(const ICUServiceKey& key, UnicodeString* /*actualID*/, UErrorCode& status) const {
+    virtual UObject* handleDefault(const ICUServiceKey& key, UnicodeString* /*actualID*/, UErrorCode& status) const override {
         LocaleKey& lkey = (LocaleKey&)key;
         //int32_t kind = lkey.kind();
 
@@ -555,7 +555,7 @@ public:
         return nc;
     }
 
-    virtual UBool isDefault() const {
+    virtual UBool isDefault() const override {
         return countFactories() == 1;
     }
 };

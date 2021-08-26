@@ -434,7 +434,7 @@ public:
      * @return    A copy of the object.
      * @stable ICU 4.0
      */
-    virtual DateIntervalFormat* clone() const;
+    virtual DateIntervalFormat* clone() const override;
 
     /**
      * Return true if the given Format objects are semantically equal. Objects
@@ -443,7 +443,7 @@ public:
      * @return         true if the given Format objects are semantically equal.
      * @stable ICU 4.0
      */
-    virtual bool operator==(const Format& other) const;
+    virtual bool operator==(const Format& other) const override;
 
     /**
      * Return true if the given Format objects are not semantically equal.
@@ -479,7 +479,7 @@ public:
     virtual UnicodeString& format(const Formattable& obj,
                                   UnicodeString& appendTo,
                                   FieldPosition& fieldPosition,
-                                  UErrorCode& status) const ;
+                                  UErrorCode& status) const override;
 
 
 
@@ -595,7 +595,7 @@ public:
      */
     virtual void parseObject(const UnicodeString& source,
                              Formattable& result,
-                             ParsePosition& parse_pos) const;
+                             ParsePosition& parse_pos) const override;
 
 
     /**
@@ -702,7 +702,7 @@ public:
      *                  other classes have different class IDs.
      * @stable ICU 4.0
      */
-    virtual UClassID getDynamicClassID(void) const;
+    virtual UClassID getDynamicClassID(void) const override;
 
 protected:
 

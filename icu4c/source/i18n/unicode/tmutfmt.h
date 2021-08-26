@@ -126,7 +126,7 @@ public:
      * @return    A copy of the object.
      * @deprecated ICU 53
      */
-    virtual TimeUnitFormat* clone() const;
+    virtual TimeUnitFormat* clone() const override;
 
     /**
      * Assignment operator
@@ -158,7 +158,7 @@ public:
      */
     virtual void parseObject(const UnicodeString& source,
                              Formattable& result,
-                             ParsePosition& pos) const;
+                             ParsePosition& pos) const override;
 
     /**
      * Return the class ID for this class. This is useful only for comparing to
@@ -184,7 +184,7 @@ public:
      *                  other classes have different class IDs.
      * @deprecated ICU 53
      */
-    virtual UClassID getDynamicClassID(void) const;
+    virtual UClassID getDynamicClassID(void) const override;
 
 private:
     Hashtable*    fTimeUnitToCountToPatterns[TimeUnit::UTIMEUNIT_FIELD_COUNT];

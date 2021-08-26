@@ -255,7 +255,7 @@ class U_COMMON_API UnicodeSetIterator U_FINAL : public UObject {
      *
      * @stable ICU 2.4
      */
-    virtual UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const override;
 
     // ======================= PRIVATES ===========================
 

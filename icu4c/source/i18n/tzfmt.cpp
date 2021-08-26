@@ -2729,7 +2729,7 @@ public:
     ZoneIdMatchHandler();
     virtual ~ZoneIdMatchHandler();
 
-    UBool handleMatch(int32_t matchLength, const CharacterNode *node, UErrorCode &status);
+    UBool handleMatch(int32_t matchLength, const CharacterNode *node, UErrorCode &status) override;
     const UChar* getID();
     int32_t getMatchLen();
 private:

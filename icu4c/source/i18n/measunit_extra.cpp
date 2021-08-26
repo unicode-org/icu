@@ -187,7 +187,7 @@ class SimpleUnitIdentifiersSink : public icu::ResourceSink {
      * @param noFallback Ignored.
      * @param status The standard ICU error code output parameter.
      */
-    void put(const char * /*key*/, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) {
+    void put(const char * /*key*/, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) override {
         ResourceTable table = value.getTable(status);
         if (U_FAILURE(status)) return;
 
@@ -275,7 +275,7 @@ class CategoriesSink : public icu::ResourceSink {
     explicit CategoriesSink(const UChar **out, int32_t &outSize, BytesTrieBuilder &trieBuilder)
         : outQuantitiesArray(out), outSize(outSize), trieBuilder(trieBuilder), outIndex(0) {}
 
-    void put(const char * /*key*/, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) {
+    void put(const char * /*key*/, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) override {
         ResourceArray array = value.getArray(status);
         if (U_FAILURE(status)) {
             return;

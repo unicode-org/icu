@@ -513,7 +513,7 @@ public:
      *
      * @stable ICU 3.8
      */
-    virtual UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const override;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.

@@ -69,7 +69,7 @@ class U_I18N_API DateFmtBestPatternKey : public LocaleCacheKey<DateFmtBestPatter
 private:
     UnicodeString fSkeleton;
 protected:
-    virtual bool equals(const CacheKeyBase &other) const {
+    virtual bool equals(const CacheKeyBase &other) const override {
        if (!LocaleCacheKey<DateFmtBestPattern>::equals(other)) {
            return false;
        }
@@ -87,17 +87,17 @@ public:
             LocaleCacheKey<DateFmtBestPattern>(other),
             fSkeleton(other.fSkeleton) { }
     virtual ~DateFmtBestPatternKey();
-    virtual int32_t hashCode() const {
+    virtual int32_t hashCode() const override {
         return (int32_t)(37u * (uint32_t)LocaleCacheKey<DateFmtBestPattern>::hashCode() + (uint32_t)fSkeleton.hashCode());
     }
     inline bool operator==(const DateFmtBestPatternKey &other) const {
         return fSkeleton == other.fSkeleton;
     }
-    virtual CacheKeyBase *clone() const {
+    virtual CacheKeyBase *clone() const override {
         return new DateFmtBestPatternKey(*this);
     }
     virtual const DateFmtBestPattern *createObject(
-            const void * /*unused*/, UErrorCode &status) const {
+            const void * /*unused*/, UErrorCode &status) const override {
         LocalPointer<DateTimePatternGenerator> dtpg(
                     DateTimePatternGenerator::createInstance(fLoc, status));
         if (U_FAILURE(status)) {

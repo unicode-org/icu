@@ -1526,7 +1526,7 @@ public:
    */
   virtual void extractBetween(int32_t start,
               int32_t limit,
-              UnicodeString& target) const;
+              UnicodeString& target) const override;
 
   /**
    * Copy the characters in the range
@@ -2456,14 +2456,14 @@ public:
    */
   virtual void handleReplaceBetween(int32_t start,
                                     int32_t limit,
-                                    const UnicodeString& text);
+                                    const UnicodeString& text) override;
 
   /**
    * Replaceable API
    * @return true if it has MetaData
    * @stable ICU 2.4
    */
-  virtual UBool hasMetaData() const;
+  virtual UBool hasMetaData() const override;
 
   /**
    * Copy a substring of this object, retaining attribute (out-of-band)
@@ -2478,7 +2478,7 @@ public:
    * dest >= limit`.
    * @stable ICU 2.0
    */
-  virtual void copy(int32_t start, int32_t limit, int32_t dest);
+  virtual void copy(int32_t start, int32_t limit, int32_t dest) override;
 
   /* Search and replace operations */
 
@@ -3338,7 +3338,7 @@ public:
    * @see getDynamicClassID
    * @stable ICU 2.6
    */
-  virtual UnicodeString *clone() const;
+  virtual UnicodeString *clone() const override;
 
   /** Destructor.
    * @stable ICU 2.0
@@ -3444,7 +3444,7 @@ public:
    *
    * @stable ICU 2.2
    */
-  virtual UClassID getDynamicClassID() const;
+  virtual UClassID getDynamicClassID() const override;
 
   //========================================
   // Implementation methods
@@ -3455,21 +3455,21 @@ protected:
    * Implement Replaceable::getLength() (see jitterbug 1027).
    * @stable ICU 2.4
    */
-  virtual int32_t getLength() const;
+  virtual int32_t getLength() const override;
 
   /**
    * The change in Replaceable to use virtual getCharAt() allows
    * UnicodeString::charAt() to be inline again (see jitterbug 709).
    * @stable ICU 2.4
    */
-  virtual char16_t getCharAt(int32_t offset) const;
+  virtual char16_t getCharAt(int32_t offset) const override;
 
   /**
    * The change in Replaceable to use virtual getChar32At() allows
    * UnicodeString::char32At() to be inline again (see jitterbug 709).
    * @stable ICU 2.4
    */
-  virtual UChar32 getChar32At(int32_t offset) const;
+  virtual UChar32 getChar32At(int32_t offset) const override;
 
 private:
   // For char* constructors. Could be made public.

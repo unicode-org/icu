@@ -107,7 +107,7 @@ class CacheKey : public CacheKeyBase {
    /**
     * The template parameter, T, determines the hash code returned.
     */
-   virtual int32_t hashCode() const {
+   virtual int32_t hashCode() const override {
        const char *s = typeid(T).name();
        return ustr_hashCharsN(s, static_cast<int32_t>(uprv_strlen(s)));
    }
@@ -115,7 +115,7 @@ class CacheKey : public CacheKeyBase {
    /**
     * Use the value type, T,  as the description.
     */
-   virtual char *writeDescription(char *buffer, int32_t bufLen) const {
+   virtual char *writeDescription(char *buffer, int32_t bufLen) const override {
        const char *s = typeid(T).name();
        uprv_strncpy(buffer, s, bufLen);
        buffer[bufLen - 1] = 0;
@@ -126,7 +126,7 @@ class CacheKey : public CacheKeyBase {
    /**
     * Two objects are equal if they are of the same type.
     */
-   virtual bool equals(const CacheKeyBase &other) const {
+   virtual bool equals(const CacheKeyBase &other) const override {
        return this == &other || typeid(*this) == typeid(other);
    }
 };
@@ -139,7 +139,7 @@ template<typename T>
 class LocaleCacheKey : public CacheKey<T> {
  protected:
    Locale   fLoc;
-   virtual bool equals(const CacheKeyBase &other) const {
+   virtual bool equals(const CacheKeyBase &other) const override {
        if (!CacheKey<T>::equals(other)) {
            return false;
        }
@@ -152,21 +152,21 @@ class LocaleCacheKey : public CacheKey<T> {
    LocaleCacheKey(const LocaleCacheKey<T> &other)
            : CacheKey<T>(other), fLoc(other.fLoc) { }
    virtual ~LocaleCacheKey() { }
-   virtual int32_t hashCode() const {
+   virtual int32_t hashCode() const override {
        return (int32_t)(37u * (uint32_t)CacheKey<T>::hashCode() + (uint32_t)fLoc.hashCode());
    }
    inline bool operator == (const LocaleCacheKey<T> &other) const {
        return fLoc == other.fLoc;
    }
-   virtual CacheKeyBase *clone() const {
+   virtual CacheKeyBase *clone() const override {
        return new LocaleCacheKey<T>(*this);
    }
    virtual const T *createObject(
-           const void *creationContext, UErrorCode &status) const;
+           const void *creationContext, UErrorCode &status) const override;
    /**
     * Use the locale id as the description.
     */
-   virtual char *writeDescription(char *buffer, int32_t bufLen) const {
+   virtual char *writeDescription(char *buffer, int32_t bufLen) const override {
        const char *s = fLoc.getName();
        uprv_strncpy(buffer, s, bufLen);
        buffer[bufLen - 1] = 0;
@@ -341,7 +341,7 @@ class U_COMMON_API UnifiedCache : public UnifiedCacheBase {
     */
    int32_t unusedCount() const;
 
-   virtual void handleUnreferencedObject() const;
+   virtual void handleUnreferencedObject() const override;
    virtual ~UnifiedCache();
    
  private:

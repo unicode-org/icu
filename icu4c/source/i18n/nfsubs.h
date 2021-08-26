@@ -250,7 +250,7 @@ private:
 
 public:
     static UClassID getStaticClassID(void);
-    virtual UClassID getDynamicClassID(void) const;
+    virtual UClassID getDynamicClassID(void) const override;
 };
 
 U_NAMESPACE_END
