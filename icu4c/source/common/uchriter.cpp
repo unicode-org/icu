@@ -69,10 +69,10 @@ UCharCharacterIterator::~UCharCharacterIterator() {
 bool
 UCharCharacterIterator::operator==(const ForwardCharacterIterator& that) const {
     if (this == &that) {
-        return TRUE;
+        return true;
     }
     if (typeid(*this) != typeid(that)) {
-        return FALSE;
+        return false;
     }
 
     UCharCharacterIterator&    realThat = (UCharCharacterIterator&)that;

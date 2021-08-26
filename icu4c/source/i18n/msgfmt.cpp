@@ -392,7 +392,7 @@ MessageFormat::operator=(const MessageFormat& that)
 bool
 MessageFormat::operator==(const Format& rhs) const
 {
-    if (this == &rhs) return TRUE;
+    if (this == &rhs) return true;
 
     MessageFormat& that = (MessageFormat&)rhs;
 
@@ -400,37 +400,37 @@ MessageFormat::operator==(const Format& rhs) const
     if (!Format::operator==(rhs) ||
         msgPattern != that.msgPattern ||
         fLocale != that.fLocale) {
-        return FALSE;
+        return false;
     }
 
     // Compare hashtables.
     if ((customFormatArgStarts == NULL) != (that.customFormatArgStarts == NULL)) {
-        return FALSE;
+        return false;
     }
     if (customFormatArgStarts == NULL) {
-        return TRUE;
+        return true;
     }
 
     UErrorCode ec = U_ZERO_ERROR;
     const int32_t count = uhash_count(customFormatArgStarts);
     const int32_t rhs_count = uhash_count(that.customFormatArgStarts);
     if (count != rhs_count) {
-        return FALSE;
+        return false;
     }
     int32_t idx = 0, rhs_idx = 0, pos = UHASH_FIRST, rhs_pos = UHASH_FIRST;
     for (; idx < count && rhs_idx < rhs_count && U_SUCCESS(ec); ++idx, ++rhs_idx) {
         const UHashElement* cur = uhash_nextElement(customFormatArgStarts, &pos);
         const UHashElement* rhs_cur = uhash_nextElement(that.customFormatArgStarts, &rhs_pos);
         if (cur->key.integer != rhs_cur->key.integer) {
-            return FALSE;
+            return false;
         }
         const Format* format = (const Format*)uhash_iget(cachedFormatters, cur->key.integer);
         const Format* rhs_format = (const Format*)uhash_iget(that.cachedFormatters, rhs_cur->key.integer);
         if (*format != *rhs_format) {
-            return FALSE;
+            return false;
         }
     }
-    return TRUE;
+    return true;
 }
 
 // -------------------------------------
@@ -1870,7 +1870,7 @@ UBool MessageFormat::equalFormats(const void* left, const void* right) {
 
 
 bool MessageFormat::DummyFormat::operator==(const Format&) const {
-    return TRUE;
+    return true;
 }
 
 MessageFormat::DummyFormat* MessageFormat::DummyFormat::clone() const {

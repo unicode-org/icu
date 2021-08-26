@@ -2350,7 +2350,7 @@ SearchIterator * TestSearch::safeClone() const
 bool TestSearch::operator!=(const TestSearch &that) const
 {
     if (SearchIterator::operator !=(that)) {
-        return FALSE;
+        return false;
     }
     return m_offset_ != that.m_offset_ || m_pattern_ != that.m_pattern_;
 }

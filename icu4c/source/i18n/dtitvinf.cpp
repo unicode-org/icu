@@ -167,11 +167,11 @@ DateIntervalInfo::~DateIntervalInfo() {
 
 bool
 DateIntervalInfo::operator==(const DateIntervalInfo& other) const {
-    UBool equal = (
+    bool equal = (
       fFallbackIntervalPattern == other.fFallbackIntervalPattern &&
       fFirstDateInPtnIsLaterDate == other.fFirstDateInPtnIsLaterDate );
 
-    if ( equal == TRUE ) {
+    if ( equal ) {
         equal = fIntervalPatterns->equals(*(other.fIntervalPatterns));
     }
 

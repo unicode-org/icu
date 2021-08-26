@@ -372,10 +372,10 @@ RuleBasedBreakIterator::clone() const {
 bool
 RuleBasedBreakIterator::operator==(const BreakIterator& that) const {
     if (typeid(*this) != typeid(that)) {
-        return FALSE;
+        return false;
     }
     if (this == &that) {
-        return TRUE;
+        return true;
     }
 
     // The base class BreakIterator carries no state that participates in equality,
@@ -388,21 +388,21 @@ RuleBasedBreakIterator::operator==(const BreakIterator& that) const {
         // The two break iterators are operating on different text,
         //   or have a different iteration position.
         //   Note that fText's position is always the same as the break iterator's position.
-        return FALSE;
+        return false;
     }
 
     if (!(fPosition == that2.fPosition &&
             fRuleStatusIndex == that2.fRuleStatusIndex &&
             fDone == that2.fDone)) {
-        return FALSE;
+        return false;
     }
 
     if (that2.fData == fData ||
         (fData != NULL && that2.fData != NULL && *that2.fData == *fData)) {
             // The two break iterators are using the same rules.
-            return TRUE;
+            return true;
         }
-    return FALSE;
+    return false;
 }
 
 /**

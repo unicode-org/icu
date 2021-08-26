@@ -354,19 +354,19 @@ NFRuleSet::operator==(const NFRuleSet& rhs) const
         // ...then compare the non-numerical rule lists...
         for (int i = 0; i < NON_NUMERICAL_RULE_LENGTH; i++) {
             if (!util_equalRules(nonNumericalRules[i], rhs.nonNumericalRules[i])) {
-                return FALSE;
+                return false;
             }
         }
 
         // ...then compare the rule lists...
         for (uint32_t i = 0; i < rules.size(); ++i) {
             if (*rules[i] != *rhs.rules[i]) {
-                return FALSE;
+                return false;
             }
         }
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 void

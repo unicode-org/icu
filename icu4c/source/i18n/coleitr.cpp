@@ -147,7 +147,7 @@ bool CollationElementIterator::operator==(
                                     const CollationElementIterator& that) const
 {
     if (this == &that) {
-        return TRUE;
+        return true;
     }
 
     return

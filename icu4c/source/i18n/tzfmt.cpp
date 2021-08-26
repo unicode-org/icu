@@ -486,7 +486,7 @@ bool
 TimeZoneFormat::operator==(const Format& other) const {
     TimeZoneFormat* tzfmt = (TimeZoneFormat*)&other;
 
-    UBool isEqual =
+    bool isEqual =
             fLocale == tzfmt->fLocale
             && fGMTPattern == tzfmt->fGMTPattern
             && fGMTZeroFormat == tzfmt->fGMTZeroFormat

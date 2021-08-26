@@ -135,14 +135,14 @@ bool
 LocalizationInfo::operator==(const LocalizationInfo* rhs) const {
     if (rhs) {
         if (this == rhs) {
-            return TRUE;
+            return true;
         }
         
         int32_t rsc = getNumberOfRuleSets();
         if (rsc == rhs->getNumberOfRuleSets()) {
             for (int i = 0; i < rsc; ++i) {
                 if (!streq(getRuleSetName(i), rhs->getRuleSetName(i))) {
-                    return FALSE;
+                    return false;
                 }
             }
             int32_t dlc = getNumberOfDisplayLocales();
@@ -152,19 +152,19 @@ LocalizationInfo::operator==(const LocalizationInfo* rhs) const {
                     int32_t ix = rhs->indexForLocale(locale);
                     // if no locale, ix is -1, getLocaleName returns null, so streq returns false
                     if (!streq(locale, rhs->getLocaleName(ix))) {
-                        return FALSE;
+                        return false;
                     }
                     for (int j = 0; j < rsc; ++j) {
                         if (!streq(getDisplayName(i, j), rhs->getDisplayName(ix, j))) {
-                            return FALSE;
+                            return false;
                         }
                     }
                 }
-                return TRUE;
+                return true;
             }
         }
     }
-    return FALSE;
+    return false;
 }
 
 int32_t
@@ -940,7 +940,7 @@ bool
 RuleBasedNumberFormat::operator==(const Format& other) const
 {
     if (this == &other) {
-        return TRUE;
+        return true;
     }
 
     if (typeid(*this) == typeid(other)) {
@@ -953,7 +953,7 @@ RuleBasedNumberFormat::operator==(const Format& other) const
             (localizations == NULL 
                 ? rhs.localizations == NULL 
                 : (rhs.localizations == NULL 
-                    ? FALSE
+                    ? false
                     : *localizations == rhs.localizations))) {
 
             NFRuleSet** p = fRuleSets;
@@ -961,7 +961,7 @@ RuleBasedNumberFormat::operator==(const Format& other) const
             if (p == NULL) {
                 return q == NULL;
             } else if (q == NULL) {
-                return FALSE;
+                return false;
             }
             while (*p && *q && (**p == **q)) {
                 ++p;
@@ -971,7 +971,7 @@ RuleBasedNumberFormat::operator==(const Format& other) const
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 UnicodeString

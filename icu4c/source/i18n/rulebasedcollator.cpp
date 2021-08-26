@@ -241,19 +241,19 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RuleBasedCollator)
 
 bool
 RuleBasedCollator::operator==(const Collator& other) const {
-    if(this == &other) { return TRUE; }
-    if(!Collator::operator==(other)) { return FALSE; }
+    if(this == &other) { return true; }
+    if(!Collator::operator==(other)) { return false; }
     const RuleBasedCollator &o = static_cast<const RuleBasedCollator &>(other);
-    if(*settings != *o.settings) { return FALSE; }
-    if(data == o.data) { return TRUE; }
+    if(*settings != *o.settings) { return false; }
+    if(data == o.data) { return true; }
     UBool thisIsRoot = data->base == NULL;
     UBool otherIsRoot = o.data->base == NULL;
     U_ASSERT(!thisIsRoot || !otherIsRoot);  // otherwise their data pointers should be ==
-    if(thisIsRoot != otherIsRoot) { return FALSE; }
+    if(thisIsRoot != otherIsRoot) { return false; }
     if((thisIsRoot || !tailoring->rules.isEmpty()) &&
             (otherIsRoot || !o.tailoring->rules.isEmpty())) {
         // Shortcut: If both collators have valid rule strings, then compare those.
-        if(tailoring->rules == o.tailoring->rules) { return TRUE; }
+        if(tailoring->rules == o.tailoring->rules) { return true; }
     }
     // Different rule strings can result in the same or equivalent tailoring.
     // The rule strings are optional in ICU resource bundles, although included by default.
@@ -261,14 +261,14 @@ RuleBasedCollator::operator==(const Collator& other) const {
     UErrorCode errorCode = U_ZERO_ERROR;
     LocalPointer<UnicodeSet> thisTailored(getTailoredSet(errorCode));
     LocalPointer<UnicodeSet> otherTailored(o.getTailoredSet(errorCode));
-    if(U_FAILURE(errorCode)) { return FALSE; }
-    if(*thisTailored != *otherTailored) { return FALSE; }
+    if(U_FAILURE(errorCode)) { return false; }
+    if(*thisTailored != *otherTailored) { return false; }
     // For completeness, we should compare all of the mappings;
     // or we should create a list of strings, sort it with one collator,
     // and check if both collators compare adjacent strings the same
     // (order & strength, down to quaternary); or similar.
     // Testing equality of collators seems unusual.
-    return TRUE;
+    return true;
 }
 
 int32_t

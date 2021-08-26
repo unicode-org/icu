@@ -179,25 +179,25 @@ bool
 DecimalFormatSymbols::operator==(const DecimalFormatSymbols& that) const
 {
     if (this == &that) {
-        return TRUE;
+        return true;
     }
     if (fIsCustomCurrencySymbol != that.fIsCustomCurrencySymbol) { 
-        return FALSE; 
+        return false;
     } 
     if (fIsCustomIntlCurrencySymbol != that.fIsCustomIntlCurrencySymbol) { 
-        return FALSE; 
+        return false;
     } 
     for(int32_t i = 0; i < (int32_t)kFormatSymbolCount; ++i) {
         if(fSymbols[(ENumberFormatSymbol)i] != that.fSymbols[(ENumberFormatSymbol)i]) {
-            return FALSE;
+            return false;
         }
     }
     for(int32_t i = 0; i < (int32_t)UNUM_CURRENCY_SPACING_COUNT; ++i) {
         if(currencySpcBeforeSym[i] != that.currencySpcBeforeSym[i]) {
-            return FALSE;
+            return false;
         }
         if(currencySpcAfterSym[i] != that.currencySpcAfterSym[i]) {
-            return FALSE;
+            return false;
         }
     }
     // No need to check fCodePointZero since it is based on fSymbols

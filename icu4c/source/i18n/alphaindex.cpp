@@ -800,12 +800,12 @@ UnicodeString AlphabeticIndex::separated(const UnicodeString &item) {
 
 
 bool AlphabeticIndex::operator==(const AlphabeticIndex& /* other */) const {
-    return FALSE;
+    return false;
 }
 
 
 bool AlphabeticIndex::operator!=(const AlphabeticIndex& /* other */) const {
-    return FALSE;
+    return false;
 }
 
 

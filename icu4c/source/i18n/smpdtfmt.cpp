@@ -673,7 +673,7 @@ SimpleDateFormat::operator==(const Format& other) const
                 fHaveDefaultCentury  == that->fHaveDefaultCentury &&
                 fDefaultCenturyStart == that->fDefaultCenturyStart);
     }
-    return FALSE;
+    return false;
 }
 
 //----------------------------------------------------------------------

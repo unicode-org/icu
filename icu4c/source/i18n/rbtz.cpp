@@ -91,21 +91,20 @@ RuleBasedTimeZone::operator=(const RuleBasedTimeZone& right) {
 bool
 RuleBasedTimeZone::operator==(const TimeZone& that) const {
     if (this == &that) {
-        return TRUE;
+        return true;
     }
-    if (typeid(*this) != typeid(that)
-        || BasicTimeZone::operator==(that) == FALSE) {
-        return FALSE;
+    if (typeid(*this) != typeid(that) || !BasicTimeZone::operator==(that)) {
+        return false;
     }
     RuleBasedTimeZone *rbtz = (RuleBasedTimeZone*)&that;
     if (*fInitialRule != *(rbtz->fInitialRule)) {
-        return FALSE;
+        return false;
     }
     if (compareRules(fHistoricRules, rbtz->fHistoricRules)
         && compareRules(fFinalRules, rbtz->fFinalRules)) {
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 bool
