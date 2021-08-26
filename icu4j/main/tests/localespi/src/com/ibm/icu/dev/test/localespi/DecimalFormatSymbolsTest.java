@@ -40,21 +40,13 @@ public class DecimalFormatSymbolsTest extends TestFmwk {
                 if (!isIcuImpl) {
                     errln("FAIL: getInstance returned JDK DecimalFormatSymbols for locale " + loc);
                 }
-            } else {
-                if (isIcuImpl) {
-                    logln("INFO: getInstance returned ICU DecimalFormatSymbols for locale " + loc);
-                }
+            } else if (isIcuImpl) {
+                logln("INFO: getInstance returned ICU DecimalFormatSymbols for locale " + loc);
                 Locale iculoc = TestUtil.toICUExtendedLocale(loc);
                 DecimalFormatSymbols decfsIcu = DecimalFormatSymbols.getInstance(iculoc);
-                if (isIcuImpl) {
-                    if (!decfs.equals(decfsIcu)) {
-                        errln("FAIL: getInstance returned ICU DecimalFormatSymbols for locale " + loc
-                                + ", but different from the one for locale " + iculoc);
-                    }
-                } else {
-                    if (!(decfsIcu instanceof com.ibm.icu.impl.jdkadapter.DecimalFormatSymbolsICU)) {
-                        errln("FAIL: getInstance returned JDK DecimalFormatSymbols for locale " + iculoc);
-                    }
+                if (!decfs.equals(decfsIcu)) {
+                    errln("FAIL: getInstance returned ICU DecimalFormatSymbols for locale " + loc
+                            + ", but different from the one for locale " + iculoc);
                 }
             }
         }
