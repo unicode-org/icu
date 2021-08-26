@@ -82,7 +82,7 @@ jobs:
         CXX: clang++
 #-------------------------------------------------------------------------
 - job: ICU4C_Clang_Cpp14_Debug_Ubuntu_1804
-  displayName: 'C: Linux Clang C++14 Debug (Ubuntu 18.04)'
+  displayName: 'C: Linux Clang C++17 Debug (Ubuntu 18.04)'
   timeoutInMinutes: 30
   pool:
     vmImage: 'ubuntu-18.04'
@@ -96,8 +96,8 @@ jobs:
         sudo apt remove libgcc-11-dev gcc-11
       displayName: Remove GCC 11 (work-around)
     - script: |
-        export CXXFLAGS="-std=c++14 -Winvalid-constexpr" && cd icu4c/source && ./runConfigureICU --enable-debug --disable-release Linux && make -j2 check
-      displayName: 'Build and Test C++14'
+        export CXXFLAGS="-std=c++17 -Winvalid-constexpr" && cd icu4c/source && ./runConfigureICU --enable-debug --disable-release Linux && make -j2 check
+      displayName: 'Build and Test C++17'
       env:
         CC: clang
         CXX: clang++
@@ -129,8 +129,8 @@ jobs:
       fetchDepth: 10
     - script: |
         sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-        sudo apt-get update
-        sudo apt-get install gcc-11 g++-11
+        sudo apt update
+        sudo apt install gcc-11 g++-11
       displayName: 'Install GCC-11'
     - script: |
         cd icu4c/source && ./runConfigureICU Linux && make -j2 check
