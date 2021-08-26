@@ -299,7 +299,7 @@ public:
      *                Objects of different subclasses are considered unequal.
      * @stable ICU 50
      */
-    virtual bool operator==(const Format& other) const;
+    virtual bool operator==(const Format& other) const override;
 
     /**
      * Clone this object polymorphically. The caller is responsible
@@ -307,7 +307,7 @@ public:
      * @return A copy of the object
      * @stable ICU 50
      */
-    virtual TimeZoneFormat* clone() const;
+    virtual TimeZoneFormat* clone() const override;
 
     /**
      * Creates an instance of <code>TimeZoneFormat</code> for the given locale.
@@ -636,7 +636,7 @@ public:
      * @stable ICU 50
      */
     virtual UnicodeString& format(const Formattable& obj, UnicodeString& appendTo,
-        FieldPosition& pos, UErrorCode& status) const;
+        FieldPosition& pos, UErrorCode& status) const override;
 
     /**
      * Parse a string to produce an object. This methods handles parsing of
@@ -650,7 +650,7 @@ public:
      *                 delete it when done.
      * @stable ICU 50
      */
-    virtual void parseObject(const UnicodeString& source, Formattable& result, ParsePosition& parse_pos) const;
+    virtual void parseObject(const UnicodeString& source, Formattable& result, ParsePosition& parse_pos) const override;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
@@ -662,7 +662,7 @@ public:
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      * @stable ICU 50
      */
-    virtual UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const override;
 
 protected:
     /**

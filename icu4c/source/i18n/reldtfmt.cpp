@@ -485,7 +485,7 @@ struct RelDateFmtDataSink : public ResourceSink {
   virtual ~RelDateFmtDataSink();
 
   virtual void put(const char *key, ResourceValue &value,
-                   UBool /*noFallback*/, UErrorCode &errorCode) {
+                   UBool /*noFallback*/, UErrorCode &errorCode) override {
       ResourceTable relDayTable = value.getTable(errorCode);
       int32_t n = 0;
       int32_t len = 0;

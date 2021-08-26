@@ -525,7 +525,7 @@ struct AllowedHourFormatsSink : public ResourceSink {
     virtual ~AllowedHourFormatsSink();
 
     virtual void put(const char *key, ResourceValue &value, UBool /*noFallback*/,
-                     UErrorCode &errorCode) {
+                     UErrorCode &errorCode) override {
         ResourceTable timeData = value.getTable(errorCode);
         if (U_FAILURE(errorCode)) { return; }
         for (int32_t i = 0; timeData.getKeyAndValue(i, key, value); ++i) {
@@ -933,7 +933,7 @@ struct DateTimePatternGenerator::AppendItemFormatsSink : public ResourceSink {
     virtual ~AppendItemFormatsSink();
 
     virtual void put(const char *key, ResourceValue &value, UBool /*noFallback*/,
-            UErrorCode &errorCode) {
+            UErrorCode &errorCode) override {
         UDateTimePatternField field = dtpg.getAppendFormatNumber(key);
         if (field == UDATPG_FIELD_COUNT) { return; }
         const UnicodeString& valueStr = value.getUnicodeString(errorCode);
@@ -962,7 +962,7 @@ struct DateTimePatternGenerator::AppendItemNamesSink : public ResourceSink {
     virtual ~AppendItemNamesSink();
 
     virtual void put(const char *key, ResourceValue &value, UBool /*noFallback*/,
-            UErrorCode &errorCode) {
+            UErrorCode &errorCode) override {
         UDateTimePGDisplayWidth width;
         UDateTimePatternField field = dtpg.getFieldAndWidthIndices(key, &width);
         if (field == UDATPG_FIELD_COUNT) { return; }
@@ -1014,7 +1014,7 @@ struct DateTimePatternGenerator::AvailableFormatsSink : public ResourceSink {
     virtual ~AvailableFormatsSink();
 
     virtual void put(const char *key, ResourceValue &value, UBool isRoot,
-            UErrorCode &errorCode) {
+            UErrorCode &errorCode) override {
         const UnicodeString formatKey(key, -1, US_INV);
         if (!dtpg.isAvailableFormatSet(formatKey) ) {
             dtpg.setAvailableFormat(formatKey, errorCode);

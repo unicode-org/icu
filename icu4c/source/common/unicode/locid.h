@@ -1005,7 +1005,7 @@ public:
      *
      * @stable ICU 2.2
      */
-    virtual UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const override;
 
     /**
      * A Locale iterator interface similar to a Java Iterator<Locale>.

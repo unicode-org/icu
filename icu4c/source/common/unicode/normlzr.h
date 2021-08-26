@@ -732,7 +732,7 @@ public:
    * @return a UClassID for the actual class.
    * @deprecated ICU 56 Use Normalizer2 instead.
    */
-  virtual UClassID getDynamicClassID() const;
+  virtual UClassID getDynamicClassID() const override;
 #endif  // U_FORCE_HIDE_DEPRECATED_API
 
 private:

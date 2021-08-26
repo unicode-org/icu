@@ -723,7 +723,7 @@ CalendarAstronomer::AngleFunc::~AngleFunc() {}
 class SunTimeAngleFunc : public CalendarAstronomer::AngleFunc {
 public:
     virtual ~SunTimeAngleFunc();
-    virtual double eval(CalendarAstronomer& a) { return a.getSunLongitude(); }
+    virtual double eval(CalendarAstronomer& a) override { return a.getSunLongitude(); }
 };
 
 SunTimeAngleFunc::~SunTimeAngleFunc() {}
@@ -743,7 +743,7 @@ CalendarAstronomer::CoordFunc::~CoordFunc() {}
 class RiseSetCoordFunc : public CalendarAstronomer::CoordFunc {
 public:
     virtual ~RiseSetCoordFunc();
-    virtual void eval(CalendarAstronomer::Equatorial& result, CalendarAstronomer&a) {  a.getSunPosition(result); }
+    virtual void eval(CalendarAstronomer::Equatorial& result, CalendarAstronomer& a) override { a.getSunPosition(result); }
 };
 
 RiseSetCoordFunc::~RiseSetCoordFunc() {}
@@ -1225,7 +1225,7 @@ const CalendarAstronomer::MoonAge CalendarAstronomer::FULL_MOON() {
 class MoonTimeAngleFunc : public CalendarAstronomer::AngleFunc {
 public:
     virtual ~MoonTimeAngleFunc();
-    virtual double eval(CalendarAstronomer&a) { return a.getMoonAge(); }
+    virtual double eval(CalendarAstronomer& a) override { return a.getMoonAge(); }
 };
 
 MoonTimeAngleFunc::~MoonTimeAngleFunc() {}
@@ -1271,7 +1271,7 @@ UDate CalendarAstronomer::getMoonTime(const CalendarAstronomer::MoonAge& desired
 class MoonRiseSetCoordFunc : public CalendarAstronomer::CoordFunc {
 public:
     virtual ~MoonRiseSetCoordFunc();
-    virtual void eval(CalendarAstronomer::Equatorial& result, CalendarAstronomer&a) { result = a.getMoonPosition(); }
+    virtual void eval(CalendarAstronomer::Equatorial& result, CalendarAstronomer& a) override { result = a.getMoonPosition(); }
 };
 
 MoonRiseSetCoordFunc::~MoonRiseSetCoordFunc() {}

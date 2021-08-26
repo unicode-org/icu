@@ -535,21 +535,21 @@ public:
     const ResourceData &getData() const { return *pResData; }
     UResourceDataEntry *getValidLocaleDataEntry() const { return validLocaleDataEntry; }
     Resource getResource() const { return res; }
-    virtual UResType getType() const;
-    virtual const UChar *getString(int32_t &length, UErrorCode &errorCode) const;
-    virtual const UChar *getAliasString(int32_t &length, UErrorCode &errorCode) const;
-    virtual int32_t getInt(UErrorCode &errorCode) const;
-    virtual uint32_t getUInt(UErrorCode &errorCode) const;
-    virtual const int32_t *getIntVector(int32_t &length, UErrorCode &errorCode) const;
-    virtual const uint8_t *getBinary(int32_t &length, UErrorCode &errorCode) const;
-    virtual ResourceArray getArray(UErrorCode &errorCode) const;
-    virtual ResourceTable getTable(UErrorCode &errorCode) const;
-    virtual UBool isNoInheritanceMarker() const;
+    virtual UResType getType() const override;
+    virtual const UChar *getString(int32_t &length, UErrorCode &errorCode) const override;
+    virtual const UChar *getAliasString(int32_t &length, UErrorCode &errorCode) const override;
+    virtual int32_t getInt(UErrorCode &errorCode) const override;
+    virtual uint32_t getUInt(UErrorCode &errorCode) const override;
+    virtual const int32_t *getIntVector(int32_t &length, UErrorCode &errorCode) const override;
+    virtual const uint8_t *getBinary(int32_t &length, UErrorCode &errorCode) const override;
+    virtual ResourceArray getArray(UErrorCode &errorCode) const override;
+    virtual ResourceTable getTable(UErrorCode &errorCode) const override;
+    virtual UBool isNoInheritanceMarker() const override;
     virtual int32_t getStringArray(UnicodeString *dest, int32_t capacity,
-                                   UErrorCode &errorCode) const;
+                                   UErrorCode &errorCode) const override;
     virtual int32_t getStringArrayOrStringAsArray(UnicodeString *dest, int32_t capacity,
-                                                  UErrorCode &errorCode) const;
-    virtual UnicodeString getStringOrFirstOfArray(UErrorCode &errorCode) const;
+                                                  UErrorCode &errorCode) const override;
+    virtual UnicodeString getStringOrFirstOfArray(UErrorCode &errorCode) const override;
 
 private:
     const ResourceData *pResData;

@@ -176,7 +176,7 @@ class UnhandledEngine : public LanguageBreakEngine {
   * @return true if this engine handles the particular character and break
   * type.
   */
-  virtual UBool handles(UChar32 c) const;
+  virtual UBool handles(UChar32 c) const override;
 
  /**
   * <p>Find any breaks within a run in the supplied text.</p>
@@ -194,7 +194,7 @@ class UnhandledEngine : public LanguageBreakEngine {
                               int32_t startPos,
                               int32_t endPos,
                               UVector32 &foundBreaks,
-                              UErrorCode &status) const;
+                              UErrorCode &status) const override;
 
  /**
   * <p>Tell the engine to handle a particular character and break type.</p>
@@ -247,7 +247,7 @@ class ICULanguageBreakFactory : public LanguageBreakFactory {
   * sought.
   * @return A LanguageBreakEngine with the desired characteristics, or 0.
   */
-  virtual const LanguageBreakEngine *getEngineFor(UChar32 c);
+  virtual const LanguageBreakEngine *getEngineFor(UChar32 c) override;
 
 protected:
  /**

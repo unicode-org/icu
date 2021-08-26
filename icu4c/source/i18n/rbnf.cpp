@@ -271,11 +271,11 @@ public:
     static StringLocalizationInfo* create(const UnicodeString& info, UParseError& perror, UErrorCode& status);
     
     virtual ~StringLocalizationInfo();
-    virtual int32_t getNumberOfRuleSets(void) const { return numRuleSets; }
-    virtual const UChar* getRuleSetName(int32_t index) const;
-    virtual int32_t getNumberOfDisplayLocales(void) const { return numLocales; }
-    virtual const UChar* getLocaleName(int32_t index) const;
-    virtual const UChar* getDisplayName(int32_t localeIndex, int32_t ruleIndex) const;
+    virtual int32_t getNumberOfRuleSets(void) const override { return numRuleSets; }
+    virtual const UChar* getRuleSetName(int32_t index) const override;
+    virtual int32_t getNumberOfDisplayLocales(void) const override { return numLocales; }
+    virtual const UChar* getLocaleName(int32_t index) const override;
+    virtual const UChar* getDisplayName(int32_t localeIndex, int32_t ruleIndex) const override;
     
 //    virtual UClassID getDynamicClassID() const;
 //    static UClassID getStaticClassID(void);

@@ -292,7 +292,7 @@ public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      */
-    virtual UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const override;
 
 private:
     int32_t indexOf(UElement key, int32_t startIndex = 0, int8_t hint = 0) const;
@@ -374,7 +374,7 @@ public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      */
-    virtual UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const override;
 
     // Disallow
     UStack(const UStack&) = delete;

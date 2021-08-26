@@ -502,7 +502,7 @@ public:
      * @see cloneAsThawed
      * @stable ICU 2.0
      */
-    virtual UnicodeSet* clone() const;
+    virtual UnicodeSet* clone() const override;
 
     /**
      * Returns the hash code value for this set.
@@ -704,7 +704,7 @@ public:
      * @stable ICU 2.0
      */
     virtual UnicodeString& toPattern(UnicodeString& result,
-                                     UBool escapeUnprintable = false) const;
+                                     UBool escapeUnprintable = false) const override;
 
     /**
      * Modifies this set to contain those code points which have the given value
@@ -802,7 +802,7 @@ public:
      * @return true if the test condition is met
      * @stable ICU 2.0
      */
-    virtual UBool contains(UChar32 c) const;
+    virtual UBool contains(UChar32 c) const override;
 
     /**
      * Returns true if this set contains every character
@@ -1011,7 +1011,7 @@ public:
     virtual UMatchDegree matches(const Replaceable& text,
                          int32_t& offset,
                          int32_t limit,
-                         UBool incremental);
+                         UBool incremental) override;
 
 private:
     /**
@@ -1060,7 +1060,7 @@ public:
      * @param toUnionTo the set into which to union the source characters
      * @stable ICU 2.4
      */
-    virtual void addMatchSetTo(UnicodeSet& toUnionTo) const;
+    virtual void addMatchSetTo(UnicodeSet& toUnionTo) const override;
 
     /**
      * Returns the index of the given character within this set, where
@@ -1521,7 +1521,7 @@ public:
      * different class IDs.
      * @stable ICU 2.4
      */
-    virtual UClassID getDynamicClassID(void) const;
+    virtual UClassID getDynamicClassID(void) const override;
 
 private:
 
@@ -1542,7 +1542,7 @@ private:
      * is the given value.  This is used by <tt>RuleBasedTransliterator</tt> for
      * indexing.
      */
-    virtual UBool matchesIndexValue(uint8_t v) const;
+    virtual UBool matchesIndexValue(uint8_t v) const override;
 
 private:
     friend class RBBIRuleScanner;

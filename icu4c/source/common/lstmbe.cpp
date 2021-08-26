@@ -93,8 +93,8 @@ public:
     }
 
     // ReadArray1D methods.
-    virtual int32_t d1() const { return d1_; }
-    virtual float get(int32_t i) const {
+    virtual int32_t d1() const override { return d1_; }
+    virtual float get(int32_t i) const override {
         U_ASSERT(i < d1_);
         return data_[i];
     }
@@ -131,9 +131,9 @@ public:
     }
 
     // ReadArray2D methods.
-    inline int32_t d1() const { return d1_; }
-    inline int32_t d2() const { return d2_; }
-    float get(int32_t i, int32_t j) const {
+    inline int32_t d1() const override { return d1_; }
+    inline int32_t d2() const override { return d2_; }
+    float get(int32_t i, int32_t j) const override {
         U_ASSERT(i < d1_);
         U_ASSERT(j < d2_);
         return data_[i * d2_ + j];
@@ -182,8 +182,8 @@ public:
         : memory_(nullptr), data_(data), d1_(d1) {}
 
     // ReadArray1D methods.
-    virtual int32_t d1() const { return d1_; }
-    virtual float get(int32_t i) const {
+    virtual int32_t d1() const override { return d1_; }
+    virtual float get(int32_t i) const override {
         U_ASSERT(i < d1_);
         return data_[i];
     }
@@ -313,9 +313,9 @@ public:
     virtual ~Array2D();
 
     // ReadArray2D methods.
-    virtual int32_t d1() const { return d1_; }
-    virtual int32_t d2() const { return d2_; }
-    virtual float get(int32_t i, int32_t j) const {
+    virtual int32_t d1() const override { return d1_; }
+    virtual int32_t d2() const override { return d2_; }
+    virtual float get(int32_t i, int32_t j) const override {
         U_ASSERT(i < d1_);
         U_ASSERT(j < d2_);
         return data_[i * d2_ + j];
@@ -508,7 +508,7 @@ public:
     virtual ~CodePointsVectorizer();
     virtual void vectorize(UText *text, int32_t startPos, int32_t endPos,
                            UVector32 &offsets, UVector32 &indices,
-                           UErrorCode &status) const;
+                           UErrorCode &status) const override;
 };
 
 CodePointsVectorizer::~CodePointsVectorizer()
@@ -547,7 +547,7 @@ public:
     virtual ~GraphemeClusterVectorizer();
     virtual void vectorize(UText *text, int32_t startPos, int32_t endPos,
                            UVector32 &offsets, UVector32 &indices,
-                           UErrorCode &status) const;
+                           UErrorCode &status) const override;
 };
 
 GraphemeClusterVectorizer::~GraphemeClusterVectorizer()
