@@ -90,11 +90,6 @@ jobs:
     - checkout: self
       lfs: true
       fetchDepth: 10
-    # This is to work-around issue: https://github.com/actions/virtual-environments/issues/3376
-    # Once the Ubuntu 18.04 build bot image is fixed, we can remove this work-around.
-    - script: |
-        sudo apt remove libgcc-11-dev gcc-11
-      displayName: Remove GCC 11 (work-around)
     - script: |
         export CXXFLAGS="-std=c++17 -Winvalid-constexpr" && cd icu4c/source && ./runConfigureICU --enable-debug --disable-release Linux && make -j2 check
       displayName: 'Build and Test C++17'
