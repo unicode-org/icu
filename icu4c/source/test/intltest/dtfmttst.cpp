@@ -400,7 +400,7 @@ DateFormatTest::TestTwoDigitYearDSTParse(void)
     UnicodeString str;
 
     if(U_FAILURE(status)) {
-        dataerrln("Could not set up test. exitting - %s", u_errorName(status));
+        dataerrln("Could not set up test. exiting - %s", u_errorName(status));
         return;
     }
 

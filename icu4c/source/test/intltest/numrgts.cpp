@@ -515,7 +515,7 @@ void NumberFormatRegressionTest::Test4086575(void)
     // TODO: There is not a good way to find out that the creation of this number format has
     // failed. Major rewiring of format construction proposed.
     if(U_FAILURE(status)) {
-      dataerrln("Something is wrong with French number format - it should not fallback. Exitting - %s", u_errorName(status));
+      dataerrln("Something is wrong with French number format - it should not fallback. Exiting - %s", u_errorName(status));
       delete nf1;
       return;
     }

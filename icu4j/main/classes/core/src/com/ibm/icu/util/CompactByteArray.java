@@ -24,7 +24,7 @@ import com.ibm.icu.impl.Utility;
  *     <LI>Smaller memory footprint.
  * </UL>
  * A compact array is composed of a index array and value array.  The index
- * array contains the indicies of Unicode characters to the value array.
+ * array contains the indices of Unicode characters to the value array.
  *
  * @see                CompactCharArray
  * @author             Helena Shih
@@ -81,7 +81,7 @@ public final class CompactByteArray implements Cloneable {
 
     /**
      * Constructor for CompactByteArray.
-     * @param indexArray the indicies of the compact array.
+     * @param indexArray the indices of the compact array.
      * @param newValues the values of the compact array.
      * @exception IllegalArgumentException If the index is out of range.
      * @internal
@@ -107,7 +107,7 @@ public final class CompactByteArray implements Cloneable {
     /**
      * Constructor for CompactByteArray.
      *
-     * @param indexArray the RLE-encoded indicies of the compact array.
+     * @param indexArray the RLE-encoded indices of the compact array.
      * @param valueArray the RLE-encoded values of the compact array.
      *
      * @throws IllegalArgumentException if the index or value array is

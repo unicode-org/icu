@@ -85,7 +85,7 @@ void Test4029195()
     if(fmdt) {
       log_verbose("today: %s\n", austrdup(fmdt));
     } else {
-      log_data_err("ERROR: couldn't format, exitting test");
+      log_data_err("ERROR: couldn't format, exiting test");
       return;
     }
     
@@ -424,7 +424,7 @@ void Test4073003()
         result =myFormatit(fmt, d);
         result2 =myFormatit(fmt, dd);
         if(!result || !result2) {
-            log_data_err("Fail: could not format - exitting test\n");
+            log_data_err("Fail: could not format - exiting test\n");
             return;
         }
         if (u_strcmp(result, result2)!=0){
@@ -491,7 +491,7 @@ void Test714(void)
     }
     result =myFormatit(fmt, d);
     if(!result) {
-      log_data_err("Fail: could not format - exitting test\n");
+      log_data_err("Fail: could not format - exiting test\n");
       return;
     }
     u_uastrcpy(temp, expect);

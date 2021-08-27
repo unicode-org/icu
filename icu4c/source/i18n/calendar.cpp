@@ -956,7 +956,7 @@ Calendar::makeInstance(const Locale& aLocale, UErrorCode& success) {
 #ifdef U_DEBUG_CALSVC
         fprintf(stderr, "%p: setting week count data to locale %s, actual locale %s\n", c, (const char*)aLocale.getName(), (const char *)actualLoc.getName());
 #endif
-        c->setWeekData(aLocale, c->getType(), success);  // set the correct locale (this was an indirected calendar)
+        c->setWeekData(aLocale, c->getType(), success);  // set the correct locale (this was an indirect calendar)
 
         char keyword[ULOC_FULLNAME_CAPACITY] = "";
         UErrorCode tmpStatus = U_ZERO_ERROR;
