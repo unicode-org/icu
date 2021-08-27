@@ -143,12 +143,12 @@ void PluralRulesTest::testAPI(/*char *par*/)
     PluralRules defRule(status);
     LocalPointer<PluralRules> test(new PluralRules(status), status);
     if(U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create PluralRules (default) - exitting");
+        dataerrln("ERROR: Could not create PluralRules (default) - exiting");
         return;
     }
     LocalPointer<PluralRules> newEnPlural(test->forLocale(Locale::getEnglish(), status), status);
     if(U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create PluralRules (English) - exitting");
+        dataerrln("ERROR: Could not create PluralRules (English) - exiting");
         return;
     }
 
@@ -177,7 +177,7 @@ void PluralRulesTest::testAPI(/*char *par*/)
     for (int32_t i=0; i<10; ++i) {
         key = empRule->select(i);
         if ( key.charAt(0)!= 0x61 ) { // 'a'
-            errln("ERROR:  empty plural rules test failed! - exitting");
+            errln("ERROR:  empty plural rules test failed! - exiting");
         }
     }
 
@@ -191,7 +191,7 @@ void PluralRulesTest::testAPI(/*char *par*/)
        LocalPointer<PluralRules> newRules(test->createRules(pluralTestData[i], status));
        setupResult(pluralTestResult[i], result, &max);
        if ( !checkEqual(*newRules, result, max) ) {
-            errln("ERROR:  simple plural rules failed! - exitting");
+            errln("ERROR:  simple plural rules failed! - exiting");
             return;
         }
     }
@@ -219,12 +219,12 @@ void PluralRulesTest::testAPI(/*char *par*/)
     };
     LocalPointer<PluralRules> newRules(test->createRules(complexRule, status));
     if ( !checkEqual(*newRules, cRuleResult, 12) ) {
-         errln("ERROR:  complex plural rules failed! - exitting");
+         errln("ERROR:  complex plural rules failed! - exiting");
          return;
     }
     newRules.adoptInstead(test->createRules(complexRule2, status));
     if ( !checkEqual(*newRules, cRuleResult, 12) ) {
-         errln("ERROR:  complex plural rules failed! - exitting");
+         errln("ERROR:  complex plural rules failed! - exiting");
          return;
     }
 
@@ -234,7 +234,7 @@ void PluralRulesTest::testAPI(/*char *par*/)
     status = U_ZERO_ERROR;
     newRules.adoptInstead(test->createRules(decimalRule, status));
     if (U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create PluralRules for testing fractions - exitting");
+        dataerrln("ERROR: Could not create PluralRules for testing fractions - exiting");
         return;
     }
     double fData[] =     {-101, -100, -1,     -0.0,  0,     0.1,  1,     1.999,  2.0,   100,   100.001 };
@@ -250,7 +250,7 @@ void PluralRulesTest::testAPI(/*char *par*/)
     logln("Testing Equality of PluralRules");
 
     if ( !testEquality(*test) ) {
-         errln("ERROR:  complex plural rules failed! - exitting");
+         errln("ERROR:  complex plural rules failed! - exiting");
          return;
      }
 

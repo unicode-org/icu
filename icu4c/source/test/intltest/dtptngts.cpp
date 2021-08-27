@@ -445,7 +445,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
 
     DateTimePatternGenerator *instFromDefaultLocale=DateTimePatternGenerator::createInstance(status);
     if (U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create DateTimePatternGenerator (default) - exitting");
+        dataerrln("ERROR: Could not create DateTimePatternGenerator (default) - exiting");
         return;
     }
     else {
@@ -457,7 +457,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     status = U_ZERO_ERROR;
     DateTimePatternGenerator *instFromLocale=DateTimePatternGenerator::createInstance(Locale::getFrench(), status);
     if (U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create DateTimePatternGenerator (Locale::getFrench()) - exitting");
+        dataerrln("ERROR: Could not create DateTimePatternGenerator (Locale::getFrench()) - exiting");
         return;
     }
 
@@ -493,7 +493,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     UDate sampleDate=LocaleTest::date(99, 9, 13, 23, 58, 59);
     DateTimePatternGenerator *gen = DateTimePatternGenerator::createInstance(deLocale, status);
     if (U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create DateTimePatternGenerator (Locale::getGermany()) - exitting");
+        dataerrln("ERROR: Could not create DateTimePatternGenerator (Locale::getGermany()) - exiting");
         return;
     }
     UnicodeString findPattern = gen->getBestPattern(UnicodeString("MMMddHmm"), status);
@@ -702,7 +702,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         logln("\n\n Locale: %s_%s_%s@%s", testLocale[localeIndex][0], testLocale[localeIndex][1], testLocale[localeIndex][2], testLocale[localeIndex][3]);
         DateTimePatternGenerator *patGen=DateTimePatternGenerator::createInstance(loc, status);
         if(U_FAILURE(status)) {
-            dataerrln("ERROR: Could not create DateTimePatternGenerator with locale index:%d . - exitting\n", localeIndex);
+            dataerrln("ERROR: Could not create DateTimePatternGenerator with locale index:%d . - exiting\n", localeIndex);
             return;
         }
         while (patternData[dataIndex].length() > 0) {
@@ -740,7 +740,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         logln("\n\n Test various skeletons for English locale...");
         DateTimePatternGenerator *patGen=DateTimePatternGenerator::createInstance(Locale::getEnglish(), status);
         if(U_FAILURE(status)) {
-            dataerrln("ERROR: Could not create DateTimePatternGenerator with locale English . - exitting\n");
+            dataerrln("ERROR: Could not create DateTimePatternGenerator with locale English . - exiting\n");
             return;
         }
         TimeZone *enZone = TimeZone::createTimeZone(UnicodeString("ECT/GMT"));
@@ -777,7 +777,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     // ======= Test random skeleton
     DateTimePatternGenerator *randDTGen= DateTimePatternGenerator::createInstance(status);
     if (U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create DateTimePatternGenerator (Locale::getFrench()) - exitting");
+        dataerrln("ERROR: Could not create DateTimePatternGenerator (Locale::getFrench()) - exiting");
         return;
     }
     UChar newChar;
@@ -812,7 +812,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
 
     test = DateTimePatternGenerator::createEmptyInstance(status);
     if(U_FAILURE(status)) {
-         errln("ERROR: Fail to create an empty instance ! - exitting.\n");
+         errln("ERROR: Fail to create an empty instance ! - exiting.\n");
          delete test;
          return;
     }

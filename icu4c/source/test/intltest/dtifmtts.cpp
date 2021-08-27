@@ -80,7 +80,7 @@ void DateIntervalFormatTest::testAPI() {
 
     DateIntervalFormat* dtitvfmt = DateIntervalFormat::createInstance(UDAT_YEAR_MONTH_DAY, status);
     if(U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create DateIntervalFormat (skeleton + default locale) - exitting");
+        dataerrln("ERROR: Could not create DateIntervalFormat (skeleton + default locale) - exiting");
         return;
     } else {
         delete dtitvfmt;
@@ -94,7 +94,7 @@ void DateIntervalFormatTest::testAPI() {
 
     dtitvfmt = DateIntervalFormat::createInstance(UDAT_YEAR_MONTH_DAY, Locale::getJapanese(), status);
     if(U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create DateIntervalFormat (skeleton + locale) - exitting");
+        dataerrln("ERROR: Could not create DateIntervalFormat (skeleton + locale) - exiting");
         return;
     } else {
         delete dtitvfmt;
@@ -112,7 +112,7 @@ void DateIntervalFormatTest::testAPI() {
     delete dtitvinf;
 
     if(U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create DateIntervalFormat (skeleton + DateIntervalInfo + default locale) - exitting");
+        dataerrln("ERROR: Could not create DateIntervalFormat (skeleton + DateIntervalInfo + default locale) - exiting");
         return;
     } else {
         delete dtitvfmt;
@@ -129,7 +129,7 @@ void DateIntervalFormatTest::testAPI() {
     dtitvfmt = DateIntervalFormat::createInstance("EEEdMMMyhms", Locale::getSimplifiedChinese(), *dtitvinf, status);
     delete dtitvinf;
     if(U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create DateIntervalFormat (skeleton + DateIntervalInfo + locale) - exitting");
+        dataerrln("ERROR: Could not create DateIntervalFormat (skeleton + DateIntervalInfo + locale) - exiting");
         return;
     }
     // not deleted, test clone
@@ -263,19 +263,19 @@ void DateIntervalFormatTest::testAPI() {
 
     DateIntervalFormat* dtifmt = new DateIntervalFormat(fmt, inf, status);
     if(U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create DateIntervalFormat (default) - exitting");
+        dataerrln("ERROR: Could not create DateIntervalFormat (default) - exiting");
         return;
     }
 
     DateIntervalFormat* dtifmt2 = new(dtifmt);
     if ( (*dtifmt) != (*dtifmt2) ) {
-        dataerrln("ERROR: Could not create DateIntervalFormat (default) - exitting");
+        dataerrln("ERROR: Could not create DateIntervalFormat (default) - exiting");
         return;
     }
 
     DateIntervalFormat dtifmt3 = (*dtifmt);
     if ( (*dtifmt) != dtifmt3 ) {
-        dataerrln("ERROR: Could not create DateIntervalFormat (default) - exitting");
+        dataerrln("ERROR: Could not create DateIntervalFormat (default) - exiting");
         return;
     }
 
@@ -293,7 +293,7 @@ void DateIntervalFormatTest::testAPI() {
     status = U_ZERO_ERROR;
     dtitvfmt->format(formattable, res, pos, status);
     if ( status != U_ILLEGAL_ARGUMENT_ERROR ) {
-        dataerrln("ERROR: format non-date-interval object should set U_ILLEGAL_ARGUMENT_ERROR - exitting");
+        dataerrln("ERROR: format non-date-interval object should set U_ILLEGAL_ARGUMENT_ERROR - exiting");
         return;
     }
 
@@ -304,7 +304,7 @@ void DateIntervalFormatTest::testAPI() {
     status = U_ZERO_ERROR;
     dtitvfmt->format(formattable, res, pos, status);
     if ( U_FAILURE(status) ) {
-        dataerrln("ERROR: format date interval failed - exitting");
+        dataerrln("ERROR: format date interval failed - exiting");
         return;
     }
 
@@ -316,7 +316,7 @@ void DateIntervalFormatTest::testAPI() {
     status = U_ZERO_ERROR;
     dtitvfmt->format(*fromCal, *toCal, res, pos, status);
     if ( U_FAILURE(status) ) {
-        dataerrln("ERROR: format date interval failed - exitting");
+        dataerrln("ERROR: format date interval failed - exiting");
         return;
     }
     delete fromCal;
@@ -328,7 +328,7 @@ void DateIntervalFormatTest::testAPI() {
     // TODO: why do I need cast?
     ((Format*)dtitvfmt)->parseObject(res, fmttable, status);
     if ( status != U_INVALID_FORMAT_ERROR ) {
-        dataerrln("ERROR: parse should set U_INVALID_FORMAT_ERROR - exitting");
+        dataerrln("ERROR: parse should set U_INVALID_FORMAT_ERROR - exiting");
         return;
     }
 

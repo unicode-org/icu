@@ -162,7 +162,7 @@ int main(int argc, const char* const argv[])
                     "*** Check the ICU_DATA environment variable and \n"
                     "*** check that the data files are present.\n", warnOrErr);
             if(!getTestOption(WARN_ON_MISSING_DATA_OPTION)) {
-                fprintf(stderr, "*** Exitting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
+                fprintf(stderr, "*** Exiting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
                 u_cleanup();
                 return 1;
             }
@@ -178,7 +178,7 @@ int main(int argc, const char* const argv[])
                     "*** Check the ICU_DATA environment variable and \n"
                     "*** check that the data files are present.\n", warnOrErr);
             if(!getTestOption(WARN_ON_MISSING_DATA_OPTION)) {
-                fprintf(stderr, "*** Exitting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
+                fprintf(stderr, "*** Exiting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
                 u_cleanup();
                 return 1;
             }
@@ -197,7 +197,7 @@ int main(int argc, const char* const argv[])
             fprintf(stderr,
                     "*** %s! Can not open a resource bundle for the default locale %s\n", warnOrErr, uloc_getDefault());
             if(!getTestOption(WARN_ON_MISSING_DATA_OPTION)) {
-                fprintf(stderr, "*** Exitting.  Use the '-w' option if data files were\n"
+                fprintf(stderr, "*** Exiting.  Use the '-w' option if data files were\n"
                     "*** purposely removed, to continue test anyway.\n");
                 u_cleanup();
                 return 1;
