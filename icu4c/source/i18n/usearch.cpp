@@ -72,25 +72,6 @@ inline uint32_t getMask(UCollationStrength strength)
     }
 }
 
-/**
-* @param ce 32-bit collation element
-* @return hash code
-*/
-static
-inline int hashFromCE32(uint32_t ce)
-{
-    int hc = (int)(
-            ((((((ce >> 24) * 37) +
-            (ce >> 16)) * 37) +
-            (ce >> 8)) * 37) +
-            ce);
-    hc %= MAX_TABLE_SIZE_;
-    if (hc < 0) {
-        hc += MAX_TABLE_SIZE_;
-    }
-    return hc;
-}
-
 U_CDECL_BEGIN
 static UBool U_CALLCONV
 usearch_cleanup(void) {
@@ -282,11 +263,9 @@ inline int64_t * addTouint64_tArray(int64_t    *destination,
 * @param strsrch string search data
 * @param status output error if any, caller to check status before calling
 *               method, status assumed to be success when passed in.
-* @return total number of expansions
 */
 static
-inline uint16_t initializePatternCETable(UStringSearch *strsrch,
-                                         UErrorCode    *status)
+inline void initializePatternCETable(UStringSearch *strsrch, UErrorCode *status)
 {
     UPattern *pattern            = &(strsrch->pattern);
     uint32_t  cetablesize        = INITIAL_ARRAY_SIZE_;
@@ -306,7 +285,7 @@ inline uint16_t initializePatternCETable(UStringSearch *strsrch,
         ucol_setText(coleiter, pattern->text, pattern->textLength, status);
     }
     if(U_FAILURE(*status)) {
-        return 0;
+        return;
     }
 
     if (pattern->ces != cetable && pattern->ces) {
@@ -314,7 +293,6 @@ inline uint16_t initializePatternCETable(UStringSearch *strsrch,
     }
 
     uint32_t  offset      = 0;
-    uint16_t  result      = 0;
     int32_t   ce;
 
     while ((ce = ucol_next(coleiter, status)) != UCOL_NULLORDER &&
@@ -326,7 +304,7 @@ inline uint16_t initializePatternCETable(UStringSearch *strsrch,
                                   patternlength - ucol_getOffset(coleiter) + 1,
                                   status);
             if (U_FAILURE(*status)) {
-                return 0;
+                return;
             }
             offset ++;
             if (cetable != temp && cetable != pattern->cesBuffer) {
@@ -334,14 +312,11 @@ inline uint16_t initializePatternCETable(UStringSearch *strsrch,
             }
             cetable = temp;
         }
-        result += (uint16_t)(ucol_getMaxExpansion(coleiter, ce) - 1);
     }
 
     cetable[offset]   = 0;
     pattern->ces       = cetable;
     pattern->cesLength = offset;
-
-    return result;
 }
 
 /**
@@ -354,10 +329,9 @@ inline uint16_t initializePatternCETable(UStringSearch *strsrch,
 * @param strsrch string search data
 * @param status output error if any, caller to check status before calling
 *               method, status assumed to be success when passed in.
-* @return total number of expansions
 */
 static
-inline uint16_t initializePatternPCETable(UStringSearch *strsrch,
+inline void initializePatternPCETable(UStringSearch *strsrch,
                                           UErrorCode    *status)
 {
     UPattern *pattern            = &(strsrch->pattern);
@@ -377,7 +351,7 @@ inline uint16_t initializePatternPCETable(UStringSearch *strsrch,
         ucol_setText(coleiter, pattern->text, pattern->textLength, status);
     }
     if(U_FAILURE(*status)) {
-        return 0;
+        return;
     }
 
     if (pattern->pces != pcetable && pattern->pces != NULL) {
@@ -385,7 +359,6 @@ inline uint16_t initializePatternPCETable(UStringSearch *strsrch,
     }
 
     uint32_t  offset = 0;
-    uint16_t  result = 0;
     int64_t   pce;
 
     icu::UCollationPCE iter(coleiter);
@@ -401,7 +374,7 @@ inline uint16_t initializePatternPCETable(UStringSearch *strsrch,
                               status);
 
         if (U_FAILURE(*status)) {
-            return 0;
+            return;
         }
 
         offset += 1;
@@ -411,28 +384,24 @@ inline uint16_t initializePatternPCETable(UStringSearch *strsrch,
         }
 
         pcetable = temp;
-        //result += (uint16_t)(ucol_getMaxExpansion(coleiter, ce) - 1);
     }
 
     pcetable[offset]   = 0;
     pattern->pces       = pcetable;
     pattern->pcesLength = offset;
-
-    return result;
 }
 
 /**
 * Initializes the pattern struct.
-* Internal method, status assumed to be success.
 * @param strsrch UStringSearch data storage
 * @param status output error if any, caller to check status before calling
 *               method, status assumed to be success when passed in.
-* @return expansionsize the total expansion size of the pattern
 */
 static
-inline int16_t initializePattern(UStringSearch *strsrch, UErrorCode *status)
+inline void initializePattern(UStringSearch *strsrch, UErrorCode *status)
 {
-    if (U_FAILURE(*status)) { return 0; }
+    if (U_FAILURE(*status)) { return; }
+
           UPattern   *pattern     = &(strsrch->pattern);
     const UChar      *patterntext = pattern->text;
           int32_t     length      = pattern->textLength;
@@ -460,82 +429,11 @@ inline int16_t initializePattern(UStringSearch *strsrch, UErrorCode *status)
         strsrch->pattern.pces = NULL;
     }
 
-    // since intializePattern is an internal method status is a success.
-    return initializePatternCETable(strsrch, status);
+    initializePatternCETable(strsrch, status);
 }
 
 /**
-* Initializing shift tables, with the default values.
-* If a corresponding default value is 0, the shift table is not set.
-* @param shift table for forwards shift
-* @param backshift table for backwards shift
-* @param cetable table containing pattern ce
-* @param cesize size of the pattern ces
-* @param expansionsize total size of the expansions
-* @param defaultforward the default forward value
-* @param defaultbackward the default backward value
-*/
-static
-inline void setShiftTable(int16_t   shift[], int16_t backshift[],
-                          int32_t  *cetable, int32_t cesize,
-                          int16_t   expansionsize,
-                          int16_t   defaultforward,
-                          int16_t   defaultbackward)
-{
-    // estimate the value to shift. to do that we estimate the smallest
-    // number of characters to give the relevant ces, ie approximately
-    // the number of ces minus their expansion, since expansions can come
-    // from a character.
-    int32_t count;
-    for (count = 0; count < MAX_TABLE_SIZE_; count ++) {
-        shift[count] = defaultforward;
-    }
-    cesize --; // down to the last index
-    for (count = 0; count < cesize; count ++) {
-        // number of ces from right of array to the count
-        int temp = defaultforward - count - 1;
-        shift[hashFromCE32(cetable[count])] = temp > 1 ? static_cast<int16_t>(temp) : 1;
-    }
-    shift[hashFromCE32(cetable[cesize])] = 1;
-    // for ignorables we just shift by one. see test examples.
-    shift[hashFromCE32(0)] = 1;
-
-    for (count = 0; count < MAX_TABLE_SIZE_; count ++) {
-        backshift[count] = defaultbackward;
-    }
-    for (count = cesize; count > 0; count --) {
-        // the original value count does not seem to work
-        backshift[hashFromCE32(cetable[count])] = count > expansionsize ?
-                                          (int16_t)(count - expansionsize) : 1;
-    }
-    backshift[hashFromCE32(cetable[0])] = 1;
-    backshift[hashFromCE32(0)] = 1;
-}
-
-/**
-* Building of the pattern collation element list and the boyer moore strsrch
-* table.
-* The canonical match will only be performed after the default match fails.
-* For both cases we need to remember the size of the composed and decomposed
-* versions of the string. Since the Boyer-Moore shift calculations shifts by
-* a number of characters in the text and tries to match the pattern from that
-* offset, the shift value can not be too large in case we miss some
-* characters. To choose a right shift size, we estimate the NFC form of the
-* and use its size as a shift guide. The NFC form should be the small
-* possible representation of the pattern. Anyways, we'll err on the smaller
-* shift size. Hence the calculation for minlength.
-* Canonical match will be performed slightly differently. We'll split the
-* pattern into 3 parts, the prefix accents (PA), the middle string bounded by
-* the first and last base character (MS), the ending accents (EA). Matches
-* will be done on MS first, and only when we match MS then some processing
-* will be required for the prefix and end accents in order to determine if
-* they match PA and EA. Hence the default shift values
-* for the canonical match will take the size of either end's accent into
-* consideration. Forwards search will take the end accents into consideration
-* for the default shift values and the backwards search will take the prefix
-* accents into consideration.
-* If pattern has no non-ignorable ce, we return a illegal argument error.
-* Internal method, status assumed to be success.
+* Initializes the pattern struct and builds the pattern collation element table.
 * @param strsrch UStringSearch data storage
 * @param status  for output errors if it occurs, status is assumed to be a
 *                success when it is passed in.
@@ -543,19 +441,7 @@ inline void setShiftTable(int16_t   shift[], int16_t backshift[],
 static
 inline void initialize(UStringSearch *strsrch, UErrorCode *status)
 {
-    int16_t expandlength  = initializePattern(strsrch, status);
-    if (U_SUCCESS(*status) && strsrch->pattern.cesLength > 0) {
-        UPattern *pattern = &strsrch->pattern;
-        int32_t   cesize  = pattern->cesLength;
-
-        int16_t minlength = cesize > expandlength
-                            ? (int16_t)cesize - expandlength : 1;
-        pattern->defaultShiftSize    = minlength;
-        setShiftTable(pattern->shift, pattern->backShift, pattern->ces,
-                      cesize, expandlength, minlength, minlength);
-        return;
-    }
-    strsrch->pattern.defaultShiftSize = 0;
+    initializePattern(strsrch, status);
 }
 
 /**

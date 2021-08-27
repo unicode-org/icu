@@ -127,7 +127,6 @@ private:
 U_NAMESPACE_END
 
 #define INITIAL_ARRAY_SIZE_       256
-#define MAX_TABLE_SIZE_           257
 
 struct USearch {
     // required since collation element iterator does not have a getText API
@@ -160,9 +159,6 @@ struct UPattern {
           int64_t             pcesBuffer[INITIAL_ARRAY_SIZE_];
           UBool               hasPrefixAccents;
           UBool               hasSuffixAccents;
-          int16_t             defaultShiftSize;
-          int16_t             shift[MAX_TABLE_SIZE_];
-          int16_t             backShift[MAX_TABLE_SIZE_];
 };
 
 struct UStringSearch {
@@ -182,8 +178,6 @@ struct UStringSearch {
            uint32_t            ceMask;
            uint32_t            variableTop;
            UBool               toShift;
-           UChar               canonicalPrefixAccents[INITIAL_ARRAY_SIZE_];
-           UChar               canonicalSuffixAccents[INITIAL_ARRAY_SIZE_];
 };
 
 /**
