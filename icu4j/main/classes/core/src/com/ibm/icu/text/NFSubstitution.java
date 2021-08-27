@@ -9,6 +9,7 @@
 package com.ibm.icu.text;
 
 import java.text.ParsePosition;
+import java.math.BigDecimal;
 
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 
@@ -1275,7 +1276,7 @@ class FractionalPartSubstitution extends NFSubstitution {
      */
     @Override
   public double transformNumber(double number) {
-        return number - Math.floor(number);
+        return BigDecimal.valueOf(number).subtract(BigDecimal.valueOf(Math.floor(number))).doubleValue();
     }
 
     //-----------------------------------------------------------------------
