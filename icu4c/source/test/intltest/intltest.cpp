@@ -1606,7 +1606,7 @@ main(int argc, char* argv[])
 }
 
 const char* IntlTest::loadTestData(UErrorCode& err){
-    if( _testDataPath == NULL){
+    if ( _testDataPath == NULL){
         const char*      directory=NULL;
         UResourceBundle* test =NULL;
         char* tdpath=NULL;
@@ -1622,6 +1622,11 @@ const char* IntlTest::loadTestData(UErrorCode& err){
 
         tdpath = (char*) malloc(sizeof(char) *(( strlen(directory) * strlen(tdrelativepath)) + 100));
 
+        if (tdpath == NULL) {
+            err = U_MEMORY_ALLOCATION_ERROR;
+            it_dataerrln((UnicodeString) "Could not allocate memory for _testDataPath " + u_errorName(err));
+            return "";
+        }
 
         /* u_getDataDirectory shoul return \source\data ... set the
          * directory to ..\source\data\..\test\testdata\out\testdata
@@ -1632,7 +1637,7 @@ const char* IntlTest::loadTestData(UErrorCode& err){
 
         test=ures_open(tdpath, "testtypes", &err);
 
-        if(U_FAILURE(err)){
+        if (U_FAILURE(err)) {
             err = U_FILE_ACCESS_ERROR;
             it_dataerrln((UnicodeString)"Could not load testtypes.res in testdata bundle with path " + tdpath + (UnicodeString)" - " + u_errorName(err));
             return "";

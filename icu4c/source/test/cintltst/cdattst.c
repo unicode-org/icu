@@ -2007,9 +2007,9 @@ static void TestNarrowQuarters(void) {
         
         if (assertSuccess("Parsing date failed", &err)) {
             if (patternIsStandaloneQuarter) {
-                assertIntEquals("Wrong parsing result", expectedStandaloneParsedDate, parsedDate);
+                assertDoubleEquals("Wrong parsing result", expectedStandaloneParsedDate, parsedDate);
             } else {
-                assertIntEquals("Wrong parsing result", expectedFormatParsedDate, parsedDate);
+                assertDoubleEquals("Wrong parsing result", expectedFormatParsedDate, parsedDate);
             }
         }
         

@@ -151,7 +151,7 @@ U_CFUNC UBool assertUEquals(const char* msg, const UChar* expectedString,
                             const UChar* actualString);
 
 /**
- * Assert that two 64-bit integers are equal, returning TRUE if they do.
+ * Assert that two 64-bit integers are equal, returning TRUE if they are.
  */
 U_CFUNC UBool assertIntEquals(const char* msg, int64_t expected, int64_t actual);
 
@@ -160,6 +160,11 @@ U_CFUNC UBool assertIntEquals(const char* msg, int64_t expected, int64_t actual)
  * TRUE if they are equal.
  */
 U_CFUNC UBool assertPtrEquals(const char* msg, const void* expected, const void* actual);
+
+/**
+ * Assert that two doubles are equal, returning TRUE if they are.
+ */
+U_CFUNC UBool assertDoubleEquals(const char *msg, double expected, double actual);
 
 /*
  * note - isICUVersionBefore and isICUVersionAtLeast have been removed.
