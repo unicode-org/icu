@@ -238,7 +238,7 @@ void PluralRulesTest::testAPI(/*char *par*/)
         return;
     }
     double fData[] =     {-101, -100, -1,     -0.0,  0,     0.1,  1,     1.999,  2.0,   100,   100.001 };
-    UBool isKeywordA[] = {TRUE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE,   FALSE, FALSE, TRUE };
+    bool isKeywordA[] = {true, false, false, false, false, true, false,  true,   false, false, true };
     for (int32_t i=0; i<UPRV_LENGTHOF(fData); i++) {
         if ((newRules->select(fData[i])== KEYWORD_A) != isKeywordA[i]) {
              errln("File %s, Line %d, ERROR: plural rules for decimal fractions test failed!\n"

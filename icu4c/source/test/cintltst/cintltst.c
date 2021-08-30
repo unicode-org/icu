@@ -794,4 +794,17 @@ U_CFUNC UBool assertPtrEquals(const char* message, const void* expected, const v
     return TRUE;
 }
 
+U_CFUNC UBool assertDoubleEquals(const char *message, double expected, double actual) {
+    if (expected != actual) {
+        log_err("FAIL: %s; got \"%f\"; expected \"%f\"\n", message, actual, expected);
+        return FALSE;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        log_verbose("Ok: %s; got \"%f\"\n", message, actual);
+    }
+#endif
+    return TRUE;
+}
+
 #endif

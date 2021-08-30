@@ -20,6 +20,7 @@
 
 #include <cstddef>
 #include <string.h>
+#include <limits>
 
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
@@ -861,11 +862,11 @@ void StringTest::TestCharStrAppendNumber() {
     assertEquals("TestAppendNumber 12345 and then 123", "12345123", testString.data());
 
     testString.clear();
-    testString.appendNumber(2147483647, errorCode);
+    testString.appendNumber(std::numeric_limits<int32_t>::max(), errorCode);
     assertEquals("TestAppendNumber when appending the biggest int32", "2147483647", testString.data());
 
     testString.clear();
-    testString.appendNumber(-2147483648, errorCode);
+    testString.appendNumber(std::numeric_limits<int32_t>::min(), errorCode);
     assertEquals("TestAppendNumber when appending the smallest int32", "-2147483648", testString.data());
 
     testString.clear();
