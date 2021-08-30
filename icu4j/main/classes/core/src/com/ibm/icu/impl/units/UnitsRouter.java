@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ibm.icu.impl.IllegalIcuArgumentException;
+import com.ibm.icu.impl.number.DecimalQuantity;
+import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.MicroProps;
 import com.ibm.icu.number.Precision;
 import com.ibm.icu.util.MeasureUnit;
@@ -83,13 +85,14 @@ public class UnitsRouter {
     }
 
     /** If micros.rounder is a BogusRounder, this function replaces it with a valid one. */
-    public RouteResult route(BigDecimal quantity, MicroProps micros) {
+    public RouteResult route(DecimalQuantity quantity, MicroProps micros) {
         Precision rounder = micros == null ? null : micros.rounder;
         ConverterPreference converterPreference = null;
         for (ConverterPreference itr : converterPreferences_) {
             converterPreference = itr;
-            if (converterPreference.converter.greaterThanOrEqual(quantity.abs(),
-                                                                 converterPreference.limit)) {
+            DecimalQuantity forChoosingPref = new DecimalQuantity_DualStorageBCD(quantity.toBigDecimal().abs());
+            if (converterPreference.converter.greaterThanOrEqual(forChoosingPref,
+                    converterPreference.limit)) {
                 break;
             }
         }

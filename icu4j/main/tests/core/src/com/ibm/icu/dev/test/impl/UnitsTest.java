@@ -17,6 +17,8 @@ import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.Pair;
+import com.ibm.icu.impl.number.DecimalQuantity;
+import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.units.ComplexUnitsConverter;
 import com.ibm.icu.impl.units.ConversionRates;
 import com.ibm.icu.impl.units.MeasureUnitImpl;
@@ -43,12 +45,16 @@ public class UnitsTest {
         class TestCase {
             String input;
             String output;
-            BigDecimal value;
+            DecimalQuantity value;
             Measure[] expected;
             // For mixed units, accuracy of the smallest unit
             double accuracy;
 
             TestCase(String input, String output, BigDecimal value, Measure[] expected, double accuracy) {
+                this(input,output,new DecimalQuantity_DualStorageBCD(value), expected, accuracy);
+            }
+
+            TestCase(String input, String output, DecimalQuantity value, Measure[] expected, double accuracy) {
                 this.input = input;
                 this.output = output;
                 this.value = value;
@@ -180,7 +186,7 @@ public class UnitsTest {
             String message;
             String inputUnit;
             String outputUnit;
-            double inputValue;
+            DecimalQuantity inputValue;
             Measure[] expectedMeasures;
             double accuracy;
 
@@ -188,7 +194,7 @@ public class UnitsTest {
                 this.message = message;
                 this.inputUnit = inputUnit;
                 this.outputUnit = outputUnit;
-                this.inputValue = inputValue;
+                this.inputValue = new DecimalQuantity_DualStorageBCD(inputValue);
                 this.expectedMeasures = expectedMeasures;
                 this.accuracy = accuracy;
             }
@@ -226,7 +232,7 @@ public class UnitsTest {
             MeasureUnitImpl output = MeasureUnitImpl.forIdentifier(testCase.outputUnit);
 
             ComplexUnitsConverter converter = new ComplexUnitsConverter(input, output, conversionRates);
-            List<Measure> actualMeasures = converter.convert(BigDecimal.valueOf(testCase.inputValue), null).measures;
+            List<Measure> actualMeasures = converter.convert(testCase.inputValue, null).measures;
 
             assertEquals(testCase.message, testCase.expectedMeasures.length, actualMeasures.size());
             for (int i = 0; i < testCase.expectedMeasures.length; i++) {
@@ -373,14 +379,20 @@ public class UnitsTest {
         class TestData {
             final String sourceIdentifier;
             final String targetIdentifier;
-            final BigDecimal input;
-            final BigDecimal expected;
+            final DecimalQuantity input;
+            final DecimalQuantity expected;
 
             TestData(String sourceIdentifier, String targetIdentifier, double input, double expected) {
+                this(sourceIdentifier, targetIdentifier, new DecimalQuantity_DualStorageBCD(input),
+                        new DecimalQuantity_DualStorageBCD(expected));
+            }
+
+            TestData(String sourceIdentifier, String targetIdentifier, DecimalQuantity input,
+                    DecimalQuantity expected) {
                 this.sourceIdentifier = sourceIdentifier;
                 this.targetIdentifier = targetIdentifier;
-                this.input = BigDecimal.valueOf(input);
-                this.expected = BigDecimal.valueOf(expected);
+                this.input = input;
+                this.expected = expected;
             }
         }
         TestData[] tests = {
@@ -445,21 +457,21 @@ public class UnitsTest {
 
             UnitsConverter converter = new UnitsConverter(source, target, conversionRates);
 
-            double maxDelta = 1e-6 * Math.abs(test.expected.doubleValue());
-            if (test.expected.doubleValue() == 0) {
+            double maxDelta = 1e-6 * Math.abs(test.expected.toBigDecimal().doubleValue());
+            if (test.expected.toDouble() == 0) {
                 maxDelta = 1e-12;
             }
             assertEquals("testConverter: " + test.sourceIdentifier + " to " + test.targetIdentifier,
-                    test.expected.doubleValue(), converter.convert(test.input).doubleValue(),
+                    test.expected.toDouble(), converter.convert(test.input).toDouble(),
                     maxDelta);
 
-            maxDelta = 1e-6 * Math.abs(test.input.doubleValue());
-            if (test.input.doubleValue() == 0) {
+            maxDelta = 1e-6 * Math.abs(test.input.toDouble());
+            if (test.input.toDouble() == 0) {
                 maxDelta = 1e-12;
             }
             assertEquals(
                     "testConverter inverse: " + test.targetIdentifier + " back to " + test.sourceIdentifier,
-                    test.input.doubleValue(), converter.convertInverse(test.expected).doubleValue(),
+                    test.input.toDouble(), converter.convertInverse(test.expected).toDouble(),
                     maxDelta);
 
 
@@ -467,20 +479,20 @@ public class UnitsTest {
             // Test UnitsConverter created by CLDR unit identifiers
             UnitsConverter converter2 = new UnitsConverter(test.sourceIdentifier, test.targetIdentifier);
 
-            maxDelta = 1e-6 * Math.abs(test.expected.doubleValue());
-            if (test.expected.doubleValue() == 0) {
+            maxDelta = 1e-6 * Math.abs(test.expected.toDouble());
+            if (test.expected.toDouble() == 0) {
                 maxDelta = 1e-12;
             }
             assertEquals("testConverter2: " + test.sourceIdentifier + " to " + test.targetIdentifier,
-                    test.expected.doubleValue(), converter2.convert(test.input).doubleValue(),
+                    test.expected.toDouble(), converter2.convert(test.input).toDouble(),
                     maxDelta);
 
-            maxDelta = 1e-6 * Math.abs(test.input.doubleValue());
-            if (test.input.doubleValue() == 0) {
+            maxDelta = 1e-6 * Math.abs(test.input.toDouble());
+            if (test.input.toDouble() == 0) {
                 maxDelta = 1e-12;
             }
             assertEquals("testConverter2 inverse: " + test.targetIdentifier + " back to " + test.sourceIdentifier,
-                    test.input.doubleValue(), converter2.convertInverse(test.expected).doubleValue(),
+                    test.input.toDouble(), converter2.convertInverse(test.expected).toDouble(),
                     maxDelta);
         }
     }
@@ -493,8 +505,8 @@ public class UnitsTest {
             String targetString;
             MeasureUnitImpl source;
             MeasureUnitImpl target;
-            BigDecimal input;
-            BigDecimal expected;
+            DecimalQuantity input;
+            DecimalQuantity expected;
 
             TestCase(String line) {
                 String[] fields = line
@@ -508,8 +520,8 @@ public class UnitsTest {
                 this.targetString = fields[2];
                 this.source = MeasureUnitImpl.UnitsParser.parseForIdentifier(fields[1]);
                 this.target = MeasureUnitImpl.UnitsParser.parseForIdentifier(fields[2]);
-                this.input = BigDecimal.valueOf(1000);
-                this.expected = new BigDecimal(fields[4]);
+                this.input = new DecimalQuantity_DualStorageBCD(1000);
+                this.expected = new DecimalQuantity_DualStorageBCD(Double.parseDouble(fields[4]));
             }
         }
 
@@ -529,8 +541,9 @@ public class UnitsTest {
         for (TestCase testCase :
                 tests) {
             UnitsConverter converter = new UnitsConverter(testCase.source, testCase.target, conversionRates);
-            BigDecimal got = converter.convert(testCase.input);
-            if (compareTwoBigDecimal(testCase.expected, got, BigDecimal.valueOf(0.000001))) {
+            DecimalQuantity got = converter.convert(testCase.input);
+            if (compareTwoBigDecimal(testCase.expected.toBigDecimal(), got.toBigDecimal(),
+                    BigDecimal.valueOf(0.000001))) {
                 continue;
             } else {
                 fail(new StringBuilder()
@@ -545,8 +558,8 @@ public class UnitsTest {
                         .append(testCase.expected.toString())
                         .toString());
             }
-            BigDecimal inverted = converter.convertInverse(testCase.input);
-            if (compareTwoBigDecimal(BigDecimal.valueOf(1000), inverted, BigDecimal.valueOf(0.000001))) {
+            DecimalQuantity inverted = converter.convertInverse(testCase.input);
+            if (compareTwoBigDecimal(BigDecimal.valueOf(1000), inverted.toBigDecimal(), BigDecimal.valueOf(0.000001))) {
                 continue;
             } else {
                 fail(new StringBuilder()
@@ -576,7 +589,7 @@ public class UnitsTest {
             String usage;
             String region;
             Pair<String, MeasureUnitImpl> inputUnit;
-            BigDecimal input;
+            DecimalQuantity input;
 
             TestCase(String line) {
                 String[] fields = line
@@ -613,7 +626,7 @@ public class UnitsTest {
                 this.usage = usage;
                 this.region = region;
                 this.inputUnit = Pair.of(inputUnitString, MeasureUnitImpl.UnitsParser.parseForIdentifier(inputUnitString));
-                this.input = new BigDecimal(inputValue);
+                this.input = new DecimalQuantity_DualStorageBCD(Double.parseDouble(inputValue));
                 for (Pair<String, String> output :
                         outputs) {
                     outputUnitInOrder.add(Pair.of(output.first, MeasureUnitImpl.UnitsParser.parseForIdentifier(output.first)));

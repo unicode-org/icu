@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
+import com.ibm.icu.impl.number.DecimalQuantity;
+import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.util.MeasureUnit;
 
 public class UnitsConverter {
@@ -108,36 +110,47 @@ public class UnitsConverter {
         return true;
     }
 
-    public BigDecimal convert(BigDecimal inputValue) {
-        BigDecimal result = inputValue.multiply(this.conversionRate).add(offset);
+    public  DecimalQuantity convert(DecimalQuantity inputValue) {
+        if (inputValue.isNaN() || inputValue.isInfinite()) {
+            return inputValue;
+        }
+
+        DecimalQuantity_DualStorageBCD result = new DecimalQuantity_DualStorageBCD( inputValue.toBigDecimal().multiply(this.conversionRate).add(offset));
         if (this.reciprocal) {
             // We should see no offsets for reciprocal conversions - they don't make sense:
             assert offset == BigDecimal.ZERO;
-            if (result == BigDecimal.ZERO) {
+
+            if (result.equals(0)) {
                 // TODO: demonstrate the resulting behaviour in tests... and
                 // figure out desired behaviour. (Theoretical result should be
                 // infinity, not 0, but BigDecimal does not support infinity.)
-                return BigDecimal.ZERO;
+                result.setToDouble(Double.POSITIVE_INFINITY);
+            } else {
+                result.setToBigDecimal(BigDecimal.ONE.divide(result.toBigDecimal(), DECIMAL128));
             }
-            result = BigDecimal.ONE.divide(result, DECIMAL128);
         }
+
         return result;
     }
 
-    public BigDecimal convertInverse(BigDecimal inputValue) {
-        BigDecimal result = inputValue;
+    public DecimalQuantity convertInverse(DecimalQuantity inputValue) {
+        if (inputValue.isInfinite() || inputValue.isNaN()) {
+            return inputValue;
+        }
+
+        DecimalQuantity_DualStorageBCD result = new DecimalQuantity_DualStorageBCD(inputValue.toBigDecimal());
         if (this.reciprocal) {
             // We should see no offsets for reciprocal conversions - they don't make sense:
             assert offset == BigDecimal.ZERO;
-            if (result == BigDecimal.ZERO) {
-                // TODO: demonstrate the resulting behaviour in tests... and
-                // figure out desired behaviour. (Theoretical result should be
-                // infinity, not 0, but BigDecimal does not support infinity.)
-                return BigDecimal.ZERO;
+            if (result.equals( BigDecimal.ZERO)) {
+                result.setToDouble(Double.POSITIVE_INFINITY);
+                return result;
             }
-            result = BigDecimal.ONE.divide(result, DECIMAL128);
+
+            result.setToBigDecimal(BigDecimal.ONE.divide(result.toBigDecimal(), DECIMAL128));
         }
-        result = result.subtract(offset).divide(this.conversionRate, DECIMAL128);
+
+        result.setToBigDecimal( result.toBigDecimal().subtract(offset).divide(this.conversionRate, DECIMAL128));
         return result;
     }
 

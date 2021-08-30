@@ -32,7 +32,7 @@ public class UsagePrefsHandler implements MicroPropsGenerator {
     mixedMeasuresToMicros(ComplexUnitsConverter.ComplexConverterResult complexConverterResult, DecimalQuantity quantity, MicroProps outMicros) {
         outMicros.mixedMeasures = complexConverterResult.measures;
         outMicros.indexOfQuantity = complexConverterResult.indexOfQuantity;
-        quantity.setToBigDecimal((BigDecimal) outMicros.mixedMeasures.get(outMicros.indexOfQuantity).getNumber());
+        quantity.setToBigDecimal(new DecimalQuantity_DualStorageBCD(outMicros.mixedMeasures.get(outMicros.indexOfQuantity).getNumber().doubleValue()));
     }
 
     /**
@@ -58,7 +58,7 @@ public class UsagePrefsHandler implements MicroPropsGenerator {
         MicroProps micros = this.fParent.processQuantity(quantity);
 
         quantity.roundToInfinity(); // Enables toDouble
-        final UnitsRouter.RouteResult routed = fUnitsRouter.route(quantity.toBigDecimal(), micros);
+        final UnitsRouter.RouteResult routed = fUnitsRouter.route(quantity, micros);
         micros.outputUnit = routed.outputUnit.build();
         UsagePrefsHandler.mixedMeasuresToMicros(routed.complexConverterResult, quantity, micros);
         return micros;

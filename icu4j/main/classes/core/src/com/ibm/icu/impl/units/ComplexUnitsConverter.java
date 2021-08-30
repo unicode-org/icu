@@ -138,11 +138,11 @@ public class ComplexUnitsConverter {
      * For example, if the input unit is `meter` and the target unit is `foot+inch`. Therefore, this function will
      * convert the `quantity` from `meter` to `foot`, then, it will compare the value in `foot` with the `limit`.
      */
-    public boolean greaterThanOrEqual(BigDecimal quantity, BigDecimal limit) {
+    public boolean greaterThanOrEqual(DecimalQuantity quantity, BigDecimal limit) {
         assert !units_.isEmpty();
 
         // NOTE: First converter converts to the biggest quantity.
-        return unitsConverters_.get(0).convert(quantity).multiply(EPSILON_MULTIPLIER).compareTo(limit) >= 0;
+        return unitsConverters_.get(0).convert(quantity).toBigDecimal().multiply(EPSILON_MULTIPLIER).compareTo(limit) >= 0;
     }
 
     public static class ComplexConverterResult {
@@ -163,11 +163,11 @@ public class ComplexUnitsConverter {
      * the smallest element is the only element that could have fractional values. And all
      * other elements are floored to the nearest integer
      */
-    public ComplexConverterResult convert(BigDecimal quantity, Precision rounder) {
-        BigInteger sign = BigInteger.ONE;
-        if (quantity.compareTo(BigDecimal.ZERO) < 0) {
-            quantity = quantity.abs();
-            sign = sign.negate();
+    public ComplexConverterResult convert(DecimalQuantity quantity, Precision rounder) {
+        DecimalQuantity sign = new DecimalQuantity_DualStorageBCD( BigInteger.ONE);
+        if (quantity.isNegative()) {
+            quantity.negate();
+            sign.negate();
         }
 
         // For N converters:
@@ -176,7 +176,7 @@ public class ComplexUnitsConverter {
         // - N-1 converters convert to bigger units for which we want integers,
         // - the Nth converter (index N-1) converts to the smallest unit, which
         //   isn't (necessarily) an integer.
-        List<BigInteger> intValues = new ArrayList<>(unitsConverters_.size() - 1);
+        List<DecimalQuantity> intValues = new ArrayList<>(unitsConverters_.size() - 1);
         for (int i = 0, n = unitsConverters_.size(); i < n; ++i) {
             quantity = (unitsConverters_.get(i)).convert(quantity);
 
@@ -187,16 +187,20 @@ public class ComplexUnitsConverter {
                 // decision is made. However after the thresholding, we use the
                 // original values to ensure unbiased accuracy (to the extent of
                 // double's capabilities).
-                BigInteger flooredQuantity = quantity.multiply(EPSILON_MULTIPLIER).setScale(0, RoundingMode.FLOOR).toBigInteger();
-                intValues.add(flooredQuantity);
-
+                BigInteger flooredQuantity = quantity.toBigDecimal().multiply(EPSILON_MULTIPLIER).setScale(0, RoundingMode.FLOOR).toBigInteger();
+                if (quantity.isZeroish()) { // if quantity is NaN, Inf or Zero.
+                    intValues.add(quantity.createCopy());
+                    break;
+                } else {
+                    intValues.add(new DecimalQuantity_DualStorageBCD(flooredQuantity));
+                }
                 // Keep the residual of the quantity.
                 // For example: `3.6 feet`, keep only `0.6 feet`
-                BigDecimal remainder = quantity.subtract(BigDecimal.valueOf(flooredQuantity.longValue()));
+                BigDecimal remainder = quantity.toBigDecimal().subtract(BigDecimal.valueOf(flooredQuantity.longValue()));
                 if (remainder.compareTo(BigDecimal.ZERO) == -1) {
-                    quantity = BigDecimal.ZERO;
+                    quantity.setToBigDecimal( BigDecimal.ZERO);
                 } else {
-                    quantity = remainder;
+                    quantity.setToBigDecimal( remainder);
                 }
             }
         }
@@ -213,12 +217,17 @@ public class ComplexUnitsConverter {
         int indexOfQuantity = -1;
         for (int i = 0, n = unitsConverters_.size(); i < n; ++i) {
             if (i < n - 1) {
-                Measure measure = new Measure(intValues.get(i).multiply(sign), units_.get(i).unitImpl.build());
+                DecimalQuantity quantityTemp = intValues.get(i).createCopy();
+                quantityTemp.multiplyBy(sign.toBigDecimal());
+                Measure measure = new Measure(
+                        quantityTemp.toDouble(),
+                        units_.get(i).unitImpl.build());
                 measures.set(units_.get(i).index, measure);
             } else {
                 indexOfQuantity = units_.get(i).index;
+                quantity.multiplyBy(sign.toBigDecimal());
                 Measure measure =
-                        new Measure(quantity.multiply(BigDecimal.valueOf(sign.longValue())),
+                        new Measure(quantity.toDouble(),
                                 units_.get(i).unitImpl.build());
                 measures.set(indexOfQuantity, measure);
             }
@@ -232,14 +241,16 @@ public class ComplexUnitsConverter {
      *
      * @return the rounded quantity
      */
-    private BigDecimal applyRounder(List<BigInteger> intValues, BigDecimal quantity, Precision rounder) {
+    private DecimalQuantity applyRounder(List<DecimalQuantity> intValues, DecimalQuantity quantity, Precision rounder) {
+        if (quantity.isNaN() || quantity.isInfinite()) {
+            return quantity;
+        }
+
         if (rounder == null) {
             return quantity;
         }
 
-        DecimalQuantity quantityBCD = new DecimalQuantity_DualStorageBCD(quantity);
-        rounder.apply(quantityBCD);
-        quantity = quantityBCD.toBigDecimal();
+        rounder.apply(quantity);
 
         if (intValues.size() == 0) {
             // There is only one element, Therefore, nothing to be done
@@ -248,25 +259,44 @@ public class ComplexUnitsConverter {
 
         // Check if there's a carry, and bubble it back up the resulting intValues.
         int lastIndex = unitsConverters_.size() - 1;
-        BigDecimal carry = unitsConverters_.get(lastIndex).convertInverse(quantity).multiply(EPSILON_MULTIPLIER)
-                .setScale(0, RoundingMode.FLOOR);
-        if (carry.compareTo(BigDecimal.ZERO) <= 0) { // carry is not greater than zero
+        DecimalQuantity carry =  new DecimalQuantity_DualStorageBCD(
+                unitsConverters_.get(lastIndex)
+                        .convertInverse(quantity)
+                        .toBigDecimal().multiply(EPSILON_MULTIPLIER)
+                        .setScale(0, RoundingMode.FLOOR)
+        );
+        if (carry.isNegative() || carry.isZeroish()) { // carry is not greater than zero.
             return quantity;
         }
-        quantity = quantity.subtract(unitsConverters_.get(lastIndex).convert(carry));
-        intValues.set(lastIndex - 1, intValues.get(lastIndex - 1).add(carry.toBigInteger()));
+        quantity.setToBigDecimal(quantity.toBigDecimal().subtract(unitsConverters_.get(lastIndex).convert(carry).toBigDecimal()));
+        BigDecimal newElementValue = intValues.get(lastIndex-1).toBigDecimal().add(carry.toBigDecimal());
+        intValues.get(lastIndex - 1).setToBigDecimal(newElementValue);
 
         // We don't use the first converter: that one is for the input unit
         for (int j = lastIndex - 1; j > 0; j--) {
-            carry = unitsConverters_.get(j)
-                    .convertInverse(BigDecimal.valueOf(intValues.get(j).longValue()))
-                    .multiply(EPSILON_MULTIPLIER)
-                    .setScale(0, RoundingMode.FLOOR);
-            if (carry.compareTo(BigDecimal.ZERO) <= 0) { // carry is not greater than zero
+            carry = new DecimalQuantity_DualStorageBCD(
+                    unitsConverters_.get(j)
+                            .convertInverse(intValues.get(j))
+                            .toBigDecimal()
+                            .multiply(EPSILON_MULTIPLIER)
+                            .setScale(0, RoundingMode.FLOOR)
+            );
+            if (carry.isNegative() || carry.isZeroish()) { // carry is not greater than zero
                 break;
             }
-            intValues.set(j, intValues.get(j).subtract(unitsConverters_.get(j).convert(carry).toBigInteger()));
-            intValues.set(j - 1, intValues.get(j - 1).add(carry.toBigInteger()));
+
+            assert carry.equals(BigDecimal.ONE);
+
+            DecimalQuantity converted = unitsConverters_.get(j).convert(carry);
+            BigInteger replaceJ = intValues.get(j).toBigDecimal().subtract(converted.toBigDecimal()).toBigInteger();
+            BigInteger replaceJMinus1 = intValues.get(j-1).toBigDecimal().add(carry.toBigDecimal()).toBigInteger();
+
+            intValues.set(j, new DecimalQuantity_DualStorageBCD(replaceJ));
+            intValues.set(j-1, new DecimalQuantity_DualStorageBCD(replaceJMinus1));
+
+//            intValues.set(j,
+//                    intValues.get(j).subtract(unitsConverters_.get(j).convert(carry).toBigDecimal().toBigInteger()));
+//            intValues.set(j - 1, intValues.get(j - 1).add(carry.toBigDecimal().toBigInteger()));
         }
 
         return quantity;

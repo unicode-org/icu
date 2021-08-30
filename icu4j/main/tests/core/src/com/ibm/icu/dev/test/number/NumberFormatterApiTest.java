@@ -1632,8 +1632,8 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().unit(MeasureUnit.SECOND).usage("media"),
                 new ULocale("nl-NL"),
                 Double.NaN,
-                // "NaN sec");
-                "0 sec");
+                "NaN sec");
+
 
         // TODO(icu-units#132): Java BigDecimal does not support Inf and NaN, so
         // we get a misleading "0" out of this:
