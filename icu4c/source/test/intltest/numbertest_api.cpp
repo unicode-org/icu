@@ -2283,13 +2283,13 @@ void NumberFormatterApiTest::unitInflections() {
             // tests can't test value0 of the following two rules:
             //   <deriveComponent feature="plural" structure="power" value0="one"  value1="compound"/>
             //   <deriveComponent feature="case" structure="power" value0="nominative"  value1="compound"/>
-            {"square-decimeter-dekameter", "de", nullptr, 1, u"1 Quadratdezimeter⋅Dekameter"},
-            {"square-decimeter-dekameter", "de", "genitive", 1, u"1 Quadratdezimeter⋅Dekameters"},
-            {"square-decimeter-dekameter", "de", nullptr, 2, u"2 Quadratdezimeter⋅Dekameter"},
-            {"square-decimeter-dekameter", "de", "dative", 2, u"2 Quadratdezimeter⋅Dekametern"},
+            {"square-decimeter-dekameter", "de", nullptr, 1, u"1 Dekameter⋅Quadratdezimeter"},
+            {"square-decimeter-dekameter", "de", "genitive", 1, u"1 Dekameter⋅Quadratdezimeter"},
+            {"square-decimeter-dekameter", "de", nullptr, 2, u"2 Dekameter⋅Quadratdezimeter"},
+            {"square-decimeter-dekameter", "de", "dative", 2, u"2 Dekameter⋅Quadratdezimeter"},
             // Feminine "Meile" better demonstrates singular-vs-plural form:
-            {"cubic-mile-dekamile", "de", nullptr, 1, u"1 Kubikmeile⋅Dekameile"},
-            {"cubic-mile-dekamile", "de", nullptr, 2, u"2 Kubikmeile⋅Dekameilen"},
+            {"cubic-mile-dekamile", "de", nullptr, 1, u"1 Dekameile⋅Kubikmeile"},
+            {"cubic-mile-dekamile", "de", nullptr, 2, u"2 Dekameile⋅Kubikmeilen"},
 
             // French handles plural "times" and "power" structures differently:
             // plural form impacts all "numerator" units (denominator remains

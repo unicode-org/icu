@@ -4480,10 +4480,14 @@ void MeasureFormatTest::TestIdentifiers() {
         {"dot", "dot"},
 
         // Testing sort order of prefixes.
-        //
-        // TODO(icu-units#70): revisit when fixing normalization. For now we're
-        // just checking some consistency between C&J.
-        {"megafoot-mebifoot-kibifoot-kilofoot", "kibifoot-mebifoot-kilofoot-megafoot"},
+        {"megafoot-mebifoot-kibifoot-kilofoot", "mebifoot-megafoot-kibifoot-kilofoot"},
+        {"per-megafoot-mebifoot-kibifoot-kilofoot", "per-mebifoot-megafoot-kibifoot-kilofoot"},
+        {"megafoot-mebifoot-kibifoot-kilofoot-per-megafoot-mebifoot-kibifoot-kilofoot",
+         "mebifoot-megafoot-kibifoot-kilofoot-per-mebifoot-megafoot-kibifoot-kilofoot"},
+        {"microfoot-millifoot-megafoot-mebifoot-kibifoot-kilofoot",
+         "mebifoot-megafoot-kibifoot-kilofoot-millifoot-microfoot"},
+        {"per-microfoot-millifoot-megafoot-mebifoot-kibifoot-kilofoot",
+         "per-mebifoot-megafoot-kibifoot-kilofoot-millifoot-microfoot"},
     };
     for (const auto &cas : cases) {
         status.setScope(cas.id);
@@ -5045,7 +5049,7 @@ void MeasureFormatTest::TestInternalMeasureUnitImpl() {
         assertEquals("append meter & centimeter: units[1]", "meter",
                      mcm.singleUnits[1]->getSimpleUnitID());
     }
-    assertEquals("append meter & centimeter: identifier", "centimeter-meter",
+    assertEquals("append meter & centimeter: identifier", "meter-centimeter",
                  std::move(mcm).build(status).getIdentifier());
 
     MeasureUnitImpl m2m = MeasureUnitImpl::forIdentifier("meter-square-meter", status);

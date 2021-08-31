@@ -3923,6 +3923,7 @@ public class MeasureUnitTest extends TestFmwk {
             new TestCase("exbibyte", "exbibyte"),
             new TestCase("zebibyte", "zebibyte"),
             new TestCase("yobibyte", "yobibyte"),
+
             // Testing aliases
             new TestCase("foodcalorie", "foodcalorie"),
             new TestCase("dot-per-centimeter", "dot-per-centimeter"),
@@ -3930,10 +3931,11 @@ public class MeasureUnitTest extends TestFmwk {
             new TestCase("dot", "dot"),
 
             // Testing sort order of prefixes.
-            //
-            // TODO(icu-units#70): revisit when fixing normalization. For now we're
-            // just checking some consistency between C&J.
-            new TestCase("megafoot-mebifoot-kibifoot-kilofoot", "kibifoot-mebifoot-kilofoot-megafoot"),
+            new TestCase("megafoot-mebifoot-kibifoot-kilofoot", "mebifoot-megafoot-kibifoot-kilofoot"),
+            new TestCase("per-megafoot-mebifoot-kibifoot-kilofoot", "per-mebifoot-megafoot-kibifoot-kilofoot"),
+            new TestCase("megafoot-mebifoot-kibifoot-kilofoot-per-megafoot-mebifoot-kibifoot-kilofoot", "mebifoot-megafoot-kibifoot-kilofoot-per-mebifoot-megafoot-kibifoot-kilofoot"),
+            new TestCase("microfoot-millifoot-megafoot-mebifoot-kibifoot-kilofoot", "mebifoot-megafoot-kibifoot-kilofoot-millifoot-microfoot"),
+            new TestCase("per-microfoot-millifoot-megafoot-mebifoot-kibifoot-kilofoot", "per-mebifoot-megafoot-kibifoot-kilofoot-millifoot-microfoot"),
         };
 
         for (TestCase testCase : cases) {
@@ -4409,7 +4411,7 @@ public class MeasureUnitTest extends TestFmwk {
         assertEquals("append meter & centimeter: units length", 2, mcm.getSingleUnits().size());
         assertEquals("append meter & centimeter: units[0]", "meter", mcm.getSingleUnits().get(0).getSimpleUnitID());
         assertEquals("append meter & centimeter: units[1]", "meter", mcm.getSingleUnits().get(1).getSimpleUnitID());
-        assertEquals("append meter & centimeter: identifier", "centimeter-meter", mcm.build().getIdentifier());
+        assertEquals("append meter & centimeter: identifier", "meter-centimeter", mcm.build().getIdentifier());
 
         MeasureUnitImpl m2m = MeasureUnitImpl.forIdentifier("meter-square-meter");
         assertEquals("meter-square-meter: complexity", MeasureUnit.Complexity.SINGLE, m2m.getComplexity());

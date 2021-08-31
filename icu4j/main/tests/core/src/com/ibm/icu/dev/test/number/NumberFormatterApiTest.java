@@ -2255,18 +2255,18 @@ public class NumberFormatterApiTest extends TestFmwk {
                 //   <deriveComponent feature="case" structure="power" value0="nominative" value1="compound"/>
 
                 new UnitInflectionTestCase("square-decimeter-dekameter", "de", null, 1,
-                                           "1 Quadratdezimeter⋅Dekameter"),
+                                           "1 Dekameter⋅Quadratdezimeter"),
                 new UnitInflectionTestCase("square-decimeter-dekameter", "de", "genitive", 1,
-                                           "1 Quadratdezimeter⋅Dekameters"),
+                                           "1 Dekameter⋅Quadratdezimeter"),
                 new UnitInflectionTestCase("square-decimeter-dekameter", "de", null, 2,
-                                           "2 Quadratdezimeter⋅Dekameter"),
+                                           "2 Dekameter⋅Quadratdezimeter"),
                 new UnitInflectionTestCase("square-decimeter-dekameter", "de", "dative", 2,
-                                           "2 Quadratdezimeter⋅Dekametern"),
+                                           "2 Dekameter⋅Quadratdezimeter"),
                 // Feminine "Meile" better demonstrates singular-vs-plural form:
                 new UnitInflectionTestCase("cubic-mile-dekamile", "de", null, 1,
-                                           "1 Kubikmeile⋅Dekameile"),
+                                           "1 Dekameile⋅Kubikmeile"),
                 new UnitInflectionTestCase("cubic-mile-dekamile", "de", null, 2,
-                                           "2 Kubikmeile⋅Dekameilen"),
+                                           "2 Dekameile⋅Kubikmeilen"),
 
                 // French handles plural "times" and "power" structures differently:
                 // plural form impacts all "numerator" units (denominator remains
