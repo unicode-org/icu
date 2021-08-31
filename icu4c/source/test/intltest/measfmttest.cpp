@@ -4473,6 +4473,12 @@ void MeasureFormatTest::TestIdentifiers() {
         {"zebibyte", "zebibyte"},
         {"yobibyte", "yobibyte"},
 
+        // Testing aliases
+        {"foodcalorie", "foodcalorie"},
+        {"dot-per-centimeter", "dot-per-centimeter"},
+        {"dot-per-inch", "dot-per-inch"},
+        {"dot", "dot"},
+
         // Testing sort order of prefixes.
         //
         // TODO(icu-units#70): revisit when fixing normalization. For now we're
