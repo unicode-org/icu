@@ -156,6 +156,9 @@ def pretty_print_issue(issue, type=None, **kwargs):
         print("\t- Assigned to %s" % issue.issue.fields.assignee.displayName)
     else:
         print("\t- No assignee!")
+    # If actually under review, print reviewer
+    if jira_issue_under_review(issue) and issue.issue.fields.customfield_10031:
+        print("\t- Reviewer: %s" % issue.issue.fields.customfield_10031.displayName)
     print("\t- Jira Link: %s" % issue_id_to_url(issue.issue_id, **kwargs))
     print("\t- Status: %s" % issue.issue.fields.status.name)
     if(issue.issue.fields.resolution):
