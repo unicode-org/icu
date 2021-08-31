@@ -3923,6 +3923,11 @@ public class MeasureUnitTest extends TestFmwk {
             new TestCase("exbibyte", "exbibyte"),
             new TestCase("zebibyte", "zebibyte"),
             new TestCase("yobibyte", "yobibyte"),
+            // Testing aliases
+            new TestCase("foodcalorie", "foodcalorie"),
+            new TestCase("dot-per-centimeter", "dot-per-centimeter"),
+            new TestCase("dot-per-inch", "dot-per-inch"),
+            new TestCase("dot", "dot"),
 
             // Testing sort order of prefixes.
             //

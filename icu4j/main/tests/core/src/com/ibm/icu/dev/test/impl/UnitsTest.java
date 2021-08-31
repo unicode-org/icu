@@ -436,6 +436,13 @@ public class UnitsTest {
                 // Fuel Consumption
                 new TestData("cubic-meter-per-meter", "mile-per-gallon", 2.1383143939394E-6, 1.1),
                 new TestData("cubic-meter-per-meter", "mile-per-gallon", 2.6134953703704E-6, 0.9),
+                // Test Aliases
+                // Alias is just another name to the same unit. Therefore, converting
+                // between them should be the same.
+                new TestData("foodcalorie", "kilocalorie", 1.0, 1.0),
+                new TestData("dot-per-centimeter", "pixel-per-centimeter", 1.0, 1.0),
+                new TestData("dot-per-inch", "pixel-per-inch", 1.0, 1.0),
+                new TestData("dot", "pixel", 1.0, 1.0),
         };
 
         ConversionRates conversionRates = new ConversionRates();
