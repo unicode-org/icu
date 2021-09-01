@@ -160,6 +160,10 @@ metadata:table(nofallback){
                 reason{"deprecated"}
                 replacement{"fbl"}
             }
+            bic{
+                reason{"deprecated"}
+                replacement{"bir"}
+            }
             bih{
                 reason{"overlong"}
                 replacement{"bho"}
@@ -179,6 +183,10 @@ metadata:table(nofallback){
             bkb{
                 reason{"deprecated"}
                 replacement{"ebk"}
+            }
+            blg{
+                reason{"deprecated"}
+                replacement{"iba"}
             }
             bod{
                 reason{"overlong"}
@@ -1227,6 +1235,10 @@ metadata:table(nofallback){
             pan{
                 reason{"overlong"}
                 replacement{"pa"}
+            }
+            pat{
+                reason{"deprecated"}
+                replacement{"kxr"}
             }
             pbu{
                 reason{"macrolanguage"}

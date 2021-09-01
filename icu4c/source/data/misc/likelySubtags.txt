@@ -165,6 +165,7 @@ likelySubtags:table(nofallback){
     bkq{"bkq_Latn_ZZ"}
     bku{"bku_Latn_PH"}
     bkv{"bkv_Latn_ZZ"}
+    blg{"blg_Latn_MY"}
     blt{"blt_Tavt_VN"}
     bm{"bm_Latn_ML"}
     bmh{"bmh_Latn_ZZ"}

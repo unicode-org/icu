@@ -240,8 +240,8 @@ yo_BJ{
         }
         light{
             lumen{
-                dnam{"lumɛ́ɛ̀nì"}
-                other{"{0} lumɛ́ɛ̀nì"}
+                dnam{"àmì lumɛ́ɛ̀nì"}
+                other{"{0} Lúmɛ́nì"}
             }
         }
         volume{

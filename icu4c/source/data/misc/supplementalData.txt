@@ -4676,9 +4676,12 @@ supplementalData:table(nofallback){
                 "bgm",
                 "bh",
                 "bhk",
+                "bic",
+                "bij",
                 "bjd",
                 "bjq",
                 "bkb",
+                "blg",
                 "bmy",
                 "bpb",
                 "btb",
@@ -4736,6 +4739,7 @@ supplementalData:table(nofallback){
                 "ggn~o",
                 "ggr",
                 "gio",
+                "gji",
                 "gli",
                 "gno",
                 "gti",
@@ -4804,6 +4808,7 @@ supplementalData:table(nofallback){
                 "mof",
                 "mst",
                 "mup",
+                "mvm",
                 "mwd",
                 "mwj",
                 "mwx~y",
@@ -4815,6 +4820,7 @@ supplementalData:table(nofallback){
                 "nbf",
                 "nbx",
                 "ncp",
+                "ngo",
                 "nln",
                 "nlr",
                 "nns",
@@ -4827,6 +4833,7 @@ supplementalData:table(nofallback){
                 "ome",
                 "ory",
                 "oun",
+                "pat",
                 "pbu",
                 "pbz",
                 "pcr",
@@ -4884,9 +4891,11 @@ supplementalData:table(nofallback){
                 "unp",
                 "uok",
                 "uzn",
+                "vki",
                 "wgw",
                 "wit",
                 "wiw",
+                "wra",
                 "xba",
                 "xbx",
                 "xia",
@@ -5004,7 +5013,7 @@ supplementalData:table(nofallback){
                 "aqa",
                 "aqc~d",
                 "aqg",
-                "aql~n",
+                "aqk~n",
                 "aqp",
                 "aqr",
                 "aqt",
@@ -5075,8 +5084,9 @@ supplementalData:table(nofallback){
                 "bha~j",
                 "bhl~z",
                 "bi",
-                "bia~g",
-                "bij~r",
+                "bia~b",
+                "bid~g",
+                "bik~r",
                 "bit~z",
                 "bja~c",
                 "bje~p",
@@ -5084,7 +5094,8 @@ supplementalData:table(nofallback){
                 "bka",
                 "bkc~d",
                 "bkf~z",
-                "bla~t",
+                "bla~f",
+                "blh~t",
                 "blv~z",
                 "bm",
                 "bma~x",
@@ -5097,7 +5108,7 @@ supplementalData:table(nofallback){
                 "boe~r",
                 "bot~z",
                 "bpa",
-                "bpd",
+                "bpd~e",
                 "bpg~z",
                 "bqa~d",
                 "bqf~z",
@@ -5228,14 +5239,13 @@ supplementalData:table(nofallback){
                 "crf~t",
                 "crv~z",
                 "cs",
-                "csa~w",
-                "csy~z",
+                "csa~z",
                 "cta",
                 "ctc~e",
                 "ctg~h",
                 "ctl~p",
                 "cts~u",
-                "ctz",
+                "cty~z",
                 "cu",
                 "cua~c",
                 "cug~l",
@@ -5307,6 +5317,7 @@ supplementalData:table(nofallback){
                 "dju",
                 "djw",
                 "dka",
+                "dkg",
                 "dkk",
                 "dkr~s",
                 "dkx",
@@ -5396,6 +5407,7 @@ supplementalData:table(nofallback){
                 "egl",
                 "ego",
                 "egx~y",
+                "ehs",
                 "ehu",
                 "eip",
                 "eit",
@@ -5422,10 +5434,10 @@ supplementalData:table(nofallback){
                 "emg",
                 "emi",
                 "emm~n",
-                "emp",
+                "emp~q",
                 "ems",
                 "emu",
-                "emw~y",
+                "emw~z",
                 "en",
                 "ena~d",
                 "enf",
@@ -5569,11 +5581,10 @@ supplementalData:table(nofallback){
                 "ghn~o",
                 "ghr~t",
                 "gia~e",
-                "gig~h",
+                "gig~i",
                 "gil~n",
                 "gip~u",
                 "giw~z",
-                "gji",
                 "gjk",
                 "gjm~n",
                 "gjr",
@@ -5583,7 +5594,7 @@ supplementalData:table(nofallback){
                 "gkn~p",
                 "gku",
                 "gl",
-                "glc~d",
+                "glb~d",
                 "glh",
                 "glj~l",
                 "glo",
@@ -5652,7 +5663,7 @@ supplementalData:table(nofallback){
                 "gyi",
                 "gyl~o",
                 "gyr",
-                "gyy",
+                "gyy~z",
                 "gza",
                 "gzi",
                 "gzn",
@@ -5686,6 +5697,7 @@ supplementalData:table(nofallback){
                 "hji",
                 "hka",
                 "hke",
+                "hkh",
                 "hkk",
                 "hkn",
                 "hks",
@@ -5874,7 +5886,7 @@ supplementalData:table(nofallback){
                 "jax~z",
                 "jbe",
                 "jbi~k",
-                "jbn~o",
+                "jbm~o",
                 "jbr",
                 "jbt~u",
                 "jbw",
@@ -5907,7 +5919,7 @@ supplementalData:table(nofallback){
                 "jka",
                 "jkm",
                 "jko~p",
-                "jkr",
+                "jkr~s",
                 "jku",
                 "jle",
                 "jls",
@@ -6116,7 +6128,7 @@ supplementalData:table(nofallback){
                 "lrt",
                 "lrv",
                 "lrz",
-                "lsa",
+                "lsa~b",
                 "lsd~e",
                 "lsh~i",
                 "lsl~p",
@@ -6146,6 +6158,7 @@ supplementalData:table(nofallback){
                 "lwo",
                 "lws~u",
                 "lww",
+                "lxm",
                 "lya",
                 "lyg",
                 "lyn",
@@ -6222,7 +6235,8 @@ supplementalData:table(nofallback){
                 "mux~z",
                 "mva~b",
                 "mvd~i",
-                "mvk~z",
+                "mvk~l",
+                "mvn~z",
                 "mwa~c",
                 "mwe~i",
                 "mwk~w",
@@ -6263,7 +6277,8 @@ supplementalData:table(nofallback){
                 "nfr",
                 "nfu",
                 "ng",
-                "nga~z",
+                "nga~n",
+                "ngp~z",
                 "nha~i",
                 "nhk",
                 "nhm~r",
@@ -6310,6 +6325,7 @@ supplementalData:table(nofallback){
                 "nqg",
                 "nqk~o",
                 "nqq",
+                "nqt",
                 "nqy",
                 "nr",
                 "nra~c",
@@ -6373,6 +6389,7 @@ supplementalData:table(nofallback){
                 "oc",
                 "oca",
                 "och",
+                "ocm",
                 "oco",
                 "ocu",
                 "oda",
@@ -6394,12 +6411,12 @@ supplementalData:table(nofallback){
                 "ojp",
                 "ojs",
                 "ojv~w",
-                "oka~b",
-                "okd~e",
+                "oka~e",
                 "okg~o",
                 "okr~s",
                 "oku~v",
                 "okx",
+                "okz",
                 "ola",
                 "old~e",
                 "olk",
@@ -6413,7 +6430,7 @@ supplementalData:table(nofallback){
                 "omi",
                 "omk~l",
                 "omn~r",
-                "omt~x",
+                "omt~y",
                 "ona~b",
                 "one",
                 "ong",
@@ -6443,7 +6460,7 @@ supplementalData:table(nofallback){
                 "osa",
                 "osc",
                 "osi",
-                "oso~p",
+                "osn~p",
                 "ost~u",
                 "osx",
                 "ota~b",
@@ -6467,7 +6484,8 @@ supplementalData:table(nofallback){
                 "pa",
                 "paa~i",
                 "pak~m",
-                "pao~z",
+                "pao~s",
+                "pau~z",
                 "pbb~c",
                 "pbe~i",
                 "pbl~p",
@@ -6685,8 +6703,7 @@ supplementalData:table(nofallback){
                 "ruy~z",
                 "rw",
                 "rwa",
-                "rwk",
-                "rwm",
+                "rwk~m",
                 "rwo",
                 "rwr",
                 "rxd",
@@ -6775,6 +6792,7 @@ supplementalData:table(nofallback){
                 "sqj~k",
                 "sqm~o",
                 "sqq~u",
+                "sqx",
                 "sr",
                 "sra~b",
                 "sre~i",
@@ -6792,6 +6810,7 @@ supplementalData:table(nofallback){
                 "sue",
                 "sug",
                 "sui~k",
+                "suo",
                 "suq~t",
                 "suv~z",
                 "sv",
@@ -6937,8 +6956,7 @@ supplementalData:table(nofallback){
                 "tyn",
                 "typ",
                 "tyr~v",
-                "tyx",
-                "tyz",
+                "tyx~z",
                 "tza",
                 "tzh",
                 "tzj",
@@ -6992,6 +7010,7 @@ supplementalData:table(nofallback){
                 "una",
                 "une",
                 "ung",
+                "uni",
                 "unk",
                 "unm~n",
                 "unr",
@@ -7050,9 +7069,9 @@ supplementalData:table(nofallback){
                 "vis~t",
                 "viv",
                 "vka",
-                "vki~m",
-                "vko~p",
+                "vkj~p",
                 "vkt~u",
+                "vkz",
                 "vlp",
                 "vls",
                 "vma~m",
@@ -7128,7 +7147,7 @@ supplementalData:table(nofallback){
                 "wlr~s",
                 "wlu~y",
                 "wma~e",
-                "wmh~i",
+                "wmg~i",
                 "wmm~o",
                 "wms~t",
                 "wmw~x",
@@ -7149,7 +7168,7 @@ supplementalData:table(nofallback){
                 "wow",
                 "woy",
                 "wpc",
-                "wra~b",
+                "wrb",
                 "wrd",
                 "wrg~i",
                 "wrk~p",
@@ -7251,10 +7270,9 @@ supplementalData:table(nofallback){
                 "xmj~z",
                 "xna~b",
                 "xnd",
-                "xng~i",
-                "xnk",
+                "xng~k",
                 "xnm~o",
-                "xnr~u",
+                "xnq~u",
                 "xny~z",
                 "xoc~d",
                 "xog",
@@ -7400,8 +7418,7 @@ supplementalData:table(nofallback){
                 "yry",
                 "ysc~d",
                 "ysg",
-                "ysl",
-                "ysn~p",
+                "ysl~p",
                 "ysr~s",
                 "ysy",
                 "yta",
@@ -7441,7 +7458,7 @@ supplementalData:table(nofallback){
                 "zbc",
                 "zbe",
                 "zbl",
-                "zbt",
+                "zbt~u",
                 "zbw",
                 "zca",
                 "zch",
@@ -7471,6 +7488,7 @@ supplementalData:table(nofallback){
                 "zkr",
                 "zkt~v",
                 "zkz",
+                "zla",
                 "zle",
                 "zlj",
                 "zlm~n",
@@ -11524,6 +11542,7 @@ supplementalData:table(nofallback){
                 "fonnapa",
                 "fonupa",
                 "fonxsamp",
+                "gallo",
                 "gascon",
                 "grclass",
                 "grital",
@@ -11574,6 +11593,7 @@ supplementalData:table(nofallback){
                 "surmiran",
                 "sursilv",
                 "sutsilv",
+                "synnejyl",
                 "tarask",
                 "tongyong",
                 "tunumiit",
@@ -26684,7 +26704,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{47210000}
             }
             rhg{
-                populationShareF:int{47520000}
+                populationShareF:int{47530000}
             }
             rkt{
                 literacyShareF:int{49200000}
@@ -26948,7 +26968,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{45470000}
             }
             yrl{
-                populationShareF:int{46104000}
+                populationShareF:int{46100000}
             }
         }
         BS{
@@ -27520,7 +27540,7 @@ supplementalData:table(nofallback){
                 57490848,
             }
             yrl{
-                populationShareF:int{45620000}
+                populationShareF:int{45610000}
             }
         }
         CP{
@@ -28311,7 +28331,7 @@ supplementalData:table(nofallback){
             }
             os{
                 officialStatus{"official_regional"}
-                populationShareF:int{48409000}
+                populationShareF:int{48220000}
             }
             ru{
                 populationShareF:int{48900000}
@@ -30125,7 +30145,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{49640000}
             }
             rhg{
-                populationShareF:int{48160000}
+                populationShareF:int{48170000}
             }
             shn{
                 populationShareF:int{48640000}
@@ -32633,7 +32653,7 @@ supplementalData:table(nofallback){
                 57286446,
             }
             yrl{
-                populationShareF:int{45630000}
+                populationShareF:int{45700000}
             }
         }
         VG{
