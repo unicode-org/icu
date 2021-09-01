@@ -986,7 +986,7 @@ UResourceBundle *init_resb_result(
 // rather than a UResourceBundle.
 // May need to entryIncrease() the resulting dataEntry.
 UResourceBundle *getAliasTargetAsResourceBundle(
-        UResourceDataEntry *dataEntry, Resource r, const char *key, int32_t idx,
+        const ResourceData &resData, Resource r, const char *key, int32_t idx,
         UResourceDataEntry *validLocaleDataEntry, const char *containerResPath,
         int32_t recursionDepth,
         UResourceBundle *resB, UErrorCode *status) {
@@ -994,7 +994,7 @@ UResourceBundle *getAliasTargetAsResourceBundle(
     if (U_FAILURE(*status)) { return resB; }
     U_ASSERT(RES_GET_TYPE(r) == URES_ALIAS);
     int32_t len = 0;
-    const UChar *alias = res_getAlias(&dataEntry->fData, r, &len);
+    const UChar *alias = res_getAlias(&resData, r, &len);
     if(len <= 0) {
         // bad alias
         *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -1063,12 +1063,13 @@ UResourceBundle *getAliasTargetAsResourceBundle(
             *sep++ = 0;
         }
         keyPath = sep;
-        path = dataEntry->fPath;
+        path = validLocaleDataEntry->fPath;
     }
 
     // Got almost everything, let's try to open.
     // First, open the bundle with real data.
     LocalUResourceBundlePointer mainRes;
+    UResourceDataEntry *dataEntry;
     if (locale == nullptr) {
         // alias = /LOCALE/keyPath
         // Read from the valid locale which we already have.
@@ -1227,7 +1228,7 @@ UResourceBundle *init_resb_result(
             return resB;
         }
         return getAliasTargetAsResourceBundle(
-            dataEntry, r, key, idx,
+            dataEntry->fData, r, key, idx,
             validLocaleDataEntry, containerResPath, recursionDepth, resB, status);
     }
     if(resB == NULL) {
