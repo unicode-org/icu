@@ -954,6 +954,13 @@ en{
             no{"Sort Digits Individually"}
             yes{"Sort Digits Numerically"}
         }
+        colReorder{
+            currency{"Currency"}
+            digit{"Digits"}
+            punct{"Punctuation"}
+            space{"Whitespace"}
+            symbol{"Symbol"}
+        }
         colStrength{
             identical{"Sort All"}
             primary{"Sort Base Letters Only"}
@@ -1064,13 +1071,6 @@ en{
             var{"Keyboard Variant"}
             viqr{"Vietnamese VIQR Keyboard"}
             windows{"Windows Keyboard"}
-        }
-        kr{
-            currency{"Currency"}
-            digit{"Digits"}
-            punct{"Punctuation"}
-            space{"Whitespace"}
-            symbol{"Symbol"}
         }
         kv{
             currency{"Ignore Symbols affects spaces, punctuation, all symbols"}

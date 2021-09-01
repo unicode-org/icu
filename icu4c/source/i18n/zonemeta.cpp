@@ -290,9 +290,13 @@ ZoneMeta::getCanonicalCLDRID(const UnicodeString &tzid, UErrorCode& status) {
     UResourceBundle *rb = ures_getByKey(top, gTypeMapTag, NULL, &tmpStatus);
     ures_getByKey(rb, gTimezoneTag, rb, &tmpStatus);
     ures_getByKey(rb, id, rb, &tmpStatus);
-    if (U_SUCCESS(tmpStatus)) {
+    int32_t bcp47StrLen = 0;
+    ures_getString(rb, &bcp47StrLen, &tmpStatus);
+    if (U_SUCCESS(tmpStatus) && bcp47StrLen!=4) {
         // type entry (canonical) found
         // the input is the canonical ID. resolve to const UChar*
+        // TODO: For now we skip entries mapping to metazone short ids,
+        // which have 4 characters.
         canonicalID = TimeZone::findID(tzid);
         isInputCanonical = TRUE;
     }
@@ -933,7 +937,11 @@ ZoneMeta::getShortIDFromCanonical(const UChar* canonicalID) {
     ures_getByKey(rb, gTimezoneTag, rb, &status);
     shortID = ures_getStringByKey(rb, tzidKey, NULL, &status);
     ures_close(rb);
-
+    if (U_FAILURE(status) || (shortID!=nullptr && u_strlen(shortID)==4)) {
+        // TODO: For now we skip entries mapping to metazone short ids,
+        // which have 4 characters.
+        return NULL;
+    }
     return shortID;
 }
 

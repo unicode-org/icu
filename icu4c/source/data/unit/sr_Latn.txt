@@ -11,6 +11,17 @@ sr_Latn{
     units{
         acceleration{
             g-force{
+                case{
+                    accusative{
+                        one{"{0} ge silu"}
+                    }
+                    genitive{
+                        one{"{0} ge sile"}
+                    }
+                    instrumental{
+                        one{"{0} ge silom"}
+                    }
+                }
                 dnam{"ge sila"}
                 few{"{0} ge sila"}
                 gender{"feminine"}
@@ -26,6 +37,17 @@ sr_Latn{
         }
         angle{
             arc-minute{
+                case{
+                    accusative{
+                        one{"{0} lučni minut"}
+                    }
+                    genitive{
+                        one{"{0} lučnog minuta"}
+                    }
+                    instrumental{
+                        one{"{0} lučnim minutom"}
+                    }
+                }
                 dnam{"lučni minuti"}
                 few{"{0} lučna minuta"}
                 gender{"inanimate"}
@@ -33,6 +55,17 @@ sr_Latn{
                 other{"{0} lučnih minuta"}
             }
             arc-second{
+                case{
+                    accusative{
+                        one{"{0} lučnu sekundu"}
+                    }
+                    genitive{
+                        one{"{0} lučne sekunde"}
+                    }
+                    instrumental{
+                        one{"{0} lučnom sekundom"}
+                    }
+                }
                 dnam{"lučne sekunde"}
                 few{"{0} lučne sekunde"}
                 gender{"feminine"}
@@ -40,6 +73,17 @@ sr_Latn{
                 other{"{0} lučnih sekundi"}
             }
             degree{
+                case{
+                    accusative{
+                        one{"{0} stepen"}
+                    }
+                    genitive{
+                        one{"{0} stepena"}
+                    }
+                    instrumental{
+                        one{"{0} stepenom"}
+                    }
+                }
                 dnam{"stepeni"}
                 few{"{0} stepena"}
                 gender{"inanimate"}
@@ -47,6 +91,17 @@ sr_Latn{
                 other{"{0} stepeni"}
             }
             radian{
+                case{
+                    accusative{
+                        one{"{0} radijan"}
+                    }
+                    genitive{
+                        one{"{0} radijana"}
+                    }
+                    instrumental{
+                        one{"{0} radijanom"}
+                    }
+                }
                 dnam{"radijani"}
                 few{"{0} radijana"}
                 gender{"inanimate"}
@@ -54,6 +109,17 @@ sr_Latn{
                 other{"{0} radijana"}
             }
             revolution{
+                case{
+                    accusative{
+                        one{"{0} obrtaj"}
+                    }
+                    genitive{
+                        one{"{0} obrtaja"}
+                    }
+                    instrumental{
+                        one{"{0} obrtajem"}
+                    }
+                }
                 dnam{"obrtaj"}
                 few{"{0} obrtaja"}
                 gender{"inanimate"}
@@ -75,6 +141,17 @@ sr_Latn{
                 other{"{0} dunama"}
             }
             hectare{
+                case{
+                    accusative{
+                        one{"{0} hektar"}
+                    }
+                    genitive{
+                        one{"{0} hektara"}
+                    }
+                    instrumental{
+                        one{"{0} hektarom"}
+                    }
+                }
                 dnam{"hektari"}
                 few{"{0} hektara"}
                 gender{"inanimate"}
@@ -203,6 +280,17 @@ sr_Latn{
                 other{"{0} stavki"}
             }
             karat{
+                case{
+                    accusative{
+                        one{"{0} karat"}
+                    }
+                    genitive{
+                        one{"{0} karata"}
+                    }
+                    instrumental{
+                        one{"{0} karatom"}
+                    }
+                }
                 dnam{"karati"}
                 few{"{0} karata"}
                 gender{"inanimate"}
@@ -222,6 +310,23 @@ sr_Latn{
                 other{"{0} milimola po litri"}
             }
             mole{
+                case{
+                    accusative{
+                        few{"{0} mola"}
+                        one{"{0} mol"}
+                        other{"{0} mola"}
+                    }
+                    genitive{
+                        few{"{0} mola"}
+                        one{"{0} mola"}
+                        other{"{0} mola"}
+                    }
+                    instrumental{
+                        few{"{0} mola"}
+                        one{"{0} molom"}
+                        other{"{0} mola"}
+                    }
+                }
                 dnam{"moli"}
                 few{"{0} mola"}
                 gender{"inanimate"}
@@ -229,6 +334,17 @@ sr_Latn{
                 other{"{0} mola"}
             }
             percent{
+                case{
+                    accusative{
+                        one{"{0} procenat"}
+                    }
+                    genitive{
+                        one{"{0} procenta"}
+                    }
+                    instrumental{
+                        one{"{0} procentom"}
+                    }
+                }
                 dnam{"procenat"}
                 few{"{0} procenata"}
                 gender{"inanimate"}
@@ -236,6 +352,17 @@ sr_Latn{
                 other{"{0} procenata"}
             }
             permille{
+                case{
+                    accusative{
+                        one{"{0} promil"}
+                    }
+                    genitive{
+                        one{"{0} promila"}
+                    }
+                    instrumental{
+                        one{"{0} promilom"}
+                    }
+                }
                 dnam{"promil"}
                 few{"{0} promila"}
                 gender{"inanimate"}
@@ -243,6 +370,17 @@ sr_Latn{
                 other{"{0} promila"}
             }
             permillion{
+                case{
+                    accusative{
+                        one{"{0} česticu na milion"}
+                    }
+                    genitive{
+                        one{"{0} čestice na milion"}
+                    }
+                    instrumental{
+                        one{"{0} česticom na milion"}
+                    }
+                }
                 dnam{"čestica na milion"}
                 few{"{0} čestice na milion"}
                 gender{"feminine"}
@@ -250,7 +388,10 @@ sr_Latn{
                 other{"{0} čestica na milion"}
             }
             permyriad{
+                few{"{0}‱"}
                 gender{"inanimate"}
+                one{"{0}‱"}
+                other{"{0}‱"}
             }
         }
         consumption{
@@ -288,6 +429,17 @@ sr_Latn{
         }
         digital{
             bit{
+                case{
+                    accusative{
+                        one{"{0} bit"}
+                    }
+                    genitive{
+                        one{"{0} bita"}
+                    }
+                    instrumental{
+                        one{"{0} bitom"}
+                    }
+                }
                 dnam{"bitovi"}
                 few{"{0} bita"}
                 gender{"inanimate"}
@@ -295,6 +447,17 @@ sr_Latn{
                 other{"{0} bitova"}
             }
             byte{
+                case{
+                    accusative{
+                        one{"{0} bajt"}
+                    }
+                    genitive{
+                        one{"{0} bajta"}
+                    }
+                    instrumental{
+                        one{"{0} bajtom"}
+                    }
+                }
                 dnam{"bajtovi"}
                 few{"{0} bajta"}
                 gender{"inanimate"}
@@ -358,6 +521,17 @@ sr_Latn{
         }
         duration{
             century{
+                case{
+                    accusative{
+                        one{"{0} vek"}
+                    }
+                    genitive{
+                        one{"{0} veka"}
+                    }
+                    instrumental{
+                        one{"{0} vekom"}
+                    }
+                }
                 dnam{"vekovi"}
                 few{"{0} veka"}
                 gender{"inanimate"}
@@ -365,6 +539,17 @@ sr_Latn{
                 other{"{0} vekova"}
             }
             day{
+                case{
+                    accusative{
+                        one{"{0} dan"}
+                    }
+                    genitive{
+                        one{"{0} dana"}
+                    }
+                    instrumental{
+                        one{"{0} danom"}
+                    }
+                }
                 dnam{"dani"}
                 few{"{0} dana"}
                 gender{"inanimate"}
@@ -376,12 +561,15 @@ sr_Latn{
                 case{
                     accusative{
                         few{"{0} decenije"}
+                        one{"{0} deceniju"}
                     }
                     genitive{
                         few{"{0} decenije"}
+                        one{"{0} decenije"}
                     }
                     instrumental{
                         few{"{0} decenije"}
+                        one{"{0} decenijom"}
                     }
                 }
                 dnam{"decenije"}
@@ -391,6 +579,17 @@ sr_Latn{
                 other{"{0} decenija"}
             }
             hour{
+                case{
+                    accusative{
+                        one{"{0} sat"}
+                    }
+                    genitive{
+                        one{"{0} sata"}
+                    }
+                    instrumental{
+                        one{"{0} satom"}
+                    }
+                }
                 dnam{"sati"}
                 few{"{0} sata"}
                 gender{"inanimate"}
@@ -411,6 +610,17 @@ sr_Latn{
                 other{"{0} milisekundi"}
             }
             minute{
+                case{
+                    accusative{
+                        one{"{0} minut"}
+                    }
+                    genitive{
+                        one{"{0} minuta"}
+                    }
+                    instrumental{
+                        one{"{0} minutom"}
+                    }
+                }
                 dnam{"minuti"}
                 few{"{0} minuta"}
                 gender{"inanimate"}
@@ -419,6 +629,17 @@ sr_Latn{
                 per{"{0} u minutu"}
             }
             month{
+                case{
+                    accusative{
+                        one{"{0} mesec"}
+                    }
+                    genitive{
+                        one{"{0} meseca"}
+                    }
+                    instrumental{
+                        one{"{0} mesecom"}
+                    }
+                }
                 dnam{"meseci"}
                 few{"{0} meseca"}
                 gender{"inanimate"}
@@ -433,6 +654,17 @@ sr_Latn{
                 other{"{0} nanosekundi"}
             }
             second{
+                case{
+                    accusative{
+                        one{"{0} sekundu"}
+                    }
+                    genitive{
+                        one{"{0} sekunde"}
+                    }
+                    instrumental{
+                        one{"{0} sekundom"}
+                    }
+                }
                 dnam{"sekunde"}
                 few{"{0} sekunde"}
                 gender{"feminine"}
@@ -441,6 +673,17 @@ sr_Latn{
                 per{"{0}/u sekundi"}
             }
             week{
+                case{
+                    accusative{
+                        one{"{0} nedelju"}
+                    }
+                    genitive{
+                        one{"{0} nedelje"}
+                    }
+                    instrumental{
+                        one{"{0} nedeljom"}
+                    }
+                }
                 dnam{"nedelje"}
                 few{"{0} nedelje"}
                 gender{"feminine"}
@@ -449,6 +692,17 @@ sr_Latn{
                 per{"{0} nedeljno"}
             }
             year{
+                case{
+                    accusative{
+                        one{"{0} godinu"}
+                    }
+                    genitive{
+                        one{"{0} godine"}
+                    }
+                    instrumental{
+                        one{"{0} godinom"}
+                    }
+                }
                 dnam{"godine"}
                 few{"{0} godine"}
                 gender{"feminine"}
@@ -459,6 +713,17 @@ sr_Latn{
         }
         electric{
             ampere{
+                case{
+                    accusative{
+                        one{"{0} amper"}
+                    }
+                    genitive{
+                        one{"{0} ampera"}
+                    }
+                    instrumental{
+                        one{"{0} amperom"}
+                    }
+                }
                 dnam{"amperi"}
                 few{"{0} ampera"}
                 gender{"inanimate"}
@@ -472,6 +737,17 @@ sr_Latn{
                 other{"{0} miliampera"}
             }
             ohm{
+                case{
+                    accusative{
+                        one{"{0} om"}
+                    }
+                    genitive{
+                        one{"{0} oma"}
+                    }
+                    instrumental{
+                        one{"{0} omom"}
+                    }
+                }
                 dnam{"omi"}
                 few{"{0} oma"}
                 gender{"inanimate"}
@@ -479,6 +755,17 @@ sr_Latn{
                 other{"{0} oma"}
             }
             volt{
+                case{
+                    accusative{
+                        one{"{0} volt"}
+                    }
+                    genitive{
+                        one{"{0} volta"}
+                    }
+                    instrumental{
+                        one{"{0} voltom"}
+                    }
+                }
                 dnam{"volti"}
                 few{"{0} volta"}
                 gender{"inanimate"}
@@ -491,6 +778,17 @@ sr_Latn{
                 dnam{"Britanska termalna jedinica"}
             }
             calorie{
+                case{
+                    accusative{
+                        one{"{0} kaloriju"}
+                    }
+                    genitive{
+                        one{"{0} kalorije"}
+                    }
+                    instrumental{
+                        one{"{0} kalorijom"}
+                    }
+                }
                 dnam{"kalorije"}
                 few{"{0} kalorije"}
                 gender{"feminine"}
@@ -510,6 +808,17 @@ sr_Latn{
                 other{"{0} kalorija"}
             }
             joule{
+                case{
+                    accusative{
+                        one{"{0} džul"}
+                    }
+                    genitive{
+                        one{"{0} džula"}
+                    }
+                    instrumental{
+                        one{"{0} džulom"}
+                    }
+                }
                 dnam{"džuli"}
                 few{"{0} džula"}
                 gender{"inanimate"}
@@ -543,6 +852,17 @@ sr_Latn{
         }
         force{
             newton{
+                case{
+                    accusative{
+                        one{"{0} njutn"}
+                    }
+                    genitive{
+                        one{"{0} njutna"}
+                    }
+                    instrumental{
+                        one{"{0} njutnom"}
+                    }
+                }
                 dnam{"njutni"}
                 few{"{0} njutna"}
                 gender{"inanimate"}
@@ -564,6 +884,17 @@ sr_Latn{
                 other{"{0} gigaherca"}
             }
             hertz{
+                case{
+                    accusative{
+                        one{"{0} herc"}
+                    }
+                    genitive{
+                        one{"{0} herca"}
+                    }
+                    instrumental{
+                        one{"{0} hercom"}
+                    }
+                }
                 dnam{"herci"}
                 few{"{0} herca"}
                 gender{"inanimate"}
@@ -591,9 +922,11 @@ sr_Latn{
             }
             em{
                 gender{"inanimate"}
+                one{"{0} em"}
             }
             pixel{
                 gender{"inanimate"}
+                one{"{0} px"}
             }
         }
         length{
@@ -661,6 +994,17 @@ sr_Latn{
                 other{"{0} svetlosnih godina"}
             }
             meter{
+                case{
+                    accusative{
+                        one{"{0} metar"}
+                    }
+                    genitive{
+                        one{"{0} metra"}
+                    }
+                    instrumental{
+                        one{"{0} metrom"}
+                    }
+                }
                 dnam{"metri"}
                 few{"{0} metra"}
                 gender{"inanimate"}
@@ -681,6 +1025,17 @@ sr_Latn{
                 other{"{0} milja"}
             }
             mile-scandinavian{
+                case{
+                    accusative{
+                        one{"{0} skandinavsku milju"}
+                    }
+                    genitive{
+                        one{"{0} skandinavske milje"}
+                    }
+                    instrumental{
+                        one{"{0} skandinavskom miljom"}
+                    }
+                }
                 dnam{"skandinavska milja"}
                 few{"{0} skandinavske milje"}
                 gender{"feminine"}
@@ -738,6 +1093,17 @@ sr_Latn{
         }
         light{
             candela{
+                case{
+                    accusative{
+                        one{"{0} kandelu"}
+                    }
+                    genitive{
+                        one{"{0} kandele"}
+                    }
+                    instrumental{
+                        one{"{0} kandelom"}
+                    }
+                }
                 dnam{"kandela"}
                 few{"{0} kandele"}
                 gender{"feminine"}
@@ -745,6 +1111,17 @@ sr_Latn{
                 other{"{0} kandela"}
             }
             lumen{
+                case{
+                    accusative{
+                        one{"{0} lumen"}
+                    }
+                    genitive{
+                        one{"{0} lumena"}
+                    }
+                    instrumental{
+                        one{"{0} lumenom"}
+                    }
+                }
                 dnam{"lumen"}
                 few{"{0} lumena"}
                 gender{"inanimate"}
@@ -752,6 +1129,17 @@ sr_Latn{
                 other{"{0} lumena"}
             }
             lux{
+                case{
+                    accusative{
+                        one{"{0} luks"}
+                    }
+                    genitive{
+                        one{"{0} luksa"}
+                    }
+                    instrumental{
+                        one{"{0} luksom"}
+                    }
+                }
                 dnam{"luks"}
                 few{"{0} luksa"}
                 gender{"inanimate"}
@@ -761,6 +1149,17 @@ sr_Latn{
         }
         mass{
             carat{
+                case{
+                    accusative{
+                        one{"{0} karat"}
+                    }
+                    genitive{
+                        one{"{0} karata"}
+                    }
+                    instrumental{
+                        one{"{0} karatom"}
+                    }
+                }
                 dnam{"karati"}
                 few{"{0} karata"}
                 gender{"inanimate"}
@@ -786,6 +1185,17 @@ sr_Latn{
                 other{"{0} grejna"}
             }
             gram{
+                case{
+                    accusative{
+                        one{"{0} gram"}
+                    }
+                    genitive{
+                        one{"{0} grama"}
+                    }
+                    instrumental{
+                        one{"{0} gramom"}
+                    }
+                }
                 dnam{"grami"}
                 few{"{0} grama"}
                 gender{"inanimate"}
@@ -794,6 +1204,17 @@ sr_Latn{
                 per{"{0} po gramu"}
             }
             kilogram{
+                case{
+                    accusative{
+                        one{"{0} kilogram"}
+                    }
+                    genitive{
+                        one{"{0} kilograma"}
+                    }
+                    instrumental{
+                        one{"{0} kilogramom"}
+                    }
+                }
                 dnam{"kilogrami"}
                 few{"{0} kilograma"}
                 gender{"inanimate"}
@@ -802,6 +1223,17 @@ sr_Latn{
                 per{"{0} po kilogramu"}
             }
             metric-ton{
+                case{
+                    accusative{
+                        one{"{0} metričku tonu"}
+                    }
+                    genitive{
+                        one{"{0} metričke tone"}
+                    }
+                    instrumental{
+                        one{"{0} metričkom tonom"}
+                    }
+                }
                 dnam{"metričke tone"}
                 few{"{0} metričke tone"}
                 gender{"feminine"}
@@ -891,6 +1323,17 @@ sr_Latn{
                 other{"{0} milivati"}
             }
             watt{
+                case{
+                    accusative{
+                        one{"{0} vat"}
+                    }
+                    genitive{
+                        one{"{0} vata"}
+                    }
+                    instrumental{
+                        one{"{0} vatom"}
+                    }
+                }
                 dnam{"vati"}
                 few{"{0} vata"}
                 gender{"inanimate"}
@@ -900,6 +1343,17 @@ sr_Latn{
         }
         pressure{
             atmosphere{
+                case{
+                    accusative{
+                        one{"{0} atmosferu"}
+                    }
+                    genitive{
+                        one{"{0} atmosfere"}
+                    }
+                    instrumental{
+                        one{"{0} atmosferom"}
+                    }
+                }
                 dnam{"atmosfere"}
                 few{"{0} atmosfere"}
                 gender{"feminine"}
@@ -907,6 +1361,17 @@ sr_Latn{
                 other{"{0} atmosfera"}
             }
             bar{
+                case{
+                    accusative{
+                        one{"{0} bar"}
+                    }
+                    genitive{
+                        one{"{0} bara"}
+                    }
+                    instrumental{
+                        one{"{0} barom"}
+                    }
+                }
                 dnam{"bari"}
                 few{"{0} bara"}
                 gender{"inanimate"}
@@ -950,6 +1415,17 @@ sr_Latn{
                 other{"{0} milimetara živinog stuba"}
             }
             pascal{
+                case{
+                    accusative{
+                        one{"{0} paskal"}
+                    }
+                    genitive{
+                        one{"{0} paskala"}
+                    }
+                    instrumental{
+                        one{"{0} paskalom"}
+                    }
+                }
                 dnam{"paskali"}
                 few{"{0} paskala"}
                 gender{"inanimate"}
@@ -991,6 +1467,17 @@ sr_Latn{
         }
         temperature{
             celsius{
+                case{
+                    accusative{
+                        one{"{0} stepen Celzijusa"}
+                    }
+                    genitive{
+                        one{"{0} stepena Celzijusa"}
+                    }
+                    instrumental{
+                        one{"{0} stepenom Celzijusa"}
+                    }
+                }
                 dnam{"stepeni Celzijusa"}
                 few{"{0} stepena Celzijusa"}
                 gender{"inanimate"}
@@ -1011,6 +1498,17 @@ sr_Latn{
                 other{"{0}°"}
             }
             kelvin{
+                case{
+                    accusative{
+                        one{"{0} kelvin"}
+                    }
+                    genitive{
+                        one{"{0} kelvina"}
+                    }
+                    instrumental{
+                        one{"{0} kelvinom"}
+                    }
+                }
                 dnam{"kelvin"}
                 few{"{0} kelvina"}
                 gender{"inanimate"}
@@ -1108,6 +1606,17 @@ sr_Latn{
                 other{"{0} šolja"}
             }
             cup-metric{
+                case{
+                    accusative{
+                        one{"{0} metričku šolju"}
+                    }
+                    genitive{
+                        one{"{0} metričke šolje"}
+                    }
+                    instrumental{
+                        one{"{0} metričkom šoljom"}
+                    }
+                }
                 dnam{"metrička šolja"}
                 few{"{0} metričke šolje"}
                 gender{"feminine"}
@@ -1183,6 +1692,17 @@ sr_Latn{
                 other{"{0} džigera"}
             }
             liter{
+                case{
+                    accusative{
+                        one{"{0} litar"}
+                    }
+                    genitive{
+                        one{"{0} litra"}
+                    }
+                    instrumental{
+                        one{"{0} litrom"}
+                    }
+                }
                 dnam{"litri"}
                 few{"{0} litra"}
                 gender{"inanimate"}
@@ -1215,6 +1735,17 @@ sr_Latn{
                 other{"{0} pinti"}
             }
             pint-metric{
+                case{
+                    accusative{
+                        one{"{0} metričku pintu"}
+                    }
+                    genitive{
+                        one{"{0} metričke pinte"}
+                    }
+                    instrumental{
+                        one{"{0} metričkom pintom"}
+                    }
+                }
                 dnam{"metričke pinte"}
                 few{"{0} metričke pinte"}
                 gender{"feminine"}

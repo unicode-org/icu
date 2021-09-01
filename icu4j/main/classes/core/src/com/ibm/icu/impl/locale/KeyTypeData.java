@@ -340,6 +340,12 @@ public class KeyTypeData {
                     String legacyTypeId = typeMapEntry.getKey();
                     String bcpTypeId = typeMapEntry.getString();
 
+                    // TODO: For now we skip loading entries mapping to metazone short ids,
+                    // which have 4 characters.
+                    if (isTZ && bcpTypeId.length() == 4) {
+                        continue;
+                    }
+
                     // special types
                     final char first = legacyTypeId.charAt(0);
                     final boolean isSpecialType = '9' < first && first < 'a' && bcpTypeId.length() == 0;

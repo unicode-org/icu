@@ -222,6 +222,11 @@ initFromResourceBundle(UErrorCode& sts) {
                 if (U_FAILURE(sts)) {
                     break;
                 }
+                // TODO: For now we skip loading entries mapping to metazone short ids,
+                // which have 4 characters.
+                if (isTZ && uBcpTypeId.length() == 4) {
+                    continue;
+                }
 
                 // empty value indicates that BCP type is same with the legacy type.
                 const char* bcpTypeId = legacyTypeId;
