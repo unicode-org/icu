@@ -757,6 +757,7 @@ infodir
 docdir
 oldincludedir
 includedir
+runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -862,6 +863,7 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
+runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -1114,6 +1116,15 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
+  -runstatedir | --runstatedir | --runstatedi | --runstated \
+  | --runstate | --runstat | --runsta | --runst | --runs \
+  | --run | --ru | --r)
+    ac_prev=runstatedir ;;
+  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
+  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
+  | --run=* | --ru=* | --r=*)
+    runstatedir=$ac_optarg ;;
+
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1251,7 +1262,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir
+		libdir localedir mandir runstatedir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1404,6 +1415,7 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -8049,7 +8061,7 @@ echo "CXXFLAGS=$CXXFLAGS"
 
 
 # output the Makefiles
-ac_config_files="$ac_config_files icudefs.mk Makefile data/pkgdataMakefile config/Makefile.inc config/icu.pc config/pkgdataMakefile data/Makefile stubdata/Makefile common/Makefile i18n/Makefile layoutex/Makefile io/Makefile extra/Makefile extra/uconv/Makefile extra/uconv/pkgdataMakefile extra/scrptrun/Makefile tools/Makefile tools/ctestfw/Makefile tools/toolutil/Makefile tools/makeconv/Makefile tools/genrb/Makefile tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/gendict/Makefile tools/gentest/Makefile tools/gennorm2/Makefile tools/genbrk/Makefile tools/gensprep/Makefile tools/icuinfo/Makefile tools/icupkg/Makefile tools/icuswap/Makefile tools/pkgdata/Makefile tools/tzcode/Makefile tools/gencfu/Makefile tools/escapesrc/Makefile test/Makefile test/compat/Makefile test/testdata/Makefile test/testdata/pkgdataMakefile test/hdrtst/Makefile test/intltest/Makefile test/cintltst/Makefile test/iotest/Makefile test/letest/Makefile test/perf/Makefile test/perf/collationperf/Makefile test/perf/collperf/Makefile test/perf/collperf2/Makefile test/perf/dicttrieperf/Makefile test/perf/ubrkperf/Makefile test/perf/charperf/Makefile test/perf/convperf/Makefile test/perf/localecanperf/Makefile test/perf/normperf/Makefile test/perf/DateFmtPerf/Makefile test/perf/howExpensiveIs/Makefile test/perf/strsrchperf/Makefile test/perf/unisetperf/Makefile test/perf/usetperf/Makefile test/perf/ustrperf/Makefile test/perf/utfperf/Makefile test/perf/utrie2perf/Makefile test/perf/leperf/Makefile test/fuzzer/Makefile samples/Makefile samples/date/Makefile samples/cal/Makefile samples/layout/Makefile"
+ac_config_files="$ac_config_files icudefs.mk Makefile data/pkgdataMakefile config/Makefile.inc config/icu.pc config/pkgdataMakefile data/Makefile stubdata/Makefile common/Makefile i18n/Makefile layoutex/Makefile io/Makefile extra/Makefile extra/uconv/Makefile extra/uconv/pkgdataMakefile extra/scrptrun/Makefile tools/Makefile tools/ctestfw/Makefile tools/toolutil/Makefile tools/makeconv/Makefile tools/genrb/Makefile tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/gendict/Makefile tools/gentest/Makefile tools/gennorm2/Makefile tools/genbrk/Makefile tools/gensprep/Makefile tools/icuinfo/Makefile tools/icupkg/Makefile tools/icuswap/Makefile tools/pkgdata/Makefile tools/icuwriteuprops/Makefile tools/tzcode/Makefile tools/gencfu/Makefile tools/escapesrc/Makefile test/Makefile test/compat/Makefile test/testdata/Makefile test/testdata/pkgdataMakefile test/hdrtst/Makefile test/intltest/Makefile test/cintltst/Makefile test/iotest/Makefile test/letest/Makefile test/perf/Makefile test/perf/collationperf/Makefile test/perf/collperf/Makefile test/perf/collperf2/Makefile test/perf/dicttrieperf/Makefile test/perf/ubrkperf/Makefile test/perf/charperf/Makefile test/perf/convperf/Makefile test/perf/localecanperf/Makefile test/perf/normperf/Makefile test/perf/DateFmtPerf/Makefile test/perf/howExpensiveIs/Makefile test/perf/strsrchperf/Makefile test/perf/unisetperf/Makefile test/perf/usetperf/Makefile test/perf/ustrperf/Makefile test/perf/utfperf/Makefile test/perf/utrie2perf/Makefile test/perf/leperf/Makefile test/fuzzer/Makefile samples/Makefile samples/date/Makefile samples/cal/Makefile samples/layout/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -8792,6 +8804,7 @@ do
     "tools/icupkg/Makefile") CONFIG_FILES="$CONFIG_FILES tools/icupkg/Makefile" ;;
     "tools/icuswap/Makefile") CONFIG_FILES="$CONFIG_FILES tools/icuswap/Makefile" ;;
     "tools/pkgdata/Makefile") CONFIG_FILES="$CONFIG_FILES tools/pkgdata/Makefile" ;;
+    "tools/icuwriteuprops/Makefile") CONFIG_FILES="$CONFIG_FILES tools/icuwriteuprops/Makefile" ;;
     "tools/tzcode/Makefile") CONFIG_FILES="$CONFIG_FILES tools/tzcode/Makefile" ;;
     "tools/gencfu/Makefile") CONFIG_FILES="$CONFIG_FILES tools/gencfu/Makefile" ;;
     "tools/escapesrc/Makefile") CONFIG_FILES="$CONFIG_FILES tools/escapesrc/Makefile" ;;

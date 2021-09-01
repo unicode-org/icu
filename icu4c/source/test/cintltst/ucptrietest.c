@@ -726,6 +726,7 @@ trieTestGolden(const char *testName,
     usrc_writeCopyrightHeader(stream, "#", 2021);
     usrc_writeFileNameGeneratedBy(stream, "#", testName, "ucptrietest.c");
     fputs("[code_point_trie.struct]\n", stream);
+    fprintf(stream, "name = \"%s\"\n", testName);
     usrc_writeUCPTrie(stream, testName, trie, UPRV_TARGET_SYNTAX_TOML);
     fputs("\n[code_point_trie.testdata]\n", stream);
     fputs("# Array of (limit, value) pairs\n", stream);
