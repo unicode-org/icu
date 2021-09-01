@@ -924,8 +924,6 @@ bin_write_xml(BinaryResource *res, const char* id, const char* /*language*/, UEr
 static void
 table_write_xml(TableResource *res, const char* id, const char* language, UBool isTopLevel, UErrorCode *status) {
 
-    uint32_t  i         = 0;
-
     struct SResource *current = NULL;
     char* sid = NULL;
 
@@ -940,7 +938,6 @@ table_write_xml(TableResource *res, const char* id, const char* language, UBool 
     }
 
     current = res->fFirst;
-    i = 0;
 
     while (current != NULL) {
         res_write_xml(current, sid, language, FALSE, status);
@@ -949,7 +946,6 @@ table_write_xml(TableResource *res, const char* id, const char* language, UBool 
             return;
         }
 
-        i += 1;
         current = current->fNext;
     }
 
