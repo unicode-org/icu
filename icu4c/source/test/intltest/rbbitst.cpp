@@ -4014,6 +4014,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
                 errln("breakPos > testText.length()");
             }
             expectedBreaks[breakPos] = 1;
+            expectedCount++;
             U_ASSERT(expectedCount<testText.length());
         }
 
