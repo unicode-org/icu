@@ -351,8 +351,13 @@ public:
     int32_t popi(void);
     
     inline void* push(void* obj, UErrorCode &status) {
-        addElementX(obj, status);
-        return obj;
+        if (hasDeleter()) {
+            adoptElement(obj, status);
+            return (U_SUCCESS(status)) ? obj : nullptr;
+        } else {
+            addElement(obj, status);
+            return obj;
+        }
     }
 
     inline int32_t push(int32_t i, UErrorCode &status) {

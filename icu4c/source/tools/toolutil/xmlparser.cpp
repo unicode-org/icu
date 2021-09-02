@@ -391,7 +391,7 @@ UXMLParser::parse(const UnicodeString &src, UErrorCode &status) {
             // Nested Element Start
             if (mXMLElemStart.lookingAt(fPos, status)) {
                 UXMLElement *t = createElement(mXMLElemStart, status);
-                el->fChildren.addElementX(t, status);
+                el->fChildren.addElement(t, status);
                 t->fParent = el;
                 fElementStack.push(el, status);
                 el = t;
@@ -407,7 +407,7 @@ UXMLParser::parse(const UnicodeString &src, UErrorCode &status) {
                     // This chunk of text contains something other than just
                     //  white space. Make a child node for it.
                     replaceCharRefs(s, status);
-                    el->fChildren.addElementX(s.clone(), status);
+                    el->fChildren.addElement(s.clone(), status);
                 }
                 mXMLSP.reset(src);    // The matchers need to stay set to the main input string.
                 continue;
@@ -445,7 +445,7 @@ UXMLParser::parse(const UnicodeString &src, UErrorCode &status) {
             // Empty Element.  Stored as a child of the current element, but not stacked.
             if (mXMLElemEmpty.lookingAt(fPos, status)) {
                 UXMLElement *t = createElement(mXMLElemEmpty, status);
-                el->fChildren.addElementX(t, status);
+                el->fChildren.addElement(t, status);
                 continue;
             }
 
@@ -521,8 +521,8 @@ UXMLParser::createElement(RegexMatcher  &mEl, UErrorCode &status) {
         replaceCharRefs(attValue, status);
 
         // Save the attribute name and value in our document structure.
-        el->fAttNames.addElementX((void *)intern(attName, status), status);
-        el->fAttValues.addElementX(attValue.clone(), status);
+        el->fAttNames.addElement((void *)intern(attName, status), status);
+        el->fAttValues.addElement(attValue.clone(), status);
         pos = mAttrValue.end(2, status);
     }
     fPos = mEl.end(0, status);

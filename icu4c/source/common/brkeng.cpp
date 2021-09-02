@@ -135,14 +135,13 @@ ICULanguageBreakFactory::getEngineFor(UChar32 c) {
     static UMutex gBreakEngineMutex;
     Mutex m(&gBreakEngineMutex);
 
-    if (fEngines == NULL) {
-        UStack  *engines = new UStack(_deleteEngine, NULL, status);
-        if (U_FAILURE(status) || engines == NULL) {
+    if (fEngines == nullptr) {
+        LocalPointer<UStack>  engines(new UStack(_deleteEngine, nullptr, status), status);
+        if (U_FAILURE(status) ) {
             // Note: no way to return error code to caller.
-            delete engines;
-            return NULL;
+            return nullptr;
         }
-        fEngines = engines;
+        fEngines = engines.orphan();
     } else {
         int32_t i = fEngines->size();
         while (--i >= 0) {
@@ -155,10 +154,10 @@ ICULanguageBreakFactory::getEngineFor(UChar32 c) {
     
     // We didn't find an engine. Create one.
     lbe = loadEngineFor(c);
-    if (lbe != NULL) {
+    if (lbe != nullptr) {
         fEngines->push((void *)lbe, status);
     }
-    return lbe;
+    return U_SUCCESS(status) ? lbe : nullptr;
 }
 
 const LanguageBreakEngine *

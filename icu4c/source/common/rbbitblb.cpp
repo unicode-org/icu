@@ -261,7 +261,7 @@ void RBBITableBuilder::calcFirstPos(RBBINode *n) {
         // Note: In order to maintain the sort invariant on the set,
         // this function should only be called on a node whose set is
         // empty to start with.
-        n->fFirstPosSet->addElementX(n, *fStatus);
+        n->fFirstPosSet->addElement(n, *fStatus);
         return;
     }
 
@@ -307,7 +307,7 @@ void RBBITableBuilder::calcLastPos(RBBINode *n) {
         // Note: In order to maintain the sort invariant on the set,
         // this function should only be called on a node whose set is
         // empty to start with.
-        n->fLastPosSet->addElementX(n, *fStatus);
+        n->fLastPosSet->addElement(n, *fStatus);
         return;
     }
 
@@ -390,8 +390,9 @@ void RBBITableBuilder::addRuleRootNodes(UVector *dest, RBBINode *node) {
     if (node == NULL || U_FAILURE(*fStatus)) {
         return;
     }
+    U_ASSERT(!dest->hasDeleter());
     if (node->fRuleRoot) {
-        dest->addElementX(node, *fStatus);
+        dest->addElement(node, *fStatus);
         // Note: rules cannot nest. If we found a rule start node,
         //       no child node can also be a start node.
         return;
@@ -583,7 +584,7 @@ void RBBITableBuilder::buildStateTable() {
     if (failState->fPositions == NULL || U_FAILURE(*fStatus)) {
         goto ExitBuildSTdeleteall;
     }
-    fDStates->addElementX(failState, *fStatus);
+    fDStates->addElement(failState, *fStatus);
     if (U_FAILURE(*fStatus)) {
         goto ExitBuildSTdeleteall;
     }
@@ -605,7 +606,7 @@ void RBBITableBuilder::buildStateTable() {
         goto ExitBuildSTdeleteall;
     }
     setAdd(initialState->fPositions, fTree->fFirstPosSet);
-    fDStates->addElementX(initialState, *fStatus);
+    fDStates->addElement(initialState, *fStatus);
     if (U_FAILURE(*fStatus)) {
         goto ExitBuildSTdeleteall;
     }
@@ -681,7 +682,7 @@ void RBBITableBuilder::buildStateTable() {
                         goto ExitBuildSTdeleteall;
                     }
                     newState->fPositions = U;
-                    fDStates->addElementX(newState, *fStatus);
+                    fDStates->addElement(newState, *fStatus);
                     if (U_FAILURE(*fStatus)) {
                         return;
                     }
@@ -1502,9 +1503,18 @@ void RBBITableBuilder::buildSafeReverseTable(UErrorCode &status) {
     // fLookAhead, etc. are not needed for the safe table, and are omitted at this stage of building.
 
     U_ASSERT(fSafeTable == nullptr);
-    fSafeTable = new UVector(uprv_deleteUObject, uhash_compareUnicodeString, numCharClasses + 2, status);
+    LocalPointer<UVector> lpSafeTable(
+        new UVector(uprv_deleteUObject, uhash_compareUnicodeString, numCharClasses + 2, status), status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+    fSafeTable = lpSafeTable.orphan();
     for (int32_t row=0; row<numCharClasses + 2; ++row) {
-        fSafeTable->addElementX(new UnicodeString(numCharClasses, 0, numCharClasses+4), status);
+        LocalPointer<UnicodeString> lpString(new UnicodeString(numCharClasses, 0, numCharClasses+4), status);
+        fSafeTable->adoptElement(lpString.orphan(), status);
+    }
+    if (U_FAILURE(status)) {
+        return;
     }
 
     // From the start state, each input char class transitions to the state for that input.

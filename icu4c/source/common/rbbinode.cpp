@@ -266,8 +266,9 @@ void   RBBINode::findNodes(UVector *dest, RBBINode::NodeType kind, UErrorCode &s
     if (U_FAILURE(status)) {
         return;
     }
+    U_ASSERT(!dest->hasDeleter());
     if (fType == kind) {
-        dest->addElementX(this, status);
+        dest->addElement(this, status);
     }
     if (fLeftChild != NULL) {
         fLeftChild->findNodes(dest, kind, status);
