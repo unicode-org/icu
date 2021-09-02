@@ -264,8 +264,8 @@ void DateFormatTest::TestWallyWedel()
      * A String array for the time zone ids.
      */
     int32_t ids_length;
-    StringEnumeration* ids = TimeZone::createEnumeration();
-    if (ids == NULL) {
+    StringEnumeration* ids = TimeZone::createEnumeration(status);
+    if (U_FAILURE(status)) {
         dataerrln("Unable to create TimeZone enumeration.");
         if (sdf != NULL) {
             delete sdf;

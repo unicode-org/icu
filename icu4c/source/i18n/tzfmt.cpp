@@ -2780,15 +2780,17 @@ static void U_CALLCONV initZoneIdTrie(UErrorCode &status) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    StringEnumeration *tzenum = TimeZone::createEnumeration();
-    const UnicodeString *id;
-    while ((id = tzenum->snext(status)) != NULL) {
-        const UChar* uid = ZoneMeta::findTimeZoneID(*id);
-        if (uid) {
-            gZoneIdTrie->put(uid, const_cast<UChar *>(uid), status);
+    StringEnumeration *tzenum = TimeZone::createEnumeration(status);
+    if (U_SUCCESS(status)) {
+        const UnicodeString *id;
+        while ((id = tzenum->snext(status)) != NULL) {
+            const UChar* uid = ZoneMeta::findTimeZoneID(*id);
+            if (uid) {
+                gZoneIdTrie->put(uid, const_cast<UChar *>(uid), status);
+            }
         }
+        delete tzenum;
     }
-    delete tzenum;
 }
 
 

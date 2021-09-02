@@ -78,9 +78,9 @@ U_NAMESPACE_BEGIN
  * \code
  *     // get the supported ids for GMT-08:00 (Pacific Standard Time)
  *     UErrorCode success = U_ZERO_ERROR;
- *     const StringEnumeration *ids = TimeZone::createEnumeration(-8 * 60 * 60 * 1000);
+ *     const StringEnumeration *ids = TimeZone::createEnumeration(-8 * 60 * 60 * 1000, success);
  *     // if no ids were returned, something is wrong. get out.
- *     if (ids == 0 || ids->count(success) == 0) {
+ *     if (U_FAILURE(success)) {
  *         return;
  *     }
  *

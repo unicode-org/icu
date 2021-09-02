@@ -158,7 +158,11 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
         LOCALES = Locale::getAvailableLocales(nLocales);
     }
 
-    StringEnumeration *tzids = TimeZone::createEnumeration();
+    StringEnumeration *tzids = TimeZone::createEnumeration(status);
+    if (U_FAILURE(status)) {
+        dataerrln("Unable to create TimeZone enumeration");
+        return;
+    }
     int32_t inRaw, inDst;
     int32_t outRaw, outDst;
 
@@ -729,9 +733,12 @@ void TimeZoneFormatTest::RunAdoptDefaultThreadSafeTests(int32_t threadNumber) {
     if (threadNumber % 2 == 0) {
         for (int32_t i = 0; i < kAdoptDefaultIteration; i++) {
             std::unique_ptr<icu::StringEnumeration> timezones(
-                    icu::TimeZone::createEnumeration());
+                    icu::TimeZone::createEnumeration(status));
             // Fails with missing data.
-            if (!assertTrue(WHERE, (bool)timezones, false, true)) {return;}
+            if (U_FAILURE(status)) {
+                dataerrln("Unable to create TimeZone enumeration");
+                return;
+            }
             while (const icu::UnicodeString* timezone = timezones->snext(status)) {
                 status = U_ZERO_ERROR;
                 icu::TimeZone::adoptDefault(icu::TimeZone::createTimeZone(*timezone));
@@ -1301,9 +1308,9 @@ TimeZoneFormatTest::TestFormatCustomZone(void) {
 void
 TimeZoneFormatTest::TestFormatTZDBNamesAllZoneCoverage(void) {
     UErrorCode status = U_ZERO_ERROR;
-    LocalPointer<StringEnumeration> tzids(TimeZone::createEnumeration());
-    if (tzids.getAlias() == nullptr) {
-        dataerrln("%s %d tzids is null", __FILE__, __LINE__);
+    LocalPointer<StringEnumeration> tzids(TimeZone::createEnumeration(status));
+    if (U_FAILURE(status)) {
+        dataerrln("Unable to create TimeZone enumeration", __FILE__, __LINE__);
         return;
     }
     const UnicodeString *tzid;
