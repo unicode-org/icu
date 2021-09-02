@@ -100,7 +100,7 @@ public:
      * different class IDs.
      * @stable ICU 2.4
      */
-    virtual UClassID getDynamicClassID(void) const = 0;
+    virtual UClassID getDynamicClassID(void) const override = 0;
 
     /**
      * Set the data object associated with this functor.  The data

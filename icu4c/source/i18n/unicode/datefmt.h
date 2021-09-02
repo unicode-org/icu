@@ -229,13 +229,13 @@ public:
      * @return clone, or nullptr if an error occurred
      * @stable ICU 2.0
      */
-    virtual DateFormat* clone() const = 0;
+    virtual DateFormat* clone() const override = 0;
 
     /**
      * Equality operator.  Returns true if the two formats have the same behavior.
      * @stable ICU 2.0
      */
-    virtual bool operator==(const Format&) const;
+    virtual bool operator==(const Format&) const override;
 
 
     using Format::format;
@@ -257,7 +257,7 @@ public:
     virtual UnicodeString& format(const Formattable& obj,
                                   UnicodeString& appendTo,
                                   FieldPosition& pos,
-                                  UErrorCode& status) const;
+                                  UErrorCode& status) const override;
 
     /**
      * Format an object to produce a string. This method handles Formattable
@@ -277,7 +277,7 @@ public:
     virtual UnicodeString& format(const Formattable& obj,
                                   UnicodeString& appendTo,
                                   FieldPositionIterator* posIter,
-                                  UErrorCode& status) const;
+                                  UErrorCode& status) const override;
     /**
      * Formats a date into a date/time string. This is an abstract method which
      * concrete subclasses must implement.
@@ -523,7 +523,7 @@ public:
      */
     virtual void parseObject(const UnicodeString& source,
                              Formattable& result,
-                             ParsePosition& parse_pos) const;
+                             ParsePosition& parse_pos) const override;
 
     /**
      * Create a default date/time formatter that uses the SHORT style for both

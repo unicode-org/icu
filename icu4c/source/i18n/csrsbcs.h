@@ -74,8 +74,8 @@ class CharsetRecog_sbcs : public CharsetRecognizer
 public:
     CharsetRecog_sbcs();
     virtual ~CharsetRecog_sbcs();
-    virtual const char *getName() const = 0;
-    virtual UBool match(InputText *det, CharsetMatch *results) const = 0;
+    virtual const char *getName() const override = 0;
+    virtual UBool match(InputText *det, CharsetMatch *results) const override = 0;
     virtual int32_t match_sbcs(InputText *det, const int32_t ngrams[], const uint8_t charMap[]) const;
 };
 

@@ -146,7 +146,7 @@ public:
      * will return distinct unequal values.
      * @stable ICU 2.0
      */
-    virtual UClassID getDynamicClassID(void) const = 0;
+    virtual UClassID getDynamicClassID(void) const override = 0;
 
     /**
      * Return a CharacterIterator over the text being analyzed.
