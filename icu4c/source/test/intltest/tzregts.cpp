@@ -517,8 +517,8 @@ void TimeZoneRegressionTest:: Test4151406() {
         //try {
             UErrorCode ec = U_ZERO_ERROR;
             int32_t count;
-            StringEnumeration* ids = TimeZone::createEnumeration(rawoffset);
-            if (ids == NULL) {
+            StringEnumeration* ids = TimeZone::createEnumerationForRawOffset(rawoffset, ec);
+            if (U_FAILURE(ec)) {
                 dataerrln("Fail: TimeZone::createEnumeration(rawoffset)");
                 continue;
             }

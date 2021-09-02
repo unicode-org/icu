@@ -260,8 +260,8 @@ CalendarRegressionTest::test4031502()
     // This bug actually occurs on Windows NT as well, and doesn't
     // require the host zone to be set; it can be set in Java.
     UErrorCode status = U_ZERO_ERROR;
-    StringEnumeration* ids = TimeZone::createEnumeration();
-    if (ids == NULL) {
+    StringEnumeration* ids = TimeZone::createEnumeration(status);
+    if (U_FAILURE(status)) {
         dataerrln("Unable to create TimeZone Enumeration.");
         return;
     }
@@ -328,12 +328,12 @@ void CalendarRegressionTest::test4035301()
 void CalendarRegressionTest::test4040996()
 {
     int32_t count = 0;
-    StringEnumeration* ids = TimeZone::createEnumeration(-8 * 60 * 60 * 1000);
-    if (ids == NULL) {
+    UErrorCode status = U_ZERO_ERROR;
+    StringEnumeration* ids = TimeZone::createEnumerationForRawOffset(-8 * 60 * 60 * 1000, status);
+    if (U_FAILURE(status)) {
         dataerrln("Unable to create TimeZone enumeration.");
         return;
     }
-    UErrorCode status = U_ZERO_ERROR;
     count = ids->count(status);
     (void)count;    // Suppress set but not used warning.
     SimpleTimeZone *pdt = new SimpleTimeZone(-8 * 60 * 60 * 1000, *ids->snext(status));
@@ -2682,9 +2682,13 @@ void CalendarRegressionTest::TestTimeZoneTransitionAdd() {
     UErrorCode ec = U_ZERO_ERROR;
     Locale locale(Locale::getUS()); // could also be CHINA
     SimpleDateFormat dateFormat("MM/dd/yyyy HH:mm z", locale, ec);
+    if (U_FAILURE(ec)) {
+        dataerrln("FAIL: Constructing SimpleDateFormat");
+        return;
+    }
 
-    StringEnumeration *tz = TimeZone::createEnumeration();
-    if (tz == NULL) {
+    StringEnumeration *tz = TimeZone::createEnumeration(ec);
+    if (U_FAILURE(ec)) {
         dataerrln("FAIL: TimeZone::createEnumeration");
         return;
     }

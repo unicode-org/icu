@@ -14,6 +14,7 @@
 #include "unicode/simpletz.h"
 #include "unicode/calendar.h"
 #include "unicode/gregocal.h"
+#include "unicode/localpointer.h"
 #include "unicode/resbund.h"
 #include "unicode/strenum.h"
 #include "unicode/uversion.h"
@@ -425,12 +426,16 @@ TimeZoneTest::TestGetAvailableIDs913()
     UnicodeString str;
     UnicodeString buf(u"TimeZone::createEnumeration() = { ");
     int32_t s_length;
-    StringEnumeration* s = TimeZone::createEnumeration();
-    if (s == NULL) {
+    StringEnumeration* s = TimeZone::createEnumeration(ec);
+    LocalPointer<StringEnumeration> tmp1(TimeZone::createEnumeration(), ec);
+    if (U_FAILURE(ec) || s == NULL) {
         dataerrln("Unable to create TimeZone enumeration");
         return;
     }
     s_length = s->count(ec);
+    if (s_length != tmp1->count(ec)) {
+        errln("TimeZone::createEnumeration() with no status args returns a different count.");
+    }
     for (i = 0; i < s_length;++i) {
         if (i > 0) buf += ", ";
         if ((i & 1) == 0) {
@@ -481,8 +486,16 @@ TimeZoneTest::TestGetAvailableIDs913()
     buf.truncate(0);
     buf += "TimeZone::createEnumeration(GMT+01:00) = { ";
 
-    s = TimeZone::createEnumeration(1 * U_MILLIS_PER_HOUR);
+    s = TimeZone::createEnumerationForRawOffset(1 * U_MILLIS_PER_HOUR, ec);
+    LocalPointer<StringEnumeration> tmp2(TimeZone::createEnumeration(1 * U_MILLIS_PER_HOUR), ec);
+    if (U_FAILURE(ec)) {
+        dataerrln("Unable to create TimeZone enumeration for GMT+1");
+        return;
+    }
     s_length = s->count(ec);
+    if (s_length != tmp2->count(ec)) {
+        errln("TimeZone::createEnumeration(GMT+01:00) with no status args returns a different count.");
+    }
     for (i = 0; i < s_length;++i) {
         if (i > 0) buf += ", ";
         buf += *s->snext(ec);
@@ -495,9 +508,17 @@ TimeZoneTest::TestGetAvailableIDs913()
     buf.truncate(0);
     buf += "TimeZone::createEnumeration(US) = { ";
 
-    s = TimeZone::createEnumeration("US");
+    s = TimeZone::createEnumerationForRegion("US", ec);
+    LocalPointer<StringEnumeration> tmp3(TimeZone::createEnumeration("US"), ec);
+    if (U_FAILURE(ec)) {
+        dataerrln("Unable to create TimeZone enumeration for US");
+        return;
+    }
     s_length = s->count(ec);
-    for (i = 0; i < s_length;++i) {
+    if (s_length != tmp3->count(ec)) {
+        errln("TimeZone::createEnumeration(\"US\") with no status args returns a different count.");
+    }
+    for (i = 0; i < s_length; ++i) {
         if (i > 0) buf += ", ";
         buf += *s->snext(ec);
     }
@@ -1720,8 +1741,8 @@ void TimeZoneTest::TestCountries() {
     // Asia/Tokyo isn't.  Vice versa for the "JP" group.
     UErrorCode ec = U_ZERO_ERROR;
     int32_t n;
-    StringEnumeration* s = TimeZone::createEnumeration("US");
-    if (s == NULL) {
+    StringEnumeration* s = TimeZone::createEnumerationForRegion("US", ec);
+    if (U_FAILURE(ec)) {
         dataerrln("Unable to create TimeZone enumeration for US");
         return;
     }
@@ -1731,7 +1752,7 @@ void TimeZoneTest::TestCountries() {
     UnicodeString tokyoZone("Asia/Tokyo", "");
     int32_t i;
 
-    if (s == NULL || n <= 0) {
+    if (n <= 0) {
         dataerrln("FAIL: TimeZone::createEnumeration() returned nothing");
         return;
     }
@@ -1750,7 +1771,11 @@ void TimeZoneTest::TestCountries() {
     }
     delete s;
     
-    s = TimeZone::createEnumeration("JP");
+    s = TimeZone::createEnumerationForRegion("JP", ec);
+    if (U_FAILURE(ec)) {
+        dataerrln("Unable to create TimeZone enumeration for JP");
+        return;
+    }
     n = s->count(ec);
     la = FALSE; tokyo = FALSE;
     
@@ -1767,8 +1792,12 @@ void TimeZoneTest::TestCountries() {
         errln("FAIL: " + laZone + " in JP = " + la);
         errln("FAIL: " + tokyoZone + " in JP = " + tokyo);
     }
-    StringEnumeration* s1 = TimeZone::createEnumeration("US");
-    StringEnumeration* s2 = TimeZone::createEnumeration("US");
+    StringEnumeration* s1 = TimeZone::createEnumerationForRegion("US", ec);
+    StringEnumeration* s2 = TimeZone::createEnumerationForRegion("US", ec);
+    if (U_FAILURE(ec)) {
+        dataerrln("Unable to create TimeZone enumeration for US");
+        return;
+    }
     for(i=0;i<n;++i){
         const UnicodeString* id1 = s1->snext(ec);
         if(id1==NULL || U_FAILURE(ec)){
@@ -2118,8 +2147,8 @@ void TimeZoneTest::TestCanonicalID() {
     // Walk through equivalency groups
     UErrorCode ec = U_ZERO_ERROR;
     int32_t s_length, i, j, k;
-    StringEnumeration* s = TimeZone::createEnumeration();
-    if (s == NULL) {
+    StringEnumeration* s = TimeZone::createEnumeration(ec);
+    if (U_FAILURE(ec)) {
         dataerrln("Unable to create TimeZone enumeration");
         return;
     }

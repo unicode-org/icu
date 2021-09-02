@@ -83,7 +83,7 @@ TestZIDEnumeration::TestZIDEnumeration(UBool all)
 : idx(0) {
     UErrorCode status = U_ZERO_ERROR;
     if (all) {
-        tzenum = TimeZone::createEnumeration();
+        tzenum = TimeZone::createEnumeration(status);
         len = tzenum->count(status);
     } else {
         tzenum = NULL;

@@ -199,15 +199,28 @@ public:
         const int32_t* rawOffset,
         UErrorCode& ec);
 
+#ifndef U_HIDE_DEPRECATED_API
     /**
      * Returns an enumeration over all recognized time zone IDs. (i.e.,
      * all strings that createTimeZone() accepts)
      *
      * @return an enumeration object, owned by the caller.
-     * @stable ICU 2.4
+     * @deprecated ICU 70 Use createEnumeration(UErrorCode&) instead.
      */
     static StringEnumeration* U_EXPORT2 createEnumeration();
+#endif  // U_HIDE_DEPRECATED_API
 
+    /**
+     * Returns an enumeration over all recognized time zone IDs. (i.e.,
+     * all strings that createTimeZone() accepts)
+     *
+     * @param status Receives the status.
+     * @return an enumeration object, owned by the caller.
+     * @stable ICU 70
+     */
+    static StringEnumeration* U_EXPORT2 createEnumeration(UErrorCode& status);
+
+#ifndef U_HIDE_DEPRECATED_API
     /**
      * Returns an enumeration over time zone IDs with a given raw
      * offset from GMT.  There may be several times zones with the
@@ -223,21 +236,57 @@ public:
      * @param rawOffset an offset from GMT in milliseconds, ignoring
      * the effect of daylight savings time, if any
      * @return an enumeration object, owned by the caller
-     * @stable ICU 2.4
+     * @deprecated ICU 70 Use createEnumerationForRawOffset(int32_t,UErrorCode&) instead.
      */
     static StringEnumeration* U_EXPORT2 createEnumeration(int32_t rawOffset);
+#endif  // U_HIDE_DEPRECATED_API
+
+    /**
+     * Returns an enumeration over time zone IDs with a given raw
+     * offset from GMT.  There may be several times zones with the
+     * same GMT offset that differ in the way they handle daylight
+     * savings time.  For example, the state of Arizona doesn't
+     * observe daylight savings time.  If you ask for the time zone
+     * IDs corresponding to GMT-7:00, you'll get back an enumeration
+     * over two time zone IDs: "America/Denver," which corresponds to
+     * Mountain Standard Time in the winter and Mountain Daylight Time
+     * in the summer, and "America/Phoenix", which corresponds to
+     * Mountain Standard Time year-round, even in the summer.
+     *
+     * @param rawOffset an offset from GMT in milliseconds, ignoring
+     * the effect of daylight savings time, if any
+     * @param status Receives the status.
+     * @return an enumeration object, owned by the caller
+     * @stable ICU 70
+     */
+    static StringEnumeration* U_EXPORT2 createEnumerationForRawOffset(int32_t rawOffset, UErrorCode& status);
+
+#ifndef U_HIDE_DEPRECATED_API
+    /**
+     * Returns an enumeration over time zone IDs associated with the
+     * given region.  Some zones are affiliated with no region
+     * (e.g., "UTC"); these may also be retrieved, as a group.
+     *
+     * @param region The ISO 3166 two-letter country code, or NULL to
+     * retrieve zones not affiliated with any region.
+     * @return an enumeration object, owned by the caller
+     * @deprecated ICU 70 Use createEnumerationForRegion(const char*,UErrorCode&) instead.
+     */
+    static StringEnumeration* U_EXPORT2 createEnumeration(const char* region);
+#endif  // U_HIDE_DEPRECATED_API
 
     /**
      * Returns an enumeration over time zone IDs associated with the
-     * given country.  Some zones are affiliated with no country
+     * given region.  Some zones are affiliated with no region
      * (e.g., "UTC"); these may also be retrieved, as a group.
      *
-     * @param country The ISO 3166 two-letter country code, or NULL to
-     * retrieve zones not affiliated with any country.
+     * @param region The ISO 3166 two-letter country code, or NULL to
+     * retrieve zones not affiliated with any region.
+     * @param status Receives the status.
      * @return an enumeration object, owned by the caller
-     * @stable ICU 2.4
+     * @stable ICU 70
      */
-    static StringEnumeration* U_EXPORT2 createEnumeration(const char* country);
+    static StringEnumeration* U_EXPORT2 createEnumerationForRegion(const char* region, UErrorCode& status);
 
     /**
      * Returns the number of IDs in the equivalency group that
