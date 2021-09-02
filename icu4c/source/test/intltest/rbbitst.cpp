@@ -1579,9 +1579,9 @@ class RBBICharMonkey: public RBBIMonkeyKind {
 public:
     RBBICharMonkey();
     virtual          ~RBBICharMonkey();
-    virtual  UVector *charClasses();
-    virtual  void     setText(const UnicodeString &s);
-    virtual  int32_t  next(int32_t i);
+    virtual  UVector *charClasses() override;
+    virtual  void     setText(const UnicodeString &s) override;
+    virtual  int32_t  next(int32_t i) override;
 private:
     UVector   *fSets;
 
@@ -1863,9 +1863,9 @@ class RBBIWordMonkey: public RBBIMonkeyKind {
 public:
     RBBIWordMonkey();
     virtual          ~RBBIWordMonkey();
-    virtual  UVector *charClasses();
-    virtual  void     setText(const UnicodeString &s);
-    virtual int32_t   next(int32_t i);
+    virtual  UVector *charClasses() override;
+    virtual  void     setText(const UnicodeString &s) override;
+    virtual int32_t   next(int32_t i) override;
 private:
     UVector      *fSets;
 
@@ -2235,9 +2235,9 @@ class RBBISentMonkey: public RBBIMonkeyKind {
 public:
     RBBISentMonkey();
     virtual          ~RBBISentMonkey();
-    virtual  UVector *charClasses();
-    virtual  void     setText(const UnicodeString &s);
-    virtual int32_t   next(int32_t i);
+    virtual  UVector *charClasses() override;
+    virtual  void     setText(const UnicodeString &s) override;
+    virtual int32_t   next(int32_t i) override;
 private:
     int               moveBack(int posFrom);
     int               moveForward(int posFrom);
@@ -2569,9 +2569,9 @@ class RBBILineMonkey: public RBBIMonkeyKind {
 public:
     RBBILineMonkey();
     virtual          ~RBBILineMonkey();
-    virtual  UVector *charClasses();
-    virtual  void     setText(const UnicodeString &s);
-    virtual  int32_t  next(int32_t i);
+    virtual  UVector *charClasses() override;
+    virtual  void     setText(const UnicodeString &s) override;
+    virtual  int32_t  next(int32_t i) override;
     virtual  void     rule9Adjust(int32_t pos, UChar32 *posChar, int32_t *nextPos, UChar32 *nextChar);
 private:
     UVector      *fSets;

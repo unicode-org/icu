@@ -161,7 +161,7 @@ public:
 
     virtual void log( const UnicodeString &message );
 
-    virtual void logln( const UnicodeString &message );
+    virtual void logln( const UnicodeString &message ) override;
 
     virtual void logln( void );
 
@@ -207,11 +207,11 @@ public:
 
     virtual void err( const UnicodeString &message );
 
-    virtual void errln( const UnicodeString &message );
+    virtual void errln( const UnicodeString &message ) override;
 
     virtual void dataerr( const UnicodeString &message );
 
-    virtual void dataerrln( const UnicodeString &message );
+    virtual void dataerrln( const UnicodeString &message ) override;
 
     void errcheckln(UErrorCode status, const UnicodeString &message );
 
@@ -418,7 +418,7 @@ public:
 public:
     UBool run_phase2( char* name, char* par ); // internally, supports reporting memory leaks
     static const char* loadTestData(UErrorCode& err);
-    virtual const char* getTestDataPath(UErrorCode& err);
+    virtual const char* getTestDataPath(UErrorCode& err) override;
     static const char* getSourceTestData(UErrorCode& err);
     static char *getUnidataPath(char path[]);
     UChar *ReadAndConvertFile(const char *fileName, int &ulen, const char *encoding, UErrorCode &status);

@@ -29,7 +29,7 @@ public:
 
     CollationTurkishTest();
     virtual ~CollationTurkishTest();
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
 
     // perform tests for turkish locale with strength PRIMARY
     void TestPrimary(/* char* par */);

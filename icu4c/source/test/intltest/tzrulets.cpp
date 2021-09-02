@@ -59,15 +59,15 @@ public:
     TestZIDEnumeration(UBool all = FALSE);
     ~TestZIDEnumeration();
 
-    virtual int32_t count(UErrorCode& /*status*/) const {
+    virtual int32_t count(UErrorCode& /*status*/) const override {
         return len;
     }
-    virtual const UnicodeString *snext(UErrorCode& status);
-    virtual void reset(UErrorCode& status);
+    virtual const UnicodeString *snext(UErrorCode& status) override;
+    virtual void reset(UErrorCode& status) override;
     static inline UClassID getStaticClassID() {
         return (UClassID)&fgClassID;
     }
-    virtual UClassID getDynamicClassID() const {
+    virtual UClassID getDynamicClassID() const override {
         return getStaticClassID();
     }
 private:

@@ -26,7 +26,7 @@
 class TransliteratorRoundTripTest : public IntlTest {
 
     void runIndexedTest(int32_t index, UBool exec, const char* &name,
-                        char* par=NULL);
+                        char* par=NULL) override;
 
     void TestKana(void);
     void TestHiragana(void);

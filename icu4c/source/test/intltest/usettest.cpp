@@ -1633,14 +1633,14 @@ public:
     /**
      * SymbolTable API
      */
-    virtual const UnicodeString* lookup(const UnicodeString& s) const {
+    virtual const UnicodeString* lookup(const UnicodeString& s) const override {
         return (const UnicodeString*) contents.get(s);
     }
 
     /**
      * SymbolTable API
      */
-    virtual const UnicodeFunctor* lookupMatcher(UChar32 /*ch*/) const {
+    virtual const UnicodeFunctor* lookupMatcher(UChar32 /*ch*/) const override {
         return NULL;
     }
 
@@ -1648,7 +1648,7 @@ public:
      * SymbolTable API
      */
     virtual UnicodeString parseReference(const UnicodeString& text,
-                                         ParsePosition& pos, int32_t limit) const {
+                                         ParsePosition& pos, int32_t limit) const override {
         int32_t start = pos.getIndex();
         int32_t i = start;
         UnicodeString result;

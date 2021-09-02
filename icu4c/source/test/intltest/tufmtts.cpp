@@ -25,7 +25,7 @@
 #endif
 
 class TimeUnitTest : public IntlTest {
-    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* /*par*/ ) {
+    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* /*par*/ ) override {
         if (exec) logln("TestSuite TimeUnitTest");
         TESTCASE_AUTO_BEGIN;
         TESTCASE_AUTO(testBasic);

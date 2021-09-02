@@ -307,29 +307,29 @@ NumberFormatTest::TestAPI(void)
 class StubNumberFormat :public NumberFormat{
 public:
     StubNumberFormat(){}
-    virtual UnicodeString& format(double ,UnicodeString& appendTo,FieldPosition& ) const {
+    virtual UnicodeString& format(double ,UnicodeString& appendTo,FieldPosition& ) const override {
         return appendTo;
     }
-    virtual UnicodeString& format(int32_t ,UnicodeString& appendTo,FieldPosition& ) const {
+    virtual UnicodeString& format(int32_t ,UnicodeString& appendTo,FieldPosition& ) const override {
         return appendTo.append((UChar)0x0033);
     }
-    virtual UnicodeString& format(int64_t number,UnicodeString& appendTo,FieldPosition& pos) const {
+    virtual UnicodeString& format(int64_t number,UnicodeString& appendTo,FieldPosition& pos) const override {
         return NumberFormat::format(number, appendTo, pos);
     }
-    virtual UnicodeString& format(const Formattable& , UnicodeString& appendTo, FieldPosition& , UErrorCode& ) const {
+    virtual UnicodeString& format(const Formattable& , UnicodeString& appendTo, FieldPosition& , UErrorCode& ) const override {
         return appendTo;
     }
     virtual void parse(const UnicodeString& ,
                     Formattable& ,
-                    ParsePosition& ) const {}
+                    ParsePosition& ) const override {}
     virtual void parse( const UnicodeString& ,
                         Formattable& ,
-                        UErrorCode& ) const {}
-    virtual UClassID getDynamicClassID(void) const {
+                        UErrorCode& ) const override {}
+    virtual UClassID getDynamicClassID(void) const override {
         static char classID = 0;
         return (UClassID)&classID;
     }
-    virtual StubNumberFormat* clone() const {return NULL;}
+    virtual StubNumberFormat* clone() const override {return NULL;}
 };
 
 void

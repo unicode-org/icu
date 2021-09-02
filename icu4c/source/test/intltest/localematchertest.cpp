@@ -51,7 +51,7 @@ class LocaleMatcherTest : public IntlTest {
 public:
     LocaleMatcherTest() {}
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL) override;
 
     void testEmpty();
     void testCopyErrorTo();

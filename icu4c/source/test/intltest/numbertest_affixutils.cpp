@@ -202,7 +202,7 @@ void AffixUtilsTest::testInvalid() {
 
 class NumericSymbolProvider : public SymbolProvider {
   public:
-    virtual UnicodeString getSymbol(AffixPatternType type) const {
+    virtual UnicodeString getSymbol(AffixPatternType type) const override {
         return Int64ToUnicodeString(type < 0 ? -type : type);
     }
 };

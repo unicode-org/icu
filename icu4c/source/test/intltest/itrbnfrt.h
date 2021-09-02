@@ -20,7 +20,7 @@
 class RbnfRoundTripTest : public IntlTest {
 
   // IntlTest override
-  virtual void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par);
+  virtual void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par) override;
 
 #if U_HAVE_RBNF
   /**
