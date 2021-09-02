@@ -172,7 +172,7 @@ void RBBISetBuilder::buildRanges() {
             // The current rlRange is now entirely within the UnicodeSet range.
             // Add this unicode set to the list of sets for this rlRange
             if (rlRange->fIncludesSets->indexOf(usetNode) == -1) {
-                rlRange->fIncludesSets->addElementX(usetNode, *fStatus);
+                rlRange->fIncludesSets->addElement(usetNode, *fStatus);
                 if (U_FAILURE(*fStatus)) {
                     return;
                 }
@@ -600,7 +600,7 @@ RangeDescriptor::RangeDescriptor(const RangeDescriptor &other, UErrorCode &statu
     }
 
     for (int32_t i=0; i<other.fIncludesSets->size(); i++) {
-        this->fIncludesSets->addElementX(other.fIncludesSets->elementAt(i), status);
+        this->fIncludesSets->addElement(other.fIncludesSets->elementAt(i), status);
     }
 }
 

@@ -1656,13 +1656,16 @@ UBool RegexCompile::doParseActions(int32_t action)
         }
 
     case doSetBegin:
-        fixLiterals(FALSE);
-        fSetStack.push(new UnicodeSet(), *fStatus);
-        fSetOpStack.push(setStart, *fStatus);
-        if ((fModeFlags & UREGEX_CASE_INSENSITIVE) != 0) {
-            fSetOpStack.push(setCaseClose, *fStatus);
+        {
+            fixLiterals(FALSE);
+            LocalPointer<UnicodeSet> lpSet(new UnicodeSet(), *fStatus);
+            fSetStack.push(lpSet.orphan(), *fStatus);
+            fSetOpStack.push(setStart, *fStatus);
+            if ((fModeFlags & UREGEX_CASE_INSENSITIVE) != 0) {
+                fSetOpStack.push(setCaseClose, *fStatus);
+            }
+            break;
         }
-        break;
 
     case doSetBeginDifference1:
         //  We have scanned something like [[abc]-[
@@ -2427,7 +2430,7 @@ void        RegexCompile::compileSet(UnicodeSet *theSet)
             //  Put it into the compiled pattern as a set.
             theSet->freeze();
             int32_t setNumber = fRXPat->fSets->size();
-            fRXPat->fSets->addElementX(theSet, *fStatus);
+            fRXPat->fSets->addElement(theSet, *fStatus);
             appendOp(URX_SETREF, setNumber);
         }
     }
@@ -4649,7 +4652,8 @@ void RegexCompile::setEval(int32_t nextOp) {
 void RegexCompile::setPushOp(int32_t op) {
     setEval(op);
     fSetOpStack.push(op, *fStatus);
-    fSetStack.push(new UnicodeSet(), *fStatus);
+    LocalPointer<UnicodeSet> lpSet(new UnicodeSet(), *fStatus);
+    fSetStack.push(lpSet.orphan(), *fStatus);
 }
 
 U_NAMESPACE_END

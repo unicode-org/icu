@@ -775,7 +775,7 @@ void RBBIRuleScanner::findSetFor(const UnicodeString &s, RBBINode *node, Unicode
     //
     // Add the new uset node to the list of all uset nodes.
     //
-    fRB->fUSetNodes->addElementX(usetNode, *fRB->fStatus);
+    fRB->fUSetNodes->addElement(usetNode, *fRB->fStatus);
 
 
     //
