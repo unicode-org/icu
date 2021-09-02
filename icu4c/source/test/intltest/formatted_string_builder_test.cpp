@@ -23,7 +23,7 @@ class FormattedStringBuilderTest : public IntlTest {
     void testUnlimitedCapacity();
     void testCodePoints();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
 
   private:
     void assertEqualsImpl(const UnicodeString &a, const FormattedStringBuilder &b);

@@ -31,12 +31,12 @@ class MyNumberFormatTest : public NumberFormat
 {
 public:
 
-    virtual UClassID getDynamicClassID(void) const;
+    virtual UClassID getDynamicClassID(void) const override;
   
     virtual UnicodeString& format(    double            number, 
                     UnicodeString&        toAppendTo, 
                     FieldPositionIterator* posIter,
-                    UErrorCode& status) const
+                    UErrorCode& status) const override
     {
         return NumberFormat::format(number, toAppendTo, posIter, status);
     }
@@ -45,7 +45,7 @@ public:
     virtual UnicodeString& format(const Formattable& obj,
                                   UnicodeString& toAppendTo,
                                   FieldPosition& pos,
-                                  UErrorCode& status) const
+                                  UErrorCode& status) const override
     {
         return NumberFormat::format(obj, toAppendTo, pos, status);
     }
@@ -53,7 +53,7 @@ public:
     /* Just use one of the format functions */
     virtual UnicodeString& format(    double            /* number */, 
                     UnicodeString&        toAppendTo, 
-                    FieldPosition&        /* pos */) const
+                    FieldPosition&        /* pos */) const override
     {
         toAppendTo = "";
         return toAppendTo;
@@ -67,28 +67,28 @@ public:
     /* Just use one of the parse functions */
     virtual void parse(    const UnicodeString&    /* text */, 
             Formattable&            result, 
-            ParsePosition&          /* parsePosition */) const
+            ParsePosition&          /* parsePosition */) const override
     {
         result.setLong((int32_t)0);
     }
   
     virtual void parse(    const UnicodeString&    text, 
             Formattable&            result, 
-            UErrorCode&            status) const 
+            UErrorCode&            status) const override
     {
         NumberFormat::parse(text, result, status);
     }
-    virtual MyNumberFormatTest* clone() const 
+    virtual MyNumberFormatTest* clone() const override
     { return NULL; }
 
     virtual UnicodeString& format(int32_t, 
                 UnicodeString& foo, 
-                FieldPosition&) const
+                FieldPosition&) const override
     { return foo.remove(); }
 
     virtual UnicodeString& format(int64_t, 
                 UnicodeString& foo, 
-                FieldPosition&) const
+                FieldPosition&) const override
     { return foo.remove(); }
 
     virtual void applyPattern(const UnicodeString&, UParseError&, UErrorCode&){

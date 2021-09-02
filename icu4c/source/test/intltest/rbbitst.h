@@ -42,7 +42,7 @@ public:
     RBBITest();
     virtual ~RBBITest();
 
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
 
     void TestGetAvailableLocales();
     void TestGetDisplayName();

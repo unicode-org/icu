@@ -36,7 +36,7 @@ public:
         directionBits(0), lineNumber(0), levelsCount(0), orderingCount(0),
         errorCount(0) {}
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL) override;
 
     void TestBidiTest();
     void TestBidiCharacterTest();

@@ -19,7 +19,7 @@
 class CalendarTest: public CalendarTimeZoneTest {
 public:
     // IntlTest override
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par ) override;
 public:
     /**
      * This test confirms the correct behavior of add when incrementing

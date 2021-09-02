@@ -37,7 +37,7 @@ public:
     UTS46Test() : trans(NULL), nontrans(NULL) {}
     virtual ~UTS46Test();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL) override;
     void TestAPI();
     void TestNotSTD3();
     void TestInvalidPunycodeDigits();
@@ -116,12 +116,12 @@ class TestCheckedArrayByteSink : public CheckedArrayByteSink {
 public:
     TestCheckedArrayByteSink(char* outbuf, int32_t capacity)
             : CheckedArrayByteSink(outbuf, capacity), calledFlush(FALSE) {}
-    virtual CheckedArrayByteSink& Reset() {
+    virtual CheckedArrayByteSink& Reset() override {
         CheckedArrayByteSink::Reset();
         calledFlush = FALSE;
         return *this;
     }
-    virtual void Flush() { calledFlush = TRUE; }
+    virtual void Flush() override { calledFlush = TRUE; }
     UBool calledFlush;
 };
 

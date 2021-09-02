@@ -29,7 +29,7 @@ public:
     UTextTest();
     virtual ~UTextTest();
 
-    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL);
+    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL) override;
     void TextTest();
     void ErrorTest();
     void FreezeTest();

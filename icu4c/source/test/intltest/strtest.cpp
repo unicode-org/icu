@@ -575,14 +575,14 @@ StringTest::TestStringPieceU8() {
 class SimpleByteSink : public ByteSink {
 public:
     SimpleByteSink(char *outbuf) : fOutbuf(outbuf), fLength(0) {}
-    virtual void Append(const char *bytes, int32_t n) {
+    virtual void Append(const char *bytes, int32_t n) override {
         if(fOutbuf != bytes) {
             memcpy(fOutbuf, bytes, n);
         }
         fOutbuf += n;
         fLength += n;
     }
-    virtual void Flush() { Append("z", 1); }
+    virtual void Flush() override { Append("z", 1); }
     int32_t length() { return fLength; }
 private:
     char *fOutbuf;

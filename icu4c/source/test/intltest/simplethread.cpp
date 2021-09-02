@@ -37,7 +37,7 @@ void SimpleThread::join() {
 class ThreadPoolThread: public SimpleThread {
   public:
     ThreadPoolThread(ThreadPoolBase *pool, int32_t threadNum) : fPool(pool), fNum(threadNum) {}
-    virtual void run() {fPool->callFn(fNum); }
+    virtual void run() override { fPool->callFn(fNum); }
     ThreadPoolBase *fPool;
     int32_t         fNum;
 };

@@ -23,7 +23,7 @@
 
 class CalendarCaseTest: public CalendarTest {
  public:
-  virtual void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par );
+  virtual void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par ) override;
 
   /* Test case struct */
   struct TestCase {

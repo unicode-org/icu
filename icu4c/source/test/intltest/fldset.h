@@ -255,7 +255,7 @@ protected:
     void handleParseValue(const FieldsSet* inheritFrom,
                           int32_t field,
                           const U_NAMESPACE_QUALIFIER UnicodeString& substr,
-                          UErrorCode& status);
+                          UErrorCode& status) override;
 };
 
 /**
@@ -282,11 +282,11 @@ class DateTimeStyleSet : public FieldsSet {
         void handleParseValue(const FieldsSet* inheritFrom,
                               int32_t field,
                               const U_NAMESPACE_QUALIFIER UnicodeString& substr,
-                              UErrorCode& status);
+                              UErrorCode& status) override;
         int32_t handleParseName(const FieldsSet* inheritFrom,
                                 const U_NAMESPACE_QUALIFIER UnicodeString& name,
                                 const U_NAMESPACE_QUALIFIER UnicodeString& substr,
-                                UErrorCode& status);
+                                UErrorCode& status) override;
 };
 
 

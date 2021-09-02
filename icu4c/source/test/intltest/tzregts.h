@@ -26,7 +26,7 @@
 class TimeZoneRegressionTest: public IntlTest {    
     
     // IntlTest override
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par ) override;
 public:
     
     void Test4052967(void);

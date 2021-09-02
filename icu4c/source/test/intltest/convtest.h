@@ -69,7 +69,7 @@ public:
     ConversionTest();
     virtual ~ConversionTest();
     
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0) override;
 
     void TestToUnicode();
     void TestFromUnicode();
