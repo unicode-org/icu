@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.ibm.icu.impl.CaseMapImpl;
+import com.ibm.icu.impl.EmojiProps;
 import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.Trie2;
 import com.ibm.icu.impl.UBiDiProps;
@@ -5918,6 +5919,43 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static boolean hasBinaryProperty(int ch, int property)
     {
         return UCharacterProperty.INSTANCE.hasBinaryProperty(ch, property);
+    }
+
+    /**
+     * {@icu} Returns true if the property is true for the string.
+     * Same as {@link #hasBinaryProperty(int, int)}
+     * if the string contains exactly one code point.
+     *
+     * <p>Most properties apply only to single code points.
+     * <a href="https://www.unicode.org/reports/tr51/#Emoji_Sets">UTS #51 Unicode Emoji</a>
+     * defines several properties of strings.
+     *
+     * @param s String to test.
+     * @param property UProperty selector constant, identifies which binary property to check.
+     *        Must be BINARY_START&lt;=which&lt;BINARY_LIMIT.
+     * @return true or false according to the binary Unicode property value for the string.
+     *         Also false if <code>property</code> is out of bounds or if the Unicode version
+     *         does not have data for the property at all.
+     *
+     * @see com.ibm.icu.lang.UProperty
+     * @see CharacterProperties#getBinaryPropertySet(int)
+     * @draft ICU 70
+     */
+    public static boolean hasBinaryProperty(CharSequence s, int property) {
+        int length = s.length();
+        if (length == 1) {
+            return hasBinaryProperty(s.charAt(0), property);  // single code point
+        } else if (length == 2) {
+            // first code point
+            int c = Character.codePointAt(s, 0);
+            if (Character.charCount(c) == length) {
+                return hasBinaryProperty(c, property);  // single code point
+            }
+        }
+        // Only call into EmojiProps for a relevant property,
+        // so that we not unnecessarily try to load its data file.
+        return UProperty.BASIC_EMOJI <= property && property <= UProperty.RGI_EMOJI &&
+            EmojiProps.INSTANCE.hasBinaryProperty(s, property);
     }
 
     /**

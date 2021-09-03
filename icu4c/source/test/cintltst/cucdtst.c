@@ -2955,6 +2955,14 @@ TestAdditionalProperties() {
             break;
         }
     }
+
+    // C API coverage
+    if (u_stringHasBinaryProperty(u"⏱", 1, UCHAR_BASIC_EMOJI) ||
+            u_stringHasBinaryProperty(u"⏱", -1, UCHAR_BASIC_EMOJI) ||
+            !u_stringHasBinaryProperty(u"⏱\uFE0F", 2, UCHAR_BASIC_EMOJI) ||
+            !u_stringHasBinaryProperty(u"⏱\uFE0F", -1, UCHAR_BASIC_EMOJI)) {
+        log_data_err("error: u_stringHasBinaryProperty(stopwatch variants) is wrong\n");
+    }
 }
 
 static void

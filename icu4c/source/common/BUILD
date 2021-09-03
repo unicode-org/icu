@@ -429,6 +429,7 @@ cc_library(
     includes = ["."],
     deps = [
         ":headers",
+        ":emojiprops",
         ":ucptrie",
         ":umutablecptrie",
         ":uniset_core",
@@ -736,6 +737,25 @@ cc_library(
 )
 
 cc_library(
+    name = "emojiprops",
+    srcs = [
+        "emojiprops.cpp",
+        "emojiprops.h",
+    ],
+    includes = ["."],
+    deps = [
+        ":headers",
+        ":ucharstrie",
+        ":ucharstrieiterator",
+        ":ucptrie",
+        ":udata",
+    ],
+    local_defines = [
+        "U_COMMON_IMPLEMENTATION",
+    ],
+)
+
+cc_library(
     name = "ucharstrie",
     srcs = [
         "ucharstrie.cpp",
@@ -997,6 +1017,7 @@ cc_library(
     includes = ["."],
     deps = [
         ":headers",
+        ":emojiprops",
         ":loadednormalizer2",
         ":normalizer2",
         ":ubidi_props",

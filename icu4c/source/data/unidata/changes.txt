@@ -38,7 +38,7 @@ https://unicode-org.atlassian.net/browse/ICU-21635
 
 * Command-line environment setup
 
-export UNICODE_DATA=~/unidata/uni14/20210819
+export UNICODE_DATA=~/unidata/uni14/20210903
 export CLDR_SRC=~/cldr/uni/src
 export ICU_ROOT=~/icu/uni
 export ICU_SRC=$ICU_ROOT/src

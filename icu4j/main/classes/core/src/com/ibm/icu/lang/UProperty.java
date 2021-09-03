@@ -567,13 +567,62 @@ public interface UProperty
      * @stable ICU 62
      */
     public static final int EXTENDED_PICTOGRAPHIC=64;
+    /**
+     * Binary property of strings Basic_Emoji.
+     * See https://www.unicode.org/reports/tr51/#Emoji_Sets
+     *
+     * @draft ICU 70
+     */
+    public static final int BASIC_EMOJI=65;
+    /**
+     * Binary property of strings Emoji_Keycap_Sequence.
+     * See https://www.unicode.org/reports/tr51/#Emoji_Sets
+     *
+     * @draft ICU 70
+     */
+    public static final int EMOJI_KEYCAP_SEQUENCE=66;
+    /**
+     * Binary property of strings RGI_Emoji_Modifier_Sequence.
+     * See https://www.unicode.org/reports/tr51/#Emoji_Sets
+     *
+     * @draft ICU 70
+     */
+    public static final int RGI_EMOJI_MODIFIER_SEQUENCE=67;
+    /**
+     * Binary property of strings RGI_Emoji_Flag_Sequence.
+     * See https://www.unicode.org/reports/tr51/#Emoji_Sets
+     *
+     * @draft ICU 70
+     */
+    public static final int RGI_EMOJI_FLAG_SEQUENCE=68;
+    /**
+     * Binary property of strings RGI_Emoji_Tag_Sequence.
+     * See https://www.unicode.org/reports/tr51/#Emoji_Sets
+     *
+     * @draft ICU 70
+     */
+    public static final int RGI_EMOJI_TAG_SEQUENCE=69;
+    /**
+     * Binary property of strings RGI_Emoji_ZWJ_Sequence.
+     * See https://www.unicode.org/reports/tr51/#Emoji_Sets
+     *
+     * @draft ICU 70
+     */
+    public static final int RGI_EMOJI_ZWJ_SEQUENCE=70;
+    /**
+     * Binary property of strings RGI_Emoji.
+     * See https://www.unicode.org/reports/tr51/#Emoji_Sets
+     *
+     * @draft ICU 70
+     */
+    public static final int RGI_EMOJI=71;
 
     /**
      * One more than the last constant for binary Unicode properties.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     @Deprecated
-    public static final int BINARY_LIMIT = 65;
+    public static final int BINARY_LIMIT = 72;
 
     /**
      * Enumerated property Bidi_Class.

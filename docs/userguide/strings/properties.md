@@ -101,10 +101,12 @@ sets of values (for use with value aliases and UnicodeSet).
 | Age | Unicode version | (U) | C: u_charAge fills in UVersionInfo<br>Java: getAge returns a VersionInfo reference |
 | Alphabetic | binary | (U) | u_isUAlphabetic, UCHAR_ALPHABETIC |
 | ASCII_Hex_Digit | binary | (U) | UCHAR_ASCII_HEX_DIGIT |
+| Basic_Emoji* | binary | (U) | UCHAR_BASIC_EMOJI |
 | Bidi_Class | enum | (U) | u_charDirection, UCHAR_BIDI_CLASS<br>returns enum UCharDirection |
 | Bidi_Control | binary | (U) | UCHAR_BIDI_CONTROL |
 | Bidi_Mirrored | binary | (U) | u_isMirrored, UCHAR_BIDI_MIRRORED |
 | Bidi_Mirroring_Glyph | code point |  | u_charMirror |
+| Bidi_Paired_Bracket_Type | enum | (U) | UCHAR_BIDI_PAIRED_BRACKET_TYPE<br>returns enum UBidiPairedBracketType |
 | Block | enum | (U) | ublock_getCode, UCHAR_BLOCK<br>returns enum UBlockCode |
 | Canonical_Combining_Class | 0..255 | (U) | u_getCombiningClass, UCHAR_CANONICAL_COMBINING_CLASS |
 | Case_Folding | Unicode string |  | u_strFoldCase (ustring.h) |
@@ -124,7 +126,14 @@ sets of values (for use with value aliases and UnicodeSet).
 | Deprecated | binary | (U) | UCHAR_DEPRECATED |
 | Diacritic | binary | (U) | UCHAR_DIACRITIC |
 | East_Asian_Width | enum | (U) | UCHAR_EAST_ASIAN_WIDTH<br>returns enum UEastAsianWidth |
+| Emoji | binary | (U) | UCHAR_EMOJI |
+| Emoji_Component | binary | (U) | UCHAR_EMOJI_COMPONENT |
+| Emoji_Keycap_Sequence* | binary | (U) | UCHAR_EMOJI_KEYCAP_SEQUENCE |
+| Emoji_Modifier | binary | (U) | UCHAR_EMOJI_MODIFIER |
+| Emoji_Modifier_Base | binary | (U) | UCHAR_EMOJI_MODIFIER_BASE |
+| Emoji_Presentation | binary | (U) | UCHAR_EMOJI_PRESENTATION |
 | Expands_On_NF* | binary |  | available via normalization API (normalizer2.h) |
+| Extended_Pictographic | binary | (U) | UCHAR_EXTENDED_PICTOGRAPHIC |
 | Extender | binary | (U) | UCHAR_EXTENDER |
 | FC_NFKC_Closure | Unicode string |  | u_getFC_NFKC_Closure |
 | Full_Composition_Exclusion | binary | (U) | UCHAR_FULL​_COMPOSITION_EXCLUSION |
@@ -168,8 +177,15 @@ sets of values (for use with value aliases and UnicodeSet).
 | Other_Uppercase | binary | (c) | contributes to Uppercase |
 | Pattern_Syntax | binary | (U) | UCHAR_PATTERN_SYNTAX |
 | Pattern_White_Space | binary | (U) | UCHAR_PATTERN_WHITE_SPACE |
+| Prepended_Concatenation_Mark | binary | (U) | UCHAR_PREPENDED_CONCATENATION_MARK |
 | Quotation_Mark | binary | (U) | UCHAR_QUOTATION_MARK |
 | Radical | binary | (U) | UCHAR_RADICAL |
+| Regional_Indicator | binary | (U) | UCHAR_REGIONAL_INDICATOR |
+| RGI_Emoji* | binary | (U) | UCHAR_RGI_EMOJI |
+| RGI_Emoji_Flag_Sequence* | binary | (U) | UCHAR_RGI_EMOJI_FLAG_SEQUENCE |
+| RGI_Emoji_Modifier_Sequence* | binary | (U) | UCHAR_RGI_EMOJI_MODIFIER_SEQUENCE |
+| RGI_Emoji_Tag_Sequence* | binary | (U) | UCHAR_RGI_EMOJI_TAG_SEQUENCE |
+| RGI_Emoji_ZWJ_Sequence* | binary | (U) | UCHAR_RGI_EMOJI_ZWJ_SEQUENCE |
 | Script | enum | (U) | uscript_getCode (uscript.h), UCHAR_SCRIPT<br>returns enum UScriptCode |
 | Script_Extensions | list | (U) | uscript_getScriptExtensions & uscript_hasScript (uscript.h), UCHAR_SCRIPT_EXTENSIONS<br>returns a list of enum UScriptCode values |
 | Sentence_Break | enum | (U) | UCHAR_SENTENCE_BREAK<br>returns enum USentenceBreak |
@@ -202,10 +218,15 @@ Notes:
     Properties which are not available in UnicodeSet are generally those that
     are not available through a UProperty selector.
 
-3.  UnicodeSet `[:scx=Arab:]` is a superset of `[:sc=Arab:]`;
+3.  When a property name is followed by a star (*), it is a property of strings;
+    for example, Basic_Emoji and RGI_Emoji.
+    See https://www.unicode.org/reports/tr51/#Emoji_Sets
+    Properties of strings are not yet supported in ICU regular expressions.
+
+4.  UnicodeSet `[:scx=Arab:]` is a superset of `[:sc=Arab:]`;
     see https://www.unicode.org/reports/tr18/#Script_Property
 
-4.  Full case mapping properties (e.g., Lowercase_Mapping) are complex.
+5.  Full case mapping properties (e.g., Lowercase_Mapping) are complex.
     The string case mapping functions that implement them handle language-specific
     and/or context-sensitive mappings.
     The output may have more code points or fewer code points than the input.

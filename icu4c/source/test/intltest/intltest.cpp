@@ -1929,9 +1929,9 @@ UBool IntlTest::assertTrue(const char* message, UBool condition, UBool quiet, UB
 UBool IntlTest::assertFalse(const char* message, UBool condition, UBool quiet, UBool possibleDataError) {
     if (condition) {
         if (possibleDataError) {
-            dataerrln("FAIL: assertTrue() failed: %s", message);
+            dataerrln("FAIL: assertFalse() failed: %s", message);
         } else {
-            errln("FAIL: assertTrue() failed: %s", message);
+            errln("FAIL: assertFalse() failed: %s", message);
         }
     } else if (!quiet) {
         logln("Ok: %s", message);
