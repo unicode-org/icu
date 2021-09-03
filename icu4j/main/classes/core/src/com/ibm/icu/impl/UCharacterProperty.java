@@ -108,8 +108,9 @@ public final class UCharacterProperty
     public static final int SRC_INPC=12;
     public static final int SRC_INSC=13;
     public static final int SRC_VO=14;
+    public static final int SRC_EMOJI=15;
     /** One more than the highest UPropertySource (SRC_) constant. */
-    public static final int SRC_COUNT=15;
+    public static final int SRC_COUNT=16;
 
     private static final class LayoutProps {
         private static final class IsAcceptable implements ICUBinary.Authenticate {
@@ -352,6 +353,18 @@ public final class UCharacterProperty
         }
     }
 
+    private class EmojiBinaryProperty extends BinaryProperty {
+        int which;
+        EmojiBinaryProperty(int which) {
+            super(SRC_EMOJI);
+            this.which=which;
+        }
+        @Override
+        boolean contains(int c) {
+            return EmojiProps.INSTANCE.hasBinaryProperty(c, which);
+        }
+    }
+
     private class NormInertBinaryProperty extends BinaryProperty {  // UCHAR_NF*_INERT properties
         int which;
         NormInertBinaryProperty(int source, int which) {
@@ -534,11 +547,11 @@ public final class UCharacterProperty
                 return !Normalizer2Impl.UTF16Plus.equal(dest, src);
             }
         },
-        new BinaryProperty(2, 1<<PROPS_2_EMOJI),
-        new BinaryProperty(2, 1<<PROPS_2_EMOJI_PRESENTATION),
-        new BinaryProperty(2, 1<<PROPS_2_EMOJI_MODIFIER),
-        new BinaryProperty(2, 1<<PROPS_2_EMOJI_MODIFIER_BASE),
-        new BinaryProperty(2, 1<<PROPS_2_EMOJI_COMPONENT),
+        new EmojiBinaryProperty(UProperty.EMOJI),
+        new EmojiBinaryProperty(UProperty.EMOJI_PRESENTATION),
+        new EmojiBinaryProperty(UProperty.EMOJI_MODIFIER),
+        new EmojiBinaryProperty(UProperty.EMOJI_MODIFIER_BASE),
+        new EmojiBinaryProperty(UProperty.EMOJI_COMPONENT),
         new BinaryProperty(SRC_PROPSVEC) {  // REGIONAL_INDICATOR
             // Property starts are a subset of lb=RI etc.
             @Override
@@ -547,7 +560,14 @@ public final class UCharacterProperty
             }
         },
         new BinaryProperty(1, 1<<PREPENDED_CONCATENATION_MARK),
-        new BinaryProperty(2, 1<<PROPS_2_EXTENDED_PICTOGRAPHIC),
+        new EmojiBinaryProperty(UProperty.EXTENDED_PICTOGRAPHIC),
+        new EmojiBinaryProperty(UProperty.BASIC_EMOJI),
+        new EmojiBinaryProperty(UProperty.EMOJI_KEYCAP_SEQUENCE),
+        new EmojiBinaryProperty(UProperty.RGI_EMOJI_MODIFIER_SEQUENCE),
+        new EmojiBinaryProperty(UProperty.RGI_EMOJI_FLAG_SEQUENCE),
+        new EmojiBinaryProperty(UProperty.RGI_EMOJI_TAG_SEQUENCE),
+        new EmojiBinaryProperty(UProperty.RGI_EMOJI_ZWJ_SEQUENCE),
+        new EmojiBinaryProperty(UProperty.RGI_EMOJI),
     };
 
     public boolean hasBinaryProperty(int c, int which) {
@@ -1365,19 +1385,20 @@ public final class UCharacterProperty
     /*
      * Properties in vector word 2
      * Bits
-     * 31..26   http://www.unicode.org/reports/tr51/#Emoji_Properties
+     * 31..26   unused since ICU 70 added uemoji.icu;
+     *          in ICU 57..69 stored emoji properties
      * 25..20   Line Break
      * 19..15   Sentence Break
      * 14..10   Word Break
      *  9.. 5   Grapheme Cluster Break
      *  4.. 0   Decomposition Type
      */
-    private static final int PROPS_2_EXTENDED_PICTOGRAPHIC=26;
-    private static final int PROPS_2_EMOJI_COMPONENT = 27;
-    private static final int PROPS_2_EMOJI = 28;
-    private static final int PROPS_2_EMOJI_PRESENTATION = 29;
-    private static final int PROPS_2_EMOJI_MODIFIER = 30;
-    private static final int PROPS_2_EMOJI_MODIFIER_BASE = 31;
+    //ivate static final int PROPS_2_EXTENDED_PICTOGRAPHIC=26;  // ICU 62..69
+    //ivate static final int PROPS_2_EMOJI_COMPONENT = 27;  // ICU 60..69
+    //ivate static final int PROPS_2_EMOJI = 28;  // ICU 57..69
+    //ivate static final int PROPS_2_EMOJI_PRESENTATION = 29;  // ICU 57..69
+    //ivate static final int PROPS_2_EMOJI_MODIFIER = 30;  // ICU 57..69
+    //ivate static final int PROPS_2_EMOJI_MODIFIER_BASE = 31;  // ICU 57..69
 
     private static final int LB_MASK          = 0x03f00000;
     private static final int LB_SHIFT         = 20;

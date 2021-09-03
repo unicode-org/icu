@@ -204,6 +204,7 @@
     <ClCompile Include="ucase.cpp" />
     <ClCompile Include="uchar.cpp" />
     <ClCompile Include="characterproperties.cpp" />
+    <ClCompile Include="emojiprops.cpp" />
     <ClCompile Include="unames.cpp" />
     <ClCompile Include="unifiedcache.cpp" />
     <ClCompile Include="unifilt.cpp" />
@@ -365,6 +366,7 @@
     <ClInclude Include="patternprops.h" />
     <ClInclude Include="propname.h" />
     <ClInclude Include="ruleiter.h" />
+    <ClInclude Include="emojiprops.h" />
     <ClInclude Include="ucase.h" />
     <ClInclude Include="ulayout_props.h" />
     <ClInclude Include="unisetspan.h" />

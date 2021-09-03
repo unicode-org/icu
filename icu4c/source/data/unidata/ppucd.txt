@@ -7,6 +7,7 @@ property;Catalog;age;Age
 property;Binary;AHex;ASCII_Hex_Digit
 property;Binary;;alnum
 property;Binary;Alpha;Alphabetic
+property;Binary;Basic_Emoji;Basic_Emoji
 property;Enumerated;bc;Bidi_Class
 property;Binary;Bidi_C;Bidi_Control
 property;Binary;Bidi_M;Bidi_Mirrored
@@ -38,6 +39,7 @@ property;Binary;EBase;Emoji_Modifier_Base
 property;Binary;EComp;Emoji_Component
 property;Binary;EMod;Emoji_Modifier
 property;Binary;Emoji;Emoji
+property;Binary;Emoji_Keycap_Sequence;Emoji_Keycap_Sequence
 property;Binary;EPres;Emoji_Presentation
 property;Miscellaneous;EqUIdeo;Equivalent_Unified_Ideograph
 property;Binary;Ext;Extender
@@ -91,6 +93,11 @@ property;Binary;PCM;Prepended_Concatenation_Mark
 property;Binary;;print
 property;Binary;QMark;Quotation_Mark
 property;Binary;Radical;Radical
+property;Binary;RGI_Emoji;RGI_Emoji
+property;Binary;RGI_Emoji_Flag_Sequence;RGI_Emoji_Flag_Sequence
+property;Binary;RGI_Emoji_Modifier_Sequence;RGI_Emoji_Modifier_Sequence
+property;Binary;RGI_Emoji_Tag_Sequence;RGI_Emoji_Tag_Sequence
+property;Binary;RGI_Emoji_ZWJ_Sequence;RGI_Emoji_ZWJ_Sequence
 property;Binary;RI;Regional_Indicator
 property;Enumerated;SB;Sentence_Break
 property;Catalog;sc;Script

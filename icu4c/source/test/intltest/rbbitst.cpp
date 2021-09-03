@@ -1883,11 +1883,11 @@ private:
     UnicodeSet  *fMidNumSet;
     UnicodeSet  *fNumericSet;
     UnicodeSet  *fFormatSet;
-    UnicodeSet  *fOtherSet;
+    UnicodeSet  *fOtherSet = nullptr;
     UnicodeSet  *fExtendSet;
     UnicodeSet  *fExtendNumLetSet;
     UnicodeSet  *fWSegSpaceSet;
-    UnicodeSet  *fDictionarySet;
+    UnicodeSet  *fDictionarySet = nullptr;
     UnicodeSet  *fZWJSet;
     UnicodeSet  *fExtendedPictSet;
 
@@ -1926,6 +1926,11 @@ RBBIWordMonkey::RBBIWordMonkey()
 
     fZWJSet           = new UnicodeSet(u"[\\p{Word_Break = ZWJ}]",          status);
     fExtendedPictSet  = new UnicodeSet(u"[:Extended_Pictographic:]", status);
+    if(U_FAILURE(status)) {
+        IntlTest::gTest->errln("%s:%d %s", __FILE__, __LINE__, u_errorName(status));
+        deferredStatus = status;
+        return;
+    }
 
     fDictionarySet = new UnicodeSet(u"[[\\uac00-\\ud7a3][:Han:][:Hiragana:]]", status);
     fDictionarySet->addAll(*fKatakanaSet);

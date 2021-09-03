@@ -65,6 +65,7 @@ void UnicodeTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     TESTCASE_AUTO(TestScriptMetadata);
     TESTCASE_AUTO(TestBidiPairedBracketType);
     TESTCASE_AUTO(TestEmojiProperties);
+    TESTCASE_AUTO(TestEmojiPropertiesOfStrings);
     TESTCASE_AUTO(TestIndicPositionalCategory);
     TESTCASE_AUTO(TestIndicSyllabicCategory);
     TESTCASE_AUTO(TestVerticalOrientation);
@@ -545,6 +546,177 @@ void UnicodeTest::TestEmojiProperties() {
                u_hasBinaryProperty(0xA9, UCHAR_EXTENDED_PICTOGRAPHIC));
 }
 
+namespace {
+
+UBool hbp(const UChar *s, int32_t length, UProperty which) {
+    return u_stringHasBinaryProperty(s, length, which);
+}
+
+UBool hbp(const UChar *s, UProperty which) {
+    return u_stringHasBinaryProperty(s, -1, which);
+}
+
+}  // namespace
+
+void UnicodeTest::TestEmojiPropertiesOfStrings() {
+    // Property of code points, for coverage
+    assertFalse("null is not Ideographic", hbp(nullptr, 1, UCHAR_IDEOGRAPHIC));
+    assertFalse("null/0 is not Ideographic", hbp(nullptr, -1, UCHAR_IDEOGRAPHIC));
+    assertFalse("empty string is not Ideographic", hbp(u"", 0, UCHAR_IDEOGRAPHIC));
+    assertFalse("empty string/0 is not Ideographic", hbp(u"", -1, UCHAR_IDEOGRAPHIC));
+    assertFalse("L is not Ideographic", hbp(u"L", 1, UCHAR_IDEOGRAPHIC));
+    assertFalse("L/0 is not Ideographic", hbp(u"L", -1, UCHAR_IDEOGRAPHIC));
+    assertTrue("U+4E02 is Ideographic", hbp(u"丂", 1, UCHAR_IDEOGRAPHIC));
+    assertTrue("U+4E02/0 is Ideographic", hbp(u"丂", -1, UCHAR_IDEOGRAPHIC));
+    assertFalse("2*U+4E02 is not Ideographic", hbp(u"丂丂", 2, UCHAR_IDEOGRAPHIC));
+    assertFalse("2*U+4E02/0 is not Ideographic", hbp(u"丂丂", -1, UCHAR_IDEOGRAPHIC));
+    assertFalse("bicycle is not Ideographic", hbp(u"🚲", 2, UCHAR_IDEOGRAPHIC));
+    assertFalse("bicycle/0 is not Ideographic", hbp(u"🚲", -1, UCHAR_IDEOGRAPHIC));
+    assertTrue("U+23456 is Ideographic", hbp(u"\U00023456", 2, UCHAR_IDEOGRAPHIC));
+    assertTrue("U+23456/0 is Ideographic", hbp(u"\U00023456", -1, UCHAR_IDEOGRAPHIC));
+
+    // Property of (code points and) strings
+    assertFalse("null is not Basic_Emoji", hbp(nullptr, 1, UCHAR_BASIC_EMOJI));
+    assertFalse("null/0 is not Basic_Emoji", hbp(nullptr, -1, UCHAR_BASIC_EMOJI));
+    assertFalse("empty string is not Basic_Emoji", hbp(u"", 0, UCHAR_BASIC_EMOJI));
+    assertFalse("empty string/0 is not Basic_Emoji", hbp(u"", -1, UCHAR_BASIC_EMOJI));
+    assertFalse("L is not Basic_Emoji", hbp(u"L", 1, UCHAR_BASIC_EMOJI));
+    assertFalse("L/0 is not Basic_Emoji", hbp(u"L", -1, UCHAR_BASIC_EMOJI));
+    assertFalse("U+4E02 is not Basic_Emoji", hbp(u"丂", 1, UCHAR_BASIC_EMOJI));
+    assertFalse("U+4E02/0 is not Basic_Emoji", hbp(u"丂", -1, UCHAR_BASIC_EMOJI));
+    assertTrue("bicycle is Basic_Emoji", hbp(u"🚲", 2, UCHAR_BASIC_EMOJI));
+    assertTrue("bicycle/0 is Basic_Emoji", hbp(u"🚲", -1, UCHAR_BASIC_EMOJI));
+    assertFalse("2*bicycle is Basic_Emoji", hbp(u"🚲🚲", 4, UCHAR_BASIC_EMOJI));
+    assertFalse("2*bicycle/0 is Basic_Emoji", hbp(u"🚲🚲", -1, UCHAR_BASIC_EMOJI));
+    assertFalse("U+23456 is not Basic_Emoji", hbp(u"\U00023456", 2, UCHAR_BASIC_EMOJI));
+    assertFalse("U+23456/0 is not Basic_Emoji", hbp(u"\U00023456", -1, UCHAR_BASIC_EMOJI));
+
+    assertFalse("stopwatch is not Basic_Emoji", hbp(u"⏱", 1, UCHAR_BASIC_EMOJI));
+    assertFalse("stopwatch/0 is not Basic_Emoji", hbp(u"⏱", -1, UCHAR_BASIC_EMOJI));
+    assertTrue("stopwatch+emoji is Basic_Emoji", hbp(u"⏱\uFE0F", 2, UCHAR_BASIC_EMOJI));
+    assertTrue("stopwatch+emoji/0 is Basic_Emoji", hbp(u"⏱\uFE0F", -1, UCHAR_BASIC_EMOJI));
+
+    assertFalse("chipmunk is not Basic_Emoji", hbp(u"🐿", UCHAR_BASIC_EMOJI));
+    assertTrue("chipmunk+emoji is Basic_Emoji", hbp(u"🐿\uFE0F", UCHAR_BASIC_EMOJI));
+    assertFalse("chipmunk+2*emoji is not Basic_Emoji", hbp(u"🐿\uFE0F\uFE0F", UCHAR_BASIC_EMOJI));
+
+    // Properties of strings (only)
+    assertFalse("4+emoji is not Emoji_Keycap_Sequence",
+                hbp(u"4\uFE0F", UCHAR_EMOJI_KEYCAP_SEQUENCE));
+    assertTrue("4+emoji+keycap is Emoji_Keycap_Sequence",
+               hbp(u"4\uFE0F\u20E3", UCHAR_EMOJI_KEYCAP_SEQUENCE));
+
+    assertFalse("[B] is not RGI_Emoji_Flag_Sequence",
+                hbp(u"\U0001F1E7", UCHAR_RGI_EMOJI_FLAG_SEQUENCE));
+    assertTrue("[BE] is RGI_Emoji_Flag_Sequence",
+               hbp(u"🇧🇪", UCHAR_RGI_EMOJI_FLAG_SEQUENCE));
+
+    assertFalse("[flag] is not RGI_Emoji_Tag_Sequence",
+                hbp(u"\U0001F3F4", UCHAR_RGI_EMOJI_TAG_SEQUENCE));
+    assertTrue("[Scotland] is RGI_Emoji_Tag_Sequence",
+               hbp(u"🏴󠁧󠁢󠁳󠁣󠁴󠁿", UCHAR_RGI_EMOJI_TAG_SEQUENCE));
+
+    assertFalse("bicyclist is not RGI_Emoji_Modifier_Sequence",
+                hbp(u"🚴", UCHAR_RGI_EMOJI_MODIFIER_SEQUENCE));
+    assertTrue("bicyclist+medium is RGI_Emoji_Modifier_Sequence",
+               hbp(u"🚴\U0001F3FD", UCHAR_RGI_EMOJI_MODIFIER_SEQUENCE));
+
+    assertFalse("woman+dark+ZWJ is not RGI_Emoji_ZWJ_Sequence",
+                hbp(u"👩\U0001F3FF\u200D", UCHAR_RGI_EMOJI_ZWJ_SEQUENCE));
+    assertTrue("woman pilot: dark skin tone is RGI_Emoji_ZWJ_Sequence",
+               hbp(u"👩\U0001F3FF\u200D✈\uFE0F", UCHAR_RGI_EMOJI_ZWJ_SEQUENCE));
+
+    // RGI_Emoji = all of the above
+    assertFalse("stopwatch is not RGI_Emoji", hbp(u"⏱", UCHAR_RGI_EMOJI));
+    assertTrue("stopwatch+emoji is RGI_Emoji", hbp(u"⏱\uFE0F", UCHAR_RGI_EMOJI));
+
+    assertFalse("chipmunk is not RGI_Emoji", hbp(u"🐿", UCHAR_RGI_EMOJI));
+    assertTrue("chipmunk+emoji is RGI_Emoji", hbp(u"🐿\uFE0F", UCHAR_RGI_EMOJI));
+
+    assertFalse("4+emoji is not RGI_Emoji", hbp(u"4\uFE0F", UCHAR_RGI_EMOJI));
+    assertTrue("4+emoji+keycap is RGI_Emoji", hbp(u"4\uFE0F\u20E3", UCHAR_RGI_EMOJI));
+
+    assertFalse("[B] is not RGI_Emoji", hbp(u"\U0001F1E7", UCHAR_RGI_EMOJI));
+    assertTrue("[BE] is RGI_Emoji", hbp(u"🇧🇪", UCHAR_RGI_EMOJI));
+
+    assertTrue("[flag] is RGI_Emoji", hbp(u"\U0001F3F4", UCHAR_RGI_EMOJI));
+    assertTrue("[Scotland] is RGI_Emoji", hbp(u"🏴󠁧󠁢󠁳󠁣󠁴󠁿", UCHAR_RGI_EMOJI));
+
+    assertTrue("bicyclist is RGI_Emoji", hbp(u"🚴", UCHAR_RGI_EMOJI));
+    assertTrue("bicyclist+medium is RGI_Emoji", hbp(u"🚴\U0001F3FD", UCHAR_RGI_EMOJI));
+
+    assertFalse("woman+dark+ZWJ is not RGI_Emoji", hbp(u"👩\U0001F3FF\u200D", UCHAR_RGI_EMOJI));
+    assertTrue("woman pilot: dark skin tone is RGI_Emoji",
+               hbp(u"👩\U0001F3FF\u200D✈\uFE0F", UCHAR_RGI_EMOJI));
+
+    // UnicodeSet with properties of strings
+    IcuTestErrorCode errorCode(*this, "TestEmojiPropertiesOfStrings()");
+    UnicodeSet basic("[:Basic_Emoji:]", errorCode);
+    UnicodeSet keycaps("[:Emoji_Keycap_Sequence:]", errorCode);
+    UnicodeSet modified("[:RGI_Emoji_Modifier_Sequence:]", errorCode);
+    UnicodeSet flags("[:RGI_Emoji_Flag_Sequence:]", errorCode);
+    UnicodeSet tags("[:RGI_Emoji_Tag_Sequence:]", errorCode);
+    UnicodeSet combos("[:RGI_Emoji_ZWJ_Sequence:]", errorCode);
+    UnicodeSet rgi("[:RGI_Emoji:]", errorCode);
+    if (errorCode.errDataIfFailureAndReset("UnicodeSets")) {
+        return;
+    }
+
+    // union of all sets except for "rgi" -- should be the same as "rgi"
+    UnicodeSet all(basic);
+    all.addAll(keycaps).addAll(modified).addAll(flags).addAll(tags).addAll(combos);
+
+    UnicodeSet basicOnlyCp(basic);
+    basicOnlyCp.removeAllStrings();
+
+    UnicodeSet rgiOnlyCp(rgi);
+    rgiOnlyCp.removeAllStrings();
+
+    assertTrue("lots of Basic_Emoji", basic.size() > 1000);
+    assertEquals("12 Emoji_Keycap_Sequence", 12, keycaps.size());
+    assertTrue("lots of RGI_Emoji_Modifier_Sequence", modified.size() > 600);
+    assertTrue("lots of RGI_Emoji_Flag_Sequence", flags.size() > 250);
+    assertTrue("some RGI_Emoji_Tag_Sequence", tags.size() >= 3);
+    assertTrue("lots of RGI_Emoji_ZWJ_Sequence", combos.size() > 1300);
+    assertTrue("lots of RGI_Emoji", rgi.size() > 3000);
+
+    assertTrue("lots of Basic_Emoji code points", basicOnlyCp.size() > 1000);
+    assertTrue("Basic_Emoji.hasStrings()", basic.hasStrings());
+    assertEquals("no Emoji_Keycap_Sequence code points", 0, keycaps.getRangeCount());
+    assertEquals("lots of RGI_Emoji_Modifier_Sequence", 0, modified.getRangeCount());
+    assertEquals("lots of RGI_Emoji_Flag_Sequence", 0, flags.getRangeCount());
+    assertEquals("some RGI_Emoji_Tag_Sequence", 0, tags.getRangeCount());
+    assertEquals("lots of RGI_Emoji_ZWJ_Sequence", 0, combos.getRangeCount());
+
+    assertTrue("lots of RGI_Emoji code points", rgiOnlyCp.size() > 1000);
+    assertTrue("RGI_Emoji.hasStrings()", rgi.hasStrings());
+    assertEquals("RGI_Emoji/only-cp.size() == Basic_Emoji/only-cp.size()",
+                 rgiOnlyCp.size(), basicOnlyCp.size());
+    assertTrue("RGI_Emoji/only-cp == Basic_Emoji/only-cp", rgiOnlyCp == basicOnlyCp);
+    assertEquals("RGI_Emoji.size() == union.size()", rgi.size(), all.size());
+    assertTrue("RGI_Emoji == union", rgi == all);
+
+    assertTrue("Basic_Emoji.contains(stopwatch+emoji)", basic.contains(u"⏱\uFE0F"));
+    assertTrue("Basic_Emoji.contains(chipmunk+emoji)", basic.contains(u"🐿\uFE0F"));
+    assertTrue("Emoji_Keycap_Sequence.contains(4+emoji+keycap)",
+               keycaps.contains(u"4\uFE0F\u20E3"));
+    assertTrue("RGI_Emoji_Flag_Sequence.contains([BE])", flags.contains(u"🇧🇪"));
+    assertTrue("RGI_Emoji_Tag_Sequence.contains([Scotland])", tags.contains(u"🏴󠁧󠁢󠁳󠁣󠁴󠁿"));
+    assertTrue("RGI_Emoji_Modifier_Sequence.contains(bicyclist+medium)",
+               modified.contains(u"🚴\U0001F3FD"));
+    assertTrue("RGI_Emoji_ZWJ_Sequence.contains(woman pilot: dark skin tone)",
+               combos.contains(u"👩\U0001F3FF\u200D✈\uFE0F"));
+    assertTrue("RGI_Emoji.contains(stopwatch+emoji)", rgi.contains(u"⏱\uFE0F"));
+    assertTrue("RGI_Emoji.contains(chipmunk+emoji)", rgi.contains(u"🐿\uFE0F"));
+    assertTrue("RGI_Emoji.contains(4+emoji+keycap)", rgi.contains(u"4\uFE0F\u20E3"));
+    assertTrue("RGI_Emoji.contains([BE] is RGI_Emoji)", rgi.contains(u"🇧🇪"));
+    assertTrue("RGI_Emoji.contains([flag])", rgi.contains(u"\U0001F3F4"));
+    assertTrue("RGI_Emoji.contains([Scotland])", rgi.contains(u"🏴󠁧󠁢󠁳󠁣󠁴󠁿"));
+    assertTrue("RGI_Emoji.contains(bicyclist)", rgi.contains(u"🚴"));
+    assertTrue("RGI_Emoji.contains(bicyclist+medium)", rgi.contains(u"🚴\U0001F3FD"));
+    assertTrue("RGI_Emoji.contains(woman pilot: dark skin tone)", rgi.contains(u"👩\U0001F3FF\u200D✈\uFE0F"));
+}
+
 void UnicodeTest::TestIndicPositionalCategory() {
     IcuTestErrorCode errorCode(*this, "TestIndicPositionalCategory()");
     UnicodeSet na(u"[:InPC=NA:]", errorCode);
@@ -633,8 +805,8 @@ void UnicodeTest::TestBinaryCharacterProperties() {
             continue;
         }
         const UnicodeSet &set = *UnicodeSet::fromUSet(uset);
-        int32_t size = set.size();
-        if (size == 0) {
+        int32_t count = set.getRangeCount();
+        if (count == 0) {
             assertFalse(UnicodeString("!hasBinaryProperty(U+0020, ") + prop + u")",
                 u_hasBinaryProperty(0x20, (UProperty)prop));
             assertFalse(UnicodeString("!hasBinaryProperty(U+0061, ") + prop + u")",
@@ -642,7 +814,7 @@ void UnicodeTest::TestBinaryCharacterProperties() {
             assertFalse(UnicodeString("!hasBinaryProperty(U+4E00, ") + prop + u")",
                 u_hasBinaryProperty(0x4e00, (UProperty)prop));
         } else {
-            UChar32 c = set.charAt(0);
+            UChar32 c = set.getRangeStart(0);
             if (c > 0) {
                 assertFalse(
                     UnicodeString("!hasBinaryProperty(") + TestUtility::hex(c - 1) +
@@ -653,7 +825,7 @@ void UnicodeTest::TestBinaryCharacterProperties() {
                 UnicodeString("hasBinaryProperty(") + TestUtility::hex(c) +
                     u", " + prop + u")",
                 u_hasBinaryProperty(c, (UProperty)prop));
-            c = set.charAt(size - 1);
+            c = set.getRangeEnd(count - 1);
             assertTrue(
                 UnicodeString("hasBinaryProperty(") + TestUtility::hex(c) +
                     u", " + prop + u")",

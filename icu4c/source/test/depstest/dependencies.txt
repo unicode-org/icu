@@ -9,7 +9,7 @@
 # created on: 2011may26
 # created by: Markus W. Scherer
 #
-# See http://site.icu-project.org/processes/release/tasks/healthy-code#TOC-Check-library-dependencies
+# See https://unicode-org.github.io/icu/processes/release/tasks/healthy-code.html#check-library-dependencies
 
 # Standard library symbols used by ICU --------------------------------------- #
 
@@ -172,7 +172,7 @@ library: common
     static_unicode_sets
     uiter edits
     ucasemap ucasemap_titlecase_brkiter script_runs
-    uprops ubidi_props ucase uscript uscript_props characterproperties
+    uprops ubidi_props ucase uscript uscript_props emojiprops characterproperties
     ubidi ushape ubiditransform
     resourcebundle service_registration resbund_cnv ures_cnv icudataver ucat
     currency
@@ -411,6 +411,7 @@ group: uprops
     ubidi_props
     unistr_case ustring_case  # only for case folding
     ucase
+    emojiprops
 
 group: characterproperties
     characterproperties.o
@@ -473,6 +474,12 @@ group: ubidi_props
     ubidi_props.o
   deps
     utrie2
+
+group: emojiprops
+    emojiprops.o
+  deps
+    ucharstrie ucharstrieiterator
+    ucptrie udata
 
 group: unistr_props
     unistr_props.o

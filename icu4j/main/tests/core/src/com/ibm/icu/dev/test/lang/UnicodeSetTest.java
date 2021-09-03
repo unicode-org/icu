@@ -152,9 +152,20 @@ public class UnicodeSetTest extends TestFmwk {
                     }
                     UnicodeSet collectedErrors = new UnicodeSet();
                     for (UnicodeSetIterator it = new UnicodeSetIterator(testSet); it.next();) {
-                        int value = UCharacter.getIntPropertyValue(it.codepoint, propNum);
-                        if (value != valueNum) {
-                            collectedErrors.add(it.codepoint);
+                        if (it.codepoint == UnicodeSetIterator.IS_STRING) {
+                            // For binary properties of strings, only [:propName=true:] _should_ yield strings.
+                            // Therefore, we should always have valueNum=1 and b=true.
+                            // TODO: ICU-21524 ^ and propName=N use complement() which leaves strings alone.
+                            boolean b = UCharacter.hasBinaryProperty(it.string, propNum);
+                            int value = b ? 1 : 0;
+                            if (value != valueNum && /* TODO: ICU-21524 */ valueNum != 0) {
+                                collectedErrors.add(it.string);
+                            }
+                        } else {
+                            int value = UCharacter.getIntPropertyValue(it.codepoint, propNum);
+                            if (value != valueNum) {
+                                collectedErrors.add(it.codepoint);
+                            }
                         }
                     }
                     if (collectedErrors.size() != 0) {

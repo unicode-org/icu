@@ -22,6 +22,7 @@ def generate(config, io, common_vars):
 
     requests += generate_cnvalias(config, io, common_vars)
     requests += generate_ulayout(config, io, common_vars)
+    requests += generate_uemoji(config, io, common_vars)
     requests += generate_confusables(config, io, common_vars)
     requests += generate_conversion_mappings(config, io, common_vars)
     requests += generate_brkitr_brk(config, io, common_vars)
@@ -181,7 +182,9 @@ def generate_brkitr_brk(config, io, common_vars):
         RepeatedExecutionRequest(
             name = "brkitr_brk",
             category = "brkitr_rules",
-            dep_targets = [DepTarget("cnvalias"), DepTarget("ulayout"), DepTarget("lstm_res")],
+            dep_targets =
+                [DepTarget("cnvalias"),
+                    DepTarget("ulayout"), DepTarget("uemoji"), DepTarget("lstm_res")],
             input_files = input_files,
             output_files = output_files,
             tool = IcuTool("genbrk"),
@@ -338,6 +341,25 @@ def generate_unames(config, io, common_vars):
 def generate_ulayout(config, io, common_vars):
     # Unicode text layout properties
     basename = "ulayout"
+    input_file = InFile("in/%s.icu" % basename)
+    output_file = OutFile("%s.icu" % basename)
+    return [
+        SingleExecutionRequest(
+            name = basename,
+            category = basename,
+            dep_targets = [],
+            input_files = [input_file],
+            output_files = [output_file],
+            tool = IcuTool("icupkg"),
+            args = "-t{ICUDATA_CHAR} {IN_DIR}/{INPUT_FILES[0]} {OUT_DIR}/{OUTPUT_FILES[0]}",
+            format_with = {}
+        )
+    ]
+
+
+def generate_uemoji(config, io, common_vars):
+    # Unicode emoji properties
+    basename = "uemoji"
     input_file = InFile("in/%s.icu" % basename)
     output_file = OutFile("%s.icu" % basename)
     return [

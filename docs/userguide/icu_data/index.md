@@ -829,9 +829,9 @@ loadable data objects.)
 
 #### Unicode Character Data (Normalization since ICU 4.4) & custom normalization data
 *   Source format:
-    [source/data/unidata/norm2/*.tx](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/unidata/norm2):
+    [source/data/unidata/norm2/*.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/unidata/norm2):
     Files derived from the [Unicode Character
-    Database](http://www.unicode.org/onlinedat/online.html), or custom data.
+    Database](https://www.unicode.org/onlinedat/online.html), or custom data.
 *   Binary format: .nrm:
     [source/common/normalizer2impl.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/normalizer2impl.h)
 *   Generator tool:
@@ -860,6 +860,18 @@ loadable data objects.)
     [Preparsed UCD](http://site.icu-project.org/design/props/ppucd)
 *   Binary format: ulayout.icu:
     [tools/unicode/c/genprops/layoutpropsbuilder.cpp](https://github.com/unicode-org/icu/blob/main/tools/unicode/c/genprops/layoutpropsbuilder.cpp)
+*   Generator tool:
+    [genprops](https://github.com/unicode-org/icu/blob/main/tools/unicode/c/genprops)
+
+#### Unicode Character Data (Emoji properties since ICU 70)
+Emoji properties of code points moved out of uprops.icu.
+Emoji properties of strings added.
+*   Source format:
+    [source/data/unidata/emoji-sequences.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/unidata/emoji-sequences.txt) and
+    [source/data/unidata/emoji-zwj-sequences.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/unidata/emoji-zwj-sequences.txt):
+    [UTS #51 Data Files](https://www.unicode.org/reports/tr51/#Data_Files)
+*   Binary format: uemoji.icu:
+    [tools/unicode/c/genprops/emojipropsbuilder.cpp](https://github.com/unicode-org/icu/blob/main/tools/unicode/c/genprops/emojipropsbuilder.cpp)
 *   Generator tool:
     [genprops](https://github.com/unicode-org/icu/blob/main/tools/unicode/c/genprops)
 

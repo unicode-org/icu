@@ -2564,6 +2564,150 @@ public final class UCharacterTest extends TestFmwk
                 UCharacter.hasBinaryProperty(0xA9, UProperty.EXTENDED_PICTOGRAPHIC));
     }
 
+    private static boolean hbp(CharSequence s, int property) {
+        return UCharacter.hasBinaryProperty(s, property);
+    }
+
+    @Test
+    public void TestEmojiPropertiesOfStrings() {
+        // Property of code points, for coverage
+        assertFalse("empty string is not Ideographic", hbp("", UProperty.IDEOGRAPHIC));
+        assertFalse("L is not Ideographic", hbp("L", UProperty.IDEOGRAPHIC));
+        assertTrue("U+4E02 is Ideographic", hbp("丂", UProperty.IDEOGRAPHIC));
+        assertFalse("2*U+4E02 is not Ideographic", hbp("丂丂", UProperty.IDEOGRAPHIC));
+        assertFalse("bicycle is not Ideographic", hbp("🚲", UProperty.IDEOGRAPHIC));
+        assertTrue("U+23456 is Ideographic", hbp(UTF16.valueOf(0x23456), UProperty.IDEOGRAPHIC));
+
+        // Property of (code points and) strings
+        assertFalse("empty string is not Basic_Emoji", hbp("", UProperty.BASIC_EMOJI));
+        assertFalse("L is not Basic_Emoji", hbp("L", UProperty.BASIC_EMOJI));
+        assertFalse("U+4E02 is not Basic_Emoji", hbp("丂", UProperty.BASIC_EMOJI));
+        assertTrue("bicycle is Basic_Emoji", hbp("🚲", UProperty.BASIC_EMOJI));
+        assertFalse("2*bicycle is Basic_Emoji", hbp("🚲🚲", UProperty.BASIC_EMOJI));
+        assertFalse("U+23456 is not Basic_Emoji", hbp(UTF16.valueOf(0x23456), UProperty.BASIC_EMOJI));
+
+        assertFalse("stopwatch is not Basic_Emoji", hbp("⏱", UProperty.BASIC_EMOJI));
+        assertTrue("stopwatch+emoji is Basic_Emoji", hbp("⏱\uFE0F", UProperty.BASIC_EMOJI));
+
+        assertFalse("chipmunk is not Basic_Emoji", hbp("🐿", UProperty.BASIC_EMOJI));
+        assertTrue("chipmunk+emoji is Basic_Emoji", hbp("🐿\uFE0F", UProperty.BASIC_EMOJI));
+        assertFalse("chipmunk+2*emoji is not Basic_Emoji", hbp("🐿\uFE0F\uFE0F", UProperty.BASIC_EMOJI));
+
+        // Properties of strings (only)
+        assertFalse("4+emoji is not Emoji_Keycap_Sequence",
+                    hbp("4\uFE0F", UProperty.EMOJI_KEYCAP_SEQUENCE));
+        assertTrue("4+emoji+keycap is Emoji_Keycap_Sequence",
+                   hbp("4\uFE0F\u20E3", UProperty.EMOJI_KEYCAP_SEQUENCE));
+
+        assertFalse("[B] is not RGI_Emoji_Flag_Sequence",
+                    hbp(UTF16.valueOf(0x1F1E7), UProperty.RGI_EMOJI_FLAG_SEQUENCE));
+        assertTrue("[BE] is RGI_Emoji_Flag_Sequence",
+                   hbp("🇧🇪", UProperty.RGI_EMOJI_FLAG_SEQUENCE));
+
+        assertFalse("[flag] is not RGI_Emoji_Tag_Sequence",
+                    hbp(UTF16.valueOf(0x1F3F4), UProperty.RGI_EMOJI_TAG_SEQUENCE));
+        assertTrue("[Scotland] is RGI_Emoji_Tag_Sequence",
+                   hbp("🏴󠁧󠁢󠁳󠁣󠁴󠁿", UProperty.RGI_EMOJI_TAG_SEQUENCE));
+
+        assertFalse("bicyclist is not RGI_Emoji_Modifier_Sequence",
+                    hbp("🚴", UProperty.RGI_EMOJI_MODIFIER_SEQUENCE));
+        assertTrue("bicyclist+medium is RGI_Emoji_Modifier_Sequence",
+                   hbp("🚴" + UTF16.valueOf(0x1F3FD), UProperty.RGI_EMOJI_MODIFIER_SEQUENCE));
+
+        assertFalse("woman+dark+ZWJ is not RGI_Emoji_ZWJ_Sequence",
+                    hbp("👩" + UTF16.valueOf(0x1F3FF) + "\u200D", UProperty.RGI_EMOJI_ZWJ_SEQUENCE));
+        assertTrue("woman pilot: dark skin tone is RGI_Emoji_ZWJ_Sequence",
+                   hbp("👩" + UTF16.valueOf(0x1F3FF) + "\u200D✈\uFE0F",
+                   UProperty.RGI_EMOJI_ZWJ_SEQUENCE));
+
+        // RGI_Emoji = all of the above
+        assertFalse("stopwatch is not RGI_Emoji", hbp("⏱", UProperty.RGI_EMOJI));
+        assertTrue("stopwatch+emoji is RGI_Emoji", hbp("⏱\uFE0F", UProperty.RGI_EMOJI));
+
+        assertFalse("chipmunk is not RGI_Emoji", hbp("🐿", UProperty.RGI_EMOJI));
+        assertTrue("chipmunk+emoji is RGI_Emoji", hbp("🐿\uFE0F", UProperty.RGI_EMOJI));
+
+        assertFalse("4+emoji is not RGI_Emoji", hbp("4\uFE0F", UProperty.RGI_EMOJI));
+        assertTrue("4+emoji+keycap is RGI_Emoji", hbp("4\uFE0F\u20E3", UProperty.RGI_EMOJI));
+
+        assertFalse("[B] is not RGI_Emoji", hbp(UTF16.valueOf(0x1F1E7), UProperty.RGI_EMOJI));
+        assertTrue("[BE] is RGI_Emoji", hbp("🇧🇪", UProperty.RGI_EMOJI));
+
+        assertTrue("[flag] is RGI_Emoji", hbp(UTF16.valueOf(0x1F3F4), UProperty.RGI_EMOJI));
+        assertTrue("[Scotland] is RGI_Emoji", hbp("🏴󠁧󠁢󠁳󠁣󠁴󠁿", UProperty.RGI_EMOJI));
+
+        assertTrue("bicyclist is RGI_Emoji", hbp("🚴", UProperty.RGI_EMOJI));
+        assertTrue("bicyclist+medium is RGI_Emoji",
+                   hbp("🚴" + UTF16.valueOf(0x1F3FD), UProperty.RGI_EMOJI));
+
+        assertFalse("woman+dark+ZWJ is not RGI_Emoji",
+                    hbp("👩" + UTF16.valueOf(0x1F3FF) + "\u200D", UProperty.RGI_EMOJI));
+        assertTrue("woman pilot: dark skin tone is RGI_Emoji",
+                   hbp("👩" + UTF16.valueOf(0x1F3FF) + "\u200D✈\uFE0F", UProperty.RGI_EMOJI));
+
+        // UnicodeSet with properties of strings
+        UnicodeSet basic = new UnicodeSet("[:Basic_Emoji:]");
+        UnicodeSet keycaps = new UnicodeSet("[:Emoji_Keycap_Sequence:]");
+        UnicodeSet modified = new UnicodeSet("[:RGI_Emoji_Modifier_Sequence:]");
+        UnicodeSet flags = new UnicodeSet("[:RGI_Emoji_Flag_Sequence:]");
+        UnicodeSet tags = new UnicodeSet("[:RGI_Emoji_Tag_Sequence:]");
+        UnicodeSet combos = new UnicodeSet("[:RGI_Emoji_ZWJ_Sequence:]");
+        UnicodeSet rgi = new UnicodeSet("[:RGI_Emoji:]");
+
+        // union of all sets except for "rgi" -- should be the same as "rgi"
+        UnicodeSet all = new UnicodeSet(basic);
+        all.addAll(keycaps).addAll(modified).addAll(flags).addAll(tags).addAll(combos);
+
+        UnicodeSet basicOnlyCp = new UnicodeSet(basic).removeAllStrings();
+        UnicodeSet rgiOnlyCp = new UnicodeSet(rgi).removeAllStrings();
+
+        assertTrue("lots of Basic_Emoji", basic.size() > 1000);
+        assertEquals("12 Emoji_Keycap_Sequence", 12, keycaps.size());
+        assertTrue("lots of RGI_Emoji_Modifier_Sequence", modified.size() > 600);
+        assertTrue("lots of RGI_Emoji_Flag_Sequence", flags.size() > 250);
+        assertTrue("some RGI_Emoji_Tag_Sequence", tags.size() >= 3);
+        assertTrue("lots of RGI_Emoji_ZWJ_Sequence", combos.size() > 1300);
+        assertTrue("lots of RGI_Emoji", rgi.size() > 3000);
+
+        assertTrue("lots of Basic_Emoji code points", basicOnlyCp.size() > 1000);
+        assertTrue("Basic_Emoji.hasStrings()", basic.hasStrings());
+        assertEquals("no Emoji_Keycap_Sequence code points", 0, keycaps.getRangeCount());
+        assertEquals("lots of RGI_Emoji_Modifier_Sequence", 0, modified.getRangeCount());
+        assertEquals("lots of RGI_Emoji_Flag_Sequence", 0, flags.getRangeCount());
+        assertEquals("some RGI_Emoji_Tag_Sequence", 0, tags.getRangeCount());
+        assertEquals("lots of RGI_Emoji_ZWJ_Sequence", 0, combos.getRangeCount());
+
+        assertTrue("lots of RGI_Emoji code points", rgiOnlyCp.size() > 1000);
+        assertTrue("RGI_Emoji.hasStrings()", rgi.hasStrings());
+        assertEquals("RGI_Emoji/only-cp.size() == Basic_Emoji/only-cp.size()",
+                     rgiOnlyCp.size(), basicOnlyCp.size());
+        assertEquals("RGI_Emoji/only-cp == Basic_Emoji/only-cp", rgiOnlyCp, basicOnlyCp);
+        assertEquals("RGI_Emoji.size() == union.size()", rgi.size(), all.size());
+        assertEquals("RGI_Emoji == union", rgi, all);
+
+        assertTrue("Basic_Emoji.contains(stopwatch+emoji)", basic.contains("⏱\uFE0F"));
+        assertTrue("Basic_Emoji.contains(chipmunk+emoji)", basic.contains("🐿\uFE0F"));
+        assertTrue("Emoji_Keycap_Sequence.contains(4+emoji+keycap)",
+                   keycaps.contains("4\uFE0F\u20E3"));
+        assertTrue("RGI_Emoji_Flag_Sequence.contains([BE])", flags.contains("🇧🇪"));
+        assertTrue("RGI_Emoji_Tag_Sequence.contains([Scotland])", tags.contains("🏴󠁧󠁢󠁳󠁣󠁴󠁿"));
+        assertTrue("RGI_Emoji_Modifier_Sequence.contains(bicyclist+medium)",
+                   modified.contains("🚴" + UTF16.valueOf(0x1F3FD)));
+        assertTrue("RGI_Emoji_ZWJ_Sequence.contains(woman pilot: dark skin tone)",
+                   combos.contains("👩" + UTF16.valueOf(0x1F3FF) + "\u200D✈\uFE0F"));
+        assertTrue("RGI_Emoji.contains(stopwatch+emoji)", rgi.contains("⏱\uFE0F"));
+        assertTrue("RGI_Emoji.contains(chipmunk+emoji)", rgi.contains("🐿\uFE0F"));
+        assertTrue("RGI_Emoji.contains(4+emoji+keycap)", rgi.contains("4\uFE0F\u20E3"));
+        assertTrue("RGI_Emoji.contains([BE] is RGI_Emoji)", rgi.contains("🇧🇪"));
+        assertTrue("RGI_Emoji.contains([flag])", rgi.contains(UTF16.valueOf(0x1F3F4)));
+        assertTrue("RGI_Emoji.contains([Scotland])", rgi.contains("🏴󠁧󠁢󠁳󠁣󠁴󠁿"));
+        assertTrue("RGI_Emoji.contains(bicyclist)", rgi.contains("🚴"));
+        assertTrue("RGI_Emoji.contains(bicyclist+medium)",
+                   rgi.contains("🚴" + UTF16.valueOf(0x1F3FD)));
+        assertTrue("RGI_Emoji.contains(woman pilot: dark skin tone)",
+                   rgi.contains("👩" + UTF16.valueOf(0x1F3FF) + "\u200D✈\uFE0F"));
+    }
+
     @Test
     public void TestIndicPositionalCategory() {
         UnicodeSet na = new UnicodeSet("[:InPC=NA:]");
@@ -3689,8 +3833,8 @@ public final class UCharacterTest extends TestFmwk
         // Spot-check getBinaryPropertySet() vs. hasBinaryProperty().
         for (int prop = 0; prop < UProperty.BINARY_LIMIT; ++prop) {
             UnicodeSet set = CharacterProperties.getBinaryPropertySet(prop);
-            int size = set.size();
-            if (size == 0) {
+            int count = set.getRangeCount();
+            if (count == 0) {
                 assertFalse("!hasBinaryProperty(U+0020, " + prop + ')',
                         UCharacter.hasBinaryProperty(0x20, prop));
                 assertFalse("!hasBinaryProperty(U+0061, " + prop + ')',
@@ -3698,14 +3842,14 @@ public final class UCharacterTest extends TestFmwk
                 assertFalse("!hasBinaryProperty(U+4E00, " + prop + ')',
                         UCharacter.hasBinaryProperty(0x4e00, prop));
             } else {
-                int c = set.charAt(0);
+                int c = set.getRangeStart(0);
                 if (c > 0) {
                     assertFalse("!hasBinaryProperty(" + Utility.hex(c - 1) + ", " + prop + ')',
                             UCharacter.hasBinaryProperty(c - 1, prop));
                 }
                 assertTrue("hasBinaryProperty(" + Utility.hex(c) + ", " + prop + ')',
                         UCharacter.hasBinaryProperty(c, prop));
-                c = set.charAt(size - 1);
+                c = set.getRangeEnd(count - 1);
                 assertTrue("hasBinaryProperty(" + Utility.hex(c) + ", " + prop + ')',
                         UCharacter.hasBinaryProperty(c, prop));
                 if (c < 0x10ffff) {

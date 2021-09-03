@@ -31,12 +31,13 @@ cc_binary(
         "//icu4c/source/common:bytestriebuilder",
         "//icu4c/source/common:propsvec",
         "//icu4c/source/common:errorcode",
+        "//icu4c/source/common:ucharstriebuilder",
         "//icu4c/source/common:uniset",
         "//icu4c/source/common:uvector32",
 
         "//icu4c/source/common:platform",
         "//icu4c/source/common:headers",
-        
+
         "//icu4c/source/tools/toolutil:ppucd",
         "//icu4c/source/tools/toolutil:unewdata",
         "//icu4c/source/tools/toolutil:writesrc",
