@@ -6,6 +6,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "number_affixutils.h"
+#include "number_modifiers.h"
 #include "unicode/utf16.h"
 #include "unicode/uniset.h"
 
@@ -174,8 +175,28 @@ AffixUtils::unescape(const UnicodeString &affixPattern, FormattedStringBuilder &
                 {UFIELD_CATEGORY_NUMBER, UNUM_CURRENCY_FIELD},
                 status);
         } else if (tag.type < 0) {
+            int32_t prevLength = length;
             length += output.insert(
                     position + length, provider.getSymbol(tag.type), getFieldForType(tag.type), status);
+            if (isCurrencyType(tag.type)) {
+                // We may need to add spacing between the notation literal and the currency, to
+                // transform "1KUS$" to "1K US$". This handles "0K¤" but not something like "0¤K".
+                // TODO: Find locales with the "0¤K" format for testing, and implement.
+                if (position > 0) {
+                    const DecimalFormatSymbols* dcfmtsym = provider.getDecimalFormatSymbols();
+                    if (dcfmtsym == nullptr) {
+                        status = U_INTERNAL_PROGRAM_ERROR;
+                        return length;
+                    }
+                    length += CurrencySpacingEnabledModifier::applyCurrencySpacingToAffixPattern(
+                        output,
+                        position + prevLength,
+                        true,
+                        *dcfmtsym,
+                        status
+                    );
+                }
+            }
         } else {
             length += output.insertCodePoint(position + length, tag.codePoint, field, status);
         }

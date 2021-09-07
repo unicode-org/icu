@@ -62,6 +62,8 @@ class U_I18N_API SymbolProvider {
 
     // TODO: Could this be more efficient if it returned by reference?
     virtual UnicodeString getSymbol(AffixPatternType type) const = 0;
+
+    virtual const DecimalFormatSymbols* getDecimalFormatSymbols() const = 0;
 };
 
 /**

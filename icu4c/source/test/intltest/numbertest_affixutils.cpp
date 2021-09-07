@@ -47,6 +47,10 @@ class DefaultSymbolProvider : public SymbolProvider {
                 UPRV_UNREACHABLE;
         }
     }
+
+    const DecimalFormatSymbols* getDecimalFormatSymbols() const U_OVERRIDE {
+        return nullptr;
+    }
 };
 
 void AffixUtilsTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char *) {
@@ -202,8 +206,11 @@ void AffixUtilsTest::testInvalid() {
 
 class NumericSymbolProvider : public SymbolProvider {
   public:
-    virtual UnicodeString getSymbol(AffixPatternType type) const {
+    UnicodeString getSymbol(AffixPatternType type) const  U_OVERRIDE{
         return Int64ToUnicodeString(type < 0 ? -type : type);
+    }
+    const DecimalFormatSymbols* getDecimalFormatSymbols() const U_OVERRIDE {
+        return nullptr;
     }
 };
 

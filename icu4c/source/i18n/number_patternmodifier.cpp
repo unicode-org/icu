@@ -335,6 +335,10 @@ UnicodeString MutablePatternModifier::getSymbol(AffixPatternType type) const {
     }
 }
 
+const DecimalFormatSymbols* MutablePatternModifier::getDecimalFormatSymbols() const {
+    return fSymbols;
+}
+
 UnicodeString MutablePatternModifier::toUnicodeString() const {
     // Never called by AffixUtils
     UPRV_UNREACHABLE;

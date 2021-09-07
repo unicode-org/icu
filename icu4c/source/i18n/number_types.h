@@ -90,6 +90,21 @@ enum AffixPatternType {
             TYPE_CURRENCY_OVERFLOW = -15
 };
 
+/** Returns whether the AffixPatternType is currency. */
+inline bool isCurrencyType(AffixPatternType type) {
+    switch (type) {
+        case TYPE_CURRENCY_SINGLE:
+        case TYPE_CURRENCY_DOUBLE:
+        case TYPE_CURRENCY_TRIPLE:
+        case TYPE_CURRENCY_QUAD:
+        case TYPE_CURRENCY_QUINT:
+        case TYPE_CURRENCY_OVERFLOW:
+            return true;
+        default:
+            return false;
+    }
+}
+
 enum CompactType {
     TYPE_DECIMAL, TYPE_CURRENCY
 };

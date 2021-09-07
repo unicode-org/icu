@@ -195,6 +195,8 @@ class U_I18N_API MutablePatternModifier
      */
     UnicodeString getSymbol(AffixPatternType type) const U_OVERRIDE;
 
+    const DecimalFormatSymbols* getDecimalFormatSymbols() const U_OVERRIDE;
+
     UnicodeString toUnicodeString() const;
 
   private:
