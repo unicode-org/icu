@@ -1297,6 +1297,23 @@ RuleBasedBreakIterator::getRules() const {
     }
 }
 
+#if defined(U_LOCAL_SERVICE_HOOK) && U_LOCAL_SERVICE_HOOK
+
+static void*(*g_svc_hook)(const char *, UErrorCode *) = nullptr;
+
+U_CAPI void* uprv_svc_hook(const char *what, UErrorCode *status) {
+    if (g_svc_hook != nullptr) {
+        return (*g_svc_hook)(what, status);
+    }
+    return nullptr;
+}
+
+U_CAPI void uprv_setup_svc_hook(void*(*svc_hook)(const char *, UErrorCode *)) {
+    g_svc_hook = svc_hook;
+}
+
+#endif
+
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
