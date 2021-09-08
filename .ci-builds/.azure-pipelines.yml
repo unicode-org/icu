@@ -62,7 +62,7 @@ jobs:
         sudo apt install -qy clang-13 lld-13 libc++-13-dev libc++abi-13-dev
       displayName: 'Install Clang-13'
     - script: |
-        export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor" && cd icu4c/source && ./runConfigureICU Linux && make -j2 tests
+        export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor -Wsuggest-override" && cd icu4c/source && ./runConfigureICU Linux && make -j2 tests
       displayName: 'Build only (WarningsAsErrors)'
       env:
         CC: clang-13
