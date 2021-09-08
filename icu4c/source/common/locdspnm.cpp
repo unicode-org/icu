@@ -723,11 +723,25 @@ LocaleDisplayNamesImpl::localeIdName(const char* localeId,
             return result;
         }
     }
-    if (substitute) {
-        return langData.get("Languages", localeId, result);
-    } else {
-        return langData.getNoFallback("Languages", localeId, result);
+    langData.getNoFallback("Languages", localeId, result);
+    if (result.isBogus() && uprv_strchr(localeId, '_') == NULL) {
+        // Canonicalize lang and try again, ICU-20870
+        // (only for language codes without script or region)
+        Locale canonLocale = Locale::createCanonical(localeId);
+        const char* canonLocId = canonLocale.getName();
+        if (nameLength == UDISPCTX_LENGTH_SHORT) {
+            langData.getNoFallback("Languages%short", canonLocId, result);
+            if (!result.isBogus()) {
+                return result;
+            }
+        }
+        langData.getNoFallback("Languages", canonLocId, result);
     }
+    if (result.isBogus() && substitute) {
+        // use key, this is what langData.get (with fallback) falls back to.
+        result.setTo(UnicodeString(localeId, -1, US_INV)); // use key (
+    }
+    return result;
 }
 
 UnicodeString&
@@ -742,10 +756,22 @@ LocaleDisplayNamesImpl::languageDisplayName(const char* lang,
             return adjustForUsageAndContext(kCapContextUsageLanguage, result);
         }
     }
-    if (substitute == UDISPCTX_SUBSTITUTE) {
-        langData.get("Languages", lang, result);
-    } else {
-        langData.getNoFallback("Languages", lang, result);
+    langData.getNoFallback("Languages", lang, result);
+    if (result.isBogus()) {
+        // Canonicalize lang and try again, ICU-20870
+        Locale canonLocale = Locale::createCanonical(lang);
+        const char* canonLocId = canonLocale.getName();
+        if (nameLength == UDISPCTX_LENGTH_SHORT) {
+            langData.getNoFallback("Languages%short", canonLocId, result);
+            if (!result.isBogus()) {
+                return adjustForUsageAndContext(kCapContextUsageLanguage, result);
+            }
+        }
+        langData.getNoFallback("Languages", canonLocId, result);
+    }
+    if (result.isBogus() && substitute == UDISPCTX_SUBSTITUTE) {
+        // use key, this is what langData.get (with fallback) falls back to.
+        result.setTo(UnicodeString(lang, -1, US_INV)); // use key (
     }
     return adjustForUsageAndContext(kCapContextUsageLanguage, result);
 }
