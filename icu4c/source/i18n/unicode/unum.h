@@ -1090,7 +1090,7 @@ typedef enum UNumberFormatAttribute {
 
   /** 
    * if this attribute is set to 0, it is set to UNUM_CURRENCY_STANDARD purpose,
-   * otherwise it is UNUM_CURRENCY_CASH purpose
+   * otherwise it is UNUM_CASH_CURRENCY purpose
    * Default: 0 (UNUM_CURRENCY_STANDARD purpose)
    * @stable ICU 54
    */
