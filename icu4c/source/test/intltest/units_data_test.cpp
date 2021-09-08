@@ -20,6 +20,7 @@ class UnitsDataTest : public IntlTest {
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL);
 
     void testGetUnitCategory();
+    // This is a sanity check that only exists in ICU4C.
     void testGetAllConversionRates();
     void testGetPreferencesFor();
 };
