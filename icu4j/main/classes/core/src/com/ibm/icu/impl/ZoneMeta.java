@@ -401,13 +401,9 @@ public final class ZoneMeta {
             UResourceBundle typeMap = keyTypeData.get("typeMap");
             UResourceBundle typeKeys = typeMap.get("timezone");
             try {
-                UResourceBundle canonicalEntry = typeKeys.get(tzidKey);
-                if (canonicalEntry.getString().length() != 4) {
-                    // The given tzid is available in the canonical list
-                    // TODO: For now we skip entries mapping to metazone short ids,
-                    // which have 4 characters.
-                    canonical = tzid;
-                }
+                /* UResourceBundle canonicalEntry = */ typeKeys.get(tzidKey);
+                // The given tzid is available in the canonical list
+                canonical = tzid;
             } catch (MissingResourceException e) {
                 // fall through
             }
@@ -883,11 +879,6 @@ public final class ZoneMeta {
             shortID = typeKeys.getString(tzidKey);
         } catch (MissingResourceException e) {
             // fall through
-        }
-        if (shortID!=null && shortID.length()==4) {
-            // TODO: For now we skip entries mapping to metazone short ids,
-            // which have 4 characters.
-            return null;
         }
 
         return shortID;
