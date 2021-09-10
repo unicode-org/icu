@@ -71,7 +71,7 @@ application.
 If you add the `--enable-static` option to the ICU command line build (Makefile
 or cygwin), ICU will also build a static library version which you can link to
 only the exact functions your application needs. Users of your ICU must compile
-with -DU_STATIC_IMPLEMENTATION. Also see [How To Use ICU](../howtouseicu.md).
+with -DU_STATIC_IMPLEMENTATION. Also see [How To Use ICU](../icu/howtouseicu.md).
 
 ### Reduce the number of libraries used
 
