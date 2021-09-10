@@ -53,7 +53,7 @@ U_NAMESPACE_BEGIN
 //
 //------------------------------------------------------------------------------
 RegexCompile::RegexCompile(RegexPattern *rxp, UErrorCode &status) :
-   fParenStack(status), fSetStack(status), fSetOpStack(status)
+   fParenStack(status), fSetStack(uprv_deleteUObject, nullptr, status), fSetOpStack(status)
 {
     // Lazy init of all shared global sets (needed for init()'s empty text)
     RegexStaticSets::initGlobals(&status);
@@ -278,11 +278,6 @@ void    RegexCompile::compile(
 
     if (U_FAILURE(*fStatus)) {
         // Bail out if the pattern had errors.
-        //   Set stack cleanup:  a successful compile would have left it empty,
-        //   but errors can leave temporary sets hanging around.
-        while (!fSetStack.empty()) {
-            delete (UnicodeSet *)fSetStack.pop();
-        }
         return;
     }
 
@@ -2431,7 +2426,11 @@ void        RegexCompile::compileSet(UnicodeSet *theSet)
             theSet->freeze();
             int32_t setNumber = fRXPat->fSets->size();
             fRXPat->fSets->addElement(theSet, *fStatus);
-            appendOp(URX_SETREF, setNumber);
+            if (U_SUCCESS(*fStatus)) {
+                appendOp(URX_SETREF, setNumber);
+            } else {
+                delete theSet;
+            }
         }
     }
 }

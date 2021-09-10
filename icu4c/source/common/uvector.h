@@ -346,6 +346,11 @@ public:
 
     inline int32_t peeki(void) const {return lastElementi();}
     
+    /**
+     * Pop and return an element from the stack.
+     * For stacks with a deleter function, the caller takes ownership
+     * of the popped element.
+     */
     void* pop(void);
     
     int32_t popi(void);
