@@ -1397,18 +1397,14 @@ void blueprint_helpers::parseIncrementOption(const StringSegment &segment, Macro
     number::impl::parseIncrementOption(segment, macros.precision, status);
 }
 
-void blueprint_helpers::generateIncrementOption(double increment, int32_t trailingZeros, UnicodeString& sb,
+void blueprint_helpers::generateIncrementOption(double increment, int32_t minFrac, UnicodeString& sb,
                                                 UErrorCode&) {
     // Utilize DecimalQuantity/double_conversion to format this for us.
     DecimalQuantity dq;
     dq.setToDouble(increment);
     dq.roundToInfinity();
+    dq.setMinFraction(minFrac);
     sb.append(dq.toPlainString());
-
-    // We might need to append extra trailing zeros for min fraction...
-    if (trailingZeros > 0) {
-        appendMultiple(sb, u'0', trailingZeros);
-    }
 }
 
 void blueprint_helpers::parseIntegerWidthOption(const StringSegment& segment, MacroProps& macros,
@@ -1632,7 +1628,7 @@ bool GeneratorHelpers::precision(const MacroProps& macros, UnicodeString& sb, UE
         sb.append(u"precision-increment/", -1);
         blueprint_helpers::generateIncrementOption(
                 impl.fIncrement,
-                impl.fMinFrac - impl.fMaxFrac,
+                impl.fMinFrac,
                 sb,
                 status);
     } else if (macros.precision.fType == Precision::RND_CURRENCY) {
