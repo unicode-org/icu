@@ -243,6 +243,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestKeywordSet);
     TESTCASE(TestKeywordSetError);
     TESTCASE(TestDisplayKeywords);
+    TESTCASE(TestCanonicalization21749StackUseAfterScope);
     TESTCASE(TestDisplayKeywordValues);
     TESTCASE(TestGetBaseName);
 #if !UCONFIG_NO_FILE_IO
@@ -2491,6 +2492,19 @@ static void TestCanonicalizationBuffer(void)
     if (uprv_strncmp(name, buffer, len) != 0) {
         log_err("FAIL: uloc_canonicalize(%s) => \"%.*s\", expected \"%s\"\n",
                 name, reslen, buffer, name);
+        return;
+    }
+}
+
+static void TestCanonicalization21749StackUseAfterScope(void)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    char buffer[256];
+    const char* input = "- _";
+    uloc_canonicalize(input, buffer, -1, &status);
+    if (U_SUCCESS(status)) {
+        log_err("FAIL: uloc_canonicalize(%s) => %s, expected U_FAILURE()\n",
+                input, u_errorName(status));
         return;
     }
 }
