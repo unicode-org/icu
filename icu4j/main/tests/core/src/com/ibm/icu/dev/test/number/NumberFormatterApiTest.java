@@ -3183,6 +3183,38 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "0.000");
 
         assertFormatDescending(
+                "Integer increment with trailing zeros (ICU-21654)",
+                "precision-increment/50",
+                "precision-increment/50",
+                NumberFormatter.with().precision(Precision.increment(new BigDecimal("50"))),
+                ULocale.ENGLISH,
+                "87,650",
+                "8,750",
+                "900",
+                "100",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0");
+
+        assertFormatDescending(
+                "Integer increment with minFraction (ICU-21654)",
+                "precision-increment/5.0",
+                "precision-increment/5.0",
+                NumberFormatter.with().precision(Precision.increment(new BigDecimal("5.0"))),
+                ULocale.ENGLISH,
+                "87,650.0",
+                "8,765.0",
+                "875.0",
+                "90.0",
+                "10.0",
+                "0.0",
+                "0.0",
+                "0.0",
+                "0.0");
+
+        assertFormatDescending(
                 "Currency Standard",
                 "currency/CZK precision-currency-standard",
                 "currency/CZK precision-currency-standard",
@@ -3299,6 +3331,56 @@ public class NumberFormatterApiTest extends TestFmwk {
                 ULocale.ENGLISH,
                 Double.MIN_VALUE,
                 "4.9E-324");
+    }
+
+    @Test
+    public void roundingIncrementSkeleton() {
+        ULocale locale = ULocale.ENGLISH;
+
+        for (int min_fraction_digits = 1; min_fraction_digits < 8; min_fraction_digits++) {
+            // pattern is a snprintf pattern string like "precision-increment/%.5f"
+            String pattern = String.format("precision-increment/%%.%df", min_fraction_digits);
+            double increment = 0.05;
+            for (int i = 0; i < 8 ; i++, increment *= 10.0) {
+                BigDecimal bdIncrement;
+                if (increment == 0.05 && min_fraction_digits == 1) {
+                    // Special case when the number of fraction digits is too low:
+                    bdIncrement = new BigDecimal("0.05");
+                } else {
+                    bdIncrement = BigDecimal.valueOf(increment).setScale(min_fraction_digits);
+                }
+                UnlocalizedNumberFormatter f =
+                    NumberFormatter.with().precision(
+                        Precision.increment(bdIncrement));
+                LocalizedNumberFormatter l = f.locale(locale);
+
+                String skeleton = f.toSkeleton();
+
+                String message = String.format(
+                    "Precision::increment(%.5f).withMinFraction(%d) '%s'\n",
+                    increment, min_fraction_digits,
+                    skeleton);
+
+                if (increment == 0.05 && min_fraction_digits == 1) {
+                    // Special case when the number of fraction digits is too low:
+                    // Precision::increment(0.05000).withMinFraction(1) 'precision-increment/0.05'
+                    assertEquals(message, "precision-increment/0.05", skeleton);
+                } else {
+                    // All other cases: use the snprintf pattern computed above:
+                    // Precision::increment(0.50000).withMinFraction(1) 'precision-increment/0.5'
+                    // Precision::increment(5.00000).withMinFraction(1) 'precision-increment/5.0'
+                    // Precision::increment(50.00000).withMinFraction(1) 'precision-increment/50.0'
+                    // ...
+                    // Precision::increment(0.05000).withMinFraction(2) 'precision-increment/0.05'
+                    // Precision::increment(0.50000).withMinFraction(2) 'precision-increment/0.50'
+                    // Precision::increment(5.00000).withMinFraction(2) 'precision-increment/5.00'
+                    // ...
+
+                    String expected = String.format(pattern, increment);
+                    assertEquals(message, expected, skeleton);
+                }
+            }
+        }
     }
 
     @Test

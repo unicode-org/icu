@@ -97,6 +97,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(roundingFigures);
         TESTCASE_AUTO(roundingFractionFigures);
         TESTCASE_AUTO(roundingOther);
+        TESTCASE_AUTO(roundingIncrementSkeleton);
         TESTCASE_AUTO(grouping);
         TESTCASE_AUTO(padding);
         TESTCASE_AUTO(integerWidth);
@@ -3197,6 +3198,38 @@ void NumberFormatterApiTest::roundingOther() {
             u"0.000");
 
     assertFormatDescending(
+            u"Integer increment with trailing zeros (ICU-21654)",
+            u"precision-increment/50",
+            u"precision-increment/50",
+            NumberFormatter::with().precision(Precision::increment(50)),
+            Locale::getEnglish(),
+            u"87,650",
+            u"8,750",
+            u"900",
+            u"100",
+            u"0",
+            u"0",
+            u"0",
+            u"0",
+            u"0");
+
+    assertFormatDescending(
+            u"Integer increment with minFraction (ICU-21654)",
+            u"precision-increment/5.0",
+            u"precision-increment/5.0",
+            NumberFormatter::with().precision(Precision::increment(5).withMinFraction(1)),
+            Locale::getEnglish(),
+            u"87,650.0",
+            u"8,765.0",
+            u"875.0",
+            u"90.0",
+            u"10.0",
+            u"0.0",
+            u"0.0",
+            u"0.0",
+            u"0.0");
+
+    assertFormatDescending(
             u"Currency Standard",
             u"currency/CZK precision-currency-standard",
             u"currency/CZK precision-currency-standard",
@@ -3323,6 +3356,55 @@ void NumberFormatterApiTest::roundingOther() {
             Locale::getEnglish(),
             DBL_TRUE_MIN,
             u"5E-324");
+}
+
+/** Test for ICU-21654 */
+void NumberFormatterApiTest::roundingIncrementSkeleton() {
+    IcuTestErrorCode status(*this, "roundingIncrementSkeleton");
+    Locale locale = Locale::getEnglish();
+
+    for (int min_fraction_digits = 1; min_fraction_digits < 8; min_fraction_digits++) {
+        // pattern is a snprintf pattern string like "precision-increment/%0.5f"
+        char pattern[256];
+        snprintf(pattern, 256, "precision-increment/%%0.%df", min_fraction_digits);
+        double increment = 0.05;
+        for (int i = 0; i < 8 ; i++, increment *= 10.0) {
+            const UnlocalizedNumberFormatter f =
+                NumberFormatter::with().precision(
+                    Precision::increment(increment).withMinFraction(
+                        min_fraction_digits));
+            const LocalizedNumberFormatter l = f.locale(locale);
+
+            std::string skeleton;
+            f.toSkeleton(status).toUTF8String<std::string>(skeleton);
+
+            char message[256];
+            snprintf(message, 256,
+                "Precision::increment(%0.5f).withMinFraction(%d) '%s'\n",
+                increment, min_fraction_digits,
+                skeleton.c_str());
+
+            if (increment == 0.05 && min_fraction_digits == 1) {
+                // Special case when the number of fraction digits is too low:
+                // Precision::increment(0.05000).withMinFraction(1) 'precision-increment/0.05'
+                assertEquals(message, "precision-increment/0.05", skeleton.c_str());
+            } else {
+                // All other cases: use the snprintf pattern computed above:
+                // Precision::increment(0.50000).withMinFraction(1) 'precision-increment/0.5'
+                // Precision::increment(5.00000).withMinFraction(1) 'precision-increment/5.0'
+                // Precision::increment(50.00000).withMinFraction(1) 'precision-increment/50.0'
+                // ...
+                // Precision::increment(0.05000).withMinFraction(2) 'precision-increment/0.05'
+                // Precision::increment(0.50000).withMinFraction(2) 'precision-increment/0.50'
+                // Precision::increment(5.00000).withMinFraction(2) 'precision-increment/5.00'
+                // ...
+
+                char expected[256];
+                snprintf(expected, 256, pattern, increment);
+                assertEquals(message, expected, skeleton.c_str());
+            }
+        }
+    }
 }
 
 void NumberFormatterApiTest::grouping() {
