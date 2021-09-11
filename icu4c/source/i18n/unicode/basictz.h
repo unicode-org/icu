@@ -226,8 +226,11 @@ protected:
     /**
      * Gets the set of TimeZoneRule instances applicable to the specified time and after.
      * @param start     The start date used for extracting time zone rules
-     * @param initial   Receives the InitialTimeZone, always not NULL
-     * @param transitionRules   Receives the transition rules, could be NULL
+     * @param initial   Output parameter, receives the InitialTimeZone.
+     *                  Always not nullptr (except in case of error)
+     * @param transitionRules   Output parameter, a UVector of transition rules.
+     *                  May be nullptr, if there are no transition rules.
+     *                  The caller owns the returned vector; the UVector owns the rules.
      * @param status    Receives error status code
      */
     void getTimeZoneRulesAfter(UDate start, InitialTimeZoneRule*& initial, UVector*& transitionRules,

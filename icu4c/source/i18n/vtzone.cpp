@@ -1876,10 +1876,7 @@ cleanupWritePartial:
         delete initial;
     }
     if (transitionRules != nullptr) {
-        while (!transitionRules->isEmpty()) {
-            TimeZoneRule *tr = (TimeZoneRule*)transitionRules->orphanElementAt(0);
-            delete tr;
-        }
+        U_ASSERT(transitionRules->hasDeleter());
         delete transitionRules;
     }
 }
