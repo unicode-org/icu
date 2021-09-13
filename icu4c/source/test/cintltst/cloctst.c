@@ -59,7 +59,9 @@ static void TestBug20321UnicodeLocaleKey(void);
 
 static void TestUsingDefaultWarning(void);
 static void TestExcessivelyLongIDs(void);
+#if !UCONFIG_NO_FORMATTING
 static void TestUldnNameVariants(void);
+#endif
 
 void PrintDataTable();
 
@@ -284,7 +286,9 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestUsingDefaultWarning);
     TESTCASE(TestBug21449InfiniteLoop);
     TESTCASE(TestExcessivelyLongIDs);
+#if !UCONFIG_NO_FORMATTING
     TESTCASE(TestUldnNameVariants);
+#endif
 }
 
 
@@ -6919,6 +6923,7 @@ static void TestBug20149() {
     }
 }
 
+#if !UCONFIG_NO_FORMATTING
 typedef enum UldnNameType {
     TEST_ULDN_LOCALE,
     TEST_ULDN_LANGUAGE,
@@ -7097,6 +7102,7 @@ static void TestUldnNameVariants() {
         uldn_close(uldn);
     }
 }
+#endif
 
 static void TestUsingDefaultWarning() {
     UChar buff[256];
