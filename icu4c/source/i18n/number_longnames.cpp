@@ -1680,7 +1680,7 @@ const Modifier *MixedUnitLongNameHandler::getModifier(Signum /*signum*/,
     // TODO(icu-units#28): investigate this method when investigating where
     // ModifierStore::getModifier() gets used. To be sure it remains
     // unreachable:
-    UPRV_UNREACHABLE;
+    UPRV_UNREACHABLE_EXIT;
     return nullptr;
 }
 

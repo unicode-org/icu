@@ -1616,7 +1616,7 @@ PluralOperand tokenTypeToPluralOperand(tokenType tt) {
     case tVariableC:
         return PLURAL_OPERAND_E;
     default:
-        UPRV_UNREACHABLE;  // unexpected.
+        UPRV_UNREACHABLE_EXIT;  // unexpected.
     }
 }
 
@@ -1889,7 +1889,7 @@ double FixedDecimal::getPluralOperand(PluralOperand operand) const {
         case PLURAL_OPERAND_E: return exponent;
         case PLURAL_OPERAND_C: return exponent;
         default:
-             UPRV_UNREACHABLE;  // unexpected.
+             UPRV_UNREACHABLE_EXIT;  // unexpected.
     }
 }
 

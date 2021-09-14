@@ -719,7 +719,7 @@ UBool RegexMatcher::find(UErrorCode &status) {
             if  (findProgressInterrupt(startPos, status))
                 return FALSE;
         }
-        UPRV_UNREACHABLE;
+        UPRV_UNREACHABLE_EXIT;
 
     case START_START:
         // Matches are only possible at the start of the input string
@@ -767,7 +767,7 @@ UBool RegexMatcher::find(UErrorCode &status) {
                     return FALSE;
             }
         }
-        UPRV_UNREACHABLE;
+        UPRV_UNREACHABLE_EXIT;
 
     case START_STRING:
     case START_CHAR:
@@ -799,7 +799,7 @@ UBool RegexMatcher::find(UErrorCode &status) {
                     return FALSE;
            }
         }
-        UPRV_UNREACHABLE;
+        UPRV_UNREACHABLE_EXIT;
 
     case START_LINE:
         {
@@ -879,10 +879,15 @@ UBool RegexMatcher::find(UErrorCode &status) {
         }
 
     default:
-        UPRV_UNREACHABLE;
+        UPRV_UNREACHABLE_ASSERT;
+        // Unknown value in fPattern->fStartType, should be from StartOfMatch enum. But
+        // we have reports of this in production code, don't use UPRV_UNREACHABLE_EXIT.
+        // See ICU-21669.
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return FALSE;
     }
 
-    UPRV_UNREACHABLE;
+    UPRV_UNREACHABLE_EXIT;
 }
 
 
@@ -993,7 +998,7 @@ UBool RegexMatcher::findUsingChunk(UErrorCode &status) {
             if  (findProgressInterrupt(startPos, status))
                 return FALSE;
         }
-        UPRV_UNREACHABLE;
+        UPRV_UNREACHABLE_EXIT;
 
     case START_START:
         // Matches are only possible at the start of the input string
@@ -1035,7 +1040,7 @@ UBool RegexMatcher::findUsingChunk(UErrorCode &status) {
                 return FALSE;
         }
     }
-    UPRV_UNREACHABLE;
+    UPRV_UNREACHABLE_EXIT;
 
     case START_STRING:
     case START_CHAR:
@@ -1064,7 +1069,7 @@ UBool RegexMatcher::findUsingChunk(UErrorCode &status) {
                 return FALSE;
         }
     }
-    UPRV_UNREACHABLE;
+    UPRV_UNREACHABLE_EXIT;
 
     case START_LINE:
     {
@@ -1135,10 +1140,15 @@ UBool RegexMatcher::findUsingChunk(UErrorCode &status) {
     }
 
     default:
-        UPRV_UNREACHABLE;
+        UPRV_UNREACHABLE_ASSERT;
+        // Unknown value in fPattern->fStartType, should be from StartOfMatch enum. But
+        // we have reports of this in production code, don't use UPRV_UNREACHABLE_EXIT.
+        // See ICU-21669.
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return FALSE;
     }
 
-    UPRV_UNREACHABLE;
+    UPRV_UNREACHABLE_EXIT;
 }
 
 
@@ -4234,7 +4244,11 @@ void RegexMatcher::MatchAt(int64_t startIdx, UBool toEnd, UErrorCode &status) {
         default:
             // Trouble.  The compiled pattern contains an entry with an
             //           unrecognized type tag.
-            UPRV_UNREACHABLE;
+            UPRV_UNREACHABLE_ASSERT;
+            // Unknown opcode type in opType = URX_TYPE(pat[fp->fPatIdx]). But we have
+            // reports of this in production code, don't use UPRV_UNREACHABLE_EXIT.
+            // See ICU-21669.
+            status = U_INTERNAL_PROGRAM_ERROR;
         }
 
         if (U_FAILURE(status)) {
@@ -5672,7 +5686,11 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
         default:
             // Trouble.  The compiled pattern contains an entry with an
             //           unrecognized type tag.
-            UPRV_UNREACHABLE;
+            UPRV_UNREACHABLE_ASSERT;
+            // Unknown opcode type in opType = URX_TYPE(pat[fp->fPatIdx]). But we have
+            // reports of this in production code, don't use UPRV_UNREACHABLE_EXIT.
+            // See ICU-21669.
+            status = U_INTERNAL_PROGRAM_ERROR;
         }
 
         if (U_FAILURE(status)) {

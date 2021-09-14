@@ -187,7 +187,7 @@ Transliterator* TransliteratorAlias::create(UParseError& pe,
         }
         break;
     case RULES:
-        UPRV_UNREACHABLE; // don't call create() if isRuleBased() returns TRUE!
+        UPRV_UNREACHABLE_EXIT; // don't call create() if isRuleBased() returns TRUE!
     }
     return t;
 }
@@ -1402,7 +1402,7 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
         }
         return 0;
     default:
-        UPRV_UNREACHABLE; // can't get here
+        UPRV_UNREACHABLE_EXIT; // can't get here
     }
 }
 U_NAMESPACE_END

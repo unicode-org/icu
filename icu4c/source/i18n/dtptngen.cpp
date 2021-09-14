@@ -745,7 +745,7 @@ DateTimePatternGenerator::getDefaultHourCycle(UErrorCode& status) const {
         case LOW_K:
             return UDAT_HOUR_CYCLE_24;
         default:
-            UPRV_UNREACHABLE;
+            UPRV_UNREACHABLE_EXIT;
     }
 }
 
@@ -1945,7 +1945,7 @@ PatternMap::copyFrom(const PatternMap& other, UErrorCode& status) {
                 if (prevElem != nullptr) {
                     prevElem->next.adoptInstead(curElem);
                 } else {
-                    UPRV_UNREACHABLE;
+                    UPRV_UNREACHABLE_EXIT;
                 }
             }
             prevElem = curElem;

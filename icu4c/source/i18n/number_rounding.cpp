@@ -498,10 +498,10 @@ void RoundingImpl::apply(impl::DecimalQuantity &value, UErrorCode& status) const
 
         case Precision::RND_CURRENCY:
             // Call .withCurrency() before .apply()!
-            UPRV_UNREACHABLE;
+            UPRV_UNREACHABLE_EXIT;
 
         default:
-            UPRV_UNREACHABLE;
+            UPRV_UNREACHABLE_EXIT;
     }
 
     if (fPrecision.fTrailingZeroDisplay == UNUM_TRAILING_ZERO_AUTO ||

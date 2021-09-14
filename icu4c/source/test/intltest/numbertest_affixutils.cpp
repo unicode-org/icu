@@ -44,7 +44,7 @@ class DefaultSymbolProvider : public SymbolProvider {
             case TYPE_CURRENCY_OVERFLOW:
                 return u"\uFFFD";
             default:
-                UPRV_UNREACHABLE;
+                UPRV_UNREACHABLE_EXIT;
         }
     }
 };

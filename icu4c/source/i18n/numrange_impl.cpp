@@ -229,7 +229,7 @@ void NumberRangeFormatterImpl::format(UFormattedNumberRangeData& data, bool equa
             break;
 
         default:
-            UPRV_UNREACHABLE;
+            UPRV_UNREACHABLE_EXIT;
     }
 }
 
