@@ -828,6 +828,7 @@ void DecimalQuantity::roundToMagnitude(int32_t magnitude, RoundingMode roundingM
 
         // Perform truncation
         if (position >= precision) {
+            U_ASSERT(trailingDigit == 0);
             setBcdToZero();
             scale = magnitude;
         } else {
@@ -845,6 +846,10 @@ void DecimalQuantity::roundToMagnitude(int32_t magnitude, RoundingMode roundingM
                 // do not return: use the bubbling logic below
             } else {
                 setDigitPos(0, 5);
+                // If the quantity was set to 0, we may need to restore a digit.
+                if (precision == 0) {
+                    precision = 1;
+                }
                 // compact not necessary: digit at position 0 is nonzero
                 return;
             }

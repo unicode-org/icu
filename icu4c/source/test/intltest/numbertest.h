@@ -73,7 +73,7 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     void roundingFigures();
     void roundingFractionFigures();
     void roundingOther();
-    void roundingIncrementSkeleton();
+    void roundingIncrementRegressionTest();
     void grouping();
     void padding();
     void integerWidth();

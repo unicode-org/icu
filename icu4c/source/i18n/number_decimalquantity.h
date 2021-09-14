@@ -433,7 +433,9 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
 
     /**
      * Sets the digit in the BCD list. This method only sets the digit; it is the caller's
-     * responsibility to call {@link #compact} after setting the digit.
+     * responsibility to call {@link #compact} after setting the digit, and to ensure
+     * that the precision field is updated to reflect the correct number of digits if a
+     * nonzero digit is added to the decimal.
      *
      * @param position The position of the digit to pop, counted in BCD units from the least
      *     significant digit. If outside the range supported by the implementation, an AssertionError
