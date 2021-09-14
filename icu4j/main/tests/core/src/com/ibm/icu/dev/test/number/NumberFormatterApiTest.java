@@ -3167,6 +3167,78 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "0.000");
 
         assertFormatDescending(
+                "Medium nickel increment with rounding mode ceiling (ICU-21668)",
+                "precision-increment/50 rounding-mode-ceiling",
+                "precision-increment/50 rounding-mode-ceiling",
+                NumberFormatter.with()
+                        .precision(Precision.increment(new BigDecimal("50")))
+                        .roundingMode(RoundingMode.CEILING),
+                ULocale.ENGLISH,
+                "87,650",
+                "8,800",
+                "900",
+                "100",
+                "50",
+                "50",
+                "50",
+                "50",
+                "0");
+        
+        assertFormatDescending(
+                "Large nickel increment with rounding mode up (ICU-21668)",
+                "precision-increment/5000 rounding-mode-up",
+                "precision-increment/5000 rounding-mode-up",
+                NumberFormatter.with()
+                        .precision(Precision.increment(new BigDecimal("5000")))
+                        .roundingMode(RoundingMode.UP),
+                ULocale.ENGLISH,
+                "90,000",
+                "10,000",
+                "5,000",
+                "5,000",
+                "5,000",
+                "5,000",
+                "5,000",
+                "5,000",
+                "0");
+        
+        assertFormatDescending(
+                "Large dime increment with rounding mode up (ICU-21668)",
+                "precision-increment/10000 rounding-mode-up",
+                "precision-increment/10000 rounding-mode-up",
+                NumberFormatter.with()
+                        .precision(Precision.increment(new BigDecimal("10000")))
+                        .roundingMode(RoundingMode.UP),
+                ULocale.ENGLISH,
+                "90,000",
+                "10,000",
+                "10,000",
+                "10,000",
+                "10,000",
+                "10,000",
+                "10,000",
+                "10,000",
+                "0");
+        
+        assertFormatDescending(
+                "Large non-nickel increment with rounding mode up (ICU-21668)",
+                "precision-increment/15000 rounding-mode-up",
+                "precision-increment/15000 rounding-mode-up",
+                NumberFormatter.with()
+                        .precision(Precision.increment(new BigDecimal("15000")))
+                        .roundingMode(RoundingMode.UP),
+                ULocale.ENGLISH,
+                "90,000",
+                "15,000",
+                "15,000",
+                "15,000",
+                "15,000",
+                "15,000",
+                "15,000",
+                "15,000",
+                "0");
+
+        assertFormatDescending(
                 "Increment Resolving to Power of 10",
                 "precision-increment/0.010",
                 "precision-increment/0.010",
@@ -3334,7 +3406,7 @@ public class NumberFormatterApiTest extends TestFmwk {
     }
 
     @Test
-    public void roundingIncrementSkeleton() {
+    public void roundingIncrementRegressionTest() {
         ULocale locale = ULocale.ENGLISH;
 
         for (int min_fraction_digits = 1; min_fraction_digits < 8; min_fraction_digits++) {
@@ -3357,7 +3429,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 String skeleton = f.toSkeleton();
 
                 String message = String.format(
-                    "Precision::increment(%.5f).withMinFraction(%d) '%s'\n",
+                    "ICU-21654: Precision::increment(%.5f).withMinFraction(%d) '%s'\n",
                     increment, min_fraction_digits,
                     skeleton);
 
@@ -3381,6 +3453,14 @@ public class NumberFormatterApiTest extends TestFmwk {
                 }
             }
         }
+
+        String increment = NumberFormatter.with()
+            .precision(Precision.increment(new BigDecimal("5000")))
+            .roundingMode(RoundingMode.UP)
+            .locale(ULocale.ENGLISH)
+            .format(5.625)
+            .toString();
+        assertEquals("ICU-21668", "5,000", increment);
     }
 
     @Test

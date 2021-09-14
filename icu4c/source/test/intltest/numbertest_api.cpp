@@ -97,7 +97,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(roundingFigures);
         TESTCASE_AUTO(roundingFractionFigures);
         TESTCASE_AUTO(roundingOther);
-        TESTCASE_AUTO(roundingIncrementSkeleton);
+        TESTCASE_AUTO(roundingIncrementRegressionTest);
         TESTCASE_AUTO(grouping);
         TESTCASE_AUTO(padding);
         TESTCASE_AUTO(integerWidth);
@@ -3182,6 +3182,78 @@ void NumberFormatterApiTest::roundingOther() {
             u"0.000");
 
     assertFormatDescending(
+            u"Medium nickel increment with rounding mode ceiling (ICU-21668)",
+            u"precision-increment/50 rounding-mode-ceiling",
+            u"precision-increment/50 rounding-mode-ceiling",
+            NumberFormatter::with()
+                .precision(Precision::increment(50))
+                .roundingMode(UNUM_ROUND_CEILING),
+            Locale::getEnglish(),
+            u"87,650",
+            u"8,800",
+            u"900",
+            u"100",
+            u"50",
+            u"50",
+            u"50",
+            u"50",
+            u"0");
+
+    assertFormatDescending(
+            u"Large nickel increment with rounding mode up (ICU-21668)",
+            u"precision-increment/5000 rounding-mode-up",
+            u"precision-increment/5000 rounding-mode-up",
+            NumberFormatter::with()
+                .precision(Precision::increment(5000))
+                .roundingMode(UNUM_ROUND_UP),
+            Locale::getEnglish(),
+            u"90,000",
+            u"10,000",
+            u"5,000",
+            u"5,000",
+            u"5,000",
+            u"5,000",
+            u"5,000",
+            u"5,000",
+            u"0");
+
+    assertFormatDescending(
+            u"Large dime increment with rounding mode up (ICU-21668)",
+            u"precision-increment/10000 rounding-mode-up",
+            u"precision-increment/10000 rounding-mode-up",
+            NumberFormatter::with()
+                .precision(Precision::increment(10000))
+                .roundingMode(UNUM_ROUND_UP),
+            Locale::getEnglish(),
+            u"90,000",
+            u"10,000",
+            u"10,000",
+            u"10,000",
+            u"10,000",
+            u"10,000",
+            u"10,000",
+            u"10,000",
+            u"0");
+
+    assertFormatDescending(
+            u"Large non-nickel increment with rounding mode up (ICU-21668)",
+            u"precision-increment/15000 rounding-mode-up",
+            u"precision-increment/15000 rounding-mode-up",
+            NumberFormatter::with()
+                .precision(Precision::increment(15000))
+                .roundingMode(UNUM_ROUND_UP),
+            Locale::getEnglish(),
+            u"90,000",
+            u"15,000",
+            u"15,000",
+            u"15,000",
+            u"15,000",
+            u"15,000",
+            u"15,000",
+            u"15,000",
+            u"0");
+
+    assertFormatDescending(
             u"Increment Resolving to Power of 10",
             u"precision-increment/0.010",
             u"precision-increment/0.010",
@@ -3358,9 +3430,9 @@ void NumberFormatterApiTest::roundingOther() {
             u"5E-324");
 }
 
-/** Test for ICU-21654 */
-void NumberFormatterApiTest::roundingIncrementSkeleton() {
-    IcuTestErrorCode status(*this, "roundingIncrementSkeleton");
+/** Test for ICU-21654 and ICU-21668 */
+void NumberFormatterApiTest::roundingIncrementRegressionTest() {
+    IcuTestErrorCode status(*this, "roundingIncrementRegressionTest");
     Locale locale = Locale::getEnglish();
 
     for (int min_fraction_digits = 1; min_fraction_digits < 8; min_fraction_digits++) {
@@ -3380,7 +3452,7 @@ void NumberFormatterApiTest::roundingIncrementSkeleton() {
 
             char message[256];
             snprintf(message, 256,
-                "Precision::increment(%0.5f).withMinFraction(%d) '%s'\n",
+                "ICU-21654: Precision::increment(%0.5f).withMinFraction(%d) '%s'\n",
                 increment, min_fraction_digits,
                 skeleton.c_str());
 
@@ -3405,6 +3477,14 @@ void NumberFormatterApiTest::roundingIncrementSkeleton() {
             }
         }
     }
+
+    auto increment = NumberFormatter::with()
+        .precision(Precision::increment(5000).withMinFraction(0))
+        .roundingMode(UNUM_ROUND_UP)
+        .locale(Locale::getEnglish())
+        .formatDouble(5.625, status)
+        .toString(status);
+    assertEquals("ICU-21668", u"5,000", increment);
 }
 
 void NumberFormatterApiTest::grouping() {
