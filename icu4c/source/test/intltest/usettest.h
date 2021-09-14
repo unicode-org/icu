@@ -99,6 +99,7 @@ private:
 
     void assertNext(UnicodeSetIterator &iter, const UnicodeString &expected);
     void TestSkipToStrings();
+    void TestPatternCodePointComplement();
 
 private:
 

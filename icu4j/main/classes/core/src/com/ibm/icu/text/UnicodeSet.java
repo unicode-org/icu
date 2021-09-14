@@ -144,6 +144,13 @@ import com.ibm.icu.util.VersionInfo;
  * their delimiters; "[:^foo]" and "\P{foo}".  In any other location,
  * '^' has no special meaning.
  *
+ * <p>Since ICU 70, "[^...]", "[:^foo]", "\P{foo}", and "[:binaryProperty=No:]"
+ * perform a “code point complement” (all code points minus the original set),
+ * removing all multicharacter strings,
+ * equivalent to .{@link #complement()}.{@link #removeAllStrings()} .
+ * The {@link #complement()} API function continues to perform a
+ * symmetric difference with all code points and thus retains all multicharacter strings.
+ *
  * <p>Ranges are indicated by placing two a '-' between two
  * characters, as in "a-z".  This specifies the range of all
  * characters from the left to the right, in Unicode order.  If the
@@ -1689,6 +1696,12 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     /**
      * This is equivalent to
      * <code>complement(MIN_VALUE, MAX_VALUE)</code>.
+     *
+     * <p><strong>Note:</strong> This performs a symmetric difference with all code points
+     * <em>and thus retains all multicharacter strings</em>.
+     * In order to achieve a “code point complement” (all code points minus this set),
+     * the easiest is to .{@link #complement()}.{@link #removeAllStrings()} .
+     *
      * @stable ICU 2.0
      */
     public UnicodeSet complement() {
@@ -2953,7 +2966,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             closeOver(CASE);
         }
         if (invert) {
-            complement();
+            complement().removeAllStrings();  // code point complement
         }
 
         // Use the rebuilt pattern (pat) only if necessary.  Prefer the
@@ -3474,7 +3487,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             if (value == 0 || value == 1) {
                 set(CharacterProperties.getBinaryPropertySet(prop));
                 if (value == 0) {
-                    complement();
+                    complement().removeAllStrings();  // code point complement
                 }
             } else {
                 clear();
@@ -3670,7 +3683,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
         applyIntPropertyValue(p, v);
         if(invert) {
-            complement();
+            complement().removeAllStrings();  // code point complement
         }
 
         return this;
@@ -3798,7 +3811,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         applyPropertyAlias(propName, valueName, symbols);
 
         if (invert) {
-            complement();
+            complement().removeAllStrings();  // code point complement
         }
 
         // Move to the limit position after the close delimiter
@@ -4768,9 +4781,10 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      */
     @Deprecated
     public UnicodeSet addBridges(UnicodeSet dontCare) {
-        UnicodeSet notInInput = new UnicodeSet(this).complement();
+        UnicodeSet notInInput = new UnicodeSet(this).complement().removeAllStrings();
         for (UnicodeSetIterator it = new UnicodeSetIterator(notInInput); it.nextRange();) {
-            if (it.codepoint != 0 && it.codepoint != UnicodeSetIterator.IS_STRING && it.codepointEnd != 0x10FFFF && dontCare.contains(it.codepoint,it.codepointEnd)) {
+            if (it.codepoint != 0 && it.codepointEnd != 0x10FFFF &&
+                    dontCare.contains(it.codepoint, it.codepointEnd)) {
                 add(it.codepoint,it.codepointEnd);
             }
         }

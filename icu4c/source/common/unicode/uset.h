@@ -726,9 +726,14 @@ U_CAPI void U_EXPORT2
 uset_compact(USet* set);
 
 /**
- * Inverts this set.  This operation modifies this set so that
- * its value is its complement.  This operation does not affect
- * the multicharacter strings, if any.
+ * This is equivalent to
+ * <code>uset_complementRange(set, 0, 0x10FFFF)</code>.
+ *
+ * <strong>Note:</strong> This performs a symmetric difference with all code points
+ * <em>and thus retains all multicharacter strings</em>.
+ * In order to achieve a “code point complement” (all code points minus this set),
+ * the easiest is to <code>uset_complement(set); uset_removeAllStrings(set);</code>.
+ *
  * A frozen set will not be modified.
  * @param set the set
  * @stable ICU 2.4

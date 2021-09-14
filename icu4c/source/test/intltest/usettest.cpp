@@ -100,6 +100,7 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestDeepPattern);
     TESTCASE_AUTO(TestEmptyString);
     TESTCASE_AUTO(TestSkipToStrings);
+    TESTCASE_AUTO(TestPatternCodePointComplement);
     TESTCASE_AUTO_END;
 }
 
@@ -4094,4 +4095,66 @@ void UnicodeSetTest::TestSkipToStrings() {
     iter.skipToStrings();
     assertNext(iter, u"ch");
     assertFalse("no next", iter.next());
+}
+
+void UnicodeSetTest::TestPatternCodePointComplement() {
+    IcuTestErrorCode errorCode(*this, "TestPatternCodePointComplement");
+    // ICU-21524 changes pattern ^ and equivalent functions to perform a "code point complement".
+    // [^abc{ch}] = [[:Any:]-[abc{ch}]] which removes all strings.
+    {
+        UnicodeSet simple(u"[^abc{ch}]", errorCode);
+        assertEquals("[^abc{ch}] --> lots of elements", 0x110000 - 3, simple.size());
+        assertFalse("[^abc{ch}] --> no strings", simple.hasStrings());
+        assertFalse("[^abc{ch}] --> no 'a'", simple.contains(u'a'));
+    }
+
+    {
+        UnicodeSet notBasic(u"[:^Basic_Emoji:]", errorCode);
+        if (errorCode.errDataIfFailureAndReset("[:^Basic_Emoji:]")) {
+            return;
+        }
+        assertTrue("[:^Basic_Emoji:] --> lots of elements", notBasic.size() > 1000);
+        assertFalse("[:^Basic_Emoji:] --> no strings", notBasic.hasStrings());
+        assertFalse("[:^Basic_Emoji:] --> no bicycle", notBasic.contains(U'🚲'));
+    }
+
+    {
+        UnicodeSet notBasic(u"[:Basic_Emoji=No:]", errorCode);
+        assertTrue("[:Basic_Emoji=No:] --> lots of elements", notBasic.size() > 1000);
+        assertFalse("[:Basic_Emoji=No:] --> no strings", notBasic.hasStrings());
+        assertFalse("[:Basic_Emoji=No:] --> no bicycle", notBasic.contains(U'🚲'));
+    }
+
+    {
+        UnicodeSet notBasic;
+        notBasic.applyIntPropertyValue(UCHAR_BASIC_EMOJI, 0, errorCode);
+        assertTrue("[].applyIntPropertyValue(Basic_Emoji, 0) --> lots of elements",
+                notBasic.size() > 1000);
+        assertFalse("[].applyIntPropertyValue(Basic_Emoji, 0) --> no strings",
+                notBasic.hasStrings());
+        assertFalse("[].applyIntPropertyValue(Basic_Emoji, 0) --> no bicycle",
+                notBasic.contains(U'🚲'));
+    }
+
+    {
+        UnicodeSet notBasic;
+        notBasic.applyPropertyAlias("Basic_Emoji", "No", errorCode);
+        assertTrue("[].applyPropertyAlias(Basic_Emoji, No) --> lots of elements",
+                notBasic.size() > 1000);
+        assertFalse("[].applyPropertyAlias(Basic_Emoji, No) --> no strings",
+                notBasic.hasStrings());
+        assertFalse("[].applyPropertyAlias(Basic_Emoji, No) --> no bicycle",
+                notBasic.contains(U'🚲'));
+    }
+
+    // The complement() API behavior does not change under this ticket.
+    {
+        UnicodeSet notBasic(u"[:Basic_Emoji:]", errorCode);
+        notBasic.complement();
+        assertTrue("[:Basic_Emoji:].complement() --> lots of elements", notBasic.size() > 1000);
+        assertTrue("[:Basic_Emoji:].complement() --> has strings", notBasic.hasStrings());
+        assertTrue("[:Basic_Emoji:].complement().contains(chipmunk+emoji)",
+                notBasic.contains(u"🐿\uFE0F"));
+        assertFalse("[:Basic_Emoji:].complement() --> no bicycle", notBasic.contains(U'🚲'));
+    }
 }

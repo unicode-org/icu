@@ -4580,6 +4580,13 @@ UnicodeSet *RegexCompile::createSetForProperty(const UnicodeString &propName, UB
     } while (false);   // End of do loop block. Code above breaks out of the block on success or hard failure.
 
     if (U_SUCCESS(status)) {
+        // ICU 70 adds emoji properties of strings, but as long as Java does not say how to
+        // deal with properties of strings and character classes with strings, we ignore them.
+        // Just in case something downstream might stumble over the strings,
+        // we remove them from the set.
+        // Note that when we support strings, the complement of a property (as with \P)
+        // should be implemented as .complement().removeAllStrings() (code point complement).
+        set->removeAllStrings();
         U_ASSERT(set.isValid());
         if (negated) {
             set->complement();
@@ -4613,6 +4620,13 @@ void RegexCompile::setEval(int32_t nextOp) {
         fSetOpStack.popi();
         U_ASSERT(fSetStack.empty() == FALSE);
         rightOperand = (UnicodeSet *)fSetStack.peek();
+        // ICU 70 adds emoji properties of strings, but createSetForProperty() removes all strings
+        // (see comments there).
+        // We also do not yet support string literals in character classes,
+        // so there should not be any strings.
+        // Note that when we support strings, the complement of a set (as with ^ or \P)
+        // should be implemented as .complement().removeAllStrings() (code point complement).
+        U_ASSERT(!rightOperand->hasStrings());
         switch (pendingSetOperation) {
             case setNegation:
                 rightOperand->complement();

@@ -153,12 +153,11 @@ public class UnicodeSetTest extends TestFmwk {
                     UnicodeSet collectedErrors = new UnicodeSet();
                     for (UnicodeSetIterator it = new UnicodeSetIterator(testSet); it.next();) {
                         if (it.codepoint == UnicodeSetIterator.IS_STRING) {
-                            // For binary properties of strings, only [:propName=true:] _should_ yield strings.
+                            // For binary properties of strings, only [:propName=true:] yields strings.
                             // Therefore, we should always have valueNum=1 and b=true.
-                            // TODO: ICU-21524 ^ and propName=N use complement() which leaves strings alone.
                             boolean b = UCharacter.hasBinaryProperty(it.string, propNum);
                             int value = b ? 1 : 0;
-                            if (value != valueNum && /* TODO: ICU-21524 */ valueNum != 0) {
+                            if (value != valueNum) {
                                 collectedErrors.add(it.string);
                             }
                         } else {
@@ -2923,5 +2922,63 @@ public class UnicodeSetTest extends TestFmwk {
         iter.skipToStrings();
         assertNext(iter, "ch");
         assertFalse("no next", iter.next());
+    }
+
+    @Test
+    public void TestPatternCodePointComplement() {
+        // ICU-21524 changes pattern ^ and equivalent functions to perform a "code point complement".
+        // [^abc{ch}] = [[:Any:]-[abc{ch}]] which removes all strings.
+        {
+            UnicodeSet simple = new UnicodeSet("[^abc{ch}]");
+            assertEquals("[^abc{ch}] --> lots of elements", 0x110000 - 3, simple.size());
+            assertFalse("[^abc{ch}] --> no strings", simple.hasStrings());
+            assertFalse("[^abc{ch}] --> no 'a'", simple.contains('a'));
+        }
+
+        {
+            UnicodeSet notBasic = new UnicodeSet("[:^Basic_Emoji:]");
+            assertTrue("[:^Basic_Emoji:] --> lots of elements", notBasic.size() > 1000);
+            assertFalse("[:^Basic_Emoji:] --> no strings", notBasic.hasStrings());
+            assertFalse("[:^Basic_Emoji:] --> no bicycle", notBasic.contains("🚲"));
+        }
+
+        {
+            UnicodeSet notBasic = new UnicodeSet("[:Basic_Emoji=No:]");
+            assertTrue("[:Basic_Emoji=No:] --> lots of elements", notBasic.size() > 1000);
+            assertFalse("[:Basic_Emoji=No:] --> no strings", notBasic.hasStrings());
+            assertFalse("[:Basic_Emoji=No:] --> no bicycle", notBasic.contains("🚲"));
+        }
+
+        {
+            UnicodeSet notBasic = new UnicodeSet();
+            notBasic.applyIntPropertyValue(UProperty.BASIC_EMOJI, 0);
+            assertTrue("[].applyIntPropertyValue(Basic_Emoji, 0) --> lots of elements",
+                    notBasic.size() > 1000);
+            assertFalse("[].applyIntPropertyValue(Basic_Emoji, 0) --> no strings",
+                    notBasic.hasStrings());
+            assertFalse("[].applyIntPropertyValue(Basic_Emoji, 0) --> no bicycle",
+                    notBasic.contains("🚲"));
+        }
+
+        {
+            UnicodeSet notBasic = new UnicodeSet();
+            notBasic.applyPropertyAlias("Basic_Emoji", "No");
+            assertTrue("[].applyPropertyAlias(Basic_Emoji, No) --> lots of elements",
+                    notBasic.size() > 1000);
+            assertFalse("[].applyPropertyAlias(Basic_Emoji, No) --> no strings",
+                    notBasic.hasStrings());
+            assertFalse("[].applyPropertyAlias(Basic_Emoji, No) --> no bicycle",
+                    notBasic.contains("🚲"));
+        }
+
+        // The complement() API behavior does not change under this ticket.
+        {
+            UnicodeSet notBasic = new UnicodeSet("[:Basic_Emoji:]").complement();
+            assertTrue("[:Basic_Emoji:].complement() --> lots of elements", notBasic.size() > 1000);
+            assertTrue("[:Basic_Emoji:].complement() --> has strings", notBasic.hasStrings());
+            assertTrue("[:Basic_Emoji:].complement().contains(chipmunk+emoji)",
+                    notBasic.contains("🐿\uFE0F"));
+            assertFalse("[:Basic_Emoji:].complement() --> no bicycle", notBasic.contains("🚲"));
+        }
     }
 }
