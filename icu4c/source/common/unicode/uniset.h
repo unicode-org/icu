@@ -136,6 +136,13 @@ class RuleCharacterIterator;
  * their delimiters; "[:^foo]" and "\\P{foo}".  In any other location,
  * '^' has no special meaning.
  *
+ * <p>Since ICU 70, "[^...]", "[:^foo]", "\\P{foo}", and "[:binaryProperty=No:]"
+ * perform a “code point complement” (all code points minus the original set),
+ * removing all multicharacter strings,
+ * equivalent to <code>.complement().removeAllStrings()</code>.
+ * The complement() API function continues to perform a
+ * symmetric difference with all code points and thus retains all multicharacter strings.
+ *
  * <p>Ranges are indicated by placing two a '-' between two
  * characters, as in "a-z".  This specifies the range of all
  * characters from the left to the right, in Unicode order.  If the
@@ -1275,13 +1282,18 @@ public:
     UnicodeSet& remove(const UnicodeString& s);
 
     /**
-     * Inverts this set.  This operation modifies this set so that
-     * its value is its complement.  This is equivalent to
+     * This is equivalent to
      * <code>complement(MIN_VALUE, MAX_VALUE)</code>.
+     *
+     * <strong>Note:</strong> This performs a symmetric difference with all code points
+     * <em>and thus retains all multicharacter strings</em>.
+     * In order to achieve a “code point complement” (all code points minus this set),
+     * the easiest is to <code>.complement().removeAllStrings()</code>.
+     *
      * A frozen set will not be modified.
      * @stable ICU 2.0
      */
-    virtual UnicodeSet& complement(void);
+    virtual UnicodeSet& complement();
 
     /**
      * Complements the specified range in this set.  Any character in
