@@ -248,19 +248,19 @@ bool MutablePatternModifier::isStrong() const {
 bool MutablePatternModifier::containsField(Field field) const {
     (void)field;
     // This method is not currently used.
-    UPRV_UNREACHABLE;
+    UPRV_UNREACHABLE_EXIT;
 }
 
 void MutablePatternModifier::getParameters(Parameters& output) const {
     (void)output;
     // This method is not currently used.
-    UPRV_UNREACHABLE;
+    UPRV_UNREACHABLE_EXIT;
 }
 
 bool MutablePatternModifier::semanticallyEquivalent(const Modifier& other) const {
     (void)other;
     // This method is not currently used.
-    UPRV_UNREACHABLE;
+    UPRV_UNREACHABLE_EXIT;
 }
 
 int32_t MutablePatternModifier::insertPrefix(FormattedStringBuilder& sb, int position, UErrorCode& status) {
@@ -331,13 +331,13 @@ UnicodeString MutablePatternModifier::getSymbol(AffixPatternType type) const {
         case AffixPatternType::TYPE_CURRENCY_QUINT:
             return UnicodeString(u"\uFFFD");
         default:
-            UPRV_UNREACHABLE;
+            UPRV_UNREACHABLE_EXIT;
     }
 }
 
 UnicodeString MutablePatternModifier::toUnicodeString() const {
     // Never called by AffixUtils
-    UPRV_UNREACHABLE;
+    UPRV_UNREACHABLE_EXIT;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -340,7 +340,7 @@ usrc_writeUCPTrie(FILE *f, const char *name, const UCPTrie *pTrie, UTargetSyntax
         sprintf(line3, "\n]\n");
         break;
     default:
-        UPRV_UNREACHABLE;
+        UPRV_UNREACHABLE_EXIT;
     }
     usrc_writeUCPTrieArrays(f, line, line2, pTrie, line3, syntax);
 
@@ -358,7 +358,7 @@ usrc_writeUCPTrie(FILE *f, const char *name, const UCPTrie *pTrie, UTargetSyntax
         line4[0] = 0;
         break;
     default:
-        UPRV_UNREACHABLE;
+        UPRV_UNREACHABLE_EXIT;
     }
     usrc_writeUCPTrieStruct(f, line, pTrie, line2, line3, line4, syntax);
 }

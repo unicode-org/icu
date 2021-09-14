@@ -1487,7 +1487,7 @@ void IntlTestDateTimePatternGeneratorAPI::testFallbackWithDefaultRootLocale() {
     }
 }
 
-// ICU-21000 Ensure that calling getDefaultHourCycle on an empty instance doesn't call UPRV_UNREACHABLE/abort.
+// ICU-21000 Ensure that calling getDefaultHourCycle on an empty instance doesn't call UPRV_UNREACHABLE_EXIT/abort.
 void IntlTestDateTimePatternGeneratorAPI::testGetDefaultHourCycle_OnEmptyInstance() {
     UErrorCode status = U_ZERO_ERROR;
 

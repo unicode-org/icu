@@ -558,7 +558,7 @@ static void TestGetDefaultHourCycle() {
     }
 }
 
-// Ensure that calling udatpg_getDefaultHourCycle on an empty instance doesn't call UPRV_UNREACHABLE/abort.
+// Ensure that calling udatpg_getDefaultHourCycle on an empty instance doesn't call UPRV_UNREACHABLE_EXIT/abort.
 static void TestGetDefaultHourCycleOnEmptyInstance() {
     UErrorCode status = U_ZERO_ERROR;
     UDateTimePatternGenerator * dtpgen = udatpg_openEmpty(&status);

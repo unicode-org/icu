@@ -758,7 +758,7 @@ Vectorizer* createVectorizer(const LSTMData* data, UErrorCode &status) {
         default:
             break;
     }
-    UPRV_UNREACHABLE;
+    UPRV_UNREACHABLE_EXIT;
 }
 
 LSTMBreakEngine::LSTMBreakEngine(const LSTMData* data, const UnicodeSet& set, UErrorCode &status)

@@ -1432,10 +1432,11 @@ const CEI *CEIBuffer::get(int32_t index) {
     //   Verify that it is the next one in sequence, which is all
     //   that is allowed.
     if (index != limitIx) {
-        U_ASSERT(FALSE);
-        // TODO: In ICU 64 the above assert was changed to use UPRV_UNREACHABLE instead
-        // which unconditionally calls abort(). However, there were cases where this was
-        // being hit. This change is reverted for now, restoring the existing behavior.
+        UPRV_UNREACHABLE_ASSERT;
+        // TODO: In ICU 64 the above was changed from U_ASSERT to UPRV_UNREACHABLE,
+        // which unconditionally called abort(). However, there were cases in which it
+        // was being hit, so it was changed back to U_ASSERT per ICU-20680. In ICU 70,
+        // we now use the new UPRV_UNREACHABLE_ASSERT to better indicate the situation.
         // ICU-20792 tracks the follow-up work/further investigation on this.
         return NULL;
     }
@@ -1474,10 +1475,11 @@ const CEI *CEIBuffer::getPrevious(int32_t index) {
     //   Verify that it is the next one in sequence, which is all
     //   that is allowed.
     if (index != limitIx) {
-        U_ASSERT(FALSE);
-        // TODO: In ICU 64 the above assert was changed to use UPRV_UNREACHABLE instead
-        // which unconditionally calls abort(). However, there were cases where this was
-        // being hit. This change is reverted for now, restoring the existing behavior.
+        UPRV_UNREACHABLE_ASSERT;
+        // TODO: In ICU 64 the above was changed from U_ASSERT to UPRV_UNREACHABLE,
+        // which unconditionally called abort(). However, there were cases in which it
+        // was being hit, so it was changed back to U_ASSERT per ICU-20680. In ICU 70,
+        // we now use the new UPRV_UNREACHABLE_ASSERT to better indicate the situation.
         // ICU-20792 tracks the follow-up work/further investigation on this.
         return NULL;
     }

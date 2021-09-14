@@ -77,7 +77,7 @@ bool WholeStringBreakIterator::operator==(const BreakIterator&) const { return f
 WholeStringBreakIterator *WholeStringBreakIterator::clone() const { return nullptr; }
 
 CharacterIterator &WholeStringBreakIterator::getText() const {
-    UPRV_UNREACHABLE;  // really should not be called
+    UPRV_UNREACHABLE_EXIT;  // really should not be called
 }
 UText *WholeStringBreakIterator::getUText(UText * /*fillIn*/, UErrorCode &errorCode) const {
     if (U_SUCCESS(errorCode)) {
@@ -100,7 +100,7 @@ void  WholeStringBreakIterator::setText(UText *text, UErrorCode &errorCode) {
     }
 }
 void  WholeStringBreakIterator::adoptText(CharacterIterator*) {
-    UPRV_UNREACHABLE;  // should not be called
+    UPRV_UNREACHABLE_EXIT;  // should not be called
 }
 
 int32_t WholeStringBreakIterator::first() { return 0; }

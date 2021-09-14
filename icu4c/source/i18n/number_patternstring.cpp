@@ -50,7 +50,7 @@ PatternParser::parseToExistingProperties(const UnicodeString& pattern, DecimalFo
 char16_t ParsedPatternInfo::charAt(int32_t flags, int32_t index) const {
     const Endpoints& endpoints = getEndpoints(flags);
     if (index < 0 || index >= endpoints.end - endpoints.start) {
-        UPRV_UNREACHABLE;
+        UPRV_UNREACHABLE_EXIT;
     }
     return pattern.charAt(endpoints.start + index);
 }
@@ -1148,7 +1148,7 @@ PatternSignType PatternStringUtils::resolveSignDisplay(UNumberSignDisplay signDi
             break;
     }
 
-    UPRV_UNREACHABLE;
+    UPRV_UNREACHABLE_EXIT;
     return PATTERN_SIGN_TYPE_POS;
 }
 
