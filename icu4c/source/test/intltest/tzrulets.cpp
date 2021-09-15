@@ -402,8 +402,6 @@ TimeZoneRuleTest::TestSimpleRuleBasedTimeZone(void) {
     rbtz1->addTransitionRule(atzr, status);
     if (U_SUCCESS(status)) {
         errln("FAIL: 3rd final rule must be rejected");
-    } else {
-        delete atzr;
     }
 
     // Try to add an initial rule
@@ -411,8 +409,6 @@ TimeZoneRuleTest::TestSimpleRuleBasedTimeZone(void) {
     rbtz1->addTransitionRule(ir1, status);
     if (U_SUCCESS(status)) {
         errln("FAIL: InitialTimeZoneRule must be rejected");
-    } else {
-        delete ir1;
     }
 
     delete ir;
