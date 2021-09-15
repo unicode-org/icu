@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.number;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -852,6 +853,14 @@ public class NumberRangeFormatterTest extends TestFmwk {
             resource.getAllItemsWithFallback("NumberElements", sink);
             sink.checkAndReset(locale);
         }
+    }
+
+    @Test
+    public void test21684_Performance() {
+        LocalizedNumberRangeFormatter lnf = NumberRangeFormatter.withLocale(ULocale.ENGLISH);
+        // The following two lines of code should finish quickly.
+        lnf.formatRange(new BigDecimal("-1e99999"), new BigDecimal("0"));
+        lnf.formatRange(new BigDecimal("0"), new BigDecimal("1e99999"));
     }
 
     @Test

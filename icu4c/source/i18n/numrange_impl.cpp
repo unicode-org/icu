@@ -385,7 +385,10 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
     }
 
     length1 += NumberFormatterImpl::writeNumber(micros1, data.quantity1, string, UPRV_INDEX_0, status);
-    length2 += NumberFormatterImpl::writeNumber(micros2, data.quantity2, string, UPRV_INDEX_2, status);
+    // ICU-21684: Write the second number to a temp string to avoid repeated insert operations
+    FormattedStringBuilder tempString;
+    NumberFormatterImpl::writeNumber(micros2, data.quantity2, tempString, 0, status);
+    length2 += string.insert(UPRV_INDEX_2, tempString, status);
 
     // TODO: Support padding?
 
