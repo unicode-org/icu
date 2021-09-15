@@ -311,6 +311,7 @@ class NumberRangeFormatterTest : public IntlTestWithFieldPosition {
     void testCollapse();
     void testIdentity();
     void testDifferentFormatters();
+    void testNaNInfinity();
     void testPlurals();
     void testFieldPositions();
     void testCopyMove();

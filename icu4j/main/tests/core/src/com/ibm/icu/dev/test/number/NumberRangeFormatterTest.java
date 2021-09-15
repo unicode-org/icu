@@ -684,6 +684,24 @@ public class NumberRangeFormatterTest extends TestFmwk {
     }
 
     @Test
+    public void testNaNInfinity() {
+        LocalizedNumberRangeFormatter lnf = NumberRangeFormatter.withLocale(ULocale.ENGLISH);
+        FormattedNumberRange result1 = lnf.formatRange(Double.NEGATIVE_INFINITY, 0);
+        FormattedNumberRange result2 = lnf.formatRange(0, Double.POSITIVE_INFINITY);
+        FormattedNumberRange result3 = lnf.formatRange(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+        FormattedNumberRange result4 = lnf.formatRange(Double.NaN, 0);
+        FormattedNumberRange result5 = lnf.formatRange(0, Double.NaN);
+        FormattedNumberRange result6 = lnf.formatRange(Double.NaN, Double.NaN);
+    
+        assertEquals("0 - inf", "-∞ – 0", result1.toString());
+        assertEquals("-inf - 0", "0–∞", result2.toString());
+        assertEquals("-inf - inf", "-∞ – ∞", result3.toString());
+        assertEquals("NaN - 0", "NaN–0", result4.toString());
+        assertEquals("0 - NaN", "0–NaN", result5.toString());
+        assertEquals("NaN - NaN", "~NaN", result6.toString());
+    }
+
+    @Test
     public void testPlurals() {
         // Locale sl has interesting plural forms:
         // GBP{
