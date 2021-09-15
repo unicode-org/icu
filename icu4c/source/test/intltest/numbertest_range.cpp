@@ -54,6 +54,7 @@ void NumberRangeFormatterTest::runIndexedTest(int32_t index, UBool exec, const c
         TESTCASE_AUTO(testCopyMove);
         TESTCASE_AUTO(toObject);
         TESTCASE_AUTO(testGetDecimalNumbers);
+        TESTCASE_AUTO(test21684_Performance);
         TESTCASE_AUTO(test21358_SignPosition);
     TESTCASE_AUTO_END;
 }
@@ -928,6 +929,14 @@ void NumberRangeFormatterTest::testGetDecimalNumbers() {
             assertEquals("Second decimal number", "3.00", decimalNumbers.second.c_str());
         }
     }
+}
+
+void NumberRangeFormatterTest::test21684_Performance() {
+    IcuTestErrorCode status(*this, "test21684_Performance");
+    LocalizedNumberRangeFormatter lnf = NumberRangeFormatter::withLocale("en");
+    // The following two lines of code should finish quickly.
+    lnf.formatFormattableRange({"-1e99999", status}, {"0", status}, status);
+    lnf.formatFormattableRange({"0", status}, {"1e99999", status}, status);
 }
 
 void NumberRangeFormatterTest::test21358_SignPosition() {

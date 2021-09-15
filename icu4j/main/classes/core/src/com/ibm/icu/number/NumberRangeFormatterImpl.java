@@ -364,7 +364,10 @@ class NumberRangeFormatterImpl {
         }
 
         h.length1 += NumberFormatterImpl.writeNumber(micros1, quantity1, string, h.index0());
-        h.length2 += NumberFormatterImpl.writeNumber(micros2, quantity2, string, h.index2());
+        // ICU-21684: Write the second number to a temp string to avoid repeated insert operations
+        FormattedStringBuilder tempString = new FormattedStringBuilder();
+        NumberFormatterImpl.writeNumber(micros2, quantity2, tempString, 0);
+        h.length2 += string.insert(h.index2(), tempString);
 
         // TODO: Support padding?
 
