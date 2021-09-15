@@ -89,17 +89,18 @@ public:
     virtual bool operator!=(const TimeZone& that) const;
 
     /**
-     * Adds the <code>TimeZoneRule</code> which represents time transitions.
-     * The <code>TimeZoneRule</code> must have start times, that is, the result
-     * of isTransitionRule() must be true. Otherwise, U_ILLEGAL_ARGUMENT_ERROR
+     * Adds the `TimeZoneRule` which represents time transitions.
+     * The `TimeZoneRule` must have start times, that is, the result
+     * of `isTransitionRule()` must be true. Otherwise, U_ILLEGAL_ARGUMENT_ERROR
      * is set to the error code.
-     * The input <code>TimeZoneRule</code> is adopted by this
-     * <code>RuleBasedTimeZone</code> on successful completion of this method,
-     * thus, the caller must not delete it when no error is returned.
-     * After all rules are added, the caller must call complete() method to
-     * make this <code>RuleBasedTimeZone</code> ready to handle common time
+     * The input `TimeZoneRule` is adopted by this `RuleBasedTimeZone`;
+     * the caller must not delete it. Should an error condition prevent
+     * the successful adoption of the rule, this function will delete it.
+     *
+     * After all rules are added, the caller must call `complete()` method to
+     * make this `RuleBasedTimeZone` ready to handle common time
      * zone functions.
-     * @param rule The <code>TimeZoneRule</code>.
+     * @param rule The `TimeZoneRule`.
      * @param status Output param to filled in with a success or an error.
      * @stable ICU 3.8
      */
