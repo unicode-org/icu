@@ -29,13 +29,14 @@ static const char kDefaultCurrency8[] = "XXX";
  * empty.
  *
  * This only supports base units: other units must be resolved to base units
- * before passing to this function, otherwise U_UNSUPPORTED_ERROR status will be
+ * before passing to this function, otherwise U_UNSUPPORTED_ERROR status may be
  * returned.
  *
  * Categories are found in `unitQuantities` in the `units` resource (see
  * `units.txt`).
  */
-CharString U_I18N_API getUnitQuantity(StringPiece baseUnitIdentifier, UErrorCode &status);
+// TODO: make this function accepts any `MeasureUnit` as Java and move it to the `UnitsData` class.
+CharString U_I18N_API getUnitQuantity(const MeasureUnitImpl &baseMeasureUnitImpl, UErrorCode &status);
 
 /**
  * A struct representing a single unit (optional SI or binary prefix, and dimensionality).
@@ -290,12 +291,27 @@ class U_I18N_API MeasureUnitImpl : public UMemory {
     void takeReciprocal(UErrorCode& status);
 
     /**
+     * Returns a simplified version of the unit.
+     * NOTE: the simplification happen when there are two units equals in their base unit and their
+     * prefixes.
+     *
+     * Example 1: "square-meter-per-meter" --> "meter"
+     * Example 2: "square-millimeter-per-meter" --> "square-millimeter-per-meter"
+     */
+    MeasureUnitImpl copyAndSimplify(UErrorCode &status) const;
+
+    /**
      * Mutates this MeasureUnitImpl to append a single unit.
      *
      * @return true if a new item was added. If unit is the dimensionless unit,
      * it is never added: the return value will always be false.
      */
     bool appendSingleUnit(const SingleUnitImpl& singleUnit, UErrorCode& status);
+
+    /**
+     * Normalizes a MeasureUnitImpl and generate the identifier string in place.
+     */
+    void serialize(UErrorCode &status);
 
     /** The complexity, either SINGLE, COMPOUND, or MIXED. */
     UMeasureUnitComplexity complexity = UMEASURE_UNIT_SINGLE;
@@ -313,12 +329,6 @@ class U_I18N_API MeasureUnitImpl : public UMemory {
      * The full unit identifier.  Owned by the MeasureUnitImpl.  Empty if not computed.
      */
     CharString identifier;
-
-  private:
-    /**
-     * Normalizes a MeasureUnitImpl and generate the identifier string in place.
-     */
-    void serialize(UErrorCode &status);
 
     // For calling serialize
     // TODO(icu-units#147): revisit serialization
