@@ -1783,6 +1783,76 @@ void NumberFormatterApiTest::unitUsage() {
                        3048,            //
                        u"3,048 cm");
 
+    assertFormatSingle(u"kilometer-per-liter match the correct category",                   //
+                       u"unit/kilometer-per-liter usage/default",                           //
+                       u"unit/kilometer-per-liter usage/default",                           //
+                       NumberFormatter::with()                                              //
+                           .unit(MeasureUnit::forIdentifier("kilometer-per-liter", status)) //
+                           .usage("default"),                                               //
+                       Locale("en-US"),                                                     //
+                       1,                                                                   //
+                       u"100 L/100 km");
+
+    assertFormatSingle(u"gallon-per-mile match the correct category",                   //
+                       u"unit/gallon-per-mile usage/default",                           //
+                       u"unit/gallon-per-mile usage/default",                           //
+                       NumberFormatter::with()                                          //
+                           .unit(MeasureUnit::forIdentifier("gallon-per-mile", status)) //
+                           .usage("default"),                                           //
+                       Locale("en-US"),                                                 //
+                       1,                                                               //
+                       u"235 L/100 km");
+
+    assertFormatSingle(u"psi match the correct category",                          //
+                       u"unit/megapascal usage/default",                           //
+                       u"unit/megapascal usage/default",                           //
+                       NumberFormatter::with()                                     //
+                           .unit(MeasureUnit::forIdentifier("megapascal", status)) //
+                           .usage("default"),                                      //
+                       Locale("en-US"),                                            //
+                       1,                                                          //
+                       "145 psi");
+
+    assertFormatSingle(u"millibar match the correct category",                   //
+                       u"unit/millibar usage/default",                           //
+                       u"unit/millibar usage/default",                           //
+                       NumberFormatter::with()                                   //
+                           .unit(MeasureUnit::forIdentifier("millibar", status)) //
+                           .usage("default"),                                    //
+                       Locale("en-US"),                                          //
+                       1,                                                        //
+                       "0.015 psi");
+
+    assertFormatSingle(u"pound-force-per-square-inch match the correct category",                   //
+                       u"unit/pound-force-per-square-inch usage/default",                           //
+                       u"unit/pound-force-per-square-inch usage/default",                           //
+                       NumberFormatter::with()                                                      //
+                           .unit(MeasureUnit::forIdentifier("pound-force-per-square-inch", status)) //
+                           .usage("default"),                                                       //
+                       Locale("en-US"),                                                             //
+                       1,                                                                           //
+                       "1 psi");                                                                    //
+
+    assertFormatSingle(u"inch-ofhg match the correct category",                   //
+                       u"unit/inch-ofhg usage/default",                           //
+                       u"unit/inch-ofhg usage/default",                           //
+                       NumberFormatter::with()                                    //
+                           .unit(MeasureUnit::forIdentifier("inch-ofhg", status)) //
+                           .usage("default"),                                     //
+                       Locale("en-US"),                                           //
+                       1,                                                         //
+                       "0.49 psi");
+
+    assertFormatSingle(u"millimeter-ofhg match the correct category",                   //
+                       u"unit/millimeter-ofhg usage/default",                           //
+                       u"unit/millimeter-ofhg usage/default",                           //
+                       NumberFormatter::with()                                          //
+                           .unit(MeasureUnit::forIdentifier("millimeter-ofhg", status)) //
+                           .usage("default"),                                           //
+                       Locale("en-US"),                                                 //
+                       1,                                                               //
+                       "0.019 psi");
+
     // TODO(icu-units#38): improve unit testing coverage. E.g. add vehicle-fuel
     // triggering inversion conversion code. Test with 0 too, to see
     // divide-by-zero behaviour.
