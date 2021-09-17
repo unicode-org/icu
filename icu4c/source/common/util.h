@@ -55,19 +55,29 @@ class U_COMMON_API ICU_Utility /* not : public UObject because all methods are s
 
     /**
      * Return true if the character is NOT printable ASCII.
-     *
-     * This method should really be in UnicodeString (or similar).  For
-     * now, we implement it here and share it with friend classes.
+     * The tab, newline and linefeed characters are considered unprintable.
      */
     static UBool isUnprintable(UChar32 c);
 
     /**
-     * Escape unprintable characters using \uxxxx notation for U+0000 to
+     * @return true for control codes and for surrogate and noncharacter code points
+     */
+    static UBool shouldAlwaysBeEscaped(UChar32 c);
+
+    /**
+     * Escapes one unprintable code point using \uxxxx notation for U+0000 to
      * U+FFFF and \Uxxxxxxxx for U+10000 and above.  If the character is
      * printable ASCII, then do nothing and return false.  Otherwise,
      * append the escaped notation and return true.
      */
     static UBool escapeUnprintable(UnicodeString& result, UChar32 c);
+
+    /**
+     * Escapes one code point using \uxxxx notation
+     * for U+0000 to U+FFFF and \Uxxxxxxxx for U+10000 and above.
+     * @return result
+     */
+    static UnicodeString &escape(UnicodeString& result, UChar32 c);
 
     /**
      * Returns the index of a character, ignoring quoted text.

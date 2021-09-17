@@ -94,7 +94,7 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestFreezable);
     TESTCASE_AUTO(TestSpan);
     TESTCASE_AUTO(TestStringSpan);
-    TESTCASE_AUTO(TestUCAUnsafeBackwards);
+    TESTCASE_AUTO(TestPatternWithSurrogates);
     TESTCASE_AUTO(TestIntOverflow);
     TESTCASE_AUTO(TestUnusedCcc);
     TESTCASE_AUTO(TestDeepPattern);
@@ -3908,60 +3908,47 @@ void UnicodeSetTest::TestStringSpan() {
     }
 }
 
-/**
- * Including collationroot.h fails here with
-1>c:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\include\driverspecs.h(142): error C2008: '$' : unexpected in macro definition
- *  .. so, we skip this test on Windows.
- * 
- * the cause is that  intltest builds with /Za which disables language extensions - which means
- *  windows header files can't be used.
- */
-#if !UCONFIG_NO_COLLATION && !U_PLATFORM_HAS_WIN32_API
-#include "collationroot.h"
-#include "collationtailoring.h"
-#endif
+void UnicodeSetTest::TestPatternWithSurrogates() {
+    IcuTestErrorCode errorCode(*this, "TestPatternWithSurrogates");
+    // Regression test for ICU-11891
+    UnicodeSet surrogates;
+    surrogates.add(0xd000, 0xd82f);  // a range ending with a lead surrogate code point
+    surrogates.add(0xd83a);  // a lead surrogate
+    surrogates.add(0xdc00, 0xdfff);  // a range of trail surrogates
+    UnicodeString pat;
+    surrogates.toPattern(pat, false);  // bad if U+D83A is immediately followed by U+DC00
+    UnicodeSet s2;
+    // was: U_MALFORMED_SET
+    // Java: IllegalArgumentException: Error: Invalid range at "[...\U0001E800-\uDFFF|...]"
+    s2.applyPattern(pat, errorCode);
+    if (errorCode.errIfFailureAndReset("surrogates (1) to/from pattern")) { return; }
+    checkEqual(surrogates, s2, "surrogates (1) to/from pattern");
 
-void UnicodeSetTest::TestUCAUnsafeBackwards() {
-#if U_PLATFORM_HAS_WIN32_API
-    infoln("Skipping TestUCAUnsafeBackwards() - can't include collationroot.h on Windows without language extensions!");
-#elif !UCONFIG_NO_COLLATION
-    UErrorCode errorCode = U_ZERO_ERROR;
+    // create a range of DBFF-DC00, and in the complement form a range of DC01-DC03
+    surrogates.add(0xdbff).remove(0xdc01, 0xdc03);
+    // add a beyond-surrogates range, up to the last code point
+    surrogates.add(0x10affe, 0x10ffff);
+    surrogates.toPattern(pat, false);  // bad if U+DBFF is immediately followed by U+DC00
+    s2.applyPattern(pat, errorCode);
+    if (errorCode.errIfFailureAndReset("surrogates (2) to/from pattern")) { return; }
+    checkEqual(surrogates, s2, "surrogates (2) to/from pattern");
 
-    // Get the unsafeBackwardsSet
-    const CollationCacheEntry *rootEntry = CollationRoot::getRootCacheEntry(errorCode);
-    if(U_FAILURE(errorCode)) {
-      dataerrln("FAIL: %s getting root cache entry", u_errorName(errorCode));
-      return;
-    }
-    //const UVersionInfo &version = rootEntry->tailoring->version;
-    const UnicodeSet *unsafeBackwardSet = rootEntry->tailoring->unsafeBackwardSet;
+    // Test the toPattern() code path when the pattern is shorter in complement form:
+    // [^opposite-ranges]
+    surrogates.add(0, 0x6789);
+    surrogates.toPattern(pat, false);
+    s2.applyPattern(pat, errorCode);
+    if (errorCode.errIfFailureAndReset("surrogates (3) to/from pattern")) { return; }
+    checkEqual(surrogates, s2, "surrogates (3) to/from pattern");
 
-    checkSerializeRoundTrip(*unsafeBackwardSet, errorCode);
-
-    if(!logKnownIssue("11891","UnicodeSet fails to round trip on CollationRoot...unsafeBackwards set")) {
-        // simple test case
-        // TODO(ticket #11891): Simplify this test function to this simple case. Rename it appropriately.
-        // TODO(ticket #11891): Port test to Java. Is this a bug there, too?
-        UnicodeSet surrogates;
-        surrogates.add(0xd83a);  // a lead surrogate
-        surrogates.add(0xdc00, 0xdfff);  // a range of trail surrogates
-        UnicodeString pat;
-        surrogates.toPattern(pat, FALSE);  // bad: [ 0xd83a, 0xdc00, 0x2d, 0xdfff ]
-        // TODO: Probably fix either UnicodeSet::_generatePattern() or _appendToPat()
-        // so that at least one type of surrogate code points are escaped,
-        // or (minimally) so that adjacent lead+trail surrogate code points are escaped.
-        errorCode = U_ZERO_ERROR;
-        UnicodeSet s2;
-        s2.applyPattern(pat, errorCode);  // looks like invalid range [ 0x1e800, 0x2d, 0xdfff ]
-        if(U_FAILURE(errorCode)) {
-            errln("FAIL: surrogates to/from pattern - %s", u_errorName(errorCode));
-        } else {
-            checkEqual(surrogates, s2, "surrogates to/from pattern");
-        }
-        // This occurs in the UCA unsafe-backwards set.
-        checkRoundTrip(*unsafeBackwardSet);
-    }
-#endif
+    // Start with a pattern, in case the original pattern is kept but
+    // without the extra white space.
+    surrogates.applyPattern(u"[\\uD83A \\uDC00-\\uDFFF]", errorCode);
+    if (errorCode.errIfFailureAndReset("surrogates from pattern")) { return; }
+    surrogates.toPattern(pat, false);
+    s2.applyPattern(pat, errorCode);
+    if (errorCode.errIfFailureAndReset("surrogates from/to/from pattern")) { return; }
+    checkEqual(surrogates, s2, "surrogates from/to/from pattern");
 }
 
 void UnicodeSetTest::TestIntOverflow() {

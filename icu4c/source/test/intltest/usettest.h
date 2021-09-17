@@ -91,7 +91,7 @@ private:
 
     void TestStringSpan();
 
-    void TestUCAUnsafeBackwards();
+    void TestPatternWithSurrogates();
     void TestIntOverflow();
     void TestUnusedCcc();
     void TestDeepPattern();

@@ -1597,6 +1597,9 @@ private:
 
     static void _appendToPat(UnicodeString& buf, UChar32 c, UBool escapeUnprintable);
 
+    static void _appendToPat(UnicodeString &result, UChar32 start, UChar32 end,
+                             UBool escapeUnprintable);
+
     //----------------------------------------------------------------
     // Implementation: Fundamental operators
     //----------------------------------------------------------------

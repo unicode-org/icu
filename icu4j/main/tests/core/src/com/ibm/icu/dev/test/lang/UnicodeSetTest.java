@@ -2753,6 +2753,42 @@ public class UnicodeSetTest extends TestFmwk {
     }
 
     @Test
+    public void TestPatternWithSurrogates() {
+        // Regression test for ICU-11891
+        UnicodeSet surrogates = new UnicodeSet();
+        surrogates.add(0xd000, 0xd82f);  // a range ending with a lead surrogate code point
+        surrogates.add(0xd83a);  // a lead surrogate
+        surrogates.add(0xdc00, 0xdfff);  // a range of trail surrogates
+        String pat = surrogates.toPattern(false);  // bad if U+D83A is immediately followed by U+DC00
+        UnicodeSet s2 = new UnicodeSet();
+        // was: IllegalArgumentException: Error: Invalid range at "[...\U0001E800-\uDFFF|...]"
+        s2.applyPattern(pat);
+        checkEqual(surrogates, s2, "surrogates (1) to/from pattern");
+
+        // create a range of DBFF-DC00, and in the complement form a range of DC01-DC03
+        surrogates.add(0xdbff).remove(0xdc01, 0xdc03);
+        // add a beyond-surrogates range, up to the last code point
+        surrogates.add(0x10affe, 0x10ffff);
+        pat = surrogates.toPattern(false);  // bad if U+DBFF is immediately followed by U+DC00
+        s2.applyPattern(pat);
+        checkEqual(surrogates, s2, "surrogates (2) to/from pattern");
+
+        // Test the toPattern() code path when the pattern is shorter in complement form:
+        // [^opposite-ranges]
+        surrogates.add(0, 0x6789);
+        pat = surrogates.toPattern(false);
+        s2.applyPattern(pat);
+        checkEqual(surrogates, s2, "surrogates (3) to/from pattern");
+
+        // Start with a pattern, in case the original pattern is kept but
+        // without the extra white space.
+        surrogates.applyPattern("[\\uD83A \\uDC00-\\uDFFF]");
+        pat = surrogates.toPattern(false);
+        s2.applyPattern(pat);
+        checkEqual(surrogates, s2, "surrogates from/to/from pattern");
+    }
+
+    @Test
     public void TestUnusedCcc() {
         // All numeric ccc values 0..255 are valid, but many are unused.
         UnicodeSet ccc2 = new UnicodeSet("[:ccc=2:]");
