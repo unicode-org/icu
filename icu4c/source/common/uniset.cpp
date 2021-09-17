@@ -1967,8 +1967,7 @@ void UnicodeSet::retain(const UChar32* other, int32_t otherLen, int8_t polarity)
  * Append the <code>toPattern()</code> representation of a
  * string to the given <code>StringBuffer</code>.
  */
-void UnicodeSet::_appendToPat(UnicodeString& buf, const UnicodeString& s, UBool
-escapeUnprintable) {
+void UnicodeSet::_appendToPat(UnicodeString& buf, const UnicodeString& s, UBool escapeUnprintable) {
     UChar32 cp;
     for (int32_t i = 0; i < s.length(); i += U16_LENGTH(cp)) {
         _appendToPat(buf, cp = s.char32At(i), escapeUnprintable);
@@ -1979,14 +1978,12 @@ escapeUnprintable) {
  * Append the <code>toPattern()</code> representation of a
  * character to the given <code>StringBuffer</code>.
  */
-void UnicodeSet::_appendToPat(UnicodeString& buf, UChar32 c, UBool
-escapeUnprintable) {
-    if (escapeUnprintable && ICU_Utility::isUnprintable(c)) {
+void UnicodeSet::_appendToPat(UnicodeString& buf, UChar32 c, UBool escapeUnprintable) {
+    if (escapeUnprintable ? ICU_Utility::isUnprintable(c) : ICU_Utility::shouldAlwaysBeEscaped(c)) {
         // Use hex escape notation (\uxxxx or \Uxxxxxxxx) for anything
         // unprintable
-        if (ICU_Utility::escapeUnprintable(buf, c)) {
-            return;
-        }
+        ICU_Utility::escape(buf, c);
+        return;
     }
     // Okay to let ':' pass through
     switch (c) {
@@ -2012,6 +2009,19 @@ escapeUnprintable) {
     buf.append(c);
 }
 
+void UnicodeSet::_appendToPat(UnicodeString &result, UChar32 start, UChar32 end,
+                              UBool escapeUnprintable) {
+    _appendToPat(result, start, escapeUnprintable);
+    if (start != end) {
+        if ((start+1) != end ||
+                // Avoid writing what looks like a lead+trail surrogate pair.
+                start == 0xdbff) {
+            result.append(u'-');
+        }
+        _appendToPat(result, end, escapeUnprintable);
+    }
+}
+
 /**
  * Append a string representation of this set to result.  This will be
  * a cleaned version of the string passed to applyPattern(), if there
@@ -2026,7 +2036,8 @@ UnicodeString& UnicodeSet::_toPattern(UnicodeString& result,
         for (i=0; i<patLen; ) {
             UChar32 c;
             U16_NEXT(pat, i, patLen, c);
-            if (escapeUnprintable && ICU_Utility::isUnprintable(c)) {
+            if (escapeUnprintable ?
+                    ICU_Utility::isUnprintable(c) : ICU_Utility::shouldAlwaysBeEscaped(c)) {
                 // If the unprintable character is preceded by an odd
                 // number of backslashes, then it has been escaped.
                 // Before unescaping it, we delete the final
@@ -2034,7 +2045,7 @@ UnicodeString& UnicodeSet::_toPattern(UnicodeString& result,
                 if ((backslashCount % 2) == 1) {
                     result.truncate(result.length() - 1);
                 }
-                ICU_Utility::escapeUnprintable(result, c);
+                ICU_Utility::escape(result, c);
                 backslashCount = 0;
             } else {
                 result.append(c);
@@ -2073,52 +2084,48 @@ UnicodeString& UnicodeSet::_generatePattern(UnicodeString& result,
 {
     result.append(u'[');
 
-//  // Check against the predefined categories.  We implicitly build
-//  // up ALL category sets the first time toPattern() is called.
-//  for (int8_t cat=0; cat<Unicode::GENERAL_TYPES_COUNT; ++cat) {
-//      if (*this == getCategorySet(cat)) {
-//          result.append(u':');
-//          result.append(CATEGORY_NAMES, cat*2, 2);
-//          return result.append(CATEGORY_CLOSE);
-//      }
-//  }
-
-    int32_t count = getRangeCount();
+    int32_t i = 0;
+    int32_t limit = len & ~1;  // = 2 * getRangeCount()
 
     // If the set contains at least 2 intervals and includes both
     // MIN_VALUE and MAX_VALUE, then the inverse representation will
     // be more economical.
-    if (count > 1 &&
-        getRangeStart(0) == MIN_VALUE &&
-        getRangeEnd(count-1) == MAX_VALUE) {
-
+    //     if (getRangeCount() >= 2 &&
+    //             getRangeStart(0) == MIN_VALUE &&
+    //             getRangeEnd(last) == MAX_VALUE)
+    // Invariant: list[len-1] == HIGH == MAX_VALUE + 1
+    // If limit == len then len is even and the last range ends with MAX_VALUE.
+    if (len >= 4 && list[0] == 0 && limit == len) {
         // Emit the inverse
         result.append(u'^');
-
-        for (int32_t i = 1; i < count; ++i) {
-            UChar32 start = getRangeEnd(i-1)+1;
-            UChar32 end = getRangeStart(i)-1;
-            _appendToPat(result, start, escapeUnprintable);
-            if (start != end) {
-                if ((start+1) != end) {
-                    result.append(u'-');
-                }
-                _appendToPat(result, end, escapeUnprintable);
-            }
-        }
+        // Offsetting the inversion list index by one lets us
+        // iterate over the ranges of the set complement.
+        i = 1;
+        --limit;
     }
 
-    // Default; emit the ranges as pairs
-    else {
-        for (int32_t i = 0; i < count; ++i) {
-            UChar32 start = getRangeStart(i);
-            UChar32 end = getRangeEnd(i);
-            _appendToPat(result, start, escapeUnprintable);
-            if (start != end) {
-                if ((start+1) != end) {
-                    result.append(u'-');
-                }
-                _appendToPat(result, end, escapeUnprintable);
+    // Emit the ranges as pairs.
+    while (i < limit) {
+        UChar32 start = list[i];  // getRangeStart()
+        UChar32 end = list[i + 1] - 1;  // getRangeEnd() = range limit minus one
+        if (!(0xd800 <= end && end <= 0xdbff)) {
+            _appendToPat(result, start, end, escapeUnprintable);
+            i += 2;
+        } else {
+            // The range ends with a lead surrogate.
+            // Avoid writing what looks like a lead+trail surrogate pair.
+            // 1. Postpone ranges that start with a lead surrogate code point.
+            int32_t firstLead = i;
+            while ((i += 2) < limit && list[i] <= 0xdbff) {}
+            int32_t firstAfterLead = i;
+            // 2. Write following ranges that start with a trail surrogate code point.
+            while (i < limit && (start = list[i]) <= 0xdfff) {
+                _appendToPat(result, start, list[i + 1] - 1, escapeUnprintable);
+                i += 2;
+            }
+            // 3. Now write the postponed ranges.
+            for (int j = firstLead; j < firstAfterLead; j += 2) {
+                _appendToPat(result, list[j], list[j + 1] - 1, escapeUnprintable);
             }
         }
     }

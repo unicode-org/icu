@@ -79,8 +79,13 @@ public class RegexUtilitiesTest extends TestFmwk {
                 errln(e.getMessage());
                 continue;
             }
-            final String expected = "[" + s + "]";
-            assertEquals("Doubled character works" + hex.transform(s), expected, pattern);
+            String expected = "[" + s + "]";  // Try this first for faster testing.
+            boolean ok = pattern.equals(expected);
+            if (!ok) {
+                expected = new UnicodeSet(expected).toPattern(false);
+                ok = pattern.equals(expected);
+            }
+            assertTrue("Doubled character works " + hex.transform(s), ok);
 
             // verify that we can create a regex pattern and use as expected
             String shouldNotMatch = UTF16.valueOf((cp + 1) % 0x110000);
