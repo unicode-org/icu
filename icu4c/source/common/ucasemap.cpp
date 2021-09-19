@@ -112,8 +112,7 @@ ucasemap_setLocale(UCaseMap *csm, const char *locale, UErrorCode *pErrorCode) {
     if(length==sizeof(csm->locale)) {
         *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
     }
-    if(U_SUCCESS(*pErrorCode)) {
-        csm->caseLocale=UCASE_LOC_UNKNOWN;
+    if(U_SUCCESS(*pErrorCode)) {     
         csm->caseLocale = ucase_getCaseLocale(csm->locale);
     } else {
         csm->locale[0]=0;
