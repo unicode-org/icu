@@ -40,6 +40,8 @@ import com.ibm.icu.util.Freezable;
  * @author markdavis
  */
 public class UnicodeRegex implements Cloneable, Freezable<UnicodeRegex>, StringTransform {
+    private static final Pattern SUPP_ESCAPE = Pattern.compile("\\\\U00([0-9a-fA-F]{6})");
+
     // Note: we don't currently have any state, but intend to in the future,
     // particularly for the regex style supported.
 
@@ -75,7 +77,7 @@ public class UnicodeRegex implements Cloneable, Freezable<UnicodeRegex>, StringT
      * <p>Not thread-safe; create a separate copy for different threads.
      * <p>In the future, we may extend this to support other regex packages.
      *
-     * @regex A modified Java regex pattern, as in the input to
+     * @param regex A modified Java regex pattern, as in the input to
      *        Pattern.compile(), except that all "character classes" are
      *        processed as if they were UnicodeSet patterns. Example:
      *        "abc[:bc=N:]. See UnicodeSet for the differences in syntax.
@@ -208,7 +210,7 @@ public class UnicodeRegex implements Cloneable, Freezable<UnicodeRegex>, StringT
      */
     public String compileBnf(List<String> lines) {
         Map<String, String> variables = getVariables(lines);
-        Set<String> unused = new LinkedHashSet<String>(variables.keySet());
+        Set<String> unused = new LinkedHashSet<>(variables.keySet());
         // brute force replacement; do twice to allow for different order
         // later on can optimize
         for (int i = 0; i < 2; ++i) {
@@ -343,7 +345,12 @@ public class UnicodeRegex implements Cloneable, Freezable<UnicodeRegex>, StringT
             pos.setIndex(i);
             UnicodeSet x = temp.clear().applyPattern(regex, pos, symbolTable, 0);
             x.complement().complement(); // hack to fix toPattern
-            result.append(x.toPattern(false));
+            String pattern = x.toPattern(false);
+            // Escaping of supplementary code points differs between ICU UnicodeSet and Java regex.
+            if (pattern.contains("\\U")) {
+                pattern = SUPP_ESCAPE.matcher(pattern).replaceAll("\\\\x{$1}");
+            }
+            result.append(pattern);
             i = pos.getIndex() - 1; // allow for the loop increment
             return i;
         } catch (Exception e) {
@@ -370,7 +377,7 @@ public class UnicodeRegex implements Cloneable, Freezable<UnicodeRegex>, StringT
     };
 
     private Map<String, String> getVariables(List<String> lines) {
-        Map<String, String> variables = new TreeMap<String, String>(LongestFirst);
+        Map<String, String> variables = new TreeMap<>(LongestFirst);
         String variable = null;
         StringBuffer definition = new StringBuffer();
         int count = 0;
