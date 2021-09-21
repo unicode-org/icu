@@ -115,6 +115,10 @@ bool ParsedPatternInfo::hasBody() const {
     return positive.integerTotal > 0;
 }
 
+bool ParsedPatternInfo::currencyAsDecimal() const {
+    return positive.hasCurrencyDecimal;
+}
+
 /////////////////////////////////////////////////////
 /// BEGIN RECURSIVE DESCENT PARSER IMPLEMENTATION ///
 /////////////////////////////////////////////////////
@@ -127,8 +131,20 @@ UChar32 ParsedPatternInfo::ParserState::peek() {
     }
 }
 
+UChar32 ParsedPatternInfo::ParserState::peek2() {
+    if (offset == pattern.length()) {
+        return -1;
+    }
+    int32_t cp1 = pattern.char32At(offset);
+    int32_t offset2 = offset + U16_LENGTH(cp1);
+    if (offset2 == pattern.length()) {
+        return -1;
+    }
+    return pattern.char32At(offset2);
+}
+
 UChar32 ParsedPatternInfo::ParserState::next() {
-    int codePoint = peek();
+    int32_t codePoint = peek();
     offset += U16_LENGTH(codePoint);
     return codePoint;
 }
@@ -284,6 +300,35 @@ void ParsedPatternInfo::consumeFormat(UErrorCode& status) {
         state.next(); // consume the decimal point
         currentSubpattern->hasDecimal = true;
         currentSubpattern->widthExceptAffixes += 1;
+        consumeFractionFormat(status);
+        if (U_FAILURE(status)) { return; }
+    } else if (state.peek() == u'¤') {
+        // Check if currency is a decimal separator
+        switch (state.peek2()) {
+            case u'#':
+            case u'0':
+            case u'1':
+            case u'2':
+            case u'3':
+            case u'4':
+            case u'5':
+            case u'6':
+            case u'7':
+            case u'8':
+            case u'9':
+                break;
+            default:
+                // Currency symbol followed by a non-numeric character;
+                // treat as a normal affix.
+                return;
+        }
+        // Currency symbol is followed by a numeric character;
+        // treat as a decimal separator.
+        currentSubpattern->hasCurrencySign = true;
+        currentSubpattern->hasCurrencyDecimal = true;
+        currentSubpattern->hasDecimal = true;
+        currentSubpattern->widthExceptAffixes += 1;
+        state.next(); // consume the symbol
         consumeFractionFormat(status);
         if (U_FAILURE(status)) { return; }
     }
@@ -565,6 +610,9 @@ PatternParser::patternInfoToProperties(DecimalFormatProperties& properties, Pars
         properties.decimalSeparatorAlwaysShown = false;
     }
 
+    // Persist the currency as decimal separator
+    properties.currencyAsDecimal = positive.hasCurrencyDecimal;
+
     // Scientific notation settings
     if (positive.exponentZeros > 0) {
         properties.exponentSignAlwaysShown = positive.exponentHasPlusSign;
@@ -750,7 +798,11 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
         }
         // Decimal separator
         if (magnitude == 0 && (alwaysShowDecimal || mN < 0)) {
-            sb.append(u'.');
+            if (properties.currencyAsDecimal) {
+                sb.append(u'¤');
+            } else {
+                sb.append(u'.');
+            }
         }
         if (!useGrouping) {
             continue;

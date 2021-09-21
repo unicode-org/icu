@@ -402,31 +402,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
         case AffixUtils.TYPE_PERMILLE:
             return symbols.getPerMillString();
         case AffixUtils.TYPE_CURRENCY_SINGLE:
-            // UnitWidth ISO, HIDDEN, or NARROW overrides the singular currency symbol.
-            if (unitWidth == UnitWidth.ISO_CODE) {
-                return currency.getCurrencyCode();
-            } else if (unitWidth == UnitWidth.HIDDEN) {
-                return "";
-            } else {
-                int selector;
-                switch (unitWidth) {
-                    case SHORT:
-                        selector = Currency.SYMBOL_NAME;
-                        break;
-                    case NARROW:
-                        selector = Currency.NARROW_SYMBOL_NAME;
-                        break;
-                    case FORMAL:
-                        selector = Currency.FORMAL_SYMBOL_NAME;
-                        break;
-                    case VARIANT:
-                        selector = Currency.VARIANT_SYMBOL_NAME;
-                        break;
-                    default:
-                        throw new AssertionError();
-                }
-                return currency.getName(symbols.getULocale(), selector, null);
-            }
+            return getCurrencySymbolForUnitWidth();
         case AffixUtils.TYPE_CURRENCY_DOUBLE:
             return currency.getCurrencyCode();
         case AffixUtils.TYPE_CURRENCY_TRIPLE:
@@ -442,6 +418,37 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
             return currency.getName(symbols.getULocale(), Currency.NARROW_SYMBOL_NAME, null);
         default:
             throw new AssertionError();
+        }
+    }
+
+    /**
+     * Returns the currency symbol for the unit width specified in setSymbols()
+     */
+    public String getCurrencySymbolForUnitWidth() {
+        // UnitWidth ISO, HIDDEN, or NARROW overrides the singular currency symbol.
+        if (unitWidth == UnitWidth.ISO_CODE) {
+            return currency.getCurrencyCode();
+        } else if (unitWidth == UnitWidth.HIDDEN) {
+            return "";
+        } else {
+            int selector;
+            switch (unitWidth) {
+                case SHORT:
+                    selector = Currency.SYMBOL_NAME;
+                    break;
+                case NARROW:
+                    selector = Currency.NARROW_SYMBOL_NAME;
+                    break;
+                case FORMAL:
+                    selector = Currency.FORMAL_SYMBOL_NAME;
+                    break;
+                case VARIANT:
+                    selector = Currency.VARIANT_SYMBOL_NAME;
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+            return currency.getName(symbols.getULocale(), selector, null);
         }
     }
 }

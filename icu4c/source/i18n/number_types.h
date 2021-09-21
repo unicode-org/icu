@@ -140,6 +140,11 @@ class U_I18N_API AffixPatternProvider {
      * number instead of rendering the number.
      */
     virtual bool hasBody() const = 0;
+
+    /**
+     * True if the currency symbol should replace the decimal separator.
+     */
+    virtual bool currencyAsDecimal() const = 0;
 };
 
 

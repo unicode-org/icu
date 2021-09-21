@@ -6919,4 +6919,32 @@ public class NumberFormatTest extends TestFmwk {
         df.parse(input.toString());
         // Should not hang
     }
+
+    @Test
+    public void Test21556_CurrencyAsDecimal() {
+        {
+            DecimalFormat df = new DecimalFormat("a0¤00b");
+            df.setCurrency(Currency.getInstance("EUR"));
+            StringBuffer result = new StringBuffer();
+            FieldPosition fp = new FieldPosition(NumberFormat.Field.CURRENCY);
+            df.format(3.141, result, fp);
+            assertEquals("Basic test: format", "a3€14b", result.toString());
+            assertEquals("Basic test: toPattern", "a0¤00b", df.toPattern());
+            assertEquals("Basic test: field position begin", 2, fp.getBeginIndex());
+            assertEquals("Basic test: field position end", 3, fp.getEndIndex());
+        }
+
+        {
+            NumberFormat nf = NumberFormat.getCurrencyInstance(new ULocale("en-GB"));
+            DecimalFormat df = (DecimalFormat) nf;
+            df.applyPattern("a0¤00b");
+            StringBuffer result = new StringBuffer();
+            FieldPosition fp = new FieldPosition(NumberFormat.Field.CURRENCY);
+            df.format(3.141, result, fp);
+            assertEquals("Via applyPattern: format", "a3£14b", result.toString());
+            assertEquals("Via applyPattern: toPattern", "a0¤00b", df.toPattern());
+            assertEquals("Via applyPattern: field position begin", 2, fp.getBeginIndex());
+            assertEquals("Via applyPattern: field position end", 3, fp.getEndIndex());
+        }
+    }
 }
