@@ -351,6 +351,14 @@ run \`make dist\`.
         archive](https://sourceforge.net/p/icu/mailman/message/36275940/) for
         advice.~~
 
+#### Output of icuexportdata:
+
+This step publishes pre-processed Unicode property data, which may be ingested by downstream clients such as ICU4X.
+
+*   Using the output from the build bots:
+    *   Navigate to the Azure Pipelines artifacts as described in the previous section
+    *   Download the files named *icuexportdata_uprops_full.zip* and *icuexportdata_uprops_sample.zip*
+
 ### Signing archives and creating checksums:
 
 #### Step 1. PGP files:

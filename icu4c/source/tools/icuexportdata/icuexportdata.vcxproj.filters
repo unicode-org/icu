@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="icuwriteuprops.cpp">
+    <ClCompile Include="icuexportdata.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -582,3 +582,48 @@ jobs:
       env:
         CC: gcc
         CXX: g++
+#-------------------------------------------------------------------------
+- job: ICU4C_icuexportdata_Ubuntu_1804
+  displayName: 'C: Create Artifacts from icuexportdata'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'ubuntu-18.04'
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    - script: |
+        cd icu4c/source && ./runConfigureICU Linux && make -j2
+      displayName: 'Build'
+      env:
+        CC: clang
+        CXX: clang++
+    - script: |
+        mkdir -p icu4c/source/icuexportdata_uprops_full/fast
+        mkdir -p icu4c/source/icuexportdata_uprops_full/small
+        cd icu4c/source
+        LD_LIBRARY_PATH=lib ./bin/icuexportdata --mode uprops --index --copyright --destdir icuexportdata_uprops_full/fast --trie-type fast --all
+        LD_LIBRARY_PATH=lib ./bin/icuexportdata --mode uprops --index --copyright --destdir icuexportdata_uprops_full/small --trie-type small --all
+      displayName: 'Build Unicode property data export file (Full)'
+    # In the sample file, include:
+    # - Basic binary properties: AHex WSpace
+    # - Property of strings: Basic_Emoji
+    # - POSIX binary property: blank
+    # - Enumerated properties: gc nt sc
+    - script: |
+        mkdir -p icu4c/source/icuexportdata_uprops_sample/fast
+        mkdir -p icu4c/source/icuexportdata_uprops_sample/small
+        cd icu4c/source
+        LD_LIBRARY_PATH=lib ./bin/icuexportdata --mode uprops --index --copyright --destdir icuexportdata_uprops_sample/fast --trie-type fast AHex gc nt Basic_Emoji sc WSpace blank
+        LD_LIBRARY_PATH=lib ./bin/icuexportdata --mode uprops --index --copyright --destdir icuexportdata_uprops_sample/small --trie-type small AHex gc nt Basic_Emoji sc WSpace blank
+      displayName: 'Build Unicode property data export file (Sample)'
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: icuexportdata_uprops_full'
+      inputs:
+        PathtoPublish: 'icu4c/source/icuexportdata_uprops_full'
+        ArtifactName: 'icuexportdata_uprops_full'
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: icuexportdata_uprops_sample'
+      inputs:
+        PathtoPublish: 'icu4c/source/icuexportdata_uprops_sample'
+        ArtifactName: 'icuexportdata_uprops_sample'

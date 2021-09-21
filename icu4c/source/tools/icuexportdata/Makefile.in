@@ -1,4 +1,4 @@
-## Makefile.in for ICU - tools/icuwriteuprops
+## Makefile.in for ICU - tools/icuexportdata
 ## Copyright (C) 2021 and later: Unicode, Inc. and others.
 ## License & terms of use: http://www.unicode.org/copyright.html
 
@@ -11,9 +11,9 @@ top_builddir = ../..
 include $(top_builddir)/icudefs.mk
 
 ## Build directory information
-subdir = tools/icuwriteuprops
+subdir = tools/icuexportdata
 
-TARGET_STUB_NAME = icuwriteuprops
+TARGET_STUB_NAME = icuexportdata
 
 SECTION = 1
 
