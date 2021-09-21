@@ -539,7 +539,11 @@ void DecimalQuantity::_setToDecNum(const DecNum& decnum, UErrorCode& status) {
     if (decnum.isNegative()) {
         flags |= NEGATIVE_FLAG;
     }
-    if (!decnum.isZero()) {
+    if (decnum.isNaN()) {
+        flags |= NAN_FLAG;
+    } else if (decnum.isInfinity()) {
+        flags |= INFINITY_FLAG;
+    } else if (!decnum.isZero()) {
         readDecNumberToBcd(decnum);
         compact();
     }

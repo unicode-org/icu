@@ -184,9 +184,11 @@ void NumberSkeletonTest::invalidTokens() {
             u"scientific/ee",
             u"precision-increment/xxx",
             u"precision-increment/NaN",
+            u"precision-increment/Infinity",
             u"precision-increment/0.1.2",
             u"scale/xxx",
             u"scale/NaN",
+            u"scale/Infinity",
             u"scale/0.1.2",
             u"scale/français", // non-invariant characters for C++
             u"currency/dummy",

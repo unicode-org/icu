@@ -677,6 +677,8 @@ void NumberRangeFormatterTest::testNaNInfinity() {
     auto result4 = lnf.formatFormattableRange(uprv_getNaN(), 0, status);
     auto result5 = lnf.formatFormattableRange(0, uprv_getNaN(), status);
     auto result6 = lnf.formatFormattableRange(uprv_getNaN(), uprv_getNaN(), status);
+    auto result7 = lnf.formatFormattableRange({"1000", status}, {"Infinity", status}, status);
+    auto result8 = lnf.formatFormattableRange({"-Infinity", status}, {"NaN", status}, status);
 
     assertEquals("0 - inf", u"-∞ – 0", result1.toTempString(status));
     assertEquals("-inf - 0", u"0–∞", result2.toTempString(status));
@@ -684,6 +686,8 @@ void NumberRangeFormatterTest::testNaNInfinity() {
     assertEquals("NaN - 0", u"NaN–0", result4.toTempString(status));
     assertEquals("0 - NaN", u"0–NaN", result5.toTempString(status));
     assertEquals("NaN - NaN", u"~NaN", result6.toTempString(status));
+    assertEquals("1000 - inf", u"1,000–∞", result7.toTempString(status));
+    assertEquals("-inf - NaN", u"-∞ – NaN", result8.toTempString(status));
 }
 
 void NumberRangeFormatterTest::testPlurals() {

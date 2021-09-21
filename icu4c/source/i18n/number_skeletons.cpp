@@ -1493,7 +1493,7 @@ void blueprint_helpers::parseScaleOption(const StringSegment& segment, MacroProp
     LocalPointer<DecNum> decnum(new DecNum(), status);
     if (U_FAILURE(status)) { return; }
     decnum->setTo({buffer.data(), buffer.length()}, status);
-    if (U_FAILURE(status)) {
+    if (U_FAILURE(status) || decnum->isSpecial()) {
         // This is a skeleton syntax error; don't let the low-level decnum error bubble up
         status = U_NUMBER_SKELETON_SYNTAX_ERROR;
         return;
