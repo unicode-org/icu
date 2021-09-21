@@ -167,9 +167,11 @@ public class NumberSkeletonTest {
                 "scientific/ee",
                 "precision-increment/xxx",
                 "precision-increment/NaN",
+                "precision-increment/Infinity",
                 "precision-increment/0.1.2",
                 "scale/xxx",
                 "scale/NaN",
+                "scale/Infinity",
                 "scale/0.1.2",
                 "scale/français", // non-invariant characters for C++
                 "currency/dummy",
