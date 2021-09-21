@@ -29,21 +29,21 @@
   <!-- Options that are common to *all* configurations -->
   <ItemDefinitionGroup>
     <Midl>
-      <TypeLibraryName>$(OutDir)/icuwriteuprops.tlb</TypeLibraryName>
+      <TypeLibraryName>$(OutDir)/icuexportdata.tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <CompileAs>Default</CompileAs>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
       <AdditionalIncludeDirectories>..\..\..\include;..\..\common;..\toolutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PrecompiledHeaderOutputFile>$(OutDir)/icuwriteuprops.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile>$(OutDir)/icuexportdata.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>$(OutDir)/</AssemblerListingLocation>
       <ObjectFileName>$(OutDir)/</ObjectFileName>
-      <ProgramDataBaseFileName>$(OutDir)/icuwriteuprops.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(OutDir)/icuexportdata.pdb</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <OutputFile>$(OutDir)/icuwriteuprops.exe</OutputFile>
+      <OutputFile>$(OutDir)/icuexportdata.exe</OutputFile>
       <AdditionalLibraryDirectories>..\..\..\$(IcuLibOutputDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
@@ -72,7 +72,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="icuwriteuprops.cpp" />
+    <ClCompile Include="icuexportdata.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

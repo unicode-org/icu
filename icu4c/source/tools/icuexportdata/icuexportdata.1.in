@@ -1,6 +1,6 @@
 .\" Hey, Emacs! This is -*-nroff-*- you know...
 .\"
-.\" icuwriteuprops.1: manual page for the icuwriteuprops utility
+.\" icuexportdata.1: manual page for the icuexportdata utility
 .\"
 .\" Copyright (C) 2016 and later: Unicode, Inc. and others.
 .\" License & terms of use: http://www.unicode.org/copyright.html
@@ -9,5 +9,5 @@
 .\"
 .TH MAKECONV 1 "12 June 2021" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
-.B icuwriteuprops
+.B icuexportdata
 \- Writes text files with Unicode properties data from ICU.
