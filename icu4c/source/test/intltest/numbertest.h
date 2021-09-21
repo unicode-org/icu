@@ -317,6 +317,7 @@ class NumberRangeFormatterTest : public IntlTestWithFieldPosition {
     void toObject();
     void testGetDecimalNumbers();
     void test21358_SignPosition();
+    void test21683_StateLeak();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
 
