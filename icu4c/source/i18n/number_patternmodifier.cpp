@@ -300,24 +300,8 @@ UnicodeString MutablePatternModifier::getSymbol(AffixPatternType type) const {
             return fSymbols->getSymbol(DecimalFormatSymbols::ENumberFormatSymbol::kPercentSymbol);
         case AffixPatternType::TYPE_PERMILLE:
             return fSymbols->getSymbol(DecimalFormatSymbols::ENumberFormatSymbol::kPerMillSymbol);
-        case AffixPatternType::TYPE_CURRENCY_SINGLE: {
-            switch (fUnitWidth) {
-            case UNumberUnitWidth::UNUM_UNIT_WIDTH_NARROW:
-                return fCurrencySymbols.getNarrowCurrencySymbol(localStatus);
-            case UNumberUnitWidth::UNUM_UNIT_WIDTH_SHORT:
-                return fCurrencySymbols.getCurrencySymbol(localStatus);
-            case UNumberUnitWidth::UNUM_UNIT_WIDTH_ISO_CODE:
-                return fCurrencySymbols.getIntlCurrencySymbol(localStatus);
-            case UNumberUnitWidth::UNUM_UNIT_WIDTH_FORMAL:
-                return fCurrencySymbols.getFormalCurrencySymbol(localStatus);
-            case UNumberUnitWidth::UNUM_UNIT_WIDTH_VARIANT:
-                return fCurrencySymbols.getVariantCurrencySymbol(localStatus);
-            case UNumberUnitWidth::UNUM_UNIT_WIDTH_HIDDEN:
-                return UnicodeString();
-            default:
-                return fCurrencySymbols.getCurrencySymbol(localStatus);
-            }
-        }
+        case AffixPatternType::TYPE_CURRENCY_SINGLE:
+            return getCurrencySymbolForUnitWidth(localStatus);
         case AffixPatternType::TYPE_CURRENCY_DOUBLE:
             return fCurrencySymbols.getIntlCurrencySymbol(localStatus);
         case AffixPatternType::TYPE_CURRENCY_TRIPLE:
@@ -332,6 +316,25 @@ UnicodeString MutablePatternModifier::getSymbol(AffixPatternType type) const {
             return UnicodeString(u"\uFFFD");
         default:
             UPRV_UNREACHABLE_EXIT;
+    }
+}
+
+UnicodeString MutablePatternModifier::getCurrencySymbolForUnitWidth(UErrorCode& status) const {
+    switch (fUnitWidth) {
+    case UNumberUnitWidth::UNUM_UNIT_WIDTH_NARROW:
+        return fCurrencySymbols.getNarrowCurrencySymbol(status);
+    case UNumberUnitWidth::UNUM_UNIT_WIDTH_SHORT:
+        return fCurrencySymbols.getCurrencySymbol(status);
+    case UNumberUnitWidth::UNUM_UNIT_WIDTH_ISO_CODE:
+        return fCurrencySymbols.getIntlCurrencySymbol(status);
+    case UNumberUnitWidth::UNUM_UNIT_WIDTH_FORMAL:
+        return fCurrencySymbols.getFormalCurrencySymbol(status);
+    case UNumberUnitWidth::UNUM_UNIT_WIDTH_VARIANT:
+        return fCurrencySymbols.getVariantCurrencySymbol(status);
+    case UNumberUnitWidth::UNUM_UNIT_WIDTH_HIDDEN:
+        return UnicodeString();
+    default:
+        return fCurrencySymbols.getCurrencySymbol(status);
     }
 }
 

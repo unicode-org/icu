@@ -254,12 +254,13 @@ class PatternModifierTest : public IntlTest {
     UnicodeString getSuffix(const MutablePatternModifier &mod, UErrorCode &status);
 };
 
-class PatternStringTest : public IntlTest {
+class PatternStringTest : public IntlTestWithFieldPosition {
   public:
     void testLocalized();
     void testToPatternSimple();
     void testExceptionOnInvalid();
     void testBug13117();
+    void testCurrencyDecimal();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
 

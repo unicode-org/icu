@@ -2504,6 +2504,7 @@ public synchronized void setParseStrictMode(ParseMode parseMode) {
     boolean useCurrency = ((tprops.getCurrency() != null)
             || tprops.getCurrencyPluralInfo() != null
             || tprops.getCurrencyUsage() != null
+            || tprops.getCurrencyAsDecimal()
             || AffixUtils.hasCurrencySymbols(tprops.getPositivePrefixPattern())
             || AffixUtils.hasCurrencySymbols(tprops.getPositiveSuffixPattern())
             || AffixUtils.hasCurrencySymbols(tprops.getNegativePrefixPattern())

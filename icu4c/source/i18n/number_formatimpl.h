@@ -115,12 +115,6 @@ class NumberFormatterImpl : public UMemory {
     LocalPointer<const LongNameMultiplexer> fLongNameMultiplexer;
     LocalPointer<const CompactHandler> fCompactHandler;
 
-    // Value objects possibly used by the number formatting pipeline:
-    struct Warehouse {
-        CurrencySymbols fCurrencySymbols;
-    } fWarehouse;
-
-
     NumberFormatterImpl(const MacroProps &macros, bool safe, UErrorCode &status);
 
     MicroProps& preProcessUnsafe(DecimalQuantity &inValue, UErrorCode &status);

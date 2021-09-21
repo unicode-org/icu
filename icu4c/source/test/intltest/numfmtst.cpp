@@ -251,6 +251,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test20425_FractionWithIntegerIncrement);
   TESTCASE_AUTO(Test21232_ParseTimeout);
   TESTCASE_AUTO(Test10997_FormatCurrency);
+  TESTCASE_AUTO(Test21556_CurrencyAsDecimal);
   TESTCASE_AUTO_END;
 }
 
@@ -10089,9 +10090,8 @@ void NumberFormatTest::Test21232_ParseTimeout() {
 void NumberFormatTest::Test10997_FormatCurrency() {
     IcuTestErrorCode status(*this, "Test10997_FormatCurrency");
 
-    UErrorCode error = U_ZERO_ERROR;
-    NumberFormat* fmt = NumberFormat::createCurrencyInstance(Locale::getUS(), error);
-    if (U_FAILURE(error)) {
+    LocalPointer<NumberFormat> fmt(NumberFormat::createCurrencyInstance(Locale::getUS(), status));
+    if (status.errDataIfFailureAndReset()) {
         return;
     }
     fmt->setMinimumFractionDigits(4);
@@ -10108,8 +10108,40 @@ void NumberFormatTest::Test10997_FormatCurrency() {
     Formattable eurAmnt(new CurrencyAmount(123.45, u"EUR", status));
     fmt->format(eurAmnt, str2, fp, status);
     assertEquals("minFrac 4 should be respected in different currency", u"€123.4500", str2);
+}
 
-    delete fmt;
+void NumberFormatTest::Test21556_CurrencyAsDecimal() {
+    IcuTestErrorCode status(*this, "Test21556_CurrencyAsDecimal");
+
+    {
+        DecimalFormat df(u"a0¤00b", status);
+        if (status.errDataIfFailureAndReset()) {
+            return;
+        }
+        df.setCurrency(u"EUR", status);
+        UnicodeString result;
+        FieldPosition fp(UNUM_CURRENCY_FIELD);
+        df.format(3.141, result, fp);
+        assertEquals("Basic test: format", u"a3€14b", result);
+        UnicodeString pattern;
+        assertEquals("Basic test: toPattern", u"a0¤00b", df.toPattern(pattern));
+        assertEquals("Basic test: field position begin", 2, fp.getBeginIndex());
+        assertEquals("Basic test: field position end", 3, fp.getEndIndex());
+    }
+
+    {
+        LocalPointer<NumberFormat> nf(NumberFormat::createCurrencyInstance("en-GB", status));
+        DecimalFormat* df = static_cast<DecimalFormat*>(nf.getAlias());
+        df->applyPattern(u"a0¤00b", status);
+        UnicodeString result;
+        FieldPosition fp(UNUM_CURRENCY_FIELD);
+        df->format(3.141, result, fp);
+        assertEquals("Via applyPattern: format", u"a3£14b", result);
+        UnicodeString pattern;
+        assertEquals("Via applyPattern: toPattern", u"a0¤00b", df->toPattern(pattern));
+        assertEquals("Via applyPattern: field position begin", 2, fp.getBeginIndex());
+        assertEquals("Via applyPattern: field position end", 3, fp.getEndIndex());
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

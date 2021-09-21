@@ -195,6 +195,11 @@ class U_I18N_API MutablePatternModifier
      */
     UnicodeString getSymbol(AffixPatternType type) const U_OVERRIDE;
 
+    /**
+     * Returns the currency symbol for the unit width specified in setSymbols()
+     */
+    UnicodeString getCurrencySymbolForUnitWidth(UErrorCode& status) const;
+
     UnicodeString toUnicodeString() const;
 
   private:

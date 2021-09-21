@@ -62,6 +62,7 @@ struct U_I18N_API ParsedSubpatternInfo {
     bool hasPercentSign = false;
     bool hasPerMilleSign = false;
     bool hasCurrencySign = false;
+    bool hasCurrencyDecimal = false;
     bool hasMinusSign = false;
     bool hasPlusSign = false;
 
@@ -104,6 +105,8 @@ struct U_I18N_API ParsedPatternInfo : public AffixPatternProvider, public UMemor
 
     bool hasBody() const U_OVERRIDE;
 
+    bool currencyAsDecimal() const U_OVERRIDE;
+
   private:
     struct U_I18N_API ParserState {
         const UnicodeString& pattern; // reference to the parent
@@ -119,8 +122,13 @@ struct U_I18N_API ParsedPatternInfo : public AffixPatternProvider, public UMemor
             return *this;
         }
 
+        /** Returns the next code point, or -1 if string is too short. */
         UChar32 peek();
 
+        /** Returns the code point after the next code point, or -1 if string is too short. */
+        UChar32 peek2();
+
+        /** Returns the next code point and then steps forward. */
         UChar32 next();
 
         // TODO: We don't currently do anything with the message string.

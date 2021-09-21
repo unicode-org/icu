@@ -91,6 +91,7 @@ public class PatternStringUtils {
         int minSig = Math.min(properties.getMinimumSignificantDigits(), dosMax);
         int maxSig = Math.min(properties.getMaximumSignificantDigits(), dosMax);
         boolean alwaysShowDecimal = properties.getDecimalSeparatorAlwaysShown();
+        boolean currencyAsDecimal = properties.getCurrencyAsDecimal();
         int exponentDigits = Math.min(properties.getMinimumExponentDigits(), dosMax);
         boolean exponentShowPlusSign = properties.getExponentSignAlwaysShown();
         AffixPatternProvider affixes = PropertiesAffixPatternProvider.forProperties(properties);
@@ -153,7 +154,11 @@ public class PatternStringUtils {
             }
             // Decimal separator
             if (magnitude == 0 && (alwaysShowDecimal || mN < 0)) {
-                sb.append('.');
+                if (currencyAsDecimal) {
+                    sb.append('¤');
+                } else {
+                    sb.append('.');
+                }
             }
             if (!useGrouping) {
                 continue;
