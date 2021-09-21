@@ -247,6 +247,8 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test20961_CurrencyPluralPattern);
   TESTCASE_AUTO(Test21134_ToNumberFormatter);
   TESTCASE_AUTO(Test13733_StrictAndLenient);
+  TESTCASE_AUTO(Test20425_IntegerIncrement);
+  TESTCASE_AUTO(Test20425_FractionWithIntegerIncrement);
   TESTCASE_AUTO(Test21232_ParseTimeout);
   TESTCASE_AUTO(Test10997_FormatCurrency);
   TESTCASE_AUTO_END;
@@ -10037,6 +10039,26 @@ void NumberFormatTest::Test13733_StrictAndLenient() {
         assertEquals("Lenient parse of " + inputString + " using " + patternString,
             parsedLenientValue, cas.expectedLenientParse);
     }
+}
+
+void NumberFormatTest::Test20425_IntegerIncrement() {
+    IcuTestErrorCode status(*this, "Test20425_IntegerIncrement");
+
+    DecimalFormat df("##00", status);
+    df.setRoundingIncrement(1);
+    UnicodeString actual;
+    df.format(1235.5, actual, status);
+    assertEquals("Should round to integer", u"1236", actual);
+}
+
+void NumberFormatTest::Test20425_FractionWithIntegerIncrement() {
+    IcuTestErrorCode status(*this, "Test20425_FractionWithIntegerIncrement");
+
+    DecimalFormat df("0.0", status);
+    df.setRoundingIncrement(1);
+    UnicodeString actual;
+    df.format(8.6, actual, status);
+    assertEquals("Should have a fraction digit", u"9.0", actual);
 }
 
 void NumberFormatTest::Test21232_ParseTimeout() {
