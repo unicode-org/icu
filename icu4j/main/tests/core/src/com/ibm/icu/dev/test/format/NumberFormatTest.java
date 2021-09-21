@@ -4104,7 +4104,7 @@ public class NumberFormatTest extends TestFmwk {
             new SetMxFrAndRndIncrItem( "15 en_US DEC 1/1/3/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  3, 0.02,   "#,##0.02#",  0.128, "0.12"  ), // use incr
             new SetMxFrAndRndIncrItem( "16 en_US DEC 1/2/2/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  2,  2, 0.02,   "#,##0.02",   0.128, "0.12"  ), // use incr
             new SetMxFrAndRndIncrItem( "17 en_US DEC 1/2/3/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  2,  3, 0.02,   "#,##0.02#",  0.128, "0.12"  ), // use incr
-            new SetMxFrAndRndIncrItem( "18 en_US DEC 1/3/3/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  3,  3, 0.02,   "#,##0.020",  0.128, "0.12"  ), // use incr; expFmt != ICU4C
+            new SetMxFrAndRndIncrItem( "18 en_US DEC 1/3/3/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  3,  3, 0.02,   "#,##0.020",  0.128, "0.120" ), // use incr
 
             new SetMxFrAndRndIncrItem( "20 en_US DEC 1/1/1/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  1, 0.0075, "#,##0.0",    0.019, "0.0"    ),
             new SetMxFrAndRndIncrItem( "21 en_US DEC 1/1/2/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  2, 0.0075, "#,##0.0075", 0.004, "0.0075" ), // use incr
@@ -4133,6 +4133,9 @@ public class NumberFormatTest extends TestFmwk {
             if (roundIncrUsed) {
                 double  testIncr = item.roundIncr;
                 for (; testIncr > ((int)testIncr); testIncr *= 10.0, fracForRoundIncr++);
+            }
+            if (fracForRoundIncr < item.minFrac) {
+                fracForRoundIncr = item.minFrac;
             }
 
             int minInt = df.getMinimumIntegerDigits();
@@ -6905,6 +6908,22 @@ public class NumberFormatTest extends TestFmwk {
             assertEquals("Strict parse of " + inputString + " using " + patternString,
                     parsedLenientValue, expectedLenientParse);
         }
+    }
+
+    @Test
+    public void Test20425_IntegerIncrement() {
+        DecimalFormat df = new DecimalFormat("##00");
+        df.setRoundingIncrement(1);
+        String actual = df.format(1235.5);
+        assertEquals("Should round to integer", "1236", actual);
+    }
+
+    @Test
+    public void Test20425_FractionWithIntegerIncrement() {
+        DecimalFormat df = new DecimalFormat("0.0");
+        df.setRoundingIncrement(1);
+        String actual = df.format(8.6);
+        assertEquals("Should have a fraction digit", "9.0", actual);
     }
 
     @Test

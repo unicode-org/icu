@@ -1248,7 +1248,10 @@ public class DecimalFormat extends NumberFormat {
     if (increment == 0) {
       setRoundingIncrement((java.math.BigDecimal) null);
     } else {
-      java.math.BigDecimal javaBigDecimal = java.math.BigDecimal.valueOf(increment);
+      // ICU-20425: Since doubles have no concept of trailing zeros, we should strip
+      // trailing zeros from the BigDecimal.
+      java.math.BigDecimal javaBigDecimal = java.math.BigDecimal.valueOf(increment)
+        .stripTrailingZeros();
       setRoundingIncrement(javaBigDecimal);
     }
   }
