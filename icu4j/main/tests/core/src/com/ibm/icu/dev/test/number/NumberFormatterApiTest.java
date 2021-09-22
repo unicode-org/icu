@@ -2691,6 +2691,40 @@ public class NumberFormatterApiTest extends TestFmwk {
     }
 
     @Test
+    public void unitNotConvertible() {
+        final double randomNumber = 1234;
+
+        try {
+            NumberFormatter.with()
+                    .unit(MeasureUnit.forIdentifier("meter-and-liter"))
+                    .locale(new ULocale("en_US"))
+                    .format(randomNumber);
+        } catch (Exception e) {
+            assertEquals("error must be thrown", "class com.ibm.icu.impl.IllegalIcuArgumentException", e.getClass().toString());
+        }
+
+        try {
+            NumberFormatter.with()
+                    .unit(MeasureUnit.forIdentifier("month-and-week"))
+                    .locale(new ULocale("en_US"))
+                    .format(randomNumber);
+        } catch (Exception e) {
+            assertEquals("error must be thrown", "class com.ibm.icu.impl.IllegalIcuArgumentException", e.getClass().toString());
+        }
+
+        try {
+            NumberFormatter.with()
+                    .unit(MeasureUnit.forIdentifier("day-and-hour"))
+                    .locale(new ULocale("en_US"))
+                    .format(2.5);
+        } catch (Exception e) {
+            // No errors.
+            assert false;
+        }
+
+    }
+
+    @Test
     public void unitPercent() {
         assertFormatDescending(
                 "Percent",
