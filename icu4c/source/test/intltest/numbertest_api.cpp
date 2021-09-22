@@ -88,6 +88,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(unitCurrency);
         TESTCASE_AUTO(unitInflections);
         TESTCASE_AUTO(unitGender);
+        TESTCASE_AUTO(unitNotConvertible);
         TESTCASE_AUTO(unitPercent);
         if (!quick) {
             // Slow test: run in exhaustive mode only
@@ -2697,6 +2698,31 @@ void NumberFormatterApiTest::unitGender() {
     fn = formatter.formatDouble(1.1, status);
     status.assertSuccess();
     assertEquals("getGender for a genderless language", "", fn.getGender(status));
+}
+
+void NumberFormatterApiTest::unitNotConvertible() {
+    IcuTestErrorCode status(*this, "unitNotConvertible");
+    const double randomNumber = 1234;
+
+    NumberFormatter::with()
+        .unit(MeasureUnit::forIdentifier("meter-and-liter", status))
+        .locale("en_US")
+        .formatDouble(randomNumber, status);
+    assertEquals(u"error must be returned", status.errorName(), u"U_ARGUMENT_TYPE_MISMATCH");
+
+    status.reset();
+    NumberFormatter::with()
+        .unit(MeasureUnit::forIdentifier("month-and-week", status))
+        .locale("en_US")
+        .formatDouble(randomNumber, status);
+    assertEquals(u"error must be returned", status.errorName(), u"U_ARGUMENT_TYPE_MISMATCH");
+
+    status.reset();
+    NumberFormatter::with()
+        .unit(MeasureUnit::forIdentifier("week-and-day", status))
+        .locale("en_US")
+        .formatDouble(randomNumber, status);
+    assertTrue(u"no error", !U_FAILURE(status));
 }
 
 void NumberFormatterApiTest::unitPercent() {

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
+import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.util.MeasureUnit;
 
 public class UnitsConverter {
@@ -48,8 +49,9 @@ public class UnitsConverter {
      */
     public UnitsConverter(MeasureUnitImpl source, MeasureUnitImpl target, ConversionRates conversionRates) {
         Convertibility convertibility = extractConvertibility(source, target, conversionRates);
-        // TODO(icu-units#82): throw exception if conversion between incompatible types was requested?
-        assert (convertibility == Convertibility.CONVERTIBLE || convertibility == Convertibility.RECIPROCAL);
+        if (convertibility != Convertibility.CONVERTIBLE && convertibility != Convertibility.RECIPROCAL) {
+            throw new IllegalIcuArgumentException("input units must be convertible or reciprocal");
+        }
 
         Factor sourceToBase = conversionRates.getFactorToBase(source);
         Factor targetToBase = conversionRates.getFactorToBase(target);
