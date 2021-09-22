@@ -28,6 +28,26 @@ For reference, see the section in the User Guide about Version numbers here:
 
 <http://userguide.icu-project.org/design#TOC-Version-Numbers-in-ICU>
 
+### ICU Version Number for Front load, RC and GA tasks
+
+The process of releasing a new ICU version (E.G. ICU 70.1) is divided in three phases:
+* Front loading tasks
+* Release Candidate (RC) tasks
+* General Availability (GA) tasks
+
+As of ICU 70, the ICU Version number changes for each of these tasks.
+
+When "front loading" tasks, the version number will consist of a Major number, Minor number, and a Patch number. 
+For example: ICU version 70.0.1
+
+For the RC and GA tasks, the ICU version number will consist of a Major number and a Minor number.
+For example: ICU version 70.1
+
+This means that when updating from the front load tasks to the RC tasks, files such as 
+[icu4c/source/common/unicode/uvernum.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/unicode/uvernum.h)
+need to be correspondingly updated. See below for more files to be updated and steps to be followed.
+
+
 ### ICU Data
 
 [icu4c/source/data/misc/icuver.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/misc/icuver.txt)
@@ -122,7 +142,7 @@ For updating ICU version numbers, follow the steps below.
         54rc. For official releases, use full version numbers using under bar as the
         separator, e.g. "54_1", "54_1_1".
     *   api.doc.version: The version displayed in API reference doc - use full
-        version number such as "60.1" for official releases, "60 Milestone 1" for
+        version number such as "60.1" for official and RC releases, "60 Milestone 1" for
         milestone 1.
     *   maven.pom.ver: The version used in ICU pom.xml files. Use full version
         number such as "60.1" for official releases, "61.1-SNAPSHOT" until 61.1
@@ -164,7 +184,7 @@ For updating ICU version numbers, follow the steps below.
         UNICODE_7_0 = getInstance(7, 0, 0, 0);
     <b>
         ICU_VERSION = getInstance(54, 1, 0, 0);
-        ICU_DATA_VERSION = getInstance(54, 1, 0, 0);</b>
+        ICU_DATA_VERSION = ICU_VERSION;</b>
         UNICODE_VERSION = UNICODE_7_0;
 
         UCOL_RUNTIME_VERSION = getInstance(8);
