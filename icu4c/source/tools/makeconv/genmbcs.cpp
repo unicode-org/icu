@@ -173,7 +173,7 @@ MBCSOpen(UCMFile *ucm) {
     }
 
     MBCSInit(mbcsData, ucm);
-    return &mbcsData->newConverter;
+    return (NewConverter *)mbcsData;
 }
 
 static void

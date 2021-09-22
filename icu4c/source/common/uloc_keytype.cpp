@@ -327,12 +327,20 @@ initFromResourceBundle(UErrorCode& sts) {
             }
         }
         if (U_FAILURE(sts)) {
+            if (typeDataMap != NULL) {
+                uhash_close(typeDataMap);
+                typeDataMap = NULL;
+            }
             break;
         }
 
         LocExtKeyData* keyData = gLocExtKeyDataEntries->create();
         if (keyData == NULL) {
             sts = U_MEMORY_ALLOCATION_ERROR;
+            if (typeDataMap != NULL) {
+                uhash_close(typeDataMap);
+                typeDataMap = NULL;
+            }
             break;
         }
         keyData->bcpId = bcpKeyId;

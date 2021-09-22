@@ -778,6 +778,7 @@ ICUService::getDisplayNames(UVector& result,
      */
     int32_t pos = UHASH_FIRST; 
     const UHashElement *entry = NULL;
+    /* coverity[deref_after_free] */
     while ((entry = dnCache->cache.nextElement(pos)) != NULL) {
         const UnicodeString* id = (const UnicodeString*)entry->value.pointer;
         if (matchKey != NULL && !matchKey->isFallbackOf(*id)) {

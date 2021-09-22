@@ -196,6 +196,9 @@ void SpoofImpl::setAllowedLocales(const char *localesList, UErrorCode &status) {
     tmpSet = allowedChars.clone();
     const char *tmpLocalesList = uprv_strdup(localesList);
     if (tmpSet == NULL || tmpLocalesList == NULL) {
+        if (tmpLocalesList != NULL) {
+            uprv_free((void *)tmpLocalesList);
+        }
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }

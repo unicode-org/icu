@@ -637,7 +637,6 @@ extern void
 cleanUpData(void) {
     uprv_free(mappingData);
     utrie_close(sprepTrie);
-    uprv_free(sprepTrie);
 }
 
 #endif /* #if !UCONFIG_NO_IDNA */
