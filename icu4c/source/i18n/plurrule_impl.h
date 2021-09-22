@@ -329,6 +329,9 @@ class U_I18N_API FixedDecimal: public IFixedDecimal, public UObject {
 
     UnicodeString toString() const;
 
+    double doubleValue() const;
+    int64_t longValue() const;
+
     double      source;
     int32_t     visibleDecimalDigitCount;
     int64_t     decimalDigits;

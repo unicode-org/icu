@@ -36,6 +36,8 @@ private:
     void testWithin();
     void testGetAllKeywordValues();
     void testCompactDecimalPluralKeyword();
+    void testDoubleValue();
+    void testLongValue();
     void testScientificPluralKeyword();
     void testOrdinal();
     void testSelect();

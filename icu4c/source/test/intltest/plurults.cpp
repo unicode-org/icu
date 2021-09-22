@@ -57,6 +57,8 @@ void PluralRulesTest::runIndexedTest( int32_t index, UBool exec, const char* &na
     TESTCASE_AUTO(testGetAllKeywordValues);
     TESTCASE_AUTO(testScientificPluralKeyword);
     TESTCASE_AUTO(testCompactDecimalPluralKeyword);
+    TESTCASE_AUTO(testDoubleValue);
+    TESTCASE_AUTO(testLongValue);
     TESTCASE_AUTO(testOrdinal);
     TESTCASE_AUTO(testSelect);
     TESTCASE_AUTO(testSelectRange);
@@ -895,6 +897,94 @@ PluralRulesTest::testCompactDecimalPluralKeyword() {
 
         UnicodeString message(UnicodeString(localeName) + u" " + DoubleToUnicodeString(input));
         assertEquals(message, expectedPluralRuleKeyword, actualPluralRuleKeyword);
+    }
+}
+
+void
+PluralRulesTest::testDoubleValue() {
+    IcuTestErrorCode errorCode(*this, "testDoubleValue");
+
+    struct IntTestCase {
+        const int64_t inputNum;
+        const double expVal;
+    } intCases[] = {
+        {-101, -101.0},
+        {-100, -100.0},
+        {-1,   -1.0},
+        {0,     0.0},
+        {1,     1.0},
+        {100,   100.0}
+    };
+    for (const auto& cas : intCases) {
+        const int64_t inputNum = cas.inputNum;
+        const double expVal = cas.expVal;
+
+        FixedDecimal fd(inputNum);
+        UnicodeString message(u"FixedDecimal::doubleValue() for" + Int64ToUnicodeString(inputNum));
+        assertEquals(message, expVal, fd.doubleValue());
+    }
+
+    struct DoubleTestCase {
+        const double inputNum;
+        const double expVal;
+    } dblCases[] = {
+        {-0.0,     -0.0},
+        {0.1,       0.1},
+        {1.999,     1.999},
+        {2.0,       2.0},
+        {100.001, 100.001}
+    };
+    for (const auto & cas : dblCases) {
+        const double inputNum = cas.inputNum;
+        const double expVal = cas.expVal;
+
+        FixedDecimal fd(inputNum);
+        UnicodeString message(u"FixedDecimal::doubleValue() for" + DoubleToUnicodeString(inputNum));
+        assertEquals(message, expVal, fd.doubleValue());
+    }
+}
+
+void
+PluralRulesTest::testLongValue() {
+    IcuTestErrorCode errorCode(*this, "testLongValue");
+
+    struct IntTestCase {
+        const int64_t inputNum;
+        const int64_t expVal;
+    } intCases[] = {
+        {-101,  101},
+        {-100,  100},
+        {-1,    1},
+        {0,     0},
+        {1,     1},
+        {100,   100}
+    };
+    for (const auto& cas : intCases) {
+        const int64_t inputNum = cas.inputNum;
+        const int64_t expVal = cas.expVal;
+
+        FixedDecimal fd(inputNum);
+        UnicodeString message(u"FixedDecimal::longValue() for" + Int64ToUnicodeString(inputNum));
+        assertEquals(message, expVal, fd.longValue());
+    }
+
+    struct DoubleTestCase {
+        const double inputNum;
+        const int64_t expVal;
+    } dblCases[] = {
+        {-0.0,      0},
+        {0.1,       0},
+        {1.999,     1},
+        {2.0,       2},
+        {100.001,   100}
+    };
+    for (const auto & cas : dblCases) {
+        const double inputNum = cas.inputNum;
+        const int64_t expVal = cas.expVal;
+
+        FixedDecimal fd(inputNum);
+        UnicodeString message(u"FixedDecimal::longValue() for" + DoubleToUnicodeString(inputNum));
+        assertEquals(message, expVal, fd.longValue());
     }
 }
 
