@@ -289,13 +289,35 @@ jobs:
           make -j2 check;
           rm lib/libicudata.so*;
           cp -P stubdata/libicudata.so* lib;
+
           cd test/cintltst;
           echo 'Running ICU4C cintltst with stubdata.';
           # Note: 'Elapsed Time: ' is printed by makefile upon final success.
-          CINTLTST_OPTS=-w make check 2>&1 | grep 'Elapsed Time: ';
+          CINTLTST_OPTS=-w make check 2>&1 | tee stubdata_ctest.log;
+          if ! grep 'Elapsed Time: ' stubdata_ctest.log
+          then
+            echo
+            echo cintltst run with stubdata failed
+            echo
+            echo See
+            echo https://unicode-org.github.io/icu/processes/release/tasks/integration.html#run-tests-without-icu-data
+            echo for how to reproduce and debug the failure
+            exit 1
+          fi
+
           cd ../intltest;
           echo 'Running ICU4C intltest with stubdata.';
-          INTLTEST_OPTS=-w make check 2>&1 | grep 'Elapsed Time: '
+          INTLTEST_OPTS=-w make check 2>&1 | tee stubdata_intltest.log;
+          if ! grep 'Elapsed Time: ' stubdata_intltest.log
+          then
+            echo
+            echo intltest run with stubdata failed
+            echo
+            echo See
+            echo https://unicode-org.github.io/icu/processes/release/tasks/integration.html#run-tests-without-icu-data
+            echo for how to reproduce and debug the failure
+            exit 1
+          fi
 
   # Test U_CHARSET_IS_UTF8
   u-charset-is-utf8-test:
