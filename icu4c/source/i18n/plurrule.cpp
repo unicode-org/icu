@@ -1881,8 +1881,8 @@ void FixedDecimal::adjustForMinFractionDigits(int32_t minFractionDigits) {
 
 double FixedDecimal::getPluralOperand(PluralOperand operand) const {
     switch(operand) {
-        case PLURAL_OPERAND_N: return source;
-        case PLURAL_OPERAND_I: return static_cast<double>(intValue);
+        case PLURAL_OPERAND_N: return (exponent == 0 ? source : source * pow(10, exponent));
+        case PLURAL_OPERAND_I: return (double) longValue();
         case PLURAL_OPERAND_F: return static_cast<double>(decimalDigits);
         case PLURAL_OPERAND_T: return static_cast<double>(decimalDigitsWithoutTrailingZeros);
         case PLURAL_OPERAND_V: return visibleDecimalDigitCount;
@@ -1929,6 +1929,18 @@ UnicodeString FixedDecimal::toString() const {
         snprintf(buffer, sizeof(buffer), pattern, source);
     }
     return UnicodeString(buffer, -1, US_INV);
+}
+
+double FixedDecimal::doubleValue() const {
+    return (isNegative ? -source : source) * pow(10, exponent);
+}
+
+int64_t FixedDecimal::longValue() const {
+    if (exponent == 0) {
+        return intValue;
+    } else {
+        return (long) (pow(10, exponent) * intValue);
+    }
 }
 
 

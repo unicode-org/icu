@@ -688,9 +688,7 @@ public class PluralRules implements Serializable {
             source = isNegative ? -n : n;
             visibleDecimalDigitCount = v;
             decimalDigits = f;
-            integerValue = n > MAX
-                    ? MAX
-                            : (long)n;
+            integerValue = n > MAX ? MAX : (long) source;
             int initExpVal = e;
             if (initExpVal == 0) {
                 initExpVal = c;
@@ -922,15 +920,15 @@ public class PluralRules implements Serializable {
         @Deprecated
         public double getPluralOperand(Operand operand) {
             switch(operand) {
-            case n: return source;
-            case i: return integerValue;
+            case n: return (exponent == 0 ? source : source * Math.pow(10, exponent));
+            case i: return intValue();
             case f: return decimalDigits;
             case t: return decimalDigitsWithoutTrailingZeros;
             case v: return visibleDecimalDigitCount;
             case w: return visibleDecimalDigitCountWithoutTrailingZeros;
             case e: return exponent;
             case c: return exponent;
-            default: return source;
+            default: return doubleValue();
             }
         }
 
@@ -1078,7 +1076,7 @@ public class PluralRules implements Serializable {
         @Deprecated
         public long getShiftedValue() {
             if (exponent != 0 && visibleDecimalDigitCount == 0 && decimalDigits == 0) {
-                // Need to taxe exponent into account if we have it
+                // Need to take exponent into account if we have it
                 return (long)(source * Math.pow(10, exponent));
             }
             return integerValue * baseFactor + decimalDigits;
