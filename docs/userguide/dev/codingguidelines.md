@@ -30,8 +30,8 @@ coding conventions used by ICU programmers in the creation of the ICU library.
 When calling an ICU API function and an error code pointer (C) or reference
 (C++), a `UErrorCode` variable is often passed in. This variable is allocated by
 the caller and must pass the test `U_SUCCESS()` before the function call.
-Otherwise, the function will not work. Normally, an error code variable is
-initialized by `U_ZERO_ERROR`.
+Otherwise, the function will return immediately, taking no action. Normally, an
+error code variable is initialized by `U_ZERO_ERROR`.
 
 `UErrorCode` is passed around and used this way, instead of using C++ exceptions
 for the following reasons:
@@ -39,7 +39,7 @@ for the following reasons:
 * It is useful in the same form for C also
 * Some C++ compilers do not support exceptions
 
-> :point_right: **Note**: *This error code mechanism, in fact, works similar to
+> :point_right: **Note**: *This error code mechanism, in fact, works similarly to
 > exceptions. If users call several ICU functions in a sequence, as soon as one
 > sets a failure code, the functions in the following example will not work. This
 > procedure prevents the API function from processing data that is not valid in
@@ -47,6 +47,10 @@ for the following reasons:
 > code after each call. It is somewhat similar to how an exception terminates a
 > function block or try block early.*
 
+Functions with a UErrorCode parameter will typically check it as the very first
+thing, returning immediately in case of failure. An exception to this general
+rule occurs with functions that adopt, or take ownership of other objects.
+See [Adoption of Objects](#adoption-of-objects) for further information.
 The following code shows the inside of an ICU function implementation:
 
 ```c++
@@ -55,10 +59,10 @@ ubidi_getLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
     int32_t start, length;
 
     if(U_FAILURE(*pErrorCode)) {
-        return NULL;
-    } else if(pBiDi==NULL || (length=pBiDi->length)<=0) {
+        return nullptr;
+    } else if(pBiDi==nullptr || (length=pBiDi->length)<=0) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
+        return nullptr;
     }
 
     ...
@@ -1021,14 +1025,14 @@ defined.
 
 #### Adoption of Objects
 
-Some constructors and factory functions take pointers to objects that they
-adopt. The newly created object contains a pointer to the adoptee and takes over
-ownership and lifecycle control. If an error occurs while creating the new
-object (and thus in the code that adopts an object), then the semantics used
-within ICU must be *adopt-on-call* (as opposed to, for example,
-adopt-on-success):
+Some constructors, factory functions and member functions take pointers to
+objects that are then adopted. The adopting object contains a pointer to the
+adoptee and takes over ownership and lifecycle control. Adoption occurs even if
+an error occurs during the execution of the function, or in the code that adopts
+the object. The semantics used within ICU are *adopt-on-call* (as opposed to,
+for example, adopt-on-success):
 
-* **General**: A constructor or factory function that adopts an object does so
+* **General**: A constructor or function that adopts an object does so
   in all cases, even if an error occurs and a `UErrorCode` is set. This means
   that either the adoptee is deleted immediately or its pointer is stored in
   the new object. The former case is most common when the constructor or
@@ -1038,21 +1042,27 @@ adopt-on-success):
   successful.
 
 * **Constructors**: The code that creates the object with the new operator
-  must check the resulting pointer returned by new and delete any adoptees if
-  it is 0 because the constructor was not called. (Typically, a `UErrorCode`
+  must check the resulting pointer returned by new, deleting any adoptees if
+  it is `nullptr` because the constructor was not called. (Typically, a `UErrorCode`
   must be set to `U_MEMORY_ALLOCATION_ERROR`.)
 
   **Pitfall**: If you allocate/construct via "`ClassName *p = new ClassName(adoptee);`"
-  and the memory allocation failed (`p==NULL`), then the
-  constructor has not been called, the adoptee has not been adopted, and you
-  are still responsible for deleting it!
+  and the memory allocation failed (`p==nullptr`), then the constructor has not
+  been called, the adoptee has not been adopted, and you are still responsible for
+  deleting it!
+
+  To simplify the above checking, ICU's `LocalPointer` class includes a
+  constructor that both takes ownership and reports an error if nullptr. It is
+  intended to be used with other-class constructors that may report a failure via
+  UErrorCode, so that callers need to check only for U_FAILURE(errorCode) and not
+  also separately for isNull().
 
 * **Factory functions (createInstance())**: The factory function must set a
   `U_MEMORY_ALLOCATION_ERROR` and delete any adoptees if it cannot allocate the
   new object. If the construction of the object fails otherwise, then the
   factory function must delete it and the factory function must delete its
   adoptees. As a result, a factory function always returns either a valid
-  object and a successful `UErrorCode`, or a 0 pointer and a failure `UErrorCode`.
+  object and a successful `UErrorCode`, or a nullptr and a failure `UErrorCode`.
   A factory function returns a pointer to an object that must be deleted by
   the user/owner.
 
@@ -1065,17 +1075,21 @@ Calendar::createInstance(TimeZone* zone, UErrorCode& errorCode) {
     LocalPointer<TimeZone> adoptedZone(zone);
     if(U_FAILURE(errorCode)) {
         // The adoptedZone destructor deletes the zone.
-        return NULL;
+        return nullptr;
     }
     // since the Locale isn't specified, use the default locale
-    LocalPointer<Calendar> c(new GregorianCalendar(zone, Locale::getDefault(), errorCode));
-    if(c.isNull()) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        // The adoptedZone destructor deletes the zone. return NULL;
-    } else if(U_FAILURE(errorCode)) {
-        // The c destructor deletes the Calendar.
-        return NULL;
-    } // c adopted the zone. adoptedZone.orphan();
+    LocalPointer<Calendar> c(new GregorianCalendar(zone, Locale::getDefault(), errorCode),
+                             errorCode);    // LocalPointer will set a U_MEMORY_ALLOCATION_ERROR if
+                                            // new GregorianCalendar() returns nullptr.
+    if (c.isValid()) {
+        // c adopted the zone.
+        adoptedZone.orphan();
+    }
+    if (U_FAILURE(errorCode)) {
+        // If c was constructed, then the c destructor deletes the Calendar,
+        // and the Calendar destructor deletes the adopted zone.
+        return nullptr;
+    }
     return c.orphan();
 }
 ```
