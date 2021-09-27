@@ -821,15 +821,19 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
-     * @internal Technical Preview
+     * @internal ICU 70 technology preview
+     * @deprecated This API is for technology preview only.
      */
+    @Deprecated
     public String getApproximatelySignString() {
         return approximatelyString;
     }
 
     /**
-     * @internal Technical Preview
+     * @internal ICU 70 technology preview
+     * @deprecated This API is for technology preview only.
      */
+    @Deprecated
     public void setApproximatelySignString(String approximatelySignString) {
         if (approximatelySignString == null) {
             throw new NullPointerException("The input plus sign is null");
