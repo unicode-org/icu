@@ -1,0 +1,38 @@
+# Copyright (C) 2021 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# GitHub Action continuous integration script for ICU post-merge tasks.
+
+name: GHA ICU Merge CI
+
+on:
+  push:
+    branches:
+      - main	
+      - 'maint/maint*'
+
+jobs:
+
+  # Test ICU4J with little-endian ICU4C data only
+  icu4j-little-endian-data-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+      - name: ICU4J little-endian
+        run: |
+          cd icu4c/source;
+          ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data ./runConfigureICU Linux;
+          make -j2 check;
+          mkdir /tmp/icu4j_data_test;
+          cp -P data/out/tmp/icudt*l* /tmp/icu4j_data_test/
+          cd ../../icu4j;
+          ant clean;
+          ant -Dicu4c.data.path=/tmp/icu4j_data_test check;
