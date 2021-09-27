@@ -6,9 +6,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import com.ibm.icu.util.BytesTrie;
 import com.ibm.icu.util.CharsTrie;

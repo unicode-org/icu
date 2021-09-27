@@ -13,8 +13,6 @@ import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ibm.icu.impl.units.UnitPreferences;
-import com.ibm.icu.impl.units.UnitsData;
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestUtil;
@@ -22,7 +20,9 @@ import com.ibm.icu.impl.Pair;
 import com.ibm.icu.impl.units.ComplexUnitsConverter;
 import com.ibm.icu.impl.units.ConversionRates;
 import com.ibm.icu.impl.units.MeasureUnitImpl;
+import com.ibm.icu.impl.units.UnitPreferences;
 import com.ibm.icu.impl.units.UnitsConverter;
+import com.ibm.icu.impl.units.UnitsData;
 import com.ibm.icu.impl.units.UnitsRouter;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
