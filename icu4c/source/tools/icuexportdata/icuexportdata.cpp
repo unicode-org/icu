@@ -34,6 +34,20 @@ void handleError(ErrorCode& status, const char* context) {
     }
 }
 
+class PropertyValueNameGetter : public ValueNameGetter {
+public:
+    PropertyValueNameGetter(UProperty prop) : property(prop) {}
+    ~PropertyValueNameGetter() override;
+    const char *getName(uint32_t value) override {
+        return u_getPropertyValueName(property, value, U_SHORT_PROPERTY_NAME);
+    }
+
+private:
+    UProperty property;
+};
+
+PropertyValueNameGetter::~PropertyValueNameGetter() {}
+
 void dumpBinaryProperty(UProperty uproperty, FILE* f) {
     IcuToolErrorCode status("icuexportdata: dumpBinaryProperty");
     const char* fullPropName = u_getPropertyName(uproperty, U_LONG_PROPERTY_NAME);
@@ -57,7 +71,8 @@ void dumpEnumeratedProperty(UProperty uproperty, FILE* f) {
     fputs("[[enum_property]]\n", f);
     fprintf(f, "long_name = \"%s\"\n", fullPropName);
     if (shortPropName) fprintf(f, "short_name = \"%s\"\n", shortPropName);
-    usrc_writeUCPMap(f, umap, uproperty, UPRV_TARGET_SYNTAX_TOML);
+    PropertyValueNameGetter valueNameGetter(uproperty);
+    usrc_writeUCPMap(f, umap, &valueNameGetter, UPRV_TARGET_SYNTAX_TOML);
     fputs("\n", f);
 
     U_ASSERT(u_getIntPropertyMinValue(uproperty) >= 0);

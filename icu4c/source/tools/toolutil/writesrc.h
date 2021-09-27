@@ -143,18 +143,32 @@ usrc_writeUnicodeSet(
     const USet *pSet,
     UTargetSyntax syntax);
 
+#ifdef __cplusplus
+
+U_NAMESPACE_BEGIN
+
+class U_TOOLUTIL_API ValueNameGetter {
+public:
+    virtual ~ValueNameGetter();
+    virtual const char *getName(uint32_t value) = 0;
+};
+
+U_NAMESPACE_END
+
 /**
  * Writes the UCPMap ranges list.
  *
- * The "uproperty" argument is optional; ignored if UCHAR_INVALID_CODE. If present, it will be used
- * to look up the property value name strings.
+ * The "valueNameGetter" argument is optional; ignored if nullptr.
+ * If present, it will be used to look up value name strings.
  */
 U_CAPI void U_EXPORT2
 usrc_writeUCPMap(
     FILE *f,
     const UCPMap *pMap,
-    UProperty uproperty,
+    icu::ValueNameGetter *valueNameGetter,
     UTargetSyntax syntax);
+
+#endif  // __cplusplus
 
 /**
  * Writes the contents of an array of mostly invariant characters.

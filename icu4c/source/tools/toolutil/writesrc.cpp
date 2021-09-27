@@ -32,6 +32,12 @@
 #include "writesrc.h"
 #include "util.h"
 
+U_NAMESPACE_BEGIN
+
+ValueNameGetter::~ValueNameGetter() {}
+
+U_NAMESPACE_END
+
 U_NAMESPACE_USE
 
 static FILE *
@@ -401,7 +407,7 @@ U_CAPI void U_EXPORT2
 usrc_writeUCPMap(
         FILE *f,
         const UCPMap *pMap,
-        UProperty uproperty,
+        icu::ValueNameGetter *valueNameGetter,
         UTargetSyntax syntax) {
     // ccode is not yet supported
     U_ASSERT(syntax == UPRV_TARGET_SYNTAX_TOML);
@@ -413,9 +419,9 @@ usrc_writeUCPMap(
     fprintf(f, "# Code points `a` through `b` have value `v`, corresponding to `name`.\n");
     fprintf(f, "ranges = [\n");
     while ((end = ucpmap_getRange(pMap, start, UCPMAP_RANGE_NORMAL, 0, nullptr, nullptr, &value)) >= 0) {
-        if (uproperty != UCHAR_INVALID_CODE) {
-            const char* short_name = u_getPropertyValueName(uproperty, value, U_SHORT_PROPERTY_NAME);
-            fprintf(f, "  {a=0x%x, b=0x%x, v=%u, name=\"%s\"},\n", start, end, value, short_name);
+        if (valueNameGetter != nullptr) {
+            const char *name = valueNameGetter->getName(value);
+            fprintf(f, "  {a=0x%x, b=0x%x, v=%u, name=\"%s\"},\n", start, end, value, name);
         } else {
             fprintf(f, "  {a=0x%x, b=0x%x, v=%u},\n", start, end, value);
         }

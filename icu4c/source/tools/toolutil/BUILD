@@ -54,7 +54,11 @@ cc_library(
     local_defines = [
         "U_TOOLUTIL_IMPLEMENTATION",
     ],
-    deps = ["//icu4c/source/common:platform"],
+    deps = [
+        "//icu4c/source/common:bytestream",
+        "//icu4c/source/common:platform",
+        "//icu4c/source/common:uniset_core",
+    ],
 )
 
 cc_library(
