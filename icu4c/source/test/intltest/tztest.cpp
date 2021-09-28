@@ -153,10 +153,13 @@ TimeZoneTest::TestGenericAPI()
     const char* tzver = TimeZone::getTZDataVersion(status);
     if (U_FAILURE(status)) {
         errcheckln(status, "FAIL: getTZDataVersion failed - %s", u_errorName(status));
-    } else if (uprv_strlen(tzver) != 5 /* 4 digits + 1 letter */) {
-        errln((UnicodeString)"FAIL: getTZDataVersion returned " + tzver);
     } else {
-        logln((UnicodeString)"tzdata version: " + tzver);
+        int32_t tzverLen = uprv_strlen(tzver);
+        if (tzverLen == 5 || tzverLen == 6 /* 4 digits + 1 or 2 letters */) {
+            logln((UnicodeString)"tzdata version: " + tzver);
+        } else {
+            errln((UnicodeString)"FAIL: getTZDataVersion returned " + tzver);
+        }
     }
 }
 

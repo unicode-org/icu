@@ -550,10 +550,10 @@ public class TimeZoneTest extends TestFmwk
 
 
         String tzver = TimeZone.getTZDataVersion();
-        if (tzver.length() != 5 /* 4 digits + 1 letter */) {
-            errln("FAIL: getTZDataVersion returned " + tzver);
-        } else {
+        if (tzver != null && (tzver.length() == 5 || tzver.length() == 6) /* 4 digits + 1 or 2 letters */ ) {
             logln("PASS: tzdata version: " + tzver);
+        } else {
+            errln("FAIL: getTZDataVersion returned " + tzver);
         }
     }
 
