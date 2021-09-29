@@ -527,6 +527,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected UResourceBundle findTopLevel(String aKey) {
         // NOTE: this only works for top-level resources.  For resources at lower
         // levels, it fails when you fall back to the parent, since you're now
@@ -593,6 +594,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected UResourceBundle findTopLevel(int index) {
         // NOTE: this _barely_ works for top-level resources.  For resources at lower
         // levels, it fails when you fall back to the parent, since you're now
@@ -629,6 +631,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      */
     @Override
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public Set<String> keySet() {
         // TODO: Java 6 ResourceBundle has keySet() which calls handleKeySet()
         // and caches the results.
@@ -681,6 +684,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      */
     @Override
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected Set<String> handleKeySet() {
         return Collections.emptySet();
     }
@@ -907,6 +911,7 @@ public abstract class UResourceBundle extends ResourceBundle {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected boolean isTopLevelResource() {
         return true;
     }

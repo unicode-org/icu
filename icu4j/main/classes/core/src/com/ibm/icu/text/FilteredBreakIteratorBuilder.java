@@ -108,6 +108,7 @@ public abstract class FilteredBreakIteratorBuilder {
      * @deprecated internal to ICU
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected FilteredBreakIteratorBuilder() {
     }
 }

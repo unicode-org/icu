@@ -800,6 +800,7 @@ public final class BytesTrie implements Cloneable, Iterable<BytesTrie.Entry> {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static int jumpByDelta(byte[] bytes, int pos) {
         int delta=bytes[pos++]&0xff;
         if(delta<kMinTwoByteDeltaLead) {

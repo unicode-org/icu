@@ -249,6 +249,7 @@ public final class CopticCalendar extends CECalendar
      */
     @Override
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int handleGetExtendedYear() {
         int eyear;
         if (newerField(EXTENDED_YEAR, YEAR) == EXTENDED_YEAR) {
@@ -272,6 +273,7 @@ public final class CopticCalendar extends CECalendar
      */
     @Override
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected void handleComputeFields(int julianDay) {
         int era, year;
         int[] fields = new int[3];
@@ -304,6 +306,7 @@ public final class CopticCalendar extends CECalendar
      */
     @Override
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int getJDEpochOffset() {
         return JD_EPOCH_OFFSET;
     }

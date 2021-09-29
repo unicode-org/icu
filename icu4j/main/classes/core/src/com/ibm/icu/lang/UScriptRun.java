@@ -52,6 +52,7 @@ import com.ibm.icu.text.UTF16;
  * @deprecated This API is ICU internal only.
  */
 @Deprecated
+@aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
 public final class UScriptRun
 {
     /**
@@ -62,6 +63,7 @@ public final class UScriptRun
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public UScriptRun()
     {
         char[] nullChars = null;
@@ -79,6 +81,7 @@ public final class UScriptRun
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public UScriptRun(String text)
     {
         reset (text);
@@ -96,6 +99,7 @@ public final class UScriptRun
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public UScriptRun(String text, int start, int count)
     {
         reset(text, start, count);
@@ -111,6 +115,7 @@ public final class UScriptRun
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public UScriptRun(char[] chars)
     {
         reset(chars);
@@ -128,6 +133,7 @@ public final class UScriptRun
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public UScriptRun(char[] chars, int start, int count)
     {
         reset(chars, start, count);
@@ -141,6 +147,7 @@ public final class UScriptRun
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public final void reset()
     {
         // empty any old parenStack contents.
@@ -173,6 +180,7 @@ public final class UScriptRun
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public final void reset(int start, int count)
     throws IllegalArgumentException
     {
@@ -205,6 +213,7 @@ public final class UScriptRun
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public final void reset(char[] chars, int start, int count)
     {
         if (chars == null) {
@@ -226,6 +235,7 @@ public final class UScriptRun
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public final void reset(char[] chars)
     {
         int length = 0;
@@ -250,6 +260,7 @@ public final class UScriptRun
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public final void reset(String str, int start, int count)
     {
         char[] chars = null;
@@ -271,6 +282,7 @@ public final class UScriptRun
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public final void reset(String str)
     {
         int length   = 0;
@@ -293,6 +305,7 @@ public final class UScriptRun
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public final int getScriptStart()
     {
         return scriptStart;
@@ -307,6 +320,7 @@ public final class UScriptRun
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public final int getScriptLimit()
     {
         return scriptLimit;
@@ -322,6 +336,7 @@ public final class UScriptRun
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public final int getScriptCode()
     {
         return scriptCode;
@@ -337,6 +352,7 @@ public final class UScriptRun
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public final boolean next()
     {
         // if we've fallen off the end of the text, we're done

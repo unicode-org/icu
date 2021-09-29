@@ -240,6 +240,7 @@ public class JapaneseCalendar extends GregorianCalendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static boolean enableTentativeEra() {
         // Although start date of next Japanese era is planned ahead, a name of
         // new era might not be available. This implementation allows tester to
@@ -452,6 +453,7 @@ public class JapaneseCalendar extends GregorianCalendar {
      */
     @Override
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public boolean haveDefaultCentury() {
         return false;
     }

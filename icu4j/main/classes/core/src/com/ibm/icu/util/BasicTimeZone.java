@@ -608,6 +608,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static int getLocalOptionValue(LocalOption locOpt) {
         return locOpt.flagVal;
     }
@@ -618,6 +619,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static final int LOCAL_STD = 0x01;
 
     /**
@@ -626,6 +628,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static final int LOCAL_DST = 0x03;
 
     /**
@@ -634,6 +637,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static final int LOCAL_FORMER = 0x04;
 
     /**
@@ -642,6 +646,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static final int LOCAL_LATTER = 0x0C;
 
     /**
@@ -650,6 +655,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static final int STD_DST_MASK = 0x03;
 
     /**
@@ -658,6 +664,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static final int FORMER_LATTER_MASK = 0x0C;
 
     /**
@@ -683,6 +690,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected BasicTimeZone(String ID) {
         super(ID);
     }

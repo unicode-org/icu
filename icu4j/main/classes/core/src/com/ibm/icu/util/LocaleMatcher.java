@@ -596,6 +596,7 @@ public final class LocaleMatcher {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public Builder internalSetThresholdDistance(int thresholdDistance) {
             if (thresholdDistance > 100) {
                 thresholdDistance = 100;

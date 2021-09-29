@@ -439,6 +439,7 @@ public abstract class TimeZoneNames implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public void loadAllDisplayNames() {}
 
     /**
@@ -446,6 +447,7 @@ public abstract class TimeZoneNames implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public void getDisplayNames(String tzID, NameType[] types, long date,
             String[] dest, int destOffset) {
         if (tzID == null || tzID.length() == 0) {
@@ -480,6 +482,7 @@ public abstract class TimeZoneNames implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static abstract class Factory {
         /**
          * The factory method of <code>TimeZoneNames</code>.
@@ -491,6 +494,7 @@ public abstract class TimeZoneNames implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public abstract TimeZoneNames getTimeZoneNames(ULocale locale);
 
         /**
@@ -499,6 +503,7 @@ public abstract class TimeZoneNames implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         protected Factory() {
         }
     }

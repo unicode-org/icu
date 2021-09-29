@@ -772,7 +772,7 @@
         <!-- baseline -->
         <java classname="com.ibm.icu.dev.tool.bnd.BaselineCheck" failonerror="true">
             <arg value="--packageReport"/>
-            <arg value="--failOnError"/>
+            <arg value="--failPackageMismatch"/>
             <arg value="${icu4j.jar.file}"/>
             <arg value="${bnd.baseline.jar}"/>
             <classpath>

@@ -2251,7 +2251,8 @@ public class DecimalFormat extends NumberFormat {
    * @deprecated This API is ICU internal only.
    */
   @Deprecated
-public synchronized void setParseStrictMode(ParseMode parseMode) {
+  @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
+  public synchronized void setParseStrictMode(ParseMode parseMode) {
     properties.setParseMode(parseMode);
     refreshFormatter();
   }
@@ -2544,6 +2545,7 @@ public synchronized void setParseStrictMode(ParseMode parseMode) {
    * @deprecated This API is ICU internal only.
    */
   @Deprecated
+  @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
   public IFixedDecimal getFixedDecimal(double number) {
     return formatter.format(number).getFixedDecimal();
   }
@@ -2645,6 +2647,7 @@ public synchronized void setParseStrictMode(ParseMode parseMode) {
    * @deprecated This API is ICU internal only.
    */
   @Deprecated
+  @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
   public synchronized void setProperties(PropertySetter func) {
     func.set(properties);
     refreshFormatter();
@@ -2655,12 +2658,14 @@ public synchronized void setParseStrictMode(ParseMode parseMode) {
    * @deprecated This API is ICU internal only.
    */
   @Deprecated
+  @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
   public static interface PropertySetter {
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public void set(DecimalFormatProperties props);
   }
 

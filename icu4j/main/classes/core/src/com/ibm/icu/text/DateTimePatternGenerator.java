@@ -117,6 +117,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static DateTimePatternGenerator getFrozenInstance(ULocale uLocale) {
         String localeKey = uLocale.toString();
         DateTimePatternGenerator result = DTPNG_CACHE.get(localeKey);
@@ -143,6 +144,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static DateTimePatternGenerator getInstanceNoStdPat(ULocale uLocale) {
         DateTimePatternGenerator result = new DateTimePatternGenerator();
         result.initData(uLocale, true);
@@ -491,6 +493,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public char getDefaultHourFormatChar() {
         return defaultHourFormatChar;
     }
@@ -500,6 +503,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public void setDefaultHourFormatChar(char defaultHourFormatChar) {
         this.defaultHourFormatChar = defaultHourFormatChar;
     }
@@ -580,6 +584,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static int getAppendFormatNumber(UResource.Key key) {
         for (int i = 0; i < CLDR_FIELD_APPEND.length; ++i) {
             if (key.contentEquals(CLDR_FIELD_APPEND[i])) {
@@ -594,6 +599,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static int getAppendFormatNumber(String string) {
         for (int i = 0; i < CLDR_FIELD_APPEND.length; ++i) {
             if (CLDR_FIELD_APPEND[i].equals(string)) {
@@ -811,6 +817,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public DateTimePatternGenerator addPatternWithSkeleton(String pattern, String skeletonToUse, boolean override, PatternInfo returnInfo) {
         checkFrozen();
         DateTimeMatcher matcher;
@@ -880,6 +887,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String getSkeletonAllowingDuplicates(String pattern) {
         synchronized (this) { // synchronized since a getter must be thread-safe
             current.set(pattern, fp, true);
@@ -897,6 +905,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String getCanonicalSkeletonAllowingDuplicates(String pattern) {
         synchronized (this) { // synchronized since a getter must be thread-safe
             current.set(pattern, fp, true);
@@ -1073,6 +1082,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public Collection<String> getRedundants(Collection<String> output) {
         synchronized (this) { // synchronized since a getter must be thread-safe
             if (output == null) {
@@ -1231,6 +1241,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         private static int COUNT = DisplayWidth.values().length;
         private final String cldrKey;
         DisplayWidth(String cldrKey) {
@@ -1273,6 +1284,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static final int MATCH_MINUTE_FIELD_LENGTH = 1 << MINUTE;
 
     /**
@@ -1281,6 +1293,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static final int MATCH_SECOND_FIELD_LENGTH = 1 << SECOND;
 
     /**
@@ -1380,6 +1393,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     private void setFieldDisplayName(int field, DisplayWidth width, String value) {
         checkFrozen();
         if (field < TYPE_LIMIT && field >= 0) {
@@ -1412,6 +1426,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static boolean isSingleField(String skeleton) {
         char first = skeleton.charAt(0);
         for (int i = 1; i < skeleton.length(); ++i) {
@@ -1514,6 +1529,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static class VariableField {
         private final String string;
         private final int canonicalIndex;
@@ -1525,6 +1541,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public VariableField(String string) {
             this(string, false);
         }
@@ -1537,6 +1554,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public VariableField(String string, boolean strict) {
             canonicalIndex = DateTimePatternGenerator.getCanonicalIndex(string, strict);
             if (canonicalIndex < 0) {
@@ -1555,6 +1573,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public int getType() {
             return types[canonicalIndex][1];
         }
@@ -1564,6 +1583,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public static String getCanonicalCode(int type) {
             try {
                 return CANONICAL_ITEMS[type];
@@ -1578,6 +1598,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public boolean isNumeric() {
             return types[canonicalIndex][2] > 0;
         }
@@ -1596,6 +1617,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
          */
         @Override
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public String toString() {
             return string;
         }
@@ -1628,6 +1650,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     static public class FormatParser {
         private static final UnicodeSet SYNTAX_CHARS = new UnicodeSet("[a-zA-Z]").freeze();
         private static final UnicodeSet QUOTING_CHARS = new UnicodeSet("[[[:script=Latn:][:script=Cyrl:]]&[[:L:][:M:]]]").freeze();
@@ -1643,6 +1666,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public FormatParser() {
         }
 
@@ -1654,6 +1678,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         final public FormatParser set(String string) {
             return set(string, false);
         }
@@ -1667,6 +1692,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public FormatParser set(String string, boolean strict) {
             items.clear();
             if (string.length() == 0) return this;
@@ -1747,6 +1773,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public List<Object> getItems() {
             return items;
         }
@@ -1758,6 +1785,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
          */
         @Override
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public String toString() {
             return toString(0, items.size());
         }
@@ -1771,6 +1799,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public String toString(int start, int limit) {
             StringBuilder result = new StringBuilder();
             for (int i = start; i < limit; ++i) {
@@ -1792,6 +1821,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public boolean hasDateAndTimeFields() {
             int foundMask = 0;
             for (Object item : items) {
@@ -1904,6 +1934,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public Object quoteLiteral(String string) {
             return tokenizer.quoteLiteral(string);
         }
@@ -1927,6 +1958,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public boolean skeletonsAreSimilar(String id, String skeleton) {
         if (id.equals(skeleton)) {
             return true; // fast path
@@ -2273,6 +2305,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String getFields(String pattern) {
         fp.set(pattern);
         StringBuilder newPattern = new StringBuilder();

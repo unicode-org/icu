@@ -5258,6 +5258,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static int getPropertyValueEnumNoThrow(int property, CharSequence valueAlias) {
         return UPropertyAliases.INSTANCE.getPropertyValueEnumNoThrow(property, valueAlias);
     }
@@ -6000,6 +6001,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     ///CLOVER:OFF
     public static String getStringPropertyValue(int propertyEnum, int codepoint, int nameChoice) {
         if ((propertyEnum >= UProperty.BINARY_START && propertyEnum < UProperty.BINARY_LIMIT) ||

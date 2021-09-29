@@ -382,6 +382,7 @@ public class DateIntervalFormat extends UFormat {
          */
         @Deprecated
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         protected Object readResolve() throws InvalidObjectException {
             if (this.getName().equals(DATE_INTERVAL_SPAN.getName()))
                 return DATE_INTERVAL_SPAN;
@@ -514,6 +515,7 @@ public class DateIntervalFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public DateIntervalFormat(String skeleton, DateIntervalInfo dtItvInfo,
                                SimpleDateFormat simpleDateFormat)
     {
@@ -823,6 +825,7 @@ public class DateIntervalFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String getPatterns(Calendar fromCalendar,
             Calendar toCalendar,
             Output<String> part2) {
@@ -1185,6 +1188,7 @@ public class DateIntervalFormat extends UFormat {
      */
     @Override
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public Object parseObject(String source, ParsePosition parse_pos)
     {
         throw new UnsupportedOperationException("parsing is not supported");
@@ -2318,6 +2322,7 @@ public class DateIntervalFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public Map<String, PatternInfo> getRawPatterns() {
         // this is unmodifiable, so ok to return directly
         return fIntervalPatterns;

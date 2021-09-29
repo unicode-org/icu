@@ -224,6 +224,7 @@ public abstract class LocaleDisplayNames {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String scriptDisplayNameInContext(String script) {
         return scriptDisplayName(script);
     }
@@ -412,6 +413,7 @@ public abstract class LocaleDisplayNames {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected LocaleDisplayNames() {
     }
 

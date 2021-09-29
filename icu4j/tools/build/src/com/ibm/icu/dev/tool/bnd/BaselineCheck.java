@@ -25,7 +25,8 @@ import aQute.libg.reporter.ReporterAdapter;
 public class BaselineCheck {
 
     public static void main(String... args) throws Exception {
-        boolean argFailOnError = false;
+        boolean argFailPackageMismatch = false;
+        boolean argFailBundleMismatch = false;
         boolean argPackageReport = false;
         boolean argBundleReport = false;
         String argDiffIgnore = "";
@@ -40,8 +41,11 @@ public class BaselineCheck {
             for (int i = 0; i < args.length - 2; i++) {
                 String arg = args[i];
                 switch (arg) {
-                    case "--failOnError":
-                        argFailOnError = true;
+                    case "--failPackageMismatch":
+                        argFailPackageMismatch = true;
+                        break;
+                    case "--failBundleMismatch":
+                        argFailBundleMismatch = true;
                         break;
                     case "--packageReport":
                         argPackageReport = true;
@@ -70,7 +74,7 @@ public class BaselineCheck {
             }
         }
 
-        BaselineCheck baselineCheck = new BaselineCheck(argFailOnError, argPackageReport, argBundleReport, argDiffIgnore, argDiffPackages);
+        BaselineCheck baselineCheck = new BaselineCheck(argFailPackageMismatch, argFailBundleMismatch, argPackageReport, argBundleReport, argDiffIgnore, argDiffPackages);
         File newJar = new File(args[args.length - 2]);
         File oldJar = new File(args[args.length - 1]);
 
@@ -80,15 +84,19 @@ public class BaselineCheck {
         }
     }
 
+    private final boolean argFailPackageMismatch;
+    private final boolean argFailBundleMismatch;
     private final boolean failOnError;
     private final boolean packageReport;
     private final boolean bundleReport;
     private final String diffIgnores;
     private final String diffPackages;
 
-    private BaselineCheck(boolean failOnMissing, boolean packageReport, boolean bundleReport, String diffIgnores,
+    private BaselineCheck(boolean argFailPackageMismatch, boolean argFailBundleMismatch, boolean packageReport, boolean bundleReport, String diffIgnores,
         String diffPackages) {
-        this.failOnError = failOnMissing;
+        this.argFailPackageMismatch = argFailPackageMismatch;
+        this.argFailBundleMismatch = argFailBundleMismatch;
+        this.failOnError = argFailPackageMismatch || argFailBundleMismatch;
         this.packageReport = packageReport;
         this.bundleReport = bundleReport;
         this.diffIgnores = diffIgnores;
@@ -132,7 +140,7 @@ public class BaselineCheck {
 
             for (Baseline.Info info : baseline.baseline(newer, older, diffpackages)) {
                 if (info.mismatch) {
-                    failed = true;
+                    failed = argFailPackageMismatch;
                     sb.setLength(0);
                     f.format(
                         "Baseline mismatch for package %s, %s change. Current is %s, repo is %s, suggest %s or %s",
@@ -153,7 +161,7 @@ public class BaselineCheck {
             Baseline.BundleInfo binfo = baseline.getBundleInfo();
 
             if (binfo.mismatch) {
-                failed = true;
+                failed = argFailBundleMismatch;
                 sb.setLength(0);
                 f.format("The bundle version change (%s to %s) is too low, the new version must be at least %s",
                     binfo.olderVersion, binfo.newerVersion, binfo.suggestedVersion);

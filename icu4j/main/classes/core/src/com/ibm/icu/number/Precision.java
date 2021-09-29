@@ -359,6 +359,7 @@ public abstract class Precision {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public Precision withMode(MathContext mathContext) {
         if (this.mathContext.equals(mathContext)) {
             return this;
@@ -376,6 +377,7 @@ public abstract class Precision {
      * @deprecated ICU 60 This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public abstract void apply(DecimalQuantity value);
 
     //////////////////////////
@@ -387,6 +389,7 @@ public abstract class Precision {
      * @deprecated ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static final BogusRounder BOGUS_PRECISION = new BogusRounder();
 
     static final InfiniteRounderImpl NONE = new InfiniteRounderImpl();
@@ -577,6 +580,7 @@ public abstract class Precision {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static class BogusRounder extends Precision {
         /**
          * Default constructor.
@@ -584,6 +588,7 @@ public abstract class Precision {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public BogusRounder() {
         }
 
@@ -594,6 +599,7 @@ public abstract class Precision {
          */
         @Override
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public void apply(DecimalQuantity value) {
             throw new AssertionError("BogusRounder must not be applied");
         }
@@ -612,6 +618,7 @@ public abstract class Precision {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public Precision into(Precision precision) {
             Precision copy = precision.createCopy();
             copy.mathContext = mathContext;

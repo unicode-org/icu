@@ -193,6 +193,7 @@ public class PluralRules implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static abstract class Factory {
         /**
          * Sole constructor
@@ -200,6 +201,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         protected Factory() {
         }
 
@@ -221,6 +223,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public abstract PluralRules forLocale(ULocale locale, PluralType type);
 
         /**
@@ -231,6 +234,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public final PluralRules forLocale(ULocale locale) {
             return forLocale(locale, PluralType.CARDINAL);
         }
@@ -242,6 +246,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public abstract ULocale[] getAvailableULocales();
 
         /**
@@ -261,6 +266,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public abstract ULocale getFunctionalEquivalent(ULocale locale, boolean[] isAvailable);
 
         /**
@@ -269,6 +275,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public static PluralRulesLoader getDefaultFactory() {
             return PluralRulesLoader.loader;
         }
@@ -279,6 +286,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public abstract boolean hasOverride(ULocale locale);
     }
     // Standard keywords.
@@ -404,6 +412,7 @@ public class PluralRules implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static PluralRules newInternal(String description, StandardPluralRanges ranges)
             throws ParseException {
         description = description.trim();
@@ -425,6 +434,7 @@ public class PluralRules implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static enum Operand {
         /**
          * The double value of the entire number.
@@ -433,6 +443,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         n,
 
         /**
@@ -442,6 +453,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         i,
 
         /**
@@ -451,6 +463,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         f,
 
         /**
@@ -460,6 +473,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         t,
 
         /**
@@ -469,6 +483,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         v,
 
         /**
@@ -478,6 +493,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         w,
 
         /**
@@ -488,6 +504,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         e,
 
         /**
@@ -501,6 +518,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         c,
 
         /**
@@ -516,6 +534,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         j;
     }
 
@@ -526,6 +545,7 @@ public class PluralRules implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static interface IFixedDecimal {
         /**
          * Returns the value corresponding to the specified operand (n, i, f, t, v, or w).
@@ -535,6 +555,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public double getPluralOperand(Operand operand);
 
         /**
@@ -542,6 +563,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public boolean isNaN();
 
         /**
@@ -549,6 +571,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public boolean isInfinite();
 
         /**
@@ -557,6 +580,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public boolean isHasIntegerValue();
     }
 
@@ -565,6 +589,7 @@ public class PluralRules implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static class FixedDecimal extends Number implements Comparable<FixedDecimal>, IFixedDecimal {
         private static final long serialVersionUID = -4756200506571685661L;
 
@@ -593,6 +618,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public double getSource() {
             return source;
         }
@@ -602,6 +628,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public int getVisibleDecimalDigitCount() {
             return visibleDecimalDigitCount;
         }
@@ -611,6 +638,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public int getVisibleDecimalDigitCountWithoutTrailingZeros() {
             return visibleDecimalDigitCountWithoutTrailingZeros;
         }
@@ -620,6 +648,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public long getDecimalDigits() {
             return decimalDigits;
         }
@@ -629,6 +658,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public long getDecimalDigitsWithoutTrailingZeros() {
             return decimalDigitsWithoutTrailingZeros;
         }
@@ -638,6 +668,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public long getIntegerValue() {
             return integerValue;
         }
@@ -648,6 +679,7 @@ public class PluralRules implements Serializable {
          */
         @Deprecated
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public boolean isHasIntegerValue() {
             return hasIntegerValue;
         }
@@ -657,6 +689,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public boolean isNegative() {
             return isNegative;
         }
@@ -666,6 +699,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public int getBaseFactor() {
             return baseFactor;
         }
@@ -683,6 +717,7 @@ public class PluralRules implements Serializable {
          * @param c Currently: an alias for param `e`
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public FixedDecimal(double n, int v, long f, int e, int c) {
             isNegative = n < 0;
             source = isNegative ? -n : n;
@@ -731,6 +766,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public FixedDecimal(double n, int v, long f, int e) {
             this(n, v, f, e, e);
         }
@@ -740,6 +776,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public FixedDecimal(double n, int v, long f) {
             this(n, v, f, 0);
         }
@@ -749,6 +786,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public static FixedDecimal createWithExponent(double n, int v, int e) {
             return new FixedDecimal(n,v,getFractionalDigits(n, v), e);
         }
@@ -758,6 +796,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public FixedDecimal(double n, int v) {
             this(n,v,getFractionalDigits(n, v));
         }
@@ -780,6 +819,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public FixedDecimal(double n) {
             this(n, decimals(n));
         }
@@ -789,6 +829,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public FixedDecimal(long n) {
             this(n,0);
         }
@@ -803,6 +844,7 @@ public class PluralRules implements Serializable {
          *
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public static int decimals(double n) {
             // Ugly...
             if (Double.isInfinite(n) || Double.isNaN(n)) {
@@ -850,6 +892,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         private FixedDecimal (FixedDecimal other) {
             // Ugly, but necessary, because constructors must only call other
             // constructors in the first line of the body, and
@@ -873,6 +916,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public FixedDecimal (String n) {
             // Ugly, but for samples we don't care.
             this(parseDecimalSampleRangeNumString(n));
@@ -883,6 +927,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         private static FixedDecimal parseDecimalSampleRangeNumString(String num) {
             if (num.contains("e") || num.contains("c")) {
                 int ePos = num.lastIndexOf('e');
@@ -920,6 +965,7 @@ public class PluralRules implements Serializable {
          */
         @Override
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public double getPluralOperand(Operand operand) {
             switch(operand) {
             case n: return source;
@@ -939,6 +985,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public static Operand getOperand(String t) {
             return Operand.valueOf(t);
         }
@@ -950,6 +997,7 @@ public class PluralRules implements Serializable {
          */
         @Override
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public int compareTo(FixedDecimal other) {
             if (exponent != other.exponent) {
                 return doubleValue() < other.doubleValue() ? -1 : 1;
@@ -976,6 +1024,7 @@ public class PluralRules implements Serializable {
          */
         @Deprecated
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public boolean equals(Object arg0) {
             if (arg0 == null) {
                 return false;
@@ -997,6 +1046,7 @@ public class PluralRules implements Serializable {
          */
         @Deprecated
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public int hashCode() {
             // TODO Auto-generated method stub
             return (int)(decimalDigits + 37 * (visibleDecimalDigitCount + (int)(37 * source)));
@@ -1008,6 +1058,7 @@ public class PluralRules implements Serializable {
          */
         @Deprecated
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public String toString() {
             String baseString = String.format(Locale.ROOT, "%." + visibleDecimalDigitCount + "f", source);
             if (exponent != 0) {
@@ -1022,6 +1073,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public boolean hasIntegerValue() {
             return hasIntegerValue;
         }
@@ -1032,6 +1084,7 @@ public class PluralRules implements Serializable {
          */
         @Deprecated
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public int intValue() {
             // TODO Auto-generated method stub
             return (int) longValue();
@@ -1043,6 +1096,7 @@ public class PluralRules implements Serializable {
          */
         @Deprecated
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public long longValue() {
             if (exponent == 0) {
                 return integerValue;
@@ -1057,6 +1111,7 @@ public class PluralRules implements Serializable {
          */
         @Deprecated
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public float floatValue() {
             return (float) (source * Math.pow(10, exponent));
         }
@@ -1067,6 +1122,7 @@ public class PluralRules implements Serializable {
          */
         @Deprecated
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public double doubleValue() {
             return (isNegative ? -source : source) * Math.pow(10, exponent);
         }
@@ -1076,6 +1132,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public long getShiftedValue() {
             return integerValue * baseFactor + decimalDigits;
         }
@@ -1099,6 +1156,7 @@ public class PluralRules implements Serializable {
          */
         @Deprecated
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public boolean isNaN() {
             return Double.isNaN(source);
         }
@@ -1111,6 +1169,7 @@ public class PluralRules implements Serializable {
          */
         @Deprecated
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public boolean isInfinite() {
             return Double.isInfinite(source);
         }
@@ -1122,18 +1181,21 @@ public class PluralRules implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public enum SampleType {
         /**
          * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         INTEGER,
         /**
          * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         DECIMAL
     }
 
@@ -1143,24 +1205,28 @@ public class PluralRules implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static class FixedDecimalRange {
         /**
          * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public final FixedDecimal start;
         /**
          * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public final FixedDecimal end;
         /**
          * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public FixedDecimalRange(FixedDecimal start, FixedDecimal end) {
             if (start.visibleDecimalDigitCount != end.visibleDecimalDigitCount) {
                 throw new IllegalArgumentException("Ranges must have the same number of visible decimals: " + start + "~" + end);
@@ -1174,6 +1240,7 @@ public class PluralRules implements Serializable {
          */
         @Deprecated
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public String toString() {
             return start + (end == start ? "" : "~" + end);
         }
@@ -1185,24 +1252,28 @@ public class PluralRules implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static class FixedDecimalSamples {
         /**
          * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public final SampleType sampleType;
         /**
          * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public final Set<FixedDecimalRange> samples;
         /**
          * @internal CLDR
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public final boolean bounded;
         /**
          * The samples must be immutable.
@@ -1273,6 +1344,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public Set<Double> addSamples(Set<Double> result) {
             for (FixedDecimalRange item : samples) {
                 // we have to convert to longs so we don't get strange double issues
@@ -1292,6 +1364,7 @@ public class PluralRules implements Serializable {
          */
         @Deprecated
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public String toString() {
             StringBuilder b = new StringBuilder("@").append(sampleType.toString().toLowerCase(Locale.ENGLISH));
             boolean first = true;
@@ -1314,6 +1387,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public Set<FixedDecimalRange> getSamples() {
             return samples;
         }
@@ -1323,6 +1397,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public void getStartEndSamples(Set<FixedDecimal> target) {
             for (FixedDecimalRange item : samples) {
                 target.add(item.start);
@@ -2231,6 +2306,7 @@ public class PluralRules implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String select(double number, int countVisibleFractionDigits, long fractionaldigits) {
         return rules.select(new FixedDecimal(number, countVisibleFractionDigits, fractionaldigits));
     }
@@ -2245,6 +2321,7 @@ public class PluralRules implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String select(IFixedDecimal number) {
         return rules.select(number);
     }
@@ -2258,6 +2335,7 @@ public class PluralRules implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public boolean matches(FixedDecimal sample, String keyword) {
         return rules.select(sample, keyword);
     }
@@ -2315,6 +2393,7 @@ public class PluralRules implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public Collection<Double> getAllKeywordValues(String keyword, SampleType type) {
         if (!isLimited(keyword, type)) {
             return null;
@@ -2352,6 +2431,7 @@ public class PluralRules implements Serializable {
      * @deprecated ICU internal only
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public Collection<Double> getSamples(String keyword, SampleType sampleType) {
         if (!keywords.contains(keyword)) {
             return null;
@@ -2413,6 +2493,7 @@ public class PluralRules implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public FixedDecimalSamples getDecimalSamples(String keyword, SampleType sampleType) {
         return rules.getDecimalSamples(keyword, sampleType);
     }
@@ -2551,6 +2632,7 @@ public class PluralRules implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public KeywordStatus getKeywordStatus(String keyword, int offset, Set<Double> explicits,
             Output<Double> uniqueValue, SampleType sampleType) {
         if (uniqueValue != null) {
@@ -2607,6 +2689,7 @@ public class PluralRules implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String getRules(String keyword) {
         return rules.getRules(keyword);
     }
@@ -2631,6 +2714,7 @@ public class PluralRules implements Serializable {
      * @deprecated internal
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public int compareTo(PluralRules other) {
         return toString().compareTo(other.toString());
     }
@@ -2644,6 +2728,7 @@ public class PluralRules implements Serializable {
      * @deprecated internal
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public boolean isLimited(String keyword, SampleType sampleType) {
         return rules.isLimited(keyword, sampleType);
     }
@@ -2653,6 +2738,7 @@ public class PluralRules implements Serializable {
      * @deprecated internal
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public boolean computeLimited(String keyword, SampleType sampleType) {
         return rules.computeLimited(keyword, sampleType);
     }

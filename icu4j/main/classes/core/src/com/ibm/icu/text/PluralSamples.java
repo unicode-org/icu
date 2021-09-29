@@ -32,6 +32,7 @@ import com.ibm.icu.util.Output;
  * @deprecated This API is ICU internal only.
  */
 @Deprecated
+@aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
 public class PluralSamples {
 
     private PluralRules pluralRules;
@@ -42,6 +43,7 @@ public class PluralSamples {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public final Map<String, Boolean> _keyLimitedMap;
     private final Map<String, Set<FixedDecimal>> _keyFractionSamplesMap;
     private final Set<FixedDecimal> _fractionSamples;
@@ -51,6 +53,7 @@ public class PluralSamples {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public PluralSamples(PluralRules pluralRules) {
         this.pluralRules = pluralRules;
         Set<String> keywords = pluralRules.getKeywords();
@@ -242,6 +245,7 @@ public class PluralSamples {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public KeywordStatus getStatus(String keyword, int offset, Set<Double> explicits, Output<Double> uniqueValue) {
         if (uniqueValue != null) {
             uniqueValue.value = null;

@@ -540,6 +540,7 @@ public class PluralFormat extends UFormat {
      * to avoid confusing users.
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     /*package*/ interface PluralSelector {
         /**
          * Given a number, returns the appropriate PluralFormat keyword.

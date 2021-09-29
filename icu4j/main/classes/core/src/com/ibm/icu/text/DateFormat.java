@@ -449,6 +449,7 @@ public abstract class DateFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     final static int RELATED_YEAR = 34;
 
     /**
@@ -475,6 +476,7 @@ public abstract class DateFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public final static int TIME_SEPARATOR = 37;
 
     /**
@@ -527,6 +529,7 @@ public abstract class DateFormat extends UFormat {
          * @deprecated
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         PARSE_PARTIAL_MATCH
     };
 
@@ -1111,6 +1114,7 @@ public abstract class DateFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static final List<String> DATE_SKELETONS = Arrays.asList(
             YEAR,
             QUARTER,
@@ -1211,6 +1215,7 @@ public abstract class DateFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static final List<String> TIME_SKELETONS = Arrays.asList(
             HOUR,
             HOUR24,
@@ -1287,6 +1292,7 @@ public abstract class DateFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static final List<String> ZONE_SKELETONS = Arrays.asList(
             LOCATION_TZ,
             GENERIC_TZ,
@@ -1348,6 +1354,7 @@ public abstract class DateFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static final String JP_ERA_2019_ROOT = "Reiwa";
 
     /**
@@ -1357,6 +1364,7 @@ public abstract class DateFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static final String JP_ERA_2019_JA = "\u4EE4\u548C";
 
     /**
@@ -1366,6 +1374,7 @@ public abstract class DateFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static final String JP_ERA_2019_NARROW = "R";
 
     /**
@@ -2514,6 +2523,7 @@ public abstract class DateFormat extends UFormat {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public static final Field RELATED_YEAR = new Field("related year", -1);
 
         /**
@@ -2534,6 +2544,7 @@ public abstract class DateFormat extends UFormat {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public static final Field TIME_SEPARATOR = new Field("time separator", -1);
 
         // Stand alone types are variants for its base types.  So we do not define Field for

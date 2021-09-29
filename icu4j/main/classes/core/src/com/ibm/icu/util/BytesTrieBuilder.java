@@ -134,6 +134,7 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
      */
     @Deprecated
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected boolean matchNodesCanHaveValues() /*const*/ { return false; }
 
     /**
@@ -143,6 +144,7 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
      */
     @Deprecated
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int getMaxBranchLinearSubNodeLength() /*const*/ { return BytesTrie.kMaxBranchLinearSubNodeLength; }
     /**
      * {@inheritDoc}
@@ -151,6 +153,7 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
      */
     @Deprecated
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int getMinLinearMatch() /*const*/ { return BytesTrie.kMinLinearMatch; }
     /**
      * {@inheritDoc}
@@ -159,6 +162,7 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
      */
     @Deprecated
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int getMaxLinearMatchLength() /*const*/ { return BytesTrie.kMaxLinearMatchLength; }
 
     private void ensureCapacity(int length) {
@@ -180,6 +184,7 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
      */
     @Deprecated
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int write(int b) {
         int newLength=bytesLength+1;
         ensureCapacity(newLength);
@@ -194,6 +199,7 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
      */
     @Deprecated
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int write(int offset, int length) {
         int newLength=bytesLength+length;
         ensureCapacity(newLength);
@@ -223,6 +229,7 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
      */
     @Deprecated
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int writeValueAndFinal(int i, boolean isFinal) {
         if(0<=i && i<=BytesTrie.kMaxOneByteValue) {
             return write(((BytesTrie.kMinOneByteValueLead+i)<<1)|(isFinal?1:0));
@@ -262,6 +269,7 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
      */
     @Deprecated
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int writeValueAndType(boolean hasValue, int value, int node) {
         int offset=write(node);
         if(hasValue) {
@@ -276,6 +284,7 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
      */
     @Deprecated
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int writeDeltaTo(int jumpTarget) {
         int i=bytesLength-jumpTarget;
         assert(i>=0);
@@ -290,6 +299,7 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static final int internalEncodeDelta(int i, byte[] intBytes) {
         assert(i>=0);
         if(i<=BytesTrie.kMaxOneByteDelta) {

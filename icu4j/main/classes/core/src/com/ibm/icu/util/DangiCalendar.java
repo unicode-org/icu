@@ -20,6 +20,7 @@ import com.ibm.icu.util.ULocale.Category;
  * @deprecated This API is ICU internal only.
  */
 @Deprecated
+@aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
 public class DangiCalendar extends ChineseCalendar {
 
     private static final long serialVersionUID = 8156297445349501985L;
@@ -87,6 +88,7 @@ public class DangiCalendar extends ChineseCalendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public DangiCalendar() {
         this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
     }
@@ -100,6 +102,7 @@ public class DangiCalendar extends ChineseCalendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public DangiCalendar(Date date) {
         this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
         setTime(date);
@@ -115,6 +118,7 @@ public class DangiCalendar extends ChineseCalendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public DangiCalendar(TimeZone zone, ULocale locale) {
         super(zone, locale, DANGI_EPOCH_YEAR, KOREA_ZONE);
     }
@@ -126,6 +130,7 @@ public class DangiCalendar extends ChineseCalendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String getType() {
         return "dangi";
     }

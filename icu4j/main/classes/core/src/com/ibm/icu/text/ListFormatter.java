@@ -137,6 +137,7 @@ final public class ListFormatter {
          */
         @Deprecated
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         protected Object readResolve() throws InvalidObjectException {
             if (this.getName().equals(LIST_SPAN.getName()))
                 return LIST_SPAN;
@@ -176,6 +177,7 @@ final public class ListFormatter {
          */
         @Deprecated
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         protected Object readResolve() throws InvalidObjectException {
             if (this.getName().equals(LITERAL.getName()))
                 return LITERAL;
@@ -286,6 +288,7 @@ final public class ListFormatter {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public ListFormatter(String two, String start, String middle, String end) {
         this(
                 compilePattern(two, new StringBuilder()),
@@ -584,6 +587,7 @@ final public class ListFormatter {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public ULocale getLocale() {
         return locale;
     }

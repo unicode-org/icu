@@ -283,6 +283,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String[] getDigitStringsLocal() {
         return digitStrings;
     }
@@ -296,6 +297,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public int getCodePointZero() {
         return codePointZero;
     }

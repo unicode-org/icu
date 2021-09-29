@@ -185,6 +185,7 @@ public abstract class NumberRangeFormatter {
          */
         @Deprecated
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         protected Object readResolve() throws InvalidObjectException {
             if (this.getName().equals(NUMBER_RANGE_SPAN.getName()))
                 return NUMBER_RANGE_SPAN;

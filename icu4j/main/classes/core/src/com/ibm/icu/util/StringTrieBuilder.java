@@ -51,6 +51,7 @@ public abstract class StringTrieBuilder {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected StringTrieBuilder() {}
 
     /**
@@ -58,6 +59,7 @@ public abstract class StringTrieBuilder {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected void addImpl(CharSequence s, int value) {
         if(state!=State.ADDING) {
             // Cannot add elements after building.
@@ -79,6 +81,7 @@ public abstract class StringTrieBuilder {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected final void buildImpl(Option buildOption) {
         switch(state) {
         case ADDING:
@@ -124,6 +127,7 @@ public abstract class StringTrieBuilder {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected void clearImpl() {
         strings.setLength(0);
         nodes.clear();
@@ -821,6 +825,7 @@ public abstract class StringTrieBuilder {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected abstract boolean matchNodesCanHaveValues() /*const*/;
 
     /**
@@ -828,18 +833,21 @@ public abstract class StringTrieBuilder {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected abstract int getMaxBranchLinearSubNodeLength() /*const*/;
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected abstract int getMinLinearMatch() /*const*/;
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected abstract int getMaxLinearMatchLength() /*const*/;
 
     /**
@@ -847,30 +855,35 @@ public abstract class StringTrieBuilder {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected abstract int write(int unit);
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected abstract int write(int offset, int length);
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected abstract int writeValueAndFinal(int i, boolean isFinal);
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected abstract int writeValueAndType(boolean hasValue, int value, int node);
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected abstract int writeDeltaTo(int jumpTarget);
 
     private enum State {
@@ -884,6 +897,7 @@ public abstract class StringTrieBuilder {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected StringBuilder strings=new StringBuilder();
     private Node root;
 

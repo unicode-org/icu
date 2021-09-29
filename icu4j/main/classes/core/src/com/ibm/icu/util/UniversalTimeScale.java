@@ -228,6 +228,7 @@ public final class UniversalTimeScale
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static final int EPOCH_OFFSET_MINUS_1_VALUE = 7;
     
     /**
@@ -242,6 +243,7 @@ public final class UniversalTimeScale
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static final int UNITS_ROUND_VALUE = 8;
     
     /**
@@ -256,6 +258,7 @@ public final class UniversalTimeScale
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static final int MIN_ROUND_VALUE = 9;
     
     /**
@@ -270,6 +273,7 @@ public final class UniversalTimeScale
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static final int MAX_ROUND_VALUE = 10;
     
     /**
@@ -283,6 +287,7 @@ public final class UniversalTimeScale
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static final int MAX_SCALE_VALUE = 11;
     
     private static final long ticks        = 1;
@@ -651,6 +656,7 @@ public final class UniversalTimeScale
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static BigDecimal toBigDecimalTrunc(BigDecimal universalTime, int timeScale)
     {
         TimeScaleData data = getTimeScaleData(timeScale);

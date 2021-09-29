@@ -37,6 +37,7 @@ public interface UProperty
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore(value = "999.99.9")
     public static final int UNDEFINED = -1;
 
     /**

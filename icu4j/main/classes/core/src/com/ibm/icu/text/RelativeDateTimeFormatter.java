@@ -163,6 +163,7 @@ public final class RelativeDateTimeFormatter {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         QUARTERS,
     }
 
@@ -442,6 +443,7 @@ public final class RelativeDateTimeFormatter {
          */
         @Deprecated
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         protected Object readResolve() throws InvalidObjectException {
             if (this.getName().equals(LITERAL.getName()))
                 return LITERAL;

@@ -504,15 +504,19 @@ public abstract class CodePointTrie extends CodePointMap {
     }
 
     /** @internal */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     static final int FAST_SHIFT = 6;
 
     /** Number of entries in a data block for code points below the fast limit. 64=0x40 @internal */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     static final int FAST_DATA_BLOCK_LENGTH = 1 << FAST_SHIFT;
 
     /** Mask for getting the lower bits for the in-fast-data-block offset. @internal */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     private static final int FAST_DATA_MASK = FAST_DATA_BLOCK_LENGTH - 1;
 
     /** @internal */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     private static final int SMALL_MAX = 0xfff;
 
     /**
@@ -520,12 +524,14 @@ public abstract class CodePointTrie extends CodePointMap {
      * value returned for out-of-range code points and ill-formed UTF-8/16.
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     private static final int ERROR_VALUE_NEG_DATA_OFFSET = 1;
     /**
      * Offset from dataLength (to be subtracted) for fetching the
      * value returned for code points highStart..U+10FFFF.
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     private static final int HIGH_VALUE_NEG_DATA_OFFSET = 2;
 
     // ucptrie_impl.h
@@ -641,9 +647,11 @@ public abstract class CodePointTrie extends CodePointMap {
     }
 
     /** @internal */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     private final int[] ascii;
 
     /** @internal */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     private final char[] index;
 
     /**
@@ -651,12 +659,14 @@ public abstract class CodePointTrie extends CodePointMap {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected final Data data;
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected final int dataLength;
     /**
      * Start of the last range which ends at U+10FFFF.
@@ -664,6 +674,7 @@ public abstract class CodePointTrie extends CodePointMap {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected final int highStart;
 
     /**
@@ -671,14 +682,17 @@ public abstract class CodePointTrie extends CodePointMap {
      * Set to an impossibly high value (e.g., 0xffff) if there is no dedicated index-3 null block.
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     private final int index3NullOffset;
     /**
      * Internal data null block offset, not shifted.
      * Set to an impossibly high value (e.g., 0xfffff) if there is no dedicated data null block.
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     private final int dataNullOffset;
     /** @internal */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     private final int nullValue;
 
     /**
@@ -686,6 +700,7 @@ public abstract class CodePointTrie extends CodePointMap {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected final int fastIndex(int c) {
         return index[c >> FAST_SHIFT] + (c & FAST_DATA_MASK);
     }
@@ -695,6 +710,7 @@ public abstract class CodePointTrie extends CodePointMap {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected final int smallIndex(Type type, int c) {
         // Split into two methods to make this part inline-friendly.
         // In C, this part is a macro.
@@ -734,6 +750,7 @@ public abstract class CodePointTrie extends CodePointMap {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected abstract int cpIndex(int c);
 
     /**
@@ -797,6 +814,7 @@ public abstract class CodePointTrie extends CodePointMap {
          */
         @Deprecated
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         protected final int cpIndex(int c) {
             if (c >= 0) {
                 if (c <= 0xffff) {
@@ -914,6 +932,7 @@ public abstract class CodePointTrie extends CodePointMap {
          */
         @Deprecated
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         protected final int cpIndex(int c) {
             if (c >= 0) {
                 if (c <= SMALL_MAX) {

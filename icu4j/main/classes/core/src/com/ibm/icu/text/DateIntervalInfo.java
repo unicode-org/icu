@@ -343,6 +343,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public DateIntervalInfo()
     {
         fIntervalPatterns = new HashMap<>();
@@ -830,6 +831,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static PatternInfo genPatternInfo(String intervalPattern,
                                       boolean laterDateFirst) {
         int splitPoint = splitPatternInto2Part(intervalPattern);
@@ -1179,6 +1181,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public Map<String,Set<String>> getPatterns() {
         LinkedHashMap<String,Set<String>> result = new LinkedHashMap<>();
         for (Entry<String, Map<String, PatternInfo>> entry : fIntervalPatterns.entrySet()) {
@@ -1193,6 +1196,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public Map<String, Map<String, PatternInfo>> getRawPatterns() {
         LinkedHashMap<String, Map<String, PatternInfo>> result = new LinkedHashMap<>();
         for (Entry<String, Map<String, PatternInfo>> entry : fIntervalPatterns.entrySet()) {

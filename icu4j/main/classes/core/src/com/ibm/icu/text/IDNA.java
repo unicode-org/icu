@@ -275,6 +275,7 @@ public abstract class IDNA {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static void resetInfo(Info info) {
         info.reset();
     }
@@ -283,6 +284,7 @@ public abstract class IDNA {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static boolean hasCertainErrors(Info info, EnumSet<Error> errors) {
         return !info.errors.isEmpty() && !Collections.disjoint(info.errors, errors);
     }
@@ -291,6 +293,7 @@ public abstract class IDNA {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static boolean hasCertainLabelErrors(Info info, EnumSet<Error> errors) {
         return !info.labelErrors.isEmpty() && !Collections.disjoint(info.labelErrors, errors);
     }
@@ -299,6 +302,7 @@ public abstract class IDNA {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static void addLabelError(Info info, Error error) {
         info.labelErrors.add(error);
     }
@@ -307,6 +311,7 @@ public abstract class IDNA {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static void promoteAndResetLabelErrors(Info info) {
         if(!info.labelErrors.isEmpty()) {
             info.errors.addAll(info.labelErrors);
@@ -318,6 +323,7 @@ public abstract class IDNA {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static void addError(Info info, Error error) {
         info.errors.add(error);
     }
@@ -326,6 +332,7 @@ public abstract class IDNA {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static void setTransitionalDifferent(Info info) {
         info.isTransDiff=true;
     }
@@ -334,6 +341,7 @@ public abstract class IDNA {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static void setBiDi(Info info) {
         info.isBiDi=true;
     }
@@ -342,6 +350,7 @@ public abstract class IDNA {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static boolean isBiDi(Info info) {
         return info.isBiDi;
     }
@@ -350,6 +359,7 @@ public abstract class IDNA {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static void setNotOkBiDi(Info info) {
         info.isOkBiDi=false;
     }
@@ -358,6 +368,7 @@ public abstract class IDNA {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static boolean isOkBiDi(Info info) {
         return info.isOkBiDi;
     }
@@ -465,6 +476,7 @@ public abstract class IDNA {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected IDNA() {
     }
 

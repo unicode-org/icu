@@ -109,6 +109,7 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
      */
     @Deprecated
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected boolean matchNodesCanHaveValues() /*const*/ { return true; }
 
     /**
@@ -118,6 +119,7 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
      */
     @Deprecated
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int getMaxBranchLinearSubNodeLength() /*const*/ { return CharsTrie.kMaxBranchLinearSubNodeLength; }
     /**
      * {@inheritDoc}
@@ -126,6 +128,7 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
      */
     @Deprecated
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int getMinLinearMatch() /*const*/ { return CharsTrie.kMinLinearMatch; }
     /**
      * {@inheritDoc}
@@ -134,6 +137,7 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
      */
     @Deprecated
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int getMaxLinearMatchLength() /*const*/ { return CharsTrie.kMaxLinearMatchLength; }
 
     private void ensureCapacity(int length) {
@@ -155,6 +159,7 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
      */
     @Deprecated
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int write(int unit) {
         int newLength=charsLength+1;
         ensureCapacity(newLength);
@@ -169,6 +174,7 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
      */
     @Deprecated
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int write(int offset, int length) {
         int newLength=charsLength+length;
         ensureCapacity(newLength);
@@ -198,6 +204,7 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
      */
     @Deprecated
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int writeValueAndFinal(int i, boolean isFinal) {
         if(0<=i && i<=CharsTrie.kMaxOneUnitValue) {
             return write(i|(isFinal ? CharsTrie.kValueIsFinal : 0));
@@ -226,6 +233,7 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
      */
     @Deprecated
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int writeValueAndType(boolean hasValue, int value, int node) {
         if(!hasValue) {
             return write(node);
@@ -254,6 +262,7 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
      */
     @Deprecated
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int writeDeltaTo(int jumpTarget) {
         int i=charsLength-jumpTarget;
         assert(i>=0);

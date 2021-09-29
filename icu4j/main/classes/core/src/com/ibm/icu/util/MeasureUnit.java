@@ -56,6 +56,7 @@ public class MeasureUnit implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected final String type;
 
     /**
@@ -64,6 +65,7 @@ public class MeasureUnit implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected final String subType;
 
     /**
@@ -71,6 +73,7 @@ public class MeasureUnit implements Serializable {
      *
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     private MeasureUnitImpl measureUnitImpl;
 
     /**
@@ -338,6 +341,7 @@ public class MeasureUnit implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public String getIdentifier() {
             return identifier;
         }
@@ -370,6 +374,7 @@ public class MeasureUnit implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected MeasureUnit(String type, String subType) {
         this.type = type;
         this.subType = subType;
@@ -403,6 +408,7 @@ public class MeasureUnit implements Serializable {
      * @deprecated Internal API for ICU use only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static MeasureUnit fromMeasureUnitImpl(MeasureUnitImpl measureUnitImpl) {
         measureUnitImpl.serialize();
         String identifier = measureUnitImpl.getIdentifier();
@@ -707,6 +713,7 @@ public class MeasureUnit implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static MeasureUnit internalGetInstance(String type, String subType) {
         if (type == null || subType == null) {
             throw new NullPointerException("Type and subType must be non-null");
@@ -732,6 +739,7 @@ public class MeasureUnit implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static MeasureUnit findBySubType(String subType) {
         populateCache();
         for (Map<String, MeasureUnit> unitsForType : cache.values()) {
@@ -750,12 +758,14 @@ public class MeasureUnit implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected interface Factory {
         /**
          * @internal
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         MeasureUnit create(String type, String subType);
     }
 
@@ -828,6 +838,7 @@ public class MeasureUnit implements Serializable {
      *
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     static synchronized private void populateCache() {
         if (cacheIsPopulated) {
             return;
@@ -863,6 +874,7 @@ public class MeasureUnit implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected synchronized static MeasureUnit addUnit(String type, String unitName, Factory factory) {
         Map<String, MeasureUnit> tmp = cache.get(type);
         if (tmp == null) {
@@ -2042,6 +2054,7 @@ public class MeasureUnit implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public MeasureUnitImpl getCopyOfMeasureUnitImpl() {
         return this.measureUnitImpl == null ?
                 MeasureUnitImpl.forIdentifier(getIdentifier()) :

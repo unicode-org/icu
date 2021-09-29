@@ -27,6 +27,7 @@ import com.ibm.icu.impl.SimpleCache;
  * @deprecated This API is ICU internal only.
  */
 @Deprecated
+@aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
 public class GenderInfo {
 
     private final ListGenderStyle style; // set based on locale
@@ -37,24 +38,28 @@ public class GenderInfo {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public enum Gender {
         /**
          * @internal
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         MALE,
         /**
          * @internal
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         FEMALE,
         /**
          * @internal
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         OTHER
     }
 
@@ -65,6 +70,7 @@ public class GenderInfo {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static GenderInfo getInstance(ULocale uLocale) {
         return genderInfoCache.get(uLocale);
     }
@@ -76,6 +82,7 @@ public class GenderInfo {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static GenderInfo getInstance(Locale locale) {
         return getInstance(ULocale.forLocale(locale));
     }
@@ -88,6 +95,7 @@ public class GenderInfo {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public enum ListGenderStyle {
         /**
          * For an empty list, returns OTHER;
@@ -97,6 +105,7 @@ public class GenderInfo {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         NEUTRAL,
         /**
          * For an empty list, returns OTHER;
@@ -107,6 +116,7 @@ public class GenderInfo {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         MIXED_NEUTRAL,
         /**
          * For an empty list, returns OTHER;
@@ -117,6 +127,7 @@ public class GenderInfo {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         MALE_TAINTS;
 
         private static Map<String, ListGenderStyle> fromNameMap =
@@ -133,6 +144,7 @@ public class GenderInfo {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public static ListGenderStyle fromName(String name) {
             ListGenderStyle result = fromNameMap.get(name);
             if (result == null) {
@@ -150,6 +162,7 @@ public class GenderInfo {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public Gender getListGender(Gender... genders) {
         return getListGender(Arrays.asList(genders));
     }
@@ -162,6 +175,7 @@ public class GenderInfo {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public Gender getListGender(List<Gender> genders) {
         if (genders.size() == 0) {
             return Gender.OTHER; // degenerate case
@@ -214,6 +228,7 @@ public class GenderInfo {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public GenderInfo(ListGenderStyle genderStyle) {
         style = genderStyle;
     }

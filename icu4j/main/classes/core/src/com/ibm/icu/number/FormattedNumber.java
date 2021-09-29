@@ -143,6 +143,7 @@ public class FormattedNumber implements FormattedValue {
      * @deprecated This API is for technology preview only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String getGender() {
         if (this.gender == null) {
             return "";
@@ -155,6 +156,7 @@ public class FormattedNumber implements FormattedValue {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public IFixedDecimal getFixedDecimal() {
         return fq;
     }

@@ -218,6 +218,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static final String ICU_DATA_VERSION_PATH = "70b";
 
     /**
@@ -226,6 +227,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static final VersionInfo ICU_DATA_VERSION;
 
     /**
@@ -643,6 +645,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
      * @deprecated This API is ICU internal only. (For use in CLDR, etc.)
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String getVersionString(int minDigits, int maxDigits) {
         if (minDigits < 1 || maxDigits < 1
                 || minDigits > 4 || maxDigits > 4 || minDigits > maxDigits) {

@@ -2158,6 +2158,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public final int getRelatedYear() {
         int year = get(EXTENDED_YEAR);
         CalType type = CalType.GREGORIAN;
@@ -2233,6 +2234,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public final void setRelatedYear(int year) {
         CalType type = CalType.GREGORIAN;
         String typeString = getType();
@@ -3674,6 +3676,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static String getDateTimePattern(Calendar cal, ULocale uLocale, int dateStyle) {
         PatternData patternData = PatternData.make(cal, uLocale);
         return patternData.getDateTimePattern(dateStyle);
@@ -3742,6 +3745,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static class FormatConfiguration {
         private String pattern;
         private String override;
@@ -3760,6 +3764,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public String getPatternString() {
             return pattern;
         }
@@ -3769,6 +3774,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public String getOverrideString() {
             return override;
         }
@@ -3780,6 +3786,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public Calendar getCalendar() {
             return cal;
         }
@@ -3791,6 +3798,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public ULocale getLocale() {
             return loc;
         }
@@ -3802,6 +3810,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public DateFormatSymbols getDateFormatSymbols() {
             return formatData;
         }
@@ -5672,6 +5681,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected long computeMillisInDayLong() {
         // Do the time portion of the conversion.
 
@@ -5773,6 +5783,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int computeZoneOffset(long millis, long millisInDay) {
         int[] offsets = new int[2];
         long wall = millis + millisInDay;
@@ -6468,6 +6479,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public boolean haveDefaultCentury() {
         return true;
     }

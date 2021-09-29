@@ -1038,6 +1038,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public int matchesAt(CharSequence text, int offset) {
         int lastLen = -1;
         strings:
@@ -2065,6 +2066,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String getRegexEquivalent() {
         if (!hasStrings()) {
             return toString();
@@ -2473,6 +2475,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public UnicodeSet applyPattern(String pattern,
             ParsePosition pos,
             SymbolTable symbols,
@@ -4132,6 +4135,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public int spanAndCount(CharSequence s, int start, SpanCondition spanCondition, OutputInt outCount) {
         if (outCount == null) {
             throw new IllegalArgumentException("outCount must not be null");
@@ -4645,6 +4649,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static <T extends Comparable<T>> int compare(Iterator<T> first, Iterator<T> other) {
         while (true) {
             if (!first.hasNext()) {
@@ -4722,6 +4727,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static int getSingleCodePoint(CharSequence s) {
         return CharSequences.getSingleCodePoint(s);
     }
@@ -4736,6 +4742,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public UnicodeSet addBridges(UnicodeSet dontCare) {
         UnicodeSet notInInput = new UnicodeSet(this).complement();
         for (UnicodeSetIterator it = new UnicodeSetIterator(notInInput); it.nextRange();) {
@@ -4754,6 +4761,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @deprecated This API is ICU internal only. Use span instead.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public int findIn(CharSequence value, int fromIndex, boolean findNot) {
         //TODO add strings, optimize, using ICU4C algorithms
         int cp;
@@ -4775,6 +4783,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @deprecated This API is ICU internal only. Use spanBack instead.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public int findLastIn(CharSequence value, int fromIndex, boolean findNot) {
         //TODO add strings, optimize, using ICU4C algorithms
         int cp;
@@ -4797,6 +4806,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @deprecated This API is ICU internal only. Use replaceFrom.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String stripFrom(CharSequence source, boolean matches) {
         StringBuilder result = new StringBuilder();
         for (int pos = 0; pos < source.length();) {
@@ -4912,6 +4922,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static XSymbolTable getDefaultXSymbolTable() {
         return XSYMBOL_TABLE;
     }
@@ -4930,6 +4941,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static void setDefaultXSymbolTable(XSymbolTable xSymbolTable) {
         // If the properties override inclusions, these have to be regenerated.
         // TODO: Check if the Unicode Tools or Unicode Utilities really need this.

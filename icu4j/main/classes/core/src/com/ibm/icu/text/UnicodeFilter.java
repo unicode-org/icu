@@ -71,5 +71,6 @@ public abstract class UnicodeFilter implements UnicodeMatcher {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected UnicodeFilter() {}
 }

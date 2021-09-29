@@ -194,24 +194,28 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         protected CharSequence s;
         /**
          * @internal
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         protected int sIndex;
         /**
          * @internal
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         protected int c;
         /**
          * @internal
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         protected int value;
 
         /**
@@ -219,6 +223,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         protected StringIterator(CharSequence s, int sIndex) {
             this.s = s;
             this.sIndex = sIndex;

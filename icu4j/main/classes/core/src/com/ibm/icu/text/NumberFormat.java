@@ -1365,6 +1365,7 @@ public abstract class NumberFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected Currency getEffectiveCurrency() {
         Currency c = getCurrency();
         if (c == null) {
@@ -1563,6 +1564,7 @@ public abstract class NumberFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static String getPatternForStyle(ULocale forLocale, int choice) {
         NumberingSystem ns = NumberingSystem.getInstance(forLocale);
         String nsName = ns.getName();
@@ -1579,6 +1581,7 @@ public abstract class NumberFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static String getPatternForStyleAndNumberingSystem(ULocale forLocale, String nsName, int choice) {
         /* for ISOCURRENCYSTYLE and PLURALCURRENCYSTYLE,
          * the pattern is the same as the pattern of CURRENCYSTYLE

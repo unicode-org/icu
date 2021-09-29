@@ -45,6 +45,7 @@ public class CompactNotation extends Notation {
      * @see DecimalFormatProperties#setCompactCustomData
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static CompactNotation forCustomData(Map<String, Map<String, String>> compactCustomData) {
         return new CompactNotation(compactCustomData);
     }

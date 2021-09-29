@@ -142,6 +142,7 @@ public final class StringTokenizer implements Enumeration<Object>
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public StringTokenizer(String str, UnicodeSet delim, boolean returndelims, boolean coalescedelims)
     {
         m_source_ = str;
@@ -226,6 +227,7 @@ public final class StringTokenizer implements Enumeration<Object>
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public StringTokenizer(String str, String delim, boolean returndelims, boolean coalescedelims)
     {
         // don't ignore whitespace

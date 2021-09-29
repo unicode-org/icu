@@ -581,6 +581,7 @@ public final class NumberFormatter {
      * @deprecated ICU 60 This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static UnlocalizedNumberFormatter fromDecimalFormat(
             DecimalFormatProperties properties,
             DecimalFormatSymbols symbols,

@@ -692,6 +692,7 @@ public class HebrewCalendar extends Calendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static boolean isLeapYear(int year) {
         //return (year * 12 + 17) % 19 >= 12;
         int x = (year*12 + 17) % 19;
@@ -765,6 +766,7 @@ public class HebrewCalendar extends Calendar {
      */
     @Override
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected void validateField(int field) {
         if (field == MONTH && !isLeapYear(handleGetExtendedYear()) && internalGet(MONTH) == ADAR_1) {
             throw new IllegalArgumentException("MONTH cannot be ADAR_1(5) except leap years");
