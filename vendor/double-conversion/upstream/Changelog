@@ -1,3 +1,7 @@
+2021-05-19:
+  Loongarch is a RISC-style command system architecture.
+  Add support for loongarch architecture.
+
 2020-02-16:
   Add support for quiet and signaling NaNs to ieee header.
 
@@ -10,7 +14,7 @@
 	the necessary line.
 
 2019-09-02:
-  Add support for e2k architectur. Thanks to Michael Shigorin.
+  Add support for e2k architecture. Thanks to Michael Shigorin.
 
 2019-08-01:
   Add min exponent width option in double-to-string conversion.
