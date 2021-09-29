@@ -107,12 +107,14 @@ typedef enum UMeasurePrefix {
      */
     UMEASURE_PREFIX_YOTTA = UMEASURE_PREFIX_ONE + 24,
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * ICU use only.
      * Used to determine the set of base-10 SI prefixes.
      * @internal
      */
     UMEASURE_PREFIX_INTERNAL_MAX_SI = UMEASURE_PREFIX_YOTTA,
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * SI prefix: zetta, 10^21.
