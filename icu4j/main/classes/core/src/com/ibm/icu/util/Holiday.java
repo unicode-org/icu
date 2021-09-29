@@ -23,11 +23,13 @@ import com.ibm.icu.util.ULocale.Category;
  * An abstract class representing a holiday.
  * @draft ICU 2.8 (retainAll)
  */
+@aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
 public abstract class Holiday implements DateRule
 {
     /**
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static Holiday[] getHolidays()
     {
         return getHolidays(ULocale.getDefault(Category.FORMAT));
@@ -36,6 +38,7 @@ public abstract class Holiday implements DateRule
     /**
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static Holiday[] getHolidays(Locale locale)
     {
         return getHolidays(ULocale.forLocale(locale));
@@ -44,6 +47,7 @@ public abstract class Holiday implements DateRule
     /**
      * @draft ICU 3.2
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static Holiday[] getHolidays(ULocale locale)
     {
         Holiday[] result = noHolidays;
@@ -70,6 +74,7 @@ public abstract class Holiday implements DateRule
      * @draft ICU 2.8
      */
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public Date firstAfter(Date start) {
         return rule.firstAfter(start);
     }
@@ -88,6 +93,7 @@ public abstract class Holiday implements DateRule
      * @draft ICU 2.8
      */
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public Date firstBetween(Date start, Date end) {
         return rule.firstBetween(start, end);
     }
@@ -102,6 +108,7 @@ public abstract class Holiday implements DateRule
      * @draft ICU 2.8
      */
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public boolean isOn(Date date) {
         //System.out.println(name + ".isOn(" + date.toString() + "):");
         return rule.isOn(date);
@@ -113,6 +120,7 @@ public abstract class Holiday implements DateRule
      * @draft ICU 2.8
      */
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public boolean isBetween(Date start, Date end) {
         return rule.isBetween(start, end);
     }
@@ -130,6 +138,7 @@ public abstract class Holiday implements DateRule
      *              simply delegates to this DateRule object.
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     protected Holiday(String name, DateRule rule)
     {
         this.name = name;
@@ -141,6 +150,7 @@ public abstract class Holiday implements DateRule
      * @see Category#DISPLAY
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public String getDisplayName() {
         return getDisplayName(ULocale.getDefault(Category.DISPLAY));
     }
@@ -156,6 +166,7 @@ public abstract class Holiday implements DateRule
      * @see ResourceBundle
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public String getDisplayName(Locale locale)
     {
         return getDisplayName(ULocale.forLocale(locale));
@@ -172,6 +183,7 @@ public abstract class Holiday implements DateRule
      * @see ResourceBundle
      * @draft ICU 3.2
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public String getDisplayName(ULocale locale)
     {
         String dispName = name;
@@ -188,6 +200,7 @@ public abstract class Holiday implements DateRule
     /**
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public DateRule getRule() {
         return rule;
     }
@@ -195,6 +208,7 @@ public abstract class Holiday implements DateRule
     /**
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public void setRule(DateRule rule) {
         this.rule = rule;
     }

@@ -346,6 +346,7 @@ public abstract class Precision {
      * @param trailingZeroDisplay Option to configure the display of trailing zeros.
      * @draft ICU 69
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public Precision trailingZeroDisplay(TrailingZeroDisplay trailingZeroDisplay) {
         Precision result = this.createCopy();
         result.trailingZeroDisplay = trailingZeroDisplay;

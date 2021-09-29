@@ -898,6 +898,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @return true if this set contains multi-character strings or the empty string.
      * @draft ICU 70
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public boolean hasStrings() {
         return !strings.isEmpty();
     }
@@ -4029,17 +4030,20 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @draft ICU3.8 (retain)
      * @author medavis
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     abstract public static class XSymbolTable implements SymbolTable {
         /**
          * Default constructor
          * @draft ICU3.8 (retain)
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         public XSymbolTable(){}
         /**
          * Supplies default implementation for SymbolTable (no action).
          * @draft ICU3.8 (retain)
          */
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         public UnicodeMatcher lookupMatcher(int i) {
             return null;
         }
@@ -4062,6 +4066,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
          *         propertyName+propertyValue combination is not recognized (in which case result is unaltered).
          * @draft ICU3.8 (retain)
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         public boolean applyPropertyAlias(String propertyName, String propertyValue, UnicodeSet result) {
             return false;
         }
@@ -4070,6 +4075,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
          * @draft ICU3.8 (retain)
          */
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         public char[] lookup(String s) {
             return null;
         }
@@ -4078,6 +4084,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
          * @draft ICU3.8 (retain)
          */
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         public String parseReference(String text, ParsePosition pos, int limit) {
             return null;
         }

@@ -77,6 +77,7 @@ public abstract class UFormat extends Format {
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8 (retain)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public final ULocale getLocale(ULocale.Type type) {
         return type == ULocale.ACTUAL_LOCALE ?
             this.actualLocale : this.validLocale;

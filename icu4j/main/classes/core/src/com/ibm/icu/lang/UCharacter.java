@@ -5942,6 +5942,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @see CharacterProperties#getBinaryPropertySet(int)
      * @draft ICU 70
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static boolean hasBinaryProperty(CharSequence s, int property) {
         int length = s.length();
         if (length == 1) {

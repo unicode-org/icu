@@ -20,6 +20,7 @@ import java.util.Date;
  * Western and Orthodox methods for calculating Easter.
  * @draft ICU 2.8 (retainAll)
  */
+@aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
 public class EasterHoliday extends Holiday
 {
     /**
@@ -28,6 +29,7 @@ public class EasterHoliday extends Holiday
      * @param name The name of the holiday
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public EasterHoliday(String name)
     {
         super(name, new EasterRule(0, false));
@@ -41,6 +43,7 @@ public class EasterHoliday extends Holiday
      * @param name      The name of the holiday
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public EasterHoliday(int daysAfter, String name)
     {
         super(name, new EasterRule(daysAfter, false));
@@ -56,6 +59,7 @@ public class EasterHoliday extends Holiday
      * @param name      The name of the holiday
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public EasterHoliday(int daysAfter, boolean orthodox, String name)
     {
         super(name, new EasterRule(daysAfter, orthodox));
@@ -65,72 +69,84 @@ public class EasterHoliday extends Holiday
      * Shrove Tuesday, aka Mardi Gras, 48 days before Easter
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     static public final EasterHoliday SHROVE_TUESDAY  = new EasterHoliday(-48,    "Shrove Tuesday");
 
     /**
      * Ash Wednesday, start of Lent, 47 days before Easter
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     static public final EasterHoliday ASH_WEDNESDAY   = new EasterHoliday(-47,    "Ash Wednesday");
 
     /**
      * Palm Sunday, 7 days before Easter
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     static public final EasterHoliday PALM_SUNDAY     = new EasterHoliday( -7,    "Palm Sunday");
 
     /**
      * Maundy Thursday, 3 days before Easter
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     static public final EasterHoliday MAUNDY_THURSDAY = new EasterHoliday( -3,    "Maundy Thursday");
 
     /**
      * Good Friday, 2 days before Easter
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     static public final EasterHoliday GOOD_FRIDAY     = new EasterHoliday( -2,    "Good Friday");
 
     /**
      * Easter Sunday
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     static public final EasterHoliday EASTER_SUNDAY   = new EasterHoliday(  0,    "Easter Sunday");
 
     /**
      * Easter Monday, 1 day after Easter
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     static public final EasterHoliday EASTER_MONDAY   = new EasterHoliday(  1,    "Easter Monday");
 
     /**
      * Ascension, 39 days after Easter
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     static public final EasterHoliday ASCENSION       = new EasterHoliday( 39,    "Ascension");
 
     /**
      * Pentecost (aka Whit Sunday), 49 days after Easter
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     static public final EasterHoliday PENTECOST       = new EasterHoliday( 49,    "Pentecost");
 
     /**
      * Whit Sunday (aka Pentecost), 49 days after Easter
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     static public final EasterHoliday WHIT_SUNDAY     = new EasterHoliday( 49,    "Whit Sunday");
 
     /**
      * Whit Monday, 50 days after Easter
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     static public final EasterHoliday WHIT_MONDAY     = new EasterHoliday( 50,    "Whit Monday");
 
     /**
      * Corpus Christi, 60 days after Easter
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     static public final EasterHoliday CORPUS_CHRISTI  = new EasterHoliday( 60,    "Corpus Christi");
 }
 

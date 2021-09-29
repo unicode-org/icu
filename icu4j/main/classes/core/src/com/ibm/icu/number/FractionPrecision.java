@@ -33,6 +33,7 @@ public abstract class FractionPrecision extends Precision {
      *
      * @draft ICU 69
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public Precision withSignificantDigits(
             int minSignificantDigits,
             int maxSignificantDigits,

@@ -346,6 +346,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * <code>DateFormatSymbols</code> instances are available.
      * @draft ICU 3.8 (retain)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static ULocale[] getAvailableULocales() {
         return ICUResourceBundle.getAvailableULocales();
     }
@@ -2383,6 +2384,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8 (retain)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public final ULocale getLocale(ULocale.Type type) {
         return type == ULocale.ACTUAL_LOCALE ?
             this.actualLocale : this.validLocale;

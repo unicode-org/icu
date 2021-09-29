@@ -101,6 +101,7 @@ public class VTimeZone extends BasicTimeZone {
      * @draft ICU 69
      */
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public void getOffsetFromLocal(long date,
             LocalOption nonExistingTimeOpt, LocalOption duplicatedTimeOpt, int[] offsets) {
         tz.getOffsetFromLocal(date, nonExistingTimeOpt, duplicatedTimeOpt, offsets);

@@ -1079,6 +1079,7 @@ public abstract class NumberFormat extends UFormat {
      * @return the available locales
      * @draft ICU 3.2 (retain)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static ULocale[] getAvailableULocales() {
         if (shim == null) {
             return ICUResourceBundle.getAvailableULocales();

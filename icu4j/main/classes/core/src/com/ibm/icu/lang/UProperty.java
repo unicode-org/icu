@@ -574,6 +574,7 @@ public interface UProperty
      *
      * @draft ICU 70
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static final int BASIC_EMOJI=65;
     /**
      * Binary property of strings Emoji_Keycap_Sequence.
@@ -581,6 +582,7 @@ public interface UProperty
      *
      * @draft ICU 70
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static final int EMOJI_KEYCAP_SEQUENCE=66;
     /**
      * Binary property of strings RGI_Emoji_Modifier_Sequence.
@@ -588,6 +590,7 @@ public interface UProperty
      *
      * @draft ICU 70
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static final int RGI_EMOJI_MODIFIER_SEQUENCE=67;
     /**
      * Binary property of strings RGI_Emoji_Flag_Sequence.
@@ -595,6 +598,7 @@ public interface UProperty
      *
      * @draft ICU 70
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static final int RGI_EMOJI_FLAG_SEQUENCE=68;
     /**
      * Binary property of strings RGI_Emoji_Tag_Sequence.
@@ -602,6 +606,7 @@ public interface UProperty
      *
      * @draft ICU 70
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static final int RGI_EMOJI_TAG_SEQUENCE=69;
     /**
      * Binary property of strings RGI_Emoji_ZWJ_Sequence.
@@ -609,6 +614,7 @@ public interface UProperty
      *
      * @draft ICU 70
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static final int RGI_EMOJI_ZWJ_SEQUENCE=70;
     /**
      * Binary property of strings RGI_Emoji.
@@ -616,6 +622,7 @@ public interface UProperty
      *
      * @draft ICU 70
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static final int RGI_EMOJI=71;
 
     /**

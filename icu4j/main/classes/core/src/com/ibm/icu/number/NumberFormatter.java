@@ -112,12 +112,14 @@ public final class NumberFormatter {
      *
      * @draft ICU 69
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static enum RoundingPriority {
         /**
          * Favor greater precision by relaxing one of the rounding constraints.
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         RELAXED,
 
         /**
@@ -125,6 +127,7 @@ public final class NumberFormatter {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         STRICT,
     }
 
@@ -439,6 +442,7 @@ public final class NumberFormatter {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         NEGATIVE,
 
         /**
@@ -446,6 +450,7 @@ public final class NumberFormatter {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         ACCOUNTING_NEGATIVE,
     }
 
@@ -490,12 +495,14 @@ public final class NumberFormatter {
      *
      * @draft ICU 69
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static enum TrailingZeroDisplay {
         /**
          * Display trailing zeros according to the settings for minimum fraction and significant digits.
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         AUTO,
 
         /**
@@ -503,6 +510,7 @@ public final class NumberFormatter {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         HIDE_IF_WHOLE,
     }
 

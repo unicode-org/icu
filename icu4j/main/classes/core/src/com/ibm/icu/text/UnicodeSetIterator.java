@@ -111,6 +111,7 @@ public final class UnicodeSetIterator {
      * @draft ICU 70
      * @see UnicodeSet#strings()
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public UnicodeSetIterator skipToStrings() {
         // Finish code point/range iteration.
         range = endRange;

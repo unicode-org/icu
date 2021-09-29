@@ -1883,6 +1883,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @return the list of locales for which Calendars are installed.
      * @draft ICU 3.2 (retain)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static ULocale[] getAvailableULocales()
     {
         // TODO
@@ -3486,6 +3487,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @return a <code>DateFormat</code> appropriate to this calendar
      * @draft ICU 3.2 (retain)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     protected DateFormat handleGetDateFormat(String pattern, String override, ULocale locale) {
         FormatConfiguration fmtConfig = new FormatConfiguration();
         fmtConfig.pattern = pattern;
@@ -5945,6 +5947,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @draft ICU 3.6 (retain)
      * @see #MONTH
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     protected int getDefaultMonthInYear(int extendedYear) {
         return Calendar.JANUARY;
     }
@@ -5959,6 +5962,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @draft ICU 3.6 (retain)
      * @see #DAY_OF_MONTH
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     protected int getDefaultDayInMonth(int extendedYear, int month) {
         return 1;
     }
@@ -6509,6 +6513,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8 (retain)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public final ULocale getLocale(ULocale.Type type) {
         return type == ULocale.ACTUAL_LOCALE ?
                 this.actualLocale : this.validLocale;

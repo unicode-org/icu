@@ -2510,6 +2510,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      *
      * @draft ICU 2.8 (retain)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static Type ACTUAL_LOCALE = new Type();
 
     /**
@@ -2525,6 +2526,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * 3.0 or later.  In ICU 2.8, it is not returned correctly.
      * @draft ICU 2.8 (retain)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static Type VALID_LOCALE = new Type();
 
     /**
@@ -2534,6 +2536,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @draft ICU 2.8 (retainAll)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static final class Type {
         private Type() {}
     }

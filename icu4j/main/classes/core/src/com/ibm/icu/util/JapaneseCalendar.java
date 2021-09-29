@@ -301,6 +301,7 @@ public class JapaneseCalendar extends GregorianCalendar {
      * @see #MONTH
      */
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     protected int getDefaultMonthInYear(int extendedYear) {
         int era = internalGet(ERA, CURRENT_ERA);
         // computeFields(status); // No need to compute fields here - expect the caller already did so.
@@ -325,6 +326,7 @@ public class JapaneseCalendar extends GregorianCalendar {
      * @see #DAY_OF_MONTH
      */
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     protected int getDefaultDayInMonth(int extendedYear, int month) {
         int era = internalGet(ERA, CURRENT_ERA);
         int[] eraStart = ERA_RULES.getStartDate(era, null);

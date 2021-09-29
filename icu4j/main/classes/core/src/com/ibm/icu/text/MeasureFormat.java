@@ -347,6 +347,7 @@ public class MeasureFormat extends UFormat {
      * @draft ICU 53 (Retain)
      */
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public Measure parseObject(String source, ParsePosition pos) {
         throw new UnsupportedOperationException();
     }

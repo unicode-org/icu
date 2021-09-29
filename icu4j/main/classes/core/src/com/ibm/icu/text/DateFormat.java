@@ -1602,6 +1602,7 @@ public abstract class DateFormat extends UFormat {
      * @return the set of locales for which DateFormats are installed.
      * @draft ICU 3.2 (retain)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static ULocale[] getAvailableULocales()
     {
         return ICUResourceBundle.getAvailableULocales();

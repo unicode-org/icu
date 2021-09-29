@@ -20,10 +20,12 @@ import java.util.List;
  * Implementation of DateRule that takes a range.
  * @draft ICU 2.8 (retainAll)
  */
+@aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
 public class RangeDateRule implements DateRule {
     /**
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public RangeDateRule() {
     }
 
@@ -38,6 +40,7 @@ public class RangeDateRule implements DateRule {
     /**
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public void add(DateRule rule) {
         add(new Date(Long.MIN_VALUE), rule);
     }
@@ -45,6 +48,7 @@ public class RangeDateRule implements DateRule {
     /**
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public void add(Date start, DateRule rule) {
         // TODO: Insert in the right place
         // System.out.println("Add: " + start.toString());
@@ -57,6 +61,7 @@ public class RangeDateRule implements DateRule {
      * @draft ICU 2.8
      */
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public Date firstAfter(Date start) {
         // Find the range that I should look at
         int index = startIndex(start);
@@ -83,6 +88,7 @@ public class RangeDateRule implements DateRule {
      * @draft ICU 2.8
      */
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public Date firstBetween(Date start, Date end) {
         if (end == null) {
             return firstAfter(start);
@@ -112,6 +118,7 @@ public class RangeDateRule implements DateRule {
      * @draft ICU 2.8
      */
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public boolean isOn(Date date) {
         Range r = rangeAt(startIndex(date));
         return r != null && r.rule != null && r.rule.isOn(date);
@@ -123,6 +130,7 @@ public class RangeDateRule implements DateRule {
      * @draft ICU 2.8
      */
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public boolean isBetween(Date start, Date end) {
         return firstBetween(start,end) == null;
     }

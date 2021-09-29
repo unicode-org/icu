@@ -2505,6 +2505,7 @@ public class PluralRules implements Serializable {
      * @return the set of locales for which PluralRules are known, as a list
      * @draft ICU 4.2 (retain)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static ULocale[] getAvailableULocales() {
         return Factory.getDefaultFactory().getAvailableULocales();
     }
@@ -2525,6 +2526,7 @@ public class PluralRules implements Serializable {
      * @return the functionally-equivalent locale
      * @draft ICU 4.2 (retain)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static ULocale getFunctionalEquivalent(ULocale locale, boolean[] isAvailable) {
         return Factory.getDefaultFactory().getFunctionalEquivalent(locale, isAvailable);
     }
@@ -2563,36 +2565,42 @@ public class PluralRules implements Serializable {
      *
      * @draft ICU 50
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public enum KeywordStatus {
         /**
          * The keyword is not valid for the rules.
          *
          * @draft ICU 50
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         INVALID,
         /**
          * The keyword is valid, but unused (it is covered by the explicit values, OR has no values for the given {@link SampleType}).
          *
          * @draft ICU 50
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         SUPPRESSED,
         /**
          * The keyword is valid, used, and has a single possible value (before considering explicit values).
          *
          * @draft ICU 50
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         UNIQUE,
         /**
          * The keyword is valid, used, not unique, and has a finite set of values.
          *
          * @draft ICU 50
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         BOUNDED,
         /**
          * The keyword is valid but not bounded; there indefinitely many matching values.
          *
          * @draft ICU 50
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         UNBOUNDED
     }
 
@@ -2611,6 +2619,7 @@ public class PluralRules implements Serializable {
      * @return the KeywordStatus
      * @draft ICU 50
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public KeywordStatus getKeywordStatus(String keyword, int offset, Set<Double> explicits,
             Output<Double> uniqueValue) {
         return getKeywordStatus(keyword, offset, explicits, uniqueValue, SampleType.INTEGER);
