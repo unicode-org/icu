@@ -648,7 +648,7 @@ class U_I18N_API FormattedNumberRange : public UMemory, public FormattedValue {
      */
     FormattedNumberRange()
         : fData(nullptr), fErrorCode(U_INVALID_STATE_ERROR) {}
-#endif
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Copying not supported; use move constructor instead.

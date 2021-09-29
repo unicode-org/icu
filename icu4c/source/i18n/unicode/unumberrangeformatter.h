@@ -193,7 +193,7 @@ typedef enum UNumberRangeIdentityResult {
      * @internal
      */
     UNUM_IDENTITY_RESULT_COUNT
-#endif
+#endif  /* U_HIDE_INTERNAL_API */
 
 } UNumberRangeIdentityResult;
 

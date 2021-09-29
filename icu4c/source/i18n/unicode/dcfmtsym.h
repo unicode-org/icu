@@ -174,7 +174,7 @@ public:
          * @internal
          */
         kApproximatelySignSymbol,
-#endif
+#endif  /* U_HIDE_INTERNAL_API */
         /** count symbol constants */
         kFormatSymbolCount = kExponentMultiplicationSymbol + 2
     };
