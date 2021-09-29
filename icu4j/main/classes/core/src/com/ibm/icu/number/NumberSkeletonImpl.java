@@ -96,6 +96,7 @@ class NumberSkeletonImpl {
         STEM_ROUNDING_MODE_HALF_DOWN,
         STEM_ROUNDING_MODE_HALF_UP,
         STEM_ROUNDING_MODE_UNNECESSARY,
+        STEM_INTEGER_WIDTH_TRUNC,
         STEM_GROUP_OFF,
         STEM_GROUP_MIN2,
         STEM_GROUP_AUTO,
@@ -174,6 +175,7 @@ class NumberSkeletonImpl {
         b.add("rounding-mode-half-down", StemEnum.STEM_ROUNDING_MODE_HALF_DOWN.ordinal());
         b.add("rounding-mode-half-up", StemEnum.STEM_ROUNDING_MODE_HALF_UP.ordinal());
         b.add("rounding-mode-unnecessary", StemEnum.STEM_ROUNDING_MODE_UNNECESSARY.ordinal());
+        b.add("integer-width-trunc", StemEnum.STEM_INTEGER_WIDTH_TRUNC.ordinal());
         b.add("group-off", StemEnum.STEM_GROUP_OFF.ordinal());
         b.add("group-min2", StemEnum.STEM_GROUP_MIN2.ordinal());
         b.add("group-auto", StemEnum.STEM_GROUP_AUTO.ordinal());
@@ -749,6 +751,11 @@ class NumberSkeletonImpl {
         case STEM_ROUNDING_MODE_UNNECESSARY:
             checkNull(macros.roundingMode, segment);
             macros.roundingMode = StemToObject.roundingMode(stem);
+            return ParseState.STATE_NULL;
+
+        case STEM_INTEGER_WIDTH_TRUNC:
+            checkNull(macros.integerWidth, segment);
+            macros.integerWidth = IntegerWidth.zeroFillTo(0).truncateAt(0);
             return ParseState.STATE_NULL;
 
         case STEM_GROUP_OFF:
@@ -1622,6 +1629,10 @@ class NumberSkeletonImpl {
         private static boolean integerWidth(MacroProps macros, StringBuilder sb) {
             if (macros.integerWidth.equals(IntegerWidth.DEFAULT)) {
                 return false; // Default
+            }
+            if (macros.integerWidth.minInt == 0 && macros.integerWidth.maxInt == 0) {
+                sb.append("integer-width-trunc");
+                return true;
             }
             sb.append("integer-width/");
             BlueprintHelpers.generateIntegerWidthOption(macros.integerWidth.minInt,

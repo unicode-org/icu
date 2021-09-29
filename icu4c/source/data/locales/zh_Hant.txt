@@ -1603,6 +1603,9 @@ zh_Hant{
                 Gy{"rU年"}
                 GyMMM{"rU年MMM"}
                 GyMMMEd{"rU年MMMdE"}
+                GyMMMM{"r(U)MMMM"}
+                GyMMMMEd{"r(U)MMMMd日 E"}
+                GyMMMMd{"r(U)MMMMd日"}
                 GyMMMd{"r年MMMd"}
                 H{"HH時"}
                 Hm{"HH:mm"}
@@ -1631,6 +1634,8 @@ zh_Hant{
                 yyyyMMM{"rU年MMM"}
                 yyyyMMMEd{"rU年MMMdE"}
                 yyyyMMMM{"rU年MMMM"}
+                yyyyMMMMEd{"r(U)MMMMd日 E"}
+                yyyyMMMMd{"r(U)MMMMd日"}
                 yyyyMMMd{"r年MMMd"}
                 yyyyMd{"r年MMMd"}
                 yyyyQQQ{"rU年QQQQ"}
@@ -4675,20 +4680,24 @@ zh_Hant{
                 }
                 h{
                     B{"Bh時至Bh時"}
+                    a{"ah時至ah時"}
                     h{"Bh時至h時"}
                 }
                 hm{
                     B{"Bh:mm至Bh:mm"}
+                    a{"ah:mm至ah:mm"}
                     h{"Bh:mm至h:mm"}
                     m{"Bh:mm至h:mm"}
                 }
                 hmv{
                     B{"Bh:mm至Bh:mm [v]"}
+                    a{"ah:mm至ah:mm [v]"}
                     h{"Bh:mm至h:mm [v]"}
                     m{"Bh:mm至h:mm [v]"}
                 }
                 hv{
                     B{"Bh時至Bh時 [v]"}
+                    a{"ah時至ah時 [v]"}
                     h{"Bh時至h時 [v]"}
                 }
                 y{
@@ -6782,6 +6791,7 @@ zh_Hant{
                 GyMMM{"Gy年M月"}
                 GyMMMEd{"Gy年M月d日E"}
                 GyMMMd{"Gy年M月d日"}
+                GyMd{"Gy/M/d"}
                 H{"H時"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}

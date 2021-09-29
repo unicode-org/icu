@@ -37,7 +37,7 @@ struct NumberFormatTest_Attributes {
  */
 class NumberFormatDataDrivenTest : public DataDrivenNumberFormatTestSuite {
   public:
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par ) override;
     void TestNumberFormatTestTuple();
     void TestDataDrivenICU4C();
 
@@ -45,19 +45,19 @@ class NumberFormatDataDrivenTest : public DataDrivenNumberFormatTestSuite {
     UBool isFormatPass(
             const NumberFormatTestTuple &tuple,
             UnicodeString &appendErrorMessage,
-            UErrorCode &status);
+            UErrorCode &status) override;
     UBool isToPatternPass(
             const NumberFormatTestTuple &tuple,
             UnicodeString &appendErrorMessage,
-            UErrorCode &status);
+            UErrorCode &status) override;
     UBool isParsePass(
             const NumberFormatTestTuple &tuple,
             UnicodeString &appendErrorMessage,
-            UErrorCode &status);
+            UErrorCode &status) override;
     UBool isParseCurrencyPass(
             const NumberFormatTestTuple &tuple,
             UnicodeString &appendErrorMessage,
-            UErrorCode &status);
+            UErrorCode &status) override;
 };
 
 /**
@@ -66,7 +66,7 @@ class NumberFormatDataDrivenTest : public DataDrivenNumberFormatTestSuite {
 class NumberFormatTest: public CalendarTimeZoneTest {
 
     // IntlTest override
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par ) override;
  public:
 
     /**
@@ -303,8 +303,11 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test20961_CurrencyPluralPattern();
     void Test21134_ToNumberFormatter();
     void Test13733_StrictAndLenient();
+    void Test20425_IntegerIncrement();
+    void Test20425_FractionWithIntegerIncrement();
     void Test21232_ParseTimeout();
     void Test10997_FormatCurrency();
+    void Test21556_CurrencyAsDecimal();
 
  private:
     UBool testFormattableAsUFormattable(const char *file, int line, Formattable &f);

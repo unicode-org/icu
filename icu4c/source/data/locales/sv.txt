@@ -723,6 +723,7 @@ sv{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E d MMM y G"}
                 GyMMMd{"d MMM y G"}
+                GyMd{"y-MM-dd GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -952,6 +953,7 @@ sv{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E d MMM y G"}
                 GyMMMd{"d MMM y G"}
+                GyMd{"y-MM-dd GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -1164,8 +1166,8 @@ sv{
                 }
                 Bhm{
                     B{"h:mm B–h:mm B"}
-                    h{"h:mm – h:mm B"}
-                    m{"h:mm – h:mm B"}
+                    h{"hh:mm – hh:mm B"}
+                    m{"hh:mm – hh:mm B"}
                 }
                 Gy{
                     G{"y G – y G"}

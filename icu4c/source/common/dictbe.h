@@ -62,7 +62,7 @@ class DictionaryBreakEngine : public LanguageBreakEngine {
    * @return true if this engine handles the particular character and break
    * type.
    */
-  virtual UBool handles(UChar32 c) const;
+  virtual UBool handles(UChar32 c) const override;
 
   /**
    * <p>Find any breaks within a run in the supplied text.</p>
@@ -80,7 +80,7 @@ class DictionaryBreakEngine : public LanguageBreakEngine {
                               int32_t startPos,
                               int32_t endPos,
                               UVector32 &foundBreaks,
-                              UErrorCode& status ) const;
+                              UErrorCode& status ) const override;
 
  protected:
 
@@ -164,7 +164,7 @@ class ThaiBreakEngine : public DictionaryBreakEngine {
                                            int32_t rangeStart,
                                            int32_t rangeEnd,
                                            UVector32 &foundBreaks,
-                                           UErrorCode& status) const;
+                                           UErrorCode& status) const override;
 
 };
 
@@ -222,7 +222,7 @@ class LaoBreakEngine : public DictionaryBreakEngine {
                                            int32_t rangeStart,
                                            int32_t rangeEnd,
                                            UVector32 &foundBreaks,
-                                           UErrorCode& status) const;
+                                           UErrorCode& status) const override;
 
 };
 
@@ -280,7 +280,7 @@ class BurmeseBreakEngine : public DictionaryBreakEngine {
                                            int32_t rangeStart,
                                            int32_t rangeEnd,
                                            UVector32 &foundBreaks,
-                                           UErrorCode& status) const;
+                                           UErrorCode& status) const override;
 
 };
 
@@ -338,7 +338,7 @@ class KhmerBreakEngine : public DictionaryBreakEngine {
                                            int32_t rangeStart,
                                            int32_t rangeEnd,
                                            UVector32 &foundBreaks,
-                                           UErrorCode& status) const;
+                                           UErrorCode& status) const override;
 
 };
 
@@ -404,7 +404,7 @@ class CjkBreakEngine : public DictionaryBreakEngine {
           int32_t rangeStart,
           int32_t rangeEnd,
           UVector32 &foundBreaks,
-          UErrorCode& status) const;
+          UErrorCode& status) const override;
 
 };
 

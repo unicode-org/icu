@@ -259,6 +259,7 @@ mn{
                 GyMMM{"G y 'оны' MMM"}
                 GyMMMEd{"G y 'оны' MMM'ын' d. E"}
                 GyMMMd{"G y 'оны' MMM'ын' d"}
+                GyMd{"GGGGG y.MM.dd"}
                 H{"HH 'ц'"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}

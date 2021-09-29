@@ -390,6 +390,7 @@ void RBBITableBuilder::addRuleRootNodes(UVector *dest, RBBINode *node) {
     if (node == NULL || U_FAILURE(*fStatus)) {
         return;
     }
+    U_ASSERT(!dest->hasDeleter());
     if (node->fRuleRoot) {
         dest->addElement(node, *fStatus);
         // Note: rules cannot nest. If we found a rule start node,
@@ -1042,6 +1043,8 @@ void RBBITableBuilder::sortedAdd(UVector **vector, int32_t val) {
 //
 //-----------------------------------------------------------------------------
 void RBBITableBuilder::setAdd(UVector *dest, UVector *source) {
+    U_ASSERT(!dest->hasDeleter());
+    U_ASSERT(!source->hasDeleter());
     int32_t destOriginalSize = dest->size();
     int32_t sourceSize       = source->size();
     int32_t di           = 0;
@@ -1070,6 +1073,9 @@ void RBBITableBuilder::setAdd(UVector *dest, UVector *source) {
     (void) source->toArray(sourcePtr);
 
     dest->setSize(sourceSize+destOriginalSize, *fStatus);
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
 
     while (sourcePtr < sourceLim && destPtr < destLim) {
         if (*destPtr == *sourcePtr) {
@@ -1497,9 +1503,18 @@ void RBBITableBuilder::buildSafeReverseTable(UErrorCode &status) {
     // fLookAhead, etc. are not needed for the safe table, and are omitted at this stage of building.
 
     U_ASSERT(fSafeTable == nullptr);
-    fSafeTable = new UVector(uprv_deleteUObject, uhash_compareUnicodeString, numCharClasses + 2, status);
+    LocalPointer<UVector> lpSafeTable(
+        new UVector(uprv_deleteUObject, uhash_compareUnicodeString, numCharClasses + 2, status), status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+    fSafeTable = lpSafeTable.orphan();
     for (int32_t row=0; row<numCharClasses + 2; ++row) {
-        fSafeTable->addElement(new UnicodeString(numCharClasses, 0, numCharClasses+4), status);
+        LocalPointer<UnicodeString> lpString(new UnicodeString(numCharClasses, 0, numCharClasses+4), status);
+        fSafeTable->adoptElement(lpString.orphan(), status);
+    }
+    if (U_FAILURE(status)) {
+        return;
     }
 
     // From the start state, each input char class transitions to the state for that input.

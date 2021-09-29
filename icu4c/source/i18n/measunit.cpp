@@ -2196,12 +2196,12 @@ const char *MeasureUnit::getIdentifier() const {
     return fImpl ? fImpl->identifier.data() : gSubTypes[getOffset()];
 }
 
-UBool MeasureUnit::operator==(const UObject& other) const {
+bool MeasureUnit::operator==(const UObject& other) const {
     if (this == &other) {  // Same object, equal
-        return TRUE;
+        return true;
     }
     if (typeid(*this) != typeid(other)) { // Different types, not equal
-        return FALSE;
+        return false;
     }
     const MeasureUnit &rhs = static_cast<const MeasureUnit&>(other);
     return uprv_strcmp(getIdentifier(), rhs.getIdentifier()) == 0;

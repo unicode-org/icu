@@ -257,20 +257,13 @@ public:
     }
 };
 
-// UObjectDeleter for serviceCache
+// Deleter for serviceCache
 U_CDECL_BEGIN
 static void U_CALLCONV
 cacheDeleter(void* obj) {
     U_NAMESPACE_USE ((CacheEntry*)obj)->unref();
 }
 
-/**
-* Deleter for UObjects
-*/
-static void U_CALLCONV
-deleteUObject(void *obj) {
-    U_NAMESPACE_USE delete (UObject*) obj;
-}
 U_CDECL_END
 
 /*
@@ -534,11 +527,10 @@ ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUSer
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return NULL;
             }
-            cacheDescriptorList->addElement(idToCache.getAlias(), status);
+            cacheDescriptorList->adoptElement(idToCache.orphan(), status);
             if (U_FAILURE(status)) {
                 return NULL;
             }
-            idToCache.orphan(); // cacheDescriptorList now owns the string.
         } while (key.fallback());
 outerEnd:
 
@@ -612,6 +604,7 @@ ICUService::getVisibleIDs(UVector& result, const UnicodeString* matchID, UErrorC
     if (U_FAILURE(status)) {
         return result;
     }
+    UObjectDeleter *savedDeleter = result.setDeleter(uprv_deleteUObject);
 
     {
         Mutex mutex(&lock);
@@ -619,7 +612,7 @@ ICUService::getVisibleIDs(UVector& result, const UnicodeString* matchID, UErrorC
         if (map != NULL) {
             ICUServiceKey* fallbackKey = createKey(matchID, status);
 
-            for (int32_t pos = UHASH_FIRST;;) {
+            for (int32_t pos = UHASH_FIRST; U_SUCCESS(status); ) {
                 const UHashElement* e = map->nextElement(pos);
                 if (e == NULL) {
                     break;
@@ -632,17 +625,11 @@ ICUService::getVisibleIDs(UVector& result, const UnicodeString* matchID, UErrorC
                     }
                 }
 
-                UnicodeString* idClone = new UnicodeString(*id);
-                if (idClone == NULL || idClone->isBogus()) {
-                    delete idClone;
+                LocalPointer<UnicodeString> idClone(new UnicodeString(*id), status);
+                if (U_SUCCESS(status) && idClone->isBogus()) {
                     status = U_MEMORY_ALLOCATION_ERROR;
-                    break;
                 }
-                result.addElement(idClone, status);
-                if (U_FAILURE(status)) {
-                    delete idClone;
-                    break;
-                }
+                result.adoptElement(idClone.orphan(), status);
             }
             delete fallbackKey;
         }
@@ -650,6 +637,7 @@ ICUService::getVisibleIDs(UVector& result, const UnicodeString* matchID, UErrorC
     if (U_FAILURE(status)) {
         result.removeAllElements();
     }
+    result.setDeleter(savedDeleter);
     return result;
 }
 
@@ -797,7 +785,7 @@ ICUService::getDisplayNames(UVector& result,
         }
         const UnicodeString* dn = (const UnicodeString*)entry->key.pointer;
         StringPair* sp = StringPair::create(*id, *dn, status);
-        result.addElement(sp, status);
+        result.adoptElement(sp, status);
         if (U_FAILURE(status)) {
             result.removeAllElements();
             break;
@@ -845,32 +833,34 @@ ICUService::createSimpleFactory(UObject* objToAdopt, const UnicodeString& id, UB
 }
 
 URegistryKey
-ICUService::registerFactory(ICUServiceFactory* factoryToAdopt, UErrorCode& status) 
+ICUService::registerFactory(ICUServiceFactory* factoryToAdopt, UErrorCode& status)
 {
-    if (U_SUCCESS(status) && factoryToAdopt != NULL) {
+    LocalPointer<ICUServiceFactory>lpFactoryToAdopt(factoryToAdopt);
+    if (U_FAILURE(status) || factoryToAdopt == nullptr) {
+        return nullptr;
+    }
+    {
         Mutex mutex(&lock);
 
-        if (factories == NULL) {
-            factories = new UVector(deleteUObject, NULL, status);
+        if (factories == nullptr) {
+            LocalPointer<UVector> lpFactories(new UVector(uprv_deleteUObject, nullptr, status), status);
             if (U_FAILURE(status)) {
-                delete factories;
-                return NULL;
+                return nullptr;
             }
+            factories = lpFactories.orphan();
         }
-        factories->insertElementAt(factoryToAdopt, 0, status);
+        factories->insertElementAt(lpFactoryToAdopt.orphan(), 0, status);
         if (U_SUCCESS(status)) {
             clearCaches();
-        } else {
-            delete factoryToAdopt;
-            factoryToAdopt = NULL;
         }
-    }
+    }   // Close of mutex lock block.
 
-    if (factoryToAdopt != NULL) {
+    if (U_SUCCESS(status)) {
         notifyChanged();
+        return (URegistryKey)factoryToAdopt;
+    } else {
+        return nullptr;
     }
-
-    return (URegistryKey)factoryToAdopt;
 }
 
 UBool 

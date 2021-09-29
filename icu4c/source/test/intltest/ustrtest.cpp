@@ -1345,6 +1345,12 @@ void UnicodeStringTest::TestUnescape(void) {
     if (!UNICODE_STRING("wrong \\u sequence", 17).unescape().isEmpty()) {
         errln("FAIL: unescaping of a string with an illegal escape sequence did not return an empty string");
     }
+
+    // ICU-21648 limit backslash-uhhhh escapes to ASCII hex digits
+    UnicodeString euro = UnicodeString(u"\\u20aC").unescape();
+    assertEquals("ASCII Euro", u"€", euro);
+    UnicodeString nonASCIIEuro = UnicodeString(u"\\u୨෦ａＣ").unescape();
+    assertTrue("unescape() accepted non-ASCII digits", nonASCIIEuro.isEmpty());
 }
 
 /* test code point counting functions --------------------------------------- */
@@ -1666,11 +1672,11 @@ class TestEnumeration : public StringEnumeration {
 public:
     TestEnumeration() : i(0) {}
 
-    virtual int32_t count(UErrorCode& /*status*/) const {
+    virtual int32_t count(UErrorCode& /*status*/) const override {
         return UPRV_LENGTHOF(testEnumStrings);
     }
 
-    virtual const UnicodeString *snext(UErrorCode &status) {
+    virtual const UnicodeString *snext(UErrorCode &status) override {
         if(U_SUCCESS(status) && i<UPRV_LENGTHOF(testEnumStrings)) {
             unistr=UnicodeString(testEnumStrings[i++], "");
             return &unistr;
@@ -1679,14 +1685,14 @@ public:
         return NULL;
     }
 
-    virtual void reset(UErrorCode& /*status*/) {
+    virtual void reset(UErrorCode& /*status*/) override {
         i=0;
     }
 
     static inline UClassID getStaticClassID() {
         return (UClassID)&fgClassID;
     }
-    virtual UClassID getDynamicClassID() const {
+    virtual UClassID getDynamicClassID() const override {
         return getStaticClassID();
     }
 
@@ -1861,7 +1867,7 @@ class TestCheckedArrayByteSink : public CheckedArrayByteSink {
 public:
     TestCheckedArrayByteSink(char* outbuf, int32_t capacity)
             : CheckedArrayByteSink(outbuf, capacity), calledFlush(FALSE) {}
-    virtual void Flush() { calledFlush = TRUE; }
+    virtual void Flush() override { calledFlush = TRUE; }
     UBool calledFlush;
 };
 
@@ -2076,7 +2082,7 @@ UnicodeStringTest::doTestAppendable(UnicodeString &dest, Appendable &app) {
 class SimpleAppendable : public Appendable {
 public:
     explicit SimpleAppendable(UnicodeString &dest) : str(dest) {}
-    virtual UBool appendCodeUnit(UChar c) { str.append(c); return TRUE; }
+    virtual UBool appendCodeUnit(UChar c) override { str.append(c); return TRUE; }
     SimpleAppendable &reset() { str.remove(); return *this; }
 private:
     UnicodeString &str;

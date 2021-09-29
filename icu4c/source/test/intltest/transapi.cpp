@@ -620,6 +620,9 @@ void TransliteratorAPITest::TestNullTransliterator(){
     UErrorCode status=U_ZERO_ERROR;
     UnicodeString s("Transliterate using null transliterator");
     Transliterator *nullTrans=Transliterator::createInstance("Any-Null", UTRANS_FORWARD, status);
+    if (!assertSuccess(WHERE, status)) {
+        return;
+    }
     int32_t transLimit;
     int32_t start=0;
     int32_t limit=s.length();
@@ -711,11 +714,11 @@ int gTestFilter3ClassID = 0;
  * Used by TestFiltering().
  */
 class TestFilter1 : public UnicodeFilter {
-    UClassID getDynamicClassID()const { return &gTestFilter1ClassID; }
-    virtual TestFilter1* clone() const {
+    UClassID getDynamicClassID()const override { return &gTestFilter1ClassID; }
+    virtual TestFilter1* clone() const override {
         return new TestFilter1(*this);
     }
-    virtual UBool contains(UChar32 c) const {
+    virtual UBool contains(UChar32 c) const override {
        if(c==0x63 || c==0x61 || c==0x43 || c==0x41)
           return FALSE;
        else
@@ -723,20 +726,20 @@ class TestFilter1 : public UnicodeFilter {
     }
     // Stubs
     virtual UnicodeString& toPattern(UnicodeString& result,
-                                     UBool /*escapeUnprintable*/) const {
+                                     UBool /*escapeUnprintable*/) const override {
         return result;
     }
-    virtual UBool matchesIndexValue(uint8_t /*v*/) const {
+    virtual UBool matchesIndexValue(uint8_t /*v*/) const override {
         return FALSE;
     }
-    virtual void addMatchSetTo(UnicodeSet& /*toUnionTo*/) const {}
+    virtual void addMatchSetTo(UnicodeSet& /*toUnionTo*/) const override {}
 };
 class TestFilter2 : public UnicodeFilter {
-    UClassID getDynamicClassID()const { return &gTestFilter2ClassID; }
-    virtual TestFilter2* clone() const {
+    UClassID getDynamicClassID() const override { return &gTestFilter2ClassID; }
+    virtual TestFilter2* clone() const override {
         return new TestFilter2(*this);
     }
-    virtual UBool contains(UChar32 c) const {
+    virtual UBool contains(UChar32 c) const override {
         if(c==0x65 || c==0x6c)
            return FALSE;
         else
@@ -744,20 +747,20 @@ class TestFilter2 : public UnicodeFilter {
     }
     // Stubs
     virtual UnicodeString& toPattern(UnicodeString& result,
-                                     UBool /*escapeUnprintable*/) const {
+                                     UBool /*escapeUnprintable*/) const override {
         return result;
     }
-    virtual UBool matchesIndexValue(uint8_t /*v*/) const {
+    virtual UBool matchesIndexValue(uint8_t /*v*/) const override {
         return FALSE;
     }
-    virtual void addMatchSetTo(UnicodeSet& /*toUnionTo*/) const {}
+    virtual void addMatchSetTo(UnicodeSet& /*toUnionTo*/) const override {}
 };
 class TestFilter3 : public UnicodeFilter {
-    UClassID getDynamicClassID()const { return &gTestFilter3ClassID; }
-    virtual TestFilter3* clone() const {
+    UClassID getDynamicClassID() const override { return &gTestFilter3ClassID; }
+    virtual TestFilter3* clone() const override {
         return new TestFilter3(*this);
     }
-    virtual UBool contains(UChar32 c) const {
+    virtual UBool contains(UChar32 c) const override {
         if(c==0x6f || c==0x77)
            return FALSE;
         else
@@ -765,13 +768,13 @@ class TestFilter3 : public UnicodeFilter {
     }
     // Stubs
     virtual UnicodeString& toPattern(UnicodeString& result,
-                                     UBool /*escapeUnprintable*/) const {
+                                     UBool /*escapeUnprintable*/) const override {
         return result;
     }
-    virtual UBool matchesIndexValue(uint8_t /*v*/) const {
+    virtual UBool matchesIndexValue(uint8_t /*v*/) const override {
         return FALSE;
     }
-    virtual void addMatchSetTo(UnicodeSet& /*toUnionTo*/) const {}
+    virtual void addMatchSetTo(UnicodeSet& /*toUnionTo*/) const override {}
 };
 
 
@@ -972,10 +975,10 @@ void TransliteratorAPITest::callEverything(const Transliterator *tr, int line) {
 static const int MyUnicodeFunctorTestClassID = 0;
 class MyUnicodeFunctorTestClass : public UnicodeFunctor {
 public:
-    virtual UnicodeFunctor* clone() const {return NULL;}
+    virtual UnicodeFunctor* clone() const override {return NULL;}
     static UClassID getStaticClassID(void) {return (UClassID)&MyUnicodeFunctorTestClassID;}
-    virtual UClassID getDynamicClassID(void) const {return getStaticClassID();}
-    virtual void setData(const TransliterationRuleData*) {}
+    virtual UClassID getDynamicClassID(void) const override {return getStaticClassID();}
+    virtual void setData(const TransliterationRuleData*) override {}
 };
 
 void TransliteratorAPITest::TestUnicodeFunctor() {

@@ -1248,7 +1248,10 @@ public class DecimalFormat extends NumberFormat {
     if (increment == 0) {
       setRoundingIncrement((java.math.BigDecimal) null);
     } else {
-      java.math.BigDecimal javaBigDecimal = java.math.BigDecimal.valueOf(increment);
+      // ICU-20425: Since doubles have no concept of trailing zeros, we should strip
+      // trailing zeros from the BigDecimal.
+      java.math.BigDecimal javaBigDecimal = java.math.BigDecimal.valueOf(increment)
+        .stripTrailingZeros();
       setRoundingIncrement(javaBigDecimal);
     }
   }
@@ -2021,7 +2024,7 @@ public class DecimalFormat extends NumberFormat {
    * @see #setMinimumGroupingDigits(int)
    * @see #MINIMUM_GROUPING_DIGITS_MIN2
    * @category Separators
-   * @draft ICU 68
+   * @stable ICU 68
    */
   public static final int MINIMUM_GROUPING_DIGITS_AUTO = -2;
 
@@ -2033,7 +2036,7 @@ public class DecimalFormat extends NumberFormat {
    * @see #setMinimumGroupingDigits(int)
    * @see #MINIMUM_GROUPING_DIGITS_AUTO
    * @category Separators
-   * @draft ICU 68
+   * @stable ICU 68
    */
   public static final int MINIMUM_GROUPING_DIGITS_MIN2 = -3;
 
@@ -2502,6 +2505,7 @@ public class DecimalFormat extends NumberFormat {
     boolean useCurrency = ((tprops.getCurrency() != null)
             || tprops.getCurrencyPluralInfo() != null
             || tprops.getCurrencyUsage() != null
+            || tprops.getCurrencyAsDecimal()
             || AffixUtils.hasCurrencySymbols(tprops.getPositivePrefixPattern())
             || AffixUtils.hasCurrencySymbols(tprops.getPositiveSuffixPattern())
             || AffixUtils.hasCurrencySymbols(tprops.getNegativePrefixPattern())

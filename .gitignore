@@ -1,4 +1,5 @@
 # Wildcards
+*.1
 *.8
 *.a
 *.ao
@@ -76,6 +77,7 @@ ipch
 pkgdata.inc
 pkgdataMakefile
 rules.mk
+.DS_Store
 
 !icu4c/source/samples/csdet/Makefile
 
@@ -89,12 +91,8 @@ icu4c/source/samples/uresb/*.res
 icu4c/source/test-*.xml
 icu4c/source/test/hdrtst/ht_*
 icu4c/source/test/perf/howExpensiveIs/*.xml
-icu4c/source/tools/gendict/*.1
-icu4c/source/tools/genrb/*.1
 icu4c/source/tools/genrb/derb_*
 icu4c/source/tools/genren/urename.*
-icu4c/source/tools/makeconv/*.1
-icu4c/source/tools/pkgdata/*.1
 icu4j/*.jar
 icu4j/lib/*.jar
 tools/multi/packages/*.jar
@@ -132,7 +130,6 @@ icu4c/source/config.log
 icu4c/source/config.status
 icu4c/source/config/Makefile.inc
 icu4c/source/config/icu-config
-icu4c/source/config/icu-config.1
 icu4c/source/config/icu.pc
 icu4c/source/config/icucross.inc
 icu4c/source/config/icucross.mk
@@ -153,7 +150,6 @@ icu4c/source/extra/scrptrun/srtest.o
 icu4c/source/extra/scrptrun/srtest.exe
 icu4c/source/extra/uconv/pkgdatain.txt
 icu4c/source/extra/uconv/uconv
-icu4c/source/extra/uconv/uconv.1
 icu4c/source/extra/uconv/uconv.plg
 icu4c/source/extra/uconv/uconvmsg
 icu4c/source/i18n/i18n.res

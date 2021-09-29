@@ -426,13 +426,28 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     }
 
     private String localeIdName(String localeId) {
+        String locIdName;
         if (nameLength == DisplayContext.LENGTH_SHORT) {
-            String locIdName = langData.get("Languages%short", localeId);
+            locIdName = langData.get("Languages%short", localeId);
             if (locIdName != null && !locIdName.equals(localeId)) {
                 return locIdName;
             }
         }
-        return langData.get("Languages", localeId);
+        locIdName = langData.get("Languages", localeId);
+        if ((locIdName == null || locIdName.equals(localeId)) && localeId.indexOf('_') < 0) {
+            // Canonicalize lang and try again, ICU-20870
+            // (only for language codes without script or region)
+            ULocale canonLocale = ULocale.createCanonical(localeId);
+            String canonLocId = canonLocale.getName();
+            if (nameLength == DisplayContext.LENGTH_SHORT) {
+                locIdName = langData.get("Languages%short", canonLocId);
+                if (locIdName != null && !locIdName.equals(canonLocId)) {
+                    return locIdName;
+                }
+            }
+            locIdName = langData.get("Languages", canonLocId);
+        }
+        return locIdName;
     }
 
     @Override
@@ -441,13 +456,27 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         if (lang.equals("root") || lang.indexOf('_') != -1) {
             return substituteHandling == DisplayContext.SUBSTITUTE ? lang : null;
         }
+        String langName;
         if (nameLength == DisplayContext.LENGTH_SHORT) {
-            String langName = langData.get("Languages%short", lang);
+            langName = langData.get("Languages%short", lang);
             if (langName != null && !langName.equals(lang)) {
                 return adjustForUsageAndContext(CapitalizationContextUsage.LANGUAGE, langName);
             }
         }
-        return adjustForUsageAndContext(CapitalizationContextUsage.LANGUAGE, langData.get("Languages", lang));
+        langName = langData.get("Languages", lang);
+        if (langName == null || langName.equals(lang)) {
+            // Canonicalize lang and try again, ICU-20870
+            ULocale canonLocale = ULocale.createCanonical(lang);
+            String canonLocId = canonLocale.getName();
+            if (nameLength == DisplayContext.LENGTH_SHORT) {
+                langName = langData.get("Languages%short", canonLocId);
+                if (langName != null && !langName.equals(canonLocId)) {
+                    return adjustForUsageAndContext(CapitalizationContextUsage.LANGUAGE, langName);
+                }
+            }
+            langName = langData.get("Languages", canonLocId);
+        }
+        return adjustForUsageAndContext(CapitalizationContextUsage.LANGUAGE, langName);
     }
 
     @Override

@@ -170,17 +170,17 @@ RBBIDataWrapper::~RBBIDataWrapper() {
 //                  should still be ==.
 //
 //-----------------------------------------------------------------------------
-UBool RBBIDataWrapper::operator ==(const RBBIDataWrapper &other) const {
+bool RBBIDataWrapper::operator ==(const RBBIDataWrapper &other) const {
     if (fHeader == other.fHeader) {
-        return TRUE;
+        return true;
     }
     if (fHeader->fLength != other.fHeader->fLength) {
-        return FALSE;
+        return false;
     }
     if (uprv_memcmp(fHeader, other.fHeader, fHeader->fLength) == 0) {
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 int32_t  RBBIDataWrapper::hashCode() {

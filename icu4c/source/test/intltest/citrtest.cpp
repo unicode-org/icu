@@ -43,42 +43,42 @@ public:
         text = newText;
     }
 
-    virtual void getText(UnicodeString& result) {
+    virtual void getText(UnicodeString& result) override {
         text.extract(0,text.length(),result);
     }
     static UClassID getStaticClassID(void){ 
         return (UClassID)(&fgClassID); 
     }
-    virtual UClassID getDynamicClassID(void) const{ 
+    virtual UClassID getDynamicClassID(void) const override {
         return getStaticClassID(); 
     }
 
-    virtual UBool operator==(const ForwardCharacterIterator& /*that*/) const{
-        return TRUE;
+    virtual bool operator==(const ForwardCharacterIterator& /*that*/) const override {
+        return true;
     }
 
-    virtual SCharacterIterator* clone(void) const {
+    virtual SCharacterIterator* clone(void) const override {
         return NULL;
     }
-    virtual int32_t hashCode(void) const{
+    virtual int32_t hashCode(void) const override {
         return DONE;
     }
-    virtual UChar nextPostInc(void){ return text.charAt(pos++);}
-    virtual UChar32 next32PostInc(void){return text.char32At(pos++);}
-    virtual UBool hasNext() { return TRUE;}
-    virtual UChar first(){return DONE;}
-    virtual UChar32 first32(){return DONE;}
-    virtual UChar last(){return DONE;}
-    virtual UChar32 last32(){return DONE;}
-    virtual UChar setIndex(int32_t /*pos*/){return DONE;}
-    virtual UChar32 setIndex32(int32_t /*pos*/){return DONE;}
-    virtual UChar current() const{return DONE;}
-    virtual UChar32 current32() const{return DONE;}
-    virtual UChar next(){return DONE;}
-    virtual UChar32 next32(){return DONE;}
-    virtual UChar previous(){return DONE;}
-    virtual UChar32 previous32(){return DONE;}
-    virtual int32_t move(int32_t delta,CharacterIterator::EOrigin origin){    
+    virtual UChar nextPostInc(void) override { return text.charAt(pos++);}
+    virtual UChar32 next32PostInc(void) override {return text.char32At(pos++);}
+    virtual UBool hasNext() override { return TRUE;}
+    virtual UChar first() override {return DONE;}
+    virtual UChar32 first32() override {return DONE;}
+    virtual UChar last() override {return DONE;}
+    virtual UChar32 last32() override {return DONE;}
+    virtual UChar setIndex(int32_t /*pos*/) override {return DONE;}
+    virtual UChar32 setIndex32(int32_t /*pos*/) override {return DONE;}
+    virtual UChar current() const override {return DONE;}
+    virtual UChar32 current32() const override {return DONE;}
+    virtual UChar next() override {return DONE;}
+    virtual UChar32 next32() override {return DONE;}
+    virtual UChar previous() override {return DONE;}
+    virtual UChar32 previous32() override {return DONE;}
+    virtual int32_t move(int32_t delta,CharacterIterator::EOrigin origin) override {
         switch(origin) {
         case kStart:
             pos = begin + delta;
@@ -101,7 +101,7 @@ public:
 
         return pos;
     }
-    virtual int32_t move32(int32_t delta, CharacterIterator::EOrigin origin){    
+    virtual int32_t move32(int32_t delta, CharacterIterator::EOrigin origin) override {
         switch(origin) {
         case kStart:
             pos = begin;
@@ -128,7 +128,7 @@ public:
 
         return pos;
     }
-    virtual UBool hasPrevious() {return TRUE;}
+    virtual UBool hasPrevious() override {return TRUE;}
 
   SCharacterIterator&  operator=(const SCharacterIterator&    that){
      text = that.text;
@@ -976,7 +976,7 @@ public:
     }
 
     // useful stuff, mostly dummy but testing coverage and subclassability
-    virtual UChar nextPostInc() {
+    virtual UChar nextPostInc() override {
         if(pos<UPRV_LENGTHOF(s)) {
             return s[pos++];
         } else {
@@ -984,7 +984,7 @@ public:
         }
     }
 
-    virtual UChar32 next32PostInc() {
+    virtual UChar32 next32PostInc() override {
         if(pos<UPRV_LENGTHOF(s)) {
             UChar32 c;
             U16_NEXT(s, pos, UPRV_LENGTHOF(s), c);
@@ -994,16 +994,16 @@ public:
         }
     }
 
-    virtual UBool hasNext() {
+    virtual UBool hasNext() override {
         return pos<UPRV_LENGTHOF(s);
     }
 
-    virtual UChar first() {
+    virtual UChar first() override {
         pos=0;
         return s[0];
     }
 
-    virtual UChar32 first32() {
+    virtual UChar32 first32() override {
         UChar32 c;
         pos=0;
         U16_NEXT(s, pos, UPRV_LENGTHOF(s), c);
@@ -1011,7 +1011,7 @@ public:
         return c;
     }
 
-    virtual UChar setIndex(int32_t position) {
+    virtual UChar setIndex(int32_t position) override {
         if(0<=position && position<=UPRV_LENGTHOF(s)) {
             pos=position;
             if(pos<UPRV_LENGTHOF(s)) {
@@ -1021,7 +1021,7 @@ public:
         return DONE;
     }
 
-    virtual UChar32 setIndex32(int32_t position) {
+    virtual UChar32 setIndex32(int32_t position) override {
         if(0<=position && position<=UPRV_LENGTHOF(s)) {
             pos=position;
             if(pos<UPRV_LENGTHOF(s)) {
@@ -1033,7 +1033,7 @@ public:
         return DONE;
     }
 
-    virtual UChar current() const {
+    virtual UChar current() const override {
         if(pos<UPRV_LENGTHOF(s)) {
             return s[pos];
         } else {
@@ -1041,7 +1041,7 @@ public:
         }
     }
 
-    virtual UChar32 current32() const {
+    virtual UChar32 current32() const override {
         if(pos<UPRV_LENGTHOF(s)) {
             UChar32 c;
             U16_GET(s, 0, pos, UPRV_LENGTHOF(s), c);
@@ -1051,7 +1051,7 @@ public:
         }
     }
 
-    virtual UChar next() {
+    virtual UChar next() override {
         if(pos<UPRV_LENGTHOF(s) && ++pos<UPRV_LENGTHOF(s)) {
             return s[pos];
         } else {
@@ -1059,7 +1059,7 @@ public:
         }
     }
 
-    virtual UChar32 next32() {
+    virtual UChar32 next32() override {
         if(pos<UPRV_LENGTHOF(s)) {
             U16_FWD_1(s, pos, UPRV_LENGTHOF(s));
         }
@@ -1073,50 +1073,50 @@ public:
         }
     }
 
-    virtual UBool hasPrevious() {
+    virtual UBool hasPrevious() override {
         return pos>0;
     }
 
-    virtual void getText(UnicodeString &result) {
+    virtual void getText(UnicodeString &result) override {
         result.setTo(s, UPRV_LENGTHOF(s));
     }
 
     // dummy implementations of other pure virtual base class functions
-    virtual UBool operator==(const ForwardCharacterIterator &that) const {
+    virtual bool operator==(const ForwardCharacterIterator &that) const override {
         return
             this==&that ||
             (typeid(*this)==typeid(that) && pos==((SubCharIter &)that).pos);
     }
 
-    virtual int32_t hashCode() const {
+    virtual int32_t hashCode() const override {
         return 2;
     }
 
-    virtual CharacterIterator *clone() const {
+    virtual CharacterIterator *clone() const override {
         return NULL;
     }
 
-    virtual UChar last() {
+    virtual UChar last() override {
         return 0;
     }
 
-    virtual UChar32 last32() {
+    virtual UChar32 last32() override {
         return 0;
     }
 
-    virtual UChar previous() {
+    virtual UChar previous() override {
         return 0;
     }
 
-    virtual UChar32 previous32() {
+    virtual UChar32 previous32() override {
         return 0;
     }
 
-    virtual int32_t move(int32_t /*delta*/, EOrigin /*origin*/) {
+    virtual int32_t move(int32_t /*delta*/, EOrigin /*origin*/) override {
         return 0;
     }
 
-    virtual int32_t move32(int32_t /*delta*/, EOrigin /*origin*/) {
+    virtual int32_t move32(int32_t /*delta*/, EOrigin /*origin*/) override {
         return 0;
     }
 
@@ -1125,7 +1125,7 @@ public:
         return (UClassID)(&fgClassID);
     }
 
-    virtual UClassID getDynamicClassID() const {
+    virtual UClassID getDynamicClassID() const override {
         return getStaticClassID();
     }
 

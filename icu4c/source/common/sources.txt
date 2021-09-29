@@ -19,6 +19,7 @@ dictbe.cpp
 dictionarydata.cpp
 dtintrv.cpp
 edits.cpp
+emojiprops.cpp
 errorcode.cpp
 filteredbrk.cpp
 filterednormalizer2.cpp

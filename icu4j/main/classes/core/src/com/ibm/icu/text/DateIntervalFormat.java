@@ -1272,7 +1272,7 @@ public class DateIntervalFormat extends UFormat {
      * type of field at the beginning of the formatted result.
      *
      * @param context The DisplayContext value to set.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public void setContext(DisplayContext context)
     {
@@ -1287,7 +1287,7 @@ public class DateIntervalFormat extends UFormat {
      *
      * @param type the DisplayContext.Type whose value to return
      * @return the current DisplayContext setting for the specified type
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public DisplayContext getContext(DisplayContext.Type type)
     {

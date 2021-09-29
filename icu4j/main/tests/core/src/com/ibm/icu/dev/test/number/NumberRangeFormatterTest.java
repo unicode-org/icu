@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.number;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -42,6 +43,7 @@ import com.ibm.icu.util.UResourceBundle;
 public class NumberRangeFormatterTest extends TestFmwk {
 
     private static final Currency USD = Currency.getInstance("USD");
+    private static final Currency CHF = Currency.getInstance("CHF");
     private static final Currency GBP = Currency.getInstance("GBP");
     private static final Currency PTE = Currency.getInstance("PTE");
 
@@ -131,14 +133,14 @@ public class NumberRangeFormatterTest extends TestFmwk {
                 .numberFormatterBoth(NumberFormatter.with().unit(MeasureUnit.FAHRENHEIT).unitWidth(UnitWidth.FULL_NAME)),
             new ULocale("fr-FR"),
             "1–5\u00A0degrés Fahrenheit",
-            "≈5\u00A0degrés Fahrenheit",
-            "≈5\u00A0degrés Fahrenheit",
+            "≃5\u00A0degrés Fahrenheit",
+            "≃5\u00A0degrés Fahrenheit",
             "0–3\u00A0degrés Fahrenheit",
-            "≈0\u00A0degré Fahrenheit",
+            "≃0\u00A0degré Fahrenheit",
             "3–3\u202F000\u00A0degrés Fahrenheit",
             "3\u202F000–5\u202F000\u00A0degrés Fahrenheit",
             "4\u202F999–5\u202F001\u00A0degrés Fahrenheit",
-            "≈5\u202F000\u00A0degrés Fahrenheit",
+            "≃5\u202F000\u00A0degrés Fahrenheit",
             "5\u202F000–5\u202F000\u202F000\u00A0degrés Fahrenheit");
 
         assertFormatRange(
@@ -146,14 +148,14 @@ public class NumberRangeFormatterTest extends TestFmwk {
             NumberRangeFormatter.with(),
             new ULocale("ja"),
             "1～5",
-            "約 5",
-            "約 5",
+            "約5",
+            "約5",
             "0～3",
-            "約 0",
+            "約0",
             "3～3,000",
             "3,000～5,000",
             "4,999～5,001",
-            "約 5,000",
+            "約5,000",
             "5,000～5,000,000");
 
         assertFormatRange(
@@ -683,6 +685,24 @@ public class NumberRangeFormatterTest extends TestFmwk {
     }
 
     @Test
+    public void testNaNInfinity() {
+        LocalizedNumberRangeFormatter lnf = NumberRangeFormatter.withLocale(ULocale.ENGLISH);
+        FormattedNumberRange result1 = lnf.formatRange(Double.NEGATIVE_INFINITY, 0);
+        FormattedNumberRange result2 = lnf.formatRange(0, Double.POSITIVE_INFINITY);
+        FormattedNumberRange result3 = lnf.formatRange(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+        FormattedNumberRange result4 = lnf.formatRange(Double.NaN, 0);
+        FormattedNumberRange result5 = lnf.formatRange(0, Double.NaN);
+        FormattedNumberRange result6 = lnf.formatRange(Double.NaN, Double.NaN);
+    
+        assertEquals("0 - inf", "-∞ – 0", result1.toString());
+        assertEquals("-inf - 0", "0–∞", result2.toString());
+        assertEquals("-inf - inf", "-∞ – ∞", result3.toString());
+        assertEquals("NaN - 0", "NaN–0", result4.toString());
+        assertEquals("0 - NaN", "0–NaN", result5.toString());
+        assertEquals("NaN - NaN", "~NaN", result6.toString());
+    }
+
+    @Test
     public void testPlurals() {
         // Locale sl has interesting plural forms:
         // GBP{
@@ -846,13 +866,86 @@ public class NumberRangeFormatterTest extends TestFmwk {
     public void testNumberingSystemRangeData() {
         RangePatternSink sink = new RangePatternSink();
         for (ULocale locale : ULocale.getAvailableLocales()) {
-            if (locale.getLanguage().equals("nn") && logKnownIssue("cldrbug:14477", "nn inherits inconsistent number range patterns")) {
-                continue;
-            }
             ICUResourceBundle resource = (ICUResourceBundle)
                     UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale);
             resource.getAllItemsWithFallback("NumberElements", sink);
             sink.checkAndReset(locale);
+        }
+    }
+
+    @Test
+    public void test21684_Performance() {
+        LocalizedNumberRangeFormatter lnf = NumberRangeFormatter.withLocale(ULocale.ENGLISH);
+        // The following two lines of code should finish quickly.
+        lnf.formatRange(new BigDecimal("-1e99999"), new BigDecimal("0"));
+        lnf.formatRange(new BigDecimal("0"), new BigDecimal("1e99999"));
+    }
+
+    @Test
+    public void test21358_SignPosition() {
+        // de-CH has currency pattern "¤ #,##0.00;¤-#,##0.00"
+        assertFormatRange(
+            "Approximately sign position with spacing from pattern",
+            NumberRangeFormatter.with()
+                .numberFormatterBoth(NumberFormatter.with().unit(CHF)),
+            ULocale.forLanguageTag("de-CH"),
+            "CHF 1.00–5.00",
+            "CHF≈5.00",
+            "CHF≈5.00",
+            "CHF 0.00–3.00",
+            "CHF≈0.00",
+            "CHF 3.00–3’000.00",
+            "CHF 3’000.00–5’000.00",
+            "CHF 4’999.00–5’001.00",
+            "CHF≈5’000.00",
+            "CHF 5’000.00–5’000’000.00");
+    
+        // TODO(CLDR-13044): Move the sign to the inside of the number
+        assertFormatRange(
+            "Approximately sign position with currency spacing",
+            NumberRangeFormatter.with()
+                .numberFormatterBoth(NumberFormatter.with().unit(CHF)),
+            ULocale.forLanguageTag("en-US"),
+            "CHF 1.00–5.00",
+            "~CHF 5.00",
+            "~CHF 5.00",
+            "CHF 0.00–3.00",
+            "~CHF 0.00",
+            "CHF 3.00–3,000.00",
+            "CHF 3,000.00–5,000.00",
+            "CHF 4,999.00–5,001.00",
+            "~CHF 5,000.00",
+            "CHF 5,000.00–5,000,000.00");
+    
+        {
+            LocalizedNumberRangeFormatter lnrf = NumberRangeFormatter
+                .withLocale(ULocale.forLanguageTag("de-CH"));
+            String actual = lnrf.formatRange(-2, 3).toString();
+            assertEquals("Negative to positive range", "-2 – 3", actual);
+        }
+    
+        {
+            LocalizedNumberRangeFormatter lnrf = NumberRangeFormatter
+                .withLocale(ULocale.forLanguageTag("de-CH"))
+                .numberFormatterBoth(NumberFormatter.forSkeleton("%"));
+            String actual = lnrf.formatRange(-2, 3).toString();
+            assertEquals("Negative to positive percent", "-2% – 3%", actual);
+        }
+    
+        {
+            // TODO(CLDR-14111): Add spacing between range separator and sign
+            LocalizedNumberRangeFormatter lnrf = NumberRangeFormatter
+                .withLocale(ULocale.forLanguageTag("de-CH"));
+            String actual = lnrf.formatRange(2, -3).toString();
+            assertEquals("Positive to negative range", "2–-3", actual);
+        }
+    
+        {
+            LocalizedNumberRangeFormatter lnrf = NumberRangeFormatter
+                .withLocale(ULocale.forLanguageTag("de-CH"))
+                .numberFormatterBoth(NumberFormatter.forSkeleton("%"));
+            String actual = lnrf.formatRange(2, -3).toString();
+            assertEquals("Positive to negative percent", "2% – -3%", actual);
         }
     }
 

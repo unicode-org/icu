@@ -48,7 +48,7 @@ public:
     IcuToolErrorCode(const char *loc) : location(loc) {}
     virtual ~IcuToolErrorCode();
 protected:
-    virtual void handleFailure() const;
+    virtual void handleFailure() const override;
 private:
     const char *location;
 };

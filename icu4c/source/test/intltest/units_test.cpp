@@ -41,7 +41,7 @@ class UnitsTest : public IntlTest {
   public:
     UnitsTest() {}
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL) override;
 
     void testUnitConstantFreshness();
     void testExtractConvertibility();
@@ -325,6 +325,15 @@ void UnitsTest::testConverter() {
         // Fuel Consumption
         {"cubic-meter-per-meter", "mile-per-gallon", 2.1383143939394E-6, 1.1},
         {"cubic-meter-per-meter", "mile-per-gallon", 2.6134953703704E-6, 0.9},
+
+        // Test Aliases
+        // Alias is just another name to the same unit. Therefore, converting
+        // between them should be the same.
+        {"foodcalorie", "kilocalorie", 1.0, 1.0},
+        {"dot-per-centimeter", "pixel-per-centimeter", 1.0, 1.0},
+        {"dot-per-inch", "pixel-per-inch", 1.0, 1.0},
+        {"dot", "pixel", 1.0, 1.0},
+
     };
 
     for (const auto &testCase : testCases) {

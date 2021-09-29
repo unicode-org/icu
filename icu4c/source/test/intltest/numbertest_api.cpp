@@ -88,6 +88,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(unitCurrency);
         TESTCASE_AUTO(unitInflections);
         TESTCASE_AUTO(unitGender);
+        TESTCASE_AUTO(unitNotConvertible);
         TESTCASE_AUTO(unitPercent);
         if (!quick) {
             // Slow test: run in exhaustive mode only
@@ -97,6 +98,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(roundingFigures);
         TESTCASE_AUTO(roundingFractionFigures);
         TESTCASE_AUTO(roundingOther);
+        TESTCASE_AUTO(roundingIncrementRegressionTest);
         TESTCASE_AUTO(grouping);
         TESTCASE_AUTO(padding);
         TESTCASE_AUTO(integerWidth);
@@ -1232,7 +1234,7 @@ void NumberFormatterApiTest::unitArbitraryMeasureUnits() {
               .locale("en-ZA");
     lnf.operator=(lnf);  // self-assignment should be a no-op
     lnf.formatInt(1, status);
-    status.expectErrorAndReset(U_RESOURCE_TYPE_MISMATCH);
+    status.expectErrorAndReset(U_INTERNAL_PROGRAM_ERROR);
 
     assertFormatSingle(
             u"kibijoule-foot-per-cubic-gigafurlong-square-second unit-width-full-name",
@@ -1271,7 +1273,7 @@ void NumberFormatterApiTest::unitArbitraryMeasureUnits() {
                 .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
             Locale("en-ZA"),
             2.4,
-            u"2,4 kilowatt-hours per 100 kilometers");
+            u"2,4 kilowatt-hours per 100 kilometres");
 }
 
 // TODO: merge these tests into numbertest_skeletons.cpp instead of here:
@@ -1782,6 +1784,76 @@ void NumberFormatterApiTest::unitUsage() {
                        3048,            //
                        u"3,048 cm");
 
+    assertFormatSingle(u"kilometer-per-liter match the correct category",                   //
+                       u"unit/kilometer-per-liter usage/default",                           //
+                       u"unit/kilometer-per-liter usage/default",                           //
+                       NumberFormatter::with()                                              //
+                           .unit(MeasureUnit::forIdentifier("kilometer-per-liter", status)) //
+                           .usage("default"),                                               //
+                       Locale("en-US"),                                                     //
+                       1,                                                                   //
+                       u"100 L/100 km");
+
+    assertFormatSingle(u"gallon-per-mile match the correct category",                   //
+                       u"unit/gallon-per-mile usage/default",                           //
+                       u"unit/gallon-per-mile usage/default",                           //
+                       NumberFormatter::with()                                          //
+                           .unit(MeasureUnit::forIdentifier("gallon-per-mile", status)) //
+                           .usage("default"),                                           //
+                       Locale("en-US"),                                                 //
+                       1,                                                               //
+                       u"235 L/100 km");
+
+    assertFormatSingle(u"psi match the correct category",                          //
+                       u"unit/megapascal usage/default",                           //
+                       u"unit/megapascal usage/default",                           //
+                       NumberFormatter::with()                                     //
+                           .unit(MeasureUnit::forIdentifier("megapascal", status)) //
+                           .usage("default"),                                      //
+                       Locale("en-US"),                                            //
+                       1,                                                          //
+                       "145 psi");
+
+    assertFormatSingle(u"millibar match the correct category",                   //
+                       u"unit/millibar usage/default",                           //
+                       u"unit/millibar usage/default",                           //
+                       NumberFormatter::with()                                   //
+                           .unit(MeasureUnit::forIdentifier("millibar", status)) //
+                           .usage("default"),                                    //
+                       Locale("en-US"),                                          //
+                       1,                                                        //
+                       "0.015 psi");
+
+    assertFormatSingle(u"pound-force-per-square-inch match the correct category",                   //
+                       u"unit/pound-force-per-square-inch usage/default",                           //
+                       u"unit/pound-force-per-square-inch usage/default",                           //
+                       NumberFormatter::with()                                                      //
+                           .unit(MeasureUnit::forIdentifier("pound-force-per-square-inch", status)) //
+                           .usage("default"),                                                       //
+                       Locale("en-US"),                                                             //
+                       1,                                                                           //
+                       "1 psi");                                                                    //
+
+    assertFormatSingle(u"inch-ofhg match the correct category",                   //
+                       u"unit/inch-ofhg usage/default",                           //
+                       u"unit/inch-ofhg usage/default",                           //
+                       NumberFormatter::with()                                    //
+                           .unit(MeasureUnit::forIdentifier("inch-ofhg", status)) //
+                           .usage("default"),                                     //
+                       Locale("en-US"),                                           //
+                       1,                                                         //
+                       "0.49 psi");
+
+    assertFormatSingle(u"millimeter-ofhg match the correct category",                   //
+                       u"unit/millimeter-ofhg usage/default",                           //
+                       u"unit/millimeter-ofhg usage/default",                           //
+                       NumberFormatter::with()                                          //
+                           .unit(MeasureUnit::forIdentifier("millimeter-ofhg", status)) //
+                           .usage("default"),                                           //
+                       Locale("en-US"),                                                 //
+                       1,                                                               //
+                       "0.019 psi");
+
     // TODO(icu-units#38): improve unit testing coverage. E.g. add vehicle-fuel
     // triggering inversion conversion code. Test with 0 too, to see
     // divide-by-zero behaviour.
@@ -2149,6 +2221,26 @@ void NumberFormatterApiTest::unitCurrency() {
             Locale("lu"),
             123.12,
             u"123,12 CN¥");
+
+    // de-CH has currency pattern "¤ #,##0.00;¤-#,##0.00"
+    assertFormatSingle(
+            u"Sign position on negative number with pattern spacing",
+            u"currency/RON",
+            u"currency/RON",
+            NumberFormatter::with().unit(RON),
+            Locale("de-CH"),
+            -123.12,
+            u"RON-123.12");
+
+    // TODO(CLDR-13044): Move the sign to the inside of the number
+    assertFormatSingle(
+            u"Sign position on negative number with currency spacing",
+            u"currency/RON",
+            u"currency/RON",
+            NumberFormatter::with().unit(RON),
+            Locale("en"),
+            -123.12,
+            u"-RON 123.12");
 }
 
 void NumberFormatterApiTest::runUnitInflectionsTestCases(UnlocalizedNumberFormatter unf,
@@ -2263,13 +2355,13 @@ void NumberFormatterApiTest::unitInflections() {
             // tests can't test value0 of the following two rules:
             //   <deriveComponent feature="plural" structure="power" value0="one"  value1="compound"/>
             //   <deriveComponent feature="case" structure="power" value0="nominative"  value1="compound"/>
-            {"square-decimeter-dekameter", "de", nullptr, 1, u"1 Quadratdezimeter⋅Dekameter"},
-            {"square-decimeter-dekameter", "de", "genitive", 1, u"1 Quadratdezimeter⋅Dekameters"},
-            {"square-decimeter-dekameter", "de", nullptr, 2, u"2 Quadratdezimeter⋅Dekameter"},
-            {"square-decimeter-dekameter", "de", "dative", 2, u"2 Quadratdezimeter⋅Dekametern"},
+            {"square-decimeter-dekameter", "de", nullptr, 1, u"1 Dekameter⋅Quadratdezimeter"},
+            {"square-decimeter-dekameter", "de", "genitive", 1, u"1 Dekameter⋅Quadratdezimeter"},
+            {"square-decimeter-dekameter", "de", nullptr, 2, u"2 Dekameter⋅Quadratdezimeter"},
+            {"square-decimeter-dekameter", "de", "dative", 2, u"2 Dekameter⋅Quadratdezimeter"},
             // Feminine "Meile" better demonstrates singular-vs-plural form:
-            {"cubic-mile-dekamile", "de", nullptr, 1, u"1 Kubikmeile⋅Dekameile"},
-            {"cubic-mile-dekamile", "de", nullptr, 2, u"2 Kubikmeile⋅Dekameilen"},
+            {"cubic-mile-dekamile", "de", nullptr, 1, u"1 Dekameile⋅Kubikmeile"},
+            {"cubic-mile-dekamile", "de", nullptr, 2, u"2 Dekameile⋅Kubikmeilen"},
 
             // French handles plural "times" and "power" structures differently:
             // plural form impacts all "numerator" units (denominator remains
@@ -2606,6 +2698,31 @@ void NumberFormatterApiTest::unitGender() {
     fn = formatter.formatDouble(1.1, status);
     status.assertSuccess();
     assertEquals("getGender for a genderless language", "", fn.getGender(status));
+}
+
+void NumberFormatterApiTest::unitNotConvertible() {
+    IcuTestErrorCode status(*this, "unitNotConvertible");
+    const double randomNumber = 1234;
+
+    NumberFormatter::with()
+        .unit(MeasureUnit::forIdentifier("meter-and-liter", status))
+        .locale("en_US")
+        .formatDouble(randomNumber, status);
+    assertEquals(u"error must be returned", status.errorName(), u"U_ARGUMENT_TYPE_MISMATCH");
+
+    status.reset();
+    NumberFormatter::with()
+        .unit(MeasureUnit::forIdentifier("month-and-week", status))
+        .locale("en_US")
+        .formatDouble(randomNumber, status);
+    assertEquals(u"error must be returned", status.errorName(), u"U_ARGUMENT_TYPE_MISMATCH");
+
+    status.reset();
+    NumberFormatter::with()
+        .unit(MeasureUnit::forIdentifier("week-and-day", status))
+        .locale("en_US")
+        .formatDouble(randomNumber, status);
+    assertTrue(u"no error", !U_FAILURE(status));
 }
 
 void NumberFormatterApiTest::unitPercent() {
@@ -3161,6 +3278,78 @@ void NumberFormatterApiTest::roundingOther() {
             u"0.000");
 
     assertFormatDescending(
+            u"Medium nickel increment with rounding mode ceiling (ICU-21668)",
+            u"precision-increment/50 rounding-mode-ceiling",
+            u"precision-increment/50 rounding-mode-ceiling",
+            NumberFormatter::with()
+                .precision(Precision::increment(50))
+                .roundingMode(UNUM_ROUND_CEILING),
+            Locale::getEnglish(),
+            u"87,650",
+            u"8,800",
+            u"900",
+            u"100",
+            u"50",
+            u"50",
+            u"50",
+            u"50",
+            u"0");
+
+    assertFormatDescending(
+            u"Large nickel increment with rounding mode up (ICU-21668)",
+            u"precision-increment/5000 rounding-mode-up",
+            u"precision-increment/5000 rounding-mode-up",
+            NumberFormatter::with()
+                .precision(Precision::increment(5000))
+                .roundingMode(UNUM_ROUND_UP),
+            Locale::getEnglish(),
+            u"90,000",
+            u"10,000",
+            u"5,000",
+            u"5,000",
+            u"5,000",
+            u"5,000",
+            u"5,000",
+            u"5,000",
+            u"0");
+
+    assertFormatDescending(
+            u"Large dime increment with rounding mode up (ICU-21668)",
+            u"precision-increment/10000 rounding-mode-up",
+            u"precision-increment/10000 rounding-mode-up",
+            NumberFormatter::with()
+                .precision(Precision::increment(10000))
+                .roundingMode(UNUM_ROUND_UP),
+            Locale::getEnglish(),
+            u"90,000",
+            u"10,000",
+            u"10,000",
+            u"10,000",
+            u"10,000",
+            u"10,000",
+            u"10,000",
+            u"10,000",
+            u"0");
+
+    assertFormatDescending(
+            u"Large non-nickel increment with rounding mode up (ICU-21668)",
+            u"precision-increment/15000 rounding-mode-up",
+            u"precision-increment/15000 rounding-mode-up",
+            NumberFormatter::with()
+                .precision(Precision::increment(15000))
+                .roundingMode(UNUM_ROUND_UP),
+            Locale::getEnglish(),
+            u"90,000",
+            u"15,000",
+            u"15,000",
+            u"15,000",
+            u"15,000",
+            u"15,000",
+            u"15,000",
+            u"15,000",
+            u"0");
+
+    assertFormatDescending(
             u"Increment Resolving to Power of 10",
             u"precision-increment/0.010",
             u"precision-increment/0.010",
@@ -3175,6 +3364,38 @@ void NumberFormatterApiTest::roundingOther() {
             u"0.090",
             u"0.010",
             u"0.000");
+
+    assertFormatDescending(
+            u"Integer increment with trailing zeros (ICU-21654)",
+            u"precision-increment/50",
+            u"precision-increment/50",
+            NumberFormatter::with().precision(Precision::increment(50)),
+            Locale::getEnglish(),
+            u"87,650",
+            u"8,750",
+            u"900",
+            u"100",
+            u"0",
+            u"0",
+            u"0",
+            u"0",
+            u"0");
+
+    assertFormatDescending(
+            u"Integer increment with minFraction (ICU-21654)",
+            u"precision-increment/5.0",
+            u"precision-increment/5.0",
+            NumberFormatter::with().precision(Precision::increment(5).withMinFraction(1)),
+            Locale::getEnglish(),
+            u"87,650.0",
+            u"8,765.0",
+            u"875.0",
+            u"90.0",
+            u"10.0",
+            u"0.0",
+            u"0.0",
+            u"0.0",
+            u"0.0");
 
     assertFormatDescending(
             u"Currency Standard",
@@ -3303,6 +3524,63 @@ void NumberFormatterApiTest::roundingOther() {
             Locale::getEnglish(),
             DBL_TRUE_MIN,
             u"5E-324");
+}
+
+/** Test for ICU-21654 and ICU-21668 */
+void NumberFormatterApiTest::roundingIncrementRegressionTest() {
+    IcuTestErrorCode status(*this, "roundingIncrementRegressionTest");
+    Locale locale = Locale::getEnglish();
+
+    for (int min_fraction_digits = 1; min_fraction_digits < 8; min_fraction_digits++) {
+        // pattern is a snprintf pattern string like "precision-increment/%0.5f"
+        char pattern[256];
+        snprintf(pattern, 256, "precision-increment/%%0.%df", min_fraction_digits);
+        double increment = 0.05;
+        for (int i = 0; i < 8 ; i++, increment *= 10.0) {
+            const UnlocalizedNumberFormatter f =
+                NumberFormatter::with().precision(
+                    Precision::increment(increment).withMinFraction(
+                        min_fraction_digits));
+            const LocalizedNumberFormatter l = f.locale(locale);
+
+            std::string skeleton;
+            f.toSkeleton(status).toUTF8String<std::string>(skeleton);
+
+            char message[256];
+            snprintf(message, 256,
+                "ICU-21654: Precision::increment(%0.5f).withMinFraction(%d) '%s'\n",
+                increment, min_fraction_digits,
+                skeleton.c_str());
+
+            if (increment == 0.05 && min_fraction_digits == 1) {
+                // Special case when the number of fraction digits is too low:
+                // Precision::increment(0.05000).withMinFraction(1) 'precision-increment/0.05'
+                assertEquals(message, "precision-increment/0.05", skeleton.c_str());
+            } else {
+                // All other cases: use the snprintf pattern computed above:
+                // Precision::increment(0.50000).withMinFraction(1) 'precision-increment/0.5'
+                // Precision::increment(5.00000).withMinFraction(1) 'precision-increment/5.0'
+                // Precision::increment(50.00000).withMinFraction(1) 'precision-increment/50.0'
+                // ...
+                // Precision::increment(0.05000).withMinFraction(2) 'precision-increment/0.05'
+                // Precision::increment(0.50000).withMinFraction(2) 'precision-increment/0.50'
+                // Precision::increment(5.00000).withMinFraction(2) 'precision-increment/5.00'
+                // ...
+
+                char expected[256];
+                snprintf(expected, 256, pattern, increment);
+                assertEquals(message, expected, skeleton.c_str());
+            }
+        }
+    }
+
+    auto increment = NumberFormatter::with()
+        .precision(Precision::increment(5000).withMinFraction(0))
+        .roundingMode(UNUM_ROUND_UP)
+        .locale(Locale::getEnglish())
+        .formatDouble(5.625, status)
+        .toString(status);
+    assertEquals("ICU-21668", u"5,000", increment);
 }
 
 void NumberFormatterApiTest::grouping() {
@@ -3818,6 +4096,41 @@ void NumberFormatterApiTest::integerWidth() {
             // Note: this double produces all 17 significant digits
             10000000000000002000.0,
             u"00");
+
+    assertFormatDescending(
+            u"Integer Width Double Zero (ICU-21590)",
+            u"integer-width-trunc",
+            u"integer-width-trunc",
+            NumberFormatter::with()
+                .integerWidth(IntegerWidth::zeroFillTo(0).truncateAt(0)),
+            Locale::getEnglish(),
+            u"0",
+            u"0",
+            u".5",
+            u".65",
+            u".765",
+            u".8765",
+            u".08765",
+            u".008765",
+            u"0");
+
+    assertFormatDescending(
+            u"Integer Width Double Zero with minFraction (ICU-21590)",
+            u"integer-width-trunc .0*",
+            u"integer-width-trunc .0*",
+            NumberFormatter::with()
+                .integerWidth(IntegerWidth::zeroFillTo(0).truncateAt(0))
+                .precision(Precision::minFraction(1)),
+            Locale::getEnglish(),
+            u".0",
+            u".0",
+            u".5",
+            u".65",
+            u".765",
+            u".8765",
+            u".08765",
+            u".008765",
+            u".0");
 }
 
 void NumberFormatterApiTest::symbols() {
@@ -4300,7 +4613,7 @@ void NumberFormatterApiTest::sign() {
                 .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
             Locale::getCanada(),
             -444444,
-            u"-444,444.00 US dollars");
+            u"-444,444.00 U.S. dollars");
 }
 
 void NumberFormatterApiTest::signNearZero() {
@@ -5358,6 +5671,12 @@ void NumberFormatterApiTest::toDecimalNumber() {
         u"৯৮,৭৬,৫০,০০,০০,০০,০০০", fn.toString(status));
     assertEquals(u"Should have expected toDecimalNumber string result",
         "9.8765E+14", fn.toDecimalNumber<std::string>(status).c_str());
+
+    fn = NumberFormatter::withLocale("bn-BD").formatDouble(0, status);
+    assertEquals("Should have expected localized string result",
+        u"০", fn.toString(status));
+    assertEquals(u"Should have expected toDecimalNumber string result",
+        "0", fn.toDecimalNumber<std::string>(status).c_str());
 }
 
 void NumberFormatterApiTest::microPropsInternals() {

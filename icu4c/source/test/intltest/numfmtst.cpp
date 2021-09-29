@@ -247,8 +247,11 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test20961_CurrencyPluralPattern);
   TESTCASE_AUTO(Test21134_ToNumberFormatter);
   TESTCASE_AUTO(Test13733_StrictAndLenient);
+  TESTCASE_AUTO(Test20425_IntegerIncrement);
+  TESTCASE_AUTO(Test20425_FractionWithIntegerIncrement);
   TESTCASE_AUTO(Test21232_ParseTimeout);
   TESTCASE_AUTO(Test10997_FormatCurrency);
+  TESTCASE_AUTO(Test21556_CurrencyAsDecimal);
   TESTCASE_AUTO_END;
 }
 
@@ -307,29 +310,29 @@ NumberFormatTest::TestAPI(void)
 class StubNumberFormat :public NumberFormat{
 public:
     StubNumberFormat(){}
-    virtual UnicodeString& format(double ,UnicodeString& appendTo,FieldPosition& ) const {
+    virtual UnicodeString& format(double ,UnicodeString& appendTo,FieldPosition& ) const override {
         return appendTo;
     }
-    virtual UnicodeString& format(int32_t ,UnicodeString& appendTo,FieldPosition& ) const {
+    virtual UnicodeString& format(int32_t ,UnicodeString& appendTo,FieldPosition& ) const override {
         return appendTo.append((UChar)0x0033);
     }
-    virtual UnicodeString& format(int64_t number,UnicodeString& appendTo,FieldPosition& pos) const {
+    virtual UnicodeString& format(int64_t number,UnicodeString& appendTo,FieldPosition& pos) const override {
         return NumberFormat::format(number, appendTo, pos);
     }
-    virtual UnicodeString& format(const Formattable& , UnicodeString& appendTo, FieldPosition& , UErrorCode& ) const {
+    virtual UnicodeString& format(const Formattable& , UnicodeString& appendTo, FieldPosition& , UErrorCode& ) const override {
         return appendTo;
     }
     virtual void parse(const UnicodeString& ,
                     Formattable& ,
-                    ParsePosition& ) const {}
+                    ParsePosition& ) const override {}
     virtual void parse( const UnicodeString& ,
                         Formattable& ,
-                        UErrorCode& ) const {}
-    virtual UClassID getDynamicClassID(void) const {
+                        UErrorCode& ) const override {}
+    virtual UClassID getDynamicClassID(void) const override {
         static char classID = 0;
         return (UClassID)&classID;
     }
-    virtual StubNumberFormat* clone() const {return NULL;}
+    virtual StubNumberFormat* clone() const override {return NULL;}
 };
 
 void
@@ -932,8 +935,8 @@ NumberFormatTest::TestCurrency(void)
 
     UnicodeString s; currencyFmt->format(1.50, s);
     logln((UnicodeString)"Un pauvre ici a..........." + s);
-    if (!(s==CharsToUnicodeString("1,50\\u00A0$\\u00A0CA")))
-        errln((UnicodeString)"FAIL: Expected 1,50<nbsp>$<nbsp>CA but got " + s);
+    if (!(s==CharsToUnicodeString("1,50\\u00A0$")))
+        errln((UnicodeString)"FAIL: Expected 1,50<nbsp>$ but got " + s);
     delete currencyFmt;
     s.truncate(0);
     char loc[256]={0};
@@ -3936,7 +3939,7 @@ NumberFormatTest::TestCurrencyParsing() {
         {"pa_IN", "1", "USD", "US$\\u00A01.00", "USD\\u00A01.00", "1.00 \\u0a2f\\u0a42.\\u0a10\\u0a38. \\u0a21\\u0a3e\\u0a32\\u0a30"},
         {"es_AR", "1", "USD", "US$\\u00A01,00", "USD\\u00A01,00", "1,00 d\\u00f3lar estadounidense"},
         {"ar_EG", "1", "USD", "\\u0661\\u066b\\u0660\\u0660\\u00a0US$", "\\u0661\\u066b\\u0660\\u0660\\u00a0USD", "\\u0661\\u066b\\u0660\\u0660 \\u062f\\u0648\\u0644\\u0627\\u0631 \\u0623\\u0645\\u0631\\u064a\\u0643\\u064a"},
-        {"fa_CA", "1", "USD", "\\u200e$\\u06f1\\u066b\\u06f0\\u06f0", "\\u200eUSD\\u06f1\\u066b\\u06f0\\u06f0", "\\u06f1\\u066b\\u06f0\\u06f0 \\u062f\\u0644\\u0627\\u0631 \\u0627\\u0645\\u0631\\u06cc\\u06a9\\u0627"},
+        {"fa_CA", "1", "USD", "\\u200e$\\u06f1\\u066b\\u06f0\\u06f0", "\\u200eUSD\\u06f1\\u066b\\u06f0\\u06f0", "\\u06f1\\u066b\\u06f0\\u06f0 \\u062f\\u0644\\u0627\\u0631 \\u0622\\u0645\\u0631\\u06cc\\u06a9\\u0627"},
         {"he_IL", "1", "USD", "\\u200f1.00\\u00a0$", "\\u200f1.00\\u00a0USD", "1.00 \\u05d3\\u05d5\\u05dc\\u05e8 \\u05d0\\u05de\\u05e8\\u05d9\\u05e7\\u05d0\\u05d9"},
         {"hr_HR", "1", "USD", "1,00\\u00a0USD", "1,00\\u00a0USD", "1,00 ameri\\u010Dkih dolara"},
         {"id_ID", "1", "USD", "US$\\u00A01,00", "USD\\u00A01,00", "1,00 Dolar Amerika Serikat"},
@@ -10039,6 +10042,26 @@ void NumberFormatTest::Test13733_StrictAndLenient() {
     }
 }
 
+void NumberFormatTest::Test20425_IntegerIncrement() {
+    IcuTestErrorCode status(*this, "Test20425_IntegerIncrement");
+
+    DecimalFormat df("##00", status);
+    df.setRoundingIncrement(1);
+    UnicodeString actual;
+    df.format(1235.5, actual, status);
+    assertEquals("Should round to integer", u"1236", actual);
+}
+
+void NumberFormatTest::Test20425_FractionWithIntegerIncrement() {
+    IcuTestErrorCode status(*this, "Test20425_FractionWithIntegerIncrement");
+
+    DecimalFormat df("0.0", status);
+    df.setRoundingIncrement(1);
+    UnicodeString actual;
+    df.format(8.6, actual, status);
+    assertEquals("Should have a fraction digit", u"9.0", actual);
+}
+
 void NumberFormatTest::Test21232_ParseTimeout() {
     IcuTestErrorCode status(*this, "Test21232_ParseTimeout");
 
@@ -10067,9 +10090,8 @@ void NumberFormatTest::Test21232_ParseTimeout() {
 void NumberFormatTest::Test10997_FormatCurrency() {
     IcuTestErrorCode status(*this, "Test10997_FormatCurrency");
 
-    UErrorCode error = U_ZERO_ERROR;
-    NumberFormat* fmt = NumberFormat::createCurrencyInstance(Locale::getUS(), error);
-    if (U_FAILURE(error)) {
+    LocalPointer<NumberFormat> fmt(NumberFormat::createCurrencyInstance(Locale::getUS(), status));
+    if (status.errDataIfFailureAndReset()) {
         return;
     }
     fmt->setMinimumFractionDigits(4);
@@ -10086,8 +10108,40 @@ void NumberFormatTest::Test10997_FormatCurrency() {
     Formattable eurAmnt(new CurrencyAmount(123.45, u"EUR", status));
     fmt->format(eurAmnt, str2, fp, status);
     assertEquals("minFrac 4 should be respected in different currency", u"€123.4500", str2);
+}
 
-    delete fmt;
+void NumberFormatTest::Test21556_CurrencyAsDecimal() {
+    IcuTestErrorCode status(*this, "Test21556_CurrencyAsDecimal");
+
+    {
+        DecimalFormat df(u"a0¤00b", status);
+        if (status.errDataIfFailureAndReset()) {
+            return;
+        }
+        df.setCurrency(u"EUR", status);
+        UnicodeString result;
+        FieldPosition fp(UNUM_CURRENCY_FIELD);
+        df.format(3.141, result, fp);
+        assertEquals("Basic test: format", u"a3€14b", result);
+        UnicodeString pattern;
+        assertEquals("Basic test: toPattern", u"a0¤00b", df.toPattern(pattern));
+        assertEquals("Basic test: field position begin", 2, fp.getBeginIndex());
+        assertEquals("Basic test: field position end", 3, fp.getEndIndex());
+    }
+
+    {
+        LocalPointer<NumberFormat> nf(NumberFormat::createCurrencyInstance("en-GB", status));
+        DecimalFormat* df = static_cast<DecimalFormat*>(nf.getAlias());
+        df->applyPattern(u"a0¤00b", status);
+        UnicodeString result;
+        FieldPosition fp(UNUM_CURRENCY_FIELD);
+        df->format(3.141, result, fp);
+        assertEquals("Via applyPattern: format", u"a3£14b", result);
+        UnicodeString pattern;
+        assertEquals("Via applyPattern: toPattern", u"a0¤00b", df->toPattern(pattern));
+        assertEquals("Via applyPattern: field position begin", 2, fp.getBeginIndex());
+        assertEquals("Via applyPattern: field position end", 3, fp.getEndIndex());
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

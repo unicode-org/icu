@@ -89,6 +89,15 @@ static void TestEnumList(void) {
     expectInList("UYW", UCURR_UNCOMMON, TRUE);
     expectInList("UYW", UCURR_DEPRECATED, FALSE);
     expectInList("UYW", UCURR_NON_DEPRECATED, TRUE);
+
+    // ICU-21685
+    expectInList("VES", UCURR_ALL, TRUE);
+    expectInList("VES", UCURR_COMMON, TRUE);
+    expectInList("VES", UCURR_UNCOMMON, FALSE);
+    expectInList("VES", UCURR_DEPRECATED, FALSE);
+    expectInList("VES", UCURR_NON_DEPRECATED, TRUE);
+
+    expectInList("EQE", UCURR_ALL, FALSE);
 }
 
 static void TestEnumListReset(void) {

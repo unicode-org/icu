@@ -2750,7 +2750,7 @@ static void TestCurrencyUsage(void) {
         }
 
         if(unum_getAttribute(unumFmt, UNUM_CURRENCY_USAGE) != UCURR_USAGE_CASH) {
-            log_err("FAIL: currency usage attribute is not UNUM_CURRENCY_CASH\n");
+            log_err("FAIL: currency usage attribute is not UNUM_CASH_CURRENCY\n");
         }
 
         for (j=0; j<UPRV_LENGTHOF(DATA); ++j) {

@@ -43,7 +43,7 @@ public:
     MeasureFormatTest() {
     }
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0) override;
 private:
     void TestBasic();
     void TestCompatible53();
@@ -3596,8 +3596,8 @@ void MeasureFormatTest::TestGreek() {
         "1 \\u03AD\\u03C4\\u03BF\\u03C2",
         // "el_GR" 1 short
         "1 \\u03B4\\u03B5\\u03C5\\u03C4.",
-        "1 \\u03BB\\u03B5\\u03C0.",
-        "1 \\u03CE\\u03C1\\u03B1",
+        "1 \\u03BB.",
+        "1 \\u03CE.",
         "1 \\u03B7\\u03BC\\u03AD\\u03C1\\u03B1",
         "1 \\u03B5\\u03B2\\u03B4.",
         "1 \\u03BC\\u03AE\\u03BD.",
@@ -3612,8 +3612,8 @@ void MeasureFormatTest::TestGreek() {
         "7 \\u03AD\\u03C4\\u03B7",
         // "el_GR" 7 short
         "7 \\u03B4\\u03B5\\u03C5\\u03C4.",
-        "7 \\u03BB\\u03B5\\u03C0.",
-        "7 \\u03CE\\u03C1.",            // hour (other)
+        "7 \\u03BB.",
+        "7 \\u03CE.",            // hour (other)
         "7 \\u03B7\\u03BC\\u03AD\\u03C1\\u03B5\\u03C2",
         "7 \\u03B5\\u03B2\\u03B4.",
         "7 \\u03BC\\u03AE\\u03BD.",
@@ -3629,8 +3629,8 @@ void MeasureFormatTest::TestGreek() {
         "1 \\u03AD\\u03C4\\u03BF\\u03C2",
         // "el" 1 short
         "1 \\u03B4\\u03B5\\u03C5\\u03C4.",
-        "1 \\u03BB\\u03B5\\u03C0.",
-        "1 \\u03CE\\u03C1\\u03B1",
+        "1 \\u03BB.",
+        "1 \\u03CE.",
         "1 \\u03B7\\u03BC\\u03AD\\u03C1\\u03B1",
         "1 \\u03B5\\u03B2\\u03B4.",
         "1 \\u03BC\\u03AE\\u03BD.",
@@ -3645,8 +3645,8 @@ void MeasureFormatTest::TestGreek() {
         "7 \\u03AD\\u03C4\\u03B7",
         // "el" 7 short
         "7 \\u03B4\\u03B5\\u03C5\\u03C4.",
-        "7 \\u03BB\\u03B5\\u03C0.",
-        "7 \\u03CE\\u03C1.",            // hour (other)
+        "7 \\u03BB.",
+        "7 \\u03CE.",            // hour (other)
         "7 \\u03B7\\u03BC\\u03AD\\u03C1\\u03B5\\u03C2",
         "7 \\u03B5\\u03B2\\u03B4.",
         "7 \\u03BC\\u03AE\\u03BD.",
@@ -3865,7 +3865,7 @@ void MeasureFormatTest::TestMultiples() {
     helperTestMultiples(en, UMEASFMT_WIDTH_NARROW, "2mi 1\\u2032 2.3\\u2033");
     helperTestMultiples(ru, UMEASFMT_WIDTH_WIDE,   "2 \\u043C\\u0438\\u043B\\u0438 1 \\u0444\\u0443\\u0442 2,3 \\u0434\\u044E\\u0439\\u043C\\u0430");
     helperTestMultiples(ru, UMEASFMT_WIDTH_SHORT,  "2 \\u043C\\u0438 1 \\u0444\\u0442 2,3 \\u0434\\u044E\\u0439\\u043C.");
-    helperTestMultiples(ru, UMEASFMT_WIDTH_NARROW, "2 \\u043C\\u0438\\u043B\\u044C 1 \\u0444\\u0442 2,3 \\u0434\\u044E\\u0439\\u043C\\u0430");
+    helperTestMultiples(ru, UMEASFMT_WIDTH_NARROW, "2 \\u043C\\u0438 1 \\u0444\\u0442 2,3 \\u0434\\u044E\\u0439\\u043C.");
 }
 
 void MeasureFormatTest::helperTestMultiples(
@@ -4473,11 +4473,21 @@ void MeasureFormatTest::TestIdentifiers() {
         {"zebibyte", "zebibyte"},
         {"yobibyte", "yobibyte"},
 
+        // Testing aliases
+        {"foodcalorie", "foodcalorie"},
+        {"dot-per-centimeter", "dot-per-centimeter"},
+        {"dot-per-inch", "dot-per-inch"},
+        {"dot", "dot"},
+
         // Testing sort order of prefixes.
-        //
-        // TODO(icu-units#70): revisit when fixing normalization. For now we're
-        // just checking some consistency between C&J.
-        {"megafoot-mebifoot-kibifoot-kilofoot", "kibifoot-mebifoot-kilofoot-megafoot"},
+        {"megafoot-mebifoot-kibifoot-kilofoot", "mebifoot-megafoot-kibifoot-kilofoot"},
+        {"per-megafoot-mebifoot-kibifoot-kilofoot", "per-mebifoot-megafoot-kibifoot-kilofoot"},
+        {"megafoot-mebifoot-kibifoot-kilofoot-per-megafoot-mebifoot-kibifoot-kilofoot",
+         "mebifoot-megafoot-kibifoot-kilofoot-per-mebifoot-megafoot-kibifoot-kilofoot"},
+        {"microfoot-millifoot-megafoot-mebifoot-kibifoot-kilofoot",
+         "mebifoot-megafoot-kibifoot-kilofoot-millifoot-microfoot"},
+        {"per-microfoot-millifoot-megafoot-mebifoot-kibifoot-kilofoot",
+         "per-mebifoot-megafoot-kibifoot-kilofoot-millifoot-microfoot"},
     };
     for (const auto &cas : cases) {
         status.setScope(cas.id);
@@ -5039,7 +5049,7 @@ void MeasureFormatTest::TestInternalMeasureUnitImpl() {
         assertEquals("append meter & centimeter: units[1]", "meter",
                      mcm.singleUnits[1]->getSimpleUnitID());
     }
-    assertEquals("append meter & centimeter: identifier", "centimeter-meter",
+    assertEquals("append meter & centimeter: identifier", "meter-centimeter",
                  std::move(mcm).build(status).getIdentifier());
 
     MeasureUnitImpl m2m = MeasureUnitImpl::forIdentifier("meter-square-meter", status);

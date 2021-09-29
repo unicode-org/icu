@@ -114,6 +114,7 @@ yo{
                 "GyMMdd",
             }
             availableFormats{
+                GyMd{"d/M/y GGGGG"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
@@ -192,6 +193,7 @@ yo{
                 GyMMM{"G y MMM"}
                 GyMMMEd{"G y MMM d, E"}
                 GyMMMd{"G y MMM d"}
+                GyMd{"d/M/y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -662,6 +664,9 @@ yo{
         }
     }
     listPattern{
+        or{
+            middle{"{0}, {1}"}
+        }
         standard{
             2{"{0}, {1}"}
             end{"{0}, {1}"}

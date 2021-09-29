@@ -17,9 +17,10 @@ class UnitsDataTest : public IntlTest {
   public:
     UnitsDataTest() {}
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL) override;
 
     void testGetUnitCategory();
+    // This is a sanity check that only exists in ICU4C.
     void testGetAllConversionRates();
     void testGetPreferencesFor();
 };
@@ -43,17 +44,20 @@ void UnitsDataTest::testGetUnitCategory() {
         {"kilogram-per-cubic-meter", "mass-density"},
         {"cubic-meter-per-kilogram", "specific-volume"},
         {"meter-per-second", "speed"},
-        // TODO(icu-units#130): inverse-speed
-        // {"second-per-meter", "speed"},
-        // Consumption specifically supports inverse units (mile-per-galon,
-        // liter-per-100-kilometer):
+        {"second-per-meter", "speed"},
+        // TODO: add this test cases once the `getUnitCategory` accepts any `MeasureUnit` and not only
+        // base units.
+        // Tests are:
+        // {"liter-per-100-kilometer", "consumption"},
+        // {"mile-per-gallon", "consumption"},
         {"cubic-meter-per-meter", "consumption"},
         {"meter-per-cubic-meter", "consumption"},
+        {"kilogram-meter-per-square-meter-square-second", "pressure"},
     };
 
     IcuTestErrorCode status(*this, "testGetUnitCategory");
     for (const auto &t : testCases) {
-        CharString category = getUnitQuantity(t.unit, status);
+        CharString category = getUnitQuantity(MeasureUnitImpl::forIdentifier(t.unit, status), status);
         if (!status.errIfFailureAndReset("getUnitCategory(%s)", t.unit)) {
             assertEquals("category", t.expectedCategory, category.data());
         }

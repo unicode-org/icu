@@ -12,16 +12,13 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.security.Policy;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
-import java.util.TreeMap;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 
@@ -112,6 +109,17 @@ abstract public class TestFmwk extends AbstractTestLog {
         }
     }
 
+    @AfterClass
+    public final static void testClassTeardown() {
+        getParams().knownIssues.printKnownIssues(new UnicodeKnownIssues.Consumer<String>() {
+            // TODO: make this a Lambda once JDK 1.8 ships
+            public void accept(String t) {
+                System.out.println(t);
+            }
+        });
+        getParams().knownIssues.reset();
+    }
+
     private static TestParams getParams() {
         //return paramsReference.get();
         return testParams;
@@ -170,10 +178,6 @@ abstract public class TestFmwk extends AbstractTestLog {
 
     }
 
-    static final String ICU_TRAC_URL = "http://bugs.icu-project.org/trac/ticket/";
-    static final String CLDR_TRAC_URL = "http://unicode.org/cldr/trac/ticket/";
-    static final String CLDR_TICKET_PREFIX = "cldrbug:";
-
     /**
      * Log the known issue.
      * This method returns true unless -prop:logKnownIssue=no is specified
@@ -189,41 +193,12 @@ abstract public class TestFmwk extends AbstractTestLog {
         if (!getBooleanProperty("logKnownIssue", true)) {
             return false;
         }
-
         // TODO: This method currently does not do very much.
         // See http://bugs.icu-project.org/trac/ticket/12589
-
-        StringBuffer descBuf = new StringBuffer();
         // TODO(junit) : what to do about this?
+        final String path = "";
         //getParams().stack.appendPath(descBuf);
-        if (comment != null && comment.length() > 0) {
-            descBuf.append(" (" + comment + ")");
-        }
-        String description = descBuf.toString();
-
-        String ticketLink = "Unknown Ticket";
-        if (ticket != null && ticket.length() > 0) {
-            boolean isCldr = false;
-            ticket = ticket.toLowerCase(Locale.ENGLISH);
-            if (ticket.startsWith(CLDR_TICKET_PREFIX)) {
-                isCldr = true;
-                ticket = ticket.substring(CLDR_TICKET_PREFIX.length());
-            }
-            ticketLink = (isCldr ? CLDR_TRAC_URL : ICU_TRAC_URL) + ticket;
-        }
-
-        if (getParams().knownIssues == null) {
-            getParams().knownIssues = new TreeMap<String, List<String>>();
-        }
-        List<String> lines = getParams().knownIssues.get(ticketLink);
-        if (lines == null) {
-            lines = new ArrayList<String>();
-            getParams().knownIssues.put(ticketLink, lines);
-        }
-        if (!lines.contains(description)) {
-            lines.add(description);
-        }
-
+        getParams().knownIssues.logKnownIssue(path, ticket, comment);
         return true;
     }
 
@@ -365,7 +340,7 @@ abstract public class TestFmwk extends AbstractTestLog {
         private SecurityManager testSecurityManager;
         private SecurityManager originalSecurityManager;
 
-        private Map<String, List<String>> knownIssues;
+        private UnicodeKnownIssues knownIssues = null;
 
         private Properties props;
 
@@ -377,6 +352,7 @@ abstract public class TestFmwk extends AbstractTestLog {
             TestParams params = new TestParams();
             Properties props = System.getProperties();
             params.parseProperties(props);
+            params.knownIssues = new UnicodeKnownIssues(params.getBooleanProperty("allKnownIssues", false));
             return params;
         }
 

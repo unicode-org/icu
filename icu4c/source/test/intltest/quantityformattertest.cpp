@@ -29,7 +29,7 @@ public:
     QuantityFormatterTest() {
     }
     void TestBasic();
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0) override;
 private:
 };
 

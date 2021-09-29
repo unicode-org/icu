@@ -2265,9 +2265,9 @@ public:
                const UnicodeString &pattern);
     ~TestSearch();
 
-    void        setOffset(int32_t position, UErrorCode &status);
-    int32_t     getOffset() const;
-    SearchIterator* safeClone() const;
+    void        setOffset(int32_t position, UErrorCode &status) override;
+    int32_t     getOffset() const override;
+    SearchIterator* safeClone() const override;
 
 
     /**
@@ -2275,7 +2275,7 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    virtual inline UClassID getDynamicClassID() const override { return getStaticClassID(); }
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
@@ -2284,13 +2284,13 @@ public:
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
-    UBool operator!=(const TestSearch &that) const;
+    bool operator!=(const TestSearch &that) const;
 
     UnicodeString m_pattern_;
 
 protected:
-    int32_t      handleNext(int32_t position, UErrorCode &status);
-    int32_t      handlePrev(int32_t position, UErrorCode &status);
+    int32_t      handleNext(int32_t position, UErrorCode &status) override;
+    int32_t      handlePrev(int32_t position, UErrorCode &status) override;
     TestSearch & operator=(const TestSearch &that);
 
 private:
@@ -2347,10 +2347,10 @@ SearchIterator * TestSearch::safeClone() const
     return new TestSearch(m_text_, m_breakiterator_, m_pattern_);
 }
 
-UBool TestSearch::operator!=(const TestSearch &that) const
+bool TestSearch::operator!=(const TestSearch &that) const
 {
     if (SearchIterator::operator !=(that)) {
-        return FALSE;
+        return false;
     }
     return m_offset_ != that.m_offset_ || m_pattern_ != that.m_pattern_;
 }
@@ -2452,12 +2452,12 @@ void StringSearchTest::TestSubclass()
 class StubSearchIterator:public SearchIterator{
 public:
     StubSearchIterator(){}
-    virtual void setOffset(int32_t , UErrorCode &) {}
-    virtual int32_t getOffset(void) const {return 0;}
-    virtual SearchIterator* safeClone(void) const {return NULL;}
-    virtual int32_t handleNext(int32_t , UErrorCode &){return 0;}
-    virtual int32_t handlePrev(int32_t , UErrorCode &) {return 0;}
-    virtual UClassID getDynamicClassID() const {
+    virtual void setOffset(int32_t , UErrorCode &) override {}
+    virtual int32_t getOffset(void) const override {return 0;}
+    virtual SearchIterator* safeClone(void) const override {return NULL;}
+    virtual int32_t handleNext(int32_t , UErrorCode &) override {return 0;}
+    virtual int32_t handlePrev(int32_t , UErrorCode &) override {return 0;}
+    virtual UClassID getDynamicClassID() const override {
         static char classID = 0;
         return (UClassID)&classID; 
     }

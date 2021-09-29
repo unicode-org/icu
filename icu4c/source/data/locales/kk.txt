@@ -265,6 +265,7 @@ kk{
                 GyMMM{"G y 'ж'. MMM"}
                 GyMMMEd{"G y 'ж'. d MMM, E"}
                 GyMMMd{"G y 'ж'. d MMM"}
+                GyMd{"d/M/y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -462,6 +463,7 @@ kk{
                 GyMMM{"G y 'ж'. MMM"}
                 GyMMMEd{"G y 'ж'. d MMM, E"}
                 GyMMMd{"G y 'ж'. d MMM"}
+                GyMd{"dd-MM-GGGGG y"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}

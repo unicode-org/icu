@@ -128,7 +128,7 @@ class LegalJamo : public Legal {
 public:
     LegalJamo() {}
     virtual ~LegalJamo() {}
-    virtual UBool is(const UnicodeString& sourceString) const;
+    virtual UBool is(const UnicodeString& sourceString) const override;
             int   getType(UChar c) const;
 };
 
@@ -172,7 +172,7 @@ public:
     LegalGreek(UBool _full) { full = _full; }
     virtual ~LegalGreek() {}
 
-    virtual UBool is(const UnicodeString& sourceString) const;
+    virtual UBool is(const UnicodeString& sourceString) const override;
 
     static UBool isVowel(UChar c);
     
@@ -1199,7 +1199,7 @@ private:
 public:
     LegalHebrew(UErrorCode& error);
     virtual ~LegalHebrew() {}
-    virtual UBool is(const UnicodeString& sourceString) const;
+    virtual UBool is(const UnicodeString& sourceString) const override;
 };
 
 LegalHebrew::LegalHebrew(UErrorCode& error){
@@ -1262,7 +1262,7 @@ class LegalIndic :public Legal{
     
 public:
     LegalIndic();
-    virtual UBool is(const UnicodeString& sourceString) const;
+    virtual UBool is(const UnicodeString& sourceString) const override;
     virtual ~LegalIndic() {}
 };
 UBool LegalIndic::is(const UnicodeString& sourceString) const{

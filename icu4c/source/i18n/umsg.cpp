@@ -463,7 +463,7 @@ umsg_vformat(   const UMessageFormat *fmt,
 
         default:
             // Unknown/unsupported argument type.
-            UPRV_UNREACHABLE;
+            UPRV_UNREACHABLE_EXIT;
         }
     }
     UnicodeString resultStr;
@@ -590,11 +590,11 @@ umsg_vparse(const UMessageFormat *fmt,
             // support kObject.  When MessageFormat is changed to
             // understand MeasureFormats, modify this code to do the
             // right thing. [alan]
-            UPRV_UNREACHABLE;
+            UPRV_UNREACHABLE_EXIT;
 
         // better not happen!
         case Formattable::kArray:
-            UPRV_UNREACHABLE;
+            UPRV_UNREACHABLE_EXIT;
         }
     }
 

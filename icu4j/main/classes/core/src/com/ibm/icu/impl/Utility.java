@@ -777,6 +777,28 @@ public final class Utility {
         /*v*/ 0x76, 0x0b
     };
 
+    /* Convert one octal digit to a numeric value 0..7, or -1 on failure */
+    private static final int _digit8(int c) {
+        if (c >= '0' && c <= '7') {
+            return c - '0';
+        }
+        return -1;
+    }
+
+    /* Convert one hex digit to a numeric value 0..F, or -1 on failure */
+    private static final int _digit16(int c) {
+        if (c >= '0' && c <= '9') {
+            return c - '0';
+        }
+        if (c >= 'A' && c <= 'F') {
+            return c - ('A' - 10);
+        }
+        if (c >= 'a' && c <= 'f') {
+            return c - ('a' - 10);
+        }
+        return -1;
+    }
+
     /**
      * Converts an escape to a code point value. We attempt
      * to parallel the icu4c unescapeAt() function.
@@ -788,26 +810,26 @@ public final class Utility {
      * @return the code point and length, or -1 on error.
      */
     public static int unescapeAndLengthAt(CharSequence s, int offset) {
-        int c;
+        return unescapeAndLengthAt(s, offset, s.length());
+    }
+
+    private static int unescapeAndLengthAt(CharSequence s, int offset, int length) {
         int result = 0;
         int n = 0;
         int minDig = 0;
         int maxDig = 0;
         int bitsPerDigit = 4;
         int dig;
-        int i;
         boolean braces = false;
 
         /* Check that offset is in range */
-        int length = s.length();
         if (offset < 0 || offset >= length) {
             return -1;
         }
         int start = offset;
 
         /* Fetch first UChar after '\\' */
-        c = Character.codePointAt(s, offset);
-        offset += UTF16.getCharCount(c);
+        int c = s.charAt(offset++);
 
         /* Convert hexadecimal and octal escapes */
         switch (c) {
@@ -819,7 +841,7 @@ public final class Utility {
             break;
         case 'x':
             minDig = 1;
-            if (offset < length && UTF16.charAt(s, offset) == 0x7B /*{*/) {
+            if (offset < length && s.charAt(offset) == '{') {
                 ++offset;
                 braces = true;
                 maxDig = 8;
@@ -828,7 +850,7 @@ public final class Utility {
             }
             break;
         default:
-            dig = UCharacter.digit(c, 8);
+            dig = _digit8(c);
             if (dig >= 0) {
                 minDig = 1;
                 maxDig = 3;
@@ -840,20 +862,20 @@ public final class Utility {
         }
         if (minDig != 0) {
             while (offset < length && n < maxDig) {
-                c = UTF16.charAt(s, offset);
-                dig = UCharacter.digit(c, (bitsPerDigit == 3) ? 8 : 16);
+                c = s.charAt(offset);
+                dig = (bitsPerDigit == 3) ? _digit8(c) : _digit16(c);
                 if (dig < 0) {
                     break;
                 }
                 result = (result << bitsPerDigit) | dig;
-                offset += UTF16.getCharCount(c);
+                ++offset;
                 ++n;
             }
             if (n < minDig) {
                 return -1;
             }
             if (braces) {
-                if (c != 0x7D /*}*/) {
+                if (c != '}') {
                     return -1;
                 }
                 ++offset;
@@ -865,26 +887,33 @@ public final class Utility {
             // if there is a trail surrogate after it, either as an
             // escape or as a literal.  If so, join them up into a
             // supplementary.
-            if (offset < length && result <= 0xffff && UTF16.isLeadSurrogate((char) result)) {
+            if (offset < length && UTF16.isLeadSurrogate(result)) {
                 int ahead = offset+1;
-                c = s.charAt(offset); // [sic] get 16-bit code unit
+                c = s.charAt(offset);
                 if (c == '\\' && ahead < length) {
-                    int cpAndLength = unescapeAndLengthAt(s, ahead);
+                    // Calling ourselves recursively may cause a stack overflow if
+                    // we have repeated escaped lead surrogates.
+                    // Limit the length to 11 ("x{0000DFFF}") after ahead.
+                    int tailLimit = ahead + 11;
+                    if (tailLimit > length) {
+                        tailLimit = length;
+                    }
+                    int cpAndLength = unescapeAndLengthAt(s, ahead, tailLimit);
                     if (cpAndLength >= 0) {
                         c = cpAndLength >> 8;
                         ahead += cpAndLength & 0xff;
                     }
                 }
-                if (c <= 0xffff && UTF16.isTrailSurrogate((char) c)) {
+                if (UTF16.isTrailSurrogate(c)) {
                     offset = ahead;
-                    result = Character.toCodePoint((char) result, (char) c);
+                    result = UCharacter.toCodePoint(result, c);
                 }
             }
             return codePointAndLength(result, start, offset);
         }
 
         /* Convert C-style escapes in table */
-        for (i=0; i<UNESCAPE_MAP.length; i+=2) {
+        for (int i=0; i<UNESCAPE_MAP.length; i+=2) {
             if (c == UNESCAPE_MAP[i]) {
                 return codePointAndLength(UNESCAPE_MAP[i+1], start, offset);
             } else if (c < UNESCAPE_MAP[i]) {
@@ -894,12 +923,20 @@ public final class Utility {
 
         /* Map \cX to control-X: X & 0x1F */
         if (c == 'c' && offset < length) {
-            c = UTF16.charAt(s, offset);
-            return codePointAndLength(c & 0x1F, start, offset + UTF16.getCharCount(c));
+            c = Character.codePointAt(s, offset);
+            return codePointAndLength(c & 0x1F, start, offset + Character.charCount(c));
         }
 
         /* If no special forms are recognized, then consider
-         * the backslash to generically escape the next character. */
+         * the backslash to generically escape the next character.
+         * Deal with surrogate pairs. */
+        if (UTF16.isLeadSurrogate(c) && offset < length) {
+            int c2 = s.charAt(offset);
+            if (UTF16.isTrailSurrogate(c2)) {
+                ++offset;
+                c = UCharacter.toCodePoint(c, c2);
+            }
+        }
         return codePointAndLength(c, start, offset);
     }
 
@@ -1499,34 +1536,65 @@ public final class Utility {
     }
 
     /**
-     * Escape unprintable characters using <backslash>uxxxx notation
+     * @return true for control codes and for surrogate and noncharacter code points
+     */
+    public static boolean shouldAlwaysBeEscaped(int c) {
+        if (c < 0x20) {
+            return true;  // C0 control codes
+        } else if (c <= 0x7e) {
+            return false;  // printable ASCII
+        } else if (c <= 0x9f) {
+            return true;  // C1 control codes
+        } else if (c < 0xd800) {
+            return false;  // most of the BMP
+        } else if (c <= 0xdfff || (0xfdd0 <= c && c <= 0xfdef) || (c & 0xfffe) == 0xfffe) {
+            return true;  // surrogate or noncharacter code points
+        } else if (c <= 0x10ffff) {
+            return false;  // all else
+        } else {
+            return true;  // not a code point
+        }
+    }
+
+    /**
+     * Escapes one unprintable code point using <backslash>uxxxx notation
      * for U+0000 to U+FFFF and <backslash>Uxxxxxxxx for U+10000 and
      * above.  If the character is printable ASCII, then do nothing
      * and return FALSE.  Otherwise, append the escaped notation and
      * return TRUE.
      */
     public static <T extends Appendable> boolean escapeUnprintable(T result, int c) {
+        if (isUnprintable(c)) {
+            escape(result, c);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Escapes one code point using <backslash>uxxxx notation
+     * for U+0000 to U+FFFF and <backslash>Uxxxxxxxx for U+10000 and above.
+     * @return result
+     */
+    public static <T extends Appendable> T escape(T result, int c) {
         try {
-            if (isUnprintable(c)) {
-                result.append('\\');
-                if ((c & ~0xFFFF) != 0) {
-                    result.append('U');
-                    result.append(DIGITS[0xF&(c>>28)]);
-                    result.append(DIGITS[0xF&(c>>24)]);
-                    result.append(DIGITS[0xF&(c>>20)]);
-                    result.append(DIGITS[0xF&(c>>16)]);
-                } else {
-                    result.append('u');
-                }
-                result.append(DIGITS[0xF&(c>>12)]);
-                result.append(DIGITS[0xF&(c>>8)]);
-                result.append(DIGITS[0xF&(c>>4)]);
-                result.append(DIGITS[0xF&c]);
-                return true;
+            result.append('\\');
+            if ((c & ~0xFFFF) != 0) {
+                result.append('U');
+                result.append(DIGITS[0xF&(c>>28)]);
+                result.append(DIGITS[0xF&(c>>24)]);
+                result.append(DIGITS[0xF&(c>>20)]);
+                result.append(DIGITS[0xF&(c>>16)]);
+            } else {
+                result.append('u');
             }
-            return false;
+            result.append(DIGITS[0xF&(c>>12)]);
+            result.append(DIGITS[0xF&(c>>8)]);
+            result.append(DIGITS[0xF&(c>>4)]);
+            result.append(DIGITS[0xF&c]);
+            return result;
         } catch (IOException e) {
-            throw new IllegalIcuArgumentException(e);
+            throw new ICUUncheckedIOException(e);
         }
     }
 

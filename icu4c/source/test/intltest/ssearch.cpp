@@ -1017,7 +1017,7 @@ public:
     SetMonkey(const USet *theSet);
     ~SetMonkey();
 
-    virtual void append(UnicodeString &test, UnicodeString &alternate);
+    virtual void append(UnicodeString &test, UnicodeString &alternate) override;
 
 private:
     const USet *set;
@@ -1051,7 +1051,7 @@ public:
     StringSetMonkey(const USet *theSet, UCollator *theCollator, CollData *theCollData);
     ~StringSetMonkey();
 
-    void append(UnicodeString &testCase, UnicodeString &alternate);
+    void append(UnicodeString &testCase, UnicodeString &alternate) override;
 
 private:
     UnicodeString &generateAlternative(const UnicodeString &testCase, UnicodeString &alternate);

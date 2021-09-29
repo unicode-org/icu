@@ -195,7 +195,7 @@ public:
     GNameSearchHandler(uint32_t types);
     virtual ~GNameSearchHandler();
 
-    UBool handleMatch(int32_t matchLength, const CharacterNode *node, UErrorCode &status);
+    UBool handleMatch(int32_t matchLength, const CharacterNode *node, UErrorCode &status) override;
     UVector* getMatches(int32_t& maxMatchLen);
 
 private:
@@ -244,7 +244,7 @@ GNameSearchHandler::handleMatch(int32_t matchLength, const CharacterNode *node, 
                         gmatch->gnameInfo = nameinfo;
                         gmatch->matchLength = matchLength;
                         gmatch->timeType = UTZFMT_TIME_TYPE_UNKNOWN;
-                        fResults->addElement(gmatch, status);
+                        fResults->addElementX(gmatch, status);
                         if (U_FAILURE(status)) {
                             uprv_free(gmatch);
                         } else {
@@ -1287,7 +1287,7 @@ TimeZoneGenericNames::createInstance(const Locale& locale, UErrorCode& status) {
     return instance;
 }
 
-UBool
+bool
 TimeZoneGenericNames::operator==(const TimeZoneGenericNames& other) const {
     // Just compare if the other object also use the same
     // ref entry

@@ -13,7 +13,7 @@ jobs:
       lfs: true
       fetchDepth: 10
     - script: |
-        echo "Building ICU4J" && cd icu4j && ant init && ant check 
+        echo "Building ICU4J" && cd icu4j && ant init && ant check && ant localespiCheck
       displayName: 'Build and Test'
       env:
         BUILD: ICU4J
@@ -45,21 +45,28 @@ jobs:
         cd icu4c/source/test/cintltst && LANG=C.UTF-8 LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./cintltst /tsutil/cloctst/TestCDefaultLocale
       displayName: 'Test C.UTF-8 Default locale'
 #-------------------------------------------------------------------------
-- job: ICU4C_Clang_Ubuntu_1804_WarningsAsErrors
-  displayName: 'C: Linux Clang WarningsAsErrors (Ubuntu 18.04)'
+- job: ICU4C_Clang13_Ubuntu_2004_WarningsAsErrors
+  displayName: 'C: Linux Clang-13 WarningsAsErrors (Ubuntu 20.04)'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'ubuntu-18.04'
+    vmImage: 'ubuntu-20.04'
   steps:
     - checkout: self
       lfs: true
       fetchDepth: 10
+    # Install Clang-13 from https://apt.llvm.org/
     - script: |
-        export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor" && cd icu4c/source && ./runConfigureICU Linux && make -j2 tests
+        curl -Ls https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+        sudo apt-add-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-13 main'
+        sudo apt update
+        sudo apt install -qy clang-13 lld-13 libc++-13-dev libc++abi-13-dev
+      displayName: 'Install Clang-13'
+    - script: |
+        export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor -Wsuggest-override" && cd icu4c/source && ./runConfigureICU Linux && make -j2 tests
       displayName: 'Build only (WarningsAsErrors)'
       env:
-        CC: clang
-        CXX: clang++
+        CC: clang-13
+        CXX: clang++-13
 #-------------------------------------------------------------------------
 - job: ICU4C_Clang_Ubuntu_DataFilter_1804
   displayName: 'C: Linux Clang DataFilter (Ubuntu 18.04)'
@@ -82,7 +89,7 @@ jobs:
         CXX: clang++
 #-------------------------------------------------------------------------
 - job: ICU4C_Clang_Cpp14_Debug_Ubuntu_1804
-  displayName: 'C: Linux Clang C++14 Debug (Ubuntu 18.04)'
+  displayName: 'C: Linux Clang C++17 Debug (Ubuntu 18.04)'
   timeoutInMinutes: 30
   pool:
     vmImage: 'ubuntu-18.04'
@@ -90,14 +97,9 @@ jobs:
     - checkout: self
       lfs: true
       fetchDepth: 10
-    # This is to work-around issue: https://github.com/actions/virtual-environments/issues/3376
-    # Once the Ubuntu 18.04 build bot image is fixed, we can remove this work-around.
     - script: |
-        sudo apt remove libgcc-11-dev gcc-11
-      displayName: Remove GCC 11 (work-around)
-    - script: |
-        export CXXFLAGS="-std=c++14 -Winvalid-constexpr" && cd icu4c/source && ./runConfigureICU --enable-debug --disable-release Linux && make -j2 check
-      displayName: 'Build and Test C++14'
+        export CXXFLAGS="-std=c++17 -Winvalid-constexpr" && cd icu4c/source && ./runConfigureICU --enable-debug --disable-release Linux && make -j2 check
+      displayName: 'Build and Test C++17'
       env:
         CC: clang
         CXX: clang++
@@ -117,6 +119,69 @@ jobs:
       env:
         CC: gcc
         CXX: g++
+#-------------------------------------------------------------------------
+- job: ICU4C_GCC11_Cpp20_Ubuntu_2004
+  displayName: 'C: Linux GCC-11 C++20 (Ubuntu 20.04)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'ubuntu-20.04'
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    - script: |
+        sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+        sudo apt update
+        sudo apt install gcc-11 g++-11
+      displayName: 'Install GCC-11'
+    - script: |
+        cd icu4c/source && ./runConfigureICU Linux && make -j2 check
+      displayName: 'Build and Test'
+      env:
+        CC: gcc-11
+        CXX: g++-11
+        CXXFLAGS: '-std=c++20 -fext-numeric-literals'
+#-------------------------------------------------------------------------
+- job: ICU4C_Clang_Ubuntu_2004_LANG
+  displayName: 'C: Linux Clang (Ubuntu 20.04) - LANG has extension tags'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'ubuntu-20.04'
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    - script: |
+        cd icu4c/source && ./runConfigureICU Linux && make -j2 check
+      displayName: 'Build and Test'
+      env:
+        CC: clang
+        CXX: clang++
+        LANG: "en_US@calendar=gregorian;hours=h12"
+#-------------------------------------------------------------------------
+- job: ICU4C_Clang13_Cpp20_Ubuntu_2004
+  displayName: 'C: Linux Clang-13 C++20 (Ubuntu 20.04)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'ubuntu-20.04'
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    # Install Clang-13 from https://apt.llvm.org/
+    - script: |
+        curl -Ls https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+        sudo apt-add-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-13 main'
+        sudo apt update
+        sudo apt install -qy clang-13 lld-13 libc++-13-dev libc++abi-13-dev
+      displayName: 'Install Clang-13'
+    - script: |
+        cd icu4c/source && ./runConfigureICU Linux && make -j2 check
+      displayName: 'Build and Test'
+      env:
+        CC: clang-13
+        CXX: clang++-13
+        CXXFLAGS: '-std=c++20'
 #-------------------------------------------------------------------------
 # VS 2019 Builds
 #-------------------------------------------------------------------------
@@ -156,6 +221,28 @@ jobs:
       inputs:
         PathtoPublish: 'icu4c/source/dist/icu-windows.zip'
         ArtifactName: '$(Build.BuildNumber)_ICU4C_MSVC_x64_Release'
+#-------------------------------------------------------------------------
+- job: ICU4C_MSVC_x64_Release_DataFilter
+  displayName: 'C: MSVC 64-bit Release DataFilter (VS 2019)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'windows-2019'
+    demands: 
+      - msbuild
+      - visualstudio
+      - Cmd
+  steps:
+    - powershell: |
+        $filterPath = $Env:BUILD_SOURCESDIRECTORY + "\.ci-builds\data-filter.json"
+        $vstsCommandString = "vso[task.setvariable variable=ICU_DATA_FILTER_FILE]" + $filterPath
+        Write-Host "##$vstsCommandString"
+    - task: VSBuild@1
+      displayName: 'Build Solution with Data Filter'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: x64
+        configuration: Release
+        msbuildArgs: '/p:SkipUWP=true'
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x86_Release_Distrelease
   displayName: 'C: MSVC 32-bit Release (VS 2019) + Distrelease'
@@ -268,6 +355,34 @@ jobs:
         solution: icu4c/source/allinone/allinone.sln
         platform: ARM64
         configuration: Debug
+#-------------------------------------------------------------------------
+# There is no /std:c++20 yet, so use c++latest as that includes many of
+# the C++20 compiler and library changes.
+- job: ICU4C_MSVC_x64_Release_CppLatest
+  displayName: 'C: MSVC 64-bit Release (VS 2019) /std:c++latest'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'windows-2019'
+    demands: 
+      - msbuild
+      - visualstudio
+      - Cmd
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    - task: VSBuild@1
+      displayName: 'Build Solution'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: x64
+        configuration: Release
+        msbuildArgs: '/p:LanguageStandard="stdcpplatest"'
+    - task: BatchScript@1
+      displayName: 'Run Tests (icucheck.bat)'
+      inputs:
+        filename: icu4c/source/allinone/icucheck.bat
+        arguments: 'x64 Release'
 #-------------------------------------------------------------------------
 # VS 2017 Builds
 #-------------------------------------------------------------------------
@@ -467,3 +582,48 @@ jobs:
       env:
         CC: gcc
         CXX: g++
+#-------------------------------------------------------------------------
+- job: ICU4C_icuexportdata_Ubuntu_1804
+  displayName: 'C: Create Artifacts from icuexportdata'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'ubuntu-18.04'
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    - script: |
+        cd icu4c/source && ./runConfigureICU Linux && make -j2
+      displayName: 'Build'
+      env:
+        CC: clang
+        CXX: clang++
+    - script: |
+        mkdir -p icu4c/source/icuexportdata_uprops_full/fast
+        mkdir -p icu4c/source/icuexportdata_uprops_full/small
+        cd icu4c/source
+        LD_LIBRARY_PATH=lib ./bin/icuexportdata --mode uprops --index --copyright --destdir icuexportdata_uprops_full/fast --trie-type fast --all
+        LD_LIBRARY_PATH=lib ./bin/icuexportdata --mode uprops --index --copyright --destdir icuexportdata_uprops_full/small --trie-type small --all
+      displayName: 'Build Unicode property data export file (Full)'
+    # In the sample file, include:
+    # - Basic binary properties: AHex WSpace
+    # - Property of strings: Basic_Emoji
+    # - POSIX binary property: blank
+    # - Enumerated properties: gc nt sc
+    - script: |
+        mkdir -p icu4c/source/icuexportdata_uprops_sample/fast
+        mkdir -p icu4c/source/icuexportdata_uprops_sample/small
+        cd icu4c/source
+        LD_LIBRARY_PATH=lib ./bin/icuexportdata --mode uprops --index --copyright --destdir icuexportdata_uprops_sample/fast --trie-type fast AHex gc nt Basic_Emoji sc WSpace blank
+        LD_LIBRARY_PATH=lib ./bin/icuexportdata --mode uprops --index --copyright --destdir icuexportdata_uprops_sample/small --trie-type small AHex gc nt Basic_Emoji sc WSpace blank
+      displayName: 'Build Unicode property data export file (Sample)'
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: icuexportdata_uprops_full'
+      inputs:
+        PathtoPublish: 'icu4c/source/icuexportdata_uprops_full'
+        ArtifactName: 'icuexportdata_uprops_full'
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: icuexportdata_uprops_sample'
+      inputs:
+        PathtoPublish: 'icu4c/source/icuexportdata_uprops_sample'
+        ArtifactName: 'icuexportdata_uprops_sample'

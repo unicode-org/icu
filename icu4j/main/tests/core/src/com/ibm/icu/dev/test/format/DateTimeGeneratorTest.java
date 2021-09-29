@@ -1825,6 +1825,10 @@ public class DateTimeGeneratorTest extends TestFmwk {
             "en_US",      "yMMMMEEEEd",  "EEEE, MMMM d, y",
             "en_US",      "yMMMMccccd",  "EEEE, MMMM d, y",
             "en_US",      "yMMMMeeeed",  "EEEE, MMMM d, y",
+
+            // ICU-20992: Bad patterns for missing fields
+            "ckb_IR",     "mmSSS",       "mm:ss٫SSS",
+            "ckb_IR",     "BSSS",        "SSS ├'Dayperiod': B┤",
         };
     
         for (int i = 0; i < testCases.length; i += 3) {
@@ -1850,4 +1854,30 @@ public class DateTimeGeneratorTest extends TestFmwk {
         }
     }
 
+    // Test for ICU-21202: Make sure DateTimePatternGenerator supplies an era field for year formats using the
+    // Buddhist and Japanese calendars for all English-speaking locales.
+    @Test
+    public void testEras() {
+        String[] localeIDs = {
+            "en_US@calendar=japanese",
+            "en_GB@calendar=japanese",
+            "en_150@calendar=japanese",
+            "en_001@calendar=japanese",
+            "en@calendar=japanese",
+            "en_US@calendar=buddhist",
+            "en_GB@calendar=buddhist",
+            "en_150@calendar=buddhist",
+            "en_001@calendar=buddhist",
+            "en@calendar=buddhist",
+        };
+
+        for (String localeID : localeIDs) {
+            DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance(new Locale(localeID));
+            String pattern = dtpg.getBestPattern("y");
+
+            if (pattern.indexOf('G') < 0) {
+                errln("missing era field for locale " + localeID);
+            }
+        }
+    }
 }

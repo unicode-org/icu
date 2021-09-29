@@ -250,7 +250,6 @@ void addNEWResourceBundleTest(TestNode** root)
     addTest(root, &TestGetKeywordValues,      "tsutil/creststn/TestGetKeywordValues"); 
     addTest(root, &TestGetFunctionalEquivalent,"tsutil/creststn/TestGetFunctionalEquivalent");
     addTest(root, &TestJB3763,                "tsutil/creststn/TestJB3763");
-    addTest(root, &TestStackReuse,            "tsutil/creststn/TestStackReuse");
 }
 
 
@@ -2893,23 +2892,6 @@ static void TestFallbackCodes(void) {
   ures_close(fall);
   ures_close(r);
   ures_close(res);
-}
-
-/* This test will crash if this doesn't work. Results don't need testing. */
-static void TestStackReuse(void) {
-    UResourceBundle table;
-    UErrorCode errorCode = U_ZERO_ERROR;
-    UResourceBundle *rb = ures_open(NULL, "en_US", &errorCode);
-
-    if(U_FAILURE(errorCode)) {
-        log_data_err("Could not load en_US locale. status=%s\n",myErrorName(errorCode));
-        return;
-    }
-    ures_initStackObject(&table);
-    ures_getByKeyWithFallback(rb, "Types", &table, &errorCode);
-    ures_getByKeyWithFallback(&table, "collation", &table, &errorCode);
-    ures_close(rb);
-    ures_close(&table);
 }
 
 /* Test ures_getUTF8StringXYZ() --------------------------------------------- */

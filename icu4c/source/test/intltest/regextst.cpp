@@ -4117,7 +4117,7 @@ void RegexTest::PerlTests() {
         // building up an ICU string from the results of the ICU match.
         //   The Perl expression will contain references to the results of
         //     a regex match, including the matched string, capture group strings,
-        //     group starting and ending indicies, etc.
+        //     group starting and ending indices, etc.
         //
         UnicodeString resultString;
         UnicodeString perlExpr = fields[3];
@@ -4514,7 +4514,7 @@ void RegexTest::PerlTestsUTF8() {
         // building up an ICU string from the results of the ICU match.
         //   The Perl expression will contain references to the results of
         //     a regex match, including the matched string, capture group strings,
-        //     group starting and ending indicies, etc.
+        //     group starting and ending indices, etc.
         //
         UnicodeString resultString;
         UnicodeString perlExpr = fields[3];

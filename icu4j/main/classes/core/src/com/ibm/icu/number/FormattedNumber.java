@@ -130,7 +130,7 @@ public class FormattedNumber implements FormattedValue {
      * as "foot-and-inch" or "hour-and-minute-and-second".
      *
      * @return `MeasureUnit`.
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public MeasureUnit getOutputUnit() {
         return this.outputUnit;

@@ -234,6 +234,12 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     }
 
     @Override
+    public void resetExponent() {
+        adjustMagnitude(exponent);
+        exponent = 0;
+    }
+
+    @Override
     public boolean isHasIntegerValue() {
         return scale >= 0;
     }
@@ -918,6 +924,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
 
             // Perform truncation
             if (position >= precision) {
+                assert trailingDigit == 0;
                 setBcdToZero();
                 scale = magnitude;
             } else {
@@ -935,6 +942,10 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
                     // do not return: use the bubbling logic below
                 } else {
                     setDigitPos(0, (byte) 5);
+                    // If the quantity was set to 0, we may need to restore a digit.
+                    if (precision == 0) {
+                        precision = 1;
+                    }
                     // compact not necessary: digit at position 0 is nonzero
                     return;
                 }
@@ -1159,8 +1170,10 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     protected abstract byte getDigitPos(int position);
 
     /**
-     * Sets the digit in the BCD list. This method only sets the digit; it is the caller's responsibility
-     * to call {@link #compact} after setting the digit.
+     * Sets the digit in the BCD list. This method only sets the digit; it is the caller's
+     * responsibility to call {@link #compact} after setting the digit, and to ensure
+     * that the precision field is updated to reflect the correct number of digits if a
+     * nonzero digit is added to the decimal.
      *
      * @param position
      *            The position of the digit to pop, counted in BCD units from the least significant

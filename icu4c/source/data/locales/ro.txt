@@ -238,6 +238,15 @@ ro{
             }
         }
         minimalPairs{
+            case{
+                genitive{"... ale (celor) {0} ..."}
+                nominative{"{0} este ..."}
+            }
+            gender{
+                feminine{"O {0} costă 5 €."}
+                masculine{"Un {0} costă 5 €, doi costă 9 €."}
+                neuter{"Un {0} costă 5 €, două costă 9 €."}
+            }
             ordinal{
                 one{"Faceți virajul nr. {0} la dreapta."}
                 other{"Faceți virajul al {0}-lea la dreapta."}
@@ -743,6 +752,7 @@ ro{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM y G"}
+                GyMd{"dd.MM.y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -962,6 +972,7 @@ ro{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM y G"}
+                GyMd{"dd.MM.y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}

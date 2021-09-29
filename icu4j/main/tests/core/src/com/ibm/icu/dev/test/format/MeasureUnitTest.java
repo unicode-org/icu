@@ -2548,8 +2548,8 @@ public class MeasureUnitTest extends TestFmwk {
                 "1 έτος",
                 // "el_GR" 1 short
                 "1 δευτ.",
-                "1 λεπ.",
-                "1 ώρα",
+                "1 λ.",
+                "1 ώ.",
                 "1 ημέρα",
                 "1 εβδ.",
                 "1 μήν.",
@@ -2564,8 +2564,8 @@ public class MeasureUnitTest extends TestFmwk {
                 "7 έτη",
                 // "el_GR" 7 short
                 "7 δευτ.",
-                "7 λεπ.",
-                "7 ώρ.",		    // hour (other)
+                "7 λ.",
+                "7 ώ.",		       // hour (other)
                 "7 ημέρες",
                 "7 εβδ.",
                 "7 μήν.",
@@ -2580,8 +2580,8 @@ public class MeasureUnitTest extends TestFmwk {
                 "1 έτος",
                 // "el" 1 short
                 "1 δευτ.",
-                "1 λεπ.",
-                "1 ώρα",
+                "1 λ.",
+                "1 ώ.",
                 "1 ημέρα",
                 "1 εβδ.",
                 "1 μήν.",
@@ -2596,8 +2596,8 @@ public class MeasureUnitTest extends TestFmwk {
                 "7 έτη",
                 // "el" 7 short
                 "7 δευτ.",
-                "7 λεπ.",
-                "7 ώρ.",		    // hour (other)
+                "7 λ.",
+                "7 ώ.",		        // hour (other)
                 "7 ημέρες",
                 "7 εβδ.",
                 "7 μήν.",
@@ -2677,7 +2677,7 @@ public class MeasureUnitTest extends TestFmwk {
                 {ULocale.ENGLISH, FormatWidth.NARROW, "2mi 1\u2032 2.3\u2033"},
                 {russia, FormatWidth.WIDE,   "2 \u043C\u0438\u043B\u0438 1 \u0444\u0443\u0442 2,3 \u0434\u044E\u0439\u043C\u0430"},
                 {russia, FormatWidth.SHORT,  "2 \u043C\u0438 1 \u0444\u0442 2,3 \u0434\u044E\u0439\u043C."},
-                {russia, FormatWidth.NARROW, "2 \u043C\u0438\u043B\u044C 1 \u0444\u0442 2,3 \u0434\u044E\u0439\u043C\u0430"},
+                {russia, FormatWidth.NARROW, "2 \u043C\u0438 1 \u0444\u0442 2,3 \u0434\u044E\u0439\u043C."},
    };
         for (Object[] row : data) {
             MeasureFormat mf = MeasureFormat.getInstance(
@@ -3924,11 +3924,18 @@ public class MeasureUnitTest extends TestFmwk {
             new TestCase("zebibyte", "zebibyte"),
             new TestCase("yobibyte", "yobibyte"),
 
+            // Testing aliases
+            new TestCase("foodcalorie", "foodcalorie"),
+            new TestCase("dot-per-centimeter", "dot-per-centimeter"),
+            new TestCase("dot-per-inch", "dot-per-inch"),
+            new TestCase("dot", "dot"),
+
             // Testing sort order of prefixes.
-            //
-            // TODO(icu-units#70): revisit when fixing normalization. For now we're
-            // just checking some consistency between C&J.
-            new TestCase("megafoot-mebifoot-kibifoot-kilofoot", "kibifoot-mebifoot-kilofoot-megafoot"),
+            new TestCase("megafoot-mebifoot-kibifoot-kilofoot", "mebifoot-megafoot-kibifoot-kilofoot"),
+            new TestCase("per-megafoot-mebifoot-kibifoot-kilofoot", "per-mebifoot-megafoot-kibifoot-kilofoot"),
+            new TestCase("megafoot-mebifoot-kibifoot-kilofoot-per-megafoot-mebifoot-kibifoot-kilofoot", "mebifoot-megafoot-kibifoot-kilofoot-per-mebifoot-megafoot-kibifoot-kilofoot"),
+            new TestCase("microfoot-millifoot-megafoot-mebifoot-kibifoot-kilofoot", "mebifoot-megafoot-kibifoot-kilofoot-millifoot-microfoot"),
+            new TestCase("per-microfoot-millifoot-megafoot-mebifoot-kibifoot-kilofoot", "per-mebifoot-megafoot-kibifoot-kilofoot-millifoot-microfoot"),
         };
 
         for (TestCase testCase : cases) {
@@ -4404,7 +4411,7 @@ public class MeasureUnitTest extends TestFmwk {
         assertEquals("append meter & centimeter: units length", 2, mcm.getSingleUnits().size());
         assertEquals("append meter & centimeter: units[0]", "meter", mcm.getSingleUnits().get(0).getSimpleUnitID());
         assertEquals("append meter & centimeter: units[1]", "meter", mcm.getSingleUnits().get(1).getSimpleUnitID());
-        assertEquals("append meter & centimeter: identifier", "centimeter-meter", mcm.build().getIdentifier());
+        assertEquals("append meter & centimeter: identifier", "meter-centimeter", mcm.build().getIdentifier());
 
         MeasureUnitImpl m2m = MeasureUnitImpl.forIdentifier("meter-square-meter");
         assertEquals("meter-square-meter: complexity", MeasureUnit.Complexity.SINGLE, m2m.getComplexity());

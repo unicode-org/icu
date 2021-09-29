@@ -670,6 +670,11 @@ en{
     Languages%menu{
         ars{"Arabic, Najdi"}
         ckb{"Kurdish, Central"}
+        se{"Sami, Northern"}
+        sma{"Sami, Southern"}
+        smj{"Sami, Lule"}
+        smn{"Sami, Inari"}
+        sms{"Sami, Skolt"}
         yue{"Chinese, Cantonese"}
         zh{"Chinese, Mandarin"}
     }
@@ -949,6 +954,13 @@ en{
             no{"Sort Digits Individually"}
             yes{"Sort Digits Numerically"}
         }
+        colReorder{
+            currency{"Currency"}
+            digit{"Digits"}
+            punct{"Punctuation"}
+            space{"Whitespace"}
+            symbol{"Symbol"}
+        }
         colStrength{
             identical{"Sort All"}
             primary{"Sort Base Letters Only"}
@@ -1059,13 +1071,6 @@ en{
             var{"Keyboard Variant"}
             viqr{"Vietnamese VIQR Keyboard"}
             windows{"Windows Keyboard"}
-        }
-        kr{
-            currency{"Currency"}
-            digit{"Digits"}
-            punct{"Punctuation"}
-            space{"Whitespace"}
-            symbol{"Symbol"}
         }
         kv{
             currency{"Ignore Symbols affects spaces, punctuation, all symbols"}
@@ -1197,6 +1202,7 @@ en{
             thai{"Thai Digits"}
             tibt{"Tibetan Digits"}
             tirh{"Tirhuta Digits"}
+            tnsa{"Tangsa Digits"}
             traditional{"Traditional Numerals"}
             vaii{"Vai Digits"}
             wara{"Warang Citi Digits"}

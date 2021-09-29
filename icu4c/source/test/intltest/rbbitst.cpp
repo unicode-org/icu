@@ -1579,9 +1579,9 @@ class RBBICharMonkey: public RBBIMonkeyKind {
 public:
     RBBICharMonkey();
     virtual          ~RBBICharMonkey();
-    virtual  UVector *charClasses();
-    virtual  void     setText(const UnicodeString &s);
-    virtual  int32_t  next(int32_t i);
+    virtual  UVector *charClasses() override;
+    virtual  void     setText(const UnicodeString &s) override;
+    virtual  int32_t  next(int32_t i) override;
 private:
     UVector   *fSets;
 
@@ -1863,9 +1863,9 @@ class RBBIWordMonkey: public RBBIMonkeyKind {
 public:
     RBBIWordMonkey();
     virtual          ~RBBIWordMonkey();
-    virtual  UVector *charClasses();
-    virtual  void     setText(const UnicodeString &s);
-    virtual int32_t   next(int32_t i);
+    virtual  UVector *charClasses() override;
+    virtual  void     setText(const UnicodeString &s) override;
+    virtual int32_t   next(int32_t i) override;
 private:
     UVector      *fSets;
 
@@ -1883,11 +1883,11 @@ private:
     UnicodeSet  *fMidNumSet;
     UnicodeSet  *fNumericSet;
     UnicodeSet  *fFormatSet;
-    UnicodeSet  *fOtherSet;
+    UnicodeSet  *fOtherSet = nullptr;
     UnicodeSet  *fExtendSet;
     UnicodeSet  *fExtendNumLetSet;
     UnicodeSet  *fWSegSpaceSet;
-    UnicodeSet  *fDictionarySet;
+    UnicodeSet  *fDictionarySet = nullptr;
     UnicodeSet  *fZWJSet;
     UnicodeSet  *fExtendedPictSet;
 
@@ -1926,6 +1926,11 @@ RBBIWordMonkey::RBBIWordMonkey()
 
     fZWJSet           = new UnicodeSet(u"[\\p{Word_Break = ZWJ}]",          status);
     fExtendedPictSet  = new UnicodeSet(u"[:Extended_Pictographic:]", status);
+    if(U_FAILURE(status)) {
+        IntlTest::gTest->errln("%s:%d %s", __FILE__, __LINE__, u_errorName(status));
+        deferredStatus = status;
+        return;
+    }
 
     fDictionarySet = new UnicodeSet(u"[[\\uac00-\\ud7a3][:Han:][:Hiragana:]]", status);
     fDictionarySet->addAll(*fKatakanaSet);
@@ -2235,9 +2240,9 @@ class RBBISentMonkey: public RBBIMonkeyKind {
 public:
     RBBISentMonkey();
     virtual          ~RBBISentMonkey();
-    virtual  UVector *charClasses();
-    virtual  void     setText(const UnicodeString &s);
-    virtual int32_t   next(int32_t i);
+    virtual  UVector *charClasses() override;
+    virtual  void     setText(const UnicodeString &s) override;
+    virtual int32_t   next(int32_t i) override;
 private:
     int               moveBack(int posFrom);
     int               moveForward(int posFrom);
@@ -2569,9 +2574,9 @@ class RBBILineMonkey: public RBBIMonkeyKind {
 public:
     RBBILineMonkey();
     virtual          ~RBBILineMonkey();
-    virtual  UVector *charClasses();
-    virtual  void     setText(const UnicodeString &s);
-    virtual  int32_t  next(int32_t i);
+    virtual  UVector *charClasses() override;
+    virtual  void     setText(const UnicodeString &s) override;
+    virtual  int32_t  next(int32_t i) override;
     virtual  void     rule9Adjust(int32_t pos, UChar32 *posChar, int32_t *nextPos, UChar32 *nextChar);
 private:
     UVector      *fSets;
@@ -2621,6 +2626,7 @@ private:
     UnicodeSet  *fZWJ;
     UnicodeSet  *fOP30;
     UnicodeSet  *fCP30;
+    UnicodeSet  *fExtPictUnassigned;
 
     BreakIterator        *fCharBI;
     const UnicodeString  *fText;
@@ -2689,6 +2695,7 @@ RBBILineMonkey::RBBILineMonkey() :
     fZWJ   = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=ZWJ}]"), status);
     fOP30  = new UnicodeSet(u"[\\p{Line_break=OP}-[\\p{ea=F}\\p{ea=W}\\p{ea=H}]]", status);
     fCP30  = new UnicodeSet(u"[\\p{Line_break=CP}-[\\p{ea=F}\\p{ea=W}\\p{ea=H}]]", status);
+    fExtPictUnassigned = new UnicodeSet(u"[\\p{Extended_Pictographic}&\\p{Cn}]", status);
 
     if (U_FAILURE(status)) {
         deferredStatus = status;
@@ -2740,7 +2747,6 @@ RBBILineMonkey::RBBILineMonkey() :
     fSets->addElement(fAL, status); classNames.push_back("fAL");
     fSets->addElement(fHL, status); classNames.push_back("fHL");
     fSets->addElement(fID, status); classNames.push_back("fID");
-    fSets->addElement(fWJ, status); classNames.push_back("fWJ");
     fSets->addElement(fRI, status); classNames.push_back("fRI");
     fSets->addElement(fSG, status); classNames.push_back("fSG");
     fSets->addElement(fEB, status); classNames.push_back("fEB");
@@ -2749,6 +2755,7 @@ RBBILineMonkey::RBBILineMonkey() :
     // TODO: fOP30 & fCP30 overlap with plain fOP. Probably OK, but fOP/CP chars will be over-represented.
     fSets->addElement(fOP30, status); classNames.push_back("fOP30");
     fSets->addElement(fCP30, status); classNames.push_back("fCP30");
+    fSets->addElement(fExtPictUnassigned, status); classNames.push_back("fExtPictUnassigned");
 
     const char *rules =
             "((\\p{Line_Break=PR}|\\p{Line_Break=PO})(\\p{Line_Break=CM}|\\u200d)*)?"
@@ -3282,8 +3289,14 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             continue;
         }
 
+        // LB30b Do not break between an emoji base (or potential emoji) and an emoji modifier.
         if (fEB->contains(prevChar) && fEM->contains(thisChar)) {
             setAppliedRule(pos, "LB30b    Emoji Base x Emoji Modifier");
+            continue;
+        }
+
+        if (fExtPictUnassigned->contains(prevChar) && fEM->contains(thisChar)) {
+            setAppliedRule(pos, "LB30b    [\\p{Extended_Pictographic}&\\p{Cn}] × EM");
             continue;
         }
 
@@ -3348,6 +3361,7 @@ RBBILineMonkey::~RBBILineMonkey() {
     delete fZWJ;
     delete fOP30;
     delete fCP30;
+    delete fExtPictUnassigned;
 
     delete fCharBI;
     delete fNumberMatcher;
@@ -4005,6 +4019,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
                 errln("breakPos > testText.length()");
             }
             expectedBreaks[breakPos] = 1;
+            expectedCount++;
             U_ASSERT(expectedCount<testText.length());
         }
 

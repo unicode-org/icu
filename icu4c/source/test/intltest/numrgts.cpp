@@ -31,12 +31,12 @@ class MyNumberFormatTest : public NumberFormat
 {
 public:
 
-    virtual UClassID getDynamicClassID(void) const;
+    virtual UClassID getDynamicClassID(void) const override;
   
     virtual UnicodeString& format(    double            number, 
                     UnicodeString&        toAppendTo, 
                     FieldPositionIterator* posIter,
-                    UErrorCode& status) const
+                    UErrorCode& status) const override
     {
         return NumberFormat::format(number, toAppendTo, posIter, status);
     }
@@ -45,7 +45,7 @@ public:
     virtual UnicodeString& format(const Formattable& obj,
                                   UnicodeString& toAppendTo,
                                   FieldPosition& pos,
-                                  UErrorCode& status) const
+                                  UErrorCode& status) const override
     {
         return NumberFormat::format(obj, toAppendTo, pos, status);
     }
@@ -53,7 +53,7 @@ public:
     /* Just use one of the format functions */
     virtual UnicodeString& format(    double            /* number */, 
                     UnicodeString&        toAppendTo, 
-                    FieldPosition&        /* pos */) const
+                    FieldPosition&        /* pos */) const override
     {
         toAppendTo = "";
         return toAppendTo;
@@ -67,28 +67,28 @@ public:
     /* Just use one of the parse functions */
     virtual void parse(    const UnicodeString&    /* text */, 
             Formattable&            result, 
-            ParsePosition&          /* parsePosition */) const
+            ParsePosition&          /* parsePosition */) const override
     {
         result.setLong((int32_t)0);
     }
   
     virtual void parse(    const UnicodeString&    text, 
             Formattable&            result, 
-            UErrorCode&            status) const 
+            UErrorCode&            status) const override
     {
         NumberFormat::parse(text, result, status);
     }
-    virtual MyNumberFormatTest* clone() const 
+    virtual MyNumberFormatTest* clone() const override
     { return NULL; }
 
     virtual UnicodeString& format(int32_t, 
                 UnicodeString& foo, 
-                FieldPosition&) const
+                FieldPosition&) const override
     { return foo.remove(); }
 
     virtual UnicodeString& format(int64_t, 
                 UnicodeString& foo, 
-                FieldPosition&) const
+                FieldPosition&) const override
     { return foo.remove(); }
 
     virtual void applyPattern(const UnicodeString&, UParseError&, UErrorCode&){
@@ -515,7 +515,7 @@ void NumberFormatRegressionTest::Test4086575(void)
     // TODO: There is not a good way to find out that the creation of this number format has
     // failed. Major rewiring of format construction proposed.
     if(U_FAILURE(status)) {
-      dataerrln("Something is wrong with French number format - it should not fallback. Exitting - %s", u_errorName(status));
+      dataerrln("Something is wrong with French number format - it should not fallback. Exiting - %s", u_errorName(status));
       delete nf1;
       return;
     }
@@ -975,20 +975,20 @@ void NumberFormatRegressionTest::Test4071005 (void)
     UnicodeString tempString;
     /* User error :
     String expectedDefault = "-5\u00a0789,987";
-    String expectedCurrency = "5\u00a0789,98\u00a0$\u00a0CA";
+    String expectedCurrency = "5\u00a0789,98\u00a0$";
     String expectedPercent = "-578\u00a0998%";
     */
     UChar chars1 [] = {
         0x2d, 0x35, 0x00a0, 0x37, 0x38, 0x39, 0x2c, 0x39, 0x38, 0x38
     };
     UChar chars2 [] = {
-        0x35, 0x00a0, 0x37, 0x38, 0x39, 0x2c, 0x39, 0x39, 0x00a0, 0x24, 0x00a0, 0x43, 0x41
+        0x35, 0x00a0, 0x37, 0x38, 0x39, 0x2c, 0x39, 0x39, 0x00a0, 0x24
     };
     UChar chars3 [] = {
         0x2d, 0x35, 0x37, 0x38, 0x00a0, 0x39, 0x39, 0x39, 0x00a0, 0x25
     };
     UnicodeString expectedDefault(chars1, 10, 10);
-    UnicodeString expectedCurrency(chars2, 13, 13);
+    UnicodeString expectedCurrency(chars2, 10, 10);
     UnicodeString expectedPercent(chars3, 10, 10);
 
     UErrorCode status = U_ZERO_ERROR;
@@ -1014,7 +1014,7 @@ void NumberFormatRegressionTest::Test4071005 (void)
     tempString = formatter->format( 5789.9876, tempString );
 
     if (tempString == expectedCurrency) {
-        logln ("Bug 4071005 currency test assed.");
+        logln ("Bug 4071005 currency test passed.");
     } else {
         errln(UnicodeString("Failed:") +
         " Expected " + expectedCurrency +

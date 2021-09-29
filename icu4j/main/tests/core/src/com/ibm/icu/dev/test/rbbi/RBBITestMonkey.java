@@ -681,61 +681,11 @@ public class RBBITestMonkey extends TestFmwk {
         // Order matches that of Unicode UAX 14, Table 1, which makes it a little easier
         // to verify that they are all accounted for.
 
-        UnicodeSet  fBK;
-        UnicodeSet  fCR;
-        UnicodeSet  fLF;
-        UnicodeSet  fCM;
-        UnicodeSet  fNL;
-        UnicodeSet  fSG;
-        UnicodeSet  fWJ;
-        UnicodeSet  fZW;
-        UnicodeSet  fGL;
-        UnicodeSet  fSP;
-        UnicodeSet  fB2;
-        UnicodeSet  fBA;
-        UnicodeSet  fBB;
-        UnicodeSet  fHH;
-        UnicodeSet  fHY;
-        UnicodeSet  fCB;
-        UnicodeSet  fCL;
-        UnicodeSet  fCP;
-        UnicodeSet  fEX;
-        UnicodeSet  fIN;
-        UnicodeSet  fNS;
-        UnicodeSet  fOP;
-        UnicodeSet  fQU;
-        UnicodeSet  fIS;
-        UnicodeSet  fNU;
-        UnicodeSet  fPO;
-        UnicodeSet  fPR;
-        UnicodeSet  fSY;
-        UnicodeSet  fAI;
-        UnicodeSet  fAL;
-        UnicodeSet  fCJ;
-        UnicodeSet  fH2;
-        UnicodeSet  fH3;
-        UnicodeSet  fHL;
-        UnicodeSet  fID;
-        UnicodeSet  fJL;
-        UnicodeSet  fJV;
-        UnicodeSet  fJT;
-        UnicodeSet  fRI;
-        UnicodeSet  fXX;
-        UnicodeSet  fEB;
-        UnicodeSet  fEM;
-        UnicodeSet  fZWJ;
-        UnicodeSet  fOP30;
-        UnicodeSet  fCP30;
-
-        StringBuffer  fText;
-        int           fOrigPositions;
-
         // XUnicodeSet is like UnicodeSet, except that the method contains(int codePoint) does not
         // throw exceptions on out-of-range codePoints. This matches ICU4C behavior.
         // The LineMonkey test (ported from ICU4C) relies on this behavior, it uses a value of -1
         // to represent a non-codepoint that is not included in any of the property sets.
         // This happens for rule 30a.
-
         class XUnicodeSet extends UnicodeSet {
             XUnicodeSet(String pattern) { super(pattern); }
             XUnicodeSet() { super(); }
@@ -745,6 +695,62 @@ public class RBBITestMonkey extends TestFmwk {
                         false : super.contains(codePoint);
             }
         }
+
+        // Declare these variables as XUnicodeSet, not merely as UnicodeSet,
+        // so that when we copy a new declaration from C++ (where only UnicodeSet exists),
+        // the missing 'X' prefix is visible;
+        // and when the prefix is there and we copy a new initializer we get a compiler error.
+        // (Otherwise we rely on the caller catching the IAE from using codePoint=-1
+        // and failing with a message that tells us what to do.)
+        XUnicodeSet fBK;
+        XUnicodeSet fCR;
+        XUnicodeSet fLF;
+        XUnicodeSet fCM;
+        XUnicodeSet fNL;
+        XUnicodeSet fSG;
+        XUnicodeSet fWJ;
+        XUnicodeSet fZW;
+        XUnicodeSet fGL;
+        XUnicodeSet fSP;
+        XUnicodeSet fB2;
+        XUnicodeSet fBA;
+        XUnicodeSet fBB;
+        XUnicodeSet fHH;
+        XUnicodeSet fHY;
+        XUnicodeSet fCB;
+        XUnicodeSet fCL;
+        XUnicodeSet fCP;
+        XUnicodeSet fEX;
+        XUnicodeSet fIN;
+        XUnicodeSet fNS;
+        XUnicodeSet fOP;
+        XUnicodeSet fQU;
+        XUnicodeSet fIS;
+        XUnicodeSet fNU;
+        XUnicodeSet fPO;
+        XUnicodeSet fPR;
+        XUnicodeSet fSY;
+        XUnicodeSet fAI;
+        XUnicodeSet fAL;
+        XUnicodeSet fCJ;
+        XUnicodeSet fH2;
+        XUnicodeSet fH3;
+        XUnicodeSet fHL;
+        XUnicodeSet fID;
+        XUnicodeSet fJL;
+        XUnicodeSet fJV;
+        XUnicodeSet fJT;
+        XUnicodeSet fRI;
+        XUnicodeSet fXX;
+        XUnicodeSet fEB;
+        XUnicodeSet fEM;
+        XUnicodeSet fZWJ;
+        XUnicodeSet fOP30;
+        XUnicodeSet fCP30;
+        XUnicodeSet fExtPictUnassigned;
+
+        StringBuffer  fText;
+        int           fOrigPositions;
 
         RBBILineMonkey()
         {
@@ -795,6 +801,7 @@ public class RBBITestMonkey extends TestFmwk {
             fZWJ   = new XUnicodeSet("[\\p{Line_break=ZWJ}]");
             fOP30  = new XUnicodeSet("[\\p{Line_break=OP}-[\\p{ea=F}\\p{ea=W}\\p{ea=H}]]");
             fCP30  = new XUnicodeSet("[\\p{Line_break=CP}-[\\p{ea=F}\\p{ea=W}\\p{ea=H}]]");
+            fExtPictUnassigned = new XUnicodeSet("[\\p{Extended_Pictographic}&\\p{Cn}]");
 
             // Remove dictionary characters.
             // The monkey test reference implementation of line break does not replicate the dictionary behavior,
@@ -847,7 +854,6 @@ public class RBBITestMonkey extends TestFmwk {
             fSets.add(fH3);     fClassNames.add("H3");
             fSets.add(fHL);     fClassNames.add("HL");
             fSets.add(fID);     fClassNames.add("ID");
-            fSets.add(fWJ);     fClassNames.add("WJ");
             fSets.add(fRI);     fClassNames.add("RI");
             fSets.add(fSG);     fClassNames.add("SG");
             fSets.add(fEB);     fClassNames.add("EB");
@@ -856,6 +862,7 @@ public class RBBITestMonkey extends TestFmwk {
             // TODO: fOP30 & fCP30 overlap with plain fOP. Probably OK, but fOP/CP chars will be over-represented.
             fSets.add(fOP30);   fClassNames.add("OP30");
             fSets.add(fCP30);   fClassNames.add("CP30");
+            fSets.add(fExtPictUnassigned); fClassNames.add("fExtPictUnassigned");
         }
 
         @Override
@@ -1308,10 +1315,17 @@ public class RBBITestMonkey extends TestFmwk {
                     continue;
                 }
 
+                // LB30b Do not break between an emoji base (or potential emoji) and an emoji modifier.
                 if (fEB.contains(prevChar) && fEM.contains(thisChar)) {
                     setAppliedRule(pos, "LB 30b Emoji Base x Emoji Modifier");
                     continue;
                 }
+
+                if (fExtPictUnassigned.contains(prevChar) && fEM.contains(thisChar)) {
+                    setAppliedRule(pos, "LB30b    [\\p{Extended_Pictographic}&\\p{Cn}] × EM");
+                    continue;
+                }
+
                 // LB 31    Break everywhere else
                 setAppliedRule(pos, "LB 31 Break everywhere else");
                 break;
@@ -2254,7 +2268,18 @@ public class RBBITestMonkey extends TestFmwk {
         logln("Line Break Monkey Test");
         RBBILineMonkey  m = new RBBILineMonkey();
         BreakIterator   bi = BreakIterator.getLineInstance(Locale.US);
-        RunMonkey(bi, m, "line", seed, loopCount);
+        try {
+            RunMonkey(bi, m, "line", seed, loopCount);
+        } catch(IllegalArgumentException e) {
+            if (e.getMessage().equals("Invalid code point U+-000001")) {
+                // Looks like you used class UnicodeSet instead of class XUnicodeSet
+                // (note the leading 'X').
+                // See the comment before the definition of class XUnicodeSet.
+                errln("Probable program error: use XUnicodeSet in RBBILineMonkey code");
+            } else {
+                throw e;
+            }
+        }
     }
 
     @Test
@@ -2312,7 +2337,18 @@ public class RBBITestMonkey extends TestFmwk {
         BreakIterator   bi = BreakIterator.getLineInstance(Locale.US);
         String rules = bi.toString();
         BreakIterator rtbi = new RuleBasedBreakIterator(rules);
-        RunMonkey(rtbi, m, "line", seed, loopCount);
+        try {
+            RunMonkey(rtbi, m, "line", seed, loopCount);
+        } catch(IllegalArgumentException e) {
+            if (e.getMessage().equals("Invalid code point U+-000001")) {
+                // Looks like you used class UnicodeSet instead of class XUnicodeSet
+                // (note the leading 'X').
+                // See the comment before the definition of class XUnicodeSet.
+                errln("Probable program error: use XUnicodeSet in RBBILineMonkey code");
+            } else {
+                throw e;
+            }
+        }
     }
 
     @Test

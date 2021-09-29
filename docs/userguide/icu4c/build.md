@@ -110,7 +110,7 @@ Depending on the platform and the type of installation, we recommend a small num
     ~/icu$ mkdir icu4c-build
     ~/icu$ cd icu4c-build
     ~/icu/icu4c-build$ ../icu/icu4c/source/runConfigureICU Linux
-    ~/icu/icu4c-build$ make check</pre>
+    ~/icu/icu4c-build$ make check
 ```
     > :point_right: **Note**:  this example shows a relative path to `runConfigureICU`. If you experience difficulty, try using an absolute path to `runConfigureICU` instead.
 

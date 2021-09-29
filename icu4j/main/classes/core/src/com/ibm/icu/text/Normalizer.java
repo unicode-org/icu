@@ -2239,7 +2239,7 @@ public final class Normalizer implements Cloneable {
 
             /* get complete code points for c1, c2 for lookups if either is a surrogate */
             cp1=c1;
-            if(UTF16.isSurrogate((char)c1)) {
+            if(UTF16.isSurrogate(c1)) {
                 char c;
 
                 if(Normalizer2Impl.UTF16Plus.isSurrogateLead(c1)) {
@@ -2255,7 +2255,7 @@ public final class Normalizer implements Cloneable {
             }
 
             cp2=c2;
-            if(UTF16.isSurrogate((char)c2)) {
+            if(UTF16.isSurrogate(c2)) {
                 char c;
 
                 if(Normalizer2Impl.UTF16Plus.isSurrogateLead(c2)) {
@@ -2279,7 +2279,7 @@ public final class Normalizer implements Cloneable {
                 (length=csp.toFullFolding(cp1, fold1, options))>=0
             ) {
                 /* cp1 case-folds to the code point "length" or to p[length] */
-                if(UTF16.isSurrogate((char)c1)) {
+                if(UTF16.isSurrogate(c1)) {
                     if(Normalizer2Impl.UTF16Plus.isSurrogateLead(c1)) {
                         /* advance beyond source surrogate pair if it case-folds */
                         ++s1;
@@ -2327,7 +2327,7 @@ public final class Normalizer implements Cloneable {
                 (length=csp.toFullFolding(cp2, fold2, options))>=0
             ) {
                 /* cp2 case-folds to the code point "length" or to p[length] */
-                if(UTF16.isSurrogate((char)c2)) {
+                if(UTF16.isSurrogate(c2)) {
                     if(Normalizer2Impl.UTF16Plus.isSurrogateLead(c2)) {
                         /* advance beyond source surrogate pair if it case-folds */
                         ++s2;
@@ -2375,7 +2375,7 @@ public final class Normalizer implements Cloneable {
                 (decomp1=nfcImpl.getDecomposition(cp1))!=null
             ) {
                 /* cp1 decomposes into p[length] */
-                if(UTF16.isSurrogate((char)c1)) {
+                if(UTF16.isSurrogate(c1)) {
                     if(Normalizer2Impl.UTF16Plus.isSurrogateLead(c1)) {
                         /* advance beyond source surrogate pair if it decomposes */
                         ++s1;
@@ -2419,7 +2419,7 @@ public final class Normalizer implements Cloneable {
                 (decomp2=nfcImpl.getDecomposition(cp2))!=null
             ) {
                 /* cp2 decomposes into p[length] */
-                if(UTF16.isSurrogate((char)c2)) {
+                if(UTF16.isSurrogate(c2)) {
                     if(Normalizer2Impl.UTF16Plus.isSurrogateLead(c2)) {
                         /* advance beyond source surrogate pair if it decomposes */
                         ++s2;

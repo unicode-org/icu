@@ -135,7 +135,7 @@ void TestPartialParse994()
     pos=0;
     d = udat_parse(f, s, u_strlen(s), &pos, &status);
     if(U_FAILURE(status)) {
-      log_data_err("FAIL: could not parse - exitting");
+      log_data_err("FAIL: could not parse - exiting");
       return;
     }
     fmtChars = myDateFormat(f, d);

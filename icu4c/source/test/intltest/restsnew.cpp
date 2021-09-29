@@ -48,6 +48,8 @@ void NewResourceBundleTest::runIndexedTest( int32_t index, UBool exec, const cha
     TESTCASE_AUTO(TestTrace);
 #endif
 
+    TESTCASE_AUTO(TestOpenDirectFillIn);
+    TESTCASE_AUTO(TestStackReuse);
     TESTCASE_AUTO_END;
 }
 
@@ -1397,22 +1399,10 @@ void NewResourceBundleTest::TestFilter() {
     }
 }
 
-/*
- * The following test for ICU-20706 has infinite loops on certain inputs for
- * locales and calendars.  In order to unblock the build (ICU-21055), those
- * specific values are temporarily removed.
- * The issue of the infinite loops and its blocking dependencies were captured
- * in ICU-21080.
- */
-
 void NewResourceBundleTest::TestIntervalAliasFallbacks() {
     const char* locales[] = {
-        // Thee will not cause infinity loop
         "en",
         "ja",
-
-        // These will cause infinity loop
-#if 0
         "fr_CA",
         "en_150",
         "es_419",
@@ -1424,15 +1414,10 @@ void NewResourceBundleTest::TestIntervalAliasFallbacks() {
         "zh_Hant",
         "zh_Hant_TW",
         "zh_TW",
-#endif
     };
     const char* calendars[] = {
-        // These won't cause infinity loop
         "gregorian",
         "chinese",
-
-        // These will cause infinity loop
-#if 0
         "islamic",
         "islamic-civil",
         "islamic-tbla",
@@ -1441,7 +1426,6 @@ void NewResourceBundleTest::TestIntervalAliasFallbacks() {
         "islamic-rgsa",
         "japanese",
         "roc",
-#endif
     };
 
     for (int lidx = 0; lidx < UPRV_LENGTHOF(locales); lidx++) {
@@ -1456,10 +1440,8 @@ void NewResourceBundleTest::TestIntervalAliasFallbacks() {
             key.append("calendar/", status);
             key.append(calendars[cidx], status);
             key.append("/intervalFormats/fallback", status);
-            if (! logKnownIssue("20400")) {
-                int32_t resStrLen = 0;
-                ures_getStringByKeyWithFallback(rb, key.data(), &resStrLen, &status);
-            }
+            int32_t resStrLen = 0;
+            ures_getStringByKeyWithFallback(rb, key.data(), &resStrLen, &status);
             if (U_FAILURE(status)) {
                 errln("Cannot ures_getStringByKeyWithFallback('%s') on locale %s",
                       key.data(), locales[lidx]);
@@ -1550,5 +1532,61 @@ void NewResourceBundleTest::TestTrace() {
 
 #endif
 
-//eof
+void NewResourceBundleTest::TestOpenDirectFillIn() {
+    // Test that ures_openDirectFillIn() opens a stack allocated resource bundle, similar to ures_open().
+    // Since ures_openDirectFillIn is just a wrapper function, this is just a very basic test copied from
+    // the crestst.c/TestOpenDirect test.
+    // ICU-20769: This test was moved to C++ intltest while
+    // turning UResourceBundle from a C struct into a C++ class.
+    IcuTestErrorCode errorCode(*this, "TestOpenDirectFillIn");
+    UResourceBundle *item;
+    UResourceBundle idna_rules;
+    ures_initStackObject(&idna_rules);
 
+    ures_openDirectFillIn(&idna_rules, loadTestData(errorCode), "idna_rules", errorCode);
+    if(errorCode.errDataIfFailureAndReset("ures_openDirectFillIn(\"idna_rules\") failed\n")) {
+        return;
+    }
+
+    if(0!=uprv_strcmp("idna_rules", ures_getLocale(&idna_rules, errorCode))) {
+        errln("ures_openDirectFillIn(\"idna_rules\").getLocale()!=idna_rules");
+    }
+    errorCode.reset();
+
+    /* try an item in idna_rules, must work */
+    item=ures_getByKey(&idna_rules, "UnassignedSet", nullptr, errorCode);
+    if(errorCode.errDataIfFailureAndReset("translit_index.getByKey(local key) failed\n")) {
+        // pass
+    } else {
+        ures_close(item);
+    }
+
+    /* try an item in root, must fail */
+    item=ures_getByKey(&idna_rules, "ShortLanguage", nullptr, errorCode);
+    if(errorCode.isFailure()) {
+        errorCode.reset();
+    } else {
+        errln("idna_rules.getByKey(root key) succeeded but should have failed!");
+        ures_close(item);
+    }
+    ures_close(&idna_rules);
+}
+
+void NewResourceBundleTest::TestStackReuse() {
+    // This test will crash if this doesn't work. Results don't need testing.
+    // ICU-20769: This test was moved to C++ intltest while
+    // turning UResourceBundle from a C struct into a C++ class.
+    IcuTestErrorCode errorCode(*this, "TestStackReuse");
+    UResourceBundle table;
+    UResourceBundle *rb = ures_open(nullptr, "en_US", errorCode);
+
+    if(errorCode.errDataIfFailureAndReset("Could not load en_US locale.\n")) {
+        return;
+    }
+    ures_initStackObject(&table);
+    ures_getByKeyWithFallback(rb, "Types", &table, errorCode);
+    ures_getByKeyWithFallback(&table, "collation", &table, errorCode);
+    ures_close(rb);
+    ures_close(&table);
+    errorCode.reset();  // ignore U_MISSING_RESOURCE_ERROR etc.
+}

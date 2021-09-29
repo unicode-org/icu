@@ -53,7 +53,7 @@ U_NAMESPACE_BEGIN
 //
 //------------------------------------------------------------------------------
 RegexCompile::RegexCompile(RegexPattern *rxp, UErrorCode &status) :
-   fParenStack(status), fSetStack(status), fSetOpStack(status)
+   fParenStack(status), fSetStack(uprv_deleteUObject, nullptr, status), fSetOpStack(status)
 {
     // Lazy init of all shared global sets (needed for init()'s empty text)
     RegexStaticSets::initGlobals(&status);
@@ -278,11 +278,6 @@ void    RegexCompile::compile(
 
     if (U_FAILURE(*fStatus)) {
         // Bail out if the pattern had errors.
-        //   Set stack cleanup:  a successful compile would have left it empty,
-        //   but errors can leave temporary sets hanging around.
-        while (!fSetStack.empty()) {
-            delete (UnicodeSet *)fSetStack.pop();
-        }
         return;
     }
 
@@ -1485,8 +1480,8 @@ UBool RegexCompile::doParseActions(int32_t action)
             case 0x78: /* 'x' */   bit = UREGEX_COMMENTS;         break;
             case 0x2d: /* '-' */   fSetModeFlag = FALSE;          break;
             default:
-                UPRV_UNREACHABLE;   // Should never happen.  Other chars are filtered out
-                                   // by the scanner.
+                UPRV_UNREACHABLE_EXIT;  // Should never happen.  Other chars are filtered out
+                                        // by the scanner.
             }
             if (fSetModeFlag) {
                 fNewModeFlags |= bit;
@@ -1656,13 +1651,16 @@ UBool RegexCompile::doParseActions(int32_t action)
         }
 
     case doSetBegin:
-        fixLiterals(FALSE);
-        fSetStack.push(new UnicodeSet(), *fStatus);
-        fSetOpStack.push(setStart, *fStatus);
-        if ((fModeFlags & UREGEX_CASE_INSENSITIVE) != 0) {
-            fSetOpStack.push(setCaseClose, *fStatus);
+        {
+            fixLiterals(FALSE);
+            LocalPointer<UnicodeSet> lpSet(new UnicodeSet(), *fStatus);
+            fSetStack.push(lpSet.orphan(), *fStatus);
+            fSetOpStack.push(setStart, *fStatus);
+            if ((fModeFlags & UREGEX_CASE_INSENSITIVE) != 0) {
+                fSetOpStack.push(setCaseClose, *fStatus);
+            }
+            break;
         }
-        break;
 
     case doSetBeginDifference1:
         //  We have scanned something like [[abc]-[
@@ -1860,7 +1858,7 @@ UBool RegexCompile::doParseActions(int32_t action)
         }
 
     default:
-        UPRV_UNREACHABLE;
+        UPRV_UNREACHABLE_EXIT;
     }
 
     if (U_FAILURE(*fStatus)) {
@@ -1967,17 +1965,17 @@ int32_t RegexCompile::buildOp(int32_t type, int32_t val) {
         return 0;
     }
     if (type < 0 || type > 255) {
-        UPRV_UNREACHABLE;
+        UPRV_UNREACHABLE_EXIT;
     }
     if (val > 0x00ffffff) {
-        UPRV_UNREACHABLE;
+        UPRV_UNREACHABLE_EXIT;
     }
     if (val < 0) {
         if (!(type == URX_RESERVED_OP_N || type == URX_RESERVED_OP)) {
-            UPRV_UNREACHABLE;
+            UPRV_UNREACHABLE_EXIT;
         }
         if (URX_TYPE(val) != 0xff) {
-            UPRV_UNREACHABLE;
+            UPRV_UNREACHABLE_EXIT;
         }
         type = URX_RESERVED_OP_N;
     }
@@ -2373,7 +2371,7 @@ void  RegexCompile::handleCloseParen() {
 
 
     default:
-        UPRV_UNREACHABLE;
+        UPRV_UNREACHABLE_EXIT;
     }
 
     // remember the next location in the compiled pattern.
@@ -2428,7 +2426,11 @@ void        RegexCompile::compileSet(UnicodeSet *theSet)
             theSet->freeze();
             int32_t setNumber = fRXPat->fSets->size();
             fRXPat->fSets->addElement(theSet, *fStatus);
-            appendOp(URX_SETREF, setNumber);
+            if (U_SUCCESS(*fStatus)) {
+                appendOp(URX_SETREF, setNumber);
+            } else {
+                delete theSet;
+            }
         }
     }
 }
@@ -2634,7 +2636,7 @@ void  RegexCompile::findCaseInsensitiveStarters(UChar32 c, UnicodeSet *starterCh
 
     if (c < UCHAR_MIN_VALUE || c > UCHAR_MAX_VALUE) {
         // This function should never be called with an invalid input character.
-        UPRV_UNREACHABLE;
+        UPRV_UNREACHABLE_EXIT;
     } else if (u_hasBinaryProperty(c, UCHAR_CASE_SENSITIVE)) {
         UChar32 caseFoldedC  = u_foldCase(c, U_FOLD_CASE_DEFAULT);
         starterChars->set(caseFoldedC, caseFoldedC);
@@ -3127,10 +3129,10 @@ void   RegexCompile::matchStartType() {
         case URX_LB_END:
         case URX_LBN_CONT:
         case URX_LBN_END:
-            UPRV_UNREACHABLE;     // Shouldn't get here.  These ops should be
-                                 //  consumed by the scan in URX_LA_START and LB_START
+            UPRV_UNREACHABLE_EXIT;  // Shouldn't get here.  These ops should be
+                                    //  consumed by the scan in URX_LA_START and LB_START
         default:
-            UPRV_UNREACHABLE;
+            UPRV_UNREACHABLE_EXIT;
             }
 
         }
@@ -3450,7 +3452,7 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
             break;
 
         default:
-            UPRV_UNREACHABLE;
+            UPRV_UNREACHABLE_EXIT;
             }
 
         }
@@ -3696,7 +3698,7 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
         case URX_CTR_LOOP_NG:
             // These opcodes will be skipped over by code for URX_CTR_INIT.
             // We shouldn't encounter them here.
-            UPRV_UNREACHABLE;
+            UPRV_UNREACHABLE_EXIT;
 
         case URX_LOOP_SR_I:
         case URX_LOOP_DOT_I:
@@ -3716,7 +3718,7 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
 
             // End of look-ahead ops should always be consumed by the processing at
             //  the URX_LA_START op.
-            // UPRV_UNREACHABLE;
+            // UPRV_UNREACHABLE_EXIT;
 
         case URX_LB_START:
             {
@@ -3735,7 +3737,7 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
             break;
 
         default:
-            UPRV_UNREACHABLE;
+            UPRV_UNREACHABLE_EXIT;
         }
 
 
@@ -3890,7 +3892,7 @@ void RegexCompile::stripNOPs() {
 
         default:
             // Some op is unaccounted for.
-            UPRV_UNREACHABLE;
+            UPRV_UNREACHABLE_EXIT;
         }
     }
 
@@ -4578,6 +4580,13 @@ UnicodeSet *RegexCompile::createSetForProperty(const UnicodeString &propName, UB
     } while (false);   // End of do loop block. Code above breaks out of the block on success or hard failure.
 
     if (U_SUCCESS(status)) {
+        // ICU 70 adds emoji properties of strings, but as long as Java does not say how to
+        // deal with properties of strings and character classes with strings, we ignore them.
+        // Just in case something downstream might stumble over the strings,
+        // we remove them from the set.
+        // Note that when we support strings, the complement of a property (as with \P)
+        // should be implemented as .complement().removeAllStrings() (code point complement).
+        set->removeAllStrings();
         U_ASSERT(set.isValid());
         if (negated) {
             set->complement();
@@ -4611,6 +4620,13 @@ void RegexCompile::setEval(int32_t nextOp) {
         fSetOpStack.popi();
         U_ASSERT(fSetStack.empty() == FALSE);
         rightOperand = (UnicodeSet *)fSetStack.peek();
+        // ICU 70 adds emoji properties of strings, but createSetForProperty() removes all strings
+        // (see comments there).
+        // We also do not yet support string literals in character classes,
+        // so there should not be any strings.
+        // Note that when we support strings, the complement of a set (as with ^ or \P)
+        // should be implemented as .complement().removeAllStrings() (code point complement).
+        U_ASSERT(!rightOperand->hasStrings());
         switch (pendingSetOperation) {
             case setNegation:
                 rightOperand->complement();
@@ -4641,7 +4657,7 @@ void RegexCompile::setEval(int32_t nextOp) {
                 delete rightOperand;
                 break;
             default:
-                UPRV_UNREACHABLE;
+                UPRV_UNREACHABLE_EXIT;
             }
         }
     }
@@ -4649,7 +4665,8 @@ void RegexCompile::setEval(int32_t nextOp) {
 void RegexCompile::setPushOp(int32_t op) {
     setEval(op);
     fSetOpStack.push(op, *fStatus);
-    fSetStack.push(new UnicodeSet(), *fStatus);
+    LocalPointer<UnicodeSet> lpSet(new UnicodeSet(), *fStatus);
+    fSetStack.push(lpSet.orphan(), *fStatus);
 }
 
 U_NAMESPACE_END

@@ -23,7 +23,10 @@
 
 #include <stdio.h>
 #include "unicode/utypes.h"
+#include "unicode/ucpmap.h"
 #include "unicode/ucptrie.h"
+#include "unicode/umutablecptrie.h"
+#include "unicode/uset.h"
 #include "utrie2.h"
 
 /**
@@ -132,6 +135,42 @@ U_CAPI void U_EXPORT2
 usrc_writeUCPTrie(FILE *f, const char *name, const UCPTrie *pTrie, UTargetSyntax syntax);
 
 /**
+ * Writes the UnicodeSet range and string lists.
+ */
+U_CAPI void U_EXPORT2
+usrc_writeUnicodeSet(
+    FILE *f,
+    const USet *pSet,
+    UTargetSyntax syntax);
+
+#ifdef __cplusplus
+
+U_NAMESPACE_BEGIN
+
+class U_TOOLUTIL_API ValueNameGetter {
+public:
+    virtual ~ValueNameGetter();
+    virtual const char *getName(uint32_t value) = 0;
+};
+
+U_NAMESPACE_END
+
+/**
+ * Writes the UCPMap ranges list.
+ *
+ * The "valueNameGetter" argument is optional; ignored if nullptr.
+ * If present, it will be used to look up value name strings.
+ */
+U_CAPI void U_EXPORT2
+usrc_writeUCPMap(
+    FILE *f,
+    const UCPMap *pMap,
+    icu::ValueNameGetter *valueNameGetter,
+    UTargetSyntax syntax);
+
+#endif  // __cplusplus
+
+/**
  * Writes the contents of an array of mostly invariant characters.
  * Characters 0..0x1f are printed as numbers,
  * others as characters with single quotes: '%c'.
@@ -146,5 +185,14 @@ usrc_writeArrayOfMostlyInvChars(FILE *f,
                                 const char *prefix,
                                 const char *p, int32_t length,
                                 const char *postfix);
+
+/**
+ * Writes a syntactically valid Unicode string in all ASCII, escaping quotes
+ * and non-ASCII characters.
+ */
+U_CAPI void U_EXPORT2
+usrc_writeStringAsASCII(FILE *f,
+                        const UChar* ptr, int32_t length,
+                        UTargetSyntax syntax);
 
 #endif

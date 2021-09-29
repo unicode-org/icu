@@ -998,6 +998,10 @@ static void VerifyTranslation(void) {
                         log_knownIssue("cldrbug:8899", "lrc and mzn locales don't have translated day names")) {
                     end = 0;
                 }
+                if ((uprv_strncmp(currLoc,"mai",3) == 0 || uprv_strncmp(currLoc,"sd_Deva",7) == 0) && 
+                        log_knownIssue("cldrbug:14995", "mai/sd_Deva day names use chars not in exemplars")) {
+                    end = 0;
+                }
 
                 for (idx = 0; idx < end; idx++) {
                     const UChar *fromBundleStr = ures_getStringByIndex(resArray, idx, &langSize, &errorCode);
@@ -1026,6 +1030,10 @@ static void VerifyTranslation(void) {
                 }
                 else {
                     end = ures_getSize(resArray);
+                }
+                if (uprv_strncmp(currLoc,"sd_Deva",7) == 0 && 
+                        log_knownIssue("cldrbug:14995", "sd_Deva month names use chars not in exemplars")) {
+                    end = 0;
                 }
 
                 for (idx = 0; idx < end; idx++) {

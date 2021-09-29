@@ -59,15 +59,15 @@ public:
     TestZIDEnumeration(UBool all = FALSE);
     ~TestZIDEnumeration();
 
-    virtual int32_t count(UErrorCode& /*status*/) const {
+    virtual int32_t count(UErrorCode& /*status*/) const override {
         return len;
     }
-    virtual const UnicodeString *snext(UErrorCode& status);
-    virtual void reset(UErrorCode& status);
+    virtual const UnicodeString *snext(UErrorCode& status) override;
+    virtual void reset(UErrorCode& status) override;
     static inline UClassID getStaticClassID() {
         return (UClassID)&fgClassID;
     }
-    virtual UClassID getDynamicClassID() const {
+    virtual UClassID getDynamicClassID() const override {
         return getStaticClassID();
     }
 private:
@@ -83,7 +83,7 @@ TestZIDEnumeration::TestZIDEnumeration(UBool all)
 : idx(0) {
     UErrorCode status = U_ZERO_ERROR;
     if (all) {
-        tzenum = TimeZone::createEnumeration();
+        tzenum = TimeZone::createEnumeration(status);
         len = tzenum->count(status);
     } else {
         tzenum = NULL;
@@ -402,8 +402,6 @@ TimeZoneRuleTest::TestSimpleRuleBasedTimeZone(void) {
     rbtz1->addTransitionRule(atzr, status);
     if (U_SUCCESS(status)) {
         errln("FAIL: 3rd final rule must be rejected");
-    } else {
-        delete atzr;
     }
 
     // Try to add an initial rule
@@ -411,8 +409,6 @@ TimeZoneRuleTest::TestSimpleRuleBasedTimeZone(void) {
     rbtz1->addTransitionRule(ir1, status);
     if (U_SUCCESS(status)) {
         errln("FAIL: InitialTimeZoneRule must be rejected");
-    } else {
-        delete ir1;
     }
 
     delete ir;

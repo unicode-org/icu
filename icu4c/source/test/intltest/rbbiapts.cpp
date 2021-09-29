@@ -70,7 +70,7 @@ void RBBIAPITest::TestCloneEquals()
     logln((UnicodeString)"Testing equals()");
 
     logln((UnicodeString)"Testing == and !=");
-    UBool b = (*bi1 != *biequal);
+    bool b = (*bi1 != *biequal);
     b |= *bi1 == *bi2;
     b |= *bi1 == *bi3;
     if (b) {

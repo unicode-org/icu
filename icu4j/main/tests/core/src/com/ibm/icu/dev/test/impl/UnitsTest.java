@@ -20,7 +20,9 @@ import com.ibm.icu.impl.Pair;
 import com.ibm.icu.impl.units.ComplexUnitsConverter;
 import com.ibm.icu.impl.units.ConversionRates;
 import com.ibm.icu.impl.units.MeasureUnitImpl;
+import com.ibm.icu.impl.units.UnitPreferences;
 import com.ibm.icu.impl.units.UnitsConverter;
+import com.ibm.icu.impl.units.UnitsData;
 import com.ibm.icu.impl.units.UnitsRouter;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
@@ -369,6 +371,36 @@ public class UnitsTest {
     }
 
     @Test
+    public void testGetUnitCategory() {
+        class TestCase {
+            final MeasureUnitImpl unit;
+            final String expectedCategory;
+
+            TestCase(String unitId, String expectedCategory) {
+                this.unit = MeasureUnitImpl.forIdentifier(unitId);
+                this.expectedCategory  = expectedCategory;
+            }
+        }
+
+        TestCase testCases[] = {
+                new TestCase("kilogram-per-cubic-meter", "mass-density"),
+                new TestCase("cubic-meter-per-kilogram", "specific-volume"),
+                new TestCase("meter-per-second", "speed"),
+                new TestCase("second-per-meter", "speed"),
+                new TestCase("mile-per-gallon", "consumption"),
+                new TestCase("liter-per-100-kilometer", "consumption"),
+                new TestCase("cubic-meter-per-meter", "consumption"),
+                new TestCase("meter-per-cubic-meter", "consumption"),
+                new TestCase("kilogram-meter-per-square-meter-square-second", "pressure"),
+        };
+
+        UnitsData data = new UnitsData();
+        for (TestCase test : testCases) {
+            assertEquals(test.expectedCategory, data.getCategory(test.unit));
+        }
+    }
+
+    @Test
     public void testConverter() {
         class TestData {
             final String sourceIdentifier;
@@ -436,6 +468,13 @@ public class UnitsTest {
                 // Fuel Consumption
                 new TestData("cubic-meter-per-meter", "mile-per-gallon", 2.1383143939394E-6, 1.1),
                 new TestData("cubic-meter-per-meter", "mile-per-gallon", 2.6134953703704E-6, 0.9),
+                // Test Aliases
+                // Alias is just another name to the same unit. Therefore, converting
+                // between them should be the same.
+                new TestData("foodcalorie", "kilocalorie", 1.0, 1.0),
+                new TestData("dot-per-centimeter", "pixel-per-centimeter", 1.0, 1.0),
+                new TestData("dot-per-inch", "pixel-per-inch", 1.0, 1.0),
+                new TestData("dot", "pixel", 1.0, 1.0),
         };
 
         ConversionRates conversionRates = new ConversionRates();
@@ -687,5 +726,72 @@ public class UnitsTest {
             }
         }
 
+    }
+
+    /**
+     * This test is dependent upon CLDR Data: when the preferences change, the test
+     * may fail: see the constants for expected Max/Min unit identifiers, for US and
+     * World, and for Roads and default lengths.
+     */
+    @Test
+    public void testGetPreferencesFor() {
+        final String USRoadMax = "mile";
+        final String USRoadMin = "foot";
+        final String USLenMax = "mile";
+        final String USLenMin = "inch";
+        final String WorldRoadMax = "kilometer";
+        final String WorldRoadMin = "meter";
+        final String WorldLenMax = "kilometer";
+        final String WorldLenMin = "centimeter";
+        class TestCase {
+            final String name;
+            final String category;
+            final String usage;
+            final String region;
+            final String expectedBiggest;
+            final String expectedSmallest;
+
+            public TestCase(String name, String category, String usage, String region, String expectedBiggest, String expectedSmallest) {
+                this.name = name;
+                this.category = category;
+                this.usage = usage;
+                this.region = region;
+                this.expectedBiggest = expectedBiggest;
+                this.expectedSmallest = expectedSmallest;
+            }
+        }
+
+        TestCase testCases[] = {
+                new TestCase("US road", "length", "road", "US", USRoadMax, USRoadMin),
+                new TestCase("001 road", "length", "road", "001", WorldRoadMax, WorldRoadMin),
+                new TestCase("US lengths", "length", "default", "US", USLenMax, USLenMin),
+                new TestCase("001 lengths", "length", "default", "001", WorldLenMax, WorldLenMin),
+                new TestCase("XX road falls back to 001", "length", "road", "XX", WorldRoadMax, WorldRoadMin),
+                new TestCase("XX default falls back to 001", "length", "default", "XX", WorldLenMax, WorldLenMin),
+                new TestCase("Unknown usage US", "length", "foobar", "US", USLenMax, USLenMin),
+                new TestCase("Unknown usage 001", "length", "foobar", "XX", WorldLenMax, WorldLenMin),
+                new TestCase("Fallback", "length", "person-height-xyzzy", "DE", "centimeter", "centimeter"),
+                new TestCase("Fallback twice", "length", "person-height-xyzzy-foo", "DE", "centimeter",
+                        "centimeter"),
+                // Confirming results for some unitPreferencesTest.txt test cases
+                new TestCase("001 area", "area", "default", "001", "square-kilometer", "square-centimeter"),
+                new TestCase("GB area", "area", "default", "GB", "square-mile", "square-inch"),
+                new TestCase("001 area geograph", "area", "geograph", "001", "square-kilometer", "square-kilometer"),
+                new TestCase("GB area geograph", "area", "geograph", "GB", "square-mile", "square-mile"),
+                new TestCase("CA person-height", "length", "person-height", "CA", "foot-and-inch", "inch"),
+                new TestCase("AT person-height", "length", "person-height", "AT", "meter-and-centimeter",
+                        "meter-and-centimeter"),
+        };
+
+        UnitsData data = new UnitsData();
+        for (TestCase t : testCases) {
+            UnitPreferences.UnitPreference prefs[] = data.getPreferencesFor(t.category, t.usage, t.region);
+            if (prefs.length > 0) {
+                assertEquals(t.name + " - max unit", t.expectedBiggest, prefs[0].getUnit());
+                assertEquals(t.name + " - min unit", t.expectedSmallest, prefs[prefs.length - 1].getUnit());
+            } else {
+                fail(t.name + ": failed to find preferences");
+            }
+        }
     }
 }

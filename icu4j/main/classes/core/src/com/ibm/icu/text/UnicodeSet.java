@@ -144,6 +144,13 @@ import com.ibm.icu.util.VersionInfo;
  * their delimiters; "[:^foo]" and "\P{foo}".  In any other location,
  * '^' has no special meaning.
  *
+ * <p>Since ICU 70, "[^...]", "[:^foo]", "\P{foo}", and "[:binaryProperty=No:]"
+ * perform a “code point complement” (all code points minus the original set),
+ * removing all multicharacter strings,
+ * equivalent to .{@link #complement()}.{@link #removeAllStrings()} .
+ * The {@link #complement()} API function continues to perform a
+ * symmetric difference with all code points and thus retains all multicharacter strings.
+ *
  * <p>Ranges are indicated by placing two a '-' between two
  * characters, as in "a-z".  This specifies the range of all
  * characters from the left to the right, in Unicode order.  If the
@@ -225,9 +232,8 @@ import com.ibm.icu.util.VersionInfo;
  *     </tr>
  *     <tr style="vertical-align: top">
  *       <td style="white-space: nowrap; vertical-align: top;" align="right"><code>hex :=&nbsp; </code></td>
- *       <td style="vertical-align: top;"><em>any character for which
- *       </em><code>Character.digit(c, 16)</code><em>
- *       returns a non-negative result</em></td>
+ *       <td style="vertical-align: top;"><code>'0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' |<br>
+ *       &nbsp;&nbsp;&nbsp;&nbsp;'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f'</code></td>
  *     </tr>
  *     <tr>
  *       <td style="white-space: nowrap; vertical-align: top;" align="right"><code>property :=&nbsp; </code></td>
@@ -651,12 +657,10 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      */
     private static <T extends Appendable> T _appendToPat(T buf, int c, boolean escapeUnprintable) {
         try {
-            if (escapeUnprintable && Utility.isUnprintable(c)) {
+            if (escapeUnprintable ? Utility.isUnprintable(c) : Utility.shouldAlwaysBeEscaped(c)) {
                 // Use hex escape notation (<backslash>uxxxx or <backslash>Uxxxxxxxx) for anything
                 // unprintable
-                if (Utility.escapeUnprintable(buf, c)) {
-                    return buf;
-                }
+                return Utility.escape(buf, c);
             }
             // Okay to let ':' pass through
             switch (c) {
@@ -686,6 +690,24 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         }
     }
 
+    private static <T extends Appendable> T _appendToPat(
+            T result, int start, int end, boolean escapeUnprintable) {
+        _appendToPat(result, start, escapeUnprintable);
+        if (start != end) {
+            if ((start+1) != end ||
+                    // Avoid writing what looks like a lead+trail surrogate pair.
+                    start == 0xdbff) {
+                try {
+                    result.append('-');
+                } catch (IOException e) {
+                    throw new ICUUncheckedIOException(e);
+                }
+            }
+            _appendToPat(result, end, escapeUnprintable);
+        }
+        return result;
+    }
+
     /**
      * Returns a string representation of this set.  If the result of
      * calling this function is passed to a UnicodeSet constructor, it
@@ -713,6 +735,10 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         }
         try {
             if (!escapeUnprintable) {
+                // TODO: The C++ version does not have this shortcut, and instead
+                // always cleans up the pattern string,
+                // which also escapes Utility.shouldAlwaysBeEscaped(c).
+                // We should sync these implementations.
                 result.append(pat);
                 return result;
             }
@@ -724,7 +750,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                     // If the unprintable character is preceded by an odd
                     // number of backslashes, then it has been escaped
                     // and we omit the last backslash.
-                    Utility.escapeUnprintable(result, c);
+                    Utility.escape(result, c);
                     oddNumberOfBackslashes = false;
                 } else if (!oddNumberOfBackslashes && c == '\\') {
                     // Temporarily withhold an odd-numbered backslash.
@@ -750,6 +776,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Generate and append a string representation of this set to result.
      * This does not use this.pat, the cleaned up copy of the string
      * passed to applyPattern().
+     *
      * @param result the buffer into which to generate the pattern
      * @param escapeUnprintable escape unprintable characters if true
      * @stable ICU 2.0
@@ -762,6 +789,9 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * Generate and append a string representation of this set to result.
      * This does not use this.pat, the cleaned up copy of the string
      * passed to applyPattern().
+     *
+     * @param result the buffer into which to generate the pattern
+     * @param escapeUnprintable escape unprintable characters if true
      * @param includeStrings if false, doesn't include the strings.
      * @stable ICU 3.8
      */
@@ -770,47 +800,55 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         return appendNewPattern(result, escapeUnprintable, includeStrings);
     }
 
+    // Implementation of public _generatePattern().
+    // Allows other callers to use a StringBuilder while the existing API is stuck with StringBuffer.
     private <T extends Appendable> T appendNewPattern(
             T result, boolean escapeUnprintable, boolean includeStrings) {
         try {
             result.append('[');
 
-            int count = getRangeCount();
+            int i = 0;
+            int limit = len & ~1;  // = 2 * getRangeCount()
 
             // If the set contains at least 2 intervals and includes both
             // MIN_VALUE and MAX_VALUE, then the inverse representation will
             // be more economical.
-            if (count > 1 &&
-                    getRangeStart(0) == MIN_VALUE &&
-                    getRangeEnd(count-1) == MAX_VALUE) {
-
+            //     if (getRangeCount() >= 2 &&
+            //             getRangeStart(0) == MIN_VALUE &&
+            //             getRangeEnd(last) == MAX_VALUE)
+            // Invariant: list[len-1] == HIGH == MAX_VALUE + 1
+            // If limit == len then len is even and the last range ends with MAX_VALUE.
+            if (len >= 4 && list[0] == 0 && limit == len) {
                 // Emit the inverse
                 result.append('^');
-
-                for (int i = 1; i < count; ++i) {
-                    int start = getRangeEnd(i-1)+1;
-                    int end = getRangeStart(i)-1;
-                    _appendToPat(result, start, escapeUnprintable);
-                    if (start != end) {
-                        if ((start+1) != end) {
-                            result.append('-');
-                        }
-                        _appendToPat(result, end, escapeUnprintable);
-                    }
-                }
+                // Offsetting the inversion list index by one lets us
+                // iterate over the ranges of the set complement.
+                i = 1;
+                --limit;
             }
 
-            // Default; emit the ranges as pairs
-            else {
-                for (int i = 0; i < count; ++i) {
-                    int start = getRangeStart(i);
-                    int end = getRangeEnd(i);
-                    _appendToPat(result, start, escapeUnprintable);
-                    if (start != end) {
-                        if ((start+1) != end) {
-                            result.append('-');
-                        }
-                        _appendToPat(result, end, escapeUnprintable);
+            // Emit the ranges as pairs.
+            while (i < limit) {
+                int start = list[i];  // getRangeStart()
+                int end = list[i + 1] - 1;  // getRangeEnd() = range limit minus one
+                if (!(0xd800 <= end && end <= 0xdbff)) {
+                    _appendToPat(result, start, end, escapeUnprintable);
+                    i += 2;
+                } else {
+                    // The range ends with a lead surrogate.
+                    // Avoid writing what looks like a lead+trail surrogate pair.
+                    // 1. Postpone ranges that start with a lead surrogate code point.
+                    int firstLead = i;
+                    while ((i += 2) < limit && list[i] <= 0xdbff) {}
+                    int firstAfterLead = i;
+                    // 2. Write following ranges that start with a trail surrogate code point.
+                    while (i < limit && (start = list[i]) <= 0xdfff) {
+                        _appendToPat(result, start, list[i + 1] - 1, escapeUnprintable);
+                        i += 2;
+                    }
+                    // 3. Now write the postponed ranges.
+                    for (int j = firstLead; j < firstAfterLead; j += 2) {
+                        _appendToPat(result, list[j], list[j + 1] - 1, escapeUnprintable);
                     }
                 }
             }
@@ -1659,6 +1697,12 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     /**
      * This is equivalent to
      * <code>complement(MIN_VALUE, MAX_VALUE)</code>.
+     *
+     * <p><strong>Note:</strong> This performs a symmetric difference with all code points
+     * <em>and thus retains all multicharacter strings</em>.
+     * In order to achieve a “code point complement” (all code points minus this set),
+     * the easiest is to .{@link #complement()}.{@link #removeAllStrings()} .
+     *
      * @stable ICU 2.0
      */
     public UnicodeSet complement() {
@@ -2925,7 +2969,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             closeOver(CASE);
         }
         if (invert) {
-            complement();
+            complement().removeAllStrings();  // code point complement
         }
 
         // Use the rebuilt pattern (pat) only if necessary.  Prefer the
@@ -3446,7 +3490,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             if (value == 0 || value == 1) {
                 set(CharacterProperties.getBinaryPropertySet(prop));
                 if (value == 0) {
-                    complement();
+                    complement().removeAllStrings();  // code point complement
                 }
             } else {
                 clear();
@@ -3642,7 +3686,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
         applyIntPropertyValue(p, v);
         if(invert) {
-            complement();
+            complement().removeAllStrings();  // code point complement
         }
 
         return this;
@@ -3770,7 +3814,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         applyPropertyAlias(propName, valueName, symbols);
 
         if (invert) {
-            complement();
+            complement().removeAllStrings();  // code point complement
         }
 
         // Move to the limit position after the close delimiter
@@ -4744,9 +4788,10 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     @Deprecated
     @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public UnicodeSet addBridges(UnicodeSet dontCare) {
-        UnicodeSet notInInput = new UnicodeSet(this).complement();
+        UnicodeSet notInInput = new UnicodeSet(this).complement().removeAllStrings();
         for (UnicodeSetIterator it = new UnicodeSetIterator(notInInput); it.nextRange();) {
-            if (it.codepoint != 0 && it.codepoint != UnicodeSetIterator.IS_STRING && it.codepointEnd != 0x10FFFF && dontCare.contains(it.codepoint,it.codepointEnd)) {
+            if (it.codepoint != 0 && it.codepointEnd != 0x10FFFF &&
+                    dontCare.contains(it.codepoint, it.codepointEnd)) {
                 add(it.codepoint,it.codepointEnd);
             }
         }

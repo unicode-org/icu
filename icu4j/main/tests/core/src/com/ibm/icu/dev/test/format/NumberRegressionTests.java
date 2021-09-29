@@ -552,7 +552,7 @@ public class NumberRegressionTests extends TestFmwk {
         String expectedPercent = "-578 998%";
     */
         String expectedDefault = "-5\u00a0789,988";
-        String expectedCurrency = "5\u00a0789,99\u00a0$\u00a0CA";
+        String expectedCurrency = "5\u00a0789,99\u00a0$";
         String expectedPercent = "-578\u00a0999\u00A0%";
 
         formatter = NumberFormat.getNumberInstance(Locale.CANADA_FRENCH);
@@ -1538,7 +1538,9 @@ public class NumberRegressionTests extends TestFmwk {
         Locale[] avail = NumberFormat.getAvailableLocales();
         for (int i=0; i<avail.length; ++i) {
             if ((avail[i].getLanguage().equals("ji") || avail[i].getLanguage().equals("bm")) &&
-                    logKnownIssue("11234", "Symbol roundtrip issues for locales ji, bm")) {
+                    logKnownIssue(
+                        "21527",
+                        "Remove bad currency test case in NumberRegressionTests.java")) {
                 continue;
             }
             for (int j=0; j<3; ++j) {
@@ -1887,4 +1889,3 @@ class MyNumberFormat extends NumberFormat {
         return new StringBuffer("");
     }
 }
-

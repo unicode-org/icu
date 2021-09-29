@@ -16,6 +16,8 @@ import java.util.Iterator;
  * code points or ranges have been returned, it returns the
  * multicharacter strings of the UnicodeSet, if any.
  *
+ * <p>This class is not intended for public subclassing.
+ *
  * <p>To iterate over code points and multicharacter strings,
  * use a loop like this:
  * <pre>
@@ -45,7 +47,7 @@ import java.util.Iterator;
  * @see UnicodeSet#strings()
  * @see UnicodeSet#iterator()
  */
-public class UnicodeSetIterator {
+public final class UnicodeSetIterator {
 
     /**
      * Value of <tt>codepoint</tt> if the iterator points to a string.
@@ -53,7 +55,7 @@ public class UnicodeSetIterator {
      * <tt>string</tt> for the current iteration result.
      * @stable ICU 2.0
      */
-    public static int IS_STRING = -1;
+    public static final int IS_STRING = -1;
 
     /**
      * Current code point, or the special value <tt>IS_STRING</tt>, if

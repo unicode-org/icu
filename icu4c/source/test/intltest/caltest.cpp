@@ -2475,8 +2475,8 @@ public:
     CalFields(const Calendar& cal, UErrorCode& status);
     void setTo(Calendar& cal) const;
     char* toString(char* buf, int32_t len) const;
-    UBool operator==(const CalFields& rhs) const;
-    UBool operator!=(const CalFields& rhs) const;
+    bool operator==(const CalFields& rhs) const;
+    bool operator!=(const CalFields& rhs) const;
     UBool isEquivalentTo(const Calendar& cal, UErrorCode& status) const;
 
 private:
@@ -2519,7 +2519,7 @@ CalFields::toString(char* buf, int32_t len) const {
     return buf;
 }
 
-UBool
+bool
 CalFields::operator==(const CalFields& rhs) const {
     return year == rhs.year
         && month == rhs.month
@@ -2530,7 +2530,7 @@ CalFields::operator==(const CalFields& rhs) const {
         && ms == rhs.ms;
 }
 
-UBool
+bool
 CalFields::operator!=(const CalFields& rhs) const {
     return !(*this == rhs);
 }

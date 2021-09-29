@@ -219,6 +219,7 @@ th{
                 GyMMMEEEEd{"EEEEที่ d MMM G y"}
                 GyMMMEd{"E d MMM G y"}
                 GyMMMd{"d MMM G y"}
+                GyMd{"d/M/y"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -1075,6 +1076,7 @@ th{
                 GyMMMEEEEd{"EEEEที่ d MMM G y"}
                 GyMMMEd{"E d MMM G y"}
                 GyMMMd{"d MMM G y"}
+                GyMd{"d/M/y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -1308,6 +1310,7 @@ th{
                 GyMMMEEEEd{"EEEEที่ d MMM G y"}
                 GyMMMEd{"E d MMM G y"}
                 GyMMMd{"d MMM G y"}
+                GyMd{"d/M/GGGGG y"}
                 H{"HH"}
                 Hm{"HH:mm น."}
                 Hms{"HH:mm:ss"}
@@ -1670,12 +1673,12 @@ th{
                 yMMMMEd{
                     M{"E d MMMM – E d MMMM G y"}
                     d{"E d – E d MMMM G y"}
-                    y{"E d MMMM G y – E d MMMM y"}
+                    y{"E d MMMM G y – E d MMMM G y"}
                 }
                 yMMMMd{
                     M{"d MMMM – d MMMM G y"}
                     d{"d–d MMMM G y"}
-                    y{"d MMMM G y – d MMMM y"}
+                    y{"d MMMM G y – d MMMM G y"}
                 }
                 yMMMd{
                     M{"d MMM – d MMM y"}

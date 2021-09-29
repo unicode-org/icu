@@ -27,12 +27,12 @@ class WrongListener : public EventListener {
 
 class ICUNSubclass : public ICUNotifier {
     public:
-    UBool acceptsListener(const EventListener& /*l*/) const {
+    UBool acceptsListener(const EventListener& /*l*/) const override {
         return TRUE;
         // return l instanceof MyListener;
     }
 
-    virtual void notifyListener(EventListener& /*l*/) const {
+    virtual void notifyListener(EventListener& /*l*/) const override {
     }
 };
 
@@ -57,7 +57,7 @@ class LKFSubclass : public LocaleKeyFactory {
     }
 
     protected:
-    virtual const Hashtable* getSupportedIDs(UErrorCode &/*status*/) const {
+    virtual const Hashtable* getSupportedIDs(UErrorCode &/*status*/) const override {
         return &table;
     }
 };
@@ -82,11 +82,11 @@ class Integer : public UObject {
         return (UClassID)&fgClassID;
     }
 
-    virtual UClassID getDynamicClassID() const {
+    virtual UClassID getDynamicClassID() const override {
         return getStaticClassID();
     }
 
-    virtual UBool operator==(const UObject& other) const 
+    virtual bool operator==(const UObject& other) const
     {
         return typeid(*this) == typeid(other) &&
             _val == ((Integer&)other)._val;
@@ -113,11 +113,11 @@ const char Integer::fgClassID = '\0';
 // use locale keys
 class TestIntegerService : public ICUService {
     public:
-    ICUServiceKey* createKey(const UnicodeString* id, UErrorCode& status) const {
+    ICUServiceKey* createKey(const UnicodeString* id, UErrorCode& status) const override {
         return LocaleKey::createWithCanonicalFallback(id, NULL, status); // no fallback locale
     }
 
-    virtual ICUServiceFactory* createSimpleFactory(UObject* obj, const UnicodeString& id, UBool visible, UErrorCode& status) 
+    virtual ICUServiceFactory* createSimpleFactory(UObject* obj, const UnicodeString& id, UBool visible, UErrorCode& status) override
     {
         Integer* i;
         if (U_SUCCESS(status) && obj && (i = dynamic_cast<Integer*>(obj)) != NULL) {
@@ -126,7 +126,7 @@ class TestIntegerService : public ICUService {
         return NULL;
     }
 
-    virtual UObject* cloneInstance(UObject* instance) const {
+    virtual UObject* cloneInstance(UObject* instance) const override {
         return instance ? new Integer(*(Integer*)instance) : NULL;
     }
 };
@@ -478,7 +478,7 @@ ICUServiceTest::testAPI_One()
 class TestStringSimpleKeyService : public ICUService {
 public:
  
-        virtual ICUServiceFactory* createSimpleFactory(UObject* obj, const UnicodeString& id, UBool visible, UErrorCode& status) 
+        virtual ICUServiceFactory* createSimpleFactory(UObject* obj, const UnicodeString& id, UBool visible, UErrorCode& status) override
     {
                 // We could put this type check into ICUService itself, but we'd still
                 // have to implement cloneInstance.  Otherwise we could just tell the service
@@ -490,18 +490,18 @@ public:
         return NULL;
     }
 
-    virtual UObject* cloneInstance(UObject* instance) const {
+    virtual UObject* cloneInstance(UObject* instance) const override {
         return instance ? new UnicodeString(*(UnicodeString*)instance) : NULL;
     }
 };
 
 class TestStringService : public ICUService {
     public:
-    ICUServiceKey* createKey(const UnicodeString* id, UErrorCode& status) const {
+    ICUServiceKey* createKey(const UnicodeString* id, UErrorCode& status) const override {
         return LocaleKey::createWithCanonicalFallback(id, NULL, status); // no fallback locale
     }
 
-  virtual ICUServiceFactory* createSimpleFactory(UObject* obj, const UnicodeString& id, UBool visible, UErrorCode& /* status */) 
+  virtual ICUServiceFactory* createSimpleFactory(UObject* obj, const UnicodeString& id, UBool visible, UErrorCode& /* status */) override
     {
         UnicodeString* s;
         if (obj && (s = dynamic_cast<UnicodeString*>(obj)) != NULL) {
@@ -510,7 +510,7 @@ class TestStringService : public ICUService {
         return NULL;
     }
 
-    virtual UObject* cloneInstance(UObject* instance) const {
+    virtual UObject* cloneInstance(UObject* instance) const override {
         return instance ? new UnicodeString(*(UnicodeString*)instance) : NULL;
     }
 };
@@ -519,15 +519,15 @@ class TestStringService : public ICUService {
 class AnonymousStringFactory : public ICUServiceFactory
 {
     public:
-    virtual UObject* create(const ICUServiceKey& key, const ICUService* /* service */, UErrorCode& /* status */) const {
+    virtual UObject* create(const ICUServiceKey& key, const ICUService* /* service */, UErrorCode& /* status */) const override {
         return new UnicodeString(key.getID());
     }
 
-    virtual void updateVisibleIDs(Hashtable& /*result*/, UErrorCode& /*status*/) const {
+    virtual void updateVisibleIDs(Hashtable& /*result*/, UErrorCode& /*status*/) const override {
         // do nothing
     }
 
-    virtual UnicodeString& getDisplayName(const UnicodeString& /*id*/, const Locale& /*locale*/, UnicodeString& result) const {
+    virtual UnicodeString& getDisplayName(const UnicodeString& /*id*/, const Locale& /*locale*/, UnicodeString& result) const override {
         // do nothing
         return result;
     }
@@ -536,7 +536,7 @@ class AnonymousStringFactory : public ICUServiceFactory
         return (UClassID)&fgClassID;
     }
 
-    virtual UClassID getDynamicClassID() const {
+    virtual UClassID getDynamicClassID() const override {
         return getStaticClassID();
     }
 
@@ -558,14 +558,14 @@ class TestMultipleKeyStringFactory : public ICUServiceFactory {
         , _factoryID(factoryID + ": ") 
     {
         for (int i = 0; i < count; ++i) {
-            _ids.addElement(new UnicodeString(ids[i]), _status);
+            _ids.addElementX(new UnicodeString(ids[i]), _status);
         }
     }
   
     ~TestMultipleKeyStringFactory() {
     }
 
-    UObject* create(const ICUServiceKey& key, const ICUService* /* service */, UErrorCode& status) const {
+    UObject* create(const ICUServiceKey& key, const ICUService* /* service */, UErrorCode& status) const override {
         if (U_FAILURE(status)) {
         return NULL;
         }
@@ -581,7 +581,7 @@ class TestMultipleKeyStringFactory : public ICUServiceFactory {
         return NULL;
     }
 
-    void updateVisibleIDs(Hashtable& result, UErrorCode& status) const {
+    void updateVisibleIDs(Hashtable& result, UErrorCode& status) const override {
         if (U_SUCCESS(_status)) {
             for (int32_t i = 0; i < _ids.size(); ++i) {
                 result.put(*(UnicodeString*)_ids[i], (void*)this, status);
@@ -589,7 +589,7 @@ class TestMultipleKeyStringFactory : public ICUServiceFactory {
         }
     }
 
-    UnicodeString& getDisplayName(const UnicodeString& id, const Locale& locale, UnicodeString& result) const {
+    UnicodeString& getDisplayName(const UnicodeString& id, const Locale& locale, UnicodeString& result) const override {
         if (U_SUCCESS(_status) && _ids.contains((void*)&id)) {
             char buffer[128];
             UErrorCode status = U_ZERO_ERROR;
@@ -612,7 +612,7 @@ class TestMultipleKeyStringFactory : public ICUServiceFactory {
         return (UClassID)&fgClassID;
     }
 
-    virtual UClassID getDynamicClassID() const {
+    virtual UClassID getDynamicClassID() const override {
         return getStaticClassID();
     }
 
@@ -833,7 +833,7 @@ class CalifornioLanguageFactory : public ICUResourceBundleFactory
       supportedIDs = NULL;
     }
 
-    const Hashtable* getSupportedIDs(UErrorCode& status) const 
+    const Hashtable* getSupportedIDs(UErrorCode& status) const override
     {
         if (supportedIDs == NULL) {
             Hashtable* table = new Hashtable();
@@ -848,7 +848,7 @@ class CalifornioLanguageFactory : public ICUResourceBundleFactory
         return supportedIDs;
     }
 
-    UnicodeString& getDisplayName(const UnicodeString& id, const Locale& locale, UnicodeString& result) const 
+    UnicodeString& getDisplayName(const UnicodeString& id, const Locale& locale, UnicodeString& result) const override
     {
         UnicodeString prefix = "";
         UnicodeString suffix = "";
@@ -958,7 +958,7 @@ class SimpleListener : public ServiceListener {
     public:
     SimpleListener(ICUServiceTest* test, const UnicodeString& name) : _test(test), _name(name) {}
 
-    virtual void serviceChanged(const ICUService& service) const {
+    virtual void serviceChanged(const ICUService& service) const override {
         UnicodeString serviceName = "listener ";
         serviceName.append(_name);
         serviceName.append(" n++");
@@ -1030,7 +1030,7 @@ public void serviceChanged(ICUService s) {
 
 class TestStringLocaleService : public ICULocaleService {
     public:
-    virtual UObject* cloneInstance(UObject* instance) const {
+    virtual UObject* cloneInstance(UObject* instance) const override {
         return instance ? new UnicodeString(*(UnicodeString*)instance) : NULL;
     }
 };
@@ -1228,7 +1228,7 @@ class WrapFactory : public ICUServiceFactory {
     greetingID = NULL;
   }
 
-    UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const {
+    UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const override {
         if (U_SUCCESS(status)) {
             UnicodeString temp;
             if (key.currentID(temp).compare(getGreetingID()) == 0) {
@@ -1243,13 +1243,13 @@ class WrapFactory : public ICUServiceFactory {
         return NULL;
     }
 
-    void updateVisibleIDs(Hashtable& result, UErrorCode& status) const {
+    void updateVisibleIDs(Hashtable& result, UErrorCode& status) const override {
         if (U_SUCCESS(status)) {
             result.put("greeting", (void*)this, status);
         }
     }
 
-    UnicodeString& getDisplayName(const UnicodeString& id, const Locale& /* locale */, UnicodeString& result) const {
+    UnicodeString& getDisplayName(const UnicodeString& id, const Locale& /* locale */, UnicodeString& result) const override {
         result.append("wrap '");
         result.append(id);
         result.append("'");
@@ -1263,7 +1263,7 @@ class WrapFactory : public ICUServiceFactory {
         return (UClassID)&fgClassID;
     }
 
-    virtual UClassID getDynamicClassID() const {
+    virtual UClassID getDynamicClassID() const override {
         return getStaticClassID();
     }
 

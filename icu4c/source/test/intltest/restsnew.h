@@ -19,7 +19,7 @@ public:
     NewResourceBundleTest();
     virtual ~NewResourceBundleTest();
     
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
 
     /** 
      * Perform several extensive tests using the subtest routine testTag
@@ -45,6 +45,9 @@ public:
 #if U_ENABLE_TRACING
     void TestTrace(void);
 #endif
+
+    void TestOpenDirectFillIn();
+    void TestStackReuse();
 
 private:
     /**

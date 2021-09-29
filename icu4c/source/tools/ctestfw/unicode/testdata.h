@@ -103,10 +103,10 @@ private:
 public:
   virtual ~RBTestData();
 
-  virtual UBool getInfo(const DataMap *& info, UErrorCode &status) const;
+  virtual UBool getInfo(const DataMap *& info, UErrorCode &status) const override;
 
-  virtual UBool nextSettings(const DataMap *& settings, UErrorCode &status);
-  virtual UBool nextCase(const DataMap *& nextCase, UErrorCode &status);
+  virtual UBool nextSettings(const DataMap *& settings, UErrorCode &status) override;
+  virtual UBool nextCase(const DataMap *& nextCase, UErrorCode &status) override;
 };
 
 #endif

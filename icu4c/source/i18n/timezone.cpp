@@ -376,7 +376,7 @@ TimeZone::operator=(const TimeZone &right)
 
 // -------------------------------------
 
-UBool
+bool
 TimeZone::operator==(const TimeZone& that) const
 {
     return typeid(*this) == typeid(that) &&
@@ -951,15 +951,15 @@ public:
 
     virtual ~TZEnumeration();
 
-    virtual StringEnumeration *clone() const {
+    virtual StringEnumeration *clone() const override {
         return new TZEnumeration(*this);
     }
 
-    virtual int32_t count(UErrorCode& status) const {
+    virtual int32_t count(UErrorCode& status) const override {
         return U_FAILURE(status) ? 0 : len;
     }
 
-    virtual const UnicodeString* snext(UErrorCode& status) {
+    virtual const UnicodeString* snext(UErrorCode& status) override {
         if (U_SUCCESS(status) && map != NULL && pos < len) {
             getID(map[pos], status);
             ++pos;
@@ -968,13 +968,13 @@ public:
         return 0;
     }
 
-    virtual void reset(UErrorCode& /*status*/) {
+    virtual void reset(UErrorCode& /*status*/) override {
         pos = 0;
     }
 
 public:
     static UClassID U_EXPORT2 getStaticClassID(void);
-    virtual UClassID getDynamicClassID(void) const;
+    virtual UClassID getDynamicClassID(void) const override;
 };
 
 TZEnumeration::~TZEnumeration() {
@@ -995,21 +995,40 @@ TimeZone::createTimeZoneIDEnumeration(
 }
 
 StringEnumeration* U_EXPORT2
+TimeZone::createEnumeration(UErrorCode& status) {
+    return TZEnumeration::create(UCAL_ZONE_TYPE_ANY, NULL, NULL, status);
+}
+
+StringEnumeration* U_EXPORT2
+TimeZone::createEnumerationForRawOffset(int32_t rawOffset, UErrorCode& status) {
+    return TZEnumeration::create(UCAL_ZONE_TYPE_ANY, NULL, &rawOffset, status);
+}
+
+StringEnumeration* U_EXPORT2
+TimeZone::createEnumerationForRegion(const char* region, UErrorCode& status) {
+    return TZEnumeration::create(UCAL_ZONE_TYPE_ANY, region, NULL, status);
+}
+
+//
+// Next 3 methods are equivalent to above, but ignores UErrorCode.
+// These methods were deprecated in ICU 70.
+
+StringEnumeration* U_EXPORT2
 TimeZone::createEnumeration() {
     UErrorCode ec = U_ZERO_ERROR;
-    return TZEnumeration::create(UCAL_ZONE_TYPE_ANY, NULL, NULL, ec);
+    return createEnumeration(ec);
 }
 
 StringEnumeration* U_EXPORT2
 TimeZone::createEnumeration(int32_t rawOffset) {
     UErrorCode ec = U_ZERO_ERROR;
-    return TZEnumeration::create(UCAL_ZONE_TYPE_ANY, NULL, &rawOffset, ec);
+    return createEnumerationForRawOffset(rawOffset, ec);
 }
 
 StringEnumeration* U_EXPORT2
-TimeZone::createEnumeration(const char* country) {
+TimeZone::createEnumeration(const char* region) {
     UErrorCode ec = U_ZERO_ERROR;
-    return TZEnumeration::create(UCAL_ZONE_TYPE_ANY, country, NULL, ec);
+    return createEnumerationForRegion(region, ec);
 }
 
 // ---------------------------------------
@@ -1244,7 +1263,7 @@ TimeZone::getDisplayName(UBool inDaylight, EDisplayType style, const Locale& loc
             tzfmt->format(UTZFMT_STYLE_GENERIC_SHORT, *this, date, result, &timeType);
             break;
         default:
-            UPRV_UNREACHABLE;
+            UPRV_UNREACHABLE_EXIT;
         }
         // Generic format many use Localized GMT as the final fallback.
         // When Localized GMT format is used, the result might not be
@@ -1272,7 +1291,7 @@ TimeZone::getDisplayName(UBool inDaylight, EDisplayType style, const Locale& loc
             tzfmt->formatOffsetISO8601Basic(offset, FALSE, FALSE, FALSE, result, status);
             break;
         default:
-            UPRV_UNREACHABLE;
+            UPRV_UNREACHABLE_EXIT;
         }
 
     } else {
@@ -1287,7 +1306,7 @@ TimeZone::getDisplayName(UBool inDaylight, EDisplayType style, const Locale& loc
             nameType = inDaylight ? UTZNM_SHORT_DAYLIGHT : UTZNM_SHORT_STANDARD;
             break;
         default:
-            UPRV_UNREACHABLE;
+            UPRV_UNREACHABLE_EXIT;
         }
         LocalPointer<TimeZoneNames> tznames(TimeZoneNames::createInstance(locale, status));
         if (U_FAILURE(status)) {

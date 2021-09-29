@@ -658,23 +658,23 @@ int gTestFilterClassID = 0;
  * Used by TestFiltering().
  */
 class TestFilter : public UnicodeFilter {
-    virtual TestFilter* clone() const {
+    virtual TestFilter* clone() const override {
         return new TestFilter(*this);
     }
-    virtual UBool contains(UChar32 c) const {
+    virtual UBool contains(UChar32 c) const override {
         return c != (UChar)0x0063 /*c*/;
     }
     // Stubs
     virtual UnicodeString& toPattern(UnicodeString& result,
-                                     UBool /*escapeUnprintable*/) const {
+                                     UBool /*escapeUnprintable*/) const override {
         return result;
     }
-    virtual UBool matchesIndexValue(uint8_t /*v*/) const {
+    virtual UBool matchesIndexValue(uint8_t /*v*/) const override {
         return FALSE;
     }
-    virtual void addMatchSetTo(UnicodeSet& /*toUnionTo*/) const {}
+    virtual void addMatchSetTo(UnicodeSet& /*toUnionTo*/) const override {}
 public:
-    UClassID getDynamicClassID() const { return (UClassID)&gTestFilterClassID; }
+    UClassID getDynamicClassID() const override { return (UClassID)&gTestFilterClassID; }
 };
 
 /**
@@ -2026,15 +2026,15 @@ class TestTrans : public Transliterator {
 public:
     TestTrans(const UnicodeString& id) : Transliterator(id, 0) {
     }
-    virtual TestTrans* clone(void) const {
+    virtual TestTrans* clone(void) const override {
         return new TestTrans(getID());
     }
     virtual void handleTransliterate(Replaceable& /*text*/, UTransPosition& offsets,
-        UBool /*isIncremental*/) const
+        UBool /*isIncremental*/) const override
     {
         offsets.start = offsets.limit;
     }
-    virtual UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const override;
     static UClassID U_EXPORT2 getStaticClassID();
 };
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TestTrans)

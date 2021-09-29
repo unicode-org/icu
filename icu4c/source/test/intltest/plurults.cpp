@@ -57,6 +57,8 @@ void PluralRulesTest::runIndexedTest( int32_t index, UBool exec, const char* &na
     TESTCASE_AUTO(testGetAllKeywordValues);
     TESTCASE_AUTO(testScientificPluralKeyword);
     TESTCASE_AUTO(testCompactDecimalPluralKeyword);
+    TESTCASE_AUTO(testDoubleValue);
+    TESTCASE_AUTO(testLongValue);
     TESTCASE_AUTO(testOrdinal);
     TESTCASE_AUTO(testSelect);
     TESTCASE_AUTO(testSelectRange);
@@ -143,12 +145,12 @@ void PluralRulesTest::testAPI(/*char *par*/)
     PluralRules defRule(status);
     LocalPointer<PluralRules> test(new PluralRules(status), status);
     if(U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create PluralRules (default) - exitting");
+        dataerrln("ERROR: Could not create PluralRules (default) - exiting");
         return;
     }
     LocalPointer<PluralRules> newEnPlural(test->forLocale(Locale::getEnglish(), status), status);
     if(U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create PluralRules (English) - exitting");
+        dataerrln("ERROR: Could not create PluralRules (English) - exiting");
         return;
     }
 
@@ -177,7 +179,7 @@ void PluralRulesTest::testAPI(/*char *par*/)
     for (int32_t i=0; i<10; ++i) {
         key = empRule->select(i);
         if ( key.charAt(0)!= 0x61 ) { // 'a'
-            errln("ERROR:  empty plural rules test failed! - exitting");
+            errln("ERROR:  empty plural rules test failed! - exiting");
         }
     }
 
@@ -191,7 +193,7 @@ void PluralRulesTest::testAPI(/*char *par*/)
        LocalPointer<PluralRules> newRules(test->createRules(pluralTestData[i], status));
        setupResult(pluralTestResult[i], result, &max);
        if ( !checkEqual(*newRules, result, max) ) {
-            errln("ERROR:  simple plural rules failed! - exitting");
+            errln("ERROR:  simple plural rules failed! - exiting");
             return;
         }
     }
@@ -219,12 +221,12 @@ void PluralRulesTest::testAPI(/*char *par*/)
     };
     LocalPointer<PluralRules> newRules(test->createRules(complexRule, status));
     if ( !checkEqual(*newRules, cRuleResult, 12) ) {
-         errln("ERROR:  complex plural rules failed! - exitting");
+         errln("ERROR:  complex plural rules failed! - exiting");
          return;
     }
     newRules.adoptInstead(test->createRules(complexRule2, status));
     if ( !checkEqual(*newRules, cRuleResult, 12) ) {
-         errln("ERROR:  complex plural rules failed! - exitting");
+         errln("ERROR:  complex plural rules failed! - exiting");
          return;
     }
 
@@ -234,11 +236,11 @@ void PluralRulesTest::testAPI(/*char *par*/)
     status = U_ZERO_ERROR;
     newRules.adoptInstead(test->createRules(decimalRule, status));
     if (U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create PluralRules for testing fractions - exitting");
+        dataerrln("ERROR: Could not create PluralRules for testing fractions - exiting");
         return;
     }
     double fData[] =     {-101, -100, -1,     -0.0,  0,     0.1,  1,     1.999,  2.0,   100,   100.001 };
-    UBool isKeywordA[] = {TRUE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE,   FALSE, FALSE, TRUE };
+    bool isKeywordA[] = {true, false, false, false, false, true, false,  true,   false, false, true };
     for (int32_t i=0; i<UPRV_LENGTHOF(fData); i++) {
         if ((newRules->select(fData[i])== KEYWORD_A) != isKeywordA[i]) {
              errln("File %s, Line %d, ERROR: plural rules for decimal fractions test failed!\n"
@@ -250,7 +252,7 @@ void PluralRulesTest::testAPI(/*char *par*/)
     logln("Testing Equality of PluralRules");
 
     if ( !testEquality(*test) ) {
-         errln("ERROR:  complex plural rules failed! - exitting");
+         errln("ERROR:  complex plural rules failed! - exiting");
          return;
      }
 
@@ -405,10 +407,10 @@ void PluralRulesTest::testGetSamples() {
 
     double values[1000];
     for (int32_t i = 0; U_SUCCESS(status) && i < numLocales; ++i) {
-        if (uprv_strcmp(locales[i].getLanguage(), "fr") == 0 &&
-                logKnownIssue("21322", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
-            continue;
-        }
+        //if (uprv_strcmp(locales[i].getLanguage(), "fr") == 0 &&
+        //        logKnownIssue("21322", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
+        //    continue;
+        //}
         LocalPointer<PluralRules> rules(PluralRules::forLocale(locales[i], status));
         if (U_FAILURE(status)) {
             break;
@@ -466,10 +468,10 @@ void PluralRulesTest::testGetFixedDecimalSamples() {
 
     FixedDecimal values[1000];
     for (int32_t i = 0; U_SUCCESS(status) && i < numLocales; ++i) {
-        if (uprv_strcmp(locales[i].getLanguage(), "fr") == 0 &&
-                logKnownIssue("21322", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
-            continue;
-        }
+        //if (uprv_strcmp(locales[i].getLanguage(), "fr") == 0 &&
+        //        logKnownIssue("21322", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
+        //    continue;
+        //}
         LocalPointer<PluralRules> rules(PluralRules::forLocale(locales[i], status));
         if (U_FAILURE(status)) {
             break;
@@ -507,8 +509,13 @@ void PluralRulesTest::testGetFixedDecimalSamples() {
                     //     std::cout << "  uk " << US(resultKeyword).cstr() << " " << values[j] << std::endl;
                     // }
                     if (*keyword != resultKeyword) {
-                        errln("file %s, line %d, Locale %s, sample for keyword \"%s\":  %s, select(%s) returns keyword \"%s\"",
-                                  __FILE__, __LINE__, locales[i].getName(), US(*keyword).cstr(), values[j].toString().getBuffer(), values[j].toString().getBuffer(), US(resultKeyword).cstr());
+                        if (values[j].exponent == 0 || !logKnownIssue("21714", "PluralRules::select treats 1c6 as 1")) {
+                            UnicodeString valueString(values[j].toString());
+                            char valueBuf[16];
+                            valueString.extract(0, valueString.length(), valueBuf, sizeof(valueBuf));
+                            errln("file %s, line %d, Locale %s, sample for keyword \"%s\":  %s, select(%s) returns keyword \"%s\"",
+                                      __FILE__, __LINE__, locales[i].getName(), US(*keyword).cstr(), valueBuf, valueBuf, US(resultKeyword).cstr());
+                        }
                     }
                 }
             }
@@ -890,6 +897,94 @@ PluralRulesTest::testCompactDecimalPluralKeyword() {
 
         UnicodeString message(UnicodeString(localeName) + u" " + DoubleToUnicodeString(input));
         assertEquals(message, expectedPluralRuleKeyword, actualPluralRuleKeyword);
+    }
+}
+
+void
+PluralRulesTest::testDoubleValue() {
+    IcuTestErrorCode errorCode(*this, "testDoubleValue");
+
+    struct IntTestCase {
+        const int64_t inputNum;
+        const double expVal;
+    } intCases[] = {
+        {-101, -101.0},
+        {-100, -100.0},
+        {-1,   -1.0},
+        {0,     0.0},
+        {1,     1.0},
+        {100,   100.0}
+    };
+    for (const auto& cas : intCases) {
+        const int64_t inputNum = cas.inputNum;
+        const double expVal = cas.expVal;
+
+        FixedDecimal fd(inputNum);
+        UnicodeString message(u"FixedDecimal::doubleValue() for" + Int64ToUnicodeString(inputNum));
+        assertEquals(message, expVal, fd.doubleValue());
+    }
+
+    struct DoubleTestCase {
+        const double inputNum;
+        const double expVal;
+    } dblCases[] = {
+        {-0.0,     -0.0},
+        {0.1,       0.1},
+        {1.999,     1.999},
+        {2.0,       2.0},
+        {100.001, 100.001}
+    };
+    for (const auto & cas : dblCases) {
+        const double inputNum = cas.inputNum;
+        const double expVal = cas.expVal;
+
+        FixedDecimal fd(inputNum);
+        UnicodeString message(u"FixedDecimal::doubleValue() for" + DoubleToUnicodeString(inputNum));
+        assertEquals(message, expVal, fd.doubleValue());
+    }
+}
+
+void
+PluralRulesTest::testLongValue() {
+    IcuTestErrorCode errorCode(*this, "testLongValue");
+
+    struct IntTestCase {
+        const int64_t inputNum;
+        const int64_t expVal;
+    } intCases[] = {
+        {-101,  101},
+        {-100,  100},
+        {-1,    1},
+        {0,     0},
+        {1,     1},
+        {100,   100}
+    };
+    for (const auto& cas : intCases) {
+        const int64_t inputNum = cas.inputNum;
+        const int64_t expVal = cas.expVal;
+
+        FixedDecimal fd(inputNum);
+        UnicodeString message(u"FixedDecimal::longValue() for" + Int64ToUnicodeString(inputNum));
+        assertEquals(message, expVal, fd.longValue());
+    }
+
+    struct DoubleTestCase {
+        const double inputNum;
+        const int64_t expVal;
+    } dblCases[] = {
+        {-0.0,      0},
+        {0.1,       0},
+        {1.999,     1},
+        {2.0,       2},
+        {100.001,   100}
+    };
+    for (const auto & cas : dblCases) {
+        const double inputNum = cas.inputNum;
+        const int64_t expVal = cas.expVal;
+
+        FixedDecimal fd(inputNum);
+        UnicodeString message(u"FixedDecimal::longValue() for" + DoubleToUnicodeString(inputNum));
+        assertEquals(message, expVal, fd.longValue());
     }
 }
 

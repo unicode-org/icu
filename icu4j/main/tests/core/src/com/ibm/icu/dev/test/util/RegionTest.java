@@ -609,7 +609,7 @@ public class RegionTest extends TestFmwk {
                 for (Region childRegion : actualChildren) {
                     actualChildIDs.add(childRegion.toString());
                 }
-                actualChildIDs.sort(null);
+                java.util.Collections.sort(actualChildIDs);
                 
                 for (int i = 0; i < actualChildIDs.size() && i < expectedChildren.length; i++) {
                     if (!expectedChildren[i].equals(actualChildIDs.get(i))) {

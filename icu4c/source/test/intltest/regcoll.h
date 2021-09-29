@@ -32,7 +32,7 @@ public:
     CollationRegressionTest();
     virtual ~CollationRegressionTest();
 
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
 
     // @bug 4048446
     //

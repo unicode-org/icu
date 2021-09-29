@@ -9,8 +9,8 @@ import java.util.Iterator;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.UResource;
-import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.UResourceBundle;
 
 /**
@@ -68,18 +68,44 @@ public class UnitsData {
      * @return the corresponding category.
      */
     public String getCategory(MeasureUnitImpl measureUnit) {
-        MeasureUnitImpl baseMeasureUnit
+        MeasureUnitImpl baseMeasureUnitImpl
                 = this.getConversionRates().extractCompoundBaseUnit(measureUnit);
-        String baseUnitIdentifier = MeasureUnit.fromMeasureUnitImpl(baseMeasureUnit).getIdentifier();
+        baseMeasureUnitImpl.serialize();
+        String identifier = baseMeasureUnitImpl.getIdentifier();
 
-        if (baseUnitIdentifier.equals("meter-per-cubic-meter")) {
-            // TODO(icu-units#130): support inverting any unit, with correct
-            // fallback logic: inversion and fallback may depend on presence or
-            // absence of a usage for that category.
-            return "consumption";
+
+        Integer index = Categories.baseUnitToIndex.get(identifier);
+
+        // In case the base unit identifier did not match any entry.
+        if (index == null) {
+            baseMeasureUnitImpl.takeReciprocal();
+            baseMeasureUnitImpl.serialize();
+            identifier = baseMeasureUnitImpl.getIdentifier();
+            index = Categories.baseUnitToIndex.get(identifier);
         }
 
-        int index = Categories.baseUnitToIndex.get(baseUnitIdentifier);
+        // In case the reciprocal of the base unit identifier did not match any entry.
+        baseMeasureUnitImpl.takeReciprocal(); // return to original form
+        MeasureUnitImpl simplifiedUnit = baseMeasureUnitImpl.copyAndSimplify();
+        if (index == null) {
+            simplifiedUnit.serialize();
+            identifier = simplifiedUnit.getIdentifier();
+            index = Categories.baseUnitToIndex.get(identifier);
+        }
+
+        // In case the simplified base unit identifier did not match any entry.
+        if (index == null) {
+            simplifiedUnit.takeReciprocal();
+            simplifiedUnit.serialize();
+            identifier = simplifiedUnit.getIdentifier();
+            index = Categories.baseUnitToIndex.get(identifier);
+        }
+
+        // If there is no match at all, throw an exception.
+        if (index == null) {
+            throw new IllegalIcuArgumentException("This unit does not has a category" + measureUnit.getIdentifier());
+        }
+
         return Categories.indexToCategory[index];
     }
 

@@ -1,4 +1,4 @@
-#!/usr/bin/python -B
+#!/usr/bin/python3 -B
 # -*- coding: utf-8 -*-
 # © 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html
@@ -409,6 +409,15 @@ def AddBinaryProperty(short_name, long_name):
   _properties[NormPropName(long_name)] = prop
 
 
+def AddSingleNameBinaryProperty(name):
+  # For some properties, the short name is the same as the long name.
+  _null_values[name] = False
+  bin_prop = _properties["Math"]
+  prop = ("Binary", [name, name], bin_prop[2], bin_prop[3])
+  _properties[name] = prop
+  _properties[NormPropName(name)] = prop
+
+
 def AddPOSIXBinaryProperty(name):
   # We only define a long name for ICU-specific (non-UCD) POSIX properties.
   _null_values[name] = False
@@ -521,13 +530,21 @@ def ParsePropertyAliases(in_file):
   AddBinaryProperty("nfcinert", "NFC_Inert")
   AddBinaryProperty("nfkcinert", "NFKC_Inert")
   AddBinaryProperty("segstart", "Segment_Starter")
-  # http://www.unicode.org/reports/tr51/#Emoji_Properties
+  # https://www.unicode.org/reports/tr51/#Emoji_Properties
   AddBinaryProperty("Emoji", "Emoji")
   AddBinaryProperty("EPres", "Emoji_Presentation")
   AddBinaryProperty("EMod", "Emoji_Modifier")
   AddBinaryProperty("EBase", "Emoji_Modifier_Base")
   AddBinaryProperty("EComp", "Emoji_Component")
   AddBinaryProperty("ExtPict", "Extended_Pictographic")
+  # https://www.unicode.org/reports/tr51/#Emoji_Sets
+  AddSingleNameBinaryProperty("Basic_Emoji")
+  AddSingleNameBinaryProperty("Emoji_Keycap_Sequence")
+  AddSingleNameBinaryProperty("RGI_Emoji_Modifier_Sequence")
+  AddSingleNameBinaryProperty("RGI_Emoji_Flag_Sequence")
+  AddSingleNameBinaryProperty("RGI_Emoji_Tag_Sequence")
+  AddSingleNameBinaryProperty("RGI_Emoji_ZWJ_Sequence")
+  AddSingleNameBinaryProperty("RGI_Emoji")
   # C/POSIX character classes that do not have Unicode property [value] aliases.
   # See uchar.h.
   AddPOSIXBinaryProperty("alnum")
@@ -1033,7 +1050,7 @@ def CompactBlock(b, i):
         # For two values with the same savings, pick the one that compares lower,
         # to make this deterministic (avoid flip-flopping).
         if (savings > max_savings or
-            (savings == max_savings and value < max_value)):
+            (savings > 0 and savings == max_savings and value < max_value)):
           max_value = value
           max_count = count
           max_savings = savings
@@ -1609,6 +1626,8 @@ _files = {
   "DerivedNumericValues.txt": (DontCopy, ParseDerivedNumericValues),
   "EastAsianWidth.txt": (DontCopy, ParseEastAsianWidth),
   "emoji-data.txt": (DontCopy, ParseNamedProperties),
+  "emoji-sequences.txt": (CopyOnly,),
+  "emoji-zwj-sequences.txt": (CopyOnly,),
   "GraphemeBreakProperty.txt": (DontCopy, ParseGraphemeBreakProperty),
   "GraphemeBreakTest-cldr.txt": (CopyOnly, "testdata"),
   "IdnaTestV2.txt": (CopyOnly, "testdata"),

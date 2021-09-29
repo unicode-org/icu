@@ -156,7 +156,7 @@ public:
     * @return         true if "other" is the same as "this"
     * @stable ICU 2.0
     */
-    UBool operator==(const CollationElementIterator& other) const;
+    bool operator==(const CollationElementIterator& other) const;
 
     /**
     * Returns true if "other" is not the same as "this".
@@ -165,7 +165,7 @@ public:
     * @return         true if "other" is not the same as "this"
     * @stable ICU 2.0
     */
-    UBool operator!=(const CollationElementIterator& other) const;
+    bool operator!=(const CollationElementIterator& other) const;
 
     /**
     * Resets the cursor to the beginning of the string.
@@ -279,7 +279,7 @@ public:
     *
     * @stable ICU 2.2
     */
-    virtual UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const override;
 
     /**
     * ICU "poor man's RTTI", returns a UClassID for this class.

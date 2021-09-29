@@ -412,6 +412,9 @@
     <ClCompile Include="characterproperties.cpp">
       <Filter>properties &amp; sets</Filter>
     </ClCompile>
+    <ClCompile Include="emojiprops.cpp">
+      <Filter>properties &amp; sets</Filter>
+    </ClCompile>
     <ClCompile Include="propname.cpp">
       <Filter>properties &amp; sets</Filter>
     </ClCompile>
@@ -892,6 +895,9 @@
       <Filter>properties &amp; sets</Filter>
     </ClInclude>
     <ClInclude Include="ruleiter.h">
+      <Filter>properties &amp; sets</Filter>
+    </ClInclude>
+    <ClInclude Include="emojiprops.h">
       <Filter>properties &amp; sets</Filter>
     </ClInclude>
     <ClInclude Include="ucase.h">

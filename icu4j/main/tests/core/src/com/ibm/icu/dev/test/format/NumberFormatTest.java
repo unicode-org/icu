@@ -679,7 +679,7 @@ public class NumberFormatTest extends TestFmwk {
     @Test
     public void TestCurrency() {
         String[] DATA = {
-                "fr_CA", "1,50\u00a0$\u00a0CA",
+                "fr_CA", "1,50\u00a0$",
                 "de_DE", "1,50\u00a0\u20AC",
                 "de_DE@currency=DEM", "1,50\u00a0DM",
                 "fr_FR", "1,50\u00a0\u20AC",
@@ -4104,7 +4104,7 @@ public class NumberFormatTest extends TestFmwk {
             new SetMxFrAndRndIncrItem( "15 en_US DEC 1/1/3/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  3, 0.02,   "#,##0.02#",  0.128, "0.12"  ), // use incr
             new SetMxFrAndRndIncrItem( "16 en_US DEC 1/2/2/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  2,  2, 0.02,   "#,##0.02",   0.128, "0.12"  ), // use incr
             new SetMxFrAndRndIncrItem( "17 en_US DEC 1/2/3/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  2,  3, 0.02,   "#,##0.02#",  0.128, "0.12"  ), // use incr
-            new SetMxFrAndRndIncrItem( "18 en_US DEC 1/3/3/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  3,  3, 0.02,   "#,##0.020",  0.128, "0.12"  ), // use incr; expFmt != ICU4C
+            new SetMxFrAndRndIncrItem( "18 en_US DEC 1/3/3/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  3,  3, 0.02,   "#,##0.020",  0.128, "0.120" ), // use incr
 
             new SetMxFrAndRndIncrItem( "20 en_US DEC 1/1/1/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  1, 0.0075, "#,##0.0",    0.019, "0.0"    ),
             new SetMxFrAndRndIncrItem( "21 en_US DEC 1/1/2/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  2, 0.0075, "#,##0.0075", 0.004, "0.0075" ), // use incr
@@ -4133,6 +4133,9 @@ public class NumberFormatTest extends TestFmwk {
             if (roundIncrUsed) {
                 double  testIncr = item.roundIncr;
                 for (; testIncr > ((int)testIncr); testIncr *= 10.0, fracForRoundIncr++);
+            }
+            if (fracForRoundIncr < item.minFrac) {
+                fracForRoundIncr = item.minFrac;
             }
 
             int minInt = df.getMinimumIntegerDigits();
@@ -6908,6 +6911,22 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void Test20425_IntegerIncrement() {
+        DecimalFormat df = new DecimalFormat("##00");
+        df.setRoundingIncrement(1);
+        String actual = df.format(1235.5);
+        assertEquals("Should round to integer", "1236", actual);
+    }
+
+    @Test
+    public void Test20425_FractionWithIntegerIncrement() {
+        DecimalFormat df = new DecimalFormat("0.0");
+        df.setRoundingIncrement(1);
+        String actual = df.format(8.6);
+        assertEquals("Should have a fraction digit", "9.0", actual);
+    }
+
+    @Test
     public void Test21232_ParseTimeout() throws ParseException {
         DecimalFormat df = new DecimalFormat();
         StringBuilder input = new StringBuilder();
@@ -6918,5 +6937,33 @@ public class NumberFormatTest extends TestFmwk {
         assertEquals("Long input of digits", 10240, input.length());
         df.parse(input.toString());
         // Should not hang
+    }
+
+    @Test
+    public void Test21556_CurrencyAsDecimal() {
+        {
+            DecimalFormat df = new DecimalFormat("a0¤00b");
+            df.setCurrency(Currency.getInstance("EUR"));
+            StringBuffer result = new StringBuffer();
+            FieldPosition fp = new FieldPosition(NumberFormat.Field.CURRENCY);
+            df.format(3.141, result, fp);
+            assertEquals("Basic test: format", "a3€14b", result.toString());
+            assertEquals("Basic test: toPattern", "a0¤00b", df.toPattern());
+            assertEquals("Basic test: field position begin", 2, fp.getBeginIndex());
+            assertEquals("Basic test: field position end", 3, fp.getEndIndex());
+        }
+
+        {
+            NumberFormat nf = NumberFormat.getCurrencyInstance(new ULocale("en-GB"));
+            DecimalFormat df = (DecimalFormat) nf;
+            df.applyPattern("a0¤00b");
+            StringBuffer result = new StringBuffer();
+            FieldPosition fp = new FieldPosition(NumberFormat.Field.CURRENCY);
+            df.format(3.141, result, fp);
+            assertEquals("Via applyPattern: format", "a3£14b", result.toString());
+            assertEquals("Via applyPattern: toPattern", "a0¤00b", df.toPattern());
+            assertEquals("Via applyPattern: field position begin", 2, fp.getBeginIndex());
+            assertEquals("Via applyPattern: field position end", 3, fp.getEndIndex());
+        }
     }
 }

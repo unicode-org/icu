@@ -195,7 +195,9 @@ determine whether case and accents are ignored during a search.
 
 #### What algorithm are you using to perform the search?
 
-StringSearch uses a version of the Boyer-Moore search algorithm that has been
+As of ICU4J 53 / ICU4C 4.0, StringSearch uses a simple linear search algorithm which
+locates a match by shifting a cursor in the target text one by one. Previous
+versions of ICU used a version of the Boyer-Moore search algorithm which was
 modified for use with Unicode. Rather than using raw Unicode character values in
 its comparisons and shift tables, the algorithm uses collation elements that
 have been "hashed" down to a smaller range to make the tables a reasonable size.

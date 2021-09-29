@@ -270,20 +270,24 @@ the following `StringSearch` specific considerations:
 
 ### Search Algorithm
 
-ICU4C releases up to 3.8 used the Boyer-Moore search algorithm in the string
+ICU4C (C/C++) releases up to 3.8 used the Boyer-Moore search algorithm in the string
 search service. There were some known issues in these previous releases.
 (See ICU tickets [ICU-5024](https://unicode-org.atlassian.net/browse/ICU-5024),
 [ICU-5382](https://unicode-org.atlassian.net/browse/ICU-5382),
-[ICU-5420](https://unicode-org.atlassian.net/browse/ICU-5420))
+[ICU-5420](https://unicode-org.atlassian.net/browse/ICU-5420)).
 
-In ICU4C 4.0, the string
-search service was updated with the simple linear search algorithm, which
-locates a match by shifting a cursor in the target text one by one, and these
-issues were fixed. In ICU4C 4.0.1, the Boyer-Moore search code was reintroduced
-as a separated API set as a technology preview. In a later release, this code was deleted.
+In ICU4C 4.0, the string search service was updated to use a simple linear search
+algorithm, which locates a match by shifting a cursor in the target text one by one,
+and these issues were fixed.
 
-The Boyer-Moore searching
-algorithm is based on automata or combinatorial properties of strings and
+In ICU4C 4.0.1, the Boyer-Moore search code was reintroduced as a separate API with
+technology preview status. However, in ICU4C 51.1, this was removed.
+(See ICU ticket [ICU-9573](https://unicode-org.atlassian.net/browse/ICU-9573)).
+
+Similarly, in ICU4J 53 (Java) the Boyer-Moore search algorithm was replaced by the
+simple linear search algorithm, ported from ICU4C. (See ICU ticket [ICU-6288](https://unicode-org.atlassian.net/browse/ICU-6288)).
+
+The Boyer-Moore search algorithm is based on automata or combinatorial properties of strings and
 pre-processes the pattern and known to be much faster than the linear search
 when search pattern length is longer. According to performance evaluation
 between these two implementations, the Boyer-Moore search is faster than the

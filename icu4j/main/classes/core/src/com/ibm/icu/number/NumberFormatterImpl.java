@@ -5,6 +5,7 @@ package com.ibm.icu.number;
 import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.StandardPlural;
+import com.ibm.icu.impl.number.AffixPatternProvider;
 import com.ibm.icu.impl.number.CompactData.CompactType;
 import com.ibm.icu.impl.number.ConstantAffixModifier;
 import com.ibm.icu.impl.number.DecimalQuantity;
@@ -361,8 +362,13 @@ class NumberFormatterImpl {
         // Middle modifier (patterns, positive/negative, currency symbols, percent)
         // The default middle modifier is weak (thus the false argument).
         MutablePatternModifier patternMod = new MutablePatternModifier(false);
-        patternMod.setPatternInfo((macros.affixProvider != null) ? macros.affixProvider : patternInfo, null);
-        patternMod.setPatternAttributes(micros.sign, isPermille);
+        AffixPatternProvider affixProvider =
+            (macros.affixProvider != null)
+                ? macros.affixProvider
+                : patternInfo;
+        patternMod.setPatternInfo(affixProvider, null);
+        boolean approximately = (macros.approximately != null) ? macros.approximately : false;
+        patternMod.setPatternAttributes(micros.sign, isPermille, approximately);
         if (patternMod.needsPlurals()) {
             if (rules == null) {
                 // Lazily create PluralRules
@@ -375,6 +381,11 @@ class NumberFormatterImpl {
         ImmutablePatternModifier immPatternMod = null;
         if (safe) {
             immPatternMod = patternMod.createImmutable();
+        }
+
+        // currencyAsDecimal
+        if (affixProvider.currencyAsDecimal()) {
+            micros.currencyAsDecimal = patternMod.getCurrencySymbolForUnitWidth();
         }
 
         // Outer modifier (CLDR units and currency long names)
@@ -512,10 +523,24 @@ class NumberFormatterImpl {
             // Add the decimal point
             if (quantity.getLowerDisplayMagnitude() < 0
                     || micros.decimal == DecimalSeparatorDisplay.ALWAYS) {
-                length += string.insert(length + index,
-                        micros.useCurrency ? micros.symbols.getMonetaryDecimalSeparatorString()
-                                : micros.symbols.getDecimalSeparatorString(),
+                if (micros.currencyAsDecimal != null) {
+                    // Note: This unconditionally substitutes the standard short symbol.
+                    // TODO: Should we support narrow or other variants?
+                    length += string.insert(
+                        length + index,
+                        micros.currencyAsDecimal,
+                        NumberFormat.Field.CURRENCY);
+                } else if (micros.useCurrency) {
+                    length += string.insert(
+                        length + index,
+                        micros.symbols.getMonetaryDecimalSeparatorString(),
                         NumberFormat.Field.DECIMAL_SEPARATOR);
+                } else {
+                    length += string.insert(
+                        length + index,
+                        micros.symbols.getDecimalSeparatorString(),
+                        NumberFormat.Field.DECIMAL_SEPARATOR);
+                }
             }
 
             // Add the fraction digits

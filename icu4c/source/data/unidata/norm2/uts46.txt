@@ -1,6 +1,6 @@
 # Original file:
 # IdnaMappingTable.txt
-# Date: 2021-05-29, 15:44:58 GMT
+# Date: 2021-07-10, 00:49:51 GMT
 # © 2021 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
@@ -6524,7 +6524,8 @@ FFFE..FFFF    >FFFD                     # 1.1  <noncharacter-FFFE>..<noncharacte
 12475..1247F  >FFFD                     # NA   <reserved-12475>..<reserved-1247F>
 # 12480..12543valid                     # 8.0  CUNEIFORM SIGN AB TIMES NUN TENU..CUNEIFORM SIGN ZU5 TIMES THREE DISH TENU
 12544..12F8F  >FFFD                     # NA   <reserved-12544>..<reserved-12F8F>
-# 12F90..12FF2valid                     # 14.0 CYPRO-MINOAN SIGN CM001..CYPRO-MINOAN SIGN CM302
+# 12F90..12FF0valid                     # 14.0 CYPRO-MINOAN SIGN CM001..CYPRO-MINOAN SIGN CM114
+# 12FF1..12FF2valid                     # 14.0 CYPRO-MINOAN SIGN CM301..CYPRO-MINOAN SIGN CM302
 12FF3..12FFF  >FFFD                     # NA   <reserved-12FF3>..<reserved-12FFF>
 # 13000..1342Evalid                     # 5.2  EGYPTIAN HIEROGLYPH A001..EGYPTIAN HIEROGLYPH AA032
 1342F         >FFFD                     # NA   <reserved-1342F>
@@ -7745,7 +7746,7 @@ FFFE..FFFF    >FFFD                     # 1.1  <noncharacter-FFFE>..<noncharacte
 1E300..1E7DF  >FFFD                     # NA   <reserved-1E300>..<reserved-1E7DF>
 # 1E7E0..1E7E6valid                     # 14.0 ETHIOPIC SYLLABLE HHYA..ETHIOPIC SYLLABLE HHYO
 1E7E7         >FFFD                     # NA   <reserved-1E7E7>
-# 1E7E8..1E7EBvalid                     # 14.0 ETHIOPIC SYLLABLE GURAGE HHWA..ETHIOPIC SYLLABLE HWE
+# 1E7E8..1E7EBvalid                     # 14.0 ETHIOPIC SYLLABLE GURAGE HHWA..ETHIOPIC SYLLABLE HHWE
 1E7EC         >FFFD                     # NA   <reserved-1E7EC>
 # 1E7ED..1E7EEvalid                     # 14.0 ETHIOPIC SYLLABLE GURAGE MWI..ETHIOPIC SYLLABLE GURAGE MWEE
 1E7EF         >FFFD                     # NA   <reserved-1E7EF>

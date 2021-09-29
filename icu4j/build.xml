@@ -87,60 +87,59 @@
 
     <!-- Java version check -->
     <condition property="is.java7">
-        <matches string="${java.version}" pattern="1\.7\.\d.*"/>
+        <matches string="${java.version}" pattern="^1\.7\.\d.*"/>
     </condition>
 
     <condition property="is.java8">
-        <matches string="${java.version}" pattern="1\.8\.\d.*"/>
+        <matches string="${java.version}" pattern="^1\.8\.\d.*"/>
     </condition>
 
     <condition property="is.java9">
-        <matches string="${java.version}" pattern="9((-.|\.\d).*)?"/>
+        <matches string="${java.version}" pattern="^9((-.|\.\d).*)?"/>
     </condition>
 
     <condition property="is.java10">
-        <matches string="${java.version}" pattern="10((-.|\.\d).*)?"/>
+        <matches string="${java.version}" pattern="^10((-.|\.\d).*)?"/>
     </condition>
 
     <condition property="is.java11">
-        <matches string="${java.version}" pattern="11((-.|\.\d).*)?"/>
+        <matches string="${java.version}" pattern="^11((-.|\.\d).*)?"/>
     </condition>
 
     <condition property="is.java12">
-        <matches string="${java.version}" pattern="12((-.|\.\d).*)?"/>
+        <matches string="${java.version}" pattern="^12((-.|\.\d).*)?"/>
     </condition>
 
     <condition property="is.java13">
-        <matches string="${java.version}" pattern="13((-.|\.\d).*)?"/>
+        <matches string="${java.version}" pattern="^13((-.|\.\d).*)?"/>
     </condition>
 
     <condition property="is.java14">
-        <matches string="${java.version}" pattern="14((-.|\.\d).*)?"/>
+        <matches string="${java.version}" pattern="^14((-.|\.\d).*)?"/>
     </condition>
 
     <condition property="is.java15">
-        <matches string="${java.version}" pattern="15((-.|\.\d).*)?"/>
+        <matches string="${java.version}" pattern="^15((-.|\.\d).*)?"/>
     </condition>
 
     <condition property="is.java16">
-        <matches string="${java.version}" pattern="16((-.|\.\d).*)?"/>
+        <matches string="${java.version}" pattern="^16((-.|\.\d).*)?"/>
     </condition>
 
     <condition property="is.java17">
-        <matches string="${java.version}" pattern="17((-.|\.\d).*)?"/>
+        <matches string="${java.version}" pattern="^17((-.|\.\d).*)?"/>
     </condition>
 
     <condition property="is.java18">
-        <matches string="${java.version}" pattern="18((-.|\.\d).*)?"/>
+        <matches string="${java.version}" pattern="^18((-.|\.\d).*)?"/>
     </condition>
 
     <condition property="is.java19">
-        <matches string="${java.version}" pattern="19((-.|\.\d).*)?"/>
+        <matches string="${java.version}" pattern="^19((-.|\.\d).*)?"/>
     </condition>
 
-    <condition property="is.java8.plus">
+  <condition property="is.java9.plus">
         <or>
-            <isset property="is.java8"/>
             <isset property="is.java9"/>
             <isset property="is.java10"/>
             <isset property="is.java11"/>
@@ -152,6 +151,13 @@
             <isset property="is.java17"/>
             <isset property="is.java18"/>
             <isset property="is.java19"/>
+        </or>
+  </condition>
+
+    <condition property="is.java8.plus">
+        <or>
+            <isset property="is.java8"/>
+            <isset property="is.java9.plus"/>
         </or>
     </condition>
 
@@ -169,7 +175,6 @@
             </not>
         </condition>
     </fail>
-
 
     <!-- Build environment info -->
     <property name="env.COMPUTERNAME" value="${env.HOSTNAME}"/>
@@ -418,6 +423,17 @@
     <path id="junit.icu.localespi-tests.jars">
         <pathelement location="${icu4j.test-framework.jar}"/>
         <pathelement location="${icu4j.localespi-tests.jar}"/>
+    </path>
+
+    <path id="junit.icu.localespi-tests.java9.jars">
+        <pathelement location="${icu4j.test-framework.jar}"/>
+        <pathelement location="${icu4j.localespi-tests.jar}"/>
+        <pathelement location="${icu4j.localespi.jar}"/>
+        <pathelement location="${icu4j.core.jar}"/>
+        <pathelement location="${icu4j.collate.jar}"/>
+        <pathelement location="${icu4j.currdata.jar}"/>
+        <pathelement location="${icu4j.langdata.jar}"/>
+        <pathelement location="${icu4j.regiondata.jar}"/>
     </path>
 
     <!--Class names that will be included/excluded as tests-->
@@ -669,7 +685,7 @@
         <fail message="test failed" if="icu-junit-failure" />
     </target>
 
-    <target name="_localespiCheck">
+    <target name="_localespiCheck" unless="is.java9.plus">
         <icu-junit test-name="localespi"
             classpath="junit.icu.localespi-tests.jars"
             jvm-options="-Djava.ext.dirs=${icu4j.core.dir}/${jar.dir}${path.separator}${icu4j.localespi.dir}/${jar.dir}${path.separator}${icu4j.collate.dir}/${jar.dir}${path.separator}${icu4j.currdata.dir}/${jar.dir}${path.separator}${icu4j.langdata.dir}/${jar.dir}${path.separator}${icu4j.regiondata.dir}/${jar.dir}${path.separator}${java.ext.dirs}"
@@ -682,8 +698,22 @@
         </icu-junit>
     </target>
 
+    <target name="_localespiCheckJava9Plus" if="is.java9.plus">
+        <icu-junit test-name="localespi"
+            classpath="junit.icu.localespi-tests.java9.jars"
+            jvm-options="-Djava.locale.providers=CLDR,COMPAT,SPI"
+            failure-status="icu-junit-failure">
+            <junit-fileset>
+                <fileset dir="${icu4j.localespi-tests.dir}/${bin.dir}">
+                    <patternset refid="localespiCheck-patternset"/>
+                </fileset>
+            </junit-fileset>
+        </icu-junit>
+    </target>
+
     <target name="localespiCheck" depends="info, localespi, localespi-tests" description="Run the ICU4J Locale SPI test suite">
         <antcall target="_localespiCheck"/>
+        <antcall target="_localespiCheckJava9Plus"/>
         <fail message="test failed" if="icu-junit-failure" />
     </target>
 

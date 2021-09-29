@@ -70,24 +70,24 @@ SimpleFwdCharIterator::~SimpleFwdCharIterator() {
 }
 
 #if 0 // not used
-UBool SimpleFwdCharIterator::operator==(const ForwardCharacterIterator& that) const {
+bool SimpleFwdCharIterator::operator==(const ForwardCharacterIterator& that) const {
     if(this == &that) {
-        return TRUE;
+        return true;
     }
 /*
     if(that->fHashCode != kInvalidHashCode && this->fHashCode = that->fHashCode) {
-        return TRUE;
+        return true;
     }
 
     if(this->fStart == that->fStart) {
-        return TRUE;
+        return true;
     }
 
     if(this->fLen == that->fLen && uprv_memcmp(this->fStart, that->fStart, this->fLen) {
-        return TRUE;
+        return true;
     }
 */
-    return FALSE;
+    return false;
 }
 #endif
 

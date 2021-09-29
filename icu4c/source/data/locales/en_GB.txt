@@ -120,20 +120,6 @@ en_GB{
             }
             monthNames{
                 format{
-                    abbreviated{
-                        "Jan",
-                        "Feb",
-                        "Mar",
-                        "Apr",
-                        "May",
-                        "Jun",
-                        "Jul",
-                        "Aug",
-                        "Sept",
-                        "Oct",
-                        "Nov",
-                        "Dec",
-                    }
                     narrow{
                         "J",
                         "F",

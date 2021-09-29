@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.ibm.icu.impl.CaseMapImpl;
+import com.ibm.icu.impl.EmojiProps;
 import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.Trie2;
 import com.ibm.icu.impl.UBiDiProps;
@@ -160,6 +161,28 @@ import com.ibm.icu.util.VersionInfo;
 
 public final class UCharacter implements ECharacterCategory, ECharacterDirection
 {
+    /**
+     * Lead surrogate bitmask
+     */
+    private static final int LEAD_SURROGATE_BITMASK = 0xFFFFFC00;
+
+    /**
+     * Trail surrogate bitmask
+     */
+    private static final int TRAIL_SURROGATE_BITMASK = 0xFFFFFC00;
+
+    /**
+     * Lead surrogate bits
+     */
+    private static final int LEAD_SURROGATE_BITS = 0xD800;
+
+    /**
+     * Trail surrogate bits
+     */
+    private static final int TRAIL_SURROGATE_BITS = 0xDC00;
+
+    private static final int U16_SURROGATE_OFFSET = ((0xd800 << 10) + 0xdc00 - 0x10000);
+
     // public inner classes ----------------------------------------------
 
     /**
@@ -5267,19 +5290,21 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /**
      * {@icu} Returns a code point corresponding to the two surrogate code units.
      *
-     * @param lead the lead char
-     * @param trail the trail char
-     * @return code point if surrogate characters are valid.
+     * @param lead the lead unit
+     *        (In ICU 2.1-69 the type of both parameters was <code>char</code>.)
+     * @param trail the trail unit
+     * @return code point if lead and trail form a valid surrogate pair.
      * @exception IllegalArgumentException thrown when the code units do
-     *            not form a valid code point
-     * @stable ICU 2.1
+     *            not form a valid surrogate pair
+     * @stable ICU 70
+     * @see #toCodePoint(int, int)
      */
-    public static int getCodePoint(char lead, char trail)
+    public static int getCodePoint(int lead, int trail)
     {
-        if (Character.isSurrogatePair(lead, trail)) {
-            return Character.toCodePoint(lead, trail);
+        if (isHighSurrogate(lead) && isLowSurrogate(trail)) {
+            return toCodePoint(lead, trail);
         }
-        throw new IllegalArgumentException("Illegal surrogate characters");
+        throw new IllegalArgumentException("Not a valid surrogate pair");
     }
 
     /**
@@ -5898,6 +5923,43 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
+     * {@icu} Returns true if the property is true for the string.
+     * Same as {@link #hasBinaryProperty(int, int)}
+     * if the string contains exactly one code point.
+     *
+     * <p>Most properties apply only to single code points.
+     * <a href="https://www.unicode.org/reports/tr51/#Emoji_Sets">UTS #51 Unicode Emoji</a>
+     * defines several properties of strings.
+     *
+     * @param s String to test.
+     * @param property UProperty selector constant, identifies which binary property to check.
+     *        Must be BINARY_START&lt;=which&lt;BINARY_LIMIT.
+     * @return true or false according to the binary Unicode property value for the string.
+     *         Also false if <code>property</code> is out of bounds or if the Unicode version
+     *         does not have data for the property at all.
+     *
+     * @see com.ibm.icu.lang.UProperty
+     * @see CharacterProperties#getBinaryPropertySet(int)
+     * @draft ICU 70
+     */
+    public static boolean hasBinaryProperty(CharSequence s, int property) {
+        int length = s.length();
+        if (length == 1) {
+            return hasBinaryProperty(s.charAt(0), property);  // single code point
+        } else if (length == 2) {
+            // first code point
+            int c = Character.codePointAt(s, 0);
+            if (Character.charCount(c) == length) {
+                return hasBinaryProperty(c, property);  // single code point
+            }
+        }
+        // Only call into EmojiProps for a relevant property,
+        // so that we not unnecessarily try to load its data file.
+        return UProperty.BASIC_EMOJI <= property && property <= UProperty.RGI_EMOJI &&
+            EmojiProps.INSTANCE.hasBinaryProperty(s, property);
+    }
+
+    /**
      * {@icu} <p>Check if a code point has the Alphabetic Unicode property.
      * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.ALPHABETIC).
      * <p>Different from UCharacter.isLetter(ch)!
@@ -6182,37 +6244,43 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * Same as {@link Character#isHighSurrogate}.
+     * Same as {@link Character#isHighSurrogate},
+     * except that the ICU version accepts <code>int</code> for code points.
      *
-     * @param ch the char to check
-     * @return true if ch is a high (lead) surrogate
-     * @stable ICU 3.0
+     * @param codePoint the code point to check
+     *        (In ICU 3.0-69 the type of this parameter was <code>char</code>.)
+     * @return true if codePoint is a high (lead) surrogate
+     * @stable ICU 70
      */
-    public static boolean isHighSurrogate(char ch) {
-        return Character.isHighSurrogate(ch);
+    public static boolean isHighSurrogate(int codePoint) {
+        return (codePoint & LEAD_SURROGATE_BITMASK) == LEAD_SURROGATE_BITS;
     }
 
     /**
-     * Same as {@link Character#isLowSurrogate}.
+     * Same as {@link Character#isLowSurrogate},
+     * except that the ICU version accepts <code>int</code> for code points.
      *
-     * @param ch the char to check
-     * @return true if ch is a low (trail) surrogate
-     * @stable ICU 3.0
+     * @param codePoint the code point to check
+     *        (In ICU 3.0-69 the type of this parameter was <code>char</code>.)
+     * @return true if codePoint is a low (trail) surrogate
+     * @stable ICU 70
      */
-    public static boolean isLowSurrogate(char ch) {
-        return Character.isLowSurrogate(ch);
+    public static boolean isLowSurrogate(int codePoint) {
+        return (codePoint & TRAIL_SURROGATE_BITMASK) == TRAIL_SURROGATE_BITS;
     }
 
     /**
-     * Same as {@link Character#isSurrogatePair}.
+     * Same as {@link Character#isSurrogatePair},
+     * except that the ICU version accepts <code>int</code> for code points.
      *
-     * @param high the high (lead) char
-     * @param low the low (trail) char
+     * @param high the high (lead) unit
+     *        (In ICU 3.0-69 the type of both parameters was <code>char</code>.)
+     * @param low the low (trail) unit
      * @return true if high, low form a surrogate pair
-     * @stable ICU 3.0
+     * @stable ICU 70
      */
-    public static final boolean isSurrogatePair(char high, char low) {
-        return Character.isSurrogatePair(high, low);
+    public static final boolean isSurrogatePair(int high, int low) {
+        return isHighSurrogate(high) && isLowSurrogate(low);
     }
 
     /**
@@ -6229,17 +6297,21 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * Same as {@link Character#toCodePoint}.
+     * Same as {@link Character#toCodePoint},
+     * except that the ICU version accepts <code>int</code> for code points.
      * Returns the code point represented by the two surrogate code units.
      * This does not check the surrogate pair for validity.
      *
      * @param high the high (lead) surrogate
+     *        (In ICU 3.0-69 the type of both parameters was <code>char</code>.)
      * @param low the low (trail) surrogate
      * @return the code point formed by the surrogate pair
-     * @stable ICU 3.0
+     * @stable ICU 70
+     * @see #getCodePoint(int, int)
      */
-    public static final int toCodePoint(char high, char low) {
-        return Character.toCodePoint(high, low);
+    public static final int toCodePoint(int high, int low) {
+        // see ICU4C U16_GET_SUPPLEMENTARY()
+        return (high << 10) + low - U16_SURROGATE_OFFSET;
     }
 
     /**

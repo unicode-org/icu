@@ -22,7 +22,7 @@
 
 class IntlTestSpoof: public IntlTest {
 public:
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
     
     // Test the USpoofDetector API functions that require C++
     // The pure C part of the API, which is most of it, is tested in cintltst

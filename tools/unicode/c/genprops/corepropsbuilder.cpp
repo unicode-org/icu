@@ -47,7 +47,7 @@ the udata API for loading ICU data. Especially, a UDataInfo structure
 precedes the actual data. It contains platform properties values and the
 file format version.
 
-The following is a description of format version 7.7 .
+The following is a description of format version 7.8 .
 
 Data contents:
 
@@ -286,6 +286,11 @@ ICU 64 adds fraction-32 numeric values for new Unicode 12 Tamil fraction charact
 ICU 66 adds two bits for the UScriptCode or Script_Extensions index in vector word 0.
 The value is split across bits 21..20 & 7..0.
 
+--- Changes in format version 7.8 ---
+
+ICU 70 moves the emoji properties from uprops.icu to (new) uemoji.icu.
+The 6 bits in vector word 2 that stored emoji properties are unused again.
+
 ----------------------------------------------------------------------------- */
 
 U_NAMESPACE_USE
@@ -301,8 +306,8 @@ static UDataInfo dataInfo={
     0,
 
     { 0x55, 0x50, 0x72, 0x6f },                 /* dataFormat="UPro" */
-    { 7, 7, 0, 0 },                             /* formatVersion */
-    { 10, 0, 0, 0 }                             /* dataVersion */
+    { 7, 8, 0, 0 },                             /* formatVersion */
+    { 14, 0, 0, 0 }                             /* dataVersion */
 };
 
 inline uint32_t splitScriptCodeOrIndex(uint32_t v) {
@@ -625,13 +630,7 @@ propToBinaries[]={
     { UCHAR_ID_CONTINUE,                    1, UPROPS_ID_CONTINUE },
     { UCHAR_GRAPHEME_BASE,                  1, UPROPS_GRAPHEME_BASE },
 
-    { UCHAR_EMOJI,                          2, UPROPS_2_EMOJI },
-    { UCHAR_EMOJI_PRESENTATION,             2, UPROPS_2_EMOJI_PRESENTATION },
-    { UCHAR_EMOJI_MODIFIER,                 2, UPROPS_2_EMOJI_MODIFIER },
-    { UCHAR_EMOJI_MODIFIER_BASE,            2, UPROPS_2_EMOJI_MODIFIER_BASE },
-    { UCHAR_EMOJI_COMPONENT,                2, UPROPS_2_EMOJI_COMPONENT },
     { UCHAR_PREPENDED_CONCATENATION_MARK,   1, UPROPS_PREPENDED_CONCATENATION_MARK },
-    { UCHAR_EXTENDED_PICTOGRAPHIC,          2, UPROPS_2_EXTENDED_PICTOGRAPHIC },
 };
 
 struct PropToEnum {

@@ -67,9 +67,42 @@ public class MeasureUnitImpl {
         MeasureUnitImpl result = new MeasureUnitImpl();
         result.complexity = this.complexity;
         result.identifier = this.identifier;
-        for (SingleUnitImpl single : this.singleUnits) {
-            result.singleUnits.add(single.copy());
+        for (SingleUnitImpl singleUnit : this.singleUnits) {
+            result.singleUnits.add(singleUnit.copy());
         }
+        return result;
+    }
+
+    /**
+     * Returns a simplified version of the unit.
+     * NOTE: the simplification happen when there are two units equals in their base unit and their
+     * prefixes.
+     *
+     * Example 1: "square-meter-per-meter" --> "meter"
+     * Example 2: "square-millimeter-per-meter" --> "square-millimeter-per-meter"
+     */
+    public MeasureUnitImpl copyAndSimplify() {
+        MeasureUnitImpl result = new MeasureUnitImpl();
+        for (SingleUnitImpl singleUnit : this.getSingleUnits()) {
+            // This `for` loop will cause time complexity to be O(n^2).
+            // However, n is very small (number of units, generally, at maximum equal to 10)
+            boolean unitExist = false;
+            for (SingleUnitImpl resultSingleUnit : result.getSingleUnits()) {
+                if(resultSingleUnit.getSimpleUnitID().compareTo(singleUnit.getSimpleUnitID()) == 0
+                &&
+                        resultSingleUnit.getPrefix().getIdentifier().compareTo(singleUnit.getPrefix().getIdentifier()) == 0
+                ) {
+                    unitExist = true;
+                    resultSingleUnit.setDimensionality(resultSingleUnit.getDimensionality() + singleUnit.getDimensionality());
+                    break;
+                }
+            }
+
+            if(!unitExist) {
+                result.appendSingleUnit(singleUnit);
+            }
+        }
+
         return result;
     }
 

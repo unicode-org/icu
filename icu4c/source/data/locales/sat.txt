@@ -287,7 +287,13 @@ sat{
             dn{"ᱯᱮᱪᱟᱸᱫᱚ"}
         }
         second{
-            dn{"ᱴᱤᱡ"}
+            dn{"ᱴᱤᱨᱤᱡ"}
+        }
+        second-narrow{
+            dn{"ᱴᱤᱨᱤᱡ"}
+        }
+        second-short{
+            dn{"ᱴᱤᱨᱤᱡ"}
         }
         week{
             dn{"ᱦᱟᱯᱛᱟ/ᱮᱢᱦᱟ"}
@@ -303,6 +309,9 @@ sat{
         }
         year{
             dn{"ᱥᱮᱨᱢᱟ/ᱵᱚᱪᱷᱚᱞᱨ"}
+        }
+        year-short{
+            dn{"ᱥᱮᱨᱢᱟ"}
         }
         zone{
             dn{"ᱴᱚᱴᱷᱟ"}

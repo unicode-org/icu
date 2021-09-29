@@ -544,7 +544,7 @@ public class TestCharset extends TestFmwk {
             bytes[x + 1] = (byte) (0x80 | ((i >> 6) & 0x3f));
             bytes[x + 2] = (byte) (0x80 | ((i >> 0) & 0x3f));
             chars[y] = (char) i;
-            if (!UTF16.isSurrogate((char)i)) {
+            if (!UTF16.isSurrogate(i)) {
                 bs = ByteBuffer.wrap(bytes, x, 3).slice();
                 us = CharBuffer.wrap(chars, y, 1).slice();
                 try {

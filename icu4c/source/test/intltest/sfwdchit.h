@@ -23,19 +23,19 @@ public:
    * Returns true when both iterators refer to the same
    * character in the same character-storage object.  
    */
-  // not used -- virtual UBool operator==(const ForwardCharacterIterator& that) const;
+  // not used -- virtual bool operator==(const ForwardCharacterIterator& that) const;
         
   /**
    * Generates a hash code for this iterator.  
    */
-  virtual int32_t hashCode(void) const;
+  virtual int32_t hashCode(void) const override;
         
   /**
    * Returns a UClassID for this ForwardCharacterIterator ("poor man's
    * RTTI").<P> Despite the fact that this function is public,
    * DO NOT CONSIDER IT PART OF CHARACTERITERATOR'S API!  
    */
-  virtual UClassID getDynamicClassID(void) const;
+  virtual UClassID getDynamicClassID(void) const override;
 
   /**
    * Gets the current code unit for returning and advances to the next code unit
@@ -43,7 +43,7 @@ public:
    * (toward endIndex()).  If there are
    * no more code units to return, returns DONE.
    */
-  virtual UChar         nextPostInc(void);
+  virtual UChar         nextPostInc(void) override;
         
   /**
    * Gets the current code point for returning and advances to the next code point
@@ -51,7 +51,7 @@ public:
    * (toward endIndex()).  If there are
    * no more code points to return, returns DONE.
    */
-  virtual UChar32       next32PostInc(void);
+  virtual UChar32       next32PostInc(void) override;
         
   /**
    * Returns FALSE if there are no more code units or code points
@@ -59,7 +59,7 @@ public:
    * This is used with nextPostInc() or next32PostInc() in forward
    * iteration.
    */
-  virtual UBool        hasNext();
+  virtual UBool        hasNext() override;
 
 protected:
     SimpleFwdCharIterator() {}

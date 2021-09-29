@@ -417,11 +417,11 @@ class TransliteratorRegistry : public UMemory {
     public:
         Enumeration(const TransliteratorRegistry& reg);
         virtual ~Enumeration();
-        virtual int32_t count(UErrorCode& status) const;
-        virtual const UnicodeString* snext(UErrorCode& status);
-        virtual void reset(UErrorCode& status);
+        virtual int32_t count(UErrorCode& status) const override;
+        virtual const UnicodeString* snext(UErrorCode& status) override;
+        virtual void reset(UErrorCode& status) override;
         static UClassID U_EXPORT2 getStaticClassID();
-        virtual UClassID getDynamicClassID() const;
+        virtual UClassID getDynamicClassID() const override;
     private:
         int32_t index;
         const TransliteratorRegistry& reg;

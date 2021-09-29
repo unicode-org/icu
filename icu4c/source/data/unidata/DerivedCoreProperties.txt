@@ -1,5 +1,5 @@
 # DerivedCoreProperties-14.0.0.txt
-# Date: 2021-06-08, 00:30:52 GMT
+# Date: 2021-08-12, 23:12:53 GMT
 # © 2021 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
@@ -2028,6 +2028,10 @@ FF41..FF5A    ; Lowercase
 105A3..105B1  ; Lowercase
 105B3..105B9  ; Lowercase
 105BB..105BC  ; Lowercase
+10780         ; Lowercase
+10783..10785  ; Lowercase
+10787..107B0  ; Lowercase
+107B2..107BA  ; Lowercase
 10CC0..10CF2  ; Lowercase
 118C0..118DF  ; Lowercase
 16E60..16E7F  ; Lowercase
@@ -2063,7 +2067,7 @@ FF41..FF5A    ; Lowercase
 1DF0B..1DF1E  ; Lowercase
 1E922..1E943  ; Lowercase
 
-# Total code points: 2416
+# Total code points: 2471
 
 # ================================================
 
@@ -2855,6 +2859,10 @@ FF41..FF5A    ; Cased
 105A3..105B1  ; Cased
 105B3..105B9  ; Cased
 105BB..105BC  ; Cased
+10780         ; Cased
+10783..10785  ; Cased
+10787..107B0  ; Cased
+107B2..107BA  ; Cased
 10C80..10CB2  ; Cased
 10CC0..10CF2  ; Cased
 118A0..118DF  ; Cased
@@ -2896,7 +2904,7 @@ FF41..FF5A    ; Cased
 1F150..1F169  ; Cased
 1F170..1F189  ; Cased
 
-# Total code points: 4398
+# Total code points: 4453
 
 # ================================================
 

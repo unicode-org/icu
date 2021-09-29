@@ -258,7 +258,7 @@ remove the dependencies on the standard C++ library. In
 remove C++ library dependencies. Visual Studio has the
 [/MT option](http://msdn.microsoft.com/en-us/library/2kzt1wy3(v=VS.100).aspx),
 and other compilers may have similar options. See the
-[How To Use ICU](../howtouseicu.md) page for related information on this topic.
+[How To Use ICU](../icu/howtouseicu.md) page for related information on this topic.
 
 ## Features of ICU
 

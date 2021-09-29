@@ -4,6 +4,7 @@
 package com.ibm.icu.lang;
 
 import com.ibm.icu.impl.CharacterPropertiesImpl;
+import com.ibm.icu.impl.EmojiProps;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.CodePointMap;
 import com.ibm.icu.util.CodePointTrie;
@@ -29,6 +30,15 @@ public final class CharacterProperties {
 
     private static UnicodeSet makeSet(int property) {
         UnicodeSet set = new UnicodeSet();
+        if (UProperty.BASIC_EMOJI <= property && property <= UProperty.RGI_EMOJI) {
+            // property of strings
+            EmojiProps.INSTANCE.addStrings(property, set);
+            if (property != UProperty.BASIC_EMOJI && property != UProperty.RGI_EMOJI) {
+                // property of _only_ strings
+                return set.freeze();
+            }
+        }
+
         UnicodeSet inclusions = CharacterPropertiesImpl.getInclusionsForProperty(property);
         int numRanges = inclusions.getRangeCount();
         int startHasProperty = -1;

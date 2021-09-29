@@ -1364,7 +1364,7 @@ class CharsetISCII extends CharsetICU {
                     if (cr.isOverflow()) {
                         break;
                     }
-                } else if (UTF16.isSurrogate((char)sourceChar)) {
+                } else if (UTF16.isSurrogate(sourceChar)) {
                     cr = handleSurrogates(source, (char) sourceChar);
                     return (cr != null) ? cr : CoderResult.unmappableForLength(2);
                 } else {
