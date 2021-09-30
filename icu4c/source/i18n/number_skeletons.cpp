@@ -1344,7 +1344,7 @@ bool blueprint_helpers::parseFracSigOption(const StringSegment& segment, MacroPr
         // @, @@, @@@
         maxSig = minSig;
     }
-    UNumberRoundingPriority priority;
+    UNumberRoundingPriority priority = UNUM_ROUNDING_PRIORITY_RELAXED;
     if (offset < segment.length()) {
         if (maxSig == -1) {
             // The wildcard character is not allowed with the priority annotation
