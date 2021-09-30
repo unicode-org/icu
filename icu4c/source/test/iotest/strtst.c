@@ -315,9 +315,10 @@ static void TestLocalizedString(void) {
 #if !UCONFIG_NO_FORMATTING
 #define Test_u_snprintf(limit, format, value, expectedSize, expectedStr) UPRV_BLOCK_MACRO_BEGIN { \
     u_uastrncpy(testStr, "xxxxxxxxxxxxxx", UPRV_LENGTHOF(testStr));\
-    size = u_snprintf(testStr, limit, format, value);\
+    size = u_snprintf(0, 0, format, value);\
+    written = u_snprintf(testStr, limit, format, value);\
     u_austrncpy(cTestResult, testStr, UPRV_LENGTHOF(cTestResult));\
-    if (size != expectedSize || strcmp(cTestResult, expectedStr) != 0) {\
+    if (size != written || size != expectedSize || strcmp(cTestResult, expectedStr) != 0) {\
         log_err("Unexpected formatting. size=%d expectedSize=%d cTestResult=%s expectedStr=%s\n",\
             size, expectedSize, cTestResult, expectedStr);\
     }\
@@ -332,7 +333,7 @@ static void TestSnprintf(void) {
 #if !UCONFIG_NO_FORMATTING
     UChar testStr[256];
     char cTestResult[256];
-    int32_t size;
+    int32_t size, written;
 
     Test_u_snprintf(0, "%d", 123, 3, "xxxxxxxxxxxxxx");
     Test_u_snprintf(2, "%d", 123, 3, "12xxxxxxxxxxxx");
