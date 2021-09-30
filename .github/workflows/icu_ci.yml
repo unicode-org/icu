@@ -399,9 +399,44 @@ jobs:
       - uses: actions/checkout@v2
       - run: python3 tools/scripts/uconfig_vars_test.py -u
 
-# Run header tests with UCONFIG_NO_XXX variations.
+  # Run header tests with UCONFIG_NO_XXX variations.
   uconfig_variation-check-all-header-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: python3 tools/scripts/uconfig_vars_test.py -p
+
+  # Build Unicode update tools
+  unicode-update-tools:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: bazelbuild/setup-bazelisk@v1
+    - name: Mount bazel cache
+      uses: actions/cache@v2
+      with:
+        path: "~/.cache/bazel"
+        key: bazel
+
+    - name: Generate the data
+      run: |
+        export ICU_SRC=`pwd`;
+        icu4c/source/data/unidata/generate.sh;
+        if $?
+        then
+          echo
+          echo Build of Unicode update tools failed.
+          echo See
+          echo https://unicode-org.github.io/icu/processes/unicode-update#bazel-build-process
+          echo for how to reproduce and debug the failure
+          exit 1
+        fi
+
+        git diff --exit-code;
+        if $?
+        then
+          echo
+          echo ICU unicode data has changed!
+          echo Did you forget to include the changed data files in this PR?
+          exit 1
+        fi
