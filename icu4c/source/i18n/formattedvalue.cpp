@@ -193,6 +193,9 @@ ucfpos_close(UConstrainedFieldPosition* ptr) {
 }
 
 
+#if defined(__clang__) || U_GCC_MAJOR_MINOR >= 1100
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wreturn-local-addr"
 U_CAPI const UChar* U_EXPORT2
 ufmtval_getString(
         const UFormattedValue* ufmtval,
@@ -211,6 +214,8 @@ ufmtval_getString(
     }
     return readOnlyAlias.getBuffer();
 }
+#pragma GCC diagnostic pop
+#endif
 
 
 U_CAPI UBool U_EXPORT2
