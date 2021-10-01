@@ -1414,6 +1414,7 @@ U_CAPI decNumber * U_EXPORT2 uprv_decNumberLogB(decNumber *res, const decNumber 
 #if defined(__clang__) || U_GCC_MAJOR_MINOR >= 406
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Warray-bounds"
+#pragma GCC diagnostic ignored "-Wstringop-overflow"
 #endif
 U_CAPI decNumber * U_EXPORT2 uprv_decNumberLog10(decNumber *res, const decNumber *rhs,
                           decContext *set) {
@@ -2829,6 +2830,7 @@ U_CAPI decNumber * U_EXPORT2 uprv_decNumberShift(decNumber *res, const decNumber
 #if defined(__clang__) || U_GCC_MAJOR_MINOR >= 406
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Warray-bounds"
+#pragma GCC diagnostic ignored "-Wstringop-overflow"
 #endif
 U_CAPI decNumber * U_EXPORT2 uprv_decNumberSquareRoot(decNumber *res, const decNumber *rhs,
                                 decContext *set) {
@@ -5626,6 +5628,7 @@ static const uShort LNnn[90]={9016,  8652,  8316,  8008,  7724,  7456,  7208,
 #if defined(__clang__) || U_GCC_MAJOR_MINOR >= 406
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Warray-bounds"
+#pragma GCC diagnostic ignored "-Wstringop-overflow"
 #endif
 decNumber * decLnOp(decNumber *res, const decNumber *rhs,
                     decContext *set, uInt *status) {
