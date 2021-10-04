@@ -382,10 +382,12 @@ struct CReg : public icu::UMemory {
         if (len > (int32_t)(sizeof(id)-1)) {
             len = (sizeof(id)-1);
         }
+#if defined(__clang__) || U_GCC_MAJOR_MINOR >= 1100
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstringop-truncation"
         uprv_strncpy(id, _id, len);
 #pragma GCC diagnostic pop
+#endif
         id[len] = 0;
         u_memcpy(iso, _iso, ISO_CURRENCY_CODE_LENGTH);
         iso[ISO_CURRENCY_CODE_LENGTH] = 0;

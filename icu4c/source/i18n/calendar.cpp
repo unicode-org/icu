@@ -841,10 +841,12 @@ Calendar::operator=(const Calendar &right)
         fWeekendCeaseMillis      = right.fWeekendCeaseMillis;
         fNextStamp               = right.fNextStamp;
         uprv_strncpy(validLocale, right.validLocale, sizeof(validLocale));
+#if defined(__clang__) || U_GCC_MAJOR_MINOR >= 1100
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstringop-truncation"
         uprv_strncpy(actualLocale, right.actualLocale, sizeof(actualLocale));
 #pragma GCC diagnostic pop
+#endif
         validLocale[sizeof(validLocale)-1] = 0;
         actualLocale[sizeof(validLocale)-1] = 0;
     }

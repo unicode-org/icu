@@ -180,10 +180,12 @@ static TestNode *createTestNode(const char* name, int32_t nameLen)
     newNode->sibling = NULL;
     newNode->child = NULL;
 
+#if defined(__clang__) || U_GCC_MAJOR_MINOR >= 1100
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstringop-truncation"
     strncpy( newNode->name, name, nameLen );
 #pragma GCC diagnostic pop
+#endif
     newNode->name[nameLen] = 0;
 
     return  newNode;
