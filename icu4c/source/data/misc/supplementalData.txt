@@ -17555,7 +17555,7 @@ supplementalData:table(nofallback){
             matchVariable{
                 americas{"019"}
                 cnsar{"HK+MO"}
-                enUS{"AS+GU+MH+MP+PR+UM+US+VI"}
+                enUS{"AS+CA+GU+MH+MP+PH+PR+UM+US+VI"}
                 maghreb{"MA+DZ+TN+LY+MR+EH"}
             }
             paradigmLocales{
