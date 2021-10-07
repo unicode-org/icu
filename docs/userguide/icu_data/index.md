@@ -38,7 +38,7 @@ the rest of ICU. No specific action or setup is required of either the
 application program or the execution environment.
 
 Update: as of ICU 64, the standard data library is over 20 MB in size. We have
-introduced a new tool, the [ICU Data Build Tool](./icu_data/buildtool.md),
+introduced a new tool, the [ICU Data Build Tool](./buildtool.md),
 to give you more control over what goes into your ICU locale data file.
 
 > :point_right: **Note**: ICU for C by default comes with pre-built data.
