@@ -2095,7 +2095,10 @@ UnicodeString& UnicodeSet::_generatePattern(UnicodeString& result,
     //             getRangeEnd(last) == MAX_VALUE)
     // Invariant: list[len-1] == HIGH == MAX_VALUE + 1
     // If limit == len then len is even and the last range ends with MAX_VALUE.
-    if (len >= 4 && list[0] == 0 && limit == len) {
+    //
+    // *But* do not write the inverse (complement) if there are strings.
+    // Since ICU 70, the '^' performs a code point complement which removes all strings.
+    if (len >= 4 && list[0] == 0 && limit == len && !hasStrings()) {
         // Emit the inverse
         result.append(u'^');
         // Offsetting the inversion list index by one lets us
