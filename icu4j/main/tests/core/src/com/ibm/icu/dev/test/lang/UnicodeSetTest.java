@@ -2971,6 +2971,23 @@ public class UnicodeSetTest extends TestFmwk {
                     notBasic.contains("🚲"));
         }
 
+        // When there are strings, we must not use the complement for a more compact toPattern().
+        {
+            UnicodeSet set = new UnicodeSet();
+            set.add(0,  'Y').add('b', 'q').add('x', 0x10ffff);
+            String pattern = set.toPattern(true);
+            UnicodeSet set2 = new UnicodeSet(pattern);
+            checkEqual(set, set2, "set(with 0 & max, only code points) pattern round-trip");
+            assertEquals("set(with 0 & max, only code points).toPattern()", "[^Z-ar-w]", pattern);
+
+            set.add("ch").add("ss");
+            pattern = set.toPattern(true);
+            set2 = new UnicodeSet(pattern);
+            checkEqual(set, set2, "set(with 0 & max, with strings) pattern round-trip");
+            assertEquals("set(with 0 & max, with strings).toPattern()",
+                    "[\\u0000-Yb-qx-\\U0010FFFF{ch}{ss}]", pattern);
+        }
+
         // The complement() API behavior does not change under this ticket.
         {
             UnicodeSet notBasic = new UnicodeSet("[:Basic_Emoji:]").complement();

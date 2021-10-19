@@ -4147,6 +4147,24 @@ void UnicodeSetTest::TestPatternCodePointComplement() {
                 notBasic.contains(U'🚲'));
     }
 
+    // When there are strings, we must not use the complement for a more compact toPattern().
+    {
+        UnicodeSet set;
+        set.add(0,  u'Y').add(u'b', u'q').add(u'x', 0x10ffff);
+        UnicodeString pattern;
+        set.toPattern(pattern, true);
+        UnicodeSet set2(pattern, errorCode);
+        checkEqual(set, set2, "set(with 0 & max, only code points) pattern round-trip");
+        assertEquals("set(with 0 & max, only code points).toPattern()", u"[^Z-ar-w]", pattern);
+
+        set.add("ch").add("ss");
+        set.toPattern(pattern, true);
+        set2 = UnicodeSet(pattern, errorCode);
+        checkEqual(set, set2, "set(with 0 & max, with strings) pattern round-trip");
+        assertEquals("set(with 0 & max, with strings).toPattern()",
+                u"[\\u0000-Yb-qx-\\U0010FFFF{ch}{ss}]", pattern);
+    }
+
     // The complement() API behavior does not change under this ticket.
     {
         UnicodeSet notBasic(u"[:Basic_Emoji:]", errorCode);
