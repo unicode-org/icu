@@ -156,7 +156,7 @@ void Win32DateTimeTest::testLocales(DateFormatTest *log)
         wdLength = GetDateFormatW(lcidRecords[i].lcid, DATE_LONGDATE, &winNow, NULL, wdBuffer, UPRV_LENGTHOF(wdBuffer));
         wtLength = GetTimeFormatW(lcidRecords[i].lcid, 0, &winNow, NULL, wtBuffer, UPRV_LENGTHOF(wtBuffer));
 
-        if (uprv_strchr(localeID, '@') > 0) {
+        if (uprv_strchr(localeID, '@')) {
             uprv_strcat(localeID, ";");
         } else {
             uprv_strcat(localeID, "@");
