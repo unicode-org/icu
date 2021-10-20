@@ -39,8 +39,9 @@ struct UFormattedNumberRange;
  * returns the keyword for the first condition that matches the number.
  * If none match, the default rule(other) is returned.
  *
- * For more information, see the LDML spec, C.11 Language Plural Rules:
- * http://www.unicode.org/reports/tr35/#Language_Plural_Rules
+ * For more information, see the
+ * LDML spec, Part 3.5 Language Plural Rules:
+ * https://www.unicode.org/reports/tr35/tr35-numbers.html#Language_Plural_Rules
  *
  * Keywords: ICU locale data has 6 predefined values -
  * 'zero', 'one', 'two', 'few', 'many' and 'other'. Callers need to check
@@ -48,7 +49,7 @@ struct UFormattedNumberRange;
  *
  * These are based on CLDR <i>Language Plural Rules</i>. For these
  * predefined rules, see the CLDR page at
- * http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
+ * https://unicode-org.github.io/cldr-staging/charts/latest/supplemental/language_plural_rules.html
  */
 
 /**

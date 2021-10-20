@@ -71,8 +71,8 @@ class UFormattedNumberRangeData;
  * default rule(other) is returned.
  *
  * For more information, details, and tips for writing rules, see the
- * LDML spec, C.11 Language Plural Rules:
- * http://www.unicode.org/draft/reports/tr35/tr35.html#Language_Plural_Rules
+ * LDML spec, Part 3.5 Language Plural Rules:
+ * https://www.unicode.org/reports/tr35/tr35-numbers.html#Language_Plural_Rules
  *
  * Examples:<pre>
  *   "one: n is 1; few: n in 2..4"</pre>
@@ -200,7 +200,7 @@ class UFormattedNumberRangeData;
  *  <p>
  *   ICU defines plural rules for many locales based on CLDR <i>Language Plural Rules</i>.
  *   For these predefined rules, see CLDR page at
- *    http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
+ *   https://unicode-org.github.io/cldr-staging/charts/latest/supplemental/language_plural_rules.html
  * </p>
  */
 class U_I18N_API PluralRules : public UObject {
