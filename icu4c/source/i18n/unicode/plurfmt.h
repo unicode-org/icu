@@ -70,7 +70,7 @@ class NFRule;
  *     use the predefined keywords. The whole plural formatting of messages can
  *     be done using localized patterns from resource bundles. For predefined plural
  *     rules, see the CLDR <i>Language Plural Rules</i> page at
- *    http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
+ *     https://unicode-org.github.io/cldr-staging/charts/latest/supplemental/language_plural_rules.html
  * </ul>
  * </p>
  * <h4>Usage of <code>PluralFormat</code></h4>

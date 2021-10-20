@@ -53,8 +53,8 @@ import com.ibm.icu.util.ULocale;
  * </p>
  * <p>
  * For more information, details, and tips for writing rules, see the <a
- * href="http://www.unicode.org/draft/reports/tr35/tr35.html#Language_Plural_Rules">LDML spec, C.11 Language Plural
- * Rules</a>
+ * href="https://www.unicode.org/reports/tr35/tr35-numbers.html#Language_Plural_Rules">LDML spec,
+ * Part 3.5 Language Plural Rules</a>
  * </p>
  * <p>
  * Examples:
@@ -208,7 +208,8 @@ public class PluralRules implements Serializable {
          *
          * <p>
          * ICU defines plural rules for many locales based on CLDR <i>Language Plural Rules</i>. For these predefined
-         * rules, see CLDR page at http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
+         * rules, see CLDR page at
+         * https://unicode-org.github.io/cldr-staging/charts/latest/supplemental/language_plural_rules.html
          *
          * @param locale
          *            The locale for which a <code>PluralRules</code> object is returned.
@@ -2059,7 +2060,7 @@ public class PluralRules implements Serializable {
      *
      * <p>ICU defines plural rules for many locales based on CLDR <i>Language Plural Rules</i>.
      * For these predefined rules, see CLDR page at
-     * http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
+     * https://unicode-org.github.io/cldr-staging/charts/latest/supplemental/language_plural_rules.html
      *
      * @param locale The locale for which a <code>PluralRules</code> object is
      *   returned.
@@ -2081,7 +2082,7 @@ public class PluralRules implements Serializable {
      *
      * <p>ICU defines plural rules for many locales based on CLDR <i>Language Plural Rules</i>.
      * For these predefined rules, see CLDR page at
-     * http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
+     * https://unicode-org.github.io/cldr-staging/charts/latest/supplemental/language_plural_rules.html
      *
      * @param locale The locale for which a <code>PluralRules</code> object is
      *   returned.
@@ -2102,7 +2103,7 @@ public class PluralRules implements Serializable {
      *
      * <p>ICU defines plural rules for many locales based on CLDR <i>Language Plural Rules</i>.
      * For these predefined rules, see CLDR page at
-     * http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
+     * https://unicode-org.github.io/cldr-staging/charts/latest/supplemental/language_plural_rules.html
      *
      * @param locale The locale for which a <code>PluralRules</code> object is
      *   returned.
@@ -2124,7 +2125,7 @@ public class PluralRules implements Serializable {
      *
      * <p>ICU defines plural rules for many locales based on CLDR <i>Language Plural Rules</i>.
      * For these predefined rules, see CLDR page at
-     * http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
+     * https://unicode-org.github.io/cldr-staging/charts/latest/supplemental/language_plural_rules.html
      *
      * @param locale The locale for which a <code>PluralRules</code> object is
      *   returned.
