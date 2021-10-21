@@ -36,7 +36,7 @@ Sample code is available in the ICU source code library at
 See also the source code for the [Unicode
 browser](https://github.com/unicode-org/icu-demos/tree/main/ubrowse) demo
 application, which can be used
-[online](http://demo.icu-project.org/icu-bin/ubrowse) to browse Unicode
+[online](https://icu4c-demos.unicode.org/icu-bin/ubrowse) to browse Unicode
 characters with their properties.
 
 ## Unicode Character Database properties in ICU APIs
@@ -250,7 +250,7 @@ tree at
 [icu4c/source/data/unidata](https://github.com/unicode-org/icu/tree/main/icu4c/source/data/unidata).
 Since ICU 49, most of the properties have been combined into one file,
 unidata/ppucd.txt (see the [Preparsed
-UCD](http://site.icu-project.org/design/props/ppucd) design doc). Some of the
+UCD](https://icu.unicode.org/design/props/ppucd) design doc). Some of the
 remaining UCD files are still inputs, others are only used for unit tests.
 
 To add a character to such a file, a line must be inserted into the file with

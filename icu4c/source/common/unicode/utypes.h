@@ -400,7 +400,7 @@ typedef double UDate;
  * suitable subclass.
  *
  * For more information, see:
- * http://icu-project.org/userguide/conventions
+ * https://unicode-org.github.io/icu/userguide/dev/codingguidelines#details-about-icu-error-codes
  *
  * Note: By convention, ICU functions that take a reference (C++) or a pointer
  * (C) to a UErrorCode first test:

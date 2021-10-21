@@ -5534,7 +5534,7 @@ void RegexTest::TestCaseInsensitiveStarters() {
     // Test that the data used by RegexCompile::findCaseInsensitiveStarters() hasn't
     //  become stale because of new Unicode characters.
     // If it is stale, rerun the generation tool
-    //    svn+ssh://source.icu-project.org/repos/icu/tools/trunk/unicode/c/genregexcasing
+    //    https://github.com/unicode-org/icu/tree/main/tools/unicode/c/genregexcasing
     // and replace the embedded data in i18n/regexcmp.cpp
 
     for (UChar32 cp=0; cp<=0x10ffff; cp++) {

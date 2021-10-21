@@ -42,7 +42,7 @@ ICU 4.4 adds the Normalizer2 API (in
 [C++](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classNormalizer2.html) and
 [C](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/unorm2_8h.html)), replacing almost all
 of the old Normalizer API. There is a [design
-doc](http://site.icu-project.org/design/normalization/custom) with many details.
+doc](https://icu.unicode.org/design/normalization/custom) with many details.
 All of the replaced old API is now implemented as a thin wrapper around the new
 API.
 

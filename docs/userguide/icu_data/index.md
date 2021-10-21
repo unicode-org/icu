@@ -43,7 +43,7 @@ to give you more control over what goes into your ICU locale data file.
 
 > :point_right: **Note**: ICU for C by default comes with pre-built data.
 > The source data files are included as an "icu\*data.zip" file starting in ICU4C 49.
-> Previously, they were not included unless ICU is downloaded from the [source repository](http://site.icu-project.org/repository).
+> Previously, they were not included unless ICU is downloaded from the [source repository](https://icu.unicode.org/repository).
 
 ## ICU and CLDR Data
 
@@ -803,7 +803,7 @@ loadable data objects.)
 #### Unicode Character Data (Properties; for Java only: hardcoded in C common library)
 *   Source format:
     [source/data/unidata/ppucd.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/unidata/ppucd.txt):
-    [Preparsed UCD](http://site.icu-project.org/design/props/ppucd)
+    [Preparsed UCD](https://icu.unicode.org/design/props/ppucd)
 *   Binary format: uprops.icu:
     [tools/unicode/c/genprops/corepropsbuilder.cpp](https://github.com/unicode-org/icu/blob/main/tools/unicode/c/genprops/corepropsbuilder.cpp)
 *   Generator tool:
@@ -857,7 +857,7 @@ loadable data objects.)
 #### Unicode Character Data (Text layout properties since ICU 64)
 *   Source format:
     [source/data/unidata/ppucd.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/unidata/ppucd.txt):
-    [Preparsed UCD](http://site.icu-project.org/design/props/ppucd)
+    [Preparsed UCD](https://icu.unicode.org/design/props/ppucd)
 *   Binary format: ulayout.icu:
     [tools/unicode/c/genprops/layoutpropsbuilder.cpp](https://github.com/unicode-org/icu/blob/main/tools/unicode/c/genprops/layoutpropsbuilder.cpp)
 *   Generator tool:
@@ -997,28 +997,28 @@ Emoji properties of strings added.
 #### UCPTrie (C)/CodePointTrie (Java) (maps code points to integers)
 *   Source format: (public builder API)
 *   Binary format:
-    [ICU Code Point Tries design doc](http://site.icu-project.org/design/struct/utrie),
+    [ICU Code Point Tries design doc](https://icu.unicode.org/design/struct/utrie),
     [icu4c/source/common/ucptrie_impl.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/ucptrie_impl.h)
 *   Generator tool: (builder class)
 
 #### UTrie2 (C)/Trie2 (Java) (maps code points to integers)
 *   Source format: (internal builder API)
 *   Binary format:
-    [ICU Code Point Tries design doc](http://site.icu-project.org/design/struct/utrie),
+    [ICU Code Point Tries design doc](https://icu.unicode.org/design/struct/utrie),
     [icu4c/source/common/utrie2_impl.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/utrie2_impl.h)
 *   Generator tool: (builder class)
 
 #### BytesTrie (maps byte sequences to 32-bit integers)
 *   Source format: (public builder API)
 *   Binary format:
-    [BytesTrie design doc](http://site.icu-project.org/design/struct/tries/bytestrie),
+    [BytesTrie design doc](https://icu.unicode.org/design/struct/tries/bytestrie),
     [icu4c/source/common/unicode/bytestrie.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/unicode/bytestrie.h)
 *   Generator tool: (builder class)
 
 #### UCharsTrie (C++)/CharsTrie (Java) (maps 16-bit-Unicode strings to 32-bit integers)
 *   Source format: (public builder API)
 *   Binary format:
-    [UCharsTrie design doc](http://site.icu-project.org/design/struct/tries/ucharstrie),
+    [UCharsTrie design doc](https://icu.unicode.org/design/struct/tries/ucharstrie),
     [icu4c/source/common/unicode/ucharstrie.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/unicode/ucharstrie.h)
 *   Generator tool: (builder class)
 
@@ -1137,7 +1137,7 @@ corresponding resource files already in that directory.
 
 #### Requirements
 
-1.  [ICU4C](http://icu-project.org/download/)
+1.  [ICU4C](https://icu.unicode.org/download)
 
 2.  Compilers and tools required for [building ICU4C](../icu4c/build).
 

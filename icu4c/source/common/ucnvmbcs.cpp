@@ -1091,7 +1091,7 @@ ucnv_MBCSGetUnicodeSet(const UConverter *cnv,
  * Definition of LINEAR macros and gb18030Ranges see near the beginning of the file.
  *
  * In the future, conversion extensions may handle m:n mappings and delta tables,
- * see http://source.icu-project.org/repos/icu/icuhtml/trunk/design/conversion/conversion_extensions.html
+ * see https://htmlpreview.github.io/?https://github.com/unicode-org/icu-docs/blob/main/design/conversion/conversion_extensions.html
  *
  * If an input character cannot be mapped, then these functions set an error
  * code. The framework will then call the callback function.

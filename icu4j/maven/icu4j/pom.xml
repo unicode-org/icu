@@ -20,7 +20,7 @@
     International Component for Unicode for Java (ICU4J) is a mature, widely used Java library
     providing Unicode and Globalization support 
   </description>
-  <url>http://icu-project.org/</url>
+  <url>https://icu.unicode.org/</url>
   <inceptionYear>2001</inceptionYear>
 
   <licenses>

@@ -607,7 +607,7 @@ Starting with ICU 49, the dependencies of code files (.o files compiled from
 .c/.cpp) are documented in
 [source/test/depstest/dependencies.txt](https://github.com/unicode-org/icu/blob/main/icu4c/source/test/depstest/dependencies.txt).
 Adjacent Python code is used to parse this file and to
-[verify](http://site.icu-project.org/processes/release/tasks/healthy-code#TOC-Check-library-dependencies)
+[verify](https://icu.unicode.org/processes/release/tasks/healthy-code#TOC-Check-library-dependencies)
 that it matches the actual dependencies of the code files.
 
 The dependency list can be used to build subset libraries. In addition, by
@@ -677,7 +677,7 @@ list members a chance to review upcoming changes, and to discuss them. A
 proposal often changes significantly as a result of discussion. Most proposals
 will eventually find consensus among list members; otherwise, the ICU-TC decides
 what to do. If the addition or change of APIs would affect you, please subscribe
-to the main [icu-design mailing list](http://icu-project.org/contacts.html).
+to the main [icu-design mailing list](https://icu.unicode.org/contacts).
 
 When a **new API** is added to ICU, it **is marked as draft with a `@draft ICU
 x.y` label in the API documentation, **where x.y is the ICU version when the

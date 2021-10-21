@@ -252,7 +252,7 @@ public class IndianTest extends CalendarTestFmwk
 
     /**
      * Problem reported by Bruno Haible <bruno.haible@de.ibm.com>
-     *  -- see ticket 8419 -- http://bugs.icu-project.org/trac/ticket/8419
+     *  -- see ticket 8419 -- https://unicode-org.atlassian.net/browse/ICU-8419
      * Problem with months out of range 0-11
      */
     @Test

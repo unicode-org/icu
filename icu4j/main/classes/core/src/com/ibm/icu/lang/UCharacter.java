@@ -86,7 +86,7 @@ import com.ibm.icu.util.VersionInfo;
  * <p>
  * Further detail on differences can be determined using the program
  *        <a href=
- * "http://source.icu-project.org/repos/icu/icu4j/trunk/src/com/ibm/icu/dev/test/lang/UCharacterCompare.java">
+ * "https://github.com/unicode-org/icu/blob/main/icu4j/main/tests/core/src/com/ibm/icu/dev/test/lang/UCharacterCompare.java">
  *        com.ibm.icu.dev.test.lang.UCharacterCompare</a>
  * <p>
  * In addition to Java compatibility functions, which calculate derived properties,
@@ -100,9 +100,9 @@ import com.ibm.icu.util.VersionInfo;
  * For more information see
  * <a href="http://www.unicode/org/ucd/">"About the Unicode Character Database"</a>
  * (http://www.unicode.org/ucd/)
- * and the <a href="http://www.icu-project.org/userguide/properties.html">ICU
+ * and the <a href="https://unicode-org.github.io/icu/userguide/strings/properties">ICU
  * User Guide chapter on Properties</a>
- * (http://www.icu-project.org/userguide/properties.html).
+ * (https://unicode-org.github.io/icu/userguide/strings/properties).
  * <p>
  * There are also functions that provide easy migration from C/POSIX functions
  * like isblank(). Their use is generally discouraged because the C/POSIX
@@ -4621,7 +4621,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Full case mappings are applied by the case mapping functions
      * that take String parameters rather than code points (int).
      * See also the User Guide chapter on C/POSIX migration:
-     * http://www.icu-project.org/userguide/posix.html#case_mappings
+     * https://unicode-org.github.io/icu/userguide/icu/posix#case-mappings
      *
      * @param ch code point whose lowercase equivalent is to be retrieved
      * @return the lowercase equivalent code point
@@ -4670,7 +4670,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Full case mappings are applied by the case mapping functions
      * that take String parameters rather than code points (int).
      * See also the User Guide chapter on C/POSIX migration:
-     * http://www.icu-project.org/userguide/posix.html#case_mappings
+     * https://unicode-org.github.io/icu/userguide/icu/posix#case-mappings
      *
      * @param ch code point  whose title case is to be retrieved
      * @return titlecase code point
@@ -4693,7 +4693,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Full case mappings are applied by the case mapping functions
      * that take String parameters rather than code points (int).
      * See also the User Guide chapter on C/POSIX migration:
-     * http://www.icu-project.org/userguide/posix.html#case_mappings
+     * https://unicode-org.github.io/icu/userguide/icu/posix#case-mappings
      *
      * @param ch code point whose uppercase is to be retrieved
      * @return uppercase code point
@@ -5564,7 +5564,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Full case mappings are applied by the case mapping functions
      * that take String parameters rather than code points (int).
      * See also the User Guide chapter on C/POSIX migration:
-     * http://www.icu-project.org/userguide/posix.html#case_mappings
+     * https://unicode-org.github.io/icu/userguide/icu/posix#case-mappings
      *
      * @param ch             the character to be converted
      * @param defaultmapping Indicates whether the default mappings defined in
@@ -5636,7 +5636,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Full case mappings are applied by the case mapping functions
      * that take String parameters rather than code points (int).
      * See also the User Guide chapter on C/POSIX migration:
-     * http://www.icu-project.org/userguide/posix.html#case_mappings
+     * https://unicode-org.github.io/icu/userguide/icu/posix#case-mappings
      *
      * @param ch the character to be converted
      * @param options A bit set for special processing. Currently the recognised options

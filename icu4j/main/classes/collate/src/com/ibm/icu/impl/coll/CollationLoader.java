@@ -117,7 +117,7 @@ public final class CollationLoader {
 
         ULocale validLocale = bundle.getULocale();
         // Normalize the root locale. See
-        // http://bugs.icu-project.org/trac/ticket/10715
+        // https://unicode-org.atlassian.net/browse/ICU-10715
         String validLocaleName = validLocale.getName();
         if (validLocaleName.length() == 0 || validLocaleName.equals("root")) {
             validLocale = ULocale.ROOT;
@@ -185,7 +185,7 @@ public final class CollationLoader {
 
         // Is this the same as the root collator? If so, then use that instead.
         ULocale actualLocale = data.getULocale();
-        // http://bugs.icu-project.org/trac/ticket/10715 ICUResourceBundle(root).getULocale() != ULocale.ROOT
+        // https://unicode-org.atlassian.net/browse/ICU-10715 ICUResourceBundle(root).getULocale() != ULocale.ROOT
         // Therefore not just if (actualLocale.equals(ULocale.ROOT) && type.equals("standard")) {
         String actualLocaleName = actualLocale.getName();
         if (actualLocaleName.length() == 0 || actualLocaleName.equals("root")) {

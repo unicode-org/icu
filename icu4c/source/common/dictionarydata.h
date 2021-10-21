@@ -159,7 +159,7 @@ udict_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *out
  * Constants are defined in the DictionaryData class.
  *
  * For the data structure of BytesTrie & UCharsTrie see
- * http://site.icu-project.org/design/struct/tries
+ * https://icu.unicode.org/design/struct/tries
  * and the bytestrie.h and ucharstrie.h header files.
  *
  * int32_t indexes[indexesLength]; -- indexesLength=indexes[IX_STRING_TRIE_OFFSET]/4;

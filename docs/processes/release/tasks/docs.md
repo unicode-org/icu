@@ -67,7 +67,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 Update the API documentation to have correct @draft/@stable/@deprecated labels.
 See the [User Guide, ICU Architectural Design, ICU API
-compatibility](http://userguide.icu-project.org/design#TOC-ICU-API-compatibility).
+compatibility](https://unicode-org.github.io/icu/userguide/icu/design#icu-api-compatibility).
 
 On ICU4J, run
 [com.ibm.icu.dev.tool.docs.CheckTags](https://github.com/unicode-org/icu/blob/main/icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/CheckTags.java)
@@ -247,7 +247,7 @@ Same for `@obsolete` & <code>#ifndef U_HIDE_<b>OBSOLETE</b>_API</code> ..
 
 <span style="background-color:yellow">For more details (and cautions) see the
 Coding Guidelines section [C/C++ Hiding Un-@stable
-APIs](http://userguide.icu-project.org/dev/codingguidelines#TOC-C-C-Hiding-Un--stable-APIs).</span>
+APIs](https://unicode-org.github.io/icu/userguide/dev/codingguidelines#cc-hiding-un-stable-apis).</span>
 
 ### Task
 
@@ -363,7 +363,7 @@ Note: This is also referenced below '[Upload API documentations](docs.md)' for h
 ### ICU4J
 
 **Note:** JCite must be installed for building ICU4J documentation:
-<http://site.icu-project.org/setup/java/ant#TOC-Building-ICU4J-API-Reference-Document-with-JCite>
+<https://icu.unicode.org/setup/java/ant#TOC-Building-ICU4J-API-Reference-Document-with-JCite>
 
 Build the API documentation pages for the new release:
 
@@ -374,7 +374,7 @@ ant releaseDocs
 #### Alternative method:
 
 **Note:** JCite must be installed for building ICU4J documentation:
-<http://site.icu-project.org/setup/java/ant#TOC-Building-ICU4J-API-Reference-Document-with-JCite>
+<https://icu.unicode.org/setup/java/ant#TOC-Building-ICU4J-API-Reference-Document-with-JCite>
 
 Use the release target
 

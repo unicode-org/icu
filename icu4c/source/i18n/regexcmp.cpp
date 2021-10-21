@@ -2595,7 +2595,8 @@ void  RegexCompile::findCaseInsensitiveStarters(UChar32 c, UnicodeSet *starterCh
 // Machine Generated below.
 // It may need updating with new versions of Unicode.
 // Intltest test RegexTest::TestCaseInsensitiveStarters will fail if an update is needed.
-// The update tool is here: svn+ssh://source.icu-project.org/repos/icu/tools/trunk/unicode/c/genregexcasing
+// The update tool is here:
+// https://github.com/unicode-org/icu/tree/main/tools/unicode/c/genregexcasing
 
 // Machine Generated Data. Do not hand edit.
     static const UChar32 RECaseFixCodePoints[] = {

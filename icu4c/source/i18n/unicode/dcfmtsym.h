@@ -425,7 +425,7 @@ public:
      *
      * This is not currently stable API, but if you think it should be stable,
      * post a comment on the following ticket and the ICU team will take a look:
-     * http://bugs.icu-project.org/trac/ticket/13580
+     * https://unicode-org.atlassian.net/browse/ICU-13580
      *
      * @param symbol Constant to indicate a number format symbol.
      * @return the format symbol by the param 'symbol'
@@ -442,7 +442,7 @@ public:
      *
      * This is not currently stable API, but if you think it should be stable,
      * post a comment on the following ticket and the ICU team will take a look:
-     * http://bugs.icu-project.org/trac/ticket/13580
+     * https://unicode-org.atlassian.net/browse/ICU-13580
      *
      * @param digit The digit, an integer between 0 and 9 inclusive.
      *              If outside the range 0 to 9, the zero digit is returned.

@@ -1,6 +1,6 @@
 #  International Components for Unicode
 
-This is the repository for the [International Components for Unicode](http://site.icu-project.org). 
+This is the repository for the [International Components for Unicode](https://icu.unicode.org/).
 The ICU project is under the stewardship of [The Unicode Consortium](https://www.unicode.org).
 
 - Source: https://github.com/unicode-org/icu
