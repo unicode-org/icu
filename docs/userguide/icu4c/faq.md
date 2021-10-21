@@ -30,7 +30,7 @@ formatting, text boundary detection, character set conversion and so on.
 
 #### Where can I get ICU?
 
-You can get ICU4C and ICU4J from <http://www.icu-project.org/download/>
+You can get ICU4C and ICU4J from <https://icu.unicode.org/download>
 
 **Why don't you build binaries for my platform?**
 
@@ -71,18 +71,18 @@ MSVC compiler. See the [Building ICU4C](./icu4c/build) page.
 
 We can try ... make sure you read the [Building ICU4C](./icu4c/build) section and also the [ICU
 Data](../icudata.md) section. You might also [searching the icu-support
-archives](http://site.icu-project.org/contacts), and then posting a question
+archives](https://icu.unicode.org/contacts), and then posting a question
 there. Additionally, sites such as
 [StackOverflow](http://stackoverflow.com/search?q=icu) may have helpful tips for
 your topic.
 
 *   **Android NDK**
     *   Please try [searching the icu-support
-        archives](http://site.icu-project.org/contacts) and also see
+        archives](https://icu.unicode.org/contacts) and also see
         [StackOverflow](http://stackoverflow.com/search?q=icu+android).
 *   **iPhone**
     *   Please try [searching the icu-support
-        archives](http://site.icu-project.org/contacts) and also see
+        archives](https://icu.unicode.org/contacts) and also see
         [StackOverflow](http://stackoverflow.com/search?q=icu+iphone).
 
 #### What is the ICU binary compatibility policy?
@@ -110,7 +110,7 @@ longer exists, but can still be retrieved through internet archive services.)
 #### Can I use ICU from other languages besides C/C++ and Java?
 
 There are a number of wrappers available, please see the
-[Related Projects](http://site.icu-project.org/related) page.
+[Related Projects](https://icu.unicode.org/related) page.
 
 #### How do I upgrade to a new version of ICU? Should I be concerned about API changes, a new Unicode version or a new CLDR version)?
 
@@ -179,7 +179,7 @@ is recommended that you report the optimization bug to the compiler
 manufacturer.
 
 If neither of these fix your problem, please send an e-mail to the [ICU4C
-Support List](http://icu-project.org/contacts.html) .
+Support List](https://icu.unicode.org/contacts) .
 
 #### How can I reduce the size of the ICU data library?
 
@@ -205,7 +205,7 @@ Studio.
 
 Yes. Please see [Customizing ICU's Data Library](../icudata#customizing-icus-data-library)
 in the [ICU Data Management](../icudata.md) of this User's Guide. You can also
-get extra converters from <http://www.icu-project.org/charts/charset/> or use
+get extra converters from <https://icu.unicode.org/charts/charset> or use
 the [ICU Data Customizer](https://unicode-org.atlassian.net/browse/ICU-12835)
 tool.
 
@@ -215,7 +215,7 @@ You need GNU's make program version 3.8 or later, and you need to run the
 runConfigureICU script, which is located in the `icu/source directory`. You may
 be using a platform that ICU does not support. If the first two answers do not
 apply to you, then you should send an e-mail to the
-[ICU4C Support List](http://www.icu-project.org/contacts.html).
+[ICU4C Support List](https://icu.unicode.org/contacts).
 
 Here are some places you can find gmake:
 
@@ -276,7 +276,7 @@ section in the [ICU Design](../design.md) chapter.
 ICU versions 65 supports Unicode version 12.
 
 The Unicode versions for older versions of ICU are listed on the ICU download
-page, <http://www.icu-project.org/download/>
+page, <https://icu.unicode.org/download>
 
 #### Does ICU support UTF-16 surrogates and Unicode supplementary characters?
 
@@ -467,4 +467,4 @@ refer to the [COBOL section](../usefrom/cobol.md) of this User's Guide.
 #### Where can I get more information about using ICU?
 
 Please send an e-mail to the [ICU4C Support
-List](http://www.icu-project.org/contacts.html) .
+List](https://icu.unicode.org/contacts) .

@@ -26,7 +26,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 For reference, see the section in the User Guide about Version numbers here:
 
-<http://userguide.icu-project.org/design#TOC-Version-Numbers-in-ICU>
+<https://unicode-org.github.io/icu/userguide/icu/design#version-numbers-in-icu>
 
 ### ICU Version Number for Front load, RC and GA tasks
 
@@ -306,7 +306,7 @@ file here:
 ## Data File *Format* Versions
 
 Make sure data file **format** versions are updated. See
-<http://userguide.icu-project.org/icudata#TOC-ICU-Data-File-Formats>
+<https://unicode-org.github.io/icu/userguide/icu_data/#icu-data-file-formats>
 
 For Unicode data files, it is also useful to look at recent tools-tree changes:
 [icu/commits/main/tools/unicode](https://github.com/unicode-org/icu/commits/main/tools/unicode)

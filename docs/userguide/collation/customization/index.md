@@ -1005,7 +1005,7 @@ the `--omitCollationRules` option to the relevant `genrb` invocations
 (for ICU 53..63, in icu4c/source/data/Makefile.in)
 or, since ICU 64, with a [data filter config file](../../icu_data/buildtool.md).
 (See for example the relevant
-[ICU integration test instructions](http://site.icu-project.org/processes/release/tasks/integration#TOC-Verify-that-ICU4C-tests-pass-without-collation-rule-strings).)
+[ICU integration test instructions](https://icu.unicode.org/processes/release/tasks/integration#TOC-Verify-that-ICU4C-tests-pass-without-collation-rule-strings).)
 
 If the tailoring rules are needed but the 150kB or so of "UCA rules" are not,
 then the line

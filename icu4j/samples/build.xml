@@ -49,7 +49,7 @@
 		<property name="iuc.res.popmsg.path" value="${iuc.res.src}/s40_popmsg/${iuc.res.popmsg}" />
 		<property name="iuc.bldicures" value="${iuc.res.src}/bldicures.py" />
 		<!-- <available file="${iuc.bldicures}" type="file" property="iuc.bldicures.present" /> -->
-		<fail unless="iuc.bldicures" message="Please set -Diuc.bldicures=/path/bldicures.py - which you can get from &lt;http://source.icu-project.org/repos/icu/tools/trunk/scripts/bldicures.py&gt;" />
+		<fail unless="iuc.bldicures" message="Please set -Diuc.bldicures=/path/bldicures.py - which you can get from &lt;https://github.com/unicode-org/icu/blob/main/tools/scripts/bldicures.py&gt;" />
 		<mkdir dir="${iuc.tmp}" />
 		<!-- make reshello -->
 		<delete dir="${iuc.tmp}/${iuc.res.reshello}" /> <!-- clean up -->

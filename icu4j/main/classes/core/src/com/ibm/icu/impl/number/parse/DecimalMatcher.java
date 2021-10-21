@@ -24,7 +24,7 @@ public class DecimalMatcher implements NumberParseMatcher {
     private final boolean groupingDisabled;
 
     // Fraction grouping parsing is disabled for now but could be enabled later.
-    // See http://bugs.icu-project.org/trac/ticket/10794
+    // See https://unicode-org.atlassian.net/browse/ICU-10794
     // private final boolean fractionGrouping;
 
     /** If true, do not accept numbers in the fraction */
@@ -101,7 +101,7 @@ public class DecimalMatcher implements NumberParseMatcher {
         grouping2 = grouper.getSecondary();
 
         // Fraction grouping parsing is disabled for now but could be enabled later.
-        // See http://bugs.icu-project.org/trac/ticket/10794
+        // See https://unicode-org.atlassian.net/browse/ICU-10794
         // fractionGrouping = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_FRACTION_GROUPING_ENABLED);
     }
 

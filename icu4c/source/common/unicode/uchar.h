@@ -77,7 +77,7 @@ U_CDECL_BEGIN
  *
  * For more information see
  * "About the Unicode Character Database" (http://www.unicode.org/ucd/)
- * and the ICU User Guide chapter on Properties (http://icu-project.org/userguide/properties.html).
+ * and the ICU User Guide chapter on Properties (https://unicode-org.github.io/icu/userguide/strings/properties).
  *
  * Many properties are accessible via generic functions that take a UProperty selector.
  * - u_hasBinaryProperty() returns a binary value (true/false) per property and code point.
@@ -3946,7 +3946,7 @@ u_isJavaIDPart(UChar32 c);
  * Full case mappings are applied by the string case mapping functions,
  * see ustring.h and the UnicodeString class.
  * See also the User Guide chapter on C/POSIX migration:
- * http://icu-project.org/userguide/posix.html#case_mappings
+ * https://unicode-org.github.io/icu/userguide/icu/posix#case-mappings
  *
  * @param c the code point to be mapped
  * @return the Simple_Lowercase_Mapping of the code point, if any;
@@ -3971,7 +3971,7 @@ u_tolower(UChar32 c);
  * Full case mappings are applied by the string case mapping functions,
  * see ustring.h and the UnicodeString class.
  * See also the User Guide chapter on C/POSIX migration:
- * http://icu-project.org/userguide/posix.html#case_mappings
+ * https://unicode-org.github.io/icu/userguide/icu/posix#case-mappings
  *
  * @param c the code point to be mapped
  * @return the Simple_Uppercase_Mapping of the code point, if any;
@@ -3996,7 +3996,7 @@ u_toupper(UChar32 c);
  * Full case mappings are applied by the string case mapping functions,
  * see ustring.h and the UnicodeString class.
  * See also the User Guide chapter on C/POSIX migration:
- * http://icu-project.org/userguide/posix.html#case_mappings
+ * https://unicode-org.github.io/icu/userguide/icu/posix#case-mappings
  *
  * @param c the code point to be mapped
  * @return the Simple_Titlecase_Mapping of the code point, if any;
@@ -4020,7 +4020,7 @@ u_totitle(UChar32 c);
  * Full case mappings are applied by the string case mapping functions,
  * see ustring.h and the UnicodeString class.
  * See also the User Guide chapter on C/POSIX migration:
- * http://icu-project.org/userguide/posix.html#case_mappings
+ * https://unicode-org.github.io/icu/userguide/icu/posix#case-mappings
  *
  * @param c the code point to be mapped
  * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I

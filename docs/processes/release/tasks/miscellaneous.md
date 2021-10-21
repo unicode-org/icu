@@ -46,10 +46,9 @@ and use it for future testing.
 ## Release ticket
 
 After every milestone (GA / RC / Milestone-N) is completed, create a new release
-ticket in ICU Jira, then add the ticket link to the next
-[milestone](http://bugs.icu-project.org/trac/roadmap). The release ticket is
-used for BRS tasks, such as version update, tagging new version, merging post RC
-fixes from trunk and others.
+ticket in ICU Jira.
+The release ticket is used for BRS tasks, such as version update, tagging new version,
+merging post RC fixes from trunk and others.
 
 ---
 

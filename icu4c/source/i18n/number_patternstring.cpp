@@ -872,7 +872,7 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
         // Copy the positive digit format into the negative.
         // This is optional; the pattern is the same as if '#' were appended here instead.
         // NOTE: It is not safe to append the UnicodeString to itself, so we need to copy.
-        // See http://bugs.icu-project.org/trac/ticket/13707
+        // See https://unicode-org.atlassian.net/browse/ICU-13707
         UnicodeString copy(sb);
         sb.append(copy, afterPrefixPos, beforeSuffixPos - afterPrefixPos);
         sb.append(affixProvider.get().getString(AffixPatternProvider::AFFIX_NEG_SUFFIX));

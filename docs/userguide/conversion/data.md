@@ -116,7 +116,7 @@ stateful encodings:
 The following sections in this chapter discuss the mapping data tables that are
 used in ICU. For related material, please see:
 
-1.  [ICU character set collection](http://icu-project.org/charts/charset/)
+1.  [ICU character set collection](https://icu.unicode.org/charts/charset)
 
 2.  [Unicode Technical Report 22](http://www.unicode.org/reports/tr22/)
 

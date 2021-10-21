@@ -64,7 +64,7 @@ Depending on the platform and the type of installation, we recommend a small num
 ```
 
     ICU call sites then either qualify ICU types explicitly, for example `icu::UnicodeString`, or do `using icu::UnicodeString;` where appropriate.
-*   **Hardcode the default charset to UTF-8:** On platforms where the default charset is always UTF-8, like MacOS X and some Linux distributions, we recommend hardcoding ICU's default charset to UTF-8. This means that some implementation code becomes simpler and faster, and statically linked ICU libraries become smaller. (See the [U_CHARSET_IS_UTF8](http://icu-project.org/apiref/icu4c/platform_8h.html#a0a33e1edf3cd23d9e9c972b63c9f7943) API documentation for more details.)
+*   **Hardcode the default charset to UTF-8:** On platforms where the default charset is always UTF-8, like MacOS X and some Linux distributions, we recommend hardcoding ICU's default charset to UTF-8. This means that some implementation code becomes simpler and faster, and statically linked ICU libraries become smaller. (See the [U_CHARSET_IS_UTF8](https://unicode-org.github.io/icu-docs/apidoc/dev/icu4c/platform_8h.html#a0a33e1edf3cd23d9e9c972b63c9f7943) API documentation for more details.)
     You can `-DU_CHARSET_IS_UTF8=1` or modify `unicode/utypes.h` (in ICU 4.8 and below) or modify unicode/platform.h (in ICU 49 and higher):
 
 ```

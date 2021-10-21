@@ -193,7 +193,7 @@ For a more detailed example of how to call the LayoutEngine, look at
 . This is a simple test used to verify that the LayoutEngine is working
 properly. It does not do any complex text rendering.
 
-For more information, see [ICU](http://icu-project.org/) , the [OpenType
+For more information, see [ICU](https://icu.unicode.org/) , the [OpenType
 Specification](http://www.microsoft.com/typography/tt/tt.htm) , and the
 [TrueType Font File
 Specification](http://developer.apple.com/fonts/TTRefMan/RM06/Chap6.html) .

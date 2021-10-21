@@ -194,7 +194,7 @@ abstract public class TestFmwk extends AbstractTestLog {
             return false;
         }
         // TODO: This method currently does not do very much.
-        // See http://bugs.icu-project.org/trac/ticket/12589
+        // See https://unicode-org.atlassian.net/browse/ICU-12589
         // TODO(junit) : what to do about this?
         final String path = "";
         //getParams().stack.appendPath(descBuf);

@@ -366,7 +366,7 @@ public class MeasureFormat extends UFormat {
         return formatMeasures(new StringBuilder(), DontCareFieldPosition.INSTANCE, measures).toString();
     }
 
-    // NOTE: For formatMeasureRange(), see http://bugs.icu-project.org/trac/ticket/12454
+    // NOTE: For formatMeasureRange(), see https://unicode-org.atlassian.net/browse/ICU-12454
 
     /**
      * Formats a single measure per unit.

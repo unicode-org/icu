@@ -185,19 +185,14 @@ about adding those. For example, we must not call printf() from library code,
 nor the global operator new.
 
 The test might complain that some .o file "imports
-icu_48::UnicodeString::UnicodeString(const char \*) but does not depend on
-unistr_cnv.o". This probably means that someone passes a simple "string literal"
-or a char\* into a function that takes a UnicodeString, which invokes the
+`icu_48::UnicodeString::UnicodeString(const char *)` but does not depend on
+unistr_cnv.o". This probably means that someone passes a simple `"string literal"`
+or a `char *` into a function that takes a UnicodeString, which invokes the
 default-conversion constructor. We do not want that! In most cases, such code
-should be fixed, like in [changeset
-30186](http://bugs.icu-project.org/trac/changeset/30186). Only implementations
+should be fixed. Only implementations
 of API that require conversion should depend on it; for example, group
 formattable_cnv depends on group unistr_cnv, but then nothing inside ICU depends
 on that.
-<!-- I did not find 30186 - I only found X-SVN-Rev's 30184 and 30188:
-https://github.com/unicode-org/icu/commit/b22717a642c2d416c56931efee61aa4ee386c027
-https://github.com/unicode-org/icu/commit/8cc8801c031f7e29b87d075ad39afd39dc4e95d6
--->
 
 ---
 
@@ -410,9 +405,8 @@ build fine; layout should build too but toolutil will fail, that's expected.
 Fix any stubdata/common/i18n issues, revert the UCONFIG_NO_CONVERSION value, and
 verify that it still works with the normal setting.
 
-If this breaks, someone probably inadvertently uses the UnicodeString(const char
-\*) constructor. See the "Check library dependencies" section and example fixes
-in [changeset 30186](http://bugs.icu-project.org/trac/changeset/30186).
+If this breaks, someone probably inadvertently uses the `UnicodeString(const char *)` constructor.
+See the "Check library dependencies" section.
 
 ---
 

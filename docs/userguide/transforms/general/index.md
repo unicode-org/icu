@@ -63,7 +63,7 @@ example, "~~Αλφaβ~~ητικός" will retain the strikethrough in transliter
 characteristics such as font type and color.*
 
 For an online demonstration of ICU transliteration, see
-<http://demo.icu-project.org/icu-bin/translit> .
+<https://icu4c-demos.unicode.org/icu-bin/translit> .
 
 ## Script Transliteration
 

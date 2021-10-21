@@ -48,7 +48,7 @@ import com.ibm.icu.impl.coll.Collation;
  *
  * <p>More information about the composition of the bit sequence can
  * be found in the
- * <a href="http://www.icu-project.org/userguide/Collate_ServiceArchitecture.html">
+ * <a href="https://unicode-org.github.io/icu/userguide/collation/architecture">
  * user guide</a>.</p>
  *
  * <p>The following example shows how <code>CollationKey</code>s can be used
@@ -383,7 +383,7 @@ public final class CollationKey implements Comparable<CollationKey>
      * also match "Smithsonian" and similar.
      * <p>
      * For more on usage, see example in test procedure
-     * <a href="http://source.icu-project.org/repos/icu/icu4j/trunk/src/com/ibm/icu/dev/test/collator/CollationAPITest.java">
+     * <a href="https://github.com/unicode-org/icu/blob/main/icu4j/main/tests/collate/src/com/ibm/icu/dev/test/collator/CollationAPITest.java">
      * src/com/ibm/icu/dev/test/collator/CollationAPITest/TestBounds.
      * </a>
      * <p>

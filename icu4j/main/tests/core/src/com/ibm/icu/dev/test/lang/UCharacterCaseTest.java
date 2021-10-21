@@ -776,7 +776,7 @@ public final class UCharacterCaseTest extends TestFmwk
 
     @Test
     public void TestGreekUpper() {
-        // http://bugs.icu-project.org/trac/ticket/5456
+        // https://unicode-org.atlassian.net/browse/ICU-5456
         assertGreekUpper("άδικος, κείμενο, ίριδα", "ΑΔΙΚΟΣ, ΚΕΙΜΕΝΟ, ΙΡΙΔΑ");
         // https://bugzilla.mozilla.org/show_bug.cgi?id=307039
         // https://bug307039.bmoattachments.org/attachment.cgi?id=194893

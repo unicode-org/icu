@@ -2613,7 +2613,7 @@ or
 
 ---------------------------------------------------------------------------- ***
 
-New script codes early in ICU 58: http://bugs.icu-project.org/trac/ticket/11764
+New script codes early in ICU 58: https://unicode-org.atlassian.net/browse/ICU-11764
 
 Adding
 - new scripts in Unicode 9: Adlm, Bhks, Marc, Newa, Osge
@@ -2641,7 +2641,7 @@ SRC_DATA_IN=$ICU_SRC_DIR/source/data/in
 UNIDATA=$ICU_SRC_DIR/source/data/unidata
 
 Adjust unicode/c/genprops/*builder.cpp for #ifndef/#ifdef changes in _data.h files,
-see http://bugs.icu-project.org/trac/ticket/12141
+see https://unicode-org.atlassian.net/browse/ICU-12141
 
 make install, then icutools cmake & make, then
 ~/svn.icutools/trunk/dbg/unicode/c$ make && genprops/genprops $ICU_SRC_DIR
@@ -2672,7 +2672,7 @@ Generate Java data as usual, only update pnames.icu & uprops.icu.
 
 ---------------------------------------------------------------------------- ***
 
-Emoji properties added in ICU 57: http://bugs.icu-project.org/trac/ticket/11802
+Emoji properties added in ICU 57: https://unicode-org.atlassian.net/browse/ICU-11802
 
 Edit preparseucd.py to add & parse new properties.
 They share the UCD property namespace but are not listed in PropertyAliases.txt.
@@ -3753,7 +3753,7 @@ or
 Future Unicode update
 
 Tools simplified since the Unicode 6.1 update. See
-- http://site.icu-project.org/design/props/ppucd
+- https://icu.unicode.org/design/props/ppucd
 - http://bugs.icu-project.org/trac/wiki/Markus/ReviewTicket8972
 
 * Unicode version numbers

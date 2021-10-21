@@ -1126,7 +1126,7 @@ void RelativeDateTimeFormatter::formatRelativeImpl(
     // leaves some holes (even for data that is currently available, such as quarter).
     // When the new CLDR data is available, update the data storage accordingly,
     // rewrite this to use it directly, and rewrite the old format method to call this
-    // new one; that is covered by http://bugs.icu-project.org/trac/ticket/12171.
+    // new one; that is covered by https://unicode-org.atlassian.net/browse/ICU-12171.
     UDateDirection direction = UDAT_DIRECTION_COUNT;
     if (offset > -2.1 && offset < 2.1) {
         // Allow a 1% epsilon, so offsets in -1.01..-0.99 map to LAST

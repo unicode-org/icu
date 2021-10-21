@@ -4504,7 +4504,7 @@ static const UDate TEST_DATE = 1326585600000.;  // 2012-jan-15
 
 void DateFormatTest::TestDotAndAtLeniency() {
     // Test for date/time parsing regression with CLDR 22.1/ICU 50 pattern strings.
-    // For details see http://bugs.icu-project.org/trac/ticket/9789
+    // For details see https://unicode-org.atlassian.net/browse/ICU-9789
     static const char *locales[] = { "en", "fr" };
     for (int32_t i = 0; i < UPRV_LENGTHOF(locales); ++i) {
         Locale locale(locales[i]);
@@ -4576,7 +4576,7 @@ typedef struct {
 } TestDateFormatLeniencyItem;
 
 void DateFormatTest::TestDateFormatLeniency() {
-    // For details see http://bugs.icu-project.org/trac/ticket/10261
+    // For details see https://unicode-org.atlassian.net/browse/ICU-10261
 
     const UDate july022008 = 1215000001979.0;
     const TestDateFormatLeniencyItem items[] = {
@@ -4655,7 +4655,7 @@ typedef struct {
 } TestMultiPatternMatchItem;
 
 void DateFormatTest::TestParseMultiPatternMatch() {
-        // For details see http://bugs.icu-project.org/trac/ticket/10336
+        // For details see https://unicode-org.atlassian.net/browse/ICU-10336
     const TestMultiPatternMatchItem items[] = {
           // leniency    parse String                                 pattern                               expected result
             {true,       UnicodeString("2013-Sep 13"),                UnicodeString("yyyy-MMM dd"),         UnicodeString("2013-Sep 13")},
