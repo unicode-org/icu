@@ -7,5 +7,16 @@ ja{
         line_loose:process(dependency){"line_loose_cj.brk"}
         line_normal:process(dependency){"line_normal_cj.brk"}
         line_strict:process(dependency){"line_cj.brk"}
+        line_phrase:process(dependency){"line_phrase_cj.brk"}
+    }
+    particles{
+         か, かしら, から, が, くらい, けれども, こそ,
+         さ, さえ, しか, だけ, だに, だの, て, で, でも,
+         と, ところが, とも, な, など, なり, に, ね, の,
+         ので, のに, は, ば, ばかり, へ, ほど, まで, も,
+         や, やら, よ, より, わ, を
+    }
+    auxVerbs {
+        です, でしょ, でし, ます, ませ, まし
     }
 }

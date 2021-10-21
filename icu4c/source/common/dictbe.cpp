@@ -17,7 +17,10 @@
 #include "dictbe.h"
 #include "unicode/uniset.h"
 #include "unicode/chariter.h"
+#include "unicode/resbund.h"
 #include "unicode/ubrk.h"
+#include "unicode/usetiter.h"
+#include "ubrkimpl.h"
 #include "utracimp.h"
 #include "uvectr32.h"
 #include "uvector.h"
@@ -48,6 +51,7 @@ DictionaryBreakEngine::findBreaks( UText *text,
                                  int32_t startPos,
                                  int32_t endPos,
                                  UVector32 &foundBreaks,
+                                 UBool isPhraseBreaking,
                                  UErrorCode& status) const {
     if (U_FAILURE(status)) return 0;
     (void)startPos;            // TODO: remove this param?
@@ -68,7 +72,7 @@ DictionaryBreakEngine::findBreaks( UText *text,
     }
     rangeStart = start;
     rangeEnd = current;
-    result = divideUpDictionaryRange(text, rangeStart, rangeEnd, foundBreaks, status);
+    result = divideUpDictionaryRange(text, rangeStart, rangeEnd, foundBreaks, isPhraseBreaking, status);
     utext_setNativeIndex(text, current);
     
     return result;
@@ -230,6 +234,7 @@ ThaiBreakEngine::divideUpDictionaryRange( UText *text,
                                                 int32_t rangeStart,
                                                 int32_t rangeEnd,
                                                 UVector32 &foundBreaks,
+                                                UBool /* isPhraseBreaking */,
                                                 UErrorCode& status) const {
     if (U_FAILURE(status)) return 0;
     utext_setNativeIndex(text, rangeStart);
@@ -469,6 +474,7 @@ LaoBreakEngine::divideUpDictionaryRange( UText *text,
                                                 int32_t rangeStart,
                                                 int32_t rangeEnd,
                                                 UVector32 &foundBreaks,
+                                                UBool /* isPhraseBreaking */,
                                                 UErrorCode& status) const {
     if (U_FAILURE(status)) return 0;
     if ((rangeEnd - rangeStart) < LAO_MIN_WORD_SPAN) {
@@ -661,6 +667,7 @@ BurmeseBreakEngine::divideUpDictionaryRange( UText *text,
                                                 int32_t rangeStart,
                                                 int32_t rangeEnd,
                                                 UVector32 &foundBreaks,
+                                                UBool /* isPhraseBreaking */,
                                                 UErrorCode& status ) const {
     if (U_FAILURE(status)) return 0;
     if ((rangeEnd - rangeStart) < BURMESE_MIN_WORD_SPAN) {
@@ -866,6 +873,7 @@ KhmerBreakEngine::divideUpDictionaryRange( UText *text,
                                                 int32_t rangeStart,
                                                 int32_t rangeEnd,
                                                 UVector32 &foundBreaks,
+                                                UBool /* isPhraseBreaking */,
                                                 UErrorCode& status ) const {
     if (U_FAILURE(status)) return 0;
     if ((rangeEnd - rangeStart) < KHMER_MIN_WORD_SPAN) {
@@ -1053,6 +1061,10 @@ CjkBreakEngine::CjkBreakEngine(DictionaryMatcher *adoptDictionary, LanguageType 
     // Korean dictionary only includes Hangul syllables
     fHangulWordSet.applyPattern(UnicodeString(u"[\\uac00-\\ud7a3]"), status);
     fHangulWordSet.compact();
+    fNumberOrOpenPunctuationSet.applyPattern(UnicodeString(u"[[:Nd:][:Pi:][:Ps:]]"), status);
+    fNumberOrOpenPunctuationSet.compact();
+    fClosePunctuationSet.applyPattern(UnicodeString(u"[[:Pc:][:Pd:][:Pe:][:Pf:][:Po:]]"), status);
+    fClosePunctuationSet.compact();
 
     // handle Korean and Japanese/Chinese using different dictionaries
     if (type == kKorean) {
@@ -1063,6 +1075,7 @@ CjkBreakEngine::CjkBreakEngine(DictionaryMatcher *adoptDictionary, LanguageType 
         UnicodeSet cjSet(UnicodeString(u"[[:Han:][:Hiragana:][:Katakana:]\\u30fc\\uff70\\uff9e\\uff9f]"), status);
         if (U_SUCCESS(status)) {
             setCharacters(cjSet);
+            initJapanesePhraseParameter(status);
         }
     }
     UTRACE_EXIT_STATUS(status);
@@ -1090,14 +1103,12 @@ static inline bool isKatakana(UChar32 value) {
             (value >= 0xFF66 && value <= 0xFF9f);
 }
 
-
 // Function for accessing internal utext flags.
 //   Replicates an internal UText function.
 
 static inline int32_t utext_i32_flag(int32_t bitIndex) {
     return (int32_t)1 << bitIndex;
 }
-
        
 /*
  * @param text A UText representing the text
@@ -1111,6 +1122,7 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
         int32_t rangeStart,
         int32_t rangeEnd,
         UVector32 &foundBreaks,
+        UBool isPhraseBreaking,
         UErrorCode& status) const {
     if (U_FAILURE(status)) return 0;
     if (rangeStart >= rangeEnd) {
@@ -1341,6 +1353,26 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
     if ((uint32_t)bestSnlp.elementAti(numCodePts) == kuint32max) {
         t_boundary.addElement(numCodePts, status);
         numBreaks++;
+    } else if (isPhraseBreaking) {
+        t_boundary.addElement(numCodePts, status);
+        if(U_SUCCESS(status)) {
+            numBreaks++;
+            int32_t prevIdx = numCodePts;
+
+            int32_t codeUnitIdx = -1;
+            int32_t length = -1;
+            for (int32_t i = prev.elementAti(numCodePts); i > 0; i = prev.elementAti(i)) {
+                codeUnitIdx = inString.moveIndex32(0, i);
+                // Calculate the length by using the code unit.
+                length = inString.moveIndex32(0, prevIdx) - codeUnitIdx;
+                prevIdx = i;
+                // Skip the breakpoint if it belongs to the particle or Hiragana.
+                if (!fSkipSet.containsKey(inString.tempSubString(codeUnitIdx, length))) {
+                    t_boundary.addElement(i, status);
+                    numBreaks++;
+                }
+            }
+        }
     } else {
         for (int32_t i = numCodePts; i > 0; i = prev.elementAti(i)) {
             t_boundary.addElement(i, status);
@@ -1361,8 +1393,8 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
     // while reversing t_boundary and pushing values to foundBreaks.
     int32_t prevCPPos = -1;
     int32_t prevUTextPos = -1;
-    int correctedNumBreaks = 0;
-    for (int32_t i = numBreaks-1; i >= 0; i--) {
+    int32_t correctedNumBreaks = 0;
+    for (int32_t i = numBreaks - 1; i >= 0; i--) {
         int32_t cpPos = t_boundary.elementAti(i);
         U_ASSERT(cpPos > prevCPPos);
         int32_t utextPos =  inputMap.isValid() ? inputMap->elementAti(cpPos) : cpPos + rangeStart;
@@ -1370,7 +1402,12 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
         if (utextPos > prevUTextPos) {
             // Boundaries are added to foundBreaks output in ascending order.
             U_ASSERT(foundBreaks.size() == 0 || foundBreaks.peeki() < utextPos);
-            if (utextPos != rangeStart) {
+            // In phrase breaking, there has to be a breakpoint between Cj character and close
+            // punctuation.
+            // E.g.［携帯電話］正しい選択 -> ［携帯▁電話］▁正しい▁選択 -> breakpoint between ］ and 正
+            if (utextPos != rangeStart
+                || (isPhraseBreaking && utextPos > 0
+                       && fClosePunctuationSet.contains(utext_char32At(inText, utextPos - 1)))) {
                 foundBreaks.push(utextPos, status);
                 correctedNumBreaks++;
             }
@@ -1385,14 +1422,53 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
     }
     (void)prevCPPos; // suppress compiler warnings about unused variable
 
+    UChar32 nextChar = utext_char32At(inText, rangeEnd);
     if (!foundBreaks.isEmpty() && foundBreaks.peeki() == rangeEnd) {
-        foundBreaks.popi();
-        correctedNumBreaks--;
+        // In phrase breaking, there has to be a breakpoint between Cj character and
+        // the number/open punctuation.
+        // E.g. る文字「そうだ、京都」->る▁文字▁「そうだ、▁京都」-> breakpoint between 字 and「
+        // E.g. 乗車率９０％程度だろうか -> 乗車▁率▁９０％▁程度だ▁ろうか -> breakpoint between 率 and ９
+        if (isPhraseBreaking) {
+            if (!fNumberOrOpenPunctuationSet.contains(nextChar)) {
+                foundBreaks.popi();
+                correctedNumBreaks--;
+            }
+        } else {
+            foundBreaks.popi();
+            correctedNumBreaks--;
+        }
     }
 
     // inString goes out of scope
     // inputMap goes out of scope
     return correctedNumBreaks;
+}
+
+void CjkBreakEngine::initJapanesePhraseParameter(UErrorCode& error) {
+    loadJapaneseParticleAndAuxVerbs(error);
+    loadHiragana(error);
+}
+
+void CjkBreakEngine::loadJapaneseParticleAndAuxVerbs(UErrorCode& error) {
+    const char* tags[2] = { "particles", "auxVerbs" };
+    ResourceBundle ja(U_ICUDATA_BRKITR, "ja", error);
+    if (U_SUCCESS(error)) {
+        for (int32_t i = 0; i < 2; i++) {
+            ResourceBundle bundle = ja.get(tags[i], error);
+            while (U_SUCCESS(error) && bundle.hasNext()) {
+                fSkipSet.puti(bundle.getNextString(error), 1, error);
+            }
+        }
+    }
+}
+
+void CjkBreakEngine::loadHiragana(UErrorCode& error) {
+    UnicodeSet hiraganaWordSet(UnicodeString(u"[:Hiragana:]"), error);
+    hiraganaWordSet.compact();
+    UnicodeSetIterator iterator(hiraganaWordSet);
+    while (iterator.next()) {
+        fSkipSet.puti(UnicodeString(iterator.getCodepoint()), 1, error);
+    }
 }
 #endif
 

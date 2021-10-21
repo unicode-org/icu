@@ -224,6 +224,7 @@ group: breakiterator
     normlzr  # for dictbe.o, should switch to Normalizer2
     uvector32 # for dictbe.o
     exp_and_tanhf # for lstmbe.o
+    usetiter # for dictbe.o
 
 group: unormcmp  # unorm_compare()
     unormcmp.o

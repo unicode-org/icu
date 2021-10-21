@@ -153,7 +153,7 @@ void LSTMBETest::runTestFromFile(const char* filename) {
                     dataerrln("%s:%d Error %s Could not allocate UVextor32", __FILE__, __LINE__, u_errorName(status));
                     return;
                 }
-                engine->findBreaks(&ut, 0, value.length(), actual, status);
+                engine->findBreaks(&ut, 0, value.length(), actual, false, status);
                 if (U_FAILURE(status)) {
                     dataerrln("%s:%d Error %s findBreaks failed", __FILE__, __LINE__, u_errorName(status));
                     return;
@@ -288,7 +288,7 @@ void LSTMBETest::runTestWithLargeMemory( const char* model, UScriptCode script) 
             return;
         }
 
-        engine->findBreaks(&ut, 0, text.length(), actual, status);
+        engine->findBreaks(&ut, 0, text.length(), actual, false, status);
         utext_close(&ut);
         text += text;
     }
