@@ -864,18 +864,18 @@ sr_Latn{
                         "d",
                     }
                     wide{
-                        "januara",
-                        "februara",
-                        "marta",
-                        "aprila",
-                        "maja",
-                        "juna",
-                        "jula",
-                        "avgusta",
-                        "septembra",
-                        "oktobra",
-                        "novembra",
-                        "decembra",
+                        "januar",
+                        "februar",
+                        "mart",
+                        "april",
+                        "maj",
+                        "jun",
+                        "jul",
+                        "avgust",
+                        "septembar",
+                        "oktobar",
+                        "novembar",
+                        "decembar",
                     }
                 }
                 stand-alone{

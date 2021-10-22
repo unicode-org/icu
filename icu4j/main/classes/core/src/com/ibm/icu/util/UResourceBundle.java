@@ -40,9 +40,9 @@ import com.ibm.icu.impl.ResourceBundleWrapper;
  *
  * <p>Resource bundles in ICU are currently defined using text files that conform to the
  * following <a
- * href="http://source.icu-project.org/repos/icu/icuhtml/trunk/design/bnf_rb.txt">BNF
+ * href="https://github.com/unicode-org/icu-docs/blob/main/design/bnf_rb.txt">BNF
  * definition</a>.  More on resource bundle concepts and syntax can be found in the <a
- * href="http://www.icu-project.org/userguide/ResourceManagement.html">Users Guide</a>.
+ * href="https://unicode-org.github.io/icu/userguide/locale/resources">Users Guide</a>.
  *
  * <p>The packaging of ICU *.res files can be of two types
  * ICU4C:

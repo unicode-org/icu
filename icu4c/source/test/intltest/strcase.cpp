@@ -788,7 +788,7 @@ StringCaseTest::assertGreekUpper(const char16_t *s, const char16_t *expected) {
 
 void
 StringCaseTest::TestGreekUpper() {
-    // http://bugs.icu-project.org/trac/ticket/5456
+    // https://unicode-org.atlassian.net/browse/ICU-5456
     assertGreekUpper(u"άδικος, κείμενο, ίριδα", u"ΑΔΙΚΟΣ, ΚΕΙΜΕΝΟ, ΙΡΙΔΑ");
     // https://bugzilla.mozilla.org/show_bug.cgi?id=307039
     // https://bug307039.bmoattachments.org/attachment.cgi?id=194893
@@ -1030,7 +1030,7 @@ void StringCaseTest::TestCopyMoveEdits() {
     TestUtility::checkEqualEdits(*this, u"c = b", b, c, errorCode);
 
     // std::move trouble on these platforms.
-    // See https://ssl.icu-project.org/trac/ticket/13393
+    // See https://unicode-org.atlassian.net/browse/ICU-13393
 #if !(U_PLATFORM == U_PF_AIX || U_PLATFORM == U_PF_OS390)
     // move constructor empties object with heap array
     Edits d(std::move(a));

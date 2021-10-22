@@ -1326,7 +1326,8 @@ part •of •the •Luang •Prabang •Range •(ทิว•เขา•ห�
 \u0E14\u0E49\u0E27\u0E22<200>\u0e2b\u0e25\u0e32\u0e22<200>\
 \u0e1e\u0e22\u0e32\u0e07\u0e04\u0e4c<200></data>
 
-# Test data originally from http://bugs.icu-project.org/trac/search?q=r30327
+# Test data originally from
+# ICU-8576 svn r30327 = git commit 62d26cc5fe8cc66696143c44a43d664c2d7be100
 <data>•กู<200> •กิน<200>กุ้ง<200> •ปิ้่<200>งอ<200>ยู่<200>ใน<200>ถ้ำ<200></data>
 
 <data>•\u0E01\u0E39<200>\u0020•\u0E01\u0E34\u0E19<200>\u0E01\u0E38\u0E49\u0E07<200>\
@@ -1464,7 +1465,8 @@ Bangkok)•</data>
 #
 ##########################################################################################
 
-# Test data originally from http://bugs.icu-project.org/trac/search?q=r30327
+# Test data originally from
+# ICU-8576 svn r30327 = git commit 62d26cc5fe8cc66696143c44a43d664c2d7be100
 #  from the file testdata/wordsegments.txt
 <locale en>
 <word>

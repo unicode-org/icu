@@ -25,7 +25,7 @@ import com.ibm.icu.util.VersionInfo;
  * Low-level implementation of the Unicode Normalization Algorithm.
  * For the data structure and details see the documentation at the end of
  * C++ normalizer2impl.h and in the design doc at
- * http://site.icu-project.org/design/normalization/custom
+ * https://icu.unicode.org/design/normalization/custom
  */
 public final class Normalizer2Impl {
     public static final class Hangul {

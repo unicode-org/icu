@@ -34,7 +34,7 @@
 #include <cassert>
 #ifndef DOUBLE_CONVERSION_ASSERT
 #define DOUBLE_CONVERSION_ASSERT(condition)         \
-    assert(condition);
+    assert(condition)
 #endif
 #ifndef DOUBLE_CONVERSION_UNIMPLEMENTED
 #define DOUBLE_CONVERSION_UNIMPLEMENTED() (abort())

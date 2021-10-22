@@ -299,7 +299,7 @@ public class WriteCharts {
             out.println("The samples are mechanically generated, and only include single characters");
             out.println("from the source set. Thus it will <i>not</i> contain examples where the transliteration");
             out.println("depends on the context around the character. For a more detailed -- and interactive -- example, see the");
-            out.println("<a href='http://demo.icu-project.org/icu-bin/translit'>Transliteration Demo</a></p><hr>");
+            out.println("<a href='https://icu4c-demos.unicode.org/icu-bin/translit'>Transliteration Demo</a></p><hr>");
             
             // set up the headers
             int columnCount = 3;

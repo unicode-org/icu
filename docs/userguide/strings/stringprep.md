@@ -350,7 +350,7 @@ in binary form with data structures optimized for runtime use.
 
 ## Demo
 
-A web application at <http://demo.icu-project.org/icu-bin/idnbrowser>
+A web application at <https://icu4c-demos.unicode.org/icu-bin/idnbrowser>
 illustrates the use of IDNA API. The source code for the application is
 available at <https://github.com/unicode-org/icu-demos/tree/main/idnbrowser>.
 

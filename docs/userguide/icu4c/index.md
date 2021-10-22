@@ -46,39 +46,39 @@ The ICU homepage also links to related information about writing internationaliz
 **Here are some useful links regarding ICU and internationalization in general.**
 
 
-| ICU, ICU4C & ICU4J Homepage                        | <http://site.icu-project.org/>                                           |
+| ICU, ICU4C & ICU4J Homepage                        | <https://icu.unicode.org/>                                           |
 | ICU FAQ - Frequently Asked Questions about ICU     | <https://unicode-org.github.io/icu/userguide/icu4c/faq>                  |
 | ICU4J FAQ - Frequently Asked Questions about ICU4J | <https://unicode-org.github.io/icu/userguide/icu4j/faq>                  |
 | ICU User's Guide                                   | <https://unicode-org.github.io/icu/>                                     |
 | How To Use ICU                                     | <https://unicode-org.github.io/icu/userguide/icu/howtouseicu>            |
-| Download ICU Releases                              | <http://site.icu-project.org/download>                                   |
-| ICU4C API Documentation Online                     | <http://icu-project.org/apiref/icu4c/>                                   |
-| Online ICU Demos                                   | <http://demo.icu-project.org/icu-bin/icudemos>                           |
-| Contacts and Bug Reports/Feature Requests          | <http://site.icu-project.org/contacts>                                   |
+| Download ICU Releases                              | <https://icu.unicode.org/download>                                   |
+| ICU4C API Documentation Online                     | <https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/>                                   |
+| Online ICU Demos                                   | <https://icu4c-demos.unicode.org/icu-bin/icudemos>                           |
+| Contacts and Bug Reports/Feature Requests          | <https://icu.unicode.org/contacts>                                   |
 
 **Important:** Please make sure you understand the [Copyright and License Information](https://github.com/unicode-org/icu/blob/main/icu4c/LICENSE).
 
 ## What Is New In The Current Release?
 
-See the [ICU download page](http://site.icu-project.org/download/) to find the subpage for the current release, including any other changes, bug fixes, known issues, changes to supported platforms and build environments, and migration issues for existing applications migrating from previous ICU releases.
+See the [ICU download page](https://icu.unicode.org/download/) to find the subpage for the current release, including any other changes, bug fixes, known issues, changes to supported platforms and build environments, and migration issues for existing applications migrating from previous ICU releases.
 
 The subpage for the current release will also include an API Change Report, both for ICU4C and ICU4J, for a complete list of APIs added, removed, or changed in this release.
 
 The list of API changes since the previous ICU4C release is available [here](https://htmlpreview.github.io/?https://raw.githubusercontent.com/unicode-org/icu/main/icu4c/APIChangeReport.html).
 
-Changes in previous releases can also be found on the main [ICU download page](http://site.icu-project.org/download) in its version-specific subpages.
+Changes in previous releases can also be found on the main [ICU download page](https://icu.unicode.org/download) in its version-specific subpages.
 
 ## How To Download the Source Code
 
 There are two ways to download ICU releases:
 
 *   **Official Release Snapshot:**
-    If you want to use ICU (as opposed to developing it), you should download an official packaged version of the ICU source code. These versions are tested more thoroughly than day-to-day development builds of the system, and they are packaged in zip and tar files for convenient download. These packaged files can be found at [http://site.icu-project.org/download](http://site.icu-project.org/download).
+    If you want to use ICU (as opposed to developing it), you should download an official packaged version of the ICU source code. These versions are tested more thoroughly than day-to-day development builds of the system, and they are packaged in zip and tar files for convenient download. These packaged files can be found at [https://icu.unicode.org/download](https://icu.unicode.org/download).
     The packaged snapshots are named `icu-nnnn.zip` or `icu-nnnn.tgz`, where `nnnn` is the version number. The .zip file is used for Windows platforms, while the .tgz file is preferred on most other platforms.
     Please unzip this file.
     > :point_right: **Note**: There may be additional commits on the `maint-*` branch for a particular version that are not included in the prepackaged download files.
 *   **GitHub Source Repository:**
-    If you are interested in developing features, patches, or bug fixes for ICU, you should probably be working with the latest version of the ICU source code. You will need to clone and checkout the code from our GitHub repository to ensure that you have the most recent version of all of the files. See our [source repository](http://site.icu-project.org/repository) for details.
+    If you are interested in developing features, patches, or bug fixes for ICU, you should probably be working with the latest version of the ICU source code. You will need to clone and checkout the code from our GitHub repository to ensure that you have the most recent version of all of the files. See our [source repository](https://icu.unicode.org/repository) for details.
 
 ## ICU Source Code Organization
 
@@ -142,7 +142,7 @@ In the descriptions below, `<ICU>` is the full path name of the ICU4C directory 
           <p>If some of the following directories are missing, it's probably
           because you got an official download. If you need the data source files
           for customization, then please download the complete ICU source code from <a
-          href="http://site.icu-project.org/repository">the ICU repository</a>.</p>
+          href="https://icu.unicode.org/repository">the ICU repository</a>.</p>
 
           <ul>
             <li><b>in/</b> A directory that contains a pre-built data library for
@@ -399,7 +399,7 @@ If you are building on a UNIX platform, and if you are installing ICU in a non-s
 
 ### Porting To A New Platform
 
-If you are using ICU's Makefiles to build ICU on a new platform, there are a few places where you will need to add or modify some files. If you need more help, you can always ask the [icu-support mailing list](http://site.icu-project.org/contacts). Once you have finished porting ICU to a new platform, it is recommended that you contribute your changes back to ICU via the icu-support mailing list. This will make it easier for everyone to benefit from your work.
+If you are using ICU's Makefiles to build ICU on a new platform, there are a few places where you will need to add or modify some files. If you need more help, you can always ask the [icu-support mailing list](https://icu.unicode.org/contacts). Once you have finished porting ICU to a new platform, it is recommended that you contribute your changes back to ICU via the icu-support mailing list. This will make it easier for everyone to benefit from your work.
 
 #### Data For a New Platform
 

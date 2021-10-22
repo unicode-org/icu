@@ -132,8 +132,8 @@ import com.ibm.icu.util.VersionInfo;
  * "[:Lu:]" and the Perl-like syntax "\p{Lu}" are recognized.  For a
  * complete list of supported property patterns, see the User's Guide
  * for UnicodeSet at
- * <a href="http://www.icu-project.org/userguide/unicodeSet.html">
- * http://www.icu-project.org/userguide/unicodeSet.html</a>.
+ * <a href="https://unicode-org.github.io/icu/userguide/strings/unicodeset">
+ * https://unicode-org.github.io/icu/userguide/strings/unicodeset</a>.
  * Actual determination of property data is defined by the underlying
  * Unicode database as implemented by UCharacter.
  *
@@ -818,7 +818,10 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             //             getRangeEnd(last) == MAX_VALUE)
             // Invariant: list[len-1] == HIGH == MAX_VALUE + 1
             // If limit == len then len is even and the last range ends with MAX_VALUE.
-            if (len >= 4 && list[0] == 0 && limit == len) {
+            //
+            // *But* do not write the inverse (complement) if there are strings.
+            // Since ICU 70, the '^' performs a code point complement which removes all strings.
+            if (len >= 4 && list[0] == 0 && limit == len && !hasStrings()) {
                 // Emit the inverse
                 result.append('^');
                 // Offsetting the inversion list index by one lets us

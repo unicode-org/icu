@@ -36,8 +36,8 @@ framework, therefore, it requires JRE 6 or later.
 
 #### Comparison between ICU and JDK: What's the difference?
 
-This is one of our most popular question. Please refer to [our comparison
-chart](http://icu-project.org/charts/comparison/).
+This is one of our most popular questions. Please refer to [our comparison
+chart](https://icu.unicode.org/charts/comparison).
 
 #### How can I get the version information of ICU4J library on my system?
 
@@ -92,7 +92,7 @@ using ICU4J 60 and considering to upgrade to ICU4J 64. In this case, you can
 generate a change report page by following steps.
 
 1.  Download [ICU4J 64 source package
-    archive](http://site.icu-project.org/download/64#TOC-ICU4J-Download)
+    archive](https://icu.unicode.org/download/64#TOC-ICU4J-Download)
     from the ICU 64 download page and extract files to your local system.
 2.  Set up ICU4J build environment as explained in the
     [ICU4C Readme](./index).
@@ -130,7 +130,7 @@ during various periods in history, but according to our sources they are not in
 common use today. If you see a real need for a Japanese lunar calendar, and
 especially if you know of any good references on how it differs from the Chinese
 calendar, please let us know by posting a note on the [mailing
-list](http://icu-project.org/contacts.html).
+list](https://icu.unicode.org/contacts).
 
 #### Do you *really* support the true lunar Islamic calendar?
 
@@ -171,7 +171,7 @@ documentation](https://unicode-org.github.io/icu-docs/apidoc/released/icu4j/com/
 #### How can I get the latest time zone rule data patch?
 
 You can use [ICU4J Time Zone Update
-Utility](http://site.icu-project.org/download/icutzu) to update the time zone
+Utility](https://icu.unicode.org/download/icutzu) to update the time zone
 rule data to the latest.
 
 #### I do not want to maintain yet another time zone rule data. Are there any way to configure ICU4J to use the JRE's time zone data?

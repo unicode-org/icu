@@ -442,7 +442,7 @@ the new ICU version.
 
 Update online demos/tools to the latest version:
 
-*   ICU demos (eg <http://demo.icu-project.org/icu-bin/idnbrowser>)
+*   ICU demos (eg <https://icu4c-demos.unicode.org/icu-bin/idnbrowser>)
 *   CLDR Survey tool (eg <http://unicode.org/cldr/apps/about.jsp>)
 *   Unicode Utilities (eg <http://unicode.org/cldr/utility/character.jsp>)
 

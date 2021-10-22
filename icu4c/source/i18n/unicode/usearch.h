@@ -32,7 +32,7 @@
  * see <code>ucol.h</code>. This ensures that language eccentricity can be 
  * handled, e.g. for the German collator, characters &szlig; and SS will be matched 
  * if case is chosen to be ignored. 
- * See the <a href="http://source.icu-project.org/repos/icu/icuhtml/trunk/design/collation/ICU_collation_design.htm">
+ * See the <a href="https://htmlpreview.github.io/?https://github.com/unicode-org/icu-docs/blob/main/design/collation/ICU_collation_design.htm">
  * "ICU Collation Design Document"</a> for more information.
  * <p> 
  * As of ICU4C 4.0 / ICU4J 53, the implementation uses a linear search. In previous versions,

@@ -303,7 +303,7 @@ void Win32NumberTest::testLocales(NumberFormatTest *log)
 
         strcpy(localeID, lcidRecords[i].localeID);
 
-        if (strchr(localeID, '@') > 0) {
+        if (strchr(localeID, '@')) {
             strcat(localeID, ";");
         } else {
             strcat(localeID, "@");

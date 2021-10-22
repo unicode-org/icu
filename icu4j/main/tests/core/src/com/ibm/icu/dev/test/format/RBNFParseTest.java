@@ -129,7 +129,7 @@ public class RBNFParseTest extends TestFmwk {
     }
 
     @Test
-    @Ignore("http://bugs.icu-project.org/trac/ticket/13793")
+    @Ignore("https://unicode-org.atlassian.net/browse/ICU-13793")
     public void TestLenientParse() throws Exception {
         RuleBasedNumberFormat rbnf_en, rbnf_fr;
 

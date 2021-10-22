@@ -1705,7 +1705,7 @@ public class DecimalFormat extends NumberFormat {
    * "*x######0" has a format width of 7 and a pad character of 'x'.
    *
    * <p>Padding is currently counted in UTF-16 code units; see <a
-   * href="http://bugs.icu-project.org/trac/ticket/13034">ticket #13034</a> for more information.
+   * href="https://unicode-org.atlassian.net/browse/ICU-13034">ticket #13034</a> for more information.
    *
    * @param width The minimum number of characters in the output.
    * @see #setPadCharacter

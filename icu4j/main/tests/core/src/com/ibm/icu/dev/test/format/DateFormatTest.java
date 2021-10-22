@@ -4791,7 +4791,7 @@ public class DateFormatTest extends TestFmwk {
 
     @Test
     public void TestDateFormatLeniency() {
-        // For details see http://bugs.icu-project.org/trac/ticket/10261
+        // For details see https://unicode-org.atlassian.net/browse/ICU-10261
 
         class TestDateFormatLeniencyItem {
             public ULocale locale;
@@ -4898,7 +4898,7 @@ public class DateFormatTest extends TestFmwk {
 
     @Test
     public void TestParseMultiPatternMatch() {
-        // For details see http://bugs.icu-project.org/trac/ticket/10336
+        // For details see https://unicode-org.atlassian.net/browse/ICU-10336
 
         class TestMultiPatternMatchItem {
             public boolean leniency;

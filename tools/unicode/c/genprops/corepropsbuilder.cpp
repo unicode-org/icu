@@ -257,7 +257,7 @@ The encoding of numeric values was extended to handle such values.
 --- Changes in format version 7.2 ---
 
 ICU 57 adds 4 Emoji properties to vector word 2.
-http://bugs.icu-project.org/trac/ticket/11802
+https://unicode-org.atlassian.net/browse/ICU-11802
 http://www.unicode.org/reports/tr51/#Emoji_Properties
 
 --- Changes in format version 7.3 ---
@@ -269,7 +269,7 @@ ICU 58 adds fraction-20 numeric values for new Unicode 9 Malayalam fraction char
 ICU 60 adds the Prepended_Concatenation_Mark property to vector word 1.
 
 ICU 60 adds the Emoji_Component property to vector word 2, for emoji 5.
-http://bugs.icu-project.org/trac/ticket/13062
+https://unicode-org.atlassian.net/browse/ICU-13062
 http://www.unicode.org/reports/tr51/#Emoji_Properties
 
 --- Changes in format version 7.5 ---

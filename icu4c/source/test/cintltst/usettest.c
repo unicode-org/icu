@@ -137,7 +137,7 @@ static void TestAPI() {
     uset_removeString(set, STR_ab, STR_ab_LEN);
     expect(set, "acd{bc}", "bfg{ab}", NULL);
 
-    /* [^acd{bc}] */
+    /* [[^acd]{bc}] */
     uset_complement(set);
     expect(set, "bef{bc}", "acd{ac}", NULL);
 
@@ -436,8 +436,8 @@ static void expectItems(const USet* set,
                 strlen(items)==0 ? "TRUE" : "FALSE");
     }
 
-    /* Don't test patterns starting with "[^" */
-    if (u_strlen(ustr) > 2 && ustr[1] == 0x5e /*'^'*/) {
+    /* Don't test patterns starting with "[^" or "[\\u0000". */
+    if ((u_strlen(ustr) > 2 && ustr[1] == u'^') || uset_contains(set, 0)) {
         return;
     }
 

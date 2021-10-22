@@ -382,7 +382,7 @@ a new naming scheme.
 
 The documentation of the old macros has been removed. If you need it, see a User
 Guide version from ICU 4.2 or earlier (see the [download
-page](http://site.icu-project.org/download)).
+page](https://icu.unicode.org/download)).
 
 C Unicode String Literals
 

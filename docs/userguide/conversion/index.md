@@ -122,7 +122,7 @@ Unicode.
     3.  ICU's conversion table repository contains hundreds of Unicode
         conversion tables from a number of common vendors and platforms as well
         as comparisons between these conversion tables:
-        <http://icu-project.org/charts/charset/> .
+        <https://icu.unicode.org/charts/charset> .
 
     4.  Do not trust codepage documentation that is not machine-readable, for
         example nice-looking charts: They are usually incomplete and out of

@@ -324,7 +324,7 @@ public class PluralFormatTest extends TestFmwk {
         }
     }
 
-    /* Test for http://bugs.icu-project.org/trac/ticket/13151 */
+    /* Test for https://unicode-org.atlassian.net/browse/ICU-13151 */
     @Test
     public void TestFractionRounding() {
         NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);

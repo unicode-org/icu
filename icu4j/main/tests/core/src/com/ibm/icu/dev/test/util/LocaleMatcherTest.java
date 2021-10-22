@@ -492,7 +492,7 @@ public class LocaleMatcherTest extends TestFmwk {
         assertEquals("es_AR", matcher.getBestMatch("es_MX").toString());
 
         matcher = newLocaleMatcher("fr, en, en_GB");
-        assertEquals("en_GB", matcher.getBestMatch("en_CA").toString());
+        assertEquals("en", matcher.getBestMatch("en_CA").toString());
 
         matcher = newLocaleMatcher("de_AT, de_DE, de_CH");
         assertEquals("de_DE", matcher.getBestMatch("de").toString());
