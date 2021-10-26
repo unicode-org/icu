@@ -321,7 +321,7 @@ javadoc files. Create icu4c-X_X_X-docs.zip
 **Note: for ICU4C 49m2 or later, requires Doxygen 1.7.5.1 or later ( see
 [ICU-8862](https://unicode-org.atlassian.net/browse/ICU-8862) )**
 
-#### Steps:
+#### Create the ICU4C docs zip file:
 
 1.  Go to .../icu4c/source
 2.  Generate the API document pages:<br>
@@ -329,36 +329,38 @@ javadoc files. Create icu4c-X_X_X-docs.zip
 3.  The generated API docs are in <path>/icu4c/source/doc/html/<br>
     `cd <path>/icu4c/source/doc/html/`
 4.  Create a zip file, e.g.,<br>
-    `zip /tmp/icu4c641 * # '641' needs to be replaced by the respective release label.`
+    `tar cvfz /tmp/icu4c641.tar.gz * # '641' needs to be replaced by the respective release label.`
 5.  ~~Upload this zip file to the GitHub release page. For the live API docs, see below.~~
 
-DRAFT:
+#### Create a PR for ICU4C docs using the docs zip file
 
-5.  Follow directions in [How to update ICU docs](https://unicode-org.github.io/icu-docs/HOWTO-Update.html)
+1.  Follow directions in [How to update ICU docs](https://unicode-org.github.io/icu-docs/HOWTO-Update.html)
 
-    a. First, bring main branch of icu-docs fork up to date.
+    a. First, bring the `main` branch of your icu-docs local copy up to date.
 
-    b. Copy the zip file to personal fork of icu-docs in apidoc/released/icu4c
-    (or dev if not a release)
+    b. Create and switch to a feature branch based of the latest `main`.  Ex: `git checkout -b ICU-<TICKET-NUMBER>`.
 
-    c. Unzip the file, replacing all documentation
+    c. Copy the zip file into your local copy of icu-docs into `apidoc/released/icu4c`
+    (or `apidoc/dev/icu4c` if not a release)
 
-    d. Remove the zip file
+    d. Unzip the file, replacing all documentation. Ex: `tar xvfz /tmp/icu4c641.tar.gz`
 
-    e. \`git add .\`
+    e. Remove the zip file
 
-    f. \`git commit -m "ICU-<TICKET-NUMBER> Update ICU4C API reference docs for
-    XX.Y"<br>
-    Example: ["ICU-21546 Update ICU4C API reference docs for 69.1"](https://github.com/unicode-org/icu-docs/pull/25)
+    f. `git add .`
 
-    g. \`git push origin main\`
+    g. `git commit -m "ICU-<TICKET-NUMBER> Update ICU4C API reference docs for
+    XX.Y"`<br>
+    Example: [ICU-21546 Update ICU4C API reference docs for 69.1](https://github.com/unicode-org/icu-docs/pull/25)
 
-    h. Create Pull Request at personal github fork for icu-docs from main into
-    unicode-ort/icu-docs main branch
+    h. `git push origin ICU-<TICKET-NUMBER>`
 
-    i. Request review
+    i. Create Pull Request from your personal github fork of icu-docs from your newly-pushed branch `ICU-<TICKET-NUMBER>` with a destination of
+    the `unicode-org/icu-docs` repo's `main` branch
 
-Note: This is also referenced below '[Upload API documentations](docs.md)' for how to make the API docs public.
+    j. Request review
+
+Note: This is also referenced below [Upload API documentations](docs.md#upload-api-documentations) for how to make the API docs public.
 
 ### ICU4J
 
@@ -387,14 +389,12 @@ which generate all release files.
 *   Upload the output files including icu4j-docs.jar to the release page first,
 *   Then update the live API docs from the generated docs.jar.
 
-See '[Upload API documentations](docs.md)' below for how to make the API docs public.
+See [Upload API documentations](docs.md#upload-api-documentations) below for how to make the API docs public.
 
 ### Upload API documentations
 
 See <https://unicode-org.github.io/icu-docs/HOWTO-Update.html> for instructions
 to upload to <https://unicode-org.github.io/icu-docs/>
-
----
 
 ### Update the Readme.html for GA
 
