@@ -1358,7 +1358,9 @@ bool blueprint_helpers::parseFracSigOption(const StringSegment& segment, MacroPr
             priority = UNUM_ROUNDING_PRIORITY_STRICT;
             offset++;
         } else {
-            U_ASSERT(offset < segment.length());
+            // Invalid digits option for fraction rounder
+            status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+            return false;
         }
         if (offset < segment.length()) {
             // Invalid digits option for fraction rounder
