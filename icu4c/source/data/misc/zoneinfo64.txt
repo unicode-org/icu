@@ -3,7 +3,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 //---------------------------------------------------------
 // Build tool:  tz2icu
-// Build date:  Sun Oct 24 18:18:10 2021
+// Build date:  Wed Oct 27 14:01:32 2021
 // tz database: ftp://ftp.iana.org/tz/
 // tz version:  2021a3
 // ICU version: 70.1
@@ -3239,7 +3239,7 @@ zoneinfo64:table(nofallback) {
   "KY", //Z#97 America/Cayman
   "US", //Z#98 America/Chicago
   "MX", //Z#99 America/Chihuahua
-  "PA", //Z#100 America/Coral_Harbour
+  "CA", //Z#100 America/Coral_Harbour
   "AR", //Z#101 America/Cordoba
   "CR", //Z#102 America/Costa_Rica
   "CA", //Z#103 America/Creston
