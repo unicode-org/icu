@@ -1653,6 +1653,16 @@ UnicodeStringTest::TestBogus() {
     if(test1>=test2 || !(test2>test1) || test1.compare(test2)>=0 || !(test2.compare(test1)>0)) {
         errln("bogus<empty failed");
     }
+
+    // test that copy constructor of bogus is bogus & clone of bogus is nullptr
+    {
+        test3.setToBogus();
+        UnicodeString test3Copy(test3);
+        UnicodeString *test3Clone = test3.clone();
+        assertTrue(WHERE, test3.isBogus());
+        assertTrue(WHERE, test3Copy.isBogus());
+        assertTrue(WHERE, test3Clone == nullptr);
+    }
 }
 
 // StringEnumeration ------------------------------------------------------- ***

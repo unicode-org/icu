@@ -334,7 +334,8 @@ Replaceable::clone() const {
 // UnicodeString overrides clone() with a real implementation
 UnicodeString *
 UnicodeString::clone() const {
-  return new UnicodeString(*this);
+  LocalPointer<UnicodeString> clonedString(new UnicodeString(*this));
+  return clonedString.isValid() && !clonedString->isBogus() ? clonedString.orphan() : nullptr;
 }
 
 //========================================
