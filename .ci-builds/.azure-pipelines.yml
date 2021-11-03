@@ -418,7 +418,7 @@ jobs:
   timeoutInMinutes: 30
   pool:
     vmImage: 'windows-2019'
-    demands: 
+    demands:
       - msbuild
       - visualstudio
       - Cmd
@@ -633,6 +633,8 @@ jobs:
         cd icu4c/source
         LD_LIBRARY_PATH=lib ./bin/icuexportdata --mode uprops --index --copyright --verbose --destdir icuexportdata_uprops_full/fast --trie-type fast --all
         LD_LIBRARY_PATH=lib ./bin/icuexportdata --mode uprops --index --copyright --verbose --destdir icuexportdata_uprops_full/small --trie-type small --all
+        LD_LIBRARY_PATH=lib ./bin/icuexportdata --mode norm --copyright --verbose --destdir icuexportdata_uprops_full/fast --trie-type fast --all
+        LD_LIBRARY_PATH=lib ./bin/icuexportdata --mode norm --copyright --verbose --destdir icuexportdata_uprops_full/small --trie-type small --all
       displayName: 'Build Unicode property data export file (Full)'
     # In the sample file, include:
     # - Basic binary properties: AHex WSpace
@@ -646,6 +648,18 @@ jobs:
         LD_LIBRARY_PATH=lib ./bin/icuexportdata --mode uprops --index --copyright --verbose --destdir icuexportdata_uprops_sample/fast --trie-type fast AHex gc nt Basic_Emoji sc WSpace blank
         LD_LIBRARY_PATH=lib ./bin/icuexportdata --mode uprops --index --copyright --verbose --destdir icuexportdata_uprops_sample/small --trie-type small AHex gc nt Basic_Emoji sc WSpace blank
       displayName: 'Build Unicode property data export file (Sample)'
+    - script: |
+        mkdir -p icu4c/source/icuexportdata_uprops_full/collation_unihan
+        mkdir -p icu4c/source/icuexportdata_uprops_full/collation_implicithan
+        cd icu4c/source
+        cd data/coll
+        FILES=`echo *.txt`
+        cd -
+        LD_LIBRARY_PATH=lib ./bin/genrb -X -s data/coll/ -d icuexportdata_uprops_full/collation_unihan --ucadata data/in/coll/ucadata-unihan-icu4x.icu $FILES
+        LD_LIBRARY_PATH=lib ./bin/genrb -X -s data/coll/ -d icuexportdata_uprops_full/collation_implicithan --ucadata data/in/coll/ucadata-implicithan-icu4x.icu $FILES
+        rm icuexportdata_uprops_full/collation_unihan/*.res
+        rm icuexportdata_uprops_full/collation_implicithan/*.res
+      displayName: 'Build collation data export file'
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: icuexportdata_uprops_full'
       inputs:
