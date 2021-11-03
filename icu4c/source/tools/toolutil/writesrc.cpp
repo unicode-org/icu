@@ -19,6 +19,7 @@
 */
 
 #include <stdio.h>
+#include <inttypes.h>
 #include <time.h>
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
@@ -143,12 +144,14 @@ usrc_writeArray(FILE *f,
     const uint8_t *p8;
     const uint16_t *p16;
     const uint32_t *p32;
-    uint32_t value;
+    const int64_t *p64; // Signed due to TOML!
+    int64_t value; // Signed due to TOML!
     int32_t i, col;
 
     p8=NULL;
     p16=NULL;
     p32=NULL;
+    p64=NULL;
     switch(width) {
     case 8:
         p8=(const uint8_t *)p;
@@ -158,6 +161,9 @@ usrc_writeArray(FILE *f,
         break;
     case 32:
         p32=(const uint32_t *)p;
+        break;
+    case 64:
+        p64=(const int64_t *)p;
         break;
     default:
         fprintf(stderr, "usrc_writeArray(width=%ld) unrecognized width\n", (long)width);
@@ -186,11 +192,14 @@ usrc_writeArray(FILE *f,
         case 32:
             value=p32[i];
             break;
+        case 64:
+            value=p64[i];
+            break;
         default:
             value=0; /* unreachable */
             break;
         }
-        fprintf(f, value<=9 ? "%lu" : "0x%lx", (unsigned long)value);
+        fprintf(f, value<=9 ? "%" PRId64 : "0x%" PRIx64, value);
     }
     if(postfix!=NULL) {
         fputs(postfix, f);

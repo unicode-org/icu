@@ -198,7 +198,7 @@ const int32_t CollationBuilder::HAS_BEFORE2;
 const int32_t CollationBuilder::HAS_BEFORE3;
 #endif
 
-CollationBuilder::CollationBuilder(const CollationTailoring *b, UErrorCode &errorCode)
+CollationBuilder::CollationBuilder(const CollationTailoring *b, UBool icu4xMode, UErrorCode &errorCode)
         : nfd(*Normalizer2::getNFDInstance(errorCode)),
           fcd(*Normalizer2Factory::getFCDInstance(errorCode)),
           nfcImpl(*Normalizer2Factory::getNFCImpl(errorCode)),
@@ -206,7 +206,8 @@ CollationBuilder::CollationBuilder(const CollationTailoring *b, UErrorCode &erro
           baseData(b->data),
           rootElements(b->data->rootElements, b->data->rootElementsLength),
           variableTop(0),
-          dataBuilder(new CollationDataBuilder(errorCode)), fastLatinEnabled(TRUE),
+          dataBuilder(new CollationDataBuilder(icu4xMode, errorCode)), fastLatinEnabled(TRUE),
+          icu4xMode(icu4xMode),
           errorReason(NULL),
           cesLength(0),
           rootPrimaryIndexes(errorCode), nodes(errorCode) {
@@ -224,6 +225,10 @@ CollationBuilder::CollationBuilder(const CollationTailoring *b, UErrorCode &erro
         errorReason = "CollationBuilder initialization failed";
     }
 }
+
+CollationBuilder::CollationBuilder(const CollationTailoring *b, UErrorCode &errorCode)
+  : CollationBuilder(b, FALSE, errorCode)
+{}
 
 CollationBuilder::~CollationBuilder() {
     delete dataBuilder;
@@ -262,15 +267,19 @@ CollationBuilder::parseAndBuild(const UnicodeString &ruleString,
     if(U_FAILURE(errorCode)) { return NULL; }
     if(dataBuilder->hasMappings()) {
         makeTailoredCEs(errorCode);
-        closeOverComposites(errorCode);
+        if (!icu4xMode) {
+            closeOverComposites(errorCode);
+        }
         finalizeCEs(errorCode);
-        // Copy all of ASCII, and Latin-1 letters, into each tailoring.
-        optimizeSet.add(0, 0x7f);
-        optimizeSet.add(0xc0, 0xff);
-        // Hangul is decomposed on the fly during collation,
-        // and the tailoring data is always built with HANGUL_TAG specials.
-        optimizeSet.remove(Hangul::HANGUL_BASE, Hangul::HANGUL_END);
-        dataBuilder->optimize(optimizeSet, errorCode);
+        if (!icu4xMode) {
+            // Copy all of ASCII, and Latin-1 letters, into each tailoring.
+            optimizeSet.add(0, 0x7f);
+            optimizeSet.add(0xc0, 0xff);
+            // Hangul is decomposed on the fly during collation,
+            // and the tailoring data is always built with HANGUL_TAG specials.
+            optimizeSet.remove(Hangul::HANGUL_BASE, Hangul::HANGUL_END);
+            dataBuilder->optimize(optimizeSet, errorCode);
+        }
         tailoring->ensureOwnedData(errorCode);
         if(U_FAILURE(errorCode)) { return NULL; }
         if(fastLatinEnabled) { dataBuilder->enableFastLatin(); }
@@ -743,14 +752,18 @@ CollationBuilder::addRelation(int32_t strength, const UnicodeString &prefix,
         }
     }
     uint32_t ce32 = Collation::UNASSIGNED_CE32;
-    if((prefix != nfdPrefix || str != nfdString) &&
+    if(!icu4xMode && (prefix != nfdPrefix || str != nfdString) &&
             !ignorePrefix(prefix, errorCode) && !ignoreString(str, errorCode)) {
         // Map from the original input to the CEs.
         // We do this in case the canonical closure is incomplete,
         // so that it is possible to explicitly provide the missing mappings.
         ce32 = addIfDifferent(prefix, str, ces, cesLength, ce32, errorCode);
     }
-    addWithClosure(nfdPrefix, nfdString, ces, cesLength, ce32, errorCode);
+    if (!icu4xMode) {
+        addWithClosure(nfdPrefix, nfdString, ces, cesLength, ce32, errorCode);
+    } else {
+        addIfDifferent(nfdPrefix, nfdString, ces, cesLength, ce32, errorCode);
+    }
     if(U_FAILURE(errorCode)) {
         parserErrorReason = "writing collation elements";
         return;
@@ -1608,7 +1621,7 @@ CEFinalizer::~CEFinalizer() {}
 void
 CollationBuilder::finalizeCEs(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
-    LocalPointer<CollationDataBuilder> newBuilder(new CollationDataBuilder(errorCode), errorCode);
+    LocalPointer<CollationDataBuilder> newBuilder(new CollationDataBuilder(icu4xMode, errorCode), errorCode);
     if(U_FAILURE(errorCode)) {
         return;
     }
