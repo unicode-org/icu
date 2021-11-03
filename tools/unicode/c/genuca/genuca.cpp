@@ -24,6 +24,7 @@
 #define U_NO_DEFAULT_INCLUDE_UTF_HEADERS 1
 
 #include <stdio.h>
+#include <stdint.h>
 #include "unicode/utypes.h"
 #include "unicode/errorcode.h"
 #include "unicode/localpointer.h"
@@ -69,7 +70,7 @@ enum HanOrderValue {
     HAN_RADICAL_STROKE
 };
 
-static UBool beVerbose=FALSE, withCopyright=TRUE;
+static UBool beVerbose=FALSE, withCopyright=TRUE, icu4xMode=FALSE;
 
 static HanOrderValue hanOrder = HAN_NO_ORDER;
 
@@ -832,6 +833,11 @@ parseFractionalUCA(const char *filename,
     int32_t lineNumber = 0;
     char buffer[30000];
 
+    const Normalizer2* norm = nullptr;
+    if (icu4xMode) {
+        norm = Normalizer2::getNFDInstance(*status);
+    }
+
     UChar32 maxCodePoint = 0;
     while(!feof(data)) {
         if(U_FAILURE(*status)) {
@@ -889,6 +895,24 @@ parseFractionalUCA(const char *filename,
                 // CollationBaseDataBuilder::init() maps them to special CEs.
                 // Except for U+FFFE, these have higher primaries in v2 than in FractionalUCA.txt.
                 if(0xfffd <= c && c <= 0xffff) { continue; }
+                if (icu4xMode) {
+                    if (c >= 0xAC00 && c <= 0xD7A3) {
+                        // Hangul syllable
+                        continue;
+                    }
+                    if (c >= 0xD800 && c < 0xE000) {
+                        // Surrogate
+                        continue;
+                    }
+                    UnicodeString src;
+                    UnicodeString dst;
+                    src.append(c);
+                    norm->normalize(src, dst, *status);
+                    if (src != dst) {
+                        // c decomposed, skip it
+                        continue;
+                    }
+                }
                 if(s.length() >= 2 && c == 0xFDD1) {
                     UChar32 c2 = s.char32At(1);
                     int32_t script = getCharScript(c2);
@@ -923,7 +947,6 @@ parseFractionalUCA(const char *filename,
                             (int)lineNumber, filename, line);
                     exit(U_INVALID_FORMAT_ERROR);
                 }
-
                 builder.add(prefix, s, ces, cesLength, *status);
             }
         }
@@ -1126,8 +1149,9 @@ buildAndWriteBaseData(CollationBaseDataBuilder &builder,
 
     CollationTailoring::makeBaseVersion(UCAVersion, ucaDataInfo.dataVersion);
     const char *dataName =
-        hanOrder == HAN_IMPLICIT ? "ucadata-implicithan" :
-        "ucadata-unihan";
+        hanOrder == HAN_IMPLICIT ?
+            (icu4xMode ? "ucadata-implicithan-icu4x" : "ucadata-implicithan") :
+            (icu4xMode ? "ucadata-unihan-icu4x" : "ucadata-unihan");
     UNewDataMemory *pData=udata_create(path, "icu", dataName, &ucaDataInfo,
                                        withCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
@@ -1275,7 +1299,7 @@ parseAndWriteCollationRootData(
         const char *sourceCodePath,
         UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
-    CollationBaseDataBuilder builder(errorCode);
+    CollationBaseDataBuilder builder(icu4xMode, errorCode);
     builder.init(errorCode);
     parseFractionalUCA(fracUCAPath, builder, &errorCode);
     buildAndWriteBaseData(builder, binaryDataPath, errorCode);
@@ -1289,7 +1313,8 @@ enum {
     HELP_QUESTION_MARK,
     VERBOSE,
     COPYRIGHT,
-    HAN_ORDER
+    HAN_ORDER,
+    ICU4X
 };
 
 static UOption options[]={
@@ -1297,7 +1322,8 @@ static UOption options[]={
     UOPTION_HELP_QUESTION_MARK,
     UOPTION_VERBOSE,
     UOPTION_COPYRIGHT,
-    UOPTION_DEF("hanOrder", '\x01', UOPT_REQUIRES_ARG)
+    UOPTION_DEF("hanOrder", '\x01', UOPT_REQUIRES_ARG),
+    UOPTION_DEF("icu4x", 'X', UOPT_NO_ARG)
 };
 
 extern "C" int
@@ -1348,6 +1374,7 @@ main(int argc, char* argv[]) {
 
     beVerbose=options[VERBOSE].doesOccur;
     withCopyright=options[COPYRIGHT].doesOccur;
+    icu4xMode=options[ICU4X].doesOccur;
 
     IcuToolErrorCode errorCode("genuca");
 

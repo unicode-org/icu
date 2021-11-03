@@ -83,14 +83,15 @@ binarySearch(const UVector64 &list, int64_t ce) {
 
 }  // namespace
 
-CollationBaseDataBuilder::CollationBaseDataBuilder(UErrorCode &errorCode)
-        : CollationDataBuilder(errorCode),
+CollationBaseDataBuilder::CollationBaseDataBuilder(UBool icu4xMode, UErrorCode &errorCode)
+        : CollationDataBuilder(icu4xMode, errorCode),
           numericPrimary(0x12000000),
           firstHanPrimary(0), lastHanPrimary(0), hanStep(2),
           rootElements(errorCode),
           scriptStartsLength(1) {
     uprv_memset(scriptsIndex, 0, sizeof(scriptsIndex));
     uprv_memset(scriptStarts, 0, sizeof(scriptStarts));
+    this->icu4xMode = icu4xMode;
 }
 
 CollationBaseDataBuilder::~CollationBaseDataBuilder() {
@@ -119,7 +120,9 @@ CollationBaseDataBuilder::init(UErrorCode &errorCode) {
     trie = utrie2_open(Collation::UNASSIGNED_CE32, Collation::FFFD_CE32, &errorCode);
 
     // Preallocate trie blocks for Latin in the hope that proximity helps with CPU caches.
-    for(UChar32 c = 0; c < 0x180; ++c) {
+    // In the ICU4X case, only preallocate ASCII, because we don't store CE32s for
+    // precomposed characters.
+    for(UChar32 c = 0; c < (icu4xMode ? 0x80 : 0x180); ++c) {
         utrie2_set32(trie, c, Collation::UNASSIGNED_CE32, &errorCode);
     }
 
@@ -128,8 +131,10 @@ CollationBaseDataBuilder::init(UErrorCode &errorCode) {
     // Some code assumes that the root first primary CE is the "space first primary"
     // from FractionalUCA.txt.
 
-    uint32_t hangulCE32 = Collation::makeCE32FromTagAndIndex(Collation::HANGUL_TAG, 0);
-    utrie2_setRange32(trie, Hangul::HANGUL_BASE, Hangul::HANGUL_END, hangulCE32, true, &errorCode);
+    if (!icu4xMode) {
+        uint32_t hangulCE32 = Collation::makeCE32FromTagAndIndex(Collation::HANGUL_TAG, 0);
+        utrie2_setRange32(trie, Hangul::HANGUL_BASE, Hangul::HANGUL_END, hangulCE32, true, &errorCode);
+    }
 
     // Add a mapping for the first-unassigned boundary,
     // which is the AlphabeticIndex overflow boundary.
