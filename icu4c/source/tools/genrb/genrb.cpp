@@ -33,6 +33,7 @@
 #include "filterrb.h"
 #include "reslist.h"
 #include "ucmndata.h"  /* TODO: for reading the pool bundle */
+#include "collationroot.h"
 
 U_NAMESPACE_USE
 
@@ -84,7 +85,9 @@ enum
     WRITE_POOL_BUNDLE,
     USE_POOL_BUNDLE,
     INCLUDE_UNIHAN_COLL,
-    FILTERDIR
+    FILTERDIR,
+    ICU4X_MODE,
+    UCADATA
 };
 
 UOption options[]={
@@ -111,6 +114,8 @@ UOption options[]={
                       UOPTION_DEF("usePoolBundle", '\x01', UOPT_OPTIONAL_ARG),/* 20 */
                       UOPTION_DEF("includeUnihanColl", '\x01', UOPT_NO_ARG),/* 21 */ /* temporary, don't display in usage info */
                       UOPTION_DEF("filterDir", '\x01', UOPT_OPTIONAL_ARG), /* 22 */
+                      UOPTION_DEF("icu4xMode", 'X', UOPT_NO_ARG),/* 23 */
+                      UOPTION_DEF("ucadata", '\x01', UOPT_REQUIRES_ARG),/* 24 */
                   };
 
 static     UBool       write_java = FALSE;
@@ -150,6 +155,10 @@ main(int argc,
     }
     if(options[WRITE_POOL_BUNDLE].doesOccur && options[USE_POOL_BUNDLE].doesOccur) {
         fprintf(stderr, "%s: cannot combine --writePoolBundle and --usePoolBundle\n", argv[0]);
+        illegalArg = TRUE;
+    }
+    if (options[ICU4X_MODE].doesOccur && !options[UCADATA].doesOccur) {
+        fprintf(stderr, "%s: --icu4xMode requires --ucadata\n", argv[0]);
         illegalArg = TRUE;
     }
     if(options[FORMAT_VERSION].doesOccur) {
@@ -300,6 +309,15 @@ main(int argc,
         if(options[WRITE_XLIFF].value != NULL){
             xliffOutputFileName = options[WRITE_XLIFF].value;
         }
+    }
+
+    if (options[UCADATA].doesOccur) {
+#if !UCONFIG_NO_COLLATION
+        CollationRoot::forceLoadFromFile(options[UCADATA].value, status);
+#else
+        fprintf(stderr, "--ucadata was used with UCONFIG_NO_COLLATION\n");
+        return status;
+#endif
     }
 
     initParser();
@@ -656,7 +674,7 @@ processFile(const char *filename, const char *cp,
     }
     /* Parse the data into an SRBRoot */
     data.adoptInstead(parse(ucbuf.getAlias(), inputDir, outputDir, filename,
-            !omitBinaryCollation, options[NO_COLLATION_RULES].doesOccur, &status));
+            !omitBinaryCollation, options[NO_COLLATION_RULES].doesOccur, options[ICU4X_MODE].doesOccur, &status));
 
     if (data.isNull() || U_FAILURE(status)) {
         fprintf(stderr, "couldn't parse the file %s. Error:%s\n", filename, u_errorName(status));
