@@ -109,6 +109,10 @@ void CharsetDetectionTest::runIndexedTest( int32_t index, UBool exec, const char
             if (exec) Ticket6954Test();
             break;
 
+       case 10: name = "Ticket21823Test";
+            if (exec) Ticket21823Test();
+            break;
+
         default: name = "";
             break; //needed to end loop
     }
@@ -838,4 +842,23 @@ void CharsetDetectionTest::Ticket6954Test() {
     TEST_ASSERT_SUCCESS(status);
     TEST_ASSERT(strcmp(name1, "windows-1252")==0);
 #endif
+}
+
+
+// Ticket 21823 - Issue with Charset Detector for ill-formed input strings. 
+//                Its fix involves returning a failure based error code 
+//                (U_INVALID_CHAR_FOUND) incase no charsets appear to match the input data.
+void CharsetDetectionTest::Ticket21823Test() {
+    UErrorCode status = U_ZERO_ERROR;
+    std::string str = "\x80";
+    UCharsetDetector* csd = ucsdet_open(&status);
+
+    ucsdet_setText(csd, str.data(), str.length(), &status);
+    const UCharsetMatch* match = ucsdet_detect(csd, &status);
+
+    if (match == NULL) {
+        TEST_ASSERT(U_FAILURE(status));
+    }
+
+    ucsdet_close(csd);
 }

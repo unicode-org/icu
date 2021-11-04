@@ -33,6 +33,7 @@ public:
     virtual void IBM420Test();
     virtual void Ticket6394Test();
     virtual void Ticket6954Test();
+    virtual void Ticket21823Test();
 
 private:
     void checkEncoding(const UnicodeString &testString,
