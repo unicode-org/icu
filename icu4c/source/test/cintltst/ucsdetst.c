@@ -402,6 +402,7 @@ static void TestBufferOverflow(void) {
     }
 
     for (idx = 0; idx < UPRV_LENGTHOF(testStrings); idx++) {
+        status = U_ZERO_ERROR;
         ucsdet_setText(csd, testStrings[idx], -1, &status);
         match = ucsdet_detect(csd, &status);
 
