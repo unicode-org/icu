@@ -2079,7 +2079,7 @@ void TimeZoneTest::TestCanonicalID() {
         {"America/Antigua", "America/Port_of_Spain"},
         {"America/Anguilla", "America/Port_of_Spain"},
         {"America/Cayman", "America/Panama"},
-        {"America/Coral_Harbour", "America/Panama"},
+        {"America/Coral_Harbour", "America/Atikokan"},
         {"America/Curacao", "America/Aruba"},
         {"America/Dominica", "America/Port_of_Spain"},
         {"America/Grenada", "America/Port_of_Spain"},

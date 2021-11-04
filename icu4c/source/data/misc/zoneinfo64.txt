@@ -3,9 +3,9 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 //---------------------------------------------------------
 // Build tool:  tz2icu
-// Build date:  Wed Oct 27 14:01:32 2021
+// Build date:  Thu Nov  4 10:32:31 2021
 // tz database: ftp://ftp.iana.org/tz/
-// tz version:  2021a3
+// tz version:  2021a4
 // ICU version: 70.1
 //---------------------------------------------------------
 // >> !!! >>   THIS IS A MACHINE-GENERATED FILE   << !!! <<
@@ -13,7 +13,7 @@
 //---------------------------------------------------------
 
 zoneinfo64:table(nofallback) {
- TZVersion { "2021a3" }
+ TZVersion { "2021a4" }
  Zones:array { 
   /* ACT */ :int { 356 } //Z#0
   /* AET */ :int { 368 } //Z#1
@@ -291,6 +291,7 @@ zoneinfo64:table(nofallback) {
     trans:intvector { -1632067200, -1615136400, -923248800, -765392400 }
     typeOffsets:intvector { -21988, 0, -21600, 0, -21600, 3600, -18000, 0 }
     typeMap:bin { "0102010203" }
+    links:intvector { 79, 100 }
   } //Z#79
   /* America/Atka */ :int { 59 } //Z#80
   /* America/Bahia */ :table {
@@ -396,7 +397,7 @@ zoneinfo64:table(nofallback) {
     finalRaw:int { -25200 }
     finalYear:int { 2003 }
   } //Z#99
-  /* America/Coral_Harbour */ :int { 182 } //Z#100
+  /* America/Coral_Harbour */ :int { 79 } //Z#100
   /* America/Cordoba */ :int { 67 } //Z#101
   /* America/Costa_Rica */ :table {
     trans:intvector { -1545071027, 288770400, 297234000, 320220000, 328683600, 664264800, 678344400, 695714400, 700635600 }
@@ -908,7 +909,7 @@ zoneinfo64:table(nofallback) {
     trans:intvector { -1946918424 }
     typeOffsets:intvector { -19088, 0, -19176, 0, -18000, 0 }
     typeMap:bin { "0102" }
-    links:intvector { 97, 100, 182 }
+    links:intvector { 97, 182 }
   } //Z#182
   /* America/Pangnirtung */ :table {
     trans:intvector { -1546300800, -880221600, -765399600, -147902400, -131572800, 325663200, 341384400, 357112800, 372834000, 388562400, 404888400, 420012000, 436338000, 452066400, 467787600, 483516000, 499237200, 514965600, 530686800, 544600800, 562136400, 576050400, 594190800, 607500000, 625640400, 638949600, 657090000, 671004000, 688539600, 702453600, 719989200, 733903200, 752043600, 765352800, 783493200, 796802400, 814946400, 828860400, 846396000, 860310000, 877845600, 891759600, 909295200, 923209200, 941349600, 954662400, 972802800, 986108400, 1004248800, 1018162800, 1035698400, 1049612400, 1067148000, 1081062000, 1099202400, 1112511600, 1130652000, 1143961200, 1162101600, 1173596400, 1194156000 }
