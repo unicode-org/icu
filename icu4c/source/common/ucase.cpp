@@ -1064,6 +1064,8 @@ ucase_toFullLower(UChar32 c,
     // The sign of the result has meaning, input must be non-negative so that it can be returned as is.
     U_ASSERT(c >= 0);
     UChar32 result=c;
+    // Reset the output pointer in case it was uninitialized.
+    *pString=nullptr;
     uint16_t props=UTRIE2_GET16(&ucase_props_singleton.trie, c);
     if(!UCASE_HAS_EXCEPTION(props)) {
         if(UCASE_IS_UPPER_OR_TITLE(props)) {
@@ -1148,7 +1150,6 @@ ucase_toFullLower(UChar32 c,
                     0307; ; 0307; 0307; tr After_I; # COMBINING DOT ABOVE
                     0307; ; 0307; 0307; az After_I; # COMBINING DOT ABOVE
                  */
-                *pString=nullptr;
                 return 0; /* remove the dot (continue without output) */
             } else if(loc==UCASE_LOC_TURKISH && c==0x49 && !isFollowedByDotAbove(iter, context)) {
                 /*
@@ -1215,6 +1216,8 @@ toUpperOrTitle(UChar32 c,
     // The sign of the result has meaning, input must be non-negative so that it can be returned as is.
     U_ASSERT(c >= 0);
     UChar32 result=c;
+    // Reset the output pointer in case it was uninitialized.
+    *pString=nullptr;
     uint16_t props=UTRIE2_GET16(&ucase_props_singleton.trie, c);
     if(!UCASE_HAS_EXCEPTION(props)) {
         if(UCASE_GET_TYPE(props)==UCASE_LOWER) {
@@ -1252,7 +1255,6 @@ toUpperOrTitle(UChar32 c,
 
                     0307; 0307; ; ; lt After_Soft_Dotted; # COMBINING DOT ABOVE
                  */
-                *pString=nullptr;
                 return 0; /* remove the dot (continue without output) */
             } else if(c==0x0587) {
                 // See ICU-13416:
@@ -1449,6 +1451,8 @@ ucase_toFullFolding(UChar32 c,
     // The sign of the result has meaning, input must be non-negative so that it can be returned as is.
     U_ASSERT(c >= 0);
     UChar32 result=c;
+    // Reset the output pointer in case it was uninitialized.
+    *pString=nullptr;
     uint16_t props=UTRIE2_GET16(&ucase_props_singleton.trie, c);
     if(!UCASE_HAS_EXCEPTION(props)) {
         if(UCASE_IS_UPPER_OR_TITLE(props)) {
