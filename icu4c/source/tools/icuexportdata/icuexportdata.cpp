@@ -15,6 +15,7 @@
 #include "unicode/uscript.h"
 #include "unicode/putil.h"
 #include "unicode/umutablecptrie.h"
+#include "ucase.h"
 #include "writesrc.h"
 
 U_NAMESPACE_USE
@@ -228,14 +229,14 @@ void dumpScriptExtensions(FILE* f) {
             }
         }
 
-        if (isScxValUnique) {   
+        if (isScxValUnique) {
             outputDedupVec.push_back(scxValVec);
             usrc_writeArray(f, "  [", scxValVec.data(), 16, scxValVec.size(), "    ", "],\n");
         }
 
         // We must update the value in the UCPTrie for the code point to contain:
         // 9..0 the Script code in the lower 10 bits when 11..10 is 0, else it is
-        //   the index into the companion array 
+        //   the index into the companion array
         // 11..10 the same higher-order 2 bits in the trie in uprops.icu indicating whether
         //   3: other
         //   2: Script=Inherited
@@ -333,35 +334,25 @@ static UOption options[]={
     UOPTION_QUIET,
 };
 
-int main(int argc, char* argv[]) {
-    U_MAIN_INIT_ARGS(argc, argv);
+void printHelp(FILE* stdfile, const char* program) {
+  fprintf(stdfile,
+          "usage: %s -m mode [-options] [--all | properties...]\n"
+          "\tdump Unicode property data to .toml files\n"
+          "options:\n"
+          "\t-h or -? or --help  this usage text\n"
+          "\t-V or --version     show a version message\n"
+          "\t-m or --mode        mode: currently only 'uprops' and 'ucase', but more may be added\n"
+          "\t      --trie-type   set the trie type (small or fast, default small)\n"
+          "\t-d or --destdir     destination directory, followed by the path\n"
+          "\t      --all         write out all properties known to icuexportdata\n"
+          "\t      --index       write an _index.toml summarizing all data exported\n"
+          "\t-c or --copyright   include a copyright notice\n"
+          "\t-v or --verbose     Turn on verbose output\n"
+          "\t-q or --quiet       do not display warnings and progress\n",
+          program);
+}
 
-    /* preset then read command line options */
-    options[OPT_DESTDIR].value=u_getDataDirectory();
-    argc=u_parseArgs(argc, argv, UPRV_LENGTHOF(options), options);
-
-    if(options[OPT_VERSION].doesOccur) {
-        printf("icuexportdata version %s, ICU tool to dump data files for external consumers\n",
-               U_ICU_DATA_VERSION);
-        printf("%s\n", U_COPYRIGHT_STRING);
-        exit(0);
-    }
-
-    /* error handling, printing usage message */
-    if(argc<0) {
-        fprintf(stderr,
-            "error in command line argument \"%s\"\n",
-            argv[-argc]);
-    } else if(argc<2) {
-        argc=-1;
-    }
-
-    /* get the options values */
-    haveCopyright = options[OPT_COPYRIGHT].doesOccur;
-    destdir = options[OPT_DESTDIR].value;
-    VERBOSE = options[OPT_VERBOSE].doesOccur;
-    QUIET = options[OPT_QUIET].doesOccur;
-
+int exportUprops(int argc, char* argv[]) {
     // Load list of Unicode properties
     std::vector<const char*> propNames;
     for (int i=1; i<argc; i++) {
@@ -383,46 +374,6 @@ int main(int argc, char* argv[]) {
             if (propName != NULL) {
                 propNames.push_back(propName);
             }
-        }
-    }
-
-    if (propNames.empty()
-            || options[OPT_HELP_H].doesOccur
-            || options[OPT_HELP_QUESTION_MARK].doesOccur
-            || !options[OPT_MODE].doesOccur) {
-        FILE *stdfile=argc<0 ? stderr : stdout;
-        fprintf(stdfile,
-            "usage: %s -m uprops [-options] [--all | properties...]\n"
-            "\tdump Unicode property data to .toml files\n"
-            "options:\n"
-            "\t-h or -? or --help  this usage text\n"
-            "\t-V or --version     show a version message\n"
-            "\t-m or --mode        mode: currently only 'uprops', but more may be added\n"
-            "\t      --trie-type   set the trie type (small or fast, default small)\n"
-            "\t-d or --destdir     destination directory, followed by the path\n"
-            "\t      --all         write out all properties known to icuexportdata\n"
-            "\t      --index       write an _index.toml summarizing all data exported\n"
-            "\t-c or --copyright   include a copyright notice\n"
-            "\t-v or --verbose     Turn on verbose output\n"
-            "\t-q or --quiet       do not display warnings and progress\n",
-            argv[0]);
-        return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
-    }
-
-    const char* mode = options[OPT_MODE].value;
-    if (uprv_strcmp(mode, "uprops") != 0) {
-        fprintf(stderr, "Invalid option for --mode (must be uprops)\n");
-        return U_ILLEGAL_ARGUMENT_ERROR;
-    }
-
-    if (options[OPT_TRIE_TYPE].doesOccur) {
-        if (uprv_strcmp(options[OPT_TRIE_TYPE].value, "fast") == 0) {
-            trieType = UCPTRIE_TYPE_FAST;
-        } else if (uprv_strcmp(options[OPT_TRIE_TYPE].value, "small") == 0) {
-            trieType = UCPTRIE_TYPE_SMALL;
-        } else {
-            fprintf(stderr, "Invalid option for --trie-type (must be small or fast)\n");
-            return U_ILLEGAL_ARGUMENT_ERROR;
         }
     }
 
@@ -469,4 +420,135 @@ int main(int argc, char* argv[]) {
     }
 
     return 0;
+}
+
+struct AddRangeHelper {
+    UMutableCPTrie* ucptrie;
+};
+
+static UBool U_CALLCONV
+addRangeToUCPTrie(const void* context, UChar32 start, UChar32 end, uint32_t value) {
+    IcuToolErrorCode status("addRangeToUCPTrie");
+    UMutableCPTrie* ucptrie = ((const AddRangeHelper*) context)->ucptrie;
+    umutablecptrie_setRange(ucptrie, start, end, value, status);
+    handleError(status, "setRange");
+
+    return TRUE;
+}
+
+int exportCase(int argc, char* argv[]) {
+    if (argc > 1) {
+        fprintf(stderr, "ucase mode does not expect additional arguments\n");
+        return U_ILLEGAL_ARGUMENT_ERROR;
+    }
+    (void) argv; // Suppress unused variable warning
+
+    IcuToolErrorCode status("icuexportdata");
+    LocalUMutableCPTriePointer builder(umutablecptrie_open(0, 0, status));
+    handleError(status, "exportCase");
+
+    int32_t exceptionsLength, unfoldLength;
+    const UCaseProps *caseProps = ucase_getSingleton(&exceptionsLength, &unfoldLength);
+    const UTrie2* caseTrie = &caseProps->trie;
+
+    AddRangeHelper helper = { builder.getAlias() };
+    utrie2_enum(caseTrie, NULL, addRangeToUCPTrie, &helper);
+
+    UCPTrieValueWidth width = UCPTRIE_VALUE_BITS_16;
+    LocalUCPTriePointer utrie(umutablecptrie_buildImmutable(
+        builder.getAlias(),
+        trieType,
+        width,
+        status));
+    handleError(status, "exportCase");
+
+    FILE* f = prepareOutputFile("ucase");
+
+    UVersionInfo versionInfo;
+    u_getUnicodeVersion(versionInfo);
+    char uvbuf[U_MAX_VERSION_STRING_LENGTH];
+    u_versionToString(versionInfo, uvbuf);
+    fprintf(f, "icu_version = \"%s\"\nunicode_version = \"%s\"\n\n",
+            U_ICU_VERSION,
+            uvbuf);
+
+    fputs("[ucase.code_point_trie]\n", f);
+    usrc_writeUCPTrie(f, "case_trie", utrie.getAlias(), UPRV_TARGET_SYNTAX_TOML);
+    fputs("\n", f);
+
+    const char* indent = "  ";
+    const char* suffix = "\n]\n";
+
+    fputs("[ucase.exceptions]\n", f);
+    const char* exceptionsPrefix = "exceptions = [\n  ";
+    int32_t exceptionsWidth = 16;
+    usrc_writeArray(f, exceptionsPrefix, caseProps->exceptions, exceptionsWidth,
+                    exceptionsLength, indent, suffix);
+    fputs("\n", f);
+
+    fputs("[ucase.unfold]\n", f);
+    const char* unfoldPrefix = "unfold = [\n  ";
+    int32_t unfoldWidth = 16;
+    usrc_writeArray(f, unfoldPrefix, caseProps->unfold, unfoldWidth,
+                    unfoldLength, indent, suffix);
+
+    return 0;
+}
+
+int main(int argc, char* argv[]) {
+    U_MAIN_INIT_ARGS(argc, argv);
+
+    /* preset then read command line options */
+    options[OPT_DESTDIR].value=u_getDataDirectory();
+    argc=u_parseArgs(argc, argv, UPRV_LENGTHOF(options), options);
+
+    if(options[OPT_VERSION].doesOccur) {
+        printf("icuexportdata version %s, ICU tool to dump data files for external consumers\n",
+               U_ICU_DATA_VERSION);
+        printf("%s\n", U_COPYRIGHT_STRING);
+        exit(0);
+    }
+
+    /* error handling, printing usage message */
+    if(argc<0) {
+        fprintf(stderr,
+            "error in command line argument \"%s\"\n",
+            argv[-argc]);
+    }
+
+    if (argc < 0
+            || options[OPT_HELP_H].doesOccur
+            || options[OPT_HELP_QUESTION_MARK].doesOccur
+            || !options[OPT_MODE].doesOccur) {
+        FILE *stdfile=argc<0 ? stderr : stdout;
+        printHelp(stdfile, argv[0]);
+        return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
+    }
+
+    /* get the options values */
+    haveCopyright = options[OPT_COPYRIGHT].doesOccur;
+    destdir = options[OPT_DESTDIR].value;
+    VERBOSE = options[OPT_VERBOSE].doesOccur;
+    QUIET = options[OPT_QUIET].doesOccur;
+
+    if (options[OPT_TRIE_TYPE].doesOccur) {
+        if (uprv_strcmp(options[OPT_TRIE_TYPE].value, "fast") == 0) {
+            trieType = UCPTRIE_TYPE_FAST;
+        } else if (uprv_strcmp(options[OPT_TRIE_TYPE].value, "small") == 0) {
+            trieType = UCPTRIE_TYPE_SMALL;
+        } else {
+            fprintf(stderr, "Invalid option for --trie-type (must be small or fast)\n");
+            return U_ILLEGAL_ARGUMENT_ERROR;
+        }
+    }
+
+    const char* mode = options[OPT_MODE].value;
+    if (uprv_strcmp(mode, "uprops") == 0) {
+        return exportUprops(argc, argv);
+    } else if (uprv_strcmp(mode, "ucase") == 0) {
+        return exportCase(argc, argv);
+    }
+
+    fprintf(stderr, "Invalid option for --mode (must be uprops or ucase)\n");
+    return U_ILLEGAL_ARGUMENT_ERROR;
 }
