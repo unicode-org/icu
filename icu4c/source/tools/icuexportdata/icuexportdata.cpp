@@ -158,6 +158,35 @@ static UOption options[]={
     UOPTION_QUIET,
 };
 
+void printHelp(FILE* stdfile, const char* program) {
+  fprintf(stdfile,
+	  "usage: %s -m mode [-options] [--all | properties...]\n"
+	  "\tdump Unicode property data to .toml files\n"
+	  "options:\n"
+	  "\t-h or -? or --help  this usage text\n"
+	  "\t-V or --version     show a version message\n"
+	  "\t-m or --mode        mode: currently only 'uprops' and 'ucase', but more may be added\n"
+	  "\t      --trie-type   set the trie type (small or fast, default small)\n"
+	  "\t-d or --destdir     destination directory, followed by the path\n"
+	  "\t      --all         write out all properties known to icuexportdata\n"
+	  "\t      --index       write an _index.toml summarizing all data exported\n"
+	  "\t-c or --copyright   include a copyright notice\n"
+	  "\t-v or --verbose     Turn on verbose output\n"
+	  "\t-q or --quiet       do not display warnings and progress\n",
+	  program);
+}
+
+void exportUprops() {
+  return 0;
+}
+
+void exportCase() {
+  return 0;
+}
+
+
+
+
 int main(int argc, char* argv[]) {
     U_MAIN_INIT_ARGS(argc, argv);
 
@@ -216,27 +245,13 @@ int main(int argc, char* argv[]) {
             || options[OPT_HELP_QUESTION_MARK].doesOccur
             || !options[OPT_MODE].doesOccur) {
         FILE *stdfile=argc<0 ? stderr : stdout;
-        fprintf(stdfile,
-            "usage: %s -m uprops [-options] [--all | properties...]\n"
-            "\tdump Unicode property data to .toml files\n"
-            "options:\n"
-            "\t-h or -? or --help  this usage text\n"
-            "\t-V or --version     show a version message\n"
-            "\t-m or --mode        mode: currently only 'uprops', but more may be added\n"
-            "\t      --trie-type   set the trie type (small or fast, default small)\n"
-            "\t-d or --destdir     destination directory, followed by the path\n"
-            "\t      --all         write out all properties known to icuexportdata\n"
-            "\t      --index       write an _index.toml summarizing all data exported\n"
-            "\t-c or --copyright   include a copyright notice\n"
-            "\t-v or --verbose     Turn on verbose output\n"
-            "\t-q or --quiet       do not display warnings and progress\n",
-            argv[0]);
+	printHelp(stdfile, argv[0]);
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
     const char* mode = options[OPT_MODE].value;
-    if (uprv_strcmp(mode, "uprops") != 0) {
-        fprintf(stderr, "Invalid option for --mode (must be uprops)\n");
+    if (uprv_strcmp(mode, "uprops") != 0 && uprv_strcmp(mode, "ucase") != 0) {
+        fprintf(stderr, "Invalid option for --mode (must be uprops or ucase)\n");
         return U_ILLEGAL_ARGUMENT_ERROR;
     }
 
