@@ -209,6 +209,8 @@ ufmtval_getString(
     if (pLength != nullptr) {
         *pLength = readOnlyAlias.length();
     }
+    // Note: this line triggers -Wreturn-local-addr, but it is safe because toTempString is
+    // defined to return memory owned by the ufmtval argument.
     return readOnlyAlias.getBuffer();
 }
 

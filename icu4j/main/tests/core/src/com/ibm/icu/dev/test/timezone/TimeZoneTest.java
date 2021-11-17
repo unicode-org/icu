@@ -1518,6 +1518,8 @@ public class TimeZoneTest extends TestFmwk
                 {"Africa/Sao_Tome", "Africa/Abidjan"},
                 {"America/Antigua", "America/Port_of_Spain"},
                 {"America/Anguilla", "America/Port_of_Spain"},
+                {"America/Cayman", "America/Panama"},
+                {"America/Coral_Harbour", "America/Atikokan"},
                 {"America/Curacao", "America/Aruba"},
                 {"America/Dominica", "America/Port_of_Spain"},
                 {"America/Grenada", "America/Port_of_Spain"},
@@ -1526,7 +1528,6 @@ public class TimeZoneTest extends TestFmwk
                 {"America/Lower_Princes", "America/Aruba"},
                 {"America/Marigot", "America/Port_of_Spain"},
                 {"America/Montserrat", "America/Port_of_Spain"},
-                {"America/Panama", "America/Cayman"},
                 {"America/Santa_Isabel", "America/Tijuana"},
                 {"America/Shiprock", "America/Denver"},
                 {"America/St_Barthelemy", "America/Port_of_Spain"},
@@ -1536,7 +1537,7 @@ public class TimeZoneTest extends TestFmwk
                 {"America/St_Vincent", "America/Port_of_Spain"},
                 {"America/Toronto", "America/Montreal"},
                 {"America/Tortola", "America/Port_of_Spain"},
-                {"America/Virgin", "America/Port_of_Spain"},
+                {"America/Virgin", "America/Puerto_Rico"},
                 {"Antarctica/South_Pole", "Antarctica/McMurdo"},
                 {"Arctic/Longyearbyen", "Europe/Oslo"},
                 {"Asia/Kuwait", "Asia/Aden"},
@@ -1627,7 +1628,7 @@ public class TimeZoneTest extends TestFmwk
             if (!bFoundCanonical) {
                 // test exclusion because of differences between Olson tzdata and CLDR
                 boolean isExcluded = false;
-                for (int k = 0; k < excluded1.length; k++) {
+                for (int k = 0; k < excluded2.length; k++) {
                     if (ids[i].equals(excluded2[k])) {
                         isExcluded = true;
                         break;
