@@ -14,6 +14,7 @@
 #include "unicode/putil.h"
 #include "unicode/umutablecptrie.h"
 #include "writesrc.h"
+#include "ucase.h"
 
 U_NAMESPACE_USE
 
@@ -176,46 +177,7 @@ void printHelp(FILE* stdfile, const char* program) {
 	  program);
 }
 
-void exportUprops() {
-  return 0;
-}
-
-void exportCase() {
-  return 0;
-}
-
-
-
-
-int main(int argc, char* argv[]) {
-    U_MAIN_INIT_ARGS(argc, argv);
-
-    /* preset then read command line options */
-    options[OPT_DESTDIR].value=u_getDataDirectory();
-    argc=u_parseArgs(argc, argv, UPRV_LENGTHOF(options), options);
-
-    if(options[OPT_VERSION].doesOccur) {
-        printf("icuexportdata version %s, ICU tool to dump data files for external consumers\n",
-               U_ICU_DATA_VERSION);
-        printf("%s\n", U_COPYRIGHT_STRING);
-        exit(0);
-    }
-
-    /* error handling, printing usage message */
-    if(argc<0) {
-        fprintf(stderr,
-            "error in command line argument \"%s\"\n",
-            argv[-argc]);
-    } else if(argc<2) {
-        argc=-1;
-    }
-
-    /* get the options values */
-    haveCopyright = options[OPT_COPYRIGHT].doesOccur;
-    destdir = options[OPT_DESTDIR].value;
-    VERBOSE = options[OPT_VERBOSE].doesOccur;
-    QUIET = options[OPT_QUIET].doesOccur;
-
+int exportUprops(int argc, char* argv[]) {
     // Load list of Unicode properties
     std::vector<const char*> propNames;
     for (int i=1; i<argc; i++) {
@@ -237,32 +199,6 @@ int main(int argc, char* argv[]) {
             if (propName != NULL) {
                 propNames.push_back(propName);
             }
-        }
-    }
-
-    if (propNames.empty()
-            || options[OPT_HELP_H].doesOccur
-            || options[OPT_HELP_QUESTION_MARK].doesOccur
-            || !options[OPT_MODE].doesOccur) {
-        FILE *stdfile=argc<0 ? stderr : stdout;
-	printHelp(stdfile, argv[0]);
-        return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
-    }
-
-    const char* mode = options[OPT_MODE].value;
-    if (uprv_strcmp(mode, "uprops") != 0 && uprv_strcmp(mode, "ucase") != 0) {
-        fprintf(stderr, "Invalid option for --mode (must be uprops or ucase)\n");
-        return U_ILLEGAL_ARGUMENT_ERROR;
-    }
-
-    if (options[OPT_TRIE_TYPE].doesOccur) {
-        if (uprv_strcmp(options[OPT_TRIE_TYPE].value, "fast") == 0) {
-            trieType = UCPTRIE_TYPE_FAST;
-        } else if (uprv_strcmp(options[OPT_TRIE_TYPE].value, "small") == 0) {
-            trieType = UCPTRIE_TYPE_SMALL;
-        } else {
-            fprintf(stderr, "Invalid option for --trie-type (must be small or fast)\n");
-            return U_ILLEGAL_ARGUMENT_ERROR;
         }
     }
 
@@ -307,4 +243,120 @@ int main(int argc, char* argv[]) {
     }
 
     return 0;
+}
+
+struct AddRangeHelper {
+    UMutableCPTrie* ucptrie;
+};
+
+static UBool U_CALLCONV
+addRangeToUCPTrie(const void* context, UChar32 start, UChar32 end, uint32_t value) {
+    IcuToolErrorCode status("addRangeToUCPTrie");
+    UMutableCPTrie* ucptrie = ((const AddRangeHelper*) context)->ucptrie;
+    umutablecptrie_setRange(ucptrie, start, end, value, status);
+    handleError(status, "setRange");
+
+    return TRUE;
+}
+
+int exportCase() {
+    if (options[OPT_INDEX].doesOccur) {
+	fprintf(stderr, "--index option not supported for ucase\n");
+	return U_ILLEGAL_ARGUMENT_ERROR;
+    }
+    if (options[OPT_ALL].doesOccur) {
+	fprintf(stderr, "--all option not supported for ucase\n");
+	return U_ILLEGAL_ARGUMENT_ERROR;
+    }
+
+    IcuToolErrorCode status("icuexportdata");
+    LocalUMutableCPTriePointer builder(umutablecptrie_open(0, 0, status));
+    handleError(status, "exportCase");
+
+    const UTrie2* caseTrie = ucase_getTrie();
+
+    AddRangeHelper helper = { builder.getAlias() };
+    utrie2_enum(caseTrie, NULL, addRangeToUCPTrie, &helper);
+
+    UCPTrieValueWidth width = UCPTRIE_VALUE_BITS_16;
+    LocalUCPTriePointer utrie(umutablecptrie_buildImmutable(
+        builder.getAlias(),
+        trieType,
+        width,
+        status));
+    handleError(status, "exportCase");
+
+    FILE* f = prepareOutputFile("ucase");
+
+    UVersionInfo versionInfo;
+    u_getUnicodeVersion(versionInfo);
+    char uvbuf[U_MAX_VERSION_STRING_LENGTH];
+    u_versionToString(versionInfo, uvbuf);
+    fprintf(f, "icu_version = \"%s\"\nunicode_version = \"%s\"\n\n",
+            U_ICU_VERSION,
+            uvbuf);
+
+    fputs("[ucase.code_point_trie]\n", f);
+    usrc_writeUCPTrie(f, "case_trie", utrie.getAlias(), UPRV_TARGET_SYNTAX_TOML);
+
+    return 0;
+}
+
+int main(int argc, char* argv[]) {
+    U_MAIN_INIT_ARGS(argc, argv);
+
+    /* preset then read command line options */
+    options[OPT_DESTDIR].value=u_getDataDirectory();
+    argc=u_parseArgs(argc, argv, UPRV_LENGTHOF(options), options);
+
+    if(options[OPT_VERSION].doesOccur) {
+        printf("icuexportdata version %s, ICU tool to dump data files for external consumers\n",
+               U_ICU_DATA_VERSION);
+        printf("%s\n", U_COPYRIGHT_STRING);
+        exit(0);
+    }
+
+    /* error handling, printing usage message */
+    if(argc<0) {
+        fprintf(stderr,
+            "error in command line argument \"%s\"\n",
+            argv[-argc]);
+    } else if(argc<2) {
+        argc=-1;
+    }
+
+    if (options[OPT_HELP_H].doesOccur
+            || options[OPT_HELP_QUESTION_MARK].doesOccur
+            || !options[OPT_MODE].doesOccur) {
+        FILE *stdfile=argc<0 ? stderr : stdout;
+	printHelp(stdfile, argv[0]);
+        return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
+    }
+
+    /* get the options values */
+    haveCopyright = options[OPT_COPYRIGHT].doesOccur;
+    destdir = options[OPT_DESTDIR].value;
+    VERBOSE = options[OPT_VERBOSE].doesOccur;
+    QUIET = options[OPT_QUIET].doesOccur;
+
+    if (options[OPT_TRIE_TYPE].doesOccur) {
+        if (uprv_strcmp(options[OPT_TRIE_TYPE].value, "fast") == 0) {
+            trieType = UCPTRIE_TYPE_FAST;
+        } else if (uprv_strcmp(options[OPT_TRIE_TYPE].value, "small") == 0) {
+            trieType = UCPTRIE_TYPE_SMALL;
+        } else {
+            fprintf(stderr, "Invalid option for --trie-type (must be small or fast)\n");
+            return U_ILLEGAL_ARGUMENT_ERROR;
+        }
+    }
+
+    const char* mode = options[OPT_MODE].value;
+    if (uprv_strcmp(mode, "uprops") == 0) {
+	return exportUprops(argc, argv);
+    } else if (uprv_strcmp(mode, "ucase") == 0) {
+	return exportCase();
+    }
+
+    fprintf(stderr, "Invalid option for --mode (must be uprops or ucase)\n");
+    return U_ILLEGAL_ARGUMENT_ERROR;
 }
