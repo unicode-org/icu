@@ -1217,6 +1217,16 @@ CasePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
         "",
         "\n};\n\n");
     fputs(
+        "struct UCaseProps {\n"
+        "    UDataMemory *mem;\n"
+        "    const int32_t *indexes;\n"
+        "    const uint16_t *exceptions;\n"
+        "    const uint16_t *unfold;\n"
+        "\n"
+        "    UTrie2 trie;\n"
+        "    uint8_t formatVersion[4];\n"
+        "};\n"
+        "\n"
         "static const UCaseProps ucase_props_singleton={\n"
         "  NULL,\n"
         "  ucase_props_indexes,\n"

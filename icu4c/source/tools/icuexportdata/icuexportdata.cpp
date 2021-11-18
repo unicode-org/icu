@@ -15,6 +15,7 @@
 #include "unicode/umutablecptrie.h"
 #include "writesrc.h"
 #include "ucase.h"
+#include "udatamem.h"
 
 U_NAMESPACE_USE
 
@@ -245,6 +246,9 @@ int exportUprops(int argc, char* argv[]) {
     return 0;
 }
 
+#define INCLUDED_FROM_UCASE_CPP
+#include "ucase_props_data.h"
+
 struct AddRangeHelper {
     UMutableCPTrie* ucptrie;
 };
@@ -273,7 +277,7 @@ int exportCase() {
     LocalUMutableCPTriePointer builder(umutablecptrie_open(0, 0, status));
     handleError(status, "exportCase");
 
-    const UTrie2* caseTrie = ucase_getTrie();
+    const UTrie2* caseTrie = &ucase_props_singleton.trie;
 
     AddRangeHelper helper = { builder.getAlias() };
     utrie2_enum(caseTrie, NULL, addRangeToUCPTrie, &helper);
@@ -296,8 +300,29 @@ int exportCase() {
             U_ICU_VERSION,
             uvbuf);
 
+    fputs("[[ucase]]\n\n", f);
+
     fputs("[ucase.code_point_trie]\n", f);
     usrc_writeUCPTrie(f, "case_trie", utrie.getAlias(), UPRV_TARGET_SYNTAX_TOML);
+    fputs("\n", f);
+
+    const char* indent = "  ";
+    const char* suffix = "\n]\n";
+
+    fputs("[ucase.exceptions]\n", f);
+    const char* exceptionsPrefix = "exceptions = [\n  ";
+    int32_t exceptionsWidth = 16;
+    int32_t exceptionsLength = UPRV_LENGTHOF(ucase_props_exceptions);
+    usrc_writeArray(f, exceptionsPrefix, ucase_props_exceptions, exceptionsWidth,
+		    exceptionsLength, indent, suffix);
+    fputs("\n", f);
+
+    fputs("[ucase.unfold]\n", f);
+    const char* unfoldPrefix = "unfold = [\n  ";
+    int32_t unfoldWidth = 16;
+    int32_t unfoldLength = UPRV_LENGTHOF(ucase_props_unfold);
+    usrc_writeArray(f, unfoldPrefix, ucase_props_unfold, unfoldWidth,
+		    unfoldLength, indent, suffix);
 
     return 0;
 }

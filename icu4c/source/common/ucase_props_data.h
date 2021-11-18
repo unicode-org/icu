@@ -958,6 +958,16 @@ static const uint16_t ucase_props_unfold[370]={
 0x1ff2,0
 };
 
+struct UCaseProps {
+    UDataMemory *mem;
+    const int32_t *indexes;
+    const uint16_t *exceptions;
+    const uint16_t *unfold;
+
+    UTrie2 trie;
+    uint8_t formatVersion[4];
+};
+
 static const UCaseProps ucase_props_singleton={
   NULL,
   ucase_props_indexes,
