@@ -2788,16 +2788,17 @@ DTSkeletonEnumeration::DTSkeletonEnumeration(PatternMap& patternMap, dtStrEnum t
                     break;
             }
             if ( !isCanonicalItem(s) ) {
-                LocalPointer<UnicodeString> newElem(new UnicodeString(s), status);
+                LocalPointer<UnicodeString> newElem(s.clone(), status);
                 if (U_FAILURE(status)) { 
                     return;
                 }
-                fSkeletons->addElementX(newElem.getAlias(), status);
+                fSkeletons->addElement(newElem.getAlias(), status);
                 if (U_FAILURE(status)) {
                     fSkeletons.adoptInstead(nullptr);
                     return;
                 }
-                newElem.orphan(); // fSkeletons vector now owns the UnicodeString.
+                newElem.orphan(); // fSkeletons vector now owns the UnicodeString (although it
+                                  // does not use a deleter function to manage the ownership).
             }
             curElem = curElem->next.getAlias();
         }
@@ -2865,12 +2866,13 @@ DTRedundantEnumeration::add(const UnicodeString& pattern, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return;
     }
-    fPatterns->addElementX(newElem.getAlias(), status);
+    fPatterns->addElement(newElem.getAlias(), status);
     if (U_FAILURE(status)) {
         fPatterns.adoptInstead(nullptr);
         return;
     }
-    newElem.orphan(); // fPatterns now owns the string.
+    newElem.orphan(); // fPatterns now owns the string, although a UVector
+                      // deleter function is not used to manage that ownership.
 }
 
 const UnicodeString*

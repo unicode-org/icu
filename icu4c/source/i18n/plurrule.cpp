@@ -1548,14 +1548,9 @@ PluralKeywordEnumeration::PluralKeywordEnumeration(RuleChain *header, UErrorCode
     UBool  addKeywordOther = TRUE;
     RuleChain *node = header;
     while (node != nullptr) {
-        auto newElem = new UnicodeString(node->fKeyword);
-        if (newElem == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        fKeywordNames.addElementX(newElem, status);
+        LocalPointer<UnicodeString> newElem(node->fKeyword.clone(), status);
+        fKeywordNames.adoptElement(newElem.orphan(), status);
         if (U_FAILURE(status)) {
-            delete newElem;
             return;
         }
         if (0 == node->fKeyword.compare(PLURAL_KEYWORD_OTHER, 5)) {
@@ -1565,14 +1560,9 @@ PluralKeywordEnumeration::PluralKeywordEnumeration(RuleChain *header, UErrorCode
     }
 
     if (addKeywordOther) {
-        auto newElem = new UnicodeString(PLURAL_KEYWORD_OTHER);
-        if (newElem == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-        fKeywordNames.addElementX(newElem, status);
+        LocalPointer<UnicodeString> newElem(new UnicodeString(PLURAL_KEYWORD_OTHER), status);
+        fKeywordNames.adoptElement(newElem.orphan(), status);
         if (U_FAILURE(status)) {
-            delete newElem;
             return;
         }
     }
