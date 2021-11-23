@@ -1,0 +1,10 @@
+add_definitions(-DU_IO_IMPLEMENTATION)
+if(WIN32)
+  add_definitions(-DMSVC_VERSION=${MSVC_VERSION} -D_CRT_SECURE_NO_WARNINGS)
+else()
+  add_definitions(-DLINUX -Wno-write-strings -Wno-deprecated)
+endif()
+
+file(GLOB icuio_src "*.h" "*.cpp")
+add_library(icuio STATIC ${icuio_src})
+target_link_libraries(icuio)

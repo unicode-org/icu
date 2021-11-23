@@ -1,0 +1,11 @@
+add_definitions(-DU_COMMON_IMPLEMENTATION)
+if(WIN32)
+  add_definitions(-DMSVC_VERSION=${MSVC_VERSION} -D_CRT_SECURE_NO_WARNINGS)
+  add_definitions(-DU_PLATFORM_USES_ONLY_WIN32_API=1)
+else()
+  add_definitions(-DLINUX -Wno-write-strings -Wno-deprecated)
+endif()
+
+file(GLOB common_src "*.h" "*.cpp")
+add_library(icuuc STATIC ${common_src})
+target_link_libraries(icuuc)

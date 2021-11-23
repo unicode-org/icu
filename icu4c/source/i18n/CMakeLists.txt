@@ -1,0 +1,12 @@
+add_definitions(-DU_I18N_IMPLEMENTATION)
+if(WIN32)
+  add_definitions(-DU_ATTRIBUTE_DEPRECATED=)
+  add_definitions(-D_HAS_EXCEPTIONS=0)
+  add_definitions(-DMSVC_VERSION=${MSVC_VERSION} -D_CRT_SECURE_NO_WARNINGS)
+else()
+  add_definitions(-DLINUX -Wno-write-strings -Wno-deprecated)
+endif()
+
+file(GLOB i18n_src "*.h" "*.cpp")
+add_library(icuin STATIC ${i18n_src})
+target_link_libraries(icuin)
