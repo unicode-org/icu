@@ -384,13 +384,13 @@ jobs:
         filename: icu4c/source/allinone/icucheck.bat
         arguments: 'x64 Release'
 #-------------------------------------------------------------------------
-# VS 2017 Builds
+# VS2019 using the VS2017 toolset builds
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x64_Release_VS2017
   displayName: 'C: MSVC 64-bit Release (VS 2017)'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'vs2017-win2016'
+    vmImage: 'windows-2019'
     demands: 
       - msbuild
       - visualstudio
@@ -405,6 +405,7 @@ jobs:
         solution: icu4c/source/allinone/allinone.sln
         platform: x64
         configuration: Release
+        msbuildArgs: /p:DefaultPlatformToolset=v141
     - task: BatchScript@1
       displayName: 'Run Tests (icucheck.bat)'
       inputs:
@@ -415,7 +416,7 @@ jobs:
   displayName: 'C: MSVC 32-bit Debug (VS 2017)'
   timeoutInMinutes: 60
   pool:
-    vmImage: 'vs2017-win2016'
+    vmImage: 'windows-2019'
     demands: 
       - msbuild
       - visualstudio
@@ -430,6 +431,7 @@ jobs:
         solution: icu4c/source/allinone/allinone.sln
         platform: Win32
         configuration: Debug
+        msbuildArgs: /p:DefaultPlatformToolset=v141
     - task: BatchScript@1
       displayName: 'Run Tests (icucheck.bat)'
       inputs:
@@ -468,7 +470,7 @@ jobs:
   displayName: 'C: MSYS2 GCC x86_64 Release'
   timeoutInMinutes: 45
   pool:
-    vmImage: 'vs2017-win2016'
+    vmImage: 'windows-2019'
     demands:
       - Cmd
   steps:
@@ -500,10 +502,10 @@ jobs:
       displayName: 'run icuinfo'
 #-------------------------------------------------------------------------
 - job: ICU4C_Clang_MacOSX_WarningsAsErrors
-  displayName: 'C: macOSX Clang WarningsAsErrors (Mojave 10.14)'
+  displayName: 'C: macOSX Clang WarningsAsErrors (Catalina 10.15)'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'macOS-10.14'
+    vmImage: 'macOS-10.15'
   steps:
     - checkout: self
       lfs: true
