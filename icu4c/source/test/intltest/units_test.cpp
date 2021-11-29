@@ -325,6 +325,9 @@ void UnitsTest::testConverter() {
         // Fuel Consumption
         {"cubic-meter-per-meter", "mile-per-gallon", 2.1383143939394E-6, 1.1},
         {"cubic-meter-per-meter", "mile-per-gallon", 2.6134953703704E-6, 0.9},
+        {"liter-per-100-kilometer", "mile-per-gallon", 6.6, 35.6386},
+        // // TODO(ICU-21862): we should probably return something other than "0":
+        // {"liter-per-100-kilometer", "mile-per-gallon", 0, 0},
 
         // Test Aliases
         // Alias is just another name to the same unit. Therefore, converting
@@ -647,6 +650,16 @@ void UnitsTest::testComplexUnitsConverter() {
           Measure(2.1, MeasureUnit::createMeter(status), status)},
          2,
          0.001},
+
+        // Negative numbers
+        {"Negative number conversion",
+         "yard",
+         "mile-and-yard",
+         -1800,
+         {Measure(-1, MeasureUnit::createMile(status), status),
+          Measure(-40, MeasureUnit::createYard(status), status)},
+         2,
+         1e-10},
     };
     status.assertSuccess();
 
@@ -694,11 +707,7 @@ void UnitsTest::testComplexUnitsConverter() {
         ComplexUnitsConverter converter2( testCase.input, testCase.output, status);
         testATestCase(converter2, "ComplexUnitsConverter #1 " , testCase);
     }
-    
-    
     status.assertSuccess();
-
-    // TODO(icu-units#63): test negative numbers!
 }
 
 void UnitsTest::testComplexUnitsConverterSorting() {
