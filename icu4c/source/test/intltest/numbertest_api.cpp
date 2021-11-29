@@ -1747,6 +1747,28 @@ void NumberFormatterApiTest::unitUsage() {
             30500,
             u"350 m");
 
+    assertFormatSingle(u"Fuel consumption: inverted units",                                    //
+                       u"unit/liter-per-100-kilometer usage/vehicle-fuel",                      //
+                       u"unit/liter-per-100-kilometer usage/vehicle-fuel",                      //
+                       NumberFormatter::with()                                                  //
+                           .unit(MeasureUnit::forIdentifier("liter-per-100-kilometer", status)) //
+                           .usage("vehicle-fuel"),                                              //
+                       Locale("en-US"),                                                         //
+                       6.6,                                                                     //
+                       "36 mpg");
+
+//     // TODO(ICU-21862): determine desired behaviour. Commented out for now to not enforce undesirable
+//     // behaviour
+//     assertFormatSingle(u"Fuel consumption: inverted units, divide-by-zero",                     //
+//                        u"unit/liter-per-100-kilometer usage/vehicle-fuel",                      //
+//                        u"unit/liter-per-100-kilometer usage/vehicle-fuel",                      //
+//                        NumberFormatter::with()                                                  //
+//                            .unit(MeasureUnit::forIdentifier("liter-per-100-kilometer", status)) //
+//                            .usage("vehicle-fuel"),                                              //
+//                        Locale("en-US"),                                                         //
+//                        0,                                                                       //
+//                        "0 mpg"); // TODO(ICU-21862)
+
     // Test calling `.usage("")` should unset the existing usage.
     // First: without usage
     assertFormatSingle(u"Rounding Mode propagates: rounding up",
@@ -1853,10 +1875,6 @@ void NumberFormatterApiTest::unitUsage() {
                        Locale("en-US"),                                                 //
                        1,                                                               //
                        "0.019 psi");
-
-    // TODO(icu-units#38): improve unit testing coverage. E.g. add vehicle-fuel
-    // triggering inversion conversion code. Test with 0 too, to see
-    // divide-by-zero behaviour.
 }
 
 void NumberFormatterApiTest::unitUsageErrorCodes() {

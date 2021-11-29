@@ -115,10 +115,8 @@ public class UnitsConverter {
         if (this.reciprocal) {
             // We should see no offsets for reciprocal conversions - they don't make sense:
             assert offset == BigDecimal.ZERO;
-            if (result == BigDecimal.ZERO) {
-                // TODO: demonstrate the resulting behaviour in tests... and
-                // figure out desired behaviour. (Theoretical result should be
-                // infinity, not 0, but BigDecimal does not support infinity.)
+            if (result.compareTo(BigDecimal.ZERO) == 0) {
+                // TODO(ICU-21862): determine desirable behaviour
                 return BigDecimal.ZERO;
             }
             result = BigDecimal.ONE.divide(result, DECIMAL128);
@@ -131,10 +129,8 @@ public class UnitsConverter {
         if (this.reciprocal) {
             // We should see no offsets for reciprocal conversions - they don't make sense:
             assert offset == BigDecimal.ZERO;
-            if (result == BigDecimal.ZERO) {
-                // TODO: demonstrate the resulting behaviour in tests... and
-                // figure out desired behaviour. (Theoretical result should be
-                // infinity, not 0, but BigDecimal does not support infinity.)
+            if (result.compareTo(BigDecimal.ZERO) == 0) {
+                // TODO(ICU-21862): determine desirable behaviour
                 return BigDecimal.ZERO;
             }
             result = BigDecimal.ONE.divide(result, DECIMAL128);

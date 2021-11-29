@@ -603,9 +603,9 @@ double UnitsConverter::convertInverse(double inputValue) const {
     double result = inputValue;
     if (conversionRate_.reciprocal) {
         if (result == 0) {
-            // TODO: demonstrate the resulting behaviour in tests... and figure
-            // out desired behaviour. (Theoretical result should be infinity,
-            // not 0.)
+            // TODO(ICU-21862): demonstrate the resulting behaviour in tests...
+            // and figure out desired behaviour. (Theoretical result should be
+            // infinity, not 0.)
             return 0.0;
         }
         result = 1.0 / result;
