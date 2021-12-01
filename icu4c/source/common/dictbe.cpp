@@ -199,13 +199,13 @@ ThaiBreakEngine::ThaiBreakEngine(DictionaryMatcher *adoptDictionary, UErrorCode 
 {
     UTRACE_ENTRY(UTRACE_UBRK_CREATE_BREAK_ENGINE);
     UTRACE_DATA1(UTRACE_INFO, "dictbe=%s", "Thai");
-    fThaiWordSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Thai:]&[:LineBreak=SA:]]"), status);
+    UnicodeSet thaiWordSet(UnicodeString(u"[[:Thai:]&[:LineBreak=SA:]]"), status);
     if (U_SUCCESS(status)) {
-        setCharacters(fThaiWordSet);
+        setCharacters(thaiWordSet);
     }
-    fMarkSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Thai:]&[:LineBreak=SA:]&[:M:]]"), status);
+    fMarkSet.applyPattern(UnicodeString(u"[[:Thai:]&[:LineBreak=SA:]&[:M:]]"), status);
     fMarkSet.add(0x0020);
-    fEndWordSet = fThaiWordSet;
+    fEndWordSet = thaiWordSet;
     fEndWordSet.remove(0x0E31);             // MAI HAN-AKAT
     fEndWordSet.remove(0x0E40, 0x0E44);     // SARA E through SARA AI MAIMALAI
     fBeginWordSet.add(0x0E01, 0x0E2E);      // KO KAI through HO NOKHUK
@@ -441,13 +441,13 @@ LaoBreakEngine::LaoBreakEngine(DictionaryMatcher *adoptDictionary, UErrorCode &s
 {
     UTRACE_ENTRY(UTRACE_UBRK_CREATE_BREAK_ENGINE);
     UTRACE_DATA1(UTRACE_INFO, "dictbe=%s", "Laoo");
-    fLaoWordSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Laoo:]&[:LineBreak=SA:]]"), status);
+    UnicodeSet laoWordSet(UnicodeString(u"[[:Laoo:]&[:LineBreak=SA:]]"), status);
     if (U_SUCCESS(status)) {
-        setCharacters(fLaoWordSet);
+        setCharacters(laoWordSet);
     }
-    fMarkSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Laoo:]&[:LineBreak=SA:]&[:M:]]"), status);
+    fMarkSet.applyPattern(UnicodeString(u"[[:Laoo:]&[:LineBreak=SA:]&[:M:]]"), status);
     fMarkSet.add(0x0020);
-    fEndWordSet = fLaoWordSet;
+    fEndWordSet = laoWordSet;
     fEndWordSet.remove(0x0EC0, 0x0EC4);     // prefix vowels
     fBeginWordSet.add(0x0E81, 0x0EAE);      // basic consonants (including holes for corresponding Thai characters)
     fBeginWordSet.add(0x0EDC, 0x0EDD);      // digraph consonants (no Thai equivalent)
@@ -637,14 +637,13 @@ BurmeseBreakEngine::BurmeseBreakEngine(DictionaryMatcher *adoptDictionary, UErro
 {
     UTRACE_ENTRY(UTRACE_UBRK_CREATE_BREAK_ENGINE);
     UTRACE_DATA1(UTRACE_INFO, "dictbe=%s", "Mymr");
-    fBurmeseWordSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Mymr:]&[:LineBreak=SA:]]"), status);
-    if (U_SUCCESS(status)) {
-        setCharacters(fBurmeseWordSet);
-    }
-    fMarkSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Mymr:]&[:LineBreak=SA:]&[:M:]]"), status);
-    fMarkSet.add(0x0020);
-    fEndWordSet = fBurmeseWordSet;
     fBeginWordSet.add(0x1000, 0x102A);      // basic consonants and independent vowels
+    fEndWordSet.applyPattern(UnicodeString(u"[[:Mymr:]&[:LineBreak=SA:]]"), status);
+    fMarkSet.applyPattern(UnicodeString(u"[[:Mymr:]&[:LineBreak=SA:]&[:M:]]"), status);
+    fMarkSet.add(0x0020);
+    if (U_SUCCESS(status)) {
+        setCharacters(fEndWordSet);
+    }
 
     // Compact for caching.
     fMarkSet.compact();
@@ -830,13 +829,13 @@ KhmerBreakEngine::KhmerBreakEngine(DictionaryMatcher *adoptDictionary, UErrorCod
 {
     UTRACE_ENTRY(UTRACE_UBRK_CREATE_BREAK_ENGINE);
     UTRACE_DATA1(UTRACE_INFO, "dictbe=%s", "Khmr");
-    fKhmerWordSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Khmr:]&[:LineBreak=SA:]]"), status);
+    UnicodeSet khmerWordSet(UnicodeString(u"[[:Khmr:]&[:LineBreak=SA:]]"), status);
     if (U_SUCCESS(status)) {
-        setCharacters(fKhmerWordSet);
+        setCharacters(khmerWordSet);
     }
-    fMarkSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Khmr:]&[:LineBreak=SA:]&[:M:]]"), status);
+    fMarkSet.applyPattern(UnicodeString(u"[[:Khmr:]&[:LineBreak=SA:]&[:M:]]"), status);
     fMarkSet.add(0x0020);
-    fEndWordSet = fKhmerWordSet;
+    fEndWordSet = khmerWordSet;
     fBeginWordSet.add(0x1780, 0x17B3);
     //fBeginWordSet.add(0x17A3, 0x17A4);      // deprecated vowels
     //fEndWordSet.remove(0x17A5, 0x17A9);     // Khmer independent vowels that can't end a word
@@ -1050,24 +1049,19 @@ CjkBreakEngine::CjkBreakEngine(DictionaryMatcher *adoptDictionary, LanguageType 
 : DictionaryBreakEngine(), fDictionary(adoptDictionary) {
     UTRACE_ENTRY(UTRACE_UBRK_CREATE_BREAK_ENGINE);
     UTRACE_DATA1(UTRACE_INFO, "dictbe=%s", "Hani");
-    // Korean dictionary only includes Hangul syllables
-    fHangulWordSet.applyPattern(UNICODE_STRING_SIMPLE("[\\uac00-\\ud7a3]"), status);
-    fHanWordSet.applyPattern(UNICODE_STRING_SIMPLE("[:Han:]"), status);
-    fKatakanaWordSet.applyPattern(UNICODE_STRING_SIMPLE("[[:Katakana:]\\uff9e\\uff9f]"), status);
-    fHiraganaWordSet.applyPattern(UNICODE_STRING_SIMPLE("[:Hiragana:]"), status);
     nfkcNorm2 = Normalizer2::getNFKCInstance(status);
+    // Korean dictionary only includes Hangul syllables
+    fHangulWordSet.applyPattern(UnicodeString(u"[\\uac00-\\ud7a3]"), status);
+    fHangulWordSet.compact();
 
-    if (U_SUCCESS(status)) {
-        // handle Korean and Japanese/Chinese using different dictionaries
-        if (type == kKorean) {
+    // handle Korean and Japanese/Chinese using different dictionaries
+    if (type == kKorean) {
+        if (U_SUCCESS(status)) {
             setCharacters(fHangulWordSet);
-        } else { //Chinese and Japanese
-            UnicodeSet cjSet;
-            cjSet.addAll(fHanWordSet);
-            cjSet.addAll(fKatakanaWordSet);
-            cjSet.addAll(fHiraganaWordSet);
-            cjSet.add(0xFF70); // HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK
-            cjSet.add(0x30FC); // KATAKANA-HIRAGANA PROLONGED SOUND MARK
+        }
+    } else { //Chinese and Japanese
+        UnicodeSet cjSet(UnicodeString(u"[[:Han:][:Hiragana:][:Katakana:]\\u30fc\\uff70\\uff9e\\uff9f]"), status);
+        if (U_SUCCESS(status)) {
             setCharacters(cjSet);
         }
     }

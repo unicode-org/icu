@@ -20,36 +20,18 @@ import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UnicodeSet;
 
 public class CjkBreakEngine extends DictionaryBreakEngine {
-    private static final UnicodeSet fHangulWordSet = new UnicodeSet();
-    private static final UnicodeSet fHanWordSet = new UnicodeSet();
-    private static final UnicodeSet fKatakanaWordSet = new UnicodeSet();
-    private static final UnicodeSet fHiraganaWordSet = new UnicodeSet();
-    static {
-        fHangulWordSet.applyPattern("[\\uac00-\\ud7a3]");
-        fHanWordSet.applyPattern("[:Han:]");
-        fKatakanaWordSet.applyPattern("[[:Katakana:]\\uff9e\\uff9f]");
-        fHiraganaWordSet.applyPattern("[:Hiragana:]");
-
-        // freeze them all
-        fHangulWordSet.freeze();
-        fHanWordSet.freeze();
-        fKatakanaWordSet.freeze();
-        fHiraganaWordSet.freeze();
-    }
-
+    private UnicodeSet fHangulWordSet;
     private DictionaryMatcher fDictionary = null;
 
     public CjkBreakEngine(boolean korean) throws IOException {
+        fHangulWordSet = new UnicodeSet("[\\uac00-\\ud7a3]");
+        fHangulWordSet.freeze();
+
         fDictionary = DictionaryData.loadDictionaryFor("Hira");
         if (korean) {
             setCharacters(fHangulWordSet);
         } else { //Chinese and Japanese
-            UnicodeSet cjSet = new UnicodeSet();
-            cjSet.addAll(fHanWordSet);
-            cjSet.addAll(fKatakanaWordSet);
-            cjSet.addAll(fHiraganaWordSet);
-            cjSet.add(0xFF70); // HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK
-            cjSet.add(0x30FC); // KATAKANA-HIRAGANA PROLONGED SOUND MARK
+            UnicodeSet cjSet = new UnicodeSet("[[:Han:][:Hiragana:][:Katakana:]\\u30fc\\uff70\\uff9e\\uff9f]");
             setCharacters(cjSet);
         }
     }

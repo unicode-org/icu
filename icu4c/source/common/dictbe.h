@@ -127,7 +127,6 @@ class ThaiBreakEngine : public DictionaryBreakEngine {
      * @internal
      */
 
-  UnicodeSet                fThaiWordSet;
   UnicodeSet                fEndWordSet;
   UnicodeSet                fBeginWordSet;
   UnicodeSet                fSuffixSet;
@@ -186,7 +185,6 @@ class LaoBreakEngine : public DictionaryBreakEngine {
      * @internal
      */
 
-  UnicodeSet                fLaoWordSet;
   UnicodeSet                fEndWordSet;
   UnicodeSet                fBeginWordSet;
   UnicodeSet                fMarkSet;
@@ -244,7 +242,6 @@ class BurmeseBreakEngine : public DictionaryBreakEngine {
      * @internal
      */
 
-  UnicodeSet                fBurmeseWordSet;
   UnicodeSet                fEndWordSet;
   UnicodeSet                fBeginWordSet;
   UnicodeSet                fMarkSet;
@@ -302,7 +299,6 @@ class KhmerBreakEngine : public DictionaryBreakEngine {
      * @internal
      */
 
-  UnicodeSet                fKhmerWordSet;
   UnicodeSet                fEndWordSet;
   UnicodeSet                fBeginWordSet;
   UnicodeSet                fMarkSet;
@@ -366,9 +362,6 @@ class CjkBreakEngine : public DictionaryBreakEngine {
      * @internal
      */
   UnicodeSet                fHangulWordSet;
-  UnicodeSet                fHanWordSet;
-  UnicodeSet                fKatakanaWordSet;
-  UnicodeSet                fHiraganaWordSet;
 
   DictionaryMatcher        *fDictionary;
   const Normalizer2        *nfkcNorm2;
