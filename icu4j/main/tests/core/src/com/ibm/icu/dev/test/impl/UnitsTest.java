@@ -474,6 +474,11 @@ public class UnitsTest {
                 new TestData("liter-per-100-kilometer", "mile-per-gallon", 6.6, 35.6386),
                 // // TODO(ICU-21862): we should probably return something other than "0":
                 // new TestData("liter-per-100-kilometer", "mile-per-gallon", 0, 0),
+                // new TestData("mile-per-gallon", "liter-per-100-kilometer", 0, 0),
+                // // TODO(ICU-21862): deal with infinity input in Java?
+                // new TestData("mile-per-gallon", "liter-per-100-kilometer", INFINITY, 0),
+                // We skip testing -Inf, because the inverse conversion loses the sign:
+                // new TestData("mile-per-gallon", "liter-per-100-kilometer", -INFINITY, 0),
                 // Test Aliases
                 // Alias is just another name to the same unit. Therefore, converting
                 // between them should be the same.
@@ -488,45 +493,32 @@ public class UnitsTest {
             MeasureUnitImpl source = MeasureUnitImpl.forIdentifier(test.sourceIdentifier);
             MeasureUnitImpl target = MeasureUnitImpl.forIdentifier(test.targetIdentifier);
 
-            UnitsConverter converter = new UnitsConverter(source, target, conversionRates);
-
             double maxDelta = 1e-6 * Math.abs(test.expected.doubleValue());
             if (test.expected.doubleValue() == 0) {
                 maxDelta = 1e-12;
             }
+            double inverseMaxDelta = 1e-6 * Math.abs(test.input.doubleValue());
+            if (test.input.doubleValue() == 0) {
+                inverseMaxDelta = 1e-12;
+            }
+
+            UnitsConverter converter = new UnitsConverter(source, target, conversionRates);
             assertEquals("testConverter: " + test.sourceIdentifier + " to " + test.targetIdentifier,
                     test.expected.doubleValue(), converter.convert(test.input).doubleValue(),
                     maxDelta);
-
-            maxDelta = 1e-6 * Math.abs(test.input.doubleValue());
-            if (test.input.doubleValue() == 0) {
-                maxDelta = 1e-12;
-            }
             assertEquals(
                     "testConverter inverse: " + test.targetIdentifier + " back to " + test.sourceIdentifier,
                     test.input.doubleValue(), converter.convertInverse(test.expected).doubleValue(),
-                    maxDelta);
+                    inverseMaxDelta);
 
-
-            // TODO: Test UnitsConverter created using CLDR separately.
             // Test UnitsConverter created by CLDR unit identifiers
             UnitsConverter converter2 = new UnitsConverter(test.sourceIdentifier, test.targetIdentifier);
-
-            maxDelta = 1e-6 * Math.abs(test.expected.doubleValue());
-            if (test.expected.doubleValue() == 0) {
-                maxDelta = 1e-12;
-            }
             assertEquals("testConverter2: " + test.sourceIdentifier + " to " + test.targetIdentifier,
                     test.expected.doubleValue(), converter2.convert(test.input).doubleValue(),
                     maxDelta);
-
-            maxDelta = 1e-6 * Math.abs(test.input.doubleValue());
-            if (test.input.doubleValue() == 0) {
-                maxDelta = 1e-12;
-            }
             assertEquals("testConverter2 inverse: " + test.targetIdentifier + " back to " + test.sourceIdentifier,
                     test.input.doubleValue(), converter2.convertInverse(test.expected).doubleValue(),
-                    maxDelta);
+                    inverseMaxDelta);
         }
     }
 
