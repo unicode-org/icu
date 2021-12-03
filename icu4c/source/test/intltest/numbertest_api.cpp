@@ -1747,7 +1747,7 @@ void NumberFormatterApiTest::unitUsage() {
             30500,
             u"350 m");
 
-    assertFormatSingle(u"Fuel consumption: inverted units",                                    //
+    assertFormatSingle(u"Fuel consumption: inverted units",                                     //
                        u"unit/liter-per-100-kilometer usage/vehicle-fuel",                      //
                        u"unit/liter-per-100-kilometer usage/vehicle-fuel",                      //
                        NumberFormatter::with()                                                  //
@@ -1757,17 +1757,35 @@ void NumberFormatterApiTest::unitUsage() {
                        6.6,                                                                     //
                        "36 mpg");
 
-//     // TODO(ICU-21862): determine desired behaviour. Commented out for now to not enforce undesirable
-//     // behaviour
-//     assertFormatSingle(u"Fuel consumption: inverted units, divide-by-zero",                     //
-//                        u"unit/liter-per-100-kilometer usage/vehicle-fuel",                      //
-//                        u"unit/liter-per-100-kilometer usage/vehicle-fuel",                      //
-//                        NumberFormatter::with()                                                  //
-//                            .unit(MeasureUnit::forIdentifier("liter-per-100-kilometer", status)) //
-//                            .usage("vehicle-fuel"),                                              //
-//                        Locale("en-US"),                                                         //
-//                        0,                                                                       //
-//                        "0 mpg"); // TODO(ICU-21862)
+    assertFormatSingle(u"Fuel consumption: inverted units, divide-by-zero, en-US",              //
+                       u"unit/liter-per-100-kilometer usage/vehicle-fuel",                      //
+                       u"unit/liter-per-100-kilometer usage/vehicle-fuel",                      //
+                       NumberFormatter::with()                                                  //
+                           .unit(MeasureUnit::forIdentifier("liter-per-100-kilometer", status)) //
+                           .usage("vehicle-fuel"),                                              //
+                       Locale("en-US"),                                                         //
+                       0,                                                                       //
+                       u"∞ mpg");
+
+    assertFormatSingle(u"Fuel consumption: inverted units, divide-by-zero, en-ZA",      //
+                       u"unit/mile-per-gallon usage/vehicle-fuel",                      //
+                       u"unit/mile-per-gallon usage/vehicle-fuel",                      //
+                       NumberFormatter::with()                                          //
+                           .unit(MeasureUnit::forIdentifier("mile-per-gallon", status)) //
+                           .usage("vehicle-fuel"),                                      //
+                       Locale("en-ZA"),                                                 //
+                       0,                                                               //
+                       u"∞ l/100 km");
+
+    assertFormatSingle(u"Fuel consumption: inverted units, divide-by-inf",              //
+                       u"unit/mile-per-gallon usage/vehicle-fuel",                      //
+                       u"unit/mile-per-gallon usage/vehicle-fuel",                      //
+                       NumberFormatter::with()                                          //
+                           .unit(MeasureUnit::forIdentifier("mile-per-gallon", status)) //
+                           .usage("vehicle-fuel"),                                      //
+                       Locale("de-CH"),                                                 //
+                       uprv_getInfinity(),                                              //
+                       u"0 L/100 km");
 
     // Test calling `.usage("")` should unset the existing usage.
     // First: without usage

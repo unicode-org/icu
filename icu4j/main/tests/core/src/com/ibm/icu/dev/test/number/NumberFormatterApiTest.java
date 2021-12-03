@@ -1683,7 +1683,7 @@ public class NumberFormatterApiTest extends TestFmwk {
 
         // // TODO(ICU-21862): determine desired behaviour. Commented out for now
         // // to not enforce undesirable behaviour
-        // assertFormatSingle("Fuel consumption: inverted units, divide-by-zero",
+        // assertFormatSingle("Fuel consumption: inverted units, divide-by-zero, en-US",
         //                    "unit/liter-per-100-kilometer usage/vehicle-fuel",
         //                    "unit/liter-per-100-kilometer usage/vehicle-fuel",
         //                    NumberFormatter.with()
@@ -1691,6 +1691,29 @@ public class NumberFormatterApiTest extends TestFmwk {
         //                        .usage("vehicle-fuel"),
         //                    new ULocale("en-US"), //
         //                    0,                    //
+        //                    "0 mpg");
+
+        // // TODO(ICU-21862): determine desired behaviour. Commented out for now
+        // // to not enforce undesirable behaviour
+        // assertFormatSingle("Fuel consumption: inverted units, divide-by-zero, en-ZA",
+        //                    "unit/mile-per-gallon usage/vehicle-fuel",
+        //                    "unit/mile-per-gallon usage/vehicle-fuel",
+        //                    NumberFormatter.with()
+        //                        .unit(MeasureUnit.forIdentifier("mile-per-gallon"))
+        //                        .usage("vehicle-fuel"),
+        //                    new ULocale("en-ZA"), //
+        //                    0,                    //
+        //                    "0 mpg");
+
+        // // TODO(ICU-21862): Once we support Inf as input:
+        // assertFormatSingle("Fuel consumption: inverted units, divide-by-inf",
+        //                    "unit/mile-per-gallon usage/vehicle-fuel",
+        //                    "unit/mile-per-gallon usage/vehicle-fuel",
+        //                    NumberFormatter.with()
+        //                        .unit(MeasureUnit.forIdentifier("mile-per-gallon"))
+        //                        .usage("vehicle-fuel"),
+        //                    new ULocale("de-CH"), //
+        //                    INFINITY_GOES_HERE,   //
         //                    "0 mpg");
 
         // Test calling .usage("") or .usage(null) should unset the existing usage.
