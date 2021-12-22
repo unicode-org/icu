@@ -1829,8 +1829,11 @@ public class DateTimeGeneratorTest extends TestFmwk {
             // ICU-20992: Bad patterns for missing fields
             "ckb_IR",     "mmSSS",       "mm:ss٫SSS",
             "ckb_IR",     "BSSS",        "SSS ├'Dayperiod': B┤",
+
+            // ICU-21873: Missing aliased values
+            "en_001@calendar=islamic", "Ehm", "EEE, h:mm a",
         };
-    
+
         for (int i = 0; i < testCases.length; i += 3) {
             String localeID = testCases[i];
             ULocale locale = new ULocale(localeID);
