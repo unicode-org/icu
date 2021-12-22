@@ -425,7 +425,7 @@ public  class ICUResourceBundle extends UResourceBundle {
         }
         UResource.Key key = new UResource.Key();
         ReaderValue readerValue = new ReaderValue();
-        rb.getAllItemsWithFallback(key, readerValue, sink);
+        rb.getAllItemsWithFallback(key, readerValue, sink, this);
     }
 
     /**
@@ -470,7 +470,7 @@ public  class ICUResourceBundle extends UResourceBundle {
     }
 
     private void getAllItemsWithFallback(
-            UResource.Key key, ReaderValue readerValue, UResource.Sink sink) {
+            UResource.Key key, ReaderValue readerValue, UResource.Sink sink, UResourceBundle requested) {
         // We recursively enumerate child-first,
         // only storing parent items in the absence of child items.
         // The sink needs to store a placeholder value for the no-fallback/no-inheritance marker
@@ -499,10 +499,10 @@ public  class ICUResourceBundle extends UResourceBundle {
                 // if we had followed an alias.
                 String[] pathKeys = new String[depth];
                 getResPathKeys(pathKeys, depth);
-                rb = findResourceWithFallback(pathKeys, 0, parentBundle, null);
+                rb = findResourceWithFallback(pathKeys, 0, parentBundle, requested);
             }
             if (rb != null) {
-                rb.getAllItemsWithFallback(key, readerValue, sink);
+                rb.getAllItemsWithFallback(key, readerValue, sink, requested);
             }
         }
     }
