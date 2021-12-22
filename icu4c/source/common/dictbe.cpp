@@ -1361,6 +1361,7 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
     // while reversing t_boundary and pushing values to foundBreaks.
     int32_t prevCPPos = -1;
     int32_t prevUTextPos = -1;
+    int correctedNumBreaks = 0;
     for (int32_t i = numBreaks-1; i >= 0; i--) {
         int32_t cpPos = t_boundary.elementAti(i);
         U_ASSERT(cpPos > prevCPPos);
@@ -1369,7 +1370,10 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
         if (utextPos > prevUTextPos) {
             // Boundaries are added to foundBreaks output in ascending order.
             U_ASSERT(foundBreaks.size() == 0 || foundBreaks.peeki() < utextPos);
-            foundBreaks.push(utextPos, status);
+            if (!(foundBreaks.contains(utextPos) || utextPos == rangeStart)) {
+                foundBreaks.push(utextPos, status);
+                correctedNumBreaks++;
+            }
         } else {
             // Normalization expanded the input text, the dictionary found a boundary
             // within the expansion, giving two boundaries with the same index in the
@@ -1381,9 +1385,14 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
     }
     (void)prevCPPos; // suppress compiler warnings about unused variable
 
+    if (!foundBreaks.isEmpty() && foundBreaks.peeki() == rangeEnd) {
+        foundBreaks.popi();
+        correctedNumBreaks--;
+    }
+
     // inString goes out of scope
     // inputMap goes out of scope
-    return numBreaks;
+    return correctedNumBreaks;
 }
 #endif
 
