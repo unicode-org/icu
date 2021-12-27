@@ -96,7 +96,7 @@ public class ThaiBreakEngine extends DictionaryBreakEngine {
 
     @Override
     public int divideUpDictionaryRange(CharacterIterator fIter, int rangeStart, int rangeEnd,
-            DequeI foundBreaks) {
+            DequeI foundBreaks, boolean isPhraseBreaking) {
 
         if ((rangeEnd - rangeStart) < THAI_MIN_WORD_SPAN) {
             return 0;  // Not enough characters for word

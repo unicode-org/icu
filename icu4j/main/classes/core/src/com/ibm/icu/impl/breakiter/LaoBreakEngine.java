@@ -85,7 +85,7 @@ public class LaoBreakEngine extends DictionaryBreakEngine {
 
     @Override
     public int divideUpDictionaryRange(CharacterIterator fIter, int rangeStart, int rangeEnd,
-            DequeI foundBreaks) {
+            DequeI foundBreaks, boolean isPhraseBreaking) {
 
 
         if ((rangeEnd - rangeStart) < LAO_MIN_WORD) {

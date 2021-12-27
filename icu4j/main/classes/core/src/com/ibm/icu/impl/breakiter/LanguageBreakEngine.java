@@ -32,7 +32,7 @@ public interface LanguageBreakEngine {
      * @return the number of breaks found
      */
     int findBreaks(CharacterIterator text, int startPos, int endPos,
-            DictionaryBreakEngine.DequeI foundBreaks);
+            DictionaryBreakEngine.DequeI foundBreaks, boolean isPhraseBreaking);
 }
 
 
