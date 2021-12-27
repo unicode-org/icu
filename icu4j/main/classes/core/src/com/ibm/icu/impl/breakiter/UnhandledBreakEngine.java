@@ -44,7 +44,7 @@ public final class UnhandledBreakEngine implements LanguageBreakEngine {
 
     @Override
     public int findBreaks(CharacterIterator text, int startPos, int endPos,
-            DictionaryBreakEngine.DequeI foundBreaks) {
+            DictionaryBreakEngine.DequeI foundBreaks, boolean isPhraseBreaking) {
 
         UnicodeSet uniset = fHandled;
         int c = CharacterIteration.current32(text);

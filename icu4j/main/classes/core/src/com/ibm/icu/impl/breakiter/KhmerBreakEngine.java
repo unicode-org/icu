@@ -85,7 +85,7 @@ public class KhmerBreakEngine extends DictionaryBreakEngine {
 
     @Override
     public int divideUpDictionaryRange(CharacterIterator fIter, int rangeStart, int rangeEnd,
-            DequeI foundBreaks) {
+            DequeI foundBreaks, boolean isPhraseBreaking) {
 
         if ((rangeEnd - rangeStart) < KHMER_MIN_WORD_SPAN) {
             return 0;  // Not enough characters for word

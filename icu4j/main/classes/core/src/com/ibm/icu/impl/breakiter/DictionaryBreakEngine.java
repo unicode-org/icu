@@ -183,7 +183,7 @@ public abstract class DictionaryBreakEngine implements LanguageBreakEngine {
 
     @Override
     public int findBreaks(CharacterIterator text, int startPos, int endPos,
-            DequeI foundBreaks) {
+            DequeI foundBreaks, boolean isPhraseBreaking) {
         int result = 0;
 
          // Find the span of characters included in the set.
@@ -202,7 +202,7 @@ public abstract class DictionaryBreakEngine implements LanguageBreakEngine {
         rangeStart = start;
         rangeEnd = current;
 
-        result = divideUpDictionaryRange(text, rangeStart, rangeEnd, foundBreaks);
+        result = divideUpDictionaryRange(text, rangeStart, rangeEnd, foundBreaks, isPhraseBreaking);
         text.setIndex(current);
 
         return result;
@@ -226,5 +226,6 @@ public abstract class DictionaryBreakEngine implements LanguageBreakEngine {
      abstract int divideUpDictionaryRange(CharacterIterator text,
                                           int               rangeStart,
                                           int               rangeEnd,
-                                          DequeI            foundBreaks );
+                                          DequeI            foundBreaks,
+                                          boolean isPhraseBreaking);
 }

@@ -14,18 +14,31 @@ import static com.ibm.icu.impl.CharacterIteration.next32;
 
 import java.io.IOException;
 import java.text.CharacterIterator;
+import java.util.HashSet;
 
 import com.ibm.icu.impl.Assert;
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSetIterator;
+import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.UResourceBundleIterator;
 
 public class CjkBreakEngine extends DictionaryBreakEngine {
     private UnicodeSet fHangulWordSet;
+    private UnicodeSet fNumberOrOpenPunctuationSet;
+    private UnicodeSet fClosePunctuationSet;
     private DictionaryMatcher fDictionary = null;
+    private HashSet<String> fSkipSet;
 
     public CjkBreakEngine(boolean korean) throws IOException {
         fHangulWordSet = new UnicodeSet("[\\uac00-\\ud7a3]");
         fHangulWordSet.freeze();
+        fNumberOrOpenPunctuationSet = new UnicodeSet("[[:Nd:][:Pi:][:Ps:]]");
+        fNumberOrOpenPunctuationSet.freeze();
+        fClosePunctuationSet = new UnicodeSet("[[:Pc:][:Pd:][:Pe:][:Pf:][:Po:]]");
+        fClosePunctuationSet.freeze();
+        fSkipSet = new HashSet<String>();
 
         fDictionary = DictionaryData.loadDictionaryFor("Hira");
         if (korean) {
@@ -33,6 +46,33 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
         } else { //Chinese and Japanese
             UnicodeSet cjSet = new UnicodeSet("[[:Han:][:Hiragana:][:Katakana:]\\u30fc\\uff70\\uff9e\\uff9f]");
             setCharacters(cjSet);
+            initializeJapanesePhraseParamater();
+        }
+    }
+
+    private void initializeJapanesePhraseParamater() {
+        loadJapaneseParticleAndAuxVerbs();
+        loadHiragana();
+    }
+
+    private void loadJapaneseParticleAndAuxVerbs() {
+        UResourceBundle rb = UResourceBundle.getBundleInstance(ICUData.ICU_BRKITR_BASE_NAME, "ja");
+        final String[] tags = {"particles", "auxVerbs"};
+        for (String tag : tags) {
+            UResourceBundle bundle = rb.get(tag);
+            UResourceBundleIterator iterator = bundle.getIterator();
+            while (iterator.hasNext()) {
+                fSkipSet.add(iterator.nextString());
+            }
+        }
+    }
+
+    private void loadHiragana() {
+        UnicodeSet hiraganaWordSet = new UnicodeSet("[:Hiragana:]");
+        hiraganaWordSet.freeze();
+        UnicodeSetIterator iterator = new UnicodeSetIterator(hiraganaWordSet);
+        while (iterator.next()) {
+            fSkipSet.add(iterator.getString());
         }
     }
 
@@ -66,7 +106,7 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
 
     @Override
     public int divideUpDictionaryRange(CharacterIterator inText, int startPos, int endPos,
-            DequeI foundBreaks) {
+            DequeI foundBreaks, boolean isPhraseBreaking) {
         if (startPos >= endPos) {
             return 0;
         }
@@ -196,6 +236,25 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
         if (bestSnlp[numCodePts] == kint32max) {
             t_boundary[numBreaks] = numCodePts;
             numBreaks++;
+        } else if (isPhraseBreaking) {
+            t_boundary[numBreaks] = numCodePts;
+            numBreaks++;
+            int prevIdx = numCodePts;
+            int codeUnitIdx = 0, length = 0;
+            for (int i = prev[numCodePts]; i > 0; i = prev[i]) {
+                codeUnitIdx = prenormstr.offsetByCodePoints(0, i);
+                length = prevIdx - i;
+                prevIdx = i;
+                String pattern = getPatternFromText(text, s, codeUnitIdx, length);
+                // Keep the breakpoint if the pattern is not in the fSkipSet and continuous Katakana
+                // characters don't occur.
+                text.setIndex(codeUnitIdx - 1);
+                if (!fSkipSet.contains(pattern)
+                        && (!isKatakana(current32(text)) || !isKatakana(next32(text)))) {
+                    t_boundary[numBreaks] = i;
+                    numBreaks++;
+                }
+            }
         } else {
             for (int i = numCodePts; i > 0; i = prev[i]) {
                 t_boundary[numBreaks] = i;
@@ -212,19 +271,50 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
         int previous = -1;
         for (int i = numBreaks - 1; i >= 0; i--) {
             int pos = charPositions[t_boundary[i]] + startPos;
-            if (pos > previous && pos != startPos) {
-                foundBreaks.push(pos);
-                correctedNumBreaks++;
+            // In phrase breaking, there has to be a breakpoint between Cj character and close
+            // punctuation.
+            // E.g.［携帯電話］正しい選択 -> ［携帯▁電話］▁正しい▁選択 -> breakpoint between ］ and 正
+            if (pos > previous) {
+                if (pos != startPos
+                        || (isPhraseBreaking && pos > 0
+                        && fClosePunctuationSet.contains(inText.setIndex(pos - 1)))) {
+                    foundBreaks.push(charPositions[t_boundary[i]] + startPos);
+                    correctedNumBreaks++;
+                }
             }
             previous = pos;
         }
 
         if (!foundBreaks.isEmpty() && foundBreaks.peek() == endPos) {
-            foundBreaks.pop();
-            correctedNumBreaks--;
+            // In phrase breaking, there has to be a breakpoint between Cj character and
+            // the number/open punctuation.
+            // E.g. る文字「そうだ、京都」->る▁文字▁「そうだ、▁京都」-> breakpoint between 字 and「
+            // E.g. 乗車率９０％程度だろうか -> 乗車▁率▁９０％▁程度だ▁ろうか -> breakpoint between 率 and ９
+            if (isPhraseBreaking) {
+                if (!fNumberOrOpenPunctuationSet.contains(inText.setIndex(endPos))) {
+                    foundBreaks.pop();
+                    correctedNumBreaks--;
+                }
+            } else {
+                foundBreaks.pop();
+                correctedNumBreaks--;
+            }
         }
         if (!foundBreaks.isEmpty())
             inText.setIndex(foundBreaks.peek());
         return correctedNumBreaks;
+    }
+
+    private String getPatternFromText(CharacterIterator text, StringBuffer sb, int start,
+            int length) {
+        sb.setLength(0);
+        if(length > 0) {
+            text.setIndex(start);
+            sb.appendCodePoint(current32(text));
+            for (int j = 1; j < length; j++) {
+                sb.appendCodePoint(next32(text));
+            }
+        }
+        return sb.toString();
     }
 }
