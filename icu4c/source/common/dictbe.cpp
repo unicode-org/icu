@@ -1370,7 +1370,7 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
         if (utextPos > prevUTextPos) {
             // Boundaries are added to foundBreaks output in ascending order.
             U_ASSERT(foundBreaks.size() == 0 || foundBreaks.peeki() < utextPos);
-            if (!(foundBreaks.contains(utextPos) || utextPos == rangeStart)) {
+            if (utextPos != rangeStart) {
                 foundBreaks.push(utextPos, status);
                 correctedNumBreaks++;
             }
