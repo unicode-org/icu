@@ -209,12 +209,14 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
         }
 
         int correctedNumBreaks = 0;
+        int previous = -1;
         for (int i = numBreaks - 1; i >= 0; i--) {
             int pos = charPositions[t_boundary[i]] + startPos;
-            if (!(foundBreaks.contains(pos) || pos == startPos)) {
-                foundBreaks.push(charPositions[t_boundary[i]] + startPos);
+            if (pos > previous && pos != startPos) {
+                foundBreaks.push(pos);
                 correctedNumBreaks++;
             }
+            previous = pos;
         }
 
         if (!foundBreaks.isEmpty() && foundBreaks.peek() == endPos) {
