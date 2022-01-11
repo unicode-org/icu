@@ -163,7 +163,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         gen.addPattern("d'. von' MMMM", true, returnInfo);
         // the returnInfo is mostly useful for debugging problem cases
         format.applyPattern(gen.getBestPattern("MMMMdHmm"));
-        assertEquals("modified format: MMMdHmm", "14. von Oktober, 08:58", format.format(sampleDate));
+        assertEquals("modified format: MMMMdHmm", "14. von Oktober um 08:58", format.format(sampleDate));
 
         // get a pattern and modify it
         format = (SimpleDateFormat)DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, locale);
@@ -1877,6 +1877,127 @@ public class DateTimeGeneratorTest extends TestFmwk {
 
             if (pattern.indexOf('G') < 0) {
                 errln("missing era field for locale " + localeID);
+            }
+        }
+    }
+
+    private final static int NUM_DATE_TIME_PATTERNS = 4;
+
+    private final class DTPLocaleAndResults {
+        public String localeID;
+        public String[] expectPat;
+        // Simple constructor
+        public DTPLocaleAndResults(String locID, String[] exPat) {
+            localeID = locID;
+            expectPat = exPat;
+        }
+    }
+
+    @Test
+    public void testDateTimePatterns() {
+        String[] skeletons = {
+            "yMMMMEEEEdjmm", // full date, short time
+            "yMMMMdjmm",     // long date, short time
+            "yMMMdjmm",      // medium date, short time
+            "yMdjmm",        // short date, short time
+        };
+        // The following tests some locales in which there are differences between the
+        // DateTimePatterns of various length styles.
+        final DTPLocaleAndResults[] localeAndResults = {
+            new DTPLocaleAndResults( "en", new String[]{ // long != medium
+                                           "EEEE, MMMM d, y 'at' h:mm a",
+                                           "MMMM d, y 'at' h:mm a",
+                                           "MMM d, y, h:mm a",
+                                           "M/d/y, h:mm a" } ),
+            new DTPLocaleAndResults( "fr", new String[]{ // medium != short
+                                           "EEEE d MMMM y 'à' HH:mm",
+                                           "d MMMM y 'à' HH:mm",
+                                           "d MMM y, HH:mm",
+                                           "dd/MM/y HH:mm" } ),
+            new DTPLocaleAndResults( "ha", new String[]{ // full != long
+                                           "EEEE d MMMM, y HH:mm",
+                                           "d MMMM, y 'da' HH:mm",
+                                           "d MMM, y, HH:mm",
+                                           "y-MM-dd, HH:mm" } ),
+        };
+
+        String[] enDTPatterns = {
+            "{1} 'at' {0}",
+            "{1} 'at' {0}",
+            "{1}, {0}",
+            "{1}, {0}",
+        };
+        String[] modDTPatterns = {
+            "{1} _0_ {0}",
+            "{1} _1_ {0}",
+            "{1} _2_ {0}",
+            "{1} _3_ {0}",
+        };
+        final DTPLocaleAndResults enModResults =
+            new DTPLocaleAndResults( "en", new String[]{
+                                            "EEEE, MMMM d, y _0_ h:mm a",
+                                            "MMMM d, y _1_ h:mm a",
+                                            "MMM d, y _2_ h:mm a",
+                                            "M/d/y _3_ h:mm a" } );
+
+        // Test various locales with standard data
+        DateTimePatternGenerator dtpg;
+        for (DTPLocaleAndResults localeAndResultItem: localeAndResults) {
+            dtpg = DateTimePatternGenerator.getInstance(new Locale(localeAndResultItem.localeID));
+            doDTPatternTest(dtpg, skeletons, localeAndResultItem);
+        }
+        // Test getting and modifying date-time combining patterns
+        dtpg = DateTimePatternGenerator.getInstance(ULocale.ENGLISH);
+        // Test style out of range
+        String dtFormat0 = "";
+        boolean gotException = false;
+        try {
+            dtFormat0 = dtpg.getDateTimeFormat(DateFormat.NONE);
+        } catch(IllegalArgumentException e) {
+            gotException = true;
+        }
+        if (!gotException) {
+            errln("ERROR: getDateTimeFormat with invalid style, expected IllegalArgumentException but got format \""
+                    + dtFormat0 + "\"");
+        }
+        // Test normal getting and setting
+        for (int patStyle = 0; patStyle < NUM_DATE_TIME_PATTERNS; patStyle++) {
+            String dtFormat1 = dtpg.getDateTimeFormat(patStyle);
+            if (!dtFormat1.equals(enDTPatterns[patStyle])) {
+                errln("ERROR: getDateTimeFormat for en before mod, style " + patStyle +
+                    ", expect \"" + enDTPatterns[patStyle] + "\", get \"" + dtFormat1 + "\"");
+            }
+            dtpg.setDateTimeFormat(patStyle, modDTPatterns[patStyle]);
+            String dtFormat2 = dtpg.getDateTimeFormat(patStyle);
+            if (!dtFormat2.equals(modDTPatterns[patStyle])) {
+                errln("ERROR: getDateTimeFormat for en after  mod, style " + patStyle +
+                    ", expect \"" + modDTPatterns[patStyle] + "\", get \"" + dtFormat2 + "\"");
+            }
+        }
+        // Test result of setting
+        doDTPatternTest(dtpg, skeletons, enModResults);
+        // Test old get/set functions
+        String dtFormat3 = dtpg.getDateTimeFormat();
+        if (!dtFormat3.equals(modDTPatterns[DateFormat.MEDIUM])) {
+            errln("ERROR: old getDateTimeFormat for en before mod, expect \"" +
+                    modDTPatterns[DateFormat.MEDIUM] + "\", get \"" + dtFormat3 + "\"");
+        }
+        dtpg.setDateTimeFormat(modDTPatterns[DateFormat.SHORT]); // set all dateTimePatterns to the short format
+        for (int patStyle = 0; patStyle < NUM_DATE_TIME_PATTERNS; patStyle++) {
+            String dtFormat4 = dtpg.getDateTimeFormat(patStyle);
+            if (!dtFormat4.equals(modDTPatterns[DateFormat.SHORT])) {
+                errln("ERROR: getDateTimeFormat for en after second mod, style " + patStyle +
+                    ", expect \"" + modDTPatterns[DateFormat.SHORT] + "\", get \"" + dtFormat4 + "\"");
+            }
+        }
+    }
+
+    private void doDTPatternTest(DateTimePatternGenerator dtpg, String[] skeletons, DTPLocaleAndResults localeAndResultItem) {
+        for (int patStyle = 0; patStyle < NUM_DATE_TIME_PATTERNS; patStyle++) {
+            String getPat = dtpg.getBestPattern(skeletons[patStyle]);
+            if (!getPat.equals(localeAndResultItem.expectPat[patStyle])) {
+                errln("ERROR: getBestPattern locale " + localeAndResultItem.localeID + ", style " + patStyle +
+                    ", expect \"" + localeAndResultItem.expectPat[patStyle] + "\", get \"" + getPat + "\"");
             }
         }
     }

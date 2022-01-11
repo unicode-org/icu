@@ -2140,7 +2140,7 @@ public class TestMessageFormat extends TestFmwk {
         Date date = new GregorianCalendar(2021, Calendar.NOVEMBER, 23, 16, 42, 55).getTime();
 
         doTheRealDateTimeSkeletonTesting(date, "{0,date,::MMMMd}", ULocale.ENGLISH, "November 23");
-        doTheRealDateTimeSkeletonTesting(date, "{0,date,::yMMMMdjm}", ULocale.ENGLISH, "November 23, 2021, 4:42 PM");
+        doTheRealDateTimeSkeletonTesting(date, "{0,date,::yMMMMdjm}", ULocale.ENGLISH, "November 23, 2021 at 4:42 PM");
         doTheRealDateTimeSkeletonTesting(date, "{0,date,   ::   yMMMMd   }", ULocale.ENGLISH, "November 23, 2021");
         doTheRealDateTimeSkeletonTesting(date, "{0,date,::yMMMMd}", ULocale.FRENCH, "23 novembre 2021");
         doTheRealDateTimeSkeletonTesting(date, "Expiration: {0,date,::yMMM}!", ULocale.ENGLISH, "Expiration: Nov 2021!");
@@ -2152,7 +2152,7 @@ public class TestMessageFormat extends TestFmwk {
         Date date = new GregorianCalendar(2021, Calendar.NOVEMBER, 23, 16, 42, 55).getTime();
 
         doTheRealDateTimeSkeletonTesting(date, "{0,time,::MMMMd}", ULocale.ENGLISH, "November 23");
-        doTheRealDateTimeSkeletonTesting(date, "{0,time,::yMMMMdjm}", ULocale.ENGLISH, "November 23, 2021, 4:42 PM");
+        doTheRealDateTimeSkeletonTesting(date, "{0,time,::yMMMMdjm}", ULocale.ENGLISH, "November 23, 2021 at 4:42 PM");
         doTheRealDateTimeSkeletonTesting(date, "{0,time,   ::   yMMMMd   }", ULocale.ENGLISH, "November 23, 2021");
         doTheRealDateTimeSkeletonTesting(date, "{0,time,::yMMMMd}", ULocale.FRENCH, "23 novembre 2021");
         doTheRealDateTimeSkeletonTesting(date, "Expiration: {0,time,::yMMM}!", ULocale.ENGLISH, "Expiration: Nov 2021!");

@@ -190,7 +190,7 @@ void DateFormatTest::TestPatterns() {
         {UDAT_ABBR_UTC_TZ, "ZZZZ", "en", "ZZZZ"},
 
         {UDAT_YEAR_NUM_MONTH_DAY UDAT_ABBR_UTC_TZ, "yMdZZZZ", "en", "M/d/y, ZZZZ"},
-        {UDAT_MONTH_DAY UDAT_LOCATION_TZ, "MMMMdVVVV", "en", "MMMM d, VVVV"}
+        {UDAT_MONTH_DAY UDAT_LOCATION_TZ, "MMMMdVVVV", "en", "MMMM d 'at' VVVV"}
     };
 
     IcuTestErrorCode errorCode(*this, "TestPatterns()");
