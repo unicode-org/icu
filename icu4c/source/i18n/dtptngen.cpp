@@ -393,10 +393,13 @@ DateTimePatternGenerator::operator=(const DateTimePatternGenerator& other) {
     *fp = *(other.fp);
     dtMatcher->copyFrom(other.dtMatcher->skeleton);
     *distanceInfo = *(other.distanceInfo);
-    dateTimeFormat = other.dateTimeFormat;
+    for (int32_t style = UDAT_FULL; style <= UDAT_SHORT; style++) {
+        dateTimeFormat[style] = other.dateTimeFormat[style];
+    }
     decimal = other.decimal;
-    // NUL-terminate for the C API.
-    dateTimeFormat.getTerminatedBuffer();
+    for (int32_t style = UDAT_FULL; style <= UDAT_SHORT; style++) {
+        dateTimeFormat[style].getTerminatedBuffer(); // NUL-terminate for the C API.
+    }
     decimal.getTerminatedBuffer();
     delete skipMatcher;
     if ( other.skipMatcher == nullptr ) {
@@ -430,7 +433,12 @@ DateTimePatternGenerator::operator==(const DateTimePatternGenerator& other) cons
         return true;
     }
     if ((pLocale==other.pLocale) && (patternMap->equals(*other.patternMap)) &&
-        (dateTimeFormat==other.dateTimeFormat) && (decimal==other.decimal)) {
+        (decimal==other.decimal)) {
+        for (int32_t style = UDAT_FULL; style <= UDAT_SHORT; style++) {
+            if (dateTimeFormat[style] != other.dateTimeFormat[style]) {
+                return false;
+            }
+        }
         for ( int32_t i=0 ; i<UDATPG_FIELD_COUNT; ++i ) {
             if (appendItemFormats[i] != other.appendItemFormats[i]) {
                 return false;
@@ -1199,7 +1207,21 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UDate
     }
     resultPattern.remove();
     status = U_ZERO_ERROR;
-    dtFormat=getDateTimeFormat();
+    // determine which dateTimeFormat to use
+    PtnSkeleton* reqSkeleton = dtMatcher->getSkeletonPtr();
+    UDateFormatStyle style = UDAT_SHORT;
+    int32_t monthFieldLen = reqSkeleton->baseOriginal.getFieldLength(UDATPG_MONTH_FIELD);
+    if (monthFieldLen == 4) {
+        if (reqSkeleton->baseOriginal.getFieldLength(UDATPG_WEEKDAY_FIELD) > 0) {
+            style = UDAT_FULL;
+        } else {
+            style = UDAT_LONG;
+        }
+    } else if (monthFieldLen == 3) {
+        style = UDAT_MEDIUM;
+    }
+    // and now use it to compose date and time
+    dtFormat=getDateTimeFormat(style, status);
     SimpleFormatter(dtFormat, 2, 2, status).format(timePattern, datePattern, resultPattern, status);
     return resultPattern;
 }
@@ -1335,14 +1357,45 @@ DateTimePatternGenerator::addCanonicalItems(UErrorCode& status) {
 
 void
 DateTimePatternGenerator::setDateTimeFormat(const UnicodeString& dtFormat) {
-    dateTimeFormat = dtFormat;
-    // NUL-terminate for the C API.
-    dateTimeFormat.getTerminatedBuffer();
+    UErrorCode status = U_ZERO_ERROR;
+    for (int32_t style = UDAT_FULL; style <= UDAT_SHORT; style++) {
+        setDateTimeFormat((UDateFormatStyle)style, dtFormat, status);
+    }
 }
 
 const UnicodeString&
 DateTimePatternGenerator::getDateTimeFormat() const {
-    return dateTimeFormat;
+    UErrorCode status = U_ZERO_ERROR;
+    return getDateTimeFormat(UDAT_MEDIUM, status);
+}
+
+void
+DateTimePatternGenerator::setDateTimeFormat(UDateFormatStyle style, const UnicodeString& dtFormat, UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    if (style < UDAT_FULL || style > UDAT_SHORT) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    dateTimeFormat[style] = dtFormat;
+    // Note for the following: getTerminatedBuffer() can re-allocate the UnicodeString
+    // buffer so we do this here before clients request a const ref to the UnicodeString
+    // or its buffer.
+    dateTimeFormat[style].getTerminatedBuffer(); // NUL-terminate for the C API.
+}
+
+const UnicodeString&
+DateTimePatternGenerator::getDateTimeFormat(UDateFormatStyle style, UErrorCode& status) const {
+    static const UnicodeString emptyString = UNICODE_STRING_SIMPLE("");
+    if (U_FAILURE(status)) {
+        return emptyString;
+    }
+    if (style < UDAT_FULL || style > UDAT_SHORT) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return emptyString;
+    }
+    return dateTimeFormat[style];
 }
 
 void
@@ -1378,13 +1431,15 @@ DateTimePatternGenerator::setDateTimeFromCalendar(const Locale& locale, UErrorCo
     }
     if (U_FAILURE(status)) { return; }
 
-    if (ures_getSize(dateTimePatterns.getAlias()) <= DateFormat::kDateTime)
+    if (ures_getSize(dateTimePatterns.getAlias()) <= DateFormat::kDateTimeOffset + DateFormat::kShort)
     {
         status = U_INVALID_FORMAT_ERROR;
         return;
     }
-    resStr = ures_getStringByIndex(dateTimePatterns.getAlias(), (int32_t)DateFormat::kDateTime, &resStrLen, &status);
-    setDateTimeFormat(UnicodeString(TRUE, resStr, resStrLen));
+    for (int32_t style = UDAT_FULL; style <= UDAT_SHORT; style++) {
+        resStr = ures_getStringByIndex(dateTimePatterns.getAlias(), (int32_t)DateFormat::kDateTimeOffset + style, &resStrLen, &status);
+        setDateTimeFormat((UDateFormatStyle)style, UnicodeString(TRUE, resStr, resStrLen), status);
+    }
 }
 
 void

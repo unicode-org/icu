@@ -313,8 +313,11 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     }
 
     private void setDateTimeFromCalendar(ULocale uLocale) {
-        String dateTimeFormat = Calendar.getDateTimePattern(Calendar.getInstance(uLocale), uLocale, DateFormat.MEDIUM);
-        setDateTimeFormat(dateTimeFormat);
+        Calendar cal = Calendar.getInstance(uLocale);
+        for (int style = DateFormat.FULL; style <= DateFormat.SHORT; style++) {
+            String dateTimeFormat = Calendar.getDateTimePattern(cal, uLocale, style);
+            setDateTimeFormat(style, dateTimeFormat);
+        }
     }
 
     private void setDecimalSymbols(ULocale uLocale) {
@@ -650,8 +653,26 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
         if (datePattern == null) return timePattern == null ? "" : timePattern;
         if (timePattern == null) return datePattern;
+        // determine which dateTimeFormat to use
+        String canonicalSkeleton = current.toCanonicalString(); // month fields use M, weekday fields use E
+        int style = DateFormat.SHORT;
+        int monthFieldLen = 0;
+        int monthFieldOffset = canonicalSkeleton.indexOf('M');
+        if (monthFieldOffset >= 0) {
+            monthFieldLen = 1 + canonicalSkeleton.lastIndexOf('M') - monthFieldOffset;
+        }
+        if (monthFieldLen == 4) {
+            if (canonicalSkeleton.indexOf('E') >= 0) {
+                style = DateFormat.FULL;
+            } else {
+                style = DateFormat.LONG;
+            }
+        } else if (monthFieldLen == 3) {
+            style = DateFormat.MEDIUM;
+        }
+        // and now use it to compose date and time
         return SimpleFormatterImpl.formatRawPattern(
-                getDateTimeFormat(), 2, 2, timePattern, datePattern);
+                getDateTimeFormat(style), 2, 2, timePattern, datePattern);
     }
 
     /*
@@ -998,23 +1019,79 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * for those two skeletons, so the result is put together with this pattern,
      * resulting in "d-MMM h:mm".
      *
+     * There are four DateTimeFormats in a DateTimePatternGenerator object,
+     * corresponding to date styles DateFormat.FULL..DateFormat.SHORT. This method sets
+     * all of them to the specified pattern. To set them individually, see
+     * setDateTimeFormat(int style, ...).
+     *
      * @param dateTimeFormat message format pattern, where {1} will be replaced by the date
      *            pattern and {0} will be replaced by the time pattern.
      * @stable ICU 3.6
      */
     public void setDateTimeFormat(String dateTimeFormat) {
         checkFrozen();
-        this.dateTimeFormat = dateTimeFormat;
+        for (int style = DateFormat.FULL; style <= DateFormat.SHORT; style++) {
+            setDateTimeFormat(style, dateTimeFormat);
+        }
     }
 
     /**
      * Getter corresponding to setDateTimeFormat.
      *
+     * There are four DateTimeFormats in a DateTimePatternGenerator object,
+     * corresponding to date styles DateFormat.FULL..DateFormat.SHORT. This method gets
+     * the style for DateFormat.MEDIUM (the default). To get them individually, see
+     * getDateTimeFormat(int style).
+     *
      * @return pattern
      * @stable ICU 3.6
      */
     public String getDateTimeFormat() {
-        return dateTimeFormat;
+        return getDateTimeFormat(DateFormat.MEDIUM);
+    }
+
+    /**
+     * dateTimeFormats are message patterns used to compose combinations of date
+     * and time patterns. There are four length styles, corresponding to the
+     * inferred style of the date pattern:
+     *  - DateFormat.FULL (for date pattern with weekday and long month), else
+     *  - DateFormat.LONG (for a date pattern with long month), else
+     *  - DateFormat.MEDIUM (for a date pattern with abbreviated month), else
+     *  - DateFormat.SHORT (for any other date pattern).
+     * For details on dateTimeFormats, see
+     * https://www.unicode.org/reports/tr35/tr35-dates.html#dateTimeFormats.
+     * The default pattern in the root locale for all styles is "{1} {0}".
+     *
+     * @param style
+     *              one of DateFormat.FULL..DateFormat.SHORT. An exception will
+     *              be thrown if out of range.
+     * @param dateTimeFormat
+     *              the new dateTimeFormat to set for the specified style
+     * @draft ICU 71
+     */
+    public void setDateTimeFormat(int style, String dateTimeFormat) {
+        if (style < DateFormat.FULL || style > DateFormat.SHORT) {
+            throw new IllegalArgumentException("Illegal style here: " + style);
+        }
+        checkFrozen();
+        this.dateTimeFormats[style] = dateTimeFormat;
+    }
+
+    /**
+     * Getter corresponding to setDateTimeFormat.
+     *
+     * @param style
+     *              one of DateFormat.FULL..DateFormat.SHORT. An exception will
+     *              be thrown if out of range.
+     * @return
+     *              the current dateTimeFormat for the specified style.
+     * @draft ICU 71
+     */
+    public String getDateTimeFormat(int style) {
+        if (style < DateFormat.FULL || style > DateFormat.SHORT) {
+            throw new IllegalArgumentException("Illegal style here: " + style);
+        }
+        return dateTimeFormats[style];
     }
 
     /**
@@ -1470,6 +1547,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             DateTimePatternGenerator result = (DateTimePatternGenerator) (super.clone());
             result.skeleton2pattern = (TreeMap<DateTimeMatcher, PatternWithSkeletonFlag>) skeleton2pattern.clone();
             result.basePattern_pattern = (TreeMap<String, PatternWithSkeletonFlag>) basePattern_pattern.clone();
+            result.dateTimeFormats = dateTimeFormats.clone();
             result.appendItemFormats = appendItemFormats.clone();
             result.fieldDisplayNames = fieldDisplayNames.clone();
             result.current = new DateTimeMatcher();
@@ -1971,7 +2049,14 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     private TreeMap<DateTimeMatcher, PatternWithSkeletonFlag> skeleton2pattern = new TreeMap<>(); // items are in priority order
     private TreeMap<String, PatternWithSkeletonFlag> basePattern_pattern = new TreeMap<>(); // items are in priority order
     private String decimal = "?";
-    private String dateTimeFormat = "{1} {0}";
+    // For the following, need fallback patterns in case an empty instance 
+    // of DateTimePatterngenerator is used for formatting.
+    private String[] dateTimeFormats = {
+        "{1} {0}",
+        "{1} {0}",
+        "{1} {0}",
+        "{1} {0}"
+    };
     private String[] appendItemFormats = new String[TYPE_LIMIT];
     private String[][] fieldDisplayNames = new String[TYPE_LIMIT][DisplayWidth.COUNT];
     private char defaultHourFormatChar = 'H';
