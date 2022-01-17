@@ -149,6 +149,10 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestTraceCreateLineNormal);
     TESTCASE_AUTO(TestTraceCreateLineLoose);
     TESTCASE_AUTO(TestTraceCreateLineStrict);
+    TESTCASE_AUTO(TestTraceCreateLineNormalPhrase);
+    TESTCASE_AUTO(TestTraceCreateLineLoosePhrase);
+    TESTCASE_AUTO(TestTraceCreateLineStrictPhrase);
+    TESTCASE_AUTO(TestTraceCreateLinePhrase);
     TESTCASE_AUTO(TestTraceCreateBreakEngine);
 #endif
 
@@ -5144,7 +5148,7 @@ void RBBITest::TestTraceCreateLine(void) {
     LocalPointer<BreakIterator> brkitr(
         BreakIterator::createLineInstance("zh-CN", status));
     status.errIfFailureAndReset();
-    assertTestTraceResult(UTRACE_UBRK_CREATE_LINE, "");
+    assertTestTraceResult(UTRACE_UBRK_CREATE_LINE, "line");
 }
 
 void RBBITest::TestTraceCreateLineStrict(void) {
@@ -5153,7 +5157,7 @@ void RBBITest::TestTraceCreateLineStrict(void) {
     LocalPointer<BreakIterator> brkitr(
         BreakIterator::createLineInstance("zh-CN-u-lb-strict", status));
     status.errIfFailureAndReset();
-    assertTestTraceResult(UTRACE_UBRK_CREATE_LINE, "strict");
+    assertTestTraceResult(UTRACE_UBRK_CREATE_LINE, "line_strict");
 }
 
 void RBBITest::TestTraceCreateLineNormal(void) {
@@ -5162,7 +5166,7 @@ void RBBITest::TestTraceCreateLineNormal(void) {
     LocalPointer<BreakIterator> brkitr(
         BreakIterator::createLineInstance("zh-CN-u-lb-normal", status));
     status.errIfFailureAndReset();
-    assertTestTraceResult(UTRACE_UBRK_CREATE_LINE, "normal");
+    assertTestTraceResult(UTRACE_UBRK_CREATE_LINE, "line_normal");
 }
 
 void RBBITest::TestTraceCreateLineLoose(void) {
@@ -5171,7 +5175,43 @@ void RBBITest::TestTraceCreateLineLoose(void) {
     LocalPointer<BreakIterator> brkitr(
         BreakIterator::createLineInstance("zh-CN-u-lb-loose", status));
     status.errIfFailureAndReset();
-    assertTestTraceResult(UTRACE_UBRK_CREATE_LINE, "loose");
+    assertTestTraceResult(UTRACE_UBRK_CREATE_LINE, "line_loose");
+}
+
+void RBBITest::TestTraceCreateLineLoosePhrase(void) {
+    SetupTestTrace();
+    IcuTestErrorCode status(*this, "TestTraceCreateLineLoosePhrase");
+    LocalPointer<BreakIterator> brkitr(
+        BreakIterator::createLineInstance("ja-u-lb-loose-lw-phrase", status));
+    status.errIfFailureAndReset();
+    assertTestTraceResult(UTRACE_UBRK_CREATE_LINE, "line_loose_phrase");
+}
+
+void RBBITest::TestTraceCreateLineNormalPhrase(void) {
+    SetupTestTrace();
+    IcuTestErrorCode status(*this, "TestTraceCreateLineNormalPhrase");
+    LocalPointer<BreakIterator> brkitr(
+        BreakIterator::createLineInstance("ja-u-lb-normal-lw-phrase", status));
+    status.errIfFailureAndReset();
+    assertTestTraceResult(UTRACE_UBRK_CREATE_LINE, "line_normal_phrase");
+}
+
+void RBBITest::TestTraceCreateLineStrictPhrase(void) {
+    SetupTestTrace();
+    IcuTestErrorCode status(*this, "TestTraceCreateLineStrictPhrase");
+    LocalPointer<BreakIterator> brkitr(
+        BreakIterator::createLineInstance("ja-u-lb-strict-lw-phrase", status));
+    status.errIfFailureAndReset();
+    assertTestTraceResult(UTRACE_UBRK_CREATE_LINE, "line_strict_phrase");
+}
+
+void RBBITest::TestTraceCreateLinePhrase(void) {
+    SetupTestTrace();
+    IcuTestErrorCode status(*this, "TestTraceCreateLinePhrase");
+    LocalPointer<BreakIterator> brkitr(
+        BreakIterator::createLineInstance("ja-u-lw-phrase", status));
+    status.errIfFailureAndReset();
+    assertTestTraceResult(UTRACE_UBRK_CREATE_LINE, "line_phrase");
 }
 
 void RBBITest::TestTraceCreateBreakEngine(void) {

@@ -105,6 +105,10 @@ public:
     void TestTraceCreateLineNormal();
     void TestTraceCreateLineStrict();
     void TestTraceCreateLineLoose();
+    void TestTraceCreateLineNormalPhrase();
+    void TestTraceCreateLineLoosePhrase();
+    void TestTraceCreateLineStrictPhrase();
+    void TestTraceCreateLinePhrase();
     void TestTraceCreateBreakEngine();
 #endif
 
