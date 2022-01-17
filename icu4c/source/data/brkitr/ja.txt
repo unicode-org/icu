@@ -7,6 +7,9 @@ ja{
         line_loose:process(dependency){"line_loose_cj.brk"}
         line_normal:process(dependency){"line_normal_cj.brk"}
         line_strict:process(dependency){"line_cj.brk"}
+        line_loose_phrase:process(dependency){"line_loose_phrase_cj.brk"}
+        line_normal_phrase:process(dependency){"line_normal_phrase_cj.brk"}
+        line_strict_phrase:process(dependency){"line_phrase_cj.brk"}
         line_phrase:process(dependency){"line_phrase_cj.brk"}
     }
     particles{

@@ -116,7 +116,7 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, UErrorCode &st
     }
 
     // Create a RuleBasedBreakIterator
-    result = new RuleBasedBreakIterator(file, uprv_strcmp(type, "line_phrase") == 0, status);
+    result = new RuleBasedBreakIterator(file, uprv_strstr(type, "phrase") != NULL, status);
 
     // If there is a result, set the valid locale and actual locale, and the kind
     if (U_SUCCESS(status) && result != NULL) {
@@ -409,7 +409,6 @@ BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
     if (U_FAILURE(status)) {
         return NULL;
     }
-    char lbType[kKeyValueLenMax];
 
     BreakIterator *result = NULL;
     switch (kind) {
@@ -429,26 +428,29 @@ BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
         break;
     case UBRK_LINE:
         {
+            char lb_lw[kKeyValueLenMax];
             UTRACE_ENTRY(UTRACE_UBRK_CREATE_LINE);
-            uprv_strcpy(lbType, "line");
+            uprv_strcpy(lb_lw, "line");
             UErrorCode kvStatus = U_ZERO_ERROR;
             CharString value;
             CharStringByteSink valueSink(&value);
             loc.getKeywordValue("lb", valueSink, kvStatus);
             if (U_SUCCESS(kvStatus) && (value == "strict" || value == "normal" || value == "loose")) {
-                uprv_strcat(lbType, "_");
-                uprv_strcat(lbType, value.data());
-            } else {
+                uprv_strcat(lb_lw, "_");
+                uprv_strcat(lb_lw, value.data());
+            }
+            // lw=phrase is only supported in Japanese.
+            if (uprv_strcmp(loc.getLanguage(), "ja") == 0) {
                 value.clear();
                 loc.getKeywordValue("lw", valueSink, kvStatus);
                 if (U_SUCCESS(kvStatus) && value == "phrase") {
-                    uprv_strcat(lbType, "_");
-                    uprv_strcat(lbType, value.data());
+                    uprv_strcat(lb_lw, "_");
+                    uprv_strcat(lb_lw, value.data());
                 }
             }
-            result = BreakIterator::buildInstance(loc, lbType, status);
+            result = BreakIterator::buildInstance(loc, lb_lw, status);
 
-            UTRACE_DATA1(UTRACE_INFO, "lb=%s", value.data());
+            UTRACE_DATA1(UTRACE_INFO, "lb_lw=%s", lb_lw);
             UTRACE_EXIT_STATUS(status);
         }
         break;
