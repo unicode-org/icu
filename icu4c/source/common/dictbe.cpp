@@ -1366,8 +1366,11 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
                 // Calculate the length by using the code unit.
                 length = inString.moveIndex32(0, prevIdx) - codeUnitIdx;
                 prevIdx = i;
-                // Skip the breakpoint if it belongs to the particle or Hiragana.
-                if (!fSkipSet.containsKey(inString.tempSubString(codeUnitIdx, length))) {
+                // Keep the breakpoint if the pattern is not in the fSkipSet and continuous Katakana
+                // characters don't occur.
+                if (!fSkipSet.containsKey(inString.tempSubString(codeUnitIdx, length))
+                    && (!isKatakana(inString.char32At(codeUnitIdx -1))
+                           || !isKatakana(inString.char32At(codeUnitIdx)))) {
                     t_boundary.addElement(i, status);
                     numBreaks++;
                 }
