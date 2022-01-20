@@ -376,11 +376,11 @@ class CjkBreakEngine : public DictionaryBreakEngine {
   const Normalizer2        *nfkcNorm2;
 
  private:
-  // Load Japanese particles and auxiliary verbs.
-  void loadJapaneseParticleAndAuxVerbs(UErrorCode& error);
+  // Load Japanese extensions.
+  void loadJapaneseExtensions(UErrorCode& error);
   // Load Japanese Hiragana.
   void loadHiragana(UErrorCode& error);
-  // Initialize fSkipSet by loading Japanese Hiragana, particles and auxiliary verbs.
+  // Initialize fSkipSet by loading Japanese Hiragana and extensions.
   void initJapanesePhraseParameter(UErrorCode& error);
 
   Hashtable fSkipSet;

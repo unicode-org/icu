@@ -54,19 +54,17 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
     }
 
     private void initializeJapanesePhraseParamater() {
-        loadJapaneseParticleAndAuxVerbs();
+        loadJapaneseExtensions();
         loadHiragana();
     }
 
-    private void loadJapaneseParticleAndAuxVerbs() {
+    private void loadJapaneseExtensions() {
         UResourceBundle rb = UResourceBundle.getBundleInstance(ICUData.ICU_BRKITR_BASE_NAME, "ja");
-        final String[] tags = {"particles", "auxVerbs"};
-        for (String tag : tags) {
-            UResourceBundle bundle = rb.get(tag);
-            UResourceBundleIterator iterator = bundle.getIterator();
-            while (iterator.hasNext()) {
-                fSkipSet.add(iterator.nextString());
-            }
+        final String tag = "extensions";
+        UResourceBundle bundle = rb.get(tag);
+        UResourceBundleIterator iterator = bundle.getIterator();
+        while (iterator.hasNext()) {
+            fSkipSet.add(iterator.nextString());
         }
     }
 
@@ -293,7 +291,7 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
             // In phrase breaking, there has to be a breakpoint between Cj character and
             // the number/open punctuation.
             // E.g. る文字「そうだ、京都」->る▁文字▁「そうだ、▁京都」-> breakpoint between 字 and「
-            // E.g. 乗車率９０％程度だろうか -> 乗車▁率▁９０％▁程度だ▁ろうか -> breakpoint between 率 and ９
+            // E.g. 乗車率９０％程度だろうか -> 乗車▁率▁９０％▁程度だろうか -> breakpoint between 率 and ９
             // E.g. しかもロゴがＵｎｉｃｏｄｅ！ -> しかも▁ロゴが▁Ｕｎｉｃｏｄｅ！-> breakpoint between が and Ｕ
             if (isPhraseBreaking) {
                 if (!fDigitOrOpenPunctuationOrAlphabetSet.contains(inText.setIndex(endPos))) {
