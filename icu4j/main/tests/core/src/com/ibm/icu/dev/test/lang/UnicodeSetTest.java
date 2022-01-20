@@ -1024,6 +1024,12 @@ public class UnicodeSetTest extends TestFmwk {
         /* Jitterbug 1423 */
         expectContainment("[[:Common:][:Inherited:]]", CharsToUnicodeString("\\U00003099\\U0001D169\\u0000"), "aA");
 
+        // ICU-21892 Danda and Double Danda
+        expectContainment("[:scx=Deva:]", CharsToUnicodeString("\\u0964\\u0965"), "aA");
+        // ICU-21892 Bengali digits
+        expectContainment("[:scx=Beng:]", CharsToUnicodeString(
+            "\\u09e6\\u09e7\\u09e8\\u09e9\\u09ea\\u09eb\\u09ec\\u09ed\\u09ee\\u09ef"), "aA");
+
     }
 
     /**

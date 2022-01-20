@@ -918,7 +918,7 @@ void UnicodeSetTest::TestScriptSet() {
     expectContainment(u"[:scx=Deva:]", CharsToUnicodeString("\\u0964\\u0965"), "aA");
     // ICU-21892 Bengali digits
     expectContainment(u"[:scx=Beng:]", CharsToUnicodeString(
-        "\\u09e6\\u09e7\\u09e8\\u09e9\\u09ea\\u09eb\\u09ec\\u09ed\\u09ee\\u09ef"), "\\u0964");
+        "\\u09e6\\u09e7\\u09e8\\u09e9\\u09ea\\u09eb\\u09ec\\u09ed\\u09ee\\u09ef"), "aA");
 }
 
 /**
