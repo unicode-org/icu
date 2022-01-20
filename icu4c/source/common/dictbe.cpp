@@ -1434,7 +1434,7 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
         // In phrase breaking, there has to be a breakpoint between Cj character and
         // the number/open punctuation.
         // E.g. る文字「そうだ、京都」->る▁文字▁「そうだ、▁京都」-> breakpoint between 字 and「
-        // E.g. 乗車率９０％程度だろうか -> 乗車▁率▁９０％▁程度だ▁ろうか -> breakpoint between 率 and ９
+        // E.g. 乗車率９０％程度だろうか -> 乗車▁率▁９０％▁程度だろうか -> breakpoint between 率 and ９
         // E.g. しかもロゴがＵｎｉｃｏｄｅ！ -> しかも▁ロゴが▁Ｕｎｉｃｏｄｅ！-> breakpoint between が and Ｕ
         if (isPhraseBreaking) {
             if (!fDigitOrOpenPunctuationOrAlphabetSet.contains(nextChar)) {
@@ -1453,19 +1453,17 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
 }
 
 void CjkBreakEngine::initJapanesePhraseParameter(UErrorCode& error) {
-    loadJapaneseParticleAndAuxVerbs(error);
+    loadJapaneseExtensions(error);
     loadHiragana(error);
 }
 
-void CjkBreakEngine::loadJapaneseParticleAndAuxVerbs(UErrorCode& error) {
-    const char* tags[2] = { "particles", "auxVerbs" };
+void CjkBreakEngine::loadJapaneseExtensions(UErrorCode& error) {
+    const char* tag = "extensions";
     ResourceBundle ja(U_ICUDATA_BRKITR, "ja", error);
     if (U_SUCCESS(error)) {
-        for (int32_t i = 0; i < 2; i++) {
-            ResourceBundle bundle = ja.get(tags[i], error);
-            while (U_SUCCESS(error) && bundle.hasNext()) {
-                fSkipSet.puti(bundle.getNextString(error), 1, error);
-            }
+        ResourceBundle bundle = ja.get(tag, error);
+        while (U_SUCCESS(error) && bundle.hasNext()) {
+            fSkipSet.puti(bundle.getNextString(error), 1, error);
         }
     }
 }
