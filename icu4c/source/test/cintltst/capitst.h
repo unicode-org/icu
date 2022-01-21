@@ -75,6 +75,11 @@
     void TestSafeClone(void);
 
     /**
+     * Test ucol_clone ()
+     **/
+    void TestClone(void);
+
+    /**
      * Test ucol_cloneBinary(), ucol_openBinary()
      **/
     void TestCloneBinary(void);

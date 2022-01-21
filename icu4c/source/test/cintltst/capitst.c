@@ -73,6 +73,7 @@ void addCollAPITest(TestNode** root)
     /*addTest(root, &TestGetDefaultRules, "tscoll/capitst/TestGetDefaultRules");*/
     addTest(root, &TestDecomposition, "tscoll/capitst/TestDecomposition");
     addTest(root, &TestSafeClone, "tscoll/capitst/TestSafeClone");
+    addTest(root, &TestClone, "tscoll/capitst/TestClone");
     addTest(root, &TestCloneBinary, "tscoll/capitst/TestCloneBinary");
     addTest(root, &TestGetSetAttr, "tscoll/capitst/TestGetSetAttr");
     addTest(root, &TestBounds, "tscoll/capitst/TestBounds");
@@ -781,6 +782,124 @@ void TestSafeClone() {
         bufferSize = U_COL_SAFECLONE_BUFFERSIZE;
         err = U_ZERO_ERROR;
         someClonedCollators[idx] = ucol_safeClone(someCollators[idx], buffer[idx], &bufferSize, &err);
+        if (U_FAILURE(err)) {
+            log_err("FAIL: Unable to clone collator %d - %s\n", idx, u_errorName(err));
+            continue;
+        }
+        if (!ucol_equals(someClonedCollators[idx], someCollators[idx])) {
+            log_err("FAIL: Cloned collator is not equal to original at index = %d.\n", idx);
+        }
+
+        /* Check the usability */
+        ucol_setStrength(someCollators[idx], UCOL_PRIMARY);
+        ucol_setAttribute(someCollators[idx], UCOL_CASE_LEVEL, UCOL_OFF, &err);
+
+        doAssert( (ucol_equal(someCollators[idx], test1, u_strlen(test1), test2, u_strlen(test2))), "Result should be \"abcda\" == \"abCda\"");
+
+        /* Close the original to make sure that the clone is usable. */
+        ucol_close(someCollators[idx]);
+
+        ucol_setStrength(someClonedCollators[idx], UCOL_TERTIARY);
+        ucol_setAttribute(someClonedCollators[idx], UCOL_CASE_LEVEL, UCOL_OFF, &err);
+        doAssert( (ucol_greater(someClonedCollators[idx], test1, u_strlen(test1), test2, u_strlen(test2))), "Result should be \"abCda\" >>> \"abcda\" ");
+
+        ucol_close(someClonedCollators[idx]);
+    }
+}
+
+void TestClone() {
+    UChar test1[6];
+    UChar test2[6];
+    static const UChar umlautUStr[] = {0x00DC, 0};
+    static const UChar oeStr[] = {0x0055, 0x0045, 0};
+    UCollator * someCollators [CLONETEST_COLLATOR_COUNT];
+    UCollator * someClonedCollators [CLONETEST_COLLATOR_COUNT];
+    UCollator * col = NULL;
+    UErrorCode err = U_ZERO_ERROR;
+    int8_t idx = 6;    /* Leave this here to test buffer alignment in memory*/
+    const char sampleRuleChars[] = "&Z < CH";
+    UChar sampleRule[sizeof(sampleRuleChars)];
+
+    u_uastrcpy(test1, "abCda");
+    u_uastrcpy(test2, "abcda");
+    u_uastrcpy(sampleRule, sampleRuleChars);
+
+    /* one default collator & two complex ones */
+    someCollators[0] = ucol_open("en_US", &err);
+    someCollators[1] = ucol_open("ko", &err);
+    someCollators[2] = ucol_open("ja_JP", &err);
+    someCollators[3] = ucol_openRules(sampleRule, -1, UCOL_ON, UCOL_TERTIARY, NULL, &err);
+    if(U_FAILURE(err)) {
+        for (idx = 0; idx < CLONETEST_COLLATOR_COUNT; idx++) {
+            ucol_close(someCollators[idx]);
+        }
+        log_data_err("Couldn't open one or more collators\n");
+        return;
+    }
+
+    /* Check the various error & informational states: */
+
+    /* Null status - just returns NULL */
+    if (NULL != ucol_clone(someCollators[0], NULL))
+    {
+        log_err("FAIL: Cloned Collator failed to deal correctly with null status\n");
+    }
+    /* error status - should return 0 & keep error the same */
+    err = U_MEMORY_ALLOCATION_ERROR;
+    if (NULL != ucol_clone(someCollators[0], &err) || err != U_MEMORY_ALLOCATION_ERROR)
+    {
+        log_err("FAIL: Cloned Collator failed to deal correctly with incoming error status\n");
+    }
+    err = U_ZERO_ERROR;
+
+    /* Verify we can use this run-time calculated size */
+    if (NULL == (col = ucol_clone(someCollators[0], &err)) || U_FAILURE(err))
+    {
+        log_err("FAIL: Collator can't be cloned.\n");
+    }
+    if (col) ucol_close(col);
+
+    if (NULL == (col = ucol_clone(someCollators[0], &err)) || err != U_ZERO_ERROR)
+    {
+        log_err("FAIL: Cloned Collator failed to deal correctly\n");
+    }
+    if (col) ucol_close(col);
+    err = U_ZERO_ERROR;
+
+    /* Null Collator - return NULL & set U_ILLEGAL_ARGUMENT_ERROR */
+    if (NULL != ucol_clone(NULL, &err) || err != U_ILLEGAL_ARGUMENT_ERROR)
+    {
+        log_err("FAIL: Cloned Collator failed to deal correctly with null Collator pointer\n");
+    }
+    err = U_ZERO_ERROR;
+
+    /* Test that a cloned collator doesn't accidentally use UCA. */
+    col=ucol_open("de@collation=phonebook", &err);
+    someClonedCollators[0] = ucol_clone(col, &err);
+    doAssert( (ucol_greater(col, umlautUStr, u_strlen(umlautUStr), oeStr, u_strlen(oeStr))), "Original German phonebook collation sorts differently than expected");
+    doAssert( (ucol_greater(someClonedCollators[0], umlautUStr, u_strlen(umlautUStr), oeStr, u_strlen(oeStr))), "Cloned German phonebook collation sorts differently than expected");
+    if (!ucol_equals(someClonedCollators[0], col)) {
+        log_err("FAIL: Cloned German phonebook collator is not equal to original.\n");
+    }
+    ucol_close(col);
+    ucol_close(someClonedCollators[0]);
+
+    err = U_ZERO_ERROR;
+
+    /* change orig & clone & make sure they are independent */
+
+    for (idx = 0; idx < CLONETEST_COLLATOR_COUNT; idx++)
+    {
+        ucol_setStrength(someCollators[idx], UCOL_IDENTICAL);
+        err = U_ZERO_ERROR;
+        ucol_close(ucol_clone(someCollators[idx], &err));
+        if (err != U_ZERO_ERROR) {
+            log_err("FAIL: collator number %d was not allocated.\n", idx);
+            log_err("FAIL: status of Collator[%d] is %d  (hex: %x).\n", idx, err, err);
+        }
+
+        err = U_ZERO_ERROR;
+        someClonedCollators[idx] = ucol_clone(someCollators[idx], &err);
         if (U_FAILURE(err)) {
             log_err("FAIL: Unable to clone collator %d - %s\n", idx, u_errorName(err));
             continue;
