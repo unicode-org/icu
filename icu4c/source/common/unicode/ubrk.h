@@ -312,7 +312,8 @@ ubrk_openBinaryRules(const uint8_t *binaryRules, int32_t rulesLength,
  *  If *pBufferSize is not enough for a stack-based safe clone,
  *  new memory will be allocated.
  * @param status to indicate whether the operation went on smoothly or there were errors
- *  An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any allocations were necessary.
+ *  An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used
+ * if pBufferSize != NULL and any allocations were necessary
  * @return pointer to the new clone
  * @deprecated ICU 69 Use ubrk_clone() instead.
  */
