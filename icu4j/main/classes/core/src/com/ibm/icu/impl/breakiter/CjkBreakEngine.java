@@ -11,6 +11,7 @@ package com.ibm.icu.impl.breakiter;
 import static com.ibm.icu.impl.CharacterIteration.DONE32;
 import static com.ibm.icu.impl.CharacterIteration.current32;
 import static com.ibm.icu.impl.CharacterIteration.next32;
+import static com.ibm.icu.impl.CharacterIteration.previous32;
 
 import java.io.IOException;
 import java.text.CharacterIterator;
@@ -240,17 +241,18 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
             t_boundary[numBreaks] = numCodePts;
             numBreaks++;
             int prevIdx = numCodePts;
-            int codeUnitIdx = 0, length = 0;
+            int codeUnitIdx = 0, prevCodeUnitIdx = 0, length = 0;
             for (int i = prev[numCodePts]; i > 0; i = prev[i]) {
                 codeUnitIdx = prenormstr.offsetByCodePoints(0, i);
-                length = prevIdx - i;
+                prevCodeUnitIdx = prenormstr.offsetByCodePoints(0, prevIdx);
+                length =  prevCodeUnitIdx - codeUnitIdx;
                 prevIdx = i;
                 String pattern = getPatternFromText(text, s, codeUnitIdx, length);
                 // Keep the breakpoint if the pattern is not in the fSkipSet and continuous Katakana
                 // characters don't occur.
-                text.setIndex(codeUnitIdx - 1);
+                text.setIndex(codeUnitIdx);
                 if (!fSkipSet.contains(pattern)
-                        && (!isKatakana(current32(text)) || !isKatakana(next32(text)))) {
+                        && (!isKatakana(current32(text)) || !isKatakana(previous32(text)))) {
                     t_boundary[numBreaks] = i;
                     numBreaks++;
                 }
@@ -308,11 +310,11 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
     private String getPatternFromText(CharacterIterator text, StringBuffer sb, int start,
             int length) {
         sb.setLength(0);
-        if(length > 0) {
+        if (length > 0) {
             text.setIndex(start);
-            sb.appendCodePoint(current32(text));
-            for (int j = 1; j < length; j++) {
-                sb.appendCodePoint(next32(text));
+            sb.append(text.current());
+            for (int i = 1; i < length; i++) {
+                sb.append(text.next());
             }
         }
         return sb.toString();
