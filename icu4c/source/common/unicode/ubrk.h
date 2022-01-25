@@ -41,10 +41,11 @@
  *
  * <h2> BreakIterator C API </h2>
  *
- * The BreakIterator C API defines  methods for finding the location
- * of boundaries in text. Pointer to a UBreakIterator maintain a
- * current position and scan over text returning the index of characters
- * where boundaries occur.
+ * The BreakIterator C API defines methods for finding the location
+ * of boundaries in text. Pointers to a UBreakIterator maintain a
+ * current position and scan over text, returning the index of characters
+ * immediately after the locations where boundaries occur (because boundaries
+ * occur between adjacent characters).
  * <p>
  * Line boundary analysis determines where a text string can be broken
  * when line-wrapping. The mechanism correctly handles punctuation and
@@ -68,7 +69,7 @@
  * well as within text editing applications that allow the user to
  * select words with a double click. Word selection provides correct
  * interpretation of punctuation marks within and following
- * words. Characters that are not part of a word, such as symbols or
+ * words. Characters that are not part of a word, such as symbols, spaces, or
  * punctuation marks, have word-breaks on both sides.
  * <p>
  * Character boundary analysis identifies the boundaries of
@@ -78,15 +79,39 @@
  * http://www.unicode.org/reports/tr29/ for additional information
  * on grapheme clusters and guidelines on their use.
  * <p>
- * Title boundary analysis locates all positions,
- * typically starts of words, that should be set to Title Case
- * when title casing the text.
- * <p>
  * The text boundary positions are found according to the rules
  * described in Unicode Standard Annex #29, Text Boundaries, and
  * Unicode Standard Annex #14, Line Breaking Properties.  These
  * are available at http://www.unicode.org/reports/tr14/ and
  * http://www.unicode.org/reports/tr29/.
+ * <p>
+ * A boundary logically occurs between two adjacent code points. The boundary
+ * analysis functions in this file return the index of the code unit directly
+ * after a boundary - so a value of 0 means "the beginning of the string" and a
+ * value of u_strlen(string) means "the end of the string".
+ * <p>
+ * A span of text between two adjacent boundaries is called a "segment."
+ * The boundary analysis functions in this file behave correctly regardless of
+ * whether the current position is set to a boundary location or into the
+ * middle of a segment. When the current position points to a boundary, the two
+ * segments that straddle that boundary are called the "previous segment" and
+ * the "current segment."
+ * <p>
+ * If the current position is set to the middle of a surrogate pair, the
+ * boundary analysis functions in this file will move the current position to
+ * the beginning of the surrogate pair before any other processing. If the
+ * current position then points into the middle of a segment, these routines
+ * will move to the beginning or end of that segment. Otherwise, the current
+ * position points to a segment boundary, and these routines will move to the
+ * beginning of the previous segment or the end of the current segment.
+ * <p>
+ * The boundary analysis functions in this file may scan an unbounded number of
+ * characters around the current position or even the returned position. (One
+ * example is a long string of flag emoji. In order to know whether the current
+ * position is in the middle of a single flag or between adjacent flags, the
+ * implementation counts how many regional indicator symbols occur in the
+ * string before the current position, to determine if the count is odd or
+ * even.)
  * <p>
  * In addition to the plain C API defined in this header file, an
  * object oriented C++ API with equivalent functionality is defined in the
