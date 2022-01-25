@@ -1360,16 +1360,18 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
             int32_t prevIdx = numCodePts;
 
             int32_t codeUnitIdx = -1;
+            int32_t prevCodeUnitIdx = -1;
             int32_t length = -1;
             for (int32_t i = prev.elementAti(numCodePts); i > 0; i = prev.elementAti(i)) {
                 codeUnitIdx = inString.moveIndex32(0, i);
+                prevCodeUnitIdx = inString.moveIndex32(0, prevIdx);
                 // Calculate the length by using the code unit.
-                length = inString.moveIndex32(0, prevIdx) - codeUnitIdx;
+                length = prevCodeUnitIdx - codeUnitIdx;
                 prevIdx = i;
                 // Keep the breakpoint if the pattern is not in the fSkipSet and continuous Katakana
                 // characters don't occur.
                 if (!fSkipSet.containsKey(inString.tempSubString(codeUnitIdx, length))
-                    && (!isKatakana(inString.char32At(codeUnitIdx -1))
+                    && (!isKatakana(inString.char32At(inString.moveIndex32(codeUnitIdx, -1)))
                            || !isKatakana(inString.char32At(codeUnitIdx)))) {
                     t_boundary.addElement(i, status);
                     numBreaks++;
