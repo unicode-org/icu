@@ -369,7 +369,7 @@ class CjkBreakEngine : public DictionaryBreakEngine {
      * @internal
      */
   UnicodeSet                fHangulWordSet;
-  UnicodeSet                fNumberOrOpenPunctuationSet;
+  UnicodeSet                fDigitOrOpenPunctuationOrAlphabetSet;
   UnicodeSet                fClosePunctuationSet;
 
   DictionaryMatcher        *fDictionary;
