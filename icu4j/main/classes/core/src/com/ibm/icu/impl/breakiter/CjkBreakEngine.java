@@ -27,7 +27,7 @@ import com.ibm.icu.util.UResourceBundleIterator;
 
 public class CjkBreakEngine extends DictionaryBreakEngine {
     private UnicodeSet fHangulWordSet;
-    private UnicodeSet fNumberOrOpenPunctuationSet;
+    private UnicodeSet fDigitOrOpenPunctuationOrAlphabetSet;
     private UnicodeSet fClosePunctuationSet;
     private DictionaryMatcher fDictionary = null;
     private HashSet<String> fSkipSet;
@@ -35,8 +35,10 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
     public CjkBreakEngine(boolean korean) throws IOException {
         fHangulWordSet = new UnicodeSet("[\\uac00-\\ud7a3]");
         fHangulWordSet.freeze();
-        fNumberOrOpenPunctuationSet = new UnicodeSet("[[:Nd:][:Pi:][:Ps:]]");
-        fNumberOrOpenPunctuationSet.freeze();
+        // Digit, open punctuation and Alphabetic characters.
+        fDigitOrOpenPunctuationOrAlphabetSet = new UnicodeSet("[[:Nd:][:Pi:][:Ps:][:Alphabetic:]]");
+        fDigitOrOpenPunctuationOrAlphabetSet.freeze();
+
         fClosePunctuationSet = new UnicodeSet("[[:Pc:][:Pd:][:Pe:][:Pf:][:Po:]]");
         fClosePunctuationSet.freeze();
         fSkipSet = new HashSet<String>();
@@ -292,8 +294,9 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
             // the number/open punctuation.
             // E.g. る文字「そうだ、京都」->る▁文字▁「そうだ、▁京都」-> breakpoint between 字 and「
             // E.g. 乗車率９０％程度だろうか -> 乗車▁率▁９０％▁程度だ▁ろうか -> breakpoint between 率 and ９
+            // E.g. しかもロゴがＵｎｉｃｏｄｅ！ -> しかも▁ロゴが▁Ｕｎｉｃｏｄｅ！-> breakpoint between が and Ｕ
             if (isPhraseBreaking) {
-                if (!fNumberOrOpenPunctuationSet.contains(inText.setIndex(endPos))) {
+                if (!fDigitOrOpenPunctuationOrAlphabetSet.contains(inText.setIndex(endPos))) {
                     foundBreaks.pop();
                     correctedNumBreaks--;
                 }

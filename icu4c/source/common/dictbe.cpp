@@ -1061,8 +1061,10 @@ CjkBreakEngine::CjkBreakEngine(DictionaryMatcher *adoptDictionary, LanguageType 
     // Korean dictionary only includes Hangul syllables
     fHangulWordSet.applyPattern(UnicodeString(u"[\\uac00-\\ud7a3]"), status);
     fHangulWordSet.compact();
-    fNumberOrOpenPunctuationSet.applyPattern(UnicodeString(u"[[:Nd:][:Pi:][:Ps:]]"), status);
-    fNumberOrOpenPunctuationSet.compact();
+    // Digits, open puncutation and Alphabetic characters.
+    fDigitOrOpenPunctuationOrAlphabetSet.applyPattern(
+        UnicodeString(u"[[:Nd:][:Pi:][:Ps:][:Alphabetic:]]"), status);
+    fDigitOrOpenPunctuationOrAlphabetSet.compact();
     fClosePunctuationSet.applyPattern(UnicodeString(u"[[:Pc:][:Pd:][:Pe:][:Pf:][:Po:]]"), status);
     fClosePunctuationSet.compact();
 
@@ -1433,8 +1435,9 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
         // the number/open punctuation.
         // E.g. る文字「そうだ、京都」->る▁文字▁「そうだ、▁京都」-> breakpoint between 字 and「
         // E.g. 乗車率９０％程度だろうか -> 乗車▁率▁９０％▁程度だ▁ろうか -> breakpoint between 率 and ９
+        // E.g. しかもロゴがＵｎｉｃｏｄｅ！ -> しかも▁ロゴが▁Ｕｎｉｃｏｄｅ！-> breakpoint between が and Ｕ
         if (isPhraseBreaking) {
-            if (!fNumberOrOpenPunctuationSet.contains(nextChar)) {
+            if (!fDigitOrOpenPunctuationOrAlphabetSet.contains(nextChar)) {
                 foundBreaks.popi();
                 correctedNumBreaks--;
             }
