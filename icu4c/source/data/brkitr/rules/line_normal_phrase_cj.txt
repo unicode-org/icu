@@ -81,9 +81,8 @@ $ZWJ = [:LineBreak = ZWJ:];
 # without a formal name. Because ICU rules require multiple uses of the expressions,
 # give them a single definition with a name
 
-$EAFWH = [\p{ea=F}\p{ea=W}\p{ea=H}];
-$OP30 = [$OP - $EAFWH];
-$CP30 = [$CP - $EAFWH];
+$OP30 = [$OP - [\p{ea=F}\p{ea=W}\p{ea=H}]];
+$CP30 = [$CP - [\p{ea=F}\p{ea=W}\p{ea=H}]];
 
 $ExtPictUnassigned = [\p{Extended_Pictographic} & \p{Cn}];
 
@@ -103,7 +102,7 @@ $Katakana = [:Katakana:];
 $Hiragana = [:Hiragana:];
 $HangulSyllable = [\uac00-\ud7a3];
 $ComplexContext = [:LineBreak = Complex_Context:];
-$KanaKanji      = [$Han $Hiragana $Katakana];
+$KanaKanji      = [$Han $Hiragana $Katakana \u30fc];
 $dictionaryCJK  = [$KanaKanji $HangulSyllable];
 $dictionary     = [$ComplexContext $dictionaryCJK];
 
@@ -115,7 +114,9 @@ $dictionary     = [$ComplexContext $dictionaryCJK];
 #                               XX  (Unknown, unassigned)
 #                         as $AL  (Alphabetic)
 #
-$ALPlus = [$AL $AI $SG $XX $EAFWH [$dictionary-[[:Mn:][:Mc:]]]];
+# Let fullwidth-ASCII digits and letters be part of words.
+$FW_alphanum = [\uff10-\uff19\uff21-\uff3a\uff41-\uff5a];
+$ALPlus = [$AL $AI $SG $XX $FW_alphanum [$dictionary-[[:Mn:][:Mc:]]]];
 
 
 ## -------------------------------------------------
