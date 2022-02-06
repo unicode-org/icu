@@ -195,6 +195,7 @@ public class FormattedNumberRange implements FormattedValue {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public IFixedDecimal getFirstFixedDecimal() {
         return quantity1;
     }
@@ -204,6 +205,7 @@ public class FormattedNumberRange implements FormattedValue {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public IFixedDecimal getSecondFixedDecimal() {
         return quantity2;
     }

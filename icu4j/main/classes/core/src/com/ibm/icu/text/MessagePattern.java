@@ -312,6 +312,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
      * @return true if getApostropheMode() == ApostropheMode.DOUBLE_REQUIRED
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     /* package */ boolean jdkAposMode() {
         return aposMode == ApostropheMode.DOUBLE_REQUIRED;
     }
@@ -1423,6 +1424,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
      * according to JDK pattern behavior.
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     /* package */ static void appendReducedApostrophes(String s, int start, int limit,
                                                        StringBuilder sb) {
         int doubleApos=-1;

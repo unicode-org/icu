@@ -138,6 +138,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected TimeZone(String ID) {
         if (ID == null) {
             throw new NullPointerException();
@@ -926,6 +927,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static TimeZone forULocaleOrDefault(ULocale locale) {
         String tz = locale.getKeywordValue("timezone");
         return (tz == null) ? getDefault() : getTimeZone(tz);
@@ -942,6 +944,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static TimeZone forLocaleOrDefault(Locale locale) {
         return forULocaleOrDefault(ULocale.forLocale(locale));
     }
@@ -1042,6 +1045,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static synchronized void setICUDefault(TimeZone tz) {
         if (tz == null) {
             defaultZone = null;

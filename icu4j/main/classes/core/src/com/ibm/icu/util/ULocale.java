@@ -976,6 +976,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static String getRegionForSupplementalData(
                             ULocale locale, boolean inferRegion) {
         String region = locale.getKeywordValue("rg");
@@ -2078,6 +2079,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String getDisplayScriptInContext() {
         return getDisplayScriptInContextInternal(this, getDefault(Category.DISPLAY));
     }
@@ -2100,6 +2102,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String getDisplayScriptInContext(ULocale displayLocale) {
         return getDisplayScriptInContextInternal(this, displayLocale);
     }
@@ -2125,6 +2128,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static String getDisplayScriptInContext(String localeID, String displayLocaleID) {
         return getDisplayScriptInContextInternal(new ULocale(localeID), new ULocale(displayLocaleID));
     }
@@ -2148,6 +2152,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static String getDisplayScriptInContext(String localeID, ULocale displayLocale) {
         return getDisplayScriptInContextInternal(new ULocale(localeID), displayLocale);
     }
@@ -2505,6 +2510,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      *
      * @draft ICU 2.8 (retain)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static Type ACTUAL_LOCALE = new Type();
 
     /**
@@ -2520,6 +2526,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * 3.0 or later.  In ICU 2.8, it is not returned correctly.
      * @draft ICU 2.8 (retain)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static Type VALID_LOCALE = new Type();
 
     /**
@@ -2529,6 +2536,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @draft ICU 2.8 (retainAll)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static final class Type {
         private Type() {}
     }
@@ -2767,6 +2775,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public enum Minimize {
         /**
          * Favor including the script, when either the region <b>or</b> the script could be suppressed, but not both.
@@ -2774,6 +2783,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         FAVOR_SCRIPT,
         /**
          * Favor including the region, when either the region <b>or</b> the script could be suppressed, but not both.
@@ -2781,6 +2791,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         FAVOR_REGION
     }
 
@@ -2815,6 +2826,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static ULocale minimizeSubtags(ULocale loc, Minimize fieldToFavor) {
         String[] tags = new String[3];
 

@@ -721,6 +721,7 @@ public class Currency extends MeasureUnit {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static String parse(ULocale locale, String text, int type, ParsePosition pos) {
         List<TextTrieMap<CurrencyStringInfo>> currencyTrieVec = getCurrencyTrieVec(locale);
         int maxLength = 0;
@@ -752,6 +753,7 @@ public class Currency extends MeasureUnit {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static TextTrieMap<CurrencyStringInfo> getParsingTrie(ULocale locale, int type) {
         List<TextTrieMap<CurrencyStringInfo>> currencyTrieVec = getCurrencyTrieVec(locale);
         if (type == Currency.LONG_NAME) {
@@ -813,6 +815,7 @@ public class Currency extends MeasureUnit {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static final class CurrencyStringInfo {
         private String isoCode;
         private String currencyString;
@@ -822,6 +825,7 @@ public class Currency extends MeasureUnit {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public CurrencyStringInfo(String isoCode, String currencyString) {
             this.isoCode = isoCode;
             this.currencyString = currencyString;
@@ -832,6 +836,7 @@ public class Currency extends MeasureUnit {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public String getISOCode() {
             return isoCode;
         }
@@ -842,6 +847,7 @@ public class Currency extends MeasureUnit {
          */
         @Deprecated
         @SuppressWarnings("unused")
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public String getCurrencyString() {
             return currencyString;
         }

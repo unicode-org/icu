@@ -16,6 +16,7 @@ package com.ibm.icu.util;
  * @deprecated This API is ICU internal only.
  */
 @Deprecated
+@aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
 public class OutputInt {
     /**
      * The value field.
@@ -24,6 +25,7 @@ public class OutputInt {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public int value;
 
     /**
@@ -33,6 +35,7 @@ public class OutputInt {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public OutputInt() {
     }
 
@@ -44,6 +47,7 @@ public class OutputInt {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public OutputInt(int value) {
         this.value = value;
     }
@@ -55,6 +59,7 @@ public class OutputInt {
      */
     @Deprecated
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String toString() {
         return Integer.toString(value);
     }

@@ -1053,6 +1053,7 @@ public class SimpleDateFormat extends DateFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public SimpleDateFormat(String pattern, DateFormatSymbols formatData, ULocale loc)
     {
         this(pattern, (DateFormatSymbols)formatData.clone(), null, null, loc, true,null);
@@ -1092,6 +1093,7 @@ public class SimpleDateFormat extends DateFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static SimpleDateFormat getInstance(Calendar.FormatConfiguration formatConfig) {
 
         String ostr = formatConfig.getOverrideString();
@@ -1559,6 +1561,7 @@ public class SimpleDateFormat extends DateFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected String subFormat(char ch, int count, int beginOffset,
                                int fieldNum, DisplayContext capitalizationContext,
                                FieldPosition pos,
@@ -1584,6 +1587,7 @@ public class SimpleDateFormat extends DateFormat {
      */
     @Deprecated
     @SuppressWarnings("fallthrough")
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected void subFormat(StringBuffer buf,
                              char ch, int count, int beginOffset,
                              int fieldNum, DisplayContext capitalizationContext,
@@ -2247,6 +2251,7 @@ public class SimpleDateFormat extends DateFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected void zeroPaddingNumber(NumberFormat nf,StringBuffer buf, int value,
                                      int minDigits, int maxDigits) {
         // Note: Indian calendar uses negative value for a calendar
@@ -2951,6 +2956,7 @@ public class SimpleDateFormat extends DateFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     private int matchString(String text, int start, int field, String[] data, String monthPattern, Calendar cal)
     {
         int i = 0;
@@ -3159,6 +3165,7 @@ public class SimpleDateFormat extends DateFormat {
      */
     @Deprecated
     @SuppressWarnings("fallthrough")
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     private int subParse(String text, int start, char ch, int count,
                            boolean obeyCount, boolean allowNegative,
                            boolean[] ambiguousYear, Calendar cal,
@@ -4297,6 +4304,7 @@ public class SimpleDateFormat extends DateFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public final StringBuffer intervalFormatByAlgorithm(Calendar fromCalendar,
                                                         Calendar toCalendar,
                                                         StringBuffer appendTo,

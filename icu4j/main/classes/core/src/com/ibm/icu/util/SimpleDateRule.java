@@ -18,6 +18,7 @@ import java.util.Date;
  * Simple implementation of DateRule.
  * @draft ICU 2.8 (retainAll)
  */
+@aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
 public class SimpleDateRule implements DateRule
 {
     /**
@@ -27,6 +28,7 @@ public class SimpleDateRule implements DateRule
      * @param dayOfMonth    The date in that month (1-based).
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public SimpleDateRule(int month, int dayOfMonth)
     {
         this.month      = month;
@@ -54,6 +56,7 @@ public class SimpleDateRule implements DateRule
      *                      the first dayOfWeek on or before dayOfMonth.
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public SimpleDateRule(int month, int dayOfMonth, int dayOfWeek, boolean after)
     {
         this.month      = month;
@@ -74,6 +77,7 @@ public class SimpleDateRule implements DateRule
      * @draft ICU 2.8
      */
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public Date firstAfter(Date start)
     {
         return doFirstBetween(start, null);
@@ -94,6 +98,7 @@ public class SimpleDateRule implements DateRule
      * @draft ICU 2.8
      */
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public Date firstBetween(Date start, Date end)
     {
         // Pin to the min/max dates for this rule
@@ -112,6 +117,7 @@ public class SimpleDateRule implements DateRule
      * @draft ICU 2.8
      */
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public boolean isOn(Date date)
     {
         Calendar c = calendar;
@@ -136,6 +142,7 @@ public class SimpleDateRule implements DateRule
      * @draft ICU 2.8
      */
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public boolean isBetween(Date start, Date end)
     {
         return firstBetween(start, end) != null; // TODO: optimize?

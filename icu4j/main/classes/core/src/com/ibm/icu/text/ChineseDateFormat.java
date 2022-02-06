@@ -122,6 +122,7 @@ public class ChineseDateFormat extends SimpleDateFormat {
      */
     @Override
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected void subFormat(StringBuffer buf,
                              char ch, int count, int beginOffset,
                              int fieldNum, DisplayContext capitalizationContext,

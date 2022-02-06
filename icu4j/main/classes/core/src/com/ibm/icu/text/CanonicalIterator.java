@@ -164,6 +164,7 @@ public final class CanonicalIterator {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static void permute(String source, boolean skipZeros, Set<String> output) {
         // TODO: optimize
         //if (PROGRESS) System.out.println("Permute: " + source);

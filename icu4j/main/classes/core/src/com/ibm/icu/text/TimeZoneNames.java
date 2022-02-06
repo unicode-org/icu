@@ -342,6 +342,7 @@ public abstract class TimeZoneNames implements Serializable {
      * @see MatchInfo
      * @draft ICU 49 (Retain)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public Collection<MatchInfo> find(CharSequence text, int start, EnumSet<NameType> types) {
         throw new UnsupportedOperationException("The method is not implemented in TimeZoneNames base class.");
     }
@@ -351,6 +352,7 @@ public abstract class TimeZoneNames implements Serializable {
      * {@link TimeZoneNames#find(CharSequence, int, EnumSet)}.
      * @draft ICU 49 (Retain)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static class MatchInfo {
         private NameType _nameType;
         private String _tzID;
@@ -370,6 +372,7 @@ public abstract class TimeZoneNames implements Serializable {
          * @see NameType
          * @draft ICU 49 (Retain)
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         public MatchInfo(NameType nameType, String tzID, String mzID, int matchLength) {
             if (nameType == null) {
                 throw new IllegalArgumentException("nameType is null");
@@ -396,6 +399,7 @@ public abstract class TimeZoneNames implements Serializable {
          * @see #mzID()
          * @draft ICU 49 (Retain)
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         public String tzID() {
             return _tzID;
         }
@@ -410,6 +414,7 @@ public abstract class TimeZoneNames implements Serializable {
          * @see #tzID()
          * @draft ICU 49 (Retain)
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         public String mzID() {
             return _mzID;
         }
@@ -420,6 +425,7 @@ public abstract class TimeZoneNames implements Serializable {
          * @see NameType
          * @draft ICU 49 (Retain)
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         public NameType nameType() {
             return _nameType;
         }
@@ -429,6 +435,7 @@ public abstract class TimeZoneNames implements Serializable {
          * @return the match length.
          * @draft ICU 49 (Retain)
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         public int matchLength() {
             return _matchLength;
         }
@@ -439,6 +446,7 @@ public abstract class TimeZoneNames implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public void loadAllDisplayNames() {}
 
     /**
@@ -446,6 +454,7 @@ public abstract class TimeZoneNames implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public void getDisplayNames(String tzID, NameType[] types, long date,
             String[] dest, int destOffset) {
         if (tzID == null || tzID.length() == 0) {
@@ -470,6 +479,7 @@ public abstract class TimeZoneNames implements Serializable {
      *
      * @draft ICU 49 (Retain)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     protected TimeZoneNames() {
     }
 
@@ -480,6 +490,7 @@ public abstract class TimeZoneNames implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static abstract class Factory {
         /**
          * The factory method of <code>TimeZoneNames</code>.
@@ -491,6 +502,7 @@ public abstract class TimeZoneNames implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public abstract TimeZoneNames getTimeZoneNames(ULocale locale);
 
         /**
@@ -499,6 +511,7 @@ public abstract class TimeZoneNames implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         protected Factory() {
         }
     }

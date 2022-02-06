@@ -257,11 +257,11 @@
                  uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
     </target>
 
-    <target name="test-init-junit-dependency" depends="init-ivy">
-        <ivy:retrieve/>
+    <target name="retrieve-dependencies" depends="init-ivy">
+        <ivy:retrieve log="quiet"/>
     </target>
 
-    <target name="init" depends="test-init-junit-dependency"
+    <target name="init" depends="retrieve-dependencies"
             description="Initialize the environment for build and test. May require internet access."/>
 
     <target name="_classifytests">
@@ -731,39 +731,85 @@
         <fail message="test failed" if="icu-junit-failure" />
     </target>
 
+    <!-- bnd targets -->
+    <target name="bnd-init" depends="retrieve-dependencies" unless="bnd.initialized">
+        <property name="bnd.jar" value="${external-jars}/biz.aQute.bnd-5.3.0.jar"/>
+        <property name="bnd.baseline.jar" value="${external-jars}/icu4j-latest.jar"/>
+
+        <fail message="bnd not found.">
+            <condition>
+                <not>
+                    <or>
+                        <available file="${bnd.jar}" />
+                    </or>
+                </not>
+            </condition>
+        </fail>
+
+        <!-- get the bnd version -->
+        <java jar="${bnd.jar}" fork="true" outputproperty="bnd.version">
+            <arg value="version"/>
+        </java>
+
+        <!-- get the baseline jar -->
+        <ivy:retrieve inline="true" organisation="com.ibm.icu" module="icu4j" type="jar" log="quiet" transitive="false"
+                      pattern="${bnd.baseline.jar}"/>
+
+        <echo message="----------------------------------------------------"/>
+        <echo message="bnd jar:  ${bnd.jar}" />
+        <echo message="bnd version:  ${bnd.version}" />
+        <echo message="bnd baseline:  ${bnd.baseline.jar}" />
+        <echo message="----------------------------------------------------"/>
+
+        <property name="bnd.initialized" value="true"/>
+    </target>
+
     <!-- jar targets -->
     <target name="jar" depends="icu4jJar, charset, localespi" description="Build ICU4J runtime library jar files">
         <copy file="${icu4j.charset.jar}" tofile="${icu4j-charset.jar.file}"/>
         <copy file="${icu4j.localespi.jar}" tofile="${icu4j-localespi.jar.file}" failonerror="false"/>
     </target>
 
-    <target name="icu4jJar" depends="info, core, collate, currdata, langdata, regiondata, translit" description="Build ICU4J all-in-one core jar">
-        <mkdir dir="${out.dir}"/>
+    <target name="icu4jJar" depends="info, core, collate, currdata, langdata, regiondata, translit, bnd-init, build-tools"
+            description="Build ICU4J all-in-one core jar">
+        <!-- collect icu4j.jar binary contents -->
+        <path id="icu4jJar.contents.path">
+            <fileset dir="${icu4j.core.dir}/${jar.dir}" includes="*.jar" excludes="*-src.jar"/>
+            <fileset dir="${icu4j.collate.dir}/${jar.dir}" includes="*.jar" excludes="*-src.jar"/>
+            <fileset dir="${icu4j.currdata.dir}/${jar.dir}" includes="*.jar" excludes="*-src.jar"/>
+            <fileset dir="${icu4j.langdata.dir}/${jar.dir}" includes="*.jar" excludes="*-src.jar"/>
+            <fileset dir="${icu4j.regiondata.dir}/${jar.dir}" includes="*.jar" excludes="*-src.jar"/>
+            <fileset dir="${icu4j.translit.dir}/${jar.dir}" includes="*.jar" excludes="*-src.jar"/>
+        </path>
 
-        <!-- manifest -->
-        <copy file="manifest.stub" todir="${out.dir}">
-            <filterset>
-                <filter token="SPECVERSION" value="${jar.spec.version}"/>
-                <filter token="IMPLVERSION" value="${jar.impl.version}"/>
-                <filter token="COPYRIGHT" value="${jar.copyright.info}"/>
-                <filter token="EXECENV" value="${jar.exec.env}"/>
-            </filterset>
-        </copy>
+        <!-- convert them to the bnd format for the -includeresources instruction -->
+        <pathconvert refid="icu4jJar.contents.path" property="icu4jJar.contents" pathsep=",">
+            <mapper type="glob" from="*.jar" to="@*.jar"/>
+        </pathconvert>
 
-        <!-- jar -->
-        <jar jarfile="${icu4j.jar.file}"
-                compress="true"
-                manifest="${out.dir}/manifest.stub">
-            <fileset dir="${icu4j.core.dir}/${bin.dir}" includes="**/*"/>
-            <fileset dir="${icu4j.collate.dir}/${bin.dir}" includes="**/*"/>
-            <fileset dir="${icu4j.currdata.dir}/${bin.dir}" includes="**/*"/>
-            <fileset dir="${icu4j.langdata.dir}/${bin.dir}" includes="**/*"/>
-            <fileset dir="${icu4j.regiondata.dir}/${bin.dir}" includes="**/*"/>
-            <fileset dir="${icu4j.translit.dir}/${bin.dir}" includes="**/*"/>
-            <fileset dir="${shared.dir}/licenses">
-                <include name="LICENSE"/>
-            </fileset>
-        </jar>
+        <!-- build jar -->
+        <java jar="${bnd.jar}" fork="true">
+            <arg value="bnd"/>
+            <arg value="icu4j.bnd"/>
+            <jvmarg value="-Dspecversion=${jar.spec.version}"/>
+            <jvmarg value="-Dimplversion=${jar.impl.version}"/>
+            <jvmarg value="-Dcopyright=${jar.copyright.info}"/>
+            <jvmarg value="-Dexecenv=${jar.exec.env}"/>
+            <jvmarg value="-Dincluderesources=${icu4jJar.contents},${shared.dir}/licenses/LICENSE"/>
+            <jvmarg value="-Doutput=${icu4j.jar.file}"/>
+        </java>
+
+        <!-- baseline -->
+        <java classname="com.ibm.icu.dev.tool.bnd.BaselineCheck" failonerror="true">
+            <arg value="--packageReport"/>
+            <arg value="--failPackageMismatch"/>
+            <arg value="${icu4j.jar.file}"/>
+            <arg value="${bnd.baseline.jar}"/>
+            <classpath>
+                <pathelement location="${icu4j.build-tools.jar}"/>
+                <pathelement location="${bnd.jar}"/>
+            </classpath>
+        </java>
     </target>
 
     <target name="icu4jSrcJar" description="Build icu4j-src.jar">
@@ -1226,7 +1272,7 @@
     </target>
 
     <!-- compile targets -->
-    <target name="core" description="Build core classes">
+    <target name="core" depends="init" description="Build core classes">
         <ant dir="${icu4j.core.dir}" inheritAll="false"/>
     </target>
 
@@ -1308,7 +1354,7 @@
         <ant dir="${icu4j.samples.dir}" inheritAll="false"/>
     </target>
 
-    <target name="build-tools" description="Build build-tool classes">
+    <target name="build-tools" depends="retrieve-dependencies" description="Build build-tool classes">
         <ant dir="${icu4j.build-tools.dir}" inheritAll="false"/>
     </target>
 

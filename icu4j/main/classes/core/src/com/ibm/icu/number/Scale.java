@@ -162,6 +162,7 @@ public class Scale {
      * @deprecated ICU 62 This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public Scale withMathContext(MathContext mc) {
         // TODO: Make this public?
         if (this.mc.equals(mc)) {
@@ -175,6 +176,7 @@ public class Scale {
      * @deprecated ICU 62 This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public void applyTo(DecimalQuantity quantity) {
         quantity.adjustMagnitude(magnitude);
         if (arbitrary != null) {
@@ -187,6 +189,7 @@ public class Scale {
      * @deprecated ICU 62 This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public void applyReciprocalTo(DecimalQuantity quantity) {
         quantity.adjustMagnitude(-magnitude);
         if (reciprocal != null) {

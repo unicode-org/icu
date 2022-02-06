@@ -193,6 +193,7 @@ public class MeasureFormat extends UFormat {
          * @deprecated ICU 61 This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         DEFAULT_CURRENCY(ListFormatter.Width.SHORT, UnitWidth.FULL_NAME, UnitWidth.SHORT);
 
         final ListFormatter.Width listWidth;
@@ -346,6 +347,7 @@ public class MeasureFormat extends UFormat {
      * @draft ICU 53 (Retain)
      */
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public Measure parseObject(String source, ParsePosition pos) {
         throw new UnsupportedOperationException();
     }
@@ -1060,6 +1062,7 @@ public class MeasureFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static String getRangeFormat(ULocale forLocale, FormatWidth width) {
         // TODO fix Hack for French
         if (forLocale.getLanguage().equals("fr")) {

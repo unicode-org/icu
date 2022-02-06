@@ -444,6 +444,7 @@ public abstract class Normalizer2 {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected Normalizer2() {
     }
 }

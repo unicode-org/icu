@@ -65,6 +65,7 @@ import com.ibm.icu.util.ULocale.Category;
  * @deprecated This API is ICU internal only.
  */
 @Deprecated
+@aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
 public class PersianCalendar extends Calendar {
     private static final long serialVersionUID = -6727306982975111643L;
 
@@ -106,6 +107,7 @@ public class PersianCalendar extends Calendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public PersianCalendar()
     {
         this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
@@ -121,6 +123,7 @@ public class PersianCalendar extends Calendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public PersianCalendar(TimeZone zone)
     {
         this(zone, ULocale.getDefault(Category.FORMAT));
@@ -136,6 +139,7 @@ public class PersianCalendar extends Calendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public PersianCalendar(Locale aLocale)
     {
         this(TimeZone.forLocaleOrDefault(aLocale), aLocale);
@@ -151,6 +155,7 @@ public class PersianCalendar extends Calendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public PersianCalendar(ULocale locale)
     {
         this(TimeZone.forULocaleOrDefault(locale), locale);
@@ -167,6 +172,7 @@ public class PersianCalendar extends Calendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public PersianCalendar(TimeZone zone, Locale aLocale)
     {
         super(zone, aLocale);
@@ -184,6 +190,7 @@ public class PersianCalendar extends Calendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public PersianCalendar(TimeZone zone, ULocale locale)
     {
         super(zone, locale);
@@ -201,6 +208,7 @@ public class PersianCalendar extends Calendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public PersianCalendar(Date date) {
         super(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
         this.setTime(date);
@@ -220,6 +228,7 @@ public class PersianCalendar extends Calendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public PersianCalendar(int year, int month, int date)
     {
         super(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
@@ -248,6 +257,7 @@ public class PersianCalendar extends Calendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public PersianCalendar(int year, int month, int date, int hour,
                            int minute, int second)
     {
@@ -296,6 +306,7 @@ public class PersianCalendar extends Calendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int handleGetLimit(int field, int limitType) {
         return LIMITS[field][limitType];
     }
@@ -329,6 +340,7 @@ public class PersianCalendar extends Calendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int handleGetMonthLength(int extendedYear, int month) {
         // If the month is out of range, adjust it into range, and
         // modify the extended year value accordingly.
@@ -348,6 +360,7 @@ public class PersianCalendar extends Calendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int handleGetYearLength(int extendedYear) {
         return isLeapYear(extendedYear) ? 366 : 365;
     }
@@ -363,6 +376,7 @@ public class PersianCalendar extends Calendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int handleComputeMonthStart(int eyear, int month, boolean useMonth) {
         // If the month is out of range, adjust it into range, and
         // modify the extended year value accordingly.
@@ -388,6 +402,7 @@ public class PersianCalendar extends Calendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int handleGetExtendedYear() {
         int year;
         if (newerField(EXTENDED_YEAR, YEAR) == EXTENDED_YEAR) {
@@ -416,6 +431,7 @@ public class PersianCalendar extends Calendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected void handleComputeFields(int julianDay) {
         int year, month, dayOfMonth, dayOfYear;
 
@@ -447,6 +463,7 @@ public class PersianCalendar extends Calendar {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String getType() {
         return "persian";
     }

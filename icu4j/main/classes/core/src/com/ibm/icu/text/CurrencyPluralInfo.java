@@ -247,6 +247,7 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     String select(double number) {
         return pluralRules.select(number);
     }
@@ -258,6 +259,7 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String select(PluralRules.FixedDecimal numberInfo) {
         return pluralRules.select(numberInfo);
     }
@@ -270,6 +272,7 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public Iterator<String> pluralPatternIterator() {
         return pluralCountToCurrencyUnitPattern.keySet().iterator();
     }

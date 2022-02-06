@@ -160,6 +160,7 @@ public abstract class NumberRangeFormatter {
      *
      * @draft ICU 69
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static final class SpanField extends UFormat.SpanField {
         private static final long serialVersionUID = 8750397196515368729L;
 
@@ -171,6 +172,7 @@ public abstract class NumberRangeFormatter {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         public static final SpanField NUMBER_RANGE_SPAN = new SpanField("number-range-span");
 
         private SpanField(String name) {
@@ -185,6 +187,7 @@ public abstract class NumberRangeFormatter {
          */
         @Deprecated
         @Override
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         protected Object readResolve() throws InvalidObjectException {
             if (this.getName().equals(NUMBER_RANGE_SPAN.getName()))
                 return NUMBER_RANGE_SPAN;

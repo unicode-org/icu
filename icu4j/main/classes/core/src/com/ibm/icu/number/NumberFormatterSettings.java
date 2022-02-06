@@ -561,6 +561,7 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      * @deprecated This API is for technology preview only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public T unitDisplayCase(String unitDisplayCase) {
         return create(KEY_UNIT_DISPLAY_CASE, unitDisplayCase);
     }
@@ -572,6 +573,7 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      * @deprecated ICU 60 This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public T macros(MacroProps macros) {
         return create(KEY_MACROS, macros);
     }
@@ -583,6 +585,7 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      * @deprecated ICU 60 This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public T padding(Padder padder) {
         return create(KEY_PADDER, padder);
     }
@@ -595,6 +598,7 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      * @deprecated ICU 60 This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public T threshold(Long threshold) {
         return create(KEY_THRESHOLD, threshold);
     }

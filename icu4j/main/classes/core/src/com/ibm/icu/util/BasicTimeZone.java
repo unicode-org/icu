@@ -542,18 +542,21 @@ public abstract class BasicTimeZone extends TimeZone {
      *
      * @draft ICU 69
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static enum LocalOption {
         /**
          * An input time is always interpreted as local time before
          * a time zone transition.
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         FORMER(0x04),
         /**
          * An input time is always interpreted as local time after
          * a time zone transition.
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         LATTER(0x0C),
         /**
          * An input time is interpreted as standard time when local
@@ -563,6 +566,7 @@ public abstract class BasicTimeZone extends TimeZone {
          * transition is used.
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         STANDARD_FORMER(0x05),
         /**
          * An input time is interpreted as standard time when local
@@ -572,6 +576,7 @@ public abstract class BasicTimeZone extends TimeZone {
          * transition is used.
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         STANDARD_LATTER(0x0D),
         /**
          * An input time is interpreted as daylight saving time when
@@ -581,6 +586,7 @@ public abstract class BasicTimeZone extends TimeZone {
          * transition is used.
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         DAYLIGHT_FORMER(0x07),
         /**
          * An input time is interpreted as daylight saving time when
@@ -590,6 +596,7 @@ public abstract class BasicTimeZone extends TimeZone {
          * transition is used.
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         DAYLIGHT_LATTER(0x0F);
 
         private int flagVal;
@@ -608,6 +615,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static int getLocalOptionValue(LocalOption locOpt) {
         return locOpt.flagVal;
     }
@@ -618,6 +626,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static final int LOCAL_STD = 0x01;
 
     /**
@@ -626,6 +635,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static final int LOCAL_DST = 0x03;
 
     /**
@@ -634,6 +644,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static final int LOCAL_FORMER = 0x04;
 
     /**
@@ -642,6 +653,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static final int LOCAL_LATTER = 0x0C;
 
     /**
@@ -650,6 +662,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static final int STD_DST_MASK = 0x03;
 
     /**
@@ -658,12 +671,14 @@ public abstract class BasicTimeZone extends TimeZone {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static final int FORMER_LATTER_MASK = 0x0C;
 
     /**
      * {@icu} Returns time zone offsets from local wall time.
      * @draft ICU 69
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public void getOffsetFromLocal(long date,
             LocalOption nonExistingTimeOpt, LocalOption duplicatedTimeOpt, int[] offsets) {
         throw new IllegalStateException("Not implemented");
@@ -683,6 +698,7 @@ public abstract class BasicTimeZone extends TimeZone {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected BasicTimeZone(String ID) {
         super(ID);
     }

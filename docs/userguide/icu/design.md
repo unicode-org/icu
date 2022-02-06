@@ -646,6 +646,15 @@ External ICU4J APIs are
 3. `public` or `protected` contained classes
 4. do not have an `@internal` label
 
+Since ICU4J 70.1, the above mentioned, exported packages are [semantically 
+versioned](https://docs.osgi.org/whitepaper/semantic-versioning/Semantic-Versioning-20190110.pdf).
+The build process uses [bndtools](https://bnd.bndtools.org/chapters/110-introduction.html) 
+to automatically create related manifest headers. A [custom baseline check](../icu4j/tools/build/src/com/ibm/icu/dev/tool/bnd/BaselineCheck.java) 
+as be implemented to fail the build early when an API change violates the 
+semantic versioning contract(s). This may happen when `@draft` APIs become 
+`@stable` without updating the containing package's version. 
+
+
 #### "System" APIs
 
 "System" APIs are external APIs that are intended only for special uses for
@@ -662,6 +671,12 @@ notice. Some of them are member functions of public C++ or Java classes, and are
 typically because programming languages don't provide sufficiently access
 control (without clumsy mechanisms). In this case, such APIs have an
 `@internal` label.
+
+Any `@internal` APIs that are in any of the exported packages mentioned above and
+have a public or protected access level must additionally be annotated with 
+`@BaselineIgnore` to exclude them for semantic versioning. There are many 
+examples that can be used as reference.
+
 
 ### ICU API compatibility
 
@@ -705,7 +720,21 @@ release, it is relabeled as stable with a `@stable ICU x.y**` label in the API
 documentation. A stable API is expected to be available in this form for a long
 time. The ICU version **x.y** indicates the last time the API *signature* was
 introduced or changed. **The promotion from `@draft ICU x.y` to `@stable ICU x.y`
-must not change the x.y version number.**
+must not change the x.y version number.**  
+
+Since ICU4J 70.1, `@draft` APIs must be additionally annotated with 
+`@BaselineIgnore` to exclude them from the semantic versioning. This is 
+necessary as frequent, potentially binary incompatible changes made to draft 
+APIs would unnecessarily increase the major/minor version of the exported 
+packages contain them. When an API is declared stable the annotation **must be 
+removed and an increment of the containg package's version will be necessary.**
+
+As the time an API stays a draft is hard to predict, the version till which they
+are ignored by the baseline check cannot necessarily be the next major/minor 
+version of the package. Because of that another version is used that is far in the 
+future but not as far as the one for internal APIs. Is the version used to 
+ignore draft APIs reached, the annotations of all remaining draft APIs must be 
+updated.
 
 We occasionally make an exception and allow adding new APIs marked as
 `@stable ICU x.y` APIs in the x.y release itself if we believe that they have to

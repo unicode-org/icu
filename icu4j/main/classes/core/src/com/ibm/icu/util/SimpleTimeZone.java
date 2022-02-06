@@ -665,6 +665,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public int getOffset(int era, int year, int month, int day,
                               int dayOfWeek, int millis,
                               int monthLength)  {
@@ -793,6 +794,7 @@ public class SimpleTimeZone extends BasicTimeZone {
      * @draft ICU 69
      */
     @Override
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public void getOffsetFromLocal(long date,
             LocalOption nonExistingTimeOpt, LocalOption duplicatedTimeOpt, int[] offsets) {
         int nonExistingTimeOptVal = getLocalOptionValue(nonExistingTimeOpt);

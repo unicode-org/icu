@@ -111,6 +111,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static final int NUMERIC = 2;
 
     /**
@@ -119,6 +120,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static final int DT_CONTEXT_COUNT = 3;
 
     // Constants for width
@@ -153,54 +155,63 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static final int DT_WIDTH_COUNT = 4;
 
     /**
      * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese calendar.
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     static final int DT_LEAP_MONTH_PATTERN_FORMAT_WIDE = 0;
 
     /**
      * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese calendar.
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     static final int DT_LEAP_MONTH_PATTERN_FORMAT_ABBREV = 1;
 
     /**
      * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese calendar.
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     static final int DT_LEAP_MONTH_PATTERN_FORMAT_NARROW = 2;
 
     /**
      * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese calendar.
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     static final int DT_LEAP_MONTH_PATTERN_STANDALONE_WIDE = 3;
 
     /**
      * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese calendar.
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     static final int DT_LEAP_MONTH_PATTERN_STANDALONE_ABBREV = 4;
 
     /**
      * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese calendar.
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     static final int DT_LEAP_MONTH_PATTERN_STANDALONE_NARROW = 5;
 
     /**
      * {@icu} Somewhat temporary constant for leap month pattern type, adequate for Chinese calendar.
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     static final int DT_LEAP_MONTH_PATTERN_NUMERIC = 6;
 
     /**
      * {@icu} Somewhat temporary constant for month pattern count, adequate for Chinese calendar.
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     static final int DT_MONTH_PATTERN_COUNT = 7;
 
     /**
@@ -208,12 +219,14 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * doesn't specify any time separator, and always recognized when parsing.
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     static final String DEFAULT_TIME_SEPARATOR = ":";
 
     /**
      * {@icu} This alternate time separator is always recognized when parsing.
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     static final String ALTERNATE_TIME_SEPARATOR = ".";
 
    /**
@@ -333,6 +346,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * <code>DateFormatSymbols</code> instances are available.
      * @draft ICU 3.8 (retain)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static ULocale[] getAvailableULocales() {
         return ICUResourceBundle.getAvailableULocales();
     }
@@ -687,6 +701,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * related to date formatting.
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     enum CapitalizationContextUsage {
         OTHER,
         MONTH_FORMAT,     /* except narrow */
@@ -1213,6 +1228,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String getLeapMonthPattern(int context, int width) {
         if (leapMonthPatterns != null) {
             int leapMonthPatternIndex = -1;
@@ -1266,6 +1282,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public void setLeapMonthPattern(String leapMonthPattern, int context, int width) {
         if (leapMonthPatterns != null) {
             int leapMonthPatternIndex = -1;
@@ -1337,6 +1354,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String getTimeSeparatorString() {
         return timeSeparator;
     }
@@ -1348,6 +1366,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public void setTimeSeparatorString(String newTimeSeparator) {
         timeSeparator = newTimeSeparator;
     }
@@ -1881,6 +1900,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     @Deprecated
     // This API was accidentally marked as @stable ICU 3.0 formerly.
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected void initializeData(ULocale desiredLocale, ICUResourceBundle b, String calendarType)
     {
         // Create a CalendarSink to load this data and a resource bundle
@@ -2364,6 +2384,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8 (retain)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public final ULocale getLocale(ULocale.Type type) {
         return type == ULocale.ACTUAL_LOCALE ?
             this.actualLocale : this.validLocale;

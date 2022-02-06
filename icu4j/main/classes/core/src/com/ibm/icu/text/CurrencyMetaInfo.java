@@ -61,6 +61,7 @@ public class CurrencyMetaInfo {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static boolean hasData() {
         return hasData;
     }
@@ -71,6 +72,7 @@ public class CurrencyMetaInfo {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected CurrencyMetaInfo() {
     }
 
@@ -109,6 +111,7 @@ public class CurrencyMetaInfo {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public final boolean tenderOnly;
 
         private CurrencyFilter(String region, String currency, long from, long to, boolean tenderOnly) {
@@ -466,6 +469,7 @@ public class CurrencyMetaInfo {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public CurrencyInfo(String region, String code, long from, long to, int priority, boolean tender) {
             this.region = region;
             this.code = code;
@@ -562,6 +566,7 @@ public class CurrencyMetaInfo {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected static final CurrencyDigits defaultDigits = new CurrencyDigits(2, 0);
 
     static {

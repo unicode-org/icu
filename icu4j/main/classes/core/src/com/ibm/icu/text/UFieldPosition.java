@@ -17,6 +17,7 @@ import java.text.Format.Field;
  * @deprecated This API is ICU internal only.
  */
 @Deprecated
+@aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
 public class UFieldPosition extends FieldPosition {
     private int countVisibleFractionDigits = -1;
     private long fractionDigits = 0;
@@ -26,6 +27,7 @@ public class UFieldPosition extends FieldPosition {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public UFieldPosition() {
         super(-1);
     }
@@ -35,6 +37,7 @@ public class UFieldPosition extends FieldPosition {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public UFieldPosition(int field) {
         super(field);
     }
@@ -44,6 +47,7 @@ public class UFieldPosition extends FieldPosition {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public UFieldPosition(Field attribute, int fieldID) {
         super(attribute, fieldID);
     }
@@ -53,6 +57,7 @@ public class UFieldPosition extends FieldPosition {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public UFieldPosition(Field attribute) {
         super(attribute);
     }
@@ -62,6 +67,7 @@ public class UFieldPosition extends FieldPosition {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public void setFractionDigits(int countVisibleFractionDigits, long fractionDigits ) {
         this.countVisibleFractionDigits = countVisibleFractionDigits;
         this.fractionDigits = fractionDigits;
@@ -72,6 +78,7 @@ public class UFieldPosition extends FieldPosition {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public int getCountVisibleFractionDigits() {
         return countVisibleFractionDigits;
     }
@@ -81,6 +88,7 @@ public class UFieldPosition extends FieldPosition {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public long getFractionDigits() {
         return fractionDigits;
     }

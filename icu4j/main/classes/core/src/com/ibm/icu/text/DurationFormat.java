@@ -47,6 +47,7 @@ public abstract class DurationFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected DurationFormat() {
     }
 
@@ -56,6 +57,7 @@ public abstract class DurationFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected DurationFormat(ULocale locale) {
         setLocale(locale,locale);
     }

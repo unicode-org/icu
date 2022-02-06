@@ -299,6 +299,7 @@ public final class EthiopicCalendar extends CECalendar
      */
     @Override
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int handleGetExtendedYear() {
         // Ethiopic calendar uses EXTENDED_YEAR aligned to
         // Amelete Mihret year always.
@@ -327,6 +328,7 @@ public final class EthiopicCalendar extends CECalendar
      */
     @Override
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected void handleComputeFields(int julianDay) {
         int era, year;
         int[] fields = new int[3];
@@ -364,6 +366,7 @@ public final class EthiopicCalendar extends CECalendar
      */
     @Override
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int handleGetLimit(int field, int limitType) {
         if (isAmeteAlemEra() && field == ERA) {
             return 0; // Only one era in this mode, era is always 0
@@ -378,6 +381,7 @@ public final class EthiopicCalendar extends CECalendar
      */
     @Override
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected int getJDEpochOffset() {
         return JD_EPOCH_OFFSET_AMETE_MIHRET;
     }
@@ -395,6 +399,7 @@ public final class EthiopicCalendar extends CECalendar
     // This API was accidentally marked as @draft, but we have no good
     // reason to keep this.  For now, we leave it as is, but may be
     // removed in future.  2008-03-21 yoshito
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static int EthiopicToJD(long year, int month, int date) {
         return ceToJD(year, month, date, JD_EPOCH_OFFSET_AMETE_MIHRET);
     }

@@ -5281,6 +5281,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static int getPropertyValueEnumNoThrow(int property, CharSequence valueAlias) {
         return UPropertyAliases.INSTANCE.getPropertyValueEnumNoThrow(property, valueAlias);
     }
@@ -5941,6 +5942,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @see CharacterProperties#getBinaryPropertySet(int)
      * @draft ICU 70
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static boolean hasBinaryProperty(CharSequence s, int property) {
         int length = s.length();
         if (length == 1) {
@@ -6062,6 +6064,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     ///CLOVER:OFF
     public static String getStringPropertyValue(int propertyEnum, int codepoint, int nameChoice) {
         if ((propertyEnum >= UProperty.BINARY_START && propertyEnum < UProperty.BINARY_LIMIT) ||

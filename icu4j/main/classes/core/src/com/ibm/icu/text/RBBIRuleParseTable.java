@@ -18,6 +18,7 @@ package com.ibm.icu.text;
  * @internal 
  *
  */
+@aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
 class RBBIRuleParseTable
 {
      static final short doCheckVarDef = 1;

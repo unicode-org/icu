@@ -898,6 +898,7 @@ class RBBITableBuilder {
         *  @return true if duplicate char classes were found, false otherwise.
         *  @internal
         */
+       @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
        boolean findDuplCharClassFrom(RBBIRuleBuilder.IntPair categories) {
            int numStates = fDStates.size();
            int numCols = fRB.fSetBuilder.getNumCharCategories();
@@ -953,6 +954,7 @@ class RBBITableBuilder {
         *  @return true if duplicate states were found, false otherwise.
         *  @internal
         */
+       @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
        boolean findDuplicateState(RBBIRuleBuilder.IntPair states) {
            int numStates = fDStates.size();
            int numCols = fRB.fSetBuilder.getNumCharCategories();
@@ -992,6 +994,7 @@ class RBBITableBuilder {
         *  @return true if duplicate states were found, false otherwise.
         *  @internal
         */
+       @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
        boolean findDuplicateSafeState(RBBIRuleBuilder.IntPair states) {
            int numStates = fSafeTable.size();
 
@@ -1025,6 +1028,7 @@ class RBBITableBuilder {
         * @param duplStates The duplicate pair of states.
         * @internal
         */
+       @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
        void removeState(IntPair duplStates) {
            final int keepState = duplStates.first;
            final int duplState = duplStates.second;
@@ -1057,6 +1061,7 @@ class RBBITableBuilder {
         *                   to the first.
         * @internal
         */
+       @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
        void removeSafeState(IntPair duplStates) {
            final int keepState = duplStates.first;
            final int duplState = duplStates.second;
@@ -1086,6 +1091,7 @@ class RBBITableBuilder {
         *  @return the number of states removed.
         *  @internal
         */
+       @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
        int removeDuplicateStates() {
            IntPair dupls = new IntPair(3, 0);
            int numStatesRemoved = 0;

@@ -234,6 +234,7 @@ public final class Normalizer implements Cloneable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         protected Mode() {
         }
 
@@ -242,6 +243,7 @@ public final class Normalizer implements Cloneable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         protected abstract Normalizer2 getNormalizer2(int options);
     }
 

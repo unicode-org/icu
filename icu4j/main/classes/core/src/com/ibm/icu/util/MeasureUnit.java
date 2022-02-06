@@ -56,6 +56,7 @@ public class MeasureUnit implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected final String type;
 
     /**
@@ -64,6 +65,7 @@ public class MeasureUnit implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected final String subType;
 
     /**
@@ -71,6 +73,7 @@ public class MeasureUnit implements Serializable {
      *
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     private MeasureUnitImpl measureUnitImpl;
 
     /**
@@ -116,6 +119,7 @@ public class MeasureUnit implements Serializable {
      *
      * @draft ICU 69
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public enum MeasurePrefix {
 
         /**
@@ -123,6 +127,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         YOTTA(24, "yotta", 10),
 
         /**
@@ -130,6 +135,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         ZETTA(21, "zetta", 10),
 
         /**
@@ -137,6 +143,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         EXA(18, "exa", 10),
 
         /**
@@ -144,6 +151,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         PETA(15, "peta", 10),
 
         /**
@@ -151,6 +159,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         TERA(12, "tera", 10),
 
         /**
@@ -158,6 +167,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         GIGA(9, "giga", 10),
 
         /**
@@ -165,6 +175,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         MEGA(6, "mega", 10),
 
         /**
@@ -172,6 +183,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         KILO(3, "kilo", 10),
 
         /**
@@ -179,6 +191,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         HECTO(2, "hecto", 10),
 
         /**
@@ -186,6 +199,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         DEKA(1, "deka", 10),
 
         /**
@@ -193,6 +207,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         ONE(0, "", 10),
 
         /**
@@ -200,6 +215,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         DECI(-1, "deci", 10),
 
         /**
@@ -207,6 +223,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         CENTI(-2, "centi", 10),
 
         /**
@@ -214,6 +231,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         MILLI(-3, "milli", 10),
 
         /**
@@ -221,6 +239,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         MICRO(-6, "micro", 10),
 
         /**
@@ -228,6 +247,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         NANO(-9, "nano", 10),
 
         /**
@@ -235,6 +255,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         PICO(-12, "pico", 10),
 
         /**
@@ -242,6 +263,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         FEMTO(-15, "femto", 10),
 
         /**
@@ -249,6 +271,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         ATTO(-18, "atto", 10),
 
         /**
@@ -256,6 +279,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         ZEPTO(-21, "zepto", 10),
 
         /**
@@ -263,6 +287,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         YOCTO(-24, "yocto", 10),
 
         /**
@@ -270,6 +295,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         KIBI(1, "kibi", 1024),
 
         /**
@@ -277,6 +303,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         MEBI(2, "mebi", 1024),
 
         /**
@@ -284,6 +311,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         GIBI(3, "gibi", 1024),
 
         /**
@@ -291,6 +319,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         TEBI(4, "tebi", 1024),
 
         /**
@@ -298,6 +327,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         PEBI(5, "pebi", 1024),
 
         /**
@@ -305,6 +335,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         EXBI(6, "exbi", 1024),
 
         /**
@@ -312,6 +343,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         ZEBI(7, "zebi", 1024),
 
         /**
@@ -319,6 +351,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         YOBI(8, "yobi", 1024);
 
         private final int base;
@@ -338,6 +371,7 @@ public class MeasureUnit implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         public String getIdentifier() {
             return identifier;
         }
@@ -349,6 +383,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         public int getBase() {
             return base;
         }
@@ -360,6 +395,7 @@ public class MeasureUnit implements Serializable {
          *
          * @draft ICU 69
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
         public int getPower() {
             return power;
         }
@@ -370,6 +406,7 @@ public class MeasureUnit implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected MeasureUnit(String type, String subType) {
         this.type = type;
         this.subType = subType;
@@ -403,6 +440,7 @@ public class MeasureUnit implements Serializable {
      * @deprecated Internal API for ICU use only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static MeasureUnit fromMeasureUnitImpl(MeasureUnitImpl measureUnitImpl) {
         measureUnitImpl.serialize();
         String identifier = measureUnitImpl.getIdentifier();
@@ -481,6 +519,7 @@ public class MeasureUnit implements Serializable {
      * @throws UnsupportedOperationException if this unit is a COMPOUND or MIXED unit.
      * @draft ICU 69
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public MeasureUnit withPrefix(MeasurePrefix prefix) {
         SingleUnitImpl singleUnit = getSingleUnitImpl();
         singleUnit.setPrefix(prefix);
@@ -498,6 +537,7 @@ public class MeasureUnit implements Serializable {
      * @throws UnsupportedOperationException if the unit is COMPOUND or MIXED.
      * @draft ICU 69
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public MeasurePrefix getPrefix() {
         return getSingleUnitImpl().getPrefix();
     }
@@ -707,6 +747,7 @@ public class MeasureUnit implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static MeasureUnit internalGetInstance(String type, String subType) {
         if (type == null || subType == null) {
             throw new NullPointerException("Type and subType must be non-null");
@@ -732,6 +773,7 @@ public class MeasureUnit implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static MeasureUnit findBySubType(String subType) {
         populateCache();
         for (Map<String, MeasureUnit> unitsForType : cache.values()) {
@@ -750,12 +792,14 @@ public class MeasureUnit implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected interface Factory {
         /**
          * @internal
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         MeasureUnit create(String type, String subType);
     }
 
@@ -828,6 +872,7 @@ public class MeasureUnit implements Serializable {
      *
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     static synchronized private void populateCache() {
         if (cacheIsPopulated) {
             return;
@@ -863,6 +908,7 @@ public class MeasureUnit implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     protected synchronized static MeasureUnit addUnit(String type, String unitName, Factory factory) {
         Map<String, MeasureUnit> tmp = cache.get(type);
         if (tmp == null) {
@@ -997,6 +1043,7 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of concentr: item
      * @draft ICU 70
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static final MeasureUnit ITEM = MeasureUnit.internalGetInstance("concentr", "item");
 
     /**
@@ -1009,6 +1056,7 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of concentr: milligram-ofglucose-per-deciliter
      * @draft ICU 69
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static final MeasureUnit MILLIGRAM_OFGLUCOSE_PER_DECILITER = MeasureUnit.internalGetInstance("concentr", "milligram-ofglucose-per-deciliter");
 
     /**
@@ -1321,6 +1369,7 @@ public class MeasureUnit implements Serializable {
      * Constant for unit of force: kilowatt-hour-per-100-kilometer
      * @draft ICU 70
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static final MeasureUnit KILOWATT_HOUR_PER_100_KILOMETER = MeasureUnit.internalGetInstance("force", "kilowatt-hour-per-100-kilometer");
 
     /**
@@ -2042,6 +2091,7 @@ public class MeasureUnit implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public MeasureUnitImpl getCopyOfMeasureUnitImpl() {
         return this.measureUnitImpl == null ?
                 MeasureUnitImpl.forIdentifier(getIdentifier()) :

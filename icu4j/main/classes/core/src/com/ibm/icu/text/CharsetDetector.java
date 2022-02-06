@@ -523,6 +523,7 @@ public class CharsetDetector {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String[] getDetectableCharsets() {
         List<String> csnames = new ArrayList<String>(ALL_CS_RECOGNIZERS.size());
         for (int i = 0; i < ALL_CS_RECOGNIZERS.size(); i++) {
@@ -551,6 +552,7 @@ public class CharsetDetector {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public CharsetDetector setDetectableCharset(String encoding, boolean enabled) {
         int modIdx = -1;
         boolean isDefaultVal = false;

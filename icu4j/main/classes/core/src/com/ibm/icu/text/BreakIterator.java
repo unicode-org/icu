@@ -885,6 +885,7 @@ public abstract class BreakIterator implements Cloneable
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static BreakIterator getBreakInstance(ULocale where, int kind) {
         if (where == null) {
             throw new NullPointerException("Specified locale is null");
@@ -926,6 +927,7 @@ public abstract class BreakIterator implements Cloneable
      * be used when creating a BreakIterator.
      * @draft ICU 3.2 (retain)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public static synchronized ULocale[] getAvailableULocales()
     {
         // to avoid linking ICULocaleData
@@ -1009,6 +1011,7 @@ public abstract class BreakIterator implements Cloneable
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8 (retain)
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     public final ULocale getLocale(ULocale.Type type) {
         return type == ULocale.ACTUAL_LOCALE ?
             this.actualLocale : this.validLocale;

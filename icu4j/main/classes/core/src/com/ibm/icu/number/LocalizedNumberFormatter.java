@@ -147,6 +147,7 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
      * @deprecated ICU 60 This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public MicroProps formatImpl(DecimalQuantity fq, FormattedStringBuilder string) {
         if (computeCompiled()) {
             return compiled.format(fq, string);
@@ -161,6 +162,7 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
      * @deprecated ICU 67 This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public MicroProps formatImpl(DecimalQuantity fq, MeasureUnit unit, FormattedStringBuilder string) {
         // Use this formatter if possible
         if (Objects.equals(resolve().unit, unit)) {
@@ -183,6 +185,7 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
      *             for related functionality.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public String getAffixImpl(boolean isPrefix, boolean isNegative) {
         FormattedStringBuilder string = new FormattedStringBuilder();
         byte signum = (byte) (isNegative ? -1 : 1);

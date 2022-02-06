@@ -1,19 +1,23 @@
 Manifest-Version: 1.0
 Specification-Title: International Components for Unicode for Java
-Specification-Version: @SPECVERSION@
+Specification-Version: $(specversion)
 Specification-Vendor: Unicode, Inc.
 Implementation-Title: International Components for Unicode for Java
-Implementation-Version: @IMPLVERSION@
+Implementation-Version: $(implversion)
 Implementation-Vendor: Unicode, Inc.
 Implementation-Vendor-Id: org.unicode
 Bundle-ManifestVersion: 2
 Bundle-Name: ICU4J
 Bundle-Description: International Components for Unicode for Java
 Bundle-SymbolicName: com.ibm.icu
-Bundle-Version: @IMPLVERSION@
+Bundle-Version: $(implversion)
 Bundle-Vendor: Unicode, Inc.
-Bundle-Copyright: @COPYRIGHT@
-Bundle-RequiredExecutionEnvironment: @EXECENV@
+Bundle-Copyright: $(copyright)
+Bundle-RequiredExecutionEnvironment: $(execenv)
 Main-Class: com.ibm.icu.util.VersionInfo
-Export-Package: com.ibm.icu.lang,com.ibm.icu.math,com.ibm.icu.number,com.ibm.icu.text,com.ibm.icu.util
 Automatic-Module-Name: com.ibm.icu
+
+-includeresource: $(includeresources)
+-exportcontents: $(removeall;$(packages;VERSIONED);$(packages;CONDITIONAL))
+-output: $(output)
+-baseline: *

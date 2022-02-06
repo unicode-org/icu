@@ -32,6 +32,7 @@ import com.ibm.icu.impl.Utility;
  * @deprecated This API is ICU internal only.
  */
 @Deprecated
+@aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
 public final class CompactByteArray implements Cloneable {
 
     /**
@@ -40,6 +41,7 @@ public final class CompactByteArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static  final int UNICODECOUNT =65536;
 
     /**
@@ -49,6 +51,7 @@ public final class CompactByteArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public CompactByteArray()
     {
         this((byte)0);
@@ -61,6 +64,7 @@ public final class CompactByteArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public CompactByteArray(byte defaultValue)
     {
         int i;
@@ -88,6 +92,7 @@ public final class CompactByteArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public CompactByteArray(char indexArray[],
                             byte newValues[])
     {
@@ -116,6 +121,7 @@ public final class CompactByteArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public CompactByteArray(String indexArray,
                             String valueArray)
     {
@@ -131,6 +137,7 @@ public final class CompactByteArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public byte elementAt(char index)
     {
         return (values[(indices[index >> BLOCKSHIFT] & 0xFFFF)
@@ -146,6 +153,7 @@ public final class CompactByteArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public void setElementAt(char index, byte value)
     {
         if (isCompact)
@@ -164,6 +172,7 @@ public final class CompactByteArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public void setElementAt(char start, char end, byte value)
     {
         int i;
@@ -181,6 +190,7 @@ public final class CompactByteArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public void compact() {
         compact(false);
     }
@@ -191,6 +201,7 @@ public final class CompactByteArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public void compact(boolean exhaustive)
     {
         if (!isCompact) {
@@ -285,6 +296,7 @@ public final class CompactByteArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public char[] getIndexArray()
     {
         return indices;
@@ -297,6 +309,7 @@ public final class CompactByteArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public byte[] getValueArray()
     {
         return values;
@@ -309,6 +322,7 @@ public final class CompactByteArray implements Cloneable {
      */
     @Override
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public Object clone()
     {
         try {
@@ -332,6 +346,7 @@ public final class CompactByteArray implements Cloneable {
      */
     @Override
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public boolean equals(Object obj) {
         if (obj == null) return false;
         if (this == obj)                      // quick check
@@ -354,6 +369,7 @@ public final class CompactByteArray implements Cloneable {
      */
     @Override
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public int hashCode() {
         int result = 0;
         int increment = Math.min(3, values.length/16);

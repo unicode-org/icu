@@ -33,6 +33,7 @@ import com.ibm.icu.impl.Utility;
  * @deprecated This API is ICU internal only.
  */
 @Deprecated
+@aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
 public final class CompactCharArray implements Cloneable {
 
     /**
@@ -41,6 +42,7 @@ public final class CompactCharArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static  final int UNICODECOUNT = 65536;
 
     /**
@@ -50,6 +52,7 @@ public final class CompactCharArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public CompactCharArray()
     {
         this((char)0);
@@ -62,6 +65,7 @@ public final class CompactCharArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public CompactCharArray(char defaultValue)
     {
         int i;
@@ -89,6 +93,7 @@ public final class CompactCharArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public CompactCharArray(char indexArray[],
                              char newValues[])
     {
@@ -117,6 +122,7 @@ public final class CompactCharArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public CompactCharArray(String indexArray,
                 String valueArray)
     {
@@ -132,6 +138,7 @@ public final class CompactCharArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public char elementAt(char index)
     {
     int ix = (indices[index >> BLOCKSHIFT] & 0xFFFF)
@@ -148,6 +155,7 @@ public final class CompactCharArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public void setElementAt(char index, char value)
     {
         if (isCompact)
@@ -166,6 +174,7 @@ public final class CompactCharArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public void setElementAt(char start, char end, char value)
     {
         int i;
@@ -183,6 +192,7 @@ public final class CompactCharArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public void compact() {
         compact(true);
     }
@@ -193,6 +203,7 @@ public final class CompactCharArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public void compact(boolean exhaustive)
     {
         if (!isCompact) {
@@ -309,6 +320,7 @@ public final class CompactCharArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public char[] getIndexArray()
     {
         return indices;
@@ -321,6 +333,7 @@ public final class CompactCharArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public char[] getValueArray()
     {
         return values;
@@ -333,6 +346,7 @@ public final class CompactCharArray implements Cloneable {
      */
     @Override
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public Object clone()
     {
         try {
@@ -356,6 +370,7 @@ public final class CompactCharArray implements Cloneable {
      */
     @Override
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public boolean equals(Object obj) {
         if (obj == null) return false;
         if (this == obj)                      // quick check
@@ -378,6 +393,7 @@ public final class CompactCharArray implements Cloneable {
      */
     @Override
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public int hashCode() {
         int result = 0;
         int increment = Math.min(3, values.length/16);
@@ -418,6 +434,7 @@ public final class CompactCharArray implements Cloneable {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static  final int BLOCKSHIFT = 5; // NormalizerBuilder needs - liu
     static  final int BLOCKCOUNT =(1<<BLOCKSHIFT);
     static  final int INDEXSHIFT =(16-BLOCKSHIFT);

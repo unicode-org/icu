@@ -192,6 +192,7 @@ public class ConstrainedFieldPosition {
      * @deprecated This API is for technology preview and might be changed or removed in a future release.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public void constrainFieldAndValue(Field field, Object fieldValue) {
         fConstraint = ConstraintType.VALUE;
         fClassConstraint = Object.class;

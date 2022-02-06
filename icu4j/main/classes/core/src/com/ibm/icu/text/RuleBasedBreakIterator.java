@@ -127,6 +127,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static RuleBasedBreakIterator getInstanceFromCompiledRules(ByteBuffer bytes) throws IOException {
         RuleBasedBreakIterator  This = new RuleBasedBreakIterator();
         This.fRData = RBBIDataWrapper.get(bytes);
@@ -267,6 +268,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public RBBIDataWrapper    fRData;
 
     /**
@@ -313,6 +315,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      *   of us) access this field directly.
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     private int fDictionaryCharCount;
 
     private DictionaryCache     fDictionaryCache = new DictionaryCache();
@@ -366,6 +369,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public void dump(java.io.PrintStream out) {
         if (out == null) {
             out = System.out;
@@ -718,6 +722,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     public static final String fDebugEnv = ICUDebug.enabled(RBBI_DEBUG_ARG) ?
                                            ICUDebug.value(RBBI_DEBUG_ARG) : null;
 
@@ -997,6 +1002,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @param fromPosition the position in the input text to begin the iteration.
      * @internal
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
     private int handleSafePrevious(int fromPosition) {
         char            state;
         short           category = 0;
@@ -1194,6 +1200,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
          * @param otherRuleStatus The rule status index that applies to boundaries other than startPos
          * @internal
          */
+        @aQute.bnd.annotation.baseline.BaselineIgnore("999.99.9")
         void populateDictionary(int startPos, int endPos,
                                 int firstRuleStatus, int otherRuleStatus) {
             if ((endPos - startPos) <= 1) {

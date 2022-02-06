@@ -23,6 +23,7 @@ import java.util.Date;
  * @see SimpleDateRule
  * @draft ICU 2.8 (retainAll)
  */
+@aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
 public interface DateRule
 {
     /**
@@ -37,6 +38,7 @@ public interface DateRule
      * @see #firstBetween
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     abstract public Date    firstAfter(Date start);
 
     /**
@@ -53,6 +55,7 @@ public interface DateRule
      * @see #firstAfter
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     abstract public Date    firstBetween(Date start, Date end);
 
     /**
@@ -66,6 +69,7 @@ public interface DateRule
      * @return      true if this event occurs on the given date.
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     abstract public boolean isOn(Date date);
 
     /**
@@ -73,5 +77,6 @@ public interface DateRule
      * dates given.
      * @draft ICU 2.8
      */
+    @aQute.bnd.annotation.baseline.BaselineIgnore("9.9.9")
     abstract public boolean isBetween(Date start, Date end);
 }
