@@ -177,7 +177,7 @@
                 ga, gd, gl, gsw, gu, guz, gv
 
                 // H
-                ha, haw, he, hi, hr, hsb, hu, hy
+                ha, haw, he, hi, hi_Latn, hr, hsb, hu, hy
 
                 // I
                 ia, id, ig, ii, in, in_ID, is, it, iw, iw_IL
@@ -186,7 +186,7 @@
                 ja, jgo, jmc, jv
 
                 // K
-                ka, kab, kam, kde, kea, khq, ki, kk, kkj, kl, kln, km, kn, ko, kok, ks
+                ka, kab, kam, kde, kea, kgp, khq, ki, kk, kkj, kl, kln, km, kn, ko, kok, ks
                 ks_IN, ksb, ksf, ksh, ku, kw, ky
 
                 // L
@@ -232,7 +232,7 @@
                 xh, xog
 
                 // Y
-                yav, yi, yo, yue, yue_CN, yue_HK, yue_Hans
+                yav, yi, yo, yrl, yue, yue_CN, yue_HK, yue_Hans
 
                 // Z
                 zgh, zh, zh_CN, zh_HK, zh_Hant, zh_MO, zh_SG, zh_TW, zu

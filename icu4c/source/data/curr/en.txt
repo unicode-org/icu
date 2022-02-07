@@ -801,7 +801,7 @@ en{
         }
         PHP{
             "₱",
-            "Philippine Piso",
+            "Philippine Peso",
         }
         PKR{
             "PKR",
@@ -2014,8 +2014,8 @@ en{
             other{"Papua New Guinean kina"}
         }
         PHP{
-            one{"Philippine piso"}
-            other{"Philippine pisos"}
+            one{"Philippine peso"}
+            other{"Philippine pesos"}
         }
         PKR{
             one{"Pakistani rupee"}

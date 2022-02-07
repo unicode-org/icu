@@ -223,6 +223,7 @@ ml{
             }
             gender{
                 feminine{"{0} സ്ത്രീലിംഗം"}
+                neuter{"{0} neuter"}
             }
             ordinal{
                 other{"{0}-ാമത്തെ വലത്തേക്ക് തിരിയുക."}
