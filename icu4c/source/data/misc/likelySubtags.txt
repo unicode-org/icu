@@ -247,12 +247,14 @@ likelySubtags:table(nofallback){
     cko{"cko_Latn_ZZ"}
     cky{"cky_Latn_ZZ"}
     cla{"cla_Latn_ZZ"}
+    clc{"clc_Latn_CA"}
     cme{"cme_Latn_ZZ"}
     cmg{"cmg_Soyo_MN"}
     co{"co_Latn_FR"}
     cop{"cop_Copt_EG"}
     cps{"cps_Latn_PH"}
     cr{"cr_Cans_CA"}
+    crg{"crg_Latn_CA"}
     crh{"crh_Cyrl_UA"}
     crj{"crj_Cans_CA"}
     crk{"crk_Cans_CA"}
@@ -466,6 +468,7 @@ likelySubtags:table(nofallback){
     he{"he_Hebr_IL"}
     hhy{"hhy_Latn_ZZ"}
     hi{"hi_Deva_IN"}
+    hi_Latn{"hi_Latn_IN"}
     hia{"hia_Latn_ZZ"}
     hif{"hif_Latn_FJ"}
     hig{"hig_Latn_ZZ"}
@@ -490,6 +493,7 @@ likelySubtags:table(nofallback){
     ht{"ht_Latn_HT"}
     hu{"hu_Latn_HU"}
     hui{"hui_Latn_ZZ"}
+    hur{"hur_Latn_CA"}
     hy{"hy_Armn_AM"}
     hz{"hz_Latn_NA"}
     ia{"ia_Latn_001"}
@@ -556,6 +560,7 @@ likelySubtags:table(nofallback){
     kaj{"kaj_Latn_NG"}
     kam{"kam_Latn_KE"}
     kao{"kao_Latn_ML"}
+    kaw{"kaw_Kawi_ID"}
     kbd{"kbd_Cyrl_RU"}
     kbm{"kbm_Latn_ZZ"}
     kbp{"kbp_Latn_ZZ"}
@@ -671,6 +676,7 @@ likelySubtags:table(nofallback){
     kvx{"kvx_Arab_PK"}
     kw{"kw_Latn_GB"}
     kwj{"kwj_Latn_ZZ"}
+    kwk{"kwk_Latn_CA"}
     kwo{"kwo_Latn_ZZ"}
     kwq{"kwq_Latn_ZZ"}
     kxa{"kxa_Latn_ZZ"}
@@ -723,6 +729,7 @@ likelySubtags:table(nofallback){
     lig{"lig_Latn_ZZ"}
     lih{"lih_Latn_ZZ"}
     lij{"lij_Latn_IT"}
+    lil{"lil_Latn_CA"}
     lis{"lis_Lisu_CN"}
     ljp{"ljp_Latn_ID"}
     lki{"lki_Arab_IR"}
@@ -953,6 +960,8 @@ likelySubtags:table(nofallback){
     nzi{"nzi_Latn_GH"}
     oc{"oc_Latn_FR"}
     ogc{"ogc_Latn_ZZ"}
+    ojs{"ojs_Cans_CA"}
+    oka{"oka_Latn_CA"}
     okr{"okr_Latn_ZZ"}
     okv{"okv_Latn_ZZ"}
     om{"om_Latn_ET"}
@@ -1002,6 +1011,7 @@ likelySubtags:table(nofallback){
     pon{"pon_Latn_FM"}
     ppa{"ppa_Deva_IN"}
     ppo{"ppo_Latn_ZZ"}
+    pqm{"pqm_Latn_CA"}
     pra{"pra_Khar_PK"}
     prd{"prd_Arab_IR"}
     prg{"prg_Latn_001"}
@@ -1491,6 +1501,7 @@ likelySubtags:table(nofallback){
     und_KZ{"ru_Cyrl_KZ"}
     und_Kali{"eky_Kali_MM"}
     und_Kana{"ja_Kana_JP"}
+    und_Kawi{"kaw_Kawi_ID"}
     und_Khar{"pra_Khar_PK"}
     und_Khmr{"km_Khmr_KH"}
     und_Khoj{"sd_Khoj_IN"}
@@ -1579,6 +1590,7 @@ likelySubtags:table(nofallback){
     und_NL{"nl_Latn_NL"}
     und_NO{"nb_Latn_NO"}
     und_NP{"ne_Deva_NP"}
+    und_Nagm{"unr_Nagm_IN"}
     und_Nand{"sa_Nand_IN"}
     und_Narb{"xna_Narb_SA"}
     und_Nbat{"arc_Nbat_JO"}

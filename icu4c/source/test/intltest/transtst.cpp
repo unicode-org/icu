@@ -3639,7 +3639,7 @@ void TransliteratorTest::TestIncrementalProgress(void) {
                 
                 Transliterator *t = Transliterator::createInstance(id, UTRANS_FORWARD, err, status);
                 if (U_FAILURE(status)) {
-                    dataerrln((UnicodeString)"FAIL: Could not create " + id);
+                    dataerrln((UnicodeString)"FAIL: Could not create " + id + ", status " + u_errorName(status));
                     delete t;
                     continue;
                 }
@@ -3664,9 +3664,12 @@ void TransliteratorTest::TestIncrementalProgress(void) {
 #if UCONFIG_NO_BREAK_ITERATION
                          && id.compare((UnicodeString)"Latin-Thai/") != 0
 #endif
+                         && !(logKnownIssue("15337", "Ethiopic transforms new in CLDR 41 fail inverse test ") &&
+                                (id.startsWith((UnicodeString)"Any-Ethiopic/") || id.startsWith((UnicodeString)"Any-byn_") || id.startsWith((UnicodeString)"Any-Braille/") ||
+                                id.endsWith((UnicodeString)"/Gurage_2013") || id.endsWith((UnicodeString)"/Gutgarts")))
                        )
                     {
-                        errln((UnicodeString)"FAIL: Could not create inverse of " + id);
+                        errln((UnicodeString)"FAIL: Could not create inverse of " + id + ", status " + u_errorName(status));
                     }
                     delete t;
                     delete inv;

@@ -202,13 +202,28 @@ ant copy-cldr-testdata
 # # File copied from cldr common/testData/localeIdentifiers/localeCanonicalization.txt
 
 # 4e. For the time being, manually re-add the lstm entries in data/brkitr/root.txt
-
 open $ICU4C_DIR/source/data/brkitr/root.txt 
 
-# paste the following block at the end, after the dictionaries block>
+# paste the following block after the dictionaries block and before the final closing '}':
     lstm{
         Thai{"Thai_graphclust_model4_heavy.res"}
         Mymr{"Burmese_graphclust_model5_heavy.res"}
+    }
+
+# 4f. And the time being (a ticket is being filed to generate the below from CLDR data),
+# manually re-add the particles/auxVerbs entries in data/brkitr/ja.txt
+open $ICU4C_DIR/source/data/brkitr/ja.txt 
+
+# paste the following blocks after the boundaries block and before the final closing '}':
+    particles{
+         か, かしら, から, が, くらい, けれども, こそ,
+         さ, さえ, しか, だけ, だに, だの, て, で, でも,
+         と, ところが, とも, な, など, なり, に, ね, の,
+         ので, のに, は, ば, ばかり, へ, ほど, まで, も,
+         や, やら, よ, より, わ, を
+    }
+    auxVerbs {
+        です, でしょ, でし, ます, ませ, まし
     }
 
 # 5. Check which data files have modifications, which have been added or removed

@@ -2180,7 +2180,7 @@ static void TestFallback()
         UResourceBundle* myResB = ures_open(NULL,"no_NO_NY",&err);
         UResourceBundle* resLocID = ures_getByKey(myResB, "Version", NULL, &err);
         const UChar* version = NULL;
-        static const UChar versionStr[] = u"40"; // 40 in nn_NO or in a parent bundle/root
+        static const UChar versionStr[] = u"41"; // 41 in nn_NO or in a parent bundle/root
 
         if(U_FAILURE(err)) {
             log_data_err("Expected success when trying to test no_NO_NY aliased to nn_NO for Version "
