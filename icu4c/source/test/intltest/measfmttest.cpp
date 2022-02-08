@@ -2683,7 +2683,7 @@ void MeasureFormatTest::TestCompatible69() {
     assertSuccess("", status);
 }
 
-void MeasureFormatTest::TestCompatible70() {
+void MeasureFormatTest::TestCompatible70() { // TestCompatible71 would be identical
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<MeasureUnit> measureUnit;
     MeasureUnit measureUnitValue;
@@ -3063,6 +3063,9 @@ void MeasureFormatTest::TestCompatible70() {
     measureUnitValue = MeasureUnit::getTeaspoon();
     assertSuccess("", status);
 }
+
+// TestCompatible71 would be identical to TestCompatible70,
+// no need to add it
 
 void MeasureFormatTest::TestBasic() {
     UErrorCode status = U_ZERO_ERROR;
