@@ -81,7 +81,6 @@ CharPerformanceTest::CharPerformanceTest(int32_t argc, const char *argv[],
     else {
         MAX_ = 0xffff;
     }
-    printf("MAX_ size will be 0x%x\n", MAX_);
     if (options[MIN_OPTION_].doesOccur) {
         MIN_ = atoi(options[MIN_OPTION_].value);
     }
