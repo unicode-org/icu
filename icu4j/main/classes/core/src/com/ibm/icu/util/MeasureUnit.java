@@ -1007,7 +1007,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of concentr: milligram-ofglucose-per-deciliter
-     * @draft ICU 69
+     * @stable ICU 69
      */
     public static final MeasureUnit MILLIGRAM_OFGLUCOSE_PER_DECILITER = MeasureUnit.internalGetInstance("concentr", "milligram-ofglucose-per-deciliter");
 

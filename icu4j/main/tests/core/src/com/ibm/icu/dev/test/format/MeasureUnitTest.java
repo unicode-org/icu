@@ -85,7 +85,7 @@ public class MeasureUnitTest extends TestFmwk {
         }
     }
 
-    private static final String[] DRAFT_VERSIONS = {"68", "69"};
+    private static final String[] DRAFT_VERSIONS = {"70", "71"};
 
     private static final HashSet<String> DRAFT_VERSION_SET = new HashSet<>();
 
@@ -322,12 +322,12 @@ public class MeasureUnitTest extends TestFmwk {
         // various generateXXX calls go here, see
         // docs/processes/release/tasks/updating-measure-unit.md
         // use this test to run each of the ollowing in succession
-        //generateConstants("70"); // for MeasureUnit.java, update generated MeasureUnit constants
-        //generateBackwardCompatibilityTest("70"); // for MeasureUnitTest.java, create TestCompatible70
-        //generateCXXHConstants("70"); // for measunit.h, update generated createXXX methods
+        //generateConstants("71"); // for MeasureUnit.java, update generated MeasureUnit constants
+        //generateBackwardCompatibilityTest("71"); // for MeasureUnitTest.java, create TestCompatible70
+        //generateCXXHConstants("71"); // for measunit.h, update generated createXXX methods
         //generateCXXConstants(); // for measunit.cpp, update generated code
-        //generateCXXBackwardCompatibilityTest("70"); // for measfmttest.cpp, create TestCompatible70
-        //updateJAVAVersions("70"); // for MeasureUnitTest.java, JAVA_VERSIONS
+        //generateCXXBackwardCompatibilityTest("71"); // for measfmttest.cpp, create TestCompatible70
+        //updateJAVAVersions("71"); // for MeasureUnitTest.java, JAVA_VERSIONS
     }
 
     @Test
@@ -2084,7 +2084,7 @@ public class MeasureUnitTest extends TestFmwk {
     }
 
     @Test
-    public void TestCompatible70() {
+    public void TestCompatible70() { // TestCompatible71 would be identical
         MeasureUnit[] units = {
                 MeasureUnit.G_FORCE,
                 MeasureUnit.METER_PER_SECOND_SQUARED,
@@ -2276,6 +2276,9 @@ public class MeasureUnitTest extends TestFmwk {
         };
         assertEquals("",  187, units.length);
     }
+
+    // TestCompatible71 would be identical to TestCompatible70,
+    // no need to add it
 
     @Test
     public void TestExamplesInDocs() {

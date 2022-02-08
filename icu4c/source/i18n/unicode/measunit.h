@@ -989,23 +989,21 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit getKarat();
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns by pointer, unit of concentr: milligram-ofglucose-per-deciliter.
      * Caller owns returned value and must free it.
      * Also see {@link #getMilligramOfglucosePerDeciliter()}.
      * @param status ICU error code.
-     * @draft ICU 69
+     * @stable ICU 69
      */
     static MeasureUnit *createMilligramOfglucosePerDeciliter(UErrorCode &status);
 
     /**
      * Returns by value, unit of concentr: milligram-ofglucose-per-deciliter.
      * Also see {@link #createMilligramOfglucosePerDeciliter()}.
-     * @draft ICU 69
+     * @stable ICU 69
      */
     static MeasureUnit getMilligramOfglucosePerDeciliter();
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of concentr: milligram-per-deciliter.
