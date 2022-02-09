@@ -106,13 +106,11 @@ ICUNotifier::removeListener(const EventListener *l, UErrorCode& status)
 void 
 ICUNotifier::notifyChanged(void) 
 {
+    Mutex lmx(&notifyLock);
     if (listeners != NULL) {
-        Mutex lmx(&notifyLock);
-        if (listeners != NULL) {
-            for (int i = 0, e = listeners->size(); i < e; ++i) {
-                EventListener* el = (EventListener*)listeners->elementAt(i);
-                notifyListener(*el);
-            }
+        for (int i = 0, e = listeners->size(); i < e; ++i) {
+            EventListener* el = (EventListener*)listeners->elementAt(i);
+            notifyListener(*el);
         }
     }
 }
