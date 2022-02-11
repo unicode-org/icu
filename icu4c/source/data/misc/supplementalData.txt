@@ -29675,7 +29675,7 @@ supplementalData:table(nofallback){
             }
             sd_Deva{
                 officialStatus{"official_regional"}
-                populationShareF:int{46260000}
+                populationShareF:int{47140000}
             }
             srx{
                 populationShareF:int{46350000}

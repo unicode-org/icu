@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ks{
-    AuxExemplarCharacters{"[\u200E\u200F \u064E \u064F \u0650 \u0654 \u0655 \u065F \u0656 \u0657]"}
+    AuxExemplarCharacters{"[\u200E\u200F \u064E \u064F \u0650 \u0654 \u0655 \u065F \u0656 \u0657 ئ]"}
     ExemplarCharacters{
         "[ء آ أ ٲ ؤ ا ب پ ت ث ٹ ج چ ح خ د ذ ڈ ر ز ڑ ژ س ش ص ض ط ظ ع غ ف ق ک گ ل م ن ں"
         " ھ ہ و ۄ ۆ ی ۍ ؠ ے]"

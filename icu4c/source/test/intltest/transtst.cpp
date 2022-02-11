@@ -3654,19 +3654,35 @@ void TransliteratorTest::TestIncrementalProgress(void) {
                     // 1. Devanagari-Arabic
                     // 2. Any-*/BGN
                     // 2a. Any-*/BGN_1981
-                    // 3. Any-*/UNGEGN
-                    // 4. Any-*/MNS
-                    // If UCONFIG_NO_BREAK_ITERATION is on, Latin-Thai is also not expected to work.
+                    // 3. Any-*/MNS
+                    //
+                    // 4. If UCONFIG_NO_BREAK_ITERATION is on, Latin-Thai is also not expected to work.
+                    //
+                    // The following are direction="both" transforms with variants, inverting the Any-Xxxx/Variant for
+                    // any of these does not work; see ICU-21911 (not sure whether this is intentional or an ICU bug).
+                    // Unfortunately we do not easily have the info at this point as to whether the original transform
+                    // had direction="both" specified.
+                    // 5. Any-*/UNGEGN
+                    // 6. Any-Ethiopic/*
+                    // 7. Any-Braille/*
+                    // 8. Any-*/Gurage_2013
+                    // 9. Any-*/Gutgarts
+                    // 10. Any-*/Tekie_Alibekit
+                    // 11. Any-*/Xaleget
+                    //
                     if (    id.compare((UnicodeString)"Devanagari-Arabic/") != 0
                          && !(id.startsWith((UnicodeString)"Any-") &&
-                                (id.endsWith((UnicodeString)"/BGN") || id.endsWith((UnicodeString)"/BGN_1981") || id.endsWith((UnicodeString)"/UNGEGN") || id.endsWith((UnicodeString)"/MNS"))
+                                (id.endsWith((UnicodeString)"/BGN") || id.endsWith((UnicodeString)"/BGN_1981") || id.endsWith((UnicodeString)"/MNS"))
                              )
 #if UCONFIG_NO_BREAK_ITERATION
                          && id.compare((UnicodeString)"Latin-Thai/") != 0
 #endif
-                         && !(logKnownIssue("15337", "Ethiopic transforms new in CLDR 41 fail inverse test ") &&
-                                (id.startsWith((UnicodeString)"Any-Ethiopic/") || id.startsWith((UnicodeString)"Any-byn_") || id.startsWith((UnicodeString)"Any-Braille/") ||
-                                id.endsWith((UnicodeString)"/Gurage_2013") || id.endsWith((UnicodeString)"/Gutgarts")))
+                         && !(logKnownIssue("21911", "ICU4C cannot create inverse of Any-Xxxx/Variant transform created from both-direction transform") &&
+                                id.startsWith((UnicodeString)"Any-") &&
+                                (id.endsWith((UnicodeString)"/UNGEGN") || id.startsWith((UnicodeString)"Any-Ethiopic/") || id.startsWith((UnicodeString)"Any-Braille/") ||
+                                 id.endsWith((UnicodeString)"/Gurage_2013") || id.endsWith((UnicodeString)"/Gutgarts") || id.endsWith((UnicodeString)"/Tekie_Alibekit") ||
+                                 id.endsWith((UnicodeString)"/Xaleget"))
+                             )
                        )
                     {
                         errln((UnicodeString)"FAIL: Could not create inverse of " + id + ", status " + u_errorName(status));

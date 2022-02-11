@@ -9,15 +9,12 @@ es_MX{
             patternsLong{
                 decimalFormat{
                     1000000000000{
-                        one{"0 billón"}
                         other{"0 billones"}
                     }
                     10000000000000{
-                        one{"00 billones"}
                         other{"00 billones"}
                     }
                     100000000000000{
-                        one{"000 billones"}
                         other{"000 billones"}
                     }
                 }

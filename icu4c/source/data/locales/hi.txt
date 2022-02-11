@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 hi{
-    AuxExemplarCharacters{"[\u200C \u200D \u0944]"}
+    AuxExemplarCharacters{"[\u200C\u200D \u0944]"}
     Ellipsis{
         final{"{0}…"}
         initial{"…{0}"}

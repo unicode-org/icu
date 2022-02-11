@@ -1078,6 +1078,7 @@ likelySubtags:table(nofallback){
     scs{"scs_Latn_CA"}
     sd{"sd_Arab_PK"}
     sd_Deva{"sd_Deva_IN"}
+    sd_IN{"sd_Deva_IN"}
     sd_Khoj{"sd_Khoj_IN"}
     sd_Sind{"sd_Sind_IN"}
     sdc{"sdc_Latn_IT"}

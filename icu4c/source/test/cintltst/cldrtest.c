@@ -1002,6 +1002,10 @@ static void VerifyTranslation(void) {
                         log_knownIssue("cldrbug:14995", "mai/sd_Deva day names use chars not in exemplars")) {
                     end = 0;
                 }
+                if (uprv_strncmp(currLoc,"ks_Deva",7) == 0 && 
+                        log_knownIssue("cldrbug:15355", "ks_Deva day names use chars not in exemplars")) {
+                    end = 0;
+                }
 
                 for (idx = 0; idx < end; idx++) {
                     const UChar *fromBundleStr = ures_getStringByIndex(resArray, idx, &langSize, &errorCode);
@@ -1035,8 +1039,8 @@ static void VerifyTranslation(void) {
                         log_knownIssue("cldrbug:14995", "sd_Deva month names use chars not in exemplars")) {
                     end = 0;
                 }
-                if (uprv_strncmp(currLoc,"ks",2) == 0 && 
-                        log_knownIssue("cldrbug:15341", "ks month names use chars not in exemplars")) {
+                if (uprv_strncmp(currLoc,"ks_Deva",7) == 0 && 
+                        log_knownIssue("cldrbug:15355", "ks_Deva month names use chars not in exemplars")) {
                     end = 0;
                 }
 
