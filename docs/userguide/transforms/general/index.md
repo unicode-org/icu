@@ -1264,8 +1264,7 @@ regular expressions can't account for the interaction and ordering of characters
 and rules. (You can, however, simulate the regex behavior with transform rules
 by using a transform rule to split the conversion rules into passes.)
 
-For more details on constructing rules, see the [Transliterator Rule
-Tutorial](rules.md) .
+For more details on constructing rules, see the [Transliterator Rule Tutorial](./rules.md).
 
 ## Script Transliterator Sources
 
