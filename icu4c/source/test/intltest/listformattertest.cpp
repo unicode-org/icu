@@ -276,7 +276,7 @@ void ListFormatterTest::RunTestFieldPositionIteratorWithNItemsPatternShift(
         const char* testName) {
     IcuTestErrorCode errorCode(*this, testName);
     LocalPointer<ListFormatter> formatter(ListFormatter::createInstance(
-        Locale("ur", "IN"),
+        Locale("ur", "IN"), // in CLDR 41 alpha1 the "backwards order" patterns in this and other locales were removed.
         ULISTFMT_TYPE_UNITS,
         ULISTFMT_WIDTH_NARROW,
         errorCode));
@@ -329,21 +329,21 @@ void ListFormatterTest::TestFieldPositionIteratorWith3Items() {
 }
 
 void ListFormatterTest::TestFieldPositionIteratorWith3ItemsPatternShift() {
-    //  0         1
-    //  012345678901234
-    // "cc bbb a"
+    // Note: In CLDR 41 alpha1 the "backwards order" patterns in ur_IN (and one or two
+    // other locales) were removed, ur_IN now just inherits list patterns from ur.
+    // So this test may no longer be interesting.
     UnicodeString data[3] = {"a", "bbb", "cc"};
     int32_t expected[] = {
-        ULISTFMT_ELEMENT_FIELD, 7, 8,
-        ULISTFMT_LITERAL_FIELD, 6, 7,
+        ULISTFMT_ELEMENT_FIELD, 0, 1,
+        ULISTFMT_LITERAL_FIELD, 1, 3,
         ULISTFMT_ELEMENT_FIELD, 3, 6,
-        ULISTFMT_LITERAL_FIELD, 2, 3,
-        ULISTFMT_ELEMENT_FIELD, 0, 2
+        ULISTFMT_LITERAL_FIELD, 6, 12,
+        ULISTFMT_ELEMENT_FIELD, 12, 14
     };
     int32_t tupleCount = sizeof(expected)/(3 * sizeof(*expected));
     RunTestFieldPositionIteratorWithNItemsPatternShift(
         data, 3, expected, tupleCount,
-        u"cc bbb a",
+        u"a، bbb، اور cc",
         "TestFieldPositionIteratorWith3ItemsPatternShift");
 }
 
@@ -365,19 +365,19 @@ void ListFormatterTest::TestFieldPositionIteratorWith2Items() {
 }
 
 void ListFormatterTest::TestFieldPositionIteratorWith2ItemsPatternShift() {
-    //  0         1
-    //  01234567890
-    // "cc bbb"
+    // Note: In CLDR 41 alpha1 the "backwards order" patterns in ur_IN (and one or two
+    // other locales) were removed, ur_IN now just inherits list patterns from ur.
+    // So this test may no longer be interesting.
     UnicodeString data[2] = {"bbb", "cc"};
     int32_t expected[] = {
-        ULISTFMT_ELEMENT_FIELD, 3, 6,
-        ULISTFMT_LITERAL_FIELD, 2, 3,
-        ULISTFMT_ELEMENT_FIELD, 0, 2
+        ULISTFMT_ELEMENT_FIELD, 0, 3,
+        ULISTFMT_LITERAL_FIELD, 3, 8,
+        ULISTFMT_ELEMENT_FIELD, 8, 10
     };
     int32_t tupleCount = sizeof(expected)/(3 * sizeof(*expected));
     RunTestFieldPositionIteratorWithNItemsPatternShift(
         data, 2, expected, tupleCount,
-        u"cc bbb",
+        u"bbb اور cc",
         "TestFieldPositionIteratorWith2ItemsPatternShift");
 }
 

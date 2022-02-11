@@ -210,21 +210,13 @@ open $ICU4C_DIR/source/data/brkitr/root.txt
         Mymr{"Burmese_graphclust_model5_heavy.res"}
     }
 
-# 4f. And the time being (a ticket is being filed to generate the below from CLDR data),
-# manually re-add the particles/auxVerbs entries in data/brkitr/ja.txt
+# 4f. And the time being (work is in progress to generate the below from CLDR data),
+# manually re-add the extensions entries in data/brkitr/ja.txt
 open $ICU4C_DIR/source/data/brkitr/ja.txt 
 
-# paste the following blocks after the boundaries block and before the final closing '}':
-    particles{
-         か, かしら, から, が, くらい, けれども, こそ,
-         さ, さえ, しか, だけ, だに, だの, て, で, でも,
-         と, ところが, とも, な, など, なり, に, ね, の,
-         ので, のに, は, ば, ばかり, へ, ほど, まで, も,
-         や, やら, よ, より, わ, を
-    }
-    auxVerbs {
-        です, でしょ, でし, ます, ませ, まし
-    }
+# copy in the extensions data from the current version...
+
+# and delete any bogus extensions data that ended up in  $ICU4C_DIR/source/data/locales/ja.txt 
 
 # 5. Check which data files have modifications, which have been added or removed
 # (if there are no changes, you may not need to proceed further). Make sure the

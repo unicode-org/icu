@@ -47,10 +47,10 @@
         <property name="specialsDir" value="${basedir}/../../../icu4c/source/data/xml"/>
 
         <!-- Default value for ICU version (icuver.txt). Update this for each release. -->
-        <property name="icuVersion" value="70.1.0.0"/>
+        <property name="icuVersion" value="71.0.1.0"/>
 
         <!-- Default value for ICU data version (icuver.txt). Update this for each release. -->
-        <property name="icuDataVersion" value="70.1.0.0"/>
+        <property name="icuDataVersion" value="71.0.1.0"/>
 
         <!-- An override for the CLDR version string (icuver.txt and others). This will be
              extracted from the CLDR library used for building the data if not set here. -->
@@ -187,7 +187,7 @@
 
                 // K
                 ka, kab, kam, kde, kea, kgp, khq, ki, kk, kkj, kl, kln, km, kn, ko, kok, ks
-                ks_IN, ksb, ksf, ksh, ku, kw, ky
+                ks_Deva, ks_IN, ksb, ksf, ksh, ku, kw, ky
 
                 // L
                 lag, lb, lg, lkt, ln, lo, lrc, lt, lu, luo, luy, lv

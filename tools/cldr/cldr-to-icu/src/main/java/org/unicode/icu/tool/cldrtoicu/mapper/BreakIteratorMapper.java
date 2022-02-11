@@ -44,6 +44,8 @@ public final class BreakIteratorMapper {
         specials.addValueAction(
             "icu:dictionaries/icu:dictionary", BreakIteratorMapper::addDictionary);
         specials.addValueAction(
+            "icu:extensions/icu:extension", BreakIteratorMapper::addExtension);
+        specials.addValueAction(
             "icu:lstm/icu:lstmdata", BreakIteratorMapper::addLstmdata);
         CLDR_PROCESSOR = processor.build();
     }
@@ -80,6 +82,7 @@ public final class BreakIteratorMapper {
     }
 
     private void addSuppression(CldrValue v) {
+        //System.out.println("addSegmentation: " + v.toString()); // debug
         String type = SEGMENTATION_TYPE.valueFrom(v);
         // TODO: Understand and document why we escape values here, but not for collation data.
         icuData.add(
@@ -87,19 +90,26 @@ public final class BreakIteratorMapper {
     }
 
     private void addBoundary(CldrValue v) {
+        //System.out.println("addBoundary: " + v.toString()); // debug
         addDependency(getDependencyName(v), getBoundaryType(v), getBoundaryDependency(v));
     }
 
     private void addDictionary(CldrValue v) {
-        //System.out.println("addDictionary: " + v.toString());
+        //System.out.println("addDictionary: " + v.toString()); // debug
         addDependency(
             getDependencyName(v),
             DICTIONARY_TYPE.valueFrom(v),
             DICTIONARY_DEP.optionalValueFrom(v));
     }
 
+    private void addExtension(CldrValue v) {
+        //System.out.println("addExtension: " + v.toString()); // debug
+        icuData.add(
+            RbPath.of("extensions"), v.getValue());
+    }
+
     private void addLstmdata(CldrValue v) {
-        //System.out.println("addLstmdata: " + v.toString());
+        //System.out.println("addLstmdata: " + v.toString()); // debug
         addDependency(
             getDependencyName(v),
             LSTMDATA_TYPE.valueFrom(v),
