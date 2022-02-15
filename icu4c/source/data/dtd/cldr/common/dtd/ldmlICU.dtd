@@ -49,6 +49,7 @@ NOTE: Unlike the other DTDs, this file is manually maintained.
 <!ELEMENT icu:extensions (alias | (icu:extension*)) >
 
 <!ELEMENT icu:extension ( #PCDATA ) >
+    <!--@ORDERED-->
 
 <!ELEMENT icu:lstm (alias | (icu:lstmdata*)) >
 

@@ -82,7 +82,7 @@ public final class BreakIteratorMapper {
     }
 
     private void addSuppression(CldrValue v) {
-        //System.out.println("addSegmentation: " + v.toString()); // debug
+        //System.out.println("addSuppression: " + v.toString()); // debug
         String type = SEGMENTATION_TYPE.valueFrom(v);
         // TODO: Understand and document why we escape values here, but not for collation data.
         icuData.add(
