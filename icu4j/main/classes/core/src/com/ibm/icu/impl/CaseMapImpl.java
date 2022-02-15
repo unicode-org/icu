@@ -70,6 +70,10 @@ public final class CaseMapImpl {
             cpStart=cpLimit=limit;
         }
 
+        public void moveTo(int i) {
+            cpStart=cpLimit=i;
+        }
+
         /**
          * Iterate forward through the string to fetch the next code point
          * to be case-mapped, and set the context indexes for it.
@@ -188,6 +192,13 @@ public final class CaseMapImpl {
         }
         return options | newOption;
     }
+
+    private static final char ACUTE = '\u0301';
+
+    private static final int U_GC_M_MASK =
+            (1 << UCharacterCategory.NON_SPACING_MARK) |
+            (1 << UCharacterCategory.COMBINING_SPACING_MARK) |
+            (1 << UCharacterCategory.ENCLOSING_MARK);
 
     private static final int LNS =
             (1 << UCharacterCategory.UPPERCASE_LETTER) |
@@ -726,34 +737,25 @@ public final class CaseMapImpl {
                     }
 
                     if(titleStart<index) {
-                        int titleLimit=iter.getCPLimit();
                         // titlecase c which is from [titleStart..titleLimit[
                         c = UCaseProps.INSTANCE.toFullTitle(c, iter, dest, caseLocale);
                         appendResult(c, dest, iter.getCPLength(), options, edits);
 
                         // Special case Dutch IJ titlecasing
+                        int titleLimit;
                         if (titleStart+1 < index && caseLocale == UCaseProps.LOC_DUTCH) {
-                            char c1 = src.charAt(titleStart);
-                            if ((c1 == 'i' || c1 == 'I')) {
-                                char c2 = src.charAt(titleStart+1);
-                                if (c2 == 'j') {
-                                    dest.append('J');
-                                    if (edits != null) {
-                                        edits.addReplace(1, 1);
-                                    }
-                                    c = iter.nextCaseMapCP();
-                                    titleLimit++;
-                                    assert c == c2;
-                                    assert titleLimit == iter.getCPLimit();
-                                } else if (c2 == 'J') {
-                                    // Keep the capital J from getting lowercased.
-                                    appendUnchanged(src, titleStart + 1, 1, dest, options, edits);
-                                    c = iter.nextCaseMapCP();
-                                    titleLimit++;
-                                    assert c == c2;
-                                    assert titleLimit == iter.getCPLimit();
-                                }
+                            if (c < 0) {
+                                c = ~c;
                             }
+                            if (c == 'I' || c == 'Í') {
+                                titleLimit = maybeTitleDutchIJ(src, c, titleStart + 1, index, dest, options, edits);
+                                iter.moveTo(titleLimit);
+                            }
+                            else {
+                                titleLimit = iter.getCPLimit();
+                            }
+                        } else {
+                            titleLimit = iter.getCPLimit();
                         }
 
                         // lowercase [titleLimit..index[
@@ -777,6 +779,82 @@ public final class CaseMapImpl {
         } catch (IOException e) {
             throw new ICUUncheckedIOException(e);
         }
+    }
+
+    /**
+     * Input: c is a letter I with or without acute accent.
+     * start is the index in src after c, and is less than segmentLimit.
+     * If a plain i/I is followed by a plain j/J,
+     * or an i/I with acute (precomposed or decomposed) is followed by a j/J with acute,
+     * then we output accordingly.
+     *
+     * @return the src index after the titlecased sequence, or the start index if no Dutch IJ
+     * @throws IOException
+     */
+    private static <A extends Appendable> int maybeTitleDutchIJ(
+            CharSequence src, int c, int start, int segmentLimit,
+            A dest, int options, Edits edits) throws IOException {
+        int index = start;
+        boolean withAcute = false;
+
+        // If the conditions are met, then the following variables tell us what to output.
+        int unchanged1 = 0;  // code units before the j, or the whole sequence (0..3)
+        boolean doTitleJ = false;  // true if the j needs to be titlecased
+        int unchanged2 = 0;  // after the j (0 or 1)
+
+        // next character after the first letter
+        char c2 = src.charAt(index++);
+
+        // Is the first letter an i/I with accent?
+        if (c == 'I') {
+            if (c2 == ACUTE) {
+                withAcute = true;
+                unchanged1 = 1;
+                if (index == segmentLimit) { return start; }
+                c2 = src.charAt(index++);
+            }
+        } else {  // Í
+            withAcute = true;
+        }
+        // Is the next character a j/J?
+        if (c2 == 'j') {
+            doTitleJ = true;
+        } else if (c2 == 'J') {
+            ++unchanged1;
+        } else {
+            return start;
+        }
+        // A plain i/I must be followed by a plain j/J.
+        // An i/I with acute must be followed by a j/J with acute.
+        if (withAcute) {
+            if (index == segmentLimit || src.charAt(index++) != ACUTE) { return start; }
+            if (doTitleJ) {
+                unchanged2 = 1;
+            } else {
+                ++unchanged1;
+            }
+        }
+        // There must not be another combining mark.
+        if (index < segmentLimit) {
+            int cp = Character.codePointAt(src, index);
+            int bit = 1 << UCharacter.getType(cp);
+            if ((bit & U_GC_M_MASK) != 0) {
+                return start;
+            }
+        }
+        // Output the rest of the Dutch IJ.
+        appendUnchanged(src, start, unchanged1, dest, options, edits);
+        start += unchanged1;
+        if (doTitleJ) {
+            dest.append('J');
+            if (edits != null) {
+                edits.addReplace(1, 1);
+            }
+            ++start;
+        }
+        appendUnchanged(src, start, unchanged2, dest, options, edits);
+        assert start + unchanged2 == index;
+        return index;
     }
 
     public static String fold(int options, CharSequence src) {

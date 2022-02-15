@@ -51,6 +51,7 @@ public:
                         void *iter, const char *localeID, uint32_t options);
     void TestCasing();
     void TestTitleOptions();
+    void TestDutchTitle();
     void TestFullCaseFoldingIterator();
     void TestGreekUpper();
     void TestArmenian();
@@ -95,6 +96,7 @@ StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
 #if !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
     TESTCASE_AUTO(TestCasing);
     TESTCASE_AUTO(TestTitleOptions);
+    TESTCASE_AUTO(TestDutchTitle);
 #endif
     TESTCASE_AUTO(TestFullCaseFoldingIterator);
     TESTCASE_AUTO(TestGreekUpper);
@@ -451,6 +453,7 @@ StringCaseTest::TestCasingImpl(const UnicodeString &input,
     }
     if(result!=output) {
         dataerrln("error: UnicodeString.%s() got a wrong result for a test case from casing.res", name);
+        dataerrln(UnicodeString("input = [") + input + "], expected = [" + output + "], actual = [" + result + "]");
     }
 #if !UCONFIG_NO_BREAK_ITERATION
     if(whichCase==TEST_TITLE && options==0) {
@@ -666,6 +669,104 @@ StringCaseTest::TestTitleOptions() {
     errorCode.reset();
 #endif
 }
+
+#if !UCONFIG_NO_BREAK_ITERATION
+void StringCaseTest::TestDutchTitle() {
+    IcuTestErrorCode errorCode(*this, "TestDutchTitle");
+
+    Locale nl("nl");  // Dutch
+    LocalPointer<BreakIterator> iter(
+        BreakIterator::createWordInstance(nl, errorCode));
+    
+    // Dutch titlecase check in English
+    TestCasingImpl(
+        u"ijssel igloo IJMUIDEN",
+        u"Ijssel Igloo Ijmuiden",
+        TEST_TITLE,
+        nullptr, 
+        "en",
+        0);
+
+    // Dutch titlecase check in Dutch
+    TestCasingImpl(
+        u"ijssel igloo IJMUIDEN", 
+        u"IJssel Igloo IJmuiden", 
+        TEST_TITLE,
+        nullptr, 
+        "nl",
+        0);
+
+    // Dutch titlecase check in Dutch with nolowercase option
+    if (U_SUCCESS(errorCode)) {
+        iter->setText(u"ijssel igloo IjMUIdEN iPoD ijenough");
+        TestCasingImpl(
+            u"ijssel igloo IjMUIdEN iPoD ijenough", 
+            u"IJssel Igloo IJMUIdEN IPoD IJenough", 
+            TEST_TITLE,
+            nullptr, 
+            "nl",
+            U_TITLECASE_NO_LOWERCASE);
+    }
+
+    errorCode.reset();
+
+    // Accented IJ testing
+
+    struct dutchTitleTestCase {
+        const UnicodeString input;
+        const UnicodeString expectedFull;
+        const UnicodeString expectedOnlyChanged;
+    } dutchTitleTestCases[] = {
+        // input,            expectedFull,      expectedOnlyChanged
+        {u"ij",              u"IJ",             u"IJ"},
+        {u"IJ",              u"IJ",             u""},
+        {u"íj́",              u"ÍJ́",             u"ÍJ"},
+        {u"ÍJ́",              u"ÍJ́",             u""},
+        {u"íJ́",              u"ÍJ́",             u"Í"},
+        {u"Ij́",              u"Ij́",             u""},
+        {u"ij́",              u"Ij́",             u"I"},
+        {u"ïj́",              u"Ïj́",             u"Ï"},
+        {u"íj\u0308",        u"Íj\u0308",       u"Í"},
+        {u"íj́\U0001D16E",    u"Íj́\U0001D16E",   u"Í"},
+        {u"íj\u1ABE",        u"Íj\u1ABE",       u"Í"},
+
+        {u"ijabc",              u"IJabc",             u"IJ"},
+        {u"IJabc",              u"IJabc",             u""},
+        {u"íj́abc",              u"ÍJ́abc",             u"ÍJ"},
+        {u"ÍJ́abc",              u"ÍJ́abc",             u""},
+        {u"íJ́abc",              u"ÍJ́abc",             u"Í"},
+        {u"Ij́abc",              u"Ij́abc",             u""},
+        {u"ij́abc",              u"Ij́abc",             u"I"},
+        {u"ïj́abc",              u"Ïj́abc",             u"Ï"},
+        {u"íjabc\u0308",        u"Íjabc\u0308",       u"Í"},
+        {u"íj́abc\U0001D16E",    u"ÍJ́abc\U0001D16E",   u"ÍJ"},
+        {u"íjabc\u1ABE",        u"Íjabc\u1ABE",       u"Í"},
+    };
+
+    for (const auto& cas : dutchTitleTestCases) {
+        const UnicodeString &input = cas.input;
+        const UnicodeString &expectedFull = cas.expectedFull;
+        const UnicodeString &expectedOnlyChanged = cas.expectedOnlyChanged;
+
+        for (const auto& isOnlyChanged : {true, false}) {
+            uint32_t testOptions = U_TITLECASE_NO_LOWERCASE
+                | (isOnlyChanged ? U_OMIT_UNCHANGED_TEXT : 0);
+            
+            const UnicodeString &expected = isOnlyChanged ? expectedOnlyChanged : expectedFull;
+            
+            TestCasingImpl(
+                input,
+                expected,
+                TEST_TITLE,
+                nullptr,
+                "nl",
+                testOptions
+            );
+        }
+        
+    }
+}
+#endif
 
 void
 StringCaseTest::TestFullCaseFoldingIterator() {
