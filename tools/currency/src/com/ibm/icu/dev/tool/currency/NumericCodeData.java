@@ -375,6 +375,7 @@ public class NumericCodeData {
         {"UYW", "927"},
         {"UZS", "860"},
         {"VEB", "862"},
+        {"VED", "926"},
         {"VEF", "937"},
         {"VES", "928"},
         {"VNC", "704"},
