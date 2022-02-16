@@ -906,7 +906,7 @@ void TimeZoneTest::TestShortZoneIDs()
         {"AET", 600, TRUE},   // ICU Link - Australia/Sydney
         {"SST", 660, FALSE},  // ICU Link - Pacific/Guadalcanal
         {"NST", 720, TRUE},   // ICU Link - Pacific/Auckland
-        {"MIT", 780, TRUE},   // ICU Link - Pacific/Apia
+        {"MIT", 780, FALSE},  // ICU Link - Pacific/Apia
 
         {"Etc/Unknown", 0, FALSE},  // CLDR
 

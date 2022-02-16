@@ -172,7 +172,7 @@ public class TimeZoneTest extends TestFmwk
             new ZoneDescriptor("AET", 600, true),   // ICU Link - Australia/Sydney
             new ZoneDescriptor("SST", 660, false),  // ICU Link - Pacific/Guadalcanal
             new ZoneDescriptor("NST", 720, true),   // ICU Link - Pacific/Auckland
-            new ZoneDescriptor("MIT", 780, true),   // ICU Link - Pacific/Apia
+            new ZoneDescriptor("MIT", 780, false),  // ICU Link - Pacific/Apia
 
             new ZoneDescriptor("Etc/Unknown", 0, false),    // CLDR
 
