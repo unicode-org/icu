@@ -39,6 +39,10 @@
                 <icu:extension>かい</icu:extension>
                 <icu:extension>かしら</icu:extension>
                 <icu:extension>から</icu:extension>
+                <icu:extension>かれい</icu:extension>
+                <icu:extension>かれつ</icu:extension>
+                <icu:extension>かれる</icu:extension>
+                <icu:extension>かれん</icu:extension>
                 <icu:extension>きり</icu:extension>
                 <icu:extension>くらい</icu:extension>
                 <icu:extension>ぐらい</icu:extension>
@@ -56,6 +60,8 @@
                 <icu:extension>たく</icu:extension>
                 <icu:extension>たら</icu:extension>
                 <icu:extension>たり</icu:extension>
+                <icu:extension>たれ</icu:extension>
+                <icu:extension>たれる</icu:extension>
                 <icu:extension>だけ</icu:extension>
                 <icu:extension>だに</icu:extension>
                 <icu:extension>だの</icu:extension>
@@ -76,11 +82,13 @@
                 <icu:extension>など</icu:extension>
                 <icu:extension>なら</icu:extension>
                 <icu:extension>なり</icu:extension>
+                <icu:extension>なれる</icu:extension>
                 <icu:extension>なんぞ</icu:extension>
                 <icu:extension>ねる</icu:extension>
                 <icu:extension>ので</icu:extension>
                 <icu:extension>のに</icu:extension>
                 <icu:extension>のみ</icu:extension>
+                <icu:extension>はれる</icu:extension>
                 <icu:extension>ばかり</icu:extension>
                 <icu:extension>へる</icu:extension>
                 <icu:extension>ほど</icu:extension>
@@ -91,8 +99,10 @@
                 <icu:extension>まっ</icu:extension>
                 <icu:extension>まで</icu:extension>
                 <icu:extension>まま</icu:extension>
+                <icu:extension>まれ</icu:extension>
                 <icu:extension>もん</icu:extension>
                 <icu:extension>やら</icu:extension>
+                <icu:extension>やれる</icu:extension>
                 <icu:extension>よう</icu:extension>
                 <icu:extension>より</icu:extension>
                 <icu:extension>らしい</icu:extension>
@@ -105,6 +115,8 @@
                 <icu:extension>わり</icu:extension>
                 <icu:extension>わる</icu:extension>
                 <icu:extension>われ</icu:extension>
+                <icu:extension>われと</icu:extension>
+                <icu:extension>われる</icu:extension>
                 <icu:extension>わん</icu:extension>
                 <!--
                 Entries added for technical reasons (particle + others).        
@@ -228,6 +240,13 @@
                 <icu:extension>が台</icu:extension>
                 <icu:extension>が床</icu:extension>
                 <icu:extension>が浜</icu:extension>
+                <icu:extension>の内</icu:extension>
+                <icu:extension>の山公園</icu:extension>
+                <icu:extension>の峰</icu:extension>
+                <icu:extension>の森</icu:extension>
+                <icu:extension>の沢</icu:extension>
+                <icu:extension>の通り</icu:extension>
+                <icu:extension>の里</icu:extension>
                 <icu:extension>ヵ国</icu:extension>
                 <icu:extension>ヵ年</icu:extension>
                 <icu:extension>ヵ所</icu:extension>
