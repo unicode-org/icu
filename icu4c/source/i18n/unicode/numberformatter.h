@@ -659,16 +659,14 @@ class U_I18N_API Precision : public UMemory {
      */
     static CurrencyPrecision currency(UCurrencyUsage currencyUsage);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Configure how trailing zeros are displayed on numbers. For example, to hide trailing zeros
      * when the number is an integer, use UNUM_TRAILING_ZERO_HIDE_IF_WHOLE.
      *
      * @param trailingZeroDisplay Option to configure the display of trailing zeros.
-     * @draft ICU 69
+     * @stable ICU 69
      */
     Precision trailingZeroDisplay(UNumberTrailingZeroDisplay trailingZeroDisplay) const;
-#endif // U_HIDE_DRAFT_API
 
   private:
     enum PrecisionType {
@@ -807,7 +805,6 @@ class U_I18N_API Precision : public UMemory {
  */
 class U_I18N_API FractionPrecision : public Precision {
   public:
-#ifndef U_HIDE_DRAFT_API
     /**
      * Override maximum fraction digits with maximum significant digits depending on the magnitude
      * of the number. See UNumberRoundingPriority.
@@ -820,13 +817,12 @@ class U_I18N_API FractionPrecision : public Precision {
      *            How to disambiguate between fraction digits and significant digits.
      * @return A precision for chaining or passing to the NumberFormatter precision() setter.
      *
-     * @draft ICU 69
+     * @stable ICU 69
      */
     Precision withSignificantDigits(
         int32_t minSignificantDigits,
         int32_t maxSignificantDigits,
         UNumberRoundingPriority priority) const;
-#endif // U_HIDE_DRAFT_API
 
     /**
      * Ensure that no less than this number of significant digits are retained when rounding
