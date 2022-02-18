@@ -414,9 +414,6 @@ public class PluralRulesTest extends TestFmwk {
                 }
                 keywordToRule.put(keyword, singleRule);
             }
-            if (compactExponentLocales.contains(locale.getLanguage()) && logKnownIssue("21714", "PluralRules.select treats 1c6 as 1")) {
-                continue;
-            }
             Map<FixedDecimal, String> collisionTest = new TreeMap();
             for (FixedDecimalSamples sample3 : samples) {
                 Set<FixedDecimalRange> samples2 = sample3.getSamples();
