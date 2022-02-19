@@ -226,7 +226,8 @@ Precision FractionPrecision::withSignificantDigits(
             *this,
             minSignificantDigits,
             maxSignificantDigits,
-            priority);
+            priority,
+            false);
     } else {
         return {U_NUMBER_ARG_OUTOFBOUNDS_ERROR};
     }
@@ -239,7 +240,8 @@ Precision FractionPrecision::withMinDigits(int32_t minSignificantDigits) const {
             *this,
             1,
             minSignificantDigits,
-            UNUM_ROUNDING_PRIORITY_RELAXED);
+            UNUM_ROUNDING_PRIORITY_RELAXED,
+            true);
     } else {
         return {U_NUMBER_ARG_OUTOFBOUNDS_ERROR};
     }
@@ -251,7 +253,8 @@ Precision FractionPrecision::withMaxDigits(int32_t maxSignificantDigits) const {
         return constructFractionSignificant(*this,
             1,
             maxSignificantDigits,
-            UNUM_ROUNDING_PRIORITY_STRICT);
+            UNUM_ROUNDING_PRIORITY_STRICT,
+            true);
     } else {
         return {U_NUMBER_ARG_OUTOFBOUNDS_ERROR};
     }
@@ -318,11 +321,13 @@ Precision::constructFractionSignificant(
         const FractionPrecision &base,
         int32_t minSig,
         int32_t maxSig,
-        UNumberRoundingPriority priority) {
+        UNumberRoundingPriority priority,
+        bool retain) {
     FractionSignificantSettings settings = base.fUnion.fracSig;
     settings.fMinSig = static_cast<digits_t>(minSig);
     settings.fMaxSig = static_cast<digits_t>(maxSig);
     settings.fPriority = priority;
+    settings.fRetain = retain;
     PrecisionUnion union_;
     union_.fracSig = settings;
     return {RND_FRACTION_SIGNIFICANT, union_};
@@ -457,6 +462,23 @@ void RoundingImpl::apply(impl::DecimalQuantity &value, UErrorCode& status) const
             break;
 
         case Precision::RND_FRACTION_SIGNIFICANT: {
+            // From ECMA-402:
+            /*
+            Let sResult be ToRawPrecision(...).
+            Let fResult be ToRawFixed(...).
+            If intlObj.[[RoundingType]] is morePrecision, then
+                If sResult.[[RoundingMagnitude]] ≤ fResult.[[RoundingMagnitude]], then
+                    Let result be sResult.
+                Else,
+                    Let result be fResult.
+            Else,
+                Assert: intlObj.[[RoundingType]] is lessPrecision.
+                If sResult.[[RoundingMagnitude]] ≤ fResult.[[RoundingMagnitude]], then
+                    Let result be fResult.
+                Else,
+                    Let result be sResult.
+            */
+
             int32_t roundingMag1 = getRoundingMagnitudeFraction(fPrecision.fUnion.fracSig.fMaxFrac);
             int32_t roundingMag2 = getRoundingMagnitudeSignificant(value, fPrecision.fUnion.fracSig.fMaxSig);
             int32_t roundingMag;
@@ -465,11 +487,35 @@ void RoundingImpl::apply(impl::DecimalQuantity &value, UErrorCode& status) const
             } else {
                 roundingMag = uprv_max(roundingMag1, roundingMag2);
             }
-            value.roundToMagnitude(roundingMag, fRoundingMode, status);
+            if (!value.isZeroish()) {
+                int32_t upperMag = value.getMagnitude();
+                value.roundToMagnitude(roundingMag, fRoundingMode, status);
+                if (!value.isZeroish() && value.getMagnitude() != upperMag && roundingMag1 == roundingMag2) {
+                    // roundingMag2 needs to be the magnitude after rounding
+                    roundingMag2 += 1;
+                }
+            }
 
             int32_t displayMag1 = getDisplayMagnitudeFraction(fPrecision.fUnion.fracSig.fMinFrac);
             int32_t displayMag2 = getDisplayMagnitudeSignificant(value, fPrecision.fUnion.fracSig.fMinSig);
-            int32_t displayMag = uprv_min(displayMag1, displayMag2);
+            int32_t displayMag;
+            if (fPrecision.fUnion.fracSig.fRetain) {
+                // withMinDigits + withMaxDigits
+                displayMag = uprv_min(displayMag1, displayMag2);
+            } else if (fPrecision.fUnion.fracSig.fPriority == UNUM_ROUNDING_PRIORITY_RELAXED) {
+                if (roundingMag2 <= roundingMag1) {
+                    displayMag = displayMag2;
+                } else {
+                    displayMag = displayMag1;
+                }
+            } else {
+                U_ASSERT(fPrecision.fUnion.fracSig.fPriority == UNUM_ROUNDING_PRIORITY_STRICT);
+                if (roundingMag2 <= roundingMag1) {
+                    displayMag = displayMag1;
+                } else {
+                    displayMag = displayMag2;
+                }
+            }
             resolvedMinFraction = uprv_max(0, -displayMag);
 
             break;

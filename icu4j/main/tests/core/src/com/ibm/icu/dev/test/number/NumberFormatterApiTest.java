@@ -2981,7 +2981,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 ULocale.ENGLISH,
                 1.2,
                 "1.20");
-        
+
         assertFormatSingle(
                 "Hide If Whole B",
                 ".00/w",
@@ -3012,6 +3012,15 @@ public class NumberFormatterApiTest extends TestFmwk {
                 ULocale.ENGLISH,
                 -98.7654321,
                 "-98.8");
+
+        assertFormatSingle(
+                "Fixed Significant at rounding boundary",
+                "@@@",
+                "@@@",
+                NumberFormatter.with().precision(Precision.fixedSignificantDigits(3)),
+                ULocale.ENGLISH,
+                9.999,
+                "10.0");
 
         assertFormatSingle(
                 "Fixed Significant Zero",
@@ -3188,7 +3197,7 @@ public class NumberFormatterApiTest extends TestFmwk {
         assertFormatDescending(
                 "FracSig withSignificantDigits STRICT",
                 "precision-integer/@#s",
-                "./@#",
+                "./@#s",
                 NumberFormatter.with().precision(Precision.maxFraction(0)
                         .withSignificantDigits(1, 2, RoundingPriority.STRICT)),
                 ULocale.ENGLISH,
@@ -3201,7 +3210,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "0",
                 "0",
                 "0");
-        
+
         assertFormatSingle(
                 "FracSig withSignificantDigits Trailing Zeros RELAXED",
                 ".0/@@@r",
@@ -3211,8 +3220,8 @@ public class NumberFormatterApiTest extends TestFmwk {
                 ULocale.ENGLISH,
                 1,
                 "1.00");
-        
-        // Trailing zeros are always retained:
+
+        // Trailing zeros follow the strategy that was chosen:
         assertFormatSingle(
                 "FracSig withSignificantDigits Trailing Zeros STRICT",
                 ".0/@@@s",
@@ -3221,7 +3230,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                         .withSignificantDigits(3, 3, RoundingPriority.STRICT)),
                 ULocale.ENGLISH,
                 1,
-                "1.00");
+                "1.0");
 
         assertFormatSingle(
                 "FracSig withSignificantDigits at rounding boundary",
@@ -3231,7 +3240,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                         .withSignificantDigits(3, 3, RoundingPriority.STRICT)),
                 ULocale.ENGLISH,
                 9.99,
-                "10.0");
+                "10");
 
         assertFormatSingle(
                 "FracSig with Trailing Zero Display",
@@ -3327,7 +3336,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "50",
                 "50",
                 "0");
-        
+
         assertFormatDescending(
                 "Large nickel increment with rounding mode up (ICU-21668)",
                 "precision-increment/5000 rounding-mode-up",
@@ -3345,7 +3354,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "5,000",
                 "5,000",
                 "0");
-        
+
         assertFormatDescending(
                 "Large dime increment with rounding mode up (ICU-21668)",
                 "precision-increment/10000 rounding-mode-up",
@@ -3363,7 +3372,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "10,000",
                 "10,000",
                 "0");
-        
+
         assertFormatDescending(
                 "Large non-nickel increment with rounding mode up (ICU-21668)",
                 "precision-increment/15000 rounding-mode-up",
@@ -3605,6 +3614,67 @@ public class NumberFormatterApiTest extends TestFmwk {
             .format(5.625)
             .toString();
         assertEquals("ICU-21668", "5,000", increment);
+    }
+
+    static interface RoundingPriorityCheckFn {
+        void check(String name, String expected, Precision precision);
+    }
+
+    @Test
+    public void roundingPriorityCoverageTest() {
+        String[][] cases = new String[][] {
+            // Input, relaxed 0113, strict 0113, relaxed 1133, strict 1133
+            { "0.9999", "1",      "1",     "1.00",    "1.0" },
+            { "9.9999", "10",     "10",    "10.0",    "10.0" },
+            { "99.999", "100",    "100",   "100.0",   "100" },
+            { "999.99", "1000",   "1000",  "1000.0",  "1000" },
+
+            { "0", "0", "0", "0.00", "0.0" },
+
+            { "9.876",  "9.88",   "9.9",   "9.88",   "9.9" },
+            { "9.001",  "9",      "9",     "9.00",   "9.0" },
+        };
+        for (String[] cas : cases) {
+            final double input = Double.parseDouble(cas[0]);
+            String expectedRelaxed0113 = cas[1];
+            String expectedStrict0113 = cas[2];
+            String expectedRelaxed1133 = cas[3];
+            String expectedStrict1133 = cas[4];
+
+            Precision precisionRelaxed0113 = Precision.minMaxFraction(0, 1)
+                .withSignificantDigits(1, 3, RoundingPriority.RELAXED);
+            Precision precisionStrict0113 = Precision.minMaxFraction(0, 1)
+                .withSignificantDigits(1, 3, RoundingPriority.STRICT);
+            Precision precisionRelaxed1133 = Precision.minMaxFraction(1, 1)
+                .withSignificantDigits(3, 3, RoundingPriority.RELAXED);
+            Precision precisionStrict1133 = Precision.minMaxFraction(1, 1)
+                .withSignificantDigits(3, 3, RoundingPriority.STRICT);
+
+            final String messageBase = cas[0];
+
+            RoundingPriorityCheckFn checker = new RoundingPriorityCheckFn() {
+                @Override
+                public void check(String name, String expected, Precision precision) {
+                    assertEquals(
+                        messageBase + name,
+                        expected,
+                        NumberFormatter.withLocale(ULocale.ENGLISH)
+                            .precision(precision)
+                            .grouping(GroupingStrategy.OFF)
+                            .format(input)
+                            .toString()
+                    );
+                }
+            };
+
+            checker.check(" Relaxed 0113", expectedRelaxed0113, precisionRelaxed0113);
+
+            checker.check(" Strict 0113", expectedStrict0113, precisionStrict0113);
+
+            checker.check(" Relaxed 1133", expectedRelaxed1133, precisionRelaxed1133);
+
+            checker.check(" Strict 1133", expectedStrict1133, precisionStrict1133);
+        }
     }
 
     @Test
@@ -4521,7 +4591,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 ULocale.ENGLISH,
                 444444,
                 "444,444");
-        
+
         assertFormatSingle(
                 "Sign Negative Negative",
                 "sign-negative",
@@ -4530,7 +4600,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 ULocale.ENGLISH,
                 -444444,
                 "-444,444");
-        
+
         assertFormatSingle(
                 "Sign Negative Negative Zero",
                 "sign-negative",
@@ -4539,7 +4609,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 ULocale.ENGLISH,
                 -0.0000001,
                 "0");
-        
+
         assertFormatSingle(
                 "Sign Accounting-Negative Positive",
                 "currency/USD sign-accounting-negative",
@@ -4548,7 +4618,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 ULocale.ENGLISH,
                 444444,
                 "$444,444.00");
-        
+
         assertFormatSingle(
                 "Sign Accounting-Negative Negative",
                 "currency/USD sign-accounting-negative",

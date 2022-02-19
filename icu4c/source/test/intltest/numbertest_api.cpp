@@ -99,6 +99,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(roundingFractionFigures);
         TESTCASE_AUTO(roundingOther);
         TESTCASE_AUTO(roundingIncrementRegressionTest);
+        TESTCASE_AUTO(roundingPriorityCoverageTest);
         TESTCASE_AUTO(grouping);
         TESTCASE_AUTO(padding);
         TESTCASE_AUTO(integerWidth);
@@ -3033,6 +3034,15 @@ void NumberFormatterApiTest::roundingFigures() {
             u"-98.8");
 
     assertFormatSingle(
+            u"Fixed Significant at rounding boundary",
+            u"@@@",
+            u"@@@",
+            NumberFormatter::with().precision(Precision::fixedSignificantDigits(3)),
+            Locale::getEnglish(),
+            9.999,
+            u"10.0");
+
+    assertFormatSingle(
             u"Fixed Significant Zero",
             u"@@@",
             u"@@@",
@@ -3192,7 +3202,7 @@ void NumberFormatterApiTest::roundingFractionFigures() {
     assertFormatDescending(
             u"FracSig withSignificantDigits STRICT",
             u"precision-integer/@#s",
-            u"./@#",
+            u"./@#s",
             NumberFormatter::with().precision(Precision::maxFraction(0)
                 .withSignificantDigits(1, 2, UNUM_ROUNDING_PRIORITY_STRICT)),
             Locale::getEnglish(),
@@ -3216,7 +3226,7 @@ void NumberFormatterApiTest::roundingFractionFigures() {
             1,
             u"1.00");
 
-    // Trailing zeros are always retained:
+    // Trailing zeros follow the strategy that was chosen:
     assertFormatSingle(
             u"FracSig withSignificantDigits Trailing Zeros STRICT",
             u".0/@@@s",
@@ -3225,7 +3235,7 @@ void NumberFormatterApiTest::roundingFractionFigures() {
                 .withSignificantDigits(3, 3, UNUM_ROUNDING_PRIORITY_STRICT)),
             Locale::getEnglish(),
             1,
-            u"1.00");
+            u"1.0");
 
     assertFormatSingle(
             u"FracSig withSignificantDigits at rounding boundary",
@@ -3235,7 +3245,7 @@ void NumberFormatterApiTest::roundingFractionFigures() {
                     .withSignificantDigits(3, 3, UNUM_ROUNDING_PRIORITY_STRICT)),
             Locale::getEnglish(),
             9.99,
-            u"10.0");
+            u"10");
 
     assertFormatSingle(
             u"FracSig with Trailing Zero Display",
@@ -3617,6 +3627,67 @@ void NumberFormatterApiTest::roundingIncrementRegressionTest() {
         .formatDouble(5.625, status)
         .toString(status);
     assertEquals("ICU-21668", u"5,000", increment);
+}
+
+void NumberFormatterApiTest::roundingPriorityCoverageTest() {
+    IcuTestErrorCode status(*this, "roundingPriorityCoverageTest");
+    struct TestCase {
+        double input;
+        const char16_t* expectedRelaxed0113;
+        const char16_t* expectedStrict0113;
+        const char16_t* expectedRelaxed1133;
+        const char16_t* expectedStrict1133;
+    } cases[] = {
+        { 0.9999, u"1",      u"1",     u"1.00",    u"1.0" },
+        { 9.9999, u"10",     u"10",    u"10.0",    u"10.0" },
+        { 99.999, u"100",    u"100",   u"100.0",   u"100" },
+        { 999.99, u"1000",   u"1000",  u"1000.0",  u"1000" },
+
+        { 0, u"0", u"0", u"0.00", u"0.0" },
+
+        { 9.876,  u"9.88",   u"9.9",   u"9.88",   u"9.9" },
+        { 9.001,  u"9",      u"9",     u"9.00",   u"9.0" },
+    };
+    for (const auto& cas : cases) {
+        auto precisionRelaxed0113 = Precision::minMaxFraction(0, 1)
+            .withSignificantDigits(1, 3, UNUM_ROUNDING_PRIORITY_RELAXED);
+        auto precisionStrict0113 = Precision::minMaxFraction(0, 1)
+            .withSignificantDigits(1, 3, UNUM_ROUNDING_PRIORITY_STRICT);
+        auto precisionRelaxed1133 = Precision::minMaxFraction(1, 1)
+            .withSignificantDigits(3, 3, UNUM_ROUNDING_PRIORITY_RELAXED);
+        auto precisionStrict1133 = Precision::minMaxFraction(1, 1)
+            .withSignificantDigits(3, 3, UNUM_ROUNDING_PRIORITY_STRICT);
+
+        auto messageBase = DoubleToUnicodeString(cas.input);
+
+        auto check = [&](
+            const char16_t* name,
+            const UnicodeString& expected,
+            const Precision& precision
+        ) {
+            assertEquals(
+                messageBase + name,
+                expected,
+                NumberFormatter::withLocale(Locale::getEnglish())
+                    .precision(precision)
+                    .grouping(UNUM_GROUPING_OFF)
+                    .formatDouble(cas.input, status)
+                    .toString(status)
+            );
+        };
+
+        check(u" Relaxed 0113", cas.expectedRelaxed0113, precisionRelaxed0113);
+        if (status.errIfFailureAndReset()) continue;
+
+        check(u" Strict 0113", cas.expectedStrict0113, precisionStrict0113);
+        if (status.errIfFailureAndReset()) continue;
+
+        check(u" Relaxed 1133", cas.expectedRelaxed1133, precisionRelaxed1133);
+        if (status.errIfFailureAndReset()) continue;
+
+        check(u" Strict 1133", cas.expectedStrict1133, precisionStrict1133);
+        if (status.errIfFailureAndReset()) continue;
+    }
 }
 
 void NumberFormatterApiTest::grouping() {
