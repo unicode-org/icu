@@ -707,6 +707,11 @@ class U_I18N_API Precision : public UMemory {
             impl::digits_t fMaxSig;
             /** @internal (private) */
             UNumberRoundingPriority fPriority;
+            /**
+             * Whether to retain trailing zeros based on the looser strategy.
+             * @internal (private)
+             */
+            bool fRetain;
         } fracSig;
         /** @internal (private) */
         struct IncrementSettings {
@@ -759,7 +764,8 @@ class U_I18N_API Precision : public UMemory {
         const FractionPrecision &base,
         int32_t minSig,
         int32_t maxSig,
-        UNumberRoundingPriority priority);
+        UNumberRoundingPriority priority,
+        bool retain);
 
     static IncrementPrecision constructIncrement(double increment, int32_t minFrac);
 

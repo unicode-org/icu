@@ -1344,8 +1344,9 @@ bool blueprint_helpers::parseFracSigOption(const StringSegment& segment, MacroPr
         // @, @@, @@@
         maxSig = minSig;
     }
-    UNumberRoundingPriority priority;
+    auto& oldPrecision = static_cast<const FractionPrecision&>(macros.precision);
     if (offset < segment.length()) {
+        UNumberRoundingPriority priority;
         if (maxSig == -1) {
             // The wildcard character is not allowed with the priority annotation
             status = U_NUMBER_SKELETON_SYNTAX_ERROR;
@@ -1367,22 +1368,19 @@ bool blueprint_helpers::parseFracSigOption(const StringSegment& segment, MacroPr
             status = U_NUMBER_SKELETON_SYNTAX_ERROR;
             return false;
         }
+        macros.precision = oldPrecision.withSignificantDigits(minSig, maxSig, priority);
     } else if (maxSig == -1) {
         // withMinDigits
-        maxSig = minSig;
-        minSig = 1;
-        priority = UNUM_ROUNDING_PRIORITY_RELAXED;
+        macros.precision = oldPrecision.withMinDigits(minSig);
     } else if (minSig == 1) {
         // withMaxDigits
-        priority = UNUM_ROUNDING_PRIORITY_STRICT;
+        macros.precision = oldPrecision.withMaxDigits(maxSig);
     } else {
         // Digits options with both min and max sig require the priority option
         status = U_NUMBER_SKELETON_SYNTAX_ERROR;
         return false;
     }
 
-    auto& oldPrecision = static_cast<const FractionPrecision&>(macros.precision);
-    macros.precision = oldPrecision.withSignificantDigits(minSig, maxSig, priority);
     return true;
 }
 
@@ -1617,11 +1615,21 @@ bool GeneratorHelpers::precision(const MacroProps& macros, UnicodeString& sb, UE
         const Precision::FractionSignificantSettings& impl = macros.precision.fUnion.fracSig;
         blueprint_helpers::generateFractionStem(impl.fMinFrac, impl.fMaxFrac, sb, status);
         sb.append(u'/');
-        blueprint_helpers::generateDigitsStem(impl.fMinSig, impl.fMaxSig, sb, status);
-        if (impl.fPriority == UNUM_ROUNDING_PRIORITY_RELAXED) {
-            sb.append(u'r');
+        if (impl.fRetain) {
+            if (impl.fPriority == UNUM_ROUNDING_PRIORITY_RELAXED) {
+                // withMinDigits
+                blueprint_helpers::generateDigitsStem(impl.fMaxSig, -1, sb, status);
+            } else {
+                // withMaxDigits
+                blueprint_helpers::generateDigitsStem(1, impl.fMaxSig, sb, status);
+            }
         } else {
-            sb.append(u's');
+            blueprint_helpers::generateDigitsStem(impl.fMinSig, impl.fMaxSig, sb, status);
+            if (impl.fPriority == UNUM_ROUNDING_PRIORITY_RELAXED) {
+                sb.append(u'r');
+            } else {
+                sb.append(u's');
+            }
         }
     } else if (macros.precision.fType == Precision::RND_INCREMENT
             || macros.precision.fType == Precision::RND_INCREMENT_ONE
