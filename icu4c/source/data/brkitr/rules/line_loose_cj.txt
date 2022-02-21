@@ -17,7 +17,8 @@
 #         line-break=loose (BCP47 -u-lb-loose) as defined for Chinese & Japanese.
 #         It sets characters of class CJ to behave like ID.
 #         In addition, it allows breaks:
-#         * before hyphens 2010 & 2013 (both BA) and 301C, 30A0 (both NS)
+#         * between ID and hyphens 2010 & 2013 (both BA)
+#         * before 301C, 30A0 (both NS)
 #         * before iteration marks 3005, 303B, 309D, 309E, 30FD, 30FE (all NS)
 #         * between characters of LineBreak class IN such as 2026
 #         * before some centered punct 203C, 2047, 2048, 2049, 30FB, FF1A, FF1B,
@@ -238,7 +239,7 @@ $OP $CM* $SP+ $CM+ $AL_FOLLOW?;    # by rule 10, stand-alone CM behaves as AL
 #        See issue ICU-20303
 
 
-$CanFollowIS = [$BK $CR $LF $NL $SP $ZW $WJ $GL $CL $CP $EX $IS $SY $QU $BA $HY $NS $ALPlus $HL $IN];
+$CanFollowIS = [$BK $CR $LF $NL $SP $ZW $WJ $GL $CL $CP $EX $IS $SY $QU $BA $BAX $HY $NS $ALPlus $HL $IN];
 $SP $IS           / [^ $CanFollowIS $NU $CM];
 $SP $IS $CM* $CMX / [^ $CanFollowIS $NU $CM];
 
@@ -294,8 +295,10 @@ $LB20NonBreaks = [$LB18NonBreaks - $CB];
 # LB 21        x   (BA | HY | NS)
 #           BB x
 #
-# DO allow breaks here before $BAX and $NSX, so don't include them
-$LB20NonBreaks $CM* ($BA | $HY | $NS);
+# DO allow breaks here before $NSX, so don't include it.
+# And DO allow breaks between ID and $BAX, so split out the handling of ID and do not include $BAX for them.
+[$LB20NonBreaks - $ID] $CM* ($BA | $BAX | $HY | $NS);
+$ID $CM* ($BA | $HY | $NS);
 
 
 ^$CM+ ($BA | $HY | $NS);

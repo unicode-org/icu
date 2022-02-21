@@ -1646,10 +1646,16 @@ Bangkok)•</data>
 #     •brk OK before 3063               •brk OK before 301C •no brk btw 2026   •no brk before FF01•
 <data>•\u3084•\u3063•\u3071•\u308A\u0020•\u0031•\u301C\u0020•\u2026\u2026\u0020•\u30A2\uFF01\u0020•</data>
 
+#     •no brk before 2010                                 •
+<data>•\u3042\u2010•\u0031\u0020•\u0061\u2010•\u0031\u0020•</data>
+
 <locale ja@lb=loose>
 <line>
 #     •brk OK before 3063               •brk OK before 301C •brk OK btw 2026    •brk OK before FF01•
 <data>•\u3084•\u3063•\u3071•\u308A\u0020•\u0031•\u301C\u0020•\u2026•\u2026\u0020•u30A2•\uFF01\u0020•</data>
+
+#     •no brk before 2010 except ok after ID               •
+<data>•\u3042•\u2010•\u0031\u0020•\u0061\u2010•\u0031\u0020•</data>
 
 <locale en@lb=strict>
 <line>

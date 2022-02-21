@@ -1646,10 +1646,16 @@ Bangkok)•</data>
 #     •brk OK before 3063               •brk OK before 301C •no brk btw 2026   •no brk before FF01•
 <data>•\u3084•\u3063•\u3071•\u308A\u0020•\u0031•\u301C\u0020•\u2026\u2026\u0020•\u30A2\uFF01\u0020•</data>
 
+#     •no brk before 2010                                 •
+<data>•\u3042\u2010•\u0031\u0020•\u0061\u2010•\u0031\u0020•</data>
+
 <locale ja@lb=loose>
 <line>
 #     •brk OK before 3063               •brk OK before 301C •brk OK btw 2026    •brk OK before FF01•
 <data>•\u3084•\u3063•\u3071•\u308A\u0020•\u0031•\u301C\u0020•\u2026•\u2026\u0020•u30A2•\uFF01\u0020•</data>
+
+#     •no brk before 2010 except ok after ID               •
+<data>•\u3042•\u2010•\u0031\u0020•\u0061\u2010•\u0031\u0020•</data>
 
 <locale en@lb=strict>
 <line>
@@ -1888,7 +1894,7 @@ Bangkok)•</data>
 <line>
 #[京都観光］時雨殿に行った。-> [京都•観光］•時雨•殿に•行った。•
 <data>•\uff3b\u4eac\u90fd•\u89b3\u5149\uff3d•\u6642\u96e8•\u6bbf\u306b•\u884c\u3063\u305f\u3002•</data>
-#９月に東京から友達が遊びに来た -> ９月に•東京から•友達が•遊びに•来た
+#９月に東京から友達が遊びに来た -> ９月に•東京から•友達が•遊びに•来た•
 <data>•\uff19\u6708\u306b•\u6771\u4eac\u304b\u3089•\u53cb\u9054\u304c•\u904a\u3073\u306b•\u6765\u305f•</data>
 #る文字「そうだ、京都」-> る•文字•「そうだ、•京都」•
 <data>•\u308b•\u6587\u5b57•\u300c\u305d\u3046\u3060\u3001•\u4eac\u90fd\u300d•</data>
