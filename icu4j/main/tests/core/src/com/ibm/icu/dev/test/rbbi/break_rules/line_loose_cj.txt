@@ -20,7 +20,8 @@
 #         line-break=loose (BCP47 -u-lb-loose) as defined for Chinese & Japanese.
 #         It sets characters of class CJ to behave like ID.
 #         In addition, it allows breaks:
-#         * before hyphens 2010 & 2013 (both BA) and 301C, 30A0 (both NS)
+#         * between ID and hyphens 2010 & 2013 (both BA)
+#         * before 301C, 30A0 (both NS)
 #         * before iteration marks 3005, 303B, 309D, 309E, 30FD, 30FE (all NS)
 #         * between characters of LineBreak class IN such as 2026
 #         * before some centered punct 203C, 2047, 2048, 2049, 30FB, FF1A, FF1B,
@@ -200,8 +201,10 @@ LB20.09:     ^(HY | HH) CM* AL;
 
 LB21a:       HL CM* (HY | BA | BAX) CM* [^CM CB]?;
 
-LB21.1:      . CM* [BA HY NS];
-LB21.2:      BB CM* [^CM CB];
+LB21.1:      [^BK CR LF NL CM ZW SP CB ID] CM* [BA BAX HY NS];
+LB21.2:      ID CM* [BA HY NS];
+LB21.3:      CM+ [BA HY NS];
+LB21.4:      BB CM* [^CM CB];
 
 LB21b:       SY CM* HL;
 
