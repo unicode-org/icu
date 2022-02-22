@@ -497,6 +497,9 @@ public final class UCharacterCaseTest extends TestFmwk
                 {"íjabc\u0308",        "Íjabc\u0308",       "Í"},
                 {"íj́abc\uD834\uDD6E",  "ÍJ́abc\uD834\uDD6E", "ÍJ"},
                 {"íjabc\u1ABE",        "Íjabc\u1ABE",       "Í"},
+
+                // Bug ICU-21919
+                {"Í",                  "Í",                 ""},
         };
 
         for (String[] caseDatum : dutchIJCasesData) {
