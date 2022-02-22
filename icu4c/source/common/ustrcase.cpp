@@ -416,6 +416,7 @@ namespace {
 int32_t maybeTitleDutchIJ(const UChar *src, UChar32 c, int32_t start, int32_t segmentLimit,
                           UChar *dest, int32_t &destIndex, int32_t destCapacity, uint32_t options,
                           icu::Edits *edits) {
+    U_ASSERT(start < segmentLimit);
 
     int32_t index = start;
     bool withAcute = false;

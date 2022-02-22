@@ -794,6 +794,8 @@ public final class CaseMapImpl {
     private static <A extends Appendable> int maybeTitleDutchIJ(
             CharSequence src, int c, int start, int segmentLimit,
             A dest, int options, Edits edits) throws IOException {
+        assert start < segmentLimit;
+
         int index = start;
         boolean withAcute = false;
 

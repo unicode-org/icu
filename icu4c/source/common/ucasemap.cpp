@@ -437,6 +437,7 @@ constexpr uint8_t ACUTE_BYTE1 = u8"\u0301"[1];
  */
 int32_t maybeTitleDutchIJ(const uint8_t *src, UChar32 c, int32_t start, int32_t segmentLimit,
                           ByteSink &sink, uint32_t options, icu::Edits *edits, UErrorCode &errorCode) {
+    U_ASSERT(start < segmentLimit);
 
     int32_t index = start;
     bool withAcute = false;
@@ -594,7 +595,7 @@ ucasemap_internalUTF8ToTitle(
                 }
 
                 /* Special case Dutch IJ titlecasing */
-                if (titleStart+1 < index &&
+                if (titleLimit < index &&
                     caseLocale == UCASE_LOC_DUTCH) {
                     if (c < 0) {
                         c = ~c;

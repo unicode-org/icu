@@ -741,6 +741,9 @@ void StringCaseTest::TestDutchTitle() {
         {u"íjabc\u0308",        u"Íjabc\u0308",       u"Í"},
         {u"íj́abc\U0001D16E",    u"ÍJ́abc\U0001D16E",   u"ÍJ"},
         {u"íjabc\u1ABE",        u"Íjabc\u1ABE",       u"Í"},
+
+        // Bug ICU-21919
+        {u"Í",                  u"Í",                 u""},
     };
 
     for (const auto& cas : dutchTitleTestCases) {
@@ -763,7 +766,6 @@ void StringCaseTest::TestDutchTitle() {
                 testOptions
             );
         }
-        
     }
 }
 #endif
