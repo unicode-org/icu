@@ -295,11 +295,6 @@ public class LongNameHandler
             // Continue: fall back to short
         }
 
-        // TODO(ICU-13353): The ICU4J fallback mechanism works differently:
-        // investigate? Without this code, unit tests do fail:
-        key.setLength(0);
-        key.append("unitsShort/");
-        key.append(subKey);
         unitsBundle.getAllItemsWithFallback(key.toString(), sink);
     }
 
@@ -455,11 +450,6 @@ public class LongNameHandler
             }
         }
 
-        // TODO(icu-units#28): this code is not exercised by unit tests yet.
-        // Also, what's the fallback mechanism mentioned in ICU-13353?
-        key.setLength(0);
-        key.append("unitsShort/compound/");
-        key.append(compoundKey);
         try {
             return resource.getStringWithFallback(key.toString());
         } catch (MissingResourceException e) {
