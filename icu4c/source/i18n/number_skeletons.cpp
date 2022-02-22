@@ -1397,12 +1397,16 @@ void blueprint_helpers::parseIncrementOption(const StringSegment &segment, Macro
     number::impl::parseIncrementOption(segment, macros.precision, status);
 }
 
-void blueprint_helpers::generateIncrementOption(double increment, int32_t minFrac, UnicodeString& sb,
-                                                UErrorCode&) {
+void blueprint_helpers::generateIncrementOption(
+        uint32_t increment,
+        digits_t incrementMagnitude,
+        int32_t minFrac,
+        UnicodeString& sb,
+        UErrorCode&) {
     // Utilize DecimalQuantity/double_conversion to format this for us.
     DecimalQuantity dq;
-    dq.setToDouble(increment);
-    dq.roundToInfinity();
+    dq.setToLong(increment);
+    dq.adjustMagnitude(incrementMagnitude);
     dq.setMinFraction(minFrac);
     sb.append(dq.toPlainString());
 }
@@ -1638,6 +1642,7 @@ bool GeneratorHelpers::precision(const MacroProps& macros, UnicodeString& sb, UE
         sb.append(u"precision-increment/", -1);
         blueprint_helpers::generateIncrementOption(
                 impl.fIncrement,
+                impl.fIncrementMagnitude,
                 impl.fMinFrac,
                 sb,
                 status);

@@ -81,11 +81,15 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
      *
      * <p>If rounding to a power of ten, use the more efficient {@link #roundToMagnitude} instead.
      *
-     * @param roundingIncrement The increment to which to round.
+     * @param increment The increment to which to round.
+     * @param magnitude The power of 10 to which to round.
      * @param roundingMode The {@link RoundingMode} to use if rounding is necessary.
      */
-    void roundToIncrement(double roundingIncrement, RoundingMode roundingMode,
-                          UErrorCode& status);
+    void roundToIncrement(
+        uint64_t increment,
+        digits_t magnitude,
+        RoundingMode roundingMode,
+        UErrorCode& status);
 
     /** Removes all fraction digits. */
     void truncate();
@@ -139,6 +143,13 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
      * @return true if integer overflow occurred; false otherwise.
      */
     bool adjustMagnitude(int32_t delta);
+
+    /**
+     * Scales the number such that the least significant nonzero digit is at magnitude 0.
+     *
+     * @return The previous magnitude of the least significant digit.
+     */
+    int32_t adjustToZeroScale();
 
     /**
      * @return The power of ten corresponding to the most significant nonzero digit.
