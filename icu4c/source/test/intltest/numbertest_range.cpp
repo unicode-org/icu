@@ -811,6 +811,28 @@ void NumberRangeFormatterTest::testFieldPositions() {
             expectedFieldPositions,
             UPRV_LENGTHOF(expectedFieldPositions));
     }
+
+    {
+        const char16_t* message = u"Field position with approximately sign";
+        const char16_t* expectedString = u"~-100";
+        FormattedNumberRange result = assertFormattedRangeEquals(
+            message,
+            NumberRangeFormatter::withLocale("en-us"),
+            -100,
+            -100,
+            expectedString);
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            // category, field, begin index, end index
+            {UFIELD_CATEGORY_NUMBER, UNUM_APPROXIMATELY_SIGN_FIELD, 0, 1},
+            {UFIELD_CATEGORY_NUMBER, UNUM_SIGN_FIELD, 1, 2},
+            {UFIELD_CATEGORY_NUMBER, UNUM_INTEGER_FIELD, 2, 5}};
+        checkMixedFormattedValue(
+            message,
+            result,
+            expectedString,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
+    }
 }
 
 void NumberRangeFormatterTest::testCopyMove() {
