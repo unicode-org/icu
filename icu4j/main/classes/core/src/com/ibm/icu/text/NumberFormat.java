@@ -1970,6 +1970,12 @@ public abstract class NumberFormat extends UFormat {
         public static final Field COMPACT = new Field("compact");
 
         /**
+         * Approximately sign. In ICU 70, this was categorized under the generic SIGN field.
+         * @draft ICU 71
+         */
+        public static final Field APPROXIMATELY_SIGN = new Field("approximately sign");
+
+        /**
          * Constructs a new instance of NumberFormat.Field with the given field
          * name.
          * @stable ICU 3.6

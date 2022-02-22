@@ -401,13 +401,24 @@ typedef enum UNumberFormatFields {
     UNUM_MEASURE_UNIT_FIELD,
     /** @stable ICU 64 */
     UNUM_COMPACT_FIELD,
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Approximately sign. In ICU 70, this was categorized under the generic SIGN field.
+     * @draft ICU 71
+     */
+    UNUM_APPROXIMATELY_SIGN_FIELD,
+#endif // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the highest normal UNumberFormatFields value.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-    UNUM_FIELD_COUNT = UNUM_SIGN_FIELD + 3
+#ifndef U_HIDE_DRAFT_API
+    UNUM_FIELD_COUNT = UNUM_COMPACT_FIELD + 2
+#else  // U_HIDE_DRAFT_API (for UNUM_APPROXIMATELY_SIGN_FIELD)
+    UNUM_FIELD_COUNT = UNUM_COMPACT_FIELD + 1
+#endif  // U_HIDE_DRAFT_API (for UNUM_APPROXIMATELY_SIGN_FIELD)
 #endif  /* U_HIDE_DEPRECATED_API */
 } UNumberFormatFields;
 

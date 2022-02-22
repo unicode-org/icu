@@ -271,8 +271,7 @@ public class AffixUtils {
         case TYPE_PLUS_SIGN:
             return NumberFormat.Field.SIGN;
         case TYPE_APPROXIMATELY_SIGN:
-            // TODO: Introduce a new field for the approximately sign?
-            return NumberFormat.Field.SIGN;
+            return NumberFormat.Field.APPROXIMATELY_SIGN;
         case TYPE_PERCENT:
             return NumberFormat.Field.PERCENT;
         case TYPE_PERMILLE:
