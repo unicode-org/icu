@@ -751,7 +751,7 @@ public abstract class Precision {
         @Override
         public void apply(DecimalQuantity value) {
             value.roundToIncrement(increment, mathContext);
-            setResolvedMinFraction(value, increment.scale());
+            setResolvedMinFraction(value, Math.max(0, increment.scale()));
         }
 
         @Override

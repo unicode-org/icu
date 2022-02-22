@@ -181,20 +181,22 @@ uint64_t DecimalQuantity::getPositionFingerprint() const {
     return fingerprint;
 }
 
-void DecimalQuantity::roundToIncrement(double roundingIncrement, RoundingMode roundingMode,
-                                       UErrorCode& status) {
+void DecimalQuantity::roundToIncrement(
+        uint64_t increment,
+        digits_t magnitude,
+        RoundingMode roundingMode,
+        UErrorCode& status) {
     // Do not call this method with an increment having only a 1 or a 5 digit!
     // Use a more efficient call to either roundToMagnitude() or roundToNickel().
     // Check a few popular rounding increments; a more thorough check is in Java.
-    U_ASSERT(roundingIncrement != 0.01);
-    U_ASSERT(roundingIncrement != 0.05);
-    U_ASSERT(roundingIncrement != 0.1);
-    U_ASSERT(roundingIncrement != 0.5);
-    U_ASSERT(roundingIncrement != 1);
-    U_ASSERT(roundingIncrement != 5);
+    U_ASSERT(increment != 1);
+    U_ASSERT(increment != 5);
 
+    DecimalQuantity incrementDQ;
+    incrementDQ.setToLong(increment);
+    incrementDQ.adjustMagnitude(magnitude);
     DecNum incrementDN;
-    incrementDN.setTo(roundingIncrement, status);
+    incrementDQ.toDecNum(incrementDN, status);
     if (U_FAILURE(status)) { return; }
 
     // Divide this DecimalQuantity by the increment, round, then multiply back.
@@ -252,6 +254,12 @@ bool DecimalQuantity::adjustMagnitude(int32_t delta) {
         return overflow;
     }
     return false;
+}
+
+int32_t DecimalQuantity::adjustToZeroScale() {
+    int32_t retval = scale;
+    scale = 0;
+    return retval;
 }
 
 double DecimalQuantity::getPluralOperand(PluralOperand operand) const {

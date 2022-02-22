@@ -3357,6 +3357,7 @@ void NumberFormatTest::TestRoundingPattern() {
 
 void NumberFormatTest::checkRounding(DecimalFormat* df, double base, int iterations, double increment) {
     df->setRoundingIncrement(increment);
+    assertEquals("Rounding increment round-trip", increment, df->getRoundingIncrement());
     double lastParsed=INT32_MIN; //Intger.MIN_VALUE
     for (int i=-iterations; i<=iterations;i++) {
         double iValue=base+(increment*(i*0.1));

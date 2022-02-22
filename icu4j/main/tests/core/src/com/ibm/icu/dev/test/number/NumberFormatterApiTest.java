@@ -3430,6 +3430,42 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "0.0",
                 "0.0");
 
+        assertFormatSingle(
+                "Large integer increment",
+                "precision-increment/24000000000000000000000",
+                "precision-increment/24000000000000000000000",
+                NumberFormatter.with().precision(Precision.increment(new BigDecimal("24e21"))),
+                ULocale.ENGLISH,
+                3.1e22,
+                "24,000,000,000,000,000,000,000");
+
+        assertFormatSingle(
+                "Quarter rounding",
+                "precision-increment/250",
+                "precision-increment/250",
+                NumberFormatter.with().precision(Precision.increment(new BigDecimal("250"))),
+                ULocale.ENGLISH,
+                700,
+                "750");
+
+        assertFormatSingle(
+                "ECMA-402 limit",
+                "precision-increment/.00000000000000000020",
+                "precision-increment/.00000000000000000020",
+                NumberFormatter.with().precision(Precision.increment(new BigDecimal("20e-20"))),
+                ULocale.ENGLISH,
+                333e-20,
+                "0.00000000000000000340");
+
+        assertFormatSingle(
+                "ECMA-402 limit with increment = 1",
+                "precision-increment/.00000000000000000001",
+                "precision-increment/.00000000000000000001",
+                NumberFormatter.with().precision(Precision.increment(new BigDecimal("1e-20"))),
+                ULocale.ENGLISH,
+                4321e-21,
+                "0.00000000000000000432");
+
         assertFormatDescending(
                 "Currency Standard",
                 "currency/CZK precision-currency-standard",
