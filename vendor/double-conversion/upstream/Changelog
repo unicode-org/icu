@@ -1,3 +1,20 @@
+2022-01-10:
+  Fix quiet NANs on MIPS* and PA-RISC architectures.
+  Update version number.
+
+2021-12-22:
+  Add support of Synopsys ARC64 architecture.
+  Reintroduce macros, if DOUBLE_CONVERSION_NON_PREFIXED_MACROS is set.
+
+2021-12-04:
+  Update version number.
+
+2021-10-04:
+  Consistently use semicolons after DOUBLE_CONVERSION_ASSERT.
+
+2021-07-16:
+  Fix spelling.
+
 2021-05-19:
   Loongarch is a RISC-style command system architecture.
   Add support for loongarch architecture.

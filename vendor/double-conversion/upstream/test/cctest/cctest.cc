@@ -75,6 +75,17 @@ static void PrintTestList(CcTest* current) {
 int main(int argc, char* argv[]) {
   int tests_run = 0;
   bool print_run_count = true;
+  if (argc == 1) {
+    // Just run all the tests.
+    CcTest* test = CcTest::last();
+    while (test != NULL) {
+      if (test->enabled()) {
+        test->Run();
+        tests_run++;
+      }
+      test = test->prev();
+    }
+  }
   for (int i = 1; i < argc; i++) {
     char* arg = argv[i];
     if (strcmp(arg, "--list") == 0) {

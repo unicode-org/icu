@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(double-conversion VERSION 3.1.5)
+project(double-conversion VERSION 3.2.0)
 
 if(BUILD_SHARED_LIBS AND MSVC)
   set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
