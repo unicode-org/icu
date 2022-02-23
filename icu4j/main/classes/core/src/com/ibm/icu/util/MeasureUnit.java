@@ -114,210 +114,210 @@ public class MeasureUnit implements Serializable {
     /**
      * Enumeration for SI and binary prefixes, e.g. "kilo-", "nano-", "mebi-".
      *
-     * @draft ICU 69
+     * @stable ICU 69
      */
     public enum MeasurePrefix {
 
         /**
          * SI prefix: yotta, 10^24.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         YOTTA(24, "yotta", 10),
 
         /**
          * SI prefix: zetta, 10^21.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         ZETTA(21, "zetta", 10),
 
         /**
          * SI prefix: exa, 10^18.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         EXA(18, "exa", 10),
 
         /**
          * SI prefix: peta, 10^15.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         PETA(15, "peta", 10),
 
         /**
          * SI prefix: tera, 10^12.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         TERA(12, "tera", 10),
 
         /**
          * SI prefix: giga, 10^9.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         GIGA(9, "giga", 10),
 
         /**
          * SI prefix: mega, 10^6.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         MEGA(6, "mega", 10),
 
         /**
          * SI prefix: kilo, 10^3.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         KILO(3, "kilo", 10),
 
         /**
          * SI prefix: hecto, 10^2.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         HECTO(2, "hecto", 10),
 
         /**
          * SI prefix: deka, 10^1.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         DEKA(1, "deka", 10),
 
         /**
          * The absence of an SI prefix.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         ONE(0, "", 10),
 
         /**
          * SI prefix: deci, 10^-1.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         DECI(-1, "deci", 10),
 
         /**
          * SI prefix: centi, 10^-2.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         CENTI(-2, "centi", 10),
 
         /**
          * SI prefix: milli, 10^-3.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         MILLI(-3, "milli", 10),
 
         /**
          * SI prefix: micro, 10^-6.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         MICRO(-6, "micro", 10),
 
         /**
          * SI prefix: nano, 10^-9.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         NANO(-9, "nano", 10),
 
         /**
          * SI prefix: pico, 10^-12.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         PICO(-12, "pico", 10),
 
         /**
          * SI prefix: femto, 10^-15.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         FEMTO(-15, "femto", 10),
 
         /**
          * SI prefix: atto, 10^-18.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         ATTO(-18, "atto", 10),
 
         /**
          * SI prefix: zepto, 10^-21.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         ZEPTO(-21, "zepto", 10),
 
         /**
          * SI prefix: yocto, 10^-24.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         YOCTO(-24, "yocto", 10),
 
         /**
          * IEC binary prefix: kibi, 1024^1.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         KIBI(1, "kibi", 1024),
 
         /**
          * IEC binary prefix: mebi, 1024^2.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         MEBI(2, "mebi", 1024),
 
         /**
          * IEC binary prefix: gibi, 1024^3.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         GIBI(3, "gibi", 1024),
 
         /**
          * IEC binary prefix: tebi, 1024^4.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         TEBI(4, "tebi", 1024),
 
         /**
          * IEC binary prefix: pebi, 1024^5.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         PEBI(5, "pebi", 1024),
 
         /**
          * IEC binary prefix: exbi, 1024^6.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         EXBI(6, "exbi", 1024),
 
         /**
          * IEC binary prefix: zebi, 1024^7.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         ZEBI(7, "zebi", 1024),
 
         /**
          * IEC binary prefix: yobi, 1024^8.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         YOBI(8, "yobi", 1024);
 
@@ -347,7 +347,7 @@ public class MeasureUnit implements Serializable {
          * - if the prefix is "centi", the base will be 10.
          * - if the prefix is "gibi", the base will be 1024.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         public int getBase() {
             return base;
@@ -358,7 +358,7 @@ public class MeasureUnit implements Serializable {
          * - if the prefix is "centi", the power will be -2.
          * - if the prefix is "gibi", the power will be 3 (for base 1024).
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         public int getPower() {
             return power;
@@ -479,7 +479,7 @@ public class MeasureUnit implements Serializable {
      * @param prefix The prefix, from MeasurePrefix.
      * @return A new SINGLE unit.
      * @throws UnsupportedOperationException if this unit is a COMPOUND or MIXED unit.
-     * @draft ICU 69
+     * @stable ICU 69
      */
     public MeasureUnit withPrefix(MeasurePrefix prefix) {
         SingleUnitImpl singleUnit = getSingleUnitImpl();
@@ -496,7 +496,7 @@ public class MeasureUnit implements Serializable {
      *
      * @return The prefix of this SINGLE unit, from MeasurePrefix.
      * @throws UnsupportedOperationException if the unit is COMPOUND or MIXED.
-     * @draft ICU 69
+     * @stable ICU 69
      */
     public MeasurePrefix getPrefix() {
         return getSingleUnitImpl().getPrefix();

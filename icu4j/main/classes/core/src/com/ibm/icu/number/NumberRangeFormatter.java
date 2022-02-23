@@ -158,7 +158,7 @@ public abstract class NumberRangeFormatter {
     /**
      * Class for span fields in FormattedNumberRange.
      *
-     * @draft ICU 69
+     * @stable ICU 69
      */
     public static final class SpanField extends UFormat.SpanField {
         private static final long serialVersionUID = 8750397196515368729L;
@@ -169,7 +169,7 @@ public abstract class NumberRangeFormatter {
          * Instances of NUMBER_RANGE_SPAN should have an associated value, the index within the input
          * list that is represented by the span.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         public static final SpanField NUMBER_RANGE_SPAN = new SpanField("number-range-span");
 

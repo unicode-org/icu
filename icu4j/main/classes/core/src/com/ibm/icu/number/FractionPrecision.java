@@ -31,7 +31,7 @@ public abstract class FractionPrecision extends Precision {
      *            How to disambiguate between fraction digits and significant digits.
      * @return A precision for chaining or passing to the NumberFormatter precision() setter.
      *
-     * @draft ICU 69
+     * @stable ICU 69
      */
     public Precision withSignificantDigits(
             int minSignificantDigits,
