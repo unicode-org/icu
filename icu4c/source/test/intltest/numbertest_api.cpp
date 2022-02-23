@@ -3012,6 +3012,28 @@ void NumberFormatterApiTest::roundingFraction() {
             Locale::getEnglish(),
             1,
             "1");
+
+    assertFormatSingle(
+            u"Hide If Whole with Rounding Mode A (ICU-21881)",
+            u".00/w rounding-mode-floor",
+            u".00/w rounding-mode-floor",
+            NumberFormatter::with().precision(Precision::fixedFraction(2)
+                .trailingZeroDisplay(UNUM_TRAILING_ZERO_HIDE_IF_WHOLE))
+                .roundingMode(UNUM_ROUND_FLOOR),
+            Locale::getEnglish(),
+            3.009,
+            "3");
+
+    assertFormatSingle(
+            u"Hide If Whole with Rounding Mode B (ICU-21881)",
+            u".00/w rounding-mode-half-up",
+            u".00/w rounding-mode-half-up",
+            NumberFormatter::with().precision(Precision::fixedFraction(2)
+                .trailingZeroDisplay(UNUM_TRAILING_ZERO_HIDE_IF_WHOLE))
+                .roundingMode(UNUM_ROUND_HALFUP),
+            Locale::getEnglish(),
+            3.001,
+            "3");
 }
 
 void NumberFormatterApiTest::roundingFigures() {

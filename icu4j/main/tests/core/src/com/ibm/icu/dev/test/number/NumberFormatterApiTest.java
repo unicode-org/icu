@@ -2991,6 +2991,28 @@ public class NumberFormatterApiTest extends TestFmwk {
                 ULocale.ENGLISH,
                 1,
                 "1");
+
+        assertFormatSingle(
+                "Hide If Whole with Rounding Mode A (ICU-21881)",
+                ".00/w rounding-mode-floor",
+                ".00/w rounding-mode-floor",
+                NumberFormatter.with().precision(Precision.fixedFraction(2)
+                    .trailingZeroDisplay(TrailingZeroDisplay.HIDE_IF_WHOLE))
+                    .roundingMode(RoundingMode.FLOOR),
+                ULocale.ENGLISH,
+                3.009,
+                "3");
+
+        assertFormatSingle(
+                "Hide If Whole with Rounding Mode B (ICU-21881)",
+                ".00/w rounding-mode-half-up",
+                ".00/w rounding-mode-half-up",
+                NumberFormatter.with().precision(Precision.fixedFraction(2)
+                    .trailingZeroDisplay(TrailingZeroDisplay.HIDE_IF_WHOLE))
+                    .roundingMode(RoundingMode.HALF_UP),
+                ULocale.ENGLISH,
+                3.001,
+                "3");
     }
 
     @Test

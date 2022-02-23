@@ -372,6 +372,16 @@ public abstract class Precision {
     abstract Precision createCopy();
 
     /**
+     * Call this function to copy the fields from the Precision base class.
+     *
+     * Note: It would be nice if this returned the copy, but most impls return the child class, not Precision.
+     */
+    /* package-private */ void createCopyHelper(Precision copy) {
+        copy.mathContext = mathContext;
+        copy.trailingZeroDisplay = trailingZeroDisplay;
+    }
+
+    /**
      * @internal
      * @deprecated ICU 60 This API is ICU internal only.
      */
@@ -602,7 +612,7 @@ public abstract class Precision {
         @Override
         BogusRounder createCopy() {
             BogusRounder copy = new BogusRounder();
-            copy.mathContext = mathContext;
+            createCopyHelper(copy);
             return copy;
         }
 
@@ -615,7 +625,7 @@ public abstract class Precision {
         @Deprecated
         public Precision into(Precision precision) {
             Precision copy = precision.createCopy();
-            copy.mathContext = mathContext;
+            createCopyHelper(copy);
             return copy;
         }
     }
@@ -634,7 +644,7 @@ public abstract class Precision {
         @Override
         InfiniteRounderImpl createCopy() {
             InfiniteRounderImpl copy = new InfiniteRounderImpl();
-            copy.mathContext = mathContext;
+            createCopyHelper(copy);
             return copy;
         }
     }
@@ -657,7 +667,7 @@ public abstract class Precision {
         @Override
         FractionRounderImpl createCopy() {
             FractionRounderImpl copy = new FractionRounderImpl(minFrac, maxFrac);
-            copy.mathContext = mathContext;
+            createCopyHelper(copy);
             return copy;
         }
     }
@@ -693,7 +703,7 @@ public abstract class Precision {
         @Override
         SignificantRounderImpl createCopy() {
             SignificantRounderImpl copy = new SignificantRounderImpl(minSig, maxSig);
-            copy.mathContext = mathContext;
+            createCopyHelper(copy);
             return copy;
         }
     }
@@ -761,7 +771,7 @@ public abstract class Precision {
         @Override
         FracSigRounderImpl createCopy() {
             FracSigRounderImpl copy = new FracSigRounderImpl(minFrac, maxFrac, minSig, maxSig, priority, retain);
-            copy.mathContext = mathContext;
+            createCopyHelper(copy);
             return copy;
         }
     }
@@ -785,7 +795,7 @@ public abstract class Precision {
         @Override
         IncrementRounderImpl createCopy() {
             IncrementRounderImpl copy = new IncrementRounderImpl(increment);
-            copy.mathContext = mathContext;
+            createCopyHelper(copy);
             return copy;
         }
     }
@@ -814,7 +824,7 @@ public abstract class Precision {
         @Override
         IncrementOneRounderImpl createCopy() {
             IncrementOneRounderImpl copy = new IncrementOneRounderImpl(increment, minFrac, maxFrac);
-            copy.mathContext = mathContext;
+            createCopyHelper(copy);
             return copy;
         }
     }
@@ -841,7 +851,7 @@ public abstract class Precision {
         @Override
         IncrementFiveRounderImpl createCopy() {
             IncrementFiveRounderImpl copy = new IncrementFiveRounderImpl(increment, minFrac, maxFrac);
-            copy.mathContext = mathContext;
+            createCopyHelper(copy);
             return copy;
         }
     }
@@ -862,7 +872,7 @@ public abstract class Precision {
         @Override
         CurrencyRounderImpl createCopy() {
             CurrencyRounderImpl copy = new CurrencyRounderImpl(usage);
-            copy.mathContext = mathContext;
+            createCopyHelper(copy);
             return copy;
         }
     }
