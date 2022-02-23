@@ -1047,6 +1047,10 @@ en{
             "VEB",
             "Venezuelan Bolívar (1871–2008)",
         }
+        VED{
+            "VED",
+            "Bolívar Soberano",
+        }
         VEF{
             "VEF",
             "Venezuelan Bolívar (2008–2018)",
@@ -2260,6 +2264,10 @@ en{
         VEB{
             one{"Venezuelan bolívar (1871–2008)"}
             other{"Venezuelan bolívars (1871–2008)"}
+        }
+        VED{
+            one{"Bolívar Soberano"}
+            other{"Bolívar Soberanos"}
         }
         VEF{
             one{"Venezuelan bolívar (2008–2018)"}
