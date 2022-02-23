@@ -4411,6 +4411,10 @@ supplementalData:table(nofallback){
                     -605344769,
                 }
             }
+            {
+                id{"VED"}
+                tender{"false"}
+            }
         }
         VG{
             {

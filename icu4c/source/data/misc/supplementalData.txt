@@ -4253,6 +4253,10 @@ supplementalData:table(nofallback){
             "860",
         }
         {
+            "VED",
+            "926",
+        }
+        {
             "VEF",
             "937",
         }
@@ -4468,6 +4472,7 @@ supplementalData:table(nofallback){
                 "UYP",
                 "UYW",
                 "VEB",
+                "VED",
                 "VEF",
                 "VNN",
                 "XAG",
@@ -12705,6 +12710,7 @@ supplementalData:table(nofallback){
             }
             secondary{
                 scripts{"Cans"}
+                territories{"CA"}
             }
         }
         chr{
@@ -12757,6 +12763,11 @@ supplementalData:table(nofallback){
                 scripts{"Cyrl"}
             }
         }
+        clc{
+            primary{
+                scripts{"Latn"}
+            }
+        }
         co{
             primary{
                 scripts{"Latn"}
@@ -12782,6 +12793,14 @@ supplementalData:table(nofallback){
                     "Cans",
                     "Latn",
                 }
+            }
+            secondary{
+                territories{"CA"}
+            }
+        }
+        crg{
+            primary{
+                scripts{"Latn"}
             }
         }
         crh{
@@ -12943,11 +12962,15 @@ supplementalData:table(nofallback){
             }
             secondary{
                 scripts{"Cans"}
+                territories{"CA"}
             }
         }
         dgr{
             primary{
                 scripts{"Latn"}
+            }
+            secondary{
+                territories{"CA"}
             }
         }
         din{
@@ -13237,6 +13260,7 @@ supplementalData:table(nofallback){
                     "LU",
                     "LV",
                     "MA",
+                    "MV",
                     "MX",
                     "MY",
                     "NL",
@@ -13298,6 +13322,7 @@ supplementalData:table(nofallback){
                     "BZ",
                     "DE",
                     "FR",
+                    "GB",
                     "GI",
                     "PH",
                     "PT",
@@ -13788,7 +13813,10 @@ supplementalData:table(nofallback){
                 scripts{"Gujr"}
             }
             secondary{
-                territories{"IN"}
+                territories{
+                    "GB",
+                    "IN",
+                }
             }
         }
         gub{
@@ -13831,6 +13859,9 @@ supplementalData:table(nofallback){
         gwi{
             primary{
                 scripts{"Latn"}
+            }
+            secondary{
+                territories{"CA"}
             }
         }
         ha{
@@ -13951,10 +13982,6 @@ supplementalData:table(nofallback){
             primary{
                 scripts{"Laoo"}
             }
-            secondary{
-                scripts{"Hmnp"}
-                territories{"US"}
-            }
         }
         hnn{
             primary{
@@ -14053,6 +14080,11 @@ supplementalData:table(nofallback){
                 scripts{"Latn"}
             }
         }
+        hur{
+            primary{
+                scripts{"Latn"}
+            }
+        }
         hy{
             primary{
                 scripts{"Armn"}
@@ -14124,9 +14156,6 @@ supplementalData:table(nofallback){
         ikt{
             primary{
                 scripts{"Latn"}
-            }
-            secondary{
-                territories{"CA"}
             }
         }
         ilo{
@@ -14661,6 +14690,11 @@ supplementalData:table(nofallback){
                 scripts{"Latn"}
             }
         }
+        kwk{
+            primary{
+                scripts{"Latn"}
+            }
+        }
         kxm{
             primary{
                 scripts{"Thai"}
@@ -14799,6 +14833,11 @@ supplementalData:table(nofallback){
             }
         }
         lij{
+            primary{
+                scripts{"Latn"}
+            }
+        }
+        lil{
             primary{
                 scripts{"Latn"}
             }
@@ -15544,10 +15583,7 @@ supplementalData:table(nofallback){
         no{
             primary{
                 scripts{"Latn"}
-                territories{
-                    "NO",
-                    "SJ",
-                }
+                territories{"NO"}
             }
         }
         nod{
@@ -15676,6 +15712,16 @@ supplementalData:table(nofallback){
                 scripts{"Latn"}
             }
         }
+        ojs{
+            primary{
+                scripts{"Cans"}
+            }
+        }
+        oka{
+            primary{
+                scripts{"Latn"}
+            }
+        }
         om{
             primary{
                 scripts{"Latn"}
@@ -15731,6 +15777,7 @@ supplementalData:table(nofallback){
             }
             secondary{
                 territories{
+                    "GB",
                     "IN",
                     "PK",
                 }
@@ -15836,7 +15883,10 @@ supplementalData:table(nofallback){
                 territories{"PL"}
             }
             secondary{
-                territories{"UA"}
+                territories{
+                    "GB",
+                    "UA",
+                }
             }
         }
         pms{
@@ -15859,6 +15909,11 @@ supplementalData:table(nofallback){
             }
             secondary{
                 territories{"FM"}
+            }
+        }
+        pqm{
+            primary{
+                scripts{"Latn"}
             }
         }
         prd{
@@ -16706,6 +16761,7 @@ supplementalData:table(nofallback){
             }
             secondary{
                 territories{
+                    "GB",
                     "IN",
                     "MY",
                 }
@@ -17168,7 +17224,10 @@ supplementalData:table(nofallback){
                 territories{"PK"}
             }
             secondary{
-                territories{"IN"}
+                territories{
+                    "GB",
+                    "IN",
+                }
             }
         }
         uz{
@@ -27458,10 +27517,10 @@ supplementalData:table(nofallback){
                 populationShareF:int{48150000}
             }
             atj{
-                populationShareF:int{46180000}
+                populationShareF:int{46170000}
             }
             bla{
-                populationShareF:int{46140000}
+                populationShareF:int{46130000}
             }
             bn{
                 populationShareF:int{47240000}
@@ -27471,37 +27530,37 @@ supplementalData:table(nofallback){
                 populationShareF:int{46340000}
             }
             clc{
-                populationShareF:int{45240000}
+                populationShareF:int{45230000}
             }
             cr{
                 officialStatus{"official_regional"}
-                populationShareF:int{46250000}
+                populationShareF:int{46240000}
             }
             crg{
-                populationShareF:int{45190000}
+                populationShareF:int{45180000}
             }
             crk{
-                populationShareF:int{46120000}
+                populationShareF:int{46110000}
             }
             crl{
-                populationShareF:int{45110000}
+                populationShareF:int{45100000}
             }
             csw{
-                populationShareF:int{45500000}
+                populationShareF:int{45480000}
             }
             dak{
-                populationShareF:int{45340000}
+                populationShareF:int{45320000}
             }
             de{
                 populationShareF:int{47780000}
             }
             den{
                 officialStatus{"official_regional"}
-                populationShareF:int{45640000}
+                populationShareF:int{45610000}
             }
             dgr{
                 officialStatus{"official_regional"}
-                populationShareF:int{45590000}
+                populationShareF:int{45560000}
             }
             el{
                 populationShareF:int{47330000}
@@ -27540,7 +27599,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{47130000}
             }
             hur{
-                populationShareF:int{45200000}
+                populationShareF:int{45190000}
             }
             it{
                 populationShareF:int{47910000}
@@ -27562,25 +27621,25 @@ supplementalData:table(nofallback){
                 populationShareF:int{47450000}
             }
             kwk{
-                populationShareF:int{45110000}
+                populationShareF:int{45100000}
             }
             lil{
-                populationShareF:int{45150000}
+                populationShareF:int{45140000}
             }
             mic{
-                populationShareF:int{46220000}
+                populationShareF:int{46210000}
             }
             moe{
                 populationShareF:int{46320000}
             }
             moh{
-                populationShareF:int{45490000}
+                populationShareF:int{45470000}
             }
             nl{
                 populationShareF:int{47150000}
             }
             nsk{
-                populationShareF:int{45390000}
+                populationShareF:int{45370000}
             }
             oj{
                 populationShareF:int{46630000}
@@ -27589,7 +27648,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{46400000}
             }
             oka{
-                populationShareF:int{45140000}
+                populationShareF:int{45130000}
             }
             pa{
                 populationShareF:int{48160000}
@@ -27601,7 +27660,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{47460000}
             }
             pqm{
-                populationShareF:int{45140000}
+                populationShareF:int{45130000}
             }
             pt{
                 populationShareF:int{47610000}
@@ -27639,7 +27698,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{47490000}
             }
             war{
-                populationShareF:int{45190000}
+                populationShareF:int{45180000}
             }
             yue{
                 populationShareF:int{48170000}
@@ -30832,7 +30891,7 @@ supplementalData:table(nofallback){
             territoryF:intvector{
                 59690100,
                 49984000,
-                55540542,
+                55391904,
             }
         }
         MW{
