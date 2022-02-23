@@ -919,7 +919,7 @@ PluralRulesTest::testDoubleValue() {
         const int64_t inputNum = cas.inputNum;
         const double expVal = cas.expVal;
 
-        FixedDecimal fd(inputNum);
+        FixedDecimal fd(static_cast<double>(inputNum));
         UnicodeString message(u"FixedDecimal::doubleValue() for" + Int64ToUnicodeString(inputNum));
         assertEquals(message, expVal, fd.doubleValue());
     }
@@ -963,7 +963,7 @@ PluralRulesTest::testLongValue() {
         const int64_t inputNum = cas.inputNum;
         const int64_t expVal = cas.expVal;
 
-        FixedDecimal fd(inputNum);
+        FixedDecimal fd(static_cast<double>(inputNum));
         UnicodeString message(u"FixedDecimal::longValue() for" + Int64ToUnicodeString(inputNum));
         assertEquals(message, expVal, fd.longValue());
     }
@@ -982,7 +982,7 @@ PluralRulesTest::testLongValue() {
         const double inputNum = cas.inputNum;
         const int64_t expVal = cas.expVal;
 
-        FixedDecimal fd(inputNum);
+        FixedDecimal fd(static_cast<double>(inputNum));
         UnicodeString message(u"FixedDecimal::longValue() for" + DoubleToUnicodeString(inputNum));
         assertEquals(message, expVal, fd.longValue());
     }

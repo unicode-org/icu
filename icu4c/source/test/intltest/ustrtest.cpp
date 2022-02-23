@@ -2364,7 +2364,7 @@ void UnicodeStringTest::TestLargeAppend() {
         } else if (total <= INT32_MAX) {
             // Check that a string of exactly the maximum size works
             UnicodeString str2;
-            int32_t remain = INT32_MAX - total;
+            int32_t remain = static_cast<int32_t>(INT32_MAX - total);
             char16_t *buf2 = str2.getBuffer(remain);
             if (buf2 == nullptr) {
                 // if somehow memory allocation fail, return the test
