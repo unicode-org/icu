@@ -2421,7 +2421,7 @@ void NumberFormatterApiTest::unitInflections() {
             {"centimeter", "de", nullptr, 1, u"1 Zentimeter"},
             {"centimeter", "de", "genitive", 1, u"1 Zentimeters"},
             {"centimeter", "de", "dative", 10, u"10 Zentimetern"},
-            // TODO(CLDR-14502): check that these inflections are correct, and
+            // TODO(CLDR-14582): check that these inflections are correct, and
             // whether CLDR needs any rules for them (presumably CLDR spec
             // should mention it, if it's a consistent rule):
             {"meter-and-centimeter", "de", nullptr, 1.01, u"1 Meter, 1 Zentimeter"},
