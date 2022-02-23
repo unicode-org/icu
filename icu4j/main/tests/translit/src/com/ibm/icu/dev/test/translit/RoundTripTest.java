@@ -890,7 +890,7 @@ public class RoundTripTest extends TestFmwk {
              */
             /* comment lines below  when transliterator is fixed */
             // start
-            // TODO(Mark): Fix ticket #8989, transliterate U+0970.
+            // TODO(CLDR-4375) Exclude \u0970 for the time being.
             String minusDevAbb = logKnownIssue("cldrbug:4375", null) ? "-[\u0970]" : "";
 
             new TransliterationTest(interIndicArray[i][0], 50)
