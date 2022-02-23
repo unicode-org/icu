@@ -110,20 +110,20 @@ public final class NumberFormatter {
      * <p>Here, RELAXED favors Max-Fraction and STRICT favors Max-Significant. Note that this larger
      * number caused the two modes to favor the opposite result.
      *
-     * @draft ICU 69
+     * @stable ICU 69
      */
     public static enum RoundingPriority {
         /**
          * Favor greater precision by relaxing one of the rounding constraints.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         RELAXED,
 
         /**
          * Favor adherence to all rounding constraints by producing lower precision.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         STRICT,
     }
@@ -437,14 +437,14 @@ public final class NumberFormatter {
         /**
          * Same as AUTO, but do not show the sign on negative zero.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         NEGATIVE,
 
         /**
          * Same as ACCOUNTING, but do not show the sign on negative zero.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         ACCOUNTING_NEGATIVE,
     }
@@ -488,20 +488,20 @@ public final class NumberFormatter {
      * <li>HIDE_IF_WHOLE: 0.90, 1, 1.10
      * </ul>
      *
-     * @draft ICU 69
+     * @stable ICU 69
      */
     public static enum TrailingZeroDisplay {
         /**
          * Display trailing zeros according to the settings for minimum fraction and significant digits.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         AUTO,
 
         /**
          * Same as AUTO, but hide trailing zeros after the decimal separator if they are all zero.
          *
-         * @draft ICU 69
+         * @stable ICU 69
          */
         HIDE_IF_WHOLE,
     }

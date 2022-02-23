@@ -344,7 +344,7 @@ public abstract class Precision {
      * when the number is an integer, use HIDE_IF_WHOLE.
      *
      * @param trailingZeroDisplay Option to configure the display of trailing zeros.
-     * @draft ICU 69
+     * @stable ICU 69
      */
     public Precision trailingZeroDisplay(TrailingZeroDisplay trailingZeroDisplay) {
         Precision result = this.createCopy();
