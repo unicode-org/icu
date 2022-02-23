@@ -317,7 +317,7 @@ void DecimalQuantityTest::testUseApproximateDoubleWhenAble() {
                  {1.235, 3, RoundingMode::UNUM_ROUND_CEILING, true}};
 
     UErrorCode status = U_ZERO_ERROR;
-    for (TestCase cas : cases) {
+    for (const TestCase& cas : cases) {
         DecimalQuantity fq;
         fq.setToDouble(cas.d);
         assertTrue("Should be using approximate double", !fq.isExplicitExactDouble());
@@ -623,7 +623,7 @@ void DecimalQuantityTest::testScientificAndCompactSuppressedExponent() {
         // test the actual computed values of the plural operands
 
         double expectedNOperand = cas.expectedDouble;
-        double expectedIOperand = cas.expectedLong;
+        double expectedIOperand = static_cast<double>(cas.expectedLong);
         double expectedEOperand = cas.expectedSuppressedScientificExponent;
         double expectedCOperand = cas.expectedSuppressedCompactExponent;
         double actualNOperand = dq.getPluralOperand(PLURAL_OPERAND_N);

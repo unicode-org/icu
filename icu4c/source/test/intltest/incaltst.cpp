@@ -988,7 +988,7 @@ void IntlCalendarTest::TestConsistencyEthiopicAmeteAlem() {
 }
 void IntlCalendarTest::checkConsistency(const char* locale) {
     // Check 2.5 years in quick mode and 8000 years in exhaustive mode.
-    int32_t numOfDaysToTest = (quick ? 2.5 : 8000) * 365;
+    int32_t numOfDaysToTest = static_cast<int32_t>((quick ? 2.5 : 8000) * 365);
     constexpr int32_t msInADay = 1000*60*60*24;
     std::string msg("TestConsistency");
     IcuTestErrorCode status(*this, (msg + locale).c_str());
