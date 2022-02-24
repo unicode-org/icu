@@ -149,7 +149,7 @@ $CANT_CM = [ $SP $BK $CR $LF $NL $ZW $CM];       # Bases that can't take CMs
 # AL_FOLLOW  set of chars that can unconditionally follow an AL
 #            Needed in rules where stand-alone $CM s are treated as AL.
 #
-$AL_FOLLOW      = [$BK $CR $LF $NL $ZW $SP $CL $CP $EX $HL $IS $SY $WJ $GL $OP30 $QU $BA $HY $NS $IN $NU $PR $PO $POX $ALPlus];
+$AL_FOLLOW      = [$BK $CR $LF $NL $ZW $SP $CL $CP $EX $HL $IS $SY $WJ $GL $OP30 $QU $BA $BAX $HY $NS $IN $NU $PR $PO $POX $ALPlus];
 
 
 #
@@ -314,7 +314,7 @@ $LB20NonBreaks = [$LB18NonBreaks - $CB];
 $ID $CM* ($BA | $HY | $NS);
 
 
-^$CM+ ($BA | $HY | $NS);
+^$CM+ ($BA | $BAX | $HY | $NS);
 
 $BB $CM* [^$CB];                                  #  $BB  x
 $BB $CM* $LB20NonBreaks;
@@ -390,9 +390,9 @@ $CP30 $CM* ($ALPlus | $HL | $NU);
 
 # LB 30a  Do not break between regional indicators. Break after pairs of them.
 #         Tricky interaction with LB8a: ZWJ x .   together with ZWJ acting like a CM.
-$RI $CM* $RI                 / [[^$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $HY $NS $IN $CM]];
-$RI $CM* $RI $CM* [$CM-$ZWJ] / [[^$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $HY $NS $IN $CM]];
-$RI $CM* $RI $CM* [$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $HY $NS $IN $ZWJ {eof}];
+$RI $CM* $RI                 / [[^$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $BAX $HY $NS $IN $CM]];
+$RI $CM* $RI $CM* [$CM-$ZWJ] / [[^$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $BAX $HY $NS $IN $CM]];
+$RI $CM* $RI $CM* [$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $BAX $HY $NS $IN $ZWJ {eof}];
 # note: the preceding rule includes {eof} rather than having the last [set] term qualified with '?'
 #       because of the chain-out behavior difference. The rule must chain out only from the [set characters],
 #       not from the preceding $RI or $CM, which it would be able to do if the set were optional.
