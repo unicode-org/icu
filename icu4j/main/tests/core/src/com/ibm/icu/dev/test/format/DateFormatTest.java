@@ -5610,4 +5610,20 @@ public class DateFormatTest extends TestFmwk {
             }
         }
     }
+
+    @Test
+    public void testExtraneousCharacters() {
+        // regression test for ICU-21802
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd", ULocale.US);
+        df.setLenient(false);
+
+        ParsePosition pos = new ParsePosition(0);
+        df.parse("2021", cal, pos);
+        assertTrue("Success parsing '2021'", pos.getIndex() == 0);
+
+        pos.setIndex(0);
+        df.parse("2021-", cal, pos);
+        assertTrue("Success parsing '2021-'", pos.getIndex() == 0);
+    }
 }
