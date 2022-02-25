@@ -1107,8 +1107,23 @@ void DateIntervalFormatTest::testHourMetacharacters() {
         "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "HH", "00\\u201301 Uhr",
         
         // k and K (ICU-21154 and ICU-21156)
-        "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "KK", "0 \\u2013 1 AM",
-        "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "kk", "24\\u201301 Uhr",
+        // (should behave the same as h and H if not overridden in locale ID)
+        "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "KK", "12 \\u2013 1 AM",
+        "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "kk", "00\\u201301 Uhr",
+        // (overriding hour cycle in locale ID should affect both h and K [or both H and k])
+        "en-u-hc-h11", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "hh", "0 \\u2013 1 AM",
+        "en-u-hc-h11", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "KK", "0 \\u2013 1 AM",
+        "de-u-hc-h24", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "HH", "24\\u201301 Uhr",
+        "de-u-hc-h24", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "kk", "24\\u201301 Uhr",
+        // (overriding hour cycle to h11 should NOT affect H and k; overriding to h24 should NOT affect h and K)
+        "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "HH", "00 \\u2013 01",
+        "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "kk", "00 \\u2013 01",
+        "en-u-hc-h11", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "HH", "00 \\u2013 01",
+        "en-u-hc-h11", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "kk", "00 \\u2013 01",
+        "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "hh", "12 \\u2013 1 Uhr AM",
+        "de", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "KK", "12 \\u2013 1 Uhr AM",
+        "de-u-hc-h24", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "hh", "12 \\u2013 1 Uhr AM",
+        "de-u-hc-h24", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "KK", "12 \\u2013 1 Uhr AM",
 
         // different lengths of the 'a' field
         "en", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "ha", "10 AM \\u2013 1 PM",
@@ -1163,14 +1178,22 @@ void DateIntervalFormatTest::testHourMetacharacters() {
         "hi_IN", "CE 2010 09 27 10:00:00", "CE 2010 09 27 13:00:00", "CC", "\\u0938\\u0941\\u092C\\u0939 10 \\u2013 \\u0926\\u094B\\u092A\\u0939\\u0930 1",
         "hi_IN", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "CC", "\\u0930\\u093E\\u0924 12\\u20131",
 
-         // regression test for ICU-21342
-         "en_GB", "CE 2010 09 27 00:00:00", "CE 2010 09 27 10:00:00", "kk", "24\\u201310",
-         "en_GB", "CE 2010 09 27 00:00:00", "CE 2010 09 27 11:00:00", "kk", "24\\u201311",
-         "en_GB", "CE 2010 09 27 00:00:00", "CE 2010 09 27 12:00:00", "kk", "24\\u201312",
-         "en_GB", "CE 2010 09 27 00:00:00", "CE 2010 09 27 13:00:00", "kk", "24\\u201313",
+        // regression test for ICU-21342
+        "en-gb-u-hc-h24", "CE 2010 09 27 00:00:00", "CE 2010 09 27 10:00:00", "kk", "24\\u201310",
+        "en-gb-u-hc-h24", "CE 2010 09 27 00:00:00", "CE 2010 09 27 11:00:00", "kk", "24\\u201311",
+        "en-gb-u-hc-h24", "CE 2010 09 27 00:00:00", "CE 2010 09 27 12:00:00", "kk", "24\\u201312",
+        "en-gb-u-hc-h24", "CE 2010 09 27 00:00:00", "CE 2010 09 27 13:00:00", "kk", "24\\u201313",
 
-         // regression test for ICU-21343
-         "de", "CE 2010 09 27 01:00:00", "CE 2010 09 27 10:00:00", "KK", "1 \\u2013 10 Uhr AM",
+        // regression test for ICU-21343
+        "de", "CE 2010 09 27 01:00:00", "CE 2010 09 27 10:00:00", "KK", "1 \\u2013 10 Uhr AM",
+        
+        // regression test for ICU-21154 (single-date ranges should use the same hour cycle as multi-date ranges)
+        "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 00:00:00", "hh", "12 AM",
+        "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "hh", "12 \\u2013 1 AM",
+        "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 00:00:00", "KK", "12 AM",
+        "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "KK", "12 \\u2013 1 AM", // (this was producing "0 - 1 AM" before)
+        "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 00:00:00", "jj", "12 AM",
+        "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "jj", "12 \\u2013 1 AM",
     };
     expect(DATA, UPRV_LENGTHOF(DATA));
 }

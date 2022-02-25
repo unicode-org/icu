@@ -1615,14 +1615,20 @@ public class DateIntervalFormat extends UFormat {
         StringBuilder result = new StringBuilder(skeleton);
 
         char hourMetachar = '\0';
+        char dayPeriodChar = '\0';
         int metacharStart = 0;
         int metacharCount = 0;
         for (int i = 0; i < result.length(); i++) {
             char c = result.charAt(i);
-            if (c == 'j' || c == 'J' || c == 'C') {
+            if (c == 'j' || c == 'J' || c == 'C' || c == 'h' || c == 'H' || c == 'k' || c == 'K') {
                 if (hourMetachar == '\0') {
                     hourMetachar = c;
                     metacharStart = i;
+                }
+                ++metacharCount;
+            } else if (c == 'a' || c == 'b' || c == 'B') {
+                if (dayPeriodChar == '\0') {
+                    dayPeriodChar = c;
                 }
                 ++metacharCount;
             } else {
@@ -1634,7 +1640,6 @@ public class DateIntervalFormat extends UFormat {
 
         if (hourMetachar != '\0') {
             char hourChar = 'H';
-            char dayPeriodChar = 'a';
 
             DateTimePatternGenerator dtptng = DateTimePatternGenerator.getInstance(locale);
             String convertedPattern = dtptng.getBestPattern(String.valueOf(hourMetachar));
@@ -1662,6 +1667,8 @@ public class DateIntervalFormat extends UFormat {
                 dayPeriodChar = 'b';
             } else if (convertedPattern.indexOf('B') != -1) {
                 dayPeriodChar = 'B';
+            } else if (dayPeriodChar == '\0') {
+                dayPeriodChar = 'a';
             }
 
             if (hourChar == 'H' || hourChar == 'k') {
