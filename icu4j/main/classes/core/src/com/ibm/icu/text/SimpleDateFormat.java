@@ -3787,6 +3787,9 @@ public class SimpleDateFormat extends DateFormat {
                 } else {
                     number = parseInt(text, pos, allowNegative,currentNumberFormat);
                 }
+                if (!isLenient() && pos.getIndex() < start + count) {
+                    return -start;
+                }
                 if (number != null) {
                     if (patternCharIndex != DateFormat.RELATED_YEAR) {
                         cal.set(field, number.intValue());

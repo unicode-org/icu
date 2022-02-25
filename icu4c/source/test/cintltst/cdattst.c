@@ -45,6 +45,7 @@ static void TestFormatForFields(void);
 static void TestForceGannenNumbering(void);
 static void TestMapDateToCalFields(void);
 static void TestNarrowQuarters(void);
+static void TestExtraneousCharacters(void);
 
 void addDateForTest(TestNode** root);
 
@@ -67,6 +68,7 @@ void addDateForTest(TestNode** root)
     TESTCASE(TestForceGannenNumbering);
     TESTCASE(TestMapDateToCalFields);
     TESTCASE(TestNarrowQuarters);
+    TESTCASE(TestExtraneousCharacters);
 }
 /* Testing the DateFormat API */
 static void TestDateFormat()
@@ -2015,6 +2017,26 @@ static void TestNarrowQuarters(void) {
         
         udat_close(df);
     }
+}
+
+static void TestExtraneousCharacters(void) {
+    // regression test for ICU-21802
+    UErrorCode err = U_ZERO_ERROR;
+    UCalendar* cal = ucal_open(u"UTC", -1, "en_US", UCAL_GREGORIAN, &err);
+    UDateFormat* df = udat_open(UDAT_PATTERN, UDAT_PATTERN, "en_US", u"UTC", -1, u"yyyyMMdd", -1, &err);
+    
+    if (assertSuccess("Failed to create date formatter and calendar", &err)) {
+        udat_setLenient(df, false);
+
+        udat_parseCalendar(df, cal, u"2021", -1, NULL, &err);
+        assertTrue("Success parsing '2021'", err == U_PARSE_ERROR);
+        
+        err = U_ZERO_ERROR;
+        udat_parseCalendar(df, cal, u"2021-", -1, NULL, &err);
+        assertTrue("Success parsing '2021-'", err == U_PARSE_ERROR);
+    }
+    udat_close(df);
+    ucal_close(cal);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
