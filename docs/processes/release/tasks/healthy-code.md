@@ -469,6 +469,7 @@ make check
 
 ## Test ICU4C Samples and Demos
 
+### Windows build and test
 To build the ICU4C samples on Windows with Visual Studio, use the following
 steps:
 
@@ -488,6 +489,28 @@ steps:
 
 To test the sample programs, run the "source\\samples\\all\\samplecheck.bat"
 script for each configuration, and ensure that they are successful.
+
+### Linux /Unix build and test
+To build and test ICU4C samples:
+
+* In icu4c/source, run the configuration "./runConfigure Linux" (or appropriate system)
+* Build and install ICU4C.
+* Set PATH to include the bin directory of the installed ICU4c.
+* Set LD_LIBRARY_PATH to include the libs directory on the installed ICU4c.
+
+
+```
+cd icu4c/source
+cd samples
+# To clean all the test binaries
+make clean-samples-recursive
+# To rebuild them all
+make all-samples-recursive
+# To run all tests serially
+make check-samples-recursive
+
+```
+
 
 ## **Test ICU4C Demos via Docker**
 
