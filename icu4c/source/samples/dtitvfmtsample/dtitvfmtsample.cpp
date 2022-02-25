@@ -51,7 +51,7 @@ static void dtitvfmtPreDefined() {
             UnicodeString("yMMMd"),
             UnicodeString("MMMMd"),
             UnicodeString("jm"),
-            0,
+            UnicodeString("")
         };
     u_fprintf(out,"%-10s%-22s%-22s%-35s%-35s\n", "Skeleton","from","to","Date Interval in en_US","Date Interval in Ja");
     int i=0;
@@ -107,7 +107,7 @@ static void dtitvfmtCustomized() {
     UnicodeString skeletons[] = {
             UnicodeString("yMMMd"),
             UnicodeString("Hm"),
-            0,
+            UnicodeString("")
         };
         u_printf("%-10s%-22s%-22s%-45s%-35s\n", "Skeleton", "from","to", "Date Interval in en_US","Date Interval in Ja");
         // Create an empty DateIntervalInfo object
