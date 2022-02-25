@@ -24,8 +24,6 @@ CLEANFILES = *~
 
 SUBDIRS = cal citer coll csdet date datecal ufortune uresb datefmt msgfmt numfmt props strsrch translit uciter8 ucnv udata ustring dtitvfmtsample dtptngsample plurfmtsample
 
-
-
 ## List of phony targets
 .PHONY : all all-local all-recursive install install-local		\
 install-recursive clean clean-local clean-recursive distclean		\
