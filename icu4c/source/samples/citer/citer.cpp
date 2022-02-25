@@ -73,7 +73,7 @@ void Test::TestUChariter() {
     test2->getText(result2);
     if (result1 != result2) {
         u_fprintf(out, "iter.getText() != clone.getText()\n");
-    } 
+    }
 
     u_fprintf(out, "\n");
 
@@ -95,7 +95,7 @@ void Test::TestUChariter() {
             u_fprintf(out, "Iterator reached end prematurely");
         }
         else if (c != testText[i]) {
-            u_fprintf(out, "Character mismatch at position %d\n" + i);
+          u_fprintf(out, "Character mismatch at position %d\n", i);
         }
         if (iter.current() != c) {
             u_fprintf(out, "current() isn't working right");
@@ -111,7 +111,7 @@ void Test::TestUChariter() {
         u_fprintf(out, "|");
         printUChar(c);
 
-    } while (c != CharacterIterator::DONE);        
+    } while (c != CharacterIterator::DONE);
 
     delete test2;
     u_fprintf(out, "\n");
@@ -146,7 +146,7 @@ void Test::TestStringiter() {
     int32_t i = iter.endIndex();
 
     printUChar(c);
-    i--; // already printed out the last char 
+    i--; // already printed out the last char
 
     if (iter.startIndex() != 0 || iter.endIndex() != u_strlen(testText)) {
         u_fprintf(out, "startIndex() or endIndex() failed\n");
