@@ -4,36 +4,46 @@
 ## Copyright (c) 2002-2010, International Business Machines Corporation 
 ## and others. All Rights Reserved.
 
-This directory contains sample code
-Below is a short description of the contents of this directory.
+This directory contains sample code using ICU4C routines. Below is a
+short description of the contents of this directory.
 
-break - demonstrates how to use BreakIterators in C and C++.
+break   - demonstrates how to use BreakIterators in C and C++.
 
-cal      - prints out a calendar. 
+cal     - prints out a calendar. 
 
 case    - demonstrates how to do Unicode case conversion in C and C++.
 
+coll    - shows how collation compares strings
+
 csdet   -  demonstrates using ICU's CharSet Detection API
 
-date     - prints out the current date, localized. 
+date    - prints out the current date, localized. 
 
-datefmt  - an exercise using the date formatting API
+datecal - demonstrates how a calendar object provides information
+    
+datefmt - an exercise using the date formatting API
 
-layout   - demonstrates the ICU LayoutEngine
+dtitvfmtsample - shows how date interval format uses predefined skeletons
 
-legacy   - demonstrates using two versions of ICU in one application
+dtptngsample - uses DateTimePatternGenerator to create customized date/time pattern
+       
+layout   - demonstrates the ICU LayoutEngine (obsolete)
+
+legacy   - demonstrates using two versions of ICU in one application (obsolete)
 
 msgfmt   - demonstrates the use of the Message Format
 
 numfmt   - demonstrates the use of the number format
 
+plurfmtsample - uses PluralFormat and Messageformat to get Plural Form
+    
 props    - demonstrates the use of Unicode properties
 
 strsrch - demonstrates how to search for patterns in Unicode text using the usearch interface.
 
 translit - demonstrates the use of ICU transliteration
 
-uciter8.c - demonstrates how to leniently read 8-bit Unicode text.
+uciter8 - demonstrates how to leniently read 8-bit Unicode text.
 
 ucnv     - demonstrates the use of ICU codepage conversion
 
@@ -41,7 +51,7 @@ udata    - demonstrates the use of ICU low level data routines (reader/writer in
 
 ufortune - demonstrates packaging and use of resources in an application
 
-ugrep  - demonstrates ICU Regular Expressions. 
+ugrep    - demonstrates ICU Regular Expressions. 
 
 uresb    - demonstrates building and loading resource bundles
 
@@ -52,12 +62,11 @@ ustring  - demonstrates ICU string manipulation functions
 * Where can I find more sample code?
 
  - The "uconv" utility is a full-featured command line application.
-    It is normally built with ICU, and is located in icu/source/extra/uconv
+   It is normally built with ICU, and is located in icu/source/extra/uconv
 
- - The "icuapps" CVS module contains other applications and libraries not
-    included with ICU.  You can check it out from the CVS command line
-    by using for example,  "cvs co icuapps" instead of "cvs co icu",
-   or through WebCVS at http://dev.icu-project.org/cgi-bin/viewcvs.cgi/icuapps/
+ - The "icu-demos" contains other applications and libraries not
+   included with ICU.  You can check it out from https://github.com/unicode-org/icu-demos
+   using github clone. See the README file for additional information.
 
 ==
 * How do I build the samples?
@@ -76,7 +85,7 @@ ustring  - demonstrates ICU string manipulation functions
             - be sure 'icu-config' is accessible from the PATH
             - type 'make all-samples' from this directory 
                (other targets:  clean-samples, check-samples)
-           Note: 'make all-samples' won't work correctly in out of source builds.
+      Note: 'make all-samples' won't work correctly in out of source builds.
 
-            - legacy and layout are not included in these lists,
-                   please see their individual readmes.
+      Note that legacy and layout are obsolete samples that may not compile or run without
+            adjustments to their makefiles.

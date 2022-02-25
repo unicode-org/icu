@@ -47,7 +47,7 @@ const char gHelpString[] =
  *    These global variables are set according to the options specified
  *    on the command line by the user.
  */
-char * opt_locale      = "en_US";
+char const *opt_locale      = "en_US";
 char * opt_rules       = 0;
 UBool  opt_help        = false;
 UBool  opt_norm        = false;
@@ -59,8 +59,8 @@ UBool  opt_case        = false;
 UBool  opt_overlap     = false;
 UBool  opt_canonical   = false;
 int    opt_level       = 0;
-char * opt_source      = "International Components for Unicode";
-char * opt_pattern     = "Unicode";
+char const *opt_source      = "International Components for Unicode";
+char const *opt_pattern     = "Unicode";
 UCollator * collator   = 0;
 UStringSearch * search = 0;
 UChar rules[100];

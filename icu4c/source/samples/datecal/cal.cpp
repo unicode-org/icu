@@ -17,6 +17,8 @@
 #include "unicode/gregocal.h"
 #include <stdio.h>
 
+using namespace icu;
+
 extern "C" void c_main();
 
 void cpp_main()
