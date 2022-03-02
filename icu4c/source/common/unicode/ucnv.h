@@ -553,7 +553,7 @@ U_CAPI UConverter* U_EXPORT2 ucnv_clone(const UConverter *cnv, UErrorCode *statu
  * @return pointer to the new clone
  * @deprecated ICU 71 Use ucnv_clone() instead.
  */
-U_CAPI UConverter * U_EXPORT2
+U_DEPRECATED UConverter * U_EXPORT2
 ucnv_safeClone(const UConverter *cnv,
                void             *stackBuffer,
                int32_t          *pBufferSize,
