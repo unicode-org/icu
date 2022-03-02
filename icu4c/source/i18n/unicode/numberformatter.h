@@ -22,6 +22,7 @@
 #include "unicode/parseerr.h"
 #include "unicode/plurrule.h"
 #include "unicode/ucurr.h"
+#include "unicode/unounclass.h"
 #include "unicode/unum.h"
 #include "unicode/unumberformatter.h"
 #include "unicode/uobject.h"
@@ -2766,14 +2767,20 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      */
     MeasureUnit getOutputUnit(UErrorCode& status) const;
 
-#ifndef U_HIDE_INTERNAL_API
+#ifndef U_HIDE_DRAFT_API
+
     /**
-     * Gets the gender of the formatted output. Returns "" when the gender is
-     * unknown, or for ungendered languages.
+     * Gets the noun class of the formatted output. Returns `OTHER` when the noun class
+     * is not supported yet.
      *
-     * @internal ICU 69 technology preview.
+     * @return `NounClass`
+     * @draft ICU 71.
      */
-    const char *getGender(UErrorCode& status) const;
+    NounClass getNounClass(UErrorCode &status) const;
+
+#endif // U_HIDE_DRAFT_API
+
+#ifndef U_HIDE_INTERNAL_API
 
     /**
      *  Gets the raw DecimalQuantity for plural rule selection.
@@ -2788,6 +2795,18 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
     void getAllFieldPositionsImpl(FieldPositionIteratorHandler& fpih, UErrorCode& status) const;
 
 #endif  /* U_HIDE_INTERNAL_API */
+
+#ifndef U_HIDE_DEPRECATED_API
+
+    /**
+     * Gets the gender of the formatted output. Returns "" when the gender is
+     * unknown, or for ungendered languages.
+     *
+     * @deprecated This API is for ICU internal use only.
+     */
+    const char *getGender(UErrorCode &status) const;
+
+#endif /* U_HIDE_DEPRECATED_API */
 
   private:
     // Can't use LocalPointer because UFormattedNumberData is forward-declared
