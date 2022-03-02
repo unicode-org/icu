@@ -440,3 +440,28 @@ jobs:
           echo Did you forget to include the changed data files in this PR?
           exit 1
         fi
+
+# Build and run ICU4C samples
+  icu4c-test-samples:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C configure and build
+        run: |
+          # Perform an out-of-source build of icu4c
+          mkdir /tmp/icu_samples
+          cd icu4c/source
+          ./runConfigureICU Linux -prefix=/tmp/icu_samples
+          make install
+          # Reference the paths in the new build
+          cd samples
+          # To clean all the test binaries
+          make clean-samples-recursive
+          # To rebuild them all
+          echo "Make all samples"
+          PATH=$PATH:/tmp/icu_samples/bin LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tmp/icu_samples/lib make all-samples-recursive
+          # To run all tests serially
+          echo "Run all samples"
+          pwd
+          PATH=$PATH:/tmp/icu_samples/bin LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tmp/icu_samples/lib make check-samples-recursive                  
