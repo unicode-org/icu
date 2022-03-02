@@ -1346,7 +1346,7 @@ U_CAPI UCollator* U_EXPORT2 ucol_clone(const UCollator *coll, UErrorCode *status
  * @see ucol_close
  * @deprecated ICU 71 Use ucol_clone() instead.
  */
-U_CAPI UCollator* U_EXPORT2 
+U_DEPRECATED UCollator* U_EXPORT2
 ucol_safeClone(const UCollator *coll,
                void            *stackBuffer,
                int32_t         *pBufferSize,
