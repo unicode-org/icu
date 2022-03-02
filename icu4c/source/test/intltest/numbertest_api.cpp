@@ -87,6 +87,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(unitUsageSkeletons);
         TESTCASE_AUTO(unitCurrency);
         TESTCASE_AUTO(unitInflections);
+        TESTCASE_AUTO(unitNounClass);
         TESTCASE_AUTO(unitGender);
         TESTCASE_AUTO(unitNotConvertible);
         TESTCASE_AUTO(unitPercent);
@@ -2436,6 +2437,307 @@ void NumberFormatterApiTest::unitInflections() {
     // TODO: add a usage case that selects between preferences with different
     // genders (e.g. year, month, day, hour).
     // TODO: look at "↑↑↑" cases: check that inheritance is done right.
+}
+
+using icu::NounClass;
+void NumberFormatterApiTest::unitNounClass() {
+    IcuTestErrorCode status(*this, "unitNounClass");
+    const struct TestCase {
+        const char *locale;
+        const char *unitIdentifier;
+        const NounClass expectedNounClass;
+    } cases[] = {
+        {"de", "inch", NounClass::MASCULINE},
+        {"de", "yard", NounClass::NEUTER},
+        {"de", "meter", NounClass::MASCULINE},
+        {"de", "liter", NounClass::MASCULINE},
+        {"de", "second", NounClass::FEMININE},
+        {"de", "minute", NounClass::FEMININE},
+        {"de", "hour", NounClass::FEMININE},
+        {"de", "day", NounClass::MASCULINE},
+        {"de", "year", NounClass::NEUTER},
+        {"de", "gram", NounClass::NEUTER},
+        {"de", "watt", NounClass::NEUTER},
+        {"de", "bit", NounClass::NEUTER},
+        {"de", "byte", NounClass::NEUTER},
+
+        {"fr", "inch", NounClass::MASCULINE},
+        {"fr", "yard", NounClass::MASCULINE},
+        {"fr", "meter", NounClass::MASCULINE},
+        {"fr", "liter", NounClass::MASCULINE},
+        {"fr", "second", NounClass::FEMININE},
+        {"fr", "minute", NounClass::FEMININE},
+        {"fr", "hour", NounClass::FEMININE},
+        {"fr", "day", NounClass::MASCULINE},
+        {"fr", "year", NounClass::MASCULINE},
+        {"fr", "gram", NounClass::MASCULINE},
+
+        // grammaticalFeatures deriveCompound "per" rule takes the gender of the
+        // numerator unit:
+        {"de", "meter-per-hour", NounClass::MASCULINE},
+        {"fr", "meter-per-hour", NounClass::MASCULINE},
+        {"af", "meter-per-hour", NounClass::OTHER}, // ungendered language
+
+        // French "times" takes gender from first value, German takes the
+        // second. Prefix and power does not have impact on gender for these
+        // languages:
+        {"de", "square-decimeter-square-second", NounClass::FEMININE},
+        {"fr", "square-decimeter-square-second", NounClass::MASCULINE},
+
+        // TODO(icu-units#149): percent and permille bypasses LongNameHandler
+        // when unitWidth is not FULL_NAME:
+        // // Gender of per-second might be that of percent? TODO(icu-units#28)
+        // {"de", "percent", NounClass::NEUTER},
+        // {"fr", "percent", NounClass::MASCULINE},
+
+        // Built-in units whose simple units lack gender in the CLDR data file
+        {"de", "kilopascal", NounClass::NEUTER},
+        {"fr", "kilopascal", NounClass::MASCULINE},
+        // {"de", "pascal", NounClass::OTHER},
+        // {"fr", "pascal", NounClass::OTHER},
+
+        // Built-in units that lack gender in the CLDR data file
+        // {"de", "revolution", NounClass::OTHER},
+        // {"de", "radian", NounClass::OTHER},
+        // {"de", "arc-minute", NounClass::OTHER},
+        // {"de", "arc-second", NounClass::OTHER},
+        {"de", "square-yard", NounClass::NEUTER},    // POWER
+        {"de", "square-inch", NounClass::MASCULINE}, // POWER
+        // {"de", "dunam", NounClass::OTHER},
+        // {"de", "karat", NounClass::OTHER},
+        // {"de", "milligram-ofglucose-per-deciliter", NounClass::OTHER}, // COMPOUND, ofglucose
+        // {"de", "millimole-per-liter", NounClass::OTHER},               // COMPOUND, mole
+        // {"de", "permillion", NounClass::OTHER},
+        // {"de", "permille", NounClass::OTHER},
+        // {"de", "permyriad", NounClass::OTHER},
+        // {"de", "mole", NounClass::OTHER},
+        {"de", "liter-per-kilometer", NounClass::MASCULINE}, // COMPOUND
+        {"de", "petabyte", NounClass::NEUTER},               // PREFIX
+        {"de", "terabit", NounClass::NEUTER},                // PREFIX
+        // {"de", "century", NounClass::OTHER},
+        // {"de", "decade", NounClass::OTHER},
+        {"de", "millisecond", NounClass::FEMININE}, // PREFIX
+        {"de", "microsecond", NounClass::FEMININE}, // PREFIX
+        {"de", "nanosecond", NounClass::FEMININE},  // PREFIX
+        // {"de", "ampere", NounClass::OTHER},
+        // {"de", "milliampere", NounClass::OTHER}, // PREFIX, ampere
+        // {"de", "ohm", NounClass::OTHER},
+        // {"de", "calorie", NounClass::OTHER},
+        // {"de", "kilojoule", NounClass::OTHER}, // PREFIX, joule
+        // {"de", "joule", NounClass::OTHER},
+        {"de", "kilowatt-hour", NounClass::FEMININE}, // COMPOUND
+        // {"de", "electronvolt", NounClass::OTHER},
+        // {"de", "british-thermal-unit", NounClass::OTHER},
+        // {"de", "therm-us", NounClass::OTHER},
+        // {"de", "pound-force", NounClass::OTHER},
+        // {"de", "newton", NounClass::OTHER},
+        // {"de", "gigahertz", NounClass::OTHER}, // PREFIX, hertz
+        // {"de", "megahertz", NounClass::OTHER}, // PREFIX, hertz
+        // {"de", "kilohertz", NounClass::OTHER}, // PREFIX, hertz
+        // {"de", "hertz", NounClass::OTHER},
+        // {"de", "em", NounClass::OTHER},
+        // {"de", "pixel", NounClass::OTHER},
+        // {"de", "megapixel", NounClass::OTHER},
+        // {"de", "pixel-per-centimeter", NounClass::OTHER}, // COMPOUND, pixel
+        // {"de", "pixel-per-inch", NounClass::OTHER},       // COMPOUND, pixel
+        // {"de", "dot-per-centimeter", NounClass::OTHER},   // COMPOUND, dot
+        // {"de", "dot-per-inch", NounClass::OTHER},         // COMPOUND, dot
+        // {"de", "dot", NounClass::OTHER},
+        // {"de", "earth-radius", NounClass::OTHER},
+        {"de", "decimeter", NounClass::MASCULINE},  // PREFIX
+        {"de", "micrometer", NounClass::MASCULINE}, // PREFIX
+        {"de", "nanometer", NounClass::MASCULINE},  // PREFIX
+        // {"de", "light-year", NounClass::OTHER},
+        // {"de", "astronomical-unit", NounClass::OTHER},
+        // {"de", "furlong", NounClass::OTHER},
+        // {"de", "fathom", NounClass::OTHER},
+        // {"de", "nautical-mile", NounClass::OTHER},
+        // {"de", "mile-scandinavian", NounClass::OTHER},
+        // {"de", "point", NounClass::OTHER},
+        // {"de", "lux", NounClass::OTHER},
+        // {"de", "candela", NounClass::OTHER},
+        // {"de", "lumen", NounClass::OTHER},
+        // {"de", "metric-ton", NounClass::OTHER},
+        // {"de", "microgram", NounClass::NEUTER}, // PREFIX
+        // {"de", "ton", NounClass::OTHER},
+        // {"de", "stone", NounClass::OTHER},
+        // {"de", "ounce-troy", NounClass::OTHER},
+        // {"de", "carat", NounClass::OTHER},
+        {"de", "gigawatt", NounClass::NEUTER},  // PREFIX
+        {"de", "milliwatt", NounClass::NEUTER}, // PREFIX
+        // {"de", "horsepower", NounClass::OTHER},
+        // {"de", "millimeter-ofhg", NounClass::OTHER},
+        // {"de", "pound-force-per-square-inch", NounClass::OTHER}, // COMPOUND, pound-force
+        // {"de", "inch-ofhg", NounClass::OTHER},
+        // {"de", "bar", NounClass::OTHER},
+        // {"de", "millibar", NounClass::OTHER}, // PREFIX, bar
+        // {"de", "atmosphere", NounClass::OTHER},
+        // {"de", "pascal", NounClass::OTHER},      // PREFIX, kilopascal? neuter?
+        // {"de", "hectopascal", NounClass::OTHER}, // PREFIX, pascal, neuter?
+        // {"de", "megapascal", NounClass::OTHER},  // PREFIX, pascal, neuter?
+        // {"de", "knot", NounClass::OTHER},
+        {"de", "pound-force-foot", NounClass::MASCULINE}, // COMPOUND
+        {"de", "newton-meter", NounClass::MASCULINE},     // COMPOUND
+        {"de", "cubic-kilometer", NounClass::MASCULINE},  // POWER
+        {"de", "cubic-yard", NounClass::NEUTER},          // POWER
+        {"de", "cubic-inch", NounClass::MASCULINE},       // POWER
+        {"de", "megaliter", NounClass::MASCULINE},        // PREFIX
+        {"de", "hectoliter", NounClass::MASCULINE},       // PREFIX
+        // {"de", "pint-metric", NounClass::OTHER},
+        // {"de", "cup-metric", NounClass::OTHER},
+        {"de", "acre-foot", NounClass::MASCULINE}, // COMPOUND
+        // {"de", "bushel", NounClass::OTHER},
+        // {"de", "barrel", NounClass::OTHER},
+        // Units missing gender in German also misses gender in French:
+        // {"fr", "revolution", NounClass::OTHER},
+        // {"fr", "radian", NounClass::OTHER},
+        // {"fr", "arc-minute", NounClass::OTHER},
+        // {"fr", "arc-second", NounClass::OTHER},
+        {"fr", "square-yard", NounClass::MASCULINE}, // POWER
+        {"fr", "square-inch", NounClass::MASCULINE}, // POWER
+        // {"fr", "dunam", NounClass::OTHER},
+        // {"fr", "karat", NounClass::OTHER},
+        {"fr", "milligram-ofglucose-per-deciliter", NounClass::MASCULINE}, // COMPOUND
+        // {"fr", "millimole-per-liter", NounClass::OTHER},                        // COMPOUND, mole
+        // {"fr", "permillion", NounClass::OTHER},
+        // {"fr", "permille", NounClass::OTHER},
+        // {"fr", "permyriad", NounClass::OTHER},
+        // {"fr", "mole", NounClass::OTHER},
+        {"fr", "liter-per-kilometer", NounClass::MASCULINE}, // COMPOUND
+        // {"fr", "petabyte", NounClass::OTHER},                     // PREFIX
+        // {"fr", "terabit", NounClass::OTHER},                      // PREFIX
+        // {"fr", "century", NounClass::OTHER},
+        // {"fr", "decade", NounClass::OTHER},
+        {"fr", "millisecond", NounClass::FEMININE}, // PREFIX
+        {"fr", "microsecond", NounClass::FEMININE}, // PREFIX
+        {"fr", "nanosecond", NounClass::FEMININE},  // PREFIX
+        // {"fr", "ampere", NounClass::OTHER},
+        // {"fr", "milliampere", NounClass::OTHER}, // PREFIX, ampere
+        // {"fr", "ohm", NounClass::OTHER},
+        // {"fr", "calorie", NounClass::OTHER},
+        // {"fr", "kilojoule", NounClass::OTHER}, // PREFIX, joule
+        // {"fr", "joule", NounClass::OTHER},
+        // {"fr", "kilowatt-hour", NounClass::OTHER}, // COMPOUND
+        // {"fr", "electronvolt", NounClass::OTHER},
+        // {"fr", "british-thermal-unit", NounClass::OTHER},
+        // {"fr", "therm-us", NounClass::OTHER},
+        // {"fr", "pound-force", NounClass::OTHER},
+        // {"fr", "newton", NounClass::OTHER},
+        // {"fr", "gigahertz", NounClass::OTHER}, // PREFIX, hertz
+        // {"fr", "megahertz", NounClass::OTHER}, // PREFIX, hertz
+        // {"fr", "kilohertz", NounClass::OTHER}, // PREFIX, hertz
+        // {"fr", "hertz", NounClass::OTHER},
+        // {"fr", "em", NounClass::OTHER},
+        // {"fr", "pixel", NounClass::OTHER},
+        // {"fr", "megapixel", NounClass::OTHER},
+        // {"fr", "pixel-per-centimeter", NounClass::OTHER}, // COMPOUND, pixel
+        // {"fr", "pixel-per-inch", NounClass::OTHER},       // COMPOUND, pixel
+        // {"fr", "dot-per-centimeter", NounClass::OTHER},   // COMPOUND, dot
+        // {"fr", "dot-per-inch", NounClass::OTHER},         // COMPOUND, dot
+        // {"fr", "dot", NounClass::OTHER},
+        // {"fr", "earth-radius", NounClass::OTHER},
+        {"fr", "decimeter", NounClass::MASCULINE},  // PREFIX
+        {"fr", "micrometer", NounClass::MASCULINE}, // PREFIX
+        {"fr", "nanometer", NounClass::MASCULINE},  // PREFIX
+        // {"fr", "light-year", NounClass::OTHER},
+        // {"fr", "astronomical-unit", NounClass::OTHER},
+        // {"fr", "furlong", NounClass::OTHER},
+        // {"fr", "fathom", NounClass::OTHER},
+        // {"fr", "nautical-mile", NounClass::OTHER},
+        // {"fr", "mile-scandinavian", NounClass::OTHER},
+        // {"fr", "point", NounClass::OTHER},
+        // {"fr", "lux", NounClass::OTHER},
+        // {"fr", "candela", NounClass::OTHER},
+        // {"fr", "lumen", NounClass::OTHER},
+        // {"fr", "metric-ton", NounClass::OTHER},
+        // {"fr", "microgram", NounClass::MASCULINE}, // PREFIX
+        // {"fr", "ton", NounClass::OTHER},
+        // {"fr", "stone", NounClass::OTHER},
+        // {"fr", "ounce-troy", NounClass::OTHER},
+        // {"fr", "carat", NounClass::OTHER},
+        // {"fr", "gigawatt", NounClass::OTHER}, // PREFIX
+        // {"fr", "milliwatt", NounClass::OTHER},
+        // {"fr", "horsepower", NounClass::OTHER},
+        {"fr", "millimeter-ofhg", NounClass::MASCULINE},
+        // {"fr", "pound-force-per-square-inch", NounClass::OTHER}, // COMPOUND, pound-force
+        {"fr", "inch-ofhg", NounClass::MASCULINE},
+        // {"fr", "bar", NounClass::OTHER},
+        // {"fr", "millibar", NounClass::OTHER}, // PREFIX, bar
+        // {"fr", "atmosphere", NounClass::OTHER},
+        // {"fr", "pascal", NounClass::OTHER},      // PREFIX, kilopascal?
+        // {"fr", "hectopascal", NounClass::OTHER}, // PREFIX, pascal
+        // {"fr", "megapascal", NounClass::OTHER},  // PREFIX, pascal
+        // {"fr", "knot", NounClass::OTHER},
+        // {"fr", "pound-force-foot", NounClass::OTHER},
+        // {"fr", "newton-meter", NounClass::OTHER},
+        {"fr", "cubic-kilometer", NounClass::MASCULINE}, // POWER
+        {"fr", "cubic-yard", NounClass::MASCULINE},      // POWER
+        {"fr", "cubic-inch", NounClass::MASCULINE},      // POWER
+        {"fr", "megaliter", NounClass::MASCULINE},       // PREFIX
+        {"fr", "hectoliter", NounClass::MASCULINE},      // PREFIX
+        // {"fr", "pint-metric", NounClass::OTHER},
+        // {"fr", "cup-metric", NounClass::OTHER},
+        {"fr", "acre-foot", NounClass::FEMININE}, // COMPOUND
+        // {"fr", "bushel", NounClass::OTHER},
+        // {"fr", "barrel", NounClass::OTHER},
+        // Some more French units missing gender:
+        // {"fr", "degree", NounClass::OTHER},
+        {"fr", "square-meter", NounClass::MASCULINE}, // POWER
+        // {"fr", "terabyte", NounClass::OTHER},              // PREFIX, byte
+        // {"fr", "gigabyte", NounClass::OTHER},              // PREFIX, byte
+        // {"fr", "gigabit", NounClass::OTHER},               // PREFIX, bit
+        // {"fr", "megabyte", NounClass::OTHER},              // PREFIX, byte
+        // {"fr", "megabit", NounClass::OTHER},               // PREFIX, bit
+        // {"fr", "kilobyte", NounClass::OTHER},              // PREFIX, byte
+        // {"fr", "kilobit", NounClass::OTHER},               // PREFIX, bit
+        // {"fr", "byte", NounClass::OTHER},
+        // {"fr", "bit", NounClass::OTHER},
+        // {"fr", "volt", NounClass::OTHER},
+        // {"fr", "watt", NounClass::OTHER},
+        {"fr", "cubic-meter", NounClass::MASCULINE}, // POWER
+
+        // gender-lacking builtins within compound units
+        {"de", "newton-meter-per-second", NounClass::MASCULINE},
+
+        // TODO(ICU-21494): determine whether list genders behave as follows,
+        // and implement proper getListGender support (covering more than just
+        // two genders):
+        // // gender rule for lists of people: de "neutral", fr "maleTaints"
+        // {"de", "day-and-hour-and-minute", NounClass::NEUTER},
+        // {"de", "hour-and-minute", NounClass::FEMININE},
+        // {"fr", "day-and-hour-and-minute", NounClass::MASCULINE},
+        // {"fr", "hour-and-minute", NounClass::FEMININE},
+    };
+
+    LocalizedNumberFormatter formatter;
+    FormattedNumber fn;
+    for (const TestCase &t : cases) {
+        formatter = NumberFormatter::with()
+                        .unit(MeasureUnit::forIdentifier(t.unitIdentifier, status))
+                        .locale(Locale(t.locale));
+        fn = formatter.formatDouble(1.1, status);
+        assertEquals(UnicodeString("Testing NounClass with default width, unit: ") + t.unitIdentifier +
+                         ", locale: " + t.locale,
+                     t.expectedNounClass, fn.getNounClass(status));
+        status.assertSuccess();
+
+        formatter = NumberFormatter::with()
+                        .unit(MeasureUnit::forIdentifier(t.unitIdentifier, status))
+                        .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)
+                        .locale(Locale(t.locale));
+        fn = formatter.formatDouble(1.1, status);
+        assertEquals(UnicodeString("Testing NounClass with UNUM_UNIT_WIDTH_FULL_NAME, unit: ") +
+                         t.unitIdentifier + ", locale: " + t.locale,
+                     t.expectedNounClass, fn.getNounClass(status));
+        status.assertSuccess();
+    }
+
+    // Make sure getNounClass does not return garbage for languages without noun classes.
+    formatter = NumberFormatter::with().locale(Locale::getEnglish());
+    fn = formatter.formatDouble(1.1, status);
+    status.assertSuccess();
+    assertEquals("getNounClasses for a not supported language", NounClass::OTHER,
+                 fn.getNounClass(status));
 }
 
 void NumberFormatterApiTest::unitGender() {

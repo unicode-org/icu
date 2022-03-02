@@ -55,6 +55,7 @@ import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
+import com.ibm.icu.util.NounClass;
 import com.ibm.icu.util.NoUnit;
 import com.ibm.icu.util.ULocale;
 
@@ -2426,6 +2427,310 @@ public class NumberFormatterApiTest extends TestFmwk {
         // TODO: add a usage case that selects between preferences with different
         // genders (e.g. year, month, day, hour).
         // TODO: look at "↑↑↑" cases: check that inheritance is done right.
+    }
+
+    @Test
+    public void unitNounClass() {
+        class TestCase {
+            public String locale;
+            public String unitIdentifier;
+            public NounClass expectedNounClass;
+
+            public TestCase(String locale, String unitIdentifier, NounClass expectedNounClass) {
+                this.locale = locale;
+                this.unitIdentifier = unitIdentifier;
+                this.expectedNounClass = expectedNounClass;
+            }
+        }
+
+        TestCase cases[] = {
+                new TestCase("de", "inch", NounClass.MASCULINE),  //
+                new TestCase("de", "yard", NounClass.NEUTER),     //
+                new TestCase("de", "meter", NounClass.MASCULINE), //
+                new TestCase("de", "liter", NounClass.MASCULINE), //
+                new TestCase("de", "second", NounClass.FEMININE), //
+                new TestCase("de", "minute", NounClass.FEMININE), //
+                new TestCase("de", "hour", NounClass.FEMININE),   //
+                new TestCase("de", "day", NounClass.MASCULINE),   //
+                new TestCase("de", "year", NounClass.NEUTER),     //
+                new TestCase("de", "gram", NounClass.NEUTER),     //
+                new TestCase("de", "watt", NounClass.NEUTER),     //
+                new TestCase("de", "bit", NounClass.NEUTER),      //
+                new TestCase("de", "byte", NounClass.NEUTER),     //
+
+                new TestCase("fr", "inch", NounClass.MASCULINE),  //
+                new TestCase("fr", "yard", NounClass.MASCULINE),  //
+                new TestCase("fr", "meter", NounClass.MASCULINE), //
+                new TestCase("fr", "liter", NounClass.MASCULINE), //
+                new TestCase("fr", "second", NounClass.FEMININE), //
+                new TestCase("fr", "minute", NounClass.FEMININE), //
+                new TestCase("fr", "hour", NounClass.FEMININE),   //
+                new TestCase("fr", "day", NounClass.MASCULINE),   //
+                new TestCase("fr", "year", NounClass.MASCULINE),  //
+                new TestCase("fr", "gram", NounClass.MASCULINE),  //
+
+                // grammaticalFeatures deriveCompound "per" rule takes the gender of the
+                // numerator unit:
+                new TestCase("de", "meter-per-hour", NounClass.MASCULINE),
+                new TestCase("fr", "meter-per-hour", NounClass.MASCULINE),
+                new TestCase("af", "meter-per-hour", NounClass.OTHER), // ungendered language
+
+                // French "times" takes gender from first value, German takes the
+                // second. Prefix and power does not have impact on gender for these
+                // languages:
+                new TestCase("de", "square-decimeter-square-second", NounClass.FEMININE),
+                new TestCase("fr", "square-decimeter-square-second", NounClass.MASCULINE),
+
+                // TODO(icu-units#149): percent and permille bypasses
+                // LongNameHandler when unitWidth is not FULL_NAME:
+                // // Gender of per-second might be that of percent? TODO(icu-units#28)
+                // new TestCase("de", "percent", NounClass.NEUTER),    //
+                // new TestCase("fr", "percent", NounClass.MASCULINE), //
+
+                // Built-in units whose simple units lack gender in the CLDR data file
+                new TestCase("de", "kilopascal", NounClass.NEUTER),    //
+                new TestCase("fr", "kilopascal", NounClass.MASCULINE), //
+                //     new TestCase("de", "pascal", NounClass.OTHER),              //
+                //     new TestCase("fr", "pascal", NounClass.OTHER),              //
+
+                // Built-in units that lack gender in the CLDR data file
+                //     new TestCase("de", "revolution", NounClass.OTHER),                        //
+                //     new TestCase("de", "radian", NounClass.OTHER),                            //
+                //     new TestCase("de", "arc-minute", NounClass.OTHER),                        //
+                //     new TestCase("de", "arc-second", NounClass.OTHER),                        //
+                new TestCase("de", "square-yard", NounClass.NEUTER),                 // COMPOUND
+                new TestCase("de", "square-inch", NounClass.MASCULINE),              // COMPOUND
+                //     new TestCase("de", "dunam", NounClass.OTHER),                             //
+                //     new TestCase("de", "karat", NounClass.OTHER),                             //
+                //     new TestCase("de", "milligram-ofglucose-per-deciliter", NounClass.OTHER), // COMPOUND, ofglucose
+                //     new TestCase("de", "millimole-per-liter", NounClass.OTHER),               // COMPOUND, mole
+                //     new TestCase("de", "permillion", NounClass.OTHER),                        //
+                //     new TestCase("de", "permille", NounClass.OTHER),                          //
+                //     new TestCase("de", "permyriad", NounClass.OTHER),                         //
+                //     new TestCase("de", "mole", NounClass.OTHER),                              //
+                new TestCase("de", "liter-per-kilometer", NounClass.MASCULINE),      // COMPOUND
+                new TestCase("de", "petabyte", NounClass.NEUTER),                    // PREFIX
+                new TestCase("de", "terabit", NounClass.NEUTER),                     // PREFIX
+                //     new TestCase("de", "century", NounClass.OTHER),                           //
+                //     new TestCase("de", "decade", NounClass.OTHER),                            //
+                new TestCase("de", "millisecond", NounClass.FEMININE),               // PREFIX
+                new TestCase("de", "microsecond", NounClass.FEMININE),               // PREFIX
+                new TestCase("de", "nanosecond", NounClass.FEMININE),                // PREFIX
+                //     new TestCase("de", "ampere", NounClass.OTHER),                            //
+                //     new TestCase("de", "milliampere", NounClass.OTHER),                       // PREFIX, ampere
+                //     new TestCase("de", "ohm", NounClass.OTHER),                               //
+                //     new TestCase("de", "calorie", NounClass.OTHER),                           //
+                //     new TestCase("de", "kilojoule", NounClass.OTHER),                         // PREFIX, joule
+                //     new TestCase("de", "joule", NounClass.OTHER),                             //
+                new TestCase("de", "kilowatt-hour", NounClass.FEMININE),             // COMPOUND
+                //     new TestCase("de", "electronvolt", NounClass.OTHER),                      //
+                //     new TestCase("de", "british-thermal-unit", NounClass.OTHER),              //
+                //     new TestCase("de", "therm-us", NounClass.OTHER),                          //
+                //     new TestCase("de", "pound-force", NounClass.OTHER),                       //
+                //     new TestCase("de", "newton", NounClass.OTHER),                            //
+                //     new TestCase("de", "gigahertz", NounClass.OTHER),                         // PREFIX, hertz
+                //     new TestCase("de", "megahertz", NounClass.OTHER),                         // PREFIX, hertz
+                //     new TestCase("de", "kilohertz", NounClass.OTHER),                         // PREFIX, hertz
+                //     new TestCase("de", "hertz", NounClass.OTHER),                             // PREFIX, hertz
+                //     new TestCase("de", "em", NounClass.OTHER),                                //
+                //     new TestCase("de", "pixel", NounClass.OTHER),                             //
+                //     new TestCase("de", "megapixel", NounClass.OTHER),                         //
+                //     new TestCase("de", "pixel-per-centimeter", NounClass.OTHER),              // COMPOUND, pixel
+                //     new TestCase("de", "pixel-per-inch", NounClass.OTHER),                    // COMPOUND, pixel
+                //     new TestCase("de", "dot-per-centimeter", NounClass.OTHER),                // COMPOUND, dot
+                //     new TestCase("de", "dot-per-inch", NounClass.OTHER),                      // COMPOUND, dot
+                //     new TestCase("de", "dot", NounClass.OTHER),                               //
+                //     new TestCase("de", "earth-radius", NounClass.OTHER),                      //
+                new TestCase("de", "decimeter", NounClass.MASCULINE),                // PREFIX
+                new TestCase("de", "micrometer", NounClass.MASCULINE),               // PREFIX
+                new TestCase("de", "nanometer", NounClass.MASCULINE),                // PREFIX
+                //     new TestCase("de", "light-year", NounClass.OTHER),                        //
+                //     new TestCase("de", "astronomical-unit", NounClass.OTHER),                 //
+                //     new TestCase("de", "furlong", NounClass.OTHER),                           //
+                //     new TestCase("de", "fathom", NounClass.OTHER),                            //
+                //     new TestCase("de", "nautical-mile", NounClass.OTHER),                     //
+                //     new TestCase("de", "mile-scandinavian", NounClass.OTHER),                 //
+                //     new TestCase("de", "point", NounClass.OTHER),                             //
+                //     new TestCase("de", "lux", NounClass.OTHER),                               //
+                //     new TestCase("de", "candela", NounClass.OTHER),                           //
+                //     new TestCase("de", "lumen", NounClass.OTHER),                             //
+                //     new TestCase("de", "metric-ton", NounClass.OTHER),                        //
+                new TestCase("de", "microgram", NounClass.NEUTER),                   // PREFIX
+                //     new TestCase("de", "ton", NounClass.OTHER),                               //
+                //     new TestCase("de", "stone", NounClass.OTHER),                             //
+                //     new TestCase("de", "ounce-troy", NounClass.OTHER),                        //
+                //     new TestCase("de", "carat", NounClass.OTHER),                             //
+                new TestCase("de", "gigawatt", NounClass.NEUTER),                    // PREFIX
+                new TestCase("de", "milliwatt", NounClass.NEUTER),                   // PREFIX
+                //     new TestCase("de", "horsepower", NounClass.OTHER),                        //
+                //     new TestCase("de", "millimeter-ofhg", NounClass.OTHER),                   //
+                //     new TestCase("de", "pound-force-per-square-inch", NounClass.OTHER),       // COMPOUND, pound-force
+                //     new TestCase("de", "inch-ofhg", NounClass.OTHER),                         //
+                //     new TestCase("de", "bar", NounClass.OTHER),                               //
+                //     new TestCase("de", "millibar", NounClass.OTHER),                          // PREFIX, bar
+                //     new TestCase("de", "atmosphere", NounClass.OTHER),                        //
+                //     new TestCase("de", "pascal", NounClass.OTHER),                            // PREFIX, kilopascal? neuter?
+                //     new TestCase("de", "hectopascal", NounClass.OTHER),                       // PREFIX, pascal, neuter?
+                //     new TestCase("de", "megapascal", NounClass.OTHER),                        // PREFIX, pascal, neuter?
+                //     new TestCase("de", "knot", NounClass.OTHER),                              //
+                new TestCase("de", "pound-force-foot", NounClass.MASCULINE),         // COMPOUND
+                new TestCase("de", "newton-meter", NounClass.MASCULINE),             // COMPOUND
+                new TestCase("de", "cubic-kilometer", NounClass.MASCULINE),          // POWER
+                new TestCase("de", "cubic-yard", NounClass.NEUTER),                  // POWER
+                new TestCase("de", "cubic-inch", NounClass.MASCULINE),               // POWER
+                new TestCase("de", "megaliter", NounClass.MASCULINE),                // PREFIX
+                new TestCase("de", "hectoliter", NounClass.MASCULINE),               // PREFIX
+                //     new TestCase("de", "pint-metric", NounClass.OTHER),                       //
+                //     new TestCase("de", "cup-metric", NounClass.OTHER),                        //
+                new TestCase("de", "acre-foot", NounClass.MASCULINE),                // COMPOUND
+                //     new TestCase("de", "bushel", NounClass.OTHER),                            //
+                //     new TestCase("de", "barrel", NounClass.OTHER),                            //
+                // Units missing gender in German also misses gender in French:
+                //     new TestCase("fr", "revolution", NounClass.OTHER),                                 //
+                //     new TestCase("fr", "radian", NounClass.OTHER),                                     //
+                //     new TestCase("fr", "arc-minute", NounClass.OTHER),                                 //
+                //     new TestCase("fr", "arc-second", NounClass.OTHER),                                 //
+                new TestCase("fr", "square-yard", NounClass.MASCULINE),                       // COMPOUND
+                new TestCase("fr", "square-inch", NounClass.MASCULINE),                       // COMPOUND
+                //     new TestCase("fr", "dunam", NounClass.OTHER),                                      //
+                //     new TestCase("fr", "karat", NounClass.OTHER),                                      //
+                new TestCase("fr", "milligram-ofglucose-per-deciliter", NounClass.MASCULINE), // COMPOUND
+                //     new TestCase("fr", "millimole-per-liter", NounClass.OTHER),                        // COMPOUND, mole
+                //     new TestCase("fr", "permillion", NounClass.OTHER),                                 //
+                //     new TestCase("fr", "permille", NounClass.OTHER),                                   //
+                //     new TestCase("fr", "permyriad", NounClass.OTHER),                                  //
+                //     new TestCase("fr", "mole", NounClass.OTHER),                                       //
+                new TestCase("fr", "liter-per-kilometer", NounClass.MASCULINE),               // COMPOUND
+                //     new TestCase("fr", "petabyte", NounClass.OTHER),                                   // PREFIX
+                //     new TestCase("fr", "terabit", NounClass.OTHER),                                    // PREFIX
+                //     new TestCase("fr", "century", NounClass.OTHER),                                    //
+                //     new TestCase("fr", "decade", NounClass.OTHER),                                     //
+                new TestCase("fr", "millisecond", NounClass.FEMININE),                        // PREFIX
+                new TestCase("fr", "microsecond", NounClass.FEMININE),                        // PREFIX
+                new TestCase("fr", "nanosecond", NounClass.FEMININE),                         // PREFIX
+                //     new TestCase("fr", "ampere", NounClass.OTHER),                                     //
+                //     new TestCase("fr", "milliampere", NounClass.OTHER),                                // PREFIX, ampere
+                //     new TestCase("fr", "ohm", NounClass.OTHER),                                        //
+                //     new TestCase("fr", "calorie", NounClass.OTHER),                                    //
+                //     new TestCase("fr", "kilojoule", NounClass.OTHER),                                  // PREFIX, joule
+                //     new TestCase("fr", "joule", NounClass.OTHER),                                      //
+                //     new TestCase("fr", "kilowatt-hour", NounClass.OTHER),                              // COMPOUND
+                //     new TestCase("fr", "electronvolt", NounClass.OTHER),                               //
+                //     new TestCase("fr", "british-thermal-unit", NounClass.OTHER),                       //
+                //     new TestCase("fr", "therm-us", NounClass.OTHER),                                   //
+                //     new TestCase("fr", "pound-force", NounClass.OTHER),                                //
+                //     new TestCase("fr", "newton", NounClass.OTHER),                                     //
+                //     new TestCase("fr", "gigahertz", NounClass.OTHER),                                  // PREFIX, hertz
+                //     new TestCase("fr", "megahertz", NounClass.OTHER),                                  // PREFIX, hertz
+                //     new TestCase("fr", "kilohertz", NounClass.OTHER),                                  // PREFIX, hertz
+                //     new TestCase("fr", "hertz", NounClass.OTHER),                                      // PREFIX, hertz
+                //     new TestCase("fr", "em", NounClass.OTHER),                                         //
+                //     new TestCase("fr", "pixel", NounClass.OTHER),                                      //
+                //     new TestCase("fr", "megapixel", NounClass.OTHER),                                  //
+                //     new TestCase("fr", "pixel-per-centimeter", NounClass.OTHER),                       // COMPOUND, pixel
+                //     new TestCase("fr", "pixel-per-inch", NounClass.OTHER),                             // COMPOUND, pixel
+                //     new TestCase("fr", "dot-per-centimeter", NounClass.OTHER),                         // COMPOUND, dot
+                //     new TestCase("fr", "dot-per-inch", NounClass.OTHER),                               // COMPOUND, dot
+                //     new TestCase("fr", "dot", NounClass.OTHER),                                        //
+                //     new TestCase("fr", "earth-radius", NounClass.OTHER),                               //
+                new TestCase("fr", "decimeter", NounClass.MASCULINE),                         // PREFIX
+                new TestCase("fr", "micrometer", NounClass.MASCULINE),                        // PREFIX
+                new TestCase("fr", "nanometer", NounClass.MASCULINE),                         // PREFIX
+                //     new TestCase("fr", "light-year", NounClass.OTHER),                                 //
+                //     new TestCase("fr", "astronomical-unit", NounClass.OTHER),                          //
+                //     new TestCase("fr", "furlong", NounClass.OTHER),                                    //
+                //     new TestCase("fr", "fathom", NounClass.OTHER),                                     //
+                //     new TestCase("fr", "nautical-mile", NounClass.OTHER),                              //
+                //     new TestCase("fr", "mile-scandinavian", NounClass.OTHER),                          //
+                //     new TestCase("fr", "point", NounClass.OTHER),                                      //
+                //     new TestCase("fr", "lux", NounClass.OTHER),                                        //
+                //     new TestCase("fr", "candela", NounClass.OTHER),                                    //
+                //     new TestCase("fr", "lumen", NounClass.OTHER),                                      //
+                //     new TestCase("fr", "metric-ton", NounClass.OTHER),                                 //
+                new TestCase("fr", "microgram", NounClass.MASCULINE),                         // PREFIX
+                //     new TestCase("fr", "ton", NounClass.OTHER),                                        //
+                //     new TestCase("fr", "stone", NounClass.OTHER),                                      //
+                //     new TestCase("fr", "ounce-troy", NounClass.OTHER),                                 //
+                //     new TestCase("fr", "carat", NounClass.OTHER),                                      //
+                //     new TestCase("fr", "gigawatt", NounClass.OTHER),                                   // PREFIX
+                //     new TestCase("fr", "milliwatt", NounClass.OTHER),                                  //
+                //     new TestCase("fr", "horsepower", NounClass.OTHER),                                 //
+                new TestCase("fr", "millimeter-ofhg", NounClass.MASCULINE),                   //
+                //     new TestCase("fr", "pound-force-per-square-inch", NounClass.OTHER), // COMPOUND, pound-force
+                new TestCase("fr", "inch-ofhg", NounClass.MASCULINE),          //
+                //     new TestCase("fr", "bar", NounClass.OTHER),                         //
+                //     new TestCase("fr", "millibar", NounClass.OTHER),                    // PREFIX, bar
+                //     new TestCase("fr", "atmosphere", NounClass.OTHER),                  //
+                //     new TestCase("fr", "pascal", NounClass.OTHER),                      // PREFIX, kilopascal?
+                //     new TestCase("fr", "hectopascal", NounClass.OTHER),                 // PREFIX, pascal
+                //     new TestCase("fr", "megapascal", NounClass.OTHER),                  // PREFIX, pascal
+                //     new TestCase("fr", "knot", NounClass.OTHER),                        //
+                //     new TestCase("fr", "pound-force-foot", NounClass.OTHER),            //
+                //     new TestCase("fr", "newton-meter", NounClass.OTHER),                //
+                new TestCase("fr", "cubic-kilometer", NounClass.MASCULINE),    // POWER
+                new TestCase("fr", "cubic-yard", NounClass.MASCULINE),         // POWER
+                new TestCase("fr", "cubic-inch", NounClass.MASCULINE),         // POWER
+                new TestCase("fr", "megaliter", NounClass.MASCULINE),          // PREFIX
+                new TestCase("fr", "hectoliter", NounClass.MASCULINE),         // PREFIX
+                //     new TestCase("fr", "pint-metric", NounClass.OTHER),                 //
+                //     new TestCase("fr", "cup-metric", NounClass.OTHER),                  //
+                new TestCase("fr", "acre-foot", NounClass.FEMININE),           // COMPOUND
+                //     new TestCase("fr", "bushel", NounClass.OTHER),                      //
+                //     new TestCase("fr", "barrel", NounClass.OTHER),                      //
+                // Some more French units missing gender:
+                //     new TestCase("fr", "degree", NounClass.OTHER),                //
+                new TestCase("fr", "square-meter", NounClass.MASCULINE), // COMPOUND
+                //     new TestCase("fr", "terabyte", NounClass.OTHER),              // PREFIX, byte
+                //     new TestCase("fr", "gigabyte", NounClass.OTHER),              // PREFIX, byte
+                //     new TestCase("fr", "gigabit", NounClass.OTHER),               // PREFIX, bit
+                //     new TestCase("fr", "megabyte", NounClass.OTHER),              // PREFIX, byte
+                //     new TestCase("fr", "megabit", NounClass.OTHER),               // PREFIX, bit
+                //     new TestCase("fr", "kilobyte", NounClass.OTHER),              // PREFIX, byte
+                //     new TestCase("fr", "kilobit", NounClass.OTHER),               // PREFIX, bit
+                //     new TestCase("fr", "byte", NounClass.OTHER),                  //
+                //     new TestCase("fr", "bit", NounClass.OTHER),                   //
+                //     new TestCase("fr", "volt", NounClass.OTHER),                  //
+                new TestCase("fr", "cubic-meter", NounClass.MASCULINE),  // POWER
+
+                // gender-lacking builtins within compound units
+                new TestCase("de", "newton-meter-per-second", NounClass.MASCULINE),
+
+                // TODO(ICU-21494): determine whether list genders behave as follows,
+                // and implement proper getListGender support (covering more than just
+                // two genders):
+                // // gender rule for lists of people: de "neutral", fr "maleTaints"
+                // new TestCase("de", "day-and-hour-and-minute", NounClass.NEUTER),
+                // new TestCase("de", "hour-and-minute", NounClass.FEMININE),
+                // new TestCase("fr", "day-and-hour-and-minute", NounClass.MASCULINE),
+                // new TestCase("fr", "hour-and-minute", NounClass.FEMININE),
+        };
+
+        LocalizedNumberFormatter formatter;
+        FormattedNumber fn;
+        for (TestCase t : cases) {
+            formatter = NumberFormatter.with()
+                    .unit(MeasureUnit.forIdentifier(t.unitIdentifier))
+                    .locale(new ULocale(t.locale));
+            fn = formatter.format(1.1);
+            assertEquals("Testing noun classes with default width, unit: " + t.unitIdentifier +
+                            ", locale: " + t.locale,
+                    t.expectedNounClass, fn.getNounClass());
+
+            formatter = NumberFormatter.with()
+                    .unit(MeasureUnit.forIdentifier(t.unitIdentifier))
+                    .unitWidth(UnitWidth.FULL_NAME)
+                    .locale(new ULocale(t.locale));
+            fn = formatter.format(1.1);
+            assertEquals("Testing noun classes with UnitWidth.FULL_NAME, unit: " + t.unitIdentifier +
+                            ", locale: " + t.locale,
+                    t.expectedNounClass, fn.getNounClass());
+        }
+
+        // Make sure getGender does not return garbage for genderless languages
+        formatter = NumberFormatter.with().locale(ULocale.ENGLISH);
+        fn = formatter.format(1.1);
+        assertEquals("getNounClass for not supported language", NounClass.OTHER, fn.getNounClass());
+
     }
 
     @Test

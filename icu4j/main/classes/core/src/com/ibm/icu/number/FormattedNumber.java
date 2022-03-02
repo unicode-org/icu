@@ -13,6 +13,8 @@ import com.ibm.icu.text.ConstrainedFieldPosition;
 import com.ibm.icu.text.FormattedValue;
 import com.ibm.icu.text.PluralRules.IFixedDecimal;
 import com.ibm.icu.util.MeasureUnit;
+import com.ibm.icu.util.NounClass;
+import com.ibm.icu.util.UResourceTypeMismatchException;
 
 /**
  * The result of a number formatting operation. This class allows the result to be exported in several
@@ -137,10 +139,56 @@ public class FormattedNumber implements FormattedValue {
     }
 
     /**
+     * Gets the noun class of the formatted output. Returns `OTHER` when the noun class
+     * is not supported yet.
+     *
+     * @throws UResourceTypeMismatchException
+     * @return `NounClass`
+     * @draft ICU 71.
+     */
+    public NounClass getNounClass() {
+        // if it is not exist, return `OTHER`
+        if (this.gender == null || this.gender.isEmpty()) {
+            return NounClass.OTHER;
+        }
+
+        if (this.gender.equals("neuter")) {
+            return NounClass.NEUTER;
+        }
+
+        if (this.gender.equals("feminine")) {
+            return NounClass.FEMININE;
+        }
+
+        if (this.gender.equals("masculine")) {
+            return NounClass.MASCULINE;
+        }
+
+        if (this.gender.equals("animate")) {
+            return NounClass.ANIMATE;
+        }
+
+        if (this.gender.equals("inanimate")) {
+            return NounClass.INANIMATE;
+        }
+
+        if (this.gender.equals("personal")) {
+            return NounClass.PERSONAL;
+        }
+
+        if (this.gender.equals("common")) {
+            return NounClass.COMMON;
+        }
+
+        // In case there is no matching.
+        throw new UResourceTypeMismatchException("there are noun classes that are not supported yet");
+    }
+
+    /**
      * The gender of the formatted output.
      *
      * @internal ICU 69 technology preview
-     * @deprecated This API is for technology preview only.
+     * @deprecated This API is for ICU internal use only.
      */
     @Deprecated
     public String getGender() {
