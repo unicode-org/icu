@@ -36,3 +36,164 @@ jobs:
           cd ../../icu4j;
           ant clean;
           ant -Dicu4c.data.path=/tmp/icu4j_data_test check;
+
+  # Compile libraries used by all ICU4C performance tests.
+  icu4c-store-perf-libs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build ICU libraries
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux;
+          make -j 2 all;
+          cd lib;
+          cp -Ps ../tools/ctestfw/libicutest* .
+      - name: Upload ICU libraries
+        uses: actions/upload-artifact@v2
+        with:
+          name: icu-perf-libs
+          path: icu4c/source/lib
+          retention-days: 1
+
+  # Assorted ICU4C performance tests
+  icu4c-performance-tests:
+    needs: icu4c-store-perf-libs
+    strategy:
+      fail-fast: false
+      matrix:
+        perf: [charperf, usetperf, utfperf]
+        include:
+          - perf: charperf
+            tests: TestIsAlpha TestIsUpper TestIsLower TestIsDigit TestIsSpace TestIsAlphaNumeric TestIsPrint TestIsControl TestToLower TestToUpper TestIsWhiteSpace
+          - perf: usetperf
+            tests: titlecase_letter_add  titlecase_letter_contains titlecase_letter_iterator unassigned_add unassigned_contains unassigned_iterator pattern1 pattern2 pattern3
+          - perf: utfperf
+            tests: Roundtrip FromUnicode FromUTF8
+            file: "-f ../../icu4j/perf-tests/data/conversion/xuzhimo.txt"
+            flag: "-e gb18030"
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Create directory for lib files
+        run: mkdir icu4c/source/perflib
+      - name: Get ICU libs
+        uses: actions/download-artifact@v2
+        with:
+          name: icu-perf-libs
+          path: icu4c/source/lib
+
+      - name: Build and run ICU4C perf tests
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux;
+          (cd test/perf && make -j2 everything && mkdir -p results && mkdir -p results/${{ matrix.perf }})
+          LD_LIBRARY_PATH=lib ./test/perf/${{ matrix.perf }}/${{ matrix.perf }} ${{ matrix.flag }} -t 5 -p 10 ${{ matrix.file }} ${{ matrix.tests }} | tee test/perf/results/${{ matrix.perf }}/output.txt
+
+      - name: Store performance test results
+        uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
+        with:
+          # The perf tests result data is in ndjson format.
+          tool: 'ndjson'
+          output-file-path: icu4c/source/test/perf/results/${{ matrix.perf }}/output.txt
+          # Tentative setting.
+          alert-threshold: '100%'
+          fail-on-alert: true
+          gh-pages-branch: perfdata
+          benchmark-data-dir-path: perf/results/${{ matrix.perf }}
+          auto-push: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          comment-on-alert: true
+
+  # Assorted ICU4C performance tests using data files
+  icu4c-performance-tests-with-files:
+    needs: icu4c-store-perf-libs
+    strategy:
+      fail-fast: false
+      # Matrix of test drivers and test data and, if applicable, flags. Note
+      # that GHA first excludes the 'exclude:' items from the total of
+      # combinations and then adds the 'include:' items.
+      matrix:
+        perf: [collperf, ustrperf, normperf]
+        data: [TestNames_Asian, TestNames_Chinese, TestNames_Japanese, TestNames_Japanese_h, TestNames_Japanese_k, TestNames_Korean, TestNames_Latin, TestNames_Russian, TestNames_SerbianSH, TestNames_SerbianSR, TestNames_Simplified_Chinese, TestNames_Thai, th18057, thesis, vfear11a]
+        include:
+          - perf: collperf
+            tests: TestIcu_KeyGen_null TestIcu_qsort_strcoll_null TestIcu_qsort_usekey TestIcu_BinarySearch_strcoll_null TestIcu_BinarySearch_usekey
+          - perf: ustrperf
+            tests: TestCtor TestCtor1 TestCtor2 TestCtor3 TestAssign TestAssign1 TestAssign2 TestGetch TestCatenate TestScan TestScan1 TestScan2
+            flag: "-l -u"
+          - perf: normperf
+            tests: TestICU_NFC_NFD_Text TestICU_NFC_NFC_Text TestICU_NFC_Orig_Text TestICU_NFD_NFD_Text TestICU_NFD_NFC_Text TestICU_NFD_Orig_Text
+        exclude:
+          - perf: collperf
+            data: th18057
+          - perf: collperf
+            data: thesis
+          - perf: collperf
+            data: vfear11a
+          - perf: ustrperf
+            data: TestNames_Japanese
+          - perf: ustrperf
+            data: thesis
+          - perf: ustrperf
+            data: vfear11a
+          - perf: normperf
+            data: TestNames_Simplified_Chinese
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Create directory for lib files
+        run: mkdir icu4c/source/perflib
+      - name: Get ICU libs
+        uses: actions/download-artifact@v2
+        with:
+          name: icu-perf-libs
+          path: icu4c/source/lib
+
+      - name: Build and run ICU4C perf tests
+        env:
+          DATA_FILE_PATH: ../../icu4j/perf-tests/data/collation
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux;
+          (cd test/perf && make -j2 everything && mkdir -p results && mkdir -p results/${{ matrix.perf }} && mkdir -p results/${{ matrix.perf }}/${{ matrix.data }})
+          LD_LIBRARY_PATH=lib ./test/perf/${{ matrix.perf }}/${{ matrix.perf }} ${{ matrix.flag }} -t 5 -p 10 -f $DATA_FILE_PATH/${{ matrix.data }}.txt ${{ matrix.tests }} | tee test/perf/results/${{ matrix.perf }}/${{ matrix.data }}/output.txt
+
+      - name: Store performance test results
+        uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
+        with:
+          # The perf tests result data is in ndjson format.
+          tool: 'ndjson'
+          output-file-path: icu4c/source/test/perf/results/${{ matrix.perf }}/${{ matrix.data }}/output.txt
+          # Tentative setting.
+          alert-threshold: '100%'
+          fail-on-alert: true
+          gh-pages-branch: perfdata
+          benchmark-data-dir-path: perf/results/${{ matrix.perf }}/${{ matrix.data }}
+          auto-push: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          comment-on-alert: true
+
+ # Retrieve performance test results and upload results to remote repository
+  perf-test-data-move:
+    name: Copy perf data to remote repo for visualization
+    needs: [icu4c-performance-tests, icu4c-performance-tests-with-files]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Switch to benchmark data storage branch.
+        run: |
+          git fetch
+          git checkout perfdata
+
+      - name: Publish data
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          external_repository: unicode-org/icu-perf
+          publish_branch: main
+          publish_dir: ./perf
