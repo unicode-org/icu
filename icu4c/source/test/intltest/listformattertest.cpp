@@ -49,6 +49,7 @@ void ListFormatterTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestContextual);
     TESTCASE_AUTO(TestNextPosition);
     TESTCASE_AUTO(TestInt32Overflow);
+    TESTCASE_AUTO(Test21871);
     TESTCASE_AUTO_END;
 }
 
@@ -838,6 +839,32 @@ void ListFormatterTest::TestInt32Overflow() {
     FormattedList result = fmt->formatStringsToValue(
         inputs.data(), static_cast<int32_t>(inputs.size()), status);
     status.expectErrorAndReset(U_INPUT_TOO_LONG_ERROR);
+}
+
+
+void ListFormatterTest::Test21871() {
+    IcuTestErrorCode status(*this, "Test21871");
+    LocalPointer<ListFormatter> fmt(ListFormatter::createInstance("en", status), status);
+    {
+        UnicodeString strings[] = {{u"A"}, {u""}};
+        FormattedList result = fmt->formatStringsToValue(strings, 2, status);
+        ConstrainedFieldPosition cfp;
+        cfp.constrainField(UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD);
+        assertTrue("nextPosition 1", result.nextPosition(cfp, status));
+        assertEquals("start", cfp.getStart(), 0);
+        assertEquals("limit", cfp.getLimit(), 1);
+        assertFalse("nextPosition 2", result.nextPosition(cfp, status));
+    }
+    {
+        UnicodeString strings[] = {{u""}, {u"B"}};
+        FormattedList result = fmt->formatStringsToValue(strings, 2, status);
+        ConstrainedFieldPosition cfp;
+        cfp.constrainField(UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD);
+        assertTrue("nextPosition 1", result.nextPosition(cfp, status));
+        assertEquals("start", cfp.getStart(), 5);
+        assertEquals("limit", cfp.getLimit(), 6);
+        assertFalse("nextPosition 2", result.nextPosition(cfp, status));
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
