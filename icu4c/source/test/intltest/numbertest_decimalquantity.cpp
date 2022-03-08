@@ -33,6 +33,7 @@ void DecimalQuantityTest::runIndexedTest(int32_t index, UBool exec, const char *
         TESTCASE_AUTO(testNickelRounding);
         TESTCASE_AUTO(testScientificAndCompactSuppressedExponent);
         TESTCASE_AUTO(testSuppressedExponentUnchangedByInitialScaling);
+        TESTCASE_AUTO(testDecimalQuantityParseFormatRoundTrip);
     TESTCASE_AUTO_END;
 }
 
@@ -722,6 +723,54 @@ void DecimalQuantityTest::testSuppressedExponentUnchangedByInitialScaling() {
                 compactCOperand + 3,
                 compactScaledCOperand);
     }
+}
+
+
+void DecimalQuantityTest::testDecimalQuantityParseFormatRoundTrip() {
+    IcuTestErrorCode status(*this, "testDecimalQuantityParseFormatRoundTrip");
+    
+    struct TestCase {
+        UnicodeString numberString;
+    } cases[] = {
+        // number string
+        { u"0" },
+        { u"1" },
+        { u"1.0" },
+        { u"1.00" },
+        { u"1.1" },
+        { u"1.10" },
+        { u"-1.10" },
+        { u"0.0" },
+        { u"1c5" },
+        { u"1.0c5" },
+        { u"1.1c5" },
+        { u"1.10c5" },
+        { u"0.00" },
+        { u"0.1" },
+        { u"1c-1" },
+        { u"1.0c-1" }
+    };
+
+    for (const auto& cas : cases) {
+        UnicodeString numberString = cas.numberString;
+
+        DecimalQuantity dq = DecimalQuantity::fromExponentString(numberString, status);
+        UnicodeString roundTrip = dq.toExponentString();
+
+        assertEquals("DecimalQuantity format(parse(s)) should equal original s", numberString, roundTrip);
+    }
+
+    DecimalQuantity dq = DecimalQuantity::fromExponentString(u"1c0", status);
+    assertEquals("Zero ignored for visible exponent",
+                u"1",
+                dq.toExponentString());
+
+    dq.clear();
+    dq = DecimalQuantity::fromExponentString(u"1.0c0", status);
+    assertEquals("Zero ignored for visible exponent",
+                u"1.0",
+                dq.toExponentString());
+
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

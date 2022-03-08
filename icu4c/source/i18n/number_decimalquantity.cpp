@@ -557,6 +557,65 @@ void DecimalQuantity::_setToDecNum(const DecNum& decnum, UErrorCode& status) {
     }
 }
 
+DecimalQuantity DecimalQuantity::fromExponentString(UnicodeString num, UErrorCode& status) {
+    if (num.indexOf(u'e') >= 0 || num.indexOf(u'c') >= 0
+                || num.indexOf(u'E') >= 0 || num.indexOf(u'C') >= 0) {
+        int32_t ePos = num.lastIndexOf('e');
+        if (ePos < 0) {
+            ePos = num.lastIndexOf('c');
+        }
+        if (ePos < 0) {
+            ePos = num.lastIndexOf('E');
+        }
+        if (ePos < 0) {
+            ePos = num.lastIndexOf('C');
+        }
+        int32_t expNumPos = ePos + 1;
+        UnicodeString exponentStr = num.tempSubString(expNumPos, num.length() - expNumPos);
+
+        // parse exponentStr into exponent, but note that parseAsciiInteger doesn't handle the minus sign
+        bool isExpStrNeg = num[expNumPos] == u'-';
+        int32_t exponentParsePos = isExpStrNeg ? 1 : 0;
+        int32_t exponent = ICU_Utility::parseAsciiInteger(exponentStr, exponentParsePos);
+        exponent = isExpStrNeg ? -exponent : exponent;
+
+        // Compute the decNumber representation
+        UnicodeString fractionStr = num.tempSubString(0, ePos);
+        CharString fracCharStr = CharString();
+        fracCharStr.appendInvariantChars(fractionStr, status);
+        DecNum decnum;
+        decnum.setTo(fracCharStr.toStringPiece(), status);
+
+        // Clear and set this DecimalQuantity instance
+        DecimalQuantity dq;
+        dq.setToDecNum(decnum, status);
+        int32_t numFracDigit = getVisibleFractionCount(fractionStr);
+        dq.setMinFraction(numFracDigit);
+        dq.adjustExponent(exponent);
+
+        return dq;
+    } else {
+        DecimalQuantity dq;
+        int numFracDigit = getVisibleFractionCount(num);
+
+        CharString numCharStr = CharString();
+        numCharStr.appendInvariantChars(num, status);
+        dq.setToDecNumber(numCharStr.toStringPiece(), status);
+
+        dq.setMinFraction(numFracDigit);
+        return dq;
+    }
+}
+
+int32_t DecimalQuantity::getVisibleFractionCount(UnicodeString value) {
+    int decimalPos = value.indexOf('.') + 1;
+    if (decimalPos == 0) {
+        return 0;
+    } else {
+        return value.length() - decimalPos;
+    }
+}
+
 int64_t DecimalQuantity::toLong(bool truncateIfOverflow) const {
     // NOTE: Call sites should be guarded by fitsInLong(), like this:
     // if (dq.fitsInLong()) { /* use dq.toLong() */ } else { /* use some fallback */ }
@@ -953,6 +1012,44 @@ UnicodeString DecimalQuantity::toPlainString() const {
     for(; p >= lower; p--) {
         sb.append(u'0' + getDigitPos(p - scale - exponent));
     }
+    return sb;
+}
+
+
+UnicodeString DecimalQuantity::toExponentString() const {
+    U_ASSERT(!isApproximate);
+    UnicodeString sb;
+    if (isNegative()) {
+        sb.append(u'-');
+    }
+
+    int32_t upper = scale + precision - 1;
+    int32_t lower = scale;
+    if (upper < lReqPos - 1) {
+        upper = lReqPos - 1;
+    }
+    if (lower > rReqPos) {
+        lower = rReqPos;
+    }    
+    int32_t p = upper;
+    if (p < 0) {
+        sb.append(u'0');
+    }
+    for (; p >= 0; p--) {
+        sb.append(u'0' + getDigitPos(p - scale));
+    }
+    if (lower < 0) {
+        sb.append(u'.');
+    }
+    for(; p >= lower; p--) {
+        sb.append(u'0' + getDigitPos(p - scale));
+    }
+
+    if (exponent != 0) {
+        sb.append(u'c');
+        ICU_Utility::appendNumber(sb, exponent);        
+    }
+
     return sb;
 }
 

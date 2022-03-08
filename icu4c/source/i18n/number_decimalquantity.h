@@ -245,6 +245,9 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
     /** Internal method if the caller already has a DecNum. */
     DecimalQuantity &setToDecNum(const DecNum& n, UErrorCode& status);
 
+    /** Returns a DecimalQuantity after parsing the input string. */
+    static DecimalQuantity fromExponentString(UnicodeString n, UErrorCode& status);
+
     /**
      * Appends a digit, optionally with one or more leading zeros, to the end of the value represented
      * by this DecimalQuantity.
@@ -325,6 +328,10 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
 
     /** Returns the string without exponential notation. Slightly slower than toScientificString(). */
     UnicodeString toPlainString() const;
+
+    /** Returns the string using ASCII digits and using exponential notation for non-zero
+    exponents, following the UTS 35 specification for plural rule samples. */
+    UnicodeString toExponentString() const;
 
     /** Visible for testing */
     inline bool isUsingBytes() { return usingBytes; }
@@ -528,6 +535,8 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
     void _setToDoubleFast(double n);
 
     void _setToDecNum(const DecNum& dn, UErrorCode& status);
+
+    static int32_t getVisibleFractionCount(UnicodeString value);
 
     void convertToAccurateDouble();
 
