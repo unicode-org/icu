@@ -88,6 +88,54 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
         return new DecimalQuantity_DualStorageBCD(this);
     }
 
+    /**
+     * Returns a DecimalQuantity after parsing the input string.
+     *
+     * @param s The String to parse
+     */
+    public static DecimalQuantity fromExponentString(String num) {
+        if (num.contains("e") || num.contains("c")
+                || num.contains("E") || num.contains("C")) {
+            int ePos = num.lastIndexOf('e');
+            if (ePos < 0) {
+                ePos = num.lastIndexOf('c');
+            }
+            if (ePos < 0) {
+                ePos = num.lastIndexOf('E');
+            }
+            if (ePos < 0) {
+                ePos = num.lastIndexOf('C');
+            }
+            int expNumPos = ePos + 1;
+            String exponentStr = num.substring(expNumPos);
+            int exponent = Integer.parseInt(exponentStr);
+
+            String fractionStr = num.substring(0, ePos);
+            BigDecimal fraction = new BigDecimal(fractionStr);
+
+            DecimalQuantity_DualStorageBCD dq = new DecimalQuantity_DualStorageBCD(fraction);
+            int numFracDigit = getVisibleFractionCount(fractionStr);
+            dq.setMinFraction(numFracDigit);
+            dq.adjustExponent(exponent);
+
+            return dq;
+        } else {
+            int numFracDigit = getVisibleFractionCount(num);
+            DecimalQuantity_DualStorageBCD dq = new DecimalQuantity_DualStorageBCD(new BigDecimal(num));
+            dq.setMinFraction(numFracDigit);
+            return dq;
+        }
+    }
+
+    private static int getVisibleFractionCount(String value) {
+        int decimalPos = value.indexOf('.') + 1;
+        if (decimalPos == 0) {
+            return 0;
+        } else {
+            return value.length() - decimalPos;
+        }
+    }
+
     @Override
     protected byte getDigitPos(int position) {
         if (usingBytes) {

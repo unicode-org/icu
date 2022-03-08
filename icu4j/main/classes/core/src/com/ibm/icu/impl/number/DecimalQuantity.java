@@ -231,6 +231,12 @@ public interface DecimalQuantity extends PluralRules.IFixedDecimal {
     public String toPlainString();
 
     /**
+     * Returns the string using ASCII digits and using exponential notation for non-zero
+     * exponents, following the UTS 35 specification for plural rule samples.
+     */
+    public String toExponentString();
+
+    /**
      * Like clone, but without the restrictions of the Cloneable interface clone.
      *
      * @return A copy of this instance which can be mutated without affecting this instance.

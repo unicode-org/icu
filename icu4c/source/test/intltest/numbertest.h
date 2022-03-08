@@ -208,6 +208,7 @@ class DecimalQuantityTest : public IntlTest {
     void testNickelRounding();
     void testScientificAndCompactSuppressedExponent();
     void testSuppressedExponentUnchangedByInitialScaling();
+    void testDecimalQuantityParseFormatRoundTrip();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
 
