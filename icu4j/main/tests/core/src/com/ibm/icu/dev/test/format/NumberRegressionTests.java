@@ -1537,12 +1537,6 @@ public class NumberRegressionTests extends TestFmwk {
         // trip properly.  Test stream in/out integrity too.
         Locale[] avail = NumberFormat.getAvailableLocales();
         for (int i=0; i<avail.length; ++i) {
-            if ((avail[i].getLanguage().equals("ji") || avail[i].getLanguage().equals("bm")) &&
-                    logKnownIssue(
-                        "21527",
-                        "Remove bad currency test case in NumberRegressionTests.java")) {
-                continue;
-            }
             for (int j=0; j<3; ++j) {
                 NumberFormat nf;
                 switch (j) {
@@ -1566,7 +1560,8 @@ public class NumberRegressionTests extends TestFmwk {
                     // Currency does not travel with the pattern string
                     f2.setCurrency(df.getCurrency());
                 }
-                if (!df.equals(f2)) {
+                // ICU-21527: Test the pattern but not the whole DecimalFormat for equality
+                if (!df.toPattern().equals(f2.toPattern())) {
                     errln("FAIL: " + avail[i] + " #" + j + " -> \"" + pat +
                           "\" -> \"" + f2.toPattern() + "\" for case " + j);
                 }
