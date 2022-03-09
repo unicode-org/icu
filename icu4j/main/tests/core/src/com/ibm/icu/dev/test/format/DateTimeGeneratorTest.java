@@ -2004,4 +2004,30 @@ public class DateTimeGeneratorTest extends TestFmwk {
             }
         }
     }
+
+    // Test for ICU-21839: Make sure ISO8601 patterns/symbols are inherited from Gregorian
+    @Test
+    public void testISO8601() {
+        String[] localeIDs = {
+            "de-AT-u-ca-iso8601",
+            "de-CH-u-ca-iso8601",
+        };
+        String skeleton = "jms";
+
+        for (String localeID : localeIDs) {
+            ULocale uloc = ULocale.forLanguageTag(localeID);
+
+            DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance(uloc);
+            String pattern = dtpg.getBestPattern(skeleton);
+            if (pattern.contains("├") || pattern.contains("Minute")) {
+                errln("ERROR: locale " + localeID + ", skeleton " + skeleton + ", bad pattern: " + pattern);
+            }
+
+            DateFormat df = DateFormat.getTimeInstance(DateFormat.MEDIUM, uloc);
+            String format = df.format(new Date());
+            if (format.contains("├") || format.contains("Minute")) {
+                errln("ERROR: locale " + localeID + ", MEDIUM, bad format: " + format);
+            }
+        }
+    }
 }
