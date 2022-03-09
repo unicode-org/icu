@@ -107,7 +107,7 @@ void NumberParserTest::testBasic() {
                  {3, u"𝟱𝟭𝟰𝟮𝟯}", u"{0};{0}", 11, 51423.},
                  {3, u"{𝟱𝟭𝟰𝟮𝟯}", u"{0};{0}", 12, 51423.},
                  {1, u"a40b", u"a0'0b'", 3, 40.}, // greedy code path thinks "40" is the number
-                 {2, u"a40b", u"a0'0b'", 4, 4.}, // slow code path finds the suffix "0b"
+                 {2, u"a40b", u"a0'0b'", 3, 40.}, // with ICU-20512, slow path has same result (before it found suffix "0b" )
                  {3, u"𝟱.𝟭𝟰𝟮E𝟯", u"0", 12, 5142.},
                  {3, u"𝟱.𝟭𝟰𝟮E-𝟯", u"0", 13, 0.005142},
                  {3, u"𝟱.𝟭𝟰𝟮e-𝟯", u"0", 13, 0.005142},

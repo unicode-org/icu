@@ -26,15 +26,18 @@ bool SeriesMatcher::match(StringSegment& segment, ParsedNumber& result, UErrorCo
     bool maybeMore = true;
     for (auto* it = begin(); it < end();) {
         const NumberParseMatcher* matcher = *it;
+        bool startCurrencyIsEmpty = (result.currencyCode[0]==0);
         int matcherOffset = segment.getOffset();
-        if (segment.length() != 0) {
+        if (segment.length() != 0
+                || (startCurrencyIsEmpty && result.seenNumber())) {
             maybeMore = matcher->match(segment, result, status);
         } else {
             // Nothing for this matcher to match; ask for more.
             maybeMore = true;
         }
 
-        bool success = (segment.getOffset() != matcherOffset);
+        bool addedCurrency = (startCurrencyIsEmpty && result.currencyCode[0]!=0);
+        bool success = ((segment.getOffset() != matcherOffset) || addedCurrency);
         bool isFlexible = matcher->isFlexible();
         if (success && isFlexible) {
             // Match succeeded, and this is a flexible matcher. Re-run it.
@@ -43,7 +46,7 @@ bool SeriesMatcher::match(StringSegment& segment, ParsedNumber& result, UErrorCo
             it++;
             // Small hack: if there is another matcher coming, do not accept trailing weak chars.
             // Needed for proper handling of currency spacing.
-            if (it < end() && segment.getOffset() != result.charEnd && result.charEnd > matcherOffset) {
+            if (it < end() && segment.getOffset() != result.charEnd && (result.charEnd > matcherOffset || addedCurrency)) {
                 segment.setOffset(result.charEnd);
             }
         } else if (isFlexible) {

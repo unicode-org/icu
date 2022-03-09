@@ -26,6 +26,7 @@ CombinedCurrencyMatcher::CombinedCurrencyMatcher(const CurrencySymbols& currency
         : fCurrency1(currencySymbols.getCurrencySymbol(status)),
           fCurrency2(currencySymbols.getIntlCurrencySymbol(status)),
           fUseFullCurrencyData(0 == (parseFlags & PARSE_FLAG_NO_FOREIGN_CURRENCY)),
+          fCurrencyTrails(0 != (parseFlags & PARSE_FLAG_HAS_TRAIL_CURRENCY)),
           afterPrefixInsert(dfs.getPatternForCurrencySpacing(UNUM_CURRENCY_INSERT, false, status)),
           beforeSuffixInsert(dfs.getPatternForCurrencySpacing(UNUM_CURRENCY_INSERT, true, status)),
           fLocaleName(dfs.getLocale().getName(), -1, status) {
@@ -63,7 +64,8 @@ CombinedCurrencyMatcher::match(StringSegment& segment, ParsedNumber& result, UEr
     // Try to match a currency spacing separator.
     int32_t initialOffset = segment.getOffset();
     bool maybeMore = false;
-    if (result.seenNumber() && !beforeSuffixInsert.isEmpty()) {
+    if (result.seenNumber() && !beforeSuffixInsert.isEmpty()
+            && segment.length() != 0) {
         int32_t overlap = segment.getCommonPrefixLength(beforeSuffixInsert);
         if (overlap == beforeSuffixInsert.length()) {
             segment.adjustOffset(overlap);
@@ -80,7 +82,8 @@ CombinedCurrencyMatcher::match(StringSegment& segment, ParsedNumber& result, UEr
     }
 
     // Try to match a currency spacing separator.
-    if (!result.seenNumber() && !afterPrefixInsert.isEmpty()) {
+    if (!result.seenNumber() && !afterPrefixInsert.isEmpty()
+            && segment.length() != 0) {
         int32_t overlap = segment.getCommonPrefixLength(afterPrefixInsert);
         if (overlap == afterPrefixInsert.length()) {
             segment.adjustOffset(overlap);
@@ -99,6 +102,8 @@ bool CombinedCurrencyMatcher::matchCurrency(StringSegment& segment, ParsedNumber
     int32_t overlap1;
     if (!fCurrency1.isEmpty()) {
         overlap1 = segment.getCaseSensitivePrefixLength(fCurrency1);
+    } else if (!fUseFullCurrencyData && (!fCurrencyTrails || result.seenNumber())) {
+        overlap1 = 0;
     } else {
         overlap1 = -1;
     }

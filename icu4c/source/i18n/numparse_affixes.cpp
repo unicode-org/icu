@@ -365,6 +365,7 @@ AffixMatcher::AffixMatcher(AffixPatternMatcher* prefix, AffixPatternMatcher* suf
         : fPrefix(prefix), fSuffix(suffix), fFlags(flags) {}
 
 bool AffixMatcher::match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const {
+    bool startCurrencyIsEmpty = (result.currencyCode[0]==0);
     if (!result.seenNumber()) {
         // Prefix
         // Do not match if:
@@ -377,7 +378,8 @@ bool AffixMatcher::match(StringSegment& segment, ParsedNumber& result, UErrorCod
         // Attempt to match the prefix.
         int initialOffset = segment.getOffset();
         bool maybeMore = fPrefix->match(segment, result, status);
-        if (initialOffset != segment.getOffset()) {
+        if (initialOffset != segment.getOffset()
+                || (startCurrencyIsEmpty && result.currencyCode[0]!=0)) {
             result.prefix = fPrefix->getPattern();
         }
         return maybeMore;
@@ -395,7 +397,8 @@ bool AffixMatcher::match(StringSegment& segment, ParsedNumber& result, UErrorCod
         // Attempt to match the suffix.
         int initialOffset = segment.getOffset();
         bool maybeMore = fSuffix->match(segment, result, status);
-        if (initialOffset != segment.getOffset()) {
+        if (initialOffset != segment.getOffset()
+                || (startCurrencyIsEmpty && result.currencyCode[0]!=0)) {
             result.suffix = fSuffix->getPattern();
         }
         return maybeMore;
