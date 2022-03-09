@@ -273,8 +273,6 @@ static const char* const CLDR_FIELD_WIDTH[] = { // [UDATPG_WIDTH_COUNT]
     "", "-short", "-narrow"
 };
 
-// TODO(ticket:13619): remove when definition uncommented in dtptngen.h.
-static const int32_t UDATPG_WIDTH_COUNT = UDATPG_NARROW + 1;
 static constexpr UDateTimePGDisplayWidth UDATPG_WIDTH_APPENDITEM = UDATPG_WIDE;
 static constexpr int32_t UDATPG_FIELD_KEY_MAX = 24; // max length of CLDR field tag (type + width)
 
