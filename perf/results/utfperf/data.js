@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1646797184706,
+  "lastUpdate": 1646797739297,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -250,6 +250,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 3.5415,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alexandermv@gmail.com",
+            "name": "Alexander Morozov",
+            "username": "alxrmorozov"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "234cbe2c17034c68d6dd6df09fda79a052f0a238",
+          "message": "ICU-21805 Remove useless check",
+          "timestamp": "2022-03-09T03:37:37Z",
+          "tree_id": "9e1ab2725eb42216e690fc018fce2b085fddb70f",
+          "url": "https://github.com/unicode-org/icu/commit/234cbe2c17034c68d6dd6df09fda79a052f0a238"
+        },
+        "date": 1646797737172,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 16.3777,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 6.1133,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 4.3052,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
