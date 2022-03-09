@@ -24,12 +24,15 @@ import com.ibm.icu.util.Measure;
 public class ComplexUnitsConverter {
     public static final BigDecimal EPSILON = BigDecimal.valueOf(Math.ulp(1.0));
     public static final BigDecimal EPSILON_MULTIPLIER = BigDecimal.valueOf(1).add(EPSILON);
-    private ArrayList<UnitsConverter> unitsConverters_;
+
+    // TODO(ICU-21937): Make it private after submitting the public units conversion API.
+    public ArrayList<UnitsConverter> unitsConverters_;
     /**
      * Individual units of mixed units, sorted big to small, with indices
      * indicating the requested output mixed unit order.
      */
-    private List<MeasureUnitImpl.MeasureUnitImplWithIndex> units_;
+    // TODO(ICU-21937): Make it private after submitting the public units conversion API.
+    public List<MeasureUnitImpl.MeasureUnitImplWithIndex> units_;
     private MeasureUnitImpl inputUnit_;
 
     /**
