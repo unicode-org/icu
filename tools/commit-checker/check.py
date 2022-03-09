@@ -78,14 +78,14 @@ def make_commit_wanted(jira_issue):
         commit_wanted = CommitWanted["FORBIDDEN"]
     elif jira_issue.fields.resolution.id in [ R_FIXED_NON_REPO, R_FIX_SURVEY_TOOL, R_FIXED_BY_OTHER_TICKET ]:
         commit_wanted = CommitWanted["FORBIDDEN"]
+    elif jira_issue.fields.issuetype.id in [ I_ICU_USERGUIDE, I_TASK ]:
+        commit_wanted = CommitWanted["OPTIONAL"]
     elif jira_issue.fields.resolution.id in [ R_FIXED ]:
         commit_wanted = CommitWanted["REQUIRED"]
     elif jira_issue.fields.resolution.id == R_FIXED_BY_OTHER_TICKET:
         commit_wanted = CommitWanted["FORBIDDEN"]
     elif jira_issue.fields.resolution.id != R_FIXED:
         commit_wanted = CommitWanted["ERROR"]
-    elif jira_issue.fields.issuetype.id in [ I_ICU_USERGUIDE, I_TASK ]:
-        commit_wanted = CommitWanted["OPTIONAL"]
     else:
         commit_wanted = CommitWanted["REQUIRED"]
     return commit_wanted
