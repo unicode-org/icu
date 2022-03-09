@@ -166,6 +166,10 @@
     ; /convertUnits/$1/factor ; values="$3"
     ; /convertUnits/$1/offset ; values=$4
 
+//supplementalData/metadata/alias/unitAlias[@type="(%W)"][@replacement="(%W)"][@reason="(%W)"]?
+    ; /alias/$1/replacement ; values=$2
+    ; /alias/$1/reason ; values="$3"
+
 # Quoting "$1" and "$2" in the output lets $3 expand space-separated regions: only the first unquoted output supports such expansion.
 //supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"]/unitPreference[@regions="(%A)"]
     ; /unitPreferenceData/"$1"/"$2"/$3/<FIFO>/unit
