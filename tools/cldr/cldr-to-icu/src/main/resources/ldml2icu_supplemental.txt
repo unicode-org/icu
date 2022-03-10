@@ -166,6 +166,11 @@
     ; /convertUnits/$1/factor ; values="$3"
     ; /convertUnits/$1/offset ; values=$4
 
+# note the following will go into metadata.txt, not units.txt
+//supplementalData/metadata/alias/(unit|usage)Alias[@type="(%A)"][@replacement="(%A)"][@reason="(%A)"]
+     ; /alias/$1/$2/reason ; values="$4"
+     ; /alias/$1/$2/replacement ; values="$3"
+
 # Quoting "$1" and "$2" in the output lets $3 expand space-separated regions: only the first unquoted output supports such expansion.
 //supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"]/unitPreference[@regions="(%A)"]
     ; /unitPreferenceData/"$1"/"$2"/$3/<FIFO>/unit
@@ -260,6 +265,9 @@
 //supplementalData/metadata/alias/(language|script|territory|subdivision|variant)Alias[@type="(%A)"][@replacement="(%A)"][@reason="(%A)"]
      ; /alias/$1/$2/reason ; values="$4"
      ; /alias/$1/$2/replacement ; values="$3"
+# Also note that there are paths in units.xml (above) like
+# //supplementalData/metadata/alias/(unit|usage)Alias[@type="(%A)"]
+# which will go into metadata.txt
 
 # Region codes used by ICU's Region class
 # Specify the value explicitly so that the LDMLConverter will split it.

@@ -839,7 +839,8 @@ public class NumberRangeFormatterTest extends TestFmwk {
                 }
                 UResource.Table nsTable = value.getTable();
                 for (int j = 0; nsTable.getKeyAndValue(j, key, value); ++j) {
-                    if (!key.contentEquals("miscPatterns")) {
+                    if (!key.contentEquals("miscPatterns") || value.getType()!=UResourceBundle.TABLE) {
+                        // now miscPatterns might have an alias; for now skip alias instead of following
                         continue;
                     }
                     UResource.Table miscTable = value.getTable();
