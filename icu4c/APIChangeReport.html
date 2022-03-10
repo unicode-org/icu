@@ -5,31 +5,31 @@
 	-->
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>ICU4C API Comparison: ICU 69 with ICU 70</title>
+<title>ICU4C API Comparison: ICU 70 with ICU 71</title>
 <link type="text/css" href="icu4c.css" rel="stylesheet">
 </head>
 <body>
 <a name="#_top"></a>
-<h1>ICU4C API Comparison: ICU 69 with ICU 70</h1>
+<h1>ICU4C API Comparison: ICU 70 with ICU 71</h1>
 <div id="toc">
 <ul>
 <li>
-<a href="#removed">Removed from ICU 69</a>
+<a href="#removed">Removed from ICU 70</a>
 </li>
 <li>
-<a href="#deprecated">Deprecated or Obsoleted in ICU 70</a>
+<a href="#deprecated">Deprecated or Obsoleted in ICU 71</a>
 </li>
 <li>
-<a href="#changed">Changed in  ICU 70</a>
+<a href="#changed">Changed in  ICU 71</a>
 </li>
 <li>
-<a href="#promoted">Promoted to stable in ICU 70</a>
+<a href="#promoted">Promoted to stable in ICU 71</a>
 </li>
 <li>
-<a href="#added">Added in ICU 70</a>
+<a href="#added">Added in ICU 71</a>
 </li>
 <li>
-<a href="#other">Other existing drafts in ICU 70</a>
+<a href="#other">Other existing drafts in ICU 71</a>
 </li>
 <li>
 <a href="#simplifications">Signature Simplifications</a>
@@ -38,814 +38,411 @@
 <hr>
 </div>
 <a name="removed"></a>
-<h2>Removed from ICU 69</h2>
+<h2>Removed from ICU 70</h2>
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>ICU 69</th><th>ICU 70</th>
+<th>File</th><th>API</th><th>ICU 70</th><th>ICU 71</th>
 </tr>
 </THEAD>
-<tr class="row1">
-<td class="file">tmutfmt.h</td><td class="proto">bool icu::TimeUnitFormat::operator!=(const Format&amp;) const</td><td class="">Deprecated<br>ICU 53</td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
 <hr>
 <a name="deprecated"></a>
-<h2>Deprecated or Obsoleted in ICU 70</h2>
+<h2>Deprecated or Obsoleted in ICU 71</h2>
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>ICU 69</th><th>ICU 70</th>
+<th>File</th><th>API</th><th>ICU 70</th><th>ICU 71</th>
 </tr>
 </THEAD>
 <tr class="row1">
-<td class="file">timezone.h</td><td class="proto"><tt>static</tt> StringEnumeration* icu::TimeZone::createEnumeration()</td><td class="stabchange">Stable<br>ICU 2.4</td><td>Deprecated<br>
-<span class="verchange"><span>ICU 70</span></span></td>
+<td class="file">numberformatter.h</td><td class="proto">const char* icu::number::FormattedNumber::getGender(UErrorCode&amp;) const</td><td class="">Internal<br>ICU 69</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">timezone.h</td><td class="proto"><tt>static</tt> StringEnumeration* icu::TimeZone::createEnumeration(const char*)</td><td class="stabchange">Stable<br>ICU 2.4</td><td>Deprecated<br>
-<span class="verchange"><span>ICU 70</span></span></td>
+<td class="file">ucnv.h</td><td class="proto">UConverter* ucnv_safeClone(const UConverter*, void*, int32_t*, UErrorCode*)</td><td class="stabchange">Stable<br>ICU 2.0</td><td>Deprecated<br>
+<span class="verchange"><span>ICU 71</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">timezone.h</td><td class="proto"><tt>static</tt> StringEnumeration* icu::TimeZone::createEnumeration(int32_t)</td><td class="stabchange">Stable<br>ICU 2.4</td><td>Deprecated<br>
-<span class="verchange"><span>ICU 70</span></span></td>
+<td class="file">ucol.h</td><td class="proto">UCollator* ucol_safeClone(const UCollator*, void*, int32_t*, UErrorCode*)</td><td class="stabchange">Stable<br>ICU 2.0</td><td>Deprecated<br>
+<span class="verchange"><span>ICU 71</span></span></td>
 </tr>
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
 <hr>
 <a name="changed"></a>
-<h2>Changed in  ICU 70 (old, new)</h2>
+<h2>Changed in  ICU 71 (old, new)</h2>
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>ICU 69</th><th>ICU 70</th>
+<th>File</th><th>API</th><th>ICU 70</th><th>ICU 71</th>
 </tr>
 </THEAD>
 <tr class="row1">
-<td class="file">dtitvfmt.h</td><td class="proto">UDisplayContext icu::DateIntervalFormat::getContext(UDisplayContextType, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">basictz.h</td><td class="proto">void icu::BasicTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">dtitvfmt.h</td><td class="proto">void icu::DateIntervalFormat::setContext(UDisplayContext, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">measunit.h</td><td class="proto">MeasureUnit icu::MeasureUnit::withPrefix(UMeasurePrefix, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">localematcher.h</td><td class="proto">Builder&amp; icu::LocaleMatcher::Builder::setMaxDistance(const Locale&amp;, const Locale&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">measunit.h</td><td class="proto">UMeasurePrefix icu::MeasureUnit::getPrefix(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">localematcher.h</td><td class="proto">Builder&amp; icu::LocaleMatcher::Builder::setNoDefaultLocale()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getMilligramOfglucosePerDeciliter()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">localematcher.h</td><td class="proto">bool icu::LocaleMatcher::isMatch(const Locale&amp;, const Locale&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMilligramOfglucosePerDeciliter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getCandela()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::FractionPrecision::withSignificantDigits(int32_t, int32_t, UNumberRoundingPriority) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getDessertSpoon()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::Precision::trailingZeroDisplay(UNumberTrailingZeroDisplay) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getDessertSpoonImperial()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">numberformatter.h</td><td class="proto">const char* icu::number::FormattedNumber::getGender(UErrorCode&amp;) const</td><td class="">Internal<br>ICU 69</td><td>Deprecated<br>
+<span class=""><span></span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getDot()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">rbtz.h</td><td class="proto">void icu::RuleBasedTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getDram()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">simpletz.h</td><td class="proto">void icu::SimpleTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getDrop()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">ubrk.h</td><td class="proto">UBreakIterator* ubrk_clone(const UBreakIterator*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getEarthRadius()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_DAYLIGHT_FORMER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getGrain()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_DAYLIGHT_LATTER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getJigger()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_FORMER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getLumen()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_LATTER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getPinch()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_STANDARD_FORMER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getQuartImperial()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_STANDARD_LATTER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCandela(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">ucal.h</td><td class="proto">void ucal_getTimeZoneOffsetFromLocal(const UCalendar*, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t*, int32_t*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createDessertSpoon(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">ucnv.h</td><td class="proto">UConverter* ucnv_safeClone(const UConverter*, void*, int32_t*, UErrorCode*)</td><td class="stabchange">Stable<br>ICU 2.0</td><td>Deprecated<br>
+<span class="verchange"><span>ICU 71</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createDessertSpoonImperial(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">ucol.h</td><td class="proto">UCollator* ucol_safeClone(const UCollator*, void*, int32_t*, UErrorCode*)</td><td class="stabchange">Stable<br>ICU 2.0</td><td>Deprecated<br>
+<span class="verchange"><span>ICU 71</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createDot(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">uniset.h</td><td class="proto">UnicodeSet&amp; icu::UnicodeSet::retain(const UnicodeString&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createDram(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatRoundingMode::UNUM_ROUND_HALF_CEILING</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createDrop(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatRoundingMode::UNUM_ROUND_HALF_FLOOR</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createEarthRadius(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatRoundingMode::UNUM_ROUND_HALF_ODD</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createGrain(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberRoundingPriority::UNUM_ROUNDING_PRIORITY_RELAXED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createJigger(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberRoundingPriority::UNUM_ROUNDING_PRIORITY_STRICT</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createLumen(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberSignDisplay::UNUM_SIGN_ACCOUNTING_NEGATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createPinch(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberSignDisplay::UNUM_SIGN_NEGATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createQuartImperial(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberTrailingZeroDisplay::UNUM_TRAILING_ZERO_AUTO</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto">std::pair&lt; LocalArray&lt; MeasureUnit &gt;, int32_t &gt; icu::MeasureUnit::splitToSingleUnits(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberTrailingZeroDisplay::UNUM_TRAILING_ZERO_HIDE_IF_WHOLE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::usage(StringPiece) const&amp;</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">uset.h</td><td class="proto">void uset_complementAllCodePoints(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::usage(StringPiece)&amp;&amp;</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">uset.h</td><td class="proto">void uset_complementRange(USet*, UChar32, UChar32)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto">MeasureUnit icu::number::FormattedNumber::getOutputUnit(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">uset.h</td><td class="proto">void uset_complementString(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">numberrangeformatter.h</td><td class="proto">std::pair&lt; StringClass, StringClass &gt; icu::number::FormattedNumberRange::getDecimalNumbers(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">uset.h</td><td class="proto">void uset_removeAllCodePoints(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">plurrule.h</td><td class="proto">UnicodeString icu::PluralRules::select(const number::FormattedNumberRange&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">uset.h</td><td class="proto">void uset_retainAllCodePoints(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">timezone.h</td><td class="proto"><tt>static</tt> StringEnumeration* icu::TimeZone::createEnumeration()</td><td class="stabchange">Stable<br>ICU 2.4</td><td>Deprecated<br>
-<span class="verchange"><span>ICU 70</span></span></td>
+<td class="file">uset.h</td><td class="proto">void uset_retainString(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">timezone.h</td><td class="proto"><tt>static</tt> StringEnumeration* icu::TimeZone::createEnumeration(const char*)</td><td class="stabchange">Stable<br>ICU 2.4</td><td>Deprecated<br>
-<span class="verchange"><span>ICU 70</span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">timezone.h</td><td class="proto"><tt>static</tt> StringEnumeration* icu::TimeZone::createEnumeration(int32_t)</td><td class="stabchange">Stable<br>ICU 2.4</td><td>Deprecated<br>
-<span class="verchange"><span>ICU 70</span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">ucurr.h</td><td class="proto"><tt>enum</tt> UCurrNameStyle::UCURR_FORMAL_SYMBOL_NAME</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row0">
-<td class="file">ucurr.h</td><td class="proto"><tt>enum</tt> UCurrNameStyle::UCURR_VARIANT_SYMBOL_NAME</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row1">
-<td class="file">udateintervalformat.h</td><td class="proto">UDisplayContext udtitvfmt_getContext(const UDateIntervalFormat*, UDisplayContextType, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row0">
-<td class="file">udateintervalformat.h</td><td class="proto">void udtitvfmt_setContext(UDateIntervalFormat*, UDisplayContext, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row1">
-<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatMinimumGroupingDigits::UNUM_MINIMUM_GROUPING_DIGITS_AUTO</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row0">
-<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatMinimumGroupingDigits::UNUM_MINIMUM_GROUPING_DIGITS_MIN2</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row1">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberUnitWidth::UNUM_UNIT_WIDTH_FORMAL</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row0">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberUnitWidth::UNUM_UNIT_WIDTH_VARIANT</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row1">
-<td class="file">unumberformatter.h</td><td class="proto">int32_t unumf_resultToDecimalNumber(const UFormattedNumber*, char*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row0">
-<td class="file">unumberrangeformatter.h</td><td class="proto">UFormattedNumberRange* unumrf_openResult(UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row1">
-<td class="file">unumberrangeformatter.h</td><td class="proto">UNumberRangeFormatter* unumrf_openForSkeletonWithCollapseAndIdentityFallback(const UChar*, int32_t, UNumberRangeCollapse, UNumberRangeIdentityFallback, const char*, UParseError*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row0">
-<td class="file">unumberrangeformatter.h</td><td class="proto">UNumberRangeIdentityResult unumrf_resultGetIdentityResult(const UFormattedNumberRange*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row1">
-<td class="file">unumberrangeformatter.h</td><td class="proto">const UFormattedValue* unumrf_resultAsValue(const UFormattedNumberRange*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row0">
-<td class="file">unumberrangeformatter.h</td><td class="proto">int32_t unumrf_resultGetFirstDecimalNumber(const UFormattedNumberRange*, char*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row1">
-<td class="file">unumberrangeformatter.h</td><td class="proto">int32_t unumrf_resultGetSecondDecimalNumber(const UFormattedNumberRange*, char*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row0">
-<td class="file">unumberrangeformatter.h</td><td class="proto">void unumrf_close(UNumberRangeFormatter*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row1">
-<td class="file">unumberrangeformatter.h</td><td class="proto">void unumrf_closeResult(UFormattedNumberRange*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row0">
-<td class="file">unumberrangeformatter.h</td><td class="proto">void unumrf_formatDecimalRange(const UNumberRangeFormatter*, const char*, int32_t, const char*, int32_t, UFormattedNumberRange*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row1">
-<td class="file">unumberrangeformatter.h</td><td class="proto">void unumrf_formatDoubleRange(const UNumberRangeFormatter*, double, double, UFormattedNumberRange*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row0">
-<td class="file">upluralrules.h</td><td class="proto">int32_t uplrules_selectForRange(const UPluralRules*, const struct UFormattedNumberRange*, UChar*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">vtzone.h</td><td class="proto">void icu::VTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
 <hr>
 <a name="promoted"></a>
-<h2>Promoted to stable in ICU 70</h2>
+<h2>Promoted to stable in ICU 71</h2>
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>ICU 69</th><th>ICU 70</th>
+<th>File</th><th>API</th><th>ICU 70</th><th>ICU 71</th>
 </tr>
 </THEAD>
 <tr class="row1">
-<td class="file">dtitvfmt.h</td><td class="proto">UDisplayContext icu::DateIntervalFormat::getContext(UDisplayContextType, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">basictz.h</td><td class="proto">void icu::BasicTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">dtitvfmt.h</td><td class="proto">void icu::DateIntervalFormat::setContext(UDisplayContext, UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">measunit.h</td><td class="proto">MeasureUnit icu::MeasureUnit::withPrefix(UMeasurePrefix, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">localematcher.h</td><td class="proto">Builder&amp; icu::LocaleMatcher::Builder::setMaxDistance(const Locale&amp;, const Locale&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">measunit.h</td><td class="proto">UMeasurePrefix icu::MeasureUnit::getPrefix(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">localematcher.h</td><td class="proto">Builder&amp; icu::LocaleMatcher::Builder::setNoDefaultLocale()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getMilligramOfglucosePerDeciliter()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">localematcher.h</td><td class="proto">bool icu::LocaleMatcher::isMatch(const Locale&amp;, const Locale&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMilligramOfglucosePerDeciliter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getCandela()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::FractionPrecision::withSignificantDigits(int32_t, int32_t, UNumberRoundingPriority) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getDessertSpoon()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::Precision::trailingZeroDisplay(UNumberTrailingZeroDisplay) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getDessertSpoonImperial()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">rbtz.h</td><td class="proto">void icu::RuleBasedTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getDot()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">simpletz.h</td><td class="proto">void icu::SimpleTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getDram()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">ubrk.h</td><td class="proto">UBreakIterator* ubrk_clone(const UBreakIterator*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getDrop()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_DAYLIGHT_FORMER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getEarthRadius()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_DAYLIGHT_LATTER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getGrain()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_FORMER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getJigger()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_LATTER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getLumen()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_STANDARD_FORMER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getPinch()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_STANDARD_LATTER</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getQuartImperial()</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">ucal.h</td><td class="proto">void ucal_getTimeZoneOffsetFromLocal(const UCalendar*, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t*, int32_t*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createCandela(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">ucnv.h</td><td class="proto">UConverter* ucnv_clone(const UConverter*, UErrorCode*)</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>ICU 71</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 71.">(Born Stable)</b></td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createDessertSpoon(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">ucol.h</td><td class="proto">UCollator* ucol_clone(const UCollator*, UErrorCode*)</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>ICU 71</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 71.">(Born Stable)</b></td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createDessertSpoonImperial(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">uniset.h</td><td class="proto">UnicodeSet&amp; icu::UnicodeSet::retain(const UnicodeString&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createDot(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatRoundingMode::UNUM_ROUND_HALF_CEILING</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createDram(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatRoundingMode::UNUM_ROUND_HALF_FLOOR</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createDrop(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatRoundingMode::UNUM_ROUND_HALF_ODD</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createEarthRadius(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberRoundingPriority::UNUM_ROUNDING_PRIORITY_RELAXED</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createGrain(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberRoundingPriority::UNUM_ROUNDING_PRIORITY_STRICT</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createJigger(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberSignDisplay::UNUM_SIGN_ACCOUNTING_NEGATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createLumen(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberSignDisplay::UNUM_SIGN_NEGATIVE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createPinch(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberTrailingZeroDisplay::UNUM_TRAILING_ZERO_AUTO</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createQuartImperial(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberTrailingZeroDisplay::UNUM_TRAILING_ZERO_HIDE_IF_WHOLE</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto">std::pair&lt; LocalArray&lt; MeasureUnit &gt;, int32_t &gt; icu::MeasureUnit::splitToSingleUnits(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">uset.h</td><td class="proto">void uset_complementAllCodePoints(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::usage(StringPiece) const&amp;</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">uset.h</td><td class="proto">void uset_complementRange(USet*, UChar32, UChar32)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::usage(StringPiece)&amp;&amp;</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">uset.h</td><td class="proto">void uset_complementString(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto">MeasureUnit icu::number::FormattedNumber::getOutputUnit(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">uset.h</td><td class="proto">void uset_removeAllCodePoints(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">numberrangeformatter.h</td><td class="proto">std::pair&lt; StringClass, StringClass &gt; icu::number::FormattedNumberRange::getDecimalNumbers(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">uset.h</td><td class="proto">void uset_retainAllCodePoints(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row1">
-<td class="file">plurrule.h</td><td class="proto">UnicodeString icu::PluralRules::select(const number::FormattedNumberRange&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
+<td class="file">uset.h</td><td class="proto">void uset_retainString(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">timezone.h</td><td class="proto"><tt>static</tt> StringEnumeration* icu::TimeZone::createEnumeration(UErrorCode&amp;)</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">timezone.h</td><td class="proto"><tt>static</tt> StringEnumeration* icu::TimeZone::createEnumerationForRawOffset(int32_t, UErrorCode&amp;)</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row0">
-<td class="file">timezone.h</td><td class="proto"><tt>static</tt> StringEnumeration* icu::TimeZone::createEnumerationForRegion(const char*, UErrorCode&amp;)</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_ARABIC_EXTENDED_B</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row0">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_CYPRO_MINOAN</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_ETHIOPIC_EXTENDED_B</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row0">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_KANA_EXTENDED_B</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_LATIN_EXTENDED_F</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row0">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_LATIN_EXTENDED_G</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_OLD_UYGHUR</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row0">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_TANGSA</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_TOTO</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row0">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED_A</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_VITHKUQI</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row0">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_ZNAMENNY_MUSICAL_NOTATION</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UJoiningGroup::U_JG_THIN_YEH</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row0">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UJoiningGroup::U_JG_VERTICAL_TAIL</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">ucurr.h</td><td class="proto"><tt>enum</tt> UCurrNameStyle::UCURR_FORMAL_SYMBOL_NAME</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row0">
-<td class="file">ucurr.h</td><td class="proto"><tt>enum</tt> UCurrNameStyle::UCURR_VARIANT_SYMBOL_NAME</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row1">
-<td class="file">udateintervalformat.h</td><td class="proto">UDisplayContext udtitvfmt_getContext(const UDateIntervalFormat*, UDisplayContextType, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row0">
-<td class="file">udateintervalformat.h</td><td class="proto">void udtitvfmt_setContext(UDateIntervalFormat*, UDisplayContext, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row1">
-<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatMinimumGroupingDigits::UNUM_MINIMUM_GROUPING_DIGITS_AUTO</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row0">
-<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatMinimumGroupingDigits::UNUM_MINIMUM_GROUPING_DIGITS_MIN2</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row1">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberUnitWidth::UNUM_UNIT_WIDTH_FORMAL</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row0">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberUnitWidth::UNUM_UNIT_WIDTH_VARIANT</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row1">
-<td class="file">unumberformatter.h</td><td class="proto">int32_t unumf_resultToDecimalNumber(const UFormattedNumber*, char*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row0">
-<td class="file">unumberrangeformatter.h</td><td class="proto">UFormattedNumberRange* unumrf_openResult(UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row1">
-<td class="file">unumberrangeformatter.h</td><td class="proto">UNumberRangeFormatter* unumrf_openForSkeletonWithCollapseAndIdentityFallback(const UChar*, int32_t, UNumberRangeCollapse, UNumberRangeIdentityFallback, const char*, UParseError*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row0">
-<td class="file">unumberrangeformatter.h</td><td class="proto">UNumberRangeIdentityResult unumrf_resultGetIdentityResult(const UFormattedNumberRange*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row1">
-<td class="file">unumberrangeformatter.h</td><td class="proto">const UFormattedValue* unumrf_resultAsValue(const UFormattedNumberRange*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row0">
-<td class="file">unumberrangeformatter.h</td><td class="proto">int32_t unumrf_resultGetFirstDecimalNumber(const UFormattedNumberRange*, char*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row1">
-<td class="file">unumberrangeformatter.h</td><td class="proto">int32_t unumrf_resultGetSecondDecimalNumber(const UFormattedNumberRange*, char*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row0">
-<td class="file">unumberrangeformatter.h</td><td class="proto">void unumrf_close(UNumberRangeFormatter*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row1">
-<td class="file">unumberrangeformatter.h</td><td class="proto">void unumrf_closeResult(UFormattedNumberRange*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row0">
-<td class="file">unumberrangeformatter.h</td><td class="proto">void unumrf_formatDecimalRange(const UNumberRangeFormatter*, const char*, int32_t, const char*, int32_t, UFormattedNumberRange*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row1">
-<td class="file">unumberrangeformatter.h</td><td class="proto">void unumrf_formatDoubleRange(const UNumberRangeFormatter*, double, double, UFormattedNumberRange*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row0">
-<td class="file">upluralrules.h</td><td class="proto">int32_t uplrules_selectForRange(const UPluralRules*, const struct UFormattedNumberRange*, UChar*, int32_t, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 68</td>
-</tr>
-<tr class="row1">
-<td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_CYPRO_MINOAN</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row0">
-<td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_OLD_UYGHUR</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_TANGSA</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row0">
-<td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_TOTO</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_VITHKUQI</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row0">
-<td class="file">utypes.h</td><td class="proto"><tt>enum</tt> UErrorCode::U_INPUT_TOO_LONG_ERROR</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 68</span></span></td>
+<td class="file">vtzone.h</td><td class="proto">void icu::VTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 69</td>
 </tr>
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
 <hr>
 <a name="added"></a>
-<h2>Added in ICU 70</h2>
+<h2>Added in ICU 71</h2>
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>ICU 69</th><th>ICU 70</th>
+<th>File</th><th>API</th><th>ICU 70</th><th>ICU 71</th>
 </tr>
 </THEAD>
 <tr class="row1">
-<td class="file">dcfmtsym.h</td><td class="proto"><tt>enum</tt>  							icu::DecimalFormatSymbols::ENumberFormatSymbol::kApproximatelySignSymbol</td><td class="">(missing)</td><td>Internal<br>
-<span class=""><span></span></span></td>
+<td class="file">dtptngen.h</td><td class="proto">const UnicodeString&amp; icu::DateTimePatternGenerator::getDateTimeFormat(UDateFormatStyle, UErrorCode&amp;) const</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 71</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getItem()</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 70</span></span></td>
+<td class="file">dtptngen.h</td><td class="proto">void icu::DateTimePatternGenerator::setDateTimeFormat(UDateFormatStyle, const UnicodeString&amp;, UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 71</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getKilowattHourPer100Kilometer()</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 70</span></span></td>
+<td class="file">numberformatter.h</td><td class="proto">NounClass icu::number::FormattedNumber::getNounClass(UErrorCode&amp;) const</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 71</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createItem(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 70</span></span></td>
+<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> IncrementPrecision icu::number::Precision::incrementExact(uint64_t, int16_t)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 71</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createKilowattHourPer100Kilometer(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 70</span></span></td>
+<td class="file">ucnv.h</td><td class="proto">UConverter* ucnv_clone(const UConverter*, UErrorCode*)</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>ICU 71</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 71.">(Born Stable)</b></td>
 </tr>
 <tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto">const DecimalFormatSymbols* icu::number::LocalizedNumberFormatter::getDecimalFormatSymbols() const</td><td class="">(missing)</td><td>Internal<br>
-<span class=""><span></span></span></td>
+<td class="file">ucol.h</td><td class="proto">UCollator* ucol_clone(const UCollator*, UErrorCode*)</td><td class="">(missing)</td><td>Stable<br>
+<span class=""><span>ICU 71</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 71.">(Born Stable)</b></td>
 </tr>
 <tr class="row1">
-<td class="file">numberrangeformatter.h</td><td class="proto">icu::number::FormattedNumberRange::FormattedNumberRange()</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 70</span></span></td>
+<td class="file">udatpg.h</td><td class="proto">const UChar* udatpg_getDateTimeFormatForStyle(const UDateTimePatternGenerator*, UDateFormatStyle, int32_t*, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 71</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">timezone.h</td><td class="proto"><tt>static</tt> StringEnumeration* icu::TimeZone::createEnumeration(UErrorCode&amp;)</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
+<td class="file">udatpg.h</td><td class="proto">void udatpg_setDateTimeFormatForStyle(UDateTimePatternGenerator*, UDateFormatStyle, const UChar*, int32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 71</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">timezone.h</td><td class="proto"><tt>static</tt> StringEnumeration* icu::TimeZone::createEnumerationForRawOffset(int32_t, UErrorCode&amp;)</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row0">
-<td class="file">timezone.h</td><td class="proto"><tt>static</tt> StringEnumeration* icu::TimeZone::createEnumerationForRegion(const char*, UErrorCode&amp;)</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">uchar.h</td><td class="proto">bool u_stringHasBinaryProperty(const UChar*, int32_t, UProperty)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 70</span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_ARABIC_EXTENDED_B</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_CYPRO_MINOAN</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row0">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_ETHIOPIC_EXTENDED_B</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_KANA_EXTENDED_B</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row0">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_LATIN_EXTENDED_F</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_LATIN_EXTENDED_G</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row0">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_OLD_UYGHUR</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_TANGSA</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row0">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_TOTO</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED_A</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row0">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_VITHKUQI</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UBlockCode::UBLOCK_ZNAMENNY_MUSICAL_NOTATION</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row0">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UJoiningGroup::U_JG_THIN_YEH</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UJoiningGroup::U_JG_VERTICAL_TAIL</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row0">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_BASIC_EMOJI</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 70</span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_EMOJI_KEYCAP_SEQUENCE</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 70</span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_RGI_EMOJI_FLAG_SEQUENCE</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 70</span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_RGI_EMOJI_MODIFIER_SEQUENCE</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 70</span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_RGI_EMOJI_TAG_SEQUENCE</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 70</span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_RGI_EMOJI_ZWJ_SEQUENCE</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 70</span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_RGI_EMOJI</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 70</span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatSymbolType::UDAT_NARROW_QUARTERS</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 70</span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatSymbolType::UDAT_STANDALONE_NARROW_QUARTERS</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 70</span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">uniset.h</td><td class="proto">bool icu::UnicodeSet::hasStrings() const</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 70</span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatSymbol::UNUM_APPROXIMATELY_SIGN_SYMBOL</td><td class="">(missing)</td><td>Internal<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_CYPRO_MINOAN</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row0">
-<td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_OLD_UYGHUR</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_TANGSA</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row0">
-<td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_TOTO</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row1">
-<td class="file">uscript.h</td><td class="proto"><tt>enum</tt> UScriptCode::USCRIPT_VITHKUQI</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 70</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in ICU 70.">(Born Stable)</b></td>
-</tr>
-<tr class="row0">
-<td class="file">uset.h</td><td class="proto">bool uset_hasStrings(const USet*)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 70</span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">uset.h</td><td class="proto">int32_t uset_getRangeCount(const USet*)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 70</span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">usetiter.h</td><td class="proto">UnicodeSetIterator&amp; icu::UnicodeSetIterator::skipToStrings()</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 70</span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">utypes.h</td><td class="proto"><tt>enum</tt> UErrorCode::U_INPUT_TOO_LONG_ERROR</td><td class="">(missing)</td><td>Stable<br>
-<span class=""><span>ICU 68</span></span></td>
+<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatFields::UNUM_APPROXIMATELY_SIGN_FIELD</td><td class="">(missing)</td><td>Draft<br>
+<span class=""><span>ICU 71</span></span></td>
 </tr>
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
 <hr>
 <a name="other"></a>
-<h2>Other existing drafts in ICU 70</h2>
+<h2>Other existing drafts in ICU 71</h2>
 <div class="other">
 <table BORDER="1" class="genTable">
 <THEAD>
 <tr>
-<th>File</th><th>API</th><th>ICU 69</th><th>ICU 70</th>
+<th>File</th><th>API</th><th>ICU 70</th><th>ICU 71</th>
 </tr>
 </THEAD>
 <tr class="row1">
-<td class="file">basictz.h</td><td class="proto">void icu::BasicTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
-</tr>
-<tr class="row0">
 <td class="file">measfmt.h</td><td class="proto">void icu::MeasureFormat::parseObject(const UnicodeString&amp;, Formattable&amp;, ParsePosition&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 53</td>
 </tr>
-<tr class="row1">
-<td class="file">measunit.h</td><td class="proto">MeasureUnit icu::MeasureUnit::withPrefix(UMeasurePrefix, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
-</tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto">UMeasurePrefix icu::MeasureUnit::getPrefix(UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getItem()</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
 </tr>
 <tr class="row1">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getMilligramOfglucosePerDeciliter()</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit icu::MeasureUnit::getKilowattHourPer100Kilometer()</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
 </tr>
 <tr class="row0">
-<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createMilligramOfglucosePerDeciliter(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createItem(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::FractionPrecision::withSignificantDigits(int32_t, int32_t, UNumberRoundingPriority) const</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
+<td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createKilowattHourPer100Kilometer(UErrorCode&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
 </tr>
 <tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::Precision::trailingZeroDisplay(UNumberTrailingZeroDisplay) const</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
+<td class="file">numberrangeformatter.h</td><td class="proto">icu::number::FormattedNumberRange::FormattedNumberRange()</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
 </tr>
 <tr class="row1">
-<td class="file">rbtz.h</td><td class="proto">void icu::RuleBasedTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
+<td class="file">uchar.h</td><td class="proto">bool u_stringHasBinaryProperty(const UChar*, int32_t, UProperty)</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
 </tr>
 <tr class="row0">
-<td class="file">simpletz.h</td><td class="proto">void icu::SimpleTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_BASIC_EMOJI</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
 </tr>
 <tr class="row1">
-<td class="file">ubrk.h</td><td class="proto">UBreakIterator* ubrk_clone(const UBreakIterator*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_EMOJI_KEYCAP_SEQUENCE</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
 </tr>
 <tr class="row0">
-<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_DAYLIGHT_FORMER</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_RGI_EMOJI_FLAG_SEQUENCE</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
 </tr>
 <tr class="row1">
-<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_DAYLIGHT_LATTER</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_RGI_EMOJI_MODIFIER_SEQUENCE</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
 </tr>
 <tr class="row0">
-<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_FORMER</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_RGI_EMOJI_TAG_SEQUENCE</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
 </tr>
 <tr class="row1">
-<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_LATTER</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_RGI_EMOJI_ZWJ_SEQUENCE</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
 </tr>
 <tr class="row0">
-<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_STANDARD_FORMER</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
+<td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UProperty::UCHAR_RGI_EMOJI</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
 </tr>
 <tr class="row1">
-<td class="file">ucal.h</td><td class="proto"><tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_STANDARD_LATTER</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
+<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatSymbolType::UDAT_NARROW_QUARTERS</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
 </tr>
 <tr class="row0">
-<td class="file">ucal.h</td><td class="proto">void ucal_getTimeZoneOffsetFromLocal(const UCalendar*, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t*, int32_t*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
+<td class="file">udat.h</td><td class="proto"><tt>enum</tt> UDateFormatSymbolType::UDAT_STANDALONE_NARROW_QUARTERS</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
 </tr>
 <tr class="row1">
 <td class="file">uformattedvalue.h</td><td class="proto"><tt>enum</tt> UFieldCategory::UFIELD_CATEGORY_NUMBER_RANGE_SPAN</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
 </tr>
 <tr class="row0">
-<td class="file">uniset.h</td><td class="proto">UnicodeSet&amp; icu::UnicodeSet::retain(const UnicodeString&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
+<td class="file">uniset.h</td><td class="proto">bool icu::UnicodeSet::hasStrings() const</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
 </tr>
 <tr class="row1">
-<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatRoundingMode::UNUM_ROUND_HALF_CEILING</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
-</tr>
-<tr class="row0">
-<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatRoundingMode::UNUM_ROUND_HALF_FLOOR</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
-</tr>
-<tr class="row1">
-<td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatRoundingMode::UNUM_ROUND_HALF_ODD</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
-</tr>
-<tr class="row0">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberRoundingPriority::UNUM_ROUNDING_PRIORITY_RELAXED</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
-</tr>
-<tr class="row1">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberRoundingPriority::UNUM_ROUNDING_PRIORITY_STRICT</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
-</tr>
-<tr class="row0">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberSignDisplay::UNUM_SIGN_ACCOUNTING_NEGATIVE</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
-</tr>
-<tr class="row1">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberSignDisplay::UNUM_SIGN_NEGATIVE</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
-</tr>
-<tr class="row0">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberTrailingZeroDisplay::UNUM_TRAILING_ZERO_AUTO</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
-</tr>
-<tr class="row1">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberTrailingZeroDisplay::UNUM_TRAILING_ZERO_HIDE_IF_WHOLE</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
-</tr>
-<tr class="row0">
 <td class="file">uregex.h</td><td class="proto"><tt>enum</tt> URegexpFlag::UREGEX_CANON_EQ</td><td class="" colspan="2" align="center">Draft<br>ICU 2.4</td>
 </tr>
+<tr class="row0">
+<td class="file">uset.h</td><td class="proto">bool uset_hasStrings(const USet*)</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
+</tr>
 <tr class="row1">
-<td class="file">uset.h</td><td class="proto">void uset_complementAllCodePoints(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
+<td class="file">uset.h</td><td class="proto">int32_t uset_getRangeCount(const USet*)</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
 </tr>
 <tr class="row0">
-<td class="file">uset.h</td><td class="proto">void uset_complementRange(USet*, UChar32, UChar32)</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
-</tr>
-<tr class="row1">
-<td class="file">uset.h</td><td class="proto">void uset_complementString(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
-</tr>
-<tr class="row0">
-<td class="file">uset.h</td><td class="proto">void uset_removeAllCodePoints(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
-</tr>
-<tr class="row1">
-<td class="file">uset.h</td><td class="proto">void uset_retainAllCodePoints(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
-</tr>
-<tr class="row0">
-<td class="file">uset.h</td><td class="proto">void uset_retainString(USet*, const UChar*, int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
-</tr>
-<tr class="row1">
-<td class="file">vtzone.h</td><td class="proto">void icu::VTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft<br>ICU 69</td>
+<td class="file">usetiter.h</td><td class="proto">UnicodeSetIterator&amp; icu::UnicodeSetIterator::skipToStrings()</td><td class="" colspan="2" align="center">Draft<br>ICU 70</td>
 </tr>
 </table>
 </div>
@@ -857,502 +454,13 @@
 <i>This section shows cases where the signature was "simplified" for the sake of comparison. The simplified form is in bold, followed by
     	all possible variations in "original" form.</i>
 <div class="other">
-<ul>
-<li>
-<b>UClassID icu::BreakIterator::getDynamicClassID() const</b>
-<br>UClassID icu::BreakIterator::getDynamicClassID() const override=0<br>UClassID icu::BreakIterator::getDynamicClassID() const=0<br>
-</li>
-<li>
-<b>UClassID icu::Calendar::getDynamicClassID() const</b>
-<br>UClassID icu::Calendar::getDynamicClassID() const override=0<br>UClassID icu::Calendar::getDynamicClassID() const=0<br>
-</li>
-<li>
-<b>UClassID icu::Collator::getDynamicClassID() const</b>
-<br>UClassID icu::Collator::getDynamicClassID() const override=0<br>UClassID icu::Collator::getDynamicClassID() const=0<br>
-</li>
-<li>
-<b>UClassID icu::ForwardCharacterIterator::getDynamicClassID() const</b>
-<br>UClassID icu::ForwardCharacterIterator::getDynamicClassID() const override=0<br>UClassID icu::ForwardCharacterIterator::getDynamicClassID() const=0<br>
-</li>
-<li>
-<b>UClassID icu::NumberFormat::getDynamicClassID() const</b>
-<br>UClassID icu::NumberFormat::getDynamicClassID() const override=0<br>UClassID icu::NumberFormat::getDynamicClassID() const=0<br>
-</li>
-<li>
-<b>UClassID icu::TimeZone::getDynamicClassID() const</b>
-<br>UClassID icu::TimeZone::getDynamicClassID() const override=0<br>UClassID icu::TimeZone::getDynamicClassID() const=0<br>
-</li>
-<li>
-<b>UClassID icu::Transliterator::getDynamicClassID() const</b>
-<br>UClassID icu::Transliterator::getDynamicClassID() const override=0<br>UClassID icu::Transliterator::getDynamicClassID() const=0<br>
-</li>
-<li>
-<b>UClassID icu::UnicodeFunctor::getDynamicClassID() const</b>
-<br>UClassID icu::UnicodeFunctor::getDynamicClassID() const override=0<br>UClassID icu::UnicodeFunctor::getDynamicClassID() const=0<br>
-</li>
-<li>
-<b>UMatchDegree icu::UnicodeFilter::matches(const Replaceable&amp;, int32_t&amp;, int32_t, bool)</b>
-<br>UMatchDegree icu::UnicodeFilter::matches(const Replaceable&amp;, int32_t&amp;, int32_t, UBool)<br>UMatchDegree icu::UnicodeFilter::matches(const Replaceable&amp;, int32_t&amp;, int32_t, UBool) override<br>
-</li>
-<li>
-<b>UMatchDegree icu::UnicodeSet::matches(const Replaceable&amp;, int32_t&amp;, int32_t, bool)</b>
-<br>UMatchDegree icu::UnicodeSet::matches(const Replaceable&amp;, int32_t&amp;, int32_t, UBool)<br>UMatchDegree icu::UnicodeSet::matches(const Replaceable&amp;, int32_t&amp;, int32_t, UBool) override<br>
-</li>
-<li>
-<b>UnicodeString&amp; icu::UnicodeSet::toPattern(UnicodeString&amp;, bool escapeUnprintable=) const</b>
-<br>UnicodeString&amp; icu::UnicodeSet::toPattern(UnicodeString&amp;, UBool escapeUnprintable=) const<br>UnicodeString&amp; icu::UnicodeSet::toPattern(UnicodeString&amp;, UBool escapeUnprintable=) const override<br>
-</li>
-<li>
-<b>bool icu::AnnualTimeZoneRule::getFinalStart(int32_t, int32_t, UDate&amp;) const</b>
-<br>UBool icu::AnnualTimeZoneRule::getFinalStart(int32_t, int32_t, UDate&amp;) const<br>UBool icu::AnnualTimeZoneRule::getFinalStart(int32_t, int32_t, UDate&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::AnnualTimeZoneRule::getFirstStart(int32_t, int32_t, UDate&amp;) const</b>
-<br>UBool icu::AnnualTimeZoneRule::getFirstStart(int32_t, int32_t, UDate&amp;) const<br>UBool icu::AnnualTimeZoneRule::getFirstStart(int32_t, int32_t, UDate&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::AnnualTimeZoneRule::getNextStart(UDate, int32_t, int32_t, bool, UDate&amp;) const</b>
-<br>UBool icu::AnnualTimeZoneRule::getNextStart(UDate, int32_t, int32_t, UBool, UDate&amp;) const<br>UBool icu::AnnualTimeZoneRule::getNextStart(UDate, int32_t, int32_t, UBool, UDate&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::AnnualTimeZoneRule::getPreviousStart(UDate, int32_t, int32_t, bool, UDate&amp;) const</b>
-<br>UBool icu::AnnualTimeZoneRule::getPreviousStart(UDate, int32_t, int32_t, UBool, UDate&amp;) const<br>UBool icu::AnnualTimeZoneRule::getPreviousStart(UDate, int32_t, int32_t, UBool, UDate&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::AnnualTimeZoneRule::isEquivalentTo(const TimeZoneRule&amp;) const</b>
-<br>UBool icu::AnnualTimeZoneRule::isEquivalentTo(const TimeZoneRule&amp;) const<br>UBool icu::AnnualTimeZoneRule::isEquivalentTo(const TimeZoneRule&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::AnnualTimeZoneRule::operator!=(const TimeZoneRule&amp;) const</b>
-<br>UBool icu::AnnualTimeZoneRule::operator!=(const TimeZoneRule&amp;) const<br>bool icu::AnnualTimeZoneRule::operator!=(const TimeZoneRule&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::AnnualTimeZoneRule::operator==(const TimeZoneRule&amp;) const</b>
-<br>UBool icu::AnnualTimeZoneRule::operator==(const TimeZoneRule&amp;) const<br>bool icu::AnnualTimeZoneRule::operator==(const TimeZoneRule&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::BreakIterator::operator==(const BreakIterator&amp;) const</b>
-<br>UBool icu::BreakIterator::operator==(const BreakIterator&amp;) const=0<br>bool icu::BreakIterator::operator==(const BreakIterator&amp;) const=0<br>
-</li>
-<li>
-<b>bool icu::ChoiceFormat::operator==(const Format&amp;) const</b>
-<br>UBool icu::ChoiceFormat::operator==(const Format&amp;) const<br>bool icu::ChoiceFormat::operator==(const Format&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::DateFormat::operator==(const Format&amp;) const</b>
-<br>UBool icu::DateFormat::operator==(const Format&amp;) const<br>bool icu::DateFormat::operator==(const Format&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::DateIntervalFormat::operator==(const Format&amp;) const</b>
-<br>UBool icu::DateIntervalFormat::operator==(const Format&amp;) const<br>bool icu::DateIntervalFormat::operator==(const Format&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::DecimalFormat::operator==(const Format&amp;) const</b>
-<br>UBool icu::DecimalFormat::operator==(const Format&amp;) const U_OVERRIDE<br>bool icu::DecimalFormat::operator==(const Format&amp;) const U_OVERRIDE<br>
-</li>
-<li>
-<b>bool icu::Format::operator==(const Format&amp;) const</b>
-<br>UBool icu::Format::operator==(const Format&amp;) const=0<br>bool icu::Format::operator==(const Format&amp;) const=0<br>
-</li>
-<li>
-<b>bool icu::ForwardCharacterIterator::operator==(const ForwardCharacterIterator&amp;) const</b>
-<br>UBool icu::ForwardCharacterIterator::operator==(const ForwardCharacterIterator&amp;) const=0<br>bool icu::ForwardCharacterIterator::operator==(const ForwardCharacterIterator&amp;) const=0<br>
-</li>
-<li>
-<b>bool icu::GregorianCalendar::haveDefaultCentury() const</b>
-<br>UBool icu::GregorianCalendar::haveDefaultCentury() const<br>UBool icu::GregorianCalendar::haveDefaultCentury() const override<br>
-</li>
-<li>
-<b>bool icu::GregorianCalendar::inDaylightTime(UErrorCode&amp;) const</b>
-<br>UBool icu::GregorianCalendar::inDaylightTime(UErrorCode&amp;) const<br>UBool icu::GregorianCalendar::inDaylightTime(UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::GregorianCalendar::isEquivalentTo(const Calendar&amp;) const</b>
-<br>UBool icu::GregorianCalendar::isEquivalentTo(const Calendar&amp;) const<br>UBool icu::GregorianCalendar::isEquivalentTo(const Calendar&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::InitialTimeZoneRule::getFinalStart(int32_t, int32_t, UDate&amp;) const</b>
-<br>UBool icu::InitialTimeZoneRule::getFinalStart(int32_t, int32_t, UDate&amp;) const<br>UBool icu::InitialTimeZoneRule::getFinalStart(int32_t, int32_t, UDate&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::InitialTimeZoneRule::getFirstStart(int32_t, int32_t, UDate&amp;) const</b>
-<br>UBool icu::InitialTimeZoneRule::getFirstStart(int32_t, int32_t, UDate&amp;) const<br>UBool icu::InitialTimeZoneRule::getFirstStart(int32_t, int32_t, UDate&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::InitialTimeZoneRule::getNextStart(UDate, int32_t, int32_t, bool, UDate&amp;) const</b>
-<br>UBool icu::InitialTimeZoneRule::getNextStart(UDate, int32_t, int32_t, UBool, UDate&amp;) const<br>UBool icu::InitialTimeZoneRule::getNextStart(UDate, int32_t, int32_t, UBool, UDate&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::InitialTimeZoneRule::getPreviousStart(UDate, int32_t, int32_t, bool, UDate&amp;) const</b>
-<br>UBool icu::InitialTimeZoneRule::getPreviousStart(UDate, int32_t, int32_t, UBool, UDate&amp;) const<br>UBool icu::InitialTimeZoneRule::getPreviousStart(UDate, int32_t, int32_t, UBool, UDate&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::InitialTimeZoneRule::isEquivalentTo(const TimeZoneRule&amp;) const</b>
-<br>UBool icu::InitialTimeZoneRule::isEquivalentTo(const TimeZoneRule&amp;) const<br>UBool icu::InitialTimeZoneRule::isEquivalentTo(const TimeZoneRule&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::InitialTimeZoneRule::operator!=(const TimeZoneRule&amp;) const</b>
-<br>UBool icu::InitialTimeZoneRule::operator!=(const TimeZoneRule&amp;) const<br>bool icu::InitialTimeZoneRule::operator!=(const TimeZoneRule&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::InitialTimeZoneRule::operator==(const TimeZoneRule&amp;) const</b>
-<br>UBool icu::InitialTimeZoneRule::operator==(const TimeZoneRule&amp;) const<br>bool icu::InitialTimeZoneRule::operator==(const TimeZoneRule&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::MeasureFormat::operator==(const Format&amp;) const</b>
-<br>UBool icu::MeasureFormat::operator==(const Format&amp;) const<br>bool icu::MeasureFormat::operator==(const Format&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::MessageFormat::operator==(const Format&amp;) const</b>
-<br>UBool icu::MessageFormat::operator==(const Format&amp;) const<br>bool icu::MessageFormat::operator==(const Format&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::NumberFormat::operator==(const Format&amp;) const</b>
-<br>UBool icu::NumberFormat::operator==(const Format&amp;) const<br>bool icu::NumberFormat::operator==(const Format&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::PluralFormat::operator==(const Format&amp;) const</b>
-<br>UBool icu::PluralFormat::operator==(const Format&amp;) const<br>bool icu::PluralFormat::operator==(const Format&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::RuleBasedBreakIterator::isBoundary(int32_t)</b>
-<br>UBool icu::RuleBasedBreakIterator::isBoundary(int32_t)<br>UBool icu::RuleBasedBreakIterator::isBoundary(int32_t) override<br>
-</li>
-<li>
-<b>bool icu::RuleBasedBreakIterator::operator==(const BreakIterator&amp;) const</b>
-<br>UBool icu::RuleBasedBreakIterator::operator==(const BreakIterator&amp;) const<br>bool icu::RuleBasedBreakIterator::operator==(const BreakIterator&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::RuleBasedCollator::operator==(const Collator&amp;) const</b>
-<br>UBool icu::RuleBasedCollator::operator==(const Collator&amp;) const<br>bool icu::RuleBasedCollator::operator==(const Collator&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::RuleBasedNumberFormat::isLenient() const</b>
-<br>UBool icu::RuleBasedNumberFormat::isLenient() const<br>UBool icu::RuleBasedNumberFormat::isLenient() const override<br>
-</li>
-<li>
-<b>bool icu::RuleBasedNumberFormat::operator==(const Format&amp;) const</b>
-<br>UBool icu::RuleBasedNumberFormat::operator==(const Format&amp;) const<br>bool icu::RuleBasedNumberFormat::operator==(const Format&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::RuleBasedTimeZone::getNextTransition(UDate, bool, TimeZoneTransition&amp;) const</b>
-<br>UBool icu::RuleBasedTimeZone::getNextTransition(UDate, UBool, TimeZoneTransition&amp;) const<br>UBool icu::RuleBasedTimeZone::getNextTransition(UDate, UBool, TimeZoneTransition&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::RuleBasedTimeZone::getPreviousTransition(UDate, bool, TimeZoneTransition&amp;) const</b>
-<br>UBool icu::RuleBasedTimeZone::getPreviousTransition(UDate, UBool, TimeZoneTransition&amp;) const<br>UBool icu::RuleBasedTimeZone::getPreviousTransition(UDate, UBool, TimeZoneTransition&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::RuleBasedTimeZone::hasSameRules(const TimeZone&amp;) const</b>
-<br>UBool icu::RuleBasedTimeZone::hasSameRules(const TimeZone&amp;) const<br>UBool icu::RuleBasedTimeZone::hasSameRules(const TimeZone&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::RuleBasedTimeZone::inDaylightTime(UDate, UErrorCode&amp;) const</b>
-<br>UBool icu::RuleBasedTimeZone::inDaylightTime(UDate, UErrorCode&amp;) const<br>UBool icu::RuleBasedTimeZone::inDaylightTime(UDate, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::RuleBasedTimeZone::operator==(const TimeZone&amp;) const</b>
-<br>UBool icu::RuleBasedTimeZone::operator==(const TimeZone&amp;) const<br>bool icu::RuleBasedTimeZone::operator==(const TimeZone&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::RuleBasedTimeZone::useDaylightTime() const</b>
-<br>UBool icu::RuleBasedTimeZone::useDaylightTime() const<br>UBool icu::RuleBasedTimeZone::useDaylightTime() const override<br>
-</li>
-<li>
-<b>bool icu::SelectFormat::operator==(const Format&amp;) const</b>
-<br>UBool icu::SelectFormat::operator==(const Format&amp;) const<br>bool icu::SelectFormat::operator==(const Format&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::SimpleDateFormat::operator==(const Format&amp;) const</b>
-<br>UBool icu::SimpleDateFormat::operator==(const Format&amp;) const<br>bool icu::SimpleDateFormat::operator==(const Format&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::SimpleNumberFormatFactory::visible() const</b>
-<br>UBool icu::SimpleNumberFormatFactory::visible() const<br>UBool icu::SimpleNumberFormatFactory::visible() const override<br>
-</li>
-<li>
-<b>bool icu::SimpleTimeZone::getNextTransition(UDate, bool, TimeZoneTransition&amp;) const</b>
-<br>UBool icu::SimpleTimeZone::getNextTransition(UDate, UBool, TimeZoneTransition&amp;) const<br>UBool icu::SimpleTimeZone::getNextTransition(UDate, UBool, TimeZoneTransition&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::SimpleTimeZone::getPreviousTransition(UDate, bool, TimeZoneTransition&amp;) const</b>
-<br>UBool icu::SimpleTimeZone::getPreviousTransition(UDate, UBool, TimeZoneTransition&amp;) const<br>UBool icu::SimpleTimeZone::getPreviousTransition(UDate, UBool, TimeZoneTransition&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::SimpleTimeZone::hasSameRules(const TimeZone&amp;) const</b>
-<br>UBool icu::SimpleTimeZone::hasSameRules(const TimeZone&amp;) const<br>UBool icu::SimpleTimeZone::hasSameRules(const TimeZone&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::SimpleTimeZone::inDaylightTime(UDate, UErrorCode&amp;) const</b>
-<br>UBool icu::SimpleTimeZone::inDaylightTime(UDate, UErrorCode&amp;) const<br>UBool icu::SimpleTimeZone::inDaylightTime(UDate, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::SimpleTimeZone::operator==(const TimeZone&amp;) const</b>
-<br>UBool icu::SimpleTimeZone::operator==(const TimeZone&amp;) const<br>bool icu::SimpleTimeZone::operator==(const TimeZone&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::SimpleTimeZone::useDaylightTime() const</b>
-<br>UBool icu::SimpleTimeZone::useDaylightTime() const<br>UBool icu::SimpleTimeZone::useDaylightTime() const override<br>
-</li>
-<li>
-<b>bool icu::StringCharacterIterator::operator==(const ForwardCharacterIterator&amp;) const</b>
-<br>UBool icu::StringCharacterIterator::operator==(const ForwardCharacterIterator&amp;) const<br>bool icu::StringCharacterIterator::operator==(const ForwardCharacterIterator&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::StringSearch::operator==(const SearchIterator&amp;) const</b>
-<br>UBool icu::StringSearch::operator==(const SearchIterator&amp;) const<br>bool icu::StringSearch::operator==(const SearchIterator&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::TimeArrayTimeZoneRule::getFinalStart(int32_t, int32_t, UDate&amp;) const</b>
-<br>UBool icu::TimeArrayTimeZoneRule::getFinalStart(int32_t, int32_t, UDate&amp;) const<br>UBool icu::TimeArrayTimeZoneRule::getFinalStart(int32_t, int32_t, UDate&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::TimeArrayTimeZoneRule::getFirstStart(int32_t, int32_t, UDate&amp;) const</b>
-<br>UBool icu::TimeArrayTimeZoneRule::getFirstStart(int32_t, int32_t, UDate&amp;) const<br>UBool icu::TimeArrayTimeZoneRule::getFirstStart(int32_t, int32_t, UDate&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::TimeArrayTimeZoneRule::getNextStart(UDate, int32_t, int32_t, bool, UDate&amp;) const</b>
-<br>UBool icu::TimeArrayTimeZoneRule::getNextStart(UDate, int32_t, int32_t, UBool, UDate&amp;) const<br>UBool icu::TimeArrayTimeZoneRule::getNextStart(UDate, int32_t, int32_t, UBool, UDate&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::TimeArrayTimeZoneRule::getPreviousStart(UDate, int32_t, int32_t, bool, UDate&amp;) const</b>
-<br>UBool icu::TimeArrayTimeZoneRule::getPreviousStart(UDate, int32_t, int32_t, UBool, UDate&amp;) const<br>UBool icu::TimeArrayTimeZoneRule::getPreviousStart(UDate, int32_t, int32_t, UBool, UDate&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::TimeArrayTimeZoneRule::isEquivalentTo(const TimeZoneRule&amp;) const</b>
-<br>UBool icu::TimeArrayTimeZoneRule::isEquivalentTo(const TimeZoneRule&amp;) const<br>UBool icu::TimeArrayTimeZoneRule::isEquivalentTo(const TimeZoneRule&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::TimeArrayTimeZoneRule::operator!=(const TimeZoneRule&amp;) const</b>
-<br>UBool icu::TimeArrayTimeZoneRule::operator!=(const TimeZoneRule&amp;) const<br>bool icu::TimeArrayTimeZoneRule::operator!=(const TimeZoneRule&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::TimeArrayTimeZoneRule::operator==(const TimeZoneRule&amp;) const</b>
-<br>UBool icu::TimeArrayTimeZoneRule::operator==(const TimeZoneRule&amp;) const<br>bool icu::TimeArrayTimeZoneRule::operator==(const TimeZoneRule&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::TimeZoneFormat::operator==(const Format&amp;) const</b>
-<br>UBool icu::TimeZoneFormat::operator==(const Format&amp;) const<br>bool icu::TimeZoneFormat::operator==(const Format&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::TimeZoneNames::operator==(const TimeZoneNames&amp;) const</b>
-<br>UBool icu::TimeZoneNames::operator==(const TimeZoneNames&amp;) const=0<br>bool icu::TimeZoneNames::operator==(const TimeZoneNames&amp;) const=0<br>
-</li>
-<li>
-<b>bool icu::UCharCharacterIterator::hasNext()</b>
-<br>UBool icu::UCharCharacterIterator::hasNext()<br>UBool icu::UCharCharacterIterator::hasNext() override<br>
-</li>
-<li>
-<b>bool icu::UCharCharacterIterator::hasPrevious()</b>
-<br>UBool icu::UCharCharacterIterator::hasPrevious()<br>UBool icu::UCharCharacterIterator::hasPrevious() override<br>
-</li>
-<li>
-<b>bool icu::UCharCharacterIterator::operator==(const ForwardCharacterIterator&amp;) const</b>
-<br>UBool icu::UCharCharacterIterator::operator==(const ForwardCharacterIterator&amp;) const<br>bool icu::UCharCharacterIterator::operator==(const ForwardCharacterIterator&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::UnicodeSet::contains(UChar32) const</b>
-<br>UBool icu::UnicodeSet::contains(UChar32) const<br>UBool icu::UnicodeSet::contains(UChar32) const override<br>
-</li>
-<li>
-<b>bool icu::UnicodeString::hasMetaData() const</b>
-<br>UBool icu::UnicodeString::hasMetaData() const<br>UBool icu::UnicodeString::hasMetaData() const override<br>
-</li>
-<li>
-<b>bool icu::UnicodeStringAppendable::appendCodePoint(UChar32)</b>
-<br>UBool icu::UnicodeStringAppendable::appendCodePoint(UChar32)<br>UBool icu::UnicodeStringAppendable::appendCodePoint(UChar32) override<br>
-</li>
-<li>
-<b>bool icu::UnicodeStringAppendable::appendCodeUnit(char16_t)</b>
-<br>UBool icu::UnicodeStringAppendable::appendCodeUnit(char16_t)<br>UBool icu::UnicodeStringAppendable::appendCodeUnit(char16_t) override<br>
-</li>
-<li>
-<b>bool icu::UnicodeStringAppendable::appendString(const char16_t*, int32_t)</b>
-<br>UBool icu::UnicodeStringAppendable::appendString(const char16_t*, int32_t)<br>UBool icu::UnicodeStringAppendable::appendString(const char16_t*, int32_t) override<br>
-</li>
-<li>
-<b>bool icu::UnicodeStringAppendable::reserveAppendCapacity(int32_t)</b>
-<br>UBool icu::UnicodeStringAppendable::reserveAppendCapacity(int32_t)<br>UBool icu::UnicodeStringAppendable::reserveAppendCapacity(int32_t) override<br>
-</li>
-<li>
-<b>bool icu::VTimeZone::getNextTransition(UDate, bool, TimeZoneTransition&amp;) const</b>
-<br>UBool icu::VTimeZone::getNextTransition(UDate, UBool, TimeZoneTransition&amp;) const<br>UBool icu::VTimeZone::getNextTransition(UDate, UBool, TimeZoneTransition&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::VTimeZone::getPreviousTransition(UDate, bool, TimeZoneTransition&amp;) const</b>
-<br>UBool icu::VTimeZone::getPreviousTransition(UDate, UBool, TimeZoneTransition&amp;) const<br>UBool icu::VTimeZone::getPreviousTransition(UDate, UBool, TimeZoneTransition&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::VTimeZone::hasSameRules(const TimeZone&amp;) const</b>
-<br>UBool icu::VTimeZone::hasSameRules(const TimeZone&amp;) const<br>UBool icu::VTimeZone::hasSameRules(const TimeZone&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::VTimeZone::inDaylightTime(UDate, UErrorCode&amp;) const</b>
-<br>UBool icu::VTimeZone::inDaylightTime(UDate, UErrorCode&amp;) const<br>UBool icu::VTimeZone::inDaylightTime(UDate, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::VTimeZone::operator==(const TimeZone&amp;) const</b>
-<br>UBool icu::VTimeZone::operator==(const TimeZone&amp;) const<br>bool icu::VTimeZone::operator==(const TimeZone&amp;) const override<br>
-</li>
-<li>
-<b>bool icu::VTimeZone::useDaylightTime() const</b>
-<br>UBool icu::VTimeZone::useDaylightTime() const<br>UBool icu::VTimeZone::useDaylightTime() const override<br>
-</li>
-<li>
-<b>void icu::RuleBasedNumberFormat::setLenient(bool)</b>
-<br>void icu::RuleBasedNumberFormat::setLenient(UBool)<br>void icu::RuleBasedNumberFormat::setLenient(UBool) override<br>
-</li>
-<li>
-<b>void icu::RuleBasedTimeZone::getOffset(UDate, bool, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</b>
-<br>void icu::RuleBasedTimeZone::getOffset(UDate, UBool, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const<br>void icu::RuleBasedTimeZone::getOffset(UDate, UBool, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>void icu::SimpleTimeZone::getOffset(UDate, bool, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</b>
-<br>void icu::SimpleTimeZone::getOffset(UDate, UBool, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const<br>void icu::SimpleTimeZone::getOffset(UDate, UBool, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>void icu::VTimeZone::getOffset(UDate, bool, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const</b>
-<br>void icu::VTimeZone::getOffset(UDate, UBool, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const<br>void icu::VTimeZone::getOffset(UDate, UBool, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const override<br>
-</li>
-<li>
-<b>void* icu::AnnualTimeZoneRule::clone() const</b>
-<br>AnnualTimeZoneRule* icu::AnnualTimeZoneRule::clone() const<br>AnnualTimeZoneRule* icu::AnnualTimeZoneRule::clone() const override<br>
-</li>
-<li>
-<b>void* icu::BasicTimeZone::clone() const</b>
-<br>BasicTimeZone* icu::BasicTimeZone::clone() const override=0<br>BasicTimeZone* icu::BasicTimeZone::clone() const=0<br>
-</li>
-<li>
-<b>void* icu::ChoiceFormat::clone() const</b>
-<br>ChoiceFormat* icu::ChoiceFormat::clone() const<br>ChoiceFormat* icu::ChoiceFormat::clone() const override<br>
-</li>
-<li>
-<b>void* icu::CurrencyAmount::clone() const</b>
-<br>CurrencyAmount* icu::CurrencyAmount::clone() const<br>CurrencyAmount* icu::CurrencyAmount::clone() const override<br>
-</li>
-<li>
-<b>void* icu::CurrencyUnit::clone() const</b>
-<br>CurrencyUnit* icu::CurrencyUnit::clone() const<br>CurrencyUnit* icu::CurrencyUnit::clone() const override<br>
-</li>
-<li>
-<b>void* icu::DateFormat::clone() const</b>
-<br>DateFormat* icu::DateFormat::clone() const override=0<br>DateFormat* icu::DateFormat::clone() const=0<br>
-</li>
-<li>
-<b>void* icu::DateIntervalFormat::clone() const</b>
-<br>DateIntervalFormat* icu::DateIntervalFormat::clone() const<br>DateIntervalFormat* icu::DateIntervalFormat::clone() const override<br>
-</li>
-<li>
-<b>void* icu::GregorianCalendar::clone() const</b>
-<br>GregorianCalendar* icu::GregorianCalendar::clone() const<br>GregorianCalendar* icu::GregorianCalendar::clone() const override<br>
-</li>
-<li>
-<b>void* icu::InitialTimeZoneRule::clone() const</b>
-<br>InitialTimeZoneRule* icu::InitialTimeZoneRule::clone() const<br>InitialTimeZoneRule* icu::InitialTimeZoneRule::clone() const override<br>
-</li>
-<li>
-<b>void* icu::MeasureFormat::clone() const</b>
-<br>MeasureFormat* icu::MeasureFormat::clone() const<br>MeasureFormat* icu::MeasureFormat::clone() const override<br>
-</li>
-<li>
-<b>void* icu::MessageFormat::clone() const</b>
-<br>MessageFormat* icu::MessageFormat::clone() const<br>MessageFormat* icu::MessageFormat::clone() const override<br>
-</li>
-<li>
-<b>void* icu::NumberFormat::clone() const</b>
-<br>NumberFormat* icu::NumberFormat::clone() const override=0<br>NumberFormat* icu::NumberFormat::clone() const=0<br>
-</li>
-<li>
-<b>void* icu::PluralFormat::clone() const</b>
-<br>PluralFormat* icu::PluralFormat::clone() const<br>PluralFormat* icu::PluralFormat::clone() const override<br>
-</li>
-<li>
-<b>void* icu::RuleBasedBreakIterator::clone() const</b>
-<br>RuleBasedBreakIterator* icu::RuleBasedBreakIterator::clone() const<br>RuleBasedBreakIterator* icu::RuleBasedBreakIterator::clone() const override<br>
-</li>
-<li>
-<b>void* icu::RuleBasedBreakIterator::createBufferClone(void*, int32_t&amp;, UErrorCode&amp;)</b>
-<br>RuleBasedBreakIterator* icu::RuleBasedBreakIterator::createBufferClone(void*, int32_t&amp;, UErrorCode&amp;)<br>RuleBasedBreakIterator* icu::RuleBasedBreakIterator::createBufferClone(void*, int32_t&amp;, UErrorCode&amp;) override<br>
-</li>
-<li>
-<b>void* icu::RuleBasedCollator::clone() const</b>
-<br>RuleBasedCollator* icu::RuleBasedCollator::clone() const<br>RuleBasedCollator* icu::RuleBasedCollator::clone() const override<br>
-</li>
-<li>
-<b>void* icu::RuleBasedNumberFormat::clone() const</b>
-<br>RuleBasedNumberFormat* icu::RuleBasedNumberFormat::clone() const<br>RuleBasedNumberFormat* icu::RuleBasedNumberFormat::clone() const override<br>
-</li>
-<li>
-<b>void* icu::RuleBasedTimeZone::clone() const</b>
-<br>RuleBasedTimeZone* icu::RuleBasedTimeZone::clone() const<br>RuleBasedTimeZone* icu::RuleBasedTimeZone::clone() const override<br>
-</li>
-<li>
-<b>void* icu::SelectFormat::clone() const</b>
-<br>SelectFormat* icu::SelectFormat::clone() const<br>SelectFormat* icu::SelectFormat::clone() const override<br>
-</li>
-<li>
-<b>void* icu::SimpleDateFormat::clone() const</b>
-<br>SimpleDateFormat* icu::SimpleDateFormat::clone() const<br>SimpleDateFormat* icu::SimpleDateFormat::clone() const override<br>
-</li>
-<li>
-<b>void* icu::SimpleTimeZone::clone() const</b>
-<br>SimpleTimeZone* icu::SimpleTimeZone::clone() const<br>SimpleTimeZone* icu::SimpleTimeZone::clone() const override<br>
-</li>
-<li>
-<b>void* icu::StringCharacterIterator::clone() const</b>
-<br>StringCharacterIterator* icu::StringCharacterIterator::clone() const<br>StringCharacterIterator* icu::StringCharacterIterator::clone() const override<br>
-</li>
-<li>
-<b>void* icu::StringSearch::safeClone() const</b>
-<br>StringSearch* icu::StringSearch::safeClone() const<br>StringSearch* icu::StringSearch::safeClone() const override<br>
-</li>
-<li>
-<b>void* icu::TimeArrayTimeZoneRule::clone() const</b>
-<br>TimeArrayTimeZoneRule* icu::TimeArrayTimeZoneRule::clone() const<br>TimeArrayTimeZoneRule* icu::TimeArrayTimeZoneRule::clone() const override<br>
-</li>
-<li>
-<b>void* icu::TimeUnit::clone() const</b>
-<br>TimeUnit* icu::TimeUnit::clone() const<br>TimeUnit* icu::TimeUnit::clone() const override<br>
-</li>
-<li>
-<b>void* icu::TimeUnitAmount::clone() const</b>
-<br>TimeUnitAmount* icu::TimeUnitAmount::clone() const<br>TimeUnitAmount* icu::TimeUnitAmount::clone() const override<br>
-</li>
-<li>
-<b>void* icu::TimeUnitFormat::clone() const</b>
-<br>TimeUnitFormat* icu::TimeUnitFormat::clone() const<br>TimeUnitFormat* icu::TimeUnitFormat::clone() const override<br>
-</li>
-<li>
-<b>void* icu::TimeZoneFormat::clone() const</b>
-<br>TimeZoneFormat* icu::TimeZoneFormat::clone() const<br>TimeZoneFormat* icu::TimeZoneFormat::clone() const override<br>
-</li>
-<li>
-<b>void* icu::UCharCharacterIterator::clone() const</b>
-<br>UCharCharacterIterator* icu::UCharCharacterIterator::clone() const<br>UCharCharacterIterator* icu::UCharCharacterIterator::clone() const override<br>
-</li>
-<li>
-<b>void* icu::UnicodeFilter::clone() const</b>
-<br>UnicodeFilter* icu::UnicodeFilter::clone() const override=0<br>UnicodeFilter* icu::UnicodeFilter::clone() const=0<br>
-</li>
-<li>
-<b>void* icu::UnicodeSet::clone() const</b>
-<br>UnicodeSet* icu::UnicodeSet::clone() const<br>UnicodeSet* icu::UnicodeSet::clone() const override<br>
-</li>
-<li>
-<b>void* icu::UnicodeString::clone() const</b>
-<br>UnicodeString* icu::UnicodeString::clone() const<br>UnicodeString* icu::UnicodeString::clone() const override<br>
-</li>
-<li>
-<b>void* icu::VTimeZone::clone() const</b>
-<br>VTimeZone* icu::VTimeZone::clone() const<br>VTimeZone* icu::VTimeZone::clone() const override<br>
-</li>
-</ul>
+<ul></ul>
 </div>
 <P></P>
 <a href="#_top">(jump back to top)</a>
 <hr>
 <p>
-<i><font size="-1">Contents generated by StableAPI tool on Wed Sep 29 11:59:05 PDT 2021<br>
+<i><font size="-1">Contents generated by StableAPI tool on Thu Mar 10 11:12:56 PST 2022<br>
         Copyright &copy; 2017 and later: Unicode, Inc. and others.<br>
         License &amp; terms of use: http://www.unicode.org/copyright.html
     </font></i>
