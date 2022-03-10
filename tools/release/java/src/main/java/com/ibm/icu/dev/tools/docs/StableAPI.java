@@ -352,6 +352,10 @@ public class StableAPI {
                             }
                             // always truncate to major # for comparing tags.
                             result = truncVersion;
+                            if (maj >= 71) {
+                              // Clear minor and micro version in API change report.
+                              milestoneOf = "";
+                            }
                         } else {
                             // old scheme - 1.0.* .. 4.8.*
                             String truncVersion = "ICU " + maj + "." + min;
