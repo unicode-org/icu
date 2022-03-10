@@ -94,6 +94,14 @@
 
 //ldml/numbers/currencyFormats[@numberSystem="(%A)"]/currencyFormatLength/currencyFormat[@type="accounting"]/alias[@source="locale"][@path="../(%W)[@type='standard']"] ; /NumberElements/$1/patterns/accountingFormat:alias ; values=/LOCALE/NumberElements/$1/patterns/$2
 
+//ldml/numbers/(miscPatterns|symbols)[@numberSystem="(%A)"]/alias[@source="locale"][@path="../%W[@numberSystem='(%A)']"]
+     ; /NumberElements/$2/$1:alias ; values=/LOCALE/NumberElements/$3/$1
+//ldml/numbers/(percentFormat|scientificFormat)s[@numberSystem="(%A)"]/alias[@source="locale"][@path="../%W[@numberSystem='(%A)']"]
+     ; /NumberElements/$2/patterns/$1:alias ; values=/LOCALE/NumberElements/$3/patterns/$1
+//ldml/numbers/(currencyFormat|decimalFormat)s[@numberSystem="(%A)"]/alias[@source="locale"][@path="../%W[@numberSystem='(%A)']"]
+     ; /NumberElements/$2/patterns/$1:alias ; values=/LOCALE/NumberElements/$3/patterns/$1
+     ; /NumberElements/$2/patternsShort/$1:alias ; values=/LOCALE/NumberElements/$3/patternsShort/$1
+
 # Characters
 
 //ldml/characters/exemplarCharacters[@type="auxiliary"]      ; /AuxExemplarCharacters
