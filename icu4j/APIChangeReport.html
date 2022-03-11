@@ -2,233 +2,171 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<!-- © 2021 and later: Unicode, Inc. and others. -->
+<!-- © 2022 and later: Unicode, Inc. and others. -->
 <!-- License & terms of use: http://www.unicode.org/copyright.html -->
-<title>ICU4J API Comparison: ICU4J 69.1 with ICU4J 70.1</title>
+<title>ICU4J API Comparison: ICU4J 70 with ICU4J 71</title>
 </head>
 <body>
-<h1>ICU4J API Comparison: ICU4J 69.1 with ICU4J 70.1</h1>
+<h1>ICU4J API Comparison: ICU4J 70 with ICU4J 71</h1>
 
 <hr/>
-<h2>Removed from ICU4J 69.1</h2>
-
-<h3>Package com.ibm.icu.lang</h3>
-<ul>
-UCharacter
-<ul>
-<li><span style='color:green'>(stable)</span> public static boolean <i>isHighSurrogate</i>(char)</li>
-<li><span style='color:green'>(stable)</span> public static boolean <i>isLowSurrogate</i>(char)</li>
-<li><span style='color:green'>(stable)</span> public static final boolean <i>isSurrogatePair</i>(char, char)</li>
-<li><span style='color:green'>(stable)</span> public static final int <i>toCodePoint</i>(char, char)</li>
-</ul>
-</ul>
-
-<h3>Package com.ibm.icu.text</h3>
-<ul>
-UTF16
-<ul>
-<li><span style='color:green'>(stable)</span> public static boolean <i>isLeadSurrogate</i>(char)</li>
-<li><span style='color:green'>(stable)</span> public static boolean <i>isSurrogate</i>(char)</li>
-<li><span style='color:green'>(stable)</span> public static boolean <i>isTrailSurrogate</i>(char)</li>
-</ul>
-</ul>
-
+<h2>Removed from ICU4J 70</h2>
+<p>(no API removed)</p>
 
 <hr/>
-<h2>Deprecated or Obsoleted in ICU4J 70.1</h2>
+<h2>Deprecated or Obsoleted in ICU4J 71</h2>
 <p>(no API obsoleted)</p>
 
 <hr/>
-<h2>Changed in ICU4J 70.1 (old, new)</h2>
+<h2>Changed in ICU4J 71 (old, new)</h2>
+<p>(no API changed)</p>
 
-<h3>Package com.ibm.icu.lang</h3>
+<hr/>
+<h2>Promoted to stable in ICU4J 71</h2>
+
+<h3>Package com.ibm.icu.number</h3>
 <ul>
-UCharacter
+<li><span style='color:green'>(stable)</span> public static final class <i>NumberRangeFormatter.SpanField</i></li>
+<li><span style='color:green'>(stable)</span> public static enum <i>NumberFormatter.RoundingPriority</i></li>
+<li><span style='color:green'>(stable)</span> public static enum <i>NumberFormatter.TrailingZeroDisplay</i></li>
+FractionPrecision
 <ul>
-<li>    <span style='color:green'>(stable)</span> public static int <i>getCodePoint</i>(char, char)</br>
-<span style='color:green'>(stable)</span> public static int <i>getCodePoint</i>(int, int)</li>
+<li><span style='color:green'>(stable)</span> public Precision <i>withSignificantDigits</i>(int, int, NumberFormatter.RoundingPriority)</li>
+</ul>
+NumberFormatter.RoundingPriority
+<ul>
+<li><span style='color:green'>(stable)</span> public static final NumberFormatter.RoundingPriority RELAXED</li>
+<li><span style='color:green'>(stable)</span> public static final NumberFormatter.RoundingPriority STRICT</li>
+</ul>
+NumberFormatter.SignDisplay
+<ul>
+<li><span style='color:green'>(stable)</span> public static final NumberFormatter.SignDisplay ACCOUNTING_NEGATIVE</li>
+<li><span style='color:green'>(stable)</span> public static final NumberFormatter.SignDisplay NEGATIVE</li>
+</ul>
+NumberFormatter.TrailingZeroDisplay
+<ul>
+<li><span style='color:green'>(stable)</span> public static final NumberFormatter.TrailingZeroDisplay AUTO</li>
+<li><span style='color:green'>(stable)</span> public static final NumberFormatter.TrailingZeroDisplay HIDE_IF_WHOLE</li>
+</ul>
+Precision
+<ul>
+<li><span style='color:green'>(stable)</span> public Precision <i>trailingZeroDisplay</i>(NumberFormatter.TrailingZeroDisplay)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+<li><span style='color:green'>(stable)</span> public static enum <i>BasicTimeZone.LocalOption</i></li>
+<li><span style='color:green'>(stable)</span> public static enum <i>MeasureUnit.MeasurePrefix</i></li>
+BasicTimeZone
+<ul>
+<li><span style='color:green'>(stable)</span> public void <i>getOffsetFromLocal</i>(long, BasicTimeZone.LocalOption, BasicTimeZone.LocalOption, int[])</li>
+</ul>
+BasicTimeZone.LocalOption
+<ul>
+<li><span style='color:green'>(stable)</span> public static final BasicTimeZone.LocalOption DAYLIGHT_FORMER</li>
+<li><span style='color:green'>(stable)</span> public static final BasicTimeZone.LocalOption DAYLIGHT_LATTER</li>
+<li><span style='color:green'>(stable)</span> public static final BasicTimeZone.LocalOption FORMER</li>
+<li><span style='color:green'>(stable)</span> public static final BasicTimeZone.LocalOption LATTER</li>
+<li><span style='color:green'>(stable)</span> public static final BasicTimeZone.LocalOption STANDARD_FORMER</li>
+<li><span style='color:green'>(stable)</span> public static final BasicTimeZone.LocalOption STANDARD_LATTER</li>
+</ul>
+MeasureUnit
+<ul>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit MILLIGRAM_OFGLUCOSE_PER_DECILITER</li>
+<li><span style='color:green'>(stable)</span> public MeasureUnit.MeasurePrefix <i>getPrefix</i>()</li>
+<li><span style='color:green'>(stable)</span> public MeasureUnit <i>withPrefix</i>(MeasureUnit.MeasurePrefix)</li>
+</ul>
+MeasureUnit.MeasurePrefix
+<ul>
+<li><span style='color:green'>(stable)</span> public int <i>getBase</i>()</li>
+<li><span style='color:green'>(stable)</span> public int <i>getPower</i>()</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix ATTO</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix CENTI</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix DECI</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix DEKA</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix EXA</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix EXBI</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix FEMTO</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix GIBI</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix GIGA</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix HECTO</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix KIBI</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix KILO</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix MEBI</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix MEGA</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix MICRO</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix MILLI</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix NANO</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix ONE</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix PEBI</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix PETA</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix PICO</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix TEBI</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix TERA</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix YOBI</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix YOCTO</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix YOTTA</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix ZEBI</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix ZEPTO</li>
+<li><span style='color:green'>(stable)</span> public static final MeasureUnit.MeasurePrefix ZETTA</li>
+</ul>
+RuleBasedTimeZone
+<ul>
+<li><span style='color:green'>(stable)</span> public void <i>getOffsetFromLocal</i>(long, BasicTimeZone.LocalOption, BasicTimeZone.LocalOption, int[])</li>
+</ul>
+SimpleTimeZone
+<ul>
+<li><span style='color:green'>(stable)</span> public void <i>getOffsetFromLocal</i>(long, BasicTimeZone.LocalOption, BasicTimeZone.LocalOption, int[])</li>
+</ul>
+VTimeZone
+<ul>
+<li><span style='color:green'>(stable)</span> public void <i>getOffsetFromLocal</i>(long, BasicTimeZone.LocalOption, BasicTimeZone.LocalOption, int[])</li>
 </ul>
 </ul>
 
 
 <hr/>
-<h2>Promoted to stable in ICU4J 70.1</h2>
+<h2>Added in ICU4J 71</h2>
 
 <h3>Package com.ibm.icu.number</h3>
 <ul>
 FormattedNumber
 <ul>
-<li><span style='color:green'>(stable)</span> public MeasureUnit <i>getOutputUnit</i>()</li>
-</ul>
-NumberFormatterSettings
-<ul>
-<li><span style='color:green'>(stable)</span> public T extends NumberFormatterSettings&lt;?&gt; <i>usage</i>(java.lang.String)</li>
+<li><span style='color:orange'>(draft)</span> public NounClass <i>getNounClass</i>()</li>
 </ul>
 </ul>
 
 <h3>Package com.ibm.icu.text</h3>
 <ul>
-DateIntervalFormat
+DateTimePatternGenerator
 <ul>
-<li><span style='color:green'>(stable)</span> public DisplayContext <i>getContext</i>(DisplayContext.Type)</li>
-<li><span style='color:green'>(stable)</span> public void <i>setContext</i>(DisplayContext)</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getDateTimeFormat</i>(int)</li>
+<li><span style='color:orange'>(draft)</span> public void <i>setDateTimeFormat</i>(int, java.lang.String)</li>
 </ul>
-DecimalFormat
+NumberFormat.Field
 <ul>
-<li><span style='color:green'>(stable)</span> public static final int MINIMUM_GROUPING_DIGITS_AUTO</li>
-<li><span style='color:green'>(stable)</span> public static final int MINIMUM_GROUPING_DIGITS_MIN2</li>
-</ul>
-PluralRules
-<ul>
-<li><span style='color:green'>(stable)</span> public java.lang.String <i>select</i>(FormattedNumberRange)</li>
+<li><span style='color:orange'>(draft)</span> public static final NumberFormat.Field APPROXIMATELY_SIGN</li>
 </ul>
 </ul>
 
 <h3>Package com.ibm.icu.util</h3>
 <ul>
-<li><span style='color:green'>(stable)</span> public class <i>ICUInputTooLongException</i></li>
-<li><span style='color:green'>(stable)</span> public final class <i>NoUnit</i></li>
-<li><span style='color:green'>(stable)</span> public static enum <i>MeasureUnit.Complexity</i></li>
-LocaleMatcher
+<li><span style='color:orange'>(draft)</span> public enum <i>NounClass</i></li>
+NounClass
 <ul>
-<li><span style='color:green'>(stable)</span> public boolean <i>isMatch</i>(ULocale, ULocale)</li>
-<li><span style='color:green'>(stable)</span> public boolean <i>isMatch</i>(java.util.Locale, java.util.Locale)</li>
-</ul>
-LocaleMatcher.Builder
-<ul>
-<li><span style='color:green'>(stable)</span> public LocaleMatcher.Builder <i>setMaxDistance</i>(ULocale, ULocale)</li>
-<li><span style='color:green'>(stable)</span> public LocaleMatcher.Builder <i>setMaxDistance</i>(java.util.Locale, java.util.Locale)</li>
-<li><span style='color:green'>(stable)</span> public LocaleMatcher.Builder <i>setNoDefaultLocale</i>()</li>
-</ul>
-MeasureUnit
-<ul>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit CANDELA</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit DESSERT_SPOON</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit DESSERT_SPOON_IMPERIAL</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit DOT</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit DRAM</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit DROP</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit EARTH_RADIUS</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit GRAIN</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit JIGGER</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit LUMEN</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit PINCH</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit QUART_IMPERIAL</li>
-<li><span style='color:green'>(stable)</span> public static MeasureUnit <i>forIdentifier</i>(java.lang.String)</li>
-<li><span style='color:green'>(stable)</span> public MeasureUnit.Complexity <i>getComplexity</i>()</li>
-<li><span style='color:green'>(stable)</span> public int <i>getDimensionality</i>()</li>
-<li><span style='color:green'>(stable)</span> public java.lang.String <i>getIdentifier</i>()</li>
-<li><span style='color:green'>(stable)</span> public MeasureUnit <i>product</i>(MeasureUnit)</li>
-<li><span style='color:green'>(stable)</span> public MeasureUnit <i>reciprocal</i>()</li>
-<li><span style='color:green'>(stable)</span> public java.util.List&lt;MeasureUnit&gt; <i>splitToSingleUnits</i>()</li>
-<li><span style='color:green'>(stable)</span> public MeasureUnit <i>withDimensionality</i>(int)</li>
-</ul>
-MeasureUnit.Complexity
-<ul>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit.Complexity COMPOUND</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit.Complexity MIXED</li>
-<li><span style='color:green'>(stable)</span> public static final MeasureUnit.Complexity SINGLE</li>
-</ul>
-</ul>
-
-
-<hr/>
-<h2>Added in ICU4J 70.1</h2>
-
-<h3>Package com.ibm.icu.lang</h3>
-<ul>
-UCharacter
-<ul>
-<li><span style='color:orange'>(draft)</span> public static boolean <i>hasBinaryProperty</i>(java.lang.CharSequence, int)</li>
-<li><span style='color:green'>(stable)</span> public static boolean <i>isHighSurrogate</i>(int)</li>
-<li><span style='color:green'>(stable)</span> public static boolean <i>isLowSurrogate</i>(int)</li>
-<li><span style='color:green'>(stable)</span> public static final boolean <i>isSurrogatePair</i>(int, int)</li>
-<li><span style='color:green'>(stable)</span> public static final int <i>toCodePoint</i>(int, int)</li>
-</ul>
-UCharacter.JoiningGroup
-<ul>
-<li><span style='color:green'>(stable)</span> public static final int THIN_YEH</li>
-<li><span style='color:green'>(stable)</span> public static final int VERTICAL_TAIL</li>
-</ul>
-UCharacter.UnicodeBlock
-<ul>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock ARABIC_EXTENDED_B</li>
-<li><span style='color:green'>(stable)</span> public static final int ARABIC_EXTENDED_B_ID</li>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock CYPRO_MINOAN</li>
-<li><span style='color:green'>(stable)</span> public static final int CYPRO_MINOAN_ID</li>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock ETHIOPIC_EXTENDED_B</li>
-<li><span style='color:green'>(stable)</span> public static final int ETHIOPIC_EXTENDED_B_ID</li>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock KANA_EXTENDED_B</li>
-<li><span style='color:green'>(stable)</span> public static final int KANA_EXTENDED_B_ID</li>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock LATIN_EXTENDED_F</li>
-<li><span style='color:green'>(stable)</span> public static final int LATIN_EXTENDED_F_ID</li>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock LATIN_EXTENDED_G</li>
-<li><span style='color:green'>(stable)</span> public static final int LATIN_EXTENDED_G_ID</li>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock OLD_UYGHUR</li>
-<li><span style='color:green'>(stable)</span> public static final int OLD_UYGHUR_ID</li>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock TANGSA</li>
-<li><span style='color:green'>(stable)</span> public static final int TANGSA_ID</li>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock TOTO</li>
-<li><span style='color:green'>(stable)</span> public static final int TOTO_ID</li>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED_A</li>
-<li><span style='color:green'>(stable)</span> public static final int UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED_A_ID</li>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock VITHKUQI</li>
-<li><span style='color:green'>(stable)</span> public static final int VITHKUQI_ID</li>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock ZNAMENNY_MUSICAL_NOTATION</li>
-<li><span style='color:green'>(stable)</span> public static final int ZNAMENNY_MUSICAL_NOTATION_ID</li>
-</ul>
-UProperty
-<ul>
-<li><span style='color:orange'>(draft)</span> public static final int BASIC_EMOJI</li>
-<li><span style='color:orange'>(draft)</span> public static final int EMOJI_KEYCAP_SEQUENCE</li>
-<li><span style='color:orange'>(draft)</span> public static final int RGI_EMOJI</li>
-<li><span style='color:orange'>(draft)</span> public static final int RGI_EMOJI_FLAG_SEQUENCE</li>
-<li><span style='color:orange'>(draft)</span> public static final int RGI_EMOJI_MODIFIER_SEQUENCE</li>
-<li><span style='color:orange'>(draft)</span> public static final int RGI_EMOJI_TAG_SEQUENCE</li>
-<li><span style='color:orange'>(draft)</span> public static final int RGI_EMOJI_ZWJ_SEQUENCE</li>
-</ul>
-UScript
-<ul>
-<li><span style='color:green'>(stable)</span> public static final int CYPRO_MINOAN</li>
-<li><span style='color:green'>(stable)</span> public static final int OLD_UYGHUR</li>
-<li><span style='color:green'>(stable)</span> public static final int TANGSA</li>
-<li><span style='color:green'>(stable)</span> public static final int TOTO</li>
-<li><span style='color:green'>(stable)</span> public static final int VITHKUQI</li>
-</ul>
-</ul>
-
-<h3>Package com.ibm.icu.text</h3>
-<ul>
-UTF16
-<ul>
-<li><span style='color:green'>(stable)</span> public static boolean <i>isLeadSurrogate</i>(int)</li>
-<li><span style='color:green'>(stable)</span> public static boolean <i>isSurrogate</i>(int)</li>
-<li><span style='color:green'>(stable)</span> public static boolean <i>isTrailSurrogate</i>(int)</li>
-</ul>
-UnicodeSet
-<ul>
-<li><span style='color:orange'>(draft)</span> public boolean <i>hasStrings</i>()</li>
-</ul>
-UnicodeSetIterator
-<ul>
-<li><span style='color:orange'>(draft)</span> public UnicodeSetIterator <i>skipToStrings</i>()</li>
-</ul>
-</ul>
-
-<h3>Package com.ibm.icu.util</h3>
-<ul>
-MeasureUnit
-<ul>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit ITEM</li>
-<li><span style='color:orange'>(draft)</span> public static final MeasureUnit KILOWATT_HOUR_PER_100_KILOMETER</li>
-</ul>
-VersionInfo
-<ul>
-<li><span style='color:green'>(stable)</span> public static final VersionInfo UNICODE_14_0</li>
+<li><span style='color:orange'>(draft)</span> public static final NounClass ANIMATE</li>
+<li><span style='color:orange'>(draft)</span> public static final NounClass COMMON</li>
+<li><span style='color:orange'>(draft)</span> public static final NounClass FEMININE</li>
+<li><span style='color:orange'>(draft)</span> public static final NounClass INANIMATE</li>
+<li><span style='color:orange'>(draft)</span> public static final NounClass MASCULINE</li>
+<li><span style='color:orange'>(draft)</span> public static final NounClass NEUTER</li>
+<li><span style='color:orange'>(draft)</span> public static final NounClass OTHER</li>
+<li><span style='color:orange'>(draft)</span> public static final NounClass PERSONAL</li>
 </ul>
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Tue Sep 28 16:43:15 PDT 2021<br/>© 2021 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a></font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Thu Mar 10 16:22:38 PST 2022<br/>© 2022 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a></font></i></p>
 </body>
 </html>
