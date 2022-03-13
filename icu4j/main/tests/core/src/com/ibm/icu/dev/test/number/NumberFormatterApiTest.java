@@ -55,8 +55,8 @@ import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
-import com.ibm.icu.util.NounClass;
 import com.ibm.icu.util.NoUnit;
+import com.ibm.icu.util.NounClass;
 import com.ibm.icu.util.ULocale;
 
 public class NumberFormatterApiTest extends TestFmwk {
