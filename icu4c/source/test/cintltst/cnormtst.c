@@ -65,6 +65,7 @@ TestGetRawDecomposition(void);
 
 static void TestAppendRestoreMiddle(void);
 static void TestGetEasyToUseInstance(void);
+static void TestAPICoverage(void);
 
 static const char* const canonTests[][3] = {
     /* Input*/                    /*Decomposed*/                /*Composed*/
@@ -156,6 +157,7 @@ void addNormTest(TestNode** root)
     addTest(root, &TestGetRawDecomposition, "tsnorm/cnormtst/TestGetRawDecomposition");
     addTest(root, &TestAppendRestoreMiddle, "tsnorm/cnormtst/TestAppendRestoreMiddle");
     addTest(root, &TestGetEasyToUseInstance, "tsnorm/cnormtst/TestGetEasyToUseInstance");
+    addTest(root, &TestAPICoverage, "tsnorm/cnormtst/TestAPICoverage");
 }
 
 static const char* const modeStrings[]={
@@ -1695,6 +1697,57 @@ TestGetEasyToUseInstance() {
     if(U_FAILURE(errorCode) || length!=2 || out[0]!=0x20 || out[1]!=0x1e09) {
         log_err("unorm2_getNFKCCasefoldInstance() did not return an NFKC_Casefold instance (normalized length=%d; %s)\n",
                 (int)length, u_errorName(errorCode));
+    }
+}
+
+static void
+TestAPICoverage() {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    const UNormalizer2 *n2 = unorm2_getNFDInstance(&errorCode);
+    if (U_FAILURE(errorCode)) {
+        log_err_status(errorCode, "unorm2_getNFDInstance() failed: %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    if (!unorm2_hasBoundaryBefore(n2, u'C') || unorm2_hasBoundaryBefore(n2, 0x300)) {
+        log_err("unorm2_hasBoundaryBefore() returns unexpected results\n");
+    }
+
+    if (!unorm2_hasBoundaryAfter(n2, u'C') || unorm2_hasBoundaryAfter(n2, 0x300)) {
+        log_err("unorm2_hasBoundaryAfter() returns unexpected results\n");
+    }
+
+    if (!unorm2_isInert(n2, 0x50005) || unorm2_isInert(n2, 0x300)) {
+        log_err("unorm2_isInert() returns unexpected results\n");
+    }
+
+    errorCode = U_ZERO_ERROR;
+    if (!unorm2_isNormalized(n2, u"c\u0327\u0300", 3, &errorCode) ||
+            unorm2_isNormalized(n2, u"c\u0300\u0327", 3, &errorCode) ||
+            U_FAILURE(errorCode)) {
+        log_err("unorm2_isNormalized() returns unexpected results\n");
+    }
+
+    errorCode = U_ZERO_ERROR;
+    if (unorm2_quickCheck(n2, u"c\u0327\u0300", 3, &errorCode) == UNORM_NO ||
+            unorm2_quickCheck(n2, u"c\u0300\u0327", 3, &errorCode) == UNORM_YES ||
+            U_FAILURE(errorCode)) {
+        log_err("unorm2_quickCheck() returns unexpected results\n");
+    }
+
+    errorCode = U_ZERO_ERROR;
+    if (unorm2_spanQuickCheckYes(n2, u"c\u0327\u0300", 3, &errorCode) != 3 ||
+            unorm2_spanQuickCheckYes(n2, u"c\u0300\u0327", 3, &errorCode) != 1 ||
+            U_FAILURE(errorCode)) {
+        log_err("unorm2_spanQuickCheckYes() returns unexpected results\n");
+    }
+
+    errorCode = U_ZERO_ERROR;
+    UChar first[10] = { u'c', 0x300, 0, 0, 0, 0, 0, 0, 0, 0 };
+    int32_t length = unorm2_normalizeSecondAndAppend(
+        n2, first, 2, UPRV_LENGTHOF(first), u"\u0327d", 2, &errorCode);
+    if (U_FAILURE(errorCode) || length != 4 || u_strcmp(first, u"c\u0327\u0300d") != 0) {
+        log_err("unorm2_normalizeSecondAndAppend() returns unexpected results\n");
     }
 }
 
