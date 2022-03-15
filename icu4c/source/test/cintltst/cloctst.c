@@ -1552,18 +1552,18 @@ static void TestSimpleDisplayNames()
 static void TestUninstalledISO3Names()
 {
   /* This test checks to make sure getISO3Language and getISO3Country work right
-     even for locales that are not installed. */
+     even for locales that are not installed (and some installed ones). */
     static const char iso2Languages [][4] = {     "am", "ba", "fy", "mr", "rn",
-                                        "ss", "tw", "zu" };
+                                        "ss", "tw", "zu", "sr" };
     static const char iso3Languages [][5] = {     "amh", "bak", "fry", "mar", "run",
-                                        "ssw", "twi", "zul" };
+                                        "ssw", "twi", "zul", "srp" };
     static const char iso2Countries [][6] = {     "am_AF", "ba_BW", "fy_KZ", "mr_MO", "rn_MN",
-                                        "ss_SB", "tw_TC", "zu_ZW" };
+                                        "ss_SB", "tw_TC", "zu_ZW", "sr_XK" };
     static const char iso3Countries [][4] = {     "AFG", "BWA", "KAZ", "MAC", "MNG",
-                                        "SLB", "TCA", "ZWE" };
+                                        "SLB", "TCA", "ZWE", "XKK" };
     int32_t i;
 
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 9; i++) {
       UErrorCode err = U_ZERO_ERROR;
       const char *test;
       test = uloc_getISO3Language(iso2Languages[i]);
@@ -1571,7 +1571,7 @@ static void TestUninstalledISO3Names()
          log_err("Got wrong ISO3 code for %s : Expected \"%s\", got \"%s\". %s\n",
                      iso2Languages[i], iso3Languages[i], test, myErrorName(err));
     }
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 9; i++) {
       UErrorCode err = U_ZERO_ERROR;
       const char *test;
       test = uloc_getISO3Country(iso2Countries[i]);
