@@ -129,6 +129,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(toObject);
         TESTCASE_AUTO(toDecimalNumber);
         TESTCASE_AUTO(microPropsInternals);
+        TESTCASE_AUTO(formatUnitsAliases);
     TESTCASE_AUTO_END;
 }
 
@@ -6172,6 +6173,37 @@ void NumberFormatterApiTest::microPropsInternals() {
     assertEquals("Original capacity", 4, mp.mixedMeasures.getCapacity());
     assertEquals("Copy Constructed capacity", 2, copyConstructed.mixedMeasures.getCapacity());
     assertEquals("Copy Assigned capacity", 4, copyAssigned.mixedMeasures.getCapacity());
+}
+
+void NumberFormatterApiTest::formatUnitsAliases() {
+    IcuTestErrorCode status(*this, "formatUnitsAliases");
+
+    struct TestCase {
+        const MeasureUnit measureUnit;
+        const UnicodeString expectedFormat;
+    } testCases[]{
+        // Aliases
+        {MeasureUnit::getMilligramPerDeciliter(), u"2 milligrams per deciliter"},
+        {MeasureUnit::getLiterPer100Kilometers(), u"2 liters per 100 kilometers"},
+        {MeasureUnit::getPartPerMillion(), u"2 parts per million"},
+        {MeasureUnit::getMillimeterOfMercury(), u"2 millimeters of mercury"},
+
+        // Replacements
+        {MeasureUnit::getMilligramOfglucosePerDeciliter(), u"2 milligrams per deciliter"},
+        {MeasureUnit::forIdentifier("millimeter-ofhg", status), u"2 millimeters of mercury"},
+        {MeasureUnit::forIdentifier("liter-per-100-kilometer", status), u"2 liters per 100 kilometers"},
+        {MeasureUnit::forIdentifier("permillion", status), u"2 parts per million"},
+    };
+
+    for (const auto &testCase : testCases) {
+        UnicodeString actualFormat = NumberFormatter::withLocale(icu::Locale::getEnglish())
+                                         .unit(testCase.measureUnit)
+                                         .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME)
+                                         .formatDouble(2.0, status)
+                                         .toString(status);
+
+        assertEquals("test unit aliases", testCase.expectedFormat, actualFormat);
+    }
 }
 
 /* For skeleton comparisons: this checks the toSkeleton output for `f` and for

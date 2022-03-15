@@ -329,6 +329,21 @@ public class LongNameHandler
         }
     }
 
+    private static final class AliasSink extends UResource.Sink {
+        String replacement;
+
+        @Override
+        public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
+            UResource.Table aliasTable = value.getTable();
+            for (int i = 0; aliasTable.getKeyAndValue(i, key, value); ++i) {
+                String keyString = key.toString();
+                if (keyString.equals("replacement")) {
+                    this.replacement = value.toString();
+                }
+            }
+        }
+    }
+
     // NOTE: outArray MUST have at least ARRAY_LENGTH entries. No bounds checking is performed.
     static void getMeasureData(
             ULocale locale,
@@ -346,12 +361,23 @@ public class LongNameHandler
         subKey.append(unit.getType());
         subKey.append("/");
 
+        // If the unit is an alias, replace it is identifier with the replacement.
+        String unitSubType = unit.getSubtype();
+        ICUResourceBundle metadataResource = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "metadata");
+        AliasSink aliasSink = new AliasSink();
+
+        metadataResource.getAllItemsWithFallbackNoFail("alias/unit/" + unitSubType, aliasSink);
+        if (aliasSink.replacement != null) {
+            unitSubType = aliasSink.replacement;
+        }
+
+
         // Map duration-year-person, duration-week-person, etc. to duration-year, duration-week, ...
         // TODO(ICU-20400): Get duration-*-person data properly with aliases.
-        if (unit.getSubtype() != null && unit.getSubtype().endsWith("-person")) {
-            subKey.append(unit.getSubtype(), 0, unit.getSubtype().length() - 7);
+        if (unitSubType != null && unitSubType.endsWith("-person")) {
+            subKey.append(unitSubType, 0, unitSubType.length() - 7);
         } else {
-            subKey.append(unit.getSubtype());
+            subKey.append(unitSubType);
         }
 
         if (width != UnitWidth.FULL_NAME) {
