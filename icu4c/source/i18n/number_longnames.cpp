@@ -451,6 +451,7 @@ void getMeasureData(const Locale &locale,
                                   &localStatus);
         outArray[GENDER_INDEX] = ures_getUnicodeString(fillIn.getAlias(), &localStatus);
     }
+    
 
     CharString key;
     key.append("units", status);
