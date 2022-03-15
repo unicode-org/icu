@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1647384116253,
+  "lastUpdate": 1647387554419,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -2026,6 +2026,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 2064.4373,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "daju@microsoft.com",
+            "name": "Daniel Ju",
+            "username": "daniel-ju"
+          },
+          "committer": {
+            "email": "41210545+daniel-ju@users.noreply.github.com",
+            "name": "Daniel Ju",
+            "username": "daniel-ju"
+          },
+          "distinct": true,
+          "id": "741bbddcf9279f41385862be8913ed13b9e342c0",
+          "message": "ICU-21900 BRS71RC Update version number and regenerate configure",
+          "timestamp": "2022-03-15T18:26:10-05:00",
+          "tree_id": "1b2b5e930f41b85f81e6baf2dc1b46dda2462bd9",
+          "url": "https://github.com/unicode-org/icu/commit/741bbddcf9279f41385862be8913ed13b9e342c0"
+        },
+        "date": 1647387551055,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 60549.1078,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 108592.2565,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.4509,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 8.3493,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 4.0572,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 12593.9318,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 41956.455,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 2159.2983,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
