@@ -4591,6 +4591,15 @@ testClassOverride(void) {
         ubidi_close(pBiDi);
         return;
     }
+    // Quick callback test (API coverage).
+    if (ubidi_getCustomizedClass(pBiDi, u'A')!=AL ||
+            ubidi_getCustomizedClass(pBiDi, u'H')!=R ||
+            ubidi_getCustomizedClass(pBiDi, u'^')!=PDF ||
+            ubidi_getCustomizedClass(pBiDi, u'~')!=BN) {
+        log_err("ubidi_getCustomizedClass() returns different values than "
+                "expected from overrideBidiClass() customClasses[]\n");
+    }
+
     verifyCallbackParams(oldFn, oldContext, NULL, NULL, 0);
 
     ubidi_getClassCallback(pBiDi, &oldFn, &oldContext);

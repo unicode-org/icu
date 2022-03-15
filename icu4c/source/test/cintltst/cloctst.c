@@ -3207,6 +3207,18 @@ static void TestAcceptLanguage(void) {
             }
         }
     }
+
+    // API coverage
+    status = U_ZERO_ERROR;
+    static const char *const supported[] = { "en-US", "en-GB", "de-DE", "ja-JP" };
+    const char * desired[] = { "de-LI", "en-IN", "zu", "fr" };
+    available = uenum_openCharStringsEnumeration(supported, UPRV_LENGTHOF(supported), &status);
+    tmp[0]=0;
+    rc = uloc_acceptLanguage(tmp, 199, &outResult, desired, UPRV_LENGTHOF(desired), available, &status);
+    if (U_FAILURE(status) || rc != 5 || uprv_strcmp(tmp, "de_DE") != 0 || outResult == ULOC_ACCEPT_FAILED) {
+        log_err("uloc_acceptLanguage() failed to do a simple match\n");
+    }
+    uenum_close(available);
 }
 
 static const char* LOCALE_ALIAS[][2] = {
@@ -7052,6 +7064,14 @@ static void TestUldnNameVariants() {
                     uloPtr->displayLocale, uloPtr->displayOptions[0], uloPtr->displayOptions[1], uloPtr->displayOptions[2],
                     u_errorName(status) );
             continue;
+        }
+        // API coverage: Expect to get back the dialect handling which is
+        // the first item in the displayOptions test data.
+        UDialectHandling dh = uldn_getDialectHandling(uldn);
+        UDisplayContext dhContext = (UDisplayContext)dh;  // same numeric values
+        if (dhContext != uloPtr->displayOptions[0]) {
+            log_err("uldn_getDialectHandling()=%03X != expected UDisplayContext %03X\n",
+                    dhContext, uloPtr->displayOptions[0]);
         }
         const UldnItem * itemPtr = uloPtr->testItems;
         int32_t itemCount = uloPtr->countItems;
