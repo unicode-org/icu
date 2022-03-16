@@ -1202,30 +1202,31 @@ class U_I18N_API Scale : public UMemory {
 
 namespace impl {
 
-// Do not enclose entire StringProp with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
+// Do not enclose entire StringProp with #ifndef U_HIDE_INTERNAL_API, needed for a protected field.
+// And do not enclose its class boilerplate within #ifndef U_HIDE_INTERNAL_API.
 /**
  * Manages NumberFormatterSettings::usage()'s char* instance on the heap.
  * @internal
  */
 class U_I18N_API StringProp : public UMemory {
 
-#ifndef U_HIDE_INTERNAL_API
-
   public:
+    /** @internal */
+    ~StringProp();
+
     /** @internal */
     StringProp(const StringProp &other);
 
     /** @internal */
     StringProp &operator=(const StringProp &other);
 
+#ifndef U_HIDE_INTERNAL_API
+
     /** @internal */
     StringProp(StringProp &&src) U_NOEXCEPT;
 
     /** @internal */
     StringProp &operator=(StringProp &&src) U_NOEXCEPT;
-
-    /** @internal */
-    ~StringProp();
 
     /** @internal */
     int16_t length() const {
