@@ -99,7 +99,7 @@ jobs:
           tool: 'ndjson'
           output-file-path: icu4c/source/test/perf/results/${{ matrix.perf }}/output.txt
           # Tentative setting.
-          alert-threshold: '150%'
+          alert-threshold: '200%'
           fail-on-alert: true
           gh-pages-branch: perfdata
           benchmark-data-dir-path: perf/results/${{ matrix.perf }}
@@ -169,7 +169,7 @@ jobs:
           tool: 'ndjson'
           output-file-path: icu4c/source/test/perf/results/${{ matrix.perf }}/${{ matrix.data }}/output.txt
           # Tentative setting.
-          alert-threshold: '150%'
+          alert-threshold: '200%'
           fail-on-alert: true
           gh-pages-branch: perfdata
           benchmark-data-dir-path: perf/results/${{ matrix.perf }}/${{ matrix.data }}
