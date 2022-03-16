@@ -186,10 +186,10 @@ NULL
 };
 
 static const char* const DEPRECATED_LANGUAGES[]={
-    "in", "iw", "ji", "jw", NULL, NULL
+    "in", "iw", "ji", "jw", "mo", NULL, NULL
 };
 static const char* const REPLACEMENT_LANGUAGES[]={
-    "id", "he", "yi", "jv", NULL, NULL
+    "id", "he", "yi", "jv", "ro", NULL, NULL
 };
 
 /**
