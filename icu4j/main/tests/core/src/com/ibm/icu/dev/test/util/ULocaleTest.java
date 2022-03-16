@@ -822,6 +822,20 @@ public class ULocaleTest extends TestFmwk {
                 { "ji", "yid", "ji", "", "" },
                 { "jw", "jaw", "jw", "", "" },
                 { "sh", "srp", "sh", "", "" },
+                { "mo", "ron", "mo", "", "" },
+                // and some non-obsolete ones
+                { "az", "aze", "az", "", "" },
+                { "cy", "cym", "cy", "", "" },
+                { "hz", "her", "hz", "", "" },
+                { "ky", "kir", "ky", "", "" },
+                { "na", "nau", "na", "", "" },
+                { "sa", "san", "sa", "", "" },
+                { "ts", "tso", "ts", "", "" },
+                { "zu", "zul", "zu", "", "" },
+                { "zz_DG", "", "zz", "DGA", "DG" },
+                { "zz_IC", "", "zz", "XIC", "IC" },
+                { "zz_XK", "", "zz", "XKK", "XK" },
+                // terminator
                 { "", "", "", "", "" }
         };
 
