@@ -376,7 +376,10 @@ UBool RuleBasedBreakIterator::BreakCache::populateNear(int32_t position, UErrorC
                 ruleStatusIndex = fBI->fRuleStatusIndex;
             }
         }
-        reset(aBoundary, ruleStatusIndex);        // Reset cache to hold aBoundary as a single starting point.
+        // Reset cache to hold aBoundary as a single starting point.
+        // Do not do so if what's in the cache is still more useful than an empty cache.
+        if (!(aBoundary == 0 && position > fBoundaries[fEndBufIdx]))
+            reset(aBoundary, ruleStatusIndex);
     }
 
     // Fill in boundaries between existing cache content and the new requested position.
