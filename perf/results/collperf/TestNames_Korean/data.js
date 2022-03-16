@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1647447334126,
+  "lastUpdate": 1647447775511,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -1564,6 +1564,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 16355830.452,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "8575c0dacef68253329608650b25412e6db7ca78",
+          "message": "ICU-21900 check non-stable API macros, move class boilerplate out of conditionals",
+          "timestamp": "2022-03-16T09:03:05-07:00",
+          "tree_id": "a400718b943fe30bfd9da7c0ac9a99ed55899aa7",
+          "url": "https://github.com/unicode-org/icu/commit/8575c0dacef68253329608650b25412e6db7ca78"
+        },
+        "date": 1647447773917,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 276.6235,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 70729712.0775,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 13465491.2684,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 67876158.4418,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 14399116.27,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
