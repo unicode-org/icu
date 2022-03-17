@@ -2036,12 +2036,20 @@ void TimeZoneTest::TestCanonicalIDAPI() {
 
 void TimeZoneTest::TestCanonicalID() {
 
-    // Some canonical IDs in CLDR are defined as "Link"
-    // in Olson tzdata.
+    // Olson (IANA) tzdata used to have very few "Link"s long time ago.
+    // This test case was written when most of CLDR canonical time zones are
+    // defined as independent "Zone" in the TZ database.
+    // Since then, the TZ maintainer found some historic rules in mid 20th century
+    // were not really reliable, and many zones are now sharing rules.
+    // As of TZ database release 2022a, there are quite a lot of zones defined
+    // by "Link" to another zone, so the exception table below becomes really
+    // big. It might be still useful to make sure CLDR zone aliases are consistent
+    // with zone rules.
     static const struct {
-        const char *alias;
-        const char *zone;
+        const char *alias;  // link-from
+        const char *zone;   // link-to (A zone ID with "Zone" rule)
     } excluded1[] = {
+        {"Africa/Accra", "Africa/Abidjan"},
         {"Africa/Addis_Ababa", "Africa/Nairobi"},
         {"Africa/Asmera", "Africa/Nairobi"},
         {"Africa/Bamako", "Africa/Abidjan"},
@@ -2076,35 +2084,43 @@ void TimeZoneTest::TestCanonicalID() {
         {"Africa/Ouagadougou", "Africa/Abidjan"},
         {"Africa/Porto-Novo", "Africa/Lagos"},
         {"Africa/Sao_Tome", "Africa/Abidjan"},
-        {"America/Antigua", "America/Port_of_Spain"},
-        {"America/Anguilla", "America/Port_of_Spain"},
+        {"America/Antigua", "America/Puerto_Rico"},
+        {"America/Anguilla", "America/Puerto_Rico"},
+        {"America/Aruba", "America/Puerto_Rico"},
+        {"America/Atikokan", "America/Panama"},
+        {"America/Blanc-Sablon", "America/Puerto_Rico"},
         {"America/Cayman", "America/Panama"},
-        {"America/Coral_Harbour", "America/Atikokan"},
-        {"America/Curacao", "America/Aruba"},
-        {"America/Dominica", "America/Port_of_Spain"},
-        {"America/Grenada", "America/Port_of_Spain"},
-        {"America/Guadeloupe", "America/Port_of_Spain"},
-        {"America/Kralendijk", "America/Aruba"},
-        {"America/Lower_Princes", "America/Aruba"},
-        {"America/Marigot", "America/Port_of_Spain"},
-        {"America/Montserrat", "America/Port_of_Spain"},
+        {"America/Coral_Harbour", "America/Panama"},
+        {"America/Creston", "America/Phoenix"},
+        {"America/Curacao", "America/Puerto_Rico"},
+        {"America/Dominica", "America/Puerto_Rico"},
+        {"America/Grenada", "America/Puerto_Rico"},
+        {"America/Guadeloupe", "America/Puerto_Rico"},
+        {"America/Kralendijk", "America/Puerto_Rico"},
+        {"America/Lower_Princes", "America/Puerto_Rico"},
+        {"America/Marigot", "America/Puerto_Rico"},
+        {"America/Montreal", "America/Toronto"},
+        {"America/Montserrat", "America/Puerto_Rico"},
+        {"America/Nassau", "America/Toronto"},
+        {"America/Port_of_Spain", "America/Puerto_Rico"},
         {"America/Santa_Isabel", "America/Tijuana"},
         {"America/Shiprock", "America/Denver"},
-        {"America/St_Barthelemy", "America/Port_of_Spain"},
-        {"America/St_Kitts", "America/Port_of_Spain"},
-        {"America/St_Lucia", "America/Port_of_Spain"},
-        {"America/St_Thomas", "America/Port_of_Spain"},
-        {"America/St_Vincent", "America/Port_of_Spain"},
-        {"America/Toronto", "America/Montreal"},
-        {"America/Tortola", "America/Port_of_Spain"},
+        {"America/St_Barthelemy", "America/Puerto_Rico"},
+        {"America/St_Kitts", "America/Puerto_Rico"},
+        {"America/St_Lucia", "America/Puerto_Rico"},
+        {"America/St_Thomas", "America/Puerto_Rico"},
+        {"America/St_Vincent", "America/Puerto_Rico"},
+        {"America/Tortola", "America/Puerto_Rico"},
         {"America/Virgin", "America/Puerto_Rico"},
+        {"Antarctica/DumontDUrville", "Pacific/Port_Moresby"},
         {"Antarctica/South_Pole", "Antarctica/McMurdo"},
+        {"Antarctica/Syowa", "Asia/Riyadh"},
         {"Arctic/Longyearbyen", "Europe/Oslo"},
-        {"Asia/Kuwait", "Asia/Aden"},
+        {"Asia/Aden", "Asia/Riyadh"},
+        {"Asia/Kuwait", "Asia/Riyadh"},
         {"Asia/Muscat", "Asia/Dubai"},
         {"Asia/Phnom_Penh", "Asia/Bangkok"},
         {"Asia/Qatar", "Asia/Bahrain"},
-        {"Asia/Riyadh", "Asia/Aden"},
         {"Asia/Vientiane", "Asia/Bangkok"},
         {"Atlantic/Jan_Mayen", "Europe/Oslo"},
         {"Atlantic/St_Helena", "Africa/Abidjan"},
