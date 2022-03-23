@@ -517,7 +517,7 @@ This section will explain how to build ICU on one platform, but to produce binar
 
 Normally, in the course of a build, ICU needs to run the tools that it builds in order to generate and package data and test-data.  In a cross compilation setting, ICU is built on a different system from that which it eventually runs on. An example might be, if you are building for a small/headless system (such as an embedded device), or a system where you can't easily run the ICU command line tools (any non-UNIX-like system).
 
-To reduce confusion, we will here refer to the "A" and the "B" system. System "A" is the actual system we will be running on - the only requirements on it is are it is able to build ICU from the command line targetting itself (with `configure` or `runConfigureICU`), and secondly, that it also contain the correct toolchain for compiling and linking for the resultant platform, referred to as the "B" system.
+To reduce confusion, we will here refer to the "A" and the "B" system. System "A" is the actual system we will be running on - the only requirements on it is are it is able to build ICU from the command line targeting itself (with `configure` or `runConfigureICU`), and secondly, that it also contain the correct toolchain for compiling and linking for the resultant platform, referred to as the "B" system.
 
 The autoconf docs use the term "build" for A, and "host" for B. More details at: [http://www.gnu.org/software/autoconf/manual/html_node/Specifying-Names.html](http://www.gnu.org/software/autoconf/manual/html_node/Specifying-Names.html#Specifying-Names)
 

@@ -694,7 +694,7 @@ In ICU4J 3.4.2 and earlier, `@draft` APIs were also marked with Java's `@depreca
 tag, so that uses of draft APIs in client code would be flagged by the compiler.
 These uses of the `@deprecated` tag were indicated with the comment “This is a
 draft API and might change in a future release of ICU.” Many clients found this
-confusing and/or undesireable, so ICU4J 3.4.3 no longer marks draft APIs with
+confusing and/or undesirable, so ICU4J 3.4.3 no longer marks draft APIs with
 the `@deprecated` tag by default. For clients who prefer the earlier behavior,
 ICU4J provides an ant build target, `restoreDeprecated`, which will update the
 source files to use the `@deprecated` tag. Then clients can just rebuild the ICU4J
