@@ -232,7 +232,7 @@ It has been replaced by the maxVariable option.
 - `[normalization on]`
 
 Turns on or off the UCOL_NORMALIZATION_MODE attribute.
-If set to on, a quick check and neccessary normalization will be performed.
+If set to on, a quick check and necessary normalization will be performed.
 
 #### strength
 - `[strength 1]`

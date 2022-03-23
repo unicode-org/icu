@@ -214,7 +214,7 @@ contain numbers.  Expect to spend a fair bit of time debugging your feature
 filter to get it to work the way you expect it to.
 
 The data for many ICU features live in individual files.  The ICU Data Build
-Tool puts puts similar *types* of files into categories.  The following table
+Tool puts similar *types* of files into categories.  The following table
 summarizes the ICU data files and their corresponding features and categories:
 
 | Feature | Category ID(s) | Data Files <br/> ([icu4c/source/data](https://github.com/unicode-org/icu/tree/main/icu4c/source/data)) | Resource Size <br/> (as of ICU 64) |
