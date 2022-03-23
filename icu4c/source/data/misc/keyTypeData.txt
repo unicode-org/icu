@@ -391,6 +391,7 @@ keyTypeData:table(nofallback){
             shp{""}
             sit{""}
             skk{""}
+            sle{""}
             sll{""}
             sos{""}
             srd{""}
