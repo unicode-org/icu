@@ -371,7 +371,7 @@ icu4j-data-install icu4j-data: all tests
 
 # For updating Windows makefiles
 
-WINDOWS_UPDATEFILES=$(srcdir)/data/makedata.mak $(shell find $(srcdir) -name '*.vcproj' -o -name '*.vcxproj')
+WINDOWS_UPDATEFILES=$(srcdir)/data/makedata.mak $(srcdir)/allinone/Build.Windows.IcuVersion.props
 
 WINDOWS_UPDATEFILES_SED=config/windows-update.sed
 

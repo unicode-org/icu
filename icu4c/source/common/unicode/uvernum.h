@@ -31,19 +31,12 @@
   *                    renaming macro, and copyright
   *
   * The following files need to be updated as well, which can be done
-  *  by running the UNIX makefile target 'update-windows-makefiles' in icu/source.
+  *  by running the UNIX makefile target 'update-windows-makefiles' in icu4c/source.
   *
-  *
-  * source/common/common_uwp.vcxproj
-  * source/common/common.vcxproj - update 'Output file name' on the link tab so
-  *                   that it contains the new major/minor combination
-  * source/i18n/i18n.vcxproj - same as for the common.vcxproj
-  * source/i18n/i18n_uwp.vcxproj - same as for the common_uwp.vcxproj
-  * source/layoutex/layoutex.vcproj - same
-  * source/stubdata/stubdata.vcproj - same as for the common.vcxproj
-  * source/io/io.vcproj - same as for the common.vcxproj
+  * source/allinone/Build.Windows.IcuVersion.props - Update the IcuMajorVersion
   * source/data/makedata.mak - change U_ICUDATA_NAME so that it contains
-  *                            the new major/minor combination and the Unicode version.
+  *                            the new major/minor combination, and UNICODE_VERSION
+  *                            for the Unicode version.
   */
 
 #ifndef UVERNUM_H
