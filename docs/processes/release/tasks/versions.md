@@ -73,15 +73,13 @@ Edit icuver.txt directly.
 
 1.  The instructions for updating the version number are in
     [icu4c/source/common/unicode/uvernum.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/unicode/uvernum.h).
-2.  [icu4c/source/stubdata/stubdata.vcxproj](https://github.com/unicode-org/icu/blob/main/icu4c/source/stubdata/stubdata.vcxproj)
-    and
-    [icu4c/source/data/makedata.mak](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/makedata.mak)
-    may also need to updated with the correct version for icudt.
-3.  After uvernum.h is updated, the Windows project files should be updated by
-    running the UNIX makefile target '**update-windows-makefiles**' in
-    icu/source.
-    *   You will need to rerun "./configure" first though before you can run the
-        command "make update-windows-makefiles".
+2.  [icu4c/source/data/makedata.mak](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/makedata.mak)
+    also needs to be updated with the correct version for `U_ICUDATA_NAME` (icudt).
+3.  After `uvernum.h` is updated, the file [Build.Windows.IcuVersion.props](https://github.com/unicode-org/icu/blob/main/icu4c/source/allinone/Build.Windows.IcuVersion.props) should be updated.
+    This can be done by hand, or by running the UNIX makefile target '**update-windows-makefiles**'
+    in `icu4c/source`.
+    *   You will need to rerun "`./configure`" first though before you can run the
+        command "`make update-windows-makefiles`".
     *   Note: You can use MSYS+MinGW to run the UNIX makefile on Windows
         platforms as well.
 4.  As well, the ICU4C "configure" script should be updated so that it reflects
