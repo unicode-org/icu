@@ -291,10 +291,10 @@ CollationDataBuilder::CollationDataBuilder(UErrorCode &errorCode)
           trie(NULL),
           ce32s(errorCode), ce64s(errorCode), conditionalCE32s(errorCode),
           modified(FALSE),
-          fastLatinEnabled(FALSE), fastLatinBuilder(NULL),
           lastContextIndex(0),
           lastContextCE32(0),
           lastContextWasSuffix(false),
+          fastLatinEnabled(FALSE), fastLatinBuilder(NULL),
           collIter(NULL) {
     // Reserve the first CE32 for U+0000.
     ce32s.addElement(0, errorCode);
