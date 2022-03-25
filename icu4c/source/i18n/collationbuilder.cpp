@@ -307,10 +307,13 @@ CollationBuilder::addReset(int32_t strength, const UnicodeString &str,
             parserErrorReason = "normalizing the reset position";
             return;
         }
-        cesLength = dataBuilder->getCEs(nfdString, ces, 0);
+        cesLength = dataBuilder->getCEs(nfdString, ces, 0, errorCode);
         if(cesLength > Collation::MAX_EXPANSION_LENGTH) {
             errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             parserErrorReason = "reset position maps to too many collation elements (more than 31)";
+            return;
+        } else if (errorCode == U_INPUT_TOO_LONG_ERROR) {
+            parserErrorReason = "exhausted maximum CONTRACTION_TAG value";
             return;
         }
     }
@@ -734,11 +737,14 @@ CollationBuilder::addRelation(int32_t strength, const UnicodeString &prefix,
             parserErrorReason = "normalizing the relation extension";
             return;
         }
-        cesLength = dataBuilder->getCEs(nfdExtension, ces, cesLength);
+        cesLength = dataBuilder->getCEs(nfdExtension, ces, cesLength, errorCode);
         if(cesLength > Collation::MAX_EXPANSION_LENGTH) {
             errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             parserErrorReason =
                 "extension string adds too many collation elements (more than 31 total)";
+            return;
+        } else if (errorCode == U_INPUT_TOO_LONG_ERROR) {
+            parserErrorReason = "exhausted maximum CONTRACTION_TAG value";
             return;
         }
     }
@@ -1182,10 +1188,12 @@ CollationBuilder::addTailComposites(const UnicodeString &nfdPrefix, const Unicod
                                      newNFDString, newString, errorCode)) {
             continue;
         }
-        int32_t newCEsLength = dataBuilder->getCEs(nfdPrefix, newNFDString, newCEs, 0);
+        int32_t newCEsLength = dataBuilder->getCEs(nfdPrefix, newNFDString, newCEs, 0, errorCode);
         if(newCEsLength > Collation::MAX_EXPANSION_LENGTH) {
             // Ignore mappings that we cannot store.
             continue;
+        } else if (U_FAILURE(errorCode)) {
+            return;
         }
         // Note: It is possible that the newCEs do not make use of the mapping
         // for which we are adding the tail composites, in which case we might be adding
@@ -1329,7 +1337,7 @@ CollationBuilder::closeOverComposites(UErrorCode &errorCode) {
     while(iter.next()) {
         U_ASSERT(!iter.isString());
         nfd.getDecomposition(iter.getCodepoint(), nfdString);
-        cesLength = dataBuilder->getCEs(nfdString, ces, 0);
+        cesLength = dataBuilder->getCEs(nfdString, ces, 0, errorCode);
         if(cesLength > Collation::MAX_EXPANSION_LENGTH) {
             // Too many CEs from the decomposition (unusual), ignore this composite.
             // We could add a capacity parameter to getCEs() and reallocate if necessary.
@@ -1347,7 +1355,7 @@ CollationBuilder::addIfDifferent(const UnicodeString &prefix, const UnicodeStrin
                                  UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return ce32; }
     int64_t oldCEs[Collation::MAX_EXPANSION_LENGTH];
-    int32_t oldCEsLength = dataBuilder->getCEs(prefix, str, oldCEs, 0);
+    int32_t oldCEsLength = dataBuilder->getCEs(prefix, str, oldCEs, 0, errorCode);
     if(!sameCEs(newCEs, newCEsLength, oldCEs, oldCEsLength)) {
         if(ce32 == Collation::UNASSIGNED_CE32) {
             ce32 = dataBuilder->encodeCEs(newCEs, newCEsLength, errorCode);

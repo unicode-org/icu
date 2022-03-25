@@ -162,9 +162,9 @@ public:
      *
      * @return incremented cesLength
      */
-    int32_t getCEs(const UnicodeString &s, int64_t ces[], int32_t cesLength);
+    int32_t getCEs(const UnicodeString &s, int64_t ces[], int32_t cesLength, UErrorCode& errorCode);
     int32_t getCEs(const UnicodeString &prefix, const UnicodeString &s,
-                   int64_t ces[], int32_t cesLength);
+                   int64_t ces[], int32_t cesLength, UErrorCode& errorCode);
 
 protected:
     friend class CopyHelper;
@@ -214,11 +214,11 @@ protected:
     void buildContexts(UErrorCode &errorCode);
     uint32_t buildContext(ConditionalCE32 *head, UErrorCode &errorCode);
     int32_t addContextTrie(uint32_t defaultCE32, UCharsTrieBuilder &trieBuilder,
-                           UErrorCode &errorCode);
+                           UBool isSuffix, UErrorCode &errorCode);
 
     void buildFastLatinTable(CollationData &data, UErrorCode &errorCode);
 
-    int32_t getCEs(const UnicodeString &s, int32_t start, int64_t ces[], int32_t cesLength);
+    int32_t getCEs(const UnicodeString &s, int32_t start, int64_t ces[], int32_t cesLength, UErrorCode& errorCode);
 
     static UChar32 jamoCpFromIndex(int32_t i) {
         // 0 <= i < CollationData::JAMO_CE32S_LENGTH = 19 + 21 + 27
@@ -244,6 +244,9 @@ protected:
     UnicodeSet contextChars;
     // Serialized UCharsTrie structures for finalized contexts.
     UnicodeString contexts;
+    int32_t lastContextIndex;
+    uint32_t lastContextCE32;
+    UBool lastContextWasSuffix;
     UnicodeSet unsafeBackwardSet;
     UBool modified;
 

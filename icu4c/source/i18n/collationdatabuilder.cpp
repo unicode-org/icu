@@ -129,7 +129,7 @@ public:
 
     virtual ~DataBuilderCollationIterator();
 
-    int32_t fetchCEs(const UnicodeString &str, int32_t start, int64_t ces[], int32_t cesLength);
+    int32_t fetchCEs(const UnicodeString &str, int32_t start, int64_t ces[], int32_t cesLength, UErrorCode& errorCode);
 
     virtual void resetToOffset(int32_t newOffset) override;
     virtual int32_t getOffset() const override;
@@ -169,7 +169,11 @@ DataBuilderCollationIterator::~DataBuilderCollationIterator() {}
 
 int32_t
 DataBuilderCollationIterator::fetchCEs(const UnicodeString &str, int32_t start,
-                                       int64_t ces[], int32_t cesLength) {
+                                       int64_t ces[], int32_t cesLength, UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return 0;
+    }
+    
     // Set the pointers each time, in case they changed due to reallocation.
     builderData.ce32s = reinterpret_cast<const uint32_t *>(builder.ce32s.getBuffer());
     builderData.ces = builder.ce64s.getBuffer();
@@ -178,7 +182,6 @@ DataBuilderCollationIterator::fetchCEs(const UnicodeString &str, int32_t start,
     reset();
     s = &str;
     pos = start;
-    UErrorCode errorCode = U_ZERO_ERROR;
     while(U_SUCCESS(errorCode) && pos < s->length()) {
         // No need to keep all CEs in the iterator buffer.
         clearCEs();
@@ -271,9 +274,8 @@ DataBuilderCollationIterator::getCE32FromBuilderData(uint32_t ce32, UErrorCode &
             // Build the context-sensitive mappings into their runtime form and cache the result.
             cond->builtCE32 = builder.buildContext(cond, errorCode);
             if(errorCode == U_BUFFER_OVERFLOW_ERROR) {
-                errorCode = U_ZERO_ERROR;
-                builder.clearContexts();
-                cond->builtCE32 = builder.buildContext(cond, errorCode);
+                errorCode = U_INPUT_TOO_LONG_ERROR;
+                return 0;
             }
             builderData.contexts = builder.contexts.getBuffer();
         }
@@ -1337,6 +1339,9 @@ CollationDataBuilder::buildContexts(UErrorCode &errorCode) {
     // Ignore abandoned lists and the cached builtCE32,
     // and build all contexts from scratch.
     contexts.remove();
+    lastContextIndex = 0;
+    lastContextCE32 = 0;
+    lastContextWasSuffix = false;
     UnicodeSetIterator iter(contextChars);
     while(U_SUCCESS(errorCode) && iter.next()) {
         U_ASSERT(!iter.isString());
@@ -1432,7 +1437,7 @@ CollationDataBuilder::buildContext(ConditionalCE32 *head, UErrorCode &errorCode)
                 if(cond == lastCond) { break; }
                 cond = getConditionalCE32(cond->next);
             }
-            int32_t index = addContextTrie(emptySuffixCE32, contractionBuilder, errorCode);
+            int32_t index = addContextTrie(emptySuffixCE32, contractionBuilder, true, errorCode);
             if(U_FAILURE(errorCode)) { return 0; }
             if(index > Collation::MAX_INDEX) {
                 errorCode = U_BUFFER_OVERFLOW_ERROR;
@@ -1455,7 +1460,7 @@ CollationDataBuilder::buildContext(ConditionalCE32 *head, UErrorCode &errorCode)
         }
     }
     U_ASSERT(head->defaultCE32 != Collation::NO_CE32);
-    int32_t index = addContextTrie(head->defaultCE32, prefixBuilder, errorCode);
+    int32_t index = addContextTrie(head->defaultCE32, prefixBuilder, false, errorCode);
     if(U_FAILURE(errorCode)) { return 0; }
     if(index > Collation::MAX_INDEX) {
         errorCode = U_BUFFER_OVERFLOW_ERROR;
@@ -1466,7 +1471,7 @@ CollationDataBuilder::buildContext(ConditionalCE32 *head, UErrorCode &errorCode)
 
 int32_t
 CollationDataBuilder::addContextTrie(uint32_t defaultCE32, UCharsTrieBuilder &trieBuilder,
-                                     UErrorCode &errorCode) {
+                                     UBool isSuffix, UErrorCode &errorCode) {
     UnicodeString context;
     context.append((UChar)(defaultCE32 >> 16)).append((UChar)defaultCE32);
     UnicodeString trieString;
@@ -1474,7 +1479,15 @@ CollationDataBuilder::addContextTrie(uint32_t defaultCE32, UCharsTrieBuilder &tr
     if(U_FAILURE(errorCode)) { return -1; }
     int32_t index = contexts.indexOf(context);
     if(index < 0) {
+        if (defaultCE32 == lastContextCE32 && isSuffix == lastContextWasSuffix) {
+            // if we're adding a context trie for the same CE as the last trie we added,
+            // just overwrite that trie and reuse its index
+            contexts.remove(lastContextIndex);
+        }
         index = contexts.length();
+        lastContextIndex = index;
+        lastContextCE32 = defaultCE32;
+        lastContextWasSuffix = isSuffix;
         contexts.append(context);
     }
     return index;
@@ -1509,29 +1522,29 @@ CollationDataBuilder::buildFastLatinTable(CollationData &data, UErrorCode &error
 }
 
 int32_t
-CollationDataBuilder::getCEs(const UnicodeString &s, int64_t ces[], int32_t cesLength) {
-    return getCEs(s, 0, ces, cesLength);
+CollationDataBuilder::getCEs(const UnicodeString &s, int64_t ces[], int32_t cesLength, UErrorCode& errorCode) {
+    return getCEs(s, 0, ces, cesLength, errorCode);
 }
 
 int32_t
 CollationDataBuilder::getCEs(const UnicodeString &prefix, const UnicodeString &s,
-                             int64_t ces[], int32_t cesLength) {
+                             int64_t ces[], int32_t cesLength, UErrorCode& errorCode) {
     int32_t prefixLength = prefix.length();
     if(prefixLength == 0) {
-        return getCEs(s, 0, ces, cesLength);
+        return getCEs(s, 0, ces, cesLength, errorCode);
     } else {
-        return getCEs(prefix + s, prefixLength, ces, cesLength);
+        return getCEs(prefix + s, prefixLength, ces, cesLength, errorCode);
     }
 }
 
 int32_t
 CollationDataBuilder::getCEs(const UnicodeString &s, int32_t start,
-                             int64_t ces[], int32_t cesLength) {
+                             int64_t ces[], int32_t cesLength, UErrorCode& errorCode) {
     if(collIter == NULL) {
         collIter = new DataBuilderCollationIterator(*this);
         if(collIter == NULL) { return 0; }
     }
-    return collIter->fetchCEs(s, start, ces, cesLength);
+    return collIter->fetchCEs(s, start, ces, cesLength, errorCode);
 }
 
 U_NAMESPACE_END
