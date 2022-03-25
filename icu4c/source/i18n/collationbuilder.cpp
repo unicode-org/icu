@@ -308,12 +308,14 @@ CollationBuilder::addReset(int32_t strength, const UnicodeString &str,
             return;
         }
         cesLength = dataBuilder->getCEs(nfdString, ces, 0, errorCode);
+        if (U_FAILURE(errorCode)) {
+            // NOTE: as of right now (3/25/22), the only error getCEs() returns is INPUT_TOO_LONG_ERROR
+            parserErrorReason = "exhausted maximum CONTRACTION_TAG value";
+            return;
+        }
         if(cesLength > Collation::MAX_EXPANSION_LENGTH) {
             errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             parserErrorReason = "reset position maps to too many collation elements (more than 31)";
-            return;
-        } else if (errorCode == U_INPUT_TOO_LONG_ERROR) {
-            parserErrorReason = "exhausted maximum CONTRACTION_TAG value";
             return;
         }
     }
@@ -738,13 +740,15 @@ CollationBuilder::addRelation(int32_t strength, const UnicodeString &prefix,
             return;
         }
         cesLength = dataBuilder->getCEs(nfdExtension, ces, cesLength, errorCode);
+        if (U_FAILURE(errorCode)) {
+            // NOTE: as of right now (3/25/22), the only error getCEs() returns is INPUT_TOO_LONG_ERROR
+            parserErrorReason = "exhausted maximum CONTRACTION_TAG value";
+            return;
+        }
         if(cesLength > Collation::MAX_EXPANSION_LENGTH) {
             errorCode = U_ILLEGAL_ARGUMENT_ERROR;
             parserErrorReason =
                 "extension string adds too many collation elements (more than 31 total)";
-            return;
-        } else if (errorCode == U_INPUT_TOO_LONG_ERROR) {
-            parserErrorReason = "exhausted maximum CONTRACTION_TAG value";
             return;
         }
     }
@@ -1189,11 +1193,12 @@ CollationBuilder::addTailComposites(const UnicodeString &nfdPrefix, const Unicod
             continue;
         }
         int32_t newCEsLength = dataBuilder->getCEs(nfdPrefix, newNFDString, newCEs, 0, errorCode);
+        if (U_FAILURE(errorCode)) {
+            return;
+        }
         if(newCEsLength > Collation::MAX_EXPANSION_LENGTH) {
             // Ignore mappings that we cannot store.
             continue;
-        } else if (U_FAILURE(errorCode)) {
-            return;
         }
         // Note: It is possible that the newCEs do not make use of the mapping
         // for which we are adding the tail composites, in which case we might be adding

@@ -292,7 +292,10 @@ CollationDataBuilder::CollationDataBuilder(UErrorCode &errorCode)
           ce32s(errorCode), ce64s(errorCode), conditionalCE32s(errorCode),
           modified(FALSE),
           fastLatinEnabled(FALSE), fastLatinBuilder(NULL),
-          collIter(NULL) {
+          collIter(NULL),
+          lastContextIndex(0),
+          lastContextCE32(0),
+          lastContextWasSuffix(false) {
     // Reserve the first CE32 for U+0000.
     ce32s.addElement(0, errorCode);
     conditionalCE32s.setDeleter(uprv_deleteConditionalCE32);
