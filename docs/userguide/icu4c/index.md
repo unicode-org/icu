@@ -154,31 +154,27 @@ In the descriptions below, `<ICU>` is the full path name of the ICU4C directory 
             <li><b>brkitr/</b> Data files for character, word, sentence, title
             casing and line boundary analysis.</li>
 
-            <li><b>coll/</b> Data for collation tailorings. The makefile
-            <b>colfiles.mk</b> contains the list of resource bundle files.</li>
+            <li><b>coll/</b> Data for collation tailorings.</li>
 
             <li><b>locales/</b> These .txt files contain ICU language and
             culture-specific localization data. Two special bundles are
             <b>root</b>, which is the fallback data and parent of other bundles,
-            and <b>index</b>, which contains a list of installed bundles. The
-            makefile <b>resfiles.mk</b> contains the list of resource bundle
-            files. Some of the locale data is split out into the type-specific
+            and <b>index</b>, which contains a list of installed bundles.
+            Some of the locale data is split out into the type-specific
             directories curr, lang, region, unit, and zone, described below.</li>
 
             <li><b>curr/</b> Locale data for currency symbols and names (including
-            plural forms), with its own makefile <b>resfiles.mk</b>.</li>
+            plural forms).</li>
 
             <li><b>lang/</b> Locale data for names of languages, scripts, and locale
-            key names and values, with its own makefile <b>resfiles.mk</b>.</li>
+            key names and values.</li>
 
-            <li><b>region/</b> Locale data for names of regions, with its own
-            makefile <b>resfiles.mk</b>.</li>
+            <li><b>region/</b> Locale data for names of regions.</li>
 
-            <li><b>unit/</b> Locale data for measurement unit patterns and names,
-            with its own makefile <b>resfiles.mk</b>.</li>
+            <li><b>unit/</b> Locale data for measurement unit patterns and
+            names.</li>
 
-            <li><b>zone/</b> Locale data for time zone names, with its own
-            makefile <b>resfiles.mk</b>.</li>
+            <li><b>zone/</b> Locale data for time zone names.</li>
 
             <li><b>mappings/</b> Here are the code page converter tables. These
             .ucm files contain mappings to and from Unicode. These are compiled
@@ -189,10 +185,8 @@ In the descriptions below, `<ICU>` is the full path name of the ICU4C directory 
             converters to be built.</li>
 
             <li><b>translit/</b> This directory contains transliterator rules as
-            resource bundles, a makefile <b>trnsfiles.mk</b> containing the list
-            of installed system translitaration files, and as well the special
-            bundle <b>translit_index</b> which lists the system transliterator
-            aliases.</li>
+            resource bundles, and the special bundle <b>translit_index</b> which
+            lists the system transliterator aliases.</li>
 
             <li><b>unidata/</b> This directory contains the Unicode data files.
             Please see <a href=
