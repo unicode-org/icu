@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Specification-Title: International Components for Unicode for Java Utilities
+Specification-Version: @SPECVERSION@
+Specification-Vendor: Unicode, Inc.
+Implementation-Title: International Components for Unicode for Java Utilities
+Implementation-Version: @IMPLVERSION@
+Implementation-Vendor: Unicode, Inc.
+Implementation-Vendor-Id: org.unicode
+Bundle-ManifestVersion: 2
+Bundle-Name: ICU4JUtilities
+Bundle-Description: International Components for Unicode for Java Utilities
+Bundle-SymbolicName: com.ibm.icu.utilities
+Bundle-Version: @IMPLVERSION@
+Bundle-Vendor: Unicode, Inc.
+Bundle-Copyright: @COPYRIGHT@
+Bundle-RequiredExecutionEnvironment: @EXECENV@
+Automatic-Module-Name: com.ibm.icu.utilities
