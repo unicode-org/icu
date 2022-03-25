@@ -290,10 +290,10 @@ CollationDataBuilder::CollationDataBuilder(UErrorCode &errorCode)
           base(NULL), baseSettings(NULL),
           trie(NULL),
           ce32s(errorCode), ce64s(errorCode), conditionalCE32s(errorCode),
-          modified(FALSE),
           lastContextIndex(0),
           lastContextCE32(0),
           lastContextWasSuffix(false),
+          modified(FALSE),
           fastLatinEnabled(FALSE), fastLatinBuilder(NULL),
           collIter(NULL) {
     // Reserve the first CE32 for U+0000.
