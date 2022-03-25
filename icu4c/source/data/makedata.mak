@@ -74,22 +74,22 @@ COREDATA_TS=$(ICUTMP)\coredata.timestamp
 ARM_CROSSBUILD_TS=
 
 #  ICUCOL
-#       The directory that contains colfiles.mk files along with *.txt collation data files
+#       The directory that contains *.txt collation data files
 #
 ICUCOL=coll
 
 #  ICURBNF
-#       The directory that contains rbnffiles.mk files along with *.txt RBNF data files
+#       The directory that contains *.txt RBNF data files
 #
 ICURBNF=rbnf
 
 #  ICUTRNS
-#       The directory that contains trfiles.mk files along with *.txt transliterator files
+#       The directory that contains *.txt transliterator files
 #
 ICUTRNS=translit
 
 #  ICUBRK
-#       The directory that contains resfiles.mk files along with *.txt break iterator files
+#       The directory that contains *.txt break iterator files
 #
 ICUBRK=brkitr
 
