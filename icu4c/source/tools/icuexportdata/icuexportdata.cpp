@@ -359,9 +359,16 @@ int exportUprops(int argc, char* argv[]) {
         propNames.push_back(argv[i]);
     }
     if (options[OPT_ALL].doesOccur) {
-        for (int i=UCHAR_BINARY_START; i<UCHAR_INT_LIMIT; i++) {
+        int i = UCHAR_BINARY_START;
+        while (true) {
             if (i == UCHAR_BINARY_LIMIT) {
                 i = UCHAR_INT_START;
+            }
+            if (i == UCHAR_INT_LIMIT) {
+                i = UCHAR_SCRIPT_EXTENSIONS;
+            }
+            if (i == UCHAR_SCRIPT_EXTENSIONS + 1) {
+                break;
             }
             UProperty uprop = static_cast<UProperty>(i);
             const char* propName = u_getPropertyName(uprop, U_SHORT_PROPERTY_NAME);
@@ -373,7 +380,10 @@ int exportUprops(int argc, char* argv[]) {
             }
             if (propName != NULL) {
                 propNames.push_back(propName);
+            } else {
+                std::cerr << "Warning: Could not find name for: " << uprop << std::endl;
             }
+            i++;
         }
     }
 
