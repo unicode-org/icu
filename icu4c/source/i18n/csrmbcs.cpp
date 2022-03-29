@@ -146,7 +146,6 @@ CharsetRecog_mbcs::~CharsetRecog_mbcs()
 }
 
 int32_t CharsetRecog_mbcs::match_mbcs(InputText *det, const uint16_t commonChars[], int32_t commonCharsLen) const {
-    int32_t singleByteCharCount = 0;
     int32_t doubleByteCharCount = 0;
     int32_t commonCharCount     = 0;
     int32_t badCharCount        = 0;
@@ -160,9 +159,7 @@ int32_t CharsetRecog_mbcs::match_mbcs(InputText *det, const uint16_t commonChars
         if (iter.error) {
             badCharCount++;
         } else {
-            if (iter.charValue <= 0xFF) {
-                singleByteCharCount++;
-            } else {
+            if (iter.charValue > 0xFF) {
                 doubleByteCharCount++;
 
                 if (commonChars != 0) {

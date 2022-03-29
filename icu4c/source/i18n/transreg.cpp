@@ -141,16 +141,10 @@ Transliterator* TransliteratorAlias::create(UParseError& pe,
             // to see whether there really are ID blocks at the beginning and end (by looking for U+FFFF, which
             // marks the position where an anonymous transliterator goes) and adjust accordingly
             int32_t anonymousRBTs = transes->size();
-            int32_t transCount = anonymousRBTs * 2 + 1;
-            if (!aliasesOrRules.isEmpty() && aliasesOrRules[0] == (UChar)(0xffff))
-                --transCount;
-            if (aliasesOrRules.length() >= 2 && aliasesOrRules[aliasesOrRules.length() - 1] == (UChar)(0xffff))
-                --transCount;
             UnicodeString noIDBlock((UChar)(0xffff));
             noIDBlock += ((UChar)(0xffff));
             int32_t pos = aliasesOrRules.indexOf(noIDBlock);
             while (pos >= 0) {
-                --transCount;
                 pos = aliasesOrRules.indexOf(noIDBlock, pos + 1);
             }
 
