@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1648157511645,
+  "lastUpdate": 1648657291730,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -2158,6 +2158,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 22825415.625,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "committer": {
+            "email": "srl295@gmail.com",
+            "name": "Steven R. Loomis",
+            "username": "srl295"
+          },
+          "distinct": true,
+          "id": "2612b8b55af90106c11422a3558006bdc8016bc4",
+          "message": "ICU-21965 fix utilities.jar module name\n\ncom.ibm.icu.utilities - otherwise the automatic module name is unusable",
+          "timestamp": "2022-03-30T11:09:53-05:00",
+          "tree_id": "c25c55651b6b9eedb525e2eafeff337ca86dedcb",
+          "url": "https://github.com/unicode-org/icu/commit/2612b8b55af90106c11422a3558006bdc8016bc4"
+        },
+        "date": 1648657289842,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 457.5591,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 49522867.1064,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 18825996.2599,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 49435215.6116,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 20954853.6936,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
