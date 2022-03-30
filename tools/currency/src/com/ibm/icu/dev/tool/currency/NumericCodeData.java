@@ -336,6 +336,7 @@ public class NumericCodeData {
         {"SHP", "654"},
         {"SIT", "705"},
         {"SKK", "703"},
+        {"SLE", "695"},
         {"SLL", "694"},
         {"SOS", "706"},
         {"SRD", "968"},
