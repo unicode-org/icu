@@ -86,13 +86,25 @@ struct ConditionalCE32 : public UMemory {
      * When fetching CEs from the builder, the contexts are built into their runtime form
      * so that the normal collation implementation can process them.
      * The result is cached in the list head. It is reset when the contexts are modified.
+     * All of these builtCE32 are invalidated by clearContexts(),
+     * via incrementing the contextsEra.
      */
     uint32_t builtCE32;
+    /**
+     * The "era" of building intermediate contexts when the above builtCE32 was set.
+     * When the array of cached, temporary contexts overflows, then clearContexts()
+     * removes them all and invalidates the builtCE32 that used to point to built tries.
+     */
+    int32_t era = -1;
     /**
      * Index of the next ConditionalCE32.
      * Negative for the end of the list.
      */
     int32_t next;
+    // Note: We could create a separate class for all of the contextual mappings for
+    // a code point, with the builtCE32, the era, and a list of the actual mappings.
+    // The class that represents one mapping would then not need to
+    // store those fields in each element.
 };
 
 U_CDECL_BEGIN
@@ -267,7 +279,7 @@ DataBuilderCollationIterator::getCE32FromBuilderData(uint32_t ce32, UErrorCode &
             // TODO: ICU-21531 figure out why this happens.
             return 0;
         }
-        if(cond->builtCE32 == Collation::NO_CE32) {
+        if(cond->builtCE32 == Collation::NO_CE32 || cond->era != builder.contextsEra) {
             // Build the context-sensitive mappings into their runtime form and cache the result.
             cond->builtCE32 = builder.buildContext(cond, errorCode);
             if(errorCode == U_BUFFER_OVERFLOW_ERROR) {
@@ -275,6 +287,7 @@ DataBuilderCollationIterator::getCE32FromBuilderData(uint32_t ce32, UErrorCode &
                 builder.clearContexts();
                 cond->builtCE32 = builder.buildContext(cond, errorCode);
             }
+            cond->era = builder.contextsEra;
             builderData.contexts = builder.contexts.getBuffer();
         }
         return cond->builtCE32;
@@ -1322,13 +1335,10 @@ CollationDataBuilder::buildMappings(CollationData &data, UErrorCode &errorCode) 
 void
 CollationDataBuilder::clearContexts() {
     contexts.remove();
-    UnicodeSetIterator iter(contextChars);
-    while(iter.next()) {
-        U_ASSERT(!iter.isString());
-        uint32_t ce32 = utrie2_get32(trie, iter.getCodepoint());
-        U_ASSERT(isBuilderContextCE32(ce32));
-        getConditionalCE32ForCE32(ce32)->builtCE32 = Collation::NO_CE32;
-    }
+    // Incrementing the contexts build "era" invalidates all of the builtCE32
+    // from before this clearContexts() call.
+    // Simpler than finding and resetting all of those fields.
+    ++contextsEra;
 }
 
 void
@@ -1336,7 +1346,7 @@ CollationDataBuilder::buildContexts(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
     // Ignore abandoned lists and the cached builtCE32,
     // and build all contexts from scratch.
-    contexts.remove();
+    clearContexts();
     UnicodeSetIterator iter(contextChars);
     while(U_SUCCESS(errorCode) && iter.next()) {
         U_ASSERT(!iter.isString());
@@ -1362,18 +1372,34 @@ CollationDataBuilder::buildContext(ConditionalCE32 *head, UErrorCode &errorCode)
     U_ASSERT(head->next >= 0);
     UCharsTrieBuilder prefixBuilder(errorCode);
     UCharsTrieBuilder contractionBuilder(errorCode);
+    // This outer loop goes from each prefix to the next.
+    // For each prefix it finds the one or more same-prefix entries (firstCond..lastCond).
+    // If there are multiple suffixes for the same prefix,
+    // then an inner loop builds a contraction trie for them.
     for(ConditionalCE32 *cond = head;; cond = getConditionalCE32(cond->next)) {
+        if(U_FAILURE(errorCode)) { return 0; }  // early out for memory allocation errors
         // After the list head, the prefix or suffix can be empty, but not both.
         U_ASSERT(cond == head || cond->hasContext());
         int32_t prefixLength = cond->prefixLength();
         UnicodeString prefix(cond->context, 0, prefixLength + 1);
         // Collect all contraction suffixes for one prefix.
         ConditionalCE32 *firstCond = cond;
-        ConditionalCE32 *lastCond = cond;
-        while(cond->next >= 0 &&
-                (cond = getConditionalCE32(cond->next))->context.startsWith(prefix)) {
+        ConditionalCE32 *lastCond;
+        do {
             lastCond = cond;
-        }
+            // Clear the defaultCE32 fields as we go.
+            // They are left over from building a previous version of this list of contexts.
+            //
+            // One of the code paths below may copy a preceding defaultCE32
+            // into its emptySuffixCE32.
+            // If a new suffix has been inserted before what used to be
+            // the firstCond for its prefix, then that previous firstCond could still
+            // contain an outdated defaultCE32 from an earlier buildContext() and
+            // result in an incorrect emptySuffixCE32.
+            // So we reset all defaultCE32 before reading and setting new values.
+            cond->defaultCE32 = Collation::NO_CE32;
+        } while(cond->next >= 0 &&
+                (cond = getConditionalCE32(cond->next))->context.startsWith(prefix));
         uint32_t ce32;
         int32_t suffixStart = prefixLength + 1;  // == prefix.length()
         if(lastCond->context.length() == suffixStart) {

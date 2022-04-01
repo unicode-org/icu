@@ -948,7 +948,7 @@ public class CollationTest extends TestFmwk {
         CollationData root = CollationRoot.getData();
         CollationRootElements rootElements = new CollationRootElements(root.rootElements);
 
-        Set<String> prevLocales = new HashSet<String>();
+        Set<String> prevLocales = new HashSet<>();
         prevLocales.add("");
         prevLocales.add("root");
         prevLocales.add("root@collation=standard");
@@ -1145,7 +1145,7 @@ public class CollationTest extends TestFmwk {
         }
 
         start = skipSpaces(start);
-        Output<String> prefixOut = new Output<String>();
+        Output<String> prefixOut = new Output<>();
         start = parseString(start, prefixOut, s);
         if (prefixOut.value != null) {
             logln(fileLine);
@@ -1491,14 +1491,14 @@ public class CollationTest extends TestFmwk {
     private boolean checkCompareTwo(String norm, String prevFileLine, String prevString, String s,
                                     int expectedOrder, int expectedLevel) {
         // Get the sort keys first, for error debug output.
-        Output<CollationKey> prevKeyOut = new Output<CollationKey>();
+        Output<CollationKey> prevKeyOut = new Output<>();
         CollationKey prevKey;
         if (!getCollationKey(norm, fileLine, prevString, prevKeyOut)) {
             return false;
         }
         prevKey = prevKeyOut.value;
 
-        Output<CollationKey> keyOut = new Output<CollationKey>();
+        Output<CollationKey> keyOut = new Output<>();
         CollationKey key;
         if (!getCollationKey(norm, fileLine, s, keyOut)) {
             return false;
@@ -1566,8 +1566,8 @@ public class CollationTest extends TestFmwk {
         // only that those two methods yield the same order.
         //
         // Use bit-wise OR so that getMergedCollationKey() is always called for both strings.
-        Output<CollationKey> outPrevKey = new Output<CollationKey>(prevKey);
-        Output<CollationKey> outKey = new Output<CollationKey>(key);
+        Output<CollationKey> outPrevKey = new Output<>(prevKey);
+        Output<CollationKey> outKey = new Output<>(key);
         if (getMergedCollationKey(prevString, outPrevKey) | getMergedCollationKey(s, outKey)) {
             prevKey = outPrevKey.value;
             key = outKey.value;
@@ -1606,7 +1606,7 @@ public class CollationTest extends TestFmwk {
     private void checkCompareStrings(BufferedReader in) throws IOException {
         String prevFileLine = "(none)";
         String prevString = "";
-        Output<String> sOut = new Output<String>();
+        Output<String> sOut = new Output<>();
         while (readNonEmptyLine(in) && !isSectionStarter(fileLine.charAt(0))) {
             // Parse the line even if it will be ignored (when we do not have a Collator)
             // in order to report syntax issues.
@@ -1701,6 +1701,46 @@ public class CollationTest extends TestFmwk {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @Test
+    public void TestBuilderContextsOverflow() {
+        // ICU-20715: ParseException caused by StringIndexOutOfBoundsException
+        // using what looks like a bogus CharsTrie after
+        // intermediate contextual-mappings data overflowed.
+        // Caused by the CollationDataBuilder using some outdated values when building
+        // contextual mappings with both prefix and contraction matching.
+        // Fixed by resetting those outdated values before code looks at them.
+        char[] rules = {
+            '&', 0x10, 0x2ff, 0x503c, 0x4617,
+            '=', 0x80, 0x4f7f, 0xff, 0x3c3d, 0x1c4f, 0x3c3c,
+            '<', 0, 0, 0, 0, '|', 0, 0, 0, 0, 0, 0xf400, 0x30ff, 0, 0, 0x4f7f, 0xff,
+            '=', 0, '|', 0, 0, 0, 0, 0, 0, 0x1f00, 0xe30,
+            0x3035, 0, 0, 0xd200, 0, 0x7f00, 0xff4f, 0x3d00, 0, 0x7c00,
+            0, 0, 0, 0, 0, 0, 0, 0x301f, 0x350e, 0x30,
+            0, 0, 0xd2, 0x7c00, 0, 0, 0, 0, 0, 0,
+            0, 0x301f, 0x350e, 0x30, 0, 0, 0x52d2, 0x2f3c, 0x5552, 0x493c,
+            0x1f10, 0x1f50, 0x300, 0, 0, 0xf400, 0x30ff, 0, 0, 0x4f7f,
+            0xff,
+            '=', 0, '|', 0, 0, 0, 0, 0x5000, 0x4617,
+            '=', 0x80, 0x4f7f, 0, 0, 0xd200, 0
+        };
+        String s = new String(rules);
+        try {
+            new RuleBasedCollator(s);
+            logln("successfully built the Collator");
+        } catch (StringIndexOutOfBoundsException e) {
+            errln("unhandled StringIndexOutOfBoundsException: " + e);
+        } catch (ParseException pe) {
+            Throwable cause = pe.getCause();
+            if (cause != null && cause instanceof StringIndexOutOfBoundsException) {
+                errln("internal parser error: " + pe);
+            } else {
+                logln("collation data builder overflow or similar: " + pe);
+            }
+        } catch (Exception e) {
+            errln("unexpected type of exception: " + e);
         }
     }
 }
