@@ -79,6 +79,7 @@ public:
     void TestTailoredElements();
     void TestDataDriven();
     void TestLongLocale();
+    void TestBuilderContextsOverflow();
 
 private:
     void checkFCD(const char *name, CollationIterator &ci, CodePointIterator &cpi);
@@ -150,6 +151,7 @@ void CollationTest::runIndexedTest(int32_t index, UBool exec, const char *&name,
     TESTCASE_AUTO(TestTailoredElements);
     TESTCASE_AUTO(TestDataDriven);
     TESTCASE_AUTO(TestLongLocale);
+    TESTCASE_AUTO(TestBuilderContextsOverflow);
     TESTCASE_AUTO_END;
 }
 
@@ -1860,6 +1862,34 @@ void CollationTest::TestLongLocale() {
                       "LVARIANT_MMCSIE_STEU_SU1GCEIE_SU6G_SU6SU6G_U_UBGE_UC_"
                       "UCEZCSI_UCIE_UZSIU_VARIANT_X@collation=bcs-ukvsz");
     LocalPointer<Collator> coll(Collator::createInstance(longLocale, errorCode));
+}
+
+void CollationTest::TestBuilderContextsOverflow() {
+    IcuTestErrorCode errorCode(*this, "TestBuilderContextsOverflow");
+    // ICU-20715: Bad memory access in what looks like a bogus CharsTrie after
+    // intermediate contextual-mappings data overflowed.
+    // Caused by the CollationDataBuilder using some outdated values when building
+    // contextual mappings with both prefix and contraction matching.
+    // Fixed by resetting those outdated values before code looks at them.
+    char16_t rules[] = {
+        u'&', 0x10, 0x2ff, 0x503c, 0x4617,
+        u'=', 0x80, 0x4f7f, 0xff, 0x3c3d, 0x1c4f, 0x3c3c,
+        u'<', 0, 0, 0, 0, u'|', 0, 0, 0, 0, 0, 0xf400, 0x30ff, 0, 0, 0x4f7f, 0xff,
+        u'=', 0, u'|', 0, 0, 0, 0, 0, 0, 0x1f00, 0xe30,
+        0x3035, 0, 0, 0xd200, 0, 0x7f00, 0xff4f, 0x3d00, 0, 0x7c00,
+        0, 0, 0, 0, 0, 0, 0, 0x301f, 0x350e, 0x30,
+        0, 0, 0xd2, 0x7c00, 0, 0, 0, 0, 0, 0,
+        0, 0x301f, 0x350e, 0x30, 0, 0, 0x52d2, 0x2f3c, 0x5552, 0x493c,
+        0x1f10, 0x1f50, 0x300, 0, 0, 0xf400, 0x30ff, 0, 0, 0x4f7f,
+        0xff,
+        u'=', 0, u'|', 0, 0, 0, 0, 0x5000, 0x4617,
+        u'=', 0x80, 0x4f7f, 0, 0, 0xd200, 0
+    };
+    UnicodeString s(false, rules, UPRV_LENGTHOF(rules));
+    LocalPointer<Collator> coll(new RuleBasedCollator(s, errorCode), errorCode);
+    if(errorCode.isSuccess()) {
+        logln("successfully built the Collator");
+    }
 }
 
 #endif  // !UCONFIG_NO_COLLATION

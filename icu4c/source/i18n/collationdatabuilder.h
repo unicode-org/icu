@@ -244,6 +244,15 @@ protected:
     UnicodeSet contextChars;
     // Serialized UCharsTrie structures for finalized contexts.
     UnicodeString contexts;
+private:
+    /**
+     * The "era" of building intermediate contexts.
+     * When the array of cached, temporary contexts overflows, then clearContexts()
+     * removes them all and invalidates the builtCE32 that used to point to built tries.
+     * See ConditionalCE32::era.
+     */
+    int32_t contextsEra = 0;
+protected:
     UnicodeSet unsafeBackwardSet;
     UBool modified;
 
