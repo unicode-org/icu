@@ -1194,6 +1194,10 @@ void DateIntervalFormatTest::testHourMetacharacters() {
         "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "KK", "12 \\u2013 1 AM", // (this was producing "0 - 1 AM" before)
         "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 00:00:00", "jj", "12 AM",
         "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "jj", "12 \\u2013 1 AM",
+        
+        // regression test for ICU-21984 (multiple day-period characters in date-interval patterns)
+        "en", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "MMMdhhmma", "Sep 27, 12:00 \\u2013 1:00 AM",
+        "sq", "CE 2010 09 27 00:00:00", "CE 2010 09 27 01:00:00", "Bhm", "12:00 \\u2013 1:00 e nat\\u00EBs",
     };
     expect(DATA, UPRV_LENGTHOF(DATA));
 }

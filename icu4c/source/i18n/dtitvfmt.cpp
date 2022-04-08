@@ -966,23 +966,26 @@ DateIntervalFormat::normalizeHourMetacharacters(const UnicodeString& skeleton) c
     
     UChar hourMetachar = u'\0';
     UChar dayPeriodChar = u'\0';
-    int32_t metacharStart = 0;
-    int32_t metacharCount = 0;
+    int32_t hourFieldStart = 0;
+    int32_t hourFieldLength = 0;
+    int32_t dayPeriodStart = 0;
+    int32_t dayPeriodLength = 0;
     for (int32_t i = 0; i < result.length(); i++) {
         UChar c = result[i];
         if (c == LOW_J || c == CAP_J || c == CAP_C || c == LOW_H || c == CAP_H || c == LOW_K || c == CAP_K) {
             if (hourMetachar == u'\0') {
                 hourMetachar = c;
-                metacharStart = i;
+                hourFieldStart = i;
             }
-            ++metacharCount;
+            ++hourFieldLength;
         } else if (c == LOW_A || c == LOW_B || c == CAP_B) {
             if (dayPeriodChar == u'\0') {
                 dayPeriodChar = c;
+                dayPeriodStart = i;
             }
-            ++metacharCount;
+            ++dayPeriodLength;
         } else {
-            if (hourMetachar != u'\0') {
+            if (hourMetachar != u'\0' && dayPeriodChar != u'\0') {
                 break;
             }
         }
@@ -1022,31 +1025,27 @@ DateIntervalFormat::normalizeHourMetacharacters(const UnicodeString& skeleton) c
             }
         }
         
-        if (hourChar == CAP_H || hourChar == LOW_K) {
-            result.replace(metacharStart, metacharCount, hourChar);
-        } else {
-            UnicodeString hourAndDayPeriod(hourChar);
-            switch (metacharCount) {
-                case 1:
-                case 2:
-                default:
-                    hourAndDayPeriod.append(UnicodeString(dayPeriodChar));
-                    break;
-                case 3:
-                case 4:
-                    for (int32_t i = 0; i < 4; i++) {
-                        hourAndDayPeriod.append(dayPeriodChar);
-                    }
-                    break;
-                case 5:
-                case 6:
-                    for (int32_t i = 0; i < 5; i++) {
-                        hourAndDayPeriod.append(dayPeriodChar);
-                    }
-                    break;
+        UnicodeString hourAndDayPeriod(hourChar);
+        if (hourChar != CAP_H && hourChar != LOW_K) {
+            int32_t newDayPeriodLength = 0;
+            if (dayPeriodLength >= 5 || hourFieldLength >= 5) {
+                newDayPeriodLength = 5;
+            } else if (dayPeriodLength >= 3 || hourFieldLength >= 3) {
+                newDayPeriodLength = 3;
+            } else {
+                newDayPeriodLength = 1;
             }
-            result.replace(metacharStart, metacharCount, hourAndDayPeriod);
+            for (int32_t i = 0; i < newDayPeriodLength; i++) {
+                hourAndDayPeriod.append(dayPeriodChar);
+            }
         }
+        result.replace(hourFieldStart, hourFieldLength, hourAndDayPeriod);
+        if (dayPeriodStart > hourFieldStart) {
+            // before deleting the original day period field, adjust its position in case
+            // we just changed the size of the hour field (and new day period field)
+            dayPeriodStart += hourAndDayPeriod.length() - hourFieldLength;
+        }
+        result.remove(dayPeriodStart, dayPeriodLength);
     }
     return result;
 }
