@@ -472,10 +472,10 @@ public class UnitsTest {
                 new TestData("cubic-meter-per-meter", "mile-per-gallon", 2.1383143939394E-6, 1.1),
                 new TestData("cubic-meter-per-meter", "mile-per-gallon", 2.6134953703704E-6, 0.9),
                 new TestData("liter-per-100-kilometer", "mile-per-gallon", 6.6, 35.6386),
-                // // TODO(ICU-21862): we should probably return something other than "0":
+                // // TODO(ICU-21988): we should probably return something other than "0":
                 // new TestData("liter-per-100-kilometer", "mile-per-gallon", 0, 0),
                 // new TestData("mile-per-gallon", "liter-per-100-kilometer", 0, 0),
-                // // TODO(ICU-21862): deal with infinity input in Java?
+                // // TODO(ICU-21988): deal with infinity input in Java?
                 // new TestData("mile-per-gallon", "liter-per-100-kilometer", INFINITY, 0),
                 // We skip testing -Inf, because the inverse conversion loses the sign:
                 // new TestData("mile-per-gallon", "liter-per-100-kilometer", -INFINITY, 0),
