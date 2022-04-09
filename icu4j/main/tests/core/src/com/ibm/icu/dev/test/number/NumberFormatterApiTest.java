@@ -1682,7 +1682,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                            6.6,                  //
                            "36 mpg");
 
-        // // TODO(ICU-21862): determine desired behaviour. Commented out for now
+        // // TODO(ICU-21988): determine desired behaviour. Commented out for now
         // // to not enforce undesirable behaviour
         // assertFormatSingle("Fuel consumption: inverted units, divide-by-zero, en-US",
         //                    "unit/liter-per-100-kilometer usage/vehicle-fuel",
@@ -1694,7 +1694,7 @@ public class NumberFormatterApiTest extends TestFmwk {
         //                    0,                    //
         //                    "0 mpg");
 
-        // // TODO(ICU-21862): determine desired behaviour. Commented out for now
+        // // TODO(ICU-21988): determine desired behaviour. Commented out for now
         // // to not enforce undesirable behaviour
         // assertFormatSingle("Fuel consumption: inverted units, divide-by-zero, en-ZA",
         //                    "unit/mile-per-gallon usage/vehicle-fuel",
@@ -1706,7 +1706,7 @@ public class NumberFormatterApiTest extends TestFmwk {
         //                    0,                    //
         //                    "0 mpg");
 
-        // // TODO(ICU-21862): Once we support Inf as input:
+        // // TODO(ICU-21988): Once we support Inf as input:
         // assertFormatSingle("Fuel consumption: inverted units, divide-by-inf",
         //                    "unit/mile-per-gallon usage/vehicle-fuel",
         //                    "unit/mile-per-gallon usage/vehicle-fuel",
