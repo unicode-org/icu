@@ -477,7 +477,7 @@ steps:
     "source\\allinone\\allinone.sln".
 *   Build the Debug/Release + x86/x64 configurations (all 4 configurations).
     *   Make sure the generated data file (ex: "icu4c\\bin\\icudt64.dll") is not
-        stub data, it should be ~26MB.
+        stub data, it should be ~26MB. [Instructions on getting the full data](../../../userguide/icu4c/faq#why-am-i-seeing-a-small--only-a-few-k--instead-of-a-large--several-megabytes--data-shared-library-icudt)
 *   Open the "all" Solution file located under "source\\samples\\all\\all.sln".
 *   Build both x86 and x64 using the "Batch Build" option. This is located under
     the menu Build > Batch Build.
