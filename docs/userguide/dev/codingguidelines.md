@@ -540,7 +540,7 @@ u_formatMessage(...);
 ```
 
 > :point_right: **Note**: The `U_CAPI`/`U_DEPRECATED` and `U_EXPORT2` qualifiers
-> are required for both the declaration and the definiton of *exported C and
+> are required for both the declaration and the definition of *exported C and
 > static C++ functions*. Use `U_CAPI` (or `U_DEPRECATED`) before and `U_EXPORT2`
 > after the return type of *exported C and static C++ functions*.
 > 
