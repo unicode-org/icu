@@ -4456,6 +4456,7 @@ supplementalData:table(nofallback){
                 "SDP",
                 "SIT",
                 "SKK",
+                "SLE",
                 "SRG",
                 "STD",
                 "SUR",
@@ -9605,6 +9606,7 @@ supplementalData:table(nofallback){
                 "iqdq",
                 "iqka",
                 "iqki",
+                "iqkr",
                 "iqma",
                 "iqmu",
                 "iqna",
@@ -21611,22 +21613,20 @@ supplementalData:table(nofallback){
         }
         IQ{
             "iqan",
-            "iqar",
             "iqba",
             "iqbb",
             "iqbg",
-            "iqda",
             "iqdi",
             "iqdq",
             "iqka",
             "iqki",
+            "iqkr",
             "iqma",
             "iqmu",
             "iqna",
             "iqni",
             "iqqa",
             "iqsd",
-            "iqsu",
             "iqwa",
         }
         IR{
@@ -25006,7 +25006,6 @@ supplementalData:table(nofallback){
             "gbnyk",
             "gbold",
             "gboxf",
-            "gbpem",
             "gbply",
             "gbpor",
             "gbpte",
@@ -25127,6 +25126,7 @@ supplementalData:table(nofallback){
             "gbmty",
             "gbntl",
             "gbnwp",
+            "gbpem",
             "gbpow",
             "gbrct",
             "gbswa",
@@ -25288,6 +25288,11 @@ supplementalData:table(nofallback){
             "iecn",
             "iedl",
             "iemn",
+        }
+        iqkr{
+            "iqar",
+            "iqda",
+            "iqsu",
         }
         is1{
             "isgar",

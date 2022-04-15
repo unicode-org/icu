@@ -1945,8 +1945,17 @@
         </javac>
 
         <mkdir dir="${cldr.util.out.dir}/lib"/>
+        <copy file="tools/build/manifest-utilities.stub" todir="${out.dir}">
+            <filterset>
+                <filter token="SPECVERSION" value="${jar.spec.version}"/>
+                <filter token="IMPLVERSION" value="${jar.impl.version}"/>
+                <filter token="COPYRIGHT" value="${jar.copyright.info}"/>
+                <filter token="EXECENV" value="${jar.exec.env}"/>
+            </filterset>
+        </copy>
         <jar jarfile="${cldr.util.out.dir}/lib/utilities.jar"
                 compress="true"
+                manifest="${out.dir}/manifest-utilities.stub"
                 basedir="${cldr.util.out.dir}/bin">
             <include name="com/ibm/icu/dev/util/*.class"/>
             <include name="com/ibm/icu/dev/tool/UOption*.class"/>
