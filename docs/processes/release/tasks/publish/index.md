@@ -440,11 +440,27 @@ the new ICU version.
 
 ## Update online demos
 
-Update online demos/tools to the latest version:
+These are the online demos/tools that need to be updated to the latest version.
 
-*   ICU demos (eg <https://icu4c-demos.unicode.org/icu-bin/idnbrowser>)
-*   CLDR Survey tool (eg <http://unicode.org/cldr/apps/about.jsp>)
-*   Unicode Utilities (eg <http://unicode.org/cldr/utility/character.jsp>)
+* Be sure to verify that the deployed version is publicly available.
+
+Note that updating ICU4C demos onlin requires Gcloud access.
+
+### ICU4C demos
+* [Run ICU4C demos](https://icu4c-demos.unicode.org/icu-bin/idnbrowser)
+
+* [Demo described here:](https://github.com/unicode-org/icu-demos/blob/main/README.md).
+
+* [Building and deploying from GCloud](https://github.com/unicode-org/icu-demos/blob/main/README.md).
+
+### UCU4J demos
+
+* [Run ICU4J online demos](https://icu4j-demos.unicode.org/icu4jweb/)
+
+* [Information on the Java demos and samples](https://icu.unicode.org/home/icu4j-demos)
+
+* [Instructions for building and deploying updates](https://github.com/unicode-org/icu-demos/blob/main/icu4jweb/README.md)
+
 
 ### Online information update
 
