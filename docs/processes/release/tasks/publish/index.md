@@ -444,7 +444,7 @@ These are the online demos/tools that need to be updated to the latest version.
 
 * Be sure to verify that the deployed version is publicly available.
 
-Note that updating ICU4C demos onlin requires Gcloud access.
+Note that updating ICU4C demos online requires Gcloud access.
 
 ### ICU4C demos
 * [Run ICU4C demos](https://icu4c-demos.unicode.org/icu-bin/idnbrowser)
@@ -453,7 +453,7 @@ Note that updating ICU4C demos onlin requires Gcloud access.
 
 * [Building and deploying from GCloud](https://github.com/unicode-org/icu-demos/blob/main/README.md).
 
-### UCU4J demos
+### ICU4J demos
 
 * [Run ICU4J online demos](https://icu4j-demos.unicode.org/icu4jweb/)
 
