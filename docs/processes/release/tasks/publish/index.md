@@ -18,7 +18,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 {: .no_toc .text-delta }
 
 1. TOC
-{:toc}
+{:toc}OnlineDemosHowToUpdate
 
 ---
 
