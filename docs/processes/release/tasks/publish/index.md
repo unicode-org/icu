@@ -18,7 +18,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 {: .no_toc .text-delta }
 
 1. TOC
-{:toc}
+{:toc}OnlineDemosHowToUpdate
 
 ---
 
@@ -33,11 +33,11 @@ merged in from the trunk.
 
 ... to the ICU project site.
 
-Build the icuapps module following the README's. Update code and/or docs as
-needed. "Reference" platforms for icuapps are: RedHat Linux and win32. On Linux,
-icuapps is built against the "make install "'ed ICU. So, run ICU4C's configure
+Build the icu-demos module following the README's. Update code and/or docs as
+needed. "Reference" platforms for icu-demos are: RedHat Linux and win32. On Linux,
+icu-demos is built against the "make install "'ed ICU. So, run ICU4C's configure
 with --prefix=/some/where pointing to where ICU4C should be installed, and also
-follow icuapps's README.
+follow icu-demos's README.
 
 Install the new locale explorer and other demos/samples onto the public demo
 hosting site.
@@ -146,13 +146,13 @@ copy that to tags/release-4-8. Specify the source revision explicitly via -r so
 that you don't inadvertently pick up an unexpected changeset. Make sure that the
 trunk at the source revision is good.~~
 
-~~We do not tag the data & icuapps trees. Steven Loomis writes on 2011-may-23:~~
+~~We do not tag the data & icu-demos trees. Steven Loomis writes on 2011-may-23:~~
 
 > ~~My thought had been (in the CVS days) to take a 'snapshot' of these items.
 > However, in SVN all you need is a date or a revision number (such as
 > r30140).~~
 
-> ~~So, probably, we don't need to tag these two (icuapps or data).~~
+> ~~So, probably, we don't need to tag these two (idu-demos or data).~~
 
 > ~~Tools are more important because those tools are actually used in the
 > release.~~
@@ -283,7 +283,7 @@ run \`make dist\`.
 
 *   Manual process:
     *   Build with MSVC x64 Release. (See the ICU
-        [readme.html](https://github.com/unicode-org/icu/blob/main/icu4c/readme.html)
+        [readme.html](https://github.com/unicode-org/icu/main/blob/icu4c/readme.html)
         file for details).
     *   Open a command prompt.
         ```
@@ -440,11 +440,27 @@ the new ICU version.
 
 ## Update online demos
 
-Update online demos/tools to the latest version:
+These are the online demos/tools that need to be updated to the latest version.
 
-*   ICU demos (eg <https://icu4c-demos.unicode.org/icu-bin/idnbrowser>)
-*   CLDR Survey tool (eg <http://unicode.org/cldr/apps/about.jsp>)
-*   Unicode Utilities (eg <http://unicode.org/cldr/utility/character.jsp>)
+* Be sure to verify that the deployed version is publicly available.
+
+Note that updating ICU4C demos online requires Gcloud access.
+
+### ICU4C demos
+* [Run ICU4C demos](https://icu4c-demos.unicode.org/icu-bin/idnbrowser)
+
+* [Demo described here](https://github.com/unicode-org/icu-demos/blob/main/README.md)
+
+* [Building and deploying from GCloud](https://github.com/unicode-org/icu-demos//blob/main/README.md)
+
+### ICU4J demos
+
+* [Run ICU4J online demos](https://icu4j-demos.unicode.org/icu4jweb/)
+
+* [Information on the Java demos and samples](https://icu.unicode.org/home/icu4j-demos)
+
+* [Instructions for building and deploying updates](https://github.com/unicode-org/icu-demos/blob/main/icu4jweb/README.md)
+
 
 ### Online information update
 
@@ -506,9 +522,9 @@ Jira.
 ## Update readme
 
 Update [ICU4C
-readme.html](https://github.com/unicode-org/icu/blob/main/icu4c/readme.html)
+readme.html](https://github.com/unicode-org/icu/main/icu4c/readme.html)
 and [ICU4J
-readme.html](https://github.com/unicode-org/icu/blob/main/icu4j/readme.html)
+readme.html](https://github.com/unicode-org/icu/main/icu4j/readme.html)
 before every milestone (GA / RC / Milestone-N). Make sure the following items
 are up to date.
 
