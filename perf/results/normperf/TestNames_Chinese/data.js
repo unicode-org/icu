@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1650482049738,
+  "lastUpdate": 1651095717171,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -3058,6 +3058,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 33.5018,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "17109322+hugovdm@users.noreply.github.com",
+            "name": "Hugo van der Merwe",
+            "username": "hugovdm"
+          },
+          "committer": {
+            "email": "17109322+hugovdm@users.noreply.github.com",
+            "name": "Hugo van der Merwe",
+            "username": "hugovdm"
+          },
+          "distinct": true,
+          "id": "50e14fe15bcde3311f3e76bb196977a0724d7e8b",
+          "message": "ICU-21959 Update stale Jira tickets in ICU4J TODOs\n\nSee #2062",
+          "timestamp": "2022-04-27T23:31:46+02:00",
+          "tree_id": "320adf839470614e0950cfe770d84936a3fe9df2",
+          "url": "https://github.com/unicode-org/icu/commit/50e14fe15bcde3311f3e76bb196977a0724d7e8b"
+        },
+        "date": 1651095714751,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 25.4576,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 24.9812,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 26.4319,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 24.0601,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 24.0154,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 30.7743,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
