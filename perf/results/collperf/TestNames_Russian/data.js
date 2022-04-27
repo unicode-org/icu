@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1650481994465,
+  "lastUpdate": 1651095647313,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -2752,6 +2752,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 225699.9302,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "17109322+hugovdm@users.noreply.github.com",
+            "name": "Hugo van der Merwe",
+            "username": "hugovdm"
+          },
+          "committer": {
+            "email": "17109322+hugovdm@users.noreply.github.com",
+            "name": "Hugo van der Merwe",
+            "username": "hugovdm"
+          },
+          "distinct": true,
+          "id": "50e14fe15bcde3311f3e76bb196977a0724d7e8b",
+          "message": "ICU-21959 Update stale Jira tickets in ICU4J TODOs\n\nSee #2062",
+          "timestamp": "2022-04-27T23:31:46+02:00",
+          "tree_id": "320adf839470614e0950cfe770d84936a3fe9df2",
+          "url": "https://github.com/unicode-org/icu/commit/50e14fe15bcde3311f3e76bb196977a0724d7e8b"
+        },
+        "date": 1651095644206,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 746.0781,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 787151.1023,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 225979.7886,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 733668.6837,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 218906.561,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
