@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1650482387730,
+  "lastUpdate": 1651096056263,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -4894,6 +4894,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 42.1569,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "17109322+hugovdm@users.noreply.github.com",
+            "name": "Hugo van der Merwe",
+            "username": "hugovdm"
+          },
+          "committer": {
+            "email": "17109322+hugovdm@users.noreply.github.com",
+            "name": "Hugo van der Merwe",
+            "username": "hugovdm"
+          },
+          "distinct": true,
+          "id": "50e14fe15bcde3311f3e76bb196977a0724d7e8b",
+          "message": "ICU-21959 Update stale Jira tickets in ICU4J TODOs\n\nSee #2062",
+          "timestamp": "2022-04-27T23:31:46+02:00",
+          "tree_id": "320adf839470614e0950cfe770d84936a3fe9df2",
+          "url": "https://github.com/unicode-org/icu/commit/50e14fe15bcde3311f3e76bb196977a0724d7e8b"
+        },
+        "date": 1651096054083,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 22.4458,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 22.5535,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 26.9479,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 35.91,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 43.0588,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 44.5164,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 27.8078,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 18.3771,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 137.0036,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 27.5274,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 55.7374,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 48.0983,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
