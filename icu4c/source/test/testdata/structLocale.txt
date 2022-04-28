@@ -11,7 +11,7 @@
 // Since ICU doesn't follow the traditional fallback model where all keys fallback to root,
 // root can't be used to validate the structure.
 structLocale:table(nofallback){
-    %%Parent{""}
+    %%Parent{"root"}
     BreakDictionaryData:bin {00}
     Countries{
         001{""}
