@@ -22,6 +22,7 @@ class FormattedStringBuilderTest : public IntlTest {
     void testFields();
     void testUnlimitedCapacity();
     void testCodePoints();
+    void testInsertOverflow();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
 
@@ -50,6 +51,7 @@ void FormattedStringBuilderTest::runIndexedTest(int32_t index, UBool exec, const
         TESTCASE_AUTO(testFields);
         TESTCASE_AUTO(testUnlimitedCapacity);
         TESTCASE_AUTO(testCodePoints);
+        TESTCASE_AUTO(testInsertOverflow);
     TESTCASE_AUTO_END;
 }
 
@@ -306,6 +308,45 @@ void FormattedStringBuilderTest::testCodePoints() {
     assertEquals("Before 1st is q", u'q', nsb.codePointBefore(1));
     assertEquals("Before 3rd is space ship", 128640, nsb.codePointBefore(3));
     assertEquals("Code point count is 2", 2, nsb.codePointCount());
+}
+
+void FormattedStringBuilderTest::testInsertOverflow() {
+    if (quick) return;
+    // Setup the test fixture in sb, sb2, ustr.
+    UErrorCode status = U_ZERO_ERROR;
+    FormattedStringBuilder sb;
+    int32_t data_length = INT32_MAX / 2;
+    UnicodeString ustr(data_length, u'a', data_length);
+    sb.append(ustr, kUndefinedField, status);
+    assertSuccess("Setup the first FormattedStringBuilder", status);
+
+    FormattedStringBuilder sb2;
+    sb2.append(ustr, kUndefinedField, status);
+    sb2.insert(0, ustr, 0, data_length / 2, kUndefinedField, status);
+    sb2.writeTerminator(status);
+    assertSuccess("Setup the second FormattedStringBuilder", status);
+
+    ustr = sb2.toUnicodeString();
+    // Complete setting up the test fixture in sb, sb2 and ustr.
+
+    // Test splice() of the second UnicodeString
+    sb.splice(0, 1, ustr, 1, ustr.length(),
+              kUndefinedField, status);
+    assertEquals(
+        "splice() long text should not crash but return U_INPUT_TOO_LONG_ERROR",
+        U_INPUT_TOO_LONG_ERROR, status);
+
+    // Test sb.insert() of the first FormattedStringBuilder with the second one.
+    sb.insert(0, sb2, status);
+    assertEquals(
+        "insert() long FormattedStringBuilder should not crash but return "
+        "U_INPUT_TOO_LONG_ERROR", U_INPUT_TOO_LONG_ERROR, status);
+
+    // Test sb.insert() of the first FormattedStringBuilder with UnicodeString.
+    sb.insert(0, ustr, 0, ustr.length(), kUndefinedField, status);
+    assertEquals(
+        "insert() long UnicodeString should not crash but return "
+        "U_INPUT_TOO_LONG_ERROR", U_INPUT_TOO_LONG_ERROR, status);
 }
 
 void FormattedStringBuilderTest::assertEqualsImpl(const UnicodeString &a, const FormattedStringBuilder &b) {
