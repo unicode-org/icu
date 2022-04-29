@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1651262365012,
+  "lastUpdate": 1651265490103,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -2308,6 +2308,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 2.8434,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "07a50207b7a0ae162a5b51856f43576f39751377",
+          "message": "ICU-21679 avoid escape of U+FFFF in a character literal",
+          "timestamp": "2022-04-29T20:43:53Z",
+          "tree_id": "0eab5a9224a4cf8dcff516967a14f248572b25be",
+          "url": "https://github.com/unicode-org/icu/commit/07a50207b7a0ae162a5b51856f43576f39751377"
+        },
+        "date": 1651265486787,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 14.7813,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 4.8872,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 2.8915,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
