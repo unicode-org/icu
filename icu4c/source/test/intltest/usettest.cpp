@@ -279,7 +279,7 @@ UnicodeSetTest::TestPatterns(void) {
     // Throw in a test of complement
     set.complement();
     UnicodeString exp;
-    exp.append((UChar)0x0000).append("aeeoouu").append((UChar)(u'z'+1)).append(u'\uFFFF');
+    exp.append((UChar)0x0000).append("aeeoouu").append((UChar)(u'z'+1)).append((UChar)0xFFFF);
     expectPairs(set, exp);
 }
 
