@@ -15,7 +15,7 @@ U_NAMESPACE_BEGIN
 #define UPRV_ISDIGIT(c) (((c) >= '0') && ((c) <= '9'))
 #define UPRV_ISALPHANUM(c) (uprv_isASCIILetter(c) || UPRV_ISDIGIT(c) )
 
-const char* kAttributeKey = "attribute";
+constexpr const char* kAttributeKey = "attribute";
 
 static bool _isExtensionSubtags(char key, const char* s, int32_t len) {
     switch (uprv_tolower(key)) {
