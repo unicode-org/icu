@@ -109,9 +109,10 @@ int32_t PersianCalendar::handleGetLimit(UCalendarDateFields field, ELimitType li
  */
 UBool PersianCalendar::isLeapYear(int32_t year)
 {
-    int32_t remainder;
-    ClockMath::floorDivide(25 * year + 11, 33, remainder);
-    return (remainder < 8);
+    double cte = 683 / 2820;
+    double remainder = (year + 2346) * cte;
+    remainder -= ClockMath::floorDivide(remainder, 1);
+    return (remainder < cte);
 }
     
 /**
