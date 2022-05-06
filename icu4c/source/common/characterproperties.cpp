@@ -36,7 +36,7 @@ namespace {
 
 UBool U_CALLCONV characterproperties_cleanup();
 
-constexpr int32_t NUM_INCLUSIONS = UPROPS_SRC_COUNT + UCHAR_INT_LIMIT - UCHAR_INT_START;
+constexpr int32_t NUM_INCLUSIONS = UPROPS_SRC_COUNT + (UCHAR_INT_LIMIT - UCHAR_INT_START);
 
 struct Inclusion {
     UnicodeSet  *fSet = nullptr;
@@ -210,7 +210,7 @@ const UnicodeSet *getInclusionsForSource(UPropertySource src, UErrorCode &errorC
 void U_CALLCONV initIntPropInclusion(UProperty prop, UErrorCode &errorCode) {
     // This function is invoked only via umtx_initOnce().
     U_ASSERT(UCHAR_INT_START <= prop && prop < UCHAR_INT_LIMIT);
-    int32_t inclIndex = UPROPS_SRC_COUNT + prop - UCHAR_INT_START;
+    int32_t inclIndex = UPROPS_SRC_COUNT + (prop - UCHAR_INT_START);
     U_ASSERT(gInclusions[inclIndex].fSet == nullptr);
     UPropertySource src = uprops_getSource(prop);
     const UnicodeSet *incl = getInclusionsForSource(src, errorCode);
@@ -255,7 +255,7 @@ const UnicodeSet *CharacterProperties::getInclusionsForProperty(
         UProperty prop, UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) { return nullptr; }
     if (UCHAR_INT_START <= prop && prop < UCHAR_INT_LIMIT) {
-        int32_t inclIndex = UPROPS_SRC_COUNT + prop - UCHAR_INT_START;
+        int32_t inclIndex = UPROPS_SRC_COUNT + (prop - UCHAR_INT_START);
         Inclusion &i = gInclusions[inclIndex];
         umtx_initOnce(i.fInitOnce, &initIntPropInclusion, prop, errorCode);
         return i.fSet;

@@ -436,7 +436,7 @@ CollationDataReader::read(const CollationTailoring *base, const uint8_t *inBytes
     settings->options = options;
     // Set variableTop from options and scripts data.
     settings->variableTop = tailoring.data->getLastPrimaryForGroup(
-            UCOL_REORDER_CODE_FIRST + settings->getMaxVariable());
+            UCOL_REORDER_CODE_FIRST + int32_t{settings->getMaxVariable()});
     if(settings->variableTop == 0) {
         errorCode = U_INVALID_FORMAT_ERROR;
         return;

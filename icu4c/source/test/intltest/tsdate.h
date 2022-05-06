@@ -59,15 +59,13 @@ private:
     UnicodeString fTestName;
     int32_t fLimit; // How many iterations it should take to reach convergence
 
-    enum
-    {
-        // Values in milliseconds (== Date)
-        ONESECOND = 1000,
-        ONEMINUTE = 60 * ONESECOND,
-        ONEHOUR = 60 * ONEMINUTE,
-        ONEDAY = 24 * ONEHOUR
-    };
-    static const double ONEYEAR;
+    // Values in milliseconds (== Date)
+    static constexpr int32_t ONESECOND = 1000;
+    static constexpr int32_t ONEMINUTE = 60 * ONESECOND;
+    static constexpr int32_t ONEHOUR = 60 * ONEMINUTE;
+    static constexpr int32_t ONEDAY = 24 * ONEHOUR;
+
+    static constexpr double ONEYEAR = 365.25 * ONEDAY; // Approximate
     enum EMode
     {
         GENERIC,

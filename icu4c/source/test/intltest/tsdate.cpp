@@ -19,8 +19,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-const double IntlTestDateFormat::ONEYEAR = 365.25 * ONEDAY; // Approximate
-
 IntlTestDateFormat::~IntlTestDateFormat() {}
 
 /**

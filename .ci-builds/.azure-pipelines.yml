@@ -180,6 +180,7 @@ jobs:
       displayName: 'Build and Test'
       env:
         CC: clang-13
+        CPPFLAGS: '-Werror'
         CXX: clang++-13
         CXXFLAGS: '-std=c++20'
 #-------------------------------------------------------------------------
