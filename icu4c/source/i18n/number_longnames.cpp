@@ -443,12 +443,12 @@ void getMeasureData(const Locale &locale,
     ures_getByKeyWithFallback(aliasBundle.getAlias(), aliasKey.data(), aliasFillIn.getAlias(),
                               &aliasStatus);
     CharString unitSubType;
+    unitSubType.append(unit.getSubtype(), status);
     if (!U_FAILURE(aliasStatus)) {
         // This means the subType is an alias. Then, replace unitSubType with the replacement.
         auto replacement = ures_getUnicodeString(aliasFillIn.getAlias(), &status);
+        unitSubType.clear();
         unitSubType.appendInvariantChars(replacement, status);
-    } else {
-        unitSubType.append(unit.getSubtype(), status);
     }
 
     // Map duration-year-person, duration-week-person, etc. to duration-year, duration-week, ...
