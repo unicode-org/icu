@@ -144,7 +144,7 @@ void Grego::timeToFields(UDate time, int32_t& year, int32_t& month,
 
 int32_t Grego::dayOfWeek(double day) {
     int32_t dow;
-    ClockMath::floorDivide(day + UCAL_THURSDAY, 7, dow);
+    ClockMath::floorDivide(day + int{UCAL_THURSDAY}, 7, dow);
     return (dow == 0) ? UCAL_SATURDAY : dow;
 }
 

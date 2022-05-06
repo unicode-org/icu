@@ -324,7 +324,7 @@ PUtilTest::testZero(void)
     volatile double pzero   = 0.0;
     volatile double nzero   = 0.0;
 
-    nzero *= -1;
+    nzero = nzero * -1;
 
     if((pzero == nzero) != TRUE) {
         errln("FAIL: 0.0 == -0.0 returned FALSE, should be TRUE.");
