@@ -347,6 +347,18 @@
 #   define U_HAVE_INTTYPES_H U_HAVE_STDINT_H
 #endif
 
+/**
+ * \def U_SUPPORTS_ATOMICS
+ * Defines whether the platform supports C++ atomics.
+ * Set this to 0 to disable certain code that requires atomics.
+ * @internal
+ */
+#ifdef U_SUPPORTS_ATOMICS
+    /* Use the predefined value. */
+#else
+#   define U_SUPPORTS_ATOMICS 1
+#endif
+
 /*===========================================================================*/
 /** @{ Compiler and environment features                                     */
 /*===========================================================================*/

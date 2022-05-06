@@ -34,6 +34,9 @@
 #if defined(U_USER_ATOMICS_H) || defined(U_USER_MUTEX_H)
 // Support for including an alternate implementation of atomic & mutex operations has been withdrawn.
 // See issue ICU-20185.
+// When it is possible to build subsets of ICU4C without atomics,
+// the U_SUPPORTS_ATOMICS flag can be used.
+// See issue ICU-22015.
 #error U_USER_ATOMICS and U_USER_MUTEX_H are not supported
 #endif
 

@@ -590,6 +590,7 @@ U_CDECL_END
 /* C++ convenience wrappers ------------------------------------------------- */
 
 #ifdef __cplusplus
+#if U_SUPPORTS_ATOMICS
 
 #include "unicode/utf.h"
 #include "mutex.h"
@@ -631,6 +632,7 @@ public:
 
 U_NAMESPACE_END
 
+#endif
 #endif
 
 /* Internal definitions ----------------------------------------------------- */
