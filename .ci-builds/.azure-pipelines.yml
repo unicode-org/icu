@@ -140,7 +140,7 @@ jobs:
       env:
         CC: gcc-11
         CXX: g++-11
-        CXXFLAGS: '-std=c++20 -fext-numeric-literals'
+        CXXFLAGS: '-std=c++20 -fext-numeric-literals -Werror'
 #-------------------------------------------------------------------------
 - job: ICU4C_Clang_Ubuntu_2004_LANG
   displayName: 'C: Linux Clang (Ubuntu 20.04) - LANG has extension tags'
