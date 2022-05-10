@@ -341,41 +341,87 @@ UBool RuleBasedBreakIterator::BreakCache::populateNear(int32_t position, UErrorC
     }
     U_ASSERT(position < fBoundaries[fStartBufIdx] || position > fBoundaries[fEndBufIdx]);
 
-    // Find a boundary somewhere in the vicinity of the requested position.
-    // Depending on the safe rules and the text data, it could be either before, at, or after
-    // the requested position.
-
+    // Add boundaries to the cache near the specified position.
+    // The given position need not be a boundary itself.
+    // The input position must be within the range of the text, and
+    // on a code point boundary.
+    // If the requested position is a break boundary, leave the iteration
+    // position on it.
+    // If the requested position is not a boundary, leave the iteration
+    // position on the preceding boundary and include both the
+    // preceding and following boundaries in the cache.
+    // Additional boundaries, either preceding or following, may be added
+    // to the cache as a side effect.
 
     // If the requested position is not near already cached positions, clear the existing cache,
     // find a near-by boundary and begin new cache contents there.
 
-    if ((position < fBoundaries[fStartBufIdx] - 15) || position > (fBoundaries[fEndBufIdx] + 15)) {
-        int32_t aBoundary = 0;
-        int32_t ruleStatusIndex = 0;
-        if (position > 20) {
-            int32_t backupPos = fBI->handleSafePrevious(position);
+    // Threshold for a text position to be considered near to existing cache contents.
+    // TODO: See issue ICU-22024 "perf tuning of Cache needed."
+    //       This value is subject to change. See the ticket for more details.
+    static constexpr int32_t CACHE_NEAR = 15;
 
-            if (backupPos > 0) {
-                // Advance to the boundary following the backup position.
-                // There is a complication: the safe reverse rules identify pairs of code points
-                // that are safe. If advancing from the safe point moves forwards by less than
-                // two code points, we need to advance one more time to ensure that the boundary
-                // is good, including a correct rules status value.
-                //
-                fBI->fPosition = backupPos;
-                aBoundary = fBI->handleNext();
-                if (aBoundary <= backupPos + 4) {
-                    // +4 is a quick test for possibly having advanced only one codepoint.
-                    // Four being the length of the longest potential code point, a supplementary in UTF-8
-                    utext_setNativeIndex(&fBI->fText, aBoundary);
-                    if (backupPos == utext_getPreviousNativeIndex(&fBI->fText)) {
-                        // The initial handleNext() only advanced by a single code point. Go again.
-                        aBoundary = fBI->handleNext();   // Safe rules identify safe pairs.
-                    }
+    int32_t aBoundary = -1;
+    int32_t ruleStatusIndex = 0;
+    bool retainCache = false;
+    if ((position > fBoundaries[fStartBufIdx] - CACHE_NEAR) && position < (fBoundaries[fEndBufIdx] + CACHE_NEAR)) {
+        // Requested position is near the existing cache. Retain it.
+        retainCache = true;
+    } else if (position <= CACHE_NEAR) {
+        // Requested position is near the start of the text. Fill cache from start, skipping
+        // the need to find a safe point.
+        retainCache = false;
+        aBoundary = 0;
+    } else {
+        // Requested position is not near the existing cache.
+        // Find a safe point to refill the cache from.
+        int32_t backupPos = fBI->handleSafePrevious(position);
+
+        if (fBoundaries[fEndBufIdx] < position && fBoundaries[fEndBufIdx] >= (backupPos - CACHE_NEAR)) {
+            // The requested position is beyond the end of the existing cache, but the
+            // reverse rules produced a position near or before the cached region.
+            // Retain the existing cache, and fill from the end of it.
+            retainCache = true;
+        } else if (backupPos < CACHE_NEAR) {
+            // The safe reverse rules moved us to near the start of text.
+            // Take that (index 0) as the backup boundary, avoiding the complication
+            // (in the following block) of moving forward from the safe point to a known boundary.
+            //
+            // Retain the cache if it begins not too far from the requested position.
+            aBoundary = 0;
+            retainCache = (fBoundaries[fStartBufIdx] <= (position + CACHE_NEAR));
+        } else {
+            // The safe reverse rules produced a position that is neither near the existing
+            // cache, nor near the start of text.
+            // Advance to the boundary following.
+            // There is a complication: the safe reverse rules identify pairs of code points
+            // that are safe. If advancing from the safe point moves forwards by less than
+            // two code points, we need to advance one more time to ensure that the boundary
+            // is good, including a correct rules status value.
+            retainCache = false;
+            fBI->fPosition = backupPos;
+            aBoundary = fBI->handleNext();
+            if (aBoundary != UBRK_DONE && aBoundary <= backupPos + 4) {
+                // +4 is a quick test for possibly having advanced only one codepoint.
+                // Four being the length of the longest potential code point, a supplementary in UTF-8
+                utext_setNativeIndex(&fBI->fText, aBoundary);
+                if (backupPos == utext_getPreviousNativeIndex(&fBI->fText)) {
+                    // The initial handleNext() only advanced by a single code point. Go again.
+                    aBoundary = fBI->handleNext();   // Safe rules identify safe pairs.
                 }
-                ruleStatusIndex = fBI->fRuleStatusIndex;
             }
+            if (aBoundary == UBRK_DONE) {
+                // Note (Andy Heninger): I don't think this condition can occur, but it's hard
+                // to prove that it can't. We ran off the end of the string looking a boundary
+                // following a safe point; choose the end of the string as that boundary.
+                aBoundary = utext_nativeLength(&fBI->fText);
+            }
+            ruleStatusIndex = fBI->fRuleStatusIndex;
         }
+    }
+
+    if (!retainCache) {
+        U_ASSERT(aBoundary != -1);
         reset(aBoundary, ruleStatusIndex);        // Reset cache to hold aBoundary as a single starting point.
     }
 

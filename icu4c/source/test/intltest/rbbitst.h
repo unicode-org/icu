@@ -95,6 +95,7 @@ public:
     void TestBug13590();
     void TestLSTMThai();
     void TestLSTMBurmese();
+    void TestRandomAccess();
 
 #if U_ENABLE_TRACING
     void TestTraceCreateCharacter();
