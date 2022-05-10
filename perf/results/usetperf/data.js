@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1651937719493,
+  "lastUpdate": 1652204480376,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -4600,6 +4600,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 2142.7614,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "chetanladdha@microsoft.com",
+            "name": "Chetan Laddha",
+            "username": "chetanladdha"
+          },
+          "committer": {
+            "email": "chetan.laddha@gmail.com",
+            "name": "Chetan Laddha",
+            "username": "chetanladdha"
+          },
+          "distinct": true,
+          "id": "5961aacd3c66f3bb8f51d9b4833c03613c57dc01",
+          "message": "ICU-21945 Add support for Visual Studio 2022\n\nSee #2059",
+          "timestamp": "2022-05-10T22:57:18+05:30",
+          "tree_id": "0a38273102e79b4fb0c96aae8fd320b79fae8c57",
+          "url": "https://github.com/unicode-org/icu/commit/5961aacd3c66f3bb8f51d9b4833c03613c57dc01"
+        },
+        "date": 1652204477801,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 85392.1826,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 142295.2349,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.5998,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 9.9055,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 5.3588,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 14434.0261,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 49410.0913,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 2423.8817,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
