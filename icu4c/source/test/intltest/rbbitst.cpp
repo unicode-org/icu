@@ -139,6 +139,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestUnpairedSurrogate);
     TESTCASE_AUTO(TestLSTMThai);
     TESTCASE_AUTO(TestLSTMBurmese);
+    TESTCASE_AUTO(TestRandomAccess);
 
 #if U_ENABLE_TRACING
     TESTCASE_AUTO(TestTraceCreateCharacter);
@@ -5451,6 +5452,68 @@ void RBBITest::TestLSTMThai() {
 
 void RBBITest::TestLSTMBurmese() {
     runLSTMTestFromFile("Burmese_graphclust_model5_heavy_Test.txt", USCRIPT_MYANMAR);
+}
+
+
+// Test preceding(index) and following(index), with semi-random indexes.
+// The random indexes are produced in clusters that are relatively closely spaced,
+// to increase the occurrences of hits to the internal break cache.
+
+void RBBITest::TestRandomAccess() {
+    static constexpr int32_t CACHE_SIZE = 128;
+
+    UnicodeString testData;
+    for (int i=0; i<CACHE_SIZE*2; ++i) {
+        testData.append(u"aaaa\n");
+    }
+
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<RuleBasedBreakIterator> bi(
+            (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getEnglish(), status),
+            status);
+    if (!assertSuccess(WHERE, status)) { return; };
+
+    bi->setText(testData);
+
+    auto expectedPreceding = [](int from) {
+        if (from == 0) {return UBRK_DONE;}
+        if (from % 5 == 0) {return from - 5;}
+        return from - (from % 5);
+    };
+
+    auto expectedFollow = [testData](int from) {
+        if (from >= testData.length()) {return UBRK_DONE;}
+        if (from % 5 == 0) {return from + 5;}
+        return from + (5 - (from % 5));
+    };
+
+    auto randomStringIndex = [testData]() {
+        static icu_rand randomGenerator;  // produces random uint32_t values.
+        static int lastNum;
+        static int clusterCount;
+        static constexpr int CLUSTER_SIZE = 100;
+        static constexpr int CLUSTER_LENGTH = 10;
+
+        if (clusterCount < CLUSTER_LENGTH) {
+            ++clusterCount;
+            lastNum += (randomGenerator() % CLUSTER_SIZE);
+            lastNum -= CLUSTER_SIZE / 2;
+            lastNum = std::max(0, lastNum);
+            // Deliberately test indexes > testData.length.
+            lastNum = std::min(testData.length() + 5, lastNum);
+        } else {
+            clusterCount = 0;
+            lastNum = randomGenerator() % testData.length();
+        }
+        return lastNum;
+    };
+
+    for (int i=0; i<5000; ++i) {
+        int idx = randomStringIndex();
+        assertEquals(WHERE, expectedFollow(idx), bi->following(idx));
+        idx = randomStringIndex();
+        assertEquals(WHERE, expectedPreceding(idx), bi->preceding(idx));
+    }
 }
 
 #endif // #if !UCONFIG_NO_BREAK_ITERATION
