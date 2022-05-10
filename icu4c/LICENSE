@@ -520,7 +520,7 @@ without express or implied warranty.
 
 ----------------------------------------------------------------------
 
-GPL-2.0-with-autoconf-exception
+GPL-2.0-or-later WITH Autoconf-exception-2.0
 
                     GNU GENERAL PUBLIC LICENSE
                        Version 2, June 1991
@@ -831,7 +831,7 @@ exception to the GPL from your modified version.
 
 ----------------------------------------------------------------------
 
-GPL-3.0-with-autoconf-exception
+Autoconf-exception-3.0
 
 AUTOCONF CONFIGURE SCRIPT EXCEPTION
 
