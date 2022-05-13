@@ -71,7 +71,12 @@ U_NAMESPACE_BEGIN
  ****************************************************************************/
 
 typedef std::atomic<int32_t> u_atomic_int32_t;
+#if !defined(__cpp_lib_atomic_value_initialization) || \
+    __cpp_lib_atomic_value_initialization < 201911L
 #define ATOMIC_INT32_T_INITIALIZER(val) ATOMIC_VAR_INIT(val)
+#else
+#define ATOMIC_INT32_T_INITIALIZER(val) val
+#endif
 
 inline int32_t umtx_loadAcquire(u_atomic_int32_t &var) {
     return var.load(std::memory_order_acquire);
