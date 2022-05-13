@@ -197,3 +197,4 @@ jobs:
           external_repository: unicode-org/icu-perf
           publish_branch: main
           publish_dir: ./perf
+          keep_files: true
