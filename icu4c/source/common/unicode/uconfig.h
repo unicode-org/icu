@@ -323,6 +323,16 @@
 #   define UCONFIG_NO_NORMALIZATION 0
 #endif
 
+/**
+ * \def UCONFIG_NO_CJ_ML_PHRASE_BREAKING
+ * This switch turns off BudouX's phrase breaking, which would make ICU use the dictionary
+ * based solution.
+ *
+ */
+#ifndef UCONFIG_NO_CJ_ML_PHRASE_BREAKING
+#   define UCONFIG_NO_CJ_ML_PHRASE_BREAKING 1
+#endif
+
 #if UCONFIG_NO_NORMALIZATION
     /* common library */
     /* ICU 50 CJK dictionary BreakIterator uses normalization */

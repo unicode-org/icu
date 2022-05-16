@@ -11,6 +11,7 @@ caniter.cpp
 characterproperties.cpp
 chariter.cpp
 charstr.cpp
+cjmlbe.cpp
 cmemory.cpp
 cstr.cpp
 cstring.cpp

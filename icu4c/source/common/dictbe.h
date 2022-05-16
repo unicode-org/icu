@@ -15,6 +15,7 @@
 #include "unicode/utext.h"
 
 #include "brkeng.h"
+#include "cjmlbe.h"
 #include "hash.h"
 #include "uvectr32.h"
 
@@ -22,6 +23,7 @@ U_NAMESPACE_BEGIN
 
 class DictionaryMatcher;
 class Normalizer2;
+class CjMLBreakEngine;
 
 /*******************************************************************
  * DictionaryBreakEngine
@@ -374,6 +376,7 @@ class CjkBreakEngine : public DictionaryBreakEngine {
 
   DictionaryMatcher        *fDictionary;
   const Normalizer2        *nfkcNorm2;
+  CjMLBreakEngine          *fMlBreakEngine;
 
  private:
   // Load Japanese extensions.

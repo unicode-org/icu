@@ -1077,7 +1077,11 @@ CjkBreakEngine::CjkBreakEngine(DictionaryMatcher *adoptDictionary, LanguageType 
         UnicodeSet cjSet(UnicodeString(u"[[:Han:][:Hiragana:][:Katakana:]\\u30fc\\uff70\\uff9e\\uff9f]"), status);
         if (U_SUCCESS(status)) {
             setCharacters(cjSet);
+#if !UCONFIG_NO_CJ_ML_PHRASE_BREAKING
+            fMlBreakEngine = new CjMLBreakEngine(fDigitOrOpenPunctuationOrAlphabetSet, fClosePunctuationSet, status);
+#else
             initJapanesePhraseParameter(status);
+#endif
         }
     }
     UTRACE_EXIT_STATUS(status);
@@ -1251,7 +1255,13 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
             }
         }
     }
-                
+
+#if !UCONFIG_NO_CJ_ML_PHRASE_BREAKING
+    if (isPhraseBreaking) {
+        return fMlBreakEngine->divideUpDictionaryRange(inText, rangeStart, rangeEnd, foundBreaks, inString, inputMap, status);
+    }
+#endif
+
     // bestSnlp[i] is the snlp of the best segmentation of the first i
     // code points in the range to be matched.
     UVector32 bestSnlp(numCodePts + 1, status);
