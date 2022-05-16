@@ -200,7 +200,7 @@ static icu::UMutex cnvCacheMutex;
 
 static const char **gAvailableConverters = NULL;
 static uint16_t gAvailableConverterCount = 0;
-static icu::UInitOnce gAvailableConvertersInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gAvailableConvertersInitOnce {};
 
 #if !U_CHARSET_IS_UTF8
 

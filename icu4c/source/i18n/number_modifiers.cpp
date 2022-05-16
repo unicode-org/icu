@@ -22,7 +22,7 @@ const int32_t ARG_NUM_LIMIT = 0x100;
 // These are the default currency spacing UnicodeSets in CLDR.
 // Pre-compute them for performance.
 // The Java unit test testCurrencySpacingPatternStability() will start failing if these change in CLDR.
-icu::UInitOnce gDefaultCurrencySpacingInitOnce = U_INITONCE_INITIALIZER;
+icu::UInitOnce gDefaultCurrencySpacingInitOnce {};
 
 UnicodeSet *UNISET_DIGIT = nullptr;
 UnicodeSet *UNISET_NOTSZ = nullptr;

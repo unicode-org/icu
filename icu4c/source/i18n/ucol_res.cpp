@@ -62,7 +62,7 @@ namespace {
 static const UChar *rootRules = NULL;
 static int32_t rootRulesLength = 0;
 static UResourceBundle *rootBundle = NULL;
-static UInitOnce gInitOnceUcolRes = U_INITONCE_INITIALIZER;
+static UInitOnce gInitOnceUcolRes {};
 
 }  // namespace
 

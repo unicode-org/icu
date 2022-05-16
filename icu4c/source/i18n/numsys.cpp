@@ -271,7 +271,7 @@ UBool NumberingSystem::isAlgorithmic() const {
 namespace {
 
 UVector* gNumsysNames = nullptr;
-UInitOnce gNumSysInitOnce = U_INITONCE_INITIALIZER;
+UInitOnce gNumSysInitOnce {};
 
 U_CFUNC UBool U_CALLCONV numSysCleanup() {
     delete gNumsysNames;

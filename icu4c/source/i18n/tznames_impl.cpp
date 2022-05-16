@@ -55,10 +55,10 @@ static const int32_t TZDBNAMES_KEYS_SIZE = UPRV_LENGTHOF(TZDBNAMES_KEYS);
 static UMutex gDataMutex;
 
 static UHashtable* gTZDBNamesMap = NULL;
-static icu::UInitOnce gTZDBNamesMapInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gTZDBNamesMapInitOnce {};
 
 static TextTrieMap* gTZDBNamesTrie = NULL;
-static icu::UInitOnce gTZDBNamesTrieInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gTZDBNamesTrieInitOnce {};
 
 // The order in which strings are stored may be different than the order in the public enum.
 enum UTimeZoneNameTypeIndex {

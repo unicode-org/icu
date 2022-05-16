@@ -30,7 +30,7 @@
 U_NAMESPACE_BEGIN
 
 SimpleDateFormatStaticSets *gStaticSets = NULL;
-UInitOnce gSimpleDateFormatStaticSetsInitOnce = U_INITONCE_INITIALIZER;
+UInitOnce gSimpleDateFormatStaticSetsInitOnce {};
 
 SimpleDateFormatStaticSets::SimpleDateFormatStaticSets(UErrorCode &status)
 : fDateIgnorables(NULL),

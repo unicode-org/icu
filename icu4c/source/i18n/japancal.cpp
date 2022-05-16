@@ -39,7 +39,7 @@
 #include "cstring.h"
 
 static icu::EraRules * gJapaneseEraRules = nullptr;
-static icu::UInitOnce gJapaneseEraRulesInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gJapaneseEraRulesInitOnce {};
 static int32_t gCurrentEra = 0;
 
 U_CDECL_BEGIN

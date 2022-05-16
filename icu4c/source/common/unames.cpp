@@ -105,7 +105,7 @@ typedef struct {
 
 static UDataMemory *uCharNamesData=NULL;
 static UCharNames *uCharNames=NULL;
-static icu::UInitOnce gCharNamesInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gCharNamesInitOnce {};
 
 /*
  * Maximum length of character names (regular & 1.0).

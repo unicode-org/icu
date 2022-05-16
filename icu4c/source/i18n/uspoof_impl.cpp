@@ -538,7 +538,7 @@ spoofDataIsAcceptable(void *context,
 //  uspoof_cleanupDefaultData - Called during cleanup.
 //
 
-static UInitOnce gSpoofInitDefaultOnce = U_INITONCE_INITIALIZER;
+static UInitOnce gSpoofInitDefaultOnce {};
 static SpoofData* gDefaultSpoofData;
 
 static UBool U_CALLCONV

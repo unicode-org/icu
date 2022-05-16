@@ -69,7 +69,7 @@ constexpr char16_t const *gGC_LVTPattern     = u"[\\p{Hangul_Syllable_Type=LVT}]
 
 
 RegexStaticSets *RegexStaticSets::gStaticSets = nullptr;
-UInitOnce gStaticSetsInitOnce = U_INITONCE_INITIALIZER;
+UInitOnce gStaticSetsInitOnce {};
 
 
 RegexStaticSets::RegexStaticSets(UErrorCode *status) {

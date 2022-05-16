@@ -301,7 +301,7 @@ DayPeriodRulesCountSink::~DayPeriodRulesCountSink() {}
 
 namespace {
 
-UInitOnce initOnce = U_INITONCE_INITIALIZER;
+UInitOnce initOnce {};
 
 U_CFUNC UBool U_CALLCONV dayPeriodRulesCleanup() {
     delete[] data->rules;

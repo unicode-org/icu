@@ -21,7 +21,7 @@
 #include "umutex.h"
 
 // see LocaleUtility::getAvailableLocaleNames
-static icu::UInitOnce   LocaleUtilityInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce   LocaleUtilityInitOnce {};
 static icu::Hashtable * LocaleUtility_cache = NULL;
 
 #define UNDERSCORE_CHAR ((UChar)0x005f)

@@ -45,7 +45,7 @@ static const int32_t FORWARD = UTRANS_FORWARD;
 static const int32_t REVERSE = UTRANS_REVERSE;
 
 static Hashtable* SPECIAL_INVERSES = NULL;
-static UInitOnce gSpecialInversesInitOnce = U_INITONCE_INITIALIZER;
+static UInitOnce gSpecialInversesInitOnce {};
 
 /**
  * The mutex controlling access to SPECIAL_INVERSES

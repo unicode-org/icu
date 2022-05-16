@@ -33,7 +33,7 @@ using namespace icu::number::impl::skeleton;
 
 namespace {
 
-icu::UInitOnce gNumberSkeletonsInitOnce = U_INITONCE_INITIALIZER;
+icu::UInitOnce gNumberSkeletonsInitOnce {};
 
 char16_t* kSerializedStemTrie = nullptr;
 

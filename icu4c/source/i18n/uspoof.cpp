@@ -41,7 +41,7 @@ U_NAMESPACE_USE
 static UnicodeSet *gInclusionSet = NULL;
 static UnicodeSet *gRecommendedSet = NULL;
 static const Normalizer2 *gNfdNormalizer = NULL;
-static UInitOnce gSpoofInitStaticsOnce = U_INITONCE_INITIALIZER;
+static UInitOnce gSpoofInitStaticsOnce {};
 
 namespace {
 

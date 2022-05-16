@@ -33,7 +33,7 @@ U_NAMESPACE_BEGIN
 namespace {
 
 static const CollationCacheEntry *rootSingleton = NULL;
-static UInitOnce initOnce = U_INITONCE_INITIALIZER;
+static UInitOnce initOnce {};
 
 }  // namespace
 
