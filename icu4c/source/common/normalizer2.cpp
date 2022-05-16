@@ -183,7 +183,7 @@ static UBool U_CALLCONV uprv_normalizer2_cleanup();
 U_CDECL_END
 
 static Normalizer2   *noopSingleton;
-static icu::UInitOnce noopInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce noopInitOnce {};
 
 static void U_CALLCONV initNoopSingleton(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) {
@@ -245,7 +245,7 @@ Norm2AllModes::createNFCInstance(UErrorCode &errorCode) {
 
 static Norm2AllModes *nfcSingleton;
 
-static icu::UInitOnce nfcInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce nfcInitOnce {};
 
 static void U_CALLCONV initNFCSingleton(UErrorCode &errorCode) {
     nfcSingleton=Norm2AllModes::createNFCInstance(errorCode);

@@ -134,14 +134,14 @@ U_CDECL_END
 
 #if !NORM2_HARDCODE_NFC_DATA
 static Norm2AllModes *nfcSingleton;
-static icu::UInitOnce nfcInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce nfcInitOnce {};
 #endif
 
 static Norm2AllModes *nfkcSingleton;
-static icu::UInitOnce nfkcInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce nfkcInitOnce {};
 
 static Norm2AllModes *nfkc_cfSingleton;
-static icu::UInitOnce nfkc_cfInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce nfkc_cfInitOnce {};
 
 static UHashtable    *cache=NULL;
 

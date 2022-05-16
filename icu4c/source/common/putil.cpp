@@ -1260,10 +1260,10 @@ uprv_tzname(int n)
 
 /* Get and set the ICU data directory --------------------------------------- */
 
-static icu::UInitOnce gDataDirInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gDataDirInitOnce {};
 static char *gDataDirectory = NULL;
 
-UInitOnce gTimeZoneFilesInitOnce = U_INITONCE_INITIALIZER;
+UInitOnce gTimeZoneFilesInitOnce {};
 static CharString *gTimeZoneFilesDirectory = NULL;
 
 #if U_POSIX_LOCALE || U_PLATFORM_USES_ONLY_WIN32_API

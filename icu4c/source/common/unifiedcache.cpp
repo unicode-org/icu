@@ -22,7 +22,7 @@
 static icu::UnifiedCache *gCache = NULL;
 static std::mutex *gCacheMutex = nullptr;
 static std::condition_variable *gInProgressValueAddedCond;
-static icu::UInitOnce gCacheInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gCacheInitOnce {};
 
 static const int32_t MAX_EVICT_ITERATIONS = 10;
 static const int32_t DEFAULT_MAX_UNUSED = 1000;

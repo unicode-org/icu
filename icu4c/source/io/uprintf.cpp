@@ -41,7 +41,7 @@
 U_NAMESPACE_USE
 
 static UFILE *gStdOut = NULL;
-static UInitOnce gStdOutInitOnce = U_INITONCE_INITIALIZER;
+static UInitOnce gStdOutInitOnce {};
 
 static UBool U_CALLCONV uprintf_cleanup(void)
 {

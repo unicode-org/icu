@@ -312,7 +312,7 @@ class CategoriesSink : public icu::ResourceSink {
     int32_t outIndex;
 };
 
-icu::UInitOnce gUnitExtrasInitOnce = U_INITONCE_INITIALIZER;
+icu::UInitOnce gUnitExtrasInitOnce {};
 
 // Array of simple unit IDs.
 //

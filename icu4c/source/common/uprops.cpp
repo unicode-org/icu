@@ -49,7 +49,7 @@ U_NAMESPACE_USE
 
 namespace {
 
-icu::UInitOnce gLayoutInitOnce = U_INITONCE_INITIALIZER;
+icu::UInitOnce gLayoutInitOnce {};
 UDataMemory *gLayoutMemory = nullptr;
 
 UCPTrie *gInpcTrie = nullptr;  // Indic_Positional_Category

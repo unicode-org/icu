@@ -24,7 +24,7 @@
 #include "udataswp.h" /* for InvChar functions */
 
 static UHashtable* gLocExtKeyMap = NULL;
-static icu::UInitOnce gLocExtKeyMapInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gLocExtKeyMapInitOnce {};
 
 // bit flags for special types
 typedef enum {

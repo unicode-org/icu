@@ -37,7 +37,7 @@ static const char* gNeutralStr = "neutral";
 static const char* gMailTaintsStr = "maleTaints";
 static const char* gMixedNeutralStr = "mixedNeutral";
 static icu::GenderInfo* gObjs = NULL;
-static icu::UInitOnce gGenderInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gGenderInitOnce {};
 
 enum GenderStyle {
   NEUTRAL,

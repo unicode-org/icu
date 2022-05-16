@@ -45,7 +45,7 @@ enum {
 };
 
 LocaleDistance *gLocaleDistance = nullptr;
-UInitOnce gInitOnce = U_INITONCE_INITIALIZER;
+UInitOnce gInitOnce {};
 
 UBool U_CALLCONV cleanup() {
     delete gLocaleDistance;

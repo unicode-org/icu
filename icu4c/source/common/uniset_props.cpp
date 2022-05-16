@@ -62,7 +62,7 @@ U_CDECL_BEGIN
 static UBool U_CALLCONV uset_cleanup();
 
 static UnicodeSet *uni32Singleton;
-static icu::UInitOnce uni32InitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce uni32InitOnce {};
 
 /**
  * Cleanup function for UnicodeSet

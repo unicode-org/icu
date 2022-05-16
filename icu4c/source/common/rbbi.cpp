@@ -1153,8 +1153,8 @@ U_NAMESPACE_END
 
 static icu::UStack *gLanguageBreakFactories = nullptr;
 static const icu::UnicodeString *gEmptyString = nullptr;
-static icu::UInitOnce gLanguageBreakFactoriesInitOnce = U_INITONCE_INITIALIZER;
-static icu::UInitOnce gRBBIInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gLanguageBreakFactoriesInitOnce {};
+static icu::UInitOnce gRBBIInitOnce {};
 
 /**
  * Release all static memory held by breakiterator.

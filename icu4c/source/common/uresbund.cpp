@@ -49,7 +49,7 @@ TODO: This cache should probably be removed when the deprecated code is
       completely removed.
 */
 static UHashtable *cache = NULL;
-static icu::UInitOnce gCacheInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gCacheInitOnce {};
 
 static UMutex resbMutex;
 

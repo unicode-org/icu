@@ -473,7 +473,7 @@ DateTimePatternGenerator::~DateTimePatternGenerator() {
 
 namespace {
 
-UInitOnce initOnce = U_INITONCE_INITIALIZER;
+UInitOnce initOnce {};
 UHashtable *localeToAllowedHourFormatsMap = nullptr;
 
 // Value deleter for hashmap.

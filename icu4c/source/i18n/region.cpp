@@ -53,7 +53,7 @@ U_CDECL_END
 
 U_NAMESPACE_BEGIN
 
-static UInitOnce gRegionDataInitOnce = U_INITONCE_INITIALIZER;
+static UInitOnce gRegionDataInitOnce {};
 static UVector* availableRegions[URGN_LIMIT];
 
 static UHashtable *regionAliases = NULL;

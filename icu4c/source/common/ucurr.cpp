@@ -97,11 +97,11 @@ static const char CURRENCYPLURALS[] = "CurrencyPlurals";
 
 // ISO codes mapping table
 static const UHashtable* gIsoCodes = NULL;
-static icu::UInitOnce gIsoCodesInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gIsoCodesInitOnce {};
 
 // Currency symbol equivalances
 static const icu::Hashtable* gCurrSymbolsEquiv = NULL;
-static icu::UInitOnce gCurrSymbolsEquivInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gCurrSymbolsEquivInitOnce {};
 
 U_NAMESPACE_BEGIN
 

@@ -37,7 +37,7 @@ U_NAMESPACE_BEGIN
 
 static icu::Locale*  availableLocaleList = NULL;
 static int32_t  availableLocaleListCount;
-static icu::UInitOnce gInitOnceLocale = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gInitOnceLocale {};
 
 U_NAMESPACE_END
 
@@ -102,7 +102,7 @@ namespace {
 // Enough capacity for the two lists in the res_index.res file
 const char** gAvailableLocaleNames[2] = {};
 int32_t gAvailableLocaleCounts[2] = {};
-icu::UInitOnce ginstalledLocalesInitOnce = U_INITONCE_INITIALIZER;
+icu::UInitOnce ginstalledLocalesInitOnce {};
 
 class AvailableLocalesSink : public ResourceSink {
   public:

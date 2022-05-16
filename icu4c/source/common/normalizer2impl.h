@@ -730,7 +730,7 @@ private:
     const uint16_t *extraData;  // mappings and/or compositions for yesYes, yesNo & noNo characters
     const uint8_t *smallFCD;  // [0x100] one bit per 32 BMP code points, set if any FCD!=0
 
-    UInitOnce       fCanonIterDataInitOnce = U_INITONCE_INITIALIZER;
+    UInitOnce       fCanonIterDataInitOnce {};
     CanonIterData  *fCanonIterData;
 };
 

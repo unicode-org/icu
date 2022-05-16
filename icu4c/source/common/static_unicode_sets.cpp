@@ -129,7 +129,7 @@ class ParseDataSink : public ResourceSink {
 };
 
 
-icu::UInitOnce gNumberParseUniSetsInitOnce = U_INITONCE_INITIALIZER;
+icu::UInitOnce gNumberParseUniSetsInitOnce {};
 
 UBool U_CALLCONV cleanupNumberParseUniSets() {
     if (gEmptyUnicodeSetInitialized) {

@@ -40,7 +40,7 @@ constexpr int32_t NUM_INCLUSIONS = UPROPS_SRC_COUNT + (UCHAR_INT_LIMIT - UCHAR_I
 
 struct Inclusion {
     UnicodeSet  *fSet = nullptr;
-    UInitOnce    fInitOnce = U_INITONCE_INITIALIZER;
+    UInitOnce    fInitOnce {};
 };
 Inclusion gInclusions[NUM_INCLUSIONS]; // cached getInclusions()
 
