@@ -886,7 +886,7 @@ private:
     Format**            formatAliases; // see getFormats
     int32_t             formatAliasesCapacity;
 
-    MessageFormat(); // default constructor not implemented
+    MessageFormat() = delete; // default constructor not implemented
 
      /**
       * This provider helps defer instantiation of a PluralRules object

@@ -30,8 +30,8 @@ public:
     const DateFormatSymbols &get() const { return dfs; }
 private:
     DateFormatSymbols dfs;
-    SharedDateFormatSymbols(const SharedDateFormatSymbols &);
-    SharedDateFormatSymbols &operator=(const SharedDateFormatSymbols &);
+    SharedDateFormatSymbols(const SharedDateFormatSymbols &) = delete;
+    SharedDateFormatSymbols &operator=(const SharedDateFormatSymbols &) = delete;
 };
 
 U_NAMESPACE_END

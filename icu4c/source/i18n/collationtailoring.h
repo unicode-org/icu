@@ -89,7 +89,7 @@ private:
      * No copy constructor: A CollationTailoring cannot be copied.
      * It is immutable, and the data trie cannot be copied either.
      */
-    CollationTailoring(const CollationTailoring &other);
+    CollationTailoring(const CollationTailoring &other) = delete;
 };
 
 struct U_I18N_API CollationCacheEntry : public SharedObject {
