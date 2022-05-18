@@ -639,8 +639,8 @@ static const int32_t kCalendarLimits[UCAL_FIELD_COUNT][4] = {
     {           0,            0,            59,            59  }, // MINUTE
     {           0,            0,            59,            59  }, // SECOND
     {           0,            0,           999,           999  }, // MILLISECOND
-    {-12*kOneHour, -12*kOneHour,   12*kOneHour,   15*kOneHour  }, // ZONE_OFFSET
-    {           0,            0,    1*kOneHour,    1*kOneHour  }, // DST_OFFSET
+    {-12*kOneHour, -12*kOneHour,   12*kOneHour,   30*kOneHour  }, // ZONE_OFFSET
+    { -1*kOneHour,  -1*kOneHour,    2*kOneHour,    2*kOneHour  }, // DST_OFFSET
     {/*N/A*/-1,       /*N/A*/-1,     /*N/A*/-1,       /*N/A*/-1}, // YEAR_WOY
     {           1,            1,             7,             7  }, // DOW_LOCAL
     {/*N/A*/-1,       /*N/A*/-1,     /*N/A*/-1,       /*N/A*/-1}, // EXTENDED_YEAR
@@ -1537,7 +1537,8 @@ void Calendar::computeFields(UErrorCode &ec)
     // JULIAN_DAY field and also removes some inelegant code. - Liu
     // 11/6/00
 
-    int32_t days =  (int32_t)ClockMath::floorDivide(localMillis, (double)kOneDay);
+    int32_t millisInDay;
+    int32_t days = ClockMath::floorDivide(localMillis, kOneDay, &millisInDay);
 
     internalSet(UCAL_JULIAN_DAY,days + kEpochStartAsJulianDay);
 
@@ -1561,19 +1562,47 @@ void Calendar::computeFields(UErrorCode &ec)
     // Compute time-related fields.  These are independent of the date and
     // of the subclass algorithm.  They depend only on the local zone
     // wall milliseconds in day.
-    int32_t millisInDay =  (int32_t) (localMillis - (days * kOneDay));
+
     fFields[UCAL_MILLISECONDS_IN_DAY] = millisInDay;
+    U_ASSERT(getMinimum(UCAL_MILLISECONDS_IN_DAY) <=
+             fFields[UCAL_MILLISECONDS_IN_DAY]);
+    U_ASSERT(fFields[UCAL_MILLISECONDS_IN_DAY] <=
+             getMaximum(UCAL_MILLISECONDS_IN_DAY));
+
     fFields[UCAL_MILLISECOND] = millisInDay % 1000;
+    U_ASSERT(getMinimum(UCAL_MILLISECOND) <= fFields[UCAL_MILLISECOND]);
+    U_ASSERT(fFields[UCAL_MILLISECOND] <= getMaximum(UCAL_MILLISECOND));
+
     millisInDay /= 1000;
     fFields[UCAL_SECOND] = millisInDay % 60;
+    U_ASSERT(getMinimum(UCAL_SECOND) <= fFields[UCAL_SECOND]);
+    U_ASSERT(fFields[UCAL_SECOND] <= getMaximum(UCAL_SECOND));
+
     millisInDay /= 60;
     fFields[UCAL_MINUTE] = millisInDay % 60;
+    U_ASSERT(getMinimum(UCAL_MINUTE) <= fFields[UCAL_MINUTE]);
+    U_ASSERT(fFields[UCAL_MINUTE] <= getMaximum(UCAL_MINUTE));
+
     millisInDay /= 60;
     fFields[UCAL_HOUR_OF_DAY] = millisInDay;
+    U_ASSERT(getMinimum(UCAL_HOUR_OF_DAY) <= fFields[UCAL_HOUR_OF_DAY]);
+    U_ASSERT(fFields[UCAL_HOUR_OF_DAY] <= getMaximum(UCAL_HOUR_OF_DAY));
+
     fFields[UCAL_AM_PM] = millisInDay / 12; // Assume AM == 0
+    U_ASSERT(getMinimum(UCAL_AM_PM) <= fFields[UCAL_AM_PM]);
+    U_ASSERT(fFields[UCAL_AM_PM] <= getMaximum(UCAL_AM_PM));
+
     fFields[UCAL_HOUR] = millisInDay % 12;
+    U_ASSERT(getMinimum(UCAL_HOUR) <= fFields[UCAL_HOUR]);
+    U_ASSERT(fFields[UCAL_HOUR] <= getMaximum(UCAL_HOUR));
+
     fFields[UCAL_ZONE_OFFSET] = rawOffset;
+    U_ASSERT(getMinimum(UCAL_ZONE_OFFSET) <= fFields[UCAL_ZONE_OFFSET]);
+    U_ASSERT(fFields[UCAL_ZONE_OFFSET] <= getMaximum(UCAL_ZONE_OFFSET));
+
     fFields[UCAL_DST_OFFSET] = dstOffset;
+    U_ASSERT(getMinimum(UCAL_DST_OFFSET) <= fFields[UCAL_DST_OFFSET]);
+    U_ASSERT(fFields[UCAL_DST_OFFSET] <= getMaximum(UCAL_DST_OFFSET));
 }
 
 uint8_t Calendar::julianDayToDayOfWeek(double julian)
@@ -1699,11 +1728,20 @@ void Calendar::computeWeekFields(UErrorCode &ec) {
     }
     fFields[UCAL_WEEK_OF_YEAR] = woy;
     fFields[UCAL_YEAR_WOY] = yearOfWeekOfYear;
+    // min/max of years are not constrains for caller, so not assert here.
     // WEEK_OF_YEAR end
 
     int32_t dayOfMonth = fFields[UCAL_DAY_OF_MONTH];
     fFields[UCAL_WEEK_OF_MONTH] = weekNumber(dayOfMonth, dayOfWeek);
+    U_ASSERT(getMinimum(UCAL_WEEK_OF_MONTH) <= fFields[UCAL_WEEK_OF_MONTH]);
+    U_ASSERT(fFields[UCAL_WEEK_OF_MONTH] <= getMaximum(UCAL_WEEK_OF_MONTH));
+
     fFields[UCAL_DAY_OF_WEEK_IN_MONTH] = (dayOfMonth-1) / 7 + 1;
+    U_ASSERT(getMinimum(UCAL_DAY_OF_WEEK_IN_MONTH) <=
+             fFields[UCAL_DAY_OF_WEEK_IN_MONTH]);
+    U_ASSERT(fFields[UCAL_DAY_OF_WEEK_IN_MONTH] <=
+             getMaximum(UCAL_DAY_OF_WEEK_IN_MONTH));
+
 #if defined (U_DEBUG_CAL)
     if(fFields[UCAL_DAY_OF_WEEK_IN_MONTH]==0) fprintf(stderr, "%s:%d: DOWIM %d on %g\n",
         __FILE__, __LINE__,fFields[UCAL_DAY_OF_WEEK_IN_MONTH], fTime);

@@ -81,12 +81,14 @@ public:
     void TestPersianCalOverflow(void);
     void TestIslamicCalOverflow(void);
     void TestWeekOfYear13548(void);
+    void TestUTCWrongAMPM22023(void);
 
     void Test13745(void);
 
     void printdate(GregorianCalendar *cal, const char *string);
     void dowTest(UBool lenient) ;
 
+    void VerifyGetStayInBound(double test_value);
 
     static UDate getAssociatedDate(UDate d, UErrorCode& status);
     static UDate makeDate(int32_t y, int32_t m = 0, int32_t d = 0, int32_t hr = 0, int32_t min = 0, int32_t sec = 0);

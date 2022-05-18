@@ -110,7 +110,7 @@ int32_t PersianCalendar::handleGetLimit(UCalendarDateFields field, ELimitType li
 UBool PersianCalendar::isLeapYear(int32_t year)
 {
     int32_t remainder;
-    ClockMath::floorDivide(25 * year + 11, 33, remainder);
+    ClockMath::floorDivide(25 * year + 11, 33, &remainder);
     return (remainder < 8);
 }
     
@@ -147,7 +147,7 @@ int32_t PersianCalendar::handleGetMonthLength(int32_t extendedYear, int32_t mont
     // If the month is out of range, adjust it into range, and
     // modify the extended year value accordingly.
     if (month < 0 || month > 11) {
-        extendedYear += ClockMath::floorDivide(month, 12, month);
+        extendedYear += ClockMath::floorDivide(month, 12, &month);
     }
 
     return isLeapYear(extendedYear) ? kPersianLeapMonthLength[month] : kPersianMonthLength[month];
@@ -169,7 +169,7 @@ int32_t PersianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, U
     // If the month is out of range, adjust it into range, and
     // modify the extended year value accordingly.
     if (month < 0 || month > 11) {
-        eyear += ClockMath::floorDivide(month, 12, month);
+        eyear += ClockMath::floorDivide(month, 12, &month);
     }
 
     int32_t julianDay = PERSIAN_EPOCH - 1 + 365 * (eyear - 1) + ClockMath::floorDivide(8 * eyear + 21, 33);

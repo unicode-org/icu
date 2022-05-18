@@ -266,6 +266,7 @@ public:
     void TestParseRegression13744();
     void TestAdoptCalendarLeak();
     void Test20741_ABFields();
+    void Test22023_UTCWithMinusZero();
 
 private:
     UBool showParse(DateFormat &format, const UnicodeString &formattedString);

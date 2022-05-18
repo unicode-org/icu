@@ -130,6 +130,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
     TESTCASE_AUTO(TestParseRegression13744);
     TESTCASE_AUTO(TestAdoptCalendarLeak);
     TESTCASE_AUTO(Test20741_ABFields);
+    TESTCASE_AUTO(Test22023_UTCWithMinusZero);
 
     TESTCASE_AUTO_END;
 }
@@ -5724,6 +5725,22 @@ void DateFormatTest::Test20741_ABFields() {
             }
         }
     }
+}
+
+void DateFormatTest::Test22023_UTCWithMinusZero() {
+    IcuTestErrorCode status(*this, "Test22023_UTCWithMinusZero");
+    Locale locale("en");
+    SimpleDateFormat fmt("h a", locale, status);
+    ASSERT_OK(status);
+    fmt.adoptCalendar(Calendar::createInstance(
+        TimeZone::createTimeZone("UTC"), locale, status));
+    ASSERT_OK(status);
+    FieldPositionIterator fp_iter;
+    icu::UnicodeString formatted;
+    // very small negative value in double cause it to be -0
+    // internally and trigger the assertion and bug.
+    fmt.format(-1e-9, formatted, &fp_iter, status);
+    ASSERT_OK(status);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
