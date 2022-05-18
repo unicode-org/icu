@@ -275,7 +275,7 @@ class U_I18N_API ListFormatter : public UObject{
         const UnicodeString items[], int32_t n_items, UnicodeString& appendTo,
         int32_t index, int32_t &offset, FieldPositionHandler* handler, UErrorCode& errorCode) const;
 
-    ListFormatter();
+    ListFormatter() = delete;
 
     ListFormatInternal* owned;
     const ListFormatInternal* data;

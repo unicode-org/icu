@@ -26,8 +26,8 @@ public:
     const PluralRules &operator*() const { return *ptr; }
 private:
     PluralRules *ptr;
-    SharedPluralRules(const SharedPluralRules &);
-    SharedPluralRules &operator=(const SharedPluralRules &);
+    SharedPluralRules(const SharedPluralRules &) = delete;
+    SharedPluralRules &operator=(const SharedPluralRules &) =delete;
 };
 
 U_NAMESPACE_END

@@ -487,7 +487,7 @@ public:
     virtual const char * getType() const override;
 
  private:
-    GregorianCalendar(); // default constructor not implemented
+    GregorianCalendar() = delete; // default constructor not implemented
 
  protected:
     /**

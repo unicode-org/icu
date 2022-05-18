@@ -569,7 +569,7 @@ private:
     RuleChain  *mRules;
     StandardPluralRanges *mStandardPluralRanges;
 
-    PluralRules();   // default constructor not implemented
+    PluralRules() = delete;   // default constructor not implemented
     void            parseDescription(const UnicodeString& ruleData, UErrorCode &status);
     int32_t         getNumberValue(const UnicodeString& token) const;
     UnicodeString   getRuleFromResource(const Locale& locale, UPluralType type, UErrorCode& status);

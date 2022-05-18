@@ -491,7 +491,7 @@ public:
     }
 
 private:
-    Collation();  // No instantiation.
+    Collation() = delete;  // No instantiation.
 };
 
 U_NAMESPACE_END

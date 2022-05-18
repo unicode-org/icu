@@ -27,8 +27,8 @@ public:
     const Calendar &operator*() const { return *ptr; }
 private:
     Calendar *ptr;
-    SharedCalendar(const SharedCalendar &);
-    SharedCalendar &operator=(const SharedCalendar &);
+    SharedCalendar(const SharedCalendar &) = delete;
+    SharedCalendar &operator=(const SharedCalendar &) = delete;
 };
 
 U_NAMESPACE_END

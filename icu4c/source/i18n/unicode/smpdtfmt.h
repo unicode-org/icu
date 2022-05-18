@@ -1226,7 +1226,7 @@ private:
 
     void initializeBooleanAttributes(void);
 
-    SimpleDateFormat(); // default constructor not implemented
+    SimpleDateFormat() = delete; // default constructor not implemented
 
     /**
      * Used by the DateFormat factory methods to construct a SimpleDateFormat.

@@ -1040,7 +1040,7 @@ public:
     virtual void setDecimalFormatSymbols(const DecimalFormatSymbols& symbols);
 
 private:
-    RuleBasedNumberFormat(); // default constructor not implemented
+    RuleBasedNumberFormat() = delete; // default constructor not implemented
 
     // this will ref the localizations if they are not NULL
     // caller must deref to get adoption

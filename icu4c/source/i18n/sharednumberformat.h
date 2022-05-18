@@ -27,8 +27,8 @@ public:
     const NumberFormat &operator*() const { return *ptr; }
 private:
     NumberFormat *ptr;
-    SharedNumberFormat(const SharedNumberFormat &);
-    SharedNumberFormat &operator=(const SharedNumberFormat &);
+    SharedNumberFormat(const SharedNumberFormat &) = delete;
+    SharedNumberFormat &operator=(const SharedNumberFormat &) = delete;
 };
 
 U_NAMESPACE_END
