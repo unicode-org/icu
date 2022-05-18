@@ -729,9 +729,8 @@ void TimeZone::getOffset(UDate date, UBool local, int32_t& rawOffset,
     // (with 7 args) twice when local == true and DST is
     // detected in the initial call.
     for (int32_t pass=0; ; ++pass) {
-        int32_t year, month, dom, dow;
-        double day = uprv_floor(date / U_MILLIS_PER_DAY);
-        int32_t millis = (int32_t) (date - day * U_MILLIS_PER_DAY);
+        int32_t year, month, dom, dow, millis;
+        double day = ClockMath::floorDivide(date, U_MILLIS_PER_DAY, &millis);
 
         Grego::dayToFields(day, year, month, dom, dow);
 

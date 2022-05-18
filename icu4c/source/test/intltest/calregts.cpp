@@ -97,6 +97,7 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(53,TestIslamicCalOverflow);
         CASE(54,TestWeekOfYear13548);
         CASE(55,Test13745);
+        CASE(56,TestUTCWrongAMPM22023);
     default: name = ""; break;
     }
 }
@@ -3087,6 +3088,105 @@ void CalendarRegressionTest::TestIslamicCalOverflow(void) {
         }
         delete cal;
     }
+}
+
+void CalendarRegressionTest::VerifyGetStayInBound(double time) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> utc(
+        Calendar::createInstance(TimeZone::createTimeZone(u"UTC"), status));
+    utc->setTime(time, status);
+    if (U_FAILURE(status)) {
+        errln("UTC setTime(%e, status)", time);
+    }
+
+    status = U_ZERO_ERROR;
+    LocalPointer<Calendar> gmt(Calendar::createInstance(
+        *TimeZone::getGMT(), status));
+    gmt->setTime(time, status);
+    if (U_FAILURE(status)) {
+        errln("UTC setTime(%e, status)", time);
+    }
+
+    status = U_ZERO_ERROR;
+    int32_t value = utc->get(UCAL_AM_PM, status);
+    if (U_FAILURE(status)) {
+        errln("UTC %e get(UCAL_AM_PM, status)", time);
+    }
+    if (value != UCAL_AM && value != UCAL_PM) {
+        errln("UTC %e UCAL_AM_PM should be either UCAL_AM | UCAL_PM  but is %d",
+              time, value);
+    }
+
+    status = U_ZERO_ERROR;
+    value = gmt->get(UCAL_AM_PM, status);
+    if (U_FAILURE(status)) {
+        errln("GMT %e get(UCAL_AM_PM, status)", time);
+    }
+    if (value != UCAL_AM && value != UCAL_PM) {
+        errln("GMT %e UCAL_AM_PM should be either UCAL_AM | UCAL_PM  but is %d",
+              time, value);
+    }
+
+    int32_t fields[] = {
+        UCAL_WEEK_OF_YEAR,
+        UCAL_YEAR_WOY,
+        UCAL_DAY_OF_MONTH,
+        UCAL_WEEK_OF_MONTH,
+        UCAL_DAY_OF_WEEK_IN_MONTH,
+        UCAL_MILLISECONDS_IN_DAY,
+        UCAL_MILLISECOND,
+        UCAL_SECOND,
+        UCAL_MINUTE,
+        UCAL_HOUR_OF_DAY,
+        UCAL_AM_PM,
+        UCAL_HOUR,
+        UCAL_ZONE_OFFSET,
+        UCAL_DST_OFFSET
+    };
+    for (auto& f : fields) {
+        UnicodeString info("Fields = ");
+        info += f;
+        status = U_ZERO_ERROR;
+        UCalendarDateFields field = static_cast<UCalendarDateFields>(f);
+        value = utc->get(field, status);
+        if (U_FAILURE(status)) {
+            errln("UTC %e get(%d)", time, field);
+        }
+        int32_t min = utc->getMinimum(field);
+        int32_t max = utc->getMaximum(field);
+        if (value < min) {
+            errln("UTC %e get(%d) < getMinimum(%d) : %d < %d", time, field,
+                  field, value, min);
+        }
+        if (max < value) {
+            errln("UTC %e getMaximum(%d) < get(%d) : %d < %d", time, field,
+                  field, max, value);
+        }
+
+        status = U_ZERO_ERROR;
+        value = gmt->get(field, status);
+        if (U_FAILURE(status)) {
+            errln("GMT %e get(%d)", time, field);
+        }
+        min = gmt->getMinimum(field);
+        max = gmt->getMaximum(field);
+        if (value < min) {
+            errln("GMT %e get(%d) < getMinimum(%d) : %d < %d", time, field,
+                  field, value, min);
+        }
+        if (max < value) {
+            errln("GMT %e getMaximum(%d) < get(%d) : %d < %d", time, field,
+                  field, max, value);
+        }
+    }
+}
+
+void CalendarRegressionTest::TestUTCWrongAMPM22023(void) {
+    VerifyGetStayInBound(-1);
+    VerifyGetStayInBound(0);
+    VerifyGetStayInBound(-1e-8);
+    VerifyGetStayInBound(-1e-9);
+    VerifyGetStayInBound(-1e-15);
 }
 
 void CalendarRegressionTest::TestWeekOfYear13548(void) {

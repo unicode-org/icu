@@ -388,7 +388,7 @@ void GregorianCalendar::handleComputeFields(int32_t julianDay, UErrorCode& statu
         // The Julian epoch day (not the same as Julian Day)
         // is zero on Saturday December 30, 0 (Gregorian).
         int32_t julianEpochDay = julianDay - (kJan1_1JulianDay - 2);
-		eyear = (int32_t) ClockMath::floorDivide((4.0*julianEpochDay) + 1464.0, (int32_t) 1461, unusedRemainder);
+		eyear = (int32_t) ClockMath::floorDivide((4.0*julianEpochDay) + 1464.0, (int32_t) 1461, &unusedRemainder);
 
         // Compute the Julian calendar day number for January 1, eyear
         int32_t january1 = 365*(eyear-1) + ClockMath::floorDivide(eyear-1, (int32_t)4);
@@ -537,7 +537,7 @@ int32_t GregorianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month,
     // If the month is out of range, adjust it into range, and
     // modify the extended year value accordingly.
     if (month < 0 || month > 11) {
-        eyear += ClockMath::floorDivide(month, 12, month);
+        eyear += ClockMath::floorDivide(month, 12, &month);
     }
 
     UBool isLeap = eyear%4 == 0;
@@ -580,7 +580,7 @@ int32_t GregorianCalendar::handleGetMonthLength(int32_t extendedYear, int32_t mo
     // If the month is out of range, adjust it into range, and
     // modify the extended year value accordingly.
     if (month < 0 || month > 11) {
-        extendedYear += ClockMath::floorDivide(month, 12, month);
+        extendedYear += ClockMath::floorDivide(month, 12, &month);
     }
 
     return isLeapYear(extendedYear) ? kLeapMonthLength[month] : kMonthLength[month];

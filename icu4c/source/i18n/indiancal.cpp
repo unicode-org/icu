@@ -110,7 +110,7 @@ static UBool isGregorianLeap(int32_t year)
  */
 int32_t IndianCalendar::handleGetMonthLength(int32_t eyear, int32_t month) const {
    if (month < 0 || month > 11) {
-      eyear += ClockMath::floorDivide(month, 12, month);
+      eyear += ClockMath::floorDivide(month, 12, &month);
    }
 
    if (isGregorianLeap(eyear + INDIAN_ERA_START) && month == 0) {
@@ -210,7 +210,7 @@ int32_t IndianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UB
 
     // If the month is out of range, adjust it into range, and adjust the extended year accordingly
    if (month < 0 || month > 11) {
-      eyear += (int32_t)ClockMath::floorDivide(month, 12, month);
+      eyear += (int32_t)ClockMath::floorDivide(month, 12, &month);
    }
 
    if(month == 12){
