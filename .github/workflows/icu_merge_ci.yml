@@ -177,10 +177,69 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           comment-on-alert: true
 
+  # String search performance test
+  icu4c-strsrchperf:
+    needs: icu4c-store-perf-libs
+    strategy:
+      fail-fast: false
+      # Matrix of locales and corresponding test data.
+      matrix:
+        locale: [de, en, fr, ja, ru, th, zh]
+        include:
+          - locale: de
+            data: udhr_deu_1996
+          - locale: en
+            data: udhr_eng
+          - locale: fr
+            data: udhr_fra
+          - locale: ja
+            data: udhr_jpn
+          - locale: ru
+            data: udhr_rus
+          - locale: th
+            data: udhr_tha
+          - locale: zh
+            data: udhr_cmn_hans
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Create directory for lib files
+        run: mkdir icu4c/source/perflib
+      - name: Get ICU libs
+        uses: actions/download-artifact@v2
+        with:
+          name: icu-perf-libs
+          path: icu4c/source/lib
+
+      - name: Build and run strschrperf test
+        env:
+          DATA_FILE_PATH: ../../icu4j/perf-tests/data/udhr
+        run: |
+          cd icu4c/source;
+          ./runConfigureICU Linux;
+          (cd test/perf && make -j2 everything && mkdir -p results && mkdir -p results/strsrchperf && mkdir -p results/strsrchperf/${{ matrix.locale }})
+          LD_LIBRARY_PATH=lib ./test/perf/strsrchperf/strsrchperf -b Test_ICU_Forward_Search Test_ICU_Backward_Search -t 5 -p 10 -L ${{ matrix.locale }} -f $DATA_FILE_PATH/${{ matrix.data }}.txt | tee test/perf/results/strsrchperf/${{ matrix.locale }}/output.txt
+
+      - name: Store performance test results
+        uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
+        with:
+          # The perf tests result data is in ndjson format.
+          tool: 'ndjson'
+          output-file-path: icu4c/source/test/perf/results/strsrchperf/${{ matrix.locale }}/output.txt
+          # Tentative setting.
+          alert-threshold: '200%'
+          fail-on-alert: true
+          gh-pages-branch: perfdata
+          benchmark-data-dir-path: perf/results/strsrchperf/${{ matrix.locale }}
+          auto-push: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          comment-on-alert: true
+
  # Retrieve performance test results and upload results to remote repository
   perf-test-data-move:
     name: Copy perf data to remote repo for visualization
-    needs: [icu4c-performance-tests, icu4c-performance-tests-with-files]
+    needs: [icu4c-performance-tests, icu4c-performance-tests-with-files, icu4c-strsrchperf]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
