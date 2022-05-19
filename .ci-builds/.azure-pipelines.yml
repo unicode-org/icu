@@ -45,29 +45,6 @@ jobs:
         cd icu4c/source/test/cintltst && LANG=C.UTF-8 LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./cintltst /tsutil/cloctst/TestCDefaultLocale
       displayName: 'Test C.UTF-8 Default locale'
 #-------------------------------------------------------------------------
-- job: ICU4C_Clang13_Ubuntu_2004_WarningsAsErrors
-  displayName: 'C: Linux Clang-13 WarningsAsErrors (Ubuntu 20.04)'
-  timeoutInMinutes: 30
-  pool:
-    vmImage: 'ubuntu-20.04'
-  steps:
-    - checkout: self
-      lfs: true
-      fetchDepth: 10
-    # Install Clang-13 from https://apt.llvm.org/
-    - script: |
-        curl -Ls https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-        sudo apt-add-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-13 main'
-        sudo apt update
-        sudo apt install -qy clang-13 lld-13 libc++-13-dev libc++abi-13-dev
-      displayName: 'Install Clang-13'
-    - script: |
-        export CPPFLAGS="-Werror -Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor -Wsuggest-override" && cd icu4c/source && ./runConfigureICU Linux && make -j2 tests
-      displayName: 'Build only (WarningsAsErrors)'
-      env:
-        CC: clang-13
-        CXX: clang++-13
-#-------------------------------------------------------------------------
 - job: ICU4C_Clang_Ubuntu_DataFilter_1804
   displayName: 'C: Linux Clang DataFilter (Ubuntu 18.04)'
   timeoutInMinutes: 30
@@ -159,8 +136,8 @@ jobs:
         CXX: clang++
         LANG: "en_US@calendar=gregorian;hours=h12"
 #-------------------------------------------------------------------------
-- job: ICU4C_Clang13_Cpp20_Ubuntu_2004
-  displayName: 'C: Linux Clang-13 C++20 (Ubuntu 20.04)'
+- job: ICU4C_Clang14_Ubuntu_2004_WarningsAsErrors
+  displayName: 'C: Linux Clang-14 WarningsAsErrors (Ubuntu 20.04)'
   timeoutInMinutes: 30
   pool:
     vmImage: 'ubuntu-20.04'
@@ -168,21 +145,70 @@ jobs:
     - checkout: self
       lfs: true
       fetchDepth: 10
-    # Install Clang-13 from https://apt.llvm.org/
+    # Install Clang-14 from https://apt.llvm.org/
     - script: |
         curl -Ls https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-        sudo apt-add-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-13 main'
+        sudo apt-add-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-14 main'
         sudo apt update
-        sudo apt install -qy clang-13 lld-13 libc++-13-dev libc++abi-13-dev
-      displayName: 'Install Clang-13'
+        sudo apt install -qy clang-14 lld-14 libc++-14-dev libc++abi-14-dev
+      displayName: 'Install Clang-14'
+    - script: |
+        cd icu4c/source && ./runConfigureICU Linux && make -j2 tests
+      displayName: 'Build only (WarningsAsErrors)'
+      env:
+        CC: clang-14
+        CPPFLAGS: '-Werror -Wall -Wextra -Wextra-semi -Wundef -Wnon-virtual-dtor -Wsuggest-override'
+        CXX: clang++-14
+#-------------------------------------------------------------------------
+- job: ICU4C_Clang14_Cpp20_Ubuntu_2004
+  displayName: 'C: Linux Clang-14 C++20 (Ubuntu 20.04)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'ubuntu-20.04'
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    # Install Clang-14 from https://apt.llvm.org/
+    - script: |
+        curl -Ls https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+        sudo apt-add-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-14 main'
+        sudo apt update
+        sudo apt install -qy clang-14 lld-14 libc++-14-dev libc++abi-14-dev
+      displayName: 'Install Clang-14'
     - script: |
         cd icu4c/source && ./runConfigureICU Linux && make -j2 check
       displayName: 'Build and Test'
       env:
-        CC: clang-13
+        CC: clang-14
         CPPFLAGS: '-Werror'
-        CXX: clang++-13
+        CXX: clang++-14
         CXXFLAGS: '-std=c++20'
+#-------------------------------------------------------------------------
+- job: ICU4C_Clang14_Cpp20_libcpp_Ubuntu_2004
+  displayName: 'C: Linux Clang-14 C++20 libc++ (Ubuntu 20.04)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'ubuntu-20.04'
+  steps:
+    - checkout: self
+      lfs: true
+      fetchDepth: 10
+    # Install Clang-14 from https://apt.llvm.org/
+    - script: |
+        curl -Ls https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+        sudo apt-add-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-14 main'
+        sudo apt update
+        sudo apt install -qy clang-14 lld-14 libc++-14-dev libc++abi-14-dev
+      displayName: 'Install Clang-14'
+    - script: |
+        cd icu4c/source && ./runConfigureICU Linux && make -j2 check
+      displayName: 'Build and Test'
+      env:
+        CC: clang-14
+        CPPFLAGS: '-Werror'
+        CXX: clang++-14
+        CXXFLAGS: '-std=c++20 -stdlib=libc++'
 #-------------------------------------------------------------------------
 # VS 2019 Builds
 #-------------------------------------------------------------------------
