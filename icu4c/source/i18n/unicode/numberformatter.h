@@ -22,7 +22,7 @@
 #include "unicode/parseerr.h"
 #include "unicode/plurrule.h"
 #include "unicode/ucurr.h"
-#include "unicode/unounclass.h"
+#include "unicode/udisplayoptions.h"
 #include "unicode/unum.h"
 #include "unicode/unumberformatter.h"
 #include "unicode/uobject.h"
@@ -2771,13 +2771,13 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
 #ifndef U_HIDE_DRAFT_API
 
     /**
-     * Gets the noun class of the formatted output. Returns `OTHER` when the noun class
+     * Gets the noun class of the formatted output. Returns `UNDEFINED` when the noun class
      * is not supported yet.
      *
      * @return `NounClass`
      * @draft ICU 71.
      */
-    NounClass getNounClass(UErrorCode &status) const;
+    UDisplayOptionsNounClass getNounClass(UErrorCode &status) const;
 
 #endif // U_HIDE_DRAFT_API
 

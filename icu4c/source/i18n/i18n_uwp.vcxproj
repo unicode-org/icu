@@ -488,6 +488,7 @@
     <ClCompile Include="units_converter.cpp" />
     <ClCompile Include="units_data.cpp" />
     <ClCompile Include="units_router.cpp" />
+    <ClCompile Include="displayoptions.cpp" />
     <ClCompile Include="unum.cpp" />
     <ClCompile Include="unumsys.cpp" />
     <ClCompile Include="upluralrules.cpp" />

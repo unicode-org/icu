@@ -885,6 +885,7 @@ library: i18n
     units_extra unitsformatter
     universal_time_scale
     uclean_i18n
+    display_options
 
 group: region
     region.o uregion.o
@@ -991,6 +992,7 @@ group: number_output
     number_representation format formatted_value_sbimpl units
     # PluralRules internals:
     unifiedcache
+    display_options
 
 group: numberformatter
     # ICU 60+ NumberFormatter API
@@ -1188,6 +1190,11 @@ group: universal_time_scale
 
 group: uclean_i18n
     ucln_in.o
+  deps
+    platform
+
+group: display_options
+    displayoptions.o
   deps
     platform
 

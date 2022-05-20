@@ -173,6 +173,7 @@
     <ClCompile Include="numbertest_patternstring.cpp" />
     <ClCompile Include="string_segment_test.cpp" />
     <ClCompile Include="numbertest_parse.cpp" />
+    <ClCompile Include="displayoptions_test.cpp" />
     <ClCompile Include="numbertest_doubleconversion.cpp" />
     <ClCompile Include="numbertest_skeletons.cpp" />
     <ClCompile Include="numbertest_range.cpp" />
