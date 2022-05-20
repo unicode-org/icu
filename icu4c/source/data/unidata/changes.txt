@@ -25,24 +25,25 @@ and see the change logs below.
 
 ---------------------------------------------------------------------------- ***
 
-Unicode 14.0 update for ICU 70
+Unicode 15.0 update for ICU 72
 
-https://www.unicode.org/versions/Unicode14.0.0/
-https://www.unicode.org/versions/beta-14.0.0.html
-https://www.unicode.org/Public/14.0.0/ucd/
+https://www.unicode.org/versions/Unicode15.0.0/
+https://www.unicode.org/versions/beta-15.0.0.html
+https://www.unicode.org/Public/15.0.0/ucd/
 https://www.unicode.org/reports/uax-proposed-updates.html
-https://www.unicode.org/reports/tr44/tr44-27.html
+https://www.unicode.org/reports/tr44/tr44-29.html
 
-https://unicode-org.atlassian.net/browse/CLDR-14801
-https://unicode-org.atlassian.net/browse/ICU-21635
+https://unicode-org.atlassian.net/browse/ICU-21980 Unicode 15
+https://unicode-org.atlassian.net/browse/CLDR-15516 Unicode 15
+https://unicode-org.atlassian.net/browse/CLDR-15253 Unicode 15 script metadata (in CLDR 41)
 
 * Command-line environment setup
 
-export UNICODE_DATA=~/unidata/uni14/20210903
+export UNICODE_DATA=~/unidata/uni15/beta
 export CLDR_SRC=~/cldr/uni/src
 export ICU_ROOT=~/icu/uni
 export ICU_SRC=$ICU_ROOT/src
-export ICUDT=icudt70b
+export ICUDT=icudt72b
 export ICU4C_DATA_IN=$ICU_SRC/icu4c/source/data/in
 export ICU4C_UNIDATA=$ICU_SRC/icu4c/source/data/unidata
 export LD_LIBRARY_PATH=$ICU_ROOT/dbg/icu4c/lib
