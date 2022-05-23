@@ -423,6 +423,8 @@ void TestUScriptCodeAPI(){
             "Chorasmian", "Dives_Akuru", "Khitan_Small_Script", "Yezidi",
             // new in ICU 70
             "Cypro_Minoan", "Old_Uyghur", "Tangsa", "Toto", "Vithkuqi",
+            // new in ICU 72
+            "Kawi", "Nag_Mundari",
         };
         static const char* expectedShort[] = {
             "Bali", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp",
@@ -461,6 +463,8 @@ void TestUScriptCodeAPI(){
             "Chrs", "Diak", "Kits", "Yezi",
             // new in ICU 70
             "Cpmn", "Ougr", "Tnsa", "Toto", "Vith",
+            // new in ICU 72
+            "Kawi", "Nagm",
         };
         int32_t j = 0;
         if(UPRV_LENGTHOF(expectedLong)!=(USCRIPT_CODE_LIMIT-USCRIPT_BALINESE)) {
