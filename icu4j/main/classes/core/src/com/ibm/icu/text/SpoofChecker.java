@@ -273,8 +273,8 @@ public class SpoofChecker {
      * @stable ICU 58
      */
     public static final UnicodeSet INCLUSION = new UnicodeSet(
-            "['\\-.\\:\\u00B7\\u0375\\u058A\\u05F3\\u05F4\\u06FD\\u06FE\\u0F0B\\u200C"
-            + "\\u200D\\u2010\\u2019\\u2027\\u30A0\\u30FB]"
+            "['\\-.\\:\\u00B7\\u0375\\u058A\\u05F3\\u05F4\\u06FD\\u06FE\\u0F0B\\u2010"
+            + "\\u2019\\u2027\\u30A0\\u30FB]"
             ).freeze();
     // Note: data from IdentifierStatus.txt & IdentifierType.txt
     // There is tooling to generate this constant in the unicodetools project:
@@ -318,14 +318,14 @@ public class SpoofChecker {
             + "\\u0C56\\u0C5D\\u0C60\\u0C61\\u0C66-\\u0C6F\\u0C80\\u0C82\\u0C83\\u0C85-"
             + "\\u0C8C\\u0C8E-\\u0C90\\u0C92-\\u0CA8\\u0CAA-\\u0CB3\\u0CB5-\\u0CB9\\u0CBC-"
             + "\\u0CC4\\u0CC6-\\u0CC8\\u0CCA-\\u0CCD\\u0CD5\\u0CD6\\u0CDD\\u0CE0-\\u0CE3"
-            + "\\u0CE6-\\u0CEF\\u0CF1\\u0CF2\\u0D00\\u0D02\\u0D03\\u0D05-\\u0D0C\\u0D0E-"
+            + "\\u0CE6-\\u0CEF\\u0CF1-\\u0CF3\\u0D00\\u0D02\\u0D03\\u0D05-\\u0D0C\\u0D0E-"
             + "\\u0D10\\u0D12-\\u0D3A\\u0D3D-\\u0D43\\u0D46-\\u0D48\\u0D4A-\\u0D4E\\u0D54-"
             + "\\u0D57\\u0D60\\u0D61\\u0D66-\\u0D6F\\u0D7A-\\u0D7F\\u0D82\\u0D83\\u0D85-"
             + "\\u0D8E\\u0D91-\\u0D96\\u0D9A-\\u0DA5\\u0DA7-\\u0DB1\\u0DB3-\\u0DBB\\u0DBD"
             + "\\u0DC0-\\u0DC6\\u0DCA\\u0DCF-\\u0DD4\\u0DD6\\u0DD8-\\u0DDE\\u0DF2\\u0E01-"
             + "\\u0E32\\u0E34-\\u0E3A\\u0E40-\\u0E4E\\u0E50-\\u0E59\\u0E81\\u0E82\\u0E84"
             + "\\u0E86-\\u0E8A\\u0E8C-\\u0EA3\\u0EA5\\u0EA7-\\u0EB2\\u0EB4-\\u0EBD\\u0EC0-"
-            + "\\u0EC4\\u0EC6\\u0EC8-\\u0ECD\\u0ED0-\\u0ED9\\u0EDE\\u0EDF\\u0F00\\u0F20-"
+            + "\\u0EC4\\u0EC6\\u0EC8-\\u0ECE\\u0ED0-\\u0ED9\\u0EDE\\u0EDF\\u0F00\\u0F20-"
             + "\\u0F29\\u0F35\\u0F37\\u0F3E-\\u0F42\\u0F44-\\u0F47\\u0F49-\\u0F4C\\u0F4E-"
             + "\\u0F51\\u0F53-\\u0F56\\u0F58-\\u0F5B\\u0F5D-\\u0F68\\u0F6A-\\u0F6C\\u0F71"
             + "\\u0F72\\u0F74\\u0F7A-\\u0F80\\u0F82-\\u0F84\\u0F86-\\u0F92\\u0F94-\\u0F97"
@@ -352,11 +352,12 @@ public class SpoofChecker {
             + "\\uAB20-\\uAB26\\uAB28-\\uAB2E\\uAB66\\uAB67\\uAC00-\\uD7A3\\uFA0E\\uFA0F"
             + "\\uFA11\\uFA13\\uFA14\\uFA1F\\uFA21\\uFA23\\uFA24\\uFA27-\\uFA29\\U00011301"
             + "\\U00011303\\U0001133B\\U0001133C\\U00016FF0\\U00016FF1\\U0001B11F-"
-            + "\\U0001B122\\U0001B150-\\U0001B152\\U0001B164-\\U0001B167\\U0001DF00-"
-            + "\\U0001DF1E\\U0001E7E0-\\U0001E7E6\\U0001E7E8-\\U0001E7EB\\U0001E7ED"
-            + "\\U0001E7EE\\U0001E7F0-\\U0001E7FE\\U00020000-\\U0002A6DF\\U0002A700-"
-            + "\\U0002B738\\U0002B740-\\U0002B81D\\U0002B820-\\U0002CEA1\\U0002CEB0-"
-            + "\\U0002EBE0\\U00030000-\\U0003134A]"
+            + "\\U0001B122\\U0001B132\\U0001B150-\\U0001B152\\U0001B155\\U0001B164-"
+            + "\\U0001B167\\U0001DF00-\\U0001DF1E\\U0001DF25-\\U0001DF2A\\U0001E08F"
+            + "\\U0001E7E0-\\U0001E7E6\\U0001E7E8-\\U0001E7EB\\U0001E7ED\\U0001E7EE"
+            + "\\U0001E7F0-\\U0001E7FE\\U00020000-\\U0002A6DF\\U0002A700-\\U0002B739"
+            + "\\U0002B740-\\U0002B81D\\U0002B820-\\U0002CEA1\\U0002CEB0-\\U0002EBE0"
+            + "\\U00030000-\\U0003134A\\U00031350-\\U000323AF]"
             ).freeze();
     // Note: data from IdentifierStatus.txt & IdentifierType.txt
     // There is tooling to generate this constant in the unicodetools project:

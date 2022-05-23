@@ -149,8 +149,6 @@ export LD_LIBRARY_PATH=$ICU_ROOT/dbg/icu4c/lib
 
   $ICU_ROOT/dbg/icu4c$ echo;echo; date; make -j7 tests &> out.txt ; tail -n 30 out.txt ; date
 
-TODO
-
 * update spoof checker UnicodeSet initializers:
     inclusionPat & recommendedPat in i18n/uspoof.cpp
     INCLUSION & RECOMMENDED in SpoofChecker.java
@@ -182,17 +180,21 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
 * update uts46test.cpp and UTS46Test.java if there are new characters that are equivalent to
   sequences with non-LDH ASCII (that is, their decompositions contain '=' or similar)
 - grep IdnaMappingTable.txt or uts46.txt for "disallowed_STD3_valid" on non-ASCII characters
-- Unicode 6.0..14.0: U+2260, U+226E, U+226F
+    ~/unitools/mine/src$ grep disallowed_STD3_valid unicodetools/data/idna/dev/IdnaMappingTable.txt
+- Unicode 6.0..15.0: U+2260, U+226E, U+226F
 - nothing new in this Unicode version, no test file to update
 
 * run & fix ICU4C tests
 - fix Unicode Tools class Segmenter to generate correct *BreakTest.txt files
+  (no rule changes in Unicode 15)
 - update CLDR GraphemeBreakTest.txt
     cd ~/unitools/mine/Generated
-    cp UCD/d22d/cldr/GraphemeBreakTest-cldr.txt $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt
-    cp UCD/d22d/cldr/GraphemeBreakTest-cldr.html $CLDR_SRC/common/properties/segments/GraphemeBreakTest.html
+    cp UCD/15.0.0/cldr/GraphemeBreakTest-cldr.txt $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt
+    cp UCD/15.0.0/cldr/GraphemeBreakTest-cldr.html $CLDR_SRC/common/properties/segments/GraphemeBreakTest.html
     cp $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt $ICU_SRC/icu4c/source/test/testdata
 - Andy helps with RBBI & spoof check test failures
+
+TODO
 
 * collation: CLDR collation root, UCA DUCET
 

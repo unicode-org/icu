@@ -6,4 +6,4 @@
 # for running Bazel commands while ensuring, through configuration, that only a
 # specific version of Bazel is executed.
 
-USE_BAZEL_VERSION=4.1.0
+USE_BAZEL_VERSION=5.1.1
