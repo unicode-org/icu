@@ -1885,6 +1885,21 @@ enum UBlockCode {
     /** @stable ICU 70 */
     UBLOCK_ZNAMENNY_MUSICAL_NOTATION = 320, /*[1CF00]*/
 
+    /** @stable ICU 72 */
+    UBLOCK_ARABIC_EXTENDED_C = 321, /*[10EC0]*/
+    /** @stable ICU 72 */
+    UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_H = 322, /*[31350]*/
+    /** @stable ICU 72 */
+    UBLOCK_CYRILLIC_EXTENDED_D = 323, /*[1E030]*/
+    /** @stable ICU 72 */
+    UBLOCK_DEVANAGARI_EXTENDED_A = 324, /*[11B00]*/
+    /** @stable ICU 72 */
+    UBLOCK_KAKTOVIK_NUMERALS = 325, /*[1D2C0]*/
+    /** @stable ICU 72 */
+    UBLOCK_KAWI = 326, /*[11F00]*/
+    /** @stable ICU 72 */
+    UBLOCK_NAG_MUNDARI = 327, /*[1E4D0]*/
+
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the highest normal UBlockCode value.
@@ -1892,7 +1907,7 @@ enum UBlockCode {
      *
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-    UBLOCK_COUNT = 321,
+    UBLOCK_COUNT = 328,
 #endif  // U_HIDE_DEPRECATED_API
 
     /** @stable ICU 2.0 */

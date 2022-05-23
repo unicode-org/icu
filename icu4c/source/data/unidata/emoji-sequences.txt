@@ -1,13 +1,13 @@
 # emoji-sequences.txt
-# Date: 2021-08-26, 17:22:22 GMT
-# © 2021 Unicode®, Inc.
+# Date: 2022-05-06, 16:14:52 GMT
+# © 2022 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
-# For terms of use, see http://www.unicode.org/terms_of_use.html
+# For terms of use, see https://www.unicode.org/terms_of_use.html
 #
 # Emoji Sequence Data for UTS #51
-# Version: 14.0
+# Version: 15.0
 #
-# For documentation and usage, see http://www.unicode.org/reports/tr51
+# For documentation and usage, see https://www.unicode.org/reports/tr51
 #
 # Format:
 #   code_point(s) ; type_field ; description # comments 
@@ -238,6 +238,7 @@
 1F6D1..1F6D2  ; Basic_Emoji                  ; stop sign                                                      # E3.0   [2] (🛑..🛒)
 1F6D5         ; Basic_Emoji                  ; hindu temple                                                   # E12.0  [1] (🛕)
 1F6D6..1F6D7  ; Basic_Emoji                  ; hut                                                            # E13.0  [2] (🛖..🛗)
+1F6DC         ; Basic_Emoji                  ; wireless                                                       # E15.0  [1] (🛜)
 1F6DD..1F6DF  ; Basic_Emoji                  ; playground slide                                               # E14.0  [3] (🛝..🛟)
 1F6EB..1F6EC  ; Basic_Emoji                  ; airplane departure                                             # E1.0   [2] (🛫..🛬)
 1F6F4..1F6F6  ; Basic_Emoji                  ; kick scooter                                                   # E3.0   [3] (🛴..🛶)
@@ -294,21 +295,30 @@
 1F9E7..1F9FF  ; Basic_Emoji                  ; red envelope                                                   # E11.0 [25] (🧧..🧿)
 1FA70..1FA73  ; Basic_Emoji                  ; ballet shoes                                                   # E12.0  [4] (🩰..🩳)
 1FA74         ; Basic_Emoji                  ; thong sandal                                                   # E13.0  [1] (🩴)
+1FA75..1FA77  ; Basic_Emoji                  ; light blue heart                                               # E15.0  [3] (🩵..🩷)
 1FA78..1FA7A  ; Basic_Emoji                  ; drop of blood                                                  # E12.0  [3] (🩸..🩺)
 1FA7B..1FA7C  ; Basic_Emoji                  ; x-ray                                                          # E14.0  [2] (🩻..🩼)
 1FA80..1FA82  ; Basic_Emoji                  ; yo-yo                                                          # E12.0  [3] (🪀..🪂)
 1FA83..1FA86  ; Basic_Emoji                  ; boomerang                                                      # E13.0  [4] (🪃..🪆)
+1FA87..1FA88  ; Basic_Emoji                  ; maracas                                                        # E15.0  [2] (🪇..🪈)
 1FA90..1FA95  ; Basic_Emoji                  ; ringed planet                                                  # E12.0  [6] (🪐..🪕)
 1FA96..1FAA8  ; Basic_Emoji                  ; military helmet                                                # E13.0 [19] (🪖..🪨)
 1FAA9..1FAAC  ; Basic_Emoji                  ; mirror ball                                                    # E14.0  [4] (🪩..🪬)
+1FAAD..1FAAF  ; Basic_Emoji                  ; folding hand fan                                               # E15.0  [3] (🪭..🪯)
 1FAB0..1FAB6  ; Basic_Emoji                  ; fly                                                            # E13.0  [7] (🪰..🪶)
 1FAB7..1FABA  ; Basic_Emoji                  ; lotus                                                          # E14.0  [4] (🪷..🪺)
+1FABB..1FABD  ; Basic_Emoji                  ; hyacinth                                                       # E15.0  [3] (🪻..🪽)
+1FABF         ; Basic_Emoji                  ; goose                                                          # E15.0  [1] (🪿)
 1FAC0..1FAC2  ; Basic_Emoji                  ; anatomical heart                                               # E13.0  [3] (🫀..🫂)
 1FAC3..1FAC5  ; Basic_Emoji                  ; pregnant man                                                   # E14.0  [3] (🫃..🫅)
+1FACE..1FACF  ; Basic_Emoji                  ; moose                                                          # E15.0  [2] (🫎..🫏)
 1FAD0..1FAD6  ; Basic_Emoji                  ; blueberries                                                    # E13.0  [7] (🫐..🫖)
 1FAD7..1FAD9  ; Basic_Emoji                  ; pouring liquid                                                 # E14.0  [3] (🫗..🫙)
+1FADA..1FADB  ; Basic_Emoji                  ; ginger root                                                    # E15.0  [2] (🫚..🫛)
 1FAE0..1FAE7  ; Basic_Emoji                  ; melting face                                                   # E14.0  [8] (🫠..🫧)
+1FAE8         ; Basic_Emoji                  ; shaking face                                                   # E15.0  [1] (🫨)
 1FAF0..1FAF6  ; Basic_Emoji                  ; hand with index finger and thumb crossed                       # E14.0  [7] (🫰..🫶)
+1FAF7..1FAF8  ; Basic_Emoji                  ; leftwards pushing hand                                         # E15.0  [2] (🫷..🫸)
 00A9 FE0F     ; Basic_Emoji                  ; copyright                                                      # E0.6   [1] (©️)
 00AE FE0F     ; Basic_Emoji                  ; registered                                                     # E0.6   [1] (®️)
 203C FE0F     ; Basic_Emoji                  ; double exclamation mark                                        # E0.6   [1] (‼️)
@@ -517,7 +527,7 @@
 1F6F0 FE0F    ; Basic_Emoji                  ; satellite                                                      # E0.7   [1] (🛰️)
 1F6F3 FE0F    ; Basic_Emoji                  ; passenger ship                                                 # E0.7   [1] (🛳️)
 
-# Total elements: 1366
+# Total elements: 1386
 
 # ================================================
 
@@ -1463,7 +1473,17 @@
 1FAF6 1F3FD   ; RGI_Emoji_Modifier_Sequence  ; heart hands: medium skin tone                                  # E14.0  [1] (🫶🏽)
 1FAF6 1F3FE   ; RGI_Emoji_Modifier_Sequence  ; heart hands: medium-dark skin tone                             # E14.0  [1] (🫶🏾)
 1FAF6 1F3FF   ; RGI_Emoji_Modifier_Sequence  ; heart hands: dark skin tone                                    # E14.0  [1] (🫶🏿)
+1FAF7 1F3FB   ; RGI_Emoji_Modifier_Sequence  ; leftwards pushing hand: light skin tone                        # E15.0  [1] (🫷🏻)
+1FAF7 1F3FC   ; RGI_Emoji_Modifier_Sequence  ; leftwards pushing hand: medium-light skin tone                 # E15.0  [1] (🫷🏼)
+1FAF7 1F3FD   ; RGI_Emoji_Modifier_Sequence  ; leftwards pushing hand: medium skin tone                       # E15.0  [1] (🫷🏽)
+1FAF7 1F3FE   ; RGI_Emoji_Modifier_Sequence  ; leftwards pushing hand: medium-dark skin tone                  # E15.0  [1] (🫷🏾)
+1FAF7 1F3FF   ; RGI_Emoji_Modifier_Sequence  ; leftwards pushing hand: dark skin tone                         # E15.0  [1] (🫷🏿)
+1FAF8 1F3FB   ; RGI_Emoji_Modifier_Sequence  ; rightwards pushing hand: light skin tone                       # E15.0  [1] (🫸🏻)
+1FAF8 1F3FC   ; RGI_Emoji_Modifier_Sequence  ; rightwards pushing hand: medium-light skin tone                # E15.0  [1] (🫸🏼)
+1FAF8 1F3FD   ; RGI_Emoji_Modifier_Sequence  ; rightwards pushing hand: medium skin tone                      # E15.0  [1] (🫸🏽)
+1FAF8 1F3FE   ; RGI_Emoji_Modifier_Sequence  ; rightwards pushing hand: medium-dark skin tone                 # E15.0  [1] (🫸🏾)
+1FAF8 1F3FF   ; RGI_Emoji_Modifier_Sequence  ; rightwards pushing hand: dark skin tone                        # E15.0  [1] (🫸🏿)
 
-# Total elements: 645
+# Total elements: 655
 
 #EOF
