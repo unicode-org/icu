@@ -53,7 +53,7 @@ The following steps must be completed in order:
     switches passed to configure
 3.  Build and install HarfBuzz - http://harfbuzz.org (HarfBuzz's use of ICU may
     be enabled or disabled at your choice)
-4.  Build and install the [icu-le-hb](http://harfbuzz.org) library.
+4.  Build and install the [icu-le-hb](https://github.com/harfbuzz/icu-le-hb) library.
 5.  Now, rerun "configure" on the exact **same** ICU workspace used above:
     *   with "icu-le-hb" AND the above-mentioned installed ICU available via
         pkg-config ( `pkg-config --modversion icu-le-hb` should return a version,
