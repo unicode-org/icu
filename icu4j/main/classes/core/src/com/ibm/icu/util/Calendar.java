@@ -4337,8 +4337,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         {           0,            0,            59,            59  }, // MINUTE
         {           0,            0,            59,            59  }, // SECOND
         {           0,            0,           999,           999  }, // MILLISECOND
-        {-12*ONE_HOUR, -12*ONE_HOUR,   12*ONE_HOUR,   12*ONE_HOUR  }, // ZONE_OFFSET
-        {           0,            0,    1*ONE_HOUR,    1*ONE_HOUR  }, // DST_OFFSET
+        {-16*ONE_HOUR, -16*ONE_HOUR,   12*ONE_HOUR,   30*ONE_HOUR  }, // ZONE_OFFSET
+        {           0,            0,    2*ONE_HOUR,    2*ONE_HOUR  }, // DST_OFFSET
         {/*                                                      */}, // YEAR_WOY
         {           1,            1,             7,             7  }, // DOW_LOCAL
         {/*                                                      */}, // EXTENDED_YEAR
