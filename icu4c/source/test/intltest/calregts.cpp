@@ -98,6 +98,7 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(54,TestWeekOfYear13548);
         CASE(55,Test13745);
         CASE(56,TestUTCWrongAMPM22023);
+        CASE(57,TestAsiaManilaAfterSetGregorianChange22043);
     default: name = ""; break;
     }
 }
@@ -3187,6 +3188,40 @@ void CalendarRegressionTest::TestUTCWrongAMPM22023(void) {
     VerifyGetStayInBound(-1e-8);
     VerifyGetStayInBound(-1e-9);
     VerifyGetStayInBound(-1e-15);
+}
+
+void CalendarRegressionTest::VerifyNoAssertWithSetGregorianChange(const char* timezone) {
+    UErrorCode status = U_ZERO_ERROR;
+    std::unique_ptr<Calendar> cal(
+        Calendar::createInstance(
+            TimeZone::createTimeZone(UnicodeString(timezone, -1, US_INV)),
+            Locale::getEnglish(),
+            status));
+    cal->setTime(Calendar::getNow(), status);
+
+    if (cal->getDynamicClassID() ==
+        GregorianCalendar::getStaticClassID()) {
+        GregorianCalendar* gc =
+            static_cast<GregorianCalendar*>(cal.get());
+        // The beginning of ECMAScript time, namely -(2**53)
+        const double start_of_time = -9007199254740992;
+        gc->setGregorianChange(start_of_time, status);
+    }
+    cal->get(UCAL_YEAR, status);
+}
+
+void CalendarRegressionTest::TestAsiaManilaAfterSetGregorianChange22043(void) {
+    VerifyNoAssertWithSetGregorianChange("Asia/Malina");
+    UErrorCode status = U_ZERO_ERROR;
+    std::unique_ptr<StringEnumeration> ids(TimeZone::createEnumeration(status));
+    if (U_FAILURE(status)) {
+        errln("TimeZone::createEnumeration failed");
+        return;
+    }
+    const char* id;
+    while ((id = ids->next(nullptr, status)) != nullptr && U_SUCCESS(status)) {
+        VerifyNoAssertWithSetGregorianChange(id);
+    }
 }
 
 void CalendarRegressionTest::TestWeekOfYear13548(void) {
