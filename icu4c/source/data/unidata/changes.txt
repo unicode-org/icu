@@ -194,8 +194,6 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
     cp $CLDR_SRC/common/properties/segments/GraphemeBreakTest.txt $ICU_SRC/icu4c/source/test/testdata
 - Andy helps with RBBI & spoof check test failures
 
-TODO
-
 * collation: CLDR collation root, UCA DUCET
 
 - UCA DUCET goes into Mark's Unicode tools,
@@ -265,6 +263,8 @@ TODO
 - note on intltest: if collate/UCAConformanceTest fails, then
   utility/MultithreadTest/TestCollators will fail as well;
   fix the conformance test before looking into the multi-thread test
+
+TODO
 
 * update Java data files
 - refresh just the UCD/UCA-related/derived files, just to be safe
