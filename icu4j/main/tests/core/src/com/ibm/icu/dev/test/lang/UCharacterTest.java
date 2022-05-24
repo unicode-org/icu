@@ -1594,6 +1594,8 @@ public final class UCharacterTest extends TestFmwk
             { 0x10800, UCharacterDirection.LEFT_TO_RIGHT },
             { 0x10D00, UCharacterDirection.RIGHT_TO_LEFT },  // Unicode 11 changes U+10D00..U+10D3F from R to AL.
             { 0x10D40, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
+            { 0x10EC0, UCharacterDirection.RIGHT_TO_LEFT },  // Unicode 15 changes U+10EC0..U+10EFF from R to AL.
+            { 0x10F00, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
             { 0x10F30, UCharacterDirection.RIGHT_TO_LEFT },  // Unicode 11 changes U+10F30..U+10F6F from R to AL.
             { 0x10F70, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
             { 0x11000, UCharacterDirection.RIGHT_TO_LEFT },

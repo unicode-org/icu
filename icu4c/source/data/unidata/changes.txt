@@ -15,6 +15,19 @@
 
 For an overview, see https://unicode-org.github.io/icu/processes/unicode-update
 
+Notes:
+
+This log includes several command lines as used in the update process.
+Some of them include a console prompt with the present working directory (pwd) followed by a $ sign.
+Use a console window that is set to that directory, or cd to there,
+and then paste the command that follows the $ sign.
+
+Most command lines use environment variables to make them more portable across versions
+and machine configurations. When you set up a console window, copy & paste the `export` commands
+from near the top of the current section before pasting tool command lines.
+Adjust the environment variables to the current version and your machine setup.
+(The command lines are currently as used on Linux.)
+
 ---------------------------------------------------------------------------- ***
 
 * New ISO 15924 script codes
@@ -264,8 +277,6 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
   utility/MultithreadTest/TestCollators will fail as well;
   fix the conformance test before looking into the multi-thread test
 
-TODO
-
 * update Java data files
 - refresh just the UCD/UCA-related/derived files, just to be safe
 - see (ICU4C)/source/data/icu4j-readme.txt
@@ -276,14 +287,14 @@ TODO
   output:
     ...
     make[1]: Entering directory '/usr/local/google/home/mscherer/icu/uni/dbg/icu4c/data'
-    mkdir -p ./out/icu4j/com/ibm/icu/impl/data/icudt70b
-    mkdir -p ./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt70b
-    LD_LIBRARY_PATH=../lib:../stubdata:../tools/ctestfw:$LD_LIBRARY_PATH  ../bin/icupkg ./out/tmp/icudt70l.dat ./out/icu4j/icudt70b.dat -s ./out/build/icudt70l -x '*' -tb -d ./out/icu4j/com/ibm/icu/impl/data/icudt70b
-    mv ./out/icu4j/"com/ibm/icu/impl/data/icudt70b/zoneinfo64.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt70b/metaZones.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt70b/timezoneTypes.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt70b/windowsZones.res" "./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt70b"
-    jar cf ./out/icu4j/icudata.jar -C ./out/icu4j com/ibm/icu/impl/data/icudt70b/
+    mkdir -p ./out/icu4j/com/ibm/icu/impl/data/icudt72b
+    mkdir -p ./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt72b
+    LD_LIBRARY_PATH=../lib:../stubdata:../tools/ctestfw:$LD_LIBRARY_PATH  ../bin/icupkg ./out/tmp/icudt72l.dat ./out/icu4j/icudt72b.dat -s ./out/build/icudt72l -x '*' -tb -d ./out/icu4j/com/ibm/icu/impl/data/icudt72b
+    mv ./out/icu4j/"com/ibm/icu/impl/data/icudt72b/zoneinfo64.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt72b/metaZones.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt72b/timezoneTypes.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt72b/windowsZones.res" "./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt72b"
+    jar cf ./out/icu4j/icudata.jar -C ./out/icu4j com/ibm/icu/impl/data/icudt72b/
     mkdir -p /tmp/icu4j/main/shared/data
     cp ./out/icu4j/icudata.jar /tmp/icu4j/main/shared/data
-    jar cf ./out/icu4j/icutzdata.jar -C ./out/icu4j/tzdata com/ibm/icu/impl/data/icudt70b/
+    jar cf ./out/icu4j/icutzdata.jar -C ./out/icu4j/tzdata com/ibm/icu/impl/data/icudt72b/
     mkdir -p /tmp/icu4j/main/shared/data
     cp ./out/icu4j/icutzdata.jar /tmp/icu4j/main/shared/data
     make[1]: Leaving directory '/usr/local/google/home/mscherer/icu/uni/dbg/icu4c/data'
@@ -314,6 +325,8 @@ or
     cd ../../test/testdata
     cp -v BidiCharacterTest.txt BidiTest.txt IdnaTestV2.txt $ICU_SRC/icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode
     cp -v $UNICODE_DATA/ucd/CompositionExclusions.txt $ICU_SRC/icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode
+
+TODO
 
 * run & fix ICU4J tests
 
