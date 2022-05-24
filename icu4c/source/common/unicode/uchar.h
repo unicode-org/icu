@@ -1885,6 +1885,8 @@ enum UBlockCode {
     /** @stable ICU 70 */
     UBLOCK_ZNAMENNY_MUSICAL_NOTATION = 320, /*[1CF00]*/
 
+    // New blocks in Unicode 15.0
+
     /** @stable ICU 72 */
     UBLOCK_ARABIC_EXTENDED_C = 321, /*[10EC0]*/
     /** @stable ICU 72 */

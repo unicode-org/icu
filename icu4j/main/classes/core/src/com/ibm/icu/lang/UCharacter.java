@@ -1292,6 +1292,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 70 */
         public static final int ZNAMENNY_MUSICAL_NOTATION_ID = 320; /*[1CF00]*/
 
+        // New blocks in Unicode 15.0
+
         /** @stable ICU 72 */
         public static final int ARABIC_EXTENDED_C_ID = 321; /*[10EC0]*/
         /** @stable ICU 72 */
@@ -2720,6 +2722,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final UnicodeBlock ZNAMENNY_MUSICAL_NOTATION =
                 new UnicodeBlock("ZNAMENNY_MUSICAL_NOTATION",
                         ZNAMENNY_MUSICAL_NOTATION_ID); /*[1CF00]*/
+
+        // New blocks in Unicode 15.0
 
         /** @stable ICU 72 */
         public static final UnicodeBlock ARABIC_EXTENDED_C =

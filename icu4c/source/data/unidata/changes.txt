@@ -326,8 +326,6 @@ or
     cp -v BidiCharacterTest.txt BidiTest.txt IdnaTestV2.txt $ICU_SRC/icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode
     cp -v $UNICODE_DATA/ucd/CompositionExclusions.txt $ICU_SRC/icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode
 
-TODO
-
 * run & fix ICU4J tests
 
 *** API additions
@@ -336,14 +334,21 @@ TODO
 *** CLDR numbering systems
 - look for new sets of decimal digits (gc=ND & nv=4) and add to CLDR
   for example:
-    ~/icu/mine/src$ egrep ';gc=Nd.+;nv=4' icu4c/source/data/unidata/ppucd.txt > /tmp/icu/nv4-13.txt
-    ~/icu/uni/src$ egrep ';gc=Nd.+;nv=4' icu4c/source/data/unidata/ppucd.txt > /tmp/icu/nv4-14.txt
-    ~/icu/uni/src$ diff -u /tmp/icu/nv4-13.txt /tmp/icu/nv4-14.txt
+    ~/icu/mine/src$ egrep ';gc=Nd.+;nv=4' icu4c/source/data/unidata/ppucd.txt > /tmp/icu/nv4-14.txt
+    ~/icu/uni/src$ egrep ';gc=Nd.+;nv=4' icu4c/source/data/unidata/ppucd.txt > /tmp/icu/nv4-15.txt
+    ~/icu/uni/src$ diff -u /tmp/icu/nv4-14.txt /tmp/icu/nv4-15.txt
     -->
-    +cp;16AC4;-Alpha;gc=Nd;-IDS;lb=NU;na=TANGSA DIGIT FOUR;nt=De;nv=4;SB=NU;WB=NU;-XIDS
-  Unicode 14:
-    tnsa 16AC0..16AC9 Tangsa
-    https://github.com/unicode-org/cldr/pull/1326
+    +cp;11F54;-Alpha;gc=Nd;InSC=Number;lb=NU;na=KAWI DIGIT FOUR;nt=De;nv=4;SB=NU;WB=NU;-XIDS
+    +cp;1E4F4;-Alpha;gc=Nd;-IDS;lb=NU;na=NAG MUNDARI DIGIT FOUR;nt=De;nv=4;SB=NU;WB=NU;-XIDS
+  or:
+    ~/unitools/mine/src$ diff -u unicodetools/data/ucd/14.0.0-Update/extracted/DerivedGeneralCategory.txt unicodetools/data/ucd/dev/extracted/DerivedGeneralCategory.txt | grep '; Nd' | egrep '^\+'
+    -->
+    +11F50..11F59  ; Nd #  [10] KAWI DIGIT ZERO..KAWI DIGIT NINE
+    +1E4F0..1E4F9  ; Nd #  [10] NAG MUNDARI DIGIT ZERO..NAG MUNDARI DIGIT NINE
+  Unicode 15:
+    kawi 11F50..11F59 Kawi
+    nagm 1E4F0..1E4F9 Nag Mundari
+    https://github.com/unicode-org/cldr/pull/2041
 
 *** merge the Unicode update branches back onto the trunk
 - do not merge the icudata.jar and testdata.jar,
