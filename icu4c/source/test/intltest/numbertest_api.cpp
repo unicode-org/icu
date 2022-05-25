@@ -2447,44 +2447,44 @@ void NumberFormatterApiTest::unitNounClass() {
         const char *unitIdentifier;
         const UDisplayOptionsNounClass expectedNounClass;
     } cases[] = {
-        {"de", "inch", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},
-        {"de", "yard", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_NEUTER},
-        {"de", "meter", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},
-        {"de", "liter", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},
-        {"de", "second", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_FEMININE},
-        {"de", "minute", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_FEMININE},
-        {"de", "hour", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_FEMININE},
-        {"de", "day", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},
-        {"de", "year", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_NEUTER},
-        {"de", "gram", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_NEUTER},
-        {"de", "watt", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_NEUTER},
-        {"de", "bit", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_NEUTER},
-        {"de", "byte", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_NEUTER},
+        {"de", "inch", UDISPOPT_NOUN_CLASS_MASCULINE},
+        {"de", "yard", UDISPOPT_NOUN_CLASS_NEUTER},
+        {"de", "meter", UDISPOPT_NOUN_CLASS_MASCULINE},
+        {"de", "liter", UDISPOPT_NOUN_CLASS_MASCULINE},
+        {"de", "second", UDISPOPT_NOUN_CLASS_FEMININE},
+        {"de", "minute", UDISPOPT_NOUN_CLASS_FEMININE},
+        {"de", "hour", UDISPOPT_NOUN_CLASS_FEMININE},
+        {"de", "day", UDISPOPT_NOUN_CLASS_MASCULINE},
+        {"de", "year", UDISPOPT_NOUN_CLASS_NEUTER},
+        {"de", "gram", UDISPOPT_NOUN_CLASS_NEUTER},
+        {"de", "watt", UDISPOPT_NOUN_CLASS_NEUTER},
+        {"de", "bit", UDISPOPT_NOUN_CLASS_NEUTER},
+        {"de", "byte", UDISPOPT_NOUN_CLASS_NEUTER},
 
-        {"fr", "inch", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},
-        {"fr", "yard", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},
-        {"fr", "meter", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},
-        {"fr", "liter", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},
-        {"fr", "second", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_FEMININE},
-        {"fr", "minute", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_FEMININE},
-        {"fr", "hour", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_FEMININE},
-        {"fr", "day", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},
-        {"fr", "year", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},
-        {"fr", "gram", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},
+        {"fr", "inch", UDISPOPT_NOUN_CLASS_MASCULINE},
+        {"fr", "yard", UDISPOPT_NOUN_CLASS_MASCULINE},
+        {"fr", "meter", UDISPOPT_NOUN_CLASS_MASCULINE},
+        {"fr", "liter", UDISPOPT_NOUN_CLASS_MASCULINE},
+        {"fr", "second", UDISPOPT_NOUN_CLASS_FEMININE},
+        {"fr", "minute", UDISPOPT_NOUN_CLASS_FEMININE},
+        {"fr", "hour", UDISPOPT_NOUN_CLASS_FEMININE},
+        {"fr", "day", UDISPOPT_NOUN_CLASS_MASCULINE},
+        {"fr", "year", UDISPOPT_NOUN_CLASS_MASCULINE},
+        {"fr", "gram", UDISPOPT_NOUN_CLASS_MASCULINE},
 
         // grammaticalFeatures deriveCompound "per" rule takes the gender of the
         // numerator unit:
-        {"de", "meter-per-hour", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},
-        {"fr", "meter-per-hour", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},
+        {"de", "meter-per-hour", UDISPOPT_NOUN_CLASS_MASCULINE},
+        {"fr", "meter-per-hour", UDISPOPT_NOUN_CLASS_MASCULINE},
         {"af", "meter-per-hour",
-         UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_UNDEFINED}, // ungendered language
+         UDISPOPT_NOUN_CLASS_UNDEFINED}, // ungendered language
 
         // French "times" takes gender from first value, German takes the
         // second. Prefix and power does not have impact on gender for these
         // languages:
-        {"de", "square-decimeter-square-second", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_FEMININE},
+        {"de", "square-decimeter-square-second", UDISPOPT_NOUN_CLASS_FEMININE},
         {"fr", "square-decimeter-square-second",
-         UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},
+         UDISPOPT_NOUN_CLASS_MASCULINE},
 
         // TODO(icu-units#149): percent and permille bypasses LongNameHandler
         // when unitWidth is not FULL_NAME:
@@ -2493,8 +2493,8 @@ void NumberFormatterApiTest::unitNounClass() {
         // {"fr", "percent", UNounClass::UNOUN_CLASS_MASCULINE},
 
         // Built-in units whose simple units lack gender in the CLDR data file
-        {"de", "kilopascal", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_NEUTER},
-        {"fr", "kilopascal", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},
+        {"de", "kilopascal", UDISPOPT_NOUN_CLASS_NEUTER},
+        {"fr", "kilopascal", UDISPOPT_NOUN_CLASS_MASCULINE},
         // {"de", "pascal", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"fr", "pascal", UNounClass::UNOUN_CLASS_UNDEFINED},
 
@@ -2503,8 +2503,8 @@ void NumberFormatterApiTest::unitNounClass() {
         // {"de", "radian", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"de", "arc-minute", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"de", "arc-second", UNounClass::UNOUN_CLASS_UNDEFINED},
-        {"de", "square-yard", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_NEUTER},    // POWER
-        {"de", "square-inch", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE}, // POWER
+        {"de", "square-yard", UDISPOPT_NOUN_CLASS_NEUTER},    // POWER
+        {"de", "square-inch", UDISPOPT_NOUN_CLASS_MASCULINE}, // POWER
         // {"de", "dunam", UNounClass::UNOUN_CLASS_ UNDEFINED},
         // {"de", "karat", UNounClass::UNOUN_CLASS_ UNDEFINED},
         // {"de", "milligram-ofglucose-per-deciliter", UNounClass::UNOUN_CLASS_UNDEFINED}, // COMPOUND,
@@ -2516,21 +2516,21 @@ void NumberFormatterApiTest::unitNounClass() {
         // {"de", "permyriad", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"de", "mole", UNounClass::UNOUN_CLASS_UNDEFINED},
         {"de", "liter-per-kilometer",
-         UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},                // COMPOUND
-        {"de", "petabyte", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_NEUTER}, // PREFIX
-        {"de", "terabit", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_NEUTER},  // PREFIX
+         UDISPOPT_NOUN_CLASS_MASCULINE},                // COMPOUND
+        {"de", "petabyte", UDISPOPT_NOUN_CLASS_NEUTER}, // PREFIX
+        {"de", "terabit", UDISPOPT_NOUN_CLASS_NEUTER},  // PREFIX
         // {"de", "century", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"de", "decade", UNounClass::UNOUN_CLASS_UNDEFINED},
-        {"de", "millisecond", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_FEMININE}, // PREFIX
-        {"de", "microsecond", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_FEMININE}, // PREFIX
-        {"de", "nanosecond", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_FEMININE},  // PREFIX
+        {"de", "millisecond", UDISPOPT_NOUN_CLASS_FEMININE}, // PREFIX
+        {"de", "microsecond", UDISPOPT_NOUN_CLASS_FEMININE}, // PREFIX
+        {"de", "nanosecond", UDISPOPT_NOUN_CLASS_FEMININE},  // PREFIX
         // {"de", "ampere", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"de", "milliampere", UNounClass::UNOUN_CLASS_UNDEFINED}, // PREFIX, ampere
         // {"de", "ohm", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"de", "calorie", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"de", "kilojoule", UNounClass::UNOUN_CLASS_UNDEFINED}, // PREFIX, joule
         // {"de", "joule", UNounClass::UNOUN_CLASS_ UNDEFINED},
-        {"de", "kilowatt-hour", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_FEMININE}, // COMPOUND
+        {"de", "kilowatt-hour", UDISPOPT_NOUN_CLASS_FEMININE}, // COMPOUND
         // {"de", "electronvolt", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"de", "british-thermal-unit", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"de", "therm-us", UNounClass::UNOUN_CLASS_UNDEFINED},
@@ -2549,9 +2549,9 @@ void NumberFormatterApiTest::unitNounClass() {
         // {"de", "dot-per-inch", UNounClass::UNOUN_CLASS_UNDEFINED},         // COMPOUND, dot
         // {"de", "dot", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"de", "earth-radius", UNounClass::UNOUN_CLASS_UNDEFINED},
-        {"de", "decimeter", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},  // PREFIX
-        {"de", "micrometer", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE}, // PREFIX
-        {"de", "nanometer", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},  // PREFIX
+        {"de", "decimeter", UDISPOPT_NOUN_CLASS_MASCULINE},  // PREFIX
+        {"de", "micrometer", UDISPOPT_NOUN_CLASS_MASCULINE}, // PREFIX
+        {"de", "nanometer", UDISPOPT_NOUN_CLASS_MASCULINE},  // PREFIX
         // {"de", "light-year", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"de", "astronomical-unit", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"de", "furlong", UNounClass::UNOUN_CLASS_UNDEFINED},
@@ -2568,8 +2568,8 @@ void NumberFormatterApiTest::unitNounClass() {
         // {"de", "stone", UNounClass::UNOUN_CLASS_ UNDEFINED},
         // {"de", "ounce-troy", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"de", "carat", UNounClass::UNOUN_CLASS_ UNDEFINED},
-        {"de", "gigawatt", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_NEUTER},  // PREFIX
-        {"de", "milliwatt", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_NEUTER}, // PREFIX
+        {"de", "gigawatt", UDISPOPT_NOUN_CLASS_NEUTER},  // PREFIX
+        {"de", "milliwatt", UDISPOPT_NOUN_CLASS_NEUTER}, // PREFIX
         // {"de", "horsepower", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"de", "millimeter-ofhg", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"de", "pound-force-per-square-inch", UNounClass::UNOUN_CLASS_UNDEFINED}, // COMPOUND,
@@ -2582,16 +2582,16 @@ void NumberFormatterApiTest::unitNounClass() {
         // {"de", "hectopascal", UNounClass::UNOUN_CLASS_UNDEFINED}, // PREFIX, pascal, neuter?
         // {"de", "megapascal", UNounClass::UNOUN_CLASS_UNDEFINED},  // PREFIX, pascal, neuter?
         // {"de", "knot", UNounClass::UNOUN_CLASS_UNDEFINED},
-        {"de", "pound-force-foot", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE}, // COMPOUND
-        {"de", "newton-meter", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},     // COMPOUND
-        {"de", "cubic-kilometer", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},  // POWER
-        {"de", "cubic-yard", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_NEUTER},          // POWER
-        {"de", "cubic-inch", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},       // POWER
-        {"de", "megaliter", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},        // PREFIX
-        {"de", "hectoliter", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},       // PREFIX
+        {"de", "pound-force-foot", UDISPOPT_NOUN_CLASS_MASCULINE}, // COMPOUND
+        {"de", "newton-meter", UDISPOPT_NOUN_CLASS_MASCULINE},     // COMPOUND
+        {"de", "cubic-kilometer", UDISPOPT_NOUN_CLASS_MASCULINE},  // POWER
+        {"de", "cubic-yard", UDISPOPT_NOUN_CLASS_NEUTER},          // POWER
+        {"de", "cubic-inch", UDISPOPT_NOUN_CLASS_MASCULINE},       // POWER
+        {"de", "megaliter", UDISPOPT_NOUN_CLASS_MASCULINE},        // PREFIX
+        {"de", "hectoliter", UDISPOPT_NOUN_CLASS_MASCULINE},       // PREFIX
         // {"de", "pint-metric", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"de", "cup-metric", UNounClass::UNOUN_CLASS_UNDEFINED},
-        {"de", "acre-foot", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE}, // COMPOUND
+        {"de", "acre-foot", UDISPOPT_NOUN_CLASS_MASCULINE}, // COMPOUND
         // {"de", "bushel", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"de", "barrel", UNounClass::UNOUN_CLASS_UNDEFINED},
         // Units missing gender in German also misses gender in French:
@@ -2599,12 +2599,12 @@ void NumberFormatterApiTest::unitNounClass() {
         // {"fr", "radian", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"fr", "arc-minute", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"fr", "arc-second", UNounClass::UNOUN_CLASS_UNDEFINED},
-        {"fr", "square-yard", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE}, // POWER
-        {"fr", "square-inch", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE}, // POWER
+        {"fr", "square-yard", UDISPOPT_NOUN_CLASS_MASCULINE}, // POWER
+        {"fr", "square-inch", UDISPOPT_NOUN_CLASS_MASCULINE}, // POWER
         // {"fr", "dunam", UNounClass::UNOUN_CLASS_ UNDEFINED},
         // {"fr", "karat", UNounClass::UNOUN_CLASS_ UNDEFINED},
         {"fr", "milligram-ofglucose-per-deciliter",
-         UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE}, // COMPOUND
+         UDISPOPT_NOUN_CLASS_MASCULINE}, // COMPOUND
         // {"fr", "millimole-per-liter", UNounClass::UNOUN_CLASS_UNDEFINED},                        //
         // COMPOUND, mole
         // {"fr", "permillion", UNounClass::UNOUN_CLASS_UNDEFINED},
@@ -2612,14 +2612,14 @@ void NumberFormatterApiTest::unitNounClass() {
         // {"fr", "permyriad", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"fr", "mole", UNounClass::UNOUN_CLASS_UNDEFINED},
         {"fr", "liter-per-kilometer",
-         UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE}, // COMPOUND
+         UDISPOPT_NOUN_CLASS_MASCULINE}, // COMPOUND
         // {"fr", "petabyte", UNounClass::UNOUN_CLASS_UNDEFINED},                     // PREFIX
         // {"fr", "terabit", UNounClass::UNOUN_CLASS_UNDEFINED},                      // PREFIX
         // {"fr", "century", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"fr", "decade", UNounClass::UNOUN_CLASS_UNDEFINED},
-        {"fr", "millisecond", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_FEMININE}, // PREFIX
-        {"fr", "microsecond", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_FEMININE}, // PREFIX
-        {"fr", "nanosecond", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_FEMININE},  // PREFIX
+        {"fr", "millisecond", UDISPOPT_NOUN_CLASS_FEMININE}, // PREFIX
+        {"fr", "microsecond", UDISPOPT_NOUN_CLASS_FEMININE}, // PREFIX
+        {"fr", "nanosecond", UDISPOPT_NOUN_CLASS_FEMININE},  // PREFIX
         // {"fr", "ampere", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"fr", "milliampere", UNounClass::UNOUN_CLASS_UNDEFINED}, // PREFIX, ampere
         // {"fr", "ohm", UNounClass::UNOUN_CLASS_UNDEFINED},
@@ -2645,9 +2645,9 @@ void NumberFormatterApiTest::unitNounClass() {
         // {"fr", "dot-per-inch", UNounClass::UNOUN_CLASS_UNDEFINED},         // COMPOUND, dot
         // {"fr", "dot", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"fr", "earth-radius", UNounClass::UNOUN_CLASS_UNDEFINED},
-        {"fr", "decimeter", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},  // PREFIX
-        {"fr", "micrometer", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE}, // PREFIX
-        {"fr", "nanometer", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},  // PREFIX
+        {"fr", "decimeter", UDISPOPT_NOUN_CLASS_MASCULINE},  // PREFIX
+        {"fr", "micrometer", UDISPOPT_NOUN_CLASS_MASCULINE}, // PREFIX
+        {"fr", "nanometer", UDISPOPT_NOUN_CLASS_MASCULINE},  // PREFIX
         // {"fr", "light-year", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"fr", "astronomical-unit", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"fr", "furlong", UNounClass::UNOUN_CLASS_UNDEFINED},
@@ -2667,10 +2667,10 @@ void NumberFormatterApiTest::unitNounClass() {
         // {"fr", "gigawatt", UNounClass::UNOUN_CLASS_UNDEFINED}, // PREFIX
         // {"fr", "milliwatt", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"fr", "horsepower", UNounClass::UNOUN_CLASS_UNDEFINED},
-        {"fr", "millimeter-ofhg", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},
+        {"fr", "millimeter-ofhg", UDISPOPT_NOUN_CLASS_MASCULINE},
         // {"fr", "pound-force-per-square-inch", UNounClass::UNOUN_CLASS_UNDEFINED}, // COMPOUND,
         // pound-force
-        {"fr", "inch-ofhg", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},
+        {"fr", "inch-ofhg", UDISPOPT_NOUN_CLASS_MASCULINE},
         // {"fr", "bar", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"fr", "millibar", UNounClass::UNOUN_CLASS_UNDEFINED}, // PREFIX, bar
         // {"fr", "atmosphere", UNounClass::UNOUN_CLASS_UNDEFINED},
@@ -2680,19 +2680,19 @@ void NumberFormatterApiTest::unitNounClass() {
         // {"fr", "knot", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"fr", "pound-force-foot", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"fr", "newton-meter", UNounClass::UNOUN_CLASS_UNDEFINED},
-        {"fr", "cubic-kilometer", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE}, // POWER
-        {"fr", "cubic-yard", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},      // POWER
-        {"fr", "cubic-inch", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},      // POWER
-        {"fr", "megaliter", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},       // PREFIX
-        {"fr", "hectoliter", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},      // PREFIX
+        {"fr", "cubic-kilometer", UDISPOPT_NOUN_CLASS_MASCULINE}, // POWER
+        {"fr", "cubic-yard", UDISPOPT_NOUN_CLASS_MASCULINE},      // POWER
+        {"fr", "cubic-inch", UDISPOPT_NOUN_CLASS_MASCULINE},      // POWER
+        {"fr", "megaliter", UDISPOPT_NOUN_CLASS_MASCULINE},       // PREFIX
+        {"fr", "hectoliter", UDISPOPT_NOUN_CLASS_MASCULINE},      // PREFIX
         // {"fr", "pint-metric", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"fr", "cup-metric", UNounClass::UNOUN_CLASS_UNDEFINED},
-        {"fr", "acre-foot", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_FEMININE}, // COMPOUND
+        {"fr", "acre-foot", UDISPOPT_NOUN_CLASS_FEMININE}, // COMPOUND
         // {"fr", "bushel", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"fr", "barrel", UNounClass::UNOUN_CLASS_UNDEFINED},
         // Some more French units missing gender:
         // {"fr", "degree", UNounClass::UNOUN_CLASS_UNDEFINED},
-        {"fr", "square-meter", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE}, // POWER
+        {"fr", "square-meter", UDISPOPT_NOUN_CLASS_MASCULINE}, // POWER
         // {"fr", "terabyte", UNounClass::UNOUN_CLASS_UNDEFINED},              // PREFIX, byte
         // {"fr", "gigabyte", UNounClass::UNOUN_CLASS_UNDEFINED},              // PREFIX, byte
         // {"fr", "gigabit", UNounClass::UNOUN_CLASS_UNDEFINED},               // PREFIX, bit
@@ -2704,10 +2704,10 @@ void NumberFormatterApiTest::unitNounClass() {
         // {"fr", "bit", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"fr", "volt", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"fr", "watt", UNounClass::UNOUN_CLASS_UNDEFINED},
-        {"fr", "cubic-meter", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE}, // POWER
+        {"fr", "cubic-meter", UDISPOPT_NOUN_CLASS_MASCULINE}, // POWER
 
         // gender-lacking builtins within compound units
-        {"de", "newton-meter-per-second", UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE},
+        {"de", "newton-meter-per-second", UDISPOPT_NOUN_CLASS_MASCULINE},
 
         // TODO(ICU-21494): determine whether list genders behave as follows,
         // and implement proper getListGender support (covering more than just
@@ -2747,7 +2747,7 @@ void NumberFormatterApiTest::unitNounClass() {
     fn = formatter.formatDouble(1.1, status);
     status.assertSuccess();
     assertEquals("getNounClasses for a not supported language",
-                 UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_UNDEFINED, fn.getNounClass(status));
+                 UDISPOPT_NOUN_CLASS_UNDEFINED, fn.getNounClass(status));
 }
 
 void NumberFormatterApiTest::unitGender() {

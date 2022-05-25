@@ -40,7 +40,7 @@ MeasureUnit FormattedNumber::getOutputUnit(UErrorCode& status) const {
 }
 
 UDisplayOptionsNounClass FormattedNumber::getNounClass(UErrorCode &status) const {
-    UPRV_FORMATTED_VALUE_METHOD_GUARD(UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_UNDEFINED);
+    UPRV_FORMATTED_VALUE_METHOD_GUARD(UDISPOPT_NOUN_CLASS_UNDEFINED);
     const char *nounClass = fData->gender;
     return udispopt_fromNounClassIdentifier(nounClass);
 }
