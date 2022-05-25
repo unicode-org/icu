@@ -315,7 +315,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     private void setDateTimeFromCalendar(ULocale uLocale) {
         Calendar cal = Calendar.getInstance(uLocale);
         for (int style = DateFormat.FULL; style <= DateFormat.SHORT; style++) {
-            String dateTimeFormat = Calendar.getDateTimePattern(cal, uLocale, style);
+            String dateTimeFormat = Calendar.getDateAtTimePattern(cal, uLocale, style);
             setDateTimeFormat(style, dateTimeFormat);
         }
     }

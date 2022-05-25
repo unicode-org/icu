@@ -260,6 +260,9 @@
 # locale info
 //supplementalData/parentLocales/parentLocale[@parent="(%A)"][@locales="(%A)"] ; /parentLocales/$1 ; values=$2
 
+# personName formats
+//supplementalData/personNamesDefaults/nameOrderLocalesDefault[@order="(%A)"] ; /personNamesDefaults/nameOrderLocalesDefault/$1 ; values={value}
+
 # supplementalMetadata.xml (metadata.txt)
 //supplementalData/metadata/defaultContent[@locales="(%A)"] ; /defaultContent ; values=$1
 //supplementalData/metadata/alias/(language|script|territory|subdivision|variant)Alias[@type="(%A)"][@replacement="(%A)"][@reason="(%A)"]

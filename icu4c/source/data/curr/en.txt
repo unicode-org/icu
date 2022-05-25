@@ -825,7 +825,7 @@ en{
         }
         QAR{
             "QAR",
-            "Qatari Rial",
+            "Qatari Riyal",
         }
         RHD{
             "RHD",
@@ -2046,8 +2046,8 @@ en{
             other{"Paraguayan guaranis"}
         }
         QAR{
-            one{"Qatari rial"}
-            other{"Qatari rials"}
+            one{"Qatari riyal"}
+            other{"Qatari riyals"}
         }
         RHD{
             one{"Rhodesian dollar"}

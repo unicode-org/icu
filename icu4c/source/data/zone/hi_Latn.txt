@@ -536,7 +536,7 @@ hi_Latn{
             ec{"Santiago"}
         }
         "America:Santo_Domingo"{
-            ec{"Santo_Domingo"}
+            ec{"Santo Domingo"}
         }
         "America:Sao_Paulo"{
             ec{"Sao Paulo"}

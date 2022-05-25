@@ -161,8 +161,8 @@ static const int8_t kTimeFieldsCount = 10;
 // of a resource.
 static const UChar gDefaultPattern[] =
 {
-    0x79, 0x79, 0x79, 0x79, 0x4D, 0x4D, 0x64, 0x64, 0x20, 0x68, 0x68, 0x3A, 0x6D, 0x6D, 0x20, 0x61, 0
-};  /* "yyyyMMdd hh:mm a" */
+    0x79, 0x4D, 0x4D, 0x64, 0x64, 0x20, 0x68, 0x68, 0x3A, 0x6D, 0x6D, 0x20, 0x61, 0
+};  /* "yMMdd hh:mm a" */
 
 // This prefix is designed to NEVER MATCH real text, in order to
 // suppress the parsing of negative numbers.  Adjust as needed (if
@@ -842,14 +842,37 @@ void SimpleDateFormat::construct(EStyle timeStyle,
 
         UnicodeString tempus2(TRUE, resStr, resStrLen);
 
-        int32_t glueIndex = kDateTime;
-        int32_t patternsSize = ures_getSize(dateTimePatterns.getAlias());
-        if (patternsSize >= (kDateTimeOffset + kShort + 1)) {
-            // Get proper date time format
-            glueIndex = (int32_t)(kDateTimeOffset + (dateStyle - kDateOffset));
+        // Currently, for compatibility with pre-CLDR-42 data, we default to the "atTime"
+        // combining patterns. Depending on guidance in CLDR 42 spec and on DisplayOptions,
+        // we may change this.
+        LocalUResourceBundlePointer dateAtTimePatterns;
+        if (!cTypeIsGregorian) {
+            CharString resourcePath("calendar/", status);
+            resourcePath.append(cType, status).append("/DateTimePatterns%atTime", status);
+            dateAtTimePatterns.adoptInstead(
+                ures_getByKeyWithFallback(bundle.getAlias(), resourcePath.data(),
+                                          nullptr, &status));
         }
+        if (cTypeIsGregorian || status == U_MISSING_RESOURCE_ERROR) {
+            status = U_ZERO_ERROR;
+            dateAtTimePatterns.adoptInstead(
+                ures_getByKeyWithFallback(bundle.getAlias(),
+                                          "calendar/gregorian/DateTimePatterns%atTime",
+                                          nullptr, &status));
+        }
+        if (U_SUCCESS(status) && ures_getSize(dateAtTimePatterns.getAlias()) >= 4) {
+            resStr = ures_getStringByIndex(dateAtTimePatterns.getAlias(), dateStyle - kDateOffset, &resStrLen, &status);
+        } else {
+            status = U_ZERO_ERROR;
+            int32_t glueIndex = kDateTime;
+            int32_t patternsSize = ures_getSize(dateTimePatterns.getAlias());
+            if (patternsSize >= (kDateTimeOffset + kShort + 1)) {
+                // Get proper date time format
+                glueIndex = (int32_t)(kDateTimeOffset + (dateStyle - kDateOffset));
+            }
 
-        resStr = ures_getStringByIndex(dateTimePatterns.getAlias(), glueIndex, &resStrLen, &status);
+            resStr = ures_getStringByIndex(dateTimePatterns.getAlias(), glueIndex, &resStrLen, &status);
+        }
         SimpleFormatter(UnicodeString(TRUE, resStr, resStrLen), 2, 2, status).
                 format(tempus1, tempus2, fPattern, status);
     }

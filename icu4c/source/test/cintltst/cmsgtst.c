@@ -43,7 +43,7 @@ static const char* const txt_testResultStrings[] = {
     "Quotes ', {, a 1 {0}",
     "Quotes ', {, a 1 {0}",
     "You deposited 1 times an amount of $3,456.00 on 1/12/70",
-    "{2,time,full}, for 3,456, 1 is 5:46:40 AM Pacific Standard Time and full date is Monday, January 12, 1970",
+    "{2,time,full}, for 3,456, 1 is 5:46:40\\u202FAM Pacific Standard Time and full date is Monday, January 12, 1970",
     "{1,number,percent} for 1 is 345,600%"
 };
 
@@ -69,7 +69,7 @@ static void InitStrings( void )
     for (i=0; i < cnt_testCases; i++ ) {
         uint32_t strSize = (uint32_t)strlen(txt_testResultStrings[i]) + 1;
         testResultStrings[i] = (UChar*)malloc(sizeof(UChar) * strSize);
-        u_uastrncpy(testResultStrings[i], txt_testResultStrings[i], strSize);
+        u_unescape(txt_testResultStrings[i], testResultStrings[i], strSize);
     }
 
     strings_initialized = TRUE;

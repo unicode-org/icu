@@ -20,7 +20,7 @@ package com.ibm.icu.impl;
  * Pattern_Syntax includes some unassigned code points.
  * <p>
  * [:Pattern_White_Space:] =
- *   [\u0009-\u000D\ \u0085\u200E\u200F\u2028\u2029]
+ *   [\u0009-\u000D\ \u0020\u0085\u200E\u200F\u2028\u2029]
  * <p>
  * [:Pattern_Syntax:] =
  *   [!-/\:-@\[-\^`\{-~\u00A1-\u00A7\u00A9\u00AB\u00AC\u00AE

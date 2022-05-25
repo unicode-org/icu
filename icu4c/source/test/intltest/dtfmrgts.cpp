@@ -144,8 +144,8 @@ void DateFormatRegressionTest::Test4052408(void)
     str = fmt->format(dt, str);
     logln(str);
     
-    if(str != "5/3/97, 8:55 AM")
-        errln("Fail: Test broken; Want 5/3/97 8:55 AM Got " + str);   
+    if(str != u"5/3/97, 8:55\u202FAM")
+        errln(UnicodeString(u"Fail: Test broken; Want 5/3/97, 8:55\u202FAM Got ", -1) + str);
     
     UnicodeString expected[] = {
         (UnicodeString) "", //"ERA_FIELD",
@@ -1230,7 +1230,7 @@ void DateFormatRegressionTest::Test714(void)
 
     UnicodeString s;
         UnicodeString tests = 
-          (UnicodeString) "7:25:43 AM" ;
+          (UnicodeString) u"7:25:43\u202FAM" ;
         UErrorCode status = U_ZERO_ERROR;
         fmt->format (d,s);
         if(U_FAILURE(status))

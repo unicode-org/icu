@@ -56,7 +56,7 @@ tzm{
                 MMMd{"MMM d"}
                 Md{"M/d"}
                 d{"d"}
-                hm{"h:mm a"}
+                hm{"h:mm a"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M/y"}
@@ -114,7 +114,7 @@ tzm{
                 MMMd{"MMM d"}
                 Md{"M/d"}
                 d{"d"}
-                hm{"h:mm a"}
+                hm{"h:mm a"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M/y"}

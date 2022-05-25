@@ -393,16 +393,16 @@ typedef struct DTPtnGenOptionsData {
 } DTPtnGenOptionsData;
 enum { kTestOptionsPatLenMax = 32 };
 
-static const UChar skel_Hmm[]     = { 0x0048, 0x006D, 0x006D, 0 };
-static const UChar skel_HHmm[]    = { 0x0048, 0x0048, 0x006D, 0x006D, 0 };
-static const UChar skel_hhmm[]    = { 0x0068, 0x0068, 0x006D, 0x006D, 0 };
-static const UChar patn_hcmm_a[]  = { 0x0068, 0x003A, 0x006D, 0x006D, 0x0020, 0x0061, 0 }; /* h:mm a */
-static const UChar patn_HHcmm[]   = { 0x0048, 0x0048, 0x003A, 0x006D, 0x006D, 0 }; /* HH:mm */
-static const UChar patn_hhcmm_a[] = { 0x0068, 0x0068, 0x003A, 0x006D, 0x006D, 0x0020, 0x0061, 0 }; /* hh:mm a */
-static const UChar patn_HHpmm[]   = { 0x0048, 0x0048, 0x002E, 0x006D, 0x006D, 0 }; /* HH.mm */
-static const UChar patn_hpmm_a[]  = { 0x0068, 0x002E, 0x006D, 0x006D, 0x0020, 0x0061, 0 }; /* h.mm a */
-static const UChar patn_Hpmm[]    = { 0x0048, 0x002E, 0x006D, 0x006D, 0 }; /* H.mm */
-static const UChar patn_hhpmm_a[] = { 0x0068, 0x0068, 0x002E, 0x006D, 0x006D, 0x0020, 0x0061, 0 }; /* hh.mm a */
+static const UChar skel_Hmm[]     = u"Hmm";
+static const UChar skel_HHmm[]    = u"HHmm";
+static const UChar skel_hhmm[]    = u"hhmm";
+static const UChar patn_hcmm_a[]  = u"h:mm\u202Fa";
+static const UChar patn_HHcmm[]   = u"HH:mm";
+static const UChar patn_hhcmm_a[] = u"hh:mm\u202Fa";
+static const UChar patn_HHpmm[]   = u"HH.mm";
+static const UChar patn_hpmm_a[]  = u"h.mm\u202Fa";
+static const UChar patn_Hpmm[]    = u"H.mm";
+static const UChar patn_hhpmm_a[] = u"hh.mm\u202Fa";
 
 static void TestOptions() {
     const DTPtnGenOptionsData testData[] = {
@@ -637,10 +637,10 @@ static void TestDateTimePatterns(void) {
     // The following tests some locales in which there are differences between the
     // DateTimePatterns of various length styles.
     DTPLocaleAndResults localeAndResults[] = {
-        { "en", { u"EEEE, MMMM d, y 'at' h:mm a", // long != medium
-                  u"MMMM d, y 'at' h:mm a",
-                  u"MMM d, y, h:mm a",
-                  u"M/d/y, h:mm a" } },
+        { "en", { u"EEEE, MMMM d, y 'at' h:mm\u202Fa", // long != medium
+                  u"MMMM d, y 'at' h:mm\u202Fa",
+                  u"MMM d, y, h:mm\u202Fa",
+                  u"M/d/y, h:mm\u202Fa" } },
         { "fr", { u"EEEE d MMMM y 'à' HH:mm", // medium != short
                   u"d MMMM y 'à' HH:mm",
                   u"d MMM y, HH:mm",
@@ -664,10 +664,10 @@ static void TestDateTimePatterns(void) {
         u"{1} _2_ {0}",
         u"{1} _3_ {0}"
     };
-    DTPLocaleAndResults enModResults = { "en", { u"EEEE, MMMM d, y _0_ h:mm a",
-                                                 u"MMMM d, y _1_ h:mm a",
-                                                 u"MMM d, y _2_ h:mm a",
-                                                 u"M/d/y _3_ h:mm a" }
+    DTPLocaleAndResults enModResults = { "en", { u"EEEE, MMMM d, y _0_ h:mm\u202Fa",
+                                                 u"MMMM d, y _1_ h:mm\u202Fa",
+                                                 u"MMM d, y _2_ h:mm\u202Fa",
+                                                 u"M/d/y _3_ h:mm\u202Fa" }
     };
 
     // Test various locales with standard data

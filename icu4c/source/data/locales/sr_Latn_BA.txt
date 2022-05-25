@@ -6,8 +6,8 @@ sr_Latn_BA{
         generic{
             intervalFormats{
                 MMMEd{
-                    M{"E, d. MMM – E, d. MMM"}
-                    d{"E, d. MMM – E, d. MMM"}
+                    M{"E, d. MMM – E, d. MMM"}
+                    d{"E, d. MMM – E, d. MMM"}
                 }
                 yMd{
                     M{"d.M.y. – d.M.y. GGGGG"}
@@ -101,26 +101,26 @@ sr_Latn_BA{
             }
             intervalFormats{
                 MEd{
-                    M{"E, MM-dd – E, MM-dd"}
-                    d{"E, MM-dd – E, MM-dd"}
+                    M{"E, MM-dd – E, MM-dd"}
+                    d{"E, MM-dd – E, MM-dd"}
                 }
                 Md{
-                    M{"MM-dd – MM-dd"}
-                    d{"MM-dd – MM-dd"}
+                    M{"MM-dd – MM-dd"}
+                    d{"MM-dd – MM-dd"}
                 }
                 yM{
-                    M{"y-MM – y-MM"}
-                    y{"y-MM – y-MM"}
+                    M{"y-MM – y-MM"}
+                    y{"y-MM – y-MM"}
                 }
                 yMEd{
-                    M{"E, y-MM-dd – E, y-MM-dd"}
-                    d{"E, y-MM-dd – E, y-MM-dd"}
-                    y{"E, y-MM-dd – E, y-MM-dd"}
+                    M{"E, y-MM-dd – E, y-MM-dd"}
+                    d{"E, y-MM-dd – E, y-MM-dd"}
+                    y{"E, y-MM-dd – E, y-MM-dd"}
                 }
                 yMd{
-                    M{"y-MM-dd – y-MM-dd"}
-                    d{"y-MM-dd – y-MM-dd"}
-                    y{"y-MM-dd – y-MM-dd"}
+                    M{"y-MM-dd – y-MM-dd"}
+                    d{"y-MM-dd – y-MM-dd"}
+                    y{"y-MM-dd – y-MM-dd"}
                 }
             }
         }

@@ -474,11 +474,10 @@ void Test4162071()
 void Test714(void)
 {
     UDate d=978103543000.0;
-    UChar temp[20];
     UErrorCode status = U_ZERO_ERROR;
     UDateFormat *fmt;
     UChar *result;
-    const char* expect =  "7:25:43 AM";
+    const UChar* expect =  u"7:25:43\u202FAM";
     
     ctest_setTimeZone(NULL, &status);
 
@@ -494,12 +493,11 @@ void Test714(void)
       log_data_err("Fail: could not format - exiting test\n");
       return;
     }
-    u_uastrcpy(temp, expect);
-    if (u_strcmp(result, temp)!=0){
-      log_err("Fail: %s != %s\n", austrdup(result), expect);
+    if (u_strcmp(result, expect)!=0){
+      log_err("Fail: %s != %s\n", austrdup(result), austrdup(expect));
     }
     else{
-      log_verbose("Ok: %s == %s\n", austrdup(result), expect );
+      log_verbose("Ok: %s == %s\n", austrdup(result), austrdup(expect));
     }
         
     udat_close(fmt);

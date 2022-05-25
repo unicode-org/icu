@@ -49,7 +49,7 @@ likelySubtags:table(nofallback){
     an{"an_Latn_ES"}
     anc{"anc_Latn_ZZ"}
     ank{"ank_Latn_ZZ"}
-    ann{"ann_Latn_ZZ"}
+    ann{"ann_Latn_NG"}
     any{"any_Latn_ZZ"}
     aoj{"aoj_Latn_ZZ"}
     aom{"aom_Latn_ZZ"}
@@ -1000,6 +1000,7 @@ likelySubtags:table(nofallback){
     phn{"phn_Phnx_LB"}
     pil{"pil_Latn_ZZ"}
     pip{"pip_Latn_ZZ"}
+    pis{"pis_Latn_SB"}
     pka{"pka_Brah_IN"}
     pko{"pko_Latn_KE"}
     pl{"pl_Latn_PL"}
@@ -1224,6 +1225,7 @@ likelySubtags:table(nofallback){
     to{"to_Latn_TO"}
     tof{"tof_Latn_ZZ"}
     tog{"tog_Latn_MW"}
+    tok{"tok_Latn_001"}
     toq{"toq_Latn_ZZ"}
     tpi{"tpi_Latn_PG"}
     tpm{"tpm_Latn_ZZ"}

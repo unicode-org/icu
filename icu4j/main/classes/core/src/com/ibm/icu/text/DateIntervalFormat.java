@@ -2126,8 +2126,16 @@ public class DateIntervalFormat extends UFormat {
         if (suppressDayPeriodField) {
             if (bestMatchIntervalPattern.indexOf(" a") != -1) {
                 bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, " a", "");
+            } else if (bestMatchIntervalPattern.indexOf("\u00A0a") != -1) {
+                bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "\u00A0a", "");
+            } else if (bestMatchIntervalPattern.indexOf("\u202Fa") != -1) {
+                bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "\u202Fa", "");
             } else if (bestMatchIntervalPattern.indexOf("a ") != -1) {
                 bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "a ", "");
+            } else if (bestMatchIntervalPattern.indexOf("a\u00A0") != -1) {
+                bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "a\u00A0", "");
+            } else if (bestMatchIntervalPattern.indexOf("a\u202F") != -1) {
+                bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "a\u202F", "");
             }
             bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "a", "");
         }

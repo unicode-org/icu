@@ -138,7 +138,7 @@ public class DateFormatRegressionTestJ extends TestFmwk {
         Date d = cal.getTime();
         DateFormat tf = DateFormat.getTimeInstance(DateFormat.SHORT);
         String act_result = tf.format(d);
-        String exp_result = "5:53 PM";
+        String exp_result = "5:53\u202FPM";
 
         if(!act_result.equals(exp_result)){
             errln("The result is not expected");
