@@ -17,6 +17,7 @@ hi_Latn{
         af{"Afreeki"}
         ar_001{"Modern Standard Arabic"}
         as{"Aasaami"}
+        bla{"Siksika"}
         bn{"Bangla"}
         bo{"Tibbati"}
         ckb{"Kurdish, Sorani"}

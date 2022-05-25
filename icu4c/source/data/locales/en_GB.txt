@@ -19,14 +19,14 @@ en_GB{
             }
             intervalFormats{
                 MMMEd{
-                    d{"E d MMM – E d MMM"}
+                    d{"E d MMM – E d MMM"}
                 }
                 Md{
                     M{"dd/MM–dd/MM"}
                     d{"dd/MM–dd/MM"}
                 }
                 yMMMEd{
-                    d{"E, d MMM – E, d MMM y G"}
+                    d{"E, d MMM – E, d MMM y G"}
                 }
             }
         }
@@ -41,8 +41,8 @@ en_GB{
                 "d MMM y",
                 "dd/MM/y",
                 "{1}, {0}",
-                "{1} 'at' {0}",
-                "{1} 'at' {0}",
+                "{1}, {0}",
+                "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
             }
@@ -59,6 +59,7 @@ en_GB{
             availableFormats{
                 EBhm{"E h:mm B"}
                 EBhms{"E h:mm:ss B"}
+                GyMd{"d/M/y GGGGG"}
             }
             dayNames{
                 format{
@@ -111,11 +112,23 @@ en_GB{
                 }
             }
             intervalFormats{
+                GyMEd{
+                    G{"E, dd/MM/y GGGGG – E, dd/MM/y GGGGG"}
+                    M{"E, dd/MM/y – E, dd/MM/y GGGGG"}
+                    d{"E, dd/MM/y – E, dd/MM/y GGGGG"}
+                    y{"E, dd/MM/y – E, dd/MM/y GGGGG"}
+                }
+                GyMd{
+                    G{"dd/MM/y GGGGG – dd/MM/y GGGGG"}
+                    M{"dd/MM/y – dd/MM/y GGGGG"}
+                    d{"dd/MM/y – dd/MM/y GGGGG"}
+                    y{"dd/MM/y – dd/MM/y GGGGG"}
+                }
                 MMMEd{
-                    d{"E d MMM – E d MMM"}
+                    d{"E d MMM – E d MMM"}
                 }
                 yMMMEd{
-                    d{"E, d MMM – E, d MMM y"}
+                    d{"E, d MMM – E, d MMM y"}
                 }
             }
             monthNames{
@@ -204,15 +217,6 @@ en_GB{
                     other{"{0} days ago"}
                 }
             }
-        }
-        hour-narrow{
-            dn{"hr"}
-        }
-        second-narrow{
-            dn{"sec"}
-        }
-        year-narrow{
-            dn{"yr"}
         }
     }
 }

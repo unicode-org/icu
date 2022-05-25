@@ -995,7 +995,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of concentr: item
-     * @draft ICU 70
+     * @stable ICU 70
      */
     public static final MeasureUnit ITEM = MeasureUnit.internalGetInstance("concentr", "item");
 
@@ -1210,6 +1210,12 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit NANOSECOND = MeasureUnit.internalGetInstance("duration", "nanosecond");
 
     /**
+     * Constant for unit of duration: quarter
+     * @draft ICU 72
+     */
+    public static final MeasureUnit QUARTER = MeasureUnit.internalGetInstance("duration", "quarter");
+
+    /**
      * Constant for unit of duration: second
      * @stable ICU 4.0
      */
@@ -1319,7 +1325,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of force: kilowatt-hour-per-100-kilometer
-     * @draft ICU 70
+     * @stable ICU 70
      */
     public static final MeasureUnit KILOWATT_HOUR_PER_100_KILOMETER = MeasureUnit.internalGetInstance("force", "kilowatt-hour-per-100-kilometer");
 

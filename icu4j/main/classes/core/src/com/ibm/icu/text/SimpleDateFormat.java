@@ -1233,11 +1233,7 @@ public class SimpleDateFormat extends DateFormat {
                 if (patternsRb == null || patternsRb.getSize() < 9) {
                     cachedDefaultPattern = FALLBACKPATTERN;
                 } else {
-                    int defaultIndex = 8;
-                    if (patternsRb.getSize() >= 13) {
-                        defaultIndex += (SHORT + 1);
-                    }
-                    String basePattern = patternsRb.getString(defaultIndex);
+                    String basePattern = Calendar.getDateAtTimePattern(cal, cachedDefaultLocale, SHORT);
 
                     cachedDefaultPattern = SimpleFormatterImpl.formatRawPattern(
                             basePattern, 2, 2,
@@ -2535,7 +2531,7 @@ public class SimpleDateFormat extends DateFormat {
                                 while (idx < plen) {
 
                                     char pch = patl.charAt(idx);
-                                    if (PatternProps.isWhiteSpace(pch))
+                                    if (PatternProps.isWhiteSpace(pch) || UCharacter.isUWhiteSpace(pch))
                                         idx++;
                                     else
                                         break;
@@ -2842,16 +2838,18 @@ public class SimpleDateFormat extends DateFormat {
         while (idx < plen && pos < tlen) {
             char pch = patternLiteral.charAt(idx);
             char ich = text.charAt(pos);
-            if (PatternProps.isWhiteSpace(pch)
-                && PatternProps.isWhiteSpace(ich)) {
+            if ((PatternProps.isWhiteSpace(pch) || UCharacter.isUWhiteSpace(pch))
+                && (PatternProps.isWhiteSpace(ich) || UCharacter.isUWhiteSpace(ich))) {
                 // White space characters found in both patten and input.
                 // Skip contiguous white spaces.
                 while ((idx + 1) < plen &&
-                        PatternProps.isWhiteSpace(patternLiteral.charAt(idx + 1))) {
+                        (PatternProps.isWhiteSpace(patternLiteral.charAt(idx + 1)) ||
+                        UCharacter.isUWhiteSpace(patternLiteral.charAt(idx + 1)))) {
                      ++idx;
                 }
                 while ((pos + 1) < tlen &&
-                        PatternProps.isWhiteSpace(text.charAt(pos + 1))) {
+                        (PatternProps.isWhiteSpace(text.charAt(pos + 1)) ||
+                        UCharacter.isUWhiteSpace(text.charAt(pos + 1)))) {
                      ++pos;
                 }
             } else if (pch != ich) {
@@ -3192,7 +3190,9 @@ public class SimpleDateFormat extends DateFormat {
                 return ~start;
             }
             int c = UTF16.charAt(text, start);
-            if (!UCharacter.isUWhiteSpace(c) || !PatternProps.isWhiteSpace(c)) {
+            // Changed the following from || to &&, as in ICU4C; needed to skip NBSP, NNBSP.
+            // Only UWhiteSpace includes \u00A0\u202F\u2009\u3000...; only PatternProps.isWhiteSpace includes \u200E\u200F
+            if (!UCharacter.isUWhiteSpace(c) && !PatternProps.isWhiteSpace(c)) {
                 break;
             }
             start += UTF16.getCharCount(c);

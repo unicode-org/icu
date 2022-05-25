@@ -6111,7 +6111,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -6219,6 +6223,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -6442,7 +6544,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -6550,6 +6656,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -6773,7 +6977,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -6881,6 +7089,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -7104,7 +7410,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -7212,6 +7522,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -7435,7 +7843,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -7543,6 +7955,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -7766,7 +8276,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -7874,6 +8388,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -8097,7 +8709,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -8205,6 +8821,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -8428,7 +9142,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -8536,6 +9254,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -8761,7 +9577,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -8869,6 +9689,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -9093,7 +10011,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -9201,6 +10123,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -9424,7 +10444,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -9532,6 +10556,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -9755,7 +10877,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -9863,6 +10989,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -10086,7 +11310,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -10194,6 +11422,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -10417,7 +11743,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -10525,6 +11855,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -10748,7 +12176,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -10856,6 +12288,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -11079,7 +12609,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -11187,6 +12721,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -11410,7 +13042,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -11518,6 +13154,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -11741,7 +13475,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -11849,6 +13587,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -12072,7 +13908,11 @@ structLocale:table(nofallback){
             }
            patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -12180,6 +14020,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -12403,7 +14341,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -12511,6 +14453,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -12734,7 +14774,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -12842,6 +14886,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -13065,7 +15207,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -13173,6 +15319,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -13396,7 +15640,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -13504,6 +15752,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -13727,7 +16073,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -13835,6 +16185,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -14058,7 +16506,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -14166,6 +16618,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -14389,7 +16939,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -14497,6 +17051,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -14764,7 +17416,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -14872,6 +17528,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -15095,7 +17849,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -15203,6 +17961,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -15426,7 +18282,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -15534,6 +18394,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -15757,7 +18715,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -15865,6 +18827,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -16088,7 +19148,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -16196,6 +19260,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -16421,7 +19583,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -16529,6 +19695,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -16752,7 +20016,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -16860,6 +20128,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -17083,7 +20449,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -17191,6 +20561,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -17414,7 +20882,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -17522,6 +20994,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -17745,7 +21315,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -17853,6 +21427,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -18076,7 +21748,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -18184,6 +21860,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -18407,7 +22181,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -18515,6 +22293,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -18738,7 +22614,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -18846,6 +22726,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -19069,7 +23047,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -19177,6 +23159,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -19400,7 +23480,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -19508,6 +23592,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -19731,7 +23913,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -19839,6 +24025,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -20062,7 +24346,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -20170,6 +24458,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -20393,7 +24779,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -20501,6 +24891,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -20724,7 +25212,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -20832,6 +25324,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -21055,7 +25645,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -21163,6 +25757,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -21387,7 +26079,11 @@ structLocale:table(nofallback){
             }
             patterns{
                 accountingFormat{""}
+                accountingFormat%alphaNextToNumber{""}
+                accountingFormat%noCurrency{""}
                 currencyFormat{""}
+                currencyFormat%alphaNextToNumber{""}
+                currencyFormat%noCurrency{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -21495,6 +26191,104 @@ structLocale:table(nofallback){
             }
             patternsShort{
                 currencyFormat{
+                    1000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    1000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    10000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                    100000000000000{
+                        zero{""}
+                        one{""}
+                        two{""}
+                        few{""}
+                        many{""}
+                        other{""}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
                     1000{
                         zero{""}
                         one{""}
@@ -22079,6 +26873,12 @@ structLocale:table(nofallback){
                 "A4",
                 "A4",
             }
+            DateTimePatterns%atTime{
+                "A4",
+                "A4",
+                "A4",
+                "A4",
+            }
             DateTimeSkeletons{
                 "",
                 "",
@@ -22316,6 +27116,12 @@ structLocale:table(nofallback){
                 "A2",
                 "A2",
                 "",
+                "A4",
+                "A4",
+                "A4",
+                "A4",
+            }
+            DateTimePatterns%atTime{
                 "A4",
                 "A4",
                 "A4",
@@ -23405,6 +28211,12 @@ structLocale:table(nofallback){
                 "A4",
                 "A4",
             }
+            DateTimePatterns%atTime{
+                "A4",
+                "A4",
+                "A4",
+                "A4",
+            }
             DateTimeSkeletons{
                 "",
                 "",
@@ -23758,6 +28570,12 @@ structLocale:table(nofallback){
                 "A2",
                 "A2",
                 "",
+                "A4",
+                "A4",
+                "A4",
+                "A4",
+            }
+            DateTimePatterns%atTime{
                 "A4",
                 "A4",
                 "A4",
@@ -24852,6 +29670,12 @@ structLocale:table(nofallback){
                 "A4",
                 "A4",
             }
+            DateTimePatterns%atTime{
+                "A4",
+                "A4",
+                "A4",
+                "A4",
+            }
             DateTimeSkeletons{
                 "",
                 "",
@@ -25518,6 +30342,12 @@ structLocale:table(nofallback){
                 "A4",
                 "A4",
             }
+            DateTimePatterns%atTime{
+                "A4",
+                "A4",
+                "A4",
+                "A4",
+            }
             DateTimeSkeletons{
                 "",
                 "",
@@ -25807,6 +30637,12 @@ structLocale:table(nofallback){
                 "A2",
                 "A2",
                 "",
+                "A4",
+                "A4",
+                "A4",
+                "A4",
+            }
+            DateTimePatterns%atTime{
                 "A4",
                 "A4",
                 "A4",
@@ -26417,6 +31253,12 @@ structLocale:table(nofallback){
                 "A4",
                 "A4",
             }
+            DateTimePatterns%atTime{
+                "A4",
+                "A4",
+                "A4",
+                "A4",
+            }
             DateTimeSkeletons{
                 "",
                 "",
@@ -26779,6 +31621,12 @@ structLocale:table(nofallback){
                 "A4",
                 "A4",
             }
+            DateTimePatterns%atTime{
+                "A4",
+                "A4",
+                "A4",
+                "A4",
+            }
             DateTimeSkeletons{
                 "",
                 "",
@@ -27098,6 +31946,12 @@ structLocale:table(nofallback){
                 "",
                 "",
                 "",
+                "A4",
+                "A4",
+                "A4",
+                "A4",
+            }
+            DateTimePatterns%atTime{
                 "A4",
                 "A4",
                 "A4",
@@ -27508,6 +32362,12 @@ structLocale:table(nofallback){
                 "A4",
                 "A4",
             }
+            DateTimePatterns%atTime{
+                "A4",
+                "A4",
+                "A4",
+                "A4",
+            }
             DateTimeSkeletons{
                 "",
                 "",
@@ -27839,6 +32699,12 @@ structLocale:table(nofallback){
                 "A2",
                 "A2",
                 "",
+                "A4",
+                "A4",
+                "A4",
+                "A4",
+            }
+            DateTimePatterns%atTime{
                 "A4",
                 "A4",
                 "A4",
@@ -28793,6 +33659,12 @@ structLocale:table(nofallback){
                 "",
                 "",
                 "",
+                "A4",
+                "A4",
+                "A4",
+                "A4",
+            }
+            DateTimePatterns%atTime{
                 "A4",
                 "A4",
                 "A4",

@@ -110,15 +110,15 @@ public class DateFormatTest extends TestFmwk {
                 {DateFormat.ABBR_MONTH_WEEKDAY_DAY, "MMMEd","en","EEE, MMM d"},
                 {DateFormat.NUM_MONTH_WEEKDAY_DAY, "MEd","en","EEE, M/d"},
 
-                {DateFormat.HOUR, "j", "en", "h a"}, // (fixed expected result per ticket 6872<-6626)
+                {DateFormat.HOUR, "j", "en", "h\u202Fa"}, // (fixed expected result per ticket 6872<-6626)
                 {DateFormat.HOUR24, "H", "en", "HH"}, // (fixed expected result per ticket 6872<-6626
 
                 {DateFormat.MINUTE, "m", "en", "m"},
-                {DateFormat.HOUR_MINUTE, "jm","en","h:mm a"}, // (fixed expected result per ticket 6872<-7180)
+                {DateFormat.HOUR_MINUTE, "jm","en","h:mm\u202Fa"}, // (fixed expected result per ticket 6872<-7180)
                 {DateFormat.HOUR24_MINUTE, "Hm", "en", "HH:mm"}, // (fixed expected result per ticket 6872<-6626)
 
                 {DateFormat.SECOND, "s", "en", "s"},
-                {DateFormat.HOUR_MINUTE_SECOND, "jms","en","h:mm:ss a"}, // (fixed expected result per ticket 6872<-7180)
+                {DateFormat.HOUR_MINUTE_SECOND, "jms","en","h:mm:ss\u202Fa"}, // (fixed expected result per ticket 6872<-7180)
                 {DateFormat.HOUR24_MINUTE_SECOND, "Hms","en","HH:mm:ss"}, // (fixed expected result per ticket 6872<-6626)
                 {DateFormat.MINUTE_SECOND, "ms", "en", "mm:ss"}, // (fixed expected result per ticket 6872<-6626)
 
@@ -1893,7 +1893,7 @@ public class DateFormatTest extends TestFmwk {
         final String[] strings = {"Mar 15", "Mar 15 1997", "asdf", "3/1/97 1:23:", "3/1/00 1:23:45 AM"};
         int strings_length = strings.length;
         DateFormat full = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, Locale.US);
-        String expected = "March 1, 2000 at 1:23:45 AM ";
+        String expected = "March 1, 2000 at 1:23:45\u202FAM ";
         for (int i = 0; i < strings_length; ++i) {
             final String text = strings[i];
             for (int j = 0; j < looks_length; ++j) {
@@ -2127,7 +2127,7 @@ public class DateFormatTest extends TestFmwk {
         dfUS.setTimeZone(tz);
         String expectedFRENCH_JDK12 = "lundi 15 septembre 1997 \u00E0 00:00:00 heure d\u2019\u00E9t\u00E9 du Pacifique";
         //String expectedFRENCH = "lundi 15 septembre 1997 00 h 00 PDT";
-        String expectedUS = "Monday, September 15, 1997 at 12:00:00 AM Pacific Daylight Time";
+        String expectedUS = "Monday, September 15, 1997 at 12:00:00\u202FAM Pacific Daylight Time";
         logln("Date set to : " + testDate);
         String out = dfFrench.format(testDate);
         logln("Date Formatted with French Locale " + out);
@@ -5552,8 +5552,8 @@ public class DateFormatTest extends TestFmwk {
             {"SSS", "SSS"},
             {"SSSS", "SSSS"},
             // hour:minute+seconds+milliseconds, correct, no repairs, proper pattern
-            {"jmsSSS", "h:mm:ss.SSS a"},
-            {"jmSSS", "h:mm:ss.SSS a"},
+            {"jmsSSS", "h:mm:ss.SSS\u202Fa"},
+            {"jmSSS", "h:mm:ss.SSS\u202Fa"},
             // Ticket #20738
             // seconds+milliseconds, correct, no repairs, proper pattern
             {"sS", "s.S"},

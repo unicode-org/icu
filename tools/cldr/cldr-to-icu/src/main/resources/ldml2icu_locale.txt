@@ -171,8 +171,12 @@
      ; /calendar/$1/DateTimePatterns ;  values="{value}" $4 ; group
 
 # DateTime patterns (4 x values)
-//ldml/dates/calendars/calendar[@type="(%A)"]/(dateTimeFormat)s/\2Length[@type="(%A)"]/\2[@type="%A"]/pattern[@type="%A"]
+//ldml/dates/calendars/calendar[@type="(%A)"]/(dateTimeFormat)s/\2Length[@type="(%A)"]/\2[@type="standard"]/pattern[@type="%A"]
      ; /calendar/$1/DateTimePatterns
+
+# DateTime atTime patterns (4 x values)
+//ldml/dates/calendars/calendar[@type="(%A)"]/(dateTimeFormat)s/\2Length[@type="(%A)"]/\2[@type="atTime"]/pattern[@type="%A"]
+     ; /calendar/$1/DateTimePatterns%atTime
 
 # ---- /calendar/xxx/DateTimeSkeletons
 # This is similar to DateTimePatterns above except that for this we do not have the DateTime patterns (4 x values, plus the duplicate value at index 8).
@@ -325,9 +329,13 @@
 //ldml/numbers/otherNumberingSystems/(%W)          ; /NumberElements/$1
 
 //ldml/numbers/symbols[@numberSystem="(%A)"]/(%W) ; /NumberElements/$1/symbols/$2
+//ldml/numbers/(%GFormat)s[@numberSystem="(%W)"]/\1Length/\1[@type="standard"]/pattern[@type="standard"][@alt="(%W)"] ; /NumberElements/$2/patterns/$1%$3
 //ldml/numbers/(%GFormat)s[@numberSystem="(%W)"]/\1Length/\1[@type="standard"]/pattern[@type="standard"] ; /NumberElements/$2/patterns/$1
+//ldml/numbers/currencyFormats[@numberSystem="(%W)"]/currencyFormatLength/currencyFormat[@type="accounting"]/pattern[@type="standard"][@alt="(%W)"] ; /NumberElements/$1/patterns/accountingFormat%$2
 //ldml/numbers/currencyFormats[@numberSystem="(%W)"]/currencyFormatLength/currencyFormat[@type="accounting"]/pattern[@type="standard"] ; /NumberElements/$1/patterns/accountingFormat
+//ldml/numbers/currencyFormats[@numberSystem="(%W)"]/currencyFormatLength[@type="short"]/currencyFormat[@type="standard"]/pattern[@type="(%N)"][@count="(%W)"][@alt="(%W)"] ; /NumberElements/$1/patternsShort/currencyFormat%$4/$2/$3
 //ldml/numbers/currencyFormats[@numberSystem="(%W)"]/currencyFormatLength[@type="short"]/currencyFormat[@type="standard"]/pattern[@type="(%N)"][@count="(%W)"] ; /NumberElements/$1/patternsShort/currencyFormat/$2/$3
+//ldml/numbers/currencyFormats[@numberSystem="(%W)"]/currencyPatternAppendISO  ; /NumberElements/$1/patterns/currencyPatternAppendISO
 //ldml/numbers/decimalFormats[@numberSystem="(%W)"]/decimalFormatLength[@type="short"]/decimalFormat[@type="standard"]/pattern[@type="(%N)"][@count="(%W)"] ; /NumberElements/$1/patternsShort/decimalFormat/$2/$3
 //ldml/numbers/decimalFormats[@numberSystem="(%W)"]/decimalFormatLength[@type="long"]/decimalFormat[@type="standard"]/pattern[@type="(%N)"][@count="(%W)"] ; /NumberElements/$1/patternsLong/decimalFormat/$2/$3
 

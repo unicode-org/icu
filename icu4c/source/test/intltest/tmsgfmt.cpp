@@ -284,15 +284,15 @@ void TestMessageFormat::PatternTest()
     };*/
 
     UnicodeString testResultStrings[] = {
-        "Quotes ', {, 'a' 1 {0}",
-        "Quotes ', {, 'a' 1 {0}",
-        "{1,number,'#',##} #34,56",
-        "There are 3,456 files on Disk at 1/12/70, 5:46 AM.",
-        "On Disk, there are 3,456 files, with $1.00.",
-        "{1,number,percent}, 345,600%,",
-        "{1,date,full}, Wednesday, December 31, 1969,",
-        "{3,date,full}, Monday, January 12, 1970,",
-        "{1,number,#,##} 34,56"
+        u"Quotes ', {, 'a' 1 {0}",
+        u"Quotes ', {, 'a' 1 {0}",
+        u"{1,number,'#',##} #34,56",
+        u"There are 3,456 files on Disk at 1/12/70, 5:46\u202FAM.",
+        u"On Disk, there are 3,456 files, with $1.00.",
+        u"{1,number,percent}, 345,600%,",
+        u"{1,date,full}, Wednesday, December 31, 1969,",
+        u"{3,date,full}, Monday, January 12, 1970,",
+        u"{1,number,#,##} 34,56"
     };
 
 
@@ -333,10 +333,12 @@ void TestMessageFormat::PatternTest()
             continue;
         }
         if (result != testResultStrings[i]) {
-            errln("TestMessageFormat::PatternTest failed test #4");
-            logln("TestMessageFormat::PatternTest failed #4.");
-            logln(UnicodeString("    Result: ") + result );
-            logln(UnicodeString("  Expected: ") + testResultStrings[i] );
+            errln(UnicodeString("TestMessageFormat::PatternTest failed test #4.") +
+                UnicodeString("\n    Result: ") + result +
+                UnicodeString("\n  Expected: ") + testResultStrings[i]);
+            logln(UnicodeString("TestMessageFormat::PatternTest failed test #4.") +
+                UnicodeString("\n    Result: ") + result +
+                UnicodeString("\n  Expected: ") + testResultStrings[i]);
         }
 
 
@@ -416,11 +418,11 @@ void TestMessageFormat::testStaticFormat()
     }
 
     const UnicodeString expected(
-            "At 12:20:00 PM on Aug 8, 1997, there was a disturbance in the Force on planet 7.", "");
+            u"At 12:20:00\u202FPM on Aug 8, 1997, there was a disturbance in the Force on planet 7.");
     if (result != expected) {
-        errln("TestMessageFormat::testStaticFormat failed on test");
-        logln( UnicodeString("     Result: ") + result );
-        logln( UnicodeString("   Expected: ") + expected );
+        errln(UnicodeString("TestMessageFormat::testStaticFormat failed on test") +
+            UnicodeString("\n     Result: ") + result +
+            UnicodeString("\n   Expected: ") + expected );
     }
 }
 
@@ -1498,13 +1500,13 @@ void TestMessageFormat::TestUnlimitedArgsAndSubformats() {
     Formattable ARGS_OBJ(ARGS, ARGS_LENGTH);
 
     UnicodeString expected =
-        "On Nov 20, 2286 (aka 11/20/86, aka November 20, 2286) "
-        "at 9:46:40 AM (aka 9:46 AM, aka 9:46:40 AM PST) "
-        "there were 1,303 werjes "
-        "(a 8% increase over 1,202) "
-        "despite the Glimmung's efforts "
-        "and to delight of the printers, Nick, his father, "
-        "his mother, the spiddles, and of course Horace.";
+        u"On Nov 20, 2286 (aka 11/20/86, aka November 20, 2286) "
+        u"at 9:46:40\u202FAM (aka 9:46\u202FAM, aka 9:46:40\u202FAM PST) "
+        u"there were 1,303 werjes "
+        u"(a 8% increase over 1,202) "
+        u"despite the Glimmung's efforts "
+        u"and to delight of the printers, Nick, his father, "
+        u"his mother, the spiddles, and of course Horace.";
     UnicodeString result;
     msg.format(ARGS_OBJ, result, ec);
     if (result == expected) {
@@ -2051,7 +2053,7 @@ void TestMessageFormat::TestMessageFormatDateSkeleton() {
     UDate date = LocaleTest::date(2021-1900, UCAL_NOVEMBER, 23, 16, 42, 55);
 
     doTheRealDateTimeSkeletonTesting(date, u"{0,date,::MMMMd}", "en", u"November 23", status);
-    doTheRealDateTimeSkeletonTesting(date, u"{0,date,::yMMMMdjm}", "en", u"November 23, 2021 at 4:42 PM", status);
+    doTheRealDateTimeSkeletonTesting(date, u"{0,date,::yMMMMdjm}", "en", u"November 23, 2021 at 4:42\u202FPM", status);
     doTheRealDateTimeSkeletonTesting(date, u"{0,date,   ::   yMMMMd   }", "en", u"November 23, 2021", status);
     doTheRealDateTimeSkeletonTesting(date, u"{0,date,::yMMMMd}", "fr", u"23 novembre 2021", status);
     doTheRealDateTimeSkeletonTesting(date, u"Expiration: {0,date,::yMMM}!", "en", u"Expiration: Nov 2021!", status);
@@ -2065,7 +2067,7 @@ void TestMessageFormat::TestMessageFormatTimeSkeleton() {
     UDate date = LocaleTest::date(2021-1900, UCAL_NOVEMBER, 23, 16, 42, 55);
 
     doTheRealDateTimeSkeletonTesting(date, u"{0,time,::MMMMd}", "en", u"November 23", status);
-    doTheRealDateTimeSkeletonTesting(date, u"{0,time,::yMMMMdjm}", "en", u"November 23, 2021 at 4:42 PM", status);
+    doTheRealDateTimeSkeletonTesting(date, u"{0,time,::yMMMMdjm}", "en", u"November 23, 2021 at 4:42\u202FPM", status);
     doTheRealDateTimeSkeletonTesting(date, u"{0,time,   ::   yMMMMd   }", "en", u"November 23, 2021", status);
     doTheRealDateTimeSkeletonTesting(date, u"{0,time,::yMMMMd}", "fr", u"23 novembre 2021", status);
     doTheRealDateTimeSkeletonTesting(date, u"Expiration: {0,time,::yMMM}!", "en", u"Expiration: Nov 2021!", status);

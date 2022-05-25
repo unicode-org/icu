@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 root{
-    Version{"41"}
+    Version{"42"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -287,6 +287,11 @@ root{
             nanosecond{
                 dnam{"ns"}
                 other{"{0} ns"}
+            }
+            quarter{
+                dnam{"qtr"}
+                other{"{0} q"}
+                per{"{0}/q"}
             }
             second{
                 dnam{"sec"}

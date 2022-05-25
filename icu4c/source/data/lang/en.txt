@@ -62,6 +62,7 @@ en{
         am{"Amharic"}
         an{"Aragonese"}
         ang{"Old English"}
+        ann{"Obolo"}
         anp{"Angika"}
         ar{"Arabic"}
         ar_001{"Modern Standard Arabic"}
@@ -107,7 +108,7 @@ en{
         bin{"Bini"}
         bjn{"Banjar"}
         bkm{"Kom"}
-        bla{"Siksika"}
+        bla{"Siksiká"}
         blt{"Tai Dam"}
         bm{"Bambara"}
         bn{"Bangla"}
@@ -384,6 +385,7 @@ en{
         lou{"Louisiana Creole"}
         loz{"Lozi"}
         lrc{"Northern Luri"}
+        lsm{"Saamia"}
         lt{"Lithuanian"}
         ltg{"Latgalian"}
         lu{"Luba-Katanga"}
@@ -500,11 +502,12 @@ en{
         pfl{"Palatine German"}
         phn{"Phoenician"}
         pi{"Pali"}
+        pis{"Pijin"}
         pl{"Polish"}
         pms{"Piedmontese"}
         pnt{"Pontic"}
         pon{"Pohnpeian"}
-        pqm{"Malecite"}
+        pqm{"Maliseet-Passamaquoddy"}
         prg{"Prussian"}
         pro{"Old Provençal"}
         ps{"Pashto"}
@@ -625,6 +628,7 @@ en{
         tn{"Tswana"}
         to{"Tongan"}
         tog{"Nyasa Tonga"}
+        tok{"Toki Pona"}
         tpi{"Tok Pisin"}
         tr{"Turkish"}
         tru{"Turoyo"}

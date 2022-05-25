@@ -187,7 +187,7 @@ public class TestMessageFormat extends TestFmwk {
             "Quotes ', {, 'a' 1 {0}",
             "Quotes ', {, 'a' 1 {0}",
             "{1,number,'#',##} #34,56",
-            "There are 3,456 files on Disk at 1/12/70, 5:46 AM.",
+            "There are 3,456 files on Disk at 1/12/70, 5:46\u202FAM.",
             "On Disk, there are 3,456 files, with $1.00.",
             "{1,number,percent}, 345,600%,",
             "{1,date,full}, Wednesday, December 31, 1969,",
@@ -278,7 +278,7 @@ public class TestMessageFormat extends TestFmwk {
         };
 
         assertEquals("format",
-            "At 12:20:00 PM on Aug 8, 1997, there was a disturbance in the Force on planet 7.",
+            "At 12:20:00\u202FPM on Aug 8, 1997, there was a disturbance in the Force on planet 7.",
             MessageFormat.format("At {1,time} on {1,date}, there was {2} on planet {0,number,integer}.",
                                  arguments));
     }
@@ -834,7 +834,7 @@ public class TestMessageFormat extends TestFmwk {
 
             String expected =
                 "On Nov 20, 2286 (aka 11/20/86, aka November 20, 2286) "+
-                "at 9:46:40 AM (aka 9:46 AM, aka 9:46:40 AM PST) "+
+                "at 9:46:40\u202FAM (aka 9:46\u202FAM, aka 9:46:40\u202FAM PST) "+
                 "there were 1,303 werjes "+
                 "(a 8% increase over 1,202) "+
                 "despite the Glimmung's efforts "+
@@ -1275,7 +1275,7 @@ public class TestMessageFormat extends TestFmwk {
         Map argMap = new HashMap();
         argMap.put("1", date);
         argMap.put("2", date);
-        target = "X:5:17:00 AM Y:Dec 17, 1990";
+        target = "X:5:17:00\u202FAM Y:Dec 17, 1990";
         result = mf.format(argMap);
         if (!target.equals(result)) {
             errln("expected '" + target + "' but got '" + result + "'");
@@ -1630,8 +1630,8 @@ public class TestMessageFormat extends TestFmwk {
         Object[] args = { args0, args1, args2 };
 
         String[] expectedStrings = {
-                "The 2nd folder 'tmp' contains 15 file(s), created at 9:58:08 AM on Jul 18, 2007.",
-                "The 2nd folder 'tmp' contains 15 file(s), created at 9:58:08 AM on Jul 18, 2007.",
+                "The 2nd folder 'tmp' contains 15 file(s), created at 9:58:08\u202FAM on Jul 18, 2007.",
+                "The 2nd folder 'tmp' contains 15 file(s), created at 9:58:08\u202FAM on Jul 18, 2007.",
                 "The folder contains 34 files." };
 
         AttributedString[] expectedAttributedStrings = { new AttributedString(expectedStrings[0]),
@@ -2140,7 +2140,7 @@ public class TestMessageFormat extends TestFmwk {
         Date date = new GregorianCalendar(2021, Calendar.NOVEMBER, 23, 16, 42, 55).getTime();
 
         doTheRealDateTimeSkeletonTesting(date, "{0,date,::MMMMd}", ULocale.ENGLISH, "November 23");
-        doTheRealDateTimeSkeletonTesting(date, "{0,date,::yMMMMdjm}", ULocale.ENGLISH, "November 23, 2021 at 4:42 PM");
+        doTheRealDateTimeSkeletonTesting(date, "{0,date,::yMMMMdjm}", ULocale.ENGLISH, "November 23, 2021 at 4:42\u202FPM");
         doTheRealDateTimeSkeletonTesting(date, "{0,date,   ::   yMMMMd   }", ULocale.ENGLISH, "November 23, 2021");
         doTheRealDateTimeSkeletonTesting(date, "{0,date,::yMMMMd}", ULocale.FRENCH, "23 novembre 2021");
         doTheRealDateTimeSkeletonTesting(date, "Expiration: {0,date,::yMMM}!", ULocale.ENGLISH, "Expiration: Nov 2021!");
@@ -2152,7 +2152,7 @@ public class TestMessageFormat extends TestFmwk {
         Date date = new GregorianCalendar(2021, Calendar.NOVEMBER, 23, 16, 42, 55).getTime();
 
         doTheRealDateTimeSkeletonTesting(date, "{0,time,::MMMMd}", ULocale.ENGLISH, "November 23");
-        doTheRealDateTimeSkeletonTesting(date, "{0,time,::yMMMMdjm}", ULocale.ENGLISH, "November 23, 2021 at 4:42 PM");
+        doTheRealDateTimeSkeletonTesting(date, "{0,time,::yMMMMdjm}", ULocale.ENGLISH, "November 23, 2021 at 4:42\u202FPM");
         doTheRealDateTimeSkeletonTesting(date, "{0,time,   ::   yMMMMd   }", ULocale.ENGLISH, "November 23, 2021");
         doTheRealDateTimeSkeletonTesting(date, "{0,time,::yMMMMd}", ULocale.FRENCH, "23 novembre 2021");
         doTheRealDateTimeSkeletonTesting(date, "Expiration: {0,time,::yMMM}!", ULocale.ENGLISH, "Expiration: Nov 2021!");

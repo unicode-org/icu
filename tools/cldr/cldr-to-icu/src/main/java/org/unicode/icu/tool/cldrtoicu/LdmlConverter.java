@@ -99,6 +99,7 @@ public final class LdmlConverter {
             "languageMatching",
             "measurementData",
             "parentLocales",
+            "personNamesDefaults",
             "subdivisionContainment",
             "territoryContainment",
             "territoryInfo",

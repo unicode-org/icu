@@ -283,6 +283,7 @@ static const UChar UDATPG_ItemFormat[]= {0x7B, 0x30, 0x7D, 0x20, 0x251C, 0x7B, 0
 //static const UChar repeatedPatterns[6]={CAP_G, CAP_E, LOW_Z, LOW_V, CAP_Q, 0}; // "GEzvQ"
 
 static const char DT_DateTimePatternsTag[]="DateTimePatterns";
+static const char DT_DateAtTimePatternsTag[]="DateTimePatterns%atTime";
 static const char DT_DateTimeCalendarTag[]="calendar";
 static const char DT_DateTimeGregorianTag[]="gregorian";
 static const char DT_DateTimeAppendItemsTag[]="appendItems";
@@ -1396,6 +1397,8 @@ DateTimePatternGenerator::getDateTimeFormat(UDateFormatStyle style, UErrorCode& 
     return dateTimeFormat[style];
 }
 
+static const int32_t cTypeBufMax = 32;
+
 void
 DateTimePatternGenerator::setDateTimeFromCalendar(const Locale& locale, UErrorCode& status) {
     if (U_FAILURE(status)) { return; }
@@ -1403,39 +1406,67 @@ DateTimePatternGenerator::setDateTimeFromCalendar(const Locale& locale, UErrorCo
     const UChar *resStr;
     int32_t resStrLen = 0;
 
-    LocalPointer<Calendar> fCalendar(Calendar::createInstance(locale, status), status);
-    if (U_FAILURE(status)) { return; }
-
     LocalUResourceBundlePointer calData(ures_open(nullptr, locale.getBaseName(), &status));
     if (U_FAILURE(status)) { return; }
     ures_getByKey(calData.getAlias(), DT_DateTimeCalendarTag, calData.getAlias(), &status);
     if (U_FAILURE(status)) { return; }
 
-    LocalUResourceBundlePointer dateTimePatterns;
-    if (fCalendar->getType() != nullptr && *fCalendar->getType() != '\0'
-            && uprv_strcmp(fCalendar->getType(), DT_DateTimeGregorianTag) != 0) {
-        dateTimePatterns.adoptInstead(ures_getByKeyWithFallback(calData.getAlias(), fCalendar->getType(),
-                                                                nullptr, &status));
-        ures_getByKeyWithFallback(dateTimePatterns.getAlias(), DT_DateTimePatternsTag,
-                                  dateTimePatterns.getAlias(), &status);
+    char cType[cTypeBufMax + 1];
+    Calendar::getCalendarTypeFromLocale(locale, cType, cTypeBufMax, status);
+    cType[cTypeBufMax] = 0;
+    if (U_FAILURE(status) || cType[0] == 0) {
+        status = U_ZERO_ERROR;
+        uprv_strcpy(cType, DT_DateTimeGregorianTag);
     }
+    UBool cTypeIsGregorian = (uprv_strcmp(cType, DT_DateTimeGregorianTag) == 0);
 
+    // Currently, for compatibility with pre-CLDR-42 data, we default to the "atTime"
+    // combining patterns. Depending on guidance in CLDR 42 spec and on DisplayOptions,
+    // we may change this.
+    LocalUResourceBundlePointer specificCalBundle;
+    LocalUResourceBundlePointer dateTimePatterns;
+    int32_t dateTimeOffset = 0; // initially for DateTimePatterns%atTime
+    if (!cTypeIsGregorian) {
+        specificCalBundle.adoptInstead(ures_getByKeyWithFallback(calData.getAlias(), cType,
+                                        nullptr, &status));
+        dateTimePatterns.adoptInstead(ures_getByKeyWithFallback(specificCalBundle.getAlias(), DT_DateAtTimePatternsTag, // the %atTime variant, 4 entries
+                                        nullptr, &status));
+    }
     if (dateTimePatterns.isNull() || status == U_MISSING_RESOURCE_ERROR) {
         status = U_ZERO_ERROR;
-        dateTimePatterns.adoptInstead(ures_getByKeyWithFallback(calData.getAlias(), DT_DateTimeGregorianTag,
-                                                                dateTimePatterns.orphan(), &status));
-        ures_getByKeyWithFallback(dateTimePatterns.getAlias(), DT_DateTimePatternsTag,
-                                  dateTimePatterns.getAlias(), &status);
+        specificCalBundle.adoptInstead(ures_getByKeyWithFallback(calData.getAlias(), DT_DateTimeGregorianTag,
+                                        nullptr, &status));
+        dateTimePatterns.adoptInstead(ures_getByKeyWithFallback(specificCalBundle.getAlias(), DT_DateAtTimePatternsTag, // the %atTime variant, 4 entries
+                                        nullptr, &status));
+    }
+    if (U_SUCCESS(status) && (ures_getSize(dateTimePatterns.getAlias()) < 4)) {
+        status = U_INVALID_FORMAT_ERROR;
+    }
+    if (status == U_MISSING_RESOURCE_ERROR) {
+        // Try again with standard variant
+        status = U_ZERO_ERROR;
+        dateTimePatterns.orphan();
+        dateTimeOffset = (int32_t)DateFormat::kDateTimeOffset;
+        if (!cTypeIsGregorian) {
+            specificCalBundle.adoptInstead(ures_getByKeyWithFallback(calData.getAlias(), cType,
+                                            nullptr, &status));
+            dateTimePatterns.adoptInstead(ures_getByKeyWithFallback(specificCalBundle.getAlias(), DT_DateTimePatternsTag, // the standard variant, 13 entries
+                                            nullptr, &status));
+        }
+        if (dateTimePatterns.isNull() || status == U_MISSING_RESOURCE_ERROR) {
+            status = U_ZERO_ERROR;
+            specificCalBundle.adoptInstead(ures_getByKeyWithFallback(calData.getAlias(), DT_DateTimeGregorianTag,
+                                            nullptr, &status));
+            dateTimePatterns.adoptInstead(ures_getByKeyWithFallback(specificCalBundle.getAlias(), DT_DateTimePatternsTag, // the standard variant, 13 entries
+                                            nullptr, &status));
+        }
+        if (U_SUCCESS(status) && (ures_getSize(dateTimePatterns.getAlias()) <= DateFormat::kDateTimeOffset + DateFormat::kShort)) {
+            status = U_INVALID_FORMAT_ERROR;
+        }
     }
     if (U_FAILURE(status)) { return; }
-
-    if (ures_getSize(dateTimePatterns.getAlias()) <= DateFormat::kDateTimeOffset + DateFormat::kShort)
-    {
-        status = U_INVALID_FORMAT_ERROR;
-        return;
-    }
     for (int32_t style = UDAT_FULL; style <= UDAT_SHORT; style++) {
-        resStr = ures_getStringByIndex(dateTimePatterns.getAlias(), (int32_t)DateFormat::kDateTimeOffset + style, &resStrLen, &status);
+        resStr = ures_getStringByIndex(dateTimePatterns.getAlias(), dateTimeOffset + style, &resStrLen, &status);
         setDateTimeFormat((UDateFormatStyle)style, UnicodeString(TRUE, resStr, resStrLen), status);
     }
 }

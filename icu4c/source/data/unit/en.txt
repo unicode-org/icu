@@ -338,6 +338,11 @@ en{
                 one{"{0} nanosecond"}
                 other{"{0} nanoseconds"}
             }
+            quarter{
+                dnam{"quarters"}
+                one{"{0} quarter"}
+                other{"{0} quarters"}
+            }
             second{
                 dnam{"seconds"}
                 one{"{0} second"}
@@ -844,6 +849,11 @@ en{
                 one{"{0} degree Fahrenheit"}
                 other{"{0} degrees Fahrenheit"}
             }
+            generic{
+                dnam{"degrees temperature"}
+                one{"{0} degree temperature"}
+                other{"{0} degrees temperature"}
+            }
             kelvin{
                 dnam{"kelvins"}
                 one{"{0} kelvin"}
@@ -1312,6 +1322,11 @@ en{
                 dnam{"ns"}
                 one{"{0}ns"}
                 other{"{0}ns"}
+            }
+            quarter{
+                dnam{"qtr"}
+                one{"{0}q"}
+                other{"{0}q"}
             }
             second{
                 dnam{"sec"}
@@ -2285,6 +2300,11 @@ en{
                 dnam{"nanosecs"}
                 one{"{0} ns"}
                 other{"{0} ns"}
+            }
+            quarter{
+                dnam{"qtr"}
+                one{"{0} qtr"}
+                other{"{0} qtrs"}
             }
             second{
                 dnam{"secs"}

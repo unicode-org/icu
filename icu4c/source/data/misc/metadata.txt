@@ -36,6 +36,10 @@ metadata:table(nofallback){
                 reason{"deprecated"}
                 replacement{"ami"}
             }
+            ajt{
+                reason{"deprecated"}
+                replacement{"aeb"}
+            }
             aju{
                 reason{"macrolanguage"}
                 replacement{"jrb"}
@@ -924,6 +928,10 @@ metadata:table(nofallback){
                 reason{"deprecated"}
                 replacement{"dtp"}
             }
+            lak{
+                reason{"deprecated"}
+                replacement{"ksp"}
+            }
             lao{
                 reason{"overlong"}
                 replacement{"lo"}
@@ -1484,6 +1492,10 @@ metadata:table(nofallback){
                 reason{"overlong"}
                 replacement{"sl"}
             }
+            smd{
+                reason{"deprecated"}
+                replacement{"kmb"}
+            }
             sme{
                 reason{"overlong"}
                 replacement{"se"}
@@ -1495,6 +1507,10 @@ metadata:table(nofallback){
             sna{
                 reason{"overlong"}
                 replacement{"sn"}
+            }
+            snb{
+                reason{"deprecated"}
+                replacement{"iba"}
             }
             snd{
                 reason{"overlong"}
@@ -5150,6 +5166,7 @@ metadata:table(nofallback){
         "ak_GH",
         "am_ET",
         "an_ES",
+        "ann_NG",
         "ar_001",
         "arn_CL",
         "as_IN",
@@ -5168,7 +5185,9 @@ metadata:table(nofallback){
         "bem_ZM",
         "bez_TZ",
         "bg_BG",
+        "bgc_IN",
         "bgn_PK",
+        "bho_IN",
         "blt_VN",
         "bm_ML",
         "bm_Nkoo_ML",
@@ -5308,6 +5327,7 @@ metadata:table(nofallback){
         "lv_LV",
         "mai_IN",
         "mas_KE",
+        "mdf_RU",
         "mer_KE",
         "mfe_MU",
         "mg_MG",
@@ -5357,12 +5377,14 @@ metadata:table(nofallback){
         "pa_Guru",
         "pa_Guru_IN",
         "pcm_NG",
+        "pis_SB",
         "pl_PL",
         "prg_001",
         "ps_AF",
         "pt_BR",
         "qu_PE",
         "quc_GT",
+        "raj_IN",
         "rhg_Rohg",
         "rhg_Rohg_MM",
         "rm_CH",
@@ -5425,6 +5447,7 @@ metadata:table(nofallback){
         "tk_TM",
         "tn_ZA",
         "to_TO",
+        "tok_001",
         "tpi_PG",
         "tr_TR",
         "trv_TW",

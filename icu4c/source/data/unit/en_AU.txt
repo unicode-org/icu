@@ -47,6 +47,8 @@ en_AU{
         temperature{
             generic{
                 dnam{"degrees"}
+                one{"{0} degree"}
+                other{"{0} degrees"}
             }
         }
         volume{

@@ -312,38 +312,58 @@ void FormattedStringBuilderTest::testCodePoints() {
 
 void FormattedStringBuilderTest::testInsertOverflow() {
     if (quick) return;
+    
     // Setup the test fixture in sb, sb2, ustr.
     UErrorCode status = U_ZERO_ERROR;
     FormattedStringBuilder sb;
     int32_t data_length = INT32_MAX / 2;
-    UnicodeString ustr(data_length, u'a', data_length);
-    sb.append(ustr, kUndefinedField, status);
+    infoln("# log: setup start, data_length %d", data_length);
+    UnicodeString ustr(data_length, u'a', data_length); // set ustr to length 1073741823
+    sb.append(ustr, kUndefinedField, status); // set sb to length 1073741823
+    infoln("# log: setup 1 done, ustr len %d, sb len %d, status %s", ustr.length(), sb.length(), u_errorName(status));
     assertSuccess("Setup the first FormattedStringBuilder", status);
 
     FormattedStringBuilder sb2;
     sb2.append(ustr, kUndefinedField, status);
-    sb2.insert(0, ustr, 0, data_length / 2, kUndefinedField, status);
+    sb2.insert(0, ustr, 0, data_length / 2, kUndefinedField, status); // set sb2 to length 1610612734
     sb2.writeTerminator(status);
+    infoln("# log: setup 2 done, sb2 len %d, status %s", sb2.length(), u_errorName(status));
     assertSuccess("Setup the second FormattedStringBuilder", status);
 
-    ustr = sb2.toUnicodeString();
+    if (!logKnownIssue("22047", "FormattedStringBuilder with long length crashes in toUnicodeString in CI Linux tests")) {
+        // The following should set ustr to have length 1610612734, but is currently crashing
+        // in the CI test "C: Linux Clang Exhaustive Tests (Ubuntu 18.04)", though not
+        // crashing when running exhaustive tests locally on e.g. macOS 12.4 on Intel).
+        // Skipping this leaves ustr with length 1073741823.
+        ustr = sb2.toUnicodeString();
+    } else {
+        // Alternative approach which sets ustr to length 1073741871, still long
+        // enough to test the expected behavior for the remainder of the code here.
+        ustr.append(u"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",-1);
+    }
     // Complete setting up the test fixture in sb, sb2 and ustr.
+    infoln("# log: setup 3 done, ustr len %d", ustr.length());
 
     // Test splice() of the second UnicodeString
     sb.splice(0, 1, ustr, 1, ustr.length(),
               kUndefinedField, status);
+    infoln("# log: sb.splice 1 done, sb len %d, status %s", sb.length(), u_errorName(status));
     assertEquals(
         "splice() long text should not crash but return U_INPUT_TOO_LONG_ERROR",
         U_INPUT_TOO_LONG_ERROR, status);
 
     // Test sb.insert() of the first FormattedStringBuilder with the second one.
+    status = U_ZERO_ERROR;
     sb.insert(0, sb2, status);
+    infoln("# log: sb.insert 1 done, sb len %d, status %s", sb.length(), u_errorName(status));
     assertEquals(
         "insert() long FormattedStringBuilder should not crash but return "
         "U_INPUT_TOO_LONG_ERROR", U_INPUT_TOO_LONG_ERROR, status);
 
     // Test sb.insert() of the first FormattedStringBuilder with UnicodeString.
+    status = U_ZERO_ERROR;
     sb.insert(0, ustr, 0, ustr.length(), kUndefinedField, status);
+    infoln("# log: sb.insert 2 done, sb len %d, status %s", sb.length(), u_errorName(status));
     assertEquals(
         "insert() long UnicodeString should not crash but return "
         "U_INPUT_TOO_LONG_ERROR", U_INPUT_TOO_LONG_ERROR, status);

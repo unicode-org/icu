@@ -69,13 +69,13 @@ public class DateTimeGeneratorTest extends TestFmwk {
                 {"de",     "CCm",     "HH:mm"},
                 {"de",     "CCCm",    "HH:mm"},
                 {"de",     "CCCCm",   "HH:mm"},
-                {"en",     "Cm",      "h:mm a"},
-                {"en",     "CCm",     "hh:mm a"},
-                {"en",     "CCCm",    "h:mm aaaa"},
-                {"en",     "CCCCm",   "hh:mm aaaa"},
-                {"en",     "CCCCCm",  "h:mm aaaaa"},
-                {"en",     "CCCCCCm", "hh:mm aaaaa"},
-                {"en-BN",  "Cm",      "h:mm b"},
+                {"en",     "Cm",      "h:mm\u202Fa"},
+                {"en",     "CCm",     "hh:mm\u202Fa"},
+                {"en",     "CCCm",    "h:mm\u202Faaaa"},
+                {"en",     "CCCCm",   "hh:mm\u202Faaaa"},
+                {"en",     "CCCCCm",  "h:mm\u202Faaaaa"},
+                {"en",     "CCCCCCm", "hh:mm\u202Faaaaa"},
+                {"en-BN",  "Cm",      "h:mm\u202Fb"},
                 {"gu-IN",  "Cm",      "h:mm B"},
                 {"und-IN", "Cm",      "h:mm B"},
         };
@@ -196,15 +196,15 @@ public class DateTimeGeneratorTest extends TestFmwk {
                 {"yMMMMMd", "O 14, 1999"},  // narrow format
                 {"EEEEEMMMMMd", "T, O 14"},  // narrow format
                 {"MMMd", "Oct 14"},
-                {"MMMdhmm", "Oct 14, 6:58 AM"},
-                {"EMMMdhmms", "Thu, Oct 14, 6:58:59 AM"},
-                {"MMdhmm", "10/14, 6:58 AM"},
-                {"EEEEMMMdhmms", "Thursday, Oct 14, 6:58:59 AM"},
-                {"yyyyMMMddhhmmss", "Oct 14, 1999, 6:58:59 AM"}, // (fixed expected result per ticket 6872<-7180)
-                {"EyyyyMMMddhhmmss", "Thu, Oct 14, 1999, 6:58:59 AM"}, // (fixed expected result per ticket 6872<-7180)
-                {"hmm", "6:58 AM"},
-                {"hhmm", "6:58 AM"}, // (fixed expected result per ticket 6872<-7180)
-                {"hhmmVVVV", "6:58 AM GMT"}, // (fixed expected result per ticket 6872<-7180)
+                {"MMMdhmm", "Oct 14, 6:58\u202FAM"},
+                {"EMMMdhmms", "Thu, Oct 14, 6:58:59\u202FAM"},
+                {"MMdhmm", "10/14, 6:58\u202FAM"},
+                {"EEEEMMMdhmms", "Thursday, Oct 14, 6:58:59\u202FAM"},
+                {"yyyyMMMddhhmmss", "Oct 14, 1999, 6:58:59\u202FAM"}, // (fixed expected result per ticket 6872<-7180)
+                {"EyyyyMMMddhhmmss", "Thu, Oct 14, 1999, 6:58:59\u202FAM"}, // (fixed expected result per ticket 6872<-7180)
+                {"hmm", "6:58\u202FAM"},
+                {"hhmm", "6:58\u202FAM"}, // (fixed expected result per ticket 6872<-7180)
+                {"hhmmVVVV", "6:58\u202FAM GMT"}, // (fixed expected result per ticket 6872<-7180)
         };
         for (int i = 0; i < tests.length; ++i) {
             final String testSkeleton = tests[i][0];
@@ -377,14 +377,14 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"MMMd", "Jan 13"},
         new String[] {"MMMMd", "January 13"},
         new String[] {"yQQQ", "Q1 1999"},
-        new String[] {"hhmm", "11:58 PM"},
+        new String[] {"hhmm", "11:58\u202FPM"},
         new String[] {"HHmm", "23:58"},
-        new String[] {"jjmm", "11:58 PM"},
+        new String[] {"jjmm", "11:58\u202FPM"},
         new String[] {"mmss", "58:59"},
         new String[] {"yyyyMMMM", "January 1999"}, // (new item for testing 6872<-5702)
         new String[] {"MMMEd", "Wed, Jan 13"},
         new String[] {"Ed", "13 Wed"},
-        new String[] {"jmmssSSS", "11:58:59.123 PM"},
+        new String[] {"jmmssSSS", "11:58:59.123\u202FPM"},
         new String[] {"JJmm", "11:58"},
 
         new ULocale("en_US@calendar=japanese"), // (new locale for testing ticket 6872<-5702)
@@ -396,14 +396,14 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"MMMd", "Jan 13"},
         new String[] {"MMMMd", "January 13"},
         new String[] {"yQQQ", "Q1 11 Heisei"},
-        new String[] {"hhmm", "11:58 PM"},
+        new String[] {"hhmm", "11:58\u202FPM"},
         new String[] {"HHmm", "23:58"},
-        new String[] {"jjmm", "11:58 PM"},
+        new String[] {"jjmm", "11:58\u202FPM"},
         new String[] {"mmss", "58:59"},
         new String[] {"yyyyMMMM", "January 11 Heisei"},
         new String[] {"MMMEd", "Wed, Jan 13"},
         new String[] {"Ed", "13 Wed"},
-        new String[] {"jmmssSSS", "11:58:59.123 PM"},
+        new String[] {"jmmssSSS", "11:58:59.123\u202FPM"},
         new String[] {"JJmm", "11:58"},
 
         new ULocale("de_DE"),
@@ -415,7 +415,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"MMMd", "13. Jan."},
         new String[] {"MMMMd", "13. Januar"},
         new String[] {"yQQQ", "Q1 1999"},
-        new String[] {"hhmm", "11:58 PM"},
+        new String[] {"hhmm", "11:58\u202FPM"},
         new String[] {"HHmm", "23:58"},
         new String[] {"jjmm", "23:58"},
         new String[] {"mmss", "58:59"},
@@ -434,7 +434,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"MMMd", "13. tammik."},
         new String[] {"MMMMd", "13. tammikuuta"},
         new String[] {"yQQQ", "1. nelj. 1999"},
-        new String[] {"hhmm", "11.58 ip."},
+        new String[] {"hhmm", "11.58\u202Fip."},
         new String[] {"HHmm", "23.58"},
         new String[] {"jjmm", "23.58"},
         new String[] {"mmss", "58.59"},
@@ -453,7 +453,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"MMMd", "13 ene"},
         new String[] {"MMMMd", "13 de enero"},
         new String[] {"yQQQ", "T1 1999"},
-        new String[] {"hhmm", "11:58 p.\u00A0m."},
+        new String[] {"hhmm", "11:58\u202Fp.\u00A0m."},
         new String[] {"HHmm", "23:58"},
         new String[] {"jjmm", "23:58"},
         new String[] {"mmss", "58:59"},
@@ -541,18 +541,18 @@ public class DateTimeGeneratorTest extends TestFmwk {
 
         new ULocale("ru"),
         new String[] {"yM", "01.1999"},
-        new String[] {"yMMM", "\u044F\u043D\u0432. 1999 \u0433."},
+        new String[] {"yMMM", "\u044F\u043D\u0432. 1999\u202F\u0433."},
         new String[] {"yMd", "13.01.1999"},
-        new String[] {"yMMMd", "13 \u044F\u043D\u0432. 1999 \u0433."},
+        new String[] {"yMMMd", "13 \u044F\u043D\u0432. 1999\u202F\u0433."},
         new String[] {"Md", "13.01"},
         new String[] {"MMMd", "13 \u044F\u043D\u0432."},
         new String[] {"MMMMd", "13 \u044F\u043D\u0432\u0430\u0440\u044F"},
-        new String[] {"yQQQ", "1-\u0439 \u043A\u0432. 1999 \u0433."},
-        new String[] {"hhmm", "11:58 PM"},
+        new String[] {"yQQQ", "1-\u0439 \u043A\u0432. 1999\u202F\u0433."},
+        new String[] {"hhmm", "11:58\u202FPM"},
         new String[] {"HHmm", "23:58"},
         new String[] {"jjmm", "23:58"},
         new String[] {"mmss", "58:59"},
-        new String[] {"yyyyMMMM", "\u044F\u043D\u0432\u0430\u0440\u044C 1999 \u0433."},
+        new String[] {"yyyyMMMM", "\u044F\u043D\u0432\u0430\u0440\u044C 1999\u202F\u0433."},
         new String[] {"MMMEd", "\u0441\u0440, 13 \u044F\u043D\u0432."},
         new String[] {"Ed", "\u0441\u0440, 13"},
         new String[] {"jmmssSSS", "23:58:59,123"},
@@ -1382,18 +1382,18 @@ public class DateTimeGeneratorTest extends TestFmwk {
     @Test
     public void TestOptions() {
         final TestOptionsItem[] testOptionsData = {
-                new TestOptionsItem( "en", "Hmm",  "HH:mm",   DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
-                new TestOptionsItem( "en", "HHmm", "HH:mm",   DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
-                new TestOptionsItem( "en", "hhmm", "h:mm a",  DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
-                new TestOptionsItem( "en", "Hmm",  "HH:mm",   DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
-                new TestOptionsItem( "en", "HHmm", "HH:mm",   DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
-                new TestOptionsItem( "en", "hhmm", "hh:mm a", DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
-                new TestOptionsItem( "da", "Hmm",  "HH.mm",   DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
-                new TestOptionsItem( "da", "HHmm", "HH.mm",   DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
-                new TestOptionsItem( "da", "hhmm", "h.mm a",  DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
-                new TestOptionsItem( "da", "Hmm",  "H.mm",    DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
-                new TestOptionsItem( "da", "HHmm", "HH.mm",   DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
-                new TestOptionsItem( "da", "hhmm", "hh.mm a", DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
+                new TestOptionsItem( "en", "Hmm",  "HH:mm",        DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
+                new TestOptionsItem( "en", "HHmm", "HH:mm",        DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
+                new TestOptionsItem( "en", "hhmm", "h:mm\u202Fa",  DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
+                new TestOptionsItem( "en", "Hmm",  "HH:mm",        DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
+                new TestOptionsItem( "en", "HHmm", "HH:mm",        DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
+                new TestOptionsItem( "en", "hhmm", "hh:mm\u202Fa", DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
+                new TestOptionsItem( "da", "Hmm",  "HH.mm",        DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
+                new TestOptionsItem( "da", "HHmm", "HH.mm",        DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
+                new TestOptionsItem( "da", "hhmm", "h.mm\u202Fa",  DateTimePatternGenerator.MATCH_NO_OPTIONS        ),
+                new TestOptionsItem( "da", "Hmm",  "H.mm",         DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
+                new TestOptionsItem( "da", "HHmm", "HH.mm",        DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
+                new TestOptionsItem( "da", "hhmm", "hh.mm\u202Fa", DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
                 //
                 new TestOptionsItem( "en",                   "yyyy",  "yyyy",  DateTimePatternGenerator.MATCH_NO_OPTIONS ),
                 new TestOptionsItem( "en",                   "YYYY",  "YYYY",  DateTimePatternGenerator.MATCH_NO_OPTIONS ),
@@ -1735,7 +1735,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
             // to ar_SA, which has a region.
             {"ars", "h a", "h:mm a", "HOUR_CYCLE_12"},
             // en_NH is interesting because NH is a depregated region code.
-            {"en_NH", "h a", "h:mm a", "HOUR_CYCLE_12"},
+            {"en_NH", "h\u202Fa", "h:mm\u202Fa", "HOUR_CYCLE_12"},
             // ch_ZH is a typo (should be zh_CN), but we should fail gracefully.
             {"cn_ZH", "HH", "HH:mm", "HOUR_CYCLE_23"}, // Desired & now actual behavior (does this fix ICU-20653?)
             // a non-BCP47 locale without a country code should not fail
@@ -1831,7 +1831,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
             "ckb_IR",     "BSSS",        "SSS ├'Dayperiod': B┤",
 
             // ICU-21873: Missing aliased values
-            "en_001@calendar=islamic", "Ehm", "EEE, h:mm a",
+            "en_001@calendar=islamic", "Ehm", "EEE, h:mm\u202Fa",
         };
 
         for (int i = 0; i < testCases.length; i += 3) {
@@ -1908,10 +1908,10 @@ public class DateTimeGeneratorTest extends TestFmwk {
         // DateTimePatterns of various length styles.
         final DTPLocaleAndResults[] localeAndResults = {
             new DTPLocaleAndResults( "en", new String[]{ // long != medium
-                                           "EEEE, MMMM d, y 'at' h:mm a",
-                                           "MMMM d, y 'at' h:mm a",
-                                           "MMM d, y, h:mm a",
-                                           "M/d/y, h:mm a" } ),
+                                           "EEEE, MMMM d, y 'at' h:mm\u202Fa",
+                                           "MMMM d, y 'at' h:mm\u202Fa",
+                                           "MMM d, y, h:mm\u202Fa",
+                                           "M/d/y, h:mm\u202Fa" } ),
             new DTPLocaleAndResults( "fr", new String[]{ // medium != short
                                            "EEEE d MMMM y 'à' HH:mm",
                                            "d MMMM y 'à' HH:mm",
@@ -1938,10 +1938,10 @@ public class DateTimeGeneratorTest extends TestFmwk {
         };
         final DTPLocaleAndResults enModResults =
             new DTPLocaleAndResults( "en", new String[]{
-                                            "EEEE, MMMM d, y _0_ h:mm a",
-                                            "MMMM d, y _1_ h:mm a",
-                                            "MMM d, y _2_ h:mm a",
-                                            "M/d/y _3_ h:mm a" } );
+                                            "EEEE, MMMM d, y _0_ h:mm\u202Fa",
+                                            "MMMM d, y _1_ h:mm\u202Fa",
+                                            "MMM d, y _2_ h:mm\u202Fa",
+                                            "M/d/y _3_ h:mm\u202Fa" } );
 
         // Test various locales with standard data
         DateTimePatternGenerator dtpg;
