@@ -4,13 +4,13 @@
 #ifndef __DISPLAYOPTIONS_H__
 #define __DISPLAYOPTIONS_H__
 
-#include "unicode/udisplayoptions.h"
 #include "unicode/utypes.h"
 
 #if U_SHOW_CPLUSPLUS_API
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/udisplayoptions.h"
 #include "unicode/uversion.h"
 
 U_NAMESPACE_BEGIN
@@ -22,31 +22,32 @@ U_NAMESPACE_BEGIN
  * class, ... etc. It currently supports enums, but may be extended in the future to have other
  * types of data. It replaces a DisplayContext[] as a method parameter.
  *
- * NOTE: this class is Immutable, and uses a Builder interface.
+ * NOTE: This class is Immutable, and uses a Builder interface.
  *
  * For example:
  * ```
  * DisplayOptions x =
- *                    DisplayOptions::builder().
- *                             .setGrammaticalCase(UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_DATIVE)
- *                             .setPluralCategory(UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_FEW)
- *                             .build();
+ *     DisplayOptions::builder().
+ *         .setGrammaticalCase(UDISPOPT_GRAMMATICAL_CASE_DATIVE)
+ *         .setPluralCategory(UDISPOPT_PLURAL_CATEGORY_FEW)
+ *         .build();
  *```
  *
  * @draft ICU 72
  */
 class U_I18N_API DisplayOptions {
-  public:
+public:
     /**
      * Responsible for building `DisplayOptions`.
      *
      * @draft ICU 72
      */
     class U_I18N_API Builder {
-      public:
+    public:
         /**
          * Sets the grammatical case.
          *
+         * @param grammaticalCase The grammatical case.
          * @return Builder
          * @draft ICU 72
          */
@@ -58,6 +59,7 @@ class U_I18N_API DisplayOptions {
         /**
          * Sets the noun class.
          *
+         * @param nounClass The noun class.
          * @return Builder
          * @draft ICU 72
          */
@@ -69,6 +71,7 @@ class U_I18N_API DisplayOptions {
         /**
          * Sets the plural category.
          *
+         * @param pluralCategory The plural category.
          * @return Builder
          * @draft ICU 72
          */
@@ -80,6 +83,7 @@ class U_I18N_API DisplayOptions {
         /**
          * Sets the capitalization.
          *
+         * @param capitalization The capitalization.
          * @return Builder
          * @draft ICU 72
          */
@@ -91,6 +95,7 @@ class U_I18N_API DisplayOptions {
         /**
          * Sets the dialect handling.
          *
+         * @param nameStyle The name style.
          * @return Builder
          * @draft ICU 72
          */
@@ -102,6 +107,7 @@ class U_I18N_API DisplayOptions {
         /**
          * Sets the display length.
          *
+         * @param displayLength The display length.
          * @return Builder
          * @draft ICU 72
          */
@@ -113,6 +119,7 @@ class U_I18N_API DisplayOptions {
         /**
          * Sets the substitute handling.
          *
+         * @param substituteHandling The substitute handling.
          * @return Builder
          * @draft ICU 72
          */
@@ -129,7 +136,7 @@ class U_I18N_API DisplayOptions {
          */
         DisplayOptions build() { return DisplayOptions(*this); }
 
-      private:
+    private:
         friend DisplayOptions;
 
         Builder();
@@ -164,7 +171,7 @@ class U_I18N_API DisplayOptions {
      * @return UDisplayOptionsGrammaticalCase
      * @draft ICU 72
      */
-    UDisplayOptionsGrammaticalCase getGrammaticalCase() const { return this->grammaticalCase; }
+    UDisplayOptionsGrammaticalCase getGrammaticalCase() const { return grammaticalCase; }
 
     /**
      * Gets the noun class.
@@ -172,7 +179,7 @@ class U_I18N_API DisplayOptions {
      * @return UDisplayOptionsNounClass
      * @draft ICU 72
      */
-    UDisplayOptionsNounClass getNounClass() const { return this->nounClass; }
+    UDisplayOptionsNounClass getNounClass() const { return nounClass; }
 
     /**
      * Gets the plural category.
@@ -180,7 +187,7 @@ class U_I18N_API DisplayOptions {
      * @return UDisplayOptionsPluralCategory
      * @draft ICU 72
      */
-    UDisplayOptionsPluralCategory getPluralCategory() const { return this->pluralCategory; }
+    UDisplayOptionsPluralCategory getPluralCategory() const { return pluralCategory; }
 
     /**
      * Gets the capitalization.
@@ -188,7 +195,7 @@ class U_I18N_API DisplayOptions {
      * @return UDisplayOptionsCapitalization
      * @draft ICU 72
      */
-    UDisplayOptionsCapitalization getCapitalization() const { return this->capitalization; }
+    UDisplayOptionsCapitalization getCapitalization() const { return capitalization; }
 
     /**
      * Gets the dialect handling.
@@ -196,7 +203,7 @@ class U_I18N_API DisplayOptions {
      * @return UDisplayOptionsNameStyle
      * @draft ICU 72
      */
-    UDisplayOptionsNameStyle getNameStyle() const { return this->nameStyle; }
+    UDisplayOptionsNameStyle getNameStyle() const { return nameStyle; }
 
     /**
      * Gets the display length.
@@ -204,7 +211,7 @@ class U_I18N_API DisplayOptions {
      * @return UDisplayOptionsDisplayLength
      * @draft ICU 72
      */
-    UDisplayOptionsDisplayLength getDisplayLength() const { return this->displayLength; }
+    UDisplayOptionsDisplayLength getDisplayLength() const { return displayLength; }
 
     /**
      * Gets the substitute handling.
@@ -212,11 +219,12 @@ class U_I18N_API DisplayOptions {
      * @return UDisplayOptionsSubstituteHandling
      * @draft ICU 72
      */
-    UDisplayOptionsSubstituteHandling getSubstituteHandling() const { return this->substituteHandling; }
+    UDisplayOptionsSubstituteHandling getSubstituteHandling() const { return substituteHandling; }
 
     /**
-     * Copy the DisplayOptions.
+     * Copies the DisplayOptions.
      *
+     * @param other The options to copy.
      * @draft ICU 72
      */
     DisplayOptions &operator=(const DisplayOptions &other) = default;
@@ -224,18 +232,20 @@ class U_I18N_API DisplayOptions {
     /**
      * Moves the DisplayOptions.
      *
+     * @param other The options to move from.
      * @draft ICU 72
      */
     DisplayOptions &operator=(DisplayOptions &&other) noexcept = default;
 
     /**
-     * Copy the DisplayOptions.
+     * Copies the DisplayOptions.
      *
+     * @param other The options to copy.
      * @draft ICU 72
      */
-    DisplayOptions(const DisplayOptions &) = default;
+    DisplayOptions(const DisplayOptions &other) = default;
 
-  private:
+private:
     DisplayOptions(const Builder &builder);
     UDisplayOptionsGrammaticalCase grammaticalCase;
     UDisplayOptionsNounClass nounClass;

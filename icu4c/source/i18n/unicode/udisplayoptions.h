@@ -15,7 +15,6 @@
 /**
  * Represents all the grammatical cases that are supported by CLDR.
  *
- *
  * @draft ICU 72
  */
 typedef enum UDisplayOptionsGrammaticalCase {
@@ -56,6 +55,7 @@ typedef enum UDisplayOptionsGrammaticalCase {
 } UDisplayOptionsGrammaticalCase;
 
 /**
+ * @param grammaticalCase The grammatical case.
  * @return the lowercase CLDR keyword string for the grammatical case.
  *
  * @draft ICU 72
@@ -64,7 +64,6 @@ U_CAPI const char * U_EXPORT2
 udispopt_getGrammaticalCaseIdentifier(UDisplayOptionsGrammaticalCase grammaticalCase);
 
 /**
- *
  * @param identifier in lower case such as "dative" or "nominative"
  * @return the plural category corresponding to the identifier, or `UDISPOPT_GRAMMATICAL_CASE_UNDEFINED`
  *
@@ -75,7 +74,7 @@ udispopt_fromGrammaticalCaseIdentifier(const char *identifier);
 
 /**
  * Standard CLDR plural form/category constants.
- * See http://www.unicode.org/reports/tr35/tr35-numbers.html#Language_Plural_Rules
+ * See https://www.unicode.org/reports/tr35/tr35-numbers.html#Language_Plural_Rules
  *
  * @draft ICU 72
  */
@@ -103,6 +102,7 @@ typedef enum UDisplayOptionsPluralCategory {
 } UDisplayOptionsPluralCategory;
 
 /**
+ * @param pluralCategory The plural category.
  * @return the lowercase CLDR identifier string for the plural category.
  *
  * @draft ICU 72
@@ -122,7 +122,7 @@ udispopt_fromPluralCategoryIdentifier(const char *identifier);
 /**
  * Represents all the grammatical noun classes that are supported by CLDR.
  *
- * @draft ICU 71.
+ * @draft ICU 72.
  */
 typedef enum UDisplayOptionsNounClass {
     /**
@@ -151,6 +151,7 @@ typedef enum UDisplayOptionsNounClass {
 } UDisplayOptionsNounClass;
 
 /**
+ * @param nounClass The noun class.
  * @return the lowercase CLDR keyword string for the noun class.
  *
  * @draft ICU 72
@@ -159,7 +160,6 @@ U_CAPI const char * U_EXPORT2
 udispopt_getNounClassIdentifier(UDisplayOptionsNounClass nounClass);
 
 /**
- *
  * @param identifier in lower case such as "feminine" or "masculine"
  * @return the plural category corresponding to the identifier, or `UDISPOPT_NOUN_CLASS_UNDEFINED`
  *

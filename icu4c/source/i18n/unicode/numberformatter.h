@@ -2774,8 +2774,8 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      * Gets the noun class of the formatted output. Returns `UNDEFINED` when the noun class
      * is not supported yet.
      *
-     * @return `NounClass`
-     * @draft ICU 71.
+     * @return UDisplayOptionsNounClass
+     * @draft ICU 72
      */
     UDisplayOptionsNounClass getNounClass(UErrorCode &status) const;
 

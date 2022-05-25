@@ -10,10 +10,10 @@ import com.ibm.icu.impl.FormattedValueStringBuilderImpl;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.text.ConstrainedFieldPosition;
+import com.ibm.icu.text.DisplayOptions;
 import com.ibm.icu.text.FormattedValue;
 import com.ibm.icu.text.PluralRules.IFixedDecimal;
 import com.ibm.icu.util.MeasureUnit;
-import com.ibm.icu.text.DisplayOptions.NounClass;
 
 /**
  * The result of a number formatting operation. This class allows the result to be exported in several
@@ -144,8 +144,8 @@ public class FormattedNumber implements FormattedValue {
      * @return NounClass
      * @draft ICU 71.
      */
-    public NounClass getNounClass() {
-        return NounClass.fromIdentifier(this.gender);
+    public DisplayOptions.NounClass getNounClass() {
+        return DisplayOptions.NounClass.fromIdentifier(this.gender);
     }
 
     /**
