@@ -76,6 +76,8 @@ void TimeZoneTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO(TestGetGMT);
     TESTCASE_AUTO(TestGetWindowsID);
     TESTCASE_AUTO(TestGetIDForWindowsID);
+    TESTCASE_AUTO(TestCasablancaNameAndOffset22041);
+    TESTCASE_AUTO(TestRawOffsetAndOffsetConsistency22041);
     TESTCASE_AUTO_END;
 }
 
@@ -2544,4 +2546,41 @@ void TimeZoneTest::TestGetIDForWindowsID(void) {
     }
 }
 
+void TimeZoneTest::TestCasablancaNameAndOffset22041(void) {
+    std::unique_ptr<TimeZone> zone(TimeZone::createTimeZone("Africa/Casablanca"));
+    UnicodeString standardName, summerName;
+    zone->getDisplayName(false, TimeZone::LONG, Locale::getEnglish(), standardName);
+    zone->getDisplayName(true, TimeZone::LONG, Locale::getEnglish(), summerName);
+    int32_t raw, dst;
+    UErrorCode status = U_ZERO_ERROR;
+    zone->getOffset(Calendar::getNow(), false, raw, dst, status);
+    assertEquals(u"TimeZone name for Africa/Casablanca should not contain '+02' since it is located in UTC, but got "
+                 + standardName, -1, standardName.indexOf("+02"));
+    assertEquals(u"TimeZone name for Africa/Casablanca should not contain '+02' since it is located in UTC, but got "
+                 + summerName, -1, summerName.indexOf("+02"));
+    assertEquals("getRawOffset() and the raw from getOffset(now, false, raw, dst, status) should not be different but got",
+                 zone->getRawOffset(), raw);
+}
+
+void TimeZoneTest::TestRawOffsetAndOffsetConsistency22041(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<StringEnumeration> s(TimeZone::createEnumeration(status));
+    if (U_FAILURE(status)) {
+        dataerrln("Unable to create TimeZone enumeration");
+        return;
+    }
+    const char* tz;
+    UDate now = Calendar::getNow();
+    while ((tz = s->next(nullptr, status)) != nullptr && U_SUCCESS(status)) {
+        std::unique_ptr<TimeZone> zone(TimeZone::createTimeZone(tz));
+        int32_t raw, dst;
+        zone->getOffset(now, false, raw, dst, status);
+        if (U_FAILURE(status)) {
+           errln("TimeZone '%s' getOffset() return error", tz);
+        }
+        assertEquals(u"TimeZone '" + UnicodeString(tz) +
+                     u"' getRawOffset() and the raw from getOffset(now, false, raw, dst, status) should not be different but got",
+                     zone->getRawOffset(), raw);
+    }
+}
 #endif /* #if !UCONFIG_NO_FORMATTING */
