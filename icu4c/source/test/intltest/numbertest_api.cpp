@@ -5,19 +5,22 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "charstr.h"
-#include <cstdarg>
 #include <cmath>
+#include <cstdarg>
 #include <memory>
-#include "unicode/unum.h"
+
+#include "unicode/displayoptions.h"
 #include "unicode/numberformatter.h"
 #include "unicode/testlog.h"
+#include "unicode/unum.h"
 #include "unicode/utypes.h"
+
+#include "charstr.h"
 #include "number_asformat.h"
+#include "number_microprops.h"
 #include "number_types.h"
 #include "number_utils.h"
 #include "number_utypes.h"
-#include "number_microprops.h"
 #include "numbertest.h"
 
 using number::impl::UFormattedNumberData;
@@ -2302,6 +2305,39 @@ void NumberFormatterApiTest::runUnitInflectionsTestCases(UnlocalizedNumberFormat
             skel = skelString.getTerminatedBuffer();
         } else {
             unf = unf.unit(mu).unitDisplayCase(t.unitDisplayCase);
+            // No skeleton support for unitDisplayCase yet.
+            skel = nullptr;
+        }
+        assertFormatSingle((UnicodeString("Unit: \"") + t.unitIdentifier + ("\", \"") + skeleton +
+                            u"\", locale=\"" + t.locale + u"\", case=\"" +
+                            (t.unitDisplayCase ? t.unitDisplayCase : "") + u"\", value=" + t.value)
+                               .getTerminatedBuffer(),
+                           skel, skel, unf, Locale(t.locale), t.value, t.expected);
+        status.assertSuccess();
+    }
+
+    for (int32_t i = 0; i < numCases; i++) {
+        UnitInflectionTestCase t = cases[i];
+        status.assertSuccess();
+        MeasureUnit mu = MeasureUnit::forIdentifier(t.unitIdentifier, status);
+        if (status.errIfFailureAndReset("MeasureUnit::forIdentifier(\"%s\", ...) failed",
+                                        t.unitIdentifier)) {
+            continue;
+        };
+
+        UnicodeString skelString = UnicodeString("unit/") + t.unitIdentifier + u" " + skeleton;
+        const UChar *skel;
+        auto displayOptionsBuilder = DisplayOptions::builder();
+        if (t.unitDisplayCase == nullptr || t.unitDisplayCase[0] == 0) {
+            auto displayoptions = displayOptionsBuilder.build();
+            unf = unf.unit(mu).displayOptions(displayoptions);
+            skel = skelString.getTerminatedBuffer();
+        } else {
+            auto displayoptions =
+                displayOptionsBuilder
+                    .setGrammaticalCase(udispopt_fromGrammaticalCaseIdentifier(t.unitDisplayCase))
+                    .build();
+            unf = unf.unit(mu).displayOptions(displayoptions);
             // No skeleton support for unitDisplayCase yet.
             skel = nullptr;
         }

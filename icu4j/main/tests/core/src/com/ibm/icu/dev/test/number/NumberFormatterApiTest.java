@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.number;
 
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -18,6 +19,8 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.ibm.icu.text.DisplayOptions;
+import com.ibm.icu.text.DisplayOptions.GrammaticalCase;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.format.FormattedValueTest;
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
@@ -2276,6 +2279,28 @@ public class NumberFormatterApiTest extends TestFmwk {
                                    "\", value=" + this.value,
                                skel, skel, unf, new ULocale(this.locale), this.value, this.expected);
         }
+
+        public void runTestWithDisplayOptions(UnlocalizedNumberFormatter unf, String skeleton) {
+            MeasureUnit mu = MeasureUnit.forIdentifier(unitIdentifier);
+            String skel;
+
+            DisplayOptions.Builder displayOptionsBuilder = DisplayOptions.builder();
+            if (this.unitDisplayCase == null || this.unitDisplayCase.isEmpty()) {
+                DisplayOptions displayOptions = displayOptionsBuilder.build();
+                unf = unf.unit(mu).displayOptions(displayOptions);
+                skel = "unit/" + unitIdentifier + " " + skeleton;
+            } else {
+                DisplayOptions displayOptions = displayOptionsBuilder.setGrammaticalCase(
+                    GrammaticalCase.fromIdentifier(this.unitDisplayCase)).build();
+                unf = unf.unit(mu).displayOptions(displayOptions);
+                // No skeleton support for unitDisplayCase yet.
+                skel = null;
+            }
+            assertFormatSingle("\"" + skeleton + "\", locale=\"" + this.locale + "\", case=\"" +
+                    (this.unitDisplayCase != null ? this.unitDisplayCase : "") +
+                    "\", value=" + this.value,
+                skel, skel, unf, new ULocale(this.locale), this.value, this.expected);
+        }
     }
 
     @Test
@@ -2298,6 +2323,7 @@ public class NumberFormatterApiTest extends TestFmwk {
             };
             for (UnitInflectionTestCase t : percentCases) {
                 t.runTest(unf, skeleton);
+                t.runTestWithDisplayOptions(unf, skeleton);
             }
         }
         {
@@ -2393,6 +2419,7 @@ public class NumberFormatterApiTest extends TestFmwk {
             };
             for (UnitInflectionTestCase t : testCases) {
                 t.runTest(unf, skeleton);
+                t.runTestWithDisplayOptions(unf, skeleton);
             }
         }
         {
@@ -2422,6 +2449,7 @@ public class NumberFormatterApiTest extends TestFmwk {
             };
             for (UnitInflectionTestCase t : meterPerDayCases) {
                 t.runTest(unf, skeleton);
+                t.runTestWithDisplayOptions(unf, skeleton);
             }
         }
         // TODO: add a usage case that selects between preferences with different
