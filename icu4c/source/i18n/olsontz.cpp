@@ -430,8 +430,7 @@ void OlsonTimeZone::setRawOffset(int32_t /*offsetMillis*/) {
 int32_t OlsonTimeZone::getRawOffset() const {
     UErrorCode ec = U_ZERO_ERROR;
     int32_t raw, dst;
-    getOffset((double) uprv_getUTCtime() * U_MILLIS_PER_SECOND,
-              FALSE, raw, dst, ec);
+    getOffset(uprv_getUTCtime(), FALSE, raw, dst, ec);
     return raw;
 }
 

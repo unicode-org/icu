@@ -479,8 +479,7 @@ RuleBasedTimeZone::getRawOffset(void) const {
     // as of current time.
     UErrorCode status = U_ZERO_ERROR;
     int32_t raw, dst;
-    getOffset(uprv_getUTCtime() * U_MILLIS_PER_SECOND,
-        FALSE, raw, dst, status);
+    getOffset(uprv_getUTCtime(), FALSE, raw, dst, status);
     return raw;
 }
 
@@ -490,7 +489,7 @@ RuleBasedTimeZone::useDaylightTime(void) const {
     // daylight saving time is used as of now or
     // after the next transition.
     UErrorCode status = U_ZERO_ERROR;
-    UDate now = uprv_getUTCtime() * U_MILLIS_PER_SECOND;
+    UDate now = uprv_getUTCtime();
     int32_t raw, dst;
     getOffset(now, FALSE, raw, dst, status);
     if (dst != 0) {

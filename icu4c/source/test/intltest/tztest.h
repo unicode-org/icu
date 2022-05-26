@@ -103,6 +103,8 @@ public:
 
     void TestGetWindowsID(void);
     void TestGetIDForWindowsID(void);
+    void TestCasablancaNameAndOffset22041(void);
+    void TestRawOffsetAndOffsetConsistency22041(void);
 
     static const UDate INTERVAL;
 
