@@ -311,7 +311,7 @@ void FormattedStringBuilderTest::testCodePoints() {
 }
 
 void FormattedStringBuilderTest::testInsertOverflow() {
-    if (quick) return;
+    if (quick || logKnownIssue("22047", "FormattedStringBuilder with long length crashes in toUnicodeString in CI Linux tests")) return;
     
     // Setup the test fixture in sb, sb2, ustr.
     UErrorCode status = U_ZERO_ERROR;
@@ -330,17 +330,16 @@ void FormattedStringBuilderTest::testInsertOverflow() {
     infoln("# log: setup 2 done, sb2 len %d, status %s", sb2.length(), u_errorName(status));
     assertSuccess("Setup the second FormattedStringBuilder", status);
 
-    if (!logKnownIssue("22047", "FormattedStringBuilder with long length crashes in toUnicodeString in CI Linux tests")) {
-        // The following should set ustr to have length 1610612734, but is currently crashing
-        // in the CI test "C: Linux Clang Exhaustive Tests (Ubuntu 18.04)", though not
-        // crashing when running exhaustive tests locally on e.g. macOS 12.4 on Intel).
-        // Skipping this leaves ustr with length 1073741823.
-        ustr = sb2.toUnicodeString();
-    } else {
-        // Alternative approach which sets ustr to length 1073741871, still long
-        // enough to test the expected behavior for the remainder of the code here.
-        ustr.append(u"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",-1);
-    }
+    // The following should set ustr to have length 1610612734, but is currently crashing
+    // in the CI test "C: Linux Clang Exhaustive Tests (Ubuntu 18.04)", though not
+    // crashing when running exhaustive tests locally on e.g. macOS 12.4 on Intel).
+    // Hence the logKnownIssue skip above.
+    ustr = sb2.toUnicodeString();
+    // Note that trying the following alternative approach which sets ustr to length 1073741871
+    // (still long enough to test the expected behavior for the remainder of the code here)
+    // also crashed in "C: Linux Clang Exhaustive Tests (Ubuntu 18.04)":
+    // ustr.append(u"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",-1);
+
     // Complete setting up the test fixture in sb, sb2 and ustr.
     infoln("# log: setup 3 done, ustr len %d", ustr.length());
 
