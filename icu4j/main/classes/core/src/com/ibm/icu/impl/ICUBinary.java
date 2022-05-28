@@ -28,6 +28,9 @@ import com.ibm.icu.util.ICUUncheckedIOException;
 import com.ibm.icu.util.VersionInfo;
 
 public final class ICUBinary {
+
+    // private methods / classes for reading individual files ------------------
+
     /**
      * Reads the ICU .dat package file format.
      * Most methods do not modify the ByteBuffer in any way,
@@ -278,6 +281,50 @@ public final class ICUBinary {
         }
     }
 
+    /**
+     * Compares the length-specified input key with the
+     * NUL-terminated table key. (ASCII)
+     */
+    static int compareKeys(CharSequence key, ByteBuffer bytes, int offset) {
+        for (int i = 0;; ++i, ++offset) {
+            int c2 = bytes.get(offset);
+            if (c2 == 0) {
+                if (i == key.length()) {
+                    return 0;
+                } else {
+                    return 1;  // key > table key because key is longer.
+                }
+            } else if (i == key.length()) {
+                return -1;  // key < table key because key is shorter.
+            }
+            int diff = key.charAt(i) - c2;
+            if (diff != 0) {
+                return diff;
+            }
+        }
+    }
+
+    static int compareKeys(CharSequence key, byte[] bytes, int offset) {
+        for (int i = 0;; ++i, ++offset) {
+            int c2 = bytes[offset];
+            if (c2 == 0) {
+                if (i == key.length()) {
+                    return 0;
+                } else {
+                    return 1;  // key > table key because key is longer.
+                }
+            } else if (i == key.length()) {
+                return -1;  // key < table key because key is shorter.
+            }
+            int diff = key.charAt(i) - c2;
+            if (diff != 0) {
+                return diff;
+            }
+        }
+    }
+
+    // private fields / methods for loading files ------------------------------
+
     private static final List<DataFile> icuDataFiles = new ArrayList<>();
 
     static {
@@ -349,48 +396,6 @@ public final class ICUBinary {
                 dataFiles.add(new SingleDataFile(itemPath.toString(), file));
             }
             itemPath.setLength(folderPathLength);
-        }
-    }
-
-    /**
-     * Compares the length-specified input key with the
-     * NUL-terminated table key. (ASCII)
-     */
-    static int compareKeys(CharSequence key, ByteBuffer bytes, int offset) {
-        for (int i = 0;; ++i, ++offset) {
-            int c2 = bytes.get(offset);
-            if (c2 == 0) {
-                if (i == key.length()) {
-                    return 0;
-                } else {
-                    return 1;  // key > table key because key is longer.
-                }
-            } else if (i == key.length()) {
-                return -1;  // key < table key because key is shorter.
-            }
-            int diff = key.charAt(i) - c2;
-            if (diff != 0) {
-                return diff;
-            }
-        }
-    }
-
-    static int compareKeys(CharSequence key, byte[] bytes, int offset) {
-        for (int i = 0;; ++i, ++offset) {
-            int c2 = bytes[offset];
-            if (c2 == 0) {
-                if (i == key.length()) {
-                    return 0;
-                } else {
-                    return 1;  // key > table key because key is longer.
-                }
-            } else if (i == key.length()) {
-                return -1;  // key < table key because key is shorter.
-            }
-            int diff = key.charAt(i) - c2;
-            if (diff != 0) {
-                return diff;
-            }
         }
     }
 
@@ -546,6 +551,8 @@ public final class ICUBinary {
             dataFile.addBaseNamesInFolder(folder, suffix, names);
         }
     }
+
+    // static utility functions-------------------------------------------------
 
     /**
      * Same as readHeader(), but returns a VersionInfo rather than a compact int.
