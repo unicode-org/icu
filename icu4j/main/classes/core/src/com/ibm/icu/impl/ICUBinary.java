@@ -323,7 +323,25 @@ public final class ICUBinary {
         }
     }
 
-    // private fields / methods for loading files ------------------------------
+    // private classes for impls of file loading -------------------------------
+
+    private static abstract class IDataFiles {
+
+        public IDataFiles() {
+            initializeDataFiles();
+        }
+
+        /**
+         * @return a reference to the {@code List} of {@code DataFile}s that
+         * this instance represents.
+         */
+        abstract List<DataFile> getDataFiles();
+
+        /**
+         * Initialize the set of files to be stored in the list from {@code getDataFiles}.
+         */
+        abstract void initializeDataFiles();
+    }
 
     private static final List<DataFile> icuDataFiles = new ArrayList<>();
 
