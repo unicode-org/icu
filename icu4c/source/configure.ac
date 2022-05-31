@@ -155,6 +155,8 @@ AC_PROG_CXX([clang++ g++ c++ gpp xlC_r xlC aCC CC cxx cc++ cl.exe icc FCC KCC RC
 # pkg-config is needed for harfbuzz support
 PKG_PROG_PKG_CONFIG([0.20])
 PKG_CHECK_MODULES(ICULEHB, icu-le-hb, have_icu_le_hb=true, :)
+# is there another ICUUC installed? For layoutex.
+PKG_CHECK_MODULES(OTHER_ICUUC, icu-uc, have_other_icu_uc=true, :)
 
 # Ensure that if CXXFLAGS/CFLAGS were not set when calling configure, set it correctly based on (enable/disable) debug or release option
 # The release mode use is the default one for autoconf
@@ -661,7 +663,7 @@ sparc-*-solaris*)
 ia64-*-hpux*)
 # There has been some issues with building ICU data on HPUX ia64 aCC
 # when using the assemble code setting below.  For now, build without
-# assemble code for this platform.  This will increase the build time.   
+# assemble code for this platform.  This will increase the build time.
 #    GENCCODE_ASSEMBLY="-a aCC-ia64"
     ;;
 esac

@@ -704,6 +704,8 @@ INSTALL_DATA
 INSTALL_SCRIPT
 INSTALL_PROGRAM
 CPP
+OTHER_ICUUC_LIBS
+OTHER_ICUUC_CFLAGS
 ICULEHB_LIBS
 ICULEHB_CFLAGS
 PKG_CONFIG_LIBDIR
@@ -757,7 +759,6 @@ infodir
 docdir
 oldincludedir
 includedir
-runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -824,6 +825,8 @@ PKG_CONFIG_PATH
 PKG_CONFIG_LIBDIR
 ICULEHB_CFLAGS
 ICULEHB_LIBS
+OTHER_ICUUC_CFLAGS
+OTHER_ICUUC_LIBS
 CPP'
 
 
@@ -863,7 +866,6 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
-runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -1116,15 +1118,6 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
-  -runstatedir | --runstatedir | --runstatedi | --runstated \
-  | --runstate | --runstat | --runsta | --runst | --runs \
-  | --run | --ru | --r)
-    ac_prev=runstatedir ;;
-  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
-  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
-  | --run=* | --ru=* | --r=*)
-    runstatedir=$ac_optarg ;;
-
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1262,7 +1255,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir runstatedir
+		libdir localedir mandir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1415,7 +1408,6 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
-  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -1511,6 +1503,10 @@ Some influential environment variables:
               C compiler flags for ICULEHB, overriding pkg-config
   ICULEHB_LIBS
               linker flags for ICULEHB, overriding pkg-config
+  OTHER_ICUUC_CFLAGS
+              C compiler flags for OTHER_ICUUC, overriding pkg-config
+  OTHER_ICUUC_LIBS
+              linker flags for OTHER_ICUUC, overriding pkg-config
   CPP         C preprocessor
 
 Use these variables to override the choices made by `configure' or to help
@@ -3966,6 +3962,78 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 	have_icu_le_hb=true
+fi
+# is there another ICUUC installed? For layoutex.
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for OTHER_ICUUC" >&5
+$as_echo_n "checking for OTHER_ICUUC... " >&6; }
+
+if test -n "$OTHER_ICUUC_CFLAGS"; then
+    pkg_cv_OTHER_ICUUC_CFLAGS="$OTHER_ICUUC_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"icu-uc\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "icu-uc") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_OTHER_ICUUC_CFLAGS=`$PKG_CONFIG --cflags "icu-uc" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$OTHER_ICUUC_LIBS"; then
+    pkg_cv_OTHER_ICUUC_LIBS="$OTHER_ICUUC_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"icu-uc\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "icu-uc") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_OTHER_ICUUC_LIBS=`$PKG_CONFIG --libs "icu-uc" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        OTHER_ICUUC_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "icu-uc" 2>&1`
+        else
+	        OTHER_ICUUC_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "icu-uc" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$OTHER_ICUUC_PKG_ERRORS" >&5
+
+	:
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+	:
+else
+	OTHER_ICUUC_CFLAGS=$pkg_cv_OTHER_ICUUC_CFLAGS
+	OTHER_ICUUC_LIBS=$pkg_cv_OTHER_ICUUC_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	have_other_icu_uc=true
 fi
 
 # Ensure that if CXXFLAGS/CFLAGS were not set when calling configure, set it correctly based on (enable/disable) debug or release option
