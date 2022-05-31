@@ -325,17 +325,13 @@ public final class ICUBinary {
 
     // private classes for impls of file loading -------------------------------
 
-    private static abstract class IDataFiles {
+    private static abstract class DataFiles {
 
-        public IDataFiles() {
+        protected final List<DataFile> dataFiles = new ArrayList<>();
+
+        public DataFiles() {
             initializeDataFiles();
         }
-
-        /**
-         * @return a reference to the {@code List} of {@code DataFile}s that
-         * this instance represents.
-         */
-        abstract List<DataFile> getDataFiles();
 
         /**
          * Initialize the set of files to be stored in the list from {@code getDataFiles}.
@@ -367,7 +363,7 @@ public final class ICUBinary {
                     path = path.substring(0, path.length() - 1);
                 }
                 if (path.length() != 0) {
-                    addDataFilesFromFolder(new File(path), new StringBuilder(), this.getDataFiles());
+                    addDataFilesFromFolder(new File(path), new StringBuilder(), dataFiles);
                 }
                 if (sepIndex < 0) {
                     break;
@@ -455,7 +451,7 @@ public final class ICUBinary {
         }
 
         private ByteBuffer getDataFromFile(String itemPath) {
-            for (DataFile dataFile : this.getDataFiles()) {
+            for (DataFile dataFile : dataFiles) {
                 ByteBuffer data = dataFile.getData(itemPath);
                 if (data != null) {
                     return data;
@@ -475,38 +471,56 @@ public final class ICUBinary {
          *        for example "de_CH".
          */
         public void addBaseNamesInFileFolder(String folder, String suffix, Set<String> names) {
-            for (DataFile dataFile : this.getDataFiles()) {
+            for (DataFile dataFile : dataFiles) {
                 dataFile.addBaseNamesInFolder(folder, suffix, names);
             }
         }
     }
 
-    static final class ICUDataFiles extends IDataFiles {
-        private final List<DataFile> icuDataFiles = new ArrayList<>();
-
-        /* (non-Javadoc)
-         * @see com.ibm.icu.impl.ICUBinary.IDataFiles#getDataFiles()
-         */
-        @Override
-        List<DataFile> getDataFiles() {
-            return icuDataFiles;
-        }
+    static final class NormalDataFiles extends DataFiles {
+        // Environment variable name for the path to ICU Data Overlay files.
+        // Note: this matches the environment variable of the same name in ICU4C
+        // that allows users to override data. (Whereas ICU_DATA can be ignored
+        // when ICU_NO_USER_DATA_OVERRIDE is defined in ICU4C.)
+        private static final String DATA_FILES_ENV_VAR = "ICU_DATA";
 
         /* (non-Javadoc)
          * @see com.ibm.icu.impl.ICUBinary.IDataFiles#initializeDataFiles()
          */
         @Override
         void initializeDataFiles() {
-            // Normally com.ibm.icu.impl.ICUBinary.dataPath.
-            String dataPath = ICUConfig.get(ICUBinary.class.getName() + ".dataPath");
+            String dataPath = System.getenv(DATA_FILES_ENV_VAR);
             if (dataPath != null) {
-                this.addDataFilesFromPath(dataPath);
+                addDataFilesFromPath(dataPath);
+            }
+
+            // Normally com.ibm.icu.impl.ICUBinary.dataPath.
+            dataPath = ICUConfig.get(ICUBinary.class.getName() + ".dataPath");
+            if (dataPath != null) {
+                addDataFilesFromPath(dataPath);
             }
 
         }
     }
 
-    public static final ICUDataFiles NORMAL_DATA_FILES = new ICUDataFiles();
+    private static final class OverrideDataFiles extends DataFiles {
+        private static final String OVERRIDE_DATA_FILES_ENV_VAR = "ICU_OVERRIDE_DATA";
+
+        /* (non-Javadoc)
+         * @see com.ibm.icu.impl.ICUBinary.IDataFiles#initializeDataFiles()
+         */
+        @Override
+        void initializeDataFiles() {
+            String dataPath = System.getenv(OVERRIDE_DATA_FILES_ENV_VAR);
+
+            if (dataPath != null) {
+                addDataFilesFromPath(dataPath);
+            }
+        }
+
+    }
+
+    public static final NormalDataFiles NORMAL_DATA_FILES = new NormalDataFiles();
 
     // public inner interface ------------------------------------------------
 
