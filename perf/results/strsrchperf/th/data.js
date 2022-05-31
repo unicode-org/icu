@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1653685454011,
+  "lastUpdate": 1654027947440,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -322,6 +322,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 89.5505,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies@chromium.org",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "younies@chromium.org",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "distinct": true,
+          "id": "d6fc9b828c95f0d8d10a8648b3471459d05fb8c4",
+          "message": "ICU-21935 Add DisplayOptions to NumberFormatterSettings\n\nSee #2099",
+          "timestamp": "2022-05-31T13:02:01-07:00",
+          "tree_id": "e043f84264e963b665a5b126a084fab5dd042bbd",
+          "url": "https://github.com/unicode-org/icu/commit/d6fc9b828c95f0d8d10a8648b3471459d05fb8c4"
+        },
+        "date": 1654027944710,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 42.5021,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 94.5822,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
