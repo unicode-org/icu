@@ -524,7 +524,7 @@ public final class ICUBinary {
         public boolean isDataVersionAcceptable(byte version[]);
     }
 
-    // public methods --------------------------------------------------------
+    // public methods (existing API for NORMAL_DATA_FILES) ---------------------
 
     /**
      * Loads an ICU binary data file and returns it as a ByteBuffer.
