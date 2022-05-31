@@ -481,7 +481,7 @@ public final class ICUBinary {
         }
     }
 
-    private static final class ICUDataFiles extends IDataFiles {
+    static final class ICUDataFiles extends IDataFiles {
         private final List<DataFile> icuDataFiles = new ArrayList<>();
 
         /* (non-Javadoc)
@@ -506,7 +506,7 @@ public final class ICUBinary {
         }
     }
 
-    private static final ICUDataFiles NORMAL_DATA_FILES = new ICUDataFiles();
+    public static final ICUDataFiles NORMAL_DATA_FILES = new ICUDataFiles();
 
     // public inner interface ------------------------------------------------
 

@@ -801,7 +801,7 @@ public  class ICUResourceBundle extends UResourceBundle {
                     folder = null;
                 }
                 if (folder != null) {
-                    ICUBinary.addBaseNamesInFileFolder(folder, ".res", set);
+                    ICUBinary.NORMAL_DATA_FILES.addBaseNamesInFileFolder(folder, ".res", set);
                 }
             }
             set.remove(ICU_RESOURCE_INDEX);  // "res_index"
