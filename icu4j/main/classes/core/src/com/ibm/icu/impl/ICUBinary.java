@@ -325,6 +325,25 @@ public final class ICUBinary {
 
     // private classes for impls of file loading -------------------------------
 
+    /**
+     * Represents implementations of the {@code DataFiles} interface.
+     *
+     * {@code NORMAL} - locale lookups fallback to locales based on truncating
+     * the locale ID string from right to left based on the last underscore. The
+     * presence or absence of user-provided data files does not affect locale
+     * fallback (parent) relationships among files.
+     * See
+     *
+     * {@code OVERRIDE} - locale lookups are similar to {@code NORMAL}, but the
+     * values in user-provided override data files for a locale supersede any
+     * other values of built-in ICU data or {@code NORMAL} data files.
+     */
+    public enum DataFilesCategory { NORMAL, OVERRIDE };
+
+    /**
+     * An interface that represents the user-provided data files to look up
+     * resource data before looking at built-in ICU data.
+     */
     private static abstract class DataFiles {
 
         protected final List<DataFile> dataFiles = new ArrayList<>();
@@ -337,6 +356,13 @@ public final class ICUBinary {
          * Initialize the set of files to be stored in the list from {@code getDataFiles}.
          */
         abstract void initializeDataFiles();
+
+        /**
+         * Indicate whether the field {@code dataFiles} has a size > 0.
+         */
+        public boolean hasFiles() {
+            return !dataFiles.isEmpty();
+        };
 
         /**
          * This is public only for the concrete implementations that themselves are private.
@@ -485,7 +511,7 @@ public final class ICUBinary {
         private static final String DATA_FILES_ENV_VAR = "ICU_DATA";
 
         /* (non-Javadoc)
-         * @see com.ibm.icu.impl.ICUBinary.IDataFiles#initializeDataFiles()
+         * @see com.ibm.icu.impl.ICUBinary.DataFiles#initializeDataFiles()
          */
         @Override
         void initializeDataFiles() {
@@ -507,7 +533,7 @@ public final class ICUBinary {
         private static final String OVERRIDE_DATA_FILES_ENV_VAR = "ICU_OVERRIDE_DATA";
 
         /* (non-Javadoc)
-         * @see com.ibm.icu.impl.ICUBinary.IDataFiles#initializeDataFiles()
+         * @see com.ibm.icu.impl.ICUBinary.DataFiles#initializeDataFiles()
          */
         @Override
         void initializeDataFiles() {

@@ -15,6 +15,7 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
 import java.util.Arrays;
+import java.util.Objects;
 
 import com.ibm.icu.util.ICUException;
 import com.ibm.icu.util.ICUUncheckedIOException;
@@ -150,14 +151,18 @@ public final class ICUResourceBundleReader {
     private static class ReaderCacheKey {
         final String baseName;
         final String localeID;
+        final ICUBinary.DataFilesCategory dataFilesCategory;
 
-        ReaderCacheKey(String baseName, String localeID) {
+        ReaderCacheKey(String baseName, String localeID, ICUBinary.DataFilesCategory dataFilesCategory) {
             this.baseName = (baseName == null) ? "" : baseName;
             this.localeID = (localeID == null) ? "" : localeID;
+            this.dataFilesCategory = dataFilesCategory;
         }
 
         @Override
         public boolean equals(Object obj) {
+            // TODO: Use Objects.equals()?
+
             if (this == obj) {
                 return true;
             }
@@ -166,12 +171,13 @@ public final class ICUResourceBundleReader {
             }
             ReaderCacheKey info = (ReaderCacheKey)obj;
             return this.baseName.equals(info.baseName)
-                    && this.localeID.equals(info.localeID);
+                    && this.localeID.equals(info.localeID)
+                    && this.dataFilesCategory.equals(info.dataFilesCategory);
         }
 
         @Override
         public int hashCode() {
-            return baseName.hashCode() ^ localeID.hashCode();
+            return Objects.hash(baseName, localeID, dataFilesCategory);
         }
     }
 
@@ -229,7 +235,11 @@ public final class ICUResourceBundleReader {
     }
 
     static ICUResourceBundleReader getReader(String baseName, String localeID, ClassLoader root) {
-        ReaderCacheKey info = new ReaderCacheKey(baseName, localeID);
+        return getReader(baseName, localeID, root, ICUBinary.DataFilesCategory.NORMAL);
+    }
+
+    static ICUResourceBundleReader getReader(String baseName, String localeID, ClassLoader root, ICUBinary.DataFilesCategory dataFilesCategory) {
+        ReaderCacheKey info = new ReaderCacheKey(baseName, localeID, dataFilesCategory);
         ICUResourceBundleReader reader = CACHE.getInstance(info, root);
         if (reader == NULL_READER) {
             return null;
