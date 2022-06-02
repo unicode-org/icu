@@ -34,6 +34,9 @@ import com.ibm.icu.util.UResourceBundleIterator;
 import com.ibm.icu.util.UResourceTypeMismatchException;
 
 public  class ICUResourceBundle extends UResourceBundle {
+
+    // static fields ------------------------------------------------------------------------------
+
     /**
      * CLDR string value "∅∅∅" prevents fallback to the parent bundle.
      */
@@ -93,6 +96,8 @@ public  class ICUResourceBundle extends UResourceBundle {
             return loader.load();
         }
     };
+
+    // methods for getting resources from a ResourceBundle ----------------------------------------
 
     /**
      * Returns a functionally equivalent locale, considering keywords as well, for the specified keyword.
@@ -1177,6 +1182,8 @@ public  class ICUResourceBundle extends UResourceBundle {
         assert false : "hashCode not designed";
         return 42;
     }
+
+    // methods + etc. for loading ResourceBundle(s) -----------------------------------------------
 
     public enum OpenType {  // C++ uresbund.cpp: enum UResOpenType
         /**
