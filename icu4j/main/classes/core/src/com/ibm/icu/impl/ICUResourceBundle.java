@@ -1268,19 +1268,33 @@ public  class ICUResourceBundle extends UResourceBundle {
                 (localeID.length() == lang.length() || localeID.charAt(lang.length()) == '_');
     }
 
-    private static ICUResourceBundle instantiateBundle(
-            final String baseName, final String localeID, final String defaultID,
-            final ClassLoader root, final OpenType openType) {
-        assert localeID.indexOf('@') < 0;
-        assert defaultID == null || defaultID.indexOf('@') < 0;
-        final String fullName = ICUResourceBundleReader.getFullName(baseName, localeID);
-        char openTypeChar = (char)('0' + openType.ordinal());
-        String cacheKey = openType != OpenType.LOCALE_DEFAULT_ROOT ?
-                fullName + '#' + openTypeChar :
-                    fullName + '#' + openTypeChar + '#' + defaultID;
-        return BUNDLE_CACHE.getInstance(cacheKey, new Loader() {
-                @Override
-                public ICUResourceBundle load() {
+    /* Represents logic for loading a ResourceBundle for a locale ID and all of the resources in the
+     * fallback / "parent" chain from that locale ID to the root locale.
+     *
+     * Naming corresponds to the ICUBinary.DataFilesCategory enum value which represents the user-provided
+     * path to files whose loading should be constructed with the relationships / behavior encoded by this
+     * class.
+     */
+    private static class NormalParentChainResourceLoader extends Loader {
+        private String baseName;
+        private String localeID;
+        private String defaultID;
+        private ClassLoader root;
+        private OpenType openType;
+        private String fullName;
+
+        public NormalParentChainResourceLoader(final String baseName, final String localeID, final String defaultID,
+            final ClassLoader root, final OpenType openType, String fullName) {
+            this.baseName = baseName;
+            this.localeID = localeID;
+            this.defaultID = defaultID;
+            this.root = root;
+            this.openType = openType;
+            this.fullName = fullName;
+        }
+
+        @Override
+        public ICUResourceBundle load() {
             if(DEBUG) System.out.println("Creating "+fullName);
             // here we assume that java type resource bundle organization
             // is required then the base name contains '.' else
@@ -1347,7 +1361,25 @@ public  class ICUResourceBundle extends UResourceBundle {
                 }
             }
             return b;
-        }});
+        }
+    }
+
+    /* Loads the ResourceBundle for the localeID and then does so recursively via the Loader for
+     * all locales in the parent chain from the given locale to the root locale.
+     */
+    private static ICUResourceBundle instantiateBundle(
+            final String baseName, final String localeID, final String defaultID,
+            final ClassLoader root, final OpenType openType) {
+        assert localeID.indexOf('@') < 0;
+        assert defaultID == null || defaultID.indexOf('@') < 0;
+        final String fullName = ICUResourceBundleReader.getFullName(baseName, localeID);
+        char openTypeChar = (char)('0' + openType.ordinal());
+        String cacheKey = openType != OpenType.LOCALE_DEFAULT_ROOT ?
+                fullName + '#' + openTypeChar :
+                    fullName + '#' + openTypeChar + '#' + defaultID;
+        NormalParentChainResourceLoader normalChainLoader =
+                new NormalParentChainResourceLoader(baseName, localeID, defaultID, root, openType, fullName);
+        return BUNDLE_CACHE.getInstance(cacheKey, normalChainLoader);
     }
 
     ICUResourceBundle get(String aKey, HashMap<String, String> aliasesVisited, UResourceBundle requested) {
