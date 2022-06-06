@@ -1678,8 +1678,6 @@ private:
                               UnicodeString& rebuiltPat,
                               UErrorCode& ec);
 
-    static const UnicodeSet* getInclusions(int32_t src, UErrorCode &status);
-
     /**
      * A filter that returns true if the given code point should be
      * included in the UnicodeSet being constructed.
@@ -1699,11 +1697,6 @@ private:
                      void* context,
                      const UnicodeSet* inclusions,
                      UErrorCode &status);
-
-    // UCPMap is now stable ICU 63
-    void applyIntPropertyValue(const UCPMap *map,
-                               UCPMapValueFilter *filter, const void *context,
-                               UErrorCode &errorCode);
 
     /**
      * Set the new pattern to cache.

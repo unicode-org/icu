@@ -1011,8 +1011,6 @@ private:
 
     void cacheExplicitFormats(UErrorCode& status);
 
-    int32_t skipLeadingSpaces(UnicodeString& style);
-
     Format* createAppropriateFormat(UnicodeString& type,
                                     UnicodeString& style,
                                     Formattable::Type& formattableType,

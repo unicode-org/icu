@@ -83,13 +83,6 @@ public:
      */
     static DateTimePatternGenerator* U_EXPORT2 createInstanceNoStdPat(const Locale& uLocale, UErrorCode& status);
 
-    /**
-     * For ICU use only
-     *
-     * @internal
-     */
-    static DateTimePatternGenerator* U_EXPORT2 internalMakeInstance(const Locale& uLocale, UErrorCode& status);
-
 #endif /* U_HIDE_INTERNAL_API */
 
     /**
