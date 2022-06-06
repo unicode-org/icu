@@ -271,10 +271,6 @@ class U_I18N_API ListFormatter : public UObject{
     struct ListPatternsSink;
     static ListFormatInternal* loadListFormatInternal(const Locale& locale, const char* style, UErrorCode& errorCode);
 
-    UnicodeString& format_(
-        const UnicodeString items[], int32_t n_items, UnicodeString& appendTo,
-        int32_t index, int32_t &offset, FieldPositionHandler* handler, UErrorCode& errorCode) const;
-
     ListFormatter() = delete;
 
     ListFormatInternal* owned;

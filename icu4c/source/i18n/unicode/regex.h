@@ -361,7 +361,7 @@ private:
      *
      */
     RegexMatcher *matcher(const char16_t *input,
-        UErrorCode          &status) const;
+        UErrorCode          &status) const = delete;
 public:
 
 
@@ -749,7 +749,7 @@ private:
      * `utext_openUChars(UText *ut, const char16_t *text, int64_t textLength, UErrorCode *status);`
      */
     RegexMatcher(const UnicodeString &regexp, const char16_t *input,
-        uint32_t flags, UErrorCode &status);
+        uint32_t flags, UErrorCode &status) = delete;
 public:
 
 
@@ -1157,7 +1157,7 @@ private:
      * `utext_openUChars(UText *ut, const char16_t *text, int64_t textLength, UErrorCode *status);`
      *
      */
-    RegexMatcher &reset(const char16_t *input);
+    RegexMatcher &reset(const char16_t *input) = delete;
 public:
 
    /**

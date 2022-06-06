@@ -560,8 +560,6 @@ class U_I18N_API LocalizedNumberRangeFormatter
 
     LocalizedNumberRangeFormatter(impl::RangeMacroProps &&macros, const Locale &locale);
 
-    void clear();
-
     // To give the fluent setters access to this class's constructor:
     friend class NumberRangeFormatterSettings<UnlocalizedNumberRangeFormatter>;
     friend class NumberRangeFormatterSettings<LocalizedNumberRangeFormatter>;
@@ -695,8 +693,6 @@ class U_I18N_API FormattedNumberRange : public UMemory, public FormattedValue {
 
     explicit FormattedNumberRange(UErrorCode errorCode)
         : fData(nullptr), fErrorCode(errorCode) {}
-
-    void getAllFieldPositionsImpl(FieldPositionIteratorHandler& fpih, UErrorCode& status) const;
 
     void getDecimalNumbers(ByteSink& sink1, ByteSink& sink2, UErrorCode& status) const;
 
