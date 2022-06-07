@@ -1269,7 +1269,8 @@ public  class ICUResourceBundle extends UResourceBundle {
     }
 
     /* Represents logic for loading a ResourceBundle for a locale ID and all of the resources in the
-     * fallback / "parent" chain from that locale ID to the root locale.
+     * fallback / "parent" chain from that locale ID to the root locale, where the parent is determined
+     * by truncating the locale ID from the right on underscore break points.
      *
      * Naming corresponds to the ICUBinary.DataFilesCategory enum value which represents the user-provided
      * path to files whose loading should be constructed with the relationships / behavior encoded by this
@@ -1295,6 +1296,114 @@ public  class ICUResourceBundle extends UResourceBundle {
 
         @Override
         public ICUResourceBundle load() {
+            if(DEBUG) System.out.println("Creating "+fullName);
+            // here we assume that java type resource bundle organization
+            // is required then the base name contains '.' else
+            // the resource organization is of ICU type
+            // so clients can instantiate resources of the type
+            // com.mycompany.data.MyLocaleElements_en.res and
+            // com.mycompany.data.MyLocaleElements.res
+            //
+            final String rootLocale = (baseName.indexOf('.')==-1) ? "root" : "";
+            String localeName = localeID.isEmpty() ? rootLocale : localeID;
+            ICUResourceBundle b = ICUResourceBundle.createBundle(baseName, localeName, root);
+
+            if(DEBUG)System.out.println("The bundle created is: "+b+" and openType="+openType+" and bundle.getNoFallback="+(b!=null && b.getNoFallback()));
+            if (openType == OpenType.DIRECT || (b != null && b.getNoFallback())) {
+                // no fallback because the caller said so or because the bundle says so
+                //
+                // TODO for b!=null: In C++, ures_openDirect() builds the parent chain
+                // for its bundle unless its nofallback flag is set.
+                // Otherwise we get test failures.
+                // For example, item aliases are followed via ures_openDirect(),
+                // and fail if the target bundle needs fallbacks but the chain is not set.
+                // Figure out why Java does not build the parent chain
+                // for a bundle that does not have nofallback.
+                // Are the relevant test cases just disabled?
+                // Do item aliases not get followed via "direct" loading?
+                return b;
+            }
+
+            // fallback to locale ID parent
+            if(b == null){
+                int i = localeName.lastIndexOf('_');
+                if (i != -1) {
+                    // Chop off the last underscore and the subtag after that.
+                    String temp = localeName.substring(0, i);
+                    b = instantiateBundle(baseName, temp, defaultID, root, openType);
+                }else{
+                    // No underscore, only a base language subtag.
+                    if(openType == OpenType.LOCALE_DEFAULT_ROOT &&
+                            !localeIDStartsWithLangSubtag(defaultID, localeName)) {
+                        // Go to the default locale before root.
+                        b = instantiateBundle(baseName, defaultID, defaultID, root, openType);
+                    } else if(openType != OpenType.LOCALE_ONLY && !rootLocale.isEmpty()) {
+                        // Ultimately go to root.
+                        b = ICUResourceBundle.createBundle(baseName, rootLocale, root);
+                    }
+                }
+            }else{
+                UResourceBundle parent = null;
+                localeName = b.getLocaleID();
+                int i = localeName.lastIndexOf('_');
+
+                // TODO: C++ uresbund.cpp also checks for %%ParentIsRoot. Why not Java?
+                String parentLocaleName = ((ICUResourceBundleImpl.ResourceTable)b).findString("%%Parent");
+                if (parentLocaleName != null) {
+                    parent = instantiateBundle(baseName, parentLocaleName, defaultID, root, openType);
+                } else if (i != -1) {
+                    parent = instantiateBundle(baseName, localeName.substring(0, i), defaultID, root, openType);
+                } else if (!localeName.equals(rootLocale)){
+                    parent = instantiateBundle(baseName, rootLocale, defaultID, root, openType);
+                }
+
+                if (!b.equals(parent)){
+                    b.setParent(parent);
+                }
+            }
+            return b;
+        }
+    }
+
+    /* Represents logic for loading a ResourceBundle for a locale ID and all of the resources in the
+     * fallback / "parent" chain from that locale ID to the root locale.
+     *
+     * When override files exist
+     * for the current locale (the 'Override' case), then the corresponding override bundle is the
+     * parent of the current locale. In turn the parent of the override file's ResourceBundle is the same
+     * as the parent would be for the input locale in the 'Normal' case.
+     *
+     * When override files do no exist for the current locale, then the parent of the input locale
+     * matches the parent of the 'Normal' case.
+     *
+     * Naming corresponds to the ICUBinary.DataFilesCategory enum value which represents the user-provided
+     * path to files whose loading should be constructed with the relationships / behavior encoded by this
+     * class.
+     */
+    private static class OverrideParentChainResourceLoader extends Loader {
+        private String baseName;
+        private String localeID;
+        private String defaultID;
+        private ClassLoader root;
+        private OpenType openType;
+        private String fullName;
+
+        public OverrideParentChainResourceLoader(final String baseName, final String localeID, final String defaultID,
+            final ClassLoader root, final OpenType openType, String fullName) {
+            this.baseName = baseName;
+            this.localeID = localeID;
+            this.defaultID = defaultID;
+            this.root = root;
+            this.openType = openType;
+            this.fullName = fullName;
+        }
+
+        @Override
+        public ICUResourceBundle load() {
+            // TODO: implement logic for checking existence of override resource file for input locale
+            // and inserting it into the parent chain if it exists
+            assert false;
+
             if(DEBUG) System.out.println("Creating "+fullName);
             // here we assume that java type resource bundle organization
             // is required then the base name contains '.' else
