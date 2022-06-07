@@ -1319,7 +1319,7 @@ public  class ICUResourceBundle extends UResourceBundle {
             //
             final String rootLocale = (baseName.indexOf('.')==-1) ? "root" : "";
             String localeName = localeID.isEmpty() ? rootLocale : localeID;
-            ICUResourceBundle b = ICUResourceBundle.createBundle(baseName, localeName, root);
+            ICUResourceBundle b = ICUResourceBundle.createBundle(baseName, localeName, root, ICUBinary.DataFilesCategory.NORMAL);
 
             if(DEBUG)System.out.println("The bundle created is: "+b+" and openType="+openType+" and bundle.getNoFallback="+(b!=null && b.getNoFallback()));
             if (openType == OpenType.DIRECT || (b != null && b.getNoFallback())) {
@@ -1416,7 +1416,7 @@ public  class ICUResourceBundle extends UResourceBundle {
             //
             final String rootLocale = (baseName.indexOf('.')==-1) ? "root" : "";
             String localeName = localeID.isEmpty() ? rootLocale : localeID;
-            ICUResourceBundle b = ICUResourceBundle.createBundle(baseName, localeName, root);
+            ICUResourceBundle b = ICUResourceBundle.createBundle(baseName, localeName, root, ICUBinary.DataFilesCategory.OVERRIDE);
 
             if(DEBUG)System.out.println("The bundle created is: "+b+" and openType="+openType+" and bundle.getNoFallback="+(b!=null && b.getNoFallback()));
             if (openType == OpenType.DIRECT || (b != null && b.getNoFallback())) {
@@ -1561,7 +1561,20 @@ public  class ICUResourceBundle extends UResourceBundle {
     * @return the new bundle
     */
     public static ICUResourceBundle createBundle(String baseName, String localeID, ClassLoader root) {
-        ICUResourceBundleReader reader = ICUResourceBundleReader.getReader(baseName, localeID, root);
+        return createBundle(baseName, localeID, root, ICUBinary.DataFilesCategory.NORMAL);
+    }
+
+    /**
+     * Create a bundle using a reader.
+     * @param baseName The name for the bundle.
+     * @param localeID The locale identification.
+     * @param root The ClassLoader object root.
+     * @param dataFilesCategory Whether the locale data's parent chain should load override data
+     *     before vanilla ICU data for a locale.
+     * @return the new bundle
+     */
+     public static ICUResourceBundle createBundle(String baseName, String localeID, ClassLoader root, ICUBinary.DataFilesCategory dataFilesCategory) {
+        ICUResourceBundleReader reader = ICUResourceBundleReader.getReader(baseName, localeID, root, dataFilesCategory);
         if (reader == null) {
             // could not open the .res file
             return null;
