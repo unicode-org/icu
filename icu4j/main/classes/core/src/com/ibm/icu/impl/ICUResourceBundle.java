@@ -1290,17 +1290,6 @@ public  class ICUResourceBundle extends UResourceBundle {
             this.fullName = fullName;
         }
 
-        public static String fullNameFor(String baseName, String localeID) {
-            return ICUResourceBundleReader.getFullName(baseName, localeID);
-        }
-
-        public static String cacheKeyFor(String baseName, String localeID, String defaultID, OpenType openType) {
-            final String fullName = fullNameFor(baseName, localeID);
-            char openTypeChar = (char)('0' + openType.ordinal());
-            return openType != OpenType.LOCALE_DEFAULT_ROOT ?
-                    fullName + '#' + openTypeChar :
-                        fullName + '#' + openTypeChar + '#' + defaultID;
-        }
     }
 
     /* Represents logic for loading a ResourceBundle for a locale ID and all of the resources in the
@@ -1494,8 +1483,11 @@ public  class ICUResourceBundle extends UResourceBundle {
             final ClassLoader root, final OpenType openType) {
         assert localeID.indexOf('@') < 0;
         assert defaultID == null || defaultID.indexOf('@') < 0;
-        String fullName = NormalParentChainResourceLoader.fullNameFor(baseName, localeID);
-        String cacheKey = NormalParentChainResourceLoader.cacheKeyFor(baseName, localeID, defaultID, openType);
+        final String fullName = ICUResourceBundleReader.getFullName(baseName, localeID);
+        char openTypeChar = (char)('0' + openType.ordinal());
+        String cacheKey = openType != OpenType.LOCALE_DEFAULT_ROOT ?
+                fullName + '#' + openTypeChar :
+                    fullName + '#' + openTypeChar + '#' + defaultID;
         NormalParentChainResourceLoader normalChainLoader =
                 new NormalParentChainResourceLoader(baseName, localeID, defaultID, root, openType, fullName);
         return BUNDLE_CACHE.getInstance(cacheKey, normalChainLoader);
