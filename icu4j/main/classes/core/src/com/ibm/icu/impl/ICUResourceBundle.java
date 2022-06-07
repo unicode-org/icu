@@ -1268,6 +1268,41 @@ public  class ICUResourceBundle extends UResourceBundle {
                 (localeID.length() == lang.length() || localeID.charAt(lang.length()) == '_');
     }
 
+    /* An inner abstract class that represents the resource file loading logic for a locale, including
+     * the construction of the parent locale chain and loading of the corresponding resource files, as
+     * used in the implementation logic in {@link #instantiateBundle(String, String, String, ClassLoader, OpenType)}.
+     */
+    private static abstract class ParentChainResourceLoader extends Loader {
+        protected String baseName;
+        protected String localeID;
+        protected String defaultID;
+        protected ClassLoader root;
+        protected OpenType openType;
+        protected String fullName;
+
+        public ParentChainResourceLoader(final String baseName, final String localeID, final String defaultID,
+            final ClassLoader root, final OpenType openType, String fullName) {
+            this.baseName = baseName;
+            this.localeID = localeID;
+            this.defaultID = defaultID;
+            this.root = root;
+            this.openType = openType;
+            this.fullName = fullName;
+        }
+
+        public static String fullNameFor(String baseName, String localeID) {
+            return ICUResourceBundleReader.getFullName(baseName, localeID);
+        }
+
+        public static String cacheKeyFor(String baseName, String localeID, String defaultID, OpenType openType) {
+            final String fullName = fullNameFor(baseName, localeID);
+            char openTypeChar = (char)('0' + openType.ordinal());
+            return openType != OpenType.LOCALE_DEFAULT_ROOT ?
+                    fullName + '#' + openTypeChar :
+                        fullName + '#' + openTypeChar + '#' + defaultID;
+        }
+    }
+
     /* Represents logic for loading a ResourceBundle for a locale ID and all of the resources in the
      * fallback / "parent" chain from that locale ID to the root locale, where the parent is determined
      * by truncating the locale ID from the right on underscore break points.
@@ -1276,22 +1311,11 @@ public  class ICUResourceBundle extends UResourceBundle {
      * path to files whose loading should be constructed with the relationships / behavior encoded by this
      * class.
      */
-    private static class NormalParentChainResourceLoader extends Loader {
-        private String baseName;
-        private String localeID;
-        private String defaultID;
-        private ClassLoader root;
-        private OpenType openType;
-        private String fullName;
+    private static class NormalParentChainResourceLoader extends ParentChainResourceLoader {
 
-        public NormalParentChainResourceLoader(final String baseName, final String localeID, final String defaultID,
-            final ClassLoader root, final OpenType openType, String fullName) {
-            this.baseName = baseName;
-            this.localeID = localeID;
-            this.defaultID = defaultID;
-            this.root = root;
-            this.openType = openType;
-            this.fullName = fullName;
+        public NormalParentChainResourceLoader(String baseName, String localeID, String defaultID, ClassLoader root,
+                OpenType openType, String fullName) {
+            super(baseName, localeID, defaultID, root, openType, fullName);
         }
 
         @Override
@@ -1380,22 +1404,11 @@ public  class ICUResourceBundle extends UResourceBundle {
      * path to files whose loading should be constructed with the relationships / behavior encoded by this
      * class.
      */
-    private static class OverrideParentChainResourceLoader extends Loader {
-        private String baseName;
-        private String localeID;
-        private String defaultID;
-        private ClassLoader root;
-        private OpenType openType;
-        private String fullName;
+    private static class OverrideParentChainResourceLoader extends ParentChainResourceLoader {
 
-        public OverrideParentChainResourceLoader(final String baseName, final String localeID, final String defaultID,
-            final ClassLoader root, final OpenType openType, String fullName) {
-            this.baseName = baseName;
-            this.localeID = localeID;
-            this.defaultID = defaultID;
-            this.root = root;
-            this.openType = openType;
-            this.fullName = fullName;
+        public OverrideParentChainResourceLoader(String baseName, String localeID, String defaultID, ClassLoader root,
+                OpenType openType, String fullName) {
+            super(baseName, localeID, defaultID, root, openType, fullName);
         }
 
         @Override
@@ -1481,11 +1494,8 @@ public  class ICUResourceBundle extends UResourceBundle {
             final ClassLoader root, final OpenType openType) {
         assert localeID.indexOf('@') < 0;
         assert defaultID == null || defaultID.indexOf('@') < 0;
-        final String fullName = ICUResourceBundleReader.getFullName(baseName, localeID);
-        char openTypeChar = (char)('0' + openType.ordinal());
-        String cacheKey = openType != OpenType.LOCALE_DEFAULT_ROOT ?
-                fullName + '#' + openTypeChar :
-                    fullName + '#' + openTypeChar + '#' + defaultID;
+        String fullName = NormalParentChainResourceLoader.fullNameFor(baseName, localeID);
+        String cacheKey = NormalParentChainResourceLoader.cacheKeyFor(baseName, localeID, defaultID, openType);
         NormalParentChainResourceLoader normalChainLoader =
                 new NormalParentChainResourceLoader(baseName, localeID, defaultID, root, openType, fullName);
         return BUNDLE_CACHE.getInstance(cacheKey, normalChainLoader);
