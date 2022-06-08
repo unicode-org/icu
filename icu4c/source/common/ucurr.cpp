@@ -566,9 +566,32 @@ ucurr_forLocale(const char* locale,
         UResourceBundle *rb = ures_openDirect(U_ICUDATA_CURR, CURRENCY_DATA, &localStatus);
         UResourceBundle *cm = ures_getByKey(rb, CURRENCY_MAP, rb, &localStatus);
         UResourceBundle *countryArray = ures_getByKey(rb, id, cm, &localStatus);
-        UResourceBundle *currencyReq = ures_getByIndex(countryArray, 0, NULL, &localStatus);
-        s = ures_getStringByKey(currencyReq, "id", &resLen, &localStatus);
-        ures_close(currencyReq);
+        // https://unicode-org.atlassian.net/browse/ICU-21997
+        // Prefer to use currencies that are legal tender.
+        if (U_SUCCESS(localStatus)) {
+            int32_t arrayLength = ures_getSize(countryArray);
+            for (int32_t i = 0; i < arrayLength; ++i) {
+                LocalUResourceBundlePointer currencyReq(
+                    ures_getByIndex(countryArray, i, nullptr, &localStatus));
+                // The currency is legal tender if it is *not* marked with tender{"false"}.
+                UErrorCode tenderStatus = localStatus;
+                const UChar *tender =
+                    ures_getStringByKey(currencyReq.getAlias(), "tender", nullptr, &tenderStatus);
+                bool isTender = U_FAILURE(tenderStatus) || u_strcmp(tender, u"false") != 0;
+                if (!isTender && s != nullptr) {
+                    // We already have a non-tender currency. Ignore all following non-tender ones.
+                    continue;
+                }
+                // Fetch the currency code.
+                s = ures_getStringByKey(currencyReq.getAlias(), "id", &resLen, &localStatus);
+                if (isTender) {
+                    break;
+                }
+            }
+            if (U_SUCCESS(localStatus) && s == nullptr) {
+                localStatus = U_MISSING_RESOURCE_ERROR;
+            }
+        }
         ures_close(countryArray);
     }
 
