@@ -983,4 +983,15 @@ public class CurrencyTest extends TestFmwk {
     public void TestCurrencyDataCtor() throws Exception {
         checkDefaultPrivateConstructor(CurrencyData.class);
     }
+    @Test
+    public void testSierraLeoneCurrency21997() {
+        // Check that currency of Sierra Leone is SLL (which is legal tender)
+        // and not the newer currency SLE (which is not legal tender), as of CLDR 41.
+        // Test will fail once SLE is declared legal.
+        Currency currency = Currency.getInstance(ULocale.forLanguageTag("en-SL"));
+        String result = currency.getCurrencyCode();
+        if (!"SLL".equals(result)) {
+            errln("Currency code of en-SL is not SLL but " + result);
+        }
+    }
 }
