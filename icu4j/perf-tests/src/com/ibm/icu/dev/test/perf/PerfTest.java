@@ -94,6 +94,8 @@ public abstract class PerfTest {
     protected Locale locale;
     protected boolean doPriorGC;
     protected int threads;
+    protected int duration;
+    protected boolean action;
 
     protected TestCmdProvider testProvider = new TestPrefixProvider(this);
 
@@ -341,11 +343,13 @@ public abstract class PerfTest {
     static final int LOCALE = 12;
     static final int TEST_NAME = 13;
     static final int THREADS = 14;
+    static final int DURATION = 15;
+    static final int ACTION = 16;
 
     // Options above here are identical to those in C; keep in sync with C
     // Options below here are unique to Java; shift down as necessary
-    static final int GARBAGE_COLLECT = 14;
-    static final int LIST = 15;
+    static final int GARBAGE_COLLECT = 17;
+    static final int LIST = 18;
 
     UOption[] getOptions() {
         return new UOption[] {
@@ -364,6 +368,8 @@ public abstract class PerfTest {
                 UOption.DEF("locale",     'L', UOption.REQUIRES_ARG),
                 UOption.DEF("testname",   'T', UOption.REQUIRES_ARG),
                 UOption.DEF("threads",    'r', UOption.REQUIRES_ARG),
+                UOption.DEF("duration",   'd', UOption.NO_ARG),
+                UOption.DEF("action",     'a', UOption.NO_ARG),
 
                 // Options above here are identical to those in C; keep in sync
                 // Options below here are unique to Java
@@ -392,15 +398,21 @@ public abstract class PerfTest {
                 throw new RuntimeException(meth
                         + " failed to return a test function");
             }
-            if (testFunction.getOperationsPerIteration() < 1) {
+            long ops = testFunction.getOperationsPerIteration();
+            if (ops < 1) {
                 throw new RuntimeException(meth
                         + " returned an illegal operations/iteration()");
             }
 
+            long min_t = 1000000;
             long t;
             // long b = System.currentTimeMillis();
-            long loops = getIteration(meth, testFunction);
+            long calibration_iter = getIteration(meth, testFunction);
             // System.out.println("The guess cost: " + (System.currentTimeMillis() - b)/1000. + " s.");
+
+            // Calculate iterations for the specified duration/pass.
+            double timePerIter = performLoops(testFunction, calibration_iter)/1000./calibration_iter;
+            long iterationCount = (long) (duration/timePerIter + 0.5);
 
             for (int j = 0; j < passes; ++j) {
                 long events = -1;
@@ -410,32 +422,37 @@ public abstract class PerfTest {
                     } else {
                         System.out.println("= " + meth + " begin " + time + " seconds");
                     }
-                } else {
+                } else if (!action) {
                     System.out.println("= " + meth + " begin ");
                 }
 
-                t = performLoops(testFunction, loops);
-                
+                t = performLoops(testFunction, iterationCount);
+                if (t < min_t) {
+                  min_t = t;
+                }
                 events = testFunction.getEventsPerIteration();
 
                 if (verbose) {
                     if (events == -1) {
-                        System.out.println("= " + meth + " end " + (t / 1000.0) + " loops: " + loops + " operations: "
-                                + testFunction.getOperationsPerIteration());
+                        System.out.println("= " + meth + " end " + (t / 1000.0) + " loops: " + iterationCount + " operations: "
+                                + ops);
                     } else {
-                        System.out.println("= " + meth + " end " + (t / 1000.0) + " loops: " + loops + " operations: "
-                                + testFunction.getOperationsPerIteration() + " events: " + events);
+                        System.out.println("= " + meth + " end " + (t / 1000.0) + " loops: " + iterationCount + " operations: "
+                                + ops + " events: " + events);
                     }
-                } else {
+                } else if (!action) {
                     if (events == -1) {
-                        System.out.println("= " + meth + " end " + (t / 1000.0) + " " + loops + " "
-                                + testFunction.getOperationsPerIteration());
+                        System.out.println("= " + meth + " end " + (t / 1000.0) + " " + iterationCount + " " + ops);
                     } else {
-                        System.out.println("= " + meth + " end " + (t / 1000.0) + " " + loops + " "
-                                + testFunction.getOperationsPerIteration() + " " + events);
+                        System.out.println("= " + meth + " end " + (t / 1000.0) + " " + iterationCount + " "
+                                + ops + " " + events);
                     }
                 }
-
+            }
+            if (action) {
+                // Print results in ndjson format for GHA Benchmark to process.
+                System.out.println("{\"biggerIsBetter\":false,\"name\":" + meth +
+                        ",\"unit\":\"ns/iter\",\"value\":" + (min_t*1E6) / (iterationCount*ops) + "}");
             }
         }
     }
@@ -459,6 +476,8 @@ public abstract class PerfTest {
         locale = null;
         testName = null;
         threads = 1;
+        duration = 10;   // Default used by Perl scripts
+        action = false;  // If test is invoked on command line, includes GitHub Action
 
         UOption[] options = getOptions();
         int remainingArgc = UOption.parseArgs(args, options);
@@ -511,12 +530,20 @@ public abstract class PerfTest {
             if (threads <= 0)
                 throw new UsageException("'-r <threads>' requires an number of threads greater than 0");
         }
-        
+        if (options[DURATION].doesOccur) {
+            try {
+                duration  = Integer.parseInt(options[DURATION].value);
+            } catch (NumberFormatException ex) {
+                throw new UsageException("'-d <duration>' requires an integer number of threads");
+            }
+        }
+
         line_mode = options[LINE_MODE].doesOccur;
         bulk_mode = options[BULK_MODE].doesOccur;
         verbose   = options[VERBOSE].doesOccur;
         uselen    = options[USELEN].doesOccur;
         doPriorGC = options[GARBAGE_COLLECT].doesOccur;
+        action    = options[ACTION].doesOccur;
 
         if (options[SOURCEDIR].doesOccur) sourceDir = options[SOURCEDIR].value;
         if (options[ENCODING].doesOccur)  encoding  = options[ENCODING].value;
@@ -570,9 +597,9 @@ public abstract class PerfTest {
      */
     private long getIteration(String methName, Function fn) throws InterruptedException {
         long iter = 0;
-        if (time < 0) { // && iterations > 0
+        if (iterations > 0) {
             iter = iterations;
-        } else { // && iterations < 0
+        } else { // iterations not in input, calibrate iterations for given time.
             // Translate time to iteration
             // Assuming there is a linear relation between time and iterations
 
