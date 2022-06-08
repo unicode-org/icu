@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1654708253414,
+  "lastUpdate": 1654731730911,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -6004,6 +6004,84 @@ window.BENCHMARK_DATA = {
           {
             "name": "pattern3",
             "value": 1967.6448,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "cyndy_ishida@apple.com",
+            "name": "Cyndy Ishida",
+            "username": "cyndyishida"
+          },
+          "committer": {
+            "email": "cyndy_ishida@apple.com",
+            "name": "Cyndy Ishida",
+            "username": "cyndyishida"
+          },
+          "distinct": true,
+          "id": "0dcb1cb065d60685aa487848050c3b385c9e6c0b",
+          "message": "ICU-22035 Remove instances of pre c++11 default constructor prevention pattern",
+          "timestamp": "2022-06-08T16:28:02-07:00",
+          "tree_id": "eff466f1fdf88e3b23d1de71c12ac226948e7455",
+          "url": "https://github.com/unicode-org/icu/commit/0dcb1cb065d60685aa487848050c3b385c9e6c0b"
+        },
+        "date": 1654731727897,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "titlecase_letter_add",
+            "value": 88866.0086,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_contains",
+            "value": 146897.5664,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "titlecase_letter_iterator",
+            "value": 0.6144,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_add",
+            "value": 9.8437,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_contains",
+            "value": 5.5517,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "unassigned_iterator",
+            "value": 0,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern1",
+            "value": 15508.1874,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern2",
+            "value": 52311.5717,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "pattern3",
+            "value": 2739.9403,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
