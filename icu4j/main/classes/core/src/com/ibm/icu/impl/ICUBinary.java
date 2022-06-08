@@ -529,7 +529,7 @@ public final class ICUBinary {
         }
     }
 
-    private static final class OverrideDataFiles extends DataFiles {
+    static final class OverrideDataFiles extends DataFiles {
         private static final String OVERRIDE_DATA_FILES_ENV_VAR = "ICU_OVERRIDE_DATA";
 
         /* (non-Javadoc)
@@ -547,6 +547,8 @@ public final class ICUBinary {
     }
 
     public static final NormalDataFiles NORMAL_DATA_FILES = new NormalDataFiles();
+
+    public static final OverrideDataFiles OVERRIDE_DATA_FILES = new OverrideDataFiles();
 
     // public inner interface ------------------------------------------------
 

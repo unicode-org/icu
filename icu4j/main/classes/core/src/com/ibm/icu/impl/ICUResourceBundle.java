@@ -1488,9 +1488,16 @@ public  class ICUResourceBundle extends UResourceBundle {
         String cacheKey = openType != OpenType.LOCALE_DEFAULT_ROOT ?
                 fullName + '#' + openTypeChar :
                     fullName + '#' + openTypeChar + '#' + defaultID;
-        NormalParentChainResourceLoader normalChainLoader =
-                new NormalParentChainResourceLoader(baseName, localeID, defaultID, root, openType, fullName);
-        return BUNDLE_CACHE.getInstance(cacheKey, normalChainLoader);
+
+        if (ICUBinary.OVERRIDE_DATA_FILES.hasFiles()) {
+            OverrideParentChainResourceLoader overrideChainLoader =
+                    new OverrideParentChainResourceLoader(baseName, localeID, defaultID, root, openType, fullName);
+            return BUNDLE_CACHE.getInstance(cacheKey, overrideChainLoader);
+        } else {
+            NormalParentChainResourceLoader normalChainLoader =
+                    new NormalParentChainResourceLoader(baseName, localeID, defaultID, root, openType, fullName);
+            return BUNDLE_CACHE.getInstance(cacheKey, normalChainLoader);
+        }
     }
 
     ICUResourceBundle get(String aKey, HashMap<String, String> aliasesVisited, UResourceBundle requested) {
