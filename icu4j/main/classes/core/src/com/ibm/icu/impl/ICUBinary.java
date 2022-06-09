@@ -365,6 +365,20 @@ public final class ICUBinary {
         };
 
         /**
+         * Reset the collection of {@code DataFile}s with the files contained in the directories
+         * in {@code dataPath}.
+         *
+         * This is analogous to ICU4C's u_setDataDirectory.
+         *
+         * @param dataPath New path of filesystem location(s) containing user-provided files to be
+         * loaded.
+         */
+        public void setDataPath(String dataPath) {
+            dataFiles.clear();
+            addDataFilesFromPath(dataPath);
+        }
+
+        /**
          * This is public only for the concrete implementations that themselves are private.
          * @param dataPath base filepath in which new files should be detected and added
          *      to the current data files list.
@@ -529,12 +543,10 @@ public final class ICUBinary {
         }
     }
 
-    static final class OverrideDataFiles extends DataFiles {
+    // VisibleForTesting
+    public static final class OverrideDataFiles extends DataFiles {
         private static final String OVERRIDE_DATA_FILES_ENV_VAR = "ICU_OVERRIDE_DATA";
 
-        /* (non-Javadoc)
-         * @see com.ibm.icu.impl.ICUBinary.DataFiles#initializeDataFiles()
-         */
         @Override
         void initializeDataFiles() {
             String dataPath = System.getenv(OVERRIDE_DATA_FILES_ENV_VAR);
