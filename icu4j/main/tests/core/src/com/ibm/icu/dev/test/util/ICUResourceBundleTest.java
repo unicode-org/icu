@@ -1155,7 +1155,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         // Note: in theory (per Javadoc), getBundleInstance should return same result for null as ICUData.ICU_BASE_NAME, but currently null gives NPE
         ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, localeID);
         String shortCompactDecimalPattern = bundle.getStringWithFallback("NumberElements/latn/patternsShort/decimalFormat/1000/other");
-        assertEquals("Normal (no override) pattern for compact short pattern for 1000", shortCompactDecimalPattern, "0K");
+        assertEquals("Normal (no override) pattern for compact short pattern for 1000", "0K", shortCompactDecimalPattern);
 
         // Override data files (after using the API to update ICUBinary.OVERRIDE_FILES)
 
@@ -1169,7 +1169,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         // Note: here using null actually does return same value as ICUData.ICU_BASE_NAME would
         ICUResourceBundle overrideBundle = ICUResourceBundle.getBundleInstance(null, localeID, ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
         String overrideShortCompactDecimalPattern = bundle.getStringWithFallback("NumberElements/latn/patternsShort/decimalFormat/1000/other");
-        assertEquals("Override pattern for compact short pattern for 1000", overrideShortCompactDecimalPattern, "0G");
+        assertEquals("Override pattern for compact short pattern for 1000", "0G", overrideShortCompactDecimalPattern);
 
     }
 
