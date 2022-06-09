@@ -11,9 +11,11 @@ package com.ibm.icu.dev.test.util;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.JarURLConnection;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
+import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Locale;
@@ -28,6 +30,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Utility;
@@ -1141,4 +1144,33 @@ public final class ICUResourceBundleTest extends TestFmwk {
         } catch (NoSuchElementException ex) {
         }
     }
+
+    @Test
+    public void TestOverrideData() {
+        String localeID = "en_CA";
+        ULocale locale = new ULocale(localeID);
+
+        // Normal data files (because we cannot set any environment variables like ICU_OVERRIDE_DATA before a unit test)
+
+        // Note: in theory (per Javadoc), getBundleInstance should return same result for null as ICUData.ICU_BASE_NAME, but currently null gives NPE
+        ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, localeID);
+        String shortCompactDecimalPattern = bundle.getStringWithFallback("NumberElements/latn/patternsShort/decimalFormat/1000/other");
+        assertEquals("Normal (no override) pattern for compact short pattern for 1000", shortCompactDecimalPattern, "0K");
+
+        // Override data files (after using the API to update ICUBinary.OVERRIDE_FILES)
+
+        URL resource = getClass().getResource("/com/ibm/icu/dev/data/override/");
+        try {
+            String path = Paths.get(resource.toURI()).toFile().toString();
+            ICUBinary.OVERRIDE_DATA_FILES.setDataPath(path);
+        } catch (URISyntaxException use) {
+            errln("Cannot find test resource file.");
+        }
+        // Note: here using null actually does return same value as ICUData.ICU_BASE_NAME would
+        ICUResourceBundle overrideBundle = ICUResourceBundle.getBundleInstance(null, localeID, ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
+        String overrideShortCompactDecimalPattern = bundle.getStringWithFallback("NumberElements/latn/patternsShort/decimalFormat/1000/other");
+        assertEquals("Override pattern for compact short pattern for 1000", overrideShortCompactDecimalPattern, "0G");
+
+    }
+
 }

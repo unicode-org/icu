@@ -1402,9 +1402,12 @@ public  class ICUResourceBundle extends UResourceBundle {
 
         @Override
         public ICUResourceBundle load() {
+
+
             // TODO: implement logic for checking existence of override resource file for input locale
             // and inserting it into the parent chain if it exists
-            assert false;
+
+
 
             if(DEBUG) System.out.println("Creating "+fullName);
             // here we assume that java type resource bundle organization
