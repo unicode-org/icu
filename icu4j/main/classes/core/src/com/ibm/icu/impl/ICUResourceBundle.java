@@ -1279,15 +1279,25 @@ public  class ICUResourceBundle extends UResourceBundle {
         protected ClassLoader root;
         protected OpenType openType;
         protected String fullName;
+        protected ICUBinary.DataFilesCategory dataFilesCategory;
 
         public ParentChainResourceLoader(final String baseName, final String localeID, final String defaultID,
-            final ClassLoader root, final OpenType openType, String fullName) {
+                final ClassLoader root, final OpenType openType, String fullName,
+                ICUBinary.DataFilesCategory dataFilesCategory) {
             this.baseName = baseName;
             this.localeID = localeID;
             this.defaultID = defaultID;
             this.root = root;
             this.openType = openType;
             this.fullName = fullName;
+            this.dataFilesCategory = dataFilesCategory;
+        }
+
+        public String cacheKey() {
+            char openTypeChar = (char) ('0' + openType.ordinal());
+            String cacheKeyBase = fullName + '#' + dataFilesCategory.toString() + '#' + openTypeChar;
+            String cacheKey = openType != OpenType.LOCALE_DEFAULT_ROOT ? cacheKeyBase : cacheKeyBase + '#' + defaultID;
+            return cacheKey;
         }
 
     }
@@ -1304,7 +1314,7 @@ public  class ICUResourceBundle extends UResourceBundle {
 
         public NormalParentChainResourceLoader(String baseName, String localeID, String defaultID, ClassLoader root,
                 OpenType openType, String fullName) {
-            super(baseName, localeID, defaultID, root, openType, fullName);
+            super(baseName, localeID, defaultID, root, openType, fullName, ICUBinary.DataFilesCategory.NORMAL);
         }
 
         @Override
@@ -1397,7 +1407,7 @@ public  class ICUResourceBundle extends UResourceBundle {
 
         public OverrideParentChainResourceLoader(String baseName, String localeID, String defaultID, ClassLoader root,
                 OpenType openType, String fullName) {
-            super(baseName, localeID, defaultID, root, openType, fullName);
+            super(baseName, localeID, defaultID, root, openType, fullName, ICUBinary.DataFilesCategory.OVERRIDE);
         }
 
         @Override
@@ -1487,18 +1497,16 @@ public  class ICUResourceBundle extends UResourceBundle {
         assert localeID.indexOf('@') < 0;
         assert defaultID == null || defaultID.indexOf('@') < 0;
         final String fullName = ICUResourceBundleReader.getFullName(baseName, localeID);
-        char openTypeChar = (char)('0' + openType.ordinal());
-        String cacheKey = openType != OpenType.LOCALE_DEFAULT_ROOT ?
-                fullName + '#' + openTypeChar :
-                    fullName + '#' + openTypeChar + '#' + defaultID;
 
         if (ICUBinary.OVERRIDE_DATA_FILES.hasFiles()) {
             OverrideParentChainResourceLoader overrideChainLoader =
                     new OverrideParentChainResourceLoader(baseName, localeID, defaultID, root, openType, fullName);
+            String cacheKey = overrideChainLoader.cacheKey();
             return BUNDLE_CACHE.getInstance(cacheKey, overrideChainLoader);
         } else {
             NormalParentChainResourceLoader normalChainLoader =
                     new NormalParentChainResourceLoader(baseName, localeID, defaultID, root, openType, fullName);
+            String cacheKey = normalChainLoader.cacheKey();
             return BUNDLE_CACHE.getInstance(cacheKey, normalChainLoader);
         }
     }
