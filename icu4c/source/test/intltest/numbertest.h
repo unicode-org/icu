@@ -326,6 +326,7 @@ class NumberRangeFormatterTest : public IntlTestWithFieldPosition {
     void test21684_Performance();
     void test21358_SignPosition();
     void test21683_StateLeak();
+    void testCreateLNRFFromNumberingSystemInSkeleton();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
 
