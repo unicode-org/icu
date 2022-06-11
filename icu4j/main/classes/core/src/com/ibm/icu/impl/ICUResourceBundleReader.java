@@ -192,7 +192,8 @@ public final class ICUResourceBundleReader {
                 ByteBuffer inBytes;
                 if (key.baseName != null && key.baseName.startsWith(ICUData.ICU_BASE_NAME)) {
                     String itemPath = fullName.substring(ICUData.ICU_BASE_NAME.length() + 1);
-                    inBytes = ICUBinary.getData(loader, fullName, itemPath);
+                    inBytes = ICUBinary.getData(loader, fullName, itemPath,
+                            false /* required */, key.dataFilesCategory);
                     if (inBytes == null) {
                         return NULL_READER;
                     }

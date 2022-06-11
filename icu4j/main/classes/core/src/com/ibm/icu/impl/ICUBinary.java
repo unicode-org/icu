@@ -649,7 +649,34 @@ public final class ICUBinary {
     private static ByteBuffer getData(ClassLoader loader, String resourceName,
             String itemPath, boolean required) {
 
-        return NORMAL_DATA_FILES.getData(loader, resourceName, itemPath, required);
+        return getData(loader, resourceName, itemPath, required, DataFilesCategory.NORMAL);
+    }
+
+    /**
+     * Loads an ICU binary data file and returns it as a ByteBuffer.
+     * The buffer contents is normally read-only, but its position etc. can be modified.
+     *
+     * @param loader Used for loader.getResourceAsStream() unless the data is found elsewhere.
+     * @param resourceName Resource name for use with the loader.
+     * @param itemPath Relative ICU data item path, for example "root.res" or "coll/ucadata.icu".
+     * @param required If the resource cannot be found,
+     *        this method returns null (!required) or throws an exception (required).
+     * @param dataFilesCategory Whether the data files parent chain is loaded as NORMAL, OVERRIDE, etc.
+     * @return The data as a read-only ByteBuffer,
+     *         or null if required==false and the resource could not be found.
+     * @throws MissingResourceException if required==true and the resource could not be found
+     */
+    public static ByteBuffer getData(ClassLoader loader, String resourceName,
+            String itemPath, boolean required, DataFilesCategory dataFilesCategory) {
+
+        switch(dataFilesCategory) {
+        case OVERRIDE:
+            return OVERRIDE_DATA_FILES.getData(loader, resourceName, itemPath, required);
+        case NORMAL:
+        default:
+            return NORMAL_DATA_FILES.getData(loader, resourceName, itemPath, required);
+        }
+
     }
 
     @SuppressWarnings("resource")  // Closing a file closes its channel.
