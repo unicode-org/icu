@@ -1170,6 +1170,13 @@ public final class ICUResourceBundleTest extends TestFmwk {
         ICUResourceBundle overrideBundle = ICUResourceBundle.getBundleInstance(null, localeID, ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
         String overrideShortCompactDecimalPattern = overrideBundle.getStringWithFallback("NumberElements/latn/patternsShort/decimalFormat/1000/other");
         assertEquals("Override pattern for compact short pattern for 1000", "0G", overrideShortCompactDecimalPattern);
+
+        // Reset override data files to empty
+
+        ICUBinary.OVERRIDE_DATA_FILES.setDataPath("");
+        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, localeID);
+        shortCompactDecimalPattern = bundle.getStringWithFallback("NumberElements/latn/patternsShort/decimalFormat/1000/other");
+        assertEquals("Normal (no override) pattern for compact short pattern for 1000", "0K", shortCompactDecimalPattern);
     }
 
 }
