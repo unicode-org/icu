@@ -1153,7 +1153,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         // Normal data files (because we cannot set any environment variables like ICU_OVERRIDE_DATA before a unit test)
 
         // Note: in theory (per Javadoc), getBundleInstance should return same result for null as ICUData.ICU_BASE_NAME, but currently null gives NPE
-        ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, localeID);
+        ICUResourceBundle bundle = ICUResourceBundle.getBundleInstance(null, localeID, ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
         String shortCompactDecimalPattern = bundle.getStringWithFallback("NumberElements/latn/patternsShort/decimalFormat/1000/other");
         assertEquals("Normal (no override) pattern for compact short pattern for 1000", "0K", shortCompactDecimalPattern);
 
@@ -1174,7 +1174,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         // Reset override data files to empty
 
         ICUBinary.OVERRIDE_DATA_FILES.setDataPath("");
-        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, localeID);
+        bundle = ICUResourceBundle.getBundleInstance(null, localeID, ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
         shortCompactDecimalPattern = bundle.getStringWithFallback("NumberElements/latn/patternsShort/decimalFormat/1000/other");
         assertEquals("Normal (no override) pattern for compact short pattern for 1000", "0K", shortCompactDecimalPattern);
     }
