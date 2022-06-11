@@ -1168,9 +1168,8 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
         // Note: here using null actually does return same value as ICUData.ICU_BASE_NAME would
         ICUResourceBundle overrideBundle = ICUResourceBundle.getBundleInstance(null, localeID, ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
-        String overrideShortCompactDecimalPattern = bundle.getStringWithFallback("NumberElements/latn/patternsShort/decimalFormat/1000/other");
+        String overrideShortCompactDecimalPattern = overrideBundle.getStringWithFallback("NumberElements/latn/patternsShort/decimalFormat/1000/other");
         assertEquals("Override pattern for compact short pattern for 1000", "0G", overrideShortCompactDecimalPattern);
-
     }
 
 }
