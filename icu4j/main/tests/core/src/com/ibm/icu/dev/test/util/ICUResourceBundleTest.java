@@ -9,13 +9,18 @@
 package com.ibm.icu.dev.test.util;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.JarURLConnection;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
-import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Locale;
@@ -1159,12 +1164,26 @@ public final class ICUResourceBundleTest extends TestFmwk {
 
         // Override data files (after using the API to update ICUBinary.OVERRIDE_FILES)
 
-        URL resource = getClass().getResource("/com/ibm/icu/dev/data/override/");
         try {
-            String path = Paths.get(resource.toURI()).toFile().toString();
+
+
+            // load override file from Java resources
+            InputStream overrideRescInStream = getClass().getResourceAsStream("/com/ibm/icu/dev/data/override/en_CA.res");
+            // copy Java resource input stream to a temp file
+            Path tmpDir = Files.createTempDirectory(null);
+            File tmpFile = new File(tmpDir.toFile(), "en_CA.res");
+            OutputStream outStream = new FileOutputStream(tmpFile);
+            byte[] buffer = new byte[8 * 1024];
+            int bytesRead;
+            while ((bytesRead = overrideRescInStream .read(buffer)) != -1) {
+                outStream.write(buffer, 0, bytesRead);
+            }
+            // get path string of dir containing temp file
+            String path = tmpDir.toString();
+
             ICUBinary.OVERRIDE_DATA_FILES.setDataPath(path);
-        } catch (URISyntaxException use) {
-            errln("Cannot find test resource file.");
+        } catch (IOException e) {
+            errln("Cannot create temporary directory.");
         }
         // Note: here using null actually does return same value as ICUData.ICU_BASE_NAME would
         ICUResourceBundle overrideBundle = ICUResourceBundle.getBundleInstance(null, localeID, ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
