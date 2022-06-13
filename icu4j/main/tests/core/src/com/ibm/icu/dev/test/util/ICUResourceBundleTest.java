@@ -1150,6 +1150,9 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
     }
 
+    /*
+     * Test that override files can be loaded from file and take precedence over built-in ICU data.
+     */
     @Test
     public void TestOverrideData() {
         String localeID = "en_CA";
@@ -1157,7 +1160,6 @@ public final class ICUResourceBundleTest extends TestFmwk {
 
         // Normal data files (because we cannot set any environment variables like ICU_OVERRIDE_DATA before a unit test)
 
-        // Note: in theory (per Javadoc), getBundleInstance should return same result for null as ICUData.ICU_BASE_NAME, but currently null gives NPE
         ICUResourceBundle bundle = ICUResourceBundle.getBundleInstance(null, localeID, ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
         String shortCompactDecimalPattern = bundle.getStringWithFallback("NumberElements/latn/patternsShort/decimalFormat/1000/other");
         assertEquals("Normal (no override) pattern for compact short pattern for 1000", "0K", shortCompactDecimalPattern);
@@ -1165,8 +1167,6 @@ public final class ICUResourceBundleTest extends TestFmwk {
         // Override data files (after using the API to update ICUBinary.OVERRIDE_FILES)
 
         try {
-
-
             // load override file from Java resources
             InputStream overrideRescInStream = getClass().getResourceAsStream("/com/ibm/icu/dev/data/override/en_CA.res");
             // copy Java resource input stream to a temp file
@@ -1185,7 +1185,6 @@ public final class ICUResourceBundleTest extends TestFmwk {
         } catch (IOException e) {
             errln("Cannot create temporary directory.");
         }
-        // Note: here using null actually does return same value as ICUData.ICU_BASE_NAME would
         ICUResourceBundle overrideBundle = ICUResourceBundle.getBundleInstance(null, localeID, ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
         String overrideShortCompactDecimalPattern = overrideBundle.getStringWithFallback("NumberElements/latn/patternsShort/decimalFormat/1000/other");
         assertEquals("Override pattern for compact short pattern for 1000", "0G", overrideShortCompactDecimalPattern);

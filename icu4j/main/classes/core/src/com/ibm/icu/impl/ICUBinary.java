@@ -366,7 +366,7 @@ public final class ICUBinary {
 
         /**
          * Reset the collection of {@code DataFile}s with the files contained in the directories
-         * in {@code dataPath}.
+         * in {@code dataPath}.  Use the empty string to clear the collection.
          *
          * This is analogous to ICU4C's u_setDataDirectory.
          *
