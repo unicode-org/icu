@@ -1175,7 +1175,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             OutputStream outStream = new FileOutputStream(tmpFile);
             byte[] buffer = new byte[8 * 1024];
             int bytesRead;
-            while ((bytesRead = overrideRescInStream .read(buffer)) != -1) {
+            while ((bytesRead = overrideRescInStream.read(buffer)) != -1) {
                 outStream.write(buffer, 0, bytesRead);
             }
             // get path string of dir containing temp file
