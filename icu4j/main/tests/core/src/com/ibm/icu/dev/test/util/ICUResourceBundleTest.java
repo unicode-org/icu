@@ -1161,6 +1161,36 @@ public final class ICUResourceBundleTest extends TestFmwk {
     }
 
     /*
+     * Copy a Java resource to a temp file and return the containing
+     * directory as a {@code File}.
+     * Note: you should delete the file when done with it.
+     */
+    private File copyJavaRescToTmpDir(String javaRescPath) {
+        try {
+            // load override file from Java resources
+            InputStream overrideRescInStream = getClass().getResourceAsStream("/com/ibm/icu/dev/data/override/test01/en_CA.res");
+            // copy Java resource input stream to a temp file
+            Path tmpDirPath = Files.createTempDirectory(null);
+            File tmpDir = tmpDirPath.toFile();
+            File tmpFile = new File(tmpDir, "en_CA.res");
+            // Preemptively mark the tmpFile to be deleted on exit. Assume that file
+            // not be deleted before then.
+            tmpFile.deleteOnExit();
+            OutputStream outStream = new FileOutputStream(tmpFile);
+            byte[] buffer = new byte[8 * 1024];
+            int bytesRead;
+            while ((bytesRead = overrideRescInStream.read(buffer)) != -1) {
+                outStream.write(buffer, 0, bytesRead);
+            }
+            return tmpDir;
+        } catch (IOException e) {
+            errln("Cannot create temporary directory.");
+            // Make the compiler happy, even though errln() should throw an exception
+            return null;
+        }
+    }
+
+    /*
      * Test that override files can be loaded from file and take precedence over built-in ICU data.
      */
     @Test
@@ -1172,30 +1202,14 @@ public final class ICUResourceBundleTest extends TestFmwk {
 
         assertRBStringEquals(localeID, "Normal (no override) pattern for compact short pattern for 1000", "0K", testResourceKeyPath);
 
-
         // Override data files (after using the API to update ICUBinary.OVERRIDE_FILES)
 
-        try {
-            // load override file from Java resources
-            InputStream overrideRescInStream = getClass().getResourceAsStream("/com/ibm/icu/dev/data/override/test01/en_CA.res");
-            // copy Java resource input stream to a temp file
-            Path tmpDir = Files.createTempDirectory(null);
-            File tmpFile = new File(tmpDir.toFile(), "en_CA.res");
-            OutputStream outStream = new FileOutputStream(tmpFile);
-            byte[] buffer = new byte[8 * 1024];
-            int bytesRead;
-            while ((bytesRead = overrideRescInStream.read(buffer)) != -1) {
-                outStream.write(buffer, 0, bytesRead);
-            }
-            // get path string of dir containing temp file
-            String path = tmpDir.toString();
-
-            ICUBinary.OVERRIDE_DATA_FILES.setDataPath(path);
-        } catch (IOException e) {
-            errln("Cannot create temporary directory.");
-        }
+        // Copy test override file to a temporary directory, set the override data files path.
+        File tmpDir = copyJavaRescToTmpDir("/com/ibm/icu/dev/data/override/test01/en_CA.res");
+        String path = tmpDir.toString();
+        ICUBinary.OVERRIDE_DATA_FILES.setDataPath(path);
         assertRBStringEquals(localeID, "Override pattern for compact short pattern for 1000", "0G", testResourceKeyPath);
-
+        tmpDir.deleteOnExit();
 
         // Reset override data files to empty
 
