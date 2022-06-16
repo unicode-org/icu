@@ -21,11 +21,18 @@
 */
 
 #include "unicode/platform.h"
-#if defined(__GNUC__) && !defined(__clang__) && defined(__STRICT_ANSI__)
-// g++, fileno isn't defined                  if     __STRICT_ANSI__ is defined.
-// clang fails to compile the <string> header unless __STRICT_ANSI__ is defined.
-// __GNUC__ is set by both gcc and clang.
-#undef __STRICT_ANSI__
+#if U_PLATFORM == U_PF_CYGWIN && defined(__STRICT_ANSI__)
+/* GCC on cygwin (not msys2) with -std=c++11 or newer has stopped defining fileno,
+   unless gcc extensions are enabled (-std=gnu11).
+   fileno is POSIX, but is not standard ANSI C.
+   It has always been a GCC extension, which everyone used until recently.
+   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=40278#c7
+
+   For cygwin/mingw, the FILE* pointer isn't opaque, so we can just use a simple macro.
+   Suggested fix from: https://github.com/gabime/spdlog/issues/1581#issuecomment-650323251
+*/
+#define _fileno(__F) ((__F)->_file)
+#define fileno(__F) _fileno(__F)
 #endif
 
 #include "locmap.h"
@@ -45,7 +52,10 @@
 #include "cmemory.h"
 
 #if U_PLATFORM_USES_ONLY_WIN32_API && !defined(fileno)
-/* Windows likes to rename Unix-like functions */
+/* We will just create an alias to Microsoft's implementation,
+   which is prefixed with _ as they deprecated non-ansi-standard POSIX function names.
+   https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/posix-fileno?view=msvc-170
+*/
 #define fileno _fileno
 #endif
 
