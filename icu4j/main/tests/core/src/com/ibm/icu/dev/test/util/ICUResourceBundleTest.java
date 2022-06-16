@@ -1156,19 +1156,19 @@ public final class ICUResourceBundleTest extends TestFmwk {
     @Test
     public void TestOverrideData() {
         String localeID = "en_CA";
-        ULocale locale = new ULocale(localeID);
+        String testResourceKeyPath = "NumberElements/latn/patternsShort/decimalFormat/1000/other";
 
         // Normal data files (because we cannot set any environment variables like ICU_OVERRIDE_DATA before a unit test)
 
         ICUResourceBundle bundle = ICUResourceBundle.getBundleInstance(null, localeID, ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
-        String shortCompactDecimalPattern = bundle.getStringWithFallback("NumberElements/latn/patternsShort/decimalFormat/1000/other");
+        String shortCompactDecimalPattern = bundle.getStringWithFallback(testResourceKeyPath);
         assertEquals("Normal (no override) pattern for compact short pattern for 1000", "0K", shortCompactDecimalPattern);
 
         // Override data files (after using the API to update ICUBinary.OVERRIDE_FILES)
 
         try {
             // load override file from Java resources
-            InputStream overrideRescInStream = getClass().getResourceAsStream("/com/ibm/icu/dev/data/override/en_CA.res");
+            InputStream overrideRescInStream = getClass().getResourceAsStream("/com/ibm/icu/dev/data/override/test01/en_CA.res");
             // copy Java resource input stream to a temp file
             Path tmpDir = Files.createTempDirectory(null);
             File tmpFile = new File(tmpDir.toFile(), "en_CA.res");
@@ -1186,14 +1186,14 @@ public final class ICUResourceBundleTest extends TestFmwk {
             errln("Cannot create temporary directory.");
         }
         ICUResourceBundle overrideBundle = ICUResourceBundle.getBundleInstance(null, localeID, ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
-        String overrideShortCompactDecimalPattern = overrideBundle.getStringWithFallback("NumberElements/latn/patternsShort/decimalFormat/1000/other");
+        String overrideShortCompactDecimalPattern = overrideBundle.getStringWithFallback(testResourceKeyPath);
         assertEquals("Override pattern for compact short pattern for 1000", "0G", overrideShortCompactDecimalPattern);
 
         // Reset override data files to empty
 
         ICUBinary.OVERRIDE_DATA_FILES.setDataPath("");
         bundle = ICUResourceBundle.getBundleInstance(null, localeID, ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
-        shortCompactDecimalPattern = bundle.getStringWithFallback("NumberElements/latn/patternsShort/decimalFormat/1000/other");
+        shortCompactDecimalPattern = bundle.getStringWithFallback(testResourceKeyPath);
         assertEquals("Normal (no override) pattern for compact short pattern for 1000", "0K", shortCompactDecimalPattern);
     }
 
