@@ -58,7 +58,7 @@ static int32_t U_CALLCONV compareUnicodeString(UElement t1, UElement t2) {
 /**
  * A UVector which implements a set of strings.
  */
-class U_COMMON_API UStringSet : public UVector {
+class UStringSet : public UVector {
  public:
   UStringSet(UErrorCode &status) : UVector(uprv_deleteUObject,
                                            uhash_compareUnicodeString,
@@ -482,7 +482,7 @@ SimpleFilteredSentenceBreakIterator::last(void) {
 /**
  * Concrete implementation of builder class.
  */
-class U_COMMON_API SimpleFilteredBreakIteratorBuilder : public FilteredBreakIteratorBuilder {
+class SimpleFilteredBreakIteratorBuilder : public FilteredBreakIteratorBuilder {
 public:
   virtual ~SimpleFilteredBreakIteratorBuilder();
   SimpleFilteredBreakIteratorBuilder(const Locale &fromLocale, UErrorCode &status);

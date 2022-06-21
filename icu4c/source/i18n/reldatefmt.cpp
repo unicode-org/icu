@@ -701,7 +701,7 @@ static UBool getDateTimePattern(
     return getStringByIndex(topLevel.getAlias(), dateTimeFormatOffset, result, status);
 }
 
-template<> U_I18N_API
+template<> 
 const RelativeDateTimeCacheData *LocaleCacheKey<RelativeDateTimeCacheData>::createObject(const void * /*unused*/, UErrorCode &status) const {
     const char *localeId = fLoc.getName();
     LocalUResourceBundlePointer topLevel(ures_open(nullptr, localeId, &status));

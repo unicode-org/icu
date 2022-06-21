@@ -109,7 +109,7 @@ struct ConditionalCE32 : public UMemory {
 
 U_CDECL_BEGIN
 
-U_CAPI void U_CALLCONV
+void U_CALLCONV
 uprv_deleteConditionalCE32(void *obj) {
     delete static_cast<ConditionalCE32 *>(obj);
 }
