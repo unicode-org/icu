@@ -532,12 +532,17 @@ void computeDecompositions(const char* basename, const USet* backwardCombiningSt
     IcuToolErrorCode status("icuexportdata: computeDecompositions");
     const Normalizer2* mainNormalizer;
     const Normalizer2* nfdNormalizer = Normalizer2::getNFDInstance(status);
+    FILE* f = NULL;
+    std::vector<uint32_t> nonRecursive32;
+    LocalUMutableCPTriePointer nonRecursiveBuilder(umutablecptrie_open(0, 0, status));
+
     if (uprv_strcmp(basename, "nfkd") == 0) {
         mainNormalizer = Normalizer2::getNFKDInstance(status);
     } else if (uprv_strcmp(basename, "uts46d") == 0) {
         mainNormalizer = Normalizer2::getInstance(NULL, "uts46", UNORM2_COMPOSE, status);
     } else {
         mainNormalizer = nfdNormalizer;
+        f = prepareOutputFile("decompositionex");
     }
 
     // Max length as of Unicode 14 is 4 for NFD. For NFKD the max
@@ -546,6 +551,8 @@ void computeDecompositions(const char* basename, const USet* backwardCombiningSt
     const int32_t LONGEST_ENCODABLE_LENGTH_32 = 8;
     const int32_t DECOMPOSITION_BUFFER_SIZE = 20;
     UChar32 utf32[DECOMPOSITION_BUFFER_SIZE];
+    const int32_t RAW_DECOMPOSITION_BUFFER_SIZE = 2;
+    UChar32 rawUtf32[RAW_DECOMPOSITION_BUFFER_SIZE];
 
     // Iterate over all scalar values excluding Hangul syllables.
     //
@@ -624,6 +631,54 @@ void computeDecompositions(const char* basename, const USet* backwardCombiningSt
         } else {
             if (src == dst) {
                 continue;
+            }
+            // ICU4X hard-codes ANGSTROM SIGN
+            if (c != 0x212B) {
+                UnicodeString raw;
+                if (!nfdNormalizer->getRawDecomposition(c, raw)) {
+                    // We're always supposed to have a non-recursive decomposition
+                    // if we had a recursive one.
+                    status.set(U_INTERNAL_PROGRAM_ERROR);
+                    handleError(status, basename);
+                }
+                // In addition to actual difference, put the whole range that contains characters
+                // with oxia into the non-recursive trie in order to catch cases where characters
+                // with oxia have singleton decompositions to corresponding characters with tonos.
+                // This way, the run-time decision to fall through can be done on the range
+                // without checking for individual characters inside the range.
+                if (raw != dst || (c >= 0x1F71 && c <= 0x1FFB)) {
+                    int32_t rawLen = raw.toUTF32(rawUtf32, RAW_DECOMPOSITION_BUFFER_SIZE, status);
+                    if (!rawLen) {
+                        status.set(U_INTERNAL_PROGRAM_ERROR);
+                        handleError(status, basename);
+                    }
+                    if (rawLen == 1) {
+                        if (c >= 0xFFFF) {
+                            status.set(U_INTERNAL_PROGRAM_ERROR);
+                            handleError(status, basename);
+                        }
+                        uint32_t shifted = uint32_t(rawUtf32[0]) << 16;
+                        umutablecptrie_set(nonRecursiveBuilder.getAlias(), c, shifted, status);
+                    } else if (rawUtf32[0] <= 0xFFFF && rawUtf32[1] <= 0xFFFF) {
+                        if (!rawUtf32[0] || !rawUtf32[1]) {
+                            status.set(U_INTERNAL_PROGRAM_ERROR);
+                            handleError(status, basename);
+                        }
+                        uint32_t bmpPair = uint32_t(rawUtf32[0]) << 16 | uint32_t(rawUtf32[1]);
+                        umutablecptrie_set(nonRecursiveBuilder.getAlias(), c, bmpPair, status);
+                    } else {
+                        // Let's add 1 to index to make it always non-zero to distinguish
+                        // it from the default zero.
+                        uint32_t index = nonRecursive32.size() + 1;
+                        nonRecursive32.push_back(uint32_t(rawUtf32[0]));
+                        nonRecursive32.push_back(uint32_t(rawUtf32[1]));
+                        if (index > 0xFFFF) {
+                            status.set(U_INTERNAL_PROGRAM_ERROR);
+                            handleError(status, basename);
+                        }
+                        umutablecptrie_set(nonRecursiveBuilder.getAlias(), c, index, status);
+                    }
+                }
             }
         }
         if (startsWithNonStarter && !(c == 0x0340 || c == 0x0341 || c == 0x0343 || c == 0x0344 || c == 0x0F73 || c == 0x0F75 || c == 0x0F81 || c == 0xFF9E || c == 0xFF9F)) {
@@ -768,6 +823,21 @@ void computeDecompositions(const char* basename, const USet* backwardCombiningSt
     }
     if (storage16.size() + storage32.size() > 0xFFF) {
         status.set(U_INTERNAL_PROGRAM_ERROR);
+    }
+    if (f) {
+        usrc_writeArray(f, "scalars32 = [\n  ", nonRecursive32.data(), 32, nonRecursive32.size(), "  ", "\n]\n");
+
+        LocalUCPTriePointer utrie(umutablecptrie_buildImmutable(
+            nonRecursiveBuilder.getAlias(),
+            trieType,
+            UCPTRIE_VALUE_BITS_32,
+            status));
+        handleError(status, basename);
+
+        fprintf(f, "[trie]\n");
+        usrc_writeUCPTrie(f, "trie", utrie.getAlias(), UPRV_TARGET_SYNTAX_TOML);
+
+        fclose(f);
     }
     handleError(status, basename);
 }
