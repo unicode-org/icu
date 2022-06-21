@@ -46,7 +46,7 @@
 
 U_NAMESPACE_BEGIN
 
-class U_I18N_API DateFmtBestPattern : public SharedObject {
+class DateFmtBestPattern : public SharedObject {
 public:
     UnicodeString fPattern;
 
@@ -58,14 +58,14 @@ public:
 DateFmtBestPattern::~DateFmtBestPattern() {
 }
 
-template<> U_I18N_API
+template<> 
 const DateFmtBestPattern *LocaleCacheKey<DateFmtBestPattern>::createObject(
         const void * /*creationContext*/, UErrorCode &status) const {
     status = U_UNSUPPORTED_ERROR;
     return NULL;
 }
 
-class U_I18N_API DateFmtBestPatternKey : public LocaleCacheKey<DateFmtBestPattern> { 
+class DateFmtBestPatternKey : public LocaleCacheKey<DateFmtBestPattern> { 
 private:
     UnicodeString fSkeleton;
 protected:
