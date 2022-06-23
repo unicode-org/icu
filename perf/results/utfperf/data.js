@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1655413064725,
+  "lastUpdate": 1656002024357,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -3442,6 +3442,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 4.4086,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "2f6cc2f7e736878c5ea8ec2c8e067b74805eeafc",
+          "message": "ICU-22070 Return if UErrorCode is error in calendar.cpp",
+          "timestamp": "2022-06-23T09:26:41-07:00",
+          "tree_id": "5810453e007e207811355c0fe52a81a09ea8e327",
+          "url": "https://github.com/unicode-org/icu/commit/2f6cc2f7e736878c5ea8ec2c8e067b74805eeafc"
+        },
+        "date": 1656002022302,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 10.8959,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 3.8359,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 2.2974,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
