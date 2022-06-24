@@ -236,10 +236,326 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           comment-on-alert: true
 
- # Retrieve performance test results and upload results to remote repository
+  # ICU4J performance test for Unicode sets
+  icu4j-unicodesetperf:
+    strategy:
+      fail-fast: false
+      matrix:
+        perf: [UnicodeSetAdd, UnicodeSetContains, UnicodeSetIterate]
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '8'
+
+      - name: Build and run unicodesetperf test
+        run: |
+          # This file needs to be restored  otherwise GHA cannot
+          # check-out the perfdata branch. Setting up this task with GH lfs
+          # modifies the file but the details of why and how are unknown.
+          git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
+          git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
+          cd icu4j;
+          ant;
+          ant perf-tests;
+          git status
+          cd perf-tests;
+          mkdir -p perf/results/j_unicodesetperf/${{ matrix.perf }};
+          java -cp ./out/bin:../tools/misc/out/bin/:../icu4j.jar com.ibm.icu.dev.test.perf.UnicodeSetPerf ${{ matrix.perf }} -a -t 2 -p 4 [:Lt:] | tee perf/results/j_unicodesetperf/${{ matrix.perf }}/output.txt
+
+      - name: Store performance test results
+        uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
+        with:
+          # The perf tests result data is in ndjson format.
+          tool: 'ndjson'
+          output-file-path: icu4j/perf-tests/perf/results/j_unicodesetperf/${{ matrix.perf }}/output.txt
+          # Tentative setting.
+          alert-threshold: '200%'
+          fail-on-alert: true
+          gh-pages-branch: perfdata
+          benchmark-data-dir-path: perf/results/j_unicodesetperf/${{ matrix.perf }}
+          auto-push: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          comment-on-alert: true
+
+  # ICU4J performance test for character APIs
+  icu4j-ucharacterperf:
+    strategy:
+      fail-fast: false
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '8'
+
+      - name: Build and run ucharacterperf test
+        run: |
+          # This file needs to be restored  otherwise GHA cannot
+          # check-out the perfdata branch. Setting up this task with GH lfs
+          # modifies the file but the details of why and how are unknown.
+          git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
+          git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
+          cd icu4j;
+          ant;
+          ant perf-tests;
+          cd perf-tests;
+          mkdir -p perf/results/j_ucharacterperf;
+          java -cp ./out/bin:../tools/misc/out/bin/:../icu4j.jar com.ibm.icu.dev.test.perf.UCharacterPerf -a -t 2 -p 4 0 ffff | tee perf/results/j_ucharacterperf/output.txt
+
+      - name: Store performance test results
+        uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
+        with:
+          # The perf tests result data is in ndjson format.
+          tool: 'ndjson'
+          output-file-path: icu4j/perf-tests/perf/results/j_ucharacterperf/output.txt
+          # Tentative setting.
+          alert-threshold: '200%'
+          fail-on-alert: true
+          gh-pages-branch: perfdata
+          benchmark-data-dir-path: perf/results/j_ucharacterperf
+          auto-push: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          comment-on-alert: true
+
+  # ICU4J performance test for decimal formatting
+  icu4j-decimalformatperf:
+    strategy:
+      fail-fast: false
+      matrix:
+        perf: [TestICUConstruction, TestICUParse, TestICUFormat]
+        locale: [en_US, de_DE]
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '8'
+
+      - name: Build and run decimalformatperf
+        run: |
+          # This file needs to be restored  otherwise GHA cannot
+          # check-out the perfdata branch. Setting up this task with GH lfs
+          # modifies the file but the details of why and how are unknown.
+          git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
+          git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
+          cd icu4j;
+          ant;
+          ant perf-tests;
+          cd perf-tests;
+          mkdir -p perf/results/j_decimalformatperf/${{ matrix.locale }}/${{ matrix.perf }};
+          java -cp ./out/bin:../tools/misc/out/bin/:../icu4j.jar com.ibm.icu.dev.test.perf.DecimalFormatPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -L ${{ matrix.locale }} "#,###.##" "1.234,56" -r 1 | tee perf/results/j_decimalformatperf/${{ matrix.locale }}/${{ matrix.perf }}/output.txt
+
+      - name: Store performance test results
+        uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
+        with:
+          # The perf tests result data is in ndjson format.
+          tool: 'ndjson'
+          output-file-path: icu4j/perf-tests/perf/results/j_decimalformatperf/${{ matrix.locale }}/${{ matrix.perf }}/output.txt
+          # Tentative setting.
+          alert-threshold: '200%'
+          fail-on-alert: true
+          gh-pages-branch: perfdata
+          benchmark-data-dir-path: perf/results/j_decimalformatperf/${{ matrix.locale }}/${{ matrix.perf }}
+          auto-push: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          comment-on-alert: true
+
+  # ICU4J performance test for normalization
+  icu4j-normperf:
+    strategy:
+      fail-fast: false
+      matrix:
+        perf: [TestICU_NFD_NFC_Text, TestICU_NFC_NFC_Text, TestICU_NFC_Orig_Text, TestICU_NFD_NFC_Text, TestICU_NFD_NFD_Text, TestICU_NFD_Orig_Text]
+        source_text: [TestNames_Asian, TestNames_Chinese, TestNames_SerbianSH]
+        mode: [-l]
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '8'
+
+      - name: Build and run normperf
+        env:
+          DATA_FILE_PATH: data/collation
+        run: |
+          # This file needs to be restored  otherwise GHA cannot
+          # check-out the perfdata branch. Setting up this task with GH lfs
+          # modifies the file but the details of why and how are unknown.
+          git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
+          git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
+          cd icu4j;
+          ant;
+          ant perf-tests;
+          cd perf-tests;
+          mkdir -p perf/results/j_normperf/${{ matrix.source_text }}/${{ matrix.perf }};
+          java -cp ./out/bin:../tools/misc/out/bin/:../icu4j.jar com.ibm.icu.dev.test.perf.NormalizerPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -f $DATA_FILE_PATH/${{ matrix.source_text }}.txt -e UTF-8 ${{ matrix.mode }} | tee perf/results/j_normperf/${{ matrix.source_text }}/${{ matrix.perf }}/output.txt
+          cat perf/results/j_normperf/${{ matrix.source_text }}/${{ matrix.perf }}/output.txt
+
+      - name: Store performance test results
+        uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
+        with:
+          # The perf tests result data is in ndjson format.
+          tool: 'ndjson'
+          output-file-path: icu4j/perf-tests/perf/results/j_normperf/${{ matrix.source_text }}/${{ matrix.perf }}/output.txt
+          # Tentative setting.
+          alert-threshold: '200%'
+          fail-on-alert: true
+          gh-pages-branch: perfdata
+          benchmark-data-dir-path: perf/results/j_normperf/${{ matrix.source_text }}/${{ matrix.perf }}
+          auto-push: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          comment-on-alert: true
+
+  # ICU4J performance test for encoding conversion
+  icu4j-converterperf:
+    strategy:
+      fail-fast: false
+      matrix:
+        source_text: [arabic, english, french, greek, hebrew, hindi, japanese, korean, s-chinese]
+        perf: [TestCharsetDecoderICU, TestCharsetEncoderICU]
+        test_enc: [UTF-8]
+        include:
+          - test_enc: csisolatinarabic
+            source_text: arabic
+            perf: TestCharsetDecoderICU
+          - test_enc: csisolatinarabic
+            source_text: arabic
+            perf: TestCharsetEncoderICU
+          - test_enc: csisolatin1
+            source_text: french
+            perf: TestCharsetDecoderICU
+          - test_enc: csisolatin1
+            source_text: french
+            perf: TestCharsetEncoderICU
+          - test_enc: csisolatingreek
+            source_text: greek
+            perf: TestCharsetDecoderICU
+          - test_enc: csisolatingreek
+            source_text: greek
+            perf: TestCharsetEncoderICU
+          - test_enc: csisolatinhebrew
+            source_text: hebrew
+            perf: TestCharsetDecoderICU
+          - test_enc: csisolatinhebrew
+            source_text: hebrew
+            perf: TestCharsetEncoderICU
+          - test_enc: EUC-JP
+            source_text: japanese
+            perf: TestCharsetDecoderICU
+          - test_enc: EUC-JP
+            source_text: japanese
+            perf: TestCharsetEncoderICU
+          - test_enc: csiso2022jp
+            source_text: japanese
+            perf: TestCharsetDecoderICU
+          - test_enc: csiso2022jp
+            source_text: japanese
+            perf: TestCharsetEncoderICU
+          - test_enc: csiso2022kr
+            source_text: korean
+            perf: TestCharsetDecoderICU
+          - test_enc: csiso2022kr
+            source_text: korean
+            perf: TestCharsetEncoderICU
+          - test_enc: EUC-CN
+            source_text: s-chinese
+            perf: TestCharsetDecoderICU
+          - test_enc: EUC-CN
+            source_text: s-chinese
+            perf: TestCharsetEncoderICU
+          - test_enc: UTF-16BE
+            source_text: french
+            perf: TestCharsetDecoderICU
+          - test_enc: UTF-16BE
+            source_text: french
+            perf: TestCharsetEncoderICU
+          - test_enc: UTF-16LE
+            source_text: french
+            perf: TestCharsetDecoderICU
+          - test_enc: UTF-16LE
+            source_text: french
+            perf: TestCharsetEncoderICU
+          - test_enc: US-ASCII
+            source_text: english
+            perf: TestCharsetDecoderICU
+          - test_enc: US-ASCII
+            source_text: english
+            perf: TestCharsetEncoderICU
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '8'
+
+      - name: Build and run converterperf
+        env:
+          DATA_FILE_PATH: data/conversion
+        run: |
+          # This file needs to be restored  otherwise GHA cannot
+          # check-out the perfdata branch. Setting up this task with GH lfs
+          # modifies the file but the details of why and how are unknown.
+          git restore --staged tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
+          git restore tools/multi/proj/icu4cscan/old-xmls.tar.bz2;
+          cd icu4j;
+          ant;
+          ant perf-tests;
+          cd perf-tests;
+          mkdir -p perf/results/j_converterperf/${{ matrix.source_text }}/${{ matrix.test_enc }}/${{ matrix.perf }};
+          java -cp ./out/bin:../tools/misc/out/bin/:../icu4j.jar:../icu4j-charset.jar com.ibm.icu.dev.test.perf.ConverterPerformanceTest ${{ matrix.perf }} -a -t 2 -p 4 -f $DATA_FILE_PATH/${{ matrix.source_text }}.txt -e UTF-8 -T ${{ matrix.test_enc }} | tee perf/results/j_converterperf/${{ matrix.source_text }}/${{ matrix.test_enc }}/${{ matrix.perf }}/output.txt
+
+      - name: Store performance test results
+        uses: gregtatum/github-action-benchmark@d3f06f738e9612988d575db23fae5ca0008d3d12
+        with:
+          # The perf tests result data is in ndjson format.
+          tool: 'ndjson'
+          output-file-path: icu4j/perf-tests/perf/results/j_converterperf/${{ matrix.source_text }}/${{ matrix.test_enc }}/${{ matrix.perf }}/output.txt
+          # Tentative setting.
+          alert-threshold: '200%'
+          fail-on-alert: true
+          gh-pages-branch: perfdata
+          benchmark-data-dir-path: perf/results/j_converterperf/${{ matrix.source_text }}/${{ matrix.test_enc }}/${{ matrix.perf }}
+          auto-push: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          comment-on-alert: true
+
+  # Retrieve performance test results and upload results to remote repository
   perf-test-data-move:
     name: Copy perf data to remote repo for visualization
-    needs: [icu4c-performance-tests, icu4c-performance-tests-with-files, icu4c-strsrchperf]
+    needs: [icu4c-performance-tests, icu4c-performance-tests-with-files, icu4c-strsrchperf, icu4j-unicodesetperf, icu4j-ucharacterperf, icu4j-decimalformatperf, icu4j-normperf, icu4j-converterperf]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -257,3 +573,4 @@ jobs:
           publish_branch: main
           publish_dir: ./perf
           keep_files: true
+

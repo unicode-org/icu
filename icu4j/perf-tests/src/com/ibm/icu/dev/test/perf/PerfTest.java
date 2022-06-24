@@ -451,8 +451,8 @@ public abstract class PerfTest {
             }
             if (action) {
                 // Print results in ndjson format for GHA Benchmark to process.
-                System.out.println("{\"biggerIsBetter\":false,\"name\":" + meth +
-                        ",\"unit\":\"ns/iter\",\"value\":" + (min_t*1E6) / (iterationCount*ops) + "}");
+                System.out.println("{\"biggerIsBetter\":false,\"name\":\"" + meth +
+                        "\",\"unit\":\"ns/iter\",\"value\":" + (min_t*1E6) / (iterationCount*ops) + "}");
             }
         }
     }
