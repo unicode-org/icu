@@ -628,45 +628,52 @@ jobs:
         CC: clang
         CXX: clang++
     - script: |
-        mkdir -p icu4c/source/icuexportdata_uprops_full/fast
-        mkdir -p icu4c/source/icuexportdata_uprops_full/small
         cd icu4c/source
-        LD_LIBRARY_PATH=lib ./bin/icuexportdata --mode uprops --index --copyright --verbose --destdir icuexportdata_uprops_full/fast --trie-type fast --all
-        LD_LIBRARY_PATH=lib ./bin/icuexportdata --mode uprops --index --copyright --verbose --destdir icuexportdata_uprops_full/small --trie-type small --all
-        LD_LIBRARY_PATH=lib ./bin/icuexportdata --mode norm --copyright --verbose --destdir icuexportdata_uprops_full/fast --trie-type fast --all
-        LD_LIBRARY_PATH=lib ./bin/icuexportdata --mode norm --copyright --verbose --destdir icuexportdata_uprops_full/small --trie-type small --all
-      displayName: 'Build Unicode property data export file (Full)'
-    # In the sample file, include:
-    # - Basic binary properties: AHex WSpace
-    # - Property of strings: Basic_Emoji
-    # - POSIX binary property: blank
-    # - Enumerated properties: gc nt sc
+        mkdir -p icuexportdata/uprops/fast
+        ./bin/icuexportdata --mode uprops --index --copyright --verbose --destdir icuexportdata/uprops/fast --trie-type fast --all
+        mkdir -p icuexportdata/uprops/small
+        ./bin/icuexportdata --mode uprops --index --copyright --verbose --destdir icuexportdata/uprops/small --trie-type small --all
+      displayName: 'Build property data export files'
+      env:
+        LD_LIBRARY_PATH: lib
     - script: |
-        mkdir -p icu4c/source/icuexportdata_uprops_sample/fast
-        mkdir -p icu4c/source/icuexportdata_uprops_sample/small
         cd icu4c/source
-        LD_LIBRARY_PATH=lib ./bin/icuexportdata --mode uprops --index --copyright --verbose --destdir icuexportdata_uprops_sample/fast --trie-type fast AHex gc nt Basic_Emoji sc WSpace blank
-        LD_LIBRARY_PATH=lib ./bin/icuexportdata --mode uprops --index --copyright --verbose --destdir icuexportdata_uprops_sample/small --trie-type small AHex gc nt Basic_Emoji sc WSpace blank
-      displayName: 'Build Unicode property data export file (Sample)'
+        mkdir -p icuexportdata/norm/fast
+        ./bin/icuexportdata --mode norm --index --copyright --verbose --destdir icuexportdata/norm/fast --trie-type fast --all
+        mkdir -p icuexportdata/norm/small
+        ./bin/icuexportdata --mode norm --index --copyright --verbose --destdir icuexportdata/norm/small --trie-type small --all
+      displayName: 'Build normalization data export files'
+      env:
+        LD_LIBRARY_PATH: lib
     - script: |
-        mkdir -p icu4c/source/icuexportdata_uprops_full/collation_unihan
-        mkdir -p icu4c/source/icuexportdata_uprops_full/collation_implicithan
         cd icu4c/source
-        cd data/coll
-        FILES=`echo *.txt`
-        cd -
-        LD_LIBRARY_PATH=lib ./bin/genrb -X -s data/coll/ -d icuexportdata_uprops_full/collation_unihan --ucadata data/in/coll/ucadata-unihan-icu4x.icu $FILES
-        LD_LIBRARY_PATH=lib ./bin/genrb -X -s data/coll/ -d icuexportdata_uprops_full/collation_implicithan --ucadata data/in/coll/ucadata-implicithan-icu4x.icu $FILES
-        rm icuexportdata_uprops_full/collation_unihan/*.res
-        rm icuexportdata_uprops_full/collation_implicithan/*.res
-      displayName: 'Build collation data export file'
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifact: icuexportdata_uprops_full'
+        mkdir -p icuexportdata/ucase/fast
+        ./bin/icuexportdata --mode ucase --index --copyright --verbose --destdir icuexportdata/ucase/fast --trie-type fast --all
+        mkdir -p icuexportdata/ucase/small
+        ./bin/icuexportdata --mode ucase --index --copyright --verbose --destdir icuexportdata/ucase/small --trie-type small --all
+      displayName: 'Build case data export files'
+      env:
+        LD_LIBRARY_PATH: lib
+    - script: |
+        cd icu4c/source
+        FILES=`ls data/coll "*.txt"` 
+        mkdir -p icuexportdata/collation/unihan
+        ./bin/genrb -X -s data/coll/ --ucadata data/in/coll/ucadata-unihan-icu4x.icu -d icuexportdata/collation/unihan $FILES
+        rm icuexportdata/collation/unihan/*.res
+        mkdir -p icuexportdata/collation/implicithan
+        ./bin/genrb -X -s data/coll/ --ucadata data/in/coll/ucadata-implicithan-icu4x.icu -d icuexportdata/collation/implicithan $FILES
+        rm icuexportdata/collation/implicithan/*.res
+      displayName: 'Build collation data export files'
+      env:
+        LD_LIBRARY_PATH: lib
+    - task: ArchiveFiles@2
+      displayName: 'Zip'
       inputs:
-        PathtoPublish: 'icu4c/source/icuexportdata_uprops_full'
-        ArtifactName: 'icuexportdata_uprops_full'
+        rootFolderOrFile: 'icu4c/source/icuexportdata' 
+        includeRootFolder: false 
+        archiveFile: 'icuexportdata_tag-goes-here.zip' 
     - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifact: icuexportdata_uprops_sample'
+      displayName: 'Publish Artifact'
       inputs:
-        PathtoPublish: 'icu4c/source/icuexportdata_uprops_sample'
-        ArtifactName: 'icuexportdata_uprops_sample'
+        PathtoPublish: 'icuexportdata_tag-goes-here.zip'
+        ArtifactName: 'icuexportdata_output'

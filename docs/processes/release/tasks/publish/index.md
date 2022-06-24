@@ -356,8 +356,9 @@ run \`make dist\`.
 This step publishes pre-processed Unicode property data, which may be ingested by downstream clients such as ICU4X.
 
 *   Using the output from the build bots:
-    *   Navigate to the Azure Pipelines artifacts as described in the previous section
-    *   Download the files named *icuexportdata_uprops_full.zip* and *icuexportdata_uprops_sample.zip*
+    *   Navigate to the Azure Pipeline `C: Create Artifacts from icuexportdata` and download its single artifact (`icuexportdata_output`)
+    *   Unzip the file
+    *   Rename the `icuexportdata_tag-goes-here.zip` file to the correct tag (replacing slashes with dashes)
 
 ### Signing archives and creating checksums:
 
