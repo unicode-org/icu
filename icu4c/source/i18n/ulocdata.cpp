@@ -230,7 +230,10 @@ ulocdata_getMeasurementSystem(const char *localeID, UErrorCode *status){
     }
 
     measurement = measurementTypeBundleForLocale(localeID, MEASUREMENT_SYSTEM, status);
-    system = (UMeasurementSystem) ures_getInt(measurement, status);
+    int32_t result = ures_getInt(measurement, status);
+    if (U_SUCCESS(*status)) {
+         system = static_cast<UMeasurementSystem>(result);
+    }
 
     ures_close(measurement);
 
