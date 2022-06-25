@@ -30,6 +30,7 @@ import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
+import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.text.CompactDecimalFormat;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.DecimalFormat;
@@ -669,10 +670,12 @@ public class CompactDecimalFormatTest extends TestFmwk {
         cdf.setProperties(new PropertySetter() {
             @Override
             public void set(DecimalFormatProperties props) {
+                PatternStringParser.parseToExistingProperties(
+                    "0 foo", props, PatternStringParser.IGNORE_ROUNDING_ALWAYS);
                 props.setCompactCustomData(customData);
             }
         });
-        assertEquals("Below custom range", "123", cdf.format(123));
+        assertEquals("Below custom range", "123 foo", cdf.format(123));
         assertEquals("Plural form one", "1 qwerty", cdf.format(1000));
         assertEquals("Plural form other", "1.2 dvorak", cdf.format(1234));
         assertEquals("Above custom range", "12 dvorak", cdf.format(12345));
