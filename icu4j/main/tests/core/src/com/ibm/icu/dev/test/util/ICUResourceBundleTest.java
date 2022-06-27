@@ -1217,4 +1217,53 @@ public final class ICUResourceBundleTest extends TestFmwk {
         assertRBStringEquals(localeID, "Normal (no override) pattern for compact short pattern for 1000", "0K", testResourceKeyPath);
     }
 
+    /*
+     * Test that the parent locale chain is logically correct when there exist (a) override data file(s).
+     */
+    @Test
+    public void TestOverrideFileParentLocale() {
+        String testResourceKeyPath = "calendar/gregorian/availableFormats/yMd";
+
+        // Normal data files
+
+        // localeID, expStrVal
+        Object[][] normalDataFileCaseData = {
+                {"en_CA", "y-MM-dd"},
+                {"en",    "M/d/y"},
+                {"root",  "y-MM-dd"},
+        };
+        for (Object[] datum : normalDataFileCaseData) {
+            String localeID = (String) datum[0];
+            String expectedStrVal = (String) datum[1];
+
+            String assertMsg = "Gregorian yMd for " + localeID;
+
+            assertRBStringEquals(localeID, assertMsg, expectedStrVal, testResourceKeyPath);
+        }
+
+        // Override files - locale set = #{en_CA}
+
+        // Copy test override file to a temporary directory, set the override data files path.
+        File tmpDir = copyJavaRescToTmpDir("/com/ibm/icu/dev/data/override/test02/en_CA.res");
+        String path = tmpDir.toString();
+        ICUBinary.OVERRIDE_DATA_FILES.setDataPath(path);
+        tmpDir.deleteOnExit();
+
+        // localeID, expStrVal
+        Object[][] rootOverrideCaseData = {
+                {"en_CA", "test override pattern for en_CA"},
+                {"en",    "M/d/y"},
+                {"root",  "y-MM-dd"},
+        };
+        for (Object[] datum : rootOverrideCaseData) {
+            String localeID = (String) datum[0];
+            String expectedStrVal = (String) datum[1];
+
+            String assertMsg = "Gregorian yMd for " + localeID;
+
+            assertRBStringEquals(localeID, assertMsg, expectedStrVal, testResourceKeyPath);
+        }
+
+    }
+
 }

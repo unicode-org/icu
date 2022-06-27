@@ -1413,12 +1413,6 @@ public  class ICUResourceBundle extends UResourceBundle {
         @Override
         public ICUResourceBundle load() {
 
-
-            // TODO: implement logic for checking existence of override resource file for input locale
-            // and inserting it into the parent chain if it exists
-
-
-
             if(DEBUG) System.out.println("Creating "+fullName);
             // here we assume that java type resource bundle organization
             // is required then the base name contains '.' else
@@ -1429,6 +1423,7 @@ public  class ICUResourceBundle extends UResourceBundle {
             //
             final String rootLocale = (baseName.indexOf('.')==-1) ? "root" : "";
             String localeName = localeID.isEmpty() ? rootLocale : localeID;
+            ICUResourceBundle overrideResc = null;
             ICUResourceBundle b = ICUResourceBundle.createBundle(baseName, localeName, root, ICUBinary.DataFilesCategory.OVERRIDE);
 
             if(DEBUG)System.out.println("The bundle created is: "+b+" and openType="+openType+" and bundle.getNoFallback="+(b!=null && b.getNoFallback()));
@@ -1447,6 +1442,21 @@ public  class ICUResourceBundle extends UResourceBundle {
                 return b;
             }
 
+            // Skip the override data if it doesn't exist and use the normal lookup instead.
+            // If the override data exists, use the normal lookup as the parent.
+            // Either way, thereafter, use the normal lookup return value ICUResourceBundle for the purposes
+            // of reusing existing code implementing locale ID parent fallback logic.
+            ICUResourceBundle normalLookup = ICUResourceBundle.createBundle(baseName, localeName, root, ICUBinary.DataFilesCategory.NORMAL);
+            if (b == null) {
+                b = normalLookup;
+            } else {
+                overrideResc = b;
+                if (normalLookup != null) {
+                    b.setParent(normalLookup);
+                    b = normalLookup;
+                }
+            }
+
             // fallback to locale ID parent
             if(b == null){
                 int i = localeName.lastIndexOf('_');
@@ -1462,7 +1472,7 @@ public  class ICUResourceBundle extends UResourceBundle {
                         b = instantiateBundle(baseName, defaultID, defaultID, root, openType);
                     } else if(openType != OpenType.LOCALE_ONLY && !rootLocale.isEmpty()) {
                         // Ultimately go to root.
-                        b = ICUResourceBundle.createBundle(baseName, rootLocale, root);
+                        b = ICUResourceBundle.createBundle(baseName, rootLocale, root, ICUBinary.DataFilesCategory.OVERRIDE);
                     }
                 }
             }else{
@@ -1484,7 +1494,12 @@ public  class ICUResourceBundle extends UResourceBundle {
                     b.setParent(parent);
                 }
             }
-            return b;
+
+            if (overrideResc != null) {
+                return overrideResc;
+            } else {
+                return b;
+            }
         }
     }
 
