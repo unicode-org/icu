@@ -21,6 +21,7 @@ import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Locale;
@@ -1168,11 +1169,12 @@ public final class ICUResourceBundleTest extends TestFmwk {
     private File copyJavaRescToTmpDir(String javaRescPath) {
         try {
             // load override file from Java resources
-            InputStream overrideRescInStream = getClass().getResourceAsStream("/com/ibm/icu/dev/data/override/test01/en_CA.res");
+            InputStream overrideRescInStream = getClass().getResourceAsStream(javaRescPath);
             // copy Java resource input stream to a temp file
             Path tmpDirPath = Files.createTempDirectory(null);
             File tmpDir = tmpDirPath.toFile();
-            File tmpFile = new File(tmpDir, "en_CA.res");
+            String fileName = Paths.get(javaRescPath).getFileName().toString();
+            File tmpFile = new File(tmpDir, fileName);
             // Preemptively mark the tmpFile to be deleted on exit. Assume that file
             // not be deleted before then.
             tmpFile.deleteOnExit();
