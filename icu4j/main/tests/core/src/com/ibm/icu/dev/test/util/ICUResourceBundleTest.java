@@ -1276,6 +1276,34 @@ public final class ICUResourceBundleTest extends TestFmwk {
             assertRBStringEquals(localeID, assertMsg, expectedStrVal, testResourceKeyPath);
         }
 
+        // Override files - locale set = #{en_CA, en, root}
+
+        // Copy test override file to a temporary directory, set the override data files path.
+        String[] rescToCopy2 = {
+                "/com/ibm/icu/dev/data/override/test02/en_CA.res",
+                "/com/ibm/icu/dev/data/override/test02/en.res",
+                "/com/ibm/icu/dev/data/override/test02/root.res"
+        };
+        File tmpDir2 = copyJavaRescToTmpDir(rescToCopy2);
+        String path2 = tmpDir2.toString();
+        ICUBinary.OVERRIDE_DATA_FILES.setDataPath(path2);
+        tmpDir2.deleteOnExit();
+
+        // localeID, expStrVal
+        Object[][] rootOverrideCaseData2 = {
+                {"en_CA", "test override pattern for en_CA"},
+                {"en",    "test override pattern for en"},
+                {"root",  "test override pattern for root"},
+        };
+        for (Object[] datum : rootOverrideCaseData2) {
+            String localeID = (String) datum[0];
+            String expectedStrVal = (String) datum[1];
+
+            String assertMsg = "Gregorian yMd for " + localeID;
+
+            assertRBStringEquals(localeID, assertMsg, expectedStrVal, testResourceKeyPath);
+        }
+
     }
 
 }
