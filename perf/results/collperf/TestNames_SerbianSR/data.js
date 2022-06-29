@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1656541514152,
+  "lastUpdate": 1656545873018,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -5020,6 +5020,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 22876495.3522,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "robertbastian@users.noreply.github.com",
+            "name": "Robert Bastian",
+            "username": "robertbastian"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "6cb4fd58488060ac87f71d2702b56f972e5861a8",
+          "message": "ICU-22061 rename",
+          "timestamp": "2022-06-29T16:28:44-07:00",
+          "tree_id": "c222a2addef0db0bb07146e49550eef2671edc21",
+          "url": "https://github.com/unicode-org/icu/commit/6cb4fd58488060ac87f71d2702b56f972e5861a8"
+        },
+        "date": 1656545869322,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 466.5244,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 66549178.7163,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 20885734.599,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 63969122.2204,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 22979797.8916,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
