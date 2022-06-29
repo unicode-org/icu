@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1656529793199,
+  "lastUpdate": 1656534216760,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -3820,6 +3820,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 4.4287,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "robertbastian@users.noreply.github.com",
+            "name": "Robert Bastian",
+            "username": "robertbastian"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "783b4f7b6a7f0996563c802bcec296e2a81d882f",
+          "message": "ICU-22061 rename",
+          "timestamp": "2022-06-29T13:16:26-07:00",
+          "tree_id": "acffa8df9f2a19ac3aa86209887641a5cf2fcb49",
+          "url": "https://github.com/unicode-org/icu/commit/783b4f7b6a7f0996563c802bcec296e2a81d882f"
+        },
+        "date": 1656534212274,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 13.4521,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 5.0042,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 3.5468,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
