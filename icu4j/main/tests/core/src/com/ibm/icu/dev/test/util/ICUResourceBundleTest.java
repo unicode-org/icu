@@ -1161,29 +1161,39 @@ public final class ICUResourceBundleTest extends TestFmwk {
         assertEquals(msg, expected, actualStrValue);
     }
 
+    private File copyJavaRescToTmpDir(String javaRescPath) {
+        String[] rescPaths = { javaRescPath };
+        return copyJavaRescToTmpDir(rescPaths);
+    }
+
     /*
      * Copy a Java resource to a temp file and return the containing
      * directory as a {@code File}.
      * Note: you should delete the file when done with it.
      */
-    private File copyJavaRescToTmpDir(String javaRescPath) {
+    private File copyJavaRescToTmpDir(String[] javaRescPaths) {
         try {
-            // load override file from Java resources
-            InputStream overrideRescInStream = getClass().getResourceAsStream(javaRescPath);
-            // copy Java resource input stream to a temp file
+            // set up temporary directory
             Path tmpDirPath = Files.createTempDirectory(null);
             File tmpDir = tmpDirPath.toFile();
-            String fileName = Paths.get(javaRescPath).getFileName().toString();
-            File tmpFile = new File(tmpDir, fileName);
-            // Preemptively mark the tmpFile to be deleted on exit. Assume that file
-            // not be deleted before then.
-            tmpFile.deleteOnExit();
-            OutputStream outStream = new FileOutputStream(tmpFile);
-            byte[] buffer = new byte[8 * 1024];
-            int bytesRead;
-            while ((bytesRead = overrideRescInStream.read(buffer)) != -1) {
-                outStream.write(buffer, 0, bytesRead);
+
+            for (String javaRescPath : javaRescPaths) {
+                // load override file from Java resources
+                InputStream overrideRescInStream = getClass().getResourceAsStream(javaRescPath);
+                // copy Java resource input stream to a temp file
+                String fileName = Paths.get(javaRescPath).getFileName().toString();
+                File tmpFile = new File(tmpDir, fileName);
+                // Preemptively mark the tmpFile to be deleted on exit. Assume that file
+                // not be deleted before then.
+                tmpFile.deleteOnExit();
+                OutputStream outStream = new FileOutputStream(tmpFile);
+                byte[] buffer = new byte[8 * 1024];
+                int bytesRead;
+                while ((bytesRead = overrideRescInStream.read(buffer)) != -1) {
+                    outStream.write(buffer, 0, bytesRead);
+                }
             }
+
             return tmpDir;
         } catch (IOException e) {
             errln("Cannot create temporary directory.");
