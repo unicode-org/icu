@@ -1230,10 +1230,10 @@ public final class ICUResourceBundleTest extends TestFmwk {
     }
 
     /*
-     * Test that the parent locale chain is logically correct when there exist (a) override data file(s).
+     * Test that the parent locale chain is logically correct when there exist an override data file.
      */
     @Test
-    public void TestOverrideFileParentLocale() {
+    public void TestOverrideDataParentLocaleSingleFile() {
         String testResourceKeyPath = "calendar/gregorian/availableFormats/yMd";
 
         // Normal data files
@@ -1276,7 +1276,19 @@ public final class ICUResourceBundleTest extends TestFmwk {
             assertRBStringEquals(localeID, assertMsg, expectedStrVal, testResourceKeyPath);
         }
 
+    }
+
+    /*
+     * Test that the parent locale chain is logically correct when there exist multiple override data files.
+     *
+     * Note: due to the stateful nature of caching, the override data files loaded in this test must be
+     * tested in isolation from the override files in any other test.
+     */
+    @Test
+    public void TestOverrideDataParentLocaleMultipleFiles() {
         // Override files - locale set = #{en_CA, en, root}
+
+        String testResourceKeyPath = "calendar/gregorian/availableFormats/yMd";
 
         // Copy test override file to a temporary directory, set the override data files path.
         String[] rescToCopy2 = {
