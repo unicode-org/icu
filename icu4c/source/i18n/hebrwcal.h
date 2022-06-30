@@ -88,7 +88,7 @@ public:
    * Useful constants for HebrewCalendar.
    * @internal
    */
-  enum EEras {
+  enum Month {
     /** 
      * Constant for Tishri, the 1st month of the Hebrew year. 
      */
