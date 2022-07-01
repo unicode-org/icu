@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1656545854870,
+  "lastUpdate": 1656691583601,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -5074,6 +5074,60 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestIcu_BinarySearch_usekey",
             "value": 219607.2463,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "cyndy_ishida@apple.com",
+            "name": "Cyndy Ishida",
+            "username": "cyndyishida"
+          },
+          "committer": {
+            "email": "cyndy_ishida@apple.com",
+            "name": "Cyndy Ishida",
+            "username": "cyndyishida"
+          },
+          "distinct": true,
+          "id": "e2ae4f5324e863a92bf79892ef1a2e0d6b183af7",
+          "message": "ICU-22054 Remove declarations for unimplemented APIs\n\nThis patch also includes marking `=delete` on specific `normal` member functions, as opposed to compiler generated functions,\nbased on the description of such functions' surrounding comments.",
+          "timestamp": "2022-07-01T08:57:10-07:00",
+          "tree_id": "fda6935be0dbf84c2fec7832622127bc05ca0b48",
+          "url": "https://github.com/unicode-org/icu/commit/e2ae4f5324e863a92bf79892ef1a2e0d6b183af7"
+        },
+        "date": 1656691579664,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestIcu_KeyGen_null",
+            "value": 714.0897,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_strcoll_null",
+            "value": 776530.5251,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_qsort_usekey",
+            "value": 220808.9243,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_strcoll_null",
+            "value": 715173.5266,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestIcu_BinarySearch_usekey",
+            "value": 200999.7178,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
