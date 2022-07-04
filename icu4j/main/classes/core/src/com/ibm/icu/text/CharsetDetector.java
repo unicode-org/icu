@@ -184,9 +184,9 @@ public class CharsetDetector {
      * @stable ICU 3.4
      */
     public CharsetMatch[] detectAll() {
-        ArrayList<CharsetMatch>         matches = new ArrayList<CharsetMatch>();
+        ArrayList<CharsetMatch> matches = new ArrayList<CharsetMatch>();
         
-        MungeInput();  // Strip html markup, collect byte stats.
+        mungeInput();  // Strip html markup, collect byte stats.
         
         //  Iterate over all possible charsets, remember all that
         //    give a match quality > 0.
@@ -345,7 +345,7 @@ public class CharsetDetector {
      *  MungeInput - after getting a set of raw input data to be analyzed, preprocess
      *               it by removing what appears to be html markup.
      */
-    private void MungeInput() {
+    private void mungeInput() {
         int srci = 0;
         int dsti = 0;
         byte b;
@@ -407,10 +407,11 @@ public class CharsetDetector {
         //
         Arrays.fill(fByteStats, (short)0);
         for (srci=0; srci<fInputLen; srci++) {
+            // by "& 0x00ff", the range -127 to +127 (of a Java byte) is converted to the "real" range 0.255
             int val = fInputBytes[srci] & 0x00ff;
             fByteStats[val]++;
         }
-        
+
         fC1Bytes = false;
         for (int i = 0x80; i <= 0x9F; i += 1) {
             if (fByteStats[i] != 0) {
@@ -421,7 +422,7 @@ public class CharsetDetector {
      }
 
     /*
-     *  The following items are accessed by individual CharsetRecongizers during
+     *  The following items are accessed by individual CharsetRecognizers during
      *     the recognition process
      * 
      */
@@ -476,6 +477,8 @@ public class CharsetDetector {
 
     static {
         List<CSRecognizerInfo> list = new ArrayList<CSRecognizerInfo>();
+
+        list.add(new CSRecognizerInfo(new CharsetRecog_ASCII(), true));
 
         list.add(new CSRecognizerInfo(new CharsetRecog_UTF8(), true));
         list.add(new CSRecognizerInfo(new CharsetRecog_Unicode.CharsetRecog_UTF_16_BE(), true));

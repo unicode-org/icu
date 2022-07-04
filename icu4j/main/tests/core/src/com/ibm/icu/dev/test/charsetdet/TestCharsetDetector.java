@@ -20,6 +20,7 @@ import java.util.TreeMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -277,7 +278,7 @@ public class TestCharsetDetector extends TestFmwk
             {(byte) 0x80, (byte) 0x20, (byte) 0x54, (byte) 0x68, (byte) 0x69, (byte) 0x73, (byte) 0x20, (byte) 0x69, (byte) 0x73, (byte) 0x20, (byte) 0x45, (byte) 0x6E, (byte) 0x67, (byte) 0x6C, (byte) 0x69, (byte) 0x73, (byte) 0x68, (byte) 0x20, (byte) 0x1b, (byte) 0x24}, /* A partial ISO-2022 shift state at the end */
             {(byte) 0x80, (byte) 0x20, (byte) 0x54, (byte) 0x68, (byte) 0x69, (byte) 0x73, (byte) 0x20, (byte) 0x69, (byte) 0x73, (byte) 0x20, (byte) 0x45, (byte) 0x6E, (byte) 0x67, (byte) 0x6C, (byte) 0x69, (byte) 0x73, (byte) 0x68, (byte) 0x20, (byte) 0x1b, (byte) 0x24, (byte) 0x28}, /* A partial ISO-2022 shift state at the end */
             {(byte) 0x80, (byte) 0x20, (byte) 0x54, (byte) 0x68, (byte) 0x69, (byte) 0x73, (byte) 0x20, (byte) 0x69, (byte) 0x73, (byte) 0x20, (byte) 0x45, (byte) 0x6E, (byte) 0x67, (byte) 0x6C, (byte) 0x69, (byte) 0x73, (byte) 0x68, (byte) 0x20, (byte) 0x1b, (byte) 0x24, (byte) 0x28, (byte) 0x44}, /* A complete ISO-2022 shift state at the end with a bad one at the start */
-            {(byte) 0x1b, (byte) 0x24, (byte) 0x28, (byte) 0x44}, /* A complete ISO-2022 shift state at the end */
+            {0x0e, 0x0e, 0x0e, 0x0e, 0x0e, (byte) 0x1b, (byte) 0x24, (byte) 0x28, (byte) 0x44}, /* 5 shifts and a complete ISO-2022 shift state at the end */
             {(byte) 0xa1}, /* Could be a single byte shift-jis at the end */
             {(byte) 0x74, (byte) 0x68, (byte) 0xa1}, /* Could be a single byte shift-jis at the end */
             {(byte) 0x74, (byte) 0x68, (byte) 0x65, (byte) 0xa1} /* Could be a single byte shift-jis at the end, but now we have English creeping in. */
@@ -1249,5 +1250,55 @@ public class TestCharsetDetector extends TestFmwk
         }
     }
 
+    @Test
+    public void plainAsciiLeadsToAsciiBeingFirst() throws Exception {
+        // Content: "@{,xxx-yyy-!!!}"
+        // Non-English text because otherwise, it is detected as ISO-8859-1
+        byte[] input = new byte[]{0x40, 0x7b, 0x2c, 0x78, 0x78, 0x78, 0x2d, 0x79, 0x79, 0x79, 0x2d, 0x21, 0x21, 0x21, 0x7d};
+
+        CharsetDetector charsetDetector = new CharsetDetector();
+        charsetDetector.setText(input);
+        CharsetMatch[] matches = charsetDetector.detectAll();
+
+        // "just" check that ASCII is first
+        Assert.assertEquals("ASCII", matches[0].getName());
+        Assert.assertEquals(35, matches[0].getConfidence());
+    }
+
+    @Test
+    public void utf8LeadsToAsciiNotBeingContained() throws Exception {
+        // Content: "This is a UTF-8 string! 🎉"
+        byte[] input = new byte[]{0x54, 0x68, 0x69, 0x73, 0x69, 0x73, 0x61, 0x55, 0x54, 0x46, 0x2d, 0x38, 0x73, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x21, (byte) 0xf0, (byte) 0x9f, (byte) 0x8e, (byte) 0x89};
+
+        CharsetDetector charsetDetector = new CharsetDetector();
+        charsetDetector.setText(input);
+        CharsetMatch[] matches = charsetDetector.detectAll();
+
+        // check that UTF-8 is the highest
+        Assert.assertEquals("UTF-8", matches[0].getName());
+
+        // check that ASCII is not contained
+        for (int i = 0; i<matches.length; i++) {
+            Assert.assertNotEquals("ASCII", matches[i].getName());
+        }
+    }
+
+    @Test
+    public void utf16LeadsToAsciiNotBeingContained() throws Exception {
+        // Content: "This is a UTF-16 string! 🎉"
+        byte[] input = new byte[]{0x00, 0x54, 0x00, 0x68, 0x00, 0x69, 0x00, 0x73, 0x00, 0x20, 0x00, 0x69, 0x00, 0x73, 0x00, 0x20, 0x00, 0x61, 0x00, 0x20, 0x00, 0x55, 0x00, 0x54, 0x00, 0x46, 0x00, 0x2d, 0x00, 0x31, 0x00, 0x36, 0x00, 0x20, 0x00, 0x73, 0x00, 0x74, 0x00, 0x72, 0x00, 0x69, 0x00, 0x6e, 0x00, 0x67, 0x00, 0x21, 0x00, 0x20, (byte) 0xd8, 0x3c, (byte) 0xdf, (byte) 0x89};
+
+        CharsetDetector charsetDetector = new CharsetDetector();
+        charsetDetector.setText(input);
+        CharsetMatch[] matches = charsetDetector.detectAll();
+
+        // check that UTF-16BE is the highest
+        Assert.assertEquals("UTF-16BE", matches[0].getName());
+
+        // check that ASCII is not contained
+        for (int i = 0; i<matches.length; i++) {
+            Assert.assertNotEquals("ASCII", matches[i].getName());
+        }
+    }
 
 }
