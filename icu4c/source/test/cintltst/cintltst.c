@@ -539,7 +539,10 @@ const char* loadTestData(UErrorCode* err){
         UResourceBundle* test =NULL;
         char* tdpath=NULL;
         const char* tdrelativepath;
-#if defined (U_TOPBUILDDIR)
+#if defined (APPLE_XCODE_BUILD)
+        tdrelativepath = "";
+        directory = U_TOPBUILDDIR;
+#elif defined (U_TOPBUILDDIR)
         tdrelativepath = "test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
         directory = U_TOPBUILDDIR;
 #else
@@ -547,7 +550,7 @@ const char* loadTestData(UErrorCode* err){
         directory= ctest_dataOutDir();
 #endif
 
-        tdpath = (char*) ctst_malloc(sizeof(char) *(( strlen(directory) * strlen(tdrelativepath)) + 10));
+        tdpath = (char*) ctst_malloc(sizeof(char) *(( strlen(directory) + strlen(tdrelativepath)) + 10));
 
 
         /* u_getDataDirectory shoul return \source\data ... set the
