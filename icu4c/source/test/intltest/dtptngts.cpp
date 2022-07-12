@@ -47,6 +47,7 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
         TESTCASE(11, test_jConsistencyOddLocales);
         TESTCASE(12, testBestPattern);
         TESTCASE(13, testDateTimePatterns);
+        TESTCASE(14, testRegionOverride);
         default: name = ""; break;
     }
 }
@@ -1755,6 +1756,34 @@ void IntlTestDateTimePatternGeneratorAPI::testDateTimePatterns() {
                 dtFormat4.extract(0, dtFormat4.length(), bGet, 64);
                 errln("ERROR: getDateTimeFormat for en after second mod, style %d, expect \"%s\", get \"%s\"",
                         patStyle, bExpect, bGet);
+            }
+        }
+    }
+}
+
+void IntlTestDateTimePatternGeneratorAPI::testRegionOverride() {
+    const struct TestCase {
+        const char* locale;
+        const UChar* expectedPattern;
+        UDateFormatHourCycle expectedHourCycle;
+    } testCases[] = {
+        { "en_US",           u"h:mm\u202fa", UDAT_HOUR_CYCLE_12 },
+        { "en_GB",           u"HH:mm",       UDAT_HOUR_CYCLE_23 },
+        { "en_US@rg=GBZZZZ", u"HH:mm",       UDAT_HOUR_CYCLE_23 },
+        { "en_US@hours=h23", u"HH:mm",       UDAT_HOUR_CYCLE_23 },
+    };
+
+    for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i++) {
+        UErrorCode err = U_ZERO_ERROR;
+        LocalPointer<DateTimePatternGenerator> dtpg(DateTimePatternGenerator::createInstance(testCases[i].locale, err));
+        
+        if (assertSuccess("Error creating dtpg", err)) {
+            UDateFormatHourCycle actualHourCycle = dtpg->getDefaultHourCycle(err);
+            UnicodeString actualPattern = dtpg->getBestPattern(u"jmm", err);
+            
+            if (assertSuccess("Error using dtpg", err)) {
+                assertEquals("Wrong hour cycle", testCases[i].expectedHourCycle, actualHourCycle);
+                assertEquals("Wrong pattern", testCases[i].expectedPattern, actualPattern);
             }
         }
     }

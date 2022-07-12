@@ -47,6 +47,7 @@ static void TestGetDefaultHourCycle(void);
 static void TestGetDefaultHourCycleOnEmptyInstance(void);
 static void TestEras(void);
 static void TestDateTimePatterns(void);
+static void TestRegionOverride(void);
 
 void addDateTimePatternGeneratorTest(TestNode** root) {
     TESTCASE(TestOpenClose);
@@ -58,6 +59,7 @@ void addDateTimePatternGeneratorTest(TestNode** root) {
     TESTCASE(TestGetDefaultHourCycleOnEmptyInstance);
     TESTCASE(TestEras);
     TESTCASE(TestDateTimePatterns);
+    TESTCASE(TestRegionOverride);
 }
 
 /*
@@ -790,4 +792,35 @@ static void doDTPatternTest(UDateTimePatternGenerator* udtpg,
     }
 }
 
+static void TestRegionOverride(void) {
+    typedef struct RegionOverrideTest {
+        const char* locale;
+        const UChar* expectedPattern;
+        UDateFormatHourCycle expectedHourCycle;
+    } RegionOverrideTest;
+
+    const RegionOverrideTest testCases[] = {
+        { "en_US",           u"h:mm\u202fa", UDAT_HOUR_CYCLE_12 },
+        { "en_GB",           u"HH:mm",  UDAT_HOUR_CYCLE_23 },
+        { "en_US@rg=GBZZZZ", u"HH:mm",  UDAT_HOUR_CYCLE_23 },
+        { "en_US@hours=h23", u"HH:mm",  UDAT_HOUR_CYCLE_23 },
+    };
+
+    for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i++) {
+        UErrorCode err = U_ZERO_ERROR;
+        UChar actualPattern[200];
+        UDateTimePatternGenerator* dtpg = udatpg_open(testCases[i].locale, &err);
+
+        if (assertSuccess("Error creating dtpg", &err)) {
+            UDateFormatHourCycle actualHourCycle = udatpg_getDefaultHourCycle(dtpg, &err);
+            udatpg_getBestPattern(dtpg, u"jmm", -1, actualPattern, 200, &err);
+
+            if (assertSuccess("Error using dtpg", &err)) {
+                assertIntEquals("Wrong hour cycle", testCases[i].expectedHourCycle, actualHourCycle);
+                assertUEquals("Wrong pattern", testCases[i].expectedPattern, actualPattern);
+            }
+        }
+        udatpg_close(dtpg);
+    }
+}
 #endif
