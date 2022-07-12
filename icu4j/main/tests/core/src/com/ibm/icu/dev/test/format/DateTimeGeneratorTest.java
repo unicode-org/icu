@@ -2030,4 +2030,27 @@ public class DateTimeGeneratorTest extends TestFmwk {
             }
         }
     }
+    
+    @Test
+    public void testRegionOverride() {
+        String[][] testCases = {
+            { "en_US",           "h:mm\u202fa", "HOUR_CYCLE_12" },
+            { "en_GB",           "HH:mm",       "HOUR_CYCLE_23" },
+            { "en_US@rg=GBZZZZ", "HH:mm",       "HOUR_CYCLE_23" },
+            { "en_US@hours=h23", "HH:mm",       "HOUR_CYCLE_23" },
+        };
+
+        for (String[] testCase : testCases) {
+            String localeID = testCase[0];
+            String expectedPattern = testCase[1];
+            String expectedHourCycle = testCase[2];
+        
+            DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance(new ULocale(localeID));
+            String actualHourCycle = dtpg.getDefaultHourCycle().toString();
+            String actualPattern = dtpg.getBestPattern("jmm");
+            
+            assertEquals("Wrong hour cycle", expectedHourCycle, actualHourCycle);
+            assertEquals("Wrong pattern", expectedPattern, actualPattern);
+        }
+    }
 }
