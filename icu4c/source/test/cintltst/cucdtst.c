@@ -75,8 +75,8 @@ parseUCDFile(const char *filename,
              char *fields[][2], int32_t fieldCount,
              UParseLineFn *lineFn, void *context,
              UErrorCode *pErrorCode) {
-    char path[256];
-    char backupPath[256];
+    char path[512];
+    char backupPath[512];
 
     if(U_FAILURE(*pErrorCode)) {
         return;
