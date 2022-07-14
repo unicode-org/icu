@@ -1374,7 +1374,7 @@ lt{
                 d{
                     d{"d–d"}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"h a–h a"}
                     h{"h–h a"}
@@ -1440,7 +1440,7 @@ lt{
                 "popiet",
             }
             AmPmMarkersNarrow{
-                "pr. p.",
+                "pr. p.",
                 "pop.",
             }
             DateTimePatterns{
@@ -1655,7 +1655,7 @@ lt{
                     }
                     narrow{
                         afternoon1{"diena"}
-                        am{"pr. p."}
+                        am{"pr. p."}
                         evening1{"vakaras"}
                         midnight{"vidurnaktis"}
                         morning1{"rytas"}
@@ -1795,7 +1795,7 @@ lt{
                 d{
                     d{"dd–dd"}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
                     h{"hh–hh a"}

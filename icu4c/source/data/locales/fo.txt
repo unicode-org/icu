@@ -384,7 +384,7 @@ fo{
                 d{
                     d{"d.–d."}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
                     h{"h–h a"}
@@ -747,7 +747,7 @@ fo{
                 d{
                     d{"d.–d."}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"h a–h a"}
                     h{"h–h a"}

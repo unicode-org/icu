@@ -657,6 +657,7 @@ keyTypeData:table(nofallback){
             jpanfin{""}
             jpanyear{""}
             kali{""}
+            kawi{""}
             khmr{""}
             knda{""}
             lana{""}
@@ -678,6 +679,7 @@ keyTypeData:table(nofallback){
             mymr{""}
             mymrshan{""}
             mymrtlng{""}
+            nagm{""}
             native{""}
             newa{""}
             nkoo{""}

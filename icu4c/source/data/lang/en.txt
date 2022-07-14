@@ -367,7 +367,7 @@ en{
         la{"Latin"}
         lad{"Ladino"}
         lag{"Langi"}
-        lah{"Lahnda"}
+        lah{"Western Panjabi"}
         lam{"Lamba"}
         lb{"Luxembourgish"}
         lez{"Lezghian"}
@@ -723,6 +723,7 @@ en{
     }
     Languages%variant{
         ckb{"Kurdish, Sorani"}
+        hi_Latn{"Hinglish"}
         ky{"Kirghiz"}
         my{"Myanmar Language"}
         ps{"Pushto"}
@@ -1212,6 +1213,7 @@ en{
             jpanfin{"Japanese Financial Numerals"}
             jpanyear{"Japanese Calendar Gannen Year Numerals"}
             kali{"Kayah Li Digits"}
+            kawi{"Kawi Digits"}
             khmr{"Khmer Digits"}
             knda{"Kannada Digits"}
             lana{"Tai Tham Hora Digits"}
@@ -1233,6 +1235,7 @@ en{
             mymr{"Myanmar Digits"}
             mymrshan{"Myanmar Shan Digits"}
             mymrtlng{"Myanmar Tai Laing Digits"}
+            nagm{"Nag Mundari Digits"}
             native{"Native Digits"}
             newa{"Newa Digits"}
             nkoo{"N’Ko Digits"}

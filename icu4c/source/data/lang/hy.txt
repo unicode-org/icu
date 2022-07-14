@@ -498,6 +498,7 @@ hy{
     }
     Languages%short{
         en_GB{"անգլերեն (Բրիտանիա)"}
+        en_US{"անգլերեն (ԱՄՆ)"}
     }
     Languages%variant{
         ckb{"սորանի"}

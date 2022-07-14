@@ -87,7 +87,7 @@ nn{
                     M{"dd.MM.–dd.MM."}
                     d{"dd.MM.–dd.MM."}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 yM{
                     M{"MM.y–MM.y G"}
                     y{"MM.y–MM.y G"}

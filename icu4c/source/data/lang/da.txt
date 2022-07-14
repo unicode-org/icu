@@ -565,8 +565,6 @@ da{
     }
     Languages%short{
         az{"azeri"}
-        en_GB{"britisk engelsk"}
-        en_US{"amerikansk engelsk"}
     }
     Languages%variant{
         ckb{"centralkurdisk"}

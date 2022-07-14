@@ -447,6 +447,7 @@ be{
     }
     Languages%short{
         en_GB{"вялікабрытанская англійская"}
+        en_US{"англійская (ЗША)"}
     }
     Languages%variant{
         ckb{"сарані"}

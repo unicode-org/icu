@@ -443,7 +443,7 @@ ur{
     }
     Languages%short{
         az{"ازیری"}
-        en_US{"امریکی انگریزی"}
+        en_GB{"انگریزی (یو کے)"}
     }
     Scripts{
         Arab{"عربی"}

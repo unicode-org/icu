@@ -17,7 +17,6 @@ nn{
     Languages{
         alt{"sør-altaj"}
         ang{"gammalengelsk"}
-        ar_001{"moderne standardarabisk"}
         asa{"asu (Tanzania)"}
         bas{"basa"}
         be{"kviterussisk"}
@@ -36,7 +35,6 @@ nn{
         ebu{"embu"}
         egy{"gammalegyptisk"}
         elx{"elamite"}
-        fa_AF{"dari"}
         fil{"filippinsk"}
         fro{"gammalfransk"}
         frs{"austfrisisk"}
@@ -66,7 +64,6 @@ nn{
         nds_NL{"lågsaksisk"}
         ne{"nepalsk"}
         niu{"niuisk"}
-        nl_BE{"flamsk"}
         nog{"nogai"}
         non{"gammalnorsk"}
         nqo{"n’ko"}
@@ -99,13 +96,11 @@ nn{
         zbl{"blissymbol"}
         zgh{"standard marokkansk tamazight"}
         zh_Hans{"forenkla kinesisk"}
-        zh_Hant{"tradisjonell kinesisk"}
         zxx{"utan språkleg innhald"}
         zza{"zaza"}
     }
     Languages%long{
         zh_Hans{"forenkla mandarinkinesisk"}
-        zh_Hant{"tradisjonell mandarinkinesisk"}
     }
     Languages%variant{
         ckb{"kurdisk (sorani)"}

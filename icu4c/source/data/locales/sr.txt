@@ -699,13 +699,13 @@ sr{
                     }
                     narrow{
                         afternoon1{"поподне"}
-                        am{"пре подне"}
+                        am{"пре подне"}
                         evening1{"вече"}
                         midnight{"поноћ"}
                         morning1{"јутро"}
                         night1{"ноћ"}
                         noon{"подне"}
-                        pm{"по подне"}
+                        pm{"по подне"}
                     }
                     wide{
                         afternoon1{"поподне"}

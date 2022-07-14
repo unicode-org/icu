@@ -3119,8 +3119,8 @@ public class DateFormatTest extends TestFmwk {
 
                 "h:mm a",     "2015 01 01 10:00:00", "10:00 a.\u00A0m.",
                 "h:mm a",     "2015 01 01 22:00:00", "10:00 p.\u00A0m.",
-                "h:mm aaaaa", "2015 01 01 10:00:00", "10:00 a.\u00A0m.",
-                "h:mm aaaaa", "2015 01 01 22:00:00", "10:00 p.\u00A0m.",
+                "h:mm aaaaa", "2015 01 01 10:00:00", "10:00 a.\u202Fm.",
+                "h:mm aaaaa", "2015 01 01 22:00:00", "10:00 p.\u202Fm.",
             };
 
             expectFormat(EN_DATA, new Locale("en", "", ""));

@@ -305,13 +305,13 @@ hsb{
         zu{"zulušćina"}
         zxx{"žadyn rěčny wobsah"}
     }
-    Languages%long{
-        zh_Hans{"chinšćina (zjednorjena)"}
-        zh_Hant{"chinšćina (tradicionalna)"}
-    }
     Languages%menu{
         yue{"chinšćina (kantonšćina)"}
         zh{"chinšćina (mandarin)"}
+    }
+    Languages%short{
+        en_GB{"jendźelšćina (UK)"}
+        en_US{"jendźelšćina (USA)"}
     }
     Languages%variant{
         ckb{"centralna kurdišćina"}

@@ -597,7 +597,7 @@ hr{
                 d{
                     d{"dd. – dd."}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
                     h{"h – h'h' a"}
@@ -1007,7 +1007,7 @@ hr{
                 d{
                     d{"dd. – dd."}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
                     h{"h – h 'h' a"}

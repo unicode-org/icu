@@ -527,7 +527,7 @@ ca{
                 d{
                     d{"d–d"}
                 }
-                fallback{"{0} - {1}"}
+                fallback{"{0} – {1}"}
                 hm{
                     a{"h:mm a –h:mm a"}
                     h{"h:mm–h:mm a"}
@@ -591,12 +591,12 @@ ca{
                 "p. m.",
             }
             AmPmMarkersAbbr{
-                "a. m.",
-                "p. m.",
+                "a. m.",
+                "p. m.",
             }
             AmPmMarkersNarrow{
-                "a. m.",
-                "p. m.",
+                "a. m.",
+                "p. m.",
             }
             DateTimePatterns{
                 "H:mm:ss (zzzz)",
@@ -809,24 +809,24 @@ ca{
                     abbreviated{
                         afternoon1{"migdia"}
                         afternoon2{"tarda"}
-                        am{"a. m."}
+                        am{"a. m."}
                         evening1{"vespre"}
                         midnight{"mitjanit"}
                         morning1{"matinada"}
                         morning2{"matí"}
                         night1{"nit"}
-                        pm{"p. m."}
+                        pm{"p. m."}
                     }
                     narrow{
                         afternoon1{"migdia"}
                         afternoon2{"tarda"}
-                        am{"a. m."}
+                        am{"a. m."}
                         evening1{"vespre"}
                         midnight{"mitjanit"}
                         morning1{"matinada"}
                         morning2{"matí"}
                         night1{"nit"}
-                        pm{"p. m."}
+                        pm{"p. m."}
                     }
                     wide{
                         afternoon1{"migdia"}
@@ -945,7 +945,7 @@ ca{
                 d{
                     d{"d–d"}
                 }
-                fallback{"{0} - {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
                     h{"h–h a"}

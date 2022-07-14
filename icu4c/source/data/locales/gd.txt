@@ -1286,7 +1286,7 @@ gd{
                 M{
                     M{"L – L"}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
             }
         }
         chinese{
@@ -1535,7 +1535,7 @@ gd{
                 d{
                     d{"d – d"}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"ha – ha"}
                     h{"h – ha"}
@@ -1953,7 +1953,7 @@ gd{
                 d{
                     d{"d – d"}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"ha – ha"}
                     h{"h – ha"}
@@ -2308,7 +2308,7 @@ gd{
                 d{
                     d{"d – d"}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"ha – ha"}
                     h{"h – ha"}
@@ -2661,7 +2661,7 @@ gd{
                 d{
                     d{"d – d"}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"ha – ha"}
                     h{"h – ha"}

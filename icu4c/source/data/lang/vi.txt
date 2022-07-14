@@ -588,8 +588,6 @@ vi{
     }
     Languages%short{
         az{"Tiếng Azeri"}
-        en_GB{"Tiếng Anh (Anh)"}
-        en_US{"Tiếng Anh (Mỹ)"}
     }
     Languages%variant{
         ckb{"Tiếng Kurd Sorani"}

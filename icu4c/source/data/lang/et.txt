@@ -644,7 +644,6 @@ et{
     }
     Languages%short{
         az{"aseri"}
-        en_GB{"Briti inglise"}
         en_US{"USA inglise"}
     }
     Languages%variant{

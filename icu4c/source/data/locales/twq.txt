@@ -77,7 +77,7 @@ twq{
             }
             AmPmMarkersAbbr{
                 "Subbaahi",
-                "Zaarikay b",
+                "Zaarikay b",
             }
             DateTimePatterns{
                 "HH:mm:ss zzzz",

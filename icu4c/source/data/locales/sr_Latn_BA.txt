@@ -20,8 +20,8 @@ sr_Latn_BA{
                 "po podne",
             }
             AmPmMarkersAbbr{
-                "prije podne",
-                "po podne",
+                "prije podne",
+                "po podne",
             }
             dayNames{
                 format{
@@ -76,8 +76,8 @@ sr_Latn_BA{
                 }
                 stand-alone{
                     abbreviated{
-                        am{"prije podne"}
-                        pm{"po podne"}
+                        am{"prije podne"}
+                        pm{"po podne"}
                     }
                     narrow{
                         am{"a"}

@@ -552,6 +552,7 @@ is{
     }
     Languages%short{
         en_GB{"enska (bresk)"}
+        en_US{"enska (BNA)"}
     }
     Scripts{
         Arab{"arabískt"}

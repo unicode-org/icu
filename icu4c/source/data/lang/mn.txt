@@ -424,8 +424,6 @@ mn{
     }
     Languages%short{
         az{"азери"}
-        en_GB{"британи-англи"}
-        en_US{"америк-англи"}
     }
     Languages%variant{
         ckb{"Курд, Сорани"}

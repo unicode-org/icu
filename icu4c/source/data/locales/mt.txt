@@ -241,7 +241,7 @@ mt{
                 MMMEd{"E, d 'ta'’ MMM"}
                 MMMMW{
                     few{"W 'ġimgħat' 'ta''' MMMM"}
-                    many{"W'-il ġimgħa' 'ta''' MMMM"}
+                    many{"W-'il' 'ġimgħa' 'ta''' MMMM"}
                     one{"W 'ġimgħa' 'ta''' MMMM"}
                     other{"W 'ġimgħa' 'ta''' MMMM"}
                     two{"W 'ġimgħatejn' 'ta''' MMMM"}
@@ -268,7 +268,7 @@ mt{
                 yQQQQ{"QQQQ - y"}
                 yw{
                     few{"w 'ġimgħat' 'ta''' Y"}
-                    many{"w'-il ġimgħa' 'ta''' Y"}
+                    many{"w-'il' 'ġimgħa' 'ta''' Y"}
                     one{"w 'ġimgħa' 'ta''' Y"}
                     other{"w 'ġimgħa' 'ta''' Y"}
                     two{"w 'ġimgħatejn' 'ta''' Y"}

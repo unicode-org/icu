@@ -566,8 +566,6 @@ fa{
     }
     Languages%short{
         az{"آذری"}
-        en_GB{"انگلیسی بریتانیا"}
-        en_US{"انگلیسی آمریکا"}
     }
     Languages%variant{
         az{"آذربایجانی"}

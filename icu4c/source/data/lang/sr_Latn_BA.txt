@@ -7,16 +7,12 @@ sr_Latn_BA{
         ms{"sistem mjernih jedinica"}
     }
     Languages{
-        ar_001{"savremeni standardni arapski"}
         arn{"mapudungun"}
         be{"bjeloruski"}
         bm{"bamanankan"}
         bn{"bangla"}
         de{"njemački"}
         de_CH{"švajcarski visoki njemački"}
-        en_GB{"engleski (Velika Britanija)"}
-        es_ES{"španski (Evropa)"}
-        fa_AF{"dari"}
         gsw{"njemački (Švajcarska)"}
         ht{"haićanski kreolski"}
         lo{"laoški"}
@@ -25,16 +21,12 @@ sr_Latn_BA{
         nd{"sjeverni ndebele"}
         nds{"niskonjemački"}
         nqo{"n’ko"}
-        pt_PT{"portugalski (Portugal)"}
         se{"sjeverni sami"}
         shi{"južni šilha"}
         si{"sinhalski"}
-        sw_CD{"kisvahili"}
         tzm{"centralnoatlaski tamašek"}
         xh{"isikosa"}
         zgh{"standardni marokanski tamašek"}
-        zh_Hans{"pojednostavljeni kineski"}
-        zh_Hant{"tradicionalni kineski"}
         zu{"isizulu"}
     }
     Types{

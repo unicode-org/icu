@@ -638,7 +638,6 @@ to{
         zh{"lea fakasiaina-mānitali"}
     }
     Languages%short{
-        en_GB{"lea fakapilitānia"}
         en_US{"lea fakapālangi-ʻAmelika"}
     }
     Languages%variant{

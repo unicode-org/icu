@@ -58,7 +58,7 @@ su{
                 "GGGGGyMd",
             }
             intervalFormats{
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
             }
         }
         gregorian{
@@ -201,7 +201,7 @@ su{
                 }
             }
             intervalFormats{
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
             }
             monthNames{
                 format{

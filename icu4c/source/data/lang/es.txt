@@ -568,6 +568,8 @@ es{
     }
     Languages%short{
         az{"azerí"}
+        en_GB{"inglés (RU)"}
+        en_US{"inglés (EE. UU.)"}
     }
     Languages%variant{
         ckb{"kurdo central"}

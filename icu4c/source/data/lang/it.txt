@@ -648,6 +648,7 @@ it{
     Languages%short{
         az{"azero"}
         en_GB{"inglese (GB)"}
+        en_US{"inglese (USA)"}
     }
     Scripts{
         Afak{"afaka"}

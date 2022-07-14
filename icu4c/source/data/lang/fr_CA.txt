@@ -5,7 +5,6 @@ fr_CA{
     Languages{
         ady{"adygué"}
         ang{"vieil anglais"}
-        ar_001{"arabe standard moderne"}
         asa{"asou"}
         bbj{"ghomala"}
         bik{"bicol"}
@@ -15,19 +14,11 @@ fr_CA{
         chn{"chinook"}
         ckb{"kurde central"}
         cr{"cri"}
-        de_AT{"allemand autrichien"}
-        de_CH{"allemand suisse"}
         den{"slave"}
         dgr{"tlicho"}
         ebu{"embou"}
-        en_AU{"anglais australien"}
-        en_CA{"anglais canadien"}
-        en_GB{"anglais britannique"}
-        en_US{"anglais américain"}
         esu{"yupik central"}
         ewo{"ewondo"}
-        fr_CA{"français canadien"}
-        fr_CH{"français suisse"}
         frc{"cajun"}
         frp{"franco-provençal"}
         goh{"vieux haut-allemand"}
@@ -48,7 +39,6 @@ fr_CA{
         mwv{"mentawai"}
         nds_NL{"bas saxon"}
         njo{"ao naga"}
-        nl_BE{"flamand"}
         nmg{"kwasio"}
         nwc{"newari classique"}
         nyn{"nkole"}
@@ -58,11 +48,8 @@ fr_CA{
         peo{"vieux perse"}
         pfl{"palatin"}
         pro{"ancien occitan"}
-        pt_BR{"portugais brésilien"}
-        pt_PT{"portugais européen"}
         quc{"k’iche’"}
         rar{"rarotonga"}
-        ro_MD{"moldave"}
         sbp{"sangu"}
         sdh{"kurde méridional"}
         sei{"seri"}
@@ -74,8 +61,6 @@ fr_CA{
         sw_CD{"swahili congolais"}
         tru{"turoyo"}
         tzm{"tamazight"}
-        zh_Hans{"chinois simplifié"}
-        zh_Hant{"chinois traditionnel"}
     }
     Languages%long{
         zh_Hans{"chinois, mandarin simplifié"}
@@ -85,6 +70,9 @@ fr_CA{
         ckb{"sorani"}
         yue{"chinois, cantonais"}
         zh{"chinois, mandarin"}
+    }
+    Languages%short{
+        en_US{"anglais (É.-U.)"}
     }
     Languages%variant{
         ug{"ouïghour"}

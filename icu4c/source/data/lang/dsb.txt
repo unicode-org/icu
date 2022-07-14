@@ -305,10 +305,6 @@ dsb{
         zu{"zulu"}
         zxx{"žedno rěcne wopśimjeśe"}
     }
-    Languages%long{
-        zh_Hans{"chinšćina (zjadnorjona)"}
-        zh_Hant{"chinšćina (tradicionalna)"}
-    }
     Languages%menu{
         yue{"chinšćina (kantonšćina)"}
         zh{"chinšćina (mandarin)"}

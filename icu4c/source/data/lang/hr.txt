@@ -571,6 +571,8 @@ hr{
     }
     Languages%short{
         az{"azerski"}
+        en_GB{"engleski (UK)"}
+        en_US{"engleski (SAD)"}
     }
     Languages%variant{
         ckb{"kurdski, soranski"}

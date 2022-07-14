@@ -98,7 +98,7 @@ wo{
                 yyyyQQQQ{"QQQQ y G"}
             }
             intervalFormats{
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
             }
         }
         gregorian{
@@ -299,7 +299,7 @@ wo{
                 }
             }
             intervalFormats{
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
             }
             monthNames{
                 format{

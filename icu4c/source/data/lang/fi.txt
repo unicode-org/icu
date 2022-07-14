@@ -654,6 +654,10 @@ fi{
         kl{"grönlanti"}
         lad{"juutalaisespanja"}
     }
+    Languages%short{
+        en_GB{"englanti (Britannia)"}
+        en_US{"englanti (USA)"}
+    }
     Scripts{
         Adlm{"fulanin adlam-aakkosto"}
         Afak{"afaka"}

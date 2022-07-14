@@ -852,7 +852,7 @@ vi{
                 d{
                     d{"'Ngày' dd–dd"}
                 }
-                fallback{"{0} - {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"h'h' a – h'h' a"}
                     h{"h'h' - h'h' a"}
@@ -1251,7 +1251,7 @@ vi{
                 d{
                     d{"'Ngày' dd–dd"}
                 }
-                fallback{"{0} - {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
                     h{"h–h a"}

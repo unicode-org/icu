@@ -265,6 +265,7 @@ ti{
     }
     Languages%short{
         az{"ኣዘሪ"}
+        en_US{"እንግሊዝኛ (ሕ.መ.)"}
     }
     Languages%variant{
         ckb{"ማእከላይ ኩርዲሽ"}

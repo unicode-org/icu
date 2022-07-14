@@ -208,6 +208,7 @@ plurals:table(nofallback){
         ur{"set3"}
         uz{"set7"}
         ve{"set7"}
+        vec{"set21"}
         vi{"set0"}
         vo{"set7"}
         vun{"set7"}
@@ -322,6 +323,7 @@ plurals:table(nofallback){
         uk{"set45"}
         ur{"set39"}
         uz{"set39"}
+        vec{"set48"}
         vi{"set41"}
         yue{"set39"}
         zh{"set39"}

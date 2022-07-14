@@ -653,6 +653,8 @@ pl{
     }
     Languages%short{
         az{"azerski"}
+        en_GB{"angielski (Wlk. Bryt.)"}
+        en_US{"angielski (USA)"}
     }
     Languages%variant{
         ps{"pasztuński"}

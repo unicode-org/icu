@@ -427,7 +427,7 @@ sr_Latn{
                 d{
                     d{"d–d"}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
                     h{"h–h a"}
@@ -700,13 +700,13 @@ sr_Latn{
                     }
                     narrow{
                         afternoon1{"popodne"}
-                        am{"pre podne"}
+                        am{"pre podne"}
                         evening1{"veče"}
                         midnight{"ponoć"}
                         morning1{"jutro"}
                         night1{"noć"}
                         noon{"podne"}
-                        pm{"po podne"}
+                        pm{"po podne"}
                     }
                     wide{
                         afternoon1{"popodne"}
@@ -778,7 +778,7 @@ sr_Latn{
                 d{
                     d{"d–d"}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
                     h{"h–h a"}

@@ -649,6 +649,8 @@ lt{
     }
     Languages%short{
         az{"azeri"}
+        en_GB{"anglų (JK)"}
+        en_US{"anglų (JAV)"}
     }
     Scripts{
         Afak{"Afaka"}
