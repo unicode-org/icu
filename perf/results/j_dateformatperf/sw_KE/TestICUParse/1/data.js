@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1657814213439,
+  "lastUpdate": 1657821514208,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -508,6 +508,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 534.5083054470067,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "6394a48d067134a99faca4c7329accee0c580301",
+          "message": "ICU-21957 integrate CLDR release-42-m2 (mid milestone) to ICU main for 72",
+          "timestamp": "2022-07-14T10:56:39-07:00",
+          "tree_id": "313c19455be6773aa335e6e10e0b9518d142b996",
+          "url": "https://github.com/unicode-org/icu/commit/6394a48d067134a99faca4c7329accee0c580301"
+        },
+        "date": 1657821507622,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 364.7477029566252,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
