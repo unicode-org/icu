@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1657814203016,
+  "lastUpdate": 1657820567401,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -208,6 +208,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 214.3921035394423,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "william.marlow@ibm.com",
+            "name": "William Marlow",
+            "username": "lux01"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "9a7b0e08d0bb8ed11775c76f935eabc155fdc795",
+          "message": "ICU-22086 Add ibm-clang_r/ibm-clang++_r to runConfigureICU",
+          "timestamp": "2022-07-14T17:38:59Z",
+          "tree_id": "0fedd85fc633e091452763491c5688581ca32177",
+          "url": "https://github.com/unicode-org/icu/commit/9a7b0e08d0bb8ed11775c76f935eabc155fdc795"
+        },
+        "date": 1657820549633,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 227.14913881595672,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
