@@ -764,6 +764,7 @@ free(result);
     /*Testing unum_getAttribute and  unum_setAttribute() */
     log_verbose("\nTesting get and set Attributes\n");
     attr=UNUM_GROUPING_SIZE;
+    assertTrue("unum_hasAttribute returned false for UNUM_GROUPING_SIZE", unum_hasAttribute(def, attr));
     newvalue=unum_getAttribute(def, attr);
     newvalue=2;
     unum_setAttribute(def, attr, newvalue);
@@ -773,6 +774,7 @@ free(result);
         log_verbose("Pass: setting and getting attributes for UNUM_GROUPING_SIZE works fine\n");
 
     attr=UNUM_MULTIPLIER;
+    assertTrue("unum_hasAttribute returned false for UNUM_MULTIPLIER", unum_hasAttribute(def, attr));
     newvalue=unum_getAttribute(def, attr);
     newvalue=8;
     unum_setAttribute(def, attr, newvalue);
@@ -782,6 +784,7 @@ free(result);
         log_verbose("Pass:setting and getting attributes for UNUM_MULTIPLIER works fine\n");
 
     attr=UNUM_SECONDARY_GROUPING_SIZE;
+    assertTrue("unum_hasAttribute returned false for UNUM_SECONDARY_GROUPING_SIZE", unum_hasAttribute(def, attr));
     newvalue=unum_getAttribute(def, attr);
     newvalue=2;
     unum_setAttribute(def, attr, newvalue);
@@ -795,6 +798,7 @@ free(result);
     log_verbose("\nTesting get and set attributes extensively\n");
     for(attr=UNUM_PARSE_INT_ONLY; attr<= UNUM_PADDING_POSITION; attr=(UNumberFormatAttribute)((int32_t)attr + 1) )
     {
+        assertTrue("unum_hasAttribute returned false", unum_hasAttribute(fr, attr));
         newvalue=unum_getAttribute(fr, attr);
         unum_setAttribute(def, attr, newvalue);
         if(unum_getAttribute(def,attr)!=unum_getAttribute(fr, attr))
@@ -807,6 +811,10 @@ free(result);
     log_verbose("\nTesting spellout format\n");
     if (spellout_def)
     {
+        // check that unum_hasAttribute() works right with a spellout formatter
+        assertTrue("unum_hasAttribute() returned true for UNUM_MULTIPLIER on a spellout formatter", !unum_hasAttribute(spellout_def, UNUM_MULTIPLIER));
+        assertTrue("unum_hasAttribute() returned false for UNUM_LENIENT_PARSE on a spellout formatter", unum_hasAttribute(spellout_def, UNUM_LENIENT_PARSE));
+
         static const int32_t values[] = { 0, -5, 105, 1005, 105050 };
         for (i = 0; i < UPRV_LENGTHOF(values); ++i) {
             UChar buffer[128];

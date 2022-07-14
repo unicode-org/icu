@@ -508,6 +508,28 @@ unum_countAvailable()
     return uloc_countAvailable();
 }
 
+U_CAPI bool U_EXPORT2
+unum_hasAttribute(const UNumberFormat*          fmt,
+          UNumberFormatAttribute  attr)
+{
+    const NumberFormat* nf = reinterpret_cast<const NumberFormat*>(fmt);
+    bool isDecimalFormat = dynamic_cast<const DecimalFormat*>(nf) != NULL;
+    
+    switch (attr) {
+        case UNUM_LENIENT_PARSE:
+        case UNUM_MAX_INTEGER_DIGITS:
+        case UNUM_MIN_INTEGER_DIGITS:
+        case UNUM_INTEGER_DIGITS:
+        case UNUM_MAX_FRACTION_DIGITS:
+        case UNUM_MIN_FRACTION_DIGITS:
+        case UNUM_FRACTION_DIGITS:
+        case UNUM_ROUNDING_MODE:
+            return true;
+        default:
+            return isDecimalFormat;
+    }
+}
+
 U_CAPI int32_t U_EXPORT2
 unum_getAttribute(const UNumberFormat*          fmt,
           UNumberFormatAttribute  attr)
