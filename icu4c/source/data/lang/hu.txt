@@ -570,6 +570,8 @@ hu{
     }
     Languages%short{
         az{"azeri"}
+        en_GB{"angol (UK)"}
+        en_US{"angol (USA)"}
     }
     Languages%variant{
         ckb{"kurd, szoráni"}

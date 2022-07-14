@@ -456,7 +456,6 @@ sw{
         zza{"Kizaza"}
     }
     Languages%long{
-        zh_Hans{"Kichina (Kilichorahisishwa)"}
         zh_Hant{"Kichina (cha jadi)"}
     }
     Languages%menu{

@@ -4003,4 +4003,7 @@ ja{
             }
         }
     }
+    personNames{
+        foreignSpaceReplacement{"・"}
+    }
 }

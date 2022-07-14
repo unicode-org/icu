@@ -958,6 +958,7 @@ likelySubtags:table(nofallback){
     nyn{"nyn_Latn_UG"}
     nzi{"nzi_Latn_GH"}
     oc{"oc_Latn_FR"}
+    oc_ES{"oc_Latn_ES"}
     ogc{"ogc_Latn_ZZ"}
     oj{"oj_Cans_CA"}
     ojs{"ojs_Cans_CA"}

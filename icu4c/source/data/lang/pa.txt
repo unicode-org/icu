@@ -435,6 +435,8 @@ pa{
     }
     Languages%short{
         az{"ਅਜ਼ੇਰੀ"}
+        en_GB{"ਅੰਗਰੇਜ਼ੀ (ਯੂ.ਕੇ.)"}
+        en_US{"ਅੰਗਰੇਜ਼ੀ (ਯੂ.ਐੱਸ.)"}
     }
     Languages%variant{
         ckb{"ਕੁਰਦਿਸ਼, ਸੋਰਾਨੀ"}

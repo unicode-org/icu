@@ -550,9 +550,6 @@ lv{
         yue{"ķīniešu (kantoniešu)"}
         zh{"ķīniešu (mandarīnu)"}
     }
-    Languages%short{
-        en_GB{"angļu (Lielbritānija)"}
-    }
     Languages%variant{
         ckb{"sorani kurdu"}
     }

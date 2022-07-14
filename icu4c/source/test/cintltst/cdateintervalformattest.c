@@ -69,7 +69,7 @@ static const DateIntervalFormatTestItem testItems[] = {
     { "en", "yMMMEd",   CAP_NONE,  tzUSPacific, Date201009270800, Date201009270800 + 31.0*_DAY,  u"Mon, Sep 27\u2009\u2013\u2009Thu, Oct 28, 2010" },
     { "en", "yMMMEd",   CAP_NONE,  tzUSPacific, Date201009270800, Date201009270800 + 410.0*_DAY, u"Mon, Sep 27, 2010\u2009\u2013\u2009Fri, Nov 11, 2011" },
     { "de", "Hm",       CAP_NONE,  tzUSPacific, Date201009270800, Date201009270800 + 12.0*_HOUR, u"08:00\u201320:00 Uhr" },
-    { "de", "Hm",       CAP_NONE,  tzUSPacific, Date201009270800, Date201009270800 + 31.0*_DAY,  u"27.9.2010, 08:00 \u2013 28.10.2010, 08:00" },
+    { "de", "Hm",       CAP_NONE,  tzUSPacific, Date201009270800, Date201009270800 + 31.0*_DAY,  u"27.9.2010, 08:00\u2009\u2013\u200928.10.2010, 08:00" },
     { "ja", "MMMd",     CAP_NONE,  tzUSPacific, Date201009270800, Date201009270800 + 1.0*_DAY,   u"9月27日～28日" },
     { "cs", "MMMEd",    CAP_NONE,  tzUSPacific, Date201009270800, Date201009270800 + 60.0*_DAY,  u"po 27. 9. \u2013 pá 26. 11." },
     { "cs", "yMMMM",    CAP_NONE,  tzUSPacific, Date201009270800, Date201009270800 + 60.0*_DAY,  u"září\u2013listopad 2010" },
@@ -194,21 +194,21 @@ static const ExpectPosAndFormat exp_en_HHmm[kNumDeltas] = {
     {  3,  5, "09:00\\u2009\\u2013\\u200909:20" },
     {  3,  5, "09:00\\u2009\\u2013\\u200911:00" },
     {  3,  5, "09:00\\u2009\\u2013\\u200921:00" },
-    { 15, 17, "11/20/2014, 09:00 \\u2013 11/28/2014, 09:00" },
-    { 15, 17, "11/20/2014, 09:00 \\u2013 12/6/2014, 09:00" },
-    { 15, 17, "11/20/2014, 09:00 \\u2013 2/28/2015, 09:00" }
+    { 15, 17, "11/20/2014, 09:00\\u2009\\u2013\\u200911/28/2014, 09:00" },
+    { 15, 17, "11/20/2014, 09:00\\u2009\\u2013\\u200912/6/2014, 09:00" },
+    { 15, 17, "11/20/2014, 09:00\\u2009\\u2013\\u20092/28/2015, 09:00" }
 };
 
 static const ExpectPosAndFormat exp_en_HHmmss[kNumDeltas] = {
     {  3,  5, "09:00:00" },
     {  3,  5, "09:00:00" },
-    {  3,  5, "09:00:00 \\u2013 09:00:20" },
-    {  3,  5, "09:00:00 \\u2013 09:20:00" },
-    {  3,  5, "09:00:00 \\u2013 11:00:00" },
-    {  3,  5, "09:00:00 \\u2013 21:00:00" },
-    { 15, 17, "11/20/2014, 09:00:00 \\u2013 11/28/2014, 09:00:00" },
-    { 15, 17, "11/20/2014, 09:00:00 \\u2013 12/6/2014, 09:00:00" },
-    { 15, 17, "11/20/2014, 09:00:00 \\u2013 2/28/2015, 09:00:00" }
+    {  3,  5, "09:00:00\\u2009\\u2013\\u200909:00:20" },
+    {  3,  5, "09:00:00\\u2009\\u2013\\u200909:20:00" },
+    {  3,  5, "09:00:00\\u2009\\u2013\\u200911:00:00" },
+    {  3,  5, "09:00:00\\u2009\\u2013\\u200921:00:00" },
+    { 15, 17, "11/20/2014, 09:00:00\\u2009\\u2013\\u200911/28/2014, 09:00:00" },
+    { 15, 17, "11/20/2014, 09:00:00\\u2009\\u2013\\u200912/6/2014, 09:00:00" },
+    { 15, 17, "11/20/2014, 09:00:00\\u2009\\u2013\\u20092/28/2015, 09:00:00" }
 };
 
 static const ExpectPosAndFormat exp_en_yyMMdd[kNumDeltas] = {
@@ -230,33 +230,33 @@ static const ExpectPosAndFormat exp_en_yyMMddHHmm[kNumDeltas] = {
     { 13, 15, "11/20/14, 09:00\\u2009\\u2013\\u200909:20" },
     { 13, 15, "11/20/14, 09:00\\u2009\\u2013\\u200911:00" },
     { 13, 15, "11/20/14, 09:00\\u2009\\u2013\\u200921:00" },
-    { 13, 15, "11/20/14, 09:00 \\u2013 11/28/14, 09:00" },
-    { 13, 15, "11/20/14, 09:00 \\u2013 12/06/14, 09:00" },
-    { 13, 15, "11/20/14, 09:00 \\u2013 02/28/15, 09:00" }
+    { 13, 15, "11/20/14, 09:00\\u2009\\u2013\\u200911/28/14, 09:00" },
+    { 13, 15, "11/20/14, 09:00\\u2009\\u2013\\u200912/06/14, 09:00" },
+    { 13, 15, "11/20/14, 09:00\\u2009\\u2013\\u200902/28/15, 09:00" }
 };
 
 static const ExpectPosAndFormat exp_en_yyMMddHHmmss[kNumDeltas] = {
     { 13, 15, "11/20/14, 09:00:00" },
     { 13, 15, "11/20/14, 09:00:00" },
-    { 13, 15, "11/20/14, 09:00:00 \\u2013 09:00:20" },
-    { 13, 15, "11/20/14, 09:00:00 \\u2013 09:20:00" },
-    { 13, 15, "11/20/14, 09:00:00 \\u2013 11:00:00" },
-    { 13, 15, "11/20/14, 09:00:00 \\u2013 21:00:00" },
-    { 13, 15, "11/20/14, 09:00:00 \\u2013 11/28/14, 09:00:00" },
-    { 13, 15, "11/20/14, 09:00:00 \\u2013 12/06/14, 09:00:00" },
-    { 13, 15, "11/20/14, 09:00:00 \\u2013 02/28/15, 09:00:00" }
+    { 13, 15, "11/20/14, 09:00:00\\u2009\\u2013\\u200909:00:20" },
+    { 13, 15, "11/20/14, 09:00:00\\u2009\\u2013\\u200909:20:00" },
+    { 13, 15, "11/20/14, 09:00:00\\u2009\\u2013\\u200911:00:00" },
+    { 13, 15, "11/20/14, 09:00:00\\u2009\\u2013\\u200921:00:00" },
+    { 13, 15, "11/20/14, 09:00:00\\u2009\\u2013\\u200911/28/14, 09:00:00" },
+    { 13, 15, "11/20/14, 09:00:00\\u2009\\u2013\\u200912/06/14, 09:00:00" },
+    { 13, 15, "11/20/14, 09:00:00\\u2009\\u2013\\u200902/28/15, 09:00:00" }
 };
 
 static const ExpectPosAndFormat exp_en_yMMMdhmmssz[kNumDeltas] = {
     { 16, 18, "Nov 20, 2014, 9:00:00\\u202FAM GMT" },
     { 16, 18, "Nov 20, 2014, 9:00:00\\u202FAM GMT" },
-    { 16, 18, "Nov 20, 2014, 9:00:00\\u202FAM GMT \\u2013 9:00:20\\u202FAM GMT" },
-    { 16, 18, "Nov 20, 2014, 9:00:00\\u202FAM GMT \\u2013 9:20:00\\u202FAM GMT" },
-    { 16, 18, "Nov 20, 2014, 9:00:00\\u202FAM GMT \\u2013 11:00:00\\u202FAM GMT" },
-    { 16, 18, "Nov 20, 2014, 9:00:00\\u202FAM GMT \\u2013 9:00:00\\u202FPM GMT" },
-    { 16, 18, "Nov 20, 2014, 9:00:00\\u202FAM GMT \\u2013 Nov 28, 2014, 9:00:00\\u202FAM GMT" },
-    { 16, 18, "Nov 20, 2014, 9:00:00\\u202FAM GMT \\u2013 Dec 6, 2014, 9:00:00\\u202FAM GMT" },
-    { 16, 18, "Nov 20, 2014, 9:00:00\\u202FAM GMT \\u2013 Feb 28, 2015, 9:00:00\\u202FAM GMT" }
+    { 16, 18, "Nov 20, 2014, 9:00:00\\u202FAM GMT\\u2009\\u2013\\u20099:00:20\\u202FAM GMT" },
+    { 16, 18, "Nov 20, 2014, 9:00:00\\u202FAM GMT\\u2009\\u2013\\u20099:20:00\\u202FAM GMT" },
+    { 16, 18, "Nov 20, 2014, 9:00:00\\u202FAM GMT\\u2009\\u2013\\u200911:00:00\\u202FAM GMT" },
+    { 16, 18, "Nov 20, 2014, 9:00:00\\u202FAM GMT\\u2009\\u2013\\u20099:00:00\\u202FPM GMT" },
+    { 16, 18, "Nov 20, 2014, 9:00:00\\u202FAM GMT\\u2009\\u2013\\u2009Nov 28, 2014, 9:00:00\\u202FAM GMT" },
+    { 16, 18, "Nov 20, 2014, 9:00:00\\u202FAM GMT\\u2009\\u2013\\u2009Dec 6, 2014, 9:00:00\\u202FAM GMT" },
+    { 16, 18, "Nov 20, 2014, 9:00:00\\u202FAM GMT\\u2009\\u2013\\u2009Feb 28, 2015, 9:00:00\\u202FAM GMT" }
 };
 
 static const ExpectPosAndFormat exp_ja_yyMMddHHmm[kNumDeltas] = {
@@ -367,7 +367,7 @@ static void TestFormatToResult() {
 
     {
         const char* message = "Field position test 1";
-        const UChar* expectedString = u"27. September 2010 um 15:00 – 2. März 2011 um 18:30";
+        const UChar* expectedString = u"27. September 2010 um 15:00\u2009\u2013\u20092. März 2011 um 18:30";
         udtitvfmt_formatToResult(fmt, Date201009270800, Date201103021030, fdi, &ec);
         assertSuccess("Formatting", &ec);
         static const UFieldPositionWithCategory expectedFieldPositions[] = {
@@ -437,7 +437,7 @@ static void TestFormatCalendarToResult() {
 
     {
         const char* message = "Field position test 1";
-        const UChar* expectedString = u"27. September 2010 um 15:00 – 2. März 2011 um 18:30";
+        const UChar* expectedString = u"27. September 2010 um 15:00\u2009\u2013\u20092. März 2011 um 18:30";
         udtitvfmt_formatCalendarToResult(fmt, ucal1, ucal2, fdi, &ec);
         assertSuccess("Formatting", &ec);
         static const UFieldPositionWithCategory expectedFieldPositions[] = {
@@ -490,9 +490,9 @@ static void TestFormatCalendarToResult() {
         // Date across Julian Gregorian change date.
         ucal_setMillis(ucal4, Date158210140000, &ec);
         ucal_setMillis(ucal5, Date158210160000, &ec);
-        //                                        1         2         3         4
-        //                              012345678901234567890123456789012345678901234567890
-        const UChar* expectedString = u"4. Oktober 1582 um 00:00 – 16. Oktober 1582 um 00:00";
+        //                                        1         2                        3         4
+        //                              0123456789012345678901234     5     6     789012345678901234567890
+        const UChar* expectedString = u"4. Oktober 1582 um 00:00\u2009\u2013\u200916. Oktober 1582 um 00:00";
         udtitvfmt_formatCalendarToResult(fmt, ucal4, ucal5, fdi, &ec);
         assertSuccess("Formatting", &ec);
         static const UFieldPositionWithCategory expectedFieldPositions[] = {
@@ -524,9 +524,9 @@ static void TestFormatCalendarToResult() {
         ucal_setMillis(ucal4, Date158210140000, &ec);
         ucal_setMillis(ucal5, Date158210160000, &ec);
         const char* message = "Field position test 4";
-        //                                        1         2         3         4
-        //                              012345678901234567890123456789012345678901234567890
-        const UChar* expectedString = u"14. Oktober 1582 um 00:00 – 16. Oktober 1582 um 00:00";
+        //                                        1         2                        3         4
+        //                              01234567890123456789012345     6     7     89012345678901234567890
+        const UChar* expectedString = u"14. Oktober 1582 um 00:00\u2009\u2013\u200916. Oktober 1582 um 00:00";
         udtitvfmt_formatCalendarToResult(fmt, ucal4, ucal5, fdi, &ec);
         assertSuccess("Formatting", &ec);
         static const UFieldPositionWithCategory expectedFieldPositions[] = {

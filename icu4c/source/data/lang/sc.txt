@@ -278,6 +278,7 @@ sc{
     }
     Languages%short{
         az{"azeru"}
+        en_GB{"inglesu (RU)"}
         en_US{"inglesu (USA)"}
     }
     Languages%variant{

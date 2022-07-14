@@ -594,7 +594,7 @@ bs{
                 d{
                     d{"d. – d."}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
                     h{"h – h'h' a"}
@@ -1003,7 +1003,7 @@ bs{
                 d{
                     d{"d–d."}
                 }
-                fallback{"{0} - {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
                     h{"h – h'h' a"}

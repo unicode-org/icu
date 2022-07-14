@@ -48,7 +48,6 @@ pt_PT{
         es_ES{"espanhol europeu"}
         es_MX{"espanhol mexicano"}
         et{"estónio"}
-        fa_AF{"dari"}
         fon{"fon"}
         fr_CA{"francês canadiano"}
         fr_CH{"francês suíço"}
@@ -79,7 +78,6 @@ pt_PT{
         nds{"baixo-alemão"}
         nds_NL{"baixo-saxão"}
         nl{"neerlandês"}
-        nl_BE{"flamengo"}
         nn{"norueguês nynorsk"}
         non{"nórdico antigo"}
         oc{"occitano"}
@@ -95,7 +93,6 @@ pt_PT{
         pt_PT{"português europeu"}
         raj{"rajastanês"}
         rhg{"rohingya"}
-        ro_MD{"moldávio"}
         se{"sami do norte"}
         sga{"irlandês antigo"}
         shu{"árabe do Chade"}
@@ -116,8 +113,6 @@ pt_PT{
         xog{"soga"}
         yo{"ioruba"}
         zgh{"tamazight marroquino padrão"}
-        zh_Hans{"chinês simplificado"}
-        zh_Hant{"chinês tradicional"}
         zun{"zuni"}
         zza{"zaza"}
     }
@@ -132,6 +127,7 @@ pt_PT{
     Languages%short{
         az{"azeri"}
         en_GB{"inglês (RU)"}
+        en_US{"inglês (EUA)"}
     }
     Languages%variant{
         ckb{"sorani (curdo)"}

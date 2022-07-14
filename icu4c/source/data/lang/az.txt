@@ -539,6 +539,8 @@ az{
     }
     Languages%short{
         az{"azəri"}
+        en_GB{"ingilis (BK)"}
+        en_US{"ingilis (ABŞ)"}
     }
     Languages%variant{
         ckb{"Kürdcə, sorani"}

@@ -156,7 +156,7 @@ ceb{
                 d{
                     d{"d – d"}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 y{
                     y{"y – y G"}
                 }
@@ -444,7 +444,7 @@ ceb{
                 d{
                     d{"d – d"}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     h{"h – h a"}
                 }

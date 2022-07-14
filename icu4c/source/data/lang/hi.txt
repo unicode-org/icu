@@ -554,7 +554,6 @@ hi{
     Languages%short{
         az{"अज़ेरी"}
         en_GB{"यू॰के॰ अंग्रेज़ी"}
-        en_US{"अमेरिकी अंग्रेज़ी"}
     }
     Languages%variant{
         ps{"पुश्तो"}

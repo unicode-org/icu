@@ -559,6 +559,8 @@ cy{
     }
     Languages%short{
         az{"Aseri"}
+        en_GB{"Saesneg (DU)"}
+        en_US{"Saesneg (UDA)"}
     }
     Scripts{
         Arab{"Arabaidd"}

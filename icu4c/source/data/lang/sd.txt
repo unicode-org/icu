@@ -414,7 +414,6 @@ sd{
     }
     Languages%short{
         az{"ازري"}
-        en_GB{"برطانوي انگريزي"}
         en_US{"انگريزي (آمريڪا)"}
     }
     Scripts{

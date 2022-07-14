@@ -540,6 +540,8 @@ sl{
     }
     Languages%short{
         az{"azerščina"}
+        en_GB{"angleščina (ZK)"}
+        en_US{"angleščina (ZDA)"}
     }
     Scripts{
         Arab{"arabski"}

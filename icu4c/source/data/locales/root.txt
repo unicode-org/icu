@@ -1101,7 +1101,7 @@ root{
                 d{
                     d{"d–d"}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
                     h{"h–h a"}
@@ -1556,7 +1556,7 @@ root{
                 d{
                     d{"d–d"}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
                     h{"h–h a"}
@@ -1874,7 +1874,7 @@ root{
                 d{
                     d{"d–d"}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
                     h{"h–h a"}
@@ -3290,6 +3290,61 @@ root{
             stricter{
                 "[,٫⹁︐﹐，]",
                 "[.․﹒．｡]",
+            }
+        }
+    }
+    personNames{
+        foreignSpaceReplacement{" "}
+        initialPattern{
+            initial{"{0}."}
+            initialSequence{"{0} {1}"}
+        }
+        nameOrderLocales{
+            givenFirst{"und"}
+            surnameFirst{
+                "hu",
+                "ja",
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+        namePattern{
+            givenFirst-long-monogram-formal{
+                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-monogram-a"
+                "llCaps}"
+            }
+            givenFirst-long-referring-formal{"{prefix} {given} {given2} {surname} {surname2} {suffix}"}
+            sorting-long-referring-formal{"{surname} {surname2}, {prefix} {given} {given2} {suffix}"}
+            surnameFirst-long-monogram-formal{
+                "{surname-monogram-allCaps}{given-monogram-allCaps}{given2-monogram-a"
+                "llCaps}"
+            }
+            surnameFirst-long-referring-formal{"{surname} {surname2} {prefix} {given} {given2} {suffix}"}
+        }
+        sampleName{
+            full{
+                given{"∅∅∅"}
+                given-informal{"∅∅∅"}
+                given2{"∅∅∅"}
+                prefix{"∅∅∅"}
+                suffix{"∅∅∅"}
+                surname-core{"∅∅∅"}
+                surname-prefix{"∅∅∅"}
+                surname2{"∅∅∅"}
+            }
+            given12Surname{
+                given{"∅∅∅"}
+                given2{"∅∅∅"}
+                surname{"∅∅∅"}
+            }
+            givenOnly{
+                given{"∅∅∅"}
+            }
+            givenSurnameOnly{
+                given{"∅∅∅"}
+                surname{"∅∅∅"}
             }
         }
     }

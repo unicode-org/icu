@@ -39,7 +39,6 @@ mai{
     }
     Languages%short{
         en_GB{"यू॰के॰ अंग्रेज़ी"}
-        en_US{"अमेरिकी अंग्रेज़ी"}
     }
     Scripts{
         Arab{"अरबी"}

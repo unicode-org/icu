@@ -13653,6 +13653,7 @@ supplementalData:table(nofallback){
         frr{
             primary{
                 scripts{"Latn"}
+                territories{"DE"}
             }
         }
         frs{
@@ -15796,7 +15797,10 @@ supplementalData:table(nofallback){
                 scripts{"Latn"}
             }
             secondary{
-                territories{"FR"}
+                territories{
+                    "ES",
+                    "FR",
+                }
             }
         }
         oj{
@@ -17369,6 +17373,15 @@ supplementalData:table(nofallback){
         vec{
             primary{
                 scripts{"Latn"}
+            }
+            secondary{
+                territories{
+                    "IT",
+                    "BR",
+                    "HR",
+                    "SI",
+                    "MX",
+                }
             }
         }
         vep{
@@ -28700,6 +28713,9 @@ supplementalData:table(nofallback){
                 officialStatus{"official_regional"}
                 populationShareF:int{48700000}
             }
+            oc{
+                populationShareF:int{46100000}
+            }
             territoryF:intvector{
                 62177800,
                 49977000,
@@ -31713,17 +31729,17 @@ supplementalData:table(nofallback){
         }
         PK{
             bal{
-                populationShareF:int{48370000}
+                populationShareF:int{48260000}
             }
             bft{
-                populationShareF:int{47180000}
+                populationShareF:int{47204000}
             }
             bgn{
-                populationShareF:int{47570000}
+                populationShareF:int{47505000}
                 writingShareF:int{48500000}
             }
             brh{
-                populationShareF:int{48130000}
+                populationShareF:int{48127000}
             }
             btv{
                 populationShareF:int{46190000}
@@ -31736,58 +31752,55 @@ supplementalData:table(nofallback){
                 populationShareF:int{47660000}
             }
             gjk{
-                populationShareF:int{47110000}
+                populationShareF:int{46630000}
             }
             gju{
-                populationShareF:int{47200000}
+                populationShareF:int{47188000}
             }
             hnd{
-                populationShareF:int{47410000}
+                populationShareF:int{47569000}
             }
             hno{
-                populationShareF:int{48120000}
+                populationShareF:int{48171700}
             }
             khw{
-                populationShareF:int{47150000}
+                populationShareF:int{47169000}
             }
             ks{
-                populationShareF:int{46690000}
+                populationShareF:int{47174000}
             }
             kvx{
-                populationShareF:int{47160000}
+                populationShareF:int{47172000}
             }
             kxp{
-                populationShareF:int{47110000}
+                populationShareF:int{46860000}
             }
             lah{
                 populationShareF:int{49400000}
             }
             mvy{
-                populationShareF:int{47140000}
+                populationShareF:int{46960000}
             }
             pa_Arab{
                 populationShareF:int{49700000}
             }
             ps{
-                populationShareF:int{49150000}
+                populationShareF:int{49158000}
             }
             sd{
-                populationShareF:int{49120000}
+                populationShareF:int{49149000}
             }
             skr{
                 literacyShareF:int{48100000}
-                populationShareF:int{48910000}
+                populationShareF:int{49124600}
             }
             territoryF:intvector{
                 62106100,
                 49549000,
                 58233501,
             }
-            tg_Arab{
-                populationShareF:int{47330000}
-            }
             trw{
-                populationShareF:int{46530000}
+                populationShareF:int{46550000}
             }
             ur{
                 officialStatus{"official"}
@@ -34547,8 +34560,8 @@ supplementalData:table(nofallback){
         JP{
             allowed{
                 "H",
-                "h",
                 "K",
+                "h",
             }
             preferred{"H"}
         }

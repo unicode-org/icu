@@ -176,6 +176,7 @@ tg{
     }
     Languages%short{
         en_GB{"англисӣ (ШМ)"}
+        en_US{"англисӣ (ИМ)"}
     }
     Scripts{
         Arab{"Арабӣ"}

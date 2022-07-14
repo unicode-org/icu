@@ -559,6 +559,8 @@ ta{
     }
     Languages%short{
         az{"அஸேரி"}
+        en_GB{"ஆங்கிலம் (யூகே)"}
+        en_US{"ஆங்கிலம் (யூஎஸ்)"}
     }
     Languages%variant{
         ps{"புஷ்தோ"}

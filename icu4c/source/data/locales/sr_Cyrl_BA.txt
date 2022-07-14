@@ -20,8 +20,8 @@ sr_Cyrl_BA{
                 "по подне",
             }
             AmPmMarkersAbbr{
-                "прије подне",
-                "по подне",
+                "прије подне",
+                "по подне",
             }
             dayNames{
                 format{
@@ -77,8 +77,8 @@ sr_Cyrl_BA{
                 }
                 stand-alone{
                     abbreviated{
-                        am{"прије подне"}
-                        pm{"по подне"}
+                        am{"прије подне"}
+                        pm{"по подне"}
                     }
                     narrow{
                         am{"а"}

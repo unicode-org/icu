@@ -410,15 +410,13 @@ ky{
         zxx{"тилдик мазмун жок"}
         zza{"зазача"}
     }
-    Languages%long{
-        zh_Hant{"кытайча (салттуу)"}
-    }
     Languages%menu{
         yue{"кытайча (кантончо)"}
         zh{"кытайча (мандарин)"}
     }
     Languages%short{
         az{"азерче"}
+        en_US{"англисче (АКШ)"}
     }
     Scripts{
         Arab{"Араб"}

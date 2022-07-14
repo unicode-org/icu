@@ -561,10 +561,6 @@ sk{
         yue{"čínština (kantonská)"}
         zh{"čínština (mandarínska)"}
     }
-    Languages%short{
-        en_GB{"angličtina (britská)"}
-        en_US{"angličtina (americká)"}
-    }
     Scripts{
         Arab{"arabské"}
         Aran{"nastaliq"}

@@ -542,6 +542,8 @@ sr{
     }
     Languages%short{
         az{"азерски"}
+        en_GB{"енглески (УК)"}
+        en_US{"енглески (САД)"}
     }
     Languages%variant{
         ps{"пашто"}

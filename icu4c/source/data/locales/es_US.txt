@@ -150,7 +150,7 @@ es_US{
                 MMMd{
                     d{"d–d 'de' MMM"}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
                 }

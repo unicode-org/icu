@@ -83,8 +83,8 @@ bas{
                 "I ɓugajɔp",
             }
             AmPmMarkersAbbr{
-                "I bikɛ̂glà",
-                "I ɓugajɔp",
+                "I bikɛ̂glà",
+                "I ɓugajɔp",
             }
             DateTimePatterns{
                 "HH:mm:ss zzzz",

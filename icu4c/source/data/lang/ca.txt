@@ -610,6 +610,7 @@ ca{
     Languages%short{
         az{"àzeri"}
         en_GB{"anglès (GB)"}
+        en_US{"anglès (EUA)"}
     }
     Languages%variant{
         ckb{"kurd sorani"}

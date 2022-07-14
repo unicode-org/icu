@@ -410,6 +410,7 @@ tk{
     }
     Languages%short{
         az{"azeri dili"}
+        en_US{"iňlis dili (ABŞ)"}
     }
     Scripts{
         Arab{"Arap elipbiýi"}

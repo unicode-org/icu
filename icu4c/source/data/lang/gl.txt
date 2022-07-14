@@ -442,6 +442,8 @@ gl{
     }
     Languages%short{
         az{"azerí"}
+        en_GB{"inglés (RU)"}
+        en_US{"inglés (EUA)"}
     }
     Languages%variant{
         ckb{"sorani"}

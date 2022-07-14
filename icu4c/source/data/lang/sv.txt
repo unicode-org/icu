@@ -642,10 +642,6 @@ sv{
         zxx{"inget språkligt innehåll"}
         zza{"zazaiska"}
     }
-    Languages%long{
-        zh_Hans{"förenklad kinesiska"}
-        zh_Hant{"traditionell kinesiska"}
-    }
     Languages%menu{
         ars{"arabiska (najd)"}
         ckb{"kurdiska (sorani)"}
@@ -653,8 +649,6 @@ sv{
     }
     Languages%short{
         az{"azeriska"}
-        en_GB{"brittisk engelska"}
-        en_US{"amerikansk engelska"}
     }
     Languages%variant{
         ps{"pashto"}

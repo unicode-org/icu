@@ -73,8 +73,8 @@ kab{
                 "n tmeddit",
             }
             AmPmMarkersAbbr{
-                "n tufat",
-                "n tmeddit",
+                "n tufat",
+                "n tmeddit",
             }
             DateTimePatterns{
                 "h:mm:ss a zzzz",

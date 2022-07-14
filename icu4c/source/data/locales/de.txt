@@ -612,7 +612,7 @@ de{
                 d{
                     d{"d.–d."}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
                     h{"h–h a"}
@@ -1029,7 +1029,7 @@ de{
                 d{
                     d{"d.–d."}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     a{"h 'Uhr' a – h 'Uhr' a"}
                     h{"h – h 'Uhr' a"}
