@@ -2481,4 +2481,14 @@ public class DateIntervalFormatTest extends TestFmwk {
                      formatted.toString());
         verifyFields(formatted, expectedFields);
     }
+    
+    @Test
+    public void testTicket21939() {
+        // the test here is just to check that this particular skeleton doesn't
+        // lead to an IllegalArgumentException
+        DateIntervalFormat dif = DateIntervalFormat.getInstance("rMdhm", ULocale.forLanguageTag("en-u-ca-chinese"));
+        DateFormat df = dif.getDateFormat();
+        SimpleDateFormat sdf = (SimpleDateFormat)df;
+        assertEquals("Wrong date format", "M/d/r, h:mm\u202Fa", sdf.toPattern());
+    }
 }

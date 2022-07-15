@@ -2804,8 +2804,8 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                     char ch1 = original.getFieldChar(field);
                     char ch2 = value.charAt(0);
                     if ( allowDuplicateFields ||
-                            (ch1 == 'r' && ch2 == 'U') ||
-                            (ch1 == 'U' && ch2 == 'r') ) {
+                            (ch1 == 'r' && (ch2 == 'U' || ch2 == 'y')) ||
+                            ((ch1 == 'U' || ch1 == 'y') && ch2 == 'r') ) {
                         continue;
                     }
                     throw new IllegalArgumentException("Conflicting fields:\t"
