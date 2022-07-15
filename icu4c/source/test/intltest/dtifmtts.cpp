@@ -65,6 +65,7 @@ void DateIntervalFormatTest::runIndexedTest( int32_t index, UBool exec, const ch
     TESTCASE_AUTO(testTicket21222GregorianEraDiff);
     TESTCASE_AUTO(testTicket21222ROCEraDiff);
     TESTCASE_AUTO(testTicket21222JapaneseEraDiff);
+    TESTCASE_AUTO(testTicket21939);
     TESTCASE_AUTO_END;
 }
 
@@ -2370,6 +2371,18 @@ void DateIntervalFormatTest::testTicket21222JapaneseEraDiff() {
                  u"H31/3/2 午前6時～R1/5/4 午前6時",
                  formatted.toString(status));
     verifyCategoryAndField(formatted, expectedCategory, expectedField, status);
+}
+
+void DateIntervalFormatTest::testTicket21939() {
+    IcuTestErrorCode err(*this, "testTicket21939");
+    LocalPointer<DateIntervalFormat> dif(DateIntervalFormat::createInstance(u"rMdhm", Locale::forLanguageTag("en-u-ca-chinese", err), err));
+    
+    if (assertSuccess("Error creating DateIntervalFormat", err)) {
+        const DateFormat* df = dif->getDateFormat();
+        const SimpleDateFormat* sdf = dynamic_cast<const SimpleDateFormat*>(df);
+        UnicodeString pattern;
+        assertEquals("Wrong pattern", u"M/d/r, h:mm\u202Fa", sdf->toPattern(pattern));
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
