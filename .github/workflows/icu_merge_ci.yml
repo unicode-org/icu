@@ -440,74 +440,30 @@ jobs:
       matrix:
         source_text: [arabic, english, french, greek, hebrew, hindi, japanese, korean, s-chinese]
         perf: [TestCharsetDecoderICU, TestCharsetEncoderICU]
-        test_enc: [UTF-8]
         include:
+          - test_enc: UTF-8
           - test_enc: csisolatinarabic
             source_text: arabic
-            perf: TestCharsetDecoderICU
-          - test_enc: csisolatinarabic
-            source_text: arabic
-            perf: TestCharsetEncoderICU
           - test_enc: csisolatin1
             source_text: french
-            perf: TestCharsetDecoderICU
-          - test_enc: csisolatin1
-            source_text: french
-            perf: TestCharsetEncoderICU
           - test_enc: csisolatingreek
             source_text: greek
-            perf: TestCharsetDecoderICU
-          - test_enc: csisolatingreek
-            source_text: greek
-            perf: TestCharsetEncoderICU
           - test_enc: csisolatinhebrew
             source_text: hebrew
-            perf: TestCharsetDecoderICU
-          - test_enc: csisolatinhebrew
-            source_text: hebrew
-            perf: TestCharsetEncoderICU
           - test_enc: EUC-JP
             source_text: japanese
-            perf: TestCharsetDecoderICU
-          - test_enc: EUC-JP
-            source_text: japanese
-            perf: TestCharsetEncoderICU
           - test_enc: csiso2022jp
             source_text: japanese
-            perf: TestCharsetDecoderICU
-          - test_enc: csiso2022jp
-            source_text: japanese
-            perf: TestCharsetEncoderICU
           - test_enc: csiso2022kr
             source_text: korean
-            perf: TestCharsetDecoderICU
-          - test_enc: csiso2022kr
-            source_text: korean
-            perf: TestCharsetEncoderICU
           - test_enc: EUC-CN
             source_text: s-chinese
-            perf: TestCharsetDecoderICU
-          - test_enc: EUC-CN
-            source_text: s-chinese
-            perf: TestCharsetEncoderICU
           - test_enc: UTF-16BE
             source_text: french
-            perf: TestCharsetDecoderICU
-          - test_enc: UTF-16BE
-            source_text: french
-            perf: TestCharsetEncoderICU
           - test_enc: UTF-16LE
             source_text: french
-            perf: TestCharsetDecoderICU
-          - test_enc: UTF-16LE
-            source_text: french
-            perf: TestCharsetEncoderICU
           - test_enc: US-ASCII
             source_text: english
-            perf: TestCharsetDecoderICU
-          - test_enc: US-ASCII
-            source_text: english
-            perf: TestCharsetEncoderICU
 
     runs-on: ubuntu-latest
     steps:
