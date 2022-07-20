@@ -1204,20 +1204,24 @@ public final class ICUResourceBundleTest extends TestFmwk {
 
     /*
      * Test that override files can be loaded from file and take precedence over built-in ICU data.
+     *
+     * Note: due to the stateful nature of caching and without a public API for resetting the cache,
+     * unit tests here are using different locales in their tests to avoid cache key collisions that
+     * would lead to unexpected behavior.
      */
     @Test
     public void TestOverrideData() {
-        String localeID = "en_CA";
+        String localeID = "pt";
         String testResourceKeyPath = "NumberElements/latn/patternsShort/decimalFormat/1000/other";
 
         // Normal data files (because we cannot set any environment variables like ICU_OVERRIDE_DATA before a unit test)
 
-        assertRBStringEquals(localeID, "Normal (no override) pattern for compact short pattern for 1000", "0K", testResourceKeyPath);
+        assertRBStringEquals(localeID, "Normal (no override) pattern for compact short pattern for 1000", "0 mil", testResourceKeyPath);
 
         // Override data files (after using the API to update ICUBinary.OVERRIDE_FILES)
 
         // Copy test override file to a temporary directory, set the override data files path.
-        File tmpDir = copyJavaRescToTmpDir("/com/ibm/icu/dev/data/override/test01/en_CA.res");
+        File tmpDir = copyJavaRescToTmpDir("/com/ibm/icu/dev/data/override/test01/pt.res");
         String path = tmpDir.toString();
         ICUBinary.OVERRIDE_DATA_FILES.setDataPath(path);
         assertRBStringEquals(localeID, "Override pattern for compact short pattern for 1000", "0G", testResourceKeyPath);
@@ -1226,7 +1230,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         // Reset override data files to empty
 
         ICUBinary.OVERRIDE_DATA_FILES.setDataPath("");
-        assertRBStringEquals(localeID, "Normal (no override) pattern for compact short pattern for 1000", "0K", testResourceKeyPath);
+        assertRBStringEquals(localeID, "Normal (no override) pattern for compact short pattern for 1000", "0 mil", testResourceKeyPath);
     }
 
     /*
@@ -1280,9 +1284,6 @@ public final class ICUResourceBundleTest extends TestFmwk {
 
     /*
      * Test that the parent locale chain is logically correct when there exist multiple override data files.
-     *
-     * Note: due to the stateful nature of caching, the override data files loaded in this test must be
-     * tested in isolation from the override files in any other test.
      */
     @Test
     public void TestOverrideDataParentLocaleMultipleFiles() {
@@ -1292,9 +1293,8 @@ public final class ICUResourceBundleTest extends TestFmwk {
 
         // Copy test override file to a temporary directory, set the override data files path.
         String[] rescToCopy2 = {
-                "/com/ibm/icu/dev/data/override/test02/en_CA.res",
-                "/com/ibm/icu/dev/data/override/test02/en.res",
-                "/com/ibm/icu/dev/data/override/test02/root.res"
+                "/com/ibm/icu/dev/data/override/test03/fr_CA.res",
+                "/com/ibm/icu/dev/data/override/test03/fr.res",
         };
         File tmpDir2 = copyJavaRescToTmpDir(rescToCopy2);
         String path2 = tmpDir2.toString();
@@ -1303,9 +1303,9 @@ public final class ICUResourceBundleTest extends TestFmwk {
 
         // localeID, expStrVal
         Object[][] rootOverrideCaseData2 = {
-                {"en_CA", "test override pattern for en_CA"},
-                {"en",    "test override pattern for en"},
-                {"root",  "test override pattern for root"},
+                {"fr_CA", "test override pattern for fr_CA"},
+                {"fr",    "test override pattern for fr"},
+                {"root",  "y-MM-dd"},
         };
         for (Object[] datum : rootOverrideCaseData2) {
             String localeID = (String) datum[0];
