@@ -33,6 +33,9 @@ import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
 import com.ibm.icu.util.UResourceTypeMismatchException;
 
+// Note: methods beginning with "find-" differ from their "get-" equivalents
+// in that the "find-" methods return null if the requested Resource does not
+// exist, while the "get-" methods will throw an Exception
 public  class ICUResourceBundle extends UResourceBundle {
 
     // static fields ------------------------------------------------------------------------------
@@ -1293,6 +1296,10 @@ public  class ICUResourceBundle extends UResourceBundle {
             this.dataFilesCategory = dataFilesCategory;
         }
 
+        /**
+         * @return cache key according to this resource file's options ({@code baseName}, {@code localeID},
+         * etc.)
+         */
         public String cacheKey() {
             char openTypeChar = (char) ('0' + openType.ordinal());
             String cacheKeyBase = fullName + '#' + dataFilesCategory.toString() + '#' + openTypeChar;

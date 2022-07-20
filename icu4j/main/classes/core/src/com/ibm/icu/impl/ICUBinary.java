@@ -120,6 +120,12 @@ public final class ICUBinary {
             }
         }
 
+        /**
+         * @param bytes resource file bytes
+         * @param key the name of the resource file
+         * @return the index of a resource file by its name in the .dat file
+         * table (ordering) of all contained resource files.
+         */
         private static int binarySearch(ByteBuffer bytes, CharSequence key) {
             int base = bytes.position();
             int count = bytes.getInt(base);
@@ -145,6 +151,13 @@ public final class ICUBinary {
             return ~start;  // Not found or table is empty.
         }
 
+        /**
+         * @param bytes
+         * @param index among the name data, index number for a resource within the ordering of all
+         * contained resources
+         * @return the offset for the name data for a contained resource file,
+         * given its index number in the ordering of all contained resources.
+         */
         private static int getNameOffset(ByteBuffer bytes, int index) {
             int base = bytes.position();
             assert 0 <= index && index < bytes.getInt(base);  // count
@@ -153,6 +166,13 @@ public final class ICUBinary {
             return base + bytes.getInt(base + 4 + index * 8);
         }
 
+        /**
+         * @param bytes
+         * @param index among the contents data, index number for a resource within the ordering of all
+         * contained resources
+         * @return the offset for the contents data for a contained resource file,
+         * given its index number in the ordering of all contained resources.
+         */
         private static int getDataOffset(ByteBuffer bytes, int index) {
             int base = bytes.position();
             int count = bytes.getInt(base);
@@ -167,6 +187,13 @@ public final class ICUBinary {
             return base + bytes.getInt(base + 4 + 4 + index * 8);
         }
 
+        /**
+         * Add the name of the contained resource file to `names` given its index
+         * number in the ordering of all contained resources, only if it is a
+         * top-level file.
+         * Also, return true if at least all files & folders' names are well-formed
+         * (ex: have a '/' after the package name base).
+         */
         static boolean addBaseName(ByteBuffer bytes, int index,
                 String folder, String suffix, StringBuilder sb, Set<String> names) {
             int offset = getNameOffset(bytes, index);
@@ -201,6 +228,10 @@ public final class ICUBinary {
         }
     }
 
+    /**
+     * Interface for ICU data files, whether a single .res file or a .dat
+     * file that contains .res files.
+     */
     private static abstract class DataFile {
         protected final String itemPath;
 
@@ -223,6 +254,7 @@ public final class ICUBinary {
         abstract void addBaseNamesInFolder(String folder, String suffix, Set<String> names);
     }
 
+    /** .res file */
     private static final class SingleDataFile extends DataFile {
         private final File path;
 
@@ -257,6 +289,7 @@ public final class ICUBinary {
         }
     }
 
+    /** .dat file */
     private static final class PackageDataFile extends DataFile {
         /**
          * .dat package bytes, or null if not a .dat package.
@@ -346,6 +379,10 @@ public final class ICUBinary {
      */
     private static abstract class DataFiles {
 
+        // A list storing all ICU data files specified by the user
+        // that they want to be included in the data file loading lookup path.
+        // The results are ultimately included in the data file lookups that occur
+        // in the public getData and getRequiredData methods.
         protected final List<DataFile> dataFiles = new ArrayList<>();
 
         public DataFiles() {
