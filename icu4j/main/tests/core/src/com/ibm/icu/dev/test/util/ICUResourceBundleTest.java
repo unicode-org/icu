@@ -1280,6 +1280,10 @@ public final class ICUResourceBundleTest extends TestFmwk {
             assertRBStringEquals(localeID, assertMsg, expectedStrVal, testResourceKeyPath);
         }
 
+        // Reset override data files to empty
+
+        ICUBinary.OVERRIDE_DATA_FILES.setDataPath("");
+
     }
 
     /*
@@ -1315,6 +1319,10 @@ public final class ICUResourceBundleTest extends TestFmwk {
 
             assertRBStringEquals(localeID, assertMsg, expectedStrVal, testResourceKeyPath);
         }
+
+        // Reset override data files to empty
+
+        ICUBinary.OVERRIDE_DATA_FILES.setDataPath("");
 
     }
 
