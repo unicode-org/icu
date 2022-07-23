@@ -76,6 +76,7 @@ static void TestIgnorePadding(void);
 static void TestSciNotationMaxFracCap(void);
 static void TestMinIntMinFracZero(void);
 static void Test21479_ExactCurrency(void);
+static void Test22088_Ethiopic(void);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
 
@@ -118,6 +119,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestSciNotationMaxFracCap);
     TESTCASE(TestMinIntMinFracZero);
     TESTCASE(Test21479_ExactCurrency);
+    TESTCASE(Test22088_Ethiopic);
 }
 
 /* test Parse int 64 */
@@ -3603,6 +3605,32 @@ static void Test21479_ExactCurrency(void) {
 
     cleanup:
     unum_close(nf);
+}
+
+static void Test22088_Ethiopic(void) {
+    UErrorCode err = U_ZERO_ERROR;
+    UNumberFormat* nf1 = unum_open(UNUM_DEFAULT, NULL, 0, "am_ET@numbers=ethi", NULL, &err);
+    UNumberFormat* nf2 = unum_open(UNUM_NUMBERING_SYSTEM, NULL, 0, "am_ET@numbers=ethi", NULL, &err);
+    UNumberFormat* nf3 = unum_open(UNUM_NUMBERING_SYSTEM, NULL, 0, "en_US", NULL, &err);
+    
+    if (assertSuccess("Creation of number formatters failed", &err)) {
+        UChar result[200];
+        
+        unum_formatDouble(nf1, 123, result, 200, NULL, &err);
+        assertSuccess("Formatting of number failed", &err);
+        assertUEquals("Wrong result with UNUM_DEFAULT", u"፻፳፫", result);
+        
+        unum_formatDouble(nf2, 123, result, 200, NULL, &err);
+        assertSuccess("Formatting of number failed", &err);
+        assertUEquals("Wrong result with UNUM_NUMBERING_SYSTEM", u"፻፳፫", result);
+        
+        unum_formatDouble(nf3, 123, result, 200, NULL, &err);
+        assertSuccess("Formatting of number failed", &err);
+        assertUEquals("Wrong result with UNUM_NUMBERING_SYSTEM and English", u"123", result);
+    }
+    unum_close(nf1);
+    unum_close(nf2);
+    unum_close(nf3);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

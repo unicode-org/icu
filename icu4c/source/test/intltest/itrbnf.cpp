@@ -78,6 +78,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(26, TestParseFailure);
         TESTCASE(27, TestMinMaxIntegerDigitsIgnored);
         TESTCASE(28, TestNorwegianSpellout);
+        TESTCASE(29, TestNumberingSystem);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -2486,6 +2487,21 @@ IntlTestRBNF::doLenientParseTest(RuleBasedNumberFormat* formatter, const char* t
             }
         }
         delete decFmt;
+    }
+}
+
+void
+IntlTestRBNF::TestNumberingSystem() {
+    IcuTestErrorCode err(*this, "TestNumberingSystem");
+    RuleBasedNumberFormat rbnf(URBNF_NUMBERING_SYSTEM, Locale::getUS(), err);
+    
+    if (!err.errIfFailureAndReset("Failed to create RBNF with URBNF_NUMBERING_SYSTEM")) {
+        UnicodeString result;
+        assertEquals("Wrong result with default rule set", u"123", rbnf.format(123, result, err));
+        
+        result.remove();
+        rbnf.setDefaultRuleSet(u"%ethiopic", err);
+        assertEquals("Wrong result with Ethiopic rule set", u"፻፳፫", rbnf.format(123, result, err));
     }
 }
 

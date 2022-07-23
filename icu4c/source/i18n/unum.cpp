@@ -60,6 +60,7 @@ unum_open(  UNumberFormatStyle    style,
     case UNUM_CURRENCY_ACCOUNTING:
     case UNUM_CASH_CURRENCY:
     case UNUM_CURRENCY_STANDARD:
+    case UNUM_NUMBERING_SYSTEM:
         retVal = NumberFormat::createInstance(Locale(locale), style, *status);
         break;
 
@@ -111,10 +112,6 @@ unum_open(  UNumberFormatStyle    style,
 
     case UNUM_DURATION:
         retVal = new RuleBasedNumberFormat(URBNF_DURATION, Locale(locale), *status);
-        break;
-
-    case UNUM_NUMBERING_SYSTEM:
-        retVal = new RuleBasedNumberFormat(URBNF_NUMBERING_SYSTEM, Locale(locale), *status);
         break;
 #endif
 

@@ -308,6 +308,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test21232_ParseTimeout();
     void Test10997_FormatCurrency();
     void Test21556_CurrencyAsDecimal();
+    void Test22088_Ethiopic();
 
  private:
     UBool testFormattableAsUFormattable(const char *file, int line, Formattable &f);

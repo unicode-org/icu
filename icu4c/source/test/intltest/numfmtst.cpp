@@ -252,6 +252,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test21232_ParseTimeout);
   TESTCASE_AUTO(Test10997_FormatCurrency);
   TESTCASE_AUTO(Test21556_CurrencyAsDecimal);
+  TESTCASE_AUTO(Test22088_Ethiopic);
   TESTCASE_AUTO_END;
 }
 
@@ -10142,6 +10143,22 @@ void NumberFormatTest::Test21556_CurrencyAsDecimal() {
         assertEquals("Via applyPattern: toPattern", u"a0¤00b", df->toPattern(pattern));
         assertEquals("Via applyPattern: field position begin", 2, fp.getBeginIndex());
         assertEquals("Via applyPattern: field position end", 3, fp.getEndIndex());
+    }
+}
+
+void NumberFormatTest::Test22088_Ethiopic() {
+    IcuTestErrorCode err(*this, "Test22088_Ethiopic");
+    LocalPointer<NumberFormat> nf1(NumberFormat::createInstance(Locale("am_ET@numbers=ethi"), UNUM_DEFAULT, err));
+    LocalPointer<NumberFormat> nf2(NumberFormat::createInstance(Locale("am_ET@numbers=ethi"), UNUM_NUMBERING_SYSTEM, err));
+    LocalPointer<NumberFormat> nf3(NumberFormat::createInstance(Locale::getUS(), UNUM_NUMBERING_SYSTEM, err));
+    
+    if (!err.errIfFailureAndReset("Creation of number formatters failed")) {
+        UnicodeString result;
+        assertEquals("Wrong result with UNUM_DEFAULT", u"፻፳፫", nf1->format(123, result));
+        result.remove();
+        assertEquals("Wrong result with UNUM_NUMBERING_SYSTEM", u"፻፳፫", nf2->format(123, result));
+        result.remove();
+        assertEquals("Wrong result with UNUM_NUMBERING_SYSTEM and English", u"123", nf3->format(123, result));
     }
 }
 
