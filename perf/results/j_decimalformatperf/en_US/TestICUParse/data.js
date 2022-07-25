@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1658503039827,
+  "lastUpdate": 1658790010173,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -628,6 +628,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 543.6367360955971,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "hsivonen@hsivonen.fi",
+            "name": "Henri Sivonen",
+            "username": "hsivonen"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "c258f3d6f81a2514b76d72c5deae8cbc295aecd6",
+          "message": "ICU-22095 Export ICU4X normalization data with tries only without Unicode sets",
+          "timestamp": "2022-07-25T15:54:29-07:00",
+          "tree_id": "1e4ac369923311e8ac0922960bbb1cc63650003f",
+          "url": "https://github.com/unicode-org/icu/commit/c258f3d6f81a2514b76d72c5deae8cbc295aecd6"
+        },
+        "date": 1658790006830,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 434.35586349315247,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
