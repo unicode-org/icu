@@ -9,11 +9,14 @@ import os
 import re
 import sys
 import datetime
+from hashlib import sha256
+import pickle
 
 from enum import Enum
 from collections import namedtuple
 from git import Repo
 from jira import JIRA
+from commit_metadata import CommitMetadata
 
 # singleCount = 0
 
@@ -111,6 +114,11 @@ flag_parser.add_argument(
     default = "unicode-org.atlassian.net"
 )
 flag_parser.add_argument(
+    "--commit-metadata",
+    help = "path to COMMIT_METADATA.md",
+    default = "COMMIT_METADATA.md"
+)
+flag_parser.add_argument(
     "--jira-username",
     help = "Username to use for authenticating to Jira",
     default = os.environ.get("JIRA_USERNAME", None)
@@ -124,6 +132,16 @@ flag_parser.add_argument(
     "--jira-query",
     help = "JQL query load tickets; this should match tickets expected to correspond to the commits being checked. Example: 'project=ICU and fixVersion=63.1'; set fixVersion to the upcoming version.",
     required = True
+)
+flag_parser.add_argument(
+    "--fix-version",
+    help = "Assumed Fix version. Used for commit metadata",
+    required = False
+)
+flag_parser.add_argument(
+    "--cache-for-dev",
+    help = "DEV USE ONLY: prefix of path to a jira cache",
+    required = False
 )
 flag_parser.add_argument(
     "--github-url",
@@ -171,19 +189,26 @@ def pretty_print_issue(issue, type=None, **kwargs):
     if issue.issue.fields.components and len(issue.issue.fields.components) > 0:
         print("\t- Component(s): " + (' '.join(sorted([str(component.name) for component in issue.issue.fields.components]))))
 
-def get_commits(repo_root, rev_range, **kwargs):
+def get_commits(commit_metadata_obj, repo_root, rev_range, **kwargs):
     """
     Yields an ICUCommit for each commit in the user-specified rev-range.
     """
     repo = Repo(repo_root)
     for commit in repo.iter_commits(rev_range):
-        match = re.search(r"^(\w+-\d+) ", commit.message)
-        if match:
-            issue_id = match.group(1)
-            # print("@@@ %s = %s / %s" % (issue_id, commit, commit.summary), file=sys.stderr)
-            yield ICUCommit(issue_id, commit)
-        else:
-            yield ICUCommit(None, commit)
+        issue_id = None
+        if commit_metadata_obj:
+            # read from the non-skip list
+            from_commit_metadata = commit_metadata_obj.get_commit_info(commit.hexsha, skip=None)
+            if from_commit_metadata:
+                (sha, issue_id, message) = from_commit_metadata
+                if message:
+                    # Update message if found
+                    commit.message = commit.message + "\nCOMMIT_METADATA: " + message
+        if not issue_id:
+            match = re.search(r"^(\w+-\d+) ", commit.message)
+            if match:
+                issue_id = match.group(1)
+        yield ICUCommit(issue_id, commit)
 
 def get_cherrypicked_commits(repo_root, rev_range, **kwargs):
     """
@@ -255,6 +280,40 @@ def get_jira_issues(jira_query, **kwargs):
         start += batch_size
 
 jira_issue_map = dict() # loaded in main()
+commit_metadata = None
+fixversion_to_skip = None
+
+def get_issue_cache_path(args):
+    return '%s-%s.pickle' % (args.cache_for_dev, sha256(args.jira_query.encode()).hexdigest())
+
+def load_issues(args):
+    global jira_issue_ids, jira_issue_map, closed_jira_issue_ids
+
+    if args.cache_for_dev:
+        issue_cache_path = get_issue_cache_path(args)
+        if os.path.exists(issue_cache_path):
+            with open(issue_cache_path, 'rb') as f:
+                (issues, jira_issue_ids, closed_jira_issue_ids, jira_issue_map) = pickle.load(f)
+                print("Loaded jira cache to " + issue_cache_path, file=sys.stderr)
+                return issues
+    # proceed to load
+    issues = list(get_jira_issues(**vars(args)))
+    # add all queried issues to the cache
+    for issue in issues:
+        jira_issue_map[issue.issue_id] = issue
+    # only the issue ids in-query
+    jira_issue_ids = set(issue.issue_id for issue in issues)
+    # only the closed issue ids in-query
+    closed_jira_issue_ids = set(issue.issue_id for issue in issues if issue.is_closed)
+
+    return issues
+
+def save_issues_to_cache(args, issues):
+    if args.cache_for_dev:
+        issue_cache_path = get_issue_cache_path(args)
+        with open(issue_cache_path, 'wb') as f:
+            pickle.dump((issues, jira_issue_ids, closed_jira_issue_ids, jira_issue_map), f)
+            print("Wrote cache to " + issue_cache_path, file=sys.stderr)
 
 def get_single_jira_issue(issue_id, **kwargs):
     """
@@ -293,6 +352,7 @@ def print_sectionheader(section):
     #print("### %s%s" % (aname(section), section))
 
 def main():
+    global fixversion_to_skip
     args = flag_parser.parse_args()
     print("TIP: Have you pulled the latest main? This script only looks at local commits.", file=sys.stderr)
     if not args.jira_username or not args.jira_password:
@@ -301,30 +361,40 @@ def main():
     else:
         authenticated = True
 
+    if args.fix_version:
+        fixversion_to_skip = 'v%s' % args.fix_version
+        args.fixversion_to_skip = fixversion_to_skip
+
+    if args.commit_metadata and os.path.exists(args.commit_metadata):
+        commit_metadata = CommitMetadata(args.commit_metadata)
+    else:
+        commit_metadata = CommitMetadata()  # null
+    args.commit_metadata_obj = commit_metadata
+
     # exclude these, already merged to old maint
-    excludeAlreadyMergedToOldMaint = get_cherrypicked_commits(**vars(args))
+    exclude_already_merged_to_old_maint = get_cherrypicked_commits(**vars(args))
 
     commits = list(get_commits(**vars(args)))
-    issues = list(get_jira_issues(**vars(args)))
+
+    def exclude_commit_sha(sha) -> bool:
+        """Return true if this sha is excluded"""
+        exclude = (sha in exclude_already_merged_to_old_maint) or (commit_metadata.get_commit_info(sha, skip=fixversion_to_skip) is not None)
+        return exclude
 
     # commit_issue_ids is all commits in the git query. Excluding cherry exclusions.
-    commit_issue_ids = set(commit.issue_id for commit in commits if commit.issue_id is not None and commit.commit.hexsha not in excludeAlreadyMergedToOldMaint)
+    commit_issue_ids = set(commit.issue_id for commit in commits if commit.issue_id is not None and not exclude_commit_sha(commit.commit.hexsha))
     # which issues have commits that were excluded
-    excluded_commit_issue_ids = set(commit.issue_id for commit in commits if commit.issue_id is not None and commit.commit.hexsha in excludeAlreadyMergedToOldMaint)
+    excluded_commit_issue_ids = set(commit.issue_id for commit in commits if commit.issue_id is not None and exclude_commit_sha(commit.commit.hexsha))
+    excluded_commits = set(commit for commit in commits if exclude_commit_sha(commit.commit.hexsha))
 
     # grouped_commits is all commits and issue_ids in the git query, regardless of issue status
     # but NOT including cherry exclusions
     grouped_commits = [
-        (issue_id, [commit for commit in commits if commit.issue_id == issue_id and commit.commit.hexsha not in excludeAlreadyMergedToOldMaint])
+        (issue_id, [commit for commit in commits if commit.issue_id == issue_id and not exclude_commit_sha(commit.commit.hexsha)])
         for issue_id in sorted(commit_issue_ids)
     ]
-    # add all queried issues to the cache
-    for issue in issues:
-        jira_issue_map[issue.issue_id] = issue
-    # only the issue ids in-query
-    jira_issue_ids = set(issue.issue_id for issue in issues)
-    # only the closed issue ids in-query
-    closed_jira_issue_ids = set(issue.issue_id for issue in issues if issue.is_closed)
+
+    issues = load_issues(args)
 
     # keep track of issues that we already said have no commit.
     no_commit_ids = set()
@@ -376,7 +446,7 @@ def main():
         no_commit_ids.add(issue.issue_id)
         pretty_print_issue(issue, type=CLOSED_NO_COMMIT, **vars(args))
         if issue.issue_id in excluded_commit_issue_ids:
-            print("\t - **Note: Has cherry-picked commits. Fix Version may be wrong.**")
+            print("\t - **Note: Has excluded/cherry-picked commits. Fix Version may be wrong.**")
         print()
     if not found:
         print("*Success: No problems in this category!*")
@@ -451,8 +521,6 @@ def main():
         print("##### Commits with Issue %s" % issue_id)
         print()
         for commit in commits:
-            if(commit.commit.hexsha in excludeAlreadyMergedToOldMaint):
-                print("@@@ ALREADY MERGED")
             pretty_print_commit(commit, **vars(args))
             print()
     if not found:
@@ -541,6 +609,27 @@ def main():
     print()
     print("## Total Problems: %s" % total_problems)
     print("## Issues under review: %s" % len(issues_in_review)) # not counted as a problem.
+
+    if fixversion_to_skip:
+        print("## fix version (for COMMIT_METADATA SKIP) %s" % fixversion_to_skip)
+
+    if len(excluded_commits) > 0:
+        print()
+        print("## Excluded commits: %d" % len(excluded_commits))
+        for commit in excluded_commits:
+            pretty_print_commit(commit, **vars(args))
+            from_commit_metadata = commit_metadata.get_commit_info(commit.commit.hexsha, skip=fixversion_to_skip)
+            if from_commit_metadata:
+                (sha, id, message) = from_commit_metadata
+                # Print any notes in the skip list here.
+                if id:
+                    print("\t- COMMIT_METADATA.md: %s" % id)
+                if message:
+                    print("\t- COMMIT_METADATA.md: %s" % message)
+            if commit.commit.hexsha in exclude_already_merged_to_old_maint:
+                print("\t- NOTE: excluded due to already being merged to old maint")
+    # save out the dev cache here, so that any 1-off issues are also included in the cache
+    save_issues_to_cache(args, issues)
 
 if __name__ == "__main__":
     main()
