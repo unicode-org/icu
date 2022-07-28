@@ -1236,7 +1236,7 @@ public class PluralRules implements Serializable {
             }
             source = source.substring(7).trim(); // remove both
 
-            for (String range : COMMA_SEPARATED.split(source)) {
+            for (String range : COMMA_SEPARATED.split(source, 0)) {
                 if (range.equals("…") || range.equals("...")) {
                     bounded2 = false;
                     haveBound = true;
@@ -1245,7 +1245,7 @@ public class PluralRules implements Serializable {
                 if (haveBound) {
                     throw new IllegalArgumentException("Can only have … at the end of samples: " + range);
                 }
-                String[] rangeParts = TILDE_SEPARATED.split(range);
+                String[] rangeParts = TILDE_SEPARATED.split(range, 0);
                 switch (rangeParts.length) {
                 case 1:
                     FixedDecimal sample = new FixedDecimal(rangeParts[0]);
@@ -1410,10 +1410,10 @@ public class PluralRules implements Serializable {
             throws ParseException {
 
         Constraint result = null;
-        String[] or_together = OR_SEPARATED.split(description);
+        String[] or_together = OR_SEPARATED.split(description, 0);
         for (int i = 0; i < or_together.length; ++i) {
             Constraint andConstraint = null;
-            String[] and_together = AND_SEPARATED.split(or_together[i]);
+            String[] and_together = AND_SEPARATED.split(or_together[i], 0);
             for (int j = 0; j < and_together.length; ++j) {
                 Constraint newConstraint = NO_CONSTRAINT;
 
@@ -1608,7 +1608,7 @@ public class PluralRules implements Serializable {
         }
 
         description = description.substring(x+1).trim();
-        String[] constraintOrSamples = AT_SEPARATED.split(description);
+        String[] constraintOrSamples = AT_SEPARATED.split(description, 0);
         boolean sampleFailure = false;
         FixedDecimalSamples integerSamples = null, decimalSamples = null;
         switch (constraintOrSamples.length) {
@@ -1662,7 +1662,7 @@ public class PluralRules implements Serializable {
         if (description.endsWith(";")) {
             description = description.substring(0,description.length()-1);
         }
-        String[] rules = SEMI_SEPARATED.split(description);
+        String[] rules = SEMI_SEPARATED.split(description, 0);
         for (int i = 0; i < rules.length; ++i) {
             Rule rule = parseRule(rules[i].trim());
             result.hasExplicitBoundingInfo |= rule.integerSamples != null || rule.decimalSamples != null;
