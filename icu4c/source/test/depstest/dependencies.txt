@@ -211,7 +211,7 @@ group: breakiterator
     brkiter.o brkeng.o ubrk.o
     rbbi.o rbbinode.o rbbiscan.o rbbisetb.o rbbistbl.o rbbitblb.o
     rbbidata.o rbbirb.o rbbi_cache.o
-    dictionarydata.o dictbe.o lstmbe.o
+    dictionarydata.o dictbe.o lstmbe.o mlbe.o
     # BreakIterator::makeInstance() factory implementation makes for circular dependency
     # between BreakIterator base and FilteredBreakIteratorBuilder.
     filteredbrk.o

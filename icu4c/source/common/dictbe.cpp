@@ -1054,9 +1054,10 @@ foundBest:
  */
 static const uint32_t kuint32max = 0xFFFFFFFF;
 CjkBreakEngine::CjkBreakEngine(DictionaryMatcher *adoptDictionary, LanguageType type, UErrorCode &status)
-: DictionaryBreakEngine(), fDictionary(adoptDictionary) {
+: DictionaryBreakEngine(), fDictionary(adoptDictionary), isCj(false) {
     UTRACE_ENTRY(UTRACE_UBRK_CREATE_BREAK_ENGINE);
     UTRACE_DATA1(UTRACE_INFO, "dictbe=%s", "Hani");
+    fMlBreakEngine = nullptr;
     nfkcNorm2 = Normalizer2::getNFKCInstance(status);
     // Korean dictionary only includes Hangul syllables
     fHangulWordSet.applyPattern(UnicodeString(u"[\\uac00-\\ud7a3]"), status);
@@ -1073,11 +1074,20 @@ CjkBreakEngine::CjkBreakEngine(DictionaryMatcher *adoptDictionary, LanguageType 
         if (U_SUCCESS(status)) {
             setCharacters(fHangulWordSet);
         }
-    } else { //Chinese and Japanese
+    } else { // Chinese and Japanese
         UnicodeSet cjSet(UnicodeString(u"[[:Han:][:Hiragana:][:Katakana:]\\u30fc\\uff70\\uff9e\\uff9f]"), status);
+        isCj = true;
         if (U_SUCCESS(status)) {
             setCharacters(cjSet);
+#if UCONFIG_USE_ML_PHRASE_BREAKING
+            fMlBreakEngine = new MlBreakEngine(fDigitOrOpenPunctuationOrAlphabetSet,
+                                               fClosePunctuationSet, status);
+            if (fMlBreakEngine == nullptr) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+            }
+#else
             initJapanesePhraseParameter(status);
+#endif
         }
     }
     UTRACE_EXIT_STATUS(status);
@@ -1085,6 +1095,7 @@ CjkBreakEngine::CjkBreakEngine(DictionaryMatcher *adoptDictionary, LanguageType 
 
 CjkBreakEngine::~CjkBreakEngine(){
     delete fDictionary;
+    delete fMlBreakEngine;
 }
 
 // The katakanaCost values below are based on the length frequencies of all
@@ -1251,7 +1262,15 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
             }
         }
     }
-                
+
+#if UCONFIG_USE_ML_PHRASE_BREAKING
+    // PhraseBreaking is supported in ja and ko; MlBreakEngine only supports ja.
+    if (isPhraseBreaking && isCj) {
+        return fMlBreakEngine->divideUpRange(inText, rangeStart, rangeEnd, foundBreaks, inString,
+                                             inputMap, status);
+    }
+#endif
+
     // bestSnlp[i] is the snlp of the best segmentation of the first i
     // code points in the range to be matched.
     UVector32 bestSnlp(numCodePts + 1, status);

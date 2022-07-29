@@ -1913,6 +1913,26 @@ Bangkok)•</data>
 <data>•\U0001F469\u200D\U0001F680•\U0001F469\U0001F3FD\u200D\U0001F680\u0020•</data>
 
 <locale ja@lw=phrase>
+#phrase breaking test cases for the ML solution
+<lineML>
+#９月に東京から友達が遊びに来た -> ９月に•東京から•友達が•遊びに•来た•
+<data>•\uff19\u6708\u306b•\u6771\u4eac\u304b\u3089•\u53cb\u9054\u304c•\u904a\u3073\u306b•\u6765\u305f•</data>
+#る文字「そうだ、京都」-> る•文字•「そうだ、•京都」•
+<data>•\u308b•\u6587\u5b57•\u300c\u305d\u3046\u3060\u3001•\u4eac\u90fd\u300d•</data>
+#Kana supplement: 𛁈(U+1B048) -> \uD82C\uDC48, 𛀸(U+1B038) -> \uD82C\uDC38, 𛀙(U+1B019)-> \uD82C\uDC19</data>
+#𛁈る𛀸（しるこ）、あ𛀙よろし（あかよろし） -> 𛁈る𛀸•（しるこ）、•あ𛀙よろし•（あかよろし）
+<data>•\U0001B048\u308B\U0001B038•\uFF08\u3057\u308B\u3053\uFF09\u3001•\u3042\U0001B019\u3088\u308D\u3057•\uFF08\u3042\u304B\u3088\u308D\u3057\uFF09•</data>
+#中国の携帯は約５００元から５０００元です -> 中国の▁携帯は▁約▁５００元から▁５０００元です
+<data>•\u4E2D\u56FD\u306E•\u643A\u5E2F\u306F•\u7D04•\uFF15\uFF10\uFF10\u5143\u304B\u3089•\uFF15\uFF10\uFF10\uFF10\u5143\u3067\u3059•</data>
+#しかもロゴがＵｎｉｃｏｄｅ！！ -> しかも▁ロゴが▁Ｕｎｉｃｏｄｅ！！
+<data>•\u3057\u304B\u3082•\u30ED\u30B4\u304C•\uFF35\uFF4E\uFF49\uFF43\uFF4F\uFF44\uFF45\uFF01\uFF01•</data>
+#バッテリーを長持ちさせ、充電を最適化します -> バッテリーを▁長持ちさせ、▁充電を▁最適化します
+<data>•\u30D0\u30C3\u30C6\u30EA\u30FC\u3092•\u9577\u6301\u3061\u3055\u305B\u3001•\u5145\u96FB\u3092•\u6700\u9069\u5316\u3057\u307E\u3059•</data>
+#データのコピー、スマートフォンでのお支払いなど -> データの▁コピー、▁スマートフォンでの▁お支払いなど
+<data>•\u30C7\u30FC\u30BF\u306E•\u30B3\u30D4\u30FC\u3001•\u30B9\u30DE\u30FC\u30C8\u30D5\u30A9\u30F3\u3067\u306E•\u304A\u652F\u6255\u3044\u306A\u3069•</data>
+
+<locale ja@lw=phrase>
+#phrase breaking test cases for the dictionary based solution
 <line>
 #[京都観光］時雨殿に行った。-> [京都•観光］•時雨•殿に•行った。•
 <data>•\uff3b\u4eac\u90fd•\u89b3\u5149\uff3d•\u6642\u96e8•\u6bbf\u306b•\u884c\u3063\u305f\u3002•</data>
@@ -2005,8 +2025,8 @@ Bangkok)•</data>
 #大韓民國은 民主共和國이다
 #<data>•大韓民國은 •民主•共和國이다•</data>
 # All the tests for ja@lw=phrase should also work in Korean.
-#[京都観光］時雨殿に行った。-> [京都•観光］•時雨•殿に•行った。•
-<data>•\uff3b\u4eac\u90fd•\u89b3\u5149\uff3d•\u6642\u96e8•\u6bbf\u306b•\u884c\u3063\u305f\u3002•</data>
+#る文字「そうだ、京都」-> る•文字•「そうだ、•京都」•
+<data>•\u308b•\u6587\u5b57•\u300c\u305d\u3046\u3060\u3001•\u4eac\u90fd\u300d•</data>
 #９月に東京から友達が遊びに来た -> ９月に•東京から•友達が•遊びに•来た•
 <data>•\uff19\u6708\u306b•\u6771\u4eac\u304b\u3089•\u53cb\u9054\u304c•\u904a\u3073\u306b•\u6765\u305f•</data>
 

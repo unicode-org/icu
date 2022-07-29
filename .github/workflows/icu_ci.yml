@@ -334,6 +334,17 @@ jobs:
           make clean;
           make -j2 check
 
+  # Test adaboost
+  adaboost-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          cd icu4c/source;
+          ICU_DATA_FILTER_FILE=../../.github/adaboost.json CPPFLAGS=-DUCONFIG_USE_ML_PHRASE_BREAKING=1 ./runConfigureICU --enable-debug --disable-release Linux -disable-layoutex;
+          make clean;
+          make -j2 check
+
   # Build and run testmap
   testmap:
     runs-on: ubuntu-latest

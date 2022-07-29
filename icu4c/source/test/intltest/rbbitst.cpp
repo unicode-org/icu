@@ -42,6 +42,7 @@
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstr.h"
+#include "cstring.h"
 #include "intltest.h"
 #include "lstmbe.h"
 #include "rbbitst.h"
@@ -835,7 +836,26 @@ void RBBITest::TestExtended() {
                 delete tp.bi;
                 tp.bi = BreakIterator::createLineInstance(locale,  status);
                 skipTest = false;
+#if UCONFIG_USE_ML_PHRASE_BREAKING
+                if(uprv_strcmp(locale.getName(), "ja@lw=phrase") == 0) {
+                    // skip <line> test cases of JP's phrase breaking when ML is enabled.
+                    skipTest = true;
+                }
+#endif
                 charIdx += 5;
+                break;
+            }
+            if (testString.compare(charIdx-1, 8, u"<lineML>") == 0) {
+                delete tp.bi;
+                tp.bi = BreakIterator::createLineInstance(locale,  status);
+                skipTest = false;
+#if !UCONFIG_USE_ML_PHRASE_BREAKING
+                if(uprv_strcmp(locale.getName(), "ja@lw=phrase") == 0) {
+                    // skip <lineML> test cases of JP's phrase breaking when ML is disabled.
+                    skipTest = true;
+                }
+#endif
+                charIdx += 7;
                 break;
             }
             if (testString.compare(charIdx-1, 6, u"<sent>") == 0) {
