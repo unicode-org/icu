@@ -36,6 +36,7 @@ kk{
             }
             patterns{
                 accountingFormat{"#,##0.00 ¤"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat{"#,##0.00 ¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -223,6 +224,59 @@ kk{
         native{"latn"}
     }
     calendar{
+        coptic{
+            monthNames{
+                format{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                    }
+                    wide{
+                        "Тут",
+                        "Баба",
+                        "Хатур",
+                        "Кийяк",
+                        "Туба",
+                        "Ашмир",
+                        "Барамхат",
+                        "Барамуда",
+                        "Башанс",
+                        "Ба’уна",
+                        "’абиб",
+                        "Мисра",
+                        "Наси’",
+                    }
+                }
+                stand-alone{
+                    wide{
+                        "Тут",
+                        "Баба",
+                        "Хатур",
+                        "Кийяк",
+                        "Туба",
+                        "Ашмир",
+                        "Барамхат",
+                        "Барамуда",
+                        "Башанс",
+                        "Ба’уна",
+                        "’абиб",
+                        "Мисра",
+                        "Наси’",
+                    }
+                }
+            }
+        }
         generic{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -645,10 +699,6 @@ kk{
                     "б.з.д.",
                     "б.з.",
                 }
-                abbreviated%variant{
-                    "BCE",
-                    "CE",
-                }
                 wide{
                     "Біздің заманымызға дейін",
                     "біздің заманымыз",
@@ -907,6 +957,102 @@ kk{
                 }
             }
         }
+        hebrew{
+            monthNames{
+                format{
+                    wide{
+                        "Тишрей",
+                        "Хешван",
+                        "Кислев",
+                        "Тевет",
+                        "Шват",
+                        "Адар I",
+                        "Адар",
+                        "Нисан",
+                        "Ияр",
+                        "Сиван",
+                        "Тамуз",
+                        "Ав",
+                        "Элул",
+                        "Адар II",
+                    }
+                }
+            }
+        }
+        indian{
+            monthNames{
+                format{
+                    wide{
+                        "Чайтра",
+                        "Вайшакха",
+                        "Джьештха",
+                        "Ашадха",
+                        "Шравана",
+                        "Бхадрапада",
+                        "Ашвина",
+                        "Картика",
+                        "Маргаширша",
+                        "Пауша",
+                        "Магха",
+                        "Пхальгуна",
+                    }
+                }
+            }
+        }
+        islamic{
+            monthNames{
+                format{
+                    abbreviated{
+                        "Қаң.",
+                        "Ақп.",
+                        "Нау.",
+                        "Сәу.",
+                        "Мам.",
+                        "Jum. II",
+                        "шіл.",
+                        "там.",
+                        "Қыр.",
+                        "Қаз.",
+                        "Қар.",
+                        "Жел.",
+                    }
+                    wide{
+                        "Мұхаррам",
+                        "Сафар",
+                        "Рабиғ әл-әууәл",
+                        "Рабиғ әс-сәни",
+                        "Джумада әл-әууәл",
+                        "Жумад ас-сәни",
+                        "Раджаб",
+                        "Шағбан",
+                        "Рамадан",
+                        "Шәууәл",
+                        "Зул-Қағда",
+                        "Зул-Хиджа",
+                    }
+                }
+            }
+        }
+        persian{
+            monthNames{
+                format{
+                    wide{
+                        "Фарвардин",
+                        "Ордибехешт",
+                        "Хордад",
+                        "Тир",
+                        "Мордад",
+                        "Шахривар",
+                        "Мехр",
+                        "Абан",
+                        "Азар",
+                        "Дей",
+                        "Бахман",
+                        "Эсфанд",
+                    }
+                }
+            }
+        }
     }
     characterLabel{
         activities{"әрекет"}
@@ -959,7 +1105,7 @@ kk{
         male{"еркек"}
         math_symbols{"математикалық таңбалар"}
         middle_eastern_scripts{"Таяу Шығыс жазулары"}
-        miscellaneous{"әр түрлі"}
+        miscellaneous{"әртүрлі"}
         modern_scripts{"қазіргі заман жазулары"}
         modifier{"модификатор"}
         musical_symbols{"музыкалық таңбалар"}
@@ -1213,7 +1359,7 @@ kk{
             }
         }
         minute-short{
-            dn{"мин"}
+            dn{"мин."}
             relativeTime{
                 future{
                     one{"{0} мин. кейін"}
@@ -1838,5 +1984,58 @@ kk{
         UK{"Ағылшын"}
         US{"Америкалық"}
         metric{"Метрлік"}
+    }
+    personNames{
+        foreignSpaceReplacement{" "}
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "kk",
+            }
+        }
+        namePattern{
+            givenFirst-long-addressing-formal{"{surname}"}
+            givenFirst-long-addressing-informal{"{given-informal}"}
+            givenFirst-long-monogram-formal{"{given-monogram-allCaps}{surname-monogram-allCaps}"}
+            givenFirst-long-monogram-informal{"{given-informal-monogram-allCaps}"}
+            givenFirst-long-referring-formal{"{given} {surname}"}
+            givenFirst-long-referring-informal{"{given-informal}"}
+            givenFirst-medium-addressing-formal{"{surname}"}
+            givenFirst-medium-addressing-informal{"{given-informal}"}
+            givenFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
+            givenFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
+            givenFirst-medium-referring-formal{"{given} {surname}"}
+            givenFirst-medium-referring-informal{"{given-informal}"}
+            givenFirst-short-addressing-formal{"{surname}"}
+            givenFirst-short-addressing-informal{"{given-informal}"}
+            givenFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
+            givenFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
+            givenFirst-short-referring-formal{"{given-initial} {surname}"}
+            givenFirst-short-referring-informal{"{given-informal}"}
+            sorting-long-referring-formal{"{given}"}
+            sorting-long-referring-informal{"{surname}, {given-informal}"}
+            sorting-medium-referring-formal{"{given}"}
+            sorting-medium-referring-informal{"{surname}, {given-informal}"}
+            sorting-short-referring-formal{"{given-initial}"}
+            sorting-short-referring-informal{"{surname}, {given-informal}"}
+            surnameFirst-long-addressing-formal{"{surname}"}
+            surnameFirst-long-addressing-informal{"{given-informal}"}
+            surnameFirst-long-monogram-formal{"{surname-monogram-allCaps}{given-monogram-allCaps}"}
+            surnameFirst-long-monogram-informal{"{surname-monogram-allCaps}{given-informal-monogram-allCaps}"}
+            surnameFirst-long-referring-formal{"{surname} {given}"}
+            surnameFirst-long-referring-informal{"{surname} {given-informal}"}
+            surnameFirst-medium-addressing-formal{"{surname}"}
+            surnameFirst-medium-addressing-informal{"{given-informal}"}
+            surnameFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
+            surnameFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
+            surnameFirst-medium-referring-formal{"{surname} {given}"}
+            surnameFirst-medium-referring-informal{"{surname} {given-informal}"}
+            surnameFirst-short-addressing-formal{"{surname}"}
+            surnameFirst-short-addressing-informal{"{given-informal}"}
+            surnameFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
+            surnameFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
+            surnameFirst-short-referring-formal{"{surname} {given-initial}"}
+            surnameFirst-short-referring-informal{"{surname} {given-initial}"}
+        }
     }
 }

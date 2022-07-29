@@ -511,6 +511,15 @@ ga{
                 other{"{0} nanashoicind"}
                 two{"{0} nanashoicind"}
             }
+            quarter{
+                dnam{"ceathrúna"}
+                few{"{0} cna"}
+                many{"{0} cna"}
+                one{"{0} ceathrú"}
+                other{"{0} ceathrúna"}
+                per{"{0}/c"}
+                two{"{0} cna"}
+            }
             second{
                 dnam{"soicindí"}
                 few{"{0} shoicind"}
@@ -2016,6 +2025,15 @@ ga{
                 other{"{0}ns"}
                 two{"{0}ns"}
             }
+            quarter{
+                dnam{"ctú"}
+                few{"{0} cna"}
+                many{"{0} cna"}
+                one{"{0} ctú"}
+                other{"{0} ctú"}
+                per{"{0}/c"}
+                two{"{0} cna"}
+            }
             second{
                 dnam{"soic"}
                 few{"{0}s"}
@@ -2494,11 +2512,11 @@ ga{
             }
             inch-ofhg{
                 dnam{"orlaí Hg"}
-                few{"{0}\u0022 Hg"}
-                many{"{0}\u0022 Hg"}
-                one{"{0}\u0022 Hg"}
-                other{"{0}\u0022 Hg"}
-                two{"{0}\u0022 Hg"}
+                few{"{0}″ Hg"}
+                many{"{0}″ Hg"}
+                one{"{0}″ Hg"}
+                other{"{0}″ Hg"}
+                two{"{0}″ Hg"}
             }
             millibar{
                 dnam{"mbar"}
@@ -3241,6 +3259,15 @@ ga{
                 one{"{0} ns"}
                 other{"{0} ns"}
                 two{"{0} ns"}
+            }
+            quarter{
+                dnam{"ctú"}
+                few{"{0} cna"}
+                many{"{0} cna"}
+                one{"{0} ctú"}
+                other{"{0} cna"}
+                per{"{0}/c"}
+                two{"{0} cna"}
             }
             second{
                 dnam{"soic"}

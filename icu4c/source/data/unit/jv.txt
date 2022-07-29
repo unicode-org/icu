@@ -275,6 +275,11 @@ jv{
                 dnam{"nanodetik"}
                 other{"{0} nanodetik"}
             }
+            quarter{
+                dnam{"seprapat"}
+                other{"{0} seprapat"}
+                per{"{0}/seprapat"}
+            }
             second{
                 dnam{"detik"}
                 other{"{0} detik"}
@@ -906,6 +911,11 @@ jv{
                 dnam{"sasi"}
                 other{"{0} sasi"}
             }
+            quarter{
+                dnam{"seprapat"}
+                other{"{0}seprapat"}
+                per{"{0}/seprapat"}
+            }
             second{
                 dnam{"dtk"}
                 other{"{0} dtk"}
@@ -1248,6 +1258,11 @@ jv{
             nanosecond{
                 dnam{"nanodtk"}
                 other{"{0} nd"}
+            }
+            quarter{
+                dnam{"seprapat"}
+                other{"{0} seprapat"}
+                per{"{0}/seprapat"}
             }
             second{
                 dnam{"dtk"}

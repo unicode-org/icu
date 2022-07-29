@@ -343,6 +343,12 @@ et{
                 one{"{0} nanosekund"}
                 other{"{0} nanosekundit"}
             }
+            quarter{
+                dnam{"kvartalid"}
+                one{"{0} kvartal"}
+                other{"{0} kvartalit"}
+                per{"{0}/kv"}
+            }
             second{
                 dnam{"sekundid"}
                 one{"{0} sekund"}
@@ -1161,6 +1167,12 @@ et{
                 one{"{0} k"}
                 other{"{0} k"}
             }
+            quarter{
+                dnam{"kv"}
+                one{"{0} kv"}
+                other{"{0} kv"}
+                per{"{0}/kv"}
+            }
             second{
                 dnam{"s"}
                 one{"{0} s"}
@@ -1658,6 +1670,12 @@ et{
                 dnam{"ns"}
                 one{"{0} ns"}
                 other{"{0} ns"}
+            }
+            quarter{
+                dnam{"kv"}
+                one{"{0} kv"}
+                other{"{0} kv"}
+                per{"{0}/kv"}
             }
             second{
                 dnam{"sek"}

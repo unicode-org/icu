@@ -237,4 +237,9 @@ es_GT{
             }
         }
     }
+    fields{
+        dayperiod{
+            dn{"a. m./p. m."}
+        }
+    }
 }

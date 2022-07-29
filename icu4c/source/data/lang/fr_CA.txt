@@ -14,6 +14,9 @@ fr_CA{
         chn{"chinook"}
         ckb{"kurde central"}
         cr{"cri"}
+        crg{"michif"}
+        crl{"cri du Nord-Est"}
+        crr{"algonquin de la Caroline"}
         den{"slave"}
         dgr{"tlicho"}
         ebu{"embou"}
@@ -42,11 +45,13 @@ fr_CA{
         nmg{"kwasio"}
         nwc{"newari classique"}
         nyn{"nkole"}
+        oka{"okanagan"}
         pau{"palauan"}
         pdc{"allemand de Pennsylvanie"}
         pdt{"bas allemand mennonite"}
         peo{"vieux perse"}
         pfl{"palatin"}
+        pis{"pidgin"}
         pro{"ancien occitan"}
         quc{"k’iche’"}
         rar{"rarotonga"}
@@ -93,14 +98,20 @@ fr_CA{
     }
     Types{
         calendar{
-            ethiopic-amete-alem{"Calendrier éthiopien de l’An de grâce"}
             islamic-umalqura{"calendrier musulman (calculé, Umm al-Qura)"}
         }
         collation{
-            dictionary{"Ordre de tri du dictionnaire"}
+            big5han{"ordre de tri chinois traditionnel - Big5"}
+            dictionary{"ordre de tri du dictionnaire"}
             eor{"ordre multilingue européen"}
-            reformed{"Ordre de tri réformé"}
+            gb2312han{"ordre de tri chinois simplifié - GB2312"}
+            phonebook{"ordre de tri de l’annuaire"}
+            pinyin{"ordre de tri pinyin"}
+            reformed{"ordre de tri réformé"}
             searchjl{"Rechercher par consonne initiale en hangeul"}
+            stroke{"ordre de tri des traits"}
+            traditional{"ordre de tri traditionnel"}
+            zhuyin{"ordre de tri zhuyin"}
         }
         d0{
             fwidth{"pleine chasse"}

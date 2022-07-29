@@ -462,6 +462,14 @@ gd{
                 other{"{0} nano-diog"}
                 two{"{0} nano-diog"}
             }
+            quarter{
+                dnam{"cairteal"}
+                few{"{0} cairtealan"}
+                one{"{0} chairteal"}
+                other{"{0} cairteal"}
+                per{"{0}/c"}
+                two{"{0} chairteal"}
+            }
             second{
                 dnam{"diog"}
                 few{"{0} diogan"}
@@ -1821,6 +1829,14 @@ gd{
                 other{"{0}ns"}
                 two{"{0}ns"}
             }
+            quarter{
+                dnam{"c"}
+                few{"{0}c"}
+                one{"{0}c"}
+                other{"{0}c"}
+                per{"{0}/c"}
+                two{"{0}c"}
+            }
             second{
                 dnam{"diog"}
                 few{"{0}d"}
@@ -3173,6 +3189,14 @@ gd{
                 one{"{0} ns"}
                 other{"{0} ns"}
                 two{"{0} ns"}
+            }
+            quarter{
+                dnam{"cairt."}
+                few{"{0} cairt."}
+                one{"{0} chairt."}
+                other{"{0} cairt."}
+                per{"{0}/c"}
+                two{"{0} chairt."}
             }
             second{
                 dnam{"diog"}

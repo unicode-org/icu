@@ -1882,6 +1882,47 @@ lt{
                 one{"{0} nanosekundė"}
                 other{"{0} nanosekundžių"}
             }
+            quarter{
+                case{
+                    accusative{
+                        few{"{0} ketvirčius"}
+                        many{"{0} ketvirčio"}
+                        one{"{0} ketvirtį"}
+                        other{"{0} ketvirčių"}
+                    }
+                    dative{
+                        few{"{0} ketvirčiams"}
+                        many{"{0} ketvirčio"}
+                        one{"{0} ketvirčiui"}
+                        other{"{0} ketvirčių"}
+                    }
+                    genitive{
+                        few{"{0} ketvirčių"}
+                        many{"{0} ketvirčio"}
+                        one{"{0} ketvirčio"}
+                        other{"{0} ketvirčių"}
+                    }
+                    instrumental{
+                        few{"{0} ketvirčiais"}
+                        many{"{0} ketvirčio"}
+                        one{"{0} ketvirčiu"}
+                        other{"{0} ketvirčių"}
+                    }
+                    locative{
+                        few{"{0} ketvirčiuose"}
+                        many{"{0} ketvirčio"}
+                        one{"{0} ketvirtyje"}
+                        other{"{0} ketvirčių"}
+                    }
+                }
+                dnam{"ketvirtis"}
+                few{"{0} ketvirčiai"}
+                gender{"masculine"}
+                many{"{0} ketvirčio"}
+                one{"{0} ketvirtis"}
+                other{"{0} ketvirčių"}
+                per{"{0}/ketv."}
+            }
             second{
                 case{
                     accusative{
@@ -5253,6 +5294,13 @@ lt{
                 one{"{0} ns"}
                 other{"{0} ns"}
             }
+            quarter{
+                few{"{0} ketv."}
+                many{"{0} ketv."}
+                one{"{0} ketv."}
+                other{"{0} ketv."}
+                per{"{0}/ketv."}
+            }
             second{
                 dnam{"sek."}
                 few{"{0} s"}
@@ -5963,6 +6011,14 @@ lt{
                 many{"{0} ns"}
                 one{"{0} ns"}
                 other{"{0} ns"}
+            }
+            quarter{
+                dnam{"ketv."}
+                few{"{0} ketv."}
+                many{"{0} ketv."}
+                one{"{0} ketv."}
+                other{"{0} ketv."}
+                per{"{0}/ketv."}
             }
             second{
                 dnam{"sek."}

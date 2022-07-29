@@ -1,0 +1,54 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
+ha_NE{
+    Currencies{
+        MDL{
+            "MDL",
+            "kuɗaɗen Moldova",
+        }
+    }
+    CurrencyPlurals{
+        BBD{
+            one{"Dalar Barbados"}
+        }
+        BMD{
+            one{"Dalar Bermuda"}
+        }
+        BND{
+            one{"Dalar Brunei"}
+            other{"Dalolin Brunei"}
+        }
+        FJD{
+            one{"Dalar Fiji"}
+            other{"Dalolin Fiji"}
+        }
+        FKP{
+            one{"Fam na Tsibirai na Falkland"}
+        }
+        NZD{
+            one{"Dalar New Zealand"}
+            other{"Dalolin New Zealand"}
+        }
+        SBD{
+            one{"Dalar Tsibirai na Solomon"}
+            other{"Dalolin Tsibirai na Solomon"}
+        }
+        SGD{
+            one{"dalar Singapore"}
+            other{"Dalolin Singapore"}
+        }
+        SHP{
+            one{"Fam na San Helena"}
+            other{"Fam na San Helena"}
+        }
+        TRY{
+            one{"kudin Turkish"}
+            other{"Kuɗin Turkiyya"}
+        }
+        UGX{
+            one{"Sulen Yuganda"}
+            other{"Sulallan Yuganda"}
+        }
+    }
+}

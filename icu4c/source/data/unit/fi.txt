@@ -1080,6 +1080,30 @@ fi{
                 one{"{0} nanosekunti"}
                 other{"{0} nanosekuntia"}
             }
+            quarter{
+                case{
+                    elative{
+                        one{"{0} neljänneksestä"}
+                        other{"{0} neljänneksestä"}
+                    }
+                    genitive{
+                        one{"{0} neljänneksen"}
+                        other{"{0} neljänneksen"}
+                    }
+                    illative{
+                        one{"{0} neljännekseen"}
+                        other{"{0} neljännekseen"}
+                    }
+                    partitive{
+                        one{"{0} neljännestä"}
+                        other{"{0} neljännestä"}
+                    }
+                }
+                dnam{"neljännekset"}
+                one{"{0} neljännes"}
+                other{"{0} neljännestä"}
+                per{"{0}/neljännes"}
+            }
             second{
                 case{
                     elative{
@@ -3295,6 +3319,9 @@ fi{
                 one{"{0}ns"}
                 other{"{0}ns"}
             }
+            quarter{
+                dnam{"q"}
+            }
             second{
                 dnam{"s"}
                 one{"{0}s"}
@@ -4276,6 +4303,9 @@ fi{
                 dnam{"ns"}
                 one{"{0} ns"}
                 other{"{0} ns"}
+            }
+            quarter{
+                dnam{"q"}
             }
             second{
                 dnam{"sek"}

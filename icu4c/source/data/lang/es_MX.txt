@@ -5,12 +5,18 @@ es_MX{
     %%Parent{"es_419"}
     Languages{
         ace{"acehnés"}
+        ady{"adigué"}
         arp{"arapaho"}
+        ars{"árabe neyedí"}
         bas{"basa"}
         bax{"bamun"}
         bho{"bhoshpuri"}
         bla{"siksika"}
         bua{"buriat"}
+        crj{"cree del sureste"}
+        crl{"cree del noreste"}
+        crr{"carolina algonquian"}
+        dar{"darguin"}
         dum{"neerlandés medieval"}
         enm{"inglés medieval"}
         eu{"euskera"}
@@ -19,29 +25,31 @@ es_MX{
         gmh{"alemán de la alta edad media"}
         grc{"griego antiguo"}
         hak{"kejia (China)"}
+        hax{"haida del sur"}
         hil{"hiligainón"}
         hsn{"xiang (China)"}
+        ikt{"inuktitut del oeste de Canadá"}
         inh{"ingusetio"}
         kbd{"kabardiano"}
+        kgp{"kaingang"}
         krc{"karachái bálkaro"}
         kum{"cumuco"}
         lo{"lao"}
-        lus{"lushai"}
         mga{"irlandés medieval"}
         nan{"min nan (Chino)"}
         nr{"ndebele meridional"}
         nso{"sotho septentrional"}
+        ojb{"ojibwa del noroeste"}
+        ojw{"ojibwa del oeste"}
         pa{"punyabí"}
         shu{"árabe chadiano"}
+        slh{"lushootseed del sur"}
         ss{"siswati"}
         sw{"suajili"}
         sw_CD{"suajili del Congo"}
         syr{"siriaco"}
-        tet{"tetún"}
-        tn{"setswana"}
-        tyv{"tuviniano"}
+        tce{"tutchone del sur"}
         wuu{"chino wu"}
-        xal{"kalmyk"}
         zgh{"tamazight marroquí estándar"}
     }
     Languages%menu{
@@ -53,9 +61,6 @@ es_MX{
     Languages%variant{
         ug{"uyghur"}
     }
-    Scripts{
-        Mlym{"malayálam"}
-    }
     Types{
         calendar{
             roc{"calendario minguo"}
@@ -65,6 +70,8 @@ es_MX{
         }
         numbers{
             gujr{"dígitos en gujarati"}
+            mtei{"dígitos en manipuri"}
+            olck{"dígitos ol chiki"}
         }
     }
     characterLabelPattern{

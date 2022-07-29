@@ -90,7 +90,7 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
         (void)currentBundleKey;    /* Suppress set but not used warning. */
         subBundle = ures_getNextResource(currentBundle, NULL, &errorCode);
         if (U_FAILURE(errorCode)) {
-            log_err("Can't open a resource for lnocale %s. Error: %s\n", locale, u_errorName(errorCode));
+            log_err("Can't open a resource for locale %s. Error: %s\n", locale, u_errorName(errorCode));
             continue;
         }
         subBundleKey = ures_getKey(subBundle);
@@ -177,7 +177,7 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
                 }
 
                 if ((subBundleKey == NULL
-                    || (subBundleKey != NULL &&  strcmp(subBundleKey, "LocaleScript") != 0 && !isCurrencyPreEuro(subBundleKey)))
+                    || (subBundleKey != NULL && strcmp(subBundleKey, "LocaleScript") != 0 && !isCurrencyPreEuro(subBundleKey)))
                     && ures_getSize(subRootBundle) != ures_getSize(subBundle))
                 {
                     log_err("Different size array with key \"%s\" in \"%s\" from root for locale \"%s\"\n"
@@ -338,13 +338,15 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
                         subBundleKey,
                         ures_getKey(currentBundle),
                         locale);
-            } else if (string[0] == (UChar)0x20) {
+            /* foreignSpaceReplacement can be just a space */
+            } else if (string[0] == (UChar)0x20 && (strcmp(subBundleKey,"foreignSpaceReplacement"))) {
                 log_err("key \"%s\" in \"%s\" starts with a space in locale \"%s\"\n",
                         subBundleKey,
                         ures_getKey(currentBundle),
                         locale);
-            /* localeDisplayPattern/separator can end with a space */
-            } else if (string[len - 1] == (UChar)0x20 && (strcmp(subBundleKey,"separator"))) {
+            /* localeDisplayPattern/separator can end with a space, foreignSpaceReplacement can be just a space */
+            } else if (string[len - 1] == (UChar)0x20 && (strcmp(subBundleKey,"separator"))
+                    && (strcmp(subBundleKey,"foreignSpaceReplacement"))) {
                 log_err("key \"%s\" in \"%s\" ends with a space in locale \"%s\"\n",
                         subBundleKey,
                         ures_getKey(currentBundle),
@@ -418,7 +420,9 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
 #endif
         }
         else if (ures_getType(subBundle) == URES_TABLE) {
-            if (strcmp(subBundleKey, "availableFormats")!=0) {
+            if (strcmp(subBundleKey, "availableFormats")!=0 &&
+                strcmp(subBundleKey, "nameOrderLocales")!=0 &&
+                strcmp(subBundleKey, "namePattern")!=0 ) {
                 /* Here is one of the recursive parts */
                 TestKeyInRootRecursive(subRootBundle, rootName, subBundle, locale);
             }
@@ -968,6 +972,10 @@ static void VerifyTranslation(void) {
             }
             else {
                 strIdx = findStringSetMismatch(currLoc, langBuffer, langSize, mergedExemplarSet, FALSE, &badChar);
+                if ((uprv_strcmp(currLoc,"my") == 0 || uprv_strncmp(currLoc,"my_",3) == 0) &&
+                        log_knownIssue("cldrbug:15858", "my day names use a char not in exemplars")) {
+                    strIdx = -1;
+                }
                 if (strIdx >= 0) {
                     log_err("getDisplayLanguage(%s) at index %d returned characters not in the exemplar characters: %04X.\n",
                         currLoc, strIdx, badChar);
@@ -1006,6 +1014,10 @@ static void VerifyTranslation(void) {
                         log_knownIssue("cldrbug:15355", "ks_Deva day names use chars not in exemplars")) {
                     end = 0;
                 }
+                if ((uprv_strcmp(currLoc,"my") == 0 || uprv_strncmp(currLoc,"my_",3) == 0) && 
+                        log_knownIssue("cldrbug:15858", "my day names use a char not in exemplars")) {
+                    end = 0;
+                }
 
                 for (idx = 0; idx < end; idx++) {
                     const UChar *fromBundleStr = ures_getStringByIndex(resArray, idx, &langSize, &errorCode);
@@ -1041,6 +1053,10 @@ static void VerifyTranslation(void) {
                 }
                 if (uprv_strncmp(currLoc,"ks_Deva",7) == 0 && 
                         log_knownIssue("cldrbug:15355", "ks_Deva month names use chars not in exemplars")) {
+                    end = 0;
+                }
+                if ((uprv_strcmp(currLoc,"my") == 0 || uprv_strncmp(currLoc,"my_",3) == 0) && 
+                        log_knownIssue("cldrbug:15858", "my month names use a char not in exemplars")) {
                     end = 0;
                 }
 

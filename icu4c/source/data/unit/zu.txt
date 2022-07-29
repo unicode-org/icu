@@ -900,6 +900,10 @@ zu{
                 one{"{0}%"}
                 other{"{0}%"}
             }
+            permillion{
+                one{"{0} ppm"}
+                other{"{0}ppm"}
+            }
         }
         consumption{
             liter-per-100-kilometer{

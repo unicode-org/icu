@@ -226,7 +226,7 @@ public class CurrencyTest extends TestFmwk {
                 "US$",
                 USD.getName(en_CA, Currency.SYMBOL_NAME, isChoiceFormat));
         assertEquals("USD.getName(NARROW_SYMBOL_NAME, en_CA)",
-                "$",
+                "US$",
                 USD.getName(en_CA, Currency.NARROW_SYMBOL_NAME, isChoiceFormat));
         assertEquals("USD.getName(SYMBOL_NAME) in en_NZ",
                 "US$",

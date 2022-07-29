@@ -582,6 +582,16 @@ cy{
                 two{"{0} nanoeiliadau"}
                 zero{"{0} nanoeiliadau"}
             }
+            quarter{
+                dnam{"chwarteri"}
+                few{"{0} chw"}
+                many{"{0} chw"}
+                one{"{0} chwateri"}
+                other{"{0} chwater"}
+                per{"{0}/chw"}
+                two{"{0} chw"}
+                zero{"{0} chw"}
+            }
             second{
                 dnam{"eiliadau"}
                 few{"{0} eiliad"}
@@ -2107,6 +2117,16 @@ cy{
                 two{"{0}m"}
                 zero{"{0}m"}
             }
+            quarter{
+                dnam{"chw"}
+                few{"{0} chw"}
+                many{"{0} chw"}
+                one{"{0}chw"}
+                other{"{0} chw"}
+                per{"{0}/chw"}
+                two{"{0} chw"}
+                zero{"{0} chw"}
+            }
             second{
                 dnam{"eil"}
                 few{"{0} eil"}
@@ -3479,6 +3499,16 @@ cy{
                 other{"{0} ns"}
                 two{"{0} ns"}
                 zero{"{0} ns"}
+            }
+            quarter{
+                dnam{"chw"}
+                few{"{0} chw"}
+                many{"{0} chw"}
+                one{"{0} chw"}
+                other{"{0} chw"}
+                per{"{0}/chw"}
+                two{"{0} chw"}
+                zero{"{0} chw"}
             }
             second{
                 dnam{"eiliadau"}

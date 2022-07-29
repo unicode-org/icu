@@ -334,6 +334,11 @@ pcm{
                 one{"{0} Nánosẹ́kọn"}
                 other{"{0} Nánosẹ́kọn"}
             }
+            quarter{
+                dnam{"kwọ́ta"}
+                one{"{0} kwọ́ta"}
+                other{"{0} kwọ́ta"}
+            }
             second{
                 dnam{"Sẹ́kọn-dẹm"}
                 one{"{0} Sẹ́kọn"}
@@ -1692,6 +1697,12 @@ pcm{
                 dnam{"Nánosẹ́kọns"}
                 one{"{0} Nansẹk"}
                 other{"{0} Nansẹk"}
+            }
+            quarter{
+                dnam{"kwt"}
+                one{"{0} kwt"}
+                other{"{0} kwtd"}
+                per{"{0}/kw"}
             }
             second{
                 dnam{"Sẹ́kọns"}

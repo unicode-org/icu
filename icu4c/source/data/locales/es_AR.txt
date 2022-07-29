@@ -190,6 +190,9 @@ es_AR{
                 }
             }
         }
+        dayperiod{
+            dn{"a. m./p. m."}
+        }
         second-narrow{
             dn{"seg."}
             relativeTime{

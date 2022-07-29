@@ -337,6 +337,12 @@ sc{
                 one{"{0} nanosegundu"}
                 other{"{0} nanosegundos"}
             }
+            quarter{
+                dnam{"cuartos"}
+                one{"{0} cuartu"}
+                other{"{0} cuartos"}
+                per{"{0}/crt"}
+            }
             second{
                 dnam{"segundos"}
                 one{"{0} segundu"}
@@ -1264,6 +1270,12 @@ sc{
                 one{"{0}ns"}
                 other{"{0}ns"}
             }
+            quarter{
+                dnam{"crt"}
+                one{"{0}crt"}
+                other{"{0}crt"}
+                per{"{0}/crt"}
+            }
             second{
                 dnam{"seg"}
                 one{"{0}s"}
@@ -1974,6 +1986,12 @@ sc{
             nanosecond{
                 one{"{0}ns"}
                 other{"{0}ns"}
+            }
+            quarter{
+                dnam{"cuartos"}
+                one{"{0} crt"}
+                other{"{0} crt"}
+                per{"{0}/crt"}
             }
             second{
                 dnam{"seg"}

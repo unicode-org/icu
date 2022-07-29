@@ -282,7 +282,7 @@
 
                     // C-F
                     ca, ceb, chr, cs, cy, da, de_AT, de, dsb, dz, ee, el, en,
-                    en_US_POSIX, en_US, eo, es, et, fa_AF, fa, ff_Adlm, ff, fil, fi, fo, fr_CA, fr,
+                    en_US_POSIX, en_US, eo, es, et, fa_AF, fa, ff_Adlm, ff, fil, fi, fo, fr_CA, fr, fy,
 
                     // G-J
                     ga, gl, gu, ha, haw, he, hi, hr, hsb, hu, hy,
@@ -322,7 +322,7 @@
 
                     // F-P
                     fa_AF, fa, ff, fil, fi, fo, fr_BE, fr_CH, fr, ga, he, hi, hr,
-                    hu, hy, id, in, is, it, iw, ja, ka, kl, km, ko, ky, lb,
+                    hu, hy, id, in, is, it, iw, ja, ka, kk, kl, km, ko, ky, lb,
                     lo, lrc, lt, lv, mk, ms, mt, my, nb, ne, nl, nn, no, pl, pt_PT, pt,
 
                     // Q-Z

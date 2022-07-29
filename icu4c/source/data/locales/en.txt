@@ -2352,29 +2352,5 @@ en{
             surnameFirst-short-referring-formal{"{surname} {given-initial} {given2-initial}"}
             surnameFirst-short-referring-informal{"{surname} {given-initial}"}
         }
-        sampleName{
-            full{
-                given{"Ada Cornelia"}
-                given-informal{"Neele"}
-                given2{"Eva Sophia"}
-                prefix{"Prof. Dr."}
-                suffix{"M.D. Ph.D."}
-                surname-core{"Wolf"}
-                surname-prefix{"van den"}
-                surname2{"Becker Schmidt"}
-            }
-            given12Surname{
-                given{"John"}
-                given2{"Hamish"}
-                surname{"Watson"}
-            }
-            givenOnly{
-                given{"Sinbad"}
-            }
-            givenSurnameOnly{
-                given{"Irene"}
-                surname{"Adler"}
-            }
-        }
     }
 }

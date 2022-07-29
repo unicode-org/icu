@@ -1253,6 +1253,31 @@ hr{
                 one{"{0} nanosekunda"}
                 other{"{0} nanosekundi"}
             }
+            quarter{
+                case{
+                    accusative{
+                        few{"{0} četvrtine"}
+                        one{"{0} četvrtinu"}
+                        other{"{0} četvrtina"}
+                    }
+                    genitive{
+                        few{"{0} četvrtine"}
+                        one{"{0} četvrtine"}
+                        other{"{0} četvrtina"}
+                    }
+                    instrumental{
+                        few{"{0} četvrtine"}
+                        one{"{0} četvrtinom"}
+                        other{"{0} četvrtina"}
+                    }
+                }
+                dnam{"čevrtine"}
+                few{"{0} četvrtine"}
+                gender{"feminine"}
+                one{"{0} četvrtina"}
+                other{"{0} četvrtina"}
+                per{"{0}/čet."}
+            }
             second{
                 case{
                     accusative{
@@ -3550,6 +3575,13 @@ hr{
                 one{"{0} ns"}
                 other{"{0} ns"}
             }
+            quarter{
+                dnam{"čet."}
+                few{"{0} čet."}
+                one{"{0} čet."}
+                other{"{0} čet."}
+                per{"{0}/čet."}
+            }
             second{
                 dnam{"s"}
                 few{"{0} s"}
@@ -4397,6 +4429,13 @@ hr{
                 few{"{0} ns"}
                 one{"{0} ns"}
                 other{"{0} ns"}
+            }
+            quarter{
+                dnam{"čet."}
+                few{"{0} čet."}
+                one{"{0} čet."}
+                other{"{0} čet."}
+                per{"{0}/čet."}
             }
             second{
                 dnam{"s"}

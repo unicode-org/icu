@@ -1080,6 +1080,30 @@ hy{
                 one{"{0} նանովայրկյան"}
                 other{"{0} նանովայրկյան"}
             }
+            quarter{
+                case{
+                    ablative{
+                        one{"{0} եռամսյակից"}
+                        other{"{0} եռամսյակից"}
+                    }
+                    dative{
+                        one{"{0} եռամսյակին"}
+                        other{"{0} եռամսյակին"}
+                    }
+                    instrumental{
+                        one{"{0} եռամսյակով"}
+                        other{"{0} եռամսյակով"}
+                    }
+                    locative{
+                        one{"{0} եռամսյակում"}
+                        other{"{0} եռամսյակում"}
+                    }
+                }
+                dnam{"եռամսյակներ"}
+                one{"{0} եռամսյակ"}
+                other{"{0} եռամսյակ"}
+                per{"{0}/եռմս"}
+            }
             second{
                 case{
                     ablative{
@@ -3000,6 +3024,7 @@ hy{
         }
         angle{
             arc-minute{
+                dnam{"րոպե"}
                 one{"{0}′"}
                 other{"{0}′"}
             }
@@ -3180,6 +3205,12 @@ hy{
                 dnam{"ա"}
                 one{"{0} ա"}
                 other{"{0} ա"}
+            }
+            quarter{
+                dnam{"եռմս"}
+                one{"{0} եռմս"}
+                other{"{0} եռմս"}
+                per{"{0}/եռմս"}
             }
             second{
                 dnam{"վ"}
@@ -3695,6 +3726,12 @@ hy{
                 dnam{"նվ"}
                 one{"{0} նվ"}
                 other{"{0} նվ"}
+            }
+            quarter{
+                dnam{"եռմս"}
+                one{"{0} եռմս"}
+                other{"{0} եռմս"}
+                per{"{0}/եռմս"}
             }
             second{
                 dnam{"վրկ"}

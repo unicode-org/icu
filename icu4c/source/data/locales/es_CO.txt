@@ -304,4 +304,9 @@ es_CO{
             }
         }
     }
+    fields{
+        dayperiod{
+            dn{"a. m./p. m."}
+        }
+    }
 }

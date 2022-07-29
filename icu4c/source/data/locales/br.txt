@@ -5315,6 +5315,7 @@ br{
         hanzi_traditional{"arouezennoù han (hengounel)"}
         heart{"kalon"}
         historic_scripts{"skritur istorel"}
+        japanese_kana{"kana japanek"}
         male{"gourel"}
         math_symbols{"arouez matematikel"}
         middle_eastern_scripts{"skriturioù Reter-Kreiz"}

@@ -330,6 +330,12 @@ af{
                 one{"{0} nanosekonde"}
                 other{"{0} nanosekondes"}
             }
+            quarter{
+                dnam{"kwartale"}
+                one{"{0} kwartaal"}
+                other{"{0} kwartale"}
+                per{"{0}/kwartaal"}
+            }
             second{
                 dnam{"sekondes"}
                 one{"{0} sekonde"}
@@ -1264,6 +1270,12 @@ af{
                 one{"{0}ns."}
                 other{"{0}ns."}
             }
+            quarter{
+                dnam{"kw."}
+                one{"{0} kw."}
+                other{"{0} kwe."}
+                per{"{0}/kw."}
+            }
             second{
                 dnam{"s."}
                 one{"{0} s."}
@@ -2138,6 +2150,12 @@ af{
                 dnam{"ns."}
                 one{"{0} ns."}
                 other{"{0} ns."}
+            }
+            quarter{
+                dnam{"kw."}
+                one{"{0} kw."}
+                other{"{0} kwe."}
+                per{"{0}/kw."}
             }
             second{
                 dnam{"s."}

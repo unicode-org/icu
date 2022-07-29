@@ -282,6 +282,11 @@ yue{
                 dnam{"奈秒"}
                 other{"{0} 奈秒"}
             }
+            quarter{
+                dnam{"季"}
+                other{"{0} 季"}
+                per{"每季 {0}"}
+            }
             second{
                 dnam{"秒"}
                 other{"{0} 秒"}
@@ -949,6 +954,11 @@ yue{
                 dnam{"月"}
                 other{"{0} 個月"}
             }
+            quarter{
+                dnam{"季"}
+                other{"{0} 季"}
+                per{"每季{0}"}
+            }
             second{
                 dnam{"秒"}
                 other{"{0} 秒"}
@@ -1323,6 +1333,11 @@ yue{
             nanosecond{
                 dnam{"奈秒"}
                 other{"{0} 奈秒"}
+            }
+            quarter{
+                dnam{"季"}
+                other{"{0} 季"}
+                per{"每季{0}"}
             }
             second{
                 dnam{"秒"}

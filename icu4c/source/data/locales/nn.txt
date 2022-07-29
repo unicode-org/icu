@@ -4,14 +4,11 @@
 nn{
     %%Parent{"no"}
     AuxExemplarCharacters{"[á ǎ č ç đ è ê ń ñ ŋ š ŧ ü ž ä ö]"}
-    ExemplarCharactersPunctuation{
-        "[\\- ‐ ‑ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ "
-        "′ ″]"
-    }
     NumberElements{
         latn{
             patterns{
                 accountingFormat{"#,##0.00 ¤"}
+                accountingFormat%noCurrency{"#,##0.00"}
                 currencyFormat{"#,##0.00 ¤"}
             }
             patternsLong{
@@ -87,7 +84,6 @@ nn{
                     M{"dd.MM.–dd.MM."}
                     d{"dd.MM.–dd.MM."}
                 }
-                fallback{"{0} – {1}"}
                 yM{
                     M{"MM.y–MM.y G"}
                     y{"MM.y–MM.y G"}
@@ -130,7 +126,6 @@ nn{
             availableFormats{
                 EHm{"E HH:mm"}
                 EHms{"E HH:mm:ss"}
-                MEd{"E d.M"}
                 MMMMW{
                     one{"'veke' W 'i' MMMM"}
                     other{"'veke' W 'i' MMMM"}
@@ -1010,6 +1005,14 @@ nn{
             end{"{0} {1}"}
             middle{"{0} {1}"}
             start{"{0} {1}"}
+        }
+    }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "nn",
+            }
         }
     }
 }

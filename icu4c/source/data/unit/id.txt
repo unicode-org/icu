@@ -270,6 +270,11 @@ id{
                 dnam{"nanodetik"}
                 other{"{0} nanodetik"}
             }
+            quarter{
+                dnam{"kuartal"}
+                other{"{0} kuartal"}
+                per{"{0}/k"}
+            }
             second{
                 dnam{"detik"}
                 other{"{0} detik"}
@@ -994,6 +999,11 @@ id{
                 dnam{"nanodtk"}
                 other{"{0} ndtk"}
             }
+            quarter{
+                dnam{"krt"}
+                other{"{0}k"}
+                per{"{0}/k"}
+            }
             second{
                 dnam{"dtk"}
                 other{"{0} dtk"}
@@ -1462,6 +1472,11 @@ id{
             nanosecond{
                 dnam{"nanodtk"}
                 other{"{0} ndtk"}
+            }
+            quarter{
+                dnam{"krt"}
+                other{"{0} krt"}
+                per{"{0}/k"}
             }
             second{
                 dnam{"dtk"}
