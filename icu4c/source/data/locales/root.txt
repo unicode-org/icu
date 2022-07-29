@@ -3323,29 +3323,5 @@ root{
             }
             surnameFirst-long-referring-formal{"{surname} {surname2} {prefix} {given} {given2} {suffix}"}
         }
-        sampleName{
-            full{
-                given{"∅∅∅"}
-                given-informal{"∅∅∅"}
-                given2{"∅∅∅"}
-                prefix{"∅∅∅"}
-                suffix{"∅∅∅"}
-                surname-core{"∅∅∅"}
-                surname-prefix{"∅∅∅"}
-                surname2{"∅∅∅"}
-            }
-            given12Surname{
-                given{"∅∅∅"}
-                given2{"∅∅∅"}
-                surname{"∅∅∅"}
-            }
-            givenOnly{
-                given{"∅∅∅"}
-            }
-            givenSurnameOnly{
-                given{"∅∅∅"}
-                surname{"∅∅∅"}
-            }
-        }
     }
 }

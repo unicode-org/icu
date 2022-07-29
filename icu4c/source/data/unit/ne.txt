@@ -342,6 +342,12 @@ ne{
                 one{"{0} न्यानोसेकेन्ड"}
                 other{"{0} न्यानोसेकेन्ड"}
             }
+            quarter{
+                dnam{"qtr"}
+                one{"{0} क्वाटर"}
+                other{"{0} क्वाटर"}
+                per{"{0}/q"}
+            }
             second{
                 dnam{"सेकेन्ड"}
                 one{"{0} सेकेन्ड"}
@@ -1143,8 +1149,8 @@ ne{
             }
             percent{
                 dnam{"प्रतिशत"}
-                one{"{0}प्रतिशत"}
-                other{"{0}प्रतिशत"}
+                one{"{0}%"}
+                other{"{0}%"}
             }
         }
         consumption{
@@ -1186,6 +1192,10 @@ ne{
                 dnam{"महिना"}
                 one{"{0} महिना"}
                 other{"{0} महिना"}
+            }
+            quarter{
+                dnam{"क्वा"}
+                per{"{0} /q"}
             }
             second{
                 dnam{"सेकेन्ड"}
@@ -1339,6 +1349,10 @@ ne{
             cubic-mile{
                 one{"{0} घन माईल"}
                 other{"{0} घन माईल"}
+            }
+            dram{
+                one{"{0}fl.dr."}
+                other{"{0} ड्राम fl"}
             }
             liter{
                 dnam{"लिटर"}
@@ -1516,8 +1530,8 @@ ne{
             }
             percent{
                 dnam{"प्रतिशत"}
-                one{"{0}प्रतिशत"}
-                other{"{0}प्रतिशत"}
+                one{"{0}%"}
+                other{"{0}%"}
             }
             permille{
                 dnam{"प्रति मिल"}
@@ -1668,6 +1682,12 @@ ne{
                 dnam{"न्यानोसेकेन्ड"}
                 one{"{0} न.से."}
                 other{"{0} न.से."}
+            }
+            quarter{
+                dnam{"क्वा"}
+                one{"{0} q"}
+                other{"{0} q"}
+                per{"{0}/q"}
             }
             second{
                 dnam{"सेकेन्ड"}

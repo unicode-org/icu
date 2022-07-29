@@ -286,7 +286,7 @@ ro{
             power3{
                 few{
                     _{
-                        _{"{0} cubi"}
+                        _{"{0} cubice"}
                         genitive{"{0} cubice"}
                     }
                     feminine{
@@ -295,7 +295,7 @@ ro{
                     }
                     masculine{
                         _{"{0} cubi"}
-                        genitive{"{0} cubice"}
+                        genitive{"{0} cubi"}
                     }
                 }
                 one{
@@ -322,8 +322,8 @@ ro{
                         genitive{"{0} cubice"}
                     }
                     masculine{
-                        _{"{0} cubice"}
-                        genitive{"{0} cubice"}
+                        _{"{0} cubi"}
+                        genitive{"{0} cubi"}
                     }
                 }
             }
@@ -341,7 +341,7 @@ ro{
                 few{"{0} itemi"}
                 gender{"masculine"}
                 one{"{0} de itemi"}
-                other{"{0} itemi"}
+                other{"{0} de itemi"}
             }
             karat{
                 case{
@@ -783,6 +783,21 @@ ro{
                 one{"{0} nanosecundă"}
                 other{"{0} de nanosecunde"}
             }
+            quarter{
+                case{
+                    genitive{
+                        few{"{0} trimestre"}
+                        one{"unui trimestru"}
+                        other{"{0} de trimestre"}
+                    }
+                }
+                dnam{"trimestre"}
+                few{"{0} trimestre"}
+                gender{"neuter"}
+                one{"{0} trimestru"}
+                other{"{0} de trimestre"}
+                per{"{0}/trim."}
+            }
             second{
                 case{
                     genitive{
@@ -980,7 +995,7 @@ ro{
                 case{
                     genitive{
                         few{"{0} kilowați-oră per 100 kilometri"}
-                        one{"{0} kilowatt-oră per 100 kilometri"}
+                        one{"unui kilowatt-oră per 100 de kilometri"}
                         other{"{0} kilowați-oră per 100 kilometri"}
                     }
                 }
@@ -2081,14 +2096,14 @@ ro{
                     genitive{
                         few{"{0} megalitri"}
                         one{"unui megalitru"}
-                        other{"{0} megalitri"}
+                        other{"{0} de megalitri"}
                     }
                 }
                 dnam{"megalitri"}
                 few{"{0} megalitri"}
                 gender{"masculine"}
                 one{"{0} megalitru"}
-                other{"{0} megalitri"}
+                other{"{0} de megalitri"}
             }
             milliliter{
                 case{
@@ -2352,6 +2367,12 @@ ro{
                 few{"{0} ns"}
                 one{"{0} ns"}
                 other{"{0} ns"}
+            }
+            quarter{
+                few{"{0} trim."}
+                one{"{0} trim."}
+                other{"{0} trim."}
+                per{"{0}/trim."}
             }
             second{
                 dnam{"s"}
@@ -3105,6 +3126,13 @@ ro{
                 few{"{0} ns"}
                 one{"{0} ns"}
                 other{"{0} ns"}
+            }
+            quarter{
+                dnam{"trim."}
+                few{"{0} trim."}
+                one{"{0} trim."}
+                other{"{0} trim."}
+                per{"{0}/trim."}
             }
             second{
                 dnam{"s"}

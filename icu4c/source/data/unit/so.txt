@@ -312,6 +312,12 @@ so{
                 one{"{0} nanoseken"}
                 other{"{0} nanoseken"}
             }
+            quarter{
+                dnam{"Rubucyo"}
+                one{"{0} rubac"}
+                other{"{0} rubac"}
+                per{"{0}/rubac"}
+            }
             second{
                 dnam{"ilbiriqsi"}
                 one{"{0} ilbiriqsi"}
@@ -973,6 +979,12 @@ so{
                 one{"{0}b"}
                 other{"{0}b"}
             }
+            quarter{
+                dnam{"Rubac"}
+                one{"{0} rubac"}
+                other{"{0} rubac"}
+                per{"{0}/rubac"}
+            }
             second{
                 one{"{0}il"}
                 other{"{0}il"}
@@ -1354,6 +1366,12 @@ so{
                 dnam{"nanosek"}
                 one{"{0} ns"}
                 other{"{0} ns"}
+            }
+            quarter{
+                dnam{"Rubuc"}
+                one{"{0} rubac"}
+                other{"{0} rubac"}
+                per{"{0}/rubac"}
             }
             second{
                 dnam{"ilbrqsi"}

@@ -643,6 +643,19 @@ da{
                 one{"{0} nanosekund"}
                 other{"{0} nanosekunder"}
             }
+            quarter{
+                case{
+                    genitive{
+                        one{"{0} kvartals"}
+                        other{"{0} kvartalers"}
+                    }
+                }
+                dnam{"kvartaler"}
+                gender{"neuter"}
+                one{"{0} kvartal"}
+                other{"{0} kvartaler"}
+                per{"{0}/pr. kvartal"}
+            }
             second{
                 case{
                     genitive{
@@ -2009,6 +2022,12 @@ da{
                 one{"{0}ns"}
                 other{"{0}ns"}
             }
+            quarter{
+                dnam{"kvartal"}
+                one{"{0} kvt."}
+                other{"{0} kvt."}
+                per{"{0}/kvt."}
+            }
             second{
                 dnam{"sek"}
                 one{"{0} s"}
@@ -2297,10 +2316,6 @@ da{
                 one{"{0}fl oz Im"}
                 other{"{0}fl oz Im"}
             }
-            hectoliter{
-                one{"{0}hL"}
-                other{"{0}hL"}
-            }
             liter{
                 dnam{"liter"}
                 one{"{0} l"}
@@ -2309,10 +2324,6 @@ da{
             megaliter{
                 one{"{0}ML"}
                 other{"{0}ML"}
-            }
-            milliliter{
-                one{"{0}mL"}
-                other{"{0}mL"}
             }
             pint-metric{
                 one{"{0} mpt"}
@@ -2596,6 +2607,12 @@ da{
                 dnam{"ns"}
                 one{"{0} ns"}
                 other{"{0} ns"}
+            }
+            quarter{
+                dnam{"kvartaler"}
+                one{"{0} kvt."}
+                other{"{0} kvt."}
+                per{"{0}/pr. kvt."}
             }
             second{
                 dnam{"sekunder"}

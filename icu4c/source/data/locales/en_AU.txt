@@ -155,15 +155,6 @@ en_AU{
                         "F.",
                         "Sa.",
                     }
-                    short{
-                        "Su",
-                        "Mon",
-                        "Tu",
-                        "Wed",
-                        "Th",
-                        "Fri",
-                        "Sat",
-                    }
                 }
                 stand-alone{
                     abbreviated{
@@ -185,11 +176,11 @@ en_AU{
                         "Sa.",
                     }
                     short{
-                        "Su",
+                        "Sun",
                         "Mon",
                         "Tu",
                         "Wed",
-                        "Th",
+                        "Thu",
                         "Fri",
                         "Sat",
                     }
@@ -252,10 +243,10 @@ en_AU{
             }
             intervalFormats{
                 GyMEd{
-                    G{"E, d/M/y GGGGG – E, d/M/y GGGGG"}
-                    M{"E, d/M/y – E, d/M/y GGGGG"}
-                    d{"E, d/M/y – E, d/M/y GGGGG"}
-                    y{"E, d/M/y – E, d/M/y GGGGG"}
+                    G{"E, d/M/y G – E, d/M/y G"}
+                    M{"E, d/M/y – E, d/M/y G"}
+                    d{"E, d/M/y – E, d/M/y G"}
+                    y{"E, d/M/y – E, d/M/y G"}
                 }
                 GyMMMEd{
                     G{"E, d MMM, y G – E, d MMM, y G"}
@@ -270,10 +261,10 @@ en_AU{
                     y{"d MMM, y – d MMM, y G"}
                 }
                 GyMd{
-                    G{"d/M/y GGGGG – d/M/y GGGGG"}
-                    M{"d/M/y – d/M/y GGGGG"}
-                    d{"d/M/y – d/M/y GGGGG"}
-                    y{"d/M/y – d/M/y GGGGG"}
+                    G{"d/M/y G – d/M/y G"}
+                    M{"d/M/y – d/M/y G"}
+                    d{"d/M/y – d/M/y G"}
+                    y{"d/M/y – d/M/y G"}
                 }
                 MMMd{
                     d{"d – d MMM"}
@@ -320,7 +311,7 @@ en_AU{
                         "Jun",
                         "Jul",
                         "Aug",
-                        "Sep",
+                        "Sept",
                         "Oct",
                         "Nov",
                         "Dec",
@@ -641,7 +632,6 @@ en_AU{
             }
         }
         hour-narrow{
-            dn{"h"}
             relativeTime{
                 future{
                     one{"in {0} hr"}
@@ -654,7 +644,6 @@ en_AU{
             }
         }
         hour-short{
-            dn{"h"}
             relativeTime{
                 future{
                     one{"in {0} hr"}
@@ -737,7 +726,7 @@ en_AU{
                     other{"in {0} qtrs"}
                 }
                 past{
-                    one{"in {0} qtr ago"}
+                    one{"{0} qtr ago"}
                     other{"{0} qtrs ago"}
                 }
             }

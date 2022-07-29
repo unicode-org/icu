@@ -398,6 +398,13 @@ ur{
                 one{"{0} نینو سیکنڈ"}
                 other{"{0} نینو سیکنڈ"}
             }
+            quarter{
+                dnam{"کوارٹرز"}
+                gender{"masculine"}
+                one{"{0} کوارٹر"}
+                other{"{0} کوارٹرز"}
+                per{"{0}/کوارٹر"}
+            }
             second{
                 dnam{"سیکنڈ"}
                 gender{"masculine"}
@@ -1328,6 +1335,12 @@ ur{
                 other{"{0} مہینے"}
                 per{"{0}/مہینہ"}
             }
+            quarter{
+                dnam{"کوارٹر"}
+                one{"{0}q"}
+                other{"{0}q"}
+                per{"{0}/q"}
+            }
             second{
                 dnam{"سیکنڈ"}
                 one{"{0} سیکنڈ"}
@@ -1948,6 +1961,12 @@ ur{
                 dnam{"نینو سیکنڈز"}
                 one{"{0} نینو سیکنڈ"}
                 other{"{0} نینو سیکنڈ"}
+            }
+            quarter{
+                dnam{"کوارٹر"}
+                one{"{0} کوارٹر"}
+                other{"{0} کوارٹرز"}
+                per{"{0}/کوارٹر"}
             }
             second{
                 dnam{"سیکنڈ"}

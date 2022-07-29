@@ -27,6 +27,7 @@ et{
             }
             patterns{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat{"#,##0.00 ¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -518,6 +519,12 @@ et{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimePatterns%atTime{
+                "{1}, 'kell' {0}",
+                "{1}, 'kell' {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
             DateTimeSkeletons{
                 "HHmmsszzzz",
                 "HHmmssz",
@@ -618,13 +625,13 @@ et{
                         "L",
                     }
                     wide{
-                        "Pühapäev",
-                        "Esmaspäev",
-                        "Teisipäev",
-                        "Kolmapäev",
-                        "Neljapäev",
-                        "Reede",
-                        "Laupäev",
+                        "pühapäev",
+                        "esmaspäev",
+                        "teisipäev",
+                        "kolmapäev",
+                        "neljapäev",
+                        "reede",
+                        "laupäev",
                     }
                 }
                 stand-alone{
@@ -656,13 +663,13 @@ et{
                         "L",
                     }
                     wide{
-                        "Pühapäev",
-                        "Esmaspäev",
-                        "Teisipäev",
-                        "Kolmapäev",
-                        "Neljapäev",
-                        "Reede",
-                        "Laupäev",
+                        "pühapäev",
+                        "esmaspäev",
+                        "teisipäev",
+                        "kolmapäev",
+                        "neljapäev",
+                        "reede",
+                        "laupäev",
                     }
                 }
             }
@@ -1999,6 +2006,45 @@ et{
                 "[,،٫⹁、︐︑﹐﹑，､]",
                 "[+⁺₊➕﬩﹢＋]",
             }
+        }
+    }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "et",
+            }
+        }
+        namePattern{
+            givenFirst-long-addressing-formal{"{prefix} {surname}"}
+            givenFirst-long-addressing-informal{"{given-informal}"}
+            givenFirst-long-referring-formal{"{given} {given2} {surname}, {suffix}"}
+            givenFirst-long-referring-informal{"{given} {surname}"}
+            givenFirst-medium-addressing-formal{"{prefix} {surname}"}
+            givenFirst-medium-addressing-informal{"{given}"}
+            givenFirst-medium-referring-informal{"{given} {surname}"}
+            givenFirst-short-addressing-formal{"{prefix} {surname}"}
+            givenFirst-short-addressing-informal{"{given}"}
+            givenFirst-short-referring-formal{"{given-initial} {given2-initial} {surname}"}
+            givenFirst-short-referring-informal{"{given} {surname-initial}"}
+            sorting-long-referring-formal{"{surname}, {given} {given2}, {suffix}"}
+            sorting-long-referring-informal{"{surname}, {given} {given2}"}
+            sorting-medium-referring-informal{"{surname}, {given-informal}"}
+            sorting-short-referring-formal{"{surname-core}, {given-initial} {given2-initial}"}
+            sorting-short-referring-informal{"{surname}, {given}"}
+            surnameFirst-long-addressing-formal{"{prefix} {surname}"}
+            surnameFirst-long-addressing-informal{"{given}"}
+            surnameFirst-long-referring-formal{"{surname}, {given} {given2}, {suffix}"}
+            surnameFirst-long-referring-informal{"{surname}, {given}"}
+            surnameFirst-medium-addressing-formal{"{prefix} {surname}"}
+            surnameFirst-medium-addressing-informal{"{given}"}
+            surnameFirst-medium-referring-informal{"{surname}, {given}"}
+            surnameFirst-short-addressing-formal{"{prefix} {surname}"}
+            surnameFirst-short-addressing-informal{"{given}"}
+            surnameFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
+            surnameFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
+            surnameFirst-short-referring-formal{"{surname}, {given-initial} {given2-initial}"}
+            surnameFirst-short-referring-informal{"{surname}, {given-initial}"}
         }
     }
 }

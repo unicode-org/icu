@@ -407,7 +407,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"JJmm", "11:58"},
 
         new ULocale("de_DE"),
-        new String[] {"yM", "1.1999"},
+        new String[] {"yM", "01/1999"},
         new String[] {"yMMM", "Jan. 1999"},
         new String[] {"yMd", "13.1.1999"},
         new String[] {"yMMMd", "13. Jan. 1999"},
@@ -1917,8 +1917,8 @@ public class DateTimeGeneratorTest extends TestFmwk {
                                            "d MMMM y 'à' HH:mm",
                                            "d MMM y, HH:mm",
                                            "dd/MM/y HH:mm" } ),
-            new DTPLocaleAndResults( "ha", new String[]{ // full != long
-                                           "EEEE d MMMM, y HH:mm",
+            new DTPLocaleAndResults( "ha", new String[]{
+                                           "EEEE d MMMM, y 'da' HH:mm",
                                            "d MMMM, y 'da' HH:mm",
                                            "d MMM, y, HH:mm",
                                            "y-MM-dd, HH:mm" } ),

@@ -283,6 +283,11 @@ ja{
                 dnam{"ナノ秒"}
                 other{"{0} ナノ秒"}
             }
+            quarter{
+                dnam{"四半期"}
+                other{"{0} 四半期"}
+                per{"{0}/四半期"}
+            }
             second{
                 dnam{"秒"}
                 other{"{0} 秒"}
@@ -1070,6 +1075,11 @@ ja{
                 dnam{"ns"}
                 other{"{0}ns"}
             }
+            quarter{
+                dnam{"四半期"}
+                other{"{0}Q"}
+                per{"{0}/Q"}
+            }
             second{
                 dnam{"秒"}
                 other{"{0}s"}
@@ -1239,7 +1249,7 @@ ja{
             }
             mile{
                 dnam{"マイル"}
-                other{"{0}マイル"}
+                other{"{0}mi"}
             }
             mile-scandinavian{
                 dnam{"スカンジナビアマイル"}
@@ -1275,7 +1285,7 @@ ja{
             }
             yard{
                 dnam{"ヤード"}
-                other{"{0}ヤード"}
+                other{"{0}yd"}
             }
         }
         light{
@@ -1380,6 +1390,9 @@ ja{
             }
         }
         pressure{
+            atmosphere{
+                other{"{0}atm"}
+            }
             bar{
                 other{"{0}bar"}
             }
@@ -1825,6 +1838,11 @@ ja{
             nanosecond{
                 dnam{"ナノ秒"}
                 other{"{0} ns"}
+            }
+            quarter{
+                dnam{"四半期"}
+                other{"{0}四半期"}
+                per{"{0}/四半期"}
             }
             second{
                 dnam{"秒"}

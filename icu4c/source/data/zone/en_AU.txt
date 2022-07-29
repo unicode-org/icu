@@ -4,6 +4,12 @@
 en_AU{
     %%Parent{"en_001"}
     zoneStrings{
+        "Australia:Currie"{
+            ec{"Currie"}
+        }
+        "Pacific:Enderbury"{
+            ec{"Enderbury"}
+        }
         "Pacific:Johnston"{
             ec{"Johnston"}
         }
@@ -53,6 +59,9 @@ en_AU{
             ld{"Cook Island Summer Time"}
             lg{"Cook Island Time"}
             ls{"Cook Island Standard Time"}
+        }
+        "meta:Gulf"{
+            ss{"Gulf ST"}
         }
         "meta:Japan"{
             ld{"Japan Summer Time"}

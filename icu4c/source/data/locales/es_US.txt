@@ -29,6 +29,28 @@ es_US{
                         other{"¤000 T"}
                     }
                 }
+                currencyFormat%alphaNextToNumber{
+                    10000000000{
+                        one{"¤ 00 B"}
+                        other{"¤ 00 B"}
+                    }
+                    100000000000{
+                        one{"¤ 000 B"}
+                        other{"¤ 000 B"}
+                    }
+                    1000000000000{
+                        one{"¤ 0 T"}
+                        other{"¤ 0 T"}
+                    }
+                    10000000000000{
+                        one{"¤ 00 T"}
+                        other{"¤ 00 T"}
+                    }
+                    100000000000000{
+                        one{"¤ 000 T"}
+                        other{"¤ 000 T"}
+                    }
+                }
                 decimalFormat{
                     1000{
                         one{"0 K"}
@@ -180,6 +202,24 @@ es_US{
                     d{"d–d 'de' MMM 'de' y"}
                 }
             }
+            quarters{
+                format{
+                    wide{
+                        "1er trimestre",
+                        "2.º trimestre",
+                        "3.º trimestre",
+                        "4.º trimestre",
+                    }
+                }
+                stand-alone{
+                    wide{
+                        "1er trimestre",
+                        "2.º trimestre",
+                        "3.º trimestre",
+                        "4.º trimestre",
+                    }
+                }
+            }
         }
     }
     characterLabel{
@@ -223,6 +263,9 @@ es_US{
         }
         dayOfYear-short{
             dn{"día del a"}
+        }
+        dayperiod{
+            dn{"a. m./p. m."}
         }
         dayperiod-narrow{
             dn{"a. m./p. m."}
@@ -306,5 +349,40 @@ es_US{
     }
     measurementSystemNames{
         UK{"imperial"}
+    }
+    personNames{
+        nameOrderLocales{
+            surnameFirst{
+                "ja",
+                "ko",
+                "zh",
+            }
+        }
+        namePattern{
+            sorting-long-referring-formal{
+                "{surname}, {prefix} {given} {given2}",
+                "{surname} {surname2}, {given} {given2}",
+            }
+            sorting-long-referring-informal{
+                "{surname} {surname2}, {given-informal}",
+                "{surname} {surname2}, {given} {given2}",
+            }
+            sorting-medium-referring-formal{
+                "{surname}, {prefix} {given} {given2-initial}",
+                "{surname} {surname2}, {given} {given2}",
+            }
+            sorting-medium-referring-informal{
+                "{surname}, {given-informal}",
+                "{surname} {surname2}, {given} {given2}",
+            }
+            sorting-short-referring-formal{
+                "{surname}, {prefix} {given-initial} {given2-initial} {suffix}",
+                "{surname} {surname2}, {given} {given2}",
+            }
+            sorting-short-referring-informal{
+                "{surname}, {given-informal}",
+                "{surname} {surname2}, {given} {given2}",
+            }
+        }
     }
 }

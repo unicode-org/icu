@@ -10,6 +10,7 @@
 // This is used to validate all keys and general structure is correct.
 // Since ICU doesn't follow the traditional fallback model where all keys fallback to root,
 // root can't be used to validate the structure.
+
 structLocale:table(nofallback){
     %%Parent{"root"}
     BreakDictionaryData:bin {00}
@@ -6116,6 +6117,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -6549,6 +6551,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -6982,6 +6985,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -7415,6 +7419,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -7848,6 +7853,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -8281,6 +8287,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -8714,6 +8721,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -9147,6 +9155,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -9582,6 +9591,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -10016,6 +10026,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -10449,6 +10460,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -10882,6 +10894,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -11315,6 +11328,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -11748,6 +11762,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -12181,6 +12196,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -12614,6 +12630,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -13047,6 +13064,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -13480,6 +13498,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -13906,13 +13925,14 @@ structLocale:table(nofallback){
                 atMost{""}
                 range{""}
             }
-           patterns{
+            patterns{
                 accountingFormat{""}
                 accountingFormat%alphaNextToNumber{""}
                 accountingFormat%noCurrency{""}
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -14346,6 +14366,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -14779,6 +14800,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -15212,6 +15234,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -15645,6 +15668,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -16078,6 +16102,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -16511,6 +16536,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -16944,6 +16970,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -17421,6 +17448,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -17854,6 +17882,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -18287,6 +18316,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -18720,6 +18750,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -19153,6 +19184,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -19588,6 +19620,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -20021,6 +20054,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -20454,6 +20488,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -20887,6 +20922,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -21320,6 +21356,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -21753,6 +21790,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -22186,6 +22224,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -22619,6 +22658,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -23052,6 +23092,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -23485,6 +23526,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -23918,6 +23960,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -24351,6 +24394,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -24784,6 +24828,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -25217,6 +25262,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -25650,6 +25696,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -26084,6 +26131,7 @@ structLocale:table(nofallback){
                 currencyFormat{""}
                 currencyFormat%alphaNextToNumber{""}
                 currencyFormat%noCurrency{""}
+                currencyPatternAppendISO{""}
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
@@ -26959,7 +27007,14 @@ structLocale:table(nofallback){
                     H{""}
                     m{""}
                 }
+                Hmvvvv{
+                    H{""}
+                    m{""}
+                }
                 Hv{
+                    H{""}
+                }
+                Hvvvv{
                     H{""}
                 }
                 M{
@@ -27020,7 +27075,18 @@ structLocale:table(nofallback){
                     h{""}
                     m{""}
                 }
+                hmvvvv{
+                    B{""}
+                    a{""}
+                    h{""}
+                    m{""}
+                }
                 hv{
+                    B{""}
+                    a{""}
+                    h{""}
+                }
+                hvvvv{
                     B{""}
                     a{""}
                     h{""}
@@ -27942,7 +28008,14 @@ structLocale:table(nofallback){
                     H{""}
                     m{""}
                 }
+                Hmvvvv{
+                    H{""}
+                    m{""}
+                }
                 Hv{
+                    H{""}
+                }
+                Hvvvv{
                     H{""}
                 }
                 M{
@@ -28003,7 +28076,18 @@ structLocale:table(nofallback){
                     h{""}
                     m{""}
                 }
+                hmvvvv{
+                    B{""}
+                    a{""}
+                    h{""}
+                    m{""}
+                }
                 hv{
+                    B{""}
+                    a{""}
+                    h{""}
+                }
+                hvvvv{
                     B{""}
                     a{""}
                     h{""}
@@ -28315,7 +28399,14 @@ structLocale:table(nofallback){
                     H{""}
                     m{""}
                 }
+                Hmvvvv{
+                    H{""}
+                    m{""}
+                }
                 Hv{
+                    H{""}
+                }
+                Hvvvv{
                     H{""}
                 }
                 M{
@@ -28376,7 +28467,18 @@ structLocale:table(nofallback){
                     h{""}
                     m{""}
                 }
+                hmvvvv{
+                    B{""}
+                    a{""}
+                    h{""}
+                    m{""}
+                }
                 hv{
+                    B{""}
+                    a{""}
+                    h{""}
+                }
+                hvvvv{
                     B{""}
                     a{""}
                     h{""}
@@ -29396,7 +29498,14 @@ structLocale:table(nofallback){
                     H{""}
                     m{""}
                 }
+                Hmvvvv{
+                    H{""}
+                    m{""}
+                }
                 Hv{
+                    H{""}
+                }
+                Hvvvv{
                     H{""}
                 }
                 M{
@@ -29457,7 +29566,18 @@ structLocale:table(nofallback){
                     h{""}
                     m{""}
                 }
+                hmvvvv{
+                    B{""}
+                    a{""}
+                    h{""}
+                    m{""}
+                }
                 hv{
+                    B{""}
+                    a{""}
+                    h{""}
+                }
+                hvvvv{
                     B{""}
                     a{""}
                     h{""}
@@ -29774,7 +29894,14 @@ structLocale:table(nofallback){
                     H{""}
                     m{""}
                 }
+                Hmvvvv{
+                    H{""}
+                    m{""}
+                }
                 Hv{
+                    H{""}
+                }
+                Hvvvv{
                     H{""}
                 }
                 M{
@@ -29835,7 +29962,18 @@ structLocale:table(nofallback){
                     h{""}
                     m{""}
                 }
+                hmvvvv{
+                    B{""}
+                    a{""}
+                    h{""}
+                    m{""}
+                }
                 hv{
+                    B{""}
+                    a{""}
+                    h{""}
+                }
+                hvvvv{
                     B{""}
                     a{""}
                     h{""}
@@ -30093,7 +30231,14 @@ structLocale:table(nofallback){
                     H{""}
                     m{""}
                 }
+                Hmvvvv{
+                    H{""}
+                    m{""}
+                }
                 Hv{
+                    H{""}
+                }
+                Hvvvv{
                     H{""}
                 }
                 M{
@@ -30154,7 +30299,18 @@ structLocale:table(nofallback){
                     h{""}
                     m{""}
                 }
+                hmvvvv{
+                    B{""}
+                    a{""}
+                    h{""}
+                    m{""}
+                }
                 hv{
+                    B{""}
+                    a{""}
+                    h{""}
+                }
+                hvvvv{
                     B{""}
                     a{""}
                     h{""}
@@ -30479,7 +30635,14 @@ structLocale:table(nofallback){
                     H{""}
                     m{""}
                 }
+                Hmvvvv{
+                    H{""}
+                    m{""}
+                }
                 Hv{
+                    H{""}
+                }
+                Hvvvv{
                     H{""}
                 }
                 M{
@@ -30540,7 +30703,18 @@ structLocale:table(nofallback){
                     h{""}
                     m{""}
                 }
+                hmvvvv{
+                    B{""}
+                    a{""}
+                    h{""}
+                    m{""}
+                }
                 hv{
+                    B{""}
+                    a{""}
+                    h{""}
+                }
+                hvvvv{
                     B{""}
                     a{""}
                     h{""}
@@ -30965,7 +31139,14 @@ structLocale:table(nofallback){
                     H{""}
                     m{""}
                 }
+                Hmvvvv{
+                    H{""}
+                    m{""}
+                }
                 Hv{
+                    H{""}
+                }
+                Hvvvv{
                     H{""}
                 }
                 M{
@@ -31026,7 +31207,18 @@ structLocale:table(nofallback){
                     h{""}
                     m{""}
                 }
+                hmvvvv{
+                    B{""}
+                    a{""}
+                    h{""}
+                    m{""}
+                }
                 hv{
+                    B{""}
+                    a{""}
+                    h{""}
+                }
+                hvvvv{
                     B{""}
                     a{""}
                     h{""}
@@ -31354,7 +31546,14 @@ structLocale:table(nofallback){
                     H{""}
                     m{""}
                 }
+                Hmvvvv{
+                    H{""}
+                    m{""}
+                }
                 Hv{
+                    H{""}
+                }
+                Hvvvv{
                     H{""}
                 }
                 M{
@@ -31415,7 +31614,18 @@ structLocale:table(nofallback){
                     h{""}
                     m{""}
                 }
+                hmvvvv{
+                    B{""}
+                    a{""}
+                    h{""}
+                    m{""}
+                }
                 hv{
+                    B{""}
+                    a{""}
+                    h{""}
+                }
+                hvvvv{
                     B{""}
                     a{""}
                     h{""}
@@ -31707,7 +31917,14 @@ structLocale:table(nofallback){
                     H{""}
                     m{""}
                 }
+                Hmvvvv{
+                    H{""}
+                    m{""}
+                }
                 Hv{
+                    H{""}
+                }
+                Hvvvv{
                     H{""}
                 }
                 M{
@@ -31768,7 +31985,18 @@ structLocale:table(nofallback){
                     h{""}
                     m{""}
                 }
+                hmvvvv{
+                    B{""}
+                    a{""}
+                    h{""}
+                    m{""}
+                }
                 hv{
+                    B{""}
+                    a{""}
+                    h{""}
+                }
+                hvvvv{
                     B{""}
                     a{""}
                     h{""}
@@ -32103,7 +32331,14 @@ structLocale:table(nofallback){
                     H{""}
                     m{""}
                 }
+                Hmvvvv{
+                    H{""}
+                    m{""}
+                }
                 Hv{
+                    H{""}
+                }
+                Hvvvv{
                     H{""}
                 }
                 M{
@@ -32164,7 +32399,18 @@ structLocale:table(nofallback){
                     h{""}
                     m{""}
                 }
+                hmvvvv{
+                    B{""}
+                    a{""}
+                    h{""}
+                    m{""}
+                }
                 hv{
+                    B{""}
+                    a{""}
+                    h{""}
+                }
+                hvvvv{
                     B{""}
                     a{""}
                     h{""}
@@ -32448,7 +32694,14 @@ structLocale:table(nofallback){
                     H{""}
                     m{""}
                 }
+                Hmvvvv{
+                    H{""}
+                    m{""}
+                }
                 Hv{
+                    H{""}
+                }
+                Hvvvv{
                     H{""}
                 }
                 M{
@@ -32509,7 +32762,18 @@ structLocale:table(nofallback){
                     h{""}
                     m{""}
                 }
+                hmvvvv{
+                    B{""}
+                    a{""}
+                    h{""}
+                    m{""}
+                }
                 hv{
+                    B{""}
+                    a{""}
+                    h{""}
+                }
+                hvvvv{
                     B{""}
                     a{""}
                     h{""}
@@ -33498,7 +33762,14 @@ structLocale:table(nofallback){
                     H{""}
                     m{""}
                 }
+                Hmvvvv{
+                    H{""}
+                    m{""}
+                }
                 Hv{
+                    H{""}
+                }
+                Hvvvv{
                     H{""}
                 }
                 M{
@@ -33559,7 +33830,18 @@ structLocale:table(nofallback){
                     h{""}
                     m{""}
                 }
+                hmvvvv{
+                    B{""}
+                    a{""}
+                    h{""}
+                    m{""}
+                }
                 hv{
+                    B{""}
+                    a{""}
+                    h{""}
+                }
+                hvvvv{
                     B{""}
                     a{""}
                     h{""}
@@ -33753,7 +34035,14 @@ structLocale:table(nofallback){
                     H{""}
                     m{""}
                 }
+                Hmvvvv{
+                    H{""}
+                    m{""}
+                }
                 Hv{
+                    H{""}
+                }
+                Hvvvv{
                     H{""}
                 }
                 M{
@@ -33814,7 +34103,18 @@ structLocale:table(nofallback){
                     h{""}
                     m{""}
                 }
+                hmvvvv{
+                    B{""}
+                    a{""}
+                    h{""}
+                    m{""}
+                }
                 hv{
+                    B{""}
+                    a{""}
+                    h{""}
+                }
+                hvvvv{
                     B{""}
                     a{""}
                     h{""}
@@ -33993,10 +34293,7 @@ structLocale:table(nofallback){
             initialSequence{""}
         }
         nameOrderLocales{
-            givenFirst{
-                "",
-                "",
-            }
+            givenFirst{""}
             surnameFirst{
                 "",
                 "",
@@ -34046,30 +34343,6 @@ structLocale:table(nofallback){
             surnameFirst-short-monogram-informal{""}
             surnameFirst-short-referring-formal{""}
             surnameFirst-short-referring-informal{""}
-        }
-        sampleName{
-            full{
-                given{""}
-                given-informal{""}
-                given2{""}
-                prefix{""}
-                suffix{""}
-                surname-core{""}
-                surname-prefix{""}
-                surname2{""}
-            }
-            given12Surname{
-                given{""}
-                given2{""}
-                surname{""}
-            }
-            givenOnly{
-                given{""}
-            }
-            givenSurnameOnly{
-                given{""}
-                surname{""}
-            }
         }
     }
     transformNames{

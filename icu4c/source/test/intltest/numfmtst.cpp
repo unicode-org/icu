@@ -2053,7 +2053,7 @@ void NumberFormatTest::TestCurrencyNames(void) {
                                              &isChoiceFormat, &len, &ec)),
                                              possibleDataError);
     assertEquals("USD.getName(NARROW_SYMBOL_NAME, en_CA)",
-                 UnicodeString("$"),
+                 UnicodeString("US$"),
                  UnicodeString(ucurr_getName(USD, "en_CA",
                                              UCURR_NARROW_SYMBOL_NAME,
                                              &isChoiceFormat, &len, &ec)),

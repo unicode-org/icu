@@ -1220,6 +1220,9 @@ ti{
         "Pacific:Johnston"{
             ec{"ጆንስተን"}
         }
+        "Pacific:Kanton"{
+            ec{"ካንቶን"}
+        }
         "Pacific:Kiritimati"{
             ec{"ኪሪቲማቲ"}
         }

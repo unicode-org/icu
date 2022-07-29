@@ -1410,6 +1410,36 @@ lv{
                 other{"{0} nanosekundes"}
                 zero{"{0} nanosekunžu"}
             }
+            quarter{
+                case{
+                    accusative{
+                        one{"{0} ceturksni"}
+                        other{"{0} ceturkšņus"}
+                        zero{"{0} cet."}
+                    }
+                    dative{
+                        one{"{0} ceturksnim"}
+                        other{"{0} ceturkšņiem"}
+                        zero{"{0} cet."}
+                    }
+                    genitive{
+                        one{"{0} ceturkšņa"}
+                        other{"{0} ceturkšņu"}
+                        zero{"{0} cet."}
+                    }
+                    locative{
+                        one{"{0} ceturksnī"}
+                        other{"{0} ceturkšņos"}
+                        zero{"{0} cet."}
+                    }
+                }
+                dnam{"ceturkšņi"}
+                gender{"masculine"}
+                one{"{0} ceturksnis"}
+                other{"{0} ceturkšņi"}
+                per{"{0}/c."}
+                zero{"{0} cet."}
+            }
             second{
                 case{
                     accusative{
@@ -3914,6 +3944,13 @@ lv{
                 per{"{0}/m."}
                 zero{"{0} m."}
             }
+            quarter{
+                dnam{"cet."}
+                one{"{0} c."}
+                other{"{0} c."}
+                per{"{0}/c."}
+                zero{"{0} cet."}
+            }
             second{
                 dnam{"s"}
                 one{"{0} s"}
@@ -4498,6 +4535,13 @@ lv{
                 one{"{0} ns"}
                 other{"{0} ns"}
                 zero{"{0} ns"}
+            }
+            quarter{
+                dnam{"cet."}
+                one{"{0} cet."}
+                other{"{0} cet."}
+                per{"{0}/c."}
+                zero{"{0} cet."}
             }
             second{
                 dnam{"sek."}

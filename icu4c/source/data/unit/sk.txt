@@ -2011,6 +2011,47 @@ sk{
                 one{"{0} nanosekunda"}
                 other{"{0} nanosekúnd"}
             }
+            quarter{
+                case{
+                    accusative{
+                        few{"{0} štvrťroky"}
+                        many{"{0} štvrťroka"}
+                        one{"{0} štvrťrok"}
+                        other{"{0} štvrťrokov"}
+                    }
+                    dative{
+                        few{"{0} štvrťrokom"}
+                        many{"{0} štvrťroka"}
+                        one{"{0} štvrťroku"}
+                        other{"{0} štvrťrokom"}
+                    }
+                    genitive{
+                        few{"{0} štvrťrokov"}
+                        many{"{0} štvrťroka"}
+                        one{"{0} štvrťroka"}
+                        other{"{0} štvrťrokov"}
+                    }
+                    instrumental{
+                        few{"{0} štvrťrokmi"}
+                        many{"{0} štvrťroka"}
+                        one{"{0} štvrťrokom"}
+                        other{"{0} štvrťrokmi"}
+                    }
+                    locative{
+                        few{"{0} štvrťrokoch"}
+                        many{"{0} štvrťroka"}
+                        one{"{0} štvrťroku"}
+                        other{"{0} štvrťrokoch"}
+                    }
+                }
+                dnam{"štvrťroky"}
+                few{"{0} štvrťroky"}
+                gender{"inanimate"}
+                many{"{0} štvrťroka"}
+                one{"{0} štvrťrok"}
+                other{"{0} štvrťrokov"}
+                per{"{0}/štvrťrok"}
+            }
             second{
                 case{
                     accusative{
@@ -5365,6 +5406,13 @@ sk{
                 one{"{0} ns"}
                 other{"{0} ns"}
             }
+            quarter{
+                few{"{0} štvrťroky"}
+                many{"{0} štvrťroka"}
+                one{"{0} štvrťrok"}
+                other{"{0} štvrťrokov"}
+                per{"{0}/štvrťrok"}
+            }
             second{
                 dnam{"s"}
                 few{"{0} s"}
@@ -6239,6 +6287,14 @@ sk{
                 many{"{0} ns"}
                 one{"{0} ns"}
                 other{"{0} ns"}
+            }
+            quarter{
+                dnam{"štvrťrok"}
+                few{"{0} štvrťroky"}
+                many{"{0} štvrťroka"}
+                one{"{0} štvrťrok"}
+                other{"{0} štvrťrokov"}
+                per{"{0}/štvrťrok"}
             }
             second{
                 dnam{"s"}

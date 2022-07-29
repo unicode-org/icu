@@ -6,20 +6,19 @@ es_419{
         latn{
             patterns{
                 accountingFormat{"¤#,##0.00"}
+                accountingFormat%alphaNextToNumber{"¤ #,##0.00"}
                 currencyFormat{"¤#,##0.00"}
+                currencyPatternAppendISO{"{0} ¤¤"}
             }
             patternsLong{
                 decimalFormat{
                     1000000000000{
-                        one{"0 billón"}
                         other{"0 billón"}
                     }
                     10000000000000{
-                        one{"00 billones"}
                         other{"00 billones"}
                     }
                     100000000000000{
-                        one{"000 billones"}
                         other{"000 billones"}
                     }
                 }
@@ -73,6 +72,56 @@ es_419{
                     100000000000000{
                         one{"¤000 B"}
                         other{"¤000 B"}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
+                    1000{
+                        one{"¤ 0 K"}
+                        other{"¤ 0 K"}
+                    }
+                    10000{
+                        one{"¤ 00 K"}
+                        other{"¤ 00 K"}
+                    }
+                    100000{
+                        one{"¤ 000 K"}
+                        other{"¤ 000 K"}
+                    }
+                    1000000{
+                        one{"¤ 0 M"}
+                        other{"¤ 0 M"}
+                    }
+                    10000000{
+                        one{"¤ 00 M"}
+                        other{"¤ 00 M"}
+                    }
+                    100000000{
+                        one{"¤ 000 M"}
+                        other{"¤ 000 M"}
+                    }
+                    1000000000{
+                        one{"¤ 0000 M"}
+                        other{"¤ 0000 M"}
+                    }
+                    10000000000{
+                        one{"¤ 00 MRD"}
+                        other{"¤ 00 MRD"}
+                    }
+                    100000000000{
+                        one{"¤ 000 MRD"}
+                        other{"¤ 000 MRD"}
+                    }
+                    1000000000000{
+                        one{"¤ 0 B"}
+                        other{"¤ 0 B"}
+                    }
+                    10000000000000{
+                        one{"¤ 00 B"}
+                        other{"¤ 00 B"}
+                    }
+                    100000000000000{
+                        one{"¤ 000 B"}
+                        other{"¤ 000 B"}
                     }
                 }
                 decimalFormat{
@@ -183,6 +232,12 @@ es_419{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimePatterns%atTime{
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
             DateTimeSkeletons{
                 "HHmmsszzzz",
                 "HHmmssz",
@@ -233,16 +288,6 @@ es_419{
                     M{"M/y – M/y GGGGG"}
                     y{"M/y – M/y GGGGG"}
                 }
-                yMEd{
-                    M{"E, d/M/y – E, d/M/y GGGGG"}
-                    d{"E, d/M/y – E, d/M/y GGGGG"}
-                    y{"E, d/M/y – E, d/M/y GGGGG"}
-                }
-                yMd{
-                    M{"d/M/y – d/M/y GGGGG"}
-                    d{"d/M/y – d/M/y GGGGG"}
-                    y{"d/M/y – d/M/y GGGGG"}
-                }
             }
         }
         gregorian{
@@ -259,6 +304,12 @@ es_419{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1} {0}",
+                "{1}, {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
                 "{1}, {0}",
             }
             DateTimeSkeletons{
@@ -289,13 +340,13 @@ es_419{
             dayNames{
                 format{
                     narrow{
-                        "d",
-                        "l",
-                        "m",
-                        "m",
-                        "j",
-                        "v",
-                        "s",
+                        "D",
+                        "L",
+                        "M",
+                        "M",
+                        "J",
+                        "V",
+                        "S",
                     }
                 }
                 stand-alone{
@@ -308,6 +359,16 @@ es_419{
                         "V",
                         "S",
                     }
+                }
+            }
+            eras{
+                abbreviated{
+                    "a.C.",
+                    "d.C.",
+                }
+                abbreviated%variant{
+                    "a.e.c.",
+                    "e.c.",
                 }
             }
             intervalFormats{
@@ -742,6 +803,9 @@ es_419{
         dayOfYear-short{
             dn{"día del año"}
         }
+        dayperiod{
+            dn{"a.m./p.m."}
+        }
         dayperiod-narrow{
             dn{"a.m./p.m."}
         }
@@ -818,6 +882,28 @@ es_419{
         }
         weekdayOfMonth-short{
             dn{"día hábil del mes"}
+        }
+    }
+    personNames{
+        initialPattern{
+            initial{"{0}."}
+            initialSequence{"{0} {1}"}
+        }
+        nameOrderLocales{
+            surnameFirst{
+                "hu",
+                "ja",
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+        namePattern{
+            givenFirst-medium-referring-formal{"{given} {given2-initial} {surname} {suffix}"}
+            surnameFirst-long-addressing-formal{"{prefix} {surname} {surname2}"}
+            surnameFirst-long-referring-formal{"{surname} {surname2} {given} {given2} {suffix}"}
+            surnameFirst-medium-referring-formal{"{surname} {given} {given2-initial} {suffix}"}
         }
     }
 }

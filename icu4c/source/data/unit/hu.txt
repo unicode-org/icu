@@ -1096,6 +1096,30 @@ hu{
                 one{"{0} nanoszekundum"}
                 other{"{0} nanoszekundum"}
             }
+            quarter{
+                case{
+                    accusative{
+                        one{"{0} negyedévet"}
+                        other{"{0} negyedévet"}
+                    }
+                    instrumental{
+                        one{"{0} negyedévvel"}
+                        other{"{0} negyedévvel"}
+                    }
+                    terminative{
+                        one{"{0} negyedévig"}
+                        other{"{0} negyedévig"}
+                    }
+                    translative{
+                        one{"{0} negyedévvé"}
+                        other{"{0} negyedévvé"}
+                    }
+                }
+                dnam{"negyedév"}
+                one{"{0} negyedév"}
+                other{"{0} negyedév"}
+                per{"{0}/n.év"}
+            }
             second{
                 case{
                     accusative{
@@ -3176,6 +3200,12 @@ hu{
                 one{"{0} h."}
                 other{"{0} h."}
             }
+            quarter{
+                dnam{"n.év"}
+                one{"{0} n.év"}
+                other{"{0} n.év"}
+                per{"{0}/n.év"}
+            }
             second{
                 dnam{"mp"}
                 one{"{0} mp"}
@@ -3688,6 +3718,12 @@ hu{
                 dnam{"ns"}
                 one{"{0} ns"}
                 other{"{0} ns"}
+            }
+            quarter{
+                dnam{"n.év"}
+                one{"{0} n.év"}
+                other{"{0} n.év"}
+                per{"{0}/n.év"}
             }
             second{
                 dnam{"mp"}

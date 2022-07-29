@@ -463,6 +463,14 @@ hsb{
                 other{"{0} nanosekundow"}
                 two{"{0} nanosekundźe"}
             }
+            quarter{
+                dnam{"kwartale"}
+                few{"{0} kwartale"}
+                one{"{0} kwartal"}
+                other{"{0} kwartalow"}
+                per{"{0}/kwartal"}
+                two{"{0} kwartalej"}
+            }
             second{
                 dnam{"sekundy"}
                 few{"{0} sekundy"}
@@ -1557,6 +1565,14 @@ hsb{
                 other{"{0} měs."}
                 two{"{0} měs."}
             }
+            quarter{
+                dnam{"kw."}
+                few{"{0} kw."}
+                one{"{0} kw."}
+                other{"{0} kw."}
+                per{"{0}/kw."}
+                two{"{0} kw."}
+            }
             second{
                 dnam{"s"}
                 few{"{0} s"}
@@ -2261,6 +2277,14 @@ hsb{
                 one{"{0} ns"}
                 other{"{0} ns"}
                 two{"{0} ns"}
+            }
+            quarter{
+                dnam{"kwart."}
+                few{"{0} kwart."}
+                one{"{0} kwart."}
+                other{"{0} kwart."}
+                per{"{0}/kwart."}
+                two{"{0} kwart."}
             }
             second{
                 dnam{"sek."}

@@ -65,6 +65,7 @@ sv{
             }
             patterns{
                 accountingFormat{"#,##0.00 ¤"}
+                accountingFormat%noCurrency{"#,##0.00"}
                 currencyFormat{"#,##0.00 ¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0 %"}
@@ -701,6 +702,12 @@ sv{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimePatterns%atTime{
+                "{1} 'kl'. {0}",
+                "{1} 'kl'. {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
             DateTimeSkeletons{
                 "HHmmsszzzz",
                 "HHmmssz",
@@ -928,6 +935,12 @@ sv{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimePatterns%atTime{
+                "{1} 'kl'. {0}",
+                "{1} 'kl'. {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
             DateTimeSkeletons{
                 "HHmmsszzzz",
                 "HHmmssz",
@@ -1108,13 +1121,11 @@ sv{
                 stand-alone{
                     abbreviated{
                         afternoon1{"efterm."}
-                        am{"f.m."}
                         evening1{"kväll"}
                         midnight{"midnatt"}
                         morning1{"morgon"}
                         morning2{"förm."}
                         night1{"natt"}
-                        pm{"e.m."}
                     }
                     narrow{
                         afternoon1{"efterm."}
@@ -1252,7 +1263,6 @@ sv{
                 }
                 fallback{"{0} – {1}"}
                 h{
-                    a{"h a – h a"}
                     h{"h–h a"}
                 }
                 hm{
@@ -1264,10 +1274,6 @@ sv{
                     a{"h:mm a – h:mm a v"}
                     h{"h:mm–h:mm a v"}
                     m{"h:mm–h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
-                    h{"h–h a v"}
                 }
                 y{
                     y{"y–y"}
@@ -2210,7 +2216,7 @@ sv{
                     other{"om {0} fredagar"}
                 }
                 past{
-                    one{"för {0} fredag sedan"}
+                    one{"{0} fredag sedan"}
                     other{"för {0} fredagar sedan"}
                 }
             }
@@ -3015,6 +3021,17 @@ sv{
                 "[¥￥]",
                 "[₩￦]",
                 "[₨₹{Rp}{Rs}]",
+            }
+        }
+    }
+    personNames{
+        initialPattern{
+            initial{"{0}"}
+        }
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "sv",
             }
         }
     }

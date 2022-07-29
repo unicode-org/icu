@@ -26,6 +26,7 @@ uz{
         arabext{
             patterns{
                 currencyFormat{"#,##0.00 ¤"}
+                currencyFormat%noCurrency{"#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
@@ -53,7 +54,8 @@ uz{
                 range{"{0}–{1}"}
             }
             patterns{
-                accountingFormat{"#,##0.00 ¤"}
+                accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat{"#,##0.00 ¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -688,15 +690,15 @@ uz{
                     y{"G y–y"}
                 }
                 GyM{
-                    G{"M/y (GGGGG) – M/y (GGGGG)"}
-                    M{"M/y – M/y (GGGGG)"}
-                    y{"M/y – M/y (GGGGG)"}
+                    G{"M/y (G) – M/y (G)"}
+                    M{"M/y – M/y (G)"}
+                    y{"M/y – M/y (G)"}
                 }
                 GyMEd{
-                    G{"E, d/M/y (GGGGG) – E, d/M/y (GGGGG)"}
-                    M{"E, d/M/y – E, d/M/y (GGGGG)"}
-                    d{"E, d/M/y – E, d/M/y (GGGGG)"}
-                    y{"E, d/M/y – E, d/M/y (GGGGG)"}
+                    G{"E, M/d/y (G) – E, M/d/y (G)"}
+                    M{"E, M/d/y – E, M/d/y (G)"}
+                    d{"E, M/d/y – E, M/d/y (G)"}
+                    y{"E, M/d/y – E, M/d/y (G)"}
                 }
                 GyMMM{
                     G{"MMM, G y – MMM, G y"}
@@ -716,10 +718,10 @@ uz{
                     y{"d-MMM, y – d-MMM, y (G)"}
                 }
                 GyMd{
-                    G{"d/M/y (GGGGG) – d/M/y (GGGGG)"}
-                    M{"d/M/y – d/M/y (GGGGG)"}
-                    d{"d/M/y – d/M/y (GGGGG)"}
-                    y{"d/M/y – d/M/y (GGGGG)"}
+                    G{"M/d/y (G) – M/d/y (G)"}
+                    M{"M/d/y – M/d/y (G)"}
+                    d{"M/d/y – M/d/y (G)"}
+                    y{"M/d/y – M/d/y (G)"}
                 }
                 H{
                     H{"HH–HH"}
@@ -959,7 +961,7 @@ uz{
             }
             eras{
                 abbreviated{
-                    "Hijriy",
+                    "hijriy",
                 }
             }
             monthNames{
@@ -1035,6 +1037,75 @@ uz{
                         "Shavvol",
                         "Zul-qa’da",
                         "Zul-hijja",
+                    }
+                }
+            }
+        }
+        persian{
+            eras{
+                abbreviated{
+                    "forsiy",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "farvardin",
+                        "oʻrdibehisht",
+                        "xurdod",
+                        "tir",
+                        "murdod",
+                        "shahrivar",
+                        "mehr",
+                        "obon",
+                        "ozar",
+                        "dey",
+                        "bahman",
+                        "isfan",
+                    }
+                    wide{
+                        "farvardin",
+                        "oʻrdibehisht",
+                        "xurdod",
+                        "tir",
+                        "murdod",
+                        "shahrivar",
+                        "mehr",
+                        "obon",
+                        "ozar",
+                        "dey",
+                        "bahman",
+                        "isfan",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "farvardin",
+                        "oʻrdibehisht",
+                        "xurdod",
+                        "tir",
+                        "murdod",
+                        "shahrivar",
+                        "mehr",
+                        "obon",
+                        "ozar",
+                        "dey",
+                        "bahman",
+                        "isfand",
+                    }
+                    wide{
+                        "farvardin",
+                        "oʻrdibehisht",
+                        "xurdod",
+                        "tur",
+                        "murdod",
+                        "shahrivar",
+                        "mehr",
+                        "obon",
+                        "ozar",
+                        "dey",
+                        "bahman",
+                        "isfand",
                     }
                 }
             }
@@ -1983,5 +2054,68 @@ uz{
         UK{"Buyuk Britaniya"}
         US{"AQSH"}
         metric{"Metrik"}
+    }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "uz",
+            }
+            surnameFirst{
+                "ja",
+                "ko",
+                "zh",
+            }
+        }
+        namePattern{
+            givenFirst-long-addressing-formal{"{prefix} {surname}"}
+            givenFirst-long-addressing-informal{"{given-informal}"}
+            givenFirst-long-monogram-formal{
+                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-monogram-a"
+                "llCaps}"
+            }
+            givenFirst-long-monogram-informal{"{given-informal-monogram-allCaps}{surname-monogram-allCaps}"}
+            givenFirst-long-referring-formal{"{given} {given2} {surname} {suffix}"}
+            givenFirst-long-referring-informal{"{given-informal} {surname}"}
+            givenFirst-medium-addressing-formal{"{prefix} {surname}"}
+            givenFirst-medium-addressing-informal{"{given-informal}"}
+            givenFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
+            givenFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
+            givenFirst-medium-referring-formal{"{given} {given2-initial} {surname} {suffix}"}
+            givenFirst-medium-referring-informal{"{given-informal} {surname}"}
+            givenFirst-short-addressing-formal{"{prefix} {surname}"}
+            givenFirst-short-addressing-informal{"{given-informal}"}
+            givenFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
+            givenFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
+            givenFirst-short-referring-formal{"{given-initial} {given2-initial} {surname}"}
+            givenFirst-short-referring-informal{"{given-informal} {surname-initial}"}
+            sorting-long-referring-formal{"{surname-core}, {given} {given2} {surname-prefix}"}
+            sorting-long-referring-informal{"{surname}, {given-informal}"}
+            sorting-medium-referring-formal{"{surname-core}, {given} {given2-initial} {surname-prefix}"}
+            sorting-medium-referring-informal{"{surname}, {given-informal}"}
+            sorting-short-referring-formal{"{surname-core}, {given-initial} {given2-initial} {surname-prefix}"}
+            sorting-short-referring-informal{"{surname}, {given-informal}"}
+            surnameFirst-long-addressing-formal{"{prefix} {surname}"}
+            surnameFirst-long-addressing-informal{"{given-informal}"}
+            surnameFirst-long-monogram-formal{
+                "{surname-monogram-allCaps}{given-monogram-allCaps}{given2-monogram-a"
+                "llCaps}"
+            }
+            surnameFirst-long-monogram-informal{"{surname-monogram-allCaps}{given-informal-monogram-allCaps}"}
+            surnameFirst-long-referring-formal{"{surname} {given} {given2} {suffix}"}
+            surnameFirst-long-referring-informal{"{surname} {given-informal}"}
+            surnameFirst-medium-addressing-formal{"{prefix} {surname}"}
+            surnameFirst-medium-addressing-informal{"{given-informal}"}
+            surnameFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
+            surnameFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
+            surnameFirst-medium-referring-formal{"{surname} {given} {given2-initial} {suffix}"}
+            surnameFirst-medium-referring-informal{"{surname} {given-informal}"}
+            surnameFirst-short-addressing-formal{"{prefix} {surname}"}
+            surnameFirst-short-addressing-informal{"{given-informal}"}
+            surnameFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
+            surnameFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
+            surnameFirst-short-referring-formal{"{surname} {given-initial} {given2-initial}"}
+            surnameFirst-short-referring-informal{"{surname} {given-initial}"}
+        }
     }
 }

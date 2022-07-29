@@ -647,7 +647,7 @@ static void TestDateTimePatterns(void) {
                   u"d MMMM y 'à' HH:mm",
                   u"d MMM y, HH:mm",
                   u"dd/MM/y HH:mm" } },
-        { "ha", { u"EEEE d MMMM, y HH:mm", // full != long
+        { "ha", { u"EEEE d MMMM, y 'da' HH:mm",
                   u"d MMMM, y 'da' HH:mm",
                   u"d MMM, y, HH:mm",
                   u"y-MM-dd, HH:mm" } },

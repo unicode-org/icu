@@ -2102,7 +2102,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().unit(USD).unitWidth(UnitWidth.NARROW),
                 ULocale.forLanguageTag("en-CA"),
                 5.43,
-                "$5.43");
+                "US$5.43");
 
         assertFormatSingle(
                 "Currency Difference between Narrow and Short (Short Version)",
@@ -5044,7 +5044,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().sign(SignDisplay.ACCOUNTING).unit(USD).unitWidth(UnitWidth.NARROW),
                 ULocale.CANADA,
                 -444444,
-                "($444,444.00)");
+                "(US$444,444.00)");
 
         assertFormatSingle(
                 "Sign Accounting Negative Short",
@@ -5073,7 +5073,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().sign(SignDisplay.ACCOUNTING).unit(USD).unitWidth(UnitWidth.FULL_NAME),
                 ULocale.CANADA,
                 -444444,
-                "-444,444.00 U.S. dollars");
+                "-444,444.00 US dollars");
     }
 
     @Test

@@ -4,17 +4,20 @@
 zh_Hant{
     %%Parent{"root"}
     AuxExemplarCharacters{
-        "[乍 乳 仂 伏 佐 侶 俏 倉 偽 傅 傘 僳 兆 兌 兹 凋 凍 凸 划 刨 别 刮 券 剃 勳 勾 匕 匙 匣 匯 卑 卞 占 卹 叉 叶 吻 哺"
-        " 唇 唵 啤 喪 喲 嘟 噁 噓 噘 嚏 坑 堤 墅 墎 墓 墟 墳 壤 壩 壺 奥 妖 嬰 孕 孜 孵 寺 尿 屍 屑 峇 嶼 巽 巾 帆 帚 幟 廁"
-        " 廈 廚 廟 弋 弓 忡 憊 懨 懸 戟 扮 扳 捂 捏 捧 掠 掰 揹 搏 摀 摔 撕 撲 攀 攤 敞 斑 斜 斧 暈 暮 曇 曬 曳 朔 杖 枯 栓"
-        " 栗 栽 框 桶 桿 棍 棕 棺 椒 楔 槌 橄 橇 橘 橙 檬 檸 櫃 櫚 櫻 欖 欠 残 殭 汁 沫 沮 泣 浣 浴 涅 涎 涮 淇 淋 渾 湘 溜"
-        " 漿 澎 澡 濕 灘 烘 烹 焊 焙 焰 煎 煮 燕 燙 燦 燭 爍 牡 犀 犬 狄 狡 狸 猩 猾 猿 獺 獾 琳 瑚 瓢 甕 甫 疊 疲 疾 瘦 瘧"
-        " 皂 皺 皿 盆 盈 盒 盔 盥 眨 眩 睏 瞇 瞌 瞪 碑 磚 礁 礫 祈 禱 禿 稻 穀 窄 竿 筒 筷 箏 箔 篷 簍 籠 糖 糰 紉 紋 紗 紮"
-        " 紳 綽 綿 縫 繃 繡 繩 纏 纖 纜 罈 罐 罩 羯 聳 聾 肌 肖 肺 脈 脖 腐 腹 膚 膠 臂 臟 艇 芒 芙 芭 芽 苗 苣 茄 茨 茵 茸"
-        " 莓 莖 菇 菌 菱 萎 萵 葵 蒜 蒸 蓄 蓉 蓬 蔔 蔥 蔬 蕉 蕾 薑 薯 蘋 蘑 蘿 虹 蚊 蚓 蚩 蚯 蛛 蜀 蜘 蜥 蜴 蝙 蝟 蝠 蝦 蝴"
-        " 蝸 螂 螃 螞 螺 蟀 蟄 蟋 蟑 蟳 蟻 蠅 蠕 蠟 蠣 衫 袍 裏 裘 裙 裱 裹 褐 襪 襯 訝 診 謎 謬 豎 豔 豚 豹 贛 跆 跨 跪 踩"
-        " 躬 軸 轎 辜 辣 遞 鄙 酋 酪 醬 釘 鈔 鈕 鉅 鉛 鉤 鋁 錨 錶 鍊 鎚 鎬 鏈 鏢 鐺 鑰 鑽 鑿 閩 阱 隴 雀 雌 霄 霜 静 靴 鞠"
-        " 鞭 頌 頸 顛 颱 飆 飪 餃 餌 餚 餵 餾 駝 駱 驕 骰 骷 髏 鬍 魷 鮑 鯉 鯊 鯨 鱷 鳩 鳶 鴨 鵡 鶴 鸚 鹽 黛 鼬 龐]"
+        "[丨 丶 丿 乍 乳 亅 亠 仂 伏 佐 侶 俏 倉 偽 傅 傘 僳 儿 兆 兌 兹 冂 冖 冫 凋 凍 几 凵 凸 划 刨 别 刮 券 剃 勳 勹 勾"
+        " 匕 匙 匚 匣 匯 匸 卑 卞 占 卩 卹 厂 厶 叉 叶 吻 哺 唇 唵 啤 喪 喲 嘟 噁 噓 噘 嚏 囗 坑 堤 墅 墎 墓 墟 墳 壤 壩 壺"
+        " 夂 夊 奥 妖 嬰 孕 孜 孵 宀 寸 寺 尢 尸 尿 屍 屑 屮 峇 嶼 巛 巽 巾 帆 帚 幟 幺 广 廁 廈 廚 廟 廴 廾 弋 弓 彐 彡 彳"
+        " 忡 憊 懨 懸 戟 扮 扳 捂 捏 捧 掠 掰 揹 搏 摀 摔 撕 撲 攀 攤 攴 敞 斑 斜 斤 斧 无 暈 暮 曇 曬 曳 朔 杖 枯 栓 栗 栽"
+        " 框 桶 桿 棍 棕 棺 椒 楔 槌 橄 橇 橘 橙 檬 檸 櫃 櫚 櫻 欖 欠 歹 残 殭 殳 毋 气 汁 沫 沮 泣 浣 浴 涅 涎 涮 淇 淋 渾"
+        " 湘 溜 漿 澎 澡 濕 灘 烘 烹 焊 焙 焰 煎 煮 燕 燙 燦 燭 爍 爻 爿 牡 犀 犬 狄 狡 狸 猩 猾 猿 獺 獾 琳 瑚 瓢 甕 甫 疊"
+        " 疋 疒 疲 疾 瘦 瘧 癶 皂 皺 皿 盆 盈 盒 盔 盥 眨 眩 睏 瞇 瞌 瞪 矢 碑 磚 礁 礫 祈 禱 禸 禾 禿 稻 穀 穴 窄 竿 筒 筷"
+        " 箏 箔 篷 簍 籠 糖 糰 糸 紉 紋 紗 紮 紳 綽 綿 縫 繃 繡 繩 纏 纖 纜 缶 罈 罐 网 罩 羯 耒 聳 聾 聿 肌 肖 肺 脈 脖 腐"
+        " 腹 膚 膠 臂 臟 臼 舛 艇 艮 艸 芒 芙 芭 芽 苗 苣 茄 茨 茵 茸 莓 莖 菇 菌 菱 萎 萵 葵 蒜 蒸 蓄 蓉 蓬 蔔 蔥 蔬 蕉 蕾"
+        " 薑 薯 蘋 蘑 蘿 虍 虫 虹 蚊 蚓 蚩 蚯 蛛 蜀 蜘 蜥 蜴 蝙 蝟 蝠 蝦 蝴 蝸 螂 螃 螞 螺 蟀 蟄 蟋 蟑 蟳 蟻 蠅 蠕 蠟 蠣 衫"
+        " 袍 裏 裘 裙 裱 裹 褐 襪 襯 襾 訝 診 謎 謬 豎 豔 豕 豚 豸 豹 贛 跆 跨 跪 踩 躬 軸 轎 辜 辣 辵 遞 邑 鄙 酋 酪 醬 釆"
+        " 釘 鈔 鈕 鉅 鉛 鉤 鋁 錨 錶 鍊 鎚 鎬 鏈 鏢 鐺 鑰 鑽 鑿 閩 阜 阱 隴 隶 隹 雀 雌 霄 霜 靑 静 靴 鞠 鞭 韭 頌 頸 顛 颱"
+        " 飆 飪 餃 餌 餚 餵 餾 駝 駱 驕 骰 骷 髏 髟 鬍 鬯 鬲 魷 鮑 鯉 鯊 鯨 鱷 鳩 鳶 鴨 鵡 鶴 鸚 鹵 鹽 黍 黛 黹 黽 鼎 鼬 龐"
+        " 龠]"
     }
     Ellipsis{
         final{"{0}…"}
@@ -82,7 +85,14 @@ zh_Hant{
         " 鬥 鬧 鬱 鬼 魁 魂 魅 魔 魚 魯 鮮 鳥 鳳 鳴 鴻 鵝 鷹 鹿 麗 麥 麵 麻 麼 黃 黎 黑 默 點 黨 鼓 鼠 鼻 齊 齋 齒 齡 龍 龜"
         "]"
     }
-    ExemplarCharactersIndex{"[一 丁 丈 不 且 丞 並 串 乘 乾 亂 亭 傀 僎 僵 儐 償 儳 儷 儻 叢 嚴 囌 囑 廳]"}
+    ExemplarCharactersIndex{
+        "[一 丨 丶 丿 乙 亅 二 亠 人 儿 入 八 冂 冖 冫 几 凵 刀 力 勹 匕 匚 匸 十 卜 卩 厂 厶 又 口 囗 土 士 夂 夊 夕 大 女"
+        " 子 宀 寸 小 尢 尸 屮 山 巛 工 己 巾 干 幺 广 廴 廾 弋 弓 彐 彡 彳 心 戈 戶 手 支 攴 文 斗 斤 方 无 日 曰 月 木 欠"
+        " 止 歹 殳 毋 比 毛 氏 气 水 火 爪 父 爻 爿 片 牙 牛 犬 玄 玉 瓜 瓦 甘 生 用 田 疋 疒 癶 白 皮 皿 目 矛 矢 石 示 禸"
+        " 禾 穴 立 竹 米 糸 缶 网 羊 羽 老 而 耒 耳 聿 肉 臣 自 至 臼 舌 舛 舟 艮 色 艸 虍 虫 血 行 衣 襾 見 角 言 谷 豆 豕"
+        " 豸 貝 赤 走 足 身 車 辛 辰 辵 邑 酉 釆 里 金 長 門 阜 隶 隹 雨 靑 非 面 革 韋 韭 音 頁 風 飛 食 首 香 馬 骨 高 髟"
+        " 鬥 鬯 鬲 鬼 魚 鳥 鹵 鹿 麥 麻 黃 黍 黑 黹 黽 鼎 鼓 鼠 鼻 齊 齒 龍 龜 龠]"
+    }
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0 1 2 3 4 5 6 7 8 9 〇 一 七 三 九 二 五 八 六 四]"}
     ExemplarCharactersPunctuation{
         "[‾ ﹉﹊﹋﹌ _ ＿ ﹍﹎﹏ ︳︴ \\- － ﹣ ‐ ‑ – ︲ — ﹘ ︱ , ， ﹐ 、 ﹑ ; ； ﹔ \\: ： ﹕ ! ！ ﹗ ? ？ ﹖"
@@ -640,6 +650,8 @@ zh_Hant{
             }
             patterns{
                 accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
+                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -7822,5 +7834,42 @@ zh_Hant{
         UK{"英制"}
         US{"美制"}
         metric{"公制"}
+    }
+    personNames{
+        nameOrderLocales{
+            surnameFirst{
+                "ja",
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+        namePattern{
+            givenFirst-long-addressing-formal{"{surname}{prefix}"}
+            givenFirst-long-addressing-informal{"{given-informal}"}
+            givenFirst-medium-addressing-formal{"{surname}{prefix}"}
+            givenFirst-medium-addressing-informal{"{given-informal}"}
+            givenFirst-short-addressing-formal{"{surname}{prefix}"}
+            givenFirst-short-addressing-informal{"{given-informal}"}
+            sorting-long-referring-formal{"{surname-core}, {given} {given2} {surname-prefix}"}
+            sorting-long-referring-informal{"{surname}, {given-informal}"}
+            sorting-medium-referring-formal{"{surname-core}, {given} {given2-initial} {surname-prefix}"}
+            sorting-medium-referring-informal{"{surname}, {given-informal}"}
+            sorting-short-referring-formal{"{surname-core}, {given-initial} {given2-initial} {surname-prefix}"}
+            sorting-short-referring-informal{"{surname}, {given-informal}"}
+            surnameFirst-long-addressing-formal{"{surname}{prefix}"}
+            surnameFirst-long-addressing-informal{"{given-informal}"}
+            surnameFirst-long-referring-formal{"{surname} {given} {given2} {suffix}"}
+            surnameFirst-long-referring-informal{"{surname} {given-informal}"}
+            surnameFirst-medium-addressing-formal{"{surname}{prefix}"}
+            surnameFirst-medium-addressing-informal{"{given-informal}"}
+            surnameFirst-medium-referring-formal{"{surname} {given} {given2-initial} {suffix}"}
+            surnameFirst-medium-referring-informal{"{surname} {given-informal}"}
+            surnameFirst-short-addressing-formal{"{surname}{prefix}"}
+            surnameFirst-short-addressing-informal{"{given-informal}"}
+            surnameFirst-short-referring-formal{"{surname} {given-initial} {given2-initial}"}
+            surnameFirst-short-referring-informal{"{surname} {given-initial}"}
+        }
     }
 }

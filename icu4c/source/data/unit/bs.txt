@@ -382,6 +382,13 @@ bs{
                 one{"{0} nanosekunda"}
                 other{"{0} nanosekundi"}
             }
+            quarter{
+                dnam{"četvrtine"}
+                few{"{0} četvrtine"}
+                one{"{0} četvrtina"}
+                other{"{0} četvrtina"}
+                per{"{0}/čet."}
+            }
             second{
                 dnam{"sekunde"}
                 few{"{0} sekunde"}
@@ -1261,6 +1268,18 @@ bs{
             south{"{0}J"}
             west{"{0}Z"}
         }
+        digital{
+            bit{
+                few{"{0} bita"}
+                one{"{0} bit"}
+                other{"{0} bita"}
+            }
+            byte{
+                few{"{0} B"}
+                one{"{0} B"}
+                other{"{0} B"}
+            }
+        }
         duration{
             day{
                 dnam{"dan"}
@@ -1796,6 +1815,13 @@ bs{
                 few{"{0} ns"}
                 one{"{0} ns"}
                 other{"{0} ns"}
+            }
+            quarter{
+                dnam{"čet."}
+                few{"{0} čet."}
+                one{"{0} čet."}
+                other{"{0} čet."}
+                per{"{0}/čet."}
             }
             second{
                 dnam{"sekunde"}

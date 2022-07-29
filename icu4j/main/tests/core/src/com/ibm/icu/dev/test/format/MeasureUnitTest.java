@@ -3096,8 +3096,8 @@ public class MeasureUnitTest extends TestFmwk {
             { MeasureUnit.SECOND, "pt-PT", FormatWidth.NARROW, "s" },
             { MeasureUnit.SECOND, "pt-PT", FormatWidth.SHORT, "s" },
             { MeasureUnit.SECOND, "pt-PT", FormatWidth.WIDE, "segundos" },
-            { MeasureUnit.SECOND, "pt", FormatWidth.NARROW, "seg" },
-            { MeasureUnit.SECOND, "pt", FormatWidth.SHORT, "seg" },
+            { MeasureUnit.SECOND, "pt", FormatWidth.NARROW, "s" },
+            { MeasureUnit.SECOND, "pt", FormatWidth.SHORT, "s" },
             { MeasureUnit.SECOND, "pt", FormatWidth.WIDE, "segundos" },
         };
 

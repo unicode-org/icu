@@ -36,7 +36,9 @@ sq{
             }
             patterns{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat{"#,##0.00 ¤"}
+                currencyPatternAppendISO{"{0} ¤¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
@@ -391,6 +393,24 @@ sq{
                     d{"d – d"}
                 }
                 fallback{"{0} – {1}"}
+                h{
+                    a{"h a – h a"}
+                    h{"h – h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm – h:mm a"}
+                    m{"h:mm – h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm – h:mm a v"}
+                    m{"h:mm – h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h – h a v"}
+                }
                 y{
                     y{"y – y G"}
                 }
@@ -973,6 +993,147 @@ sq{
                         "Tremujori i 2-të",
                         "Tremujori i 3-të",
                         "Tremujori i 4-t",
+                    }
+                }
+            }
+        }
+        islamic{
+            DateTimePatterns{
+                "h:mm:ss a, zzzz",
+                "h:mm:ss a, z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, d MMMM y G",
+                "d MMMM y G",
+                "d MMM y G",
+                "d.M.y GGGGG",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            availableFormats{
+                E{"ccc"}
+                Ed{"E, d"}
+                Gy{"y G"}
+                GyMMM{"M.y G"}
+                GyMMMEd{"E, d.M.y G"}
+                GyMMMd{"d.M.y G"}
+                GyMd{"d.M.y GGGGG"}
+                M{"L"}
+                MEd{"E, d.M"}
+                MMM{"LLL"}
+                MMMEd{"E, d MMM"}
+                MMMMEd{"E, d MMMM"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                Md{"d.M"}
+                d{"d"}
+                y{"y G"}
+                yyyy{"y G"}
+                yyyyM{"M.y GGGGG"}
+                yyyyMEd{"E, d.M.y GGGGG"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"E, d MMM y G"}
+                yyyyMMMM{"MMMM y G"}
+                yyyyMMMd{"d MMM y G"}
+                yyyyMd{"d.M.y GGGGG"}
+                yyyyQQQ{"QQQ, y G"}
+                yyyyQQQQ{"QQQQ, y G"}
+            }
+            eras{
+                abbreviated{
+                    "H.",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "muh.",
+                        "sef.",
+                        "reb. I",
+                        "reb. II",
+                        "xhum. I",
+                        "xhum. II",
+                        "rexh.",
+                        "sha.",
+                        "ram.",
+                        "shev.",
+                        "dhul-k.",
+                        "dhul-h.",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "muharrem",
+                        "sefer",
+                        "rebiul-evel",
+                        "rebiu-theni",
+                        "xhumadel-ula",
+                        "xhumade-theni",
+                        "rexheb",
+                        "shaban",
+                        "ramazan",
+                        "sheval",
+                        "dhul-kade",
+                        "dhul-hixhe",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Muh.",
+                        "Sef.",
+                        "Reb. I",
+                        "Reb. II",
+                        "Xhum. I",
+                        "Xhum. II",
+                        "Rexh.",
+                        "Sha.",
+                        "Ram.",
+                        "Shev.",
+                        "Dhul-k.",
+                        "Dhul-h.",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "Muharrem",
+                        "Sefer",
+                        "Rebiul-evel",
+                        "Rebiu-theni",
+                        "Xhumadel-ula",
+                        "Xhumade-theni",
+                        "Rexheb",
+                        "Shaban",
+                        "Ramazan",
+                        "Sheval",
+                        "Dhul-kade",
+                        "Dhul-hixhe",
                     }
                 }
             }
@@ -1925,5 +2086,73 @@ sq{
         UK{"britanik (imperial)"}
         US{"amerikan"}
         metric{"metrik"}
+    }
+    personNames{
+        foreignSpaceReplacement{" "}
+        initialPattern{
+            initial{"{0}."}
+            initialSequence{"{0} {1}"}
+        }
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "sq",
+            }
+            surnameFirst{
+                "hu",
+                "ja",
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+        namePattern{
+            givenFirst-long-addressing-formal{"{prefix} {surname}"}
+            givenFirst-long-addressing-informal{"{prefix} {given-informal}"}
+            givenFirst-long-monogram-formal{"{given-monogram-allCaps}.{surname-monogram-allCaps}."}
+            givenFirst-long-monogram-informal{"{given-monogram-allCaps}.{surname-monogram-allCaps}."}
+            givenFirst-long-referring-formal{"{prefix} {given} {surname}, {suffix}"}
+            givenFirst-long-referring-informal{"{prefix} {given} {surname}"}
+            givenFirst-medium-addressing-formal{"{prefix} {surname}"}
+            givenFirst-medium-addressing-informal{"{prefix} {given-informal}"}
+            givenFirst-medium-monogram-formal{"{given-monogram-allCaps}.{surname-monogram-allCaps}."}
+            givenFirst-medium-monogram-informal{"{given-monogram-allCaps}.{surname-monogram-allCaps}."}
+            givenFirst-medium-referring-formal{"{prefix} {given} {surname}, {suffix}"}
+            givenFirst-medium-referring-informal{"{prefix} {given} {surname}"}
+            givenFirst-short-addressing-formal{"{prefix} {surname}"}
+            givenFirst-short-addressing-informal{"{prefix} {given-informal}"}
+            givenFirst-short-monogram-formal{"{given-monogram-allCaps}.{surname-monogram-allCaps}."}
+            givenFirst-short-monogram-informal{"{given-monogram-allCaps}.{surname-monogram-allCaps}."}
+            givenFirst-short-referring-formal{"{prefix} {given} {surname}, {suffix}"}
+            givenFirst-short-referring-informal{"{prefix} {given} {surname}"}
+            sorting-long-referring-formal{"{prefix} {surname-core}, {given} {surname-prefix}"}
+            sorting-long-referring-informal{"{prefix} {surname}, {given-informal}"}
+            sorting-medium-referring-formal{"{prefix} {surname-core}, {given} {surname-prefix}"}
+            sorting-medium-referring-informal{"{prefix} {surname}, {given-informal}"}
+            sorting-short-referring-formal{"{prefix} {surname-core}, {given} {surname-prefix}"}
+            sorting-short-referring-informal{"{prefix} {surname}, {given-informal}"}
+            surnameFirst-long-addressing-formal{"{prefix} {surname}"}
+            surnameFirst-long-addressing-informal{"{prefix} {given-informal}"}
+            surnameFirst-long-monogram-formal{
+                "{surname-monogram-allCaps}.{given-monogram-allCaps}.{given2-monogram"
+                "-allCaps}."
+            }
+            surnameFirst-long-monogram-informal{"{surname-monogram-allCaps}.{given-informal-monogram-allCaps}."}
+            surnameFirst-long-referring-formal{"{prefix} {surname}, {given} {given2-initial}, {suffix}"}
+            surnameFirst-long-referring-informal{"{prefix} {surname}, {given}"}
+            surnameFirst-medium-addressing-formal{"{prefix} {surname}"}
+            surnameFirst-medium-addressing-informal{"{prefix} {given-informal}"}
+            surnameFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
+            surnameFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
+            surnameFirst-medium-referring-formal{"{prefix} {surname}, {given} {given2-initial}, {suffix}"}
+            surnameFirst-medium-referring-informal{"{prefix} {surname}, {given}"}
+            surnameFirst-short-addressing-formal{"{prefix} {surname}"}
+            surnameFirst-short-addressing-informal{"{prefix} {given-informal}"}
+            surnameFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
+            surnameFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
+            surnameFirst-short-referring-formal{"{prefix} {surname}, {given} {given2-initial}, {suffix}"}
+            surnameFirst-short-referring-informal{"{prefix} {surname}, {given}"}
+        }
     }
 }

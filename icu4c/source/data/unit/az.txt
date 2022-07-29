@@ -330,6 +330,12 @@ az{
                 one{"{0} nanosaniyə"}
                 other{"{0} nanosaniyə"}
             }
+            quarter{
+                dnam{"rüb"}
+                one{"{0} r"}
+                other{"{0} r"}
+                per{"{0}/r"}
+            }
             second{
                 dnam{"saniyə"}
                 one{"{0} saniyə"}
@@ -1134,6 +1140,12 @@ az{
                 one{"{0} ay"}
                 other{"{0} ay"}
             }
+            quarter{
+                dnam{"rüb"}
+                one{"{0} r"}
+                other{"{0} r"}
+                per{"{0}/r"}
+            }
             second{
                 dnam{"san"}
                 one{"{0} san"}
@@ -1725,6 +1737,12 @@ az{
                 dnam{"nsan"}
                 one{"{0} nsan"}
                 other{"{0} nsan"}
+            }
+            quarter{
+                dnam{"rüb"}
+                one{"{0} r"}
+                other{"{0} r"}
+                per{"{0}/r"}
             }
             second{
                 dnam{"saniyə"}

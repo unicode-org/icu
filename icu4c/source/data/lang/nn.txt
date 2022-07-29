@@ -23,10 +23,11 @@ nn{
         bez{"bena (Tanzania)"}
         bss{"bakossi"}
         car{"carib"}
-        ceb{"cebuano"}
         chg{"tsjagataisk"}
         chr{"cherokee"}
         ckb{"sorani"}
+        crj{"sørleg aust-cree"}
+        crl{"nordleg aust-cree"}
         crs{"seselwa (fransk-kreolsk)"}
         cu{"kyrkjeslavisk"}
         cv{"tsjuvansk"}
@@ -45,7 +46,9 @@ nn{
         grc{"gammalgresk"}
         gv{"manx"}
         gwi{"gwichin"}
+        hax{"sørleg haida"}
         hsb{"høgsorbisk"}
+        ikt{"vestleg kanadisk inuktitut"}
         kl{"grønlandsk (kalaallisut)"}
         krc{"karachay-balkar"}
         kum{"kumyk"}
@@ -69,6 +72,8 @@ nn{
         nqo{"n’ko"}
         nso{"nordsotho"}
         nwc{"klassisk newarisk"}
+        ojb{"nordvestleg ojibwa"}
+        ojw{"vestleg ojibwa"}
         pcm{"nigeriansk pidgin"}
         peo{"gammalpersisk"}
         pro{"gammalprovençalsk"}
@@ -78,14 +83,17 @@ nn{
         rw{"kinjarwanda"}
         sc{"sardinsk"}
         sga{"gammalirsk"}
+        slh{"sørleg lushootseed"}
         srn{"sranan tongo"}
         st{"sørsotho"}
         swb{"shimaore"}
         syr{"syrisk"}
+        tce{"sørleg tutchone"}
         tiv{"tivi"}
         tkl{"tokelau"}
         tn{"tswana"}
         tog{"tonga (Nyasa)"}
+        ttm{"nordleg tutchone"}
         tvl{"tuvalu"}
         tyv{"tuvinisk"}
         tzm{"sentral-tamazight"}
@@ -189,6 +197,7 @@ nn{
             hant{"tradisjonelle kinesiske tal"}
             hantfin{"tradisjonelle kinesiske finanstal"}
             hebr{"hebraiske tal"}
+            java{"javanesiske siffer"}
             jpan{"japanske tal"}
             jpanfin{"japanske finanstal"}
             khmr{"khmer-siffer"}
@@ -197,6 +206,7 @@ nn{
             latn{"vestlege siffer"}
             mlym{"malayalam-siffer"}
             mymr{"burmesiske siffer"}
+            native{"språkspesifikke siffer"}
             orya{"odia-siffer"}
             roman{"romartal"}
             romanlow{"små romartal"}
@@ -205,6 +215,7 @@ nn{
             telu{"telugu-siffer"}
             thai{"thailandske siffer"}
             tibt{"tibetanske siffer"}
+            vaii{"vai-siffer"}
         }
     }
     Variants{

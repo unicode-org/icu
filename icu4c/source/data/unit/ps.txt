@@ -320,6 +320,9 @@ ps{
                 one{"{0} ns"}
                 other{"{0} ns"}
             }
+            quarter{
+                dnam{"ربعه"}
+            }
             second{
                 dnam{"ثانيې"}
             }
@@ -994,6 +997,10 @@ ps{
                 dnam{"مياشت"}
                 one{"{0} m"}
                 other{"{0} m"}
+                per{"{0}/m"}
+            }
+            quarter{
+                dnam{"qtr"}
             }
             second{
                 dnam{"sec"}
@@ -1404,6 +1411,9 @@ ps{
                 dnam{"ns"}
                 one{"{0} ns"}
                 other{"{0} ns"}
+            }
+            quarter{
+                dnam{"qtr"}
             }
             second{
                 dnam{"ثانيې"}

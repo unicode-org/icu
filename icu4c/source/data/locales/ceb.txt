@@ -13,6 +13,8 @@ ceb{
             }
             patterns{
                 accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
+                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 scientificFormat{"#E0"}
@@ -124,7 +126,6 @@ ceb{
                     G{"MMM d, y G – MMM d, y G"}
                     M{"MMM d – MMM d, y G"}
                     d{"MMM d – d, y G"}
-                    y{"MMM d, y – MMM d, y G"}
                 }
                 GyMd{
                     G{"M/d/y GGGGG – M/d/y GGGGG"}

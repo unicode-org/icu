@@ -356,10 +356,9 @@
 //ldml/personNames/foreignSpaceReplacement              ; /personNames/foreignSpaceReplacement
 //ldml/personNames/initialPattern[@type="(%A)"][@alt="(%A)"] ; /personNames/initialPattern/$1%$2
 //ldml/personNames/initialPattern[@type="(%A)"]              ; /personNames/initialPattern/$1
-//ldml/personNames/personName[@order="(%A)"][@length="(%A)"][@usage="(%A)"][@formality="(%A)"]/namePattern[@alt="(%A)"] ; /personNames/namePattern/$1-$2-$3-$4-%5
-//ldml/personNames/personName[@order="(%A)"][@length="(%A)"][@usage="(%A)"][@formality="(%A)"]/namePattern ; /personNames/namePattern/$1-$2-$3-$4
-//ldml/personNames/sampleName[@item="(%A)"]/nameField[@type="(%A)"][@alt="(%A)"] ; /personNames/sampleName/$1/$2%$3
-//ldml/personNames/sampleName[@item="(%A)"]/nameField[@type="(%A)"]              ; /personNames/sampleName/$1/$2
+//ldml/personNames/personName[@order="(%A)"][@length="(%A)"][@usage="(%A)"][@formality="(%A)"]/namePattern ;           /personNames/namePattern/$1-$2-$3-$4
+//ldml/personNames/personName[@order="(%A)"][@length="(%A)"][@usage="(%A)"][@formality="(%A)"]/namePattern[@alt="1"] ; /personNames/namePattern/$1-$2-$3-$4
+//ldml/personNames/personName[@order="(%A)"][@length="(%A)"][@usage="(%A)"][@formality="(%A)"]/namePattern[@alt="2"] ; /personNames/namePattern/$1-$2-$3-$4
 
 # Misc
 

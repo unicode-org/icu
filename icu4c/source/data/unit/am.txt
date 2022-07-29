@@ -569,6 +569,18 @@ am{
                 one{"{0} ናኖሰከንድ"}
                 other{"{0} ናኖሰከንድ"}
             }
+            quarter{
+                case{
+                    accusative{
+                        one{"{0} ሩ"}
+                        other{"{0} ሩ"}
+                    }
+                }
+                dnam{"ሩቦች"}
+                one{"{0} ሩ"}
+                other{"{0} ሩ"}
+                per{"{0}/ሩ"}
+            }
             second{
                 case{
                     accusative{
@@ -1796,6 +1808,10 @@ am{
                 one{"{0} ወር"}
                 other{"{0} ወር"}
             }
+            quarter{
+                one{"{0} ሩብ"}
+                other{"{0} ሩ"}
+            }
             second{
                 dnam{"ሰከንድ"}
                 one{"{0} ሰ"}
@@ -2332,6 +2348,12 @@ am{
                 dnam{"ናኖሰከንድ"}
                 one{"{0} ናኖሰከንድ"}
                 other{"{0} ናኖሰከንድ"}
+            }
+            quarter{
+                dnam{"ሩብ"}
+                one{"{0} ሩብ"}
+                other{"{0} ሩብ"}
+                per{"{0}/ሩ"}
             }
             second{
                 dnam{"ሰከንዶች"}

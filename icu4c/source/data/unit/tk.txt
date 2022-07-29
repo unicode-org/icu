@@ -337,6 +337,12 @@ tk{
                 one{"{0} nanosekunt"}
                 other{"{0} nanosekunt"}
             }
+            quarter{
+                dnam{"çärýek"}
+                one{"{0} çärýek"}
+                other{"{0} çärýek"}
+                per{"{0}/ç"}
+            }
             second{
                 dnam{"sekunt"}
                 one{"{0} sekunt"}
@@ -1120,6 +1126,12 @@ tk{
                 one{"{0}a"}
                 other{"{0}a"}
             }
+            quarter{
+                dnam{"çär"}
+                one{"{0}ç"}
+                other{"{0}ç"}
+                per{"{0}/ç"}
+            }
             second{
                 dnam{"se"}
                 one{"{0}se"}
@@ -1540,6 +1552,12 @@ tk{
                 dnam{"ns"}
                 one{"{0} ns"}
                 other{"{0} ns"}
+            }
+            quarter{
+                dnam{"çär"}
+                one{"{0} çär"}
+                other{"{0} çär"}
+                per{"{0}/ç"}
             }
             second{
                 dnam{"sek"}

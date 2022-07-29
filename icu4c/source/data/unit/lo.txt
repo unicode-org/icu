@@ -282,6 +282,11 @@ lo{
                 dnam{"ນາ​ໂນ​ວິ​ນາ​ທີ"}
                 other{"{0} ນາ​ໂນ​ວິ​ນາ​ທີ"}
             }
+            quarter{
+                dnam{"ໄຕມາດ"}
+                other{"{0} ໄຕມາດ"}
+                per{"{0}/ໄຕມາດ"}
+            }
             second{
                 dnam{"ວິນາທີ"}
                 other{"{0} ວິນາທີ"}
@@ -1269,6 +1274,11 @@ lo{
             nanosecond{
                 dnam{"ນາ​ໂນ​ວິ​"}
                 other{"{0} ນນ​ວິ"}
+            }
+            quarter{
+                dnam{"ໄຕມາດ"}
+                other{"{0} ໄຕມາດ"}
+                per{"{0}/ໄຕມາດ"}
             }
             second{
                 dnam{"ວິ."}

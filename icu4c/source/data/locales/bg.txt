@@ -27,6 +27,7 @@ bg{
             }
             patterns{
                 accountingFormat{"0.00 ¤;(0.00 ¤)"}
+                accountingFormat%noCurrency{"0.00;(0.00)"}
                 currencyFormat{"0.00 ¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -227,6 +228,12 @@ bg{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1} 'в' {0}",
+                "{1} 'в' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
             }
@@ -479,6 +486,12 @@ bg{
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1} 'в' {0}",
+                "{1} 'в' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
             }
@@ -1615,7 +1628,6 @@ bg{
             }
         }
         second-narrow{
-            dn{"с"}
             relativeTime{
                 future{
                     one{"сл. {0} сек"}
@@ -1905,10 +1917,10 @@ bg{
             dn{"седмица от месеца"}
         }
         weekOfMonth-narrow{
-            dn{"седмица от месеца"}
+            dn{"седм. от мес."}
         }
         weekOfMonth-short{
-            dn{"седмица от месеца"}
+            dn{"седм. от мес."}
         }
         weekday{
             dn{"ден от седмицата"}
@@ -1965,7 +1977,7 @@ bg{
             }
         }
         year-short{
-            dn{"г."}
+            dn{"год."}
             relative{
                 "-1"{"мин. г."}
                 "0"{"т. г."}
@@ -2036,5 +2048,69 @@ bg{
         UK{"имперска"}
         US{"американска"}
         metric{"метрична"}
+    }
+    personNames{
+        initialPattern{
+            initial{"{0}."}
+            initialSequence{"{0} {1}"}
+        }
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "bg",
+            }
+            surnameFirst{
+                "ja",
+                "ko",
+                "zh",
+            }
+        }
+        namePattern{
+            givenFirst-long-addressing-formal{"{prefix} {surname-core}"}
+            givenFirst-long-addressing-informal{"{given}"}
+            givenFirst-long-monogram-formal{
+                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-core-monog"
+                "ram-allCaps}"
+            }
+            givenFirst-long-referring-formal{"{prefix} {given} {given2} {surname-core}, {suffix}"}
+            givenFirst-long-referring-informal{"{given} {surname-core}"}
+            givenFirst-medium-addressing-formal{"{prefix} {surname-core}"}
+            givenFirst-medium-addressing-informal{"{given}"}
+            givenFirst-medium-monogram-informal{"{given-monogram-allCaps}"}
+            givenFirst-medium-referring-formal{"{prefix} {given} {given2} {surname-core}, {suffix}"}
+            givenFirst-medium-referring-informal{"{given} {surname-core}"}
+            givenFirst-short-addressing-formal{"{prefix} {surname-core}"}
+            givenFirst-short-addressing-informal{"{given}"}
+            givenFirst-short-monogram-informal{"{given-monogram-allCaps}"}
+            givenFirst-short-referring-formal{"{given-initial} {given2-initial} {surname-core}"}
+            givenFirst-short-referring-informal{"{given} {surname-core-initial}"}
+            sorting-long-referring-formal{"{prefix} {surname-core}, {given} {given2} {surname-prefix}"}
+            sorting-long-referring-informal{"{surname-core}, {given}"}
+            sorting-medium-referring-formal{"{prefix} {surname-core}, {given} {given2-initial} {surname-prefix}"}
+            sorting-medium-referring-informal{"{surname-core}, {given}"}
+            sorting-short-referring-formal{"{surname-core}, {given-initial} {given2-initial} {surname-prefix}"}
+            sorting-short-referring-informal{"{surname-core}, {given-initial}"}
+            surnameFirst-long-addressing-formal{"{prefix} {surname-core}"}
+            surnameFirst-long-addressing-informal{"{given}"}
+            surnameFirst-long-monogram-formal{
+                "{surname-core-monogram-allCaps}{given-monogram-allCaps}{given2-monog"
+                "ram-allCaps}"
+            }
+            surnameFirst-long-monogram-informal{"{surname-core-monogram-allCaps}{given-monogram-allCaps}"}
+            surnameFirst-long-referring-formal{"{prefix} {surname-core}, {given} {given2}, {suffix}"}
+            surnameFirst-long-referring-informal{"{surname-core}, {given}"}
+            surnameFirst-medium-addressing-formal{"{prefix} {surname-core}"}
+            surnameFirst-medium-addressing-informal{"{given}"}
+            surnameFirst-medium-monogram-formal{"{surname-core-monogram-allCaps}"}
+            surnameFirst-medium-monogram-informal{"{given-monogram-allCaps}"}
+            surnameFirst-medium-referring-formal{"{prefix} {surname-core}, {given} {given2-initial}, {suffix}"}
+            surnameFirst-medium-referring-informal{"{surname-core}, {given}"}
+            surnameFirst-short-addressing-formal{"{prefix} {surname-core}"}
+            surnameFirst-short-addressing-informal{"{given}"}
+            surnameFirst-short-monogram-formal{"{surname-core-monogram-allCaps}"}
+            surnameFirst-short-monogram-informal{"{given-monogram-allCaps}"}
+            surnameFirst-short-referring-formal{"{surname-core}, {given-initial} {given2-initial}"}
+            surnameFirst-short-referring-informal{"{surname-core}, {given-initial}"}
+        }
     }
 }

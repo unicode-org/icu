@@ -279,6 +279,11 @@ zh_Hant{
                 dnam{"奈秒"}
                 other{"{0} 奈秒"}
             }
+            quarter{
+                dnam{"刻"}
+                other{"{0} 刻"}
+                per{"{0}/刻"}
+            }
             second{
                 dnam{"秒"}
                 other{"{0} 秒"}
@@ -852,7 +857,7 @@ zh_Hant{
             }
             degree{
                 dnam{"角度"}
-                other{"{0}度"}
+                other{"{0}°"}
             }
             radian{
                 dnam{"弧度"}
@@ -1058,6 +1063,11 @@ zh_Hant{
             nanosecond{
                 dnam{"奈秒"}
                 other{"{0}ns"}
+            }
+            quarter{
+                dnam{"刻"}
+                other{"{0} 刻"}
+                per{"{0}/刻"}
             }
             second{
                 dnam{"秒"}
@@ -1843,6 +1853,11 @@ zh_Hant{
             nanosecond{
                 dnam{"奈秒"}
                 other{"{0} 奈秒"}
+            }
+            quarter{
+                dnam{"刻"}
+                other{"{0} 刻"}
+                per{"{0}/刻"}
             }
             second{
                 dnam{"秒"}

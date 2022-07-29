@@ -858,9 +858,9 @@ mt{
         month{
             dn{"xahar"}
             relative{
-                "-1"{"Ix-xahar li għadda"}
-                "0"{"Dan ix-xahar"}
-                "1"{"Ix-xahar id-dieħel"}
+                "-1"{"ix-xahar li għadda"}
+                "0"{"dan ix-xahar"}
+                "1"{"ix-xahar id-dieħel"}
             }
             relativeTime{
                 future{
@@ -968,6 +968,7 @@ mt{
             }
         }
         quarter-short{
+            dn{"kwrt"}
             relative{
                 "-1"{"il-kwart ta’ sena li għadda"}
                 "0"{"il-kwart ta’ sena li qegħdin fih"}
@@ -1140,14 +1141,14 @@ mt{
                     many{"sa {0}-il ġimgħa oħra"}
                     one{"sa ġimgħa oħra"}
                     other{"sa {0} ġimgħa oħra"}
-                    two{"sa ġimgħatejn oħra"}
+                    two{"sa ġimagħtejn oħra"}
                 }
                 past{
                     few{"{0} ġimgħat ilu"}
                     many{"{0}-il ġimgħa ilu"}
                     one{"ġimgħa ilu"}
                     other{"{0} ġimgħa ilu"}
-                    two{"ġimgħatejn ilu"}
+                    two{"ġimagħtejn ilu"}
                 }
             }
         }
@@ -1159,18 +1160,19 @@ mt{
                     many{"sa {0}-il ġimgħa oħra"}
                     one{"sa ġimgħa oħra"}
                     other{"sa {0} ġimgħa oħra"}
-                    two{"sa ġimgħatejn oħra"}
+                    two{"sa ġimagħtejn oħra"}
                 }
                 past{
                     few{"{0} ġimgħat ilu"}
                     many{"{0}-il ġimgħa ilu"}
                     one{"ġimgħa ilu"}
                     other{"{0} ġimgħa ilu"}
-                    two{"ġimgħatejn ilu"}
+                    two{"ġimagħtejn ilu"}
                 }
             }
         }
         week-short{
+            dn{"ġm"}
             relativePeriod{"fil-ġimgħa ta’ {0}"}
             relativeTime{
                 future{
@@ -1178,14 +1180,14 @@ mt{
                     many{"sa {0}-il ġimgħa oħra"}
                     one{"sa ġimgħa oħra"}
                     other{"sa {0} ġimgħa oħra"}
-                    two{"sa ġimgħatejn oħra"}
+                    two{"sa ġimagħtejn oħra"}
                 }
                 past{
                     few{"{0} ġimgħat ilu"}
                     many{"{0}-il ġimgħa ilu"}
                     one{"ġimgħa ilu"}
                     other{"{0} ġimgħa ilu"}
-                    two{"ġimgħatejn ilu"}
+                    two{"ġimagħtejn ilu"}
                 }
             }
         }
@@ -1260,7 +1262,7 @@ mt{
             }
         }
         year-short{
-            dn{"Sena"}
+            dn{"Sn"}
             relativeTime{
                 future{
                     few{"fi żmien {0} snin oħra"}

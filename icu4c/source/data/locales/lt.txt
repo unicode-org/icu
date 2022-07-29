@@ -33,6 +33,7 @@ lt{
             }
             patterns{
                 accountingFormat{"#,##0.00 ¤"}
+                accountingFormat%noCurrency{"#,##0.00"}
                 currencyFormat{"#,##0.00 ¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0 %"}
@@ -1306,6 +1307,7 @@ lt{
                 GyMMM{"y MMM G"}
                 GyMMMEd{"y MMM d G, E"}
                 GyMMMd{"y MMM d G"}
+                GyMd{"y-MM-dd G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -1490,6 +1492,7 @@ lt{
                 GyMMMMEd{"y 'm'. G MMMM d 'd'., E"}
                 GyMMMMd{"y 'm'. G MMMM d 'd'."}
                 GyMMMd{"y-MM-dd G"}
+                GyMd{"y-MM-dd G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -3866,6 +3869,51 @@ lt{
                 "[,٫︐﹐，]",
                 "[.․﹒．｡]",
             }
+        }
+    }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "lt",
+            }
+            surnameFirst{
+                "hu",
+                "ja",
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+        namePattern{
+            givenFirst-long-addressing-informal{"{given} {given2} {surname} {surname2}"}
+            givenFirst-long-referring-formal{"{suffix} {prefix} {given} {given2} {surname} {surname2}"}
+            givenFirst-long-referring-informal{"{given} {given2} {surname} {surname2}"}
+            givenFirst-medium-addressing-informal{"{given} {given2} {surname} {surname2}"}
+            givenFirst-medium-referring-informal{"{given} {given2} {surname} {surname2}"}
+            givenFirst-short-addressing-formal{"{prefix} {given} {given2} {surname} {surname2}"}
+            givenFirst-short-addressing-informal{"{given} {given2} {surname} {surname2}"}
+            givenFirst-short-referring-formal{"{prefix} {given} {given2} {surname} {surname2}"}
+            givenFirst-short-referring-informal{"{given} {given2} {surname} {surname2}"}
+            sorting-long-referring-formal{"{prefix} {surname} {surname2}, {given} {given2}"}
+            sorting-long-referring-informal{"{surname} {surname2}, {given} {given2}"}
+            sorting-medium-referring-formal{"{prefix} {surname} {surname2}, {given} {given2}"}
+            sorting-medium-referring-informal{"{surname} {surname2}, {given} {given2}"}
+            sorting-short-referring-formal{"{prefix} {surname} {surname2}, {given} {given2}"}
+            sorting-short-referring-informal{"{surname} {surname2}, {given} {given2}"}
+            surnameFirst-long-addressing-formal{"{prefix} {surname} {surname2}, {given} {given2}"}
+            surnameFirst-long-addressing-informal{"{surname} {surname2}, {given} {given2}"}
+            surnameFirst-long-referring-formal{"{prefix} {surname} {surname2}, {given} {given2}"}
+            surnameFirst-long-referring-informal{"{surname} {surname2}, {given} {given2}"}
+            surnameFirst-medium-addressing-formal{"{prefix} {surname} {surname2}, {given} {given2}"}
+            surnameFirst-medium-addressing-informal{"{surname} {surname2}, {given} {given2}"}
+            surnameFirst-medium-referring-formal{"{prefix} {surname} {surname2}, {given} {given2}"}
+            surnameFirst-medium-referring-informal{"{surname} {surname2}, {given} {given2}"}
+            surnameFirst-short-addressing-formal{"{surname} {surname2}, {given} {given2}"}
+            surnameFirst-short-addressing-informal{"{surname} {surname2}, {given} {given2}"}
+            surnameFirst-short-referring-formal{"{surname} {surname2}, {given} {given2}"}
+            surnameFirst-short-referring-informal{"{surname} {surname2}, {given} {given2}"}
         }
     }
 }

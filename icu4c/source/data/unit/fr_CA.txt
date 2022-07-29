@@ -195,7 +195,7 @@ fr_CA{
         }
         energy{
             british-thermal-unit{
-                dnam{"Unités thermiques britanniques"}
+                dnam{"unités thermiques britanniques"}
                 one{"{0} unité thermique britannique"}
                 other{"{0} unités thermiques britanniques"}
             }
@@ -552,10 +552,6 @@ fr_CA{
             }
         }
         duration{
-            century{
-                one{"´{0}s."}
-                other{"´{0}s."}
-            }
             decade{
                 dnam{"déc"}
                 one{"{0}déc"}
@@ -569,7 +565,6 @@ fr_CA{
             month{
                 one{"{0}m"}
                 other{"{0}m"}
-                per{"{0}/m"}
             }
             week{
                 dnam{"sem"}
@@ -918,9 +913,6 @@ fr_CA{
             }
         }
         duration{
-            century{
-                dnam{"s."}
-            }
             day{
                 one{"{0} j"}
                 other{"{0} j"}
