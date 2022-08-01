@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1659134965609,
+  "lastUpdate": 1659338780183,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -538,6 +538,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 9.236760382281286,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "rp9-next",
+            "username": "rp9-next"
+          },
+          "committer": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "rp9-next",
+            "username": "rp9-next"
+          },
+          "distinct": true,
+          "id": "4cf4116dadd2f34c20d9df42b1272cac7dcb30c4",
+          "message": "ICU-22074 Increase the valgrind CI timeout",
+          "timestamp": "2022-08-01T12:51:55+05:30",
+          "tree_id": "5219374afb583705529f150783e07b0ac009b0c1",
+          "url": "https://github.com/unicode-org/icu/commit/4cf4116dadd2f34c20d9df42b1272cac7dcb30c4"
+        },
+        "date": 1659338776281,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 11.775353063428321,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
