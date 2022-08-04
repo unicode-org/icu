@@ -15,7 +15,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -1244,10 +1246,10 @@ public  class ICUResourceBundle extends UResourceBundle {
         localeID = ULocale.getBaseName(localeID);
         ICUResourceBundle b;
         if (openType == OpenType.LOCALE_DEFAULT_ROOT) {
-            b = instantiateBundle(baseName, localeID, ULocale.getDefault().getBaseName(),
+            b = instantiateBundle(baseName, localeID, null, ULocale.getDefault().getBaseName(),
                     root, openType);
         } else {
-            b = instantiateBundle(baseName, localeID, null, root, openType);
+            b = instantiateBundle(baseName, localeID, null, null, root, openType);
         }
         if(b==null){
             throw new MissingResourceException(
@@ -1261,8 +1263,99 @@ public  class ICUResourceBundle extends UResourceBundle {
                 (localeID.length() == lang.length() || localeID.charAt(lang.length()) == '_');
     }
 
+    private static final Comparator<String[]> COMPARE_FIRST_ELEMENT = new Comparator<String[]>() {
+        @Override
+        public int compare(String[] pair1, String[] pair2) {
+            return pair1[0].compareTo(pair2[0]);
+        }
+    };
+
+    private static String getExplicitParent(String localeID) {
+        return LocaleFallbackData.PARENT_LOCALE_TABLE.get(localeID);
+    }
+
+    private static String getDefaultScript(String language, String region) {
+        String localeID = language + "_" + region;
+        String result = LocaleFallbackData.DEFAULT_SCRIPT_TABLE.get(localeID);
+        if (result == null) {
+            result = LocaleFallbackData.DEFAULT_SCRIPT_TABLE.get(language);
+        }
+        if (result == null) {
+            result = "Latn";
+        }
+        return result;
+    }
+
+    private static String getParentLocaleID(String name, String origName, OpenType openType) {
+        // early out if the locale ID has a variant code or ends with _
+        if (name.endsWith("_") || !ULocale.getVariant(name).isEmpty()) {
+            int lastUnderbarPos = name.lastIndexOf('_');
+            if (lastUnderbarPos >= 0) {
+                return name.substring(0, lastUnderbarPos);
+            } else {
+                return null;
+            }
+        }
+
+        // TODO: Is there a better way to break the locale ID up into its consituent parts?
+        ULocale nameLocale = new ULocale(name);
+        String language = nameLocale.getLanguage();
+        String script = nameLocale.getScript();
+        String region = nameLocale.getCountry();
+
+        // if our open type is LOCALE_DEFAULT_ROOT, first look the locale ID up in the parent locale table; if that
+        // table specifies a parent for it, return that (we don't do this for the other open types-- if we're not
+        // falling back through the system default locale, we also want to do straight truncation fallback instead
+        // of looking things up in the parent locale table-- see https://www.unicode.org/reports/tr35/tr35.html#Parent_Locales:
+        // "Collation data, however, is an exception...")
+        if (openType == OpenType.LOCALE_DEFAULT_ROOT) {
+            String parentID = getExplicitParent(name);
+            if (parentID != null) {
+                return parentID.equals("root") ? null : parentID;
+            }
+        }
+
+        // if it's not in the parent locale table, figure out the fallback script algorithmically
+        // (see CLDR-15265 for an explanation of the algorithm)
+        if (!script.isEmpty() && !region.isEmpty()) {
+            // if "name" has both script and region, is the script the default script?
+            // - if so, remove it and keep the region
+            // - if not, remove the region and keep the script
+            if (getDefaultScript(language, region).equals(script)) {
+                return language + "_" + region;
+            } else {
+                return language + "_" + script;
+            }
+        } else if (!region.isEmpty()) {
+            // if "name" has region but not script, did the original locale ID specify a script?
+            // - if yes, replace the region with the script from the original locale ID
+            // - if no, replace the region with the default script for that language and region
+            String origNameScript = ULocale.getScript(origName);
+            if (!origNameScript.isEmpty()) {
+                return language + "_" + origNameScript;
+            } else {
+                return language + "_" + getDefaultScript(language, region);
+            }
+        } else if (!script.isEmpty()) {
+            // if "name" has script but not region (and our open type is LOCALE_DEFAULT_ROOT), is the script the
+            // default script for the language?
+            // - if so, remove it from the locale ID
+            // - if not, return "root" (bypassing the system default locale ID)
+            // (we don't do this for other open types for the same reason we don't look things up in the parent
+            // locale table for other open types-- see the reference to UTS #35 above)
+            if (openType != OpenType.LOCALE_DEFAULT_ROOT || getDefaultScript(language, null).equals(script)) {
+                return language;
+            } else {
+                return /*"root"*/null;
+            }
+        } else {
+            // if "name" just contains a language code, return null so the calling code falls back to "root"
+            return null;
+        }
+    }
+
     private static ICUResourceBundle instantiateBundle(
-            final String baseName, final String localeID, final String defaultID,
+            final String baseName, final String localeID, final String origLocaleID, final String defaultID,
             final ClassLoader root, final OpenType openType) {
         assert localeID.indexOf('@') < 0;
         assert defaultID == null || defaultID.indexOf('@') < 0;
@@ -1304,17 +1397,15 @@ public  class ICUResourceBundle extends UResourceBundle {
 
             // fallback to locale ID parent
             if(b == null){
-                int i = localeName.lastIndexOf('_');
-                if (i != -1) {
-                    // Chop off the last underscore and the subtag after that.
-                    String temp = localeName.substring(0, i);
-                    b = instantiateBundle(baseName, temp, defaultID, root, openType);
+                String origLocaleName = (origLocaleID != null) ? origLocaleID : localeName;
+                String fallbackLocaleID = getParentLocaleID(localeName, origLocaleName, openType);
+                if (fallbackLocaleID != null) {
+                    b = instantiateBundle(baseName, fallbackLocaleID, origLocaleName, defaultID, root, openType);
                 }else{
-                    // No underscore, only a base language subtag.
                     if(openType == OpenType.LOCALE_DEFAULT_ROOT &&
                             !localeIDStartsWithLangSubtag(defaultID, localeName)) {
                         // Go to the default locale before root.
-                        b = instantiateBundle(baseName, defaultID, defaultID, root, openType);
+                        b = instantiateBundle(baseName, defaultID, null, defaultID, root, openType);
                     } else if(openType != OpenType.LOCALE_ONLY && !rootLocale.isEmpty()) {
                         // Ultimately go to root.
                         b = ICUResourceBundle.createBundle(baseName, rootLocale, root);
@@ -1328,11 +1419,11 @@ public  class ICUResourceBundle extends UResourceBundle {
                 // TODO: C++ uresbund.cpp also checks for %%ParentIsRoot. Why not Java?
                 String parentLocaleName = ((ICUResourceBundleImpl.ResourceTable)b).findString("%%Parent");
                 if (parentLocaleName != null) {
-                    parent = instantiateBundle(baseName, parentLocaleName, defaultID, root, openType);
+                    parent = instantiateBundle(baseName, parentLocaleName, null, defaultID, root, openType);
                 } else if (i != -1) {
-                    parent = instantiateBundle(baseName, localeName.substring(0, i), defaultID, root, openType);
+                    parent = instantiateBundle(baseName, localeName.substring(0, i), null, defaultID, root, openType);
                 } else if (!localeName.equals(rootLocale)){
-                    parent = instantiateBundle(baseName, rootLocale, defaultID, root, openType);
+                    parent = instantiateBundle(baseName, rootLocale, null, defaultID, root, openType);
                 }
 
                 if (!b.equals(parent)){

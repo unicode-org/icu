@@ -58,8 +58,8 @@ $ cd "$TOOLS_ROOT/cldr/lib"
 $ ./install-cldr-jars.sh "$CLDR_DIR"
 
 
-Generating all ICU data
------------------------
+Generating all ICU data and source code
+---------------------------------------
 
 $ cd "$TOOLS_ROOT/cldr/cldr-to-icu"
 $ ant -f build-icu-data.xml
@@ -70,7 +70,7 @@ Other Examples
 
 * Outputting a subset of the supplemental data into a specified directory:
 
-  $ ant -f build-icu-data.xml -DoutDir=/tmp/cldr -DoutputTypes=plurals,dayPeriods
+  $ ant -f build-icu-data.xml -DoutDir=/tmp/cldr -DoutputTypes=plurals,dayPeriods -DdontGenCode=true
 
   Note: Output types can be listed with mixedCase, lower_underscore or UPPER_UNDERSCORE.
   Pass '-DoutputTypes=help' to see the full list.
@@ -78,7 +78,7 @@ Other Examples
 
 * Outputting only a subset of locale IDs (and all the supplemental data):
 
-  $ ant -f build-icu-data.xml -DoutDir=/tmp/cldr -DlocaleIdFilter='(zh|yue).*'
+  $ ant -f build-icu-data.xml -DoutDir=/tmp/cldr -DlocaleIdFilter='(zh|yue).*' -DdontGenCode=true
 
 
 * Overriding the default CLDR version string (which normally matches the CLDR library code):

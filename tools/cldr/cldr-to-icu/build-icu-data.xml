@@ -13,7 +13,7 @@
 <!-- TODO: Add things like copying of a template directory and deleting previous files
      (perhaps always generate into a temporary directory and copy back to avoid having
       inconsistent state when the conversion is cancelled). -->
-<project name="Convert" default="all" basedir=".">
+<project name="Convert" default="all" basedir="." xmlns:if="ant:if" xmlns:unless="ant:unless">
 
     <target name="all" depends="init-args, prepare-jar, clean, convert"/>
 
@@ -42,6 +42,20 @@
              this will overwrite (without deletion) the ICU data files in this ICU release,
              so it is recommended that for testing, it be set to another value.  -->
         <property name="outDir" value="${basedir}/../../../icu4c/source/data/"/>
+
+        <!-- The output directory into which to write generated C/C++ code.  By default
+             this will overwrite (without deletion) the generated C/C++ files in this
+             ICU release, so it is recommended that for testing, it be set to another value. -->
+        <property name="genCCodeDir" value="${basedir}/../../../icu4c/source/"/>
+
+        <!-- The output directory into which to write generated Java code.  By default
+             this will overwrite (without deletion) the generated Java files in this
+             ICU release, so it is recommended that for testing, it be set to another value. -->
+        <property name="genJavaCodeDir" value="${basedir}/../../../icu4j/main/classes/core"/>
+        
+        <!-- Set this to true to prevent build-icu-data.xml from generating the generated
+             ICU source files -->
+        <property name="dontGenCode" value="false" />
 
         <!-- The directory in which the additional ICU XML data is stored. -->
         <property name="specialsDir" value="${basedir}/../../../icu4c/source/data/xml"/>
@@ -115,6 +129,9 @@
             <arg line="-f build-icu-data.xml convert-impl -DcldrDir=${cldrDataDir}"/>
             <!-- List all properties in the "convert-impl" task (except cldrDir). -->
             <arg value="-DoutDir=${outDir}"/>
+            <arg value="-DgenCCodeDir=${genCCodeDir}"/>
+            <arg value="-DgenJavaCodeDir=${genJavaCodeDir}"/>
+            <arg value="-DdontGenCode=${dontGenCode}"/>
             <arg value="-DspecialsDir=${specialsDir}"/>
             <arg value="-DoutputTypes=${outputTypes}"/>
             <arg value="-DicuVersion=${icuVersion}"/>
@@ -131,6 +148,11 @@
          default properties and the configuration in the "<convert>" element below. -->
     <target name="convert-impl">
         <taskdef name="convert" classname="org.unicode.icu.tool.cldrtoicu.ant.ConvertIcuDataTask">
+            <classpath>
+                <pathelement path="target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar"/>
+            </classpath>
+        </taskdef>
+        <taskdef name="generateCode" classname="org.unicode.icu.tool.cldrtoicu.ant.GenerateCodeTask">
             <classpath>
                 <pathelement path="target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar"/>
             </classpath>
@@ -375,10 +397,17 @@
                           source="//path/to/value[@attr='bar']"
                           locales="xx,yy_ZZ"/> -->
         </convert>
+        
+        <generateCode cldrDir="${cldrDir}" cOutDir="${genCCodeDir}" javaOutDir="${genJavaCodeDir}" unless:true="${dontGenCode}" />
     </target>
 
     <target name="clean" depends="init-args, prepare-jar">
         <taskdef name="outputDirectories" classname="org.unicode.icu.tool.cldrtoicu.ant.CleanOutputDirectoryTask">
+            <classpath>
+                <pathelement path="target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar"/>
+            </classpath>
+        </taskdef>
+        <taskdef name="generateCode" classname="org.unicode.icu.tool.cldrtoicu.ant.GenerateCodeTask">
             <classpath>
                 <pathelement path="target/cldr-to-icu-1.0-SNAPSHOT-jar-with-dependencies.jar"/>
             </classpath>
@@ -436,6 +465,8 @@
                 <retain path="tzdbNames.txt"/>
             </dir>
         </outputDirectories>
+        
+        <generateCode cOutDir="${genCCodeDir}" javaOutDir="${genJavaCodeDir}" action="clean" />
     </target>
 </project>
 
