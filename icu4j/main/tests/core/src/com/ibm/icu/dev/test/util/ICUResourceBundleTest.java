@@ -1144,4 +1144,39 @@ public final class ICUResourceBundleTest extends TestFmwk {
         } catch (NoSuchElementException ex) {
         }
     }
+
+    @Test
+    public void TestAlgorithmicParentFallback() {
+        // Test for ICU-21125 and ICU-21126 -- cases where resource fallback isn't determined by lopping fields off
+        // the end of the locale ID (or following a %%Parent directive in a resource bundle)
+        // first column is input locale, second column is expected output locale
+        String[][] testCases = {
+            { "de_Latn_LI", "de_LI", "de_LI"     },
+//            { "en_VA",      "en_150", "en"       },  // TODO: put this back in after https://unicode-org.atlassian.net/browse/CLDR-15893 is fixed
+            { "yi_Latn_DE", "",       "yi"       },  // "" is just "root"-- or, actually, the system default locale
+            { "yi_Hebr_DE", "yi",     "yi"       },
+            { "zh_Hant_SG", "zh_Hant", "zh_Hant" },
+            // would be nice to test that sr_Latn_ME falls back to sr_Latn, or sr_ME to sr_Latn_ME,
+            // or sr_Latn to root, but all of these resource bundle files actually exist in the project
+        };
+
+        for (String[] testCase : testCases) {
+            String localeID = testCase[0];
+            String localeDefaultRootExpected = testCase[1];
+            String localeRootExpected = testCase[2];
+
+            ULocale locale = new ULocale(localeID);
+            ICUResourceBundle localeDefaultRootRB = ICUResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale, ICUResourceBundle.OpenType.LOCALE_DEFAULT_ROOT);
+            ICUResourceBundle localeRootRB = ICUResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale, ICUResourceBundle.OpenType.LOCALE_ROOT);
+            String localeDefaultRootActual = localeDefaultRootRB.getULocale().toString();
+            String localeRootActual = localeRootRB.getULocale().toString();
+
+            if (localeDefaultRootExpected.isEmpty()) {
+                assertEquals("Got wrong locale with LOCALE_DEFAULT_ROOT", ULocale.getDefault().toString(), localeDefaultRootActual);
+            } else {
+                assertEquals("Got wrong locale with LOCALE_DEFAULT_ROOT", localeDefaultRootExpected, localeDefaultRootActual);
+            }
+            assertEquals("Got wrong locale with LOCALE_ROOT", localeRootExpected, localeRootActual);
+        }
+    }
 }

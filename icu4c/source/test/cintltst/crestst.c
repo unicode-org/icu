@@ -26,6 +26,7 @@
 #include "filestrm.h"
 #include <stdbool.h>
 #include <stdlib.h>
+#include <stdio.h>  // for sprintf()
 
 #define RESTEST_HEAP_CHECK 0
 
@@ -38,6 +39,8 @@ static void TestOpenDirect(void);
 static void TestFallback(void);
 static void TestTable32(void);
 static void TestFileStream(void);
+static void TestAlgorithmicParentFallback(void);
+    
 /*****************************************************************************/
 
 const UChar kERROR[] = { 0x0045 /*E*/, 0x0052 /*'R'*/, 0x0052 /*'R'*/,
@@ -120,6 +123,7 @@ void addResourceBundleTest(TestNode** root)
 #endif
     addTest(root, &TestFallback, "tsutil/crestst/TestFallback");
     addTest(root, &TestAliasConflict, "tsutil/crestst/TestAliasConflict");
+    addTest(root, &TestAlgorithmicParentFallback, "tsutil/crestst/TestAlgorithmicParentFallback");
 
 }
 
@@ -1049,4 +1053,61 @@ static void TestGetLocaleByType(void) {
         ures_close(rb);
     }
     ures_close(res);
+}
+
+static void TestAlgorithmicParentFallback(void) {
+    // Test for ICU-21125 and ICU-21126 -- cases where resource fallback isn't determined by lopping fields off
+    // the end of the locale ID (or following a %%Parent directive in a resource bundle)
+    // first column is input locale, second column is expected output locale
+    const char* testCases[] = {
+        "de_Latn_LI", "de_LI",   "de_LI",
+//        "en_VA",      "en_150",  "en",// TODO: put this back in after https://unicode-org.atlassian.net/browse/CLDR-15893 is fixed
+        "yi_Latn_DE", "root",    "yi",
+        "yi_Hebr_DE", "yi",      "yi",
+        "zh_Hant_SG", "zh_Hant", "zh_Hant"
+        // would be nice to test that sr_Latn_ME falls back to sr_Latn, or sr_ME to sr_Latn_ME,
+        // or sr_Latn to root, but all of these resource bundle files actually exist in the project
+    };
+    
+    for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i += 3) {
+        const char* testLocale = testCases[i];
+        const char* regularExpected = testCases[i + 1];
+        const char* noDefaultExpected = testCases[i + 2];
+        
+        UErrorCode err = U_ZERO_ERROR;
+        UResourceBundle* regularRB = ures_open(NULL, testLocale, &err);
+        char errorMessage[200];
+        
+        sprintf(errorMessage, "Error %s opening resource bundle for locale %s and URES_OPEN_LOCALE_DEFAULT_ROOT", u_errorName(err), testLocale);
+        if (assertSuccess(errorMessage, &err)) {
+            const char* resourceLocale = ures_getLocaleByType(regularRB, ULOC_ACTUAL_LOCALE, &err);
+            
+            sprintf(errorMessage, "Error %s getting resource locale for locale %s and URES_OPEN_LOCALE_DEFAULT_ROOT", u_errorName(err), testLocale);
+            if (assertSuccess(errorMessage, &err)) {
+                sprintf(errorMessage, "Mismatch for locale %s and URES_OPEN_LOCALE_DEFAULT_ROOT", testLocale);
+                if (uprv_strcmp(regularExpected, "root") == 0) {
+                    // (the system default locale may have keywords-- just check if the resource locale (which won't) is a prefix of the system default)
+                    assertTrue(errorMessage, uprv_strncmp(uloc_getDefault(), resourceLocale, uprv_strlen(resourceLocale)) == 0);
+                } else {
+                    assertEquals(errorMessage, regularExpected, resourceLocale);
+                }
+            }
+        }
+        ures_close(regularRB);
+
+        err = U_ZERO_ERROR;
+        UResourceBundle* noDefaultRB = ures_openNoDefault(NULL, testLocale, &err);
+        
+        sprintf(errorMessage, "Error %s opening resource bundle for locale %s and URES_OPEN_LOCALE_ROOT", u_errorName(err), testLocale);
+        if (assertSuccess(errorMessage, &err)) {
+            const char* resourceLocale = ures_getLocaleByType(noDefaultRB, ULOC_ACTUAL_LOCALE, &err);
+            
+            sprintf(errorMessage, "Error %s getting resource locale for locale %s and URES_OPEN_LOCALE_ROOT", u_errorName(err), testLocale);
+            if (assertSuccess(errorMessage, &err)) {
+                sprintf(errorMessage, "Mismatch for locale %s and URES_OPEN_LOCALE_ROOT", testLocale);
+                assertEquals(errorMessage, noDefaultExpected, resourceLocale);
+            }
+        }
+        ures_close(noDefaultRB);
+    }
 }

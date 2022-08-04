@@ -91,6 +91,202 @@ static UBool chopLocale(char *name) {
     return false;
 }
 
+static UBool hasVariant(const char* localeID) {
+    UErrorCode err = U_ZERO_ERROR;
+    int32_t variantLength = uloc_getVariant(localeID, NULL, 0, &err);
+    return variantLength != 0;
+}
+
+// This file contains the tables for doing locale fallback, which are generated
+// by the CLDR-to-ICU process directly from the CLDR data.  This file should only
+// ever be included from here.
+#define INCLUDED_FROM_URESBUND_CPP
+#include "localefallback_data.h"
+
+static const char* performFallbackLookup(const char* key,
+                                         const char* keyStrs,
+                                         const char* valueStrs,
+                                         const int32_t* lookupTable,
+                                         int32_t lookupTableLength) {
+    const int32_t* bottom = lookupTable;
+    const int32_t* top = lookupTable + lookupTableLength;
+
+    while (bottom < top) {
+        // Effectively, divide by 2 and round down to an even index
+        const int32_t* middle = bottom + (((top - bottom) / 4) * 2);
+        const char* entryKey = &(keyStrs[*middle]);
+        int32_t strcmpResult = uprv_strcmp(key, entryKey);
+        if (strcmpResult == 0) {
+            return &(valueStrs[middle[1]]);
+        } else if (strcmpResult < 0) {
+            top = middle;
+        } else {
+            bottom = middle + 2;
+        }
+    }
+    return nullptr;
+}
+
+static CharString getDefaultScript(const CharString& language, const CharString& region) {
+    const char* defaultScript = nullptr;
+    UErrorCode err = U_ZERO_ERROR;
+    
+    // the default script will be "Latn" if we don't find the locale ID in the tables
+    CharString result("Latn", err);
+    
+    // if we were passed both language and region, make them into a locale ID and look that up in the default
+    // script table
+    if (!region.isEmpty()) {
+        CharString localeID;
+        localeID.append(language, err).append("_", err).append(region, err);
+        if (U_FAILURE(err)) {
+            return result;
+        }
+        defaultScript = performFallbackLookup(localeID.data(), dsLocaleIDChars, scriptCodeChars, defaultScriptTable, UPRV_LENGTHOF(defaultScriptTable));
+    }
+    
+    // if we didn't find anything, look up just the language in the default script table
+    if (defaultScript == nullptr) {
+        defaultScript = performFallbackLookup(language.data(), dsLocaleIDChars, scriptCodeChars, defaultScriptTable, UPRV_LENGTHOF(defaultScriptTable));
+    }
+    
+    // if either lookup above succeeded, copy the result from "defaultScript" into "result"; otherwise, return "Latn"
+    if (defaultScript != nullptr) {
+        result.clear();
+        result.append(defaultScript, err);
+    }
+    return result;
+}
+
+enum UResOpenType {
+    /**
+     * Open a resource bundle for the locale;
+     * if there is not even a base language bundle, then fall back to the default locale;
+     * if there is no bundle for that either, then load the root bundle.
+     *
+     * This is the default bundle loading behavior.
+     */
+    URES_OPEN_LOCALE_DEFAULT_ROOT,
+    // TODO: ICU ticket #11271 "consistent default locale across locale trees"
+    // Add an option to look at the main locale tree for whether to
+    // fall back to root directly (if the locale has main data) or
+    // fall back to the default locale first (if the locale does not even have main data).
+    /**
+     * Open a resource bundle for the locale;
+     * if there is not even a base language bundle, then load the root bundle;
+     * never fall back to the default locale.
+     *
+     * This is used for algorithms that have good pan-Unicode default behavior,
+     * such as case mappings, collation, and segmentation (BreakIterator).
+     */
+    URES_OPEN_LOCALE_ROOT,
+    /**
+     * Open a resource bundle for the exact bundle name as requested;
+     * no fallbacks, do not load parent bundles.
+     *
+     * This is used for supplemental (non-locale) data.
+     */
+    URES_OPEN_DIRECT
+};
+typedef enum UResOpenType UResOpenType;
+
+/**
+ *  Internal function, determines the search path for resource bundle files.
+ *  Currently, this function is used only by findFirstExisting() to help search for resource bundle files when a bundle for the specified
+ *  locale doesn't exist.  The code that supports inheritance of resources between existing resource bundle files continues to
+ *  use chopLocale() below.
+ *  @param name In-out parameter: On input, the locale ID to get a parent locale ID for (this is a locale's base name, without keywords); on output, the
+ *  requested parent locale ID.
+ *  @param origName The original locale ID the caller of findFirstExisting() requested.  This is the same as `name` on the first call to this function,
+ *  but as findFirstExisting() ascends the resource bundle's parent tree, this parameter will continue to be the original locale ID requested.
+ */
+static bool getParentLocaleID(char *name, const char *origName, UResOpenType openType) {
+    // early out if the locale ID has a variant code or ends with _
+    if (name[uprv_strlen(name) - 1] == '_' || hasVariant(name)) {
+        return chopLocale(name);
+    }
+    
+    UErrorCode err = U_ZERO_ERROR;
+    const char* tempNamePtr = name;
+    CharString language = ulocimp_getLanguage(tempNamePtr, &tempNamePtr, err);
+    if (*tempNamePtr == '_') {
+        ++tempNamePtr;
+    }
+    CharString script = ulocimp_getScript(tempNamePtr, &tempNamePtr, err);
+    if (*tempNamePtr == '_') {
+        ++tempNamePtr;
+    }
+    CharString region = ulocimp_getCountry(tempNamePtr, &tempNamePtr, err);
+    CharString workingLocale;
+    if (U_FAILURE(err)) {
+        // hopefully this never happens...
+        return chopLocale(name);
+    }
+    
+    // if the open type is URES_OPEN_LOCALE_DEFAULT_ROOT, first look the locale ID up in the parent locale table;
+    // if that table specifies a parent for it, return that  (we don't do this for the other open types-- if we're not
+    // falling back through the system default locale, we also want to do straight truncation fallback instead
+    // of looking things up in the parent locale table-- see https://www.unicode.org/reports/tr35/tr35.html#Parent_Locales:
+    // "Collation data, however, is an exception...")
+    if (openType == URES_OPEN_LOCALE_DEFAULT_ROOT) {
+        const char* parentID = performFallbackLookup(name, parentLocaleChars, parentLocaleChars, parentLocaleTable, UPRV_LENGTHOF(parentLocaleTable));
+        if (parentID != NULL) {
+            uprv_strcpy(name, parentID);
+            return true;
+        }
+    }
+
+    // if it's not in the parent locale table, figure out the fallback script algorithmically
+    // (see CLDR-15265 for an explanation of the algorithm)
+    if (!script.isEmpty() && !region.isEmpty()) {
+        // if "name" has both script and region, is the script the default script?
+        // - if so, remove it and keep the region
+        // - if not, remove the region and keep the script
+        if (getDefaultScript(language, region) == script.toStringPiece()) {
+            workingLocale.append(language, err).append("_", err).append(region, err);
+        } else {
+            workingLocale.append(language, err).append("_", err).append(script, err);
+        }
+    } else if (!region.isEmpty()) {
+        // if "name" has region but not script, did the original locale ID specify a script?
+        // - if yes, replace the region with the script from the original locale ID
+        // - if no, replace the region with the default script for that language and region
+        UErrorCode err = U_ZERO_ERROR;
+        tempNamePtr = origName;
+        CharString origNameLanguage = ulocimp_getLanguage(tempNamePtr, &tempNamePtr, err);
+        if (*tempNamePtr == '_') {
+            ++tempNamePtr;
+        }
+        CharString origNameScript = ulocimp_getScript(origName, nullptr, err);
+        if (!origNameScript.isEmpty()) {
+            workingLocale.append(language, err).append("_", err).append(origNameScript, err);
+        } else {
+            workingLocale.append(language, err).append("_", err).append(getDefaultScript(language, region), err);
+        }
+    } else if (!script.isEmpty()) {
+        // if "name" has script but not region (and our open type if URES_OPEN_LOCALE_DEFAULT_ROOT), is the script
+        // the default script for the language?
+        // - if so, remove it from the locale ID
+        // - if not, return false to continue up the chain
+        // (we don't do this for other open types for the same reason we don't look things up in the parent
+        // locale table for other open types-- see the reference to UTS #35 above)
+        if (openType != URES_OPEN_LOCALE_DEFAULT_ROOT || getDefaultScript(language, CharString()) == script.toStringPiece()) {
+            workingLocale.append(language, err);
+        } else {
+            return false;
+        }
+    } else {
+        // if "name" just contains a language code, return false so the calling code falls back to "root"
+        return false;
+    }
+    if (U_SUCCESS(err) && !workingLocale.isEmpty()) {
+        uprv_strcpy(name, workingLocale.data());
+        return true;
+    } else {
+        return false;
+    }
+}
+
 /**
  *  Called to check whether a name without '_' needs to be checked for a parent.
  *  Some code had assumed that locale IDs with '_' could not have a non-root parent.
@@ -463,13 +659,15 @@ getPoolEntry(const char *path, UErrorCode *status) {
 /* INTERNAL: */
 /*   CAUTION:  resbMutex must be locked when calling this function! */
 static UResourceDataEntry *
-findFirstExisting(const char* path, char* name, const char* defaultLocale,
-                  UBool *isRoot, UBool *hasChopped, UBool *isDefault, UErrorCode* status) {
+findFirstExisting(const char* path, char* name, const char* defaultLocale, UResOpenType openType,
+                  UBool *isRoot, UBool *foundParent, UBool *isDefault, UErrorCode* status) {
     UResourceDataEntry *r = NULL;
     UBool hasRealData = false;
-    *hasChopped = true; /* we're starting with a fresh name */
+    *foundParent = true; /* we're starting with a fresh name */
+    char origName[ULOC_FULLNAME_CAPACITY];
 
-    while(*hasChopped && !hasRealData) {
+    uprv_strcpy(origName, name);
+    while(*foundParent && !hasRealData) {
         r = init_entry(name, path, status);
         /* Null pointer test */
         if (U_FAILURE(*status)) {
@@ -494,8 +692,14 @@ findFirstExisting(const char* path, char* name, const char* defaultLocale,
         *isRoot = (UBool)(uprv_strcmp(name, kRootLocaleName) == 0);
 
         /*Fallback data stuff*/
-        *hasChopped = chopLocale(name);
-        if (*hasChopped && *name == '\0') {
+        if (!hasRealData) {
+            *foundParent = getParentLocaleID(name, origName, openType);
+        } else {
+            // we've already found a real resource file; what we return to the caller is the parent
+            // locale ID for inheritance, which should come from chopLocale(), not getParentLocaleID()
+            *foundParent = chopLocale(name);
+        }
+        if (*foundParent && *name == '\0') {
             uprv_strcpy(name, "und");
         }
     }
@@ -602,38 +806,6 @@ insertRootBundle(UResourceDataEntry *&t1, UErrorCode *status) {
     return true;
 }
 
-enum UResOpenType {
-    /**
-     * Open a resource bundle for the locale;
-     * if there is not even a base language bundle, then fall back to the default locale;
-     * if there is no bundle for that either, then load the root bundle.
-     *
-     * This is the default bundle loading behavior.
-     */
-    URES_OPEN_LOCALE_DEFAULT_ROOT,
-    // TODO: ICU ticket #11271 "consistent default locale across locale trees"
-    // Add an option to look at the main locale tree for whether to
-    // fall back to root directly (if the locale has main data) or
-    // fall back to the default locale first (if the locale does not even have main data).
-    /**
-     * Open a resource bundle for the locale;
-     * if there is not even a base language bundle, then load the root bundle;
-     * never fall back to the default locale.
-     *
-     * This is used for algorithms that have good pan-Unicode default behavior,
-     * such as case mappings, collation, and segmentation (BreakIterator).
-     */
-    URES_OPEN_LOCALE_ROOT,
-    /**
-     * Open a resource bundle for the exact bundle name as requested;
-     * no fallbacks, do not load parent bundles.
-     *
-     * This is used for supplemental (non-locale) data.
-     */
-    URES_OPEN_DIRECT
-};
-typedef enum UResOpenType UResOpenType;
-
 static UResourceDataEntry *entryOpen(const char* path, const char* localeID,
                                      UResOpenType openType, UErrorCode* status) {
     U_ASSERT(openType != URES_OPEN_DIRECT);
@@ -676,7 +848,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID,
     Mutex lock(&resbMutex);    // Lock resbMutex until the end of this function.
 
     /* We're going to skip all the locales that do not have any data */
-    r = findFirstExisting(path, name, defaultLocale, &isRoot, &hasChopped, &isDefault, &intStatus);
+    r = findFirstExisting(path, name, defaultLocale, openType, &isRoot, &hasChopped, &isDefault, &intStatus);
 
     // If we failed due to out-of-memory, report the failure and exit early.
     if (intStatus == U_MEMORY_ALLOCATION_ERROR) {
@@ -717,7 +889,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID,
     if(r==NULL && openType == URES_OPEN_LOCALE_DEFAULT_ROOT && !isDefault && !isRoot) {
         /* insert default locale */
         uprv_strcpy(name, defaultLocale);
-        r = findFirstExisting(path, name, defaultLocale, &isRoot, &hasChopped, &isDefault, &intStatus);
+        r = findFirstExisting(path, name, defaultLocale, openType, &isRoot, &hasChopped, &isDefault, &intStatus);
         // If we failed due to out-of-memory, report the failure and exit early.
         if (intStatus == U_MEMORY_ALLOCATION_ERROR) {
             *status = intStatus;
@@ -741,7 +913,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID,
     /* present */
     if(r == NULL) {
         uprv_strcpy(name, kRootLocaleName);
-        r = findFirstExisting(path, name, defaultLocale, &isRoot, &hasChopped, &isDefault, &intStatus);
+        r = findFirstExisting(path, name, defaultLocale, openType, &isRoot, &hasChopped, &isDefault, &intStatus);
         // If we failed due to out-of-memory, report the failure and exit early.
         if (intStatus == U_MEMORY_ALLOCATION_ERROR) {
             *status = intStatus;
