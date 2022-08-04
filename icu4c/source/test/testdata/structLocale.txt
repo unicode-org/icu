@@ -5533,6 +5533,7 @@ structLocale:table(nofallback){
         bfd{""}
         bfq{""}
         bg{""}
+        bgc{""}
         bgn{""}
         bho{""}
         bi{""}

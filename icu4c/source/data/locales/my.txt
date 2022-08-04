@@ -14,7 +14,11 @@ my{
         word-initial{"… {0}"}
         word-medial{"{0} … {1}"}
     }
-    ExemplarCharacters{"[က ခ ဂ ဃ င စ ဆ ဇ ဈ ည ဋ ဌ ဍ ဎ ဏ တ ထ ဒ ဓ န ပ ဖ ဗ ဘ မ ယ ရ လ ဝ သ ဟ ဠ အ]"}
+    ExemplarCharacters{
+        "[က ခ ဂ ဃ င စ ဆ ဇ ဈ ဉ ည ဋ ဌ ဍ ဎ ဏ တ ထ ဒ ဓ န ပ ဖ ဗ ဘ မ ယ ရ လ ဝ သ ဟ ဠ အ ဣ ၏ ဤ ဥ"
+        " ဦ ဧ ဩ ဪ ာ ါ \u102D \u102E \u102F \u1030 ေ \u1032 \u1036 ဿ ျ ြ \u103D "
+        "\u103E \u1039 \u103A \u1037 း]"
+    }
     ExemplarCharactersIndex{"[က ခ ဂ ဃ င စ ဆ ဇ ဈ ဉ ည ဋ ဌ ဍ ဎ ဏ တ ထ ဒ ဓ န ပ ဖ ဗ ဘ မ ယ ရ လ ဝ သ ဟ ဠ အ]"}
     ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0၀ 1၁ 2၂ 3၃ 4၄ 5၅ 6၆ 7၇ 8၈ 9၉]"}
     ExemplarCharactersPunctuation{"[\\- ‐ ‑ – — … ၊ ။ ‘ ’ “ ” ( ) \\[ \\] \\{ \\} @ * / #]"}

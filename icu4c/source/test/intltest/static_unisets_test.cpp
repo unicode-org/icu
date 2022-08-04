@@ -80,9 +80,7 @@ void StaticUnicodeSetsTest::testSetCoverage() {
 
 #define ASSERT_IN_SET(name, foo) assertInSet(localeName, UnicodeString("" #name ""), name, foo)
 
-        if (uprv_strncmp(locale.getBaseName(),"ks_Deva",7)!=0 || !logKnownIssue("22099", "locale-specific parse sets not supported")) {
-            ASSERT_IN_SET(decimals, dfs.getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol));
-        }
+        ASSERT_IN_SET(decimals, dfs.getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol));
         ASSERT_IN_SET(grouping, dfs.getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol));
         ASSERT_IN_SET(plusSign, dfs.getConstSymbol(DecimalFormatSymbols::kPlusSignSymbol));
         ASSERT_IN_SET(minusSign, dfs.getConstSymbol(DecimalFormatSymbols::kMinusSignSymbol));

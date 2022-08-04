@@ -9,7 +9,7 @@ ks_Deva{
         "ड त थ द न प फ ब म य र ल व श स ह ा ि ी \u0941 \u0942 \u0943 \u0944 \u0945 "
         "\u0947 \u0948 ॉ ो ौ \u094D]"
     }
-    ExemplarCharactersNumbers{"[\\- ‑ , . । % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
+    ExemplarCharactersNumbers{"[\\- ‑ , . % ‰ + 0 1 2 3 4 5 6 7 8 9]"}
     ExemplarCharactersPunctuation{
         "[\\- ‐ ‑ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ "
         "′ ″]"
@@ -24,7 +24,6 @@ ks_Deva{
                 scientificFormat{"#E0"}
             }
             symbols{
-                decimal{"।"}
                 group{","}
                 minusSign{"-"}
                 percentSign{"%"}
@@ -393,17 +392,6 @@ ks_Deva{
                 "[¥￥]",
                 "[₩￦]",
                 "[₨₹{Rp}{Rs}]",
-            }
-        }
-        number{
-            lenient{
-                "[\\-‐‒–⁻₋−➖﹣－]",
-                "[,،٫⹁、︐︑﹐﹑，､]",
-                "[+⁺₊➕﬩﹢＋]",
-            }
-            stricter{
-                "[,٫⹁︐﹐，]",
-                "[.․﹒．｡।]",
             }
         }
     }

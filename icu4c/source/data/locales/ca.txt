@@ -217,6 +217,7 @@ ca{
                 two{"Agafa el {0}n a la dreta."}
             }
             plural{
+                many{"{0} de dies"}
                 one{"{0} dia"}
                 other{"{0} dies"}
             }

@@ -2906,6 +2906,68 @@ public class SimpleDateFormat extends DateFormat {
     static final UnicodeSet DATE_PATTERN_TYPE = new UnicodeSet("[GyYuUQqMLlwWd]").freeze();
 
     /**
+     * Attempt to match the text at a given position against two arrays of
+     * month symbol strings.  Since multiple strings in the array may match (for
+     * example, if the array contains "a", "ab", and "abc", all will match
+     * the input string "abcd") the longest match is returned.  As a side
+     * effect, the given field of <code>cal</code> is set to the index
+     * of the best match, if there is one.
+     * @param text the time text being parsed.
+     * @param start where to start parsing.
+     * @param wideData the string array of wide month symbols
+     * @param shortData the string array of short month symbols
+     * @param cal
+     * @return the new start position if matching succeeded; a negative
+     * number indicating matching failure, otherwise.  As a side effect,
+     * sets the <code>cal</code> field <code>field</code> to the index
+     * of the best match, if matching succeeded.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     * Does not handle monthPattern.
+     * field is always Calendar.MONTH
+     */
+    @Deprecated
+    private int matchAlphaMonthStrings(String text, int start, String[] wideData, String[] shortData, Calendar cal)
+    {
+        int i;
+        int bestMatchLength = 0, bestMatch = -1;
+
+        for (i = 0; i<wideData.length; ++i)
+            {
+                int length = wideData[i].length();
+                int matchLength = 0;
+                // Always compare if we have no match yet; otherwise only compare
+                // against potentially better matches (longer strings).
+                if (length > bestMatchLength &&
+                    (matchLength = regionMatchesWithOptionalDot(text, start, wideData[i], length)) >= 0)
+                    {
+                        bestMatch = i;
+                        bestMatchLength = matchLength;
+                    }
+            }
+        for (i = 0; i<shortData.length; ++i)
+            {
+                int length = shortData[i].length();
+                int matchLength = 0;
+                // Always compare if we have no match yet; otherwise only compare
+                // against potentially better matches (longer strings).
+                if (length > bestMatchLength &&
+                    (matchLength = regionMatchesWithOptionalDot(text, start, shortData[i], length)) >= 0)
+                    {
+                        bestMatch = i;
+                        bestMatchLength = matchLength;
+                    }
+            }
+        if (bestMatch >= 0)
+            {
+                cal.set(Calendar.MONTH, bestMatch);
+                return start + bestMatchLength;
+            }
+        return ~start;
+    }
+
+
+    /**
      * Attempt to match the text at a given position against an array of
      * strings.  Since multiple strings in the array may match (for
      * example, if the array contains "a", "ab", and "abc", all will match
@@ -3355,14 +3417,22 @@ public class SimpleDateFormat extends DateFormat {
                     boolean haveMonthPat = (formatData.leapMonthPatterns != null && formatData.leapMonthPatterns.length >= DateFormatSymbols.DT_MONTH_PATTERN_COUNT);
                     // Try count == 4 first:, unless we're strict
                     int newStart = 0;
+                    if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH)&& count>=3 && count <=4 && !haveMonthPat) {
+                        newStart = (patternCharIndex == 2)?
+                            matchAlphaMonthStrings(text, start, formatData.months, formatData.shortMonths, cal):
+                            matchAlphaMonthStrings(text, start, formatData.standaloneMonths, formatData.standaloneShortMonths, cal);
+                        if (newStart > 0) {
+                            return newStart;
+                        }
+                    }
                     if(getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH) || count == 4) {
                         newStart = (patternCharIndex == 2)?
                             matchString(text, start, Calendar.MONTH, formatData.months,
                                     (haveMonthPat)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_FORMAT_WIDE]: null, cal):
                             matchString(text, start, Calendar.MONTH, formatData.standaloneMonths,
                                     (haveMonthPat)? formatData.leapMonthPatterns[DateFormatSymbols.DT_LEAP_MONTH_PATTERN_STANDALONE_WIDE]: null, cal);
-                    if (newStart > 0) {
-                        return newStart;
+                        if (newStart > 0) {
+                            return newStart;
                         }
                     }
                     // count == 4 failed, now try count == 3

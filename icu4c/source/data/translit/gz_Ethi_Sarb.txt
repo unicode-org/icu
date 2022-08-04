@@ -2,7 +2,7 @@
 # License & terms of use: http://www.unicode.org/copyright.html
 # Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 #
-# File: Ethi_Sarb.txt
+# File: gz_Ethi_Sarb.txt
 # Generated from CLDR
 #
 
