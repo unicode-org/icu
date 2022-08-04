@@ -2919,6 +2919,49 @@ UBool SimpleDateFormat::matchLiterals(const UnicodeString &pattern,
 }
 
 //----------------------------------------------------------------------
+// check both wide and abbrev months.
+// Does not currently handle monthPattern.
+// UCalendarDateFields field = UCAL_MONTH
+
+int32_t SimpleDateFormat::matchAlphaMonthStrings(const UnicodeString& text,
+                              int32_t start,
+                              const UnicodeString* wideData,
+                              const UnicodeString* shortData,
+                              int32_t dataCount,
+                              Calendar& cal) const
+{
+    int32_t i;
+    int32_t bestMatchLength = 0, bestMatch = -1;
+
+    for (i = 0; i < dataCount; ++i) {
+        int32_t matchLen = 0;
+        if ((matchLen = matchStringWithOptionalDot(text, start, wideData[i])) > bestMatchLength) {
+            bestMatch = i;
+            bestMatchLength = matchLen;
+        }
+    }
+    for (i = 0; i < dataCount; ++i) {
+        int32_t matchLen = 0;
+        if ((matchLen = matchStringWithOptionalDot(text, start, shortData[i])) > bestMatchLength) {
+            bestMatch = i;
+            bestMatchLength = matchLen;
+        }
+    }
+
+    if (bestMatch >= 0) { 
+        // Adjustment for Hebrew Calendar month Adar II
+        if (!strcmp(cal.getType(),"hebrew") && bestMatch==13) {
+            cal.set(UCAL_MONTH,6);
+        } else {
+            cal.set(UCAL_MONTH, bestMatch);
+        }
+        return start + bestMatchLength;
+    }
+
+    return -start;
+}
+
+//----------------------------------------------------------------------
 
 int32_t SimpleDateFormat::matchString(const UnicodeString& text,
                               int32_t start,
@@ -2937,6 +2980,8 @@ int32_t SimpleDateFormat::matchString(const UnicodeString& text,
     // the same prefix (e.g., Cerven and Cervenec (June and July) in Czech).
     // We keep track of the longest match, and return that.  Note that this
     // unfortunately requires us to test all array elements.
+    // But this does not really work for cases such as Chuvash in which
+    // May is "ҫу" and August is "ҫурла"/"ҫур.", hence matchAlphaMonthStrings.
     int32_t bestMatchLength = 0, bestMatch = -1;
     UnicodeString bestMatchName;
     int32_t isLeapMonth = 0;
@@ -3327,6 +3372,14 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             }
             int32_t newStart = 0;
             if (patternCharIndex==UDAT_MONTH_FIELD) {
+                if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) && count>=3 && count <=4 &&
+                        fSymbols->fLeapMonthPatterns==nullptr && fSymbols->fMonthsCount==fSymbols->fShortMonthsCount) {
+                    // single function to check both wide and short, an experiment
+                    newStart = matchAlphaMonthStrings(text, start, fSymbols->fMonths, fSymbols->fShortMonths, fSymbols->fMonthsCount, cal); // try MMMM,MMM
+                    if (newStart > 0) {
+                        return newStart;
+                    }
+                }
                 if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 4) {
                     newStart = matchString(text, start, UCAL_MONTH, fSymbols->fMonths, fSymbols->fMonthsCount, wideMonthPat, cal); // try MMMM
                     if (newStart > 0) {
@@ -3337,6 +3390,14 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                     newStart = matchString(text, start, UCAL_MONTH, fSymbols->fShortMonths, fSymbols->fShortMonthsCount, shortMonthPat, cal); // try MMM
                 }
             } else {
+                if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) && count>=3 && count <=4 &&
+                        fSymbols->fLeapMonthPatterns==nullptr && fSymbols->fStandaloneMonthsCount==fSymbols->fStandaloneShortMonthsCount) {
+                    // single function to check both wide and short, an experiment
+                    newStart = matchAlphaMonthStrings(text, start, fSymbols->fStandaloneMonths, fSymbols->fStandaloneShortMonths, fSymbols->fStandaloneMonthsCount, cal); // try MMMM,MMM
+                    if (newStart > 0) {
+                        return newStart;
+                    }
+                }
                 if(getBooleanAttribute(UDAT_PARSE_MULTIPLE_PATTERNS_FOR_MATCH, status) || count == 4) {
                     newStart = matchString(text, start, UCAL_MONTH, fSymbols->fStandaloneMonths, fSymbols->fStandaloneMonthsCount, wideMonthPat, cal); // try LLLL
                     if (newStart > 0) {

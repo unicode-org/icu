@@ -972,10 +972,6 @@ static void VerifyTranslation(void) {
             }
             else {
                 strIdx = findStringSetMismatch(currLoc, langBuffer, langSize, mergedExemplarSet, FALSE, &badChar);
-                if ((uprv_strcmp(currLoc,"my") == 0 || uprv_strncmp(currLoc,"my_",3) == 0) &&
-                        log_knownIssue("cldrbug:15858", "my day names use a char not in exemplars")) {
-                    strIdx = -1;
-                }
                 if (strIdx >= 0) {
                     log_err("getDisplayLanguage(%s) at index %d returned characters not in the exemplar characters: %04X.\n",
                         currLoc, strIdx, badChar);
@@ -1014,10 +1010,6 @@ static void VerifyTranslation(void) {
                         log_knownIssue("cldrbug:15355", "ks_Deva day names use chars not in exemplars")) {
                     end = 0;
                 }
-                if ((uprv_strcmp(currLoc,"my") == 0 || uprv_strncmp(currLoc,"my_",3) == 0) && 
-                        log_knownIssue("cldrbug:15858", "my day names use a char not in exemplars")) {
-                    end = 0;
-                }
 
                 for (idx = 0; idx < end; idx++) {
                     const UChar *fromBundleStr = ures_getStringByIndex(resArray, idx, &langSize, &errorCode);
@@ -1053,10 +1045,6 @@ static void VerifyTranslation(void) {
                 }
                 if (uprv_strncmp(currLoc,"ks_Deva",7) == 0 && 
                         log_knownIssue("cldrbug:15355", "ks_Deva month names use chars not in exemplars")) {
-                    end = 0;
-                }
-                if ((uprv_strcmp(currLoc,"my") == 0 || uprv_strncmp(currLoc,"my_",3) == 0) && 
-                        log_knownIssue("cldrbug:15858", "my month names use a char not in exemplars")) {
                     end = 0;
                 }
 

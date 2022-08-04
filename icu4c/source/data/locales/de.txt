@@ -1050,7 +1050,7 @@ de{
                 }
                 yM{
                     M{"MM/y – MM/y"}
-                    y{"MM/ y– MM/y"}
+                    y{"MM/y – MM/y"}
                 }
                 yMEd{
                     M{"E, dd.MM. – E, dd.MM.y"}

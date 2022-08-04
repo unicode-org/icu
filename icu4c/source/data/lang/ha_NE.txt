@@ -2,13 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ha_NE{
-    Languages{
-        fa_AF{"Vote Farisanci na Afaganistan"}
-    }
-    characterLabelPattern{
-        strokes{
-            one{"bugu {0}"}
-            other{"bugu-bugu {0}"}
-        }
+    Scripts{
+        Cans{"Haɗaɗɗun Gaɓoɓin Ƴan Asali na Kanada"}
     }
 }

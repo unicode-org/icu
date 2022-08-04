@@ -159,10 +159,10 @@
                 af, agq, ak, am, ar, ars, as, asa, ast, az, az_AZ, az_Cyrl
 
                 // B
-                bas, be, bem, bez, bg, bm, bn, bo, br, brx, bs, bs_BA, bs_Cyrl
+                bas, be, bem, bez, bg, bgc, bho, bm, bn, bo, br, brx, bs, bs_BA, bs_Cyrl
 
                 // C
-                ca, ccp, ce, ceb, cgg, chr, ckb, cs, cy
+                ca, ccp, ce, ceb, cgg, chr, ckb, cs, cv, cy
 
                 // D
                 da, dav, de, dje, doi, dsb, dua, dyo, dz
@@ -209,7 +209,7 @@
                 qu
 
                 // R
-                rm, rn, ro, rof, ru, rw, rwk
+                raj, rm, rn, ro, rof, ru, rw, rwk
 
                 // S
                 sa, sah, saq, sat, sat_IN, sbp, sc, sd, sd_Deva, sd_PK, se, seh, ses, sg, sh, sh_BA, sh_CS, sh_YU

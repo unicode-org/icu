@@ -1831,7 +1831,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
             "ckb_IR",     "BSSS",        "SSS ├'Dayperiod': B┤",
 
             // ICU-21873: Missing aliased values
-            "en_001@calendar=islamic", "Ehm", "EEE, h:mm\u202Fa",
+            "en_001@calendar=islamic", "Ehm", "EEE h:mm\u202Fa",
         };
 
         for (int i = 0; i < testCases.length; i += 3) {

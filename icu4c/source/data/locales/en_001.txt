@@ -121,13 +121,7 @@ en_001{
                 "GGGGGyMMdd",
             }
             availableFormats{
-                EBhm{"E, h:mm B"}
-                EBhms{"E, h:mm:ss B"}
-                EHm{"E, HH:mm"}
-                EHms{"E, HH:mm:ss"}
                 Ed{"E d"}
-                Ehm{"E, h:mm a"}
-                Ehms{"E, h:mm:ss a"}
                 GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM y G"}
                 GyMd{"dd/MM/y GGGGG"}
@@ -257,8 +251,6 @@ en_001{
                 "yMMdd",
             }
             availableFormats{
-                EBhm{"E, h:mm B"}
-                EBhms{"E, h:mm:ss B"}
                 Ed{"E d"}
                 GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM y G"}

@@ -13,10 +13,6 @@ en_GB{
     }
     calendar{
         generic{
-            availableFormats{
-                MEd{"E dd/MM"}
-                MMMEd{"E d MMM"}
-            }
             intervalFormats{
                 MMMEd{
                     d{"E d MMM – E d MMM"}
@@ -57,8 +53,6 @@ en_GB{
                 "yMMdd",
             }
             availableFormats{
-                EBhm{"E h:mm B"}
-                EBhms{"E h:mm:ss B"}
                 GyMd{"d/M/y GGGGG"}
             }
             dayNames{
