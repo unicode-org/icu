@@ -8,6 +8,8 @@
  */
 package com.ibm.icu.dev.test.bidi;
 
+import java.util.Arrays;
+
 import org.junit.Test;
 
 import com.ibm.icu.text.Bidi;
@@ -139,5 +141,35 @@ public class TestReorderArabicMathSymbols extends BidiFmwk {
         }
         
         logln("\nExiting TestReorderArabicMathSymbols\n");
+    }
+
+    @Test
+    public void testVisualMap() {
+        int arabicLetterRaa = 0x1EE13;
+        assertTrue("it is a valid code point", Character.isValidCodePoint(arabicLetterRaa));
+        char[] charsFromTheCodePoint = Character.toChars(arabicLetterRaa);
+        assertEquals("the same code point", arabicLetterRaa, Character.toCodePoint(charsFromTheCodePoint[0], charsFromTheCodePoint[1]));
+
+        StringBuilder textBuilder = new StringBuilder("ABC ");
+        textBuilder.append(charsFromTheCodePoint).append(charsFromTheCodePoint);
+
+        String text = textBuilder.toString();
+        assertEquals("two character for each code point" , 4 + 2*2 , text.length());
+
+        Bidi bidi = new Bidi();
+        bidi.setPara(text, Bidi.LEVEL_DEFAULT_LTR, null);
+        byte[] levels = bidi.getLevels();
+        byte[] expectedLevels = {0,0,0,0,1,1,1,1};
+
+        int[] visualMap = bidi.getVisualMap();
+        int[] expectedVisualMap = {0,1,2,3,7,6,5,4};
+
+        int[] logicalMap = bidi.getLogicalMap();
+        int[] expectedLogicalMap = {0,1,2,3,7,6,5,4};
+
+        assertTrue(" levels", Arrays.equals( expectedLevels,levels));
+        assertTrue(" visual map", Arrays.equals( expectedVisualMap , visualMap));
+        assertTrue(" levels", Arrays.equals( expectedLogicalMap , logicalMap));
+        assertTrue("logical = visual" , Arrays.equals(logicalMap, visualMap));
     }
 }
