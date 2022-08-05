@@ -30,19 +30,17 @@ public class TestBidi extends BidiFmwk {
     @Test
     public void testBidi() {
         Bidi bidi;
-        Bidi bidiLine;
 
         logln("\nEntering TestBidi");
         bidi = new Bidi(MAXLEN, 0);
-        bidiLine = new Bidi();
 
-        doTests(bidi, bidiLine, false);
-        doTests(bidi, bidiLine, true);
+        doTests(bidi, false);
+        doTests(bidi, true);
         doMisc();
         logln("\nExiting TestBidi");
     }
 
-    private void doTests(Bidi bidi, Bidi bidiLine, boolean countRunsFirst) {
+    private void doTests(Bidi bidi, boolean countRunsFirst) {
         int testNumber;
         String string;
         int lineStart;
@@ -67,6 +65,7 @@ public class TestBidi extends BidiFmwk {
             if (lineStart == -1) {
                 doTest(bidi, testNumber, test, 0, countRunsFirst);
             } else {
+                Bidi bidiLine;
                 try {
                     bidiLine = bidi.setLine(lineStart, test.lineLimit);
                     logln("Bidi.setLine(" + lineStart + ", " + test.lineLimit
@@ -74,7 +73,7 @@ public class TestBidi extends BidiFmwk {
                             + bidiLine.getDirection() + " paraLevel "
                             + bidiLine.getBaseLevel());
                     doTest(bidiLine, testNumber, test, lineStart, countRunsFirst);
-                } catch (Exception e)  {
+                } catch (Exception e) {
                     errln("Bidi.setLine(" + lineStart + ", " + test.lineLimit
                             + "), in runAll test[" + testNumber + "] failed");
                 }
