@@ -1839,6 +1839,18 @@ public class NumberFormatterApiTest extends TestFmwk {
                 new ULocale("en-US"),
                 1,
                 "0.019 psi");
+
+        // ICU-22105
+        assertFormatSingle("negative temperature conversion",
+                "measure-unit/temperature-celsius unit-width-short usage/default",
+                "measure-unit/temperature-celsius unit-width-short usage/default",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.forIdentifier("celsius"))
+                        .usage("default")
+                        .unitWidth(UnitWidth.SHORT),
+                new ULocale("en-US"),
+                -1,
+                "30°F");
     }
 
     @Test

@@ -1899,6 +1899,17 @@ void NumberFormatterApiTest::unitUsage() {
                        Locale("en-US"),                                                 //
                        1,                                                               //
                        "0.019 psi");
+
+    assertFormatSingle(u"negative temperature conversion",                                 //
+                       u"measure-unit/temperature-celsius unit-width-short usage/default", //
+                       u"measure-unit/temperature-celsius unit-width-short usage/default", //
+                       NumberFormatter::with()                                             //
+                           .unit(MeasureUnit::forIdentifier("celsius", status))            //
+                           .usage("default")                                               //
+                           .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_SHORT),            //
+                       Locale("en-US"),                                                    //
+                       -1,                                                                 //
+                       u"30°F");
 }
 
 void NumberFormatterApiTest::unitUsageErrorCodes() {
