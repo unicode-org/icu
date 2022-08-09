@@ -580,12 +580,12 @@ ar{
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
-                MEd{"E، d/‏M"}
+                MEd{"E، d‏/M"}
                 MMM{"LLL"}
                 MMMEd{"E، d MMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
-                Md{"d/‏M"}
+                Md{"d‏/M"}
                 d{"d"}
                 h{"h a"}
                 hm{"h:mm a"}
@@ -594,7 +594,7 @@ ar{
                 y{"y G"}
                 yyyy{"y G"}
                 yyyyM{"M‏/y G"}
-                yyyyMEd{"E، d/‏M/‏y G"}
+                yyyyMEd{"E، d‏/M‏/y G"}
                 yyyyMMM{"MMM y G"}
                 yyyyMMMEd{"E، d MMM y G"}
                 yyyyMMMM{"MMMM y G"}
@@ -660,8 +660,8 @@ ar{
                     M{"M–M"}
                 }
                 MEd{
-                    M{"E، d/‏M – E، d/‏M"}
-                    d{"E، d/‏M –‏ E، d/‏M"}
+                    M{"E، d‏/M – E، d‏/M"}
+                    d{"E، d‏/M – E، d‏/M"}
                 }
                 MMM{
                     M{"MMM–MMM"}
@@ -678,8 +678,8 @@ ar{
                     d{"d–d MMM"}
                 }
                 Md{
-                    M{"d-M – d-M"}
-                    d{"d-M – d-M"}
+                    M{"d‏/M – d‏/M"}
+                    d{"d‏/M – d‏/M"}
                 }
                 d{
                     d{"d–d"}
@@ -810,7 +810,7 @@ ar{
                 Hmsv{"HH:mm:ss v"}
                 Hmv{"HH:mm v"}
                 M{"L"}
-                MEd{"E، d/‏M"}
+                MEd{"E، d‏/M"}
                 MMM{"LLL"}
                 MMMEd{"E، d MMM"}
                 MMMMEd{"E، d MMMM"}
@@ -825,7 +825,7 @@ ar{
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
                 MMdd{"dd‏/MM"}
-                Md{"d/‏M"}
+                Md{"d‏/M"}
                 d{"d"}
                 h{"h a"}
                 hm{"h:mm a"}
@@ -835,7 +835,7 @@ ar{
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M‏/y"}
-                yMEd{"E، d/‏M/‏y"}
+                yMEd{"E، d‏/M‏/y"}
                 yMM{"MM‏/y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E، d MMM y"}
@@ -1072,8 +1072,8 @@ ar{
                     M{"M–M"}
                 }
                 MEd{
-                    M{"E، d/‏M – E، d/‏M"}
-                    d{"E، d/‏M –‏ E، d/‏M"}
+                    M{"E، d‏/M – E، d‏/M"}
+                    d{"E، d‏/M – E، d‏/M"}
                 }
                 MMM{
                     M{"MMM–MMM"}
@@ -1090,8 +1090,8 @@ ar{
                     d{"d–d MMM"}
                 }
                 Md{
-                    M{"M/d – M/d"}
-                    d{"d-M – d-M"}
+                    M{"d‏/M – d‏/M"}
+                    d{"d‏/M – d‏/M"}
                 }
                 d{
                     d{"d–d"}
@@ -1433,12 +1433,12 @@ ar{
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
-                MEd{"E، d/‏M"}
+                MEd{"E، d‏/M"}
                 MMM{"LLL"}
                 MMMEd{"E، d MMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
-                Md{"d/‏M"}
+                Md{"d‏/M"}
                 d{"d"}
                 h{"h a"}
                 hm{"h:mm a"}
@@ -1446,7 +1446,7 @@ ar{
                 y{"y G"}
                 yyyy{"y G"}
                 yyyyM{"M‏/y G"}
-                yyyyMEd{"E، d/‏M/‏y G"}
+                yyyyMEd{"E، d‏/M‏/y G"}
                 yyyyMMM{"MMM y G"}
                 yyyyMMMEd{"E، d MMM y G"}
                 yyyyMMMM{"MMMM y G"}

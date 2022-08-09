@@ -6619,17 +6619,18 @@ void LocaleTest::TestNullDereferenceWrite21597() {
 }
 #if !UCONFIG_NO_FORMATTING
 void LocaleTest::TestSierraLeoneCurrency21997() {
-    // Check that currency of Sierra Leone is SLL (which is legal tender)
+    // CLDR 41: Check that currency of Sierra Leone is SLL (which is legal tender)
     // and not the newer currency SLE (which is not legal tender), as of CLDR 41.
     // Test will fail once SLE is declared legal.
-    UnicodeString sllStr("SLL", ""), resultStr;
+    // CLDR 42: Now check that currency of Sierra Leone is SLE (which is legal tender)
+    UnicodeString sllStr("SLE", ""), resultStr;
     UChar tmp[4];
     UErrorCode status = U_ZERO_ERROR;
 
     ucurr_forLocale("en_SL", tmp, 4, &status);
     resultStr.setTo(tmp);
     if (sllStr != resultStr) {
-        errcheckln(status, "Fail: en_SL didn't return SLL - %s", u_errorName(status));
+        errcheckln(status, "Fail: en_SL didn't return SLE - %s", u_errorName(status));
     }
 }
 #endif

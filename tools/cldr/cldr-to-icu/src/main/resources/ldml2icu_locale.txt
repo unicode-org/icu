@@ -359,6 +359,8 @@
 //ldml/personNames/personName[@order="(%A)"][@length="(%A)"][@usage="(%A)"][@formality="(%A)"]/namePattern ;           /personNames/namePattern/$1-$2-$3-$4
 //ldml/personNames/personName[@order="(%A)"][@length="(%A)"][@usage="(%A)"][@formality="(%A)"]/namePattern[@alt="1"] ; /personNames/namePattern/$1-$2-$3-$4
 //ldml/personNames/personName[@order="(%A)"][@length="(%A)"][@usage="(%A)"][@formality="(%A)"]/namePattern[@alt="2"] ; /personNames/namePattern/$1-$2-$3-$4
+//ldml/personNames/personName[@order="(%A)"][@length="(%A)"][@usage="(%A)"][@formality="(%A)"]/alias[@source="locale"][@path="../personName[@order='(%A)'][@length='(%A)'][@usage='(%A)'][@formality='(%A)']"]
+     ; /personNames/namePattern/$1-$2-$3-$4:alias ; values=/LOCALE/personNames/namePattern/$5-$6-$7-$8
 
 # Misc
 
