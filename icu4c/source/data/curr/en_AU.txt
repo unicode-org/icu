@@ -428,10 +428,6 @@ en_AU{
             "SHP",
             "St Helena Pound",
         }
-        SLL{
-            "SLL",
-            "Sierra Leonean Leone",
-        }
         SOS{
             "SOS",
             "Somali Shilling",

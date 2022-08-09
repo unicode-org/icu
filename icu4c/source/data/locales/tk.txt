@@ -861,6 +861,57 @@ tk{
             }
         }
         islamic{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d MMMM, y G",
+                "d MMMM, y G",
+                "d MMM, y G",
+                "d/M/y GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                E{"ccc"}
+                Ed{"d, E"}
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, d MMM, y G"}
+                GyMMMd{"d MMM, y G"}
+                GyMd{"d/M/y GGGGG"}
+                M{"L"}
+                MEd{"E, d/M"}
+                MMM{"LLL"}
+                MMMEd{"E, d MMM"}
+                MMMMEd{"d MMMM, E"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                Md{"d/M"}
+                d{"d"}
+                y{"y G"}
+                yM{"MM.y"}
+                yMEd{"dd.MM.y E"}
+                yMMM{"MMM, y"}
+                yMMMEd{"d MMM, y, E"}
+                yMMMM{"MMMM, y"}
+                yMMMd{"d MMM, y"}
+                yMd{"dd.MM.y"}
+                yyyy{"y G"}
+                yyyyM{"M/y GGGGG"}
+                yyyyMEd{"E, d/M/y GGGGG"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"E, d MMM, y G"}
+                yyyyMMMM{"MMMM, y G"}
+                yyyyMMMd{"d MMM, y G"}
+                yyyyMd{"d/M/y GGGGG"}
+                yyyyQQQ{"QQQ, y G"}
+                yyyyQQQQ{"QQQQ, y G"}
+            }
             eras{
                 abbreviated{
                     "HS",
@@ -868,6 +919,20 @@ tk{
             }
             monthNames{
                 format{
+                    abbreviated{
+                        "Aşy",
+                        "Sap",
+                        "Tir I",
+                        "Tir II",
+                        "Tir III",
+                        "Tir IV",
+                        "Rej",
+                        "Mer",
+                        "Ora",
+                        "Baý",
+                        "Boş",
+                        "Gur",
+                    }
                     narrow{
                         "1",
                         "2",
@@ -898,6 +963,20 @@ tk{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "Aşy",
+                        "Sap",
+                        "Tir I",
+                        "Tir II",
+                        "Tir III",
+                        "Tir IV",
+                        "Rej",
+                        "Mer",
+                        "Ora",
+                        "Baý",
+                        "Boş",
+                        "Gur",
+                    }
                     narrow{
                         "1",
                         "2",
