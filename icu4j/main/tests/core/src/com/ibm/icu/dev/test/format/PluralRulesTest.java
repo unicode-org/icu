@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -31,6 +32,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,6 +44,8 @@ import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
 import com.ibm.icu.dev.util.CollectionUtilities;
 import com.ibm.icu.impl.Relation;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.number.DecimalQuantity;
+import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.number.FormattedNumber;
 import com.ibm.icu.number.FormattedNumberRange;
 import com.ibm.icu.number.LocalizedNumberFormatter;
@@ -50,9 +55,9 @@ import com.ibm.icu.number.Precision;
 import com.ibm.icu.number.UnlocalizedNumberFormatter;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.PluralRules;
+import com.ibm.icu.text.PluralRules.DecimalQuantitySamples;
+import com.ibm.icu.text.PluralRules.DecimalQuantitySamplesRange;
 import com.ibm.icu.text.PluralRules.FixedDecimal;
-import com.ibm.icu.text.PluralRules.FixedDecimalRange;
-import com.ibm.icu.text.PluralRules.FixedDecimalSamples;
 import com.ibm.icu.text.PluralRules.KeywordStatus;
 import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.text.PluralRules.SampleType;
@@ -177,17 +182,27 @@ public class PluralRulesTest extends TestFmwk {
         PluralRules test = PluralRules.createRules(description);
 
         checkNewSamples(description, test, "one", PluralRules.SampleType.INTEGER, "@integer 3, 19", true,
-                new FixedDecimal(3));
+                DecimalQuantity_DualStorageBCD.fromExponentString("3"));
         checkNewSamples(description, test, "one", PluralRules.SampleType.DECIMAL, "@decimal 3.50~3.53, …", false,
-                new FixedDecimal(3.5, 2));
-        checkOldSamples(description, test, "one", SampleType.INTEGER, 3d, 19d);
-        checkOldSamples(description, test, "one", SampleType.DECIMAL, 3.5d, 3.51d, 3.52d, 3.53d);
+                DecimalQuantity_DualStorageBCD.fromExponentString("3.50"));
+        checkOldSamples(description, test, "one", SampleType.INTEGER,
+                DecimalQuantity_DualStorageBCD.fromExponentString("3"),
+                DecimalQuantity_DualStorageBCD.fromExponentString("19"));
+        checkOldSamples(description, test, "one", SampleType.DECIMAL,
+                DecimalQuantity_DualStorageBCD.fromExponentString("3.50"),
+                DecimalQuantity_DualStorageBCD.fromExponentString("3.51"),
+                DecimalQuantity_DualStorageBCD.fromExponentString("3.52"),
+                DecimalQuantity_DualStorageBCD.fromExponentString("3.53"));
 
         checkNewSamples(description, test, "other", PluralRules.SampleType.INTEGER, "", true, null);
         checkNewSamples(description, test, "other", PluralRules.SampleType.DECIMAL, "@decimal 99.0~99.2, 999.0, …",
-                false, new FixedDecimal(99d, 1));
+                false, DecimalQuantity_DualStorageBCD.fromExponentString("99.0"));
         checkOldSamples(description, test, "other", SampleType.INTEGER);
-        checkOldSamples(description, test, "other", SampleType.DECIMAL, 99d, 99.1, 99.2d, 999d);
+        checkOldSamples(description, test, "other", SampleType.DECIMAL,
+                DecimalQuantity_DualStorageBCD.fromExponentString("99.0"),
+                DecimalQuantity_DualStorageBCD.fromExponentString("99.1"),
+                DecimalQuantity_DualStorageBCD.fromExponentString("99.2"),
+                DecimalQuantity_DualStorageBCD.fromExponentString("999.0"));
     }
 
     /**
@@ -205,22 +220,26 @@ public class PluralRulesTest extends TestFmwk {
         // Creating the PluralRules object means being able to parse numbers
         // like 1e5 and 1.1e5
         PluralRules test = PluralRules.createRules(description);
+
+        // Currently, 'c' is the canonical representation of numbers with suppressed exponent, and 'e'
+        // is an alias. The test helpers here skip 'e' for round-trip sample string parsing and formatting.
+
         checkNewSamples(description, test, "one", PluralRules.SampleType.INTEGER, "@integer 0, 1, 1e5", true,
-                new FixedDecimal(0));
+                DecimalQuantity_DualStorageBCD.fromExponentString("0"));
         checkNewSamples(description, test, "one", PluralRules.SampleType.DECIMAL, "@decimal 0.0~1.5, 1.1e5", true,
-                new FixedDecimal(0, 1));
+                DecimalQuantity_DualStorageBCD.fromExponentString("0.0"));
         checkNewSamples(description, test, "many", PluralRules.SampleType.INTEGER, "@integer 1000000, 2e6, 3e6, 4e6, 5e6, 6e6, 7e6, …", false,
-                new FixedDecimal(1000000));
+                DecimalQuantity_DualStorageBCD.fromExponentString("1000000"));
         checkNewSamples(description, test, "many", PluralRules.SampleType.DECIMAL, "@decimal 2.1e6, 3.1e6, 4.1e6, 5.1e6, 6.1e6, 7.1e6, …", false,
-                FixedDecimal.createWithExponent(2.1, 1, 6));
+                DecimalQuantity_DualStorageBCD.fromExponentString("2.1c6"));
         checkNewSamples(description, test, "other", PluralRules.SampleType.INTEGER, "@integer 2~17, 100, 1000, 10000, 100000, 2e5, 3e5, 4e5, 5e5, 6e5, 7e5, …", false,
-                new FixedDecimal(2));
+                DecimalQuantity_DualStorageBCD.fromExponentString("2"));
         checkNewSamples(description, test, "other", PluralRules.SampleType.DECIMAL, "@decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 2.1e5, 3.1e5, 4.1e5, 5.1e5, 6.1e5, 7.1e5, …", false,
-                new FixedDecimal(2.0, 1));
+                DecimalQuantity_DualStorageBCD.fromExponentString("2.0"));
     }
 
     /**
-     * This test is for the support of X.YcZ compactnotation of numbers in
+     * This test is for the support of X.YcZ compact notation of numbers in
      * the plural sample string.
      */
     @Test
@@ -236,34 +255,53 @@ public class PluralRulesTest extends TestFmwk {
         // Note: Since `c` is currently an alias to `e`, the toString() of
         // FixedDecimal will return "1e5" even when input is "1c5".
         PluralRules test = PluralRules.createRules(description);
-        checkNewSamples(description, test, "one", PluralRules.SampleType.INTEGER, "@integer 0, 1, 1e5", true,
-                new FixedDecimal(0));
-        checkNewSamples(description, test, "one", PluralRules.SampleType.DECIMAL, "@decimal 0.0~1.5, 1.1e5", true,
-                new FixedDecimal(0, 1));
-        checkNewSamples(description, test, "many", PluralRules.SampleType.INTEGER, "@integer 1000000, 2e6, 3e6, 4e6, 5e6, 6e6, 7e6, …", false,
-                new FixedDecimal(1000000));
-        checkNewSamples(description, test, "many", PluralRules.SampleType.DECIMAL, "@decimal 2.1e6, 3.1e6, 4.1e6, 5.1e6, 6.1e6, 7.1e6, …", false,
-                FixedDecimal.createWithExponent(2.1, 1, 6));
-        checkNewSamples(description, test, "other", PluralRules.SampleType.INTEGER, "@integer 2~17, 100, 1000, 10000, 100000, 2e5, 3e5, 4e5, 5e5, 6e5, 7e5, …", false,
-                new FixedDecimal(2));
-        checkNewSamples(description, test, "other", PluralRules.SampleType.DECIMAL, "@decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 2.1e5, 3.1e5, 4.1e5, 5.1e5, 6.1e5, 7.1e5, …", false,
-                new FixedDecimal(2.0, 1));
+
+        checkNewSamples(description, test, "one", PluralRules.SampleType.INTEGER, "@integer 0, 1, 1c5", true,
+                DecimalQuantity_DualStorageBCD.fromExponentString("0"));
+        checkNewSamples(description, test, "one", PluralRules.SampleType.DECIMAL, "@decimal 0.0~1.5, 1.1c5", true,
+                DecimalQuantity_DualStorageBCD.fromExponentString("0.0"));
+        checkNewSamples(description, test, "many", PluralRules.SampleType.INTEGER, "@integer 1000000, 2c6, 3c6, 4c6, 5c6, 6c6, 7c6, …", false,
+                DecimalQuantity_DualStorageBCD.fromExponentString("1000000"));
+        checkNewSamples(description, test, "many", PluralRules.SampleType.DECIMAL, "@decimal 2.1c6, 3.1c6, 4.1c6, 5.1c6, 6.1c6, 7.1c6, …", false,
+                DecimalQuantity_DualStorageBCD.fromExponentString("2.1c6"));
+        checkNewSamples(description, test, "other", PluralRules.SampleType.INTEGER, "@integer 2~17, 100, 1000, 10000, 100000, 2c5, 3c5, 4c5, 5c5, 6c5, 7c5, …", false,
+                DecimalQuantity_DualStorageBCD.fromExponentString("2"));
+        checkNewSamples(description, test, "other", PluralRules.SampleType.DECIMAL, "@decimal 2.0~3.5, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 2.1c5, 3.1c5, 4.1c5, 5.1c5, 6.1c5, 7.1c5, …", false,
+                DecimalQuantity_DualStorageBCD.fromExponentString("2.0"));
     }
 
     public void checkOldSamples(String description, PluralRules rules, String keyword, SampleType sampleType,
-            Double... expected) {
-        Collection<Double> oldSamples = rules.getSamples(keyword, sampleType);
-        if (!assertEquals("getOldSamples; " + keyword + "; " + description, new HashSet(Arrays.asList(expected)),
-                oldSamples)) {
+            DecimalQuantity... expected) {
+        Collection<DecimalQuantity> oldSamples = rules.getDecimalQuantitySamples(keyword, sampleType);
+
+        // Collect actual (oldSamples) and expected (expectedSamplesList) into the
+        // same concrete collection for comparison purposes.
+        ArrayList<DecimalQuantity> oldSamplesList = new ArrayList(oldSamples);
+        ArrayList<DecimalQuantity> expectedSamplesList = new ArrayList(Arrays.asList(expected));
+
+        if (!assertEquals("getOldSamples; " + keyword + "; " + description, expectedSamplesList,
+                oldSamplesList)) {
             rules.getSamples(keyword, sampleType);
         }
     }
 
     public void checkNewSamples(String description, PluralRules test, String keyword, SampleType sampleType,
-            String samplesString, boolean isBounded, FixedDecimal firstInRange) {
+            String samplesString, boolean isBounded, DecimalQuantity firstInRange) {
         String title = description + ", " + sampleType;
-        FixedDecimalSamples samples = test.getDecimalSamples(keyword, sampleType);
+        DecimalQuantitySamples samples = test.getDecimalSamples(keyword, sampleType);
         if (samples != null) {
+
+            // For now, skip round-trip formatting test when samples string uses
+            // 'e' instead of 'c' for compact notation.
+
+            // We are skipping tests for 'e' by replacing 'e' with 'c' in exponent
+            // notation.
+            Pattern p = Pattern.compile("(\\d+)(e)([-]?\\d+)");
+            Matcher m = p.matcher(samplesString);
+            if (m.find()) {
+                samplesString = m.replaceAll("$1c$3");
+            }
+
             assertEquals("samples; " + title, samplesString, samples.toString());
             assertEquals("bounded; " + title, isBounded, samples.bounded);
             assertEquals("first; " + title, firstInRange, samples.samples.iterator().next().start);
@@ -391,11 +429,11 @@ public class PluralRulesTest extends TestFmwk {
         main: for (ULocale locale : factory.getAvailableULocales()) {
             PluralRules rules = factory.forLocale(locale);
             Map<String, PluralRules> keywordToRule = new HashMap<>();
-            Collection<FixedDecimalSamples> samples = new LinkedHashSet<>();
+            Collection<DecimalQuantitySamples> samples = new LinkedHashSet<>();
 
             for (String keyword : rules.getKeywords()) {
                 for (SampleType sampleType : SampleType.values()) {
-                    FixedDecimalSamples samples2 = rules.getDecimalSamples(keyword, sampleType);
+                    DecimalQuantitySamples samples2 = rules.getDecimalSamples(keyword, sampleType);
                     if (samples2 != null) {
                         samples.add(samples2);
                     }
@@ -412,15 +450,16 @@ public class PluralRulesTest extends TestFmwk {
                 }
                 keywordToRule.put(keyword, singleRule);
             }
-            Map<FixedDecimal, String> collisionTest = new TreeMap();
-            for (FixedDecimalSamples sample3 : samples) {
-                Set<FixedDecimalRange> samples2 = sample3.getSamples();
+
+            Map<DecimalQuantity, String> collisionTest = new LinkedHashMap();
+            for (DecimalQuantitySamples sample3 : samples) {
+                Set<DecimalQuantitySamplesRange> samples2 = sample3.getSamples();
                 if (samples2 == null) {
                     continue;
                 }
-                for (FixedDecimalRange sample : samples2) {
+                for (DecimalQuantitySamplesRange sample : samples2) {
                     for (int i = 0; i < 1; ++i) {
-                        FixedDecimal item = i == 0 ? sample.start : sample.end;
+                        DecimalQuantity item = i == 0 ? sample.start : sample.end;
                         collisionTest.clear();
                         for (Entry<String, PluralRules> entry : keywordToRule.entrySet()) {
                             PluralRules rule = entry.getValue();
@@ -460,9 +499,9 @@ public class PluralRulesTest extends TestFmwk {
     }
 
     public void checkValue(String title1, PluralRules rules, String expected, String value) {
-        FixedDecimal fdNum = new FixedDecimal(value);
+        DecimalQuantity dqNum = DecimalQuantity_DualStorageBCD.fromExponentString(value);
 
-        String result = rules.select(fdNum);
+        String result = rules.select(dqNum);
         ULocale locale = null;
         assertEquals(getAssertMessage(title1, locale, rules, expected) + "; value: " + value, expected, result);
     }
@@ -733,13 +772,20 @@ public class PluralRulesTest extends TestFmwk {
         }
     }
 
-    private void assertRuleValue(String rule, double value) {
+    private void assertRuleValue(String rule, DecimalQuantity value) {
         assertRuleKeyValue("a:" + rule, "a", value);
     }
 
-    private void assertRuleKeyValue(String rule, String key, double value) {
+    private void assertRuleKeyValue(String rule, String key, DecimalQuantity value) {
         PluralRules pr = PluralRules.createRules(rule);
-        assertEquals(rule, value, pr.getUniqueKeywordValue(key));
+
+        // as a DecimalQuantity
+        assertEquals(rule, value, pr.getUniqueKeywordDecimalQuantityValue(key));
+
+        // as a double
+        double expDouble = value.equals(PluralRules.NO_UNIQUE_VALUE_DECIMAL_QUANTITY) ?
+                PluralRules.NO_UNIQUE_VALUE : value.toDouble();
+        assertEquals(rule, expDouble, pr.getUniqueKeywordValue(key));
     }
 
     /*
@@ -747,26 +793,36 @@ public class PluralRulesTest extends TestFmwk {
      */
     @Test
     public void TestGetUniqueKeywordValue() {
-        assertRuleKeyValue("a: n is 1", "not_defined", PluralRules.NO_UNIQUE_VALUE); // key not defined
-        assertRuleValue("n within 2..2", 2);
-        assertRuleValue("n is 1", 1);
-        assertRuleValue("n in 2..2", 2);
-        assertRuleValue("n in 3..4", PluralRules.NO_UNIQUE_VALUE);
-        assertRuleValue("n within 3..4", PluralRules.NO_UNIQUE_VALUE);
-        assertRuleValue("n is 2 or n is 2", 2);
-        assertRuleValue("n is 2 and n is 2", 2);
-        assertRuleValue("n is 2 or n is 3", PluralRules.NO_UNIQUE_VALUE);
-        assertRuleValue("n is 2 and n is 3", PluralRules.NO_UNIQUE_VALUE);
-        assertRuleValue("n is 2 or n in 2..3", PluralRules.NO_UNIQUE_VALUE);
-        assertRuleValue("n is 2 and n in 2..3", 2);
-        assertRuleKeyValue("a: n is 1", "other", PluralRules.NO_UNIQUE_VALUE); // key matches default rule
-        assertRuleValue("n in 2,3", PluralRules.NO_UNIQUE_VALUE);
-        assertRuleValue("n in 2,3..6 and n not in 2..3,5..6", 4);
+        LocalizedNumberFormatter fmtr = NumberFormatter.withLocale(ULocale.ROOT);
+
+        assertRuleKeyValue("a: n is 1", "not_defined", PluralRules.NO_UNIQUE_VALUE_DECIMAL_QUANTITY); // key not defined
+        assertRuleValue("n within 2..2", new DecimalQuantity_DualStorageBCD(2));
+        assertRuleValue("n is 1", new DecimalQuantity_DualStorageBCD(1));
+        assertRuleValue("n in 2..2", new DecimalQuantity_DualStorageBCD(2));
+        assertRuleValue("n in 3..4", PluralRules.NO_UNIQUE_VALUE_DECIMAL_QUANTITY);
+        assertRuleValue("n within 3..4", PluralRules.NO_UNIQUE_VALUE_DECIMAL_QUANTITY);
+        assertRuleValue("n is 2 or n is 2", new DecimalQuantity_DualStorageBCD(2));
+        assertRuleValue("n is 2 and n is 2", new DecimalQuantity_DualStorageBCD(2));
+        assertRuleValue("n is 2 or n is 3", PluralRules.NO_UNIQUE_VALUE_DECIMAL_QUANTITY);
+        assertRuleValue("n is 2 and n is 3", PluralRules.NO_UNIQUE_VALUE_DECIMAL_QUANTITY);
+        assertRuleValue("n is 2 or n in 2..3", PluralRules.NO_UNIQUE_VALUE_DECIMAL_QUANTITY);
+        assertRuleValue("n is 2 and n in 2..3", new DecimalQuantity_DualStorageBCD(2));
+        assertRuleKeyValue("a: n is 1", "other", PluralRules.NO_UNIQUE_VALUE_DECIMAL_QUANTITY); // key matches default rule
+        assertRuleValue("n in 2,3", PluralRules.NO_UNIQUE_VALUE_DECIMAL_QUANTITY);
+        assertRuleValue("n in 2,3..6 and n not in 2..3,5..6", new DecimalQuantity_DualStorageBCD(4));
     }
 
     /**
      * The version in PluralFormatUnitTest is not really a test, and it's in the wrong place anyway, so I'm putting a
      * variant of it here.
+     *
+     * Using the double API for getting plural samples, assert all samples match the keyword
+     * they are listed under, for all locales.
+     *
+     * Specifically, iterate over all locales, get plural rules for the locale, iterate over every rule,
+     * then iterate over every sample in the rule, parse sample to a number (double), use that number
+     * as an input to .select() for the rules object, and assert the actual return plural keyword matches
+     * what we expect based on the plural rule string.
      */
     @Test
     public void TestGetSamples() {
@@ -775,10 +831,6 @@ public class PluralRulesTest extends TestFmwk {
             uniqueRuleSet.add(PluralRules.getFunctionalEquivalent(locale, null));
         }
         for (ULocale locale : uniqueRuleSet) {
-            //if (locale.getLanguage().equals("fr") &&
-            //        logKnownIssue("21322", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
-            //    continue;
-            //}
             PluralRules rules = factory.forLocale(locale);
             logln("\nlocale: " + (locale == ULocale.ROOT ? "root" : locale.toString()) + ", rules: " + rules);
             Set<String> keywords = rules.getKeywords();
@@ -791,8 +843,8 @@ public class PluralRulesTest extends TestFmwk {
                 if (list.size() == 0) {
                     // when the samples (meaning integer samples) are null, then then integerSamples must be, and the
                     // decimalSamples must not be
-                    FixedDecimalSamples integerSamples = rules.getDecimalSamples(keyword, SampleType.INTEGER);
-                    FixedDecimalSamples decimalSamples = rules.getDecimalSamples(keyword, SampleType.DECIMAL);
+                    DecimalQuantitySamples integerSamples = rules.getDecimalSamples(keyword, SampleType.INTEGER);
+                    DecimalQuantitySamples decimalSamples = rules.getDecimalSamples(keyword, SampleType.DECIMAL);
                     assertTrue(getAssertMessage("List is not null", locale, rules, keyword), integerSamples == null
                             && decimalSamples != null && decimalSamples.samples.size() != 0);
                 } else {
@@ -813,6 +865,131 @@ public class PluralRulesTest extends TestFmwk {
 
             assertNull(locale + ", list is null", rules.getSamples("@#$%^&*"));
             assertNull(locale + ", list is null", rules.getSamples("@#$%^&*", SampleType.DECIMAL));
+        }
+    }
+
+    /**
+     * This replicates the setup of TestGetSamples(), but parses samples as DecimalQuantity instead of double.
+     *
+     * Using the DecimalQuantity API for getting plural samples, assert all samples match the keyword
+     * they are listed under, for all locales.
+     *
+     * Specifically, iterate over all locales, get plural rules for the locale, iterate over every rule,
+     * then iterate over every sample in the rule, parse sample to a number (DecimalQuantity), use that number
+     * as an input to .select() for the rules object, and assert the actual return plural keyword matches
+     * what we expect based on the plural rule string.
+     */
+    @Test
+    public void TestGetDecimalQuantitySamples() {
+        Set<ULocale> uniqueRuleSet = new HashSet<>();
+        for (ULocale locale : factory.getAvailableULocales()) {
+            uniqueRuleSet.add(PluralRules.getFunctionalEquivalent(locale, null));
+        }
+        for (ULocale locale : uniqueRuleSet) {
+            PluralRules rules = factory.forLocale(locale);
+            logln("\nlocale: " + (locale == ULocale.ROOT ? "root" : locale.toString()) + ", rules: " + rules);
+            Set<String> keywords = rules.getKeywords();
+            for (String keyword : keywords) {
+                Collection<DecimalQuantity> list = rules.getDecimalQuantitySamples(keyword);
+                logln("keyword: " + keyword + ", samples: " + list);
+                // with fractions, the samples can be empty and thus the list null. In that case, however, there will be
+                // FixedDecimal values.
+                // So patch the test for that.
+                if (list.size() == 0) {
+                    // when the samples (meaning integer samples) are null, then then integerSamples must be, and the
+                    // decimalSamples must not be
+                    DecimalQuantitySamples integerSamples = rules.getDecimalSamples(keyword, SampleType.INTEGER);
+                    DecimalQuantitySamples decimalSamples = rules.getDecimalSamples(keyword, SampleType.DECIMAL);
+                    assertTrue(getAssertMessage("List is not null", locale, rules, keyword), integerSamples == null
+                            && decimalSamples != null && decimalSamples.samples.size() != 0);
+                } else {
+                    if (!assertTrue(getAssertMessage("Test getSamples.isEmpty", locale, rules, keyword),
+                            !list.isEmpty())) {
+                        rules.getDecimalQuantitySamples(keyword);
+                    }
+                    if (rules.toString().contains(": j")) {
+                        // hack until we remove j
+                    } else {
+                        for (DecimalQuantity value : list) {
+                            assertEquals(getAssertMessage("Match keyword", locale, rules, keyword) + "; value '"
+                                    + value + "'", keyword, rules.select(value));
+                        }
+                    }
+                }
+            }
+
+            assertNull(locale + ", list is null", rules.getDecimalQuantitySamples("@#$%^&*"));
+            assertNull(locale + ", list is null", rules.getDecimalQuantitySamples("@#$%^&*", SampleType.DECIMAL));
+        }
+    }
+
+    /**
+     * Test addSamples (Java) / getSamplesFromString (C++) to ensure the expansion of plural rule sample range
+     * expands to a sequence of sample numbers that is incremented as the right scale.
+     *
+     *  Do this for numbers with fractional digits but no exponent.
+     */
+    @Test
+    public void testGetOrAddSamplesFromString() {
+        PluralRules rules = PluralRules.createRules("testkeyword: e != 0 @decimal 2.0~4.0, …");
+
+        Set<String> keywords = rules.getKeywords();
+        assertTrue("At least parse the test keyword in the test rule string", 0 < keywords.size());
+
+        String expKeyword = "testkeyword";
+        Collection<DecimalQuantity> list = rules.getDecimalQuantitySamples(expKeyword, SampleType.DECIMAL);
+
+        String[] expDqStrs = {
+                "2.0", "2.1", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9",
+                "3.0", "3.1", "3.2", "3.3", "3.4", "3.5", "3.6", "3.7", "3.8", "3.9",
+                "4.0"
+        };
+        assertEquals("Number of parsed samples from test string incorrect", expDqStrs.length, list.size());
+        ArrayList<DecimalQuantity> actSamples = new ArrayList<>(list);
+        for (int i = 0; i < list.size(); i++) {
+            String expDqStr = expDqStrs[i];
+            DecimalQuantity sample = actSamples.get(i);
+            String sampleStr = sample.toExponentString();
+
+            assertEquals("Expansion of sample range to sequence of sample values should increment at the right scale",
+                    expDqStr, sampleStr);
+
+        }
+    }
+
+    /**
+     * Test addSamples (Java) / getSamplesFromString (C++) to ensure the expansion of plural rule sample range
+     * expands to a sequence of sample numbers that is incremented as the right scale.
+     *
+     *  Do this for numbers written in a notation that has an exponent, for which the number is an
+     *  integer (also as defined in the UTS 35 spec for the plural operands) but whose representation
+     *  has fractional digits in the significand written before the exponent.
+     */
+    @Test
+    public void testGetOrAddSamplesFromStringCompactNotation() {
+        PluralRules rules = PluralRules.createRules("testkeyword: e != 0 @decimal 2.0c6~4.0c6, …");
+
+        Set<String> keywords = rules.getKeywords();
+        assertTrue("At least parse the test keyword in the test rule string", 0 < keywords.size());
+
+        String expKeyword = "testkeyword";
+        Collection<DecimalQuantity> list = rules.getDecimalQuantitySamples(expKeyword, SampleType.DECIMAL);
+
+        String[] expDqStrs = {
+                "2.0c6", "2.1c6", "2.2c6", "2.3c6", "2.4c6", "2.5c6", "2.6c6", "2.7c6", "2.8c6", "2.9c6",
+                "3.0c6", "3.1c6", "3.2c6", "3.3c6", "3.4c6", "3.5c6", "3.6c6", "3.7c6", "3.8c6", "3.9c6",
+                "4.0c6"
+        };
+        assertEquals("Number of parsed samples from test string incorrect", expDqStrs.length, list.size());
+        ArrayList<DecimalQuantity> actSamples = new ArrayList<>(list);
+        for (int i = 0; i < list.size(); i++) {
+            String expDqStr = expDqStrs[i];
+            DecimalQuantity sample = actSamples.get(i);
+            String sampleStr = sample.toExponentString();
+
+            assertEquals("Expansion of sample range to sequence of sample values should increment at the right scale",
+                    expDqStr, sampleStr);
+
         }
     }
 
@@ -882,24 +1059,42 @@ public class PluralRulesTest extends TestFmwk {
                 if (valueList != null) {
                     valueList = valueList.trim();
                 }
-                Collection<Double> values;
+                Collection<DecimalQuantity> values;
                 if (valueList == null || valueList.length() == 0) {
                     values = Collections.EMPTY_SET;
                 } else if ("null".equals(valueList)) {
                     values = null;
                 } else {
-                    values = new TreeSet<>();
+                    values = new LinkedHashSet<>();
                     for (String value : valueList.split(",")) {
-                        values.add(Double.parseDouble(value));
+                        values.add(DecimalQuantity_DualStorageBCD.fromExponentString(value));
                     }
                 }
 
-                Collection<Double> results = p.getAllKeywordValues(keyword);
-                assertEquals(keyword + " in " + ruleDescription, values, results == null ? null : new HashSet(results));
+                Collection<DecimalQuantity> results = p.getAllKeywordDecimalQuantityValues(keyword);
+
+                // Convert DecimalQuantity using a 1:1 conversion to String for comparison purposes
+                Set<String> valuesForComparison = new HashSet<>();
+                if (values != null) {
+                    for (DecimalQuantity dq : values) {
+                        valuesForComparison.add(dq.toExponentString());
+                    }
+                }
+                Set<String> resultsForComparison = new HashSet<>();
+                if (results != null) {
+                    for (DecimalQuantity dq : results) {
+                        resultsForComparison.add(dq.toExponentString());
+                    }
+                }
+
+                assertEquals(keyword + " in " + ruleDescription,
+                        values == null ? null : valuesForComparison,
+                        results == null ? null : resultsForComparison
+                );
 
                 if (results != null) {
                     try {
-                        results.add(PluralRules.NO_UNIQUE_VALUE);
+                        results.add(PluralRules.NO_UNIQUE_VALUE_DECIMAL_QUANTITY);
                         fail("returned set is modifiable");
                     } catch (UnsupportedOperationException e) {
                         // pass
@@ -967,13 +1162,9 @@ public class PluralRulesTest extends TestFmwk {
                     for (String keyword : rules.getKeywords()) {
                         boolean isLimited = rules.isLimited(keyword, sampleType);
                         boolean computeLimited = rules.computeLimited(keyword, sampleType);
-                        if (!keyword.equals("other") && !(locale.getLanguage().equals("fr") && logKnownIssue("ICU-21322", "fr plurals many case computeLimited == isLimited"))) {
-                            assertEquals(getAssertMessage("computeLimited == isLimited", locale, rules, keyword),
-                                    computeLimited, isLimited);
-                        }
-                        Collection<Double> samples = rules.getSamples(keyword, sampleType);
+                        Collection<DecimalQuantity> samples = rules.getDecimalQuantitySamples(keyword, sampleType);
                         assertNotNull(getAssertMessage("Samples must not be null", locale, rules, keyword), samples);
-                        /* FixedDecimalSamples decimalSamples = */rules.getDecimalSamples(keyword, sampleType);
+                        rules.getDecimalSamples(keyword, sampleType);
                         // assertNotNull(getAssertMessage("Decimal samples must be null if unlimited", locale, rules,
                         // keyword), decimalSamples);
                     }
@@ -985,29 +1176,30 @@ public class PluralRulesTest extends TestFmwk {
     @Test
     public void TestKeywords() {
         Set<String> possibleKeywords = new LinkedHashSet(Arrays.asList("zero", "one", "two", "few", "many", "other"));
+        DecimalQuantity ONE_INTEGER = DecimalQuantity_DualStorageBCD.fromExponentString("1");
         Object[][][] tests = {
                 // format is locale, explicits, then triples of keyword, status, unique value.
-                { { "en", null }, { "one", KeywordStatus.UNIQUE, 1.0d }, { "other", KeywordStatus.UNBOUNDED, null } },
-                { { "pl", null }, { "one", KeywordStatus.UNIQUE, 1.0d }, { "few", KeywordStatus.UNBOUNDED, null },
+                { { "en", null }, { "one", KeywordStatus.UNIQUE, ONE_INTEGER }, { "other", KeywordStatus.UNBOUNDED, null } },
+                { { "pl", null }, { "one", KeywordStatus.UNIQUE, ONE_INTEGER }, { "few", KeywordStatus.UNBOUNDED, null },
                         { "many", KeywordStatus.UNBOUNDED, null },
                         { "other", KeywordStatus.SUPPRESSED, null, KeywordStatus.UNBOUNDED, null } // note that it is
                                                                                                    // suppressed in
                                                                                                    // INTEGER but not
                                                                                                    // DECIMAL
-                }, { { "en", new HashSet<>(Arrays.asList(1.0d)) }, // check that 1 is suppressed
+                }, { { "en", new HashSet<>(Arrays.asList(ONE_INTEGER)) }, // check that 1 is suppressed
                         { "one", KeywordStatus.SUPPRESSED, null }, { "other", KeywordStatus.UNBOUNDED, null } }, };
-        Output<Double> uniqueValue = new Output<>();
+        Output<DecimalQuantity> uniqueValue = new Output<>();
         for (Object[][] test : tests) {
             ULocale locale = new ULocale((String) test[0][0]);
             // NumberType numberType = (NumberType) test[1];
-            Set<Double> explicits = (Set<Double>) test[0][1];
+            Set<DecimalQuantity> explicits = (Set<DecimalQuantity>) test[0][1];
             PluralRules pluralRules = factory.forLocale(locale);
             LinkedHashSet<String> remaining = new LinkedHashSet(possibleKeywords);
             for (int i = 1; i < test.length; ++i) {
                 Object[] row = test[i];
                 String keyword = (String) row[0];
                 KeywordStatus statusExpected = (KeywordStatus) row[1];
-                Double uniqueExpected = (Double) row[2];
+                DecimalQuantity uniqueExpected = (DecimalQuantity) row[2];
                 remaining.remove(keyword);
                 KeywordStatus status = pluralRules.getKeywordStatus(keyword, 0, explicits, uniqueValue);
                 assertEquals(getAssertMessage("Unique Value", locale, pluralRules, keyword), uniqueExpected,
@@ -1015,7 +1207,7 @@ public class PluralRulesTest extends TestFmwk {
                 assertEquals(getAssertMessage("Keyword Status", locale, pluralRules, keyword), statusExpected, status);
                 if (row.length > 3) {
                     statusExpected = (KeywordStatus) row[3];
-                    uniqueExpected = (Double) row[4];
+                    uniqueExpected = (DecimalQuantity) row[4];
                     status = pluralRules.getKeywordStatus(keyword, 0, explicits, uniqueValue, SampleType.DECIMAL);
                     assertEquals(getAssertMessage("Unique Value - decimal", locale, pluralRules, keyword),
                             uniqueExpected, uniqueValue.value);
@@ -1033,6 +1225,11 @@ public class PluralRulesTest extends TestFmwk {
 
     // For the time being, the compact notation exponent operand `c` is an alias
     // for the scientific exponent operand `e` and compact notation.
+    /**
+     * Test the proper plural rule keyword selection given an input number that is
+     * already formatted into scientific notation. This exercises the `e` plural operand
+     * for the formatted number.
+     */
     @Test
     public void testScientificPluralKeyword() {
         PluralRules rules = PluralRules.createRules("one: i = 0,1 @integer 0, 1 @decimal 0.0~1.5;  many: e = 0 and i % 1000000 = 0 and v = 0 or " +
@@ -1082,6 +1279,11 @@ public class PluralRulesTest extends TestFmwk {
         }
     }
 
+    /**
+     * Test the proper plural rule keyword selection given an input number that is
+     * already formatted into compact notation. This exercises the `c` plural operand
+     * for the formatted number.
+     */
     @Test
     public void testCompactDecimalPluralKeyword() {
         PluralRules rules = PluralRules.createRules("one: i = 0,1 @integer 0, 1 @decimal 0.0~1.5;  many: c = 0 and i % 1000000 = 0 and v = 0 or " +
@@ -1261,8 +1463,13 @@ public class PluralRulesTest extends TestFmwk {
 
     @Test
     public void TestLocales() {
+        // This test will fail when the locale snapshot gets out of sync with the real CLDR data.
+        // In that case, temporarily use "if (true)",
+        // copy & paste the output into the initializer above,
+        // and revert to "if (false)" for normal testing.
         if (false) {
             generateLOCALE_SNAPSHOT();
+            return;
         }
         for (String test : LOCALE_SNAPSHOT) {
             test = test.trim();
@@ -1308,7 +1515,7 @@ public class PluralRulesTest extends TestFmwk {
                 System.out.print("        \"" + CollectionUtilities.join(locales, ","));
                 for (StandardPluralCategories spc : set) {
                     String keyword = spc.toString();
-                    FixedDecimalSamples samples = rule.getDecimalSamples(keyword, SampleType.INTEGER);
+                    DecimalQuantitySamples samples = rule.getDecimalSamples(keyword, SampleType.INTEGER);
                     System.out.print("; " + spc + ": " + samples);
                 }
                 System.out.println("\",");
