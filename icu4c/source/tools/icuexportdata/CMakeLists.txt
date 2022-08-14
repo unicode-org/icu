@@ -1,0 +1,2 @@
+add_executable(icuexportdata icuexportdata.cpp)
+target_link_libraries(icuexportdata PRIVATE icu_defaults icuuc toolutil)
