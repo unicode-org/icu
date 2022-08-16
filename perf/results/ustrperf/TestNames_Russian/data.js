@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1660691909414,
+  "lastUpdate": 1660692173435,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -11230,6 +11230,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 47.6932,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "hsivonen@hsivonen.fi",
+            "name": "Henri Sivonen",
+            "username": "hsivonen"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "01c194a366f2b18dd89cae4952e60c4719897d1f",
+          "message": "ICU-22115 Merge passthrough and canonical combining class data into the NFD trie for ICU4X",
+          "timestamp": "2022-08-16T15:54:01-07:00",
+          "tree_id": "1431d8b0ce6c447915eebcb86c86a9307f8df52f",
+          "url": "https://github.com/unicode-org/icu/commit/01c194a366f2b18dd89cae4952e60c4719897d1f"
+        },
+        "date": 1660692166356,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 24.9108,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 25.9359,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 29.3678,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 55.688,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 59.9065,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 45.1425,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 34.3512,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 21.6621,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 224.7146,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 30.1151,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 58.8426,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 49.6583,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
