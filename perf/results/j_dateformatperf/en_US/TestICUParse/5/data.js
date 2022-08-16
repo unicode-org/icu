@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1660256611425,
+  "lastUpdate": 1660670809018,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -598,6 +598,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 424.580407653656,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "8492a8291670aa0af0f3fa6c088ddaf4ff373833",
+          "message": "ICU-22105 Fixed the unit-conversion logic to work correctly with negative temperature values.",
+          "timestamp": "2022-08-16T10:18:24-07:00",
+          "tree_id": "ade7eb2c651708551e62d475d3987927dec81353",
+          "url": "https://github.com/unicode-org/icu/commit/8492a8291670aa0af0f3fa6c088ddaf4ff373833"
+        },
+        "date": 1660670804454,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 430.2538852340035,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
