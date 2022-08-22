@@ -917,13 +917,6 @@ dsb{
                 per{"{0} na kilogram"}
                 two{"{0} kilograma"}
             }
-            metric-ton{
-                dnam{"tony"}
-                few{"{0} tony"}
-                one{"{0} tona"}
-                other{"{0} tonow"}
-                two{"{0} tonje"}
-            }
             microgram{
                 dnam{"mikrogramy"}
                 few{"{0} mikrogramy"}
@@ -981,6 +974,13 @@ dsb{
                 one{"{0} ameriska tona"}
                 other{"{0} ameriskich tonow"}
                 two{"{0} ameriskej tonje"}
+            }
+            tonne{
+                dnam{"tony"}
+                few{"{0} tony"}
+                one{"{0} tona"}
+                other{"{0} tonow"}
+                two{"{0} tonje"}
             }
         }
         power{
@@ -2631,13 +2631,6 @@ dsb{
                 per{"{0}/kg"}
                 two{"{0} kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                few{"{0} t"}
-                one{"{0} t"}
-                other{"{0} t"}
-                two{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 few{"{0} μg"}
@@ -2695,6 +2688,13 @@ dsb{
                 one{"{0} tn"}
                 other{"{0} tn"}
                 two{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                few{"{0} t"}
+                one{"{0} t"}
+                other{"{0} t"}
+                two{"{0} t"}
             }
         }
         power{

@@ -1157,15 +1157,6 @@ cy{
                 two{"{0} kg"}
                 zero{"{0} kg"}
             }
-            metric-ton{
-                dnam{"tunelli metrig"}
-                few{"{0} t"}
-                many{"{0} t"}
-                one{"{0} dunnell fetrig"}
-                other{"{0} tunnell fetrig"}
-                two{"{0} t"}
-                zero{"{0} t"}
-            }
             microgram{
                 dnam{"microgramau"}
                 few{"{0} μg"}
@@ -1239,6 +1230,15 @@ cy{
                 other{"{0} tunnell"}
                 two{"{0} dunnell"}
                 zero{"{0} tn"}
+            }
+            tonne{
+                dnam{"tunelli metrig"}
+                few{"{0} t"}
+                many{"{0} t"}
+                one{"{0} dunnell fetrig"}
+                other{"{0} tunnell fetrig"}
+                two{"{0} t"}
+                zero{"{0} t"}
             }
         }
         power{
@@ -2561,15 +2561,6 @@ cy{
                 two{"{0} kg"}
                 zero{"{0} kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                few{"{0}t"}
-                many{"{0}t"}
-                one{"{0}t"}
-                other{"{0}t"}
-                two{"{0}t"}
-                zero{"{0}t"}
-            }
             microgram{
                 dnam{"μg"}
                 few{"{0}μg"}
@@ -2616,6 +2607,15 @@ cy{
                 other{"{0}st"}
                 two{"{0}st"}
                 zero{"{0}st"}
+            }
+            tonne{
+                dnam{"t"}
+                few{"{0}t"}
+                many{"{0}t"}
+                one{"{0}t"}
+                other{"{0}t"}
+                two{"{0}t"}
+                zero{"{0}t"}
             }
         }
         power{
@@ -3928,15 +3928,6 @@ cy{
                 two{"{0} kg"}
                 zero{"{0} kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                few{"{0} t"}
-                many{"{0} t"}
-                one{"{0} t"}
-                other{"{0} t"}
-                two{"{0} t"}
-                zero{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 few{"{0} μg"}
@@ -4004,6 +3995,15 @@ cy{
                 other{"{0} tn"}
                 two{"{0} tn"}
                 zero{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                few{"{0} t"}
+                many{"{0} t"}
+                one{"{0} t"}
+                other{"{0} t"}
+                two{"{0} t"}
+                zero{"{0} t"}
             }
         }
         power{

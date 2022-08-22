@@ -597,11 +597,6 @@ ps{
                 other{"{0} کيلو ګرامز"}
                 per{"{0} في کيلو ګرام"}
             }
-            metric-ton{
-                dnam{"ميټرک ټنز"}
-                one{"{0} ميټرک ټن"}
-                other{"{0} ميټرک ټنز"}
-            }
             microgram{
                 dnam{"مايکرو ګرامز"}
                 one{"{0} مايکرو ګرام"}
@@ -638,6 +633,11 @@ ps{
                 dnam{"ټنز"}
                 one{"{0} ټن"}
                 other{"{0} ټنز"}
+            }
+            tonne{
+                dnam{"ميټرک ټنز"}
+                one{"{0} ميټرک ټن"}
+                other{"{0} ميټرک ټنز"}
             }
         }
         power{
@@ -1691,11 +1691,6 @@ ps{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -1730,6 +1725,11 @@ ps{
                 dnam{"ټنز"}
                 one{"{0} tn"}
                 other{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

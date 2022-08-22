@@ -2879,6 +2879,12 @@ bn{
                 "und",
                 "bn",
             }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
         }
         namePattern{
             givenFirst-long-addressing-formal{"{prefix} {given} {given2} {surname} {surname2} {suffix}"}

@@ -385,4 +385,18 @@ sat{
         US{"ᱭᱩᱮᱥ"}
         metric{"ᱢᱮᱴᱨᱤᱠ"}
     }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "sat",
+            }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+    }
 }

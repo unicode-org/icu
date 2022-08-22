@@ -3302,7 +3302,6 @@ root{
         nameOrderLocales{
             givenFirst{"und"}
             surnameFirst{
-                "hu",
                 "ja",
                 "ko",
                 "vi",

@@ -1355,18 +1355,6 @@ hi{
                 other{"{0} किलोग्राम"}
                 per{"{0}/किलोग्राम"}
             }
-            metric-ton{
-                case{
-                    oblique{
-                        one{"{0} मीट्रिक टन"}
-                        other{"{0} मीट्रिक टन"}
-                    }
-                }
-                dnam{"मीट्रिक टन"}
-                gender{"masculine"}
-                one{"{0} मीट्रिक टन"}
-                other{"{0} मीट्रिक टन"}
-            }
             microgram{
                 case{
                     oblique{
@@ -1443,6 +1431,18 @@ hi{
                 dnam{"टन"}
                 one{"{0} टन"}
                 other{"{0} टन"}
+            }
+            tonne{
+                case{
+                    oblique{
+                        one{"{0} मीट्रिक टन"}
+                        other{"{0} मीट्रिक टन"}
+                    }
+                }
+                dnam{"मीट्रिक टन"}
+                gender{"masculine"}
+                one{"{0} मीट्रिक टन"}
+                other{"{0} मीट्रिक टन"}
             }
         }
         power{
@@ -2438,10 +2438,6 @@ hi{
                 one{"{0} किग्रा"}
                 other{"{0} किग्रा"}
             }
-            metric-ton{
-                one{"{0} ट"}
-                other{"{0} ट"}
-            }
             milligram{
                 one{"{0} मिग्रा"}
                 other{"{0} मिग्रा"}
@@ -2457,6 +2453,10 @@ hi{
             stone{
                 one{"{0} ला"}
                 other{"{0}st"}
+            }
+            tonne{
+                one{"{0} ट"}
+                other{"{0} ट"}
             }
         }
         power{
@@ -3231,11 +3231,6 @@ hi{
                 other{"{0} कि॰ग्रा॰"}
                 per{"{0}/कि॰ग्रा॰"}
             }
-            metric-ton{
-                dnam{"मीट्रिक टन"}
-                one{"{0} मीट्रिक टन"}
-                other{"{0} मी टन"}
-            }
             microgram{
                 dnam{"मा॰ग्रा॰"}
                 one{"{0} मा॰ग्रा॰"}
@@ -3272,6 +3267,11 @@ hi{
                 dnam{"टन"}
                 one{"{0} टन"}
                 other{"{0} टन"}
+            }
+            tonne{
+                dnam{"मीट्रिक टन"}
+                one{"{0} मीट्रिक टन"}
+                other{"{0} मी टन"}
             }
         }
         power{

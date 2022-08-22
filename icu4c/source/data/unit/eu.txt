@@ -669,11 +669,6 @@ eu{
                 other{"{0} kilogramo"}
                 per{"{0} kilogramo bakoitzeko"}
             }
-            metric-ton{
-                dnam{"tona metrikoak"}
-                one{"{0} tona metriko"}
-                other{"{0} tona metriko"}
-            }
             microgram{
                 dnam{"mikrogramoak"}
                 one{"{0} mikrogramo"}
@@ -714,6 +709,11 @@ eu{
                 dnam{"AEBko tonak"}
                 one{"{0} AEBko tona"}
                 other{"{0} AEBko tona"}
+            }
+            tonne{
+                dnam{"tona metrikoak"}
+                one{"{0} tona metriko"}
+                other{"{0} tona metriko"}
             }
         }
         power{
@@ -2013,11 +2013,6 @@ eu{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -2058,6 +2053,11 @@ eu{
                 dnam{"AEBko tona"}
                 one{"{0} AEBko tona"}
                 other{"{0} AEBko tona"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

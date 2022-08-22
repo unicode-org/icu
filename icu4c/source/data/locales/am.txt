@@ -2469,8 +2469,9 @@ am{
                 "am",
             }
             surnameFirst{
-                "ja",
                 "ko",
+                "vi",
+                "yue",
                 "zh",
             }
         }

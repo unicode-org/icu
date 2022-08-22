@@ -4,12 +4,6 @@
 en_AU{
     %%Parent{"en_001"}
     zoneStrings{
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
         "Pacific:Johnston"{
             ec{"Johnston"}
         }

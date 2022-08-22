@@ -778,12 +778,6 @@ ca{
                 other{"{0} quilograms"}
                 per{"{0} per quilogram"}
             }
-            metric-ton{
-                dnam{"tones mètriques"}
-                gender{"feminine"}
-                one{"{0} tona mètrica"}
-                other{"{0} tones mètriques"}
-            }
             microgram{
                 dnam{"micrograms"}
                 gender{"masculine"}
@@ -827,6 +821,12 @@ ca{
                 dnam{"tones"}
                 one{"{0} tona"}
                 other{"{0} tones"}
+            }
+            tonne{
+                dnam{"tones mètriques"}
+                gender{"feminine"}
+                one{"{0} tona mètrica"}
+                other{"{0} tones mètriques"}
             }
         }
         power{
@@ -1431,11 +1431,6 @@ ca{
                 one{"{0} kg"}
                 other{"{0} kg"}
             }
-            metric-ton{
-                dnam{"t mètriques"}
-                one{"{0} t mètr."}
-                other{"{0} t mètr."}
-            }
             ounce-troy{
                 dnam{"ozt"}
                 one{"{0} ozt"}
@@ -1445,6 +1440,11 @@ ca{
                 dnam{"t"}
                 one{"{0} t"}
                 other{"{0} t"}
+            }
+            tonne{
+                dnam{"t mètriques"}
+                one{"{0} t mètr."}
+                other{"{0} t mètr."}
             }
         }
         power{
@@ -2104,11 +2104,6 @@ ca{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t mètriques"}
-                one{"{0} t mètr."}
-                other{"{0} t mètr."}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -2145,6 +2140,11 @@ ca{
                 dnam{"t"}
                 one{"{0} t"}
                 other{"{0} t"}
+            }
+            tonne{
+                dnam{"t mètriques"}
+                one{"{0} t mètr."}
+                other{"{0} t mètr."}
             }
         }
         power{

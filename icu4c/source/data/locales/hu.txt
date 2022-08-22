@@ -2532,6 +2532,16 @@ hu{
         }
     }
     personNames{
+        nameOrderLocales{
+            surnameFirst{
+                "hu",
+                "ja",
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
         namePattern{
             givenFirst-long-addressing-formal{"{prefix} {surname}"}
             givenFirst-long-addressing-informal{"{given-informal}"}

@@ -1688,4 +1688,21 @@ ti{
         US{"ኣመሪካ"}
         metric{"ሜትሪክ"}
     }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "ti",
+            }
+            surnameFirst{
+                "ko",
+                "si",
+                "ta",
+                "te",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+    }
 }

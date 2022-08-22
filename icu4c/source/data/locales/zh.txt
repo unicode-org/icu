@@ -5142,8 +5142,11 @@ zh{
         }
         nameOrderLocales{
             surnameFirst{
+                "hu",
                 "ja",
                 "ko",
+                "vi",
+                "yue",
                 "zh",
             }
         }

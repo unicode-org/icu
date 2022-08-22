@@ -565,10 +565,6 @@ yue{
                 other{"{0} 公斤"}
                 per{"每公斤 {0}"}
             }
-            metric-ton{
-                dnam{"公噸"}
-                other{"{0} 公噸"}
-            }
             microgram{
                 dnam{"微克"}
                 other{"{0} 微克"}
@@ -602,6 +598,10 @@ yue{
             ton{
                 dnam{"英噸"}
                 other{"{0} 英噸"}
+            }
+            tonne{
+                dnam{"公噸"}
+                other{"{0} 公噸"}
             }
         }
         power{
@@ -1617,10 +1617,6 @@ yue{
                 other{"{0} 公斤"}
                 per{"每公斤{0}"}
             }
-            metric-ton{
-                dnam{"公噸"}
-                other{"{0} 公噸"}
-            }
             microgram{
                 dnam{"微克"}
                 other{"{0} 微克"}
@@ -1654,6 +1650,10 @@ yue{
             ton{
                 dnam{"英噸"}
                 other{"{0} 英噸"}
+            }
+            tonne{
+                dnam{"公噸"}
+                other{"{0} 公噸"}
             }
         }
         power{

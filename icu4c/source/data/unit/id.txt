@@ -552,10 +552,6 @@ id{
                 other{"{0} kilogram"}
                 per{"{0} per kilogram"}
             }
-            metric-ton{
-                dnam{"metrik ton"}
-                other{"{0} metrik ton"}
-            }
             microgram{
                 dnam{"mikrogram"}
                 other{"{0} mikrogram"}
@@ -589,6 +585,10 @@ id{
             ton{
                 dnam{"ton Amerika Serikat"}
                 other{"{0} ton Amerika Serikat"}
+            }
+            tonne{
+                dnam{"metrik ton"}
+                other{"{0} metrik ton"}
             }
         }
         power{
@@ -1721,10 +1721,6 @@ id{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 other{"{0} μg"}
@@ -1756,6 +1752,10 @@ id{
             ton{
                 dnam{"ton AS"}
                 other{"{0} tn AS"}
+            }
+            tonne{
+                dnam{"t"}
+                other{"{0} t"}
             }
         }
         power{

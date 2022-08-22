@@ -1898,4 +1898,18 @@ fo{
             }
         }
     }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "fo",
+            }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+    }
 }

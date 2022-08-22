@@ -28,6 +28,7 @@ en{
         lw{"Line Breaks In Words Setting"}
         m0{"Transform Rules"}
         ms{"Measurement System"}
+        mu{"Measurement Unit"}
         numbers{"Numbers"}
         rg{"Region For Supplemental Data"}
         s0{"Transform Source"}
@@ -218,7 +219,7 @@ en{
         fa_AF{"Dari"}
         fan{"Fang"}
         fat{"Fanti"}
-        ff{"Fulah"}
+        ff{"Fula"}
         fi{"Finnish"}
         fil{"Filipino"}
         fit{"Tornedalen Finnish"}
@@ -539,7 +540,7 @@ en{
         rwk{"Rwa"}
         sa{"Sanskrit"}
         sad{"Sandawe"}
-        sah{"Sakha"}
+        sah{"Yakut"}
         sam{"Samaritan Aramaic"}
         saq{"Samburu"}
         sas{"Sasak"}
@@ -1173,6 +1174,11 @@ en{
             metric{"Metric System"}
             uksystem{"Imperial Measurement System"}
             ussystem{"US Measurement System"}
+        }
+        mu{
+            celsius{"Celsius"}
+            fahrenhe{"Fahrenheit"}
+            kelvin{"Kelvin"}
         }
         numbers{
             adlm{"Adlam Digits"}

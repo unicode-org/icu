@@ -544,10 +544,6 @@ ms{
                 other{"{0} kilogram"}
                 per{"{0} setiap kilogram"}
             }
-            metric-ton{
-                dnam{"metrik tan"}
-                other{"{0} metrik tan"}
-            }
             microgram{
                 dnam{"mikrogram"}
                 other{"{0} mikrogram"}
@@ -581,6 +577,10 @@ ms{
             ton{
                 dnam{"tan"}
                 other{"{0} tan"}
+            }
+            tonne{
+                dnam{"metrik tan"}
+                other{"{0} metrik tan"}
             }
         }
         power{
@@ -1190,10 +1190,6 @@ ms{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 other{"{0} μg"}
@@ -1223,6 +1219,10 @@ ms{
             ton{
                 dnam{"tan"}
                 other{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                other{"{0} t"}
             }
         }
         power{
@@ -1813,10 +1813,6 @@ ms{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 other{"{0} μg"}
@@ -1846,6 +1842,10 @@ ms{
             ton{
                 dnam{"tan"}
                 other{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                other{"{0} t"}
             }
         }
         power{

@@ -1372,6 +1372,15 @@ hi_Latn{
                 "und",
                 "hi",
             }
+            surnameFirst{
+                "ko",
+                "si",
+                "ta",
+                "te",
+                "vi",
+                "yue",
+                "zh",
+            }
         }
     }
 }

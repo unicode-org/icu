@@ -1032,7 +1032,12 @@ ig{
                 "und",
                 "ig",
             }
-            surnameFirst{"zxx"}
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
         }
     }
 }

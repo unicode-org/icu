@@ -47,7 +47,6 @@ en_CA{
         mul{"multiple languages"}
         nds_NL{"West Low German"}
         ro_MD{"Moldovan"}
-        sah{"Yakut"}
         und{"unknown language"}
         zh_Hans{"simplified Chinese"}
         zh_Hant{"traditional Chinese"}

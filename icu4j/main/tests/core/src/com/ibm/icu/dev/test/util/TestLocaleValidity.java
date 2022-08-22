@@ -72,6 +72,7 @@ public class TestLocaleValidity extends TestFmwk {
                 {"OK", "en-u-kr-latn-digit-others-Cyrl"}, // reorder codes, duplicat
                 {"OK", "en-u-ks-identic"},
                 {"OK", "en-u-kv-currency"},
+                {"OK", "en-u-mu-celsius"},
                 {"OK", "en-u-nu-ahom"},
                 {"OK", "en-u-sd-usny"},
                 {"OK", "en-u-tz-adalv"},

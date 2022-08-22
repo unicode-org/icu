@@ -2209,6 +2209,12 @@ ca{
                 "und",
                 "ca",
             }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
         }
         namePattern{
             givenFirst-long-addressing-formal{"{prefix} {surname} {surname2}"}

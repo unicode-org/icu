@@ -3660,46 +3660,6 @@ sl{
                 per{"{0} na kilogram"}
                 two{"{0} kilograma"}
             }
-            metric-ton{
-                case{
-                    accusative{
-                        few{"{0} metrične tone"}
-                        one{"{0} metrično tono"}
-                        other{"{0} metričnih ton"}
-                        two{"{0} metrični toni"}
-                    }
-                    dative{
-                        few{"{0} metričnim tonam"}
-                        one{"{0} metrični toni"}
-                        other{"{0} metričnim tonam"}
-                        two{"{0} metričnima tonama"}
-                    }
-                    genitive{
-                        few{"{0} metričnih ton"}
-                        one{"{0} metrične tone"}
-                        other{"{0} metričnih ton"}
-                        two{"{0} metričnih ton"}
-                    }
-                    instrumental{
-                        few{"{0} metričnimi tonami"}
-                        one{"{0} metrično tono"}
-                        other{"{0} metričnimi tonami"}
-                        two{"{0} metričnima tonama"}
-                    }
-                    locative{
-                        few{"{0} metričnih tonah"}
-                        one{"{0} metrični toni"}
-                        other{"{0} metričnih tonah"}
-                        two{"{0} metričnih tonah"}
-                    }
-                }
-                dnam{"metrične tone"}
-                few{"{0} metrične tone"}
-                gender{"feminine"}
-                one{"{0} metrična tona"}
-                other{"{0} metričnih ton"}
-                two{"{0} metrični toni"}
-            }
             microgram{
                 case{
                     accusative{
@@ -3823,6 +3783,46 @@ sl{
                 one{"{0} ameriška tona"}
                 other{"{0} ameriških ton"}
                 two{"{0} ameriški toni"}
+            }
+            tonne{
+                case{
+                    accusative{
+                        few{"{0} metrične tone"}
+                        one{"{0} metrično tono"}
+                        other{"{0} metričnih ton"}
+                        two{"{0} metrični toni"}
+                    }
+                    dative{
+                        few{"{0} metričnim tonam"}
+                        one{"{0} metrični toni"}
+                        other{"{0} metričnim tonam"}
+                        two{"{0} metričnima tonama"}
+                    }
+                    genitive{
+                        few{"{0} metričnih ton"}
+                        one{"{0} metrične tone"}
+                        other{"{0} metričnih ton"}
+                        two{"{0} metričnih ton"}
+                    }
+                    instrumental{
+                        few{"{0} metričnimi tonami"}
+                        one{"{0} metrično tono"}
+                        other{"{0} metričnimi tonami"}
+                        two{"{0} metričnima tonama"}
+                    }
+                    locative{
+                        few{"{0} metričnih tonah"}
+                        one{"{0} metrični toni"}
+                        other{"{0} metričnih tonah"}
+                        two{"{0} metričnih tonah"}
+                    }
+                }
+                dnam{"metrične tone"}
+                few{"{0} metrične tone"}
+                gender{"feminine"}
+                one{"{0} metrična tona"}
+                other{"{0} metričnih ton"}
+                two{"{0} metrični toni"}
             }
         }
         power{
@@ -6459,13 +6459,6 @@ sl{
                 per{"{0}/kg"}
                 two{"{0} kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                few{"{0} t"}
-                one{"{0} t"}
-                other{"{0} t"}
-                two{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 few{"{0} μg"}
@@ -6523,6 +6516,13 @@ sl{
                 one{"{0} sh tn"}
                 other{"{0} sh tn"}
                 two{"{0} sh tn"}
+            }
+            tonne{
+                dnam{"t"}
+                few{"{0} t"}
+                one{"{0} t"}
+                other{"{0} t"}
+                two{"{0} t"}
             }
         }
         power{

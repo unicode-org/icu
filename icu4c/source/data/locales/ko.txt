@@ -3130,6 +3130,7 @@ ko{
     personNames{
         nameOrderLocales{
             surnameFirst{
+                "hu",
                 "ja",
                 "ko",
                 "vi",

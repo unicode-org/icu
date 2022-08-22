@@ -686,11 +686,6 @@ fa{
                 other{"{0} کیلوگرم"}
                 per{"{0} در کیلوگرم"}
             }
-            metric-ton{
-                dnam{"تن متریک"}
-                one{"{0} تن متریک"}
-                other{"{0} تن متریک"}
-            }
             microgram{
                 dnam{"میکروگرم"}
                 one{"{0} میکروگرم"}
@@ -732,6 +727,11 @@ fa{
                 dnam{"تن"}
                 one{"{0} تن"}
                 other{"{0} تن"}
+            }
+            tonne{
+                dnam{"تن متریک"}
+                one{"{0} تن متریک"}
+                other{"{0} تن متریک"}
             }
         }
         power{
@@ -1455,11 +1455,6 @@ fa{
                 one{"{0}kg"}
                 other{"{0}kg"}
             }
-            metric-ton{
-                dnam{"تن متریک"}
-                one{"{0} تن"}
-                other{"{0} تن"}
-            }
             microgram{
                 dnam{"میکروگرم"}
                 one{"{0}μg"}
@@ -1499,6 +1494,11 @@ fa{
                 dnam{"تن"}
                 one{"{0}tn"}
                 other{"{0}tn"}
+            }
+            tonne{
+                dnam{"تن متریک"}
+                one{"{0} تن"}
+                other{"{0} تن"}
             }
         }
         power{
@@ -2339,10 +2339,6 @@ fa{
                 other{"{0} کیلوگرم"}
                 per{"{0}‎/kg"}
             }
-            metric-ton{
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 one{"{0} میکروگرم"}
                 other{"{0} میکروگرم"}
@@ -2382,6 +2378,10 @@ fa{
                 dnam{"تن"}
                 one{"{0} تن"}
                 other{"{0} تن"}
+            }
+            tonne{
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

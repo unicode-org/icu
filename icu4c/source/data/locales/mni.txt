@@ -387,4 +387,21 @@ mni{
         US{"য়ু এস"}
         metric{"মেত্রিক"}
     }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "mni",
+            }
+            surnameFirst{
+                "ko",
+                "si",
+                "ta",
+                "te",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+    }
 }

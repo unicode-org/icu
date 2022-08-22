@@ -1608,7 +1608,12 @@ zu{
                 "und",
                 "zu",
             }
-            surnameFirst{"zxx"}
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
         }
     }
 }

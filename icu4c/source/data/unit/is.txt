@@ -1918,26 +1918,6 @@ is{
                 other{"{0} kílógrömm"}
                 per{"{0} á kílógramm"}
             }
-            metric-ton{
-                case{
-                    accusative{
-                        one{"{0} tonn"}
-                        other{"{0} tonn"}
-                    }
-                    dative{
-                        one{"{0} tonni"}
-                        other{"{0} tonnum"}
-                    }
-                    genitive{
-                        one{"{0} tonns"}
-                        other{"{0} tonna"}
-                    }
-                }
-                dnam{"tonn"}
-                gender{"neuter"}
-                one{"{0} tonn"}
-                other{"{0} tonn"}
-            }
             microgram{
                 case{
                     accusative{
@@ -2009,6 +1989,26 @@ is{
                 dnam{"bandarísk tonn"}
                 one{"{0} bandarískt tonn"}
                 other{"{0} bandarísk tonn"}
+            }
+            tonne{
+                case{
+                    accusative{
+                        one{"{0} tonn"}
+                        other{"{0} tonn"}
+                    }
+                    dative{
+                        one{"{0} tonni"}
+                        other{"{0} tonnum"}
+                    }
+                    genitive{
+                        one{"{0} tonns"}
+                        other{"{0} tonna"}
+                    }
+                }
+                dnam{"tonn"}
+                gender{"neuter"}
+                one{"{0} tonn"}
+                other{"{0} tonn"}
             }
         }
         power{
@@ -3103,11 +3103,6 @@ is{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -3144,6 +3139,11 @@ is{
                 dnam{"BNA tonn"}
                 one{"{0}tn"}
                 other{"{0}tn"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{
@@ -3874,11 +3874,6 @@ is{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"tn"}
-                one{"{0} tn"}
-                other{"{0} tn"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -3920,6 +3915,11 @@ is{
                 dnam{"BNA tonn"}
                 one{"{0} BNA tn"}
                 other{"{0} BNA tn"}
+            }
+            tonne{
+                dnam{"tn"}
+                one{"{0} tn"}
+                other{"{0} tn"}
             }
         }
         power{

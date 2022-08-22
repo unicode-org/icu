@@ -690,11 +690,6 @@ et{
                 other{"{0} kilogrammi"}
                 per{"{0} kilogrammi kohta"}
             }
-            metric-ton{
-                dnam{"tonnid"}
-                one{"{0} tonn"}
-                other{"{0} tonni"}
-            }
             microgram{
                 dnam{"mikrogrammid"}
                 one{"{0} mikrogramm"}
@@ -736,6 +731,11 @@ et{
                 dnam{"lühikesed tonnid"}
                 one{"{0} lühike tonn"}
                 other{"{0} lühikest tonni"}
+            }
+            tonne{
+                dnam{"tonnid"}
+                one{"{0} tonn"}
+                other{"{0} tonni"}
             }
         }
         power{
@@ -1998,11 +1998,6 @@ et{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -2042,6 +2037,11 @@ et{
                 dnam{"lüh t"}
                 one{"{0} lüh t"}
                 other{"{0} lüh t"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

@@ -549,10 +549,6 @@ jv{
                 other{"{0} kilogram"}
                 per{"{0} saben kilogram"}
             }
-            metric-ton{
-                dnam{"metrik ton"}
-                other{"{0} metrik ton"}
-            }
             microgram{
                 dnam{"mikrogram"}
                 other{"{0} mikrogram"}
@@ -586,6 +582,10 @@ jv{
             ton{
                 dnam{"ton"}
                 other{"{0} ton"}
+            }
+            tonne{
+                dnam{"metrik ton"}
+                other{"{0} metrik ton"}
             }
         }
         power{
@@ -966,7 +966,7 @@ jv{
                 dnam{"kg"}
                 other{"{0} kg"}
             }
-            metric-ton{
+            tonne{
                 other{"{0}t"}
             }
         }
@@ -1494,10 +1494,6 @@ jv{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"metrik ton"}
-                other{"{0} metrik ton"}
-            }
             microgram{
                 dnam{"mikrogram"}
             }
@@ -1529,6 +1525,10 @@ jv{
             ton{
                 dnam{"ton"}
                 other{"{0} ton"}
+            }
+            tonne{
+                dnam{"metrik ton"}
+                other{"{0} metrik ton"}
             }
         }
         power{

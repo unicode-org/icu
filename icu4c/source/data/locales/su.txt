@@ -437,4 +437,18 @@ su{
         US{"A.S."}
         metric{"Métrik"}
     }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "su",
+            }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+    }
 }

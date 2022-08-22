@@ -180,7 +180,6 @@ sw_KE{
         Ethi{"Kihabeshi"}
         Hanb{"Kihan chenye Kibopomofo"}
         Hans{"Kilichorahisishwa"}
-        Hant{"Kawaida"}
         Hira{"Kihiragana"}
         Hrkt{"Silabi za Kijapani"}
         Jamo{"Kijamo"}
@@ -198,7 +197,6 @@ sw_KE{
     }
     Scripts%stand-alone{
         Hans{"Kihan Kilichorahisishwa"}
-        Hant{"Kihan cha Kawaida"}
     }
     Types{
         calendar{

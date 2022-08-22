@@ -55,15 +55,15 @@ es_419{
             }
         }
         mass{
-            metric-ton{
-                dnam{"toneladas métricas"}
-                one{"{0} tonelada métrica"}
-                other{"{0} toneladas métricas"}
-            }
             ton{
                 dnam{"toneladas"}
                 one{"{0} tonelada"}
                 other{"{0} toneladas"}
+            }
+            tonne{
+                dnam{"toneladas métricas"}
+                one{"{0} tonelada métrica"}
+                other{"{0} toneladas métricas"}
             }
         }
         power{
@@ -200,9 +200,6 @@ es_419{
             carat{
                 dnam{"ct"}
             }
-            metric-ton{
-                dnam{"t"}
-            }
             microgram{
                 dnam{"μg"}
             }
@@ -218,6 +215,9 @@ es_419{
                 dnam{"ton"}
                 one{"{0}ton"}
                 other{"{0}ton"}
+            }
+            tonne{
+                dnam{"t"}
             }
         }
         power{
@@ -324,11 +324,6 @@ es_419{
             }
         }
         mass{
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             ounce-troy{
                 dnam{"ozt"}
                 one{"{0} ozt"}
@@ -341,6 +336,11 @@ es_419{
                 dnam{"ton"}
                 one{"{0} ton"}
                 other{"{0} ton"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

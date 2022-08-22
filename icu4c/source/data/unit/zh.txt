@@ -538,10 +538,6 @@ zh{
                 other{"{0}千克"}
                 per{"每千克{0}"}
             }
-            metric-ton{
-                dnam{"公吨"}
-                other{"{0}公吨"}
-            }
             microgram{
                 dnam{"微克"}
                 other{"{0}微克"}
@@ -575,6 +571,10 @@ zh{
             ton{
                 dnam{"吨"}
                 other{"{0}吨"}
+            }
+            tonne{
+                dnam{"公吨"}
+                other{"{0}公吨"}
             }
         }
         power{
@@ -1224,9 +1224,6 @@ zh{
                 dnam{"kg"}
                 other{"{0}kg"}
             }
-            metric-ton{
-                other{"{0}t"}
-            }
             microgram{
                 other{"{0}μg"}
             }
@@ -1251,6 +1248,9 @@ zh{
             }
             ton{
                 other{"{0}tn"}
+            }
+            tonne{
+                other{"{0}t"}
             }
         }
         power{

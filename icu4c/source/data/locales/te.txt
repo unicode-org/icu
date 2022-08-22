@@ -2673,13 +2673,14 @@ te{
             initialSequence{"{0} {1}"}
         }
         nameOrderLocales{
-            givenFirst{
-                "und",
-                "te",
-            }
+            givenFirst{"und"}
             surnameFirst{
-                "ja",
                 "ko",
+                "si",
+                "ta",
+                "te",
+                "vi",
+                "yue",
                 "zh",
             }
         }

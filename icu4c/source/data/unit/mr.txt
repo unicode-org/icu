@@ -2891,38 +2891,6 @@ mr{
                 other{"{0} किलोग्रॅम"}
                 per{"{0} दर किलोग्रॅम"}
             }
-            metric-ton{
-                case{
-                    ablative{
-                        one{"{0} मेट्रिक टनपासून"}
-                        other{"{0} मेट्रिक टनहून"}
-                    }
-                    accusative{
-                        one{"{0} मेट्रिक टनला"}
-                        other{"{0} मेट्रिक टनना"}
-                    }
-                    dative{
-                        one{"{0} मेट्रिक टनला"}
-                        other{"{0} मेट्रिक टनना"}
-                    }
-                    ergative{
-                        one{"{0} मेट्रिक टनने"}
-                        other{"{0} मेट्रिक टनसाठी"}
-                    }
-                    genitive{
-                        one{"{0} मेट्रिक टनचा"}
-                        other{"{0} मेट्रिक टननी"}
-                    }
-                    locative{
-                        one{"{0} मेट्रिक टनशी"}
-                        other{"{0} मेट्रिक टनचे"}
-                    }
-                }
-                dnam{"मेट्रिक टन"}
-                gender{"neuter"}
-                one{"{0} मेट्रिक टन"}
-                other{"{0} मेट्रिक टन"}
-            }
             microgram{
                 case{
                     ablative{
@@ -3018,6 +2986,38 @@ mr{
                 dnam{"टन"}
                 one{"{0} टन"}
                 other{"{0} टन"}
+            }
+            tonne{
+                case{
+                    ablative{
+                        one{"{0} मेट्रिक टनपासून"}
+                        other{"{0} मेट्रिक टनहून"}
+                    }
+                    accusative{
+                        one{"{0} मेट्रिक टनला"}
+                        other{"{0} मेट्रिक टनना"}
+                    }
+                    dative{
+                        one{"{0} मेट्रिक टनला"}
+                        other{"{0} मेट्रिक टनना"}
+                    }
+                    ergative{
+                        one{"{0} मेट्रिक टनने"}
+                        other{"{0} मेट्रिक टनसाठी"}
+                    }
+                    genitive{
+                        one{"{0} मेट्रिक टनचा"}
+                        other{"{0} मेट्रिक टननी"}
+                    }
+                    locative{
+                        one{"{0} मेट्रिक टनशी"}
+                        other{"{0} मेट्रिक टनचे"}
+                    }
+                }
+                dnam{"मेट्रिक टन"}
+                gender{"neuter"}
+                one{"{0} मेट्रिक टन"}
+                other{"{0} मेट्रिक टन"}
             }
         }
         power{
@@ -5318,11 +5318,6 @@ mr{
                 other{"{0} किग्रॅ"}
                 per{"{0}/किग्रॅ"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -5362,6 +5357,11 @@ mr{
                 dnam{"टन"}
                 one{"{0} टन"}
                 other{"{0} टन"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

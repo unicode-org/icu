@@ -722,12 +722,6 @@ gu{
                 other{"{0} કિલોગ્રામ"}
                 per{"{0} પ્રતિ કિલોગ્રામ"}
             }
-            metric-ton{
-                dnam{"મેટ્રિક ટન"}
-                gender{"masculine"}
-                one{"{0} મેટ્રિક ટન"}
-                other{"{0} મેટ્રિક ટન"}
-            }
             microgram{
                 dnam{"માઇક્રોગ્રામ"}
                 one{"{0} માઇક્રોગ્રામ"}
@@ -768,6 +762,12 @@ gu{
                 dnam{"ટન"}
                 one{"{0} ટન"}
                 other{"{0} ટન"}
+            }
+            tonne{
+                dnam{"મેટ્રિક ટન"}
+                gender{"masculine"}
+                one{"{0} મેટ્રિક ટન"}
+                other{"{0} મેટ્રિક ટન"}
             }
         }
         power{
@@ -2088,11 +2088,6 @@ gu{
                 other{"{0} કિગ્રા"}
                 per{"{0}/કિગ્રા"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μગ્રામ"}
                 one{"{0} μગ્રામ"}
@@ -2134,6 +2129,11 @@ gu{
                 dnam{"ટન"}
                 one{"{0} ટન"}
                 other{"{0} ટન"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

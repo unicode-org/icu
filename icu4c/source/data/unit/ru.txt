@@ -4646,46 +4646,6 @@ ru{
                 other{"{0} килограмма"}
                 per{"{0} на килограмм"}
             }
-            metric-ton{
-                case{
-                    accusative{
-                        few{"{0} тонны"}
-                        many{"{0} тонн"}
-                        one{"{0} тонна"}
-                        other{"{0} тонны"}
-                    }
-                    dative{
-                        few{"{0} тоннам"}
-                        many{"{0} тоннам"}
-                        one{"{0} тонне"}
-                        other{"{0} тонны"}
-                    }
-                    genitive{
-                        few{"{0} тонн"}
-                        many{"{0} тонн"}
-                        one{"{0} тонны"}
-                        other{"{0} тонны"}
-                    }
-                    instrumental{
-                        few{"{0} тоннами"}
-                        many{"{0} тоннами"}
-                        one{"{0} тонной"}
-                        other{"{0} тонны"}
-                    }
-                    prepositional{
-                        few{"{0} тоннах"}
-                        many{"{0} тоннах"}
-                        one{"{0} тонне"}
-                        other{"{0} тонны"}
-                    }
-                }
-                dnam{"тонны"}
-                few{"{0} тонны"}
-                gender{"feminine"}
-                many{"{0} тонн"}
-                one{"{0} тонна"}
-                other{"{0} тонны"}
-            }
             microgram{
                 case{
                     accusative{
@@ -4939,6 +4899,46 @@ ru{
                 many{"{0} американских тонн"}
                 one{"{0} американская тонна"}
                 other{"{0} американской тонны"}
+            }
+            tonne{
+                case{
+                    accusative{
+                        few{"{0} тонны"}
+                        many{"{0} тонн"}
+                        one{"{0} тонна"}
+                        other{"{0} тонны"}
+                    }
+                    dative{
+                        few{"{0} тоннам"}
+                        many{"{0} тоннам"}
+                        one{"{0} тонне"}
+                        other{"{0} тонны"}
+                    }
+                    genitive{
+                        few{"{0} тонн"}
+                        many{"{0} тонн"}
+                        one{"{0} тонны"}
+                        other{"{0} тонны"}
+                    }
+                    instrumental{
+                        few{"{0} тоннами"}
+                        many{"{0} тоннами"}
+                        one{"{0} тонной"}
+                        other{"{0} тонны"}
+                    }
+                    prepositional{
+                        few{"{0} тоннах"}
+                        many{"{0} тоннах"}
+                        one{"{0} тонне"}
+                        other{"{0} тонны"}
+                    }
+                }
+                dnam{"тонны"}
+                few{"{0} тонны"}
+                gender{"feminine"}
+                many{"{0} тонн"}
+                one{"{0} тонна"}
+                other{"{0} тонны"}
             }
         }
         power{
@@ -7682,13 +7682,6 @@ ru{
                 other{"{0} кг"}
                 per{"{0}/кг"}
             }
-            metric-ton{
-                dnam{"т"}
-                few{"{0} т"}
-                many{"{0} т"}
-                one{"{0} т"}
-                other{"{0} т"}
-            }
             microgram{
                 dnam{"мкг"}
                 few{"{0} мкг"}
@@ -7730,6 +7723,13 @@ ru{
                 many{"{0} ам. т"}
                 one{"{0} ам. т"}
                 other{"{0} ам. т"}
+            }
+            tonne{
+                dnam{"т"}
+                few{"{0} т"}
+                many{"{0} т"}
+                one{"{0} т"}
+                other{"{0} т"}
             }
         }
         power{
@@ -8737,13 +8737,6 @@ ru{
                 other{"{0} кг"}
                 per{"{0}/кг"}
             }
-            metric-ton{
-                dnam{"т"}
-                few{"{0} т"}
-                many{"{0} т"}
-                one{"{0} т"}
-                other{"{0} т"}
-            }
             microgram{
                 dnam{"мкг"}
                 few{"{0} мкг"}
@@ -8794,6 +8787,13 @@ ru{
                 many{"{0} амер. т"}
                 one{"{0} амер. т"}
                 other{"{0} амер. т"}
+            }
+            tonne{
+                dnam{"т"}
+                few{"{0} т"}
+                many{"{0} т"}
+                one{"{0} т"}
+                other{"{0} т"}
             }
         }
         power{

@@ -1295,15 +1295,7 @@ zh_Hant_HK{
     }
     personNames{
         nameOrderLocales{
-            givenFirst{
-                "und",
-                "en",
-            }
-            surnameFirst{
-                "ja",
-                "ko",
-                "zh",
-            }
+            givenFirst{"und"}
         }
         namePattern{
             givenFirst-long-addressing-formal{"{prefix} {surname}"}

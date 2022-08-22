@@ -797,12 +797,6 @@ pt{
                 other{"{0} quilogramas"}
                 per{"{0} por quilograma"}
             }
-            metric-ton{
-                dnam{"toneladas métricas"}
-                gender{"feminine"}
-                one{"{0} tonelada métrica"}
-                other{"{0} toneladas métricas"}
-            }
             microgram{
                 dnam{"microgramas"}
                 gender{"masculine"}
@@ -849,6 +843,12 @@ pt{
                 dnam{"toneladas americanas"}
                 one{"{0} tonelada americana"}
                 other{"{0} toneladas americanas"}
+            }
+            tonne{
+                dnam{"toneladas métricas"}
+                gender{"feminine"}
+                one{"{0} tonelada métrica"}
+                other{"{0} toneladas métricas"}
             }
         }
         power{
@@ -2005,11 +2005,6 @@ pt{
             gram{
                 dnam{"gramas"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             ounce-troy{
                 dnam{"oz troy"}
             }
@@ -2026,6 +2021,11 @@ pt{
                 dnam{"toneladas americanas"}
                 one{"{0} tn"}
                 other{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

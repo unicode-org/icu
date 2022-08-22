@@ -3878,8 +3878,6 @@ lt{
                 "lt",
             }
             surnameFirst{
-                "hu",
-                "ja",
                 "ko",
                 "vi",
                 "yue",

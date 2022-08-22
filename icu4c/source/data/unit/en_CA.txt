@@ -173,15 +173,15 @@ en_CA{
             }
         }
         mass{
-            metric-ton{
-                dnam{"tonnes"}
-                one{"{0} tonne"}
-                other{"{0} tonnes"}
-            }
             stone{
                 dnam{"stone"}
                 one{"{0} stone"}
                 other{"{0} stone"}
+            }
+            tonne{
+                dnam{"tonnes"}
+                one{"{0} tonne"}
+                other{"{0} tonnes"}
             }
         }
         pressure{

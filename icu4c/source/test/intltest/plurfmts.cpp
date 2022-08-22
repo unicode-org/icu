@@ -385,7 +385,7 @@ PluralFormatTest::pluralFormatLocaleTest(/*char *par*/)
         pluralResults[100+i] = PFT_FEW; // note override after loop
     }
     pluralResults[1]= PFT_ONE;
-    pluralResults[101]= PFT_OTHER;
+    pluralResults[100]= PFT_OTHER;
     helperTestResults(singularZeroSomeLocales, 1, testPattern, pluralResults);
     
     // ======== Test Special 12/19.

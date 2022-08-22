@@ -951,6 +951,12 @@ gd{
             }
         }
         minimalPairs{
+            ordinal{
+                few{"Tionndaidh ris an làimh dheas aig an {0}s gobhal."}
+                one{"Tionndaidh ris an làimh dheas aig a’ {0}d ghobhal."}
+                other{"Tionndaidh ris an làimh dheas aig a’ {0}mh gobhal."}
+                two{"Tionndaidh ris an làimh dheas aig an {0}na gobhal."}
+            }
             plural{
                 few{"{0} brògan"}
                 one{"{0} bhròg"}
@@ -4435,6 +4441,12 @@ gd{
                 "und",
                 "gd",
             }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
         }
         namePattern{
             givenFirst-long-addressing-formal{"{prefix} {surname}"}
@@ -4479,7 +4491,7 @@ gd{
             }
             sorting-medium-referring-formal{
                 "{surname} {surname2-initial}, {prefix} {given} {given2-initial}",
-                "{surname} {surname2-initial}, {prefix} {given} {given2-initial}",
+                "{surname}, {prefix} {given} {given2-initial}",
             }
             sorting-medium-referring-informal{
                 "{given-informal} {given2} {suffix}",
@@ -4487,7 +4499,7 @@ gd{
             }
             sorting-short-referring-formal{
                 "{surname} {surname2-initial}, {given-initial} {given2-initial}",
-                "{surname} {surname2-initial}, {given-initial} {given2-initial}",
+                "{surname}, {given-initial} {given2-initial}",
             }
             sorting-short-referring-informal{
                 "{given-informal} {given2-initial}",

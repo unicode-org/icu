@@ -32930,6 +32930,9 @@ structLocale:table(nofallback){
             }
         }
         islamic-civil:alias{"structLocale/calendar/islamic"}
+        islamic-rgsa:alias{"structLocale/calendar/islamic"}
+        islamic-tbla:alias{"structLocale/calendar/islamic"}
+        islamic-umalqura:alias{"structLocale/calendar/islamic"}
         japanese{
             AmPmMarkers{
                 "",

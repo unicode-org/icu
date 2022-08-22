@@ -1005,14 +1005,6 @@ br{
                 per{"{0} dre gilogramm"}
                 two{"{0} gilogramm"}
             }
-            metric-ton{
-                dnam{"tonennoù metrek"}
-                few{"{0} zonenn metrek"}
-                many{"{0} a donennoù metrek"}
-                one{"{0} donenn vetrek"}
-                other{"{0} tonenn vetrek"}
-                two{"{0} donenn vetrek"}
-            }
             microgram{
                 dnam{"mikrogrammoù"}
                 few{"{0} mikrogramm"}
@@ -1078,6 +1070,14 @@ br{
                 one{"{0} donenn"}
                 other{"{0} tonenn"}
                 two{"{0} donenn"}
+            }
+            tonne{
+                dnam{"tonennoù metrek"}
+                few{"{0} zonenn metrek"}
+                many{"{0} a donennoù metrek"}
+                one{"{0} donenn vetrek"}
+                other{"{0} tonenn vetrek"}
+                two{"{0} donenn vetrek"}
             }
         }
         power{
@@ -2485,14 +2485,6 @@ br{
                 per{"{0}/kg"}
                 two{"{0}kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                few{"{0}t"}
-                many{"{0}t"}
-                one{"{0}t"}
-                other{"{0}t"}
-                two{"{0}t"}
-            }
             microgram{
                 dnam{"μg"}
                 few{"{0}μg"}
@@ -2555,6 +2547,14 @@ br{
                 one{"{0}tn"}
                 other{"{0}tn"}
                 two{"{0}tn"}
+            }
+            tonne{
+                dnam{"t"}
+                few{"{0}t"}
+                many{"{0}t"}
+                one{"{0}t"}
+                other{"{0}t"}
+                two{"{0}t"}
             }
         }
         power{
@@ -3843,14 +3843,6 @@ br{
                 per{"{0}/kg"}
                 two{"{0} kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                few{"{0} t"}
-                many{"{0} t"}
-                one{"{0} t"}
-                other{"{0} t"}
-                two{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 few{"{0} μg"}
@@ -3900,6 +3892,14 @@ br{
                 one{"{0} tn"}
                 other{"{0} tn"}
                 two{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                few{"{0} t"}
+                many{"{0} t"}
+                one{"{0} t"}
+                other{"{0} t"}
+                two{"{0} t"}
             }
         }
         power{

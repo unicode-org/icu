@@ -539,10 +539,6 @@ zh_Hant{
                 other{"{0} 公斤"}
                 per{"每公斤 {0}"}
             }
-            metric-ton{
-                dnam{"公噸"}
-                other{"{0} 公噸"}
-            }
             microgram{
                 dnam{"微克"}
                 other{"{0} 微克"}
@@ -576,6 +572,10 @@ zh_Hant{
             ton{
                 dnam{"美噸"}
                 other{"{0} 美噸"}
+            }
+            tonne{
+                dnam{"公噸"}
+                other{"{0} 公噸"}
             }
         }
         power{
@@ -1325,10 +1325,6 @@ zh_Hant{
                 dnam{"公斤"}
                 other{"{0} 公斤"}
             }
-            metric-ton{
-                dnam{"公噸"}
-                other{"{0}t"}
-            }
             microgram{
                 dnam{"微克"}
                 other{"{0}μg"}
@@ -1360,6 +1356,10 @@ zh_Hant{
             ton{
                 dnam{"英噸"}
                 other{"{0}tn"}
+            }
+            tonne{
+                dnam{"公噸"}
+                other{"{0}t"}
             }
         }
         power{
@@ -2101,10 +2101,6 @@ zh_Hant{
                 other{"{0} 公斤"}
                 per{"{0}/公斤"}
             }
-            metric-ton{
-                dnam{"公噸"}
-                other{"{0} 公噸"}
-            }
             microgram{
                 dnam{"微克"}
                 other{"{0} 微克"}
@@ -2138,6 +2134,10 @@ zh_Hant{
             ton{
                 dnam{"美噸"}
                 other{"{0} 美噸"}
+            }
+            tonne{
+                dnam{"公噸"}
+                other{"{0} 公噸"}
             }
         }
         power{

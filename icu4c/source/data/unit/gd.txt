@@ -933,13 +933,6 @@ gd{
                 per{"{0} sa chileagram"}
                 two{"{0} chileagram"}
             }
-            metric-ton{
-                dnam{"tunna meatrach"}
-                few{"{0} tunnaichean meatrach"}
-                one{"{0} tunna meatrach"}
-                other{"{0} tunna meatrach"}
-                two{"{0} thunna meatrach"}
-            }
             microgram{
                 dnam{"micreo-gram"}
                 few{"{0} micreo-gramaichean"}
@@ -997,6 +990,13 @@ gd{
                 one{"{0} tunna"}
                 other{"{0} tunna"}
                 two{"{0} thunna"}
+            }
+            tonne{
+                dnam{"tunna meatrach"}
+                few{"{0} tunnaichean meatrach"}
+                one{"{0} tunna meatrach"}
+                other{"{0} tunna meatrach"}
+                two{"{0} thunna meatrach"}
             }
         }
         power{
@@ -2299,13 +2299,6 @@ gd{
                 per{"{0}/kg"}
                 two{"{0}kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                few{"{0}t"}
-                one{"{0}t"}
-                other{"{0}t"}
-                two{"{0}t"}
-            }
             microgram{
                 dnam{"μg"}
                 few{"{0}μg"}
@@ -2363,6 +2356,13 @@ gd{
                 one{"{0}tn"}
                 other{"{0}tn"}
                 two{"{0}tn"}
+            }
+            tonne{
+                dnam{"t"}
+                few{"{0}t"}
+                one{"{0}t"}
+                other{"{0}t"}
+                two{"{0}t"}
             }
         }
         power{
@@ -3582,13 +3582,6 @@ gd{
                 per{"{0}/kg"}
                 two{"{0} kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                few{"{0} t"}
-                one{"{0} t"}
-                other{"{0} t"}
-                two{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 few{"{0} μg"}
@@ -3642,6 +3635,13 @@ gd{
                 one{"{0} tn"}
                 other{"{0} tn"}
                 two{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                few{"{0} t"}
+                one{"{0} t"}
+                other{"{0} t"}
+                two{"{0} t"}
             }
         }
         power{

@@ -1253,18 +1253,6 @@ pa{
                 other{"{0} ਕਿਲੋਗ੍ਰਾਮ"}
                 per{"{0} ਪ੍ਰਤੀ ਕਿਲੋਗ੍ਰਾਮ"}
             }
-            metric-ton{
-                case{
-                    oblique{
-                        one{"{0} ਮੀਟਰਿਕ ਟਨ"}
-                        other{"{0} ਮੀਟਰਿਕ ਟਨ"}
-                    }
-                }
-                dnam{"ਮੀਟਰਿਕ ਟਨ"}
-                gender{"masculine"}
-                one{"{0} ਮੀਟਰਿਕ ਟਨ"}
-                other{"{0} ਮੀਟਰਿਕ ਟਨ"}
-            }
             microgram{
                 case{
                     oblique{
@@ -1320,6 +1308,18 @@ pa{
                 dnam{"ਅਮਰੀਕੀ ਟਨ"}
                 one{"{0} ਅਮਰੀਕੀ ਟਨ"}
                 other{"{0} ਅਮਰੀਕੀ ਟਨ"}
+            }
+            tonne{
+                case{
+                    oblique{
+                        one{"{0} ਮੀਟਰਿਕ ਟਨ"}
+                        other{"{0} ਮੀਟਰਿਕ ਟਨ"}
+                    }
+                }
+                dnam{"ਮੀਟਰਿਕ ਟਨ"}
+                gender{"masculine"}
+                one{"{0} ਮੀਟਰਿਕ ਟਨ"}
+                other{"{0} ਮੀਟਰਿਕ ਟਨ"}
             }
         }
         power{
@@ -3192,11 +3192,6 @@ pa{
                 other{"{0} ਕਿ.ਗ੍ਰਾ."}
                 per{"{0}/ਕਿ.ਗ੍ਰਾ."}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -3236,6 +3231,11 @@ pa{
                 dnam{"ਅਮਰੀਕੀ ਟਨ"}
                 one{"{0} ਅਮਰੀਕੀ ਟਨ"}
                 other{"{0} ਅਮਰੀਕੀ ਟਨ"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

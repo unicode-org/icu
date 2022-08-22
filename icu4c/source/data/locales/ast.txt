@@ -4071,4 +4071,18 @@ ast{
             }
         }
     }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "ast",
+            }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+    }
 }

@@ -395,4 +395,21 @@ ks_Deva{
             }
         }
     }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "ks",
+            }
+            surnameFirst{
+                "ko",
+                "si",
+                "ta",
+                "te",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+    }
 }

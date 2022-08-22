@@ -1480,20 +1480,6 @@ ro{
                 other{"{0} de kilograme"}
                 per{"{0} per kilogram"}
             }
-            metric-ton{
-                case{
-                    genitive{
-                        few{"{0} tone"}
-                        one{"{0} tonă"}
-                        other{"{0} de tone"}
-                    }
-                }
-                dnam{"tone"}
-                few{"{0} tone"}
-                gender{"feminine"}
-                one{"{0} tonă"}
-                other{"{0} de tone"}
-            }
             microgram{
                 case{
                     genitive{
@@ -1559,6 +1545,20 @@ ro{
                 few{"{0} tone scurte"}
                 one{"{0} tonă scurtă"}
                 other{"{0} de tone scurte"}
+            }
+            tonne{
+                case{
+                    genitive{
+                        few{"{0} tone"}
+                        one{"{0} tonă"}
+                        other{"{0} de tone"}
+                    }
+                }
+                dnam{"tone"}
+                few{"{0} tone"}
+                gender{"feminine"}
+                one{"{0} tonă"}
+                other{"{0} de tone"}
             }
         }
         power{
@@ -2560,12 +2560,6 @@ ro{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                few{"{0} t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 few{"{0} μg"}
@@ -2609,6 +2603,12 @@ ro{
                 few{"{0} t.s."}
                 one{"{0} t.s."}
                 other{"{0} t.s."}
+            }
+            tonne{
+                dnam{"t"}
+                few{"{0} t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{
@@ -3484,12 +3484,6 @@ ro{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                few{"{0} t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 few{"{0} μg"}
@@ -3533,6 +3527,12 @@ ro{
                 few{"{0} t.s."}
                 one{"{0} t.s."}
                 other{"{0} t.s."}
+            }
+            tonne{
+                dnam{"t"}
+                few{"{0} t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

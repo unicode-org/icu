@@ -669,11 +669,6 @@ af{
                 other{"{0} kilogram"}
                 per{"{0} per kilogram"}
             }
-            metric-ton{
-                dnam{"metrieke ton"}
-                one{"{0} metrieke ton"}
-                other{"{0} metrieke ton"}
-            }
             microgram{
                 dnam{"mikrogram"}
                 one{"{0} mikrogram"}
@@ -715,6 +710,11 @@ af{
                 dnam{"VSA-ton"}
                 one{"{0} VSA-ton"}
                 other{"{0} VSA-ton"}
+            }
+            tonne{
+                dnam{"metrieke ton"}
+                one{"{0} metrieke ton"}
+                other{"{0} metrieke ton"}
             }
         }
         power{
@@ -1562,10 +1562,6 @@ af{
                 one{"{0}kg"}
                 other{"{0}kg"}
             }
-            metric-ton{
-                one{"{0}t"}
-                other{"{0}t"}
-            }
             microgram{
                 one{"{0}μg"}
                 other{"{0}μg"}
@@ -1602,6 +1598,10 @@ af{
             ton{
                 one{"{0}VSA-t."}
                 other{"{0}VSA-t."}
+            }
+            tonne{
+                one{"{0}t"}
+                other{"{0}t"}
             }
         }
         power{
@@ -2476,11 +2476,6 @@ af{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -2522,6 +2517,11 @@ af{
                 dnam{"VSA-ton"}
                 one{"{0} VSA-t."}
                 other{"{0} VSA-t."}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

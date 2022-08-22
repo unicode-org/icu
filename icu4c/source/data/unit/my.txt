@@ -557,10 +557,6 @@ my{
                 other{"{0} ကီလိုဂရမ်"}
                 per{"တစ်ကီလိုဂရမ်လျှင် {0}"}
             }
-            metric-ton{
-                dnam{"မက်ထရစ်တန်"}
-                other{"{0} မက်ထရစ်တန်"}
-            }
             microgram{
                 dnam{"မိုက်ခရို ဂရမ်"}
                 other{"{0} မိုက်ခရို ဂရမ်"}
@@ -594,6 +590,10 @@ my{
             ton{
                 dnam{"တန်"}
                 other{"{0} တန်"}
+            }
+            tonne{
+                dnam{"မက်ထရစ်တန်"}
+                other{"{0} မက်ထရစ်တန်"}
             }
         }
         power{
@@ -1616,10 +1616,6 @@ my{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"မက်ထရစ်တန်"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 other{"{0} μg"}
@@ -1653,6 +1649,10 @@ my{
             ton{
                 dnam{"တန်"}
                 other{"{0} tn"}
+            }
+            tonne{
+                dnam{"မက်ထရစ်တန်"}
+                other{"{0} t"}
             }
         }
         power{

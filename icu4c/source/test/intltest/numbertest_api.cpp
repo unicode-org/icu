@@ -755,10 +755,10 @@ void NumberFormatterApiTest::unitMeasure() {
 
     assertFormatSingle(
             u"Mixed Unit (Narrow Version)",
-            u"unit/metric-ton-and-kilogram-and-gram unit-width-narrow",
-            u"unit/metric-ton-and-kilogram-and-gram unit-width-narrow",
+            u"unit/tonne-and-kilogram-and-gram unit-width-narrow",
+            u"unit/tonne-and-kilogram-and-gram unit-width-narrow",
             NumberFormatter::with()
-                .unit(MeasureUnit::forIdentifier("metric-ton-and-kilogram-and-gram", status))
+                .unit(MeasureUnit::forIdentifier("tonne-and-kilogram-and-gram", status))
                 .unitWidth(UNUM_UNIT_WIDTH_NARROW),
             Locale("en-US"),
             4.28571,
@@ -766,10 +766,10 @@ void NumberFormatterApiTest::unitMeasure() {
 
     assertFormatSingle(
             u"Mixed Unit (Short Version)",
-            u"unit/metric-ton-and-kilogram-and-gram unit-width-short",
-            u"unit/metric-ton-and-kilogram-and-gram unit-width-short",
+            u"unit/tonne-and-kilogram-and-gram unit-width-short",
+            u"unit/tonne-and-kilogram-and-gram unit-width-short",
             NumberFormatter::with()
-                .unit(MeasureUnit::forIdentifier("metric-ton-and-kilogram-and-gram", status))
+                .unit(MeasureUnit::forIdentifier("tonne-and-kilogram-and-gram", status))
                 .unitWidth(UNUM_UNIT_WIDTH_SHORT),
             Locale("en-US"),
             4.28571,
@@ -777,10 +777,10 @@ void NumberFormatterApiTest::unitMeasure() {
 
     assertFormatSingle(
             u"Mixed Unit (Full Name Version)",
-            u"unit/metric-ton-and-kilogram-and-gram unit-width-full-name",
-            u"unit/metric-ton-and-kilogram-and-gram unit-width-full-name",
+            u"unit/tonne-and-kilogram-and-gram unit-width-full-name",
+            u"unit/tonne-and-kilogram-and-gram unit-width-full-name",
             NumberFormatter::with()
-                .unit(MeasureUnit::forIdentifier("metric-ton-and-kilogram-and-gram", status))
+                .unit(MeasureUnit::forIdentifier("tonne-and-kilogram-and-gram", status))
                 .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
             Locale("en-US"),
             4.28571,
@@ -2609,7 +2609,7 @@ void NumberFormatterApiTest::unitNounClass() {
         // {"de", "lux", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"de", "candela", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"de", "lumen", UNounClass::UNOUN_CLASS_ UNDEFINED},
-        // {"de", "metric-ton", UNounClass::UNOUN_CLASS_UNDEFINED},
+        // {"de", "tonne", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"de", "microgram", UNounClass::UNOUN_CLASS_NEUTER}, // PREFIX
         // {"de", "ton", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"de", "stone", UNounClass::UNOUN_CLASS_ UNDEFINED},
@@ -2705,7 +2705,7 @@ void NumberFormatterApiTest::unitNounClass() {
         // {"fr", "lux", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"fr", "candela", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"fr", "lumen", UNounClass::UNOUN_CLASS_ UNDEFINED},
-        // {"fr", "metric-ton", UNounClass::UNOUN_CLASS_UNDEFINED},
+        // {"fr", "tonne", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"fr", "microgram", UNounClass::UNOUN_CLASS_MASCULINE}, // PREFIX
         // {"fr", "ton", UNounClass::UNOUN_CLASS_UNDEFINED},
         // {"fr", "stone", UNounClass::UNOUN_CLASS_ UNDEFINED},
@@ -2915,7 +2915,7 @@ void NumberFormatterApiTest::unitGender() {
         // {"de", "lux", ""},
         // {"de", "candela", ""},
         // {"de", "lumen", ""},
-        // {"de", "metric-ton", ""},
+        // {"de", "tonne", ""},
         // {"de", "microgram", "neuter"}, // PREFIX
         // {"de", "ton", ""},
         // {"de", "stone", ""},
@@ -3007,7 +3007,7 @@ void NumberFormatterApiTest::unitGender() {
         // {"fr", "lux", ""},
         // {"fr", "candela", ""},
         // {"fr", "lumen", ""},
-        // {"fr", "metric-ton", ""},
+        // {"fr", "tonne", ""},
         // {"fr", "microgram", "masculine"}, // PREFIX
         // {"fr", "ton", ""},
         // {"fr", "stone", ""},
@@ -4255,39 +4255,39 @@ void NumberFormatterApiTest::grouping() {
             u"8,765",
             u"0");
 
-    // NOTE: Bulgarian is interesting because it has no grouping in the default currency format.
+    // NOTE: en_US_POSIX is interesting because it has no grouping in the default currency format.
     // If this test breaks due to data changes, find another locale that has no default grouping.
     assertFormatDescendingBig(
-            u"Bulgarian Currency Grouping",
+            u"en_US_POSIX Currency Grouping",
             u"currency/USD group-auto",
             u"currency/USD",
             NumberFormatter::with().grouping(UNUM_GROUPING_AUTO).unit(USD),
-            Locale("bg"),
-            u"87650000,00 щ.д.",
-            u"8765000,00 щ.д.",
-            u"876500,00 щ.д.",
-            u"87650,00 щ.д.",
-            u"8765,00 щ.д.",
-            u"876,50 щ.д.",
-            u"87,65 щ.д.",
-            u"8,76 щ.д.",
-            u"0,00 щ.д.");
+            Locale("en_US_POSIX"),
+            u"$ 87650000.00",
+            u"$ 8765000.00",
+            u"$ 876500.00",
+            u"$ 87650.00",
+            u"$ 8765.00",
+            u"$ 876.50",
+            u"$ 87.65",
+            u"$ 8.76",
+            u"$ 0.00");
 
     assertFormatDescendingBig(
-            u"Bulgarian Currency Grouping, Always",
+            u"en_US_POSIX Currency Grouping, Always",
             u"currency/USD group-on-aligned",
             u"currency/USD ,!",
             NumberFormatter::with().grouping(UNUM_GROUPING_ON_ALIGNED).unit(USD),
-            Locale("bg"),
-            u"87 650 000,00 щ.д.",
-            u"8 765 000,00 щ.д.",
-            u"876 500,00 щ.д.",
-            u"87 650,00 щ.д.",
-            u"8 765,00 щ.д.",
-            u"876,50 щ.д.",
-            u"87,65 щ.д.",
-            u"8,76 щ.д.",
-            u"0,00 щ.д.");
+            Locale("en_US_POSIX"),
+            u"$ 87,650,000.00",
+            u"$ 8,765,000.00",
+            u"$ 876,500.00",
+            u"$ 87,650.00",
+            u"$ 8,765.00",
+            u"$ 876.50",
+            u"$ 87.65",
+            u"$ 8.76",
+            u"$ 0.00");
 
     MacroProps macros;
     macros.grouper = Grouper(4, 1, 3, UNUM_GROUPING_COUNT);
@@ -4689,15 +4689,15 @@ void NumberFormatterApiTest::symbols() {
             u"currency/USD latin",
             NumberFormatter::with().adoptSymbols(new NumberingSystem(LATN)).unit(USD),
             Locale("ar"),
-            u"US$ 87,650.00",
-            u"US$ 8,765.00",
-            u"US$ 876.50",
-            u"US$ 87.65",
-            u"US$ 8.76",
-            u"US$ 0.88",
-            u"US$ 0.09",
-            u"US$ 0.01",
-            u"US$ 0.00");
+            u"\u200FUS$ 87,650.00",
+            u"\u200FUS$ 8,765.00",
+            u"\u200FUS$ 876.50",
+            u"\u200FUS$ 87.65",
+            u"\u200FUS$ 8.76",
+            u"\u200FUS$ 0.88",
+            u"\u200FUS$ 0.09",
+            u"\u200FUS$ 0.01",
+            u"\u200FUS$ 0.00");
 
     assertFormatDescending(
             u"Math Numbering System with French Data",
@@ -4742,7 +4742,7 @@ void NumberFormatterApiTest::symbols() {
             NumberFormatter::with().adoptSymbols(new NumberingSystem(LATN)).unit(USD),
             Locale("ar"),
             12345.67,
-            u"US$ 12,345.67");
+            u"\u200FUS$ 12,345.67");
 
     assertFormatSingle(
             u"Currency symbol should precede number in ar@numbers=latn",
@@ -4751,7 +4751,7 @@ void NumberFormatterApiTest::symbols() {
             NumberFormatter::with().unit(USD),
             Locale("ar@numbers=latn"),
             12345.67,
-            u"US$ 12,345.67");
+            u"\u200FUS$ 12,345.67");
 
     assertFormatSingle(
             u"Currency symbol should follow number in ar-EG with NS arab",
@@ -4760,7 +4760,7 @@ void NumberFormatterApiTest::symbols() {
             NumberFormatter::with().unit(USD),
             Locale("ar-EG"),
             12345.67,
-            u"١٢٬٣٤٥٫٦٧ US$");
+            u"\u200F١٢٬٣٤٥٫٦٧ US$");
 
     assertFormatSingle(
             u"Currency symbol should follow number in ar@numbers=arab",
@@ -4769,7 +4769,7 @@ void NumberFormatterApiTest::symbols() {
             NumberFormatter::with().unit(USD),
             Locale("ar@numbers=arab"),
             12345.67,
-            u"١٢٬٣٤٥٫٦٧ US$");
+            u"\u200F١٢٬٣٤٥٫٦٧ US$");
 
     assertFormatSingle(
             u"NumberingSystem in API should win over @numbers keyword",
@@ -4778,12 +4778,12 @@ void NumberFormatterApiTest::symbols() {
             NumberFormatter::with().adoptSymbols(new NumberingSystem(LATN)).unit(USD),
             Locale("ar@numbers=arab"),
             12345.67,
-            u"US$ 12,345.67");
+            u"\u200FUS$ 12,345.67");
 
     UErrorCode status = U_ZERO_ERROR;
     assertEquals(
             "NumberingSystem in API should win over @numbers keyword in reverse order",
-            u"US$ 12,345.67",
+            u"\u200FUS$ 12,345.67",
             NumberFormatter::withLocale(Locale("ar@numbers=arab")).adoptSymbols(new NumberingSystem(LATN))
                     .unit(USD)
                     .formatDouble(12345.67, status)

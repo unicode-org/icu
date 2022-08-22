@@ -488,10 +488,6 @@ vi{
                 dnam{"kilôgam"}
                 other{"{0} kilôgam"}
             }
-            metric-ton{
-                dnam{"tấn hệ mét"}
-                other{"{0} tấn hệ mét"}
-            }
             microgram{
                 dnam{"micrôgam"}
                 other{"{0} micrôgam"}
@@ -520,6 +516,10 @@ vi{
             ton{
                 dnam{"tấn"}
                 other{"{0} tấn"}
+            }
+            tonne{
+                dnam{"tấn hệ mét"}
+                other{"{0} tấn hệ mét"}
             }
         }
         power{
@@ -1315,9 +1315,6 @@ vi{
             kilogram{
                 dnam{"kg"}
             }
-            metric-ton{
-                dnam{"t"}
-            }
             microgram{
                 dnam{"μg"}
             }
@@ -1337,6 +1334,9 @@ vi{
             }
             solar-mass{
                 dnam{"trọng lượng mặt trời"}
+            }
+            tonne{
+                dnam{"t"}
             }
         }
         power{

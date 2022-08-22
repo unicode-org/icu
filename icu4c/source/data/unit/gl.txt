@@ -689,11 +689,6 @@ gl{
                 other{"{0} quilogramos"}
                 per{"{0} por quilogramo"}
             }
-            metric-ton{
-                dnam{"toneladas métricas"}
-                one{"{0} tonelada métrica"}
-                other{"{0} toneladas métricas"}
-            }
             microgram{
                 dnam{"microgramos"}
                 one{"{0} microgramo"}
@@ -735,6 +730,11 @@ gl{
                 dnam{"toneladas estadounidenses"}
                 one{"{0} tonelada estadounidense"}
                 other{"{0} toneladas estadounidenses"}
+            }
+            tonne{
+                dnam{"toneladas métricas"}
+                one{"{0} tonelada métrica"}
+                other{"{0} toneladas métricas"}
             }
         }
         power{
@@ -2031,11 +2031,6 @@ gl{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -2070,6 +2065,11 @@ gl{
                 dnam{"tn EUA"}
                 one{"{0} tn EUA"}
                 other{"{0} tn EUA"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

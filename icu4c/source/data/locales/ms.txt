@@ -2873,6 +2873,12 @@ ms{
                 "und",
                 "ms",
             }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
         }
         namePattern{
             givenFirst-long-monogram-informal{"{given-informal-monogram-allCaps}{surname-monogram-allCaps}"}

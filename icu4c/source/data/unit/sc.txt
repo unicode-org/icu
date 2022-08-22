@@ -684,11 +684,6 @@ sc{
                 other{"{0} chilogrammos"}
                 per{"{0} pro chilogrammu"}
             }
-            metric-ton{
-                dnam{"tonnelladas mètricas"}
-                one{"{0} tonnellada mètrica"}
-                other{"{0} tonnelladas mètricas"}
-            }
             microgram{
                 dnam{"microgrammos"}
                 one{"{0} microgrammu"}
@@ -730,6 +725,11 @@ sc{
                 dnam{"tonnelladas"}
                 one{"{0} tonnellada"}
                 other{"{0} tonnelladas"}
+            }
+            tonne{
+                dnam{"tonnelladas mètricas"}
+                one{"{0} tonnellada mètrica"}
+                other{"{0} tonnelladas mètricas"}
             }
         }
         power{
@@ -1563,10 +1563,6 @@ sc{
                 one{"{0}kg"}
                 other{"{0}kg"}
             }
-            metric-ton{
-                one{"{0}t"}
-                other{"{0}t"}
-            }
             microgram{
                 one{"{0}μg"}
                 other{"{0}μg"}
@@ -1598,6 +1594,10 @@ sc{
             ton{
                 one{"{0}tn"}
                 other{"{0}tn"}
+            }
+            tonne{
+                one{"{0}t"}
+                other{"{0}t"}
             }
         }
         power{

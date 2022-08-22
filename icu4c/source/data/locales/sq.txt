@@ -2099,8 +2099,6 @@ sq{
                 "sq",
             }
             surnameFirst{
-                "hu",
-                "ja",
                 "ko",
                 "vi",
                 "yue",

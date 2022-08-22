@@ -1865,10 +1865,16 @@ ky{
     }
     personNames{
         nameOrderLocales{
-            givenFirst{"zxx"}
-            surnameFirst{
+            givenFirst{
                 "und",
                 "ky",
+            }
+            surnameFirst{
+                "ja",
+                "ko",
+                "vi",
+                "yue",
+                "zh",
             }
         }
         namePattern{
@@ -1878,6 +1884,7 @@ ky{
             givenFirst-medium-addressing-informal{"{given-informal}"}
             givenFirst-short-addressing-formal{"{prefix} {surname}"}
             givenFirst-short-addressing-informal{"{given-informal}"}
+            givenFirst-short-referring-formal{"{given-initial} {given2-initial} {surname}"}
             givenFirst-short-referring-informal{"{given-informal} {surname-initial}"}
             sorting-short-referring-informal{"{surname}, {given-informal}"}
             surnameFirst-long-addressing-formal{"{prefix} {surname}"}

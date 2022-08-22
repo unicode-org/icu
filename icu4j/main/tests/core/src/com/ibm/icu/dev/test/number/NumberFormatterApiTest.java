@@ -709,10 +709,10 @@ public class NumberFormatterApiTest extends TestFmwk {
 
         assertFormatSingle(
                 "Mixed Unit (Narrow Version)",
-                "unit/metric-ton-and-kilogram-and-gram unit-width-narrow",
-                "unit/metric-ton-and-kilogram-and-gram unit-width-narrow",
+                "unit/tonne-and-kilogram-and-gram unit-width-narrow",
+                "unit/tonne-and-kilogram-and-gram unit-width-narrow",
                 NumberFormatter.with()
-                        .unit(MeasureUnit.forIdentifier("metric-ton-and-kilogram-and-gram"))
+                        .unit(MeasureUnit.forIdentifier("tonne-and-kilogram-and-gram"))
                         .unitWidth(UnitWidth.NARROW),
                 new ULocale("en-US"),
                 4.28571,
@@ -720,10 +720,10 @@ public class NumberFormatterApiTest extends TestFmwk {
 
         assertFormatSingle(
                 "Mixed Unit (Short Version)",
-                "unit/metric-ton-and-kilogram-and-gram unit-width-short",
-                "unit/metric-ton-and-kilogram-and-gram unit-width-short",
+                "unit/tonne-and-kilogram-and-gram unit-width-short",
+                "unit/tonne-and-kilogram-and-gram unit-width-short",
                 NumberFormatter.with()
-                        .unit(MeasureUnit.forIdentifier("metric-ton-and-kilogram-and-gram"))
+                        .unit(MeasureUnit.forIdentifier("tonne-and-kilogram-and-gram"))
                         .unitWidth(UnitWidth.SHORT),
                 new ULocale("en-US"),
                 4.28571,
@@ -731,10 +731,10 @@ public class NumberFormatterApiTest extends TestFmwk {
 
         assertFormatSingle(
                 "Mixed Unit (Full Name Version)",
-                "unit/metric-ton-and-kilogram-and-gram unit-width-full-name",
-                "unit/metric-ton-and-kilogram-and-gram unit-width-full-name",
+                "unit/tonne-and-kilogram-and-gram unit-width-full-name",
+                "unit/tonne-and-kilogram-and-gram unit-width-full-name",
                 NumberFormatter.with()
-                        .unit(MeasureUnit.forIdentifier("metric-ton-and-kilogram-and-gram"))
+                        .unit(MeasureUnit.forIdentifier("tonne-and-kilogram-and-gram"))
                         .unitWidth(UnitWidth.FULL_NAME),
                 new ULocale("en-US"),
                 4.28571,
@@ -2594,7 +2594,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 //     new TestCase("de", "lux", NounClass.UNDEFINED),                               //
                 //     new TestCase("de", "candela", NounClass.UNDEFINED),                           //
                 //     new TestCase("de", "lumen", NounClass.UNDEFINED),                             //
-                //     new TestCase("de", "metric-ton", NounClass.UNDEFINED),                        //
+                //     new TestCase("de", "tonne", NounClass.UNDEFINED),                        //
                 new TestCase("de", "microgram", NounClass.NEUTER),                   // PREFIX
                 //     new TestCase("de", "ton", NounClass.UNDEFINED),                               //
                 //     new TestCase("de", "stone", NounClass.UNDEFINED),                             //
@@ -2686,7 +2686,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 //     new TestCase("fr", "lux", NounClass.UNDEFINED),                                        //
                 //     new TestCase("fr", "candela", NounClass.UNDEFINED),                                    //
                 //     new TestCase("fr", "lumen", NounClass.UNDEFINED),                                      //
-                //     new TestCase("fr", "metric-ton", NounClass.UNDEFINED),                                 //
+                //     new TestCase("fr", "tonne", NounClass.UNDEFINED),                                 //
                 new TestCase("fr", "microgram", NounClass.MASCULINE),                         // PREFIX
                 //     new TestCase("fr", "ton", NounClass.UNDEFINED),                                        //
                 //     new TestCase("fr", "stone", NounClass.UNDEFINED),                                      //
@@ -2898,7 +2898,7 @@ public class NumberFormatterApiTest extends TestFmwk {
         //     new TestCase("de", "lux", ""),                               //
         //     new TestCase("de", "candela", ""),                           //
         //     new TestCase("de", "lumen", ""),                             //
-        //     new TestCase("de", "metric-ton", ""),                        //
+        //     new TestCase("de", "tonne", ""),                        //
             new TestCase("de", "microgram", "neuter"),                   // PREFIX
         //     new TestCase("de", "ton", ""),                               //
         //     new TestCase("de", "stone", ""),                             //
@@ -2990,7 +2990,7 @@ public class NumberFormatterApiTest extends TestFmwk {
         //     new TestCase("fr", "lux", ""),                                        //
         //     new TestCase("fr", "candela", ""),                                    //
         //     new TestCase("fr", "lumen", ""),                                      //
-        //     new TestCase("fr", "metric-ton", ""),                                 //
+        //     new TestCase("fr", "tonne", ""),                                 //
             new TestCase("fr", "microgram", "masculine"),                         // PREFIX
         //     new TestCase("fr", "ton", ""),                                        //
         //     new TestCase("fr", "stone", ""),                                      //
@@ -4229,39 +4229,39 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "8,765",
                 "0");
 
-        // NOTE: Bulgarian is interesting because it has no grouping in the default currency format.
+        // NOTE: en_US_POSIX is interesting because it has no grouping in the default currency format.
         // If this test breaks due to data changes, find another locale that has no default grouping.
         assertFormatDescendingBig(
-                "Bulgarian Currency Grouping",
+                "en_US_POSIX Currency Grouping",
                 "currency/USD group-auto",
                 "currency/USD",
                 NumberFormatter.with().grouping(GroupingStrategy.AUTO).unit(USD),
-                new ULocale("bg"),
-                "87650000,00 щ.д.",
-                "8765000,00 щ.д.",
-                "876500,00 щ.д.",
-                "87650,00 щ.д.",
-                "8765,00 щ.д.",
-                "876,50 щ.д.",
-                "87,65 щ.д.",
-                "8,76 щ.д.",
-                "0,00 щ.д.");
+                new ULocale("en_US_POSIX"),
+                "$ 87650000.00",
+                "$ 8765000.00",
+                "$ 876500.00",
+                "$ 87650.00",
+                "$ 8765.00",
+                "$ 876.50",
+                "$ 87.65",
+                "$ 8.76",
+                "$ 0.00");
 
         assertFormatDescendingBig(
-                "Bulgarian Currency Grouping, Always",
+                "en_US_POSIX Currency Grouping, Always",
                 "currency/USD group-on-aligned",
                 "currency/USD ,!",
                 NumberFormatter.with().grouping(GroupingStrategy.ON_ALIGNED).unit(USD),
-                new ULocale("bg"),
-                "87 650 000,00 щ.д.",
-                "8 765 000,00 щ.д.",
-                "876 500,00 щ.д.",
-                "87 650,00 щ.д.",
-                "8 765,00 щ.д.",
-                "876,50 щ.д.",
-                "87,65 щ.д.",
-                "8,76 щ.д.",
-                "0,00 щ.д.");
+                new ULocale("en_US_POSIX"),
+                "$ 87,650,000.00",
+                "$ 8,765,000.00",
+                "$ 876,500.00",
+                "$ 87,650.00",
+                "$ 8,765.00",
+                "$ 876.50",
+                "$ 87.65",
+                "$ 8.76",
+                "$ 0.00");
 
         MacroProps macros = new MacroProps();
         macros.grouping = Grouper.getInstance((short) 4, (short) 1, (short) 3);
@@ -4649,15 +4649,15 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "currency/USD latin",
                 NumberFormatter.with().symbols(NumberingSystem.LATIN).unit(USD),
                 new ULocale("ar"),
-                "US$ 87,650.00",
-                "US$ 8,765.00",
-                "US$ 876.50",
-                "US$ 87.65",
-                "US$ 8.76",
-                "US$ 0.88",
-                "US$ 0.09",
-                "US$ 0.01",
-                "US$ 0.00");
+                "\u200FUS$ 87,650.00",
+                "\u200FUS$ 8,765.00",
+                "\u200FUS$ 876.50",
+                "\u200FUS$ 87.65",
+                "\u200FUS$ 8.76",
+                "\u200FUS$ 0.88",
+                "\u200FUS$ 0.09",
+                "\u200FUS$ 0.01",
+                "\u200FUS$ 0.00");
 
         assertFormatDescending(
                 "Math Numbering System with French Data",
@@ -4702,7 +4702,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().symbols(NumberingSystem.LATIN).unit(USD),
                 new ULocale("ar"),
                 12345.67,
-                "US$ 12,345.67");
+                "\u200FUS$ 12,345.67");
 
         assertFormatSingle(
                 "Currency symbol should precede number in ar@numbers=latn",
@@ -4711,7 +4711,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().unit(USD),
                 new ULocale("ar@numbers=latn"),
                 12345.67,
-                "US$ 12,345.67");
+                "\u200FUS$ 12,345.67");
 
         assertFormatSingle(
                 "Currency symbol should follow number in ar-EG with NS arab",
@@ -4720,7 +4720,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().unit(USD),
                 new ULocale("ar-EG"),
                 12345.67,
-                "١٢٬٣٤٥٫٦٧ US$");
+                "\u200F١٢٬٣٤٥٫٦٧ US$");
 
         assertFormatSingle(
                 "Currency symbol should follow number in ar@numbers=arab",
@@ -4729,7 +4729,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().unit(USD),
                 new ULocale("ar@numbers=arab"),
                 12345.67,
-                "١٢٬٣٤٥٫٦٧ US$");
+                "\u200F١٢٬٣٤٥٫٦٧ US$");
 
         assertFormatSingle(
                 "NumberingSystem in API should win over @numbers keyword",
@@ -4738,10 +4738,10 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().symbols(NumberingSystem.LATIN).unit(USD),
                 new ULocale("ar@numbers=arab"),
                 12345.67,
-                "US$ 12,345.67");
+                "\u200FUS$ 12,345.67");
 
         assertEquals("NumberingSystem in API should win over @numbers keyword in reverse order",
-                "US$ 12,345.67",
+                "\u200FUS$ 12,345.67",
                 NumberFormatter.withLocale(new ULocale("ar@numbers=arab"))
                     .symbols(NumberingSystem.LATIN)
                     .unit(USD)

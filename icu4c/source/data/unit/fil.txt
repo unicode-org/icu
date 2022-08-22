@@ -676,11 +676,6 @@ fil{
                 other{"{0} kilo"}
                 per{"{0} kada kilo"}
             }
-            metric-ton{
-                dnam{"toneladang metriko"}
-                one{"{0} toneladang metriko"}
-                other{"{0} na toneladang metriko"}
-            }
             microgram{
                 dnam{"micrograms"}
                 one{"{0} microgram"}
@@ -722,6 +717,11 @@ fil{
                 dnam{"tonelada"}
                 one{"{0} tonelada"}
                 other{"{0} tonelada"}
+            }
+            tonne{
+                dnam{"toneladang metriko"}
+                one{"{0} toneladang metriko"}
+                other{"{0} na toneladang metriko"}
             }
         }
         power{
@@ -1382,11 +1382,6 @@ fil{
                 other{"{0}kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0}t"}
-                other{"{0}t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0}μg"}
@@ -1421,6 +1416,11 @@ fil{
                 dnam{"ton"}
                 one{"{0}tn"}
                 other{"{0}tn"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0}t"}
+                other{"{0}t"}
             }
         }
         power{
@@ -2190,11 +2190,6 @@ fil{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -2236,6 +2231,11 @@ fil{
                 dnam{"tonelada"}
                 one{"{0} tn"}
                 other{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

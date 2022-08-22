@@ -26,9 +26,9 @@ bg{
                 range{"{0} – {1}"}
             }
             patterns{
-                accountingFormat{"0.00 ¤;(0.00 ¤)"}
-                accountingFormat%noCurrency{"0.00;(0.00)"}
-                currencyFormat{"0.00 ¤"}
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"#,##0.00 ¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
@@ -2060,8 +2060,9 @@ bg{
                 "bg",
             }
             surnameFirst{
-                "ja",
                 "ko",
+                "vi",
+                "yue",
                 "zh",
             }
         }

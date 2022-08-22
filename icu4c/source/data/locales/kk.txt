@@ -1992,6 +1992,12 @@ kk{
                 "und",
                 "kk",
             }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
         }
         namePattern{
             givenFirst-long-addressing-formal{"{surname}"}

@@ -49,6 +49,7 @@ keyTypeData:table(nofallback){
         lw{""}
         m0{""}
         measure{"ms"}
+        measurement-unit{"mu"}
         numbers{"nu"}
         rg{""}
         s0{""}
@@ -616,6 +617,11 @@ keyTypeData:table(nofallback){
             imperial{"uksystem"}
             metric{""}
             ussystem{""}
+        }
+        measurement-unit{
+            celsius{""}
+            fahrenhe{""}
+            kelvin{""}
         }
         numbers{
             adlm{""}

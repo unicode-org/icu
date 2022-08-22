@@ -3472,8 +3472,14 @@ he{
     personNames{
         nameOrderLocales{
             givenFirst{
-                "he",
                 "und",
+                "he",
+            }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
             }
         }
         namePattern{

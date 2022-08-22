@@ -1273,18 +1273,6 @@ no{
                 other{"{0} kilogram"}
                 per{"{0} per kilogram"}
             }
-            metric-ton{
-                case{
-                    genitive{
-                        one{"{0} tonns"}
-                        other{"{0} tonns"}
-                    }
-                }
-                dnam{"tonn"}
-                gender{"neuter"}
-                one{"{0} tonn"}
-                other{"{0} tonn"}
-            }
             microgram{
                 case{
                     genitive{
@@ -1343,6 +1331,18 @@ no{
                 dnam{"amerikanske tonn"}
                 one{"{0} amerikansk tonn"}
                 other{"{0} amerikanske tonn"}
+            }
+            tonne{
+                case{
+                    genitive{
+                        one{"{0} tonns"}
+                        other{"{0} tonns"}
+                    }
+                }
+                dnam{"tonn"}
+                gender{"neuter"}
+                one{"{0} tonn"}
+                other{"{0} tonn"}
             }
         }
         power{
@@ -2351,11 +2351,6 @@ no{
                 one{"{0}kg"}
                 other{"{0}kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0}t"}
-                other{"{0}t"}
-            }
             microgram{
                 one{"{0}μg"}
                 other{"{0}μg"}
@@ -2382,6 +2377,11 @@ no{
             ton{
                 one{"{0} am. tn."}
                 other{"{0} am. tn."}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0}t"}
+                other{"{0}t"}
             }
         }
         power{
@@ -3164,11 +3164,6 @@ no{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"tonn"}
-                one{"{0} tonn"}
-                other{"{0} tonn"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -3208,6 +3203,11 @@ no{
                 dnam{"am. tonn"}
                 one{"{0} am. tonn"}
                 other{"{0} am. tonn"}
+            }
+            tonne{
+                dnam{"tonn"}
+                one{"{0} tonn"}
+                other{"{0} tonn"}
             }
         }
         power{

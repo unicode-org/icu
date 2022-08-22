@@ -521,10 +521,6 @@ km{
                 other{"{0} គីឡូក្រាម"}
                 per{"{0} ក្នុងមួយគីឡូក្រាម"}
             }
-            metric-ton{
-                dnam{"តោនម៉ែត្រ"}
-                other{"{0} តោនម៉ែត្រ"}
-            }
             microgram{
                 dnam{"មីក្រូក្រាម"}
                 other{"{0} មីក្រូក្រាម"}
@@ -554,6 +550,10 @@ km{
             ton{
                 dnam{"តោនអាមេរិក"}
                 other{"{0} តោនអាមេរិក"}
+            }
+            tonne{
+                dnam{"តោនម៉ែត្រ"}
+                other{"{0} តោនម៉ែត្រ"}
             }
         }
         power{
@@ -1482,10 +1482,6 @@ km{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 other{"{0} μg"}
@@ -1515,6 +1511,10 @@ km{
             ton{
                 dnam{"តោនអាមេរិក"}
                 other{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                other{"{0} t"}
             }
         }
         power{

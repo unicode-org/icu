@@ -1957,10 +1957,18 @@ ne{
             initialSequence{"{0} {1}"}
         }
         nameOrderLocales{
-            surnameFirst{
-                "ja",
-                "ko",
+            givenFirst{
+                "und",
                 "ne",
+            }
+            surnameFirst{
+                "ko",
+                "si",
+                "ta",
+                "te",
+                "vi",
+                "yue",
+                "zh",
             }
         }
         namePattern{

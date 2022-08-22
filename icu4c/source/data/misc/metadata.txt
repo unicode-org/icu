@@ -5116,6 +5116,10 @@ metadata:table(nofallback){
                 reason{"deprecated"}
                 replacement{"meter-per-square-second"}
             }
+            metric-ton{
+                reason{"deprecated"}
+                replacement{"tonne"}
+            }
             milligram-per-deciliter{
                 reason{"deprecated"}
                 replacement{"milligram-ofglucose-per-deciliter"}
@@ -5350,7 +5354,6 @@ metadata:table(nofallback){
         "mua_CM",
         "mus_US",
         "my_MM",
-        "shn_MM",
         "myv_RU",
         "mzn_IR",
         "naq_NA",
@@ -5416,6 +5419,7 @@ metadata:table(nofallback){
         "shi_Latn_MA",
         "shi_Tfng",
         "shi_Tfng_MA",
+        "shn_MM",
         "si_LK",
         "sid_ET",
         "sk_SK",

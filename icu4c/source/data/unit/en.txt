@@ -684,11 +684,6 @@ en{
                 other{"{0} kilograms"}
                 per{"{0} per kilogram"}
             }
-            metric-ton{
-                dnam{"metric tons"}
-                one{"{0} metric ton"}
-                other{"{0} metric tons"}
-            }
             microgram{
                 dnam{"micrograms"}
                 one{"{0} microgram"}
@@ -730,6 +725,11 @@ en{
                 dnam{"tons"}
                 one{"{0} ton"}
                 other{"{0} tons"}
+            }
+            tonne{
+                dnam{"metric tons"}
+                one{"{0} metric ton"}
+                other{"{0} metric tons"}
             }
         }
         power{
@@ -1659,11 +1659,6 @@ en{
                 one{"{0}kg"}
                 other{"{0}kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0}t"}
-                other{"{0}t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0}μg"}
@@ -1703,6 +1698,11 @@ en{
                 dnam{"ton"}
                 one{"{0}tn"}
                 other{"{0}tn"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0}t"}
+                other{"{0}t"}
             }
         }
         power{
@@ -2622,11 +2622,6 @@ en{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -2668,6 +2663,11 @@ en{
                 dnam{"tons"}
                 one{"{0} tn"}
                 other{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

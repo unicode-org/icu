@@ -2643,35 +2643,6 @@ lv{
                 per{"{0} uz kilogramu"}
                 zero{"{0} kilogramu"}
             }
-            metric-ton{
-                case{
-                    accusative{
-                        one{"{0} metrisko tonnu"}
-                        other{"{0} metriskās tonnas"}
-                        zero{"{0} metrisko tonnu"}
-                    }
-                    dative{
-                        one{"{0} metriskajai tonnai"}
-                        other{"{0} metriskajām tonnām"}
-                        zero{"{0} metrisko tonnu"}
-                    }
-                    genitive{
-                        one{"{0} metriskās tonnas"}
-                        other{"{0} metrisko tonnu"}
-                        zero{"{0} metrisko tonnu"}
-                    }
-                    locative{
-                        one{"{0} metriskajā tonnā"}
-                        other{"{0} metriskajās tonnās"}
-                        zero{"{0} metrisko tonnu"}
-                    }
-                }
-                dnam{"metriskās tonnas"}
-                gender{"feminine"}
-                one{"{0} metriskā tonna"}
-                other{"{0} metriskās tonnas"}
-                zero{"{0} metrisko tonnu"}
-            }
             microgram{
                 case{
                     accusative{
@@ -2767,6 +2738,35 @@ lv{
                 one{"{0} tonna"}
                 other{"{0} tonnas"}
                 zero{"{0} tonnu"}
+            }
+            tonne{
+                case{
+                    accusative{
+                        one{"{0} metrisko tonnu"}
+                        other{"{0} metriskās tonnas"}
+                        zero{"{0} metrisko tonnu"}
+                    }
+                    dative{
+                        one{"{0} metriskajai tonnai"}
+                        other{"{0} metriskajām tonnām"}
+                        zero{"{0} metrisko tonnu"}
+                    }
+                    genitive{
+                        one{"{0} metriskās tonnas"}
+                        other{"{0} metrisko tonnu"}
+                        zero{"{0} metrisko tonnu"}
+                    }
+                    locative{
+                        one{"{0} metriskajā tonnā"}
+                        other{"{0} metriskajās tonnās"}
+                        zero{"{0} metrisko tonnu"}
+                    }
+                }
+                dnam{"metriskās tonnas"}
+                gender{"feminine"}
+                one{"{0} metriskā tonna"}
+                other{"{0} metriskās tonnas"}
+                zero{"{0} metrisko tonnu"}
             }
         }
         power{
@@ -4885,12 +4885,6 @@ lv{
                 per{"{0}/kg"}
                 zero{"{0} kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-                zero{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -4939,6 +4933,12 @@ lv{
                 one{"{0} tonna"}
                 other{"{0} tonnas"}
                 zero{"{0} tonnas"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
+                zero{"{0} t"}
             }
         }
         power{

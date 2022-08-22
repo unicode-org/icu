@@ -1266,18 +1266,6 @@ sv{
                 other{"{0} kilogram"}
                 per{"{0} per kilogram"}
             }
-            metric-ton{
-                case{
-                    genitive{
-                        one{"{0} tons"}
-                        other{"{0} tons"}
-                    }
-                }
-                dnam{"ton"}
-                gender{"neuter"}
-                one{"{0} ton"}
-                other{"{0} ton"}
-            }
             microgram{
                 case{
                     genitive{
@@ -1336,6 +1324,18 @@ sv{
                 dnam{"engelska korta ton"}
                 one{"{0} engelskt kort ton"}
                 other{"{0} engelska korta ton"}
+            }
+            tonne{
+                case{
+                    genitive{
+                        one{"{0} tons"}
+                        other{"{0} tons"}
+                    }
+                }
+                dnam{"ton"}
+                gender{"neuter"}
+                one{"{0} ton"}
+                other{"{0} ton"}
             }
         }
         power{
@@ -2473,11 +2473,6 @@ sv{
                 other{"{0}kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0}t"}
-                other{"{0}t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0}μg"}
@@ -2514,6 +2509,11 @@ sv{
                 dnam{"eng. k. ton"}
                 one{"{0} en.k.ton"}
                 other{"{0} en.k.ton"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0}t"}
+                other{"{0}t"}
             }
         }
         power{
@@ -3387,11 +3387,6 @@ sv{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -3428,6 +3423,11 @@ sv{
                 dnam{"eng. k. ton"}
                 one{"{0} eng. k. ton"}
                 other{"{0} eng. k. ton"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

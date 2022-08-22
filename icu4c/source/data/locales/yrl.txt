@@ -2013,4 +2013,18 @@ yrl{
             }
         }
     }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "yrl",
+            }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+    }
 }

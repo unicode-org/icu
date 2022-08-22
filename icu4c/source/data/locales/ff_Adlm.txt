@@ -4596,4 +4596,18 @@ ff_Adlm{
             }
         }
     }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "ff",
+            }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+    }
 }

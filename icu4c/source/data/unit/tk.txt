@@ -684,11 +684,6 @@ tk{
                 other{"{0} kilogram"}
                 per{"{0}/kilogram"}
             }
-            metric-ton{
-                dnam{"metrik tonna"}
-                one{"{0} metrik tonna"}
-                other{"{0} metrik tonna"}
-            }
             microgram{
                 dnam{"mikrogram"}
                 one{"{0} mikrogram"}
@@ -730,6 +725,11 @@ tk{
                 dnam{"tonna"}
                 one{"{0} tonna"}
                 other{"{0} tonna"}
+            }
+            tonne{
+                dnam{"metrik tonna"}
+                one{"{0} metrik tonna"}
+                other{"{0} metrik tonna"}
             }
         }
         power{
@@ -1893,11 +1893,6 @@ tk{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -1939,6 +1934,11 @@ tk{
                 dnam{"tonna"}
                 one{"{0} tn"}
                 other{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

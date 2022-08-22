@@ -1676,4 +1676,18 @@ tg{
         US{"ИМА"}
         metric{"Метрӣ"}
     }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "tg",
+            }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+    }
 }

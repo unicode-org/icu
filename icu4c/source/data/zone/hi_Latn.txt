@@ -862,9 +862,6 @@ hi_Latn{
         "Australia:Broken_Hill"{
             ec{"Broken Hill"}
         }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
         "Australia:Darwin"{
             ec{"Darwin"}
         }
@@ -1116,9 +1113,6 @@ hi_Latn{
         }
         "Pacific:Efate"{
             ec{"Efate"}
-        }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
         }
         "Pacific:Fakaofo"{
             ec{"Fakaofo"}

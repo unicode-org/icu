@@ -351,13 +351,6 @@ es_US{
         UK{"imperial"}
     }
     personNames{
-        nameOrderLocales{
-            surnameFirst{
-                "ja",
-                "ko",
-                "zh",
-            }
-        }
         namePattern{
             sorting-long-referring-formal{
                 "{surname}, {prefix} {given} {given2}",

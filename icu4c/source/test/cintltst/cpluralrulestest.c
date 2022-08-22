@@ -187,7 +187,7 @@ static const KeywordsForLang getKeywordsItems[] = {
     { "lv", { "zero", "one", "other" } },
     { "hr", { "one", "few", "other" } },
     { "sl", { "one", "two", "few", "other" } },
-    { "he", { "one", "two", "many", "other" } },
+    { "he", { "one", "two", "other" } },
     { "cs", { "one", "few", "many", "other" } },
     { "ar", { "zero", "one", "two", "few", "many" , "other" } },
     { NULL, { NULL } }

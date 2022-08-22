@@ -525,10 +525,6 @@ lo{
                 other{"{0} ກິໂລກຣາມ"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 other{"{0} μg"}
@@ -562,6 +558,10 @@ lo{
             ton{
                 dnam{"ໂຕນ"}
                 other{"{0} ໂຕນ"}
+            }
+            tonne{
+                dnam{"t"}
+                other{"{0} t"}
             }
         }
         power{
@@ -1472,10 +1472,6 @@ lo{
                 other{"{0} ກິໂລ"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 other{"{0} μg"}
@@ -1501,6 +1497,10 @@ lo{
             ton{
                 dnam{"ຕ"}
                 other{"{0} ຕ"}
+            }
+            tonne{
+                dnam{"t"}
+                other{"{0} t"}
             }
         }
         power{

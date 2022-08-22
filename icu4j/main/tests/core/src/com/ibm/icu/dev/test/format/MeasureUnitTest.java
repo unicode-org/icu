@@ -280,6 +280,7 @@ public class MeasureUnitTest extends TestFmwk {
         {"ITEM", "70"},
         {"KILOWATT_HOUR_PER_100_KILOMETER", "70"},
         {"QUARTER", "72"},
+        {"TONNE", "72"},
     };
 
     private static final HashMap<String, String> JAVA_VERSION_MAP = new HashMap<>();
@@ -328,7 +329,7 @@ public class MeasureUnitTest extends TestFmwk {
         //generateCXXHConstants("72"); // for measunit.h, update generated createXXX methods
         //generateCXXConstants(); // for measunit.cpp, update generated code
         //generateCXXBackwardCompatibilityTest("72"); // for measfmttest.cpp, create TestCompatible72
-        updateJAVAVersions("72"); // for MeasureUnitTest.java, JAVA_VERSIONS
+        //updateJAVAVersions("72"); // for MeasureUnitTest.java, JAVA_VERSIONS
     }
 
     @Test
@@ -2403,7 +2404,6 @@ public class MeasureUnitTest extends TestFmwk {
                 MeasureUnit.GRAIN,
                 MeasureUnit.GRAM,
                 MeasureUnit.KILOGRAM,
-                MeasureUnit.METRIC_TON,
                 MeasureUnit.MICROGRAM,
                 MeasureUnit.MILLIGRAM,
                 MeasureUnit.OUNCE,
@@ -2412,6 +2412,7 @@ public class MeasureUnitTest extends TestFmwk {
                 MeasureUnit.SOLAR_MASS,
                 MeasureUnit.STONE,
                 MeasureUnit.TON,
+                MeasureUnit.TONNE,
                 MeasureUnit.GIGAWATT,
                 MeasureUnit.HORSEPOWER,
                 MeasureUnit.KILOWATT,

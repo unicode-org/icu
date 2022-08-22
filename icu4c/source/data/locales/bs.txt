@@ -2329,8 +2329,9 @@ bs{
                 "bs",
             }
             surnameFirst{
-                "ja",
                 "ko",
+                "vi",
+                "yue",
                 "zh",
             }
         }

@@ -3051,6 +3051,13 @@ uk{
                 "und",
                 "uk",
             }
+            surnameFirst{
+                "ja",
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
         }
         namePattern{
             givenFirst-long-addressing-informal{"{given-informal} {surname} {surname2}"}
@@ -3090,7 +3097,12 @@ uk{
             sorting-medium-referring-informal{"{surname} {surname2}, {given-informal-initial}"}
             sorting-short-referring-formal{"{surname} {surname2}, {given-initial} {given2-initial}"}
             sorting-short-referring-informal{"{surname} {given-informal}"}
+            surnameFirst-long-addressing-formal{"{prefix} {surname}"}
             surnameFirst-long-addressing-informal{"{given-informal}"}
+            surnameFirst-long-monogram-formal{
+                "{surname-monogram-allCaps}{given-monogram-allCaps}{given2-monogram-a"
+                "llCaps}"
+            }
             surnameFirst-long-monogram-informal{
                 "{surname-monogram-allCaps}{surname2-monogram-allCaps}{given-informal"
                 "-monogram-allCaps}"

@@ -1305,6 +1305,13 @@ mi{
                 "und",
                 "mi",
             }
+            surnameFirst{
+                "ja",
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
         }
     }
 }

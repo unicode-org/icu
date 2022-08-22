@@ -3707,46 +3707,6 @@ cs{
                 other{"{0} kilogramů"}
                 per{"{0} na kilogram"}
             }
-            metric-ton{
-                case{
-                    accusative{
-                        few{"{0} tuny"}
-                        many{"{0} tuny"}
-                        one{"{0} tunu"}
-                        other{"{0} tun"}
-                    }
-                    dative{
-                        few{"{0} tunám"}
-                        many{"{0} tuny"}
-                        one{"{0} tuně"}
-                        other{"{0} tunám"}
-                    }
-                    genitive{
-                        few{"{0} tun"}
-                        many{"{0} tuny"}
-                        one{"{0} tuny"}
-                        other{"{0} tun"}
-                    }
-                    instrumental{
-                        few{"{0} tunami"}
-                        many{"{0} tuny"}
-                        one{"{0} tunou"}
-                        other{"{0} tunami"}
-                    }
-                    locative{
-                        few{"{0} tunách"}
-                        many{"{0} tuny"}
-                        one{"{0} tuně"}
-                        other{"{0} tunách"}
-                    }
-                }
-                dnam{"tuny"}
-                few{"{0} tuny"}
-                gender{"feminine"}
-                many{"{0} tuny"}
-                one{"{0} tuna"}
-                other{"{0} tun"}
-            }
             microgram{
                 case{
                     accusative{
@@ -3870,6 +3830,46 @@ cs{
                 many{"{0} americké tuny"}
                 one{"{0} americká tuna"}
                 other{"{0} amerických tun"}
+            }
+            tonne{
+                case{
+                    accusative{
+                        few{"{0} tuny"}
+                        many{"{0} tuny"}
+                        one{"{0} tunu"}
+                        other{"{0} tun"}
+                    }
+                    dative{
+                        few{"{0} tunám"}
+                        many{"{0} tuny"}
+                        one{"{0} tuně"}
+                        other{"{0} tunám"}
+                    }
+                    genitive{
+                        few{"{0} tun"}
+                        many{"{0} tuny"}
+                        one{"{0} tuny"}
+                        other{"{0} tun"}
+                    }
+                    instrumental{
+                        few{"{0} tunami"}
+                        many{"{0} tuny"}
+                        one{"{0} tunou"}
+                        other{"{0} tunami"}
+                    }
+                    locative{
+                        few{"{0} tunách"}
+                        many{"{0} tuny"}
+                        one{"{0} tuně"}
+                        other{"{0} tunách"}
+                    }
+                }
+                dnam{"tuny"}
+                few{"{0} tuny"}
+                gender{"feminine"}
+                many{"{0} tuny"}
+                one{"{0} tuna"}
+                other{"{0} tun"}
             }
         }
         power{
@@ -6198,13 +6198,6 @@ cs{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                few{"{0} t"}
-                many{"{0} t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 few{"{0} μg"}
@@ -6262,6 +6255,13 @@ cs{
                 many{"{0} sht"}
                 one{"{0} sht"}
                 other{"{0} sht"}
+            }
+            tonne{
+                dnam{"t"}
+                few{"{0} t"}
+                many{"{0} t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{
@@ -7632,13 +7632,6 @@ cs{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                few{"{0} t"}
-                many{"{0} t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 few{"{0} μg"}
@@ -7696,6 +7689,13 @@ cs{
                 many{"{0} sht"}
                 one{"{0} sht"}
                 other{"{0} sht"}
+            }
+            tonne{
+                dnam{"t"}
+                few{"{0} t"}
+                many{"{0} t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

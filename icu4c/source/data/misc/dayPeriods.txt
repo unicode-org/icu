@@ -745,12 +745,8 @@ dayPeriods:table(nofallback){
                 from{"12:00"}
             }
             evening1{
-                before{"18:00"}
-                from{"16:00"}
-            }
-            evening2{
                 before{"21:00"}
-                from{"18:00"}
+                from{"16:00"}
             }
             morning1{
                 before{"06:00"}
@@ -2267,12 +2263,8 @@ dayPeriods:table(nofallback){
                 from{"12:00"}
             }
             evening1{
-                before{"18:00"}
-                from{"16:00"}
-            }
-            evening2{
                 before{"21:00"}
-                from{"18:00"}
+                from{"16:00"}
             }
             midnight{
                 at{"00:00"}
