@@ -1816,4 +1816,22 @@ brx{
         US{"इउ.एस"}
         metric{"मेट्रिक जखा"}
     }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "brx",
+            }
+            surnameFirst{
+                "ja",
+                "ko",
+                "si",
+                "ta",
+                "te",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+    }
 }

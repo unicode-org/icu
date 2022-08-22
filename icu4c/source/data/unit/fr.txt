@@ -798,12 +798,6 @@ fr{
                 other{"{0} kilogrammes"}
                 per{"{0} par kilogramme"}
             }
-            metric-ton{
-                dnam{"tonnes"}
-                gender{"feminine"}
-                one{"{0} tonne"}
-                other{"{0} tonnes"}
-            }
             microgram{
                 dnam{"microgrammes"}
                 gender{"masculine"}
@@ -850,6 +844,12 @@ fr{
                 dnam{"tonnes courtes"}
                 one{"{0} tonne courte"}
                 other{"{0} tonnes courtes"}
+            }
+            tonne{
+                dnam{"tonnes"}
+                gender{"feminine"}
+                one{"{0} tonne"}
+                other{"{0} tonnes"}
             }
         }
         power{
@@ -1810,11 +1810,6 @@ fr{
                 other{"{0}kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0}t"}
-                other{"{0}t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0}μg"}
@@ -1856,6 +1851,11 @@ fr{
                 dnam{"sh tn"}
                 one{"{0} sh tn"}
                 other{"{0} sh tn"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0}t"}
+                other{"{0}t"}
             }
         }
         power{
@@ -2764,11 +2764,6 @@ fr{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -2810,6 +2805,11 @@ fr{
                 dnam{"sh tn"}
                 one{"{0} sh tn"}
                 other{"{0} sh tn"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

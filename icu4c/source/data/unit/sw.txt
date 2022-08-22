@@ -689,11 +689,6 @@ sw{
                 other{"kilogramu {0}"}
                 per{"{0} kwa kila kilogramu"}
             }
-            metric-ton{
-                dnam{"tani mita"}
-                one{"tani mita {0}"}
-                other{"tani mita {0}"}
-            }
             microgram{
                 dnam{"mikrogramu"}
                 one{"mikrogramu {0}"}
@@ -735,6 +730,11 @@ sw{
                 dnam{"tani fupi"}
                 one{"tani fupi {0}"}
                 other{"tani fupi {0}"}
+            }
+            tonne{
+                dnam{"tani mita"}
+                one{"tani mita {0}"}
+                other{"tani mita {0}"}
             }
         }
         power{
@@ -2037,11 +2037,6 @@ sw{
                 other{"kg {0}"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"tani mita"}
-                one{"tani mita {0}"}
-                other{"tani mita {0}"}
-            }
             microgram{
                 dnam{"mikrogramu"}
                 one{"mikrogramu {0}"}
@@ -2083,6 +2078,11 @@ sw{
                 dnam{"tani fupi"}
                 one{"tani fupi {0}"}
                 other{"tani fupi {0}"}
+            }
+            tonne{
+                dnam{"tani mita"}
+                one{"tani mita {0}"}
+                other{"tani mita {0}"}
             }
         }
         power{

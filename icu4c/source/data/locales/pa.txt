@@ -2671,9 +2671,13 @@ pa{
                 "pa",
             }
             surnameFirst{
-                "hi",
-                "gu",
-                "mr",
+                "ko",
+                "si",
+                "ta",
+                "te",
+                "vi",
+                "yue",
+                "zh",
             }
         }
         namePattern{

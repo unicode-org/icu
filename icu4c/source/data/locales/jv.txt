@@ -1631,6 +1631,12 @@ jv{
                 "und",
                 "jv",
             }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
         }
         namePattern{
             givenFirst-long-addressing-formal{"{prefix} {surname}"}

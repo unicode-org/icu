@@ -1869,6 +1869,12 @@ ka{
                 "und",
                 "ka",
             }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
         }
     }
 }

@@ -1847,7 +1847,13 @@ km{
     personNames{
         nameOrderLocales{
             givenFirst{"und"}
-            surnameFirst{"km"}
+            surnameFirst{
+                "km",
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
         }
     }
 }

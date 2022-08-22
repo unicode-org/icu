@@ -1990,30 +1990,6 @@ sr_Latn{
                 other{"{0} kilograma"}
                 per{"{0} po kilogramu"}
             }
-            metric-ton{
-                case{
-                    accusative{
-                        few{"{0} metričke tone"}
-                        one{"{0} metričku tonu"}
-                        other{"{0} metričkih tona"}
-                    }
-                    genitive{
-                        few{"{0} metričke tone"}
-                        one{"{0} metričke tone"}
-                        other{"{0} metričkih tona"}
-                    }
-                    instrumental{
-                        few{"{0} metričke tone"}
-                        one{"{0} metričkom tonom"}
-                        other{"{0} metričkih tona"}
-                    }
-                }
-                dnam{"metričke tone"}
-                few{"{0} metričke tone"}
-                gender{"feminine"}
-                one{"{0} metrička tona"}
-                other{"{0} metričkih tona"}
-            }
             microgram{
                 case{
                     genitive{
@@ -2089,6 +2065,30 @@ sr_Latn{
                 few{"{0} tone"}
                 one{"{0} tona"}
                 other{"{0} tona"}
+            }
+            tonne{
+                case{
+                    accusative{
+                        few{"{0} metričke tone"}
+                        one{"{0} metričku tonu"}
+                        other{"{0} metričkih tona"}
+                    }
+                    genitive{
+                        few{"{0} metričke tone"}
+                        one{"{0} metričke tone"}
+                        other{"{0} metričkih tona"}
+                    }
+                    instrumental{
+                        few{"{0} metričke tone"}
+                        one{"{0} metričkom tonom"}
+                        other{"{0} metričkih tona"}
+                    }
+                }
+                dnam{"metričke tone"}
+                few{"{0} metričke tone"}
+                gender{"feminine"}
+                one{"{0} metrička tona"}
+                other{"{0} metričkih tona"}
             }
         }
         power{
@@ -3934,12 +3934,6 @@ sr_Latn{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                few{"{0} t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 few{"{0} μg"}
@@ -3977,6 +3971,12 @@ sr_Latn{
                 few{"{0} tn"}
                 one{"{0} tn"}
                 other{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                few{"{0} t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

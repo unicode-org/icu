@@ -546,10 +546,6 @@ ko{
                 other{"{0}킬로그램"}
                 per{"킬로그램당 {0}"}
             }
-            metric-ton{
-                dnam{"메트릭 톤"}
-                other{"{0}메트릭 톤"}
-            }
             microgram{
                 dnam{"마이크로그램"}
                 other{"{0}마이크로그램"}
@@ -583,6 +579,10 @@ ko{
             ton{
                 dnam{"톤"}
                 other{"{0}톤"}
+            }
+            tonne{
+                dnam{"메트릭 톤"}
+                other{"{0}메트릭 톤"}
             }
         }
         power{
@@ -1079,10 +1079,6 @@ ko{
                 other{"{0}kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                other{"{0}t"}
-            }
             microgram{
                 dnam{"μg"}
                 other{"{0}μg"}
@@ -1112,6 +1108,10 @@ ko{
             ton{
                 dnam{"tn"}
                 other{"{0}tn"}
+            }
+            tonne{
+                dnam{"t"}
+                other{"{0}t"}
             }
         }
         power{
@@ -1704,10 +1704,6 @@ ko{
                 other{"{0}kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                other{"{0}t"}
-            }
             microgram{
                 dnam{"μg"}
                 other{"{0}μg"}
@@ -1741,6 +1737,10 @@ ko{
             ton{
                 dnam{"tn"}
                 other{"{0}tn"}
+            }
+            tonne{
+                dnam{"t"}
+                other{"{0}t"}
             }
         }
         power{

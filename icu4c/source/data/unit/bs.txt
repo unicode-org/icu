@@ -745,12 +745,6 @@ bs{
                 other{"{0} kilograma"}
                 per{"{0} po kilogramu"}
             }
-            metric-ton{
-                dnam{"metričke tone"}
-                few{"{0} metričke tone"}
-                one{"{0} metrička tona"}
-                other{"{0} metričkih tona"}
-            }
             microgram{
                 dnam{"mikrogrami"}
                 few{"{0} mikrograma"}
@@ -800,6 +794,12 @@ bs{
                 few{"{0} tone"}
                 one{"{0} tona"}
                 other{"{0} tona"}
+            }
+            tonne{
+                dnam{"metričke tone"}
+                few{"{0} metričke tone"}
+                one{"{0} metrička tona"}
+                other{"{0} metričkih tona"}
             }
         }
         power{
@@ -2197,12 +2197,6 @@ bs{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                few{"{0} t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 few{"{0} μg"}
@@ -2246,6 +2240,12 @@ bs{
                 few{"{0} tn"}
                 one{"{0} tn"}
                 other{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                few{"{0} t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

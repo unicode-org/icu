@@ -1536,7 +1536,7 @@ public class PluralRulesTest extends TestFmwk {
     }
 
     static final String[] LOCALE_SNAPSHOT = {
-            // Last regenerated 2022-05-25 as part of CLDR 42m1 integration
+            // Last regenerated 2022-08-21 as part of CLDR 42 alpha2 integration
             // [other]
             "bm,bo,dz,hnj,id,ig,ii,ja,jbo,jv,kde,kea,km,ko,lkt,lo,ms,my,nqo,osa,root,sah,ses,sg,su,th,to,tpi,vi,wo,yo,yue,zh; other: @integer 0~15, 100, 1000, 10000, 100000, 1000000, …",
 
@@ -1559,26 +1559,24 @@ public class PluralRulesTest extends TestFmwk {
             "ksh; zero: @integer 0; one: @integer 1; other: @integer 2~17, 100, 1000, 10000, 100000, 1000000, …",
 
             // [one, two, other]
+            "he; one: @integer 1; two: @integer 2; other: @integer 0, 3~17, 100, 1000, 10000, 100000, 1000000, …",
             "iu,naq,sat,se,sma,smi,smj,smn,sms; one: @integer 1; two: @integer 2; other: @integer 0, 3~17, 100, 1000, 10000, 100000, 1000000, …",
 
             // [one, few, other]
             "shi; one: @integer 0, 1; few: @integer 2~10; other: @integer 11~26, 100, 1000, 10000, 100000, 1000000, …",
-            "ro; one: @integer 1; few: @integer 0, 2~16, 102, 1002, …; other: @integer 20~35, 100, 1000, 10000, 100000, 1000000, …",
+            "ro; one: @integer 1; few: @integer 0, 2~16, 101, 1001, …; other: @integer 20~35, 100, 1000, 10000, 100000, 1000000, …",
             "bs,hr,sr,sr_Latn; one: @integer 1, 21, 31, 41, 51, 61, 71, 81, 101, 1001, …; few: @integer 2~4, 22~24, 32~34, 42~44, 52~54, 62, 102, 1002, …; other: @integer 0, 5~19, 100, 1000, 10000, 100000, 1000000, …",
 
             // [one, many, other]
-            "fr; one: @integer 0, 1; many: @integer 1000000, 1e6, 2e6, 3e6, 4e6, 5e6, 6e6, …; other: @integer 2~17, 100, 1000, 10000, 100000, 1e3, 2e3, 3e3, 4e3, 5e3, 6e3, …",
-            "pt; one: @integer 0, 1; many: @integer 1000000, 1e6, 2e6, 3e6, 4e6, 5e6, 6e6, …; other: @integer 2~17, 100, 1000, 10000, 100000, 1e3, 2e3, 3e3, 4e3, 5e3, 6e3, …",
-            "ca,it,pt_PT; one: @integer 1; many: @integer 1000000, 1e6, 2e6, 3e6, 4e6, 5e6, 6e6, …; other: @integer 0, 2~16, 100, 1000, 10000, 100000, 1e3, 2e3, 3e3, 4e3, 5e3, 6e3, …",
-            "es; one: @integer 1; many: @integer 1000000, 1e6, 2e6, 3e6, 4e6, 5e6, 6e6, …; other: @integer 0, 2~16, 100, 1000, 10000, 100000, 1e3, 2e3, 3e3, 4e3, 5e3, 6e3, …",
+            "fr; one: @integer 0, 1; many: @integer 1000000, 1c6, 2c6, 3c6, 4c6, 5c6, 6c6, …; other: @integer 2~17, 100, 1000, 10000, 100000, 1c3, 2c3, 3c3, 4c3, 5c3, 6c3, …",
+            "pt; one: @integer 0, 1; many: @integer 1000000, 1c6, 2c6, 3c6, 4c6, 5c6, 6c6, …; other: @integer 2~17, 100, 1000, 10000, 100000, 1c3, 2c3, 3c3, 4c3, 5c3, 6c3, …",
+            "ca,it,pt_PT,vec; one: @integer 1; many: @integer 1000000, 1c6, 2c6, 3c6, 4c6, 5c6, 6c6, …; other: @integer 0, 2~16, 100, 1000, 10000, 100000, 1c3, 2c3, 3c3, 4c3, 5c3, 6c3, …",
+            "es; one: @integer 1; many: @integer 1000000, 1c6, 2c6, 3c6, 4c6, 5c6, 6c6, …; other: @integer 0, 2~16, 100, 1000, 10000, 100000, 1c3, 2c3, 3c3, 4c3, 5c3, 6c3, …",
 
             // [one, two, few, other]
             "gd; one: @integer 1, 11; two: @integer 2, 12; few: @integer 3~10, 13~19; other: @integer 0, 20~34, 100, 1000, 10000, 100000, 1000000, …",
             "dsb,hsb; one: @integer 1, 101, 201, 301, 401, 501, 601, 701, 1001, …; two: @integer 2, 102, 202, 302, 402, 502, 602, 702, 1002, …; few: @integer 3, 4, 103, 104, 203, 204, 303, 304, 403, 404, 503, 504, 603, 604, 703, 704, 1003, …; other: @integer 0, 5~19, 100, 1000, 10000, 100000, 1000000, …",
             "sl; one: @integer 1, 101, 201, 301, 401, 501, 601, 701, 1001, …; two: @integer 2, 102, 202, 302, 402, 502, 602, 702, 1002, …; few: @integer 3, 4, 103, 104, 203, 204, 303, 304, 403, 404, 503, 504, 603, 604, 703, 704, 1003, …; other: @integer 0, 5~19, 100, 1000, 10000, 100000, 1000000, …",
-
-            // [one, two, many, other]
-            "he; one: @integer 1; two: @integer 2; many: @integer 20, 30, 40, 50, 60, 70, 80, 90, 100, 1000, 10000, 100000, 1000000, …; other: @integer 0, 3~17, 101, 1001, …",
 
             // [one, few, many, other]
             "cs,sk; one: @integer 1; few: @integer 2~4; many: null; other: @integer 0, 5~19, 100, 1000, 10000, 100000, 1000000, …",

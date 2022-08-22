@@ -1240,18 +1240,6 @@ da{
                 other{"{0} kilogram"}
                 per{"{0} pr. kg"}
             }
-            metric-ton{
-                case{
-                    genitive{
-                        one{"{0} tons"}
-                        other{"{0} tons"}
-                    }
-                }
-                dnam{"tons"}
-                gender{"neuter"}
-                one{"{0} ton"}
-                other{"{0} tons"}
-            }
             microgram{
                 case{
                     genitive{
@@ -1310,6 +1298,18 @@ da{
                 dnam{"short ton"}
                 one{"{0} short ton"}
                 other{"{0} short ton"}
+            }
+            tonne{
+                case{
+                    genitive{
+                        one{"{0} tons"}
+                        other{"{0} tons"}
+                    }
+                }
+                dnam{"tons"}
+                gender{"neuter"}
+                one{"{0} ton"}
+                other{"{0} tons"}
             }
         }
         power{
@@ -2859,11 +2859,6 @@ da{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -2898,6 +2893,11 @@ da{
                 dnam{"tn"}
                 one{"{0} tn"}
                 other{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

@@ -1147,4 +1147,18 @@ wo{
         US{"US"}
         metric{"Metrik"}
     }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "wo",
+            }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+    }
 }

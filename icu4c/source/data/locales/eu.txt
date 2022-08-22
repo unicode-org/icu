@@ -1918,9 +1918,10 @@ eu{
                 "eu",
             }
             surnameFirst{
-                "zh",
-                "ja",
                 "ko",
+                "vi",
+                "yue",
+                "zh",
             }
         }
         namePattern{

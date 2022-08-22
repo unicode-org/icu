@@ -2176,26 +2176,6 @@ de{
                 other{"{0} Kilogramm"}
                 per{"{0} pro Kilogramm"}
             }
-            metric-ton{
-                case{
-                    accusative{
-                        one{"{0} Tonne"}
-                        other{"{0} Tonnen"}
-                    }
-                    dative{
-                        one{"{0} Tonne"}
-                        other{"{0} Tonnen"}
-                    }
-                    genitive{
-                        one{"{0} Tonne"}
-                        other{"{0} Tonnen"}
-                    }
-                }
-                dnam{"Tonnen"}
-                gender{"feminine"}
-                one{"{0} Tonne"}
-                other{"{0} Tonnen"}
-            }
             microgram{
                 case{
                     accusative{
@@ -2312,6 +2292,26 @@ de{
                 dnam{"Short Tons"}
                 one{"{0} Short Ton"}
                 other{"{0} Short Tons"}
+            }
+            tonne{
+                case{
+                    accusative{
+                        one{"{0} Tonne"}
+                        other{"{0} Tonnen"}
+                    }
+                    dative{
+                        one{"{0} Tonne"}
+                        other{"{0} Tonnen"}
+                    }
+                    genitive{
+                        one{"{0} Tonne"}
+                        other{"{0} Tonnen"}
+                    }
+                }
+                dnam{"Tonnen"}
+                gender{"feminine"}
+                one{"{0} Tonne"}
+                other{"{0} Tonnen"}
             }
         }
         power{
@@ -3824,11 +3824,6 @@ de{
             kilogram{
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -3865,6 +3860,11 @@ de{
                 dnam{"Tons"}
                 one{"{0} tn"}
                 other{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

@@ -7,7 +7,6 @@ sw_KE{
         011{"Afrika Magharibi"}
         014{"Afrika Mashariki"}
         015{"Afrika Kaskazini"}
-        018{"Afrika Kusini"}
         030{"Asia Mashariki"}
         034{"Asia Kusini"}
         035{"Kusini Mashariki mwa Asia"}
@@ -19,7 +18,6 @@ sw_KE{
         154{"Ulaya Kaskazini"}
         155{"Ulaya Magharibi"}
         202{"Kusini mwa Jangwa la Sahara"}
-        419{"Amerika Kusini"}
         AF{"Afghanistani"}
         AG{"Antigua na Babuda"}
         AI{"Anguila"}

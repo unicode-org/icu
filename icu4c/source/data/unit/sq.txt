@@ -674,11 +674,6 @@ sq{
                 other{"{0} kilogramë"}
                 per{"{0}/kilogram"}
             }
-            metric-ton{
-                dnam{"tonë metrik"}
-                one{"{0} ton metrik"}
-                other{"{0} tonë metrik"}
-            }
             microgram{
                 dnam{"mikrogramë"}
                 one{"{0} mikrogram"}
@@ -715,6 +710,11 @@ sq{
                 dnam{"tonë"}
                 one{"{0} ton"}
                 other{"{0} tonë"}
+            }
+            tonne{
+                dnam{"tonë metrik"}
+                one{"{0} ton metrik"}
+                other{"{0} tonë metrik"}
             }
         }
         power{
@@ -1625,11 +1625,6 @@ sq{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -1671,6 +1666,11 @@ sq{
                 dnam{"tn"}
                 one{"{0} tn"}
                 other{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{
@@ -2502,11 +2502,6 @@ sq{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -2538,6 +2533,11 @@ sq{
                 dnam{"tn"}
                 one{"{0} tn"}
                 other{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

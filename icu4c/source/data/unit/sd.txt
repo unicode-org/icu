@@ -672,11 +672,6 @@ sd{
                 other{"{0}ڪلوگرامَ"}
                 per{"{0} في ڪلوگرام"}
             }
-            metric-ton{
-                dnam{"ميٽرڪ ٽَنَ"}
-                one{"{0} ميٽرڪ ٽَنُ"}
-                other{"{0} ميٽرڪ ٽَنَ"}
-            }
             microgram{
                 dnam{"مائڪروگرامَ"}
                 one{"{0} مائڪروگرام"}
@@ -713,6 +708,11 @@ sd{
                 dnam{"ٽن"}
                 one{"{0} ٽن"}
                 other{"{0} ٽن"}
+            }
+            tonne{
+                dnam{"ميٽرڪ ٽَنَ"}
+                one{"{0} ميٽرڪ ٽَنُ"}
+                other{"{0} ميٽرڪ ٽَنَ"}
             }
         }
         power{
@@ -1183,15 +1183,15 @@ sd{
                 other{"{0} kg"}
                 per{"{0}/ڪ.گـ."}
             }
-            metric-ton{
-                dnam{"ٽَـ"}
-                one{"{0}ٽَـ"}
-                other{"{0}ٽَـ"}
-            }
             milligram{
                 dnam{"مـ.گـ."}
                 one{"{0}مـ.گـ."}
                 other{"{0}مـ.گـ."}
+            }
+            tonne{
+                dnam{"ٽَـ"}
+                one{"{0}ٽَـ"}
+                other{"{0}ٽَـ"}
             }
         }
         speed{
@@ -1832,10 +1832,6 @@ sd{
                 one{"{0} ڪلو گرام"}
                 other{"{0} kg"}
             }
-            metric-ton{
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 one{"{0} μg"}
                 other{"{0} μg"}
@@ -1870,6 +1866,10 @@ sd{
                 dnam{"ٽن"}
                 one{"{0} ٽن"}
                 other{"{0} ٽن"}
+            }
+            tonne{
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

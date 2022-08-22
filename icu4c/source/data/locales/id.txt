@@ -2816,8 +2816,9 @@ id{
                 "id",
             }
             surnameFirst{
-                "ja",
                 "ko",
+                "vi",
+                "yue",
                 "zh",
             }
         }

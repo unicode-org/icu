@@ -1607,22 +1607,6 @@ el{
                 other{"{0} χιλιόγραμμα"}
                 per{"{0} ανά χιλιόγραμμο"}
             }
-            metric-ton{
-                case{
-                    accusative{
-                        one{"{0} τόνο"}
-                        other{"{0} τόνους"}
-                    }
-                    genitive{
-                        one{"{0} τόνου"}
-                        other{"{0} τόνων"}
-                    }
-                }
-                dnam{"τόνοι"}
-                gender{"masculine"}
-                one{"{0} τόνος"}
-                other{"{0} τόνοι"}
-            }
             microgram{
                 case{
                     accusative{
@@ -1686,6 +1670,22 @@ el{
                 dnam{"τόνοι ΗΠΑ"}
                 one{"{0} τόνος ΗΠΑ"}
                 other{"{0} τόνοι ΗΠΑ"}
+            }
+            tonne{
+                case{
+                    accusative{
+                        one{"{0} τόνο"}
+                        other{"{0} τόνους"}
+                    }
+                    genitive{
+                        one{"{0} τόνου"}
+                        other{"{0} τόνων"}
+                    }
+                }
+                dnam{"τόνοι"}
+                gender{"masculine"}
+                one{"{0} τόνος"}
+                other{"{0} τόνοι"}
             }
         }
         power{
@@ -3447,11 +3447,6 @@ el{
                 other{"{0} κιλά"}
                 per{"{0}/κιλό"}
             }
-            metric-ton{
-                dnam{"τ."}
-                one{"{0} τ."}
-                other{"{0} τ."}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -3492,6 +3487,11 @@ el{
                 dnam{"τόνοι ΗΠΑ"}
                 one{"{0} τ. ΗΠΑ"}
                 other{"{0} τ. ΗΠΑ"}
+            }
+            tonne{
+                dnam{"τ."}
+                one{"{0} τ."}
+                other{"{0} τ."}
             }
         }
         power{

@@ -2694,8 +2694,12 @@ ml{
                 "ml",
             }
             surnameFirst{
-                "ja",
                 "ko",
+                "si",
+                "ta",
+                "te",
+                "vi",
+                "yue",
                 "zh",
             }
         }

@@ -564,10 +564,6 @@ ja{
                 other{"{0} キログラム"}
                 per{"{0}/キログラム"}
             }
-            metric-ton{
-                dnam{"トン"}
-                other{"{0} トン"}
-            }
             microgram{
                 dnam{"マイクログラム"}
                 other{"{0} マイクログラム"}
@@ -601,6 +597,10 @@ ja{
             ton{
                 dnam{"米トン"}
                 other{"{0} 米トン"}
+            }
+            tonne{
+                dnam{"トン"}
+                other{"{0} トン"}
             }
         }
         power{
@@ -1331,10 +1331,6 @@ ja{
                 other{"{0}kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                other{"{0}t"}
-            }
             microgram{
                 dnam{"μg"}
                 other{"{0}μg"}
@@ -1365,6 +1361,10 @@ ja{
             }
             ton{
                 other{"{0}s/t"}
+            }
+            tonne{
+                dnam{"t"}
+                other{"{0}t"}
             }
         }
         power{
@@ -2122,10 +2122,6 @@ ja{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"トン"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"マイクログラム"}
                 other{"{0} μg"}
@@ -2159,6 +2155,10 @@ ja{
             ton{
                 dnam{"米トン"}
                 other{"{0} s/t"}
+            }
+            tonne{
+                dnam{"トン"}
+                other{"{0} t"}
             }
         }
         power{

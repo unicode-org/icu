@@ -2265,7 +2265,6 @@ da{
                 "da",
             }
             surnameFirst{
-                "ja",
                 "ko",
                 "vi",
                 "yue",

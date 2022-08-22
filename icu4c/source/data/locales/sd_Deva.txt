@@ -413,4 +413,21 @@ sd_Deva{
         US{"यूएस"}
         metric{"मैट्रिक"}
     }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "sd",
+            }
+            surnameFirst{
+                "ko",
+                "si",
+                "ta",
+                "te",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+    }
 }

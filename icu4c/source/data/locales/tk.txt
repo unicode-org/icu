@@ -1964,7 +1964,6 @@ tk{
                 "und",
                 "tk",
             }
-            surnameFirst{"zxx"}
         }
         namePattern{
             givenFirst-short-addressing-formal{"{prefix} {surname}"}

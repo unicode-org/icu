@@ -650,11 +650,6 @@ mk{
                 other{"{0} килограми"}
                 per{"{0} на килограм"}
             }
-            metric-ton{
-                dnam{"тони"}
-                one{"{0} тон"}
-                other{"{0} тони"}
-            }
             microgram{
                 dnam{"микрограми"}
                 one{"{0} микрограм"}
@@ -696,6 +691,11 @@ mk{
                 dnam{"американски тони"}
                 one{"{0} американски тон"}
                 other{"{0} американски тони"}
+            }
+            tonne{
+                dnam{"тони"}
+                one{"{0} тон"}
+                other{"{0} тони"}
             }
         }
         power{
@@ -2104,11 +2104,6 @@ mk{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -2150,6 +2145,11 @@ mk{
                 dnam{"американски тони"}
                 one{"{0} tn"}
                 other{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

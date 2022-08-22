@@ -3631,6 +3631,12 @@ th{
                 "und",
                 "th",
             }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
         }
         namePattern{
             givenFirst-long-addressing-informal{"{given-informal}"}

@@ -2656,8 +2656,12 @@ kn{
                 "kn",
             }
             surnameFirst{
-                "ja",
                 "ko",
+                "si",
+                "ta",
+                "te",
+                "vi",
+                "yue",
                 "zh",
             }
         }

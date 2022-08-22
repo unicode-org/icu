@@ -800,12 +800,6 @@ es{
                 other{"{0} kilogramos"}
                 per{"{0} por kilogramo"}
             }
-            metric-ton{
-                dnam{"toneladas"}
-                gender{"feminine"}
-                one{"{0} tonelada"}
-                other{"{0} toneladas"}
-            }
             microgram{
                 dnam{"microgramos"}
                 gender{"masculine"}
@@ -852,6 +846,12 @@ es{
                 dnam{"toneladas cortas"}
                 one{"{0} tonelada corta"}
                 other{"{0} toneladas cortas"}
+            }
+            tonne{
+                dnam{"toneladas"}
+                gender{"feminine"}
+                one{"{0} tonelada"}
+                other{"{0} toneladas"}
             }
         }
         power{
@@ -1817,10 +1817,6 @@ es{
                 other{"{0}kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                one{"{0}t"}
-                other{"{0}t"}
-            }
             microgram{
                 one{"{0}μg"}
                 other{"{0}μg"}
@@ -1857,6 +1853,10 @@ es{
             ton{
                 one{"{0}tc"}
                 other{"{0}tc"}
+            }
+            tonne{
+                one{"{0}t"}
+                other{"{0}t"}
             }
         }
         power{
@@ -2746,10 +2746,6 @@ es{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -2781,6 +2777,10 @@ es{
                 dnam{"tc"}
                 one{"{0} tc"}
                 other{"{0} tc"}
+            }
+            tonne{
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

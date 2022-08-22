@@ -3024,7 +3024,6 @@ ro{
                 "ro",
             }
             surnameFirst{
-                "ja",
                 "ko",
                 "vi",
                 "yue",

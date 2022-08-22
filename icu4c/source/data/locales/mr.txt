@@ -907,7 +907,6 @@ mr{
                     abbreviated{
                         afternoon1{"दुपार"}
                         evening1{"संध्याकाळ"}
-                        evening2{"सायंकाळ"}
                         midnight{"मध्यरात्र"}
                         morning1{"पहाट"}
                         morning2{"सकाळ"}
@@ -917,7 +916,6 @@ mr{
                     narrow{
                         afternoon1{"दु"}
                         evening1{"सं"}
-                        evening2{"सा"}
                         midnight{"म.रा."}
                         morning1{"प"}
                         morning2{"स"}
@@ -927,7 +925,6 @@ mr{
                     wide{
                         afternoon1{"दुपार"}
                         evening1{"संध्याकाळ"}
-                        evening2{"सायंकाळ"}
                         midnight{"मध्यरात्र"}
                         morning1{"पहाट"}
                         morning2{"सकाळ"}
@@ -940,7 +937,6 @@ mr{
                         afternoon1{"दुपार"}
                         am{"AM"}
                         evening1{"संध्याकाळ"}
-                        evening2{"सायंकाळ"}
                         midnight{"मध्यरात्र"}
                         morning1{"पहाट"}
                         morning2{"सकाळ"}
@@ -952,7 +948,6 @@ mr{
                         afternoon1{"दु"}
                         am{"AM"}
                         evening1{"सं"}
-                        evening2{"सा"}
                         midnight{"म.रा."}
                         morning1{"प"}
                         morning2{"स"}
@@ -964,7 +959,6 @@ mr{
                         afternoon1{"दुपार"}
                         am{"AM"}
                         evening1{"संध्याकाळ"}
-                        evening2{"सायंकाळ"}
                         midnight{"मध्यरात्र"}
                         morning1{"पहाट"}
                         morning2{"सकाळ"}
@@ -2660,8 +2654,12 @@ mr{
                 "mr",
             }
             surnameFirst{
-                "ja",
                 "ko",
+                "si",
+                "ta",
+                "te",
+                "vi",
+                "yue",
                 "zh",
             }
         }

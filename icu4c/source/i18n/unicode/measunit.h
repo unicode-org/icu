@@ -2586,6 +2586,7 @@ class U_I18N_API MeasureUnit: public UObject {
 
     /**
      * Returns by pointer, unit of mass: metric-ton.
+     * (renamed to tonne in CLDR 42 / ICU 72)
      * Caller owns returned value and must free it.
      * Also see {@link #getMetricTon()}.
      * @param status ICU error code.
@@ -2595,7 +2596,8 @@ class U_I18N_API MeasureUnit: public UObject {
 
     /**
      * Returns by value, unit of mass: metric-ton.
-     * Also see {@link #createMetricTon()}.
+      * (renamed to tonne in CLDR 42 / ICU 72)
+    * Also see {@link #createMetricTon()}.
      * @stable ICU 64
      */
     static MeasureUnit getMetricTon();
@@ -2727,6 +2729,24 @@ class U_I18N_API MeasureUnit: public UObject {
      * @stable ICU 64
      */
     static MeasureUnit getTon();
+
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Returns by pointer, unit of mass: tonne.
+     * Caller owns returned value and must free it.
+     * Also see {@link #getTonne()}.
+     * @param status ICU error code.
+     * @draft ICU 72
+     */
+    static MeasureUnit *createTonne(UErrorCode &status);
+
+    /**
+     * Returns by value, unit of mass: tonne.
+     * Also see {@link #createTonne()}.
+     * @draft ICU 72
+     */
+    static MeasureUnit getTonne();
+#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of power: gigawatt.

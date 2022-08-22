@@ -670,11 +670,6 @@ az{
                 other{"{0} kiloqram"}
                 per{"{0}/kq"}
             }
-            metric-ton{
-                dnam{"metrik ton"}
-                one{"{0} metrik ton"}
-                other{"{0} metrik ton"}
-            }
             microgram{
                 dnam{"mikroqram"}
                 one{"{0} mikroqram"}
@@ -716,6 +711,11 @@ az{
                 dnam{"ton"}
                 one{"{0} ton"}
                 other{"{0} ton"}
+            }
+            tonne{
+                dnam{"metrik ton"}
+                one{"{0} metrik ton"}
+                other{"{0} metrik ton"}
             }
         }
         power{
@@ -2061,11 +2061,6 @@ az{
                 other{"{0} kq"}
                 per{"{0}/kq"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μq"}
                 one{"{0} μq"}
@@ -2105,6 +2100,11 @@ az{
                 dnam{"tn"}
                 one{"{0} tn"}
                 other{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

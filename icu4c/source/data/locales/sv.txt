@@ -3033,6 +3033,12 @@ sv{
                 "und",
                 "sv",
             }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
         }
     }
 }

@@ -2330,30 +2330,6 @@ hr{
                 other{"{0} kilograma"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                case{
-                    accusative{
-                        few{"{0} tone"}
-                        one{"{0} tonu"}
-                        other{"{0} tona"}
-                    }
-                    genitive{
-                        few{"{0} tone"}
-                        one{"{0} tone"}
-                        other{"{0} tona"}
-                    }
-                    instrumental{
-                        few{"{0} tone"}
-                        one{"{0} tonom"}
-                        other{"{0} tona"}
-                    }
-                }
-                dnam{"tone"}
-                few{"{0} tone"}
-                gender{"feminine"}
-                one{"{0} tona"}
-                other{"{0} tona"}
-            }
             microgram{
                 case{
                     accusative{
@@ -2439,6 +2415,30 @@ hr{
                 few{"{0} kratke tone"}
                 one{"{0} kratka tona"}
                 other{"{0} kratkih tona"}
+            }
+            tonne{
+                case{
+                    accusative{
+                        few{"{0} tone"}
+                        one{"{0} tonu"}
+                        other{"{0} tona"}
+                    }
+                    genitive{
+                        few{"{0} tone"}
+                        one{"{0} tone"}
+                        other{"{0} tona"}
+                    }
+                    instrumental{
+                        few{"{0} tone"}
+                        one{"{0} tonom"}
+                        other{"{0} tona"}
+                    }
+                }
+                dnam{"tone"}
+                few{"{0} tone"}
+                gender{"feminine"}
+                one{"{0} tona"}
+                other{"{0} tona"}
             }
         }
         power{
@@ -3827,11 +3827,6 @@ hr{
                 one{"{0} kg"}
                 other{"{0} kg"}
             }
-            metric-ton{
-                few{"{0} t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 few{"{0} μg"}
                 one{"{0} μg"}
@@ -3867,6 +3862,11 @@ hr{
                 few{"{0} tn"}
                 one{"{0} tn"}
                 other{"{0} tn"}
+            }
+            tonne{
+                few{"{0} t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{
@@ -4790,12 +4790,6 @@ hr{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                few{"{0} t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 few{"{0} μg"}
@@ -4839,6 +4833,12 @@ hr{
                 few{"{0} tn"}
                 one{"{0} tn"}
                 other{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                few{"{0} t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

@@ -2486,8 +2486,9 @@ ga{
                 "ga",
             }
             surnameFirst{
-                "ja",
                 "ko",
+                "vi",
+                "yue",
                 "zh",
             }
         }

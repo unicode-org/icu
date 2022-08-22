@@ -673,11 +673,6 @@ ha{
                 other{"kilogiramgiram {0}"}
                 per{"{0} a kilogiram"}
             }
-            metric-ton{
-                dnam{"metric tons"}
-                one{"metric ton {0}"}
-                other{"metric tons {0}"}
-            }
             microgram{
                 dnam{"makirogiramgiram"}
                 one{"Makirogiram {0}"}
@@ -717,6 +712,11 @@ ha{
                 dnam{"tan-tan"}
                 one{"tan {0}"}
                 other{"tan-tan {0}"}
+            }
+            tonne{
+                dnam{"metric tons"}
+                one{"metric ton {0}"}
+                other{"metric tons {0}"}
             }
         }
         power{
@@ -1573,10 +1573,6 @@ ha{
                 one{"kg{0}"}
                 other{"kg{0}"}
             }
-            metric-ton{
-                one{"t{0}"}
-                other{"t{0}"}
-            }
             microgram{
                 one{"μg{0}"}
                 other{"μg{0}"}
@@ -1613,6 +1609,10 @@ ha{
                 dnam{"tan"}
                 one{"tn{0}"}
                 other{"tn{0}"}
+            }
+            tonne{
+                one{"t{0}"}
+                other{"t{0}"}
             }
         }
         power{
@@ -2463,10 +2463,6 @@ ha{
                 one{"kg {0}"}
                 other{"kg {0}"}
             }
-            metric-ton{
-                one{"t {0}"}
-                other{"t {0}"}
-            }
             microgram{
                 one{"μg {0}"}
                 other{"μg {0}"}
@@ -2503,6 +2499,10 @@ ha{
                 dnam{"tan-tan"}
                 one{"tn {0}"}
                 other{"tn {0}"}
+            }
+            tonne{
+                one{"t {0}"}
+                other{"t {0}"}
             }
         }
         power{

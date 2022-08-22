@@ -1514,8 +1514,14 @@ qu{
     personNames{
         nameOrderLocales{
             givenFirst{
-                "qu",
                 "und",
+                "qu",
+            }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
             }
         }
         namePattern{

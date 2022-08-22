@@ -423,6 +423,18 @@ en_001{
         math_symbols{"maths symbol"}
     }
     fields{
+        day-narrow{
+            relativeTime{
+                future{
+                    one{"in {0} day"}
+                    other{"in {0} days"}
+                }
+                past{
+                    one{"{0} day ago"}
+                    other{"{0} days ago"}
+                }
+            }
+        }
         dayOfYear-narrow{
             dn{"day of yr"}
         }

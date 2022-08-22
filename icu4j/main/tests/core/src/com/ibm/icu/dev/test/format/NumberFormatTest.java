@@ -780,7 +780,7 @@ public class NumberFormatTest extends TestFmwk {
                 {"root@numbers=latn", "-1.23", "USD", "-US$ 1.23", "-USD 1.23", "-1.23 USD"}, // ensure that the root locale is still used with modifiers
                 {"root@numbers=arab", "-1.23", "USD", "\u061C-\u0661\u066B\u0662\u0663\u00A0US$", "\u061C-\u0661\u066B\u0662\u0663\u00A0USD", "\u061C-\u0661\u066B\u0662\u0663 USD"}, // ensure that the root locale is still used with modifiers
                 {"es_AR", "1", "INR", "INR\u00A01,00", "INR\u00A01,00", "1,00 rupia india"},
-                {"ar_EG", "1", "USD", "١٫٠٠\u00A0US$", "١٫٠٠\u00A0USD", "١٫٠٠ دولار أمريكي"},
+                {"ar_EG", "1", "USD", "\u200F١٫٠٠\u00A0US$", "\u200F١٫٠٠\u00A0USD", "١٫٠٠ دولار أمريكي"},
         };
 
         for (int i=0; i<DATA.length; ++i) {
@@ -5637,9 +5637,9 @@ public class NumberFormatTest extends TestFmwk {
 
     @Test
     public void Test13074() {
-        DecimalFormat df = (DecimalFormat) NumberFormat.getCurrencyInstance(new ULocale("bg-BG"));
+        DecimalFormat df = (DecimalFormat) NumberFormat.getCurrencyInstance(new ULocale("en_US_POSIX"));
         String result = df.format(987654.321);
-        assertEquals("Locale 'bg' should not use monetary grouping", "987654,32 лв.", result);
+        assertEquals("Locale 'en_US_POSIX' should not use monetary grouping", "$ 987654.32", result);
     }
 
     @Test
@@ -6233,11 +6233,11 @@ public class NumberFormatTest extends TestFmwk {
                     },
                     // currency (\062C.\0645.\200F is the currency sign in ar for EGP)
                     {
-                        "\u061C+\u0660\u066B\u0660\u0661\u00A0\u062C.\u0645.\u200F",
-                        "\u061C+\u0665\u066B\u0667\u0668\u00A0\u062C.\u0645.\u200F",
-                        "\u061C+\u0660\u066B\u0660\u0660\u00A0\u062C.\u0645.\u200F",
-                        "\u061C-\u0660\u066B\u0660\u0661\u00A0\u062C.\u0645.\u200F",
-                        "\u061C-\u0665\u066B\u0667\u0668\u00A0\u062C.\u0645.\u200F"
+                        "\u061C+\u200F\u0660\u066B\u0660\u0661\u00A0\u062C.\u0645.\u200F",
+                        "\u061C+\u200F\u0665\u066B\u0667\u0668\u00A0\u062C.\u0645.\u200F",
+                        "\u061C+\u200F\u0660\u066B\u0660\u0660\u00A0\u062C.\u0645.\u200F",
+                        "\u061C-\u200F\u0660\u066B\u0660\u0661\u00A0\u062C.\u0645.\u200F",
+                        "\u061C-\u200F\u0665\u066B\u0667\u0668\u00A0\u062C.\u0645.\u200F"
                     }
                 },
                 // es-CL (interesting because of position of sign in currency)

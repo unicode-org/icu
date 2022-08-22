@@ -2446,7 +2446,12 @@ sr{
                 "und",
                 "sr",
             }
-            surnameFirst{"ko"}
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
         }
         namePattern{
             givenFirst-long-addressing-formal{"{prefix} {surname}"}

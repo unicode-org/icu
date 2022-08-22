@@ -892,16 +892,6 @@ es_419{
             initial{"{0}."}
             initialSequence{"{0} {1}"}
         }
-        nameOrderLocales{
-            surnameFirst{
-                "hu",
-                "ja",
-                "ko",
-                "vi",
-                "yue",
-                "zh",
-            }
-        }
         namePattern{
             givenFirst-medium-referring-formal{"{given} {given2-initial} {surname} {suffix}"}
             surnameFirst-long-addressing-formal{"{prefix} {surname} {surname2}"}

@@ -1936,8 +1936,9 @@ sw{
                 "sw",
             }
             surnameFirst{
-                "ja",
                 "ko",
+                "vi",
+                "yue",
                 "zh",
             }
         }

@@ -32,7 +32,7 @@ en_AU{
             }
         }
         mass{
-            metric-ton{
+            tonne{
                 one{"tonne"}
                 other{"{0} tonnes"}
             }
@@ -56,6 +56,11 @@ en_AU{
                 dnam{"fluid ounces"}
                 one{"{0} fluid ounce"}
                 other{"{0} fluid ounces"}
+            }
+            fluid-ounce-imperial{
+                dnam{"Imp. fluid ounces"}
+                one{"{0} Imp. fluid ounce"}
+                other{"{0} Imp. fluid ounces"}
             }
         }
     }
@@ -150,8 +155,15 @@ en_AU{
                 one{"{0}dsp-Imp"}
                 other{"{0}dsp-Imp"}
             }
+            fluid-ounce{
+                dnam{"fl oz"}
+                one{"{0}fl oz"}
+                other{"{0}fl oz"}
+            }
             fluid-ounce-imperial{
-                dnam{"Imp. fl oz"}
+                dnam{"Imp fl oz"}
+                one{"{0}fl oz Im"}
+                other{"{0}fl oz Im"}
             }
             gallon{
                 dnam{"gal US"}
@@ -344,6 +356,11 @@ en_AU{
                 dnam{"fl oz"}
                 one{"{0} fl oz"}
                 other{"{0} fl oz"}
+            }
+            fluid-ounce-imperial{
+                dnam{"Imp. fl oz"}
+                one{"{0} fl oz Imp."}
+                other{"{0} fl oz Imp."}
             }
             gallon{
                 dnam{"gal US"}

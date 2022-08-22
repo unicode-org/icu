@@ -1383,6 +1383,9 @@ ti{
         "meta:French_Southern"{
             ls{"ግዜ ፈረንሳዊ ደቡባዊ ግዝኣታትን ኣንታርቲክን"}
         }
+        "meta:GMT"{
+            ls{"GMT"}
+        }
         "meta:Galapagos"{
             ls{"ግዜ ጋላፓጎስ"}
         }

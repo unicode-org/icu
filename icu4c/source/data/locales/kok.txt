@@ -1832,6 +1832,15 @@ kok{
                 "und",
                 "kok",
             }
+            surnameFirst{
+                "ko",
+                "si",
+                "ta",
+                "te",
+                "vi",
+                "yue",
+                "zh",
+            }
         }
     }
 }

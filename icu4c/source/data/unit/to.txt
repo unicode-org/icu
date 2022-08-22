@@ -564,10 +564,6 @@ to{
                 other{"kilokalami ʻe {0}"}
                 per{"{0} he kilokalami"}
             }
-            metric-ton{
-                dnam{"toni"}
-                other{"toni ʻe {0}"}
-            }
             microgram{
                 dnam{"maikolokalami"}
                 other{"maikolokalami ʻe {0}"}
@@ -601,6 +597,10 @@ to{
             ton{
                 dnam{"toni nounou"}
                 other{"toni nounou ʻe {0}"}
+            }
+            tonne{
+                dnam{"toni"}
+                other{"toni ʻe {0}"}
             }
         }
         power{
@@ -1369,10 +1369,6 @@ to{
                 other{"{0} kk"}
                 per{"{0}/kk"}
             }
-            metric-ton{
-                dnam{"to"}
-                other{"{0} to"}
-            }
             microgram{
                 dnam{"μk"}
                 other{"{0} μk"}
@@ -1406,6 +1402,10 @@ to{
             ton{
                 dnam{"tn"}
                 other{"{0} tn"}
+            }
+            tonne{
+                dnam{"to"}
+                other{"{0} to"}
             }
         }
         power{
@@ -2176,10 +2176,6 @@ to{
                 other{"kk ʻe {0}"}
                 per{"{0}/kk"}
             }
-            metric-ton{
-                dnam{"to"}
-                other{"to ʻe {0}"}
-            }
             microgram{
                 dnam{"μk"}
                 other{"μk ʻe {0}"}
@@ -2213,6 +2209,10 @@ to{
             ton{
                 dnam{"tn"}
                 other{"tn ʻe {0}"}
+            }
+            tonne{
+                dnam{"to"}
+                other{"to ʻe {0}"}
             }
         }
         power{

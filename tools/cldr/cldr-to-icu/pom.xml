@@ -83,7 +83,7 @@
         <dependency>
             <groupId>com.ibm.icu</groupId>
             <artifactId>icu4j-for-cldr</artifactId>
-            <version>72.0.1-SNAPSHOT-cldr-2022-08-01</version>
+            <version>72.0.1-SNAPSHOT-cldr-2022-08-17</version>
             <!-- Note: see https://github.com/unicode-org/icu/packages/411079/versions
                 for the icu4j-for-cldr version tag to use -->
         </dependency>

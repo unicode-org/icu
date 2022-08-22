@@ -2457,8 +2457,10 @@ tr{
                 "tr",
             }
             surnameFirst{
-                "zh",
                 "ko",
+                "vi",
+                "yue",
+                "zh",
             }
         }
         namePattern{

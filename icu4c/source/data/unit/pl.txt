@@ -3229,28 +3229,6 @@ pl{
                 other{"{0} kilograma"}
                 per{"{0} na kilogram"}
             }
-            metric-ton{
-                case{
-                    accusative{
-                        few{"{0} tony"}
-                        many{"{0} ton"}
-                        one{"{0} tonę"}
-                        other{"{0} tony"}
-                    }
-                    genitive{
-                        few{"{0} ton"}
-                        many{"{0} ton"}
-                        one{"{0} tony"}
-                        other{"{0} tony"}
-                    }
-                }
-                dnam{"tony"}
-                few{"{0} tony"}
-                gender{"feminine"}
-                many{"{0} ton"}
-                one{"{0} tona"}
-                other{"{0} tony"}
-            }
             microgram{
                 case{
                     accusative{
@@ -3459,6 +3437,28 @@ pl{
                 many{"{0} krótkich ton"}
                 one{"{0} krótka tona"}
                 other{"{0} krótkiej tony"}
+            }
+            tonne{
+                case{
+                    accusative{
+                        few{"{0} tony"}
+                        many{"{0} ton"}
+                        one{"{0} tonę"}
+                        other{"{0} tony"}
+                    }
+                    genitive{
+                        few{"{0} ton"}
+                        many{"{0} ton"}
+                        one{"{0} tony"}
+                        other{"{0} tony"}
+                    }
+                }
+                dnam{"tony"}
+                few{"{0} tony"}
+                gender{"feminine"}
+                many{"{0} ton"}
+                one{"{0} tona"}
+                other{"{0} tony"}
             }
         }
         power{

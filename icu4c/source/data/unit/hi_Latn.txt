@@ -101,11 +101,6 @@ hi_Latn{
                 one{"{0} Imp. dessert spoon"}
                 other{"{0} Imp. dessert spoons"}
             }
-            fluid-ounce{
-                dnam{"fluid ounces"}
-                one{"{0} fluid ounce"}
-                other{"{0} fluid ounces"}
-            }
             gallon-imperial{
                 dnam{"Imp. gallons"}
                 one{"{0} Imp. gallon"}
@@ -186,6 +181,11 @@ hi_Latn{
                 dnam{"Imp dsp"}
                 one{"{0}dsp-Imp"}
                 other{"{0}dsp-Imp"}
+            }
+            fluid-ounce{
+                dnam{"fl oz"}
+                one{"{0}fl oz"}
+                other{"{0}fl oz"}
             }
             fluid-ounce-imperial{
                 dnam{"Imp fl oz"}
@@ -280,6 +280,11 @@ hi_Latn{
             drop{
                 one{"{0} drop"}
                 other{"{0} drop"}
+            }
+            fluid-ounce-imperial{
+                dnam{"Imp. fl oz"}
+                one{"{0} fl oz Imp."}
+                other{"{0} fl oz Imp."}
             }
             gallon{
                 one{"{0} gal US"}

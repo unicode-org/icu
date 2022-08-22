@@ -676,4 +676,21 @@ doi{
         US{"यूएस"}
         metric{"मीट्रिक"}
     }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "doi",
+            }
+            surnameFirst{
+                "ko",
+                "si",
+                "ta",
+                "te",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+    }
 }

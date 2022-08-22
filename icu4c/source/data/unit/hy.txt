@@ -2073,29 +2073,6 @@ hy{
                 other{"{0} կիլոգրամ"}
                 per{"{0} կիլոգրամի վրա"}
             }
-            metric-ton{
-                case{
-                    ablative{
-                        one{"{0} տոննայից"}
-                        other{"{0} տոննայից"}
-                    }
-                    dative{
-                        one{"{0} տոննային"}
-                        other{"{0} տոննային"}
-                    }
-                    instrumental{
-                        one{"{0} տոննայով"}
-                        other{"{0} տոննայով"}
-                    }
-                    locative{
-                        one{"{0} տոննայում"}
-                        other{"{0} տոննայում"}
-                    }
-                }
-                dnam{"տոննաներ"}
-                one{"{0} տոննա"}
-                other{"{0} տոննա"}
-            }
             microgram{
                 case{
                     ablative{
@@ -2173,6 +2150,29 @@ hy{
                 dnam{"ամերիկյան տոննաներ"}
                 one{"{0} ամերիկյան տոննա"}
                 other{"{0} ամերիկյան տոննա"}
+            }
+            tonne{
+                case{
+                    ablative{
+                        one{"{0} տոննայից"}
+                        other{"{0} տոննայից"}
+                    }
+                    dative{
+                        one{"{0} տոննային"}
+                        other{"{0} տոննային"}
+                    }
+                    instrumental{
+                        one{"{0} տոննայով"}
+                        other{"{0} տոննայով"}
+                    }
+                    locative{
+                        one{"{0} տոննայում"}
+                        other{"{0} տոննայում"}
+                    }
+                }
+                dnam{"տոննաներ"}
+                one{"{0} տոննա"}
+                other{"{0} տոննա"}
             }
         }
         power{
@@ -4058,11 +4058,6 @@ hy{
                 other{"{0} կգ"}
                 per{"{0}/կգ"}
             }
-            metric-ton{
-                dnam{"տ"}
-                one{"{0} տ"}
-                other{"{0} տ"}
-            }
             microgram{
                 dnam{"մկգ"}
                 one{"{0} մկգ"}
@@ -4099,6 +4094,11 @@ hy{
                 dnam{"ամեր․ տ"}
                 one{"{0} ամեր․ տ"}
                 other{"{0} ամեր․ տ"}
+            }
+            tonne{
+                dnam{"տ"}
+                one{"{0} տ"}
+                other{"{0} տ"}
             }
         }
         power{

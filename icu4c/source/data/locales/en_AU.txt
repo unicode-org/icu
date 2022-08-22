@@ -607,18 +607,6 @@ en_AU{
         upwards_arrows{"upward arrows"}
     }
     fields{
-        day-narrow{
-            relativeTime{
-                future{
-                    one{"in {0}d"}
-                    other{"in {0} days"}
-                }
-                past{
-                    one{"{0} day ago"}
-                    other{"{0} days ago"}
-                }
-            }
-        }
         fri-short{
             relativeTime{
                 future{

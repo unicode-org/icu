@@ -781,4 +781,18 @@ xh{
         US{"US"}
         metric{"Metric"}
     }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "xh",
+            }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+    }
 }

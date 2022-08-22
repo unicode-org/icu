@@ -2905,12 +2905,12 @@ lo{
         nameOrderLocales{
             givenFirst{
                 "und",
-                "en",
                 "lo",
             }
             surnameFirst{
-                "ja",
                 "ko",
+                "vi",
+                "yue",
                 "zh",
             }
         }

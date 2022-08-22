@@ -2230,8 +2230,9 @@ be{
                 "be",
             }
             surnameFirst{
-                "ja",
                 "ko",
+                "vi",
+                "yue",
                 "zh",
             }
         }

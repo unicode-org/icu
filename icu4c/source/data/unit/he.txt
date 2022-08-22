@@ -184,9 +184,6 @@ he{
                     _{
                         _{"{0} בריבוע"}
                     }
-                    feminine{
-                        _{"{0} בריבוע"}
-                    }
                 }
                 one{
                     _{
@@ -216,9 +213,6 @@ he{
             power3{
                 many{
                     _{
-                        _{"{0} מעוקב"}
-                    }
-                    feminine{
                         _{"{0} מעוקב"}
                     }
                 }
@@ -1033,14 +1027,6 @@ he{
                 per{"{0}/קילוגרם"}
                 two{"{0} קילוגרם"}
             }
-            metric-ton{
-                dnam{"טון מטרי"}
-                gender{"masculine"}
-                many{"{0} טון מטרי"}
-                one{"טון מטרי אחד"}
-                other{"{0} טון מטרי"}
-                two{"שני טון מטרי"}
-            }
             microgram{
                 dnam{"מיקרוגרם"}
                 gender{"masculine"}
@@ -1100,6 +1086,14 @@ he{
                 one{"טונה אחת"}
                 other{"{0} טונות"}
                 two{"שתי טונות"}
+            }
+            tonne{
+                dnam{"טון מטרי"}
+                gender{"masculine"}
+                many{"{0} טון מטרי"}
+                one{"טון מטרי אחד"}
+                other{"{0} טון מטרי"}
+                two{"שני טון מטרי"}
             }
         }
         power{
@@ -1992,13 +1986,6 @@ he{
                 per{"{0}/ק״ג"}
                 two{"{0}kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                many{"{0} t"}
-                one{"{0} t"}
-                other{"{0} t"}
-                two{"{0} t"}
-            }
             microgram{
                 dnam{"מק״ג"}
                 many{"{0} מק״ג"}
@@ -2034,6 +2021,13 @@ he{
                 one{"ט׳ {0}"}
                 other{"{0} ט׳"}
                 two{"{0} ט׳"}
+            }
+            tonne{
+                dnam{"t"}
+                many{"{0} t"}
+                one{"{0} t"}
+                other{"{0} t"}
+                two{"{0} t"}
             }
         }
         power{
@@ -2951,13 +2945,6 @@ he{
                 per{"{0}/ק״ג"}
                 two{"{0} ק״ג"}
             }
-            metric-ton{
-                dnam{"t"}
-                many{"{0} t"}
-                one{"{0} t"}
-                other{"{0} t"}
-                two{"{0} t"}
-            }
             microgram{
                 dnam{"מק״ג"}
                 many{"{0} מק״ג"}
@@ -3008,6 +2995,13 @@ he{
                 one{"ט׳ {0}"}
                 other{"{0} ט׳"}
                 two{"{0} ט׳"}
+            }
+            tonne{
+                dnam{"t"}
+                many{"{0} t"}
+                one{"{0} t"}
+                other{"{0} t"}
+                two{"{0} t"}
             }
         }
         power{

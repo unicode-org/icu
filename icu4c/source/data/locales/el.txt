@@ -2912,16 +2912,13 @@ el{
         nameOrderLocales{
             givenFirst{
                 "und",
-                "en",
+                "el",
             }
             surnameFirst{
-                "hu",
-                "ja",
                 "ko",
                 "vi",
                 "yue",
                 "zh",
-                "el",
             }
         }
         namePattern{

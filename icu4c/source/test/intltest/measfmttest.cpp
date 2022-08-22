@@ -3311,8 +3311,6 @@ void MeasureFormatTest::TestCompatible72() {
     measureUnitValue = MeasureUnit::getGram();
     measureUnit.adoptInstead(MeasureUnit::createKilogram(status));
     measureUnitValue = MeasureUnit::getKilogram();
-    measureUnit.adoptInstead(MeasureUnit::createMetricTon(status));
-    measureUnitValue = MeasureUnit::getMetricTon();
     measureUnit.adoptInstead(MeasureUnit::createMicrogram(status));
     measureUnitValue = MeasureUnit::getMicrogram();
     measureUnit.adoptInstead(MeasureUnit::createMilligram(status));
@@ -3329,6 +3327,8 @@ void MeasureFormatTest::TestCompatible72() {
     measureUnitValue = MeasureUnit::getStone();
     measureUnit.adoptInstead(MeasureUnit::createTon(status));
     measureUnitValue = MeasureUnit::getTon();
+    measureUnit.adoptInstead(MeasureUnit::createTonne(status));
+    measureUnitValue = MeasureUnit::getTonne();
     measureUnit.adoptInstead(MeasureUnit::createGigawatt(status));
     measureUnitValue = MeasureUnit::getGigawatt();
     measureUnit.adoptInstead(MeasureUnit::createHorsepower(status));

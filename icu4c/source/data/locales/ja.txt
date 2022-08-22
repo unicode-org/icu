@@ -4044,6 +4044,7 @@ ja{
         foreignSpaceReplacement{"・"}
         nameOrderLocales{
             surnameFirst{
+                "hu",
                 "ja",
                 "ko",
                 "vi",

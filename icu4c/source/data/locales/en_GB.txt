@@ -12,20 +12,6 @@ en_GB{
         minimumGroupingDigits{"1"}
     }
     calendar{
-        generic{
-            intervalFormats{
-                MMMEd{
-                    d{"E d MMM – E d MMM"}
-                }
-                Md{
-                    M{"dd/MM–dd/MM"}
-                    d{"dd/MM–dd/MM"}
-                }
-                yMMMEd{
-                    d{"E, d MMM – E, d MMM y G"}
-                }
-            }
-        }
         gregorian{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -51,9 +37,6 @@ en_GB{
                 "yMMMMd",
                 "yMMMd",
                 "yMMdd",
-            }
-            availableFormats{
-                GyMd{"d/M/y GGGGG"}
             }
             dayNames{
                 format{
@@ -103,26 +86,6 @@ en_GB{
                         midnight{"midnight"}
                         noon{"noon"}
                     }
-                }
-            }
-            intervalFormats{
-                GyMEd{
-                    G{"E, dd/MM/y GGGGG – E, dd/MM/y GGGGG"}
-                    M{"E, dd/MM/y – E, dd/MM/y GGGGG"}
-                    d{"E, dd/MM/y – E, dd/MM/y GGGGG"}
-                    y{"E, dd/MM/y – E, dd/MM/y GGGGG"}
-                }
-                GyMd{
-                    G{"dd/MM/y GGGGG – dd/MM/y GGGGG"}
-                    M{"dd/MM/y – dd/MM/y GGGGG"}
-                    d{"dd/MM/y – dd/MM/y GGGGG"}
-                    y{"dd/MM/y – dd/MM/y GGGGG"}
-                }
-                MMMEd{
-                    d{"E d MMM – E d MMM"}
-                }
-                yMMMEd{
-                    d{"E, d MMM – E, d MMM y"}
                 }
             }
             monthNames{
@@ -195,20 +158,6 @@ en_GB{
                         "3rd quarter",
                         "4th quarter",
                     }
-                }
-            }
-        }
-    }
-    fields{
-        day-narrow{
-            relativeTime{
-                future{
-                    one{"in {0} day"}
-                    other{"in {0} days"}
-                }
-                past{
-                    one{"{0} day ago"}
-                    other{"{0} days ago"}
                 }
             }
         }

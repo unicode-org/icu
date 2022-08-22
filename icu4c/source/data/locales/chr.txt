@@ -1952,7 +1952,12 @@ chr{
             givenFirst{
                 "und",
                 "chr",
-                "en",
+            }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
             }
         }
     }

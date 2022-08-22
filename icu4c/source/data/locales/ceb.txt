@@ -822,4 +822,18 @@ ceb{
         US{"US"}
         metric{"Metric"}
     }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "ceb",
+            }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+    }
 }

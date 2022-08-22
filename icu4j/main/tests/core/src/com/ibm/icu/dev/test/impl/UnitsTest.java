@@ -134,25 +134,27 @@ public class UnitsTest {
             //                             new Measure(0, MeasureUnit.METER)},
             //              0),
 
-            // 1e-15 light years is 9.46073 meters (calculated using "bc" and
-            // the CLDR conversion factor). With double-precision maths in C++,
+            // 1e-15 light years is 9.4607304725808 (calculated using "bc" and
+            // the CLDR conversion factor)¹. With double-precision maths in C++,
             // we get 10.5. In this case, we're off by a bit more than 1 meter.
             // With Java BigDecimal, we get accurate results.
+            // ¹With CLDR 42 conversions we get a more accurate and precise value for meters.
             new TestCase("light-year", "light-year-and-meter", BigDecimal.valueOf(1.0 + 1e-15),
                          new Measure[] {new Measure(1, MeasureUnit.LIGHT_YEAR),
-                                        new Measure(9.46073, MeasureUnit.METER)},
+                                        new Measure(9.4607304725808, MeasureUnit.METER)},
                          0 /* meters, precision */),
 
             // TODO(ICU-21861): reconsider whether epsilon rounding is desirable:
             //
-            // 2e-16 light years is 1.892146 meters. For C++ double, we consider
+            // 2e-16 light years is 1.89214609451616 meters¹. For C++ double, we consider
             // this in the noise, and thus expect a 0. (This test fails when
             // 2e-16 is increased to 4e-16.) For Java, using BigDecimal, we
             // actually get a good result.
+            // ¹With CLDR 42 conversions we get a more accurate and precise value for meters.
             new TestCase("light-year", "light-year-and-meter", BigDecimal.valueOf(1.0 + 2e-16),
                          new Measure[] {new Measure(1, MeasureUnit.LIGHT_YEAR),
-                                        new Measure(1.892146, MeasureUnit.METER)},
-                         0),
+                                        new Measure(1.89214609451616, MeasureUnit.METER)},
+                         0 /* meters, precision */),
 
             // Negative numbers
             new TestCase(

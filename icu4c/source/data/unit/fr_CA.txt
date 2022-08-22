@@ -344,10 +344,6 @@ fr_CA{
                 one{"{0} kilogramme"}
                 other{"{0} kilogrammes"}
             }
-            metric-ton{
-                one{"{0} tonne"}
-                other{"{0} tonnes"}
-            }
             milligram{
                 one{"{0} milligramme"}
                 other{"{0} milligrammes"}
@@ -371,6 +367,10 @@ fr_CA{
             ton{
                 one{"{0} tonne courte"}
                 other{"{0} tonnes courtes"}
+            }
+            tonne{
+                one{"{0} tonne"}
+                other{"{0} tonnes"}
             }
         }
         power{
@@ -1128,10 +1128,6 @@ fr_CA{
                 one{"{0} kg"}
                 other{"{0} kg"}
             }
-            metric-ton{
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 one{"{0} μg"}
                 other{"{0} μg"}
@@ -1156,6 +1152,10 @@ fr_CA{
                 dnam{"tc"}
                 one{"{0} tc"}
                 other{"{0} tc"}
+            }
+            tonne{
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{
