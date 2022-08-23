@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1661275537744,
+  "lastUpdate": 1661284380273,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -1108,6 +1108,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 384.67349886427627,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "49d192fefe09fcc38547203487cf4e63d2dad61f",
+          "message": "ICU-22112 word break updates for @,colon; colon tailorings for fi,sv\n\nSee #2159",
+          "timestamp": "2022-08-23T12:45:55-07:00",
+          "tree_id": "860bf4fdbcdb8953fab05089e4b3d0b92fbd27bc",
+          "url": "https://github.com/unicode-org/icu/commit/49d192fefe09fcc38547203487cf4e63d2dad61f"
+        },
+        "date": 1661284375004,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 389.32944338934965,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
