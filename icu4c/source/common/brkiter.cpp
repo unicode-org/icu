@@ -439,14 +439,11 @@ BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
                 uprv_strcat(lb_lw, "_");
                 uprv_strcat(lb_lw, value.data());
             }
-            // lw=phrase is only supported in Japanese.
-            if (uprv_strcmp(loc.getLanguage(), "ja") == 0) {
-                value.clear();
-                loc.getKeywordValue("lw", valueSink, kvStatus);
-                if (U_SUCCESS(kvStatus) && value == "phrase") {
-                    uprv_strcat(lb_lw, "_");
-                    uprv_strcat(lb_lw, value.data());
-                }
+            value.clear();
+            loc.getKeywordValue("lw", valueSink, kvStatus);
+            if (U_SUCCESS(kvStatus) && value == "phrase") {
+                uprv_strcat(lb_lw, "_");
+                uprv_strcat(lb_lw, value.data());
             }
             result = BreakIterator::buildInstance(loc, lb_lw, status);
 
