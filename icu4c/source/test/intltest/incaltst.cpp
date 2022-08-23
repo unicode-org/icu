@@ -1091,7 +1091,14 @@ void IntlCalendarTest::checkConsistency(const char* locale) {
                   " Gregorian(e=" + g->get(UCAL_ERA, status) + " " +
                   g->get(UCAL_YEAR, status) + "/" +
                   (g->get(UCAL_MONTH, status) + 1) + "/" +
-                  g->get(UCAL_DATE, status) + ") ");
+                  g->get(UCAL_DATE, status) + ") \n" +
+                  " Calendar[" + base->getType() +
+                  "](e=" + base->get(UCAL_ERA, status) + " " +
+                  base->get(UCAL_YEAR, status) + "/" +
+                  (base->get(UCAL_MONTH, status) + 1) + "/" +
+                  base->get(UCAL_DATE, status) + ") ordinalMonth=" +
+                  base->get(UCAL_ORDINAL_MONTH, status));
+
             status.errIfFailureAndReset();
             return;
         }

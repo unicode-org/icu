@@ -285,6 +285,53 @@ public: // package
         int32_t minute, int32_t second, int32_t millisecond, int32_t zone_offset,
         int32_t dst_offset, int32_t year_woy, int32_t dow_local, int32_t extended_year,
         int32_t julian_day, int32_t milliseconds_in_day, int32_t is_leap_month);
+
+    void TestGregorianCalendarInTemporalLeapYear(void);
+    void TestChineseCalendarInTemporalLeapYear(void);
+    void TestDangiCalendarInTemporalLeapYear(void);
+    void TestHebrewCalendarInTemporalLeapYear(void);
+    void TestIslamicCalendarInTemporalLeapYear(void);
+    void TestIslamicCivilCalendarInTemporalLeapYear(void);
+    void TestIslamicUmalquraCalendarInTemporalLeapYear(void);
+    void TestIslamicRGSACalendarInTemporalLeapYear(void);
+    void TestIslamicTBLACalendarInTemporalLeapYear(void);
+    void TestPersianCalendarInTemporalLeapYear(void);
+    void TestIndianCalendarInTemporalLeapYear(void);
+    void TestTaiwanCalendarInTemporalLeapYear(void);
+    void TestJapaneseCalendarInTemporalLeapYear(void);
+    void TestBuddhistCalendarInTemporalLeapYear(void);
+    void TestCopticCalendarInTemporalLeapYear(void);
+    void TestEthiopicCalendarInTemporalLeapYear(void);
+    void TestEthiopicAmeteAlemCalendarInTemporalLeapYear(void);
+
+    void TestChineseCalendarGetTemporalMonthCode(void);
+    void TestDangiCalendarGetTemporalMonthCode(void);
+    void TestHebrewCalendarGetTemporalMonthCode(void);
+    void TestCopticCalendarGetTemporalMonthCode(void);
+    void TestEthiopicCalendarGetTemporalMonthCode(void);
+    void TestEthiopicAmeteAlemCalendarGetTemporalMonthCode(void);
+
+    void TestGregorianCalendarSetTemporalMonthCode(void);
+    void TestChineseCalendarSetTemporalMonthCode(void);
+    void TestHebrewCalendarSetTemporalMonthCode(void);
+    void TestCopticCalendarSetTemporalMonthCode(void);
+    void TestEthiopicCalendarSetTemporalMonthCode(void);
+
+    void TestMostCalendarsOrdinalMonthSet(void);
+    void TestChineseCalendarOrdinalMonthSet(void);
+    void TestDangiCalendarOrdinalMonthSet(void);
+    void TestHebrewCalendarOrdinalMonthSet(void);
+
+    void TestCalendarAddOrdinalMonth(void);
+    void TestCalendarRollOrdinalMonth(void);
+    void TestLimitsOrdinalMonth(void);
+    void TestActualLimitsOrdinalMonth(void);
+
+    void RunChineseCalendarInTemporalLeapYearTest(Calendar* cal);
+    void RunIslamicCalendarInTemporalLeapYearTest(Calendar* cal);
+    void Run366DaysIsLeapYearCalendarInTemporalLeapYearTest(Calendar* cal);
+    void RunChineseCalendarGetTemporalMonthCode(Calendar* cal);
+    void RunCECalendarGetTemporalMonthCode(Calendar* cal);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

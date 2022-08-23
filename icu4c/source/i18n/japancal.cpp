@@ -219,7 +219,7 @@ void JapaneseCalendar::handleComputeFields(int32_t julianDay, UErrorCode& status
     //Calendar::timeToFields(theTime, quick, status);
     GregorianCalendar::handleComputeFields(julianDay, status);
     int32_t year = internalGet(UCAL_EXTENDED_YEAR); // Gregorian year
-    int32_t eraIdx = gJapaneseEraRules->getEraIndex(year, internalGet(UCAL_MONTH) + 1, internalGet(UCAL_DAY_OF_MONTH), status);
+    int32_t eraIdx = gJapaneseEraRules->getEraIndex(year, internalGetMonth() + 1, internalGet(UCAL_DAY_OF_MONTH), status);
 
     internalSet(UCAL_ERA, eraIdx);
     internalSet(UCAL_YEAR, year - gJapaneseEraRules->getStartYear(eraIdx, status) + 1);

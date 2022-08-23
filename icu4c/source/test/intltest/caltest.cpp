@@ -21,6 +21,9 @@
 #include "unicode/ustring.h"
 #include "cstring.h"
 #include "unicode/localpointer.h"
+#include "intltest.h"
+#include "coptccal.h"
+#include "ethpccal.h"
 #include "islamcal.h"
 
 #define mkcstr(U) u_austrcpy(calloc(8, u_strlen(U) + 1), U)
@@ -86,303 +89,101 @@ UnicodeString CalendarTest::calToStr(const Calendar & cal)
 void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite TestCalendar");
-    switch (index) {
-        case 0:
-            name = "TestDOW943";
-            if (exec) {
-                logln("TestDOW943---"); logln("");
-                TestDOW943();
-            }
-            break;
-        case 1:
-            name = "TestClonesUnique908";
-            if (exec) {
-                logln("TestClonesUnique908---"); logln("");
-                TestClonesUnique908();
-            }
-            break;
-        case 2:
-            name = "TestGregorianChange768";
-            if (exec) {
-                logln("TestGregorianChange768---"); logln("");
-                TestGregorianChange768();
-            }
-            break;
-        case 3:
-            name = "TestDisambiguation765";
-            if (exec) {
-                logln("TestDisambiguation765---"); logln("");
-                TestDisambiguation765();
-            }
-            break;
-        case 4:
-            name = "TestGMTvsLocal4064654";
-            if (exec) {
-                logln("TestGMTvsLocal4064654---"); logln("");
-                TestGMTvsLocal4064654();
-            }
-            break;
-        case 5:
-            name = "TestAddSetOrder621";
-            if (exec) {
-                logln("TestAddSetOrder621---"); logln("");
-                TestAddSetOrder621();
-            }
-            break;
-        case 6:
-            name = "TestAdd520";
-            if (exec) {
-                logln("TestAdd520---"); logln("");
-                TestAdd520();
-            }
-            break;
-        case 7:
-            name = "TestFieldSet4781";
-            if (exec) {
-                logln("TestFieldSet4781---"); logln("");
-                TestFieldSet4781();
-            }
-            break;
-        case 8:
-            name = "TestSerialize337";
-            if (exec) {
-                logln("TestSerialize337---"); logln("");
-            //  TestSerialize337();
-            }
-            break;
-        case 9:
-            name = "TestSecondsZero121";
-            if (exec) {
-                logln("TestSecondsZero121---"); logln("");
-                TestSecondsZero121();
-            }
-            break;
-        case 10:
-            name = "TestAddSetGet0610";
-            if (exec) {
-                logln("TestAddSetGet0610---"); logln("");
-                TestAddSetGet0610();
-            }
-            break;
-        case 11:
-            name = "TestFields060";
-            if (exec) {
-                logln("TestFields060---"); logln("");
-                TestFields060();
-            }
-            break;
-        case 12:
-            name = "TestEpochStartFields";
-            if (exec) {
-                logln("TestEpochStartFields---"); logln("");
-                TestEpochStartFields();
-            }
-            break;
-        case 13:
-            name = "TestDOWProgression";
-            if (exec) {
-                logln("TestDOWProgression---"); logln("");
-                TestDOWProgression();
-            }
-            break;
-        case 14:
-            name = "TestGenericAPI";
-            if (exec) {
-                logln("TestGenericAPI---"); logln("");
-                TestGenericAPI();
-            }
-            break;
-        case 15:
-            name = "TestAddRollExtensive";
-            if (exec) {
-                logln("TestAddRollExtensive---"); logln("");
-                TestAddRollExtensive();
-            }
-            break;
-        case 16:
-            name = "TestDOW_LOCALandYEAR_WOY";
-            if (exec) {
-                logln("TestDOW_LOCALandYEAR_WOY---"); logln("");
-                TestDOW_LOCALandYEAR_WOY();
-            }
-            break;
-        case 17:
-            name = "TestWOY";
-            if (exec) {
-                logln("TestWOY---"); logln("");
-                TestWOY();
-            }
-            break;
-        case 18:
-            name = "TestRog";
-            if (exec) {
-                logln("TestRog---"); logln("");
-                TestRog();
-            }
-            break;
-        case 19:
-           name = "TestYWOY";
-            if (exec) {
-                logln("TestYWOY---"); logln("");
-                TestYWOY();
-            }
-            break;
-        case 20:
-          name = "TestJD";
-          if(exec) {
-            logln("TestJD---"); logln("");
-            TestJD();
-          }
-          break;
-        case 21:
-          name = "TestDebug";
-          if(exec) {
-            logln("TestDebug---"); logln("");
-            TestDebug();
-          }
-          break;
-        case 22:
-          name = "Test6703";
-          if(exec) {
-            logln("Test6703---"); logln("");
-            Test6703();
-          }
-          break;
-        case 23:
-          name = "Test3785";
-          if(exec) {
-            logln("Test3785---"); logln("");
-            Test3785();
-          }
-          break;
-        case 24:
-          name = "Test1624";
-          if(exec) {
-            logln("Test1624---"); logln("");
-            Test1624();
-          }
-          break;
-        case 25:
-          name = "TestTimeStamp";
-          if(exec) {
-            logln("TestTimeStamp---"); logln("");
-            TestTimeStamp();
-          }
-          break;
-        case 26:
-          name = "TestISO8601";
-          if(exec) {
-            logln("TestISO8601---"); logln("");
-            TestISO8601();
-          }
-          break;
-        case 27:
-          name = "TestAmbiguousWallTimeAPIs";
-          if(exec) {
-            logln("TestAmbiguousWallTimeAPIs---"); logln("");
-            TestAmbiguousWallTimeAPIs();
-          }
-          break;
-        case 28:
-          name = "TestRepeatedWallTime";
-          if(exec) {
-            logln("TestRepeatedWallTime---"); logln("");
-            TestRepeatedWallTime();
-          }
-          break;
-        case 29:
-          name = "TestSkippedWallTime";
-          if(exec) {
-            logln("TestSkippedWallTime---"); logln("");
-            TestSkippedWallTime();
-          }
-          break;
-        case 30:
-          name = "TestCloneLocale";
-          if(exec) {
-            logln("TestCloneLocale---"); logln("");
-            TestCloneLocale();
-          }
-          break;
-        case 31:
-          name = "TestIslamicUmAlQura";
-          if(exec) {
-            logln("TestIslamicUmAlQura---"); logln("");
-            TestIslamicUmAlQura();
-          }
-          break;
-        case 32:
-          name = "TestIslamicTabularDates";
-          if(exec) {
-            logln("TestIslamicTabularDates---"); logln("");
-            TestIslamicTabularDates();
-          }
-          break;
-        case 33:
-          name = "TestHebrewMonthValidation";
-          if(exec) {
-            logln("TestHebrewMonthValidation---"); logln("");
-            TestHebrewMonthValidation();
-          }
-          break;
-        case 34:
-          name = "TestWeekData";
-          if(exec) {
-            logln("TestWeekData---"); logln("");
-            TestWeekData();
-          }
-          break;
-        case 35:
-          name = "TestAddAcrossZoneTransition";
-          if(exec) {
-            logln("TestAddAcrossZoneTransition---"); logln("");
-            TestAddAcrossZoneTransition();
-          }
-          break;
-        case 36:
-          name = "TestChineseCalendarMapping";
-          if(exec) {
-            logln("TestChineseCalendarMapping---"); logln("");
-            TestChineseCalendarMapping();
-          }
-          break;
-        case 37:
-          name = "TestTimeZoneInLocale";
-          if(exec) {
-            logln("TestTimeZoneInLocale---"); logln("");
-            TestTimeZoneInLocale();
-          }
-          break;
-#define CASE(num, NAME) \
-        case num: \
-          name = #NAME; \
-          if(exec) { \
-            logln(#NAME "---"); logln(""); \
-            NAME(); \
-          } \
-          break;
 
-        CASE(38, TestBasicConversionISO8601);
-        CASE(39, TestBasicConversionJapanese);
-        CASE(40, TestBasicConversionBuddhist);
-        CASE(41, TestBasicConversionTaiwan);
-        CASE(42, TestBasicConversionPersian);
-        CASE(43, TestBasicConversionIslamic);
-        CASE(44, TestBasicConversionIslamicTBLA);
-        CASE(45, TestBasicConversionIslamicCivil);
-        CASE(46, TestBasicConversionIslamicRGSA);
-        CASE(47, TestBasicConversionIslamicUmalqura);
-        CASE(48, TestBasicConversionHebrew);
-        CASE(49, TestBasicConversionChinese);
-        CASE(50, TestBasicConversionDangi);
-        CASE(51, TestBasicConversionIndian);
-        CASE(52, TestBasicConversionCoptic);
-        CASE(53, TestBasicConversionEthiopic);
-        CASE(54, TestBasicConversionEthiopicAmeteAlem);
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(TestDOW943);
+    TESTCASE_AUTO(TestClonesUnique908);
+    TESTCASE_AUTO(TestGregorianChange768);
+    TESTCASE_AUTO(TestDisambiguation765);
+    TESTCASE_AUTO(TestGMTvsLocal4064654);
+    TESTCASE_AUTO(TestAddSetOrder621);
+    TESTCASE_AUTO(TestAdd520);
+    TESTCASE_AUTO(TestFieldSet4781);
+    //  TESTCASE_AUTO(TestSerialize337);
+    TESTCASE_AUTO(TestSecondsZero121);
+    TESTCASE_AUTO(TestAddSetGet0610);
+    TESTCASE_AUTO(TestFields060);
+    TESTCASE_AUTO(TestEpochStartFields);
+    TESTCASE_AUTO(TestDOWProgression);
+    TESTCASE_AUTO(TestGenericAPI);
+    TESTCASE_AUTO(TestAddRollExtensive);
+    TESTCASE_AUTO(TestDOW_LOCALandYEAR_WOY);
+    TESTCASE_AUTO(TestWOY);
+    TESTCASE_AUTO(TestRog);
+    TESTCASE_AUTO(TestYWOY);
+    TESTCASE_AUTO(TestJD);
+    TESTCASE_AUTO(TestDebug);
+    TESTCASE_AUTO(Test6703);
+    TESTCASE_AUTO(Test3785);
+    TESTCASE_AUTO(Test1624);
+    TESTCASE_AUTO(TestTimeStamp);
+    TESTCASE_AUTO(TestISO8601);
+    TESTCASE_AUTO(TestAmbiguousWallTimeAPIs);
+    TESTCASE_AUTO(TestRepeatedWallTime);
+    TESTCASE_AUTO(TestSkippedWallTime);
+    TESTCASE_AUTO(TestCloneLocale);
+    TESTCASE_AUTO(TestIslamicUmAlQura);
+    TESTCASE_AUTO(TestIslamicTabularDates);
+    TESTCASE_AUTO(TestHebrewMonthValidation);
+    TESTCASE_AUTO(TestWeekData);
+    TESTCASE_AUTO(TestAddAcrossZoneTransition);
+    TESTCASE_AUTO(TestChineseCalendarMapping);
+    TESTCASE_AUTO(TestTimeZoneInLocale);
+    TESTCASE_AUTO(TestBasicConversionISO8601);
+    TESTCASE_AUTO(TestBasicConversionJapanese);
+    TESTCASE_AUTO(TestBasicConversionBuddhist);
+    TESTCASE_AUTO(TestBasicConversionTaiwan);
+    TESTCASE_AUTO(TestBasicConversionPersian);
+    TESTCASE_AUTO(TestBasicConversionIslamic);
+    TESTCASE_AUTO(TestBasicConversionIslamicTBLA);
+    TESTCASE_AUTO(TestBasicConversionIslamicCivil);
+    TESTCASE_AUTO(TestBasicConversionIslamicRGSA);
+    TESTCASE_AUTO(TestBasicConversionIslamicUmalqura);
+    TESTCASE_AUTO(TestBasicConversionHebrew);
+    TESTCASE_AUTO(TestBasicConversionChinese);
+    TESTCASE_AUTO(TestBasicConversionDangi);
+    TESTCASE_AUTO(TestBasicConversionIndian);
+    TESTCASE_AUTO(TestBasicConversionCoptic);
+    TESTCASE_AUTO(TestBasicConversionEthiopic);
+    TESTCASE_AUTO(TestBasicConversionEthiopicAmeteAlem);
+    TESTCASE_AUTO(TestGregorianCalendarInTemporalLeapYear);
+    TESTCASE_AUTO(TestChineseCalendarInTemporalLeapYear);
+    TESTCASE_AUTO(TestDangiCalendarInTemporalLeapYear);
+    TESTCASE_AUTO(TestHebrewCalendarInTemporalLeapYear);
+    TESTCASE_AUTO(TestIslamicCalendarInTemporalLeapYear);
+    TESTCASE_AUTO(TestIslamicCivilCalendarInTemporalLeapYear);
+    TESTCASE_AUTO(TestIslamicUmalquraCalendarInTemporalLeapYear);
+    TESTCASE_AUTO(TestIslamicRGSACalendarInTemporalLeapYear);
+    TESTCASE_AUTO(TestIslamicTBLACalendarInTemporalLeapYear);
+    TESTCASE_AUTO(TestPersianCalendarInTemporalLeapYear);
+    TESTCASE_AUTO(TestIndianCalendarInTemporalLeapYear);
+    TESTCASE_AUTO(TestTaiwanCalendarInTemporalLeapYear);
+    TESTCASE_AUTO(TestJapaneseCalendarInTemporalLeapYear);
+    TESTCASE_AUTO(TestBuddhistCalendarInTemporalLeapYear);
+    TESTCASE_AUTO(TestCopticCalendarInTemporalLeapYear);
+    TESTCASE_AUTO(TestEthiopicCalendarInTemporalLeapYear);
+    TESTCASE_AUTO(TestEthiopicAmeteAlemCalendarInTemporalLeapYear);
+    TESTCASE_AUTO(TestChineseCalendarGetTemporalMonthCode);
+    TESTCASE_AUTO(TestDangiCalendarGetTemporalMonthCode);
+    TESTCASE_AUTO(TestHebrewCalendarGetTemporalMonthCode);
+    TESTCASE_AUTO(TestCopticCalendarGetTemporalMonthCode);
+    TESTCASE_AUTO(TestEthiopicCalendarGetTemporalMonthCode);
+    TESTCASE_AUTO(TestEthiopicAmeteAlemCalendarGetTemporalMonthCode);
+    TESTCASE_AUTO(TestGregorianCalendarSetTemporalMonthCode);
+    TESTCASE_AUTO(TestChineseCalendarSetTemporalMonthCode);
+    TESTCASE_AUTO(TestHebrewCalendarSetTemporalMonthCode);
+    TESTCASE_AUTO(TestCopticCalendarSetTemporalMonthCode);
+    TESTCASE_AUTO(TestEthiopicCalendarSetTemporalMonthCode);
+    TESTCASE_AUTO(TestMostCalendarsOrdinalMonthSet);
+    TESTCASE_AUTO(TestChineseCalendarOrdinalMonthSet);
+    TESTCASE_AUTO(TestDangiCalendarOrdinalMonthSet);
+    TESTCASE_AUTO(TestHebrewCalendarOrdinalMonthSet);
+    TESTCASE_AUTO(TestCalendarAddOrdinalMonth);
+    TESTCASE_AUTO(TestCalendarRollOrdinalMonth);
+    TESTCASE_AUTO(TestLimitsOrdinalMonth);
+    TESTCASE_AUTO(TestActualLimitsOrdinalMonth);
 
-#undef CASE
-        default: name = ""; break;
-    }
+    TESTCASE_AUTO_END;
 }
 
 // ---------------------------------------------------------------------------------
@@ -670,7 +471,7 @@ CalendarTest::TestGenericAPI()
         const char *charValue;
         int32_t valueLength;
         while ((charValue = values->next(&valueLength, status)) != NULL) {
-            if (valueLength == 6 && strcmp(charValue, "hebrew") == 0) {
+            if (valueLength == 6 && uprv_strcmp(charValue, "hebrew") == 0) {
                 containsHebrew = true;
             }
         }
@@ -3629,7 +3430,7 @@ void CalendarTest::TestIslamicUmAlQura() {
     Calendar* gregCal = Calendar::createInstance(*((const TimeZone *)tzSA), gregoLoc, status);
 
     IslamicCalendar* iCal = (IslamicCalendar*)tstCal;
-    if(strcmp(iCal->getType(), "islamic-umalqura") != 0) {
+    if(uprv_strcmp(iCal->getType(), "islamic-umalqura") != 0) {
         errln("wrong type of calendar created - %s", iCal->getType());
     }
 
@@ -4081,6 +3882,1502 @@ void CalendarTest::TestChineseCalendarMapping() {
                 continue;
             }
         }
+    }
+}
+
+void CalendarTest::TestGregorianCalendarInTemporalLeapYear(void) {
+    // test from year 1800 to 2500
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar gc(status);
+    if (failure(status, "construct GregorianCalendar")) return;
+    for (int32_t year = 1900; year < 2400; ++year) {
+        gc.set(year, UCAL_MARCH, 7);
+        assertEquals("Calendar::inTemporalLeapYear",
+                 gc.isLeapYear(year) == true, gc.inTemporalLeapYear(status) == true);
+        if (failure(status, "inTemporalLeapYear")) return;
+    }
+}
+
+void CalendarTest::RunChineseCalendarInTemporalLeapYearTest(Calendar* cal) {
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar gc(status);
+    if (failure(status, "construct GregorianCalendar")) return;
+    LocalPointer<Calendar> leapTest(cal->clone());
+    // Start our test from 1900, Jan 1.
+    // Check every 29 days in exhausted mode.
+    int32_t incrementDays = 29;
+    int32_t startYear = 1900;
+    int32_t stopYear = 2400;
+
+    if (quick) {
+        incrementDays = 317;
+        stopYear = 2100;
+    }
+    int32_t yearForHasLeapMonth = -1;
+    bool hasLeapMonth = false;
+    for (gc.set(startYear, UCAL_JANUARY, 1);
+         gc.get(UCAL_YEAR, status) <= stopYear;
+         gc.add(UCAL_DATE, incrementDays, status)) {
+        cal->setTime(gc.getTime(status), status);
+        if (failure(status, "add/get/set/getTime/setTime incorrect")) return;
+
+        int32_t cal_year = cal->get(UCAL_EXTENDED_YEAR, status);
+        if (yearForHasLeapMonth != cal_year) {
+            leapTest->set(UCAL_EXTENDED_YEAR, cal_year);
+            leapTest->set(UCAL_MONTH, 0);
+            leapTest->set(UCAL_DATE, 1);
+            // seek any leap month
+            // check any leap month in the next 12 months.
+            for (hasLeapMonth = false;
+                 (!hasLeapMonth) && cal_year == leapTest->get(UCAL_EXTENDED_YEAR, status);
+                 leapTest->add(UCAL_MONTH, 1, status)) {
+                hasLeapMonth = leapTest->get(UCAL_IS_LEAP_MONTH, status) != 0;
+            }
+            yearForHasLeapMonth = cal_year;
+        }
+        if (failure(status, "error while figure out expectation")) return;
+
+        bool actualInLeap =  cal->inTemporalLeapYear(status);
+        if (failure(status, "inTemporalLeapYear")) return;
+        if (hasLeapMonth != actualInLeap) {
+            logln("Gregorian y=%d m=%d d=%d => cal y=%d m=%s%d d=%d expected:%s actual:%s\n",
+                   gc.get(UCAL_YEAR, status),
+                   gc.get(UCAL_MONTH, status),
+                   gc.get(UCAL_DATE, status),
+                   cal->get(UCAL_EXTENDED_YEAR, status),
+                   cal->get(UCAL_IS_LEAP_MONTH, status) == 1 ? "L" : "",
+                   cal->get(UCAL_MONTH, status),
+                   cal->get(UCAL_DAY_OF_MONTH, status),
+                   hasLeapMonth ? "true" : "false",
+                   actualInLeap ? "true" : "false");
+        }
+        assertEquals("inTemporalLeapYear", hasLeapMonth, actualInLeap);
+    }
+}
+
+void CalendarTest::TestChineseCalendarInTemporalLeapYear(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "chinese", status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
+    if (failure(status, "construct ChineseCalendar")) return;
+    RunChineseCalendarInTemporalLeapYearTest(cal.getAlias());
+}
+
+void CalendarTest::TestDangiCalendarInTemporalLeapYear(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "dangi", status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
+    if (failure(status, "construct DangiCalendar")) return;
+    RunChineseCalendarInTemporalLeapYearTest(cal.getAlias());
+}
+
+void CalendarTest::TestHebrewCalendarInTemporalLeapYear(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar gc(status);
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "hebrew", status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
+    LocalPointer<Calendar> leapTest(Calendar::createInstance(l, status));
+    if (failure(status, "construct HebrewCalendar")) return;
+    // Start our test from 1900, Jan 1.
+    // Check every 29 days in exhausted mode.
+    int32_t incrementDays = 29;
+    int32_t startYear = 1900;
+    int32_t stopYear = 2400;
+
+    if (quick) {
+        incrementDays = 317;
+        stopYear = 2100;
+    }
+    int32_t yearForHasLeapMonth = -1;
+    bool hasLeapMonth = false;
+    for (gc.set(startYear, UCAL_JANUARY, 1);
+         gc.get(UCAL_YEAR, status) <= stopYear;
+         gc.add(UCAL_DATE, incrementDays, status)) {
+        if (failure(status, "add/get/set/getTime/setTime incorrect")) return;
+
+        int32_t cal_year = cal->get(UCAL_EXTENDED_YEAR, status);
+        if (yearForHasLeapMonth != cal_year) {
+            leapTest->set(UCAL_EXTENDED_YEAR, cal_year);
+            leapTest->set(UCAL_MONTH, 0);
+            leapTest->set(UCAL_DATE, 1);
+            // If 10 months after TISHRI is TAMUZ, then it is a leap year.
+            hasLeapMonth = leapTest->get(UCAL_MONTH, status) == icu::HebrewCalendar::TAMUZ;
+            yearForHasLeapMonth = cal_year;
+        }
+        bool actualInLeap =  cal->inTemporalLeapYear(status);
+        if (failure(status, "inTemporalLeapYear")) return;
+        if (hasLeapMonth != actualInLeap) {
+            logln("Gregorian y=%d m=%d d=7 => cal y=%d m=%d d=%d expected:%s actual:%s\n",
+                   gc.get(UCAL_YEAR, status),
+                   gc.get(UCAL_MONTH, status),
+                   cal->get(UCAL_EXTENDED_YEAR, status),
+                   cal->get(UCAL_MONTH, status),
+                   cal->get(UCAL_DAY_OF_MONTH, status),
+                   hasLeapMonth ? "true" : "false",
+                   actualInLeap ? "true" : "false");
+        }
+        assertEquals("inTemporalLeapYear", hasLeapMonth, actualInLeap);
+    }
+}
+
+void CalendarTest::RunIslamicCalendarInTemporalLeapYearTest(Calendar* cal) {
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar gc(status);
+    if (failure(status, "construct GregorianCalendar")) return;
+    // Start our test from 1900, Jan 1.
+    // Check every 29 days in exhausted mode.
+    int32_t incrementDays = 29;
+    int32_t startYear = 1900;
+    int32_t stopYear = 2400;
+
+    if (quick) {
+        incrementDays = 317;
+        stopYear = 2100;
+    }
+    int32_t yearForHasLeapMonth = -1;
+    bool hasLeapMonth = false;
+    for (gc.set(startYear, UCAL_JANUARY, 1);
+         gc.get(UCAL_YEAR, status) <= stopYear;
+         gc.add(UCAL_DATE, incrementDays, status)) {
+        cal->setTime(gc.getTime(status), status);
+        if (failure(status, "set/getTime/setTime incorrect")) return;
+        int32_t cal_year = cal->get(UCAL_EXTENDED_YEAR, status);
+        if (yearForHasLeapMonth != cal_year) {
+            // If that year has exactly 355 days, it is a leap year.
+            hasLeapMonth = cal->getActualMaximum(UCAL_DAY_OF_YEAR, status) == 355;
+            yearForHasLeapMonth = cal_year;
+        }
+
+        bool actualInLeap =  cal->inTemporalLeapYear(status);
+        if (failure(status, "inTemporalLeapYear")) return;
+        if (hasLeapMonth != actualInLeap) {
+            logln("Gregorian y=%d m=%d d=%d => cal y=%d m=%s%d d=%d expected:%s actual:%s\n",
+                   gc.get(UCAL_EXTENDED_YEAR, status),
+                   gc.get(UCAL_MONTH, status),
+                   gc.get(UCAL_DAY_OF_MONTH, status),
+                   cal->get(UCAL_EXTENDED_YEAR, status),
+                   cal->get(UCAL_IS_LEAP_MONTH, status) == 1 ? "L" : "",
+                   cal->get(UCAL_MONTH, status),
+                   cal->get(UCAL_DAY_OF_MONTH, status),
+                   hasLeapMonth ? "true" : "false",
+                   actualInLeap ? "true" : "false");
+        }
+        assertEquals("inTemporalLeapYear", hasLeapMonth, actualInLeap);
+    }
+}
+
+void CalendarTest::TestIslamicCalendarInTemporalLeapYear(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "islamic", status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
+    if (failure(status, "construct IslamicCalendar")) return;
+    RunIslamicCalendarInTemporalLeapYearTest(cal.getAlias());
+}
+
+void CalendarTest::TestIslamicCivilCalendarInTemporalLeapYear(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "islamic-civil", status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
+    if (failure(status, "construct IslamicCivilCalendar")) return;
+    RunIslamicCalendarInTemporalLeapYearTest(cal.getAlias());
+}
+
+void CalendarTest::TestIslamicUmalquraCalendarInTemporalLeapYear(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "islamic-umalqura", status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
+    if (failure(status, "construct IslamicUmalquraCalendar")) return;
+    RunIslamicCalendarInTemporalLeapYearTest(cal.getAlias());
+}
+
+void CalendarTest::TestIslamicRGSACalendarInTemporalLeapYear(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "islamic-rgsa", status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
+    if (failure(status, "construct IslamicRGSACalendar")) return;
+    RunIslamicCalendarInTemporalLeapYearTest(cal.getAlias());
+}
+
+void CalendarTest::TestIslamicTBLACalendarInTemporalLeapYear(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "islamic-tbla", status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
+    if (failure(status, "construct IslamicTBLACalendar")) return;
+    RunIslamicCalendarInTemporalLeapYearTest(cal.getAlias());
+}
+
+void CalendarTest::Run366DaysIsLeapYearCalendarInTemporalLeapYearTest(Calendar* cal) {
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar gc(status);
+    if (failure(status, "construct GregorianCalendar")) return;
+    // Start our test from 1900, Jan 1.
+    // Check every 29 days in exhausted mode.
+    int32_t incrementDays = 29;
+    int32_t startYear = 1900;
+    int32_t stopYear = 2400;
+
+    if (quick) {
+        incrementDays = 317;
+        stopYear = 2100;
+    }
+    int32_t yearForHasLeapMonth = -1;
+    bool hasLeapMonth = false;
+    for (gc.set(startYear, UCAL_JANUARY, 1);
+         gc.get(UCAL_YEAR, status) <= stopYear;
+         gc.add(UCAL_DATE, incrementDays, status)) {
+        cal->setTime(gc.getTime(status), status);
+        if (failure(status, "set/getTime/setTime incorrect")) return;
+        int32_t cal_year = cal->get(UCAL_EXTENDED_YEAR, status);
+        if (yearForHasLeapMonth != cal_year) {
+            // If that year has exactly 355 days, it is a leap year.
+            hasLeapMonth = cal->getActualMaximum(UCAL_DAY_OF_YEAR, status) == 366;
+            if (failure(status, "getActualMaximum incorrect")) return;
+            yearForHasLeapMonth = cal_year;
+        }
+        bool actualInLeap =  cal->inTemporalLeapYear(status);
+        if (failure(status, "inTemporalLeapYear")) return;
+        if (hasLeapMonth != actualInLeap) {
+            logln("Gregorian y=%d m=%d d=%d => cal y=%d m=%s%d d=%d expected:%s actual:%s\n",
+                   gc.get(UCAL_EXTENDED_YEAR, status),
+                   gc.get(UCAL_MONTH, status),
+                   gc.get(UCAL_DAY_OF_MONTH, status),
+                   cal->get(UCAL_EXTENDED_YEAR, status),
+                   cal->get(UCAL_IS_LEAP_MONTH, status) == 1 ? "L" : "",
+                   cal->get(UCAL_MONTH, status),
+                   cal->get(UCAL_DAY_OF_MONTH, status),
+                   hasLeapMonth ? "true" : "false",
+                   actualInLeap ? "true" : "false");
+        }
+        assertEquals("inTemporalLeapYear", hasLeapMonth, actualInLeap);
+    }
+}
+
+void CalendarTest::TestTaiwanCalendarInTemporalLeapYear(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "roc", status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
+    if (failure(status, "construct TaiwanCalendar")) return;
+    Run366DaysIsLeapYearCalendarInTemporalLeapYearTest(cal.getAlias());
+}
+
+void CalendarTest::TestJapaneseCalendarInTemporalLeapYear(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "japanese", status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
+    if (failure(status, "construct JapaneseCalendar")) return;
+    Run366DaysIsLeapYearCalendarInTemporalLeapYearTest(cal.getAlias());
+}
+
+void CalendarTest::TestBuddhistCalendarInTemporalLeapYear(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "buddhist", status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
+    if (failure(status, "construct BuddhistCalendar")) return;
+    Run366DaysIsLeapYearCalendarInTemporalLeapYearTest(cal.getAlias());
+}
+
+void CalendarTest::TestPersianCalendarInTemporalLeapYear(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "persian", status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
+    if (failure(status, "construct PersianCalendar")) return;
+    Run366DaysIsLeapYearCalendarInTemporalLeapYearTest(cal.getAlias());
+}
+
+void CalendarTest::TestIndianCalendarInTemporalLeapYear(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "indian", status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
+    if (failure(status, "construct IndianCalendar")) return;
+    Run366DaysIsLeapYearCalendarInTemporalLeapYearTest(cal.getAlias());
+}
+
+void CalendarTest::TestCopticCalendarInTemporalLeapYear(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "coptic", status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
+    if (failure(status, "construct CopticCalendar")) return;
+    Run366DaysIsLeapYearCalendarInTemporalLeapYearTest(cal.getAlias());
+}
+
+void CalendarTest::TestEthiopicCalendarInTemporalLeapYear(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "ethiopic", status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
+    if (failure(status, "construct EthiopicCalendar")) return;
+    Run366DaysIsLeapYearCalendarInTemporalLeapYearTest(cal.getAlias());
+}
+
+void CalendarTest::TestEthiopicAmeteAlemCalendarInTemporalLeapYear(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "ethiopic-amete-alem", status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
+    if (failure(status, "construct EthiopicAmeteAlemCalendar")) return;
+    Run366DaysIsLeapYearCalendarInTemporalLeapYearTest(cal.getAlias());
+}
+
+std::string monthCode(int32_t month, bool leap) {
+    std::string code("M");
+    if (month < 10) {
+        code += "0";
+        code += ('0' + month);
+    } else {
+        code += "1";
+        code += ('0' + (month % 10));
+    }
+    if (leap) {
+        code += "L";
+    }
+    return code;
+}
+std::string hebrewMonthCode(int32_t icuMonth) {
+    if (icuMonth == icu::HebrewCalendar::ADAR_1) {
+        return monthCode(icuMonth, true);
+    }
+    return monthCode(icuMonth < icu::HebrewCalendar::ADAR_1 ? icuMonth+1 : icuMonth, false);
+}
+
+void CalendarTest::RunChineseCalendarGetTemporalMonthCode(Calendar* cal) {
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar gc(status);
+    if (failure(status, "construct GregorianCalendar")) return;
+    // Start our test from 1900, Jan 1.
+    // Check every 29 days in exhausted mode.
+    int32_t incrementDays = 29;
+    int32_t startYear = 1900;
+    int32_t stopYear = 2400;
+
+    if (quick) {
+        incrementDays = 317;
+        startYear = 1950;
+        stopYear = 2050;
+    }
+    for (gc.set(startYear, UCAL_JANUARY, 1);
+         gc.get(UCAL_YEAR, status) <= stopYear;
+         gc.add(UCAL_DATE, incrementDays, status)) {
+        cal->setTime(gc.getTime(status), status);
+        if (failure(status, "set/getTime/setTime incorrect")) return;
+        int32_t cal_month = cal->get(UCAL_MONTH, status);
+        std::string expected = monthCode(
+            cal_month + 1, cal->get(UCAL_IS_LEAP_MONTH, status) != 0);
+        assertEquals("getTemporalMonthCode", expected.c_str(), cal->getTemporalMonthCode(status));
+        if (failure(status, "getTemporalMonthCode")) return;
+    }
+}
+
+void CalendarTest::TestChineseCalendarGetTemporalMonthCode(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "chinese", status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
+    if (failure(status, "construct ChineseCalendar")) return;
+    RunChineseCalendarGetTemporalMonthCode(cal.getAlias());
+}
+
+void CalendarTest::TestDangiCalendarGetTemporalMonthCode(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "dangi", status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
+    if (failure(status, "construct DangiCalendar")) return;
+    RunChineseCalendarGetTemporalMonthCode(cal.getAlias());
+}
+
+void CalendarTest::TestHebrewCalendarGetTemporalMonthCode(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "hebrew", status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
+    GregorianCalendar gc(status);
+    if (failure(status, "construct Calendar")) return;
+    // Start our test from 1900, Jan 1.
+    // Check every 29 days in exhausted mode.
+    int32_t incrementDays = 29;
+    int32_t startYear = 1900;
+    int32_t stopYear = 2400;
+
+    if (quick) {
+        incrementDays = 317;
+        stopYear = 2100;
+    }
+    for (gc.set(startYear, UCAL_JANUARY, 1);
+         gc.get(UCAL_YEAR, status) <= stopYear;
+         gc.add(UCAL_DATE, incrementDays, status)) {
+        cal->setTime(gc.getTime(status), status);
+        if (failure(status, "set/getTime/setTime incorrect")) return;
+        std::string expected = hebrewMonthCode(cal->get(UCAL_MONTH, status));
+        if (failure(status, "get failed")) return;
+        assertEquals("getTemporalMonthCode", expected.c_str(), cal->getTemporalMonthCode(status));
+        if (failure(status, "getTemporalMonthCode")) return;
+    }
+}
+
+void CalendarTest::RunCECalendarGetTemporalMonthCode(Calendar* cal) {
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar gc(status);
+    if (failure(status, "construct Calendar")) return;
+    // Start testing from 1900
+    gc.set(1900, UCAL_JANUARY, 1);
+    cal->setTime(gc.getTime(status), status);
+    int32_t year = cal->get(UCAL_YEAR, status);
+    for (int32_t m = 0; m < 13; m++) {
+        std::string expected = monthCode(m+1, false);
+        for (int32_t y = year; y < year + 500 ; y++) {
+            cal->set(y, m, 1);
+            assertEquals("getTemporalMonthCode", expected.c_str(), cal->getTemporalMonthCode(status));
+            if (failure(status, "getTemporalMonthCode")) continue;
+        }
+    }
+
+}
+
+void CalendarTest::TestCopticCalendarGetTemporalMonthCode(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "coptic", status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
+    if (failure(status, "construct CopticCalendar")) return;
+    RunCECalendarGetTemporalMonthCode(cal.getAlias());
+}
+
+void CalendarTest::TestEthiopicCalendarGetTemporalMonthCode(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "ethiopic", status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
+    if (failure(status, "construct EthiopicCalendar")) return;
+    RunCECalendarGetTemporalMonthCode(cal.getAlias());
+}
+
+void CalendarTest::TestEthiopicAmeteAlemCalendarGetTemporalMonthCode(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "ethiopic-amete-alem", status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(l, status));
+    if (failure(status, "construct EthiopicAmeteAlemCalendar")) return;
+    RunCECalendarGetTemporalMonthCode(cal.getAlias());
+}
+
+void CalendarTest::TestGregorianCalendarSetTemporalMonthCode(void) {
+
+    struct TestCase {
+      int32_t gYear;
+      int32_t gMonth;
+      int32_t gDate;
+      const char* monthCode;
+      int32_t ordinalMonth;
+    } cases[] = {
+      { 1911, UCAL_JANUARY, 31, "M01", 0 },
+      { 1970, UCAL_FEBRUARY, 22, "M02", 1 },
+      { 543, UCAL_MARCH, 3, "M03", 2 },
+      { 2340, UCAL_APRIL, 21, "M04", 3 },
+      { 1234, UCAL_MAY, 21, "M05", 4 },
+      { 1931, UCAL_JUNE, 17, "M06", 5 },
+      { 2000, UCAL_JULY, 1, "M07", 6 },
+      { 2033, UCAL_AUGUST, 3, "M08", 7 },
+      { 2013, UCAL_SEPTEMBER, 9, "M09", 8 },
+      { 1849, UCAL_OCTOBER, 31, "M10", 9 },
+      { 1433, UCAL_NOVEMBER, 30, "M11", 10 },
+      { 2022, UCAL_DECEMBER, 25, "M12", 11 },
+    };
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar gc1(status);
+    GregorianCalendar gc2(status);
+    if (failure(status, "construct GregorianCalendar")) return;
+    for (auto& cas : cases) {
+        gc1.clear();
+        gc2.clear();
+        gc1.set(cas.gYear, cas.gMonth, cas.gDate);
+
+        gc2.set(UCAL_YEAR, cas.gYear);
+        gc2.setTemporalMonthCode(cas.monthCode, status);
+        gc2.set(UCAL_DATE, cas.gDate);
+        if (failure(status, "set/setTemporalMonthCode")) return;
+
+        assertTrue("by set and setTemporalMonthCode()", gc1.equals(gc2, status));
+        const char* actualMonthCode1 = gc1.getTemporalMonthCode(status);
+        const char* actualMonthCode2 = gc2.getTemporalMonthCode(status);
+        if (failure(status, "getTemporalMonthCode")) continue;
+        assertEquals("getTemporalMonthCode()", 0,
+                     uprv_strcmp(actualMonthCode1, actualMonthCode2));
+        assertEquals("getTemporalMonthCode()", 0,
+                     uprv_strcmp(cas.monthCode, actualMonthCode2));
+        assertEquals("ordinalMonth", cas.ordinalMonth, gc2.get(UCAL_ORDINAL_MONTH, status));
+        assertEquals("ordinalMonth", gc1.get(UCAL_ORDINAL_MONTH, status),
+                     gc2.get(UCAL_ORDINAL_MONTH, status));
+    }
+}
+
+void CalendarTest::TestChineseCalendarSetTemporalMonthCode(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "chinese", status);
+    LocalPointer<Calendar> cc1(Calendar::createInstance(l, status));
+    if (failure(status, "construct ChineseCalendar")) return;
+    LocalPointer<Calendar> cc2(cc1->clone());
+
+    struct TestCase {
+      int32_t gYear;
+      int32_t gMonth;
+      int32_t gDate;
+      int32_t cYear;
+      int32_t cMonth;
+      int32_t cDate;
+      const char* cMonthCode;
+      bool cLeapMonth;
+      int32_t cOrdinalMonth;
+    } cases[] = {
+      // https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2022.pdf
+      { 2022, UCAL_DECEMBER, 15, 4659, UCAL_NOVEMBER, 22, "M11", false, 10},
+      // M01L is very hard to find. Cannot find a year has M01L in these several
+      // centuries.
+      // M02L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2004.pdf
+      { 2004, UCAL_MARCH, 20, 4641, UCAL_FEBRUARY, 30, "M02", false, 1},
+      { 2004, UCAL_MARCH, 21, 4641, UCAL_FEBRUARY, 1, "M02L", true, 2},
+      { 2004, UCAL_APRIL, 18, 4641, UCAL_FEBRUARY, 29, "M02L", true, 2},
+      { 2004, UCAL_APRIL, 19, 4641, UCAL_MARCH, 1, "M03", false, 3},
+      // M03L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/1995.pdf
+      { 1955, UCAL_APRIL, 21, 4592, UCAL_MARCH, 29, "M03", false, 2},
+      { 1955, UCAL_APRIL, 22, 4592, UCAL_MARCH, 1, "M03L", true, 3},
+      { 1955, UCAL_MAY, 21, 4592, UCAL_MARCH, 30, "M03L", true, 3},
+      { 1955, UCAL_MAY, 22, 4592, UCAL_APRIL, 1, "M04", false, 4},
+      // M12 https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/1996.pdf
+      { 1956, UCAL_FEBRUARY, 11, 4592, UCAL_DECEMBER, 30, "M12", false, 12},
+      // M04L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2001.pdf
+      { 2001, UCAL_MAY, 22, 4638, UCAL_APRIL, 30, "M04", false, 3},
+      { 2001, UCAL_MAY, 23, 4638, UCAL_APRIL, 1, "M04L", true, 4},
+      { 2001, UCAL_JUNE, 20, 4638, UCAL_APRIL, 29, "M04L", true, 4},
+      { 2001, UCAL_JUNE, 21, 4638, UCAL_MAY, 1, "M05", false, 5},
+      // M05L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2009.pdf
+      { 2009, UCAL_JUNE, 22, 4646, UCAL_MAY, 30, "M05", false, 4},
+      { 2009, UCAL_JUNE, 23, 4646, UCAL_MAY, 1, "M05L", true, 5},
+      { 2009, UCAL_JULY, 21, 4646, UCAL_MAY, 29, "M05L", true, 5},
+      { 2009, UCAL_JULY, 22, 4646, UCAL_JUNE, 1, "M06", false, 6},
+      // M06L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2017.pdf
+      { 2017, UCAL_JULY, 22, 4654, UCAL_JUNE, 29, "M06", false, 5},
+      { 2017, UCAL_JULY, 23, 4654, UCAL_JUNE, 1, "M06L", true, 6},
+      { 2017, UCAL_AUGUST, 21, 4654, UCAL_JUNE, 30, "M06L", true, 6},
+      { 2017, UCAL_AUGUST, 22, 4654, UCAL_JULY, 1, "M07", false, 7},
+      // M07L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2006.pdf
+      { 2006, UCAL_AUGUST, 23, 4643, UCAL_JULY, 30, "M07", false, 6},
+      { 2006, UCAL_AUGUST, 24, 4643, UCAL_JULY, 1, "M07L", true, 7},
+      { 2006, UCAL_SEPTEMBER, 21, 4643, UCAL_JULY, 29, "M07L", true, 7},
+      { 2006, UCAL_SEPTEMBER, 22, 4643, UCAL_AUGUST, 1, "M08", false, 8},
+      // M08L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/1995.pdf
+      { 1995, UCAL_SEPTEMBER, 24, 4632, UCAL_AUGUST, 30, "M08", false, 7},
+      { 1995, UCAL_SEPTEMBER, 25, 4632, UCAL_AUGUST, 1, "M08L", true, 8},
+      { 1995, UCAL_OCTOBER, 23, 4632, UCAL_AUGUST, 29, "M08L", true, 8},
+      { 1995, UCAL_OCTOBER, 24, 4632, UCAL_SEPTEMBER, 1, "M09", false, 9},
+      // M09L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2014.pdf
+      { 2014, UCAL_OCTOBER, 23, 4651, UCAL_SEPTEMBER, 30, "M09", false, 8},
+      { 2014, UCAL_OCTOBER, 24, 4651, UCAL_SEPTEMBER, 1, "M09L", true, 9},
+      { 2014, UCAL_NOVEMBER, 21, 4651, UCAL_SEPTEMBER, 29, "M09L", true, 9},
+      { 2014, UCAL_NOVEMBER, 22, 4651, UCAL_OCTOBER, 1, "M10", false, 10},
+      // M10L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/1984.pdf
+      { 1984, UCAL_NOVEMBER, 22, 4621, UCAL_OCTOBER, 30, "M10", false, 9},
+      { 1984, UCAL_NOVEMBER, 23, 4621, UCAL_OCTOBER, 1, "M10L", true, 10},
+      { 1984, UCAL_DECEMBER, 21, 4621, UCAL_OCTOBER, 29, "M10L", true, 10},
+      { 1984, UCAL_DECEMBER, 22, 4621, UCAL_NOVEMBER, 1, "M11", false, 11},
+      // M11L https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2033.pdf
+      //      https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2034.pdf
+      { 2033, UCAL_DECEMBER, 21, 4670, UCAL_NOVEMBER, 30, "M11", false, 10},
+      { 2033, UCAL_DECEMBER, 22, 4670, UCAL_NOVEMBER, 1, "M11L", true, 11},
+      { 2034, UCAL_JANUARY, 19, 4670, UCAL_NOVEMBER, 29, "M11L", true, 11},
+      { 2034, UCAL_JANUARY, 20, 4670, UCAL_DECEMBER, 1, "M12", false, 12},
+      // M12L is very hard to find. Cannot find a year has M01L in these several
+      // centuries.
+    };
+    GregorianCalendar gc1(status);
+    if (failure(status, "construct Calendar")) return;
+    for (auto& cas : cases) {
+        gc1.clear();
+        cc1->clear();
+        cc2->clear();
+        gc1.set(cas.gYear, cas.gMonth, cas.gDate);
+        cc1->setTime(gc1.getTime(status), status);
+
+        cc2->set(UCAL_EXTENDED_YEAR, cas.cYear);
+        cc2->setTemporalMonthCode(cas.cMonthCode, status);
+        cc2->set(UCAL_DATE, cas.cDate);
+
+        assertEquals("year", cas.cYear, cc1->get(UCAL_EXTENDED_YEAR, status));
+        assertEquals("month", cas.cMonth, cc1->get(UCAL_MONTH, status));
+        assertEquals("date", cas.cDate, cc1->get(UCAL_DATE, status));
+        assertEquals("is_leap_month", cas.cLeapMonth ? 1 : 0, cc1->get(UCAL_IS_LEAP_MONTH, status));
+        assertEquals("getTemporalMonthCode()", 0,
+                     uprv_strcmp(cas.cMonthCode, cc1->getTemporalMonthCode(status)));
+        if (failure(status, "getTemporalMonthCode")) continue;
+        assertEquals("ordinalMonth", cas.cOrdinalMonth, cc1->get(UCAL_ORDINAL_MONTH, status));
+        if (! cc2->equals(*cc1, status)) {
+            printf("g=%f %f vs %f. diff = %f %d/%d%s/%d vs %d/%d%s/%d\n",
+                   gc1.getTime(status), cc1->getTime(status), cc2->getTime(status),
+                   cc1->getTime(status) - cc2->getTime(status),
+                   cc1->get(UCAL_EXTENDED_YEAR, status),
+                   cc1->get(UCAL_MONTH, status)+1,
+                   cc1->get(UCAL_IS_LEAP_MONTH, status) == 0 ? "" : "L",
+                   cc1->get(UCAL_DATE, status),
+                   cc2->get(UCAL_EXTENDED_YEAR, status),
+                   cc2->get(UCAL_MONTH, status)+1,
+                   cc2->get(UCAL_IS_LEAP_MONTH, status) == 0 ? "" : "L",
+                   cc2->get(UCAL_DATE, status));
+        }
+        assertTrue("by set() and setTemporalMonthCode()", cc2->equals(*cc1, status));
+    }
+}
+
+void CalendarTest::TestHebrewCalendarSetTemporalMonthCode(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "hebrew", status);
+    LocalPointer<Calendar> cc1(Calendar::createInstance(l, status));
+    if (failure(status, "construct HebrewCalendar")) return;
+    LocalPointer<Calendar> cc2(cc1->clone());
+
+    struct TestCase {
+      int32_t gYear;
+      int32_t gMonth;
+      int32_t gDate;
+      int32_t cYear;
+      int32_t cMonth;
+      int32_t cDate;
+      const char* cMonthCode;
+      int32_t cOrdinalMonth;
+    } cases[] = {
+      { 2022, UCAL_JANUARY, 11, 5782, icu::HebrewCalendar::SHEVAT, 9, "M05", 4},
+      { 2022, UCAL_FEBRUARY, 12, 5782, icu::HebrewCalendar::ADAR_1, 11, "M05L", 5},
+      { 2022, UCAL_MARCH, 13, 5782, icu::HebrewCalendar::ADAR, 10, "M06", 6},
+      { 2022, UCAL_APRIL, 14, 5782, icu::HebrewCalendar::NISAN, 13, "M07", 7},
+      { 2022, UCAL_MAY, 15, 5782, icu::HebrewCalendar::IYAR, 14, "M08", 8},
+      { 2022, UCAL_JUNE, 16, 5782, icu::HebrewCalendar::SIVAN, 17, "M09", 9},
+      { 2022, UCAL_JULY, 17, 5782, icu::HebrewCalendar::TAMUZ, 18, "M10", 10},
+      { 2022, UCAL_AUGUST, 18, 5782, icu::HebrewCalendar::AV, 21, "M11", 11},
+      { 2022, UCAL_SEPTEMBER, 19, 5782, icu::HebrewCalendar::ELUL, 23, "M12", 12},
+      { 2022, UCAL_OCTOBER, 20, 5783, icu::HebrewCalendar::TISHRI, 25, "M01", 0},
+      { 2022, UCAL_NOVEMBER, 21, 5783, icu::HebrewCalendar::HESHVAN, 27, "M02", 1},
+      { 2022, UCAL_DECEMBER, 22, 5783, icu::HebrewCalendar::KISLEV, 28, "M03", 2},
+      { 2023, UCAL_JANUARY, 20, 5783, icu::HebrewCalendar::TEVET, 27, "M04", 3},
+    };
+    GregorianCalendar gc1(status);
+    if (failure(status, "construct Calendar")) return;
+    for (auto& cas : cases) {
+        gc1.clear();
+        cc1->clear();
+        cc2->clear();
+        gc1.set(cas.gYear, cas.gMonth, cas.gDate);
+        cc1->setTime(gc1.getTime(status), status);
+
+        cc2->set(UCAL_EXTENDED_YEAR, cas.cYear);
+        cc2->setTemporalMonthCode(cas.cMonthCode, status);
+        cc2->set(UCAL_DATE, cas.cDate);
+
+        assertEquals("year", cas.cYear, cc1->get(UCAL_EXTENDED_YEAR, status));
+        assertEquals("month", cas.cMonth, cc1->get(UCAL_MONTH, status));
+        assertEquals("date", cas.cDate, cc1->get(UCAL_DATE, status));
+        assertEquals("getTemporalMonthCode()", 0,
+                     uprv_strcmp(cas.cMonthCode, cc1->getTemporalMonthCode(status)));
+        if (failure(status, "getTemporalMonthCode")) continue;
+        if (! cc2->equals(*cc1, status)) {
+            printf("g=%f %f vs %f. diff = %f %d/%d/%d vs %d/%d/%d\n",
+                   gc1.getTime(status), cc1->getTime(status), cc2->getTime(status),
+                   cc1->getTime(status) - cc2->getTime(status),
+                   cc1->get(UCAL_EXTENDED_YEAR, status),
+                   cc1->get(UCAL_MONTH, status)+1,
+                   cc1->get(UCAL_DATE, status),
+                   cc2->get(UCAL_EXTENDED_YEAR, status),
+                   cc2->get(UCAL_MONTH, status)+1,
+                   cc2->get(UCAL_DATE, status));
+        }
+        assertTrue("by set() and setTemporalMonthCode()", cc2->equals(*cc1, status));
+        assertEquals("ordinalMonth", cas.cOrdinalMonth, cc1->get(UCAL_ORDINAL_MONTH, status));
+        assertEquals("ordinalMonth", cas.cOrdinalMonth, cc2->get(UCAL_ORDINAL_MONTH, status));
+    }
+}
+
+void CalendarTest::TestCopticCalendarSetTemporalMonthCode(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "coptic", status);
+    LocalPointer<Calendar> cc1(Calendar::createInstance(l, status));
+    if (failure(status, "construct CopticCalendar")) return;
+    LocalPointer<Calendar> cc2(cc1->clone());
+
+    struct TestCase {
+      int32_t gYear;
+      int32_t gMonth;
+      int32_t gDate;
+      int32_t cYear;
+      int32_t cMonth;
+      int32_t cDate;
+      const char* cMonthCode;
+      int32_t cOrdinalMonth;
+    } cases[] = {
+      { 1900, UCAL_JANUARY, 1, 1616, icu::CopticCalendar::KIAHK, 23, "M04", 3},
+      { 1900, UCAL_SEPTEMBER, 6, 1616, icu::CopticCalendar::NASIE, 1, "M13", 12},
+      { 1900, UCAL_SEPTEMBER, 10, 1616, icu::CopticCalendar::NASIE, 5, "M13", 12},
+      { 1900, UCAL_SEPTEMBER, 11, 1617, icu::CopticCalendar::TOUT, 1, "M01", 0},
+
+      { 2022, UCAL_JANUARY, 11, 1738, icu::CopticCalendar::TOBA, 3, "M05", 4},
+      { 2022, UCAL_FEBRUARY, 12, 1738, icu::CopticCalendar::AMSHIR, 5, "M06", 5},
+      { 2022, UCAL_MARCH, 13, 1738, icu::CopticCalendar::BARAMHAT, 4, "M07", 6},
+      { 2022, UCAL_APRIL, 14, 1738, icu::CopticCalendar::BARAMOUDA, 6, "M08", 7},
+      { 2022, UCAL_MAY, 15, 1738, icu::CopticCalendar::BASHANS, 7, "M09", 8},
+      { 2022, UCAL_JUNE, 16, 1738, icu::CopticCalendar::PAONA, 9, "M10", 9},
+      { 2022, UCAL_JULY, 17, 1738, icu::CopticCalendar::EPEP, 10, "M11", 10},
+      { 2022, UCAL_AUGUST, 18, 1738, icu::CopticCalendar::MESRA, 12, "M12", 11},
+      { 2022, UCAL_SEPTEMBER, 6, 1738, icu::CopticCalendar::NASIE, 1, "M13", 12},
+      { 2022, UCAL_SEPTEMBER, 10, 1738, icu::CopticCalendar::NASIE, 5, "M13", 12},
+      { 2022, UCAL_SEPTEMBER, 11, 1739, icu::CopticCalendar::TOUT, 1, "M01", 0},
+      { 2022, UCAL_SEPTEMBER, 19, 1739, icu::CopticCalendar::TOUT, 9, "M01", 0},
+      { 2022, UCAL_OCTOBER, 20, 1739, icu::CopticCalendar::BABA, 10, "M02", 1},
+      { 2022, UCAL_NOVEMBER, 21, 1739, icu::CopticCalendar::HATOR, 12, "M03", 2},
+      { 2022, UCAL_DECEMBER, 22, 1739, icu::CopticCalendar::KIAHK, 13, "M04", 3},
+
+      { 2023, UCAL_JANUARY, 1, 1739, icu::CopticCalendar::KIAHK, 23, "M04", 3},
+      { 2023, UCAL_SEPTEMBER, 6, 1739, icu::CopticCalendar::NASIE, 1, "M13", 12},
+      { 2023, UCAL_SEPTEMBER, 11, 1739, icu::CopticCalendar::NASIE, 6, "M13", 12},
+      { 2023, UCAL_SEPTEMBER, 12, 1740, icu::CopticCalendar::TOUT, 1, "M01", 0},
+
+      { 2030, UCAL_JANUARY, 1, 1746, icu::CopticCalendar::KIAHK, 23, "M04", 3},
+      { 2030, UCAL_SEPTEMBER, 6, 1746, icu::CopticCalendar::NASIE, 1, "M13", 12},
+      { 2030, UCAL_SEPTEMBER, 10, 1746, icu::CopticCalendar::NASIE, 5, "M13", 12},
+      { 2030, UCAL_SEPTEMBER, 11, 1747, icu::CopticCalendar::TOUT, 1, "M01", 0},
+    };
+    GregorianCalendar gc1(status);
+    if (failure(status, "construct Calendar")) return;
+    for (auto& cas : cases) {
+        gc1.clear();
+        cc1->clear();
+        cc2->clear();
+        gc1.set(cas.gYear, cas.gMonth, cas.gDate);
+        cc1->setTime(gc1.getTime(status), status);
+
+        cc2->set(UCAL_EXTENDED_YEAR, cas.cYear);
+        cc2->setTemporalMonthCode(cas.cMonthCode, status);
+        cc2->set(UCAL_DATE, cas.cDate);
+
+        assertEquals("year", cas.cYear, cc1->get(UCAL_EXTENDED_YEAR, status));
+        assertEquals("month", cas.cMonth, cc1->get(UCAL_MONTH, status));
+        assertEquals("date", cas.cDate, cc1->get(UCAL_DATE, status));
+        assertEquals("getTemporalMonthCode()", 0,
+                     uprv_strcmp(cas.cMonthCode, cc1->getTemporalMonthCode(status)));
+        if (failure(status, "getTemporalMonthCode")) continue;
+        assertTrue("by set() and setTemporalMonthCode()", cc2->equals(*cc1, status));
+        if (! cc2->equals(*cc1, status)) {
+            printf("g=%f %f vs %f. diff = %f %d/%d/%d vs %d/%d/%d\n",
+                   gc1.getTime(status), cc1->getTime(status), cc2->getTime(status),
+                   cc1->getTime(status) - cc2->getTime(status),
+                   cc1->get(UCAL_EXTENDED_YEAR, status),
+                   cc1->get(UCAL_MONTH, status)+1,
+                   cc1->get(UCAL_DATE, status),
+                   cc2->get(UCAL_EXTENDED_YEAR, status),
+                   cc2->get(UCAL_MONTH, status)+1,
+                   cc2->get(UCAL_DATE, status));
+        }
+        assertEquals("ordinalMonth", cas.cOrdinalMonth, cc1->get(UCAL_ORDINAL_MONTH, status));
+        assertEquals("ordinalMonth", cas.cOrdinalMonth, cc2->get(UCAL_ORDINAL_MONTH, status));
+    }
+}
+
+void CalendarTest::TestEthiopicCalendarSetTemporalMonthCode(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "ethiopic", status);
+    LocalPointer<Calendar> cc1(Calendar::createInstance(l, status));
+    if (failure(status, "construct EthiopicCalendar")) return;
+    LocalPointer<Calendar> cc2(cc1->clone());
+
+    struct TestCase {
+      int32_t gYear;
+      int32_t gMonth;
+      int32_t gDate;
+      int32_t cYear;
+      int32_t cMonth;
+      int32_t cDate;
+      const char* cMonthCode;
+      int32_t cOrdinalMonth;
+    } cases[] = {
+      { 1900, UCAL_JANUARY, 1, 1892, icu::EthiopicCalendar::TAHSAS, 23, "M04", 3},
+      { 1900, UCAL_SEPTEMBER, 6, 1892, icu::EthiopicCalendar::PAGUMEN, 1, "M13", 12},
+      { 1900, UCAL_SEPTEMBER, 10, 1892, icu::EthiopicCalendar::PAGUMEN, 5, "M13", 12},
+      { 1900, UCAL_SEPTEMBER, 11, 1893, icu::EthiopicCalendar::MESKEREM, 1, "M01", 0},
+
+      { 2022, UCAL_JANUARY, 11, 2014, icu::EthiopicCalendar::TER, 3, "M05", 4},
+      { 2022, UCAL_FEBRUARY, 12, 2014, icu::EthiopicCalendar::YEKATIT, 5, "M06", 5},
+      { 2022, UCAL_MARCH, 13, 2014, icu::EthiopicCalendar::MEGABIT, 4, "M07", 6},
+      { 2022, UCAL_APRIL, 14, 2014, icu::EthiopicCalendar::MIAZIA, 6, "M08", 7},
+      { 2022, UCAL_MAY, 15, 2014, icu::EthiopicCalendar::GENBOT, 7, "M09", 8},
+      { 2022, UCAL_JUNE, 16, 2014, icu::EthiopicCalendar::SENE, 9, "M10", 9},
+      { 2022, UCAL_JULY, 17, 2014, icu::EthiopicCalendar::HAMLE, 10, "M11", 10},
+      { 2022, UCAL_AUGUST, 18, 2014, icu::EthiopicCalendar::NEHASSA, 12, "M12", 11},
+      { 2022, UCAL_SEPTEMBER, 6, 2014, icu::EthiopicCalendar::PAGUMEN, 1, "M13", 12},
+      { 2022, UCAL_SEPTEMBER, 10, 2014, icu::EthiopicCalendar::PAGUMEN, 5, "M13", 12},
+      { 2022, UCAL_SEPTEMBER, 11, 2015, icu::EthiopicCalendar::MESKEREM, 1, "M01", 0},
+      { 2022, UCAL_SEPTEMBER, 19, 2015, icu::EthiopicCalendar::MESKEREM, 9, "M01", 0},
+      { 2022, UCAL_OCTOBER, 20, 2015, icu::EthiopicCalendar::TEKEMT, 10, "M02", 1},
+      { 2022, UCAL_NOVEMBER, 21, 2015, icu::EthiopicCalendar::HEDAR, 12, "M03", 2},
+      { 2022, UCAL_DECEMBER, 22, 2015, icu::EthiopicCalendar::TAHSAS, 13, "M04", 3},
+
+      { 2023, UCAL_JANUARY, 1, 2015, icu::EthiopicCalendar::TAHSAS, 23, "M04", 3},
+      { 2023, UCAL_SEPTEMBER, 6, 2015, icu::EthiopicCalendar::PAGUMEN, 1, "M13", 12},
+      { 2023, UCAL_SEPTEMBER, 11, 2015, icu::EthiopicCalendar::PAGUMEN, 6, "M13", 12},
+      { 2023, UCAL_SEPTEMBER, 12, 2016, icu::EthiopicCalendar::MESKEREM, 1, "M01", 0},
+
+      { 2030, UCAL_JANUARY, 1, 2022, icu::EthiopicCalendar::TAHSAS, 23, "M04", 3},
+      { 2030, UCAL_SEPTEMBER, 6, 2022, icu::EthiopicCalendar::PAGUMEN, 1, "M13", 12},
+      { 2030, UCAL_SEPTEMBER, 10, 2022, icu::EthiopicCalendar::PAGUMEN, 5, "M13", 12},
+      { 2030, UCAL_SEPTEMBER, 11, 2023, icu::EthiopicCalendar::MESKEREM, 1, "M01", 0},
+    };
+    GregorianCalendar gc1(status);
+    if (failure(status, "construct Calendar")) return;
+    for (auto& cas : cases) {
+        gc1.clear();
+        cc1->clear();
+        cc2->clear();
+        gc1.set(cas.gYear, cas.gMonth, cas.gDate);
+        cc1->setTime(gc1.getTime(status), status);
+
+        cc2->set(UCAL_EXTENDED_YEAR, cas.cYear);
+        cc2->setTemporalMonthCode(cas.cMonthCode, status);
+        cc2->set(UCAL_DATE, cas.cDate);
+
+        assertEquals("year", cas.cYear, cc1->get(UCAL_EXTENDED_YEAR, status));
+        assertEquals("month", cas.cMonth, cc1->get(UCAL_MONTH, status));
+        assertEquals("date", cas.cDate, cc1->get(UCAL_DATE, status));
+        assertEquals("getTemporalMonthCode()", 0,
+                     uprv_strcmp(cas.cMonthCode, cc1->getTemporalMonthCode(status)));
+        if (failure(status, "getTemporalMonthCode")) continue;
+        if (! cc2->equals(*cc1, status)) {
+            printf("g=%f %f vs %f. diff = %f %d/%d/%d vs %d/%d/%d\n",
+                   gc1.getTime(status), cc1->getTime(status), cc2->getTime(status),
+                   cc1->getTime(status) - cc2->getTime(status),
+                   cc1->get(UCAL_EXTENDED_YEAR, status),
+                   cc1->get(UCAL_MONTH, status)+1,
+                   cc1->get(UCAL_DATE, status),
+                   cc2->get(UCAL_EXTENDED_YEAR, status),
+                   cc2->get(UCAL_MONTH, status)+1,
+                   cc2->get(UCAL_DATE, status));
+        }
+        assertTrue("by set() and setTemporalMonthCode()", cc2->equals(*cc1, status));
+        assertEquals("ordinalMonth", cas.cOrdinalMonth, cc1->get(UCAL_ORDINAL_MONTH, status));
+        assertEquals("ordinalMonth", cas.cOrdinalMonth, cc2->get(UCAL_ORDINAL_MONTH, status));
+    }
+}
+
+void VerifyMonth(CalendarTest* test, const char* message, Calendar* cc, int32_t expectedMonth,
+                 int32_t expectedOrdinalMonth, bool expectedLeapMonth,
+                 const char* expectedMonthCode) {
+    UErrorCode status = U_ZERO_ERROR;
+    std::string buf(message);
+    buf.append(" get(UCAL_MONTH)");
+    test->assertEquals(buf.c_str(), expectedMonth, cc->get(UCAL_MONTH, status));
+    buf = message;
+    buf.append(" get(UCAL_ORDINAL_MONTH)");
+    test->assertEquals(buf.c_str(), expectedOrdinalMonth, cc->get(UCAL_ORDINAL_MONTH, status));
+    buf = message;
+    buf.append(" get(UCAL_IS_LEAP_MONTH)");
+    test->assertEquals(buf.c_str(), expectedLeapMonth ? 1 : 0, cc->get(UCAL_IS_LEAP_MONTH, status));
+    buf = message;
+    buf.append(" getTemporalMonthCode()");
+    test->assertTrue(buf.c_str(), uprv_strcmp(cc->getTemporalMonthCode(status), expectedMonthCode) == 0);
+}
+
+void CalendarTest::TestMostCalendarsOrdinalMonthSet(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    std::unique_ptr<icu::StringEnumeration> enumeration(
+        Calendar::getKeywordValuesForLocale("calendar", l, false, status));
+    for (const char* name = enumeration->next(nullptr, status);
+        U_SUCCESS(status) && name != nullptr;
+        name = enumeration->next(nullptr, status)) {
+
+        // Test these three calendars differently.
+        if (uprv_strcmp(name, "chinese") == 0) continue;
+        if (uprv_strcmp(name, "dangi") == 0) continue;
+        if (uprv_strcmp(name, "hebrew") == 0) continue;
+
+        l.setKeywordValue("calendar", name, status);
+        LocalPointer<Calendar> cc1(Calendar::createInstance(l, status));
+        if (failure(status, "Construct Calendar")) return;
+
+        LocalPointer<Calendar> cc2(cc1->clone());
+        LocalPointer<Calendar> cc3(cc1->clone());
+
+        cc1->set(UCAL_EXTENDED_YEAR, 2134);
+        cc2->set(UCAL_EXTENDED_YEAR, 2134);
+        cc3->set(UCAL_EXTENDED_YEAR, 2134);
+        cc1->set(UCAL_MONTH, 5);
+        cc2->set(UCAL_ORDINAL_MONTH, 5);
+        cc3->setTemporalMonthCode("M06", status);
+        if (failure(status, "setTemporalMonthCode failure")) return;
+        cc1->set(UCAL_DATE, 23);
+        cc2->set(UCAL_DATE, 23);
+        cc3->set(UCAL_DATE, 23);
+        assertTrue("M06 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+        assertTrue("M06 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+        if (failure(status, "equals failure")) return;
+        VerifyMonth(this, "cc1", cc1.getAlias(), 5, 5, false, "M06");
+        VerifyMonth(this, "cc2", cc2.getAlias(), 5, 5, false, "M06");
+        VerifyMonth(this, "cc3", cc3.getAlias(), 5, 5, false, "M06");
+
+        cc1->set(UCAL_ORDINAL_MONTH, 6);
+        cc2->setTemporalMonthCode("M07", status);
+        if (failure(status, "setTemporalMonthCode failure")) return;
+        cc3->set(UCAL_MONTH, 6);
+        assertTrue("M07 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+        assertTrue("M07 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+        if (failure(status, "equals failure")) return;
+        VerifyMonth(this, "cc1", cc1.getAlias(), 6, 6, false, "M07");
+        VerifyMonth(this, "cc2", cc2.getAlias(), 6, 6, false, "M07");
+        VerifyMonth(this, "cc3", cc3.getAlias(), 6, 6, false, "M07");
+
+        cc1->setTemporalMonthCode("M08", status);
+        if (failure(status, "setTemporalMonthCode failure")) return;
+        cc2->set(UCAL_MONTH, 7);
+        cc3->set(UCAL_ORDINAL_MONTH, 7);
+        assertTrue("M08 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+        assertTrue("M08 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+        if (failure(status, "equals failure")) return;
+        VerifyMonth(this, "cc1", cc1.getAlias(), 7, 7, false, "M08");
+        VerifyMonth(this, "cc2", cc2.getAlias(), 7, 7, false, "M08");
+        VerifyMonth(this, "cc3", cc3.getAlias(), 7, 7, false, "M08");
+
+        cc1->set(UCAL_DATE, 3);
+        // For "M13", do not return error for these three calendars.
+        if ((uprv_strcmp(name, "coptic") == 0) ||
+            (uprv_strcmp(name, "ethiopic") == 0) ||
+            (uprv_strcmp(name, "ethiopic-amete-alem") == 0)) {
+
+            cc1->setTemporalMonthCode("M13", status);
+            assertEquals("setTemporalMonthCode(\"M13\")", U_ZERO_ERROR, status);
+            assertEquals("get(UCAL_MONTH) after setTemporalMonthCode(\"M13\")",
+                         12, cc1->get(UCAL_MONTH, status));
+            assertEquals("get(UCAL_ORDINAL_MONTH) after setTemporalMonthCode(\"M13\")",
+                         12, cc1->get(UCAL_ORDINAL_MONTH, status));
+            assertEquals("get", U_ZERO_ERROR, status);
+        } else {
+            cc1->setTemporalMonthCode("M13", status);
+            assertEquals("setTemporalMonthCode(\"M13\")", U_ILLEGAL_ARGUMENT_ERROR, status);
+        }
+        status = U_ZERO_ERROR;
+
+        // Out of bound monthCodes should return error.
+        // These are not valid for calendar do not have a leap month
+        const char* kInvalidMonthCodes[] = {
+          "M00", "M14", "M01L", "M02L", "M03L", "M04L", "M05L", "M06L", "M07L",
+          "M08L", "M09L", "M10L", "M11L", "M12L"};
+        for (auto& cas : kInvalidMonthCodes) {
+           cc1->setTemporalMonthCode(cas, status);
+           assertEquals("setTemporalMonthCode(\"M13\")", U_ILLEGAL_ARGUMENT_ERROR, status);
+           status = U_ZERO_ERROR;
+        }
+
+    }
+}
+
+void CalendarTest::TestChineseCalendarOrdinalMonthSet(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "chinese", status);
+    LocalPointer<Calendar> cc1(Calendar::createInstance(l, status));
+    if (failure(status, "Construct Calendar")) return;
+
+    LocalPointer<Calendar> cc2(cc1->clone());
+    LocalPointer<Calendar> cc3(cc1->clone());
+
+    constexpr int32_t notLeapYear = 4591;
+    constexpr int32_t leapMarchYear = 4592;
+
+    cc1->set(UCAL_EXTENDED_YEAR, leapMarchYear);
+    cc2->set(UCAL_EXTENDED_YEAR, leapMarchYear);
+    cc3->set(UCAL_EXTENDED_YEAR, leapMarchYear);
+
+    cc1->set(UCAL_MONTH, UCAL_MARCH); cc1->set(UCAL_IS_LEAP_MONTH, 1);
+    cc2->set(UCAL_ORDINAL_MONTH, 3);
+    cc3->setTemporalMonthCode("M03L", status);
+    if (failure(status, "setTemporalMonthCode failure")) return;
+    cc1->set(UCAL_DATE, 1);
+    cc2->set(UCAL_DATE, 1);
+    cc3->set(UCAL_DATE, 1);
+    assertTrue("4592 M03L cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("4592 M03L cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    if (failure(status, "equals failure")) return;
+    VerifyMonth(this, "4592 M03L cc1", cc1.getAlias(), UCAL_MARCH, 3, true, "M03L");
+    VerifyMonth(this, "4592 M03L cc2", cc2.getAlias(), UCAL_MARCH, 3, true, "M03L");
+    VerifyMonth(this, "4592 M03L cc3", cc3.getAlias(), UCAL_MARCH, 3, true, "M03L");
+
+    cc1->set(UCAL_EXTENDED_YEAR, notLeapYear);
+    cc2->set(UCAL_EXTENDED_YEAR, notLeapYear);
+    cc3->set(UCAL_EXTENDED_YEAR, notLeapYear);
+    cc1->set(UCAL_ORDINAL_MONTH, 5);
+    cc2->setTemporalMonthCode("M06", status);
+    if (failure(status, "setTemporalMonthCode failure")) return;
+    cc3->set(UCAL_MONTH, UCAL_JUNE); cc3->set(UCAL_IS_LEAP_MONTH, 0);
+    assertTrue("4591 M06 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("4591 M06 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    if (failure(status, "equals failure")) return;
+    VerifyMonth(this, "4591 M06 cc1", cc1.getAlias(), UCAL_JUNE, 5, false, "M06");
+    VerifyMonth(this, "4591 M06 cc2", cc2.getAlias(), UCAL_JUNE, 5, false, "M06");
+    VerifyMonth(this, "4591 M06 cc3", cc3.getAlias(), UCAL_JUNE, 5, false, "M06");
+
+    cc1->set(UCAL_EXTENDED_YEAR, leapMarchYear);
+    cc2->set(UCAL_EXTENDED_YEAR, leapMarchYear);
+    cc3->set(UCAL_EXTENDED_YEAR, leapMarchYear);
+    cc1->setTemporalMonthCode("M04", status);
+    if (failure(status, "setTemporalMonthCode failure")) return;
+    cc2->set(UCAL_MONTH, UCAL_APRIL); cc2->set(UCAL_IS_LEAP_MONTH, 0);
+    cc3->set(UCAL_ORDINAL_MONTH, 4);
+    assertTrue("4592 M04 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("4592 M04 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    if (failure(status, "equals failure")) return;
+    // 4592 has leap March so April is the 5th month in that year.
+    VerifyMonth(this, "4592 M04 cc1", cc1.getAlias(), UCAL_APRIL, 4, false, "M04");
+    VerifyMonth(this, "4592 M04 cc2", cc2.getAlias(), UCAL_APRIL, 4, false, "M04");
+    VerifyMonth(this, "4592 M04 cc3", cc3.getAlias(), UCAL_APRIL, 4, false, "M04");
+
+    cc1->set(UCAL_EXTENDED_YEAR, notLeapYear);
+    cc2->set(UCAL_EXTENDED_YEAR, notLeapYear);
+    cc3->set(UCAL_EXTENDED_YEAR, notLeapYear);
+    assertTrue("4591 M04 no leap month before cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("4591 M04 no leap month before cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    if (failure(status, "equals failure")) return;
+    // 4592 has no leap month before April so April is the 4th month in that year.
+    VerifyMonth(this, "4591 M04 cc1", cc1.getAlias(), UCAL_APRIL, 3, false, "M04");
+    VerifyMonth(this, "4591 M04 cc2", cc2.getAlias(), UCAL_APRIL, 3, false, "M04");
+    VerifyMonth(this, "4591 M04 cc3", cc3.getAlias(), UCAL_APRIL, 3, false, "M04");
+
+    // Out of bound monthCodes should return error.
+    // These are not valid for calendar do not have a leap month
+    UErrorCode expectedStatus = U_ILLEGAL_ARGUMENT_ERROR;
+    const char* kInvalidMonthCodes[] = { "M00", "M13", "M14" };
+
+
+    for (auto& cas : kInvalidMonthCodes) {
+       cc1->setTemporalMonthCode(cas, status);
+       if (status != expectedStatus) {
+           errln("setTemporalMonthCode(%s) should return U_ILLEGAL_ARGUMENT_ERROR", cas);
+       }
+       status = U_ZERO_ERROR;
+    }
+}
+
+void CalendarTest::TestDangiCalendarOrdinalMonthSet(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    const char* name = "dangi";
+    l.setKeywordValue("calendar", name, status);
+    LocalPointer<Calendar> cc1(Calendar::createInstance(l, status));
+    if (failure(status, "Construct Calendar")) return;
+
+    LocalPointer<Calendar> cc2(cc1->clone());
+    LocalPointer<Calendar> cc3(cc1->clone());
+
+    constexpr int32_t notLeapYear = 4287;
+    constexpr int32_t leapMarchYear = 4288;
+
+    cc1->set(UCAL_EXTENDED_YEAR, leapMarchYear);
+    cc2->set(UCAL_EXTENDED_YEAR, leapMarchYear);
+    cc3->set(UCAL_EXTENDED_YEAR, leapMarchYear);
+
+    cc1->set(UCAL_MONTH, UCAL_MARCH); cc1->set(UCAL_IS_LEAP_MONTH, 1);
+    cc2->set(UCAL_ORDINAL_MONTH, 3);
+    cc3->setTemporalMonthCode("M03L", status);
+    if (failure(status, "setTemporalMonthCode failure")) return;
+    cc1->set(UCAL_DATE, 1);
+    cc2->set(UCAL_DATE, 1);
+    cc3->set(UCAL_DATE, 1);
+    assertTrue("4288 M03L cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("4288 M03L cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    if (failure(status, "equals failure")) return;
+    VerifyMonth(this, "4288 M03L cc1", cc1.getAlias(), UCAL_MARCH, 3, true, "M03L");
+    VerifyMonth(this, "4288 M03L cc2", cc2.getAlias(), UCAL_MARCH, 3, true, "M03L");
+    VerifyMonth(this, "4288 M03L cc3", cc3.getAlias(), UCAL_MARCH, 3, true, "M03L");
+
+    cc1->set(UCAL_EXTENDED_YEAR, notLeapYear);
+    cc2->set(UCAL_EXTENDED_YEAR, notLeapYear);
+    cc3->set(UCAL_EXTENDED_YEAR, notLeapYear);
+    cc1->set(UCAL_ORDINAL_MONTH, 5);
+    cc2->setTemporalMonthCode("M06", status);
+    if (failure(status, "setTemporalMonthCode failure")) return;
+    cc3->set(UCAL_MONTH, UCAL_JUNE); cc3->set(UCAL_IS_LEAP_MONTH, 0);
+    assertTrue("4287 M06 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("4287 M06 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    if (failure(status, "equals failure")) return;
+    VerifyMonth(this, "4287 M06 cc1", cc1.getAlias(), UCAL_JUNE, 5, false, "M06");
+    VerifyMonth(this, "4287 M06 cc2", cc2.getAlias(), UCAL_JUNE, 5, false, "M06");
+    VerifyMonth(this, "4287 M06 cc3", cc3.getAlias(), UCAL_JUNE, 5, false, "M06");
+
+    cc1->set(UCAL_EXTENDED_YEAR, leapMarchYear);
+    cc2->set(UCAL_EXTENDED_YEAR, leapMarchYear);
+    cc3->set(UCAL_EXTENDED_YEAR, leapMarchYear);
+    cc1->setTemporalMonthCode("M04", status);
+    if (failure(status, "setTemporalMonthCode failure")) return;
+    cc2->set(UCAL_MONTH, UCAL_APRIL); cc2->set(UCAL_IS_LEAP_MONTH, 0);
+    cc3->set(UCAL_ORDINAL_MONTH, 4);
+    assertTrue("4288 M04 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("4288 M04 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    if (failure(status, "equals failure")) return;
+    // 4592 has leap March so April is the 5th month in that year.
+    VerifyMonth(this, "4288 M04 cc1", cc1.getAlias(), UCAL_APRIL, 4, false, "M04");
+    VerifyMonth(this, "4288 M04 cc2", cc2.getAlias(), UCAL_APRIL, 4, false, "M04");
+    VerifyMonth(this, "4288 M04 cc3", cc3.getAlias(), UCAL_APRIL, 4, false, "M04");
+
+    cc1->set(UCAL_EXTENDED_YEAR, notLeapYear);
+    cc2->set(UCAL_EXTENDED_YEAR, notLeapYear);
+    cc3->set(UCAL_EXTENDED_YEAR, notLeapYear);
+    assertTrue("4287 M04 no leap month before cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("4287 M04 no leap month before cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    if (failure(status, "equals failure")) return;
+    // 4592 has no leap month before April so April is the 4th month in that year.
+    VerifyMonth(this, "4287 M04 cc1", cc1.getAlias(), UCAL_APRIL, 3, false, "M04");
+    VerifyMonth(this, "4287 M04 cc2", cc2.getAlias(), UCAL_APRIL, 3, false, "M04");
+    VerifyMonth(this, "4287 M04 cc3", cc3.getAlias(), UCAL_APRIL, 3, false, "M04");
+
+    // Out of bound monthCodes should return error.
+    // These are not valid for calendar do not have a leap month
+    UErrorCode expectedStatus = U_ILLEGAL_ARGUMENT_ERROR;
+    const char* kInvalidMonthCodes[] = { "M00", "M13", "M14" };
+
+    for (auto& cas : kInvalidMonthCodes) {
+       cc1->setTemporalMonthCode(cas, status);
+       if (status != expectedStatus) {
+           errln("setTemporalMonthCode(%s) should return U_ILLEGAL_ARGUMENT_ERROR", cas);
+       }
+       status = U_ZERO_ERROR;
+    }
+}
+
+void CalendarTest::TestHebrewCalendarOrdinalMonthSet(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale l(Locale::getRoot());
+    l.setKeywordValue("calendar", "hebrew", status);
+    LocalPointer<Calendar> cc1(Calendar::createInstance(l, status));
+    if (failure(status, "Construct Calendar")) return;
+
+    LocalPointer<Calendar> cc2(cc1->clone());
+    LocalPointer<Calendar> cc3(cc1->clone());
+
+    // 5782 is leap year, 5781 is NOT.
+    cc1->set(UCAL_EXTENDED_YEAR, 5782);
+    cc2->set(UCAL_EXTENDED_YEAR, 5782);
+    cc3->set(UCAL_EXTENDED_YEAR, 5782);
+    cc1->set(UCAL_MONTH, icu::HebrewCalendar::ADAR_1);
+    cc2->set(UCAL_ORDINAL_MONTH, 5);
+    cc3->setTemporalMonthCode("M05L", status);
+    if (failure(status, "setTemporalMonthCode failure")) return;
+    cc1->set(UCAL_DATE, 1);
+    cc2->set(UCAL_DATE, 1);
+    cc3->set(UCAL_DATE, 1);
+    assertTrue("5782 M05L cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("5782 M05L cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    if (failure(status, "equals failure")) return;
+    VerifyMonth(this, "cc1", cc1.getAlias(), icu::HebrewCalendar::ADAR_1, 5, false, "M05L");
+    VerifyMonth(this, "cc2", cc2.getAlias(), icu::HebrewCalendar::ADAR_1, 5, false, "M05L");
+    VerifyMonth(this, "cc3", cc3.getAlias(), icu::HebrewCalendar::ADAR_1, 5, false, "M05L");
+
+    cc1->set(UCAL_ORDINAL_MONTH, 4);
+    cc2->setTemporalMonthCode("M05", status);
+    if (failure(status, "setTemporalMonthCode failure")) return;
+    cc3->set(UCAL_MONTH, icu::HebrewCalendar::SHEVAT);
+    assertTrue("5782 M05 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("5782 M05 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    if (failure(status, "equals failure")) return;
+    VerifyMonth(this, "cc1", cc1.getAlias(), icu::HebrewCalendar::SHEVAT, 4, false, "M05");
+    VerifyMonth(this, "cc2", cc2.getAlias(), icu::HebrewCalendar::SHEVAT, 4, false, "M05");
+    VerifyMonth(this, "cc3", cc3.getAlias(), icu::HebrewCalendar::SHEVAT, 4, false, "M05");
+
+    cc1->set(UCAL_EXTENDED_YEAR, 5781);
+    cc2->set(UCAL_EXTENDED_YEAR, 5781);
+    cc3->set(UCAL_EXTENDED_YEAR, 5781);
+    cc1->setTemporalMonthCode("M06", status);
+    if (failure(status, "setTemporalMonthCode failure")) return;
+    cc2->set(UCAL_MONTH, icu::HebrewCalendar::ADAR);
+    cc3->set(UCAL_ORDINAL_MONTH, 5);
+    assertTrue("5781 M06 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("5781 M06 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    if (failure(status, "equals failure")) return;
+    VerifyMonth(this, "cc1", cc1.getAlias(), icu::HebrewCalendar::ADAR, 5, false, "M06");
+    VerifyMonth(this, "cc2", cc2.getAlias(), icu::HebrewCalendar::ADAR, 5, false, "M06");
+    VerifyMonth(this, "cc3", cc3.getAlias(), icu::HebrewCalendar::ADAR, 5, false, "M06");
+
+    cc1->set(UCAL_EXTENDED_YEAR, 5782);
+    cc2->set(UCAL_EXTENDED_YEAR, 5782);
+    cc3->set(UCAL_EXTENDED_YEAR, 5782);
+    assertTrue("5782 M06 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("5782 M06 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    if (failure(status, "equals failure")) return;
+    VerifyMonth(this, "cc1", cc1.getAlias(), icu::HebrewCalendar::ADAR, 6, false, "M06");
+    VerifyMonth(this, "cc2", cc2.getAlias(), icu::HebrewCalendar::ADAR, 6, false, "M06");
+    VerifyMonth(this, "cc3", cc3.getAlias(), icu::HebrewCalendar::ADAR, 6, false, "M06");
+
+    cc1->set(UCAL_ORDINAL_MONTH, 6);
+    cc2->setTemporalMonthCode("M07", status);
+    if (failure(status, "setTemporalMonthCode failure")) return;
+    cc3->set(UCAL_MONTH, icu::HebrewCalendar::NISAN);
+    assertTrue("5782 M07 cc2==cc1 set month by UCAL_MONTH and UCAL_UCAL_ORDINAL_MONTH", cc2->equals(*cc1, status));
+    assertTrue("5782 M07 cc2==cc3 set month by UCAL_MONTH and setTemporalMonthCode", cc2->equals(*cc3, status));
+    if (failure(status, "equals failure")) return;
+    VerifyMonth(this, "cc1", cc1.getAlias(), icu::HebrewCalendar::NISAN, 7, false, "M07");
+    VerifyMonth(this, "cc2", cc2.getAlias(), icu::HebrewCalendar::NISAN, 7, false, "M07");
+    VerifyMonth(this, "cc3", cc3.getAlias(), icu::HebrewCalendar::NISAN, 7, false, "M07");
+
+    // Out of bound monthCodes should return error.
+    // These are not valid for calendar do not have a leap month
+    UErrorCode expectedStatus = U_ILLEGAL_ARGUMENT_ERROR;
+    const char* kInvalidMonthCodes[] = { "M00", "M13", "M14",
+      "M01L", "M02L", "M03L", "M04L",
+      /* M05L could be legal */
+      "M06L", "M07L", "M08L", "M09L", "M10L", "M11L", "M12L",
+    };
+
+    for (auto& cas : kInvalidMonthCodes) {
+       cc1->setTemporalMonthCode(cas, status);
+       if (status != expectedStatus) {
+           errln("setTemporalMonthCode(%s) should return U_ILLEGAL_ARGUMENT_ERROR", cas);
+       }
+       status = U_ZERO_ERROR;
+    }
+}
+
+void CalendarTest::TestCalendarAddOrdinalMonth(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar gc(status);
+    gc.set(2022, UCAL_DECEMBER, 16);
+    Locale l(Locale::getRoot());
+    std::unique_ptr<icu::StringEnumeration> enumeration(
+        Calendar::getKeywordValuesForLocale("calendar", l, false, status));
+    for (const char* name = enumeration->next(nullptr, status);
+        U_SUCCESS(status) && name != nullptr;
+        name = enumeration->next(nullptr, status)) {
+
+        l.setKeywordValue("calendar", name, status);
+        LocalPointer<Calendar> cc1(Calendar::createInstance(l, status));
+        if (failure(status, "Construct Calendar")) return;
+
+        cc1->setTime(gc.getTime(status), status);
+        LocalPointer<Calendar> cc2(cc1->clone());
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 1; j < 8; j++) {
+                cc1->add(UCAL_MONTH, j, status);
+                cc2->add(UCAL_ORDINAL_MONTH, j, status);
+                if (failure(status, "add j")) return;
+                assertTrue("two add produce the same result", cc2->equals(*cc1, status));
+            }
+            for (int j = 1; j < 8; j++) {
+                cc1->add(UCAL_MONTH, -j, status);
+                cc2->add(UCAL_ORDINAL_MONTH, -j, status);
+                if (failure(status, "add -j")) return;
+                assertTrue("two add produce the same result", cc2->equals(*cc1, status));
+            }
+        }
+    }
+}
+
+void CalendarTest::TestCalendarRollOrdinalMonth(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar gc(status);
+    gc.set(2022, UCAL_DECEMBER, 16);
+    Locale l(Locale::getRoot());
+    std::unique_ptr<icu::StringEnumeration> enumeration(
+        Calendar::getKeywordValuesForLocale("calendar", l, false, status));
+    for (const char* name = enumeration->next(nullptr, status);
+        U_SUCCESS(status) && name != nullptr;
+        name = enumeration->next(nullptr, status)) {
+
+        l.setKeywordValue("calendar", name, status);
+        LocalPointer<Calendar> cc1(Calendar::createInstance(l, status));
+        if (failure(status, "Construct Calendar")) return;
+
+        cc1->setTime(gc.getTime(status), status);
+        LocalPointer<Calendar> cc2(cc1->clone());
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 1; j < 8; j++) {
+                cc1->roll(UCAL_MONTH, j, status);
+                cc2->roll(UCAL_ORDINAL_MONTH, j, status);
+                if (failure(status, "roll j")) return;
+                assertTrue("two add produce the same result", cc2->equals(*cc1, status));
+            }
+            for (int j = 1; j < 8; j++) {
+                cc1->roll(UCAL_MONTH, -j, status);
+                cc2->roll(UCAL_ORDINAL_MONTH, -j, status);
+                if (failure(status, "roll -j")) return;
+                assertTrue("two add produce the same result", cc2->equals(*cc1, status));
+            }
+            for (int j = 1; j < 3; j++) {
+                cc1->roll(UCAL_MONTH, true, status);
+                cc2->roll(UCAL_ORDINAL_MONTH, true, status);
+                if (failure(status, "roll true")) return;
+                assertTrue("two add produce the same result", cc2->equals(*cc1, status));
+            }
+            for (int j = 1; j < 3; j++) {
+                cc1->roll(UCAL_MONTH, false, status);
+                cc2->roll(UCAL_ORDINAL_MONTH, false, status);
+                if (failure(status, "roll false")) return;
+                assertTrue("two add produce the same result", cc2->equals(*cc1, status));
+            }
+        }
+    }
+}
+
+void CalendarTest::TestLimitsOrdinalMonth(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar gc(status);
+    gc.set(2022, UCAL_DECEMBER, 16);
+    Locale l(Locale::getRoot());
+    std::unique_ptr<icu::StringEnumeration> enumeration(
+        Calendar::getKeywordValuesForLocale("calendar", l, false, status));
+
+    struct Expectation {
+      const char* calendar;
+      int32_t min;
+      int32_t max;
+      int32_t greatestMin;
+      int32_t leastMax;
+    } kExpectations[] = {
+        { "gregorian", 0, 11, 0, 11 },
+        { "japanese", 0, 11, 0, 11 },
+        { "buddhist", 0, 11, 0, 11 },
+        { "roc", 0, 11, 0, 11 },
+        { "persian", 0, 11, 0, 11 },
+        { "islamic-civil", 0, 11, 0, 11 },
+        { "islamic", 0, 11, 0, 11 },
+        { "hebrew", 0, 12, 0, 11 },
+        { "chinese", 0, 12, 0, 11 },
+        { "indian", 0, 11, 0, 11 },
+        { "coptic", 0, 12, 0, 12 },
+        { "ethiopic", 0, 12, 0, 12 },
+        { "ethiopic-amete-alem", 0, 12, 0, 12 },
+        { "iso8601", 0, 11, 0, 11 },
+        { "dangi", 0, 12, 0, 11 },
+        { "islamic-umalqura", 0, 11, 0, 11 },
+        { "islamic-tbla", 0, 11, 0, 11 },
+        { "islamic-rgsa", 0, 11, 0, 11 },
+    };
+
+    for (const char* name = enumeration->next(nullptr, status);
+        U_SUCCESS(status) && name != nullptr;
+        name = enumeration->next(nullptr, status)) {
+        l.setKeywordValue("calendar", name, status);
+        LocalPointer<Calendar> cc1(Calendar::createInstance(l, status));
+        if (failure(status, "Construct Calendar")) return;
+        bool found = false;
+        for (auto& exp : kExpectations) {
+            if (uprv_strcmp(exp.calendar, name) == 0) {
+                found = true;
+                assertEquals("getMinimum(UCAL_ORDINAL_MONTH)",
+                             exp.min, cc1->getMinimum(UCAL_ORDINAL_MONTH));
+                assertEquals("getMaximum(UCAL_ORDINAL_MONTH)",
+                             exp.max, cc1->getMaximum(UCAL_ORDINAL_MONTH));
+                assertEquals("getMinimum(UCAL_ORDINAL_MONTH)",
+                             exp.greatestMin, cc1->getGreatestMinimum(UCAL_ORDINAL_MONTH));
+                assertEquals("getMinimum(UCAL_ORDINAL_MONTH)",
+                             exp.leastMax, cc1->getLeastMaximum(UCAL_ORDINAL_MONTH));
+                break;
+            }
+        }
+        if (!found) {
+            errln("Cannot find expectation");
+        }
+    }
+}
+
+void CalendarTest::TestActualLimitsOrdinalMonth(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar gc(status);
+    gc.set(2022, UCAL_DECEMBER, 16);
+    Locale l(Locale::getRoot());
+    std::unique_ptr<icu::StringEnumeration> enumeration(
+        Calendar::getKeywordValuesForLocale("calendar", l, false, status));
+
+    struct TestCases {
+      const char* calendar;
+      int32_t extended_year;
+      int32_t actualMinOrdinalMonth;
+      int32_t actualMaxOrdinalMonth;
+    } cases[] = {
+        { "gregorian", 2021, 0, 11 },
+        { "gregorian", 2022, 0, 11 },
+        { "gregorian", 2023, 0, 11 },
+        { "japanese", 2021, 0, 11 },
+        { "japanese", 2022, 0, 11 },
+        { "japanese", 2023, 0, 11 },
+        { "buddhist", 2021, 0, 11 },
+        { "buddhist", 2022, 0, 11 },
+        { "buddhist", 2023, 0, 11 },
+        { "roc", 2021, 0, 11 },
+        { "roc", 2022, 0, 11 },
+        { "roc", 2023, 0, 11 },
+        { "persian", 1400, 0, 11 },
+        { "persian", 1401, 0, 11 },
+        { "persian", 1402, 0, 11 },
+        { "hebrew", 5782, 0, 12 },
+        { "hebrew", 5783, 0, 11 },
+        { "hebrew", 5789, 0, 11 },
+        { "hebrew", 5790, 0, 12 },
+        { "chinese", 4645, 0, 11 },
+        { "chinese", 4646, 0, 12 },
+        { "chinese", 4647, 0, 11 },
+        { "dangi", 4645 + 304, 0, 11 },
+        { "dangi", 4646 + 304, 0, 12 },
+        { "dangi", 4647 + 304, 0, 11 },
+        { "indian", 1944, 0, 11 },
+        { "indian", 1945, 0, 11 },
+        { "indian", 1946, 0, 11 },
+        { "coptic", 1737, 0, 12 },
+        { "coptic", 1738, 0, 12 },
+        { "coptic", 1739, 0, 12 },
+        { "ethiopic", 2013, 0, 12 },
+        { "ethiopic", 2014, 0, 12 },
+        { "ethiopic", 2015, 0, 12 },
+        { "ethiopic-amete-alem", 2014, 0, 12 },
+        { "ethiopic-amete-alem", 2015, 0, 12 },
+        { "ethiopic-amete-alem", 2016, 0, 12 },
+        { "iso8601", 2022, 0, 11 },
+        { "islamic-civil", 1443, 0, 11 },
+        { "islamic-civil", 1444, 0, 11 },
+        { "islamic-civil", 1445, 0, 11 },
+        { "islamic", 1443, 0, 11 },
+        { "islamic", 1444, 0, 11 },
+        { "islamic", 1445, 0, 11 },
+        { "islamic-umalqura", 1443, 0, 11 },
+        { "islamic-umalqura", 1444, 0, 11 },
+        { "islamic-umalqura", 1445, 0, 11 },
+        { "islamic-tbla", 1443, 0, 11 },
+        { "islamic-tbla", 1444, 0, 11 },
+        { "islamic-tbla", 1445, 0, 11 },
+        { "islamic-rgsa", 1443, 0, 11 },
+        { "islamic-rgsa", 1444, 0, 11 },
+        { "islamic-rgsa", 1445, 0, 11 },
+    };
+
+    for (auto& cas : cases) {
+        l.setKeywordValue("calendar", cas.calendar, status);
+        LocalPointer<Calendar> cc1(Calendar::createInstance(l, status));
+        if (failure(status, "Construct Calendar")) return;
+        cc1->set(UCAL_EXTENDED_YEAR, cas.extended_year);
+        cc1->set(UCAL_ORDINAL_MONTH, 0);
+        cc1->set(UCAL_DATE, 1);
+        assertEquals("getActualMinimum(UCAL_ORDINAL_MONTH)",
+                     cas.actualMinOrdinalMonth, cc1->getActualMinimum(UCAL_ORDINAL_MONTH, status));
+        assertEquals("getActualMaximum(UCAL_ORDINAL_MONTH)",
+                     cas.actualMaxOrdinalMonth, cc1->getActualMaximum(UCAL_ORDINAL_MONTH, status));
     }
 }
 
