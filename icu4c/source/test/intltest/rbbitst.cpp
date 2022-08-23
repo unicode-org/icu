@@ -1264,12 +1264,17 @@ UBool RBBITest::testCaseIsKnownIssue(const UnicodeString &testCase, const char *
         {"21097", "LineBreakTest.txt", u"\uBD10\uC694\u002E\u0020\u0041\u002E\u0033\u0020\uBABB"},
         {"21097", "LineBreakTest.txt", u"\uC694\u002E\u0020\u0041\u002E\u0034\u0020\uBABB"},
         {"21097", "LineBreakTest.txt", u"a.2\u3000\u300C"},
+
+        // ICU-22127 until UAX #29 wordbreak is update for the colon changes in ICU-22112,
+        // need to skip some tests in WordBreakTest.txt
+        {"22127", "WordBreakTest.txt", u"a:"},
+        {"22127", "WordBreakTest.txt", u"A:"},
     };
 
     for (int n=0; n<UPRV_LENGTHOF(badTestCases); n++) {
         const TestCase &badCase = badTestCases[n];
         if (!strcmp(fileName, badCase.fFileName) &&
-                testCase == UnicodeString(badCase.fString)) {
+                testCase.startsWith(UnicodeString(badCase.fString))) {
             return logKnownIssue(badCase.fTicketNum);
         }
     }
@@ -1912,11 +1917,11 @@ RBBIWordMonkey::RBBIWordMonkey()
     fKatakanaSet      = new UnicodeSet(u"[\\p{Word_Break = Katakana}]",     status);
     fRegionalIndicatorSet =  new UnicodeSet(u"[\\p{Word_Break = Regional_Indicator}]", status);
     fHebrew_LetterSet = new UnicodeSet(u"[\\p{Word_Break = Hebrew_Letter}]", status);
-    fALetterSet       = new UnicodeSet(u"[\\p{Word_Break = ALetter}]", status);
+    fALetterSet       = new UnicodeSet(u"[\\p{Word_Break = ALetter} @]", status);
     fSingle_QuoteSet  = new UnicodeSet(u"[\\p{Word_Break = Single_Quote}]",    status);
     fDouble_QuoteSet  = new UnicodeSet(u"[\\p{Word_Break = Double_Quote}]",    status);
     fMidNumLetSet     = new UnicodeSet(u"[\\p{Word_Break = MidNumLet}]",    status);
-    fMidLetterSet     = new UnicodeSet(u"[\\p{Word_Break = MidLetter}]",    status);
+    fMidLetterSet     = new UnicodeSet(u"[\\p{Word_Break = MidLetter} - [\\: \\uFE55 \\uFF1A]]",    status);
     fMidNumSet        = new UnicodeSet(u"[\\p{Word_Break = MidNum}]",       status);
     fNumericSet       = new UnicodeSet(u"[\\p{Word_Break = Numeric}]", status);
     fFormatSet        = new UnicodeSet(u"[\\p{Word_Break = Format}]",       status);
