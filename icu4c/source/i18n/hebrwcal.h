@@ -399,6 +399,51 @@ public:
    */
   virtual int32_t defaultCenturyStartYear() const override;
 
+ public:
+  /**
+   * Returns true if the date is in a leap year.
+   *
+   * @param status        ICU Error Code
+   * @return       True if the date in the fields is in a Temporal proposal
+   *               defined leap year. False otherwise.
+   */
+  virtual bool inTemporalLeapYear(UErrorCode& status) const override;
+
+  /**
+   * Gets The Temporal monthCode value corresponding to the month for the date.
+   * The value is a string identifier that starts with the literal grapheme
+   * "M" followed by two graphemes representing the zero-padded month number
+   * of the current month in a normal (non-leap) year and suffixed by an
+   * optional literal grapheme "L" if this is a leap month in a lunisolar
+   * calendar. For the Hebrew calendar, the values are "M01" .. "M12" for
+   * non-leap year, and "M01" .. "M05", "M05L", "M06" .. "M12" for leap year.
+   *
+   * @param status        ICU Error Code
+   * @return       One of 13 possible strings in {"M01".. "M05", "M05L",
+   * "M06" .. "M12"}.
+   * @draft ICU 73
+   */
+  virtual const char* getTemporalMonthCode(UErrorCode& status) const override;
+
+  /**
+   * Sets The Temporal monthCode which is a string identifier that starts
+   * with the literal grapheme "M" followed by two graphemes representing
+   * the zero-padded month number of the current month in a normal
+   * (non-leap) year and suffixed by an optional literal grapheme "L" if this
+   * is a leap month in a lunisolar calendar. For Hebrew calendar, the values
+   * are "M01" .. "M12" for non-leap years, and "M01" .. "M05", "M05L", "M06"
+   * .. "M12" for leap year.
+   *
+   * @param temporalMonth  The value to be set for temporal monthCode.
+   * @param status        ICU Error Code
+   *
+   * @draft ICU 73
+   */
+  virtual void setTemporalMonthCode(const char* code, UErrorCode& status ) override;
+
+ protected:
+   virtual int32_t internalGetMonth() const override;
+
  private: // Calendar-specific implementation
     /**
      * Finds the day # of the first day in the given Hebrew year.

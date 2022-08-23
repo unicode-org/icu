@@ -24,6 +24,36 @@ U_NAMESPACE_BEGIN
  */
 class U_I18N_API CECalendar : public Calendar {
 
+public:
+
+   /**
+    * Gets The Temporal monthCode value corresponding to the month for the date.
+    * The value is a string identifier that starts with the literal grapheme
+    * "M" followed by two graphemes representing the zero-padded month number
+    * of the current month in a normal (non-leap) year. For the short thirteen
+    * month in each year in the CECalendar, the value is "M13".
+    *
+    * @param status        ICU Error Code
+    * @return       One of 13 possible strings in {"M01".. "M12", "M13"}.
+    * @draft ICU 73
+    */
+    virtual const char* getTemporalMonthCode(UErrorCode& status) const override;
+
+    /**
+     * Sets The Temporal monthCode which is a string identifier that starts
+     * with the literal grapheme "M" followed by two graphemes representing
+     * the zero-padded month number of the current month in a normal
+     * (non-leap) year. For CECalendar calendar, the values
+     * are "M01" .. "M13" while the "M13" is represent the short thirteen month
+     * in each year.
+     *
+     * @param temporalMonth  The value to be set for temporal monthCode.
+     * @param status        ICU Error Code
+     *
+     * @draft ICU 73
+     */
+    virtual void setTemporalMonthCode(const char* code, UErrorCode& status) override;
+
 protected:
     //-------------------------------------------------------------------------
     // Constructors...

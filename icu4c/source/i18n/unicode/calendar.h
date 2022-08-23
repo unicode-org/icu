@@ -1349,6 +1349,66 @@ public:
      */
     virtual UBool isWeekend(void) const;
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Returns true if the date is in a leap year. Recalculate the current time
+     * field values if the time value has been changed by a call to * setTime().
+     * This method is semantically const, but may alter the object in memory.
+     * A "leap year" is a year that contains more days than other years (for
+     * solar or lunar calendars) or more months than other years (for lunisolar
+     * calendars like Hebrew or Chinese), as defined in the ECMAScript Temporal
+     * proposal.
+     *
+     * @param status        ICU Error Code
+     * @return       True if the date in the fields is in a Temporal proposal
+     *               defined leap year. False otherwise.
+     * @draft ICU 73
+     */
+    virtual bool inTemporalLeapYear(UErrorCode& status) const;
+
+    /**
+     * Gets The Temporal monthCode value corresponding to the month for the date.
+     * The value is a string identifier that starts with the literal grapheme
+     * "M" followed by two graphemes representing the zero-padded month number
+     * of the current month in a normal (non-leap) year and suffixed by an
+     * optional literal grapheme "L" if this is a leap month in a lunisolar
+     * calendar. The 25 possible values are "M01" .. "M13" and "M01L" .. "M12L".
+     * For the Hebrew calendar, the values are "M01" .. "M12" for non-leap year, and
+     * "M01" .. "M05", "M05L", "M06" .. "M12" for leap year.
+     * For the Chinese calendar, the values are "M01" .. "M12" for non-leap year and
+     * in leap year with another monthCode in "M01L" .. "M12L".
+     * For Coptic and Ethiopian calendar, the Temporal monthCode values for any
+     * years are "M01" to "M13".
+     *
+     * @param status        ICU Error Code
+     * @return       One of 25 possible strings in {"M01".."M13", "M01L".."M12L"}.
+     * @draft ICU 73
+     */
+    virtual const char* getTemporalMonthCode(UErrorCode& status) const;
+
+    /**
+     * Sets The Temporal monthCode which is a string identifier that starts
+     * with the literal grapheme "M" followed by two graphemes representing
+     * the zero-padded month number of the current month in a normal
+     * (non-leap) year and suffixed by an optional literal grapheme "L" if this
+     * is a leap month in a lunisolar calendar. The 25 possible values are
+     * "M01" .. "M13" and "M01L" .. "M12L". For Hebrew calendar, the values are
+     * "M01" .. "M12" for non-leap years, and "M01" .. "M05", "M05L", "M06"
+     * .. "M12" for leap year.
+     * For the Chinese calendar, the values are "M01" .. "M12" for non-leap year and
+     * in leap year with another monthCode in "M01L" .. "M12L".
+     * For Coptic and Ethiopian calendar, the Temporal monthCode values for any
+     * years are "M01" to "M13".
+     *
+     * @param temporalMonth  The value to be set for temporal monthCode.
+     * @param status        ICU Error Code
+     *
+     * @draft ICU 73
+     */
+    virtual void setTemporalMonthCode(const char* temporalMonth, UErrorCode& status);
+
+#endif /* U_HIDE_DRAFT_API */
+
 protected:
 
      /**
@@ -1489,6 +1549,31 @@ protected:
      * @internal
      */
     inline int32_t internalGet(UCalendarDateFields field) const {return fFields[field];}
+
+    /**
+     * Use this function instead of internalGet(UCAL_MONTH). The implementation
+     * check the timestamp of UCAL_MONTH and UCAL_ORDINAL_MONTH and use the
+     * one set later. The subclass should override it to conver the value of UCAL_ORDINAL_MONTH
+     * to UCAL_MONTH correctly if UCAL_ORDINAL_MONTH has higher priority.
+     *
+     * @return       The value for the UCAL_MONTH.
+     * @internal
+     */
+    virtual int32_t internalGetMonth() const;
+
+    /**
+     * Use this function instead of internalGet(UCAL_MONTH, defaultValue). The implementation
+     * check the timestamp of UCAL_MONTH and UCAL_ORDINAL_MONTH and use the
+     * one set later. The subclass should override it to conver the value of UCAL_ORDINAL_MONTH
+     * to UCAL_MONTH correctly if UCAL_ORDINAL_MONTH has higher priority.
+     *
+     * @param defaultValue a default value used if the UCAL_MONTH and
+     *   UCAL_ORDINAL are both unset.
+     * @return       The value for the UCAL_MONTH.
+     * @internal
+     */
+    virtual int32_t internalGetMonth(int32_t defaultValue) const;
+
 #endif  /* U_HIDE_INTERNAL_API */
 
 #ifndef U_HIDE_DEPRECATED_API
@@ -1568,7 +1653,6 @@ protected:
      * @internal
      */
     virtual int32_t getLimit(UCalendarDateFields field, ELimitType limitType) const;
-
 
     /**
      * Return the Julian day number of day before the first day of the
@@ -1723,6 +1807,13 @@ protected:
     static const UFieldResolutionTable kDOWPrecedence[];
 
     /**
+     * Precedence table for Months
+     * @see #resolveFields
+     * @internal
+     */
+    static const UFieldResolutionTable kMonthPrecedence[];
+
+    /**
      * Given a precedence table, return the newest field combination in
      * the table, or UCAL_FIELD_COUNT if none is found.
      *
@@ -1749,7 +1840,7 @@ protected:
      * match, then UCAL_FIELD_COUNT is returned.
      * @internal
      */
-    UCalendarDateFields resolveFields(const UFieldResolutionTable *precedenceTable);
+    UCalendarDateFields resolveFields(const UFieldResolutionTable *precedenceTable) const;
 #endif  /* U_HIDE_INTERNAL_API */
 
 

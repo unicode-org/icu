@@ -101,6 +101,7 @@ static const int32_t kGregorianCalendarLimits[UCAL_FIELD_COUNT][4] = {
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // JULIAN_DAY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECONDS_IN_DAY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // IS_LEAP_MONTH
+    {        0,        0,       11,       11}, // ORDINAL_MONTH
 };
 
 /*
@@ -435,6 +436,7 @@ void GregorianCalendar::handleComputeFields(int32_t julianDay, UErrorCode& statu
     }
 
     internalSet(UCAL_MONTH, month);
+    internalSet(UCAL_ORDINAL_MONTH, month);
     internalSet(UCAL_DAY_OF_MONTH, dayOfMonth);
     internalSet(UCAL_DAY_OF_YEAR, dayOfYear);
     internalSet(UCAL_EXTENDED_YEAR, eyear);
@@ -633,7 +635,7 @@ GregorianCalendar::yearLength() const
 void 
 GregorianCalendar::pinDayOfMonth() 
 {
-    int32_t monthLen = monthLength(internalGet(UCAL_MONTH));
+    int32_t monthLen = monthLength(internalGetMonth());
     int32_t dom = internalGet(UCAL_DATE);
     if(dom > monthLen) 
         set(UCAL_DATE, monthLen);
@@ -659,7 +661,7 @@ GregorianCalendar::validateFields() const
     if (isSet(UCAL_DATE)) {
         int32_t date = internalGet(UCAL_DATE);
         if (date < getMinimum(UCAL_DATE) ||
-            date > monthLength(internalGet(UCAL_MONTH))) {
+            date > monthLength(internalGetMonth())) {
                 return false;
             }
     }
@@ -839,7 +841,7 @@ GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& s
         case UCAL_DAY_OF_MONTH:
         case UCAL_WEEK_OF_MONTH:
             {
-                int32_t max = monthLength(internalGet(UCAL_MONTH));
+                int32_t max = monthLength(internalGetMonth());
                 UDate t = internalGetTime();
                 // We subtract 1 from the DAY_OF_MONTH to make it zero-based, and an
                 // additional 10 if we are after the cutover. Thus the monthStart
@@ -872,7 +874,7 @@ GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& s
         // may be one year before or after the calendar year.
         int32_t isoYear = get(UCAL_YEAR_WOY, status);
         int32_t isoDoy = internalGet(UCAL_DAY_OF_YEAR);
-        if (internalGet(UCAL_MONTH) == UCAL_JANUARY) {
+        if (internalGetMonth() == UCAL_JANUARY) {
             if (woy >= 52) {
                 isoDoy += handleGetYearLength(isoYear);
             }
