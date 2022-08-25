@@ -19,8 +19,6 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.ibm.icu.text.DisplayOptions;
-import com.ibm.icu.text.DisplayOptions.GrammaticalCase;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.format.FormattedValueTest;
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
@@ -51,6 +49,9 @@ import com.ibm.icu.number.SkeletonSyntaxException;
 import com.ibm.icu.number.UnlocalizedNumberFormatter;
 import com.ibm.icu.text.ConstrainedFieldPosition;
 import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.DisplayOptions;
+import com.ibm.icu.text.DisplayOptions.GrammaticalCase;
+import com.ibm.icu.text.DisplayOptions.NounClass;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberingSystem;
 import com.ibm.icu.util.Currency;
@@ -59,7 +60,6 @@ import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.NoUnit;
-import com.ibm.icu.text.DisplayOptions.NounClass;
 import com.ibm.icu.util.ULocale;
 
 public class NumberFormatterApiTest extends TestFmwk {
