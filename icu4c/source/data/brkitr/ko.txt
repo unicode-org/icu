@@ -1,0 +1,20 @@
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
+ko{
+    boundaries{
+        line:process(dependency){"line_normal.brk"}
+        line_loose:process(dependency){"line_loose_cj.brk"}
+        line_loose_phrase:process(dependency){"line_loose_phrase_cj.brk"}
+        line_normal:process(dependency){"line_normal_cj.brk"}
+        line_normal_phrase:process(dependency){"line_normal_phrase_cj.brk"}
+        line_phrase:process(dependency){"line_phrase_cj.brk"}
+        line_strict:process(dependency){"line_cj.brk"}
+        line_strict_phrase:process(dependency){"line_phrase_cj.brk"}
+    }
+// Korean particles should be added here and dictbe.cpp needs to be adjusted
+// once a Korean dictionary is added. Even without a Korean dictionary,
+// Korean particle list can be used when a Korean word written in CJK ideographs
+// or a Korean word in Hangul and a closing puncutation mark is followed by a Korean
+// particle. Examples include: "大韓民國은  民主共和國이다", "『님의 침묵』이" .
+}
