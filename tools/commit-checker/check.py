@@ -41,6 +41,7 @@ ICUIssue = namedtuple("ICUIssue", ["issue_id", "is_closed", "commit_wanted", "is
 # <https://unicode-org.atlassian.net/rest/api/2/resolution>
 R_NEEDS_MOREINFO        = "10003"
 R_FIXED                 = "10004"
+R_NO_TIME_TO_DO_THIS    = "10005"
 R_DUPLICATE             = "10006"
 R_OUTOFSCOPE            = "10008"
 R_ASDESIGNED            = "10009"
@@ -51,6 +52,9 @@ R_NOTREPRO              = "10024"
 R_FIXED_NON_REPO        = "10025"
 R_FIX_SURVEY_TOOL       = "10022"
 R_OBSOLETE              = "10023"
+
+# so we don't miss any
+all_resolutions = [ R_NEEDS_MOREINFO, R_FIXED, R_NO_TIME_TO_DO_THIS, R_DUPLICATE, R_OUTOFSCOPE, R_ASDESIGNED, R_WONTFIX, R_FIXED_BY_OTHER_TICKET, R_NOTREPRO, R_FIX_SURVEY_TOOL, R_OBSOLETE, R_FIXED_NON_REPO, R_INVALID ]
 
 # constants for jira_issue.fields.issuetype.id
 # <https://unicode-org.atlassian.net/rest/api/2/issuetype>
@@ -78,7 +82,7 @@ def make_commit_wanted(jira_issue):
     # TODO: should be data driven from a config file.
     if not jira_issue.fields.resolution:
         commit_wanted = CommitWanted["OPTIONAL"]
-    elif jira_issue.fields.resolution.id in [ R_DUPLICATE, R_ASDESIGNED, R_OUTOFSCOPE, R_NOTREPRO, R_INVALID, R_NEEDS_MOREINFO, R_OBSOLETE ]:
+    elif jira_issue.fields.resolution.id in [ R_DUPLICATE, R_ASDESIGNED, R_OUTOFSCOPE, R_NOTREPRO, R_INVALID, R_NEEDS_MOREINFO, R_OBSOLETE, R_NO_TIME_TO_DO_THIS ]:
         commit_wanted = CommitWanted["FORBIDDEN"]
     elif jira_issue.fields.resolution.id in [ R_FIXED_NON_REPO, R_FIX_SURVEY_TOOL, R_FIXED_BY_OTHER_TICKET ]:
         commit_wanted = CommitWanted["FORBIDDEN"]
@@ -472,6 +476,8 @@ def main():
                 count += 1
                 no_commit_ids.add(issue.issue_id)
                 pretty_print_issue(issue, type=CLOSED_NO_COMMIT, file=out, **vars(args))
+                # for debugging:
+                # print("\t - commit class was %s or %s" % (make_commit_wanted(issue.issue), issue.commit_wanted), file=out)
                 if issue.issue_id in excluded_commit_issue_ids:
                     print("\t - **Note: Has excluded/cherry-picked commits. Fix Version may be wrong.**", file=out)
                 print(file=out)
@@ -484,14 +490,21 @@ def main():
             for issue in issues:
                 if not issue.is_closed:
                     continue
+                if issue.issue_id in no_commit_ids:
+                    continue # we already complained about it above. don't double count.
+                if issue.issue.fields.resolution and issue.issue.fields.resolution.id not in all_resolutions:
+                    # Special case. Resolution is not in our list.
+                    pretty_print_issue(issue, type=CLOSED_ILLEGAL_RESOLUTION, file=out, **vars(args))
+                    print("\t- INTERNAL ERROR: resolution ID# %s is unknown, not in all_resolutions[]. Fix the commit checker." % issue.issue.fields.resolution.id, file=out)
+                    count += 1
+                    found = True
+                    continue
                 if issue.commit_wanted == CommitWanted["OPTIONAL"]:
                     continue
                 if issue.issue_id in commit_issue_ids and issue.commit_wanted == CommitWanted["REQUIRED"]:
                     continue
                 if issue.issue_id not in commit_issue_ids and issue.commit_wanted == CommitWanted["FORBIDDEN"]:
                     continue
-                if issue.issue_id in no_commit_ids:
-                    continue # we already complained about it above. don't double count.
                 found = True
                 total_problems += 1
                 count += 1
