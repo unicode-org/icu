@@ -356,7 +356,7 @@
             <directory dir="brkitr" inheritLanguageSubtag="zh_Hant">
                 <localeIds>
                     root,
-                    de, el, en, en_US_POSIX, en_US, es, fi, fr, it, ja, pt, ru, sv, zh_Hant, zh
+                    de, el, en, en_US_POSIX, en_US, es, fi, fr, it, ja, ko, pt, ru, sv, zh_Hant, zh
                 </localeIds>
             </directory>
 
