@@ -6,6 +6,7 @@
 import argparse
 import itertools
 import os
+import io
 import re
 import sys
 import datetime
@@ -159,35 +160,40 @@ def issue_id_to_url(issue_id, jira_hostname, **kwargs):
     return "https://%s/browse/%s" % (jira_hostname, issue_id)
 
 
-def pretty_print_commit(commit, github_url, **kwargs):
-    print("- %s `%s`" % (commit.commit.hexsha[:7], commit.commit.summary))
-    print("\t- Authored by %s <%s>" % (commit.commit.author.name, commit.commit.author.email))
-    print("\t- Committed at %s" % commit.commit.committed_datetime.isoformat())
-    print("\t- GitHub Link: %s" % "%s/commit/%s" % (github_url, commit.commit.hexsha))
-
-
-def pretty_print_issue(issue, type=None, **kwargs):
-    print("- %s: `%s`" % (issue.issue_id, issue.issue.fields.summary))
-    if type:
-        print("\t- _%s_" % type)
-    if issue.issue.fields.assignee:
-        print("\t- Assigned to %s" % issue.issue.fields.assignee.displayName)
+def pretty_print_commit(commit, github_url, file=None, **kwargs):
+    fixed_summary = commit.commit.summary
+    if commit.issue_id and fixed_summary[:(len(commit.issue_id)+1)] == commit.issue_id+' ':
+        # linkify beginning of commit message
+        fixed_summary = fixed_summary[len(commit.issue_id)+1:]
+        fixed_summary = '[%s](%s) `%s`' % (commit.issue_id, issue_id_to_url(commit.issue_id, **kwargs), fixed_summary)
     else:
-        print("\t- No assignee!")
+        fixed_summary = '`%s`' % fixed_summary
+    print("- [%s](%s) %s" % (commit.commit.hexsha[:7], ("%s/commit/%s" % (github_url, commit.commit.hexsha)), fixed_summary), file=file)
+    print("\t- Authored by %s <%s>" % (commit.commit.author.name, commit.commit.author.email), file=file)
+    print("\t- Committed at %s" % commit.commit.committed_datetime.isoformat(), file=file)
+
+
+def pretty_print_issue(issue, type=None, file=None, **kwargs):
+    print("- [%s](%s): `%s`" % (issue.issue_id, issue_id_to_url(issue.issue_id, **kwargs), issue.issue.fields.summary), file=file)
+    if type:
+        print("\t- _%s_" % type, file=file)
+    if issue.issue.fields.assignee:
+        print("\t- Assigned to %s" % issue.issue.fields.assignee.displayName, file=file)
+    else:
+        print("\t- No assignee!", file=file)
     # If actually under review, print reviewer
     if jira_issue_under_review(issue) and issue.issue.fields.customfield_10031:
-        print("\t- Reviewer: %s" % issue.issue.fields.customfield_10031.displayName)
-    print("\t- Jira Link: %s" % issue_id_to_url(issue.issue_id, **kwargs))
-    print("\t- Status: %s" % issue.issue.fields.status.name)
+        print("\t- Reviewer: %s" % issue.issue.fields.customfield_10031.displayName, file=file)
+    print("\t- Status: %s" % issue.issue.fields.status.name, file=file)
     if(issue.issue.fields.resolution):
-        print("\t- Resolution: " + issue.issue.fields.resolution.name)
+        print("\t- Resolution: " + issue.issue.fields.resolution.name, file=file)
     if(issue.issue.fields.fixVersions):
         for version in issue.issue.fields.fixVersions:
-            print("\t- Fix Version: " + version.name)
+            print("\t- Fix Version: " + version.name, file=file)
     else:
-        print("\t- Fix Version: _none_")
+        print("\t- Fix Version: _none_", file=file)
     if issue.issue.fields.components and len(issue.issue.fields.components) > 0:
-        print("\t- Component(s): " + (' '.join(sorted([str(component.name) for component in issue.issue.fields.components]))))
+        print("\t- Component(s): " + (' '.join(sorted([str(component.name) for component in issue.issue.fields.components]))), file=file)
 
 def get_commits(commit_metadata_obj, repo_root, rev_range, **kwargs):
     """
@@ -203,7 +209,7 @@ def get_commits(commit_metadata_obj, repo_root, rev_range, **kwargs):
                 (sha, issue_id, message) = from_commit_metadata
                 if message:
                     # Update message if found
-                    commit.message = commit.message + "\nCOMMIT_METADATA: " + message
+                    commit.message = str(commit.message) + "\nCOMMIT_METADATA: " + message
         if not issue_id:
             match = re.search(r"^(\w+-\d+) ", commit.message)
             if match:
@@ -335,9 +341,9 @@ def get_single_jira_issue(issue_id, **kwargs):
     print("Loaded single issue %s (%d in cache) " % (issue_id, len(jira_issue_map)), file=sys.stderr)
     return icu_issue
 
-def toplink():
-    print("[🔝Top](#table-of-contents)")
-    print()
+def toplink(file=None):
+    print("[🔝Top](#table-of-contents)", file=file)
+    print(file=file)
 
 def sectionToFragment(section):
     return re.sub(r' ', '-', section.lower())
@@ -346,12 +352,14 @@ def sectionToFragment(section):
 #     """convert section name to am anchor"""
 #     return "<a name=\"%s\"></a>" % sectionToFragment(section)
 
-def print_sectionheader(section):
+def print_sectionheader(section, file=None):
     """Print a section (###) header, including anchor"""
-    print("### %s" % (section))
+    print("### %s" % (section), file=file)
     #print("### %s%s" % (aname(section), section))
 
 def main():
+    global total_problems
+    global commits
     global fixversion_to_skip
     args = flag_parser.parse_args()
     print("TIP: Have you pulled the latest main? This script only looks at local commits.", file=sys.stderr)
@@ -406,7 +414,14 @@ def main():
     COMMIT_OPEN_JIRA = "Commits with Open Jira Issue"
     COMMIT_JIRA_NOT_IN_QUERY = "Commits with Jira Issue Not Found"
     ISSUE_UNDER_REVIEW = "Issue is under Review"
+    EXCLUDED_COMMITS = "Excluded Commits"
 
+    # this controls the ordering of the sections
+    ALL_SECTIONS = [CLOSED_NO_COMMIT, CLOSED_ILLEGAL_RESOLUTION, COMMIT_NO_JIRA, COMMIT_JIRA_NOT_IN_QUERY, COMMIT_OPEN_JIRA, ISSUE_UNDER_REVIEW, EXCLUDED_COMMITS]
+    # a buffer for each section
+    section_buffer = {}
+    # a count for each section
+    section_count = {}
     total_problems = 0
     if not args.nocopyright:
         print("<!--")
@@ -423,211 +438,244 @@ def main():
     print("- Jira Query: `%s`" % args.jira_query)
     print("- Rev Range: `%s`" % args.rev_range)
     print("- Authenticated: %s" % ("`Yes`" if authenticated else "`No` (sensitive tickets not shown)"))
+    if fixversion_to_skip:
+        print("- fix version (for COMMIT_METADATA SKIP) %s" % fixversion_to_skip)
     print()
+
+    # big subfunction to calculate each section
+    def run_section(section, out) -> int:
+        """Calculate the text of a section
+
+        Args:
+            section (str): section name such as COMMIT_NO_JIRA
+            out (file): file-ish, or None for immediate
+
+        Returns:
+            int: count of items in this section
+        """
+        global total_problems
+        global commits
+        count = 0
+        if section == CLOSED_NO_COMMIT:
+            print("Tip: Tickets with type 'Task' or 'User Guide' or resolution 'Fixed by Other Ticket' are ignored.", file=out)
+            print(file=out)
+            found = False
+            for issue in issues:
+                if not issue.is_closed:
+                    continue
+                if issue.issue_id in commit_issue_ids:
+                    continue
+                if issue.commit_wanted == CommitWanted["OPTIONAL"] or issue.commit_wanted == CommitWanted["FORBIDDEN"]:
+                    continue
+                found = True
+                total_problems += 1
+                count += 1
+                no_commit_ids.add(issue.issue_id)
+                pretty_print_issue(issue, type=CLOSED_NO_COMMIT, file=out, **vars(args))
+                if issue.issue_id in excluded_commit_issue_ids:
+                    print("\t - **Note: Has excluded/cherry-picked commits. Fix Version may be wrong.**", file=out)
+                print(file=out)
+        elif section == CLOSED_ILLEGAL_RESOLUTION:
+            print("Tip: Fixed tickets should have resolution 'Fixed by Other Ticket' or 'Fixed'.", file=out)
+            print("Duplicate tickets should have their fixVersion tag removed.", file=out)
+            print("Tickets with resolution 'Fixed by Other Ticket' are not allowed to have commits.", file=out)
+            print(file=out)
+            found = False
+            for issue in issues:
+                if not issue.is_closed:
+                    continue
+                if issue.commit_wanted == CommitWanted["OPTIONAL"]:
+                    continue
+                if issue.issue_id in commit_issue_ids and issue.commit_wanted == CommitWanted["REQUIRED"]:
+                    continue
+                if issue.issue_id not in commit_issue_ids and issue.commit_wanted == CommitWanted["FORBIDDEN"]:
+                    continue
+                if issue.issue_id in no_commit_ids:
+                    continue # we already complained about it above. don't double count.
+                found = True
+                total_problems += 1
+                count += 1
+                pretty_print_issue(issue, type=CLOSED_ILLEGAL_RESOLUTION, file=out, **vars(args))
+                if issue.issue_id not in commit_issue_ids and issue.commit_wanted == CommitWanted["REQUIRED"]:
+                    print("\t- No commits, and they are REQUIRED.", file=out)
+                if issue.issue_id in commit_issue_ids and issue.commit_wanted == CommitWanted["FORBIDDEN"]:
+                    print("\t- Has commits, and they are FORBIDDEN.", file=out)
+                print(file=out)
+        elif section == COMMIT_NO_JIRA:
+            # TODO: This section should usually be empty due to the PR checker.
+            # Pre-calculate the count and omit it.
+            print("Tip: If you see your name here, make sure to label your commits correctly in the future.", file=out)
+            print(file=out)
+            found = False
+            for commit in commits:
+                if commit.issue_id is not None:
+                    continue
+                found = True
+                total_problems += 1
+                count += 1
+                pretty_print_commit(commit, type=COMMIT_NO_JIRA, file=out, **vars(args))
+                print(file=out)
+        elif section == COMMIT_JIRA_NOT_IN_QUERY:
+            print("Tip: Check that these tickets have the correct fixVersion tag.", file=out)
+            print(file=out)
+            found = False
+            for issue_id, commits in grouped_commits:
+                if issue_id in jira_issue_ids:
+                    continue
+                found = True
+                total_problems += 1
+                count += 1
+                print("#### Issue %s" % issue_id, file=out)
+                print(file=out)
+                print("_issue was not found in `%s`_" % args.jira_query, file=out) # TODO: link to query?
+                jira_issue = get_single_jira_issue(issue_id, **vars(args))
+                if jira_issue:
+                    pretty_print_issue(jira_issue, file=out, **vars(args))
+                else:
+                    print("*Jira issue does not seem to exist*", file=out)
+                print(file=out)
+                print("##### Commits with Issue %s" % issue_id, file=out)
+                print(file=out)
+                for commit in commits:
+                    pretty_print_commit(commit, file=out, **vars(args))
+                    print(file=out)
+        elif section == COMMIT_OPEN_JIRA:
+            print("Tip: Consider closing the ticket if it is fixed.", file=out)
+            print(file=out)
+            found = False
+            componentToTicket = {}
+            def addToComponent(component, issue_id):
+                if component not in componentToTicket:
+                    componentToTicket[component] = set()
+                componentToTicket[component].add(issue_id)
+            # first, scan ahead for the components
+            for issue_id, commits in grouped_commits:
+                if issue_id in closed_jira_issue_ids:
+                    continue
+                jira_issue = get_single_jira_issue(issue_id, **vars(args))
+                if jira_issue and jira_issue.is_closed:
+                    # JIRA ticket was not in query, but was actually closed.
+                    continue
+                if jira_issue_under_review(jira_issue):
+                    # note: skip has to be recalculated in the other section
+                    # issues_in_review.add(issue_id)
+                    continue
+                # OK. Now, split it out by component
+                if jira_issue.issue.fields.components and len(jira_issue.issue.fields.components) > 0:
+                    for component in jira_issue.issue.fields.components:
+                        addToComponent(component.name, issue_id)
+                else:
+                    addToComponent("(no component)", issue_id)
+
+            print("#### Open Issues by Component", file=out)  # "bonus" sub-section.
+            print(file=out)
+            for component in sorted(componentToTicket.keys()):
+                print(" - **%s**: %s" % (component,  ' '.join("[%s](#issue-%s)" % (issue_id, sectionToFragment(issue_id)) for issue_id in componentToTicket[component])), file=out)
+
+            print(file=out)
+            print(file=out)
+
+            # now, actually show the ticket list.
+            for issue_id, commits in grouped_commits:
+                if issue_id in closed_jira_issue_ids:
+                    continue
+                jira_issue = get_single_jira_issue(issue_id, **vars(args))
+                if jira_issue and jira_issue.is_closed:
+                    # JIRA ticket was not in query, but was actually closed.
+                    continue
+                if jira_issue_under_review(jira_issue):
+                    # We already added it to the review list above.
+                    continue
+                print("#### Issue %s" % issue_id, file=out)
+                print(file=out)
+                print("_Jira issue is open_", file=out)
+                if jira_issue:
+                    pretty_print_issue(jira_issue, file=out, **vars(args))
+                else:
+                    print("*Jira issue does not seem to exist*", file=out)
+                print(file=out)
+                print("##### Commits with Issue %s" % issue_id, file=out)
+                print(file=out)
+                found = True
+                total_problems += 1
+                count += 1
+                for commit in commits:
+                    # print("@@@@ %s = %s / %s" % (issue_id, commit, commit.commit.summary), file=sys.stderr)
+                    pretty_print_commit(commit, file=out, **vars(args))
+                    print(file=out)
+            # end COMMIT_OPEN_JIRA
+        elif section == ISSUE_UNDER_REVIEW:
+            print("These issues are otherwise accounted for above, but are in review.", file=out)
+            # list of issues that are in review
+            issues_in_review = set()
+            # TODO: this next loop is copied from the above section, to make this section independent from COMMIT_OPEN_JIRA
+            # TODO: ideally this would be calculated once above.
+            for issue_id, commits in grouped_commits:
+                if issue_id in closed_jira_issue_ids:
+                    continue
+                jira_issue = get_single_jira_issue(issue_id, **vars(args))
+                if jira_issue and jira_issue.is_closed:
+                    # JIRA ticket was not in query, but was actually closed.
+                    continue
+                if jira_issue_under_review(jira_issue):
+                    print("skipping for now- %s is under review" % issue_id, file=sys.stderr)
+                    issues_in_review.add(issue_id)
+            for issue_id in sorted(issues_in_review):
+                jira_issue = get_single_jira_issue(issue_id, **vars(args))
+                pretty_print_issue(jira_issue, type=ISSUE_UNDER_REVIEW, **vars(args), file=out)
+                count += 1
+        elif section == EXCLUDED_COMMITS:
+            if len(excluded_commits) > 0:
+                print("These commits are not considered as part of current version tickets.", file=out)
+                print(file=out)
+                count = len(excluded_commits)
+                for commit in excluded_commits:
+                    pretty_print_commit(commit, file=out, **vars(args))
+                    from_commit_metadata = commit_metadata.get_commit_info(commit.commit.hexsha, skip=fixversion_to_skip)
+                    if from_commit_metadata:
+                        (sha, id, message) = from_commit_metadata
+                        # Print any notes in the skip list here.
+                        if id:
+                            print("\t- COMMIT_METADATA.md: %s" % id, file=out)
+                        if message:
+                            print("\t- COMMIT_METADATA.md: %s" % message, file=out)
+                    if commit.commit.hexsha in exclude_already_merged_to_old_maint:
+                        print("\t- NOTE: excluded due to already being merged to old maint", file=out)
+        else:
+            print("### @@@@@ Unknown section: %s" % section, file=out)
+        return count
+
+    print("-----")
+    # Now, run each section
+    for section in ALL_SECTIONS:
+        # empty buffer
+        section_buffer[section] = io.StringIO();
+        # For debugging: setting to None will cause immediate output
+        # section_buffer[section] = None
+        section_count[section] = run_section(section, section_buffer[section])
+    print("-----")
+    print("_(anything between the above two lines is an error)_")
+
+    print()
+    print("Total problem(s): %d" % total_problems)
+    print()
+
+    # Now run the ToC
     print("## Table Of Contents")
-    for section in [CLOSED_NO_COMMIT, CLOSED_ILLEGAL_RESOLUTION, COMMIT_NO_JIRA, COMMIT_JIRA_NOT_IN_QUERY, COMMIT_OPEN_JIRA, ISSUE_UNDER_REVIEW]:
-        print("- [%s](#%s)" % (section, sectionToFragment(section)))
+    print("Note: empty categories are omitted.")
+    for section in ALL_SECTIONS:
+        if section_count[section] > 0:
+            print("- [%s](#%s) %d" % (section, sectionToFragment(section), section_count[section]))
+        else:
+            print("- _%s_" % (section))
     print()
     print("## Problem Categories")
-    print_sectionheader(CLOSED_NO_COMMIT)
-    toplink()
-    print("Tip: Tickets with type 'Task' or 'User Guide' or resolution 'Fixed by Other Ticket' are ignored.")
-    print()
-    found = False
-    for issue in issues:
-        if not issue.is_closed:
-            continue
-        if issue.issue_id in commit_issue_ids:
-            continue
-        if issue.commit_wanted == CommitWanted["OPTIONAL"] or issue.commit_wanted == CommitWanted["FORBIDDEN"]:
-            continue
-        found = True
-        total_problems += 1
-        no_commit_ids.add(issue.issue_id)
-        pretty_print_issue(issue, type=CLOSED_NO_COMMIT, **vars(args))
-        if issue.issue_id in excluded_commit_issue_ids:
-            print("\t - **Note: Has excluded/cherry-picked commits. Fix Version may be wrong.**")
-        print()
-    if not found:
-        print("*Success: No problems in this category!*")
-
-    print_sectionheader(CLOSED_ILLEGAL_RESOLUTION)
-    toplink()
-    print("Tip: Fixed tickets should have resolution 'Fixed by Other Ticket' or 'Fixed'.")
-    print("Duplicate tickets should have their fixVersion tag removed.")
-    print("Tickets with resolution 'Fixed by Other Ticket' are not allowed to have commits.")
-    print()
-    found = False
-    for issue in issues:
-        if not issue.is_closed:
-            continue
-        if issue.commit_wanted == CommitWanted["OPTIONAL"]:
-            continue
-        if issue.issue_id in commit_issue_ids and issue.commit_wanted == CommitWanted["REQUIRED"]:
-            continue
-        if issue.issue_id not in commit_issue_ids and issue.commit_wanted == CommitWanted["FORBIDDEN"]:
-            continue
-        if issue.issue_id in no_commit_ids:
-            continue # we already complained about it above. don't double count.
-        found = True
-        total_problems += 1
-        pretty_print_issue(issue, type=CLOSED_ILLEGAL_RESOLUTION, **vars(args))
-        if issue.issue_id not in commit_issue_ids and issue.commit_wanted == CommitWanted["REQUIRED"]:
-            print("\t- No commits, and they are REQUIRED.")
-        if issue.issue_id in commit_issue_ids and issue.commit_wanted == CommitWanted["FORBIDDEN"]:
-            print("\t- Has commits, and they are FORBIDDEN.")
-        print()
-    if not found:
-        print("*Success: No problems in this category!*")
-
-    # TODO: This section should usually be empty due to the PR checker.
-    # Pre-calculate the count and omit it.
-    print()
-    print_sectionheader(COMMIT_NO_JIRA)
-    toplink()
-    print("Tip: If you see your name here, make sure to label your commits correctly in the future.")
-    print()
-    found = False
-    for commit in commits:
-        if commit.issue_id is not None:
-            continue
-        found = True
-        total_problems += 1
-        pretty_print_commit(commit, type=COMMIT_NO_JIRA, **vars(args))
-        print()
-    if not found:
-        print("*Success: No problems in this category!*")
-
-    print()
-    print_sectionheader(COMMIT_JIRA_NOT_IN_QUERY)
-    toplink()
-    print("Tip: Check that these tickets have the correct fixVersion tag.")
-    print()
-    found = False
-    for issue_id, commits in grouped_commits:
-        if issue_id in jira_issue_ids:
-            continue
-        found = True
-        total_problems += 1
-        print("#### Issue %s" % issue_id)
-        print()
-        print("_issue was not found in `%s`_" % args.jira_query) # TODO: link to query?
-        jira_issue = get_single_jira_issue(issue_id, **vars(args))
-        if jira_issue:
-            pretty_print_issue(jira_issue, **vars(args))
-        else:
-            print("*Jira issue does not seem to exist*")
-        print()
-        print("##### Commits with Issue %s" % issue_id)
-        print()
-        for commit in commits:
-            pretty_print_commit(commit, **vars(args))
-            print()
-    if not found:
-        print("*Success: No problems in this category!*")
-
-    print()
-
-    # list of issues that are in review
-    issues_in_review = set()
-
-    print_sectionheader(COMMIT_OPEN_JIRA)
-    toplink()
-    print("Tip: Consider closing the ticket if it is fixed.")
-    print()
-    found = False
-    componentToTicket = {}
-    def addToComponent(component, issue_id):
-        if component not in componentToTicket:
-            componentToTicket[component] = set()
-        componentToTicket[component].add(issue_id)
-    # first, scan ahead for the components
-    for issue_id, commits in grouped_commits:
-        if issue_id in closed_jira_issue_ids:
-            continue
-        jira_issue = get_single_jira_issue(issue_id, **vars(args))
-        if jira_issue and jira_issue.is_closed:
-            # JIRA ticket was not in query, but was actually closed.
-            continue
-        if jira_issue_under_review(jira_issue):
-            print("skipping for now- %s is under review" % issue_id, file=sys.stderr)
-            issues_in_review.add(issue_id)
-            continue
-        # OK. Now, split it out by component
-        if jira_issue.issue.fields.components and len(jira_issue.issue.fields.components) > 0:
-            for component in jira_issue.issue.fields.components:
-                addToComponent(component.name, issue_id)
-        else:
-            addToComponent("(no component)", issue_id)
-
-    print("#### Open Issues by Component")
-    print()
-    for component in sorted(componentToTicket.keys()):
-        print(" - **%s**: %s" % (component,  ' '.join("[%s](#issue-%s)" % (issue_id, sectionToFragment(issue_id)) for issue_id in componentToTicket[component])))
-
-    print()
-    print()
-
-    # now, actually show the ticket list.
-    for issue_id, commits in grouped_commits:
-        if issue_id in closed_jira_issue_ids:
-            continue
-        jira_issue = get_single_jira_issue(issue_id, **vars(args))
-        if jira_issue and jira_issue.is_closed:
-            # JIRA ticket was not in query, but was actually closed.
-            continue
-        if jira_issue_under_review(jira_issue):
-            # We already added it to the review list above.
-            continue
-        print("#### Issue %s" % issue_id)
-        print()
-        print("_Jira issue is open_")
-        if jira_issue:
-            pretty_print_issue(jira_issue, **vars(args))
-        else:
-            print("*Jira issue does not seem to exist*")
-        print()
-        print("##### Commits with Issue %s" % issue_id)
-        print()
-        found = True
-        total_problems += 1
-        for commit in commits:
-            # print("@@@@ %s = %s / %s" % (issue_id, commit, commit.commit.summary), file=sys.stderr)
-            pretty_print_commit(commit, **vars(args))
-            print()
-    if not found:
-        print("*Success: No problems in this category!*")
-
-    print_sectionheader(ISSUE_UNDER_REVIEW)
-    print()
-    toplink()
-    print("These issues are otherwise accounted for above, but are in review.")
-    for issue_id in sorted(issues_in_review):
-        jira_issue = get_single_jira_issue(issue_id, **vars(args))
-        pretty_print_issue(jira_issue, type=ISSUE_UNDER_REVIEW, **vars(args))
-
-    print()
-    print("## Total Problems: %s" % total_problems)
-    print("## Issues under review: %s" % len(issues_in_review)) # not counted as a problem.
-
-    if fixversion_to_skip:
-        print("## fix version (for COMMIT_METADATA SKIP) %s" % fixversion_to_skip)
-
-    if len(excluded_commits) > 0:
-        print()
-        print("## Excluded commits: %d" % len(excluded_commits))
-        for commit in excluded_commits:
-            pretty_print_commit(commit, **vars(args))
-            from_commit_metadata = commit_metadata.get_commit_info(commit.commit.hexsha, skip=fixversion_to_skip)
-            if from_commit_metadata:
-                (sha, id, message) = from_commit_metadata
-                # Print any notes in the skip list here.
-                if id:
-                    print("\t- COMMIT_METADATA.md: %s" % id)
-                if message:
-                    print("\t- COMMIT_METADATA.md: %s" % message)
-            if commit.commit.hexsha in exclude_already_merged_to_old_maint:
-                print("\t- NOTE: excluded due to already being merged to old maint")
+    for section in ALL_SECTIONS:
+        if section_count[section] > 0:
+            print_sectionheader(section)
+            toplink()
+            print("_%d item(s)_" % section_count[section])
+            print(section_buffer[section].getvalue()) # print that section
     # save out the dev cache here, so that any 1-off issues are also included in the cache
     save_issues_to_cache(args, issues)
 
