@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1661284416854,
+  "lastUpdate": 1661539304705,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -838,6 +838,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 181.5162734108119,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ccornelius@google.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "37e295627156bc334e1f1e88807025fac984da0e",
+          "message": "ICU-21957 ICU4J API status and change report",
+          "timestamp": "2022-08-26T11:33:50-07:00",
+          "tree_id": "22673db46dd386a73e7498417bba169e1e62c780",
+          "url": "https://github.com/unicode-org/icu/commit/37e295627156bc334e1f1e88807025fac984da0e"
+        },
+        "date": 1661539300566,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 208.40544549785827,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
