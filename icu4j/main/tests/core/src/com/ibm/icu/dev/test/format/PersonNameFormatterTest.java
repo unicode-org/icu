@@ -5,7 +5,6 @@ package com.ibm.icu.dev.test.format;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.PersonNameFormatter;
 import com.ibm.icu.text.SimplePersonName;
-import com.ibm.icu.util.ULocale;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -24,23 +23,56 @@ public class PersonNameFormatterTest extends TestFmwk{
         }
     }
 
+    private SimplePersonName buildPersonName(String fieldsAndValues) {
+        SimplePersonName.Builder builder = SimplePersonName.builder();
+
+        StringTokenizer entrySplitter = new StringTokenizer(fieldsAndValues, ",");
+        while (entrySplitter.hasMoreTokens()) {
+            String entry = entrySplitter.nextToken();
+            int equalPos = entry.indexOf('=');
+            if (equalPos < 0) {
+                throw new IllegalArgumentException("No = found in name field entry");
+            }
+            String fieldName = entry.substring(0, equalPos);
+            String fieldValue = entry.substring(equalPos + 1);
+
+            if (fieldName.equals("locale")) {
+                // cheating here, because java.util.Locale doesn't have a constructor that parses an ICU-style
+                // locale ID
+                builder.setLocale(Locale.forLanguageTag(fieldValue.replace("_", "-")));
+            } else if (fieldName.indexOf('-') < 0) {
+                builder.addField(PersonNameFormatter.NameField.forString(fieldName), null, fieldValue);
+            } else {
+                StringTokenizer fieldNameSplitter = new StringTokenizer(fieldName, "-");
+                Set<PersonNameFormatter.FieldModifier> modifiers = new HashSet<>();
+                PersonNameFormatter.NameField fieldID = PersonNameFormatter.NameField.forString(fieldNameSplitter.nextToken());
+                while (fieldNameSplitter.hasMoreTokens()) {
+                    modifiers.add(PersonNameFormatter.FieldModifier.forString(fieldNameSplitter.nextToken()));
+                }
+                builder.addField(fieldID, modifiers, fieldValue);
+            }
+        }
+        return builder.build();
+    }
+
     private void executeTestCases(NameAndTestCases[] namesAndTestCases, boolean forDebugging) {
         for (NameAndTestCases nameAndTestCases : namesAndTestCases) {
-            SimplePersonName name = new SimplePersonName(nameAndTestCases.nameFields);
+            SimplePersonName name = buildPersonName(nameAndTestCases.nameFields);
             if (forDebugging) {
                 System.out.println(nameAndTestCases.nameFields);
             }
 
             for (String[] testCase : nameAndTestCases.testCases) {
-                ULocale formatterLocale = new ULocale(testCase[0]);
+                Locale formatterLocale = Locale.forLanguageTag(testCase[0].replace('_', '-'));
                 PersonNameFormatter.Length formatterLength = PersonNameFormatter.Length.valueOf(testCase[1]);
                 PersonNameFormatter.Usage formatterUsage = PersonNameFormatter.Usage.valueOf(testCase[2]);
                 PersonNameFormatter.Formality formatterFormality = PersonNameFormatter.Formality.valueOf(testCase[3]);
                 Set<PersonNameFormatter.Options> formatterOptions = makeOptionsSet(testCase[4]);
                 String expectedResult = testCase[5];
 
-                PersonNameFormatter formatter = new PersonNameFormatter(formatterLocale, formatterLength, formatterUsage, formatterFormality, formatterOptions);
-                String actualResult = formatter.format(name);
+                PersonNameFormatter formatter = PersonNameFormatter.builder().setLocale(formatterLocale).setLength(formatterLength).
+                        setUsage(formatterUsage).setFormality(formatterFormality).setOptions(formatterOptions).build();
+                String actualResult = formatter.formatToString(name);
 
                 if (forDebugging) {
                     System.out.println("    " + formatterLocale + "," + formatterLength + "," + formatterUsage + "," + formatterFormality + "," + formatterOptions + " => " + actualResult);
@@ -209,7 +241,7 @@ public class PersonNameFormatterTest extends TestFmwk{
                 { "en_US", "LONG",   "MONOGRAM",   "FORMAL",   "",              "JSS" },
                 { "en_US", "LONG",   "MONOGRAM",   "INFORMAL", "",              "JS" },
             }),
-        }, false);
+        }, true);
     }
 
     @Test
@@ -336,6 +368,93 @@ public class PersonNameFormatterTest extends TestFmwk{
         }, false);
     }
 
-    // need tests (and implementation?) for:
-    // - foreign space replacement
+    @Test
+    public void TestScriptGuessing() {
+        executeTestCases(new NameAndTestCases[]{
+            // here, we're leaving out the locale on the name object.  In the first case, we
+            // see the Latin letters and assume English, giving us GN-first ordering.  In the
+            // second, we see the Han characters and guess Japanese, giving us SN-first ordering.
+            new NameAndTestCases("given=Hayao,surname=Miyazaki", new String[][]{
+                    {"en_US", "LONG", "REFERRING", "FORMAL", "", "Hayao Miyazaki"},
+            }),
+            new NameAndTestCases("given=駿,surname=宮崎", new String[][]{
+                    {"en_US", "LONG", "REFERRING", "FORMAL", "", "宮崎 駿"},
+            }),
+        }, false);
+    }
+
+    @Test
+    public void TestLiteralTextElision2() {
+        // a more extensive text of the literal text elision logic
+        PersonNameFormatter pnf = new PersonNameFormatter(Locale.US, new String[] {
+            "1{prefix}1 2{given}2 3{given2}3 4{surname}4 5{surname2}5 6{suffix}6"
+        });
+
+        String[][] testCases = new String[][] {
+            { "locale=en_US,prefix=Dr.,given=Richard,given2=Theodore,surname=Gillam,surname2=Morgan,suffix=III", "1Dr.1 2Richard2 3Theodore3 4Gillam4 5Morgan5 6III6" },
+            { "locale=en_US,prefix=Mr.,given=Richard,given2=Theodore,surname=Gillam", "1Mr.1 2Richard2 3Theodore3 4Gillam" },
+            { "locale=en_US,given=Richard,given2=Theodore,surname=Gillam",            "Richard2 3Theodore3 4Gillam" },
+            { "locale=en_US,given=Richard,surname=Gillam",                            "Richard2 4Gillam" },
+            { "locale=en_US,given=Richard",                                           "Richard" },
+            { "locale=en_US,prefix=Dr.,suffix=III",                                   "1Dr.1 6III6" }
+        };
+
+        for (String[] testCase : testCases) {
+            SimplePersonName name = buildPersonName(testCase[0]);
+            String expectedResult = testCase[1];
+            String actualResult = pnf.formatToString(name);
+
+            assertEquals("Wrong result", expectedResult, actualResult);
+        }
+    }
+
+    @Test
+    public void TestPatternSelection() {
+        // a more extensive test of the logic that selects an appropriate pattern when the formatter has more than one
+        PersonNameFormatter pnf = new PersonNameFormatter(Locale.US, new String[] {
+            "A {prefix} {given} {given2} {surname} {surname2} {suffix}",
+            "B {given} {given2} {surname} {surname2}",
+            "C {given} {surname}",
+        });
+
+        String[][] testCases = new String[][] {
+                { "locale=en_US,prefix=Dr.,given=Richard,given2=Theodore,surname=Gillam,surname2=Morgan,suffix=III", "A Dr. Richard Theodore Gillam Morgan III" },
+                { "locale=en_US,prefix=Mr.,given=Richard,given2=Theodore,surname=Gillam", "A Mr. Richard Theodore Gillam" },
+                { "locale=en_US,given=Richard,given2=Theodore,surname=Gillam",            "B Richard Theodore Gillam" },
+                { "locale=en_US,given=Richard,surname=Gillam",                            "C Richard Gillam" },
+                { "locale=en_US,given=Richard",                                           "C Richard" },
+                { "locale=en_US,prefix=Dr.,suffix=III",                                   "A Dr. III" }
+        };
+
+        for (String[] testCase : testCases) {
+            SimplePersonName name = buildPersonName(testCase[0]);
+            String expectedResult = testCase[1];
+            String actualResult = pnf.formatToString(name);
+
+            assertEquals("Wrong result", expectedResult, actualResult);
+        }
+    }
+
+    @Test
+    public void TestCapitalization() {
+        // a more extensive test of the capitalization logic to make sure it works right with characters that
+        // have a separate titlecase form
+        SimplePersonName name = buildPersonName("locale=hu_HU,given=ǳsárgál,surname=ǳiatkowicz");
+
+        String[][] testCases = new String[][] {
+            { "{surname} {given}",                       "ǳiatkowicz ǳsárgál" },
+            { "{surname-initialCap} {given-initialCap}", "ǲiatkowicz ǲsárgál"},
+            { "{surname-allCaps} {given-allCaps}",       "ǱIATKOWICZ ǱSÁRGÁL" },
+            { "{surname-monogram}{given-monogram}",      "ǳǳ" },
+            { "{surname-initial} {given-initial}",       "ǳ. ǳ." }
+        };
+
+        for (String[] testCase : testCases) {
+            PersonNameFormatter pnf = new PersonNameFormatter(new Locale("hu", "HU"), new String[] { testCase[0] } );
+            String expectedResult = testCase[1];
+            String actualResult = pnf.formatToString(name);
+
+            assertEquals("Wrong result", expectedResult, actualResult);
+        }
+    }
 }

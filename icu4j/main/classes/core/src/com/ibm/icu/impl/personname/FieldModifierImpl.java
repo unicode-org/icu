@@ -7,8 +7,8 @@ import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.CaseMap;
 import com.ibm.icu.text.PersonNameFormatter;
 import com.ibm.icu.text.SimpleFormatter;
-import com.ibm.icu.util.ULocale;
 
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 /**
@@ -66,9 +66,9 @@ abstract class FieldModifierImpl {
      * for the "allCaps" modifier.
      */
     private static class AllCapsModifier extends FieldModifierImpl {
-        private final ULocale locale;
+        private final Locale locale;
 
-        public AllCapsModifier(ULocale locale) {
+        public AllCapsModifier(Locale locale) {
             this.locale = locale;
         }
 
@@ -83,16 +83,16 @@ abstract class FieldModifierImpl {
      * the default behavior of the "initialCap" modifier.
      */
     private static class InitialCapModifier extends FieldModifierImpl {
-        private final ULocale locale;
+        private final Locale locale;
         private static final CaseMap.Title TO_TITLE_WHOLE_STRING_NO_LOWERCASE = CaseMap.toTitle().wholeString().noLowercase();
 
-        public InitialCapModifier(ULocale locale) {
+        public InitialCapModifier(Locale locale) {
             this.locale = locale;
         }
 
         @Override
         public String modifyField(String fieldValue) {
-            return TO_TITLE_WHOLE_STRING_NO_LOWERCASE.apply(locale.toLocale(), null, fieldValue);
+            return TO_TITLE_WHOLE_STRING_NO_LOWERCASE.apply(locale, null, fieldValue);
         }
     }
 
@@ -149,7 +149,7 @@ abstract class FieldModifierImpl {
         }
 
         // (currently, no locale overrides the grapheme-break rules, so we just use "root" instead of passing in the locale)
-        BreakIterator bi = BreakIterator.getCharacterInstance(ULocale.ROOT);
+        BreakIterator bi = BreakIterator.getCharacterInstance(Locale.ROOT);
         bi.setText(s);
         return s.substring(0, bi.next());
     }

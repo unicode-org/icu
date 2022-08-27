@@ -2,9 +2,14 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.text;
 
-import com.ibm.icu.util.ULocale;
-
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.TreeSet;
 
 /**
  * A concrete implementation of PersonNameFormatter.PersonName that simply stores the field
@@ -13,71 +18,117 @@ import java.util.*;
  * A caller can store both raw field values (such as "given") and modified field values (such as "given-informal")
  * in a SimplePersonName.  But beyond storing and returning modified field values provided to it by the caller,
  * SimplePersonName relies on the PersonNameFormatter's default handling of field modifiers.
- * @internal
+ * @internal ICU 72 technology preview
+ * @deprecated This API is for technology preview only.
  */
 public class SimplePersonName implements PersonNameFormatter.PersonName {
     /**
-     * Simple constructor.
-     * @param nameLocale The locale of the name (i.e., its ethnic or national origin).
-     * @param fieldValues A Map mapping from field names to field values.  The field names
-     *                    are the values returned by NameField.toString().
-     * @internal
+     * @internal ICU 72 technology preview
+     * @deprecated This API is for technology preview only.
+     *
      */
-    public SimplePersonName(ULocale nameLocale, Map<String, String> fieldValues) {
+    public static class Builder {
+        /**
+         * Set the locale for the new name object.
+         * @param locale The locale for the new name object.
+         * @return This builder.
+         * @internal ICU 72 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        public Builder setLocale(Locale locale) {
+            this.locale = locale;
+            return this;
+        }
+
+        /**
+         * Sets the value for one field (with optional modifiers) in the new name object.
+         * @param field A NameField object specifying the field to set.
+         * @param modifiers A collection of FieldModifier objects for any modifiers that apply
+         *                  to this field value.  May be null, which is the same as the empty set.
+         * @param value The value for this field.
+         * @return This builder.
+         * @internal ICU 72 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        public Builder addField(PersonNameFormatter.NameField field,
+                                Collection<PersonNameFormatter.FieldModifier> modifiers,
+                                String value) {
+            // generate the modifiers' internal names, and sort them alphabetically
+            Set<String> modifierNames = new TreeSet<>();
+            if (modifiers != null) {
+                for (PersonNameFormatter.FieldModifier modifier : modifiers) {
+                    modifierNames.add(modifier.toString());
+                }
+            }
+
+            // construct the modified field name, which is the field name, with all the modifier names attached in
+            // alphabetical order, delimited by hyphens
+            StringBuilder fieldName = new StringBuilder();
+            fieldName.append(field.toString());
+            for (String modifierName : modifierNames) {
+                fieldName.append("-");
+                fieldName.append(modifierName);
+            }
+
+            fieldValues.put(fieldName.toString(), value);
+            return this;
+        }
+
+        /**
+         * Returns a SimplePersonName with the field values and name locale that were passed to this builder.
+         * @return A SimplePersonName with the field values and name locale that were passed to this builder.
+         * @internal ICU 72 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        public SimplePersonName build() {
+            // special-case code for the "surname" field -- if it isn't specified, but "surname-prefix" and
+            // "surname-core" both are, let "surname" be the other two fields joined with a space
+            if (fieldValues.get("surname") == null) {
+                String surnamePrefix = fieldValues.get("surname-prefix");
+                String surnameCore = fieldValues.get("surname-core");
+                if (surnamePrefix != null && surnameCore != null) {
+                    fieldValues.put("surname", surnamePrefix + " " + surnameCore);
+                }
+            }
+
+            return new SimplePersonName(locale, fieldValues);
+        }
+
+        private Builder() {
+            locale = null;
+            fieldValues = new HashMap<>();
+        }
+
+        private Locale locale;
+        private Map<String, String> fieldValues;
+    }
+
+    /**
+     * Returns a Builder object that can be used to construct a new SimplePersonName object.
+     * @return A Builder object that can be used to construct a new SimplePersonName object.
+     * @internal ICU 72 technology preview
+     * @deprecated This API is for technology preview only.
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    /**
+     * Internal constructor used by the Builder object.
+     */
+    private SimplePersonName(Locale nameLocale, Map<String, String> fieldValues) {
         this.nameLocale = nameLocale;
         this.fieldValues = new HashMap<>(fieldValues);
     }
 
     /**
-     * A constructor that takes the locale ID and field values as a single String.  This constructor is really
-     * intended only for the use of the PersonNameFormatter unit tests.
-     * @param keysAndValues A single string containing the locale ID and field values.  This string is organized
-     *                      into key-value pairs separated by commas.  The keys are separated from the values
-     *                      by equal signs.  The keys themselves are field names, as returned by
-     *                      NameField.toString(), optionally followed by a hyphen-delimited set of modifier names,
-     *                      as returned by FieldModifier.toString().
-     * @internal
-     */
-    public SimplePersonName(String keysAndValues) {
-        this.fieldValues = new HashMap<>();
-
-        StringTokenizer tok = new StringTokenizer(keysAndValues, ",");
-        ULocale tempLocale = null;
-        while (tok.hasMoreTokens()) {
-            String entry = tok.nextToken();
-            int equalPos = entry.indexOf('=');
-            if (equalPos < 0) {
-                throw new IllegalArgumentException("No = found in name field entry");
-            }
-            String fieldName = entry.substring(0, equalPos);
-            String fieldValue = entry.substring(equalPos + 1);
-
-            if (fieldName.equals("locale")) {
-                tempLocale = new ULocale(fieldValue);
-            } else {
-                this.fieldValues.put(fieldName, fieldValue);
-            }
-        }
-        this.nameLocale = tempLocale;
-
-        // special-case code for the "surname" field-- if it isn't specified, but "surname-prefix" and
-        // "surname-core" both are, let "surname" be the other two fields joined with a space
-        if (this.fieldValues.get("surname") == null) {
-            String surnamePrefix = this.fieldValues.get("surname-prefix");
-            String surnameCore = this.fieldValues.get("surname-core");
-            if (surnamePrefix != null && surnameCore != null) {
-                this.fieldValues.put("surname", surnamePrefix + " " + surnameCore);
-            }
-        }
-    }
-
-    /**
      * Returns the locale of the name-- that is, the language or country of origin for the person being named.
-     * @return The name's locale.
-     * @internal
+     * @return The name's locale, or null if it's unknown.
+     * @internal ICU 72 technology preview
+     * @deprecated This API is for technology preview only.
      */
     @Override
-    public ULocale getNameLocale() {
+    public Locale getNameLocale() {
         return nameLocale;
     }
 
@@ -92,7 +143,8 @@ public class SimplePersonName implements PersonNameFormatter.PersonName {
      *                  was provided at construction time.
      * @return The value of the requested field, optionally modified by some or all of the requested modifiers, or
      * null if the requested field isn't present in the name.
-     * @internal
+     * @internal ICU 72 technology preview
+     * @deprecated This API is for technology preview only.
      */
     @Override
     public String getFieldValue(PersonNameFormatter.NameField nameField, Set<PersonNameFormatter.FieldModifier> modifiers) {
@@ -158,6 +210,6 @@ public class SimplePersonName implements PersonNameFormatter.PersonName {
         return result;
     }
 
-    private final ULocale nameLocale;
+    private final Locale nameLocale;
     private final Map<String, String> fieldValues;
 }
