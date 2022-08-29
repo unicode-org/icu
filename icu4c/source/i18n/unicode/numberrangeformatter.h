@@ -639,14 +639,12 @@ class U_I18N_API FormattedNumberRange : public UMemory, public FormattedValue {
      */
     UNumberRangeIdentityResult getIdentityResult(UErrorCode& status) const;
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Default constructor; makes an empty FormattedNumberRange.
-     * @draft ICU 70
+     * @stable ICU 70
      */
     FormattedNumberRange()
         : fData(nullptr), fErrorCode(U_INVALID_STATE_ERROR) {}
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Copying not supported; use move constructor instead.
