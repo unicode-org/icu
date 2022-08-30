@@ -25,17 +25,10 @@
 
     <target name="@compile">
         <echo message="build-local:     ${global.build-local.properties}"/>
-        <!-- set java 7 bootclasspath to empty if not set -->
-        <property name="java7.bootclasspath" value=""/>
-
-        <condition property="javac.bootclasspath" value="${java7.bootclasspath}" else="">
-            <equals arg1="${javac.target}" arg2="1.7"/>
-        </condition>
 
         <echo message="--- java compiler arguments ------------------------"/>
         <echo message="source dir:     ${basedir}/${src.dir}"/>
         <echo message="output dir:     ${basedir}/${bin.dir}"/>
-        <echo message="bootclasspath:  ${javac.bootclasspath}"/>
         <echo message="classpath:      ${toString:javac.classpathref}"/>
         <echo message="source:         ${javac.source}"/>
         <echo message="target:         ${javac.target}"/>
@@ -48,7 +41,6 @@
         <javac
             srcdir="${src.dir}"
             destdir="${bin.dir}"
-            bootclasspath="${javac.bootclasspath}"
             classpathref="javac.classpathref"
             source="${javac.source}"
             target="${javac.target}"

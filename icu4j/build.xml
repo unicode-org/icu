@@ -86,10 +86,6 @@
     <property name="external-jars" value="lib"/>
 
     <!-- Java version check -->
-    <condition property="is.java7">
-        <matches string="${java.version}" pattern="^1\.7\.\d.*"/>
-    </condition>
-
     <condition property="is.java8">
         <matches string="${java.version}" pattern="^1\.8\.\d.*"/>
     </condition>
@@ -161,17 +157,10 @@
         </or>
     </condition>
 
-    <condition property="is.java7.plus">
-        <or>
-            <isset property="is.java7"/>
-            <isset property="is.java8.plus"/>
-        </or>
-    </condition>
-
     <fail message="The JDK version is too old or unknown.">
         <condition>
             <not>
-                <isset property="is.java7.plus"/>
+                <isset property="is.java8.plus"/>
             </not>
         </condition>
     </fail>
@@ -680,7 +669,7 @@
         </icu-junit>
     </target>
 
-    <target name="translitCheck" depends="info, core, translit, translit-tests" description="Run the ICU4J Translit test suite">
+    <target name="translitCheck" depends="info, core, translit, langdata, translit-tests" description="Run the ICU4J Translit test suite">
         <antcall target="_translitCheck"/>
         <fail message="test failed" if="icu-junit-failure" />
     </target>
@@ -803,7 +792,6 @@
         <condition property="release.build.config.ok">
             <and>
                 <isset property="is.java8"/>
-                <isset property="java7.bootclasspath"/>
                 <isset property="jcite.libs"/>
             </and>
         </condition>
@@ -813,9 +801,6 @@
         <condition property="disp.is.java8" value="${java.version}" else="${java.version} - Must be 1.8!">
             <isset property="is.java8"/>
         </condition>
-        <condition property="disp.java7.bootclasspath" value="${java7.bootclasspath}" else="Not Defined!">
-            <isset property="java7.bootclasspath"/>
-        </condition>
         <condition property="disp.jcite.libs" value="${jcite.libs}" else="Not Defined!">
             <isset property="jcite.libs"/>
         </condition>
@@ -823,7 +808,6 @@
         <echo message="################################################################"/>
         <echo message="[WARNING] Insufficient Build Configuration for ICU4J Release"/>
         <echo message="JDK 8 Tools:                    ${disp.is.java8}"/>
-        <echo message="JRE 7 System Library Path:      ${disp.java7.bootclasspath}"/>
         <echo message="JCite Library Path:             ${disp.jcite.libs}"/>
         <echo message="################################################################"/>
     </target>
@@ -1308,7 +1292,11 @@
         <ant dir="${icu4j.samples.dir}" inheritAll="false"/>
     </target>
 
-    <target name="build-tools" description="Build build-tool classes">
+    <target name="_checkBuildToolsSupported" unless="is.java8">
+        <fail>JDK8 is required to build build-tools.</fail>
+    </target>
+
+    <target name="build-tools" depends="_checkBuildToolsSupported" description="Build build-tool classes">
         <ant dir="${icu4j.build-tools.dir}" inheritAll="false"/>
     </target>
 
@@ -1345,22 +1333,12 @@
         <pathconvert property="jcite.addl.src" refid="jcite.src.dirs"/>
     </target>
 
-    <target name="_docsStyleSheet">
-        <condition property="docs.style.sheet" value="stylesheet7.css">
-            <isset property="is.java7"/>
-        </condition>
-        <!-- all other cases -->
+    <target name="_docsOptions">
         <property name="docs.style.sheet" value="stylesheet8.css"/>
+        <property name="doclint.option" value="-Xdoclint:reference,html"/>
     </target>
 
-    <target name="_docsLintOption" unless="doclint.options">
-        <!-- syntax check is disabled because JCite tag name "@.jcite" is invalidated -->
-        <condition property="doclint.option" value="-Xdoclint:reference,html" else="">
-            <isset property="is.java8.plus"/>
-        </condition>
-    </target>
-
-    <target name="_docsWithJCite" depends="_docsStyleSheet, _docsLintOption" if="jcite.libs">
+    <target name="_docsWithJCite" depends="_checkJCite, _docsOptions" if="jcite.libs">
         <echo message="Javadoc lint option:            ${doclint.option}"/>
         <echo message="JCite library path:             ${jcite.libs}"/>
         <echo message="JCite additional source path:   ${jcite.addl.src}"/>
@@ -1377,7 +1355,7 @@
                 bottom="${icu4j.api.doc.copyright.footer}"
                 additionalparam="${doclint.option} -breakiterator -use -tagletpath ${icu4j.build-tools.jar}${path.separator}${jcite.libs} -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -taglet ch.arrenbrecht.jcite.JCiteTaglet -J-Djcitesourcepath=${jcite.addl.src} -J-Dfile.encoding=UTF-8"
                 link="${icu4j.api.doc.jdk.link}"
-                source="1.7"
+                source="${javac.source}"
                 stylesheetfile="${docs.style.sheet}"
                 failonerror="true">
             <packageset dir="${icu4j.core.dir}/src">
@@ -1399,7 +1377,7 @@
         </javadoc>
     </target>
 
-    <target name="_docsWithoutJCite" depends="_docsStyleSheet, _docsLintOption" unless="jcite.libs">
+    <target name="_docsWithoutJCite" depends="_checkJCite, _docsOptions" unless="jcite.libs">
         <echo message="Javadoc lint option:            ${doclint.option}"/>
         <javadoc
                 destdir="${doc.dir}"
@@ -1413,7 +1391,7 @@
                 bottom="${icu4j.api.doc.copyright.footer}"
                 additionalparam="${doclint.option} -breakiterator -use -tagletpath ${icu4j.build-tools.jar} -taglet com.ibm.icu.dev.tool.docs.ICUTaglet"
                 link="${icu4j.api.doc.jdk.link}"
-                source="1.7"
+                source="${javac.source}"
                 failonerror="true">
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
@@ -1435,10 +1413,10 @@
     </target>
 
     <!-- Component document targets, only used for Maven repository releases -->
-    <target name="docsMaven" depends="info, build-tools, _checkJCite, _docsStyleSheet, _docsLintOption, _mavenIcu4jDoc, _mavenCharsetDoc, _mavenLocalespiDoc"
+    <target name="docsMaven" depends="info, build-tools, _checkJCite, _mavenIcu4jDoc, _mavenCharsetDoc, _mavenLocalespiDoc"
         description="Build API docs for each ICU4J maven artifact"/>
 
-    <target name="_mavenIcu4jDoc">
+    <target name="_mavenIcu4jDoc" depends="_docsOptions">
         <fail message="JCite must be configured." unless="jcite.libs"/>
         <delete dir="${maven.doc.base.dir}/icu4j"/>
 
@@ -1458,7 +1436,7 @@
                 bottom="${icu4j.api.doc.copyright.footer}"
                 additionalparam="${doclint.option} -breakiterator -use -tagletpath ${icu4j.build-tools.jar}${path.separator}${jcite.libs} -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -taglet ch.arrenbrecht.jcite.JCiteTaglet -J-Djcitesourcepath=${jcite.addl.src} -J-Dfile.encoding=UTF-8"
                 link="${icu4j.api.doc.jdk.link}"
-                source="1.7"
+                source="${javac.source}"
                 stylesheetfile="${docs.style.sheet}"
                 failonerror="true">
             <packageset dir="${icu4j.core.dir}/src">
@@ -1477,7 +1455,7 @@
         </javadoc>
     </target>
 
-    <target name="_mavenCharsetDoc">
+    <target name="_mavenCharsetDoc" depends="_docsOptions, icu4jJar">
         <fail message="JCite must be configured." unless="jcite.libs"/>
         <delete dir="${maven.doc.base.dir}/charset"/>
 
@@ -1497,7 +1475,7 @@
                 bottom="${icu4j.api.doc.copyright.footer}"
                 additionalparam="${doclint.option} -breakiterator -use -tagletpath ${icu4j.build-tools.jar}${path.separator}${jcite.libs} -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -taglet ch.arrenbrecht.jcite.JCiteTaglet -J-Djcitesourcepath=${jcite.addl.src} -J-Dfile.encoding=UTF-8"
                 link="${icu4j.api.doc.jdk.link}"
-                source="1.7"
+                source="${javac.source}"
                 stylesheetfile="${docs.style.sheet}"
                 failonerror="true"
                 classpath="${icu4j.jar.file}">
@@ -1507,7 +1485,7 @@
         </javadoc>
     </target>
 
-    <target name="_mavenLocalespiDoc">
+    <target name="_mavenLocalespiDoc" depends="_docsOptions">
         <delete dir="${maven.doc.base.dir}/localespi"/>
 
         <echo message="Javadoc lint option:            ${doclint.option}"/>
@@ -1524,7 +1502,7 @@
                 bottom="${icu4j.api.doc.copyright.footer}"
                 additionalparam="${doclint.option} -breakiterator -use"
                 link="${icu4j.api.doc.jdk.link}"
-                source="1.7"
+                source="${javac.source}"
                 failonerror="true"
                 classpath="${icu4j.jar.file}">
             <packageset dir="${icu4j.localespi.dir}/src">
@@ -1662,9 +1640,8 @@
     </target>
 
     <!-- Release management targets -->
-    <target name="checktags" depends="info, build-tools" description="Check API tags before release">
-        <javadoc source="1.7"
-                 bootclasspath="${java7.bootclasspath}"
+    <target name="checktags" depends="info, build-tools" description="Check API tags before release - This is currently not working as designed">
+        <javadoc source="${javac.source}"
                  encoding="${java.src.encoding}">
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
@@ -1686,8 +1663,7 @@
 
     <target name="gatherapi" depends="info, build-tools" description="Run API database generator tool">
         <mkdir dir="${out.dir}"/>
-        <javadoc source="1.7"
-                 bootclasspath="${java7.bootclasspath}"
+        <javadoc source="${javac.source}"
                  encoding="${java.src.encoding}">
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
@@ -1725,52 +1701,6 @@
             <arg value="-new:" />
             <arg value="${out.dir}/icu4j${api.report.version}.api3.gz" />
             <arg value="-html" />
-            <arg value="-out:" />
-            <arg value="${out.dir}/icu4j_compare_${api.report.prev.version}_${api.report.version}.html" />
-        </java>
-    </target>
-
-    <target name="gatherapiOld" depends="info, build-tools" description="Run API database generator tool (Pre Java 5 style)">
-        <mkdir dir="${out.dir}"/>
-        <javadoc source="1.7"
-                 bootclasspath="${java7.bootclasspath}"
-                 encoding="${java.src.encoding}">
-            <packageset dir="${icu4j.core.dir}/src">
-                <include name="com/ibm/icu/lang/**"/>
-                <include name="com/ibm/icu/math/**"/>
-                <include name="com/ibm/icu/number/**"/>
-                <include name="com/ibm/icu/text/**"/>
-                <include name="com/ibm/icu/util/**"/>
-            </packageset>
-            <packageset dir="${icu4j.collate.dir}/src">
-                <include name="com/ibm/icu/text/**"/>
-                <include name="com/ibm/icu/util/**"/>
-            </packageset>
-            <packageset dir="${icu4j.charset.dir}/src">
-                <include name="com/ibm/icu/charset/**"/>
-            </packageset>
-            <packageset dir="${icu4j.translit.dir}/src">
-                <include name="com/ibm/icu/text/**"/>
-            </packageset>
-            <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIDataOld" path="${icu4j.build-tools.jar}">
-                <param name="-name" value="ICU4J ${icu4j.impl.version}"/>
-                <param name="-output" value="${out.dir}/icu4j${api.report.version}.api"/>
-                <param name="-internal"/>
-                <param name="-gzip"/>
-            </doclet>
-        </javadoc>
-    </target>
-
-    <target name="apireportOld" depends="info, gatherapiOld" description="Run API report generator tool (Pre Java 5 Style)">
-        <java classname="com.ibm.icu.dev.tool.docs.ReportAPI"
-                classpath="${icu4j.build-tools.jar}"
-                failonerror="true">
-            <arg value="-old:" />
-            <arg value="${icu4j.build-tools.dir}/icu4j${api.report.prev.version}.api.gz" />
-            <arg value="-new:" />
-            <arg value="${out.dir}/icu4j${api.report.version}.api.gz" />
-            <arg value="-html" />
-            <arg value="-internal" />
             <arg value="-out:" />
             <arg value="${out.dir}/icu4j_compare_${api.report.prev.version}_${api.report.version}.html" />
         </java>
