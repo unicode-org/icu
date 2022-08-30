@@ -52,7 +52,7 @@ https://unicode-org.atlassian.net/browse/CLDR-15253 Unicode 15 script metadata (
 
 * Command-line environment setup
 
-export UNICODE_DATA=~/unidata/uni15/beta
+export UNICODE_DATA=~/unidata/uni15/20220830
 export CLDR_SRC=~/cldr/uni/src
 export ICU_ROOT=~/icu/uni
 export ICU_SRC=$ICU_ROOT/src
@@ -198,6 +198,9 @@ copying that version number into the $ICU_SRC/.bazeliskrc config file.
 - nothing new in this Unicode version, no test file to update
 
 * run & fix ICU4C tests
+- Note: Some of the collation data and test data will be updated below,
+  so at this time we might get some collation test failures.
+  Ignore these for now.
 - fix Unicode Tools class Segmenter to generate correct *BreakTest.txt files
   (no rule changes in Unicode 15)
 - update CLDR GraphemeBreakTest.txt
@@ -353,6 +356,15 @@ or
 *** merge the Unicode update branches back onto the trunk
 - do not merge the icudata.jar and testdata.jar,
   instead rebuild them from merged & tested ICU4C
+- if there is a merge conflict in icudata.jar, here is one way to deal with it:
+  +   remove icudata.jar from the commit so that rebasing is trivial
+  + ~/icu/uni/src$ git restore --source=main icu4j/main/shared/data/icudata.jar
+  + ~/icu/uni/src$ git commit -a --amend
+  +   switch to main, pull updates, switch back to the dev branch
+  + ~/icu/uni/src$ git rebase main
+  +   rebuild icudata.jar
+  + ~/icu/uni/src$ git commit -a --amend
+  + ~/icu/uni/src$ git push -f
 - make sure that changes to Unicode tools are checked in:
   https://github.com/unicode-org/unicodetools
 

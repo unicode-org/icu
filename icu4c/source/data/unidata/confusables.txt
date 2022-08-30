@@ -1,5 +1,5 @@
-﻿# confusables.txt
-# Date: 2022-05-18, 21:51:56 GMT
+# confusables.txt
+# Date: 2022-08-26, 16:49:08 GMT
 # © 2022 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see https://www.unicode.org/terms_of_use.html
@@ -7535,9 +7535,9 @@ FA7E ;	5944 ;	MA	# ( 奄 → 奄 ) CJK COMPATIBILITY IDEOGRAPH-FA7E → CJK UNIF
 
 F90C ;	5948 ;	MA	# ( 奈 → 奈 ) CJK COMPATIBILITY IDEOGRAPH-F90C → CJK UNIFIED IDEOGRAPH-5948	# 
 
-F909 ;	5951 ;	MA	# ( 契 → 契 ) CJK COMPATIBILITY IDEOGRAPH-F909 → CJK UNIFIED IDEOGRAPH-5951	# 
-
 FA7F ;	5954 ;	MA	# ( 奔 → 奔 ) CJK COMPATIBILITY IDEOGRAPH-FA7F → CJK UNIFIED IDEOGRAPH-5954	# 
+
+F909 ;	5951 ;	MA	# ( 契 → 契 ) CJK COMPATIBILITY IDEOGRAPH-F909 → CJK UNIFIED IDEOGRAPH-5951	# 
 
 2F85F ;	5962 ;	MA	# ( 奢 → 奢 ) CJK COMPATIBILITY IDEOGRAPH-2F85F → CJK UNIFIED IDEOGRAPH-5962	# 
 
