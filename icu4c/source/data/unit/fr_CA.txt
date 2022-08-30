@@ -64,7 +64,7 @@ fr_CA{
         }
         concentr{
             permille{
-                one{"{0} pour mille"}
+                one{"{0} pour mille"}
                 other{"{0} pour mille"}
             }
             permillion{
@@ -75,7 +75,7 @@ fr_CA{
         }
         consumption{
             liter-per-100-kilometer{
-                dnam{"litres aux 100 kilomètres"}
+                dnam{"litres aux 100 kilomètres"}
                 one{"{0} litre aux 100 kilomètres"}
                 other{"{0} litres aux 100 kilomètres"}
             }
@@ -177,7 +177,7 @@ fr_CA{
         }
         electric{
             ampere{
-                one{"{0} ampère"}
+                one{"{0} ampère"}
                 other{"{0} ampères"}
             }
             milliampere{
@@ -318,7 +318,7 @@ fr_CA{
             yard{
                 dnam{"verges"}
                 gender{"feminine"}
-                one{"{0} verge"}
+                one{"{0} verge"}
                 other{"{0} verges"}
             }
         }
@@ -475,7 +475,7 @@ fr_CA{
             }
             cubic-yard{
                 dnam{"verges cubes"}
-                one{"{0} verge cube"}
+                one{"{0} verge cube"}
                 other{"{0} verges cubes"}
             }
             dessert-spoon{
@@ -547,8 +547,8 @@ fr_CA{
         }
         concentr{
             percent{
-                one{"{0} %"}
-                other{"{0} %"}
+                one{"{0} %"}
+                other{"{0} %"}
             }
         }
         duration{
@@ -688,7 +688,7 @@ fr_CA{
         }
         temperature{
             celsius{
-                one{"{0} °C"}
+                one{"{0} °C"}
                 other{"{0} °C"}
             }
         }
@@ -813,7 +813,7 @@ fr_CA{
                 other{"{0} cm²"}
             }
             square-foot{
-                one{"{0} pi²"}
+                one{"{0} pi²"}
                 other{"{0} pi²"}
             }
             square-inch{
@@ -847,8 +847,8 @@ fr_CA{
                 dnam{"carats"}
             }
             percent{
-                one{"{0} %"}
-                other{"{0} %"}
+                one{"{0} %"}
+                other{"{0} %"}
             }
             permille{
                 one{"{0} ‰"}
@@ -1039,7 +1039,7 @@ fr_CA{
         }
         length{
             astronomical-unit{
-                one{"{0} ua"}
+                one{"{0} ua"}
                 other{"{0} ua"}
             }
             centimeter{
@@ -1051,7 +1051,7 @@ fr_CA{
                 other{"{0} dm"}
             }
             foot{
-                one{"{0} pi"}
+                one{"{0} pi"}
                 other{"{0} pi"}
             }
             inch{
@@ -1088,7 +1088,7 @@ fr_CA{
             }
             nautical-mile{
                 dnam{"NM"}
-                one{"{0} NM"}
+                one{"{0} NM"}
                 other{"{0} NM"}
             }
             parsec{
@@ -1101,7 +1101,7 @@ fr_CA{
             }
             yard{
                 dnam{"vg"}
-                one{"{0} vg"}
+                one{"{0} vg"}
                 other{"{0} vg"}
             }
         }
@@ -1191,8 +1191,8 @@ fr_CA{
             }
             inch-ofhg{
                 dnam{"po Hg"}
-                one{"{0} po Hg"}
-                other{"{0} po Hg"}
+                one{"{0} po Hg"}
+                other{"{0} po Hg"}
             }
             millibar{
                 one{"{0} mbar"}
@@ -1205,7 +1205,7 @@ fr_CA{
             }
             pound-force-per-square-inch{
                 dnam{"psi"}
-                one{"{0} psi"}
+                one{"{0} psi"}
                 other{"{0} psi"}
             }
         }
@@ -1250,8 +1250,8 @@ fr_CA{
                 other{"{0} cm³"}
             }
             cubic-foot{
-                one{"{0} pi³"}
-                other{"{0} pi³"}
+                one{"{0} pi³"}
+                other{"{0} pi³"}
             }
             cubic-inch{
                 one{"{0} po³"}
@@ -1271,7 +1271,7 @@ fr_CA{
             }
             cubic-yard{
                 dnam{"vg³"}
-                one{"{0} vg³"}
+                one{"{0} vg³"}
                 other{"{0} vg³"}
             }
             dessert-spoon{
@@ -1296,7 +1296,7 @@ fr_CA{
             }
             fluid-ounce{
                 dnam{"oz liq."}
-                one{"{0} oz liq."}
+                one{"{0} oz liq."}
                 other{"{0} oz liq."}
             }
             fluid-ounce-imperial{
@@ -1322,7 +1322,7 @@ fr_CA{
             }
             quart{
                 dnam{"pte"}
-                one{"{0} pte"}
+                one{"{0} pte"}
                 other{"{0} pte"}
             }
             quart-imperial{
@@ -1332,7 +1332,7 @@ fr_CA{
             }
             teaspoon{
                 dnam{"c. à t."}
-                one{"{0} c. à t."}
+                one{"{0} c. à t."}
                 other{"{0} c. à t."}
             }
         }
