@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1661985635023,
+  "lastUpdate": 1661987979863,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -988,6 +988,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 3.4323891652660095,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "8050af54847348504a879564c28008203510201d",
+          "message": "ICU-21980 Unicode 15 update 2022aug30",
+          "timestamp": "2022-08-31T16:15:42-07:00",
+          "tree_id": "95cbedfa8185c379bfc37eb45bca48716bae6869",
+          "url": "https://github.com/unicode-org/icu/commit/8050af54847348504a879564c28008203510201d"
+        },
+        "date": 1661987973421,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 3.246928813867856,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
