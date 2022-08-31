@@ -21,8 +21,10 @@ import java.util.TreeSet;
  * @internal ICU 72 technology preview
  * @deprecated This API is for technology preview only.
  */
-public class SimplePersonName implements PersonNameFormatter.PersonName {
+public class SimplePersonName implements PersonName {
     /**
+     * A utility class for constructing a SimplePersonName.  Use SimplePersonName.builder()
+     * to get a new Builder instance.
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      *
@@ -30,7 +32,8 @@ public class SimplePersonName implements PersonNameFormatter.PersonName {
     public static class Builder {
         /**
          * Set the locale for the new name object.
-         * @param locale The locale for the new name object.
+         * @param locale The locale for the new name object.  Can be null, which indicates the
+         *               name's locale is unknown.
          * @return This builder.
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
@@ -50,13 +53,13 @@ public class SimplePersonName implements PersonNameFormatter.PersonName {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
-        public Builder addField(PersonNameFormatter.NameField field,
-                                Collection<PersonNameFormatter.FieldModifier> modifiers,
+        public Builder addField(NameField field,
+                                Collection<FieldModifier> modifiers,
                                 String value) {
             // generate the modifiers' internal names, and sort them alphabetically
             Set<String> modifierNames = new TreeSet<>();
             if (modifiers != null) {
-                for (PersonNameFormatter.FieldModifier modifier : modifiers) {
+                for (FieldModifier modifier : modifiers) {
                     modifierNames.add(modifier.toString());
                 }
             }
@@ -147,7 +150,7 @@ public class SimplePersonName implements PersonNameFormatter.PersonName {
      * @deprecated This API is for technology preview only.
      */
     @Override
-    public String getFieldValue(PersonNameFormatter.NameField nameField, Set<PersonNameFormatter.FieldModifier> modifiers) {
+    public String getFieldValue(NameField nameField, Set<FieldModifier> modifiers) {
         // first look for the fully modified name in the internal table
         String fieldName = nameField.toString();
         String result = fieldValues.get(makeModifiedFieldName(nameField, modifiers));
@@ -170,7 +173,7 @@ public class SimplePersonName implements PersonNameFormatter.PersonName {
         int winningScore = 0;
         for (String key : fieldValues.keySet()) {
             if (key.startsWith(fieldName)) {
-                Set<PersonNameFormatter.FieldModifier> keyModifiers = makeModifiersFromName(key);
+                Set<FieldModifier> keyModifiers = makeModifiersFromName(key);
                 if (modifiers.containsAll(keyModifiers)) {
                     if (keyModifiers.size() > winningScore || (keyModifiers.size() == winningScore && key.compareTo(winningKey) < 0)) {
                         winningKey = key;
@@ -184,13 +187,13 @@ public class SimplePersonName implements PersonNameFormatter.PersonName {
         return result;
     }
 
-    private static String makeModifiedFieldName(PersonNameFormatter.NameField fieldName,
-                                                Collection<PersonNameFormatter.FieldModifier> modifiers) {
+    private static String makeModifiedFieldName(NameField fieldName,
+                                                Collection<FieldModifier> modifiers) {
         StringBuilder result = new StringBuilder();
         result.append(fieldName);
 
         TreeSet<String> sortedModifierNames = new TreeSet<>();
-        for (PersonNameFormatter.FieldModifier modifier : modifiers) {
+        for (FieldModifier modifier : modifiers) {
             sortedModifierNames.add(modifier.toString());
         }
         for (String modifierName : sortedModifierNames) {
@@ -200,12 +203,12 @@ public class SimplePersonName implements PersonNameFormatter.PersonName {
         return result.toString();
     }
 
-    private static Set<PersonNameFormatter.FieldModifier> makeModifiersFromName(String modifiedName) {
+    private static Set<FieldModifier> makeModifiersFromName(String modifiedName) {
         StringTokenizer tok = new StringTokenizer(modifiedName, "-");
-        Set<PersonNameFormatter.FieldModifier> result = new HashSet<>();
+        Set<FieldModifier> result = new HashSet<>();
         String fieldName = tok.nextToken(); // throw away the field name
         while (tok.hasMoreTokens()) {
-            result.add(PersonNameFormatter.FieldModifier.forString(tok.nextToken()));
+            result.add(PersonName.FieldModifier.forString(tok.nextToken()));
         }
         return result;
     }

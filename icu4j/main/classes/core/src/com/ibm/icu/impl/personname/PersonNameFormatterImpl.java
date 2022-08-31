@@ -5,6 +5,7 @@ package com.ibm.icu.impl.personname;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.lang.UScript;
+import com.ibm.icu.text.PersonName;
 import com.ibm.icu.text.PersonNameFormatter;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
@@ -124,7 +125,7 @@ public class PersonNameFormatterImpl {
 
     }
 
-    public String formatToString(PersonNameFormatter.PersonName name) {
+    public String formatToString(PersonName name) {
         // TODO: Should probably return a FormattedPersonName object
 
         // if the formatter is for a language that doesn't use spaces between words and the name is from a language
@@ -201,10 +202,10 @@ public class PersonNameFormatterImpl {
      * @param name The name to be formatted.
      * @return If true, use given-first order to format the name; if false, use surname-first order.
      */
-    private boolean nameIsGnFirst(PersonNameFormatter.PersonName name) {
+    private boolean nameIsGnFirst(PersonName name) {
         // the name can declare its order-- check that first (it overrides any locale-based calculation)
-        Set<PersonNameFormatter.FieldModifier> modifiers = new HashSet<>();
-        String preferredOrder = name.getFieldValue(PersonNameFormatter.NameField.PREFERRED_ORDER, modifiers);
+        Set<PersonName.FieldModifier> modifiers = new HashSet<>();
+        String preferredOrder = name.getFieldValue(PersonName.NameField.PREFERRED_ORDER, modifiers);
         if (preferredOrder != null) {
             if (preferredOrder.equals("givenFirst")) {
                 return true;
@@ -235,7 +236,7 @@ public class PersonNameFormatterImpl {
         return true;
     }
 
-    private PersonNamePattern getBestPattern(PersonNamePattern[] patterns, PersonNameFormatter.PersonName name) {
+    private PersonNamePattern getBestPattern(PersonNamePattern[] patterns, PersonName name) {
         // early out if there's only one pattern
         if (patterns.length == 1) {
             return patterns[0];
@@ -270,14 +271,14 @@ public class PersonNameFormatterImpl {
      * @param name The name for which we need the locale
      * @return The name's (real or guessed) locale.
      */
-    private Locale getNameLocale(PersonNameFormatter.PersonName name) {
+    private Locale getNameLocale(PersonName name) {
         // if the name specifies its locale, we can just return it
         Locale nameLocale = name.getNameLocale();
         if (nameLocale == null) {
             // if not, we look at the characters in the name.  If their script matches the default script for the formatter's
             // locale, we use the formatter's locale as the name's locale
             int formatterScript = UScript.getCodeFromName(ULocale.addLikelySubtags(ULocale.forLocale(locale)).getScript());
-            String givenName = name.getFieldValue(PersonNameFormatter.NameField.GIVEN, new HashSet<PersonNameFormatter.FieldModifier>());
+            String givenName = name.getFieldValue(PersonName.NameField.GIVEN, new HashSet<PersonName.FieldModifier>());
             int nameScript = UScript.INVALID_CODE;
             for (int i = 0; nameScript == UScript.INVALID_CODE && i < givenName.length(); i++) {
                 // the script of the name is the script of the first character in the name whose script isn't
