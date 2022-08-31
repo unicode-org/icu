@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.personname;
 
-import com.ibm.icu.text.PersonNameFormatter;
+import com.ibm.icu.text.PersonName;
 
 import java.util.*;
 
@@ -74,7 +74,7 @@ class PersonNamePattern {
         this.patternElements = elements.toArray(new Element[0]);
     }
 
-    public String format(PersonNameFormatter.PersonName name) {
+    public String format(PersonName name) {
         StringBuilder result = new StringBuilder();
         boolean seenLeadingField = false;
         boolean seenEmptyLeadingField = false;
@@ -131,7 +131,7 @@ class PersonNamePattern {
         return result.toString();
     }
 
-    public int numPopulatedFields(PersonNameFormatter.PersonName name) {
+    public int numPopulatedFields(PersonName name) {
         int result = 0;
         for (Element element : patternElements) {
             result += element.isPopulated(name) ? 1 : 0;
@@ -139,7 +139,7 @@ class PersonNamePattern {
         return result;
     }
 
-    public int numEmptyFields(PersonNameFormatter.PersonName name) {
+    public int numEmptyFields(PersonName name) {
         int result = 0;
         for (Element element : patternElements) {
             result += element.isPopulated(name) ? 0 : 1;
@@ -190,8 +190,8 @@ class PersonNamePattern {
      */
     private interface Element {
         boolean isLiteral();
-        String format(PersonNameFormatter.PersonName name);
-        boolean isPopulated(PersonNameFormatter.PersonName name);
+        String format(PersonName name);
+        boolean isPopulated(PersonName name);
     }
 
     /**
@@ -208,11 +208,11 @@ class PersonNamePattern {
             return true;
         }
 
-        public String format(PersonNameFormatter.PersonName name) {
+        public String format(PersonName name) {
             return text;
         }
 
-        public boolean isPopulated(PersonNameFormatter.PersonName name) {
+        public boolean isPopulated(PersonName name) {
             return false;
         }
     }
@@ -223,23 +223,23 @@ class PersonNamePattern {
      * PersonName object and applying any modifiers to it.
      */
     private static class NameFieldImpl implements Element {
-        private PersonNameFormatter.NameField fieldID;
-        private Map<PersonNameFormatter.FieldModifier, FieldModifierImpl> modifiers;
+        private PersonName.NameField fieldID;
+        private Map<PersonName.FieldModifier, FieldModifierImpl> modifiers;
 
         public NameFieldImpl(String fieldNameAndModifiers, PersonNameFormatterImpl formatterImpl) {
-            List<PersonNameFormatter.FieldModifier> modifierIDs = new ArrayList<>();
+            List<PersonName.FieldModifier> modifierIDs = new ArrayList<>();
             StringTokenizer tok = new StringTokenizer(fieldNameAndModifiers, "-");
 
-            this.fieldID = PersonNameFormatter.NameField.forString(tok.nextToken());
+            this.fieldID = PersonName.NameField.forString(tok.nextToken());
             while (tok.hasMoreTokens()) {
-                modifierIDs.add(PersonNameFormatter.FieldModifier.forString(tok.nextToken()));
+                modifierIDs.add(PersonName.FieldModifier.forString(tok.nextToken()));
             }
-            if (this.fieldID == PersonNameFormatter.NameField.SURNAME && formatterImpl.shouldCapitalizeSurname()) {
-                modifierIDs.add(PersonNameFormatter.FieldModifier.ALL_CAPS);
+            if (this.fieldID == PersonName.NameField.SURNAME && formatterImpl.shouldCapitalizeSurname()) {
+                modifierIDs.add(PersonName.FieldModifier.ALL_CAPS);
             }
 
             this.modifiers = new HashMap<>();
-            for (PersonNameFormatter.FieldModifier modifierID : modifierIDs) {
+            for (PersonName.FieldModifier modifierID : modifierIDs) {
                 this.modifiers.put(modifierID, FieldModifierImpl.forName(modifierID, formatterImpl));
             }
         }
@@ -248,20 +248,20 @@ class PersonNamePattern {
             return false;
         }
 
-        public String format(PersonNameFormatter.PersonName name) {
-            Set<PersonNameFormatter.FieldModifier> modifierIDs = new HashSet<>(modifiers.keySet());
+        public String format(PersonName name) {
+            Set<PersonName.FieldModifier> modifierIDs = new HashSet<>(modifiers.keySet());
             String result = name.getFieldValue(fieldID, modifierIDs);
             if (result != null) {
-                for (PersonNameFormatter.FieldModifier modifierID : modifierIDs) {
+                for (PersonName.FieldModifier modifierID : modifierIDs) {
                     result = modifiers.get(modifierID).modifyField(result);
                 }
             }
             return result;
         }
 
-        public boolean isPopulated(PersonNameFormatter.PersonName name) {
+        public boolean isPopulated(PersonName name) {
             // just check whether the unmodified field contains a value
-            Set<PersonNameFormatter.FieldModifier> modifierIDs = new HashSet<>();
+            Set<PersonName.FieldModifier> modifierIDs = new HashSet<>();
             String fieldValue = name.getFieldValue(fieldID, modifierIDs);
             return fieldValue != null && !fieldValue.isEmpty();
         }

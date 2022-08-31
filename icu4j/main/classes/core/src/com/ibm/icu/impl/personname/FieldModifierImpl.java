@@ -3,10 +3,7 @@
 package com.ibm.icu.impl.personname;
 
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.text.BreakIterator;
-import com.ibm.icu.text.CaseMap;
-import com.ibm.icu.text.PersonNameFormatter;
-import com.ibm.icu.text.SimpleFormatter;
+import com.ibm.icu.text.*;
 
 import java.util.Locale;
 import java.util.StringTokenizer;
@@ -17,7 +14,7 @@ import java.util.StringTokenizer;
 abstract class FieldModifierImpl {
     public abstract String modifyField(String fieldValue);
 
-    public static FieldModifierImpl forName(PersonNameFormatter.FieldModifier modifierID, PersonNameFormatterImpl formatterImpl) {
+    public static FieldModifierImpl forName(PersonName.FieldModifier modifierID, PersonNameFormatterImpl formatterImpl) {
         switch (modifierID) {
             case INFORMAL:
                 return NOOP_MODIFIER;

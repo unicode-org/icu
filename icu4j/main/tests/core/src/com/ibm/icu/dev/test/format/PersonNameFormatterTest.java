@@ -3,6 +3,7 @@
 package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.PersonName;
 import com.ibm.icu.text.PersonNameFormatter;
 import com.ibm.icu.text.SimplePersonName;
 import org.junit.Test;
@@ -41,13 +42,13 @@ public class PersonNameFormatterTest extends TestFmwk{
                 // locale ID
                 builder.setLocale(Locale.forLanguageTag(fieldValue.replace("_", "-")));
             } else if (fieldName.indexOf('-') < 0) {
-                builder.addField(PersonNameFormatter.NameField.forString(fieldName), null, fieldValue);
+                builder.addField(PersonName.NameField.forString(fieldName), null, fieldValue);
             } else {
                 StringTokenizer fieldNameSplitter = new StringTokenizer(fieldName, "-");
-                Set<PersonNameFormatter.FieldModifier> modifiers = new HashSet<>();
-                PersonNameFormatter.NameField fieldID = PersonNameFormatter.NameField.forString(fieldNameSplitter.nextToken());
+                Set<PersonName.FieldModifier> modifiers = new HashSet<>();
+                PersonName.NameField fieldID = PersonName.NameField.forString(fieldNameSplitter.nextToken());
                 while (fieldNameSplitter.hasMoreTokens()) {
-                    modifiers.add(PersonNameFormatter.FieldModifier.forString(fieldNameSplitter.nextToken()));
+                    modifiers.add(PersonName.FieldModifier.forString(fieldNameSplitter.nextToken()));
                 }
                 builder.addField(fieldID, modifiers, fieldValue);
             }
