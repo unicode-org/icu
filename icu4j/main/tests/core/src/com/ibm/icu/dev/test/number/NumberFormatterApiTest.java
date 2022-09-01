@@ -2445,7 +2445,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 new UnitInflectionTestCase("centimeter", "de", null, 1, "1 Zentimeter"),
                 new UnitInflectionTestCase("centimeter", "de", "genitive", 1, "1 Zentimeters"),
                 new UnitInflectionTestCase("centimeter", "de", "dative", 10, "10 Zentimetern"),
-                // TODO(CLDR-14502): check that these inflections are correct, and
+                // TODO(CLDR-14582): check that these inflections are correct, and
                 // whether CLDR needs any rules for them (presumably CLDR spec
                 // should mention it, if it's a consistent rule):
                 new UnitInflectionTestCase("meter-and-centimeter", "de", null, 1.01,
