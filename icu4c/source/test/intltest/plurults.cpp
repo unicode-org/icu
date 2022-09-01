@@ -416,10 +416,6 @@ void PluralRulesTest::testGetSamples() {
 
     double values[1000];
     for (int32_t i = 0; U_SUCCESS(status) && i < numLocales; ++i) {
-        //if (uprv_strcmp(locales[i].getLanguage(), "fr") == 0 &&
-        //        logKnownIssue("21322", "PluralRules::getSamples cannot distinguish 1e5 from 100000")) {
-        //    continue;
-        //}
         LocalPointer<PluralRules> rules(PluralRules::forLocale(locales[i], status));
         if (U_FAILURE(status)) {
             break;
