@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1661989176849,
+  "lastUpdate": 1662053073394,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -12286,6 +12286,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 42.9191,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "9acba58c493123234b9c3ed4326d35d8f73cbcc1",
+          "message": "ICU-22116 Updating minimum Java runtime support to Java 8",
+          "timestamp": "2022-09-01T13:02:27-04:00",
+          "tree_id": "3effaf2286da632e64849215f3216eb05a4448f1",
+          "url": "https://github.com/unicode-org/icu/commit/9acba58c493123234b9c3ed4326d35d8f73cbcc1"
+        },
+        "date": 1662053067174,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 22.5912,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 24.7915,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 29.7297,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 36.9497,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 48.7605,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 65.8991,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 27.766,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 17.8676,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 210.9929,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 31.467,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 65.914,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 53.3749,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
