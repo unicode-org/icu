@@ -2245,7 +2245,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 -123.12,
                 "RON-123.12");
 
-        // TODO(CLDR-13044): Move the sign to the inside of the number
+        // TODO(ICU-21420): Move the sign to the inside of the number
         assertFormatSingle(
                 "Sign position on negative number with currency spacing",
                 "currency/RON",
