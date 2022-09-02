@@ -528,11 +528,11 @@ jobs:
        echo 'Run icuinfo from CMD shell' && cd /d C:\tools\msys64\tmp\build-icu\bin && set PATH=C:\tools\msys64\mingw64\bin;%PATH% && icuinfo.exe"
       displayName: 'run icuinfo'
 #-------------------------------------------------------------------------
-- job: ICU4C_Clang_MacOSX_WarningsAsErrors
-  displayName: 'C: macOSX Clang WarningsAsErrors (Catalina 10.15)'
+- job: ICU4C_Clang_MacOS_WarningsAsErrors
+  displayName: 'C: macOS(Latest) Clang WarningsAsErrors'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'macOS-10.15'
+    vmImage: 'macOS-latest'
   steps:
     - checkout: self
       lfs: true
