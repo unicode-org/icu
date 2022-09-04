@@ -29,11 +29,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -429,15 +432,20 @@ public class PluralRulesTest extends TestFmwk {
         main: for (ULocale locale : factory.getAvailableULocales()) {
             PluralRules rules = factory.forLocale(locale);
             Map<String, PluralRules> keywordToRule = new HashMap<>();
-            Collection<DecimalQuantitySamples> samples = new LinkedHashSet<>();
 
+            // get the set of all rule samples from all of the keywords of the locale's rule
+            Set<DecimalQuantitySamples> samples =
+                    rules.getKeywords()
+                        .stream()
+                        .flatMap(keyword -> {
+                            return Arrays.stream(SampleType.values())
+                                    .map(sampleType -> rules.getDecimalSamples(keyword, sampleType));
+                        })
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toSet());
+
+            // take the rule substring per keyword, and create a map keyed by keyword for a new rules object of that rule substring
             for (String keyword : rules.getKeywords()) {
-                for (SampleType sampleType : SampleType.values()) {
-                    DecimalQuantitySamples samples2 = rules.getDecimalSamples(keyword, sampleType);
-                    if (samples2 != null) {
-                        samples.add(samples2);
-                    }
-                }
                 if (keyword.equals("other")) {
                     continue;
                 }
@@ -452,32 +460,35 @@ public class PluralRulesTest extends TestFmwk {
             }
 
             Map<DecimalQuantity, String> collisionTest = new LinkedHashMap();
-            for (DecimalQuantitySamples sample3 : samples) {
-                Set<DecimalQuantitySamplesRange> samples2 = sample3.getSamples();
-                if (samples2 == null) {
-                    continue;
-                }
-                for (DecimalQuantitySamplesRange sample : samples2) {
-                    for (int i = 0; i < 1; ++i) {
-                        DecimalQuantity item = i == 0 ? sample.start : sample.end;
-                        collisionTest.clear();
-                        for (Entry<String, PluralRules> entry : keywordToRule.entrySet()) {
-                            PluralRules rule = entry.getValue();
-                            String foundKeyword = rule.select(item);
-                            if (foundKeyword.equals("other")) {
-                                continue;
-                            }
-                            String old = collisionTest.get(item);
-                            if (old != null) {
-                                errln(locale + "\tNon-unique rules: " + item + " => " + old + " & " + foundKeyword);
-                                rule.select(item);
-                            } else {
-                                collisionTest.put(item, foundKeyword);
-                            }
-                        }
+
+            // get all of the sample ranges from all of the samples
+            Stream<DecimalQuantitySamplesRange> ranges = samples.stream()
+                .map(DecimalQuantitySamples::getSamples)
+                .filter(Objects::nonNull)
+                .flatMap(Set::stream);
+
+            // get all of the sample values at the endpoints of each sample range
+            Stream<DecimalQuantity> items = ranges.flatMap(range -> {
+                return Arrays.stream(new DecimalQuantity[] {range.start, range.end});
+            });
+
+            items.forEach(item -> {
+                collisionTest.clear();
+                for (Entry<String, PluralRules> entry : keywordToRule.entrySet()) {
+                    PluralRules rule = entry.getValue();
+                    String foundKeyword = rule.select(item);
+                    if (foundKeyword.equals("other")) {
+                        continue;
+                    }
+                    String old = collisionTest.get(item);
+                    if (old != null) {
+                        errln(locale + "\tNon-unique rules: " + item + " => " + old + " & " + foundKeyword);
+                        rule.select(item);
+                    } else {
+                        collisionTest.put(item, foundKeyword);
                     }
                 }
-            }
+            });
         }
     }
 
