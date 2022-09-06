@@ -155,6 +155,8 @@ class NumberFormatTest: public CalendarTimeZoneTest {
 
     void TestCurrencyVariants(void);
 
+    void TestCurrencyPlurals(void);
+
     void TestCurrencyAmount(void);
 
     void TestCurrencyUnit(void);
@@ -306,6 +308,9 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test20425_IntegerIncrement();
     void Test20425_FractionWithIntegerIncrement();
     void Test21232_ParseTimeout();
+    void Test8144_TestCurrencyNames();
+    void Test8144_TestCurrencyVariants();
+    void Test8144_TestCurrencyPlurals();
     void Test10997_FormatCurrency();
     void Test21556_CurrencyAsDecimal();
     void Test22088_Ethiopic();

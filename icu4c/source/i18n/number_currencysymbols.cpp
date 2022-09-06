@@ -11,6 +11,7 @@
 
 #include "numparse_types.h"
 #include "number_currencysymbols.h"
+#include <currencydisplaynames.h>
 
 using namespace icu;
 using namespace icu::number;
@@ -91,14 +92,14 @@ UnicodeString CurrencySymbols::getIntlCurrencySymbol(UErrorCode&) const {
 
 UnicodeString CurrencySymbols::getPluralName(StandardPlural::Form plural, UErrorCode& status) const {
     const char16_t* isoCode = fCurrency.getISOCurrency();
-    int32_t symbolLen = 0;
-    const char16_t* symbol = ucurr_getPluralName(
-            isoCode,
-            fLocaleName.data(),
-            nullptr /* isChoiceFormat */,
-            StandardPlural::getKeyword(plural),
-            &symbolLen,
-            &status);
+    const Locale* locale = new Locale(fLocaleName.data());
+    const CurrencyDisplayNames *currencyDisplayNames = CurrencyDisplayNames::getInstance(locale, status);
+    const UChar *symbol = currencyDisplayNames->getPluralName(
+        fCurrency.getISOCurrency(),
+        PluralMapBase::toCategory(StandardPlural::getKeyword(plural)),
+        status);
+    int32_t symbolLen = u_strlen(symbol);
+
     // If given an unknown currency, ucurr_getName returns the input string, which we can't alias safely!
     // Otherwise, symbol points to a resource bundle, and we can use readonly-aliasing constructor.
     if (symbol == isoCode) {

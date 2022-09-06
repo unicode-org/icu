@@ -76,6 +76,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="currencydisplaynames.cpp" />
     <ClCompile Include="filteredbrk.cpp" />
     <ClCompile Include="ubidi.cpp" />
     <ClCompile Include="ubiditransform.cpp" />
@@ -273,6 +274,7 @@
     <ClCompile Include="utf_impl.cpp" />
     <ClCompile Include="static_unicode_sets.cpp" />
     <ClCompile Include="restrace.cpp" />
+    <ClInclude Include="currencydisplaynames.h" />
     <ClInclude Include="localsvc.h" />
     <ClInclude Include="msvcres.h" />
     <ClInclude Include="pluralmap.h" />
