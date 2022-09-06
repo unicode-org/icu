@@ -23,6 +23,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <stdbool.h>
+
 #include "unicode/ucurr.h"
 #include "unicode/uloc.h"
 #include "unicode/unum.h"
@@ -82,11 +84,11 @@ static void TestPatterns(void)
             continue;
         }
         lneed=0;
-        lneed=unum_toPattern(fmt, FALSE, NULL, lneed, &status);
+        lneed=unum_toPattern(fmt, false, NULL, lneed, &status);
         if(status==U_BUFFER_OVERFLOW_ERROR){
             status= U_ZERO_ERROR;
             unewp=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-            unum_toPattern(fmt, FALSE, unewp, lneed+1, &status);
+            unum_toPattern(fmt, false, unewp, lneed+1, &status);
         }
         if(U_FAILURE(status)){
             log_err("FAIL: Number format extracting the pattern failed for %s\n", pat[i]);
@@ -261,7 +263,7 @@ static void TestExponential(void)
             continue;
         }
         lneed= u_strlen(upat) + 1;
-        unum_toPattern(fmt, FALSE, pattern, lneed, &status);
+        unum_toPattern(fmt, false, pattern, lneed, &status);
         log_verbose("Pattern \" %s \" -toPattern-> \" %s \" \n", upat, u_austrcpy(tempMsgBug, pattern) );
         for (v=0; v<val_length; ++v)
         {
@@ -366,11 +368,11 @@ static void TestCurrencySign(void)
         log_err_status(status, "Error in formatting using unum_format(.....): %s\n", myErrorName(status) );
     }
     lneed=0;
-    lneed=unum_toPattern(fmt, FALSE, NULL, lneed, &status);
+    lneed=unum_toPattern(fmt, false, NULL, lneed, &status);
     if(status==U_BUFFER_OVERFLOW_ERROR){
         status=U_ZERO_ERROR;
         pat=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-        unum_formatDouble(fmt, FALSE, pat, lneed+1, NULL, &status);
+        unum_formatDouble(fmt, false, pat, lneed+1, NULL, &status);
     }
     log_verbose("Pattern \" %s \" \n", u_austrcpy(tempBuf, pat));
     log_verbose("Format 1234.56 -> %s\n", u_austrcpy(tempBuf, str) );
@@ -647,10 +649,10 @@ static void TestSecondaryGrouping(void) {
     UFieldPosition pos;
     UChar resultBuffer[512];
     int32_t l = 1876543210L;
-    UBool ok = TRUE;
+    UBool ok = true;
     UChar buffer[512];
     int32_t i;
-    UBool expectGroup = FALSE, isGroup = FALSE;
+    UBool expectGroup = false, isGroup = false;
 
     u_uastrcpy(buffer, "#,##,###");
     f = unum_open(UNUM_IGNORE,buffer, -1, "en_US",NULL, &status);
@@ -670,7 +672,7 @@ static void TestSecondaryGrouping(void) {
         log_err("Fail: Formatting \"#,##,###\" pattern pos = (%d, %d) expected pos = (0, 12)\n", pos.beginIndex, pos.endIndex);
     }
     memset(resultBuffer,0, sizeof(UChar)*512);
-    unum_toPattern(f, FALSE, resultBuffer, 512, &status);
+    unum_toPattern(f, false, resultBuffer, 512, &status);
     u_uastrcpy(buffer, "#,##,##0");
     if ((u_strcmp(resultBuffer, buffer) != 0) || U_FAILURE(status))
     {
@@ -678,7 +680,7 @@ static void TestSecondaryGrouping(void) {
     }
     memset(resultBuffer,0, sizeof(UChar)*512);
     u_uastrcpy(buffer, "#,###");
-    unum_applyPattern(f, FALSE, buffer, -1,NULL,NULL);
+    unum_applyPattern(f, false, buffer, -1,NULL,NULL);
     if (U_FAILURE(status))
     {
         log_err("Fail: applyPattern call failed\n");
@@ -691,7 +693,7 @@ static void TestSecondaryGrouping(void) {
         log_err("Fail: Formatting \"#,###\" pattern with 123456789 got %s, expected %s\n", austrdup(resultBuffer), "12,3456,789");
     }
     memset(resultBuffer,0, sizeof(UChar)*512);
-    unum_toPattern(f, FALSE, resultBuffer, 512, &status);
+    unum_toPattern(f, false, resultBuffer, 512, &status);
     u_uastrcpy(buffer, "#,####,##0");
     if ((u_strcmp(resultBuffer, buffer) != 0) || U_FAILURE(status))
     {
@@ -709,23 +711,23 @@ static void TestSecondaryGrouping(void) {
     /* expect "1,87,65,43,210", but with Hindi digits */
     /*         01234567890123                         */
     if (u_strlen(resultBuffer) != 14) {
-        ok = FALSE;
+        ok = false;
     } else {
         for (i=0; i<u_strlen(resultBuffer); ++i) {
-            expectGroup = FALSE;
+            expectGroup = false;
             switch (i) {
             case 1:
             case 4:
             case 7:
             case 10:
-                expectGroup = TRUE;
+                expectGroup = true;
                 break;
             }
             /* Later -- fix this to get the actual grouping */
             /* character from the resource bundle.          */
             isGroup = (UBool)(resultBuffer[i] == 0x002C);
             if (isGroup != expectGroup) {
-                ok = FALSE;
+                ok = false;
                 break;
             }
         }
@@ -844,7 +846,7 @@ static void TestGetKeywordValuesForLocale(void) {
     
     UList *ALLList = NULL;
     
-    UEnumeration *ALL = ucurr_getKeywordValuesForLocale("currency", uloc_getDefault(), FALSE, &status);
+    UEnumeration *ALL = ucurr_getKeywordValuesForLocale("currency", uloc_getDefault(), false, &status);
     if (ALL == NULL) {
         log_err_status(status, "ERROR getting keyword value for default locale. -> %s\n", u_errorName(status));
         return;
@@ -858,24 +860,24 @@ static void TestGetKeywordValuesForLocale(void) {
         pref = NULL;
         all = NULL;
         loc = PREFERRED[i][0];
-        pref = ucurr_getKeywordValuesForLocale("currency", loc, TRUE, &status);
-        matchPref = FALSE;
-        matchAll = FALSE;
+        pref = ucurr_getKeywordValuesForLocale("currency", loc, true, &status);
+        matchPref = false;
+        matchAll = false;
         
         size = uenum_count(pref, &status);
         
         if (size == EXPECTED_SIZE[i]) {
-            matchPref = TRUE;
+            matchPref = true;
             for (j = 0; j < size; j++) {
                 if ((value = uenum_next(pref, &valueLength, &status)) != NULL && U_SUCCESS(status)) {
                     if (uprv_strcmp(value, PREFERRED[i][j+1]) != 0) {
                         log_err("ERROR: locale %s got keywords #%d %s expected %s\n", loc, j, value, PREFERRED[i][j+1]);
 
-                        matchPref = FALSE;
+                        matchPref = false;
                         break;
                     }
                 } else {
-                    matchPref = FALSE;
+                    matchPref = false;
                     log_err("ERROR getting keyword value for locale \"%s\"\n", loc);
                     break;
                 }
@@ -890,22 +892,22 @@ static void TestGetKeywordValuesForLocale(void) {
         }
         uenum_close(pref);
         
-        all = ucurr_getKeywordValuesForLocale("currency", loc, FALSE, &status);
+        all = ucurr_getKeywordValuesForLocale("currency", loc, false, &status);
         
         size = uenum_count(all, &status);
         
         if (U_SUCCESS(status) && size == uenum_count(ALL, &status)) {
-            matchAll = TRUE;
+            matchAll = true;
             ALLList = ulist_getListFromEnum(ALL);
             for (j = 0; j < size; j++) {
                 if ((value = uenum_next(all, &valueLength, &status)) != NULL && U_SUCCESS(status)) {
                     if (!ulist_containsString(ALLList, value, (int32_t)uprv_strlen(value))) {
                         log_err("Locale %s have %s not in ALL\n", loc, value);
-                        matchAll = FALSE;
+                        matchAll = false;
                         break;
                     }
                 } else {
-                    matchAll = FALSE;
+                    matchAll = false;
                     log_err("ERROR getting \"all\" keyword value for locale \"%s\"\n", loc);
                     break;
                 }

@@ -23,9 +23,9 @@ debug(debug),
 contractionsTable(NULL),
 duplicators(NULL),
 maxExpansionPrefixSize(0),
-wordSort(FALSE),
-frenchSecondary(FALSE),
-upperFirst(FALSE),
+wordSort(false),
+frenchSecondary(false),
+upperFirst(false),
 sortkeys(NULL),
 sortkeyOffset(0)
 {
@@ -57,7 +57,7 @@ SortedLines::~SortedLines()
 void
 SortedLines::getBounds(UErrorCode &status) {
   // first sort through the set
-  debug->log(toString(), TRUE);
+  debug->log(toString(), true);
   int32_t i = 0, j = 0;
   UColAttributeValue strength = UCOL_OFF;
   for(i = 0; i < size; i++) {
@@ -122,8 +122,8 @@ SortedLines::getBounds(UErrorCode &status) {
   UB[strength] = toSort[size-j];
   for(i = 0; i < UCOL_OFF; i++) {
     if(UB[i]) {
-      //debug->log(UB[i], TRUE);
-      debug->log(UB[i]->toString(TRUE), TRUE);
+      //debug->log(UB[i], true);
+      debug->log(UB[i]->toString(true), true);
     }
   }
 }
@@ -149,13 +149,13 @@ SortedLines::classifyRepertoire() {
       UColAttributeValue st = UCOL_OFF;
 
       logger->log("Interpolating to get the distance from empty for Line ");
-      logger->log(toSort[i]->toString(TRUE), TRUE);
+      logger->log(toSort[i]->toString(true), true);
 
       if(i) {
         st = probe.getStrength(*toSort[i-1], *toSort[i]);
         if(st == UCOL_OFF) {
           logger->log("Cannot deduce distance from empty using previous element. Something is very wrong! Line:");
-          logger->log(toSort[i]->toString(TRUE), TRUE);
+          logger->log(toSort[i]->toString(true), true);
         } else if(st == UCOL_IDENTICAL || st >= toSort[i-1]->strengthFromEmpty) {
           prevStrength  = toSort[i-1]->strengthFromEmpty;
         } else if(st < toSort[i-1]->strengthFromEmpty) { 
@@ -168,7 +168,7 @@ SortedLines::classifyRepertoire() {
         st = probe.getStrength(*toSort[i+1], *toSort[i]);
         if(st == UCOL_OFF) {
           logger->log("Cannot deduce distance from empty using next element. Something is very wrong! Line:");
-          logger->log(toSort[i]->toString(TRUE), TRUE);
+          logger->log(toSort[i]->toString(true), true);
         } else if(st == UCOL_IDENTICAL || st < toSort[i+1]->strengthFromEmpty) {
           nextStrength = toSort[i+1]->strengthFromEmpty;
         } else if(st >= toSort[i+1]->strengthFromEmpty) { 
@@ -195,12 +195,12 @@ SortedLines::classifyRepertoire() {
       lastChange = i;
       debug->log("Problem detected in distances from empty. Most probably word sort is on\n");
       */
-      wordSort = TRUE;
+      wordSort = true;
     }
     i++;
   }
   debug->log("Distances from empty string\n");
-  debug->log(toStringFromEmpty(), TRUE);
+  debug->log(toStringFromEmpty(), true);
 }
 
 void
@@ -217,15 +217,15 @@ SortedLines::analyse(UErrorCode &status) {
     return;
   }
   logger->log("upper first value is %i\n", upperFirst, upperFirst);
-  sort(TRUE, TRUE);
+  sort(true, true);
   classifyRepertoire();
   getBounds(status);
-  //sort(TRUE, TRUE);
+  //sort(true, true);
   addContractionsToRepertoire(status);
-  //sort(TRUE, TRUE);
+  //sort(true, true);
   debug->log("\n*** Order after detecting contractions\n\n");
   calculateSortKeys();
-  debug->log(toPrettyString(FALSE, TRUE), TRUE);
+  debug->log(toPrettyString(false, true), true);
   detectExpansions();
 }
 
@@ -412,7 +412,7 @@ int32_t SortedLines::addContractionsToRepertoire(UErrorCode &status)
   noConts = detectContractions(toSort, size, toSort, size, 
 			       delta, deltaSize, lesserToAddTo, lesserToAddToSize, 3*size, status);
   setSortingArray(deltaSorted, delta, deltaSize);
-  sort(deltaSorted, deltaSize, TRUE);
+  sort(deltaSorted, deltaSize, true);
 
   setDistancesFromEmpty(delta, deltaSize);
   int32_t deltaPSize = deltaSize;
@@ -438,9 +438,9 @@ int32_t SortedLines::addContractionsToRepertoire(UErrorCode &status)
 
       addAll(deltaP, deltaPSize);
       setSortingArray(toSort, lines, size);
-      sort(TRUE, TRUE);
+      sort(true, true);
       setSortingArray(newDeltaSorted, newDeltaP, newDeltaSize);
-      sort(newDeltaSorted, newDeltaSize, TRUE);
+      sort(newDeltaSorted, newDeltaSize, true);
 	  
       // if no new ones, bail
       //if (newDeltaSize == 0) break;
@@ -468,7 +468,7 @@ int32_t SortedLines::addContractionsToRepertoire(UErrorCode &status)
   setDistancesFromEmpty(lesserToAddTo, lesserToAddToSize);
   addAll(lesserToAddTo, lesserToAddToSize);
   setSortingArray(toSort, lines, size);
-  sort(TRUE, TRUE);
+  sort(true, true);
 
   delete[] deltaSorted;
   delete[] delta;
@@ -518,7 +518,7 @@ int32_t SortedLines::detectContractions(Line **firstRep, int32_t firstSize,
         }
       	if(duplicators && duplicators->get(UnicodeString(secondRep[j]->name, secondRep[j]->len)) != NULL) {
           debug->log("Skipping duplicator ");
-          debug->log(secondRep[j]->toString(), TRUE);
+          debug->log(secondRep[j]->toString(), true);
 		  continue;
 		}
 
@@ -623,7 +623,7 @@ int32_t SortedLines::detectContractions(Line **firstRep, int32_t firstSize,
 	// and 
 	// XY- <? XY <? XY+
 	Line xym, xyp, xy;
-	UBool xymIsContraction = FALSE, toAddIsContraction = FALSE;
+	UBool xymIsContraction = false, toAddIsContraction = false;
     if(j) {
 	  if(((!secondRep[j-1]->firstCC || firstRep[i]->lastCC < secondRep[j-1]->firstCC) && !frenchSecondary) 
              ||((!firstRep[i]->firstCC || firstRep[i]->firstCC > secondRep[j-1]->lastCC) && frenchSecondary)) {
@@ -650,7 +650,7 @@ int32_t SortedLines::detectContractions(Line **firstRep, int32_t firstSize,
 		  if(probe.compare(xyp, xym) >= 0) {
 		    // xyp looks like a contraction
 		    noteContraction("!1", toAddTo, toAddToSize, firstRep[i], secondRep[j], noConts, status);
-		    toAddIsContraction = TRUE;
+		    toAddIsContraction = true;
 		  } else {
 		    break;
 		  }
@@ -668,11 +668,11 @@ int32_t SortedLines::detectContractions(Line **firstRep, int32_t firstSize,
               if(probe.compare(xyp, xym) <= 0) {
 	            // xyp looks like a contraction
 	            noteContraction("!2", toAddTo, toAddToSize, firstRep[i], secondRep[j-1], noConts, status);
-	            xymIsContraction = TRUE;
+	            xymIsContraction = true;
               }
             }
           } else {
-            xymIsContraction = TRUE;
+            xymIsContraction = true;
           }
           // if they have reordered, but none has moved, then we add them both
           // and hope for the best
@@ -729,7 +729,7 @@ SortedLines::noteContraction(const char* msg, Line *toAddTo, int32_t &toAddToSiz
         // so while 'ch' is contraction, 'ch'+dot_above sorts between 'cg'+dot_above and 'ci'+dot_above
         debug->log("Con -");
         debug->log(msg);
-        debug->log(toAdd.toString(FALSE), TRUE);
+        debug->log(toAdd.toString(false), true);
         return;
       }
     } else {
@@ -741,7 +741,7 @@ SortedLines::noteContraction(const char* msg, Line *toAddTo, int32_t &toAddToSiz
           // so while 'ch' is contraction, 'ch'+dot_above sorts between 'cg'+dot_above and 'ci'+dot_above
           debug->log("Con -");
           debug->log(msg);
-          debug->log(toAdd.toString(FALSE), TRUE);
+          debug->log(toAdd.toString(false), true);
           return;
         }
       }
@@ -753,7 +753,7 @@ SortedLines::noteContraction(const char* msg, Line *toAddTo, int32_t &toAddToSiz
           // so while 'ch' is contraction, 'ch'+dot_above sorts between 'cg'+dot_above and 'ci'+dot_above
           debug->log("Con -");
           debug->log(msg);
-          debug->log(toAdd.toString(FALSE), TRUE);
+          debug->log(toAdd.toString(false), true);
           return;
         }
       }
@@ -770,7 +770,7 @@ SortedLines::noteContraction(const char* msg, Line *toAddTo, int32_t &toAddToSiz
       // so while 'ch' is contraction, 'ch'+dot_above sorts between 'cg'+dot_above and 'ci'+dot_above
       debug->log("Con -");
       debug->log(msg);
-      debug->log(toAdd.toString(FALSE), TRUE);
+      debug->log(toAdd.toString(false), true);
       return;
     }
   }
@@ -782,7 +782,7 @@ SortedLines::noteContraction(const char* msg, Line *toAddTo, int32_t &toAddToSiz
       noConts++;
       debug->log(msg);
       debug->log(" Con + ");
-      debug->log(toAdd.toString(FALSE), TRUE);
+      debug->log(toAdd.toString(false), true);
 
       if(!left->sortKey) {
         calculateSortKey(*left);
@@ -797,7 +797,7 @@ SortedLines::noteContraction(const char* msg, Line *toAddTo, int32_t &toAddToSiz
       debug->log(" = ");
 
       calculateSortKey(toAdd);
-      debug->log(toAdd.dumpSortkey(), TRUE);
+      debug->log(toAdd.dumpSortkey(), true);
       if(noConts > size/2) {
         status = U_BUFFER_OVERFLOW_ERROR;
       }
@@ -814,7 +814,7 @@ SortedLines::getExpansionLine(const Line &expansion, const Line &previous, const
   int32_t comparisonResult = 0;
   int32_t i = 0, k = 0, prevK = 0;
   Line trial;
-  UBool sequenceCompleted = FALSE;
+  UBool sequenceCompleted = false;
   int32_t expIndexes[256];
   int32_t expIndexesSize = 0;
 
@@ -834,7 +834,7 @@ SortedLines::getExpansionLine(const Line &expansion, const Line &previous, const
       prevK = 0;
       while(k < size) {
         if(expansionLine.len > 15) {
-          sequenceCompleted = TRUE;
+          sequenceCompleted = true;
           break;
         }
         while(k < size && toSort[k]->strength != UCOL_PRIMARY) 
@@ -860,12 +860,12 @@ SortedLines::getExpansionLine(const Line &expansion, const Line &previous, const
         comparisonResult = probe.compare(trial, expansion);
         if(comparisonResult == 0) {
           expansionLine = *toSort[k];
-          return TRUE;
+          return true;
         } else if (comparisonResult > 0) {
           if(prevK) {
             if(exp == *toSort[prevK]) {
               expansionLine = exp;
-              return TRUE;
+              return true;
             }
             i = prevK;
             while(i < k-1) {
@@ -892,7 +892,7 @@ SortedLines::getExpansionLine(const Line &expansion, const Line &previous, const
               int32_t putBreakPointHere = 0;
             }
           } else {
-            sequenceCompleted = TRUE;
+            sequenceCompleted = true;
             break;
           }
           //break;
@@ -912,7 +912,7 @@ int32_t
 SortedLines::gooseUp(int32_t resetIndex, int32_t expansionIndex, Line &expLine, int32_t *expIndexes, int32_t &expIndexSize, UColAttributeValue strength) 
 {
   int32_t i = expansionIndex, k = resetIndex+1, n = 0, m = 0, start = 0;
-  UBool haveChanges = FALSE;
+  UBool haveChanges = false;
   Line trial, prefix, suffix;
   // we will first try goosing up the reset index
   //while(toSort[k]->strength >= strength)
@@ -949,7 +949,7 @@ SortedLines::gooseUp(int32_t resetIndex, int32_t expansionIndex, Line &expLine, 
       }
     }
     if(k > expIndexes[n]+1) {
-      haveChanges = TRUE;
+      haveChanges = true;
       expIndexes[n] = k-1;
     }
     prefix.append(*toSort[expIndexes[n]]);
@@ -983,7 +983,7 @@ SortedLines::gooseUp(int32_t resetIndex, int32_t expansionIndex, Line &expLine, 
           }
           expIndexes[n] = k;
           expIndexSize++;
-          haveChanges = TRUE;
+          haveChanges = true;
           break;
         }
 #if 0
@@ -997,7 +997,7 @@ SortedLines::gooseUp(int32_t resetIndex, int32_t expansionIndex, Line &expLine, 
             }
             expIndexes[n] = k-1;
             expIndexSize++;
-            haveChanges = TRUE;
+            haveChanges = true;
             if(n == expIndexSize-1) { // added to the end of the string
               UColAttributeValue str = probe.getStrength(trial, *toSort[i]);
               int32_t putBreakHere = 0;
@@ -1031,7 +1031,7 @@ SortedLines::detectExpansions()
   int32_t exCount = 0;
   int32_t i = 0, j = 0, k = 0, prevK = 0;
   Line *previous, trial, expansionLine;
-  UBool foundExp = FALSE, sequenceCompleted = FALSE;
+  UBool foundExp = false, sequenceCompleted = false;
   UColAttributeValue strength = UCOL_OFF;
   UColAttributeValue maxStrength = UCOL_IDENTICAL;
   UColAttributeValue expStrength = UCOL_OFF;
@@ -1056,23 +1056,23 @@ SortedLines::detectExpansions()
     { 
       int32_t putBreakpointhere = 0;
     }
-    foundExp = FALSE;
-    sequenceCompleted = FALSE;
+    foundExp = false;
+    sequenceCompleted = false;
     strength = toSort[i]->strength;
-    if(strength == UCOL_IDENTICAL && toSort[i-1]->isExpansion == TRUE) {
+    if(strength == UCOL_IDENTICAL && toSort[i-1]->isExpansion == true) {
       u_strcpy(toSort[i]->expansionString, toSort[i-1]->expansionString);
       toSort[i]->expLen = toSort[i-1]->expLen;
-      toSort[i]->isExpansion = TRUE;
+      toSort[i]->isExpansion = true;
       toSort[i]->expIndex = toSort[i-1]->expIndex;
       toSort[i]->expStrength = UCOL_IDENTICAL;
       //toSort[i]->expStrength = toSort[i-1]->expStrength;
-      foundExp = TRUE;
-      sequenceCompleted = TRUE;
+      foundExp = true;
+      sequenceCompleted = true;
     }
     //logger->log("%i %i\n", i, j);
     while(!foundExp && strength <= maxStrength) {
       j = i-1;
-      while(j && (toSort[j]->isExpansion == TRUE || toSort[j]->isRemoved == TRUE)) {
+      while(j && (toSort[j]->isExpansion == true || toSort[j]->isRemoved == true)) {
         //if(toSort[j]->strength < strength) {
           //strength = toSort[j]->strength;
         //}
@@ -1096,7 +1096,7 @@ SortedLines::detectExpansions()
         //trial.setToConcat(previous, UB[strength]);
         trial.setToConcat(previous, UB[probe.getStrength(*toSort[j], *toSort[i])]);
         if(probe.compare(trial, *toSort[i]) > 0) {
-          foundExp = TRUE;
+          foundExp = true;
         }
       //}
       if(strength == UCOL_QUATERNARY) {
@@ -1122,7 +1122,7 @@ SortedLines::detectExpansions()
         prevK = 0;
         while(k < size) {
           if(expansionLine.len > 15) {
-            sequenceCompleted = TRUE;
+            sequenceCompleted = true;
             break;
           }
           while(k < size && toSort[k]->strength != UCOL_PRIMARY) {
@@ -1158,7 +1158,7 @@ SortedLines::detectExpansions()
                 int32_t putBreakPointHere = 0;
               }
             } else {
-              sequenceCompleted = TRUE;
+              sequenceCompleted = true;
               break;
             }
             //break;
@@ -1209,7 +1209,7 @@ SortedLines::detectExpansions()
         }
         if((!isExpansionLineAContraction && s1 >= expStrength) || (diffLen <= 0 && s1 == UCOL_IDENTICAL)) {
           contractionsTable->remove(UnicodeString(toSort[i]->name, toSort[i]->len));
-          toSort[i]->isRemoved = TRUE;
+          toSort[i]->isRemoved = true;
           if(toSort[i]->next && toSort[i]->previous) {
             toSort[i]->previous->next = toSort[i]->next;
           }
@@ -1217,14 +1217,14 @@ SortedLines::detectExpansions()
             toSort[i]->next->previous = toSort[i]->previous;
           }
 	      debug->log("Exp -N: ");
-	      debug->log(toSort[i]->toString(FALSE));
+	      debug->log(toSort[i]->toString(false));
 	      debug->log(" / ");
-	      debug->log(expansionLine.toString(FALSE), TRUE);
+	      debug->log(expansionLine.toString(false), true);
         }
         else
         {         
           u_strncat(toSort[i]->expansionString, expansionLine.name, expansionLine.len);
-          toSort[i]->isExpansion = TRUE;
+          toSort[i]->isExpansion = true;
           toSort[i]->expStrength = expStrength;
           toSort[i]->expLen = expansionLine.len;
           toSort[i]->expansionString[toSort[i]->expLen] = 0;
@@ -1232,12 +1232,12 @@ SortedLines::detectExpansions()
         }
       }
     }
-    if(toSort[i]->isExpansion == TRUE) {
+    if(toSort[i]->isExpansion == true) {
       if(debug->isOn()) {
         debug->log("Exp + : &");
-        debug->log(toSort[j]->toString(FALSE));
-        debug->log(toSort[i]->strengthToString(toSort[i]->expStrength, TRUE));
-        debug->log(toSort[i]->toString(FALSE));
+        debug->log(toSort[j]->toString(false));
+        debug->log(toSort[i]->strengthToString(toSort[i]->expStrength, true));
+        debug->log(toSort[i]->toString(false));
         debug->log(" ");
         if(!toSort[j]->sortKey) {
           calculateSortKey(*toSort[j]);
@@ -1250,7 +1250,7 @@ SortedLines::detectExpansions()
         debug->log(toSort[i]->dumpSortkey());
         calculateSortKey(expansionLine);
         debug->log("/");
-        debug->log(expansionLine.dumpSortkey(), TRUE);
+        debug->log(expansionLine.dumpSortkey(), true);
       }
       
     }
@@ -1374,7 +1374,7 @@ SortedLines::arrayToString(Line** sortedLines, int32_t linesSize, UBool pretty, 
   Line *line = NULL;
   Line *previous = sortedLines[0];
   if(printSortKeys && !sortkeys) {
-    printSortKeys = FALSE;
+    printSortKeys = false;
   }
   if(previous->isReset) {
     result.append(" & ");
@@ -1436,9 +1436,9 @@ debug(debug),
 contractionsTable(NULL),
 duplicators(NULL),
 maxExpansionPrefixSize(0),
-wordSort(FALSE),
-frenchSecondary(FALSE),
-upperFirst(FALSE),
+wordSort(false),
+frenchSecondary(false),
+upperFirst(false),
 sortkeys(NULL),
 sortkeyOffset(0)
 {
@@ -1506,8 +1506,8 @@ SortedLines::toFile(FILE *file, UBool useLinks, UErrorCode &status)
 
 UnicodeString 
 SortedLines::toStringFromEmpty() {
-  UBool useLinks = FALSE;
-  UBool pretty = FALSE;
+  UBool useLinks = false;
+  UBool pretty = false;
   UnicodeString result;
   int32_t i = 0;
 
@@ -1558,14 +1558,14 @@ SortedLines::toStringFromEmpty() {
 UnicodeString 
 SortedLines::toString(UBool useLinks) 
 {
-  return arrayToString(toSort, size, FALSE, useLinks, FALSE);
+  return arrayToString(toSort, size, false, useLinks, false);
 }
 
 
 UnicodeString 
 SortedLines::toPrettyString(UBool useLinks, UBool printSortKeys) 
 {
-  return arrayToString(toSort, size, TRUE, useLinks, printSortKeys);
+  return arrayToString(toSort, size, true, useLinks, printSortKeys);
 }
 
 UnicodeString 
@@ -1788,8 +1788,8 @@ SortedLines::reduceDifference(SortedLines& reference) {
   Hashtable *seenReference = new Hashtable();
 
 
-  UBool found = FALSE;
-  UBool finished = FALSE;
+  UBool found = false;
+  UBool finished = false;
   const int32_t lookForward = 20;
   int32_t tailoringMove = 0;
   //int32_t referenceSize = reference.getSize();
@@ -1798,18 +1798,18 @@ SortedLines::reduceDifference(SortedLines& reference) {
   refLine = refLine->next;
   Line *myLine = getFirst();
   Line *myLatestEqual = myLine;
-  myLatestEqual->isRemoved = TRUE;
+  myLatestEqual->isRemoved = true;
   myLine = myLine->next;
   while(myLine && refLine) {
-    found = FALSE;
+    found = false;
     while(myLine && refLine && myLine->equals(*refLine)) {
       myLatestEqual = myLine;
-      myLatestEqual->isRemoved = TRUE;
+      myLatestEqual->isRemoved = true;
       myLine = myLine->next;
       refLatestEqual = refLine;
       refLine = refLine->next;
       if(refLine == NULL && myLine == NULL) {
-        finished = TRUE;
+        finished = true;
       }
     }
     if(myLine) {
@@ -1869,7 +1869,7 @@ SortedLines::reduceDifference(SortedLines& reference) {
       if(refLine == NULL) { // ran out of reference
         // this is the tail of tailoring - the last insertion
         myLine  = NULL;
-        found = TRUE;
+        found = true;
       } else if(tailoringMove == lookForward || myLine == NULL) { // run over treshold or out of tailoring
         tailoringMove = 0;
         // we didn't find insertion after all
@@ -1901,7 +1901,7 @@ SortedLines::reduceDifference(SortedLines& reference) {
             continue;
           }
         }
-        found = TRUE;
+        found = true;
       }
       if(found) {
         if(myLatestEqual->next != myLine || refLine == NULL) {
@@ -1938,7 +1938,7 @@ SortedLines::reduceDifference(SortedLines& reference) {
             while(refStart && refStart != refLine) {
               if(*myStart == *refStart) {
                 if(myStart->cumulativeStrength == refStart->cumulativeStrength) {
-                  myStart->isRemoved = TRUE;
+                  myStart->isRemoved = true;
                   removed++;
                 }
               }
@@ -1948,8 +1948,8 @@ SortedLines::reduceDifference(SortedLines& reference) {
             traversed++;
           }
           if(removed < traversed) {
-            myLatestEqual->isReset = TRUE;
-            myLatestEqual->isRemoved = FALSE;
+            myLatestEqual->isReset = true;
+            myLatestEqual->isRemoved = false;
           }
 
           myLatestEqual = myLine;
@@ -2014,7 +2014,7 @@ SortedLines::removeDecompositionsFromRepertoire() {
       len = repertoireIter.getString().length();
       u_memcpy(string, repertoireIter.getString().getBuffer(), len);
     } else { // process code point
-      UBool isError = FALSE;
+      UBool isError = false;
       U16_APPEND(string, len, 25, repertoireIter.getCodepoint(), isError);
     }
     string[len] = 0; // zero terminate, for our evil ways
@@ -2027,7 +2027,7 @@ SortedLines::removeDecompositionsFromRepertoire() {
     }
   }
   debug->log("\nRemoving\n");
-  debug->log(toRemove.toPattern(compString, TRUE), TRUE);
+  debug->log(toRemove.toPattern(compString, true), true);
   repertoire.removeAll(toRemove);
 }
 

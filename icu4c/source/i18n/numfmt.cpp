@@ -186,7 +186,7 @@ static UBool U_CALLCONV numfmt_cleanup(void) {
         uhash_close(NumberingSystem_cache);
         NumberingSystem_cache = NULL;
     }
-    return TRUE;
+    return true;
 }
 U_CDECL_END
 
@@ -229,13 +229,13 @@ SimpleNumberFormatFactory::getSupportedIDs(int32_t &count, UErrorCode& status) c
 // -------------------------------------
 // default constructor
 NumberFormat::NumberFormat()
-:   fGroupingUsed(TRUE),
+:   fGroupingUsed(true),
     fMaxIntegerDigits(gDefaultMaxIntegerDigits),
     fMinIntegerDigits(1),
     fMaxFractionDigits(3), // invariant, >= minFractionDigits
     fMinFractionDigits(0),
-    fParseIntegerOnly(FALSE),
-    fLenient(FALSE),
+    fParseIntegerOnly(false),
+    fLenient(false),
     fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
     fCurrency[0] = 0;
@@ -294,39 +294,39 @@ NumberFormat::operator==(const Format& that) const
 #ifdef FMT_DEBUG
     // This code makes it easy to determine why two format objects that should
     // be equal aren't.
-    UBool first = TRUE;
+    UBool first = true;
     if (!Format::operator==(that)) {
-        if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
+        if (first) { printf("[ "); first = false; } else { printf(", "); }
         debug("Format::!=");
     }
     if (!(fMaxIntegerDigits == other->fMaxIntegerDigits &&
           fMinIntegerDigits == other->fMinIntegerDigits)) {
-        if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
+        if (first) { printf("[ "); first = false; } else { printf(", "); }
         debug("Integer digits !=");
     }
     if (!(fMaxFractionDigits == other->fMaxFractionDigits &&
           fMinFractionDigits == other->fMinFractionDigits)) {
-        if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
+        if (first) { printf("[ "); first = false; } else { printf(", "); }
         debug("Fraction digits !=");
     }
     if (!(fGroupingUsed == other->fGroupingUsed)) {
-        if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
+        if (first) { printf("[ "); first = false; } else { printf(", "); }
         debug("fGroupingUsed != ");
     }
     if (!(fParseIntegerOnly == other->fParseIntegerOnly)) {
-        if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
+        if (first) { printf("[ "); first = false; } else { printf(", "); }
         debug("fParseIntegerOnly != ");
     }
     if (!(u_strcmp(fCurrency, other->fCurrency) == 0)) {
-        if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
+        if (first) { printf("[ "); first = false; } else { printf(", "); }
         debug("fCurrency !=");
     }
     if (!(fLenient == other->fLenient)) {
-        if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
+        if (first) { printf("[ "); first = false; } else { printf(", "); }
         debug("fLenient != ");
     }
     if (!(fCapitalizationContext == other->fCapitalizationContext)) {
-        if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
+        if (first) { printf("[ "); first = false; } else { printf(", "); }
         debug("fCapitalizationContext != ");
     }
     if (!first) { printf(" ]"); }
@@ -502,7 +502,7 @@ ArgExtractor::iso(void) const {
 }
 
 ArgExtractor::ArgExtractor(const NumberFormat& /*nf*/, const Formattable& obj, UErrorCode& /*status*/)
-  : num(&obj), fWasCurrency(FALSE) {
+  : num(&obj), fWasCurrency(false) {
 
     const UObject* o = obj.getObject(); // most commonly o==NULL
     const CurrencyAmount* amt;
@@ -512,7 +512,7 @@ ArgExtractor::ArgExtractor(const NumberFormat& /*nf*/, const Formattable& obj, U
         //const UChar* curr = amt->getISOCurrency();
         u_strcpy(save, amt->getISOCurrency());
         num = &amt->getNumber();
-        fWasCurrency=TRUE;
+        fWasCurrency=true;
     } else {
       save[0]=0;
     }
@@ -1007,13 +1007,13 @@ UBool U_EXPORT2
 NumberFormat::unregister(URegistryKey key, UErrorCode& status)
 {
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
     if (haveService()) {
         return gService->unregister(key, status);
     } else {
         status = U_ILLEGAL_ARGUMENT_ERROR;
-        return FALSE;
+        return false;
     }
 }
 
@@ -1337,11 +1337,11 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
 
         // if the locale has "@compat=host", create a host-specific NumberFormat
         if (U_SUCCESS(status) && count > 0 && uprv_strcmp(buffer, "host") == 0) {
-            UBool curr = TRUE;
+            UBool curr = true;
 
             switch (style) {
             case UNUM_DECIMAL:
-                curr = FALSE;
+                curr = false;
                 // fall-through
                 U_FALLTHROUGH;
 
@@ -1415,7 +1415,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
                 ns->getName(),
                 gFormatCldrStyles[style],
                 status);
-        pattern = UnicodeString(TRUE, patternPtr, -1);
+        pattern = UnicodeString(true, patternPtr, -1);
     }
     if (U_FAILURE(status)) {
         return NULL;
@@ -1468,8 +1468,8 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         // replace single currency sign in the pattern with double currency sign
         // if the style is UNUM_CURRENCY_ISO
         if (style == UNUM_CURRENCY_ISO) {
-            pattern.findAndReplace(UnicodeString(TRUE, gSingleCurrencySign, 1),
-                                   UnicodeString(TRUE, gDoubleCurrencySign, 2));
+            pattern.findAndReplace(UnicodeString(true, gSingleCurrencySign, 1),
+                                   UnicodeString(true, gDoubleCurrencySign, 2));
         }
 
         // "new DecimalFormat()" does not adopt the symbols argument if its memory allocation fails.

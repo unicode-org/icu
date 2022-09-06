@@ -2118,7 +2118,7 @@ public class BasicTest extends TestFmwk {
             nfcNorm2.getDecomposition(0x4e00)!=null ||
             nfcNorm2.getDecomposition(0x20002)!=null
         ) {
-            errln("NFC.getDecomposition() returns TRUE for characters which do not have decompositions");
+            errln("NFC.getDecomposition() returns true for characters which do not have decompositions");
         }
 
         // test getRawDecomposition() for some characters that do not decompose
@@ -2126,7 +2126,7 @@ public class BasicTest extends TestFmwk {
             nfcNorm2.getRawDecomposition(0x4e00)!=null ||
             nfcNorm2.getRawDecomposition(0x20002)!=null
         ) {
-            errln("getRawDecomposition() returns TRUE for characters which do not have decompositions");
+            errln("getRawDecomposition() returns true for characters which do not have decompositions");
         }
 
         // test composePair() for some pairs of characters that do not compose

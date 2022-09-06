@@ -1507,7 +1507,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * the pattern map from parent locales.
      *
      * @param key of the availableFormatMask in CLDR
-     * @return TRUE if the corresponding slot of CLDR_AVAIL_FORMAT_KEY[]
+     * @return true if the corresponding slot of CLDR_AVAIL_FORMAT_KEY[]
      * has been added to DateTimePatternGenerator.
      * @stable ICU 3.6
      */

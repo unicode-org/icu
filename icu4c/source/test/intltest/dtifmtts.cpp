@@ -1986,7 +1986,7 @@ void DateIntervalFormatTest::testCreateInstanceForAllLocales() {
     for (int32_t i = 0; i < locale_count; i++) {
         std::unique_ptr<icu::StringEnumeration> calendars(
             icu::Calendar::getKeywordValuesForLocale(
-                "calendar", locales[i], FALSE, status));
+                "calendar", locales[i], false, status));
         int32_t calendar_count = calendars->count(status);
         if (status.errIfFailureAndReset()) { break; }
         // In quick mode, only run 1/5 of locale combination

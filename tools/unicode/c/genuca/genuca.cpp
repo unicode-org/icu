@@ -70,7 +70,7 @@ enum HanOrderValue {
     HAN_RADICAL_STROKE
 };
 
-static UBool beVerbose=FALSE, withCopyright=TRUE, icu4xMode=FALSE;
+static UBool beVerbose=false, withCopyright=true, icu4xMode=false;
 
 static HanOrderValue hanOrder = HAN_NO_ORDER;
 
@@ -412,7 +412,7 @@ static int32_t getCharScript(UChar32 c) {
  */
 class HanOrder {
 public:
-    HanOrder(UErrorCode &errorCode) : ranges(errorCode), set(), done(FALSE) {}
+    HanOrder(UErrorCode &errorCode) : ranges(errorCode), set(), done(false) {}
 
     void addRange(UChar32 start, UChar32 end, UErrorCode &errorCode) {
         int32_t length = ranges.size();
@@ -429,11 +429,11 @@ public:
     void setBuilderHanOrder(CollationBaseDataBuilder &builder, UErrorCode &errorCode) {
         if(U_FAILURE(errorCode)) { return; }
         builder.initHanRanges(ranges.getBuffer(), ranges.size(), errorCode);
-        done = TRUE;
+        done = true;
     }
 
     void setDone() {
-        done = TRUE;
+        done = true;
     }
 
     UBool isDone() { return done; }
@@ -681,7 +681,7 @@ readAnElement(char *line,
         int64_t ces[32], int32_t &cesLength,
         UErrorCode *status) {
     if(U_FAILURE(*status)) {
-        return FALSE;
+        return false;
     }
     int32_t lineLength = (int32_t)uprv_strlen(line);
     while(lineLength>0 && (line[lineLength-1] == '\r' || line[lineLength-1] == '\n')) {
@@ -696,13 +696,13 @@ readAnElement(char *line,
         lineLength -= 3;
     }
     if(line[0] == 0 || line[0] == '#') {
-        return FALSE; // just a comment, skip whole line
+        return false; // just a comment, skip whole line
     }
 
     // Directives.
     if(line[0] == '[') {
         readAnOption(builder, line, status);
-        return FALSE;
+        return false;
     }
 
     CharString input;
@@ -711,7 +711,7 @@ readAnElement(char *line,
     if(endCodePoint == NULL) {
         fprintf(stderr, "error - line with no code point:\n%s\n", line);
         *status = U_INVALID_FORMAT_ERROR; /* No code point - could be an error, but probably only an empty line */
-        return FALSE;
+        return false;
     }
 
     char *pipePointer = strchr(line, '|');
@@ -728,7 +728,7 @@ readAnElement(char *line,
             fprintf(stderr, "error - parsing of prefix \"%s\" failed: %s\n%s\n",
                     input.data(), line, u_errorName(*status));
             *status = U_INVALID_FORMAT_ERROR;
-            return FALSE;
+            return false;
         }
         prefix.releaseBuffer(prefixSize);
         startCodePoint = pipePointer + 1;
@@ -747,7 +747,7 @@ readAnElement(char *line,
         fprintf(stderr, "error - parsing of code point(s) \"%s\" failed: %s\n%s\n",
                 input.data(), line, u_errorName(*status));
         *status = U_INVALID_FORMAT_ERROR;
-        return FALSE;
+        return false;
     }
     s.releaseBuffer(cSize);
 
@@ -767,13 +767,13 @@ readAnElement(char *line,
         if(cesLength >= 31) {
             fprintf(stderr, "Error: Too many CEs on line '%s'\n", line);
             *status = U_INVALID_FORMAT_ERROR;
-            return FALSE;
+            return false;
         }
         ces[cesLength++] = parseCE(builder, pointer, *status);
         if(U_FAILURE(*status)) {
             fprintf(stderr, "Syntax error parsing CE from line '%s' - %s\n",
                     line, u_errorName(*status));
-            return FALSE;
+            return false;
         }
     }
 
@@ -787,17 +787,17 @@ readAnElement(char *line,
         // intltest collate/CollationTest/TestRootElements
         for (int32_t i = 0; i < cesLength; ++i) {
             int64_t ce = ces[i];
-            UBool isCompressible = FALSE;
+            UBool isCompressible = false;
             for (int j = 7; j >= 0; --j) {
                 uint8_t b = (uint8_t)(ce >> (j * 8));
                 if(j <= 1) { b &= 0x3f; }  // tertiary bytes use 6 bits
                 if (b == 1) {
                     fprintf(stderr, "Warning: invalid UCA weight byte 01 for %s\n", line);
-                    return FALSE;
+                    return false;
                 }
                 if (j == 7 && b == 2) {
                     fprintf(stderr, "Warning: invalid UCA primary weight lead byte 02 for %s\n", line);
-                    return FALSE;
+                    return false;
                 }
                 if (j == 7) {
                     isCompressible = builder.isCompressibleLeadByte(b);
@@ -808,14 +808,14 @@ readAnElement(char *line,
                     if (isCompressible && (b <= 3 || b == 0xff)) {
                         fprintf(stderr, "Warning: invalid UCA primary second weight byte %02X for %s\n",
                                 b, line);
-                        return FALSE;
+                        return false;
                     }
                 }
             }
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 static void

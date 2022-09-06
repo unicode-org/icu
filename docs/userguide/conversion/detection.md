@@ -256,7 +256,7 @@ static char buffer[BUFFER_SIZE] = {....};
 int32_t inputLength = ... // length of the input text
 UErrorCode status = U_ZERO_ERROR;
 ucsdet_setText(csd, buffer, inputLength, &status);
-ucsdet_enableInputFilter(csd, TRUE);
+ucsdet_enableInputFilter(csd, true);
 ucm = ucsdet_detect(csd, &status);
 ```
 

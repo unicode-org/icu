@@ -34,10 +34,10 @@ U_NAMESPACE_USE
 /*
  * Global - verbosity
  */
-UBool VERBOSE = FALSE;
-UBool QUIET = FALSE;
+UBool VERBOSE = false;
+UBool QUIET = false;
 
-UBool haveCopyright = TRUE;
+UBool haveCopyright = true;
 UCPTrieType trieType = UCPTRIE_TYPE_SMALL;
 const char* destdir = "";
 
@@ -506,21 +506,21 @@ const uint32_t NON_ROUND_TRIP_MARKER = 1;
 
 UBool permissibleBmpPair(UBool knownToRoundTrip, UChar32 c, UChar32 second) {
     if (knownToRoundTrip) {
-        return TRUE;
+        return true;
     }
     // Nuktas, Hebrew presentation forms and polytonic Greek with oxia
     // are special-cased in ICU4X.
     if (c >= 0xFB1D && c <= 0xFB4E) {
         // Hebrew presentation forms
-        return TRUE;
+        return true;
     }
     if (c >= 0x1F71 && c <= 0x1FFB) {
         // Polytonic Greek with oxia
-        return TRUE;
+        return true;
     }
     if ((second & 0x7F) == 0x3C && second >= 0x0900 && second <= 0x0BFF) {
         // Nukta
-        return TRUE;
+        return true;
     }
     // To avoid more branchiness, 4 characters that decompose to
     // a BMP starter followed by a BMP non-starter are excluded
@@ -530,7 +530,7 @@ UBool permissibleBmpPair(UBool knownToRoundTrip, UChar32 c, UChar32 second) {
     // U+0F78 TIBETAN VOWEL SIGN VOCALIC L
     // U+212B ANGSTROM SIGN
     // U+2ADC FORKING
-    return FALSE;
+    return false;
 }
 
 // Computes data for canonical decompositions
@@ -601,7 +601,7 @@ void computeDecompositions(const char* basename,
         // True if we're building non-NFD or we're building NFD but
         // the `c` round trips to NFC.
         // False if we're building NFD and `c` does not round trip to NFC.
-        UBool nonNfdOrRoundTrips = TRUE;
+        UBool nonNfdOrRoundTrips = true;
         src.append(c);
         if (mainNormalizer != nfdNormalizer) {
             UnicodeString inter;
@@ -690,7 +690,7 @@ void computeDecompositions(const char* basename,
         } else {
             if (src == dst) {
                 if (startsWithBackwardCombiningStarter) {
-                    pendingTrieInsertions.push_back({c, BACKWARD_COMBINING_STARTER_MARKER << 16, FALSE});
+                    pendingTrieInsertions.push_back({c, BACKWARD_COMBINING_STARTER_MARKER << 16, false});
                 }
                 continue;
             }
@@ -760,7 +760,7 @@ void computeDecompositions(const char* basename,
                     handleError(status, basename);
                 }
             }
-            pendingTrieInsertions.push_back({c, uint32_t(utf32[0]) << 16, FALSE});
+            pendingTrieInsertions.push_back({c, uint32_t(utf32[0]) << 16, false});
         } else if (len == 2 &&
                    utf32[0] <= 0xFFFF &&
                    utf32[1] <= 0xFFFF &&
@@ -779,15 +779,15 @@ void computeDecompositions(const char* basename,
                 status.set(U_INTERNAL_PROGRAM_ERROR);
                 handleError(status, basename);
             }
-            pendingTrieInsertions.push_back({c, (uint32_t(utf32[0]) << 16) | uint32_t(utf32[1]), FALSE});
+            pendingTrieInsertions.push_back({c, (uint32_t(utf32[0]) << 16) | uint32_t(utf32[1]), false});
         } else {
             if (startsWithBackwardCombiningStarter) {
                 status.set(U_INTERNAL_PROGRAM_ERROR);
                 handleError(status, basename);
             }
 
-            UBool supplementary = FALSE;
-            UBool nonInitialStarter = FALSE;
+            UBool supplementary = false;
+            UBool nonInitialStarter = false;
             for (int32_t i = 0; i < len; ++i) {
                 if (((utf32[i] == 0x0345) && (uprv_strcmp(basename, "uts46d") == 0)) || utf32[i] == 0xFF9E || utf32[i] == 0xFF9F) {
                     // Assert that iota subscript and half-width voicing marks never occur in these
@@ -797,14 +797,14 @@ void computeDecompositions(const char* basename,
                 }
 
                 if (utf32[i] > 0xFFFF) {
-                    supplementary = TRUE;
+                    supplementary = true;
                 }
                 if (utf32[i] == 0) {
                     status.set(U_INTERNAL_PROGRAM_ERROR);
                     handleError(status, basename);
                 }
                 if (i != 0 && !u_getCombiningClass(utf32[i])) {
-                    nonInitialStarter = TRUE;
+                    nonInitialStarter = true;
                 }
             }
             if (!supplementary) {
@@ -850,13 +850,13 @@ void computeDecompositions(const char* basename,
                 handleError(status, basename);
             }
             size_t index = 0;
-            bool writeToStorage = FALSE;
+            bool writeToStorage = false;
             // Sadly, C++ lacks break and continue by label, so using goto in the
             // inner loops to break or continue the outer loop.
             if (!supplementary) {
                 outer16: for (;;) {
                     if (index == storage16.size()) {
-                        writeToStorage = TRUE;
+                        writeToStorage = true;
                         break;
                     }
                     if (storage16[index] == utf32[0]) {
@@ -875,7 +875,7 @@ void computeDecompositions(const char* basename,
             } else {
                 outer32: for (;;) {
                     if (index == storage32.size()) {
-                        writeToStorage = TRUE;
+                        writeToStorage = true;
                         break;
                     }
                     if (storage32[index] == uint32_t(utf32[0])) {
@@ -1130,7 +1130,7 @@ addRangeToUCPTrie(const void* context, UChar32 start, UChar32 end, uint32_t valu
     umutablecptrie_setRange(ucptrie, start, end, value, status);
     handleError(status, "setRange");
 
-    return TRUE;
+    return true;
 }
 
 int exportCase(int argc, char* argv[]) {

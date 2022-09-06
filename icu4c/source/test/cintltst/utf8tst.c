@@ -15,6 +15,8 @@
 *******************************************************************************
 */
 
+#include <stdbool.h>
+
 #include "unicode/utypes.h"
 #include "unicode/utf8.h"
 #include "unicode/utf_old.h"
@@ -195,7 +197,7 @@ static void TestCharLength()
               log_verbose("The no: of code units for %lx is %d\n",c, U8_LENGTH(c));
         }
 #if !U_HIDE_OBSOLETE_UTF_OLD_H
-        multiple=(UBool)(codepoint[i] == 1 ? FALSE : TRUE);
+        multiple=(UBool)(codepoint[i] == 1 ? false : true);
         if(UTF8_NEED_MULTIPLE_UCHAR(c) != multiple){
               log_err("ERROR: UTF8_NEED_MULTIPLE_UCHAR failed for %lx\n", c);
         }
@@ -263,7 +265,7 @@ static void TestGetChar()
         }
         expected=result[i+1];
 #if !U_HIDE_OBSOLETE_UTF_OLD_H
-        UTF8_GET_CHAR_SAFE(input, 0, offset, sizeof(input), c, FALSE);
+        UTF8_GET_CHAR_SAFE(input, 0, offset, sizeof(input), c, false);
         if(c != expected){
             log_err("ERROR: UTF8_GET_CHAR_SAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
         }
@@ -280,7 +282,7 @@ static void TestGetChar()
             log_err("ERROR: U8_GET_OR_FFFD failed for offset=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
         }
 #if !U_HIDE_OBSOLETE_UTF_OLD_H
-        UTF8_GET_CHAR_SAFE(input, 0, offset, sizeof(input), c, TRUE);
+        UTF8_GET_CHAR_SAFE(input, 0, offset, sizeof(input), c, true);
         if(c != result[i+2]){
             log_err("ERROR: UTF8_GET_CHAR_SAFE(strict) failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+2], c);
         }
@@ -347,7 +349,7 @@ static void TestNextPrevChar() {
         expected=result[i];  // next_safe_ns
 #if !U_HIDE_OBSOLETE_UTF_OLD_H
         setOffset=offset;
-        UTF8_NEXT_CHAR_SAFE(input, setOffset, sizeof(input), c, FALSE);
+        UTF8_NEXT_CHAR_SAFE(input, setOffset, sizeof(input), c, false);
         if(setOffset != movedOffset[j]) {
             log_err("ERROR: UTF8_NEXT_CHAR_SAFE failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
                 offset, movedOffset[j], setOffset);
@@ -379,7 +381,7 @@ static void TestNextPrevChar() {
         }
 #if !U_HIDE_OBSOLETE_UTF_OLD_H
         setOffset=offset;
-        UTF8_NEXT_CHAR_SAFE(input, setOffset, sizeof(input), c, TRUE);
+        UTF8_NEXT_CHAR_SAFE(input, setOffset, sizeof(input), c, true);
         if(setOffset != movedOffset[j]) {
             log_err("ERROR: UTF8_NEXT_CHAR_SAFE(strict) failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
                 offset, movedOffset[j], setOffset);
@@ -399,7 +401,7 @@ static void TestNextPrevChar() {
         expected=result[i+2];  // prev_safe_ns
 #if !U_HIDE_OBSOLETE_UTF_OLD_H
         setOffset=offset;
-        UTF8_PREV_CHAR_SAFE(input, 0, setOffset, c, FALSE);
+        UTF8_PREV_CHAR_SAFE(input, 0, setOffset, c, false);
         if(setOffset != movedOffset[j+1]) {
             log_err("ERROR: UTF8_PREV_CHAR_SAFE failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
                 offset, movedOffset[j+1], setOffset);
@@ -431,7 +433,7 @@ static void TestNextPrevChar() {
         }
 #if !U_HIDE_OBSOLETE_UTF_OLD_H
         setOffset=offset;
-        UTF8_PREV_CHAR_SAFE(input, 0,  setOffset, c, TRUE);
+        UTF8_PREV_CHAR_SAFE(input, 0,  setOffset, c, true);
         if(setOffset != movedOffset[j+1]) {
             log_err("ERROR: UTF8_PREV_CHAR_SAFE(strict) failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
                 offset, movedOffset[j+1], setOffset);
@@ -570,13 +572,13 @@ static void TestNextPrevNonCharacters() {
 #if !U_HIDE_OBSOLETE_UTF_OLD_H
     for(idx=0; idx<(int32_t)sizeof(nonChars);) {
         UChar32 expected= nonChars[idx]<0xf0 ? 0xffff : 0x10ffff;
-        UTF8_NEXT_CHAR_SAFE(nonChars, idx, sizeof(nonChars), ch, TRUE);
+        UTF8_NEXT_CHAR_SAFE(nonChars, idx, sizeof(nonChars), ch, true);
         if(ch!=expected) {
             log_err("UTF8_NEXT_CHAR_SAFE(strict, before %d) failed to read a non-character\n", idx);
         }
     }
     for(idx=(int32_t)sizeof(nonChars); idx>0;) {
-        UTF8_PREV_CHAR_SAFE(nonChars, 0, idx, ch, TRUE);
+        UTF8_PREV_CHAR_SAFE(nonChars, 0, idx, ch, true);
         UChar32 expected= nonChars[idx]<0xf0 ? 0xffff : 0x10ffff;
         if(ch!=expected) {
             log_err("UTF8_PREV_CHAR_SAFE(strict, at %d) failed to read a non-character\n", idx);
@@ -1215,11 +1217,11 @@ static void TestAppend() {
     }
 
     length=0;
-    wrongIsError=FALSE;
+    wrongIsError=false;
     for(i=0; i<UPRV_LENGTHOF(codePoints); ++i) {
         c=codePoints[i];
         expectIsError= c<0 || 0x10ffff<c || U_IS_SURROGATE(c);
-        isError=FALSE;
+        isError=false;
 
         U8_APPEND(buffer, length, UPRV_LENGTHOF(buffer), c, isError);
         wrongIsError|= isError!=expectIsError;

@@ -128,7 +128,7 @@ UnicodeString toString(UBool b);
 #define TESTCASE_AUTO_END \
         name = ""; \
         break; \
-    } while (TRUE)
+    } while (true)
 
 
 // WHERE Macro yields a literal string of the form "source_file_name:line number "
@@ -144,13 +144,13 @@ public:
 
     virtual UBool runTest( char* name = NULL, char* par = NULL, char *baseName = NULL); // not to be overridden
 
-    virtual UBool setVerbose( UBool verbose = TRUE );
-    virtual UBool setNoErrMsg( UBool no_err_msg = TRUE );
-    virtual UBool setQuick( UBool quick = TRUE );
-    virtual UBool setLeaks( UBool leaks = TRUE );
-    virtual UBool setNotime( UBool no_time = TRUE );
-    virtual UBool setWarnOnMissingData( UBool warn_on_missing_data = TRUE );
-    virtual UBool setWriteGoldenData( UBool write_golden_data = TRUE );
+    virtual UBool setVerbose( UBool verbose = true );
+    virtual UBool setNoErrMsg( UBool no_err_msg = true );
+    virtual UBool setQuick( UBool quick = true );
+    virtual UBool setLeaks( UBool leaks = true );
+    virtual UBool setNotime( UBool no_time = true );
+    virtual UBool setWarnOnMissingData( UBool warn_on_missing_data = true );
+    virtual UBool setWriteGoldenData( UBool write_golden_data = true );
     virtual int32_t setThreadCount( int32_t count = 1);
 
     virtual int32_t getErrors( void );
@@ -236,7 +236,7 @@ public:
     // Print ALL named errors encountered so far
     void printErrors();
 
-    // print known issues. return TRUE if there were any.
+    // print known issues. return true if there were any.
     UBool printKnownIssues();
 
     virtual void usage( void ) ;
@@ -286,16 +286,16 @@ public:
     virtual void setProperty(const char* propline);
     virtual const char* getProperty(const char* prop);
 
-    /* JUnit-like assertions. Each returns TRUE if it succeeds. */
-    UBool assertTrue(const char* message, UBool condition, UBool quiet=FALSE, UBool possibleDataError=FALSE, const char *file=NULL, int line=0);
-    UBool assertFalse(const char* message, UBool condition, UBool quiet=FALSE, UBool possibleDataError=FALSE);
+    /* JUnit-like assertions. Each returns true if it succeeds. */
+    UBool assertTrue(const char* message, UBool condition, UBool quiet=false, UBool possibleDataError=false, const char *file=NULL, int line=0);
+    UBool assertFalse(const char* message, UBool condition, UBool quiet=false, UBool possibleDataError=false);
     /**
-     * @param possibleDataError - if TRUE, use dataerrln instead of errcheckln on failure
-     * @return TRUE on success, FALSE on failure.
+     * @param possibleDataError - if true, use dataerrln instead of errcheckln on failure
+     * @return true on success, false on failure.
      */
-    UBool assertSuccess(const char* message, UErrorCode ec, UBool possibleDataError=FALSE, const char *file=NULL, int line=0);
+    UBool assertSuccess(const char* message, UErrorCode ec, UBool possibleDataError=false, const char *file=NULL, int line=0);
     UBool assertEquals(const char* message, const UnicodeString& expected,
-                       const UnicodeString& actual, UBool possibleDataError=FALSE);
+                       const UnicodeString& actual, UBool possibleDataError=false);
     UBool assertEquals(const char* message, const char* expected, const char* actual);
     UBool assertEquals(const char* message, UBool expected, UBool actual);
     UBool assertEquals(const char* message, int32_t expected, int32_t actual);
@@ -322,16 +322,16 @@ public:
 
 #if !UCONFIG_NO_FORMATTING
     UBool assertEquals(const char* message, const Formattable& expected,
-                       const Formattable& actual, UBool possibleDataError=FALSE);
+                       const Formattable& actual, UBool possibleDataError=false);
     UBool assertEquals(const UnicodeString& message, const Formattable& expected,
                        const Formattable& actual);
 #endif
     UBool assertNotEquals(const char* message, int32_t expectedNot, int32_t actual);
-    UBool assertTrue(const UnicodeString& message, UBool condition, UBool quiet=FALSE, UBool possibleDataError=FALSE);
-    UBool assertFalse(const UnicodeString& message, UBool condition, UBool quiet=FALSE, UBool possibleDataError=FALSE);
+    UBool assertTrue(const UnicodeString& message, UBool condition, UBool quiet=false, UBool possibleDataError=false);
+    UBool assertFalse(const UnicodeString& message, UBool condition, UBool quiet=false, UBool possibleDataError=false);
     UBool assertSuccess(const UnicodeString& message, UErrorCode ec);
     UBool assertEquals(const UnicodeString& message, const UnicodeString& expected,
-                       const UnicodeString& actual, UBool possibleDataError=FALSE);
+                       const UnicodeString& actual, UBool possibleDataError=false);
     UBool assertEquals(const UnicodeString& message, const char* expected, const char* actual);
     UBool assertEquals(const UnicodeString& message, UBool expected, UBool actual);
     UBool assertEquals(const UnicodeString& message, int32_t expected, int32_t actual);
@@ -402,7 +402,7 @@ protected:
     // used for collation result reporting, defined here for convenience
 
     static UnicodeString &prettify(const UnicodeString &source, UnicodeString &target);
-    static UnicodeString prettify(const UnicodeString &source, UBool parseBackslash=FALSE);
+    static UnicodeString prettify(const UnicodeString &source, UBool parseBackslash=false);
     // digits=-1 determines the number of digits automatically
     static UnicodeString &appendHex(uint32_t number, int32_t digits, UnicodeString &target);
     static UnicodeString toHex(uint32_t number, int32_t digits=-1);

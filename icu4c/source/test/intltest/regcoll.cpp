@@ -519,7 +519,7 @@ void CollationRegressionTest::Test4079231(/* char* par */)
     //
     // if (en_us->operator==(NULL))
     // {
-    //     errln("en_us->operator==(NULL) returned TRUE");
+    //     errln("en_us->operator==(NULL) returned true");
     // }
 
  /*
@@ -1094,7 +1094,7 @@ static int32_t calcKeyIncremental(UCollator *coll, const UChar* text, int32_t le
 
     uiter_setString(&uiter, text, len);
     keyLen = 0;
-    while (TRUE) {
+    while (true) {
         int32_t keyPartLen = ucol_nextSortKeyPart(coll, &uiter, state, &keyBuf[keyLen], count, &status);
         if (U_FAILURE(status)) {
             return -1;
@@ -1131,7 +1131,7 @@ void CollationRegressionTest::TestT7189() {
     };
 
     // Open the collator
-    coll = ucol_openFromShortString("EO_S1", FALSE, NULL, &status);
+    coll = ucol_openFromShortString("EO_S1", false, NULL, &status);
     if (U_FAILURE(status)) {
         errln("Failed to create a collator for short string EO_S1");
         return;

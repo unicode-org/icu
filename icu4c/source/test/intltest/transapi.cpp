@@ -720,9 +720,9 @@ class TestFilter1 : public UnicodeFilter {
     }
     virtual UBool contains(UChar32 c) const override {
        if(c==0x63 || c==0x61 || c==0x43 || c==0x41)
-          return FALSE;
+          return false;
        else
-          return TRUE;
+          return true;
     }
     // Stubs
     virtual UnicodeString& toPattern(UnicodeString& result,
@@ -730,7 +730,7 @@ class TestFilter1 : public UnicodeFilter {
         return result;
     }
     virtual UBool matchesIndexValue(uint8_t /*v*/) const override {
-        return FALSE;
+        return false;
     }
     virtual void addMatchSetTo(UnicodeSet& /*toUnionTo*/) const override {}
 };
@@ -741,9 +741,9 @@ class TestFilter2 : public UnicodeFilter {
     }
     virtual UBool contains(UChar32 c) const override {
         if(c==0x65 || c==0x6c)
-           return FALSE;
+           return false;
         else
-           return TRUE;
+           return true;
     }
     // Stubs
     virtual UnicodeString& toPattern(UnicodeString& result,
@@ -751,7 +751,7 @@ class TestFilter2 : public UnicodeFilter {
         return result;
     }
     virtual UBool matchesIndexValue(uint8_t /*v*/) const override {
-        return FALSE;
+        return false;
     }
     virtual void addMatchSetTo(UnicodeSet& /*toUnionTo*/) const override {}
 };
@@ -762,9 +762,9 @@ class TestFilter3 : public UnicodeFilter {
     }
     virtual UBool contains(UChar32 c) const override {
         if(c==0x6f || c==0x77)
-           return FALSE;
+           return false;
         else
-           return TRUE;
+           return true;
     }
     // Stubs
     virtual UnicodeString& toPattern(UnicodeString& result,
@@ -772,7 +772,7 @@ class TestFilter3 : public UnicodeFilter {
         return result;
     }
     virtual UBool matchesIndexValue(uint8_t /*v*/) const override {
-        return FALSE;
+        return false;
     }
     virtual void addMatchSetTo(UnicodeSet& /*toUnionTo*/) const override {}
 };
@@ -949,8 +949,8 @@ void TransliteratorAPITest::callEverything(const Transliterator *tr, int line) {
 
     UnicodeString rules;
     UnicodeString clonedRules;
-    rules = tr->toRules(rules, FALSE);
-    clonedRules = clonedTR->toRules(clonedRules, FALSE);
+    rules = tr->toRules(rules, false);
+    clonedRules = clonedTR->toRules(clonedRules, false);
     CEASSERT(rules == clonedRules);
 
     UnicodeSet sourceSet;

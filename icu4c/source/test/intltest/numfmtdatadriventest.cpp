@@ -227,16 +227,16 @@ static DecimalFormat* newDecimalFormat(const NumberFormatTestTuple& tuple, UErro
 UBool NumberFormatDataDrivenTest::isFormatPass(const NumberFormatTestTuple& tuple,
                                                UnicodeString& appendErrorMessage, UErrorCode& status) {
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
     LocalPointer<DecimalFormat> fmtPtr(newDecimalFormat(tuple, status));
     if (U_FAILURE(status)) {
         appendErrorMessage.append("Error creating DecimalFormat.");
-        return FALSE;
+        return false;
     }
     adjustDecimalFormat(tuple, *fmtPtr, appendErrorMessage);
     if (appendErrorMessage.length() > 0) {
-        return FALSE;
+        return false;
     }
     DecimalQuantity digitList;
     strToDigitList(tuple.format, digitList, status);
@@ -245,12 +245,12 @@ UBool NumberFormatDataDrivenTest::isFormatPass(const NumberFormatTestTuple& tupl
         format(*fmtPtr, digitList, appendTo, status);
         if (U_FAILURE(status)) {
             appendErrorMessage.append("Error formatting.");
-            return FALSE;
+            return false;
         }
         if (appendTo != tuple.output) {
             appendErrorMessage.append(
                     UnicodeString("Expected: ") + tuple.output + ", got: " + appendTo);
-            return FALSE;
+            return false;
         }
     }
     double doubleVal = digitList.toDouble();
@@ -261,12 +261,12 @@ UBool NumberFormatDataDrivenTest::isFormatPass(const NumberFormatTestTuple& tupl
         format(*fmtPtr, doubleVal, appendTo, status);
         if (U_FAILURE(status)) {
             appendErrorMessage.append("Error formatting.");
-            return FALSE;
+            return false;
         }
         if (appendTo != tuple.output) {
             appendErrorMessage.append(
                     UnicodeString("double Expected: ") + tuple.output + ", got: " + appendTo);
-            return FALSE;
+            return false;
         }
     }
     if (!uprv_isNaN(doubleVal) && !uprv_isInfinite(doubleVal) && digitList.fitsInLong()) {
@@ -276,31 +276,31 @@ UBool NumberFormatDataDrivenTest::isFormatPass(const NumberFormatTestTuple& tupl
             format(*fmtPtr, intVal, appendTo, status);
             if (U_FAILURE(status)) {
                 appendErrorMessage.append("Error formatting.");
-                return FALSE;
+                return false;
             }
             if (appendTo != tuple.output) {
                 appendErrorMessage.append(
                         UnicodeString("int64 Expected: ") + tuple.output + ", got: " + appendTo);
-                return FALSE;
+                return false;
             }
         }
     }
-    return TRUE;
+    return true;
 }
 
 UBool NumberFormatDataDrivenTest::isToPatternPass(const NumberFormatTestTuple& tuple,
                                                   UnicodeString& appendErrorMessage, UErrorCode& status) {
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
     LocalPointer<DecimalFormat> fmtPtr(newDecimalFormat(tuple, status));
     if (U_FAILURE(status)) {
         appendErrorMessage.append("Error creating DecimalFormat.");
-        return FALSE;
+        return false;
     }
     adjustDecimalFormat(tuple, *fmtPtr, appendErrorMessage);
     if (appendErrorMessage.length() > 0) {
-        return FALSE;
+        return false;
     }
     if (tuple.toPatternFlag) {
         UnicodeString actual;
@@ -324,16 +324,16 @@ UBool NumberFormatDataDrivenTest::isToPatternPass(const NumberFormatTestTuple& t
 UBool NumberFormatDataDrivenTest::isParsePass(const NumberFormatTestTuple& tuple,
                                               UnicodeString& appendErrorMessage, UErrorCode& status) {
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
     LocalPointer<DecimalFormat> fmtPtr(newDecimalFormat(tuple, status));
     if (U_FAILURE(status)) {
         appendErrorMessage.append("Error creating DecimalFormat.");
-        return FALSE;
+        return false;
     }
     adjustDecimalFormat(tuple, *fmtPtr, appendErrorMessage);
     if (appendErrorMessage.length() > 0) {
-        return FALSE;
+        return false;
     }
     Formattable result;
     ParsePosition ppos;
@@ -341,37 +341,37 @@ UBool NumberFormatDataDrivenTest::isParsePass(const NumberFormatTestTuple& tuple
     if (ppos.getIndex() == 0) {
         appendErrorMessage.append("Parse failed; got error index ");
         appendErrorMessage = appendErrorMessage + ppos.getErrorIndex();
-        return FALSE;
+        return false;
     }
     if (tuple.output == "fail") {
         appendErrorMessage.append(
                 UnicodeString("Parse succeeded: ") + result.getDouble() + ", but was expected to fail.");
-        return TRUE; // TRUE because failure handling is in the test suite
+        return true; // true because failure handling is in the test suite
     }
     if (tuple.output == "NaN") {
         if (!uprv_isNaN(result.getDouble())) {
             appendErrorMessage.append(UnicodeString("Expected NaN, but got: ") + result.getDouble());
-            return FALSE;
+            return false;
         }
-        return TRUE;
+        return true;
     } else if (tuple.output == "Inf") {
         if (!uprv_isInfinite(result.getDouble()) || result.getDouble() < 0) {
             appendErrorMessage.append(UnicodeString("Expected Inf, but got: ") + result.getDouble());
-            return FALSE;
+            return false;
         }
-        return TRUE;
+        return true;
     } else if (tuple.output == "-Inf") {
         if (!uprv_isInfinite(result.getDouble()) || result.getDouble() > 0) {
             appendErrorMessage.append(UnicodeString("Expected -Inf, but got: ") + result.getDouble());
-            return FALSE;
+            return false;
         }
-        return TRUE;
+        return true;
     } else if (tuple.output == "-0.0") {
         if (!std::signbit(result.getDouble()) || result.getDouble() != 0) {
             appendErrorMessage.append(UnicodeString("Expected -0.0, but got: ") + result.getDouble());
-            return FALSE;
+            return false;
         }
-        return TRUE;
+        return true;
     }
     // All other cases parse to a DecimalQuantity, not a double.
 
@@ -390,26 +390,26 @@ UBool NumberFormatDataDrivenTest::isParsePass(const NumberFormatTestTuple& tuple
         appendErrorMessage.append(
                 UnicodeString("Expected: ") + tuple.output + " (i.e., " + expectedString + "), but got: " +
                 actualString + " (" + ppos.getIndex() + ":" + ppos.getErrorIndex() + ")");
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 UBool NumberFormatDataDrivenTest::isParseCurrencyPass(const NumberFormatTestTuple& tuple,
                                                       UnicodeString& appendErrorMessage,
                                                       UErrorCode& status) {
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
     LocalPointer<DecimalFormat> fmtPtr(newDecimalFormat(tuple, status));
     if (U_FAILURE(status)) {
         appendErrorMessage.append("Error creating DecimalFormat.");
-        return FALSE;
+        return false;
     }
     adjustDecimalFormat(tuple, *fmtPtr, appendErrorMessage);
     if (appendErrorMessage.length() > 0) {
-        return FALSE;
+        return false;
     }
     ParsePosition ppos;
     LocalPointer<CurrencyAmount> currAmt(
@@ -417,7 +417,7 @@ UBool NumberFormatDataDrivenTest::isParseCurrencyPass(const NumberFormatTestTupl
     if (ppos.getIndex() == 0) {
         appendErrorMessage.append("Parse failed; got error index ");
         appendErrorMessage = appendErrorMessage + ppos.getErrorIndex();
-        return FALSE;
+        return false;
     }
     UnicodeString currStr(currAmt->getISOCurrency());
     U_ASSERT(currAmt->getNumber().getDecimalQuantity() != nullptr); // no doubles in currency tests
@@ -425,7 +425,7 @@ UBool NumberFormatDataDrivenTest::isParseCurrencyPass(const NumberFormatTestTupl
     if (tuple.output == "fail") {
         appendErrorMessage.append(
                 UnicodeString("Parse succeeded: ") + resultStr + ", but was expected to fail.");
-        return TRUE; // TRUE because failure handling is in the test suite
+        return true; // true because failure handling is in the test suite
     }
 
     DecimalQuantity expectedQuantity;
@@ -442,16 +442,16 @@ UBool NumberFormatDataDrivenTest::isParseCurrencyPass(const NumberFormatTestTupl
         appendErrorMessage.append(
                 UnicodeString("Expected: ") + tuple.output + " (i.e., " + expectedString + "), but got: " +
                 resultStr + " (" + ppos.getIndex() + ":" + ppos.getErrorIndex() + ")");
-        return FALSE;
+        return false;
     }
 
     if (currStr != tuple.outputCurrency) {
         appendErrorMessage.append(
                 UnicodeString(
                         "Expected currency: ") + tuple.outputCurrency + ", got: " + currStr + ". ");
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 void NumberFormatDataDrivenTest::TestNumberFormatTestTuple() {
@@ -499,7 +499,7 @@ void NumberFormatDataDrivenTest::TestNumberFormatTestTuple() {
 }
 
 void NumberFormatDataDrivenTest::TestDataDrivenICU4C() {
-    run("numberformattestspecification.txt", TRUE);
+    run("numberformattestspecification.txt", true);
 }
 
 #endif  // !UCONFIG_NO_FORMATTING

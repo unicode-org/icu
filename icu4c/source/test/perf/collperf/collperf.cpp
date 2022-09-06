@@ -226,7 +226,7 @@ public:
         int count5 = 5;
         int strindex = 0;
         ucol_setOffset(iter, strindex, status);
-        while (TRUE) {
+        while (true) {
             if (ucol_next(iter, status) == UCOL_NULLORDER) {
                 break;
             }
@@ -248,7 +248,7 @@ public:
         int count5 = 5;
         int strindex = 5;
         ucol_setOffset(iter, strindex, status);
-        while (TRUE) {
+        while (true) {
             if (ucol_previous(iter, status) == UCOL_NULLORDER) {
                 break;
             }
@@ -425,7 +425,7 @@ public:
             int guess;
             int last_guess = -1;
             int r;
-            while (TRUE) {
+            while (true) {
                 guess = (high + low)/2;
                 if (last_guess == guess) break; // nothing to search
 
@@ -898,7 +898,7 @@ int main(int argc, const char *argv[])
         return status;
     }
 
-    if (test.run() == FALSE){
+    if (test.run() == false){
         fprintf(stderr, "FAILED: Tests could not be run please check the "
             "arguments.\n");
         return -1;

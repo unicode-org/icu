@@ -342,7 +342,7 @@ class AnyTransliterator extends Transliterator {
 
 
         /**
-         * Returns TRUE if there are any more runs.  TRUE is always
+         * Returns true if there are any more runs.  true is always
          * returned at least once.  Upon return, the caller should
          * examine scriptCode, start, and limit.
          */
@@ -385,7 +385,7 @@ class AnyTransliterator extends Transliterator {
                 ++limit;
             }
 
-            // Return TRUE even if the entire text is COMMON / INHERITED, in
+            // Return true even if the entire text is COMMON / INHERITED, in
             // which case scriptCode will be UScript.INVALID_CODE.
             return true;
         }

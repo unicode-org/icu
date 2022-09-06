@@ -588,8 +588,8 @@ DateFormat::adoptNumberFormat(NumberFormat* newNumberFormat)
 {
     delete fNumberFormat;
     fNumberFormat = newNumberFormat;
-    newNumberFormat->setParseIntegerOnly(TRUE);
-    newNumberFormat->setGroupingUsed(FALSE);
+    newNumberFormat->setParseIntegerOnly(true);
+    newNumberFormat->setGroupingUsed(false);
 }
 //----------------------------------------------------------------------
 
@@ -660,7 +660,7 @@ DateFormat::setLenient(UBool lenient)
 UBool
 DateFormat::isLenient() const
 {
-    UBool lenient = TRUE;
+    UBool lenient = true;
     if (fCalendar != NULL) {
         lenient = fCalendar->isLenient();
     }
@@ -687,7 +687,7 @@ DateFormat::isCalendarLenient() const
         return fCalendar->isLenient();
     }
     // fCalendar is rarely null
-    return FALSE;
+    return false;
 }
 
 

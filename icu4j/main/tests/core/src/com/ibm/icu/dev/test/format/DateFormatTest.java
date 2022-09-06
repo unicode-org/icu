@@ -4996,37 +4996,37 @@ public class DateFormatTest extends TestFmwk {
         // Set calendar to strict
         fmt.setCalendarLenient(false);
 
-        assertFalse("isLenient after setCalendarLenient(FALSE)", fmt.isLenient());
-        assertFalse("isCalendarLenient after setCalendarLenient(FALSE)", fmt.isCalendarLenient());
-        assertTrue("ALLOW_WHITESPACE after setCalendarLenient(FALSE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE));
-        assertTrue("ALLOW_NUMERIC  after setCalendarLenient(FALSE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC));
+        assertFalse("isLenient after setCalendarLenient(false)", fmt.isLenient());
+        assertFalse("isCalendarLenient after setCalendarLenient(false)", fmt.isCalendarLenient());
+        assertTrue("ALLOW_WHITESPACE after setCalendarLenient(false)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE));
+        assertTrue("ALLOW_NUMERIC  after setCalendarLenient(false)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC));
 
         // Set to strict
         fmt.setLenient(false);
 
-        assertFalse("isLenient after setLenient(FALSE)", fmt.isLenient());
-        assertFalse("isCalendarLenient after setLenient(FALSE)", fmt.isCalendarLenient());
-        assertFalse("ALLOW_WHITESPACE after setLenient(FALSE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE));
-        assertFalse("ALLOW_NUMERIC  after setLenient(FALSE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC));
+        assertFalse("isLenient after setLenient(false)", fmt.isLenient());
+        assertFalse("isCalendarLenient after setLenient(false)", fmt.isCalendarLenient());
+        assertFalse("ALLOW_WHITESPACE after setLenient(false)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE));
+        assertFalse("ALLOW_NUMERIC  after setLenient(false)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC));
         // These two boolean attributes are NOT affected according to the API specification
-        assertTrue("PARTIAL_MATCH after setLenient(FALSE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_PARTIAL_LITERAL_MATCH));
-        assertTrue("MULTIPLE_PATTERNS after setLenient(FALSE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH));
+        assertTrue("PARTIAL_MATCH after setLenient(false)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_PARTIAL_LITERAL_MATCH));
+        assertTrue("MULTIPLE_PATTERNS after setLenient(false)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_MULTIPLE_PATTERNS_FOR_MATCH));
 
         // Allow white space leniency
         fmt.setBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE, true);
 
-        assertFalse("isLenient after ALLOW_WHITESPACE/TRUE", fmt.isLenient());
-        assertFalse("isCalendarLenient after ALLOW_WHITESPACE/TRUE", fmt.isCalendarLenient());
-        assertTrue("ALLOW_WHITESPACE after ALLOW_WHITESPACE/TRUE", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE));
-        assertFalse("ALLOW_NUMERIC  after ALLOW_WHITESPACE/TRUE", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC));
+        assertFalse("isLenient after ALLOW_WHITESPACE/true", fmt.isLenient());
+        assertFalse("isCalendarLenient after ALLOW_WHITESPACE/true", fmt.isCalendarLenient());
+        assertTrue("ALLOW_WHITESPACE after ALLOW_WHITESPACE/true", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE));
+        assertFalse("ALLOW_NUMERIC  after ALLOW_WHITESPACE/true", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC));
 
         // Set to lenient
         fmt.setLenient(true);
 
-        assertTrue("isLenient after setLenient(TRUE)", fmt.isLenient());
-        assertTrue("isCalendarLenient after setLenient(TRUE)", fmt.isCalendarLenient());
-        assertTrue("ALLOW_WHITESPACE after setLenient(TRUE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE));
-        assertTrue("ALLOW_NUMERIC after setLenient(TRUE)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC));
+        assertTrue("isLenient after setLenient(true)", fmt.isLenient());
+        assertTrue("isCalendarLenient after setLenient(true)", fmt.isCalendarLenient());
+        assertTrue("ALLOW_WHITESPACE after setLenient(true)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE));
+        assertTrue("ALLOW_NUMERIC after setLenient(true)", fmt.getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC));
 
     }
 

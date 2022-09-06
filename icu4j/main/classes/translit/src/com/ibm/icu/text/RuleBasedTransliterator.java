@@ -183,7 +183,7 @@ public class RuleBasedTransliterator extends Transliterator {
      * Return a representation of this transliterator as source rules.
      * These rules will produce an equivalent transliterator if used
      * to construct a new transliterator.
-     * @param escapeUnprintable if TRUE then convert unprintable
+     * @param escapeUnprintable if true then convert unprintable
      * character to their hex escape representations, \\uxxxx or
      * \\Uxxxxxxxx.  Unprintable characters are those other than
      * U+000A, U+0020..U+007E.

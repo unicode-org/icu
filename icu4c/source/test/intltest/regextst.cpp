@@ -194,7 +194,7 @@ const char* RegexTest::extractToAssertBuf(const UnicodeString& message) {
 } UPRV_BLOCK_MACRO_END
 
 #define REGEX_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN { \
-    if ((expr)==FALSE) { \
+    if ((expr)==false) { \
         errln("%s:%d: RegexTest failure: REGEX_ASSERT(%s) failed \n", __FILE__, __LINE__, #expr); \
     } \
 } UPRV_BLOCK_MACRO_END
@@ -215,7 +215,7 @@ const char* RegexTest::extractToAssertBuf(const UnicodeString& message) {
 } UPRV_BLOCK_MACRO_END
 
 #define REGEX_ASSERT_L(expr, line) UPRV_BLOCK_MACRO_BEGIN { \
-    if ((expr)==FALSE) { \
+    if ((expr)==false) { \
         errln("RegexTest failure at line %d, from %d.", __LINE__, (line)); \
         return; \
     } \
@@ -352,7 +352,7 @@ static UText* regextst_openUTF8FromInvariant(UText *ut, const char *inv, int64_t
 //       usage:
 //          REGEX_TESTLM("pattern",  "input text",  lookingAt expected, matches expected);
 //
-//          The expected results are UBool - TRUE or FALSE.
+//          The expected results are UBool - true or false.
 //          The input text is unescaped.  The pattern is not.
 //
 //
@@ -370,14 +370,14 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
     UParseError         pe;
     RegexPattern        *REPattern = NULL;
     RegexMatcher        *REMatcher = NULL;
-    UBool               retVal     = TRUE;
+    UBool               retVal     = true;
 
     UnicodeString patString(pat, -1, US_INV);
     REPattern = RegexPattern::compile(patString, 0, pe, status);
     if (U_FAILURE(status)) {
         dataerrln("RegexTest failure in RegexPattern::compile() at line %d.  Status = %s",
             line, u_errorName(status));
-        return FALSE;
+        return false;
     }
     if (line==376) { REPattern->dumpPattern();}
 
@@ -387,7 +387,7 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
     if (U_FAILURE(status)) {
         errln("RegexTest failure in REPattern::matcher() at line %d.  Status = %s\n",
             line, u_errorName(status));
-        return FALSE;
+        return false;
     }
 
     UBool actualmatch;
@@ -395,11 +395,11 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
     if (U_FAILURE(status)) {
         errln("RegexTest failure in lookingAt() at line %d.  Status = %s\n",
             line, u_errorName(status));
-        retVal =  FALSE;
+        retVal =  false;
     }
     if (actualmatch != looking) {
         errln("RegexTest: wrong return from lookingAt() at line %d.\n", line);
-        retVal = FALSE;
+        retVal = false;
     }
 
     status = U_ZERO_ERROR;
@@ -407,14 +407,14 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
     if (U_FAILURE(status)) {
         errln("RegexTest failure in matches() at line %d.  Status = %s\n",
             line, u_errorName(status));
-        retVal = FALSE;
+        retVal = false;
     }
     if (actualmatch != match) {
         errln("RegexTest: wrong return from matches() at line %d.\n", line);
-        retVal = FALSE;
+        retVal = false;
     }
 
-    if (retVal == FALSE) {
+    if (retVal == false) {
         REPattern->dumpPattern();
     }
 
@@ -433,14 +433,14 @@ UBool RegexTest::doRegexLMTestUTF8(const char *pat, const char *text, UBool look
     UParseError         pe;
     RegexPattern        *REPattern = NULL;
     RegexMatcher        *REMatcher = NULL;
-    UBool               retVal     = TRUE;
+    UBool               retVal     = true;
 
     regextst_openUTF8FromInvariant(&pattern, pat, -1, &status);
     REPattern = RegexPattern::compile(&pattern, 0, pe, status);
     if (U_FAILURE(status)) {
         dataerrln("RegexTest failure in RegexPattern::compile() at line %d (UTF8).  Status = %s\n",
             line, u_errorName(status));
-        return FALSE;
+        return false;
     }
 
     UnicodeString inputString(text, -1, US_INV);
@@ -452,7 +452,7 @@ UBool RegexTest::doRegexLMTestUTF8(const char *pat, const char *text, UBool look
     if (U_FAILURE(status) && status != U_BUFFER_OVERFLOW_ERROR) {
         // UTF-8 does not allow unpaired surrogates, so this could actually happen
         logln("RegexTest unable to convert input to UTF8 at line %d.  Status = %s\n", line, u_errorName(status));
-        return TRUE; // not a failure of the Regex engine
+        return true; // not a failure of the Regex engine
     }
     status = U_ZERO_ERROR; // buffer overflow
     textChars = new char[inputUTF8Length+1];
@@ -463,7 +463,7 @@ UBool RegexTest::doRegexLMTestUTF8(const char *pat, const char *text, UBool look
     if (U_FAILURE(status)) {
         errln("RegexTest failure in REPattern::matcher() at line %d (UTF8).  Status = %s\n",
             line, u_errorName(status));
-        return FALSE;
+        return false;
     }
 
     UBool actualmatch;
@@ -471,11 +471,11 @@ UBool RegexTest::doRegexLMTestUTF8(const char *pat, const char *text, UBool look
     if (U_FAILURE(status)) {
         errln("RegexTest failure in lookingAt() at line %d (UTF8).  Status = %s\n",
             line, u_errorName(status));
-        retVal =  FALSE;
+        retVal =  false;
     }
     if (actualmatch != looking) {
         errln("RegexTest: wrong return from lookingAt() at line %d (UTF8).\n", line);
-        retVal = FALSE;
+        retVal = false;
     }
 
     status = U_ZERO_ERROR;
@@ -483,14 +483,14 @@ UBool RegexTest::doRegexLMTestUTF8(const char *pat, const char *text, UBool look
     if (U_FAILURE(status)) {
         errln("RegexTest failure in matches() at line %d (UTF8).  Status = %s\n",
             line, u_errorName(status));
-        retVal = FALSE;
+        retVal = false;
     }
     if (actualmatch != match) {
         errln("RegexTest: wrong return from matches() at line %d (UTF8).\n", line);
-        retVal = FALSE;
+        retVal = false;
     }
 
-    if (retVal == FALSE) {
+    if (retVal == false) {
         REPattern->dumpPattern();
     }
 
@@ -579,7 +579,7 @@ void RegexTest::Basic() {
 //
 #if 0
     {
-        // REGEX_TESTLM("a\N{LATIN SMALL LETTER B}c", "abc", FALSE, FALSE);
+        // REGEX_TESTLM("a\N{LATIN SMALL LETTER B}c", "abc", false, false);
         UParseError pe;
         UErrorCode  status = U_ZERO_ERROR;
         RegexPattern *pattern;
@@ -598,124 +598,124 @@ void RegexTest::Basic() {
     //
     // Pattern with parentheses
     //
-    REGEX_TESTLM("st(abc)ring", "stabcring thing", TRUE,  FALSE);
-    REGEX_TESTLM("st(abc)ring", "stabcring",       TRUE,  TRUE);
-    REGEX_TESTLM("st(abc)ring", "stabcrung",       FALSE, FALSE);
+    REGEX_TESTLM("st(abc)ring", "stabcring thing", true,  false);
+    REGEX_TESTLM("st(abc)ring", "stabcring",       true,  true);
+    REGEX_TESTLM("st(abc)ring", "stabcrung",       false, false);
 
     //
     // Patterns with *
     //
-    REGEX_TESTLM("st(abc)*ring", "string", TRUE, TRUE);
-    REGEX_TESTLM("st(abc)*ring", "stabcring", TRUE, TRUE);
-    REGEX_TESTLM("st(abc)*ring", "stabcabcring", TRUE, TRUE);
-    REGEX_TESTLM("st(abc)*ring", "stabcabcdring", FALSE, FALSE);
-    REGEX_TESTLM("st(abc)*ring", "stabcabcabcring etc.", TRUE, FALSE);
+    REGEX_TESTLM("st(abc)*ring", "string", true, true);
+    REGEX_TESTLM("st(abc)*ring", "stabcring", true, true);
+    REGEX_TESTLM("st(abc)*ring", "stabcabcring", true, true);
+    REGEX_TESTLM("st(abc)*ring", "stabcabcdring", false, false);
+    REGEX_TESTLM("st(abc)*ring", "stabcabcabcring etc.", true, false);
 
-    REGEX_TESTLM("a*", "",  TRUE, TRUE);
-    REGEX_TESTLM("a*", "b", TRUE, FALSE);
+    REGEX_TESTLM("a*", "",  true, true);
+    REGEX_TESTLM("a*", "b", true, false);
 
 
     //
     //  Patterns with "."
     //
-    REGEX_TESTLM(".", "abc", TRUE, FALSE);
-    REGEX_TESTLM("...", "abc", TRUE, TRUE);
-    REGEX_TESTLM("....", "abc", FALSE, FALSE);
-    REGEX_TESTLM(".*", "abcxyz123", TRUE, TRUE);
-    REGEX_TESTLM("ab.*xyz", "abcdefghij", FALSE, FALSE);
-    REGEX_TESTLM("ab.*xyz", "abcdefg...wxyz", TRUE, TRUE);
-    REGEX_TESTLM("ab.*xyz", "abcde...wxyz...abc..xyz", TRUE, TRUE);
-    REGEX_TESTLM("ab.*xyz", "abcde...wxyz...abc..xyz...", TRUE, FALSE);
+    REGEX_TESTLM(".", "abc", true, false);
+    REGEX_TESTLM("...", "abc", true, true);
+    REGEX_TESTLM("....", "abc", false, false);
+    REGEX_TESTLM(".*", "abcxyz123", true, true);
+    REGEX_TESTLM("ab.*xyz", "abcdefghij", false, false);
+    REGEX_TESTLM("ab.*xyz", "abcdefg...wxyz", true, true);
+    REGEX_TESTLM("ab.*xyz", "abcde...wxyz...abc..xyz", true, true);
+    REGEX_TESTLM("ab.*xyz", "abcde...wxyz...abc..xyz...", true, false);
 
     //
     //  Patterns with * applied to chars at end of literal string
     //
-    REGEX_TESTLM("abc*", "ab", TRUE, TRUE);
-    REGEX_TESTLM("abc*", "abccccc", TRUE, TRUE);
+    REGEX_TESTLM("abc*", "ab", true, true);
+    REGEX_TESTLM("abc*", "abccccc", true, true);
 
     //
     //  Supplemental chars match as single chars, not a pair of surrogates.
     //
-    REGEX_TESTLM(".", "\\U00011000", TRUE, TRUE);
-    REGEX_TESTLM("...", "\\U00011000x\\U00012002", TRUE, TRUE);
-    REGEX_TESTLM("...", "\\U00011000x\\U00012002y", TRUE, FALSE);
+    REGEX_TESTLM(".", "\\U00011000", true, true);
+    REGEX_TESTLM("...", "\\U00011000x\\U00012002", true, true);
+    REGEX_TESTLM("...", "\\U00011000x\\U00012002y", true, false);
 
 
     //
     //  UnicodeSets in the pattern
     //
-    REGEX_TESTLM("[1-6]", "1", TRUE, TRUE);
-    REGEX_TESTLM("[1-6]", "3", TRUE, TRUE);
-    REGEX_TESTLM("[1-6]", "7", FALSE, FALSE);
-    REGEX_TESTLM("a[1-6]", "a3", TRUE, TRUE);
-    REGEX_TESTLM("a[1-6]", "a3", TRUE, TRUE);
-    REGEX_TESTLM("a[1-6]b", "a3b", TRUE, TRUE);
+    REGEX_TESTLM("[1-6]", "1", true, true);
+    REGEX_TESTLM("[1-6]", "3", true, true);
+    REGEX_TESTLM("[1-6]", "7", false, false);
+    REGEX_TESTLM("a[1-6]", "a3", true, true);
+    REGEX_TESTLM("a[1-6]", "a3", true, true);
+    REGEX_TESTLM("a[1-6]b", "a3b", true, true);
 
-    REGEX_TESTLM("a[0-9]*b", "a123b", TRUE, TRUE);
-    REGEX_TESTLM("a[0-9]*b", "abc", TRUE, FALSE);
-    REGEX_TESTLM("[\\p{Nd}]*", "123456", TRUE, TRUE);
-    REGEX_TESTLM("[\\p{Nd}]*", "a123456", TRUE, FALSE);   // note that * matches 0 occurrences.
-    REGEX_TESTLM("[a][b][[:Zs:]]*", "ab   ", TRUE, TRUE);
+    REGEX_TESTLM("a[0-9]*b", "a123b", true, true);
+    REGEX_TESTLM("a[0-9]*b", "abc", true, false);
+    REGEX_TESTLM("[\\p{Nd}]*", "123456", true, true);
+    REGEX_TESTLM("[\\p{Nd}]*", "a123456", true, false);   // note that * matches 0 occurrences.
+    REGEX_TESTLM("[a][b][[:Zs:]]*", "ab   ", true, true);
 
     //
     //   OR operator in patterns
     //
-    REGEX_TESTLM("(a|b)", "a", TRUE, TRUE);
-    REGEX_TESTLM("(a|b)", "b", TRUE, TRUE);
-    REGEX_TESTLM("(a|b)", "c", FALSE, FALSE);
-    REGEX_TESTLM("a|b", "b", TRUE, TRUE);
+    REGEX_TESTLM("(a|b)", "a", true, true);
+    REGEX_TESTLM("(a|b)", "b", true, true);
+    REGEX_TESTLM("(a|b)", "c", false, false);
+    REGEX_TESTLM("a|b", "b", true, true);
 
-    REGEX_TESTLM("(a|b|c)*", "aabcaaccbcabc", TRUE, TRUE);
-    REGEX_TESTLM("(a|b|c)*", "aabcaaccbcabdc", TRUE, FALSE);
-    REGEX_TESTLM("(a(b|c|d)(x|y|z)*|123)", "ac", TRUE, TRUE);
-    REGEX_TESTLM("(a(b|c|d)(x|y|z)*|123)", "123", TRUE, TRUE);
-    REGEX_TESTLM("(a|(1|2)*)(b|c|d)(x|y|z)*|123", "123", TRUE, TRUE);
-    REGEX_TESTLM("(a|(1|2)*)(b|c|d)(x|y|z)*|123", "222211111czzzzw", TRUE, FALSE);
+    REGEX_TESTLM("(a|b|c)*", "aabcaaccbcabc", true, true);
+    REGEX_TESTLM("(a|b|c)*", "aabcaaccbcabdc", true, false);
+    REGEX_TESTLM("(a(b|c|d)(x|y|z)*|123)", "ac", true, true);
+    REGEX_TESTLM("(a(b|c|d)(x|y|z)*|123)", "123", true, true);
+    REGEX_TESTLM("(a|(1|2)*)(b|c|d)(x|y|z)*|123", "123", true, true);
+    REGEX_TESTLM("(a|(1|2)*)(b|c|d)(x|y|z)*|123", "222211111czzzzw", true, false);
 
     //
     //  +
     //
-    REGEX_TESTLM("ab+", "abbc", TRUE, FALSE);
-    REGEX_TESTLM("ab+c", "ac", FALSE, FALSE);
-    REGEX_TESTLM("b+", "", FALSE, FALSE);
-    REGEX_TESTLM("(abc|def)+", "defabc", TRUE, TRUE);
-    REGEX_TESTLM(".+y", "zippity dooy dah ", TRUE, FALSE);
-    REGEX_TESTLM(".+y", "zippity dooy", TRUE, TRUE);
+    REGEX_TESTLM("ab+", "abbc", true, false);
+    REGEX_TESTLM("ab+c", "ac", false, false);
+    REGEX_TESTLM("b+", "", false, false);
+    REGEX_TESTLM("(abc|def)+", "defabc", true, true);
+    REGEX_TESTLM(".+y", "zippity dooy dah ", true, false);
+    REGEX_TESTLM(".+y", "zippity dooy", true, true);
 
     //
     //   ?
     //
-    REGEX_TESTLM("ab?", "ab", TRUE, TRUE);
-    REGEX_TESTLM("ab?", "a", TRUE, TRUE);
-    REGEX_TESTLM("ab?", "ac", TRUE, FALSE);
-    REGEX_TESTLM("ab?", "abb", TRUE, FALSE);
-    REGEX_TESTLM("a(b|c)?d", "abd", TRUE, TRUE);
-    REGEX_TESTLM("a(b|c)?d", "acd", TRUE, TRUE);
-    REGEX_TESTLM("a(b|c)?d", "ad", TRUE, TRUE);
-    REGEX_TESTLM("a(b|c)?d", "abcd", FALSE, FALSE);
-    REGEX_TESTLM("a(b|c)?d", "ab", FALSE, FALSE);
+    REGEX_TESTLM("ab?", "ab", true, true);
+    REGEX_TESTLM("ab?", "a", true, true);
+    REGEX_TESTLM("ab?", "ac", true, false);
+    REGEX_TESTLM("ab?", "abb", true, false);
+    REGEX_TESTLM("a(b|c)?d", "abd", true, true);
+    REGEX_TESTLM("a(b|c)?d", "acd", true, true);
+    REGEX_TESTLM("a(b|c)?d", "ad", true, true);
+    REGEX_TESTLM("a(b|c)?d", "abcd", false, false);
+    REGEX_TESTLM("a(b|c)?d", "ab", false, false);
 
     //
     //  Escape sequences that become single literal chars, handled internally
     //   by ICU's Unescape.
     //
 
-    // REGEX_TESTLM("\101\142", "Ab", TRUE, TRUE);      // Octal     TODO: not implemented yet.
-    REGEX_TESTLM("\\a", "\\u0007", TRUE, TRUE);        // BEL
-    REGEX_TESTLM("\\cL", "\\u000c", TRUE, TRUE);       // Control-L
-    REGEX_TESTLM("\\e", "\\u001b", TRUE, TRUE);        // Escape
-    REGEX_TESTLM("\\f", "\\u000c", TRUE, TRUE);        // Form Feed
-    REGEX_TESTLM("\\n", "\\u000a", TRUE, TRUE);        // new line
-    REGEX_TESTLM("\\r", "\\u000d", TRUE, TRUE);        //  CR
-    REGEX_TESTLM("\\t", "\\u0009", TRUE, TRUE);        // Tab
-    REGEX_TESTLM("\\u1234", "\\u1234", TRUE, TRUE);
-    REGEX_TESTLM("\\U00001234", "\\u1234", TRUE, TRUE);
+    // REGEX_TESTLM("\101\142", "Ab", true, true);      // Octal     TODO: not implemented yet.
+    REGEX_TESTLM("\\a", "\\u0007", true, true);        // BEL
+    REGEX_TESTLM("\\cL", "\\u000c", true, true);       // Control-L
+    REGEX_TESTLM("\\e", "\\u001b", true, true);        // Escape
+    REGEX_TESTLM("\\f", "\\u000c", true, true);        // Form Feed
+    REGEX_TESTLM("\\n", "\\u000a", true, true);        // new line
+    REGEX_TESTLM("\\r", "\\u000d", true, true);        //  CR
+    REGEX_TESTLM("\\t", "\\u0009", true, true);        // Tab
+    REGEX_TESTLM("\\u1234", "\\u1234", true, true);
+    REGEX_TESTLM("\\U00001234", "\\u1234", true, true);
 
-    REGEX_TESTLM(".*\\Ax", "xyz", TRUE, FALSE);  //  \A matches only at the beginning of input
-    REGEX_TESTLM(".*\\Ax", " xyz", FALSE, FALSE);  //  \A matches only at the beginning of input
+    REGEX_TESTLM(".*\\Ax", "xyz", true, false);  //  \A matches only at the beginning of input
+    REGEX_TESTLM(".*\\Ax", " xyz", false, false);  //  \A matches only at the beginning of input
 
     // Escape of special chars in patterns
-    REGEX_TESTLM("\\\\\\|\\(\\)\\[\\{\\~\\$\\*\\+\\?\\.", "\\\\|()[{~$*+?.", TRUE, TRUE);
+    REGEX_TESTLM("\\\\\\|\\(\\)\\[\\{\\~\\$\\*\\+\\?\\.", "\\\\|()[{~$*+?.", true, true);
 }
 
 
@@ -789,16 +789,16 @@ void RegexTest::API_Match() {
         //
         RegexMatcher *m1 = pat2->matcher(inStr1, status);
         REGEX_CHECK_STATUS;
-        REGEX_ASSERT(m1->lookingAt(status) == TRUE);
+        REGEX_ASSERT(m1->lookingAt(status) == true);
         REGEX_ASSERT(m1->input() == inStr1);
         m1->reset(instr2);
-        REGEX_ASSERT(m1->lookingAt(status) == FALSE);
+        REGEX_ASSERT(m1->lookingAt(status) == false);
         REGEX_ASSERT(m1->input() == instr2);
         m1->reset(inStr1);
         REGEX_ASSERT(m1->input() == inStr1);
-        REGEX_ASSERT(m1->lookingAt(status) == TRUE);
+        REGEX_ASSERT(m1->lookingAt(status) == true);
         m1->reset(empty);
-        REGEX_ASSERT(m1->lookingAt(status) == FALSE);
+        REGEX_ASSERT(m1->lookingAt(status) == false);
         REGEX_ASSERT(m1->input() == empty);
         REGEX_ASSERT(&m1->pattern() == pat2);
 
@@ -809,7 +809,7 @@ void RegexTest::API_Match() {
         m1->reset(4, status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(m1->input() == inStr1);
-        REGEX_ASSERT(m1->lookingAt(status) == TRUE);
+        REGEX_ASSERT(m1->lookingAt(status) == true);
 
         m1->reset(-1, status);
         REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
@@ -836,25 +836,25 @@ void RegexTest::API_Match() {
         // match(pos, status)
         //
         m1->reset(instr2);
-        REGEX_ASSERT(m1->matches(4, status) == TRUE);
+        REGEX_ASSERT(m1->matches(4, status) == true);
         m1->reset();
-        REGEX_ASSERT(m1->matches(3, status) == FALSE);
+        REGEX_ASSERT(m1->matches(3, status) == false);
         m1->reset();
-        REGEX_ASSERT(m1->matches(5, status) == FALSE);
-        REGEX_ASSERT(m1->matches(4, status) == TRUE);
-        REGEX_ASSERT(m1->matches(-1, status) == FALSE);
+        REGEX_ASSERT(m1->matches(5, status) == false);
+        REGEX_ASSERT(m1->matches(4, status) == true);
+        REGEX_ASSERT(m1->matches(-1, status) == false);
         REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
 
         // Match() at end of string should fail, but should not
         //  be an error.
         status = U_ZERO_ERROR;
         len = m1->input().length();
-        REGEX_ASSERT(m1->matches(len, status) == FALSE);
+        REGEX_ASSERT(m1->matches(len, status) == false);
         REGEX_CHECK_STATUS;
 
         // Match beyond end of string should fail with an error.
         status = U_ZERO_ERROR;
-        REGEX_ASSERT(m1->matches(len+1, status) == FALSE);
+        REGEX_ASSERT(m1->matches(len+1, status) == false);
         REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
 
         // Successful match at end of string.
@@ -864,10 +864,10 @@ void RegexTest::API_Match() {
             REGEX_CHECK_STATUS;
             m.reset(inStr1);
             len = inStr1.length();
-            REGEX_ASSERT(m.matches(len, status) == TRUE);
+            REGEX_ASSERT(m.matches(len, status) == true);
             REGEX_CHECK_STATUS;
             m.reset(empty);
-            REGEX_ASSERT(m.matches(0, status) == TRUE);
+            REGEX_ASSERT(m.matches(0, status) == true);
             REGEX_CHECK_STATUS;
         }
 
@@ -877,17 +877,17 @@ void RegexTest::API_Match() {
         //
         status = U_ZERO_ERROR;
         m1->reset(instr2);  // "not abc"
-        REGEX_ASSERT(m1->lookingAt(4, status) == TRUE);
-        REGEX_ASSERT(m1->lookingAt(5, status) == FALSE);
-        REGEX_ASSERT(m1->lookingAt(3, status) == FALSE);
-        REGEX_ASSERT(m1->lookingAt(4, status) == TRUE);
-        REGEX_ASSERT(m1->lookingAt(-1, status) == FALSE);
+        REGEX_ASSERT(m1->lookingAt(4, status) == true);
+        REGEX_ASSERT(m1->lookingAt(5, status) == false);
+        REGEX_ASSERT(m1->lookingAt(3, status) == false);
+        REGEX_ASSERT(m1->lookingAt(4, status) == true);
+        REGEX_ASSERT(m1->lookingAt(-1, status) == false);
         REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
         status = U_ZERO_ERROR;
         len = m1->input().length();
-        REGEX_ASSERT(m1->lookingAt(len, status) == FALSE);
+        REGEX_ASSERT(m1->lookingAt(len, status) == false);
         REGEX_CHECK_STATUS;
-        REGEX_ASSERT(m1->lookingAt(len+1, status) == FALSE);
+        REGEX_ASSERT(m1->lookingAt(len+1, status) == false);
         REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
 
         delete m1;
@@ -913,7 +913,7 @@ void RegexTest::API_Match() {
 
         RegexMatcher *matcher = pat->matcher(data, status);
         REGEX_CHECK_STATUS;
-        REGEX_ASSERT(matcher->lookingAt(status) == TRUE);
+        REGEX_ASSERT(matcher->lookingAt(status) == true);
         static const int32_t matchStarts[] = {0,  2, 4, 8};
         static const int32_t matchEnds[]   = {10, 8, 6, 10};
         int32_t i;
@@ -979,8 +979,8 @@ void RegexTest::API_Match() {
         REGEX_ASSERT(matcher->start(status) == 6);
         REGEX_ASSERT(matcher->find());
         REGEX_ASSERT(matcher->start(status) == 12);
-        REGEX_ASSERT(matcher->find() == FALSE);
-        REGEX_ASSERT(matcher->find() == FALSE);
+        REGEX_ASSERT(matcher->find() == false);
+        REGEX_ASSERT(matcher->find() == false);
 
         matcher->reset();
         REGEX_ASSERT(matcher->find());
@@ -994,9 +994,9 @@ void RegexTest::API_Match() {
         REGEX_ASSERT(matcher->start(status) == 6);
         REGEX_ASSERT(matcher->find(12, status));
         REGEX_ASSERT(matcher->start(status) == 12);
-        REGEX_ASSERT(matcher->find(13, status) == FALSE);
-        REGEX_ASSERT(matcher->find(16, status) == FALSE);
-        REGEX_ASSERT(matcher->find(17, status) == FALSE);
+        REGEX_ASSERT(matcher->find(13, status) == false);
+        REGEX_ASSERT(matcher->find(16, status) == false);
+        REGEX_ASSERT(matcher->find(17, status) == false);
         REGEX_ASSERT_FAIL(matcher->start(status), U_REGEX_INVALID_STATE);
 
         status = U_ZERO_ERROR;
@@ -1055,7 +1055,7 @@ void RegexTest::API_Match() {
         UnicodeString s("    ");
         m.reset(s);
         for (i=0; ; i++) {
-            if (m.find() == FALSE) {
+            if (m.find() == false) {
                 break;
             }
             REGEX_ASSERT(m.start(status) == i);
@@ -1068,7 +1068,7 @@ void RegexTest::API_Match() {
         s = s.unescape();
         m.reset(s);
         for (i=0; ; i+=2) {
-            if (m.find() == FALSE) {
+            if (m.find() == false) {
                 break;
             }
             REGEX_ASSERT(m.start(status) == i);
@@ -1087,7 +1087,7 @@ void RegexTest::API_Match() {
         UnicodeString s("    ");
         m.reset(s);
         for (i=0; ; i++) {
-            if (m.find() == FALSE) {
+            if (m.find() == false) {
                 break;
             }
             REGEX_ASSERT(m.start(status) == i);
@@ -1115,7 +1115,7 @@ void RegexTest::API_Match() {
         RegexMatcher  *m = p->matcher(status);
         REGEX_CHECK_STATUS;
 
-        REGEX_ASSERT(m->find() == FALSE);
+        REGEX_ASSERT(m->find() == false);
         REGEX_ASSERT(m->input() == "");
         delete m;
         delete p;
@@ -1131,8 +1131,8 @@ void RegexTest::API_Match() {
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(m.regionStart() == 0);
         REGEX_ASSERT(m.regionEnd() == testString.length());
-        REGEX_ASSERT(m.hasTransparentBounds() == FALSE);
-        REGEX_ASSERT(m.hasAnchoringBounds() == TRUE);
+        REGEX_ASSERT(m.hasTransparentBounds() == false);
+        REGEX_ASSERT(m.hasAnchoringBounds() == true);
 
         m.region(2,4, status);
         REGEX_CHECK_STATUS;
@@ -1150,27 +1150,27 @@ void RegexTest::API_Match() {
         REGEX_ASSERT(m.regionStart() == 0);
         REGEX_ASSERT(m.regionEnd() == shorterString.length());
 
-        REGEX_ASSERT(m.hasAnchoringBounds() == TRUE);
-        REGEX_ASSERT(&m == &m.useAnchoringBounds(FALSE));
-        REGEX_ASSERT(m.hasAnchoringBounds() == FALSE);
+        REGEX_ASSERT(m.hasAnchoringBounds() == true);
+        REGEX_ASSERT(&m == &m.useAnchoringBounds(false));
+        REGEX_ASSERT(m.hasAnchoringBounds() == false);
         REGEX_ASSERT(&m == &m.reset());
-        REGEX_ASSERT(m.hasAnchoringBounds() == FALSE);
+        REGEX_ASSERT(m.hasAnchoringBounds() == false);
 
-        REGEX_ASSERT(&m == &m.useAnchoringBounds(TRUE));
-        REGEX_ASSERT(m.hasAnchoringBounds() == TRUE);
+        REGEX_ASSERT(&m == &m.useAnchoringBounds(true));
+        REGEX_ASSERT(m.hasAnchoringBounds() == true);
         REGEX_ASSERT(&m == &m.reset());
-        REGEX_ASSERT(m.hasAnchoringBounds() == TRUE);
+        REGEX_ASSERT(m.hasAnchoringBounds() == true);
 
-        REGEX_ASSERT(m.hasTransparentBounds() == FALSE);
-        REGEX_ASSERT(&m == &m.useTransparentBounds(TRUE));
-        REGEX_ASSERT(m.hasTransparentBounds() == TRUE);
+        REGEX_ASSERT(m.hasTransparentBounds() == false);
+        REGEX_ASSERT(&m == &m.useTransparentBounds(true));
+        REGEX_ASSERT(m.hasTransparentBounds() == true);
         REGEX_ASSERT(&m == &m.reset());
-        REGEX_ASSERT(m.hasTransparentBounds() == TRUE);
+        REGEX_ASSERT(m.hasTransparentBounds() == true);
 
-        REGEX_ASSERT(&m == &m.useTransparentBounds(FALSE));
-        REGEX_ASSERT(m.hasTransparentBounds() == FALSE);
+        REGEX_ASSERT(&m == &m.useTransparentBounds(false));
+        REGEX_ASSERT(m.hasTransparentBounds() == false);
         REGEX_ASSERT(&m == &m.reset());
-        REGEX_ASSERT(m.hasTransparentBounds() == FALSE);
+        REGEX_ASSERT(m.hasTransparentBounds() == false);
 
     }
 
@@ -1181,23 +1181,23 @@ void RegexTest::API_Match() {
         UErrorCode status = U_ZERO_ERROR;
         UnicodeString testString("aabb");
         RegexMatcher m1(".*", testString,  0, status);
-        REGEX_ASSERT(m1.lookingAt(status) == TRUE);
-        REGEX_ASSERT(m1.hitEnd() == TRUE);
-        REGEX_ASSERT(m1.requireEnd() == FALSE);
+        REGEX_ASSERT(m1.lookingAt(status) == true);
+        REGEX_ASSERT(m1.hitEnd() == true);
+        REGEX_ASSERT(m1.requireEnd() == false);
         REGEX_CHECK_STATUS;
 
         status = U_ZERO_ERROR;
         RegexMatcher m2("a*", testString, 0, status);
-        REGEX_ASSERT(m2.lookingAt(status) == TRUE);
-        REGEX_ASSERT(m2.hitEnd() == FALSE);
-        REGEX_ASSERT(m2.requireEnd() == FALSE);
+        REGEX_ASSERT(m2.lookingAt(status) == true);
+        REGEX_ASSERT(m2.hitEnd() == false);
+        REGEX_ASSERT(m2.requireEnd() == false);
         REGEX_CHECK_STATUS;
 
         status = U_ZERO_ERROR;
         RegexMatcher m3(".*$", testString, 0, status);
-        REGEX_ASSERT(m3.lookingAt(status) == TRUE);
-        REGEX_ASSERT(m3.hitEnd() == TRUE);
-        REGEX_ASSERT(m3.requireEnd() == TRUE);
+        REGEX_ASSERT(m3.lookingAt(status) == true);
+        REGEX_ASSERT(m3.hitEnd() == true);
+        REGEX_ASSERT(m3.requireEnd() == true);
         REGEX_CHECK_STATUS;
     }
 
@@ -1238,7 +1238,7 @@ void RegexTest::API_Match() {
         REGEX_ASSERT(matcher.getTimeLimit() == 0);
         matcher.setTimeLimit(100, status);
         REGEX_ASSERT(matcher.getTimeLimit() == 100);
-        REGEX_ASSERT(matcher.lookingAt(status) == FALSE);
+        REGEX_ASSERT(matcher.lookingAt(status) == false);
         REGEX_ASSERT(status == U_REGEX_TIME_OUT);
     }
     {
@@ -1248,7 +1248,7 @@ void RegexTest::API_Match() {
         RegexMatcher matcher("(a+)+b", testString, 0, status);
         REGEX_CHECK_STATUS;
         matcher.setTimeLimit(100, status);
-        REGEX_ASSERT(matcher.lookingAt(status) == FALSE);
+        REGEX_ASSERT(matcher.lookingAt(status) == false);
         REGEX_CHECK_STATUS;
     }
 
@@ -1264,21 +1264,21 @@ void RegexTest::API_Match() {
         RegexMatcher matcher("(A)+A$", testString, 0, status);
 
         // With the default stack, this match should fail to run
-        REGEX_ASSERT(matcher.lookingAt(status) == FALSE);
+        REGEX_ASSERT(matcher.lookingAt(status) == false);
         REGEX_ASSERT(status == U_REGEX_STACK_OVERFLOW);
 
         // With unlimited stack, it should run
         status = U_ZERO_ERROR;
         matcher.setStackLimit(0, status);
         REGEX_CHECK_STATUS;
-        REGEX_ASSERT(matcher.lookingAt(status) == TRUE);
+        REGEX_ASSERT(matcher.lookingAt(status) == true);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(matcher.getStackLimit() == 0);
 
         // With a limited stack, it the match should fail
         status = U_ZERO_ERROR;
         matcher.setStackLimit(10000, status);
-        REGEX_ASSERT(matcher.lookingAt(status) == FALSE);
+        REGEX_ASSERT(matcher.lookingAt(status) == false);
         REGEX_ASSERT(status == U_REGEX_STACK_OVERFLOW);
         REGEX_ASSERT(matcher.getStackLimit() == 10000);
     }
@@ -1292,7 +1292,7 @@ void RegexTest::API_Match() {
         REGEX_CHECK_STATUS;
         matcher.setStackLimit(30, status);
         REGEX_CHECK_STATUS;
-        REGEX_ASSERT(matcher.matches(status) == TRUE);
+        REGEX_ASSERT(matcher.matches(status) == true);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(matcher.getStackLimit() == 30);
 
@@ -1576,11 +1576,11 @@ void RegexTest::API_Pattern() {
         REGEX_CHECK_STATUS;
         UnicodeString s = "Hello World";
         mFromClone->reset(s);
-        REGEX_ASSERT(mFromClone->find() == TRUE);
+        REGEX_ASSERT(mFromClone->find() == true);
         REGEX_ASSERT(mFromClone->group(status) == "Hello");
-        REGEX_ASSERT(mFromClone->find() == TRUE);
+        REGEX_ASSERT(mFromClone->find() == true);
         REGEX_ASSERT(mFromClone->group(status) == "World");
-        REGEX_ASSERT(mFromClone->find() == FALSE);
+        REGEX_ASSERT(mFromClone->find() == false);
         delete mFromClone;
         delete pClone;
     }
@@ -1588,18 +1588,18 @@ void RegexTest::API_Pattern() {
     //
     //   matches convenience API
     //
-    REGEX_ASSERT(RegexPattern::matches(".*", "random input", pe, status) == TRUE);
+    REGEX_ASSERT(RegexPattern::matches(".*", "random input", pe, status) == true);
     REGEX_CHECK_STATUS;
-    REGEX_ASSERT(RegexPattern::matches("abc", "random input", pe, status) == FALSE);
+    REGEX_ASSERT(RegexPattern::matches("abc", "random input", pe, status) == false);
     REGEX_CHECK_STATUS;
-    REGEX_ASSERT(RegexPattern::matches(".*nput", "random input", pe, status) == TRUE);
+    REGEX_ASSERT(RegexPattern::matches(".*nput", "random input", pe, status) == true);
     REGEX_CHECK_STATUS;
-    REGEX_ASSERT(RegexPattern::matches("random input", "random input", pe, status) == TRUE);
+    REGEX_ASSERT(RegexPattern::matches("random input", "random input", pe, status) == true);
     REGEX_CHECK_STATUS;
-    REGEX_ASSERT(RegexPattern::matches(".*u", "random input", pe, status) == FALSE);
+    REGEX_ASSERT(RegexPattern::matches(".*u", "random input", pe, status) == false);
     REGEX_CHECK_STATUS;
     status = U_INDEX_OUTOFBOUNDS_ERROR;
-    REGEX_ASSERT(RegexPattern::matches("abc", "abc", pe, status) == FALSE);
+    REGEX_ASSERT(RegexPattern::matches("abc", "abc", pe, status) == false);
     REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
 
 
@@ -1863,18 +1863,18 @@ void RegexTest::API_Match_UTF8() {
         //
         RegexMatcher *m1 = &pat2->matcher(status)->reset(&input1);
         REGEX_CHECK_STATUS;
-        REGEX_ASSERT(m1->lookingAt(status) == TRUE);
+        REGEX_ASSERT(m1->lookingAt(status) == true);
         const char str_abcdefthisisatest[] = { 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x20, 0x74, 0x68, 0x69, 0x73, 0x20, 0x69, 0x73, 0x20, 0x61, 0x20, 0x74, 0x65, 0x73, 0x74, 0x00 }; /* abcdef this is a test */
         REGEX_ASSERT_UTEXT_UTF8(str_abcdefthisisatest, m1->inputText());
         m1->reset(&input2);
-        REGEX_ASSERT(m1->lookingAt(status) == FALSE);
+        REGEX_ASSERT(m1->lookingAt(status) == false);
         const char str_notabc[] = { 0x6e, 0x6f, 0x74, 0x20, 0x61, 0x62, 0x63, 0x00 }; /* not abc */
         REGEX_ASSERT_UTEXT_UTF8(str_notabc, m1->inputText());
         m1->reset(&input1);
         REGEX_ASSERT_UTEXT_UTF8(str_abcdefthisisatest, m1->inputText());
-        REGEX_ASSERT(m1->lookingAt(status) == TRUE);
+        REGEX_ASSERT(m1->lookingAt(status) == true);
         m1->reset(&empty);
-        REGEX_ASSERT(m1->lookingAt(status) == FALSE);
+        REGEX_ASSERT(m1->lookingAt(status) == false);
         REGEX_ASSERT(utext_nativeLength(&empty) == 0);
 
         //
@@ -1884,7 +1884,7 @@ void RegexTest::API_Match_UTF8() {
         m1->reset(4, status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT_UTEXT_UTF8(str_abcdefthisisatest, m1->inputText());
-        REGEX_ASSERT(m1->lookingAt(status) == TRUE);
+        REGEX_ASSERT(m1->lookingAt(status) == true);
 
         m1->reset(-1, status);
         REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
@@ -1910,24 +1910,24 @@ void RegexTest::API_Match_UTF8() {
         // match(pos, status)
         //
         m1->reset(&input2);
-        REGEX_ASSERT(m1->matches(4, status) == TRUE);
+        REGEX_ASSERT(m1->matches(4, status) == true);
         m1->reset();
-        REGEX_ASSERT(m1->matches(3, status) == FALSE);
+        REGEX_ASSERT(m1->matches(3, status) == false);
         m1->reset();
-        REGEX_ASSERT(m1->matches(5, status) == FALSE);
-        REGEX_ASSERT(m1->matches(4, status) == TRUE);
-        REGEX_ASSERT(m1->matches(-1, status) == FALSE);
+        REGEX_ASSERT(m1->matches(5, status) == false);
+        REGEX_ASSERT(m1->matches(4, status) == true);
+        REGEX_ASSERT(m1->matches(-1, status) == false);
         REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
 
         // Match() at end of string should fail, but should not
         //  be an error.
         status = U_ZERO_ERROR;
-        REGEX_ASSERT(m1->matches(input2Len, status) == FALSE);
+        REGEX_ASSERT(m1->matches(input2Len, status) == false);
         REGEX_CHECK_STATUS;
 
         // Match beyond end of string should fail with an error.
         status = U_ZERO_ERROR;
-        REGEX_ASSERT(m1->matches(input2Len+1, status) == FALSE);
+        REGEX_ASSERT(m1->matches(input2Len+1, status) == false);
         REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
 
         // Successful match at end of string.
@@ -1936,10 +1936,10 @@ void RegexTest::API_Match_UTF8() {
             RegexMatcher m("A?", 0, status);  // will match zero length string.
             REGEX_CHECK_STATUS;
             m.reset(&input1);
-            REGEX_ASSERT(m.matches(input1Len, status) == TRUE);
+            REGEX_ASSERT(m.matches(input1Len, status) == true);
             REGEX_CHECK_STATUS;
             m.reset(&empty);
-            REGEX_ASSERT(m.matches(0, status) == TRUE);
+            REGEX_ASSERT(m.matches(0, status) == true);
             REGEX_CHECK_STATUS;
         }
 
@@ -1949,16 +1949,16 @@ void RegexTest::API_Match_UTF8() {
         //
         status = U_ZERO_ERROR;
         m1->reset(&input2);  // "not abc"
-        REGEX_ASSERT(m1->lookingAt(4, status) == TRUE);
-        REGEX_ASSERT(m1->lookingAt(5, status) == FALSE);
-        REGEX_ASSERT(m1->lookingAt(3, status) == FALSE);
-        REGEX_ASSERT(m1->lookingAt(4, status) == TRUE);
-        REGEX_ASSERT(m1->lookingAt(-1, status) == FALSE);
+        REGEX_ASSERT(m1->lookingAt(4, status) == true);
+        REGEX_ASSERT(m1->lookingAt(5, status) == false);
+        REGEX_ASSERT(m1->lookingAt(3, status) == false);
+        REGEX_ASSERT(m1->lookingAt(4, status) == true);
+        REGEX_ASSERT(m1->lookingAt(-1, status) == false);
         REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
         status = U_ZERO_ERROR;
-        REGEX_ASSERT(m1->lookingAt(input2Len, status) == FALSE);
+        REGEX_ASSERT(m1->lookingAt(input2Len, status) == false);
         REGEX_CHECK_STATUS;
-        REGEX_ASSERT(m1->lookingAt(input2Len+1, status) == FALSE);
+        REGEX_ASSERT(m1->lookingAt(input2Len+1, status) == false);
         REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
 
         delete m1;
@@ -1994,7 +1994,7 @@ void RegexTest::API_Match_UTF8() {
 
         RegexMatcher *matcher = &pat->matcher(status)->reset(&input);
         REGEX_CHECK_STATUS;
-        REGEX_ASSERT(matcher->lookingAt(status) == TRUE);
+        REGEX_ASSERT(matcher->lookingAt(status) == true);
         static const int32_t matchStarts[] = {0,  2, 4, 8};
         static const int32_t matchEnds[]   = {10, 8, 6, 10};
         int32_t i;
@@ -2145,8 +2145,8 @@ void RegexTest::API_Match_UTF8() {
         REGEX_ASSERT(matcher->start(status) == 6);
         REGEX_ASSERT(matcher->find());
         REGEX_ASSERT(matcher->start(status) == 12);
-        REGEX_ASSERT(matcher->find() == FALSE);
-        REGEX_ASSERT(matcher->find() == FALSE);
+        REGEX_ASSERT(matcher->find() == false);
+        REGEX_ASSERT(matcher->find() == false);
 
         matcher->reset();
         REGEX_ASSERT(matcher->find());
@@ -2160,9 +2160,9 @@ void RegexTest::API_Match_UTF8() {
         REGEX_ASSERT(matcher->start(status) == 6);
         REGEX_ASSERT(matcher->find(12, status));
         REGEX_ASSERT(matcher->start(status) == 12);
-        REGEX_ASSERT(matcher->find(13, status) == FALSE);
-        REGEX_ASSERT(matcher->find(16, status) == FALSE);
-        REGEX_ASSERT(matcher->find(17, status) == FALSE);
+        REGEX_ASSERT(matcher->find(13, status) == false);
+        REGEX_ASSERT(matcher->find(16, status) == false);
+        REGEX_ASSERT(matcher->find(17, status) == false);
         REGEX_ASSERT_FAIL(matcher->start(status), U_REGEX_INVALID_STATE);
 
         status = U_ZERO_ERROR;
@@ -2233,7 +2233,7 @@ void RegexTest::API_Match_UTF8() {
         utext_openUTF8(&s, "    ", -1, &status);
         m.reset(&s);
         for (i=0; ; i++) {
-            if (m.find() == FALSE) {
+            if (m.find() == false) {
                 break;
             }
             REGEX_ASSERT(m.start(status) == i);
@@ -2247,7 +2247,7 @@ void RegexTest::API_Match_UTF8() {
         utext_openUTF8(&s, (char *)aboveBMP, -1, &status);
         m.reset(&s);
         for (i=0; ; i+=4) {
-            if (m.find() == FALSE) {
+            if (m.find() == false) {
                 break;
             }
             REGEX_ASSERT(m.start(status) == i);
@@ -2269,7 +2269,7 @@ void RegexTest::API_Match_UTF8() {
         utext_openUTF8(&s, "    ", -1, &status);
         m.reset(&s);
         for (i=0; ; i++) {
-            if (m.find() == FALSE) {
+            if (m.find() == false) {
                 break;
             }
             REGEX_ASSERT(m.start(status) == i);
@@ -2299,7 +2299,7 @@ void RegexTest::API_Match_UTF8() {
         RegexMatcher  *m = p->matcher(status);
         REGEX_CHECK_STATUS;
 
-        REGEX_ASSERT(m->find() == FALSE);
+        REGEX_ASSERT(m->find() == false);
         REGEX_ASSERT(utext_nativeLength(m->inputText()) == 0);
         delete m;
         delete p;
@@ -2321,8 +2321,8 @@ void RegexTest::API_Match_UTF8() {
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(m.regionStart() == 0);
         REGEX_ASSERT(m.regionEnd() == (int32_t)strlen("This is test data"));
-        REGEX_ASSERT(m.hasTransparentBounds() == FALSE);
-        REGEX_ASSERT(m.hasAnchoringBounds() == TRUE);
+        REGEX_ASSERT(m.hasTransparentBounds() == false);
+        REGEX_ASSERT(m.hasAnchoringBounds() == true);
 
         m.region(2,4, status);
         REGEX_CHECK_STATUS;
@@ -2341,27 +2341,27 @@ void RegexTest::API_Match_UTF8() {
         REGEX_ASSERT(m.regionStart() == 0);
         REGEX_ASSERT(m.regionEnd() == (int32_t)strlen("short"));
 
-        REGEX_ASSERT(m.hasAnchoringBounds() == TRUE);
-        REGEX_ASSERT(&m == &m.useAnchoringBounds(FALSE));
-        REGEX_ASSERT(m.hasAnchoringBounds() == FALSE);
+        REGEX_ASSERT(m.hasAnchoringBounds() == true);
+        REGEX_ASSERT(&m == &m.useAnchoringBounds(false));
+        REGEX_ASSERT(m.hasAnchoringBounds() == false);
         REGEX_ASSERT(&m == &m.reset());
-        REGEX_ASSERT(m.hasAnchoringBounds() == FALSE);
+        REGEX_ASSERT(m.hasAnchoringBounds() == false);
 
-        REGEX_ASSERT(&m == &m.useAnchoringBounds(TRUE));
-        REGEX_ASSERT(m.hasAnchoringBounds() == TRUE);
+        REGEX_ASSERT(&m == &m.useAnchoringBounds(true));
+        REGEX_ASSERT(m.hasAnchoringBounds() == true);
         REGEX_ASSERT(&m == &m.reset());
-        REGEX_ASSERT(m.hasAnchoringBounds() == TRUE);
+        REGEX_ASSERT(m.hasAnchoringBounds() == true);
 
-        REGEX_ASSERT(m.hasTransparentBounds() == FALSE);
-        REGEX_ASSERT(&m == &m.useTransparentBounds(TRUE));
-        REGEX_ASSERT(m.hasTransparentBounds() == TRUE);
+        REGEX_ASSERT(m.hasTransparentBounds() == false);
+        REGEX_ASSERT(&m == &m.useTransparentBounds(true));
+        REGEX_ASSERT(m.hasTransparentBounds() == true);
         REGEX_ASSERT(&m == &m.reset());
-        REGEX_ASSERT(m.hasTransparentBounds() == TRUE);
+        REGEX_ASSERT(m.hasTransparentBounds() == true);
 
-        REGEX_ASSERT(&m == &m.useTransparentBounds(FALSE));
-        REGEX_ASSERT(m.hasTransparentBounds() == FALSE);
+        REGEX_ASSERT(&m == &m.useTransparentBounds(false));
+        REGEX_ASSERT(m.hasTransparentBounds() == false);
         REGEX_ASSERT(&m == &m.reset());
-        REGEX_ASSERT(m.hasTransparentBounds() == FALSE);
+        REGEX_ASSERT(m.hasTransparentBounds() == false);
 
         utext_close(&testText);
         utext_close(&testPattern);
@@ -2380,27 +2380,27 @@ void RegexTest::API_Match_UTF8() {
         utext_openUTF8(&testText, str_aabb, -1, &status);
 
         RegexMatcher m1(&testPattern, &testText,  0, status);
-        REGEX_ASSERT(m1.lookingAt(status) == TRUE);
-        REGEX_ASSERT(m1.hitEnd() == TRUE);
-        REGEX_ASSERT(m1.requireEnd() == FALSE);
+        REGEX_ASSERT(m1.lookingAt(status) == true);
+        REGEX_ASSERT(m1.hitEnd() == true);
+        REGEX_ASSERT(m1.requireEnd() == false);
         REGEX_CHECK_STATUS;
 
         status = U_ZERO_ERROR;
         const char str_a[] = { 0x61, 0x2a, 0x00 }; /* a* */
         utext_openUTF8(&testPattern, str_a, -1, &status);
         RegexMatcher m2(&testPattern, &testText, 0, status);
-        REGEX_ASSERT(m2.lookingAt(status) == TRUE);
-        REGEX_ASSERT(m2.hitEnd() == FALSE);
-        REGEX_ASSERT(m2.requireEnd() == FALSE);
+        REGEX_ASSERT(m2.lookingAt(status) == true);
+        REGEX_ASSERT(m2.hitEnd() == false);
+        REGEX_ASSERT(m2.requireEnd() == false);
         REGEX_CHECK_STATUS;
 
         status = U_ZERO_ERROR;
         const char str_dotstardollar[] = { 0x2e, 0x2a, 0x24, 0x00 }; /* .*$ */
         utext_openUTF8(&testPattern, str_dotstardollar, -1, &status);
         RegexMatcher m3(&testPattern, &testText, 0, status);
-        REGEX_ASSERT(m3.lookingAt(status) == TRUE);
-        REGEX_ASSERT(m3.hitEnd() == TRUE);
-        REGEX_ASSERT(m3.requireEnd() == TRUE);
+        REGEX_ASSERT(m3.lookingAt(status) == true);
+        REGEX_ASSERT(m3.hitEnd() == true);
+        REGEX_ASSERT(m3.requireEnd() == true);
         REGEX_CHECK_STATUS;
 
         utext_close(&testText);
@@ -2871,11 +2871,11 @@ void RegexTest::API_Pattern_UTF8() {
         const char str_HelloWorld[] = { 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64, 0x00 }; /* Hello World */
         utext_openUTF8(&input, str_HelloWorld, -1, &status);
         mFromClone->reset(&input);
-        REGEX_ASSERT(mFromClone->find() == TRUE);
+        REGEX_ASSERT(mFromClone->find() == true);
         REGEX_ASSERT(mFromClone->group(status) == "Hello");
-        REGEX_ASSERT(mFromClone->find() == TRUE);
+        REGEX_ASSERT(mFromClone->find() == true);
         REGEX_ASSERT(mFromClone->group(status) == "World");
-        REGEX_ASSERT(mFromClone->find() == FALSE);
+        REGEX_ASSERT(mFromClone->find() == false);
         delete mFromClone;
         delete pClone;
 
@@ -2896,32 +2896,32 @@ void RegexTest::API_Pattern_UTF8() {
 
         const char str_dotstar[] = { 0x2e, 0x2a, 0x00 }; /* .* */
         utext_openUTF8(&pattern, str_dotstar, -1, &status);
-        REGEX_ASSERT(RegexPattern::matches(&pattern, &input, pe, status) == TRUE);
+        REGEX_ASSERT(RegexPattern::matches(&pattern, &input, pe, status) == true);
         REGEX_CHECK_STATUS;
 
         const char str_abc[] = { 0x61, 0x62, 0x63, 0x00 }; /* abc */
         utext_openUTF8(&pattern, str_abc, -1, &status);
-        REGEX_ASSERT(RegexPattern::matches("abc", "random input", pe, status) == FALSE);
+        REGEX_ASSERT(RegexPattern::matches("abc", "random input", pe, status) == false);
         REGEX_CHECK_STATUS;
 
         const char str_nput[] = { 0x2e, 0x2a, 0x6e, 0x70, 0x75, 0x74, 0x00 }; /* .*nput */
         utext_openUTF8(&pattern, str_nput, -1, &status);
-        REGEX_ASSERT(RegexPattern::matches(".*nput", "random input", pe, status) == TRUE);
+        REGEX_ASSERT(RegexPattern::matches(".*nput", "random input", pe, status) == true);
         REGEX_CHECK_STATUS;
 
         utext_openUTF8(&pattern, str_randominput, -1, &status);
-        REGEX_ASSERT(RegexPattern::matches("random input", "random input", pe, status) == TRUE);
+        REGEX_ASSERT(RegexPattern::matches("random input", "random input", pe, status) == true);
         REGEX_CHECK_STATUS;
 
         const char str_u[] = { 0x2e, 0x2a, 0x75, 0x00 }; /* .*u */
         utext_openUTF8(&pattern, str_u, -1, &status);
-        REGEX_ASSERT(RegexPattern::matches(".*u", "random input", pe, status) == FALSE);
+        REGEX_ASSERT(RegexPattern::matches(".*u", "random input", pe, status) == false);
         REGEX_CHECK_STATUS;
 
         utext_openUTF8(&input, str_abc, -1, &status);
         utext_openUTF8(&pattern, str_abc, -1, &status);
         status = U_INDEX_OUTOFBOUNDS_ERROR;
-        REGEX_ASSERT(RegexPattern::matches("abc", "abc", pe, status) == FALSE);
+        REGEX_ASSERT(RegexPattern::matches("abc", "abc", pe, status) == false);
         REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
 
         utext_close(&input);
@@ -3183,7 +3183,7 @@ void RegexTest::Extended() {
     //
     //  Put the test data into a UnicodeString
     //
-    UnicodeString testString(FALSE, testData, len);
+    UnicodeString testString(false, testData, len);
 
     RegexMatcher    quotedStuffMat(UNICODE_STRING_SIMPLE("\\s*([\\'\\\"/])(.*?)\\1"), 0, status);
     RegexMatcher    commentMat    (UNICODE_STRING_SIMPLE("\\s*(#.*)?$"), 0, status);
@@ -3269,7 +3269,7 @@ void RegexTest::Extended() {
         //  The only thing left from the input line should be an optional trailing comment.
         //
         commentMat.reset(testLine);
-        if (commentMat.lookingAt(status) == FALSE) {
+        if (commentMat.lookingAt(status) == false) {
             errln("Line %d: unexpected characters at end of test line.", lineNum);
             continue;
         }
@@ -3321,7 +3321,7 @@ static void setInt(UVector &vec, int32_t val, int32_t idx) {
 
 static UBool utextOffsetToNative(UText *utext, int32_t unistrOffset, int32_t& nativeIndex)
 {
-    UBool couldFind = TRUE;
+    UBool couldFind = true;
     UTEXT_SETNATIVEINDEX(utext, 0);
     int32_t i = 0;
     while (i < unistrOffset) {
@@ -3329,7 +3329,7 @@ static UBool utextOffsetToNative(UText *utext, int32_t unistrOffset, int32_t& na
         if (c != U_SENTINEL) {
             i += U16_LENGTH(c);
         } else {
-            couldFind = FALSE;
+            couldFind = false;
             break;
         }
     }
@@ -3362,12 +3362,12 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     UVector             groupEnds(status);
     UVector             groupStartsUTF8(status);
     UVector             groupEndsUTF8(status);
-    UBool               isMatch        = FALSE, isUTF8Match = FALSE;
-    UBool               failed         = FALSE;
+    UBool               isMatch        = false, isUTF8Match = false;
+    UBool               failed         = false;
     int32_t             numFinds;
     int32_t             i;
-    UBool               useMatchesFunc   = FALSE;
-    UBool               useLookingAtFunc = FALSE;
+    UBool               useMatchesFunc   = false;
+    UBool               useLookingAtFunc = false;
     int32_t             regionStart      = -1;
     int32_t             regionEnd        = -1;
     int32_t             regionStartUTF8  = -1;
@@ -3490,10 +3490,10 @@ void RegexTest::regex_find(const UnicodeString &pattern,
 
     // 'M' flag.  Use matches() instead of find()
     if (flags.indexOf((UChar)0x4d) >= 0) {
-        useMatchesFunc = TRUE;
+        useMatchesFunc = true;
     }
     if (flags.indexOf((UChar)0x4c) >= 0) {
-        useLookingAtFunc = TRUE;
+        useLookingAtFunc = true;
     }
 
     //
@@ -3539,7 +3539,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     }
     if ((regionStart>=0 || regionEnd>=0) && (regionStart<0 || regionStart>regionEnd)) {
         errln("mismatched <r> tags");
-        failed = TRUE;
+        failed = true;
         goto cleanupAndReturn;
     }
 
@@ -3549,7 +3549,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     matcher = callerPattern->matcher(deTaggedInput, status);
     REGEX_CHECK_STATUS_L(line);
     if (flags.indexOf((UChar)0x74) >= 0) {   //  't' trace flag
-        matcher->setTrace(TRUE);
+        matcher->setTrace(true);
     }
 
     if (UTF8Pattern != NULL) {
@@ -3576,7 +3576,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     //
     if (UTF8Matcher != NULL) {
         if (flags.indexOf((UChar)0x74) >= 0) {   //  't' trace flag
-            UTF8Matcher->setTrace(TRUE);
+            UTF8Matcher->setTrace(true);
         }
         if (regionStart>=0)    (void) utextOffsetToNative(&inputText, regionStart, regionStartUTF8);
         if (regionEnd>=0)      (void) utextOffsetToNative(&inputText, regionEnd, regionEndUTF8);
@@ -3590,7 +3590,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
                 int32_t  startUTF8;
                 if (!utextOffsetToNative(&inputText, start, startUTF8)) {
                     errln("Error at line %d: could not find native index for group start %d.  UTF16 index %d", line, i, start);
-                    failed = TRUE;
+                    failed = true;
                     goto cleanupAndReturn;  // Good chance of subsequent bogus errors.  Stop now.
                 }
                 setInt(groupStartsUTF8, startUTF8, i);
@@ -3602,7 +3602,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
                 int32_t  endUTF8;
                 if (!utextOffsetToNative(&inputText, end, endUTF8)) {
                     errln("Error at line %d: could not find native index for group end %d.  UTF16 index %d", line, i, end);
-                    failed = TRUE;
+                    failed = true;
                     goto cleanupAndReturn;  // Good chance of subsequent bogus errors.  Stop now.
                 }
                 setInt(groupEndsUTF8, endUTF8, i);
@@ -3619,15 +3619,15 @@ void RegexTest::regex_find(const UnicodeString &pattern,
        }
     }
     if (flags.indexOf((UChar)0x61) >= 0) {   //  'a' anchoring bounds flag
-        matcher->useAnchoringBounds(FALSE);
+        matcher->useAnchoringBounds(false);
         if (UTF8Matcher != NULL) {
-            UTF8Matcher->useAnchoringBounds(FALSE);
+            UTF8Matcher->useAnchoringBounds(false);
         }
     }
     if (flags.indexOf((UChar)0x62) >= 0) {   //  'b' transparent bounds flag
-        matcher->useTransparentBounds(TRUE);
+        matcher->useTransparentBounds(true);
         if (UTF8Matcher != NULL) {
-            UTF8Matcher->useTransparentBounds(TRUE);
+            UTF8Matcher->useTransparentBounds(true);
         }
     }
 
@@ -3656,9 +3656,9 @@ void RegexTest::regex_find(const UnicodeString &pattern,
             }
         }
     }
-    matcher->setTrace(FALSE);
+    matcher->setTrace(false);
     if (UTF8Matcher) {
-        UTF8Matcher->setTrace(FALSE);
+        UTF8Matcher->setTrace(false);
     }
     if (U_FAILURE(status)) {
         errln("Error at line %d. ICU ErrorCode is %s", u_errorName(status));
@@ -3672,22 +3672,22 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     // matcher->groupCount does not include group 0, the entire match, hence the +1.
     //   G option in test means that capture group data is not available in the
     //     expected results, so the check needs to be suppressed.
-    if (isMatch == FALSE && groupStarts.size() != 0) {
+    if (isMatch == false && groupStarts.size() != 0) {
         dataerrln("Error at line %d:  Match expected, but none found.", line);
-        failed = TRUE;
+        failed = true;
         goto cleanupAndReturn;
-    } else if (UTF8Matcher != NULL && isUTF8Match == FALSE && groupStarts.size() != 0) {
+    } else if (UTF8Matcher != NULL && isUTF8Match == false && groupStarts.size() != 0) {
         errln("Error at line %d:  Match expected, but none found. (UTF8)", line);
-        failed = TRUE;
+        failed = true;
         goto cleanupAndReturn;
     }
     if (isMatch && groupStarts.size() == 0) {
         errln("Error at line %d: No match expected, but one found at position %d.", line, matcher->start(status));
-        failed = TRUE;
+        failed = true;
     }
     if (UTF8Matcher && isUTF8Match && groupStarts.size() == 0) {
         errln("Error at line %d: No match expected, but one found at position %d (UTF-8).", line, UTF8Matcher->start(status));
-        failed = TRUE;
+        failed = true;
     }
 
     if (flags.indexOf((UChar)0x47 /*G*/) >= 0) {
@@ -3702,12 +3702,12 @@ void RegexTest::regex_find(const UnicodeString &pattern,
         if (matcher->start(i, status) != expectedStart) {
             errln("Error at line %d: incorrect start position for group %d.  Expected %d, got %d",
                 line, i, expectedStart, matcher->start(i, status));
-            failed = TRUE;
+            failed = true;
             goto cleanupAndReturn;  // Good chance of subsequent bogus errors.  Stop now.
         } else if (UTF8Matcher != NULL && UTF8Matcher->start(i, status) != expectedStartUTF8) {
             errln("Error at line %d: incorrect start position for group %d.  Expected %d, got %d (UTF8)",
                   line, i, expectedStartUTF8, UTF8Matcher->start(i, status));
-            failed = TRUE;
+            failed = true;
             goto cleanupAndReturn;  // Good chance of subsequent bogus errors.  Stop now.
         }
 
@@ -3716,13 +3716,13 @@ void RegexTest::regex_find(const UnicodeString &pattern,
         if (matcher->end(i, status) != expectedEnd) {
             errln("Error at line %d: incorrect end position for group %d.  Expected %d, got %d",
                 line, i, expectedEnd, matcher->end(i, status));
-            failed = TRUE;
+            failed = true;
             // Error on end position;  keep going; real error is probably yet to come as group
             //   end positions work from end of the input data towards the front.
         } else if (UTF8Matcher != NULL && UTF8Matcher->end(i, status) != expectedEndUTF8) {
             errln("Error at line %d: incorrect end position for group %d.  Expected %d, got %d (UTF8)",
                   line, i, expectedEndUTF8, UTF8Matcher->end(i, status));
-            failed = TRUE;
+            failed = true;
             // Error on end position;  keep going; real error is probably yet to come as group
             //   end positions work from end of the input data towards the front.
         }
@@ -3730,52 +3730,52 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     if ( matcher->groupCount()+1 < groupStarts.size()) {
         errln("Error at line %d: Expected %d capture groups, found %d.",
             line, groupStarts.size()-1, matcher->groupCount());
-        failed = TRUE;
+        failed = true;
         }
     else if (UTF8Matcher != NULL && UTF8Matcher->groupCount()+1 < groupStarts.size()) {
         errln("Error at line %d: Expected %d capture groups, found %d. (UTF8)",
               line, groupStarts.size()-1, UTF8Matcher->groupCount());
-        failed = TRUE;
+        failed = true;
     }
 
     if ((flags.indexOf((UChar)0x59) >= 0) &&   //  'Y' flag:  RequireEnd() == false
-        matcher->requireEnd() == TRUE) {
-        errln("Error at line %d: requireEnd() returned TRUE.  Expected FALSE", line);
-        failed = TRUE;
+        matcher->requireEnd() == true) {
+        errln("Error at line %d: requireEnd() returned true.  Expected false", line);
+        failed = true;
     } else if (UTF8Matcher != NULL && (flags.indexOf((UChar)0x59) >= 0) &&   //  'Y' flag:  RequireEnd() == false
-        UTF8Matcher->requireEnd() == TRUE) {
-        errln("Error at line %d: requireEnd() returned TRUE.  Expected FALSE (UTF8)", line);
-        failed = TRUE;
+        UTF8Matcher->requireEnd() == true) {
+        errln("Error at line %d: requireEnd() returned true.  Expected false (UTF8)", line);
+        failed = true;
     }
 
     if ((flags.indexOf((UChar)0x79) >= 0) &&   //  'y' flag:  RequireEnd() == true
-        matcher->requireEnd() == FALSE) {
-        errln("Error at line %d: requireEnd() returned FALSE.  Expected TRUE", line);
-        failed = TRUE;
+        matcher->requireEnd() == false) {
+        errln("Error at line %d: requireEnd() returned false.  Expected true", line);
+        failed = true;
     } else if (UTF8Matcher != NULL && (flags.indexOf((UChar)0x79) >= 0) &&   //  'Y' flag:  RequireEnd() == false
-        UTF8Matcher->requireEnd() == FALSE) {
-        errln("Error at line %d: requireEnd() returned FALSE.  Expected TRUE (UTF8)", line);
-        failed = TRUE;
+        UTF8Matcher->requireEnd() == false) {
+        errln("Error at line %d: requireEnd() returned false.  Expected true (UTF8)", line);
+        failed = true;
     }
 
     if ((flags.indexOf((UChar)0x5A) >= 0) &&   //  'Z' flag:  hitEnd() == false
-        matcher->hitEnd() == TRUE) {
-        errln("Error at line %d: hitEnd() returned TRUE.  Expected FALSE", line);
-        failed = TRUE;
+        matcher->hitEnd() == true) {
+        errln("Error at line %d: hitEnd() returned true.  Expected false", line);
+        failed = true;
     } else if (UTF8Matcher != NULL && (flags.indexOf((UChar)0x5A) >= 0) &&   //  'Z' flag:  hitEnd() == false
-               UTF8Matcher->hitEnd() == TRUE) {
-        errln("Error at line %d: hitEnd() returned TRUE.  Expected FALSE (UTF8)", line);
-        failed = TRUE;
+               UTF8Matcher->hitEnd() == true) {
+        errln("Error at line %d: hitEnd() returned true.  Expected false (UTF8)", line);
+        failed = true;
     }
 
     if ((flags.indexOf((UChar)0x7A) >= 0) &&   //  'z' flag:  hitEnd() == true
-        matcher->hitEnd() == FALSE) {
-        errln("Error at line %d: hitEnd() returned FALSE.  Expected TRUE", line);
-        failed = TRUE;
+        matcher->hitEnd() == false) {
+        errln("Error at line %d: hitEnd() returned false.  Expected true", line);
+        failed = true;
     } else if (UTF8Matcher != NULL && (flags.indexOf((UChar)0x7A) >= 0) &&   //  'z' flag:  hitEnd() == true
-               UTF8Matcher->hitEnd() == FALSE) {
-        errln("Error at line %d: hitEnd() returned FALSE.  Expected TRUE (UTF8)", line);
-        failed = TRUE;
+               UTF8Matcher->hitEnd() == false) {
+        errln("Error at line %d: hitEnd() returned false.  Expected true (UTF8)", line);
+        failed = true;
     }
 
 
@@ -3932,7 +3932,7 @@ void RegexTest::PerlTests() {
     //
     //  Put the test data into a UnicodeString
     //
-    UnicodeString testDataString(FALSE, testData, len);
+    UnicodeString testDataString(false, testData, len);
 
     //
     //  Regex to break the input file into lines, and strip the new lines.
@@ -4092,9 +4092,9 @@ void RegexTest::PerlTests() {
         //
         RegexMatcher *testMat = testPat->matcher(matchString, status);
         UBool found = testMat->find();
-        UBool expected = FALSE;
+        UBool expected = false;
         if (fields[2].indexOf(UChar_y) >=0) {
-            expected = TRUE;
+            expected = true;
         }
         if (expected != found) {
             errln("line %d: Expected %smatch, got %smatch",
@@ -4303,7 +4303,7 @@ void RegexTest::PerlTestsUTF8() {
     //
     //  Put the test data into a UnicodeString
     //
-    UnicodeString testDataString(FALSE, testData, len);
+    UnicodeString testDataString(false, testData, len);
 
     //
     //  Regex to break the input file into lines, and strip the new lines.
@@ -4489,9 +4489,9 @@ void RegexTest::PerlTestsUTF8() {
         //
         RegexMatcher *testMat = &testPat->matcher(status)->reset(&inputText);
         UBool found = testMat->find();
-        UBool expected = FALSE;
+        UBool expected = false;
         if (fields[2].indexOf(UChar_y) >=0) {
-            expected = TRUE;
+            expected = true;
         }
         if (expected != found) {
             errln("line %d: Expected %smatch, got %smatch",
@@ -4675,7 +4675,7 @@ void RegexTest::Bug6149() {
     RegexMatcher  matcher(pattern, s, flags, status);
     UBool result = false;
     REGEX_ASSERT_FAIL(result=matcher.matches(status), U_REGEX_STACK_OVERFLOW);
-    REGEX_ASSERT(result == FALSE);
+    REGEX_ASSERT(result == false);
  }
 
 
@@ -4755,7 +4755,7 @@ void RegexTest::Callbacks() {
         cbInfo.reset(4);
         s = "aaaaaaaaaaaaaaaaaaab";
         matcher.reset(s);
-        REGEX_ASSERT(matcher.matches(status)==FALSE);
+        REGEX_ASSERT(matcher.matches(status)==false);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(cbInfo.numCalls > 0);
 
@@ -4764,7 +4764,7 @@ void RegexTest::Callbacks() {
         cbInfo.reset(4);
         s = "aaaaaaaaaaaaaaaaaaaaaaab";
         matcher.reset(s);
-        REGEX_ASSERT(matcher.matches(status)==FALSE);
+        REGEX_ASSERT(matcher.matches(status)==false);
         REGEX_ASSERT(status == U_REGEX_STOPPED_BY_CALLER);
         REGEX_ASSERT(cbInfo.numCalls == 4);
 
@@ -4773,7 +4773,7 @@ void RegexTest::Callbacks() {
         cbInfo.reset(4);
         s = "aaaaaaaaaaaaaaaaaaaaaaab";
         matcher.reset(s);
-        REGEX_ASSERT(matcher.find(status)==FALSE);
+        REGEX_ASSERT(matcher.find(status)==false);
         REGEX_ASSERT(status == U_REGEX_STOPPED_BY_CALLER);
         REGEX_ASSERT(cbInfo.numCalls == 4);
     }
@@ -4798,8 +4798,8 @@ struct progressCallBackContext {
 };
 
 // call-back function for find().
-// Return TRUE to continue the find().
-// Return FALSE to stop the find().
+// Return true to continue the find().
+// Return false to stop the find().
 U_CDECL_BEGIN
 static UBool U_CALLCONV
 testProgressCallBackFn(const void *context, int64_t matchIndex) {
@@ -4850,7 +4850,7 @@ void RegexTest::FindProgressCallbacks() {
         UnicodeString s = "aaxxx";
         matcher.reset(s);
 #if 0
-        matcher.setTrace(TRUE);
+        matcher.setTrace(true);
 #endif
         REGEX_ASSERT(matcher.find(0, status));
         REGEX_CHECK_STATUS;
@@ -4862,7 +4862,7 @@ void RegexTest::FindProgressCallbacks() {
         s = "aaaaaaaaaaaaaaaaaaab";
         cbInfo.reset(s.length()); //  Some upper limit for number of calls that is greater than size of our input string
         matcher.reset(s);
-        REGEX_ASSERT(matcher.find(0, status)==FALSE);
+        REGEX_ASSERT(matcher.find(0, status)==false);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(cbInfo.numCalls > 0 && cbInfo.numCalls < 25);
 
@@ -4871,7 +4871,7 @@ void RegexTest::FindProgressCallbacks() {
         UnicodeString s1 = "aaaaaaaaaaaaaaaaaaaaaaab";
         cbInfo.reset(s1.length() - 5); //  Bail early somewhere near the end of input string
         matcher.reset(s1);
-        REGEX_ASSERT(matcher.find(0, status)==FALSE);
+        REGEX_ASSERT(matcher.find(0, status)==false);
         REGEX_ASSERT(status == U_REGEX_STOPPED_BY_CALLER);
         REGEX_ASSERT(cbInfo.numCalls == s1.length() - 5);
 
@@ -4880,7 +4880,7 @@ void RegexTest::FindProgressCallbacks() {
         UnicodeString s2 = "aaaaaaaaaaaaaa aaaaaaaaab xxx";
         cbInfo.reset(s2.length() - 10); //  Bail early somewhere near the end of input string
         matcher.reset(s2);
-        REGEX_ASSERT(matcher.find(0, status)==FALSE);
+        REGEX_ASSERT(matcher.find(0, status)==false);
         REGEX_ASSERT(status == U_REGEX_STOPPED_BY_CALLER);
         // Now retry the match from where left off
         cbInfo.maxCalls = 100; //  No callback limit
@@ -4977,7 +4977,7 @@ void RegexTest::PreAllocatedUTextCAPI () {
 
         uregex_setText(re, text1, -1, &status);
         result = uregex_find(re, 0, &status);
-        REGEX_ASSERT(result==TRUE);
+        REGEX_ASSERT(result==true);
 
         /*  Capture Group 0, the full match.  Should succeed. "abc interior def" */
         status = U_ZERO_ERROR;
@@ -5569,14 +5569,14 @@ void RegexTest::TestBug11049() {
     // To see the problem, the text must exactly fill an allocated buffer, so that valgrind will
     // detect the bad read.
 
-    TestCase11049("A|B|C", "a string \\ud800\\udc00", FALSE, __LINE__);
-    TestCase11049("A|B|C", "string matches at end C", TRUE, __LINE__);
+    TestCase11049("A|B|C", "a string \\ud800\\udc00", false, __LINE__);
+    TestCase11049("A|B|C", "string matches at end C", true, __LINE__);
 
     // Test again with a pattern starting with a single character,
     // which takes a different code path than starting with an OR expression,
     // but with similar logic.
-    TestCase11049("C", "a string \\ud800\\udc00", FALSE, __LINE__);
-    TestCase11049("C", "string matches at end C", TRUE, __LINE__);
+    TestCase11049("C", "a string \\ud800\\udc00", false, __LINE__);
+    TestCase11049("C", "string matches at end C", true, __LINE__);
 }
 
 // Run a single test case from TestBug11049(). Internal function.

@@ -119,7 +119,7 @@ u_finit(FILE          *f,
         const char    *locale,
         const char    *codepage)
 {
-    return finit_owner(f, locale, codepage, FALSE);
+    return finit_owner(f, locale, codepage, false);
 }
 
 U_CAPI UFILE* U_EXPORT2
@@ -127,7 +127,7 @@ u_fadopt(FILE         *f,
         const char    *locale,
         const char    *codepage)
 {
-    return finit_owner(f, locale, codepage, TRUE);
+    return finit_owner(f, locale, codepage, true);
 }
 
 U_CAPI UFILE* U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
@@ -142,7 +142,7 @@ u_fopen(const char    *filename,
         return 0;
     }
 
-    result = finit_owner(systemFile, locale, codepage, TRUE);
+    result = finit_owner(systemFile, locale, codepage, true);
 
     if (!result) {
         /* Something bad happened.
@@ -198,7 +198,7 @@ u_fopen_u(const UChar   *filename,
         mbstowcs_s(&retVal, wperm, UPRV_LENGTHOF(wperm), perm, _TRUNCATE);
         FILE *systemFile = _wfopen(reinterpret_cast<const wchar_t *>(filename), wperm); // may return NULL for long filename
         if (systemFile) {
-            result = finit_owner(systemFile, locale, codepage, TRUE);
+            result = finit_owner(systemFile, locale, codepage, true);
         }
         if (!result && systemFile) {
             /* Something bad happened.
@@ -253,7 +253,7 @@ u_feof(UFILE  *f)
 {
     UBool endOfBuffer;
     if (f == NULL) {
-        return TRUE;
+        return true;
     }
     endOfBuffer = (UBool)(f->str.fPos >= f->str.fLimit);
     if (f->fFile != NULL) {

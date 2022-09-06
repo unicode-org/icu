@@ -1110,7 +1110,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAllFieldPatterns(/*char *par*/)
                         // test that resulting pattern has at least one char in mustIncludeOneOf
                         UnicodeString mustIncludeOneOf(testDataPtr->mustIncludeOneOf, -1, US_INV);
                         int32_t patIndx, patLen = pattern.length();
-                        UBool inQuoted = FALSE;
+                        UBool inQuoted = false;
                         for (patIndx = 0; patIndx < patLen; patIndx++) {
                             UChar c = pattern.charAt(patIndx);
                             if (c == 0x27) {
@@ -1256,7 +1256,7 @@ void IntlTestDateTimePatternGeneratorAPI::testSkeletonsWithDayPeriods() {
         int32_t i, len = UPRV_LENGTHOF(patterns);
         for (i = 0; i < len; i++) {
             UnicodeString conflictingPattern;
-            (void)gen->addPattern(UnicodeString(patterns[i]), TRUE, conflictingPattern, status);
+            (void)gen->addPattern(UnicodeString(patterns[i]), true, conflictingPattern, status);
             if (U_FAILURE(status)) {
                 errln("ERROR: addPattern %s fail, status: %s", patterns[i], u_errorName(status));
                 break;

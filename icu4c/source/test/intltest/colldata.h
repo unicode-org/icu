@@ -97,7 +97,7 @@ public:
      * @param offset - the offset of the suffix
      * @param other - the other <code>CEList</code>
      *
-     * @return <code>TRUE</code> if the CEs match, <code>FALSE</code> otherwise.
+     * @return <code>true</code> if the CEs match, <code>false</code> otherwise.
      */
     UBool matchesAt(int32_t offset, const CEList *other) const; 
 

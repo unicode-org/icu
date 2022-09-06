@@ -454,7 +454,7 @@ void MonkeyTestData::set(BreakRules *rules, IntlTest::icu_rand &rand, UErrorCode
                                              // for control over rule chaining.
     while (strIdx < fString.length()) {
         BreakRule *matchingRule = NULL;
-        UBool      hasBreak = FALSE;
+        UBool      hasBreak = false;
         int32_t ruleNum = 0;
         int32_t matchStart = 0;
         int32_t matchEnd = 0;
@@ -610,7 +610,7 @@ void MonkeyTestData::dump(int32_t around) const {
 //
 //---------------------------------------------------------------------------------------
 
-RBBIMonkeyImpl::RBBIMonkeyImpl(UErrorCode &status) : fDumpExpansions(FALSE), fThread(this) {
+RBBIMonkeyImpl::RBBIMonkeyImpl(UErrorCode &status) : fDumpExpansions(false), fThread(this) {
     (void)status;    // suppress unused parameter compiler warning.
 }
 
@@ -647,7 +647,7 @@ void RBBIMonkeyImpl::openBreakRules(const char *fileName, UErrorCode &status) {
     path.append("break_rules" U_FILE_SEP_STRING, status);
     path.appendPathPart(fileName, status);
     const char *codePage = "UTF-8";
-    fRuleCharBuffer.adoptInstead(ucbuf_open(path.data(), &codePage, TRUE, FALSE, &status));
+    fRuleCharBuffer.adoptInstead(ucbuf_open(path.data(), &codePage, true, false, &status));
 }
 
 
@@ -918,10 +918,10 @@ void RBBIMonkeyTest::testMonkey() {
     int64_t loopCount = quick? 100 : 5000;
     getIntParam("loop", params, loopCount, status);
 
-    UBool dumpExpansions = FALSE;
+    UBool dumpExpansions = false;
     getBoolParam("expansions", params, dumpExpansions, status);
 
-    UBool verbose = FALSE;
+    UBool verbose = false;
     getBoolParam("verbose", params, verbose, status);
 
     int64_t seed = 0;
@@ -989,9 +989,9 @@ UBool  RBBIMonkeyTest::getIntParam(UnicodeString name, UnicodeString &params, in
         // Delete this parameter from the params string.
         m.reset();
         params = m.replaceFirst(UnicodeString(), status);
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 UBool RBBIMonkeyTest::getStringParam(UnicodeString name, UnicodeString &params, CharString &dest, UErrorCode &status) {
@@ -1004,9 +1004,9 @@ UBool RBBIMonkeyTest::getStringParam(UnicodeString name, UnicodeString &params, 
         // Delete this parameter from the params string.
         m.reset();
         params = m.replaceFirst(UnicodeString(), status);
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 UBool RBBIMonkeyTest::getBoolParam(UnicodeString name, UnicodeString &params, UBool &dest, UErrorCode &status) {
@@ -1018,15 +1018,15 @@ UBool RBBIMonkeyTest::getBoolParam(UnicodeString name, UnicodeString &params, UB
             dest = m.group(1, status).caseCompare(UnicodeString("true"), U_FOLD_CASE_DEFAULT) == 0;
         } else {
             // No explicit user value, implies true.
-            dest = TRUE;
+            dest = true;
         }
 
         // Delete this parameter from the params string.
         m.reset();
         params = m.replaceFirst(UnicodeString(), status);
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 #endif /* !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_FORMATTING */

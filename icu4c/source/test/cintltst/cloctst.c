@@ -15,8 +15,9 @@
 ******************************************************************************
 */
 #include "cloctst.h"
-#include <stdlib.h>
+#include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "cintltst.h"
 #include "cmemory.h"
@@ -911,15 +912,15 @@ static void TestGetAvailableLocalesByType() {
     uenum_close(uenum);
 
     uenum = uloc_openAvailableByType(ULOC_AVAILABLE_ONLY_LEGACY_ALIASES, &status);
-    UBool found_he = FALSE;
-    UBool found_iw = FALSE;
+    UBool found_he = false;
+    UBool found_iw = false;
     const char* loc;
     while ((loc = uenum_next(uenum, NULL, &status))) {
         if (uprv_strcmp("he", loc) == 0) {
-            found_he = TRUE;
+            found_he = true;
         }
         if (uprv_strcmp("iw", loc) == 0) {
-            found_iw = TRUE;
+            found_iw = true;
         }
     }
     assertTrue("Should NOT have found he amongst the legacy/alias locales", !found_he);
@@ -927,16 +928,16 @@ static void TestGetAvailableLocalesByType() {
     uenum_close(uenum);
 
     uenum = uloc_openAvailableByType(ULOC_AVAILABLE_WITH_LEGACY_ALIASES, &status);
-    found_he = FALSE;
-    found_iw = FALSE;
+    found_he = false;
+    found_iw = false;
     const UChar* uloc; // test the UChar conversion
     int32_t count = 0;
     while ((uloc = uenum_unext(uenum, NULL, &status))) {
         if (u_strcmp(u"iw", uloc) == 0) {
-            found_iw = TRUE;
+            found_iw = true;
         }
         if (u_strcmp(u"he", uloc) == 0) {
-            found_he = TRUE;
+            found_he = true;
         }
         count++;
     }
@@ -3240,9 +3241,9 @@ static UBool isLocaleAvailable(UResourceBundle* resIndex, const char* loc){
     int32_t len = 0;
     ures_getStringByKey(resIndex, loc,&len, &status);
     if(U_FAILURE(status)){
-        return FALSE; 
+        return false; 
     }
-    return TRUE;
+    return true;
 }
 
 static void TestCalendar() {
@@ -6248,7 +6249,7 @@ static void TestToLanguageTag(void) {
         langtag[0] = 0;
         expected = locale_to_langtag[i][1];
 
-        len = uloc_toLanguageTag(inloc, langtag, sizeof(langtag), FALSE, &status);
+        len = uloc_toLanguageTag(inloc, langtag, sizeof(langtag), false, &status);
         (void)len;    /* Suppress set but not used warning. */
         if (U_FAILURE(status)) {
             if (expected != NULL) {
@@ -6270,7 +6271,7 @@ static void TestToLanguageTag(void) {
         langtag[0] = 0;
         expected = locale_to_langtag[i][2];
 
-        len = uloc_toLanguageTag(inloc, langtag, sizeof(langtag), TRUE, &status);
+        len = uloc_toLanguageTag(inloc, langtag, sizeof(langtag), true, &status);
         if (U_FAILURE(status)) {
             if (expected != NULL) {
                 log_data_err("Error returned by uloc_toLanguageTag {strict} for locale id [%s] - error: %s Are you missing data?\n",
@@ -6302,7 +6303,7 @@ static void TestBug20132(void) {
      * instead require several iterations before getting the correct size. */
 
     status = U_ZERO_ERROR;
-    len = uloc_toLanguageTag(inloc, langtag, 1, FALSE, &status);
+    len = uloc_toLanguageTag(inloc, langtag, 1, false, &status);
 
     if (U_FAILURE(status) && status != U_BUFFER_OVERFLOW_ERROR) {
         log_data_err("Error returned by uloc_toLanguageTag for locale id [%s] - error: %s Are you missing data?\n",
@@ -6314,7 +6315,7 @@ static void TestBug20132(void) {
     }
 
     status = U_ZERO_ERROR;
-    len = uloc_toLanguageTag(inloc, langtag, expected_len, FALSE, &status);
+    len = uloc_toLanguageTag(inloc, langtag, expected_len, false, &status);
 
     if (U_FAILURE(status)) {
         log_data_err("Error returned by uloc_toLanguageTag for locale id [%s] - error: %s Are you missing data?\n",
@@ -6481,7 +6482,7 @@ static void TestLangAndRegionCanonicalize(void) {
         status = U_ZERO_ERROR;
         const char* input = langtag_to_canonical[i].input;
         uloc_forLanguageTag(input, locale, sizeof(locale), NULL, &status);
-        uloc_toLanguageTag(locale, canonical, sizeof(canonical), TRUE, &status);
+        uloc_toLanguageTag(locale, canonical, sizeof(canonical), true, &status);
         if (U_FAILURE(status)) {
             log_err_status(status, "Error returned by uloc_forLanguageTag or uloc_toLanguageTag "
                            "for language tag [%s] - error: %s\n", input, u_errorName(status));

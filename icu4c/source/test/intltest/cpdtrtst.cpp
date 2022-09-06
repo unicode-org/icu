@@ -359,13 +359,13 @@ void CompoundTransliteratorTest::TestTransliterate(){
         UTransPosition index = { 0, 0, 0, 0 };
         UnicodeString rsource2(s);
         UnicodeString expectedResult=s;
-        ct1->handleTransliterate(rsource2, index, FALSE);
-        expectAux(ct1->getID() + ":String, index(0,0,0), incremental=FALSE", rsource2 + "->" + rsource2, rsource2==expectedResult, expectedResult);
+        ct1->handleTransliterate(rsource2, index, false);
+        expectAux(ct1->getID() + ":String, index(0,0,0), incremental=false", rsource2 + "->" + rsource2, rsource2==expectedResult, expectedResult);
         UTransPosition _index = {1,3,2,3};
         uprv_memcpy(&index, &_index, sizeof(index));
         UnicodeString rsource3(s);
-        ct1->handleTransliterate(rsource3, index, TRUE); 
-        expectAux(ct1->getID() + ":String, index(1,2,3), incremental=TRUE", rsource3 + "->" + rsource3, rsource3==expectedResult, expectedResult);
+        ct1->handleTransliterate(rsource3, index, true); 
+        expectAux(ct1->getID() + ":String, index(1,2,3), incremental=true", rsource3 + "->" + rsource3, rsource3==expectedResult, expectedResult);
 #endif
     }
     delete ct1;

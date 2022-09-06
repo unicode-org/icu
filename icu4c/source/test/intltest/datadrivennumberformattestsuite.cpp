@@ -32,7 +32,7 @@ void DataDrivenNumberFormatTestSuite::run(const char *fileName, UBool runAllTest
     CharString path(getSourceTestData(status), status);
     path.appendPathPart(fileName, status);
     const char *codePage = "UTF-8";
-    LocalUCHARBUFPointer f(ucbuf_open(path.data(), &codePage, TRUE, FALSE, &status));
+    LocalUCHARBUFPointer f(ucbuf_open(path.data(), &codePage, true, false, &status));
     if (!assertSuccess("Can't open data file", status)) {
         return;
     }
@@ -193,17 +193,17 @@ UBool DataDrivenNumberFormatTestSuite::readLine(
             errln("Error reading line from file.");
         }
         fFileLine.remove();
-        return FALSE;
+        return false;
     }
     ++fFileLineNumber;
     // Strip trailing CR/LF, comments, and spaces.
     while(lineLength > 0 && isCROrLF(line[lineLength - 1])) { --lineLength; }
-    fFileLine.setTo(FALSE, line, lineLength);
+    fFileLine.setTo(false, line, lineLength);
     while(lineLength > 0 && isSpace(line[lineLength - 1])) { --lineLength; }
     if (lineLength == 0) {
         fFileLine.remove();
     }
-    return TRUE;
+    return true;
 }
 
 UBool DataDrivenNumberFormatTestSuite::isPass(
@@ -211,9 +211,9 @@ UBool DataDrivenNumberFormatTestSuite::isPass(
         UnicodeString &appendErrorMessage,
         UErrorCode &status) {
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
-    UBool result = FALSE;
+    UBool result = false;
     if (tuple.formatFlag && tuple.outputFlag) {
         ++fFormatTestNumber;
         result = isFormatPass(
@@ -254,9 +254,9 @@ UBool DataDrivenNumberFormatTestSuite::isFormatPass(
         UnicodeString & /*appendErrorMessage*/,
         UErrorCode &status) {
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
     
 UBool DataDrivenNumberFormatTestSuite::isFormatPass(
@@ -277,9 +277,9 @@ UBool DataDrivenNumberFormatTestSuite::isToPatternPass(
         UnicodeString & /*appendErrorMessage*/,
         UErrorCode &status) {
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 UBool DataDrivenNumberFormatTestSuite::isParsePass(
@@ -287,9 +287,9 @@ UBool DataDrivenNumberFormatTestSuite::isParsePass(
         UnicodeString & /*appendErrorMessage*/,
         UErrorCode &status) {
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 UBool DataDrivenNumberFormatTestSuite::isParseCurrencyPass(
@@ -297,9 +297,9 @@ UBool DataDrivenNumberFormatTestSuite::isParseCurrencyPass(
         UnicodeString & /*appendErrorMessage*/,
         UErrorCode &status) {
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 UBool DataDrivenNumberFormatTestSuite::isSelectPass(
@@ -307,8 +307,8 @@ UBool DataDrivenNumberFormatTestSuite::isSelectPass(
         UnicodeString & /*appendErrorMessage*/,
         UErrorCode &status) {
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 #endif /* !UCONFIG_NO_FORMATTING */

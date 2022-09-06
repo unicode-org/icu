@@ -311,7 +311,7 @@ UBool NormalizerConformanceTest::checkConformance(const UnicodeString* field,
                                                   const char *line,
                                                   int32_t options,
                                                   UErrorCode &status) {
-    UBool pass = TRUE, result;
+    UBool pass = true, result;
     UnicodeString out, fcd;
     int32_t fieldNum;
 
@@ -329,19 +329,19 @@ UBool NormalizerConformanceTest::checkConformance(const UnicodeString* field,
     // test quick checks
     if(UNORM_NO == Normalizer::quickCheck(field[1], UNORM_NFC, options, status)) {
         errln("Normalizer error: quickCheck(NFC(s), UNORM_NFC) is UNORM_NO");
-        pass = FALSE;
+        pass = false;
     }
     if(UNORM_NO == Normalizer::quickCheck(field[2], UNORM_NFD, options, status)) {
         errln("Normalizer error: quickCheck(NFD(s), UNORM_NFD) is UNORM_NO");
-        pass = FALSE;
+        pass = false;
     }
     if(UNORM_NO == Normalizer::quickCheck(field[3], UNORM_NFKC, options, status)) {
         errln("Normalizer error: quickCheck(NFKC(s), UNORM_NFKC) is UNORM_NO");
-        pass = FALSE;
+        pass = false;
     }
     if(UNORM_NO == Normalizer::quickCheck(field[4], UNORM_NFKD, options, status)) {
         errln("Normalizer error: quickCheck(NFKD(s), UNORM_NFKD) is UNORM_NO");
-        pass = FALSE;
+        pass = false;
     }
 
     // branch on options==0 for better code coverage
@@ -351,75 +351,75 @@ UBool NormalizerConformanceTest::checkConformance(const UnicodeString* field,
         result = Normalizer::isNormalized(field[1], UNORM_NFC, options, status);
     }
     if(!result) {
-        dataerrln("Normalizer error: isNormalized(NFC(s), UNORM_NFC) is FALSE");
-        pass = FALSE;
+        dataerrln("Normalizer error: isNormalized(NFC(s), UNORM_NFC) is false");
+        pass = false;
     }
     if(options==0 && !isNormalizedUTF8(nfc, field[1], status)) {
-        dataerrln("Normalizer error: nfc.isNormalizedUTF8(NFC(s)) is FALSE");
-        pass = FALSE;
+        dataerrln("Normalizer error: nfc.isNormalizedUTF8(NFC(s)) is false");
+        pass = false;
     }
     if(field[0]!=field[1]) {
         if(Normalizer::isNormalized(field[0], UNORM_NFC, options, status)) {
-            errln("Normalizer error: isNormalized(s, UNORM_NFC) is TRUE");
-            pass = FALSE;
+            errln("Normalizer error: isNormalized(s, UNORM_NFC) is true");
+            pass = false;
         }
         if(isNormalizedUTF8(nfc, field[0], status)) {
-            errln("Normalizer error: nfc.isNormalizedUTF8(s) is TRUE");
-            pass = FALSE;
+            errln("Normalizer error: nfc.isNormalizedUTF8(s) is true");
+            pass = false;
         }
     }
     if(options==0 && !isNormalizedUTF8(nfd, field[2], status)) {
-        dataerrln("Normalizer error: nfd.isNormalizedUTF8(NFD(s)) is FALSE");
-        pass = FALSE;
+        dataerrln("Normalizer error: nfd.isNormalizedUTF8(NFD(s)) is false");
+        pass = false;
     }
     if(!Normalizer::isNormalized(field[3], UNORM_NFKC, options, status)) {
-        dataerrln("Normalizer error: isNormalized(NFKC(s), UNORM_NFKC) is FALSE");
-        pass = FALSE;
+        dataerrln("Normalizer error: isNormalized(NFKC(s), UNORM_NFKC) is false");
+        pass = false;
     } else {
         if(options==0 && !isNormalizedUTF8(nfkc, field[3], status)) {
-            dataerrln("Normalizer error: nfkc.isNormalizedUTF8(NFKC(s)) is FALSE");
-            pass = FALSE;
+            dataerrln("Normalizer error: nfkc.isNormalizedUTF8(NFKC(s)) is false");
+            pass = false;
         }
         if(field[0]!=field[3]) {
             if(Normalizer::isNormalized(field[0], UNORM_NFKC, options, status)) {
-                errln("Normalizer error: isNormalized(s, UNORM_NFKC) is TRUE");
-                pass = FALSE;
+                errln("Normalizer error: isNormalized(s, UNORM_NFKC) is true");
+                pass = false;
             }
             if(options==0 && isNormalizedUTF8(nfkc, field[0], status)) {
-                errln("Normalizer error: nfkc.isNormalizedUTF8(s) is TRUE");
-                pass = FALSE;
+                errln("Normalizer error: nfkc.isNormalizedUTF8(s) is true");
+                pass = false;
             }
         }
     }
     if(options==0 && !isNormalizedUTF8(nfkd, field[4], status)) {
-        dataerrln("Normalizer error: nfkd.isNormalizedUTF8(NFKD(s)) is FALSE");
-        pass = FALSE;
+        dataerrln("Normalizer error: nfkd.isNormalizedUTF8(NFKD(s)) is false");
+        pass = false;
     }
 
     // test FCD quick check and "makeFCD"
     Normalizer::normalize(field[0], UNORM_FCD, options, fcd, status);
     if(UNORM_NO == Normalizer::quickCheck(fcd, UNORM_FCD, options, status)) {
         errln("Normalizer error: quickCheck(FCD(s), UNORM_FCD) is UNORM_NO");
-        pass = FALSE;
+        pass = false;
     }
     if(UNORM_NO == Normalizer::quickCheck(field[2], UNORM_FCD, options, status)) {
         errln("Normalizer error: quickCheck(NFD(s), UNORM_FCD) is UNORM_NO");
-        pass = FALSE;
+        pass = false;
     }
     if(UNORM_NO == Normalizer::quickCheck(field[4], UNORM_FCD, options, status)) {
         errln("Normalizer error: quickCheck(NFKD(s), UNORM_FCD) is UNORM_NO");
-        pass = FALSE;
+        pass = false;
     }
 
     Normalizer::normalize(fcd, UNORM_NFD, options, out, status);
     if(out != field[2]) {
         dataerrln("Normalizer error: NFD(FCD(s))!=NFD(s)");
-        pass = FALSE;
+        pass = false;
     }
 
     if (U_FAILURE(status)) {
         dataerrln("Normalizer::normalize returned error status: %s", u_errorName(status));
-        pass = FALSE;
+        pass = false;
     }
 
     if(field[0]!=field[2]) {
@@ -433,10 +433,10 @@ UBool NormalizerConformanceTest::checkConformance(const UnicodeString* field,
         rc=Normalizer::compare(field[0], field[2], (options<<UNORM_COMPARE_NORM_OPTIONS_SHIFT)|U_COMPARE_IGNORE_CASE, status);
         if(U_FAILURE(status)) {
             dataerrln("Normalizer::compare(case-insensitive) sets %s", u_errorName(status));
-            pass=FALSE;
+            pass=false;
         } else if(rc!=0) {
             errln("Normalizer::compare(original, NFD, case-insensitive) returned %d instead of 0 for equal", rc);
-            pass=FALSE;
+            pass=false;
         }
     }
 
@@ -466,24 +466,24 @@ UBool NormalizerConformanceTest::checkNorm(UNormalizationMode mode, int32_t opti
     Normalizer::normalize(s, mode, options, out, errorCode);
     if (U_FAILURE(errorCode)) {
         dataerrln("Error running normalize UNORM_NF%s: %s", modeString, u_errorName(errorCode));
-        return FALSE;
+        return false;
     }
     if (!assertEqual(modeString, "", s, out, exp, msg)) {
-        return FALSE;
+        return false;
     }
 
     iterativeNorm(s, mode, options, out, +1);
     if (!assertEqual(modeString, "(+1)", s, out, exp, msg)) {
-        return FALSE;
+        return false;
     }
 
     iterativeNorm(s, mode, options, out, -1);
     if (!assertEqual(modeString, "(-1)", s, out, exp, msg)) {
-        return FALSE;
+        return false;
     }
 
     if (norm2 == nullptr || options != 0) {
-        return TRUE;
+        return true;
     }
 
     std::string s8;
@@ -498,19 +498,19 @@ UBool NormalizerConformanceTest::checkNorm(UNormalizationMode mode, int32_t opti
     if (U_FAILURE(errorCode)) {
         errln("Normalizer2.%s.normalizeUTF8(%s) failed: %s",
               modeString, s8.c_str(), u_errorName(errorCode));
-        return FALSE;
+        return false;
     }
     if (out8 != exp8) {
         errln("Normalizer2.%s.normalizeUTF8(%s)=%s != %s",
               modeString, s8.c_str(), out8.c_str(), exp8.c_str());
-        return FALSE;
+        return false;
     }
     if (editsPtr == nullptr) {
-        return TRUE;
+        return true;
     }
 
     // Do the Edits cover the entire input & output?
-    UBool pass = TRUE;
+    UBool pass = true;
     pass &= assertEquals("edits.hasChanges()", (UBool)(s8 != out8), edits.hasChanges());
     pass &= assertEquals("edits.lengthDelta()",
                          (int32_t)(out8.length() - s8.length()), edits.lengthDelta());
@@ -558,7 +558,7 @@ UBool NormalizerConformanceTest::assertEqual(const char *op, const char *op2,
                                              const UnicodeString& exp,
                                              const char *msg) {
     if (exp == got)
-        return TRUE;
+        return true;
 
     char *sChars, *gotChars, *expChars;
     UnicodeString sPretty(prettify(s));
@@ -581,7 +581,7 @@ UBool NormalizerConformanceTest::assertEqual(const char *op, const char *op2,
     delete []sChars;
     delete []gotChars;
     delete []expChars;
-    return FALSE;
+    return false;
 }
 
 /**
@@ -593,7 +593,7 @@ UBool NormalizerConformanceTest::assertEqual(const char *op, const char *op2,
  * fields are parsed.  If there are too few an exception is
  * thrown.  If there are too many the extras are ignored.
  *
- * @return FALSE upon failure
+ * @return false upon failure
  */
 UBool NormalizerConformanceTest::hexsplit(const char *s, char delimiter,
                                           UnicodeString output[], int32_t outputLength) {
@@ -617,7 +617,7 @@ UBool NormalizerConformanceTest::hexsplit(const char *s, char delimiter,
                 (*end != ' ' && *end != '\t' && *end != delimiter)
             ) {
                 errln(UnicodeString("Bad field ", "") + (i + 1) + " in " + UnicodeString(s, ""));
-                return FALSE;
+                return false;
             }
 
             output[i].append(c);
@@ -635,15 +635,15 @@ UBool NormalizerConformanceTest::hexsplit(const char *s, char delimiter,
             }
             if(*t == 0) {
                 if((i + 1) == outputLength) {
-                    return TRUE;
+                    return true;
                 } else {
                     errln(UnicodeString("Missing field(s) in ", "") + s + " only " + (i + 1) + " out of " + outputLength);
-                    return FALSE;
+                    return false;
                 }
             }
         }
     }
-    return TRUE;
+    return true;
 }
 
 // Specific tests for debugging.  These are generally failures taken from

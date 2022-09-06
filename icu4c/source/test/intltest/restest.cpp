@@ -126,12 +126,12 @@ param[] =
     // "IN" means inherits
     // "NE" or "ne" means "does not exist"
 
-    { "root",       NULL,   U_ZERO_ERROR,             e_Root,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } },
-    { "te",         NULL,   U_ZERO_ERROR,             e_te,        { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
-    { "te_IN",      NULL,   U_ZERO_ERROR,             e_te_IN,     { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
-    { "te_NE",      NULL,   U_USING_FALLBACK_WARNING, e_te,        { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
-    { "te_IN_NE",   NULL,   U_USING_FALLBACK_WARNING, e_te_IN,     { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
-    { "ne",         NULL,   U_USING_DEFAULT_WARNING,  e_Root,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
+    { "root",       NULL,   U_ZERO_ERROR,             e_Root,      { true, false, false }, { true, false, false } },
+    { "te",         NULL,   U_ZERO_ERROR,             e_te,        { false, true, false }, { true, true, false } },
+    { "te_IN",      NULL,   U_ZERO_ERROR,             e_te_IN,     { false, false, true }, { true, true, true } },
+    { "te_NE",      NULL,   U_USING_FALLBACK_WARNING, e_te,        { false, true, false }, { true, true, false } },
+    { "te_IN_NE",   NULL,   U_USING_FALLBACK_WARNING, e_te_IN,     { false, false, true }, { true, true, true } },
+    { "ne",         NULL,   U_USING_DEFAULT_WARNING,  e_Root,      { true, false, false }, { true, false, false } }
 };
 
 static const int32_t bundles_count = UPRV_LENGTHOF(param);
@@ -145,11 +145,11 @@ static const int32_t bundles_count = UPRV_LENGTHOF(param);
 uint32_t
 randul()
 {
-    static UBool initialized = FALSE;
+    static UBool initialized = false;
     if (!initialized)
     {
         srand((unsigned)time(NULL));
-        initialized = TRUE;
+        initialized = true;
     }
     // Assume rand has at least 12 bits of precision
     uint32_t l = 0;
@@ -243,14 +243,14 @@ ResourceBundleTest::TestResourceBundles()
         Locale::setDefault(Locale("en_US"), status);
     }
 
-    testTag("only_in_Root", TRUE, FALSE, FALSE);
-    testTag("only_in_te", FALSE, TRUE, FALSE);
-    testTag("only_in_te_IN", FALSE, FALSE, TRUE);
-    testTag("in_Root_te", TRUE, TRUE, FALSE);
-    testTag("in_Root_te_te_IN", TRUE, TRUE, TRUE);
-    testTag("in_Root_te_IN", TRUE, FALSE, TRUE);
-    testTag("in_te_te_IN", FALSE, TRUE, TRUE);
-    testTag("nonexistent", FALSE, FALSE, FALSE);
+    testTag("only_in_Root", true, false, false);
+    testTag("only_in_te", false, true, false);
+    testTag("only_in_te_IN", false, false, true);
+    testTag("in_Root_te", true, true, false);
+    testTag("in_Root_te_te_IN", true, true, true);
+    testTag("in_Root_te_IN", true, false, true);
+    testTag("in_te_te_IN", false, true, true);
+    testTag("nonexistent", false, false, false);
     logln("Passed: %d\nFailed: %d", pass, fail);
 
     /* Restore the default locale for the other tests. */
@@ -351,7 +351,7 @@ ResourceBundleTest::testTag(const char* frag,
     if(U_FAILURE(status))
     {
         dataerrln("Could not load testdata.dat %s " + UnicodeString(u_errorName(status)));
-        return FALSE;
+        return false;
     }
 
     for (i=0; i<bundles_count; ++i)
@@ -419,7 +419,7 @@ ResourceBundleTest::testTag(const char* frag,
         UnicodeString string(theBundle.getStringEx(tag, status));
 
         if(U_FAILURE(status)) {
-            string.setTo(TRUE, kErrorUChars, kErrorLength);
+            string.setTo(true, kErrorUChars, kErrorLength);
         }
 
         CONFIRM_UErrorCode(status, expected_resource_status, action);

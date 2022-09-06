@@ -1006,7 +1006,7 @@ void RelativeDateTimeFormatterTest::TestEnglishNoQuantityCaps() {
             UDAT_STYLE_LONG,
             UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE,
             status);
-    if (assertSuccess("RelativeDateTimeFormatter", status, TRUE) == FALSE) {
+    if (assertSuccess("RelativeDateTimeFormatter", status, true) == false) {
         return;
     }
     RunTest(

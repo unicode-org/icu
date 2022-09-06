@@ -97,7 +97,7 @@ void StaticUnicodeSetsTest::testNonEmpty() {
         }
         const UnicodeSet* uset = get(static_cast<unisets::Key>(i));
         // Can fail if no data:
-        assertFalse(UnicodeString("Set should not be empty: ") + i, uset->isEmpty(), FALSE, TRUE);
+        assertFalse(UnicodeString("Set should not be empty: ") + i, uset->isEmpty(), false, true);
     }
 }
 

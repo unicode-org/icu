@@ -260,7 +260,7 @@ usrc_writeUTrie2Struct(FILE *f,
         "    0x%lx,\n"          /* errorValue */
         "    0x%lx,\n"          /* highStart */
         "    0x%lx,\n"          /* highValueIndex */
-        "    NULL, 0, FALSE, FALSE, 0, NULL\n",
+        "    NULL, 0, false, false, 0, NULL\n",
         (long)pTrie->indexLength, (long)pTrie->dataLength,
         (short)pTrie->index2NullOffset, (short)pTrie->dataNullOffset,
         (long)pTrie->initialValue, (long)pTrie->errorValue,

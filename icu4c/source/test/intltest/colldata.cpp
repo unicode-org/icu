@@ -149,16 +149,16 @@ uint32_t &CEList::operator[](int32_t index) const
 UBool CEList::matchesAt(int32_t offset, const CEList *other) const
 {
     if (other == NULL || listSize - offset < other->size()) {
-        return FALSE;
+        return false;
     }
 
     for (int32_t i = offset, j = 0; j < other->size(); i += 1, j += 1) {
         if (ces[i] != (*other)[j]) {
-            return FALSE;
+            return false;
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 int32_t CEList::size() const
@@ -350,7 +350,7 @@ CollData::CollData(UCollator *collator, UErrorCode &status)
     coll = collator;
 #endif
 
-    ucol_getContractionsAndExpansions(coll, contractions, expansions, FALSE, &status);
+    ucol_getContractionsAndExpansions(coll, contractions, expansions, false, &status);
 
     uset_addAll(charsToTest, contractions);
     uset_addAll(charsToTest, expansions);
@@ -428,7 +428,7 @@ bail:
     // Maybe use [:HST=T:] and look for the end of the last range?
     // Maybe use script boundary mappings instead of this code??
     UChar  jamoRanges[] = {Hangul::JAMO_L_BASE, Hangul::JAMO_V_BASE, Hangul::JAMO_T_BASE + 1, 0x11FF};
-     UnicodeString jamoString(FALSE, jamoRanges, UPRV_LENGTHOF(jamoRanges));
+     UnicodeString jamoString(false, jamoRanges, UPRV_LENGTHOF(jamoRanges));
      CEList hanList(coll, hanString, status);
      CEList jamoList(coll, jamoString, status);
      int32_t j = 0;

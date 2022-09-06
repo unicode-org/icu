@@ -68,7 +68,7 @@ BOOL CALLBACK EnumLocalesProc(LPSTR lpLocaleString)
 
     lcidCount += 1;
 
-    return TRUE;
+    return true;
 }
 
 // TODO: Note that this test will skip locale names and only hit locales with assigned LCIDs

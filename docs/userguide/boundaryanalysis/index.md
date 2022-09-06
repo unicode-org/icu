@@ -350,10 +350,10 @@ UBool isWholeWord(BreakIterator& wordBrk,
     int32_t start,
     int32_t end) {
     if (s.isEmpty())
-        return FALSE;
+        return false;
     wordBrk.setText(s);
     if (!wordBrk.isBoundary(start))
-        return FALSE;
+        return false;
     return wordBrk.isBoundary(end);
 }
 ```
@@ -367,10 +367,10 @@ UBool isWholeWord(UBreakIterator* wordBrk,
     int32_t start,
     int32_t end,
     UErrorCode* err) {
-    UBool result = FALSE;
+    UBool result = false;
     if (wordBrk == NULL || s == NULL) {
         *err = U_ILLEGAL_ARGUMENT_ERROR;
-        return FALSE;
+        return false;
     }
     ubrk_setText(wordBrk, s, sLen, err);
     if (U_SUCCESS(*err)) {
