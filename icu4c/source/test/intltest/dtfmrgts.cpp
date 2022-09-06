@@ -198,7 +198,7 @@ void DateFormatRegressionTest::Test4052408(void)
         (UnicodeString) "TIMEZONE_FIELD"
     };
 
-    UBool pass = TRUE;
+    UBool pass = true;
     for(int i = 0; i <= 17; ++i) {
         FieldPosition pos(i);
         UnicodeString buf;
@@ -216,7 +216,7 @@ void DateFormatRegressionTest::Test4052408(void)
             logln(" ok");
         else {
             errln(UnicodeString(" expected ") + exp);
-            pass = FALSE;
+            pass = false;
         }
         
     }
@@ -236,7 +236,7 @@ void DateFormatRegressionTest::Test4056591(void)
 
     //try {
         SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("yyMMdd"), Locale::getUS(), status);
-        if (failure(status, "new SimpleDateFormat", TRUE)) {
+        if (failure(status, "new SimpleDateFormat", true)) {
             delete fmt;
             return;
         }
@@ -294,7 +294,7 @@ void DateFormatRegressionTest::Test4059917(void)
     UnicodeString myDate;
 
     SimpleDateFormat fmt(UnicodeString(u"yyyy/MM/dd"), status );
-    if (failure(status, "new SimpleDateFormat", TRUE)) return;
+    if (failure(status, "new SimpleDateFormat", true)) return;
     myDate = "1997/01/01";
     aux917( &fmt, myDate );
 
@@ -345,7 +345,7 @@ void DateFormatRegressionTest::Test4060212(void)
     logln("Using yyyy-DDD.hh:mm:ss");
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat formatter(UnicodeString("yyyy-DDD.hh:mm:ss"), status);
-    if (failure(status, "new SimpleDateFormat", TRUE)) return;
+    if (failure(status, "new SimpleDateFormat", true)) return;
     ParsePosition pos(0);
     UDate myDate = formatter.parse( dateString, pos );
     UnicodeString myString;
@@ -406,14 +406,14 @@ void DateFormatRegressionTest::Test4061287(void)
         errln("Fail: " + e);
         e.printStackTrace();
     }*/
-    df->setLenient(FALSE);
-    UBool ok = FALSE;
+    df->setLenient(false);
+    UBool ok = false;
     //try {
     logln(UnicodeString("") + df->parse("35/01/1971", status));
     if(U_FAILURE(status))
-        ok = TRUE;
+        ok = true;
     //logln(df.parse("35/01/1971").toString());
-    //} catch (ParseException e) {ok=TRUE;}
+    //} catch (ParseException e) {ok=true;}
     if(!ok) 
         errln("Fail: Lenient not working");
     delete df;
@@ -661,7 +661,7 @@ void DateFormatRegressionTest::Test4100302(void)
         Locale::US
         };
     //try {
-        UBool pass = TRUE;
+        UBool pass = true;
         for(int i = 0; i < 21; i++) {
 
             Format *format = DateFormat::createDateTimeInstance(DateFormat::FULL,
@@ -681,7 +681,7 @@ void DateFormatRegressionTest::Test4100302(void)
                 new ObjectInputStream(new ByteArrayInputStream(bytes));
         
             if (!format.equals(ois.readObject())) {
-                pass = FALSE;
+                pass = false;
                 logln("DateFormat instance for locale " +
                       locales[i] + " is incorrectly serialized/deserialized.");
             } else {
@@ -708,7 +708,7 @@ void DateFormatRegressionTest::Test4101483(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat sdf(UnicodeString("z"), Locale::getUS(), status);
-    if (failure(status, "new SimpleDateFormat", TRUE)) return;
+    if (failure(status, "new SimpleDateFormat", true)) return;
     FieldPosition fp(UDAT_TIMEZONE_FIELD);
     //Date d = date(9234567890L);
     UDate d = 9234567890.0;
@@ -739,7 +739,7 @@ void DateFormatRegressionTest::Test4103340(void)
     // and some arbitrary time 
     UDate d = date(97, 3, 1, 1, 1, 1); 
     SimpleDateFormat df(UnicodeString(u"MMMM"), Locale::getUS(), status); 
-    if (failure(status, "new SimpleDateFormat", TRUE)) return;
+    if (failure(status, "new SimpleDateFormat", true)) return;
 
     UnicodeString s;
     s = dateToString(d, s);
@@ -997,7 +997,7 @@ void DateFormatRegressionTest::Test4134203(void)
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString dateFormat = "MM/dd/yy HH:mm:ss zzz";
     SimpleDateFormat fmt (dateFormat, status);
-    if (failure(status, "new SimpleDateFormat", TRUE)) return;
+    if (failure(status, "new SimpleDateFormat", true)) return;
     ParsePosition p0(0);
     UDate d = fmt.parse("01/22/92 04:52:00 GMT", p0);
     logln(dateToString(d));
@@ -1017,7 +1017,7 @@ void DateFormatRegressionTest::Test4151631(void)
     logln("pattern=" + pattern);
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat format(pattern, Locale::getUS(), status);
-    if (failure(status, "new SimpleDateFormat", TRUE)) return;
+    if (failure(status, "new SimpleDateFormat", true)) return;
     UnicodeString result;
     FieldPosition pos(FieldPosition::DONT_CARE);
     result = format.format(date(1998-1900, UCAL_JUNE, 30, 13, 30, 0), result, pos);
@@ -1039,7 +1039,7 @@ void DateFormatRegressionTest::Test4151706(void)
     UnicodeString dateString("Thursday, 31-Dec-98 23:00:00 GMT");
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat fmt(UnicodeString("EEEE, dd-MMM-yy HH:mm:ss z"), Locale::getUS(), status);
-    if (failure(status, "new SimpleDateFormat", TRUE)) return;
+    if (failure(status, "new SimpleDateFormat", true)) return;
     //try {
         UDate d = fmt.parse(dateString, status);
         failure(status, "fmt->parse");
@@ -1126,7 +1126,7 @@ void DateFormatRegressionTest::Test4182066(void) {
     };
 
     UnicodeString out;
-    UBool pass = TRUE;
+    UBool pass = true;
     for (int32_t i=0; i<STRINGS_COUNT; ++i) {
         UnicodeString str(STRINGS[i]);
         UDate expected = DATES[i];
@@ -1155,7 +1155,7 @@ void DateFormatRegressionTest::Test4182066(void) {
             }
             out.append("FAIL: " + str + " => " + actStr
                        + ", expected " + expStr + "\n");
-            pass = FALSE;
+            pass = false;
         }
     }
     if (pass) {
@@ -1182,7 +1182,7 @@ DateFormatRegressionTest::Test4210209(void) {
         return;
     }
     Calendar* calx = (Calendar*)fmt.getCalendar(); // cast away const!
-    calx->setLenient(FALSE);
+    calx->setLenient(false);
     UDate d = date(2000-1900, UCAL_FEBRUARY, 29);
     UnicodeString s, ss;
     fmt.format(d, s);
@@ -1207,7 +1207,7 @@ DateFormatRegressionTest::Test4210209(void) {
         return;
     }
     cal.clear();
-    cal.setLenient(FALSE);
+    cal.setLenient(false);
     cal.set(2000, UCAL_FEBRUARY, 29); // This should work!
     logln(UnicodeString("Attempt to set Calendar to Feb 29 2000: ") +
                         disp.format(cal.getTime(status), ss.remove()));
@@ -1570,14 +1570,14 @@ void DateFormatRegressionTest::TestT10334(void) {
         return;
     }
 
-    format.setBooleanAttribute(UDAT_PARSE_PARTIAL_LITERAL_MATCH, FALSE, status);
+    format.setBooleanAttribute(UDAT_PARSE_PARTIAL_LITERAL_MATCH, false, status);
     format.parse(text, status);
     if (!U_FAILURE(status)) {
         errln("parse partial match did NOT fail in strict mode - %s", u_errorName(status));
     }
 
     status = U_ZERO_ERROR;
-    format.setBooleanAttribute(UDAT_PARSE_PARTIAL_LITERAL_MATCH, TRUE, status);
+    format.setBooleanAttribute(UDAT_PARSE_PARTIAL_LITERAL_MATCH, true, status);
     format.parse(text, status);
     if (U_FAILURE(status)) {
         errln("parse partial match failure in lenient mode - %s", u_errorName(status));
@@ -1601,7 +1601,7 @@ void DateFormatRegressionTest::TestT10334(void) {
     pattern = UnicodeString(patternArray);
     text = UnicodeString("2013 12 10 03 3 04 04");
     status = U_ZERO_ERROR;
-    format.setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, TRUE, status);
+    format.setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
     format.applyPattern(pattern);
     ParsePosition pp(0);
     format.parse(text, pp);
@@ -1610,7 +1610,7 @@ void DateFormatRegressionTest::TestT10334(void) {
     }
 
     status = U_ZERO_ERROR;
-    format.setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, FALSE, status);
+    format.setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, false, status);
     format.parse(text, status);
     if (!U_FAILURE(status)) {
         errln("numeric parse did NOT fail in strict mode", u_errorName(status));

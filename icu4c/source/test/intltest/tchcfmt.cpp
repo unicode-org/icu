@@ -461,7 +461,7 @@ void TestChoiceFormat::TestClosures(void) {
     // intervals.  Do this both using arrays and using a pattern.
 
     // 'fmt1' is created using arrays
-    UBool T = TRUE, F = FALSE;
+    UBool T = true, F = false;
     // 0:   ,1)
     // 1: [1,2]
     // 2: (2,3]
@@ -606,7 +606,7 @@ void TestChoiceFormat::_testPattern(const char* pattern,
 void TestChoiceFormat::TestPatterns(void) {
     // Try a pattern that isolates a single value.  Create
     // three ranges: [-Inf,1.0) [1.0,1.0] (1.0,+Inf]
-    _testPattern("0.0#a|1.0#b|1.0<c", TRUE,
+    _testPattern("0.0#a|1.0#b|1.0<c", true,
                  1.0 - 1e-9, "a",
                  1.0, "b",
                  1.0 + 1e-9, "c");
@@ -614,21 +614,21 @@ void TestChoiceFormat::TestPatterns(void) {
 #if 0  // ICU 4.8 only checks the pattern syntax, not whether the ranges make sense.
     // Try an invalid pattern that isolates a single value.
     // [-Inf,1.0) [1.0,1.0) [1.0,+Inf]
-    _testPattern("0.0#a|1.0#b|1.0#c", FALSE,
+    _testPattern("0.0#a|1.0#b|1.0#c", false,
                  0, 0, 0, 0, 0, 0);
 
     // Another
     // [-Inf,1.0] (1.0,1.0) [1.0,+Inf]
-    _testPattern("0.0#a|1.0<b|1.0#c", FALSE,
+    _testPattern("0.0#a|1.0<b|1.0#c", false,
                  0, 0, 0, 0, 0, 0);
     // Another
     // [-Inf,1.0] (1.0,1.0] (1.0,+Inf]
-    _testPattern("0.0#a|1.0<b|1.0<c", FALSE,
+    _testPattern("0.0#a|1.0<b|1.0<c", false,
                  0, 0, 0, 0, 0, 0);
 
     // Try a grossly invalid pattern.
     // [-Inf,2.0) [2.0,1.0) [1.0,+Inf]
-    _testPattern("0.0#a|2.0#b|1.0#c", FALSE,
+    _testPattern("0.0#a|2.0#b|1.0#c", false,
                  0, 0, 0, 0, 0, 0);
 #endif
 }

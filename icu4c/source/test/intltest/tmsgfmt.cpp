@@ -358,12 +358,12 @@ void TestMessageFormat::PatternTest()
         } else if (parseCount != count) {
             errln("MSG count not %d as expected. Got %d", count, parseCount);
         }
-        UBool failed = FALSE;
+        UBool failed = false;
         for (int32_t j = 0; j < parseCount; ++j) {
              if (values == 0 || testArgs[j] != values[j]) {
                 errln(((UnicodeString)"MSG testargs[") + j + "]: " + toString(testArgs[j]));
                 errln(((UnicodeString)"MSG values[") + j + "]  : " + toString(values[j]));
-                failed = TRUE;
+                failed = true;
              }
         }
         if (failed)
@@ -1023,17 +1023,17 @@ void TestMessageFormat::testSetLocale()
     }
 
     msg.setLocale(Locale::getEnglish());
-    UBool getLocale_ok = TRUE;
+    UBool getLocale_ok = true;
     if (msg.getLocale() != Locale::getEnglish()) {
         errln("*** MSG getLocale err.");
-        getLocale_ok = FALSE;
+        getLocale_ok = false;
     }
 
     msg.setLocale(Locale::getGerman());
 
     if (msg.getLocale() != Locale::getGerman()) {
         errln("*** MSG getLocal err.");
-        getLocale_ok = FALSE;
+        getLocale_ok = false;
     }
 
     msg.applyPattern( formatStr, err);
@@ -1249,14 +1249,14 @@ void TestMessageFormat::testAdopt()
     }
 
     UBool diff;
-    diff = TRUE;
+    diff = true;
     for (i = 0; i < count; i++) {
         a = formatsChg[i];
         b = formatsCmp[i];
         if ((a != NULL) && (b != NULL)) {
             if (*a == *b) {
                 logln("formatsChg == formatsCmp at index %d", i);
-                diff = FALSE;
+                diff = false;
             }
         }
     }
@@ -1883,19 +1883,19 @@ void TestMessageFormat::TestSelectOrdinal() {
     FieldPosition ignore(FieldPosition::DONT_CARE);
     UnicodeString result;
     assertEquals("plural-and-ordinal format(21) failed", "21 files, 21st file",
-                 m.format(args, 1, result, ignore, errorCode), TRUE);
+                 m.format(args, 1, result, ignore, errorCode), true);
 
     args[0].setLong(2);
     assertEquals("plural-and-ordinal format(2) failed", "2 files, 2nd file",
-                 m.format(args, 1, result.remove(), ignore, errorCode), TRUE);
+                 m.format(args, 1, result.remove(), ignore, errorCode), true);
 
     args[0].setLong(1);
     assertEquals("plural-and-ordinal format(1) failed", "1 file, 1st file",
-                 m.format(args, 1, result.remove(), ignore, errorCode), TRUE);
+                 m.format(args, 1, result.remove(), ignore, errorCode), true);
 
     args[0].setLong(3);
     assertEquals("plural-and-ordinal format(3) failed", "3 files, 3rd file",
-                 m.format(args, 1, result.remove(), ignore, errorCode), TRUE);
+                 m.format(args, 1, result.remove(), ignore, errorCode), true);
 
     errorCode.errDataIfFailureAndReset("");
 }
@@ -1910,12 +1910,12 @@ void TestMessageFormat::TestDecimals() {
     FieldPosition ignore;
     UnicodeString result;
     assertEquals("simple format(1)", "one meter",
-            m.format(args, 1, result, ignore, errorCode), TRUE);
+            m.format(args, 1, result, ignore, errorCode), true);
 
     args[0] = (double)1.5;
     result.remove();
     assertEquals("simple format(1.5)", "1.5 meters",
-            m.format(args, 1, result, ignore, errorCode), TRUE);
+            m.format(args, 1, result, ignore, errorCode), true);
 
     // Simple but explicit.
     MessageFormat m0(
@@ -1924,12 +1924,12 @@ void TestMessageFormat::TestDecimals() {
     args[0] = (int32_t)1;
     result.remove();
     assertEquals("explicit format(1)", "one meter",
-            m0.format(args, 1, result, ignore, errorCode), TRUE);
+            m0.format(args, 1, result, ignore, errorCode), true);
 
     args[0] = (double)1.5;
     result.remove();
     assertEquals("explicit format(1.5)", "1.5 meters",
-            m0.format(args, 1, result, ignore, errorCode), TRUE);
+            m0.format(args, 1, result, ignore, errorCode), true);
 
     // With offset and specific simple format with optional decimals.
     MessageFormat m1(
@@ -1938,17 +1938,17 @@ void TestMessageFormat::TestDecimals() {
     args[0] = (int32_t)1;
     result.remove();
     assertEquals("offset format(1)", "01 meters",
-            m1.format(args, 1, result, ignore, errorCode), TRUE);
+            m1.format(args, 1, result, ignore, errorCode), true);
 
     args[0] = (int32_t)2;
     result.remove();
     assertEquals("offset format(1)", "another meter",
-            m1.format(args, 1, result, ignore, errorCode), TRUE);
+            m1.format(args, 1, result, ignore, errorCode), true);
 
     args[0] = (double)2.5;
     result.remove();
     assertEquals("offset format(1)", "02.5 meters",
-            m1.format(args, 1, result, ignore, errorCode), TRUE);
+            m1.format(args, 1, result, ignore, errorCode), true);
 
     // With offset and specific simple format with forced decimals.
     MessageFormat m2(
@@ -1957,17 +1957,17 @@ void TestMessageFormat::TestDecimals() {
     args[0] = (int32_t)1;
     result.remove();
     assertEquals("offset-decimals format(1)", "1.0 meters",
-            m2.format(args, 1, result, ignore, errorCode), TRUE);
+            m2.format(args, 1, result, ignore, errorCode), true);
 
     args[0] = (int32_t)2;
     result.remove();
     assertEquals("offset-decimals format(1)", "2.0 meters",
-            m2.format(args, 1, result, ignore, errorCode), TRUE);
+            m2.format(args, 1, result, ignore, errorCode), true);
 
     args[0] = (double)2.5;
     result.remove();
     assertEquals("offset-decimals format(1)", "2.5 meters",
-            m2.format(args, 1, result, ignore, errorCode), TRUE);
+            m2.format(args, 1, result, ignore, errorCode), true);
     errorCode.reset();
 }
 

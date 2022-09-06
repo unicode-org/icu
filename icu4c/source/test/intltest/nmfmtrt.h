@@ -69,7 +69,7 @@ public:
     }
 
 protected:
-    UBool failure(UErrorCode status, const char* msg, UBool possibleDataError=FALSE);
+    UBool failure(UErrorCode status, const char* msg, UBool possibleDataError=false);
 
 };
 

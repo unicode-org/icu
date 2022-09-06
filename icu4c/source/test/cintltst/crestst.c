@@ -24,6 +24,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
+#include <stdbool.h>
 #include <stdlib.h>
 
 #define RESTEST_HEAP_CHECK 0
@@ -88,12 +89,12 @@ static struct
   /* "IN" means inherits */
   /* "NE" or "ne" means "does not exist" */
 
-  { "root",         U_ZERO_ERROR,             e_Root,    { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } },
-  { "te",           U_ZERO_ERROR,             e_te,      { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
-  { "te_IN",        U_ZERO_ERROR,             e_te_IN,   { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
-  { "te_NE",        U_USING_FALLBACK_WARNING, e_te,      { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
-  { "te_IN_NE",     U_USING_FALLBACK_WARNING, e_te_IN,   { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
-  { "ne",           U_USING_DEFAULT_WARNING,  e_Root,    { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
+  { "root",         U_ZERO_ERROR,             e_Root,    { true, false, false }, { true, false, false } },
+  { "te",           U_ZERO_ERROR,             e_te,      { false, true, false }, { true, true, false } },
+  { "te_IN",        U_ZERO_ERROR,             e_te_IN,   { false, false, true }, { true, true, true } },
+  { "te_NE",        U_USING_FALLBACK_WARNING, e_te,      { false, true, false }, { true, true, false } },
+  { "te_IN_NE",     U_USING_FALLBACK_WARNING, e_te_IN,   { false, false, true }, { true, true, true } },
+  { "ne",           U_USING_DEFAULT_WARNING,  e_Root,    { true, false, false }, { true, false, false } }
 };
 
 static int32_t bundles_count = UPRV_LENGTHOF(param);
@@ -163,14 +164,14 @@ void TestResourceBundles()
         return;
     }
 
-    testTag("only_in_Root", TRUE, FALSE, FALSE);
-    testTag("in_Root_te", TRUE, TRUE, FALSE);
-    testTag("in_Root_te_te_IN", TRUE, TRUE, TRUE);
-    testTag("in_Root_te_IN", TRUE, FALSE, TRUE);
-    testTag("only_in_te", FALSE, TRUE, FALSE);
-    testTag("only_in_te_IN", FALSE, FALSE, TRUE);
-    testTag("in_te_te_IN", FALSE, TRUE, TRUE);
-    testTag("nonexistent", FALSE, FALSE, FALSE);
+    testTag("only_in_Root", true, false, false);
+    testTag("in_Root_te", true, true, false);
+    testTag("in_Root_te_te_IN", true, true, true);
+    testTag("in_Root_te_IN", true, false, true);
+    testTag("only_in_te", false, true, false);
+    testTag("only_in_te_IN", false, false, true);
+    testTag("in_te_te_IN", false, true, true);
+    testTag("nonexistent", false, false, false);
 
     log_verbose("Passed:=  %d   Failed=   %d \n", pass, fail);
 }
@@ -297,7 +298,7 @@ UBool testTag(const char* frag,
     {
         ures_close(theBundle);
         log_err("Couldn't open root bundle in %s", testdatapath);
-        return FALSE;
+        return false;
     }
     ures_close(theBundle);
     theBundle = NULL;

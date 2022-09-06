@@ -18,9 +18,10 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <stdarg.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdarg.h>
 #include "unicode/uloc.h"
 #include "unicode/umsg.h"
 #include "unicode/udat.h"
@@ -52,7 +53,7 @@ static UChar* testCasePatterns[5];
 
 static UChar* testResultStrings[5];
 
-static UBool strings_initialized = FALSE;
+static UBool strings_initialized = false;
 
 /* function used to create the test patterns for testing Message formatting */
 static void InitStrings( void )
@@ -72,7 +73,7 @@ static void InitStrings( void )
         u_unescape(txt_testResultStrings[i], testResultStrings[i], strSize);
     }
 
-    strings_initialized = TRUE;
+    strings_initialized = true;
 }
 
 static void FreeStrings( void )
@@ -87,7 +88,7 @@ static void FreeStrings( void )
     for (i=0; i < cnt_testCases; i++ ) {
         free(testResultStrings[i]);
     }
-    strings_initialized = FALSE;
+    strings_initialized = false;
 }
 
 #if (U_PLATFORM == U_PF_LINUX) /* add platforms here .. */

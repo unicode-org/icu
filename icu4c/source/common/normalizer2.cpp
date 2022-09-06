@@ -62,7 +62,7 @@ Normalizer2::normalizeUTF8(uint32_t /*options*/, StringPiece src, ByteSink &sink
 
 UBool
 Normalizer2::getRawDecomposition(UChar32, UnicodeString &) const {
-    return FALSE;
+    return false;
 }
 
 UChar32
@@ -142,7 +142,7 @@ class NoopNormalizer2 : public Normalizer2 {
     }
     virtual UBool
     getDecomposition(UChar32, UnicodeString &) const U_OVERRIDE {
-        return FALSE;
+        return false;
     }
     // No need to U_OVERRIDE the default getRawDecomposition().
     virtual UBool
@@ -161,9 +161,9 @@ class NoopNormalizer2 : public Normalizer2 {
     spanQuickCheckYes(const UnicodeString &s, UErrorCode &) const U_OVERRIDE {
         return s.length();
     }
-    virtual UBool hasBoundaryBefore(UChar32) const U_OVERRIDE { return TRUE; }
-    virtual UBool hasBoundaryAfter(UChar32) const U_OVERRIDE { return TRUE; }
-    virtual UBool isInert(UChar32) const U_OVERRIDE { return TRUE; }
+    virtual UBool hasBoundaryBefore(UChar32) const U_OVERRIDE { return true; }
+    virtual UBool hasBoundaryAfter(UChar32) const U_OVERRIDE { return true; }
+    virtual UBool isInert(UChar32) const U_OVERRIDE { return true; }
 };
 
 NoopNormalizer2::~NoopNormalizer2() {}
@@ -299,7 +299,7 @@ static UBool U_CALLCONV uprv_normalizer2_cleanup() {
     nfcSingleton = NULL;
     nfcInitOnce.reset(); 
 #endif
-    return TRUE;
+    return true;
 }
 
 U_CDECL_END
@@ -423,7 +423,7 @@ unorm2_normalizeSecondAndAppend(const UNormalizer2 *norm2,
     return normalizeSecondAndAppend(norm2,
                                     first, firstLength, firstCapacity,
                                     second, secondLength,
-                                    TRUE, pErrorCode);
+                                    true, pErrorCode);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -434,7 +434,7 @@ unorm2_append(const UNormalizer2 *norm2,
     return normalizeSecondAndAppend(norm2,
                                     first, firstLength, firstCapacity,
                                     second, secondLength,
-                                    FALSE, pErrorCode);
+                                    false, pErrorCode);
 }
 
 U_CAPI int32_t U_EXPORT2

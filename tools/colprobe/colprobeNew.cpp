@@ -103,10 +103,10 @@ inline int CompareStringW(DWORD, DWORD, UChar *, int, UChar *, int) {return 0;};
 
 #include "line.h"
 
-static UBool gVerbose = FALSE;
-static UBool gDebug = FALSE;
-static UBool gQuiet = FALSE;
-static UBool gExemplar = FALSE;
+static UBool gVerbose = false;
+static UBool gDebug = false;
+static UBool gQuiet = false;
+static UBool gExemplar = false;
 
 DWORD          gWinLCID;
 int            gCount;
@@ -136,7 +136,7 @@ int32_t gPlatformNo = 0;
 int32_t gPlatformIndexes[10];
 int32_t gLocaleNo = 0;
 const char* gLocales[100];
-UBool gRulesStdin = FALSE;
+UBool gRulesStdin = false;
 const char *outputFormat = "HTML";
 const char *outExtension = "html";
 
@@ -221,8 +221,8 @@ int Winstrcmp(const void *a, const void *b) {
   UErrorCode status = U_ZERO_ERROR;
     gCount++;
     int t;
-    //compALen = unorm_compose(compA, 256, (*(Line **)a)->name, (*(Line **)a)->len, FALSE, 0, &status);
-    //compBLen = unorm_compose(compB, 256, (*(Line **)b)->name, (*(Line **)b)->len, FALSE, 0, &status);
+    //compALen = unorm_compose(compA, 256, (*(Line **)a)->name, (*(Line **)a)->len, false, 0, &status);
+    //compBLen = unorm_compose(compB, 256, (*(Line **)b)->name, (*(Line **)b)->len, false, 0, &status);
     compALen = unorm_normalize((*(Line **)a)->name, (*(Line **)a)->len, UNORM_NFC, 0, compA, 256, &status);
     compBLen = unorm_normalize((*(Line **)b)->name, (*(Line **)b)->len, UNORM_NFC, 0, compB, 256, &status);
     t = CompareStringW(gWinLCID,  SORT_STRINGSORT, //0,
@@ -349,17 +349,17 @@ void processArgs(int argc, char* argv[], UErrorCode &status)
     return;
   }
   if(options[VERBOSE].doesOccur) {
-    gVerbose = TRUE;
+    gVerbose = true;
   }
   if(options[DEBUG].doesOccur) {
-    gDebug = TRUE;
-    gVerbose = TRUE;
+    gDebug = true;
+    gVerbose = true;
   }
   if(options[EXEMPLAR].doesOccur) {
-    gExemplar = TRUE;
+    gExemplar = true;
   }
   if(options[QUIET].doesOccur) {
-    gQuiet = TRUE;
+    gQuiet = true;
   }
 
   // ASCII based options specified on the command line
@@ -368,7 +368,7 @@ void processArgs(int argc, char* argv[], UErrorCode &status)
   // In that case, we test only ICU and don't need 
   // a locale.
   if(options[RULESSTDIN].doesOccur) {
-    gRulesStdin = TRUE;
+    gRulesStdin = true;
     addPlatform("icu");
     return;
   } 
@@ -411,7 +411,7 @@ void processArgs(int argc, char* argv[], UErrorCode &status)
       return;
     } else {
       UnicodeString pattern;
-      logger->log(gExcludeSet.toPattern(pattern, TRUE), TRUE);
+      logger->log(gExcludeSet.toPattern(pattern, true), true);
     }
   }
 
@@ -545,7 +545,7 @@ setFiles(const char *name, UErrorCode &status) {
   getFileNames(name, tailoringName, tailoringDumpName, defaultName, defaultDumpName, diffName);
   if(options[PLATFORM].doesOccur && !options[DIFF].doesOccur) {  
     if(createDir(platforms[gPlatformIndexes[0]].name) == 0) {
-      tailoringBundle = new UPrinter(tailoringName, "en", "utf-8", NULL, FALSE);
+      tailoringBundle = new UPrinter(tailoringName, "en", "utf-8", NULL, false);
       fTailoringDump = fopen(tailoringDumpName, "wb");
     } else {
       status = U_FILE_ACCESS_ERROR;
@@ -555,7 +555,7 @@ setFiles(const char *name, UErrorCode &status) {
 
   if(options[REFERENCE].doesOccur && !options[DIFF].doesOccur) {
     if(createDir(platforms[gRefNum].name) == 0) {
-      referenceBundle = new UPrinter(defaultName, "en", "utf-8", NULL, FALSE);
+      referenceBundle = new UPrinter(defaultName, "en", "utf-8", NULL, false);
       fDefaultDump = fopen(defaultDumpName, "wb");
     } else {
       status = U_FILE_ACCESS_ERROR;
@@ -565,7 +565,7 @@ setFiles(const char *name, UErrorCode &status) {
 
   if((options[PLATFORM].doesOccur && options[REFERENCE].doesOccur) || options[DIFF].doesOccur) {
     if(createDir(platforms[gPlatformIndexes[0]].name) == 0) {
-      bundle = new UPrinter(diffName, "en", "utf-8", NULL, FALSE);
+      bundle = new UPrinter(diffName, "en", "utf-8", NULL, false);
     }
   }
   if(options[DIFF].doesOccur) {
@@ -646,7 +646,7 @@ processCollator(UCollator *col, UErrorCode &status) {
   char myLoc[256];
 
   int32_t ruleStringLength = ucol_getRulesEx(gCol, UCOL_TAILORING_ONLY, ruleString, 16384);
-  logger->log(UnicodeString(ruleString, ruleStringLength), TRUE);
+  logger->log(UnicodeString(ruleString, ruleStringLength), true);
   const char *locale = ucol_getLocale(gCol, ULOC_REQUESTED_LOCALE, &status);
   if(locale == NULL) {
     locale = "en";
@@ -665,7 +665,7 @@ processCollator(UCollator *col, UErrorCode &status) {
   int sanityResult;
 
   UnicodeSet hanSet;
-  UBool hanAppears = FALSE;
+  UBool hanAppears = false;
 
   debug->log("\nGenerating order for platform: %s\n", platforms[gPlatformIndexes[0]].name);
   gComparer = platforms[gPlatformIndexes[0]].comparer;
@@ -694,10 +694,10 @@ processCollator(UCollator *col, UErrorCode &status) {
   hanSet.applyIntPropertyValue(UCHAR_SCRIPT, USCRIPT_HAN, status);
   exemplarUSet.removeAll(hanSet);
   
-  logger->log(exemplarUSet.toPattern(pattern, TRUE), TRUE);
+  logger->log(exemplarUSet.toPattern(pattern, true), true);
 
   exemplarUSet = flatten(exemplarUSet, status);
-  logger->log(exemplarUSet.toPattern(pattern, TRUE), TRUE);
+  logger->log(exemplarUSet.toPattern(pattern, true), true);
 
   if(!options[PRINTREF].doesOccur) {
 
@@ -708,9 +708,9 @@ processCollator(UCollator *col, UErrorCode &status) {
     lines.analyse(status);
     lines.calculateSortKeys();
     debug->log("\n*** Final order\n\n");
-    debug->log(lines.toPrettyString(TRUE, TRUE), TRUE);
-    lines.toFile(fTailoringDump, TRUE, status);
-    tailoringBundle->log(lines.toOutput(outputFormat, myLoc, platforms[gPlatformIndexes[0]].name, NULL, TRUE, TRUE, hanAppears), TRUE);
+    debug->log(lines.toPrettyString(true, true), true);
+    lines.toFile(fTailoringDump, true, status);
+    tailoringBundle->log(lines.toOutput(outputFormat, myLoc, platforms[gPlatformIndexes[0]].name, NULL, true, true, hanAppears), true);
     //debug->off();
 
     if(options[REFERENCE].doesOccur) {
@@ -718,20 +718,20 @@ processCollator(UCollator *col, UErrorCode &status) {
       lines.getRepertoire(RefRepertoire);
       setReference(status);
 
-      logger->log(exemplarUSet.toPattern(pattern, TRUE), TRUE);
-      logger->log(RefRepertoire.toPattern(pattern, TRUE), TRUE);
+      logger->log(exemplarUSet.toPattern(pattern, true), true);
+      logger->log(RefRepertoire.toPattern(pattern, true), true);
 
       StrengthProbe RefProbe(platforms[gRefNum].comparer, platforms[gRefNum].skgetter);
       logger->log("\n*** Detecting ordering for reference\n\n");
       SortedLines RefLines(exemplarUSet, gExcludeSet, RefProbe, logger, debug);
       RefLines.analyse(status);
-      referenceBundle->log(RefLines.toOutput(outputFormat, myLoc, platforms[gRefNum].name, NULL, TRUE, TRUE, FALSE), TRUE);
-      RefLines.toFile(fDefaultDump, TRUE, status);
+      referenceBundle->log(RefLines.toOutput(outputFormat, myLoc, platforms[gRefNum].name, NULL, true, true, false), true);
+      RefLines.toFile(fDefaultDump, true, status);
 
       lines.reduceDifference(RefLines);
       logger->log("\n*** Final rules\n\n");
-      logger->log(lines.toPrettyString(TRUE), TRUE);
-      bundle->log(lines.toOutput(outputFormat, myLoc, platforms[gPlatformIndexes[0]].name, platforms[gRefNum].name, TRUE, TRUE, hanAppears), TRUE);
+      logger->log(lines.toPrettyString(true), true);
+      bundle->log(lines.toOutput(outputFormat, myLoc, platforms[gPlatformIndexes[0]].name, platforms[gRefNum].name, true, true, hanAppears), true);
     }
   } else {
     setReference(status);
@@ -739,8 +739,8 @@ processCollator(UCollator *col, UErrorCode &status) {
     logger->log("\n*** Detecting ordering for reference\n\n");
     SortedLines RefLines(exemplarUSet, gExcludeSet, RefProbe, logger, debug);
     RefLines.analyse(status);
-    logger->log(RefLines.toPrettyString(TRUE), TRUE);
-    referenceBundle->log(RefLines.toOutput(outputFormat, myLoc, platforms[gRefNum].name, NULL, TRUE, TRUE, FALSE), TRUE);
+    logger->log(RefLines.toPrettyString(true), true);
+    referenceBundle->log(RefLines.toOutput(outputFormat, myLoc, platforms[gRefNum].name, NULL, true, true, false), true);
   }
   if(hanAppears) {
     // there are Han characters. This is a huge block. The best we can do is to just sort it, compare to empty
@@ -752,12 +752,12 @@ processCollator(UCollator *col, UErrorCode &status) {
     exemplarUSet.applyIntPropertyValue(UCHAR_SCRIPT, USCRIPT_HAN, status);
     exemplarUSet = flatten(exemplarUSet, status);
     SortedLines han(exemplarUSet, gExcludeSet, probe, logger, debug);
-    han.sort(TRUE, TRUE);
+    han.sort(true, true);
     han.classifyRepertoire();
     han.getBounds(status);
     tailoringBundle->log("Han ordering:<br>\n");
-    tailoringBundle->log(han.toOutput(outputFormat, myLoc, platforms[gPlatformIndexes[0]].name, NULL, TRUE, FALSE, FALSE), TRUE);
-    bundle->log(han.toOutput(outputFormat, myLoc, platforms[gPlatformIndexes[0]].name, NULL, TRUE, FALSE, FALSE), TRUE);
+    tailoringBundle->log(han.toOutput(outputFormat, myLoc, platforms[gPlatformIndexes[0]].name, NULL, true, false, false), true);
+    bundle->log(han.toOutput(outputFormat, myLoc, platforms[gPlatformIndexes[0]].name, NULL, true, false, false), true);
   }
   ucol_close(gCol);
 }
@@ -800,12 +800,12 @@ hasCollationElements(const char *locName) {
     if(status == U_ZERO_ERROR) { /* do the test - there are real elements */
       ures_close(ColEl);
       ures_close(loc);
-      return TRUE;
+      return true;
     }
     ures_close(ColEl);
     ures_close(loc);
   }
-  return FALSE;
+  return false;
 }
 
 int
@@ -821,7 +821,7 @@ main(int argc,
   uset_add(wsp, 0x0041);
   uset_remove(wsp, 0x0041);
   UnicodeString pat;
-  ((UnicodeSet *)wsp)->toPattern(pat, TRUE);
+  ((UnicodeSet *)wsp)->toPattern(pat, true);
   pat.setCharAt(pat.length(), 0);
   escapeString(pat.getBuffer(), pat.length(), log);
   u_fflush(log);
@@ -874,14 +874,14 @@ main(int argc,
   
       if(fTailoringDump && fDefaultDump) {
 	    SortedLines tailoring(fTailoringDump, logger, debug, status);
-	    logger->log(tailoring.toString(TRUE), TRUE);
+	    logger->log(tailoring.toString(true), true);
 	    SortedLines reference(fDefaultDump, logger, debug, status);
-	    logger->log(reference.toString(TRUE), TRUE);
+	    logger->log(reference.toString(true), true);
 	    tailoring.reduceDifference(reference);
 	    logger->log("\n*** Final rules\n\n");
-	    logger->log(tailoring.toPrettyString(TRUE), TRUE);
-	    //result->log(lines.toPrettyString(TRUE), TRUE);
-	    bundle->log(tailoring.toOutput(outputFormat, gLocale, platforms[gPlatformIndexes[0]].name, platforms[gRefNum].name, TRUE, TRUE, FALSE), TRUE);
+	    logger->log(tailoring.toPrettyString(true), true);
+	    //result->log(lines.toPrettyString(true), true);
+	    bundle->log(tailoring.toOutput(outputFormat, gLocale, platforms[gPlatformIndexes[0]].name, platforms[gRefNum].name, true, true, false), true);
       }
 
     } else {
@@ -959,17 +959,17 @@ void generateRepertoire(const char *locale, UnicodeSet &rep, UBool &hanAppears, 
     if(scriptLength) {
 	  for (i = 0; i < scriptLength; ++i) {
         if(script[i] == USCRIPT_HAN) {
-          hanAppears = TRUE;
+          hanAppears = true;
           continue;
         }
         delta.applyIntPropertyValue(prop, script[i], status);
         debug->log("Adding ");
-        debug->log(propertyAndValueName(prop, script[i]), TRUE);
+        debug->log(propertyAndValueName(prop, script[i]), true);
         tailoringBundle->log("// ");
-        tailoringBundle->log(propertyAndValueName(prop, script[i]), TRUE);
+        tailoringBundle->log(propertyAndValueName(prop, script[i]), true);
         if(options[REFERENCE].doesOccur) {
           referenceBundle->log("// ");
-          referenceBundle->log(propertyAndValueName(prop, script[i]), TRUE);
+          referenceBundle->log(propertyAndValueName(prop, script[i]), true);
         }
 		rep.addAll(delta);
 	  }
@@ -995,12 +995,12 @@ void generateRepertoire(const char *locale, UnicodeSet &rep, UBool &hanAppears, 
         if (!rep.containsSome(delta)) continue;
         if (rep.containsAll(delta)) continue; // just to see what we are adding
         debug->log("Adding ");
-        debug->log(propertyAndValueName(prop, i), TRUE);                
+        debug->log(propertyAndValueName(prop, i), true);                
         tailoringBundle->log("// ");
-        tailoringBundle->log(propertyAndValueName(prop, i), TRUE);
+        tailoringBundle->log(propertyAndValueName(prop, i), true);
         if(options[REFERENCE].doesOccur) {
           referenceBundle->log("// ");
-          referenceBundle->log(propertyAndValueName(prop, i), TRUE);
+          referenceBundle->log(propertyAndValueName(prop, i), true);
         }
         rep.addAll(delta);
     }
@@ -1052,14 +1052,14 @@ void testWin(StrengthProbe &probe, UErrorCode &status)
   Line myCh, combo, trial, inter, kLine;
   for(i = 0; i < intLen; i++) {
     inter.setTo(interesting[i]);
-    logger->log(inter.toString(TRUE), TRUE);
+    logger->log(inter.toString(true), true);
     logger->log("----------------------\n");
     for(j = 0; j < 0xFFFF; j++) {
       myCh.setTo(j);
       if(probe.distanceFromEmptyString(myCh) == UCOL_IDENTICAL) {
         continue;
       }
-      logger->log(myCh.toString(TRUE));
+      logger->log(myCh.toString(true));
       combo.setTo(j);
       combo.append(interesting[i]);
       count = 0;

@@ -84,15 +84,15 @@ extern IntlTest *createTimeUnitTest() {
 // double 3.0 hours to be equal
 static UBool tmaEqual(const TimeUnitAmount& left, const TimeUnitAmount& right) {
     if (left.getTimeUnitField() != right.getTimeUnitField()) {
-        return FALSE;
+        return false;
     }
     UErrorCode status = U_ZERO_ERROR;
     if (!left.getNumber().isNumeric() || !right.getNumber().isNumeric()) {
-        return FALSE;
+        return false;
     }
     UBool result = left.getNumber().getDouble(status) == right.getNumber().getDouble(status);
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
     return result;
 }
@@ -109,7 +109,7 @@ void TimeUnitTest::testBasic() {
         Locale loc(locales[locIndex]);
         TimeUnitFormat** formats = new TimeUnitFormat*[2];
         formats[UTMUTFMT_FULL_STYLE] = new TimeUnitFormat(loc, status);
-        if (!assertSuccess("TimeUnitFormat(full)", status, TRUE)) return;
+        if (!assertSuccess("TimeUnitFormat(full)", status, true)) return;
         formats[UTMUTFMT_ABBREVIATED_STYLE] = new TimeUnitFormat(loc, UTMUTFMT_ABBREVIATED_STYLE, status);
         if (!assertSuccess("TimeUnitFormat(short)", status)) return;
 #ifdef TUFMTTS_DEBUG
@@ -254,7 +254,7 @@ void TimeUnitTest::testAPI() {
     //================= TimeUnitFormat =================
     //
     TimeUnitFormat* tmf_en = new TimeUnitFormat(Locale("en"), status);
-    if (!assertSuccess("TimeUnitFormat(en...)", status, TRUE)) return;
+    if (!assertSuccess("TimeUnitFormat(en...)", status, true)) return;
     TimeUnitFormat tmf_fr(Locale("fr"), status);
     if (!assertSuccess("TimeUnitFormat(fr...)", status)) return;
 
@@ -444,7 +444,7 @@ void TimeUnitTest::testGreekWithSanitization() {
     UErrorCode status = U_ZERO_ERROR;
     Locale elLoc("el");
     NumberFormat* numberFmt = NumberFormat::createInstance(Locale("el"), status);
-    if (!assertSuccess("NumberFormat::createInstance for el locale", status, TRUE)) return;
+    if (!assertSuccess("NumberFormat::createInstance for el locale", status, true)) return;
     numberFmt->setMaximumFractionDigits(1);
 
     TimeUnitFormat* timeUnitFormat = new TimeUnitFormat(elLoc, status);
@@ -523,7 +523,7 @@ void TimeUnitTest::TestBritishShortHourFallback() {
     UnicodeString result;
     formatter.format(oneHour, result, status);
     assertSuccess("TestBritishShortHourFallback()", status);
-    assertEquals("TestBritishShortHourFallback()", UNICODE_STRING_SIMPLE("1 hr"), result, TRUE);
+    assertEquals("TestBritishShortHourFallback()", UNICODE_STRING_SIMPLE("1 hr"), result, true);
 }
 
 #endif

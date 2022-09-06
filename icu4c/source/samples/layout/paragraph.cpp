@@ -118,7 +118,7 @@ Paragraph::Paragraph(const LEUnicode chars[], int32_t charCount, const FontRuns 
         if (pEnd != pStart) {
             subsetFontRuns(fontRuns, pStart - fChars, pEnd - fChars, &fr);
 
-            paragraphLayout = new ParagraphLayout(pStart, pEnd - pStart, &fr, NULL, NULL, locales, fParagraphLevel, FALSE, status);
+            paragraphLayout = new ParagraphLayout(pStart, pEnd - pStart, &fr, NULL, NULL, locales, fParagraphLevel, false, status);
 
             if (LE_FAILURE(status)) {
                 delete paragraphLayout;

@@ -28,7 +28,7 @@ class WrongListener : public EventListener {
 class ICUNSubclass : public ICUNotifier {
     public:
     UBool acceptsListener(const EventListener& /*l*/) const override {
-        return TRUE;
+        return true;
         // return l instanceof MyListener;
     }
 
@@ -450,7 +450,7 @@ ICUServiceTest::testAPI_One()
     // be visible by default, but if you know the secret password you
     // can still access these services...
     Integer* singleton5 = new Integer(5);
-    service.registerInstance(singleton5, "en_US_BAR", FALSE, status);
+    service.registerInstance(singleton5, "en_US_BAR", false, status);
     {
         UErrorCode status = U_ZERO_ERROR;
         Integer* result = (Integer*)service.get("en_US_BAR", status);
@@ -1048,7 +1048,7 @@ void ICUServiceTest::testLocale() {
     service.registerInstance(root, "", status);
     service.registerInstance(german, "de", status);
     service.registerInstance(germany, Locale::getGermany(), status);
-    service.registerInstance(japanese, (UnicodeString)"ja", TRUE, status);
+    service.registerInstance(japanese, (UnicodeString)"ja", true, status);
     service.registerInstance(japan, Locale::getJapan(), status);
 
     {
@@ -1413,7 +1413,7 @@ void ICUServiceTest::testCoverage()
     key = LocaleKey::createWithCanonicalFallback(&primary, &fallback, status);
 
     UnicodeString result;
-    LKFSubclass lkf(TRUE); // empty
+    LKFSubclass lkf(true); // empty
     Hashtable table;
 
     UObject *obj = lkf.create(*key, NULL, status);
@@ -1425,7 +1425,7 @@ void ICUServiceTest::testCoverage()
       errln("visible IDs does not contain en_US");
     }
 
-    LKFSubclass invisibleLKF(FALSE);
+    LKFSubclass invisibleLKF(false);
     obj = lkf.create(*key, NULL, status);
     logln("obj: " + UnicodeString(obj ? "obj" : "null"));
     logln(invisibleLKF.getDisplayName("en_US", Locale::getDefault(), result.remove()));

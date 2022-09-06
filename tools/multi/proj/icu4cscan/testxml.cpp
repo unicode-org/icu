@@ -85,7 +85,7 @@ static void _getCLDRVersionDirect(UVersionInfo versionArray, UErrorCode *status)
 //            strcpy(tmp, "type=\"cldr\" version=\"");
 //            u_versionToString(cldrVersion, tmp+strlen(tmp));
 //            strcat(tmp, "\"");
-//            XMLElement icuData(xf, "feature", tmp, TRUE);
+//            XMLElement icuData(xf, "feature", tmp, true);
         }
         ures_close(resindx);
     }
@@ -111,7 +111,7 @@ static void _getCLDRVersionOld(UVersionInfo versionArray, UErrorCode *status) {
 //            strcpy(tmp, "type=\"cldr\" version=\"");
 //            u_versionToString(cldrVersion, tmp+strlen(tmp));
 //            strcat(tmp, "\"");
-//            XMLElement icuData(xf, "feature", tmp, TRUE);
+//            XMLElement icuData(xf, "feature", tmp, true);
         }
         ures_close(resindx);
     }
@@ -272,7 +272,7 @@ date(const UChar *tz,
   fmt = udat_open(style, style, locale, tz, -1,NULL,0, status);
   if ( format != NULL ) {
      u_charsToUChars(format,uFormat,strlen(format)),
-     udat_applyPattern(fmt,FALSE,uFormat,strlen(format));
+     udat_applyPattern(fmt,false,uFormat,strlen(format));
   }
   len = udat_format(fmt, ucal_getNow(), 0, len, 0, status);
   if(*status == U_BUFFER_OVERFLOW_ERROR) {
@@ -463,7 +463,7 @@ int main (int argc, char **  argv) {
             {
                 sprintf(tmp, "type=\"unicode\" version=\"%s\"",
                     U_UNICODE_VERSION);
-                XMLElement icuData(xf, "feature", tmp, TRUE);
+                XMLElement icuData(xf, "feature", tmp, true);
             }
             {
                 UCollator *col;
@@ -479,7 +479,7 @@ int main (int argc, char **  argv) {
 #endif
                 sprintf(tmp, "type=\"uca\" version=\"%s\"",
                     ucavers);
-                XMLElement icuData(xf, "feature", tmp, TRUE);
+                XMLElement icuData(xf, "feature", tmp, true);
                 ucol_close(col);
             }
 #if (U_ICU_VERSION_MAJOR_NUM>3) || ((U_ICU_VERSION_MAJOR_NUM > 2) && (U_ICU_VERSION_MINOR_NUM >7))
@@ -489,7 +489,7 @@ int main (int argc, char **  argv) {
                 tzvers = ucal_getTZDataVersion(&status);
                 sprintf(tmp, "type=\"tz\" version=\"%s\"",
                     tzvers);
-                XMLElement icuData(xf, "feature", tmp, TRUE);
+                XMLElement icuData(xf, "feature", tmp, true);
             }
 #endif            
             { 
@@ -510,7 +510,7 @@ int main (int argc, char **  argv) {
                     strcpy(tmp, "type=\"cldr\" version=\"");
                     u_versionToString(cldrVersion, tmp+strlen(tmp));
                     strcat(tmp, "\"");
-                    XMLElement icuData(xf, "feature", tmp, TRUE);
+                    XMLElement icuData(xf, "feature", tmp, true);
                 }
             }
             if(1) {

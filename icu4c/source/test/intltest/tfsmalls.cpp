@@ -92,7 +92,7 @@ void test_FieldPosition_example( void )
         it_dataerrln("NumberFormat::createInstance() error");
         return;
     }
-    fmt->setDecimalSeparatorAlwaysShown(TRUE);
+    fmt->setDecimalSeparatorAlwaysShown(true);
     
     const int32_t tempLen = 20;
     char temp[tempLen];
@@ -130,16 +130,16 @@ void test_FieldPosition( void )
     if ( fph->getField() != 3) it_errln("*** FP getField or heap constr.");
     delete fph;
 
-    UBool err1 = FALSE;
-    UBool err2 = FALSE;
-    UBool err3 = FALSE;
+    UBool err1 = false;
+    UBool err2 = false;
+    UBool err3 = false;
     for (int32_t i = -50; i < 50; i++ ) {
         fp.setField( i+8 );
         fp.setBeginIndex( i+6 );
         fp.setEndIndex( i+7 );
-        if (fp.getField() != i+8)  err1 = TRUE;
-        if (fp.getBeginIndex() != i+6) err2 = TRUE;
-        if (fp.getEndIndex() != i+7) err3 = TRUE;
+        if (fp.getField() != i+8)  err1 = true;
+        if (fp.getBeginIndex() != i+6) err2 = true;
+        if (fp.getEndIndex() != i+7) err3 = true;
     }
     if (!err1) {
         it_logln("FP setField and getField tested.");
@@ -271,10 +271,10 @@ void test_Formattable( void )
     int32_t i, res_cnt;
     const Formattable* res_array = ft_arr.getArray( res_cnt );
     if (res_cnt == ft_cnt) {
-        UBool same  = TRUE;
+        UBool same  = true;
         for (i = 0; i < res_cnt; i++ ) {
             if (res_array[i] != ftarray[i]) {
-                same = FALSE;
+                same = false;
             }
         }
         if (same) {

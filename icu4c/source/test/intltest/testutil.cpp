@@ -146,7 +146,7 @@ UBool TestUtility::checkEqualEdits(IntlTest &test, const UnicodeString &name,
                                    const Edits &e1, const Edits &e2, UErrorCode &errorCode) {
     Edits::Iterator ei1 = e1.getFineIterator();
     Edits::Iterator ei2 = e2.getFineIterator();
-    UBool ok = TRUE;
+    UBool ok = true;
     for (int32_t i = 0; ok; ++i) {
         UBool ei1HasNext = ei1.next(errorCode);
         UBool ei2HasNext = ei2.next(errorCode);

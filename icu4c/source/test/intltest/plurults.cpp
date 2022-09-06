@@ -246,7 +246,7 @@ void PluralRulesTest::testAPI(/*char *par*/)
     for (int32_t i=0; i<UPRV_LENGTHOF(fData); i++) {
         if ((newRules->select(fData[i])== KEYWORD_A) != isKeywordA[i]) {
              errln("File %s, Line %d, ERROR: plural rules for decimal fractions test failed!\n"
-                   "  number = %g, expected %s", __FILE__, __LINE__, fData[i], isKeywordA[i]?"TRUE":"FALSE");
+                   "  number = %g, expected %s", __FILE__, __LINE__, fData[i], isKeywordA[i]?"true":"false");
         }
     }
 
@@ -300,11 +300,11 @@ void setupResult(const int32_t testSource[], char result[], int32_t* max) {
 
 UBool checkEqual(const PluralRules &test, char *result, int32_t max) {
     UnicodeString key;
-    UBool isEqual = TRUE;
+    UBool isEqual = true;
     for (int32_t i=0; i<max; ++i) {
         key= test.select(i);
         if ( key.charAt(0)!=result[i] ) {
-            isEqual = FALSE;
+            isEqual = false;
         }
     }
     return isEqual;
@@ -329,7 +329,7 @@ UBool testEquality(const PluralRules &test) {
     };
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString key[MAX_EQ_COL];
-    UBool ret=TRUE;
+    UBool ret=true;
     for (int32_t i=0; i<MAX_EQ_ROW; ++i) {
         PluralRules* rules[MAX_EQ_COL];
 
@@ -347,7 +347,7 @@ UBool testEquality(const PluralRules &test) {
             }
             for(int32_t j=0; j<totalRules-1;++j) {
                 if (key[j]!=key[j+1]) {
-                    ret= FALSE;
+                    ret= false;
                     break;
                 }
             }
@@ -828,15 +828,15 @@ PluralRulesTest::testGetAllKeywordValues() {
                 while (*ep && *ep == ' ') ++ep; // and spaces
             }
 
-            UBool ok = TRUE;
+            UBool ok = true;
             if (count == -1) {
                 if (*ep != 'n') {
                     errln("expected values for keyword %s but got -1 (%s)", rp, ep);
-                    ok = FALSE;
+                    ok = false;
                 }
             } else if (*ep == 'n') {
                 errln("expected count of -1, got %d, for keyword %s (%s)", count, rp, ep);
-                ok = FALSE;
+                ok = false;
             }
 
             // We'll cheat a bit here.  The samples happened to be in order and so are our
@@ -848,7 +848,7 @@ PluralRulesTest::testGetAllKeywordValues() {
                 double val = samples[j];
                 if (*ep == 0 || *ep == ';') {
                     errln("got unexpected value[%d]: %g", j, val);
-                    ok = FALSE;
+                    ok = false;
                     break;
                 }
                 char* xp;
@@ -856,13 +856,13 @@ PluralRulesTest::testGetAllKeywordValues() {
                 if (xp == ep) {
                     // internal error
                     errln("yikes!");
-                    ok = FALSE;
+                    ok = false;
                     break;
                 }
                 ep = xp;
                 if (expectedVal != val) {
                     errln("expected %g but got %g", expectedVal, val);
-                    ok = FALSE;
+                    ok = false;
                     break;
                 }
                 if (*ep == ',') ++ep;
@@ -871,7 +871,7 @@ PluralRulesTest::testGetAllKeywordValues() {
             if (ok && count != -1) {
                 if (!(*ep == 0 || *ep == ';')) {
                     errln("file: %s, line %d, didn't get expected value: %s", __FILE__, __LINE__, ep);
-                    ok = FALSE;
+                    ok = false;
                 }
             }
 

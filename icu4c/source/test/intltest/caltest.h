@@ -202,7 +202,7 @@ public: // package
      * Clone the specified calendar, and determine its earliest supported date
      * by setting the extended year to the minimum value.
      * @param cal Calendar (will be cloned)
-     * @param isGregorian output: returns 'TRUE' if the calendar's class is GregorianCalendar
+     * @param isGregorian output: returns 'true' if the calendar's class is GregorianCalendar
      * @param status error code
      */
     static UDate minDateOfCalendar(const Calendar& cal, UBool &isGregorian, UErrorCode& status);
@@ -211,7 +211,7 @@ public: // package
      * Construct a calendar of the specified locale, and determine its earliest supported date
      * by setting the extended year to the minimum value.
      * @param locale locale of calendar to check
-     * @param isGregorian output: returns 'TRUE' if the calendar's class is GregorianCalendar
+     * @param isGregorian output: returns 'true' if the calendar's class is GregorianCalendar
      * @param status error code
      */
     static UDate minDateOfCalendar(const Locale& locale, UBool &isGregorian, UErrorCode& status);

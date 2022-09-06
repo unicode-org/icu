@@ -88,7 +88,7 @@ void DecimalFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &
 } UPRV_BLOCK_MACRO_END
 
 #define DF_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN { \
-    if ((expr)==FALSE) { \
+    if ((expr)==false) { \
         errln("DecimalFormatTest failure at line %d.\n", __LINE__); \
     } \
 } UPRV_BLOCK_MACRO_END
@@ -109,7 +109,7 @@ void DecimalFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &
 } UPRV_BLOCK_MACRO_END
 
 #define DF_ASSERT_L(expr, line) UPRV_BLOCK_MACRO_BEGIN { \
-    if ((expr)==FALSE) { \
+    if ((expr)==false) { \
         errln("DecimalFormatTest failure at line %d, from %d.", __LINE__, (line)); \
         return; \
     } \
@@ -226,7 +226,7 @@ void DecimalFormatTest::DataDrivenTests() {
     //
     //  Put the test data into a UnicodeString
     //
-    UnicodeString testString(FALSE, testData, len);
+    UnicodeString testString(false, testData, len);
 
     RegexMatcher    parseLineMat(UnicodeString(
             "(?i)\\s*parse\\s+"

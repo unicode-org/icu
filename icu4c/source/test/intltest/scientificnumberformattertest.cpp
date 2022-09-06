@@ -172,7 +172,7 @@ void ScientificNumberFormatterTest::TestPlusSignInExponentSuperscript() {
 void ScientificNumberFormatterTest::TestFixedDecimalMarkup() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<DecimalFormat> decfmt((DecimalFormat *) NumberFormat::createInstance("en", status));
-    if (assertSuccess("NumberFormat::createInstance", status, TRUE) == FALSE) {
+    if (assertSuccess("NumberFormat::createInstance", status, true) == false) {
         return;
     }
     LocalPointer<ScientificNumberFormatter> fmt(
@@ -194,7 +194,7 @@ void ScientificNumberFormatterTest::TestFixedDecimalMarkup() {
 void ScientificNumberFormatterTest::TestFixedDecimalSuperscript() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<DecimalFormat> decfmt((DecimalFormat *) NumberFormat::createInstance("en", status));
-    if (assertSuccess("NumberFormat::createInstance", status, TRUE) == FALSE) {
+    if (assertSuccess("NumberFormat::createInstance", status, true) == false) {
         return;
     }
     LocalPointer<ScientificNumberFormatter> fmt(

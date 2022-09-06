@@ -203,8 +203,8 @@ static std::condition_variable initCondition;
 // function on this thread, or wait for some other thread to complete the initialization.
 //
 // The actual call to the init function is made inline by template code
-// that knows the C++ types involved. This function returns TRUE if
-// the inline code needs to invoke the Init function, or FALSE if the initialization
+// that knows the C++ types involved. This function returns true if
+// the inline code needs to invoke the Init function, or false if the initialization
 // has completed on another thread.
 //
 // UInitOnce::fState values:
@@ -217,7 +217,7 @@ UBool umtx_initImplPreInit(UInitOnce &uio) {
     int32_t state = uio.fState;
     if (state == 0) {
         umtx_storeRelease(uio.fState, 1);
-        return TRUE; // Caller will next call the init function.
+        return true; // Caller will next call the init function.
     } else {
         while (uio.fState == 1) {
             // Another thread is currently running the initialization.
@@ -225,7 +225,7 @@ UBool umtx_initImplPreInit(UInitOnce &uio) {
             initCondition.wait(initLock);
         }
         U_ASSERT(uio.fState == 2);
-        return FALSE;
+        return false;
     }
 }
 

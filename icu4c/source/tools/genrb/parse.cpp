@@ -323,7 +323,7 @@ parseUCARules(ParseState* state, char *tag, uint32_t startline, const struct USt
     char              filename[256] = { '\0' };
     char              cs[128]       = { '\0' };
     uint32_t          line;
-    UBool quoted = FALSE;
+    UBool quoted = false;
     UCHARBUF *ucbuf=NULL;
     UChar32   c     = 0;
     const char* cp  = NULL;
@@ -367,7 +367,7 @@ parseUCARules(ParseState* state, char *tag, uint32_t startline, const struct USt
         return res_none();
     }
 
-    ucbuf = ucbuf_open(filename, &cp, getShowWarning(),FALSE, status);
+    ucbuf = ucbuf_open(filename, &cp, getShowWarning(),false, status);
 
     if (U_FAILURE(*status)) {
         error(line, "An error occurred while opening the input file %s\n", filename);
@@ -505,7 +505,7 @@ parseTransliterator(ParseState* state, char *tag, uint32_t startline, const stru
     uprv_strcat(filename, cs);
 
 
-    ucbuf = ucbuf_open(filename, &cp, getShowWarning(),FALSE, status);
+    ucbuf = ucbuf_open(filename, &cp, getShowWarning(),false, status);
 
     if (U_FAILURE(*status)) {
         error(line, "An error occurred while opening the input file %s\n", filename);
@@ -760,7 +760,7 @@ GenrbImporter::getRules(
     // printf("GenrbImporter::getRules(%s, %s) reads %s\n", localeID, collationType, openFileName.data());
     const char* cp = "";
     LocalUCHARBUFPointer ucbuf(
-            ucbuf_open(openFileName.data(), &cp, getShowWarning(), TRUE, &errorCode));
+            ucbuf_open(openFileName.data(), &cp, getShowWarning(), true, &errorCode));
     if(errorCode == U_FILE_ACCESS_ERROR) {
         fprintf(stderr, "couldn't open file %s\n", openFileName.data());
         return;
@@ -772,7 +772,7 @@ GenrbImporter::getRules(
 
     /* Parse the data into an SRBRoot */
     LocalPointer<SRBRoot> data(
-            parse(ucbuf.getAlias(), inputDir, outputDir, filename.data(), FALSE, FALSE, FALSE, &errorCode));
+            parse(ucbuf.getAlias(), inputDir, outputDir, filename.data(), false, false, false, &errorCode));
     if (U_FAILURE(errorCode)) {
         return;
     }
@@ -943,7 +943,7 @@ static UBool
 convertTrie(const void *context, UChar32 start, UChar32 end, uint32_t value) {
     if (start >= 0x1100 && start < 0x1200 && end >= 0x1100 && end < 0x1200) {
         // Range entirely in conjoining jamo block.
-        return TRUE;
+        return true;
     }
     icu::IcuToolErrorCode status("genrb: convertTrie");
     umutablecptrie_setRange((UMutableCPTrie*)context, start, end, value, status);
@@ -1040,10 +1040,10 @@ writeCollationSpecialPrimariesTOML(const char* outputdir, const char* name, cons
 
 static void
 writeCollationTOML(const char* outputdir, const char* name, const char* collationType, const icu::CollationData* data, const icu::CollationSettings* settings, UErrorCode *status) {
-    UBool tailored = FALSE;
-    UBool tailoredDiacritics = FALSE;
+    UBool tailored = false;
+    UBool tailoredDiacritics = false;
     UBool lithuanianDotAbove = (uprv_strcmp(name, "lt") == 0);
-    UBool reordering = FALSE;
+    UBool reordering = false;
     UBool isRoot = uprv_strcmp(name, "root") == 0;
     UChar32 diacriticLimit = ICU4X_DIACRITIC_LIMIT;
     if (!data->base && isRoot) {
@@ -1067,7 +1067,7 @@ writeCollationTOML(const char* outputdir, const char* name, const char* collatio
             }
             uint32_t ce32 = data->getCE32(c);
             if ((ce32 != icu::Collation::FALLBACK_CE32) && (ce32 != data->base->getCE32(c))) {
-                tailoredDiacritics = TRUE;
+                tailoredDiacritics = true;
                 diacriticLimit = writeCollationDiacriticsTOML(outputdir, name, collationType, data, status);
                 if (U_FAILURE(*status)) {
                     return;
@@ -1078,7 +1078,7 @@ writeCollationTOML(const char* outputdir, const char* name, const char* collatio
     }
 
     if (settings->hasReordering()) {
-        reordering = TRUE;
+        reordering = true;
         // Note: There are duplicate reorderings. Expecting the ICU4X provider
         // to take care of deduplication.
         writeCollationReorderingTOML(outputdir, name, collationType, settings, status);
@@ -1155,7 +1155,7 @@ addCollation(ParseState* state, TableResource  *result, const char *collationTyp
     enum   ETokenType  token;
     char               subtag[1024];
     UnicodeString      rules;
-    UBool              haveRules = FALSE;
+    UBool              haveRules = false;
     UVersionInfo       version;
     uint32_t           line;
 
@@ -1233,7 +1233,7 @@ addCollation(ParseState* state, TableResource  *result, const char *collationTyp
         {
             StringResource *sr = static_cast<StringResource *>(member);
             rules = sr->fString;
-            haveRules = TRUE;
+            haveRules = true;
             // Defer building the collator until we have seen
             // all sub-elements of the collation table, including the Version.
             /* in order to achieve smaller data files, we can direct genrb */
@@ -1384,7 +1384,7 @@ addCollation(ParseState* state, TableResource  *result, const char *collationTyp
 
 static UBool
 keepCollationType(const char * /*type*/) {
-    return TRUE;
+    return true;
 }
 
 static struct SResource *
@@ -1525,7 +1525,7 @@ realParseTable(ParseState* state, TableResource *table, char *tag, uint32_t star
     enum   ETokenType token;
     char              subtag[1024];
     uint32_t          line;
-    UBool             readToken = FALSE;
+    UBool             readToken = false;
 
     /* '{' . (name resource)* '}' */
 
@@ -1590,7 +1590,7 @@ realParseTable(ParseState* state, TableResource *table, char *tag, uint32_t star
             error(line, "parse error. Stopped parsing table with %s", u_errorName(*status));
             return NULL;
         }
-        readToken = TRUE;
+        readToken = true;
         ustr_deinit(&comment);
    }
 
@@ -1605,11 +1605,11 @@ parseTable(ParseState* state, char *tag, uint32_t startline, const struct UStrin
 {
     if (tag != NULL && uprv_strcmp(tag, "CollationElements") == 0)
     {
-        return parseCollationElements(state, tag, startline, FALSE, status);
+        return parseCollationElements(state, tag, startline, false, status);
     }
     if (tag != NULL && uprv_strcmp(tag, "collations") == 0)
     {
-        return parseCollationElements(state, tag, startline, TRUE, status);
+        return parseCollationElements(state, tag, startline, true, status);
     }
     if(isVerbose()){
         printf(" table %s at line %i \n",  (tag == NULL) ? "(null)" : tag, (int)startline);
@@ -1631,7 +1631,7 @@ parseArray(ParseState* state, char *tag, uint32_t startline, const struct UStrin
     struct UString    *tokenValue;
     struct UString    memberComments;
     enum   ETokenType token;
-    UBool             readToken = FALSE;
+    UBool             readToken = false;
 
     ArrayResource  *result = array_open(state->bundle, tag, comment, status);
 
@@ -1704,7 +1704,7 @@ parseArray(ParseState* state, char *tag, uint32_t startline, const struct UStrin
             res_close(result);
             return NULL;
         }
-        readToken = TRUE;
+        readToken = true;
     }
 
     ustr_deinit(&memberComments);
@@ -1717,7 +1717,7 @@ parseIntVector(ParseState* state, char *tag, uint32_t startline, const struct US
     enum   ETokenType  token;
     char              *string;
     int32_t            value;
-    UBool              readToken = FALSE;
+    UBool              readToken = false;
     char              *stopstring;
     struct UString     memberComments;
 
@@ -1788,7 +1788,7 @@ parseIntVector(ParseState* state, char *tag, uint32_t startline, const struct US
         {
             getToken(state, NULL, NULL, NULL, status);
         }
-        readToken = TRUE;
+        readToken = true;
     }
 
     /* not reached */
@@ -2029,7 +2029,7 @@ parseInclude(ParseState* state, char *tag, uint32_t startline, const struct UStr
         uprv_strcpy(fullname,filename);
     }
 
-    ucbuf = ucbuf_open(fullname, &cp,getShowWarning(),FALSE,status);
+    ucbuf = ucbuf_open(fullname, &cp,getShowWarning(),false,status);
 
     if (U_FAILURE(*status)) {
         error(line, "couldn't open input file %s\n", filename);
@@ -2345,7 +2345,7 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, const char *fi
     ustr_init(&comment);
     expect(&state, TOK_STRING, &tokenValue, &comment, NULL, status);
 
-    state.bundle = new SRBRoot(&comment, FALSE, *status);
+    state.bundle = new SRBRoot(&comment, false, *status);
 
     if (state.bundle == NULL || U_FAILURE(*status))
     {
@@ -2402,7 +2402,7 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, const char *fi
          * This is the same as a regular table, but also sets the
          * URES_ATT_NO_FALLBACK flag in indexes[URES_INDEX_ATTRIBUTES] .
          */
-        state.bundle->fNoFallback=TRUE;
+        state.bundle->fNoFallback=true;
     }
     /* top-level tables need not handle special table names like "collations" */
     assert(!state.bundle->fIsPoolBundle);

@@ -53,7 +53,7 @@ uspoof_cleanup(void) {
     gRecommendedSet = NULL;
     gNfdNormalizer = NULL;
     gSpoofInitStaticsOnce.reset();
-    return TRUE;
+    return true;
 }
 
 void U_CALLCONV initializeStatics(UErrorCode &status) {
@@ -612,7 +612,7 @@ int32_t checkImpl(const SpoofImpl* This, const UnicodeString& id, CheckResult* c
         int32_t     i;
         UChar32     c;
         UChar32     firstNonspacingMark = 0;
-        UBool       haveMultipleMarks = FALSE;  
+        UBool       haveMultipleMarks = false;  
         UnicodeSet  marksSeenSoFar;   // Set of combining marks in a single combining sequence.
         
         for (i=0; i<nfdLength ;) {
@@ -622,7 +622,7 @@ int32_t checkImpl(const SpoofImpl* This, const UnicodeString& id, CheckResult* c
                 firstNonspacingMark = 0;
                 if (haveMultipleMarks) {
                     marksSeenSoFar.clear();
-                    haveMultipleMarks = FALSE;
+                    haveMultipleMarks = false;
                 }
                 continue;
             }
@@ -632,7 +632,7 @@ int32_t checkImpl(const SpoofImpl* This, const UnicodeString& id, CheckResult* c
             }
             if (!haveMultipleMarks) {
                 marksSeenSoFar.add(firstNonspacingMark);
-                haveMultipleMarks = TRUE;
+                haveMultipleMarks = true;
             }
             if (marksSeenSoFar.contains(c)) {
                 // report the error, and stop scanning.
@@ -657,13 +657,13 @@ uspoof_check2UnicodeString(const USpoofChecker *sc,
                           UErrorCode *status) {
     const SpoofImpl *This = SpoofImpl::validateThis(sc, *status);
     if (This == NULL) {
-        return FALSE;
+        return false;
     }
 
     if (checkResult != NULL) {
         CheckResult* ThisCheckResult = CheckResult::validateThis(checkResult, *status);
         if (ThisCheckResult == NULL) {
-            return FALSE;
+            return false;
         }
         return checkImpl(This, id, ThisCheckResult, status);
     } else {

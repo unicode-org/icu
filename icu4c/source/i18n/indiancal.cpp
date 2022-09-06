@@ -303,13 +303,13 @@ IndianCalendar::inDaylightTime(UErrorCode& status) const
 {
     // copied from GregorianCalendar
     if (U_FAILURE(status) || !getTimeZone().useDaylightTime()) {
-        return FALSE;
+        return false;
     }
 
     // Force an update of the state of the Calendar.
     ((IndianCalendar*)this)->complete(status); // cast away const
 
-    return (UBool)(U_SUCCESS(status) ? (internalGet(UCAL_DST_OFFSET) != 0) : FALSE);
+    return (UBool)(U_SUCCESS(status) ? (internalGet(UCAL_DST_OFFSET) != 0) : false);
 }
 
 
@@ -325,7 +325,7 @@ static icu::UInitOnce  gSystemDefaultCenturyInit        {};
 
 UBool IndianCalendar::haveDefaultCentury() const
 {
-    return TRUE;
+    return true;
 }
 
 static void U_CALLCONV

@@ -28,6 +28,9 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
+
+#include <stdbool.h>
+
 #include "unicode/udat.h"
 #include "unicode/udatpg.h"
 #include "unicode/ustring.h"
@@ -277,14 +280,14 @@ static void TestBuilder() {
     }
     
     /* Add a pattern */
-    conflict = udatpg_addPattern(dtpg, redundantPattern, 5, FALSE, result, 20, 
+    conflict = udatpg_addPattern(dtpg, redundantPattern, 5, false, result, 20, 
                                  &length, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("udatpg_addPattern() failed - %s\n", u_errorName(errorCode));
         return;
     }
     /* Add a redundant pattern */
-    conflict = udatpg_addPattern(dtpg, redundantPattern, 5, FALSE, result, 20,
+    conflict = udatpg_addPattern(dtpg, redundantPattern, 5, false, result, 20,
                                  &length, &errorCode);
     if(conflict == UDATPG_NO_CONFLICT) {
         log_err("udatpg_addPattern() failed to find the duplicate pattern.\n");
@@ -292,7 +295,7 @@ static void TestBuilder() {
     }
     /* Test pattern == NULL */
     s=NULL;
-    length = udatpg_addPattern(dtpg, s, 0, FALSE, result, 20,
+    length = udatpg_addPattern(dtpg, s, 0, false, result, 20,
                                &length, &errorCode);
     if(!U_FAILURE(errorCode)&&(length!=0) ) {
         log_err("udatpg_addPattern failed in illegal argument - pattern is NULL.\n");
@@ -301,7 +304,7 @@ static void TestBuilder() {
 
     /* replace field type */
     errorCode=U_ZERO_ERROR;
-    conflict = udatpg_addPattern(dtpg, testPattern2, 7, FALSE, result, 20,
+    conflict = udatpg_addPattern(dtpg, testPattern2, 7, false, result, 20,
                                  &length, &errorCode);
     if((conflict != UDATPG_NO_CONFLICT)||U_FAILURE(errorCode)) {
         log_err("udatpg_addPattern() failed to add HH:mm v. - %s\n", u_errorName(errorCode));

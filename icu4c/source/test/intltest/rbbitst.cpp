@@ -762,7 +762,7 @@ void RBBITest::TestExtended() {
     //
     //  Put the test data into a UnicodeString
     //
-    UnicodeString testString(FALSE, testFile, len);
+    UnicodeString testString(false, testFile, len);
 
     enum EParseState{
         PARSE_COMMENT,
@@ -1278,7 +1278,7 @@ UBool RBBITest::testCaseIsKnownIssue(const UnicodeString &testCase, const char *
             return logKnownIssue(badCase.fTicketNum);
         }
     }
-    return FALSE;
+    return false;
 }
 
 
@@ -1314,7 +1314,7 @@ void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *
     if (U_FAILURE(status) || testFile == NULL) {
         return; /* something went wrong, error already output */
     }
-    UnicodeString testFileAsString(TRUE, testFile, len);
+    UnicodeString testFileAsString(true, testFile, len);
 
     //
     //  Parse the test data file using a regular expression.
@@ -1547,7 +1547,7 @@ std::string RBBIMonkeyKind::classNameFromCodepoint(const UChar32 c) {
             return classNames[aClassNum];
         }
     }
-    U_ASSERT(FALSE);  // This should not happen.
+    U_ASSERT(false);  // This should not happen.
     return "bad class name";
 }
 
@@ -3721,7 +3721,7 @@ void RBBITest::TestLineBreaks(void)
         // printf("looping %d\n", loop);
         int32_t t = u_unescape(strlist[loop], str, STRSIZE);
         if (t >= STRSIZE) {
-            TEST_ASSERT(FALSE);
+            TEST_ASSERT(false);
             continue;
         }
 
@@ -3826,9 +3826,9 @@ void RBBITest::TestMonkey() {
     int32_t        seed      = 1;
     UnicodeString  breakType = "all";
     Locale         locale("en");
-    UBool          useUText  = FALSE;
+    UBool          useUText  = false;
 
-    if (quick == FALSE) {
+    if (quick == false) {
         loopCount = 10000;
     }
 
@@ -3846,7 +3846,7 @@ void RBBITest::TestMonkey() {
 
         RegexMatcher u(" *utext", p, 0, status);
         if (u.find()) {
-            useUText = TRUE;
+            useUText = true;
             u.reset();
             p = u.replaceFirst("", status);
         }
@@ -3870,9 +3870,9 @@ void RBBITest::TestMonkey() {
         BreakIterator  *bi = BreakIterator::createCharacterInstance(locale, status);
         if (U_SUCCESS(status)) {
             RunMonkey(bi, m, "char", seed, loopCount, useUText);
-            if (breakType == "all" && useUText==FALSE) {
+            if (breakType == "all" && useUText==false) {
                 // Also run a quick test with UText when "all" is specified
-                RunMonkey(bi, m, "char", seed, loopCount, TRUE);
+                RunMonkey(bi, m, "char", seed, loopCount, true);
             }
         }
         else {
@@ -5341,7 +5341,7 @@ void RBBITest::runLSTMTestFromFile(const char* filename, UScriptCode script) {
     }
 
     //  Put the test data into a UnicodeString
-    UnicodeString testString(FALSE, testFile, len);
+    UnicodeString testString(false, testFile, len);
 
     int32_t start = 0;
 

@@ -237,12 +237,12 @@ public class TestMessageFormat extends TestFmwk {
     //        } else if (parseCount != count) {
     //            errln("MSG count not %d as expected. Got %d", count, parseCount);
     //        }
-    //        UBool failed = FALSE;
+    //        UBool failed = false;
     //        for (int j = 0; j < parseCount; ++j) {
     //             if (values == 0 || testArgs[j] != values[j]) {
     //                errln(((String)"MSG testargs[") + j + "]: " + toString(testArgs[j]));
     //                errln(((String)"MSG values[") + j + "]  : " + toString(values[j]));
-    //                failed = TRUE;
+    //                failed = true;
     //             }
     //        }
     //        if (failed)

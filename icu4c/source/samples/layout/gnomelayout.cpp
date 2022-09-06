@@ -147,7 +147,7 @@ void openfile(GtkObject */*object*/, gpointer data)
   gtk_signal_connect_object(GTK_OBJECT(cancelButton), "clicked",
 		     GTK_SIGNAL_FUNC(gtk_widget_destroy), GTK_OBJECT(fileselection));
 
-  gtk_window_set_modal(GTK_WINDOW(fileselection), TRUE);
+  gtk_window_set_modal(GTK_WINDOW(fileselection), true);
   gtk_widget_show(fileselection);
   gtk_main();
 }
@@ -203,7 +203,7 @@ gint eventDelete(GtkWidget *widget, GdkEvent */*event*/, gpointer /*data*/)
   closeSample(widget);
 
   // indicate that closeapp  already destroyed the window 
-  return TRUE;
+  return true;
 }
 
 gint eventConfigure(GtkWidget */*widget*/, GdkEventConfigure *event, Context *context)
@@ -217,7 +217,7 @@ gint eventConfigure(GtkWidget */*widget*/, GdkEventConfigure *event, Context *co
     }
   }
 
-  return TRUE;
+  return true;
 }
 
 gint eventExpose(GtkWidget *widget, GdkEvent */*event*/, Context *context)
@@ -230,7 +230,7 @@ gint eventExpose(GtkWidget *widget, GdkEvent */*event*/, Context *context)
     context->paragraph->draw(&surface, firstLine, (maxLines < lastLine)? maxLines : lastLine);
   }
 
-  return TRUE;
+  return true;
 }
 
 GtkWidget *newSample(const gchar *fileName)

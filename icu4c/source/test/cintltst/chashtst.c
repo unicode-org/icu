@@ -139,16 +139,16 @@ static void TestBasic(void) {
     // puti(key, value==0) removes the key's element.
     _put(hash, two, 0, 200);
 
-    if(_compareChars((void*)one, (void*)three) == TRUE ||
-        _compareChars((void*)one, (void*)one2) != TRUE ||
-        _compareChars((void*)one, (void*)one) != TRUE ||
-        _compareChars((void*)one, NULL) == TRUE  )  {
+    if(_compareChars((void*)one, (void*)three) == true ||
+        _compareChars((void*)one, (void*)one2) != true ||
+        _compareChars((void*)one, (void*)one) != true ||
+        _compareChars((void*)one, NULL) == true  )  {
         log_err("FAIL: compareChars failed\n");
     }
-    if(_compareIChars((void*)one, (void*)three) == TRUE ||
-        _compareIChars((void*)one, (void*)one) != TRUE ||
-        _compareIChars((void*)one, (void*)one2) != TRUE ||
-        _compareIChars((void*)one, NULL) == TRUE  )  {
+    if(_compareIChars((void*)one, (void*)three) == true ||
+        _compareIChars((void*)one, (void*)one) != true ||
+        _compareIChars((void*)one, (void*)one2) != true ||
+        _compareIChars((void*)one, NULL) == true  )  {
         log_err("FAIL: compareIChars failed\n");
     }
 
@@ -277,10 +277,10 @@ static void TestOtherAPI(void){
         log_err("FAIL: uhash_put() with value!=NULL didn't replace the key value pair\n");
     }
 
-    if(_compareUChars((void*)one, (void*)two) == TRUE ||
-        _compareUChars((void*)one, (void*)one) != TRUE ||
-        _compareUChars((void*)one, (void*)one2) != TRUE ||
-        _compareUChars((void*)one, NULL) == TRUE  )  {
+    if(_compareUChars((void*)one, (void*)two) == true ||
+        _compareUChars((void*)one, (void*)one) != true ||
+        _compareUChars((void*)one, (void*)one2) != true ||
+        _compareUChars((void*)one, NULL) == true  )  {
         log_err("FAIL: compareUChars failed\n");
     }
    
@@ -294,9 +294,9 @@ static void TestOtherAPI(void){
     uhash_iputi(hash, 1001, 1, &status);
     uhash_iputi(hash, 1002, 2, &status);
     uhash_iputi(hash, 1003, 3, &status);
-    if(_compareLong(1001, 1002) == TRUE ||
-        _compareLong(1001, 1001) != TRUE ||
-        _compareLong(1001, 0) == TRUE  )  {
+    if(_compareLong(1001, 1002) == true ||
+        _compareLong(1001, 1001) != true ||
+        _compareLong(1001, 0) == true  )  {
         log_err("FAIL: compareLong failed\n");
     }
     /*set the resize policy to just GROW and SHRINK*/

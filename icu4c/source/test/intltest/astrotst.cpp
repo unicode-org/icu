@@ -190,15 +190,15 @@ void AstroTest::TestCoverage(void) {
     logln((UnicodeString)"   equ ecl: " + (anAstro->eclipticToEquatorial(eq,ecl)).toString());
     logln((UnicodeString)"   equ long: " + (anAstro->eclipticToEquatorial(eq, eclLong)).toString());
     logln((UnicodeString)"   horiz: " + (anAstro->eclipticToHorizon(hor, eclLong)).toString());
-    logln((UnicodeString)"   sunrise: " + (anAstro->getSunRiseSet(TRUE)));
-    logln((UnicodeString)"   sunset: " + (anAstro->getSunRiseSet(FALSE)));
+    logln((UnicodeString)"   sunrise: " + (anAstro->getSunRiseSet(true)));
+    logln((UnicodeString)"   sunset: " + (anAstro->getSunRiseSet(false)));
     logln((UnicodeString)"   moon phase: " + anAstro->getMoonPhase());
-    logln((UnicodeString)"   moonrise: " + (anAstro->getMoonRiseSet(TRUE)));
-    logln((UnicodeString)"   moonset: " + (anAstro->getMoonRiseSet(FALSE)));
-    logln((UnicodeString)"   prev summer solstice: " + (anAstro->getSunTime(CalendarAstronomer::SUMMER_SOLSTICE(), FALSE)));
-    logln((UnicodeString)"   next summer solstice: " + (anAstro->getSunTime(CalendarAstronomer::SUMMER_SOLSTICE(), TRUE)));
-    logln((UnicodeString)"   prev full moon: " + (anAstro->getMoonTime(CalendarAstronomer::FULL_MOON(), FALSE)));
-    logln((UnicodeString)"   next full moon: " + (anAstro->getMoonTime(CalendarAstronomer::FULL_MOON(), TRUE)));
+    logln((UnicodeString)"   moonrise: " + (anAstro->getMoonRiseSet(true)));
+    logln((UnicodeString)"   moonset: " + (anAstro->getMoonRiseSet(false)));
+    logln((UnicodeString)"   prev summer solstice: " + (anAstro->getSunTime(CalendarAstronomer::SUMMER_SOLSTICE(), false)));
+    logln((UnicodeString)"   next summer solstice: " + (anAstro->getSunTime(CalendarAstronomer::SUMMER_SOLSTICE(), true)));
+    logln((UnicodeString)"   prev full moon: " + (anAstro->getMoonTime(CalendarAstronomer::FULL_MOON(), false)));
+    logln((UnicodeString)"   next full moon: " + (anAstro->getMoonTime(CalendarAstronomer::FULL_MOON(), true)));
   }
 
   delete myastro2;
@@ -296,10 +296,10 @@ void AstroTest::TestSunriseTimes(void) {
   for (int32_t i=0; i < 30; i++) {
     logln("setDate\n");
     astro3.setDate(cal.getTime(status));
-    logln("getRiseSet(TRUE)\n");
-    UDate sunrise = astro3.getSunRiseSet(TRUE);
-    logln("getRiseSet(FALSE)\n");
-    UDate sunset  = astro3.getSunRiseSet(FALSE);
+    logln("getRiseSet(true)\n");
+    UDate sunrise = astro3.getSunRiseSet(true);
+    logln("getRiseSet(false)\n");
+    UDate sunset  = astro3.getSunRiseSet(false);
     logln("end of getRiseSet\n");
 
     cal2.setTime(cal.getTime(status), status);

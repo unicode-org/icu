@@ -15,6 +15,8 @@
 *******************************************************************************
 */
 
+#include <stdbool.h>
+
 #include "unicode/ustring.h"
 #include "unicode/ucnv.h"
 #include "cstring.h"
@@ -377,7 +379,7 @@ TestNoInvariantAtSign() {
         char ic = nativeInvChars[i];
         UBool actual = uprv_isAtSign(ic);
         if (actual) {
-            log_err("uprv_isAtSign(invariant '%c')=TRUE is wrong\n", ic);
+            log_err("uprv_isAtSign(invariant '%c')=true is wrong\n", ic);
         }
         if (ic == 0) { break; }
     }

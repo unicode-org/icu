@@ -460,6 +460,7 @@ Starting with ICU 68 (2020q4), we no longer define these in public header files
 (unless `U_DEFINE_FALSE_AND_TRUE`=1),
 in order to avoid name collisions with code outside ICU defining enum constants and similar
 with these names.
+Starting with ICU 72 (2022q4), we no longer use these anywhere in ICU.
 
 Instead, the versions of the C and C++ standards we require now do define type `bool`
 and values `false` & `true`, and we and our users can use these values.

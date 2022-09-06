@@ -92,7 +92,7 @@ GLUE_SYM ( Calendar ) :: ~ GLUE_SYM(Calendar) () {
 
 
 UBool GLUE_SYM ( Calendar ) :: haveDefaultCentury() const {
-  return FALSE;
+  return false;
 }
 UDate GLUE_SYM ( Calendar ) :: defaultCenturyStart() const {
   return 0L;
@@ -104,7 +104,7 @@ const char * GLUE_SYM ( Calendar ) :: getType() const  {
   return "dilbert";
 }
 UBool GLUE_SYM ( Calendar ) :: inDaylightTime(UErrorCode& status) const  {
-  return FALSE;
+  return false;
 }
 int32_t GLUE_SYM ( Calendar ) :: defaultCenturyStartYear() const  {
   return 2012;

@@ -90,19 +90,19 @@ UBool
 CECalendar::inDaylightTime(UErrorCode& status) const
 {
     if (U_FAILURE(status) || !getTimeZone().useDaylightTime()) {
-        return FALSE;
+        return false;
     }
 
     // Force an update of the state of the Calendar.
     ((CECalendar*)this)->complete(status); // cast away const
 
-    return (UBool)(U_SUCCESS(status) ? (internalGet(UCAL_DST_OFFSET) != 0) : FALSE);
+    return (UBool)(U_SUCCESS(status) ? (internalGet(UCAL_DST_OFFSET) != 0) : false);
 }
 
 UBool
 CECalendar::haveDefaultCentury() const
 {
-    return TRUE;
+    return true;
 }
 
 //-------------------------------------------------------------------------

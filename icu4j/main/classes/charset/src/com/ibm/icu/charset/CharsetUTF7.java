@@ -757,7 +757,7 @@ class CharsetUTF7 extends CharsetICU {
                     }
                 }
                 /*reset the state for the next conversion */
-                fromUnicodeStatus=((status&0xf0000000) | 0x1000000); /* keep version, inDirectMode=TRUE */
+                fromUnicodeStatus=((status&0xf0000000) | 0x1000000); /* keep version, inDirectMode=true */
             } else {
                 /* set the converter state back */
                 fromUnicodeStatus=((status&0xf0000000) | (inDirectMode<<24) | ((base64Counter & UConverterConstants.UNSIGNED_BYTE_MASK)<<16) | (bits));

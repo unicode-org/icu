@@ -4691,7 +4691,7 @@ void MeasureFormatTest::TestIndividualPluralFallback() {
     if (errorCode.errIfFailureAndReset("mf.format(...) failed.")) {
         return;
     }
-    assertEquals("2 deg temp in fr_CA", expected, actual, TRUE);
+    assertEquals("2 deg temp in fr_CA", expected, actual, true);
     errorCode.errIfFailureAndReset("mf.format failed");
 }
 
@@ -5350,7 +5350,7 @@ void MeasureFormatTest::Test21223_FrenchDuration() {
     //     auto& loc = locales[i];
     //     MeasureFormat mf1(loc, UMEASFMT_WIDTH_NARROW, status);
     //     mf1.formatMeasures(H5M10, UPRV_LENGTHOF(H5M10), result.remove(), pos, status);
-    //     assertFalse(result + u" " + loc.getName(), TRUE);
+    //     assertFalse(result + u" " + loc.getName(), true);
     // }
 }
 

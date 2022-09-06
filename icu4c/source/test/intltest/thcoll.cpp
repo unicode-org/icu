@@ -98,7 +98,7 @@ void CollationThaiTest::TestNamesList(void) {
     UnicodeString lastWord, word;
     //int32_t failed = 0;
     int32_t wordCount = 0;
-    while (names.readLineSkippingComments(word, ec, FALSE) && U_SUCCESS(ec)) {
+    while (names.readLineSkippingComments(word, ec, false) && U_SUCCESS(ec)) {
 
         // Show the first 8 words being compared, so we can see what's happening
         ++wordCount;
@@ -145,7 +145,7 @@ void CollationThaiTest::TestDictionary(void) {
     UnicodeString lastWord, word;
     int32_t failed = 0;
     int32_t wordCount = 0;
-    while (riwords.readLineSkippingComments(word, ec, FALSE) && U_SUCCESS(ec)) {
+    while (riwords.readLineSkippingComments(word, ec, false) && U_SUCCESS(ec)) {
 
         // Show the first 8 words being compared, so we can see what's happening
         ++wordCount;

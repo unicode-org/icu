@@ -130,10 +130,10 @@ CalendarRegressionTest::failure(UErrorCode status, const char* msg)
 {
     if(U_FAILURE(status)) {
         errcheckln(status, UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status));
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*
@@ -227,7 +227,7 @@ CalendarRegressionTest::Test9019()
     cal1->set(2011,UCAL_MAY,06);
     cal2->set(2012,UCAL_JANUARY,06);
     printdate(cal1.getAlias(), "cal1: ") ;
-    cal1->setLenient(FALSE);
+    cal1->setLenient(false);
     cal1->add(UCAL_MONTH,8,status);
     failure(status, "->add(UCAL_MONTH,8)");
     printdate(cal1.getAlias(), "cal1 (lenient) after adding 8 months:") ;
@@ -267,7 +267,7 @@ CalendarRegressionTest::test4031502()
         dataerrln("Unable to create TimeZone Enumeration.");
         return;
     }
-    UBool bad = FALSE;
+    UBool bad = false;
     TimeZone* tz =TimeZone::createTimeZone("Asia/Riyadh87");
     failure(status, "new TimeZone");
     GregorianCalendar *cl = new GregorianCalendar(tz, status);
@@ -295,7 +295,7 @@ CalendarRegressionTest::test4031502()
                                cal->get(UCAL_DST_OFFSET,status) / (60*60*1000) + " " +
                                zone->getRawOffset() / (60*60*1000) +
                                ": HOUR = " + cal->get(UCAL_HOUR,status));
-            bad = TRUE;
+            bad = true;
         }
         delete cal;
     }
@@ -387,7 +387,7 @@ void CalendarRegressionTest::test4051765()
       delete cal;
       return;
     }
-    cal->setLenient(FALSE);
+    cal->setLenient(false);
     cal->set(UCAL_DAY_OF_WEEK, 0);
     //try {
         cal->getTime(status);
@@ -576,8 +576,8 @@ CalendarRegressionTest::getAssociatedDate(UDate d, UErrorCode& status)
  */
 void CalendarRegressionTest::test4071197()
 {
-    dowTest(FALSE);
-    dowTest(TRUE);
+    dowTest(false);
+    dowTest(true);
 }
 
 void CalendarRegressionTest::dowTest(UBool lenient)
@@ -1003,7 +1003,7 @@ void CalendarRegressionTest::test4103271()
     testCal->clear();
     sdf.adoptCalendar(testCal);
     sdf.applyPattern("EEE dd MMM yyyy 'WOY'ww'-'YYYY 'DOY'DDD");
-    UBool fail = FALSE;
+    UBool fail = false;
     for (int32_t firstDay=1; firstDay<=2; firstDay++) {
         for (int32_t minDays=1; minDays<=7; minDays++) {
             testCal->setMinimalDaysInFirstWeek((uint8_t)minDays);
@@ -1027,7 +1027,7 @@ void CalendarRegressionTest::test4103271()
                         output = testDesc + " - " + sdf.format(d,temp,pos) + "\t";
                         output = output + "\t" + actWOY;
                         logln(output);
-                        fail = TRUE;
+                        fail = true;
                     }
                 }
             }
@@ -1055,7 +1055,7 @@ void CalendarRegressionTest::test4103271()
                 UnicodeString(" ") + woy);
             if (woy != DATA[j + 1 + i]) {
                 log(" ERROR");
-                fail = TRUE;
+                fail = true;
             }
             logln("");
 
@@ -1070,7 +1070,7 @@ void CalendarRegressionTest::test4103271()
                 str.remove();
                 logln(UnicodeString("  Parse failed: ") +
                       sdf.format(testCal->getTime(status), str));
-                fail= TRUE;
+                fail= true;
             }
 
             testCal->setTime(save,status);
@@ -1141,7 +1141,7 @@ void CalendarRegressionTest::test4103271()
             logln(CalendarTest::calToStr(*testCal));
             testCal->setTime(exp, status);
             logln(CalendarTest::calToStr(*testCal) + UnicodeString( " <<< expected "));
-            fail = TRUE;
+            fail = true;
         }
         logln("");
 
@@ -1157,7 +1157,7 @@ void CalendarRegressionTest::test4103271()
                          " got:" + sdf.format(got, str2));
         if (got != exp) {
             log("  FAIL");
-            fail = TRUE;
+            fail = true;
         }
         logln("");
     }
@@ -1178,10 +1178,10 @@ void CalendarRegressionTest::test4103271()
 
 
     UBool ADDROLL_bool [] = {
-        TRUE,//ADD,
-        TRUE,
-        FALSE,
-        FALSE
+        true,//ADD,
+        true,
+        false,
+        false
     };
 
     testCal->setMinimalDaysInFirstWeek(3);
@@ -1210,7 +1210,7 @@ void CalendarRegressionTest::test4103271()
         if (after != got) {
             str.remove();
             logln(UnicodeString("  exp:") + sdf.format(after, str) + "  FAIL");
-            fail = TRUE;
+            fail = true;
         }
         else logln(" ok");
 
@@ -1227,7 +1227,7 @@ void CalendarRegressionTest::test4103271()
         if (before != got) {
             str.remove();
             logln(UnicodeString("  exp:") + sdf.format(before, str) + "  FAIL");
-            fail = TRUE;
+            fail = true;
         }
         else logln(" ok");
     }
@@ -1332,7 +1332,7 @@ void CalendarRegressionTest::test4114578()
     UDate onset = makeDate(1998, UCAL_APRIL, 5, 1, 0) + ONE_HOUR;
     UDate cease = makeDate(1998, UCAL_OCTOBER, 25, 0, 0) + 2*ONE_HOUR;
 
-    UBool fail = FALSE;
+    UBool fail = false;
 
     const int32_t ADD = 1;
     const int32_t ROLL = 2;
@@ -1372,7 +1372,7 @@ void CalendarRegressionTest::test4114578()
 
         double change = cal->getTime(status) - date;
         if (change != expectedChange) {
-            fail = TRUE;
+            fail = true;
             logln(" FAIL");
         }
         else logln(" OK");
@@ -1589,7 +1589,7 @@ void CalendarRegressionTest::test4142933()
       return;
     }
     //try {
-    calendar->roll((UCalendarDateFields)-1, TRUE, status);
+    calendar->roll((UCalendarDateFields)-1, true, status);
         if(U_SUCCESS(status))
             errln("Test failed, no exception thrown");
     //}
@@ -1692,7 +1692,7 @@ void CalendarRegressionTest::test4147269()
       delete calendar;
       return;
     }
-    calendar->setLenient(FALSE);
+    calendar->setLenient(false);
     UDate date = makeDate(1996, UCAL_JANUARY, 3); // Arbitrary date
     for (int32_t field = 0; field < UCAL_FIELD_COUNT; field++) {
         calendar->setTime(date,status);
@@ -1895,7 +1895,7 @@ CalendarRegressionTest::Test4166109()
      * 22 23 24 25 26 27 28
      * 29 30 31
      */
-    UBool passed = TRUE;
+    UBool passed = true;
     UErrorCode status = U_ZERO_ERROR;
     UCalendarDateFields field = UCAL_WEEK_OF_MONTH;
 
@@ -1923,7 +1923,7 @@ CalendarRegressionTest::Test4166109()
               ((returned == expected) ? "  ok" : "  FAIL"));
 
         if (returned != expected) {
-            passed = FALSE;
+            passed = false;
         }
     }
     if (!passed) {
@@ -2796,8 +2796,8 @@ void CalendarRegressionTest::TestDeprecates(void)
     }
 
     c1->setTime(c2->getTime(status),status);
-    c1->roll(Calendar::HOUR,(UBool)FALSE,status);
-    c2->roll(UCAL_HOUR,(UBool)FALSE,status);
+    c1->roll(Calendar::HOUR,(UBool)false,status);
+    c2->roll(UCAL_HOUR,(UBool)false,status);
 
     if(U_FAILURE(status)) {
         errln("Error code when trying to roll(UBool)");
@@ -2876,7 +2876,7 @@ void CalendarRegressionTest::TestT8057(void) {
         delete cal;
         return;
     }
-    cal->setLenient(FALSE);
+    cal->setLenient(false);
     cal->clear();
     cal->set(2008, UCAL_DECEMBER, 31);
 

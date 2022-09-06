@@ -31,7 +31,7 @@ StrengthProbe::StrengthProbe(CompareFn comparer, GetSortKeyFn getter, UChar SE,
 SE(SE),
 B0(B0), B1(B1), B2(B2), B3(B3),
 utilFirstP(&utilFirst), utilSecondP(&utilSecond),
-frenchSecondary(FALSE),
+frenchSecondary(false),
 comparer(comparer), skgetter(getter)
 {
 }
@@ -111,9 +111,9 @@ StrengthProbe::probePrefix(const Line &x, const Line &y, UChar first, UChar seco
   utilSecond.len = y.len+2;
 
   if(comparer(&utilFirstP, &utilSecondP) < 0) {
-    return TRUE;
+    return true;
   } else {
-    return FALSE;
+    return false;
   }
 }
 
@@ -131,9 +131,9 @@ StrengthProbe::probeSuffix(const Line &x, const Line &y, UChar first, UChar seco
   utilSecond.len = y.len + 2;
 
   if(comparer(&utilFirstP, &utilSecondP) < 0) {
-    return TRUE;
+    return true;
   } else {
-    return FALSE;
+    return false;
   }
 }
 
@@ -150,9 +150,9 @@ StrengthProbe::probePrefixNoSep(const Line &x, const Line &y, UChar first, UChar
   utilSecond.len = y.len + 1;
 
   if(comparer(&utilFirstP, &utilSecondP) < 0) {
-    return TRUE;
+    return true;
   } else {
-    return FALSE;
+    return false;
   }
 }
 
@@ -168,9 +168,9 @@ StrengthProbe::probeSuffixNoSep(const Line &x, const Line &y, UChar first, UChar
   utilSecond.len = y.len + 1;
 
   if(comparer(&utilFirstP, &utilSecondP) < 0) {
-    return TRUE;
+    return true;
   } else {
-    return FALSE;
+    return false;
   }
 }
 
@@ -364,13 +364,13 @@ StrengthProbe::isFrenchSecondary(UErrorCode &status) {
   int32_t result = compare(utilFirst, utilSecond);
 
   if(result < 0) {
-    return FALSE;
+    return false;
   } else if(result > 0) {
-    frenchSecondary = TRUE;
-    return TRUE;
+    frenchSecondary = true;
+    return true;
   } else {
     status = U_INTERNAL_PROGRAM_ERROR;
-    return FALSE;
+    return false;
   }
 }
 
@@ -393,12 +393,12 @@ StrengthProbe::isUpperFirst(UErrorCode &status) {
   }
   
   if(lower == 0 && equal == 0) {
-    return TRUE;
+    return true;
   }
   if(upper == 0 && equal == 0) {
-    return FALSE;
+    return false;
   }
   status = U_INTERNAL_PROGRAM_ERROR;
-  return FALSE;
+  return false;
 }
 

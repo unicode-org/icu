@@ -34,7 +34,7 @@ public:
     void TestDateFormatRoundTrip(void);
     void TestCentury(void);
     void test(const Locale& loc);
-    void test(DateFormat *fmt, const Locale &origLocale, UBool timeOnly = FALSE );
+    void test(DateFormat *fmt, const Locale &origLocale, UBool timeOnly = false );
     int32_t getField(UDate d, int32_t f);
     UnicodeString& escape(const UnicodeString& src, UnicodeString& dst);
     UDate generateDate(void); 
@@ -86,7 +86,7 @@ private:
     static int32_t TRIALS;
     static int32_t DEPTH;
 
-    UBool optionv; // TRUE if @v option is given on command line
+    UBool optionv; // true if @v option is given on command line
     SimpleDateFormat *dateFormat;
     UnicodeString fgStr;
     Calendar *getFieldCal;

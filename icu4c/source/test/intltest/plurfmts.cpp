@@ -82,8 +82,8 @@ void PluralFormatTest::pluralFormatBasicTest(/*char *par*/)
     
     for (int32_t i=0; i< 8; ++i) {
         if (U_SUCCESS(status[i])) {
-            numberFormatTest(plFmt[i], numFmt, 1, 12, NULL, NULL, FALSE, &message);
-            numberFormatTest(plFmt[i], numFmt, 100, 112, NULL, NULL, FALSE, &message);
+            numberFormatTest(plFmt[i], numFmt, 1, 12, NULL, NULL, false, &message);
+            numberFormatTest(plFmt[i], numFmt, 100, 112, NULL, NULL, false, &message);
         }
         else {
             dataerrln("ERROR: PluralFormat constructor failed!");
@@ -221,7 +221,7 @@ void PluralFormatTest::pluralFormatUnitTest(/*char *par*/)
     // ======= Test applying various pattern
     logln("Testing various patterns");
     status = U_ZERO_ERROR;
-    UBool overwrite[PLURAL_PATTERN_DATA] = {FALSE, FALSE, TRUE, TRUE};
+    UBool overwrite[PLURAL_PATTERN_DATA] = {false, false, true, true};
     
     LocalPointer<NumberFormat> numFmt(NumberFormat::createInstance(status));
     UnicodeString message=UnicodeString("ERROR: PluralFormat tests various pattern ...");
@@ -266,7 +266,7 @@ void PluralFormatTest::pluralFormatUnitTest(/*char *par*/)
     if (U_FAILURE(status)) {
         dataerrln("ERROR: Could not create NumberFormat instance with English locale ");
     }
-    numberFormatTest(&pluralFmt, numFmt.getAlias(), 5, 5, NULL, NULL, FALSE, &message);
+    numberFormatTest(&pluralFmt, numFmt.getAlias(), 5, 5, NULL, NULL, false, &message);
     pluralFmt.applyPattern(UNICODE_STRING_SIMPLE("odd__{odd} other{even}"), status);
     if (pluralFmt.format((int32_t)1, status) != UNICODE_STRING_SIMPLE("even")) {
         errln("SetLocale should reset rules but did not.");
@@ -666,15 +666,15 @@ PluralFormatTest::TestDecimals() {
     IcuTestErrorCode errorCode(*this, "TestDecimals");
     // Simple number replacement.
     PluralFormat pf(Locale::getEnglish(), "one{one meter}other{# meters}", errorCode);
-    assertEquals("simple format(1)", "one meter", pf.format((int32_t)1, errorCode), TRUE);
-    assertEquals("simple format(1.5)", "1.5 meters", pf.format(1.5, errorCode), TRUE);
+    assertEquals("simple format(1)", "one meter", pf.format((int32_t)1, errorCode), true);
+    assertEquals("simple format(1.5)", "1.5 meters", pf.format(1.5, errorCode), true);
     PluralFormat pf2(Locale::getEnglish(),
             "offset:1 one{another meter}other{another # meters}", errorCode);
     DecimalFormat df("0.0", new DecimalFormatSymbols(Locale::getEnglish(), errorCode), errorCode);
     pf2.setNumberFormat(&df, errorCode);
-    assertEquals("offset-decimals format(1)", "another 0.0 meters", pf2.format((int32_t)1, errorCode), TRUE);
-    assertEquals("offset-decimals format(2)", "another 1.0 meters", pf2.format((int32_t)2, errorCode), TRUE);
-    assertEquals("offset-decimals format(2.5)", "another 1.5 meters", pf2.format(2.5, errorCode), TRUE);
+    assertEquals("offset-decimals format(1)", "another 0.0 meters", pf2.format((int32_t)1, errorCode), true);
+    assertEquals("offset-decimals format(2)", "another 1.0 meters", pf2.format((int32_t)2, errorCode), true);
+    assertEquals("offset-decimals format(2.5)", "another 1.5 meters", pf2.format(2.5, errorCode), true);
     errorCode.reset();
 }
 

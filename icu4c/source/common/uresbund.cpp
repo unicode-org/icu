@@ -85,10 +85,10 @@ static UBool chopLocale(char *name) {
 
     if(i != NULL) {
         *i = '\0';
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /**
@@ -199,7 +199,7 @@ static int32_t ures_flushCache()
     }
 
     do {
-        deletedMore = FALSE;
+        deletedMore = false;
         /*creates an enumeration to iterate through every element in the table */
         pos = UHASH_FIRST;
         while ((e = uhash_nextElement(cache, &pos)) != NULL)
@@ -216,7 +216,7 @@ static int32_t ures_flushCache()
 
             if (resB->fCountExisting == 0) {
                 rbDeletedNum++;
-                deletedMore = TRUE;
+                deletedMore = true;
                 uhash_removeElement(cache, e);
                 free_entry(resB);
             }
@@ -234,7 +234,7 @@ static int32_t ures_flushCache()
 #include <stdio.h>
 
 U_CAPI UBool U_EXPORT2 ures_dumpCacheContents(void) {
-  UBool cacheNotEmpty = FALSE;
+  UBool cacheNotEmpty = false;
   int32_t pos = UHASH_FIRST;
   const UHashElement *e;
   UResourceDataEntry *resB;
@@ -242,11 +242,11 @@ U_CAPI UBool U_EXPORT2 ures_dumpCacheContents(void) {
     Mutex lock(&resbMutex);
     if (cache == NULL) {
       fprintf(stderr,"%s:%d: RB Cache is NULL.\n", __FILE__, __LINE__);
-      return FALSE;
+      return false;
     }
 
     while ((e = uhash_nextElement(cache, &pos)) != NULL) {
-      cacheNotEmpty=TRUE;
+      cacheNotEmpty=true;
       resB = (UResourceDataEntry *) e->value.pointer;
       fprintf(stderr,"%s:%d: RB Cache: Entry @0x%p, refcount %d, name %s:%s.  Pool 0x%p, alias 0x%p, parent 0x%p\n",
               __FILE__, __LINE__,
@@ -272,7 +272,7 @@ static UBool U_CALLCONV ures_cleanup(void)
         cache = NULL;
     }
     gCacheInitOnce.reset();
-    return TRUE;
+    return true;
 }
 
 /** INTERNAL: Initializes the cache for resources */
@@ -320,7 +320,7 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
     const char *name;
     char aliasName[100] = { 0 };
     int32_t aliasLen = 0;
-    /*UBool isAlias = FALSE;*/
+    /*UBool isAlias = false;*/
     /*UHashTok hashkey; */
 
     if(U_FAILURE(*status)) {
@@ -466,8 +466,8 @@ static UResourceDataEntry *
 findFirstExisting(const char* path, char* name, const char* defaultLocale,
                   UBool *isRoot, UBool *hasChopped, UBool *isDefault, UErrorCode* status) {
     UResourceDataEntry *r = NULL;
-    UBool hasRealData = FALSE;
-    *hasChopped = TRUE; /* we're starting with a fresh name */
+    UBool hasRealData = false;
+    *hasChopped = true; /* we're starting with a fresh name */
 
     while(*hasChopped && !hasRealData) {
         r = init_entry(name, path, status);
@@ -513,13 +513,13 @@ static void ures_setIsStackObject( UResourceBundle* resB, UBool state) {
 }
 
 static UBool ures_isStackObject(const UResourceBundle* resB) {
-  return((resB->fMagic1 == MAGIC1 && resB->fMagic2 == MAGIC2)?FALSE:TRUE);
+  return((resB->fMagic1 == MAGIC1 && resB->fMagic2 == MAGIC2)?false:true);
 }
 
 
 U_CFUNC void ures_initStackObject(UResourceBundle* resB) {
   uprv_memset(resB, 0, sizeof(UResourceBundle));
-  ures_setIsStackObject(resB, TRUE);
+  ures_setIsStackObject(resB, true);
 }
 
 U_NAMESPACE_BEGIN
@@ -538,8 +538,8 @@ static UBool  // returns U_SUCCESS(*status)
 loadParentsExceptRoot(UResourceDataEntry *&t1,
                       char name[], int32_t nameCapacity,
                       UBool usingUSRData, char usrDataPath[], UErrorCode *status) {
-    if (U_FAILURE(*status)) { return FALSE; }
-    UBool checkParent = TRUE;
+    if (U_FAILURE(*status)) { return false; }
+    UBool checkParent = true;
     while (checkParent && t1->fParent == NULL && !t1->fData.noFallback &&
             res_getResource(&t1->fData,"%%ParentIsRoot") == RES_BOGUS) {
         Resource parentRes = res_getResource(&t1->fData, "%%Parent");
@@ -550,7 +550,7 @@ loadParentsExceptRoot(UResourceDataEntry *&t1,
             if(parentLocaleName != NULL && 0 < parentLocaleLen && parentLocaleLen < nameCapacity) {
                 u_UCharsToChars(parentLocaleName, name, parentLocaleLen + 1);
                 if (uprv_strcmp(name, kRootLocaleName) == 0) {
-                    return TRUE;
+                    return true;
                 }
             }
         }
@@ -559,7 +559,7 @@ loadParentsExceptRoot(UResourceDataEntry *&t1,
         UResourceDataEntry *t2 = init_entry(name, t1->fPath, &parentStatus);
         if (U_FAILURE(parentStatus)) {
             *status = parentStatus;
-            return FALSE;
+            return false;
         }
         UResourceDataEntry *u2 = NULL;
         UErrorCode usrStatus = U_ZERO_ERROR;
@@ -568,7 +568,7 @@ loadParentsExceptRoot(UResourceDataEntry *&t1,
             // If we failed due to out-of-memory, report that to the caller and exit early.
             if (usrStatus == U_MEMORY_ALLOCATION_ERROR) {
                 *status = usrStatus;
-                return FALSE;
+                return false;
             }
         }
 
@@ -585,21 +585,21 @@ loadParentsExceptRoot(UResourceDataEntry *&t1,
         t1 = t2;
         checkParent = chopLocale(name) || mayHaveParent(name);
     }
-    return TRUE;
+    return true;
 }
 
 static UBool  // returns U_SUCCESS(*status)
 insertRootBundle(UResourceDataEntry *&t1, UErrorCode *status) {
-    if (U_FAILURE(*status)) { return FALSE; }
+    if (U_FAILURE(*status)) { return false; }
     UErrorCode parentStatus = U_ZERO_ERROR;
     UResourceDataEntry *t2 = init_entry(kRootLocaleName, t1->fPath, &parentStatus);
     if (U_FAILURE(parentStatus)) {
         *status = parentStatus;
-        return FALSE;
+        return false;
     }
     t1->fParent = t2;
     t1 = t2;
-    return TRUE;
+    return true;
 }
 
 enum UResOpenType {
@@ -640,10 +640,10 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID,
     UErrorCode intStatus = U_ZERO_ERROR;
     UResourceDataEntry *r = NULL;
     UResourceDataEntry *t1 = NULL;
-    UBool isDefault = FALSE;
-    UBool isRoot = FALSE;
-    UBool hasRealData = FALSE;
-    UBool hasChopped = TRUE;
+    UBool isDefault = false;
+    UBool isRoot = false;
+    UBool hasRealData = false;
+    UBool hasChopped = true;
     UBool usingUSRData = U_USE_USRDATA && ( path == NULL || uprv_strncmp(path,U_ICUDATA_NAME,8) == 0);
 
     char name[ULOC_FULLNAME_CAPACITY];
@@ -686,7 +686,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID,
 
     if(r != NULL) { /* if there is one real locale, we can look for parents. */
         t1 = r;
-        hasRealData = TRUE;
+        hasRealData = true;
         if ( usingUSRData ) {  /* This code inserts user override data into the inheritance chain */
             UErrorCode usrStatus = U_ZERO_ERROR;
             UResourceDataEntry *u1 = init_entry(t1->fName, usrDataPath, &usrStatus);
@@ -726,8 +726,8 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID,
         intStatus = U_USING_DEFAULT_WARNING;
         if(r != NULL) { /* the default locale exists */
             t1 = r;
-            hasRealData = TRUE;
-            isDefault = TRUE;
+            hasRealData = true;
+            isDefault = true;
             // TODO: Why not if (usingUSRData) { ... } like in the non-default-locale code path?
             if ((hasChopped || mayHaveParent(name)) && !isRoot) {
                 if (!loadParentsExceptRoot(t1, name, UPRV_LENGTHOF(name), usingUSRData, usrDataPath, status)) {
@@ -750,7 +750,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID,
         if(r != NULL) {
             t1 = r;
             intStatus = U_USING_DEFAULT_WARNING;
-            hasRealData = TRUE;
+            hasRealData = true;
         } else { /* we don't even have the root locale */
             *status = U_MISSING_RESOURCE_ERROR;
             goto finish;
@@ -826,7 +826,7 @@ entryOpenDirect(const char* path, const char* localeID, UErrorCode* status) {
         char name[ULOC_FULLNAME_CAPACITY];
         uprv_strcpy(name, localeID);
         if(!chopLocale(name) || uprv_strcmp(name, kRootLocaleName) == 0 ||
-                loadParentsExceptRoot(t1, name, UPRV_LENGTHOF(name), FALSE, NULL, status)) {
+                loadParentsExceptRoot(t1, name, UPRV_LENGTHOF(name), false, NULL, status)) {
             if(uprv_strcmp(t1->fName, kRootLocaleName) != 0 && t1->fParent == NULL) {
                 insertRootBundle(t1, status);
             }
@@ -956,7 +956,7 @@ ures_closeBundle(UResourceBundle* resB, UBool freeBundleObj)
         }
         ures_freeResPath(resB);
 
-        if(ures_isStackObject(resB) == FALSE && freeBundleObj) {
+        if(ures_isStackObject(resB) == false && freeBundleObj) {
             uprv_free(resB);
         }
 #if 0 /*U_DEBUG*/
@@ -971,7 +971,7 @@ ures_closeBundle(UResourceBundle* resB, UBool freeBundleObj)
 U_CAPI void  U_EXPORT2
 ures_close(UResourceBundle* resB)
 {
-    ures_closeBundle(resB, TRUE);
+    ures_closeBundle(resB, true);
 }
 
 namespace {
@@ -1237,7 +1237,7 @@ UResourceBundle *init_resb_result(
             *status = U_MEMORY_ALLOCATION_ERROR;
             return NULL;
         }
-        ures_setIsStackObject(resB, FALSE);
+        ures_setIsStackObject(resB, false);
         resB->fResPath = NULL;
         resB->fResPathLen = 0;
     } else {
@@ -1254,7 +1254,7 @@ UResourceBundle *init_resb_result(
         treated the same
         */
         /*
-        if(ures_isStackObject(resB) != FALSE) {
+        if(ures_isStackObject(resB) != false) {
         ures_initStackObject(resB);
         }
         */
@@ -1264,8 +1264,8 @@ UResourceBundle *init_resb_result(
     }
     resB->fData = dataEntry;
     entryIncrease(resB->fData);
-    resB->fHasFallback = FALSE;
-    resB->fIsTopLevel = FALSE;
+    resB->fHasFallback = false;
+    resB->fIsTopLevel = false;
     resB->fIndex = -1;
     resB->fKey = key; 
     resB->fValidLocaleDataEntry = validLocaleDataEntry;
@@ -1318,7 +1318,7 @@ UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle *origin
     }
     if(original != NULL) {
         if(r == NULL) {
-            isStackObject = FALSE;
+            isStackObject = false;
             r = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
             /* test for NULL */
             if (r == NULL) {
@@ -1327,7 +1327,7 @@ UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle *origin
             }
         } else {
             isStackObject = ures_isStackObject(r);
-            ures_closeBundle(r, FALSE);
+            ures_closeBundle(r, false);
         }
         uprv_memcpy(r, original, sizeof(UResourceBundle));
         r->fResPath = NULL;
@@ -1409,7 +1409,7 @@ ures_toUTF8String(const UChar *s16, int32_t length16,
              * may store UTF-8 natively.
              * (In which case dest would not be used at all.)
              *
-             * We do not do this if forceCopy=TRUE because then the caller
+             * We do not do this if forceCopy=true because then the caller
              * expects the string to start exactly at dest.
              *
              * The test above for <= 0x2aaaaaaa prevents overflows.
@@ -1553,7 +1553,7 @@ U_CAPI void U_EXPORT2 ures_resetIterator(UResourceBundle *resB){
 
 U_CAPI UBool U_EXPORT2 ures_hasNext(const UResourceBundle *resB) {
   if(resB == NULL) {
-    return FALSE;
+    return false;
   }
   return (UBool)(resB->fIndex < resB->fSize-1);
 }
@@ -2133,7 +2133,7 @@ void getAllItemsWithFallback(
         parentRef.fData = parentEntry;
         parentRef.fValidLocaleDataEntry = bundle->fValidLocaleDataEntry;
         parentRef.fHasFallback = !parentRef.getResData().noFallback;
-        parentRef.fIsTopLevel = TRUE;
+        parentRef.fIsTopLevel = true;
         parentRef.fRes = parentRef.getResData().rootRes;
         parentRef.fSize = res_countArrayItems(&parentRef.getResData(), parentRef.fRes);
         parentRef.fIndex = -1;
@@ -2276,7 +2276,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
         res = res_getTableItemByKey(&resB->getResData(), resB->fRes, &t, &key);
         if(res == RES_BOGUS) {
             key = inKey;
-            if(resB->fHasFallback == TRUE) {
+            if(resB->fHasFallback == true) {
                 dataEntry = getFallbackData(resB, &key, &res, status);
                 if(U_SUCCESS(*status)) {
                     /* check if resB->fResPath gives the right name here */
@@ -2294,7 +2294,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
 #if 0
     /* this is a kind of TODO item. If we have an array with an index table, we could do this. */
     /* not currently */
-    else if(RES_GET_TYPE(resB->fRes) == URES_ARRAY && resB->fHasFallback == TRUE) {
+    else if(RES_GET_TYPE(resB->fRes) == URES_ARRAY && resB->fHasFallback == true) {
         /* here should go a first attempt to locate the key using index table */
         dataEntry = getFallbackData(resB, &key, &res, status);
         if(U_SUCCESS(*status)) {
@@ -2331,7 +2331,7 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
 
         if(res == RES_BOGUS) {
             key = inKey;
-            if(resB->fHasFallback == TRUE) {
+            if(resB->fHasFallback == true) {
                 dataEntry = getFallbackData(resB, &key, &res, status);
                 if(U_SUCCESS(*status)) {
                     switch (RES_GET_TYPE(res)) {
@@ -2376,7 +2376,7 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
 #if 0 
     /* this is a kind of TODO item. If we have an array with an index table, we could do this. */
     /* not currently */   
-    else if(RES_GET_TYPE(resB->fRes) == URES_ARRAY && resB->fHasFallback == TRUE) {
+    else if(RES_GET_TYPE(resB->fRes) == URES_ARRAY && resB->fHasFallback == true) {
         /* here should go a first attempt to locate the key using index table */
         dataEntry = getFallbackData(resB, &key, &res, status);
         if(U_SUCCESS(*status)) {
@@ -2510,17 +2510,17 @@ ures_openWithType(UResourceBundle *r, const char* path, const char* localeID,
             *status = U_MEMORY_ALLOCATION_ERROR;
             return NULL;
         }
-        isStackObject = FALSE;
+        isStackObject = false;
     } else {  // fill-in
         isStackObject = ures_isStackObject(r);
-        ures_closeBundle(r, FALSE);
+        ures_closeBundle(r, false);
     }
     uprv_memset(r, 0, sizeof(UResourceBundle));
     ures_setIsStackObject(r, isStackObject);
 
     r->fValidLocaleDataEntry = r->fData = entry;
     r->fHasFallback = openType != URES_OPEN_DIRECT && !r->getResData().noFallback;
-    r->fIsTopLevel = TRUE;
+    r->fIsTopLevel = true;
     r->fRes = r->getResData().rootRes;
     r->fSize = res_countArrayItems(&r->getResData(), r->fRes);
     r->fIndex = -1;
@@ -2795,10 +2795,10 @@ static UBool isLocaleInList(UEnumeration *locEnum, const char *locToSearch, UErr
     const char *loc;
     while ((loc = uenum_next(locEnum, NULL, status)) != NULL) {
         if (uprv_strcmp(loc, locToSearch) == 0) {
-            return TRUE;
+            return true;
         }
     }
-    return FALSE;
+    return false;
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -2836,7 +2836,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
 
     if(isAvailable) { 
         UEnumeration *locEnum = ures_openAvailableLocales(path, &subStatus);
-        *isAvailable = TRUE;
+        *isAvailable = true;
         if (U_SUCCESS(subStatus)) {
             *isAvailable = isLocaleInList(locEnum, parent, &subStatus);
         }
@@ -2854,7 +2854,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
         if(((subStatus == U_USING_FALLBACK_WARNING) ||
             (subStatus == U_USING_DEFAULT_WARNING)) && isAvailable)
         {
-            *isAvailable = FALSE;
+            *isAvailable = false;
         }
         isAvailable = NULL; /* only want to set this the first time around */
         
@@ -2910,7 +2910,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
         subStatus = U_ZERO_ERROR;
         res = ures_open(path, parent, &subStatus);
         if((subStatus == U_USING_FALLBACK_WARNING) && isAvailable) {
-            *isAvailable = FALSE;
+            *isAvailable = false;
         }
         isAvailable = NULL; /* only want to set this the first time around */
         
@@ -2991,7 +2991,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
             subStatus = U_ZERO_ERROR;
             res = ures_open(path, parent, &subStatus);
             if((subStatus == U_USING_FALLBACK_WARNING) && isAvailable) {
-                *isAvailable = FALSE;
+                *isAvailable = false;
             }
             isAvailable = NULL; /* only want to set this the first time around */
             
@@ -3224,32 +3224,32 @@ ures_equal(const UResourceBundle* res1, const UResourceBundle* res2){
         return (res1->fKey==res2->fKey);
     }else{
         if(uprv_strcmp(res1->fKey, res2->fKey)!=0){
-            return FALSE;
+            return false;
         }
     }
     if(uprv_strcmp(res1->fData->fName, res2->fData->fName)!=0){
-        return FALSE;
+        return false;
     }
     if(res1->fData->fPath == NULL||  res2->fData->fPath==NULL){
         return (res1->fData->fPath == res2->fData->fPath);
     }else{
         if(uprv_strcmp(res1->fData->fPath, res2->fData->fPath)!=0){
-            return FALSE;
+            return false;
         }
     }
     if(uprv_strcmp(res1->fData->fParent->fName, res2->fData->fParent->fName)!=0){
-        return FALSE;
+        return false;
     }
     if(uprv_strcmp(res1->fData->fParent->fPath, res2->fData->fParent->fPath)!=0){
-        return FALSE;
+        return false;
     }
     if(uprv_strncmp(res1->fResPath, res2->fResPath, res1->fResPathLen)!=0){
-        return FALSE;
+        return false;
     }
     if(res1->fRes != res2->fRes){
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 U_CAPI UResourceBundle* U_EXPORT2
 ures_clone(const UResourceBundle* res, UErrorCode* status){

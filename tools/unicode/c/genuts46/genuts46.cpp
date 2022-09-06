@@ -65,7 +65,7 @@ toIDNA2003(const UStringPrepProfile *prep, UChar32 c, icu::UnicodeString &destSt
     int32_t destLength;
     dest=destString.getBuffer(32);
     if(dest==NULL) {
-        return FALSE;
+        return false;
     }
     UErrorCode errorCode=U_ZERO_ERROR;
     destLength=usprep_prepare(prep, src, srcLength,
@@ -75,8 +75,8 @@ toIDNA2003(const UStringPrepProfile *prep, UChar32 c, icu::UnicodeString &destSt
     if(errorCode==U_STRINGPREP_PROHIBITED_ERROR) {
         return -1;
     } else {
-        // Returns FALSE=0 for U_STRINGPREP_UNASSIGNED_ERROR and processing errors,
-        // TRUE=1 if c is valid or mapped.
+        // Returns false=0 for U_STRINGPREP_UNASSIGNED_ERROR and processing errors,
+        // true=1 if c is valid or mapped.
         return U_SUCCESS(errorCode);
     }
 }
@@ -163,7 +163,7 @@ main(int argc, const char *argv[]) {
 
     // HACK: The StringPrep API performs a BiDi check according to the data.
     // We need to override that for this data generation, by resetting an internal flag.
-    namePrep->checkBiDi=FALSE;
+    namePrep->checkBiDi=false;
 
     icu::UnicodeSet baseExclusionSet;
     icu::UnicodeString cString, mapping, namePrepResult;
@@ -240,7 +240,7 @@ main(int argc, const char *argv[]) {
         add(0x2e);  // not mapped, simply valid
     UBool madeChange;
     do {
-        madeChange=FALSE;
+        madeChange=false;
         {
             removeSet.clear();
             icu::UnicodeSetIterator iter(validSet);
@@ -250,7 +250,7 @@ main(int argc, const char *argv[]) {
                     fprintf(stderr, "U+%04lX valid -> disallowed: NFD not wholly valid\n", (long)c);
                     disallowedSet.add(c);
                     removeSet.add(c);
-                    madeChange=TRUE;
+                    madeChange=true;
                 }
             }
             validSet.removeAll(removeSet);
@@ -267,7 +267,7 @@ main(int argc, const char *argv[]) {
                     fprintf(stderr, "U+%04lX mapped -> disallowed: NFD of mapping not wholly valid\n", (long)c);
                     disallowedSet.add(c);
                     removeSet.add(c);
-                    madeChange=TRUE;
+                    madeChange=true;
                 }
             }
             mappedSet.removeAll(removeSet);

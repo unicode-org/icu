@@ -1352,7 +1352,7 @@ void NumberFormatterApiTest::unitSkeletons() {
             continue;
         }
         assertEquals(                                                       //
-            UnicodeString(TRUE, cas.inputSkeleton, -1) + u" normalization", //
+            UnicodeString(true, cas.inputSkeleton, -1) + u" normalization", //
             cas.normalizedSkeleton,                                         //
             nf.toSkeleton(status));
         status.errIfFailureAndReset("NumberFormatter::toSkeleton failed");
@@ -6280,7 +6280,7 @@ void NumberFormatterApiTest::assertFormatDescending(
         ...) {
     va_list args;
     va_start(args, locale);
-    UnicodeString message(TRUE, umessage, -1);
+    UnicodeString message(true, umessage, -1);
     static double inputs[] = {87650, 8765, 876.5, 87.65, 8.765, 0.8765, 0.08765, 0.008765, 0};
     const LocalizedNumberFormatter l1 = f.threshold(0).locale(locale); // no self-regulation
     const LocalizedNumberFormatter l2 = f.threshold(1).locale(locale); // all self-regulation
@@ -6300,7 +6300,7 @@ void NumberFormatterApiTest::assertFormatDescending(
         assertEquals(message + u": Safe Path: " + caseNumber, expected, actual2);
     }
     if (uskeleton != nullptr) { // if null, skeleton is declared as undefined.
-        UnicodeString skeleton(TRUE, uskeleton, -1);
+        UnicodeString skeleton(true, uskeleton, -1);
         // Only compare normalized skeletons: the tests need not provide the normalized forms.
         // Use the normalized form to construct the testing formatter to guarantee no loss of info.
         UnicodeString normalized = NumberFormatter::forSkeleton(skeleton, status).toSkeleton(status);
@@ -6350,7 +6350,7 @@ void NumberFormatterApiTest::assertFormatDescendingBig(
         ...) {
     va_list args;
     va_start(args, locale);
-    UnicodeString message(TRUE, umessage, -1);
+    UnicodeString message(true, umessage, -1);
     static double inputs[] = {87650000, 8765000, 876500, 87650, 8765, 876.5, 87.65, 8.765, 0};
     const LocalizedNumberFormatter l1 = f.threshold(0).locale(locale); // no self-regulation
     const LocalizedNumberFormatter l2 = f.threshold(1).locale(locale); // all self-regulation
@@ -6370,7 +6370,7 @@ void NumberFormatterApiTest::assertFormatDescendingBig(
         assertEquals(message + u": Safe Path: " + caseNumber, expected, actual2);
     }
     if (uskeleton != nullptr) { // if null, skeleton is declared as undefined.
-        UnicodeString skeleton(TRUE, uskeleton, -1);
+        UnicodeString skeleton(true, uskeleton, -1);
         // Only compare normalized skeletons: the tests need not provide the normalized forms.
         // Use the normalized form to construct the testing formatter to guarantee no loss of info.
         UnicodeString normalized = NumberFormatter::forSkeleton(skeleton, status).toSkeleton(status);
@@ -6420,7 +6420,7 @@ NumberFormatterApiTest::assertFormatSingle(
         Locale locale,
         double input,
         const UnicodeString& expected) {
-    UnicodeString message(TRUE, umessage, -1);
+    UnicodeString message(true, umessage, -1);
     const LocalizedNumberFormatter l1 = f.threshold(0).locale(locale); // no self-regulation
     const LocalizedNumberFormatter l2 = f.threshold(1).locale(locale); // all self-regulation
     IcuTestErrorCode status(*this, "assertFormatSingle");
@@ -6433,7 +6433,7 @@ NumberFormatterApiTest::assertFormatSingle(
     assertSuccess(message + u": Safe Path", status);
     assertEquals(message + u": Safe Path", expected, actual2);
     if (uskeleton != nullptr) { // if null, skeleton is declared as undefined.
-        UnicodeString skeleton(TRUE, uskeleton, -1);
+        UnicodeString skeleton(true, uskeleton, -1);
         // Only compare normalized skeletons: the tests need not provide the normalized forms.
         // Use the normalized form to construct the testing formatter to ensure no loss of info.
         UnicodeString normalized = NumberFormatter::forSkeleton(skeleton, status).toSkeleton(status);

@@ -66,7 +66,7 @@ ulocdata_open(const char *localeID, UErrorCode *status)
 
    uld->langBundle = NULL;
 
-   uld->noSubstitute = FALSE;
+   uld->noSubstitute = false;
    uld->bundle = ures_open(NULL, localeID, status);
    uld->langBundle = ures_open(U_ICUDATA_LANG, localeID, status);
 
@@ -196,7 +196,7 @@ static UResourceBundle * measurementTypeBundleForLocale(const char *localeID, co
     UResourceBundle *rb;
     UResourceBundle *measTypeBundle = NULL;
     
-    ulocimp_getRegionForSupplementalData(localeID, TRUE, region, ULOC_COUNTRY_CAPACITY, status);
+    ulocimp_getRegionForSupplementalData(localeID, true, region, ULOC_COUNTRY_CAPACITY, status);
     
     rb = ures_openDirect(NULL, "supplementalData", status);
     ures_getByKey(rb, "measurementData", rb, status);

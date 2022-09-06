@@ -1465,7 +1465,7 @@ static const UTrie2 propsTrie={
     0x0,
     0x110000,
     0x59e4,
-    NULL, 0, FALSE, FALSE, 0, NULL
+    NULL, 0, false, false, 0, NULL
 };
 
 static const uint16_t propsVectorsTrie_index[32692]={
@@ -3527,7 +3527,7 @@ static const UTrie2 propsVectorsTrie={
     0x0,
     0x110000,
     0x7fb0,
-    NULL, 0, FALSE, FALSE, 0, NULL
+    NULL, 0, false, false, 0, NULL
 };
 
 static const uint32_t propsVectors[7230]={

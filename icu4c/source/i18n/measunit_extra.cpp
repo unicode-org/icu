@@ -349,7 +349,7 @@ UBool U_CALLCONV cleanupUnitExtras() {
     uprv_free(gSimpleUnits);
     gSimpleUnits = nullptr;
     gUnitExtrasInitOnce.reset();
-    return TRUE;
+    return true;
 }
 
 void U_CALLCONV initUnitExtras(UErrorCode& status) {

@@ -85,7 +85,7 @@ UBool U_CALLCONV characterproperties_cleanup() {
         ucptrie_close(reinterpret_cast<UCPTrie *>(maps[i]));
         maps[i] = nullptr;
     }
-    return TRUE;
+    return true;
 }
 
 void U_CALLCONV initInclusion(UPropertySource src, UErrorCode &errorCode) {
