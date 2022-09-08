@@ -4649,15 +4649,15 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "currency/USD latin",
                 NumberFormatter.with().symbols(NumberingSystem.LATIN).unit(USD),
                 new ULocale("ar"),
-                "\u200FUS$ 87,650.00",
-                "\u200FUS$ 8,765.00",
-                "\u200FUS$ 876.50",
-                "\u200FUS$ 87.65",
-                "\u200FUS$ 8.76",
-                "\u200FUS$ 0.88",
-                "\u200FUS$ 0.09",
-                "\u200FUS$ 0.01",
-                "\u200FUS$ 0.00");
+                "\u200F87,650.00 US$",
+                "\u200F8,765.00 US$",
+                "\u200F876.50 US$",
+                "\u200F87.65 US$",
+                "\u200F8.76 US$",
+                "\u200F0.88 US$",
+                "\u200F0.09 US$",
+                "\u200F0.01 US$",
+                "\u200F0.00 US$");
 
         assertFormatDescending(
                 "Math Numbering System with French Data",
@@ -4696,22 +4696,22 @@ public class NumberFormatterApiTest extends TestFmwk {
         // NOTE: Locale ar puts ¤ after the number in NS arab but before the number in NS latn.
 
         assertFormatSingle(
-                "Currency symbol should precede number in ar with NS latn",
+                "Currency symbol should follow number in ar with NS latn",
                 "currency/USD latin",
                 "currency/USD latin",
                 NumberFormatter.with().symbols(NumberingSystem.LATIN).unit(USD),
                 new ULocale("ar"),
                 12345.67,
-                "\u200FUS$ 12,345.67");
+                "\u200F12,345.67 US$");
 
         assertFormatSingle(
-                "Currency symbol should precede number in ar@numbers=latn",
+                "Currency symbol should follow number in ar@numbers=latn",
                 "currency/USD",
                 "currency/USD",
                 NumberFormatter.with().unit(USD),
                 new ULocale("ar@numbers=latn"),
                 12345.67,
-                "\u200FUS$ 12,345.67");
+                "\u200F12,345.67 US$");
 
         assertFormatSingle(
                 "Currency symbol should follow number in ar-EG with NS arab",
@@ -4738,10 +4738,10 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().symbols(NumberingSystem.LATIN).unit(USD),
                 new ULocale("ar@numbers=arab"),
                 12345.67,
-                "\u200FUS$ 12,345.67");
+                "\u200F12,345.67 US$");
 
         assertEquals("NumberingSystem in API should win over @numbers keyword in reverse order",
-                "\u200FUS$ 12,345.67",
+                "\u200F12,345.67 US$",
                 NumberFormatter.withLocale(new ULocale("ar@numbers=arab"))
                     .symbols(NumberingSystem.LATIN)
                     .unit(USD)

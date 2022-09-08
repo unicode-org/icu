@@ -6909,6 +6909,10 @@ uk{
             }
             furlong{
                 dnam{"фурлонги"}
+                few{"{0} fur"}
+                many{"{0} fur"}
+                one{"{0} fur"}
+                other{"{0} fur"}
             }
             inch{
                 dnam{"дюйми"}

@@ -62,6 +62,7 @@ sq{
         bug{"buginezisht"}
         byn{"blinisht"}
         ca{"katalonisht"}
+        cay{"kajugaisht"}
         ccp{"çakmaisht"}
         ce{"çeçenisht"}
         ceb{"sebuanisht"}

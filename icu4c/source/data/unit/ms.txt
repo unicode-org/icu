@@ -475,7 +475,7 @@ ms{
                 other{"{0} milimeter"}
             }
             nanometer{
-                dnam{"nm"}
+                dnam{"nanometer"}
                 other{"{0} nanometer"}
             }
             nautical-mile{
