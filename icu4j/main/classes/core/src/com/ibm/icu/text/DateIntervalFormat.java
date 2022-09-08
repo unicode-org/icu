@@ -206,11 +206,12 @@ import com.ibm.icu.util.UResourceBundle;
  *   // and parses into
  *   DateInterval dtInterval = new DateInterval(1000*3600*24L, 1000*3600*24*2L);
  *   DateIntervalFormat dtIntervalFmt = DateIntervalFormat.getInstance(
- *                   YEAR_MONTH_DAY, Locale("en", "GB", ""));
- *   StringBuffer str = new StringBuffer("");
- *   FieldPosition pos = new FieldPosition(0);
+ *           DateFormat.YEAR_MONTH_DAY, new Locale("en", "GB", ""));
+ *   StringBuffer result = new StringBuffer("");
+ *   FieldPosition pos = new FieldPosition(-1);
  *   // formatting
- *   dtIntervalFmt.format(dtInterval, dateIntervalString, pos);
+ *   dtIntervalFmt.format(dtInterval, result, pos);
+ *   assertEquals("interval", "1–2 January 1970", result.toString());
  *
  * </pre>
  *
