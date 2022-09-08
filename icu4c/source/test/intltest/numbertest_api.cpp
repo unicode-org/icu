@@ -4689,15 +4689,15 @@ void NumberFormatterApiTest::symbols() {
             u"currency/USD latin",
             NumberFormatter::with().adoptSymbols(new NumberingSystem(LATN)).unit(USD),
             Locale("ar"),
-            u"\u200FUS$ 87,650.00",
-            u"\u200FUS$ 8,765.00",
-            u"\u200FUS$ 876.50",
-            u"\u200FUS$ 87.65",
-            u"\u200FUS$ 8.76",
-            u"\u200FUS$ 0.88",
-            u"\u200FUS$ 0.09",
-            u"\u200FUS$ 0.01",
-            u"\u200FUS$ 0.00");
+            u"\u200F87,650.00 US$",
+            u"\u200F8,765.00 US$",
+            u"\u200F876.50 US$",
+            u"\u200F87.65 US$",
+            u"\u200F8.76 US$",
+            u"\u200F0.88 US$",
+            u"\u200F0.09 US$",
+            u"\u200F0.01 US$",
+            u"\u200F0.00 US$");
 
     assertFormatDescending(
             u"Math Numbering System with French Data",
@@ -4736,22 +4736,22 @@ void NumberFormatterApiTest::symbols() {
     // NOTE: Locale ar puts ¤ after the number in NS arab but before the number in NS latn.
 
     assertFormatSingle(
-            u"Currency symbol should precede number in ar with NS latn",
+            u"Currency symbol should follow number in ar with NS latn",
             u"currency/USD latin",
             u"currency/USD latin",
             NumberFormatter::with().adoptSymbols(new NumberingSystem(LATN)).unit(USD),
             Locale("ar"),
             12345.67,
-            u"\u200FUS$ 12,345.67");
+            u"\u200F12,345.67 US$");
 
     assertFormatSingle(
-            u"Currency symbol should precede number in ar@numbers=latn",
+            u"Currency symbol should follow number in ar@numbers=latn",
             u"currency/USD",
             u"currency/USD",
             NumberFormatter::with().unit(USD),
             Locale("ar@numbers=latn"),
             12345.67,
-            u"\u200FUS$ 12,345.67");
+            u"\u200F12,345.67 US$");
 
     assertFormatSingle(
             u"Currency symbol should follow number in ar-EG with NS arab",
@@ -4778,12 +4778,12 @@ void NumberFormatterApiTest::symbols() {
             NumberFormatter::with().adoptSymbols(new NumberingSystem(LATN)).unit(USD),
             Locale("ar@numbers=arab"),
             12345.67,
-            u"\u200FUS$ 12,345.67");
+            u"\u200F12,345.67 US$");
 
     UErrorCode status = U_ZERO_ERROR;
     assertEquals(
             "NumberingSystem in API should win over @numbers keyword in reverse order",
-            u"\u200FUS$ 12,345.67",
+            u"\u200F12,345.67 US$",
             NumberFormatter::withLocale(Locale("ar@numbers=arab")).adoptSymbols(new NumberingSystem(LATN))
                     .unit(USD)
                     .formatDouble(12345.67, status)

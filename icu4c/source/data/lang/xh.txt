@@ -3,6 +3,7 @@
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 xh{
     Languages{
+        af{"isiBhulu"}
         ar{"Isi-Arabhu"}
         ar_001{"Isi-Arabhu (Sale mihla)"}
         bn{"IsiBangla"}
@@ -41,6 +42,7 @@ xh{
         zh{"IsiMandarin"}
         zh_Hans{"IsiTshayina Esenziwe Lula"}
         zh_Hant{"IsiTshayina Esiqhelekileyo"}
+        zu{"isiZulu"}
     }
     Languages%long{
         zh_Hans{"IsiMandarin Esenziwe Lula"}

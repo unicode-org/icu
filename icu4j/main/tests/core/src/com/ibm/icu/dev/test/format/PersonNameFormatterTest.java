@@ -349,7 +349,7 @@ public class PersonNameFormatterTest extends TestFmwk{
             // the native formatter
             new NameAndTestCases("locale=ja_JP,given=駿,surname=宮崎", new String[][] {
                 // (the Japanese name formatter actually inserts a space even for native names)
-                { "ja_JP", "LONG",   "REFERRING",  "FORMAL",   "",                "宮崎 駿" },
+                { "ja_JP", "LONG",   "REFERRING",  "FORMAL",   "",                "宮崎駿" },
                 { "zh_CN", "LONG",   "REFERRING",  "FORMAL",   "",                "宮崎駿" },
             }),
 

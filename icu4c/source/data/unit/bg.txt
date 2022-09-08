@@ -1064,6 +1064,7 @@ bg{
                 other{"{0}′"}
             }
             arc-second{
+                dnam{"дъг. сек."}
                 one{"{0}″"}
                 other{"{0}″"}
             }

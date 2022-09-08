@@ -539,6 +539,9 @@ sq{
                 one{"{0} rreze toke"}
                 other{"{0} rreze toke"}
             }
+            fathom{
+                dnam{"fth"}
+            }
             foot{
                 dnam{"këmbë"}
                 one{"{0} këmbë"}
@@ -661,6 +664,11 @@ sq{
                 dnam{"masa Toke"}
                 one{"{0} masë Toke"}
                 other{"{0} masa Toke"}
+            }
+            grain{
+                dnam{"gran"}
+                one{"{0} gran"}
+                other{"{0} granë"}
             }
             gram{
                 dnam{"gramë"}
@@ -862,6 +870,11 @@ sq{
                 dnam{"fuçi"}
                 one{"{0} fuçi"}
                 other{"{0} fuçi"}
+            }
+            bushel{
+                dnam{"bushelë"}
+                one{"{0} bushel"}
+                other{"{0} bushelë"}
             }
             centiliter{
                 dnam{"centilitra"}
@@ -2490,6 +2503,11 @@ sq{
                 one{"{0} CD"}
                 other{"{0} CD"}
             }
+            grain{
+                dnam{"gran"}
+                one{"{0} gran"}
+                other{"{0} granë"}
+            }
             gram{
                 dnam{"g"}
                 one{"{0} g"}
@@ -2652,6 +2670,9 @@ sq{
                 dnam{"ac ft"}
                 one{"{0} ac ft"}
                 other{"{0} ac ft"}
+            }
+            bushel{
+                dnam{"bushelë"}
             }
             centiliter{
                 dnam{"cL"}
