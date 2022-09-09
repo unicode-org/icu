@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1662689092246,
+  "lastUpdate": 1662693651424,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -1558,6 +1558,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 10.310287038529717,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "44496574+floratmin@users.noreply.github.com",
+            "name": "floratmin",
+            "username": "floratmin"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "1dfe456fe8a98de1f8ea966c45ef157f16160da6",
+          "message": "ICU-21983 Fix fraction precision skeleton\n\nSee #2058",
+          "timestamp": "2022-09-08T20:17:48-07:00",
+          "tree_id": "3d308762dd0f304b04e153e238616d745d769ee9",
+          "url": "https://github.com/unicode-org/icu/commit/1dfe456fe8a98de1f8ea966c45ef157f16160da6"
+        },
+        "date": 1662693644241,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 9.594996161081546,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
