@@ -34,7 +34,7 @@ public class CompactData implements MultiplierProducer {
     private byte largestMagnitude;
     private boolean isEmpty;
 
-    private static final int COMPACT_MAX_DIGITS = 15;
+    private static final int COMPACT_MAX_DIGITS = 20;
 
     public CompactData() {
         patterns = new String[(CompactData.COMPACT_MAX_DIGITS + 1) * StandardPlural.COUNT];

@@ -176,7 +176,8 @@ void CompactData::CompactDataSink::put(const char *key, ResourceValue &value, UB
         // length of the key minus one.  We only support magnitudes less than COMPACT_MAX_DIGITS;
         // ignore entries that have greater magnitude.
         auto magnitude = static_cast<int8_t> (strlen(key) - 1);
-        if (magnitude >= COMPACT_MAX_DIGITS) {
+        U_ASSERT(magnitude < COMPACT_MAX_DIGITS); // debug assert
+        if (magnitude >= COMPACT_MAX_DIGITS) { // skip in production
             continue;
         }
         int8_t multiplier = data.multipliers[magnitude];
