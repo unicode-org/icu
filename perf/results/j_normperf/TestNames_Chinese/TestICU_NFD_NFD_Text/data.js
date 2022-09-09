@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1662687289605,
+  "lastUpdate": 1662689566248,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -1738,6 +1738,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 3.700963391960726,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "5de6ee0c61b38feb4e35b842bc81d9d8030d2afa",
+          "message": "ICU-21959 fix DateIntervalFormat general usage example",
+          "timestamp": "2022-09-08T18:59:19-07:00",
+          "tree_id": "0397c38bdb1077ee68baebac985ebe4ad514188a",
+          "url": "https://github.com/unicode-org/icu/commit/5de6ee0c61b38feb4e35b842bc81d9d8030d2afa"
+        },
+        "date": 1662689560925,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 4.207650170426455,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
