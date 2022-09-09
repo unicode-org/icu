@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1662686591318,
+  "lastUpdate": 1662687073112,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -1468,6 +1468,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.014843867803176774,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "d3a753a0d4a3e6e9d4b5392ec7a0777d229c71f5",
+          "message": "ICU-21957 BRS 72rc, update urename.h",
+          "timestamp": "2022-09-08T18:19:30-07:00",
+          "tree_id": "0c076a705771be959218146920f7658d04800557",
+          "url": "https://github.com/unicode-org/icu/commit/d3a753a0d4a3e6e9d4b5392ec7a0777d229c71f5"
+        },
+        "date": 1662687064038,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.013968010609089032,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
