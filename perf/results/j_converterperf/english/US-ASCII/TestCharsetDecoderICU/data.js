@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1662654024984,
+  "lastUpdate": 1662686648762,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -1498,6 +1498,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 1.1098759664137732,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "1de1e36d6f6050d05b2db027f4c64ae6823eae2a",
+          "message": "ICU-21957 integrate CLDR release-42-alpha3 to ICU main for 72",
+          "timestamp": "2022-09-08T18:19:10-07:00",
+          "tree_id": "43c37bedd13165396856bfd9fd7a067a73e93291",
+          "url": "https://github.com/unicode-org/icu/commit/1de1e36d6f6050d05b2db027f4c64ae6823eae2a"
+        },
+        "date": 1662686644344,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.7320275456697166,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
