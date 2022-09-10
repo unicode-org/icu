@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1662764553544,
+  "lastUpdate": 1662769607748,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -1558,6 +1558,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetAdd",
             "value": 9.341295766206494,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "krlmlr@users.noreply.github.com",
+            "name": "Kirill Müller",
+            "username": "krlmlr"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "a48ae42864e8fcb702a5dfb6f6a076e4dde7e397",
+          "message": "ICU-22117 Replace uprv_strncpy() by uprv_memcpy()\n\nThis fixes a warning on gcc 9.4.0, which is triggered because the third argument to strncpy() depends on the length of the second argument (but should actually indicate the buffer size). Replacing by memcpy() seems harmless because a null terminator is appended further below, and the buffer is sized to be \"large enough\" elsewhere.\n\nSee https://github.com/duckdb/duckdb/issues/4391 for details.\n\nFixing the warning is important for us, because the checks in the duckdb repository treat all warnings as errors.",
+          "timestamp": "2022-09-09T17:07:53-07:00",
+          "tree_id": "5204a95a33d0eb3b78a5a30a3fee3cee294a0da7",
+          "url": "https://github.com/unicode-org/icu/commit/a48ae42864e8fcb702a5dfb6f6a076e4dde7e397"
+        },
+        "date": 1662769600500,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetAdd",
+            "value": 11.68350973451082,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
