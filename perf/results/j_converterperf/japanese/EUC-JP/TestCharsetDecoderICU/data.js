@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1662769078473,
+  "lastUpdate": 1662998413366,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -1738,6 +1738,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.011368722631017875,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "99dee47fb783b1839af5cc742797ba5cdf8924ac",
+          "message": "ICU-21959 add the uemoji feature to ICU Data Build Tool chapter",
+          "timestamp": "2022-09-12T08:57:06-07:00",
+          "tree_id": "5d7f297d26373540044bd9d1355a8b92bf240108",
+          "url": "https://github.com/unicode-org/icu/commit/99dee47fb783b1839af5cc742797ba5cdf8924ac"
+        },
+        "date": 1662998408217,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.011260690169690566,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
