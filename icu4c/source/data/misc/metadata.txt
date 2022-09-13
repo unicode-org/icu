@@ -5233,6 +5233,7 @@ metadata:table(nofallback){
         "ee_GH",
         "el_GR",
         "en_Dsrt_US",
+        "en_Shaw_GB",
         "en_US",
         "eo_001",
         "es_ES",
