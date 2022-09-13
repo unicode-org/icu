@@ -3642,15 +3642,15 @@ th{
             givenFirst-long-addressing-informal{"{given-informal}"}
             givenFirst-long-monogram-formal{"{given-informal-monogram-allCaps}"}
             givenFirst-long-monogram-informal{"{given-informal-monogram-allCaps}"}
-            givenFirst-long-referring-informal{"{given} {given2} {surname} {surname2} {suffix}"}
+            givenFirst-long-referring-informal{"{given}{given2}{surname}{surname2}{suffix}"}
             givenFirst-medium-addressing-informal{"{given-informal}"}
             givenFirst-medium-monogram-formal{"{given-informal-monogram-allCaps}"}
             givenFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
-            givenFirst-medium-referring-informal{"{given-informal} {surname}"}
+            givenFirst-medium-referring-informal{"{given-informal}{surname}"}
             givenFirst-short-addressing-informal{"{given-informal}"}
-            givenFirst-short-referring-informal{"{given} {given2} {surname} {surname2}"}
-            sorting-long-referring-formal{"{surname-core} {given} {given2} {surname-prefix}"}
-            sorting-long-referring-informal{"{surname} {given-informal}"}
+            givenFirst-short-referring-informal{"{given}{given2}{surname}{surname2}"}
+            sorting-long-referring-formal{"{surname-core}{given}{given2}{surname-prefix}"}
+            sorting-long-referring-informal{"{surname}{given-informal}"}
             surnameFirst-long-addressing-informal{"{given-informal}"}
             surnameFirst-long-monogram-formal{"{surname-monogram-allCaps}"}
             surnameFirst-long-monogram-informal{"{surname-monogram-allCaps}"}

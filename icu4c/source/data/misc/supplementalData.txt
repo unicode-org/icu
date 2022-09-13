@@ -17385,8 +17385,10 @@ supplementalData:table(nofallback){
             secondary{
                 territories{
                     "BR",
+                    "HR",
                     "IT",
                     "MX",
+                    "SI",
                 }
             }
         }
@@ -29459,6 +29461,7 @@ supplementalData:table(nofallback){
                 56422775,
             }
             vec{
+                officialStatus{"official_regional"}
                 populationShareF:int{47700000}
             }
         }
@@ -32469,6 +32472,7 @@ supplementalData:table(nofallback){
                 56210268,
             }
             vec{
+                officialStatus{"official_regional"}
                 populationShareF:int{48140000}
             }
         }
