@@ -1234,7 +1234,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
     }
 
     /*
-     * Test that the parent locale chain is logically correct when there exist an override data file.
+     * Test that the parent locale chain is logically correct when there exists an override data file.
      */
     @Test
     public void TestOverrideDataParentLocaleSingleFile() {
@@ -1291,7 +1291,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
      */
     @Test
     public void TestOverrideDataParentLocaleMultipleFiles() {
-        // Override files - locale set = #{en_CA, en, root}
+        // Override files - locale set = #{fr_CA, fr, root}
 
         String testResourceKeyPath = "calendar/gregorian/availableFormats/yMd";
 
