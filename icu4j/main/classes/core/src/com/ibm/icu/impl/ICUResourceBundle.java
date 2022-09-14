@@ -1520,17 +1520,23 @@ public  class ICUResourceBundle extends UResourceBundle {
         assert defaultID == null || defaultID.indexOf('@') < 0;
         final String fullName = ICUResourceBundleReader.getFullName(baseName, localeID);
 
-        if (ICUBinary.OVERRIDE_DATA_FILES.hasFiles()) {
-            OverrideParentChainResourceLoader overrideChainLoader =
-                    new OverrideParentChainResourceLoader(baseName, localeID, defaultID, root, openType, fullName);
-            String cacheKey = overrideChainLoader.cacheKey();
-            return BUNDLE_CACHE.getInstance(cacheKey, overrideChainLoader);
-        } else {
-            NormalParentChainResourceLoader normalChainLoader =
-                    new NormalParentChainResourceLoader(baseName, localeID, defaultID, root, openType, fullName);
-            String cacheKey = normalChainLoader.cacheKey();
-            return BUNDLE_CACHE.getInstance(cacheKey, normalChainLoader);
+        // Only if the user wants fallback behavior should we check for locale data overrides
+        // that imply changes at load-time in how we load the data that encodes locale fallback behavior.
+        if (!openType.equals(OpenType.DIRECT)) {
+            if (ICUBinary.OVERRIDE_DATA_FILES.hasFiles()) {
+                OverrideParentChainResourceLoader overrideChainLoader =
+                        new OverrideParentChainResourceLoader(baseName, localeID, defaultID, root, openType, fullName);
+                String cacheKey = overrideChainLoader.cacheKey();
+                return BUNDLE_CACHE.getInstance(cacheKey, overrideChainLoader);
+            }
         }
+
+        // default case
+
+        NormalParentChainResourceLoader normalChainLoader =
+                new NormalParentChainResourceLoader(baseName, localeID, defaultID, root, openType, fullName);
+        String cacheKey = normalChainLoader.cacheKey();
+        return BUNDLE_CACHE.getInstance(cacheKey, normalChainLoader);
     }
 
     ICUResourceBundle get(String aKey, HashMap<String, String> aliasesVisited, UResourceBundle requested) {
