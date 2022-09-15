@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1663093875688,
+  "lastUpdate": 1663263834407,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -2806,6 +2806,42 @@ window.BENCHMARK_DATA = {
           {
             "name": "Test_ICU_Backward_Search",
             "value": 62.9237,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "db5903479332caf213e3d6813dfa75ed7e91720c",
+          "message": "ICU-22124 Adding a tech preview implementation of MessageFormat v2\n\nSee #2170",
+          "timestamp": "2022-09-15T10:32:13-07:00",
+          "tree_id": "5bf067f7e5996c2571bf2c901465dd8757b4af77",
+          "url": "https://github.com/unicode-org/icu/commit/db5903479332caf213e3d6813dfa75ed7e91720c"
+        },
+        "date": 1663263825490,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Test_ICU_Forward_Search",
+            "value": 33.7173,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "Test_ICU_Backward_Search",
+            "value": 59.1635,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
