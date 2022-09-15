@@ -2423,6 +2423,8 @@ void TimeZoneTest::TestGetRegion()
         {"Asia/Riyadh",                     "SA"},
         // tz file solar87 was removed from tzdata2013i
         // {"Asia/Riyadh87",                   "001"}, // this should be "SA" actually, but not in zone.tab
+        {"Atlantic/Jan_Mayen",              "SJ"},
+        {"Pacific/Truk",                    "FM"},
         {"Etc/Unknown",                     0},  // CLDR canonical, but not a sysmte zone ID
         {"bogus",                           0},  // bogus
         {"GMT+08:00",                       0},  // a custom ID, not a system zone ID
