@@ -2275,24 +2275,30 @@ class U_I18N_API NumberFormatterSettings {
     Derived displayOptions(const DisplayOptions &displayOptions) &&;
 #endif // U_HIDE_DRAFT_API
 
-#ifndef U_HIDE_DEPRECATED_API
+#ifndef U_HIDE_INTERNAL_API
     /**
-     * NOTE: This function is deprecated, use `displayOptions` instead.
+     * NOTE: Use `displayOptions` instead. This method was part of
+     * an internal technology preview in ICU 69, but will be removed
+     * in ICU 73, in favor of `displayOptions`
      *
      * Specifies the desired case for a unit formatter's output (e.g.
      * accusative, dative, genitive).
      *
-     * @deprecated ICU 72
+     * @internal
      */
     Derived unitDisplayCase(StringPiece unitDisplayCase) const &;
 
     /**
+     * NOTE: Use `displayOptions` instead. This method was part of
+     * an internal technology preview in ICU 69, but will be removed
+     * in ICU 73, in favor of `displayOptions`
+     *
      * Overload of unitDisplayCase() for use on an rvalue reference.
      *
-     * @deprecated ICU 72
+     * @internal
      */
     Derived unitDisplayCase(StringPiece unitDisplayCase) &&;
-#endif // U_HIDE_DEPRECATED_API
+#endif // U_HIDE_INTERNAL_API
 
 #ifndef U_HIDE_INTERNAL_API
 
@@ -2818,18 +2824,6 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
     void getAllFieldPositionsImpl(FieldPositionIteratorHandler& fpih, UErrorCode& status) const;
 
 #endif  /* U_HIDE_INTERNAL_API */
-
-#ifndef U_HIDE_DEPRECATED_API
-
-    /**
-     * Gets the gender of the formatted output. Returns "" when the gender is
-     * unknown, or for ungendered languages.
-     *
-     * @deprecated This API is for ICU internal use only.
-     */
-    const char *getGender(UErrorCode &status) const;
-
-#endif /* U_HIDE_DEPRECATED_API */
 
   private:
     // Can't use LocalPointer because UFormattedNumberData is forward-declared
