@@ -3,7 +3,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 //---------------------------------------------------------
 // Build tool:  tz2icu
-// Build date:  Thu Aug 18 04:47:36 2022
+// Build date:  Thu Sep 15 17:54:12 2022
 // tz database: ftp://ftp.iana.org/tz/
 // tz version:  2022b
 // ICU version: 72.0.1
@@ -3036,7 +3036,7 @@ zoneinfo64:table(nofallback) {
   "BF", //Z#52 Africa/Ouagadougou
   "BJ", //Z#53 Africa/Porto-Novo
   "ST", //Z#54 Africa/Sao_Tome
-  "CI", //Z#55 Africa/Timbuktu
+  "ML", //Z#55 Africa/Timbuktu
   "LY", //Z#56 Africa/Tripoli
   "TN", //Z#57 Africa/Tunis
   "NA", //Z#58 Africa/Windhoek
@@ -3215,7 +3215,7 @@ zoneinfo64:table(nofallback) {
   "AQ", //Z#231 Antarctica/McMurdo
   "AQ", //Z#232 Antarctica/Palmer
   "AQ", //Z#233 Antarctica/Rothera
-  "NZ", //Z#234 Antarctica/South_Pole
+  "AQ", //Z#234 Antarctica/South_Pole
   "AQ", //Z#235 Antarctica/Syowa
   "AQ", //Z#236 Antarctica/Troll
   "AQ", //Z#237 Antarctica/Vostok
@@ -3325,7 +3325,7 @@ zoneinfo64:table(nofallback) {
   "CV", //Z#341 Atlantic/Cape_Verde
   "FO", //Z#342 Atlantic/Faeroe
   "FO", //Z#343 Atlantic/Faroe
-  "DE", //Z#344 Atlantic/Jan_Mayen
+  "SJ", //Z#344 Atlantic/Jan_Mayen
   "PT", //Z#345 Atlantic/Madeira
   "IS", //Z#346 Atlantic/Reykjavik
   "GS", //Z#347 Atlantic/South_Georgia
@@ -3566,7 +3566,7 @@ zoneinfo64:table(nofallback) {
   "PW", //Z#582 Pacific/Palau
   "PN", //Z#583 Pacific/Pitcairn
   "FM", //Z#584 Pacific/Pohnpei
-  "SB", //Z#585 Pacific/Ponape
+  "FM", //Z#585 Pacific/Ponape
   "PG", //Z#586 Pacific/Port_Moresby
   "CK", //Z#587 Pacific/Rarotonga
   "MP", //Z#588 Pacific/Saipan
@@ -3574,10 +3574,10 @@ zoneinfo64:table(nofallback) {
   "PF", //Z#590 Pacific/Tahiti
   "KI", //Z#591 Pacific/Tarawa
   "TO", //Z#592 Pacific/Tongatapu
-  "PG", //Z#593 Pacific/Truk
+  "FM", //Z#593 Pacific/Truk
   "UM", //Z#594 Pacific/Wake
   "WF", //Z#595 Pacific/Wallis
-  "PG", //Z#596 Pacific/Yap
+  "FM", //Z#596 Pacific/Yap
   "PL", //Z#597 Poland
   "PT", //Z#598 Portugal
   "TW", //Z#599 ROC
