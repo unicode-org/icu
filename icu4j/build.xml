@@ -1361,6 +1361,7 @@
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
                 <include name="com/ibm/icu/math/**"/>
+                <include name="com/ibm/icu/message2/**"/>
                 <include name="com/ibm/icu/number/**"/>
                 <include name="com/ibm/icu/text/**"/>
                 <include name="com/ibm/icu/util/**"/>
@@ -1396,6 +1397,7 @@
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
                 <include name="com/ibm/icu/math/**"/>
+                <include name="com/ibm/icu/message2/**"/>
                 <include name="com/ibm/icu/number/**"/>
                 <include name="com/ibm/icu/text/**"/>
                 <include name="com/ibm/icu/util/**"/>
@@ -1442,6 +1444,7 @@
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
                 <include name="com/ibm/icu/math/**"/>
+                <include name="com/ibm/icu/message2/**"/>
                 <include name="com/ibm/icu/number/**"/>
                 <include name="com/ibm/icu/text/**"/>
                 <include name="com/ibm/icu/util/**"/>
@@ -1646,6 +1649,7 @@
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
                 <include name="com/ibm/icu/math/**"/>
+                <include name="com/ibm/icu/message2/**"/>
                 <include name="com/ibm/icu/number/**"/>
                 <include name="com/ibm/icu/text/**"/>
                 <include name="com/ibm/icu/util/**"/>
@@ -1668,6 +1672,7 @@
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
                 <include name="com/ibm/icu/math/**"/>
+                <include name="com/ibm/icu/message2/**"/>
                 <include name="com/ibm/icu/number/**"/>
                 <include name="com/ibm/icu/text/**"/>
                 <include name="com/ibm/icu/util/**"/>
