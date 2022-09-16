@@ -1247,7 +1247,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
 
         // localeID, expStrVal
         Object[][] normalDataFileCaseData = {
-                {"en_CA", "y-MM-dd"},
+                {"en_CA", "M/d/y"},
                 {"en",    "M/d/y"},
                 {"root",  "y-MM-dd"},
         };
