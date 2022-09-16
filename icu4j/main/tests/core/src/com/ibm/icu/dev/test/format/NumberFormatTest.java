@@ -6966,4 +6966,94 @@ public class NumberFormatTest extends TestFmwk {
             assertEquals("Via applyPattern: field position end", 3, fp.getEndIndex());
         }
     }
+
+    @Test
+    public void TestParseWithEmptyCurr() {
+        DecimalFormat df = (DecimalFormat)NumberFormat.getInstance(new ULocale("en_US"), NumberFormat.CURRENCYSTYLE);
+        DecimalFormatSymbols dfs = df.getDecimalFormatSymbols();
+        dfs.setCurrencySymbol("");
+        df.setDecimalFormatSymbols(dfs);
+ 
+        String textToParse = "3";    
+        ParsePosition ppos = new ParsePosition(0);
+
+        Number num = df.parse(textToParse, ppos);
+        if (ppos.getIndex() != 1 || num.doubleValue() != 3.0) {
+            errln("parse with empty curr symbol, expect pos 1, value 3.0; get "
+                                + ppos.getIndex() + ", " + num.doubleValue());
+        }
+
+        ppos.setIndex(0);
+        CurrencyAmount currAmt = df.parseCurrency(textToParse, ppos);
+        if (currAmt != null) {
+            errln("parseCurrency with empty curr symbol, expect null but succeeds");
+        }
+
+        //                        "¤#,##0.00" "¤ #,##0.00" "#,##0.00 ¤" "#,##,##0.00¤"
+        final String[] locales = {"en_US",    "nb_NO",     "cs_CZ",     "bn_BD"};
+        for (String locale: locales) {
+            df = (DecimalFormat)NumberFormat.getInstance(new ULocale(locale), NumberFormat.CURRENCYSTYLE);
+            dfs = df.getDecimalFormatSymbols();
+            dfs.setCurrencySymbol("");
+            df.setDecimalFormatSymbols(dfs);
+
+            final double posValToUse = 37.0;
+            final double negValToUse = -3.0;
+
+            textToParse = df.format(posValToUse);
+            int expectParseLen = textToParse.length();
+            if (textToParse.endsWith("\u00A0") || textToParse.endsWith("\u202F")) { // NBSP, NNBSP
+                expectParseLen--;
+            }
+            ppos.setIndex(0);
+            num = df.parse(textToParse, ppos);
+            if (ppos.getIndex() != expectParseLen || num.doubleValue() != posValToUse) {
+                errln("locale " + locale + ", parse with empty curr symbol, expect pos, value "
+                                + expectParseLen + ", " + posValToUse + ";  get "
+                                + ppos.getIndex() + ", " + num.doubleValue());
+            }
+
+            textToParse = df.format(negValToUse);
+            expectParseLen = textToParse.length();
+            if (textToParse.endsWith("\u00A0") || textToParse.endsWith("\u202F")) { // NBSP, NNBSP
+                expectParseLen--;
+            }
+            ppos.setIndex(0);
+            num = df.parse(textToParse, ppos);
+            if (ppos.getIndex() != expectParseLen || num.doubleValue() != negValToUse) {
+                errln("locale " + locale + ", parse with empty curr symbol, expect pos, value "
+                                + expectParseLen + ", " + negValToUse + ";  get "
+                                + ppos.getIndex() + ", " + num.doubleValue());
+            }
+
+            df.applyPattern("#,##0.00¤");
+
+            textToParse = df.format(posValToUse);
+            expectParseLen = textToParse.length();
+            if (textToParse.endsWith("\u00A0") || textToParse.endsWith("\u202F")) { // NBSP, NNBSP
+                expectParseLen--;
+            }
+            ppos.setIndex(0);
+            num = df.parse(textToParse, ppos);
+            if (ppos.getIndex() != expectParseLen || num.doubleValue() != posValToUse) {
+                errln("locale " + locale + "with \"#,##0.00¤\", parse with empty curr symbol, expect pos, value "
+                                + expectParseLen + ", " + posValToUse + ";  get "
+                                + ppos.getIndex() + ", " + num.doubleValue());
+            }
+
+            textToParse = df.format(negValToUse);
+            expectParseLen = textToParse.length();
+            if (textToParse.endsWith("\u00A0") || textToParse.endsWith("\u202F")) { // NBSP, NNBSP
+                expectParseLen--;
+            }
+            ppos.setIndex(0);
+            num = df.parse(textToParse, ppos);
+            if (ppos.getIndex() != expectParseLen || num.doubleValue() != negValToUse) {
+                errln("locale " + locale + "with \"#,##0.00¤\", parse with empty curr symbol, expect pos, value "
+                                + expectParseLen + ", " + negValToUse + ";  get "
+                                + ppos.getIndex() + ", " + num.doubleValue());
+            }
+
+        }
+    }
 }
