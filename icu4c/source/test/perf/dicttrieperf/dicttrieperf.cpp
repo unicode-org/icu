@@ -416,7 +416,7 @@ public:
             if(lines[i].name[0]<0x41) {
                 continue;
             }
-            builder->add(UnicodeString(FALSE, lines[i].name, lines[i].len), 0, errorCode);
+            builder->add(UnicodeString(false, lines[i].name, lines[i].len), 0, errorCode);
         }
         UnicodeString trieUChars;
         int32_t length=builder->buildUnicodeString(USTRINGTRIE_BUILD_SMALL, trieUChars, errorCode).length();
@@ -499,16 +499,16 @@ static UBool thaiWordToBytes(const UChar *s, int32_t length,
             str.append((char)b, errorCode);
         } else {
             fprintf(stderr, "thaiWordToBytes(): unable to encode U+%04X as a byte\n", c);
-            return FALSE;
+            return false;
         }
     }
-    return TRUE;
+    return true;
 }
 
 class BytesTrieDictLookup : public DictLookup {
 public:
     BytesTrieDictLookup(const DictionaryTriePerfTest &perfTest)
-            : DictLookup(perfTest), trie(NULL), noDict(FALSE) {
+            : DictLookup(perfTest), trie(NULL), noDict(false) {
         IcuToolErrorCode errorCode("BytesTrieDictLookup()");
         builder=new BytesTrieBuilder(errorCode);
         CharString str;
@@ -521,7 +521,7 @@ public:
             }
             if(!thaiWordToBytes(lines[i].name, lines[i].len, str.clear(), errorCode)) {
                 fprintf(stderr, "thaiWordToBytes(): failed for word %ld (0-based)\n", (long)i);
-                noDict=TRUE;
+                noDict=true;
                 break;
             }
             builder->add(str.toStringPiece(), 0, errorCode);

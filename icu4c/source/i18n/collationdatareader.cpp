@@ -471,9 +471,9 @@ CollationDataReader::isAcceptable(void *context,
         if(version != NULL) {
             uprv_memcpy(version, pInfo->dataVersion, 4);
         }
-        return TRUE;
+        return true;
     } else {
-        return FALSE;
+        return false;
     }
 }
 

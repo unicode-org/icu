@@ -1502,28 +1502,9 @@ public final class RelativeDateTimeFormatter {
             this.ulocale = ulocale;
         }
 
-        private String getDateTimePattern(ICUResourceBundle r) {
-            String calType = r.getStringWithFallback("calendar/default");
-            if (calType == null || calType.equals("")) {
-                calType = "gregorian";
-            }
-            String resourcePath = "calendar/" + calType + "/DateTimePatterns";
-            ICUResourceBundle patternsRb = r.findWithFallback(resourcePath);
-            if (patternsRb == null && calType.equals("gregorian")) {
-                // Try with gregorian.
-                patternsRb = r.findWithFallback("calendar/gregorian/DateTimePatterns");
-            }
-            if (patternsRb == null || patternsRb.getSize() < 9) {
-                // Undefined or too few elements.
-                return "{1} {0}";
-            } else {
-                int elementType = patternsRb.get(8).getType();
-                if (elementType == UResourceBundle.ARRAY) {
-                    return patternsRb.get(8).getString(0);
-                } else {
-                    return patternsRb.getString(8);
-                }
-            }
+        private String getDateTimePattern() {
+            Calendar cal = Calendar.getInstance(ulocale);
+            return Calendar.getDateAtTimePattern(cal, ulocale, DateFormat.MEDIUM);
         }
 
         public RelativeDateTimeFormatterData load() {
@@ -1551,7 +1532,7 @@ public final class RelativeDateTimeFormatter {
 
             return new RelativeDateTimeFormatterData(
                     sink.qualitativeUnitMap, sink.styleRelUnitPatterns,
-                    getDateTimePattern(r));
+                    getDateTimePattern());
         }
     }
 

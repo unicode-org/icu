@@ -37,7 +37,7 @@ U_NAMESPACE_BEGIN
  */
 class U_I18N_API CollationBaseDataBuilder : public CollationDataBuilder {
 public:
-    CollationBaseDataBuilder(UErrorCode &errorCode);
+    CollationBaseDataBuilder(UBool icu4xMode, UErrorCode &errorCode);
 
     virtual ~CollationBaseDataBuilder();
 

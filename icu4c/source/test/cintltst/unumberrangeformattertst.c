@@ -9,6 +9,7 @@
 // Helpful in toString methods and elsewhere.
 #define UNISTR_FROM_STRING_EXPLICIT
 
+#include <stdbool.h>
 #include <stdio.h>
 #include "unicode/unumberformatter.h"
 #include "unicode/unumberrangeformatter.h"
@@ -56,16 +57,16 @@ static void TestExampleCode() {
         NULL,
         &ec);
     UFormattedNumberRange* uresult = unumrf_openResult(&ec);
-    assertSuccessCheck("There should not be a failure in the example code", &ec, TRUE);
+    assertSuccessCheck("There should not be a failure in the example code", &ec, true);
 
     // Format a double range:
     unumrf_formatDoubleRange(uformatter, 3.0, 5.0, uresult, &ec);
-    assertSuccessCheck("There should not be a failure in the example code", &ec, TRUE);
+    assertSuccessCheck("There should not be a failure in the example code", &ec, true);
 
     // Get the result string:
     int32_t len;
     const UChar* str = ufmtval_getString(unumrf_resultAsValue(uresult, &ec), &len, &ec);
-    assertSuccessCheck("There should not be a failure in the example code", &ec, TRUE);
+    assertSuccessCheck("There should not be a failure in the example code", &ec, true);
     assertUEquals("Should produce expected string result", u"$3 – $5", str);
     int32_t resultLength = str != NULL ? u_strlen(str) : 0;
     assertIntEquals("Length should be as expected", resultLength, len);
@@ -86,14 +87,14 @@ static void TestFormattedValue() {
         "en-US",
         NULL,
         &ec);
-    assertSuccessCheck("Should create without error", &ec, TRUE);
+    assertSuccessCheck("Should create without error", &ec, true);
     UFormattedNumberRange* uresult = unumrf_openResult(&ec);
     assertSuccess("Should create result without error", &ec);
 
     // Test the decimal number code path, too
     unumrf_formatDecimalRange(uformatter, "5.5e4", -1, "1.5e5", -1, uresult, &ec);
 
-    if (assertSuccessCheck("Should format without error", &ec, TRUE)) {
+    if (assertSuccessCheck("Should format without error", &ec, true)) {
         const UFormattedValue* fv = unumrf_resultAsValue(uresult, &ec);
         assertSuccess("Should convert without error", &ec);
         static const UFieldPositionWithCategory expectedFieldPositions[] = {
@@ -169,13 +170,13 @@ static void TestGetDecimalNumbers() {
         "en-US",
         NULL,
         &ec);
-    assertSuccessCheck("Should create without error", &ec, TRUE);
+    assertSuccessCheck("Should create without error", &ec, true);
     UFormattedNumberRange* uresult = unumrf_openResult(&ec);
     assertSuccess("Should create result without error", &ec);
 
     unumrf_formatDoubleRange(uformatter, 3.0, 5.0, uresult, &ec);
     const UChar* str = ufmtval_getString(unumrf_resultAsValue(uresult, &ec), NULL, &ec);
-    assertSuccessCheck("Formatting should succeed", &ec, TRUE);
+    assertSuccessCheck("Formatting should succeed", &ec, true);
     assertUEquals("Should produce expected string result", u"$3.00 \u2013 $5.00", str);
 
     char buffer[CAPACITY];

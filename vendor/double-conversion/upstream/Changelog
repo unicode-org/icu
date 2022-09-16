@@ -1,3 +1,6 @@
+2022-01-16:
+  Install Visual Studio debugger (pdb) files.
+
 2022-01-10:
   Fix quiet NANs on MIPS* and PA-RISC architectures.
   Update version number.

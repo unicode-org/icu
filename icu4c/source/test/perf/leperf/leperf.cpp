@@ -45,7 +45,7 @@ void iterate(void * p) {
     float     *positions = NULL;
     le_int32   glyphCount = 0;
     LEUnicode *chars = params->chars;
-    glyphCount = engine->layoutChars(chars, 0, params->charLen, params->charLen, TRUE, 0.0, 0.0, status);
+    glyphCount = engine->layoutChars(chars, 0, params->charLen, params->charLen, true, 0.0, 0.0, status);
     glyphs    = LE_NEW_ARRAY(LEGlyphID, glyphCount + 10);
     indices   = LE_NEW_ARRAY(le_int32, glyphCount + 10);
     positions = LE_NEW_ARRAY(float, glyphCount + 10);

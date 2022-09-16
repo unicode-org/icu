@@ -1604,7 +1604,7 @@ class CharsetMBCS extends CharsetICU {
     }
 
     /*
-     * TRUE if not an SI/SO stateful converter, or if the match length fits with the current converter state
+     * true if not an SI/SO stateful converter, or if the match length fits with the current converter state
      */
     static boolean TO_U_VERIFY_SISO_MATCH(byte sisoState, int match) {
         return sisoState < 0 || (sisoState == 0) == (match == 1);
@@ -1994,7 +1994,7 @@ class CharsetMBCS extends CharsetICU {
              * return no match because - match>0 && value points to string: simple conversion cannot handle multiple
              * code points - match>0 && match!=length: not all input consumed, forbidden for this function - match==0:
              * no match found in the first place - match<0: partial match, not supported for simple conversion (and
-             * flush==TRUE)
+             * flush==true)
              */
             return 0xfffe;
         }
@@ -3612,10 +3612,10 @@ class CharsetMBCS extends CharsetICU {
          * @param useFallback
          *            "use fallback" flag, usually from cnv->useFallback
          * @param flush
-         *            TRUE if the end of the input stream is reached
+         *            true if the end of the input stream is reached
          * @return >1: matched, return value=total match length (number of input units matched) 1: matched, no mapping
          *         but request for <subchar1> (only for the first code point) 0: no match <0: partial match, return
-         *         value=negative total match length (partial matches are never returned for flush==TRUE) (partial
+         *         value=negative total match length (partial matches are never returned for flush==true) (partial
          *         matches are never returned as being longer than UCNV_EXT_MAX_UCHARS) the matchLength is 2 if only
          *         firstCP matched, and >2 if firstCP and further code units matched
          */
@@ -3793,7 +3793,7 @@ class CharsetMBCS extends CharsetICU {
             /*
              * return no match because - match>1 && resultLength>4: result too long for simple conversion - match==1: no
              * match found, <subchar1> preferred - match==0: no match found in the first place - match<0: partial
-             * match, not supported for simple conversion (and flush==TRUE)
+             * match, not supported for simple conversion (and flush==true)
              */
             return 0;
         }

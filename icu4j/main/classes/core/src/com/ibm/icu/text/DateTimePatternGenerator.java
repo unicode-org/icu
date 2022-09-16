@@ -315,7 +315,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     private void setDateTimeFromCalendar(ULocale uLocale) {
         Calendar cal = Calendar.getInstance(uLocale);
         for (int style = DateFormat.FULL; style <= DateFormat.SHORT; style++) {
-            String dateTimeFormat = Calendar.getDateTimePattern(cal, uLocale, style);
+            String dateTimeFormat = Calendar.getDateAtTimePattern(cal, uLocale, style);
             setDateTimeFormat(style, dateTimeFormat);
         }
     }
@@ -358,6 +358,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
         String language = uLocale.getLanguage();
         String country = uLocale.getCountry();
+        
         if (language.isEmpty() || country.isEmpty()) {
             // Note: addLikelySubtags is documented not to throw in Java,
             // unlike in C++.
@@ -366,6 +367,15 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             country = max.getCountry();
         }
 
+        String regionOverride = uLocale.getKeywordValue("rg");
+        if (regionOverride != null && !regionOverride.isEmpty()) {
+            // chop off any subdivision codes that may have been included
+            if (regionOverride.length() > 2) {
+                regionOverride = regionOverride.substring(0, 2);
+            }
+            country = regionOverride;
+        }
+        
         if (language.isEmpty()) {
             // Unexpected, but fail gracefully
             language = "und";
@@ -1497,7 +1507,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * the pattern map from parent locales.
      *
      * @param key of the availableFormatMask in CLDR
-     * @return TRUE if the corresponding slot of CLDR_AVAIL_FORMAT_KEY[]
+     * @return true if the corresponding slot of CLDR_AVAIL_FORMAT_KEY[]
      * has been added to DateTimePatternGenerator.
      * @stable ICU 3.6
      */
@@ -2794,8 +2804,8 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                     char ch1 = original.getFieldChar(field);
                     char ch2 = value.charAt(0);
                     if ( allowDuplicateFields ||
-                            (ch1 == 'r' && ch2 == 'U') ||
-                            (ch1 == 'U' && ch2 == 'r') ) {
+                            (ch1 == 'r' && (ch2 == 'U' || ch2 == 'y')) ||
+                            ((ch1 == 'U' || ch1 == 'y') && ch2 == 'r') ) {
                         continue;
                     }
                     throw new IllegalArgumentException("Conflicting fields:\t"

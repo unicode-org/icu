@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.number;
 
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -48,6 +49,9 @@ import com.ibm.icu.number.SkeletonSyntaxException;
 import com.ibm.icu.number.UnlocalizedNumberFormatter;
 import com.ibm.icu.text.ConstrainedFieldPosition;
 import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.DisplayOptions;
+import com.ibm.icu.text.DisplayOptions.GrammaticalCase;
+import com.ibm.icu.text.DisplayOptions.NounClass;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberingSystem;
 import com.ibm.icu.util.Currency;
@@ -56,7 +60,6 @@ import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.NoUnit;
-import com.ibm.icu.util.NounClass;
 import com.ibm.icu.util.ULocale;
 
 public class NumberFormatterApiTest extends TestFmwk {
@@ -706,10 +709,10 @@ public class NumberFormatterApiTest extends TestFmwk {
 
         assertFormatSingle(
                 "Mixed Unit (Narrow Version)",
-                "unit/metric-ton-and-kilogram-and-gram unit-width-narrow",
-                "unit/metric-ton-and-kilogram-and-gram unit-width-narrow",
+                "unit/tonne-and-kilogram-and-gram unit-width-narrow",
+                "unit/tonne-and-kilogram-and-gram unit-width-narrow",
                 NumberFormatter.with()
-                        .unit(MeasureUnit.forIdentifier("metric-ton-and-kilogram-and-gram"))
+                        .unit(MeasureUnit.forIdentifier("tonne-and-kilogram-and-gram"))
                         .unitWidth(UnitWidth.NARROW),
                 new ULocale("en-US"),
                 4.28571,
@@ -717,10 +720,10 @@ public class NumberFormatterApiTest extends TestFmwk {
 
         assertFormatSingle(
                 "Mixed Unit (Short Version)",
-                "unit/metric-ton-and-kilogram-and-gram unit-width-short",
-                "unit/metric-ton-and-kilogram-and-gram unit-width-short",
+                "unit/tonne-and-kilogram-and-gram unit-width-short",
+                "unit/tonne-and-kilogram-and-gram unit-width-short",
                 NumberFormatter.with()
-                        .unit(MeasureUnit.forIdentifier("metric-ton-and-kilogram-and-gram"))
+                        .unit(MeasureUnit.forIdentifier("tonne-and-kilogram-and-gram"))
                         .unitWidth(UnitWidth.SHORT),
                 new ULocale("en-US"),
                 4.28571,
@@ -728,10 +731,10 @@ public class NumberFormatterApiTest extends TestFmwk {
 
         assertFormatSingle(
                 "Mixed Unit (Full Name Version)",
-                "unit/metric-ton-and-kilogram-and-gram unit-width-full-name",
-                "unit/metric-ton-and-kilogram-and-gram unit-width-full-name",
+                "unit/tonne-and-kilogram-and-gram unit-width-full-name",
+                "unit/tonne-and-kilogram-and-gram unit-width-full-name",
                 NumberFormatter.with()
-                        .unit(MeasureUnit.forIdentifier("metric-ton-and-kilogram-and-gram"))
+                        .unit(MeasureUnit.forIdentifier("tonne-and-kilogram-and-gram"))
                         .unitWidth(UnitWidth.FULL_NAME),
                 new ULocale("en-US"),
                 4.28571,
@@ -1836,6 +1839,18 @@ public class NumberFormatterApiTest extends TestFmwk {
                 new ULocale("en-US"),
                 1,
                 "0.019 psi");
+
+        // ICU-22105
+        assertFormatSingle("negative temperature conversion",
+                "measure-unit/temperature-celsius unit-width-short usage/default",
+                "measure-unit/temperature-celsius unit-width-short usage/default",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.forIdentifier("celsius"))
+                        .usage("default")
+                        .unitWidth(UnitWidth.SHORT),
+                new ULocale("en-US"),
+                -1,
+                "30°F");
     }
 
     @Test
@@ -2099,7 +2114,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().unit(USD).unitWidth(UnitWidth.NARROW),
                 ULocale.forLanguageTag("en-CA"),
                 5.43,
-                "$5.43");
+                "US$5.43");
 
         assertFormatSingle(
                 "Currency Difference between Narrow and Short (Short Version)",
@@ -2230,7 +2245,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 -123.12,
                 "RON-123.12");
 
-        // TODO(CLDR-13044): Move the sign to the inside of the number
+        // TODO(ICU-21420): Move the sign to the inside of the number
         assertFormatSingle(
                 "Sign position on negative number with currency spacing",
                 "currency/RON",
@@ -2276,6 +2291,28 @@ public class NumberFormatterApiTest extends TestFmwk {
                                    "\", value=" + this.value,
                                skel, skel, unf, new ULocale(this.locale), this.value, this.expected);
         }
+
+        public void runTestWithDisplayOptions(UnlocalizedNumberFormatter unf, String skeleton) {
+            MeasureUnit mu = MeasureUnit.forIdentifier(unitIdentifier);
+            String skel;
+
+            DisplayOptions.Builder displayOptionsBuilder = DisplayOptions.builder();
+            if (this.unitDisplayCase == null || this.unitDisplayCase.isEmpty()) {
+                DisplayOptions displayOptions = displayOptionsBuilder.build();
+                unf = unf.unit(mu).displayOptions(displayOptions);
+                skel = "unit/" + unitIdentifier + " " + skeleton;
+            } else {
+                DisplayOptions displayOptions = displayOptionsBuilder.setGrammaticalCase(
+                    GrammaticalCase.fromIdentifier(this.unitDisplayCase)).build();
+                unf = unf.unit(mu).displayOptions(displayOptions);
+                // No skeleton support for unitDisplayCase yet.
+                skel = null;
+            }
+            assertFormatSingle("\"" + skeleton + "\", locale=\"" + this.locale + "\", case=\"" +
+                    (this.unitDisplayCase != null ? this.unitDisplayCase : "") +
+                    "\", value=" + this.value,
+                skel, skel, unf, new ULocale(this.locale), this.value, this.expected);
+        }
     }
 
     @Test
@@ -2298,6 +2335,7 @@ public class NumberFormatterApiTest extends TestFmwk {
             };
             for (UnitInflectionTestCase t : percentCases) {
                 t.runTest(unf, skeleton);
+                t.runTestWithDisplayOptions(unf, skeleton);
             }
         }
         {
@@ -2393,6 +2431,7 @@ public class NumberFormatterApiTest extends TestFmwk {
             };
             for (UnitInflectionTestCase t : testCases) {
                 t.runTest(unf, skeleton);
+                t.runTestWithDisplayOptions(unf, skeleton);
             }
         }
         {
@@ -2406,7 +2445,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 new UnitInflectionTestCase("centimeter", "de", null, 1, "1 Zentimeter"),
                 new UnitInflectionTestCase("centimeter", "de", "genitive", 1, "1 Zentimeters"),
                 new UnitInflectionTestCase("centimeter", "de", "dative", 10, "10 Zentimetern"),
-                // TODO(CLDR-14502): check that these inflections are correct, and
+                // TODO(CLDR-14582): check that these inflections are correct, and
                 // whether CLDR needs any rules for them (presumably CLDR spec
                 // should mention it, if it's a consistent rule):
                 new UnitInflectionTestCase("meter-and-centimeter", "de", null, 1.01,
@@ -2422,6 +2461,7 @@ public class NumberFormatterApiTest extends TestFmwk {
             };
             for (UnitInflectionTestCase t : meterPerDayCases) {
                 t.runTest(unf, skeleton);
+                t.runTestWithDisplayOptions(unf, skeleton);
             }
         }
         // TODO: add a usage case that selects between preferences with different
@@ -2473,7 +2513,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 // numerator unit:
                 new TestCase("de", "meter-per-hour", NounClass.MASCULINE),
                 new TestCase("fr", "meter-per-hour", NounClass.MASCULINE),
-                new TestCase("af", "meter-per-hour", NounClass.OTHER), // ungendered language
+                new TestCase("af", "meter-per-hour", NounClass.UNDEFINED), // ungendered language
 
                 // French "times" takes gender from first value, German takes the
                 // second. Prefix and power does not have impact on gender for these
@@ -2490,89 +2530,89 @@ public class NumberFormatterApiTest extends TestFmwk {
                 // Built-in units whose simple units lack gender in the CLDR data file
                 new TestCase("de", "kilopascal", NounClass.NEUTER),    //
                 new TestCase("fr", "kilopascal", NounClass.MASCULINE), //
-                //     new TestCase("de", "pascal", NounClass.OTHER),              //
-                //     new TestCase("fr", "pascal", NounClass.OTHER),              //
+                //     new TestCase("de", "pascal", NounClass.UNDEFINED),              //
+                //     new TestCase("fr", "pascal", NounClass.UNDEFINED),              //
 
                 // Built-in units that lack gender in the CLDR data file
-                //     new TestCase("de", "revolution", NounClass.OTHER),                        //
-                //     new TestCase("de", "radian", NounClass.OTHER),                            //
-                //     new TestCase("de", "arc-minute", NounClass.OTHER),                        //
-                //     new TestCase("de", "arc-second", NounClass.OTHER),                        //
+                //     new TestCase("de", "revolution", NounClass.UNDEFINED),                        //
+                //     new TestCase("de", "radian", NounClass.UNDEFINED),                            //
+                //     new TestCase("de", "arc-minute", NounClass.UNDEFINED),                        //
+                //     new TestCase("de", "arc-second", NounClass.UNDEFINED),                        //
                 new TestCase("de", "square-yard", NounClass.NEUTER),                 // COMPOUND
                 new TestCase("de", "square-inch", NounClass.MASCULINE),              // COMPOUND
-                //     new TestCase("de", "dunam", NounClass.OTHER),                             //
-                //     new TestCase("de", "karat", NounClass.OTHER),                             //
-                //     new TestCase("de", "milligram-ofglucose-per-deciliter", NounClass.OTHER), // COMPOUND, ofglucose
-                //     new TestCase("de", "millimole-per-liter", NounClass.OTHER),               // COMPOUND, mole
-                //     new TestCase("de", "permillion", NounClass.OTHER),                        //
-                //     new TestCase("de", "permille", NounClass.OTHER),                          //
-                //     new TestCase("de", "permyriad", NounClass.OTHER),                         //
-                //     new TestCase("de", "mole", NounClass.OTHER),                              //
+                //     new TestCase("de", "dunam", NounClass.UNDEFINED),                             //
+                //     new TestCase("de", "karat", NounClass.UNDEFINED),                             //
+                //     new TestCase("de", "milligram-ofglucose-per-deciliter", NounClass.UNDEFINED), // COMPOUND, ofglucose
+                //     new TestCase("de", "millimole-per-liter", NounClass.UNDEFINED),               // COMPOUND, mole
+                //     new TestCase("de", "permillion", NounClass.UNDEFINED),                        //
+                //     new TestCase("de", "permille", NounClass.UNDEFINED),                          //
+                //     new TestCase("de", "permyriad", NounClass.UNDEFINED),                         //
+                //     new TestCase("de", "mole", NounClass.UNDEFINED),                              //
                 new TestCase("de", "liter-per-kilometer", NounClass.MASCULINE),      // COMPOUND
                 new TestCase("de", "petabyte", NounClass.NEUTER),                    // PREFIX
                 new TestCase("de", "terabit", NounClass.NEUTER),                     // PREFIX
-                //     new TestCase("de", "century", NounClass.OTHER),                           //
-                //     new TestCase("de", "decade", NounClass.OTHER),                            //
+                //     new TestCase("de", "century", NounClass.UNDEFINED),                           //
+                //     new TestCase("de", "decade", NounClass.UNDEFINED),                            //
                 new TestCase("de", "millisecond", NounClass.FEMININE),               // PREFIX
                 new TestCase("de", "microsecond", NounClass.FEMININE),               // PREFIX
                 new TestCase("de", "nanosecond", NounClass.FEMININE),                // PREFIX
-                //     new TestCase("de", "ampere", NounClass.OTHER),                            //
-                //     new TestCase("de", "milliampere", NounClass.OTHER),                       // PREFIX, ampere
-                //     new TestCase("de", "ohm", NounClass.OTHER),                               //
-                //     new TestCase("de", "calorie", NounClass.OTHER),                           //
-                //     new TestCase("de", "kilojoule", NounClass.OTHER),                         // PREFIX, joule
-                //     new TestCase("de", "joule", NounClass.OTHER),                             //
+                //     new TestCase("de", "ampere", NounClass.UNDEFINED),                            //
+                //     new TestCase("de", "milliampere", NounClass.UNDEFINED),                       // PREFIX, ampere
+                //     new TestCase("de", "ohm", NounClass.UNDEFINED),                               //
+                //     new TestCase("de", "calorie", NounClass.UNDEFINED),                           //
+                //     new TestCase("de", "kilojoule", NounClass.UNDEFINED),                         // PREFIX, joule
+                //     new TestCase("de", "joule", NounClass.UNDEFINED),                             //
                 new TestCase("de", "kilowatt-hour", NounClass.FEMININE),             // COMPOUND
-                //     new TestCase("de", "electronvolt", NounClass.OTHER),                      //
-                //     new TestCase("de", "british-thermal-unit", NounClass.OTHER),              //
-                //     new TestCase("de", "therm-us", NounClass.OTHER),                          //
-                //     new TestCase("de", "pound-force", NounClass.OTHER),                       //
-                //     new TestCase("de", "newton", NounClass.OTHER),                            //
-                //     new TestCase("de", "gigahertz", NounClass.OTHER),                         // PREFIX, hertz
-                //     new TestCase("de", "megahertz", NounClass.OTHER),                         // PREFIX, hertz
-                //     new TestCase("de", "kilohertz", NounClass.OTHER),                         // PREFIX, hertz
-                //     new TestCase("de", "hertz", NounClass.OTHER),                             // PREFIX, hertz
-                //     new TestCase("de", "em", NounClass.OTHER),                                //
-                //     new TestCase("de", "pixel", NounClass.OTHER),                             //
-                //     new TestCase("de", "megapixel", NounClass.OTHER),                         //
-                //     new TestCase("de", "pixel-per-centimeter", NounClass.OTHER),              // COMPOUND, pixel
-                //     new TestCase("de", "pixel-per-inch", NounClass.OTHER),                    // COMPOUND, pixel
-                //     new TestCase("de", "dot-per-centimeter", NounClass.OTHER),                // COMPOUND, dot
-                //     new TestCase("de", "dot-per-inch", NounClass.OTHER),                      // COMPOUND, dot
-                //     new TestCase("de", "dot", NounClass.OTHER),                               //
-                //     new TestCase("de", "earth-radius", NounClass.OTHER),                      //
+                //     new TestCase("de", "electronvolt", NounClass.UNDEFINED),                      //
+                //     new TestCase("de", "british-thermal-unit", NounClass.UNDEFINED),              //
+                //     new TestCase("de", "therm-us", NounClass.UNDEFINED),                          //
+                //     new TestCase("de", "pound-force", NounClass.UNDEFINED),                       //
+                //     new TestCase("de", "newton", NounClass.UNDEFINED),                            //
+                //     new TestCase("de", "gigahertz", NounClass.UNDEFINED),                         // PREFIX, hertz
+                //     new TestCase("de", "megahertz", NounClass.UNDEFINED),                         // PREFIX, hertz
+                //     new TestCase("de", "kilohertz", NounClass.UNDEFINED),                         // PREFIX, hertz
+                //     new TestCase("de", "hertz", NounClass.UNDEFINED),                             // PREFIX, hertz
+                //     new TestCase("de", "em", NounClass.UNDEFINED),                                //
+                //     new TestCase("de", "pixel", NounClass.UNDEFINED),                             //
+                //     new TestCase("de", "megapixel", NounClass.UNDEFINED),                         //
+                //     new TestCase("de", "pixel-per-centimeter", NounClass.UNDEFINED),              // COMPOUND, pixel
+                //     new TestCase("de", "pixel-per-inch", NounClass.UNDEFINED),                    // COMPOUND, pixel
+                //     new TestCase("de", "dot-per-centimeter", NounClass.UNDEFINED),                // COMPOUND, dot
+                //     new TestCase("de", "dot-per-inch", NounClass.UNDEFINED),                      // COMPOUND, dot
+                //     new TestCase("de", "dot", NounClass.UNDEFINED),                               //
+                //     new TestCase("de", "earth-radius", NounClass.UNDEFINED),                      //
                 new TestCase("de", "decimeter", NounClass.MASCULINE),                // PREFIX
                 new TestCase("de", "micrometer", NounClass.MASCULINE),               // PREFIX
                 new TestCase("de", "nanometer", NounClass.MASCULINE),                // PREFIX
-                //     new TestCase("de", "light-year", NounClass.OTHER),                        //
-                //     new TestCase("de", "astronomical-unit", NounClass.OTHER),                 //
-                //     new TestCase("de", "furlong", NounClass.OTHER),                           //
-                //     new TestCase("de", "fathom", NounClass.OTHER),                            //
-                //     new TestCase("de", "nautical-mile", NounClass.OTHER),                     //
-                //     new TestCase("de", "mile-scandinavian", NounClass.OTHER),                 //
-                //     new TestCase("de", "point", NounClass.OTHER),                             //
-                //     new TestCase("de", "lux", NounClass.OTHER),                               //
-                //     new TestCase("de", "candela", NounClass.OTHER),                           //
-                //     new TestCase("de", "lumen", NounClass.OTHER),                             //
-                //     new TestCase("de", "metric-ton", NounClass.OTHER),                        //
+                //     new TestCase("de", "light-year", NounClass.UNDEFINED),                        //
+                //     new TestCase("de", "astronomical-unit", NounClass.UNDEFINED),                 //
+                //     new TestCase("de", "furlong", NounClass.UNDEFINED),                           //
+                //     new TestCase("de", "fathom", NounClass.UNDEFINED),                            //
+                //     new TestCase("de", "nautical-mile", NounClass.UNDEFINED),                     //
+                //     new TestCase("de", "mile-scandinavian", NounClass.UNDEFINED),                 //
+                //     new TestCase("de", "point", NounClass.UNDEFINED),                             //
+                //     new TestCase("de", "lux", NounClass.UNDEFINED),                               //
+                //     new TestCase("de", "candela", NounClass.UNDEFINED),                           //
+                //     new TestCase("de", "lumen", NounClass.UNDEFINED),                             //
+                //     new TestCase("de", "tonne", NounClass.UNDEFINED),                        //
                 new TestCase("de", "microgram", NounClass.NEUTER),                   // PREFIX
-                //     new TestCase("de", "ton", NounClass.OTHER),                               //
-                //     new TestCase("de", "stone", NounClass.OTHER),                             //
-                //     new TestCase("de", "ounce-troy", NounClass.OTHER),                        //
-                //     new TestCase("de", "carat", NounClass.OTHER),                             //
+                //     new TestCase("de", "ton", NounClass.UNDEFINED),                               //
+                //     new TestCase("de", "stone", NounClass.UNDEFINED),                             //
+                //     new TestCase("de", "ounce-troy", NounClass.UNDEFINED),                        //
+                //     new TestCase("de", "carat", NounClass.UNDEFINED),                             //
                 new TestCase("de", "gigawatt", NounClass.NEUTER),                    // PREFIX
                 new TestCase("de", "milliwatt", NounClass.NEUTER),                   // PREFIX
-                //     new TestCase("de", "horsepower", NounClass.OTHER),                        //
-                //     new TestCase("de", "millimeter-ofhg", NounClass.OTHER),                   //
-                //     new TestCase("de", "pound-force-per-square-inch", NounClass.OTHER),       // COMPOUND, pound-force
-                //     new TestCase("de", "inch-ofhg", NounClass.OTHER),                         //
-                //     new TestCase("de", "bar", NounClass.OTHER),                               //
-                //     new TestCase("de", "millibar", NounClass.OTHER),                          // PREFIX, bar
-                //     new TestCase("de", "atmosphere", NounClass.OTHER),                        //
-                //     new TestCase("de", "pascal", NounClass.OTHER),                            // PREFIX, kilopascal? neuter?
-                //     new TestCase("de", "hectopascal", NounClass.OTHER),                       // PREFIX, pascal, neuter?
-                //     new TestCase("de", "megapascal", NounClass.OTHER),                        // PREFIX, pascal, neuter?
-                //     new TestCase("de", "knot", NounClass.OTHER),                              //
+                //     new TestCase("de", "horsepower", NounClass.UNDEFINED),                        //
+                //     new TestCase("de", "millimeter-ofhg", NounClass.UNDEFINED),                   //
+                //     new TestCase("de", "pound-force-per-square-inch", NounClass.UNDEFINED),       // COMPOUND, pound-force
+                //     new TestCase("de", "inch-ofhg", NounClass.UNDEFINED),                         //
+                //     new TestCase("de", "bar", NounClass.UNDEFINED),                               //
+                //     new TestCase("de", "millibar", NounClass.UNDEFINED),                          // PREFIX, bar
+                //     new TestCase("de", "atmosphere", NounClass.UNDEFINED),                        //
+                //     new TestCase("de", "pascal", NounClass.UNDEFINED),                            // PREFIX, kilopascal? neuter?
+                //     new TestCase("de", "hectopascal", NounClass.UNDEFINED),                       // PREFIX, pascal, neuter?
+                //     new TestCase("de", "megapascal", NounClass.UNDEFINED),                        // PREFIX, pascal, neuter?
+                //     new TestCase("de", "knot", NounClass.UNDEFINED),                              //
                 new TestCase("de", "pound-force-foot", NounClass.MASCULINE),         // COMPOUND
                 new TestCase("de", "newton-meter", NounClass.MASCULINE),             // COMPOUND
                 new TestCase("de", "cubic-kilometer", NounClass.MASCULINE),          // POWER
@@ -2580,116 +2620,116 @@ public class NumberFormatterApiTest extends TestFmwk {
                 new TestCase("de", "cubic-inch", NounClass.MASCULINE),               // POWER
                 new TestCase("de", "megaliter", NounClass.MASCULINE),                // PREFIX
                 new TestCase("de", "hectoliter", NounClass.MASCULINE),               // PREFIX
-                //     new TestCase("de", "pint-metric", NounClass.OTHER),                       //
-                //     new TestCase("de", "cup-metric", NounClass.OTHER),                        //
+                //     new TestCase("de", "pint-metric", NounClass.UNDEFINED),                       //
+                //     new TestCase("de", "cup-metric", NounClass.UNDEFINED),                        //
                 new TestCase("de", "acre-foot", NounClass.MASCULINE),                // COMPOUND
-                //     new TestCase("de", "bushel", NounClass.OTHER),                            //
-                //     new TestCase("de", "barrel", NounClass.OTHER),                            //
+                //     new TestCase("de", "bushel", NounClass.UNDEFINED),                            //
+                //     new TestCase("de", "barrel", NounClass.UNDEFINED),                            //
                 // Units missing gender in German also misses gender in French:
-                //     new TestCase("fr", "revolution", NounClass.OTHER),                                 //
-                //     new TestCase("fr", "radian", NounClass.OTHER),                                     //
-                //     new TestCase("fr", "arc-minute", NounClass.OTHER),                                 //
-                //     new TestCase("fr", "arc-second", NounClass.OTHER),                                 //
+                //     new TestCase("fr", "revolution", NounClass.UNDEFINED),                                 //
+                //     new TestCase("fr", "radian", NounClass.UNDEFINED),                                     //
+                //     new TestCase("fr", "arc-minute", NounClass.UNDEFINED),                                 //
+                //     new TestCase("fr", "arc-second", NounClass.UNDEFINED),                                 //
                 new TestCase("fr", "square-yard", NounClass.MASCULINE),                       // COMPOUND
                 new TestCase("fr", "square-inch", NounClass.MASCULINE),                       // COMPOUND
-                //     new TestCase("fr", "dunam", NounClass.OTHER),                                      //
-                //     new TestCase("fr", "karat", NounClass.OTHER),                                      //
+                //     new TestCase("fr", "dunam", NounClass.UNDEFINED),                                      //
+                //     new TestCase("fr", "karat", NounClass.UNDEFINED),                                      //
                 new TestCase("fr", "milligram-ofglucose-per-deciliter", NounClass.MASCULINE), // COMPOUND
-                //     new TestCase("fr", "millimole-per-liter", NounClass.OTHER),                        // COMPOUND, mole
-                //     new TestCase("fr", "permillion", NounClass.OTHER),                                 //
-                //     new TestCase("fr", "permille", NounClass.OTHER),                                   //
-                //     new TestCase("fr", "permyriad", NounClass.OTHER),                                  //
-                //     new TestCase("fr", "mole", NounClass.OTHER),                                       //
+                //     new TestCase("fr", "millimole-per-liter", NounClass.UNDEFINED),                        // COMPOUND, mole
+                //     new TestCase("fr", "permillion", NounClass.UNDEFINED),                                 //
+                //     new TestCase("fr", "permille", NounClass.UNDEFINED),                                   //
+                //     new TestCase("fr", "permyriad", NounClass.UNDEFINED),                                  //
+                //     new TestCase("fr", "mole", NounClass.UNDEFINED),                                       //
                 new TestCase("fr", "liter-per-kilometer", NounClass.MASCULINE),               // COMPOUND
-                //     new TestCase("fr", "petabyte", NounClass.OTHER),                                   // PREFIX
-                //     new TestCase("fr", "terabit", NounClass.OTHER),                                    // PREFIX
-                //     new TestCase("fr", "century", NounClass.OTHER),                                    //
-                //     new TestCase("fr", "decade", NounClass.OTHER),                                     //
+                //     new TestCase("fr", "petabyte", NounClass.UNDEFINED),                                   // PREFIX
+                //     new TestCase("fr", "terabit", NounClass.UNDEFINED),                                    // PREFIX
+                //     new TestCase("fr", "century", NounClass.UNDEFINED),                                    //
+                //     new TestCase("fr", "decade", NounClass.UNDEFINED),                                     //
                 new TestCase("fr", "millisecond", NounClass.FEMININE),                        // PREFIX
                 new TestCase("fr", "microsecond", NounClass.FEMININE),                        // PREFIX
                 new TestCase("fr", "nanosecond", NounClass.FEMININE),                         // PREFIX
-                //     new TestCase("fr", "ampere", NounClass.OTHER),                                     //
-                //     new TestCase("fr", "milliampere", NounClass.OTHER),                                // PREFIX, ampere
-                //     new TestCase("fr", "ohm", NounClass.OTHER),                                        //
-                //     new TestCase("fr", "calorie", NounClass.OTHER),                                    //
-                //     new TestCase("fr", "kilojoule", NounClass.OTHER),                                  // PREFIX, joule
-                //     new TestCase("fr", "joule", NounClass.OTHER),                                      //
-                //     new TestCase("fr", "kilowatt-hour", NounClass.OTHER),                              // COMPOUND
-                //     new TestCase("fr", "electronvolt", NounClass.OTHER),                               //
-                //     new TestCase("fr", "british-thermal-unit", NounClass.OTHER),                       //
-                //     new TestCase("fr", "therm-us", NounClass.OTHER),                                   //
-                //     new TestCase("fr", "pound-force", NounClass.OTHER),                                //
-                //     new TestCase("fr", "newton", NounClass.OTHER),                                     //
-                //     new TestCase("fr", "gigahertz", NounClass.OTHER),                                  // PREFIX, hertz
-                //     new TestCase("fr", "megahertz", NounClass.OTHER),                                  // PREFIX, hertz
-                //     new TestCase("fr", "kilohertz", NounClass.OTHER),                                  // PREFIX, hertz
-                //     new TestCase("fr", "hertz", NounClass.OTHER),                                      // PREFIX, hertz
-                //     new TestCase("fr", "em", NounClass.OTHER),                                         //
-                //     new TestCase("fr", "pixel", NounClass.OTHER),                                      //
-                //     new TestCase("fr", "megapixel", NounClass.OTHER),                                  //
-                //     new TestCase("fr", "pixel-per-centimeter", NounClass.OTHER),                       // COMPOUND, pixel
-                //     new TestCase("fr", "pixel-per-inch", NounClass.OTHER),                             // COMPOUND, pixel
-                //     new TestCase("fr", "dot-per-centimeter", NounClass.OTHER),                         // COMPOUND, dot
-                //     new TestCase("fr", "dot-per-inch", NounClass.OTHER),                               // COMPOUND, dot
-                //     new TestCase("fr", "dot", NounClass.OTHER),                                        //
-                //     new TestCase("fr", "earth-radius", NounClass.OTHER),                               //
+                //     new TestCase("fr", "ampere", NounClass.UNDEFINED),                                     //
+                //     new TestCase("fr", "milliampere", NounClass.UNDEFINED),                                // PREFIX, ampere
+                //     new TestCase("fr", "ohm", NounClass.UNDEFINED),                                        //
+                //     new TestCase("fr", "calorie", NounClass.UNDEFINED),                                    //
+                //     new TestCase("fr", "kilojoule", NounClass.UNDEFINED),                                  // PREFIX, joule
+                //     new TestCase("fr", "joule", NounClass.UNDEFINED),                                      //
+                //     new TestCase("fr", "kilowatt-hour", NounClass.UNDEFINED),                              // COMPOUND
+                //     new TestCase("fr", "electronvolt", NounClass.UNDEFINED),                               //
+                //     new TestCase("fr", "british-thermal-unit", NounClass.UNDEFINED),                       //
+                //     new TestCase("fr", "therm-us", NounClass.UNDEFINED),                                   //
+                //     new TestCase("fr", "pound-force", NounClass.UNDEFINED),                                //
+                //     new TestCase("fr", "newton", NounClass.UNDEFINED),                                     //
+                //     new TestCase("fr", "gigahertz", NounClass.UNDEFINED),                                  // PREFIX, hertz
+                //     new TestCase("fr", "megahertz", NounClass.UNDEFINED),                                  // PREFIX, hertz
+                //     new TestCase("fr", "kilohertz", NounClass.UNDEFINED),                                  // PREFIX, hertz
+                //     new TestCase("fr", "hertz", NounClass.UNDEFINED),                                      // PREFIX, hertz
+                //     new TestCase("fr", "em", NounClass.UNDEFINED),                                         //
+                //     new TestCase("fr", "pixel", NounClass.UNDEFINED),                                      //
+                //     new TestCase("fr", "megapixel", NounClass.UNDEFINED),                                  //
+                //     new TestCase("fr", "pixel-per-centimeter", NounClass.UNDEFINED),                       // COMPOUND, pixel
+                //     new TestCase("fr", "pixel-per-inch", NounClass.UNDEFINED),                             // COMPOUND, pixel
+                //     new TestCase("fr", "dot-per-centimeter", NounClass.UNDEFINED),                         // COMPOUND, dot
+                //     new TestCase("fr", "dot-per-inch", NounClass.UNDEFINED),                               // COMPOUND, dot
+                //     new TestCase("fr", "dot", NounClass.UNDEFINED),                                        //
+                //     new TestCase("fr", "earth-radius", NounClass.UNDEFINED),                               //
                 new TestCase("fr", "decimeter", NounClass.MASCULINE),                         // PREFIX
                 new TestCase("fr", "micrometer", NounClass.MASCULINE),                        // PREFIX
                 new TestCase("fr", "nanometer", NounClass.MASCULINE),                         // PREFIX
-                //     new TestCase("fr", "light-year", NounClass.OTHER),                                 //
-                //     new TestCase("fr", "astronomical-unit", NounClass.OTHER),                          //
-                //     new TestCase("fr", "furlong", NounClass.OTHER),                                    //
-                //     new TestCase("fr", "fathom", NounClass.OTHER),                                     //
-                //     new TestCase("fr", "nautical-mile", NounClass.OTHER),                              //
-                //     new TestCase("fr", "mile-scandinavian", NounClass.OTHER),                          //
-                //     new TestCase("fr", "point", NounClass.OTHER),                                      //
-                //     new TestCase("fr", "lux", NounClass.OTHER),                                        //
-                //     new TestCase("fr", "candela", NounClass.OTHER),                                    //
-                //     new TestCase("fr", "lumen", NounClass.OTHER),                                      //
-                //     new TestCase("fr", "metric-ton", NounClass.OTHER),                                 //
+                //     new TestCase("fr", "light-year", NounClass.UNDEFINED),                                 //
+                //     new TestCase("fr", "astronomical-unit", NounClass.UNDEFINED),                          //
+                //     new TestCase("fr", "furlong", NounClass.UNDEFINED),                                    //
+                //     new TestCase("fr", "fathom", NounClass.UNDEFINED),                                     //
+                //     new TestCase("fr", "nautical-mile", NounClass.UNDEFINED),                              //
+                //     new TestCase("fr", "mile-scandinavian", NounClass.UNDEFINED),                          //
+                //     new TestCase("fr", "point", NounClass.UNDEFINED),                                      //
+                //     new TestCase("fr", "lux", NounClass.UNDEFINED),                                        //
+                //     new TestCase("fr", "candela", NounClass.UNDEFINED),                                    //
+                //     new TestCase("fr", "lumen", NounClass.UNDEFINED),                                      //
+                //     new TestCase("fr", "tonne", NounClass.UNDEFINED),                                 //
                 new TestCase("fr", "microgram", NounClass.MASCULINE),                         // PREFIX
-                //     new TestCase("fr", "ton", NounClass.OTHER),                                        //
-                //     new TestCase("fr", "stone", NounClass.OTHER),                                      //
-                //     new TestCase("fr", "ounce-troy", NounClass.OTHER),                                 //
-                //     new TestCase("fr", "carat", NounClass.OTHER),                                      //
-                //     new TestCase("fr", "gigawatt", NounClass.OTHER),                                   // PREFIX
-                //     new TestCase("fr", "milliwatt", NounClass.OTHER),                                  //
-                //     new TestCase("fr", "horsepower", NounClass.OTHER),                                 //
+                //     new TestCase("fr", "ton", NounClass.UNDEFINED),                                        //
+                //     new TestCase("fr", "stone", NounClass.UNDEFINED),                                      //
+                //     new TestCase("fr", "ounce-troy", NounClass.UNDEFINED),                                 //
+                //     new TestCase("fr", "carat", NounClass.UNDEFINED),                                      //
+                //     new TestCase("fr", "gigawatt", NounClass.UNDEFINED),                                   // PREFIX
+                //     new TestCase("fr", "milliwatt", NounClass.UNDEFINED),                                  //
+                //     new TestCase("fr", "horsepower", NounClass.UNDEFINED),                                 //
                 new TestCase("fr", "millimeter-ofhg", NounClass.MASCULINE),                   //
-                //     new TestCase("fr", "pound-force-per-square-inch", NounClass.OTHER), // COMPOUND, pound-force
+                //     new TestCase("fr", "pound-force-per-square-inch", NounClass.UNDEFINED), // COMPOUND, pound-force
                 new TestCase("fr", "inch-ofhg", NounClass.MASCULINE),          //
-                //     new TestCase("fr", "bar", NounClass.OTHER),                         //
-                //     new TestCase("fr", "millibar", NounClass.OTHER),                    // PREFIX, bar
-                //     new TestCase("fr", "atmosphere", NounClass.OTHER),                  //
-                //     new TestCase("fr", "pascal", NounClass.OTHER),                      // PREFIX, kilopascal?
-                //     new TestCase("fr", "hectopascal", NounClass.OTHER),                 // PREFIX, pascal
-                //     new TestCase("fr", "megapascal", NounClass.OTHER),                  // PREFIX, pascal
-                //     new TestCase("fr", "knot", NounClass.OTHER),                        //
-                //     new TestCase("fr", "pound-force-foot", NounClass.OTHER),            //
-                //     new TestCase("fr", "newton-meter", NounClass.OTHER),                //
+                //     new TestCase("fr", "bar", NounClass.UNDEFINED),                         //
+                //     new TestCase("fr", "millibar", NounClass.UNDEFINED),                    // PREFIX, bar
+                //     new TestCase("fr", "atmosphere", NounClass.UNDEFINED),                  //
+                //     new TestCase("fr", "pascal", NounClass.UNDEFINED),                      // PREFIX, kilopascal?
+                //     new TestCase("fr", "hectopascal", NounClass.UNDEFINED),                 // PREFIX, pascal
+                //     new TestCase("fr", "megapascal", NounClass.UNDEFINED),                  // PREFIX, pascal
+                //     new TestCase("fr", "knot", NounClass.UNDEFINED),                        //
+                //     new TestCase("fr", "pound-force-foot", NounClass.UNDEFINED),            //
+                //     new TestCase("fr", "newton-meter", NounClass.UNDEFINED),                //
                 new TestCase("fr", "cubic-kilometer", NounClass.MASCULINE),    // POWER
                 new TestCase("fr", "cubic-yard", NounClass.MASCULINE),         // POWER
                 new TestCase("fr", "cubic-inch", NounClass.MASCULINE),         // POWER
                 new TestCase("fr", "megaliter", NounClass.MASCULINE),          // PREFIX
                 new TestCase("fr", "hectoliter", NounClass.MASCULINE),         // PREFIX
-                //     new TestCase("fr", "pint-metric", NounClass.OTHER),                 //
-                //     new TestCase("fr", "cup-metric", NounClass.OTHER),                  //
+                //     new TestCase("fr", "pint-metric", NounClass.UNDEFINED),                 //
+                //     new TestCase("fr", "cup-metric", NounClass.UNDEFINED),                  //
                 new TestCase("fr", "acre-foot", NounClass.FEMININE),           // COMPOUND
-                //     new TestCase("fr", "bushel", NounClass.OTHER),                      //
-                //     new TestCase("fr", "barrel", NounClass.OTHER),                      //
+                //     new TestCase("fr", "bushel", NounClass.UNDEFINED),                      //
+                //     new TestCase("fr", "barrel", NounClass.UNDEFINED),                      //
                 // Some more French units missing gender:
-                //     new TestCase("fr", "degree", NounClass.OTHER),                //
+                //     new TestCase("fr", "degree", NounClass.UNDEFINED),                //
                 new TestCase("fr", "square-meter", NounClass.MASCULINE), // COMPOUND
-                //     new TestCase("fr", "terabyte", NounClass.OTHER),              // PREFIX, byte
-                //     new TestCase("fr", "gigabyte", NounClass.OTHER),              // PREFIX, byte
-                //     new TestCase("fr", "gigabit", NounClass.OTHER),               // PREFIX, bit
-                //     new TestCase("fr", "megabyte", NounClass.OTHER),              // PREFIX, byte
-                //     new TestCase("fr", "megabit", NounClass.OTHER),               // PREFIX, bit
-                //     new TestCase("fr", "kilobyte", NounClass.OTHER),              // PREFIX, byte
-                //     new TestCase("fr", "kilobit", NounClass.OTHER),               // PREFIX, bit
-                //     new TestCase("fr", "byte", NounClass.OTHER),                  //
-                //     new TestCase("fr", "bit", NounClass.OTHER),                   //
-                //     new TestCase("fr", "volt", NounClass.OTHER),                  //
+                //     new TestCase("fr", "terabyte", NounClass.UNDEFINED),              // PREFIX, byte
+                //     new TestCase("fr", "gigabyte", NounClass.UNDEFINED),              // PREFIX, byte
+                //     new TestCase("fr", "gigabit", NounClass.UNDEFINED),               // PREFIX, bit
+                //     new TestCase("fr", "megabyte", NounClass.UNDEFINED),              // PREFIX, byte
+                //     new TestCase("fr", "megabit", NounClass.UNDEFINED),               // PREFIX, bit
+                //     new TestCase("fr", "kilobyte", NounClass.UNDEFINED),              // PREFIX, byte
+                //     new TestCase("fr", "kilobit", NounClass.UNDEFINED),               // PREFIX, bit
+                //     new TestCase("fr", "byte", NounClass.UNDEFINED),                  //
+                //     new TestCase("fr", "bit", NounClass.UNDEFINED),                   //
+                //     new TestCase("fr", "volt", NounClass.UNDEFINED),                  //
                 new TestCase("fr", "cubic-meter", NounClass.MASCULINE),  // POWER
 
                 // gender-lacking builtins within compound units
@@ -2729,7 +2769,7 @@ public class NumberFormatterApiTest extends TestFmwk {
         // Make sure getGender does not return garbage for genderless languages
         formatter = NumberFormatter.with().locale(ULocale.ENGLISH);
         fn = formatter.format(1.1);
-        assertEquals("getNounClass for not supported language", NounClass.OTHER, fn.getNounClass());
+        assertEquals("getNounClass for not supported language", NounClass.UNDEFINED, fn.getNounClass());
 
     }
 
@@ -2858,7 +2898,7 @@ public class NumberFormatterApiTest extends TestFmwk {
         //     new TestCase("de", "lux", ""),                               //
         //     new TestCase("de", "candela", ""),                           //
         //     new TestCase("de", "lumen", ""),                             //
-        //     new TestCase("de", "metric-ton", ""),                        //
+        //     new TestCase("de", "tonne", ""),                        //
             new TestCase("de", "microgram", "neuter"),                   // PREFIX
         //     new TestCase("de", "ton", ""),                               //
         //     new TestCase("de", "stone", ""),                             //
@@ -2950,7 +2990,7 @@ public class NumberFormatterApiTest extends TestFmwk {
         //     new TestCase("fr", "lux", ""),                                        //
         //     new TestCase("fr", "candela", ""),                                    //
         //     new TestCase("fr", "lumen", ""),                                      //
-        //     new TestCase("fr", "metric-ton", ""),                                 //
+        //     new TestCase("fr", "tonne", ""),                                 //
             new TestCase("fr", "microgram", "masculine"),                         // PREFIX
         //     new TestCase("fr", "ton", ""),                                        //
         //     new TestCase("fr", "stone", ""),                                      //
@@ -4189,39 +4229,39 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "8,765",
                 "0");
 
-        // NOTE: Bulgarian is interesting because it has no grouping in the default currency format.
+        // NOTE: en_US_POSIX is interesting because it has no grouping in the default currency format.
         // If this test breaks due to data changes, find another locale that has no default grouping.
         assertFormatDescendingBig(
-                "Bulgarian Currency Grouping",
+                "en_US_POSIX Currency Grouping",
                 "currency/USD group-auto",
                 "currency/USD",
                 NumberFormatter.with().grouping(GroupingStrategy.AUTO).unit(USD),
-                new ULocale("bg"),
-                "87650000,00 щ.д.",
-                "8765000,00 щ.д.",
-                "876500,00 щ.д.",
-                "87650,00 щ.д.",
-                "8765,00 щ.д.",
-                "876,50 щ.д.",
-                "87,65 щ.д.",
-                "8,76 щ.д.",
-                "0,00 щ.д.");
+                new ULocale("en_US_POSIX"),
+                "$ 87650000.00",
+                "$ 8765000.00",
+                "$ 876500.00",
+                "$ 87650.00",
+                "$ 8765.00",
+                "$ 876.50",
+                "$ 87.65",
+                "$ 8.76",
+                "$ 0.00");
 
         assertFormatDescendingBig(
-                "Bulgarian Currency Grouping, Always",
+                "en_US_POSIX Currency Grouping, Always",
                 "currency/USD group-on-aligned",
                 "currency/USD ,!",
                 NumberFormatter.with().grouping(GroupingStrategy.ON_ALIGNED).unit(USD),
-                new ULocale("bg"),
-                "87 650 000,00 щ.д.",
-                "8 765 000,00 щ.д.",
-                "876 500,00 щ.д.",
-                "87 650,00 щ.д.",
-                "8 765,00 щ.д.",
-                "876,50 щ.д.",
-                "87,65 щ.д.",
-                "8,76 щ.д.",
-                "0,00 щ.д.");
+                new ULocale("en_US_POSIX"),
+                "$ 87,650,000.00",
+                "$ 8,765,000.00",
+                "$ 876,500.00",
+                "$ 87,650.00",
+                "$ 8,765.00",
+                "$ 876.50",
+                "$ 87.65",
+                "$ 8.76",
+                "$ 0.00");
 
         MacroProps macros = new MacroProps();
         macros.grouping = Grouper.getInstance((short) 4, (short) 1, (short) 3);
@@ -4609,15 +4649,15 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "currency/USD latin",
                 NumberFormatter.with().symbols(NumberingSystem.LATIN).unit(USD),
                 new ULocale("ar"),
-                "US$ 87,650.00",
-                "US$ 8,765.00",
-                "US$ 876.50",
-                "US$ 87.65",
-                "US$ 8.76",
-                "US$ 0.88",
-                "US$ 0.09",
-                "US$ 0.01",
-                "US$ 0.00");
+                "\u200F87,650.00 US$",
+                "\u200F8,765.00 US$",
+                "\u200F876.50 US$",
+                "\u200F87.65 US$",
+                "\u200F8.76 US$",
+                "\u200F0.88 US$",
+                "\u200F0.09 US$",
+                "\u200F0.01 US$",
+                "\u200F0.00 US$");
 
         assertFormatDescending(
                 "Math Numbering System with French Data",
@@ -4656,22 +4696,22 @@ public class NumberFormatterApiTest extends TestFmwk {
         // NOTE: Locale ar puts ¤ after the number in NS arab but before the number in NS latn.
 
         assertFormatSingle(
-                "Currency symbol should precede number in ar with NS latn",
+                "Currency symbol should follow number in ar with NS latn",
                 "currency/USD latin",
                 "currency/USD latin",
                 NumberFormatter.with().symbols(NumberingSystem.LATIN).unit(USD),
                 new ULocale("ar"),
                 12345.67,
-                "US$ 12,345.67");
+                "\u200F12,345.67 US$");
 
         assertFormatSingle(
-                "Currency symbol should precede number in ar@numbers=latn",
+                "Currency symbol should follow number in ar@numbers=latn",
                 "currency/USD",
                 "currency/USD",
                 NumberFormatter.with().unit(USD),
                 new ULocale("ar@numbers=latn"),
                 12345.67,
-                "US$ 12,345.67");
+                "\u200F12,345.67 US$");
 
         assertFormatSingle(
                 "Currency symbol should follow number in ar-EG with NS arab",
@@ -4680,7 +4720,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().unit(USD),
                 new ULocale("ar-EG"),
                 12345.67,
-                "١٢٬٣٤٥٫٦٧ US$");
+                "\u200F١٢٬٣٤٥٫٦٧ US$");
 
         assertFormatSingle(
                 "Currency symbol should follow number in ar@numbers=arab",
@@ -4689,7 +4729,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().unit(USD),
                 new ULocale("ar@numbers=arab"),
                 12345.67,
-                "١٢٬٣٤٥٫٦٧ US$");
+                "\u200F١٢٬٣٤٥٫٦٧ US$");
 
         assertFormatSingle(
                 "NumberingSystem in API should win over @numbers keyword",
@@ -4698,10 +4738,10 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().symbols(NumberingSystem.LATIN).unit(USD),
                 new ULocale("ar@numbers=arab"),
                 12345.67,
-                "US$ 12,345.67");
+                "\u200F12,345.67 US$");
 
         assertEquals("NumberingSystem in API should win over @numbers keyword in reverse order",
-                "US$ 12,345.67",
+                "\u200F12,345.67 US$",
                 NumberFormatter.withLocale(new ULocale("ar@numbers=arab"))
                     .symbols(NumberingSystem.LATIN)
                     .unit(USD)
@@ -5016,7 +5056,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().sign(SignDisplay.ACCOUNTING).unit(USD).unitWidth(UnitWidth.NARROW),
                 ULocale.CANADA,
                 -444444,
-                "($444,444.00)");
+                "(US$444,444.00)");
 
         assertFormatSingle(
                 "Sign Accounting Negative Short",
@@ -5045,7 +5085,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().sign(SignDisplay.ACCOUNTING).unit(USD).unitWidth(UnitWidth.FULL_NAME),
                 ULocale.CANADA,
                 -444444,
-                "-444,444.00 U.S. dollars");
+                "-444,444.00 US dollars");
     }
 
     @Test

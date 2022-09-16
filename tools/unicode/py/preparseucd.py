@@ -353,7 +353,10 @@ def SetPropertyValue(pname, vname, start, end):
 
 _stripped_cp_re = re.compile("([0-9a-fA-F]+)$")
 _stripped_range_re = re.compile("([0-9a-fA-F]+)\.\.([0-9a-fA-F]+)$")
+# Default value for all of Unicode.
 _missing_re = re.compile("# *@missing: *0000\.\.10FFFF *; *(.+)$")
+# Default value for some range.
+_missing2_re = re.compile("# *@missing: *(.+)$")
 
 def ReadUCDLines(in_file, want_ranges=True, want_other=False,
                  want_comments=False, want_missing=False):
@@ -365,6 +368,7 @@ def ReadUCDLines(in_file, want_ranges=True, want_other=False,
     line = line.strip()
     if not line: continue
     if line.startswith("#"):  # whole-line comment
+      parse_data = False
       if want_missing:
         match = _missing_re.match(line)
         if match:
@@ -372,8 +376,15 @@ def ReadUCDLines(in_file, want_ranges=True, want_other=False,
           for i in range(len(fields)): fields[i] = fields[i].strip()
           yield ("missing", line, fields)
           continue
-      if want_comments: yield ("comment", line)
-      continue
+        match = _missing2_re.match(line)
+        if match:
+          # Strip the "missing" comment prefix and fall through to
+          # parse the remainder of the line like regular data.
+          parse_data = True
+          line = match.group(1)
+      if not parse_data:
+        if want_comments: yield ("comment", line)
+        continue
     comment_start = line.find("#")  # inline comment
     if comment_start >= 0:
       line = line[:comment_start].rstrip()

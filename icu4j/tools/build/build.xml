@@ -10,17 +10,6 @@
     <property file="build-local.properties"/>
     <property file="build.properties"/>
 
-    <!-- before importing common-targets.xml -->
-    <condition property="alt.src.dir" value="out/tmp-src-pre8">
-        <or>
-            <equals arg1="${ant.java.version}" arg2="1.7"/>
-        </or>
-    </condition>
-
-    <condition property="src.dir" value="${alt.src.dir}">
-        <isset property="alt.src.dir"/>
-    </condition>
-
     <import file="${shared.dir}/build/common-targets.xml"/>
 
     <path id="javac.classpathref">
@@ -35,25 +24,11 @@
 
     <target name="clean" depends="@clean" description="Clean up the build outputs"/>
 
-    <target name="compile" depends="copy-src-pre8, @compile" description="Compile java source files"/>
+    <target name="compile" depends="@compile" description="Compile java source files"/>
 
     <target name="copy" depends="@copy" description="Copy non-java runtime files to the project's binary directory"/>
 
     <target name="jar" depends="compile, copy, @jar" description="Create the project's jar file"/>
 
-    <target name="src-jar" depends="copy-src-pre8, @src-jar" description="Create the project's source jar file"/>
-
-    <!-- Override a source file for supporting JDK 8 JavaDoc -->
-    <target name="copy-src-pre8" if="alt.src.dir">
-        <echo message="Building ICU4J build tools with JDK7 or older tools..."/>
-        <mkdir dir="${alt.src.dir}"/>
-        <!-- copy all files under 'src' -->
-        <copy todir="${alt.src.dir}">
-            <fileset dir="src"/>
-        </copy>
-        <!-- overwrite jdk7 or older specific source file -->
-        <copy todir="${alt.src.dir}" overwrite="yes">
-            <fileset dir="src-pre8"/>
-        </copy>
-    </target>
+    <target name="src-jar" depends="@src-jar" description="Create the project's source jar file"/>
 </project>

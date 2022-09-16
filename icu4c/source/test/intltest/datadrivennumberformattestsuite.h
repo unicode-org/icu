@@ -39,7 +39,7 @@ class DataDrivenNumberFormatTestSuite : public IntlTest {
       *
       * @param fileName is the name of the file in the source/test/testdata.
       *  This should be just a filename such as "numberformattest.txt"
-      * @param runAllTests If TRUE, runs every test in fileName. if FALSE,
+      * @param runAllTests If true, runs every test in fileName. if false,
       *  skips the tests that are known to break for ICU4C.
       */
      void run(const char *fileName, UBool runAllTests);
@@ -53,7 +53,7 @@ class DataDrivenNumberFormatTestSuite : public IntlTest {
      * @param appendErrorMessage any message describing failures appended
      *   here.
      * @param status any error returned here.
-     * @return TRUE if test passed or FALSE if test failed.
+     * @return true if test passed or false if test failed.
      */
     virtual UBool isFormatPass(
             const NumberFormatTestTuple &tuple,
@@ -74,7 +74,7 @@ class DataDrivenNumberFormatTestSuite : public IntlTest {
      * @param appendErrorMessage any message describing failures appended
      *   here.
      * @param status any error returned here.
-     * @return TRUE if test passed or FALSE if test failed.
+     * @return true if test passed or false if test failed.
      */
     virtual UBool isFormatPass(
             const NumberFormatTestTuple &tuple,

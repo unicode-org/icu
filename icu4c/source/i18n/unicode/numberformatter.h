@@ -14,6 +14,7 @@
 #include "unicode/bytestream.h"
 #include "unicode/currunit.h"
 #include "unicode/dcfmtsym.h"
+#include "unicode/displayoptions.h"
 #include "unicode/fieldpos.h"
 #include "unicode/formattedvalue.h"
 #include "unicode/fpositer.h"
@@ -22,7 +23,7 @@
 #include "unicode/parseerr.h"
 #include "unicode/plurrule.h"
 #include "unicode/ucurr.h"
-#include "unicode/unounclass.h"
+#include "unicode/udisplayoptions.h"
 #include "unicode/unum.h"
 #include "unicode/unumberformatter.h"
 #include "unicode/uobject.h"
@@ -2254,23 +2255,44 @@ class U_I18N_API NumberFormatterSettings {
     Derived usage(StringPiece usage) &&;
 
 #ifndef U_HIDE_DRAFT_API
-#ifndef U_HIDE_INTERNAL_API
     /**
+     * Specifies the DisplayOptions. For example, UDisplayOptionsGrammaticalCase specifies
+     * the desired case for a unit formatter's output (e.g. accusative, dative, genitive).
+     *
+     * @param displayOptions
+     * @return The fluent chain.
+     * @draft ICU 72
+     */
+    Derived displayOptions(const DisplayOptions &displayOptions) const &;
+
+    /**
+     * Overload of displayOptions() for use on an rvalue reference.
+     *
+     * @param displayOptions
+     * @return The fluent chain.
+     * @draft ICU 72
+     */
+    Derived displayOptions(const DisplayOptions &displayOptions) &&;
+#endif // U_HIDE_DRAFT_API
+
+#ifndef U_HIDE_DEPRECATED_API
+    /**
+     * NOTE: This function is deprecated, use `displayOptions` instead.
+     *
      * Specifies the desired case for a unit formatter's output (e.g.
      * accusative, dative, genitive).
      *
-     * @internal ICU 69 technology preview
+     * @deprecated ICU 72
      */
     Derived unitDisplayCase(StringPiece unitDisplayCase) const &;
 
     /**
      * Overload of unitDisplayCase() for use on an rvalue reference.
      *
-     * @internal ICU 69 technology preview
+     * @deprecated ICU 72
      */
     Derived unitDisplayCase(StringPiece unitDisplayCase) &&;
-#endif // U_HIDE_INTERNAL_API
-#endif // U_HIDE_DRAFT_API
+#endif // U_HIDE_DEPRECATED_API
 
 #ifndef U_HIDE_INTERNAL_API
 
@@ -2771,13 +2793,13 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
 #ifndef U_HIDE_DRAFT_API
 
     /**
-     * Gets the noun class of the formatted output. Returns `OTHER` when the noun class
+     * Gets the noun class of the formatted output. Returns `UNDEFINED` when the noun class
      * is not supported yet.
      *
-     * @return `NounClass`
-     * @draft ICU 71.
+     * @return UDisplayOptionsNounClass
+     * @draft ICU 72
      */
-    NounClass getNounClass(UErrorCode &status) const;
+    UDisplayOptionsNounClass getNounClass(UErrorCode &status) const;
 
 #endif // U_HIDE_DRAFT_API
 

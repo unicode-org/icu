@@ -187,6 +187,12 @@ public class UnitsConverter {
         private int exponentGlucoseMolarMass = 0;
         /** Exponent for the item per mole conversion rate constant */
         private int exponentItemPerMole = 0;
+        /** Exponent for the meters per AU conversion rate constant */
+        private int exponentMetersPerAU = 0;
+        /** Exponent for the sec per julian year conversion rate constant */
+        private int exponentSecPerJulianYear = 0;
+        /** Exponent for the speed of light meters per second" conversion rate constant */
+        private int exponentSpeedOfLightMetersPerSecond = 0;
 
         /**
          * Creates Empty Factor
@@ -240,6 +246,9 @@ public class UnitsConverter {
             result.exponentLbToKg = this.exponentLbToKg;
             result.exponentGlucoseMolarMass = this.exponentGlucoseMolarMass;
             result.exponentItemPerMole = this.exponentItemPerMole;
+            result.exponentMetersPerAU = this.exponentMetersPerAU;
+            result.exponentSecPerJulianYear = this.exponentSecPerJulianYear;
+            result.exponentSpeedOfLightMetersPerSecond = this.exponentSpeedOfLightMetersPerSecond;
 
             return result;
         }
@@ -267,6 +276,9 @@ public class UnitsConverter {
             resultCollector.multiply(new BigDecimal("0.45359237"), this.exponentLbToKg);
             resultCollector.multiply(new BigDecimal("180.1557"), this.exponentGlucoseMolarMass);
             resultCollector.multiply(new BigDecimal("6.02214076E+23"), this.exponentItemPerMole);
+            resultCollector.multiply(new BigDecimal("149597870700"), this.exponentMetersPerAU);
+            resultCollector.multiply(new BigDecimal("31557600"), this.exponentSecPerJulianYear);
+            resultCollector.multiply(new BigDecimal("299792458"), this.exponentSpeedOfLightMetersPerSecond);
 
             return resultCollector.factorNum.divide(resultCollector.factorDen, DECIMAL128);
         }
@@ -323,6 +335,10 @@ public class UnitsConverter {
             result.exponentLbToKg = this.exponentLbToKg * power;
             result.exponentGlucoseMolarMass = this.exponentGlucoseMolarMass * power;
             result.exponentItemPerMole = this.exponentItemPerMole * power;
+            result.exponentMetersPerAU = this.exponentMetersPerAU * power;
+            result.exponentSecPerJulianYear = this.exponentSecPerJulianYear * power;
+            result.exponentSpeedOfLightMetersPerSecond =
+                this.exponentSpeedOfLightMetersPerSecond * power;
 
             return result;
         }
@@ -341,6 +357,10 @@ public class UnitsConverter {
             result.exponentGlucoseMolarMass =
                 this.exponentGlucoseMolarMass - other.exponentGlucoseMolarMass;
             result.exponentItemPerMole = this.exponentItemPerMole - other.exponentItemPerMole;
+            result.exponentMetersPerAU = this.exponentMetersPerAU - other.exponentMetersPerAU;
+            result.exponentSecPerJulianYear = this.exponentSecPerJulianYear - other.exponentSecPerJulianYear;
+            result.exponentSpeedOfLightMetersPerSecond =
+                this.exponentSpeedOfLightMetersPerSecond - other.exponentSpeedOfLightMetersPerSecond;
 
             return result;
         }
@@ -359,6 +379,10 @@ public class UnitsConverter {
             result.exponentGlucoseMolarMass =
                 this.exponentGlucoseMolarMass + other.exponentGlucoseMolarMass;
             result.exponentItemPerMole = this.exponentItemPerMole + other.exponentItemPerMole;
+            result.exponentMetersPerAU = this.exponentMetersPerAU + other.exponentMetersPerAU;
+            result.exponentSecPerJulianYear = this.exponentSecPerJulianYear + other.exponentSecPerJulianYear;
+            result.exponentSpeedOfLightMetersPerSecond =
+                this.exponentSpeedOfLightMetersPerSecond + other.exponentSpeedOfLightMetersPerSecond;
 
             return result;
         }
@@ -402,9 +426,15 @@ public class UnitsConverter {
                 this.exponentGlucoseMolarMass += power;
             } else if ("item_per_mole".equals(entity)) {
                 this.exponentItemPerMole += power;
+            } else if ("meters_per_AU".equals(entity)) {
+                this.exponentMetersPerAU += power;
             } else if ("PI".equals(entity)) {
                 this.exponentPi += power;
-            } else {
+             } else if ("sec_per_julian_year".equals(entity)) {
+                this.exponentSecPerJulianYear += power;
+            } else if ("speed_of_light_meters_per_second".equals(entity)) {
+                this.exponentSpeedOfLightMetersPerSecond += power;
+           } else {
                 BigDecimal decimalEntity = new BigDecimal(entity).pow(power, DECIMAL128);
                 this.factorNum = this.factorNum.multiply(decimalEntity);
             }

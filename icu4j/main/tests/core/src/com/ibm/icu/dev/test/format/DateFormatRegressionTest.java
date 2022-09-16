@@ -100,8 +100,8 @@ public class DateFormatRegressionTest extends TestFmwk {
         String str = fmt.format(dt);
         logln(str);
 
-        if (!str.equals("5/3/97, 8:55 AM"))
-            errln("Fail: Test broken; Want 5/3/97, 8:55 AM Got " + str);
+        if (!str.equals("5/3/97, 8:55\u202FAM"))
+            errln("Fail: Test broken; Want 5/3/97, 8:55\u202FAM Got " + str);
 
         String expected[] = {
             "", //"ERA_FIELD",
@@ -908,7 +908,7 @@ public class DateFormatRegressionTest extends TestFmwk {
         Date d = new Date(978103543000l - (defaultOffset - PSTOffset));
         d = new Date(d.getTime() - (defaultTZ.inDaylightTime(d) ? 3600000 : 0));
         DateFormat fmt = DateFormat.getDateTimeInstance(-1, DateFormat.MEDIUM, Locale.US);
-        String tests = "7:25:43 AM";
+        String tests = "7:25:43\u202FAM";
         String s = fmt.format(d);
         if (!s.equals(tests)) {
             errln("Fail: " + s + " != " + tests);

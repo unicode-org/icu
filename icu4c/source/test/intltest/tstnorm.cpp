@@ -883,8 +883,8 @@ ref_norm_compare(const UnicodeString &s1, const UnicodeString &s2, uint32_t opti
     int32_t normOptions=(int32_t)(options>>UNORM_COMPARE_NORM_OPTIONS_SHIFT);
 
     if(options&U_COMPARE_IGNORE_CASE) {
-        Normalizer::decompose(s1, FALSE, normOptions, r1, errorCode);
-        Normalizer::decompose(s2, FALSE, normOptions, r2, errorCode);
+        Normalizer::decompose(s1, false, normOptions, r1, errorCode);
+        Normalizer::decompose(s2, false, normOptions, r2, errorCode);
 
         r1.foldCase(options);
         r2.foldCase(options);
@@ -893,8 +893,8 @@ ref_norm_compare(const UnicodeString &s1, const UnicodeString &s2, uint32_t opti
         r2=s2;
     }
 
-    Normalizer::decompose(r1, FALSE, normOptions, t1, errorCode);
-    Normalizer::decompose(r2, FALSE, normOptions, t2, errorCode);
+    Normalizer::decompose(r1, false, normOptions, t1, errorCode);
+    Normalizer::decompose(r2, false, normOptions, t2, errorCode);
 
     if(options&U_COMPARE_CODE_POINT_ORDER) {
         return t1.compareCodePointOrder(t2);
@@ -1194,7 +1194,7 @@ BasicNormalizerTest::TestCompare() {
         nfcNorm2->getDecomposition(0x4e00, s2) ||
         nfcNorm2->getDecomposition(0x20002, s2)
     ) {
-        errln("NFC.getDecomposition() returns TRUE for characters which do not have decompositions");
+        errln("NFC.getDecomposition() returns true for characters which do not have decompositions");
     }
 
     // test getRawDecomposition() for some characters that do not decompose
@@ -1202,7 +1202,7 @@ BasicNormalizerTest::TestCompare() {
         nfcNorm2->getRawDecomposition(0x4e00, s2) ||
         nfcNorm2->getRawDecomposition(0x20002, s2)
     ) {
-        errln("NFC.getRawDecomposition() returns TRUE for characters which do not have decompositions");
+        errln("NFC.getRawDecomposition() returns true for characters which do not have decompositions");
     }
 
     // test composePair() for some pairs of characters that do not compose
@@ -1280,14 +1280,14 @@ BasicNormalizerTest::countFoldFCDExceptions(uint32_t foldingOptions) {
         s.setTo(c);
 
         // get leading and trailing cc for c
-        Normalizer::decompose(s, FALSE, 0, d, errorCode);
+        Normalizer::decompose(s, false, 0, d, errorCode);
         isNFD= s==d;
         cc=u_getCombiningClass(d.char32At(0));
         trailCC=u_getCombiningClass(d.char32At(d.length()-1));
 
         // get leading and trailing cc for the case-folding of c
         s.foldCase(foldingOptions);
-        Normalizer::decompose(s, FALSE, 0, d, errorCode);
+        Normalizer::decompose(s, false, 0, d, errorCode);
         foldCC=u_getCombiningClass(d.char32At(0));
         foldTrailCC=u_getCombiningClass(d.char32At(d.length()-1));
 
@@ -1438,12 +1438,12 @@ BasicNormalizerTest::TestSkippable() {
             // expectSets ourselves in initSkippables().
 
             s=UNICODE_STRING_SIMPLE("skip-expect=");
-            (diff=skipSets[i]).removeAll(expectSets[i]).toPattern(pattern, TRUE);
+            (diff=skipSets[i]).removeAll(expectSets[i]).toPattern(pattern, true);
             s.append(pattern);
 
             pattern.remove();
             s.append(UNICODE_STRING_SIMPLE("\n\nexpect-skip="));
-            (diff=expectSets[i]).removeAll(skipSets[i]).toPattern(pattern, TRUE);
+            (diff=expectSets[i]).removeAll(skipSets[i]).toPattern(pattern, true);
             s.append(pattern);
             s.append(UNICODE_STRING_SIMPLE("\n\n"));
 
@@ -1585,25 +1585,25 @@ BasicNormalizerTest::TestComposeUTF8WithEdits() {
     assertSuccess("normalizeUTF8 with Edits", errorCode.get());
     assertEquals("normalizeUTF8 with Edits", expected.data(), result.c_str());
     static const EditChange expectedChanges[] = {
-        { FALSE, 2, 2 },  // 2 spaces
-        { TRUE, 1, 1 },  // A→a
-        { TRUE, 2, 2 },  // Ä→ä
-        { TRUE, 3, 2 },  // A\u0308→ä
-        { TRUE, 7, 5 },  // A\u0308\u00ad\u0323→ạ\u0308 removes the soft hyphen
-        { TRUE, 4, 5 },  // Ä\u0323→ạ\u0308
-        { FALSE, 1, 1 },  // comma
-        { TRUE, 2, 0 },  // U+00AD soft hyphen maps to empty
-        { TRUE, 6, 3 },  // \u1100\u1161→가
-        { TRUE, 6, 3 },  // 가\u11A8→각
-        { TRUE, 6, 3 },  // 가\u3133→갃
-        { FALSE, 2, 2 }  // 2 spaces
+        { false, 2, 2 },  // 2 spaces
+        { true, 1, 1 },  // A→a
+        { true, 2, 2 },  // Ä→ä
+        { true, 3, 2 },  // A\u0308→ä
+        { true, 7, 5 },  // A\u0308\u00ad\u0323→ạ\u0308 removes the soft hyphen
+        { true, 4, 5 },  // Ä\u0323→ạ\u0308
+        { false, 1, 1 },  // comma
+        { true, 2, 0 },  // U+00AD soft hyphen maps to empty
+        { true, 6, 3 },  // \u1100\u1161→가
+        { true, 6, 3 },  // 가\u11A8→각
+        { true, 6, 3 },  // 가\u3133→갃
+        { false, 2, 2 }  // 2 spaces
     };
     assertTrue("normalizeUTF8 with Edits hasChanges", edits.hasChanges());
     assertEquals("normalizeUTF8 with Edits numberOfChanges", 9, edits.numberOfChanges());
     TestUtility::checkEditsIter(*this, u"normalizeUTF8 with Edits",
             edits.getFineIterator(), edits.getFineIterator(),
             expectedChanges, UPRV_LENGTHOF(expectedChanges),
-            TRUE, errorCode);
+            true, errorCode);
 
     assertFalse("isNormalizedUTF8(source)", nfkc_cf->isNormalizedUTF8(src, errorCode));
     assertTrue("isNormalizedUTF8(normalized)", nfkc_cf->isNormalizedUTF8(result, errorCode));
@@ -1620,7 +1620,7 @@ BasicNormalizerTest::TestComposeUTF8WithEdits() {
     TestUtility::checkEditsIter(*this, u"normalizeUTF8 omit unchanged",
             edits.getFineIterator(), edits.getFineIterator(),
             expectedChanges, UPRV_LENGTHOF(expectedChanges),
-            TRUE, errorCode);
+            true, errorCode);
 
     // With filter: The normalization code does not see the "A" substrings.
     UnicodeSet filter(u"[^A]", errorCode);
@@ -1632,24 +1632,24 @@ BasicNormalizerTest::TestComposeUTF8WithEdits() {
     assertSuccess("filtered normalizeUTF8", errorCode.get());
     assertEquals("filtered normalizeUTF8", expected.data(), result.c_str());
     static const EditChange filteredChanges[] = {
-        { FALSE, 3, 3 },  // 2 spaces + A
-        { TRUE, 2, 2 },  // Ä→ä
-        { FALSE, 4, 4 },  // A\u0308A
-        { TRUE, 6, 4 },  // \u0308\u00ad\u0323→\u0323\u0308 removes the soft hyphen
-        { TRUE, 4, 5 },  // Ä\u0323→ạ\u0308
-        { FALSE, 1, 1 },  // comma
-        { TRUE, 2, 0 },  // U+00AD soft hyphen maps to empty
-        { TRUE, 6, 3 },  // \u1100\u1161→가
-        { TRUE, 6, 3 },  // 가\u11A8→각
-        { TRUE, 6, 3 },  // 가\u3133→갃
-        { FALSE, 2, 2 }  // 2 spaces
+        { false, 3, 3 },  // 2 spaces + A
+        { true, 2, 2 },  // Ä→ä
+        { false, 4, 4 },  // A\u0308A
+        { true, 6, 4 },  // \u0308\u00ad\u0323→\u0323\u0308 removes the soft hyphen
+        { true, 4, 5 },  // Ä\u0323→ạ\u0308
+        { false, 1, 1 },  // comma
+        { true, 2, 0 },  // U+00AD soft hyphen maps to empty
+        { true, 6, 3 },  // \u1100\u1161→가
+        { true, 6, 3 },  // 가\u11A8→각
+        { true, 6, 3 },  // 가\u3133→갃
+        { false, 2, 2 }  // 2 spaces
     };
     assertTrue("filtered normalizeUTF8 hasChanges", edits.hasChanges());
     assertEquals("filtered normalizeUTF8 numberOfChanges", 7, edits.numberOfChanges());
     TestUtility::checkEditsIter(*this, u"filtered normalizeUTF8",
             edits.getFineIterator(), edits.getFineIterator(),
             filteredChanges, UPRV_LENGTHOF(filteredChanges),
-            TRUE, errorCode);
+            true, errorCode);
 
     assertFalse("filtered isNormalizedUTF8(source)", fn2.isNormalizedUTF8(src, errorCode));
     assertTrue("filtered isNormalizedUTF8(normalized)", fn2.isNormalizedUTF8(result, errorCode));
@@ -1668,7 +1668,7 @@ BasicNormalizerTest::TestComposeUTF8WithEdits() {
     TestUtility::checkEditsIter(*this, u"filtered normalizeUTF8 omit unchanged",
             edits.getFineIterator(), edits.getFineIterator(),
             filteredChanges, UPRV_LENGTHOF(filteredChanges),
-            TRUE, errorCode);
+            true, errorCode);
 }
 
 void
@@ -1691,29 +1691,29 @@ BasicNormalizerTest::TestDecomposeUTF8WithEdits() {
     assertSuccess("normalizeUTF8 with Edits", errorCode.get());
     assertEquals("normalizeUTF8 with Edits", expected.data(), result.c_str());
     static const EditChange expectedChanges[] = {
-        { FALSE, 2, 2 },  // 2 spaces
-        { TRUE, 1, 1 },  // A→a
-        { TRUE, 2, 3 },  // Ä→a\u0308
-        { TRUE, 1, 1 },  // A→a
-        { FALSE, 2, 2 },  // \u0308→\u0308 unchanged
-        { TRUE, 1, 1 },  // A→a
-        { TRUE, 6, 4 },  // \u0308\u00ad\u0323→\u0323\u0308 removes the soft hyphen
-        { TRUE, 4, 5 },  // Ä\u0323→a\u0323\u0308
-        { FALSE, 1, 1 },  // comma
-        { TRUE, 2, 0 },  // U+00AD soft hyphen maps to empty
-        { FALSE, 6, 6 },  // \u1100\u1161 unchanged
-        { TRUE, 3, 6 },  // 가→\u1100\u1161
-        { FALSE, 3, 3 },  // \u11A8 unchanged
-        { TRUE, 3, 6 },  // 가→\u1100\u1161
-        { TRUE, 3, 3 },  // \u3133→\u11AA
-        { FALSE, 2, 2 }  // 2 spaces
+        { false, 2, 2 },  // 2 spaces
+        { true, 1, 1 },  // A→a
+        { true, 2, 3 },  // Ä→a\u0308
+        { true, 1, 1 },  // A→a
+        { false, 2, 2 },  // \u0308→\u0308 unchanged
+        { true, 1, 1 },  // A→a
+        { true, 6, 4 },  // \u0308\u00ad\u0323→\u0323\u0308 removes the soft hyphen
+        { true, 4, 5 },  // Ä\u0323→a\u0323\u0308
+        { false, 1, 1 },  // comma
+        { true, 2, 0 },  // U+00AD soft hyphen maps to empty
+        { false, 6, 6 },  // \u1100\u1161 unchanged
+        { true, 3, 6 },  // 가→\u1100\u1161
+        { false, 3, 3 },  // \u11A8 unchanged
+        { true, 3, 6 },  // 가→\u1100\u1161
+        { true, 3, 3 },  // \u3133→\u11AA
+        { false, 2, 2 }  // 2 spaces
     };
     assertTrue("normalizeUTF8 with Edits hasChanges", edits.hasChanges());
     assertEquals("normalizeUTF8 with Edits numberOfChanges", 10, edits.numberOfChanges());
     TestUtility::checkEditsIter(*this, u"normalizeUTF8 with Edits",
             edits.getFineIterator(), edits.getFineIterator(),
             expectedChanges, UPRV_LENGTHOF(expectedChanges),
-            TRUE, errorCode);
+            true, errorCode);
 
     assertFalse("isNormalizedUTF8(source)", nfkd_cf->isNormalizedUTF8(src, errorCode));
     assertTrue("isNormalizedUTF8(normalized)", nfkd_cf->isNormalizedUTF8(result, errorCode));
@@ -1730,7 +1730,7 @@ BasicNormalizerTest::TestDecomposeUTF8WithEdits() {
     TestUtility::checkEditsIter(*this, u"normalizeUTF8 omit unchanged",
             edits.getFineIterator(), edits.getFineIterator(),
             expectedChanges, UPRV_LENGTHOF(expectedChanges),
-            TRUE, errorCode);
+            true, errorCode);
 
     // Not testing FilteredNormalizer2:
     // The code there is the same for all normalization modes, and

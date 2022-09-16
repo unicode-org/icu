@@ -90,7 +90,7 @@ class RBBINode {
                                         //   corresponds to columns in the final
                                         //   state transition table.
 
-    boolean      fLookAheadEnd;        // For endMark nodes, set TRUE if
+    boolean      fLookAheadEnd;        // For endMark nodes, set true if
                                        //   marking the end of a look-ahead rule.
 
     boolean      fRuleRoot;             // True if this node is the root of a rule.

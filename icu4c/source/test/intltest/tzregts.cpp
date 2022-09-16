@@ -57,10 +57,10 @@ TimeZoneRegressionTest::failure(UErrorCode status, const char* msg)
 {
     if(U_FAILURE(status)) {
         errln(UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status));
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /**
@@ -91,7 +91,7 @@ UDate TimeZoneRegressionTest::findTransitionBinary(const SimpleTimeZone& tz, UDa
     UBool startsInDST = tz.inDaylightTime(min, status);
     if (failure(status, "SimpleTimeZone::inDaylightTime")) return 0;
     if (tz.inDaylightTime(max, status) == startsInDST) {
-        logln((UnicodeString)"Error: inDaylightTime() != " + ((!startsInDST)?"TRUE":"FALSE"));
+        logln((UnicodeString)"Error: inDaylightTime() != " + ((!startsInDST)?"true":"false"));
         return 0;
     }
     if (failure(status, "SimpleTimeZone::inDaylightTime")) return 0;
@@ -166,7 +166,7 @@ void TimeZoneRegressionTest:: Test4073215()
     UBool indt = cal.getTimeZone().inDaylightTime(jan31 = cal.getTime(status), status);
     failure(status, "inDaylightTime or getTime call on Jan 31");
     if (indt) {
-        errln("Fail: Jan 31 inDaylightTime=TRUE, exp FALSE");
+        errln("Fail: Jan 31 inDaylightTime=true, exp false");
     }
     cal.set(1997, UCAL_MARCH, 1);
     indt = cal.getTimeZone().inDaylightTime(mar1 = cal.getTime(status), status);
@@ -175,13 +175,13 @@ void TimeZoneRegressionTest:: Test4073215()
         UnicodeString str;
         sdf.format(cal.getTime(status), str);
         failure(status, "getTime");
-        errln((UnicodeString)"Fail: " + str + " inDaylightTime=FALSE, exp TRUE");
+        errln((UnicodeString)"Fail: " + str + " inDaylightTime=false, exp true");
     }
     cal.set(1997, UCAL_MARCH, 31);
     indt = cal.getTimeZone().inDaylightTime(mar31 = cal.getTime(status), status);
     failure(status, "inDaylightTime or getTime call on Mar 31");
     if (indt) {
-        errln("Fail: Mar 31 inDaylightTime=TRUE, exp FALSE");
+        errln("Fail: Mar 31 inDaylightTime=true, exp false");
     }
 
     /*
@@ -271,7 +271,7 @@ void TimeZoneRegressionTest:: Test4096952() {
     // {sfb} serialization not applicable
 /*
     UnicodeString ZONES [] = { UnicodeString("GMT"), UnicodeString("MET"), UnicodeString("IST") };
-    UBool pass = TRUE;
+    UBool pass = true;
     //try {
         for (int32_t i=0; i < ZONES.length; ++i) {
             TimeZone *zone = TimeZone::createTimeZone(ZONES[i]);
@@ -334,7 +334,7 @@ void TimeZoneRegressionTest:: Test4109314() {
         CalendarRegressionTest::makeDate(98,UCAL_OCTOBER,24,22,0), 
         CalendarRegressionTest::makeDate(98,UCAL_OCTOBER,25,6,0)
     };
-    UBool pass = TRUE;
+    UBool pass = true;
     for (int32_t i = 0; i < 4; i+=2) {
         //testCal->setTimeZone((TimeZone) testData[i]);
         testCal->setTimeZone(*PST);
@@ -343,7 +343,7 @@ void TimeZoneRegressionTest:: Test4109314() {
         while(testCal->getTime(status) < end) { 
             testCal->setTime(t, status);
             if ( ! checkCalendar314(testCal, PST))
-                pass = FALSE;
+                pass = false;
             t += 60*60*1000.0;
         } 
     }
@@ -549,7 +549,7 @@ void TimeZoneRegressionTest:: Test4151429() {
     //try {
         /*TimeZone *tz = TimeZone::createTimeZone("GMT");
         UnicodeString name;
-        tz->getDisplayName(TRUE, TimeZone::LONG,
+        tz->getDisplayName(true, TimeZone::LONG,
                                         Locale.getDefault(), name);
         errln("IllegalArgumentException not thrown by TimeZone::getDisplayName()");*/
     //} catch(IllegalArgumentException e) {}
@@ -979,21 +979,21 @@ void TimeZoneRegressionTest::Test4176686() {
     UnicodeString a,b,c,d,e,f,g,h,i,j,k,l;
     UnicodeString DATA[] = {
         "z1.getDisplayName(false, SHORT)/std zone",
-        z1.getDisplayName(FALSE, TimeZone::SHORT, a), "GMT+1:30",
+        z1.getDisplayName(false, TimeZone::SHORT, a), "GMT+1:30",
         "z1.getDisplayName(false, LONG)/std zone",
-        z1.getDisplayName(FALSE, TimeZone::LONG, b), "GMT+01:30",
+        z1.getDisplayName(false, TimeZone::LONG, b), "GMT+01:30",
         "z1.getDisplayName(true, SHORT)/std zone",
-        z1.getDisplayName(TRUE, TimeZone::SHORT, c), "GMT+1:30",
+        z1.getDisplayName(true, TimeZone::SHORT, c), "GMT+1:30",
         "z1.getDisplayName(true, LONG)/std zone",
-        z1.getDisplayName(TRUE, TimeZone::LONG, d ), "GMT+01:30",
+        z1.getDisplayName(true, TimeZone::LONG, d ), "GMT+01:30",
         "z2.getDisplayName(false, SHORT)/dst zone",
-        z2.getDisplayName(FALSE, TimeZone::SHORT, e), "GMT+1:30",
+        z2.getDisplayName(false, TimeZone::SHORT, e), "GMT+1:30",
         "z2.getDisplayName(false, LONG)/dst zone",
-        z2.getDisplayName(FALSE, TimeZone::LONG, f ), "GMT+01:30",
+        z2.getDisplayName(false, TimeZone::LONG, f ), "GMT+01:30",
         "z2.getDisplayName(true, SHORT)/dst zone",
-        z2.getDisplayName(TRUE, TimeZone::SHORT, g), "GMT+2:15",
+        z2.getDisplayName(true, TimeZone::SHORT, g), "GMT+2:15",
         "z2.getDisplayName(true, LONG)/dst zone",
-        z2.getDisplayName(TRUE, TimeZone::LONG, h ), "GMT+02:15",
+        z2.getDisplayName(true, TimeZone::LONG, h ), "GMT+02:15",
         "DateFormat.format(std)/std zone", fmt1.format(std, i), "GMT+1:30",
         "DateFormat.format(dst)/std zone", fmt1.format(dst, j), "GMT+1:30",
         "DateFormat.format(std)/dst zone", fmt2.format(std, k), "GMT+1:30",
@@ -1257,7 +1257,7 @@ void TimeZoneRegressionTest::TestNegativeDaylightSaving() {
     }
     failure(status, "inDaylightTime() - Jan 15");
 
-    stzDublin.getOffset(testDate, FALSE, rawOffset, dstOffset, status);
+    stzDublin.getOffset(testDate, false, rawOffset, dstOffset, status);
     failure(status, "getOffset() - Jan 15");
     if (rawOffset != stdOff || dstOffset != save) {
         errln((UnicodeString)"FAIL: Expected [stdoff=" + stdOff + ",save=" + save
@@ -1274,7 +1274,7 @@ void TimeZoneRegressionTest::TestNegativeDaylightSaving() {
     }
     failure(status, "inDaylightTime() - Jul 15");
 
-    stzDublin.getOffset(testDate, FALSE, rawOffset, dstOffset, status);
+    stzDublin.getOffset(testDate, false, rawOffset, dstOffset, status);
     failure(status, "getOffset() - Jul 15");
     if (rawOffset != stdOff || dstOffset != 0) {
         errln((UnicodeString)"FAIL: Expected [stdoff=" + stdOff + ",save=" + 0

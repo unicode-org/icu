@@ -300,8 +300,8 @@ static void expect(const USet* set,
         log_err("FAIL: USet is NULL\n");
         return;
     }
-    expectContainment(set, inList, TRUE);
-    expectContainment(set, outList, FALSE);
+    expectContainment(set, inList, true);
+    expectContainment(set, outList, false);
     expectItems(set, inList);
 }
 
@@ -315,7 +315,7 @@ static void expectContainment(const USet* set,
     int32_t rangeStart = -1, rangeEnd = -1, length;
             
     ec = U_ZERO_ERROR;
-    length = uset_toPattern(set, ustr, sizeof(ustr), TRUE, &ec);
+    length = uset_toPattern(set, ustr, sizeof(ustr), true, &ec);
     if(U_FAILURE(ec)) {
         log_err("FAIL: uset_toPattern() fails in expectContainment() - %s\n", u_errorName(ec));
         return;
@@ -423,7 +423,7 @@ static void expectItems(const USet* set,
     bool isString = false;
 
     ec = U_ZERO_ERROR;
-    length = uset_toPattern(set, ustr, sizeof(ustr), TRUE, &ec);
+    length = uset_toPattern(set, ustr, sizeof(ustr), true, &ec);
     if (U_FAILURE(ec)) {
         log_err("FAIL: uset_toPattern => %s\n", u_errorName(ec));
         return;
@@ -433,7 +433,7 @@ static void expectItems(const USet* set,
     if (uset_isEmpty(set) != (strlen(items)==0)) {
         log_data_err("FAIL: %s should return %s from isEmpty (Are you missing data?)\n",
                 pat,
-                strlen(items)==0 ? "TRUE" : "FALSE");
+                strlen(items)==0 ? "true" : "false");
     }
 
     /* Don't test patterns starting with "[^" or "[\\u0000". */

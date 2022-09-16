@@ -260,7 +260,7 @@ class NFTestFactory : public SimpleNumberFormatFactory {
 
 public:
     NFTestFactory() 
-        : SimpleNumberFormatFactory(SRC_LOC, TRUE)
+        : SimpleNumberFormatFactory(SRC_LOC, true)
     {
         UErrorCode status = U_ZERO_ERROR;
         currencyStyle = NumberFormat::createInstance(SWAP_LOC, status);

@@ -572,20 +572,20 @@ UBool LocaleMatcherTest::dataDriven(const TestCase &test, IcuTestErrorCode &erro
             favor = ULOCMATCH_FAVOR_SCRIPT;
         } else {
             errln(UnicodeString(u"unsupported FavorSubtag value ") + test.favor);
-            return FALSE;
+            return false;
         }
         builder.setFavorSubtag(favor);
     }
     if (!test.threshold.isEmpty()) {
         infoln("skipping test case on line %d with non-default threshold: not exposed via API",
                (int)test.lineNr);
-        return TRUE;
+        return true;
         // int32_t threshold = Integer.valueOf(test.threshold);
         // builder.internalSetThresholdDistance(threshold);
     }
     LocaleMatcher matcher = builder.build(errorCode);
     if (errorCode.errIfFailureAndReset("LocaleMatcher::Builder::build()")) {
-        return FALSE;
+        return false;
     }
 
     Locale expMatchLocale("");
@@ -595,7 +595,7 @@ UBool LocaleMatcherTest::dataDriven(const TestCase &test, IcuTestErrorCode &erro
         const Locale *bestSupported = matcher.getBestMatchForListString(desiredSP, errorCode);
         if (!assertEquals("bestSupported from string",
                           locString(expMatch), locString(bestSupported))) {
-            return FALSE;
+            return false;
         }
         LocalePriorityList desired(test.desired.toStringPiece(), errorCode);
         LocalePriorityList::Iterator desiredIter = desired.iterator();
@@ -646,7 +646,7 @@ void LocaleMatcherTest::testDataDriven() {
     CharString path(getSourceTestData(errorCode), errorCode);
     path.appendPathPart("localeMatcherTest.txt", errorCode);
     const char *codePage = "UTF-8";
-    LocalUCHARBUFPointer f(ucbuf_open(path.data(), &codePage, TRUE, FALSE, errorCode));
+    LocalUCHARBUFPointer f(ucbuf_open(path.data(), &codePage, true, false, errorCode));
     if(errorCode.errIfFailureAndReset("ucbuf_open(localeMatcherTest.txt)")) {
         return;
     }
@@ -657,7 +657,7 @@ void LocaleMatcherTest::testDataDriven() {
     int32_t numPassed = 0;
     while ((p = ucbuf_readline(f.getAlias(), &lineLength, errorCode)) != nullptr &&
             errorCode.isSuccess()) {
-        line.setTo(FALSE, p, lineLength);
+        line.setTo(false, p, lineLength);
         if (!readTestCase(line, test, errorCode)) {
             if (errorCode.errIfFailureAndReset(
                     "test data syntax error on line %d", (int)test.lineNr)) {

@@ -250,7 +250,7 @@ void ReplaceableTest::TestReplaceableClass(void) {
     }
 
     if(!noop.hasMetaData()) {
-        errln("Replaceable::hasMetaData() does not return TRUE");
+        errln("Replaceable::hasMetaData() does not return true");
     }
 
     // try to call the compiler-provided

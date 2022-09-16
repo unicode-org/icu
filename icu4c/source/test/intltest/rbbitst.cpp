@@ -139,6 +139,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestUnpairedSurrogate);
     TESTCASE_AUTO(TestLSTMThai);
     TESTCASE_AUTO(TestLSTMBurmese);
+    TESTCASE_AUTO(TestRandomAccess);
 
 #if U_ENABLE_TRACING
     TESTCASE_AUTO(TestTraceCreateCharacter);
@@ -761,7 +762,7 @@ void RBBITest::TestExtended() {
     //
     //  Put the test data into a UnicodeString
     //
-    UnicodeString testString(FALSE, testFile, len);
+    UnicodeString testString(false, testFile, len);
 
     enum EParseState{
         PARSE_COMMENT,
@@ -1263,16 +1264,21 @@ UBool RBBITest::testCaseIsKnownIssue(const UnicodeString &testCase, const char *
         {"21097", "LineBreakTest.txt", u"\uBD10\uC694\u002E\u0020\u0041\u002E\u0033\u0020\uBABB"},
         {"21097", "LineBreakTest.txt", u"\uC694\u002E\u0020\u0041\u002E\u0034\u0020\uBABB"},
         {"21097", "LineBreakTest.txt", u"a.2\u3000\u300C"},
+
+        // ICU-22127 until UAX #29 wordbreak is update for the colon changes in ICU-22112,
+        // need to skip some tests in WordBreakTest.txt
+        {"22127", "WordBreakTest.txt", u"a:"},
+        {"22127", "WordBreakTest.txt", u"A:"},
     };
 
     for (int n=0; n<UPRV_LENGTHOF(badTestCases); n++) {
         const TestCase &badCase = badTestCases[n];
         if (!strcmp(fileName, badCase.fFileName) &&
-                testCase == UnicodeString(badCase.fString)) {
+                testCase.startsWith(UnicodeString(badCase.fString))) {
             return logKnownIssue(badCase.fTicketNum);
         }
     }
-    return FALSE;
+    return false;
 }
 
 
@@ -1308,7 +1314,7 @@ void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *
     if (U_FAILURE(status) || testFile == NULL) {
         return; /* something went wrong, error already output */
     }
-    UnicodeString testFileAsString(TRUE, testFile, len);
+    UnicodeString testFileAsString(true, testFile, len);
 
     //
     //  Parse the test data file using a regular expression.
@@ -1541,7 +1547,7 @@ std::string RBBIMonkeyKind::classNameFromCodepoint(const UChar32 c) {
             return classNames[aClassNum];
         }
     }
-    U_ASSERT(FALSE);  // This should not happen.
+    U_ASSERT(false);  // This should not happen.
     return "bad class name";
 }
 
@@ -1911,11 +1917,11 @@ RBBIWordMonkey::RBBIWordMonkey()
     fKatakanaSet      = new UnicodeSet(u"[\\p{Word_Break = Katakana}]",     status);
     fRegionalIndicatorSet =  new UnicodeSet(u"[\\p{Word_Break = Regional_Indicator}]", status);
     fHebrew_LetterSet = new UnicodeSet(u"[\\p{Word_Break = Hebrew_Letter}]", status);
-    fALetterSet       = new UnicodeSet(u"[\\p{Word_Break = ALetter}]", status);
+    fALetterSet       = new UnicodeSet(u"[\\p{Word_Break = ALetter} @]", status);
     fSingle_QuoteSet  = new UnicodeSet(u"[\\p{Word_Break = Single_Quote}]",    status);
     fDouble_QuoteSet  = new UnicodeSet(u"[\\p{Word_Break = Double_Quote}]",    status);
     fMidNumLetSet     = new UnicodeSet(u"[\\p{Word_Break = MidNumLet}]",    status);
-    fMidLetterSet     = new UnicodeSet(u"[\\p{Word_Break = MidLetter}]",    status);
+    fMidLetterSet     = new UnicodeSet(u"[\\p{Word_Break = MidLetter} - [\\: \\uFE55 \\uFF1A]]",    status);
     fMidNumSet        = new UnicodeSet(u"[\\p{Word_Break = MidNum}]",       status);
     fNumericSet       = new UnicodeSet(u"[\\p{Word_Break = Numeric}]", status);
     fFormatSet        = new UnicodeSet(u"[\\p{Word_Break = Format}]",       status);
@@ -3715,7 +3721,7 @@ void RBBITest::TestLineBreaks(void)
         // printf("looping %d\n", loop);
         int32_t t = u_unescape(strlist[loop], str, STRSIZE);
         if (t >= STRSIZE) {
-            TEST_ASSERT(FALSE);
+            TEST_ASSERT(false);
             continue;
         }
 
@@ -3820,9 +3826,9 @@ void RBBITest::TestMonkey() {
     int32_t        seed      = 1;
     UnicodeString  breakType = "all";
     Locale         locale("en");
-    UBool          useUText  = FALSE;
+    UBool          useUText  = false;
 
-    if (quick == FALSE) {
+    if (quick == false) {
         loopCount = 10000;
     }
 
@@ -3840,7 +3846,7 @@ void RBBITest::TestMonkey() {
 
         RegexMatcher u(" *utext", p, 0, status);
         if (u.find()) {
-            useUText = TRUE;
+            useUText = true;
             u.reset();
             p = u.replaceFirst("", status);
         }
@@ -3864,9 +3870,9 @@ void RBBITest::TestMonkey() {
         BreakIterator  *bi = BreakIterator::createCharacterInstance(locale, status);
         if (U_SUCCESS(status)) {
             RunMonkey(bi, m, "char", seed, loopCount, useUText);
-            if (breakType == "all" && useUText==FALSE) {
+            if (breakType == "all" && useUText==false) {
                 // Also run a quick test with UText when "all" is specified
-                RunMonkey(bi, m, "char", seed, loopCount, TRUE);
+                RunMonkey(bi, m, "char", seed, loopCount, true);
             }
         }
         else {
@@ -5335,7 +5341,7 @@ void RBBITest::runLSTMTestFromFile(const char* filename, UScriptCode script) {
     }
 
     //  Put the test data into a UnicodeString
-    UnicodeString testString(FALSE, testFile, len);
+    UnicodeString testString(false, testFile, len);
 
     int32_t start = 0;
 
@@ -5451,6 +5457,68 @@ void RBBITest::TestLSTMThai() {
 
 void RBBITest::TestLSTMBurmese() {
     runLSTMTestFromFile("Burmese_graphclust_model5_heavy_Test.txt", USCRIPT_MYANMAR);
+}
+
+
+// Test preceding(index) and following(index), with semi-random indexes.
+// The random indexes are produced in clusters that are relatively closely spaced,
+// to increase the occurrences of hits to the internal break cache.
+
+void RBBITest::TestRandomAccess() {
+    static constexpr int32_t CACHE_SIZE = 128;
+
+    UnicodeString testData;
+    for (int i=0; i<CACHE_SIZE*2; ++i) {
+        testData.append(u"aaaa\n");
+    }
+
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<RuleBasedBreakIterator> bi(
+            (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getEnglish(), status),
+            status);
+    if (!assertSuccess(WHERE, status)) { return; };
+
+    bi->setText(testData);
+
+    auto expectedPreceding = [](int from) {
+        if (from == 0) {return UBRK_DONE;}
+        if (from % 5 == 0) {return from - 5;}
+        return from - (from % 5);
+    };
+
+    auto expectedFollow = [testData](int from) {
+        if (from >= testData.length()) {return UBRK_DONE;}
+        if (from % 5 == 0) {return from + 5;}
+        return from + (5 - (from % 5));
+    };
+
+    auto randomStringIndex = [testData]() {
+        static icu_rand randomGenerator;  // produces random uint32_t values.
+        static int lastNum;
+        static int clusterCount;
+        static constexpr int CLUSTER_SIZE = 100;
+        static constexpr int CLUSTER_LENGTH = 10;
+
+        if (clusterCount < CLUSTER_LENGTH) {
+            ++clusterCount;
+            lastNum += (randomGenerator() % CLUSTER_SIZE);
+            lastNum -= CLUSTER_SIZE / 2;
+            lastNum = std::max(0, lastNum);
+            // Deliberately test indexes > testData.length.
+            lastNum = std::min(testData.length() + 5, lastNum);
+        } else {
+            clusterCount = 0;
+            lastNum = randomGenerator() % testData.length();
+        }
+        return lastNum;
+    };
+
+    for (int i=0; i<5000; ++i) {
+        int idx = randomStringIndex();
+        assertEquals(WHERE, expectedFollow(idx), bi->following(idx));
+        idx = randomStringIndex();
+        assertEquals(WHERE, expectedPreceding(idx), bi->preceding(idx));
+    }
 }
 
 #endif // #if !UCONFIG_NO_BREAK_ITERATION

@@ -58,7 +58,9 @@ public class ExhaustiveNumberTest extends TestFmwk {
         for (ULocale locale : ULocale.getAvailableLocales()) {
             DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance(locale);
 
-            assertInSet(locale, decimals, dfs.getDecimalSeparatorString());
+            if (!locale.getBaseName().startsWith("ks_Deva") || !logKnownIssue("22099", "locale-specific parse sets not supported")) {
+                assertInSet(locale, decimals, dfs.getDecimalSeparatorString());
+            }
             assertInSet(locale, grouping, dfs.getGroupingSeparatorString());
             assertInSet(locale, plusSign, dfs.getPlusSignString());
             assertInSet(locale, minusSign, dfs.getMinusSignString());

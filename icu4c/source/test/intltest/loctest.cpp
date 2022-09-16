@@ -142,7 +142,7 @@ static const char* const rawData[33][8] = {
 
 /*
  Usage:
-    test_assert(    Test (should be TRUE)  )
+    test_assert(    Test (should be true)  )
 
    Example:
        test_assert(i==3);
@@ -159,7 +159,7 @@ static const char* const rawData[33][8] = {
 
 /*
  Usage:
-    test_assert_print(    Test (should be TRUE),  printable  )
+    test_assert_print(    Test (should be true),  printable  )
 
    Example:
        test_assert(i==3, toString(i));
@@ -288,6 +288,9 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestNullDereferenceWrite21597);
     TESTCASE_AUTO(TestLongLocaleSetKeywordAssign);
     TESTCASE_AUTO(TestLongLocaleSetKeywordMoveAssign);
+#if !UCONFIG_NO_FORMATTING
+    TESTCASE_AUTO(TestSierraLeoneCurrency21997);
+#endif
     TESTCASE_AUTO_END;
 }
 
@@ -379,7 +382,7 @@ void LocaleTest::TestBasicGetters() {
 
     Locale bogusLang("THISISABOGUSLANGUAGE"); // Jitterbug 2864: language code too long
     if(!bogusLang.isBogus()) {
-        errln("Locale(\"THISISABOGUSLANGUAGE\").isBogus()==FALSE");
+        errln("Locale(\"THISISABOGUSLANGUAGE\").isBogus()==false");
     }
 
     bogusLang=Locale("eo");
@@ -924,8 +927,8 @@ LocaleTest::TestGetLangsAndCountries()
       ;
 
     /* TODO: Change this test to be more like the cloctst version? */
-    if (testCount != 594)
-        errln("Expected getISOLanguages() to return 594 languages; it returned %d", testCount);
+    if (testCount != 595)
+        errln("Expected getISOLanguages() to return 595 languages; it returned %d", testCount);
     else {
         for (i = 0; i < 15; i++) {
             int32_t j;
@@ -1659,12 +1662,12 @@ void
 LocaleTest::TestSetIsBogus() {
     Locale l("en_US");
     l.setToBogus();
-    if(l.isBogus() != TRUE) {
-        errln("After setting bogus, didn't return TRUE");
+    if(l.isBogus() != true) {
+        errln("After setting bogus, didn't return true");
     }
     l = "en_US"; // This should reset bogus
-    if(l.isBogus() != FALSE) {
-        errln("After resetting bogus, didn't return FALSE");
+    if(l.isBogus() != false) {
+        errln("After resetting bogus, didn't return false");
     }
 }
 
@@ -4689,12 +4692,12 @@ void LocaleTest::checkRegisteredCollators(const char *expectExtra) {
 
     // 2. add all of NEW
     const UnicodeString *locStr;
-    UBool foundExpected = FALSE;
+    UBool foundExpected = false;
     while((locStr = newEnum->snext(status)) && U_SUCCESS(status)) {
         count2++;
 
         if(expectExtra != NULL && expectStr == *locStr) {
-            foundExpected = TRUE;
+            foundExpected = true;
             logln(UnicodeString("Found expected registered collator: ","") + expectStr);
         }
         (void)foundExpected;    // Hush unused variable compiler warning.
@@ -5382,10 +5385,10 @@ void LocaleTest::TestIsRightToLeft() {
     assertFalse("root LTR", Locale::getRoot().isRightToLeft());
     assertFalse("zh LTR", Locale::getChinese().isRightToLeft());
     assertTrue("ar RTL", Locale("ar").isRightToLeft());
-    assertTrue("und-EG RTL", Locale("und-EG").isRightToLeft(), FALSE, TRUE);
+    assertTrue("und-EG RTL", Locale("und-EG").isRightToLeft(), false, true);
     assertFalse("fa-Cyrl LTR", Locale("fa-Cyrl").isRightToLeft());
     assertTrue("en-Hebr RTL", Locale("en-Hebr").isRightToLeft());
-    assertTrue("ckb RTL", Locale("ckb").isRightToLeft(), FALSE, TRUE);  // Sorani Kurdish
+    assertTrue("ckb RTL", Locale("ckb").isRightToLeft(), false, true);  // Sorani Kurdish
     assertFalse("fil LTR", Locale("fil").isRightToLeft());
     assertFalse("he-Zyxw LTR", Locale("he-Zyxw").isRightToLeft());
 }
@@ -6614,3 +6617,20 @@ void LocaleTest::TestNullDereferenceWrite21597() {
     l.canonicalize(status);
     status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
 }
+#if !UCONFIG_NO_FORMATTING
+void LocaleTest::TestSierraLeoneCurrency21997() {
+    // CLDR 41: Check that currency of Sierra Leone is SLL (which is legal tender)
+    // and not the newer currency SLE (which is not legal tender), as of CLDR 41.
+    // Test will fail once SLE is declared legal.
+    // CLDR 42: Now check that currency of Sierra Leone is SLE (which is legal tender)
+    UnicodeString sllStr("SLE", ""), resultStr;
+    UChar tmp[4];
+    UErrorCode status = U_ZERO_ERROR;
+
+    ucurr_forLocale("en_SL", tmp, 4, &status);
+    resultStr.setTo(tmp);
+    if (sllStr != resultStr) {
+        errcheckln(status, "Fail: en_SL didn't return SLE - %s", u_errorName(status));
+    }
+}
+#endif

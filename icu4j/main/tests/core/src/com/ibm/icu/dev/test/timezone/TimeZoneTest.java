@@ -1556,38 +1556,59 @@ public class TimeZoneTest extends TestFmwk
                 {"Antarctica/DumontDUrville", "Pacific/Port_Moresby"},
                 {"Antarctica/South_Pole", "Antarctica/McMurdo"},
                 {"Antarctica/Syowa", "Asia/Riyadh"},
-                {"Arctic/Longyearbyen", "Europe/Oslo"},
+                {"Arctic/Longyearbyen", "Europe/Berlin"},
                 {"Asia/Aden", "Asia/Riyadh"},
+                {"Asia/Brunei", "Asia/Kuching"},
+                {"Asia/Kuala_Lumpur", "Asia/Singapore"},
                 {"Asia/Kuwait", "Asia/Riyadh"},
                 {"Asia/Muscat", "Asia/Dubai"},
                 {"Asia/Phnom_Penh", "Asia/Bangkok"},
                 {"Asia/Qatar", "Asia/Bahrain"},
+                {"Asia/Urumqi", "Antarctica/Vostok"},
                 {"Asia/Vientiane", "Asia/Bangkok"},
-                {"Atlantic/Jan_Mayen", "Europe/Oslo"},
+                {"Atlantic/Jan_Mayen", "Europe/Berlin"},
+                {"Atlantic/Reykjavik", "Africa/Abidjan"},
                 {"Atlantic/St_Helena", "Africa/Abidjan"},
                 {"Australia/Currie", "Australia/Hobart"},
                 {"Australia/Tasmania", "Australia/Hobart"},
                 {"Europe/Bratislava", "Europe/Prague"},
+                {"Europe/Brussels", "Europe/Amsterdam"},
                 {"Europe/Busingen", "Europe/Zurich"},
+                {"Europe/Copenhagen", "Europe/Berlin"},
                 {"Europe/Guernsey", "Europe/London"},
                 {"Europe/Isle_of_Man", "Europe/London"},
                 {"Europe/Jersey", "Europe/London"},
                 {"Europe/Ljubljana", "Europe/Belgrade"},
+                {"Europe/Luxembourg", "Europe/Amsterdam"},
                 {"Europe/Mariehamn", "Europe/Helsinki"},
+                {"Europe/Monaco", "Europe/Paris"},
+                {"Europe/Oslo", "Europe/Berlin"},
                 {"Europe/Podgorica", "Europe/Belgrade"},
                 {"Europe/San_Marino", "Europe/Rome"},
                 {"Europe/Sarajevo", "Europe/Belgrade"},
                 {"Europe/Skopje", "Europe/Belgrade"},
+                {"Europe/Stockholm", "Europe/Berlin"},
                 {"Europe/Vaduz", "Europe/Zurich"},
                 {"Europe/Vatican", "Europe/Rome"},
                 {"Europe/Zagreb", "Europe/Belgrade"},
                 {"Indian/Antananarivo", "Africa/Nairobi"},
+                {"Indian/Christmas", "Asia/Bangkok"},
+                {"Indian/Cocos", "Asia/Rangoon"},
                 {"Indian/Comoro", "Africa/Nairobi"},
+                {"Indian/Mahe", "Asia/Dubai"},
+                {"Indian/Maldives", "Indian/Kerguelen"},
                 {"Indian/Mayotte", "Africa/Nairobi"},
+                {"Indian/Reunion", "Asia/Dubai"},
                 {"Pacific/Auckland", "Antarctica/McMurdo"},
                 {"Pacific/Johnston", "Pacific/Honolulu"},
+                {"Pacific/Majuro", "Pacific/Funafuti"},
                 {"Pacific/Midway", "Pacific/Pago_Pago"},
+                {"Pacific/Ponape", "Pacific/Guadalcanal"},
                 {"Pacific/Saipan", "Pacific/Guam"},
+                {"Pacific/Tarawa", "Pacific/Funafuti"},
+                {"Pacific/Truk", "Pacific/Port_Moresby"},
+                {"Pacific/Wake", "Pacific/Funafuti"},
+                {"Pacific/Wallis", "Pacific/Funafuti"},
         };
 
         // Following IDs are aliases of Etc/GMT in CLDR,
@@ -2322,6 +2343,36 @@ public class TimeZoneTest extends TestFmwk
         assertFalse("Compare TimeZone and TimeZoneAdapter", icuChicago.equals(icuChicagoWrapped));
         assertFalse("Compare TimeZoneAdapter with TimeZone", icuChicagoWrapped.equals(icuChicago));
         assertTrue("Compare two TimeZoneAdapters", icuChicagoWrapped.equals(icuChicagoWrapped2));
+    }
+
+    @Test
+    public void TestCasablancaNameAndOffset22041() {
+        String id = "Africa/Casablanca";
+        TimeZone zone = TimeZone.getTimeZone(id);
+        String standardName = zone.getDisplayName(false, TimeZone.LONG, Locale.ENGLISH);
+        String summerName = zone.getDisplayName(true, TimeZone.LONG, Locale.ENGLISH);
+        assertEquals("TimeZone name for Africa/Casablanca should not contain '+02' since it is located in UTC, but got "
+                     + standardName, -1, standardName.indexOf("+02"));
+        assertEquals("TimeZone name for Africa/Casablanca should not contain '+02' since it is located in UTC, but got "
+                     + summerName, -1, summerName.indexOf("+02"));
+        int[] offsets = new int[2]; // raw = offsets[0], dst = offsets[1]
+        zone.getOffset((new Date()).getTime(), false, offsets);
+        int raw = offsets[0];
+        assertEquals("getRawOffset() and the raw from getOffset(now, false, offset) should not be different but got",
+                     zone.getRawOffset(), raw);
+    }
+
+    @Test
+    public void TestRawOffsetAndOffsetConsistency22041() {
+        long now = (new Date()).getTime();
+        int[] offsets = new int[2]; // raw = offsets[0], dst = offsets[1]
+        for (String id : TimeZone.getAvailableIDs()) {
+            TimeZone zone = TimeZone.getTimeZone(id);
+            zone.getOffset((new Date()).getTime(), false, offsets);
+            int raw = offsets[0];
+            assertEquals("getRawOffset() and the raw from getOffset(now, false, offset) should not be different but got",
+                         zone.getRawOffset(), raw);
+        }
     }
 }
 

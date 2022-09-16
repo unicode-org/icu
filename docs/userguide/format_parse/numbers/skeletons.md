@@ -231,7 +231,7 @@ the API docs for UNumberRoundingPriority.
 | `.##/@@@r` | Same as above, but pad trailing zeros <br/> to at least 3 significant digits | `Precision::maxFraction(2)` <br/> `.withSignificantDigits(3, 3, RELAXED)` |
 | `.00/@##` | Exactly 2 fraction digits, but do not <br/> display more than 3 significant digits | `Precision::fixedFraction(2)` <br/> `.withMaxDigits(3)` |
 | `.00/@##s` | Same as above | `Precision::fixedFraction(2)` <br/> `.withSignificantDigits(1, 3, STRICT)` |
-| `.00/@##s` | Same as above, but pad trailing zeros <br/> to at least 3 significant digits | `Precision::fixedFraction(2)` <br/> `.withSignificantDigits(3, 3, STRICT)` |
+| `.00/@@@s` | Same as above, but pad trailing zeros <br/> to at least 3 significant digits | `Precision::fixedFraction(2)` <br/> `.withSignificantDigits(3, 3, STRICT)` |
 
 Precisely, the option follows the syntax of the significant digits stem (see below),
 but one of the following must be true:

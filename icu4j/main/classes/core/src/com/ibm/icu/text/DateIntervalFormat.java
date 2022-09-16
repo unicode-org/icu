@@ -206,11 +206,12 @@ import com.ibm.icu.util.UResourceBundle;
  *   // and parses into
  *   DateInterval dtInterval = new DateInterval(1000*3600*24L, 1000*3600*24*2L);
  *   DateIntervalFormat dtIntervalFmt = DateIntervalFormat.getInstance(
- *                   YEAR_MONTH_DAY, Locale("en", "GB", ""));
- *   StringBuffer str = new StringBuffer("");
- *   FieldPosition pos = new FieldPosition(0);
+ *           DateFormat.YEAR_MONTH_DAY, new Locale("en", "GB", ""));
+ *   StringBuffer result = new StringBuffer("");
+ *   FieldPosition pos = new FieldPosition(-1);
  *   // formatting
- *   dtIntervalFmt.format(dtInterval, dateIntervalString, pos);
+ *   dtIntervalFmt.format(dtInterval, result, pos);
+ *   assertEquals("interval", "1–2 January 1970", result.toString());
  *
  * </pre>
  *
@@ -2126,8 +2127,16 @@ public class DateIntervalFormat extends UFormat {
         if (suppressDayPeriodField) {
             if (bestMatchIntervalPattern.indexOf(" a") != -1) {
                 bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, " a", "");
+            } else if (bestMatchIntervalPattern.indexOf("\u00A0a") != -1) {
+                bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "\u00A0a", "");
+            } else if (bestMatchIntervalPattern.indexOf("\u202Fa") != -1) {
+                bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "\u202Fa", "");
             } else if (bestMatchIntervalPattern.indexOf("a ") != -1) {
                 bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "a ", "");
+            } else if (bestMatchIntervalPattern.indexOf("a\u00A0") != -1) {
+                bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "a\u00A0", "");
+            } else if (bestMatchIntervalPattern.indexOf("a\u202F") != -1) {
+                bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "a\u202F", "");
             }
             bestMatchIntervalPattern = findReplaceInPattern(bestMatchIntervalPattern, "a", "");
         }

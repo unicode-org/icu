@@ -100,25 +100,25 @@ char * opt_fName      = 0;
 char * opt_locale     = "en_US";
 int    opt_langid     = 0;         // Defaults to value corresponding to opt_locale.
 char * opt_rules      = 0;
-UBool  opt_help       = FALSE;
+UBool  opt_help       = false;
 int    opt_time       = 0;
 int    opt_loopCount  = 0;
 int    opt_passesCount= 1;
-UBool  opt_terse      = FALSE;
-UBool  opt_icu        = TRUE;
-UBool  opt_win        = FALSE;      // Run with Windows native functions.
-UBool  opt_unix       = FALSE;      // Run with UNIX strcoll, strxfrm functions.
-UBool  opt_mac        = FALSE;      // Run with MacOSX word break services.
-UBool  opt_uselen     = FALSE;
-UBool  opt_dump       = FALSE;
-UBool  opt_char       = FALSE;
-UBool  opt_word       = FALSE;
-UBool  opt_line       = FALSE;
-UBool  opt_sentence   = FALSE;
-UBool  opt_capi       = FALSE;
+UBool  opt_terse      = false;
+UBool  opt_icu        = true;
+UBool  opt_win        = false;      // Run with Windows native functions.
+UBool  opt_unix       = false;      // Run with UNIX strcoll, strxfrm functions.
+UBool  opt_mac        = false;      // Run with MacOSX word break services.
+UBool  opt_uselen     = false;
+UBool  opt_dump       = false;
+UBool  opt_char       = false;
+UBool  opt_word       = false;
+UBool  opt_line       = false;
+UBool  opt_sentence   = false;
+UBool  opt_capi       = false;
 
-UBool  opt_next       = FALSE;
-UBool  opt_isBound    = FALSE;
+UBool  opt_next       = false;
+UBool  opt_isBound    = false;
 
 
 
@@ -184,13 +184,13 @@ void createMACBrkIt() {
   LocaleRef lref;
   status = LocaleRefFromLocaleString(opt_locale, &lref);
   status = UCCreateTextBreakLocator(lref, 0, kUCTextBreakAllMask, (TextBreakLocatorRef*)&breakRef);
-  if(opt_char == TRUE) {
+  if(opt_char == true) {
     macBreakType = kUCTextBreakClusterMask;
-  } else if(opt_word == TRUE) {
+  } else if(opt_word == true) {
     macBreakType = kUCTextBreakWordMask;
-  } else if(opt_line == TRUE) {
+  } else if(opt_line == true) {
     macBreakType = kUCTextBreakLineMask;
-  } else if(opt_sentence == TRUE) {
+  } else if(opt_sentence == true) {
     // error
     // brkit = BreakIterator::createSentenceInstance(opt_locale, status);
   } else {
@@ -205,22 +205,22 @@ void createICUBrkIt() {
   //  Set up an ICU break iterator
   //
   UErrorCode          status = U_ZERO_ERROR;
-  if(opt_char == TRUE) {
+  if(opt_char == true) {
     brkit = BreakIterator::createCharacterInstance(opt_locale, status);
-  } else if(opt_word == TRUE) {
+  } else if(opt_word == true) {
     brkit = BreakIterator::createWordInstance(opt_locale, status);
-  } else if(opt_line == TRUE) {
+  } else if(opt_line == true) {
     brkit = BreakIterator::createLineInstance(opt_locale, status);
-  } else if(opt_sentence == TRUE) {
+  } else if(opt_sentence == true) {
     brkit = BreakIterator::createSentenceInstance(opt_locale, status);
   } else {
     // default is character iterator
     brkit = BreakIterator::createCharacterInstance(opt_locale, status);
   }
-  if (status==U_USING_DEFAULT_WARNING && opt_terse==FALSE) {
+  if (status==U_USING_DEFAULT_WARNING && opt_terse==false) {
     fprintf(stderr, "Warning, U_USING_DEFAULT_WARNING for %s\n", opt_locale);
   }
-  if (status==U_USING_FALLBACK_WARNING && opt_terse==FALSE) {
+  if (status==U_USING_FALLBACK_WARNING && opt_terse==false) {
     fprintf(stderr, "Warning, U_USING_FALLBACK_ERROR for %s\n", opt_locale);
   }
 
@@ -244,13 +244,13 @@ UBool ProcessOptions(int argc, const char **argv, OptSpec opts[])
             if (strcmp(pOpt->name, pArgName) == 0) {
                 switch (pOpt->type) {
                 case OptSpec::FLAG:
-                    *(UBool *)(pOpt->pVar) = TRUE;
+                    *(UBool *)(pOpt->pVar) = true;
                     break;
                 case OptSpec::STRING:
                     argNum ++;
                     if (argNum >= argc) {
                         fprintf(stderr, "value expected for \"%s\" option.\n", pOpt->name);
-                        return FALSE;
+                        return false;
                     }
                     *(const char **)(pOpt->pVar)  = argv[argNum];
                     break;
@@ -258,13 +258,13 @@ UBool ProcessOptions(int argc, const char **argv, OptSpec opts[])
                     argNum ++;
                     if (argNum >= argc) {
                         fprintf(stderr, "value expected for \"%s\" option.\n", pOpt->name);
-                        return FALSE;
+                        return false;
                     }
                     char *endp;
                     i = strtol(argv[argNum], &endp, 0);
                     if (endp == argv[argNum]) {
                         fprintf(stderr, "integer value expected for \"%s\" option.\n", pOpt->name);
-                        return FALSE;
+                        return false;
                     }
                     *(int *)(pOpt->pVar) = i;
                 }
@@ -274,15 +274,15 @@ UBool ProcessOptions(int argc, const char **argv, OptSpec opts[])
         if (pOpt->name == 0)
         {
             fprintf(stderr, "Unrecognized option \"%s\"\n", pArgName);
-            return FALSE;
+            return false;
         }
     }
-return TRUE;
+return true;
 }
 
 
 void doForwardTest() {
-  if (opt_terse == FALSE) {
+  if (opt_terse == false) {
     printf("Doing the forward test\n");
   }
   int32_t noBreaks = 0;
@@ -293,7 +293,7 @@ void doForwardTest() {
     createICUBrkIt();
     brkit->setText(UnicodeString(text, textSize));
     brkit->first();
-    if (opt_terse == FALSE) {
+    if (opt_terse == false) {
       printf("Warmup\n");
     }
     int j;
@@ -302,7 +302,7 @@ void doForwardTest() {
       //fprintf(stderr, "%d ", j);
     }
   
-    if (opt_terse == FALSE) {
+    if (opt_terse == false) {
       printf("Measure\n");
     } 
     startTime = timeGetTime();
@@ -356,7 +356,7 @@ void doForwardTest() {
   }
 
 
-  if (opt_terse == FALSE) {
+  if (opt_terse == false) {
   int32_t loopTime = (int)(float(1000) * ((float)elapsedTime/(float)opt_loopCount));
       int32_t timePerCU = (int)(float(1000) * ((float)loopTime/(float)textSize));
       int32_t timePerBreak = (int)(float(1000) * ((float)loopTime/(float)noBreaks));
@@ -401,7 +401,7 @@ void doIsBoundTest() {
 
   elapsedTime = timeGetTime()-startTime;
   int32_t loopTime = (int)(float(1000) * ((float)elapsedTime/(float)opt_loopCount));
-  if (opt_terse == FALSE) {
+  if (opt_terse == false) {
       int32_t timePerCU = (int)(float(1000) * ((float)loopTime/(float)textSize));
       int32_t timePerBreak = (int)(float(1000) * ((float)loopTime/(float)noBreaks));
       printf("forward break iteration average loop time %d\n", loopTime);
@@ -494,8 +494,8 @@ private:
 };
 
 UCharFile::UCharFile(const char * fileName) {
-    fEof                 = FALSE;
-    fError               = FALSE;
+    fEof                 = false;
+    fError               = false;
     fName                = fileName;
     struct stat buf;
     int32_t result = stat(fileName, &buf);
@@ -509,7 +509,7 @@ UCharFile::UCharFile(const char * fileName) {
     fPending2ndSurrogate = 0;
     if (fFile == NULL) {
         fprintf(stderr, "Can not open file \"%s\"\n", opt_fName);
-        fError = TRUE;
+        fError = true;
         return;
     }
     //
@@ -552,7 +552,7 @@ UChar UCharFile::get() {
             c  = cL  | (cH << 8);
             if (cH == EOF) {
                 c   = 0;
-                fEof = TRUE;
+                fEof = true;
             }
             break;
         }
@@ -564,7 +564,7 @@ UChar UCharFile::get() {
             c  = cL  | (cH << 8);
             if (cL == EOF) {
                 c   = 0;
-                fEof = TRUE;
+                fEof = true;
             }
             break;
         }
@@ -579,7 +579,7 @@ UChar UCharFile::get() {
             int ch = fgetc(fFile);   // Note:  c and ch are separate cause eof test doesn't work on UChar type.
             if (ch == EOF) {
                 c = 0;
-                fEof = TRUE;
+                fEof = true;
                 break;
             }
             
@@ -597,7 +597,7 @@ UChar UCharFile::get() {
             else if (ch >= 0xC0) {nBytes=2;}
             else {
                 fprintf(stderr, "not likely utf-8 encoded file %s contains corrupt data at offset %d.\n", fName, ftell(fFile));
-                fError = TRUE;
+                fError = true;
                 return 0;
             }
             
@@ -608,7 +608,7 @@ UChar UCharFile::get() {
                 bytes[i] = fgetc(fFile);
                 if (bytes[i] < 0x80 || bytes[i] >= 0xc0) {
                     fprintf(stderr, "utf-8 encoded file %s contains corrupt data at offset %d. Expected %d bytes, byte %d is invalid. First byte is %02X\n", fName, ftell(fFile), nBytes, i, ch);
-                    fError = TRUE;
+                    fError = true;
                     return 0;
                 }
             }
@@ -643,14 +643,14 @@ UChar UCharFile::get() {
 //
 //----------------------------------------------------------------------------------------
 int main(int argc, const char** argv) {
-    if (ProcessOptions(argc, argv, opts) != TRUE || opt_help || opt_fName == 0) {
+    if (ProcessOptions(argc, argv, opts) != true || opt_help || opt_fName == 0) {
         printf(gUsageString);
         exit (1);
     }
     // Make sure that we've only got one API selected.
-    if (opt_mac || opt_unix || opt_win) opt_icu = FALSE;
-    if (opt_mac || opt_unix) opt_win = FALSE;
-    if (opt_mac) opt_unix = FALSE;
+    if (opt_mac || opt_unix || opt_win) opt_icu = false;
+    if (opt_mac || opt_unix) opt_win = false;
+    if (opt_mac) opt_unix = false;
 
     UErrorCode          status = U_ZERO_ERROR;
 
@@ -730,7 +730,7 @@ int main(int argc, const char** argv) {
     }
 
 
-    if (opt_terse == FALSE) {
+    if (opt_terse == false) {
         printf("file \"%s\", %d charCount code units.\n", opt_fName, charCount);
     }
 

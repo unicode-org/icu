@@ -233,16 +233,16 @@ void CollationAPITest::TestKeywordValues() {
     }
 
     LocalPointer<StringEnumeration> kwEnum(
-        col->getKeywordValuesForLocale("collation", Locale::getEnglish(), TRUE, errorCode));
+        col->getKeywordValuesForLocale("collation", Locale::getEnglish(), true, errorCode));
     if (errorCode.errIfFailureAndReset("Get Keyword Values for English Collator failed")) {
         return;
     }
     assertTrue("expect at least one collation tailoring for English", kwEnum->count(errorCode) > 0);
     const char *kw;
-    UBool hasStandard = FALSE;
+    UBool hasStandard = false;
     while ((kw = kwEnum->next(NULL, errorCode)) != NULL) {
         if (strcmp(kw, "standard") == 0) {
-            hasStandard = TRUE;
+            hasStandard = true;
         }
     }
     assertTrue("expect at least the 'standard' collation tailoring for English", hasStandard);
@@ -525,7 +525,7 @@ CollationAPITest::TestCollationKey(/* char* par */)
     col->getCollationKey(NULL, 0, sortkEmpty, key1Status);
     // key gets reset here
     const uint8_t* byteArrayEmpty = sortkEmpty.getByteArray(length);
-    doAssert(sortkEmpty.isBogus() == FALSE && length == 3 &&
+    doAssert(sortkEmpty.isBogus() == false && length == 3 &&
              byteArrayEmpty[0] == 1 && byteArrayEmpty[1] == 1 && byteArrayEmpty[2] == 0,
              "Empty string should return a collation key with empty levels");
     doAssert(sortkNone.compareTo(sortkEmpty) == Collator::LESS,
@@ -1268,7 +1268,7 @@ void CollationAPITest::TestSortKeyOverflow() {
     // For i_and_phi we expect 6 bytes, then the NUL terminator.
     const int32_t maxPrefixLength = longCapacity - 6 - 1;
     LocalArray<uint8_t> longSortKey(new uint8_t[longCapacity]);
-    UnicodeString s(FALSE, i_and_phi, 2);
+    UnicodeString s(false, i_and_phi, 2);
     for (int32_t prefixLength = 0; prefixLength < maxPrefixLength; ++prefixLength) {
         length = col->getSortKey(s, longSortKey.getAlias(), longCapacity);
         CollationKey collKey;

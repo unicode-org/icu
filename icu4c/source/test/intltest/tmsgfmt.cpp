@@ -284,15 +284,15 @@ void TestMessageFormat::PatternTest()
     };*/
 
     UnicodeString testResultStrings[] = {
-        "Quotes ', {, 'a' 1 {0}",
-        "Quotes ', {, 'a' 1 {0}",
-        "{1,number,'#',##} #34,56",
-        "There are 3,456 files on Disk at 1/12/70, 5:46 AM.",
-        "On Disk, there are 3,456 files, with $1.00.",
-        "{1,number,percent}, 345,600%,",
-        "{1,date,full}, Wednesday, December 31, 1969,",
-        "{3,date,full}, Monday, January 12, 1970,",
-        "{1,number,#,##} 34,56"
+        u"Quotes ', {, 'a' 1 {0}",
+        u"Quotes ', {, 'a' 1 {0}",
+        u"{1,number,'#',##} #34,56",
+        u"There are 3,456 files on Disk at 1/12/70, 5:46\u202FAM.",
+        u"On Disk, there are 3,456 files, with $1.00.",
+        u"{1,number,percent}, 345,600%,",
+        u"{1,date,full}, Wednesday, December 31, 1969,",
+        u"{3,date,full}, Monday, January 12, 1970,",
+        u"{1,number,#,##} 34,56"
     };
 
 
@@ -333,10 +333,12 @@ void TestMessageFormat::PatternTest()
             continue;
         }
         if (result != testResultStrings[i]) {
-            errln("TestMessageFormat::PatternTest failed test #4");
-            logln("TestMessageFormat::PatternTest failed #4.");
-            logln(UnicodeString("    Result: ") + result );
-            logln(UnicodeString("  Expected: ") + testResultStrings[i] );
+            errln(UnicodeString("TestMessageFormat::PatternTest failed test #4.") +
+                UnicodeString("\n    Result: ") + result +
+                UnicodeString("\n  Expected: ") + testResultStrings[i]);
+            logln(UnicodeString("TestMessageFormat::PatternTest failed test #4.") +
+                UnicodeString("\n    Result: ") + result +
+                UnicodeString("\n  Expected: ") + testResultStrings[i]);
         }
 
 
@@ -356,12 +358,12 @@ void TestMessageFormat::PatternTest()
         } else if (parseCount != count) {
             errln("MSG count not %d as expected. Got %d", count, parseCount);
         }
-        UBool failed = FALSE;
+        UBool failed = false;
         for (int32_t j = 0; j < parseCount; ++j) {
              if (values == 0 || testArgs[j] != values[j]) {
                 errln(((UnicodeString)"MSG testargs[") + j + "]: " + toString(testArgs[j]));
                 errln(((UnicodeString)"MSG values[") + j + "]  : " + toString(values[j]));
-                failed = TRUE;
+                failed = true;
              }
         }
         if (failed)
@@ -416,11 +418,11 @@ void TestMessageFormat::testStaticFormat()
     }
 
     const UnicodeString expected(
-            "At 12:20:00 PM on Aug 8, 1997, there was a disturbance in the Force on planet 7.", "");
+            u"At 12:20:00\u202FPM on Aug 8, 1997, there was a disturbance in the Force on planet 7.");
     if (result != expected) {
-        errln("TestMessageFormat::testStaticFormat failed on test");
-        logln( UnicodeString("     Result: ") + result );
-        logln( UnicodeString("   Expected: ") + expected );
+        errln(UnicodeString("TestMessageFormat::testStaticFormat failed on test") +
+            UnicodeString("\n     Result: ") + result +
+            UnicodeString("\n   Expected: ") + expected );
     }
 }
 
@@ -1021,17 +1023,17 @@ void TestMessageFormat::testSetLocale()
     }
 
     msg.setLocale(Locale::getEnglish());
-    UBool getLocale_ok = TRUE;
+    UBool getLocale_ok = true;
     if (msg.getLocale() != Locale::getEnglish()) {
         errln("*** MSG getLocale err.");
-        getLocale_ok = FALSE;
+        getLocale_ok = false;
     }
 
     msg.setLocale(Locale::getGerman());
 
     if (msg.getLocale() != Locale::getGerman()) {
         errln("*** MSG getLocal err.");
-        getLocale_ok = FALSE;
+        getLocale_ok = false;
     }
 
     msg.applyPattern( formatStr, err);
@@ -1247,14 +1249,14 @@ void TestMessageFormat::testAdopt()
     }
 
     UBool diff;
-    diff = TRUE;
+    diff = true;
     for (i = 0; i < count; i++) {
         a = formatsChg[i];
         b = formatsCmp[i];
         if ((a != NULL) && (b != NULL)) {
             if (*a == *b) {
                 logln("formatsChg == formatsCmp at index %d", i);
-                diff = FALSE;
+                diff = false;
             }
         }
     }
@@ -1498,13 +1500,13 @@ void TestMessageFormat::TestUnlimitedArgsAndSubformats() {
     Formattable ARGS_OBJ(ARGS, ARGS_LENGTH);
 
     UnicodeString expected =
-        "On Nov 20, 2286 (aka 11/20/86, aka November 20, 2286) "
-        "at 9:46:40 AM (aka 9:46 AM, aka 9:46:40 AM PST) "
-        "there were 1,303 werjes "
-        "(a 8% increase over 1,202) "
-        "despite the Glimmung's efforts "
-        "and to delight of the printers, Nick, his father, "
-        "his mother, the spiddles, and of course Horace.";
+        u"On Nov 20, 2286 (aka 11/20/86, aka November 20, 2286) "
+        u"at 9:46:40\u202FAM (aka 9:46\u202FAM, aka 9:46:40\u202FAM PST) "
+        u"there were 1,303 werjes "
+        u"(a 8% increase over 1,202) "
+        u"despite the Glimmung's efforts "
+        u"and to delight of the printers, Nick, his father, "
+        u"his mother, the spiddles, and of course Horace.";
     UnicodeString result;
     msg.format(ARGS_OBJ, result, ec);
     if (result == expected) {
@@ -1881,19 +1883,19 @@ void TestMessageFormat::TestSelectOrdinal() {
     FieldPosition ignore(FieldPosition::DONT_CARE);
     UnicodeString result;
     assertEquals("plural-and-ordinal format(21) failed", "21 files, 21st file",
-                 m.format(args, 1, result, ignore, errorCode), TRUE);
+                 m.format(args, 1, result, ignore, errorCode), true);
 
     args[0].setLong(2);
     assertEquals("plural-and-ordinal format(2) failed", "2 files, 2nd file",
-                 m.format(args, 1, result.remove(), ignore, errorCode), TRUE);
+                 m.format(args, 1, result.remove(), ignore, errorCode), true);
 
     args[0].setLong(1);
     assertEquals("plural-and-ordinal format(1) failed", "1 file, 1st file",
-                 m.format(args, 1, result.remove(), ignore, errorCode), TRUE);
+                 m.format(args, 1, result.remove(), ignore, errorCode), true);
 
     args[0].setLong(3);
     assertEquals("plural-and-ordinal format(3) failed", "3 files, 3rd file",
-                 m.format(args, 1, result.remove(), ignore, errorCode), TRUE);
+                 m.format(args, 1, result.remove(), ignore, errorCode), true);
 
     errorCode.errDataIfFailureAndReset("");
 }
@@ -1908,12 +1910,12 @@ void TestMessageFormat::TestDecimals() {
     FieldPosition ignore;
     UnicodeString result;
     assertEquals("simple format(1)", "one meter",
-            m.format(args, 1, result, ignore, errorCode), TRUE);
+            m.format(args, 1, result, ignore, errorCode), true);
 
     args[0] = (double)1.5;
     result.remove();
     assertEquals("simple format(1.5)", "1.5 meters",
-            m.format(args, 1, result, ignore, errorCode), TRUE);
+            m.format(args, 1, result, ignore, errorCode), true);
 
     // Simple but explicit.
     MessageFormat m0(
@@ -1922,12 +1924,12 @@ void TestMessageFormat::TestDecimals() {
     args[0] = (int32_t)1;
     result.remove();
     assertEquals("explicit format(1)", "one meter",
-            m0.format(args, 1, result, ignore, errorCode), TRUE);
+            m0.format(args, 1, result, ignore, errorCode), true);
 
     args[0] = (double)1.5;
     result.remove();
     assertEquals("explicit format(1.5)", "1.5 meters",
-            m0.format(args, 1, result, ignore, errorCode), TRUE);
+            m0.format(args, 1, result, ignore, errorCode), true);
 
     // With offset and specific simple format with optional decimals.
     MessageFormat m1(
@@ -1936,17 +1938,17 @@ void TestMessageFormat::TestDecimals() {
     args[0] = (int32_t)1;
     result.remove();
     assertEquals("offset format(1)", "01 meters",
-            m1.format(args, 1, result, ignore, errorCode), TRUE);
+            m1.format(args, 1, result, ignore, errorCode), true);
 
     args[0] = (int32_t)2;
     result.remove();
     assertEquals("offset format(1)", "another meter",
-            m1.format(args, 1, result, ignore, errorCode), TRUE);
+            m1.format(args, 1, result, ignore, errorCode), true);
 
     args[0] = (double)2.5;
     result.remove();
     assertEquals("offset format(1)", "02.5 meters",
-            m1.format(args, 1, result, ignore, errorCode), TRUE);
+            m1.format(args, 1, result, ignore, errorCode), true);
 
     // With offset and specific simple format with forced decimals.
     MessageFormat m2(
@@ -1955,17 +1957,17 @@ void TestMessageFormat::TestDecimals() {
     args[0] = (int32_t)1;
     result.remove();
     assertEquals("offset-decimals format(1)", "1.0 meters",
-            m2.format(args, 1, result, ignore, errorCode), TRUE);
+            m2.format(args, 1, result, ignore, errorCode), true);
 
     args[0] = (int32_t)2;
     result.remove();
     assertEquals("offset-decimals format(1)", "2.0 meters",
-            m2.format(args, 1, result, ignore, errorCode), TRUE);
+            m2.format(args, 1, result, ignore, errorCode), true);
 
     args[0] = (double)2.5;
     result.remove();
     assertEquals("offset-decimals format(1)", "2.5 meters",
-            m2.format(args, 1, result, ignore, errorCode), TRUE);
+            m2.format(args, 1, result, ignore, errorCode), true);
     errorCode.reset();
 }
 
@@ -2051,7 +2053,7 @@ void TestMessageFormat::TestMessageFormatDateSkeleton() {
     UDate date = LocaleTest::date(2021-1900, UCAL_NOVEMBER, 23, 16, 42, 55);
 
     doTheRealDateTimeSkeletonTesting(date, u"{0,date,::MMMMd}", "en", u"November 23", status);
-    doTheRealDateTimeSkeletonTesting(date, u"{0,date,::yMMMMdjm}", "en", u"November 23, 2021 at 4:42 PM", status);
+    doTheRealDateTimeSkeletonTesting(date, u"{0,date,::yMMMMdjm}", "en", u"November 23, 2021 at 4:42\u202FPM", status);
     doTheRealDateTimeSkeletonTesting(date, u"{0,date,   ::   yMMMMd   }", "en", u"November 23, 2021", status);
     doTheRealDateTimeSkeletonTesting(date, u"{0,date,::yMMMMd}", "fr", u"23 novembre 2021", status);
     doTheRealDateTimeSkeletonTesting(date, u"Expiration: {0,date,::yMMM}!", "en", u"Expiration: Nov 2021!", status);
@@ -2065,7 +2067,7 @@ void TestMessageFormat::TestMessageFormatTimeSkeleton() {
     UDate date = LocaleTest::date(2021-1900, UCAL_NOVEMBER, 23, 16, 42, 55);
 
     doTheRealDateTimeSkeletonTesting(date, u"{0,time,::MMMMd}", "en", u"November 23", status);
-    doTheRealDateTimeSkeletonTesting(date, u"{0,time,::yMMMMdjm}", "en", u"November 23, 2021 at 4:42 PM", status);
+    doTheRealDateTimeSkeletonTesting(date, u"{0,time,::yMMMMdjm}", "en", u"November 23, 2021 at 4:42\u202FPM", status);
     doTheRealDateTimeSkeletonTesting(date, u"{0,time,   ::   yMMMMd   }", "en", u"November 23, 2021", status);
     doTheRealDateTimeSkeletonTesting(date, u"{0,time,::yMMMMd}", "fr", u"23 novembre 2021", status);
     doTheRealDateTimeSkeletonTesting(date, u"Expiration: {0,time,::yMMM}!", "en", u"Expiration: Nov 2021!", status);

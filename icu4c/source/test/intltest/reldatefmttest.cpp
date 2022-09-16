@@ -193,7 +193,6 @@ static WithQuantityExpected kEnglishShort[] = {
         {0.5, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_YEARS, "in 0.5 yr."},
         {1.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_YEARS, "in 1 yr."},
         {2.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_YEARS, "in 2 yr."},
-                
         {0.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_SECONDS, "0 sec. ago"},
         {0.5, UDAT_DIRECTION_LAST, UDAT_RELATIVE_SECONDS, "0.5 sec. ago"},
         {1.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_SECONDS, "1 sec. ago"},
@@ -222,6 +221,66 @@ static WithQuantityExpected kEnglishShort[] = {
         {0.5, UDAT_DIRECTION_LAST, UDAT_RELATIVE_YEARS, "0.5 yr. ago"},
         {1.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_YEARS, "1 yr. ago"},
         {2.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_YEARS, "2 yr. ago"} 
+};
+
+static WithQuantityExpected kEnglishNarrow[] = {
+        {0.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_SECONDS, "in 0s"},
+        {0.5, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_SECONDS, "in 0.5s"},
+        {1.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_SECONDS, "in 1s"},
+        {2.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_SECONDS, "in 2s"},
+        {0.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_MINUTES, "in 0m"},
+        {0.5, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_MINUTES, "in 0.5m"},
+        {1.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_MINUTES, "in 1m"},
+        {2.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_MINUTES, "in 2m"},
+        {0.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_HOURS, "in 0h"},
+        {0.5, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_HOURS, "in 0.5h"},
+        {1.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_HOURS, "in 1h"},
+        {2.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_HOURS, "in 2h"},
+        {0.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_DAYS, "in 0d"},
+        {0.5, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_DAYS, "in 0.5d"},
+        {1.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_DAYS, "in 1d"},
+        {2.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_DAYS, "in 2d"},
+        {0.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_WEEKS, "in 0w"},
+        {0.5, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_WEEKS, "in 0.5w"},
+        {1.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_WEEKS, "in 1w"},
+        {2.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_WEEKS, "in 2w"},
+        {0.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_MONTHS, "in 0mo"},
+        {0.5, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_MONTHS, "in 0.5mo"},
+        {1.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_MONTHS, "in 1mo"},
+        {2.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_MONTHS, "in 2mo"},
+        {0.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_YEARS, "in 0y"},
+        {0.5, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_YEARS, "in 0.5y"},
+        {1.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_YEARS, "in 1y"},
+        {2.0, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_YEARS, "in 2y"},
+
+        {0.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_SECONDS, "0s ago"},
+        {0.5, UDAT_DIRECTION_LAST, UDAT_RELATIVE_SECONDS, "0.5s ago"},
+        {1.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_SECONDS, "1s ago"},
+        {2.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_SECONDS, "2s ago"},
+        {0.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_MINUTES, "0m ago"},
+        {0.5, UDAT_DIRECTION_LAST, UDAT_RELATIVE_MINUTES, "0.5m ago"},
+        {1.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_MINUTES, "1m ago"},
+        {2.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_MINUTES, "2m ago"},
+        {0.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_HOURS, "0h ago"},
+        {0.5, UDAT_DIRECTION_LAST, UDAT_RELATIVE_HOURS, "0.5h ago"},
+        {1.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_HOURS, "1h ago"},
+        {2.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_HOURS, "2h ago"},
+        {0.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_DAYS, "0d ago"},
+        {0.5, UDAT_DIRECTION_LAST, UDAT_RELATIVE_DAYS, "0.5d ago"},
+        {1.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_DAYS, "1d ago"},
+        {2.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_DAYS, "2d ago"},
+        {0.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_WEEKS, "0w ago"},
+        {0.5, UDAT_DIRECTION_LAST, UDAT_RELATIVE_WEEKS, "0.5w ago"},
+        {1.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_WEEKS, "1w ago"},
+        {2.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_WEEKS, "2w ago"},
+        {0.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_MONTHS, "0mo ago"},
+        {0.5, UDAT_DIRECTION_LAST, UDAT_RELATIVE_MONTHS, "0.5mo ago"},
+        {1.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_MONTHS, "1mo ago"},
+        {2.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_MONTHS, "2mo ago"},
+        {0.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_YEARS, "0y ago"},
+        {0.5, UDAT_DIRECTION_LAST, UDAT_RELATIVE_YEARS, "0.5y ago"},
+        {1.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_YEARS, "1y ago"},
+        {2.0, UDAT_DIRECTION_LAST, UDAT_RELATIVE_YEARS, "2y ago"}
 };
 
 static WithQuantityExpected kEnglishDecimal[] = {
@@ -472,10 +531,10 @@ static WithoutQuantityExpected kEnglishNoQuantityNarrow[] = {
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_SUNDAY, "this Su"},
         
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_DAY, "day"},
-        {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_WEEK, "wk."},
-        {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_MONTH, "mo."},
-        {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_QUARTER, "qtr."},
-        {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_YEAR, "yr."},
+        {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_WEEK, "wk"},
+        {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_MONTH, "mo"},
+        {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_QUARTER, "qtr"},
+        {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_YEAR, "yr"},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_MONDAY, "M"},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_TUESDAY, "T"},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_WEDNESDAY, "W"},
@@ -924,7 +983,7 @@ void RelativeDateTimeFormatterTest::TestEnglishShort() {
 }
 
 void RelativeDateTimeFormatterTest::TestEnglishNarrow() {
-    RunTest("en", UDAT_STYLE_NARROW, kEnglishShort, UPRV_LENGTHOF(kEnglishShort));
+    RunTest("en", UDAT_STYLE_NARROW, kEnglishNarrow, UPRV_LENGTHOF(kEnglishNarrow));
 }
 
 void RelativeDateTimeFormatterTest::TestSerbian() {
@@ -947,7 +1006,7 @@ void RelativeDateTimeFormatterTest::TestEnglishNoQuantityCaps() {
             UDAT_STYLE_LONG,
             UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE,
             status);
-    if (assertSuccess("RelativeDateTimeFormatter", status, TRUE) == FALSE) {
+    if (assertSuccess("RelativeDateTimeFormatter", status, true) == false) {
         return;
     }
     RunTest(

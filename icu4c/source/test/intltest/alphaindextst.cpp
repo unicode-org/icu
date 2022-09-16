@@ -80,7 +80,7 @@ void AlphabeticIndexTest::runIndexedTest( int32_t index, UBool exec, const char*
 } UPRV_BLOCK_MACRO_END
 
 #define TEST_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN { \
-    if ((expr)==FALSE) { \
+    if ((expr)==false) { \
         errln("%s:%d: Test failure \n", __FILE__, __LINE__); \
     } \
 } UPRV_BLOCK_MACRO_END
@@ -228,7 +228,7 @@ void AlphabeticIndexTest::APITest() {
         TEST_CHECK_STATUS;
         while (index->nextRecord(status)) {
             TEST_CHECK_STATUS;
-            TEST_ASSERT(FALSE);   // No items have been added.
+            TEST_ASSERT(false);   // No items have been added.
         }
         TEST_CHECK_STATUS;
     }
@@ -250,10 +250,10 @@ void AlphabeticIndexTest::APITest() {
     TEST_CHECK_STATUS;
     TEST_ASSERT(itemCount == 4);
 
-    TEST_ASSERT(index->nextBucket(status) == FALSE);
+    TEST_ASSERT(index->nextBucket(status) == false);
     index->resetBucketIterator(status);
     TEST_CHECK_STATUS;
-    TEST_ASSERT(index->nextBucket(status) == TRUE);
+    TEST_ASSERT(index->nextBucket(status) == true);
 
     index->clearRecords(status);
     TEST_CHECK_STATUS;
@@ -261,7 +261,7 @@ void AlphabeticIndexTest::APITest() {
     while (index->nextBucket(status)) {
         TEST_CHECK_STATUS;
         while (index->nextRecord(status)) {
-            TEST_ASSERT(FALSE);   // No items have been added.
+            TEST_ASSERT(false);   // No items have been added.
         }
     }
     TEST_CHECK_STATUS;
@@ -290,7 +290,7 @@ void AlphabeticIndexTest::APITest() {
             TEST_ASSERT(type == U_ALPHAINDEX_OVERFLOW);
             TEST_ASSERT(label == charlie);
         } else {
-            TEST_ASSERT(FALSE);
+            TEST_ASSERT(false);
         }
     }
     TEST_ASSERT(i==28);
@@ -464,9 +464,9 @@ void AlphabeticIndexTest::HackPinyinTest() {
         // std::string s;
         // std::cout << label.toUTF8String(s) << ":  ";
 
-        UBool  bucketHasContents = FALSE;
+        UBool  bucketHasContents = false;
         while (aindex.nextRecord(status)) {
-            bucketHasContents = TRUE;
+            bucketHasContents = true;
             UnicodeString name = aindex.getRecordName();
             if (aindex.getBucketLabelType() != U_ALPHAINDEX_NORMAL) {
                 errln("File %s, Line %d, Name \"\\u%x\" is in an under or overflow bucket.",

@@ -226,7 +226,7 @@ public class CurrencyTest extends TestFmwk {
                 "US$",
                 USD.getName(en_CA, Currency.SYMBOL_NAME, isChoiceFormat));
         assertEquals("USD.getName(NARROW_SYMBOL_NAME, en_CA)",
-                "$",
+                "US$",
                 USD.getName(en_CA, Currency.NARROW_SYMBOL_NAME, isChoiceFormat));
         assertEquals("USD.getName(SYMBOL_NAME) in en_NZ",
                 "US$",
@@ -982,5 +982,17 @@ public class CurrencyTest extends TestFmwk {
     @Test
     public void TestCurrencyDataCtor() throws Exception {
         checkDefaultPrivateConstructor(CurrencyData.class);
+    }
+    @Test
+    public void testSierraLeoneCurrency21997() {
+        // CLDR 41: Check that currency of Sierra Leone is SLL (which is legal tender)
+        // and not the newer currency SLE (which is not legal tender), as of CLDR 41.
+        // Test will fail once SLE is declared legal.
+        // CLDR 42: Now check that currency of Sierra Leone is SLE (which is legal tender)
+        Currency currency = Currency.getInstance(ULocale.forLanguageTag("en-SL"));
+        String result = currency.getCurrencyCode();
+        if (!"SLE".equals(result)) {
+            errln("Currency code of en-SL is not SLE but " + result);
+        }
     }
 }

@@ -14,6 +14,7 @@
 *    Steven R. Loomis     7/8/1999      Adding input buffer test
 ********************************************************************************
 */
+#include <stdbool.h>
 #include <stdio.h>
 #include "cstring.h"
 #include "unicode/uloc.h"
@@ -376,7 +377,7 @@ static ETestConvertResult testConvertFromU( const UChar *source, int sourceLen, 
     char *realBufferEnd;
     const UChar *realSourceEnd;
     const UChar *sourceLimit;
-    UBool checkOffsets = TRUE;
+    UBool checkOffsets = true;
     UBool doFlush;
 
     for(i=0;i<NEW_MAX_BUFFER;i++)
@@ -410,7 +411,7 @@ static ETestConvertResult testConvertFromU( const UChar *source, int sourceLen, 
     realSourceEnd = source + sourceLen;
 
     if ( gOutBufferSize != realBufferSize || gInBufferSize != NEW_MAX_BUFFER )
-        checkOffsets = FALSE;
+        checkOffsets = false;
 
     do
     {
@@ -423,7 +424,7 @@ static ETestConvertResult testConvertFromU( const UChar *source, int sourceLen, 
         log_err("Error, overflowed the real buffer while about to call fromUnicode! targ=%08lx %s", targ, gNuConvTestName);
         return TC_FAIL;
       }
-      log_verbose("calling fromUnicode @ SOURCE:%08lx to %08lx  TARGET: %08lx to %08lx, flush=%s\n", src,sourceLimit, targ,end, doFlush?"TRUE":"FALSE");
+      log_verbose("calling fromUnicode @ SOURCE:%08lx to %08lx  TARGET: %08lx to %08lx, flush=%s\n", src,sourceLimit, targ,end, doFlush?"true":"false");
 
 
       status = U_ZERO_ERROR;
@@ -531,7 +532,7 @@ static ETestConvertResult testConvertToU( const uint8_t *source, int sourcelen, 
     UChar *end;
     int32_t *offs;
     int i;
-    UBool   checkOffsets = TRUE;
+    UBool   checkOffsets = true;
 
     int32_t   realBufferSize;
     UChar *realBufferEnd;
@@ -568,7 +569,7 @@ static ETestConvertResult testConvertToU( const uint8_t *source, int sourcelen, 
     realSourceEnd = src + sourcelen;
 
     if ( gOutBufferSize != realBufferSize ||  gInBufferSize != NEW_MAX_BUFFER )
-        checkOffsets = FALSE;
+        checkOffsets = false;
 
     do
     {
@@ -836,7 +837,7 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 
     /*UTF-8*/
     testConvertFromU(sampleText, UPRV_LENGTHOF(sampleText),
-        expectedUTF8, sizeof(expectedUTF8), "UTF8", toUTF8Offs,FALSE );
+        expectedUTF8, sizeof(expectedUTF8), "UTF8", toUTF8Offs,false );
 
     log_verbose("Test surrogate behaviour for UTF8\n");
     {
@@ -847,7 +848,7 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
         };
         static const int32_t offsets[]={ 0, 0, 0, 1, 1, 1, 1, 3, 3, 3 };
         testConvertFromU(testinput, UPRV_LENGTHOF(testinput),
-                         expectedUTF8test2, sizeof(expectedUTF8test2), "UTF8", offsets,FALSE );
+                         expectedUTF8test2, sizeof(expectedUTF8test2), "UTF8", offsets,false );
 
 
     }
@@ -855,47 +856,47 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 #if !UCONFIG_NO_LEGACY_CONVERSION && defined(U_ENABLE_GENERIC_ISO_2022)
     /*ISO-2022*/
     testConvertFromU(sampleText, UPRV_LENGTHOF(sampleText),
-        expectedISO2022, sizeof(expectedISO2022), "ISO_2022", toISO2022Offs,FALSE );
+        expectedISO2022, sizeof(expectedISO2022), "ISO_2022", toISO2022Offs,false );
 #endif
 
     /*UTF16 LE*/
     testConvertFromU(sampleText, UPRV_LENGTHOF(sampleText),
-        expectedUTF16LE, sizeof(expectedUTF16LE), "utf-16le", toUTF16LEOffs,FALSE );
+        expectedUTF16LE, sizeof(expectedUTF16LE), "utf-16le", toUTF16LEOffs,false );
     /*UTF16 BE*/
     testConvertFromU(sampleText, UPRV_LENGTHOF(sampleText),
-        expectedUTF16BE, sizeof(expectedUTF16BE), "utf-16be", toUTF16BEOffs,FALSE );
+        expectedUTF16BE, sizeof(expectedUTF16BE), "utf-16be", toUTF16BEOffs,false );
     /*UTF32 LE*/
     testConvertFromU(sampleText, UPRV_LENGTHOF(sampleText),
-        expectedUTF32LE, sizeof(expectedUTF32LE), "utf-32le", toUTF32LEOffs,FALSE );
+        expectedUTF32LE, sizeof(expectedUTF32LE), "utf-32le", toUTF32LEOffs,false );
     /*UTF32 BE*/
     testConvertFromU(sampleText, UPRV_LENGTHOF(sampleText),
-        expectedUTF32BE, sizeof(expectedUTF32BE), "utf-32be", toUTF32BEOffs,FALSE );
+        expectedUTF32BE, sizeof(expectedUTF32BE), "utf-32be", toUTF32BEOffs,false );
 
     /*LATIN_1*/
     testConvertFromU(sampleText, UPRV_LENGTHOF(sampleText),
-        expectedLATIN1, sizeof(expectedLATIN1), "LATIN_1", toLATIN1Offs,FALSE );
+        expectedLATIN1, sizeof(expectedLATIN1), "LATIN_1", toLATIN1Offs,false );
 
 #if !UCONFIG_NO_LEGACY_CONVERSION
     /*EBCDIC_STATEFUL*/
     testConvertFromU(sampleText, UPRV_LENGTHOF(sampleText),
-        expectedIBM930, sizeof(expectedIBM930), "ibm-930", toIBM930Offs,FALSE );
+        expectedIBM930, sizeof(expectedIBM930), "ibm-930", toIBM930Offs,false );
 
     testConvertFromU(sampleText, UPRV_LENGTHOF(sampleText),
-        expectedISO88593, sizeof(expectedISO88593), "iso-8859-3", toISO88593Offs,FALSE );
+        expectedISO88593, sizeof(expectedISO88593), "iso-8859-3", toISO88593Offs,false );
 
     /*MBCS*/
 
     testConvertFromU(sampleText, UPRV_LENGTHOF(sampleText),
-        expectedIBM943, sizeof(expectedIBM943), "ibm-943", toIBM943Offs,FALSE );
+        expectedIBM943, sizeof(expectedIBM943), "ibm-943", toIBM943Offs,false );
     /*DBCS*/
     testConvertFromU(sampleText, UPRV_LENGTHOF(sampleText),
-        expectedIBM9027, sizeof(expectedIBM9027), "@ibm9027", toIBM9027Offs,FALSE );
+        expectedIBM9027, sizeof(expectedIBM9027), "@ibm9027", toIBM9027Offs,false );
     /*SBCS*/
     testConvertFromU(sampleText, UPRV_LENGTHOF(sampleText),
-        expectedIBM920, sizeof(expectedIBM920), "ibm-920", toIBM920Offs,FALSE );
+        expectedIBM920, sizeof(expectedIBM920), "ibm-920", toIBM920Offs,false );
     /*SBCS*/
     testConvertFromU(sampleText, UPRV_LENGTHOF(sampleText),
-        expectedISO88593, sizeof(expectedISO88593), "iso-8859-3", toISO88593Offs,FALSE );
+        expectedISO88593, sizeof(expectedISO88593), "iso-8859-3", toISO88593Offs,false );
 #endif
 
 
@@ -903,51 +904,51 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 
     /*UTF-8*/
     testConvertToU(expectedUTF8, sizeof(expectedUTF8),
-        sampleText, UPRV_LENGTHOF(sampleText), "utf8", fmUTF8Offs,FALSE);
+        sampleText, UPRV_LENGTHOF(sampleText), "utf8", fmUTF8Offs,false);
 #if !UCONFIG_NO_LEGACY_CONVERSION && defined(U_ENABLE_GENERIC_ISO_2022)
     /*ISO-2022*/
     testConvertToU(expectedISO2022, sizeof(expectedISO2022),
-        sampleText, UPRV_LENGTHOF(sampleText), "ISO_2022", fmISO2022Offs,FALSE);
+        sampleText, UPRV_LENGTHOF(sampleText), "ISO_2022", fmISO2022Offs,false);
 #endif
 
     /*UTF16 LE*/
     testConvertToU(expectedUTF16LE, sizeof(expectedUTF16LE),
-        sampleText, UPRV_LENGTHOF(sampleText), "utf-16le", fmUTF16LEOffs,FALSE);
+        sampleText, UPRV_LENGTHOF(sampleText), "utf-16le", fmUTF16LEOffs,false);
     /*UTF16 BE*/
     testConvertToU(expectedUTF16BE, sizeof(expectedUTF16BE),
-        sampleText, UPRV_LENGTHOF(sampleText), "utf-16be", fmUTF16BEOffs,FALSE);
+        sampleText, UPRV_LENGTHOF(sampleText), "utf-16be", fmUTF16BEOffs,false);
     /*UTF32 LE*/
     testConvertToU(expectedUTF32LE, sizeof(expectedUTF32LE),
-        sampleText, UPRV_LENGTHOF(sampleText), "utf-32le", fmUTF32LEOffs,FALSE);
+        sampleText, UPRV_LENGTHOF(sampleText), "utf-32le", fmUTF32LEOffs,false);
     /*UTF32 BE*/
     testConvertToU(expectedUTF32BE, sizeof(expectedUTF32BE),
-        sampleText, UPRV_LENGTHOF(sampleText), "utf-32be", fmUTF32BEOffs,FALSE);
+        sampleText, UPRV_LENGTHOF(sampleText), "utf-32be", fmUTF32BEOffs,false);
 
 #if !UCONFIG_NO_LEGACY_CONVERSION
     /*EBCDIC_STATEFUL*/
     testConvertToU(expectedIBM930, sizeof(expectedIBM930), sampleTextRoundTripUnmappable, 
-            UPRV_LENGTHOF(sampleTextRoundTripUnmappable), "ibm-930", fmIBM930Offs,FALSE);
+            UPRV_LENGTHOF(sampleTextRoundTripUnmappable), "ibm-930", fmIBM930Offs,false);
     /*MBCS*/
     testConvertToU(expectedIBM943, sizeof(expectedIBM943),sampleTextRoundTripUnmappable, 
-            UPRV_LENGTHOF(sampleTextRoundTripUnmappable), "ibm-943", fmIBM943Offs,FALSE);
+            UPRV_LENGTHOF(sampleTextRoundTripUnmappable), "ibm-943", fmIBM943Offs,false);
 #endif
 
     /* Try it again to make sure it still works */
     testConvertToU(expectedUTF16LE, sizeof(expectedUTF16LE),
-        sampleText, UPRV_LENGTHOF(sampleText), "utf-16le", fmUTF16LEOffs,FALSE);
+        sampleText, UPRV_LENGTHOF(sampleText), "utf-16le", fmUTF16LEOffs,false);
 
 #if !UCONFIG_NO_LEGACY_CONVERSION
     testConvertToU(expectedMaltese913, sizeof(expectedMaltese913),
-        malteseUChars, UPRV_LENGTHOF(malteseUChars), "latin3", NULL,FALSE);
+        malteseUChars, UPRV_LENGTHOF(malteseUChars), "latin3", NULL,false);
 
     testConvertFromU(malteseUChars, UPRV_LENGTHOF(malteseUChars),
-        expectedMaltese913, sizeof(expectedMaltese913), "iso-8859-3", NULL,FALSE );
+        expectedMaltese913, sizeof(expectedMaltese913), "iso-8859-3", NULL,false );
 
     /*LMBCS*/
     testConvertFromU(LMBCSUChars, UPRV_LENGTHOF(LMBCSUChars),
-        expectedLMBCS, sizeof(expectedLMBCS), "LMBCS-1", toLMBCSOffs,FALSE );
+        expectedLMBCS, sizeof(expectedLMBCS), "LMBCS-1", toLMBCSOffs,false );
     testConvertToU(expectedLMBCS, sizeof(expectedLMBCS),
-        LMBCSUChars, UPRV_LENGTHOF(LMBCSUChars), "LMBCS-1", fmLMBCSOffs,FALSE);
+        LMBCSUChars, UPRV_LENGTHOF(LMBCSUChars), "LMBCS-1", fmLMBCSOffs,false);
 #endif
 
     /* UTF-7 examples are mostly from http://www.imc.org/rfc2152 */
@@ -1016,13 +1017,13 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
             16, 16, 16, 17, 17, 17, 18, 18, 18, 18
         };
 
-        testConvertFromU(unicode, UPRV_LENGTHOF(unicode), utf7, sizeof(utf7), "UTF-7", fromUnicodeOffsets,FALSE);
+        testConvertFromU(unicode, UPRV_LENGTHOF(unicode), utf7, sizeof(utf7), "UTF-7", fromUnicodeOffsets,false);
 
-        testConvertToU(utf7, sizeof(utf7), unicode, UPRV_LENGTHOF(unicode), "UTF-7", toUnicodeOffsets,FALSE);
+        testConvertToU(utf7, sizeof(utf7), unicode, UPRV_LENGTHOF(unicode), "UTF-7", toUnicodeOffsets,false);
 
-        testConvertFromU(unicode, UPRV_LENGTHOF(unicode), utf7Restricted, sizeof(utf7Restricted), "UTF-7,version=1", fromUnicodeOffsetsR,FALSE);
+        testConvertFromU(unicode, UPRV_LENGTHOF(unicode), utf7Restricted, sizeof(utf7Restricted), "UTF-7,version=1", fromUnicodeOffsetsR,false);
 
-        testConvertToU(utf7Restricted, sizeof(utf7Restricted), unicode, UPRV_LENGTHOF(unicode), "UTF-7,version=1", toUnicodeOffsetsR,FALSE);
+        testConvertToU(utf7Restricted, sizeof(utf7Restricted), unicode, UPRV_LENGTHOF(unicode), "UTF-7,version=1", toUnicodeOffsetsR,false);
     }
 
     /*
@@ -1096,9 +1097,9 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
             35, 36, 36, 36, 37, 37, 37, 37, 37
         };
 
-        testConvertFromU(unicode, UPRV_LENGTHOF(unicode), imap, sizeof(imap), "IMAP-mailbox-name", fromUnicodeOffsets,FALSE);
+        testConvertFromU(unicode, UPRV_LENGTHOF(unicode), imap, sizeof(imap), "IMAP-mailbox-name", fromUnicodeOffsets,false);
 
-        testConvertToU(imap, sizeof(imap), unicode, UPRV_LENGTHOF(unicode), "IMAP-mailbox-name", toUnicodeOffsets,FALSE);
+        testConvertToU(imap, sizeof(imap), unicode, UPRV_LENGTHOF(unicode), "IMAP-mailbox-name", toUnicodeOffsets,false);
     }
 
     /* Test UTF-8 bad data handling*/
@@ -1145,7 +1146,7 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
             28
         };
         testConvertToU(utf8, sizeof(utf8),
-                       utf8Expected, UPRV_LENGTHOF(utf8Expected), "utf-8", utf8Offsets ,FALSE);
+                       utf8Expected, UPRV_LENGTHOF(utf8Expected), "utf-8", utf8Offsets ,false);
 
     }
 
@@ -1197,9 +1198,9 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
         };
 
         testConvertToU(utf32, sizeof(utf32),
-                       utf32Expected, UPRV_LENGTHOF(utf32Expected), "utf-32be", utf32Offsets ,FALSE);
+                       utf32Expected, UPRV_LENGTHOF(utf32Expected), "utf-32be", utf32Offsets ,false);
         testConvertFromU(utf32Expected, UPRV_LENGTHOF(utf32Expected),
-            utf32ExpectedBack, sizeof(utf32ExpectedBack), "utf-32be", utf32OffsetsBack, FALSE);
+            utf32ExpectedBack, sizeof(utf32ExpectedBack), "utf-32be", utf32OffsetsBack, false);
     }
 
     /* Test UTF-32LE bad data handling*/
@@ -1250,9 +1251,9 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
             8,8,8,8
         };
         testConvertToU(utf32, sizeof(utf32),
-            utf32Expected, UPRV_LENGTHOF(utf32Expected), "utf-32le", utf32Offsets,FALSE );
+            utf32Expected, UPRV_LENGTHOF(utf32Expected), "utf-32le", utf32Offsets,false );
         testConvertFromU(utf32Expected, UPRV_LENGTHOF(utf32Expected),
-            utf32ExpectedBack, sizeof(utf32ExpectedBack), "utf-32le", utf32OffsetsBack, FALSE);
+            utf32ExpectedBack, sizeof(utf32ExpectedBack), "utf-32le", utf32OffsetsBack, false);
     }
 }
 
@@ -1289,7 +1290,7 @@ static void TestCoverageMBCS(){
 
         /*from Unicode*/
         testConvertFromU(unicodeInput, UPRV_LENGTHOF(unicodeInput),
-            expectedtest1, sizeof(expectedtest1), "@test1", totest1Offs,FALSE );
+            expectedtest1, sizeof(expectedtest1), "@test1", totest1Offs,false );
     }
 
     /*some more test to increase the code coverage in MBCS.  Create an test converter from test3.ucm
@@ -1307,11 +1308,11 @@ static void TestCoverageMBCS(){
 
         /*from Unicode*/
         testConvertFromU(unicodeInput, UPRV_LENGTHOF(unicodeInput),
-            expectedtest3, sizeof(expectedtest3), "@test3", totest3Offs,FALSE );
+            expectedtest3, sizeof(expectedtest3), "@test3", totest3Offs,false );
 
         /*to Unicode*/
         testConvertToU(test3input, sizeof(test3input),
-            expectedUnicode, UPRV_LENGTHOF(expectedUnicode), "@test3", fromtest3Offs ,FALSE);
+            expectedUnicode, UPRV_LENGTHOF(expectedUnicode), "@test3", fromtest3Offs ,false);
 
     }
 
@@ -1330,11 +1331,11 @@ static void TestCoverageMBCS(){
 
         /*from Unicode*/
         testConvertFromU(unicodeInput, UPRV_LENGTHOF(unicodeInput),
-            expectedtest4, sizeof(expectedtest4), "@test4", totest4Offs,FALSE );
+            expectedtest4, sizeof(expectedtest4), "@test4", totest4Offs,false );
 
         /*to Unicode*/
         testConvertToU(test4input, sizeof(test4input),
-            expectedUnicode, UPRV_LENGTHOF(expectedUnicode), "@test4", fromtest4Offs,FALSE );
+            expectedUnicode, UPRV_LENGTHOF(expectedUnicode), "@test4", fromtest4Offs,false );
 
     }
 #if 0
@@ -1378,32 +1379,32 @@ static void TestConverterTypesAndStarters()
     UBool mystarters[256];
 
 /*    const UBool expectedKSCstarters[256] = {
-        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-        FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-        FALSE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,
-        TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,
-        TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,
-        TRUE, TRUE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, TRUE,
-        TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,
-        TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,
-        TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,
-        TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,
-        TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,
-        TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,
-        TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,
-        TRUE, TRUE, TRUE, TRUE, TRUE, TRUE};*/
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false,
+        false, false, false, true, true, true, true, true, true, true,
+        true, true, true, true, true, true, true, true, true, true,
+        true, true, true, true, true, true, true, true, true, true,
+        true, true, true, false, false, true, true, true, true, true,
+        true, true, true, true, true, true, true, true, true, true,
+        true, true, true, true, true, true, true, true, true, true,
+        true, true, true, true, true, true, true, true, true, true,
+        true, true, true, true, true, true, true, true, true, true,
+        true, true, true, true, true, true, true, true, true, true,
+        true, true, true, true, true, true, true, true, true, true,
+        true, true, true, true, true, true, true, true, true, true,
+        true, true, true, true, true, true};*/
 
 
     log_verbose("Testing KSC, ibm-930, ibm-878  for starters and their conversion types.");
@@ -1480,7 +1481,7 @@ TestAmbiguousConverter(UConverter *cnv) {
     errorCode=U_ZERO_ERROR;
     s=inBytes;
     u=outUnicode;
-    ucnv_toUnicode(cnv, &u, u+20, &s, s+3, NULL, TRUE, &errorCode);
+    ucnv_toUnicode(cnv, &u, u+20, &s, s+3, NULL, true, &errorCode);
     if(U_FAILURE(errorCode)) {
         /* we do not care about general failures in this test; the input may just not be mappable */
         return;
@@ -2685,7 +2686,7 @@ TestICCRunout() {
     UChar   targetBuf[256];
     UChar   *target = targetBuf;
     UChar   *targetLim = target+256;
-    ucnv_toUnicode(cnv, &target, targetLim, &source, sourceLim, NULL, TRUE, &status);
+    ucnv_toUnicode(cnv, &target, targetLim, &source, sourceLim, NULL, true, &status);
 
     log_info("After convert: target@%d, source@%d, status%s\n",
 	     target-targetBuf, source-sourceData, u_errorName(status));
@@ -2807,7 +2808,7 @@ TestSmallTargetBuffer(const uint16_t* source, const UChar* sourceLimit,UConverte
         do{
 
             cTargetLimit = cTargetLimit+ i;
-            ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,NULL,FALSE, &errorCode);
+            ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,NULL,false, &errorCode);
             if(errorCode==U_BUFFER_OVERFLOW_ERROR){
                errorCode=U_ZERO_ERROR;
                 continue;
@@ -2823,7 +2824,7 @@ TestSmallTargetBuffer(const uint16_t* source, const UChar* sourceLimit,UConverte
         cSourceLimit =cTarget;
         do{
             uTargetLimit=uTargetLimit+i;
-            ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,NULL,FALSE,&errorCode);
+            ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,NULL,false,&errorCode);
             if(errorCode==U_BUFFER_OVERFLOW_ERROR){
                errorCode=U_ZERO_ERROR;
                 continue;
@@ -2927,7 +2928,7 @@ static void TestSmallSourceBuffer(const uint16_t* source, const UChar* sourceLim
             if (uSourceLimit < sourceLimit) {
                 uSourceLimit = uSourceLimit+1;
             }
-            ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,NULL,FALSE, &errorCode);
+            ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,NULL,false, &errorCode);
             if(errorCode==U_BUFFER_OVERFLOW_ERROR){
                errorCode=U_ZERO_ERROR;
                 continue;
@@ -2945,7 +2946,7 @@ static void TestSmallSourceBuffer(const uint16_t* source, const UChar* sourceLim
             if (cSourceLimit < cBuf + (cTarget - cBuf)) {
                 cSourceLimit = cSourceLimit+1;
             }
-            ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,NULL,FALSE,&errorCode);
+            ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,NULL,false,&errorCode);
             if(errorCode==U_BUFFER_OVERFLOW_ERROR){
                errorCode=U_ZERO_ERROR;
                 continue;
@@ -3117,7 +3118,7 @@ TestHZ() {
     cTargetLimit = cBuf +uBufSize*5;
     uTarget = uBuf;
     uTargetLimit = uBuf+ uBufSize*5;
-    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,TRUE, &errorCode);
+    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,true, &errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
         goto cleanup;
@@ -3126,7 +3127,7 @@ TestHZ() {
     cSourceLimit =cTarget;
     test =uBuf;
     myOff=offsets;
-    ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,TRUE,&errorCode);
+    ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,true,&errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
         goto cleanup;
@@ -3291,7 +3292,7 @@ TestISCII(){
         0xEF, 0x30,
 
     };
-    testConvertToU(byteArr,(sizeof(byteArr)),in,UPRV_LENGTHOF(in),"x-iscii-de",NULL,TRUE);
+    testConvertToU(byteArr,(sizeof(byteArr)),in,UPRV_LENGTHOF(in),"x-iscii-de",NULL,true);
     TestConv(in,(sizeof(in)/2),"ISCII,version=0","hindi", (char *)byteArr,sizeof(byteArr));    
 
 }
@@ -3339,7 +3340,7 @@ TestISO_2022_JP() {
     cTargetLimit = cBuf +uBufSize*5;
     uTarget = uBuf;
     uTargetLimit = uBuf+ uBufSize*5;
-    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,TRUE, &errorCode);
+    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,true, &errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
         goto cleanup;
@@ -3348,7 +3349,7 @@ TestISO_2022_JP() {
     cSourceLimit =cTarget;
     test =uBuf;
     myOff=offsets;
-    ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,TRUE,&errorCode);
+    ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,true,&errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
         goto cleanup;
@@ -3407,7 +3408,7 @@ static void TestConv(const uint16_t in[],int len, const char* conv, const char* 
     cTargetLimit = cBuf +uBufSize;
     uTarget = uBuf;
     uTargetLimit = uBuf+ uBufSize;
-    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,TRUE, &errorCode);
+    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,true, &errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
         return;
@@ -3417,7 +3418,7 @@ static void TestConv(const uint16_t in[],int len, const char* conv, const char* 
     cSourceLimit =cTarget;
     test =uBuf;
     myOff=offsets;
-    ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,TRUE,&errorCode);
+    ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,true,&errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_toUnicode conversion failed, reason: %s\n", u_errorName(errorCode));
         return;
@@ -3442,7 +3443,7 @@ static void TestConv(const uint16_t in[],int len, const char* conv, const char* 
             cSourceLimit = cSource+byteArrLen;
             test=uBuf;
             myOff = offsets;
-            ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,TRUE,&errorCode);
+            ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,true,&errorCode);
             if(U_FAILURE(errorCode)){
                 log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
                 return;
@@ -3810,7 +3811,7 @@ static void TestJitterbug2346(){
         log_data_err("Unable to open a iso-2022 converter: %s\n", u_errorName(err));
         return;
     }
-    ucnv_toUnicode(conv,&utarget,utargetLimit,&csource,csource+sizeof(source),NULL,TRUE,&err);
+    ucnv_toUnicode(conv,&utarget,utargetLimit,&csource,csource+sizeof(source),NULL,true,&err);
     if(U_FAILURE(err)) {
         log_err("ISO_2022_JP to Unicode conversion failed: %s\n", u_errorName(err));
         return;
@@ -3825,7 +3826,7 @@ static void TestJitterbug2346(){
         utarget++;
         temp++;
     }
-    ucnv_fromUnicode(conv,&ctarget,ctargetLimit,(const UChar**)&utarget,utargetLimit,NULL,TRUE,&err);
+    ucnv_fromUnicode(conv,&ctarget,ctargetLimit,(const UChar**)&utarget,utargetLimit,NULL,true,&err);
     if(U_FAILURE(err)) {
         log_err("ISO_2022_JP from Unicode conversion failed: %s\n", u_errorName(err));
         return;
@@ -3883,7 +3884,7 @@ TestISO_2022_JP_1() {
     cTargetLimit = cBuf +uBufSize*5;
     uTarget = uBuf;
     uTargetLimit = uBuf+ uBufSize*5;
-    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,NULL,TRUE, &errorCode);
+    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,NULL,true, &errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
         return;
@@ -3891,7 +3892,7 @@ TestISO_2022_JP_1() {
     cSource = cBuf;
     cSourceLimit =cTarget;
     test =uBuf;
-    ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,NULL,TRUE,&errorCode);
+    ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,NULL,true,&errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
         return;
@@ -3974,7 +3975,7 @@ TestISO_2022_JP_2() {
     cTargetLimit = cBuf +uBufSize*5;
     uTarget = uBuf;
     uTargetLimit = uBuf+ uBufSize*5;
-    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,TRUE, &errorCode);
+    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,true, &errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
         goto cleanup;
@@ -3983,7 +3984,7 @@ TestISO_2022_JP_2() {
     cSourceLimit =cTarget;
     test =uBuf;
     myOff=offsets;
-    ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,TRUE,&errorCode);
+    ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,true,&errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
         goto cleanup;
@@ -4054,7 +4055,7 @@ TestISO_2022_KR() {
     cTargetLimit = cBuf +uBufSize*5;
     uTarget = uBuf;
     uTargetLimit = uBuf+ uBufSize*5;
-    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,TRUE, &errorCode);
+    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,true, &errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
         goto cleanup;
@@ -4063,7 +4064,7 @@ TestISO_2022_KR() {
     cSourceLimit =cTarget;
     test =uBuf;
     myOff=offsets;
-    ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,TRUE,&errorCode);
+    ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,true,&errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
         goto cleanup;
@@ -4136,7 +4137,7 @@ TestISO_2022_KR_1() {
     cTargetLimit = cBuf +uBufSize*5;
     uTarget = uBuf;
     uTargetLimit = uBuf+ uBufSize*5;
-    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,TRUE, &errorCode);
+    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,true, &errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
         goto cleanup;
@@ -4145,7 +4146,7 @@ TestISO_2022_KR_1() {
     cSourceLimit =cTarget;
     test =uBuf;
     myOff=offsets;
-    ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,TRUE,&errorCode);
+    ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,true,&errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
         goto cleanup;
@@ -4192,7 +4193,7 @@ static void TestJitterbug2411(){
         log_data_err("Unable to open a iso-2022-kr converter: %s\n", u_errorName(errorCode));
         return;
     }
-    ucnv_toUnicode(kr,&target,targetLimit,&source,source+uprv_strlen(source),NULL,TRUE,&errorCode);
+    ucnv_toUnicode(kr,&target,targetLimit,&source,source+uprv_strlen(source),NULL,true,&errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("iso-2022-kr cannot handle multiple escape sequences : %s\n", u_errorName(errorCode));
         return;
@@ -4204,7 +4205,7 @@ static void TestJitterbug2411(){
     }
     target = tgt;
     targetLimit = target+100;
-    ucnv_toUnicode(kr,&target,targetLimit,&source,source+uprv_strlen(source),NULL,TRUE,&errorCode);
+    ucnv_toUnicode(kr,&target,targetLimit,&source,source+uprv_strlen(source),NULL,true,&errorCode);
        
     if(U_FAILURE(errorCode)) {
         log_err("iso-2022-kr_1 cannot handle multiple escape sequences : %s\n", u_errorName(errorCode));
@@ -4282,11 +4283,11 @@ TestJIS(){
         };
 
         testConvertToU(sampleTextJIS,sizeof(sampleTextJIS),expectedISO2022JIS,
-            UPRV_LENGTHOF(expectedISO2022JIS),"JIS", toISO2022JISOffs,TRUE);
+            UPRV_LENGTHOF(expectedISO2022JIS),"JIS", toISO2022JISOffs,true);
         testConvertToU(sampleTextJIS7,sizeof(sampleTextJIS7),expectedISO2022JIS7,
-            UPRV_LENGTHOF(expectedISO2022JIS7),"JIS7", toISO2022JIS7Offs,TRUE);
+            UPRV_LENGTHOF(expectedISO2022JIS7),"JIS7", toISO2022JIS7Offs,true);
         testConvertToU(sampleTextJIS8,sizeof(sampleTextJIS8),expectedISO2022JIS8,
-            UPRV_LENGTHOF(expectedISO2022JIS8),"JIS8", toISO2022JIS8Offs,TRUE);
+            UPRV_LENGTHOF(expectedISO2022JIS8),"JIS8", toISO2022JIS8Offs,true);
     }
 
 }
@@ -4351,14 +4352,14 @@ static void TestJitterbug915(){
         log_data_err("Unable to open a iso-2022 converter: %s\n", u_errorName(err));
         return;
     }
-    ucnv_toUnicode(conv,&utarget,utargetLimit,&csource,csource+sizeof(cSource),NULL,TRUE,&err);
+    ucnv_toUnicode(conv,&utarget,utargetLimit,&csource,csource+sizeof(cSource),NULL,true,&err);
     if(U_FAILURE(err)) {
         log_err("iso-2022-CN to Unicode conversion failed: %s\n", u_errorName(err));
         return;
     }
     utargetLimit=utarget;
     utarget = uTarget;
-    ucnv_fromUnicode(conv,&ctarget,ctargetLimit,(const UChar**)&utarget,utargetLimit,NULL,TRUE,&err);
+    ucnv_fromUnicode(conv,&ctarget,ctargetLimit,(const UChar**)&utarget,utargetLimit,NULL,true,&err);
     if(U_FAILURE(err)) {
         log_err("iso-2022-CN from Unicode conversion failed: %s\n", u_errorName(err));
         return;
@@ -4445,7 +4446,7 @@ TestISO_2022_CN_EXT() {
     cTargetLimit = cBuf +uBufSize*5;
     uTarget = uBuf;
     uTargetLimit = uBuf+ uBufSize*5;
-    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,TRUE, &errorCode);
+    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,true, &errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
         goto cleanup;
@@ -4454,7 +4455,7 @@ TestISO_2022_CN_EXT() {
     cSourceLimit =cTarget;
     test =uBuf;
     myOff=offsets;
-    ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,TRUE,&errorCode);
+    ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,true,&errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
         goto cleanup;
@@ -4547,7 +4548,7 @@ TestISO_2022_CN() {
     cTargetLimit = cBuf +uBufSize*5;
     uTarget = uBuf;
     uTargetLimit = uBuf+ uBufSize*5;
-    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,TRUE, &errorCode);
+    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,myOff,true, &errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
         goto cleanup;
@@ -4556,7 +4557,7 @@ TestISO_2022_CN() {
     cSourceLimit =cTarget;
     test =uBuf;
     myOff=offsets;
-    ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,TRUE,&errorCode);
+    ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,myOff,true,&errorCode);
     if(U_FAILURE(errorCode)){
         log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
         goto cleanup;
@@ -4653,7 +4654,7 @@ static void TestJitterbug6175(void) {
             const UChar * toUCharsLimit = toUCharsPtr + kEmptySegmentToUCharsMax;
             const char *  inCharsPtr = testPtr->inputText;
             const char *  inCharsLimit = inCharsPtr + testPtr->inputTextLength;
-            ucnv_toUnicode(cnv, &toUCharsPtr, toUCharsLimit, &inCharsPtr, inCharsLimit, NULL, TRUE, &err);
+            ucnv_toUnicode(cnv, &toUCharsPtr, toUCharsLimit, &inCharsPtr, inCharsLimit, NULL, true, &err);
         }
         ucnv_close(cnv);
     }
@@ -4969,7 +4970,7 @@ TestLMBCS() {
                       &pSource,
                       sourceLimit,
                       off,
-                      TRUE,
+                      true,
                       &errorCode);
 
 
@@ -5132,7 +5133,7 @@ TestLMBCS() {
                &pSource,
                (pSource+1), /* claim that this is a 1- byte buffer */
                NULL,
-               FALSE,    /* FALSE means there might be more chars in the next buffer */
+               false,    /* false means there might be more chars in the next buffer */
                &errorCode);
            
            if (U_SUCCESS (errorCode))
@@ -5176,7 +5177,7 @@ TestLMBCS() {
 
          /* negative source request should always return U_ILLEGAL_ARGUMENT_ERROR */
          pUIn++;
-         ucnv_fromUnicode(cnv, &pLOut, pLOut+1, &pUIn, pUIn-1, off, FALSE, &errorCode);
+         ucnv_fromUnicode(cnv, &pLOut, pLOut+1, &pUIn, pUIn-1, off, false, &errorCode);
          if (errorCode != U_ILLEGAL_ARGUMENT_ERROR)
          {
             log_err("Unexpected Error on negative source request to ucnv_fromUnicode: %s\n", u_errorName(errorCode));
@@ -5184,7 +5185,7 @@ TestLMBCS() {
          pUIn--;
          
          errorCode=U_ZERO_ERROR;
-         ucnv_toUnicode(cnv, &pUOut,pUOut+1,(const char **)&pLIn,(const char *)(pLIn-1),off,FALSE, &errorCode);
+         ucnv_toUnicode(cnv, &pUOut,pUOut+1,(const char **)&pLIn,(const char *)(pLIn-1),off,false, &errorCode);
          if (errorCode != U_ILLEGAL_ARGUMENT_ERROR)
          {
             log_err("Unexpected Error on negative source request to ucnv_toUnicode: %s\n", u_errorName(errorCode));
@@ -5199,8 +5200,8 @@ TestLMBCS() {
          errorCode=U_ZERO_ERROR;
 
          /* 0 byte source request - no error, no pointer movement */
-         ucnv_toUnicode(cnv, &pUOut,pUOut+1,(const char **)&pLIn,(const char *)pLIn,off,FALSE, &errorCode);
-         ucnv_fromUnicode(cnv, &pLOut,pLOut+1,&pUIn,pUIn,off,FALSE, &errorCode);
+         ucnv_toUnicode(cnv, &pUOut,pUOut+1,(const char **)&pLIn,(const char *)pLIn,off,false, &errorCode);
+         ucnv_fromUnicode(cnv, &pLOut,pLOut+1,&pUIn,pUIn,off,false, &errorCode);
          if(U_FAILURE(errorCode)) {
             log_err("0 byte source request: unexpected error: %s\n", u_errorName(errorCode));
          }
@@ -5223,7 +5224,7 @@ TestLMBCS() {
          /* running out of target room : U_BUFFER_OVERFLOW_ERROR */
 
          pUIn = pszUnicode;
-         ucnv_fromUnicode(cnv, &pLOut,pLOut+offsets[4],&pUIn,pUIn+UPRV_LENGTHOF(pszUnicode),off,FALSE, &errorCode);
+         ucnv_fromUnicode(cnv, &pLOut,pLOut+offsets[4],&pUIn,pUIn+UPRV_LENGTHOF(pszUnicode),off,false, &errorCode);
          if (errorCode != U_BUFFER_OVERFLOW_ERROR || pLOut != LOut + offsets[4] || pUIn != pszUnicode+4 )
          {
             log_err("Unexpected results on out of target room to ucnv_fromUnicode\n");
@@ -5232,7 +5233,7 @@ TestLMBCS() {
          errorCode = U_ZERO_ERROR;
 
          pLIn = (const char *)pszLMBCS;
-         ucnv_toUnicode(cnv, &pUOut,pUOut+4,&pLIn,(pLIn+sizeof(pszLMBCS)),off,FALSE, &errorCode);
+         ucnv_toUnicode(cnv, &pUOut,pUOut+4,&pLIn,(pLIn+sizeof(pszLMBCS)),off,false, &errorCode);
          if (errorCode != U_BUFFER_OVERFLOW_ERROR || pUOut != UOut + 4 || pLIn != (const char *)pszLMBCS+offsets[4])
          {
             log_err("Unexpected results on out of target room to ucnv_toUnicode\n");
@@ -5251,7 +5252,7 @@ TestLMBCS() {
          pUOut = UOut;
 
          ucnv_setToUCallBack(cnv, UCNV_TO_U_CALLBACK_STOP, NULL, NULL, NULL, &errorCode);
-         ucnv_toUnicode(cnv, &pUOut,pUOut+UPRV_LENGTHOF(UOut),(const char **)&pLIn,(const char *)(pLIn+5),off,TRUE, &errorCode);
+         ucnv_toUnicode(cnv, &pUOut,pUOut+UPRV_LENGTHOF(UOut),(const char **)&pLIn,(const char *)(pLIn+5),off,true, &errorCode);
          if (UOut[0] != 0xD801 || errorCode != U_TRUNCATED_CHAR_FOUND || pUOut != UOut + 1 || pLIn != LIn + 5)
          {
             log_err("Unexpected results on chopped low surrogate\n");
@@ -5265,7 +5266,7 @@ TestLMBCS() {
          errorCode = U_ZERO_ERROR;
          pUOut = UOut;
 
-         ucnv_toUnicode(cnv, &pUOut,pUOut+UPRV_LENGTHOF(UOut),(const char **)&pLIn,(const char *)(pLIn+3),off,TRUE, &errorCode);
+         ucnv_toUnicode(cnv, &pUOut,pUOut+UPRV_LENGTHOF(UOut),(const char **)&pLIn,(const char *)(pLIn+3),off,true, &errorCode);
          if (UOut[0] != 0xD801 || U_FAILURE(errorCode) || pUOut != UOut + 1 || pLIn != LIn + 3)
          {
             log_err("Unexpected results on chopped at surrogate boundary \n");
@@ -5282,7 +5283,7 @@ TestLMBCS() {
          errorCode = U_ZERO_ERROR;
          pUOut = UOut;
 
-         ucnv_toUnicode(cnv, &pUOut,pUOut+UPRV_LENGTHOF(UOut),(const char **)&pLIn,(const char *)(pLIn+6),off,TRUE, &errorCode);
+         ucnv_toUnicode(cnv, &pUOut,pUOut+UPRV_LENGTHOF(UOut),(const char **)&pLIn,(const char *)(pLIn+6),off,true, &errorCode);
          if (UOut[0] != 0xD801 || UOut[1] != 0xC9D0 || U_FAILURE(errorCode) || pUOut != UOut + 2 || pLIn != LIn + 6)
          {
             log_err("Unexpected results after unpaired surrogate plus valid Unichar \n");
@@ -5299,7 +5300,7 @@ TestLMBCS() {
          errorCode = U_ZERO_ERROR;
          pUOut = UOut;
 
-         ucnv_toUnicode(cnv, &pUOut,pUOut+UPRV_LENGTHOF(UOut),(const char **)&pLIn,(const char *)(pLIn+5),off,TRUE, &errorCode);
+         ucnv_toUnicode(cnv, &pUOut,pUOut+UPRV_LENGTHOF(UOut),(const char **)&pLIn,(const char *)(pLIn+5),off,true, &errorCode);
          if (UOut[0] != 0xD801 || errorCode != U_TRUNCATED_CHAR_FOUND || pUOut != UOut + 1 || pLIn != LIn + 5)
          {
             log_err("Unexpected results after unpaired surrogate plus chopped Unichar \n");
@@ -5316,7 +5317,7 @@ TestLMBCS() {
          errorCode = U_ZERO_ERROR;
          pUOut = UOut;
 
-         ucnv_toUnicode(cnv, &pUOut,pUOut+UPRV_LENGTHOF(UOut),(const char **)&pLIn,(const char *)(pLIn+5),off,TRUE, &errorCode);
+         ucnv_toUnicode(cnv, &pUOut,pUOut+UPRV_LENGTHOF(UOut),(const char **)&pLIn,(const char *)(pLIn+5),off,true, &errorCode);
          if (UOut[0] != 0xD801 || UOut[1] != 0x1B || U_FAILURE(errorCode) || pUOut != UOut + 2 || pLIn != LIn + 5)
          {
             log_err("Unexpected results after unpaired surrogate plus valid non-Unichar\n");
@@ -5332,7 +5333,7 @@ TestLMBCS() {
          errorCode = U_ZERO_ERROR;
          pUOut = UOut;
 
-         ucnv_toUnicode(cnv, &pUOut,pUOut+UPRV_LENGTHOF(UOut),(const char **)&pLIn,(const char *)(pLIn+4),off,TRUE, &errorCode);
+         ucnv_toUnicode(cnv, &pUOut,pUOut+UPRV_LENGTHOF(UOut),(const char **)&pLIn,(const char *)(pLIn+4),off,true, &errorCode);
 
          if (UOut[0] != 0xD801 || errorCode != U_TRUNCATED_CHAR_FOUND || pUOut != UOut + 1 || pLIn != LIn + 4)
          {
@@ -5389,7 +5390,7 @@ static void TestEBCDICUS4XML()
         log_data_err("Failed to open the converter for EBCDIC-XML-US.\n");
         return;
     }
-    ucnv_toUnicode(cnv, &unicodes, unicodes+3, (const char**)&newLines, newLines+3, NULL, TRUE, &status);
+    ucnv_toUnicode(cnv, &unicodes, unicodes+3, (const char**)&newLines, newLines+3, NULL, true, &status);
     if (U_FAILURE(status) || memcmp(unicodes_x, toUnicodeMaps, sizeof(UChar)*3) != 0) {
         log_err("To Unicode conversion failed in EBCDICUS4XML test. %s\n",
             u_errorName(status));
@@ -5397,7 +5398,7 @@ static void TestEBCDICUS4XML()
         printUSeqErr(toUnicodeMaps, 3);
     }
     status = U_ZERO_ERROR;
-    ucnv_fromUnicode(cnv, &target, target+3, (const UChar**)&toUnicodeMaps, toUnicodeMaps+3, NULL, TRUE, &status);
+    ucnv_fromUnicode(cnv, &target, target+3, (const UChar**)&toUnicodeMaps, toUnicodeMaps+3, NULL, true, &status);
     if (U_FAILURE(status) || memcmp(target_x, fromUnicodeMaps, sizeof(char)*3) != 0) {
         log_err("From Unicode conversion failed in EBCDICUS4XML test. %s\n",
             u_errorName(status));
@@ -5525,7 +5526,7 @@ static void TestJB5275_1(){
     }
     
     log_verbose("Testing switching back to default script when new line is encountered.\n");
-    ucnv_toUnicode(conv, &target, targetLimit, &source, sourceLimit, NULL, TRUE, &status);
+    ucnv_toUnicode(conv, &target, targetLimit, &source, sourceLimit, NULL, true, &status);
     if(U_FAILURE(status)){
         log_err("conversion failed: %s \n", u_errorName(status));
     }
@@ -5571,7 +5572,7 @@ static void TestJB5275(){
     const char* source = data;
     const char* sourceLimit = data+strlen(data);
     const UChar* exp = expected;
-    ucnv_toUnicode(conv, &target, targetLimit, &source, sourceLimit, NULL, TRUE, &status);
+    ucnv_toUnicode(conv, &target, targetLimit, &source, sourceLimit, NULL, true, &status);
     if(U_FAILURE(status)){
         log_data_err("conversion failed: %s \n", u_errorName(status));
     }
@@ -5617,7 +5618,7 @@ TestIsFixedWidth() {
         }
 
         if (!ucnv_isFixedWidth(cnv, &status)) {
-            log_err("%s is a fixedWidth converter but returned FALSE.\n", fixedWidth[i]);
+            log_err("%s is a fixedWidth converter but returned false.\n", fixedWidth[i]);
         }
         ucnv_close(cnv);
     }
@@ -5630,7 +5631,7 @@ TestIsFixedWidth() {
         }
 
         if (ucnv_isFixedWidth(cnv, &status)) {
-            log_err("%s is NOT a fixedWidth converter but returned TRUE.\n", notFixedWidth[i]);
+            log_err("%s is NOT a fixedWidth converter but returned true.\n", notFixedWidth[i]);
         }
         ucnv_close(cnv);
     }

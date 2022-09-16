@@ -1022,14 +1022,14 @@ public abstract class Transliterator implements StringTransform  {
      * Top-level transliteration method, handling filtering, incremental and
      * non-incremental transliteration, and rollback.  All transliteration
      * public API methods eventually call this method with a rollback argument
-     * of TRUE.  Other entities may call this method but rollback should be
-     * FALSE.
+     * of true.  Other entities may call this method but rollback should be
+     * false.
      *
      * <p>If this transliterator has a filter, break up the input text into runs
      * of unfiltered characters.  Pass each run to
      * <subclass>.handleTransliterate().
      *
-     * <p>In incremental mode, if rollback is TRUE, perform a special
+     * <p>In incremental mode, if rollback is true, perform a special
      * incremental procedure in which several passes are made over the input
      * text, adding one character at a time, and committing successful
      * transliterations as they occur.  Unsuccessful transliterations are rolled
@@ -1037,12 +1037,12 @@ public abstract class Transliterator implements StringTransform  {
      *
      * @param text the text to be transliterated
      * @param index the position indices
-     * @param incremental if TRUE, then assume more characters may be inserted
+     * @param incremental if true, then assume more characters may be inserted
      * at index.limit, and postpone processing to accommodate future incoming
      * characters
-     * @param rollback if TRUE and if incremental is TRUE, then perform special
+     * @param rollback if true and if incremental is true, then perform special
      * incremental processing, as described above, and undo partial
-     * transliterations where necessary.  If incremental is FALSE then this
+     * transliterations where necessary.  If incremental is false then this
      * parameter is ignored.
      */
     private void filteredTransliterate(Replaceable text,
@@ -1127,7 +1127,7 @@ public abstract class Transliterator implements StringTransform  {
 
             // Is this run incremental?  If there is additional
             // filtered text (if limit < globalLimit) then we pass in
-            // an incremental value of FALSE to force the subclass to
+            // an incremental value of false to force the subclass to
             // complete the transliteration for this run.
             boolean isIncrementalRun =
                 (index.limit < globalLimit ? false : incremental);
@@ -1354,7 +1354,7 @@ public abstract class Transliterator implements StringTransform  {
      * another transliterator.
      * @param text the text to be transliterated
      * @param index the position indices
-     * @param incremental if TRUE, then assume more characters may be inserted
+     * @param incremental if true, then assume more characters may be inserted
      * at index.limit, and postpone processing to accommodate future incoming
      * characters
      * @stable ICU 2.0

@@ -135,7 +135,7 @@ void QuantityFormatterTest::TestBasic() {
                         *plurrule,
                         appendTo,
                         pos,
-                        status), TRUE);
+                        status), true);
         appendTo.remove();
         assertEquals(
                 "format plural",
@@ -146,7 +146,7 @@ void QuantityFormatterTest::TestBasic() {
                         *plurrule,
                         appendTo,
                         pos,
-                        status), TRUE);
+                        status), true);
     }
     fmt.reset();
     assertFalse("isValid after reset", fmt.isValid());

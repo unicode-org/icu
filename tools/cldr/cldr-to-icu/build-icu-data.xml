@@ -47,10 +47,10 @@
         <property name="specialsDir" value="${basedir}/../../../icu4c/source/data/xml"/>
 
         <!-- Default value for ICU version (icuver.txt). Update this for each release. -->
-        <property name="icuVersion" value="71.1.0.0"/>
+        <property name="icuVersion" value="72.0.1.0"/>
 
         <!-- Default value for ICU data version (icuver.txt). Update this for each release. -->
-        <property name="icuDataVersion" value="71.1.0.0"/>
+        <property name="icuDataVersion" value="72.0.1.0"/>
 
         <!-- An override for the CLDR version string (icuver.txt and others). This will be
              extracted from the CLDR library used for building the data if not set here. -->
@@ -159,10 +159,10 @@
                 af, agq, ak, am, ar, ars, as, asa, ast, az, az_AZ, az_Cyrl
 
                 // B
-                bas, be, bem, bez, bg, bm, bn, bo, br, brx, bs, bs_BA, bs_Cyrl
+                bas, be, bem, bez, bg, bgc, bho, bm, bn, bo, br, brx, bs, bs_BA, bs_Cyrl
 
                 // C
-                ca, ccp, ce, ceb, cgg, chr, ckb, cs, cy
+                ca, ccp, ce, ceb, cgg, chr, ckb, cs, cv, cy
 
                 // D
                 da, dav, de, dje, doi, dsb, dua, dyo, dz
@@ -209,7 +209,7 @@
                 qu
 
                 // R
-                rm, rn, ro, rof, ru, rw, rwk
+                raj, rm, rn, ro, rof, ru, rw, rwk
 
                 // S
                 sa, sah, saq, sat, sat_IN, sbp, sc, sd, sd_Deva, sd_PK, se, seh, ses, sg, sh, sh_BA, sh_CS, sh_YU
@@ -282,7 +282,7 @@
 
                     // C-F
                     ca, ceb, chr, cs, cy, da, de_AT, de, dsb, dz, ee, el, en,
-                    en_US_POSIX, en_US, eo, es, et, fa_AF, fa, ff_Adlm, ff, fil, fi, fo, fr_CA, fr,
+                    en_US_POSIX, en_US, eo, es, et, fa_AF, fa, ff_Adlm, ff, fil, fi, fo, fr_CA, fr, fy,
 
                     // G-J
                     ga, gl, gu, ha, haw, he, hi, hr, hsb, hu, hy,
@@ -322,7 +322,7 @@
 
                     // F-P
                     fa_AF, fa, ff, fil, fi, fo, fr_BE, fr_CH, fr, ga, he, hi, hr,
-                    hu, hy, id, in, is, it, iw, ja, ka, kl, km, ko, ky, lb,
+                    hu, hy, id, in, is, it, iw, ja, ka, kk, kl, km, ko, ky, lb,
                     lo, lrc, lt, lv, mk, ms, mt, my, nb, ne, nl, nn, no, pl, pt_PT, pt,
 
                     // Q-Z

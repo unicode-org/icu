@@ -300,14 +300,15 @@ so{
     }
     Countries%short{
         GB{"UK"}
-        PS{"Falastiin"}
+        PS{"Palestine (translation hint: Warning, see info panel on right.)"}
     }
     Countries%variant{
         CD{"Jamhuuriyadda Dimuqaadiga Kongo"}
         CG{"Jamhuuriyadda Kongo"}
-        CI{"Aayforikoost"}
+        CI{"Ivory Coast (translation hint: Warning, see info panel on right.)"}
         CZ{"Jamhuuriyadda Jek"}
         FK{"Jasiiradaha Fookland"}
+        NZ{"Aotearoa New Zealand"}
         SZ{"Iswaasilaan"}
         TL{"Bariga Timor"}
     }

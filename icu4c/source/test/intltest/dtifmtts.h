@@ -88,6 +88,8 @@ public:
     void testTicket21222GregorianEraDiff();
     void testTicket21222ROCEraDiff();
     void testTicket21222JapaneseEraDiff();
+    
+    void testTicket21939();
 
 private:
     /**

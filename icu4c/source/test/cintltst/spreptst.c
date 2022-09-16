@@ -15,6 +15,7 @@
  *   created on: 2003jul11
  *   created by: Ram Viswanadha
  */
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include "unicode/utypes.h"
@@ -506,7 +507,7 @@ Test_nfs4_cs_prep(void){
         int32_t srcLen = unescapeData(source, (int32_t)strlen(source), src, MAX_BUFFER_SIZE, &status);
         if(U_SUCCESS(status)){
             char dest[MAX_BUFFER_SIZE] = {'\0'};
-            int32_t destLen = nfs4_cs_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, FALSE, &parseError, &status);
+            int32_t destLen = nfs4_cs_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, false, &parseError, &status);
             if(U_FAILURE(status)){
                 log_err("StringPrep failed for case: BiDi Checking Turned OFF with error: %s\n", u_errorName(status));
             }
@@ -529,7 +530,7 @@ Test_nfs4_cs_prep(void){
         int32_t srcLen = unescapeData(source, (int32_t)strlen(source), src, MAX_BUFFER_SIZE, &status);
         if(U_SUCCESS(status)){
             char dest[MAX_BUFFER_SIZE] = {'\0'};
-            int32_t destLen = nfs4_cs_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, FALSE, &parseError, &status);
+            int32_t destLen = nfs4_cs_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, false, &parseError, &status);
             if(U_FAILURE(status)){
                 log_err("StringPrep failed for case: Normalization Turned OFF with error: %s\n", u_errorName(status));
             }
@@ -552,7 +553,7 @@ Test_nfs4_cs_prep(void){
         int32_t srcLen = unescapeData(source, (int32_t)strlen(source), src, MAX_BUFFER_SIZE, &status);
         if(U_SUCCESS(status)){
             char dest[MAX_BUFFER_SIZE] = {'\0'};
-            int32_t destLen = nfs4_cs_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, TRUE, &parseError, &status);
+            int32_t destLen = nfs4_cs_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, true, &parseError, &status);
             if(U_FAILURE(status)){
                 log_err("StringPrep failed for case: Case Mapping Turned OFF with error: %s\n", u_errorName(status));
             }
@@ -578,7 +579,7 @@ Test_nfs4_cs_prep(void){
         int32_t expLen = unescapeData(expected, (int32_t)strlen(expected), exp, MAX_BUFFER_SIZE, &status);
         if(U_SUCCESS(status)){
             char dest[MAX_BUFFER_SIZE] = {'\0'};
-            int32_t destLen = nfs4_cs_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, FALSE, &parseError, &status);
+            int32_t destLen = nfs4_cs_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, false, &parseError, &status);
             if(U_FAILURE(status)){
                 log_err("StringPrep failed for case: Case Mapping Turned On with error: %s\n", u_errorName(status));
             }

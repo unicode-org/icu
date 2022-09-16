@@ -363,7 +363,9 @@ class NumberFormatterImpl {
         // The default middle modifier is weak (thus the false argument).
         MutablePatternModifier patternMod = new MutablePatternModifier(false);
         AffixPatternProvider affixProvider =
-            (macros.affixProvider != null)
+            (macros.affixProvider != null && (
+                    // For more information on this condition, see ICU-22073
+                    !isCompactNotation || isCurrency == macros.affixProvider.hasCurrencySign()))
                 ? macros.affixProvider
                 : patternInfo;
         patternMod.setPatternInfo(affixProvider, null);

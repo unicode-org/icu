@@ -168,7 +168,7 @@ public class ComplexUnitsConverter {
      */
     public ComplexConverterResult convert(BigDecimal quantity, Precision rounder) {
         BigInteger sign = BigInteger.ONE;
-        if (quantity.compareTo(BigDecimal.ZERO) < 0) {
+        if (quantity.compareTo(BigDecimal.ZERO) < 0 && unitsConverters_.size() > 1) {
             quantity = quantity.abs();
             sign = sign.negate();
         }

@@ -320,7 +320,7 @@ public:
 // Appendable is abstract; we define a subclass to verify that there is no "poor man's RTTI".
 class DummyAppendable : public Appendable {
 public:
-    virtual UBool appendCodeUnit(UChar /*c*/) override { return TRUE; }
+    virtual UBool appendCodeUnit(UChar /*c*/) override { return true; }
 };
 
 void UObjectTest::testIDs()

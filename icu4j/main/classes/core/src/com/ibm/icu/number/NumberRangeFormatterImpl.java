@@ -157,7 +157,7 @@ class NumberRangeFormatterImpl {
                 : NumberRangeFormatter.RangeIdentityFallback.APPROXIMATELY;
 
         String nsName = formatterImpl1.getRawMicroProps().nsName;
-        if (nsName == null || !nsName.equals(formatterImpl2.getRawMicroProps().nsName)) {
+        if (nsName == null || (!fSameFormatters && !nsName.equals(formatterImpl2.getRawMicroProps().nsName))) {
             throw new IllegalArgumentException("Both formatters must have same numbering system");
         }
         getNumberRangeData(macros.loc, nsName, this);

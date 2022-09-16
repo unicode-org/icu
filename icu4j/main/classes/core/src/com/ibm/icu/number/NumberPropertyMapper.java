@@ -301,8 +301,6 @@ final class NumberPropertyMapper {
             } else {
                 macros.notation = Notation.compactShort();
             }
-            // Do not forward the affix provider.
-            macros.affixProvider = null;
         }
 
         /////////////////

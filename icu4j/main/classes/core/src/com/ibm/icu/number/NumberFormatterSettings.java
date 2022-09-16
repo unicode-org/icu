@@ -11,6 +11,8 @@ import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.DisplayOptions;
+import com.ibm.icu.text.DisplayOptions.GrammaticalCase;
 import com.ibm.icu.text.NumberingSystem;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Measure;
@@ -550,6 +552,22 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
         }
 
         return create(KEY_USAGE, usage);
+    }
+
+    /**
+     * Specifies the {@code DisplayOptions}. For example, {@code GrammaticalCase} specifies
+     * the desired case for a unit formatter's output (e.g. accusative, dative, genitive).
+     *
+     * @return The fluent chain.
+     * @draft ICU 72
+     */
+    public T displayOptions(DisplayOptions displayOptions) {
+        // `displayCase` does not recognise the `undefined`
+        if (displayOptions.getGrammaticalCase() == GrammaticalCase.UNDEFINED) {
+            return create(KEY_UNIT_DISPLAY_CASE, null);
+        }
+
+        return create(KEY_UNIT_DISPLAY_CASE, displayOptions.getGrammaticalCase().getIdentifier());
     }
 
     /**

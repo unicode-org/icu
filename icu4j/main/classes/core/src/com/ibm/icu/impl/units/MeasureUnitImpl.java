@@ -415,7 +415,7 @@ public class MeasureUnitImpl {
         private int fIndex = 0;
         // Set to true when we've seen a "-per-" or a "per-", after which all units
         // are in the denominator. Until we find an "-and-", at which point the
-        // identifier is invalid pending TODO(CLDR-13700).
+        // identifier is invalid pending TODO(CLDR-13701).
         private boolean fAfterPer = false;
         // If an "-and-" was parsed prior to finding the "single
         //     * unit", sawAnd is set to true. If not, it is left as is.
@@ -549,7 +549,7 @@ public class MeasureUnitImpl {
          * <p>
          *
          * @throws IllegalArgumentException if we parse both compound units and "-and-", since mixed
-         *                                  compound units are not yet supported - TODO(CLDR-13700).
+         *                                  compound units are not yet supported - TODO(CLDR-13701).
          */
         private SingleUnitImpl nextSingleUnit() {
             SingleUnitImpl result = new SingleUnitImpl();
@@ -585,7 +585,7 @@ public class MeasureUnitImpl {
                     case PER:
                         if (fSawAnd) {
                             throw new IllegalArgumentException("Mixed compound units not yet supported");
-                            // TODO(CLDR-13700).
+                            // TODO(CLDR-13701).
                         }
 
                         fAfterPer = true;
@@ -600,7 +600,7 @@ public class MeasureUnitImpl {
 
                     case AND:
                         if (fAfterPer) {
-                            // not yet supported, TODO(CLDR-13700).
+                            // not yet supported, TODO(CLDR-13701).
                             throw new IllegalArgumentException("Can't start with \"-and-\", and mixed compound units");
                         }
                         fSawAnd = true;

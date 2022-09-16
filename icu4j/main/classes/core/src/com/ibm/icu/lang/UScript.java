@@ -1060,6 +1060,11 @@ public final class UScript {
     /** @stable ICU 70 */
     public static final int VITHKUQI = 197; /* Vith */
 
+    /** @stable ICU 72 */
+    public static final int KAWI = 198; /* Kawi */
+    /** @stable ICU 72 */
+    public static final int NAG_MUNDARI = 199; /* Nagm */
+
     /**
      * One more than the highest normal UScript code.
      * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.SCRIPT).
@@ -1067,7 +1072,7 @@ public final class UScript {
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     @Deprecated
-    public static final int CODE_LIMIT   = 198;
+    public static final int CODE_LIMIT   = 200;
 
     private static int[] getCodesFromLocale(ULocale locale) {
         // Multi-script languages, equivalent to the LocaleScript data
@@ -1547,6 +1552,8 @@ public final class UScript {
             0x16ABC | EXCLUSION,  // Tnsa
             0x1E290 | EXCLUSION,  // Toto
             0x10582 | EXCLUSION | CASED,  // Vith
+            0x11F1B | EXCLUSION | LB_LETTERS,  // Kawi
+            0x1E4E6 | EXCLUSION,  // Nagm
             // End copy-paste from parsescriptmetadata.py
         };
 

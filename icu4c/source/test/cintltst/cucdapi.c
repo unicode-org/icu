@@ -5,6 +5,7 @@
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 
+#include <stdbool.h>
 #include <string.h>
 #include "unicode/utypes.h"
 #include "unicode/uscript.h"
@@ -316,7 +317,7 @@ void TestUScriptCodeAPI(){
         };
         UScriptCode code = USCRIPT_INVALID_CODE;
         UErrorCode status = U_ZERO_ERROR;
-        UBool passed = TRUE;
+        UBool passed = true;
 
         for(i=0; i<UPRV_LENGTHOF(codepoints); ++i){
             code = uscript_getScript(codepoints[i],&status);
@@ -325,7 +326,7 @@ void TestUScriptCodeAPI(){
                     code != (UScriptCode)u_getIntPropertyValue(codepoints[i], UCHAR_SCRIPT)
                 ) {
                     log_err("uscript_getScript for codepoint \\U%08X failed\n",codepoints[i]);
-                    passed = FALSE;
+                    passed = false;
                 }
             }else{
                 log_err("uscript_getScript for codepoint \\U%08X failed. Error: %s\n", 
@@ -334,7 +335,7 @@ void TestUScriptCodeAPI(){
             }
         }
         
-        if(passed==FALSE){
+        if(passed==false){
            log_err("uscript_getScript failed.\n");
         }      
     }
@@ -423,6 +424,8 @@ void TestUScriptCodeAPI(){
             "Chorasmian", "Dives_Akuru", "Khitan_Small_Script", "Yezidi",
             // new in ICU 70
             "Cypro_Minoan", "Old_Uyghur", "Tangsa", "Toto", "Vithkuqi",
+            // new in ICU 72
+            "Kawi", "Nag_Mundari",
         };
         static const char* expectedShort[] = {
             "Bali", "Batk", "Blis", "Brah", "Cham", "Cirt", "Cyrs", "Egyd", "Egyh", "Egyp",
@@ -461,6 +464,8 @@ void TestUScriptCodeAPI(){
             "Chrs", "Diak", "Kits", "Yezi",
             // new in ICU 70
             "Cpmn", "Ougr", "Tnsa", "Toto", "Vith",
+            // new in ICU 72
+            "Kawi", "Nagm",
         };
         int32_t j = 0;
         if(UPRV_LENGTHOF(expectedLong)!=(USCRIPT_CODE_LIMIT-USCRIPT_BALINESE)) {
@@ -556,14 +561,14 @@ void TestHasScript() {
 }
 
 static UBool scriptsContain(UScriptCode scripts[], int32_t length, UScriptCode script) {
-    UBool contain=FALSE;
+    UBool contain=false;
     int32_t prev=-1, i;
     for(i=0; i<length; ++i) {
         int32_t s=scripts[i];
         if(s<=prev) {
             log_err("uscript_getScriptExtensions() not in sorted order: %d %d\n", (int)prev, (int)s);
         }
-        if(s==script) { contain=TRUE; }
+        if(s==script) { contain=true; }
     }
     return contain;
 }
@@ -728,13 +733,13 @@ void TestBinaryValues() {
     static const char *const trueValues[]={ "Y", "Yes", "T", "True" };
     int32_t i;
     for(i=0; i<UPRV_LENGTHOF(falseValues); ++i) {
-        if(FALSE!=u_getPropertyValueEnum(UCHAR_ALPHABETIC, falseValues[i])) {
-            log_data_err("u_getPropertyValueEnum(UCHAR_ALPHABETIC, \"%s\")!=FALSE (Are you missing data?)\n", falseValues[i]);
+        if(false!=u_getPropertyValueEnum(UCHAR_ALPHABETIC, falseValues[i])) {
+            log_data_err("u_getPropertyValueEnum(UCHAR_ALPHABETIC, \"%s\")!=false (Are you missing data?)\n", falseValues[i]);
         }
     }
     for(i=0; i<UPRV_LENGTHOF(trueValues); ++i) {
-        if(TRUE!=u_getPropertyValueEnum(UCHAR_ALPHABETIC, trueValues[i])) {
-            log_data_err("u_getPropertyValueEnum(UCHAR_ALPHABETIC, \"%s\")!=TRUE (Are you missing data?)\n", trueValues[i]);
+        if(true!=u_getPropertyValueEnum(UCHAR_ALPHABETIC, trueValues[i])) {
+            log_data_err("u_getPropertyValueEnum(UCHAR_ALPHABETIC, \"%s\")!=true (Are you missing data?)\n", trueValues[i]);
         }
     }
 }

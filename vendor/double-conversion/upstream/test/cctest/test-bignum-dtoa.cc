@@ -43,7 +43,7 @@ using namespace double_conversion;
 // Removes trailing '0' digits.
 // Can return the empty string if all digits are 0.
 static void TrimRepresentation(Vector<char> representation) {
-  int len = strlen(representation.start());
+  int len = static_cast<int>(strlen(representation.start()));
   int i;
   for (i = len - 1; i >= 0; --i) {
     if (representation[i] != '0') break;

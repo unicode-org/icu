@@ -12,7 +12,7 @@
 
 /*
  Usage:
-    test_assert(    Test (should be TRUE)  )
+    test_assert(    Test (should be true)  )
 
    Example:
        test_assert(i==3);
@@ -29,7 +29,7 @@
 
 /*
  Usage:
-    test_assert_print(    Test (should be TRUE),  printable  )
+    test_assert_print(    Test (should be true),  printable  )
 
    Example:
        test_assert(i==3, toString(i));
@@ -519,40 +519,40 @@ void LocaleDisplayNamesTest::VerifyNoSubstitute(LocaleDisplayNames* ldn) {
   test_assert(UDISPCTX_NO_SUBSTITUTE == context);
 
   ldn->regionDisplayName(unknown_region, temp);
-  test_assert(TRUE == temp.isBogus());
+  test_assert(true == temp.isBogus());
   ldn->languageDisplayName(unknown_lang, temp);
-  test_assert(TRUE == temp.isBogus());
+  test_assert(true == temp.isBogus());
   ldn->scriptDisplayName(unknown_script, temp);
-  test_assert(TRUE == temp.isBogus());
+  test_assert(true == temp.isBogus());
   ldn->variantDisplayName(unknown_variant, temp);
-  test_assert(TRUE == temp.isBogus());
+  test_assert(true == temp.isBogus());
   ldn->keyDisplayName(unknown_key, temp);
-  test_assert(TRUE == temp.isBogus());
+  test_assert(true == temp.isBogus());
   ldn->keyValueDisplayName("ca", unknown_ca_value, temp);
-  test_assert(TRUE == temp.isBogus());
+  test_assert(true == temp.isBogus());
 
   ldn->localeDisplayName(unknown_lang, temp);
-  test_assert(TRUE == temp.isBogus());
+  test_assert(true == temp.isBogus());
   ldn->localeDisplayName(known_lang_unknown_script, temp);
-  test_assert(TRUE == temp.isBogus());
+  test_assert(true == temp.isBogus());
   ldn->localeDisplayName(unknown_lang_unknown_script, temp);
-  test_assert(TRUE == temp.isBogus());
+  test_assert(true == temp.isBogus());
   ldn->localeDisplayName(unknown_lang_known_script, temp);
-  test_assert(TRUE == temp.isBogus());
+  test_assert(true == temp.isBogus());
   ldn->localeDisplayName(unknown_lang_unknown_region, temp);
-  test_assert(TRUE == temp.isBogus());
+  test_assert(true == temp.isBogus());
   ldn->localeDisplayName(known_lang_unknown_region, temp);
-  test_assert(TRUE == temp.isBogus());
+  test_assert(true == temp.isBogus());
   ldn->localeDisplayName(unknown_lang_known_region, temp);
-  test_assert(TRUE == temp.isBogus());
+  test_assert(true == temp.isBogus());
   ldn->localeDisplayName(unknown_lang_unknown_script_unknown_region, temp);
-  test_assert(TRUE == temp.isBogus());
+  test_assert(true == temp.isBogus());
   ldn->localeDisplayName(known_lang_unknown_script_unknown_region, temp);
-  test_assert(TRUE == temp.isBogus());
+  test_assert(true == temp.isBogus());
   ldn->localeDisplayName(unknown_lang_known_script_unknown_region, temp);
-  test_assert(TRUE == temp.isBogus());
+  test_assert(true == temp.isBogus());
   ldn->localeDisplayName(unknown_lang_known_script_known_region, temp);
-  test_assert(TRUE == temp.isBogus());
+  test_assert(true == temp.isBogus());
 
   ldn->localeDisplayName(known_lang, temp);
   test_assert_equal("Englisch", temp);
