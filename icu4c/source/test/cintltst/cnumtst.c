@@ -78,6 +78,7 @@ static void TestSciNotationMaxFracCap(void);
 static void TestMinIntMinFracZero(void);
 static void Test21479_ExactCurrency(void);
 static void Test22088_Ethiopic(void);
+static void TestParseWithEmptyCurr(void);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
 
@@ -121,6 +122,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestMinIntMinFracZero);
     TESTCASE(Test21479_ExactCurrency);
     TESTCASE(Test22088_Ethiopic);
+    TESTCASE(TestParseWithEmptyCurr);
 }
 
 /* test Parse int 64 */
@@ -3632,6 +3634,149 @@ static void Test22088_Ethiopic(void) {
     unum_close(nf1);
     unum_close(nf2);
     unum_close(nf3);
+}
+
+static void TestParseWithEmptyCurr(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UNumberFormat* unum = unum_open(UNUM_CURRENCY, NULL, 0, "en_US", NULL, &status);
+    if (U_FAILURE(status)) {
+        log_data_err("unum_open UNUM_CURRENCY for \"en_US\" fails with %s\n", u_errorName(status));
+    } else {
+        unum_setSymbol(unum, UNUM_CURRENCY_SYMBOL, u"", 0, &status);
+        if (U_FAILURE(status)) {
+            log_err("unum_setSymbol UNUM_CURRENCY_SYMBOL u\"\" fails with %s\n", u_errorName(status));
+        } else {
+            char bbuf[kBBufMax] = { 0 };
+            UChar curr[4] = { 0 };
+            int32_t ppos, blen;
+            double val;
+            const UChar* text = u"3";
+
+            status = U_ZERO_ERROR;
+            ppos = 0;
+            blen = unum_parseDecimal(unum, text, -1, &ppos, bbuf, kBBufMax, &status);
+            if (U_FAILURE(status)) {
+                log_err("unum_parseDecimal u\"3\" with empty curr symbol fails with %s, ppos %d\n", u_errorName(status), ppos);
+            } else if (ppos != 1 || blen != 1 || bbuf[0] != '3') {
+                log_err("unum_parseDecimal expect ppos 1, blen 1, str 3; get %d, %d, %s\n", ppos, blen, bbuf);
+            }
+
+            status = U_ZERO_ERROR;
+            ppos = 0;
+            val = unum_parseDouble(unum, text, -1, &ppos, &status);
+            if (U_FAILURE(status)) {
+                log_err("unum_parseDouble u\"3\" with empty curr symbol fails with %s, ppos %d\n", u_errorName(status), ppos);
+            } else if (ppos != 1 || val != 3.0) {
+                log_err("unum_parseDouble expect ppos 1, val 3.0; get %d, %.2f\n", ppos, val);
+            }
+
+            status = U_ZERO_ERROR;
+            ppos = 0;
+            val = unum_parseDoubleCurrency(unum, text, -1, &ppos, curr, &status);
+            if (U_SUCCESS(status)) {
+                log_err("unum_parseDoubleCurrency u\"3\" with empty curr symbol succeeds, get ppos %d, val %.2f\n", ppos, val);
+            }
+        }
+        unum_close(unum);
+    }
+
+    //                              "¤#,##0.00" "¤ #,##0.00" "#,##0.00 ¤" "#,##,##0.00¤"
+    static const char* locales[] = {"en_US",    "nb_NO",     "cs_CZ",     "bn_BD",       NULL };
+    const char ** localesPtr = locales;
+    const char* locale;
+    while ((locale = *localesPtr++) != NULL) {
+        status = U_ZERO_ERROR;
+        unum = unum_open(UNUM_CURRENCY, NULL, 0, locale, NULL, &status);
+        if (U_FAILURE(status)) {
+            log_data_err("locale %s unum_open UNUM_CURRENCY fails with %s\n", locale, u_errorName(status));
+        } else {
+            UChar ubuf[kUBufMax];
+            int32_t ppos, ulen;
+            const double posValToUse = 37.0;
+            const double negValToUse = -3.0;
+            double val;
+
+            status = U_ZERO_ERROR;
+            unum_setSymbol(unum, UNUM_CURRENCY_SYMBOL, u"", 0, &status);
+            if (U_FAILURE(status)) {
+                log_err("locale %s unum_setSymbol UNUM_CURRENCY_SYMBOL u\"\" fails with %s, skipping\n", locale, u_errorName(status));
+                continue;
+            }
+
+            status = U_ZERO_ERROR;
+            ulen = unum_formatDouble(unum, posValToUse, ubuf, kUBufMax, NULL, &status);
+            if (U_FAILURE(status)) {
+                log_err("locale %s unum_formatDouble %.1f fails with %s, skipping\n", locale, posValToUse, u_errorName(status));
+                continue;
+            }
+
+            status = U_ZERO_ERROR;
+            ppos = 0;
+            val = unum_parseDouble(unum, ubuf, ulen, &ppos, &status);
+            if (U_FAILURE(status)) {
+                log_err("locale %s unum_parseDouble fails with %s, ppos %d, expect %.1f\n", locale, u_errorName(status), ppos, posValToUse);
+            } else if (ppos != ulen || val != posValToUse) {
+                log_err("locale %s unum_parseDouble expect ppos %d, val %.1f; get %d, %.2f\n", locale, ulen, posValToUse, ppos, val);
+            }
+
+            status = U_ZERO_ERROR;
+            ulen = unum_formatDouble(unum, negValToUse, ubuf, kUBufMax, NULL, &status);
+            if (U_FAILURE(status)) {
+                log_err("locale %s unum_formatDouble %.1f fails with %s, skipping\n", locale, negValToUse, u_errorName(status));
+                continue;
+            }
+
+            status = U_ZERO_ERROR;
+            ppos = 0;
+            val = unum_parseDouble(unum, ubuf, ulen, &ppos, &status);
+            if (U_FAILURE(status)) {
+                log_err("locale %s unum_parseDouble fails with %s, ppos %d, expect %.1f\n", locale, u_errorName(status), ppos, negValToUse);
+            } else if (ppos != ulen || val != negValToUse) {
+                log_err("locale %s unum_parseDouble expect ppos %d, val %.1f; get %d, %.2f\n", locale, ulen, negValToUse, ppos, val);
+            }
+
+            status = U_ZERO_ERROR;
+            unum_applyPattern(unum, false, u"#,##0.00¤", -1, NULL, &status);
+            if (U_FAILURE(status)) {
+                log_err("locale %s unum_applyPattern \"#,##0.00¤\" fails with %s, skipping\n", locale, u_errorName(status));
+                continue;
+            }
+
+            status = U_ZERO_ERROR;
+            ulen = unum_formatDouble(unum, posValToUse, ubuf, kUBufMax, NULL, &status);
+            if (U_FAILURE(status)) {
+                log_err("locale %s with \"#,##0.00¤\" unum_formatDouble %.1f fails with %s, skipping\n", locale, posValToUse, u_errorName(status));
+                continue;
+            }
+
+            status = U_ZERO_ERROR;
+            ppos = 0;
+            val = unum_parseDouble(unum, ubuf, ulen, &ppos, &status);
+            if (U_FAILURE(status)) {
+                log_err("locale %s with \"#,##0.00¤\" unum_parseDouble fails with %s, ppos %d, expect %.1f\n", locale, u_errorName(status), ppos, posValToUse);
+            } else if (ppos != ulen || val != posValToUse) {
+                log_err("locale %s with \"#,##0.00¤\" unum_parseDouble expect ppos %d, val %.1f; get %d, %.2f\n", locale, ulen, posValToUse, ppos, val);
+            }
+
+            status = U_ZERO_ERROR;
+            ulen = unum_formatDouble(unum, negValToUse, ubuf, kUBufMax, NULL, &status);
+            if (U_FAILURE(status)) {
+                log_err("locale %s with \"#,##0.00¤\" unum_formatDouble %.1f fails with %s, skipping\n", locale, negValToUse, u_errorName(status));
+                continue;
+            }
+
+            status = U_ZERO_ERROR;
+            ppos = 0;
+            val = unum_parseDouble(unum, ubuf, ulen, &ppos, &status);
+            if (U_FAILURE(status)) {
+                log_err("locale %s with \"#,##0.00¤\" unum_parseDouble fails with %s, ppos %d, expect %.1f\n", locale, u_errorName(status), ppos, negValToUse);
+            } else if (ppos != ulen || val != negValToUse) {
+                log_err("locale %s with \"#,##0.00¤\" unum_parseDouble expect ppos %d, val %.1f; get %d, %.2f\n", locale, ulen, negValToUse, ppos, val);
+            }
+
+            unum_close(unum);
+        }
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
