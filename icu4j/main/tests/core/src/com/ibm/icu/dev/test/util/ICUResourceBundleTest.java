@@ -9,11 +9,19 @@
 package com.ibm.icu.dev.test.util;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Locale;
@@ -28,6 +36,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Utility;
@@ -1144,4 +1153,180 @@ public final class ICUResourceBundleTest extends TestFmwk {
         } catch (NoSuchElementException ex) {
         }
     }
+
+    /*
+     * Assert the expected value when getting a string value Resource for a ResourceBundle of a given locale and
+     * given the key path for the Resource.
+     */
+    private void assertRBStringEquals(String localeID, String msg, String expected, String keyPathForActual) {
+        ICUResourceBundle bundle = ICUResourceBundle.getBundleInstance(null, localeID, ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
+        String actualStrValue = bundle.getStringWithFallback(keyPathForActual);
+        assertEquals(msg, expected, actualStrValue);
+    }
+
+    private File copyJavaRescToTmpDir(String javaRescPath) {
+        String[] rescPaths = { javaRescPath };
+        return copyJavaRescToTmpDir(rescPaths);
+    }
+
+    /*
+     * Copy a Java resource to a temp file and return the containing
+     * directory as a {@code File}.
+     * Note: you should delete the file when done with it.
+     */
+    private File copyJavaRescToTmpDir(String[] javaRescPaths) {
+        try {
+            // set up temporary directory
+            Path tmpDirPath = Files.createTempDirectory(null);
+            File tmpDir = tmpDirPath.toFile();
+
+            for (String javaRescPath : javaRescPaths) {
+                // load override file from Java resources
+                InputStream overrideRescInStream = getClass().getResourceAsStream(javaRescPath);
+                // copy Java resource input stream to a temp file
+                String fileName = Paths.get(javaRescPath).getFileName().toString();
+                File tmpFile = new File(tmpDir, fileName);
+                // Preemptively mark the tmpFile to be deleted on exit. Assume that file
+                // not be deleted before then.
+                tmpFile.deleteOnExit();
+                OutputStream outStream = new FileOutputStream(tmpFile);
+                byte[] buffer = new byte[8 * 1024];
+                int bytesRead;
+                while ((bytesRead = overrideRescInStream.read(buffer)) != -1) {
+                    outStream.write(buffer, 0, bytesRead);
+                }
+            }
+
+            return tmpDir;
+        } catch (IOException e) {
+            errln("Cannot create temporary directory.");
+            // Make the compiler happy, even though errln() should throw an exception
+            return null;
+        }
+    }
+
+    /*
+     * Test that override files can be loaded from file and take precedence over built-in ICU data.
+     *
+     * Note: due to the stateful nature of caching and without a public API for resetting the cache,
+     * unit tests here are using different locales in their tests to avoid cache key collisions that
+     * would lead to unexpected behavior.
+     */
+    @Test
+    public void TestOverrideData() {
+        String localeID = "pt";
+        String testResourceKeyPath = "NumberElements/latn/patternsShort/decimalFormat/1000/other";
+
+        // Normal data files (because we cannot set any environment variables like ICU_OVERRIDE_DATA before a unit test)
+
+        assertRBStringEquals(localeID, "Normal (no override) pattern for compact short pattern for 1000", "0 mil", testResourceKeyPath);
+
+        // Override data files (after using the API to update ICUBinary.OVERRIDE_FILES)
+
+        // Copy test override file to a temporary directory, set the override data files path.
+        File tmpDir = copyJavaRescToTmpDir("/com/ibm/icu/dev/data/override/test01/pt.res");
+        String path = tmpDir.toString();
+        ICUBinary.OVERRIDE_DATA_FILES.setDataPath(path);
+        assertRBStringEquals(localeID, "Override pattern for compact short pattern for 1000", "0G", testResourceKeyPath);
+        tmpDir.deleteOnExit();
+
+        // Reset override data files to empty
+
+        ICUBinary.OVERRIDE_DATA_FILES.setDataPath("");
+        assertRBStringEquals(localeID, "Normal (no override) pattern for compact short pattern for 1000", "0 mil", testResourceKeyPath);
+    }
+
+    /*
+     * Test that the parent locale chain is logically correct when there exists an override data file.
+     */
+    @Test
+    public void TestOverrideDataParentLocaleSingleFile() {
+        String testResourceKeyPath = "calendar/gregorian/availableFormats/yMd";
+
+        // Normal data files
+
+        // localeID, expStrVal
+        Object[][] normalDataFileCaseData = {
+                {"en_CA", "M/d/y"},
+                {"en",    "M/d/y"},
+                {"root",  "y-MM-dd"},
+        };
+        for (Object[] datum : normalDataFileCaseData) {
+            String localeID = (String) datum[0];
+            String expectedStrVal = (String) datum[1];
+
+            String assertMsg = "Gregorian yMd for " + localeID;
+
+            assertRBStringEquals(localeID, assertMsg, expectedStrVal, testResourceKeyPath);
+        }
+
+        // Override files - locale set = #{en_CA}
+
+        // Copy test override file to a temporary directory, set the override data files path.
+        File tmpDir = copyJavaRescToTmpDir("/com/ibm/icu/dev/data/override/test02/en_CA.res");
+        String path = tmpDir.toString();
+        ICUBinary.OVERRIDE_DATA_FILES.setDataPath(path);
+        tmpDir.deleteOnExit();
+
+        // localeID, expStrVal
+        Object[][] rootOverrideCaseData = {
+                {"en_CA", "test override pattern for en_CA"},
+                {"en",    "M/d/y"},
+                {"root",  "y-MM-dd"},
+        };
+        for (Object[] datum : rootOverrideCaseData) {
+            String localeID = (String) datum[0];
+            String expectedStrVal = (String) datum[1];
+
+            String assertMsg = "Gregorian yMd for " + localeID;
+
+            assertRBStringEquals(localeID, assertMsg, expectedStrVal, testResourceKeyPath);
+        }
+
+        // Reset override data files to empty
+
+        ICUBinary.OVERRIDE_DATA_FILES.setDataPath("");
+
+    }
+
+    /*
+     * Test that the parent locale chain is logically correct when there exist multiple override data files.
+     */
+    @Test
+    public void TestOverrideDataParentLocaleMultipleFiles() {
+        // Override files - locale set = #{fr_CA, fr, root}
+
+        String testResourceKeyPath = "calendar/gregorian/availableFormats/yMd";
+
+        // Copy test override file to a temporary directory, set the override data files path.
+        String[] rescToCopy2 = {
+                "/com/ibm/icu/dev/data/override/test03/fr_CA.res",
+                "/com/ibm/icu/dev/data/override/test03/fr.res",
+        };
+        File tmpDir2 = copyJavaRescToTmpDir(rescToCopy2);
+        String path2 = tmpDir2.toString();
+        ICUBinary.OVERRIDE_DATA_FILES.setDataPath(path2);
+        tmpDir2.deleteOnExit();
+
+        // localeID, expStrVal
+        Object[][] rootOverrideCaseData2 = {
+                {"fr_CA", "test override pattern for fr_CA"},
+                {"fr",    "test override pattern for fr"},
+                {"root",  "y-MM-dd"},
+        };
+        for (Object[] datum : rootOverrideCaseData2) {
+            String localeID = (String) datum[0];
+            String expectedStrVal = (String) datum[1];
+
+            String assertMsg = "Gregorian yMd for " + localeID;
+
+            assertRBStringEquals(localeID, assertMsg, expectedStrVal, testResourceKeyPath);
+        }
+
+        // Reset override data files to empty
+
+        ICUBinary.OVERRIDE_DATA_FILES.setDataPath("");
+
+    }
+
 }

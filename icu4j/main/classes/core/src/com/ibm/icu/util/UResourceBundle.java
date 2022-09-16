@@ -368,6 +368,9 @@ public abstract class UResourceBundle extends ResourceBundle {
      */
     protected static UResourceBundle instantiateBundle(String baseName, String localeName,
                                                        ClassLoader root, boolean disableFallback) {
+
+        // TODO: Resolve null baseName to ICUData.ICU_BASE_NAME to match Javadoc here (and other overloads), or change Javadoc?
+
         RootType rootType = getRootType(baseName, root);
 
         switch (rootType) {

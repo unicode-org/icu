@@ -28,6 +28,9 @@ import com.ibm.icu.util.ICUUncheckedIOException;
 import com.ibm.icu.util.VersionInfo;
 
 public final class ICUBinary {
+
+    // private methods / classes for reading individual files ------------------
+
     /**
      * Reads the ICU .dat package file format.
      * Most methods do not modify the ByteBuffer in any way,
@@ -117,6 +120,12 @@ public final class ICUBinary {
             }
         }
 
+        /**
+         * @param bytes resource file bytes
+         * @param key the name of the resource file
+         * @return the index of a resource file by its name in the .dat file
+         * table (ordering) of all contained resource files.
+         */
         private static int binarySearch(ByteBuffer bytes, CharSequence key) {
             int base = bytes.position();
             int count = bytes.getInt(base);
@@ -142,6 +151,13 @@ public final class ICUBinary {
             return ~start;  // Not found or table is empty.
         }
 
+        /**
+         * @param bytes
+         * @param index among the name data, index number for a resource within the ordering of all
+         * contained resources
+         * @return the offset for the name data for a contained resource file,
+         * given its index number in the ordering of all contained resources.
+         */
         private static int getNameOffset(ByteBuffer bytes, int index) {
             int base = bytes.position();
             assert 0 <= index && index < bytes.getInt(base);  // count
@@ -150,6 +166,13 @@ public final class ICUBinary {
             return base + bytes.getInt(base + 4 + index * 8);
         }
 
+        /**
+         * @param bytes
+         * @param index among the contents data, index number for a resource within the ordering of all
+         * contained resources
+         * @return the offset for the contents data for a contained resource file,
+         * given its index number in the ordering of all contained resources.
+         */
         private static int getDataOffset(ByteBuffer bytes, int index) {
             int base = bytes.position();
             int count = bytes.getInt(base);
@@ -164,6 +187,13 @@ public final class ICUBinary {
             return base + bytes.getInt(base + 4 + 4 + index * 8);
         }
 
+        /**
+         * Add the name of the contained resource file to `names` given its index
+         * number in the ordering of all contained resources, only if it is a
+         * top-level file.
+         * Also, return true if at least all files & folders' names are well-formed
+         * (ex: have a '/' after the package name base).
+         */
         static boolean addBaseName(ByteBuffer bytes, int index,
                 String folder, String suffix, StringBuilder sb, Set<String> names) {
             int offset = getNameOffset(bytes, index);
@@ -198,6 +228,10 @@ public final class ICUBinary {
         }
     }
 
+    /**
+     * Interface for ICU data files, whether a single .res file or a .dat
+     * file that contains .res files.
+     */
     private static abstract class DataFile {
         protected final String itemPath;
 
@@ -220,6 +254,7 @@ public final class ICUBinary {
         abstract void addBaseNamesInFolder(String folder, String suffix, Set<String> names);
     }
 
+    /** .res file */
     private static final class SingleDataFile extends DataFile {
         private final File path;
 
@@ -254,6 +289,7 @@ public final class ICUBinary {
         }
     }
 
+    /** .dat file */
     private static final class PackageDataFile extends DataFile {
         /**
          * .dat package bytes, or null if not a .dat package.
@@ -275,80 +311,6 @@ public final class ICUBinary {
         @Override
         void addBaseNamesInFolder(String folder, String suffix, Set<String> names) {
             DatPackageReader.addBaseNamesInFolder(pkgBytes, folder, suffix, names);
-        }
-    }
-
-    private static final List<DataFile> icuDataFiles = new ArrayList<>();
-
-    static {
-        // Normally com.ibm.icu.impl.ICUBinary.dataPath.
-        String dataPath = ICUConfig.get(ICUBinary.class.getName() + ".dataPath");
-        if (dataPath != null) {
-            addDataFilesFromPath(dataPath, icuDataFiles);
-        }
-    }
-
-    private static void addDataFilesFromPath(String dataPath, List<DataFile> files) {
-        // Split the path and find files in each location.
-        // This splitting code avoids the regex pattern compilation in String.split()
-        // and its array allocation.
-        // (There is no simple by-character split()
-        // and the StringTokenizer "is discouraged in new code".)
-        int pathStart = 0;
-        while (pathStart < dataPath.length()) {
-            int sepIndex = dataPath.indexOf(File.pathSeparatorChar, pathStart);
-            int pathLimit;
-            if (sepIndex >= 0) {
-                pathLimit = sepIndex;
-            } else {
-                pathLimit = dataPath.length();
-            }
-            String path = dataPath.substring(pathStart, pathLimit).trim();
-            if (path.endsWith(File.separator)) {
-                path = path.substring(0, path.length() - 1);
-            }
-            if (path.length() != 0) {
-                addDataFilesFromFolder(new File(path), new StringBuilder(), icuDataFiles);
-            }
-            if (sepIndex < 0) {
-                break;
-            }
-            pathStart = sepIndex + 1;
-        }
-    }
-
-    private static void addDataFilesFromFolder(File folder, StringBuilder itemPath,
-            List<DataFile> dataFiles) {
-        File[] files = folder.listFiles();
-        if (files == null || files.length == 0) {
-            return;
-        }
-        int folderPathLength = itemPath.length();
-        if (folderPathLength > 0) {
-            // The item path must use the ICU file separator character,
-            // not the platform-dependent File.separatorChar,
-            // so that the enumerated item paths match the paths requested by ICU code.
-            itemPath.append('/');
-            ++folderPathLength;
-        }
-        for (File file : files) {
-            String fileName = file.getName();
-            if (fileName.endsWith(".txt")) {
-                continue;
-            }
-            itemPath.append(fileName);
-            if (file.isDirectory()) {
-                // TODO: Within a folder, put all single files before all .dat packages?
-                addDataFilesFromFolder(file, itemPath, dataFiles);
-            } else if (fileName.endsWith(".dat")) {
-                ByteBuffer pkgBytes = mapFile(file);
-                if (pkgBytes != null && DatPackageReader.validate(pkgBytes)) {
-                    dataFiles.add(new PackageDataFile(itemPath.toString(), pkgBytes));
-                }
-            } else {
-                dataFiles.add(new SingleDataFile(itemPath.toString(), file));
-            }
-            itemPath.setLength(folderPathLength);
         }
     }
 
@@ -394,6 +356,249 @@ public final class ICUBinary {
         }
     }
 
+    // private classes for impls of file loading -------------------------------
+
+    /**
+     * Represents implementations of the {@code DataFiles} interface.
+     *
+     * {@code NORMAL} - locale lookups fallback to locales based on truncating
+     * the locale ID string from right to left based on the last underscore. The
+     * presence or absence of user-provided data files does not affect locale
+     * fallback (parent) relationships among files.
+     * See
+     *
+     * {@code OVERRIDE} - locale lookups are similar to {@code NORMAL}, but the
+     * values in user-provided override data files for a locale supersede any
+     * other values of built-in ICU data or {@code NORMAL} data files.
+     */
+    public enum DataFilesCategory { NORMAL, OVERRIDE };
+
+    /**
+     * An interface that represents the user-provided data files to look up
+     * resource data before looking at built-in ICU data.
+     */
+    private static abstract class DataFiles {
+
+        // A list storing all ICU data files specified by the user
+        // that they want to be included in the data file loading lookup path.
+        // The results are ultimately included in the data file lookups that occur
+        // in the public getData and getRequiredData methods.
+        protected final List<DataFile> dataFiles = new ArrayList<>();
+
+        public DataFiles() {
+            initializeDataFiles();
+        }
+
+        /**
+         * Initialize the set of files to be stored in the list from {@code getDataFiles}.
+         */
+        abstract void initializeDataFiles();
+
+        /**
+         * Indicate whether the field {@code dataFiles} has a size > 0.
+         */
+        public boolean hasFiles() {
+            return !dataFiles.isEmpty();
+        };
+
+        /**
+         * Reset the collection of {@code DataFile}s with the files contained in the directories
+         * in {@code dataPath}.  Use the empty string to clear the collection.
+         *
+         * This is analogous to ICU4C's u_setDataDirectory.
+         *
+         * @param dataPath New path of filesystem location(s) containing user-provided files to be
+         * loaded.
+         */
+        public void setDataPath(String dataPath) {
+            dataFiles.clear();
+            addDataFilesFromPath(dataPath);
+        }
+
+        /**
+         * This is public only for the concrete implementations that themselves are private.
+         * @param dataPath base filepath in which new files should be detected and added
+         *      to the current data files list.
+         */
+        public void addDataFilesFromPath(String dataPath) {
+            // Split the path and find files in each location.
+            // This splitting code avoids the regex pattern compilation in String.split()
+            // and its array allocation.
+            // (There is no simple by-character split()
+            // and the StringTokenizer "is discouraged in new code".)
+            int pathStart = 0;
+            while (pathStart < dataPath.length()) {
+                int sepIndex = dataPath.indexOf(File.pathSeparatorChar, pathStart);
+                int pathLimit;
+                if (sepIndex >= 0) {
+                    pathLimit = sepIndex;
+                } else {
+                    pathLimit = dataPath.length();
+                }
+                String path = dataPath.substring(pathStart, pathLimit).trim();
+                if (path.endsWith(File.separator)) {
+                    path = path.substring(0, path.length() - 1);
+                }
+                if (path.length() != 0) {
+                    addDataFilesFromFolder(new File(path), new StringBuilder(), dataFiles);
+                }
+                if (sepIndex < 0) {
+                    break;
+                }
+                pathStart = sepIndex + 1;
+            }
+        }
+
+        private void addDataFilesFromFolder(File folder, StringBuilder itemPath,
+                List<DataFile> dataFiles) {
+            File[] files = folder.listFiles();
+            if (files == null || files.length == 0) {
+                return;
+            }
+            int folderPathLength = itemPath.length();
+            if (folderPathLength > 0) {
+                // The item path must use the ICU file separator character,
+                // not the platform-dependent File.separatorChar,
+                // so that the enumerated item paths match the paths requested by ICU code.
+                itemPath.append('/');
+                ++folderPathLength;
+            }
+            for (File file : files) {
+                String fileName = file.getName();
+                if (fileName.endsWith(".txt")) {
+                    continue;
+                }
+                itemPath.append(fileName);
+                if (file.isDirectory()) {
+                    // TODO: Within a folder, put all single files before all .dat packages?
+                    addDataFilesFromFolder(file, itemPath, dataFiles);
+                } else if (fileName.endsWith(".dat")) {
+                    ByteBuffer pkgBytes = mapFile(file);
+                    if (pkgBytes != null && DatPackageReader.validate(pkgBytes)) {
+                        dataFiles.add(new PackageDataFile(itemPath.toString(), pkgBytes));
+                    }
+                } else {
+                    dataFiles.add(new SingleDataFile(itemPath.toString(), file));
+                }
+                itemPath.setLength(folderPathLength);
+            }
+        }
+
+        /**
+         * Loads an ICU binary data file and returns it as a ByteBuffer.
+         * The buffer contents is normally read-only, but its position etc. can be modified.
+         *
+         * Note: method is public in order to support legacy private helper methods in
+         * the superclass that support the legacy APIs which assume the non-override/overlay
+         * style of loading resources.
+         *
+         * @param loader Used for loader.getResourceAsStream() unless the data is found elsewhere.
+         * @param resourceName Resource name for use with the loader.
+         * @param itemPath Relative ICU data item path, for example "root.res" or "coll/ucadata.icu".
+         * @param required If the resource cannot be found,
+         *        this method returns null (!required) or throws an exception (required).
+         * @return The data as a read-only ByteBuffer,
+         *         or null if required==false and the resource could not be found.
+         * @throws MissingResourceException if required==true and the resource could not be found
+         */
+        public ByteBuffer getData(ClassLoader loader, String resourceName,
+                String itemPath, boolean required) {
+            ByteBuffer bytes = this.getDataFromFile(itemPath);
+            if (bytes != null) {
+                return bytes;
+            }
+            if (loader == null) {
+                loader = ClassLoaderUtil.getClassLoader(ICUData.class);
+            }
+            if (resourceName == null) {
+                resourceName = ICUData.ICU_BASE_NAME + '/' + itemPath;
+            }
+            ByteBuffer buffer = null;
+            try {
+                @SuppressWarnings("resource")  // Closed by getByteBufferFromInputStreamAndCloseStream().
+                InputStream is = ICUData.getStream(loader, resourceName, required);
+                if (is == null) {
+                    return null;
+                }
+                buffer = getByteBufferFromInputStreamAndCloseStream(is);
+            } catch (IOException e) {
+                throw new ICUUncheckedIOException(e);
+            }
+            return buffer;
+        }
+
+        private ByteBuffer getDataFromFile(String itemPath) {
+            for (DataFile dataFile : dataFiles) {
+                ByteBuffer data = dataFile.getData(itemPath);
+                if (data != null) {
+                    return data;
+                }
+            }
+            return null;
+        }
+
+        /**
+         * Note: method is public in order to support legacy private helper methods in
+         * the superclass that support the legacy APIs which assume the non-override/overlay
+         * style of loading resources.
+         *
+         * @param folder The relative ICU data folder, like "" or "coll".
+         * @param suffix Usually ".res".
+         * @param names File base names relative to the folder are added without the suffix,
+         *        for example "de_CH".
+         */
+        public void addBaseNamesInFileFolder(String folder, String suffix, Set<String> names) {
+            for (DataFile dataFile : dataFiles) {
+                dataFile.addBaseNamesInFolder(folder, suffix, names);
+            }
+        }
+    }
+
+    static final class NormalDataFiles extends DataFiles {
+        // Environment variable name for the path to ICU Data Overlay files.
+        // Note: this matches the environment variable of the same name in ICU4C
+        // that allows users to override data. (Whereas ICU_DATA can be ignored
+        // when ICU_NO_USER_DATA_OVERRIDE is defined in ICU4C.)
+        private static final String DATA_FILES_ENV_VAR = "ICU_DATA";
+
+        /* (non-Javadoc)
+         * @see com.ibm.icu.impl.ICUBinary.DataFiles#initializeDataFiles()
+         */
+        @Override
+        void initializeDataFiles() {
+            String dataPath = System.getenv(DATA_FILES_ENV_VAR);
+            if (dataPath != null) {
+                addDataFilesFromPath(dataPath);
+            }
+
+            // Normally com.ibm.icu.impl.ICUBinary.dataPath.
+            dataPath = ICUConfig.get(ICUBinary.class.getName() + ".dataPath");
+            if (dataPath != null) {
+                addDataFilesFromPath(dataPath);
+            }
+
+        }
+    }
+
+    // VisibleForTesting
+    public static final class OverrideDataFiles extends DataFiles {
+        private static final String OVERRIDE_DATA_FILES_ENV_VAR = "ICU_OVERRIDE_DATA";
+
+        @Override
+        void initializeDataFiles() {
+            String dataPath = System.getenv(OVERRIDE_DATA_FILES_ENV_VAR);
+
+            if (dataPath != null) {
+                addDataFilesFromPath(dataPath);
+            }
+        }
+
+    }
+
+    public static final NormalDataFiles NORMAL_DATA_FILES = new NormalDataFiles();
+
+    public static final OverrideDataFiles OVERRIDE_DATA_FILES = new OverrideDataFiles();
+
     // public inner interface ------------------------------------------------
 
     /**
@@ -410,7 +615,7 @@ public final class ICUBinary {
         public boolean isDataVersionAcceptable(byte version[]);
     }
 
-    // public methods --------------------------------------------------------
+    // public methods (existing API for NORMAL_DATA_FILES) ---------------------
 
     /**
      * Loads an ICU binary data file and returns it as a ByteBuffer.
@@ -480,38 +685,35 @@ public final class ICUBinary {
      */
     private static ByteBuffer getData(ClassLoader loader, String resourceName,
             String itemPath, boolean required) {
-        ByteBuffer bytes = getDataFromFile(itemPath);
-        if (bytes != null) {
-            return bytes;
-        }
-        if (loader == null) {
-            loader = ClassLoaderUtil.getClassLoader(ICUData.class);
-        }
-        if (resourceName == null) {
-            resourceName = ICUData.ICU_BASE_NAME + '/' + itemPath;
-        }
-        ByteBuffer buffer = null;
-        try {
-            @SuppressWarnings("resource")  // Closed by getByteBufferFromInputStreamAndCloseStream().
-            InputStream is = ICUData.getStream(loader, resourceName, required);
-            if (is == null) {
-                return null;
-            }
-            buffer = getByteBufferFromInputStreamAndCloseStream(is);
-        } catch (IOException e) {
-            throw new ICUUncheckedIOException(e);
-        }
-        return buffer;
+
+        return getData(loader, resourceName, itemPath, required, DataFilesCategory.NORMAL);
     }
 
-    private static ByteBuffer getDataFromFile(String itemPath) {
-        for (DataFile dataFile : icuDataFiles) {
-            ByteBuffer data = dataFile.getData(itemPath);
-            if (data != null) {
-                return data;
-            }
+    /**
+     * Loads an ICU binary data file and returns it as a ByteBuffer.
+     * The buffer contents is normally read-only, but its position etc. can be modified.
+     *
+     * @param loader Used for loader.getResourceAsStream() unless the data is found elsewhere.
+     * @param resourceName Resource name for use with the loader.
+     * @param itemPath Relative ICU data item path, for example "root.res" or "coll/ucadata.icu".
+     * @param required If the resource cannot be found,
+     *        this method returns null (!required) or throws an exception (required).
+     * @param dataFilesCategory Whether the data files parent chain is loaded as NORMAL, OVERRIDE, etc.
+     * @return The data as a read-only ByteBuffer,
+     *         or null if required==false and the resource could not be found.
+     * @throws MissingResourceException if required==true and the resource could not be found
+     */
+    public static ByteBuffer getData(ClassLoader loader, String resourceName,
+            String itemPath, boolean required, DataFilesCategory dataFilesCategory) {
+
+        switch(dataFilesCategory) {
+        case OVERRIDE:
+            return OVERRIDE_DATA_FILES.getData(loader, resourceName, itemPath, required);
+        case NORMAL:
+        default:
+            return NORMAL_DATA_FILES.getData(loader, resourceName, itemPath, required);
         }
-        return null;
+
     }
 
     @SuppressWarnings("resource")  // Closing a file closes its channel.
@@ -542,10 +744,10 @@ public final class ICUBinary {
      *        for example "de_CH".
      */
     public static void addBaseNamesInFileFolder(String folder, String suffix, Set<String> names) {
-        for (DataFile dataFile : icuDataFiles) {
-            dataFile.addBaseNamesInFolder(folder, suffix, names);
-        }
+        NORMAL_DATA_FILES.addBaseNamesInFileFolder(folder, suffix, names);
     }
+
+    // static utility functions-------------------------------------------------
 
     /**
      * Same as readHeader(), but returns a VersionInfo rather than a compact int.
