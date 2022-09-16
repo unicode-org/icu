@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1663343003509,
+  "lastUpdate": 1663344424809,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -1738,6 +1738,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 358.86712961465486,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "9dc1c020a19a5b950af3e6304b97e7396b92aaaf",
+          "message": "ICU-20512 Add extra matchers to handle empty currency symbols",
+          "timestamp": "2022-09-16T09:00:50-07:00",
+          "tree_id": "24a6fbc2a421138fe4900be8283523091a3cfbc7",
+          "url": "https://github.com/unicode-org/icu/commit/9dc1c020a19a5b950af3e6304b97e7396b92aaaf"
+        },
+        "date": 1663344416284,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 439.6893390700521,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
