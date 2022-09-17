@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1663364175096,
+  "lastUpdate": 1663373156130,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -6382,6 +6382,48 @@ window.BENCHMARK_DATA = {
           {
             "name": "FromUTF8",
             "value": 2.1635,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "y.umaoka@gmail.com",
+            "name": "yumaoka",
+            "username": "yumaoka"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "17435c4533c173b228d60e47413f35c1c6a9d748",
+          "message": "ICU-22151 Update timezone-region supplementation mapping data for Jan Mayen and some others",
+          "timestamp": "2022-09-16T16:49:42-07:00",
+          "tree_id": "b53cde68b9a46dfbf1b6ce2fe8afcb340e7a4275",
+          "url": "https://github.com/unicode-org/icu/commit/17435c4533c173b228d60e47413f35c1c6a9d748"
+        },
+        "date": 1663373149686,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "Roundtrip",
+            "value": 14.1224,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUnicode",
+            "value": 4.8038,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "FromUTF8",
+            "value": 3.2856,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
