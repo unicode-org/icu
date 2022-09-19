@@ -26,6 +26,7 @@ class LocaleFallbackData {
         t.put("ae", "Avst");
         t.put("aeb", "Arab");
         t.put("aho", "Ahom");
+        t.put("ajt", "Arab");
         t.put("akk", "Xsux");
         t.put("alt", "Cyrl");
         t.put("am", "Ethi");
