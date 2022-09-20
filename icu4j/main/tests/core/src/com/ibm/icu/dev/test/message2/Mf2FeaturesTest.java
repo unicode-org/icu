@@ -20,7 +20,7 @@ import com.ibm.icu.util.CurrencyAmount;
  * Trying to show off most of the features in one place.
  *
  * <p>It covers the examples in the
- * <a href="https://github.com/unicode-org/message-format-wg/blob/develop/spec/syntax.md">spec document</a>,
+ * <a href="https://github.com/unicode-org/message-format-wg/blob/main/spec/syntax.md">spec document</a>,
  * except for the custom formatters ones, which are too verbose and were moved to separate test classes.</p>
  * </p>
  */

@@ -16,9 +16,9 @@ import java.util.StringJoiner;
  * This maps closely to the official specification.
  * Since it is not final, we will not add javadoc everywhere.
  *
- * <p>See <a target="github" href="https://github.com/unicode-org/message-format-wg/blob/develop/spec/syntax.md">the
+ * <p>See <a target="github" href="https://github.com/unicode-org/message-format-wg/blob/main/spec/syntax.md">the
  * description of the syntax with examples and use cases</a> and the corresponding
- * <a target="github" href="https://github.com/unicode-org/message-format-wg/blob/develop/spec/message.ebnf">EBNF</a>.</p>
+ * <a target="github" href="https://github.com/unicode-org/message-format-wg/blob/main/spec/message.ebnf">EBNF</a>.</p>
  *
  * @internal ICU 72 technology preview
  * @deprecated This API is for ICU internal use only.
