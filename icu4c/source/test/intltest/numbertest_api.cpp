@@ -93,6 +93,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(unitNounClass);
         TESTCASE_AUTO(unitNotConvertible);
         TESTCASE_AUTO(unitPercent);
+        TESTCASE_AUTO(unitLocaleTags);
         if (!quick) {
             // Slow test: run in exhaustive mode only
             TESTCASE_AUTO(percentParity);
@@ -2946,6 +2947,90 @@ void NumberFormatterApiTest::unitPercent() {
             Locale::getEnglish(),
             50,
             u"50 meters per percent");
+}
+
+void NumberFormatterApiTest::unitLocaleTags() {
+    IcuTestErrorCode status(*this, "unitLocaleTags");
+
+    const struct TestCase {
+        const UnicodeString message;
+        const char *locale;
+        const char *inputUnit;
+        const double inputValue;
+        const char *usage;
+        const char *expectedOutputUnit;
+        const double expectedOutputValue;
+        const UnicodeString expectedFormattedNumber;
+    } cases[] = {
+        // Test without any tag behaviour
+        {u"Test the locale without any addition and without usage", "en-US", "celsius", 0, nullptr,
+         "celsius", 0.0, u"0 degrees Celsius"},
+        {u"Test the locale without any addition and usage", "en-US", "celsius", 0, "default",
+         "fahrenheit", 32.0, u"32 degrees Fahrenheit"},
+
+        // Test the behaviour of the `mu` tag.
+        {u"Test the locale with mu = celsius and without usage", "en-US-u-mu-celsius", "fahrenheit", 0,
+         nullptr, "fahrenheit", 0.0, u"0 degrees Fahrenheit"},
+        {u"Test the locale with mu = celsius and with usage", "en-US-u-mu-celsius", "fahrenheit", 0,
+         "default", "celsius", -18.0, u"-18 degrees Celsius"},
+        {u"Test the locale with mu = calsius (wrong spelling) and with usage", "en-US-u-mu-calsius",
+         "fahrenheit", 0, "default", "fahrenheit", 0.0, u"0 degrees Fahrenheit"},
+        {u"Test the locale with mu = meter (only temprature units are supported) and with usage",
+         "en-US-u-mu-meter", "foot", 0, "default", "inch", 0.0, u"0 inches"},
+
+        // Test the behaviour of the `ms` tag
+        {u"Test the locale with ms = metric and without usage", "en-US-u-ms-metric", "fahrenheit", 0,
+         nullptr, "fahrenheit", 0.0, u"0 degrees Fahrenheit"},
+        {u"Test the locale with ms = metric and with usage", "en-US-u-ms-metric", "fahrenheit", 0,
+         "default", "celsius", -18, u"-18 degrees Celsius"},
+        {u"Test the locale with ms = Matric (wrong spelling) and with usage", "en-US-u-ms-Matric",
+         "fahrenheit", 0, "default", "fahrenheit", 0.0, u"0 degrees Fahrenheit"},
+
+        // Test the behaviour of the `rg` tag
+        {u"Test the locale with rg = UK and without usage", "en-US-u-rg-ukzzzz", "fahrenheit", 0,
+         nullptr, "fahrenheit", 0.0, u"0 degrees Fahrenheit"},
+        {u"Test the locale with rg = UK and with usage", "en-US-u-rg-ukzzzz", "fahrenheit", 0, "default",
+         "celsius", -18, u"-18 degrees Celsius"},
+        {"Test the locale with mu = fahrenheit and without usage", "en-US-u-mu-fahrenheit", "celsius", 0,
+         nullptr, "celsius", 0.0, "0 degrees Celsius"},
+        {"Test the locale with mu = fahrenheit and with usage", "en-US-u-mu-fahrenheit", "celsius", 0,
+         "default", "fahrenheit", 32.0, "32 degrees Fahrenheit"},
+        {u"Test the locale with rg = UKOI and with usage", "en-US-u-rg-ukoizzzz", "fahrenheit", 0,
+         "default", "celsius", -18.0, u"-18 degrees Celsius"},
+
+        // Test the priorities
+        {u"Test the locale with mu,ms,rg --> mu tag wins", "en-US-u-mu-celsius-ms-ussystem-rg-uszzzz",
+         "celsius", 0, "default", "celsius", 0.0, u"0 degrees Celsius"},
+        {u"Test the locale with ms,rg --> ms tag wins", "en-US-u-ms-metric-rg-uszzzz", "foot", 1,
+         "default", "centimeter", 30.0, u"30 centimeters"},
+    };
+
+    for (const auto &testCase : cases) {
+        UnicodeString message = testCase.message;
+        Locale locale(testCase.locale);
+        auto inputUnit = MeasureUnit::forIdentifier(testCase.inputUnit, status);
+        auto inputValue = testCase.inputValue;
+        auto usage = testCase.usage;
+        auto expectedOutputUnit = MeasureUnit::forIdentifier(testCase.expectedOutputUnit, status);
+        UnicodeString expectedFormattedNumber = testCase.expectedFormattedNumber;
+
+        auto nf = NumberFormatter::with()
+                      .locale(locale)                        //
+                      .unit(inputUnit)                       //
+                      .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME); //
+        if (usage != nullptr) {
+            nf = nf.usage(usage);
+        }
+        auto fn = nf.formatDouble(inputValue, status);
+        if (status.errIfFailureAndReset()) {
+            continue;
+        }
+
+        assertEquals(message, fn.toString(status), expectedFormattedNumber);
+        // TODO: ICU-22154
+        // assertEquals(message, fn.getOutputUnit(status).getIdentifier(),
+        //              expectedOutputUnit.getIdentifier());
+    }
 }
 
 void NumberFormatterApiTest::percentParity() {
