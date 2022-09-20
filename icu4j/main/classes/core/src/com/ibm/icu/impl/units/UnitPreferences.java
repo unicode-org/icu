@@ -4,14 +4,28 @@ package com.ibm.icu.impl.units;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UResource;
+import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
 public class UnitPreferences {
+    private static final Map<String, String> measurementSystem;
+
+    static {
+        Map tempMS = new HashMap<String, String>();
+        tempMS.put("metric", "001");
+        tempMS.put("ussystem", "US");
+        tempMS.put("uksystem", "GB");
+        measurementSystem = Collections.unmodifiableMap(tempMS);
+    }
+
 
     private HashMap<String, HashMap<String, UnitPreference[]>> mapToUnitPreferences = new HashMap<>();
 
@@ -56,7 +70,48 @@ public class UnitPreferences {
         return result.toArray(new String[0]);
     }
 
-    public UnitPreference[] getPreferencesFor(String category, String usage, String region) {
+    public UnitPreference[] getPreferencesFor(String category, String usage, ULocale locale, UnitsData data) {
+        // TODO: remove this condition when all the categories are allowed.
+        if (category.equals("temperature")) {
+            String localeUnit = locale.getKeywordValue("mu");
+            String localeUnitCategory;
+            try {
+                localeUnitCategory = localeUnit == null ? null : data.getCategory(MeasureUnitImpl.forIdentifier(localeUnit));
+            } catch (Exception e) {
+                localeUnitCategory = null;
+            }
+
+            if (localeUnitCategory != null && category.equals(localeUnitCategory)) {
+                UnitPreference[] preferences = {new UnitPreference(localeUnit, null, null)};
+                return preferences;
+            }
+        }
+
+        String region = locale.getCountry();
+
+        // Check the locale system tag, e.g `ms=metric`.
+        String localeSystem = locale.getKeywordValue("measure");
+        boolean isLocaleSystem = false;
+        if (measurementSystem.containsKey(localeSystem)) {
+            isLocaleSystem = true;
+            region = measurementSystem.get(localeSystem);
+        }
+
+        // Check the region tag, e.g. `rg=uszzz`.
+        if (!isLocaleSystem) {
+            String localeRegion = locale.getKeywordValue("rg");
+            if (localeRegion != null && localeRegion.length() >= 3) {
+                if (localeRegion.equals("default")) {
+                    region = localeRegion;
+                } else if (Character.isDigit(localeRegion.charAt(0))) {
+                    region = localeRegion.substring(0, 3); // e.g. 001
+                } else {
+                    // Capitalize the first two character of the region, e.g. ukzzzz or usca
+                    region = localeRegion.substring(0, 2).toUpperCase(Locale.ROOT);
+                }
+            }
+        }
+
         String[] subUsages = getAllUsages(usage);
         UnitPreference[] result = null;
         for (String subUsage :
@@ -64,6 +119,7 @@ public class UnitPreferences {
             result = getUnitPreferences(category, subUsage, region);
             if (result != null) break;
         }
+
         // TODO: if a category is missing, we get an assertion failure, or we
         // return null, causing a NullPointerException. In C++, we return an
         // U_MISSING_RESOURCE_ERROR error.
@@ -101,8 +157,8 @@ public class UnitPreferences {
 
         public UnitPreference(String unit, String geq, String skeleton) {
             this.unit = unit;
-            this.geq = new BigDecimal(geq);
-            this.skeleton = skeleton;
+            this.geq = geq == null ? BigDecimal.valueOf( Double.MIN_VALUE) /* -inf */ :  new BigDecimal(geq);
+            this.skeleton = skeleton == null? "" : skeleton;
         }
 
         public String getUnit() {

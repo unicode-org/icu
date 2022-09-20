@@ -490,6 +490,65 @@ public class NumberFormatterApiTest extends TestFmwk {
     }
 
     @Test
+    public void unitWithLocaleTags() {
+        String[][] tests = {
+                // 0-message, 1- locale, 2- input unit, 3- input value, 4- usage, 5- output unit, 6- output value, 7- formatted number.
+                // Test without any tag behaviour
+                {"Test the locale without any addition and without usage", "en-US", "celsius", "0", null, "celsius", "0.0", "0 degrees Celsius"},
+                {"Test the locale without any addition and usage", "en-US", "celsius", "0", "default", "fahrenheit", "32.0", "32 degrees Fahrenheit"},
+
+                // Test the behaviour of the `mu` tag.
+                {"Test the locale with mu = celsius and without usage", "en-US-u-mu-celsius", "fahrenheit", "0", null, "fahrenheit", "0.0", "0 degrees Fahrenheit"},
+                {"Test the locale with mu = celsius and with usage", "en-US-u-mu-celsius", "fahrenheit", "0", "default", "celsius", "-18.0", "-18 degrees Celsius"},
+                {"Test the locale with mu = calsius (wrong spelling) and with usage", "en-US-u-mu-calsius", "fahrenheit", "0", "default", "fahrenheit", "0.0", "0 degrees Fahrenheit"},
+                {"Test the locale with mu = fahrenheit and without usage", "en-US-u-mu-fahrenheit", "celsius", "0", null, "celsius", "0.0", "0 degrees Celsius"},
+                {"Test the locale with mu = fahrenheit and with usage", "en-US-u-mu-fahrenheit", "celsius", "0", "default", "fahrenheit", "32.0", "32 degrees Fahrenheit"},
+                {"Test the locale with mu = meter (only temprature units are supported) and with usage", "en-US-u-mu-meter", "foot", "0", "default", "foot", "0.0", "0 inches"},
+
+                // Test the behaviour of the `ms` tag
+                {"Test the locale with ms = metric and without usage", "en-US-u-ms-metric", "fahrenheit", "0", null, "fahrenheit", "0.0", "0 degrees Fahrenheit"},
+                {"Test the locale with ms = metric and with usage", "en-US-u-ms-metric", "fahrenheit", "0", "default", "celsius", "-18", "-18 degrees Celsius"},
+                {"Test the locale with ms = Matric (wrong spelling) and with usage", "en-US-u-ms-Matric", "fahrenheit", "0", "default", "fahrenheit", "0.0", "0 degrees Fahrenheit"},
+
+                // Test the behaviour of the `rg` tag
+                {"Test the locale with rg = UK and without usage", "en-US-u-rg-ukzzzz", "fahrenheit", "0", null, "fahrenheit", "0.0", "0 degrees Fahrenheit"},
+                {"Test the locale with rg = UK and with usage", "en-US-u-rg-ukzzzz", "fahrenheit", "0", "default", "celsius", "-18", "-18 degrees Celsius"},
+                {"Test the locale with rg = UKOI and with usage", "en-US-u-rg-ukoizzzz", "fahrenheit", "0", "default", "celsius", "-18" , "-18 degrees Celsius"},
+
+                // Test the priorities
+                {"Test the locale with mu,ms,rg --> mu tag wins", "en-US-u-mu-celsius-ms-ussystem-rg-uszzzz", "celsius", "0", "default", "celsius", "0.0", "0 degrees Celsius"},
+                {"Test the locale with ms,rg --> ms tag wins", "en-US-u-ms-metric-rg-uszzzz", "foot", "1", "default", "foot", "30.0", "30 centimeters"},
+        };
+
+        int testIndex = 0;
+        for (String[] test : tests) {
+            String message = test[0] + ", index = " + testIndex++;
+            ULocale locale = ULocale.forLanguageTag(test[1]);
+            MeasureUnit inputUnit = MeasureUnit.forIdentifier(test[2]);
+            double inputValue = Double.parseDouble(test[3]);
+            String usage = test[4];
+            MeasureUnit expectedOutputUnit = MeasureUnit.forIdentifier(test[5]);
+            BigDecimal expectedOutputValue = new BigDecimal(test[6]);
+            String expectedFormattedMessage = test[7];
+
+            LocalizedNumberFormatter nf = NumberFormatter.with().locale(locale).unit(inputUnit).unitWidth(UnitWidth.FULL_NAME);
+            if (usage != null) {
+                nf = nf.usage(usage);
+            }
+
+            FormattedNumber fn = nf.format(inputValue);
+            MeasureUnit actualOutputUnit = fn.getOutputUnit();
+            BigDecimal actualOutputValue = fn.toBigDecimal();
+            String actualFormattedMessage = fn.toString();
+
+            assertEquals(message, expectedFormattedMessage, actualFormattedMessage);
+            // TODO: ICU-22154
+            // assertEquals(message, expectedOutputUnit, actualOutputUnit);
+            assertTrue(message, expectedOutputValue.subtract(actualOutputValue).abs().compareTo(BigDecimal.valueOf(0.0001)) <= 0);
+        }
+    }
+
+    @Test
     public void unitMeasure() {
         assertFormatDescending(
                 "Meters Short",

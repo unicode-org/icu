@@ -26,7 +26,7 @@ import com.ibm.icu.impl.units.UnitsData;
 import com.ibm.icu.impl.units.UnitsRouter;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
-
+import com.ibm.icu.util.ULocale;
 
 public class UnitsTest {
 
@@ -613,6 +613,7 @@ public class UnitsTest {
              */
             String category;
             String usage;
+            ULocale locale;
             String region;
             Pair<String, MeasureUnitImpl> inputUnit;
             BigDecimal input;
@@ -651,6 +652,7 @@ public class UnitsTest {
                 this.category = category;
                 this.usage = usage;
                 this.region = region;
+                this.locale = new ULocale("und-" + this.region);
                 this.inputUnit = Pair.of(inputUnitString, MeasureUnitImpl.UnitsParser.parseForIdentifier(inputUnitString));
                 this.input = new BigDecimal(inputValue);
                 for (Pair<String, String> output :
@@ -667,8 +669,8 @@ public class UnitsTest {
                     outputUnits.add(unit.second);
                 }
                 return "TestCase: " + category + ", " + usage + ", " + region + "; Input: " + input +
-                    " " + inputUnit.first + "; Expected Values: " + expectedInOrder +
-                    ", Expected Units: " + outputUnits;
+                        " " + inputUnit.first + "; Expected Values: " + expectedInOrder +
+                        ", Expected Units: " + outputUnits;
             }
         }
 
@@ -686,7 +688,8 @@ public class UnitsTest {
         }
 
         for (TestCase testCase : tests) {
-            UnitsRouter router = new UnitsRouter(testCase.inputUnit.second, testCase.region, testCase.usage);
+            UnitsRouter router = new UnitsRouter(testCase.inputUnit.second, testCase.locale,
+                    testCase.usage);
             List<Measure> measures = router.route(testCase.input, null).complexConverterResult.measures;
 
             assertEquals("For " + testCase.toString() + ", Measures size must be the same as expected units",
@@ -707,7 +710,7 @@ public class UnitsTest {
 
         // Test UnitsRouter created with CLDR units identifiers.
         for (TestCase testCase : tests) {
-            UnitsRouter router = new UnitsRouter(testCase.inputUnit.first, testCase.region, testCase.usage);
+            UnitsRouter router = new UnitsRouter(testCase.inputUnit.first, testCase.locale, testCase.usage);
             List<Measure> measures = router.route(testCase.input, null).complexConverterResult.measures;
 
             assertEquals("Measures size must be the same as expected units",
@@ -785,7 +788,9 @@ public class UnitsTest {
 
         UnitsData data = new UnitsData();
         for (TestCase t : testCases) {
-            UnitPreferences.UnitPreference prefs[] = data.getPreferencesFor(t.category, t.usage, t.region);
+            ULocale locale = new ULocale("und-" + t.region);
+            UnitPreferences.UnitPreference prefs[] = data.getPreferencesFor(t.category, t.usage,
+                    locale);
             if (prefs.length > 0) {
                 assertEquals(t.name + " - max unit", t.expectedBiggest, prefs[0].getUnit());
                 assertEquals(t.name + " - min unit", t.expectedSmallest, prefs[prefs.length - 1].getUnit());

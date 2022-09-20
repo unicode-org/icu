@@ -10,6 +10,7 @@ import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.number.MicroProps;
 import com.ibm.icu.number.Precision;
 import com.ibm.icu.util.MeasureUnit;
+import com.ibm.icu.util.ULocale;
 
 /**
  * `UnitsRouter` responsible for converting from a single unit (such as `meter` or `meter-per-second`) to
@@ -22,7 +23,7 @@ import com.ibm.icu.util.MeasureUnit;
  * `foot+inch`, otherwise, the output will be in `inch`.
  * <p>
  * NOTE:
- * the output units and the their limits MUST BE in order, for example, if the output units, from the
+ * the output units and their limits MUST BE in order, for example, if the output units, from the
  * previous example, are the following:
  * {`inch`     , limit: no value (-inf)}
  * {`foot+inch`, limit: 3.0}
@@ -46,17 +47,17 @@ public class UnitsRouter {
     private ArrayList<MeasureUnit> outputUnits_ = new ArrayList<>();
     private ArrayList<ConverterPreference> converterPreferences_ = new ArrayList<>();
 
-    public UnitsRouter(String inputUnitIdentifier, String region, String usage) {
-        this(MeasureUnitImpl.forIdentifier(inputUnitIdentifier), region, usage);
+    public UnitsRouter(String inputUnitIdentifier, ULocale locale, String usage) {
+        this(MeasureUnitImpl.forIdentifier(inputUnitIdentifier), locale, usage);
     }
 
-    public UnitsRouter(MeasureUnitImpl inputUnit, String region, String usage) {
+    public UnitsRouter(MeasureUnitImpl inputUnit, ULocale locale, String usage) {
         // TODO: do we want to pass in ConversionRates and UnitPreferences instead?
         // of loading in each UnitsRouter instance? (Or make global?)
         UnitsData data = new UnitsData();
 
         String category = data.getCategory(inputUnit);
-        UnitPreferences.UnitPreference[] unitPreferences = data.getPreferencesFor(category, usage, region);
+        UnitPreferences.UnitPreference[] unitPreferences = data.getPreferencesFor(category, usage, locale);
 
         for (int i = 0; i < unitPreferences.length; ++i) {
             UnitPreferences.UnitPreference preference = unitPreferences[i];
