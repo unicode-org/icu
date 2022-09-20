@@ -30,7 +30,7 @@ import java.util.Map;
  * is hosted on <a target="github" href="https://github.com/unicode-org/message-format-wg">GitHub</a>.</p>
  *
  * <p>The current specification for the syntax and data model can be found
- * <a target="github" href="https://github.com/unicode-org/message-format-wg/blob/develop/spec/syntax.md">here</a>.</p>
+ * <a target="github" href="https://github.com/unicode-org/message-format-wg/blob/main/spec/syntax.md">here</a>.</p>
  *
  * <p>This tech preview implements enough of the {@code MessageFormat} functions to be useful,
  * but the final set of functions and the parameters accepted by those functions is not yet finalized.</p>
