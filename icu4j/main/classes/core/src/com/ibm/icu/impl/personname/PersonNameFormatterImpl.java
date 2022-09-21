@@ -2,13 +2,8 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.personname;
 
-import com.ibm.icu.impl.ICUData;
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.lang.UScript;
-import com.ibm.icu.text.PersonName;
-import com.ibm.icu.text.PersonNameFormatter;
-import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
+import static com.ibm.icu.util.UResourceBundle.ARRAY;
+import static com.ibm.icu.util.UResourceBundle.STRING;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,8 +11,13 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import static com.ibm.icu.util.UResourceBundle.ARRAY;
-import static com.ibm.icu.util.UResourceBundle.STRING;
+import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.lang.UScript;
+import com.ibm.icu.text.PersonName;
+import com.ibm.icu.text.PersonNameFormatter;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 
 /**
  * Actual implementation class for PersonNameFormatter.

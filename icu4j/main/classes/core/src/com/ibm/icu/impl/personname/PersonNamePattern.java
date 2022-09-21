@@ -2,9 +2,15 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.personname;
 
-import com.ibm.icu.text.PersonName;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
 
-import java.util.*;
+import com.ibm.icu.text.PersonName;
 
 /**
  * A single name formatting pattern, corresponding to a single namePattern element in CLDR.
