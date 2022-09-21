@@ -2,11 +2,14 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.impl.personname;
 
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.text.*;
-
 import java.util.Locale;
 import java.util.StringTokenizer;
+
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.CaseMap;
+import com.ibm.icu.text.PersonName;
+import com.ibm.icu.text.SimpleFormatter;
 
 /**
  * Parent class for classes that implement field-modifier behavior.

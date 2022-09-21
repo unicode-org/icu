@@ -2,11 +2,11 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.personname.PersonNameFormatterImpl;
-
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+
+import com.ibm.icu.impl.personname.PersonNameFormatterImpl;
 
 /**
  * A class for formatting names of people.  Takes raw name data for a person and renders it into a string according to

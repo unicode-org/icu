@@ -2,15 +2,20 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.text.PersonName;
-import com.ibm.icu.text.PersonNameFormatter;
-import com.ibm.icu.text.SimplePersonName;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
+import java.util.StringTokenizer;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.util.*;
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.PersonName;
+import com.ibm.icu.text.PersonNameFormatter;
+import com.ibm.icu.text.SimplePersonName;
 
 @RunWith(JUnit4.class)
 public class PersonNameFormatterTest extends TestFmwk{
