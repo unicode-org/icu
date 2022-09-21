@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1663624020441,
+  "lastUpdate": 1663718571131,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -2008,6 +2008,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 8.752751703900806,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "f5367befba65cc6a94cea5ff557bf72f1af9254c",
+          "message": "ICU-22124 Update the MessageFormat v2 links to the main branch",
+          "timestamp": "2022-09-20T16:47:38-07:00",
+          "tree_id": "6a3c5be851b439f5e83d53d6b21a2431eedb8e83",
+          "url": "https://github.com/unicode-org/icu/commit/f5367befba65cc6a94cea5ff557bf72f1af9254c"
+        },
+        "date": 1663718562295,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 10.637970132235694,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
