@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1663742625443,
+  "lastUpdate": 1663786898232,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -2158,6 +2158,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 422.0990721703417,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nmihai_2000@yahoo.com",
+            "name": "Mihai Nita",
+            "username": "mihnita"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "b23d6c1afe339a09da31943f5fe104cd3f2689ff",
+          "message": "ICU-22124 Tag the default constructor of OrderedMap as internal/deprecated\n\nICU-22124 Tag the default constructor of OrderedMap as internal/deprecated\r\n\r\nFix for apireport, see #2193",
+          "timestamp": "2022-09-21T11:50:09-07:00",
+          "tree_id": "2d04f8c14ced0ad2bb157e2c6f7df13de67bcf0d",
+          "url": "https://github.com/unicode-org/icu/commit/b23d6c1afe339a09da31943f5fe104cd3f2689ff"
+        },
+        "date": 1663786889450,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 377.3827727330718,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
