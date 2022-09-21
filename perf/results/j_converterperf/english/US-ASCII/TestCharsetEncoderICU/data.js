@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1663718620673,
+  "lastUpdate": 1663719023680,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -1918,6 +1918,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 0.6114741741516241,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "younies.mahmoud@gmail.com",
+            "name": "Younies Mahmoud",
+            "username": "younies"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "dbfe83010856a58698edf68476ef693236f49a5a",
+          "message": "ICU-22122 Support Locale Tags (ms, mu and rg)\n\nSee #2182",
+          "timestamp": "2022-09-20T16:51:24-07:00",
+          "tree_id": "4817fd24c8d0124c0b6375b844fafa8a93c32998",
+          "url": "https://github.com/unicode-org/icu/commit/dbfe83010856a58698edf68476ef693236f49a5a"
+        },
+        "date": 1663719017625,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 0.6134323337382147,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
