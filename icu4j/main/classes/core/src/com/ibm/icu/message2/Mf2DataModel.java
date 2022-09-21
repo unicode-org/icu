@@ -664,6 +664,17 @@ public class Mf2DataModel {
     @Deprecated
     public static class OrderedMap<K, V> extends LinkedHashMap<K, V> {
         private static final long serialVersionUID = -7049361727790825496L;
+
+        /**
+         * {@inheritDoc}
+         *
+         * @internal ICU 72 technology preview
+         * @deprecated This API is for ICU internal use only.
+         */
+        @Deprecated
+        public OrderedMap() {
+            super();
+        }
     }
 
     private final OrderedMap<String, Expression> localVariables;
