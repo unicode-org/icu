@@ -297,6 +297,23 @@ void IndianCalendar::handleComputeFields(int32_t julianDay, UErrorCode&  /* stat
    internalSet(UCAL_DAY_OF_YEAR, yday + 1); // yday is 0-based
 }    
 
+constexpr uint32_t kIndianRelatedYearDiff = 79;
+
+int32_t IndianCalendar::getRelatedYear(UErrorCode &status) const
+{
+    int32_t year = get(UCAL_EXTENDED_YEAR, status);
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+    return year + kIndianRelatedYearDiff;
+}
+
+void IndianCalendar::setRelatedYear(int32_t year)
+{
+    // set extended year
+    set(UCAL_EXTENDED_YEAR, year - kIndianRelatedYearDiff);
+}
+
 /**
  * The system maintains a static default century start date and Year.  They are
  * initialized the first time they are used.  Once the system default century date

@@ -692,6 +692,54 @@ void IslamicCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status)
     internalSet(UCAL_DAY_OF_YEAR, dayOfYear);       
 }    
 
+static int32_t gregoYearFromIslamicStart(int32_t year) {
+    // ad hoc conversion, improve under #10752
+    // rough est for now, ok for grego 1846-2138,
+    // otherwise occasionally wrong (for 3% of years)
+    int cycle, offset, shift = 0;
+    if (year >= 1397) {
+        cycle = (year - 1397) / 67;
+        offset = (year - 1397) % 67;
+        shift = 2*cycle + ((offset >= 33)? 1: 0);
+    } else {
+        cycle = (year - 1396) / 67 - 1;
+        offset = -(year - 1396) % 67;
+        shift = 2*cycle + ((offset <= 33)? 1: 0);
+    }
+    return year + 579 - shift;
+}
+
+int32_t IslamicCalendar::getRelatedYear(UErrorCode &status) const
+{
+    int32_t year = get(UCAL_EXTENDED_YEAR, status);
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+    return gregoYearFromIslamicStart(year);
+}
+
+static int32_t firstIslamicStartYearFromGrego(int32_t year) {
+    // ad hoc conversion, improve under #10752
+    // rough est for now, ok for grego 1846-2138,
+    // otherwise occasionally wrong (for 3% of years)
+    int cycle, offset, shift = 0;
+    if (year >= 1977) {
+        cycle = (year - 1977) / 65;
+        offset = (year - 1977) % 65;
+        shift = 2*cycle + ((offset >= 32)? 1: 0);
+    } else {
+        cycle = (year - 1976) / 65 - 1;
+        offset = -(year - 1976) % 65;
+        shift = 2*cycle + ((offset <= 32)? 1: 0);
+    }
+    return year - 579 + shift;
+}
+
+void IslamicCalendar::setRelatedYear(int32_t year)
+{
+    set(UCAL_EXTENDED_YEAR, firstIslamicStartYearFromGrego(year));
+}
+
 /**
  * The system maintains a static default century start date and Year.  They are
  * initialized the first time they are used.  Once the system default century date 
