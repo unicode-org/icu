@@ -14,7 +14,7 @@ import java.util.Map;
  * and <code>select</code> in {@link com.ibm.icu.text.MessageFormat}.</p>
  *
  * @internal ICU 72 technology preview
- * @deprecated This API is for ICU internal use only.
+ * @deprecated This API is for technology preview only.
  */
 @Deprecated
 public interface Selector {
@@ -30,7 +30,7 @@ public interface Selector {
      * @return the formatted string.
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     boolean matches(Object value, String key, Map<String, Object> variableOptions);

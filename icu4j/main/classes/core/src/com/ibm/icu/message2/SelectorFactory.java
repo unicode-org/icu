@@ -13,7 +13,7 @@ import java.util.Map;
  * <p>The we use it to create and cache various selectors with various options.</p>
  *
  * @internal ICU 72 technology preview
- * @deprecated This API is for ICU internal use only.
+ * @deprecated This API is for technology preview only.
  */
 @Deprecated
 public interface SelectorFactory {
@@ -25,7 +25,7 @@ public interface SelectorFactory {
      * @return The Selector.
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     Selector createSelector(Locale locale, Map<String, Object> fixedOptions);

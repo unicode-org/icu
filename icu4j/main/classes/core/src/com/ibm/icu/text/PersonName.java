@@ -17,6 +17,7 @@ import java.util.Set;
  * @see SimplePersonName
  * @deprecated This API is for technology preview only.
  */
+@Deprecated
 public interface PersonName {
     //==============================================================================
     // Identifiers used to request field values from the PersonName object
@@ -26,12 +27,14 @@ public interface PersonName {
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
+    @Deprecated
     enum NameField {
         /**
          * Contains titles and other words that precede the actual name, such as "Mr."
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         PREFIX("prefix"),
 
         /**
@@ -39,6 +42,7 @@ public interface PersonName {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         GIVEN("given"),
 
         /**
@@ -47,6 +51,7 @@ public interface PersonName {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         GIVEN2("given2"),
 
         /**
@@ -54,6 +59,7 @@ public interface PersonName {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         SURNAME("surname"),
 
         /**
@@ -63,6 +69,7 @@ public interface PersonName {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         SURNAME2("surname2"),
 
         /**
@@ -71,6 +78,7 @@ public interface PersonName {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         SUFFIX("suffix"),
 
         /**
@@ -82,6 +90,7 @@ public interface PersonName {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         PREFERRED_ORDER("preferredOrder");
 
         private final String name;
@@ -92,8 +101,10 @@ public interface PersonName {
 
         /**
          * Returns the NameField's display name.
-         * @internal
+         * @internal ICU 72 technology preview
+         * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         @Override
         public String toString() {
             return name;
@@ -102,7 +113,9 @@ public interface PersonName {
         /**
          * Returns the appropriate NameField for its display name.
          * @internal
+         * @deprecated This API is for ICU internal use only.
          */
+        @Deprecated
         public static NameField forString(String name) {
             for (NameField field : values()) {
                 if (field.name.equals(name)) {
@@ -118,6 +131,7 @@ public interface PersonName {
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
+    @Deprecated
     enum FieldModifier {
         /**
          * Requests an "informal" variant of the field, generally a nickname of some type:
@@ -127,6 +141,7 @@ public interface PersonName {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         INFORMAL("informal"),
 
         /**
@@ -137,6 +152,7 @@ public interface PersonName {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         PREFIX("prefix"),
 
         /**
@@ -147,6 +163,7 @@ public interface PersonName {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         CORE("core"),
 
         /**
@@ -156,6 +173,7 @@ public interface PersonName {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         INITIAL("initial"),
 
         /**
@@ -166,6 +184,7 @@ public interface PersonName {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         MONOGRAM("monogram"),
 
         /**
@@ -174,6 +193,7 @@ public interface PersonName {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         ALL_CAPS("allCaps"),
 
         /**
@@ -183,6 +203,7 @@ public interface PersonName {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         INITIAL_CAP("initialCap");
 
         private final String name;
@@ -193,8 +214,10 @@ public interface PersonName {
 
         /**
          * Returns the FieldModifier's display name.
-         * @internal
+         * @internal ICU 72 technology preview
+         * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         @Override
         public String toString() {
             return name;
@@ -202,8 +225,10 @@ public interface PersonName {
 
         /**
          * Returns the appropriate fieldModifier for its display name.
-         * @internal
+         * @internal ICU 72 technology preview
+         * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         public static FieldModifier forString(String name) {
             for (FieldModifier modifier : values()) {
                 if (modifier.name.equals(name)) {
@@ -224,6 +249,7 @@ public interface PersonName {
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
+    @Deprecated
     public Locale getNameLocale();
 
     /**
@@ -239,5 +265,6 @@ public interface PersonName {
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
+    @Deprecated
     public String getFieldValue(NameField identifier, Set<FieldModifier> modifiers);
 }

@@ -117,52 +117,27 @@ class Mf2Serializer implements EventHandler {
 
     Mf2Serializer() {}
 
-    /**
-     * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
-     */
-    @Deprecated
     @Override
     public void reset(CharSequence input) {
         this.input = input.toString();
         tokens.clear();
     }
 
-    /**
-     * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
-     */
-    @Deprecated
     @Override
     public void startNonterminal(String name, int begin) {
         tokens.add(new Token(Token.Kind.NONTERMINAL_START, name, begin, -1, input));
     }
 
-    /**
-     * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
-     */
-    @Deprecated
     @Override
     public void endNonterminal(String name, int end) {
         tokens.add(new Token(Token.Kind.NONTERMINAL_END, name, -1, end, input));
     }
 
-    /**
-     * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
-     */
-    @Deprecated
     @Override
     public void terminal(String name, int begin, int end) {
         tokens.add(new Token(Token.Kind.TERMINAL, name, begin, end, input));
     }
 
-    /**
-     * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
-     */
-    @Deprecated
     @Override
     public void whitespace(int begin, int end) {
     }

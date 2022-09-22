@@ -25,6 +25,7 @@ import com.ibm.icu.impl.personname.PersonNameFormatterImpl;
  * @internal ICU 72 technology preview
  * @deprecated This API is for technology preview only.
  */
+@Deprecated
 public class PersonNameFormatter {
     //==============================================================================
     // Parameters that control formatting behavior
@@ -34,12 +35,14 @@ public class PersonNameFormatter {
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
+    @Deprecated
     public enum Length {
         /**
          * The longest name length.  Generally uses most of the fields in the name object.
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         LONG,
 
         /**
@@ -48,6 +51,7 @@ public class PersonNameFormatter {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         MEDIUM,
 
         /**
@@ -56,6 +60,7 @@ public class PersonNameFormatter {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         SHORT
     }
 
@@ -64,12 +69,14 @@ public class PersonNameFormatter {
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
+    @Deprecated
     public enum Usage {
         /**
          * Used for when the name is going to be used to address the user directly: "Turn left here, John."
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         ADDRESSING,
 
         /**
@@ -77,6 +84,7 @@ public class PersonNameFormatter {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         REFERRING,
 
         /**
@@ -87,6 +95,7 @@ public class PersonNameFormatter {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         MONOGRAM
     }
 
@@ -95,12 +104,14 @@ public class PersonNameFormatter {
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
+    @Deprecated
     public enum Formality {
         /**
          * The more formal version of the name.
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         FORMAL,
 
         /**
@@ -109,6 +120,7 @@ public class PersonNameFormatter {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         INFORMAL
     }
 
@@ -117,6 +129,7 @@ public class PersonNameFormatter {
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
+    @Deprecated
     public enum Options {
         /**
          * Causes the formatter to generate results suitable for inclusion in a sorted list.  For GN-first languages,
@@ -125,6 +138,7 @@ public class PersonNameFormatter {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         SORTING,
 
         /**
@@ -133,6 +147,7 @@ public class PersonNameFormatter {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         SURNAME_ALLCAPS
     }
 
@@ -147,6 +162,7 @@ public class PersonNameFormatter {
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
+    @Deprecated
     public static class Builder {
         /**
          * Sets the locale for the formatter to be constructed.
@@ -155,6 +171,7 @@ public class PersonNameFormatter {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         public Builder setLocale(Locale locale) {
             if (locale != null) {
                 this.locale = locale;
@@ -169,6 +186,7 @@ public class PersonNameFormatter {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         public Builder setLength(Length length) {
             this.length = length;
             return this;
@@ -181,6 +199,7 @@ public class PersonNameFormatter {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         public Builder setUsage(Usage usage) {
             this.usage = usage;
             return this;
@@ -193,6 +212,7 @@ public class PersonNameFormatter {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         public Builder setFormality(Formality formality) {
             this.formality = formality;
             return this;
@@ -207,6 +227,7 @@ public class PersonNameFormatter {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         public Builder setOptions(Set<Options> options) {
             this.options = options;
             return this;
@@ -221,6 +242,7 @@ public class PersonNameFormatter {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         public PersonNameFormatter build() {
             return new PersonNameFormatter(locale, length, usage, formality, options);
         }
@@ -244,6 +266,7 @@ public class PersonNameFormatter {
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
+    @Deprecated
     public static Builder builder() {
         return new Builder();
     }
@@ -255,6 +278,7 @@ public class PersonNameFormatter {
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
+    @Deprecated
     public Builder toBuilder() {
         Builder builder = builder();
         builder.setLocale(impl.getLocale());
@@ -273,6 +297,7 @@ public class PersonNameFormatter {
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
+    @Deprecated
     public String formatToString(PersonName name) {
         // TODO: Add a format() method that returns a FormattedPersonName object that descends from FormattedValue.
         return impl.formatToString(name);
@@ -286,7 +311,9 @@ public class PersonNameFormatter {
 
     /**
      * @internal For unit testing only!
+     * @deprecated This API is for unit testing only.
      */
+    @Deprecated
     public PersonNameFormatter(Locale locale, String[] patterns) {
         this.impl = new PersonNameFormatterImpl(locale, patterns);
     }
