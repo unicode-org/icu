@@ -22,8 +22,8 @@
 #include "cmemory.h"
 #include "umutex.h"
 #include <float.h>
-#include "gregoimp.h" // Math
-#include "astro.h" // CalendarAstronomer
+#include "gregoimp.h" // ClockMath
+#include "astro.h" // CalendarCache
 #include "uhash.h"
 #include "ucln_in.h"
 

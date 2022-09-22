@@ -16,7 +16,6 @@
 #include "mutex.h"
 #include <float.h>
 #include "gregoimp.h" // Math
-#include "astro.h" // CalendarAstronomer
 #include "uhash.h"
 
 // Debugging
