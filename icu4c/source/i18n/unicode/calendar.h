@@ -870,7 +870,7 @@ public:
      *           false, otherwise.
      * @stable ICU 2.0
      */
-    virtual UBool inDaylightTime(UErrorCode& status) const = 0;
+    virtual UBool inDaylightTime(UErrorCode& status) const;
 
     /**
      * Specifies whether or not date/time interpretation is to be lenient. With lenient

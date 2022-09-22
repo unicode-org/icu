@@ -87,19 +87,6 @@ CECalendar::handleGetLimit(UCalendarDateFields field, ELimitType limitType) cons
 }
 
 UBool
-CECalendar::inDaylightTime(UErrorCode& status) const
-{
-    if (U_FAILURE(status) || !getTimeZone().useDaylightTime()) {
-        return false;
-    }
-
-    // Force an update of the state of the Calendar.
-    ((CECalendar*)this)->complete(status); // cast away const
-
-    return (UBool)(U_SUCCESS(status) ? (internalGet(UCAL_DST_OFFSET) != 0) : false);
-}
-
-UBool
 CECalendar::haveDefaultCentury() const
 {
     return true;
