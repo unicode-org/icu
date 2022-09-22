@@ -297,21 +297,6 @@ void IndianCalendar::handleComputeFields(int32_t julianDay, UErrorCode&  /* stat
    internalSet(UCAL_DAY_OF_YEAR, yday + 1); // yday is 0-based
 }    
 
-UBool
-IndianCalendar::inDaylightTime(UErrorCode& status) const
-{
-    // copied from GregorianCalendar
-    if (U_FAILURE(status) || !getTimeZone().useDaylightTime()) {
-        return false;
-    }
-
-    // Force an update of the state of the Calendar.
-    ((IndianCalendar*)this)->complete(status); // cast away const
-
-    return (UBool)(U_SUCCESS(status) ? (internalGet(UCAL_DST_OFFSET) != 0) : false);
-}
-
-
 /**
  * The system maintains a static default century start date and Year.  They are
  * initialized the first time they are used.  Once the system default century date

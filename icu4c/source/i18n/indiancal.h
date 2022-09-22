@@ -289,19 +289,6 @@ private:
 
   // Default century.
 protected:
-
-  /**
-   * (Overrides Calendar) Return true if the current date for this Calendar is in
-   * Daylight Savings Time. Recognizes DST_OFFSET, if it is set.
-   *
-   * @param status Fill-in parameter which receives the status of this operation.
-   * @return   True if the current date for this Calendar is in Daylight Savings Time,
-   *           false, otherwise.
-   * @internal
-   */
-  virtual UBool inDaylightTime(UErrorCode& status) const override;
-
-
   /**
    * Returns true because the Indian Calendar does have a default century
    * @internal

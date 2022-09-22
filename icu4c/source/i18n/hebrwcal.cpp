@@ -666,19 +666,6 @@ int32_t HebrewCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UB
     return (int) (day + 347997);
 }
 
-UBool
-HebrewCalendar::inDaylightTime(UErrorCode& status) const
-{
-    // copied from GregorianCalendar
-    if (U_FAILURE(status) || !getTimeZone().useDaylightTime()) 
-        return false;
-
-    // Force an update of the state of the Calendar.
-    ((HebrewCalendar*)this)->complete(status); // cast away const
-
-    return (UBool)(U_SUCCESS(status) ? (internalGet(UCAL_DST_OFFSET) != 0) : false);
-}
-
 /**
  * The system maintains a static default century start date and Year.  They are
  * initialized the first time they are used.  Once the system default century date 

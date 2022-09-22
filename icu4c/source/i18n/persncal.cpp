@@ -233,19 +233,6 @@ void PersianCalendar::handleComputeFields(int32_t julianDay, UErrorCode &/*statu
     internalSet(UCAL_DAY_OF_YEAR, dayOfYear);
 }    
 
-UBool
-PersianCalendar::inDaylightTime(UErrorCode& status) const
-{
-    // copied from GregorianCalendar
-    if (U_FAILURE(status) || !getTimeZone().useDaylightTime()) 
-        return false;
-
-    // Force an update of the state of the Calendar.
-    ((PersianCalendar*)this)->complete(status); // cast away const
-
-    return (UBool)(U_SUCCESS(status) ? (internalGet(UCAL_DST_OFFSET) != 0) : false);
-}
-
 // default century
 
 static UDate           gSystemDefaultCenturyStart       = DBL_MIN;

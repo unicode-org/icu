@@ -1237,20 +1237,6 @@ int32_t GregorianCalendar::handleGetExtendedYearFromWeekFields(int32_t yearWoy, 
 
 // -------------------------------------
 
-UBool
-GregorianCalendar::inDaylightTime(UErrorCode& status) const
-{
-    if (U_FAILURE(status) || !getTimeZone().useDaylightTime()) 
-        return false;
-
-    // Force an update of the state of the Calendar.
-    ((GregorianCalendar*)this)->complete(status); // cast away const
-
-    return (UBool)(U_SUCCESS(status) ? (internalGet(UCAL_DST_OFFSET) != 0) : false);
-}
-
-// -------------------------------------
-
 /**
 * Return the ERA.  We need a special method for this because the
 * default ERA is AD, but a zero (unset) ERA is BC.

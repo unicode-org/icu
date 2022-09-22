@@ -2869,7 +2869,20 @@ Calendar::getActualMinimum(UCalendarDateFields field, UErrorCode& status) const
 
 // -------------------------------------
 
+UBool
+Calendar::inDaylightTime(UErrorCode& status) const
+{
+    if (U_FAILURE(status) || !getTimeZone().useDaylightTime()) {
+        return false;
+    }
 
+    // Force an update of the state of the Calendar.
+    ((Calendar*)this)->complete(status); // cast away const
+
+    return (UBool)(U_SUCCESS(status) ? (internalGet(UCAL_DST_OFFSET) != 0) : false);
+}
+
+// -------------------------------------
 
 /**
 * Ensure that each field is within its valid range by calling {@link

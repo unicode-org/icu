@@ -826,19 +826,6 @@ void ChineseCalendar::offsetMonth(int32_t newMoon, int32_t dom, int32_t delta) {
 }
 
 
-UBool
-ChineseCalendar::inDaylightTime(UErrorCode& status) const
-{
-    // copied from GregorianCalendar
-    if (U_FAILURE(status) || !getTimeZone().useDaylightTime()) 
-        return false;
-
-    // Force an update of the state of the Calendar.
-    ((ChineseCalendar*)this)->complete(status); // cast away const
-
-    return (UBool)(U_SUCCESS(status) ? (internalGet(UCAL_DST_OFFSET) != 0) : false);
-}
-
 // default century
 
 static UDate     gSystemDefaultCenturyStart       = DBL_MIN;
