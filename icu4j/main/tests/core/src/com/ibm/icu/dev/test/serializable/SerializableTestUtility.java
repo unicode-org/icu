@@ -768,7 +768,7 @@ public class SerializableTestUtility {
         public Object[] getTestObjects() {
             Mf2DataModel.OrderedMap<String, Object> mapWithContent = new Mf2DataModel.OrderedMap<>();
             mapWithContent.put("number", Double.valueOf(3.1416));
-            mapWithContent.put("date", new Date());
+            mapWithContent.put("date", new Date(1664582400000L /* 20221001T000000Z */));
             mapWithContent.put("string", "testing");
             return new Mf2DataModel.OrderedMap[] {
                     new Mf2DataModel.OrderedMap(),
