@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1663802534053,
+  "lastUpdate": 1663848732091,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -2218,6 +2218,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.626026155066799,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "y.umaoka@gmail.com",
+            "name": "yumaoka",
+            "username": "yumaoka"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "329c95e3b9df2d22fb20b02044a035fb509ef5f4",
+          "message": "ICU-21957 BRS72 Cleanup import statements",
+          "timestamp": "2022-09-22T08:07:12-04:00",
+          "tree_id": "fd306139753f0b8e767268d57390120887aa73d9",
+          "url": "https://github.com/unicode-org/icu/commit/329c95e3b9df2d22fb20b02044a035fb509ef5f4"
+        },
+        "date": 1663848723845,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.4560294665115192,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
