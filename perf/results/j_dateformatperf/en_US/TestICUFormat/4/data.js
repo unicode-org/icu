@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1663848633164,
+  "lastUpdate": 1663869686714,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -2008,6 +2008,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 278.6455255609854,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "0c9d6f6b856c698bf8631c3971ff1fd8581b402b",
+          "message": "ICU-21957 Fix status tags for U_HIDDEN, unum_hasAttribute",
+          "timestamp": "2022-09-22T10:50:22-07:00",
+          "tree_id": "284aa4e537dcb92e7f3c21d350654e469bc666fb",
+          "url": "https://github.com/unicode-org/icu/commit/0c9d6f6b856c698bf8631c3971ff1fd8581b402b"
+        },
+        "date": 1663869680812,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 274.8674533308723,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
