@@ -19,7 +19,7 @@ public class UnitPreferences {
     private static final Map<String, String> measurementSystem;
 
     static {
-        Map tempMS = new HashMap<String, String>();
+        Map<String, String> tempMS = new HashMap<>();
         tempMS.put("metric", "001");
         tempMS.put("ussystem", "US");
         tempMS.put("uksystem", "GB");
