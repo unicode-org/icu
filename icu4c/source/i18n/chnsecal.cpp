@@ -825,6 +825,22 @@ void ChineseCalendar::offsetMonth(int32_t newMoon, int32_t dom, int32_t delta) {
     }
 }
 
+constexpr uint32_t kChineseRelatedYearDiff = -2637;
+
+int32_t ChineseCalendar::getRelatedYear(UErrorCode &status) const
+{
+    int32_t year = get(UCAL_EXTENDED_YEAR, status);
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+    return year + kChineseRelatedYearDiff;
+}
+
+void ChineseCalendar::setRelatedYear(int32_t year)
+{
+    // set extended year
+    set(UCAL_EXTENDED_YEAR, year - kChineseRelatedYearDiff);
+}
 
 // default century
 

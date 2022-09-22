@@ -278,6 +278,20 @@ class PersianCalendar : public Calendar {
    */
   virtual const char * getType() const override;
 
+  /**
+   * @return      The related Gregorian year; will be obtained by modifying the value
+   *              obtained by get from UCAL_EXTENDED_YEAR field
+   * @internal
+   */
+  virtual int32_t getRelatedYear(UErrorCode &status) const override;
+
+  /**
+   * @param year  The related Gregorian year to set; will be modified as necessary then
+   *              set in UCAL_EXTENDED_YEAR field
+   * @internal
+   */
+  virtual void setRelatedYear(int32_t year) override;
+
  private:
   PersianCalendar(); // default constructor not implemented
 

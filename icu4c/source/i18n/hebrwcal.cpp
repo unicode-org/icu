@@ -666,6 +666,23 @@ int32_t HebrewCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UB
     return (int) (day + 347997);
 }
 
+constexpr uint32_t kHebrewRelatedYearDiff = -3760;
+
+int32_t HebrewCalendar::getRelatedYear(UErrorCode &status) const
+{
+    int32_t year = get(UCAL_EXTENDED_YEAR, status);
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+    return year + kHebrewRelatedYearDiff;
+}
+
+void HebrewCalendar::setRelatedYear(int32_t year)
+{
+    // set extended year
+    set(UCAL_EXTENDED_YEAR, year - kHebrewRelatedYearDiff);
+}
+
 /**
  * The system maintains a static default century start date and Year.  They are
  * initialized the first time they are used.  Once the system default century date 

@@ -233,6 +233,23 @@ void PersianCalendar::handleComputeFields(int32_t julianDay, UErrorCode &/*statu
     internalSet(UCAL_DAY_OF_YEAR, dayOfYear);
 }    
 
+constexpr uint32_t kPersianRelatedYearDiff = 622;
+
+int32_t PersianCalendar::getRelatedYear(UErrorCode &status) const
+{
+    int32_t year = get(UCAL_EXTENDED_YEAR, status);
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+    return year + kPersianRelatedYearDiff;
+}
+
+void PersianCalendar::setRelatedYear(int32_t year)
+{
+    // set extended year
+    set(UCAL_EXTENDED_YEAR, year - kPersianRelatedYearDiff);
+}
+
 // default century
 
 static UDate           gSystemDefaultCenturyStart       = DBL_MIN;
