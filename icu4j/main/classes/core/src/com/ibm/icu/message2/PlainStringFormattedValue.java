@@ -14,8 +14,8 @@ import com.ibm.icu.text.FormattedValue;
  * Very-very rough implementation of FormattedValue, packaging a string.
  * Expect it to change.
  *
- * @internal ICU 72 technology preview. Visible For Testing.
- * @deprecated This API is for technology preview only.
+ * @internal Visible For Testing.
+ * @deprecated This API is for unit testing only.
  */
 @Deprecated
 public class PlainStringFormattedValue implements FormattedValue {
@@ -26,8 +26,8 @@ public class PlainStringFormattedValue implements FormattedValue {
      *
      * @param value the string value to store
      *
-     * @internal ICU 72 technology preview. Visible For Testing.
-     * @deprecated This API is for technology preview only.
+     * @internal Visible For Testing.
+     * @deprecated This API is for unit testing only.
      */
     @Deprecated
     public PlainStringFormattedValue(String value) {
@@ -40,8 +40,8 @@ public class PlainStringFormattedValue implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @internal ICU 72 technology preview. Visible For Testing.
-     * @deprecated This API is for technology preview only.
+     * @internal Visible For Testing.
+     * @deprecated This API is for unit testing only.
      */
     @Deprecated
     @Override
@@ -52,8 +52,8 @@ public class PlainStringFormattedValue implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @internal ICU 72 technology preview. Visible For Testing.
-     * @deprecated This API is for technology preview only.
+     * @internal Visible For Testing.
+     * @deprecated This API is for unit testing only.
      */
     @Deprecated
     @Override
@@ -64,8 +64,8 @@ public class PlainStringFormattedValue implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @internal ICU 72 technology preview. Visible For Testing.
-     * @deprecated This API is for technology preview only.
+     * @internal Visible For Testing.
+     * @deprecated This API is for unit testing only.
      */
     @Deprecated
     @Override
@@ -76,8 +76,8 @@ public class PlainStringFormattedValue implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @internal ICU 72 technology preview. Visible For Testing.
-     * @deprecated This API is for technology preview only.
+     * @internal Visible For Testing.
+     * @deprecated This API is for unit testing only.
      */
     @Deprecated
     @Override
@@ -95,8 +95,8 @@ public class PlainStringFormattedValue implements FormattedValue {
      *
      * {@inheritDoc}
      *
-     * @internal ICU 72 technology preview. Visible For Testing.
-     * @deprecated This API is for technology preview only.
+     * @internal Visible For Testing.
+     * @deprecated This API is for unit testing only.
      */
     @Deprecated
     @Override
@@ -109,8 +109,8 @@ public class PlainStringFormattedValue implements FormattedValue {
      *
      * {@inheritDoc}
      *
-     * @internal ICU 72 technology preview. Visible For Testing.
-     * @deprecated This API is for technology preview only.
+     * @internal Visible For Testing.
+     * @deprecated This API is for unit testing only.
      */
     @Deprecated
     @Override
@@ -121,8 +121,8 @@ public class PlainStringFormattedValue implements FormattedValue {
     /**
      * {@inheritDoc}
      *
-     * @internal ICU 72 technology preview. Visible For Testing.
-     * @deprecated This API is for technology preview only.
+     * @internal Visible For Testing.
+     * @deprecated This API is for unit testing only.
      */
     @Deprecated
     @Override
