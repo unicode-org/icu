@@ -13,7 +13,7 @@ import java.util.Map;
  * <p>We use it to create and cache various formatters with various options.</p>
  *
  * @internal ICU 72 technology preview
- * @deprecated This API is for ICU internal use only.
+ * @deprecated This API is for technology preview only.
  */
 @Deprecated
 public interface FormatterFactory {
@@ -26,7 +26,7 @@ public interface FormatterFactory {
      * @throws IllegalArgumentException
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     Formatter createFormatter(Locale locale, Map<String, Object> fixedOptions);

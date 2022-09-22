@@ -21,7 +21,7 @@ import java.util.StringJoiner;
  * <a target="github" href="https://github.com/unicode-org/message-format-wg/blob/main/spec/message.ebnf">EBNF</a>.</p>
  *
  * @internal ICU 72 technology preview
- * @deprecated This API is for ICU internal use only.
+ * @deprecated This API is for technology preview only.
  */
 @Deprecated
 @SuppressWarnings("javadoc")
@@ -29,7 +29,7 @@ public class Mf2DataModel {
 
     /**
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public static class SelectorKeys {
@@ -46,7 +46,7 @@ public class Mf2DataModel {
          * @return the Builder.
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public static Builder builder() {
@@ -55,7 +55,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public List<String> getKeys() {
@@ -64,7 +64,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         @Override
@@ -78,7 +78,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public static class Builder {
@@ -90,7 +90,7 @@ public class Mf2DataModel {
 
             /**
              * @internal ICU 72 technology preview
-             * @deprecated This API is for ICU internal use only.
+             * @deprecated This API is for technology preview only.
              */
             @Deprecated
             public Builder add(String key) {
@@ -100,7 +100,7 @@ public class Mf2DataModel {
 
             /**
              * @internal ICU 72 technology preview
-             * @deprecated This API is for ICU internal use only.
+             * @deprecated This API is for technology preview only.
              */
             @Deprecated
             public Builder addAll(Collection<String> otherKeys) {
@@ -110,7 +110,7 @@ public class Mf2DataModel {
 
             /**
              * @internal ICU 72 technology preview
-             * @deprecated This API is for ICU internal use only.
+             * @deprecated This API is for technology preview only.
              */
             @Deprecated
             public SelectorKeys build() {
@@ -121,7 +121,7 @@ public class Mf2DataModel {
 
     /**
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public static class Pattern {
@@ -138,7 +138,7 @@ public class Mf2DataModel {
          * @return the Builder.
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public static Builder builder() {
@@ -147,7 +147,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public List<Part> getParts() {
@@ -156,7 +156,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         @Override
@@ -172,7 +172,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public static class Builder {
@@ -184,7 +184,7 @@ public class Mf2DataModel {
 
             /**
              * @internal ICU 72 technology preview
-             * @deprecated This API is for ICU internal use only.
+             * @deprecated This API is for technology preview only.
              */
             @Deprecated
             public Builder add(Part part) {
@@ -194,7 +194,7 @@ public class Mf2DataModel {
 
             /**
              * @internal ICU 72 technology preview
-             * @deprecated This API is for ICU internal use only.
+             * @deprecated This API is for technology preview only.
              */
             @Deprecated
             public Builder addAll(Collection<Part> otherParts) {
@@ -204,7 +204,7 @@ public class Mf2DataModel {
 
             /**
              * @internal ICU 72 technology preview
-             * @deprecated This API is for ICU internal use only.
+             * @deprecated This API is for technology preview only.
              */
             @Deprecated
             public Pattern build() {
@@ -219,7 +219,7 @@ public class Mf2DataModel {
      * and that plain text {@link Text} and {@link Expression} are Part(s).
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public interface Part {
@@ -227,7 +227,7 @@ public class Mf2DataModel {
 
     /**
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public static class Text implements Part {
@@ -235,7 +235,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         private Text(Builder builder) {
@@ -248,7 +248,7 @@ public class Mf2DataModel {
          * @return the Builder.
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public static Builder builder() {
@@ -257,7 +257,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Text(String value) {
@@ -266,7 +266,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public String getValue() {
@@ -275,7 +275,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         @Override
@@ -285,7 +285,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public static class Builder {
@@ -297,7 +297,7 @@ public class Mf2DataModel {
 
             /**
              * @internal ICU 72 technology preview
-             * @deprecated This API is for ICU internal use only.
+             * @deprecated This API is for technology preview only.
              */
             @Deprecated
             public Builder setValue(String value) {
@@ -307,7 +307,7 @@ public class Mf2DataModel {
 
             /**
              * @internal ICU 72 technology preview
-             * @deprecated This API is for ICU internal use only.
+             * @deprecated This API is for technology preview only.
              */
             @Deprecated
             public Text build() {
@@ -318,7 +318,7 @@ public class Mf2DataModel {
 
     /**
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public static class Expression implements Part {
@@ -339,7 +339,7 @@ public class Mf2DataModel {
          * @return the Builder.
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public static Builder builder() {
@@ -348,7 +348,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Value getOperand() {
@@ -357,7 +357,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public String getFunctionName() {
@@ -366,7 +366,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Map<String, Value> getOptions() {
@@ -375,7 +375,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         @Override
@@ -397,7 +397,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public static class Builder {
@@ -411,7 +411,7 @@ public class Mf2DataModel {
 
             /**
              * @internal ICU 72 technology preview
-             * @deprecated This API is for ICU internal use only.
+             * @deprecated This API is for technology preview only.
              */
             @Deprecated
             public Builder setOperand(Value operand) {
@@ -421,7 +421,7 @@ public class Mf2DataModel {
 
             /**
              * @internal ICU 72 technology preview
-             * @deprecated This API is for ICU internal use only.
+             * @deprecated This API is for technology preview only.
              */
             @Deprecated
             public Builder setFunctionName(String functionName) {
@@ -431,7 +431,7 @@ public class Mf2DataModel {
 
             /**
              * @internal ICU 72 technology preview
-             * @deprecated This API is for ICU internal use only.
+             * @deprecated This API is for technology preview only.
              */
             @Deprecated
             public Builder addOption(String key, Value value) {
@@ -441,7 +441,7 @@ public class Mf2DataModel {
 
             /**
              * @internal ICU 72 technology preview
-             * @deprecated This API is for ICU internal use only.
+             * @deprecated This API is for technology preview only.
              */
             @Deprecated
             public Builder addOptions(Map<String, Value> otherOptions) {
@@ -451,7 +451,7 @@ public class Mf2DataModel {
 
             /**
              * @internal ICU 72 technology preview
-             * @deprecated This API is for ICU internal use only.
+             * @deprecated This API is for technology preview only.
              */
             @Deprecated
             public Expression build() {
@@ -470,7 +470,7 @@ public class Mf2DataModel {
      * A Value can be either a Literal, or a Variable, but not both.
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public static class Value {
@@ -489,7 +489,7 @@ public class Mf2DataModel {
          * @return the Builder.
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public static Builder builder() {
@@ -498,7 +498,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public String getLiteral() {
@@ -507,7 +507,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public String getVariableName() {
@@ -516,7 +516,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public boolean isLiteral() {
@@ -525,7 +525,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public boolean isVariable() {
@@ -534,7 +534,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         @Override
@@ -544,7 +544,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public static class Builder {
@@ -557,7 +557,7 @@ public class Mf2DataModel {
 
             /**
              * @internal ICU 72 technology preview
-             * @deprecated This API is for ICU internal use only.
+             * @deprecated This API is for technology preview only.
              */
             @Deprecated
             public Builder setLiteral(String literal) {
@@ -568,7 +568,7 @@ public class Mf2DataModel {
 
             /**
              * @internal ICU 72 technology preview
-             * @deprecated This API is for ICU internal use only.
+             * @deprecated This API is for technology preview only.
              */
             @Deprecated
             public Builder setVariableName(String variableName) {
@@ -579,7 +579,7 @@ public class Mf2DataModel {
 
             /**
              * @internal ICU 72 technology preview
-             * @deprecated This API is for ICU internal use only.
+             * @deprecated This API is for technology preview only.
              */
             @Deprecated
             public Value build() {
@@ -590,7 +590,7 @@ public class Mf2DataModel {
 
     /**
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public static class Variable {
@@ -606,7 +606,7 @@ public class Mf2DataModel {
          * @return the Builder.
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public static Builder builder() {
@@ -615,7 +615,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public String getName() {
@@ -624,7 +624,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public static class Builder {
@@ -636,7 +636,7 @@ public class Mf2DataModel {
 
             /**
              * @internal ICU 72 technology preview
-             * @deprecated This API is for ICU internal use only.
+             * @deprecated This API is for technology preview only.
              */
             @Deprecated
             public Builder setName(String name) {
@@ -646,7 +646,7 @@ public class Mf2DataModel {
 
             /**
              * @internal ICU 72 technology preview
-             * @deprecated This API is for ICU internal use only.
+             * @deprecated This API is for technology preview only.
              */
             @Deprecated
             public Variable build() {
@@ -659,7 +659,7 @@ public class Mf2DataModel {
      * This is only to not force LinkedHashMap on the public API.
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public static class OrderedMap<K, V> extends LinkedHashMap<K, V> {
@@ -669,7 +669,7 @@ public class Mf2DataModel {
          * {@inheritDoc}
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public OrderedMap() {
@@ -695,7 +695,7 @@ public class Mf2DataModel {
      * @return the Builder.
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public static Builder builder() {
@@ -704,7 +704,7 @@ public class Mf2DataModel {
 
     /**
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public OrderedMap<String, Expression> getLocalVariables() {
@@ -713,7 +713,7 @@ public class Mf2DataModel {
 
     /**
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public List<Expression>  getSelectors() {
@@ -722,7 +722,7 @@ public class Mf2DataModel {
 
     /**
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public OrderedMap<SelectorKeys, Pattern>  getVariants() {
@@ -731,7 +731,7 @@ public class Mf2DataModel {
 
     /**
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public Pattern getPattern() {
@@ -740,7 +740,7 @@ public class Mf2DataModel {
 
     /**
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     @Override
@@ -772,7 +772,7 @@ public class Mf2DataModel {
 
     /**
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public static class Builder {
@@ -787,7 +787,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Builder addLocalVariable(String variableName, Expression expression) {
@@ -797,7 +797,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Builder addLocalVariables(OrderedMap<String, Expression> otherLocalVariables) {
@@ -807,7 +807,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Builder addSelector(Expression otherSelector) {
@@ -817,7 +817,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Builder addSelectors(List<Expression> otherSelectors) {
@@ -827,7 +827,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Builder addVariant(SelectorKeys keys, Pattern newPattern) {
@@ -837,7 +837,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Builder addVariants(OrderedMap<SelectorKeys, Pattern> otherVariants) {
@@ -847,7 +847,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Builder setPattern(Pattern pattern) {
@@ -857,7 +857,7 @@ public class Mf2DataModel {
 
         /**
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Mf2DataModel build() {

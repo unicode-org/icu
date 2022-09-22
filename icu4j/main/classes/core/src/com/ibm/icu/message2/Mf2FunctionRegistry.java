@@ -27,7 +27,7 @@ import java.util.Set;
  * </ul>
  *
  * @internal ICU 72 technology preview
- * @deprecated This API is for ICU internal use only.
+ * @deprecated This API is for technology preview only.
  */
 @Deprecated
 public class Mf2FunctionRegistry {
@@ -47,7 +47,7 @@ public class Mf2FunctionRegistry {
      * @return the Builder.
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public static Builder builder() {
@@ -71,7 +71,7 @@ public class Mf2FunctionRegistry {
      * @return the factory creating formatters for {@code name}. Returns {@code null} if none is registered.
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public FormatterFactory getFormatter(String formatterName) {
@@ -84,7 +84,7 @@ public class Mf2FunctionRegistry {
      * @return a set of all the known formatter names.
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public Set<String> getFormatterNames() {
@@ -98,7 +98,7 @@ public class Mf2FunctionRegistry {
      * @return the name of the formatter class, if registered. Returns {@code null} otherwise.
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public String getDefaultFormatterNameForType(Class<?> clazz) {
@@ -125,7 +125,7 @@ public class Mf2FunctionRegistry {
      * @return a set of all the known classes that have mapping to function names.
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public Set<Class<?>> getDefaultFormatterTypes() {
@@ -143,7 +143,7 @@ public class Mf2FunctionRegistry {
      * @see #getFormatter(String)
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public SelectorFactory getSelector(String selectorName) {
@@ -156,7 +156,7 @@ public class Mf2FunctionRegistry {
      * @return a set of all the known selector names.
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public Set<String> getSelectorNames() {
@@ -167,7 +167,7 @@ public class Mf2FunctionRegistry {
      * A {@code Builder} used to build instances of {@link Mf2FunctionRegistry}.
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public static class Builder {
@@ -186,7 +186,7 @@ public class Mf2FunctionRegistry {
          * @return the builder, for fluent use.
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Builder addAll(Mf2FunctionRegistry functionRegistry) {
@@ -204,7 +204,7 @@ public class Mf2FunctionRegistry {
          * @return the builder, for fluent use.
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Builder setFormatter(String formatterName, FormatterFactory formatterFactory) {
@@ -219,7 +219,7 @@ public class Mf2FunctionRegistry {
          * @return the builder, for fluent use.
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Builder removeFormatter(String formatterName) {
@@ -233,7 +233,7 @@ public class Mf2FunctionRegistry {
          * @return the builder, for fluent use.
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Builder clearFormatters() {
@@ -249,7 +249,7 @@ public class Mf2FunctionRegistry {
          * @return the builder, for fluent use.
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Builder setDefaultFormatterNameForType(Class<?> clazz, String formatterName) {
@@ -264,7 +264,7 @@ public class Mf2FunctionRegistry {
          * @return the builder, for fluent use.
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Builder removeDefaultFormatterNameForType(Class<?> clazz) {
@@ -278,7 +278,7 @@ public class Mf2FunctionRegistry {
          * @return the builder, for fluent use.
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Builder clearDefaultFormatterNames() {
@@ -294,7 +294,7 @@ public class Mf2FunctionRegistry {
          * @return the builder, for fluent use.
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Builder setSelector(String selectorName, SelectorFactory selectorFactory) {
@@ -309,7 +309,7 @@ public class Mf2FunctionRegistry {
          * @return the builder, for fluent use.
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Builder removeSelector(String selectorName) {
@@ -323,7 +323,7 @@ public class Mf2FunctionRegistry {
          * @return the builder, for fluent use.
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Builder clearSelectors() {
@@ -337,7 +337,7 @@ public class Mf2FunctionRegistry {
          * @return the function registry created.
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Mf2FunctionRegistry build() {

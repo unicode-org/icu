@@ -10,7 +10,7 @@ import java.util.Map;
  * that can be used from {@link MessageFormatter}.
  *
  * @internal ICU 72 technology preview
- * @deprecated This API is for ICU internal use only.
+ * @deprecated This API is for technology preview only.
  */
 @Deprecated
 public interface Formatter {
@@ -23,7 +23,7 @@ public interface Formatter {
      * @return the formatted string.
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     String formatToString(Object toFormat, Map<String, Object> variableOptions);
@@ -37,7 +37,7 @@ public interface Formatter {
      * @return the formatted placeholder.
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     FormattedPlaceholder format(Object toFormat, Map<String, Object> variableOptions);

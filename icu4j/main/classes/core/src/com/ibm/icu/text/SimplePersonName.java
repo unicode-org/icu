@@ -21,14 +21,15 @@ import java.util.TreeSet;
  * @internal ICU 72 technology preview
  * @deprecated This API is for technology preview only.
  */
+@Deprecated
 public class SimplePersonName implements PersonName {
     /**
      * A utility class for constructing a SimplePersonName.  Use SimplePersonName.builder()
      * to get a new Builder instance.
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
-     *
      */
+    @Deprecated
     public static class Builder {
         /**
          * Set the locale for the new name object.
@@ -38,6 +39,7 @@ public class SimplePersonName implements PersonName {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         public Builder setLocale(Locale locale) {
             this.locale = locale;
             return this;
@@ -53,6 +55,7 @@ public class SimplePersonName implements PersonName {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         public Builder addField(NameField field,
                                 Collection<FieldModifier> modifiers,
                                 String value) {
@@ -83,6 +86,7 @@ public class SimplePersonName implements PersonName {
          * @internal ICU 72 technology preview
          * @deprecated This API is for technology preview only.
          */
+        @Deprecated
         public SimplePersonName build() {
             // special-case code for the "surname" field -- if it isn't specified, but "surname-prefix" and
             // "surname-core" both are, let "surname" be the other two fields joined with a space
@@ -112,6 +116,7 @@ public class SimplePersonName implements PersonName {
      * @internal ICU 72 technology preview
      * @deprecated This API is for technology preview only.
      */
+    @Deprecated
     public static Builder builder() {
         return new Builder();
     }
@@ -131,6 +136,7 @@ public class SimplePersonName implements PersonName {
      * @deprecated This API is for technology preview only.
      */
     @Override
+    @Deprecated
     public Locale getNameLocale() {
         return nameLocale;
     }
@@ -150,6 +156,7 @@ public class SimplePersonName implements PersonName {
      * @deprecated This API is for technology preview only.
      */
     @Override
+    @Deprecated
     public String getFieldValue(NameField nameField, Set<FieldModifier> modifiers) {
         // first look for the fully modified name in the internal table
         String fieldName = nameField.toString();

@@ -101,7 +101,7 @@ import java.util.Map;
  * </table>
  *
  * @internal ICU 72 technology preview
- * @deprecated This API is for ICU internal use only.
+ * @deprecated This API is for technology preview only.
  */
 @Deprecated
 public class MessageFormatter {
@@ -145,7 +145,7 @@ public class MessageFormatter {
      * @return the Builder.
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public static Builder builder() {
@@ -159,7 +159,7 @@ public class MessageFormatter {
      * @return the locale.
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public Locale getLocale() {
@@ -176,7 +176,7 @@ public class MessageFormatter {
      * @return the pattern.
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public String getPattern() {
@@ -195,7 +195,7 @@ public class MessageFormatter {
      * @return the data model.
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public Mf2DataModel getDataModel() {
@@ -213,7 +213,7 @@ public class MessageFormatter {
      *         (for example wrong argument type, or null arguments, etc.)
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public String formatToString(Map<String, Object> arguments) {
@@ -228,7 +228,7 @@ public class MessageFormatter {
      * @return the {@link FormattedMessage} class representing the message with parameters replaced.
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public FormattedMessage format(Map<String, Object> arguments) {
@@ -239,7 +239,7 @@ public class MessageFormatter {
      * A {@code Builder} used to build instances of {@link MessageFormatter}.
      *
      * @internal ICU 72 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public static class Builder {
@@ -259,7 +259,7 @@ public class MessageFormatter {
          * @return the builder, for fluent use.
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Builder setLocale(Locale locale) {
@@ -275,7 +275,7 @@ public class MessageFormatter {
          * @return the builder, for fluent use.
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Builder setPattern(String pattern) {
@@ -297,7 +297,7 @@ public class MessageFormatter {
          * @return the builder, for fluent use.
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Builder setFunctionRegistry(Mf2FunctionRegistry functionRegistry) {
@@ -313,7 +313,7 @@ public class MessageFormatter {
          * @return the builder, for fluent use.
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public Builder setDataModel(Mf2DataModel dataModel) {
@@ -328,7 +328,7 @@ public class MessageFormatter {
          * @return the {@link MessageFormatter} created.
          *
          * @internal ICU 72 technology preview
-         * @deprecated This API is for ICU internal use only.
+         * @deprecated This API is for technology preview only.
          */
         @Deprecated
         public MessageFormatter build() {
