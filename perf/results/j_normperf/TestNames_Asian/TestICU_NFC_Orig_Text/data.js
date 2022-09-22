@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1663848778238,
+  "lastUpdate": 1663869652974,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -2188,6 +2188,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFC_Orig_Text",
             "value": 4.207356653121141,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "0c9d6f6b856c698bf8631c3971ff1fd8581b402b",
+          "message": "ICU-21957 Fix status tags for U_HIDDEN, unum_hasAttribute",
+          "timestamp": "2022-09-22T10:50:22-07:00",
+          "tree_id": "284aa4e537dcb92e7f3c21d350654e469bc666fb",
+          "url": "https://github.com/unicode-org/icu/commit/0c9d6f6b856c698bf8631c3971ff1fd8581b402b"
+        },
+        "date": 1663869645072,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 7.454307336005667,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
