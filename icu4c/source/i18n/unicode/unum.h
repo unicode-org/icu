@@ -1174,7 +1174,7 @@ typedef enum UNumberFormatAttribute {
 * @see unum_setDoubleAttribute
 * @see unum_getTextAttribute
 * @see unum_setTextAttribute
-* @draft ICU 72.0
+* @draft ICU 72
 */
 U_CAPI bool U_EXPORT2
 unum_hasAttribute(const UNumberFormat*          fmt,
