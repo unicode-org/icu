@@ -1069,12 +1069,27 @@ static void TestAlgorithmicParentFallback(void) {
         // or sr_Latn to root, but all of these resource bundle files actually exist in the project
     };
     
+    // fallbacks to "root" in the table above actually fall back to the system default locale.
+    // Trying to compare the locale ID from the resource bundle we get back to uloc_getDefault()
+    // has all kinds of problems, so instead we open a resource bundle with a locale ID that we know
+    // will fall back to the default, save THAT resource bundle's locale ID, and just compare anything
+    // that's supposed to fall back to "root" to THAT.  (If trying to determine the default locale
+    // in this way fails for some reason, we dump out and don't do the rest of the test.)
+    UErrorCode err = U_ZERO_ERROR;
+    UResourceBundle* defaultLocaleRB = ures_open(NULL, "xx_YY", &err);
+    const char* defaultLocaleID = ures_getLocaleByType(defaultLocaleRB, ULOC_ACTUAL_LOCALE, &err);
+    if (U_FAILURE(err)) {
+        log_err("Couldn't create resource bundle for default locale: %s\n", u_errorName(err));
+        return;
+    }
+    // (can't close defaultLocaleRB here because then defaultLocaleID would go bad)
+    
     for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i += 3) {
         const char* testLocale = testCases[i];
         const char* regularExpected = testCases[i + 1];
         const char* noDefaultExpected = testCases[i + 2];
         
-        UErrorCode err = U_ZERO_ERROR;
+        err = U_ZERO_ERROR;
         UResourceBundle* regularRB = ures_open(NULL, testLocale, &err);
         char errorMessage[200];
         
@@ -1086,8 +1101,7 @@ static void TestAlgorithmicParentFallback(void) {
             if (assertSuccess(errorMessage, &err)) {
                 sprintf(errorMessage, "Mismatch for locale %s and URES_OPEN_LOCALE_DEFAULT_ROOT", testLocale);
                 if (uprv_strcmp(regularExpected, "root") == 0) {
-                    // (the system default locale may have keywords-- just check if the resource locale (which won't) is a prefix of the system default)
-                    assertTrue(errorMessage, uprv_strncmp(uloc_getDefault(), resourceLocale, uprv_strlen(resourceLocale)) == 0);
+                    assertEquals(errorMessage, defaultLocaleID, resourceLocale);
                 } else {
                     assertEquals(errorMessage, regularExpected, resourceLocale);
                 }
@@ -1110,4 +1124,5 @@ static void TestAlgorithmicParentFallback(void) {
         }
         ures_close(noDefaultRB);
     }
+    ures_close(defaultLocaleRB);
 }
