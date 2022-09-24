@@ -1252,9 +1252,8 @@ public class TestCharsetDetector extends TestFmwk
 
     @Test
     public void plainAsciiLeadsToAsciiBeingFirst() throws Exception {
-        // Content: "@{,xxx-yyy-!!!}"
-        // Non-English text because otherwise, it is detected as ISO-8859-1
-        byte[] input = new byte[]{0x40, 0x7b, 0x2c, 0x78, 0x78, 0x78, 0x2d, 0x79, 0x79, 0x79, 0x2d, 0x21, 0x21, 0x21, 0x7d};
+        // Non-English text because otherwise, it is detected as ISO-8859-1        
+        byte[] input = "@{,xxx-yyy-!!!}".getBytes(StandardCharsets.US_ASCII);
 
         CharsetDetector charsetDetector = new CharsetDetector();
         charsetDetector.setText(input);
