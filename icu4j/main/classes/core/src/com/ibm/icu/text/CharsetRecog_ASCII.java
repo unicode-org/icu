@@ -12,9 +12,6 @@ class CharsetRecog_ASCII extends CharsetRecognizer {
         return "ASCII";
     }
 
-    /* (non-Javadoc)
-     * @see com.ibm.icu.text.CharsetRecognizer#match(com.ibm.icu.text.CharsetDetector)
-     */
     @Override
     CharsetMatch match(CharsetDetector det) {
         // code similar to determining com.ibm.icu.text.CharsetDetector.fC1Bytes
