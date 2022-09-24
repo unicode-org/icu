@@ -1276,9 +1276,7 @@ public class TestCharsetDetector extends TestFmwk
         Assert.assertEquals("UTF-8", matches[0].getName());
 
         // check that ASCII is not contained
-        for (int i = 0; i<matches.length; i++) {
-            Assert.assertNotEquals("ASCII", matches[i].getName());
-        }
+        Assert.assertFalse(Arrays.asList(matches).contains("ASCII"));
     }
 
     @Test
