@@ -16,7 +16,7 @@ class CharsetRecog_ASCII extends com.ibm.icu.text.CharsetRecognizer {
      * @see com.ibm.icu.text.CharsetRecognizer#match(com.ibm.icu.text.CharsetDetector)
      */
     @Override
-    com.ibm.icu.text.CharsetMatch match(com.ibm.icu.text.CharsetDetector det) {
+    CharsetMatch match(CharsetDetector det) {
         // code similar to determining com.ibm.icu.text.CharsetDetector.fC1Bytes
         boolean highestBitSet = false;
         for (int i = 0x80; i <= 0xFF; i += 1) {
