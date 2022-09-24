@@ -28,9 +28,12 @@ class CharsetRecog_ASCII extends CharsetRecognizer {
             return null;
         } else {
             // ASCII, because ALL bytes in the stream are <= 127.
-            // However, there could be some unicode (such as Hebrew) which also has this property.
-            // Thus, we have confidence of 35.
-            return new CharsetMatch(det, this, 35);
+            // However, there could be some encoding (such as Hebrew or ISO-2022) which also has this property.
+            // Thus, we have a confidence lower than 100.
+            // We could execute the charset detectors of the other languages;
+            // if they don't have a hit, we can increase our confidence.
+            // However, this would lead to dependencies to outer CharsetRecognizers which is not a well-designed architecture.
+            return new CharsetMatch(det, this, 80);
         }
     }
 }
