@@ -5,7 +5,7 @@ package com.ibm.icu.text;
 /**
  * Charset recognizer for plain ASCII
  */
-class CharsetRecog_ASCII extends com.ibm.icu.text.CharsetRecognizer {
+class CharsetRecog_ASCII extends CharsetRecognizer {
 
     @Override
     String getName() {
