@@ -1266,8 +1266,7 @@ public class TestCharsetDetector extends TestFmwk
 
     @Test
     public void utf8LeadsToAsciiNotBeingContained() throws Exception {
-        // Content: "This is a UTF-8 string! 🎉"
-        byte[] input = new byte[]{0x54, 0x68, 0x69, 0x73, 0x69, 0x73, 0x61, 0x55, 0x54, 0x46, 0x2d, 0x38, 0x73, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x21, (byte) 0xf0, (byte) 0x9f, (byte) 0x8e, (byte) 0x89};
+        byte[] input = "This is a UTF-8 string! 🎉".getBytes(StandardCharsets.UTF_8);
 
         CharsetDetector charsetDetector = new CharsetDetector();
         charsetDetector.setText(input);
