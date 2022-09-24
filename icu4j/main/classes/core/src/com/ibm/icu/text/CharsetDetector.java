@@ -407,7 +407,7 @@ public class CharsetDetector {
         //
         Arrays.fill(fByteStats, (short)0);
         for (srci=0; srci<fInputLen; srci++) {
-            // by "& 0x00ff", the range -127 to +127 (of a Java byte) is converted to the "real" range 0.255
+            // by "& 0x00ff", the range -127 to +127 (of a Java byte) is converted to the "real" range 0..255
             int val = fInputBytes[srci] & 0x00ff;
             fByteStats[val]++;
         }
