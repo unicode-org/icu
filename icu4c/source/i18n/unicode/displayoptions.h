@@ -10,6 +10,13 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+/**
+ * \file
+ * \brief C++ API: Display options class
+ *
+ * This class is designed as a more modern version of the UDisplayContext mechanism.
+ */
+
 #include "unicode/udisplayoptions.h"
 #include "unicode/uversion.h"
 
