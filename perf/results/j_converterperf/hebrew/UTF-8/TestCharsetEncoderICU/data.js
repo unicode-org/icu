@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1664234710947,
+  "lastUpdate": 1664319945666,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -2368,6 +2368,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 3.9140665663339758,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "e72233f8b7526bbb840ae7742948a892686acfee",
+          "message": "ICU-21959 fix file-level doxygen issues",
+          "timestamp": "2022-09-27T15:58:43-07:00",
+          "tree_id": "e935fae45795ccdd00637839bd409b521f5265ff",
+          "url": "https://github.com/unicode-org/icu/commit/e72233f8b7526bbb840ae7742948a892686acfee"
+        },
+        "date": 1664319939101,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 4.137058839573361,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
