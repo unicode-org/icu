@@ -581,6 +581,8 @@ public class CurrencyTest extends TestFmwk {
         assertTrue("Full currencies list should include UYW", currencies.contains("UYW")); // ICU-21622
         assertTrue("Full currencies list should include VES", currencies.contains("VES")); // ICU-21685
         assertFalse("Full currencies list should not include EQE", currencies.contains("EQE")); // ICU-21685
+        assertTrue("Full currencies list should include SLE", currencies.contains("SLE")); // CLDR 41/42, ICU-21989
+        assertTrue("Full currencies list should include VED", currencies.contains("VED")); // CLDR 41, ICU-21989
     }
 
     // Coverage-only test of the CurrencyMetaInfo class
