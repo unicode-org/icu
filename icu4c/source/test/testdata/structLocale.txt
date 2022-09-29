@@ -1224,6 +1224,10 @@ structLocale:table(nofallback){
             "",
             "",
         }
+        SLE{
+            "",
+            "",
+        }
         SLL{
             "",
             "",
@@ -1369,6 +1373,10 @@ structLocale:table(nofallback){
             "",
         }
         VEB{
+            "",
+            "",
+        }
+        VED{
             "",
             "",
         }
@@ -3426,6 +3434,14 @@ structLocale:table(nofallback){
             many{""}
             other{""}
         }
+        SLE{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
         SLL{
             zero{""}
             one{""}
@@ -3699,6 +3715,14 @@ structLocale:table(nofallback){
             other{""}
         }
         VEB{
+            zero{""}
+            one{""}
+            two{""}
+            few{""}
+            many{""}
+            other{""}
+        }
+        VED{
             zero{""}
             one{""}
             two{""}
