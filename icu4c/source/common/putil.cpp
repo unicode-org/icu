@@ -1073,6 +1073,28 @@ static void u_property_read(void* cookie, const char* name, const char* value,
 }
 #endif
 
+#if defined(CHECK_LOCALTIME_LINK) && !defined(DEBUG_SKIP_LOCALTIME_LINK)
+static bool extractOlsonIdFromPath(const char* path, int len) {
+    U_ASSERT(gTimeZoneBufferPtr == nullptr);
+    int32_t tzZoneInfoTailLen = uprv_strlen(TZZONEINFOTAIL);
+    if (len > 0) {
+      len = (len > PATH_MAX - 1) ? (PATH_MAX - 1) : len;
+      strncpy(gTimeZoneBuffer, path, len);
+    } else {
+      len = -len;
+    }
+    gTimeZoneBuffer[len] = 0;
+    char* tzZoneInfoTailPtr = uprv_strstr(gTimeZoneBuffer, TZZONEINFOTAIL);
+    if (tzZoneInfoTailPtr != nullptr &&
+        isValidOlsonID(tzZoneInfoTailPtr + tzZoneInfoTailLen))
+    {
+        gTimeZoneBufferPtr = tzZoneInfoTailPtr + tzZoneInfoTailLen;
+        return true;
+    }
+    return false;
+}
+#endif
+
 U_CAPI void U_EXPORT2
 uprv_tzname_clear_cache(void)
 {
@@ -1152,13 +1174,28 @@ uprv_tzname(int n)
         && uprv_strcmp(tzid, TZ_ENV_CHECK) != 0
 #endif
     ) {
-        /* The colon forces tzset() to treat the remainder as zoneinfo path */
+        /* The colon forces tzset() to treat the remainder as zoneinfo path. At
+         * least some versions of glibc does not care about the presence of a
+         * colon. So, no check is added here.*/
         if (tzid[0] == ':') {
             tzid++;
         }
-        /* This might be a good Olson ID. */
+        /* This might be a good Olson ID or it can be a full file path to a
+         * zoneinfo file or TZDEFAULT that is a symlink to a zoneinfo file or
+         * contains the actual zoneinfo rules. The last case need not be handled
+         * here. */
         skipZoneIDPrefix(&tzid);
-        return tzid;
+#if (defined(CHECK_LOCALTIME_LINK) && !defined(DEBUG_SKIP_LOCALTIME_LINK)) && (U_PLATFORM == U_PF_LINUX)
+        if (isValidOlsonID(tzid) && tzid[0] != '/')
+#endif
+          return tzid;
+#if (defined(CHECK_LOCALTIME_LINK) && !defined(DEBUG_SKIP_LOCALTIME_LINK)) && (U_PLATFORM == U_PF_LINUX)
+        /* Caller must handle threading issues */
+        else if (gTimeZoneBufferPtr != nullptr ||
+                 extractOlsonIdFromPath(tzid, uprv_strlen(tzid))) {
+          return gTimeZoneBufferPtr;
+        }
+#endif
     }
     /* else U_TZNAME will give a better result. */
 #endif
@@ -1173,15 +1210,8 @@ uprv_tzname(int n)
         */
         int32_t ret = (int32_t)readlink(TZDEFAULT, gTimeZoneBuffer, sizeof(gTimeZoneBuffer)-1);
         if (0 < ret) {
-            int32_t tzZoneInfoTailLen = uprv_strlen(TZZONEINFOTAIL);
-            gTimeZoneBuffer[ret] = 0;
-            char *  tzZoneInfoTailPtr = uprv_strstr(gTimeZoneBuffer, TZZONEINFOTAIL);
-
-            if (tzZoneInfoTailPtr != NULL
-                && isValidOlsonID(tzZoneInfoTailPtr + tzZoneInfoTailLen))
-            {
-                return (gTimeZoneBufferPtr = tzZoneInfoTailPtr + tzZoneInfoTailLen);
-            }
+            if (extractOlsonIdFromPath(gTimeZoneBuffer, -ret))
+                return gTimeZoneBufferPtr;
         } else {
 #if defined(SEARCH_TZFILE)
             DefaultTZInfo* tzInfo = (DefaultTZInfo*)uprv_malloc(sizeof(DefaultTZInfo));
