@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1665071052693,
+  "lastUpdate": 1665072768834,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -2578,6 +2578,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 2.344144998552718,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ccornelius@google.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "599ecdc4a181062c47ea500a72145c40e42982d8",
+          "message": "ICU-21958 Improved process for Releasing ICU API Docs",
+          "timestamp": "2022-10-06T09:07:55-07:00",
+          "tree_id": "d63d033e13575c68686acb09a088dff586018ce8",
+          "url": "https://github.com/unicode-org/icu/commit/599ecdc4a181062c47ea500a72145c40e42982d8"
+        },
+        "date": 1665072760719,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 2.3458814359263735,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
