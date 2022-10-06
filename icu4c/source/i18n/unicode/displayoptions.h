@@ -38,7 +38,7 @@ U_NAMESPACE_BEGIN
  *         .setGrammaticalCase(UDISPOPT_GRAMMATICAL_CASE_DATIVE)
  *         .setPluralCategory(UDISPOPT_PLURAL_CATEGORY_FEW)
  *         .build();
- *```
+ * ```
  *
  * @draft ICU 72
  */
