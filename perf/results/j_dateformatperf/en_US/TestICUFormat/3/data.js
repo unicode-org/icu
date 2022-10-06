@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1665080856356,
+  "lastUpdate": 1665086827649,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -2458,6 +2458,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 301.47784520219545,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "felipe@felipegasper.com",
+            "name": "Felipe Gasper",
+            "username": "FGasper"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "ff4ecd9f5017b940a7a29e5a25a70289dc3652db",
+          "message": "ICU-22170 Fix typo in resource bundle documentation.\n\nhttps://unicode-org.atlassian.net/browse/ICU-22170",
+          "timestamp": "2022-10-06T13:00:31-07:00",
+          "tree_id": "7cbd9ccfdce9b92a9b79154d1263690414f6ac98",
+          "url": "https://github.com/unicode-org/icu/commit/ff4ecd9f5017b940a7a29e5a25a70289dc3652db"
+        },
+        "date": 1665086819193,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 314.02259346877844,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
