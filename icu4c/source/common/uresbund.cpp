@@ -2351,7 +2351,66 @@ struct GetAllChildrenSink : public ResourceSink {
                     aliasedValue.setData(aliasRB->getResData());
                     aliasedValue.setValidLocaleDataEntry(aliasRB->fValidLocaleDataEntry);
                     aliasedValue.setResource(aliasRB->fRes, ResourceTracer(aliasRB));
-                    dest.put(key, aliasedValue, isRoot, errorCode);
+                    
+                    if (aliasedValue.getType() != URES_TABLE) {
+                        dest.put(key, aliasedValue, isRoot, errorCode);
+                    } else {
+                        // if the resource we're aliasing over to is a table, the sink might iterate over its contents.
+                        // If it does, it'll get only the things defined in the actual alias target, not the things
+                        // the target inherits from its parent resources.  So we walk the parent chain for the *alias target*,
+                        // calling dest.put() for each of the parent tables we could be inheriting from.  This means
+                        // that dest.put() has to iterate over the children of multiple tables to get all of the inherited
+                        // resource values, but it already has to do that to handle normal vertical inheritance.
+                        UResType aliasedValueType = URES_TABLE;
+                        CharString tablePath;
+                        tablePath.append(aliasRB->fResPath, errorCode);
+                        const char* parentKey = key; // dest.put() changes the key
+                        dest.put(parentKey, aliasedValue, isRoot, errorCode);
+                        UResourceDataEntry* entry = aliasRB->fData;
+                        Resource res = aliasRB->fRes;
+                        while (aliasedValueType == URES_TABLE && entry->fParent != nullptr) {
+                            CharString localPath;
+                            localPath.copyFrom(tablePath, errorCode);
+                            char* localPathAsCharPtr = localPath.data();
+                            const char* childKey;
+                            entry = entry->fParent;
+                            res = entry->fData.rootRes;
+                            Resource newRes = res_findResource(&entry->fData, res, &localPathAsCharPtr, &childKey);
+                            if (newRes != RES_BOGUS) {
+                                aliasedValue.setData(entry->fData);
+                                // TODO: do I also need to call aliasedValue.setValueLocaleDataEntry() ?
+                                aliasedValue.setResource(newRes, ResourceTracer(aliasRB)); // probably wrong to use aliasRB here
+                                aliasedValueType = aliasedValue.getType();
+                                if (aliasedValueType == URES_ALIAS) {
+                                    // in a few rare cases, when we get to the root resource bundle, the resource in question
+                                    // won't be an actual table, but will instead be an alias to a table.  That is, we have
+                                    // two aliases in the inheritance path.  (For some locales, such as Zulu, we see this with
+                                    // children of the "fields" resource: "day-narrow" aliases to "day-short", which aliases
+                                    // to "day".)  When this happens, we need to make sure we follow all the aliases.
+                                    ResourceDataValue& rdv2 = static_cast<ResourceDataValue&>(aliasedValue);
+                                    aliasRB = getAliasTargetAsResourceBundle(rdv2.getData(), rdv2.getResource(), nullptr, -1,
+                                                                             rdv2.getValidLocaleDataEntry(), nullptr, 0,
+                                                                             stackTempBundle.getAlias(), &errorCode);
+                                    tablePath.clear();
+                                    tablePath.append(aliasRB->fResPath, errorCode);
+                                    entry = aliasRB->fData;
+                                    res = aliasRB->fRes;
+                                    aliasedValue.setData(entry->fData);
+                                    // TODO: do I also need to call aliasedValue.setValueLocaleDataEntry() ?
+                                    aliasedValue.setResource(res, ResourceTracer(aliasRB)); // probably wrong to use aliasRB here
+                                    aliasedValueType = aliasedValue.getType();
+                                }
+                                if (aliasedValueType == URES_TABLE) {
+                                    dest.put(parentKey, aliasedValue, isRoot, errorCode);
+                                } else {
+                                    // once we've followed the alias, the resource we're looking at really should
+                                    // be a table
+                                    errorCode = U_INTERNAL_PROGRAM_ERROR;
+                                    return;
+                                }
+                            }
+                        }
+                    }
                 }
             } else {
                 dest.put(key, value, isRoot, errorCode);

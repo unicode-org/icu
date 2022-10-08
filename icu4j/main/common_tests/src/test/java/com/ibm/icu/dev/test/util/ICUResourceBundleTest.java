@@ -15,14 +15,17 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.jar.JarEntry;
 
+import com.ibm.icu.impl.UResource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -1196,5 +1199,102 @@ public final class ICUResourceBundleTest extends TestFmwk {
             // enrure is that we don't crash with a StackOverflowError when trying to retrieve the bundle
         }
         ULocale.setDefault(oldDefaultLocale);
+	}
+        
+    @Test
+    public void TestPersonUnits() {
+        // Test for ICU-21877: ICUResourceBundle.getAllChildrenWithFallback() doesn't return all of the children of the resource
+        // that's passed into it.  If you have to follow an alias to get some of the children, we get the resources in the
+        // bundle we're aliasing to, and its children, but things that the bundle we're aliasing to inherits from its parent
+        // don't show up.
+        // This example is from the en_CA resource in the "unit" tree: The four test cases below show what we get when we call
+        // getStringWithFallback():
+        // - units/duration/day-person/other doesn't exist in either en_CA or en, so we fall back on root.
+        // - root/units aliases over to LOCALE/unitsShort.
+        // - unitsShort/duration/day-person/other also doesn't exist in either en_CA or en, so we fall back to root again.
+        // - root/unitsShort/duration/day-person aliases over to LOCALE/unitsShort/duration/day.
+        // - unitsShort/duration/day/other also doesn't exist in en_CA, so we fallback to en.
+        // - en/unitsShort/duration/day/other DOES exist and has "{0} days", so we return that.
+        // It's the same basic story for week-person, month-person, and year-person, except that:
+        // - unitsShort/duration/day doesn't exist at all in en_CA
+        // - unitsShort/duration/week DOES exist in en_CA, but only contains "per", so we inherit "other" from en
+        // - unitsShort/duration/month/other DOES exist in en_CA (it overrides "{0} mths" with "{0} mos")
+        // - unitsShort/duration/year DOES exist in en_CA, but only contains "per", so we inherit "other" from en
+        ICUResourceBundle en_ca = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_UNIT_BASE_NAME, "en_CA");
+        assertEquals("Wrong result for units/duration/day-person/other", "{0} days", en_ca.getStringWithFallback("units/duration/day-person/other"));
+        assertEquals("Wrong result for units/duration/week-person/other", "{0} wks", en_ca.getStringWithFallback("units/duration/week-person/other"));
+        assertEquals("Wrong result for units/duration/month-person/other", "{0} mos", en_ca.getStringWithFallback("units/duration/month-person/other"));
+        assertEquals("Wrong result for units/duration/year-person/other", "{0} yrs", en_ca.getStringWithFallback("units/duration/year-person/other"));
+
+        // getAllChildrenWithFallback() wasn't bringing all of those things back, however.  When en_CA/units/year-person
+        // aliased over to en_CA/unitsShort/year, the sink would only be called on en_CA/unitsShort/year, which means it'd
+        // only see en_CA/unitsShort/year/per, because "per" was the only thing contained in en_CA/unitsShort/year.  But
+        // en_CA/unitsShort/year should be inheriting "dnam", "one", and "other" from en/unitsShort/year.  getAllChildrenWithFallback()
+        // had to be modified to walk the parent chain and call the sink again with en/unitsShort/year and root/unitsShort/year.
+        final Map<String, Set<String>> foundResources = new HashMap<>();
+        en_ca.getAllChildrenWithFallback("units/duration", new UResource.Sink() {
+            @Override
+            public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
+                assertEquals(key + " isn't a table!", value.getType(), UResourceBundle.TABLE);
+
+                Set<String> keys = foundResources.computeIfAbsent(key.toString(), k -> new HashSet<>());
+                UResource.Table childTable = value.getTable();
+                for (int i = 0; i < childTable.getSize(); i++) {
+                    childTable.getKeyAndValue(i, key, value);
+                    keys.add(key.toString());
+                }
+            }
+        });
+        for (String key : foundResources.keySet()) {
+            if (!key.endsWith("-person")) {
+                continue;
+            }
+
+            Set<String> foundChildren = foundResources.get(key);
+            assertTrue(key + " doesn't contain 'dnam'!", foundChildren.contains("dnam"));
+            assertTrue(key + " doesn't contain 'one'!", foundChildren.contains("one"));
+            assertTrue(key + " doesn't contain 'other'!", foundChildren.contains("other"));
+            assertTrue(key + " doesn't contain 'per'!", foundChildren.contains("per"));
+        }
+    }
+
+    @Test
+    public void TestZuluFields() {
+        // Test for ICU-21877: Similar to the above test, except that here we're bringing back the wrong values.
+        // In some resources under the "locales" tree, some resources under "fields" would either have no display
+        // names or bring back the _wrong_ display names.  The underlying cause was the same as in TestPersonUnits()
+        // above, except that there were two levels of indirection: At the root level, *-narrow aliased to *-short,
+        // which in turn aliased to *.  If (say) day-narrow and day-short both didn't have "dn" resources, you could
+        // iterate over fields/day-short and find the "dn" resource that should have been inherited over from
+        // fields/day, but if you iterated over fields/day-narrow, you WOULDN'T get back the "dn" resource from
+        // fields/day (or, with my original fix for ICU-21877, you'd get back the wrong value).  This test verifies
+        // that the double indirection works correctly.
+        ICUResourceBundle zu = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, "zu");
+        assertEquals("Wrong getStringWithFallback() result for fields/day/dn", "Usuku", zu.getStringWithFallback("fields/day/dn"));
+        assertEquals("Wrong getStringWithFallback() result for fields/day-short/dn", "Usuku", zu.getStringWithFallback("fields/day-short/dn"));
+        assertEquals("Wrong getStringWithFallback() result for fields/day-narrow/dn", "Usuku", zu.getStringWithFallback("fields/day-narrow/dn"));
+
+        assertEquals("Wrong getStringWithFallback() result for fields/month/dn", "Inyanga", zu.getStringWithFallback("fields/month/dn"));
+        assertEquals("Wrong getStringWithFallback() result for fields/month-short/dn", "Inyanga", zu.getStringWithFallback("fields/month-short/dn"));
+        assertEquals("Wrong getStringWithFallback() result for fields/month-narrow/dn", "Inyanga", zu.getStringWithFallback("fields/month-narrow/dn"));
+
+        final Map<String, String> foundNames = new HashMap<>();
+        zu.getAllChildrenWithFallback("fields", new UResource.Sink() {
+            @Override
+            public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
+                assertEquals(key + " isn't a table!", value.getType(), UResourceBundle.TABLE);
+
+                UResource.Table childTable = value.getTable();
+                if (childTable.findValue("dn", value)) {
+                    foundNames.putIfAbsent(key.toString(), value.toString());
+                }
+            }
+        });
+        assertEquals("Wrong getAllChildrenWithFallback() result for fields/day/dn", "Usuku", foundNames.get("day"));
+        assertEquals("Wrong getAllChildrenWithFallback() result for fields/day-short/dn", "Usuku", foundNames.get("day-short"));
+        assertEquals("Wrong getAllChildrenWithFallback() result for fields/day-narrow/dn", "Usuku", foundNames.get("day-narrow"));
+        assertEquals("Wrong getAllChildrenWithFallback() result for fields/month/dn", "Inyanga", foundNames.get("month"));
+        assertEquals("Wrong getAllChildrenWithFallback() result for fields/month-short/dn", "Inyanga", foundNames.get("month-short"));
+        assertEquals("Wrong getAllChildrenWithFallback() result for fields/month-narrow/dn", "Inyanga", foundNames.get("month-narrow"));
     }
 }
