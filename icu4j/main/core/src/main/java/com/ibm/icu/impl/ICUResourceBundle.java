@@ -459,7 +459,43 @@ public  class ICUResourceBundle extends UResourceBundle {
                         ReaderValue aliasedValue = new ReaderValue();
                         aliasedValue.reader = aliasedResourceImpl.wholeBundle.reader;
                         aliasedValue.res = aliasedResourceImpl.getResource();
-                        sink.put(key, aliasedValue, noFallback);
+
+                        if (aliasedValue.getType() != TABLE) {
+                            sink.put(key, aliasedValue, noFallback);
+                        } else {
+                            // if the resource we're aliasing over to is a table, the sink might iterate over its contents.
+                            // If it does, it'll get only the things defined in the actual alias target, not the things
+                            // the target inherits from its parent resources.  So we walk the parent chain for the *alias target*,
+                            // calling sink.put() for each of the parent tables we could be inheriting from.  This means
+                            // that sink.put() has to iterate over the children of multiple tables to get all of the inherited
+                            // resource values, but it already has to do that to handle normal vertical inheritance.
+                            int aliasedValueType = TABLE;
+                            String tablePath = aliasPath.substring("/LOCALE/".length());
+                            UResource.Key keyCopy = key.clone(); // sink.put() changes the key
+                            sink.put(keyCopy, aliasedValue, noFallback);
+                            while (aliasedValueType == TABLE && aliasedResource.getParent() != null) {
+                                ICUResourceBundle newAliasedResource = aliasedResource.getParent().findWithFallback(tablePath);
+                                if (newAliasedResource.key.equals(aliasedResource.key)) {
+                                    aliasedResource = newAliasedResource;
+                                } else {
+                                    // the findWithFallback() call above might follow an alias.  If it does, we'll get
+                                    // back the alias target at the wrong level (e.g., if we're in en_CA, we're calling
+                                    // findWithFallback() on en, and if it follows an alias, we get back the alias target
+                                    // in en, even if it also exists in en_CA).  So we check the keys to see if we followed
+                                    // an alias, and if we did, we re-fetch the alias target from our original resource bundle
+                                    tablePath = tablePath.substring(0, tablePath.lastIndexOf('/'));
+                                    tablePath += "/" + newAliasedResource.key;
+                                    aliasedResource = ICUResourceBundle.this.findWithFallback(tablePath);
+                                }
+                                aliasedResourceImpl = (ICUResourceBundleImpl) aliasedResource;
+                                aliasedValue = new ReaderValue();
+                                aliasedValue.reader = aliasedResourceImpl.wholeBundle.reader;
+                                aliasedValue.res = aliasedResourceImpl.getResource();
+                                aliasedValueType = aliasedValue.getType(); // sink.put() messes up the value
+                                keyCopy = key.clone(); // sink.put() messes up the key
+                                sink.put(keyCopy, aliasedValue, noFallback);
+                            }
+                        }
                     } else {
                         sink.put(key, value, noFallback);
                     }
