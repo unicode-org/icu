@@ -35,8 +35,8 @@ ISO 4217 code data in XML format. These files are found in
 http://www.currency-iso.org/iso_index/iso_tables.htm. There are two
 files that we're interested in.
 
- - http://www.currency-iso.org/dl_iso_table_a1.xml
- - http://www.currency-iso.org/dl_iso_tables_a3.xml
+ - https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-one.xml
+ - https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-three.xml
 
 Table A.1 contains current currencies and funds and Table A.3 contains
 historic denominations.
