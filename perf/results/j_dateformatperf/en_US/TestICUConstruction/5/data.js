@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1665162286830,
+  "lastUpdate": 1665507285069,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -2608,6 +2608,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 2642.189036638831,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "jharkawat@microsoft.com",
+            "name": "JALAJ HARKAWAT",
+            "username": "jalaj-microsoft"
+          },
+          "committer": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "Rahul Pandey",
+            "username": "rp9-next"
+          },
+          "distinct": true,
+          "id": "ea4fca604f975b88753abbcdbb8b80f707709894",
+          "message": "ICU-21958 BRS72GA Update version number",
+          "timestamp": "2022-10-11T22:19:20+05:30",
+          "tree_id": "3c93225b8f8f2a7abbef6c56c17e697624e85860",
+          "url": "https://github.com/unicode-org/icu/commit/ea4fca604f975b88753abbcdbb8b80f707709894"
+        },
+        "date": 1665507277079,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 2195.471256863999,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
