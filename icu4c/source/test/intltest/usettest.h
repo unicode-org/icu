@@ -101,6 +101,8 @@ private:
     void TestSkipToStrings();
     void TestPatternCodePointComplement();
     void TestSimpleCaseFolding();
+    void TestCompareFullSimpleCaseFolding();
+    void TestChangesWhenCasefolded();
 
 private:
 

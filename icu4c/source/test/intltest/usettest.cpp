@@ -102,6 +102,8 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestSkipToStrings);
     TESTCASE_AUTO(TestPatternCodePointComplement);
     TESTCASE_AUTO(TestSimpleCaseFolding);
+    TESTCASE_AUTO(TestCompareFullSimpleCaseFolding);
+    TESTCASE_AUTO(TestChangesWhenCasefolded);
     TESTCASE_AUTO_END;
 }
 
@@ -4220,6 +4222,21 @@ const UnicodeSet &getCWCF() {
     return *set;
 }
 
+// Returns a superset of the characters that have default scf mappings.
+// See comments in TestChangesWhenCasefolded().
+const UnicodeSet &getAtLeastCWDefaultSCF() {
+    // Lazy initialization.
+    static const UnicodeSet *set = [] {
+        UErrorCode errorCode = U_ZERO_ERROR;
+        UnicodeSet *set = new UnicodeSet(u"[[:CWCF:]\u1FBE]", errorCode);
+        U_ASSERT(U_SUCCESS(errorCode));
+        U_ASSERT(set != nullptr);
+        U_ASSERT(!set->isBogus());
+        return set;
+    }();
+    return *set;
+}
+
 // Per-character scf = Simple_Case_Folding of a string.
 // (Normally when we case-fold a string we use full case foldings.)
 bool scfString(const UnicodeString &s, UnicodeString &scf) {
@@ -4256,7 +4273,7 @@ bool scfDirect(UnicodeSet &set, bool keepInputCP) {
     // Optimization: Only look at the characters that have
     // simple or full case folding mappings.
     UnicodeSet codePoints(set);
-    codePoints.retainAll(getCWCF());  // intersection: no strings
+    codePoints.retainAll(getAtLeastCWDefaultSCF());  // intersection: no strings
     // A set isBogus() if it could not allocate sufficient memory.
     U_ASSERT(!codePoints.isBogus());
     if (codePoints.isEmpty() && !set.hasStrings()) {
@@ -4341,6 +4358,10 @@ void UnicodeSetTest::TestSimpleCaseFolding() {
         assertFalse(WHERE, scfDirect(set, true));
         checkEqual(expected, set, WHERE);
     }
+}
+
+void UnicodeSetTest::TestCompareFullSimpleCaseFolding() {
+    IcuTestErrorCode errorCode(*this, "TestCompareFullSimpleCaseFolding");
     // Compare the two functions for each code point (except lots of boring ones).
     // Many differences:
     // closeOver() adds other case variants; for example, for 'k' it adds 'K' and the Kelvin sign.
@@ -4351,8 +4372,9 @@ void UnicodeSetTest::TestSimpleCaseFolding() {
     // just like the ECMAScript CharacterSetMatcher's
     // "If there exists a member a of A such that Canonicalize(a) is cc, ..."
     //
-    // There are still 7 input characters for which closeOver() adds additional characters to the output:
-    // U+0390, U+03B0, U+1FBE, U+1FD3, U+1FE3, U+FB05, U+FB06
+    // Unicode 15: There are still 6 input characters for which
+    // closeOver() adds additional characters to the output:
+    // U+0390, U+03B0, U+1FD3, U+1FE3, U+FB05, U+FB06
     //
     // For example:
     // U+0390 GREEK SMALL LETTER IOTA WITH DIALYTIKA AND TONOS
@@ -4371,5 +4393,67 @@ void UnicodeSetTest::TestSimpleCaseFolding() {
         if (!checkEqual(direct, closedOver, "one of manyCp")) {
             errln("    input: U+%04X\n", c);
         }
+    }
+}
+
+void UnicodeSetTest::TestChangesWhenCasefolded() {
+    IcuTestErrorCode errorCode(*this, "TestChangesWhenCasefolded");
+    // One could expect that every character that case-folds in any way
+    // has Changes_When_Casefolded=Yes.
+    // However, the specification is different:
+    // https://www.unicode.org/reports/tr44/#CWCF
+    //   Characters whose normalized forms are not stable under case folding.
+    //   For more information, see D142 in Section 3.13, Default Case Algorithms in [Unicode].
+    //   Generated from: toCasefold(toNFD(X)) != toNFD(X)
+    // Two important points here:
+    // 1. This uses default *full* case mappings,
+    //    which means that we end up with about 3.6% more code points than we need here.
+    //    (Making code using CWCF for scf slightly slower.)
+    // 2. This checks whether the case folding differs *after canonical decomposition*.
+    //    U+1FBE decomposes to U+03B9 which does not case-fold.
+    // U+1FBE is the only character with an scf mapping but not in CWCF.
+    UnicodeSet cwDefaultSimpleCf;
+    UnicodeSet cwFullCf;
+    UnicodeSet cwAnyCf;
+    // Skip boring (for case folding) code points.
+    UnicodeSet manyCp(u"[^[:C:][:Hani:][:Hang:]]", errorCode);
+    UnicodeSetIterator iter(manyCp);
+    while (iter.next()) {
+        UChar32 c = iter.getCodepoint();
+        UChar32 scf = u_foldCase(c, U_FOLD_CASE_DEFAULT);
+        UChar32 scfT = u_foldCase(c, U_FOLD_CASE_EXCLUDE_SPECIAL_I);
+        UnicodeString s(c);
+        UnicodeString cf(s);
+        UnicodeString cfT(s);
+        cf.foldCase(U_FOLD_CASE_DEFAULT);
+        cfT.foldCase(U_FOLD_CASE_EXCLUDE_SPECIAL_I);
+        if (scf != c /* || scfT != c */) {  // only default mappings in this case
+            cwDefaultSimpleCf.add(c);
+        }
+        if (cf != s || cfT != s) {
+            cwFullCf.add(c);
+        }
+        if (scf != c || scfT != c || cf != s || cfT != s) {
+            cwAnyCf.add(c);
+        }
+    }
+    const UnicodeSet &cwcf = getCWCF();
+    // Unicode 15: cwcf is "missing" U+1FBE but has 53 characters with other types of case foldings.
+    // Both sets share 1453 characters.
+    // (Use https://util.unicode.org/UnicodeJsps/unicodeset.jsp
+    // to compare the two sets in the error log.)
+    checkEqual(cwcf, cwDefaultSimpleCf, "cwcf vs. cwDefaultSimpleCf");
+    // Unicode 15: cwcf is "missing" 24 characters that have full case mappings
+    // only if we don't first decompose (such as U+01F0, U+0390, U+1FD3).
+    checkEqual(cwcf, cwFullCf, "cwcf vs. cwFullCf");
+    checkEqual(cwcf, cwAnyCf, "cwcf vs. cwAnyCf");
+
+    const UnicodeSet &atLeastCWDefaultSCF = getAtLeastCWDefaultSCF();
+    if (!atLeastCWDefaultSCF.containsAll(cwDefaultSimpleCf)) {
+        UnicodeSet empty;
+        // Use this for printing the difference.
+        UnicodeSet missing(cwDefaultSimpleCf);
+        missing.removeAll(atLeastCWDefaultSCF);
+        checkEqual(empty, missing, "characters missing from getAtLeastCWDefaultSCF()");
     }
 }
