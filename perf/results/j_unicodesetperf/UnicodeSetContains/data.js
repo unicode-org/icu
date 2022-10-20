@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1666301476400,
+  "lastUpdate": 1666304125774,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -3118,6 +3118,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetContains",
             "value": 3.6164780595561434,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "103115900+rp9-next@users.noreply.github.com",
+            "name": "rp9-next",
+            "username": "rp9-next"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "511b4111f2f1d97a70d08c6a885c333a8542a729",
+          "message": "ICU-22190 Add public PGP Key\n\nSee #2236",
+          "timestamp": "2022-10-20T23:29:13+02:00",
+          "tree_id": "ba77322f3b9d45d1dc97c474231d3dbd2a211139",
+          "url": "https://github.com/unicode-org/icu/commit/511b4111f2f1d97a70d08c6a885c333a8542a729"
+        },
+        "date": 1666304115197,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetContains",
+            "value": 3.0053056411420997,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
