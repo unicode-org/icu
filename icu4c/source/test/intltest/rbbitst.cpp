@@ -168,7 +168,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
 //--------------------------------------------------------------------------------------
 
 RBBITest::RBBITest() {
-    fTestParams = NULL;
+    fTestParams = nullptr;
 }
 
 
@@ -216,8 +216,8 @@ static void printStringBreaks(UText *tstr, int expected[], int expectedCount) {
 
 static void printStringBreaks(const UnicodeString &ustr, int expected[], int expectedCount) {
    UErrorCode status = U_ZERO_ERROR;
-   UText *tstr = NULL;
-   tstr = utext_openConstUnicodeString(NULL, &ustr, &status);
+   UText *tstr = nullptr;
+   tstr = utext_openConstUnicodeString(nullptr, &ustr, &status);
    if (U_FAILURE(status)) {
        printf("printStringBreaks, utext_openConstUnicodeString() returns %s\n", u_errorName(status));
        return;
@@ -236,7 +236,7 @@ void RBBITest::TestBug3818() {
     UnicodeString  thaiStr(thaiWordData);
 
     BreakIterator* bi = BreakIterator::createWordInstance(Locale("th"), status);
-    if (U_FAILURE(status) || bi == NULL) {
+    if (U_FAILURE(status) || bi == nullptr) {
         errcheckln(status, "Fail at file %s, line %d, status = %s", __FILE__, __LINE__, u_errorName(status));
         return;
     }
@@ -365,8 +365,8 @@ void RBBITest::TestBug5775() {
         return;
     }
 // Check for status first for better handling of no data errors.
-    TEST_ASSERT(bi != NULL);
-    if (bi == NULL) {
+    TEST_ASSERT(bi != nullptr);
+    if (bi == nullptr) {
         return;
     }
 
@@ -405,11 +405,11 @@ struct TestParams {
     CharString       utf8String;           // UTF-8 form of text to break.
 
     TestParams(UErrorCode &status) : dataToBreak() {
-        bi               = NULL;
+        bi               = nullptr;
         expectedBreaks   = new UVector32(status);
         srcLine          = new UVector32(status);
         srcCol           = new UVector32(status);
-        textToBreak      = NULL;
+        textToBreak      = nullptr;
         textMap          = new UVector32(status);
     }
 
@@ -438,9 +438,9 @@ static void CharStringAppend(CharString &dest, const UnicodeString &src, UErrorC
         return;
     }
     int32_t utf8Length;
-    u_strToUTF8WithSub(NULL, 0, &utf8Length,            // Output Buffer, NULL for preflight.
+    u_strToUTF8WithSub(nullptr, 0, &utf8Length,         // Output Buffer, nullptr for preflight.
                        src.getBuffer(), src.length(),   // UTF-16 data
-                       0xfffd, NULL,                    // Substitution char, number of subs.
+                       0xfffd, nullptr,                 // Substitution char, number of subs.
                        &status);
     if (U_FAILURE(status) && status != U_BUFFER_OVERFLOW_ERROR) {
         return;
@@ -448,9 +448,9 @@ static void CharStringAppend(CharString &dest, const UnicodeString &src, UErrorC
     status = U_ZERO_ERROR;
     int32_t capacity;
     char *buffer = dest.getAppendBuffer(utf8Length, utf8Length, capacity, status);
-    u_strToUTF8WithSub(buffer, utf8Length, NULL,
+    u_strToUTF8WithSub(buffer, utf8Length, nullptr,
                        src.getBuffer(), src.length(),
-                       0xfffd, NULL, &status);
+                       0xfffd, nullptr, &status);
     dest.append(buffer, utf8Length, status);
 }
 
@@ -554,7 +554,7 @@ void RBBITest::executeTest(TestParams *t, UErrorCode &status) {
         return;
     }
 
-    if (t->bi == NULL) {
+    if (t->bi == nullptr) {
         return;
     }
 
@@ -1296,7 +1296,7 @@ void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *
     //
     const char *testDataDirectory = IntlTest::getSourceTestData(status);
     char testFileName[1000];
-    if (testDataDirectory == NULL || strlen(testDataDirectory) >= sizeof(testFileName)) {
+    if (testDataDirectory == nullptr || strlen(testDataDirectory) >= sizeof(testFileName)) {
         dataerrln("Can't open test data.  Path too long.");
         return;
     }
@@ -1309,9 +1309,9 @@ void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *
     UChar *testFile = ReadAndConvertFile(testFileName, len, "UTF-8", status);
     if (status != U_FILE_ACCESS_ERROR) {
         TEST_ASSERT_SUCCESS(status);
-        TEST_ASSERT(testFile != NULL);
+        TEST_ASSERT(testFile != nullptr);
     }
-    if (U_FAILURE(status) || testFile == NULL) {
+    if (U_FAILURE(status) || testFile == nullptr) {
         return; /* something went wrong, error already output */
     }
     UnicodeString testFileAsString(true, testFile, len);
@@ -1365,7 +1365,7 @@ void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *
             if (length<=8) {
                 char buf[10];
                 hexNumber.extract (0, length, buf, sizeof(buf), US_INV);
-                UChar32 c = (UChar32)strtol(buf, NULL, 16);
+                UChar32 c = (UChar32)strtol(buf, nullptr, 16);
                 if (c<=0x10ffff) {
                     testString.append(c);
                 } else {
@@ -1621,7 +1621,7 @@ private:
 RBBICharMonkey::RBBICharMonkey() {
     UErrorCode  status = U_ZERO_ERROR;
 
-    fText = NULL;
+    fText = nullptr;
 
     fCRLFSet    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\r\\n]"), status);
     fControlSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[[\\p{Grapheme_Cluster_Break = Control}]]"), status);
@@ -2645,11 +2645,11 @@ private:
 
 RBBILineMonkey::RBBILineMonkey() :
     RBBIMonkeyKind(),
-    fSets(NULL),
+    fSets(nullptr),
 
-    fCharBI(NULL),
-    fText(NULL),
-    fNumberMatcher(NULL)
+    fCharBI(nullptr),
+    fText(nullptr),
+    fNumberMatcher(nullptr)
 
 {
     if (U_FAILURE(deferredStatus)) {
@@ -3409,7 +3409,7 @@ static int32_t  getIntParam(UnicodeString name, UnicodeString &params, int32_t d
             paramLength = (int32_t)(sizeof(valString)-2);
         }
         params.extract(m.start(1, status), paramLength, valString, sizeof(valString));
-        val = strtol(valString, NULL, 10);
+        val = strtol(valString, nullptr, 10);
 
         // Delete this parameter from the params string.
         m.reset();
@@ -3857,7 +3857,7 @@ void RBBITest::TestMonkey() {
             // Each option is stripped out of the option string as it is processed.
             // All options have been checked.  The option string should have been completely emptied..
             char buf[100];
-            p.extract(buf, sizeof(buf), NULL, status);
+            p.extract(buf, sizeof(buf), nullptr, status);
             buf[sizeof(buf)-1] = 0;
             errln("Unrecognized or extra parameter:  %s\n", buf);
             return;
@@ -3974,7 +3974,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
     // Verify that the character classes all have at least one member.
     for (i=0; i<numCharClasses; i++) {
         UnicodeSet *s = (UnicodeSet *)chClasses->elementAt(i);
-        if (s == NULL || s->size() == 0) {
+        if (s == nullptr || s->size() == 0) {
             errln("Character Class #%d is null or of zero size.", i);
             return;
         }
@@ -4037,7 +4037,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
         memset(forwardBreaks, 0, sizeof(forwardBreaks));
         if (useUText) {
             UErrorCode status = U_ZERO_ERROR;
-            UText *testUText = utext_openReplaceable(NULL, &testText, &status);
+            UText *testUText = utext_openReplaceable(nullptr, &testText, &status);
             // testUText = utext_openUnicodeString(testUText, &testText, &status);
             bi->setText(testUText, status);
             TEST_ASSERT_SUCCESS(status);
@@ -4122,8 +4122,8 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
 
         // Compare the expected and actual results.
         for (i=0; i<=testText.length(); i++) {
-            const char *errorType = NULL;
-            const char* currentBreakData = NULL;
+            const char *errorType = nullptr;
+            const char* currentBreakData = nullptr;
             if  (forwardBreaks[i] != expectedBreaks[i]) {
                 errorType = "next()";
                 currentBreakData = forwardBreaks;
@@ -4141,7 +4141,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
                 currentBreakData = precedingBreaks;
             }
 
-            if (errorType != NULL) {
+            if (errorType != nullptr) {
                 // Format a range of the test text that includes the failure as
                 //  a data item that can be included in the rbbi test data file.
 
@@ -4372,7 +4372,7 @@ void RBBITest::TestBug12918() {
     // This test triggers an assertion failure in dictbe.cpp
     const UChar *crasherString = u"\u3325\u4a16";
     UErrorCode status = U_ZERO_ERROR;
-    UBreakIterator* iter = ubrk_open(UBRK_WORD, NULL, crasherString, -1, &status);
+    UBreakIterator* iter = ubrk_open(UBRK_WORD, nullptr, crasherString, -1, &status);
     if (U_FAILURE(status)) {
         dataerrln("%s:%d status = %s", __FILE__, __LINE__, u_errorName(status));
         return;
@@ -4426,7 +4426,7 @@ void RBBITest::TestEmoji() {
 
     int    len;
     UChar *testFile = ReadAndConvertFile(testFileName.data(), len, "UTF-8", status);
-    if (U_FAILURE(status) || testFile == NULL) {
+    if (U_FAILURE(status) || testFile == nullptr) {
         errln("%s:%s %s while opening emoji-test.txt", __FILE__, __LINE__, u_errorName(status));
         return;
     }
@@ -4459,7 +4459,7 @@ void RBBITest::TestEmoji() {
             }
             CharString hex8;
             hex8.appendInvariantChars(hex, status);
-            UChar32 c = (UChar32)strtol(hex8.data(), NULL, 16);
+            UChar32 c = (UChar32)strtol(hex8.data(), nullptr, 16);
             if (c<=0x10ffff) {
                 testString.append(c);
             } else {

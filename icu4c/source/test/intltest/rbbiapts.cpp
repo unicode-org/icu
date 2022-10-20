@@ -330,7 +330,7 @@ void RBBIAPITest::TestGetSetAdoptText()
     //                012345678901
 
     status.reset();
-    LocalUTextPointer ut(utext_openUTF8(NULL, s1, -1, status));
+    LocalUTextPointer ut(utext_openUTF8(nullptr, s1, -1, status));
     wordIter1->setText(ut.getAlias(), status);
     TEST_ASSERT_SUCCESS(status);
 
@@ -347,7 +347,7 @@ void RBBIAPITest::TestGetSetAdoptText()
     TEST_ASSERT(pos==UBRK_DONE);
 
     status.reset();
-    LocalUTextPointer ut2(utext_openUTF8(NULL, s2, -1, status));
+    LocalUTextPointer ut2(utext_openUTF8(nullptr, s2, -1, status));
     TEST_ASSERT_SUCCESS(status);
     wordIter1->setText(ut2.getAlias(), status);
     TEST_ASSERT_SUCCESS(status);
@@ -372,7 +372,7 @@ void RBBIAPITest::TestGetSetAdoptText()
 
     status.reset();
     UnicodeString sEmpty;
-    LocalUTextPointer gut2(utext_openUnicodeString(NULL, &sEmpty, status));
+    LocalUTextPointer gut2(utext_openUnicodeString(nullptr, &sEmpty, status));
     wordIter1->getUText(gut2.getAlias(), status);
     TEST_ASSERT_SUCCESS(status);
     status.reset();
@@ -386,42 +386,42 @@ void RBBIAPITest::TestIteration()
 
     UErrorCode status=U_ZERO_ERROR;
     RuleBasedBreakIterator* bi  = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
-    if (U_FAILURE(status) || bi == NULL)  {
+    if (U_FAILURE(status) || bi == nullptr)  {
         errcheckln(status, "Failure creating character break iterator.  Status = %s", u_errorName(status));
     }
     delete bi;
 
     status=U_ZERO_ERROR;
     bi  = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status);
-    if (U_FAILURE(status) || bi == NULL)  {
+    if (U_FAILURE(status) || bi == nullptr)  {
         errcheckln(status, "Failure creating Word break iterator.  Status = %s", u_errorName(status));
     }
     delete bi;
 
     status=U_ZERO_ERROR;
     bi  = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createLineInstance(Locale::getDefault(), status);
-    if (U_FAILURE(status) || bi == NULL)  {
+    if (U_FAILURE(status) || bi == nullptr)  {
         errcheckln(status, "Failure creating Line break iterator.  Status = %s", u_errorName(status));
     }
     delete bi;
 
     status=U_ZERO_ERROR;
     bi  = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createSentenceInstance(Locale::getDefault(), status);
-    if (U_FAILURE(status) || bi == NULL)  {
+    if (U_FAILURE(status) || bi == nullptr)  {
         errcheckln(status, "Failure creating Sentence break iterator.  Status = %s", u_errorName(status));
     }
     delete bi;
 
     status=U_ZERO_ERROR;
     bi  = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createTitleInstance(Locale::getDefault(), status);
-    if (U_FAILURE(status) || bi == NULL)  {
+    if (U_FAILURE(status) || bi == nullptr)  {
         errcheckln(status, "Failure creating Title break iterator.  Status = %s", u_errorName(status));
     }
     delete bi;
 
     status=U_ZERO_ERROR;
     bi  = (RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
-    if (U_FAILURE(status) || bi == NULL)  {
+    if (U_FAILURE(status) || bi == nullptr)  {
         errcheckln(status, "Failure creating character break iterator.  Status = %s", u_errorName(status));
         return;   // Skip the rest of these tests.
     }
@@ -1078,8 +1078,8 @@ void RBBIAPITest::TestGetBinaryRules() {
         return;
     }
     RuleBasedBreakIterator *rbbi = dynamic_cast<RuleBasedBreakIterator *>(bi.getAlias());
-    if (rbbi == NULL) {
-        dataerrln("FAIL: RuleBasedBreakIterator is NULL");
+    if (rbbi == nullptr) {
+        dataerrln("FAIL: RuleBasedBreakIterator is nullptr");
         return;
     }
 
@@ -1096,7 +1096,7 @@ void RBBIAPITest::TestGetBinaryRules() {
     uint32_t ruleLength;
     const uint8_t *binRules = rbbi->getBinaryRules(ruleLength);
     TEST_ASSERT(ruleLength > 0);
-    TEST_ASSERT(binRules != NULL);
+    TEST_ASSERT(binRules != nullptr);
 
     // Clone the binary rules, and create a break iterator from that.
     // The break iterator does not adopt the rules; we must delete when we are finished with the iterator.
