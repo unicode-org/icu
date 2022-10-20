@@ -108,7 +108,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(const uint8_t *compiledRules,
     if (U_FAILURE(status)) {
         return;
     }
-    if (compiledRules == NULL || ruleLength < sizeof(RBBIDataHeader)) {
+    if (compiledRules == nullptr || ruleLength < sizeof(RBBIDataHeader)) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -261,9 +261,9 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
     }
     BreakIterator::operator=(that);
 
-    if (fLanguageBreakEngines != NULL) {
+    if (fLanguageBreakEngines != nullptr) {
         delete fLanguageBreakEngines;
-        fLanguageBreakEngines = NULL;   // Just rebuild for now
+        fLanguageBreakEngines = nullptr;   // Just rebuild for now
     }
     // TODO: clone fLanguageBreakEngines from "that"
     UErrorCode status = U_ZERO_ERROR;
@@ -274,22 +274,22 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
     }
     fCharIter = &fSCharIter;
 
-    if (that.fCharIter != NULL && that.fCharIter != &that.fSCharIter) {
+    if (that.fCharIter != nullptr && that.fCharIter != &that.fSCharIter) {
         // This is a little bit tricky - it will initially appear that
         //  this->fCharIter is adopted, even if that->fCharIter was
         //  not adopted.  That's ok.
         fCharIter = that.fCharIter->clone();
     }
     fSCharIter = that.fSCharIter;
-    if (fCharIter == NULL) {
+    if (fCharIter == nullptr) {
         fCharIter = &fSCharIter;
     }
 
-    if (fData != NULL) {
+    if (fData != nullptr) {
         fData->removeReference();
-        fData = NULL;
+        fData = nullptr;
     }
-    if (that.fData != NULL) {
+    if (that.fData != nullptr) {
         fData = that.fData->addReference();
     }
 
@@ -346,10 +346,10 @@ void RuleBasedBreakIterator::init(UErrorCode &status) {
         return;
     }
 
-    utext_openUChars(&fText, NULL, 0, &status);
+    utext_openUChars(&fText, nullptr, 0, &status);
     fDictionaryCache = new DictionaryCache(this, status);
     fBreakCache      = new BreakCache(this, status);
-    if (U_SUCCESS(status) && (fDictionaryCache == NULL || fBreakCache == NULL)) {
+    if (U_SUCCESS(status) && (fDictionaryCache == nullptr || fBreakCache == nullptr)) {
         status = U_MEMORY_ALLOCATION_ERROR;
     }
 
@@ -412,7 +412,7 @@ RuleBasedBreakIterator::operator==(const BreakIterator& that) const {
     }
 
     if (that2.fData == fData ||
-        (fData != NULL && that2.fData != NULL && *that2.fData == *fData)) {
+        (fData != nullptr && that2.fData != nullptr && *that2.fData == *fData)) {
             // The two break iterators are using the same rules.
             return true;
         }
@@ -426,7 +426,7 @@ RuleBasedBreakIterator::operator==(const BreakIterator& that) const {
 int32_t
 RuleBasedBreakIterator::hashCode(void) const {
     int32_t   hash = 0;
-    if (fData != NULL) {
+    if (fData != nullptr) {
         hash = fData->hashCode();
     }
     return hash;
@@ -494,10 +494,10 @@ RuleBasedBreakIterator::adoptText(CharacterIterator* newText) {
     UErrorCode status = U_ZERO_ERROR;
     fBreakCache->reset();
     fDictionaryCache->reset();
-    if (newText==NULL || newText->startIndex() != 0) {
+    if (newText==nullptr || newText->startIndex() != 0) {
         // startIndex !=0 wants to be an error, but there's no way to report it.
         // Make the iterator text be an empty string.
-        utext_openUChars(&fText, NULL, 0, &status);
+        utext_openUChars(&fText, nullptr, 0, &status);
     } else {
         utext_openCharacterIterator(&fText, newText, &status);
     }
@@ -542,7 +542,7 @@ RuleBasedBreakIterator &RuleBasedBreakIterator::refreshInputText(UText *input, U
     if (U_FAILURE(status)) {
         return *this;
     }
-    if (input == NULL) {
+    if (input == nullptr) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return *this;
     }
@@ -1009,7 +1009,7 @@ int32_t RuleBasedBreakIterator::handleSafePrevious(int32_t fromPosition) {
     #endif
 
     // if we're already at the start of the text, return DONE.
-    if (fData == NULL || UTEXT_GETNATIVEINDEX(&fText)==0) {
+    if (fData == nullptr || UTEXT_GETNATIVEINDEX(&fText)==0) {
         return BreakIterator::DONE;
     }
 
@@ -1117,10 +1117,10 @@ int32_t RuleBasedBreakIterator::getRuleStatusVec(
 //
 //-------------------------------------------------------------------------------
 const uint8_t  *RuleBasedBreakIterator::getBinaryRules(uint32_t &length) {
-    const uint8_t  *retPtr = NULL;
+    const uint8_t  *retPtr = nullptr;
     length = 0;
 
-    if (fData != NULL) {
+    if (fData != nullptr) {
         retPtr = (const uint8_t *)fData->fHeader;
         length = fData->fHeader->fLength;
     }
@@ -1131,16 +1131,16 @@ const uint8_t  *RuleBasedBreakIterator::getBinaryRules(uint32_t &length) {
 RuleBasedBreakIterator *RuleBasedBreakIterator::createBufferClone(
         void * /*stackBuffer*/, int32_t &bufferSize, UErrorCode &status) {
     if (U_FAILURE(status)){
-        return NULL;
+        return nullptr;
     }
 
     if (bufferSize == 0) {
         bufferSize = 1;  // preflighting for deprecated functionality
-        return NULL;
+        return nullptr;
     }
 
     BreakIterator *clonedBI = clone();
-    if (clonedBI == NULL) {
+    if (clonedBI == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
     } else {
         status = U_SAFECLONE_ALLOCATED_WARNING;
@@ -1185,14 +1185,14 @@ static void U_CALLCONV rbbiInit() {
 
 static void U_CALLCONV initLanguageFactories() {
     UErrorCode status = U_ZERO_ERROR;
-    U_ASSERT(gLanguageBreakFactories == NULL);
-    gLanguageBreakFactories = new UStack(_deleteFactory, NULL, status);
-    if (gLanguageBreakFactories != NULL && U_SUCCESS(status)) {
+    U_ASSERT(gLanguageBreakFactories == nullptr);
+    gLanguageBreakFactories = new UStack(_deleteFactory, nullptr, status);
+    if (gLanguageBreakFactories != nullptr && U_SUCCESS(status)) {
         ICULanguageBreakFactory *builtIn = new ICULanguageBreakFactory(status);
         gLanguageBreakFactories->push(builtIn, status);
 #ifdef U_LOCAL_SERVICE_HOOK
         LanguageBreakFactory *extra = (LanguageBreakFactory *)uprv_svc_hook("languageBreakFactory", &status);
-        if (extra != NULL) {
+        if (extra != nullptr) {
             gLanguageBreakFactories->push(extra, status);
         }
 #endif
@@ -1205,16 +1205,16 @@ static const LanguageBreakEngine*
 getLanguageBreakEngineFromFactory(UChar32 c)
 {
     umtx_initOnce(gLanguageBreakFactoriesInitOnce, &initLanguageFactories);
-    if (gLanguageBreakFactories == NULL) {
-        return NULL;
+    if (gLanguageBreakFactories == nullptr) {
+        return nullptr;
     }
 
     int32_t i = gLanguageBreakFactories->size();
-    const LanguageBreakEngine *lbe = NULL;
+    const LanguageBreakEngine *lbe = nullptr;
     while (--i >= 0) {
         LanguageBreakFactory *factory = (LanguageBreakFactory *)(gLanguageBreakFactories->elementAt(i));
         lbe = factory->getEngineFor(c);
-        if (lbe != NULL) {
+        if (lbe != nullptr) {
             break;
         }
     }
@@ -1230,15 +1230,15 @@ getLanguageBreakEngineFromFactory(UChar32 c)
 //-------------------------------------------------------------------------------
 const LanguageBreakEngine *
 RuleBasedBreakIterator::getLanguageBreakEngine(UChar32 c) {
-    const LanguageBreakEngine *lbe = NULL;
+    const LanguageBreakEngine *lbe = nullptr;
     UErrorCode status = U_ZERO_ERROR;
 
-    if (fLanguageBreakEngines == NULL) {
+    if (fLanguageBreakEngines == nullptr) {
         fLanguageBreakEngines = new UStack(status);
-        if (fLanguageBreakEngines == NULL || U_FAILURE(status)) {
+        if (fLanguageBreakEngines == nullptr || U_FAILURE(status)) {
             delete fLanguageBreakEngines;
             fLanguageBreakEngines = 0;
-            return NULL;
+            return nullptr;
         }
     }
 
@@ -1255,7 +1255,7 @@ RuleBasedBreakIterator::getLanguageBreakEngine(UChar32 c) {
     lbe = getLanguageBreakEngineFromFactory(c);
 
     // If we got one, use it and push it on our stack.
-    if (lbe != NULL) {
+    if (lbe != nullptr) {
         fLanguageBreakEngines->push((void *)lbe, status);
         // Even if we can't remember it, we can keep looking it up, so
         // return it even if the push fails.
@@ -1264,9 +1264,9 @@ RuleBasedBreakIterator::getLanguageBreakEngine(UChar32 c) {
 
     // No engine is forthcoming for this character. Add it to the
     // reject set. Create the reject break engine if needed.
-    if (fUnhandledBreakEngine == NULL) {
+    if (fUnhandledBreakEngine == nullptr) {
         fUnhandledBreakEngine = new UnhandledEngine(status);
-        if (U_SUCCESS(status) && fUnhandledBreakEngine == NULL) {
+        if (U_SUCCESS(status) && fUnhandledBreakEngine == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return nullptr;
         }
@@ -1278,7 +1278,7 @@ RuleBasedBreakIterator::getLanguageBreakEngine(UChar32 c) {
         if (U_FAILURE(status)) {
             delete fUnhandledBreakEngine;
             fUnhandledBreakEngine = 0;
-            return NULL;
+            return nullptr;
         }
     }
 
@@ -1303,7 +1303,7 @@ void RuleBasedBreakIterator::dumpTables() {
 
 const UnicodeString&
 RuleBasedBreakIterator::getRules() const {
-    if (fData != NULL) {
+    if (fData != nullptr) {
         return fData->getRuleSourceString();
     } else {
         umtx_initOnce(gRBBIInitOnce, &rbbiInit);
