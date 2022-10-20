@@ -100,6 +100,18 @@ static void TestEnumList(void) {
     expectInList("VES", UCURR_DEPRECATED, false);
     expectInList("VES", UCURR_NON_DEPRECATED, true);
 
+    // CLDR 41/42 and ICU-21989
+    expectInList("SLE", UCURR_ALL, true);
+    expectInList("SLE", UCURR_COMMON, true);
+    expectInList("SLE", UCURR_UNCOMMON, false);
+    expectInList("SLE", UCURR_DEPRECATED, false);
+    expectInList("SLE", UCURR_NON_DEPRECATED, true);
+    expectInList("VED", UCURR_ALL, true);
+    expectInList("VED", UCURR_COMMON, false);
+    expectInList("VED", UCURR_UNCOMMON, true);
+    expectInList("VED", UCURR_DEPRECATED, false);
+    expectInList("VED", UCURR_NON_DEPRECATED, true);
+
     expectInList("EQE", UCURR_ALL, false);
 }
 

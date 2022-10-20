@@ -22,7 +22,7 @@
 
 // Safer use of UnicodeString.
 #include <cstdint>
-#include <unicode/umachine.h>
+#include "unicode/umachine.h"
 #ifndef UNISTR_FROM_CHAR_EXPLICIT
 #   define UNISTR_FROM_CHAR_EXPLICIT explicit
 #endif
