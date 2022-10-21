@@ -5231,7 +5231,7 @@ void RBBITest::TestTraceCreateBreakEngine(void) {
 
     // To word break the following text, BreakIterator will create 5 dictionary
     // break engine internally.
-    brkitr->setText(
+    UnicodeString text(
         u"test "
         u"測試 " // Hani
         u"សាកល្បង " // Khmr
@@ -5240,6 +5240,7 @@ void RBBITest::TestTraceCreateBreakEngine(void) {
         u"ทดสอบ " // Thai
         u"test "
     );
+    brkitr->setText(text);
 
     // Loop through all the text.
     while (brkitr->next() > 0) ;
