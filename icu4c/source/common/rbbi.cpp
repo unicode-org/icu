@@ -63,9 +63,8 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RuleBasedBreakIterator)
  * tables object that is passed in as a parameter.
  */
 RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode &status)
- : fSCharIter(UnicodeString())
+ : RuleBasedBreakIterator(status)
 {
-    init(status);
     fData = new RBBIDataWrapper(data, status); // status checked in constructor
     if (U_FAILURE(status)) {return;}
     if(fData == nullptr) {
@@ -102,9 +101,8 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* udm, UBool isPhraseB
 RuleBasedBreakIterator::RuleBasedBreakIterator(const uint8_t *compiledRules,
                        uint32_t       ruleLength,
                        UErrorCode     &status)
- : fSCharIter(UnicodeString())
+ : RuleBasedBreakIterator(status)
 {
-    init(status);
     if (U_FAILURE(status)) {
         return;
     }
@@ -141,9 +139,8 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(const uint8_t *compiledRules,
 //
 //-------------------------------------------------------------------------------
 RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* udm, UErrorCode &status)
- : fSCharIter(UnicodeString())
+ : RuleBasedBreakIterator(status)
 {
-    init(status);
     fData = new RBBIDataWrapper(udm, status); // status checked in constructor
     if (U_FAILURE(status)) {return;}
     if(fData == nullptr) {
@@ -170,9 +167,8 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* udm, UErrorCode &sta
 RuleBasedBreakIterator::RuleBasedBreakIterator( const UnicodeString  &rules,
                                                 UParseError          &parseError,
                                                 UErrorCode           &status)
- : fSCharIter(UnicodeString())
+ : RuleBasedBreakIterator(status)
 {
-    init(status);
     if (U_FAILURE(status)) {return;}
     RuleBasedBreakIterator *bi = (RuleBasedBreakIterator *)
         RBBIRuleBuilder::createRuleBasedBreakIterator(rules, &parseError, status);
@@ -194,10 +190,35 @@ RuleBasedBreakIterator::RuleBasedBreakIterator( const UnicodeString  &rules,
 //                           of rules.
 //-------------------------------------------------------------------------------
 RuleBasedBreakIterator::RuleBasedBreakIterator()
- : fSCharIter(UnicodeString())
+ : RuleBasedBreakIterator(fErrorCode)
 {
-    UErrorCode status = U_ZERO_ERROR;
-    init(status);
+}
+
+/**
+ * Simple Constructor with an error code.
+ * Handles common initialization for all other constructors.
+ */
+RuleBasedBreakIterator::RuleBasedBreakIterator(UErrorCode &status) {
+    utext_openUChars(&fText, nullptr, 0, &status);
+    LocalPointer<DictionaryCache> lpDictionaryCache(new DictionaryCache(this, status), status);
+    LocalPointer<BreakCache> lpBreakCache(new BreakCache(this, status), status);
+    if (U_FAILURE(status)) {
+        fErrorCode = status;
+        return;
+    }
+    fDictionaryCache = lpDictionaryCache.orphan();
+    fBreakCache = lpBreakCache.orphan();
+
+#ifdef RBBI_DEBUG
+    static UBool debugInitDone = false;
+    if (debugInitDone == false) {
+        char *debugEnv = getenv("U_RBBIDEBUG");
+        if (debugEnv && uprv_strstr(debugEnv, "trace")) {
+            gTrace = true;
+        }
+        debugInitDone = true;
+    }
+#endif
 }
 
 
@@ -208,11 +229,8 @@ RuleBasedBreakIterator::RuleBasedBreakIterator()
 //
 //-------------------------------------------------------------------------------
 RuleBasedBreakIterator::RuleBasedBreakIterator(const RuleBasedBreakIterator& other)
-: BreakIterator(other),
-  fSCharIter(UnicodeString())
+: RuleBasedBreakIterator()
 {
-    UErrorCode status = U_ZERO_ERROR;
-    this->init(status);
     *this = other;
 }
 
@@ -315,58 +333,6 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
     return *this;
 }
 
-
-
-//-----------------------------------------------------------------------------
-//
-//    init()      Shared initialization routine.   Used by all the constructors.
-//                Initializes all fields, leaving the object in a consistent state.
-//
-//-----------------------------------------------------------------------------
-void RuleBasedBreakIterator::init(UErrorCode &status) {
-    fCharIter             = nullptr;
-    fData                 = nullptr;
-    fPosition             = 0;
-    fRuleStatusIndex      = 0;
-    fDone                 = false;
-    fDictionaryCharCount  = 0;
-    fLanguageBreakEngines = nullptr;
-    fUnhandledBreakEngine = nullptr;
-    fBreakCache           = nullptr;
-    fDictionaryCache      = nullptr;
-    fLookAheadMatches     = nullptr;
-    fIsPhraseBreaking     = false;
-
-    // Note: IBM xlC is unable to assign or initialize member fText from UTEXT_INITIALIZER.
-    // fText                 = UTEXT_INITIALIZER;
-    static const UText initializedUText = UTEXT_INITIALIZER;
-    uprv_memcpy(&fText, &initializedUText, sizeof(UText));
-
-   if (U_FAILURE(status)) {
-        return;
-    }
-
-    utext_openUChars(&fText, nullptr, 0, &status);
-    fDictionaryCache = new DictionaryCache(this, status);
-    fBreakCache      = new BreakCache(this, status);
-    if (U_SUCCESS(status) && (fDictionaryCache == nullptr || fBreakCache == nullptr)) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-    }
-
-#ifdef RBBI_DEBUG
-    static UBool debugInitDone = false;
-    if (debugInitDone == false) {
-        char *debugEnv = getenv("U_RBBIDEBUG");
-        if (debugEnv && uprv_strstr(debugEnv, "trace")) {
-            gTrace = true;
-        }
-        debugInitDone = true;
-    }
-#endif
-}
-
-
-
 //-----------------------------------------------------------------------------
 //
 //    clone - Returns a newly-constructed RuleBasedBreakIterator with the same
@@ -447,7 +413,7 @@ void RuleBasedBreakIterator::setText(UText *ut, UErrorCode &status) {
     //   Return one over an empty string instead - this is the closest
     //   we can come to signaling a failure.
     //   (GetText() is obsolete, this failure is sort of OK)
-    fSCharIter.setText(UnicodeString());
+    fSCharIter.setText(u"", 0);
 
     if (fCharIter != &fSCharIter) {
         // existing fCharIter was adopted from the outside.  Delete it now.
@@ -520,7 +486,7 @@ RuleBasedBreakIterator::setText(const UnicodeString& newText) {
     //   Needed in case someone calls getText().
     //  Can not, unfortunately, do this lazily on the (probably never)
     //  call to getText(), because getText is const.
-    fSCharIter.setText(newText);
+    fSCharIter.setText(newText.getBuffer(), newText.length());
 
     if (fCharIter != &fSCharIter) {
         // old fCharIter was adopted from the outside.  Delete it.
