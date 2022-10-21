@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1666301952537,
+  "lastUpdate": 1666311702512,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -2998,6 +2998,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 1062.3045071942195,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "d453c12bfacde783b7e985cdb4eb15c6db277f78",
+          "message": "ICU-22190 Update KEYS with additional public key\n\nSee #2237",
+          "timestamp": "2022-10-21T02:13:32+02:00",
+          "tree_id": "0fc2e58be4144d2ed6f6e966dda6667392347a4b",
+          "url": "https://github.com/unicode-org/icu/commit/d453c12bfacde783b7e985cdb4eb15c6db277f78"
+        },
+        "date": 1666311687670,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 1340.220964460229,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
