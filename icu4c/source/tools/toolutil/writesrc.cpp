@@ -19,8 +19,8 @@
 */
 
 #include <stdio.h>
-#include <inttypes.h>
 #include <time.h>
+#include <cinttypes>
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "unicode/ucptrie.h"
