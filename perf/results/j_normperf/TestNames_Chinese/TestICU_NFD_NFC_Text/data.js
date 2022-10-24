@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1666311638685,
+  "lastUpdate": 1666640824929,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -6058,6 +6058,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 2.9848348051454114,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "cwcornelius@gmail.com",
+            "name": "Craig Cornelius",
+            "username": "sven-oly"
+          },
+          "distinct": true,
+          "id": "fbb4a5a167192d2d918ee0020e8e084c299de97d",
+          "message": "ICU-22190 Update KEYS with additional signature data.",
+          "timestamp": "2022-10-24T12:39:23-07:00",
+          "tree_id": "031c0f6d3b697be99f016d7a0f08de1467a3af78",
+          "url": "https://github.com/unicode-org/icu/commit/fbb4a5a167192d2d918ee0020e8e084c299de97d"
+        },
+        "date": 1666640816386,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 4.528684572388822,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
