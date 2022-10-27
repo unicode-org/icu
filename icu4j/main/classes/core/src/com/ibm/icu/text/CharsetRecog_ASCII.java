@@ -33,7 +33,7 @@ class CharsetRecog_ASCII extends CharsetRecognizer {
             // We could execute the charset detectors of the other languages;
             // if they don't have a hit, we can increase our confidence.
             // However, this would lead to dependencies to outer CharsetRecognizers which is not a well-designed architecture.
-            return new CharsetMatch(det, this, 80);
+            return new CharsetMatch(det, this, 81);
         }
     }
 }
