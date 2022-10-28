@@ -102,7 +102,7 @@ class UStringSet : public UVector {
   inline UBool add(const UnicodeString& str, UErrorCode &status) {
     if(U_FAILURE(status)) return false;
     UnicodeString *t = new UnicodeString(str);
-    if(t==NULL) {
+    if(t==nullptr) {
       status = U_MEMORY_ALLOCATION_ERROR; return false;
     }
     return adopt(t, status);
@@ -191,7 +191,7 @@ public:
     return clone();
   }
   virtual SimpleFilteredSentenceBreakIterator* clone() const override { return new SimpleFilteredSentenceBreakIterator(*this); }
-  virtual UClassID getDynamicClassID(void) const override { return NULL; }
+  virtual UClassID getDynamicClassID(void) const override { return nullptr; }
   virtual bool operator==(const BreakIterator& o) const override { if(this==&o) return true; return false; }
 
   /* -- text modifying -- */
@@ -516,7 +516,7 @@ SimpleFilteredBreakIteratorBuilder::SimpleFilteredBreakIteratorBuilder(const Loc
 #endif
       return;  // leaves the builder empty, if you try to use it.
     }
-    LocalUResourceBundlePointer exceptions(ures_getByKeyWithFallback(b.getAlias(), "exceptions", NULL, &subStatus));
+    LocalUResourceBundlePointer exceptions(ures_getByKeyWithFallback(b.getAlias(), "exceptions", nullptr, &subStatus));
     if (U_FAILURE(subStatus) || (subStatus == U_USING_DEFAULT_WARNING) ) {    
       status = subStatus; // copy the failing status 
 #if FB_DEBUG
@@ -524,7 +524,7 @@ SimpleFilteredBreakIteratorBuilder::SimpleFilteredBreakIteratorBuilder(const Loc
 #endif
       return;  // leaves the builder empty, if you try to use it.
     }
-    LocalUResourceBundlePointer breaks(ures_getByKeyWithFallback(exceptions.getAlias(), "SentenceBreak", NULL, &subStatus));
+    LocalUResourceBundlePointer breaks(ures_getByKeyWithFallback(exceptions.getAlias(), "SentenceBreak", nullptr, &subStatus));
 
 #if FB_DEBUG
     {
@@ -590,7 +590,7 @@ SimpleFilteredBreakIteratorBuilder::build(BreakIterator* adoptBreakIterator, UEr
   LocalPointer<UCharsTrieBuilder> builder(new UCharsTrieBuilder(status), status);
   LocalPointer<UCharsTrieBuilder> builder2(new UCharsTrieBuilder(status), status);
   if(U_FAILURE(status)) {
-    return NULL;
+    return nullptr;
   }
 
   int32_t revCount = 0;
@@ -620,7 +620,7 @@ SimpleFilteredBreakIteratorBuilder::build(BreakIterator* adoptBreakIterator, UEr
     } else {
       FB_TRACE("build",abbr,false,i);
       status = U_MEMORY_ALLOCATION_ERROR;
-      return NULL;
+      return nullptr;
     }
     partials[n] = 0; // default: not partial
     n++;
@@ -682,21 +682,21 @@ SimpleFilteredBreakIteratorBuilder::build(BreakIterator* adoptBreakIterator, UEr
       ////if(debug2) u_printf("SUPPRESS- not Added(%d):  /%S/ status=%s\n",partials[i], ustrs[i].getTerminatedBuffer(), u_errorName(status));
     }
   }
-  FB_TRACE("AbbrCount",NULL,false, subCount);
+  FB_TRACE("AbbrCount",nullptr,false, subCount);
 
   if(revCount>0) {
     backwardsTrie.adoptInstead(builder->build(USTRINGTRIE_BUILD_FAST, status));
     if(U_FAILURE(status)) {
-      FB_TRACE(u_errorName(status),NULL,false, -1);
-      return NULL;
+      FB_TRACE(u_errorName(status),nullptr,false, -1);
+      return nullptr;
     }
   }
 
   if(fwdCount>0) {
     forwardsPartialTrie.adoptInstead(builder2->build(USTRINGTRIE_BUILD_FAST, status));
     if(U_FAILURE(status)) {
-      FB_TRACE(u_errorName(status),NULL,false, -1);
-      return NULL;
+      FB_TRACE(u_errorName(status),nullptr,false, -1);
+      return nullptr;
     }
   }
 
@@ -714,9 +714,9 @@ FilteredBreakIteratorBuilder::~FilteredBreakIteratorBuilder() {
 
 FilteredBreakIteratorBuilder *
 FilteredBreakIteratorBuilder::createInstance(const Locale& where, UErrorCode& status) {
-  if(U_FAILURE(status)) return NULL;
+  if(U_FAILURE(status)) return nullptr;
   LocalPointer<FilteredBreakIteratorBuilder> ret(new SimpleFilteredBreakIteratorBuilder(where, status), status);
-  return (U_SUCCESS(status))? ret.orphan(): NULL;
+  return (U_SUCCESS(status))? ret.orphan(): nullptr;
 }
 
 FilteredBreakIteratorBuilder *
@@ -726,9 +726,9 @@ FilteredBreakIteratorBuilder::createInstance(UErrorCode &status) {
 
 FilteredBreakIteratorBuilder *
 FilteredBreakIteratorBuilder::createEmptyInstance(UErrorCode& status) {
-  if(U_FAILURE(status)) return NULL;
+  if(U_FAILURE(status)) return nullptr;
   LocalPointer<FilteredBreakIteratorBuilder> ret(new SimpleFilteredBreakIteratorBuilder(status), status);
-  return (U_SUCCESS(status))? ret.orphan(): NULL;
+  return (U_SUCCESS(status))? ret.orphan(): nullptr;
 }
 
 U_NAMESPACE_END

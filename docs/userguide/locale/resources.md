@@ -635,7 +635,7 @@ root {
         }
     }
 
-    // This resource is a table, thus accessible only through iteration and indexes...
+    // This resource is an array, thus accessible only through iteration and indexes...
     errors {
         "Invalid Command",
         "Bad Value",

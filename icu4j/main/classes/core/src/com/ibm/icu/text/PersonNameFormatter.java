@@ -14,13 +14,56 @@ import com.ibm.icu.impl.personname.PersonNameFormatterImpl;
  *
  * The Length, Usage, and Formality options can be used to get a wide variety of results.  In English, they would
  * produce results along these lines:
- *
- * |        | REFERRING             | REFERRING    | ADDRESSING | ADDRESSING | MONOGRAM | MONOGRAM |
- * |        | FORMAL                | INFORMAL     | FORMAL     | INFORMAL   | FORMAL   | INFORMAL |
- * |--------|-----------------------|--------------|------------|------------|----------|----------|
- * | LONG   | James Earl Carter Jr. | Jimmy Carter | Mr. Carter | Jimmy      | JEC      | JC       |
- * | MEDIUM | James E. Carter Jr.   | Jimmy Carter | Mr. Carter | Jimmy      | C        | J        |
- * | SHORT  | J. E. Carter          | Jimmy Carter | Mr. Carter | Jimmy      | C        | J        |
+ * <table border="1">
+ *     <tr>
+ *         <th rowspan="2">
+ *         </th>
+ *         <th colspan="2">
+ *             REFERRING
+ *         </th>
+ *         <th colspan="2">
+ *             ADDRESSING
+ *         </th>
+ *         <th colspan="2">
+ *             MONOGRAM
+ *         </th>
+ *     </tr>
+ *     <tr>
+ *         <th>FORMAL</th>
+ *         <th>INFORMAL</th>
+ *         <th>FORMAL</th>
+ *         <th>INFORMAL</th>
+ *         <th>FORMAL</th>
+ *         <th>INFORMAL</th>
+ *     </tr>
+ *     <tr>
+ *         <th>LONG</th>
+ *         <td>James Earl Carter Jr.</td>
+ *         <td>Jimmy Carter</td>
+ *         <td>Mr. Carter</td>
+ *         <td>Jimmy</td>
+ *         <td>JEC</td>
+ *         <td>JC</td>
+ *     </tr>
+ *     <tr>
+ *         <th>MEDIUM</th>
+ *         <td>James E. Carter Jr.</td>
+ *         <td>Jimmy Carter</td>
+ *         <td>Mr. Carter</td>
+ *         <td>Jimmy</td>
+ *         <td>C</td>
+ *         <td>J</td>
+ *     </tr>
+ *     <tr>
+ *         <th>SHORT</th>
+ *         <td>J. E. Carter</td>
+ *         <td>Jimmy Carter</td>
+ *         <td>Mr. Carter</td>
+ *         <td>Jimmy</td>
+ *         <td>C</td>
+ *         <td>J</td>
+ *     </tr>
+ * </table>
  *
  * @internal ICU 72 technology preview
  * @deprecated This API is for technology preview only.

@@ -1941,10 +1941,21 @@ supplementalData:table(nofallback){
         HR{
             {
                 from:intvector{
+                    389,
+                    1788921856,
+                }
+                id{"EUR"}
+            }
+            {
+                from:intvector{
                     179,
                     1456854016,
                 }
                 id{"HRK"}
+                to:intvector{
+                    389,
+                    -1210045441,
+                }
             }
             {
                 from:intvector{
@@ -3773,8 +3784,8 @@ supplementalData:table(nofallback){
                 }
                 id{"SLL"}
                 to:intvector{
-                    387,
-                    -1778510849,
+                    391,
+                    974987263,
                 }
             }
             {
