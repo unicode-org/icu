@@ -11,28 +11,56 @@ To get ICU4J running in VSCode, including JUnit support:
 ```
 
 3. Run `ant init` in the `icu4j` directory
-4. Run `sudo cp -R lib /external-libraries && chmod a+x /external-libraries`.
-    - *This is a big hack! It allows VSCode to find the required jar files.*
-    - The same outcome can also be achieved by modifying the paths in the `.classpath` files, as described below.
-5. Create a new workspace and add the following directories to it:
+4. Create a new workspace and add the following directories to it:
     - `icu4j/main/classes/*` (all directories at that path)
     - `icu4j/main/tests/*` (all directories at that path)
     - `icu4j/tools/misc`
-6. ICU4J should now be able to _build_ successfully. However, when you try to run tests, you will get failures because it cannot find the data. To fix this, add the following line to the `.classpath` file of the package you are testing (e.g. `icu4j/main/tests/core/.classpath`):
+5. Modify all of the `icu4j/main/tests/.classpath` files as follows:
+    1. Change all occurrences of `/external-libraries/` to `../../../lib/`.
+    2. Add `classpathentry`s for the data jar files.
+    
+    For example:
 
 ```xml
+<!-- Before -->
+
+	<classpathentry kind="lib" path="/external-libraries/hamcrest-core-1.3.jar"/>
+	<classpathentry kind="lib" path="/external-libraries/junit-4.12.jar" sourcepath="/external-libraries/junit-4.12-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/external-libraries/junit-4.12-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/external-libraries/JUnitParams-1.0.5.jar" sourcepath="/external-libraries/JUnitParams-1.0.5-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/external-libraries/JUnitParams-1.0.5-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+
+<!-- After -->
+
+	<classpathentry kind="lib" path="../../../lib/hamcrest-core-1.3.jar"/>
+	<classpathentry kind="lib" path="../../../lib/junit-4.12.jar" sourcepath="../../../lib/junit-4.12-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/../../../lib/junit-4.12-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="../../../lib/JUnitParams-1.0.5.jar" sourcepath="../../../lib/JUnitParams-1.0.5-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/../../../lib/JUnitParams-1.0.5-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="../../shared/data/icudata.jar"/>
 	<classpathentry kind="lib" path="../../shared/data/icutzdata.jar"/>
 	<classpathentry kind="lib" path="../../shared/data/testdata.jar"/>
 ```
 
-7. To prevent your changes to `.classpath` from accidentally being committed, you can run:
+6. To prevent your changes to `.classpath` from accidentally being committed, you can run:
 
 ```bash
 $ git update-index --assume-unchanged icu4j/main/tests/core/.classpath
 ```
 
-8. If VSCode also tries changing your `org.eclipse.jdt.core.prefs` files, you can ignore those, too:
+7. If VSCode also tries changing your `org.eclipse.jdt.core.prefs` files, you can ignore those, too:
 
 ```bash
 $ git update-index --assume-unchanged main/classes/*/.settings/org.eclipse.jdt.core.prefs
