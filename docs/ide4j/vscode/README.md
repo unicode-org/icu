@@ -70,7 +70,8 @@ $ git update-index --assume-unchanged tools/misc/.settings/org.eclipse.jdt.core.
 
 8. To verify that everything is working, use the VSCode UI to run your choice of JUnit test. Open any `*.java` file, and you should see a double-right triangle, which you can click to run the test.
 
-Other handy commands:
+Other tips:
 
+- View the project outline under "Java Projects" on the left side under the file explorer; from here, you can rebuild projects, run all tests, add new classes, etc.
 - To rebuild: open the command palette (`Shift + Ctrl + P` on Linux) and search for "Java: Rebuild Projects"
 - To debug: right-click the icon where you run your test, and click "Debug Test"
