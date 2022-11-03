@@ -1,4 +1,4 @@
-<!--- © 2020 and later: Unicode, Inc. and others. ---> 
+<!--- © 2022 and later: Unicode, Inc. and others. ---> 
 <!--- License & terms of use: http://www.unicode.org/copyright.html --->
 
 # Configuring VSCode for ICU4J
