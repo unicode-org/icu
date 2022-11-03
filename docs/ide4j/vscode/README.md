@@ -57,7 +57,7 @@ To get ICU4J running in VSCode, including JUnit support:
 6. To prevent your changes to `.classpath` from accidentally being committed, you can run:
 
 ```bash
-$ git update-index --assume-unchanged icu4j/main/tests/core/.classpath
+$ git update-index --assume-unchanged main/tests/*/.classpath
 ```
 
 7. If VSCode also tries changing your `org.eclipse.jdt.core.prefs` files, you can ignore those, too:
