@@ -11,7 +11,7 @@ To get ICU4J running in VSCode, including JUnit support:
 ```
 
 3. Run `ant init` in the `icu4j` directory
-4. Create a new workspace and add the following directories to it:
+4. Create a new workspace and add each of the following directories to it:
     - `icu4j/main/classes/*` (all directories at that path)
     - `icu4j/main/tests/*` (all directories at that path)
     - `icu4j/tools/misc`
@@ -67,3 +67,10 @@ $ git update-index --assume-unchanged main/classes/*/.settings/org.eclipse.jdt.c
 $ git update-index --assume-unchanged main/tests/*/.settings/org.eclipse.jdt.core.prefs
 $ git update-index --assume-unchanged tools/misc/.settings/org.eclipse.jdt.core.prefs
 ```
+
+8. To verify that everything is working, use the VSCode UI to run your choice of JUnit test. Open any `*.java` file, and you should see a double-right triangle, which you can click to run the test.
+
+Other handy commands:
+
+- To rebuild: open the command palette (`Shift + Ctrl + P` on Linux) and search for "Java: Rebuild Projects"
+- To debug: right-click the icon where you run your test, and click "Debug Test"
