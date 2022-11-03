@@ -202,7 +202,8 @@ typedef enum UResOpenType UResOpenType;
  */
 static bool getParentLocaleID(char *name, const char *origName, UResOpenType openType) {
     // early out if the locale ID has a variant code or ends with _
-    if (name[uprv_strlen(name) - 1] == '_' || hasVariant(name)) {
+    size_t nameLen = uprv_strlen(name);
+    if (!nameLen || name[nameLen - 1] == '_' || hasVariant(name)) {
         return chopLocale(name);
     }
     
