@@ -20,7 +20,16 @@
 
 #include <stdio.h>
 #include <time.h>
+
+// The C99 standard suggested that C++ implementations not define PRId64 etc. constants
+// unless this macro is defined.
+// See the Notes at https://en.cppreference.com/w/cpp/types/integer .
+// Similar to defining __STDC_LIMIT_MACROS in unicode/ptypes.h .
+#ifndef __STDC_FORMAT_MACROS
+#   define __STDC_FORMAT_MACROS
+#endif
 #include <cinttypes>
+
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "unicode/ucptrie.h"
