@@ -45,6 +45,7 @@
 #include "hebrwcal.h"
 #include "persncal.h"
 #include "indiancal.h"
+#include "iso8601cal.h"
 #include "chnsecal.h"
 #include "coptccal.h"
 #include "dangical.h"
@@ -354,18 +355,19 @@ static Calendar *createStandardCalendar(ECalType calType, const Locale &loc, UEr
             cal.adoptInsteadAndCheckErrorCode(new PersianCalendar(loc, status), status);
             break;
         case CALTYPE_ISLAMIC_TBLA:
-            cal.adoptInsteadAndCheckErrorCode(new IslamicCalendar(loc, status, IslamicCalendar::TBLA), status);
+            cal.adoptInsteadAndCheckErrorCode(new IslamicTBLACalendar(loc, status), status);
             break;
         case CALTYPE_ISLAMIC_CIVIL:
-            cal.adoptInsteadAndCheckErrorCode(new IslamicCalendar(loc, status, IslamicCalendar::CIVIL), status);
+            cal.adoptInsteadAndCheckErrorCode(new IslamicCivilCalendar(loc, status), status);
             break;
         case CALTYPE_ISLAMIC_RGSA:
-            // default any region specific not handled individually to islamic
+            cal.adoptInsteadAndCheckErrorCode(new IslamicRGSACalendar(loc, status), status);
+            break;
         case CALTYPE_ISLAMIC:
-            cal.adoptInsteadAndCheckErrorCode(new IslamicCalendar(loc, status, IslamicCalendar::ASTRONOMICAL), status);
+            cal.adoptInsteadAndCheckErrorCode(new IslamicCalendar(loc, status), status);
             break;
         case CALTYPE_ISLAMIC_UMALQURA:
-            cal.adoptInsteadAndCheckErrorCode(new IslamicCalendar(loc, status, IslamicCalendar::UMALQURA), status);
+            cal.adoptInsteadAndCheckErrorCode(new IslamicUmalquraCalendar(loc, status), status);
             break;
         case CALTYPE_HEBREW:
             cal.adoptInsteadAndCheckErrorCode(new HebrewCalendar(loc, status), status);
@@ -380,17 +382,13 @@ static Calendar *createStandardCalendar(ECalType calType, const Locale &loc, UEr
             cal.adoptInsteadAndCheckErrorCode(new CopticCalendar(loc, status), status);
             break;
         case CALTYPE_ETHIOPIC:
-            cal.adoptInsteadAndCheckErrorCode(new EthiopicCalendar(loc, status, EthiopicCalendar::AMETE_MIHRET_ERA), status);
+            cal.adoptInsteadAndCheckErrorCode(new EthiopicCalendar(loc, status), status);
             break;
         case CALTYPE_ETHIOPIC_AMETE_ALEM:
-            cal.adoptInsteadAndCheckErrorCode(new EthiopicCalendar(loc, status, EthiopicCalendar::AMETE_ALEM_ERA), status);
+            cal.adoptInsteadAndCheckErrorCode(new EthiopicAmeteAlemCalendar(loc, status), status);
             break;
         case CALTYPE_ISO8601:
-            cal.adoptInsteadAndCheckErrorCode(new GregorianCalendar(loc, status), status);
-            if (cal.isValid()) {
-                cal->setFirstDayOfWeek(UCAL_MONDAY);
-                cal->setMinimalDaysInFirstWeek(4);
-            }
+            cal.adoptInsteadAndCheckErrorCode(new ISO8601Calendar(loc, status), status);
             break;
         case CALTYPE_DANGI:
             cal.adoptInsteadAndCheckErrorCode(new DangiCalendar(loc, status), status);
