@@ -1078,7 +1078,7 @@ group: formatting
     measfmt.o quantityformatter.o
     # dateformat
     astro.o buddhcal.o calendar.o cecal.o chnsecal.o coptccal.o dangical.o ethpccal.o
-    gregocal.o gregoimp.o hebrwcal.o indiancal.o islamcal.o japancal.o persncal.o taiwncal.o
+    gregocal.o gregoimp.o hebrwcal.o indiancal.o islamcal.o iso8601cal.o japancal.o persncal.o taiwncal.o
     erarules.o  # mostly for Japanese eras
     ucal.o
     basictz.o olsontz.o rbtz.o simpletz.o timezone.o tzrule.o tztrans.o

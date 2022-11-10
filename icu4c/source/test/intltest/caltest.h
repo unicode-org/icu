@@ -257,6 +257,34 @@ public: // package
     void TestAddAcrossZoneTransition(void);
 
     void TestChineseCalendarMapping(void);
+
+    void TestBasicConversionGregorian(void);
+    void TestBasicConversionISO8601(void);
+    void TestBasicConversionJapanese(void);
+    void TestBasicConversionBuddhist(void);
+    void TestBasicConversionTaiwan(void);
+    void TestBasicConversionPersian(void);
+    void TestBasicConversionIslamic(void);
+    void TestBasicConversionIslamicTBLA(void);
+    void TestBasicConversionIslamicCivil(void);
+    void TestBasicConversionIslamicRGSA(void);
+    void TestBasicConversionIslamicUmalqura(void);
+    void TestBasicConversionHebrew(void);
+    void TestBasicConversionChinese(void);
+    void TestBasicConversionDangi(void);
+    void TestBasicConversionIndian(void);
+    void TestBasicConversionCoptic(void);
+    void TestBasicConversionEthiopic(void);
+    void TestBasicConversionEthiopicAmeteAlem(void);
+
+    void AsssertCalendarFieldValue(
+        Calendar* cal, double time, const char* type,
+        int32_t era, int32_t year, int32_t month, int32_t week_of_year,
+        int32_t week_of_month, int32_t date, int32_t day_of_year, int32_t day_of_week,
+        int32_t day_of_week_in_month, int32_t am_pm, int32_t hour, int32_t hour_of_day,
+        int32_t minute, int32_t second, int32_t millisecond, int32_t zone_offset,
+        int32_t dst_offset, int32_t year_woy, int32_t dow_local, int32_t extended_year,
+        int32_t julian_day, int32_t milliseconds_in_day, int32_t is_leap_month);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

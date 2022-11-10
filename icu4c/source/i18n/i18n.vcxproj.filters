@@ -186,6 +186,9 @@
     <ClCompile Include="indiancal.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="iso8601cal.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="islamcal.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -849,6 +852,9 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="indiancal.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="iso8601cal.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="islamcal.h">

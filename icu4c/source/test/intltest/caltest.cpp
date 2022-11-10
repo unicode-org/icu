@@ -353,6 +353,34 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
             TestTimeZoneInLocale();
           }
           break;
+#define CASE(num, NAME) \
+        case num: \
+          name = #NAME; \
+          if(exec) { \
+            logln(#NAME "---"); logln(""); \
+            NAME(); \
+          } \
+          break;
+
+        CASE(38, TestBasicConversionISO8601);
+        CASE(39, TestBasicConversionJapanese);
+        CASE(40, TestBasicConversionBuddhist);
+        CASE(41, TestBasicConversionTaiwan);
+        CASE(42, TestBasicConversionPersian);
+        CASE(43, TestBasicConversionIslamic);
+        CASE(44, TestBasicConversionIslamicTBLA);
+        CASE(45, TestBasicConversionIslamicCivil);
+        CASE(46, TestBasicConversionIslamicRGSA);
+        CASE(47, TestBasicConversionIslamicUmalqura);
+        CASE(48, TestBasicConversionHebrew);
+        CASE(49, TestBasicConversionChinese);
+        CASE(50, TestBasicConversionDangi);
+        CASE(51, TestBasicConversionIndian);
+        CASE(52, TestBasicConversionCoptic);
+        CASE(53, TestBasicConversionEthiopic);
+        CASE(54, TestBasicConversionEthiopicAmeteAlem);
+
+#undef CASE
         default: name = ""; break;
     }
 }
@@ -2390,8 +2418,8 @@ void CalendarTest::TestISO8601() {
             errln("Error: Failed to create a calendar for locale: %s", TEST_LOCALES[i]);
             continue;
         }
-        if (uprv_strcmp(cal->getType(), "gregorian") != 0) {
-            errln("Error: Gregorian calendar is not used for locale: %s", TEST_LOCALES[i]);
+        if (uprv_strcmp(cal->getType(), "iso8601") != 0) {
+            errln("Error: iso8601 calendar is not used for locale: %s", TEST_LOCALES[i]);
             continue;
         }
         for (int j = 0; TEST_DATA[j][0] != 0; j++) {
@@ -2833,8 +2861,8 @@ void CalendarTest::TestTimeZoneInLocale(void) {
         { "my-u-ca-islamic-umalqura-tz-kzala", "Asia/Almaty",                "islamic-umalqura" },
         { "lo-u-ca-islamic-tbla-tz-bmbda",     "Atlantic/Bermuda",           "islamic-tbla" },
         { "km-u-ca-islamic-civil-tz-aqplm",    "Antarctica/Palmer",          "islamic-civil" },
-        { "kk-u-ca-islamic-rgsa-tz-usanc",     "America/Anchorage",          "islamic" },
-        { "ar-u-ca-iso8601-tz-bjptn",          "Africa/Porto-Novo",          "gregorian" },
+        { "kk-u-ca-islamic-rgsa-tz-usanc",     "America/Anchorage",          "islamic-rgsa" },
+        { "ar-u-ca-iso8601-tz-bjptn",          "Africa/Porto-Novo",          "iso8601" },
         { "he-u-ca-japanese-tz-tzdar",         "Africa/Dar_es_Salaam",       "japanese" },
         { "bs-u-ca-persian-tz-etadd",          "Africa/Addis_Ababa",         "persian" },
         { "it-u-ca-roc-tz-aruaq",              "America/Argentina/San_Juan", "roc" },
@@ -2858,6 +2886,286 @@ void CalendarTest::TestTimeZoneInLocale(void) {
                      testLine[2], calendar->getType());
     }
 }
+
+void CalendarTest::AsssertCalendarFieldValue(
+    Calendar* cal, double time, const char* type,
+    int32_t era, int32_t year, int32_t month, int32_t week_of_year,
+    int32_t week_of_month, int32_t date, int32_t day_of_year, int32_t day_of_week,
+    int32_t day_of_week_in_month, int32_t am_pm, int32_t hour, int32_t hour_of_day,
+    int32_t minute, int32_t second, int32_t millisecond, int32_t zone_offset,
+    int32_t dst_offset, int32_t year_woy, int32_t dow_local, int32_t extended_year,
+    int32_t julian_day, int32_t milliseconds_in_day, int32_t is_leap_month) {
+
+    UErrorCode status = U_ZERO_ERROR;
+    cal->setTime(time, status);
+    assertEquals("getType", type, cal->getType());
+
+    assertEquals("UCAL_ERA", era, cal->get(UCAL_ERA, status));
+    assertEquals("UCAL_YEAR", year, cal->get(UCAL_YEAR, status));
+    assertEquals("UCAL_MONTH", month, cal->get(UCAL_MONTH, status));
+    assertEquals("UCAL_WEEK_OF_YEAR", week_of_year, cal->get(UCAL_WEEK_OF_YEAR, status));
+    assertEquals("UCAL_WEEK_OF_MONTH", week_of_month, cal->get(UCAL_WEEK_OF_MONTH, status));
+    assertEquals("UCAL_DATE", date, cal->get(UCAL_DATE, status));
+    assertEquals("UCAL_DAY_OF_YEAR", day_of_year, cal->get(UCAL_DAY_OF_YEAR, status));
+    assertEquals("UCAL_DAY_OF_WEEK", day_of_week, cal->get(UCAL_DAY_OF_WEEK, status));
+    assertEquals("UCAL_DAY_OF_WEEK_IN_MONTH", day_of_week_in_month, cal->get(UCAL_DAY_OF_WEEK_IN_MONTH, status));
+    assertEquals("UCAL_AM_PM", am_pm, cal->get(UCAL_AM_PM, status));
+    assertEquals("UCAL_HOUR", hour, cal->get(UCAL_HOUR, status));
+    assertEquals("UCAL_HOUR_OF_DAY", hour_of_day, cal->get(UCAL_HOUR_OF_DAY, status));
+    assertEquals("UCAL_MINUTE", minute, cal->get(UCAL_MINUTE, status));
+    assertEquals("UCAL_SECOND", second, cal->get(UCAL_SECOND, status));
+    assertEquals("UCAL_MILLISECOND", millisecond, cal->get(UCAL_MILLISECOND, status));
+    assertEquals("UCAL_ZONE_OFFSET", zone_offset, cal->get(UCAL_ZONE_OFFSET, status));
+    assertEquals("UCAL_DST_OFFSET", dst_offset, cal->get(UCAL_DST_OFFSET, status));
+    assertEquals("UCAL_YEAR_WOY", year_woy, cal->get(UCAL_YEAR_WOY, status));
+    assertEquals("UCAL_DOW_LOCAL", dow_local, cal->get(UCAL_DOW_LOCAL, status));
+    assertEquals("UCAL_EXTENDED_YEAR", extended_year, cal->get(UCAL_EXTENDED_YEAR, status));
+    assertEquals("UCAL_JULIAN_DAY", julian_day, cal->get(UCAL_JULIAN_DAY, status));
+    assertEquals("UCAL_MILLISECONDS_IN_DAY", milliseconds_in_day, cal->get(UCAL_MILLISECONDS_IN_DAY, status));
+    assertEquals("UCAL_IS_LEAP_MONTH", is_leap_month, cal->get(UCAL_IS_LEAP_MONTH, status));
+}
+
+static constexpr double test_time = 1667277891323; // Nov 1, 2022 4:44:51 GMT
+
+void CalendarTest::TestBasicConversionGregorian(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=gregorian"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Gregorian calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "gregorian",
+        1, 2022, 10, 45, 1, 1, 305, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 2022, 3, 2022, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionISO8601(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=iso8601"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get ISO8601 calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "iso8601",
+        1, 2022, 10, 44, 1, 1, 305, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 2022, 2, 2022, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionJapanese(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=japanese"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Japanese calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "japanese",
+        236, 4, 10, 45, 1, 1, 305, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 2022, 3, 2022, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionBuddhist(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=buddhist"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Buddhist calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "buddhist",
+        0, 2565, 10, 45, 1, 1, 305, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 2022, 3, 2022, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionTaiwan(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=roc"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Taiwan calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "roc",
+        1, 111, 10, 45, 1, 1, 305, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 2022, 3, 2022, 2459885, 17091323, 0);
+
+}
+void CalendarTest::TestBasicConversionPersian(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=persian"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Persian calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "persian",
+        0, 1401, 7, 33, 2, 10, 226, 3, 2, 0, 4, 4, 44, 51,
+        323, 0, 0, 1401, 3, 1401, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionIslamic(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=islamic"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Islamic calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "islamic",
+        0, 1444, 3, 15, 2, 7, 96, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 1444, 3, 1444, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionIslamicTBLA(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=islamic-tbla"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get IslamicTBLA calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "islamic-tbla",
+        0, 1444, 3, 15, 2, 7, 96, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 1444, 3, 1444, 2459885, 17091323, 0);
+
+}
+void CalendarTest::TestBasicConversionIslamicCivil(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=islamic-civil"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get IslamicCivil calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "islamic-civil",
+        0, 1444, 3, 15, 2, 6, 95, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 1444, 3, 1444, 2459885, 17091323, 0);
+
+}
+void CalendarTest::TestBasicConversionIslamicRGSA(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=islamic-rgsa"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get IslamicRGSA calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "islamic-rgsa",
+        0, 1444, 3, 15, 2, 7, 96, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 1444, 3, 1444, 2459885, 17091323, 0);
+
+}
+void CalendarTest::TestBasicConversionIslamicUmalqura(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=islamic-umalqura"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get IslamicUmalqura calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "islamic-umalqura",
+        0, 1444, 3, 15, 2, 7, 95, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 1444, 3, 1444, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionHebrew(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=hebrew"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Hebrew calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "hebrew",
+        0, 5783, 1, 6, 2, 7, 37, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 5783, 3, 5783, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionChinese(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=chinese"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Chinese calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "chinese",
+        78, 39, 9, 40, 2, 8, 274, 3, 2, 0, 4, 4, 44, 51,
+        323, 0, 0, 4659, 3, 4659, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionDangi(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=dangi"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Dangi calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "dangi",
+        78, 39, 9, 40, 2, 8, 274, 3, 2, 0, 4, 4, 44, 51,
+        323, 0, 0, 4355, 3, 4355, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionIndian(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=indian"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Indian calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "indian",
+        0, 1944, 7, 33, 2, 10, 225, 3, 2, 0, 4, 4, 44, 51,
+        323, 0, 0, 1944, 3, 1944, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionCoptic(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=coptic"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Coptic calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "coptic",
+        1, 1739, 1, 8, 4, 22, 52, 3, 4, 0, 4, 4, 44, 51,
+        323, 0, 0, 1739, 3, 1739, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionEthiopic(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=ethiopic"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Ethiopic calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "ethiopic",
+        1, 2015, 1, 8, 4, 22, 52, 3, 4, 0, 4, 4, 44, 51,
+        323, 0, 0, 2015, 3, 2015, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionEthiopicAmeteAlem(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=ethiopic-amete-alem"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get EthiopicAmeteAlem calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "ethiopic-amete-alem",
+        0, 7515, 1, 8, 4, 22, 52, 3, 4, 0, 4, 4, 44, 51,
+        323, 0, 0, 2015, 3, 2015, 2459885, 17091323, 0);
+}
+
 
 void CalendarTest::setAndTestCalendar(Calendar* cal, int32_t initMonth, int32_t initDay, int32_t initYear, UErrorCode& status) {
         cal->clear();
