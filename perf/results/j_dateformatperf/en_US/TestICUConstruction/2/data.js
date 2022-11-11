@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1668029152483,
+  "lastUpdate": 1668207212324,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -3478,6 +3478,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 2438.373441360768,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "9c1fb785b30ad8ce3177f1a6dab13ba224ef54f9",
+          "message": "ICU-22164 Replace switch+getType with subclass\n\nSee #2215\n\nfix",
+          "timestamp": "2022-11-11T14:49:16-08:00",
+          "tree_id": "73d8753f29e0fd31bc6b0aaa0d0c66b5e01658a2",
+          "url": "https://github.com/unicode-org/icu/commit/9c1fb785b30ad8ce3177f1a6dab13ba224ef54f9"
+        },
+        "date": 1668207200751,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 2419.655434482692,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
