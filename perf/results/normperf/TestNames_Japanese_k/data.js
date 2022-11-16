@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1668207713897,
+  "lastUpdate": 1668627868216,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -12178,6 +12178,66 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 14.3079,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "kobrineli@ispras.ru",
+            "name": "Eli Kobrin",
+            "username": "kobrineli"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "8b7ef3d9088c130cf0ef8973b30ceb39a40b605a",
+          "message": "ICU-22198 Fix stack buffer overflow.",
+          "timestamp": "2022-11-16T11:29:32-08:00",
+          "tree_id": "c884bed743fc9d9f7b2c3133f5b3f804d75a7f82",
+          "url": "https://github.com/unicode-org/icu/commit/8b7ef3d9088c130cf0ef8973b30ceb39a40b605a"
+        },
+        "date": 1668627855936,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFC_NFD_Text",
+            "value": 22.5716,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_NFC_Text",
+            "value": 14.8137,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFC_Orig_Text",
+            "value": 14.8941,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 16.6316,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 17.8473,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 17.9125,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
