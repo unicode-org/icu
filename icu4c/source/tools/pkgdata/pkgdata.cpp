@@ -1725,6 +1725,7 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
             writeCCode(
                 file,
                 o->tmpDir,
+                NULL,
                 dataName[0] != 0 ? dataName : o->shortName,
                 newName[0] != 0 ? newName : NULL,
                 gencmnFile,
