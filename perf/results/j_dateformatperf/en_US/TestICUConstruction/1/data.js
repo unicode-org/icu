@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1668207113341,
+  "lastUpdate": 1668627378551,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -3538,6 +3538,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUConstruction",
             "value": 2743.631358799953,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "kobrineli@ispras.ru",
+            "name": "Eli Kobrin",
+            "username": "kobrineli"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "8b7ef3d9088c130cf0ef8973b30ceb39a40b605a",
+          "message": "ICU-22198 Fix stack buffer overflow.",
+          "timestamp": "2022-11-16T11:29:32-08:00",
+          "tree_id": "c884bed743fc9d9f7b2c3133f5b3f804d75a7f82",
+          "url": "https://github.com/unicode-org/icu/commit/8b7ef3d9088c130cf0ef8973b30ceb39a40b605a"
+        },
+        "date": 1668627367219,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUConstruction",
+            "value": 2129.215700214603,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
