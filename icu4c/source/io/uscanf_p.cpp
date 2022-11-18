@@ -323,7 +323,7 @@ u_scanf_skip_leading_ws(UFILE   *input,
     UBool isNotEOF;
 
     /* skip all leading ws in the input */
-    while( ((isNotEOF = ufile_getch(input, &c)) == true) && (c == pad || u_isWhitespace(c)) )
+    while( ((isNotEOF = ufile_getch(input, &c))==(UBool)true) && (c == pad || u_isWhitespace(c)) )
     {
         count++;
     }
@@ -357,7 +357,7 @@ u_scanf_skip_leading_positive_sign(UFILE   *input,
 
         if (U_SUCCESS(localStatus)) {
             /* skip all leading ws in the input */
-            while( ((isNotEOF = ufile_getch(input, &c)) == true) && (count < symbolLen && c == plusSymbol[count]) )
+            while( ((isNotEOF = ufile_getch(input, &c))==(UBool)true) && (count < symbolLen && c == plusSymbol[count]) )
             {
                 count++;
             }
@@ -868,7 +868,7 @@ u_scanf_string_handler(UFILE        *input,
         return -1;
 
     while( (info->fWidth == -1 || count < info->fWidth) 
-        && ((isNotEOF = ufile_getch(input, &c)) == true)
+        && ((isNotEOF = ufile_getch(input, &c))==(UBool)true)
         && (!info->fIsString || (c != info->fPadChar && !u_isWhitespace(c))))
     {
 
@@ -959,7 +959,7 @@ u_scanf_ustring_handler(UFILE       *input,
     count = 0;
 
     while( (info->fWidth == -1 || count < info->fWidth)
-        && ((isNotEOF = ufile_getch(input, &c)) == true)
+        && ((isNotEOF = ufile_getch(input, &c))==(UBool)true)
         && (!info->fIsString || (c != info->fPadChar && !u_isWhitespace(c))))
     {
 
@@ -1262,7 +1262,7 @@ u_scanf_scanset_handler(UFILE       *input,
 
         /* grab characters one at a time and make sure they are in the scanset */
         while(chLeft > 0) {
-            if ( ((isNotEOF = ufile_getch32(input, &c)) == true) && uset_contains(scanset, c) ) {
+            if ( ((isNotEOF = ufile_getch32(input, &c))==(UBool)true) && uset_contains(scanset, c) ) {
                 readCharacter = true;
                 if (!info->fSkipArg) {
                     int32_t idx = 0;

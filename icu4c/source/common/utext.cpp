@@ -223,7 +223,7 @@ utext_current32(UText *ut) {
             trail = ut->chunkContents[ut->chunkOffset];
         }
         UBool r = ut->pFuncs->access(ut, nativePosition, false);  // reverse iteration flag loads preceding chunk
-        U_ASSERT(r==true);
+        U_ASSERT(r);
         ut->chunkOffset = originalOffset;
         if(!r) {
             return U_SENTINEL;

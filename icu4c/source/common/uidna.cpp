@@ -287,7 +287,7 @@ _internal_toASCII(const UChar* src, int32_t srcLength,
             failPos = j;
         }
     }
-    if(useSTD3ASCIIRules == true){
+    if(useSTD3ASCIIRules){
         // verify 3a and 3b
         // 3(a) Verify the absence of non-LDH ASCII code points; that is, the
         //  absence of 0..2C, 2E..2F, 3A..40, 5B..60, and 7B..7F.
@@ -731,7 +731,7 @@ uidna_IDNToASCII(  const UChar *src, int32_t srcLength,
             remainingDestCapacity = 0;
         }
 
-        if(done == true){
+        if(done){
             break;
         }
 
@@ -829,7 +829,7 @@ uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
             remainingDestCapacity = 0;
         }
 
-        if(done == true){
+        if(done){
             break;
         }
 

@@ -3508,7 +3508,7 @@ int32_t Calendar::handleGetExtendedYearFromWeekFields(int32_t yearWoy, int32_t w
     switch(bestField) {
     case UCAL_WEEK_OF_YEAR:
         if(woy == 1) {
-            if(jan1InPrevYear == true) {
+            if(jan1InPrevYear) {
                 // the first week of January is in the previous year
                 // therefore WOY1 is always solidly within yearWoy
                 return yearWoy;

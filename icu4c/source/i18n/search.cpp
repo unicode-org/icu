@@ -81,10 +81,9 @@ USearchAttributeValue SearchIterator::getAttribute(
 {
     switch (attribute) {
     case USEARCH_OVERLAP :
-        return (m_search_->isOverlap == true ? USEARCH_ON : USEARCH_OFF);
+        return (m_search_->isOverlap ? USEARCH_ON : USEARCH_OFF);
     case USEARCH_CANONICAL_MATCH :
-        return (m_search_->isCanonicalMatch == true ? USEARCH_ON : 
-                                                                USEARCH_OFF);
+        return (m_search_->isCanonicalMatch ? USEARCH_ON : USEARCH_OFF);
     case USEARCH_ELEMENT_COMPARISON :
         {
             int16_t value = m_search_->elementComparisonType;
@@ -242,7 +241,7 @@ int32_t SearchIterator::next(UErrorCode &status)
         int32_t matchindex  = m_search_->matchedIndex;
         int32_t     matchlength = m_search_->matchedLength;
         m_search_->reset = false;
-        if (m_search_->isForwardSearching == true) {
+        if (m_search_->isForwardSearching) {
             int32_t textlength = m_search_->textLength;
             if (offset == textlength || matchindex == textlength || 
                 (matchindex != USEARCH_DONE && 
@@ -295,7 +294,7 @@ int32_t SearchIterator::previous(UErrorCode &status)
         }
         
         int32_t matchindex = m_search_->matchedIndex;
-        if (m_search_->isForwardSearching == true) {
+        if (m_search_->isForwardSearching) {
             // switching direction. 
             // if matchedIndex == USEARCH_DONE, it means that either a 
             // setOffset has been called or that next ran off the text
