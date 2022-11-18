@@ -160,7 +160,7 @@ usprep_internal_flushCache(UBool noRefCount){
         key  = (UStringPrepKey *) e->key.pointer;
 
         if ((noRefCount== false && profile->refCount == 0) || 
-             noRefCount== true) {
+             noRefCount) {
             deletedNum++;
             uhash_removeElement(SHARED_DATA_HASHTABLE, e);
 
@@ -746,16 +746,16 @@ usprep_prepare(   const UStringPrepProfile* profile,
             }
         }
     }
-    if(profile->checkBiDi == true){
+    if(profile->checkBiDi){
         // satisfy 2
-        if( leftToRight == true && rightToLeft == true){
+        if( leftToRight && rightToLeft){
             *status = U_STRINGPREP_CHECK_BIDI_ERROR;
             uprv_syntaxError(b2,(rtlPos>ltrPos) ? rtlPos : ltrPos, b2Len, parseError);
             return 0;
         }
 
         //satisfy 3
-        if( rightToLeft == true && 
+        if( rightToLeft && 
             !((firstCharDir == U_RIGHT_TO_LEFT || firstCharDir == U_RIGHT_TO_LEFT_ARABIC) &&
               (direction == U_RIGHT_TO_LEFT || direction == U_RIGHT_TO_LEFT_ARABIC))
            ){

@@ -918,7 +918,7 @@ void RBBIRuleScanner::nextChar(RBBIRuleChar &c) {
             //   Toggle quoting mode.
             //   Return either '('  or ')', because quotes cause a grouping of the quoted text.
             fQuoteMode = !fQuoteMode;
-            if (fQuoteMode == true) {
+            if (fQuoteMode) {
                 c.fChar = chLParen;
             } else {
                 c.fChar = chRParen;

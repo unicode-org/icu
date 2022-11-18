@@ -819,11 +819,9 @@ U_CAPI USearchAttributeValue U_EXPORT2 usearch_getAttribute(
     if (strsrch) {
         switch (attribute) {
         case USEARCH_OVERLAP :
-            return (strsrch->search->isOverlap == true ? USEARCH_ON :
-                                                        USEARCH_OFF);
+            return (strsrch->search->isOverlap ? USEARCH_ON : USEARCH_OFF);
         case USEARCH_CANONICAL_MATCH :
-            return (strsrch->search->isCanonicalMatch == true ? USEARCH_ON :
-                                                               USEARCH_OFF);
+            return (strsrch->search->isCanonicalMatch ? USEARCH_ON : USEARCH_OFF);
         case USEARCH_ELEMENT_COMPARISON :
             {
                 int16_t value = strsrch->search->elementComparisonType;
@@ -1249,7 +1247,7 @@ U_CAPI int32_t U_EXPORT2 usearch_previous(UStringSearch *strsrch,
         }
 
         int32_t matchedindex = search->matchedIndex;
-        if (search->isForwardSearching == true) {
+        if (search->isForwardSearching) {
             // switching direction.
             // if matchedIndex == USEARCH_DONE, it means that either a
             // setOffset has been called or that next ran off the text

@@ -4065,7 +4065,7 @@ void RegexCompile::nextChar(RegexPatternChar &c) {
                 if (c.fChar == (UChar32)-1) {
                     break;     // End of Input
                 }
-                if  (c.fChar == chPound && fEOLComments == true) {
+                if  (c.fChar == chPound && fEOLComments) {
                     // Start of a comment.  Consume the rest of it, until EOF or a new line
                     for (;;) {
                         c.fChar = nextCharLL();

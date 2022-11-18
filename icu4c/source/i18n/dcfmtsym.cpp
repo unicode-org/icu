@@ -329,11 +329,13 @@ struct CurrencySpacingSink : public ResourceSink {
         // both beforeCurrency and afterCurrency were found in CLDR.
         static const char* defaults[] = { "[:letter:]", "[:digit:]", " " };
         if (!hasBeforeCurrency || !hasAfterCurrency) {
-            for (UBool beforeCurrency = 0; beforeCurrency <= true; beforeCurrency++) {
-                for (int32_t pattern = 0; pattern < UNUM_CURRENCY_SPACING_COUNT; pattern++) {
-                    dfs.setPatternForCurrencySpacing((UCurrencySpacing)pattern,
-                        beforeCurrency, UnicodeString(defaults[pattern], -1, US_INV));
-                }
+            for (int32_t pattern = 0; pattern < UNUM_CURRENCY_SPACING_COUNT; pattern++) {
+                dfs.setPatternForCurrencySpacing((UCurrencySpacing)pattern,
+                    false, UnicodeString(defaults[pattern], -1, US_INV));
+            }
+            for (int32_t pattern = 0; pattern < UNUM_CURRENCY_SPACING_COUNT; pattern++) {
+                dfs.setPatternForCurrencySpacing((UCurrencySpacing)pattern,
+                    true, UnicodeString(defaults[pattern], -1, US_INV));
             }
         }
     }
