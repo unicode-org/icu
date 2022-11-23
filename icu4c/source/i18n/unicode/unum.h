@@ -25,6 +25,7 @@
 #include "unicode/uformattable.h"
 #include "unicode/udisplaycontext.h"
 #include "unicode/ufieldpositer.h"
+#include "unicode/unumberoptions.h"
 
 #if U_SHOW_CPLUSPLUS_API
 #include "unicode/localpointer.h"
@@ -270,55 +271,6 @@ typedef enum UNumberFormatStyle {
      */
     UNUM_IGNORE = UNUM_PATTERN_DECIMAL
 } UNumberFormatStyle;
-
-/** The possible number format rounding modes.
- *
- * <p>
- * For more detail on rounding modes, see:
- * https://unicode-org.github.io/icu/userguide/format_parse/numbers/rounding-modes
- *
- * @stable ICU 2.0
- */
-typedef enum UNumberFormatRoundingMode {
-    UNUM_ROUND_CEILING,
-    UNUM_ROUND_FLOOR,
-    UNUM_ROUND_DOWN,
-    UNUM_ROUND_UP,
-    /**
-     * Half-even rounding
-     * @stable, ICU 3.8
-     */
-    UNUM_ROUND_HALFEVEN,
-#ifndef U_HIDE_DEPRECATED_API
-    /**
-     * Half-even rounding, misspelled name
-     * @deprecated, ICU 3.8
-     */
-    UNUM_FOUND_HALFEVEN = UNUM_ROUND_HALFEVEN,
-#endif  /* U_HIDE_DEPRECATED_API */
-    UNUM_ROUND_HALFDOWN = UNUM_ROUND_HALFEVEN + 1,
-    UNUM_ROUND_HALFUP,
-    /** 
-      * ROUND_UNNECESSARY reports an error if formatted result is not exact.
-      * @stable ICU 4.8
-      */
-    UNUM_ROUND_UNNECESSARY,
-    /**
-     * Rounds ties toward the odd number.
-     * @stable ICU 69
-     */
-    UNUM_ROUND_HALF_ODD,
-    /**
-     * Rounds ties toward +∞.
-     * @stable ICU 69
-     */
-    UNUM_ROUND_HALF_CEILING,
-    /**
-     * Rounds ties toward -∞.
-     * @stable ICU 69
-     */
-    UNUM_ROUND_HALF_FLOOR,
-} UNumberFormatRoundingMode;
 
 /** The possible number format pad positions. 
  *  @stable ICU 2.0

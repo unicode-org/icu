@@ -365,6 +365,18 @@ class NumberRangeFormatterTest : public IntlTestWithFieldPosition {
       const char16_t* expected);
 };
 
+class SimpleNumberFormatterTest : public IntlTestWithFieldPosition {
+  public:
+    void testBasic();
+    void testWithOptions();
+    void testSymbols();
+    void testSign();
+    void testCopyMove();
+    void testCAPI();
+
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
+};
+
 class NumberPermutationTest : public IntlTest {
   public:
     void testPermutations();
@@ -403,7 +415,8 @@ class NumberTest : public IntlTest {
         TESTCLASS(7, NumberParserTest);
         TESTCLASS(8, NumberSkeletonTest);
         TESTCLASS(9, NumberRangeFormatterTest);
-        TESTCLASS(10, NumberPermutationTest);
+        TESTCLASS(10, SimpleNumberFormatterTest);
+        TESTCLASS(11, NumberPermutationTest);
         default: name = ""; break; // needed to end loop
         }
     }
