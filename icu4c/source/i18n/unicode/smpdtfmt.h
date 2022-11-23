@@ -55,6 +55,7 @@ class DateIntervalFormat;
 
 namespace number {
 class LocalizedNumberFormatter;
+class SimpleNumberFormatter;
 }
 
 /**
@@ -1520,14 +1521,9 @@ private:
     int32_t skipUWhiteSpace(const UnicodeString& text, int32_t pos) const;
 
     /**
-     * Initialize LocalizedNumberFormatter instances used for speedup.
+     * Initialize SimpleNumberFormat instance
      */
-    void initFastNumberFormatters(UErrorCode& status);
-
-    /**
-     * Delete the LocalizedNumberFormatter instances used for speedup.
-     */
-    void freeFastNumberFormatters();
+    void initSimpleNumberFormatter(UErrorCode &status);
 
     /**
      * Initialize NumberFormat instances used for numbering system overrides.
@@ -1599,12 +1595,12 @@ private:
      * A pointer to an object containing the strings to use in formatting (e.g.,
      * month and day names, AM and PM strings, time zone names, etc.)
      */
-    DateFormatSymbols*  fSymbols;   // Owned
+    DateFormatSymbols*  fSymbols = nullptr;   // Owned
 
     /**
      * The time zone formatter
      */
-    TimeZoneFormat* fTimeZoneFormat;
+    TimeZoneFormat* fTimeZoneFormat = nullptr;
 
     /**
      * If dates have ambiguous years, we map them into the century starting
@@ -1644,25 +1640,20 @@ private:
      * The number format in use for each date field. NULL means fall back
      * to fNumberFormat in DateFormat.
      */
-    const SharedNumberFormat    **fSharedNumberFormatters;
-
-    enum NumberFormatterKey {
-        SMPDTFMT_NF_1x10,
-        SMPDTFMT_NF_2x10,
-        SMPDTFMT_NF_3x10,
-        SMPDTFMT_NF_4x10,
-        SMPDTFMT_NF_2x2,
-        SMPDTFMT_NF_COUNT
-    };
+    const SharedNumberFormat    **fSharedNumberFormatters = nullptr;
 
     /**
-     * Number formatters pre-allocated for fast performance on the most common integer lengths.
+     * Number formatter pre-allocated for fast performance
+     * 
+     * This references the decimal symbols from fNumberFormatter if it is an instance
+     * of DecimalFormat (and is otherwise null). This should always be cleaned up before
+     * destroying fNumberFormatter.
      */
-    const number::LocalizedNumberFormatter* fFastNumberFormatters[SMPDTFMT_NF_COUNT] = {};
+    const number::SimpleNumberFormatter* fSimpleNumberFormatter = nullptr;
 
     UBool fHaveDefaultCentury;
 
-    const BreakIterator* fCapitalizationBrkIter;
+    const BreakIterator* fCapitalizationBrkIter = nullptr;
 };
 
 inline UDate

@@ -4869,6 +4869,13 @@ void DateFormatTest::TestNumberFormatOverride() {
 
         if (result != expected)
             errln("FAIL: Expected " + expected + " get: " + result);
+
+        // Ensure that adopted formats are handled correctly after copy constructing
+        SimpleDateFormat fmtCopy = *fmt;
+        result.remove();
+        fmtCopy.format(test_date,result, pos);
+        if (result != expected)
+            errln("FAIL: Expected " + expected + " after copy constructing get: " + result);
     }
 }
 

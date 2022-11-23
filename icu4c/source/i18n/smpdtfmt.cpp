@@ -45,6 +45,7 @@
 #include "unicode/ustring.h"
 #include "unicode/basictz.h"
 #include "unicode/simpleformatter.h"
+#include "unicode/simplenumberformatter.h"
 #include "unicode/simpletz.h"
 #include "unicode/rbtz.h"
 #include "unicode/tzfmt.h"
@@ -334,7 +335,7 @@ SimpleDateFormat::~SimpleDateFormat()
     if (fTimeZoneFormat) {
         delete fTimeZoneFormat;
     }
-    freeFastNumberFormatters();
+    delete fSimpleNumberFormatter;
 
 #if !UCONFIG_NO_BREAK_ITERATION
     delete fCapitalizationBrkIter;
@@ -344,11 +345,7 @@ SimpleDateFormat::~SimpleDateFormat()
 //----------------------------------------------------------------------
 
 SimpleDateFormat::SimpleDateFormat(UErrorCode& status)
-  :   fLocale(Locale::getDefault()),
-      fSymbols(NULL),
-      fTimeZoneFormat(NULL),
-      fSharedNumberFormatters(NULL),
-      fCapitalizationBrkIter(NULL)
+  :   fLocale(Locale::getDefault())
 {
     initializeBooleanAttributes();
     construct(kShort, (EStyle) (kShort + kDateOffset), fLocale, status);
@@ -360,11 +357,7 @@ SimpleDateFormat::SimpleDateFormat(UErrorCode& status)
 SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
                                    UErrorCode &status)
 :   fPattern(pattern),
-    fLocale(Locale::getDefault()),
-    fSymbols(NULL),
-    fTimeZoneFormat(NULL),
-    fSharedNumberFormatters(NULL),
-    fCapitalizationBrkIter(NULL)
+    fLocale(Locale::getDefault())
 {
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
@@ -381,11 +374,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
                                    const UnicodeString& override,
                                    UErrorCode &status)
 :   fPattern(pattern),
-    fLocale(Locale::getDefault()),
-    fSymbols(NULL),
-    fTimeZoneFormat(NULL),
-    fSharedNumberFormatters(NULL),
-    fCapitalizationBrkIter(NULL)
+    fLocale(Locale::getDefault())
 {
     fDateOverride.setTo(override);
     fTimeOverride.setToBogus();
@@ -405,10 +394,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
                                    const Locale& locale,
                                    UErrorCode& status)
 :   fPattern(pattern),
-    fLocale(locale),
-    fTimeZoneFormat(NULL),
-    fSharedNumberFormatters(NULL),
-    fCapitalizationBrkIter(NULL)
+    fLocale(locale)
 {
 
     fDateOverride.setToBogus();
@@ -428,10 +414,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
                                    const Locale& locale,
                                    UErrorCode& status)
 :   fPattern(pattern),
-    fLocale(locale),
-    fTimeZoneFormat(NULL),
-    fSharedNumberFormatters(NULL),
-    fCapitalizationBrkIter(NULL)
+    fLocale(locale)
 {
 
     fDateOverride.setTo(override);
@@ -454,10 +437,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
                                    UErrorCode& status)
 :   fPattern(pattern),
     fLocale(Locale::getDefault()),
-    fSymbols(symbolsToAdopt),
-    fTimeZoneFormat(NULL),
-    fSharedNumberFormatters(NULL),
-    fCapitalizationBrkIter(NULL)
+    fSymbols(symbolsToAdopt)
 {
 
     fDateOverride.setToBogus();
@@ -476,10 +456,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
                                    UErrorCode& status)
 :   fPattern(pattern),
     fLocale(Locale::getDefault()),
-    fSymbols(new DateFormatSymbols(symbols)),
-    fTimeZoneFormat(NULL),
-    fSharedNumberFormatters(NULL),
-    fCapitalizationBrkIter(NULL)
+    fSymbols(new DateFormatSymbols(symbols))
 {
 
     fDateOverride.setToBogus();
@@ -498,11 +475,7 @@ SimpleDateFormat::SimpleDateFormat(EStyle timeStyle,
                                    EStyle dateStyle,
                                    const Locale& locale,
                                    UErrorCode& status)
-:   fLocale(locale),
-    fSymbols(NULL),
-    fTimeZoneFormat(NULL),
-    fSharedNumberFormatters(NULL),
-    fCapitalizationBrkIter(NULL)
+:   fLocale(locale)
 {
     initializeBooleanAttributes();
     construct(timeStyle, dateStyle, fLocale, status);
@@ -521,11 +494,7 @@ SimpleDateFormat::SimpleDateFormat(EStyle timeStyle,
 SimpleDateFormat::SimpleDateFormat(const Locale& locale,
                                    UErrorCode& status)
 :   fPattern(gDefaultPattern),
-    fLocale(locale),
-    fSymbols(NULL),
-    fTimeZoneFormat(NULL),
-    fSharedNumberFormatters(NULL),
-    fCapitalizationBrkIter(NULL)
+    fLocale(locale)
 {
     if (U_FAILURE(status)) return;
     initializeBooleanAttributes();
@@ -557,11 +526,7 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
 
 SimpleDateFormat::SimpleDateFormat(const SimpleDateFormat& other)
 :   DateFormat(other),
-    fLocale(other.fLocale),
-    fSymbols(NULL),
-    fTimeZoneFormat(NULL),
-    fSharedNumberFormatters(NULL),
-    fCapitalizationBrkIter(NULL)
+    fLocale(other.fLocale)
 {
     initializeBooleanAttributes();
     *this = other;
@@ -574,6 +539,12 @@ SimpleDateFormat& SimpleDateFormat::operator=(const SimpleDateFormat& other)
     if (this == &other) {
         return *this;
     }
+
+    // fSimpleNumberFormatter references fNumberFormatter, delete it
+    // before we call the = operator which may invalidate fNumberFormatter
+    delete fSimpleNumberFormatter;
+    fSimpleNumberFormatter = nullptr;
+
     DateFormat::operator=(other);
     fDateOverride = other.fDateOverride;
     fTimeOverride = other.fTimeOverride;
@@ -642,9 +613,10 @@ SimpleDateFormat& SimpleDateFormat::operator=(const SimpleDateFormat& other)
     }
 
     UErrorCode localStatus = U_ZERO_ERROR;
-    freeFastNumberFormatters();
-    initFastNumberFormatters(localStatus);
-
+    // SimpleNumberFormatter does not have a copy constructor. Furthermore,
+    // it references data from an internal field, fNumberFormatter,
+    // so we must rematerialize that reference after copying over the number formatter.
+    initSimpleNumberFormatter(localStatus);
     return *this;
 }
 
@@ -979,7 +951,7 @@ SimpleDateFormat::initialize(const Locale& locale,
         //fNumberFormat->setLenient(true); // Java uses a custom DateNumberFormat to format/parse
 
         initNumberFormatters(locale, status);
-        initFastNumberFormatters(status);
+        initSimpleNumberFormatter(status);
 
     }
     else if (U_SUCCESS(status))
@@ -1324,18 +1296,8 @@ _appendSymbolWithMonthPattern(UnicodeString& dst, int32_t value, const UnicodeSt
 
 //----------------------------------------------------------------------
 
-static number::LocalizedNumberFormatter*
-createFastFormatter(const DecimalFormat* df, int32_t minInt, int32_t maxInt, UErrorCode& status) {
-    const number::LocalizedNumberFormatter* lnfBase = df->toNumberFormatter(status);
-    if (U_FAILURE(status)) {
-        return nullptr;
-    }
-    return lnfBase->integerWidth(
-        number::IntegerWidth::zeroFillTo(minInt).truncateAt(maxInt)
-    ).clone().orphan();
-}
-
-void SimpleDateFormat::initFastNumberFormatters(UErrorCode& status) {
+void
+SimpleDateFormat::initSimpleNumberFormatter(UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
     }
@@ -1343,26 +1305,19 @@ void SimpleDateFormat::initFastNumberFormatters(UErrorCode& status) {
     if (df == nullptr) {
         return;
     }
-    fFastNumberFormatters[SMPDTFMT_NF_1x10] = createFastFormatter(df, 1, 10, status);
-    fFastNumberFormatters[SMPDTFMT_NF_2x10] = createFastFormatter(df, 2, 10, status);
-    fFastNumberFormatters[SMPDTFMT_NF_3x10] = createFastFormatter(df, 3, 10, status);
-    fFastNumberFormatters[SMPDTFMT_NF_4x10] = createFastFormatter(df, 4, 10, status);
-    fFastNumberFormatters[SMPDTFMT_NF_2x2] = createFastFormatter(df, 2, 2, status);
+    const DecimalFormatSymbols* syms = df->getDecimalFormatSymbols();
+    if (syms == nullptr) {
+        return;
+    }
+    fSimpleNumberFormatter = new number::SimpleNumberFormatter(
+        number::SimpleNumberFormatter::forLocaleAndSymbolsAndGroupingStrategy(
+            fLocale, *syms, UNUM_GROUPING_OFF, status
+        )
+    );
+    if (fSimpleNumberFormatter == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
 }
-
-void SimpleDateFormat::freeFastNumberFormatters() {
-    delete fFastNumberFormatters[SMPDTFMT_NF_1x10];
-    delete fFastNumberFormatters[SMPDTFMT_NF_2x10];
-    delete fFastNumberFormatters[SMPDTFMT_NF_3x10];
-    delete fFastNumberFormatters[SMPDTFMT_NF_4x10];
-    delete fFastNumberFormatters[SMPDTFMT_NF_2x2];
-    fFastNumberFormatters[SMPDTFMT_NF_1x10] = nullptr;
-    fFastNumberFormatters[SMPDTFMT_NF_2x10] = nullptr;
-    fFastNumberFormatters[SMPDTFMT_NF_3x10] = nullptr;
-    fFastNumberFormatters[SMPDTFMT_NF_4x10] = nullptr;
-    fFastNumberFormatters[SMPDTFMT_NF_2x2] = nullptr;
-}
-
 
 void
 SimpleDateFormat::initNumberFormatters(const Locale &locale,UErrorCode &status) {
@@ -2116,6 +2071,11 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
 //----------------------------------------------------------------------
 
 void SimpleDateFormat::adoptNumberFormat(NumberFormat *formatToAdopt) {
+    // Null out the fast formatter, it references fNumberFormat which we're
+    // about to invalidate
+    delete fSimpleNumberFormatter;
+    fSimpleNumberFormatter = nullptr;
+
     fixNumberFormatForDates(*formatToAdopt);
     delete fNumberFormat;
     fNumberFormat = formatToAdopt;
@@ -2127,10 +2087,9 @@ void SimpleDateFormat::adoptNumberFormat(NumberFormat *formatToAdopt) {
         fSharedNumberFormatters = NULL;
     }
 
-    // Also re-compute the fast formatters.
+    // Recompute fSimpleNumberFormatter if necessary
     UErrorCode localStatus = U_ZERO_ERROR;
-    freeFastNumberFormatters();
-    initFastNumberFormatters(localStatus);
+    initSimpleNumberFormatter(localStatus);
 }
 
 void SimpleDateFormat::adoptNumberFormat(const UnicodeString& fields, NumberFormat *formatToAdopt, UErrorCode &status){
@@ -2186,36 +2145,19 @@ SimpleDateFormat::zeroPaddingNumber(
         UnicodeString &appendTo,
         int32_t value, int32_t minDigits, int32_t maxDigits) const
 {
-    const number::LocalizedNumberFormatter* fastFormatter = nullptr;
-    // NOTE: This uses the heuristic that these five min/max int settings account for the vast majority
-    // of SimpleDateFormat number formatting cases at the time of writing (ICU 62).
-    if (currentNumberFormat == fNumberFormat) {
-        if (maxDigits == 10) {
-            if (minDigits == 1) {
-                fastFormatter = fFastNumberFormatters[SMPDTFMT_NF_1x10];
-            } else if (minDigits == 2) {
-                fastFormatter = fFastNumberFormatters[SMPDTFMT_NF_2x10];
-            } else if (minDigits == 3) {
-                fastFormatter = fFastNumberFormatters[SMPDTFMT_NF_3x10];
-            } else if (minDigits == 4) {
-                fastFormatter = fFastNumberFormatters[SMPDTFMT_NF_4x10];
-            }
-        } else if (maxDigits == 2) {
-            if (minDigits == 2) {
-                fastFormatter = fFastNumberFormatters[SMPDTFMT_NF_2x2];
-            }
-        }
-    }
-    if (fastFormatter != nullptr) {
+
+    if (currentNumberFormat == fNumberFormat && fSimpleNumberFormatter) {
         // Can use fast path
-        number::impl::UFormattedNumberData result;
-        result.quantity.setToInt(value);
         UErrorCode localStatus = U_ZERO_ERROR;
-        fastFormatter->formatImpl(&result, localStatus);
+        number::SimpleNumber number = number::SimpleNumber::forInt64(value, localStatus);
+        number.setMinimumIntegerDigits(minDigits, localStatus);
+        number.truncateStart(maxDigits, localStatus);
+
+        number::FormattedNumber result = fSimpleNumberFormatter->format(std::move(number), localStatus);
         if (U_FAILURE(localStatus)) {
             return;
         }
-        appendTo.append(result.getStringRef().toTempUnicodeString());
+        appendTo.append(result.toTempString(localStatus));
         return;
     }
 
