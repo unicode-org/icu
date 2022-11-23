@@ -99,7 +99,7 @@ static const char *gNumberElementKeys[DecimalFormatSymbols::kFormatSymbolCount] 
 // Initializes this with the decimal format symbols in the default locale.
 
 DecimalFormatSymbols::DecimalFormatSymbols(UErrorCode& status)
-        : UObject(), locale(), currPattern(NULL) {
+        : UObject(), locale() {
     initialize(locale, status, true);
 }
 
@@ -107,17 +107,17 @@ DecimalFormatSymbols::DecimalFormatSymbols(UErrorCode& status)
 // Initializes this with the decimal format symbols in the desired locale.
 
 DecimalFormatSymbols::DecimalFormatSymbols(const Locale& loc, UErrorCode& status)
-        : UObject(), locale(loc), currPattern(NULL) {
+        : UObject(), locale(loc) {
     initialize(locale, status);
 }
 
 DecimalFormatSymbols::DecimalFormatSymbols(const Locale& loc, const NumberingSystem& ns, UErrorCode& status)
-        : UObject(), locale(loc), currPattern(NULL) {
+        : UObject(), locale(loc) {
     initialize(locale, status, false, &ns);
 }
 
 DecimalFormatSymbols::DecimalFormatSymbols()
-        : UObject(), locale(Locale::getRoot()), currPattern(NULL) {
+        : UObject(), locale(Locale::getRoot()) {
     *validLocale = *actualLocale = 0;
     initialize();
 }
@@ -169,6 +169,7 @@ DecimalFormatSymbols::operator=(const DecimalFormatSymbols& rhs)
         fIsCustomIntlCurrencySymbol = rhs.fIsCustomIntlCurrencySymbol; 
         fCodePointZero = rhs.fCodePointZero;
         currPattern = rhs.currPattern;
+        uprv_strcpy(nsName, rhs.nsName);
     }
     return *this;
 }
@@ -383,6 +384,7 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
     } else {
         nsName = gLatn;
     }
+    uprv_strcpy(this->nsName, nsName);
 
     // Open resource bundles
     const char* locStr = loc.getName();
@@ -517,7 +519,7 @@ DecimalFormatSymbols::initialize() {
     fCodePointZero = 0x30;
     U_ASSERT(fCodePointZero == fSymbols[kZeroDigitSymbol].char32At(0));
     currPattern = nullptr;
-
+    nsName[0] = 0;
 }
 
 void DecimalFormatSymbols::setCurrency(const UChar* currency, UErrorCode& status) {

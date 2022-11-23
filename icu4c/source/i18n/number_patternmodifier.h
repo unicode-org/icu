@@ -156,6 +156,9 @@ class U_I18N_API MutablePatternModifier
      */
     bool needsPlurals() const;
 
+    /** Creates a quantity-dependent Modifier for the specified plural form. */
+    AdoptingSignumModifierStore createImmutableForPlural(StandardPlural::Form plural, UErrorCode& status);
+
     /**
      * Creates a new quantity-dependent Modifier that behaves the same as the current instance, but which is immutable
      * and can be saved for future use. The number properties in the current instance are mutated; all other properties

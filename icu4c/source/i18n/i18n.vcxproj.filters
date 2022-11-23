@@ -609,6 +609,9 @@
     <ClCompile Include="number_currencysymbols.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="number_simple.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="number_skeletons.cpp">
       <Filter>formatting</Filter>
     </ClCompile>

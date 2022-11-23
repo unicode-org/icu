@@ -435,6 +435,7 @@
     <ClCompile Include="number_mapper.cpp" />
     <ClCompile Include="number_multiplier.cpp" />
     <ClCompile Include="number_currencysymbols.cpp" />
+    <ClCompile Include="number_simple.cpp" />
     <ClCompile Include="number_skeletons.cpp" />
     <ClCompile Include="number_symbolswrapper.cpp" />
     <ClCompile Include="number_capi.cpp" />
