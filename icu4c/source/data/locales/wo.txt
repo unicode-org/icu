@@ -98,7 +98,7 @@ wo{
                 yyyyQQQQ{"QQQQ y G"}
             }
             intervalFormats{
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
             }
         }
         gregorian{
@@ -299,7 +299,7 @@ wo{
                 }
             }
             intervalFormats{
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
             }
             monthNames{
                 format{
@@ -1146,5 +1146,19 @@ wo{
         UK{"UK"}
         US{"US"}
         metric{"Metrik"}
+    }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "wo",
+            }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
     }
 }

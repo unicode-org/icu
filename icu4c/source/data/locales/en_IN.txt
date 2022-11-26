@@ -64,6 +64,56 @@ en_IN{
                         other{"¤000LCr"}
                     }
                 }
+                currencyFormat%alphaNextToNumber{
+                    1000{
+                        one{"¤ 0T"}
+                        other{"¤ 0T"}
+                    }
+                    10000{
+                        one{"¤ 00T"}
+                        other{"¤ 00T"}
+                    }
+                    100000{
+                        one{"¤ 0L"}
+                        other{"¤ 0L"}
+                    }
+                    1000000{
+                        one{"¤ 00L"}
+                        other{"¤ 00L"}
+                    }
+                    10000000{
+                        one{"¤ 0Cr"}
+                        other{"¤ 0Cr"}
+                    }
+                    100000000{
+                        one{"¤ 00Cr"}
+                        other{"¤ 00Cr"}
+                    }
+                    1000000000{
+                        one{"¤ 000Cr"}
+                        other{"¤ 000Cr"}
+                    }
+                    10000000000{
+                        one{"¤ 0TCr"}
+                        other{"¤ 0TCr"}
+                    }
+                    100000000000{
+                        one{"¤ 00TCr"}
+                        other{"¤ 00TCr"}
+                    }
+                    1000000000000{
+                        one{"¤ 0LCr"}
+                        other{"¤ 0LCr"}
+                    }
+                    10000000000000{
+                        one{"¤ 00LCr"}
+                        other{"¤ 00LCr"}
+                    }
+                    100000000000000{
+                        one{"¤ 000LCr"}
+                        other{"¤ 000LCr"}
+                    }
+                }
                 decimalFormat{
                     1000{
                         one{"0T"}
@@ -145,6 +195,12 @@ en_IN{
                 "GGGGGyMd",
             }
             availableFormats{
+                EBhm{"E, h:mm B"}
+                EBhms{"E, h:mm:ss B"}
+                EHm{"E, HH:mm"}
+                EHms{"E, HH:mm:ss"}
+                Ehm{"E, h:mm a"}
+                Ehms{"E, h:mm:ss a"}
                 GyMMM{"MMM, y G"}
                 GyMMMEd{"E, d MMM, y G"}
                 GyMMMd{"d MMM, y G"}
@@ -231,6 +287,8 @@ en_IN{
                 "yyMMdd",
             }
             availableFormats{
+                EBhm{"E, h:mm B"}
+                EBhms{"E, h:mm:ss B"}
                 EHm{"E, HH:mm"}
                 EHms{"E, HH:mm:ss"}
                 Ehm{"E, h:mm a"}

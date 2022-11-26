@@ -33,7 +33,7 @@ UBool U_CALLCONV cleanupDefaultCurrencySpacing() {
     delete UNISET_NOTSZ;
     UNISET_NOTSZ = nullptr;
     gDefaultCurrencySpacingInitOnce.reset();
-    return TRUE;
+    return true;
 }
 
 void U_CALLCONV initDefaultCurrencySpacing(UErrorCode &status) {

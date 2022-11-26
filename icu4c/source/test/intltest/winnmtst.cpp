@@ -57,7 +57,7 @@
 
 #define LOOP_COUNT 1000
 
-static UBool initialized = FALSE;
+static UBool initialized = false;
 
 /**
  * Return a random int64_t where U_INT64_MIN <= ran <= U_INT64_MAX.
@@ -69,7 +69,7 @@ static uint64_t randomInt64(void)
 
     if (!initialized) {
         srand((unsigned)time(NULL));
-        initialized = TRUE;
+        initialized = true;
     }
 
     /* Assume rand has at least 12 bits of precision */
@@ -89,7 +89,7 @@ static double randomDouble(void)
 
     if (!initialized) {
         srand((unsigned)time(NULL));
-        initialized = TRUE;
+        initialized = true;
     }
 #if 0
     int32_t i;
@@ -123,7 +123,7 @@ static uint32_t randomInt32(void)
 
     if (!initialized) {
         srand((unsigned)time(NULL));
-        initialized = TRUE;
+        initialized = true;
     }
 
     /* Assume rand has at least 12 bits of precision */
@@ -315,16 +315,16 @@ void Win32NumberTest::testLocales(NumberFormatTest *log)
         NumberFormat *wnf = NumberFormat::createInstance(ulocale, status);
         NumberFormat *wcf = NumberFormat::createCurrencyInstance(ulocale, status);
 
-        testLocale(lcidRecords[i].localeID, lcidRecords[i].lcid, wnf, FALSE, log);
-        testLocale(lcidRecords[i].localeID, lcidRecords[i].lcid, wcf, TRUE,  log);
+        testLocale(lcidRecords[i].localeID, lcidRecords[i].lcid, wnf, false, log);
+        testLocale(lcidRecords[i].localeID, lcidRecords[i].lcid, wcf, true,  log);
 
 #if 0
         char *old_locale = strdup(setlocale(LC_ALL, NULL));
         
         setlocale(LC_ALL, "German");
 
-        testLocale(lcidRecords[i].localeID, lcidRecords[i].lcid, wnf, FALSE, log);
-        testLocale(lcidRecords[i].localeID, lcidRecords[i].lcid, wcf, TRUE,  log);
+        testLocale(lcidRecords[i].localeID, lcidRecords[i].lcid, wnf, false, log);
+        testLocale(lcidRecords[i].localeID, lcidRecords[i].lcid, wcf, true,  log);
 
         setlocale(LC_ALL, old_locale);
 

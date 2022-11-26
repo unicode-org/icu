@@ -34,10 +34,10 @@ U_NAMESPACE_USE
 /*
  * Global - verbosity
  */
-UBool VERBOSE = FALSE;
-UBool QUIET = FALSE;
+UBool VERBOSE = false;
+UBool QUIET = false;
 
-UBool haveCopyright = TRUE;
+UBool haveCopyright = true;
 UCPTrieType trieType = UCPTRIE_TYPE_SMALL;
 const char* destdir = "";
 
@@ -380,7 +380,7 @@ void writeDecompositionTables(const char* basename, const uint16_t* ptr16, size_
     fclose(f);
 }
 
-void writeDecompositionData(const char* basename, uint32_t baseSize16, uint32_t baseSize32, uint32_t supplementSize16, USet* uset, USet* reference, const std::vector<PendingDescriptor>& pendingTrieInsertions) {
+void writeDecompositionData(const char* basename, uint32_t baseSize16, uint32_t baseSize32, uint32_t supplementSize16, USet* uset, USet* reference, const std::vector<PendingDescriptor>& pendingTrieInsertions, char16_t passthroughCap) {
     IcuToolErrorCode status("icuexportdata: writeDecompositionData");
     FILE* f = prepareOutputFile(basename);
 
@@ -392,7 +392,7 @@ void writeDecompositionData(const char* basename, uint32_t baseSize16, uint32_t 
     for (int32_t i = pendingTrieInsertions.size() - 1; i >= 0; --i) {
         const PendingDescriptor& pending = pendingTrieInsertions[i];
         uint32_t additional = 0;
-        if (!(pending.descriptor & 0xFFFF0000)) {
+        if (!(pending.descriptor & 0xFFFE0000)) {
             uint32_t offset = pending.descriptor & 0xFFF;
             if (!pending.supplementary) {
                 if (offset >= baseSize16) {
@@ -419,7 +419,15 @@ void writeDecompositionData(const char* basename, uint32_t baseSize16, uint32_t 
                 handleError(status, basename);
             }
         }
-        umutablecptrie_set(builder.getAlias(), pending.scalar, pending.descriptor + additional, status);
+        // It turns out it's better to swap the halves compared to the initial
+        // idea in order to put special marker values close to zero so that
+        // an important marker value becomes 1, so it's efficient to compare
+        // "1 or 0". Unfortunately, going through all the code to swap
+        // things is too error prone, so let's do the swapping here in one
+        // place.
+        uint32_t oldTrieValue = pending.descriptor + additional;
+        uint32_t swappedTrieValue = (oldTrieValue >> 16) | (oldTrieValue << 16);
+        umutablecptrie_set(builder.getAlias(), pending.scalar, swappedTrieValue, status);
     }
     LocalUCPTriePointer utrie(umutablecptrie_buildImmutable(
         builder.getAlias(),
@@ -428,9 +436,7 @@ void writeDecompositionData(const char* basename, uint32_t baseSize16, uint32_t 
         status));
     handleError(status, basename);
 
-    if (!reference) {
-        usrc_writeUnicodeSet(f, uset, UPRV_TARGET_SYNTAX_TOML);
-    } else {
+    if (reference) {
         if (uset_contains(reference, 0xFF9E) || uset_contains(reference, 0xFF9F) || !uset_contains(reference, 0x0345)) {
             // NFD expectations don't hold. The set must not contain the half-width
             // kana voicing marks and must contain iota subscript.
@@ -462,9 +468,7 @@ void writeDecompositionData(const char* basename, uint32_t baseSize16, uint32_t 
 
         USet* iotaCheck = uset_cloneAsThawed(reference);
         uset_removeAll(iotaCheck, uset);
-        if (uset_equals(iotaCheck, iotaSubscript)) {
-            flags |= (1 << 1);
-        } else if (!uset_isEmpty(iotaCheck)) {
+        if (!(uset_equals(iotaCheck, iotaSubscript)) && !uset_isEmpty(iotaCheck)) {
             // The result was neither empty nor contained exactly
             // the iota subscript. The ICU4X normalizer doesn't
             // know how to deal with this case.
@@ -477,6 +481,7 @@ void writeDecompositionData(const char* basename, uint32_t baseSize16, uint32_t 
         uset_close(halfWidthVoicing);
 
         fprintf(f, "flags = 0x%X\n", flags);
+        fprintf(f, "cap = 0x%X\n", passthroughCap);
     }
     fprintf(f, "[trie]\n");
     usrc_writeUCPTrie(f, "trie", utrie.getAlias(), UPRV_TARGET_SYNTAX_TOML);
@@ -484,60 +489,75 @@ void writeDecompositionData(const char* basename, uint32_t baseSize16, uint32_t 
     handleError(status, basename);
 }
 
-void writePotentialCompositionPassThrough(const char* basename, const Normalizer2* norm, const USet* decompositionStartsWithNonStarter, const USet* decompositionStartsWithBackwardCombiningStarter, USet* potentialPassthroughAndNotBackwardCombining) {
-    IcuToolErrorCode status("icuexportdata: writePotentialCompositionPassThrough");
-    FILE* f = prepareOutputFile(basename);
+// Special marker for the NFKD form of U+FDFA
+const int32_t FDFA_MARKER = 3;
 
-    const Normalizer2* nfc = nullptr;
-    if (!norm) {
-        // UTS 46 case
-        norm = Normalizer2::getInstance(NULL, "uts46", UNORM2_COMPOSE, status);
-        nfc = Normalizer2::getNFCInstance(status);
+// Special marker for characters whose decomposition starts with a non-starter
+// and the decomposition isn't the character itself.
+const int32_t SPECIAL_NON_STARTER_DECOMPOSITION_MARKER = 2;
+
+// Special marker for starters that decompose to themselves but that may
+// combine backwards under canonical composition
+const int32_t BACKWARD_COMBINING_STARTER_MARKER = 1;
+
+/// Marker that a complex decomposition isn't round-trippable
+/// under re-composition.
+const uint32_t NON_ROUND_TRIP_MARKER = 1;
+
+UBool permissibleBmpPair(UBool knownToRoundTrip, UChar32 c, UChar32 second) {
+    if (knownToRoundTrip) {
+        return true;
     }
-    for (UChar32 c = 0; c <= 0x10FFFF; ++c) {
-        if (c >= 0xD800 && c < 0xE000) {
-            // Surrogate
-            continue;
-        }
-        if (uset_contains(decompositionStartsWithNonStarter, c) || uset_contains(decompositionStartsWithBackwardCombiningStarter, c)) {
-            continue;
-        }
-        UnicodeString src;
-        UnicodeString dst;
-        src.append(c);
-        norm->normalize(src, dst, status);
-        if (nfc && (dst.isEmpty() || (dst == u"\uFFFD" && c != 0xFFFD))) {
-            // UTS 46 ignored and disallowed fall back to NFC for data
-            // overlap.
-            dst.truncate(0);
-            nfc->normalize(src, dst, status);
-        }
-        if (src == dst) {
-            uset_add(potentialPassthroughAndNotBackwardCombining, c);
-        }
+    // Nuktas, Hebrew presentation forms and polytonic Greek with oxia
+    // are special-cased in ICU4X.
+    if (c >= 0xFB1D && c <= 0xFB4E) {
+        // Hebrew presentation forms
+        return true;
     }
-
-    // The surrogate range forms a useless discontinuity. The code
-    // that reads from the set never looks up by surrage, so let's
-    // put the surrogate range in the set as a micro-optimization.
-    uset_addRange(potentialPassthroughAndNotBackwardCombining, 0xD800, 0xDFFF);
-
-    usrc_writeUnicodeSet(f, potentialPassthroughAndNotBackwardCombining, UPRV_TARGET_SYNTAX_TOML);
-    fclose(f);
-    handleError(status, basename);
+    if (c >= 0x1F71 && c <= 0x1FFB) {
+        // Polytonic Greek with oxia
+        return true;
+    }
+    if ((second & 0x7F) == 0x3C && second >= 0x0900 && second <= 0x0BFF) {
+        // Nukta
+        return true;
+    }
+    // To avoid more branchiness, 4 characters that decompose to
+    // a BMP starter followed by a BMP non-starter are excluded
+    // from being encoded directly into the trie value and are
+    // handled as complex decompositions instead. These are:
+    // U+0F76 TIBETAN VOWEL SIGN VOCALIC R
+    // U+0F78 TIBETAN VOWEL SIGN VOCALIC L
+    // U+212B ANGSTROM SIGN
+    // U+2ADC FORKING
+    return false;
 }
 
 // Computes data for canonical decompositions
-void computeDecompositions(const char* basename, const USet* backwardCombiningStarters, std::vector<uint16_t>& storage16, std::vector<uint32_t>& storage32, USet* decompositionStartsWithNonStarter, USet* decompositionStartsWithBackwardCombiningStarter, std::vector<PendingDescriptor>& pendingTrieInsertions) {
+void computeDecompositions(const char* basename,
+                           const USet* backwardCombiningStarters,
+                           std::vector<uint16_t>& storage16,
+                           std::vector<uint32_t>& storage32,
+                           USet* decompositionStartsWithNonStarter,
+                           USet* decompositionStartsWithBackwardCombiningStarter,
+                           std::vector<PendingDescriptor>& pendingTrieInsertions,
+                           UChar32& decompositionPassthroughBound,
+                           UChar32& compositionPassthroughBound) {
     IcuToolErrorCode status("icuexportdata: computeDecompositions");
     const Normalizer2* mainNormalizer;
     const Normalizer2* nfdNormalizer = Normalizer2::getNFDInstance(status);
+    const Normalizer2* nfcNormalizer = Normalizer2::getNFCInstance(status);
+    FILE* f = NULL;
+    std::vector<uint32_t> nonRecursive32;
+    LocalUMutableCPTriePointer nonRecursiveBuilder(umutablecptrie_open(0, 0, status));
+
     if (uprv_strcmp(basename, "nfkd") == 0) {
         mainNormalizer = Normalizer2::getNFKDInstance(status);
     } else if (uprv_strcmp(basename, "uts46d") == 0) {
         mainNormalizer = Normalizer2::getInstance(NULL, "uts46", UNORM2_COMPOSE, status);
     } else {
         mainNormalizer = nfdNormalizer;
+        f = prepareOutputFile("decompositionex");
     }
 
     // Max length as of Unicode 14 is 4 for NFD. For NFKD the max
@@ -546,6 +566,8 @@ void computeDecompositions(const char* basename, const USet* backwardCombiningSt
     const int32_t LONGEST_ENCODABLE_LENGTH_32 = 8;
     const int32_t DECOMPOSITION_BUFFER_SIZE = 20;
     UChar32 utf32[DECOMPOSITION_BUFFER_SIZE];
+    const int32_t RAW_DECOMPOSITION_BUFFER_SIZE = 2;
+    UChar32 rawUtf32[RAW_DECOMPOSITION_BUFFER_SIZE];
 
     // Iterate over all scalar values excluding Hangul syllables.
     //
@@ -576,6 +598,10 @@ void computeDecompositions(const char* basename, const USet* backwardCombiningSt
         }
         UnicodeString src;
         UnicodeString dst;
+        // True if we're building non-NFD or we're building NFD but
+        // the `c` round trips to NFC.
+        // False if we're building NFD and `c` does not round trip to NFC.
+        UBool nonNfdOrRoundTrips = true;
         src.append(c);
         if (mainNormalizer != nfdNormalizer) {
             UnicodeString inter;
@@ -583,6 +609,9 @@ void computeDecompositions(const char* basename, const USet* backwardCombiningSt
             nfdNormalizer->normalize(inter, dst, status);
         } else {
             nfdNormalizer->normalize(src, dst, status);
+            UnicodeString nfc;
+            nfcNormalizer->normalize(dst, nfc, status);
+            nonNfdOrRoundTrips = (src == nfc);
         }
         int32_t len = dst.toUTF32(utf32, DECOMPOSITION_BUFFER_SIZE, status);
         if (!len || (len == 1 && utf32[0] == 0xFFFD && c != 0xFFFD)) {
@@ -609,11 +638,38 @@ void computeDecompositions(const char* basename, const USet* backwardCombiningSt
             status.set(U_INTERNAL_PROGRAM_ERROR);
             handleError(status, basename);
         }
-        bool startsWithNonStarter = u_getCombiningClass(utf32[0]);
-        if (startsWithNonStarter) {
+        uint8_t firstCombiningClass = u_getCombiningClass(utf32[0]);
+        bool specialNonStarterDecomposition = false;
+        bool startsWithBackwardCombiningStarter = false;
+        if (firstCombiningClass) {
+            decompositionPassthroughBound = c;
+            compositionPassthroughBound = c;
             uset_add(decompositionStartsWithNonStarter, c);
-        } else if (uset_contains(backwardCombiningStarters, c)) {
+            if (src != dst) {
+                if (c == 0x0340 || c == 0x0341 || c == 0x0343 || c == 0x0344 || c == 0x0F73 || c == 0x0F75 || c == 0x0F81 || c == 0xFF9E || c == 0xFF9F) {
+                    specialNonStarterDecomposition = true;
+                } else {
+                    // A character whose decomposition starts with a non-starter and isn't the same as the character itself and isn't already hard-coded into ICU4X.
+                    status.set(U_INTERNAL_PROGRAM_ERROR);
+                    handleError(status, basename);
+                }
+            }
+        } else if (uset_contains(backwardCombiningStarters, utf32[0])) {
+            compositionPassthroughBound = c;
+            startsWithBackwardCombiningStarter = true;
             uset_add(decompositionStartsWithBackwardCombiningStarter, c);
+        }
+        if (c != BACKWARD_COMBINING_STARTER_MARKER && len == 1 && utf32[0] == BACKWARD_COMBINING_STARTER_MARKER) {
+            status.set(U_INTERNAL_PROGRAM_ERROR);
+            handleError(status, basename);
+        }
+        if (c != SPECIAL_NON_STARTER_DECOMPOSITION_MARKER && len == 1 && utf32[0] == SPECIAL_NON_STARTER_DECOMPOSITION_MARKER) {
+            status.set(U_INTERNAL_PROGRAM_ERROR);
+            handleError(status, basename);
+        }
+        if (c != FDFA_MARKER && len == 1 && utf32[0] == FDFA_MARKER) {
+            status.set(U_INTERNAL_PROGRAM_ERROR);
+            handleError(status, basename);
         }
         if (mainNormalizer != nfdNormalizer) {
             UnicodeString nfd;
@@ -621,38 +677,134 @@ void computeDecompositions(const char* basename, const USet* backwardCombiningSt
             if (dst == nfd) {
                 continue;
             }
+            decompositionPassthroughBound = c;
+            compositionPassthroughBound = c;
+        } else if (firstCombiningClass) {
+            len = 1;
+            if (specialNonStarterDecomposition) {
+                utf32[0] = SPECIAL_NON_STARTER_DECOMPOSITION_MARKER; // magic value
+            } else {
+                // Use the surrogate range to store the canonical combining class
+                utf32[0] = 0xD800 | UChar32(firstCombiningClass);
+            }
         } else {
             if (src == dst) {
+                if (startsWithBackwardCombiningStarter) {
+                    pendingTrieInsertions.push_back({c, BACKWARD_COMBINING_STARTER_MARKER << 16, false});
+                }
                 continue;
             }
+            decompositionPassthroughBound = c;
+            // ICU4X hard-codes ANGSTROM SIGN
+            if (c != 0x212B) {
+                UnicodeString raw;
+                if (!nfdNormalizer->getRawDecomposition(c, raw)) {
+                    // We're always supposed to have a non-recursive decomposition
+                    // if we had a recursive one.
+                    status.set(U_INTERNAL_PROGRAM_ERROR);
+                    handleError(status, basename);
+                }
+                // In addition to actual difference, put the whole range that contains characters
+                // with oxia into the non-recursive trie in order to catch cases where characters
+                // with oxia have singleton decompositions to corresponding characters with tonos.
+                // This way, the run-time decision to fall through can be done on the range
+                // without checking for individual characters inside the range.
+                if (raw != dst || (c >= 0x1F71 && c <= 0x1FFB)) {
+                    int32_t rawLen = raw.toUTF32(rawUtf32, RAW_DECOMPOSITION_BUFFER_SIZE, status);
+                    if (!rawLen) {
+                        status.set(U_INTERNAL_PROGRAM_ERROR);
+                        handleError(status, basename);
+                    }
+                    if (rawLen == 1) {
+                        if (c >= 0xFFFF) {
+                            status.set(U_INTERNAL_PROGRAM_ERROR);
+                            handleError(status, basename);
+                        }
+                        umutablecptrie_set(nonRecursiveBuilder.getAlias(), c, uint32_t(rawUtf32[0]), status);
+                    } else if (rawUtf32[0] <= 0xFFFF && rawUtf32[1] <= 0xFFFF) {
+                        if (!rawUtf32[0] || !rawUtf32[1]) {
+                            status.set(U_INTERNAL_PROGRAM_ERROR);
+                            handleError(status, basename);
+                        }
+                        // Swapped for consistency with the primary trie
+                        uint32_t bmpPair = uint32_t(rawUtf32[1]) << 16 | uint32_t(rawUtf32[0]);
+                        umutablecptrie_set(nonRecursiveBuilder.getAlias(), c, bmpPair, status);
+                    } else {
+                        // Let's add 1 to index to make it always non-zero to distinguish
+                        // it from the default zero.
+                        uint32_t index = nonRecursive32.size() + 1;
+                        nonRecursive32.push_back(uint32_t(rawUtf32[0]));
+                        nonRecursive32.push_back(uint32_t(rawUtf32[1]));
+                        if (index > 0xFFFF) {
+                            status.set(U_INTERNAL_PROGRAM_ERROR);
+                            handleError(status, basename);
+                        }
+                        umutablecptrie_set(nonRecursiveBuilder.getAlias(), c, index << 16, status);
+                    }
+                }
+            }
         }
-        if (startsWithNonStarter && !(c == 0x0340 || c == 0x0341 || c == 0x0343 || c == 0x0344 || c == 0x0F73 || c == 0x0F75 || c == 0x0F81 || c == 0xFF9E || c == 0xFF9F)) {
-            // A character whose decomposition starts with a non-starter and isn't the same as the character itself and isn't already hard-coded into ICU4X.
-            status.set(U_INTERNAL_PROGRAM_ERROR);
-            handleError(status, basename);
+        if (!nonNfdOrRoundTrips) {
+            compositionPassthroughBound = c;
         }
         if (len == 1 && utf32[0] <= 0xFFFF) {
-            if (utf32[0] == 1) {
-                // 1 is reserved as a marker for the expansion of U+FDFA.
+            if (startsWithBackwardCombiningStarter) {
+                if (mainNormalizer == nfdNormalizer) {
+                    // Not supposed to happen in NFD
+                    status.set(U_INTERNAL_PROGRAM_ERROR);
+                    handleError(status, basename);
+                } else if (!((utf32[0] >= 0x1161 && utf32[0] <= 0x1175) || (utf32[0] >= 0x11A8 && utf32[0] <= 0x11C2))) {
+                    // Other than conjoining jamo vowels and trails
+                    // unsupported for non-NFD.
+                    status.set(U_INTERNAL_PROGRAM_ERROR);
+                    handleError(status, basename);
+                }
+            }
+            pendingTrieInsertions.push_back({c, uint32_t(utf32[0]) << 16, false});
+        } else if (len == 2 &&
+                   utf32[0] <= 0xFFFF &&
+                   utf32[1] <= 0xFFFF &&
+                   !u_getCombiningClass(utf32[0]) &&
+                   u_getCombiningClass(utf32[1]) &&
+                   permissibleBmpPair(nonNfdOrRoundTrips, c, utf32[1])) {
+            for (int32_t i = 0; i < len; ++i) {
+                if (((utf32[i] == 0x0345) && (uprv_strcmp(basename, "uts46d") == 0)) || utf32[i] == 0xFF9E || utf32[i] == 0xFF9F) {
+                    // Assert that iota subscript and half-width voicing marks never occur in these
+                    // expansions in the normalization forms where they are special.
+                    status.set(U_INTERNAL_PROGRAM_ERROR);
+                    handleError(status, basename);
+                }
+            }
+            if (startsWithBackwardCombiningStarter) {
                 status.set(U_INTERNAL_PROGRAM_ERROR);
                 handleError(status, basename);
             }
-            pendingTrieInsertions.push_back({c, uint32_t(utf32[0]) << 16, FALSE});
-        } else if (len == 2 && utf32[0] <= 0xFFFF && utf32[1] <= 0xFFFF && !u_getCombiningClass(utf32[0]) && u_getCombiningClass(utf32[1])) {
-            pendingTrieInsertions.push_back({c, (uint32_t(utf32[0]) << 16) | uint32_t(utf32[1]), FALSE});
+            pendingTrieInsertions.push_back({c, (uint32_t(utf32[0]) << 16) | uint32_t(utf32[1]), false});
         } else {
-            UBool supplementary = FALSE;
-            UBool nonInitialStarter = FALSE;
+            if (startsWithBackwardCombiningStarter) {
+                status.set(U_INTERNAL_PROGRAM_ERROR);
+                handleError(status, basename);
+            }
+
+            UBool supplementary = false;
+            UBool nonInitialStarter = false;
             for (int32_t i = 0; i < len; ++i) {
+                if (((utf32[i] == 0x0345) && (uprv_strcmp(basename, "uts46d") == 0)) || utf32[i] == 0xFF9E || utf32[i] == 0xFF9F) {
+                    // Assert that iota subscript and half-width voicing marks never occur in these
+                    // expansions in the normalization forms where they are special.
+                    status.set(U_INTERNAL_PROGRAM_ERROR);
+                    handleError(status, basename);
+                }
+
                 if (utf32[i] > 0xFFFF) {
-                    supplementary = TRUE;
+                    supplementary = true;
                 }
                 if (utf32[i] == 0) {
                     status.set(U_INTERNAL_PROGRAM_ERROR);
                     handleError(status, basename);
                 }
                 if (i != 0 && !u_getCombiningClass(utf32[i])) {
-                    nonInitialStarter = TRUE;
+                    nonInitialStarter = true;
                 }
             }
             if (!supplementary) {
@@ -660,7 +812,7 @@ void computeDecompositions(const char* basename, const USet* backwardCombiningSt
                     if (len == 18 && c == 0xFDFA) {
                         // Special marker for the one character whose decomposition
                         // is too long.
-                        pendingTrieInsertions.push_back({c, 1 << 16, supplementary});
+                        pendingTrieInsertions.push_back({c, FDFA_MARKER << 16, supplementary});
                         continue;
                     } else {
                         status.set(U_INTERNAL_PROGRAM_ERROR);
@@ -698,13 +850,13 @@ void computeDecompositions(const char* basename, const USet* backwardCombiningSt
                 handleError(status, basename);
             }
             size_t index = 0;
-            bool writeToStorage = FALSE;
+            bool writeToStorage = false;
             // Sadly, C++ lacks break and continue by label, so using goto in the
             // inner loops to break or continue the outer loop.
             if (!supplementary) {
                 outer16: for (;;) {
                     if (index == storage16.size()) {
-                        writeToStorage = TRUE;
+                        writeToStorage = true;
                         break;
                     }
                     if (storage16[index] == utf32[0]) {
@@ -723,7 +875,7 @@ void computeDecompositions(const char* basename, const USet* backwardCombiningSt
             } else {
                 outer32: for (;;) {
                     if (index == storage32.size()) {
-                        writeToStorage = TRUE;
+                        writeToStorage = true;
                         break;
                     }
                     if (storage32[index] == uint32_t(utf32[0])) {
@@ -763,11 +915,31 @@ void computeDecompositions(const char* basename, const USet* backwardCombiningSt
                     }
                 }
             }
-            pendingTrieInsertions.push_back({c, descriptor, supplementary});
+
+            uint32_t nonRoundTripMarker = 0;
+            if (!nonNfdOrRoundTrips) {
+                nonRoundTripMarker = (NON_ROUND_TRIP_MARKER << 16);
+            }
+            pendingTrieInsertions.push_back({c, descriptor | nonRoundTripMarker, supplementary});
         }
     }
     if (storage16.size() + storage32.size() > 0xFFF) {
         status.set(U_INTERNAL_PROGRAM_ERROR);
+    }
+    if (f) {
+        usrc_writeArray(f, "scalars32 = [\n  ", nonRecursive32.data(), 32, nonRecursive32.size(), "  ", "\n]\n");
+
+        LocalUCPTriePointer utrie(umutablecptrie_buildImmutable(
+            nonRecursiveBuilder.getAlias(),
+            trieType,
+            UCPTRIE_VALUE_BITS_32,
+            status));
+        handleError(status, basename);
+
+        fprintf(f, "[trie]\n");
+        usrc_writeUCPTrie(f, "trie", utrie.getAlias(), UPRV_TARGET_SYNTAX_TOML);
+
+        fclose(f);
     }
     handleError(status, basename);
 }
@@ -958,7 +1130,7 @@ addRangeToUCPTrie(const void* context, UChar32 start, UChar32 end, uint32_t valu
     umutablecptrie_setRange(ucptrie, start, end, value, status);
     handleError(status, "setRange");
 
-    return TRUE;
+    return true;
 }
 
 int exportCase(int argc, char* argv[]) {
@@ -1030,10 +1202,27 @@ int exportNorm() {
     std::vector<uint16_t> storage16;
     std::vector<uint32_t> storage32;
 
+    // Note: the USets are not exported. They are only used to check that a new
+    // Unicode version doesn't violate expectations that are hard-coded in ICU4X.
     USet* nfdDecompositionStartsWithNonStarter = uset_openEmpty();
     USet* nfdDecompositionStartsWithBackwardCombiningStarter = uset_openEmpty();
     std::vector<PendingDescriptor> nfdPendingTrieInsertions;
-    computeDecompositions("nfd", backwardCombiningStarters, storage16, storage32, nfdDecompositionStartsWithNonStarter, nfdDecompositionStartsWithBackwardCombiningStarter, nfdPendingTrieInsertions);
+    UChar32 nfdBound = 0x10FFFF;
+    UChar32 nfcBound = 0x10FFFF;
+    computeDecompositions("nfd",
+                          backwardCombiningStarters,
+                          storage16,
+                          storage32,
+                          nfdDecompositionStartsWithNonStarter,
+                          nfdDecompositionStartsWithBackwardCombiningStarter,
+                          nfdPendingTrieInsertions,
+                          nfdBound,
+                          nfcBound);
+    if (!(nfdBound == 0xC0 && nfcBound == 0x300)) {
+        // Unexpected bounds for NFD/NFC.
+        status.set(U_INTERNAL_PROGRAM_ERROR);
+        handleError(status, "exportNorm");
+    }
 
     uint32_t baseSize16 = storage16.size();
     uint32_t baseSize32 = storage32.size();
@@ -1041,44 +1230,72 @@ int exportNorm() {
     USet* nfkdDecompositionStartsWithNonStarter = uset_openEmpty();
     USet* nfkdDecompositionStartsWithBackwardCombiningStarter = uset_openEmpty();
     std::vector<PendingDescriptor> nfkdPendingTrieInsertions;
-    computeDecompositions("nfkd", backwardCombiningStarters, storage16, storage32, nfkdDecompositionStartsWithNonStarter, nfkdDecompositionStartsWithBackwardCombiningStarter, nfkdPendingTrieInsertions);
+    UChar32 nfkdBound = 0x10FFFF;
+    UChar32 nfkcBound = 0x10FFFF;
+    computeDecompositions("nfkd",
+                          backwardCombiningStarters,
+                          storage16,
+                          storage32,
+                          nfkdDecompositionStartsWithNonStarter,
+                          nfkdDecompositionStartsWithBackwardCombiningStarter,
+                          nfkdPendingTrieInsertions,
+                          nfkdBound,
+                          nfkcBound);
+    if (!(nfkdBound <= 0xC0 && nfkcBound <= 0x300)) {
+        status.set(U_INTERNAL_PROGRAM_ERROR);
+        handleError(status, "exportNorm");
+    }
+    if (nfkcBound > 0xC0) {
+        if (nfkdBound != 0xC0) {
+            status.set(U_INTERNAL_PROGRAM_ERROR);
+            handleError(status, "exportNorm");
+        }
+    } else {
+        if (nfkdBound != nfkcBound) {
+            status.set(U_INTERNAL_PROGRAM_ERROR);
+            handleError(status, "exportNorm");
+        }
+    }
 
     USet* uts46DecompositionStartsWithNonStarter = uset_openEmpty();
     USet* uts46DecompositionStartsWithBackwardCombiningStarter = uset_openEmpty();
     std::vector<PendingDescriptor> uts46PendingTrieInsertions;
-    computeDecompositions("uts46d", backwardCombiningStarters, storage16, storage32, uts46DecompositionStartsWithNonStarter, uts46DecompositionStartsWithBackwardCombiningStarter, uts46PendingTrieInsertions);
+    UChar32 uts46dBound = 0x10FFFF;
+    UChar32 uts46Bound = 0x10FFFF;
+    computeDecompositions("uts46d",
+                          backwardCombiningStarters,
+                          storage16,
+                          storage32,
+                          uts46DecompositionStartsWithNonStarter,
+                          uts46DecompositionStartsWithBackwardCombiningStarter,
+                          uts46PendingTrieInsertions,
+                          uts46dBound,
+                          uts46Bound);
+    if (!(uts46dBound <= 0xC0 && uts46Bound <= 0x300)) {
+        status.set(U_INTERNAL_PROGRAM_ERROR);
+        handleError(status, "exportNorm");
+    }
+    if (uts46Bound > 0xC0) {
+        if (uts46dBound != 0xC0) {
+            status.set(U_INTERNAL_PROGRAM_ERROR);
+            handleError(status, "exportNorm");
+        }
+    } else {
+        if (uts46dBound != uts46Bound) {
+            status.set(U_INTERNAL_PROGRAM_ERROR);
+            handleError(status, "exportNorm");
+        }
+    }
 
     uint32_t supplementSize16 = storage16.size() - baseSize16;
     uint32_t supplementSize32 = storage32.size() - baseSize32;
 
-    writeDecompositionData("nfd", baseSize16, baseSize32, supplementSize16, nfdDecompositionStartsWithNonStarter, nullptr, nfdPendingTrieInsertions);
-    writeDecompositionData("nfkd", baseSize16, baseSize32, supplementSize16, nfkdDecompositionStartsWithNonStarter, nfdDecompositionStartsWithNonStarter, nfkdPendingTrieInsertions);
-    writeDecompositionData("uts46d", baseSize16, baseSize32, supplementSize16, uts46DecompositionStartsWithNonStarter, nfdDecompositionStartsWithNonStarter, uts46PendingTrieInsertions);
+    writeDecompositionData("nfd", baseSize16, baseSize32, supplementSize16, nfdDecompositionStartsWithNonStarter, nullptr, nfdPendingTrieInsertions, char16_t(nfcBound));
+    writeDecompositionData("nfkd", baseSize16, baseSize32, supplementSize16, nfkdDecompositionStartsWithNonStarter, nfdDecompositionStartsWithNonStarter, nfkdPendingTrieInsertions, char16_t(nfkcBound));
+    writeDecompositionData("uts46d", baseSize16, baseSize32, supplementSize16, uts46DecompositionStartsWithNonStarter, nfdDecompositionStartsWithNonStarter, uts46PendingTrieInsertions, char16_t(uts46Bound));
 
     writeDecompositionTables("nfdex", storage16.data(), baseSize16, storage32.data(), baseSize32);
     writeDecompositionTables("nfkdex", storage16.data() + baseSize16, supplementSize16, storage32.data() + baseSize32, supplementSize32);
-
-    USet* nfcPotentialPassthroughAndNotBackwardCombining = uset_openEmpty();
-    const Normalizer2* nfc = Normalizer2::getNFCInstance(status);
-    writePotentialCompositionPassThrough("nfc", nfc, nfdDecompositionStartsWithNonStarter, nfdDecompositionStartsWithBackwardCombiningStarter, nfcPotentialPassthroughAndNotBackwardCombining);
-
-    USet* nfkcPotentialPassthroughAndNotBackwardCombining = uset_openEmpty();
-    const Normalizer2* nfkc = Normalizer2::getNFKCInstance(status);
-    writePotentialCompositionPassThrough("nfkc", nfkc, nfkdDecompositionStartsWithNonStarter, nfkdDecompositionStartsWithBackwardCombiningStarter, nfkcPotentialPassthroughAndNotBackwardCombining);
-
-    USet* uts46PotentialPassthroughAndNotBackwardCombining = uset_openEmpty();
-    writePotentialCompositionPassThrough("uts46", nullptr, uts46DecompositionStartsWithNonStarter, uts46DecompositionStartsWithBackwardCombiningStarter, uts46PotentialPassthroughAndNotBackwardCombining);
-
-    // Check that NFKC set has no characters that NFC doesn't also have.
-    uset_removeAll(nfkcPotentialPassthroughAndNotBackwardCombining, nfcPotentialPassthroughAndNotBackwardCombining);
-    if (!uset_isEmpty(nfkcPotentialPassthroughAndNotBackwardCombining)) {
-        status.set(U_INTERNAL_PROGRAM_ERROR);
-        handleError(status, "exportNorm");
-    }
-
-    uset_close(nfcPotentialPassthroughAndNotBackwardCombining);
-    uset_close(nfkcPotentialPassthroughAndNotBackwardCombining);
-    uset_close(uts46PotentialPassthroughAndNotBackwardCombining);
 
     uset_close(nfdDecompositionStartsWithNonStarter);
     uset_close(nfkdDecompositionStartsWithNonStarter);

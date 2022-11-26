@@ -117,18 +117,18 @@ U_CFUNC void ctest_resetTimeZone(void);
 U_CFUNC UBool ctest_resetICU(void);
 
 /**
- * Assert that the given UErrorCode succeeds, and return TRUE if it does.
+ * Assert that the given UErrorCode succeeds, and return true if it does.
  */
 U_CFUNC UBool assertSuccess(const char* msg, UErrorCode* ec);
 
 /**
- * Assert that the given UErrorCode succeeds, and return TRUE if it does.
- * Give data error if UErrorCode fails and possibleDataError is TRUE.
+ * Assert that the given UErrorCode succeeds, and return true if it does.
+ * Give data error if UErrorCode fails and possibleDataError is true.
  */
 U_CFUNC UBool assertSuccessCheck(const char* msg, UErrorCode* ec, UBool possibleDataError);
 
 /**
- * Assert that the UBool is TRUE, and return TRUE if it does.
+ * Assert that the UBool is true, and return true if it does.
  *
  * NOTE: Use 'int condition' rather than 'UBool condition' so the
  * compiler doesn't complain about integral conversion of expressions
@@ -138,31 +138,31 @@ U_CFUNC UBool assertTrue(const char* msg, int condition);
 
 /**
  * Assert that the actualString equals the expectedString, and return
- * TRUE if it does.
+ * true if it does.
  */
 U_CFUNC UBool assertEquals(const char* msg, const char* expectedString,
                            const char* actualString);
 
 /**
  * Assert that the actualString equals the expectedString, and return
- * TRUE if it does.
+ * true if it does.
  */
 U_CFUNC UBool assertUEquals(const char* msg, const UChar* expectedString,
                             const UChar* actualString);
 
 /**
- * Assert that two 64-bit integers are equal, returning TRUE if they are.
+ * Assert that two 64-bit integers are equal, returning true if they are.
  */
 U_CFUNC UBool assertIntEquals(const char* msg, int64_t expected, int64_t actual);
 
 /**
  * Assert that the addresses of the two pointers are the same, returning
- * TRUE if they are equal.
+ * true if they are equal.
  */
 U_CFUNC UBool assertPtrEquals(const char* msg, const void* expected, const void* actual);
 
 /**
- * Assert that two doubles are equal, returning TRUE if they are.
+ * Assert that two doubles are equal, returning true if they are.
  */
 U_CFUNC UBool assertDoubleEquals(const char *msg, double expected, double actual);
 

@@ -193,7 +193,7 @@ void UnescapeTransliterator::handleTransliterate(Replaceable& text, UTransPositi
             // s is a copy of start that is advanced over the
             // characters as we parse them.
             int32_t s = start;
-            UBool match = TRUE;
+            UBool match = true;
 
             for (i=0; i<prefixLen; ++i) {
                 if (s >= limit) {
@@ -205,13 +205,13 @@ void UnescapeTransliterator::handleTransliterate(Replaceable& text, UTransPositi
                         if (isIncremental) {
                             goto exit;
                         }
-                        match = FALSE;
+                        match = false;
                         break;
                     }
                 }
                 UChar c = text.charAt(s++);
                 if (c != spec[ipat + i]) {
-                    match = FALSE;
+                    match = false;
                     break;
                 }
             }
@@ -248,12 +248,12 @@ void UnescapeTransliterator::handleTransliterate(Replaceable& text, UTransPositi
                             if (s > start && isIncremental) {
                                 goto exit;
                             }
-                            match = FALSE;
+                            match = false;
                             break;
                         }
                         UChar c = text.charAt(s++);
                         if (c != spec[ipat + prefixLen + i]) {
-                            match = FALSE;
+                            match = false;
                             break;
                         }
                     }

@@ -906,8 +906,8 @@ public final class Normalizer2Impl {
     public static final int MIN_YES_YES_WITH_CC=0xfe02;
     public static final int JAMO_VT=0xfe00;
     public static final int MIN_NORMAL_MAYBE_YES=0xfc00;
-    public static final int JAMO_L=2;  // offset=1 hasCompBoundaryAfter=FALSE
-    public static final int INERT=1;  // offset=0 hasCompBoundaryAfter=TRUE
+    public static final int JAMO_L=2;  // offset=1 hasCompBoundaryAfter=false
+    public static final int INERT=1;  // offset=0 hasCompBoundaryAfter=true
 
     // norm16 bit 0 is comp-boundary-after.
     public static final int HAS_COMP_BOUNDARY_AFTER=1;

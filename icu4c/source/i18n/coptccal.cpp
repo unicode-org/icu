@@ -96,6 +96,23 @@ CopticCalendar::handleComputeFields(int32_t julianDay, UErrorCode &/*status*/)
     internalSet(UCAL_DAY_OF_YEAR, (30 * month) + day);
 }
 
+constexpr uint32_t kCopticRelatedYearDiff = 284;
+
+int32_t CopticCalendar::getRelatedYear(UErrorCode &status) const
+{
+    int32_t year = get(UCAL_EXTENDED_YEAR, status);
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+    return year + kCopticRelatedYearDiff;
+}
+
+void CopticCalendar::setRelatedYear(int32_t year)
+{
+    // set extended year
+    set(UCAL_EXTENDED_YEAR, year - kCopticRelatedYearDiff);
+}
+
 /**
  * The system maintains a static default century start date and Year.  They are
  * initialized the first time they are used.  Once the system default century date 

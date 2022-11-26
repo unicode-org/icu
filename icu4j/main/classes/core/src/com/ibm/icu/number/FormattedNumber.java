@@ -152,7 +152,7 @@ public class FormattedNumber implements FormattedValue {
      * The gender of the formatted output.
      *
      * @internal ICU 69 technology preview
-     * @deprecated This API is for ICU internal use only.
+     * @deprecated This API is for technology preview only.
      */
     @Deprecated
     public String getGender() {

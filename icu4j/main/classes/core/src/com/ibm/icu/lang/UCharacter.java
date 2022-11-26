@@ -5980,7 +5980,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      *
      * @see com.ibm.icu.lang.UProperty
      * @see CharacterProperties#getBinaryPropertySet(int)
-     * @draft ICU 70
+     * @stable ICU 70
      */
     public static boolean hasBinaryProperty(CharSequence s, int property) {
         int length = s.length();

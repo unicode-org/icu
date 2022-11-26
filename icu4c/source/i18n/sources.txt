@@ -86,6 +86,7 @@ hebrwcal.cpp
 indiancal.cpp
 inputext.cpp
 islamcal.cpp
+iso8601cal.cpp
 japancal.cpp
 listformatter.cpp
 measfmt.cpp

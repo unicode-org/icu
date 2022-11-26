@@ -65,7 +65,7 @@ void UVectorTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
 } UPRV_BLOCK_MACRO_END
 
 #define TEST_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN {\
-    if ((expr)==FALSE) {\
+    if ((expr)==false) {\
         errln("UVectorTest failure at line %d.\n", __LINE__);\
     }\
 } UPRV_BLOCK_MACRO_END
@@ -181,7 +181,7 @@ void UVectorTest::UStack_API() {
 
 U_CDECL_BEGIN
 static UBool U_CALLCONV neverTRUE(const UElement /*key1*/, const UElement /*key2*/) {
-    return FALSE;
+    return false;
 }
 
 U_CDECL_END
@@ -201,7 +201,7 @@ void UVectorTest::Hashtable_API() {
     Hashtable b(status);
     TEST_ASSERT((!a->equals(b)));
     TEST_ASSERT((b.puti("b", 2, status) == 0));
-    TEST_ASSERT((!a->equals(b))); // Without a value comparator, this will be FALSE by default.
+    TEST_ASSERT((!a->equals(b))); // Without a value comparator, this will be false by default.
     b.setValueComparator(uhash_compareLong);
     TEST_ASSERT((!a->equals(b)));
     a->setValueComparator(uhash_compareLong);

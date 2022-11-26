@@ -1,5 +1,5 @@
 ﻿# UCA_Rules_SHORT.txt
-# Date: 2022-05-17, 01:30:07 GMT
+# Date: 2022-08-24, 17:17:42 GMT
 # © 2022 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see https://www.unicode.org/terms_of_use.html
@@ -202,8 +202,6 @@
     =	 ༷
     =	 ༾
     =	 ༿
-    =	 ྂ
-    =	 ྃ
     =	 ྆
     =	 ྇
     =	 ࿆
@@ -361,13 +359,13 @@
     =	 '\U00013436'
     =	 '\U00013437'
     =	 '\U00013438'
-    =	 𓐹
-    =	 𓐺
-    =	 𓐻
-    =	 𓐼
-    =	 𓐽
-    =	 𓐾
-    =	 𓐿
+    =	 '\U00013439'
+    =	 '\U0001343A'
+    =	 '\U0001343B'
+    =	 '\U0001343C'
+    =	 '\U0001343D'
+    =	 '\U0001343E'
+    =	 '\U0001343F'
     =	 𓑀
     =	 𓑇
     =	 𓑈
@@ -1399,6 +1397,8 @@
     =	 ಁ
     =	 ഁ
     =	 ඁ
+    =	 ྂ
+    =	 ྃ
     =	 ᬀ
     =	 ᬁ
     =	 ꣅ

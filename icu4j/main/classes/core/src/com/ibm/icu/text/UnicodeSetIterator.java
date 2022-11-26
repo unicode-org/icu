@@ -108,7 +108,7 @@ public final class UnicodeSetIterator {
      * No-op if next() would return false, or if it would yield a string anyway.
      *
      * @return this
-     * @draft ICU 70
+     * @stable ICU 70
      * @see UnicodeSet#strings()
      */
     public UnicodeSetIterator skipToStrings() {

@@ -960,7 +960,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * Uses
      * (1) any region specified by locale tag "rg"; if none then
      * (2) any unicode_region_tag in the locale ID; if none then
-     * (3) if inferRegion is TRUE, the region suggested by
+     * (3) if inferRegion is true, the region suggested by
      *     getLikelySubtags on the localeID.
      * If no region is found, returns empty string ""
      *
@@ -968,7 +968,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      *     The locale (includes any keywords) from which
      *     to get the region to use for supplemental data.
      * @param inferRegion
-     *     If TRUE, will try to infer region from other
+     *     If true, will try to infer region from other
      *     locale elements if not found any other way.
      * @return
      *     String with region to use ("" if none found).

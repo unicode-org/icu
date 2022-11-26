@@ -65,7 +65,7 @@ public:
     }
     virtual UChar nextPostInc(void) override { return text.charAt(pos++);}
     virtual UChar32 next32PostInc(void) override {return text.char32At(pos++);}
-    virtual UBool hasNext() override { return TRUE;}
+    virtual UBool hasNext() override { return true;}
     virtual UChar first() override {return DONE;}
     virtual UChar32 first32() override {return DONE;}
     virtual UChar last() override {return DONE;}
@@ -128,7 +128,7 @@ public:
 
         return pos;
     }
-    virtual UBool hasPrevious() override {return TRUE;}
+    virtual UBool hasPrevious() override {return true;}
 
   SCharacterIterator&  operator=(const SCharacterIterator&    that){
      text = that.text;
@@ -600,7 +600,7 @@ void CharIterTest::TestIterationUChar32() {
             /* logln("c=%d i=%d char32At=%d", c, i, text.char32At(i)); */
             if (c == CharacterIterator::DONE && i != text.length())
                 errln("Iterator reached end prematurely");
-            else if(iter.hasNext() == FALSE && i != text.length())
+            else if(iter.hasNext() == false && i != text.length())
                 errln("Iterator reached end prematurely.  Failed at hasNext");
             else if (c != text.char32At(i))
                 errln("Character mismatch at position %d, iterator has %X, string has %X", i, c, text.char32At(i));
@@ -614,13 +614,13 @@ void CharIterTest::TestIterationUChar32() {
                 i += U16_LENGTH(c);
             }
         } while (c != CharacterIterator::DONE);
-        if(iter.hasNext() == TRUE)
+        if(iter.hasNext() == true)
            errln("hasNext() returned true at the end of the string");
 
 
 
         c=iter.setToEnd();
-        if(iter.getIndex() != text.length() || iter.hasNext() != FALSE)
+        if(iter.getIndex() != text.length() || iter.hasNext() != false)
             errln("setToEnd failed");
 
         c=iter.next32();
@@ -637,7 +637,7 @@ void CharIterTest::TestIterationUChar32() {
         do {
             if (c == CharacterIterator::DONE && i >= 0)
                 errln((UnicodeString)"Iterator reached start prematurely for i=" + i);
-            else if(iter.hasPrevious() == FALSE && i>0)
+            else if(iter.hasPrevious() == false && i>0)
                 errln((UnicodeString)"Iterator reached start prematurely for i=" + i);
             else if (c != text.char32At(i))
                 errln("Character mismatch at position %d, iterator has %X, string has %X", i, c, text.char32At(i));
@@ -653,7 +653,7 @@ void CharIterTest::TestIterationUChar32() {
                 i -= U16_LENGTH(c);
             }
         } while (c != CharacterIterator::DONE);
-        if(iter.hasPrevious() == TRUE)
+        if(iter.hasPrevious() == true)
             errln("hasPrevious returned true after reaching the start");
 
         c=iter.previous32();
@@ -713,7 +713,7 @@ void CharIterTest::TestIterationUChar32() {
         do {
             if (c == CharacterIterator::DONE && i != 11)
                 errln("Iterator reached end prematurely");
-            else if(iter.hasNext() == FALSE)
+            else if(iter.hasNext() == false)
                 errln("Iterator reached end prematurely");
             else if (c != text.char32At(i))
                 errln("Character mismatch at position %d, iterator has %X, string has %X", i, c, text.char32At(i));
@@ -740,7 +740,7 @@ void CharIterTest::TestIterationUChar32() {
         do {
             if (c == CharacterIterator::DONE && i >= 5)
                 errln("Iterator reached start prematurely");
-            else if(iter.hasPrevious() == FALSE && i > 5)
+            else if(iter.hasPrevious() == false && i > 5)
                 errln("Iterator reached start prematurely");
             else if (c != text.char32At(i))
                 errln("Character mismatch at position %d, iterator has %X, string has %X", i, c, text.char32At(i));
@@ -814,13 +814,13 @@ void CharIterTest::TestUCharIterator(UCharIterator *iter, CharacterIterator &ci,
             break;
 
         case '2':
-            h=h2=FALSE;
+            h=h2=false;
             c=(UChar32)iter->move(iter, 2, UITER_CURRENT);
             c2=(UChar32)ci.move(2, CharacterIterator::kCurrent);
             break;
 
         case '8':
-            h=h2=FALSE;
+            h=h2=false;
             c=(UChar32)iter->move(iter, -2, UITER_CURRENT);
             c2=(UChar32)ci.move(-2, CharacterIterator::kCurrent);
             break;

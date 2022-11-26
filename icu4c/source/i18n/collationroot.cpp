@@ -43,7 +43,7 @@ U_CDECL_BEGIN
 static UBool U_CALLCONV uprv_collation_root_cleanup() {
     SharedObject::clearPtr(rootSingleton);
     initOnce.reset();
-    return TRUE;
+    return true;
 }
 
 U_CDECL_END

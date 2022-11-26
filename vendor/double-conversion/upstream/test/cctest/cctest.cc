@@ -33,6 +33,15 @@
 
 CcTest* CcTest::last_ = NULL;
 
+// The windows compiler doesn't like to use `strdup`, and claims it's a
+// deprecated name.
+// For simplicity just implement it ourselves.
+static char* Strdup(const char* str) {
+  size_t len = strlen(str);
+  char* result = reinterpret_cast<char*>(malloc(len + 1));
+  memcpy(result, str, len + 1);
+  return result;
+}
 
 CcTest::CcTest(TestFunction* callback, const char* test_file,
                const char* test_name, const char* test_dependency,
@@ -45,9 +54,9 @@ CcTest::CcTest(TestFunction* callback, const char* test_file,
     basename = strrchr(const_cast<char *>(test_file), '\\');
   }
   if (!basename) {
-    basename = strdup(test_file);
+    basename = Strdup(test_file);
   } else {
-    basename = strdup(basename + 1);
+    basename = Strdup(basename + 1);
   }
   // Drop the extension, if there is one.
   char *extension = strrchr(basename, '.');
@@ -93,7 +102,7 @@ int main(int argc, char* argv[]) {
       print_run_count = false;
 
     } else {
-      char* arg_copy = strdup(arg);
+      char* arg_copy = Strdup(arg);
       char* testname = strchr(arg_copy, '/');
       if (testname) {
         // Split the string in two by nulling the slash and then run

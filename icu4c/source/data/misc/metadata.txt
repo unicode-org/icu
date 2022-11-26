@@ -5116,6 +5116,10 @@ metadata:table(nofallback){
                 reason{"deprecated"}
                 replacement{"meter-per-square-second"}
             }
+            metric-ton{
+                reason{"deprecated"}
+                replacement{"tonne"}
+            }
             milligram-per-deciliter{
                 reason{"deprecated"}
                 replacement{"milligram-ofglucose-per-deciliter"}
@@ -5229,6 +5233,7 @@ metadata:table(nofallback){
         "ee_GH",
         "el_GR",
         "en_Dsrt_US",
+        "en_Shaw_GB",
         "en_US",
         "eo_001",
         "es_ES",
@@ -5243,6 +5248,7 @@ metadata:table(nofallback){
         "fil_PH",
         "fo_FO",
         "fr_FR",
+        "frr_DE",
         "fur_IT",
         "fy_NL",
         "ga_IE",
@@ -5414,6 +5420,7 @@ metadata:table(nofallback){
         "shi_Latn_MA",
         "shi_Tfng",
         "shi_Tfng_MA",
+        "shn_MM",
         "si_LK",
         "sid_ET",
         "sk_SK",
@@ -5467,6 +5474,7 @@ metadata:table(nofallback){
         "vai_Vaii",
         "vai_Vaii_LR",
         "ve_ZA",
+        "vec_IT",
         "vi_VN",
         "vo_001",
         "vun_TZ",

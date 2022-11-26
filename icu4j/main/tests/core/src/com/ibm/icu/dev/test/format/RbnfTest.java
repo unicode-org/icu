@@ -1839,4 +1839,14 @@ public class RbnfTest extends TestFmwk {
         assertEquals("infinity", rbnf.format(Double.POSITIVE_INFINITY));
         assertEquals("not a number", rbnf.format(Double.NaN));
     }
+
+    @Test
+    public void TestNumberingSystem() {
+        RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(ULocale.US, RuleBasedNumberFormat.NUMBERING_SYSTEM);
+
+        assertEquals("Wrong result with default rule set", "123", rbnf.format(123));
+
+        rbnf.setDefaultRuleSet("%ethiopic");
+        assertEquals("Wrong result with Ethiopic rule set", "፻፳፫", rbnf.format(123));
+    }
 }

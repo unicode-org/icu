@@ -16,6 +16,7 @@
 #include "cintltst.h"
 #include "cmemory.h"
 
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -60,7 +61,7 @@ static int32_t preflight(const UChar *src, int32_t length, UConverter *cnv)
     do {
         dest = buffer;
         status = U_ZERO_ERROR;
-        ucnv_fromUnicode(cnv, &dest, destLimit, &src, srcLimit, 0, TRUE, &status);
+        ucnv_fromUnicode(cnv, &dest, destLimit, &src, srcLimit, 0, true, &status);
         result += (int32_t) (dest - buffer);
     } while (status == U_BUFFER_OVERFLOW_ERROR);
 
@@ -76,7 +77,7 @@ static char *extractBytes(const UChar *src, int32_t length, const char *codepage
     char *bytes = NEW_ARRAY(char, byteCount + 1);
     char *dest = bytes, *destLimit = bytes + byteCount + 1;
 
-    ucnv_fromUnicode(cnv, &dest, destLimit, &src, srcLimit, 0, TRUE, &status);
+    ucnv_fromUnicode(cnv, &dest, destLimit, &src, srcLimit, 0, true, &status);
     ucnv_close(cnv);
 
     *byteLength = byteCount;
@@ -146,7 +147,7 @@ static void TestUTF8(void)
 
     dLength = ucsdet_getUChars(match, detected, sLength, &status);
 
-    if (u_strCompare(detected, dLength, s, sLength, FALSE) != 0) {
+    if (u_strCompare(detected, dLength, s, sLength, false) != 0) {
         log_err("Round-trip test failed!\n");
     }
 
@@ -293,10 +294,10 @@ static void TestInputFilter(void)
     sLength = u_unescape(ss, s, sizeof(ss));
     bytes = extractBytes(s, sLength, "ISO-8859-1", &byteLength);
 
-    ucsdet_enableInputFilter(csd, TRUE);
+    ucsdet_enableInputFilter(csd, true);
 
     if (!ucsdet_isInputFilterEnabled(csd)) {
-        log_err("ucsdet_enableInputFilter(csd, TRUE) did not enable input filter!\n");
+        log_err("ucsdet_enableInputFilter(csd, true) did not enable input filter!\n");
     }
 
 
@@ -321,7 +322,7 @@ static void TestInputFilter(void)
     }
 
 turn_off:
-    ucsdet_enableInputFilter(csd, FALSE);
+    ucsdet_enableInputFilter(csd, false);
     ucsdet_setText(csd, bytes, byteLength, &status);
     match = ucsdet_detect(csd, &status);
 

@@ -514,7 +514,6 @@ static const char * const gSubTypes[] = {
     "grain",
     "gram",
     "kilogram",
-    "metric-ton",
     "microgram",
     "milligram",
     "ounce",
@@ -523,6 +522,7 @@ static const char * const gSubTypes[] = {
     "solar-mass",
     "stone",
     "ton",
+    "tonne",
     "",
     "gigawatt",
     "horsepower",
@@ -1543,74 +1543,82 @@ MeasureUnit MeasureUnit::getKilogram() {
 }
 
 MeasureUnit *MeasureUnit::createMetricTon(UErrorCode &status) {
-    return MeasureUnit::create(15, 6, status);
-}
-
-MeasureUnit MeasureUnit::getMetricTon() {
-    return MeasureUnit(15, 6);
-}
-
-MeasureUnit *MeasureUnit::createMicrogram(UErrorCode &status) {
-    return MeasureUnit::create(15, 7, status);
-}
-
-MeasureUnit MeasureUnit::getMicrogram() {
-    return MeasureUnit(15, 7);
-}
-
-MeasureUnit *MeasureUnit::createMilligram(UErrorCode &status) {
-    return MeasureUnit::create(15, 8, status);
-}
-
-MeasureUnit MeasureUnit::getMilligram() {
-    return MeasureUnit(15, 8);
-}
-
-MeasureUnit *MeasureUnit::createOunce(UErrorCode &status) {
-    return MeasureUnit::create(15, 9, status);
-}
-
-MeasureUnit MeasureUnit::getOunce() {
-    return MeasureUnit(15, 9);
-}
-
-MeasureUnit *MeasureUnit::createOunceTroy(UErrorCode &status) {
-    return MeasureUnit::create(15, 10, status);
-}
-
-MeasureUnit MeasureUnit::getOunceTroy() {
-    return MeasureUnit(15, 10);
-}
-
-MeasureUnit *MeasureUnit::createPound(UErrorCode &status) {
-    return MeasureUnit::create(15, 11, status);
-}
-
-MeasureUnit MeasureUnit::getPound() {
-    return MeasureUnit(15, 11);
-}
-
-MeasureUnit *MeasureUnit::createSolarMass(UErrorCode &status) {
-    return MeasureUnit::create(15, 12, status);
-}
-
-MeasureUnit MeasureUnit::getSolarMass() {
-    return MeasureUnit(15, 12);
-}
-
-MeasureUnit *MeasureUnit::createStone(UErrorCode &status) {
-    return MeasureUnit::create(15, 13, status);
-}
-
-MeasureUnit MeasureUnit::getStone() {
-    return MeasureUnit(15, 13);
-}
-
-MeasureUnit *MeasureUnit::createTon(UErrorCode &status) {
     return MeasureUnit::create(15, 14, status);
 }
 
+MeasureUnit MeasureUnit::getMetricTon() {
+    return MeasureUnit(15, 14);
+}
+
+MeasureUnit *MeasureUnit::createMicrogram(UErrorCode &status) {
+    return MeasureUnit::create(15, 6, status);
+}
+
+MeasureUnit MeasureUnit::getMicrogram() {
+    return MeasureUnit(15, 6);
+}
+
+MeasureUnit *MeasureUnit::createMilligram(UErrorCode &status) {
+    return MeasureUnit::create(15, 7, status);
+}
+
+MeasureUnit MeasureUnit::getMilligram() {
+    return MeasureUnit(15, 7);
+}
+
+MeasureUnit *MeasureUnit::createOunce(UErrorCode &status) {
+    return MeasureUnit::create(15, 8, status);
+}
+
+MeasureUnit MeasureUnit::getOunce() {
+    return MeasureUnit(15, 8);
+}
+
+MeasureUnit *MeasureUnit::createOunceTroy(UErrorCode &status) {
+    return MeasureUnit::create(15, 9, status);
+}
+
+MeasureUnit MeasureUnit::getOunceTroy() {
+    return MeasureUnit(15, 9);
+}
+
+MeasureUnit *MeasureUnit::createPound(UErrorCode &status) {
+    return MeasureUnit::create(15, 10, status);
+}
+
+MeasureUnit MeasureUnit::getPound() {
+    return MeasureUnit(15, 10);
+}
+
+MeasureUnit *MeasureUnit::createSolarMass(UErrorCode &status) {
+    return MeasureUnit::create(15, 11, status);
+}
+
+MeasureUnit MeasureUnit::getSolarMass() {
+    return MeasureUnit(15, 11);
+}
+
+MeasureUnit *MeasureUnit::createStone(UErrorCode &status) {
+    return MeasureUnit::create(15, 12, status);
+}
+
+MeasureUnit MeasureUnit::getStone() {
+    return MeasureUnit(15, 12);
+}
+
+MeasureUnit *MeasureUnit::createTon(UErrorCode &status) {
+    return MeasureUnit::create(15, 13, status);
+}
+
 MeasureUnit MeasureUnit::getTon() {
+    return MeasureUnit(15, 13);
+}
+
+MeasureUnit *MeasureUnit::createTonne(UErrorCode &status) {
+    return MeasureUnit::create(15, 14, status);
+}
+
+MeasureUnit MeasureUnit::getTonne() {
     return MeasureUnit(15, 14);
 }
 

@@ -20,6 +20,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <stdbool.h>
+
 #include "unicode/uloc.h"
 #include "unicode/udat.h"
 #include "unicode/ucal.h"
@@ -169,7 +171,7 @@ void tryPat994(UDateFormat* format, const char* pattern, const char* s, UDate ex
     pat=(UChar*)malloc(sizeof(UChar) * (strlen(pattern) + 1) );
     u_uastrcpy(pat, pattern);
     log_verbose("Pattern : %s ;  String : %s\n", austrdup(pat), austrdup(str));
-    udat_applyPattern(format, FALSE, pat, u_strlen(pat));
+    udat_applyPattern(format, false, pat, u_strlen(pat));
     pos=0;
     date = udat_parse(format, str, u_strlen(str), &pos, &status);
     if(U_FAILURE(status) || date == null) {
@@ -248,11 +250,11 @@ void TestCzechMonths459()
         return;
     }
     lneed=0;
-    lneed=udat_toPattern(fmt, TRUE, NULL, lneed, &status);
+    lneed=udat_toPattern(fmt, true, NULL, lneed, &status);
     if(status==U_BUFFER_OVERFLOW_ERROR){
         status=U_ZERO_ERROR;
         pattern=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-        udat_toPattern(fmt, TRUE, pattern, lneed+1, &status);
+        udat_toPattern(fmt, true, pattern, lneed+1, &status);
     }
     if(U_FAILURE(status)){ log_err("Error in extracting the pattern\n"); }
     tzID=(UChar*)malloc(sizeof(UChar) * 4);
@@ -363,8 +365,8 @@ void TestBooleanAttributes(void)
 {
     UDateFormat *en;
     UErrorCode status=U_ZERO_ERROR;
-    UBool initialState = TRUE;
-    UBool switchedState = FALSE;
+    UBool initialState = true;
+    UBool switchedState = false;
         
     log_verbose("\ncreating a date format with english locale\n");
     en = udat_open(UDAT_FULL, UDAT_DEFAULT, "en_US", NULL, 0, NULL, 0, &status);
@@ -376,7 +378,7 @@ void TestBooleanAttributes(void)
     
     
     initialState = udat_getBooleanAttribute(en, UDAT_PARSE_ALLOW_NUMERIC, &status);
-    if(initialState != TRUE) switchedState = TRUE;  // if it wasn't the default of TRUE, then flip what we expect
+    if(initialState != true) switchedState = true;  // if it wasn't the default of true, then flip what we expect
 
     udat_setBooleanAttribute(en, UDAT_PARSE_ALLOW_NUMERIC, switchedState, &status);
     if(switchedState != udat_getBooleanAttribute(en, UDAT_PARSE_ALLOW_NUMERIC, &status)) {

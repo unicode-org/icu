@@ -19,8 +19,17 @@
 */
 
 #include <stdio.h>
-#include <inttypes.h>
 #include <time.h>
+
+// The C99 standard suggested that C++ implementations not define PRId64 etc. constants
+// unless this macro is defined.
+// See the Notes at https://en.cppreference.com/w/cpp/types/integer .
+// Similar to defining __STDC_LIMIT_MACROS in unicode/ptypes.h .
+#ifndef __STDC_FORMAT_MACROS
+#   define __STDC_FORMAT_MACROS
+#endif
+#include <cinttypes>
+
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "unicode/ucptrie.h"
@@ -260,7 +269,7 @@ usrc_writeUTrie2Struct(FILE *f,
         "    0x%lx,\n"          /* errorValue */
         "    0x%lx,\n"          /* highStart */
         "    0x%lx,\n"          /* highValueIndex */
-        "    NULL, 0, FALSE, FALSE, 0, NULL\n",
+        "    NULL, 0, false, false, 0, NULL\n",
         (long)pTrie->indexLength, (long)pTrie->dataLength,
         (short)pTrie->index2NullOffset, (short)pTrie->dataNullOffset,
         (long)pTrie->initialValue, (long)pTrie->errorValue,

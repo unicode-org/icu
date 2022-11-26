@@ -9,10 +9,10 @@ en_CA{
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
-                "EEEE, MMMM d, r(U)",
-                "MMMM d, r(U)",
+                "EEEE, MMMM d, r (U)",
+                "MMMM d, r (U)",
                 "MMM d, r",
-                "r-MM-dd",
+                "M/d/r",
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
@@ -58,16 +58,43 @@ en_CA{
                     y{"y-MM-dd – y-MM-dd"}
                 }
             }
+            monthNames{
+                format{
+                    wide{
+                        "first month",
+                        "second month",
+                        "third month",
+                        "fourth month",
+                        "fifth month",
+                        "sixth month",
+                        "seventh month",
+                        "eighth month",
+                        "ninth month",
+                        "tenth month",
+                        "eleventh month",
+                        "twelfth month",
+                    }
+                }
+            }
         }
         generic{
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, MMMM d, y G",
+                "MMMM d, y G",
+                "MMM d, y G",
+                "M/d/y GGGGG",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
             availableFormats{
-                EBhm{"E, h:mm B"}
-                EBhms{"E, h:mm:ss B"}
-                EHm{"E, HH:mm"}
-                EHms{"E, HH:mm:ss"}
                 Ed{"E d"}
-                Ehm{"E, h:mm a"}
-                Ehms{"E, h:mm:ss a"}
             }
             intervalFormats{
                 Bh{
@@ -201,7 +228,7 @@ en_CA{
                 "EEEE, MMMM d, y",
                 "MMMM d, y",
                 "MMM d, y",
-                "y-MM-dd",
+                "M/d/yy",
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
@@ -209,15 +236,8 @@ en_CA{
                 "{1}, {0}",
             }
             availableFormats{
-                EBhm{"E, h:mm B"}
-                EBhms{"E, h:mm:ss B"}
                 Ed{"E d"}
-                MEd{"E, MM-dd"}
-                MMdd{"MM-dd"}
-                Md{"MM-dd"}
-                yM{"MM/y"}
-                yMEd{"E, y-MM-dd"}
-                yMd{"y-MM-dd"}
+                MMdd{"MM/dd"}
             }
             dayPeriod{
                 format{
@@ -227,6 +247,7 @@ en_CA{
                         midnight{"mid"}
                         morning1{"mor"}
                         night1{"night"}
+                        noon{"n"}
                     }
                 }
                 stand-alone{
@@ -240,12 +261,23 @@ en_CA{
                         evening1{"eve"}
                         midnight{"mid"}
                         morning1{"mor"}
+                        night1{"night"}
                         pm{"pm"}
                     }
                     wide{
                         am{"a.m."}
                         pm{"p.m."}
                     }
+                }
+            }
+            eras{
+                wide{
+                    "before Christ",
+                    "Anno Domini",
+                }
+                wide%variant{
+                    "before Common Era",
+                    "Common Era",
                 }
             }
             intervalFormats{
@@ -263,15 +295,15 @@ en_CA{
                     y{"y–y G"}
                 }
                 GyM{
-                    G{"M/y GGGGG–M/y GGGGG"}
-                    M{"M/y–M/y GGGGG"}
-                    y{"M/y–M/y GGGGG"}
+                    G{"M/y G–M/y G"}
+                    M{"M/y–M/y G"}
+                    y{"M/y–M/y G"}
                 }
                 GyMEd{
-                    G{"E, M/d/y GGGGG–E, M/d/y GGGGG"}
-                    M{"E, M/d/y–E, M/d/y GGGGG"}
-                    d{"E, M/d/y–E, M/d/y GGGGG"}
-                    y{"E, M/d/y–E, M/d/y GGGGG"}
+                    G{"E, M/d/y G–E, M/d/y G"}
+                    M{"E, M/d/y–E, M/d/y G"}
+                    d{"E, M/d/y–E, M/d/y G"}
+                    y{"E, M/d/y–E, M/d/y G"}
                 }
                 GyMMM{
                     G{"MMM y G–MMM y G"}
@@ -291,10 +323,10 @@ en_CA{
                     y{"MMM d, y–MMM d, y G"}
                 }
                 GyMd{
-                    G{"M/d/y GGGGG–M/d/y GGGGG"}
-                    M{"M/d/y–M/d/y GGGGG"}
-                    d{"M/d/y–M/d/y GGGGG"}
-                    y{"M/d/y–M/d/y GGGGG"}
+                    G{"M/d/y G–M/d/y G"}
+                    M{"M/d/y–M/d/y G"}
+                    d{"M/d/y–M/d/y G"}
+                    y{"M/d/y–M/d/y G"}
                 }
                 H{
                     H{"HH–HH"}
@@ -390,40 +422,6 @@ en_CA{
                     y{"M/d/y–M/d/y"}
                 }
             }
-            monthNames{
-                format{
-                    abbreviated{
-                        "Jan",
-                        "Feb",
-                        "Mar",
-                        "Apr",
-                        "May",
-                        "Jun",
-                        "Jul",
-                        "Aug",
-                        "Sept",
-                        "Oct",
-                        "Nov",
-                        "Dec",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "Jan",
-                        "Feb",
-                        "Mar",
-                        "Apr",
-                        "May",
-                        "Jun",
-                        "Jul",
-                        "Aug",
-                        "Sept",
-                        "Oct",
-                        "Nov",
-                        "Dec",
-                    }
-                }
-            }
         }
         islamic{
             availableFormats{
@@ -434,6 +432,8 @@ en_CA{
     characterLabel{
         downwards_arrows{"downward arrow"}
         downwards_upwards_arrows{"downward upward arrow"}
+        food_drink{"food and drink"}
+        format_whitespace{"format and whitespace"}
         leftwards_arrows{"leftward arrow"}
         leftwards_rightwards_arrows{"leftward rightward arrow"}
         letterlike_symbols{"letter-like symbol"}
@@ -461,9 +461,11 @@ en_CA{
         fri-narrow{
             relativeTime{
                 future{
+                    one{"in {0} F"}
                     other{"in {0} F’s"}
                 }
                 past{
+                    one{"{0} F ago"}
                     other{"{0} F’s ago"}
                 }
             }
@@ -538,9 +540,11 @@ en_CA{
         mon-narrow{
             relativeTime{
                 future{
+                    one{"in {0} M"}
                     other{"in {0} M’s"}
                 }
                 past{
+                    one{"{0} M ago"}
                     other{"{0} M’s ago"}
                 }
             }
@@ -625,9 +629,11 @@ en_CA{
         sat-narrow{
             relativeTime{
                 future{
+                    one{"in {0} Sa"}
                     other{"in {0} Sa’s"}
                 }
                 past{
+                    one{"{0} Sa ago"}
                     other{"{0} Sa’s ago"}
                 }
             }
@@ -677,9 +683,11 @@ en_CA{
         sun-narrow{
             relativeTime{
                 future{
+                    one{"in {0} Su"}
                     other{"in {0} Su’s"}
                 }
                 past{
+                    one{"{0} Su ago"}
                     other{"{0} Su’s ago"}
                 }
             }
@@ -704,9 +712,11 @@ en_CA{
         thu-narrow{
             relativeTime{
                 future{
+                    one{"in {0} Th"}
                     other{"in {0} Th’s"}
                 }
                 past{
+                    one{"{0} Th ago"}
                     other{"{0} Th’s ago"}
                 }
             }
@@ -731,9 +741,11 @@ en_CA{
         tue-narrow{
             relativeTime{
                 future{
+                    one{"in {0} Tu"}
                     other{"in {0} Tu’s"}
                 }
                 past{
+                    one{"{0} Tu ago"}
                     other{"{0} Tu’s ago"}
                 }
             }
@@ -758,9 +770,11 @@ en_CA{
         wed-narrow{
             relativeTime{
                 future{
+                    one{"in {0} W"}
                     other{"in {0} W’s"}
                 }
                 past{
+                    one{"{0} W ago"}
                     other{"{0} W’s ago"}
                 }
             }
@@ -888,9 +902,5 @@ en_CA{
             2{"{0} and {1}"}
             end{"{0} and {1}"}
         }
-    }
-    measurementSystemNames{
-        UK{"U.K."}
-        US{"U.S."}
     }
 }

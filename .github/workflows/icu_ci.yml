@@ -30,8 +30,8 @@ jobs:
            # Regex note: (?! ... ) is a negative lookahead. Succeed if the pattern is not present. 
           set +o pipefail && make doc 2>&1 | tee doxygen.log && ( ! grep -P 'warning:(?! .* file .?Doxyfile)' doxygen.log )
 
-  # Java7 ICU4J build and unit test
-  java7-icu4j-build-and-test:
+  # Java8 ICU4J build and unit test
+  java8-icu4j-build-and-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
@@ -40,30 +40,10 @@ jobs:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v3
         with:
+          distribution: 'temurin'
           java-version: '8'
-      - name: Cache for Java 7 tarball
-        id: cache-java7
-        uses: actions/cache@v2
-        with:
-          path: java7-tarball
-          key: ${{ runner.os }}-java7-tarball
-      - name: Download Java 7
-        if: steps.cache-java7.outputs.cache-hit != 'true'
-        run: |
-          mkdir -p java7-tarball
-          download_url="https://download.java.net/openjdk/jdk7u75/ri/openjdk-7u75-b13-linux-x64-18_dec_2014.tar.gz"
-          wget -O java7-tarball/java_package.tar.gz $download_url
-          pushd java7-tarball
-          gunzip java_package.tar.gz
-          tar xvf java_package.tar
-          popd
-      - name: Configure Ant build to use Java 7 JRE
-        run: |
-          echo "java7.bootclasspath" > $RUNNER_TEMP/draft
-          ls java7-tarball/java-se-7u75-ri/jre/lib/*.jar|paste -sd ":" - >> $RUNNER_TEMP/draft
-          paste -sd "=" < $RUNNER_TEMP/draft >  icu4j/build-local.properties
       - name: ICU4J
         run: |
           cd icu4j;
@@ -86,8 +66,9 @@ jobs:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v3
         with:
+          distribution: 'temurin'
           java-version: '11'
       - name: ICU4J
         run: |
@@ -110,8 +91,9 @@ jobs:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v3
         with:
+          distribution: 'temurin'
           java-version: '16'
       - name: ICU4J
         run: |
@@ -134,8 +116,9 @@ jobs:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v3
         with:
+          distribution: 'temurin'
           java-version: '11'
       - name: Config LSTM and Rebuild data jar
         run: |

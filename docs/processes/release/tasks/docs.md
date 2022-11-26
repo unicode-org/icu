@@ -311,7 +311,7 @@ and make sure ICU4J adequately covers the JDK API for the classes we replicate.
 
 ---
 
-## Build API documentations
+## Build API documentation
 
 ### **ICU4C**
 
@@ -329,8 +329,8 @@ javadoc files. Create icu4c-X_X_X-docs.zip
 3.  The generated API docs are in <path>/icu4c/source/doc/html/<br>
     `cd <path>/icu4c/source/doc/html/`
 4.  Create a zip file, e.g.,<br>
-    `tar cvfz /tmp/icu4c641.tar.gz * # '641' needs to be replaced by the respective release label.`
-5.  ~~Upload this zip file to the GitHub release page. For the live API docs, see below.~~
+    `tar cvfz /tmp/icu4c72rc.tar.gz * # Note: label the file apropriately for the release.
+
 
 #### Create a PR for ICU4C docs using the docs zip file
 
@@ -340,25 +340,29 @@ javadoc files. Create icu4c-X_X_X-docs.zip
 
     b. Create and switch to a feature branch based of the latest `main`.  Ex: `git checkout -b ICU-<TICKET-NUMBER>`.
 
-    c. Copy the zip file into your local copy of icu-docs into `apidoc/released/icu4c`
-    (or `apidoc/dev/icu4c` if not a release)
+    c. Go to the directory for the version of interest, either
+       `apidoc/dev/icu4c` (release candicate) or `apidoc/released/icu4c`
+       (general release.)
 
-    d. Unzip the file, replacing all documentation. Ex: `tar xvfz /tmp/icu4c641.tar.gz`
+    d. Be sure that you are in the right directory. Then, remove all the files
+        in this directory, e.g., `rm -rf *`. (Remember "git restore" is a good friend!)
+     
+    e. Unzip the tar file from above, replacing all documentation. Ex: `tar xvfz /tmp/icu4c72rc.tar.gz`
 
-    e. Remove the zip file
+    e. Remove the zip file if it's in the folder.
 
-    f. `git add .`
+    f. `git add .`.  Note that this may remove some old files. That's correct behavior.
 
-    g. `git commit -m "ICU-<TICKET-NUMBER> Update ICU4C API reference docs for
+    h. `git commit -m "ICU-<TICKET-NUMBER> Update ICU4C API reference docs for
     XX.Y"`<br>
     Example: [ICU-21546 Update ICU4C API reference docs for 69.1](https://github.com/unicode-org/icu-docs/pull/25)
 
-    h. `git push origin ICU-<TICKET-NUMBER>`
+    i. `git push origin ICU-<TICKET-NUMBER>`
 
-    i. Create Pull Request from your personal github fork of icu-docs from your newly-pushed branch `ICU-<TICKET-NUMBER>` with a destination of
+    j. Create Pull Request from your personal github fork of icu-docs from your newly-pushed branch `ICU-<TICKET-NUMBER>` with a destination of
     the `unicode-org/icu-docs` repo's `main` branch
 
-    j. Request review
+    k. Request a review and submit the PR when approved.
 
 Note: This is also referenced below [Upload API documentations](docs.md#upload-api-documentations) for how to make the API docs public.
 

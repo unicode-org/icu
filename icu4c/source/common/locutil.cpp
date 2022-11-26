@@ -41,7 +41,7 @@ static UBool U_CALLCONV service_cleanup(void) {
         delete LocaleUtility_cache;
         LocaleUtility_cache = NULL;
     }
-    return TRUE;
+    return true;
 }
 
 

@@ -50,9 +50,9 @@ class ICUServiceTest : public IntlTest
   void confirmIdentical(const UnicodeString& message, const UObject* lhs, const UObject* rhs);
   void confirmIdentical(const UnicodeString& message, int32_t lhs, int32_t rhs);
 
-  void msgstr(const UnicodeString& message, UObject* obj, UBool err = TRUE);
+  void msgstr(const UnicodeString& message, UObject* obj, UBool err = true);
   void logstr(const UnicodeString& message, UObject* obj) {
-        msgstr(message, obj, FALSE);
+        msgstr(message, obj, false);
   }
 };
 

@@ -2072,14 +2072,14 @@ static double StrToD(const char* str, int flags, double empty_string_value,
                      uc16 separator = StringToDoubleConverter::kNoSeparator) {
   StringToDoubleConverter converter(flags, empty_string_value, Double::NaN(),
                                     NULL, NULL, separator);
-  double result = converter.StringToDouble(str, strlen(str),
+  int len = static_cast<int>(strlen(str));
+  double result = converter.StringToDouble(str, len,
                                            processed_characters_count);
   *processed_all =
       ((strlen(str) == static_cast<unsigned>(*processed_characters_count)));
 
   uc16 buffer16[256];
   DOUBLE_CONVERSION_ASSERT(strlen(str) < DOUBLE_CONVERSION_ARRAY_SIZE(buffer16));
-  int len = strlen(str);
   for (int i = 0; i < len; i++) {
     buffer16[i] = str[i];
   }
@@ -4186,25 +4186,25 @@ static float StrToF16(const uc16* str16, int length, int flags,
                       bool* processed_all) {
   StringToDoubleConverter converter(flags, empty_string_value, Double::NaN(),
                                     NULL, NULL);
-  double result =
+  float result =
       converter.StringToFloat(str16, length, processed_characters_count);
   *processed_all = (length == *processed_characters_count);
   return result;
 }
 
 
-static double StrToF(const char* str, int flags, double empty_string_value,
-                     int* processed_characters_count, bool* processed_all) {
+static float StrToF(const char* str, int flags, double empty_string_value,
+                    int* processed_characters_count, bool* processed_all) {
   StringToDoubleConverter converter(flags, empty_string_value, Single::NaN(),
                                     NULL, NULL);
-  float result = converter.StringToFloat(str, strlen(str),
+  int len = static_cast<int>(strlen(str));
+  float result = converter.StringToFloat(str, len,
                                          processed_characters_count);
   *processed_all =
       ((strlen(str) == static_cast<unsigned>(*processed_characters_count)));
 
   uc16 buffer16[256];
   DOUBLE_CONVERSION_ASSERT(strlen(str) < DOUBLE_CONVERSION_ARRAY_SIZE(buffer16));
-  int len = strlen(str);
   for (int i = 0; i < len; i++) {
     buffer16[i] = str[i];
   }

@@ -157,21 +157,6 @@ private:
      * @internal
      */
     virtual int32_t handleGetLimit(UCalendarDateFields field, ELimitType limitType) const override;
-        /**
-     * Return the Julian day number of day before the first day of the
-     * given month in the given extended year.  Subclasses should override
-     * this method to implement their calendar system.
-     * @param eyear the extended year
-     * @param month the zero-based month, or 0 if useMonth is false
-     * @param useMonth if false, compute the day before the first day of
-     * the given year, otherwise, compute the day before the first day of
-     * the given month
-     * @param return the Julian day number of the day before the first
-     * day of the given month and year
-     * @internal
-     */
-    virtual int32_t handleComputeMonthStart(int32_t eyear, int32_t month,
-                                            UBool useMonth) const override;
 
     /**
      * Returns true because the Buddhist Calendar does have a default century

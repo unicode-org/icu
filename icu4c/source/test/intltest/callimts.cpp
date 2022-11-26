@@ -81,13 +81,13 @@ CalendarLimitTest::test(UDate millis, icu::Calendar* cal, icu::DateFormat* fmt)
 //|double
 //|CalendarLimitTest::nextDouble(double a)
 //|{
-//|    return uprv_nextDouble(a, TRUE);
+//|    return uprv_nextDouble(a, true);
 //|}
 //|
 //|double
 //|CalendarLimitTest::previousDouble(double a)
 //|{
-//|    return uprv_nextDouble(a, FALSE);
+//|    return uprv_nextDouble(a, false);
 //|}
 
 UBool
@@ -101,7 +101,7 @@ CalendarLimitTest::TestCalendarExtremeLimit()
 {
     UErrorCode status = U_ZERO_ERROR;
     Calendar *cal = Calendar::createInstance(status);
-    if (failure(status, "Calendar::createInstance", TRUE)) return;
+    if (failure(status, "Calendar::createInstance", true)) return;
     cal->adoptTimeZone(TimeZone::createTimeZone("GMT"));
     DateFormat *fmt = DateFormat::createDateTimeInstance();
     if(!fmt || !cal) {
@@ -156,21 +156,21 @@ const UDate DEFAULT_START = 944006400000.0; // 1999-12-01T00:00Z
 const int32_t DEFAULT_END = -120; // Default for non-quick is run 2 minutes
 
 TestCase TestCases[] = {
-        {"gregorian",       FALSE,      DEFAULT_START, DEFAULT_END},
-        {"japanese",        FALSE,      596937600000.0, DEFAULT_END}, // 1988-12-01T00:00Z, Showa 63
-        {"buddhist",        FALSE,      DEFAULT_START, DEFAULT_END},
-        {"roc",             FALSE,      DEFAULT_START, DEFAULT_END},
-        {"persian",         FALSE,      DEFAULT_START, DEFAULT_END},
-        {"islamic-civil",   FALSE,      DEFAULT_START, DEFAULT_END},
-        {"islamic",         FALSE,      DEFAULT_START, 800000}, // Approx. 2250 years from now, after which 
+        {"gregorian",       false,      DEFAULT_START, DEFAULT_END},
+        {"japanese",        false,      596937600000.0, DEFAULT_END}, // 1988-12-01T00:00Z, Showa 63
+        {"buddhist",        false,      DEFAULT_START, DEFAULT_END},
+        {"roc",             false,      DEFAULT_START, DEFAULT_END},
+        {"persian",         false,      DEFAULT_START, DEFAULT_END},
+        {"islamic-civil",   false,      DEFAULT_START, DEFAULT_END},
+        {"islamic",         false,      DEFAULT_START, 800000}, // Approx. 2250 years from now, after which 
                                                                 // some rounding errors occur in Islamic calendar
-        {"hebrew",          TRUE,       DEFAULT_START, DEFAULT_END},
-        {"chinese",         TRUE,       DEFAULT_START, DEFAULT_END},
-        {"dangi",           TRUE,       DEFAULT_START, DEFAULT_END},
-        {"indian",          FALSE,      DEFAULT_START, DEFAULT_END},
-        {"coptic",          FALSE,      DEFAULT_START, DEFAULT_END},
-        {"ethiopic",        FALSE,      DEFAULT_START, DEFAULT_END},
-        {"ethiopic-amete-alem", FALSE,  DEFAULT_START, DEFAULT_END}
+        {"hebrew",          true,       DEFAULT_START, DEFAULT_END},
+        {"chinese",         true,       DEFAULT_START, DEFAULT_END},
+        {"dangi",           true,       DEFAULT_START, DEFAULT_END},
+        {"indian",          false,      DEFAULT_START, DEFAULT_END},
+        {"coptic",          false,      DEFAULT_START, DEFAULT_END},
+        {"ethiopic",        false,      DEFAULT_START, DEFAULT_END},
+        {"ethiopic-amete-alem", false,  DEFAULT_START, DEFAULT_END}
 };
     
 struct {
@@ -178,10 +178,10 @@ struct {
     UBool next (int32_t &rIndex) {
         Mutex lock;
         if (fIndex >= UPRV_LENGTHOF(TestCases)) {
-            return FALSE;
+            return false;
         }
         rIndex = fIndex++;
-        return TRUE;
+        return true;
     }
     void reset() {
         fIndex = 0;
@@ -212,7 +212,7 @@ void CalendarLimitTest::TestLimitsThread(int32_t threadNum) {
         uprv_strcpy(buf, "root@calendar=");
         strcat(buf, testCase.type);
         cal.adoptInstead(Calendar::createInstance(buf, status));
-        if (failure(status, "Calendar::createInstance", TRUE)) {
+        if (failure(status, "Calendar::createInstance", true)) {
             continue;
         }
         if (uprv_strcmp(cal->getType(), testCase.type) != 0) {
@@ -473,7 +473,7 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
     UnicodeString buf;
     for (j = 0; fieldsToTest[j] >= 0; ++j) {
         int32_t rangeLow, rangeHigh;
-        UBool fullRangeSeen = TRUE;
+        UBool fullRangeSeen = true;
         UCalendarDateFields f = (UCalendarDateFields)fieldsToTest[j];
 
         buf.remove();
@@ -483,7 +483,7 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
         rangeLow = cal.getMinimum(f);
         rangeHigh = cal.getGreatestMinimum(f);
         if (limits[j][0] != rangeLow || limits[j][1] != rangeHigh) {
-            fullRangeSeen = FALSE;
+            fullRangeSeen = false;
         }
         buf.append((UnicodeString)" minima range=" + rangeLow + ".." + rangeHigh);
         buf.append((UnicodeString)" minima actual=" + limits[j][0] + ".." + limits[j][1]);
@@ -492,7 +492,7 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
         rangeLow = cal.getLeastMaximum(f);
         rangeHigh = cal.getMaximum(f);
         if (limits[j][2] != rangeLow || limits[j][3] != rangeHigh) {
-            fullRangeSeen = FALSE;
+            fullRangeSeen = false;
         }
         buf.append((UnicodeString)" maxima range=" + rangeLow + ".." + rangeHigh);
         buf.append((UnicodeString)" maxima actual=" + limits[j][2] + ".." + limits[j][3]);

@@ -35,10 +35,10 @@ Line::init()
         next = NULL;
         left = NULL;
         right = NULL;
-        isContraction = FALSE;
-        isExpansion = FALSE;
-        isRemoved = FALSE;
-        isReset = FALSE;
+        isContraction = false;
+        isExpansion = false;
+        isRemoved = false;
+        isReset = false;
         expIndex = 0;
         firstCC = 0;
         lastCC = 0;
@@ -126,38 +126,38 @@ Line::operator=(const Line &other) {
 UBool 
 Line::operator==(const Line &other) const {
   if(this == &other) {
-    return TRUE;
+    return true;
   }
   if(len != other.len) {
-    return FALSE;
+    return false;
   }
   if(u_strcmp(name, other.name) != 0) {
-    return FALSE;
+    return false;
   }
-  return TRUE;
+  return true;
 }
 
 UBool 
 Line::equals(const Line &other) const {
   if(this == &other) {
-    return TRUE;
+    return true;
   }
   if(len != other.len) {
-    return FALSE;
+    return false;
   }
   if(u_strcmp(name, other.name) != 0) {
-    return FALSE;
+    return false;
   }
   if(strength != other.strength) {
-    return FALSE;
+    return false;
   }
   if(expLen != other.expLen) {
-    return FALSE;
+    return false;
   }
   if(u_strcmp(expansionString, other.expansionString)) {
-    return FALSE;
+    return false;
   }
-  return TRUE;
+  return true;
 }
 
 UBool
@@ -251,7 +251,7 @@ Line::toBundleString()
   if(isReset) {
     result.append("&");
   } else {
-    result.append(strengthToString(strength, FALSE, FALSE));
+    result.append(strengthToString(strength, false, false));
   }
   UBool quote = needsQuoting->containsSome(name) || needsQuoting->containsSome(NFC);
   if(quote) {
@@ -304,7 +304,7 @@ Line::toHTMLString()
   if(isReset) {
     result.append("&amp;");
   } else {
-    result.append(strengthToString(strength, FALSE, TRUE));
+    result.append(strengthToString(strength, false, true));
   }
   result.append(NFC, NFCLen);
   if(expLen && !isReset) {
@@ -367,7 +367,7 @@ Line::setTo(const UnicodeString &string) {
 
 void 
 Line::setTo(const UChar32 n) {
-  UBool isError = FALSE;
+  UBool isError = false;
   len = 0; // we are setting the line to char, not appending
   U16_APPEND(name, len, 25, n, isError);
   name[len] = 0;
@@ -604,13 +604,13 @@ Line::initFromString(const char *buff, int32_t, UErrorCode &)
   bufIndex++;
 
   if(i > 1) {
-    isContraction = TRUE;
+    isContraction = true;
   } else {
-    isContraction = FALSE;
+    isContraction = false;
   }
 
   if(buff[bufIndex] == ';') {
-    isExpansion = FALSE;
+    isExpansion = false;
     bufIndex += 2;
     expansionString[0] = 0;
     expLen = 0;
@@ -657,7 +657,7 @@ Line::swapCase(UChar *string, int32_t &sLen)
   UChar32 c = 0;
   int32_t i = 0, j = 0;
   UChar buff[256];
-  UBool isError = FALSE;
+  UBool isError = false;
   while(i < sLen) {
     U16_NEXT(string, i, sLen, c);
     if(u_isUUppercase(c)) {

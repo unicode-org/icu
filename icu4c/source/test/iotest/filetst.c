@@ -21,8 +21,9 @@
 #include "unicode/ustring.h"
 #include "unicode/uloc.h"
 
-#include <string.h>
+#include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 
 const char *STANDARD_TEST_FILE = "iotest-c.txt";
 
@@ -1369,39 +1370,39 @@ static void TestFScanset(void) {
     static const UChar abcUChars[] = {0x61,0x62,0x63,0x63,0x64,0x65,0x66,0x67,0};
     static const char abcChars[] = "abccdefg";
 
-    TestFScanSetFormat("%[bc]S", abcUChars, abcChars, TRUE);
-    TestFScanSetFormat("%[cb]S", abcUChars, abcChars, TRUE);
+    TestFScanSetFormat("%[bc]S", abcUChars, abcChars, true);
+    TestFScanSetFormat("%[cb]S", abcUChars, abcChars, true);
 
-    TestFScanSetFormat("%[ab]S", abcUChars, abcChars, TRUE);
-    TestFScanSetFormat("%[ba]S", abcUChars, abcChars, TRUE);
+    TestFScanSetFormat("%[ab]S", abcUChars, abcChars, true);
+    TestFScanSetFormat("%[ba]S", abcUChars, abcChars, true);
 
-    TestFScanSetFormat("%[ab]", abcUChars, abcChars, TRUE);
-    TestFScanSetFormat("%[ba]", abcUChars, abcChars, TRUE);
+    TestFScanSetFormat("%[ab]", abcUChars, abcChars, true);
+    TestFScanSetFormat("%[ba]", abcUChars, abcChars, true);
 
-    TestFScanSetFormat("%[abcdefgh]", abcUChars, abcChars, TRUE);
-    TestFScanSetFormat("%[;hgfedcba]", abcUChars, abcChars, TRUE);
+    TestFScanSetFormat("%[abcdefgh]", abcUChars, abcChars, true);
+    TestFScanSetFormat("%[;hgfedcba]", abcUChars, abcChars, true);
 
-    TestFScanSetFormat("%[^a]", abcUChars, abcChars, TRUE);
-    TestFScanSetFormat("%[^e]", abcUChars, abcChars, TRUE);
-    TestFScanSetFormat("%[^ed]", abcUChars, abcChars, TRUE);
-    TestFScanSetFormat("%[^dc]", abcUChars, abcChars, TRUE);
-    TestFScanSetFormat("%[^e]  ", abcUChars, abcChars, TRUE);
+    TestFScanSetFormat("%[^a]", abcUChars, abcChars, true);
+    TestFScanSetFormat("%[^e]", abcUChars, abcChars, true);
+    TestFScanSetFormat("%[^ed]", abcUChars, abcChars, true);
+    TestFScanSetFormat("%[^dc]", abcUChars, abcChars, true);
+    TestFScanSetFormat("%[^e]  ", abcUChars, abcChars, true);
 
-    TestFScanSetFormat("%1[ab]  ", abcUChars, abcChars, TRUE);
-    TestFScanSetFormat("%2[^f]", abcUChars, abcChars, TRUE);
+    TestFScanSetFormat("%1[ab]  ", abcUChars, abcChars, true);
+    TestFScanSetFormat("%2[^f]", abcUChars, abcChars, true);
 
-    TestFScanSetFormat("%[qrst]", abcUChars, abcChars, TRUE);
+    TestFScanSetFormat("%[qrst]", abcUChars, abcChars, true);
 
     /* Extra long string for testing */
     TestFScanSetFormat("                                                                                                                         %[qrst]",
-        abcUChars, abcChars, TRUE);
+        abcUChars, abcChars, true);
 
-    TestFScanSetFormat("%[a-]", abcUChars, abcChars, TRUE);
+    TestFScanSetFormat("%[a-]", abcUChars, abcChars, true);
 
     /* Bad format */
-    TestFScanSetFormat("%[f-a]", abcUChars, abcChars, FALSE);
-    TestFScanSetFormat("%[c-a]", abcUChars, abcChars, FALSE);
-    TestFScanSetFormat("%[a", abcUChars, abcChars, FALSE);
+    TestFScanSetFormat("%[f-a]", abcUChars, abcChars, false);
+    TestFScanSetFormat("%[c-a]", abcUChars, abcChars, false);
+    TestFScanSetFormat("%[a", abcUChars, abcChars, false);
     /* The following is not deterministic on Windows */
 /*    TestFScanSetFormat("%[a-", abcUChars, abcChars);*/
 

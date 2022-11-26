@@ -115,11 +115,11 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
         char calLoc[256] = "";
         DateTimeStyleSet styleSet;
         UnicodeString pattern;
-        UBool usePattern = FALSE;
+        UBool usePattern = false;
         (void)usePattern;   // Suppress unused warning.
         CalendarFieldsSet fromSet;
         UDate fromDate = 0;
-        UBool useDate = FALSE;
+        UBool useDate = false;
         
         UDate now = Calendar::getNow();
         
@@ -163,7 +163,7 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
         Locale loc(calLoc);
         if(spec.startsWith(kPATTERN)) {
             pattern = UnicodeString(spec,kPATTERN.length());
-            usePattern = TRUE;
+            usePattern = true;
             format = new SimpleDateFormat(pattern, loc, status);
             if(U_FAILURE(status)) {
                 errln("case %d: could not create SimpleDateFormat from pattern: %s", n, u_errorName(status));
@@ -196,11 +196,11 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
         // parse 'date'
         if(date.startsWith(kMILLIS)) {
             UnicodeString millis = UnicodeString(date, kMILLIS.length());
-            useDate = TRUE;
+            useDate = true;
             fromDate = udbg_stod(millis);
         } else if(date.startsWith(kRELATIVE_MILLIS)) {
             UnicodeString millis = UnicodeString(date, kRELATIVE_MILLIS.length());
-            useDate = TRUE;
+            useDate = true;
             fromDate = udbg_stod(millis) + now;
         } else if(date.startsWith(kRELATIVE_ADD)) {
             UnicodeString add = UnicodeString(date, kRELATIVE_ADD.length());  // "add" is a string indicating which fields to add
@@ -208,7 +208,7 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
                 errln("case %d: could not parse date as RELATIVE_ADD calendar fields: %s", n, u_errorName(status));
                 continue;
             }
-            useDate=TRUE;
+            useDate=true;
             cal->clear();
             cal->setTime(now, status);
             for (int q=0; q<UCAL_FIELD_COUNT; q++) {

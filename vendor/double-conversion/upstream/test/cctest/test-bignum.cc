@@ -39,12 +39,14 @@ using namespace double_conversion;
 static const int kBufferSize = 1024;
 
 static void AssignHexString(Bignum* bignum, const char* str) {
-  bignum->AssignHexString(Vector<const char>(str, strlen(str)));
+  int len = static_cast<int>(strlen(str));
+  bignum->AssignHexString(Vector<const char>(str, len));
 }
 
 
 static void AssignDecimalString(Bignum* bignum, const char* str) {
-  bignum->AssignDecimalString(Vector<const char>(str, strlen(str)));
+  int len = static_cast<int>(strlen(str));
+  bignum->AssignDecimalString(Vector<const char>(str, len));
 }
 
 

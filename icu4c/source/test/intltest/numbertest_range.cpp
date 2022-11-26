@@ -987,7 +987,7 @@ void NumberRangeFormatterTest::test21358_SignPosition() {
         u"CHF≈5’000.00",
         u"CHF 5’000.00–5’000’000.00");
 
-    // TODO(CLDR-13044): Move the sign to the inside of the number
+    // TODO(ICU-21420): Move the sign to the inside of the number
     assertFormatRange(
         u"Approximately sign position with currency spacing",
         NumberRangeFormatter::with()

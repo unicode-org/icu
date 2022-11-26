@@ -308,6 +308,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test21232_ParseTimeout();
     void Test10997_FormatCurrency();
     void Test21556_CurrencyAsDecimal();
+    void Test22088_Ethiopic();
 
  private:
     UBool testFormattableAsUFormattable(const char *file, int line, Formattable &f);
@@ -343,10 +344,10 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     }
 
     void expect(NumberFormat& fmt, const Formattable& n,
-                const UnicodeString& exp, UBool rt=TRUE);
+                const UnicodeString& exp, UBool rt=true);
 
     void expect(NumberFormat& fmt, const Formattable& n,
-                const char *exp, UBool rt=TRUE) {
+                const char *exp, UBool rt=true) {
         expect(fmt, n, UnicodeString(exp, ""), rt);
     }
 
@@ -360,12 +361,12 @@ class NumberFormatTest: public CalendarTimeZoneTest {
 
     void expect(NumberFormat* fmt, const Formattable& n,
                 const UnicodeString& exp, UErrorCode errorCode) {
-        expect(fmt, n, exp, TRUE, errorCode);
+        expect(fmt, n, exp, true, errorCode);
     }
 
     void expect(NumberFormat* fmt, const Formattable& n,
                 const char *exp, UErrorCode errorCode) {
-        expect(fmt, n, UnicodeString(exp, ""), TRUE, errorCode);
+        expect(fmt, n, UnicodeString(exp, ""), true, errorCode);
     }
 
     void expectCurrency(NumberFormat& nf, const Locale& locale,
@@ -404,7 +405,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void expect_rbnf(NumberFormat& fmt, const UnicodeString& str, const Formattable& n);
 
     void expect_rbnf(NumberFormat& fmt, const Formattable& n,
-                const UnicodeString& exp, UBool rt=TRUE);
+                const UnicodeString& exp, UBool rt=true);
 
     // internal utility routine
     static UnicodeString& escape(UnicodeString& s);

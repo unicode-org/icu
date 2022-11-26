@@ -42,7 +42,7 @@ public:
 
 private:
 
-    UBool optionv; // TRUE if @v option is given on command line
+    UBool optionv; // true if @v option is given on command line
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -83,7 +83,7 @@ private:
     // main testing functions
     void testAPI(const UChar *src, const UChar *expected, const char *testName, 
              UBool useSTD3ASCIIRules, UErrorCode expectedStatus,
-             UBool doCompare, UBool testUnassigned, TestFunc func, UBool testSTD3ASCIIRules=TRUE);
+             UBool doCompare, UBool testUnassigned, TestFunc func, UBool testSTD3ASCIIRules=true);
 
     void testCompare(const UChar* s1, int32_t s1Len,
                         const UChar* s2, int32_t s2Len,

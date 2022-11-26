@@ -69,7 +69,7 @@ int main(int argc, const char* argv[]){
         return status;
     }
 
-    if(test.run()==FALSE){
+    if(test.run()==false){
 		cout << "run failed!" << endl;
         fprintf(stderr,"FAILED: Tests could not be run please check the arguments.\n");
         return -1;

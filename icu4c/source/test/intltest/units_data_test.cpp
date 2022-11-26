@@ -5,7 +5,9 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "cstring.h"
 #include "measunit_impl.h"
+#include "unicode/locid.h"
 #include "units_data.h"
 
 #include "intltest.h"
@@ -118,8 +120,7 @@ void UnitsDataTest::testGetPreferencesFor() {
         {"Unknown usage US", "length", "foobar", "US", USLenMax, USLenMin},
         {"Unknown usage 001", "length", "foobar", "XX", WorldLenMax, WorldLenMin},
         {"Fallback", "length", "person-height-xyzzy", "DE", "centimeter", "centimeter"},
-        {"Fallback twice", "length", "person-height-xyzzy-foo", "DE", "centimeter",
-         "centimeter"},
+        {"Fallback twice", "length", "person-height-xyzzy-foo", "DE", "centimeter", "centimeter"},
         // Confirming results for some unitPreferencesTest.txt test cases
         {"001 area", "area", "default", "001", "square-kilometer", "square-centimeter"},
         {"GB area", "area", "default", "GB", "square-mile", "square-inch"},
@@ -140,18 +141,20 @@ void UnitsDataTest::testGetPreferencesFor() {
 
     for (const auto &t : testCases) {
         logln(t.name);
-        const UnitPreference *const *prefs;
-        int32_t prefsCount;
-        preferences.getPreferencesFor(t.category, t.usage, t.region, prefs, prefsCount, status);
+        CharString localeID;
+        localeID.append("und-", status); // append undefined language.
+        localeID.append(t.region, status);
+        Locale locale(localeID.data());
+        auto unitPrefs = preferences.getPreferencesFor(t.category, t.usage, locale, status);
         if (status.errIfFailureAndReset("getPreferencesFor(\"%s\", \"%s\", \"%s\", ...", t.category,
                                         t.usage, t.region)) {
             continue;
         }
-        if (prefsCount > 0) {
+        if (unitPrefs.length() > 0) {
             assertEquals(UnicodeString(t.name) + " - max unit", t.expectedBiggest,
-                         prefs[0]->unit.data());
+                         unitPrefs[0]->unit.data());
             assertEquals(UnicodeString(t.name) + " - min unit", t.expectedSmallest,
-                         prefs[prefsCount - 1]->unit.data());
+                         unitPrefs[unitPrefs.length() - 1]->unit.data());
         } else {
             errln(UnicodeString(t.name) + ": failed to find preferences");
         }

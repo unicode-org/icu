@@ -119,7 +119,7 @@ public:
     // Select the currently marked candidate, point after it in the text, and invalidate self
     int32_t   acceptMarked( UText *text );
   
-    // Back up from the current candidate to the next shorter one; return TRUE if that exists
+    // Back up from the current candidate to the next shorter one; return true if that exists
     // and point the text after it
     UBool     backUp( UText *text );
   
@@ -140,7 +140,7 @@ int32_t PossibleWord::candidates( UText *text, DictionaryMatcher *dict, int32_t 
     int32_t start = (int32_t)utext_getNativeIndex(text);
     if (start != offset) {
         offset = start;
-        count = dict->matches(text, rangeEnd-start, UPRV_LENGTHOF(cuLengths), cuLengths, cpLengths, NULL, &prefix);
+        count = dict->matches(text, rangeEnd-start, UPRV_LENGTHOF(cuLengths), cuLengths, cpLengths, nullptr, &prefix);
         // Dictionary leaves text after longest prefix, not longest word. Back up.
         if (count <= 0) {
             utext_setNativeIndex(text, start);
@@ -165,9 +165,9 @@ UBool
 PossibleWord::backUp( UText *text ) {
     if (current > 0) {
         utext_setNativeIndex(text, offset + cuLengths[--current]);
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 /*
@@ -1135,7 +1135,7 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
     UnicodeString inString;
 
     // inputMap[inStringIndex] = corresponding native index from UText inText.
-    // If NULL then mapping is 1:1
+    // If nullptr then mapping is 1:1
     LocalPointer<UVector32>     inputMap;
 
     // if UText has the input string as one contiguous UTF-16 chunk
@@ -1146,7 +1146,7 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
 
         // Input UText is in one contiguous UTF-16 chunk.
         // Use Read-only aliasing UnicodeString.
-        inString.setTo(FALSE,
+        inString.setTo(false,
                        inText->chunkContents + rangeStart - inText->chunkNativeStart,
                        rangeEnd - rangeStart);
     } else {
@@ -1292,9 +1292,9 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
         int32_t count;
         utext_setNativeIndex(&fu, ix);
         count = fDictionary->matches(&fu, maxWordSize, numCodePts,
-                             NULL, lengths.getBuffer(), values.getBuffer(), NULL);
+                             nullptr, lengths.getBuffer(), values.getBuffer(), nullptr);
                              // Note: lengths is filled with code point lengths
-                             //       The NULL parameter is the ignored code unit lengths.
+                             //       The nullptr parameter is the ignored code unit lengths.
 
         // if there are no single character matches found in the dictionary 
         // starting with this character, treat character as a 1-character word 

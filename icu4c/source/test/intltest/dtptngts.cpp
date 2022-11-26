@@ -47,6 +47,7 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
         TESTCASE(11, test_jConsistencyOddLocales);
         TESTCASE(12, testBestPattern);
         TESTCASE(13, testDateTimePatterns);
+        TESTCASE(14, testRegionOverride);
         default: name = ""; break;
     }
 }
@@ -139,7 +140,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
 
     UnicodeString patternResults_de_DE[] = {
         // de_DE                                              // 2 de_DE
-        UnicodeString("1.1999"),                              // 00: yM
+        UnicodeString("01/1999"),                             // 00: yM
         UnicodeString("Jan. 1999"),                           // 01: yMMM
         UnicodeString("13.1.1999"),                           // 02: yMd
         UnicodeString("13. Jan. 1999"),                       // 03: yMMMd
@@ -1109,7 +1110,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAllFieldPatterns(/*char *par*/)
                         // test that resulting pattern has at least one char in mustIncludeOneOf
                         UnicodeString mustIncludeOneOf(testDataPtr->mustIncludeOneOf, -1, US_INV);
                         int32_t patIndx, patLen = pattern.length();
-                        UBool inQuoted = FALSE;
+                        UBool inQuoted = false;
                         for (patIndx = 0; patIndx < patLen; patIndx++) {
                             UChar c = pattern.charAt(patIndx);
                             if (c == 0x27) {
@@ -1255,7 +1256,7 @@ void IntlTestDateTimePatternGeneratorAPI::testSkeletonsWithDayPeriods() {
         int32_t i, len = UPRV_LENGTHOF(patterns);
         for (i = 0; i < len; i++) {
             UnicodeString conflictingPattern;
-            (void)gen->addPattern(UnicodeString(patterns[i]), TRUE, conflictingPattern, status);
+            (void)gen->addPattern(UnicodeString(patterns[i]), true, conflictingPattern, status);
             if (U_FAILURE(status)) {
                 errln("ERROR: addPattern %s fail, status: %s", patterns[i], u_errorName(status));
                 break;
@@ -1650,7 +1651,7 @@ void IntlTestDateTimePatternGeneratorAPI::testDateTimePatterns() {
                   UnicodeString(u"d MMMM y 'à' HH:mm"),
                   UnicodeString(u"d MMM y, HH:mm"),
                   UnicodeString(u"dd/MM/y HH:mm") } },
-        { "ha", { UnicodeString(u"EEEE d MMMM, y HH:mm"), // full != long
+        { "ha", { UnicodeString(u"EEEE d MMMM, y 'da' HH:mm"),
                   UnicodeString(u"d MMMM, y 'da' HH:mm"),
                   UnicodeString(u"d MMM, y, HH:mm"),
                   UnicodeString(u"y-MM-dd, HH:mm") } },
@@ -1755,6 +1756,34 @@ void IntlTestDateTimePatternGeneratorAPI::testDateTimePatterns() {
                 dtFormat4.extract(0, dtFormat4.length(), bGet, 64);
                 errln("ERROR: getDateTimeFormat for en after second mod, style %d, expect \"%s\", get \"%s\"",
                         patStyle, bExpect, bGet);
+            }
+        }
+    }
+}
+
+void IntlTestDateTimePatternGeneratorAPI::testRegionOverride() {
+    const struct TestCase {
+        const char* locale;
+        const UChar* expectedPattern;
+        UDateFormatHourCycle expectedHourCycle;
+    } testCases[] = {
+        { "en_US",           u"h:mm\u202fa", UDAT_HOUR_CYCLE_12 },
+        { "en_GB",           u"HH:mm",       UDAT_HOUR_CYCLE_23 },
+        { "en_US@rg=GBZZZZ", u"HH:mm",       UDAT_HOUR_CYCLE_23 },
+        { "en_US@hours=h23", u"HH:mm",       UDAT_HOUR_CYCLE_23 },
+    };
+
+    for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i++) {
+        UErrorCode err = U_ZERO_ERROR;
+        LocalPointer<DateTimePatternGenerator> dtpg(DateTimePatternGenerator::createInstance(testCases[i].locale, err));
+        
+        if (assertSuccess("Error creating dtpg", err)) {
+            UDateFormatHourCycle actualHourCycle = dtpg->getDefaultHourCycle(err);
+            UnicodeString actualPattern = dtpg->getBestPattern(u"jmm", err);
+            
+            if (assertSuccess("Error using dtpg", err)) {
+                assertEquals("Wrong hour cycle", testCases[i].expectedHourCycle, actualHourCycle);
+                assertEquals("Wrong pattern", testCases[i].expectedPattern, actualPattern);
             }
         }
     }

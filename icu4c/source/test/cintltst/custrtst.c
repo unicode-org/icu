@@ -24,6 +24,7 @@
 #include "cintltst.h"
 #include "cstring.h"
 #include "cmemory.h"
+#include <stdbool.h>
 #include <string.h>
 
 /* get the sign of an integer */
@@ -445,19 +446,19 @@ static void TestStringFunctions()
                 log_err("error: u_strncmpCodePointOrder(2)!=u_memcmpCodePointOrder(2) for string %d and the following one\n", i);
             }
 
-            /* test u_strCompare(TRUE) */
+            /* test u_strCompare(true) */
             len1=u_strlen(strings[i]);
             len2=u_strlen(strings[i+1]);
-            if( u_strCompare(strings[i], -1, strings[i+1], -1, TRUE)>=0 ||
-                u_strCompare(strings[i], -1, strings[i+1], len2, TRUE)>=0 ||
-                u_strCompare(strings[i], len1, strings[i+1], -1, TRUE)>=0 ||
-                u_strCompare(strings[i], len1, strings[i+1], len2, TRUE)>=0
+            if( u_strCompare(strings[i], -1, strings[i+1], -1, true)>=0 ||
+                u_strCompare(strings[i], -1, strings[i+1], len2, true)>=0 ||
+                u_strCompare(strings[i], len1, strings[i+1], -1, true)>=0 ||
+                u_strCompare(strings[i], len1, strings[i+1], len2, true)>=0
             ) {
                 log_err("error: u_strCompare(code point order) fails for string %d and the following one\n", i);
             }
 
-            /* test u_strCompare(FALSE) */
-            r1=u_strCompare(strings[i], -1, strings[i+1], -1, FALSE);
+            /* test u_strCompare(false) */
+            r1=u_strCompare(strings[i], -1, strings[i+1], -1, false);
             r2=u_strcmp(strings[i], strings[i+1]);
             if(_SIGN(r1)!=_SIGN(r2)) {
                 log_err("error: u_strCompare(code unit order)!=u_strcmp() for string %d and the following one\n", i);
@@ -466,10 +467,10 @@ static void TestStringFunctions()
             /* test u_strCompareIter() */
             uiter_setString(&iter1, strings[i], len1);
             uiter_setString(&iter2, strings[i+1], len2);
-            if(u_strCompareIter(&iter1, &iter2, TRUE)>=0) {
+            if(u_strCompareIter(&iter1, &iter2, true)>=0) {
                 log_err("error: u_strCompareIter(code point order) fails for string %d and the following one\n", i);
             }
-            r1=u_strCompareIter(&iter1, &iter2, FALSE);
+            r1=u_strCompareIter(&iter1, &iter2, false);
             if(_SIGN(r1)!=_SIGN(u_strcmp(strings[i], strings[i+1]))) {
                 log_err("error: u_strCompareIter(code unit order)!=u_strcmp() for string %d and the following one\n", i);
             }
@@ -1312,7 +1313,7 @@ compareIterators(UCharIterator *iter1, const char *n1,
         return;
     }
     if(!iter1->hasNext(iter1)) {
-        log_err("%s->hasNext() at the start returns FALSE\n", n1);
+        log_err("%s->hasNext() at the start returns false\n", n1);
         return;
     }
 
@@ -1322,7 +1323,7 @@ compareIterators(UCharIterator *iter1, const char *n1,
         return;
     }
     if(!iter2->hasNext(iter2)) {
-        log_err("%s->hasNext() at the start returns FALSE\n", n2);
+        log_err("%s->hasNext() at the start returns false\n", n2);
         return;
     }
 
@@ -1336,11 +1337,11 @@ compareIterators(UCharIterator *iter1, const char *n1,
     } while(c1>=0);
 
     if(iter1->hasNext(iter1)) {
-        log_err("%s->hasNext() at the end returns TRUE\n", n1);
+        log_err("%s->hasNext() at the end returns true\n", n1);
         return;
     }
     if(iter2->hasNext(iter2)) {
-        log_err("%s->hasNext() at the end returns TRUE\n", n2);
+        log_err("%s->hasNext() at the end returns true\n", n2);
         return;
     }
 
@@ -1377,7 +1378,7 @@ compareIterators(UCharIterator *iter1, const char *n1,
         return;
     }
     if(!iter1->hasPrevious(iter1)) {
-        log_err("%s->hasPrevious() at the end returns FALSE\n", n1);
+        log_err("%s->hasPrevious() at the end returns false\n", n1);
         return;
     }
 
@@ -1387,7 +1388,7 @@ compareIterators(UCharIterator *iter1, const char *n1,
         return;
     }
     if(!iter2->hasPrevious(iter2)) {
-        log_err("%s->hasPrevious() at the end returns FALSE\n", n2);
+        log_err("%s->hasPrevious() at the end returns false\n", n2);
         return;
     }
 
@@ -1401,11 +1402,11 @@ compareIterators(UCharIterator *iter1, const char *n1,
     } while(c1>=0);
 
     if(iter1->hasPrevious(iter1)) {
-        log_err("%s->hasPrevious() at the start returns TRUE\n", n1);
+        log_err("%s->hasPrevious() at the start returns true\n", n1);
         return;
     }
     if(iter2->hasPrevious(iter2)) {
-        log_err("%s->hasPrevious() at the start returns TRUE\n", n2);
+        log_err("%s->hasPrevious() at the start returns true\n", n2);
         return;
     }
 }

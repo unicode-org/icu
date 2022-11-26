@@ -73,6 +73,56 @@ fr_CA{
                         other{"000 T¤"}
                     }
                 }
+                currencyFormat%alphaNextToNumber{
+                    1000{
+                        one{"0 k ¤"}
+                        other{"0 k ¤"}
+                    }
+                    10000{
+                        one{"00 k ¤"}
+                        other{"00 k ¤"}
+                    }
+                    100000{
+                        one{"000 k ¤"}
+                        other{"000 k ¤"}
+                    }
+                    1000000{
+                        one{"0 M ¤"}
+                        other{"0 M ¤"}
+                    }
+                    10000000{
+                        one{"00 M ¤"}
+                        other{"00 M ¤"}
+                    }
+                    100000000{
+                        one{"000 M ¤"}
+                        other{"000 M ¤"}
+                    }
+                    1000000000{
+                        one{"0 G ¤"}
+                        other{"0 G ¤"}
+                    }
+                    10000000000{
+                        one{"00 G ¤"}
+                        other{"00 G ¤"}
+                    }
+                    100000000000{
+                        one{"000 G ¤"}
+                        other{"000 G ¤"}
+                    }
+                    1000000000000{
+                        one{"0 T ¤"}
+                        other{"0 T ¤"}
+                    }
+                    10000000000000{
+                        one{"00 T ¤"}
+                        other{"00 T ¤"}
+                    }
+                    100000000000000{
+                        one{"000 T ¤"}
+                        other{"000 T ¤"}
+                    }
+                }
                 decimalFormat{
                     1000000000{
                         one{"0 G"}
@@ -494,20 +544,10 @@ fr_CA{
                     y{"E y-MM-dd – E y-MM-dd GGGGG"}
                 }
                 GyMMM{
-                    G{"MMM y G – MMM y G"}
                     M{"MMM y – MMM y G"}
-                    y{"MMM y – MMM y G"}
                 }
                 GyMMMEd{
-                    G{"E d MMM y G – E d MMM y G"}
-                    M{"E d MMM – E d MMM y G"}
                     d{"E d MMM – E d MMM y G"}
-                    y{"E d MMM y – E d MMM y G"}
-                }
-                GyMMMd{
-                    G{"d MMM y G – d MMM y G"}
-                    M{"d MMM – d MMM y G"}
-                    y{"d MMM y – d MMM y G"}
                 }
                 GyMd{
                     G{"y-MM-dd GGGGG – y-MM-dd GGGGG"}

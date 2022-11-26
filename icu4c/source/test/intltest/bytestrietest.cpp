@@ -784,7 +784,7 @@ void BytesTrieTest::checkNext(BytesTrie &trie,
         }
         // Compare the final current() with whether next() can actually continue.
         trie.saveState(state);
-        UBool nextContinues=FALSE;
+        UBool nextContinues=false;
         // Try all graphic characters; we only use those in test strings in this file.
 #if U_CHARSET_FAMILY==U_ASCII_FAMILY
         const int32_t minChar=0x20;
@@ -798,7 +798,7 @@ void BytesTrieTest::checkNext(BytesTrie &trie,
 #endif
         for(int32_t c=minChar; c<=maxChar; ++c) {
             if(trie.resetToState(state).next(c)) {
-                nextContinues=TRUE;
+                nextContinues=true;
                 break;
             }
         }
@@ -957,7 +957,7 @@ void BytesTrieTest::checkIterator(BytesTrie::Iterator &iter,
     IcuTestErrorCode errorCode(*this, "checkIterator()");
     for(int32_t i=0; i<dataLength; ++i) {
         if(!iter.hasNext()) {
-            errln("trie iterator hasNext()=FALSE for item %d: %s", (int)i, data[i].s);
+            errln("trie iterator hasNext()=false for item %d: %s", (int)i, data[i].s);
             break;
         }
         UBool hasNext=iter.next(errorCode);
@@ -965,7 +965,7 @@ void BytesTrieTest::checkIterator(BytesTrie::Iterator &iter,
             break;
         }
         if(!hasNext) {
-            errln("trie iterator next()=FALSE for item %d: %s", (int)i, data[i].s);
+            errln("trie iterator next()=false for item %d: %s", (int)i, data[i].s);
             break;
         }
         if(iter.getString()!=StringPiece(data[i].s)) {
@@ -980,11 +980,11 @@ void BytesTrieTest::checkIterator(BytesTrie::Iterator &iter,
         }
     }
     if(iter.hasNext()) {
-        errln("trie iterator hasNext()=TRUE after all items");
+        errln("trie iterator hasNext()=true after all items");
     }
     UBool hasNext=iter.next(errorCode);
     errorCode.errIfFailureAndReset("trie iterator next() after all items");
     if(hasNext) {
-        errln("trie iterator next()=TRUE after all items");
+        errln("trie iterator next()=true after all items");
     }
 }

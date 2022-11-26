@@ -96,8 +96,8 @@ class TransliteratorRegistry {
         private String spec;       // current spec
         private String nextSpec;   // next spec
         private String scriptName; // script name equivalent of top, if != top
-        private boolean isSpecLocale; // TRUE if spec is a locale
-        private boolean isNextLocale; // TRUE if nextSpec is a locale
+        private boolean isSpecLocale; // true if spec is a locale
+        private boolean isNextLocale; // true if nextSpec is a locale
         private ICUResourceBundle res;
 
         public Spec(String theSpec) {

@@ -1583,9 +1583,10 @@ Bangkok)•</data>
 
 <locale en_US>
 <word>
-<data>•Can't<200> •have<200> •breaks<200> •in<200> •xx:yy<200> •or<200> •struct.field<200> \
+<data>•Can't<200> •have<200> •breaks<200> •in<200> •xx<200>:•yy<200> •or<200> •struct.field<200> \
 •for<200> •CS<200>-•types<200>.•</data>
 <data>•\uFF92\uFF76\uFF9E<400> •</data>
+<data>•xx@yy<200>.•</data>
 
 <locale en_US_POSIX>
 <word>
@@ -1593,6 +1594,21 @@ Bangkok)•</data>
 •for<200> •CS<200>-•types<200>.•</data>
 <data>•\u06c9<200>\uc799\ufffa•</data>
 <data>•\uFF92\uFF76\uFF9E<400> •</data>
+<data>•xx@yy<200>.•</data>
+
+<locale fi>
+<word>
+<data>•Can't<200> •have<200> •breaks<200> •in<200> •xx:yy<200> •or<200> •struct.field<200> \
+•for<200> •CS<200>-•types<200>.•</data>
+<data>•\uFF92\uFF76\uFF9E<400> •</data>
+<data>•xx@yy<200>.•</data>
+
+<locale sv>
+<word>
+<data>•Can't<200> •have<200> •breaks<200> •in<200> •xx:yy<200> •or<200> •struct.field<200> \
+•for<200> •CS<200>-•types<200>.•</data>
+<data>•\uFF92\uFF76\uFF9E<400> •</data>
+<data>•xx@yy<200>.•</data>
 
 
 # UBreakIteratorType UBRK_CHARACTER, Locale "th"
@@ -1946,6 +1962,76 @@ Bangkok)•</data>
 <data>•\u9577\u3055\u3092•\u9078\u629E\u3057\u3066•\u611F\u5EA6\u3092•\u8ABF\u6574\u3057\u3001•\u96FB\u6E90•\u30DC\u30BF\u30F3\u3092•\u9577\u62BC\u3057\u3057\u307E\u3059\u3002•</data>
 #データのコピー、スマートフォンでのお支払いなど -> データの▁コピー、▁スマートフォンでの▁お支払いなど
 <data>•\u30C7\u30FC\u30BF\u306E•\u30B3\u30D4\u30FC\u3001•\u30B9\u30DE\u30FC\u30C8\u30D5\u30A9\u30F3\u3067\u306E•\u304A\u652F\u6255\u3044\u306A\u3069•</data>
+#データ使用量を節約します -> データ▁使用量を▁節約します
+<data>•\u30C7\u30FC\u30BF•\u4F7F\u7528\u91CF\u3092•\u7BC0\u7D04\u3057\u307E\u3059•</data>
+#スマートフォンで設定できる最低限の明るさよりも画面を暗くします -> スマートフォンで▁設定▁できる▁最低限の▁明るさよりも▁画面を▁暗くします
+<data>•\u30B9\u30DE\u30FC\u30C8\u30D5\u30A9\u30F3\u3067•\u8A2D\u5B9A•\u3067\u304D\u308B•\u6700\u4F4E\u9650\u306E•\u660E\u308B\u3055\u3088\u308A\u3082•\u753B\u9762\u3092•\u6697\u304F\u3057\u307E\u3059•</data>
+#寝転んでいても -> 寝転んでいても
+<data>•\u5BDD\u8EE2\u3093\u3067\u3044\u3066\u3082•</data>
+#周囲の状況にもご注意ください -> 周囲の▁状況にも▁ご注意▁くだ▁さい
+<data>•\u5468\u56F2\u306E•\u72B6\u6CC1\u306B\u3082•\u3054\u6CE8\u610F•\u304F\u3060•\u3055\u3044•</data>
+#国や地域によってはご利用いただけない場合があります -> 国や▁地域によっては▁ご利用いただけない▁場合が▁あります
+<data>•\u56FD\u3084•\u5730\u57DF\u306B\u3088\u3063\u3066\u306F•\u3054\u5229\u7528\u3044\u305F\u3060\u3051\u306A\u3044•\u5834\u5408\u304C•\u3042\u308A\u307E\u3059•</data>
+#前回停止した場所からお楽しみいただけます -> 前回▁停止した▁場所から▁お楽しみいただけます
+<data>•\u524D\u56DE•\u505C\u6B62\u3057\u305F•\u5834\u6240\u304B\u3089•\u304A\u697D\u3057\u307F\u3044\u305F\u3060\u3051\u307E\u3059•</data>
+#聞き逃したくない音をスマートフォンで常時検出できます -> 聞き逃したくない▁音を▁スマートフォンで▁常時▁検出▁できます
+<data>•\u805E\u304D\u9003\u3057\u305F\u304F\u306A\u3044•\u97F3\u3092•\u30B9\u30DE\u30FC\u30C8\u30D5\u30A9\u30F3\u3067•\u5E38\u6642•\u691C\u51FA•\u3067\u304D\u307E\u3059•</data>
+#メニューのボタンを大きくする -> メニューの▁ボタンを▁大きく▁する
+<data>•\u30E1\u30CB\u30E5\u30FC\u306E•\u30DC\u30BF\u30F3\u3092•\u5927\u304D\u304F•\u3059\u308B•</data>
+#これらの連絡先はデバイスをロック解除しなくても表示され -> これらの▁連絡先は▁デバイスを▁ロック▁解除しなくても▁表示され
+<data>•\u3053\u308C\u3089\u306E•\u9023\u7D61\u5148\u306F•\u30C7\u30D0\u30A4\u30B9\u3092•\u30ED\u30C3\u30AF•\u89E3\u9664\u3057\u306A\u304F\u3066\u3082•\u8868\u793A\u3055\u308C•</data>
+
+# Test the differences in ko with or without lw=phrase.
+<locale ko@lw=phrase>
+<line>
+#1948년 7월 12일에 제정되고 8차에 국민투표에 의하여 개정한다.
+<data>•1948년 •7월 •12일에 •제정되고 •8차에 •국민투표에 •의하여 •개정한다.•</data>
+#대한민국은 민주공화국이다.
+<data>•대한민국은 •민주공화국이다.•</data>
+#서울에서 부산까지 London까지
+<data>•서울에서 •부산까지 •London까지•</data>
+#LTE가 안 되면 WiFi를
+<data>•LTE가 •안 •되면 •WiFi를•</data>
+#<님의 침묵>을 읽고 느낀 점은?
+<data>•\u003c님의 •침묵\u003e을 •읽고 •느낀 •점은?•</data>
+# The following entry passes in ICU4C but fails in ICU4J for an unknown reason.
+#"님의 침묵"을 읽고
+#<data>•"님의 •침묵"을 •읽고•</data>
+# The following 3 lines are not handled properly, yet.
+#“님의 침묵”을 읽고
+#<data>•“님의 •침묵”을 •읽고•</data>
+#『님의 침묵』을 읽고
+#<data>•『님의 •침묵』을 •읽고•</data>
+#大韓民國은 民主共和國이다
+#<data>•大韓民國은 •民主•共和國이다•</data>
+# All the tests for ja@lw=phrase should also work in Korean.
+#[京都観光］時雨殿に行った。-> [京都•観光］•時雨•殿に•行った。•
+<data>•\uff3b\u4eac\u90fd•\u89b3\u5149\uff3d•\u6642\u96e8•\u6bbf\u306b•\u884c\u3063\u305f\u3002•</data>
+#９月に東京から友達が遊びに来た -> ９月に•東京から•友達が•遊びに•来た•
+<data>•\uff19\u6708\u306b•\u6771\u4eac\u304b\u3089•\u53cb\u9054\u304c•\u904a\u3073\u306b•\u6765\u305f•</data>
+
+<locale ko>
+<line>
+#1948년 7월 12일에 제정되고 8차에 국민투표에 의하여 개정한다.
+<data>•1948•년 •7•월 •12•일•에 •제•정•되•고 •8•차•에 •국•민•투•표•에 •의•하•여•개•정•한•다.•</data>
+#대한민국은 민주공화국이다.
+<data>•대•한•민•국•은 •민•주•공•화•국•이•다.•</data>
+#서울에서 부산까지 London까지
+<data>•서•울•에•서 •부•산•까•지 •London•까•지•</data>
+#LTE가 안 되면 WiFi를
+<data>•LTE•가 •안 •되•면 •WiFi•를•</data>
+#<님의 침묵>을 읽고 느낀 점은?
+<data>•\u003c•님•의 •침•묵•\u003e•을 •읽•고 •느•낀 •점•은?•</data>
+#"님의 침묵"을 읽고
+<data>•"님•의 •침•묵"을 •읽•고•</data>
+#“님의 침묵”을 읽고
+<data>•“님•의 •침•묵”을 •읽•고•</data>
+#『님의 침묵』을 읽고
+<data>•『님•의 •침•묵』•을 •읽•고•</data>
+#『foo bar』load
+<data>•『foo •bar』•load•</data>
+#《님의 침묵》을 읽고
+<data>•《님•의 •침•묵》•을 •읽•고•</data>
 
 ####################################################################################
 #

@@ -19,7 +19,7 @@ U_NAMESPACE_BEGIN
 const char RunArray::fgClassID = 0;
 
 RunArray::RunArray(le_int32 initialCapacity)
-    : fClientArrays(FALSE), fLimits(NULL), fCount(0), fCapacity(initialCapacity)
+    : fClientArrays(false), fLimits(NULL), fCount(0), fCapacity(initialCapacity)
 {
     if (initialCapacity > 0) {
         fLimits = LE_NEW_ARRAY(le_int32, fCapacity);

@@ -4,6 +4,7 @@
 // ucptrietest.c (modified from trie2test.c)
 // created: 2017dec29 Markus W. Scherer
 
+#include <stdbool.h>
 #include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/ucptrie.h"
@@ -81,21 +82,21 @@ doCheckRange(const char *name, const char *variant,
             log_err("error: %s getRanges (%s) fails to deliver range [U+%04lx..U+%04lx].0x%lx\n",
                     name, variant, (long)start, (long)expEnd, (long)expValue);
         }
-        return FALSE;
+        return false;
     }
     if (expEnd < 0) {
         log_err("error: %s getRanges (%s) delivers unexpected range [U+%04lx..U+%04lx].0x%lx\n",
                 name, variant, (long)start, (long)end, (long)value);
-        return FALSE;
+        return false;
     }
     if (end != expEnd || value != expValue) {
         log_err("error: %s getRanges (%s) delivers wrong range [U+%04lx..U+%04lx].0x%lx "
                 "instead of [U+%04lx..U+%04lx].0x%lx\n",
                 name, variant, (long)start, (long)end, (long)value,
                 (long)start, (long)expEnd, (long)expValue);
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 // Test iteration starting from various UTF-8/16 and trie structure boundaries.
@@ -1198,45 +1199,45 @@ checkRangesSingleValue[]={
 
 static void
 TrieTestSet1(void) {
-    testTrieRanges("set1", FALSE,
+    testTrieRanges("set1", false,
         setRanges1, UPRV_LENGTHOF(setRanges1),
         checkRanges1, UPRV_LENGTHOF(checkRanges1));
 }
 
 static void
 TrieTestSet2Overlap(void) {
-    testTrieRanges("set2-overlap", FALSE,
+    testTrieRanges("set2-overlap", false,
         setRanges2, UPRV_LENGTHOF(setRanges2),
         checkRanges2, UPRV_LENGTHOF(checkRanges2));
 }
 
 static void
 TrieTestSet3Initial9(void) {
-    testTrieRanges("set3-initial-9", FALSE,
+    testTrieRanges("set3-initial-9", false,
         setRanges3, UPRV_LENGTHOF(setRanges3),
         checkRanges3, UPRV_LENGTHOF(checkRanges3));
-    testTrieRanges("set3-initial-9-clone", TRUE,
+    testTrieRanges("set3-initial-9-clone", true,
         setRanges3, UPRV_LENGTHOF(setRanges3),
         checkRanges3, UPRV_LENGTHOF(checkRanges3));
 }
 
 static void
 TrieTestSetEmpty(void) {
-    testTrieRanges("set-empty", FALSE,
+    testTrieRanges("set-empty", false,
         setRangesEmpty, 0,
         checkRangesEmpty, UPRV_LENGTHOF(checkRangesEmpty));
 }
 
 static void
 TrieTestSetSingleValue(void) {
-    testTrieRanges("set-single-value", FALSE,
+    testTrieRanges("set-single-value", false,
         setRangesSingleValue, UPRV_LENGTHOF(setRangesSingleValue),
         checkRangesSingleValue, UPRV_LENGTHOF(checkRangesSingleValue));
 }
 
 static void
 TrieTestSet2OverlapWithClone(void) {
-    testTrieRanges("set2-overlap.withClone", TRUE,
+    testTrieRanges("set2-overlap.withClone", true,
         setRanges2, UPRV_LENGTHOF(setRanges2),
         checkRanges2, UPRV_LENGTHOF(checkRanges2));
 }
@@ -1287,7 +1288,7 @@ FreeBlocksTest(void) {
         return;
     }
 
-    mutableTrie = testTrieSerializeAllValueWidth(testName, mutableTrie, FALSE,
+    mutableTrie = testTrieSerializeAllValueWidth(testName, mutableTrie, false,
                                                  checkRanges, UPRV_LENGTHOF(checkRanges));
     umutablecptrie_close(mutableTrie);
 }
@@ -1338,7 +1339,7 @@ GrowDataArrayTest(void) {
         return;
     }
 
-    mutableTrie = testTrieSerializeAllValueWidth(testName, mutableTrie, FALSE,
+    mutableTrie = testTrieSerializeAllValueWidth(testName, mutableTrie, false,
                                                  checkRanges, UPRV_LENGTHOF(checkRanges));
     umutablecptrie_close(mutableTrie);
 }
@@ -1377,7 +1378,7 @@ ManyAllSameBlocksTest(void) {
         }
     }
 
-    mutableTrie = testTrieSerializeAllValueWidth(testName, mutableTrie, FALSE,
+    mutableTrie = testTrieSerializeAllValueWidth(testName, mutableTrie, false,
                                                  checkRanges, UPRV_LENGTHOF(checkRanges));
     umutablecptrie_close(mutableTrie);
 }
@@ -1435,7 +1436,7 @@ MuchDataTest(void) {
 
     testBuilder(testName, mutableTrie, checkRanges, r);
     testTrieSerialize("much-data.16", mutableTrie,
-                      UCPTRIE_TYPE_FAST, UCPTRIE_VALUE_BITS_16, FALSE, checkRanges, r);
+                      UCPTRIE_TYPE_FAST, UCPTRIE_VALUE_BITS_16, false, checkRanges, r);
     umutablecptrie_close(mutableTrie);
 }
 
@@ -1526,7 +1527,7 @@ TrieTestGetRangesFixedSurr(void) {
         checkRangesFixedLeadSurr1, UPRV_LENGTHOF(checkRangesFixedLeadSurr1),
         &initialValue, &errorValue);
     UMutableCPTrie *mutableTrie = makeTrieWithRanges(
-        "fixedSurr", FALSE, setRangesFixedSurr, UPRV_LENGTHOF(setRangesFixedSurr),
+        "fixedSurr", false, setRangesFixedSurr, UPRV_LENGTHOF(setRangesFixedSurr),
         initialValue, errorValue);
     UErrorCode errorCode = U_ZERO_ERROR;
     if (mutableTrie == NULL) {
@@ -1599,7 +1600,7 @@ static void TestSmallNullBlockMatchesFast(void) {
         { 0x110000, 9 }
     };
 
-    testTrieRanges("small0-in-fast", FALSE,
+    testTrieRanges("small0-in-fast", false,
         setRanges, UPRV_LENGTHOF(setRanges),
         checkRanges, UPRV_LENGTHOF(checkRanges));
 }
@@ -1632,7 +1633,7 @@ static void ShortAllSameBlocksTest(void) {
         return;
     }
 
-    mutableTrie = testTrieSerializeAllValueWidth(testName, mutableTrie, FALSE,
+    mutableTrie = testTrieSerializeAllValueWidth(testName, mutableTrie, false,
                                                  checkRanges, UPRV_LENGTHOF(checkRanges));
     umutablecptrie_close(mutableTrie);
 }

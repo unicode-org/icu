@@ -226,7 +226,7 @@ public class CurrencyTest extends TestFmwk {
                 "US$",
                 USD.getName(en_CA, Currency.SYMBOL_NAME, isChoiceFormat));
         assertEquals("USD.getName(NARROW_SYMBOL_NAME, en_CA)",
-                "$",
+                "US$",
                 USD.getName(en_CA, Currency.NARROW_SYMBOL_NAME, isChoiceFormat));
         assertEquals("USD.getName(SYMBOL_NAME) in en_NZ",
                 "US$",
@@ -581,6 +581,8 @@ public class CurrencyTest extends TestFmwk {
         assertTrue("Full currencies list should include UYW", currencies.contains("UYW")); // ICU-21622
         assertTrue("Full currencies list should include VES", currencies.contains("VES")); // ICU-21685
         assertFalse("Full currencies list should not include EQE", currencies.contains("EQE")); // ICU-21685
+        assertTrue("Full currencies list should include SLE", currencies.contains("SLE")); // CLDR 41/42, ICU-21989
+        assertTrue("Full currencies list should include VED", currencies.contains("VED")); // CLDR 41, ICU-21989
     }
 
     // Coverage-only test of the CurrencyMetaInfo class
@@ -985,13 +987,14 @@ public class CurrencyTest extends TestFmwk {
     }
     @Test
     public void testSierraLeoneCurrency21997() {
-        // Check that currency of Sierra Leone is SLL (which is legal tender)
+        // CLDR 41: Check that currency of Sierra Leone is SLL (which is legal tender)
         // and not the newer currency SLE (which is not legal tender), as of CLDR 41.
         // Test will fail once SLE is declared legal.
+        // CLDR 42: Now check that currency of Sierra Leone is SLE (which is legal tender)
         Currency currency = Currency.getInstance(ULocale.forLanguageTag("en-SL"));
         String result = currency.getCurrencyCode();
-        if (!"SLL".equals(result)) {
-            errln("Currency code of en-SL is not SLL but " + result);
+        if (!"SLE".equals(result)) {
+            errln("Currency code of en-SL is not SLE but " + result);
         }
     }
 }

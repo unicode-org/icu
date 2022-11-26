@@ -10,6 +10,13 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+/**
+ * \file
+ * \brief C++ API: Display options class
+ *
+ * This class is designed as a more modern version of the UDisplayContext mechanism.
+ */
+
 #include "unicode/udisplayoptions.h"
 #include "unicode/uversion.h"
 
@@ -31,7 +38,7 @@ U_NAMESPACE_BEGIN
  *         .setGrammaticalCase(UDISPOPT_GRAMMATICAL_CASE_DATIVE)
  *         .setPluralCategory(UDISPOPT_PLURAL_CATEGORY_FEW)
  *         .build();
- *```
+ * ```
  *
  * @draft ICU 72
  */

@@ -87,7 +87,7 @@ static UBool U_CALLCONV collator_cleanup(void) {
     }
     availableLocaleListCount = 0;
     gAvailableLocaleListInitOnce.reset();
-    return TRUE;
+    return true;
 }
 
 U_CDECL_END
@@ -109,7 +109,7 @@ CollatorFactory::~CollatorFactory() {}
 
 UBool
 CollatorFactory::visible(void) const {
-    return TRUE;
+    return true;
 }
 
 //-------------------------------------------
@@ -794,7 +794,7 @@ Collator::unregister(URegistryKey key, UErrorCode& status)
         }
         status = U_ILLEGAL_ARGUMENT_ERROR;
     }
-    return FALSE;
+    return false;
 }
 #endif /* UCONFIG_NO_SERVICE */
 

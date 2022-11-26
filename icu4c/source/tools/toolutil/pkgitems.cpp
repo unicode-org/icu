@@ -284,7 +284,7 @@ ures_enumDependencies(const char *itemName,
                       CheckDependency check, void *context,
                       Package *pkg,
                       UErrorCode *pErrorCode) {
-    UBool doCheckParent = TRUE;  // always remains TRUE if depth>1
+    UBool doCheckParent = true;  // always remains true if depth>1
     switch(res_getPublicType(res)) {
     case URES_STRING:
         if(depth==1 && inKey!=NULL &&
@@ -294,11 +294,11 @@ ures_enumDependencies(const char *itemName,
             // Top-level %%Parent string:
             //   We use this bundle as well as the explicit parent bundle.
             // Either way, the truncation parent is ignored.
-            doCheckParent = FALSE;
+            doCheckParent = false;
             // No tracing: build tool
             int32_t length;
             const UChar *alias=res_getStringNoTrace(pResData, res, &length);
-            checkAlias(itemName, res, alias, length, /*useResSuffix=*/ TRUE,
+            checkAlias(itemName, res, alias, length, /*useResSuffix=*/ true,
                        check, context, pErrorCode);
             // If there is a %%ALIAS, then there should be nothing else in this resource bundle.
         } else if(depth==2 && parentKey!=NULL && 0==strcmp(parentKey, "%%DEPENDENCY")) {
@@ -307,7 +307,7 @@ ures_enumDependencies(const char *itemName,
             // No tracing: build tool
             int32_t length;
             const UChar *alias=res_getStringNoTrace(pResData, res, &length);
-            checkAlias(itemName, res, alias, length, /*useResSuffix=*/ FALSE,
+            checkAlias(itemName, res, alias, length, /*useResSuffix=*/ false,
                        check, context, pErrorCode);
         }
         // we ignore all other strings
@@ -316,7 +316,7 @@ ures_enumDependencies(const char *itemName,
         {
             int32_t length;
             const UChar *alias=res_getAlias(pResData, res, &length);
-            checkAlias(itemName, res, alias, length, TRUE, check, context, pErrorCode);
+            checkAlias(itemName, res, alias, length, true, check, context, pErrorCode);
         }
         break;
     case URES_TABLE:
@@ -327,7 +327,7 @@ ures_enumDependencies(const char *itemName,
                 const char *itemKey;
                 Resource item=res_getTableItemByIndex(pResData, res, i, &itemKey);
                 // This doCheckParent return value is needed to
-                // propagate the possible FALSE value from depth=1 to depth=0.
+                // propagate the possible false value from depth=1 to depth=0.
                 doCheckParent &= ures_enumDependencies(
                         itemName, pResData,
                         item, itemKey,

@@ -1606,10 +1606,12 @@ public class MeasureUnit implements Serializable {
     public static final MeasureUnit KILOGRAM = MeasureUnit.internalGetInstance("mass", "kilogram");
 
     /**
-     * Constant for unit of mass: metric-ton
+     * Constant for unit of mass: metric-ton (renamed to tonne in CLDR 42 / ICU 72).
+     * Note: In ICU 74 this will be deprecated in favor of TONNE, which is currently
+     * draft but will become stable in ICU 74, and which uses the preferred naming.
      * @stable ICU 54
      */
-    public static final MeasureUnit METRIC_TON = MeasureUnit.internalGetInstance("mass", "metric-ton");
+    public static final MeasureUnit METRIC_TON = MeasureUnit.internalGetInstance("mass", "tonne");
 
     /**
      * Constant for unit of mass: microgram
@@ -1658,6 +1660,12 @@ public class MeasureUnit implements Serializable {
      * @stable ICU 54
      */
     public static final MeasureUnit TON = MeasureUnit.internalGetInstance("mass", "ton");
+
+    /**
+     * Constant for unit of mass: tonne
+     * @draft ICU 72
+     */
+    public static final MeasureUnit TONNE = MeasureUnit.internalGetInstance("mass", "tonne");
 
     /**
      * Constant for unit of power: gigawatt

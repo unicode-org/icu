@@ -195,10 +195,10 @@ static UBool getStringByIndex(
     const UChar *resStr = ures_getStringByIndex(
             resource, idx, &len, &status);
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
-    result.setTo(TRUE, resStr, len);
-    return TRUE;
+    result.setTo(true, resStr, len);
+    return true;
 }
 
 namespace {
@@ -655,7 +655,7 @@ static UBool getDateTimePattern(
         UnicodeString &result,
         UErrorCode &status) {
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
     char cType[cTypeBufMax + 1];
     Calendar::getCalendarTypeFromLocale(locale, cType, cTypeBufMax, status);
@@ -690,18 +690,18 @@ static UBool getDateTimePattern(
                         resource, pathBuffer.data(), nullptr, &status));
     }
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
     if (dateTimeFormatOffset == DateFormat::kDateTime && ures_getSize(topLevel.getAlias()) <= DateFormat::kDateTime) {
         // Oops, size is too small to access the index that we want, fallback
         // to a hard-coded value.
         result = UNICODE_STRING_SIMPLE("{1} {0}");
-        return TRUE;
+        return true;
     }
     return getStringByIndex(topLevel.getAlias(), dateTimeFormatOffset, result, status);
 }
 
-template<> U_I18N_API
+template<> 
 const RelativeDateTimeCacheData *LocaleCacheKey<RelativeDateTimeCacheData>::createObject(const void * /*unused*/, UErrorCode &status) const {
     const char *localeId = fLoc.getName();
     LocalUResourceBundlePointer topLevel(ures_open(nullptr, localeId, &status));
@@ -1212,9 +1212,9 @@ UBool RelativeDateTimeFormatter::checkNoAdjustForContext(UErrorCode& status) con
     // casing. The code could be written and tested if there is demand.
     if (fOptBreakIterator != nullptr) {
         status = U_UNSUPPORTED_ERROR;
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 void RelativeDateTimeFormatter::init(

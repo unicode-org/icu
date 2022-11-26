@@ -1436,41 +1436,88 @@ class BreakCache {
     boolean populateNear(int position) {
         assert(position < fBoundaries[fStartBufIdx] || position > fBoundaries[fEndBufIdx]);
 
-        // Find a boundary somewhere in the vicinity of the requested position.
-        // Depending on the safe rules and the text data, it could be either before, at, or after
-        // the requested position.
-
+        // Add boundaries to the cache near the specified position.
+        // The given position need not be a boundary itself.
+        // The input position must be within the range of the text, and
+        // on a code point boundary.
+        // If the requested position is a break boundary, leave the iteration
+        // position on it.
+        // If the requested position is not a boundary, leave the iteration
+        // position on the preceding boundary and include both the
+        // preceding and following boundaries in the cache.
+        // Additional boundaries, either preceding or following, may be added
+        // to the cache as a side effect.
 
         // If the requested position is not near already cached positions, clear the existing cache,
         // find a near-by boundary and begin new cache contents there.
 
-        if ((position < fBoundaries[fStartBufIdx] - 15) || position > (fBoundaries[fEndBufIdx] + 15)) {
-            int aBoundary = fText.getBeginIndex();
-            int ruleStatusIndex = 0;
-            if (position > aBoundary + 20) {
-                int backupPos = handleSafePrevious(position);
-                if (backupPos > aBoundary) {
-                    // Advance to the boundary following the backup position.
-                    // There is a complication: the safe reverse rules identify pairs of code points
-                    // that are safe. If advancing from the safe point moves forwards by less than
-                    // two code points, we need to advance one more time to ensure that the boundary
-                    // is good, including a correct rules status value.
-                    //
-                    fPosition = backupPos;
+        // Threshold for a text position to be considered near to existing cache contents.
+        // TODO: See issue ICU-22024 "perf tuning of Cache needed."
+        //       This value is subject to change. See the ticket for more details.
+        final int CACHE_NEAR = 15;
+
+        int startOfText = fText.getBeginIndex();
+        int aBoundary = -1;
+        int ruleStatusIndex = 0;
+        boolean retainCache = false;
+        if ((position > fBoundaries[fStartBufIdx] - CACHE_NEAR) && position < (fBoundaries[fEndBufIdx] + CACHE_NEAR)) {
+            // Requested position is near the existing cache. Retain it.
+            retainCache = true;
+        } else if (position <= startOfText + CACHE_NEAR) {
+            // Requested position is near the start of the text. Fill cache from start, skipping
+            // the need to find a safe point.
+            retainCache = false;
+            aBoundary = startOfText;
+        } else {
+            // Requested position is not near the existing cache.
+            // Find a safe point to refill the cache from.
+            int backupPos = handleSafePrevious(position);
+
+            if (fBoundaries[fEndBufIdx] < position && fBoundaries[fEndBufIdx] >= (backupPos - CACHE_NEAR)) {
+                // The requested position is beyond the end of the existing cache, but the
+                // reverse rules produced a position near or before the cached region.
+                // Retain the existing cache, and fill from the end of it.
+                retainCache = true;
+            } else if (backupPos < startOfText + CACHE_NEAR) {
+                // The safe reverse rules moved us to near the start of text.
+                // Take that (index 0) as the backup boundary, avoiding the complication
+                // (in the following block) of moving forward from the safe point to a known boundary.
+                //
+                // Retain the cache if it begins not too far from the requested position.
+                aBoundary = startOfText;
+                retainCache = (fBoundaries[fStartBufIdx] <= (position + CACHE_NEAR));
+            } else {
+                // The safe reverse rules produced a position that is neither near the existing
+                // cache, nor near the start of text.
+                // Advance to the boundary following.
+                // There is a complication: the safe reverse rules identify pairs of code points
+                // that are safe. If advancing from the safe point moves forwards by less than
+                // two code points, we need to advance one more time to ensure that the boundary
+                // is good, including a correct rules status value.
+                //
+                retainCache = false;
+                fPosition = backupPos;
+                aBoundary = handleNext();
+                if (aBoundary == backupPos + 1 ||
+                        (aBoundary == backupPos + 2 &&
+                        Character.isHighSurrogate(fText.setIndex(backupPos)) &&
+                        Character.isLowSurrogate(fText.next()))) {
+                    // The initial handleNext() only advanced by a single code point. Go again.
+                    // Safe rules identify safe pairs.
                     aBoundary = handleNext();
-                    if (aBoundary == backupPos + 1 ||
-                            (aBoundary == backupPos + 2 &&
-                            Character.isHighSurrogate(fText.setIndex(backupPos)) &&
-                            Character.isLowSurrogate(fText.next()))) {
-                        // The initial handleNext() only advanced by a single code point. Go again.
-                        // Safe rules identify safe pairs.
-                        aBoundary = handleNext();
-                    }
+                }
+                if (aBoundary == BreakIterator.DONE) {
+                    aBoundary = fText.getEndIndex();
                 }
                 ruleStatusIndex = fRuleStatusIndex;
             }
+        }
+
+        if (!retainCache) {
+            assert(aBoundary != -1);
             reset(aBoundary, ruleStatusIndex);               // Reset cache to hold aBoundary as a single starting point.
         }
+
 
         // Fill in boundaries between existing cache content and the new requested position.
 

@@ -1560,8 +1560,8 @@ public final class Utility {
      * Escapes one unprintable code point using <backslash>uxxxx notation
      * for U+0000 to U+FFFF and <backslash>Uxxxxxxxx for U+10000 and
      * above.  If the character is printable ASCII, then do nothing
-     * and return FALSE.  Otherwise, append the escaped notation and
-     * return TRUE.
+     * and return false.  Otherwise, append the escaped notation and
+     * return true.
      */
     public static <T extends Appendable> boolean escapeUnprintable(T result, int c) {
         if (isUnprintable(c)) {

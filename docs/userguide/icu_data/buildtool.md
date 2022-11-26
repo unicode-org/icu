@@ -233,6 +233,7 @@ summarizes the ICU data files and their corresponding features and categories:
 | StringPrep | `"stringprep"` | sprep/\*.txt | 193 KiB |
 | Time Zones | `"misc"` <br/> `"zone_tree"` <br/> `"zone_supplemental"` | misc/metaZones.txt <br/> misc/timezoneTypes.txt <br/> misc/windowsZones.txt <br/> misc/zoneinfo64.txt <br/> zone/\*.txt <br/> zone/tzdbNames.txt | 41 KiB <br/> 20 KiB <br/> 22 KiB <br/> 151 KiB <br/> **2.7 MiB** <br/> 4.8 KiB |
 | Transliteration | `"translit"` | translit/\*.txt | 685 KiB |
+| Unicode Emoji<br/>Properties | `"uemoji"` | in/uemoji.icu | 13 KiB |
 | Unicode Character <br/> Names | `"unames"` | in/unames.icu | 269 KiB |
 | Unicode Text Layout | `"ulayout"` | in/ulayout.icu | 14 KiB |
 | Units | `"unit_tree"` | unit/\*.txt | **1.7 MiB** |

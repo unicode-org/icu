@@ -794,13 +794,11 @@ public:
      */
     virtual UBool isEmpty(void) const;
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * @return true if this set contains multi-character strings or the empty string.
-     * @draft ICU 70
+     * @stable ICU 70
      */
     UBool hasStrings() const;
-#endif  // U_HIDE_DRAFT_API
 
     /**
      * Returns true if this set contains the given character.

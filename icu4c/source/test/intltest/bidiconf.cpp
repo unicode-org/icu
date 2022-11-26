@@ -93,14 +93,14 @@ UBool BiDiConformanceTest::parseLevels(const char *&start) {
                           || value>(UBIDI_MAX_EXPLICIT_LEVEL+1)) {
                 errln("\nError on line %d: Levels parse error at %s", (int)lineNumber, start);
                 printErrorLine();
-                return FALSE;
+                return false;
             }
             levels[levelsCount++]=(UBiDiLevel)value;
             directionBits|=(1<<(value&1));
             start=end;
         }
     }
-    return TRUE;
+    return true;
 }
 
 UBool BiDiConformanceTest::parseOrdering(const char *start) {
@@ -111,12 +111,12 @@ UBool BiDiConformanceTest::parseOrdering(const char *start) {
         if(end<=start || (!U_IS_INV_WHITESPACE(*end) && *end!=0 && *end!=';') || value>=1000) {
             errln("\nError on line %d: Reorder parse error at %s", (int)lineNumber, start);
             printErrorLine();
-            return FALSE;
+            return false;
         }
         ordering[orderingCount++]=(int32_t)value;
         start=end;
     }
-    return TRUE;
+    return true;
 }
 
 static const UChar charFromBiDiClass[U_CHAR_DIRECTION_COUNT]={
@@ -252,9 +252,9 @@ UBool BiDiConformanceTest::parseInputStringFromBiDiClasses(const char *&start) {
         }
         errln("\nError on line %d: BiDi class string not recognized at %s", (int)lineNumber, start);
         printErrorLine();
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 void BiDiConformanceTest::TestBidiTest() {
@@ -579,11 +579,11 @@ static uint32_t getDirectionBits(const UBiDiLevel actualLevels[], int32_t actual
 }
 
 UBool BiDiConformanceTest::checkLevels(const UBiDiLevel actualLevels[], int32_t actualCount) {
-    UBool isOk=TRUE;
+    UBool isOk=true;
     if(levelsCount!=actualCount) {
         errln("\nError on line %d: Wrong number of level values; expected %d actual %d",
               (int)lineNumber, (int)levelsCount, (int)actualCount);
-        isOk=FALSE;
+        isOk=false;
     } else {
         for(int32_t i=0; i<actualCount; ++i) {
             if(levels[i]!=actualLevels[i] && levels[i]<UBIDI_DEFAULT_LTR) {
@@ -596,7 +596,7 @@ UBool BiDiConformanceTest::checkLevels(const UBiDiLevel actualLevels[], int32_t 
                 } else {
                     errln("\nError on line %d: Wrong level value at index %d; expected %d actual %d",
                           (int)lineNumber, (int)i, levels[i], actualLevels[i]);
-                    isOk=FALSE;
+                    isOk=false;
                     break;
                 }
             }
@@ -625,7 +625,7 @@ UBool BiDiConformanceTest::checkLevels(const UBiDiLevel actualLevels[], int32_t 
 // Therefore we just skip the indexes for BiDi controls while comparing
 // with the expected ordering that has them omitted.
 UBool BiDiConformanceTest::checkOrdering(UBiDi *ubidi) {
-    UBool isOk=TRUE;
+    UBool isOk=true;
     IcuTestErrorCode errorCode(*this, "checkOrdering()");
     int32_t resultLength=ubidi_getResultLength(ubidi);  // visual length including BiDi controls
     int32_t i, visualIndex;
@@ -635,7 +635,7 @@ UBool BiDiConformanceTest::checkOrdering(UBiDi *ubidi) {
         int32_t logicalIndex=ubidi_getLogicalIndex(ubidi, i, errorCode);
         if(errorCode.errIfFailureAndReset("ubidi_getLogicalIndex()")) {
             errln("Input line %d: %s", (int)lineNumber, line);
-            return FALSE;
+            return false;
         }
         if(levels[logicalIndex]>=UBIDI_DEFAULT_LTR) {
             continue;  // BiDi control, omitted from expected ordering.
@@ -643,7 +643,7 @@ UBool BiDiConformanceTest::checkOrdering(UBiDi *ubidi) {
         if(visualIndex<orderingCount && logicalIndex!=ordering[visualIndex]) {
             errln("\nError on line %d: Wrong ordering value at visual index %d; expected %d actual %d",
                   (int)lineNumber, (int)visualIndex, ordering[visualIndex], logicalIndex);
-            isOk=FALSE;
+            isOk=false;
             break;
         }
         ++visualIndex;
@@ -653,7 +653,7 @@ UBool BiDiConformanceTest::checkOrdering(UBiDi *ubidi) {
     if(isOk && orderingCount!=visualIndex) {
         errln("\nError on line %d: Wrong number of ordering values; expected %d actual %d",
               (int)lineNumber, (int)orderingCount, (int)visualIndex);
-        isOk=FALSE;
+        isOk=false;
     }
     if(!isOk) {
         printErrorLine();

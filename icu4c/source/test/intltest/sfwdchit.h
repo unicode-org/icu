@@ -15,7 +15,7 @@
 class SimpleFwdCharIterator : public ForwardCharacterIterator {
 public:
     // not used -- SimpleFwdCharIterator(const UnicodeString& s);
-    SimpleFwdCharIterator(UChar *s, int32_t len, UBool adopt = FALSE);
+    SimpleFwdCharIterator(UChar *s, int32_t len, UBool adopt = false);
 
     virtual ~SimpleFwdCharIterator();
 
@@ -54,7 +54,7 @@ public:
   virtual UChar32       next32PostInc(void) override;
         
   /**
-   * Returns FALSE if there are no more code units or code points
+   * Returns false if there are no more code units or code points
    * at or after the current position in the iteration range.
    * This is used with nextPostInc() or next32PostInc() in forward
    * iteration.

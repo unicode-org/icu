@@ -28,6 +28,7 @@ pt_PT{
             }
             patterns{
                 accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat{"#,##0.00 ¤"}
             }
             patternsLong{
@@ -291,8 +292,8 @@ pt_PT{
                 "{1}, {0}",
             }
             DateTimePatterns%atTime{
-                "{1} 'às' {0}",
-                "{1} 'às' {0}",
+                "{1}, {0}",
+                "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
             }
@@ -418,12 +419,6 @@ pt_PT{
                 "{1}, {0}",
                 "{1}, {0}",
             }
-            DateTimePatterns%atTime{
-                "{1} 'às' {0}",
-                "{1} 'às' {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
             DateTimeSkeletons{
                 "HHmmsszzzz",
                 "HHmmssz",
@@ -442,7 +437,6 @@ pt_PT{
                     other{"W.'ª' 'semana' 'de' MMMM"}
                 }
                 MMMd{"d/MM"}
-                Md{"dd/MM"}
                 yMMM{"MM/y"}
                 yMMMEEEEd{"EEEE, d/MM/y"}
                 yMMMEd{"E, d/MM/y"}
@@ -538,6 +532,11 @@ pt_PT{
                 }
             }
             intervalFormats{
+                GyM{
+                    G{"M/y GGGGG – M/y GGGGG"}
+                    M{"M/y – M/y GGGGG"}
+                    y{"M/y – M/y GGGGG"}
+                }
                 GyMEd{
                     G{"E, d/M/y GGGGG – E, d/M/y GGGGG"}
                     M{"E, d/M/y – E, d/M/y GGGGG"}

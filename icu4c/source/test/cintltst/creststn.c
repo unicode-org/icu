@@ -17,6 +17,7 @@
 */
 
 
+#include <stdbool.h>
 #include <time.h>
 #include "unicode/utypes.h"
 #include "cintltst.h"
@@ -54,11 +55,11 @@ randul()
 {
     uint32_t l=0;
     int32_t i;
-    static UBool initialized = FALSE;
+    static UBool initialized = false;
     if (!initialized)
     {
         srand((unsigned)time(NULL));
-        initialized = TRUE;
+        initialized = true;
     }
     /* Assume rand has at least 12 bits of precision */
     
@@ -195,12 +196,12 @@ param[] =
   /* "IN" means inherits */
   /* "NE" or "ne" means "does not exist" */
 
-  { "root",         U_ZERO_ERROR,             e_Root,    { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } },
-  { "te",           U_ZERO_ERROR,             e_te,      { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE  } },
-  { "te_IN",        U_ZERO_ERROR,             e_te_IN,   { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE   } },
-  { "te_NE",        U_USING_FALLBACK_WARNING, e_te,      { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE  } },
-  { "te_IN_NE",     U_USING_FALLBACK_WARNING, e_te_IN,   { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE   } },
-  { "ne",           U_USING_DEFAULT_WARNING,  e_Root,    { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
+  { "root",         U_ZERO_ERROR,             e_Root,    { true, false, false }, { true, false, false } },
+  { "te",           U_ZERO_ERROR,             e_te,      { false, true, false }, { true, true, false  } },
+  { "te_IN",        U_ZERO_ERROR,             e_te_IN,   { false, false, true }, { true, true, true   } },
+  { "te_NE",        U_USING_FALLBACK_WARNING, e_te,      { false, true, false }, { true, true, false  } },
+  { "te_IN_NE",     U_USING_FALLBACK_WARNING, e_te_IN,   { false, false, true }, { true, true, true   } },
+  { "ne",           U_USING_DEFAULT_WARNING,  e_Root,    { true, false, false }, { true, false, false } }
 };
 
 static int32_t bundles_count = UPRV_LENGTHOF(param);
@@ -714,7 +715,7 @@ static void TestNewTypes() {
             }else{
                 /* open the file */
                 const char* cp = NULL; 
-                UCHARBUF* ucbuf = ucbuf_open(testDataFileName,&cp,FALSE,FALSE,&status);
+                UCHARBUF* ucbuf = ucbuf_open(testDataFileName,&cp,false,false,&status);
                 len = 0;
                 if(U_SUCCESS(status)){
                     const UChar* buffer = ucbuf_getBuffer(ucbuf,&len,&status);
@@ -752,7 +753,7 @@ static void TestNewTypes() {
             }else{
                 /* open the file */
                 const char* cp=NULL;
-                UCHARBUF* ucbuf = ucbuf_open(testDataFileName,&cp,FALSE,FALSE,&status);
+                UCHARBUF* ucbuf = ucbuf_open(testDataFileName,&cp,false,false,&status);
                 len = 0;
                 if(U_SUCCESS(status)){
                     const UChar* buffer = ucbuf_getBuffer(ucbuf,&len,&status);
@@ -1255,8 +1256,8 @@ static void TestErrorConditions(){
     }
     /*Test ures_hasNext() with UResourceBundle = NULL*/
     status=U_ZERO_ERROR;
-    if(ures_hasNext(NULL) != FALSE){  
-        log_err("ERROR: ures_hasNext() should return FALSE when UResourceBundle=NULL.  Got =%d\n", ures_hasNext(NULL));
+    if(ures_hasNext(NULL) != false){  
+        log_err("ERROR: ures_hasNext() should return false when UResourceBundle=NULL.  Got =%d\n", ures_hasNext(NULL));
     }
     /*Test ures_get() with UResourceBundle = NULL*/
     status=U_ZERO_ERROR;
@@ -1524,14 +1525,14 @@ static void TestResourceBundles()
         return;
     }
 
-    testTag("only_in_Root", TRUE, FALSE, FALSE);
-    testTag("in_Root_te", TRUE, TRUE, FALSE);
-    testTag("in_Root_te_te_IN", TRUE, TRUE, TRUE);
-    testTag("in_Root_te_IN", TRUE, FALSE, TRUE);
-    testTag("only_in_te", FALSE, TRUE, FALSE);
-    testTag("only_in_te_IN", FALSE, FALSE, TRUE);
-    testTag("in_te_te_IN", FALSE, TRUE, TRUE);
-    testTag("nonexistent", FALSE, FALSE, FALSE);
+    testTag("only_in_Root", true, false, false);
+    testTag("in_Root_te", true, true, false);
+    testTag("in_Root_te_te_IN", true, true, true);
+    testTag("in_Root_te_IN", true, false, true);
+    testTag("only_in_te", false, true, false);
+    testTag("only_in_te_IN", false, false, true);
+    testTag("in_te_te_IN", false, true, true);
+    testTag("nonexistent", false, false, false);
 
     log_verbose("Passed:=  %d   Failed=   %d \n", pass, fail);
 
@@ -1671,7 +1672,7 @@ static UBool testTag(const char* frag,
     if(U_FAILURE(status))
     {
         log_data_err("Could not load testdata.dat %s \n",myErrorName(status));
-        return FALSE;
+        return false;
     }
 
     is_in[0] = in_Root;
@@ -2587,7 +2588,7 @@ static void TestJB3763(void) {
 
 static void TestGetKeywordValues(void) {
     UEnumeration *kwVals;
-    UBool foundStandard = FALSE;
+    UBool foundStandard = false;
     UErrorCode status = U_ZERO_ERROR;
     const char *kw;
 #if !UCONFIG_NO_COLLATION
@@ -2598,14 +2599,14 @@ static void TestGetKeywordValues(void) {
     while((kw=uenum_next(kwVals, NULL, &status))) {
         log_verbose("  %s\n", kw);
         if(!strcmp(kw,"standard")) {
-            if(foundStandard == FALSE) {
-                foundStandard = TRUE;
+            if(foundStandard == false) {
+                foundStandard = true;
             } else {
                 log_err("'standard' was found twice in the keyword list.\n");
             }
         }
     }
-    if(foundStandard == FALSE) {
+    if(foundStandard == false) {
         log_err_status(status, "'standard' was not found in the keyword list.\n");
     }
     uenum_close(kwVals);
@@ -2614,7 +2615,7 @@ static void TestGetKeywordValues(void) {
     }
     status = U_ZERO_ERROR;
 #endif
-    foundStandard = FALSE;
+    foundStandard = false;
     kwVals = ures_getKeywordValues( "ICUDATA", "calendar", &status);
 
     log_verbose("Testing getting calendar keyword values:\n");
@@ -2622,14 +2623,14 @@ static void TestGetKeywordValues(void) {
     while((kw=uenum_next(kwVals, NULL, &status))) {
         log_verbose("  %s\n", kw);
         if(!strcmp(kw,"japanese")) {
-            if(foundStandard == FALSE) {
-                foundStandard = TRUE;
+            if(foundStandard == false) {
+                foundStandard = true;
             } else {
                 log_err("'japanese' was found twice in the calendar keyword list.\n");
             }
         }
     }
-    if(foundStandard == FALSE) {
+    if(foundStandard == false) {
         log_err_status(status, "'japanese' was not found in the calendar keyword list.\n");
     }
     uenum_close(kwVals);
@@ -2641,8 +2642,8 @@ static void TestGetKeywordValues(void) {
 static void TestGetFunctionalEquivalentOf(const char *path, const char *resName, const char *keyword, UBool truncate, const char * const testCases[]) {
     int32_t i;
     for(i=0;testCases[i];i+=3) {
-        UBool expectAvail = (testCases[i][0]=='t')?TRUE:FALSE;
-        UBool gotAvail = FALSE;
+        UBool expectAvail = (testCases[i][0]=='t')?true:false;
+        UBool gotAvail = false;
         const char *inLocale = testCases[i+1];
         const char *expectLocale = testCases[i+2];
         char equivLocale[256];
@@ -2724,9 +2725,9 @@ static void TestGetFunctionalEquivalent(void) {
     };
 
 #if !UCONFIG_NO_COLLATION
-    TestGetFunctionalEquivalentOf(U_ICUDATA_COLL, "collations", "collation", TRUE, collCases);
+    TestGetFunctionalEquivalentOf(U_ICUDATA_COLL, "collations", "collation", true, collCases);
 #endif
-    TestGetFunctionalEquivalentOf("ICUDATA", "calendar", "calendar", FALSE, calCases);
+    TestGetFunctionalEquivalentOf("ICUDATA", "calendar", "calendar", false, calCases);
 
 #if !UCONFIG_NO_COLLATION
     log_verbose("Testing error conditions:\n");
@@ -2734,11 +2735,11 @@ static void TestGetFunctionalEquivalent(void) {
         char equivLocale[256] = "???";
         int32_t len;
         UErrorCode status = U_ZERO_ERROR;
-        UBool gotAvail = FALSE;
+        UBool gotAvail = false;
 
         len = ures_getFunctionalEquivalent(equivLocale, 255, U_ICUDATA_COLL,
             "calendar", "calendar", "ar_EG@calendar=islamic", 
-            &gotAvail, FALSE, &status);
+            &gotAvail, false, &status);
         (void)len;    /* Suppress set but not used warning. */
 
         if(status == U_MISSING_RESOURCE_ERROR) {
@@ -2929,7 +2930,7 @@ tres_getString(const UResourceBundle *resB,
     length16 = *length;
 
     /* try the UTF-8 variant of ures_getStringXYZ() */
-    for(forceCopy = FALSE; forceCopy <= TRUE; ++forceCopy) {
+    for(forceCopy = false; forceCopy <= true; ++forceCopy) {
         p8 = buffer8;
         length8 = (int32_t)sizeof(buffer8);
         if(idx >= 0) {
@@ -3037,7 +3038,7 @@ TestGetUTF8String() {
     /* one good call */
     status = U_ZERO_ERROR;
     length8 = (int32_t)sizeof(buffer8);
-    s8 = ures_getUTF8StringByKey(res, "string_only_in_Root", buffer8, &length8, FALSE, &status);
+    s8 = ures_getUTF8StringByKey(res, "string_only_in_Root", buffer8, &length8, false, &status);
     (void)s8;    /* Suppress set but not used warning. */
     if(status != U_ZERO_ERROR) {
         log_err("ures_getUTF8StringByKey(testdata/root string) malfunctioned - %s\n", u_errorName(status));
@@ -3046,7 +3047,7 @@ TestGetUTF8String() {
     /* negative capacity */
     status = U_ZERO_ERROR;
     length8 = -1;
-    s8 = ures_getUTF8StringByKey(res, "string_only_in_Root", buffer8, &length8, FALSE, &status);
+    s8 = ures_getUTF8StringByKey(res, "string_only_in_Root", buffer8, &length8, false, &status);
     if(status != U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("ures_getUTF8StringByKey(capacity<0) malfunctioned - %s\n", u_errorName(status));
     }
@@ -3054,7 +3055,7 @@ TestGetUTF8String() {
     /* capacity>0 but dest=NULL */
     status = U_ZERO_ERROR;
     length8 = (int32_t)sizeof(buffer8);
-    s8 = ures_getUTF8StringByKey(res, "string_only_in_Root", NULL, &length8, FALSE, &status);
+    s8 = ures_getUTF8StringByKey(res, "string_only_in_Root", NULL, &length8, false, &status);
     if(status != U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("ures_getUTF8StringByKey(dest=NULL capacity>0) malfunctioned - %s\n", u_errorName(status));
     }

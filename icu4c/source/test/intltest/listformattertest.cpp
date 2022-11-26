@@ -72,14 +72,14 @@ void ListFormatterTest::ExpectPositions(
     ConstrainedFieldPosition cfp;
     cfp.constrainCategory(UFIELD_CATEGORY_LIST);
     if (tupleCount > 10) {
-      assertTrue("internal error, tupleCount too large", FALSE);
+      assertTrue("internal error, tupleCount too large", false);
     } else {
         for (int i = 0; i < tupleCount; ++i) {
-            found[i] = FALSE;
+            found[i] = false;
         }
     }
     while (iter.nextPosition(cfp, status)) {
-        UBool ok = FALSE;
+        UBool ok = false;
         int32_t id = cfp.getField();
         int32_t start = cfp.getStart();
         int32_t limit = cfp.getLimit();
@@ -91,17 +91,17 @@ void ListFormatterTest::ExpectPositions(
                 continue;
             }
             if (values[i*3] == id && values[i*3+1] == start && values[i*3+2] == limit) {
-                found[i] = ok = TRUE;
+                found[i] = ok = true;
                 break;
             }
         }
         assertTrue((UnicodeString)"found [" + attrString(id) + "," + start + "," + limit + "]", ok);
     }
     // check that all were found
-    UBool ok = TRUE;
+    UBool ok = true;
     for (int i = 0; i < tupleCount; ++i) {
         if (!found[i]) {
-            ok = FALSE;
+            ok = false;
             assertTrue((UnicodeString) "missing [" + attrString(values[i*3]) + "," + values[i*3+1] +
                        "," + values[i*3+2] + "]", found[i]);
         }
@@ -153,7 +153,7 @@ UBool ListFormatterTest::RecordFourCases(const Locale& locale, UnicodeString one
     LocalPointer<ListFormatter> formatter(ListFormatter::createInstance(locale, errorCode));
     if (U_FAILURE(errorCode)) {
         dataerrln("ListFormatter::createInstance(\"%s\", errorCode) failed in RecordFourCases: %s", locale.getName(), u_errorName(errorCode));
-        return FALSE;
+        return false;
     }
     UnicodeString input1[] = {one};
     formatter->format(input1, 1, results[0], errorCode);
@@ -165,9 +165,9 @@ UBool ListFormatterTest::RecordFourCases(const Locale& locale, UnicodeString one
     formatter->format(input4, 4, results[3], errorCode);
     if (U_FAILURE(errorCode)) {
         errln("RecordFourCases failed: %s", u_errorName(errorCode));
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 void ListFormatterTest::TestRoot() {

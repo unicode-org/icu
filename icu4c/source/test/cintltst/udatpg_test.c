@@ -28,6 +28,9 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
+
+#include <stdbool.h>
+
 #include "unicode/udat.h"
 #include "unicode/udatpg.h"
 #include "unicode/ustring.h"
@@ -47,6 +50,7 @@ static void TestGetDefaultHourCycle(void);
 static void TestGetDefaultHourCycleOnEmptyInstance(void);
 static void TestEras(void);
 static void TestDateTimePatterns(void);
+static void TestRegionOverride(void);
 
 void addDateTimePatternGeneratorTest(TestNode** root) {
     TESTCASE(TestOpenClose);
@@ -58,6 +62,7 @@ void addDateTimePatternGeneratorTest(TestNode** root) {
     TESTCASE(TestGetDefaultHourCycleOnEmptyInstance);
     TESTCASE(TestEras);
     TESTCASE(TestDateTimePatterns);
+    TESTCASE(TestRegionOverride);
 }
 
 /*
@@ -275,14 +280,14 @@ static void TestBuilder() {
     }
     
     /* Add a pattern */
-    conflict = udatpg_addPattern(dtpg, redundantPattern, 5, FALSE, result, 20, 
+    conflict = udatpg_addPattern(dtpg, redundantPattern, 5, false, result, 20, 
                                  &length, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("udatpg_addPattern() failed - %s\n", u_errorName(errorCode));
         return;
     }
     /* Add a redundant pattern */
-    conflict = udatpg_addPattern(dtpg, redundantPattern, 5, FALSE, result, 20,
+    conflict = udatpg_addPattern(dtpg, redundantPattern, 5, false, result, 20,
                                  &length, &errorCode);
     if(conflict == UDATPG_NO_CONFLICT) {
         log_err("udatpg_addPattern() failed to find the duplicate pattern.\n");
@@ -290,7 +295,7 @@ static void TestBuilder() {
     }
     /* Test pattern == NULL */
     s=NULL;
-    length = udatpg_addPattern(dtpg, s, 0, FALSE, result, 20,
+    length = udatpg_addPattern(dtpg, s, 0, false, result, 20,
                                &length, &errorCode);
     if(!U_FAILURE(errorCode)&&(length!=0) ) {
         log_err("udatpg_addPattern failed in illegal argument - pattern is NULL.\n");
@@ -299,7 +304,7 @@ static void TestBuilder() {
 
     /* replace field type */
     errorCode=U_ZERO_ERROR;
-    conflict = udatpg_addPattern(dtpg, testPattern2, 7, FALSE, result, 20,
+    conflict = udatpg_addPattern(dtpg, testPattern2, 7, false, result, 20,
                                  &length, &errorCode);
     if((conflict != UDATPG_NO_CONFLICT)||U_FAILURE(errorCode)) {
         log_err("udatpg_addPattern() failed to add HH:mm v. - %s\n", u_errorName(errorCode));
@@ -645,7 +650,7 @@ static void TestDateTimePatterns(void) {
                   u"d MMMM y 'à' HH:mm",
                   u"d MMM y, HH:mm",
                   u"dd/MM/y HH:mm" } },
-        { "ha", { u"EEEE d MMMM, y HH:mm", // full != long
+        { "ha", { u"EEEE d MMMM, y 'da' HH:mm",
                   u"d MMMM, y 'da' HH:mm",
                   u"d MMM, y, HH:mm",
                   u"y-MM-dd, HH:mm" } },
@@ -790,4 +795,35 @@ static void doDTPatternTest(UDateTimePatternGenerator* udtpg,
     }
 }
 
+static void TestRegionOverride(void) {
+    typedef struct RegionOverrideTest {
+        const char* locale;
+        const UChar* expectedPattern;
+        UDateFormatHourCycle expectedHourCycle;
+    } RegionOverrideTest;
+
+    const RegionOverrideTest testCases[] = {
+        { "en_US",           u"h:mm\u202fa", UDAT_HOUR_CYCLE_12 },
+        { "en_GB",           u"HH:mm",  UDAT_HOUR_CYCLE_23 },
+        { "en_US@rg=GBZZZZ", u"HH:mm",  UDAT_HOUR_CYCLE_23 },
+        { "en_US@hours=h23", u"HH:mm",  UDAT_HOUR_CYCLE_23 },
+    };
+
+    for (int32_t i = 0; i < UPRV_LENGTHOF(testCases); i++) {
+        UErrorCode err = U_ZERO_ERROR;
+        UChar actualPattern[200];
+        UDateTimePatternGenerator* dtpg = udatpg_open(testCases[i].locale, &err);
+
+        if (assertSuccess("Error creating dtpg", &err)) {
+            UDateFormatHourCycle actualHourCycle = udatpg_getDefaultHourCycle(dtpg, &err);
+            udatpg_getBestPattern(dtpg, u"jmm", -1, actualPattern, 200, &err);
+
+            if (assertSuccess("Error using dtpg", &err)) {
+                assertIntEquals("Wrong hour cycle", testCases[i].expectedHourCycle, actualHourCycle);
+                assertUEquals("Wrong pattern", testCases[i].expectedPattern, actualPattern);
+            }
+        }
+        udatpg_close(dtpg);
+    }
+}
 #endif

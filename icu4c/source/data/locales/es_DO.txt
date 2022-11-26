@@ -126,6 +126,9 @@ es_DO{
         day{
             dn{"Día"}
         }
+        dayperiod{
+            dn{"a. m./p. m."}
+        }
         era{
             dn{"Era"}
         }

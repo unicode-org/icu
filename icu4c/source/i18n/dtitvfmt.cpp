@@ -298,7 +298,7 @@ DateIntervalFormat::format(const DateInterval* dtInterval,
     }
 
     FieldPositionOnlyHandler handler(fieldPosition);
-    handler.setAcceptFirstOnly(TRUE);
+    handler.setAcceptFirstOnly(true);
     int8_t ignore;
 
     Mutex lock(&gFormatterMutex);
@@ -351,7 +351,7 @@ DateIntervalFormat::format(Calendar& fromCalendar,
                            FieldPosition& pos,
                            UErrorCode& status) const {
     FieldPositionOnlyHandler handler(pos);
-    handler.setAcceptFirstOnly(TRUE);
+    handler.setAcceptFirstOnly(true);
     int8_t ignore;
 
     Mutex lock(&gFormatterMutex);
@@ -1207,8 +1207,8 @@ DateIntervalFormat::getDateTimeSkeleton(const UnicodeString& skeleton,
  * @param dateSkeleton   normalized date skeleton
  * @param timeSkeleton   normalized time skeleton
  * @return               whether the resource is found for the skeleton.
- *                       TRUE if interval pattern found for the skeleton,
- *                       FALSE otherwise.
+ *                       true if interval pattern found for the skeleton,
+ *                       false otherwise.
  * @stable ICU 4.0
  */
 UBool
@@ -1420,8 +1420,8 @@ DateIntervalFormat::setIntervalPattern(UCalendarDateFields field,
  * @param extendedBestSkeleton  extended best match skeleton
  * @return                      whether the interval pattern is found
  *                              through extending skeleton or not.
- *                              TRUE if interval pattern is found by
- *                              extending skeleton, FALSE otherwise.
+ *                              true if interval pattern is found by
+ *                              extending skeleton, false otherwise.
  * @stable ICU 4.0
  */
 UBool
@@ -1495,10 +1495,10 @@ DateIntervalFormat::setIntervalPattern(UCalendarDateFields field,
             setIntervalPattern(field, pattern);
         }
         if ( extendedSkeleton && !extendedSkeleton->isEmpty() ) {
-            return TRUE;
+            return true;
         }
     }
-    return FALSE;
+    return false;
 }
 
 
@@ -1539,8 +1539,8 @@ DateIntervalFormat::splitPatternInto2Part(const UnicodeString& intervalPattern) 
         if (ch != prevCh && count > 0) {
             // check the repeativeness of pattern letter
             UBool repeated = patternRepeated[(int)(prevCh - PATTERN_CHAR_BASE)];
-            if ( repeated == FALSE ) {
-                patternRepeated[prevCh - PATTERN_CHAR_BASE] = TRUE;
+            if ( repeated == false ) {
+                patternRepeated[prevCh - PATTERN_CHAR_BASE] = true;
             } else {
                 foundRepetition = true;
                 break;
@@ -1568,8 +1568,8 @@ DateIntervalFormat::splitPatternInto2Part(const UnicodeString& intervalPattern) 
     // "dd MM" ( no repetition ),
     // "d-d"(last char repeated ), and
     // "d-d MM" ( repetition found )
-    if ( count > 0 && foundRepetition == FALSE ) {
-        if ( patternRepeated[(int)(prevCh - PATTERN_CHAR_BASE)] == FALSE ) {
+    if ( count > 0 && foundRepetition == false ) {
+        if ( patternRepeated[(int)(prevCh - PATTERN_CHAR_BASE)] == false ) {
             count = 0;
         }
     }
@@ -1683,7 +1683,7 @@ DateIntervalFormat::fieldExistsInSkeleton(UCalendarDateFields field,
                                           const UnicodeString& skeleton)
 {
     const UChar fieldChar = fgCalendarFieldToPatternLetter[field];
-    return ( (skeleton.indexOf(fieldChar) == -1)?FALSE:TRUE ) ;
+    return ( (skeleton.indexOf(fieldChar) == -1)?false:true ) ;
 }
 
 

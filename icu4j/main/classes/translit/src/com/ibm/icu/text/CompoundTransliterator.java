@@ -138,7 +138,7 @@ class CompoundTransliterator extends Transliterator {
      * @param splitTrans a transliterator to be inserted
      * before the entry at offset idSplitPoint in the id string.  May be
      * NULL to insert no entry.
-     * @param fixReverseID if TRUE, then reconstruct the ID of reverse
+     * @param fixReverseID if true, then reconstruct the ID of reverse
      * entries by calling getID() of component entries.  Some constructors
      * do not require this because they apply a facade ID anyway.
      */
@@ -173,7 +173,7 @@ class CompoundTransliterator extends Transliterator {
      * is, it should be in the FORWARD order; if direction is REVERSE then
      * the list order will be reversed.
      * @param direction either FORWARD or REVERSE
-     * @param fixReverseID if TRUE, then reconstruct the ID of reverse
+     * @param fixReverseID if true, then reconstruct the ID of reverse
      * entries by calling getID() of component entries.  Some constructors
      * do not require this because they apply a facade ID anyway.
      */
@@ -257,7 +257,7 @@ class CompoundTransliterator extends Transliterator {
      * Override Transliterator:
      * Create a rule string that can be passed to createFromRules()
      * to recreate this transliterator.
-     * @param escapeUnprintable if TRUE then convert unprintable
+     * @param escapeUnprintable if true then convert unprintable
      * character to their hex escape representations, \\uxxxx or
      * \\Uxxxxxxxx.  Unprintable characters are those other than
      * U+000A, U+0020..U+007E.

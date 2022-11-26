@@ -22,7 +22,7 @@
 
 /**
  * \file
- * \brief  C++ API:  Regular Expressions
+ * \brief C++ API: Regular Expressions
  *
  * The ICU API for processing regular expressions consists of two classes,
  *  `RegexPattern` and `RegexMatcher`.

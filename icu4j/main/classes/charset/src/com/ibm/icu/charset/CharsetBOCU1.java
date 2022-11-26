@@ -254,7 +254,7 @@ class CharsetBOCU1 extends CharsetICU {
          * what we need here.
          * This macro adjust the results so that the modulo-value m is always >=0.
          *
-         * For positive n, the if() condition is always FALSE.
+         * For positive n, the if() condition is always false.
          *
          * @param n Number to be split into quotient and rest.
          *          Will be modified to contain the quotient.

@@ -83,7 +83,7 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
             strcat(xbuf2,locID);
             strcat(xbuf2,"/");
             //printf(" -> %s\n", xbuf2);
-            UCollator *col = ucol_openFromShortString(xbuf2, FALSE,NULL, &subStatus);
+            UCollator *col = ucol_openFromShortString(xbuf2, false,NULL, &subStatus);
 #else
             UCollator *col = ucol_open(locID, &subStatus);
 #endif
@@ -122,7 +122,7 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
             printf("\n");
 
             char xbuf4[200];
-            UCollator *col2 = ucol_openFromShortString(xbuf3, FALSE, NULL, &subStatus);
+            UCollator *col2 = ucol_openFromShortString(xbuf3, false, NULL, &subStatus);
             if(U_FAILURE(subStatus)) {
               printf("Err opening from new short string : %s\n", u_errorName(subStatus));
               continue;

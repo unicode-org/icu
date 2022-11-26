@@ -74,8 +74,8 @@ tzm{
                 "Ḍeffir aza",
             }
             AmPmMarkersAbbr{
-                "Zdat azal",
-                "Ḍeffir aza",
+                "Zdat azal",
+                "Ḍeffir aza",
             }
             DateTimePatterns{
                 "HH:mm:ss zzzz",

@@ -1354,4 +1354,19 @@ tt{
         US{"АКШ"}
         metric{"метрик"}
     }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "tt",
+            }
+            surnameFirst{
+                "ja",
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+    }
 }

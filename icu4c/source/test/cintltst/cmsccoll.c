@@ -15,6 +15,7 @@
  * to fit.
  */
 
+#include <stdbool.h>
 #include <stdio.h>
 
 #include "unicode/utypes.h"
@@ -3222,16 +3223,16 @@ ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
                                      &isAvailable, &ec);
     if (assertSuccess("getFunctionalEquivalent", &ec)) {
         assertEquals("getFunctionalEquivalent(de)", "root", loc);
-        assertTrue("getFunctionalEquivalent(de).isAvailable==TRUE",
-                   isAvailable == TRUE);
+        assertTrue("getFunctionalEquivalent(de).isAvailable==true",
+                   isAvailable == true);
     }
 
     n = ucol_getFunctionalEquivalent(loc, sizeof(loc), "collation", "de_DE",
                                      &isAvailable, &ec);
     if (assertSuccess("getFunctionalEquivalent", &ec)) {
         assertEquals("getFunctionalEquivalent(de_DE)", "root", loc);
-        assertTrue("getFunctionalEquivalent(de_DE).isAvailable==FALSE",
-                   isAvailable == FALSE);
+        assertTrue("getFunctionalEquivalent(de_DE).isAvailable==false",
+                   isAvailable == false);
     }
 }
 
@@ -4032,7 +4033,7 @@ TestSortKeyConsistency(void)
     uint8_t bufPart[TSKC_DATA_SIZE][TSKC_BUF_SIZE];
     int32_t i, j, i2;
 
-    ucol = ucol_openFromShortString("LEN_S4", FALSE, NULL, &icuRC);
+    ucol = ucol_openFromShortString("LEN_S4", false, NULL, &icuRC);
     if (U_FAILURE(icuRC))
     {
         log_err_status(icuRC, "ucol_openFromShortString failed -> %s\n", u_errorName(icuRC));
@@ -4062,8 +4063,8 @@ TestSortKeyConsistency(void)
 
         for (i2=0; i2<i; i2++)
         {
-            UBool fullMatch = TRUE;
-            UBool partMatch = TRUE;
+            UBool fullMatch = true;
+            UBool partMatch = true;
             for (j=0; j<TSKC_BUF_SIZE; j++)
             {
                 fullMatch = fullMatch && (bufFull[i][j] != bufFull[i2][j]);
@@ -4098,7 +4099,7 @@ static void TestCroatianSortKey(void) {
     size_t actualSortKeyLen;
     uint32_t uStateInfo[2] = { 0, 0 };
 
-    ucol = ucol_openFromShortString(collString, FALSE, NULL, &status);
+    ucol = ucol_openFromShortString(collString, false, NULL, &status);
     if (U_FAILURE(status)) {
         log_err_status(status, "ucol_openFromShortString error in Craotian test. -> %s\n", u_errorName(status));
         return;
@@ -4142,7 +4143,7 @@ static void TestHiragana(void) {
     int32_t keySize1;
     int32_t keySize2;
 
-    ucol = ucol_openFromShortString("LJA_AN_CX_EX_FX_HO_NX_S4", FALSE, NULL,
+    ucol = ucol_openFromShortString("LJA_AN_CX_EX_FX_HO_NX_S4", false, NULL,
             &status);
     if (U_FAILURE(status)) {
         log_err_status(status, "Error status: %s; Unable to open collator from short string.\n", u_errorName(status));
@@ -4944,9 +4945,9 @@ static void TestReorderingAPIWithRuleCreatedCollator(void)
 static UBool containsExpectedScript(const int32_t scripts[], int32_t length, int32_t expectedScript) {
     int32_t i;
     for (i = 0; i < length; ++i) {
-        if (expectedScript == scripts[i]) { return TRUE; }
+        if (expectedScript == scripts[i]) { return true; }
     }
-    return FALSE;
+    return false;
 }
 
 static void TestEquivalentReorderingScripts(void) {

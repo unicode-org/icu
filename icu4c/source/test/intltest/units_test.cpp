@@ -948,7 +948,11 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
         return;
     }
 
-    UnitsRouter router(inputMeasureUnit, region, usage, status);
+    CharString localeID;
+    localeID.append("und-", status); // append undefined language.
+    localeID.append(region, status);
+    Locale locale(localeID.data());
+    UnitsRouter router(inputMeasureUnit, locale, usage, status);
     if (status.errIfFailureAndReset("UnitsRouter(<%s>, \"%.*s\", \"%.*s\", status)",
                                     inputMeasureUnit.getIdentifier(), region.length(), region.data(),
                                     usage.length(), usage.data())) {
@@ -976,7 +980,7 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
 
     // Test UnitsRouter created with CLDR units identifiers.
     CharString inputUnitIdentifier(inputUnit, status);
-    UnitsRouter router2(inputUnitIdentifier.data(), region, usage, status);
+    UnitsRouter router2(inputUnitIdentifier.data(), locale, usage, status);
     if (status.errIfFailureAndReset("UnitsRouter2(<%s>, \"%.*s\", \"%.*s\", status)",
                                     inputUnitIdentifier.data(), region.length(), region.data(),
                                     usage.length(), usage.data())) {

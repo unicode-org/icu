@@ -19,8 +19,6 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.ibm.icu.text.DisplayOptions;
-import com.ibm.icu.text.DisplayOptions.GrammaticalCase;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.format.FormattedValueTest;
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
@@ -51,6 +49,9 @@ import com.ibm.icu.number.SkeletonSyntaxException;
 import com.ibm.icu.number.UnlocalizedNumberFormatter;
 import com.ibm.icu.text.ConstrainedFieldPosition;
 import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.DisplayOptions;
+import com.ibm.icu.text.DisplayOptions.GrammaticalCase;
+import com.ibm.icu.text.DisplayOptions.NounClass;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberingSystem;
 import com.ibm.icu.util.Currency;
@@ -59,7 +60,6 @@ import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.NoUnit;
-import com.ibm.icu.text.DisplayOptions.NounClass;
 import com.ibm.icu.util.ULocale;
 
 public class NumberFormatterApiTest extends TestFmwk {
@@ -490,6 +490,65 @@ public class NumberFormatterApiTest extends TestFmwk {
     }
 
     @Test
+    public void unitWithLocaleTags() {
+        String[][] tests = {
+                // 0-message, 1- locale, 2- input unit, 3- input value, 4- usage, 5- output unit, 6- output value, 7- formatted number.
+                // Test without any tag behaviour
+                {"Test the locale without any addition and without usage", "en-US", "celsius", "0", null, "celsius", "0.0", "0 degrees Celsius"},
+                {"Test the locale without any addition and usage", "en-US", "celsius", "0", "default", "fahrenheit", "32.0", "32 degrees Fahrenheit"},
+
+                // Test the behaviour of the `mu` tag.
+                {"Test the locale with mu = celsius and without usage", "en-US-u-mu-celsius", "fahrenheit", "0", null, "fahrenheit", "0.0", "0 degrees Fahrenheit"},
+                {"Test the locale with mu = celsius and with usage", "en-US-u-mu-celsius", "fahrenheit", "0", "default", "celsius", "-18.0", "-18 degrees Celsius"},
+                {"Test the locale with mu = calsius (wrong spelling) and with usage", "en-US-u-mu-calsius", "fahrenheit", "0", "default", "fahrenheit", "0.0", "0 degrees Fahrenheit"},
+                {"Test the locale with mu = fahrenheit and without usage", "en-US-u-mu-fahrenheit", "celsius", "0", null, "celsius", "0.0", "0 degrees Celsius"},
+                {"Test the locale with mu = fahrenheit and with usage", "en-US-u-mu-fahrenheit", "celsius", "0", "default", "fahrenheit", "32.0", "32 degrees Fahrenheit"},
+                {"Test the locale with mu = meter (only temprature units are supported) and with usage", "en-US-u-mu-meter", "foot", "0", "default", "foot", "0.0", "0 inches"},
+
+                // Test the behaviour of the `ms` tag
+                {"Test the locale with ms = metric and without usage", "en-US-u-ms-metric", "fahrenheit", "0", null, "fahrenheit", "0.0", "0 degrees Fahrenheit"},
+                {"Test the locale with ms = metric and with usage", "en-US-u-ms-metric", "fahrenheit", "0", "default", "celsius", "-18", "-18 degrees Celsius"},
+                {"Test the locale with ms = Matric (wrong spelling) and with usage", "en-US-u-ms-Matric", "fahrenheit", "0", "default", "fahrenheit", "0.0", "0 degrees Fahrenheit"},
+
+                // Test the behaviour of the `rg` tag
+                {"Test the locale with rg = UK and without usage", "en-US-u-rg-ukzzzz", "fahrenheit", "0", null, "fahrenheit", "0.0", "0 degrees Fahrenheit"},
+                {"Test the locale with rg = UK and with usage", "en-US-u-rg-ukzzzz", "fahrenheit", "0", "default", "celsius", "-18", "-18 degrees Celsius"},
+                {"Test the locale with rg = UKOI and with usage", "en-US-u-rg-ukoizzzz", "fahrenheit", "0", "default", "celsius", "-18" , "-18 degrees Celsius"},
+
+                // Test the priorities
+                {"Test the locale with mu,ms,rg --> mu tag wins", "en-US-u-mu-celsius-ms-ussystem-rg-uszzzz", "celsius", "0", "default", "celsius", "0.0", "0 degrees Celsius"},
+                {"Test the locale with ms,rg --> ms tag wins", "en-US-u-ms-metric-rg-uszzzz", "foot", "1", "default", "foot", "30.0", "30 centimeters"},
+        };
+
+        int testIndex = 0;
+        for (String[] test : tests) {
+            String message = test[0] + ", index = " + testIndex++;
+            ULocale locale = ULocale.forLanguageTag(test[1]);
+            MeasureUnit inputUnit = MeasureUnit.forIdentifier(test[2]);
+            double inputValue = Double.parseDouble(test[3]);
+            String usage = test[4];
+            MeasureUnit expectedOutputUnit = MeasureUnit.forIdentifier(test[5]);
+            BigDecimal expectedOutputValue = new BigDecimal(test[6]);
+            String expectedFormattedMessage = test[7];
+
+            LocalizedNumberFormatter nf = NumberFormatter.with().locale(locale).unit(inputUnit).unitWidth(UnitWidth.FULL_NAME);
+            if (usage != null) {
+                nf = nf.usage(usage);
+            }
+
+            FormattedNumber fn = nf.format(inputValue);
+            MeasureUnit actualOutputUnit = fn.getOutputUnit();
+            BigDecimal actualOutputValue = fn.toBigDecimal();
+            String actualFormattedMessage = fn.toString();
+
+            assertEquals(message, expectedFormattedMessage, actualFormattedMessage);
+            // TODO: ICU-22154
+            // assertEquals(message, expectedOutputUnit, actualOutputUnit);
+            assertTrue(message, expectedOutputValue.subtract(actualOutputValue).abs().compareTo(BigDecimal.valueOf(0.0001)) <= 0);
+        }
+    }
+
+    @Test
     public void unitMeasure() {
         assertFormatDescending(
                 "Meters Short",
@@ -709,10 +768,10 @@ public class NumberFormatterApiTest extends TestFmwk {
 
         assertFormatSingle(
                 "Mixed Unit (Narrow Version)",
-                "unit/metric-ton-and-kilogram-and-gram unit-width-narrow",
-                "unit/metric-ton-and-kilogram-and-gram unit-width-narrow",
+                "unit/tonne-and-kilogram-and-gram unit-width-narrow",
+                "unit/tonne-and-kilogram-and-gram unit-width-narrow",
                 NumberFormatter.with()
-                        .unit(MeasureUnit.forIdentifier("metric-ton-and-kilogram-and-gram"))
+                        .unit(MeasureUnit.forIdentifier("tonne-and-kilogram-and-gram"))
                         .unitWidth(UnitWidth.NARROW),
                 new ULocale("en-US"),
                 4.28571,
@@ -720,10 +779,10 @@ public class NumberFormatterApiTest extends TestFmwk {
 
         assertFormatSingle(
                 "Mixed Unit (Short Version)",
-                "unit/metric-ton-and-kilogram-and-gram unit-width-short",
-                "unit/metric-ton-and-kilogram-and-gram unit-width-short",
+                "unit/tonne-and-kilogram-and-gram unit-width-short",
+                "unit/tonne-and-kilogram-and-gram unit-width-short",
                 NumberFormatter.with()
-                        .unit(MeasureUnit.forIdentifier("metric-ton-and-kilogram-and-gram"))
+                        .unit(MeasureUnit.forIdentifier("tonne-and-kilogram-and-gram"))
                         .unitWidth(UnitWidth.SHORT),
                 new ULocale("en-US"),
                 4.28571,
@@ -731,10 +790,10 @@ public class NumberFormatterApiTest extends TestFmwk {
 
         assertFormatSingle(
                 "Mixed Unit (Full Name Version)",
-                "unit/metric-ton-and-kilogram-and-gram unit-width-full-name",
-                "unit/metric-ton-and-kilogram-and-gram unit-width-full-name",
+                "unit/tonne-and-kilogram-and-gram unit-width-full-name",
+                "unit/tonne-and-kilogram-and-gram unit-width-full-name",
                 NumberFormatter.with()
-                        .unit(MeasureUnit.forIdentifier("metric-ton-and-kilogram-and-gram"))
+                        .unit(MeasureUnit.forIdentifier("tonne-and-kilogram-and-gram"))
                         .unitWidth(UnitWidth.FULL_NAME),
                 new ULocale("en-US"),
                 4.28571,
@@ -1839,6 +1898,18 @@ public class NumberFormatterApiTest extends TestFmwk {
                 new ULocale("en-US"),
                 1,
                 "0.019 psi");
+
+        // ICU-22105
+        assertFormatSingle("negative temperature conversion",
+                "measure-unit/temperature-celsius unit-width-short usage/default",
+                "measure-unit/temperature-celsius unit-width-short usage/default",
+                NumberFormatter.with()
+                        .unit(MeasureUnit.forIdentifier("celsius"))
+                        .usage("default")
+                        .unitWidth(UnitWidth.SHORT),
+                new ULocale("en-US"),
+                -1,
+                "30°F");
     }
 
     @Test
@@ -2102,7 +2173,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().unit(USD).unitWidth(UnitWidth.NARROW),
                 ULocale.forLanguageTag("en-CA"),
                 5.43,
-                "$5.43");
+                "US$5.43");
 
         assertFormatSingle(
                 "Currency Difference between Narrow and Short (Short Version)",
@@ -2233,7 +2304,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 -123.12,
                 "RON-123.12");
 
-        // TODO(CLDR-13044): Move the sign to the inside of the number
+        // TODO(ICU-21420): Move the sign to the inside of the number
         assertFormatSingle(
                 "Sign position on negative number with currency spacing",
                 "currency/RON",
@@ -2433,7 +2504,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 new UnitInflectionTestCase("centimeter", "de", null, 1, "1 Zentimeter"),
                 new UnitInflectionTestCase("centimeter", "de", "genitive", 1, "1 Zentimeters"),
                 new UnitInflectionTestCase("centimeter", "de", "dative", 10, "10 Zentimetern"),
-                // TODO(CLDR-14502): check that these inflections are correct, and
+                // TODO(CLDR-14582): check that these inflections are correct, and
                 // whether CLDR needs any rules for them (presumably CLDR spec
                 // should mention it, if it's a consistent rule):
                 new UnitInflectionTestCase("meter-and-centimeter", "de", null, 1.01,
@@ -2582,7 +2653,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 //     new TestCase("de", "lux", NounClass.UNDEFINED),                               //
                 //     new TestCase("de", "candela", NounClass.UNDEFINED),                           //
                 //     new TestCase("de", "lumen", NounClass.UNDEFINED),                             //
-                //     new TestCase("de", "metric-ton", NounClass.UNDEFINED),                        //
+                //     new TestCase("de", "tonne", NounClass.UNDEFINED),                        //
                 new TestCase("de", "microgram", NounClass.NEUTER),                   // PREFIX
                 //     new TestCase("de", "ton", NounClass.UNDEFINED),                               //
                 //     new TestCase("de", "stone", NounClass.UNDEFINED),                             //
@@ -2674,7 +2745,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 //     new TestCase("fr", "lux", NounClass.UNDEFINED),                                        //
                 //     new TestCase("fr", "candela", NounClass.UNDEFINED),                                    //
                 //     new TestCase("fr", "lumen", NounClass.UNDEFINED),                                      //
-                //     new TestCase("fr", "metric-ton", NounClass.UNDEFINED),                                 //
+                //     new TestCase("fr", "tonne", NounClass.UNDEFINED),                                 //
                 new TestCase("fr", "microgram", NounClass.MASCULINE),                         // PREFIX
                 //     new TestCase("fr", "ton", NounClass.UNDEFINED),                                        //
                 //     new TestCase("fr", "stone", NounClass.UNDEFINED),                                      //
@@ -2886,7 +2957,7 @@ public class NumberFormatterApiTest extends TestFmwk {
         //     new TestCase("de", "lux", ""),                               //
         //     new TestCase("de", "candela", ""),                           //
         //     new TestCase("de", "lumen", ""),                             //
-        //     new TestCase("de", "metric-ton", ""),                        //
+        //     new TestCase("de", "tonne", ""),                        //
             new TestCase("de", "microgram", "neuter"),                   // PREFIX
         //     new TestCase("de", "ton", ""),                               //
         //     new TestCase("de", "stone", ""),                             //
@@ -2978,7 +3049,7 @@ public class NumberFormatterApiTest extends TestFmwk {
         //     new TestCase("fr", "lux", ""),                                        //
         //     new TestCase("fr", "candela", ""),                                    //
         //     new TestCase("fr", "lumen", ""),                                      //
-        //     new TestCase("fr", "metric-ton", ""),                                 //
+        //     new TestCase("fr", "tonne", ""),                                 //
             new TestCase("fr", "microgram", "masculine"),                         // PREFIX
         //     new TestCase("fr", "ton", ""),                                        //
         //     new TestCase("fr", "stone", ""),                                      //
@@ -4217,39 +4288,39 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "8,765",
                 "0");
 
-        // NOTE: Bulgarian is interesting because it has no grouping in the default currency format.
+        // NOTE: en_US_POSIX is interesting because it has no grouping in the default currency format.
         // If this test breaks due to data changes, find another locale that has no default grouping.
         assertFormatDescendingBig(
-                "Bulgarian Currency Grouping",
+                "en_US_POSIX Currency Grouping",
                 "currency/USD group-auto",
                 "currency/USD",
                 NumberFormatter.with().grouping(GroupingStrategy.AUTO).unit(USD),
-                new ULocale("bg"),
-                "87650000,00 щ.д.",
-                "8765000,00 щ.д.",
-                "876500,00 щ.д.",
-                "87650,00 щ.д.",
-                "8765,00 щ.д.",
-                "876,50 щ.д.",
-                "87,65 щ.д.",
-                "8,76 щ.д.",
-                "0,00 щ.д.");
+                new ULocale("en_US_POSIX"),
+                "$ 87650000.00",
+                "$ 8765000.00",
+                "$ 876500.00",
+                "$ 87650.00",
+                "$ 8765.00",
+                "$ 876.50",
+                "$ 87.65",
+                "$ 8.76",
+                "$ 0.00");
 
         assertFormatDescendingBig(
-                "Bulgarian Currency Grouping, Always",
+                "en_US_POSIX Currency Grouping, Always",
                 "currency/USD group-on-aligned",
                 "currency/USD ,!",
                 NumberFormatter.with().grouping(GroupingStrategy.ON_ALIGNED).unit(USD),
-                new ULocale("bg"),
-                "87 650 000,00 щ.д.",
-                "8 765 000,00 щ.д.",
-                "876 500,00 щ.д.",
-                "87 650,00 щ.д.",
-                "8 765,00 щ.д.",
-                "876,50 щ.д.",
-                "87,65 щ.д.",
-                "8,76 щ.д.",
-                "0,00 щ.д.");
+                new ULocale("en_US_POSIX"),
+                "$ 87,650,000.00",
+                "$ 8,765,000.00",
+                "$ 876,500.00",
+                "$ 87,650.00",
+                "$ 8,765.00",
+                "$ 876.50",
+                "$ 87.65",
+                "$ 8.76",
+                "$ 0.00");
 
         MacroProps macros = new MacroProps();
         macros.grouping = Grouper.getInstance((short) 4, (short) 1, (short) 3);
@@ -4637,15 +4708,15 @@ public class NumberFormatterApiTest extends TestFmwk {
                 "currency/USD latin",
                 NumberFormatter.with().symbols(NumberingSystem.LATIN).unit(USD),
                 new ULocale("ar"),
-                "US$ 87,650.00",
-                "US$ 8,765.00",
-                "US$ 876.50",
-                "US$ 87.65",
-                "US$ 8.76",
-                "US$ 0.88",
-                "US$ 0.09",
-                "US$ 0.01",
-                "US$ 0.00");
+                "\u200F87,650.00 US$",
+                "\u200F8,765.00 US$",
+                "\u200F876.50 US$",
+                "\u200F87.65 US$",
+                "\u200F8.76 US$",
+                "\u200F0.88 US$",
+                "\u200F0.09 US$",
+                "\u200F0.01 US$",
+                "\u200F0.00 US$");
 
         assertFormatDescending(
                 "Math Numbering System with French Data",
@@ -4684,22 +4755,22 @@ public class NumberFormatterApiTest extends TestFmwk {
         // NOTE: Locale ar puts ¤ after the number in NS arab but before the number in NS latn.
 
         assertFormatSingle(
-                "Currency symbol should precede number in ar with NS latn",
+                "Currency symbol should follow number in ar with NS latn",
                 "currency/USD latin",
                 "currency/USD latin",
                 NumberFormatter.with().symbols(NumberingSystem.LATIN).unit(USD),
                 new ULocale("ar"),
                 12345.67,
-                "US$ 12,345.67");
+                "\u200F12,345.67 US$");
 
         assertFormatSingle(
-                "Currency symbol should precede number in ar@numbers=latn",
+                "Currency symbol should follow number in ar@numbers=latn",
                 "currency/USD",
                 "currency/USD",
                 NumberFormatter.with().unit(USD),
                 new ULocale("ar@numbers=latn"),
                 12345.67,
-                "US$ 12,345.67");
+                "\u200F12,345.67 US$");
 
         assertFormatSingle(
                 "Currency symbol should follow number in ar-EG with NS arab",
@@ -4708,7 +4779,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().unit(USD),
                 new ULocale("ar-EG"),
                 12345.67,
-                "١٢٬٣٤٥٫٦٧ US$");
+                "\u200F١٢٬٣٤٥٫٦٧ US$");
 
         assertFormatSingle(
                 "Currency symbol should follow number in ar@numbers=arab",
@@ -4717,7 +4788,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().unit(USD),
                 new ULocale("ar@numbers=arab"),
                 12345.67,
-                "١٢٬٣٤٥٫٦٧ US$");
+                "\u200F١٢٬٣٤٥٫٦٧ US$");
 
         assertFormatSingle(
                 "NumberingSystem in API should win over @numbers keyword",
@@ -4726,10 +4797,10 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().symbols(NumberingSystem.LATIN).unit(USD),
                 new ULocale("ar@numbers=arab"),
                 12345.67,
-                "US$ 12,345.67");
+                "\u200F12,345.67 US$");
 
         assertEquals("NumberingSystem in API should win over @numbers keyword in reverse order",
-                "US$ 12,345.67",
+                "\u200F12,345.67 US$",
                 NumberFormatter.withLocale(new ULocale("ar@numbers=arab"))
                     .symbols(NumberingSystem.LATIN)
                     .unit(USD)
@@ -5044,7 +5115,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().sign(SignDisplay.ACCOUNTING).unit(USD).unitWidth(UnitWidth.NARROW),
                 ULocale.CANADA,
                 -444444,
-                "($444,444.00)");
+                "(US$444,444.00)");
 
         assertFormatSingle(
                 "Sign Accounting Negative Short",
@@ -5073,7 +5144,7 @@ public class NumberFormatterApiTest extends TestFmwk {
                 NumberFormatter.with().sign(SignDisplay.ACCOUNTING).unit(USD).unitWidth(UnitWidth.FULL_NAME),
                 ULocale.CANADA,
                 -444444,
-                "-444,444.00 U.S. dollars");
+                "-444,444.00 US dollars");
     }
 
     @Test

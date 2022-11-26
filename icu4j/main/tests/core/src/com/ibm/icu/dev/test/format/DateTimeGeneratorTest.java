@@ -407,7 +407,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"JJmm", "11:58"},
 
         new ULocale("de_DE"),
-        new String[] {"yM", "1.1999"},
+        new String[] {"yM", "01/1999"},
         new String[] {"yMMM", "Jan. 1999"},
         new String[] {"yMd", "13.1.1999"},
         new String[] {"yMMMd", "13. Jan. 1999"},
@@ -1831,7 +1831,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
             "ckb_IR",     "BSSS",        "SSS ├'Dayperiod': B┤",
 
             // ICU-21873: Missing aliased values
-            "en_001@calendar=islamic", "Ehm", "EEE, h:mm\u202Fa",
+            "en_001@calendar=islamic", "Ehm", "EEE h:mm\u202Fa",
         };
 
         for (int i = 0; i < testCases.length; i += 3) {
@@ -1917,8 +1917,8 @@ public class DateTimeGeneratorTest extends TestFmwk {
                                            "d MMMM y 'à' HH:mm",
                                            "d MMM y, HH:mm",
                                            "dd/MM/y HH:mm" } ),
-            new DTPLocaleAndResults( "ha", new String[]{ // full != long
-                                           "EEEE d MMMM, y HH:mm",
+            new DTPLocaleAndResults( "ha", new String[]{
+                                           "EEEE d MMMM, y 'da' HH:mm",
                                            "d MMMM, y 'da' HH:mm",
                                            "d MMM, y, HH:mm",
                                            "y-MM-dd, HH:mm" } ),
@@ -2028,6 +2028,29 @@ public class DateTimeGeneratorTest extends TestFmwk {
             if (format.contains("├") || format.contains("Minute")) {
                 errln("ERROR: locale " + localeID + ", MEDIUM, bad format: " + format);
             }
+        }
+    }
+    
+    @Test
+    public void testRegionOverride() {
+        String[][] testCases = {
+            { "en_US",           "h:mm\u202fa", "HOUR_CYCLE_12" },
+            { "en_GB",           "HH:mm",       "HOUR_CYCLE_23" },
+            { "en_US@rg=GBZZZZ", "HH:mm",       "HOUR_CYCLE_23" },
+            { "en_US@hours=h23", "HH:mm",       "HOUR_CYCLE_23" },
+        };
+
+        for (String[] testCase : testCases) {
+            String localeID = testCase[0];
+            String expectedPattern = testCase[1];
+            String expectedHourCycle = testCase[2];
+        
+            DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance(new ULocale(localeID));
+            String actualHourCycle = dtpg.getDefaultHourCycle().toString();
+            String actualPattern = dtpg.getBestPattern("jmm");
+            
+            assertEquals("Wrong hour cycle", expectedHourCycle, actualHourCycle);
+            assertEquals("Wrong pattern", expectedPattern, actualPattern);
         }
     }
 }

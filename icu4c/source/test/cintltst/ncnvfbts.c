@@ -14,6 +14,7 @@
 * Madhu Katragadda    06/23/2000     Tests for Converter FallBack API and Functionality
 ******************************************************************************
 */
+#include <stdbool.h>
 #include <stdio.h>
 #include "unicode/uloc.h"
 #include "unicode/ucnv.h"
@@ -146,9 +147,9 @@ static UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const u
     char *realBufferEnd;
     const UChar *realSourceEnd;
     const UChar *sourceLimit;
-    UBool checkOffsets = TRUE;
+    UBool checkOffsets = true;
     UBool doFlush;
-    UBool action=FALSE;
+    UBool action=false;
     char *p;
 
 
@@ -165,7 +166,7 @@ static UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const u
     if(U_FAILURE(status))
     {
         log_data_err("Couldn't open converter %s\n",codepage);
-        return TRUE;
+        return true;
     }
 
     log_verbose("Converter opened..\n");
@@ -185,10 +186,10 @@ static UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const u
     realSourceEnd = source + sourceLen;
 
     if ( gOutBufferSize != realBufferSize )
-        checkOffsets = FALSE;
+        checkOffsets = false;
 
     if( gInBufferSize != NEW_MAX_BUFFER )
-        checkOffsets = FALSE;
+        checkOffsets = false;
 
     do
     {
@@ -200,9 +201,9 @@ static UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const u
         if(targ == realBufferEnd)
         {
             log_err("Error, overflowed the real buffer while about to call fromUnicode! targ=%08lx %s", targ, gNuConvTestName);
-            return FALSE;
+            return false;
         }
-        log_verbose("calling fromUnicode @ SOURCE:%08lx to %08lx  TARGET: %08lx to %08lx, flush=%s\n", src,sourceLimit, targ,end, doFlush?"TRUE":"FALSE");
+        log_verbose("calling fromUnicode @ SOURCE:%08lx to %08lx  TARGET: %08lx to %08lx, flush=%s\n", src,sourceLimit, targ,end, doFlush?"true":"false");
 
 
         status = U_ZERO_ERROR;
@@ -221,7 +222,7 @@ static UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const u
     if(U_FAILURE(status))
     {
         log_err("Problem doing toUnicode, errcode %d %s\n", myErrorName(status), gNuConvTestName);
-        return FALSE;
+        return false;
     }
 
     log_verbose("\nConversion done [%d uchars in -> %d chars out]. \nResult :",
@@ -257,7 +258,7 @@ static UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const u
         log_verbose("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
         printSeqErr((const unsigned char*)junkout, (int32_t)(targ-junkout));
         printSeqErr((const unsigned char*)expect, expectLen);
-        return FALSE;
+        return false;
     }
 
     if (checkOffsets && (expectOffsets != 0) )
@@ -279,7 +280,7 @@ static UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const u
     if(!memcmp(junkout, expect, expectLen))
     {
         log_verbose("Matches!\n");
-        return TRUE;
+        return true;
     }
     else
     {
@@ -287,7 +288,7 @@ static UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const u
         log_verbose("String does not match. %s\n", gNuConvTestName);
         printSeqErr((const unsigned char*)junkout, expectLen);
         printSeqErr((const unsigned char*)expect, expectLen);
-        return FALSE;
+        return false;
     }
 }
 
@@ -305,7 +306,7 @@ static UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const U
     UChar *end;
     int32_t *offs;
     int i;
-    UBool   checkOffsets = TRUE;
+    UBool   checkOffsets = true;
     char junk[9999];
     char offset_str[9999];
     UChar *p;
@@ -329,7 +330,7 @@ static UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const U
     if(U_FAILURE(status))
     {
         log_data_err("Couldn't open converter %s\n",gNuConvTestName);
-        return TRUE; /* because it has been logged */
+        return true; /* because it has been logged */
     }
 
     log_verbose("Converter opened..\n");
@@ -349,10 +350,10 @@ static UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const U
     }
     /*-------------------------------------*/
     if ( gOutBufferSize != realBufferSize )
-      checkOffsets = FALSE;
+      checkOffsets = false;
 
     if( gInBufferSize != NEW_MAX_BUFFER )
-      checkOffsets = FALSE;
+      checkOffsets = false;
 
     do
     {
@@ -362,7 +363,7 @@ static UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const U
         if(targ == realBufferEnd)
         {
             log_err("Error, the end would overflow the real output buffer while about to call toUnicode! tarjey=%08lx %s",targ,gNuConvTestName);
-            return FALSE;
+            return false;
         }
         log_verbose("calling toUnicode @ %08lx to %08lx\n", targ,end);
 
@@ -384,7 +385,7 @@ static UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const U
     if(U_FAILURE(status))
     {
         log_err("Problem doing toUnicode, errcode %s %s\n", myErrorName(status), gNuConvTestName);
-        return FALSE;
+        return false;
     }
 
     log_verbose("\nConversion done. %d bytes -> %d chars.\nResult :",
@@ -437,7 +438,7 @@ static UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const U
     if(!memcmp(junkout, expect, expectlen*2))
     {
         log_verbose("Matches!\n");
-        return TRUE;
+        return true;
     }
     else
     {
@@ -446,7 +447,7 @@ static UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const U
         printUSeqErr(junkout, expectlen);
         printf("\n");
         printUSeqErr(expect, expectlen);
-        return FALSE;
+        return false;
     }
 }
 
@@ -547,31 +548,31 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
     for(i=0; i<UPRV_LENGTHOF(nativeCodePage); i++){
         log_verbose("Testing %s\n", nativeCodePage[i]);
         if(!testConvertFromUnicode(SBCSText, UPRV_LENGTHOF(SBCSText),
-            expectedNative, sizeof(expectedNative), nativeCodePage[i], TRUE, toNativeOffs ))
+            expectedNative, sizeof(expectedNative), nativeCodePage[i], true, toNativeOffs ))
             log_err("u-> %s(SBCS) with FallBack did not match.\n", nativeCodePage[i]);
 
         if(!testConvertToUnicode(expectedNative, sizeof(expectedNative), 
-            retrievedSBCSText, UPRV_LENGTHOF(retrievedSBCSText), nativeCodePage[i], TRUE, fromNativeoffs ))
+            retrievedSBCSText, UPRV_LENGTHOF(retrievedSBCSText), nativeCodePage[i], true, fromNativeoffs ))
             log_err("%s->u(SBCS) with Fallback did not match.\n", nativeCodePage[i]);
     }
     
     /*DBCS*/
     if(!testConvertFromUnicode(DBCSText, UPRV_LENGTHOF(DBCSText),
-        expectedIBM1363_DBCS, sizeof(expectedIBM1363_DBCS), "ibm-1363", TRUE, toIBM1363Offs_DBCS ))
+        expectedIBM1363_DBCS, sizeof(expectedIBM1363_DBCS), "ibm-1363", true, toIBM1363Offs_DBCS ))
        log_err("u-> ibm-1363(DBCS portion) with FallBack did not match.\n");
 
     if(!testConvertToUnicode(expectedIBM1363_DBCS, sizeof(expectedIBM1363_DBCS), 
-        retrievedDBCSText, UPRV_LENGTHOF(retrievedDBCSText),"ibm-1363", TRUE, fromIBM1363offs_DBCS ))
+        retrievedDBCSText, UPRV_LENGTHOF(retrievedDBCSText),"ibm-1363", true, fromIBM1363offs_DBCS ))
         log_err("ibm-1363->u(DBCS portion) with Fallback did not match.\n");
 
   
     /*MBCS*/
     if(!testConvertFromUnicode(MBCSText, UPRV_LENGTHOF(MBCSText),
-        expectedIBM950, sizeof(expectedIBM950), "ibm-950", TRUE, toIBM950Offs ))
+        expectedIBM950, sizeof(expectedIBM950), "ibm-950", true, toIBM950Offs ))
        log_err("u-> ibm-950(MBCS) with FallBack did not match.\n");
 
     if(!testConvertToUnicode(expectedIBM950, sizeof(expectedIBM950), 
-        retrievedMBCSText, UPRV_LENGTHOF(retrievedMBCSText),"ibm-950", TRUE, fromIBM950offs ))
+        retrievedMBCSText, UPRV_LENGTHOF(retrievedMBCSText),"ibm-950", true, fromIBM950offs ))
         log_err("ibm-950->u(MBCS) with Fallback did not match.\n");
     
    /*commented until data table is available*/
@@ -586,10 +587,10 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
         UChar expectedFallbackFalse[]= { 0x5165, 0x5165, 0x516b, 0x516b, 0x9ef9, 0x9ef9};
 
         if(!testConvertToUnicode(IBM950input, sizeof(IBM950input), 
-                expectedUnicodeText, UPRV_LENGTHOF(expectedUnicodeText),"ibm-950", TRUE, fromIBM950inputOffs ))
+                expectedUnicodeText, UPRV_LENGTHOF(expectedUnicodeText),"ibm-950", true, fromIBM950inputOffs ))
             log_err("ibm-950->u(MBCS) with Fallback did not match.\n");
         if(!testConvertToUnicode(IBM950input, sizeof(IBM950input), 
-                expectedFallbackFalse, UPRV_LENGTHOF(expectedFallbackFalse),"ibm-950", FALSE, fromIBM950inputOffs ))
+                expectedFallbackFalse, UPRV_LENGTHOF(expectedFallbackFalse),"ibm-950", false, fromIBM950inputOffs ))
             log_err("ibm-950->u(MBCS) with Fallback  did not match.\n");
 
     }
@@ -605,11 +606,11 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
         UChar expectedFallbackFalse[]= { 0x5C6E, 0x5C6E, 0x81FC, 0x81FC, 0x8278, 0x8278};
 
         if(!testConvertToUnicode(euc_tw_input, sizeof(euc_tw_input), 
-                expectedUnicodeText, UPRV_LENGTHOF(expectedUnicodeText),"euc-tw", TRUE, from_euc_tw_offs ))
+                expectedUnicodeText, UPRV_LENGTHOF(expectedUnicodeText),"euc-tw", true, from_euc_tw_offs ))
             log_err("from euc-tw->u with Fallback did not match.\n");
 
         if(!testConvertToUnicode(euc_tw_input, sizeof(euc_tw_input), 
-                expectedFallbackFalse, UPRV_LENGTHOF(expectedFallbackFalse),"euc-tw", FALSE, from_euc_tw_offs ))
+                expectedFallbackFalse, UPRV_LENGTHOF(expectedFallbackFalse),"euc-tw", false, from_euc_tw_offs ))
             log_err("from euc-tw->u with Fallback false did not match.\n");
 
 
@@ -630,18 +631,18 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
             6, 6, 7, 7, 7, 7, 8, 8, 9, 9, 10, 10, 10, 10, 11, 11, 11, 11, 12, 12, 12, 12};
 
         if(!testConvertFromUnicode(inputText, UPRV_LENGTHOF(inputText),
-                expected_euc_tw, sizeof(expected_euc_tw), "euc-tw", TRUE, to_euc_tw_offs ))
+                expected_euc_tw, sizeof(expected_euc_tw), "euc-tw", true, to_euc_tw_offs ))
             log_err("u-> euc-tw with FallBack did not match.\n");
 
     }
 
     /*MBCS 1363*/
     if(!testConvertFromUnicode(MBCSText1363, UPRV_LENGTHOF(MBCSText1363),
-        expectedIBM1363, sizeof(expectedIBM1363), "ibm-1363", TRUE, toIBM1363Offs ))
+        expectedIBM1363, sizeof(expectedIBM1363), "ibm-1363", true, toIBM1363Offs ))
        log_err("u-> ibm-1363(MBCS) with FallBack did not match.\n");
 
     if(!testConvertToUnicode(expectedIBM1363, sizeof(expectedIBM1363), 
-        retrievedMBCSText1363, UPRV_LENGTHOF(retrievedMBCSText1363),"ibm-1363", TRUE, fromIBM1363offs ))
+        retrievedMBCSText1363, UPRV_LENGTHOF(retrievedMBCSText1363),"ibm-1363", true, fromIBM1363offs ))
         log_err("ibm-1363->u(MBCS) with Fallback did not match.\n");
 
 
@@ -660,12 +661,12 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
 
         /*from Unicode*/
         if(!testConvertFromUnicode(unicodeInput, UPRV_LENGTHOF(unicodeInput),
-                expectedtest1, sizeof(expectedtest1), "@test1", TRUE, totest1Offs ))
+                expectedtest1, sizeof(expectedtest1), "@test1", true, totest1Offs ))
             log_err("u-> test1(MBCS conversion with single-byte) did not match.\n");
         
         /*to Unicode*/
         if(!testConvertToUnicode(test1input, sizeof(test1input),
-               expectedUnicode, UPRV_LENGTHOF(expectedUnicode), "@test1", TRUE, fromtest1Offs ))
+               expectedUnicode, UPRV_LENGTHOF(expectedUnicode), "@test1", true, fromtest1Offs ))
             log_err("test1(MBCS conversion with single-byte) -> u  did not match.\n");
 
     }
@@ -687,12 +688,12 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
 
         /*from Unicode*/
         if(!testConvertFromUnicode(unicodeInput, UPRV_LENGTHOF(unicodeInput),
-                expectedtest3, sizeof(expectedtest3), "@test3", TRUE, totest3Offs ))
+                expectedtest3, sizeof(expectedtest3), "@test3", true, totest3Offs ))
             log_err("u-> test3(MBCS conversion with three-byte) did not match.\n");
         
         /*to Unicode*/
         if(!testConvertToUnicode(test3input, sizeof(test3input),
-               expectedUnicode, UPRV_LENGTHOF(expectedUnicode), "@test3", TRUE, fromtest3Offs ))
+               expectedUnicode, UPRV_LENGTHOF(expectedUnicode), "@test3", true, fromtest3Offs ))
             log_err("test3(MBCS conversion with three-byte) -> u  did not match.\n"); 
 
     }
@@ -722,12 +723,12 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
 
         /*from Unicode*/
         if(!testConvertFromUnicode(unicodeInput, UPRV_LENGTHOF(unicodeInput),
-                expectedtest4, sizeof(expectedtest4), "@test4", TRUE, totest4Offs ))
+                expectedtest4, sizeof(expectedtest4), "@test4", true, totest4Offs ))
             log_err("u-> test4(MBCS conversion with four-byte) did not match.\n");
         
         /*to Unicode*/
         if(!testConvertToUnicode(test4input, sizeof(test4input),
-               expectedUnicode, UPRV_LENGTHOF(expectedUnicode), "@test4", TRUE, fromtest4Offs ))
+               expectedUnicode, UPRV_LENGTHOF(expectedUnicode), "@test4", true, fromtest4Offs ))
             log_err("test4(MBCS conversion with four-byte) -> u  did not match.\n"); 
 
     }
@@ -741,11 +742,11 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
         int32_t fromtest1Offs[]       = {1,              3,          5,         8,         10,             12 };
         /*from Unicode*/
         if(!testConvertFromUnicode(unicodeInput, UPRV_LENGTHOF(unicodeInput),
-                expectedtest1, sizeof(expectedtest1), "ibm-1371", TRUE, totest1Offs ))
+                expectedtest1, sizeof(expectedtest1), "ibm-1371", true, totest1Offs ))
             log_err("u-> ibm-1371(MBCS conversion with single-byte) did not match.,\n");
         /*to Unicode*/
         if(!testConvertToUnicode(test1input, sizeof(test1input),
-               expectedUnicode, UPRV_LENGTHOF(expectedUnicode), "ibm-1371", TRUE, fromtest1Offs ))
+               expectedUnicode, UPRV_LENGTHOF(expectedUnicode), "ibm-1371", true, fromtest1Offs ))
             log_err("ibm-1371(MBCS conversion with single-byte) -> u  did not match.,\n");
     }
 

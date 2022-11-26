@@ -82,7 +82,7 @@ void Win32DateTimeTest::testLocales(DateFormatTest *log)
 
     tz->getID(zoneID);
     if (! uprv_getWindowsTimeZoneInfo(&tzi, zoneID.getBuffer(), zoneID.length())) {
-        UBool found = FALSE;
+        UBool found = false;
         int32_t ec = TimeZone::countEquivalentIDs(zoneID);
 
         for (int z = 0; z < ec; z += 1) {

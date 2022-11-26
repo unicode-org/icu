@@ -61,8 +61,8 @@ BasicNormalizerTest::TestNormalizerAPI() {
     tel.insert(1, (UChar)0x301);
 
     UErrorCode errorCode=U_ZERO_ERROR;
-    Normalizer::compose(tel, TRUE, 0, nfkc, errorCode);
-    Normalizer::decompose(tel, TRUE, 0, nfkd, errorCode);
+    Normalizer::compose(tel, true, 0, nfkc, errorCode);
+    Normalizer::decompose(tel, true, 0, nfkd, errorCode);
     if(U_FAILURE(errorCode)) {
         dataerrln("error in Normalizer::(de)compose(): %s", u_errorName(errorCode));
     } else if(
@@ -119,8 +119,8 @@ BasicNormalizerTest::TestNormalizerAPI() {
     }
 
     // test setOption() and getOption()
-    copy.setOption(0xaa0000, TRUE);
-    copy.setOption(0x20000, FALSE);
+    copy.setOption(0xaa0000, true);
+    copy.setOption(0x20000, false);
     if(!copy.getOption(0x880000) || copy.getOption(0x20000)) {
         errln("error in Normalizer::setOption() or Normalizer::getOption()");
     }
@@ -152,11 +152,11 @@ BasicNormalizerTest::TestNormalizerAPI() {
     if(s.charAt(0)!=0xe4) {
         dataerrln("error in Normalizer::normalize(UNORM_NFC, self)");
     }
-    Normalizer::decompose(s, FALSE, 0, s, status);
+    Normalizer::decompose(s, false, 0, s, status);
     if(s.charAt(1)!=0x308) {
         dataerrln("error in Normalizer::decompose(self)");
     }
-    Normalizer::compose(s, FALSE, 0, s, status);
+    Normalizer::compose(s, false, 0, s, status);
     if(s.charAt(0)!=0xe4) {
         dataerrln("error in Normalizer::compose(self)");
     }

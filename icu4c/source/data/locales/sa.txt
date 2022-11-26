@@ -631,4 +631,21 @@ sa{
         US{"सं.रा."}
         metric{"छन्दोमान"}
     }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "sa",
+            }
+            surnameFirst{
+                "ko",
+                "si",
+                "ta",
+                "te",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
+    }
 }

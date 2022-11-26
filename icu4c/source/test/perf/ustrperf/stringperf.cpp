@@ -33,7 +33,7 @@ int main(int argc, const char *argv[])
 {
     UErrorCode status = U_ZERO_ERROR;
 
-    bCatenatePrealloc=TRUE;
+    bCatenatePrealloc=true;
 
     StringPerformanceTest test(argc, argv, status);
     if (U_FAILURE(status)){
@@ -54,7 +54,7 @@ int main(int argc, const char *argv[])
         catStd = new stlstring();
     }
 
-    if (test.run() == FALSE){
+    if (test.run() == false){
         fprintf(stderr, "FAILED: Tests could not be run please check the "
             "arguments.\n");
         return -1;

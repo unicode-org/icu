@@ -67,10 +67,10 @@ MessageFormatRegressionTest::failure(UErrorCode status, const char* msg, UBool p
         } else {
             errln(UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status));
         }
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /* @bug 4074764
@@ -186,7 +186,7 @@ void MessageFormatRegressionTest::Test4031438()
     MessageFormat *messageFormatter = new MessageFormat("", status);
     failure(status, "new MessageFormat");
 
-    const UBool possibleDataError = TRUE;
+    const UBool possibleDataError = true;
 
     //try {
         logln("Apply with pattern : " + pattern1);
@@ -344,7 +344,7 @@ void MessageFormatRegressionTest::Test4104976()
     failure(status, "new ChoiceFormat");
     //try {
         log("Compares to null is always false, returned : ");
-        logln(cf == NULL ? "TRUE" : "FALSE");
+        logln(cf == NULL ? "true" : "false");
     /*} catch (Exception foo) {
         errln("ChoiceFormat.equals(null) throws exception.");
     }*/
@@ -488,7 +488,7 @@ void MessageFormatRegressionTest::Test4116444()
     for (int i = 0; i < 3; i++) {
         UnicodeString pattern = patterns[i];
         mf->applyPattern(pattern, status);
-        failure(status, "mf->applyPattern", TRUE);
+        failure(status, "mf->applyPattern", true);
 
         //try {
         int32_t count = 0;
@@ -738,7 +738,7 @@ void MessageFormatRegressionTest::Test4118592()
 void MessageFormatRegressionTest::Test4118594()
 {
     UErrorCode status = U_ZERO_ERROR;
-    const UBool possibleDataError = TRUE;
+    const UBool possibleDataError = true;
     MessageFormat *mf = new MessageFormat("{0}, {0}, {0}", status);
     failure(status, "new MessageFormat");
     UnicodeString forParsing("x, y, z");
@@ -790,7 +790,7 @@ void MessageFormatRegressionTest::Test4105380()
     UnicodeString patternText1("The disk \"{1}\" contains {0}.");
     UnicodeString patternText2("There are {0} on the disk \"{1}\"");
     UErrorCode status = U_ZERO_ERROR;
-    const UBool possibleDataError = TRUE;
+    const UBool possibleDataError = true;
     MessageFormat *form1 = new MessageFormat(patternText1, status);
     failure(status, "new MessageFormat");
     MessageFormat *form2 = new MessageFormat(patternText2, status);
@@ -890,7 +890,7 @@ void MessageFormatRegressionTest::Test4142938()
         };
         FieldPosition pos(FieldPosition::DONT_CARE);
         out = mf->format(objs, 1, out, pos, status);
-        if (!failure(status, "mf->format", TRUE)) {
+        if (!failure(status, "mf->format", true)) {
             if (SUFFIX[i] == "") {
                 if (out != PREFIX[i])
                     errln((UnicodeString)"" + i + ": Got \"" + out + "\"; Want \"" + PREFIX[i] + "\"");

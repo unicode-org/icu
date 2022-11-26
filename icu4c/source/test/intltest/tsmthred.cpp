@@ -381,7 +381,7 @@ ThreadSafeFormat::ThreadSafeFormat(UErrorCode &status) {
 static const UChar *kUSD = u"USD";
 
 UBool ThreadSafeFormat::doStuff(int32_t offset, UnicodeString &appendErr, UErrorCode &status) const {
-  UBool okay = TRUE;
+  UBool okay = true;
 
   if(u_strcmp(fFormat->getCurrency(), kUSD)) {
     appendErr.append(u"fFormat currency != ")
@@ -389,7 +389,7 @@ UBool ThreadSafeFormat::doStuff(int32_t offset, UnicodeString &appendErr, UError
       .append(u", =")
       .append(fFormat->getCurrency())
       .append(u"! ");
-    okay = FALSE;
+    okay = false;
   }
 
   if(u_strcmp(gSharedData->fFormat->getCurrency(), kUSD)) {
@@ -398,7 +398,7 @@ UBool ThreadSafeFormat::doStuff(int32_t offset, UnicodeString &appendErr, UError
       .append(u", =")
       .append(gSharedData->fFormat->getCurrency())
       .append(u"! ");
-    okay = FALSE;
+    okay = false;
   }
   UnicodeString str;
   const UnicodeString *o=NULL;
@@ -414,13 +414,13 @@ UBool ThreadSafeFormat::doStuff(int32_t offset, UnicodeString &appendErr, UError
 
   if(*o != str) {
     appendErr.append(showDifference(*o, str));
-    okay = FALSE;
+    okay = false;
   }
   return okay;
 }
 
 UBool U_CALLCONV isAcceptable(void *, const char *, const char *, const UDataInfo *) {
-    return TRUE;
+    return true;
 }
 
 //static UMTX debugMutex = NULL;
@@ -665,7 +665,7 @@ void MultithreadTest::TestThreadedIntl()
     UErrorCode threadSafeErr = U_ZERO_ERROR;
 
     ThreadSafeFormatSharedData sharedData(threadSafeErr);
-    assertSuccess(WHERE, threadSafeErr, TRUE);
+    assertSuccess(WHERE, threadSafeErr, true);
 
     //
     //  Create and start the test threads
@@ -729,7 +729,7 @@ public:
         coll(NULL),
         lines(NULL),
         noLines(0),
-        isAtLeastUCA62(TRUE)
+        isAtLeastUCA62(true)
     {
     }
     void setCollator(Collator *c, Line *l, int32_t nl, UBool atLeastUCA62)

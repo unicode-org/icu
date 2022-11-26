@@ -12,7 +12,7 @@ class XMLFile {
      /**
       * Write indent at current level, increment level, and then return what the initial level was
       */
-     int indent(const char *s, bool single = FALSE);
+     int indent(const char *s, bool single = false);
      /**
       * Decrement level, write indent of 'outer' level, and return what the new level is. Should match your earlier call to indent.
       */
@@ -35,7 +35,7 @@ class XMLFile {
 
 class XMLElement {
     public:
-        XMLElement(XMLFile &f, const char *name, const char *attribs  = NULL, bool single=FALSE);
+        XMLElement(XMLFile &f, const char *name, const char *attribs  = NULL, bool single=false);
         ~XMLElement();
         
         const char *name;

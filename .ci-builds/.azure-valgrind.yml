@@ -30,7 +30,7 @@ jobs:
 #-------------------------------------------------------------------------
 - job: ICU4C_Clang_Valgrind_Ubuntu_1804
   displayName: 'C: Linux Clang Valgrind (Ubuntu 18.04)'
-  timeoutInMinutes: 60
+  timeoutInMinutes: 75
   pool:
     vmImage: 'ubuntu-18.04'
   steps:
@@ -53,7 +53,7 @@ jobs:
     - script: |
         cd icu4c/source/test/intltest && LD_LIBRARY_PATH=../../lib:../../stubdata:../../tools/ctestfw:$LD_LIBRARY_PATH valgrind --tool=memcheck --error-exitcode=1 --leak-check=full --show-reachable=yes ./intltest
       displayName: 'Valgrind intltest'
-      timeoutInMinutes: 45
+      timeoutInMinutes: 60
     - script: |
         cd icu4c/source/test/cintltst && LD_LIBRARY_PATH=../../lib:../../stubdata:../../tools/ctestfw:$LD_LIBRARY_PATH valgrind --tool=memcheck --error-exitcode=1 --leak-check=full --show-reachable=yes ./cintltst
       displayName: 'Valgrind cintltst'

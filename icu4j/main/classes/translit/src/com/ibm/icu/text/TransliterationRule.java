@@ -360,11 +360,11 @@ class TransliterationRule {
      *
      * @param text the text
      * @param pos the position indices
-     * @param incremental if TRUE, test for partial matches that may
+     * @param incremental if true, test for partial matches that may
      * be completed by additional text inserted at pos.limit.
      * @return one of <code>U_MISMATCH</code>,
      * <code>U_PARTIAL_MATCH</code>, or <code>U_MATCH</code>.  If
-     * incremental is FALSE then U_PARTIAL_MATCH will not be returned.
+     * incremental is false then U_PARTIAL_MATCH will not be returned.
      */
     public int matchAndReplace(Replaceable text,
                                Transliterator.Position pos,

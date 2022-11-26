@@ -29,7 +29,7 @@ public:
 protected:
     // Return true if the given status indicates failure.  Also has the side effect
     // of calling errln().  Msg should be of the form "Class::Method" in general.
-    UBool failure(UErrorCode status, const char* msg, UBool possibleDataError=FALSE);
+    UBool failure(UErrorCode status, const char* msg, UBool possibleDataError=false);
 
     // Utility method for formatting dates for printing; useful for Java->C++ conversion.
     // Tries to mimic the Java Date.toString() format.

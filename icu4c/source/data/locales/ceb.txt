@@ -13,6 +13,8 @@ ceb{
             }
             patterns{
                 accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
+                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 scientificFormat{"#E0"}
@@ -124,7 +126,6 @@ ceb{
                     G{"MMM d, y G – MMM d, y G"}
                     M{"MMM d – MMM d, y G"}
                     d{"MMM d – d, y G"}
-                    y{"MMM d, y – MMM d, y G"}
                 }
                 GyMd{
                     G{"M/d/y GGGGG – M/d/y GGGGG"}
@@ -156,7 +157,7 @@ ceb{
                 d{
                     d{"d – d"}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 y{
                     y{"y – y G"}
                 }
@@ -444,7 +445,7 @@ ceb{
                 d{
                     d{"d – d"}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} – {1}"}
                 h{
                     h{"h – h a"}
                 }
@@ -820,5 +821,19 @@ ceb{
         UK{"UK"}
         US{"US"}
         metric{"Metric"}
+    }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "ceb",
+            }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
     }
 }

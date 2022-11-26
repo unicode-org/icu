@@ -11,6 +11,7 @@ import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.UResource;
+import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
 /**
@@ -109,8 +110,8 @@ public class UnitsData {
         return Categories.indexToCategory[index];
     }
 
-    public UnitPreferences.UnitPreference[] getPreferencesFor(String category, String usage, String region) {
-        return this.unitPreferences.getPreferencesFor(category, usage, region);
+    public UnitPreferences.UnitPreference[] getPreferencesFor(String category, String usage, ULocale locale) {
+        return this.unitPreferences.getPreferencesFor(category, usage, locale, this);
     }
 
     public static class SimpleUnitIdentifiersSink extends UResource.Sink {

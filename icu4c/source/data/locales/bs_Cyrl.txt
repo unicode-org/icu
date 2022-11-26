@@ -441,7 +441,7 @@ bs_Cyrl{
                 "послије подне",
             }
             AmPmMarkersAbbr{
-                "пре подне",
+                "пре подне",
                 "поподне",
             }
             DateTimePatterns{

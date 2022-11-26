@@ -51,7 +51,7 @@ UBool U_CALLCONV cleanup() {
     delete gLocaleDistance;
     gLocaleDistance = nullptr;
     gInitOnce.reset();
-    return TRUE;
+    return true;
 }
 
 }  // namespace

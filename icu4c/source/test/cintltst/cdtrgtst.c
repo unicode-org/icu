@@ -21,6 +21,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <stdbool.h>
+
 #include "unicode/uloc.h"
 #include "unicode/udat.h"
 #include "unicode/ucal.h"
@@ -69,13 +71,13 @@ void Test4029195()
         return;
     }
     resultlength=0;
-    resultlengthneeded=udat_toPattern(df, TRUE, NULL, resultlength, &status);
+    resultlengthneeded=udat_toPattern(df, true, NULL, resultlength, &status);
     if(status==U_BUFFER_OVERFLOW_ERROR)
     {
         status=U_ZERO_ERROR;
         resultlength=resultlengthneeded + 1;
         pat=(UChar*)malloc(sizeof(UChar) * resultlength);
-        udat_toPattern(df, TRUE, pat, resultlength, &status);
+        udat_toPattern(df, true, pat, resultlength, &status);
     }
     
     log_verbose("pattern: %s\n", austrdup(pat));
@@ -91,7 +93,7 @@ void Test4029195()
     
     temp=(UChar*)malloc(sizeof(UChar) * 10);
     u_uastrcpy(temp, "M yyyy dd");
-    udat_applyPattern(df, TRUE, temp, u_strlen(temp));
+    udat_applyPattern(df, true, temp, u_strlen(temp));
     
     todayS =myFormatit(df, today);
     log_verbose("After the pattern is applied\n today: %s\n", austrdup(todayS) );
@@ -248,13 +250,13 @@ void aux917( UDateFormat *fmt, UChar* str)
     UDate d1=1000000000.0;
    
     resultlength=0;
-    resultlengthneeded=udat_toPattern(fmt, TRUE, NULL, resultlength, &status);
+    resultlengthneeded=udat_toPattern(fmt, true, NULL, resultlength, &status);
     if(status==U_BUFFER_OVERFLOW_ERROR)
     {
         status=U_ZERO_ERROR;
         resultlength=resultlengthneeded + 1;
         pat=(UChar*)malloc(sizeof(UChar) * (resultlength));
-        udat_toPattern(fmt, TRUE, pat, resultlength, &status);
+        udat_toPattern(fmt, true, pat, resultlength, &status);
     }
     if(U_FAILURE(status)){
         log_err("failure in retrieving the pattern: %s\n", myErrorName(status));
@@ -341,17 +343,17 @@ void Test4061287()
 
     pos=0;
     
-    udat_setLenient(df, FALSE);
+    udat_setLenient(df, false);
     ok=udat_isLenient(df);
-    if(ok==TRUE)
+    if(ok==true)
         log_err("setLenient nor working\n");
-    ok = FALSE;
+    ok = false;
     myDate = udat_parse(df, dateString, u_strlen(dateString), &pos, &status);
     (void)myDate;   /* Suppress set but not used warning. */
     if(U_FAILURE(status))
-        ok = TRUE;
-    if(ok!=TRUE) 
-        log_err("Fail: Lenient not working: does lenient parsing in spite of setting Lenient as FALSE ");
+        ok = true;
+    if(ok!=true) 
+        log_err("Fail: Lenient not working: does lenient parsing in spite of setting Lenient as false ");
 
     udat_close(df);
     
@@ -396,7 +398,7 @@ void Test4073003()
         return;
     }
     u_uastrcpy(temp, "m/D/yy");
-    udat_applyPattern(fmt, FALSE, temp, u_strlen(temp));
+    udat_applyPattern(fmt, false, temp, u_strlen(temp));
 
     for(i= 0; i < 4; i+=2) {
         status=U_ZERO_ERROR;
@@ -574,7 +576,7 @@ void Test_GEec(void)
             int32_t dmyGnTextLen;
             UDate   dateResult;
 
-            udat_applyPattern(dtfmt, FALSE, patTextPtr->pattern, -1);
+            udat_applyPattern(dtfmt, false, patTextPtr->pattern, -1);
             dmyGnTextLen = udat_format(dtfmt, july022008, dmyGnText, DATE_TEXT_MAX_CHARS, NULL, &status);
             (void)dmyGnTextLen;   /* Suppress set but not used warning. */ 
             if ( U_FAILURE(status) ) {

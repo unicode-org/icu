@@ -99,7 +99,7 @@ public:
         const UChar *s=getBuffer();
         int32_t length=getBufferLen();
         int32_t i=0;
-        UBool tf=FALSE;
+        UBool tf=false;
         while(i<length) {
             i=span(s, length, i, tf);
             tf=(UBool)(!tf);
@@ -181,7 +181,7 @@ public:
         int32_t length=testcase.getBufferLen();
         int32_t count=0;
         int32_t i=0;
-        UBool tf=FALSE;
+        UBool tf=false;
         while(i<length) {
             i+=span(set, s+i, length-i, tf);
             tf=(UBool)(!tf);
@@ -243,7 +243,7 @@ public:
         int32_t length=testcase.getBufferLen();
         int32_t count=0;
         int32_t i=0;
-        UBool tf=FALSE;
+        UBool tf=false;
         while(i<length) {
             i+=set.span(s+i, length-i, (USetSpanCondition)tf);
             tf=(UBool)(!tf);
@@ -344,7 +344,7 @@ public:
         int32_t length=testcase.utf8Length;
         int32_t count=0;
         int32_t i=0;
-        UBool tf=FALSE;
+        UBool tf=false;
         while(i<length) {
             i+=set.spanUTF8(s+i, length-i, (USetSpanCondition)tf);
             tf=(UBool)(!tf);
@@ -434,7 +434,7 @@ int main(int argc, const char *argv[])
         return status;
     }
         
-    if (test.run() == FALSE){
+    if (test.run() == false){
         fprintf(stderr, "FAILED: Tests could not be run, please check the "
 			            "arguments.\n");
         return 1;

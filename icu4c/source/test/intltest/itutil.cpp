@@ -204,7 +204,7 @@ class IcuTestErrorCodeTestHelper : public IntlTest {
   public:
     void errln( const UnicodeString &message ) U_OVERRIDE {
         test->assertFalse("Already saw an error", seenError);
-        seenError = TRUE;
+        seenError = true;
         test->assertEquals("Message for Error", expectedErrln, message);
         if (expectedDataErr) {
             test->errln("Got non-data error, but expected data error");
@@ -213,7 +213,7 @@ class IcuTestErrorCodeTestHelper : public IntlTest {
 
     void dataerrln( const UnicodeString &message ) U_OVERRIDE {
         test->assertFalse("Already saw an error", seenError);
-        seenError = TRUE;
+        seenError = true;
         test->assertEquals("Message for Error", expectedErrln, message);
         if (!expectedDataErr) {
             test->errln("Got data error, but expected non-data error");
@@ -232,8 +232,8 @@ void ErrorCodeTest::TestIcuTestErrorCode() {
 
     // Test destructor message
     helper.expectedErrln = u"AAA destructor: expected success but got error: U_ILLEGAL_PAD_POSITION";
-    helper.expectedDataErr = FALSE;
-    helper.seenError = FALSE;
+    helper.expectedDataErr = false;
+    helper.seenError = false;
     {
         IcuTestErrorCode testStatus(helper, "AAA");
         testStatus.set(U_ILLEGAL_PAD_POSITION);
@@ -242,8 +242,8 @@ void ErrorCodeTest::TestIcuTestErrorCode() {
 
     // Test destructor message with scope
     helper.expectedErrln = u"BBB destructor: expected success but got error: U_ILLEGAL_PAD_POSITION scope: foo";
-    helper.expectedDataErr = FALSE;
-    helper.seenError = FALSE;
+    helper.expectedDataErr = false;
+    helper.seenError = false;
     {
         IcuTestErrorCode testStatus(helper, "BBB");
         testStatus.setScope("foo");
@@ -253,15 +253,15 @@ void ErrorCodeTest::TestIcuTestErrorCode() {
 
     // Check errIfFailure message with scope
     helper.expectedErrln = u"CCC expected success but got error: U_ILLEGAL_PAD_POSITION scope: foo";
-    helper.expectedDataErr = FALSE;
-    helper.seenError = FALSE;
+    helper.expectedDataErr = false;
+    helper.seenError = false;
     {
         IcuTestErrorCode testStatus(helper, "CCC");
         testStatus.setScope("foo");
         testStatus.set(U_ILLEGAL_PAD_POSITION);
         testStatus.errIfFailureAndReset();
         assertTrue("Should have seen an error", helper.seenError);
-        helper.seenError = FALSE;
+        helper.seenError = false;
         helper.expectedErrln = u"CCC expected success but got error: U_ILLEGAL_CHAR_FOUND scope: foo - 5.4300";
         testStatus.set(U_ILLEGAL_CHAR_FOUND);
         testStatus.errIfFailureAndReset("%6.4f", 5.43);
@@ -270,14 +270,14 @@ void ErrorCodeTest::TestIcuTestErrorCode() {
 
     // Check errDataIfFailure message without scope
     helper.expectedErrln = u"DDD data: expected success but got error: U_ILLEGAL_PAD_POSITION";
-    helper.expectedDataErr = TRUE;
-    helper.seenError = FALSE;
+    helper.expectedDataErr = true;
+    helper.seenError = false;
     {
         IcuTestErrorCode testStatus(helper, "DDD");
         testStatus.set(U_ILLEGAL_PAD_POSITION);
         testStatus.errDataIfFailureAndReset();
         assertTrue("Should have seen an error", helper.seenError);
-        helper.seenError = FALSE;
+        helper.seenError = false;
         helper.expectedErrln = u"DDD data: expected success but got error: U_ILLEGAL_CHAR_FOUND - 5.4300";
         testStatus.set(U_ILLEGAL_CHAR_FOUND);
         testStatus.errDataIfFailureAndReset("%6.4f", 5.43);
@@ -286,8 +286,8 @@ void ErrorCodeTest::TestIcuTestErrorCode() {
 
     // Check expectFailure
     helper.expectedErrln = u"EEE expected: U_ILLEGAL_CHAR_FOUND but got error: U_ILLEGAL_PAD_POSITION";
-    helper.expectedDataErr = FALSE;
-    helper.seenError = FALSE;
+    helper.expectedDataErr = false;
+    helper.seenError = false;
     {
         IcuTestErrorCode testStatus(helper, "EEE");
         testStatus.set(U_ILLEGAL_PAD_POSITION);
@@ -296,7 +296,7 @@ void ErrorCodeTest::TestIcuTestErrorCode() {
         testStatus.set(U_ILLEGAL_PAD_POSITION);
         testStatus.expectErrorAndReset(U_ILLEGAL_CHAR_FOUND);
         assertTrue("Should have seen an error", helper.seenError);
-        helper.seenError = FALSE;
+        helper.seenError = false;
         helper.expectedErrln = u"EEE expected: U_ILLEGAL_CHAR_FOUND but got error: U_ZERO_ERROR scope: scopety scope - 5.4300";
         testStatus.setScope("scopety scope");
         testStatus.set(U_ILLEGAL_PAD_POSITION);

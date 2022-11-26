@@ -780,7 +780,7 @@ public class NumberFormatTest extends TestFmwk {
                 {"root@numbers=latn", "-1.23", "USD", "-US$ 1.23", "-USD 1.23", "-1.23 USD"}, // ensure that the root locale is still used with modifiers
                 {"root@numbers=arab", "-1.23", "USD", "\u061C-\u0661\u066B\u0662\u0663\u00A0US$", "\u061C-\u0661\u066B\u0662\u0663\u00A0USD", "\u061C-\u0661\u066B\u0662\u0663 USD"}, // ensure that the root locale is still used with modifiers
                 {"es_AR", "1", "INR", "INR\u00A01,00", "INR\u00A01,00", "1,00 rupia india"},
-                {"ar_EG", "1", "USD", "١٫٠٠\u00A0US$", "١٫٠٠\u00A0USD", "١٫٠٠ دولار أمريكي"},
+                {"ar_EG", "1", "USD", "\u200F١٫٠٠\u00A0US$", "\u200F١٫٠٠\u00A0USD", "١٫٠٠ دولار أمريكي"},
         };
 
         for (int i=0; i<DATA.length; ++i) {
@@ -5637,9 +5637,9 @@ public class NumberFormatTest extends TestFmwk {
 
     @Test
     public void Test13074() {
-        DecimalFormat df = (DecimalFormat) NumberFormat.getCurrencyInstance(new ULocale("bg-BG"));
+        DecimalFormat df = (DecimalFormat) NumberFormat.getCurrencyInstance(new ULocale("en_US_POSIX"));
         String result = df.format(987654.321);
-        assertEquals("Locale 'bg' should not use monetary grouping", "987654,32 лв.", result);
+        assertEquals("Locale 'en_US_POSIX' should not use monetary grouping", "$ 987654.32", result);
     }
 
     @Test
@@ -6233,11 +6233,11 @@ public class NumberFormatTest extends TestFmwk {
                     },
                     // currency (\062C.\0645.\200F is the currency sign in ar for EGP)
                     {
-                        "\u061C+\u0660\u066B\u0660\u0661\u00A0\u062C.\u0645.\u200F",
-                        "\u061C+\u0665\u066B\u0667\u0668\u00A0\u062C.\u0645.\u200F",
-                        "\u061C+\u0660\u066B\u0660\u0660\u00A0\u062C.\u0645.\u200F",
-                        "\u061C-\u0660\u066B\u0660\u0661\u00A0\u062C.\u0645.\u200F",
-                        "\u061C-\u0665\u066B\u0667\u0668\u00A0\u062C.\u0645.\u200F"
+                        "\u061C+\u200F\u0660\u066B\u0660\u0661\u00A0\u062C.\u0645.\u200F",
+                        "\u061C+\u200F\u0665\u066B\u0667\u0668\u00A0\u062C.\u0645.\u200F",
+                        "\u061C+\u200F\u0660\u066B\u0660\u0660\u00A0\u062C.\u0645.\u200F",
+                        "\u061C-\u200F\u0660\u066B\u0660\u0661\u00A0\u062C.\u0645.\u200F",
+                        "\u061C-\u200F\u0665\u066B\u0667\u0668\u00A0\u062C.\u0645.\u200F"
                     }
                 },
                 // es-CL (interesting because of position of sign in currency)
@@ -6327,8 +6327,8 @@ public class NumberFormatTest extends TestFmwk {
         pattern = pattern.replace("¤", "¤¤¤¤¤");
         df.applyPattern(pattern);
         // Note: Narrow currency is not parseable because of ambiguity.
-        assertEquals("Narrow currency symbol for USD in en_CA is $",
-                "$123.45", df.format(123.45));
+        assertEquals("Narrow currency symbol for USD in en_CA is US$",
+                "US$123.45", df.format(123.45));
     }
 
     @Test
@@ -6964,6 +6964,96 @@ public class NumberFormatTest extends TestFmwk {
             assertEquals("Via applyPattern: toPattern", "a0¤00b", df.toPattern());
             assertEquals("Via applyPattern: field position begin", 2, fp.getBeginIndex());
             assertEquals("Via applyPattern: field position end", 3, fp.getEndIndex());
+        }
+    }
+
+    @Test
+    public void TestParseWithEmptyCurr() {
+        DecimalFormat df = (DecimalFormat)NumberFormat.getInstance(new ULocale("en_US"), NumberFormat.CURRENCYSTYLE);
+        DecimalFormatSymbols dfs = df.getDecimalFormatSymbols();
+        dfs.setCurrencySymbol("");
+        df.setDecimalFormatSymbols(dfs);
+ 
+        String textToParse = "3";    
+        ParsePosition ppos = new ParsePosition(0);
+
+        Number num = df.parse(textToParse, ppos);
+        if (ppos.getIndex() != 1 || num.doubleValue() != 3.0) {
+            errln("parse with empty curr symbol, expect pos 1, value 3.0; get "
+                                + ppos.getIndex() + ", " + num.doubleValue());
+        }
+
+        ppos.setIndex(0);
+        CurrencyAmount currAmt = df.parseCurrency(textToParse, ppos);
+        if (currAmt != null) {
+            errln("parseCurrency with empty curr symbol, expect null but succeeds");
+        }
+
+        //                        "¤#,##0.00" "¤ #,##0.00" "#,##0.00 ¤" "#,##,##0.00¤"
+        final String[] locales = {"en_US",    "nb_NO",     "cs_CZ",     "bn_BD"};
+        for (String locale: locales) {
+            df = (DecimalFormat)NumberFormat.getInstance(new ULocale(locale), NumberFormat.CURRENCYSTYLE);
+            dfs = df.getDecimalFormatSymbols();
+            dfs.setCurrencySymbol("");
+            df.setDecimalFormatSymbols(dfs);
+
+            final double posValToUse = 37.0;
+            final double negValToUse = -3.0;
+
+            textToParse = df.format(posValToUse);
+            int expectParseLen = textToParse.length();
+            if (textToParse.endsWith("\u00A0") || textToParse.endsWith("\u202F")) { // NBSP, NNBSP
+                expectParseLen--;
+            }
+            ppos.setIndex(0);
+            num = df.parse(textToParse, ppos);
+            if (ppos.getIndex() != expectParseLen || num.doubleValue() != posValToUse) {
+                errln("locale " + locale + ", parse with empty curr symbol, expect pos, value "
+                                + expectParseLen + ", " + posValToUse + ";  get "
+                                + ppos.getIndex() + ", " + num.doubleValue());
+            }
+
+            textToParse = df.format(negValToUse);
+            expectParseLen = textToParse.length();
+            if (textToParse.endsWith("\u00A0") || textToParse.endsWith("\u202F")) { // NBSP, NNBSP
+                expectParseLen--;
+            }
+            ppos.setIndex(0);
+            num = df.parse(textToParse, ppos);
+            if (ppos.getIndex() != expectParseLen || num.doubleValue() != negValToUse) {
+                errln("locale " + locale + ", parse with empty curr symbol, expect pos, value "
+                                + expectParseLen + ", " + negValToUse + ";  get "
+                                + ppos.getIndex() + ", " + num.doubleValue());
+            }
+
+            df.applyPattern("#,##0.00¤");
+
+            textToParse = df.format(posValToUse);
+            expectParseLen = textToParse.length();
+            if (textToParse.endsWith("\u00A0") || textToParse.endsWith("\u202F")) { // NBSP, NNBSP
+                expectParseLen--;
+            }
+            ppos.setIndex(0);
+            num = df.parse(textToParse, ppos);
+            if (ppos.getIndex() != expectParseLen || num.doubleValue() != posValToUse) {
+                errln("locale " + locale + "with \"#,##0.00¤\", parse with empty curr symbol, expect pos, value "
+                                + expectParseLen + ", " + posValToUse + ";  get "
+                                + ppos.getIndex() + ", " + num.doubleValue());
+            }
+
+            textToParse = df.format(negValToUse);
+            expectParseLen = textToParse.length();
+            if (textToParse.endsWith("\u00A0") || textToParse.endsWith("\u202F")) { // NBSP, NNBSP
+                expectParseLen--;
+            }
+            ppos.setIndex(0);
+            num = df.parse(textToParse, ppos);
+            if (ppos.getIndex() != expectParseLen || num.doubleValue() != negValToUse) {
+                errln("locale " + locale + "with \"#,##0.00¤\", parse with empty curr symbol, expect pos, value "
+                                + expectParseLen + ", " + negValToUse + ";  get "
+                                + ppos.getIndex() + ", " + num.doubleValue());
+            }
+
         }
     }
 }

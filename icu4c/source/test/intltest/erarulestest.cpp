@@ -51,13 +51,13 @@ void EraRulesTest::testAPIs() {
         UErrorCode status = U_ZERO_ERROR;
         const char *calId = calTypes[i];
 
-        LocalPointer<EraRules> rules1(EraRules::createInstance(calId, FALSE, status));
+        LocalPointer<EraRules> rules1(EraRules::createInstance(calId, false, status));
         if (U_FAILURE(status)) {
             errln(UnicodeString("Era rules for ") + calId + " is not available.");
             continue;
         }
 
-        LocalPointer<EraRules> rules2(EraRules::createInstance(calId, TRUE, status));
+        LocalPointer<EraRules> rules2(EraRules::createInstance(calId, true, status));
         if (U_FAILURE(status)) {
             errln(UnicodeString("Era rules for ") + calId + " (including tentative eras) is not available.");
             continue;
@@ -107,7 +107,7 @@ void EraRulesTest::testJapanese() {
     const int32_t HEISEI = 235; // ICU4C does not define constants for eras
 
     UErrorCode status = U_ZERO_ERROR;
-    LocalPointer<EraRules> rules(EraRules::createInstance("japanese", TRUE, status));
+    LocalPointer<EraRules> rules(EraRules::createInstance("japanese", true, status));
     if (U_FAILURE(status)) {
         errln("Failed to get era rules for Japanese calendar.");
         return;

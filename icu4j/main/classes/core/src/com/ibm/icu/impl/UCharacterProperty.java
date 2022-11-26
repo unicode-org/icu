@@ -313,7 +313,7 @@ public final class UCharacterProperty
      */
     private static final boolean isgraphPOSIX(int c) {
         /* \p{space}\p{gc=Control} == \p{gc=Z}\p{Control} */
-        /* comparing ==0 returns FALSE for the categories mentioned */
+        /* comparing ==0 returns false for the categories mentioned */
         return (getMask(UCharacter.getType(c))&
                 (GC_CC_MASK|GC_CS_MASK|GC_CN_MASK|GC_Z_MASK))
                ==0;
@@ -823,7 +823,7 @@ public final class UCharacterProperty
     public int getIntPropertyMaxValue(int which) {
         if(which<UProperty.INT_START) {
             if(UProperty.BINARY_START<=which && which<UProperty.BINARY_LIMIT) {
-                return 1;  // maximum TRUE for all binary properties
+                return 1;  // maximum true for all binary properties
             }
         } else if(which<UProperty.INT_LIMIT) {
             return intProps[which-UProperty.INT_START].getMaxValue(which);

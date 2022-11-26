@@ -109,7 +109,7 @@ struct ConditionalCE32 : public UMemory {
 
 U_CDECL_BEGIN
 
-U_CAPI void U_CALLCONV
+void U_CALLCONV
 uprv_deleteConditionalCE32(void *obj) {
     delete static_cast<ConditionalCE32 *>(obj);
 }
@@ -164,7 +164,7 @@ protected:
 };
 
 DataBuilderCollationIterator::DataBuilderCollationIterator(CollationDataBuilder &b)
-        : CollationIterator(&builderData, /*numeric=*/ FALSE),
+        : CollationIterator(&builderData, /*numeric=*/ false),
           builder(b), builderData(b.nfcImpl),
           s(NULL), pos(0) {
     builderData.base = builder.base;
@@ -204,7 +204,7 @@ DataBuilderCollationIterator::fetchCEs(const UnicodeString &str, int32_t start,
         } else {
             d = &builderData;
         }
-        appendCEsFromCE32(d, c, ce32, /*forward=*/ TRUE, errorCode);
+        appendCEsFromCE32(d, c, ce32, /*forward=*/ true, errorCode);
         U_ASSERT(U_SUCCESS(errorCode));
         for(int32_t i = 0; i < getCEsLength(); ++i) {
             int64_t ce = getCE(i);
@@ -301,9 +301,9 @@ CollationDataBuilder::CollationDataBuilder(UBool icu4xMode, UErrorCode &errorCod
           base(NULL), baseSettings(NULL),
           trie(NULL),
           ce32s(errorCode), ce64s(errorCode), conditionalCE32s(errorCode),
-          modified(FALSE),
+          modified(false),
           icu4xMode(icu4xMode),
-          fastLatinEnabled(FALSE), fastLatinBuilder(NULL),
+          fastLatinEnabled(false), fastLatinBuilder(NULL),
           collIter(NULL) {
     // Reserve the first CE32 for U+0000.
     if (!icu4xMode) {
@@ -351,7 +351,7 @@ CollationDataBuilder::initForTailoring(const CollationData *b, UErrorCode &error
         // Do this here, rather than in buildMappings(),
         // so that we see the HANGUL_TAG in various assertions.
         uint32_t hangulCE32 = Collation::makeCE32FromTagAndIndex(Collation::HANGUL_TAG, 0);
-        utrie2_setRange32(trie, Hangul::HANGUL_BASE, Hangul::HANGUL_END, hangulCE32, TRUE, &errorCode);
+        utrie2_setRange32(trie, Hangul::HANGUL_BASE, Hangul::HANGUL_END, hangulCE32, true, &errorCode);
 
         // Copy the set contents but don't copy/clone the set as a whole because
         // that would copy the isFrozen state too.
@@ -365,7 +365,7 @@ UBool
 CollationDataBuilder::maybeSetPrimaryRange(UChar32 start, UChar32 end,
                                            uint32_t primary, int32_t step,
                                            UErrorCode &errorCode) {
-    if(U_FAILURE(errorCode)) { return FALSE; }
+    if(U_FAILURE(errorCode)) { return false; }
     U_ASSERT(start <= end);
     // TODO: Do we need to check what values are currently set for start..end?
     // An offset range is worth it only if we can achieve an overlap between
@@ -390,11 +390,11 @@ CollationDataBuilder::maybeSetPrimaryRange(UChar32 start, UChar32 end,
             return 0;
         }
         uint32_t offsetCE32 = Collation::makeCE32FromTagAndIndex(Collation::OFFSET_TAG, index);
-        utrie2_setRange32(trie, start, end, offsetCE32, TRUE, &errorCode);
-        modified = TRUE;
-        return TRUE;
+        utrie2_setRange32(trie, start, end, offsetCE32, true, &errorCode);
+        modified = true;
+        return true;
     } else {
-        return FALSE;
+        return false;
     }
 }
 
@@ -415,7 +415,7 @@ CollationDataBuilder::setPrimaryRangeAndReturnNext(UChar32 start, UChar32 end,
             primary = Collation::incThreeBytePrimaryByOffset(primary, isCompressible, step);
             if(start > end) { return primary; }
         }
-        modified = TRUE;
+        modified = true;
     }
 }
 
@@ -451,10 +451,10 @@ int64_t
 CollationDataBuilder::getSingleCE(UChar32 c, UErrorCode &errorCode) const {
     if(U_FAILURE(errorCode)) { return 0; }
     // Keep parallel with CollationData::getSingleCE().
-    UBool fromBase = FALSE;
+    UBool fromBase = false;
     uint32_t ce32 = utrie2_get32(trie, c);
     if(ce32 == Collation::FALLBACK_CE32) {
-        fromBase = TRUE;
+        fromBase = true;
         ce32 = base->getCE32(c);
     }
     while(Collation::isSpecialCE32(ce32)) {
@@ -673,7 +673,7 @@ CollationDataBuilder::addCE32(const UnicodeString &prefix, const UnicodeString &
         // Otherwise we just override the base mapping.
         uint32_t baseCE32 = base->getFinalCE32(base->getCE32(c));
         if(hasContext || Collation::ce32HasContext(baseCE32)) {
-            oldCE32 = copyFromBaseCE32(c, baseCE32, TRUE, errorCode);
+            oldCE32 = copyFromBaseCE32(c, baseCE32, true, errorCode);
             utrie2_set32(trie, c, oldCE32, &errorCode);
             if(U_FAILURE(errorCode)) { return; }
         }
@@ -733,7 +733,7 @@ CollationDataBuilder::addCE32(const UnicodeString &prefix, const UnicodeString &
             cond = nextCond;
         }
     }
-    modified = TRUE;
+    modified = true;
 }
 
 uint32_t
@@ -917,7 +917,7 @@ CollationDataBuilder::copyFromBaseCE32(UChar32 c, uint32_t ce32, UBool withConte
         const UChar *p = base->contexts + Collation::indexFromCE32(ce32);
         ce32 = CollationData::readCE32(p);  // Default if no prefix match.
         if(!withContext) {
-            return copyFromBaseCE32(c, ce32, FALSE, errorCode);
+            return copyFromBaseCE32(c, ce32, false, errorCode);
         }
         ConditionalCE32 head;
         UnicodeString context((UChar)0);
@@ -925,7 +925,7 @@ CollationDataBuilder::copyFromBaseCE32(UChar32 c, uint32_t ce32, UBool withConte
         if(Collation::isContractionCE32(ce32)) {
             index = copyContractionsFromBaseCE32(context, c, ce32, &head, errorCode);
         } else {
-            ce32 = copyFromBaseCE32(c, ce32, TRUE, errorCode);
+            ce32 = copyFromBaseCE32(c, ce32, true, errorCode);
             head.next = index = addConditionalCE32(context, ce32, errorCode);
         }
         if(U_FAILURE(errorCode)) { return 0; }
@@ -939,7 +939,7 @@ CollationDataBuilder::copyFromBaseCE32(UChar32 c, uint32_t ce32, UBool withConte
             if(Collation::isContractionCE32(ce32)) {
                 index = copyContractionsFromBaseCE32(context, c, ce32, cond, errorCode);
             } else {
-                ce32 = copyFromBaseCE32(c, ce32, TRUE, errorCode);
+                ce32 = copyFromBaseCE32(c, ce32, true, errorCode);
                 cond->next = index = addConditionalCE32(context, ce32, errorCode);
             }
             if(U_FAILURE(errorCode)) { return 0; }
@@ -953,7 +953,7 @@ CollationDataBuilder::copyFromBaseCE32(UChar32 c, uint32_t ce32, UBool withConte
         if(!withContext) {
             const UChar *p = base->contexts + Collation::indexFromCE32(ce32);
             ce32 = CollationData::readCE32(p);  // Default if no suffix match.
-            return copyFromBaseCE32(c, ce32, FALSE, errorCode);
+            return copyFromBaseCE32(c, ce32, false, errorCode);
         }
         ConditionalCE32 head;
         UnicodeString context((UChar)0);
@@ -966,7 +966,7 @@ CollationDataBuilder::copyFromBaseCE32(UChar32 c, uint32_t ce32, UBool withConte
         errorCode = U_UNSUPPORTED_ERROR;  // We forbid tailoring of Hangul syllables.
         break;
     case Collation::OFFSET_TAG:
-        ce32 = getCE32FromOffsetCE32(TRUE, c, ce32);
+        ce32 = getCE32FromOffsetCE32(true, c, ce32);
         break;
     case Collation::IMPLICIT_TAG:
         ce32 = encodeOneCE(Collation::unassignedCEFromCodePoint(c), errorCode);
@@ -992,7 +992,7 @@ CollationDataBuilder::copyContractionsFromBaseCE32(UnicodeString &context, UChar
     } else {
         ce32 = CollationData::readCE32(p);  // Default if no suffix match.
         U_ASSERT(!Collation::isContractionCE32(ce32));
-        ce32 = copyFromBaseCE32(c, ce32, TRUE, errorCode);
+        ce32 = copyFromBaseCE32(c, ce32, true, errorCode);
         cond->next = index = addConditionalCE32(context, ce32, errorCode);
         if(U_FAILURE(errorCode)) { return 0; }
         cond = getConditionalCE32(index);
@@ -1002,7 +1002,7 @@ CollationDataBuilder::copyContractionsFromBaseCE32(UnicodeString &context, UChar
     UCharsTrie::Iterator suffixes(p + 2, 0, errorCode);
     while(suffixes.next(errorCode)) {
         context.append(suffixes.getString());
-        ce32 = copyFromBaseCE32(c, (uint32_t)suffixes.getValue(), TRUE, errorCode);
+        ce32 = copyFromBaseCE32(c, (uint32_t)suffixes.getValue(), true, errorCode);
         cond->next = index = addConditionalCE32(context, ce32, errorCode);
         if(U_FAILURE(errorCode)) { return 0; }
         // No need to update the unsafeBackwardSet because the tailoring set
@@ -1023,7 +1023,7 @@ public:
 
     UBool copyRangeCE32(UChar32 start, UChar32 end, uint32_t ce32) {
         ce32 = copyCE32(ce32);
-        utrie2_setRange32(dest.trie, start, end, ce32, TRUE, &errorCode);
+        utrie2_setRange32(dest.trie, start, end, ce32, true, &errorCode);
         if(CollationDataBuilder::isBuilderContextCE32(ce32)) {
             dest.contextChars.add(start, end);
         }
@@ -1044,7 +1044,7 @@ public:
                 int32_t length = Collation::lengthFromCE32(ce32);
                 // Inspect the source CE32s. Just copy them if none are modified.
                 // Otherwise copy to modifiedCEs, with modifications.
-                UBool isModified = FALSE;
+                UBool isModified = false;
                 for(int32_t i = 0; i < length; ++i) {
                     ce32 = srcCE32s[i];
                     int64_t ce;
@@ -1058,7 +1058,7 @@ public:
                             for(int32_t j = 0; j < i; ++j) {
                                 modifiedCEs[j] = Collation::ceFromCE32(srcCE32s[j]);
                             }
-                            isModified = TRUE;
+                            isModified = true;
                         }
                         modifiedCEs[i] = ce;
                     }
@@ -1075,7 +1075,7 @@ public:
                 int32_t length = Collation::lengthFromCE32(ce32);
                 // Inspect the source CEs. Just copy them if none are modified.
                 // Otherwise copy to modifiedCEs, with modifications.
-                UBool isModified = FALSE;
+                UBool isModified = false;
                 for(int32_t i = 0; i < length; ++i) {
                     int64_t srcCE = srcCEs[i];
                     int64_t ce = modifier.modifyCE(srcCE);
@@ -1088,7 +1088,7 @@ public:
                             for(int32_t j = 0; j < i; ++j) {
                                 modifiedCEs[j] = srcCEs[j];
                             }
-                            isModified = TRUE;
+                            isModified = true;
                         }
                         modifiedCEs[i] = ce;
                     }
@@ -1170,11 +1170,11 @@ CollationDataBuilder::optimize(const UnicodeSet &set, UErrorCode &errorCode) {
         uint32_t ce32 = utrie2_get32(trie, c);
         if(ce32 == Collation::FALLBACK_CE32) {
             ce32 = base->getFinalCE32(base->getCE32(c));
-            ce32 = copyFromBaseCE32(c, ce32, TRUE, errorCode);
+            ce32 = copyFromBaseCE32(c, ce32, true, errorCode);
             utrie2_set32(trie, c, ce32, &errorCode);
         }
     }
-    modified = TRUE;
+    modified = true;
 }
 
 void
@@ -1187,7 +1187,7 @@ CollationDataBuilder::suppressContractions(const UnicodeSet &set, UErrorCode &er
         if(ce32 == Collation::FALLBACK_CE32) {
             ce32 = base->getFinalCE32(base->getCE32(c));
             if(Collation::ce32HasContext(ce32)) {
-                ce32 = copyFromBaseCE32(c, ce32, FALSE /* without context */, errorCode);
+                ce32 = copyFromBaseCE32(c, ce32, false /* without context */, errorCode);
                 utrie2_set32(trie, c, ce32, &errorCode);
             }
         } else if(isBuilderContextCE32(ce32)) {
@@ -1199,23 +1199,23 @@ CollationDataBuilder::suppressContractions(const UnicodeSet &set, UErrorCode &er
             contextChars.remove(c);
         }
     }
-    modified = TRUE;
+    modified = true;
 }
 
 UBool
 CollationDataBuilder::getJamoCE32s(uint32_t jamoCE32s[], UErrorCode &errorCode) {
-    if(U_FAILURE(errorCode)) { return FALSE; }
+    if(U_FAILURE(errorCode)) { return false; }
     UBool anyJamoAssigned = base == NULL;  // always set jamoCE32s in the base data
-    UBool needToCopyFromBase = FALSE;
+    UBool needToCopyFromBase = false;
     for(int32_t j = 0; j < CollationData::JAMO_CE32S_LENGTH; ++j) {  // Count across Jamo types.
         UChar32 jamo = jamoCpFromIndex(j);
-        UBool fromBase = FALSE;
+        UBool fromBase = false;
         uint32_t ce32 = utrie2_get32(trie, jamo);
         anyJamoAssigned |= Collation::isAssignedCE32(ce32);
         // TODO: Try to prevent [optimize [Jamo]] from counting as anyJamoAssigned.
         // (As of CLDR 24 [2013] the Korean tailoring does not optimize conjoining Jamo.)
         if(ce32 == Collation::FALLBACK_CE32) {
-            fromBase = TRUE;
+            fromBase = true;
             ce32 = base->getCE32(jamo);
         }
         if(Collation::isSpecialCE32(ce32)) {
@@ -1232,14 +1232,14 @@ CollationDataBuilder::getJamoCE32s(uint32_t jamoCE32s[], UErrorCode &errorCode) 
                 if(fromBase) {
                     // Defer copying until we know if anyJamoAssigned.
                     ce32 = Collation::FALLBACK_CE32;
-                    needToCopyFromBase = TRUE;
+                    needToCopyFromBase = true;
                 }
                 break;
             case Collation::IMPLICIT_TAG:
                 // An unassigned Jamo should only occur in tests with incomplete bases.
                 U_ASSERT(fromBase);
                 ce32 = Collation::FALLBACK_CE32;
-                needToCopyFromBase = TRUE;
+                needToCopyFromBase = true;
                 break;
             case Collation::OFFSET_TAG:
                 ce32 = getCE32FromOffsetCE32(fromBase, jamo, ce32);
@@ -1252,7 +1252,7 @@ CollationDataBuilder::getJamoCE32s(uint32_t jamoCE32s[], UErrorCode &errorCode) 
             case Collation::HANGUL_TAG:
             case Collation::LEAD_SURROGATE_TAG:
                 errorCode = U_INTERNAL_PROGRAM_ERROR;
-                return FALSE;
+                return false;
             }
         }
         jamoCE32s[j] = ce32;
@@ -1262,7 +1262,7 @@ CollationDataBuilder::getJamoCE32s(uint32_t jamoCE32s[], UErrorCode &errorCode) 
             if(jamoCE32s[j] == Collation::FALLBACK_CE32) {
                 UChar32 jamo = jamoCpFromIndex(j);
                 jamoCE32s[j] = copyFromBaseCE32(jamo, base->getCE32(jamo),
-                                                /*withContext=*/ TRUE, errorCode);
+                                                /*withContext=*/ true, errorCode);
             }
         }
     }
@@ -1303,15 +1303,15 @@ enumRangeLeadValue(const void *context, UChar32 /*start*/, UChar32 /*end*/, uint
         value = Collation::LEAD_ALL_FALLBACK;
     } else {
         *pValue = Collation::LEAD_MIXED;
-        return FALSE;
+        return false;
     }
     if(*pValue < 0) {
         *pValue = (int32_t)value;
     } else if(*pValue != (int32_t)value) {
         *pValue = Collation::LEAD_MIXED;
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 U_CDECL_END
@@ -1366,10 +1366,10 @@ CollationDataBuilder::buildMappings(CollationData &data, UErrorCode &errorCode) 
         // In order to still have good trie compression and keep this code simple,
         // we only set this flag if a whole block of 588 Hangul syllables starting with
         // a common leading consonant (Jamo L) has this property.
-        UBool isAnyJamoVTSpecial = FALSE;
+        UBool isAnyJamoVTSpecial = false;
         for(int32_t i = Hangul::JAMO_L_COUNT; i < CollationData::JAMO_CE32S_LENGTH; ++i) {
             if(Collation::isSpecialCE32(jamoCE32s[i])) {
-                isAnyJamoVTSpecial = TRUE;
+                isAnyJamoVTSpecial = true;
                 break;
             }
         }
@@ -1381,7 +1381,7 @@ CollationDataBuilder::buildMappings(CollationData &data, UErrorCode &errorCode) 
                 ce32 |= Collation::HANGUL_NO_SPECIAL_JAMO;
             }
             UChar32 limit = c + Hangul::JAMO_VT_COUNT;
-            utrie2_setRange32(trie, c, limit - 1, ce32, TRUE, &errorCode);
+            utrie2_setRange32(trie, c, limit - 1, ce32, true, &errorCode);
             c = limit;
         }
     } else {
@@ -1391,7 +1391,7 @@ CollationDataBuilder::buildMappings(CollationData &data, UErrorCode &errorCode) 
             uint32_t ce32 = base->getCE32(c);
             U_ASSERT(Collation::hasCE32Tag(ce32, Collation::HANGUL_TAG));
             UChar32 limit = c + Hangul::JAMO_VT_COUNT;
-            utrie2_setRange32(trie, c, limit - 1, ce32, TRUE, &errorCode);
+            utrie2_setRange32(trie, c, limit - 1, ce32, true, &errorCode);
             c = limit;
         }
     }

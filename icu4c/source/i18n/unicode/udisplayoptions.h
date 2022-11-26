@@ -8,6 +8,14 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+/**
+ * \file
+ * \brief C API: Display options (enum types, values, helper functions)
+ *
+ * These display options are designed to be used in class DisplayOptions
+ * as a more modern version of the UDisplayContext mechanism.
+ */
+
 #include "unicode/uversion.h"
 
 #ifndef U_HIDE_DRAFT_API
@@ -111,8 +119,9 @@ U_CAPI const char * U_EXPORT2
 udispopt_getPluralCategoryIdentifier(UDisplayOptionsPluralCategory pluralCategory);
 
 /**
- * @param keyword for example "few" or "other"
- * @return the plural category corresponding to the keyword, or `UDISPOPT_PLURAL_CATEGORY_UNDEFINED`
+ * @param identifier for example "few" or "other"
+ * @return the plural category corresponding to the identifier (plural keyword),
+ *         or `UDISPOPT_PLURAL_CATEGORY_UNDEFINED`
  *
  * @draft ICU 72
  */

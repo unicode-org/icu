@@ -65,7 +65,7 @@ void UVector32Test::runIndexedTest( int32_t index, UBool exec, const char* &name
 } UPRV_BLOCK_MACRO_END
 
 #define TEST_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN {\
-    if ((expr)==FALSE) {\
+    if ((expr)==false) {\
         errln("UVector32Test failure at line %d.\n", __LINE__);\
     }\
 } UPRV_BLOCK_MACRO_END
@@ -207,10 +207,10 @@ void UVector32Test::UVector32_API() {
     a->addElement(10, status);
     a->addElement(20, status);
     a->addElement(30, status);
-    TEST_ASSERT(a->contains(10) == TRUE);
-    TEST_ASSERT(a->contains(11) == FALSE);
-    TEST_ASSERT(a->contains(20) == TRUE);
-    TEST_ASSERT(a->contains(-10) == FALSE);
+    TEST_ASSERT(a->contains(10) == true);
+    TEST_ASSERT(a->contains(11) == false);
+    TEST_ASSERT(a->contains(20) == true);
+    TEST_ASSERT(a->contains(-10) == false);
     TEST_CHECK_STATUS(status);
     delete a;
 
@@ -224,19 +224,19 @@ void UVector32Test::UVector32_API() {
     a->addElement(20, status);
     a->addElement(30, status);
     b = new UVector32(status);
-    TEST_ASSERT(a->containsAll(*b) == TRUE);
+    TEST_ASSERT(a->containsAll(*b) == true);
     b->addElement(2, status);
-    TEST_ASSERT(a->containsAll(*b) == FALSE);
+    TEST_ASSERT(a->containsAll(*b) == false);
     b->setElementAt(10, 0);
-    TEST_ASSERT(a->containsAll(*b) == TRUE);
-    TEST_ASSERT(b->containsAll(*a) == FALSE);
+    TEST_ASSERT(a->containsAll(*b) == true);
+    TEST_ASSERT(b->containsAll(*a) == false);
     b->addElement(30, status);
     b->addElement(20, status);
-    TEST_ASSERT(a->containsAll(*b) == TRUE);
-    TEST_ASSERT(b->containsAll(*a) == TRUE);
+    TEST_ASSERT(a->containsAll(*b) == true);
+    TEST_ASSERT(b->containsAll(*a) == true);
     b->addElement(2, status);
-    TEST_ASSERT(a->containsAll(*b) == FALSE);
-    TEST_ASSERT(b->containsAll(*a) == TRUE);
+    TEST_ASSERT(a->containsAll(*b) == false);
+    TEST_ASSERT(b->containsAll(*a) == true);
     TEST_CHECK_STATUS(status);
     delete a;
     delete b;
@@ -255,12 +255,12 @@ void UVector32Test::UVector32_API() {
     b->addElement(20, status);
     a->removeAll(*b);
     TEST_ASSERT(a->size() == 2);
-    TEST_ASSERT(a->contains(10)==TRUE);
-    TEST_ASSERT(a->contains(30)==TRUE);
+    TEST_ASSERT(a->contains(10)==true);
+    TEST_ASSERT(a->contains(30)==true);
     b->addElement(10, status);
     a->removeAll(*b);
     TEST_ASSERT(a->size() == 1);
-    TEST_ASSERT(a->contains(30) == TRUE);
+    TEST_ASSERT(a->contains(30) == true);
     TEST_CHECK_STATUS(status);
     delete a;
     delete b;
@@ -282,7 +282,7 @@ void UVector32Test::UVector32_API() {
     TEST_ASSERT(a->size() == 3);
     b->removeElementAt(1);
     a->retainAll(*b);
-    TEST_ASSERT(a->contains(20) == FALSE);
+    TEST_ASSERT(a->contains(20) == false);
     TEST_ASSERT(a->size() == 2);
     b->removeAllElements();
     TEST_ASSERT(b->size() == 0);
@@ -309,14 +309,14 @@ void UVector32Test::UVector32_API() {
     //
     status = U_ZERO_ERROR;
     a = new UVector32(status);
-    TEST_ASSERT(a->isEmpty() == TRUE);
+    TEST_ASSERT(a->isEmpty() == true);
     a->addElement(10, status);
-    TEST_ASSERT(a->isEmpty() == FALSE);
+    TEST_ASSERT(a->isEmpty() == false);
     a->addElement(20, status);
     a->removeElementAt(0);
-    TEST_ASSERT(a->isEmpty() == FALSE);
+    TEST_ASSERT(a->isEmpty() == false);
     a->removeElementAt(0);
-    TEST_ASSERT(a->isEmpty() == TRUE);
+    TEST_ASSERT(a->isEmpty() == true);
     TEST_CHECK_STATUS(status);
     delete a;
 
@@ -326,10 +326,10 @@ void UVector32Test::UVector32_API() {
     //
     status = U_ZERO_ERROR;
     a = new UVector32(status);
-    TEST_ASSERT(a->isEmpty() == TRUE);
+    TEST_ASSERT(a->isEmpty() == true);
     a->addElement(10, status);
-    TEST_ASSERT(a->ensureCapacity(5000, status)== TRUE);
-    TEST_ASSERT(a->expandCapacity(20000, status) == TRUE);
+    TEST_ASSERT(a->ensureCapacity(5000, status)== true);
+    TEST_ASSERT(a->expandCapacity(20000, status) == true);
     TEST_CHECK_STATUS(status);
     delete a;
     
@@ -356,7 +356,7 @@ void UVector32Test::UVector32_API() {
     TEST_ASSERT(a->elementAti(2) == 0);
     TEST_ASSERT(a->size() == 2);
     a->setSize(0);
-    TEST_ASSERT(a->empty() == TRUE);
+    TEST_ASSERT(a->empty() == true);
     TEST_ASSERT(a->size() == 0);
 
     TEST_CHECK_STATUS(status);
@@ -371,11 +371,11 @@ void UVector32Test::UVector32_API() {
     a->addElement(20, status);
     a->addElement(30, status);
     b = new UVector32(status);
-    TEST_ASSERT(a->containsNone(*b) == TRUE);
+    TEST_ASSERT(a->containsNone(*b) == true);
     b->addElement(5, status);
-    TEST_ASSERT(a->containsNone(*b) == TRUE);
+    TEST_ASSERT(a->containsNone(*b) == true);
     b->addElement(30, status);
-    TEST_ASSERT(a->containsNone(*b) == FALSE);
+    TEST_ASSERT(a->containsNone(*b) == false);
 
     TEST_CHECK_STATUS(status);
     delete a;
@@ -422,14 +422,14 @@ void UVector32Test::UVector32_API() {
     //
     status = U_ZERO_ERROR;
     a = new UVector32(status);
-    TEST_ASSERT(a->empty() == TRUE);
+    TEST_ASSERT(a->empty() == true);
     a->addElement(10, status);
-    TEST_ASSERT(a->empty() == FALSE);
+    TEST_ASSERT(a->empty() == false);
     a->addElement(20, status);
     a->removeElementAt(0);
-    TEST_ASSERT(a->empty() == FALSE);
+    TEST_ASSERT(a->empty() == false);
     a->removeElementAt(0);
-    TEST_ASSERT(a->empty() == TRUE);
+    TEST_ASSERT(a->empty() == true);
     TEST_CHECK_STATUS(status);
     delete a;
 

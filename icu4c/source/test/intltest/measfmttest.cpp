@@ -3311,8 +3311,6 @@ void MeasureFormatTest::TestCompatible72() {
     measureUnitValue = MeasureUnit::getGram();
     measureUnit.adoptInstead(MeasureUnit::createKilogram(status));
     measureUnitValue = MeasureUnit::getKilogram();
-    measureUnit.adoptInstead(MeasureUnit::createMetricTon(status));
-    measureUnitValue = MeasureUnit::getMetricTon();
     measureUnit.adoptInstead(MeasureUnit::createMicrogram(status));
     measureUnitValue = MeasureUnit::getMicrogram();
     measureUnit.adoptInstead(MeasureUnit::createMilligram(status));
@@ -3329,6 +3327,8 @@ void MeasureFormatTest::TestCompatible72() {
     measureUnitValue = MeasureUnit::getStone();
     measureUnit.adoptInstead(MeasureUnit::createTon(status));
     measureUnitValue = MeasureUnit::getTon();
+    measureUnit.adoptInstead(MeasureUnit::createTonne(status));
+    measureUnitValue = MeasureUnit::getTonne();
     measureUnit.adoptInstead(MeasureUnit::createGigawatt(status));
     measureUnitValue = MeasureUnit::getGigawatt();
     measureUnit.adoptInstead(MeasureUnit::createHorsepower(status));
@@ -4425,8 +4425,8 @@ void MeasureFormatTest::TestDisplayNames() {
     helperTestDisplayName( MeasureUnit::createSecond(status), "pt-PT", UMEASFMT_WIDTH_NARROW, "s" );
     helperTestDisplayName( MeasureUnit::createSecond(status), "pt-PT", UMEASFMT_WIDTH_SHORT, "s" );
     helperTestDisplayName( MeasureUnit::createSecond(status), "pt-PT", UMEASFMT_WIDTH_WIDE, "segundos" );
-    helperTestDisplayName( MeasureUnit::createSecond(status), "pt", UMEASFMT_WIDTH_NARROW, "seg" );
-    helperTestDisplayName( MeasureUnit::createSecond(status), "pt", UMEASFMT_WIDTH_SHORT, "seg" );
+    helperTestDisplayName( MeasureUnit::createSecond(status), "pt", UMEASFMT_WIDTH_NARROW, "s" );
+    helperTestDisplayName( MeasureUnit::createSecond(status), "pt", UMEASFMT_WIDTH_SHORT, "s" );
     helperTestDisplayName( MeasureUnit::createSecond(status), "pt", UMEASFMT_WIDTH_WIDE, "segundos" );
     assertSuccess("Error creating measure units", status);
 }
@@ -4691,7 +4691,7 @@ void MeasureFormatTest::TestIndividualPluralFallback() {
     if (errorCode.errIfFailureAndReset("mf.format(...) failed.")) {
         return;
     }
-    assertEquals("2 deg temp in fr_CA", expected, actual, TRUE);
+    assertEquals("2 deg temp in fr_CA", expected, actual, true);
     errorCode.errIfFailureAndReset("mf.format failed");
 }
 
@@ -4923,7 +4923,7 @@ void MeasureFormatTest::TestInvalidIdentifiers() {
         "per-hour-and-hertz",
         "hertz-and-per-hour",
 
-        // Compound units not supported in mixed units yet. TODO(CLDR-13700).
+        // Compound units not supported in mixed units yet. TODO(CLDR-13701).
         "kilonewton-meter-and-newton-meter",
     };
 
@@ -5350,7 +5350,7 @@ void MeasureFormatTest::Test21223_FrenchDuration() {
     //     auto& loc = locales[i];
     //     MeasureFormat mf1(loc, UMEASFMT_WIDTH_NARROW, status);
     //     mf1.formatMeasures(H5M10, UPRV_LENGTHOF(H5M10), result.remove(), pos, status);
-    //     assertFalse(result + u" " + loc.getName(), TRUE);
+    //     assertFalse(result + u" " + loc.getName(), true);
     // }
 }
 
@@ -5620,4 +5620,3 @@ extern IntlTest *createMeasureFormatTest() {
 }
 
 #endif
-

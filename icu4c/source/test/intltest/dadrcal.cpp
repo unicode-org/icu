@@ -73,7 +73,7 @@ void DataDrivenCalendarTest::runIndexedTest(int32_t index, UBool exec,
 void DataDrivenCalendarTest::testOps(TestData *testData,
         const DataMap * /*settings*/) {
     UErrorCode status = U_ZERO_ERROR;
-    UBool useDate = FALSE; // TODO
+    UBool useDate = false; // TODO
     UnicodeString kMILLIS("MILLIS="); // TODO: static
     UDate fromDate = 0; // TODO
     UDate toDate = 0;
@@ -136,7 +136,7 @@ void DataDrivenCalendarTest::testOps(TestData *testData,
                 
         if(from.startsWith(kMILLIS)){
         	UnicodeString millis = UnicodeString(from, kMILLIS.length());
-        	useDate = TRUE;
+        	useDate = true;
         	fromDate = udbg_stod(millis);
         } else if(fromSet.parseFrom(testSetting, status)<0 || U_FAILURE(status)){
         	errln(caseString+": Failed to parse '"+param+"' parameter: "
@@ -187,7 +187,7 @@ void DataDrivenCalendarTest::testOps(TestData *testData,
         }
         if(to.startsWith(kMILLIS)){
         	UnicodeString millis = UnicodeString(to, kMILLIS.length());
-            useDate = TRUE;
+            useDate = true;
             toDate = udbg_stod(millis);
         } else if(toSet.parseFrom(testSetting, &fromSet, status)<0 || U_FAILURE(status)){
             errln(caseString+": Failed to parse '"+param+"' parameter: "

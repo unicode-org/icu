@@ -39,7 +39,7 @@ static UBool calendar_dangi_cleanup(void) {
         gDangiCalendarZoneAstroCalc = NULL;
     }
     gDangiCalendarInitOnce.reset();
-    return TRUE;
+    return true;
 }
 U_CDECL_END
 
@@ -139,6 +139,23 @@ static void U_CALLCONV initDangiCalZoneAstroCalc(UErrorCode &status) {
 const TimeZone* DangiCalendar::getDangiCalZoneAstroCalc(UErrorCode &status) const {
     umtx_initOnce(gDangiCalendarInitOnce, &initDangiCalZoneAstroCalc, status);
     return gDangiCalendarZoneAstroCalc;
+}
+
+constexpr uint32_t kDangiRelatedYearDiff = -2333;
+
+int32_t DangiCalendar::getRelatedYear(UErrorCode &status) const
+{
+    int32_t year = get(UCAL_EXTENDED_YEAR, status);
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+    return year + kDangiRelatedYearDiff;
+}
+
+void DangiCalendar::setRelatedYear(int32_t year)
+{
+    // set extended year
+    set(UCAL_EXTENDED_YEAR, year - kDangiRelatedYearDiff);
 }
 
 

@@ -189,14 +189,14 @@ void TransliteratorErrorTest::TestUnicodeSetErrors() {
 
 //void TransliteratorErrorTest::TestUniToHexErrors() {
 //    UErrorCode status = U_ZERO_ERROR;
-//    Transliterator *t = new UnicodeToHexTransliterator("", TRUE, NULL, status);
+//    Transliterator *t = new UnicodeToHexTransliterator("", true, NULL, status);
 //    if (U_SUCCESS(status)) {
 //        errln("FAIL: Created a UnicodeToHexTransliterator with an empty pattern.");
 //    }
 //    delete t;
 //
 //    status = U_ZERO_ERROR;
-//    t = new UnicodeToHexTransliterator("\\x", TRUE, NULL, status);
+//    t = new UnicodeToHexTransliterator("\\x", true, NULL, status);
 //    if (U_SUCCESS(status)) {
 //        errln("FAIL: Created a UnicodeToHexTransliterator with a bad pattern.");
 //    }

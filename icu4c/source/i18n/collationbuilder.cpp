@@ -89,7 +89,7 @@ RuleBasedCollator::RuleBasedCollator()
           cacheEntry(NULL),
           validLocale(""),
           explicitlySetAttributes(0),
-          actualLocaleIsSameAsValid(FALSE) {
+          actualLocaleIsSameAsValid(false) {
 }
 
 RuleBasedCollator::RuleBasedCollator(const UnicodeString &rules, UErrorCode &errorCode)
@@ -99,7 +99,7 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString &rules, UErrorCode &err
           cacheEntry(NULL),
           validLocale(""),
           explicitlySetAttributes(0),
-          actualLocaleIsSameAsValid(FALSE) {
+          actualLocaleIsSameAsValid(false) {
     internalBuildTailoring(rules, UCOL_DEFAULT, UCOL_DEFAULT, NULL, NULL, errorCode);
 }
 
@@ -111,7 +111,7 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString &rules, ECollationStren
           cacheEntry(NULL),
           validLocale(""),
           explicitlySetAttributes(0),
-          actualLocaleIsSameAsValid(FALSE) {
+          actualLocaleIsSameAsValid(false) {
     internalBuildTailoring(rules, strength, UCOL_DEFAULT, NULL, NULL, errorCode);
 }
 
@@ -124,7 +124,7 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString &rules,
           cacheEntry(NULL),
           validLocale(""),
           explicitlySetAttributes(0),
-          actualLocaleIsSameAsValid(FALSE) {
+          actualLocaleIsSameAsValid(false) {
     internalBuildTailoring(rules, UCOL_DEFAULT, decompositionMode, NULL, NULL, errorCode);
 }
 
@@ -138,7 +138,7 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString &rules,
           cacheEntry(NULL),
           validLocale(""),
           explicitlySetAttributes(0),
-          actualLocaleIsSameAsValid(FALSE) {
+          actualLocaleIsSameAsValid(false) {
     internalBuildTailoring(rules, strength, decompositionMode, NULL, NULL, errorCode);
 }
 
@@ -151,7 +151,7 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString &rules,
           cacheEntry(NULL),
           validLocale(""),
           explicitlySetAttributes(0),
-          actualLocaleIsSameAsValid(FALSE) {
+          actualLocaleIsSameAsValid(false) {
     internalBuildTailoring(rules, UCOL_DEFAULT, UCOL_DEFAULT, &parseError, &reason, errorCode);
 }
 
@@ -191,13 +191,6 @@ RuleBasedCollator::internalBuildTailoring(const UnicodeString &rules,
 
 // CollationBuilder implementation ----------------------------------------- ***
 
-// Some compilers don't care if constants are defined in the .cpp file.
-// MS Visual C++ does not like it, but gcc requires it. clang does not care.
-#ifndef _MSC_VER
-const int32_t CollationBuilder::HAS_BEFORE2;
-const int32_t CollationBuilder::HAS_BEFORE3;
-#endif
-
 CollationBuilder::CollationBuilder(const CollationTailoring *b, UBool icu4xMode, UErrorCode &errorCode)
         : nfd(*Normalizer2::getNFDInstance(errorCode)),
           fcd(*Normalizer2Factory::getFCDInstance(errorCode)),
@@ -206,7 +199,7 @@ CollationBuilder::CollationBuilder(const CollationTailoring *b, UBool icu4xMode,
           baseData(b->data),
           rootElements(b->data->rootElements, b->data->rootElementsLength),
           variableTop(0),
-          dataBuilder(new CollationDataBuilder(icu4xMode, errorCode)), fastLatinEnabled(TRUE),
+          dataBuilder(new CollationDataBuilder(icu4xMode, errorCode)), fastLatinEnabled(true),
           icu4xMode(icu4xMode),
           errorReason(NULL),
           cesLength(0),
@@ -227,7 +220,7 @@ CollationBuilder::CollationBuilder(const CollationTailoring *b, UBool icu4xMode,
 }
 
 CollationBuilder::CollationBuilder(const CollationTailoring *b, UErrorCode &errorCode)
-  : CollationBuilder(b, FALSE, errorCode)
+  : CollationBuilder(b, false, errorCode)
 {}
 
 CollationBuilder::~CollationBuilder() {
@@ -493,7 +486,7 @@ CollationBuilder::getSpecialResetPosition(const UnicodeString &str,
     U_ASSERT(str.length() == 2);
     int64_t ce;
     int32_t strength = UCOL_PRIMARY;
-    UBool isBoundary = FALSE;
+    UBool isBoundary = false;
     UChar32 pos = str.charAt(1) - CollationRuleParser::POS_BASE;
     U_ASSERT(0 <= pos && pos <= CollationRuleParser::LAST_TRAILING);
     switch(pos) {
@@ -553,14 +546,14 @@ CollationBuilder::getSpecialResetPosition(const UnicodeString &str,
         break;
     case CollationRuleParser::FIRST_VARIABLE:
         ce = rootElements.getFirstPrimaryCE();
-        isBoundary = TRUE;  // FractionalUCA.txt: FDD1 00A0, SPACE first primary
+        isBoundary = true;  // FractionalUCA.txt: FDD1 00A0, SPACE first primary
         break;
     case CollationRuleParser::LAST_VARIABLE:
         ce = rootElements.lastCEWithPrimaryBefore(variableTop + 1);
         break;
     case CollationRuleParser::FIRST_REGULAR:
         ce = rootElements.firstCEWithPrimaryAtLeast(variableTop + 1);
-        isBoundary = TRUE;  // FractionalUCA.txt: FDD1 263A, SYMBOL first primary
+        isBoundary = true;  // FractionalUCA.txt: FDD1 263A, SYMBOL first primary
         break;
     case CollationRuleParser::LAST_REGULAR:
         // Use the Hani-first-primary rather than the actual last "regular" CE before it,
@@ -579,7 +572,7 @@ CollationBuilder::getSpecialResetPosition(const UnicodeString &str,
         return 0;
     case CollationRuleParser::FIRST_TRAILING:
         ce = Collation::makeCE(Collation::FIRST_TRAILING_PRIMARY);
-        isBoundary = TRUE;  // trailing first primary (there is no mapping for it)
+        isBoundary = true;  // trailing first primary (there is no mapping for it)
         break;
     case CollationRuleParser::LAST_TRAILING:
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
@@ -1038,7 +1031,7 @@ CollationBuilder::setCaseBits(const UnicodeString &nfdString,
     int64_t cases = 0;
     if(numTailoredPrimaries > 0) {
         const UChar *s = nfdString.getBuffer();
-        UTF16CollationIterator baseCEs(baseData, FALSE, s, s, s + nfdString.length());
+        UTF16CollationIterator baseCEs(baseData, false, s, s, s + nfdString.length());
         int32_t baseCEsLength = baseCEs.fetchCEs(errorCode) - 1;
         if(U_FAILURE(errorCode)) {
             parserErrorReason = "fetching root CEs for tailored string";
@@ -1230,18 +1223,18 @@ CollationBuilder::mergeCompositeIntoString(const UnicodeString &nfdString,
                                            UChar32 composite, const UnicodeString &decomp,
                                            UnicodeString &newNFDString, UnicodeString &newString,
                                            UErrorCode &errorCode) const {
-    if(U_FAILURE(errorCode)) { return FALSE; }
+    if(U_FAILURE(errorCode)) { return false; }
     U_ASSERT(nfdString.char32At(indexAfterLastStarter - 1) == decomp.char32At(0));
     int32_t lastStarterLength = decomp.moveIndex32(0, 1);
     if(lastStarterLength == decomp.length()) {
         // Singleton decompositions should be found by addWithClosure()
         // and the CanonicalIterator, so we can ignore them here.
-        return FALSE;
+        return false;
     }
     if(nfdString.compare(indexAfterLastStarter, 0x7fffffff,
                          decomp, lastStarterLength, 0x7fffffff) == 0) {
         // same strings, nothing new to be found here
-        return FALSE;
+        return false;
     }
 
     // Make new FCD strings that combine a composite, or its decomposition,
@@ -1251,7 +1244,7 @@ CollationBuilder::mergeCompositeIntoString(const UnicodeString &nfdString,
     newString.setTo(nfdString, 0, indexAfterLastStarter - lastStarterLength).append(composite);
 
     // The following is related to discontiguous contraction matching,
-    // but builds only FCD strings (or else returns FALSE).
+    // but builds only FCD strings (or else returns false).
     int32_t sourceIndex = indexAfterLastStarter;
     int32_t decompIndex = lastStarterLength;
     // Small optimization: We keep the source character across loop iterations
@@ -1278,16 +1271,16 @@ CollationBuilder::mergeCompositeIntoString(const UnicodeString &nfdString,
             // Unable to merge because the source contains a non-zero combining mark
             // but the composite's decomposition contains another starter.
             // The strings would not be equivalent.
-            return FALSE;
+            return false;
         } else if(sourceCC < decompCC) {
             // Composite + sourceChar would not be FCD.
-            return FALSE;
+            return false;
         } else if(decompCC < sourceCC) {
             newNFDString.append(decompChar);
             decompIndex += U16_LENGTH(decompChar);
         } else if(decompChar != sourceChar) {
             // Blocked because same combining class.
-            return FALSE;
+            return false;
         } else {  // match: decompChar == sourceChar
             newNFDString.append(decompChar);
             decompIndex += U16_LENGTH(decompChar);
@@ -1299,7 +1292,7 @@ CollationBuilder::mergeCompositeIntoString(const UnicodeString &nfdString,
     if(sourceChar >= 0) {  // more characters from nfdString but not from decomp
         if(sourceCC < decompCC) {
             // Appending the next source character to the composite would not be FCD.
-            return FALSE;
+            return false;
         }
         newNFDString.append(nfdString, sourceIndex, 0x7fffffff);
         newString.append(nfdString, sourceIndex, 0x7fffffff);
@@ -1309,7 +1302,7 @@ CollationBuilder::mergeCompositeIntoString(const UnicodeString &nfdString,
     U_ASSERT(nfd.isNormalized(newNFDString, errorCode));
     U_ASSERT(fcd.isNormalized(newString, errorCode));
     U_ASSERT(nfd.normalize(newString, errorCode) == newNFDString);  // canonically equivalent
-    return TRUE;
+    return true;
 }
 
 UBool
@@ -1374,13 +1367,13 @@ UBool
 CollationBuilder::sameCEs(const int64_t ces1[], int32_t ces1Length,
                           const int64_t ces2[], int32_t ces2Length) {
     if(ces1Length != ces2Length) {
-        return FALSE;
+        return false;
     }
     U_ASSERT(ces1Length <= Collation::MAX_EXPANSION_LENGTH);
     for(int32_t i = 0; i < ces1Length; ++i) {
-        if(ces1[i] != ces2[i]) { return FALSE; }
+        if(ces1[i] != ces2[i]) { return false; }
     }
-    return TRUE;
+    return true;
 }
 
 #ifdef DEBUG_COLLATION_BUILDER
@@ -1412,9 +1405,9 @@ CollationBuilder::makeTailoredCEs(UErrorCode &errorCode) {
         uint32_t s = p == 0 ? 0 : Collation::COMMON_WEIGHT16;
         uint32_t t = s;
         uint32_t q = 0;
-        UBool pIsTailored = FALSE;
-        UBool sIsTailored = FALSE;
-        UBool tIsTailored = FALSE;
+        UBool pIsTailored = false;
+        UBool sIsTailored = false;
+        UBool tIsTailored = false;
 #ifdef DEBUG_COLLATION_BUILDER
         printf("\nprimary     %lx\n", (long)alignWeightRight(p));
 #endif
@@ -1468,13 +1461,13 @@ CollationBuilder::makeTailoredCEs(UErrorCode &errorCode) {
                                 errorReason = "tertiary tailoring gap too small";
                                 return;
                             }
-                            tIsTailored = TRUE;
+                            tIsTailored = true;
                         }
                         t = tertiaries.nextWeight();
                         U_ASSERT(t != 0xffffffff);
                     } else {
                         t = weight16FromNode(node);
-                        tIsTailored = FALSE;
+                        tIsTailored = false;
 #ifdef DEBUG_COLLATION_BUILDER
                         printf("    ter     %lx\n", (long)alignWeightRight(t));
 #endif
@@ -1520,13 +1513,13 @@ CollationBuilder::makeTailoredCEs(UErrorCode &errorCode) {
 #endif
                                     return;
                                 }
-                                sIsTailored = TRUE;
+                                sIsTailored = true;
                             }
                             s = secondaries.nextWeight();
                             U_ASSERT(s != 0xffffffff);
                         } else {
                             s = weight16FromNode(node);
-                            sIsTailored = FALSE;
+                            sIsTailored = false;
 #ifdef DEBUG_COLLATION_BUILDER
                             printf("  sec       %lx\n", (long)alignWeightRight(s));
 #endif
@@ -1549,15 +1542,15 @@ CollationBuilder::makeTailoredCEs(UErrorCode &errorCode) {
                                 errorReason = "primary tailoring gap too small";
                                 return;
                             }
-                            pIsTailored = TRUE;
+                            pIsTailored = true;
                         }
                         p = primaries.nextWeight();
                         U_ASSERT(p != 0xffffffff);
                         s = Collation::COMMON_WEIGHT16;
-                        sIsTailored = FALSE;
+                        sIsTailored = false;
                     }
                     t = s == 0 ? 0 : Collation::COMMON_WEIGHT16;
-                    tIsTailored = FALSE;
+                    tIsTailored = false;
                 }
                 q = 0;
             }
@@ -1703,7 +1696,7 @@ ucol_getUnsafeSet( const UCollator *coll,
     USet *contractions = uset_open(0,0);
 
     int32_t i = 0, j = 0;
-    ucol_getContractionsAndExpansions(coll, contractions, NULL, FALSE, status);
+    ucol_getContractionsAndExpansions(coll, contractions, NULL, false, status);
     int32_t contsSize = uset_size(contractions);
     UChar32 c = 0;
     // Contraction set consists only of strings

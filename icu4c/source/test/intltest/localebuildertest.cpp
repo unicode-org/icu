@@ -62,7 +62,7 @@ void LocaleBuilderTest::Verify(LocaleBuilder& bld, const char* expected, const c
         errln(msg, u_errorName(copyStatus));
     }
     if (!bld.copyErrorTo(errorStatus) || errorStatus != U_ILLEGAL_ARGUMENT_ERROR) {
-        errln("Should always get the previous error and return FALSE");
+        errln("Should always get the previous error and return false");
     }
     Locale loc = bld.build(status);
     if (U_FAILURE(status)) {
