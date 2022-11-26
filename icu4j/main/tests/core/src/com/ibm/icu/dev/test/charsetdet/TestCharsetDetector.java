@@ -1263,7 +1263,7 @@ public class TestCharsetDetector extends TestFmwk
 
         // "just" check that ASCII is first
         Assert.assertEquals("ASCII", matches[0].getName());
-        Assert.assertTrue(35 >= matches[0].getConfidence());
+        Assert.assertTrue(95 >= matches[0].getConfidence());
     }
 
     @Test
@@ -1279,7 +1279,7 @@ public class TestCharsetDetector extends TestFmwk
     }
 
     @Test
-    public void utf8IsTheHightestAtUTf8String() throws Exception {
+    public void utf8IsTheHighestAtUTf8String() throws Exception {
         byte[] input = "🎉\uD83C\uDF57".getBytes(StandardCharsets.UTF_8);
 
         CharsetDetector charsetDetector = new CharsetDetector();
