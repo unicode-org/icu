@@ -429,9 +429,9 @@ public class TestCharsetDetector extends TestFmwk
         }
 
         String charsetMatchLanguage = m.getLanguage();
-        if ((language != null && !charsetMatchLanguage.equals(language))
+        if ((language != null && charsetMatchLanguage == null)
             || (language == null && charsetMatchLanguage != null)
-            || (language != null && charsetMatchLanguage == null))
+            || (language != null && !charsetMatchLanguage.equals(language)))
         {
             errln(id + ", " + encoding + ": language detection failure - expected " + language + ", got " + m.getLanguage());
         }
@@ -487,7 +487,7 @@ public class TestCharsetDetector extends TestFmwk
             det.setText(new ByteArrayInputStream(bytes));
             checkMatch(det, testString, encoding, language, checkRoundtrip, id);
          } catch (Exception e) {
-            errln(id + ": " + e.toString() + "enc=" + encoding);
+            errln(id + ": " + e + "; enc=" + encoding);
             e.printStackTrace();
         }
     }
