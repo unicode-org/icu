@@ -33,7 +33,16 @@ class CharsetRecog_ASCII extends CharsetRecognizer {
             // We could execute the charset detectors of the other languages;
             // if they don't have a hit, we can increase our confidence.
             // However, this would lead to dependencies to outer CharsetRecognizers which is not a well-designed architecture.
-            return new CharsetMatch(det, this, 95);
+
+            // We re-use the language detection feature of the ISO-8859-1 detector
+            CharsetRecog_sbcs.CharsetRecog_8859_1 charsetRecog_8859_1 = new CharsetRecog_sbcs.CharsetRecog_8859_1();
+            CharsetMatch match = charsetRecog_8859_1.match(det);
+            if (match == null) {
+                return new CharsetMatch(det, this, 95);
+            } else {
+                // We are sure that we return ASCII (instead of ISO-8859-1), thus we have a higher confidence
+                return new CharsetMatch(det, this, match.getConfidence() + 1, "ASCII", match.getLanguage());
+            }
         }
     }
 }
