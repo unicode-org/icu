@@ -3386,6 +3386,7 @@ void NumberFormatterApiTest::roundingFractionFigures() {
             u"0",
             u"0");
 
+    // Keep the result having more trailing zeros
     assertFormatSingle(
             u"FracSig withSignificantDigits Trailing Zeros RELAXED",
             u".0/@@@r",
@@ -3396,13 +3397,35 @@ void NumberFormatterApiTest::roundingFractionFigures() {
             1,
             u"1.00");
 
-    // Trailing zeros follow the strategy that was chosen:
+    // Keep the result having fewer trailing zeros
     assertFormatSingle(
             u"FracSig withSignificantDigits Trailing Zeros STRICT",
             u".0/@@@s",
             u".0/@@@s",
             NumberFormatter::with().precision(Precision::fixedFraction(1)
                 .withSignificantDigits(3, 3, UNUM_ROUNDING_PRIORITY_STRICT)),
+            Locale::getEnglish(),
+            1,
+            u"1.0");
+
+    // Keep the result having more trailing zeros
+    assertFormatSingle(
+            u"FracSig withSignificantDigits Trailing Zeros RELAXED",
+            u".00#/@@####r",
+            u".00#/@@####r",
+            NumberFormatter::with().precision(Precision::minMaxFraction(2, 3)
+                .withSignificantDigits(2, 6, UNUM_ROUNDING_PRIORITY_RELAXED)),
+            Locale::getEnglish(),
+            1,
+            u"1.00");
+
+    // Keep the result having fewer trailing zeros
+    assertFormatSingle(
+            u"FracSig withSignificantDigits Trailing Zeros STRICT",
+            u".00#/@@####s",
+            u".00#/@@####s",
+            NumberFormatter::with().precision(Precision::minMaxFraction(2, 3)
+                .withSignificantDigits(2, 6, UNUM_ROUNDING_PRIORITY_STRICT)),
             Locale::getEnglish(),
             1,
             u"1.0");
