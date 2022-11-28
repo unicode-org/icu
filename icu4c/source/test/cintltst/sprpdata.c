@@ -141,8 +141,8 @@ getValues(uint32_t result, int32_t* value, UBool* isIndex){
         }
         if((result>>2) == _SPREP_MAX_INDEX_VALUE){
             type = USPREP_DELETE;
-            isIndex =false;
-            value = 0;
+            *isIndex = false;
+            *value = 0;
         }
     }
     return type;
