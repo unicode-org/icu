@@ -1544,6 +1544,7 @@ public class TimeZoneTest extends TestFmwk
                 {"America/Montserrat", "America/Puerto_Rico"},
                 {"America/Nassau", "America/Toronto"},
                 {"America/Nipigon", "America/Toronto"},
+                {"America/Pangnirtung", "America/Iqaluit"},
                 {"America/Port_of_Spain", "America/Puerto_Rico"},
                 {"America/Rainy_River", "America/Winnipeg"},
                 {"America/Santa_Isabel", "America/Tijuana"},
