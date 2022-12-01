@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1669697958047,
+  "lastUpdate": 1669865581437,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -26566,6 +26566,222 @@ window.BENCHMARK_DATA = {
           {
             "name": "testJDKIsIdentifierIgnorable",
             "value": 2.996095691673091,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "y.umaoka@gmail.com",
+            "name": "yumaoka",
+            "username": "yumaoka"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "cecd19e9ba46db107b02a9de62b2ae34e199360b",
+          "message": "ICU-22217 TZ Database 2022g updates",
+          "timestamp": "2022-11-30T22:08:08-05:00",
+          "tree_id": "e19f9bc448a7622e50cd56b6c57a23e6534d0ced",
+          "url": "https://github.com/unicode-org/icu/commit/cecd19e9ba46db107b02a9de62b2ae34e199360b"
+        },
+        "date": 1669865571073,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "testJDKIsDefined",
+            "value": 2.8354796963163165,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsLetterOrDigit",
+            "value": 1.6036833965070283,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsUpperCase",
+            "value": 1.6790779812601786,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsDigit",
+            "value": 1.5029902516962799,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsLetter",
+            "value": 3.5622620304955976,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsUnicodeIdentifierPart",
+            "value": 3.3740144788051527,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsTitleCase",
+            "value": 3.361112923409017,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsWhiteSpace",
+            "value": 1.5122806191361768,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsISOControl",
+            "value": 0.4019088347187648,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKGetNumericValue",
+            "value": 5.622014558323191,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsUnicodeIdentifierStart",
+            "value": 3.558493575694883,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsSpaceChar",
+            "value": 1.502668184049042,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKDigit",
+            "value": 3.1737238913526222,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKGetType",
+            "value": 3.299072228504637,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsWhiteSpace",
+            "value": 3.563429781062874,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsISOControl",
+            "value": 0.951636284154346,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsUpperCase",
+            "value": 6.807327525808125,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testDigit",
+            "value": 1.5118203825447047,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsLowerCase",
+            "value": 1.5019184007459572,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testGetType",
+            "value": 1.5013074181131156,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsUnicodeIdentifierStart",
+            "value": 1.5014770216281477,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsUnicodeIdentifierPart",
+            "value": 3.5703875570710686,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsIdentifierIgnorable",
+            "value": 1.8258598335480072,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsLetter",
+            "value": 1.5026263015831092,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testGetNumericValue",
+            "value": 1.5958852856285153,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsTitleCase",
+            "value": 1.5037712579926819,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsDigit",
+            "value": 3.5425865723951304,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsSpaceChar",
+            "value": 3.554087828453672,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsLetterOrDigit",
+            "value": 3.3587563558713653,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsLowerCase",
+            "value": 5.641398099947794,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testIsDefined",
+            "value": 1.488324477628645,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "testJDKIsIdentifierIgnorable",
+            "value": 3.364391672631662,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
