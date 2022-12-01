@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1669696347967,
+  "lastUpdate": 1669864344534,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -3568,6 +3568,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.3845641543225855,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "y.umaoka@gmail.com",
+            "name": "yumaoka",
+            "username": "yumaoka"
+          },
+          "committer": {
+            "email": "yumaoka@users.noreply.github.com",
+            "name": "Yoshito Umaoka",
+            "username": "yumaoka"
+          },
+          "distinct": true,
+          "id": "cecd19e9ba46db107b02a9de62b2ae34e199360b",
+          "message": "ICU-22217 TZ Database 2022g updates",
+          "timestamp": "2022-11-30T22:08:08-05:00",
+          "tree_id": "e19f9bc448a7622e50cd56b6c57a23e6534d0ced",
+          "url": "https://github.com/unicode-org/icu/commit/cecd19e9ba46db107b02a9de62b2ae34e199360b"
+        },
+        "date": 1669864334062,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.38022936970983306,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
