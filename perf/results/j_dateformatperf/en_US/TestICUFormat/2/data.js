@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1669864215510,
+  "lastUpdate": 1669916813617,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -3448,6 +3448,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 204.71159971318784,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "manishsmail@gmail.com",
+            "name": "Manish Goregaokar",
+            "username": "Manishearth"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "d02b30fc3f665677a775950b550179a8b3b736b2",
+          "message": "ICU-20115 ICU4C: Move SimpleDateFormat over to SimpleNumberFormatter",
+          "timestamp": "2022-12-01T09:40:55-08:00",
+          "tree_id": "ce7707da3b9edf6f880f231053c5b9626e5701e9",
+          "url": "https://github.com/unicode-org/icu/commit/d02b30fc3f665677a775950b550179a8b3b736b2"
+        },
+        "date": 1669916799766,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 285.94551458717183,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
