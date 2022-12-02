@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1670004961719,
+  "lastUpdate": 1670007002094,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -3748,6 +3748,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 4.86274965756495,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "amy@amyspark.me",
+            "name": "L. E. Segovia",
+            "username": "amyspark"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "e7aad77f31640666262e9ae1d098929920bd9a4b",
+          "message": "ICU-22204 toolutil: Fix crash when trying to generate MinGW assembly",
+          "timestamp": "2022-12-02T10:42:24-08:00",
+          "tree_id": "ff8eff2e96f3b8edcb7eb3669fb9ca89f3991845",
+          "url": "https://github.com/unicode-org/icu/commit/e7aad77f31640666262e9ae1d098929920bd9a4b"
+        },
+        "date": 1670006989072,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 4.866469488481405,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
