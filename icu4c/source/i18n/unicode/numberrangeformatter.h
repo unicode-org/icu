@@ -381,6 +381,13 @@ class U_I18N_API NumberRangeFormatterSettings {
     friend class UnlocalizedNumberRangeFormatter;
 };
 
+// Explicit instantiations in source/i18n/numrange_fluent.cpp.
+// (MSVC treats imports/exports of explicit instantiations differently.)
+#ifndef _MSC_VER
+extern template class NumberRangeFormatterSettings<UnlocalizedNumberRangeFormatter>;
+extern template class NumberRangeFormatterSettings<LocalizedNumberRangeFormatter>;
+#endif
+
 /**
  * A NumberRangeFormatter that does not yet have a locale. In order to format, a locale must be specified.
  *
