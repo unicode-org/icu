@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1670006882575,
+  "lastUpdate": 1670010488539,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -3688,6 +3688,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 3.8609238859442416,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "amy@amyspark.me",
+            "name": "L. E. Segovia",
+            "username": "amyspark"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "ba8e4087ca1b086d0e83a685654ff69a0005f1a9",
+          "message": "ICU-22203 Windows: enable C-code generation with overridden entry point",
+          "timestamp": "2022-12-02T11:45:09-08:00",
+          "tree_id": "386e221678647a5c982c13fcfc3a40ff1bcd84ef",
+          "url": "https://github.com/unicode-org/icu/commit/ba8e4087ca1b086d0e83a685654ff69a0005f1a9"
+        },
+        "date": 1670010472089,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 4.22474001632597,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
