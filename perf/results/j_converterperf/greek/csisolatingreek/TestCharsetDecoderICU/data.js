@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1670010508815,
+  "lastUpdate": 1670217506214,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -3688,6 +3688,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.10217372891791077,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "7e083e34fbdfc12e4d12adaa593a8da21a8ef2c5",
+          "message": "ICU-22220 BRS73RC Update version number to 73.0.1",
+          "timestamp": "2022-12-04T21:14:41-08:00",
+          "tree_id": "f188442a34cb1a848905317a6cda67d7971c9507",
+          "url": "https://github.com/unicode-org/icu/commit/7e083e34fbdfc12e4d12adaa593a8da21a8ef2c5"
+        },
+        "date": 1670217493480,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.15436683841581977,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
