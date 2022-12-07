@@ -55,6 +55,54 @@ jobs:
           [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`;
         if: ${{ failure() }}
 
+  # Java8 ICU4J build and unit tests using Maven
+  # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+  # Run `test` to execute unit tests and ensure it is possible for tests to run even without packaging submodule
+  # dependencies as jar files
+  java8-icu4j-test-maven:
+    name: Run unit tests with Maven using JDK 8
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+          cache: maven
+      - name: Run Maven test
+        run: |
+          cd icu4j/maven-build;
+          mvn --batch-mode test
+
+  # Run `verify` to ensure that `package` (creating .jar files) and `integration-test` (special setup for localespi tests) work
+  java8-icu4j-verify-maven:
+    name: Run integration tests with Maven using JDK 8
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+          cache: maven
+      # The Maven `verify` phase causes the following to happen first, and in order:
+      # build/compile (`compile`), unit tests (`test`), Jar building (`package`),
+      # integration tests, if any (`integration-test`)
+      - name: Run Maven verify
+        run: |
+          cd icu4j/maven-build;
+          mvn --batch-mode verify
 
   # ICU4J build and unit test under Java11
   java11-icu4j-build-and-test:

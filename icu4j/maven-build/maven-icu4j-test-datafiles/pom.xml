@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<!--
+* © 2016 and later: Unicode, Inc. and others.
+* License & terms of use: http://www.unicode.org/copyright.html
+*******************************************************************************
+* Copyright (C) 2010-2016, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
+  <parent>
+    <groupId>com.ibm.icu</groupId>
+    <artifactId>icu4j-root</artifactId>
+    <version>73.1-SNAPSHOT</version>
+    <!-- default relativePath for parent -->
+  </parent>
+  
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.ibm.icu</groupId>
+  <artifactId>icu4j-test-datafiles</artifactId>
+  <version>73.1-SNAPSHOT</version>
+
+  <packaging>jar</packaging>
+
+  <name>ICU4J Test Data Files</name>
+  <description>Various *.jar files needed by ICU4J components' test code.</description>
+
+  <distributionManagement>
+    <repository>
+      <id>icu4j-releases</id>
+      <name>ICU4J Central Repository</name>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+    </repository>
+    <snapshotRepository>
+      <id>icu4j-snapshots</id>
+      <name>ICU4J Central Development Repository</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <!-- 
+    We need to put the local repo repository here because it didn't seem possible
+    to put it in the parent POM and correctly inherit the information and find the
+    artifacts accordingly.
+  -->
+  <!--
+    The ${basedir} will (hopefully) only be resolved from this child directory, and
+    not the root directory or anywhere else.
+  -->
+  <repositories>
+    <repository>
+      <id>local-maven-repo</id>
+      <url>file:${basedir}/../local-maven-repo</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+
+    <!--
+       Shouldn't declare this dependency with scope=test because downstream
+       submodule consumers are the ones to declare <scope>test</scope> in
+       the <dependency> configuration.
+    -->
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>testdata</artifactId>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-remote-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>process-remote-resources</id>
+            <goals>
+              <goal>bundle</goal>
+            </goals>
+            <configuration>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

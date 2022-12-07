@@ -1,0 +1,15 @@
+<!--
+© 2022 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.ibm.icu</groupId>
+  <artifactId>testdata</artifactId>
+  <versioning>
+    <versions>
+      <version>73.1-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20221207000430</lastUpdated>
+  </versioning>
+</metadata>

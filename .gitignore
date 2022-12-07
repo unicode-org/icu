@@ -63,6 +63,7 @@ lib/
 !tools/cldr/lib
 out/
 release/
+target/
 !docs/processes/release/
 tmp/
 x64/
