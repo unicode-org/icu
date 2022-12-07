@@ -1,0 +1,28 @@
+<!--
+© 2022 and later: Unicode, Inc. and others.
+License & terms of use: http://www.unicode.org/copyright.html
+-->
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>com.ibm.icu</groupId>
+  <artifactId>testdata</artifactId>
+  <versioning>
+    <lastUpdated>20221207000430</lastUpdated>
+    <snapshot>
+      <localCopy>true</localCopy>
+    </snapshot>
+    <snapshotVersions>
+      <snapshotVersion>
+        <extension>jar</extension>
+        <value>73.1-SNAPSHOT</value>
+        <updated>20221207000430</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>73.1-SNAPSHOT</value>
+        <updated>20221207000430</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+  <version>73.1-SNAPSHOT</version>
+</metadata>
