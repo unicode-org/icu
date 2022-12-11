@@ -158,6 +158,22 @@ static const struct AssemblyType {
 
         ".long ","",HEX_0X
     },
+    /* macOS PPC should use `.p2align 4` instead `.balign 16` because is
+     * unknown pseudo ops for such legacy system*/
+    {"gcc-darwin-ppc",
+        /*"\t.section __TEXT,__text,regular,pure_instructions\n"
+        "\t.section __TEXT,__picsymbolstub1,symbol_stubs,pure_instructions,32\n"*/
+        ".globl _%s\n"
+        "#ifdef U_HIDE_DATA_SYMBOL\n"
+        "\t.private_extern _%s\n"
+        "#endif\n"
+        "\t.data\n"
+        "\t.const\n"
+        "\t.p2align 4\n"
+        "_%s:\n\n",
+
+        ".long ","",HEX_0X
+    },
     {"gcc-cygwin",
         ".globl _%s\n"
         "\t.section .rodata\n"
