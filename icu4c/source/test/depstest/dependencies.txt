@@ -48,6 +48,9 @@ group: std_mutex
     std::condition_variable::~condition_variable()
     std::condition_variable_any::condition_variable_any()
     std::condition_variable_any::~condition_variable_any()
+    pthread_once
+    pthread_mutex_lock
+    pthread_mutex_unlock
 
 group: ubsan
     # UBSan=UndefinedBehaviorSanitizer, clang -fsanitize=bounds
