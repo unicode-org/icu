@@ -172,7 +172,7 @@ jobs:
   # (FORCE guards make this tool pass but won't compile to working code.
   # See the testtagsguards.sh script for details.)
   clang-release-build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
 
@@ -261,7 +261,7 @@ jobs:
 
   # Run ICU4C tests with stubdata.
   run-with-stubdata:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
 
@@ -391,7 +391,7 @@ jobs:
 
   # Build Unicode update tools
   unicode-update-tools:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
     - uses: bazelbuild/setup-bazelisk@v1
