@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1670959506001,
+  "lastUpdate": 1671048457440,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -3568,6 +3568,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUFormat",
             "value": 297.7547656528792,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "57c9313eb7da760f27922fec7ce40f515232e7e7",
+          "message": "ICU-22193 Use Ubuntu 20.04 for jobs failing in migration to 22.04",
+          "timestamp": "2022-12-14T20:04:45Z",
+          "tree_id": "e14c5268f7dcd929919029260ca7a00697f3723f",
+          "url": "https://github.com/unicode-org/icu/commit/57c9313eb7da760f27922fec7ce40f515232e7e7"
+        },
+        "date": 1671048444436,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUFormat",
+            "value": 282.4079708788098,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
