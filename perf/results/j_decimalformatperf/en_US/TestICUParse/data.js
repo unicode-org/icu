@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1671048563613,
+  "lastUpdate": 1671066010482,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -3898,6 +3898,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 520.1558898146836,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "45e98d4f67e6d88c29d70fb8f5322d549066f76d",
+          "message": "ICU-12811 Build ICU4J using Maven\n\nSee #2251",
+          "timestamp": "2022-12-15T00:48:31Z",
+          "tree_id": "47f397196d5494ea204df32d02f60eaab06d4ef5",
+          "url": "https://github.com/unicode-org/icu/commit/45e98d4f67e6d88c29d70fb8f5322d549066f76d"
+        },
+        "date": 1671065997897,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 403.77052818214645,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
