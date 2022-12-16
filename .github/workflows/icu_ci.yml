@@ -391,7 +391,7 @@ jobs:
 
   # Build Unicode update tools
   unicode-update-tools:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - uses: bazelbuild/setup-bazelisk@v1
@@ -399,7 +399,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: "~/.cache/bazel"
-        key: bazel
+        key: ${{ runner.os }}-bazel
 
     - name: Generate the data
       run: |
