@@ -63,6 +63,10 @@ jobs:
   java8-icu4j-test-maven:
     name: Run unit tests with Maven using JDK 8
     runs-on: ubuntu-latest
+    # Make this unit test target job depend on a later phase target job to prevent race condition when
+    # trying to persist the Maven cache to the Github cache, knowing that artifacts needed for
+    # the later phase `verify` are a superset of the artifacts needed for the earlier phase `test`.
+    needs: java8-icu4j-verify-maven
     steps:
       - name: Checkout and setup
         uses: actions/checkout@v2
