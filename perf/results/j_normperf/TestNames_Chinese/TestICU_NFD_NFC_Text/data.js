@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1671476113697,
+  "lastUpdate": 1671575566075,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -7918,6 +7918,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 4.555164462057978,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "allenwtsu@google.com",
+            "name": "allenwtsu",
+            "username": "allensu05"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "90caafbcd437e04147106d8e35a29b189977f0b7",
+          "message": "ICU-22100 Incorporate BudouX into ICU (Java)\n\nSee #2214",
+          "timestamp": "2022-12-20T14:27:04-08:00",
+          "tree_id": "b0f1243db09796adc0ab6a1402cb26cea8d97484",
+          "url": "https://github.com/unicode-org/icu/commit/90caafbcd437e04147106d8e35a29b189977f0b7"
+        },
+        "date": 1671575553529,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 3.729534164496134,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
