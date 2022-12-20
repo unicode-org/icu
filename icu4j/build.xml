@@ -338,11 +338,13 @@
             <!--set the property - if it was set before it won't override-->
             <property name="user-jvm-options" value=""/>
             <property name="internal-jvm-options" value=""/>
+            <property name="com.ibm.icu.impl.breakiter.useMLPhraseBreaking" value=""/>
             <delete dir="${junit.out.dir}/@{test-name}"/>
             <mkdir  dir="${junit.out.dir}/@{test-name}"/>
 
             <junit fork="yes" forkmode="once" printsummary="yes" haltonfailure="no"
                 failureproperty="@{failure-status}" tempdir="${junit.out.dir}">
+                <sysproperty key="com.ibm.icu.impl.breakiter.useMLPhraseBreaking" value="${com.ibm.icu.impl.breakiter.useMLPhraseBreaking}" />
                 <jvmarg value="-Xss4m"/>
                 <jvmarg value="-ea"/>
                 <jvmarg value="-Djava.awt.headless=true"/>
