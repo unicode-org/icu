@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1671476003384,
+  "lastUpdate": 1671575440363,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -4048,6 +4048,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.04589398537270138,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "allenwtsu@google.com",
+            "name": "allenwtsu",
+            "username": "allensu05"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "90caafbcd437e04147106d8e35a29b189977f0b7",
+          "message": "ICU-22100 Incorporate BudouX into ICU (Java)\n\nSee #2214",
+          "timestamp": "2022-12-20T14:27:04-08:00",
+          "tree_id": "b0f1243db09796adc0ab6a1402cb26cea8d97484",
+          "url": "https://github.com/unicode-org/icu/commit/90caafbcd437e04147106d8e35a29b189977f0b7"
+        },
+        "date": 1671575427038,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.04284370210769204,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
