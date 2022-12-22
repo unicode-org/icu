@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1671575480530,
+  "lastUpdate": 1671687997963,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -3958,6 +3958,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.8182124108218917,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "dcac8ac4c1c450b291276e6c84b29f8b5844cf48",
+          "message": "ICU-22233 Use separate Bazel cache keys per OS.",
+          "timestamp": "2022-12-22T14:43:22+09:00",
+          "tree_id": "1277c3ad5ffcd596586185975df17ac4dd2b2ede",
+          "url": "https://github.com/unicode-org/icu/commit/dcac8ac4c1c450b291276e6c84b29f8b5844cf48"
+        },
+        "date": 1671687985250,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.5632281740711405,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
