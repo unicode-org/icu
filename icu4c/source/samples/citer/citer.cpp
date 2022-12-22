@@ -184,7 +184,7 @@ int main( void )
 {
     UErrorCode status = U_ZERO_ERROR;
 
-    out = u_finit(stdout, NULL, NULL);
+    out = u_finit(stdout, nullptr, nullptr);
 
     u_fprintf(out, "ICU Iteration Sample Program (C++)\n\n");
 

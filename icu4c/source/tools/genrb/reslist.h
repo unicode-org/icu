@@ -44,9 +44,9 @@ class ResKeyPath;
 
 struct ResFile {
     ResFile()
-            : fBytes(NULL), fIndexes(NULL),
-              fKeys(NULL), fKeysLength(0), fKeysCount(0),
-              fStrings(NULL), fStringIndexLimit(0),
+            : fBytes(nullptr), fIndexes(nullptr),
+              fKeys(nullptr), fKeysLength(0), fKeysCount(0),
+              fStrings(nullptr), fStringIndexLimit(0),
               fChecksum(0) {}
     ~ResFile() { close(); }
 
@@ -137,7 +137,7 @@ void bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* 
 /*
  * Return a unique pointer to a dummy object,
  * for use in non-error cases when no resource is to be added to the bundle.
- * (NULL is used in error cases.)
+ * (nullptr is used in error cases.)
  */
 struct SResource* res_none(void);
 
@@ -245,7 +245,7 @@ public:
     ContainerResource(SRBRoot *bundle, const char *tag, int8_t type,
                       const UString* comment, UErrorCode &errorCode)
             : SResource(bundle, tag, type, comment, errorCode),
-              fCount(0), fFirst(NULL) {}
+              fCount(0), fFirst(nullptr) {}
     virtual ~ContainerResource();
 
     void handlePreflightStrings(SRBRoot *bundle, UHashtable *stringSet, UErrorCode &errorCode) override;
@@ -289,7 +289,7 @@ public:
     ArrayResource(SRBRoot *bundle, const char *tag,
                   const UString* comment, UErrorCode &errorCode)
             : ContainerResource(bundle, tag, URES_ARRAY, comment, errorCode),
-              fLast(NULL) {}
+              fLast(nullptr) {}
     virtual ~ArrayResource();
 
     void add(SResource *res);
@@ -308,7 +308,7 @@ public:
 class PseudoListResource : public ContainerResource {
 public:
     PseudoListResource(SRBRoot *bundle, UErrorCode &errorCode)
-            : ContainerResource(bundle, NULL, URES_TABLE, NULL, errorCode) {}
+            : ContainerResource(bundle, nullptr, URES_TABLE, nullptr, errorCode) {}
     virtual ~PseudoListResource();
 
     void add(SResource *res);
@@ -341,17 +341,17 @@ public:
     StringResource(SRBRoot *bundle, const char *tag, const UChar *value, int32_t len,
                    const UString* comment, UErrorCode &errorCode)
             : StringBaseResource(bundle, tag, URES_STRING, value, len, comment, errorCode),
-              fSame(NULL), fSuffixOffset(0),
+              fSame(nullptr), fSuffixOffset(0),
               fNumCopies(0), fNumUnitsSaved(0), fNumCharsForLength(0) {}
     StringResource(SRBRoot *bundle, const icu::UnicodeString &value, UErrorCode &errorCode)
             : StringBaseResource(bundle, URES_STRING, value, errorCode),
-              fSame(NULL), fSuffixOffset(0),
+              fSame(nullptr), fSuffixOffset(0),
               fNumCopies(0), fNumUnitsSaved(0), fNumCharsForLength(0) {}
     StringResource(int32_t poolStringIndex, int8_t numCharsForLength,
                    const UChar *value, int32_t length,
                    UErrorCode &errorCode)
             : StringBaseResource(URES_STRING, value, length, errorCode),
-              fSame(NULL), fSuffixOffset(0),
+              fSame(nullptr), fSuffixOffset(0),
               fNumCopies(0), fNumUnitsSaved(0), fNumCharsForLength(numCharsForLength) {
         // v3 pool string encoded as string-v2 with low offset
         fRes = URES_MAKE_RESOURCE(URES_STRING_V2, poolStringIndex);

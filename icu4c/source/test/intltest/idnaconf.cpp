@@ -43,7 +43,7 @@ static const UChar C_USESTD3ASCIIRULES[] = {0x55, 0x73, 0x65, 0x53, 0x54, 0x44,
        0x33, 0x41, 0x53, 0x43, 0x49, 0x49, 0x52, 0x75, 0x6C, 0x65, 0x73, 0}; // UseSTD3ASCIIRules
 
 IdnaConfTest::IdnaConfTest(){
-    base = NULL;
+    base = nullptr;
     len = 0;
     curOffset = 0;
 
@@ -116,7 +116,7 @@ UBool IdnaConfTest::ReadOneLine(UnicodeString& buf){
  * and, of course, will shift tail elements.
  */
 void IdnaConfTest::ExplainCodePointTag(UnicodeString& buf){
-    buf.append((UChar)0);    // add a terminal NULL
+    buf.append((UChar)0);    // add a terminal NUL
     UChar* bufBase = buf.getBuffer(buf.length());
     UChar* p = bufBase;
     while (*p != 0){
@@ -158,13 +158,13 @@ void IdnaConfTest::Call(){
         const int p_len = namebase.length();
 
         if (type == 0 && option == 0){
-            uidna_IDNToASCII(p, p_len, result, 200, UIDNA_USE_STD3_RULES, NULL, &status);
+            uidna_IDNToASCII(p, p_len, result, 200, UIDNA_USE_STD3_RULES, nullptr, &status);
         } else if (type == 0 && option == 1){
-            uidna_IDNToASCII(p, p_len, result, 200, UIDNA_ALLOW_UNASSIGNED, NULL, &status);
+            uidna_IDNToASCII(p, p_len, result, 200, UIDNA_ALLOW_UNASSIGNED, nullptr, &status);
         } else if (type == 1 && option == 0){
-            uidna_IDNToUnicode(p, p_len, result, 200, UIDNA_USE_STD3_RULES, NULL, &status);
+            uidna_IDNToUnicode(p, p_len, result, 200, UIDNA_USE_STD3_RULES, nullptr, &status);
         } else if (type == 1 && option == 1){
-            uidna_IDNToUnicode(p, p_len, result, 200, UIDNA_ALLOW_UNASSIGNED, NULL, &status);
+            uidna_IDNToUnicode(p, p_len, result, 200, UIDNA_ALLOW_UNASSIGNED, nullptr, &status);
         }
         if (passfail == 0){
             if (U_FAILURE(status)){

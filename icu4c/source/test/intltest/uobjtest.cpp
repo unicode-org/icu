@@ -86,10 +86,10 @@
 #define TESTCLASSID_DEFAULT(c) \
     delete testClass(new c, #c, "new " #c , c::getStaticClassID())
 #define TESTCLASSID_ABSTRACT(c) \
-    testClass(NULL, #c, NULL, c::getStaticClassID())
+    testClass(nullptr, #c, nullptr, c::getStaticClassID())
 #define TESTCLASSID_FACTORY_HIDDEN(c, f) UPRV_BLOCK_MACRO_BEGIN { \
     UObject *objVar = f; \
-    delete testClass(objVar, #c, #f, objVar!=NULL? objVar->getDynamicClassID(): NULL); \
+    delete testClass(objVar, #c, #f, objVar!=nullptr? objVar->getDynamicClassID(): nullptr); \
     if(U_FAILURE(status)) { \
         dataerrln(UnicodeString(#c " - " #f " - got err status ")  + UnicodeString(u_errorName(status))); \
         status = U_ZERO_ERROR; \
@@ -109,7 +109,7 @@ UObject *UObjectTest::testClass(UObject *obj,
 {
     uint32_t i;
     UnicodeString what = UnicodeString(className) + " * x= " + UnicodeString(factory?factory:" ABSTRACT ") + "; ";
-    UClassID dynamicID = NULL;
+    UClassID dynamicID = nullptr;
 
     if(ids_count >= MAX_CLASS_ID) {
         char count[100];
@@ -128,18 +128,18 @@ UObject *UObjectTest::testClass(UObject *obj,
         logln(what + tmp);
     }
 
-    if(staticID == NULL) {
-        dataerrln("FAIL: staticID == NULL! " + what);
+    if(staticID == nullptr) {
+        dataerrln("FAIL: staticID == nullptr! " + what);
     }
 
-    if(factory != NULL) {  /* NULL factory means: abstract */
+    if(factory != nullptr) {  /* nullptr factory means: abstract */
         if(!obj) {
-            dataerrln( "FAIL: ==NULL! " + what);
+            dataerrln( "FAIL: ==nullptr! " + what);
             return obj;
         }
 
-        if(dynamicID == NULL) {
-            errln("FAIL: dynamicID == NULL!" + what);
+        if(dynamicID == nullptr) {
+            errln("FAIL: dynamicID == nullptr!" + what);
         }
 
         if(dynamicID != staticID) {
@@ -148,7 +148,7 @@ UObject *UObjectTest::testClass(UObject *obj,
     }
 
     // Bail out if static ID is null. Error message was already printed.
-    if(staticID == NULL) {
+    if(staticID == nullptr) {
         return obj;
     }
 
@@ -175,7 +175,7 @@ UObject *UObjectTest::testClass(UObject *obj,
 UObject *UObjectTest::testClassNoClassID(UObject *obj, const char *className, const char *factory)
 {
     if (!obj) {
-        return NULL;
+        return nullptr;
     }
     UnicodeString what = UnicodeString(className) + " * x= " + UnicodeString(factory?factory:" ABSTRACT ") + "; ";
     UClassID dynamicID = obj->getDynamicClassID();
@@ -186,14 +186,14 @@ UObject *UObjectTest::testClassNoClassID(UObject *obj, const char *className, co
         logln(what + tmp);
     }
 
-    if(factory != NULL) {  /* NULL factory means: abstract */
+    if(factory != nullptr) {  /* nullptr factory means: abstract */
         if(!obj) {
-            dataerrln( "FAIL: ==NULL! " + what);
+            dataerrln( "FAIL: ==nullptr! " + what);
             return obj;
         }
 
-        if(dynamicID != NULL) {
-            errln("FAIL: dynamicID != NULL! for non-poor-man's-RTTI " + what);
+        if(dynamicID != nullptr) {
+            errln("FAIL: dynamicID != nullptr! for non-poor-man's-RTTI " + what);
         }
     }
 
@@ -338,7 +338,7 @@ void UObjectTest::testIDs()
 #if !UCONFIG_NO_NORMALIZATION
     UnicodeString emptyString;
     TESTCLASSID_CTOR(Normalizer, (emptyString, UNORM_NONE));
-    const Normalizer2 *noNormalizer2 = NULL;
+    const Normalizer2 *noNormalizer2 = nullptr;
     UnicodeSet emptySet;
     TESTCLASSID_NONE_CTOR(FilteredNormalizer2, (*noNormalizer2, emptySet));
     TESTCLASSID_FACTORY(CanonicalIterator, new CanonicalIterator(UnicodeString("abc"), status));
@@ -425,8 +425,8 @@ void UObjectTest::testIDs()
     TESTCLASSID_FACTORY_HIDDEN(TransliteratorRegistry::Enumeration, Transliterator::getAvailableIDs(status));
 
 #if UOBJTEST_TEST_INTERNALS
-    TESTCLASSID_CTOR(Quantifier, (NULL, 0, 0));
-    TESTCLASSID_CTOR(FunctionReplacer, (NULL,NULL));
+    TESTCLASSID_CTOR(Quantifier, (nullptr, 0, 0));
+    TESTCLASSID_CTOR(FunctionReplacer, (nullptr,nullptr));
     TESTCLASSID_CTOR(StringMatcher, (UnicodeString("x"), 0,0,0,TransliterationRuleData(status)));
     TESTCLASSID_CTOR(StringReplacer,(UnicodeString(),new TransliterationRuleData(status)));
 #endif
@@ -475,14 +475,14 @@ void UObjectTest::testIDs()
     TESTCLASSID_CTOR(UVector32, (status));
 
 #if !UCONFIG_NO_SERVICE
-    TESTCLASSID_CTOR(SimpleFactory, (NULL, UnicodeString("foo")));
+    TESTCLASSID_CTOR(SimpleFactory, (nullptr, UnicodeString("foo")));
     TESTCLASSID_DEFAULT(EventListener);
     TESTCLASSID_DEFAULT(ICUResourceBundleFactory);
     //TESTCLASSID_DEFAULT(Key); // does not exist?
     UnicodeString baz("baz");
     UnicodeString bat("bat");
     TESTCLASSID_FACTORY(LocaleKey, LocaleKey::createWithCanonicalFallback(&baz, &bat, LocaleKey::KIND_ANY, status));
-    TESTCLASSID_CTOR(SimpleLocaleKeyFactory, (NULL, UnicodeString("bar"), 8, 12) );
+    TESTCLASSID_CTOR(SimpleLocaleKeyFactory, (nullptr, UnicodeString("bar"), 8, 12) );
     TESTCLASSID_CTOR(TestLocaleKeyFactory, (42));   // Test replacement for LocaleKeyFactory
 //#if UOBJTEST_TEST_INTERNALS
 //    TESTCLASSID_CTOR(LocaleKeyFactory, (42));
@@ -588,11 +588,11 @@ void UObjectTest::TestCompilerRTTI() {
         dataerrln("NumberFormat::createInstance(de) failed - %s", u_errorName(errorCode));
         return;
     }
-    if (dynamic_cast<DecimalFormat *>(nf) == NULL || dynamic_cast<ChoiceFormat *>(nf) != NULL) {
+    if (dynamic_cast<DecimalFormat *>(nf) == nullptr || dynamic_cast<ChoiceFormat *>(nf) != nullptr) {
         errln("dynamic_cast<>(NumberFormat) failed");
     }
     UnicodeSet emptySet;
-    if (&typeid(*nf) == NULL || typeid(*nf) == typeid(UObject) || typeid(*nf) == typeid(Format) ||
+    if (&typeid(*nf) == nullptr || typeid(*nf) == typeid(UObject) || typeid(*nf) == typeid(Format) ||
         typeid(*nf) != typeid(DecimalFormat) || typeid(*nf) == typeid(ChoiceFormat) ||
         typeid(*nf) == typeid(emptySet)
     ) {

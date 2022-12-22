@@ -29,7 +29,7 @@
 
 U_CFUNC int32_t
 ustrcase_getCaseLocale(const char *locale) {
-    if (locale == NULL) {
+    if (locale == nullptr) {
         locale = uloc_getDefault();
     }
     if (*locale == 0) {

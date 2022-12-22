@@ -37,7 +37,7 @@
 /*
  * Test if a substring match inside a string is at code point boundaries.
  * All pointers refer to the same buffer.
- * The limit pointer may be NULL, all others must be real pointers.
+ * The limit pointer may be nullptr, all others must be real pointers.
  */
 static inline UBool
 isMatchAtCPBoundary(const UChar *start, const UChar *match, const UChar *matchLimit, const UChar *limit) {
@@ -58,11 +58,11 @@ u_strFindFirst(const UChar *s, int32_t length,
     const UChar *start, *p, *q, *subLimit;
     UChar c, cs, cq;
 
-    if(sub==NULL || subLength<-1) {
+    if(sub==nullptr || subLength<-1) {
         return (UChar *)s;
     }
-    if(s==NULL || length<-1) {
-        return NULL;
+    if(s==nullptr || length<-1) {
+        return nullptr;
     }
 
     start=s;
@@ -84,14 +84,14 @@ u_strFindFirst(const UChar *s, int32_t length,
                 q=sub;
                 for(;;) {
                     if((cq=*q)==0) {
-                        if(isMatchAtCPBoundary(start, s-1, p, NULL)) {
+                        if(isMatchAtCPBoundary(start, s-1, p, nullptr)) {
                             return (UChar *)(s-1); /* well-formed match */
                         } else {
                             break; /* no match because surrogate pair is split */
                         }
                     }
                     if((c=*p)==0) {
-                        return NULL; /* no match, and none possible after s */
+                        return nullptr; /* no match, and none possible after s */
                     }
                     if(c!=cq) {
                         break; /* no match */
@@ -103,7 +103,7 @@ u_strFindFirst(const UChar *s, int32_t length,
         }
 
         /* not found */
-        return NULL;
+        return nullptr;
     }
 
     if(subLength<0) {
@@ -132,14 +132,14 @@ u_strFindFirst(const UChar *s, int32_t length,
                 q=sub;
                 for(;;) {
                     if(q==subLimit) {
-                        if(isMatchAtCPBoundary(start, s-1, p, NULL)) {
+                        if(isMatchAtCPBoundary(start, s-1, p, nullptr)) {
                             return (UChar *)(s-1); /* well-formed match */
                         } else {
                             break; /* no match because surrogate pair is split */
                         }
                     }
                     if((c=*p)==0) {
-                        return NULL; /* no match, and none possible after s */
+                        return nullptr; /* no match, and none possible after s */
                     }
                     if(c!=*q) {
                         break; /* no match */
@@ -154,7 +154,7 @@ u_strFindFirst(const UChar *s, int32_t length,
 
         /* subLength was decremented above */
         if(length<=subLength) {
-            return NULL; /* s is shorter than sub */
+            return nullptr; /* s is shorter than sub */
         }
 
         limit=s+length;
@@ -187,7 +187,7 @@ u_strFindFirst(const UChar *s, int32_t length,
     }
 
     /* not found */
-    return NULL;
+    return nullptr;
 }
 
 U_CAPI UChar * U_EXPORT2
@@ -209,7 +209,7 @@ u_strchr(const UChar *s, UChar c) {
                 return (UChar *)s;
             }
             if(cs==0) {
-                return NULL;
+                return nullptr;
             }
             ++s;
         }
@@ -230,17 +230,17 @@ u_strchr32(const UChar *s, UChar32 c) {
                 return (UChar *)(s-1);
             }
         }
-        return NULL;
+        return nullptr;
     } else {
         /* not a Unicode code point, not findable */
-        return NULL;
+        return nullptr;
     }
 }
 
 U_CAPI UChar * U_EXPORT2
 u_memchr(const UChar *s, UChar c, int32_t count) {
     if(count<=0) {
-        return NULL; /* no string */
+        return nullptr; /* no string */
     } else if(U16_IS_SURROGATE(c)) {
         /* make sure to not find half of a surrogate pair */
         return u_strFindFirst(s, count, &c, 1);
@@ -252,7 +252,7 @@ u_memchr(const UChar *s, UChar c, int32_t count) {
                 return (UChar *)s;
             }
         } while(++s!=limit);
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -263,7 +263,7 @@ u_memchr32(const UChar *s, UChar32 c, int32_t count) {
         return u_memchr(s, (UChar)c, count);
     } else if(count<2) {
         /* too short for a surrogate pair */
-        return NULL;
+        return nullptr;
     } else if((uint32_t)c<=UCHAR_MAX_VALUE) {
         /* find supplementary code point as surrogate pair */
         const UChar *limit=s+count-1; /* -1 so that we do not need a separate check for the trail unit */
@@ -274,10 +274,10 @@ u_memchr32(const UChar *s, UChar32 c, int32_t count) {
                 return (UChar *)s;
             }
         } while(++s!=limit);
-        return NULL;
+        return nullptr;
     } else {
         /* not a Unicode code point, not findable */
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -289,11 +289,11 @@ u_strFindLast(const UChar *s, int32_t length,
     const UChar *start, *limit, *p, *q, *subLimit;
     UChar c, cs;
 
-    if(sub==NULL || subLength<-1) {
+    if(sub==nullptr || subLength<-1) {
         return (UChar *)s;
     }
-    if(s==NULL || length<-1) {
-        return NULL;
+    if(s==nullptr || length<-1) {
+        return nullptr;
     }
 
     /*
@@ -329,7 +329,7 @@ u_strFindLast(const UChar *s, int32_t length,
 
     /* subLength was decremented above */
     if(length<=subLength) {
-        return NULL; /* s is shorter than sub */
+        return nullptr; /* s is shorter than sub */
     }
 
     start=s;
@@ -360,7 +360,7 @@ u_strFindLast(const UChar *s, int32_t length,
     }
 
     /* not found */
-    return NULL;
+    return nullptr;
 }
 
 U_CAPI UChar * U_EXPORT2
@@ -374,7 +374,7 @@ u_strrchr(const UChar *s, UChar c) {
         /* make sure to not find half of a surrogate pair */
         return u_strFindLast(s, -1, &c, 1);
     } else {
-        const UChar *result=NULL;
+        const UChar *result=nullptr;
         UChar cs;
 
         /* trivial search for a BMP code point */
@@ -397,7 +397,7 @@ u_strrchr32(const UChar *s, UChar32 c) {
         return u_strrchr(s, (UChar)c);
     } else if((uint32_t)c<=UCHAR_MAX_VALUE) {
         /* find supplementary code point as surrogate pair */
-        const UChar *result=NULL;
+        const UChar *result=nullptr;
         UChar cs, lead=U16_LEAD(c), trail=U16_TRAIL(c);
 
         while((cs=*s++)!=0) {
@@ -408,14 +408,14 @@ u_strrchr32(const UChar *s, UChar32 c) {
         return (UChar *)result;
     } else {
         /* not a Unicode code point, not findable */
-        return NULL;
+        return nullptr;
     }
 }
 
 U_CAPI UChar * U_EXPORT2
 u_memrchr(const UChar *s, UChar c, int32_t count) {
     if(count<=0) {
-        return NULL; /* no string */
+        return nullptr; /* no string */
     } else if(U16_IS_SURROGATE(c)) {
         /* make sure to not find half of a surrogate pair */
         return u_strFindLast(s, count, &c, 1);
@@ -427,7 +427,7 @@ u_memrchr(const UChar *s, UChar c, int32_t count) {
                 return (UChar *)limit;
             }
         } while(s!=limit);
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -438,7 +438,7 @@ u_memrchr32(const UChar *s, UChar32 c, int32_t count) {
         return u_memrchr(s, (UChar)c, count);
     } else if(count<2) {
         /* too short for a surrogate pair */
-        return NULL;
+        return nullptr;
     } else if((uint32_t)c<=UCHAR_MAX_VALUE) {
         /* find supplementary code point as surrogate pair */
         const UChar *limit=s+count-1;
@@ -449,10 +449,10 @@ u_memrchr32(const UChar *s, UChar32 c, int32_t count) {
                 return (UChar *)(limit-1);
             }
         } while(s!=--limit);
-        return NULL;
+        return nullptr;
     } else {
         /* not a Unicode code point, not findable */
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -544,7 +544,7 @@ u_strpbrk(const UChar *string, const UChar *matchSet)
     if(idx >= 0) {
         return (UChar *)string + idx;
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -583,8 +583,8 @@ u_strtok_r(UChar    *src,
     UChar *nextToken;
     uint32_t nonDelimIdx;
 
-    /* If saveState is NULL, the user messed up. */
-    if (src != NULL) {
+    /* If saveState is nullptr, the user messed up. */
+    if (src != nullptr) {
         tokSource = src;
         *saveState = src; /* Set to "src" in case there are no delimiters */
     }
@@ -592,9 +592,9 @@ u_strtok_r(UChar    *src,
         tokSource = *saveState;
     }
     else {
-        /* src == NULL && *saveState == NULL */
+        /* src == nullptr && *saveState == nullptr */
         /* This shouldn't happen. We already finished tokenizing. */
-        return NULL;
+        return nullptr;
     }
 
     /* Skip initial delimiters */
@@ -603,7 +603,7 @@ u_strtok_r(UChar    *src,
 
     if (*tokSource) {
         nextToken = u_strpbrk(tokSource, delim);
-        if (nextToken != NULL) {
+        if (nextToken != nullptr) {
             /* Create a token */
             *(nextToken++) = 0;
             *saveState = nextToken;
@@ -611,15 +611,15 @@ u_strtok_r(UChar    *src,
         }
         else if (*saveState) {
             /* Return the last token */
-            *saveState = NULL;
+            *saveState = nullptr;
             return tokSource;
         }
     }
     else {
         /* No tokens were found. Only delimiters were left. */
-        *saveState = NULL;
+        *saveState = nullptr;
     }
-    return NULL;
+    return nullptr;
 }
 
 /* Miscellaneous functions -------------------------------------------------- */
@@ -715,7 +715,7 @@ uprv_strCompare(const UChar *s1, int32_t length1,
         }
 
         /* setup for fix-up */
-        limit1=limit2=NULL;
+        limit1=limit2=nullptr;
     } else if(strncmpStyle) {
         /* special handling for strncmp, assume length1==length2>=0 but also check for NUL */
         if(s1==s2) {
@@ -830,7 +830,7 @@ u_strCompareIter(UCharIterator *iter1, UCharIterator *iter2, UBool codePointOrde
     UChar32 c1, c2;
 
     /* argument checking */
-    if(iter1==NULL || iter2==NULL) {
+    if(iter1==nullptr || iter2==nullptr) {
         return 0; /* bad arguments */
     }
     if(iter1==iter2) {
@@ -926,7 +926,7 @@ u_strCompare(const UChar *s1, int32_t length1,
              const UChar *s2, int32_t length2,
              UBool codePointOrder) {
     /* argument checking */
-    if(s1==NULL || length1<-1 || s2==NULL || length2<-1) {
+    if(s1==nullptr || length1<-1 || s2==nullptr || length2<-1) {
         return 0;
     }
     return uprv_strCompare(s1, length1, s2, length2, false, codePointOrder);
@@ -1008,7 +1008,7 @@ U_CAPI int32_t U_EXPORT2
 u_countChar32(const UChar *s, int32_t length) {
     int32_t count;
 
-    if(s==NULL || length<-1) {
+    if(s==nullptr || length<-1) {
         return 0;
     }
 
@@ -1051,7 +1051,7 @@ u_strHasMoreChar32Than(const UChar *s, int32_t length, int32_t number) {
     if(number<0) {
         return true;
     }
-    if(s==NULL || length<-1) {
+    if(s==nullptr || length<-1) {
         return false;
     }
 
@@ -1387,7 +1387,7 @@ u_unescape(const char *src, UChar *dest, int32_t destCapacity) {
             int32_t lenParsed = 0;
             UChar32 c32;
             if (src != segment) {
-                if (dest != NULL) {
+                if (dest != nullptr) {
                     _appendUChars(dest + i, destCapacity - i,
                                   segment, (int32_t)(src - segment));
                 }
@@ -1399,7 +1399,7 @@ u_unescape(const char *src, UChar *dest, int32_t destCapacity) {
                 goto err;
             }
             src += lenParsed; /* advance past escape seq. */
-            if (dest != NULL && U16_LENGTH(c32) <= (destCapacity - i)) {
+            if (dest != nullptr && U16_LENGTH(c32) <= (destCapacity - i)) {
                 U16_APPEND_UNSAFE(dest, i, c32);
             } else {
                 i += U16_LENGTH(c32);
@@ -1410,19 +1410,19 @@ u_unescape(const char *src, UChar *dest, int32_t destCapacity) {
         }
     }
     if (src != segment) {
-        if (dest != NULL) {
+        if (dest != nullptr) {
             _appendUChars(dest + i, destCapacity - i,
                           segment, (int32_t)(src - segment));
         }
         i += (int32_t)(src - segment);
     }
-    if (dest != NULL && i < destCapacity) {
+    if (dest != nullptr && i < destCapacity) {
         dest[i] = 0;
     }
     return i;
 
  err:
-    if (dest != NULL && destCapacity > 0) {
+    if (dest != nullptr && destCapacity > 0) {
         *dest = 0;
     }
     return 0;
@@ -1435,7 +1435,7 @@ u_unescape(const char *src, UChar *dest, int32_t destCapacity) {
  * Set warning and error codes accordingly.
  */
 #define __TERMINATE_STRING(dest, destCapacity, length, pErrorCode) UPRV_BLOCK_MACRO_BEGIN { \
-    if(pErrorCode!=NULL && U_SUCCESS(*pErrorCode)) {                    \
+    if(pErrorCode!=nullptr && U_SUCCESS(*pErrorCode)) {                    \
         /* not a public function, so no complete argument checking */   \
                                                                         \
         if(length<0) {                                                  \
@@ -1506,7 +1506,7 @@ u_terminateWChars(wchar_t *dest, int32_t destCapacity, int32_t length, UErrorCod
 #define STRING_HASH(TYPE, STR, STRLEN, DEREF) UPRV_BLOCK_MACRO_BEGIN { \
     uint32_t hash = 0;                        \
     const TYPE *p = (const TYPE*) STR;        \
-    if (p != NULL) {                          \
+    if (p != nullptr) {                          \
         int32_t len = (int32_t)(STRLEN);      \
         int32_t inc = ((len - 32) / 32) + 1;  \
         const TYPE *limit = p + len;          \

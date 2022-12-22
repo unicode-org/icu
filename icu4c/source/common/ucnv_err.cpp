@@ -150,7 +150,7 @@ UCNV_FROM_U_CALLBACK_SKIP (
              */
             *err = U_ZERO_ERROR;
         }
-        else if (context == NULL || (*((char*)context) == UCNV_PRV_STOP_ON_ILLEGAL && reason == UCNV_UNASSIGNED))
+        else if (context == nullptr || (*((char*)context) == UCNV_PRV_STOP_ON_ILLEGAL && reason == UCNV_UNASSIGNED))
         {
             *err = U_ZERO_ERROR;
         }
@@ -180,7 +180,7 @@ UCNV_FROM_U_CALLBACK_SUBSTITUTE (
              */
             *err = U_ZERO_ERROR;
         }
-        else if (context == NULL || (*((char*)context) == UCNV_PRV_STOP_ON_ILLEGAL && reason == UCNV_UNASSIGNED))
+        else if (context == nullptr || (*((char*)context) == UCNV_PRV_STOP_ON_ILLEGAL && reason == UCNV_UNASSIGNED))
         {
             *err = U_ZERO_ERROR;
             ucnv_cbFromUWriteSub(fromArgs, 0, err);
@@ -210,12 +210,12 @@ UCNV_FROM_U_CALLBACK_ESCAPE (
   int32_t valueStringLength = 0;
   int32_t i = 0;
 
-  const UChar *myValueSource = NULL;
+  const UChar *myValueSource = nullptr;
   UErrorCode err2 = U_ZERO_ERROR;
-  UConverterFromUCallback original = NULL;
+  UConverterFromUCallback original = nullptr;
   const void *originalContext;
 
-  UConverterFromUCallback ignoredCallback = NULL;
+  UConverterFromUCallback ignoredCallback = nullptr;
   const void *ignoredContext;
   
   if (reason > UCNV_IRREGULAR)
@@ -233,7 +233,7 @@ UCNV_FROM_U_CALLBACK_ESCAPE (
 
   ucnv_setFromUCallBack (fromArgs->converter,
                      (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_SUBSTITUTE,
-                     NULL,
+                     nullptr,
                      &original,
                      &originalContext,
                      &err2);
@@ -243,7 +243,7 @@ UCNV_FROM_U_CALLBACK_ESCAPE (
     *err = err2;
     return;
   } 
-  if(context==NULL)
+  if(context==nullptr)
   { 
       while (i < length)
       {
@@ -373,7 +373,7 @@ UCNV_TO_U_CALLBACK_SKIP (
     (void)length;
     if (reason <= UCNV_IRREGULAR)
     {
-        if (context == NULL || (*((char*)context) == UCNV_PRV_STOP_ON_ILLEGAL && reason == UCNV_UNASSIGNED))
+        if (context == nullptr || (*((char*)context) == UCNV_PRV_STOP_ON_ILLEGAL && reason == UCNV_UNASSIGNED))
         {
             *err = U_ZERO_ERROR;
         }
@@ -395,7 +395,7 @@ UCNV_TO_U_CALLBACK_SUBSTITUTE (
     (void)length;
     if (reason <= UCNV_IRREGULAR)
     {
-        if (context == NULL || (*((char*)context) == UCNV_PRV_STOP_ON_ILLEGAL && reason == UCNV_UNASSIGNED))
+        if (context == nullptr || (*((char*)context) == UCNV_PRV_STOP_ON_ILLEGAL && reason == UCNV_UNASSIGNED))
         {
             *err = U_ZERO_ERROR;
             ucnv_cbToUWriteSub(toArgs,0,err);
@@ -426,7 +426,7 @@ UCNV_TO_U_CALLBACK_ESCAPE (
         return;
     }
 
-    if(context==NULL)
+    if(context==nullptr)
     {    
         while (i < length)
         {

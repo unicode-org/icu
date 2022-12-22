@@ -158,7 +158,7 @@ UBool processCollator()
     if (opt_rules != 0) {
 		u_unescape(opt_rules, rules, 100);
         collator = ucol_openRules(rules, -1, UCOL_OFF, UCOL_TERTIARY, 
-			                  NULL, &status);
+			                  nullptr, &status);
     }
     else {
         collator = ucol_open(opt_locale, &status);
@@ -236,7 +236,7 @@ UBool processStringSearch()
 	u_unescape(opt_source, source, 100);
 	u_unescape(opt_pattern, pattern, 100);
 	UErrorCode status = U_ZERO_ERROR;
-	search = usearch_openFromCollator(pattern, -1, source, -1, collator, NULL, 
+	search = usearch_openFromCollator(pattern, -1, source, -1, collator, nullptr, 
 		                              &status);
 	if (U_FAILURE(status)) {
 		return false;

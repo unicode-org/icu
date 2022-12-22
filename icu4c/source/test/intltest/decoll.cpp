@@ -43,7 +43,7 @@ CollationGermanTest::CollationGermanTest()
         errcheckln(status, __FILE__ "failed to create! err " + UnicodeString(u_errorName(status)));
         /* if it wasn't already: */
         delete myCollation;
-        myCollation = NULL;
+        myCollation = nullptr;
     }
 }
 
@@ -104,7 +104,7 @@ const Collator::EComparisonResult CollationGermanTest::results[][2] =
 
 void CollationGermanTest::TestTertiary(/* char* par */)
 {
-    if(myCollation == NULL ) {
+    if(myCollation == nullptr ) {
         dataerrln("decoll: cannot start test, collator is null\n");
         return;
     }
@@ -120,7 +120,7 @@ void CollationGermanTest::TestTertiary(/* char* par */)
 }
 void CollationGermanTest::TestPrimary(/* char* par */)
 {
-    if(myCollation == NULL ) {
+    if(myCollation == nullptr ) {
         dataerrln("decoll: cannot start test, collator is null\n");
         return;
     }

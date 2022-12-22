@@ -38,7 +38,7 @@ const LEFontInstance *GnomeFontMap::openFont(const char *fontName, le_int16 poin
 
     if (LE_FAILURE(status)) {
       delete result;
-      result = NULL;
+      result = nullptr;
     }
 
     return result;

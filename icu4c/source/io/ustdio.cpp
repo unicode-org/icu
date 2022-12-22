@@ -67,7 +67,7 @@ U_CAPI UTransliterator* U_EXPORT2
 u_fsettransliterator(UFILE *file, UFileDirection direction,
                      UTransliterator *adopt, UErrorCode *status)
 {
-    UTransliterator *old = NULL;
+    UTransliterator *old = nullptr;
 
     if(U_FAILURE(*status))
     {
@@ -87,21 +87,21 @@ u_fsettransliterator(UFILE *file, UFileDirection direction,
         return adopt;
     }
 
-    if(adopt == NULL) /* they are clearing it */
+    if(adopt == nullptr) /* they are clearing it */
     {
-        if(file->fTranslit != NULL)
+        if(file->fTranslit != nullptr)
         {
             /* TODO: Check side */
             old = file->fTranslit->translit;
             uprv_free(file->fTranslit->buffer);
-            file->fTranslit->buffer=NULL;
+            file->fTranslit->buffer=nullptr;
             uprv_free(file->fTranslit);
-            file->fTranslit=NULL;
+            file->fTranslit=nullptr;
         }
     }
     else
     {
-        if(file->fTranslit == NULL)
+        if(file->fTranslit == nullptr)
         {
             file->fTranslit = (UFILETranslitBuffer*) uprv_malloc(sizeof(UFILETranslitBuffer));
             if(!file->fTranslit)
@@ -112,7 +112,7 @@ u_fsettransliterator(UFILE *file, UFileDirection direction,
             file->fTranslit->capacity = 0;
             file->fTranslit->length = 0;
             file->fTranslit->pos = 0;
-            file->fTranslit->buffer = NULL;
+            file->fTranslit->buffer = nullptr;
         }
         else
         {
@@ -135,7 +135,7 @@ static const UChar * u_file_translit(UFILE *f, const UChar *src, int32_t *count,
     UTransPosition pos;
     UErrorCode status = U_ZERO_ERROR;
 
-    if(count == NULL)
+    if(count == nullptr)
     {
         count = &junkCount;
     }
@@ -160,7 +160,7 @@ static const UChar * u_file_translit(UFILE *f, const UChar *src, int32_t *count,
 
     if(newlen > f->fTranslit->capacity)
     {
-        if(f->fTranslit->buffer == NULL)
+        if(f->fTranslit->buffer == nullptr)
         {
             f->fTranslit->buffer = (UChar*)uprv_malloc(newlen * sizeof(UChar));
         }
@@ -169,8 +169,8 @@ static const UChar * u_file_translit(UFILE *f, const UChar *src, int32_t *count,
             f->fTranslit->buffer = (UChar*)uprv_realloc(f->fTranslit->buffer, newlen * sizeof(UChar));
         }
         /* Check for malloc/realloc failure. */
-        if (f->fTranslit->buffer == NULL) {
-        	return NULL;
+        if (f->fTranslit->buffer == nullptr) {
+        	return nullptr;
         }
         f->fTranslit->capacity = newlen;
     }
@@ -239,7 +239,7 @@ ufile_flush_translit(UFILE *f)
         return;
 #endif
 
-    u_file_write_flush(NULL, 0, f, false, true);
+    u_file_write_flush(nullptr, 0, f, false, true);
 }
 
 
@@ -250,7 +250,7 @@ ufile_flush_io(UFILE *f)
     return; /* skip if no file */
   }
 
-  u_file_write_flush(NULL, 0, f, true, false);
+  u_file_write_flush(nullptr, 0, f, true, false);
 }
 
 
@@ -274,7 +274,7 @@ ufile_close_translit(UFILE *f)
     }
 
     uprv_free(f->fTranslit);
-    f->fTranslit = NULL;
+    f->fTranslit = nullptr;
 #endif
 }
 
@@ -353,13 +353,13 @@ u_file_write_flush(const UChar *chars,
     do {
         mySourceBegin = mySource; /* beginning location for this loop */
         status     = U_ZERO_ERROR;
-        if(f->fConverter != NULL) { /* We have a valid converter */
+        if(f->fConverter != nullptr) { /* We have a valid converter */
             ucnv_fromUnicode(f->fConverter,
                 &myTarget,
                 charBuffer + UFILE_CHARBUFFER_SIZE,
                 &mySource,
                 mySourceEnd,
-                NULL,
+                nullptr,
                 flushIO,
                 &status);
         } else { /*weiv: do the invariant conversion */
@@ -416,7 +416,7 @@ ufile_fill_uchar_buffer(UFILE *f)
     char        charBuffer[UFILE_CHARBUFFER_SIZE];
     u_localized_string *str;
 
-    if (f->fFile == NULL) {
+    if (f->fFile == nullptr) {
         /* There is nothing to do. It's a string. */
         return;
     }
@@ -438,8 +438,8 @@ ufile_fill_uchar_buffer(UFILE *f)
     availLength = UFILE_UCHARBUFFER_SIZE - dataSize;
 
     /* Determine the # of codepage bytes needed to fill our UChar buffer */
-    /* weiv: if converter is NULL, we use invariant converter with charwidth = 1)*/
-    maxCPBytes = availLength / (f->fConverter!=NULL?(2*ucnv_getMinCharSize(f->fConverter)):1);
+    /* weiv: if converter is nullptr, we use invariant converter with charwidth = 1)*/
+    maxCPBytes = availLength / (f->fConverter!=nullptr?(2*ucnv_getMinCharSize(f->fConverter)):1);
 
     /* Read in the data to convert */
     if (f->fFileno == 0) {
@@ -462,14 +462,14 @@ ufile_fill_uchar_buffer(UFILE *f)
     myTarget    = f->fUCBuffer + dataSize;
     bufferSize  = UFILE_UCHARBUFFER_SIZE;
 
-    if(f->fConverter != NULL) { /* We have a valid converter */
+    if(f->fConverter != nullptr) { /* We have a valid converter */
         /* Perform the conversion */
         ucnv_toUnicode(f->fConverter,
             &myTarget,
             f->fUCBuffer + bufferSize,
             &mySource,
             mySourceEnd,
-            NULL,
+            nullptr,
             (UBool)(feof(f->fFile) != 0),
             &status);
 
@@ -498,7 +498,7 @@ u_fgets(UChar        *s,
 
     if (n <= 0) {
         /* Caller screwed up. We need to write the null terminatior. */
-        return NULL;
+        return nullptr;
     }
 
     /* fill the buffer if needed */
@@ -515,7 +515,7 @@ u_fgets(UChar        *s,
 
     /* if 0 characters were left, return 0 */
     if (dataSize == 0)
-        return NULL;
+        return nullptr;
 
     /* otherwise, iteratively fill the buffer and copy */
     count = 0;

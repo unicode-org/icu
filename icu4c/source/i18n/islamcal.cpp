@@ -54,18 +54,18 @@ static void debug_islamcal_msg(const char *pat, ...)
 
 // --- The cache --
 // cache of months
-static icu::CalendarCache *gMonthCache = NULL;
-static icu::CalendarAstronomer *gIslamicCalendarAstro = NULL;
+static icu::CalendarCache *gMonthCache = nullptr;
+static icu::CalendarAstronomer *gIslamicCalendarAstro = nullptr;
 
 U_CDECL_BEGIN
 static UBool calendar_islamic_cleanup(void) {
     if (gMonthCache) {
         delete gMonthCache;
-        gMonthCache = NULL;
+        gMonthCache = nullptr;
     }
     if (gIslamicCalendarAstro) {
         delete gIslamicCalendarAstro;
-        gIslamicCalendarAstro = NULL;
+        gIslamicCalendarAstro = nullptr;
     }
     return true;
 }
@@ -405,9 +405,9 @@ double IslamicCalendar::moonAge(UDate time, UErrorCode &status)
 
     static UMutex astroLock;      // pod bay door lock
     umtx_lock(&astroLock);
-    if(gIslamicCalendarAstro == NULL) {
+    if(gIslamicCalendarAstro == nullptr) {
         gIslamicCalendarAstro = new CalendarAstronomer();
-        if (gIslamicCalendarAstro == NULL) {
+        if (gIslamicCalendarAstro == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return age;
         }

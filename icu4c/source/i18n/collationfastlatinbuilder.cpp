@@ -89,7 +89,7 @@ binarySearch(const int64_t list[], int32_t limit, int64_t ce) {
 CollationFastLatinBuilder::CollationFastLatinBuilder(UErrorCode &errorCode)
         : ce0(0), ce1(0),
           contractionCEs(errorCode), uniqueCEs(errorCode),
-          miniCEs(NULL),
+          miniCEs(nullptr),
           firstDigitPrimary(0), firstLatinPrimary(0), lastLatinPrimary(0),
           firstShortPrimary(0), shortPrimaryOverflow(false),
           headerLength(0) {
@@ -431,7 +431,7 @@ CollationFastLatinBuilder::encodeUniqueCEs(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return false; }
     uprv_free(miniCEs);
     miniCEs = (uint16_t *)uprv_malloc(uniqueCEs.size() * 2);
-    if(miniCEs == NULL) {
+    if(miniCEs == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return false;
     }

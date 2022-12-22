@@ -303,10 +303,10 @@ uprv_ebcdicFromAscii(const UDataSwapper *ds,
 
     int32_t count;
 
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+    if(pErrorCode==nullptr || U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(ds==NULL || inData==NULL || length<0 || (length>0 && outData==NULL)) {
+    if(ds==nullptr || inData==nullptr || length<0 || (length>0 && outData==nullptr)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -340,10 +340,10 @@ uprv_copyAscii(const UDataSwapper *ds,
 
     int32_t count;
 
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+    if(pErrorCode==nullptr || U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(ds==NULL || inData==NULL || length<0 || (length>0 && outData==NULL)) {
+    if(ds==nullptr || inData==nullptr || length<0 || (length>0 && outData==nullptr)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -380,10 +380,10 @@ uprv_asciiFromEbcdic(const UDataSwapper *ds,
 
     int32_t count;
 
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+    if(pErrorCode==nullptr || U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(ds==NULL || inData==NULL || length<0 ||  (length>0 && outData==NULL)) {
+    if(ds==nullptr || inData==nullptr || length<0 ||  (length>0 && outData==nullptr)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -417,10 +417,10 @@ uprv_copyEbcdic(const UDataSwapper *ds,
 
     int32_t count;
 
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+    if(pErrorCode==nullptr || U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(ds==NULL || inData==NULL || length<0 || (length>0 && outData==NULL)) {
+    if(ds==nullptr || inData==nullptr || length<0 || (length>0 && outData==nullptr)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -463,7 +463,7 @@ uprv_compareInvAscii(const UDataSwapper *ds,
     UChar32 c1, c2;
     uint8_t c;
 
-    if(outString==NULL || outLength<-1 || localString==NULL || localLength<-1) {
+    if(outString==nullptr || outLength<-1 || localString==nullptr || localLength<-1) {
         return 0;
     }
 
@@ -509,7 +509,7 @@ uprv_compareInvEbcdic(const UDataSwapper *ds,
     UChar32 c1, c2;
     uint8_t c;
 
-    if(outString==NULL || outLength<-1 || localString==NULL || localLength<-1) {
+    if(outString==nullptr || outLength<-1 || localString==nullptr || localLength<-1) {
         return 0;
     }
 

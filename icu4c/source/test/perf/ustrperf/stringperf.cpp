@@ -69,8 +69,8 @@ StringPerformanceTest::StringPerformanceTest(int32_t argc, const char *argv[],
                                              UErrorCode &status)
                                              : UPerfTest(argc, argv, status)
 {
-    filelines_=NULL;
-    StrBuffer=NULL;
+    filelines_=nullptr;
+    StrBuffer=nullptr;
     StrBufferLen=0;
 
     int32_t len =0;
@@ -155,9 +155,9 @@ UPerfFunction* StringPerformanceTest::runIndexedTest(int32_t index, UBool exec,
 
         default: 
             name = ""; 
-            return NULL;
+            return nullptr;
     }
-    return NULL;
+    return nullptr;
 }
 
 UPerfFunction* StringPerformanceTest::TestCtor()

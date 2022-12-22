@@ -859,12 +859,12 @@ U_CDECL_END
 static const UConverterImpl _UTF8Impl={
     UCNV_UTF8,
 
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
 
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
 
     ucnv_toUnicode_UTF8,
     ucnv_toUnicode_UTF8_OFFSETS_LOGIC,
@@ -872,10 +872,10 @@ static const UConverterImpl _UTF8Impl={
     ucnv_fromUnicode_UTF8_OFFSETS_LOGIC,
     ucnv_getNextUChar_UTF8,
 
-    NULL,
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
     ucnv_getNonSurrogateUnicodeSet,
 
     ucnv_UTF8FromUTF8,
@@ -903,27 +903,27 @@ const UConverterSharedData _UTF8Data=
 static const UConverterImpl _CESU8Impl={
     UCNV_CESU8,
 
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
 
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
 
     ucnv_toUnicode_UTF8,
     ucnv_toUnicode_UTF8_OFFSETS_LOGIC,
     ucnv_fromUnicode_UTF8,
     ucnv_fromUnicode_UTF8_OFFSETS_LOGIC,
-    NULL,
+    nullptr,
 
-    NULL,
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
     ucnv_getCompleteUnicodeSet,
 
-    NULL,
-    NULL
+    nullptr,
+    nullptr
 };
 
 static const UConverterStaticData _CESU8StaticData={

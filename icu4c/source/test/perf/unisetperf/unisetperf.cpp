@@ -50,7 +50,7 @@ class UnicodeSetPerformanceTest : public UPerfTest {
 public:
     UnicodeSetPerformanceTest(int32_t argc, const char *argv[], UErrorCode &status)
             : UPerfTest(argc, argv, options, UPRV_LENGTHOF(options), unisetperf_usage, status),
-              utf8(NULL), utf8Length(0), countInputCodePoints(0), spanCount(0) {
+              utf8(nullptr), utf8Length(0), countInputCodePoints(0), spanCount(0) {
         if (U_SUCCESS(status)) {
             UnicodeString pattern=UnicodeString(options[SET_PATTERN].value, -1, US_INV).unescape();
             set.applyPattern(pattern, status);
@@ -67,12 +67,12 @@ public:
                 countSpans();
 
                 // Preflight the UTF-8 length and allocate utf8.
-                u_strToUTF8(NULL, 0, &utf8Length, buffer, bufferLen, &status);
+                u_strToUTF8(nullptr, 0, &utf8Length, buffer, bufferLen, &status);
                 if(status==U_BUFFER_OVERFLOW_ERROR) {
                     utf8=(char *)malloc(utf8Length);
-                    if(utf8!=NULL) {
+                    if(utf8!=nullptr) {
                         status=U_ZERO_ERROR;
-                        u_strToUTF8(utf8, utf8Length, NULL, buffer, bufferLen, &status);
+                        u_strToUTF8(utf8, utf8Length, nullptr, buffer, bufferLen, &status);
                     } else {
                         status=U_MEMORY_ALLOCATION_ERROR;
                     }
@@ -89,7 +89,7 @@ public:
         }
     }
 
-    virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = NULL);
+    virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = nullptr);
 
     // Count spans of characters that are in the set,
     // and spans of characters that are not in the set.
@@ -416,7 +416,7 @@ UPerfFunction* UnicodeSetPerformanceTest::runIndexedTest(int32_t index, UBool ex
         case 4: name = "SpanBackUTF8"; if (exec) return SpanBackUTF8::get(*this); break;
         default: name = ""; break;
     }
-    return NULL;
+    return nullptr;
 }
 
 int main(int argc, const char *argv[])

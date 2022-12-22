@@ -337,7 +337,7 @@ class ThreadSafeFormatSharedData {
     UnicodeString  fBBDStr;
 };
 
-const ThreadSafeFormatSharedData *gSharedData = NULL;
+const ThreadSafeFormatSharedData *gSharedData = nullptr;
 
 ThreadSafeFormatSharedData::ThreadSafeFormatSharedData(UErrorCode &status) {
     fFormat.adoptInstead(NumberFormat::createCurrencyInstance(Locale::getUS(), status));
@@ -348,13 +348,13 @@ ThreadSafeFormatSharedData::ThreadSafeFormatSharedData(UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
     }
-    fFormat->format(fYDDThing, fYDDStr, NULL, status);
-    fFormat->format(fBBDThing, fBBDStr, NULL, status);
+    fFormat->format(fYDDThing, fYDDStr, nullptr, status);
+    fFormat->format(fBBDThing, fBBDStr, nullptr, status);
     gSharedData = this;
 }
 
 ThreadSafeFormatSharedData::~ThreadSafeFormatSharedData() {
-    gSharedData = NULL;
+    gSharedData = nullptr;
 }
 
 /**
@@ -401,16 +401,16 @@ UBool ThreadSafeFormat::doStuff(int32_t offset, UnicodeString &appendErr, UError
     okay = false;
   }
   UnicodeString str;
-  const UnicodeString *o=NULL;
+  const UnicodeString *o=nullptr;
   Formattable f;
-  const NumberFormat *nf = NULL; // only operate on it as const.
+  const NumberFormat *nf = nullptr; // only operate on it as const.
   switch(offset%4) {
   case 0:  f = gSharedData->fYDDThing;  o = &gSharedData->fYDDStr;  nf = gSharedData->fFormat.getAlias();  break;
   case 1:  f = gSharedData->fBBDThing;  o = &gSharedData->fBBDStr;  nf = gSharedData->fFormat.getAlias();  break;
   case 2:  f = gSharedData->fYDDThing;  o = &gSharedData->fYDDStr;  nf = fFormat.getAlias();  break;
   case 3:  f = gSharedData->fBBDThing;  o = &gSharedData->fBBDStr;  nf = fFormat.getAlias();  break;
   }
-  nf->format(f, str, NULL, status);
+  nf->format(f, str, nullptr, status);
 
   if(*o != str) {
     appendErr.append(showDifference(*o, str));
@@ -423,7 +423,7 @@ UBool U_CALLCONV isAcceptable(void *, const char *, const char *, const UDataInf
     return true;
 }
 
-//static UMTX debugMutex = NULL;
+//static UMTX debugMutex = nullptr;
 //static UMTX gDebugMutex;
 
 
@@ -439,7 +439,7 @@ public:
         : SimpleThread(),
         fNum(0),
         fTraceInfo(0),
-        fTSF(NULL),
+        fTSF(nullptr),
         fOffset(0)
         // the locale to use
     {
@@ -478,8 +478,8 @@ public:
         int m;
         for (m=0; m<4000; m++) {
             status         = U_ZERO_ERROR;
-            UResourceBundle *res   = NULL;
-            const char *localeName = NULL;
+            UResourceBundle *res   = nullptr;
+            const char *localeName = nullptr;
 
             Locale  loc = Locale::getEnglish();
 
@@ -488,7 +488,7 @@ public:
 
             // ResourceBundle bund = ResourceBundle(0, loc, status);
             //umtx_lock(&gDebugMutex);
-            res = ures_open(NULL, localeName, &status);
+            res = ures_open(nullptr, localeName, &status);
             //umtx_unlock(&gDebugMutex);
 
             //umtx_lock(&gDebugMutex);
@@ -726,8 +726,8 @@ private:
     UBool isAtLeastUCA62;
 public:
     CollatorThreadTest()  : SimpleThread(),
-        coll(NULL),
-        lines(NULL),
+        coll(nullptr),
+        lines(nullptr),
         noLines(0),
         isAtLeastUCA62(true)
     {
@@ -741,7 +741,7 @@ public:
     }
     virtual void run() override {
         uint8_t sk1[1024], sk2[1024];
-        uint8_t *oldSk = NULL, *newSk = sk1;
+        uint8_t *oldSk = nullptr, *newSk = sk1;
         int32_t oldLen = 0;
         int32_t prev = 0;
         int32_t i = 0;
@@ -751,7 +751,7 @@ public:
 
             int32_t resLen = coll->getSortKey(lines[i].buff, lines[i].buflen, newSk, 1024);
 
-            if(oldSk != NULL) {
+            if(oldSk != nullptr) {
                 int32_t skres = strcmp((char *)oldSk, (char *)newSk);
                 int32_t cmpres = coll->compare(lines[prev].buff, lines[prev].buflen, lines[i].buff, lines[i].buflen);
                 int32_t cmpres2 = coll->compare(lines[i].buff, lines[i].buflen, lines[prev].buff, lines[prev].buflen);
@@ -795,7 +795,7 @@ void MultithreadTest::TestCollators()
 {
 
     UErrorCode status = U_ZERO_ERROR;
-    FILE *testFile = NULL;
+    FILE *testFile = nullptr;
     char testDataPath[1024];
     strcpy(testDataPath, IntlTest::getSourceTestData(status));
     if (U_FAILURE(status)) {
@@ -856,7 +856,7 @@ void MultithreadTest::TestCollators()
     UChar bufferU[1024];
     uint32_t first = 0;
 
-    while (fgets(buffer, 1024, testFile) != NULL) {
+    while (fgets(buffer, 1024, testFile) != nullptr) {
         if(*buffer == 0 || buffer[0] == '#') {
             // Store empty and comment lines so that errors are reported
             // for the real test file lines.
@@ -970,7 +970,7 @@ public:
 
 };
 
-const UnicodeString *StringThreadTest2::gSharedString = NULL;
+const UnicodeString *StringThreadTest2::gSharedString = nullptr;
 
 // ** The actual test function.
 
@@ -998,7 +998,7 @@ void MultithreadTest::TestString()
     }
 
     delete StringThreadTest2::gSharedString;
-    StringThreadTest2::gSharedString = NULL;
+    StringThreadTest2::gSharedString = nullptr;
 }
 
 
@@ -1010,7 +1010,7 @@ void MultithreadTest::TestString()
 //
 
 #if !UCONFIG_NO_TRANSLITERATION
-Transliterator *gSharedTranslit = NULL;
+Transliterator *gSharedTranslit = nullptr;
 class TxThread: public SimpleThread {
   public:
     TxThread() {}
@@ -1043,7 +1043,7 @@ void MultithreadTest::TestAnyTranslit() {
     for (i=0; i<UPRV_LENGTHOF(threads); i++) {
         threads[i].join();
     }
-    gSharedTranslit = NULL;
+    gSharedTranslit = nullptr;
 #endif  // !UCONFIG_NO_TRANSLITERATION
 }
 
@@ -1072,7 +1072,7 @@ static const int32_t CACHE_LOAD = 3;
 class UCTMultiThreadItem : public SharedObject {
   public:
     char *value;
-    UCTMultiThreadItem(const char *x) : value(NULL) {
+    UCTMultiThreadItem(const char *x) : value(nullptr) {
         value = uprv_strdup(x);
     }
     virtual ~UCTMultiThreadItem() {
@@ -1091,8 +1091,8 @@ const UCTMultiThreadItem *LocaleCacheKey<UCTMultiThreadItem>::createObject(
     const UnifiedCache *cacheContext = (const UnifiedCache *) context;
 
     if (uprv_strcmp(fLoc.getLanguage(), fLoc.getName()) != 0) {
-        const UCTMultiThreadItem *result = NULL;
-        if (cacheContext == NULL) {
+        const UCTMultiThreadItem *result = nullptr;
+        if (cacheContext == nullptr) {
             UnifiedCache::getByLocale(fLoc.getLanguage(), result, status);
             return result;
         }
@@ -1120,7 +1120,7 @@ const UCTMultiThreadItem *LocaleCacheKey<UCTMultiThreadItem>::createObject(
 
     const UCTMultiThreadItem *result =
         new UCTMultiThreadItem(fLoc.getLanguage());
-    if (result == NULL) {
+    if (result == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
     } else {
         result->addRef();
@@ -1157,7 +1157,7 @@ class UnifiedCacheThread: public SimpleThread {
 
 void UnifiedCacheThread::exerciseByLocale(const Locale &locale) {
     UErrorCode status = U_ZERO_ERROR;
-    const UCTMultiThreadItem *origItem = NULL;
+    const UCTMultiThreadItem *origItem = nullptr;
     fCache->get(
             LocaleCacheKey<UCTMultiThreadItem>(locale), fCache, origItem, status);
     U_ASSERT(U_SUCCESS(status));
@@ -1166,11 +1166,11 @@ void UnifiedCacheThread::exerciseByLocale(const Locale &locale) {
     // Fetch the same item again many times. We should always get the same
     // pointer since this client is already holding onto it
     for (int32_t i = 0; i < 1000; ++i) {
-        const UCTMultiThreadItem *item = NULL;
+        const UCTMultiThreadItem *item = nullptr;
         fCache->get(
                 LocaleCacheKey<UCTMultiThreadItem>(locale), fCache, item, status);
         IntlTest::gTest->assertTrue(WHERE, item == origItem);
-        if (item != NULL) {
+        if (item != nullptr) {
             item->removeRef();
         }
     }
@@ -1299,8 +1299,8 @@ void MultithreadTest::TestBreakTranslit() {
     }
 
     delete gSharedTransliterator;
-    gTranslitInput = NULL;
-    gTranslitExpected = NULL;
+    gTranslitInput = nullptr;
+    gTranslitExpected = nullptr;
 }
 
 

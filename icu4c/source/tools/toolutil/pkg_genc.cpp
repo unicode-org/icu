@@ -289,7 +289,7 @@ writeAssemblyCode(
     size_t i, length, count;
 
     in=T_FileStream_open(filename, "rb");
-    if(in==NULL) {
+    if(in==nullptr) {
         fprintf(stderr, "genccode: unable to open input file %s\n", filename);
         exit(U_FILE_ACCESS_ERROR);
     }
@@ -304,12 +304,12 @@ writeAssemblyCode(
         ".S",
         optFilename);
     out=T_FileStream_open(buffer.chars, "w");
-    if(out==NULL) {
+    if(out==nullptr) {
         fprintf(stderr, "genccode: unable to open output file %s\n", buffer.chars);
         exit(U_FILE_ACCESS_ERROR);
     }
 
-    if (outFilePath != NULL) {
+    if (outFilePath != nullptr) {
         if (uprv_strlen(buffer.chars) >= outFilePathCapacity) {
             fprintf(stderr, "genccode: filename too long\n");
             exit(U_ILLEGAL_ARGUMENT_ERROR);
@@ -321,7 +321,7 @@ writeAssemblyCode(
 #endif
     }
 
-    if(optEntryPoint != NULL) {
+    if(optEntryPoint != nullptr) {
         uprv_strcpy(entry, optEntryPoint);
         uprv_strcat(entry, "_dat");
     }
@@ -400,12 +400,12 @@ writeCCode(
     size_t i, length, count;
 
     in=T_FileStream_open(filename, "rb");
-    if(in==NULL) {
+    if(in==nullptr) {
         fprintf(stderr, "genccode: unable to open input file %s\n", filename);
         exit(U_FILE_ACCESS_ERROR);
     }
 
-    if(optName != NULL) { /* prepend  'icudt28_' */
+    if(optName != nullptr) { /* prepend  'icudt28_' */
         // +2 includes the _ and the NUL
         if (uprv_strlen(optName) + 2 > sizeof(entry)) {
             fprintf(stderr, "genccode: entry name too long (long filename?)\n");
@@ -427,7 +427,7 @@ writeCCode(
         ".c",
         optFilename);
 
-    if (outFilePath != NULL) {
+    if (outFilePath != nullptr) {
         if (uprv_strlen(buffer) >= outFilePathCapacity) {
             fprintf(stderr, "genccode: filename too long\n");
             exit(U_ILLEGAL_ARGUMENT_ERROR);
@@ -440,12 +440,12 @@ writeCCode(
     }
 
     out=T_FileStream_open(buffer, "w");
-    if(out==NULL) {
+    if(out==nullptr) {
         fprintf(stderr, "genccode: unable to open output file %s\n", buffer);
         exit(U_FILE_ACCESS_ERROR);
     }
 
-    if(optEntryPoint != NULL) {
+    if(optEntryPoint != nullptr) {
         uprv_strcpy(entry, optEntryPoint);
         uprv_strcat(entry, "_dat");
     }
@@ -687,7 +687,7 @@ getOutFilename(
     icu::ErrorCode status;
 
     /* copy path */
-    if(destdir!=NULL && *destdir!=0) {
+    if(destdir!=nullptr && *destdir!=0) {
         outFilenameBuilder.append(destdir, status);
         outFilenameBuilder.ensureEndsWithFileSeparator(status);
     } else {
@@ -695,10 +695,10 @@ getOutFilename(
     }
     inFilename=basename;
 
-    if(suffix==NULL) {
+    if(suffix==nullptr) {
         /* the filename does not have a suffix */
         entryNameBuilder.append(inFilename, status);
-        if(optFilename != NULL) {
+        if(optFilename != nullptr) {
             outFilenameBuilder.append(optFilename, status);
         } else {
             outFilenameBuilder.append(inFilename, status);
@@ -724,7 +724,7 @@ getOutFilename(
         outFilenameBuilder.append(inFilename, status);
         entryNameBuilder.append(inFilename, status);
 
-        if(optFilename != NULL) {
+        if(optFilename != nullptr) {
             outFilenameBuilder.truncate(saveOutFilenameLength);
             outFilenameBuilder.append(optFilename, status);
         }
@@ -776,7 +776,7 @@ getArchitecture(uint16_t *pCPU, uint16_t *pBits, UBool *pIsBigEndian, const char
 #   error "Unknown platform for CAN_GENERATE_OBJECTS."
 #endif
 
-    if(optMatchArch != NULL) {
+    if(optMatchArch != nullptr) {
         filename=optMatchArch;
     } else {
         /* set defaults */
@@ -817,7 +817,7 @@ getArchitecture(uint16_t *pCPU, uint16_t *pBits, UBool *pIsBigEndian, const char
     }
 
     in=T_FileStream_open(filename, "rb");
-    if(in==NULL) {
+    if(in==nullptr) {
         fprintf(stderr, "genccode: unable to open match-arch file %s\n", filename);
         exit(U_FILE_ACCESS_ERROR);
     }
@@ -1171,7 +1171,7 @@ writeObjectCode(
 #endif
 
     in=T_FileStream_open(filename, "rb");
-    if(in==NULL) {
+    if(in==nullptr) {
         fprintf(stderr, "genccode: unable to open input file %s\n", filename);
         exit(U_FILE_ACCESS_ERROR);
     }
@@ -1187,7 +1187,7 @@ writeObjectCode(
         newSuffix,
         optFilename);
 
-    if (outFilePath != NULL) {
+    if (outFilePath != nullptr) {
         if (uprv_strlen(buffer) >= outFilePathCapacity) {
             fprintf(stderr, "genccode: filename too long\n");
             exit(U_ILLEGAL_ARGUMENT_ERROR);
@@ -1195,7 +1195,7 @@ writeObjectCode(
         uprv_strcpy(outFilePath, buffer);
     }
 
-    if(optEntryPoint != NULL) {
+    if(optEntryPoint != nullptr) {
         uprv_strcpy(entry+entryOffset, optEntryPoint);
         uprv_strcat(entry+entryOffset, "_dat");
     }
@@ -1209,7 +1209,7 @@ writeObjectCode(
 
     /* open the output file */
     out=T_FileStream_open(buffer, "wb");
-    if(out==NULL) {
+    if(out==nullptr) {
         fprintf(stderr, "genccode: unable to open output file %s\n", buffer);
         exit(U_FILE_ACCESS_ERROR);
     }
@@ -1284,7 +1284,7 @@ writeObjectCode(
     /* set the file header */
     objHeader.fileHeader.Machine=cpu;
     objHeader.fileHeader.NumberOfSections=2;
-    objHeader.fileHeader.TimeDateStamp=(DWORD)time(NULL);
+    objHeader.fileHeader.TimeDateStamp=(DWORD)time(nullptr);
     objHeader.fileHeader.PointerToSymbolTable=IMAGE_SIZEOF_FILE_HEADER+2*IMAGE_SIZEOF_SECTION_HEADER+length+size; /* start of symbol table */
     objHeader.fileHeader.NumberOfSymbols=1;
 

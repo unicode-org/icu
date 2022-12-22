@@ -68,10 +68,10 @@ NameUnicodeTransliterator::NameUnicodeTransliterator(UnicodeFilter* adoptedFilte
     USetAdder sa = {
         (USet *)legalPtr, // USet* == UnicodeSet*
         _set_add,
-        NULL, // Don't need _set_addRange
-        NULL, // Don't need _set_addString
-        NULL, // Don't need remove()
-        NULL
+        nullptr, // Don't need _set_addRange
+        nullptr, // Don't need _set_addString
+        nullptr, // Don't need remove()
+        nullptr
     };
     uprv_getCharNameCharacters(&sa);
 }
@@ -111,7 +111,7 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
                                                     UBool isIncremental) const {
     // The failure mode, here and below, is to behave like Any-Null,
     // if either there is no name data (max len == 0) or there is no
-    // memory (malloc() => NULL).
+    // memory (malloc() => nullptr).
 
     int32_t maxLen = uprv_getMaxCharNameLength();
     if (maxLen == 0) {
@@ -122,7 +122,7 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
     // Accommodate the longest possible name
     ++maxLen; // allow for temporary trailing space
     char* cbuf = (char*) uprv_malloc(maxLen);
-    if (cbuf == NULL) {
+    if (cbuf == nullptr) {
         offsets.start = offsets.limit;
         return;
     }

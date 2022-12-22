@@ -372,7 +372,7 @@ uset_getItem(const USet* uset, int32_t itemIndex,
  */
 U_CAPI int32_t U_EXPORT2
 uset_serialize(const USet* set, uint16_t* dest, int32_t destCapacity, UErrorCode* ec) {
-    if (ec==NULL || U_FAILURE(*ec)) {
+    if (ec==nullptr || U_FAILURE(*ec)) {
         return 0;
     }
 
@@ -383,10 +383,10 @@ U_CAPI UBool U_EXPORT2
 uset_getSerializedSet(USerializedSet* fillSet, const uint16_t* src, int32_t srcLength) {
     int32_t length;
 
-    if(fillSet==NULL) {
+    if(fillSet==nullptr) {
         return false;
     }
-    if(src==NULL || srcLength<=0) {
+    if(src==nullptr || srcLength<=0) {
         fillSet->length=fillSet->bmpLength=0;
         return false;
     }
@@ -415,7 +415,7 @@ uset_getSerializedSet(USerializedSet* fillSet, const uint16_t* src, int32_t srcL
 
 U_CAPI void U_EXPORT2
 uset_setSerializedToOne(USerializedSet* fillSet, UChar32 c) {
-    if(fillSet==NULL || (uint32_t)c>0x10ffff) {
+    if(fillSet==nullptr || (uint32_t)c>0x10ffff) {
         return;
     }
 
@@ -450,7 +450,7 @@ U_CAPI UBool U_EXPORT2
 uset_serializedContains(const USerializedSet* set, UChar32 c) {
     const uint16_t* array;
 
-    if(set==NULL || (uint32_t)c>0x10ffff) {
+    if(set==nullptr || (uint32_t)c>0x10ffff) {
         return false;
     }
 
@@ -506,7 +506,7 @@ uset_serializedContains(const USerializedSet* set, UChar32 c) {
 
 U_CAPI int32_t U_EXPORT2
 uset_getSerializedRangeCount(const USerializedSet* set) {
-    if(set==NULL) {
+    if(set==nullptr) {
         return 0;
     }
 
@@ -519,7 +519,7 @@ uset_getSerializedRange(const USerializedSet* set, int32_t rangeIndex,
     const uint16_t* array;
     int32_t bmpLength, length;
 
-    if(set==NULL || rangeIndex<0 || pStart==NULL || pEnd==NULL) {
+    if(set==nullptr || rangeIndex<0 || pStart==nullptr || pEnd==nullptr) {
         return false;
     }
 
@@ -590,7 +590,7 @@ uset_getSerializedRange(const USerializedSet* set, int32_t rangeIndex,
 // addRemove(USet* set, UChar32 c, int32_t doRemove) {
 //     int32_t i, length, more;
 // 
-//     if(set==NULL || (uint32_t)c>0x10ffff) {
+//     if(set==nullptr || (uint32_t)c>0x10ffff) {
 //         return false;
 //     }
 // 
@@ -646,7 +646,7 @@ uset_getSerializedRange(const USerializedSet* set, int32_t rangeIndex,
 //         /* reallocate */
 //         int32_t newCapacity=set->capacity+set->capacity/2+USET_GROW_DELTA;
 //         UChar32* newArray=(UChar32* )uprv_malloc(newCapacity*4);
-//         if(newArray==NULL) {
+//         if(newArray==nullptr) {
 //             return false;
 //         }
 //         set->capacity=newCapacity;

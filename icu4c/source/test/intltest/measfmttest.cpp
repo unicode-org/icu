@@ -3486,7 +3486,7 @@ void MeasureFormatTest::TestBasic() {
 }
 
 void MeasureFormatTest::TestGetAvailable() {
-    MeasureUnit *units = NULL;
+    MeasureUnit *units = nullptr;
     UErrorCode status = U_ZERO_ERROR;
     int32_t totalCount = MeasureUnit::getAvailable(units, 0, status);
     while (status == U_BUFFER_OVERFLOW_ERROR) {
@@ -3513,13 +3513,13 @@ void MeasureFormatTest::TestGetAvailable() {
     if (types->count(status) < 10) {
         errln("Expect at least 10 distinct unit types.");
     }
-    units = NULL;
+    units = nullptr;
     int32_t unitCapacity = 0;
     int32_t unitCountSum = 0;
     for (
-            const char* type = types->next(NULL, status);
-            type != NULL;
-            type = types->next(NULL, status)) {
+            const char* type = types->next(nullptr, status);
+            type != nullptr;
+            type = types->next(nullptr, status)) {
         int32_t unitCount = MeasureUnit::getAvailable(type, units, unitCapacity, status);
         while (status == U_BUFFER_OVERFLOW_ERROR) {
             status = U_ZERO_ERROR;
@@ -4086,7 +4086,7 @@ void MeasureFormatTest::TestFormatSingleArg() {
 void MeasureFormatTest::TestFormatMeasuresZeroArg() {
     UErrorCode status = U_ZERO_ERROR;
     MeasureFormat fmt("en", UMEASFMT_WIDTH_WIDE, status);
-    verifyFormat("TestFormatMeasuresZeroArg", fmt, NULL, 0, "");
+    verifyFormat("TestFormatMeasuresZeroArg", fmt, nullptr, 0, "");
 }
 
 void MeasureFormatTest::TestSimplePer() {

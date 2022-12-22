@@ -48,7 +48,7 @@ removeText(UChar *source, int32_t srcLen,
            UnicodeString patString,uint32_t options,  
            UnicodeString replaceText, UErrorCode *status){
 
-    if(status == NULL || U_FAILURE(*status)){
+    if(status == nullptr || U_FAILURE(*status)){
         return 0;
     }
 
@@ -89,7 +89,7 @@ getText(const UChar* source, int32_t srcLen,
         UnicodeString patternString, 
         UErrorCode* status){
     
-    if(status == NULL || U_FAILURE(*status)){
+    if(status == nullptr || U_FAILURE(*status)){
         return 0;
     }
 
@@ -124,7 +124,7 @@ U_CFUNC int32_t
 getDescription( const UChar* source, int32_t srcLen,
                 UChar** dest, int32_t destCapacity,
                 UErrorCode* status){
-    if(status == NULL || U_FAILURE(*status)){
+    if(status == nullptr || U_FAILURE(*status)){
         return 0;
     }
 
@@ -148,7 +148,7 @@ U_CFUNC int32_t
 getCount(const UChar* source, int32_t srcLen, 
          UParseCommentsOption option, UErrorCode *status){
     
-    if(status == NULL || U_FAILURE(*status)){
+    if(status == nullptr || U_FAILURE(*status)){
         return 0;
     }
 
@@ -188,7 +188,7 @@ getAt(const UChar* source, int32_t srcLen,
         UParseCommentsOption option,
         UErrorCode* status){
 
-    if(status == NULL || U_FAILURE(*status)){
+    if(status == nullptr || U_FAILURE(*status)){
         return 0;
     }
 

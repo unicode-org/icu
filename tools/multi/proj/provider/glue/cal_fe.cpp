@@ -73,10 +73,10 @@ GLUE_VER( ICUGLUE_VER )
 #endif
 
 GLUE_SYM (Calendar ) :: GLUE_SYM(Calendar) ( const Locale& loc, UErrorCode& status ) :
-Calendar(status), _this(NULL)
+Calendar(status), _this(nullptr)
 { 
 
-  _this = OICU_ucal_open(NULL, -1, /*locale*/NULL, UCAL_DEFAULT, &status);
+  _this = OICU_ucal_open(nullptr, -1, /*locale*/nullptr, UCAL_DEFAULT, &status);
 
   // copy some things over
   setMinimalDaysInFirstWeek(OICU_ucal_getAttribute(_this, UCAL_MINIMAL_DAYS_IN_FIRST_WEEK));
@@ -117,7 +117,7 @@ int32_t GLUE_SYM ( Calendar ) :: handleGetLimit(UCalendarDateFields field, ELimi
   return 1;
 }
 Calendar* GLUE_SYM ( Calendar ) :: clone(void) const {
-  return NULL;
+  return nullptr;
 }
 
 
@@ -140,7 +140,7 @@ Calendar* GLUE_SYM ( Calendar ) :: clone(void) const {
 //                                       pattern,
 //                                       patternLength,
 //                                       status);
-//     if(U_FAILURE(*status)) return NULL; // TODO: ERR?
+//     if(U_FAILURE(*status)) return nullptr; // TODO: ERR?
 //     DateFormat *c =  new GLUE_SYM( DateFormat ) ( uc );
 // #if CAL_FE_DEBUG
 //     fprintf(stderr, "VCF " ICUGLUE_VER_STR " udat_open=%s ->> %p\n", loc.getName(), (void*)c);
@@ -272,7 +272,7 @@ UObject* VersionCalendarFactory::handleCreate(const Locale &loc, int32_t kind, c
     fprintf(stderr,  "VCalF:CC %s\n", loc.getName());
 #endif
     int32_t len = loc.getKeywordValue("sp", provider, 200, status);
-    if(U_FAILURE(status)||len==0) return NULL;
+    if(U_FAILURE(status)||len==0) return nullptr;
 #if CAL_FE_DEBUG
     fprintf(stderr,  "VCalF:KWV> %s/%d\n", u_errorName(status), len);
 #endif
@@ -280,7 +280,7 @@ UObject* VersionCalendarFactory::handleCreate(const Locale &loc, int32_t kind, c
 #if CAL_FE_DEBUG
     fprintf(stderr,  "VCalF:KWV %s\n", provider);
 #endif
-    if(strncmp(provider,"icu",3)) return NULL;
+    if(strncmp(provider,"icu",3)) return nullptr;
     const char *icuver=provider+3;
 #if CAL_FE_DEBUG
     fprintf(stderr,  "VCalF:ICUV %s\n", icuver);
@@ -295,16 +295,16 @@ UObject* VersionCalendarFactory::handleCreate(const Locale &loc, int32_t kind, c
     fprintf(stderr,  "VCalF:CC %s failed\n", loc.getName());
 #endif
 
-    return NULL;
+    return nullptr;
 }
 
 
-static const UnicodeString *gLocalesDate = NULL;
+static const UnicodeString *gLocalesDate = nullptr;
 static  int32_t gLocCountDate = 0; 
 
 const Hashtable *VersionCalendarFactory::getSupportedIDs (UErrorCode& status) const {
   // from coll.cpp
-  Hashtable *_ids = NULL;
+  Hashtable *_ids = nullptr;
   if (U_SUCCESS(status)) {
     int32_t count = 0;
     _ids = new Hashtable(status);
@@ -314,7 +314,7 @@ const Hashtable *VersionCalendarFactory::getSupportedIDs (UErrorCode& status) co
         _ids->put(idlist[i], (void*)this, status);
         if (U_FAILURE(status)) {
           delete _ids;
-          _ids = NULL;
+          _ids = nullptr;
           return;
         }
       }
@@ -328,7 +328,7 @@ const Hashtable *VersionCalendarFactory::getSupportedIDs (UErrorCode& status) co
 
 const UnicodeString
 *VersionCalendarFactory::getSupportedIDs(int32_t &count, UErrorCode &/*status*/) const {
-  if(gLocalesDate==NULL) {
+  if(gLocalesDate==nullptr) {
     count = 0;
     
     
@@ -369,7 +369,7 @@ const UnicodeString
 #include <stdio.h>
 #include <unicode/uversion.h>
 
-static URegistryKey rkcal = NULL;
+static URegistryKey rkcal = nullptr;
 
 void cal_provider_register(UErrorCode &status) {
   debugfprintf((stderr, "about to register VCalF\n"));

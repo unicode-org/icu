@@ -52,7 +52,7 @@ class NamePrepTransform;
  */
 class TestIDNA : public IntlTest {
 public:
-    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL) override;
+    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=nullptr) override;
     void TestDataFile();
     void TestToASCII();
     void TestToUnicode();

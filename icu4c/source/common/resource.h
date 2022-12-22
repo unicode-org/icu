@@ -45,7 +45,7 @@ class ResourceValue;
 class U_COMMON_API ResourceArray {
 public:
     /** Constructs an empty array object. */
-    ResourceArray() : items16(NULL), items32(NULL), length(0) {}
+    ResourceArray() : items16(nullptr), items32(nullptr), length(0) {}
 
     /** Only for implementation use. @internal */
     ResourceArray(const uint16_t *i16, const uint32_t *i32, int32_t len,
@@ -80,7 +80,7 @@ private:
 class U_COMMON_API ResourceTable {
 public:
     /** Constructs an empty table object. */
-    ResourceTable() : keys16(NULL), keys32(NULL), items16(NULL), items32(NULL), length(0) {}
+    ResourceTable() : keys16(nullptr), keys32(nullptr), items16(nullptr), items32(nullptr), length(0) {}
 
     /** Only for implementation use. @internal */
     ResourceTable(const uint16_t *k16, const int32_t *k32,

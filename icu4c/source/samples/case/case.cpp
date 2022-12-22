@@ -32,13 +32,13 @@ int main( void )
 {
     UFILE *out;
     UErrorCode status  = U_ZERO_ERROR;
-    out = u_finit(stdout, NULL, NULL);
+    out = u_finit(stdout, nullptr, nullptr);
     if(!out) {
         fprintf(stderr, "Could not initialize (finit()) over stdout! \n");
         return 1;
     }
     ucnv_setFromUCallBack(u_fgetConverter(out), UCNV_FROM_U_CALLBACK_ESCAPE,
-        NULL, NULL, NULL, &status);
+        nullptr, nullptr, nullptr, &status);
     if(U_FAILURE(status)) {
         u_fprintf(out, "Warning- couldn't set the substitute callback - err %s\n", u_errorName(status));
     }

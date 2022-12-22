@@ -65,7 +65,7 @@
 #include "ulocimp.h"
 
 #if !UCONFIG_NO_SERVICE
-static icu::ICULocaleService* gService = NULL;
+static icu::ICULocaleService* gService = nullptr;
 static icu::UInitOnce gServiceInitOnce {};
 
 // INTERNAL - for cleanup
@@ -74,7 +74,7 @@ static UBool calendar_cleanup(void) {
 #if !UCONFIG_NO_SERVICE
     if (gService) {
         delete gService;
-        gService = NULL;
+        gService = nullptr;
     }
     gServiceInitOnce.reset();
 #endif
@@ -176,7 +176,7 @@ static const char * const gCalTypes[] = {
     "islamic-umalqura",
     "islamic-tbla",
     "islamic-rgsa",
-    NULL
+    nullptr
 };
 
 // Must be in the order of gCalTypes above
@@ -229,7 +229,7 @@ const SharedCalendar *LocaleCacheKey<SharedCalendar>::createObject(
 }
 
 static ECalType getCalendarType(const char *s) {
-    for (int i = 0; gCalTypes[i] != NULL; i++) {
+    for (int i = 0; gCalTypes[i] != nullptr; i++) {
         if (uprv_stricmp(s, gCalTypes[i]) == 0) {
             return (ECalType)i;
         }
@@ -302,16 +302,16 @@ static ECalType getCalendarTypeForLocale(const char *locid) {
     }
 
     // Read preferred calendar values from supplementalData calendarPreference
-    UResourceBundle *rb = ures_openDirect(NULL, "supplementalData", &status);
+    UResourceBundle *rb = ures_openDirect(nullptr, "supplementalData", &status);
     ures_getByKey(rb, "calendarPreferenceData", rb, &status);
-    UResourceBundle *order = ures_getByKey(rb, region, NULL, &status);
-    if (status == U_MISSING_RESOURCE_ERROR && rb != NULL) {
+    UResourceBundle *order = ures_getByKey(rb, region, nullptr, &status);
+    if (status == U_MISSING_RESOURCE_ERROR && rb != nullptr) {
         status = U_ZERO_ERROR;
-        order = ures_getByKey(rb, "001", NULL, &status);
+        order = ures_getByKey(rb, "001", nullptr, &status);
     }
 
     calTypeBuf[0] = 0;
-    if (U_SUCCESS(status) && order != NULL) {
+    if (U_SUCCESS(status) && order != nullptr) {
         // the first calendar type is the default for the region
         int32_t len = 0;
         const UChar *uCalType = ures_getStringByIndex(order, 0, &len, &status);
@@ -431,7 +431,7 @@ protected:
     virtual void updateVisibleIDs(Hashtable& result, UErrorCode& status) const override
     {
         if (U_SUCCESS(status)) {
-            for(int32_t i=0;gCalTypes[i] != NULL;i++) {
+            for(int32_t i=0;gCalTypes[i] != nullptr;i++) {
                 UnicodeString id((UChar)0x40); /* '@' a variant character */
                 id.append(UNICODE_STRING_SIMPLE("calendar="));
                 id.append(UnicodeString(gCalTypes[i], -1, US_INV));
@@ -445,7 +445,7 @@ protected:
            return nullptr;
         }
 #ifdef U_DEBUG_CALSVC
-        if(dynamic_cast<const LocaleKey*>(&key) == NULL) {
+        if(dynamic_cast<const LocaleKey*>(&key) == nullptr) {
             fprintf(stderr, "::create - not a LocaleKey!\n");
         }
 #endif
@@ -471,7 +471,7 @@ protected:
 
             fprintf(stderr, "BasicCalendarFactory - not handling %s.[%s]\n", (const char*) curLoc.getName(), tmp );
 #endif
-            return NULL;
+            return nullptr;
         }
 
         return createStandardCalendar(getCalendarType(keyword), canLoc, status);
@@ -526,7 +526,7 @@ public:
 
     virtual UObject* cloneInstance(UObject* instance) const override {
         UnicodeString *s = dynamic_cast<UnicodeString *>(instance);
-        if(s != NULL) {
+        if(s != nullptr) {
             return s->clone();
         } else {
 #ifdef U_DEBUG_CALSVC_F
@@ -592,7 +592,7 @@ initCalendarService(UErrorCode &status)
     }
     ucln_i18n_registerCleanup(UCLN_I18N_CALENDAR, calendar_cleanup);
     gService = new CalendarService();
-    if (gService == NULL) {
+    if (gService == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
         return;
         }
@@ -612,7 +612,7 @@ initCalendarService(UErrorCode &status)
             fprintf(stderr, "err (%s) registering classes, deleting service.....\n", u_errorName(status));
 #endif
         delete gService;
-        gService = NULL;
+        gService = nullptr;
     }
         }
 
@@ -729,7 +729,7 @@ fAreFieldsVirtuallySet(false),
 fNextStamp((int32_t)kMinimumUserStamp),
 fTime(0),
 fLenient(true),
-fZone(NULL),
+fZone(nullptr),
 fRepeatedWallTime(UCAL_WALLTIME_LAST),
 fSkippedWallTime(UCAL_WALLTIME_LAST)
 {
@@ -740,10 +740,10 @@ fSkippedWallTime(UCAL_WALLTIME_LAST)
         return;
     }
     fZone = TimeZone::createDefault();
-    if (fZone == NULL) {
+    if (fZone == nullptr) {
         success = U_MEMORY_ALLOCATION_ERROR;
     }
-    setWeekData(Locale::getDefault(), NULL, success);
+    setWeekData(Locale::getDefault(), nullptr, success);
 }
 
 // -------------------------------------
@@ -757,7 +757,7 @@ fAreFieldsVirtuallySet(false),
 fNextStamp((int32_t)kMinimumUserStamp),
 fTime(0),
 fLenient(true),
-fZone(NULL),
+fZone(nullptr),
 fRepeatedWallTime(UCAL_WALLTIME_LAST),
 fSkippedWallTime(UCAL_WALLTIME_LAST)
 {
@@ -778,7 +778,7 @@ fSkippedWallTime(UCAL_WALLTIME_LAST)
 
     clear();
     fZone = zone;
-    setWeekData(aLocale, NULL, success);
+    setWeekData(aLocale, nullptr, success);
 }
 
 // -------------------------------------
@@ -792,7 +792,7 @@ fAreFieldsVirtuallySet(false),
 fNextStamp((int32_t)kMinimumUserStamp),
 fTime(0),
 fLenient(true),
-fZone(NULL),
+fZone(nullptr),
 fRepeatedWallTime(UCAL_WALLTIME_LAST),
 fSkippedWallTime(UCAL_WALLTIME_LAST)
 {
@@ -803,10 +803,10 @@ fSkippedWallTime(UCAL_WALLTIME_LAST)
     }
     clear();
     fZone = zone.clone();
-    if (fZone == NULL) {
+    if (fZone == nullptr) {
         success = U_MEMORY_ALLOCATION_ERROR;
     }
-    setWeekData(aLocale, NULL, success);
+    setWeekData(aLocale, nullptr, success);
 }
 
 // -------------------------------------
@@ -821,7 +821,7 @@ Calendar::~Calendar()
 Calendar::Calendar(const Calendar &source)
 :   UObject(source)
 {
-    fZone = NULL;
+    fZone = nullptr;
     *this = source;
 }
 
@@ -843,8 +843,8 @@ Calendar::operator=(const Calendar &right)
         fRepeatedWallTime        = right.fRepeatedWallTime;
         fSkippedWallTime         = right.fSkippedWallTime;
         delete fZone;
-        fZone = NULL;
-        if (right.fZone != NULL) {
+        fZone = nullptr;
+        if (right.fZone != nullptr) {
             fZone                = right.fZone->clone();
         }
         fFirstDayOfWeek          = right.fFirstDayOfWeek;
@@ -894,11 +894,11 @@ Calendar::createInstance(const Locale& aLocale, UErrorCode& success)
 Calendar * U_EXPORT2
 Calendar::makeInstance(const Locale& aLocale, UErrorCode& success) {
     if (U_FAILURE(success)) {
-        return NULL;
+        return nullptr;
     }
 
     Locale actualLoc;
-    UObject* u = NULL;
+    UObject* u = nullptr;
 
 #if !UCONFIG_NO_SERVICE
     if (isCalendarServiceUsed()) {
@@ -909,18 +909,18 @@ Calendar::makeInstance(const Locale& aLocale, UErrorCode& success) {
     {
         u = createStandardCalendar(getCalendarTypeForLocale(aLocale.getName()), aLocale, success);
     }
-    Calendar* c = NULL;
+    Calendar* c = nullptr;
 
     if(U_FAILURE(success) || !u) {
         if(U_SUCCESS(success)) { // Propagate some kind of err
             success = U_INTERNAL_PROGRAM_ERROR;
         }
-        return NULL;
+        return nullptr;
     }
 
 #if !UCONFIG_NO_SERVICE
     const UnicodeString* str = dynamic_cast<const UnicodeString*>(u);
-    if(str != NULL) {
+    if(str != nullptr) {
         // It's a unicode string telling us what type of calendar to load ("gregorian", etc)
         // Create a Locale over this string
         Locale l("");
@@ -932,7 +932,7 @@ Calendar::makeInstance(const Locale& aLocale, UErrorCode& success) {
 
         Locale actualLoc2;
         delete u;
-        u = NULL;
+        u = nullptr;
 
         // Don't overwrite actualLoc, since the actual loc from this call
         // may be something like "@calendar=gregorian" -- TODO investigate
@@ -943,11 +943,11 @@ Calendar::makeInstance(const Locale& aLocale, UErrorCode& success) {
             if(U_SUCCESS(success)) {
                 success = U_INTERNAL_PROGRAM_ERROR; // Propagate some err
             }
-            return NULL;
+            return nullptr;
         }
 
         str = dynamic_cast<const UnicodeString*>(c);
-        if(str != NULL) {
+        if(str != nullptr) {
             // recursed! Second lookup returned a UnicodeString.
             // Perhaps DefaultCalendar{} was set to another locale.
 #ifdef U_DEBUG_CALSVC
@@ -965,7 +965,7 @@ Calendar::makeInstance(const Locale& aLocale, UErrorCode& success) {
 #endif
             success = U_MISSING_RESOURCE_ERROR;  // requested a calendar type which could NOT be found.
             delete c;
-            return NULL;
+            return nullptr;
         }
 #ifdef U_DEBUG_CALSVC
         fprintf(stderr, "%p: setting week count data to locale %s, actual locale %s\n", c, (const char*)aLocale.getName(), (const char *)actualLoc.getName());
@@ -994,16 +994,16 @@ Calendar* U_EXPORT2
 Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& success)
 {
     LocalPointer<TimeZone> zonePtr(zone);
-    const SharedCalendar *shared = NULL;
+    const SharedCalendar *shared = nullptr;
     UnifiedCache::getByLocale(aLocale, shared, success);
     if (U_FAILURE(success)) {
-        return NULL;
+        return nullptr;
     }
     Calendar *c = (*shared)->clone();
     shared->removeRef();
-    if (c == NULL) {
+    if (c == nullptr) {
         success = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+        return nullptr;
     }
 
     // Now, reset calendar to default state:
@@ -1033,7 +1033,7 @@ Calendar::getCalendarTypeFromLocale(
         char *typeBuffer,
         int32_t typeBufferSize,
         UErrorCode &success) {
-    const SharedCalendar *shared = NULL;
+    const SharedCalendar *shared = nullptr;
     UnifiedCache::getByLocale(aLocale, shared, success);
     if (U_FAILURE(success)) {
         return;
@@ -1117,7 +1117,7 @@ Calendar::getKeywordValuesForLocale(const char* key,
                                                         commonlyUsed, &status);
     if (U_FAILURE(status)) {
         uenum_close(uenum);
-        return NULL;
+        return nullptr;
     }
     UStringEnumeration* ustringenum = new UStringEnumeration(uenum);
     if (ustringenum == nullptr) {
@@ -2360,8 +2360,8 @@ int32_t Calendar::fieldDifference(UDate targetMs, UCalendarDateFields field, UEr
 void
 Calendar::adoptTimeZone(TimeZone* zone)
 {
-    // Do nothing if passed-in zone is NULL
-    if (zone == NULL) return;
+    // Do nothing if passed-in zone is nullptr
+    if (zone == nullptr) return;
 
     // fZone should always be non-null
     delete fZone;
@@ -2383,7 +2383,7 @@ Calendar::setTimeZone(const TimeZone& zone)
 const TimeZone&
 Calendar::getTimeZone() const
 {
-    U_ASSERT(fZone != NULL);
+    U_ASSERT(fZone != nullptr);
     return *fZone;
 }
 
@@ -2394,9 +2394,9 @@ Calendar::orphanTimeZone()
 {
     // we let go of the time zone; the new time zone is the system default time zone
     TimeZone *defaultZone = TimeZone::createDefault();
-    if (defaultZone == NULL) {
-        // No error handling available. Must keep fZone non-NULL, there are many unchecked uses.
-        return NULL;
+    if (defaultZone == nullptr) {
+        // No error handling available. Must keep fZone non-nullptr, there are many unchecked uses.
+        return nullptr;
     }
     TimeZone *z = fZone;
     fZone = defaultZone;
@@ -2564,7 +2564,7 @@ Calendar::isWeekend(UDate date, UErrorCode &status) const
     }
     // clone the calendar so we don't mess with the real one.
     Calendar *work = this->clone();
-    if (work == NULL) {
+    if (work == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return false;
     }
@@ -2726,7 +2726,7 @@ Calendar::getActualMinimum(UCalendarDateFields field, UErrorCode& status) const
     // clone the calendar so we don't mess with the real one, and set it to
     // accept anything for the field values
     Calendar *work = this->clone();
-    if (work == NULL) {
+    if (work == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return 0;
     }
@@ -3890,12 +3890,12 @@ Calendar::setWeekData(const Locale& desiredLocale, const char *type, UErrorCode&
 
     // Get the monthNames resource bundle for the calendar 'type'. Fallback to gregorian if the resource is not
     // found.
-    LocalUResourceBundlePointer calData(ures_open(NULL, useLocale.getBaseName(), &status));
+    LocalUResourceBundlePointer calData(ures_open(nullptr, useLocale.getBaseName(), &status));
     ures_getByKey(calData.getAlias(), gCalendar, calData.getAlias(), &status);
 
     LocalUResourceBundlePointer monthNames;
-    if (type != NULL && *type != '\0' && uprv_strcmp(type, gGregorian) != 0) {
-        monthNames.adoptInstead(ures_getByKeyWithFallback(calData.getAlias(), type, NULL, &status));
+    if (type != nullptr && *type != '\0' && uprv_strcmp(type, gGregorian) != 0) {
+        monthNames.adoptInstead(ures_getByKeyWithFallback(calData.getAlias(), type, nullptr, &status));
         ures_getByKeyWithFallback(monthNames.getAlias(), gMonthNames,
                                   monthNames.getAlias(), &status);
     }
@@ -3921,12 +3921,12 @@ Calendar::setWeekData(const Locale& desiredLocale, const char *type, UErrorCode&
     (void)ulocimp_getRegionForSupplementalData(desiredLocale.getName(), true, region, sizeof(region), &status);
 
     // Read week data values from supplementalData week data
-    UResourceBundle *rb = ures_openDirect(NULL, "supplementalData", &status);
+    UResourceBundle *rb = ures_openDirect(nullptr, "supplementalData", &status);
     ures_getByKey(rb, "weekData", rb, &status);
-    UResourceBundle *weekData = ures_getByKey(rb, region, NULL, &status);
-    if (status == U_MISSING_RESOURCE_ERROR && rb != NULL) {
+    UResourceBundle *weekData = ures_getByKey(rb, region, nullptr, &status);
+    if (status == U_MISSING_RESOURCE_ERROR && rb != nullptr) {
         status = U_ZERO_ERROR;
-        weekData = ures_getByKey(rb, "001", NULL, &status);
+        weekData = ures_getByKey(rb, "001", nullptr, &status);
     }
 
     if (U_FAILURE(status)) {
@@ -4060,13 +4060,13 @@ int32_t Calendar::internalGetMonth(int32_t defaultValue) const {
 
 BasicTimeZone*
 Calendar::getBasicTimeZone(void) const {
-    if (dynamic_cast<const OlsonTimeZone *>(fZone) != NULL
-        || dynamic_cast<const SimpleTimeZone *>(fZone) != NULL
-        || dynamic_cast<const RuleBasedTimeZone *>(fZone) != NULL
-        || dynamic_cast<const VTimeZone *>(fZone) != NULL) {
+    if (dynamic_cast<const OlsonTimeZone *>(fZone) != nullptr
+        || dynamic_cast<const SimpleTimeZone *>(fZone) != nullptr
+        || dynamic_cast<const RuleBasedTimeZone *>(fZone) != nullptr
+        || dynamic_cast<const VTimeZone *>(fZone) != nullptr) {
         return (BasicTimeZone*)fZone;
     }
-    return NULL;
+    return nullptr;
 }
 
 U_NAMESPACE_END

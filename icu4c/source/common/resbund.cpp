@@ -177,13 +177,13 @@ U_NAMESPACE_BEGIN
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ResourceBundle)
 
 ResourceBundle::ResourceBundle(UErrorCode &err)
-                                :UObject(), fLocale(NULL)
+                                :UObject(), fLocale(nullptr)
 {
     fResource = ures_open(0, Locale::getDefault().getName(), &err);
 }
 
 ResourceBundle::ResourceBundle(const ResourceBundle &other)
-                              :UObject(other), fLocale(NULL)
+                              :UObject(other), fLocale(nullptr)
 {
     UErrorCode status = U_ZERO_ERROR;
 
@@ -191,23 +191,23 @@ ResourceBundle::ResourceBundle(const ResourceBundle &other)
         fResource = ures_copyResb(0, other.fResource, &status);
     } else {
         /* Copying a bad resource bundle */
-        fResource = NULL;
+        fResource = nullptr;
     }
 }
 
 ResourceBundle::ResourceBundle(UResourceBundle *res, UErrorCode& err)
-                               :UObject(), fLocale(NULL)
+                               :UObject(), fLocale(nullptr)
 {
     if (res) {
         fResource = ures_copyResb(0, res, &err);
     } else {
         /* Copying a bad resource bundle */
-        fResource = NULL;
+        fResource = nullptr;
     }
 }
 
 ResourceBundle::ResourceBundle(const char* path, const Locale& locale, UErrorCode& err) 
-                               :UObject(), fLocale(NULL)
+                               :UObject(), fLocale(nullptr)
 {
     fResource = ures_open(path, locale.getName(), &err);
 }
@@ -220,18 +220,18 @@ ResourceBundle& ResourceBundle::operator=(const ResourceBundle& other)
     }
     if(fResource != 0) {
         ures_close(fResource);
-        fResource = NULL;
+        fResource = nullptr;
     }
-    if (fLocale != NULL) {
+    if (fLocale != nullptr) {
         delete fLocale;
-        fLocale = NULL;
+        fLocale = nullptr;
     }
     UErrorCode status = U_ZERO_ERROR;
     if (other.fResource) {
         fResource = ures_copyResb(0, other.fResource, &status);
     } else {
         /* Copying a bad resource bundle */
-        fResource = NULL;
+        fResource = nullptr;
     }
     return *this;
 }
@@ -241,7 +241,7 @@ ResourceBundle::~ResourceBundle()
     if(fResource != 0) {
         ures_close(fResource);
     }
-    if(fLocale != NULL) {
+    if(fLocale != nullptr) {
       delete(fLocale);
     }
 }
@@ -380,14 +380,14 @@ void ResourceBundle::getVersion(UVersionInfo versionInfo) const {
 const Locale &ResourceBundle::getLocale(void) const {
     static UMutex gLocaleLock;
     Mutex lock(&gLocaleLock);
-    if (fLocale != NULL) {
+    if (fLocale != nullptr) {
         return *fLocale;
     }
     UErrorCode status = U_ZERO_ERROR;
     const char *localeName = ures_getLocaleInternal(fResource, &status);
     ResourceBundle *ncThis = const_cast<ResourceBundle *>(this);
     ncThis->fLocale = new Locale(localeName);
-    return ncThis->fLocale != NULL ? *ncThis->fLocale : Locale::getDefault();
+    return ncThis->fLocale != nullptr ? *ncThis->fLocale : Locale::getDefault();
 }
 
 const Locale ResourceBundle::getLocale(ULocDataLocaleType type, UErrorCode &status) const

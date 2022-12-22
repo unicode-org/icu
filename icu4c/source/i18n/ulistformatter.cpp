@@ -24,11 +24,11 @@ ulistfmt_open(const char*  locale,
               UErrorCode*  status)
 {
     if (U_FAILURE(*status)) {
-        return NULL;
+        return nullptr;
     }
     LocalPointer<ListFormatter> listfmt(ListFormatter::createInstance(Locale(locale), *status));
     if (U_FAILURE(*status)) {
-        return NULL;
+        return nullptr;
     }
     return (UListFormatter*)listfmt.orphan();
 }
@@ -39,11 +39,11 @@ ulistfmt_openForType(const char*  locale, UListFormatterType type,
                     UListFormatterWidth width, UErrorCode* status)
 {
     if (U_FAILURE(*status)) {
-        return NULL;
+        return nullptr;
     }
     LocalPointer<ListFormatter> listfmt(ListFormatter::createInstance(Locale(locale), type, width, *status));
     if (U_FAILURE(*status)) {
-        return NULL;
+        return nullptr;
     }
     return (UListFormatter*)listfmt.orphan();
 }
@@ -74,7 +74,7 @@ static UnicodeString* getUnicodeStrings(
         LocalArray<UnicodeString>& maybeOwner,
         UErrorCode& status) {
     U_ASSERT(U_SUCCESS(status));
-    if (stringCount < 0 || (strings == NULL && stringCount > 0)) {
+    if (stringCount < 0 || (strings == nullptr && stringCount > 0)) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return nullptr;
     }
@@ -86,7 +86,7 @@ static UnicodeString* getUnicodeStrings(
         }
         ustrings = maybeOwner.getAlias();
     }
-    if (stringLengths == NULL) {
+    if (stringLengths == nullptr) {
         for (int32_t stringIndex = 0; stringIndex < stringCount; stringIndex++) {
             ustrings[stringIndex].setTo(true, strings[stringIndex], -1);
         }
@@ -111,7 +111,7 @@ ulistfmt_format(const UListFormatter* listfmt,
     if (U_FAILURE(*status)) {
         return -1;
     }
-    if ((result == NULL) ? resultCapacity != 0 : resultCapacity < 0) {
+    if ((result == nullptr) ? resultCapacity != 0 : resultCapacity < 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
@@ -123,8 +123,8 @@ ulistfmt_format(const UListFormatter* listfmt,
         return -1;
     }
     UnicodeString res;
-    if (result != NULL) {
-        // NULL destination for pure preflighting: empty dummy string
+    if (result != nullptr) {
+        // nullptr destination for pure preflighting: empty dummy string
         // otherwise, alias the destination buffer (copied from udat_format)
         res.setTo(result, 0, resultCapacity);
     }

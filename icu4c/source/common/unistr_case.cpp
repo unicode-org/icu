@@ -47,7 +47,7 @@ UnicodeString::doCaseCompare(int32_t start,
                              uint32_t options) const
 {
   // compare illegal string values
-  // treat const UChar *srcChars==NULL as an empty string
+  // treat const UChar *srcChars==nullptr as an empty string
   if(isBogus()) {
     return -1;
   }
@@ -55,7 +55,7 @@ UnicodeString::doCaseCompare(int32_t start,
   // pin indices to legal values
   pinIndices(start, length);
 
-  if(srcChars == NULL) {
+  if(srcChars == nullptr) {
     srcStart = srcLength = 0;
   }
 
@@ -138,7 +138,7 @@ UnicodeString::caseMap(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITER
 #endif
     newLength = stringCaseMapper(caseLocale, options, UCASEMAP_BREAK_ITERATOR
                                  buffer, capacity,
-                                 oldArray, oldLength, NULL, errorCode);
+                                 oldArray, oldLength, nullptr, errorCode);
     if (U_SUCCESS(errorCode)) {
       setLength(newLength);
       return *this;
@@ -201,7 +201,7 @@ UnicodeString::caseMap(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITER
   // No need to iter->setText() again: The case mapper restarts via iter->first().
   newLength = stringCaseMapper(caseLocale, options, UCASEMAP_BREAK_ITERATOR
                                getArrayStart(), getCapacity(),
-                               oldArray, oldLength, NULL, errorCode);
+                               oldArray, oldLength, nullptr, errorCode);
   if (bufferToDelete) {
     uprv_free(bufferToDelete);
   }
@@ -225,7 +225,7 @@ U_CAPI int32_t U_EXPORT2
 uhash_hashCaselessUnicodeString(const UElement key) {
     U_NAMESPACE_USE
     const UnicodeString *str = (const UnicodeString*) key.pointer;
-    if (str == NULL) {
+    if (str == nullptr) {
         return 0;
     }
     // Inefficient; a better way would be to have a hash function in
@@ -243,7 +243,7 @@ uhash_compareCaselessUnicodeString(const UElement key1, const UElement key2) {
     if (str1 == str2) {
         return true;
     }
-    if (str1 == NULL || str2 == NULL) {
+    if (str1 == nullptr || str2 == nullptr) {
         return false;
     }
     return str1->caseCompare(*str2, U_FOLD_CASE_DEFAULT) == 0;

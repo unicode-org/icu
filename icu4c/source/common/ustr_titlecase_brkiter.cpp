@@ -170,7 +170,7 @@ int32_t CaseMap::toTitle(
         UErrorCode &errorCode) {
     LocalPointer<BreakIterator> ownedIter;
     iter = ustrcase_getTitleBreakIterator(nullptr, locale, options, iter, ownedIter, errorCode);
-    if(iter==NULL) {
+    if(iter==nullptr) {
         return 0;
     }
     UnicodeString s(srcLength<0, src, srcLength);
@@ -216,7 +216,7 @@ ucasemap_toTitle(UCaseMap *csm,
     if (U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if (csm->iter == NULL) {
+    if (csm->iter == nullptr) {
         LocalPointer<BreakIterator> ownedIter;
         BreakIterator *iter = ustrcase_getTitleBreakIterator(
             nullptr, csm->locale, csm->options, nullptr, ownedIter, *pErrorCode);
@@ -231,7 +231,7 @@ ucasemap_toTitle(UCaseMap *csm,
         csm->caseLocale, csm->options, csm->iter,
         dest, destCapacity,
         src, srcLength,
-        ustrcase_internalToTitle, NULL, *pErrorCode);
+        ustrcase_internalToTitle, nullptr, *pErrorCode);
 }
 
 #endif  // !UCONFIG_NO_BREAK_ITERATION

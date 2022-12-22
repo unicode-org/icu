@@ -102,7 +102,7 @@ GLUE_SYM ( DateFormat ) :: create(UDateFormatStyle  timeStyle,
                                       pattern,
                                       patternLength,
                                       status);
-    if(U_FAILURE(*status)) return NULL; // TODO: ERR?
+    if(U_FAILURE(*status)) return nullptr; // TODO: ERR?
     DateFormat *c =  new GLUE_SYM( DateFormat ) ( uc );
 #if DATE_FE_DEBUG
     fprintf(stderr, "VCF " ICUGLUE_VER_STR " udat_open=%s ->> %p\n", loc.getName(), (void*)c);
@@ -144,7 +144,7 @@ void  GLUE_SYM (DateFormat ) :: parse( const UnicodeString& text, Calendar& cal,
 
 Format*  GLUE_SYM (DateFormat ) :: clone(void) const
 {
-  return NULL;
+  return nullptr;
 }
 
 
@@ -231,7 +231,7 @@ DateFormat *VersionDateFormatFactory::createFormat(UDateFormatStyle  timeStyle,
     fprintf(stderr,  "VCF:CC %s\n", loc.getName());
 #endif
     int32_t len = loc.getKeywordValue("sp", provider, 200, *status);
-    if(U_FAILURE(*status)||len==0) return NULL;
+    if(U_FAILURE(*status)||len==0) return nullptr;
 #if DATE_FE_DEBUG
     fprintf(stderr,  "VCF:KWV> %s/%d\n", u_errorName(*status), len);
 #endif
@@ -239,7 +239,7 @@ DateFormat *VersionDateFormatFactory::createFormat(UDateFormatStyle  timeStyle,
 #if DATE_FE_DEBUG
     fprintf(stderr,  "VCF:KWV %s\n", provider);
 #endif
-    if(strncmp(provider,"icu",3)) return NULL;
+    if(strncmp(provider,"icu",3)) return nullptr;
     const char *icuver=provider+3;
 #if DATE_FE_DEBUG
     fprintf(stderr,  "VCF:ICUV %s\n", icuver);
@@ -254,17 +254,17 @@ DateFormat *VersionDateFormatFactory::createFormat(UDateFormatStyle  timeStyle,
     fprintf(stderr,  "VCF:CC %s failed\n", loc.getName());
 #endif
 
-    return NULL;
+    return nullptr;
 }
 
 
-static const UnicodeString *gLocalesDate = NULL;
+static const UnicodeString *gLocalesDate = nullptr;
 static  int32_t gLocCountDate = 0; 
 
 
 const UnicodeString
 *VersionDateFormatFactory::getSupportedIDs(int32_t &count, UErrorCode &/*status*/) {
-  if(gLocalesDate==NULL) {
+  if(gLocalesDate==nullptr) {
     count = 0;
     
     
@@ -305,7 +305,7 @@ const UnicodeString
 #include <stdio.h>
 #include <unicode/uversion.h>
 
-//static URegistryKey rkdate = NULL;
+//static URegistryKey rkdate = nullptr;
 
 static VersionDateFormatFactory vdf;
 

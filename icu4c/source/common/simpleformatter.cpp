@@ -45,7 +45,7 @@ enum {
 };
 
 inline UBool isInvalidArray(const void *array, int32_t length) {
-   return (length < 0 || (array == NULL && length != 0));
+   return (length < 0 || (array == nullptr && length != 0));
 }
 
 }  // namespace
@@ -159,7 +159,7 @@ UnicodeString& SimpleFormatter::format(
         const UnicodeString &value0,
         UnicodeString &appendTo, UErrorCode &errorCode) const {
     const UnicodeString *values[] = { &value0 };
-    return formatAndAppend(values, 1, appendTo, NULL, 0, errorCode);
+    return formatAndAppend(values, 1, appendTo, nullptr, 0, errorCode);
 }
 
 UnicodeString& SimpleFormatter::format(
@@ -167,7 +167,7 @@ UnicodeString& SimpleFormatter::format(
         const UnicodeString &value1,
         UnicodeString &appendTo, UErrorCode &errorCode) const {
     const UnicodeString *values[] = { &value0, &value1 };
-    return formatAndAppend(values, 2, appendTo, NULL, 0, errorCode);
+    return formatAndAppend(values, 2, appendTo, nullptr, 0, errorCode);
 }
 
 UnicodeString& SimpleFormatter::format(
@@ -176,7 +176,7 @@ UnicodeString& SimpleFormatter::format(
         const UnicodeString &value2,
         UnicodeString &appendTo, UErrorCode &errorCode) const {
     const UnicodeString *values[] = { &value0, &value1, &value2 };
-    return formatAndAppend(values, 3, appendTo, NULL, 0, errorCode);
+    return formatAndAppend(values, 3, appendTo, nullptr, 0, errorCode);
 }
 
 UnicodeString& SimpleFormatter::formatAndAppend(
@@ -192,7 +192,7 @@ UnicodeString& SimpleFormatter::formatAndAppend(
         return appendTo;
     }
     return format(compiledPattern.getBuffer(), compiledPattern.length(), values,
-                  appendTo, NULL, true,
+                  appendTo, nullptr, true,
                   offsets, offsetsLength, errorCode);
 }
 
@@ -287,7 +287,7 @@ UnicodeString &SimpleFormatter::format(
         int32_t n = compiledPattern[i++];
         if (n < ARG_NUM_LIMIT) {
             const UnicodeString *value = values[n];
-            if (value == NULL) {
+            if (value == nullptr) {
                 errorCode = U_ILLEGAL_ARGUMENT_ERROR;
                 return result;
             }

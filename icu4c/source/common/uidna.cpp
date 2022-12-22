@@ -209,7 +209,7 @@ _internal_toASCII(const UChar* src, int32_t srcLength,
             reqLength=0;
 
     int32_t namePrepOptions = ((options & UIDNA_ALLOW_UNASSIGNED) != 0) ? USPREP_ALLOW_UNASSIGNED: 0;
-    UBool* caseFlags = NULL;
+    UBool* caseFlags = nullptr;
     
     // the source contains all ascii codepoints
     UBool srcIsASCII  = true;
@@ -229,7 +229,7 @@ _internal_toASCII(const UChar* src, int32_t srcLength,
     
     if(srcLength > b1Capacity){
         b1 = (UChar*) uprv_malloc(srcLength * U_SIZEOF_UCHAR);
-        if(b1==NULL){
+        if(b1==nullptr){
             *status = U_MEMORY_ALLOCATION_ERROR;
             goto CLEANUP;
         }
@@ -257,7 +257,7 @@ _internal_toASCII(const UChar* src, int32_t srcLength,
                 uprv_free(b1);
             }
             b1 = (UChar*) uprv_malloc(b1Len * U_SIZEOF_UCHAR);
-            if(b1==NULL){
+            if(b1==nullptr){
                 *status = U_MEMORY_ALLOCATION_ERROR;
                 goto CLEANUP;
             }
@@ -339,7 +339,7 @@ _internal_toASCII(const UChar* src, int32_t srcLength,
                 // redo processing of string
                 /* we do not have enough room so grow the buffer*/
                 b2 = (UChar*) uprv_malloc(b2Len * U_SIZEOF_UCHAR); 
-                if(b2 == NULL){
+                if(b2 == nullptr){
                     *status = U_MEMORY_ALLOCATION_ERROR;
                     goto CLEANUP;
                 }
@@ -407,14 +407,14 @@ _internal_toUnicode(const UChar* src, int32_t srcLength,
     UChar b1Stack[MAX_LABEL_BUFFER_SIZE], b2Stack[MAX_LABEL_BUFFER_SIZE], b3Stack[MAX_LABEL_BUFFER_SIZE];
 
     //initialize pointers to stack buffers
-    UChar  *b1 = b1Stack, *b2 = b2Stack, *b1Prime=NULL, *b3=b3Stack;
+    UChar  *b1 = b1Stack, *b2 = b2Stack, *b1Prime=nullptr, *b3=b3Stack;
     int32_t b1Len = 0, b2Len, b1PrimeLen, b3Len,
             b1Capacity = MAX_LABEL_BUFFER_SIZE, 
             b2Capacity = MAX_LABEL_BUFFER_SIZE,
             b3Capacity = MAX_LABEL_BUFFER_SIZE,
             reqLength=0;
 
-    UBool* caseFlags = NULL;
+    UBool* caseFlags = nullptr;
 
     UBool srcIsASCII = true;
     /*UBool srcIsLDH = true;
@@ -459,7 +459,7 @@ _internal_toUnicode(const UChar* src, int32_t srcLength,
             // redo processing of string
             /* we do not have enough room so grow the buffer*/
             b1 = (UChar*) uprv_malloc(b1Len * U_SIZEOF_UCHAR);
-            if(b1==NULL){
+            if(b1==nullptr){
                 *status = U_MEMORY_ALLOCATION_ERROR;
                 goto CLEANUP;
             }
@@ -499,7 +499,7 @@ _internal_toUnicode(const UChar* src, int32_t srcLength,
             // redo processing of string
             /* we do not have enough room so grow the buffer*/
             b2 = (UChar*) uprv_malloc(b2Len * U_SIZEOF_UCHAR);
-            if(b2==NULL){
+            if(b2==nullptr){
                 *status = U_MEMORY_ALLOCATION_ERROR;
                 goto CLEANUP;
             }
@@ -517,7 +517,7 @@ _internal_toUnicode(const UChar* src, int32_t srcLength,
             // redo processing of string
             /* we do not have enough room so grow the buffer*/
             b3 = (UChar*) uprv_malloc(b3Len * U_SIZEOF_UCHAR);
-            if(b3==NULL){
+            if(b3==nullptr){
                 *status = U_MEMORY_ALLOCATION_ERROR;
                 goto CLEANUP;
             }
@@ -614,10 +614,10 @@ uidna_toASCII(const UChar* src, int32_t srcLength,
               UParseError* parseError,
               UErrorCode* status){
     
-    if(status == NULL || U_FAILURE(*status)){
+    if(status == nullptr || U_FAILURE(*status)){
         return 0;
     }
-    if((src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
+    if((src==nullptr) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -643,10 +643,10 @@ uidna_toUnicode(const UChar* src, int32_t srcLength,
                 UParseError* parseError,
                 UErrorCode* status){
 
-    if(status == NULL || U_FAILURE(*status)){
+    if(status == nullptr || U_FAILURE(*status)){
         return 0;
     }
-    if( (src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
+    if( (src==nullptr) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }  
@@ -672,10 +672,10 @@ uidna_IDNToASCII(  const UChar *src, int32_t srcLength,
                    UParseError *parseError,
                    UErrorCode *status){
 
-    if(status == NULL || U_FAILURE(*status)){
+    if(status == nullptr || U_FAILURE(*status)){
         return 0;
     }
-    if((src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
+    if((src==nullptr) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -765,10 +765,10 @@ uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
                      UParseError* parseError,
                      UErrorCode* status){
     
-    if(status == NULL || U_FAILURE(*status)){
+    if(status == nullptr || U_FAILURE(*status)){
         return 0;
     }
-    if((src==NULL) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
+    if((src==nullptr) || (srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -863,7 +863,7 @@ uidna_compare(  const UChar *s1, int32_t length1,
                 int32_t options,
                 UErrorCode* status){
 
-    if(status == NULL || U_FAILURE(*status)){
+    if(status == nullptr || U_FAILURE(*status)){
         return -1;
     }
 
@@ -878,7 +878,7 @@ uidna_compare(  const UChar *s1, int32_t length1,
     if(*status == U_BUFFER_OVERFLOW_ERROR){
         // redo processing of string
         b1 = (UChar*) uprv_malloc(b1Len * U_SIZEOF_UCHAR);
-        if(b1==NULL){
+        if(b1==nullptr){
             *status = U_MEMORY_ALLOCATION_ERROR;
             goto CLEANUP;
         }
@@ -893,7 +893,7 @@ uidna_compare(  const UChar *s1, int32_t length1,
     if(*status == U_BUFFER_OVERFLOW_ERROR){
         // redo processing of string
         b2 = (UChar*) uprv_malloc(b2Len * U_SIZEOF_UCHAR);
-        if(b2==NULL){
+        if(b2==nullptr){
             *status = U_MEMORY_ALLOCATION_ERROR;
             goto CLEANUP;
         }

@@ -58,15 +58,15 @@ class CodePointIterator;
 class CollationTest : public IntlTest {
 public:
     CollationTest()
-            : fcd(NULL), nfd(NULL),
+            : fcd(nullptr), nfd(nullptr),
               fileLineNumber(0),
-              coll(NULL) {}
+              coll(nullptr) {}
 
     ~CollationTest() {
         delete coll;
     }
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL) override;
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=nullptr) override;
 
     void TestMinMax();
     void TestImplicits();
@@ -164,7 +164,7 @@ void CollationTest::TestMinMax() {
         return;
     }
     RuleBasedCollator *rbc = dynamic_cast<RuleBasedCollator *>(coll);
-    if(rbc == NULL) {
+    if(rbc == nullptr) {
         errln("the root collator is not a RuleBasedCollator");
         return;
     }
@@ -231,7 +231,7 @@ void CollationTest::TestImplicits() {
     const UnicodeSet *sets[] = { &coreHan, &otherHan, &unassigned };
     UChar32 prev = 0;
     uint32_t prevPrimary = 0;
-    UTF16CollationIterator ci(cd, false, NULL, NULL, NULL);
+    UTF16CollationIterator ci(cd, false, nullptr, nullptr, nullptr);
     for(int32_t i = 0; i < UPRV_LENGTHOF(sets); ++i) {
         LocalPointer<UnicodeSetIterator> iter(new UnicodeSetIterator(*sets[i]));
         while(iter->next()) {
@@ -273,7 +273,7 @@ void CollationTest::TestNulTerminated() {
     static const UChar s[] = { 0x61, 0x62, 0x61, 0x62, 0 };
 
     UTF16CollationIterator ci1(data, false, s, s, s + 2);
-    UTF16CollationIterator ci2(data, false, s + 2, s + 2, NULL);
+    UTF16CollationIterator ci2(data, false, s + 2, s + 2, nullptr);
     for(int32_t i = 0;; ++i) {
         int64_t ce1 = ci1.nextCE(errorCode);
         int64_t ce2 = ci2.nextCE(errorCode);
@@ -477,7 +477,7 @@ void CollationTest::TestFCD() {
         0x4e00, 0xf71, 0xf80
     };
 
-    FCDUTF16CollationIterator u16ci(data, false, s, s, NULL);
+    FCDUTF16CollationIterator u16ci(data, false, s, s, nullptr);
     if(errorCode.errIfFailureAndReset("FCDUTF16CollationIterator constructor")) {
         return;
     }
@@ -872,7 +872,7 @@ void CollationTest::TestTailoredElements() {
     }
     CollationRootElements rootElements(root->rootElements, root->rootElementsLength);
 
-    UHashtable *prevLocales = uhash_open(uhash_hashChars, uhash_compareChars, NULL, errorCode);
+    UHashtable *prevLocales = uhash_open(uhash_hashChars, uhash_compareChars, nullptr, errorCode);
     if(errorCode.errIfFailureAndReset("failed to create a hash table")) {
         return;
     }
@@ -892,7 +892,7 @@ void CollationTest::TestTailoredElements() {
                 Collator::getKeywordValuesForLocale("collation", locale, false, errorCode));
         errorCode.assertSuccess();
         const char *type;  // first: default type
-        while((type = types->next(NULL, errorCode)) != NULL) {
+        while((type = types->next(nullptr, errorCode)) != nullptr) {
             if(strncmp(type, "private-", 8) == 0) {
                 errln("Collator::getKeywordValuesForLocale(%s) returns private collation keyword: %s",
                         localeID, type);
@@ -914,7 +914,7 @@ void CollationTest::TestTailoredElements() {
             logln("TestTailoredElements(): requested %s -> actual %s",
                   localeWithType.getName(), actual.getName());
             RuleBasedCollator *rbc = dynamic_cast<RuleBasedCollator *>(coll.getAlias());
-            if(rbc == NULL) {
+            if(rbc == nullptr) {
                 continue;
             }
             // Note: It would be better to get tailored strings such that we can
@@ -943,7 +943,7 @@ void CollationTest::TestTailoredElements() {
                 }
             }
         }
-    } while((localeID = locales->next(NULL, errorCode)) != NULL);
+    } while((localeID = locales->next(nullptr, errorCode)) != nullptr);
     uhash_close(prevLocales);
 }
 
@@ -973,14 +973,14 @@ UBool CollationTest::readNonEmptyLine(UCHARBUF *f, IcuTestErrorCode &errorCode) 
     for(;;) {
         int32_t lineLength;
         const UChar *line = ucbuf_readline(f, &lineLength, errorCode);
-        if(line == NULL || errorCode.isFailure()) {
+        if(line == nullptr || errorCode.isFailure()) {
             fileLine.remove();
             return false;
         }
         ++fileLineNumber;
         // Strip trailing CR/LF, comments, and spaces.
         const UChar *comment = u_memchr(line, 0x23, lineLength);  // '#'
-        if(comment != NULL) {
+        if(comment != nullptr) {
             lineLength = (int32_t)(comment - line);
         } else {
             while(lineLength > 0 && isCROrLF(line[lineLength - 1])) { --lineLength; }
@@ -1148,7 +1148,7 @@ void CollationTest::parseAndSetAttribute(IcuTestErrorCode &errorCode) {
             errorCode.set(U_PARSE_ERROR);
             return;
         }
-        if(coll != NULL) {
+        if(coll != nullptr) {
             coll->setMaxVariable(max, errorCode);
             if(errorCode.isFailure()) {
                 errln("setMaxVariable() failed on line %d: %s",
@@ -1189,7 +1189,7 @@ void CollationTest::parseAndSetAttribute(IcuTestErrorCode &errorCode) {
         }
     }
 
-    if(coll != NULL) {
+    if(coll != nullptr) {
         coll->setAttribute(attr, value, errorCode);
         if(errorCode.isFailure()) {
             errln("illegal attribute=value combination on line %d: %s",
@@ -1223,7 +1223,7 @@ void CollationTest::parseAndSetReorderCodes(int32_t start, IcuTestErrorCode &err
         reorderCodes.addElement(code, errorCode);
         start = limit;
     }
-    if(coll != NULL) {
+    if(coll != nullptr) {
         coll->setReorderCodes(reorderCodes.getBuffer(), reorderCodes.size(), errorCode);
         if(errorCode.isFailure()) {
             errln("setReorderCodes() failed on line %d: %s",
@@ -1247,7 +1247,7 @@ void CollationTest::buildTailoring(UCHARBUF *f, IcuTestErrorCode &errorCode) {
     UnicodeString reason;
     delete coll;
     coll = new RuleBasedCollator(rules, parseError, reason, errorCode);
-    if(coll == NULL) {
+    if(coll == nullptr) {
         errln("unable to allocate a new collator");
         errorCode.set(U_MEMORY_ALLOCATION_ERROR);
         return;
@@ -1261,7 +1261,7 @@ void CollationTest::buildTailoring(UCHARBUF *f, IcuTestErrorCode &errorCode) {
                 parseError.preContext + "(!)" + parseError.postContext + "...");
         }
         delete coll;
-        coll = NULL;
+        coll = nullptr;
         errorCode.reset();
     } else {
         assertEquals("no error reason when RuleBasedCollator(rules) succeeds",
@@ -1282,7 +1282,7 @@ void CollationTest::setRootCollator(IcuTestErrorCode &errorCode) {
 void CollationTest::setLocaleCollator(IcuTestErrorCode &errorCode) {
     if(errorCode.isFailure()) { return; }
     delete coll;
-    coll = NULL;
+    coll = nullptr;
     int32_t at = fileLine.indexOf((UChar)0x40, 9);  // @ is not invariant
     if(at >= 0) {
         fileLine.setCharAt(at, (UChar)0x2a);  // *
@@ -1307,7 +1307,7 @@ void CollationTest::setLocaleCollator(IcuTestErrorCode &errorCode) {
                   locale.getName(), (int)fileLineNumber);
         infoln(fileLine);
         delete coll;
-        coll = NULL;
+        coll = nullptr;
         errorCode.reset();
     }
 }
@@ -1475,7 +1475,7 @@ UBool CollationTest::getMergedCollationKey(const UChar *s, int32_t length,
             }
             dest = mergedKey.allocateInsteadAndReset(mergedKeyCapacity);
         }
-        U_ASSERT(dest != NULL || mergedKeyCapacity == 0);
+        U_ASSERT(dest != nullptr || mergedKeyCapacity == 0);
         if(key1Length == 0) {
             // key2 is the sort key for the first segment.
             uprv_memcpy(dest, key2Bytes, key2Length);
@@ -1770,7 +1770,7 @@ void CollationTest::checkCompareStrings(UCHARBUF *f, IcuTestErrorCode &errorCode
             errorCode.reset();
             break;
         }
-        if(coll == NULL) {
+        if(coll == nullptr) {
             // We were unable to create the Collator but continue with tests.
             // Ignore test data for this Collator.
             // The next Collator creation might work.

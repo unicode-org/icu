@@ -20,7 +20,7 @@
 #include "line.h"
 #include <stdio.h>
 
-UnicodeSet * Line::needsQuoting = NULL;
+UnicodeSet * Line::needsQuoting = nullptr;
 
 void
 Line::init()
@@ -31,10 +31,10 @@ Line::init()
         strengthFromEmpty = UCOL_OFF;
         cumulativeStrength = UCOL_OFF;
         expStrength = UCOL_OFF;
-        previous = NULL;
-        next = NULL;
-        left = NULL;
-        right = NULL;
+        previous = nullptr;
+        next = nullptr;
+        left = nullptr;
+        right = nullptr;
         isContraction = false;
         isExpansion = false;
         isRemoved = false;
@@ -42,7 +42,7 @@ Line::init()
         expIndex = 0;
         firstCC = 0;
         lastCC = 0;
-        sortKey = NULL;
+        sortKey = nullptr;
 }
 
 Line::Line()
@@ -83,19 +83,19 @@ Line::Line(const UnicodeString &string)
 }
 
 Line::Line(const char *buff, int32_t buffLen, UErrorCode &status) :
-previous(NULL),
-next(NULL),
-left(NULL),
-right(NULL)
+previous(nullptr),
+next(nullptr),
+left(nullptr),
+right(nullptr)
 {
   initFromString(buff, buffLen, status);
 }
 
 Line::Line(const Line &other) :
-  previous(NULL),
-  next(NULL),
-left(NULL),
-right(NULL)
+  previous(nullptr),
+  next(nullptr),
+left(nullptr),
+right(nullptr)
 {
   *this = other;
 }

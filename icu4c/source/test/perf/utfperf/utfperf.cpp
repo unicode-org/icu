@@ -93,7 +93,7 @@ public:
         }
     }
 
-    virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = NULL);
+    virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = nullptr);
 
     const UChar *getBuffer() const { return buffer; }
     int32_t getBufferLen() const { return bufferLen; }
@@ -130,7 +130,7 @@ protected:
         if (U_FAILURE(errorCode)) {
             fprintf(stderr, "error opening converter for \"%s\" - %s\n", testcase.charset, u_errorName(errorCode));
         }
-        ucnv_setFromUCallBack(cnv, fromUCallback, NULL, NULL, NULL, &errorCode);
+        ucnv_setFromUCallBack(cnv, fromUCallback, nullptr, nullptr, nullptr, &errorCode);
     }
 public:
     virtual ~Command(){
@@ -161,7 +161,7 @@ public:
             return t;
         } else {
             delete t;
-            return NULL;
+            return nullptr;
         }
     }
     virtual void call(UErrorCode* pErrorCode){
@@ -188,7 +188,7 @@ public:
         do {
             /* convert a block of [pIn..pInLimit[ to the encoding in intermediate[] */
             pInter=intermediate;
-            ucnv_fromUnicode(cnv, &pInter, pInterLimit, &pIn, pInLimit, NULL, true, pErrorCode);
+            ucnv_fromUnicode(cnv, &pInter, pInterLimit, &pIn, pInLimit, nullptr, true, pErrorCode);
             encodedLength+=(int32_t)(pInter-intermediate);
 
             if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
@@ -202,7 +202,7 @@ public:
 
             /* convert the block [intermediate..pInter[ back to UTF-16 */
             p=intermediate;
-            ucnv_toUnicode(cnv, &pOut, pOutLimit,&p, pInter,NULL, flush,pErrorCode);
+            ucnv_toUnicode(cnv, &pOut, pOutLimit,&p, pInter,nullptr, flush,pErrorCode);
             if(U_FAILURE(*pErrorCode)) {
                 return;
             }
@@ -228,7 +228,7 @@ public:
             return t;
         } else {
             delete t;
-            return NULL;
+            return nullptr;
         }
     }
     virtual void call(UErrorCode* pErrorCode){
@@ -247,7 +247,7 @@ public:
 
         for(;;) {
             pInter=intermediate;
-            ucnv_fromUnicode(cnv, &pInter, pInterLimit, &pIn, pInLimit, NULL, true, pErrorCode);
+            ucnv_fromUnicode(cnv, &pInter, pInterLimit, &pIn, pInLimit, nullptr, true, pErrorCode);
             encodedLength+=(int32_t)(pInter-intermediate);
 
             if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
@@ -267,7 +267,7 @@ class FromUTF8 : public Command {
 protected:
     FromUTF8(const UtfPerformanceTest &testcase)
             : Command(testcase),
-              utf8Cnv(NULL),
+              utf8Cnv(nullptr),
               input8(utf8), input8Length(utf8Length) {
         utf8Cnv=ucnv_open("UTF-8", &errorCode);
     }
@@ -278,7 +278,7 @@ public:
             return t;
         } else {
             delete t;
-            return NULL;
+            return nullptr;
         }
     }
     ~FromUTF8() {
@@ -335,7 +335,7 @@ UPerfFunction* UtfPerformanceTest::runIndexedTest(int32_t index, UBool exec, con
         case 2: name = "FromUTF8";      if (exec) return FromUTF8::get(*this); break;
         default: name = ""; break;
     }
-    return NULL;
+    return nullptr;
 }
 
 int main(int argc, const char *argv[])

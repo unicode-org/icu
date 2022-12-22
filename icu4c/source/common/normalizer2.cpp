@@ -190,7 +190,7 @@ static void U_CALLCONV initNoopSingleton(UErrorCode &errorCode) {
         return;
     }
     noopSingleton=new NoopNormalizer2;
-    if(noopSingleton==NULL) {
+    if(noopSingleton==nullptr) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -198,7 +198,7 @@ static void U_CALLCONV initNoopSingleton(UErrorCode &errorCode) {
 }
 
 const Normalizer2 *Normalizer2Factory::getNoopInstance(UErrorCode &errorCode) {
-    if(U_FAILURE(errorCode)) { return NULL; }
+    if(U_FAILURE(errorCode)) { return nullptr; }
     umtx_initOnce(noopInitOnce, &initNoopSingleton, errorCode);
     return noopSingleton;
 }
@@ -216,13 +216,13 @@ Norm2AllModes *
 Norm2AllModes::createInstance(Normalizer2Impl *impl, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) {
         delete impl;
-        return NULL;
+        return nullptr;
     }
     Norm2AllModes *allModes=new Norm2AllModes(impl);
-    if(allModes==NULL) {
+    if(allModes==nullptr) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
         delete impl;
-        return NULL;
+        return nullptr;
     }
     return allModes;
 }
@@ -231,12 +231,12 @@ Norm2AllModes::createInstance(Normalizer2Impl *impl, UErrorCode &errorCode) {
 Norm2AllModes *
 Norm2AllModes::createNFCInstance(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) {
-        return NULL;
+        return nullptr;
     }
     Normalizer2Impl *impl=new Normalizer2Impl;
-    if(impl==NULL) {
+    if(impl==nullptr) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+        return nullptr;
     }
     impl->init(norm2_nfc_data_indexes, &norm2_nfc_data_trie,
                norm2_nfc_data_extraData, norm2_nfc_data_smallFCD);
@@ -254,7 +254,7 @@ static void U_CALLCONV initNFCSingleton(UErrorCode &errorCode) {
 
 const Norm2AllModes *
 Norm2AllModes::getNFCInstance(UErrorCode &errorCode) {
-    if(U_FAILURE(errorCode)) { return NULL; }
+    if(U_FAILURE(errorCode)) { return nullptr; }
     umtx_initOnce(nfcInitOnce, &initNFCSingleton, errorCode);
     return nfcSingleton;
 }
@@ -262,29 +262,29 @@ Norm2AllModes::getNFCInstance(UErrorCode &errorCode) {
 const Normalizer2 *
 Normalizer2::getNFCInstance(UErrorCode &errorCode) {
     const Norm2AllModes *allModes=Norm2AllModes::getNFCInstance(errorCode);
-    return allModes!=NULL ? &allModes->comp : NULL;
+    return allModes!=nullptr ? &allModes->comp : nullptr;
 }
 
 const Normalizer2 *
 Normalizer2::getNFDInstance(UErrorCode &errorCode) {
     const Norm2AllModes *allModes=Norm2AllModes::getNFCInstance(errorCode);
-    return allModes!=NULL ? &allModes->decomp : NULL;
+    return allModes!=nullptr ? &allModes->decomp : nullptr;
 }
 
 const Normalizer2 *Normalizer2Factory::getFCDInstance(UErrorCode &errorCode) {
     const Norm2AllModes *allModes=Norm2AllModes::getNFCInstance(errorCode);
-    return allModes!=NULL ? &allModes->fcd : NULL;
+    return allModes!=nullptr ? &allModes->fcd : nullptr;
 }
 
 const Normalizer2 *Normalizer2Factory::getFCCInstance(UErrorCode &errorCode) {
     const Norm2AllModes *allModes=Norm2AllModes::getNFCInstance(errorCode);
-    return allModes!=NULL ? &allModes->fcc : NULL;
+    return allModes!=nullptr ? &allModes->fcc : nullptr;
 }
 
 const Normalizer2Impl *
 Normalizer2Factory::getNFCImpl(UErrorCode &errorCode) {
     const Norm2AllModes *allModes=Norm2AllModes::getNFCInstance(errorCode);
-    return allModes!=NULL ? allModes->impl : NULL;
+    return allModes!=nullptr ? allModes->impl : nullptr;
 }
 #endif  // NORM2_HARDCODE_NFC_DATA
 
@@ -292,11 +292,11 @@ U_CDECL_BEGIN
 
 static UBool U_CALLCONV uprv_normalizer2_cleanup() {
     delete noopSingleton;
-    noopSingleton = NULL;
+    noopSingleton = nullptr;
     noopInitOnce.reset(); 
 #if NORM2_HARDCODE_NFC_DATA
     delete nfcSingleton;
-    nfcSingleton = NULL;
+    nfcSingleton = nullptr;
     nfcInitOnce.reset(); 
 #endif
     return true;
@@ -333,23 +333,23 @@ unorm2_normalize(const UNormalizer2 *norm2,
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if( (src==NULL ? length!=0 : length<-1) ||
-        (dest==NULL ? capacity!=0 : capacity<0) ||
-        (src==dest && src!=NULL)
+    if( (src==nullptr ? length!=0 : length<-1) ||
+        (dest==nullptr ? capacity!=0 : capacity<0) ||
+        (src==dest && src!=nullptr)
     ) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
     UnicodeString destString(dest, 0, capacity);
-    // length==0: Nothing to do, and n2wi->normalize(NULL, NULL, buffer, ...) would crash.
+    // length==0: Nothing to do, and n2wi->normalize(nullptr, nullptr, buffer, ...) would crash.
     if(length!=0) {
         const Normalizer2 *n2=(const Normalizer2 *)norm2;
         const Normalizer2WithImpl *n2wi=dynamic_cast<const Normalizer2WithImpl *>(n2);
-        if(n2wi!=NULL) {
+        if(n2wi!=nullptr) {
             // Avoid duplicate argument checking and support NUL-terminated src.
             ReorderingBuffer buffer(n2wi->impl, destString);
             if(buffer.init(length, *pErrorCode)) {
-                n2wi->normalize(src, length>=0 ? src+length : NULL, buffer, *pErrorCode);
+                n2wi->normalize(src, length>=0 ? src+length : nullptr, buffer, *pErrorCode);
             }
         } else {
             UnicodeString srcString(length<0, src, length);
@@ -368,27 +368,27 @@ normalizeSecondAndAppend(const UNormalizer2 *norm2,
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if( (second==NULL ? secondLength!=0 : secondLength<-1) ||
-        (first==NULL ? (firstCapacity!=0 || firstLength!=0) :
+    if( (second==nullptr ? secondLength!=0 : secondLength<-1) ||
+        (first==nullptr ? (firstCapacity!=0 || firstLength!=0) :
                        (firstCapacity<0 || firstLength<-1)) ||
-        (first==second && first!=NULL)
+        (first==second && first!=nullptr)
     ) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
     UnicodeString firstString(first, firstLength, firstCapacity);
     firstLength=firstString.length();  // In case it was -1.
-    // secondLength==0: Nothing to do, and n2wi->normalizeAndAppend(NULL, NULL, buffer, ...) would crash.
+    // secondLength==0: Nothing to do, and n2wi->normalizeAndAppend(nullptr, nullptr, buffer, ...) would crash.
     if(secondLength!=0) {
         const Normalizer2 *n2=(const Normalizer2 *)norm2;
         const Normalizer2WithImpl *n2wi=dynamic_cast<const Normalizer2WithImpl *>(n2);
-        if(n2wi!=NULL) {
+        if(n2wi!=nullptr) {
             // Avoid duplicate argument checking and support NUL-terminated src.
             UnicodeString safeMiddle;
             {
                 ReorderingBuffer buffer(n2wi->impl, firstString);
                 if(buffer.init(firstLength+secondLength+1, *pErrorCode)) {  // destCapacity>=-1
-                    n2wi->normalizeAndAppend(second, secondLength>=0 ? second+secondLength : NULL,
+                    n2wi->normalizeAndAppend(second, secondLength>=0 ? second+secondLength : nullptr,
                                              doNormalize, safeMiddle, buffer, *pErrorCode);
                 }
             }  // The ReorderingBuffer destructor finalizes firstString.
@@ -396,7 +396,7 @@ normalizeSecondAndAppend(const UNormalizer2 *norm2,
                 // Restore the modified suffix of the first string.
                 // This does not restore first[] array contents between firstLength and firstCapacity.
                 // (That might be uninitialized memory, as far as we know.)
-                if(first!=NULL) { /* don't dereference NULL */
+                if(first!=nullptr) { /* don't dereference nullptr */
                   safeMiddle.extract(0, 0x7fffffff, first+firstLength-safeMiddle.length());
                   if(firstLength<firstCapacity) {
                     first[firstLength]=0;  // NUL-terminate in case it was originally.
@@ -444,7 +444,7 @@ unorm2_getDecomposition(const UNormalizer2 *norm2,
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(decomposition==NULL ? capacity!=0 : capacity<0) {
+    if(decomposition==nullptr ? capacity!=0 : capacity<0) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -463,7 +463,7 @@ unorm2_getRawDecomposition(const UNormalizer2 *norm2,
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(decomposition==NULL ? capacity!=0 : capacity<0) {
+    if(decomposition==nullptr ? capacity!=0 : capacity<0) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -492,7 +492,7 @@ unorm2_isNormalized(const UNormalizer2 *norm2,
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if((s==NULL && length!=0) || length<-1) {
+    if((s==nullptr && length!=0) || length<-1) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -507,7 +507,7 @@ unorm2_quickCheck(const UNormalizer2 *norm2,
     if(U_FAILURE(*pErrorCode)) {
         return UNORM_NO;
     }
-    if((s==NULL && length!=0) || length<-1) {
+    if((s==nullptr && length!=0) || length<-1) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return UNORM_NO;
     }
@@ -522,7 +522,7 @@ unorm2_spanQuickCheckYes(const UNormalizer2 *norm2,
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if((s==NULL && length!=0) || length<-1) {
+    if((s==nullptr && length!=0) || length<-1) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }

@@ -300,7 +300,7 @@ TimeZoneBoundaryTest::TestBoundaries()
     TimeZone* save = TimeZone::createDefault();
     TimeZone::setDefault(*pst);
    
-    if (tempcal != NULL) { 
+    if (tempcal != nullptr) { 
         // DST changeover for PST is 4/6/1997 at 2 hours past midnight
         // at 238978.0 epoch hours.
         tempcal->clear();

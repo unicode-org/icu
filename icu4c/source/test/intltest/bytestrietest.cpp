@@ -34,7 +34,7 @@ public:
     BytesTrieTest();
     virtual ~BytesTrieTest();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL) override;
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=nullptr) override;
     void TestBuilder();
     void TestEmpty();
     void Test_a();
@@ -78,7 +78,7 @@ extern IntlTest *createBytesTrieTest() {
     return new BytesTrieTest();
 }
 
-BytesTrieTest::BytesTrieTest() : builder_(NULL) {
+BytesTrieTest::BytesTrieTest() : builder_(nullptr) {
     IcuTestErrorCode errorCode(*this, "BytesTrieTest()");
     builder_=new BytesTrieBuilder(errorCode);
 }
@@ -594,7 +594,7 @@ void BytesTrieTest::TestIteratorFromBytes() {
 
 void BytesTrieTest::TestFailedIterator() {
     UErrorCode failure = U_ILLEGAL_ARGUMENT_ERROR;
-    BytesTrie::Iterator iter(NULL, 0, failure);
+    BytesTrie::Iterator iter(nullptr, 0, failure);
     StringPiece sp = iter.getString();
     if (!sp.empty()) {
         errln("failed iterator returned garbage data");
@@ -696,7 +696,7 @@ BytesTrie *BytesTrieTest::buildTrie(const StringAndValue data[], int32_t dataLen
         errln("builder.buildStringPiece() before & after build() returned same array");
     }
     if(errorCode.isFailure()) {
-        return NULL;
+        return nullptr;
     }
     // Tries from either build() method should be identical but
     // BytesTrie does not implement equals().

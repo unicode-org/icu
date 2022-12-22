@@ -153,7 +153,7 @@ UXMLParser::UXMLParser(UErrorCode &status) :
 UXMLParser *
 UXMLParser::createParser(UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) {
-        return NULL;
+        return nullptr;
     } else {
         return new UXMLParser(errorCode);
     }
@@ -173,13 +173,13 @@ UXMLParser::parseFile(const char *filename, UErrorCode &errorCode) {
     UBool flush;
 
     if(U_FAILURE(errorCode)) {
-        return NULL;
+        return nullptr;
     }
 
     f=T_FileStream_open(filename, "rb");
-    if(f==NULL) {
+    if(f==nullptr) {
         errorCode=U_FILE_ACCESS_ERROR;
-        return NULL;
+        return nullptr;
     }
 
     bytesLength=T_FileStream_read(f, bytes, (int32_t)sizeof(bytes));
@@ -197,8 +197,8 @@ UXMLParser::parseFile(const char *filename, UErrorCode &errorCode) {
      * 2. treat as ISO-8859-1 and read XML encoding="charser"
      * 3. default to UTF-8
      */
-    charset=ucnv_detectUnicodeSignature(bytes, bytesLength, NULL, &errorCode);
-    if(U_SUCCESS(errorCode) && charset!=NULL) {
+    charset=ucnv_detectUnicodeSignature(bytes, bytesLength, nullptr, &errorCode);
+    if(U_SUCCESS(errorCode) && charset!=nullptr) {
         // open converter according to Unicode signature
         cnv=ucnv_open(charset, &errorCode);
     } else {
@@ -210,7 +210,7 @@ UXMLParser::parseFile(const char *filename, UErrorCode &errorCode) {
         }
 
         buffer=toUCharPtr(src.getBuffer(bytesLength));
-        if(buffer==NULL) {
+        if(buffer==nullptr) {
             // unexpected failure to reserve some string capacity
             errorCode=U_MEMORY_ALLOCATION_ERROR;
             goto exit;
@@ -221,10 +221,10 @@ UXMLParser::parseFile(const char *filename, UErrorCode &errorCode) {
             cnv,
             &pu, buffer+src.getCapacity(),
             &pb, bytes+bytesLength,
-            NULL, true, &errorCode);
+            nullptr, true, &errorCode);
         src.releaseBuffer(U_SUCCESS(errorCode) ? (int32_t)(pu-buffer) : 0);
         ucnv_close(cnv);
-        cnv=NULL;
+        cnv=nullptr;
         if(U_FAILURE(errorCode)) {
             // unexpected error in conversion from Latin-1
             src.remove();
@@ -255,7 +255,7 @@ UXMLParser::parseFile(const char *filename, UErrorCode &errorCode) {
                 pos = mAttrValue.end(2, errorCode);
             }
 
-            if(charset==NULL) {
+            if(charset==nullptr) {
                 // default to UTF-8
                 charset="UTF-8";
             }
@@ -279,7 +279,7 @@ UXMLParser::parseFile(const char *filename, UErrorCode &errorCode) {
         for(;;) {
             length=src.length();
             buffer=toUCharPtr(src.getBuffer(capacity));
-            if(buffer==NULL) {
+            if(buffer==nullptr) {
                 // unexpected failure to reserve some string capacity
                 errorCode=U_MEMORY_ALLOCATION_ERROR;
                 goto exit;
@@ -289,7 +289,7 @@ UXMLParser::parseFile(const char *filename, UErrorCode &errorCode) {
             ucnv_toUnicode(
                 cnv, &pu, buffer+src.getCapacity(),
                 &pb, bytes+bytesLength,
-                NULL, false, &errorCode);
+                nullptr, false, &errorCode);
             src.releaseBuffer(U_SUCCESS(errorCode) ? (int32_t)(pu-buffer) : 0);
             if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
                 errorCode=U_ZERO_ERROR;
@@ -322,17 +322,17 @@ exit:
     if(U_SUCCESS(errorCode)) {
         return parse(src, errorCode);
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 
 UXMLElement *
 UXMLParser::parse(const UnicodeString &src, UErrorCode &status) {
     if(U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
 
-    UXMLElement   *root = NULL;
+    UXMLElement   *root = nullptr;
     fPos = 0; // TODO use just a local pos variable and pass it into functions
               // where necessary?
 
@@ -435,7 +435,7 @@ UXMLParser::parse(const UnicodeString &src, UErrorCode &status) {
                 }
                 if (fElementStack.empty()) {
                     // Close of the root element.  We're done with the doc.
-                    el = NULL;
+                    el = nullptr;
                     break;
                 }
                 el = (UXMLElement *)fElementStack.pop();
@@ -455,7 +455,7 @@ UXMLParser::parse(const UnicodeString &src, UErrorCode &status) {
             break;
         }
 
-        if (el != NULL || !fElementStack.empty()) {
+        if (el != nullptr || !fElementStack.empty()) {
             // We bailed out early, for some reason.
             error("Root element not closed.", status);
             goto errorExit;
@@ -477,7 +477,7 @@ UXMLParser::parse(const UnicodeString &src, UErrorCode &status) {
 
 errorExit:
     delete root;
-    return NULL;
+    return nullptr;
 }
 
 //
@@ -653,7 +653,7 @@ UXMLParser::error(const char *message, UErrorCode &status) {
 const UnicodeString *
 UXMLParser::intern(const UnicodeString &s, UErrorCode &errorCode) {
     const UHashElement *he=fNames.find(s);
-    if(he!=NULL) {
+    if(he!=nullptr) {
         // already a known name, return its hashed key pointer
         return (const UnicodeString *)he->key.pointer;
     } else {
@@ -667,12 +667,12 @@ UXMLParser::intern(const UnicodeString &s, UErrorCode &errorCode) {
 const UnicodeString *
 UXMLParser::findName(const UnicodeString &s) const {
     const UHashElement *he=fNames.find(s);
-    if(he!=NULL) {
+    if(he!=nullptr) {
         // a known name, return its hashed key pointer
         return (const UnicodeString *)he->key.pointer;
     } else {
         // unknown name
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -684,7 +684,7 @@ UXMLElement::UXMLElement(const UXMLParser *parser, const UnicodeString *name, UE
    fAttNames(errorCode),
    fAttValues(errorCode),
    fChildren(errorCode),
-   fParent(NULL)
+   fParent(nullptr)
 {
 }
 
@@ -718,7 +718,7 @@ UXMLElement::appendText(UnicodeString &text, UBool recurse) const {
     for(i=0; i<count; ++i) {
         node=(const UObject *)fChildren.elementAt(i);
         const UnicodeString *s=dynamic_cast<const UnicodeString *>(node);
-        if(s!=NULL) {
+        if(s!=nullptr) {
             text.append(*s);
         } else if(recurse) /* must be a UXMLElement */ {
             ((const UXMLElement *)node)->appendText(text, recurse);
@@ -738,7 +738,7 @@ UXMLElement::getAttribute(int32_t i, UnicodeString &name, UnicodeString &value) 
         value.setTo(*(const UnicodeString *)fAttValues.elementAt(i));
         return &value; // or return (UnicodeString *)fAttValues.elementAt(i);
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -747,8 +747,8 @@ UXMLElement::getAttribute(const UnicodeString &name) const {
     // search for the attribute name by comparing the interned pointer,
     // not the string contents
     const UnicodeString *p=fParser->findName(name);
-    if(p==NULL) {
-        return NULL; // no such attribute seen by the parser at all
+    if(p==nullptr) {
+        return nullptr; // no such attribute seen by the parser at all
     }
 
     int32_t i, count=fAttNames.size();
@@ -757,7 +757,7 @@ UXMLElement::getAttribute(const UnicodeString &name) const {
             return (const UnicodeString *)fAttValues.elementAt(i);
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 int32_t
@@ -769,21 +769,21 @@ const UObject *
 UXMLElement::getChild(int32_t i, UXMLNodeType &type) const {
     if(0<=i && i<fChildren.size()) {
         const UObject *node=(const UObject *)fChildren.elementAt(i);
-        if(dynamic_cast<const UXMLElement *>(node)!=NULL) {
+        if(dynamic_cast<const UXMLElement *>(node)!=nullptr) {
             type=UXML_NODE_TYPE_ELEMENT;
         } else {
             type=UXML_NODE_TYPE_STRING;
         }
         return node;
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 
 const UXMLElement *
 UXMLElement::nextChildElement(int32_t &i) const {
     if(i<0) {
-        return NULL;
+        return nullptr;
     }
 
     const UObject *node;
@@ -791,11 +791,11 @@ UXMLElement::nextChildElement(int32_t &i) const {
     while(i<count) {
         node=(const UObject *)fChildren.elementAt(i++);
         const UXMLElement *elem=dynamic_cast<const UXMLElement *>(node);
-        if(elem!=NULL) {
+        if(elem!=nullptr) {
             return elem;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 const UXMLElement *
@@ -803,8 +803,8 @@ UXMLElement::getChildElement(const UnicodeString &name) const {
     // search for the element name by comparing the interned pointer,
     // not the string contents
     const UnicodeString *p=fParser->findName(name);
-    if(p==NULL) {
-        return NULL; // no such element seen by the parser at all
+    if(p==nullptr) {
+        return nullptr; // no such element seen by the parser at all
     }
 
     const UObject *node;
@@ -812,13 +812,13 @@ UXMLElement::getChildElement(const UnicodeString &name) const {
     for(i=0; i<count; ++i) {
         node=(const UObject *)fChildren.elementAt(i);
         const UXMLElement *elem=dynamic_cast<const UXMLElement *>(node);
-        if(elem!=NULL) {
+        if(elem!=nullptr) {
             if(p==elem->fName) {
                 return elem;
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 U_NAMESPACE_END

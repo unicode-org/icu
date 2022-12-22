@@ -108,7 +108,7 @@ private:
     UnicodeFunctor** segments;
 
     /**
-     * The number of elements in segments[] or zero if segments is NULL.
+     * The number of elements in segments[] or zero if segments is nullptr.
      */
     int32_t segmentsCount;
 

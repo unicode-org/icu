@@ -164,8 +164,8 @@ OptSpec opts[] = {
 //---------------------------------------------------------------------------
 
 //DWORD          gWinLCID;
-BreakIterator *brkit = NULL;
-UChar *text = NULL;
+BreakIterator *brkit = nullptr;
+UChar *text = nullptr;
 int32_t textSize = 0;
 
 
@@ -507,7 +507,7 @@ UCharFile::UCharFile(const char * fileName) {
     }
     fFile                = fopen(fName, "rb");
     fPending2ndSurrogate = 0;
-    if (fFile == NULL) {
+    if (fFile == nullptr) {
         fprintf(stderr, "Can not open file \"%s\"\n", opt_fName);
         fError = true;
         return;
@@ -699,7 +699,7 @@ int main(int argc, const char** argv) {
       text = (UChar *)malloc(STARTSIZE*sizeof(UChar));
       bufSize = STARTSIZE;
     }
-    if(text == NULL) {
+    if(text == nullptr) {
       fprintf(stderr, "Allocating buffer failed\n");
       exit(-1);
     }
@@ -721,7 +721,7 @@ int main(int argc, const char** argv) {
         text[charCount++] = c;
         if(charCount == bufSize) {
           text = (UChar *)realloc(text, 2*bufSize*sizeof(UChar));
-          if(text == NULL) {
+          if(text == nullptr) {
             fprintf(stderr, "Reallocating buffer failed\n");
             exit(-1);
           }
@@ -765,10 +765,10 @@ int main(int argc, const char** argv) {
       }
     }
 
-  if(text != NULL) {
+  if(text != nullptr) {
     free(text);
   }
-    if(brkit != NULL) {
+    if(brkit != nullptr) {
       delete brkit;
     }
 

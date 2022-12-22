@@ -92,7 +92,7 @@ ChoiceFormat::ChoiceFormat(const double* limits,
 : constructorErrorCode(U_ZERO_ERROR),
   msgPattern(constructorErrorCode)
 {
-    setChoices(limits, NULL, formats, cnt, constructorErrorCode);
+    setChoices(limits, nullptr, formats, cnt, constructorErrorCode);
 }
 
 // -------------------------------------
@@ -209,7 +209,7 @@ ChoiceFormat::dtos(double value,
             while (*itrPtr) {
                 *(expPtr++)  = *(itrPtr++);
             }
-            // NULL terminate
+            // NUL terminate
             *expPtr = 0;
         }
     }
@@ -225,7 +225,7 @@ void
 ChoiceFormat::applyPattern(const UnicodeString& pattern,
                            UErrorCode& status)
 {
-    msgPattern.parseChoiceStyle(pattern, NULL, status);
+    msgPattern.parseChoiceStyle(pattern, nullptr, status);
     constructorErrorCode = status;
 }
 
@@ -257,7 +257,7 @@ ChoiceFormat::setChoices(  const double* limits,
                            int32_t cnt )
 {
     UErrorCode errorCode = U_ZERO_ERROR;
-    setChoices(limits, NULL, formats, cnt, errorCode);
+    setChoices(limits, nullptr, formats, cnt, errorCode);
 }
 
 // -------------------------------------
@@ -281,7 +281,7 @@ ChoiceFormat::setChoices(const double* limits,
     if (U_FAILURE(errorCode)) {
         return;
     }
-    if (limits == NULL || formats == NULL) {
+    if (limits == nullptr || formats == nullptr) {
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -301,7 +301,7 @@ ChoiceFormat::setChoices(const double* limits,
         } else {
             result += dtos(limits[i], buf);
         }
-        if (closures != NULL && closures[i]) {
+        if (closures != nullptr && closures[i]) {
             result += LESS_THAN;
         } else {
             result += LESS_EQUAL;
@@ -347,7 +347,7 @@ const double*
 ChoiceFormat::getLimits(int32_t& cnt) const 
 {
     cnt = 0;
-    return NULL;
+    return nullptr;
 }
 
 // -------------------------------------
@@ -357,7 +357,7 @@ const UBool*
 ChoiceFormat::getClosures(int32_t& cnt) const 
 {
     cnt = 0;
-    return NULL;
+    return nullptr;
 }
 
 // -------------------------------------
@@ -367,7 +367,7 @@ const UnicodeString*
 ChoiceFormat::getFormats(int32_t& cnt) const
 {
     cnt = 0;
-    return NULL;
+    return nullptr;
 }
 
 // -------------------------------------

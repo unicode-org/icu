@@ -64,12 +64,12 @@ namespace {
 
 UnicodeString *ownedString(const UnicodeString &s, LocalPointer<UnicodeString> &owned,
                            UErrorCode &errorCode) {
-    if (U_FAILURE(errorCode)) { return NULL; }
+    if (U_FAILURE(errorCode)) { return nullptr; }
     if (owned.isValid()) {
         return owned.orphan();
     }
     UnicodeString *p = new UnicodeString(s);
-    if (p == NULL) {
+    if (p == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
     return p;
@@ -158,7 +158,7 @@ public:
             }
         }
         const AlphabeticIndex::Bucket *bucket = getBucket(*bucketList_, start);
-        if (bucket->displayBucket_ != NULL) {
+        if (bucket->displayBucket_ != nullptr) {
             bucket = bucket->displayBucket_;
         }
         return bucket->displayIndex_;
@@ -198,29 +198,29 @@ AlphabeticIndex::ImmutableIndex::getBucket(int32_t index) const {
     if (0 <= index && index < buckets_->getBucketCount()) {
         return icu::getBucket(*buckets_->immutableVisibleList_, index);
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 
 AlphabeticIndex::AlphabeticIndex(const Locale &locale, UErrorCode &status)
-        : inputList_(NULL),
-          labelsIterIndex_(-1), itemsIterIndex_(0), currentBucket_(NULL),
+        : inputList_(nullptr),
+          labelsIterIndex_(-1), itemsIterIndex_(0), currentBucket_(nullptr),
           maxLabelCount_(99),
-          initialLabels_(NULL), firstCharsInScripts_(NULL),
-          collator_(NULL), collatorPrimaryOnly_(NULL),
-          buckets_(NULL) {
+          initialLabels_(nullptr), firstCharsInScripts_(nullptr),
+          collator_(nullptr), collatorPrimaryOnly_(nullptr),
+          buckets_(nullptr) {
     init(&locale, status);
 }
 
 
 AlphabeticIndex::AlphabeticIndex(RuleBasedCollator *collator, UErrorCode &status)
-        : inputList_(NULL),
-          labelsIterIndex_(-1), itemsIterIndex_(0), currentBucket_(NULL),
+        : inputList_(nullptr),
+          labelsIterIndex_(-1), itemsIterIndex_(0), currentBucket_(nullptr),
           maxLabelCount_(99),
-          initialLabels_(NULL), firstCharsInScripts_(NULL),
-          collator_(collator), collatorPrimaryOnly_(NULL),
-          buckets_(NULL) {
-    init(NULL, status);
+          initialLabels_(nullptr), firstCharsInScripts_(nullptr),
+          collator_(collator), collatorPrimaryOnly_(nullptr),
+          buckets_(nullptr) {
+    init(nullptr, status);
 }
 
 
@@ -253,22 +253,22 @@ AlphabeticIndex &AlphabeticIndex::addLabels(const Locale &locale, UErrorCode &st
 
 
 AlphabeticIndex::ImmutableIndex *AlphabeticIndex::buildImmutableIndex(UErrorCode &errorCode) {
-    if (U_FAILURE(errorCode)) { return NULL; }
+    if (U_FAILURE(errorCode)) { return nullptr; }
     // In C++, the ImmutableIndex must own its copy of the BucketList,
     // even if it contains no records, for proper memory management.
-    // We could clone the buckets_ if they are not NULL,
+    // We could clone the buckets_ if they are not nullptr,
     // but that would be worth it only if this method is called multiple times,
     // or called after using the old-style bucket iterator API.
     LocalPointer<BucketList> immutableBucketList(createBucketList(errorCode));
     LocalPointer<RuleBasedCollator> coll(collatorPrimaryOnly_->clone());
     if (immutableBucketList.isNull() || coll.isNull()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+        return nullptr;
     }
     ImmutableIndex *immIndex = new ImmutableIndex(immutableBucketList.getAlias(), coll.getAlias());
-    if (immIndex == NULL) {
+    if (immIndex == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+        return nullptr;
     }
     // The ImmutableIndex adopted its parameter objects.
     immutableBucketList.orphan();
@@ -286,7 +286,7 @@ int32_t AlphabeticIndex::getBucketCount(UErrorCode &status) {
 
 
 int32_t AlphabeticIndex::getRecordCount(UErrorCode &status) {
-    if (U_FAILURE(status) || inputList_ == NULL) {
+    if (U_FAILURE(status) || inputList_ == nullptr) {
         return 0;
     }
     return inputList_->size();
@@ -319,7 +319,7 @@ void AlphabeticIndex::initLabels(UVector &indexCharacters, UErrorCode &errorCode
             // even if the label string sorts the same when all contractions are suppressed.
             ownedItem.adoptInstead(new UnicodeString(*item, 0, itemLength - 1));
             item = ownedItem.getAlias();
-            if (item == NULL) {
+            if (item == nullptr) {
                 errorCode = U_MEMORY_ALLOCATION_ERROR;
                 return;
             }
@@ -421,7 +421,7 @@ BucketList *AlphabeticIndex::createBucketList(UErrorCode &errorCode) const {
     UVector indexCharacters(errorCode);
     indexCharacters.setDeleter(uprv_deleteUObject);
     initLabels(indexCharacters, errorCode);
-    if (U_FAILURE(errorCode)) { return NULL; }
+    if (U_FAILURE(errorCode)) { return nullptr; }
 
     // Variables for hasMultiplePrimaryWeights().
     UVector64 ces(errorCode);
@@ -435,28 +435,28 @@ BucketList *AlphabeticIndex::createBucketList(UErrorCode &errorCode) const {
 
     // Helper arrays for Chinese Pinyin collation.
     Bucket *asciiBuckets[26] = {
-        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+        nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+        nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr
     };
     Bucket *pinyinBuckets[26] = {
-        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+        nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+        nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr
     };
     UBool hasPinyin = false;
 
     LocalPointer<UVector> bucketList(new UVector(errorCode), errorCode);
     if (U_FAILURE(errorCode)) {
-        return NULL;
+        return nullptr;
     }
     bucketList->setDeleter(uprv_deleteUObject);
 
     // underflow bucket
     LocalPointer<Bucket> bucket(new Bucket(getUnderflowLabel(), emptyString_, U_ALPHAINDEX_UNDERFLOW), errorCode);
     if (U_FAILURE(errorCode)) {
-        return NULL;
+        return nullptr;
     }
     bucketList->adoptElement(bucket.orphan(), errorCode);
-    if (U_FAILURE(errorCode)) { return NULL; }
+    if (U_FAILURE(errorCode)) { return nullptr; }
 
     UnicodeString temp;
 
@@ -513,7 +513,7 @@ BucketList *AlphabeticIndex::createBucketList(UErrorCode &errorCode) const {
                     // underflow or inflow label.
                     break;
                 }
-                if (singleBucket->displayBucket_ == NULL &&
+                if (singleBucket->displayBucket_ == nullptr &&
                         !hasMultiplePrimaryWeights(*collatorPrimaryOnly_, variableTop,
                                                    singleBucket->lowerBoundary_,
                                                    ces, errorCode)) {
@@ -526,7 +526,7 @@ BucketList *AlphabeticIndex::createBucketList(UErrorCode &errorCode) const {
                         U_ALPHAINDEX_NORMAL),
                         errorCode);
                     if (U_FAILURE(errorCode)) {
-                        return NULL;
+                        return nullptr;
                     }
                     bucket->displayBucket_ = singleBucket;
                     bucketList->adoptElement(bucket.orphan(), errorCode);
@@ -537,13 +537,13 @@ BucketList *AlphabeticIndex::createBucketList(UErrorCode &errorCode) const {
             }
         }
     }
-    if (U_FAILURE(errorCode)) { return NULL; }
+    if (U_FAILURE(errorCode)) { return nullptr; }
     if (bucketList->size() == 1) {
         // No real labels, show only the underflow label.
         BucketList *bl = new BucketList(bucketList.getAlias(), bucketList.getAlias());
-        if (bl == NULL) {
+        if (bl == nullptr) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
+            return nullptr;
         }
         bucketList.orphan();
         return bl;
@@ -556,24 +556,24 @@ BucketList *AlphabeticIndex::createBucketList(UErrorCode &errorCode) const {
 
     if (hasPinyin) {
         // Redirect Pinyin buckets.
-        Bucket *asciiBucket = NULL;
+        Bucket *asciiBucket = nullptr;
         for (int32_t i = 0; i < 26; ++i) {
-            if (asciiBuckets[i] != NULL) {
+            if (asciiBuckets[i] != nullptr) {
                 asciiBucket = asciiBuckets[i];
             }
-            if (pinyinBuckets[i] != NULL && asciiBucket != NULL) {
+            if (pinyinBuckets[i] != nullptr && asciiBucket != nullptr) {
                 pinyinBuckets[i]->displayBucket_ = asciiBucket;
                 hasInvisibleBuckets = true;
             }
         }
     }
 
-    if (U_FAILURE(errorCode)) { return NULL; }
+    if (U_FAILURE(errorCode)) { return nullptr; }
     if (!hasInvisibleBuckets) {
         BucketList *bl = new BucketList(bucketList.getAlias(), bucketList.getAlias());
-        if (bl == NULL) {
+        if (bl == nullptr) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
+            return nullptr;
         }
         bucketList.orphan();
         return bl;
@@ -584,7 +584,7 @@ BucketList *AlphabeticIndex::createBucketList(UErrorCode &errorCode) const {
     Bucket *nextBucket = getBucket(*bucketList, i);
     while (--i > 0) {
         Bucket *bucket = getBucket(*bucketList, i);
-        if (bucket->displayBucket_ != NULL) {
+        if (bucket->displayBucket_ != nullptr) {
             continue;  // skip invisible buckets
         }
         if (bucket->labelType_ == U_ALPHAINDEX_INFLOW) {
@@ -598,21 +598,21 @@ BucketList *AlphabeticIndex::createBucketList(UErrorCode &errorCode) const {
 
     LocalPointer<UVector> publicBucketList(new UVector(errorCode), errorCode);
     if (U_FAILURE(errorCode)) {
-        return NULL;
+        return nullptr;
     }
     // Do not call publicBucketList->setDeleter():
     // This vector shares its objects with the bucketList.
     for (int32_t j = 0; j < bucketList->size(); ++j) {
         Bucket *bucket = getBucket(*bucketList, j);
-        if (bucket->displayBucket_ == NULL) {
+        if (bucket->displayBucket_ == nullptr) {
             publicBucketList->addElement(bucket, errorCode);
         }
     }
-    if (U_FAILURE(errorCode)) { return NULL; }
+    if (U_FAILURE(errorCode)) { return nullptr; }
     BucketList *bl = new BucketList(bucketList.getAlias(), publicBucketList.getAlias());
-    if (bl == NULL) {
+    if (bl == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+        return nullptr;
     }
     bucketList.orphan();
     publicBucketList.orphan();
@@ -623,11 +623,11 @@ BucketList *AlphabeticIndex::createBucketList(UErrorCode &errorCode) const {
  * Creates an index, and buckets and sorts the list of records into the index.
  */
 void AlphabeticIndex::initBuckets(UErrorCode &errorCode) {
-    if (U_FAILURE(errorCode) || buckets_ != NULL) {
+    if (U_FAILURE(errorCode) || buckets_ != nullptr) {
         return;
     }
     buckets_ = createBucketList(errorCode);
-    if (U_FAILURE(errorCode) || inputList_ == NULL || inputList_->isEmpty()) {
+    if (U_FAILURE(errorCode) || inputList_ == nullptr || inputList_->isEmpty()) {
         return;
     }
 
@@ -649,14 +649,14 @@ void AlphabeticIndex::initBuckets(UErrorCode &errorCode) {
         nextBucket = getBucket(*buckets_->bucketList_, bucketIndex++);
         upperBoundary = &nextBucket->lowerBoundary_;
     } else {
-        nextBucket = NULL;
-        upperBoundary = NULL;
+        nextBucket = nullptr;
+        upperBoundary = nullptr;
     }
     for (int32_t i = 0; i < inputList_->size(); ++i) {
         Record *r = getRecord(*inputList_, i);
         // if the current bucket isn't the right one, find the one that is
         // We have a special flag for the last bucket so that we don't look any further
-        while (upperBoundary != NULL &&
+        while (upperBoundary != nullptr &&
                 collatorPrimaryOnly_->compare(r->name_, *upperBoundary, errorCode) >= 0) {
             currentBucket = nextBucket;
             // now reset the boundary that we compare against
@@ -664,15 +664,15 @@ void AlphabeticIndex::initBuckets(UErrorCode &errorCode) {
                 nextBucket = getBucket(*buckets_->bucketList_, bucketIndex++);
                 upperBoundary = &nextBucket->lowerBoundary_;
             } else {
-                upperBoundary = NULL;
+                upperBoundary = nullptr;
             }
         }
         // now put the record into the bucket.
         Bucket *bucket = currentBucket;
-        if (bucket->displayBucket_ != NULL) {
+        if (bucket->displayBucket_ != nullptr) {
             bucket = bucket->displayBucket_;
         }
-        if (bucket->records_ == NULL) {
+        if (bucket->records_ == nullptr) {
             LocalPointer<UVector> records(new UVector(errorCode), errorCode);
             if (U_FAILURE(errorCode)) {
                 return;
@@ -684,16 +684,16 @@ void AlphabeticIndex::initBuckets(UErrorCode &errorCode) {
 }
 
 void AlphabeticIndex::clearBuckets() {
-    if (buckets_ != NULL) {
+    if (buckets_ != nullptr) {
         delete buckets_;
-        buckets_ = NULL;
+        buckets_ = nullptr;
         internalResetBucketIterator();
     }
 }
 
 void AlphabeticIndex::internalResetBucketIterator() {
     labelsIterIndex_ = -1;
-    currentBucket_ = NULL;
+    currentBucket_ = nullptr;
 }
 
 
@@ -869,13 +869,13 @@ AlphabeticIndex &AlphabeticIndex::setMaxLabelCount(int32_t maxLabelCount, UError
 
 void AlphabeticIndex::init(const Locale *locale, UErrorCode &status) {
     if (U_FAILURE(status)) { return; }
-    if (locale == NULL && collator_ == NULL) {
+    if (locale == nullptr && collator_ == nullptr) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
 
     initialLabels_         = new UnicodeSet();
-    if (initialLabels_ == NULL) {
+    if (initialLabels_ == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -884,25 +884,25 @@ void AlphabeticIndex::init(const Locale *locale, UErrorCode &status) {
     overflowLabel_ = inflowLabel_;
     underflowLabel_ = inflowLabel_;
 
-    if (collator_ == NULL) {
+    if (collator_ == nullptr) {
         Collator *coll = Collator::createInstance(*locale, status);
         if (U_FAILURE(status)) {
             delete coll;
             return;
         }
-        if (coll == NULL) {
+        if (coll == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
         collator_ = dynamic_cast<RuleBasedCollator *>(coll);
-        if (collator_ == NULL) {
+        if (collator_ == nullptr) {
             delete coll;
             status = U_UNSUPPORTED_ERROR;
             return;
         }
     }
     collatorPrimaryOnly_ = collator_->clone();
-    if (collatorPrimaryOnly_ == NULL) {
+    if (collatorPrimaryOnly_ == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -930,7 +930,7 @@ void AlphabeticIndex::init(const Locale *locale, UErrorCode &status) {
 
     // Chinese index characters, which are specific to each of the several Chinese tailorings,
     // take precedence over the single locale data exemplar set per language.
-    if (!addChineseIndexCharacters(status) && locale != NULL) {
+    if (!addChineseIndexCharacters(status) && locale != nullptr) {
         addIndexExemplars(*locale, status);
     }
 }
@@ -947,13 +947,13 @@ collatorComparator(const void *context, const void *left, const void *right) {
     const UnicodeString *rightString = static_cast<const UnicodeString *>(rightElement->pointer);
 
     if (leftString == rightString) {
-        // Catches case where both are NULL
+        // Catches case where both are nullptr
         return 0;
     }
-    if (leftString == NULL) {
+    if (leftString == nullptr) {
         return 1;
     }
-    if (rightString == NULL) {
+    if (rightString == nullptr) {
         return -1;
     }
     const Collator *col = static_cast<const Collator *>(context);
@@ -977,11 +977,11 @@ recordCompareFn(const void *context, const void *left, const void *right) {
 
 UVector *AlphabeticIndex::firstStringsInScript(UErrorCode &status) {
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
     LocalPointer<UVector> dest(new UVector(status), status);
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
     dest->setDeleter(uprv_deleteUObject);
     // Fetch the script-first-primary contractions which are defined in the root collator.
@@ -989,11 +989,11 @@ UVector *AlphabeticIndex::firstStringsInScript(UErrorCode &status) {
     UnicodeSet set;
     collatorPrimaryOnly_->internalAddContractions(0xFDD1, set, status);
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
     if (set.isEmpty()) {
         status = U_UNSUPPORTED_ERROR;
-        return NULL;
+        return nullptr;
     }
     UnicodeSetIterator iter(set);
     while (iter.next()) {
@@ -1059,7 +1059,7 @@ AlphabeticIndex & AlphabeticIndex::addRecord(const UnicodeString &name, const vo
     if (U_FAILURE(status)) {
         return *this;
     }
-    if (inputList_ == NULL) {
+    if (inputList_ == nullptr) {
         LocalPointer<UVector> inputList(new UVector(status), status);
         if (U_FAILURE(status)) {
             return *this;
@@ -1082,7 +1082,7 @@ AlphabeticIndex & AlphabeticIndex::addRecord(const UnicodeString &name, const vo
 
 
 AlphabeticIndex &AlphabeticIndex::clearRecords(UErrorCode &status) {
-    if (U_SUCCESS(status) && inputList_ != NULL && !inputList_->isEmpty()) {
+    if (U_SUCCESS(status) && inputList_ != nullptr && !inputList_->isEmpty()) {
         inputList_->removeAllElements();
         clearBuckets();
     }
@@ -1107,7 +1107,7 @@ UBool AlphabeticIndex::nextBucket(UErrorCode &status) {
     if (U_FAILURE(status)) {
         return false;
     }
-    if (buckets_ == NULL && currentBucket_ != NULL) {
+    if (buckets_ == nullptr && currentBucket_ != nullptr) {
         status = U_ENUM_OUT_OF_SYNC_ERROR;
         return false;
     }
@@ -1126,7 +1126,7 @@ UBool AlphabeticIndex::nextBucket(UErrorCode &status) {
 }
 
 const UnicodeString &AlphabeticIndex::getBucketLabel() const {
-    if (currentBucket_ != NULL) {
+    if (currentBucket_ != nullptr) {
         return currentBucket_->label_;
     } else {
         return emptyString_;
@@ -1135,7 +1135,7 @@ const UnicodeString &AlphabeticIndex::getBucketLabel() const {
 
 
 UAlphabeticIndexLabelType AlphabeticIndex::getBucketLabelType() const {
-    if (currentBucket_ != NULL) {
+    if (currentBucket_ != nullptr) {
         return currentBucket_->labelType_;
     } else {
         return U_ALPHAINDEX_NORMAL;
@@ -1144,7 +1144,7 @@ UAlphabeticIndexLabelType AlphabeticIndex::getBucketLabelType() const {
 
 
 int32_t AlphabeticIndex::getBucketRecordCount() const {
-    if (currentBucket_ != NULL && currentBucket_->records_ != NULL) {
+    if (currentBucket_ != nullptr && currentBucket_->records_ != nullptr) {
         return currentBucket_->records_->size();
     } else {
         return 0;
@@ -1165,17 +1165,17 @@ UBool AlphabeticIndex::nextRecord(UErrorCode &status) {
     if (U_FAILURE(status)) {
         return false;
     }
-    if (currentBucket_ == NULL) {
+    if (currentBucket_ == nullptr) {
         // We are trying to iterate over the items in a bucket, but there is no
         // current bucket from the enumeration of buckets.
         status = U_INVALID_STATE_ERROR;
         return false;
     }
-    if (buckets_ == NULL) {
+    if (buckets_ == nullptr) {
         status = U_ENUM_OUT_OF_SYNC_ERROR;
         return false;
     }
-    if (currentBucket_->records_ == NULL) {
+    if (currentBucket_->records_ == nullptr) {
         return false;
     }
     ++itemsIterIndex_;
@@ -1189,7 +1189,7 @@ UBool AlphabeticIndex::nextRecord(UErrorCode &status) {
 
 const UnicodeString &AlphabeticIndex::getRecordName() const {
     const UnicodeString *retStr = &emptyString_;
-    if (currentBucket_ != NULL && currentBucket_->records_ != NULL &&
+    if (currentBucket_ != nullptr && currentBucket_->records_ != nullptr &&
         itemsIterIndex_ >= 0 &&
         itemsIterIndex_ < currentBucket_->records_->size()) {
             Record *item = static_cast<Record *>(currentBucket_->records_->elementAt(itemsIterIndex_));
@@ -1199,8 +1199,8 @@ const UnicodeString &AlphabeticIndex::getRecordName() const {
 }
 
 const void *AlphabeticIndex::getRecordData() const {
-    const void *retPtr = NULL;
-    if (currentBucket_ != NULL && currentBucket_->records_ != NULL &&
+    const void *retPtr = nullptr;
+    if (currentBucket_ != nullptr && currentBucket_->records_ != nullptr &&
         itemsIterIndex_ >= 0 &&
         itemsIterIndex_ < currentBucket_->records_->size()) {
             Record *item = static_cast<Record *>(currentBucket_->records_->elementAt(itemsIterIndex_));
@@ -1221,8 +1221,8 @@ AlphabeticIndex::Bucket::Bucket(const UnicodeString &label,
                                 const UnicodeString &lowerBoundary,
                                 UAlphabeticIndexLabelType type)
         : label_(label), lowerBoundary_(lowerBoundary), labelType_(type),
-          displayBucket_(NULL), displayIndex_(-1),
-          records_(NULL) {
+          displayBucket_(nullptr), displayIndex_(-1),
+          records_(nullptr) {
 }
 
 

@@ -53,13 +53,13 @@ static void debug_chnsecal_msg(const char *pat, ...)
 
 // --- The cache --
 static icu::UMutex astroLock;
-static icu::CalendarAstronomer *gChineseCalendarAstro = NULL;
+static icu::CalendarAstronomer *gChineseCalendarAstro = nullptr;
 
 // Lazy Creation & Access synchronized by class CalendarCache with a mutex.
-static icu::CalendarCache *gChineseCalendarWinterSolsticeCache = NULL;
-static icu::CalendarCache *gChineseCalendarNewYearCache = NULL;
+static icu::CalendarCache *gChineseCalendarWinterSolsticeCache = nullptr;
+static icu::CalendarCache *gChineseCalendarNewYearCache = nullptr;
 
-static icu::TimeZone *gChineseCalendarZoneAstroCalc = NULL;
+static icu::TimeZone *gChineseCalendarZoneAstroCalc = nullptr;
 static icu::UInitOnce gChineseCalendarZoneAstroCalcInitOnce {};
 
 /**
@@ -89,19 +89,19 @@ U_CDECL_BEGIN
 static UBool calendar_chinese_cleanup(void) {
     if (gChineseCalendarAstro) {
         delete gChineseCalendarAstro;
-        gChineseCalendarAstro = NULL;
+        gChineseCalendarAstro = nullptr;
     }
     if (gChineseCalendarWinterSolsticeCache) {
         delete gChineseCalendarWinterSolsticeCache;
-        gChineseCalendarWinterSolsticeCache = NULL;
+        gChineseCalendarWinterSolsticeCache = nullptr;
     }
     if (gChineseCalendarNewYearCache) {
         delete gChineseCalendarNewYearCache;
-        gChineseCalendarNewYearCache = NULL;
+        gChineseCalendarNewYearCache = nullptr;
     }
     if (gChineseCalendarZoneAstroCalc) {
         delete gChineseCalendarZoneAstroCalc;
-        gChineseCalendarZoneAstroCalc = NULL;
+        gChineseCalendarZoneAstroCalc = nullptr;
     }
     gChineseCalendarZoneAstroCalcInitOnce.reset();
     return true;
@@ -486,7 +486,7 @@ void ChineseCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status
  */
 double ChineseCalendar::daysToMillis(double days) const {
     double millis = days * (double)kOneDay;
-    if (fZoneAstroCalc != NULL) {
+    if (fZoneAstroCalc != nullptr) {
         int32_t rawOffset, dstOffset;
         UErrorCode status = U_ZERO_ERROR;
         fZoneAstroCalc->getOffset(millis, false, rawOffset, dstOffset, status);
@@ -503,7 +503,7 @@ double ChineseCalendar::daysToMillis(double days) const {
  * @return days after January 1, 1970 0:00 in the astronomical base zone
  */
 double ChineseCalendar::millisToDays(double millis) const {
-    if (fZoneAstroCalc != NULL) {
+    if (fZoneAstroCalc != nullptr) {
         int32_t rawOffset, dstOffset;
         UErrorCode status = U_ZERO_ERROR;
         fZoneAstroCalc->getOffset(millis, false, rawOffset, dstOffset, status);
@@ -540,7 +540,7 @@ int32_t ChineseCalendar::winterSolstice(int32_t gyear) const {
         double ms = daysToMillis(Grego::fieldsToDay(gyear, UCAL_DECEMBER, 1));
 
         umtx_lock(&astroLock);
-        if(gChineseCalendarAstro == NULL) {
+        if(gChineseCalendarAstro == nullptr) {
             gChineseCalendarAstro = new CalendarAstronomer();
             ucln_i18n_registerCleanup(UCLN_I18N_CHINESE_CALENDAR, calendar_chinese_cleanup);
         }
@@ -570,7 +570,7 @@ int32_t ChineseCalendar::winterSolstice(int32_t gyear) const {
 int32_t ChineseCalendar::newMoonNear(double days, UBool after) const {
     
     umtx_lock(&astroLock);
-    if(gChineseCalendarAstro == NULL) {
+    if(gChineseCalendarAstro == nullptr) {
         gChineseCalendarAstro = new CalendarAstronomer();
         ucln_i18n_registerCleanup(UCLN_I18N_CHINESE_CALENDAR, calendar_chinese_cleanup);
     }
@@ -602,7 +602,7 @@ int32_t ChineseCalendar::synodicMonthsBetween(int32_t day1, int32_t day2) const 
 int32_t ChineseCalendar::majorSolarTerm(int32_t days) const {
     
     umtx_lock(&astroLock);
-    if(gChineseCalendarAstro == NULL) {
+    if(gChineseCalendarAstro == nullptr) {
         gChineseCalendarAstro = new CalendarAstronomer();
         ucln_i18n_registerCleanup(UCLN_I18N_CHINESE_CALENDAR, calendar_chinese_cleanup);
     }

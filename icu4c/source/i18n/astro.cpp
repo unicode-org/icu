@@ -44,8 +44,8 @@ static void debug_astro_msg(const char *pat, ...)
 #include "unicode/ustring.h"
 static const char * debug_astro_date(UDate d) {
   static char gStrBuf[1024];
-  static DateFormat *df = NULL;
-  if(df == NULL) {
+  static DateFormat *df = nullptr;
+  if(df == nullptr) {
     df = DateFormat::createDateTimeInstance(DateFormat::MEDIUM, DateFormat::MEDIUM, Locale::getUS());
     df->adoptTimeZone(TimeZone::getGMT()->clone());
   }
@@ -1532,13 +1532,13 @@ UnicodeString CalendarAstronomer::Horizon::toString() const
 
 void CalendarCache::createCache(CalendarCache** cache, UErrorCode& status) {
     ucln_i18n_registerCleanup(UCLN_I18N_ASTRO_CALENDAR, calendar_astro_cleanup);
-    if(cache == NULL) {
+    if(cache == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
     } else {
         *cache = new CalendarCache(32, status);
         if(U_FAILURE(status)) {
             delete *cache;
-            *cache = NULL;
+            *cache = nullptr;
         }
     }
 }
@@ -1551,7 +1551,7 @@ int32_t CalendarCache::get(CalendarCache** cache, int32_t key, UErrorCode &statu
     }
     umtx_lock(&ccLock);
 
-    if(*cache == NULL) {
+    if(*cache == nullptr) {
         createCache(cache, status);
         if(U_FAILURE(status)) {
             umtx_unlock(&ccLock);
@@ -1572,7 +1572,7 @@ void CalendarCache::put(CalendarCache** cache, int32_t key, int32_t value, UErro
     }
     umtx_lock(&ccLock);
 
-    if(*cache == NULL) {
+    if(*cache == nullptr) {
         createCache(cache, status);
         if(U_FAILURE(status)) {
             umtx_unlock(&ccLock);
@@ -1587,12 +1587,12 @@ void CalendarCache::put(CalendarCache** cache, int32_t key, int32_t value, UErro
 }
 
 CalendarCache::CalendarCache(int32_t size, UErrorCode &status) {
-    fTable = uhash_openSize(uhash_hashLong, uhash_compareLong, NULL, size, &status);
+    fTable = uhash_openSize(uhash_hashLong, uhash_compareLong, nullptr, size, &status);
     U_DEBUG_ASTRO_MSG(("%p: Opening.\n", fTable));
 }
 
 CalendarCache::~CalendarCache() {
-    if(fTable != NULL) {
+    if(fTable != nullptr) {
         U_DEBUG_ASTRO_MSG(("%p: Closing.\n", fTable));
         uhash_close(fTable);
     }

@@ -119,8 +119,8 @@ void Win32DateTimeTest::testLocales(DateFormatTest *log)
         DWORD value = 0;
         int32_t calType = 0;
 
-        // NULL localeID means ICU didn't recognize this locale
-        if (lcidRecords[i].localeID == NULL) {
+        // nullptr localeID means ICU didn't recognize this locale
+        if (lcidRecords[i].localeID == nullptr) {
             continue;
         }
 
@@ -153,8 +153,8 @@ void Win32DateTimeTest::testLocales(DateFormatTest *log)
         Locale ulocale(localeID);
         int32_t wdLength, wtLength;
 
-        wdLength = GetDateFormatW(lcidRecords[i].lcid, DATE_LONGDATE, &winNow, NULL, wdBuffer, UPRV_LENGTHOF(wdBuffer));
-        wtLength = GetTimeFormatW(lcidRecords[i].lcid, 0, &winNow, NULL, wtBuffer, UPRV_LENGTHOF(wtBuffer));
+        wdLength = GetDateFormatW(lcidRecords[i].lcid, DATE_LONGDATE, &winNow, nullptr, wdBuffer, UPRV_LENGTHOF(wdBuffer));
+        wtLength = GetTimeFormatW(lcidRecords[i].lcid, 0, &winNow, nullptr, wtBuffer, UPRV_LENGTHOF(wtBuffer));
 
         if (uprv_strchr(localeID, '@')) {
             uprv_strcat(localeID, ";");

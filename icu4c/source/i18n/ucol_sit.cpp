@@ -189,7 +189,7 @@ _processRFC3066Locale(CollatorSpec *spec, uint32_t, const char* string,
     char terminator = *string;
     string++;
     const char *end = uprv_strchr(string+1, terminator);
-    if(end == NULL || end - string >= loc3066Capacity) {
+    if(end == nullptr || end - string >= loc3066Capacity) {
         *status = U_BUFFER_OVERFLOW_ERROR;
         return string;
     } else {
@@ -456,8 +456,8 @@ ucol_prepareShortStringOpen( const char *definition,
 
     UResourceBundle *b = ures_open(U_ICUDATA_COLL, buffer, status);
     /* we try to find stuff from keyword */
-    UResourceBundle *collations = ures_getByKey(b, "collations", NULL, status);
-    UResourceBundle *collElem = NULL;
+    UResourceBundle *collations = ures_getByKey(b, "collations", nullptr, status);
+    UResourceBundle *collElem = nullptr;
     char keyBuffer[256];
     // if there is a keyword, we pick it up and try to get elements
     int32_t keyLen = uloc_getKeywordValue(buffer, "collation", keyBuffer, sizeof(keyBuffer), status);
@@ -469,7 +469,7 @@ ucol_prepareShortStringOpen( const char *definition,
     if(keyLen == 0) {
       // no keyword
       // we try to find the default setting, which will give us the keyword value
-      UResourceBundle *defaultColl = ures_getByKeyWithFallback(collations, "default", NULL, status);
+      UResourceBundle *defaultColl = ures_getByKeyWithFallback(collations, "default", nullptr, status);
       if(U_SUCCESS(*status)) {
         int32_t defaultKeyLen = 0;
         const UChar *defaultKey = ures_getString(defaultColl, &defaultKeyLen, status);
@@ -539,7 +539,7 @@ ucol_openFromShortString( const char *definition,
             if(U_FAILURE(*status)) {
                 parseError->offset = (int32_t)(string - definition);
                 ucol_close(result);
-                return NULL;
+                return nullptr;
             }
 
         }
@@ -555,7 +555,7 @@ ucol_openFromShortString( const char *definition,
 
     if(U_FAILURE(*status)) { // here it can only be a bogus value
         ucol_close(result);
-        result = NULL;
+        result = nullptr;
     }
 
     UTRACE_EXIT_PTR_STATUS(result, *status);
@@ -571,7 +571,7 @@ ucol_getShortDefinitionString(const UCollator *coll,
                               UErrorCode *status)
 {
     if(U_FAILURE(*status)) return 0;
-    if(coll == NULL) {
+    if(coll == nullptr) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -618,7 +618,7 @@ ucol_getContractions( const UCollator *coll,
                   USet *contractions,
                   UErrorCode *status)
 {
-  ucol_getContractionsAndExpansions(coll, contractions, NULL, false, status);
+  ucol_getContractionsAndExpansions(coll, contractions, nullptr, false, status);
   return uset_getItemCount(contractions);
 }
 
@@ -642,12 +642,12 @@ ucol_getContractionsAndExpansions( const UCollator *coll,
     if(U_FAILURE(*status)) {
         return;
     }
-    if(coll == NULL) {
+    if(coll == nullptr) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
     const icu::RuleBasedCollator *rbc = icu::RuleBasedCollator::rbcFromUCollator(coll);
-    if(rbc == NULL) {
+    if(rbc == nullptr) {
         *status = U_UNSUPPORTED_ERROR;
         return;
     }

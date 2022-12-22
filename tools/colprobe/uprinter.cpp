@@ -25,7 +25,7 @@ UPrinter::UPrinter(FILE *file, const char *locale, const char *encoding, UBool t
   strcpy(_locale, locale);
   if(transliterateNonPrintable) {
     UErrorCode status = U_ZERO_ERROR;
-    UTransliterator *anyHex = utrans_open("[^\\u000d\\u000a\\u0009\\u0020-\\u007f] Any-Hex/Java", UTRANS_FORWARD, NULL, 0, NULL, &status);
+    UTransliterator *anyHex = utrans_open("[^\\u000d\\u000a\\u0009\\u0020-\\u007f] Any-Hex/Java", UTRANS_FORWARD, nullptr, 0, nullptr, &status);
     u_fsettransliterator(out, U_WRITE, anyHex, &status);
   }
 };
@@ -37,8 +37,8 @@ UPrinter::UPrinter(const char *name, const char *locale, const char *encoding, U
   strcpy(_locale, locale);
   if(transliterateNonPrintable) {
     UErrorCode status = U_ZERO_ERROR;
-    if(trans == NULL) {
-      UTransliterator *anyHex = utrans_open("[^\\u000d\\u000a\\u0009\\u0020-\\u007f] Any-Hex/Java", UTRANS_FORWARD, NULL, 0, NULL, &status);
+    if(trans == nullptr) {
+      UTransliterator *anyHex = utrans_open("[^\\u000d\\u000a\\u0009\\u0020-\\u007f] Any-Hex/Java", UTRANS_FORWARD, nullptr, 0, nullptr, &status);
       u_fsettransliterator(out, U_WRITE, anyHex, &status);
     } else {
       u_fsettransliterator(out, U_WRITE, trans, &status);

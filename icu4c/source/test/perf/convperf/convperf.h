@@ -39,18 +39,18 @@ public:
         src = source;
         srcLen = sourceLen;
         if(U_FAILURE(status)){
-            conv = NULL;
+            conv = nullptr;
             return;
         }
-        target = NULL;
-        targetLimit = NULL;
+        target = nullptr;
+        targetLimit = nullptr;
         int32_t reqdLen = ucnv_toUChars(conv,   target, 0,
                                         source, srcLen, &status);
         if(status==U_BUFFER_OVERFLOW_ERROR) {
             status=U_ZERO_ERROR;
             target=(UChar*)malloc((reqdLen) * U_SIZEOF_UCHAR*2);
             targetLimit = target + reqdLen;
-            if(target == NULL){
+            if(target == nullptr){
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return;
             }
@@ -60,7 +60,7 @@ public:
         const char* mySrc = src;
         const char* sourceLimit = src + srcLen;
         UChar* myTarget = target;
-        ucnv_toUnicode(conv, &myTarget, targetLimit, &mySrc, sourceLimit, NULL, true, status);
+        ucnv_toUnicode(conv, &myTarget, targetLimit, &mySrc, sourceLimit, nullptr, true, status);
     }
     virtual long getOperationsPerIteration(void){
         return srcLen;
@@ -85,18 +85,18 @@ public:
         src = source;
         srcLen = sourceLen;
         if(U_FAILURE(status)){
-            conv = NULL;
+            conv = nullptr;
             return;
         }
-        target = NULL;
-        targetLimit = NULL;
+        target = nullptr;
+        targetLimit = nullptr;
         int32_t reqdLen = ucnv_fromUChars(conv,   target, 0,
                                           source, srcLen, &status);
         if(status==U_BUFFER_OVERFLOW_ERROR) {
             status=U_ZERO_ERROR;
             target=(char*)malloc((reqdLen*2));
             targetLimit = target + reqdLen;
-            if(target == NULL){
+            if(target == nullptr){
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return;
             }
@@ -106,7 +106,7 @@ public:
         const UChar* mySrc = src;
         const UChar* sourceLimit = src + srcLen;
         char* myTarget = target;
-        ucnv_fromUnicode(conv,&myTarget, targetLimit, &mySrc, sourceLimit, NULL, true, status);
+        ucnv_fromUnicode(conv,&myTarget, targetLimit, &mySrc, sourceLimit, nullptr, true, status);
     }
     virtual long getOperationsPerIteration(void){
         return srcLen;
@@ -172,12 +172,12 @@ public:
         }
         LPMULTILANGUAGE2 pMulti;
         
-        CoInitialize(NULL);
+        CoInitialize(nullptr);
 
         /* create instance of converter object*/
         CoCreateInstance(
                           __uuidof(CMultiLanguage),
-                          NULL,
+                          nullptr,
                           CLSCTX_SERVER,
                           __uuidof(IMultiLanguage2),
                           (void**)&pMulti
@@ -227,12 +227,12 @@ public:
         }
         LPMULTILANGUAGE2 pMulti;
         
-        CoInitialize(NULL);
+        CoInitialize(nullptr);
 
         /* create instance of converter object*/
         CoCreateInstance(
                           __uuidof(CMultiLanguage),
-                          NULL,
+                          nullptr,
                           CLSCTX_SERVER,
                           __uuidof(IMultiLanguage2),
                           (void**)&pMulti
@@ -248,8 +248,8 @@ public:
         uiCodePage = (mimeInfo.uiInternetEncoding==0)?mimeInfo.uiCodePage:mimeInfo.uiInternetEncoding;
     }
     virtual void call(UErrorCode* status){
-        BOOL* pUsedDefaultChar =(uiCodePage==CP_UTF8)?NULL:&lpUsedDefaultChar;
-        int winSize = WideCharToMultiByte(uiCodePage,CONVERSION_FLAGS,src,srcLen,dest,dstLen,NULL, pUsedDefaultChar);
+        BOOL* pUsedDefaultChar =(uiCodePage==CP_UTF8)?nullptr:&lpUsedDefaultChar;
+        int winSize = WideCharToMultiByte(uiCodePage,CONVERSION_FLAGS,src,srcLen,dest,dstLen,nullptr, pUsedDefaultChar);
     }
     virtual long getOperationsPerIteration(void){
         return srcLen;
@@ -283,12 +283,12 @@ private:
 public:
     WinIMultiLanguageToUnicodePerfFunction(const char* name,char* source, UINT sourceLen, UErrorCode& status){
              
-        CoInitialize(NULL);
+        CoInitialize(nullptr);
 
         /* create instance of converter object*/
         CoCreateInstance(
                           __uuidof(CMultiLanguage),
-                          NULL,
+                          nullptr,
                           CLSCTX_SERVER,
                           __uuidof(IMultiLanguage2),
                           (void**)&pMulti
@@ -339,12 +339,12 @@ private:
 public:
     WinIMultiLanguageFromUnicodePerfFunction(const char* name,WCHAR* source, UINT sourceLen, UErrorCode& status){
              
-        CoInitialize(NULL);
+        CoInitialize(nullptr);
 
         /* create instance of converter object*/
         CoCreateInstance(
                           __uuidof(CMultiLanguage),
-                          NULL,
+                          nullptr,
                           CLSCTX_SERVER,
                           __uuidof(IMultiLanguage2),
                           (void**)&pMulti
@@ -395,12 +395,12 @@ private:
 public:
     WinIMultiLanguage2ToUnicodePerfFunction(const char* name,char* source, UINT sourceLen, UErrorCode& status){
              
-        CoInitialize(NULL);
+        CoInitialize(nullptr);
 
         /* create instance of converter object*/
         CoCreateInstance(
                           __uuidof(CMultiLanguage),
-                          NULL,
+                          nullptr,
                           CLSCTX_SERVER,
                           __uuidof(IMultiLanguage2),
                           (void**)&pMulti
@@ -449,12 +449,12 @@ private:
 public:
     WinIMultiLanguage2FromUnicodePerfFunction(const char* name,WCHAR* source, UINT sourceLen, UErrorCode& status){
              
-        CoInitialize(NULL);
+        CoInitialize(nullptr);
 
         /* create instance of converter object*/
         CoCreateInstance(
                           __uuidof(CMultiLanguage),
-                          NULL,
+                          nullptr,
                           CLSCTX_SERVER,
                           __uuidof(IMultiLanguage2),
                           (void**)&pMulti
@@ -496,7 +496,7 @@ public:
 
     ConverterPerformanceTest(int32_t argc, const char* argv[], UErrorCode& status);
     ~ConverterPerformanceTest();
-    virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec,const char* &name, char* par = NULL);    
+    virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec,const char* &name, char* par = nullptr);
     
     UPerfFunction* TestICU_CleanOpenAllConverters();
     UPerfFunction* TestICU_OpenAllConverters();

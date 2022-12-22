@@ -112,7 +112,7 @@ MessagePatternList<T, stackCapacity>::copyFrom(
         int32_t length,
         UErrorCode &errorCode) {
     if(U_SUCCESS(errorCode) && length>0) {
-        if(length>a.getCapacity() && NULL==a.resize(length)) {
+        if(length>a.getCapacity() && nullptr==a.resize(length)) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
             return;
         }
@@ -126,7 +126,7 @@ MessagePatternList<T, stackCapacity>::ensureCapacityForOneMore(int32_t oldLength
     if(U_FAILURE(errorCode)) {
         return false;
     }
-    if(a.getCapacity()>oldLength || a.resize(2*oldLength, oldLength)!=NULL) {
+    if(a.getCapacity()>oldLength || a.resize(2*oldLength, oldLength)!=nullptr) {
         return true;
     }
     errorCode=U_MEMORY_ALLOCATION_ERROR;
@@ -145,24 +145,24 @@ class MessagePatternPartsList : public MessagePatternList<MessagePattern::Part, 
 
 MessagePattern::MessagePattern(UErrorCode &errorCode)
         : aposMode(UCONFIG_MSGPAT_DEFAULT_APOSTROPHE_MODE),
-          partsList(NULL), parts(NULL), partsLength(0),
-          numericValuesList(NULL), numericValues(NULL), numericValuesLength(0),
+          partsList(nullptr), parts(nullptr), partsLength(0),
+          numericValuesList(nullptr), numericValues(nullptr), numericValuesLength(0),
           hasArgNames(false), hasArgNumbers(false), needsAutoQuoting(false) {
     init(errorCode);
 }
 
 MessagePattern::MessagePattern(UMessagePatternApostropheMode mode, UErrorCode &errorCode)
         : aposMode(mode),
-          partsList(NULL), parts(NULL), partsLength(0),
-          numericValuesList(NULL), numericValues(NULL), numericValuesLength(0),
+          partsList(nullptr), parts(nullptr), partsLength(0),
+          numericValuesList(nullptr), numericValues(nullptr), numericValuesLength(0),
           hasArgNames(false), hasArgNumbers(false), needsAutoQuoting(false) {
     init(errorCode);
 }
 
 MessagePattern::MessagePattern(const UnicodeString &pattern, UParseError *parseError, UErrorCode &errorCode)
         : aposMode(UCONFIG_MSGPAT_DEFAULT_APOSTROPHE_MODE),
-          partsList(NULL), parts(NULL), partsLength(0),
-          numericValuesList(NULL), numericValues(NULL), numericValuesLength(0),
+          partsList(nullptr), parts(nullptr), partsLength(0),
+          numericValuesList(nullptr), numericValues(nullptr), numericValuesLength(0),
           hasArgNames(false), hasArgNumbers(false), needsAutoQuoting(false) {
     if(init(errorCode)) {
         parse(pattern, parseError, errorCode);
@@ -175,7 +175,7 @@ MessagePattern::init(UErrorCode &errorCode) {
         return false;
     }
     partsList=new MessagePatternPartsList();
-    if(partsList==NULL) {
+    if(partsList==nullptr) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
         return false;
     }
@@ -185,8 +185,8 @@ MessagePattern::init(UErrorCode &errorCode) {
 
 MessagePattern::MessagePattern(const MessagePattern &other)
         : UObject(other), aposMode(other.aposMode), msg(other.msg),
-          partsList(NULL), parts(NULL), partsLength(0),
-          numericValuesList(NULL), numericValues(NULL), numericValuesLength(0),
+          partsList(nullptr), parts(nullptr), partsLength(0),
+          numericValuesList(nullptr), numericValues(nullptr), numericValuesLength(0),
           hasArgNames(other.hasArgNames), hasArgNumbers(other.hasArgNumbers),
           needsAutoQuoting(other.needsAutoQuoting) {
     UErrorCode errorCode=U_ZERO_ERROR;
@@ -217,13 +217,13 @@ MessagePattern::copyStorage(const MessagePattern &other, UErrorCode &errorCode) 
     if(U_FAILURE(errorCode)) {
         return false;
     }
-    parts=NULL;
+    parts=nullptr;
     partsLength=0;
-    numericValues=NULL;
+    numericValues=nullptr;
     numericValuesLength=0;
-    if(partsList==NULL) {
+    if(partsList==nullptr) {
         partsList=new MessagePatternPartsList();
-        if(partsList==NULL) {
+        if(partsList==nullptr) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
             return false;
         }
@@ -238,9 +238,9 @@ MessagePattern::copyStorage(const MessagePattern &other, UErrorCode &errorCode) 
         partsLength=other.partsLength;
     }
     if(other.numericValuesLength>0) {
-        if(numericValuesList==NULL) {
+        if(numericValuesList==nullptr) {
             numericValuesList=new MessagePatternDoubleList();
-            if(numericValuesList==NULL) {
+            if(numericValuesList==nullptr) {
                 errorCode=U_MEMORY_ALLOCATION_ERROR;
                 return false;
             }
@@ -407,7 +407,7 @@ MessagePattern::preParse(const UnicodeString &pattern, UParseError *parseError, 
     if(U_FAILURE(errorCode)) {
         return;
     }
-    if(parseError!=NULL) {
+    if(parseError!=nullptr) {
         parseError->line=0;
         parseError->offset=0;
         parseError->preContext[0]=0;
@@ -422,10 +422,10 @@ MessagePattern::preParse(const UnicodeString &pattern, UParseError *parseError, 
 
 void
 MessagePattern::postParse() {
-    if(partsList!=NULL) {
+    if(partsList!=nullptr) {
         parts=partsList->a.getAlias();
     }
-    if(numericValuesList!=NULL) {
+    if(numericValuesList!=nullptr) {
         numericValues=numericValuesList->a.getAlias();
     }
 }
@@ -1127,9 +1127,9 @@ MessagePattern::addArgDoublePart(double numericValue, int32_t start, int32_t len
         return;
     }
     int32_t numericIndex=numericValuesLength;
-    if(numericValuesList==NULL) {
+    if(numericValuesList==nullptr) {
         numericValuesList=new MessagePatternDoubleList();
-        if(numericValuesList==NULL) {
+        if(numericValuesList==nullptr) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
             return;
         }
@@ -1147,7 +1147,7 @@ MessagePattern::addArgDoublePart(double numericValue, int32_t start, int32_t len
 
 void
 MessagePattern::setParseError(UParseError *parseError, int32_t index) {
-    if(parseError==NULL) {
+    if(parseError==nullptr) {
         return;
     }
     parseError->offset=index;

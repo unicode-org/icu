@@ -73,7 +73,7 @@ void UnicodeNameTransliterator::handleTransliterate(Replaceable& text, UTransPos
                                                     UBool /*isIncremental*/) const {
     // The failure mode, here and below, is to behave like Any-Null,
     // if either there is no name data (max len == 0) or there is no
-    // memory (malloc() => NULL).
+    // memory (malloc() => nullptr).
 
     int32_t maxLen = uprv_getMaxCharNameLength();
     if (maxLen == 0) {
@@ -83,7 +83,7 @@ void UnicodeNameTransliterator::handleTransliterate(Replaceable& text, UTransPos
 
     // Accommodate the longest possible name plus padding
     char* buf = (char*) uprv_malloc(maxLen);
-    if (buf == NULL) {
+    if (buf == nullptr) {
         offsets.start = offsets.limit;
         return;
     }

@@ -31,7 +31,7 @@ UCharsTrie::~UCharsTrie() {
 UStringTrieResult
 UCharsTrie::current() const {
     const UChar *pos=pos_;
-    if(pos==NULL) {
+    if(pos==nullptr) {
         return USTRINGTRIE_NO_MATCH;
     } else {
         int32_t node;
@@ -154,7 +154,7 @@ UCharsTrie::nextImpl(const UChar *pos, int32_t uchar) {
 UStringTrieResult
 UCharsTrie::next(int32_t uchar) {
     const UChar *pos=pos_;
-    if(pos==NULL) {
+    if(pos==nullptr) {
         return USTRINGTRIE_NO_MATCH;
     }
     int32_t length=remainingMatchLength_;  // Actual remaining match length minus 1.
@@ -182,7 +182,7 @@ UCharsTrie::next(ConstChar16Ptr ptr, int32_t sLength) {
         return current();
     }
     const UChar *pos=pos_;
-    if(pos==NULL) {
+    if(pos==nullptr) {
         return USTRINGTRIE_NO_MATCH;
     }
     int32_t length=remainingMatchLength_;  // Actual remaining match length minus 1.
@@ -287,8 +287,8 @@ UCharsTrie::findUniqueValueFromBranch(const UChar *pos, int32_t length,
                                       UBool haveUniqueValue, int32_t &uniqueValue) {
     while(length>kMaxBranchLinearSubNodeLength) {
         ++pos;  // ignore the comparison unit
-        if(NULL==findUniqueValueFromBranch(jumpByDelta(pos), length>>1, haveUniqueValue, uniqueValue)) {
-            return NULL;
+        if(nullptr==findUniqueValueFromBranch(jumpByDelta(pos), length>>1, haveUniqueValue, uniqueValue)) {
+            return nullptr;
         }
         length=length-(length>>1);
         pos=skipDelta(pos);
@@ -304,7 +304,7 @@ UCharsTrie::findUniqueValueFromBranch(const UChar *pos, int32_t length,
         if(isFinal) {
             if(haveUniqueValue) {
                 if(value!=uniqueValue) {
-                    return NULL;
+                    return nullptr;
                 }
             } else {
                 uniqueValue=value;
@@ -312,7 +312,7 @@ UCharsTrie::findUniqueValueFromBranch(const UChar *pos, int32_t length,
             }
         } else {
             if(!findUniqueValue(pos+value, haveUniqueValue, uniqueValue)) {
-                return NULL;
+                return nullptr;
             }
             haveUniqueValue=true;
         }
@@ -329,7 +329,7 @@ UCharsTrie::findUniqueValue(const UChar *pos, UBool haveUniqueValue, int32_t &un
                 node=*pos++;
             }
             pos=findUniqueValueFromBranch(pos, node+1, haveUniqueValue, uniqueValue);
-            if(pos==NULL) {
+            if(pos==nullptr) {
                 return false;
             }
             haveUniqueValue=true;
@@ -366,7 +366,7 @@ UCharsTrie::findUniqueValue(const UChar *pos, UBool haveUniqueValue, int32_t &un
 int32_t
 UCharsTrie::getNextUChars(Appendable &out) const {
     const UChar *pos=pos_;
-    if(pos==NULL) {
+    if(pos==nullptr) {
         return 0;
     }
     if(remainingMatchLength_>=0) {

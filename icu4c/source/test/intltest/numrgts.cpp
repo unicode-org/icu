@@ -79,7 +79,7 @@ public:
         NumberFormat::parse(text, result, status);
     }
     virtual MyNumberFormatTest* clone() const override
-    { return NULL; }
+    { return nullptr; }
 
     virtual UnicodeString& format(int32_t, 
                 UnicodeString& foo, 
@@ -251,7 +251,7 @@ void NumberFormatRegressionTest::Test4075713(void)
 {
     //try {
         MyNumberFormatTest *tmp = new MyNumberFormatTest();
-        if(tmp != NULL)
+        if(tmp != nullptr)
             logln("NumberFormat.equals passed");
     /*} catch (NullPointerException e) {
         errln("(new MyNumberFormatTest()).equals(null) throws unexpected exception");
@@ -468,7 +468,7 @@ void NumberFormatRegressionTest::Test4083018 (void)
     DecimalFormatSymbols *dfs = new DecimalFormatSymbols(status);
     failure(status, "new DecimalFormatSymbols", Locale::getUS());
     //try {
-        if (dfs != NULL)
+        if (dfs != nullptr)
             logln("Test Passed!");
         else
             errln("Test for bug 4083018 failed");
@@ -523,7 +523,7 @@ void NumberFormatRegressionTest::Test4086575(void)
 
     // C++ workaround to make sure cast works
     DecimalFormat *nf = dynamic_cast<DecimalFormat *>(nf1);
-    if(nf == NULL) {
+    if(nf == nullptr) {
         errln("NumberFormat::createInstance returned incorrect type.");
         return;
     }
@@ -859,7 +859,7 @@ void NumberFormatRegressionTest::Test4087244 (void) {
         return;
     }
     DecimalFormat *df = dynamic_cast<DecimalFormat *>(nf.getAlias());
-    if(df == NULL) {
+    if(df == nullptr) {
         errln("expected DecimalFormat!");
         return;
     }
@@ -1658,7 +1658,7 @@ void NumberFormatRegressionTest::Test4122840(void)
     for (int i = 0; i < count; i++) {
         UErrorCode status = U_ZERO_ERROR;
         ResourceBundle *rb = new ResourceBundle(
-            NULL/*"java.text.resources.LocaleElements"*/, 
+            nullptr/*"java.text.resources.LocaleElements"*/, 
             locales[i], status);
         failure(status, "new ResourceBundle");
         ResourceBundle numPat = rb->getWithFallback("NumberElements", status);
@@ -1942,7 +1942,7 @@ void NumberFormatRegressionTest::Test4145457() {
         return;
     }
     DecimalFormat *nf = dynamic_cast<DecimalFormat *>(nff);
-    if(nf == NULL) {
+    if(nf == nullptr) {
         errln("DecimalFormat needed to continue");
         return;
     }
@@ -2759,7 +2759,7 @@ void NumberFormatRegressionTest::TestJ691(void) {
 void NumberFormatRegressionTest::Test8199(void) {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createInstance(Locale::getEnglish(), status);
-    if (nf == NULL) {
+    if (nf == nullptr) {
         dataerrln("Fail: NumberFormat::createInstance(Locale::getEnglish(), status)");
         return;
     }
@@ -2910,7 +2910,7 @@ void NumberFormatRegressionTest::Test9780(void) {
         return;
     }
     DecimalFormat *df = dynamic_cast<DecimalFormat *>(nf);
-    if(df == NULL) {
+    if(df == nullptr) {
         errln("DecimalFormat needed to continue");
         return;
     }
@@ -2950,20 +2950,20 @@ void NumberFormatRegressionTest::Test9677(void) {
   static const UChar text2[] = { 0x6E, 0x31,0x32,0x33,0x34,0x35,0x36,0x37,0x38,0x39,0 }; // n123456789
   
   UErrorCode status = U_ZERO_ERROR;
-  LocalUNumberFormatPointer f(unum_open(UNUM_DEFAULT, NULL, 0, "en_US", NULL, &status));
+  LocalUNumberFormatPointer f(unum_open(UNUM_DEFAULT, nullptr, 0, "en_US", nullptr, &status));
   if (U_FAILURE(status)) {
       dataerrln("Failure opening unum_open");
       return;
   }
 
   if (U_SUCCESS(status)) {
-    unum_applyPattern(f.getAlias(), false, pattern, -1, NULL, &status);
+    unum_applyPattern(f.getAlias(), false, pattern, -1, nullptr, &status);
     unum_setTextAttribute(f.getAlias(), UNUM_POSITIVE_PREFIX, positivePrefix, -1, &status);
     assertSuccess("setting attributes", status);
   }
 
   if(U_SUCCESS(status)) {
-    int32_t n = unum_parse(f.getAlias(), text, -1, NULL, &status);
+    int32_t n = unum_parse(f.getAlias(), text, -1, nullptr, &status);
     logln("unum_parse status %s, result %d\n", u_errorName(status), n);
 
     if(U_FAILURE(status)) {
@@ -2975,13 +2975,13 @@ void NumberFormatRegressionTest::Test9677(void) {
   }
 
   if (U_SUCCESS(status)) {
-    unum_setTextAttribute(f.getAlias(), UNUM_POSITIVE_PREFIX, NULL, 0, &status);
+    unum_setTextAttribute(f.getAlias(), UNUM_POSITIVE_PREFIX, nullptr, 0, &status);
     assertSuccess("setting attributes", status);
     logln("removed positive prefix");
   }
 
   if(U_SUCCESS(status)) {
-    int32_t n = unum_parse(f.getAlias(), text, -1, NULL, &status);
+    int32_t n = unum_parse(f.getAlias(), text, -1, nullptr, &status);
     logln("unum_parse status %s, result %d\n", u_errorName(status), n);
 
     if(U_FAILURE(status)) {
@@ -2997,7 +2997,7 @@ void NumberFormatRegressionTest::Test9677(void) {
   }
 
   if(U_SUCCESS(status)) {
-    int32_t n = unum_parse(f.getAlias(), text2, -1, NULL, &status);
+    int32_t n = unum_parse(f.getAlias(), text2, -1, nullptr, &status);
     logln("unum_parse status %s, result %d\n", u_errorName(status), n);
 
     if(U_FAILURE(status)) {
@@ -3015,7 +3015,7 @@ void NumberFormatRegressionTest::Test9677(void) {
   }
 
   if(U_SUCCESS(status)) {
-    int32_t n = unum_parse(f.getAlias(), text2, -1, NULL, &status);
+    int32_t n = unum_parse(f.getAlias(), text2, -1, nullptr, &status);
     logln("unum_parse status %s, result %d\n", u_errorName(status), n);
 
     if(U_FAILURE(status)) {

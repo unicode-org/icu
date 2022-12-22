@@ -166,7 +166,7 @@ protected:
 DataBuilderCollationIterator::DataBuilderCollationIterator(CollationDataBuilder &b)
         : CollationIterator(&builderData, /*numeric=*/ false),
           builder(b), builderData(b.nfcImpl),
-          s(NULL), pos(0) {
+          s(nullptr), pos(0) {
     builderData.base = builder.base;
     // Set all of the jamoCE32s[] to indirection CE32s.
     for(int32_t j = 0; j < CollationData::JAMO_CE32S_LENGTH; ++j) {  // Count across Jamo types.
@@ -298,13 +298,13 @@ DataBuilderCollationIterator::getCE32FromBuilderData(uint32_t ce32, UErrorCode &
 
 CollationDataBuilder::CollationDataBuilder(UBool icu4xMode, UErrorCode &errorCode)
         : nfcImpl(*Normalizer2Factory::getNFCImpl(errorCode)),
-          base(NULL), baseSettings(NULL),
-          trie(NULL),
+          base(nullptr), baseSettings(nullptr),
+          trie(nullptr),
           ce32s(errorCode), ce64s(errorCode), conditionalCE32s(errorCode),
           modified(false),
           icu4xMode(icu4xMode),
-          fastLatinEnabled(false), fastLatinBuilder(NULL),
-          collIter(NULL) {
+          fastLatinEnabled(false), fastLatinBuilder(nullptr),
+          collIter(nullptr) {
     // Reserve the first CE32 for U+0000.
     if (!icu4xMode) {
         ce32s.addElement(0, errorCode);
@@ -321,11 +321,11 @@ CollationDataBuilder::~CollationDataBuilder() {
 void
 CollationDataBuilder::initForTailoring(const CollationData *b, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
-    if(trie != NULL) {
+    if(trie != nullptr) {
         errorCode = U_INVALID_STATE_ERROR;
         return;
     }
-    if(b == NULL) {
+    if(b == nullptr) {
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -566,7 +566,7 @@ CollationDataBuilder::addCE32(const UnicodeString &prefix, const UnicodeString &
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-    if(trie == NULL || utrie2_isFrozen(trie)) {
+    if(trie == nullptr || utrie2_isFrozen(trie)) {
         errorCode = U_INVALID_STATE_ERROR;
         return;
     }
@@ -777,7 +777,7 @@ CollationDataBuilder::encodeCEs(const int64_t ces[], int32_t cesLength,
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-    if(trie == NULL || utrie2_isFrozen(trie)) {
+    if(trie == nullptr || utrie2_isFrozen(trie)) {
         errorCode = U_INVALID_STATE_ERROR;
         return 0;
     }
@@ -1148,12 +1148,12 @@ void
 CollationDataBuilder::copyFrom(const CollationDataBuilder &src, const CEModifier &modifier,
                                UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
-    if(trie == NULL || utrie2_isFrozen(trie)) {
+    if(trie == nullptr || utrie2_isFrozen(trie)) {
         errorCode = U_INVALID_STATE_ERROR;
         return;
     }
     CopyHelper helper(src, *this, modifier, errorCode);
-    utrie2_enum(src.trie, NULL, enumRangeForCopy, &helper);
+    utrie2_enum(src.trie, nullptr, enumRangeForCopy, &helper);
     errorCode = helper.errorCode;
     // Update the contextChars and the unsafeBackwardSet while copying,
     // in case a character had conditional mappings in the source builder
@@ -1205,7 +1205,7 @@ CollationDataBuilder::suppressContractions(const UnicodeSet &set, UErrorCode &er
 UBool
 CollationDataBuilder::getJamoCE32s(uint32_t jamoCE32s[], UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return false; }
-    UBool anyJamoAssigned = base == NULL;  // always set jamoCE32s in the base data
+    UBool anyJamoAssigned = base == nullptr;  // always set jamoCE32s in the base data
     UBool needToCopyFromBase = false;
     for(int32_t j = 0; j < CollationData::JAMO_CE32S_LENGTH; ++j) {  // Count across Jamo types.
         UChar32 jamo = jamoCpFromIndex(j);
@@ -1320,7 +1320,7 @@ void
 CollationDataBuilder::setLeadSurrogates(UErrorCode &errorCode) {
     for(UChar lead = 0xd800; lead < 0xdc00; ++lead) {
         int32_t value = -1;
-        utrie2_enumForLeadSurrogate(trie, lead, NULL, enumRangeLeadValue, &value);
+        utrie2_enumForLeadSurrogate(trie, lead, nullptr, enumRangeLeadValue, &value);
         utrie2_set32ForLeadSurrogateCodeUnit(
             trie, lead,
             Collation::makeCE32FromTagAndIndex(Collation::LEAD_SURROGATE_TAG, 0) | (uint32_t)value,
@@ -1331,7 +1331,7 @@ CollationDataBuilder::setLeadSurrogates(UErrorCode &errorCode) {
 void
 CollationDataBuilder::build(CollationData &data, UErrorCode &errorCode) {
     buildMappings(data, errorCode);
-    if(base != NULL) {
+    if(base != nullptr) {
         data.numericPrimary = base->numericPrimary;
         data.compressibleBytes = base->compressibleBytes;
         data.numScripts = base->numScripts;
@@ -1345,7 +1345,7 @@ CollationDataBuilder::build(CollationData &data, UErrorCode &errorCode) {
 void
 CollationDataBuilder::buildMappings(CollationData &data, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
-    if(trie == NULL || utrie2_isFrozen(trie)) {
+    if(trie == nullptr || utrie2_isFrozen(trie)) {
         errorCode = U_INVALID_STATE_ERROR;
         return;
     }
@@ -1630,25 +1630,25 @@ CollationDataBuilder::buildFastLatinTable(CollationData &data, UErrorCode &error
 
     delete fastLatinBuilder;
     fastLatinBuilder = new CollationFastLatinBuilder(errorCode);
-    if(fastLatinBuilder == NULL) {
+    if(fastLatinBuilder == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
     if(fastLatinBuilder->forData(data, errorCode)) {
         const uint16_t *table = fastLatinBuilder->getTable();
         int32_t length = fastLatinBuilder->lengthOfTable();
-        if(base != NULL && length == base->fastLatinTableLength &&
+        if(base != nullptr && length == base->fastLatinTableLength &&
                 uprv_memcmp(table, base->fastLatinTable, length * 2) == 0) {
             // Same fast Latin table as in the base, use that one instead.
             delete fastLatinBuilder;
-            fastLatinBuilder = NULL;
+            fastLatinBuilder = nullptr;
             table = base->fastLatinTable;
         }
         data.fastLatinTable = table;
         data.fastLatinTableLength = length;
     } else {
         delete fastLatinBuilder;
-        fastLatinBuilder = NULL;
+        fastLatinBuilder = nullptr;
     }
 }
 
@@ -1671,9 +1671,9 @@ CollationDataBuilder::getCEs(const UnicodeString &prefix, const UnicodeString &s
 int32_t
 CollationDataBuilder::getCEs(const UnicodeString &s, int32_t start,
                              int64_t ces[], int32_t cesLength) {
-    if(collIter == NULL) {
+    if(collIter == nullptr) {
         collIter = new DataBuilderCollationIterator(*this);
-        if(collIter == NULL) { return 0; }
+        if(collIter == nullptr) { return 0; }
     }
     return collIter->fetchCEs(s, start, ces, cesLength);
 }

@@ -114,20 +114,20 @@ const char Integer::fgClassID = '\0';
 class TestIntegerService : public ICUService {
     public:
     ICUServiceKey* createKey(const UnicodeString* id, UErrorCode& status) const override {
-        return LocaleKey::createWithCanonicalFallback(id, NULL, status); // no fallback locale
+        return LocaleKey::createWithCanonicalFallback(id, nullptr, status); // no fallback locale
     }
 
     virtual ICUServiceFactory* createSimpleFactory(UObject* obj, const UnicodeString& id, UBool visible, UErrorCode& status) override
     {
         Integer* i;
-        if (U_SUCCESS(status) && obj && (i = dynamic_cast<Integer*>(obj)) != NULL) {
+        if (U_SUCCESS(status) && obj && (i = dynamic_cast<Integer*>(obj)) != nullptr) {
             return new SimpleFactory(i, id, visible);
         }
-        return NULL;
+        return nullptr;
     }
 
     virtual UObject* cloneInstance(UObject* instance) const override {
-        return instance ? new Integer(*(Integer*)instance) : NULL;
+        return instance ? new Integer(*(Integer*)instance) : nullptr;
     }
 };
 
@@ -157,17 +157,17 @@ char* /*par*/)
 UnicodeString append(UnicodeString& result, const UObject* obj) 
 {
     char buffer[128];
-    if (obj == NULL) {
-        result.append("NULL");
+    if (obj == nullptr) {
+        result.append("nullptr");
     } else {
         const UnicodeString* s;
         const Locale* loc;
         const Integer* i;
-        if ((s = dynamic_cast<const UnicodeString*>(obj)) != NULL) {
+        if ((s = dynamic_cast<const UnicodeString*>(obj)) != nullptr) {
             result.append(*s);
-        } else if ((loc = dynamic_cast<const Locale*>(obj)) != NULL) {
+        } else if ((loc = dynamic_cast<const Locale*>(obj)) != nullptr) {
             result.append(loc->getName());
-        } else if ((i = dynamic_cast<const Integer*>(obj)) != NULL) {
+        } else if ((i = dynamic_cast<const Integer*>(obj)) != nullptr) {
             snprintf(buffer, sizeof(buffer), "%d", (int)i->_val);
             result.append(buffer);
         } else {
@@ -203,9 +203,9 @@ ICUServiceTest::confirmBoolean(const UnicodeString& message, UBool val)
 void
 ICUServiceTest::confirmEqual(const UnicodeString& message, const UObject* lhs, const UObject* rhs) 
 {
-    UBool equ = (lhs == NULL)
-        ? (rhs == NULL)
-        : (rhs != NULL && lhs->operator==(*rhs));
+    UBool equ = (lhs == nullptr)
+        ? (rhs == nullptr)
+        : (rhs != nullptr && lhs->operator==(*rhs));
 
     UnicodeString temp;
     lrmsg(temp, message, lhs, rhs);
@@ -220,9 +220,9 @@ ICUServiceTest::confirmEqual(const UnicodeString& message, const UObject* lhs, c
 void
 ICUServiceTest::confirmEqual(const UnicodeString& message, const Integer* lhs, const Integer* rhs) 
 {
-    UBool equ = (lhs == NULL)
-        ? (rhs == NULL)
-        : (rhs != NULL && lhs->operator==(*rhs));
+    UBool equ = (lhs == nullptr)
+        ? (rhs == nullptr)
+        : (rhs != nullptr && lhs->operator==(*rhs));
 
     UnicodeString temp;
     lrmsg(temp, message, lhs, rhs);
@@ -237,9 +237,9 @@ ICUServiceTest::confirmEqual(const UnicodeString& message, const Integer* lhs, c
 void
 ICUServiceTest::confirmEqual(const UnicodeString& message, const UnicodeString* lhs, const UnicodeString* rhs) 
 {
-    UBool equ = (lhs == NULL)
-        ? (rhs == NULL)
-        : (rhs != NULL && lhs->operator==(*rhs));
+    UBool equ = (lhs == nullptr)
+        ? (rhs == nullptr)
+        : (rhs != nullptr && lhs->operator==(*rhs));
 
     UnicodeString temp;
     lrmsg(temp, message, lhs, rhs);
@@ -254,9 +254,9 @@ ICUServiceTest::confirmEqual(const UnicodeString& message, const UnicodeString* 
 void
 ICUServiceTest::confirmEqual(const UnicodeString& message, const Locale* lhs, const Locale* rhs) 
 {
-    UBool equ = (lhs == NULL)
-        ? (rhs == NULL)
-        : (rhs != NULL && lhs->operator==(*rhs));
+    UBool equ = (lhs == nullptr)
+        ? (rhs == nullptr)
+        : (rhs != nullptr && lhs->operator==(*rhs));
 
     UnicodeString temp;
     lrmsg(temp, message, lhs, rhs);
@@ -319,7 +319,7 @@ ICUServiceTest::msgstr(const UnicodeString& message, UObject* obj, UBool err)
         logln(message + *str);
         delete str;
     } else if (err) {
-        errln("Error " + message + "string is NULL");
+        errln("Error " + message + "string is nullptr");
     }
 }
 
@@ -420,7 +420,7 @@ ICUServiceTest::testAPI_One()
     {
         UErrorCode status = U_ZERO_ERROR;
         Integer* result = (Integer*)service.get("foo", status);
-        confirmIdentical("13) foo -> null", result, NULL);
+        confirmIdentical("13) foo -> null", result, nullptr);
         delete result;
     }
 
@@ -484,34 +484,34 @@ public:
                 // have to implement cloneInstance.  Otherwise we could just tell the service
                 // what the object type is when we create it, and the default implementation
                 // could handle everything for us.  Phooey.
-        if (obj && dynamic_cast<UnicodeString*>(obj) != NULL) {
+        if (obj && dynamic_cast<UnicodeString*>(obj) != nullptr) {
                         return ICUService::createSimpleFactory(obj, id, visible, status);
         }
-        return NULL;
+        return nullptr;
     }
 
     virtual UObject* cloneInstance(UObject* instance) const override {
-        return instance ? new UnicodeString(*(UnicodeString*)instance) : NULL;
+        return instance ? new UnicodeString(*(UnicodeString*)instance) : nullptr;
     }
 };
 
 class TestStringService : public ICUService {
     public:
     ICUServiceKey* createKey(const UnicodeString* id, UErrorCode& status) const override {
-        return LocaleKey::createWithCanonicalFallback(id, NULL, status); // no fallback locale
+        return LocaleKey::createWithCanonicalFallback(id, nullptr, status); // no fallback locale
     }
 
   virtual ICUServiceFactory* createSimpleFactory(UObject* obj, const UnicodeString& id, UBool visible, UErrorCode& /* status */) override
     {
         UnicodeString* s;
-        if (obj && (s = dynamic_cast<UnicodeString*>(obj)) != NULL) {
+        if (obj && (s = dynamic_cast<UnicodeString*>(obj)) != nullptr) {
             return new SimpleFactory(s, id, visible);
         }
-        return NULL;
+        return nullptr;
     }
 
     virtual UObject* cloneInstance(UObject* instance) const override {
-        return instance ? new UnicodeString(*(UnicodeString*)instance) : NULL;
+        return instance ? new UnicodeString(*(UnicodeString*)instance) : nullptr;
     }
 };
 
@@ -567,7 +567,7 @@ class TestMultipleKeyStringFactory : public ICUServiceFactory {
 
     UObject* create(const ICUServiceKey& key, const ICUService* /* service */, UErrorCode& status) const override {
         if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
         }
         UnicodeString temp;
         key.currentID(temp);
@@ -578,7 +578,7 @@ class TestMultipleKeyStringFactory : public ICUServiceFactory {
         } else {
         status = _status;
     }
-        return NULL;
+        return nullptr;
     }
 
     void updateVisibleIDs(Hashtable& result, UErrorCode& status) const override {
@@ -593,7 +593,7 @@ class TestMultipleKeyStringFactory : public ICUServiceFactory {
         if (U_SUCCESS(_status) && _ids.contains((void*)&id)) {
             char buffer[128];
             UErrorCode status = U_ZERO_ERROR;
-            int32_t len = id.extract(buffer, sizeof(buffer), NULL, status);
+            int32_t len = id.extract(buffer, sizeof(buffer), nullptr, status);
             if (U_SUCCESS(status)) {
                 if (len == sizeof(buffer)) {
                     --len;
@@ -663,7 +663,7 @@ ICUServiceTest::testAPI_Two()
     {
         UErrorCode status = U_ZERO_ERROR;
         UnicodeString* result = (UnicodeString*)service.get("en_US", status);
-        confirmIdentical("24) empty", result, NULL);
+        confirmIdentical("24) empty", result, nullptr);
     }
 
     // create a custom multiple key factory
@@ -758,7 +758,7 @@ ICUServiceTest::testAPI_Two()
         UnicodeString actualID;
         UnicodeString id = "en_us_surfer_gal";
         UnicodeString* gal = (UnicodeString*)service.get(id, &actualID, status);
-        if (gal != NULL) {
+        if (gal != nullptr) {
             UnicodeString displayName;
             logln("actual id: " + actualID);
             service.getDisplayName(actualID, displayName, Locale::getEnglish());
@@ -781,7 +781,7 @@ ICUServiceTest::testAPI_Two()
         UnicodeString actualID;
         UnicodeString id = "en_US_SURFER_BOZO";
         UnicodeString* bozo = (UnicodeString*)service.get(id, &actualID, status);
-        if (bozo != NULL) {
+        if (bozo != nullptr) {
             UnicodeString displayName;
             service.getDisplayName(actualID, displayName, Locale::getEnglish());
             logln("found actual: " + *bozo + " with display name: " + displayName);
@@ -826,16 +826,16 @@ class CalifornioLanguageFactory : public ICUResourceBundleFactory
     static const char* valley; // = californio ## "_VALLEY";
     static const char* surfer; // = californio ## "_SURFER";
     static const char* geek; // = californio ## "_GEEK";
-    static Hashtable* supportedIDs; // = NULL;
+    static Hashtable* supportedIDs; // = nullptr;
 
     static void cleanup(void) {
       delete supportedIDs;
-      supportedIDs = NULL;
+      supportedIDs = nullptr;
     }
 
     const Hashtable* getSupportedIDs(UErrorCode& status) const override
     {
-        if (supportedIDs == NULL) {
+        if (supportedIDs == nullptr) {
             Hashtable* table = new Hashtable();
             table->put(UnicodeString(californio), (void*)table, status);
             table->put(UnicodeString(valley), (void*)table, status);
@@ -887,7 +887,7 @@ const char* CalifornioLanguageFactory::californio = "en_US_CA";
 const char* CalifornioLanguageFactory::valley = "en_US_CA_VALLEY";
 const char* CalifornioLanguageFactory::surfer = "en_US_CA_SURFER";
 const char* CalifornioLanguageFactory::geek = "en_US_CA_GEEK";
-Hashtable* CalifornioLanguageFactory::supportedIDs = NULL;
+Hashtable* CalifornioLanguageFactory::supportedIDs = nullptr;
 
 void
 ICUServiceTest::testRBF()
@@ -1031,7 +1031,7 @@ public void serviceChanged(ICUService s) {
 class TestStringLocaleService : public ICULocaleService {
     public:
     virtual UObject* cloneInstance(UObject* instance) const override {
-        return instance ? new UnicodeString(*(UnicodeString*)instance) : NULL;
+        return instance ? new UnicodeString(*(UnicodeString*)instance) : nullptr;
     }
 };
 
@@ -1130,7 +1130,7 @@ void ICUServiceTest::testLocale() {
         UnicodeString english = "en";
         Locale localeResult;
         UnicodeString result;
-        LocaleKey* lkey = LocaleKey::createWithCanonicalFallback(&english, NULL, 1234, status);
+        LocaleKey* lkey = LocaleKey::createWithCanonicalFallback(&english, nullptr, 1234, status);
         logln("lkey prefix: " + lkey->prefix(result));
         result.remove();
         logln("lkey descriptor: " + lkey->currentDescriptor(result));
@@ -1202,7 +1202,7 @@ void ICUServiceTest::testLocale() {
             logln("locales: ");
             {
                 const char* p;
-                while ((p = locales->next(NULL, status))) {
+                while ((p = locales->next(nullptr, status))) {
                     logln(p);
                 }
             }
@@ -1217,7 +1217,7 @@ void ICUServiceTest::testLocale() {
 class WrapFactory : public ICUServiceFactory {
     public:
     static const UnicodeString& getGreetingID() {
-      if (greetingID == NULL) {
+      if (greetingID == nullptr) {
     greetingID = new UnicodeString("greeting");
       }
       return *greetingID;
@@ -1225,14 +1225,14 @@ class WrapFactory : public ICUServiceFactory {
 
   static void cleanup() {
     delete greetingID;
-    greetingID = NULL;
+    greetingID = nullptr;
   }
 
     UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const override {
         if (U_SUCCESS(status)) {
             UnicodeString temp;
             if (key.currentID(temp).compare(getGreetingID()) == 0) {
-                UnicodeString* previous = (UnicodeString*)service->getKey((ICUServiceKey&)key, NULL, this, status);
+                UnicodeString* previous = (UnicodeString*)service->getKey((ICUServiceKey&)key, nullptr, this, status);
                 if (previous) {
                     previous->insert(0, "A different greeting: \"");
                     previous->append("\"");
@@ -1240,7 +1240,7 @@ class WrapFactory : public ICUServiceFactory {
                 }
             }
         }
-        return NULL;
+        return nullptr;
     }
 
     void updateVisibleIDs(Hashtable& result, UErrorCode& status) const override {
@@ -1272,7 +1272,7 @@ class WrapFactory : public ICUServiceFactory {
     static UnicodeString* greetingID;
 };
 
-UnicodeString* WrapFactory::greetingID = NULL;
+UnicodeString* WrapFactory::greetingID = nullptr;
 const char WrapFactory::fgClassID = '\0';
 
 void 
@@ -1416,7 +1416,7 @@ void ICUServiceTest::testCoverage()
     LKFSubclass lkf(true); // empty
     Hashtable table;
 
-    UObject *obj = lkf.create(*key, NULL, status);
+    UObject *obj = lkf.create(*key, nullptr, status);
     logln("obj: " + UnicodeString(obj ? "obj" : "null"));
     logln(lkf.getDisplayName("en_US", Locale::getDefault(), result));
     lkf.updateVisibleIDs(table, status);
@@ -1426,7 +1426,7 @@ void ICUServiceTest::testCoverage()
     }
 
     LKFSubclass invisibleLKF(false);
-    obj = lkf.create(*key, NULL, status);
+    obj = lkf.create(*key, nullptr, status);
     logln("obj: " + UnicodeString(obj ? "obj" : "null"));
     logln(invisibleLKF.getDisplayName("en_US", Locale::getDefault(), result.remove()));
     invisibleLKF.updateVisibleIDs(table, status);
@@ -1459,8 +1459,8 @@ void ICUServiceTest::testCoverage()
         // ResourceBundleFactory
     key = LocaleKey::createWithCanonicalFallback(&primary, &fallback, status);
         ICUResourceBundleFactory rbf;
-        UObject* icurb = rbf.create(*key, NULL, status);
-        if (icurb != NULL) {
+        UObject* icurb = rbf.create(*key, nullptr, status);
+        if (icurb != nullptr) {
                 logln("got resource bundle for key");
                 delete icurb;
         }

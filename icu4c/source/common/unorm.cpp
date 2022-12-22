@@ -122,12 +122,12 @@ _iterate(UCharIterator *src, UBool forward,
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(destCapacity<0 || (dest==NULL && destCapacity>0) || src==NULL) {
+    if(destCapacity<0 || (dest==nullptr && destCapacity>0) || src==nullptr) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
 
-    if(pNeededToNormalize!=NULL) {
+    if(pNeededToNormalize!=nullptr) {
         *pNeededToNormalize=false;
     }
     if(!(forward ? src->hasNext(src) : src->hasPrevious(src))) {
@@ -163,7 +163,7 @@ _iterate(UCharIterator *src, UBool forward,
     UnicodeString destString(dest, 0, destCapacity);
     if(buffer.length()>0 && doNormalize) {
         n2->normalize(buffer, destString, *pErrorCode).extract(dest, destCapacity, *pErrorCode);
-        if(pNeededToNormalize!=NULL && U_SUCCESS(*pErrorCode)) {
+        if(pNeededToNormalize!=nullptr && U_SUCCESS(*pErrorCode)) {
             *pNeededToNormalize= destString!=buffer;
         }
         return destString.length();
@@ -230,14 +230,14 @@ _concatenate(const UChar *left, int32_t leftLength,
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(destCapacity<0 || (dest==NULL && destCapacity>0) ||
-        left==NULL || leftLength<-1 || right==NULL || rightLength<-1) {
+    if(destCapacity<0 || (dest==nullptr && destCapacity>0) ||
+        left==nullptr || leftLength<-1 || right==nullptr || rightLength<-1) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
 
     /* check for overlapping right and destination */
-    if( dest!=NULL &&
+    if( dest!=nullptr &&
         ((right>=dest && right<(dest+destCapacity)) ||
          (rightLength>0 && dest>=right && dest<(right+rightLength)))
     ) {

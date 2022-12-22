@@ -51,7 +51,7 @@ int32_t checkOverflowAndEditsError(int32_t destIndex, int32_t destCapacity,
     if (U_SUCCESS(errorCode)) {
         if (destIndex > destCapacity) {
             errorCode = U_BUFFER_OVERFLOW_ERROR;
-        } else if (edits != NULL) {
+        } else if (edits != nullptr) {
             edits->copyErrorTo(errorCode);
         }
     }
@@ -69,7 +69,7 @@ appendResult(UChar *dest, int32_t destIndex, int32_t destCapacity,
     /* decode the result */
     if(result<0) {
         /* (not) original code point */
-        if(edits!=NULL) {
+        if(edits!=nullptr) {
             edits->addUnchanged(cpLength);
         }
         if(options & U_OMIT_UNCHANGED_TEXT) {
@@ -87,7 +87,7 @@ appendResult(UChar *dest, int32_t destIndex, int32_t destCapacity,
             length=result;
         } else if(destIndex<destCapacity && result<=0xffff) {  // BMP slightly-fastpath
             dest[destIndex++]=(UChar)result;
-            if(edits!=NULL) {
+            if(edits!=nullptr) {
                 edits->addReplace(cpLength, 1);
             }
             return destIndex;
@@ -95,7 +95,7 @@ appendResult(UChar *dest, int32_t destIndex, int32_t destCapacity,
             c=result;
             length=U16_LENGTH(c);
         }
-        if(edits!=NULL) {
+        if(edits!=nullptr) {
             edits->addReplace(cpLength, length);
         }
     }
@@ -145,7 +145,7 @@ appendUChar(UChar *dest, int32_t destIndex, int32_t destCapacity, UChar c) {
 int32_t
 appendNonEmptyUnchanged(UChar *dest, int32_t destIndex, int32_t destCapacity,
                         const UChar *s, int32_t length, uint32_t options, icu::Edits *edits) {
-    if(edits!=NULL) {
+    if(edits!=nullptr) {
         edits->addUnchanged(length);
     }
     if(options & U_OMIT_UNCHANGED_TEXT) {
@@ -1198,11 +1198,11 @@ int32_t toUpper(uint32_t options,
                 int32_t newLength = (i2 - i) + numYpogegrammeni;
                 change |= oldLength != newLength;
                 if (change) {
-                    if (edits != NULL) {
+                    if (edits != nullptr) {
                         edits->addReplace(oldLength, newLength);
                     }
                 } else {
-                    if (edits != NULL) {
+                    if (edits != nullptr) {
                         edits->addUnchanged(oldLength);
                     }
                     // Write unchanged text?
@@ -1229,7 +1229,7 @@ int32_t toUpper(uint32_t options,
             }
         } else {
             const UChar *s;
-            c=ucase_toFullUpper(c, NULL, NULL, &s, UCASE_LOC_GREEK);
+            c=ucase_toFullUpper(c, nullptr, nullptr, &s, UCASE_LOC_GREEK);
             destIndex = appendResult(dest, destIndex, destCapacity, c, s,
                                      nextIndex - i, options, edits);
             if (destIndex < 0) {
@@ -1317,8 +1317,8 @@ ustrcase_map(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITERATOR_PARAM
         return 0;
     }
     if( destCapacity<0 ||
-        (dest==NULL && destCapacity>0) ||
-        src==NULL ||
+        (dest==nullptr && destCapacity>0) ||
+        src==nullptr ||
         srcLength<-1
     ) {
         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -1331,7 +1331,7 @@ ustrcase_map(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITERATOR_PARAM
     }
 
     /* check for overlapping source and destination */
-    if( dest!=NULL &&
+    if( dest!=nullptr &&
         ((src>=dest && src<(dest+destCapacity)) ||
          (dest>=src && dest<(src+srcLength)))
     ) {
@@ -1363,8 +1363,8 @@ ustrcase_mapWithOverlap(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITE
         return 0;
     }
     if( destCapacity<0 ||
-        (dest==NULL && destCapacity>0) ||
-        src==NULL ||
+        (dest==nullptr && destCapacity>0) ||
+        src==nullptr ||
         srcLength<-1
     ) {
         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -1377,7 +1377,7 @@ ustrcase_mapWithOverlap(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITE
     }
 
     /* check for overlapping source and destination */
-    if( dest!=NULL &&
+    if( dest!=nullptr &&
         ((src>=dest && src<(dest+destCapacity)) ||
          (dest>=src && dest<(src+srcLength)))
     ) {
@@ -1388,7 +1388,7 @@ ustrcase_mapWithOverlap(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITE
         } else {
             /* allocate a buffer */
             temp=(UChar *)uprv_malloc(destCapacity*U_SIZEOF_UCHAR);
-            if(temp==NULL) {
+            if(temp==nullptr) {
                 errorCode=U_MEMORY_ALLOCATION_ERROR;
                 return 0;
             }
@@ -1398,7 +1398,7 @@ ustrcase_mapWithOverlap(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITE
     }
 
     destLength=stringCaseMapper(caseLocale, options, UCASEMAP_BREAK_ITERATOR
-                                temp, destCapacity, src, srcLength, NULL, errorCode);
+                                temp, destCapacity, src, srcLength, nullptr, errorCode);
     if(temp!=dest) {
         /* copy the result string to the destination buffer */
         if (U_SUCCESS(errorCode) && 0 < destLength && destLength <= destCapacity) {
@@ -1464,9 +1464,9 @@ typedef struct CmpEquivLevel CmpEquivLevel;
  * This function is called from u_strcmpFold() and u_caseInsensitivePrefixMatch().
  *
  * @param s1            input string 1
- * @param length1       length of string 1, or -1 (NULL terminated)
+ * @param length1       length of string 1, or -1 (NUL terminated)
  * @param s2            input string 2
- * @param length2       length of string 2, or -1 (NULL terminated)
+ * @param length2       length of string 2, or -1 (NUL terminated)
  * @param options       compare options
  * @param matchLen1     (output) length of partial prefix match in s1
  * @param matchLen2     (output) length of partial prefix match in s2
@@ -1518,21 +1518,21 @@ static int32_t _cmpFold(
 
     /* initialize */
     if(matchLen1) {
-        U_ASSERT(matchLen2 !=NULL);
+        U_ASSERT(matchLen2 !=nullptr);
         *matchLen1=0;
         *matchLen2=0;
     }
 
     start1=m1=org1=s1;
     if(length1==-1) {
-        limit1=NULL;
+        limit1=nullptr;
     } else {
         limit1=s1+length1;
     }
 
     start2=m2=org2=s2;
     if(length2==-1) {
-        limit2=NULL;
+        limit2=nullptr;
     } else {
         limit2=s2+length2;
     }
@@ -1550,7 +1550,7 @@ static int32_t _cmpFold(
         if(c1<0) {
             /* get next code unit from string 1, post-increment */
             for(;;) {
-                if(s1==limit1 || ((c1=*s1)==0 && (limit1==NULL || (options&_STRNCMP_STYLE)))) {
+                if(s1==limit1 || ((c1=*s1)==0 && (limit1==nullptr || (options&_STRNCMP_STYLE)))) {
                     if(level1==0) {
                         c1=-1;
                         break;
@@ -1564,7 +1564,7 @@ static int32_t _cmpFold(
                 do {
                     --level1;
                     start1=stack1[level1].start;    /*Not uninitialized*/
-                } while(start1==NULL);
+                } while(start1==nullptr);
                 s1=stack1[level1].s;                /*Not uninitialized*/
                 limit1=stack1[level1].limit;        /*Not uninitialized*/
             }
@@ -1573,7 +1573,7 @@ static int32_t _cmpFold(
         if(c2<0) {
             /* get next code unit from string 2, post-increment */
             for(;;) {
-                if(s2==limit2 || ((c2=*s2)==0 && (limit2==NULL || (options&_STRNCMP_STYLE)))) {
+                if(s2==limit2 || ((c2=*s2)==0 && (limit2==nullptr || (options&_STRNCMP_STYLE)))) {
                     if(level2==0) {
                         c2=-1;
                         break;
@@ -1587,7 +1587,7 @@ static int32_t _cmpFold(
                 do {
                     --level2;
                     start2=stack2[level2].start;    /*Not uninitialized*/
-                } while(start2==NULL);
+                } while(start2==nullptr);
                 s2=stack2[level2].s;                /*Not uninitialized*/
                 limit2=stack2[level2].limit;        /*Not uninitialized*/
             }
@@ -1614,7 +1614,7 @@ static int32_t _cmpFold(
              *      has no matching code point in s1, so this implementation returns
              *      2 as the prefix match length ("Fu").
              */
-            next1=next2=NULL;
+            next1=next2=nullptr;
             if(level1==0) {
                 next1=s1;
             } else if(s1==limit1) {
@@ -1629,7 +1629,7 @@ static int32_t _cmpFold(
                 next1=stack1[0].s;
             }
 
-            if (next1!=NULL) {
+            if (next1!=nullptr) {
                 if(level2==0) {
                     next2=s2;
                 } else if(s2==limit2) {
@@ -1638,7 +1638,7 @@ static int32_t _cmpFold(
                     /* is s2 at the end of the current stack? */
                     next2=stack2[0].s;
                 }
-                if(next2!=NULL) {
+                if(next2!=nullptr) {
                     m1=next1;
                     m2=next2;
                 }
@@ -1841,7 +1841,7 @@ u_strcmpFold(const UChar *s1, int32_t length1,
              const UChar *s2, int32_t length2,
              uint32_t options,
              UErrorCode *pErrorCode) {
-    return _cmpFold(s1, length1, s2, length2, options, NULL, NULL, pErrorCode);
+    return _cmpFold(s1, length1, s2, length2, options, nullptr, nullptr, pErrorCode);
 }
 
 /* public API functions */
@@ -1855,7 +1855,7 @@ u_strCaseCompare(const UChar *s1, int32_t length1,
     if(pErrorCode==0 || U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(s1==NULL || length1<-1 || s2==NULL || length2<-1) {
+    if(s1==nullptr || length1<-1 || s2==nullptr || length2<-1) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }

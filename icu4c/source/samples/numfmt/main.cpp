@@ -107,7 +107,7 @@ setNumberFormatCurrency_2_4(NumberFormat &nf, const char *currency, UErrorCode &
     if(U_FAILURE(errorCode)) {
         return;
     }
-    if(currency==NULL || strlen(currency)!=3) {
+    if(currency==nullptr || strlen(currency)!=3) {
         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -116,7 +116,7 @@ setNumberFormatCurrency_2_4(NumberFormat &nf, const char *currency, UErrorCode &
     // necessary because we will cast to the DecimalFormat subclass to set
     // the currency symbol
     DecimalFormat *dnf=dynamic_cast<DecimalFormat *>(&nf);
-    if(dnf==NULL) {
+    if(dnf==nullptr) {
         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -195,7 +195,7 @@ setNumberFormatCurrency_2_6(NumberFormat &nf, const char *currency, UErrorCode &
     if(U_FAILURE(errorCode)) {
         return;
     }
-    if(currency==NULL || strlen(currency)!=3) {
+    if(currency==nullptr || strlen(currency)!=3) {
         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }

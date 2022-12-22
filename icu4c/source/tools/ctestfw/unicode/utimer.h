@@ -68,7 +68,7 @@
  *          int  line;
  *          int  loops;
  *          UErrorCode error = U_ZERO_ERROR;
- *          UChar* dest=NULL;
+ *          UChar* dest=nullptr;
  *          int32_t destCapacity=0;
  *          int len =-1;
  *          double elapsedTime = 0; 

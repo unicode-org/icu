@@ -30,7 +30,7 @@ public:
     LSTMBETest();
     virtual ~LSTMBETest();
 
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 
     void TestThaiGraphclust();
     void TestThaiCodepoints();

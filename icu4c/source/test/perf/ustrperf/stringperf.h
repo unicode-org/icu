@@ -141,13 +141,13 @@ public:
 
         fn1_ = func;
         lines_=srcLines;
-        wlines_=NULL;
+        wlines_=nullptr;
         numLines_=srcNumLines;
         uselen_=uselen;
         line_mode_=true;
-        src_ = NULL;
+        src_ = nullptr;
         srcLen_ = 0;
-        wsrc_ = NULL;
+        wsrc_ = nullptr;
         wsrcLen_ = 0;
         fnType_ = Fn_ICU;
 
@@ -155,9 +155,9 @@ public:
         for(int32_t i=0; i<numLines_; i++) {
             uS0_[i]=UnicodeString(lines_[i].name, lines_[i].len);
         }
-        sS0_=NULL;
-        ubulk_=NULL;
-        sbulk_=NULL;
+        sS0_=nullptr;
+        ubulk_=nullptr;
+        sbulk_=nullptr;
     }
 
     StringPerfFunction(StdStringPerfFn func, ULine* srcLines, int32_t srcNumLines, UBool uselen)
@@ -165,19 +165,19 @@ public:
 
         fn2_ = func;
         lines_=srcLines;
-        wlines_=NULL;
+        wlines_=nullptr;
         numLines_=srcNumLines;
         uselen_=uselen;
         line_mode_=true;
-        src_ = NULL;
+        src_ = nullptr;
         srcLen_ = 0;
-        wsrc_ = NULL;
+        wsrc_ = nullptr;
         wsrcLen_ = 0;
         fnType_ = Fn_STD;
 
-        uS0_=NULL;
-        ubulk_=NULL;
-        sbulk_=NULL;
+        uS0_=nullptr;
+        ubulk_=nullptr;
+        sbulk_=nullptr;
 
         //fillin wlines_[], sS0_[]
         prepareLinesForStd();
@@ -187,30 +187,30 @@ public:
     {
 
         fn1_ = func;
-        lines_=NULL;
-        wlines_=NULL;
+        lines_=nullptr;
+        wlines_=nullptr;
         numLines_=0;
         uselen_=uselen;
         line_mode_=false;
         src_ = new UChar[sourceLen];
         memcpy(src_, source, sourceLen * U_SIZEOF_UCHAR);
         srcLen_ = sourceLen;
-        wsrc_ = NULL;
+        wsrc_ = nullptr;
         wsrcLen_ = 0;
         fnType_ = Fn_ICU;
 
-        uS0_=NULL;
-        sS0_=NULL;	
+        uS0_=nullptr;
+        sS0_=nullptr;
         ubulk_=new UnicodeString(src_,srcLen_);
-        sbulk_=NULL;
+        sbulk_=nullptr;
     }
 
     StringPerfFunction(StdStringPerfFn func, UChar* source, int32_t sourceLen, UBool uselen)
     {
 
         fn2_ = func;
-        lines_=NULL;
-        wlines_=NULL;
+        lines_=nullptr;
+        wlines_=nullptr;
         numLines_=0;
         uselen_=uselen;
         line_mode_=false;
@@ -219,9 +219,9 @@ public:
         srcLen_ = sourceLen;
         fnType_ = Fn_STD;
 
-        uS0_=NULL;
-        sS0_=NULL;
-        ubulk_=NULL;
+        uS0_=nullptr;
+        sS0_=nullptr;
+        ubulk_=nullptr;
 
         //fillin wsrc_, sbulk_
         prepareBulkForStd();
@@ -278,7 +278,7 @@ private:
 
         const UChar* uSrc = src_;
         int32_t uSrcLen = srcLen_;
-        wchar_t* wDest = NULL;
+        wchar_t* wDest = nullptr;
         int32_t wDestLen = 0;
         int32_t reqLen= 0 ;
 
@@ -352,7 +352,7 @@ public:
     ~StringPerformanceTest();
     virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec,
                                           const char *&name,
-                                          char *par = NULL);
+                                          char *par = nullptr);
     UPerfFunction* TestCtor();
     UPerfFunction* TestCtor1();
     UPerfFunction* TestCtor2();

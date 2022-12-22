@@ -358,7 +358,7 @@ void TransliteratorAPITest::TestTransliterate2(){
         status = U_ZERO_ERROR;
         callEverything(t, __LINE__);
         delete t;
-        t = NULL;
+        t = nullptr;
     }
 
     status = U_ZERO_ERROR;
@@ -653,13 +653,13 @@ void TransliteratorAPITest::TestRegisterUnregister(){
    
    UErrorCode status=U_ZERO_ERROR;
     /* Make sure it doesn't exist */
-   if (Transliterator::createInstance("TestA-TestB", UTRANS_FORWARD, status) != NULL) {
+   if (Transliterator::createInstance("TestA-TestB", UTRANS_FORWARD, status) != nullptr) {
       errln("FAIL: TestA-TestB already registered\n");
       return;
    }
    /* Check inverse too 
    if (Transliterator::createInstance("TestA-TestB",
-                                      (UTransDirection)UTRANS_REVERSE) != NULL) {
+                                      (UTransDirection)UTRANS_REVERSE) != nullptr) {
       errln("FAIL: TestA-TestB inverse already registered\n");
       return;
    }
@@ -677,7 +677,7 @@ void TransliteratorAPITest::TestRegisterUnregister(){
 
    /* Now check again -- should exist now*/
    Transliterator *s = Transliterator::createInstance("TestA-TestB", UTRANS_FORWARD, status);
-   if (s == NULL) {
+   if (s == nullptr) {
       errln("FAIL: TestA-TestB not registered\n");
       return;
    }
@@ -688,7 +688,7 @@ void TransliteratorAPITest::TestRegisterUnregister(){
    /* Check inverse too
    s = Transliterator::createInstance("TestA-TestB",
                                       (UTransDirection)UTRANS_REVERSE);
-   if (s == NULL) {
+   if (s == nullptr) {
       errln("FAIL: TestA-TestB inverse not registered\n");
       return;
    }
@@ -698,7 +698,7 @@ void TransliteratorAPITest::TestRegisterUnregister(){
    /*unregister the instance*/
    Transliterator::unregister("TestA-TestB");
    /* now Make sure it doesn't exist */
-   if (Transliterator::createInstance("TestA-TestB", UTRANS_FORWARD, status) != NULL) {
+   if (Transliterator::createInstance("TestA-TestB", UTRANS_FORWARD, status) != nullptr) {
       errln("FAIL: TestA-TestB isn't unregistered\n");
       return;
    }
@@ -788,7 +788,7 @@ void TransliteratorAPITest::TestGetAdoptFilter(){
         return;
     }
     const UnicodeFilter *u=t->getFilter();
-    if(u != NULL){
+    if(u != nullptr){
         errln("FAIL: getFilter failed. Didn't return null when the transliterator used no filtering");
         delete t;
         return;
@@ -808,7 +808,7 @@ void TransliteratorAPITest::TestGetAdoptFilter(){
          
     logln("Testing round trip");
     t->adoptFilter((UnicodeFilter*)u);
-    if(t->getFilter() == NULL)
+    if(t->getFilter() == nullptr)
        logln("OK: adoptFilter and getFilter round trip worked");
     else
        errln("FAIL: adoptFilter or getFilter round trip failed");  
@@ -927,7 +927,7 @@ void TransliteratorAPITest::doTest(const UnicodeString& message, const UnicodeSt
 
 void TransliteratorAPITest::callEverything(const Transliterator *tr, int line) {
     Transliterator *clonedTR = tr->clone();
-    CEASSERT(clonedTR != NULL);
+    CEASSERT(clonedTR != nullptr);
 
     int32_t  maxcl = tr->getMaximumContextLength();
     CEASSERT(clonedTR->getMaximumContextLength() == maxcl);
@@ -940,8 +940,8 @@ void TransliteratorAPITest::callEverything(const Transliterator *tr, int line) {
 
     const UnicodeFilter *filter = tr->getFilter();
     const UnicodeFilter *clonedFilter = clonedTR->getFilter();
-    if (filter == NULL || clonedFilter == NULL) {
-        // If one filter is NULL they better both be NULL.
+    if (filter == nullptr || clonedFilter == nullptr) {
+        // If one filter is nullptr they better both be nullptr.
         CEASSERT(filter == clonedFilter);
     } else {
         CEASSERT(filter != clonedFilter);
@@ -975,7 +975,7 @@ void TransliteratorAPITest::callEverything(const Transliterator *tr, int line) {
 static const int MyUnicodeFunctorTestClassID = 0;
 class MyUnicodeFunctorTestClass : public UnicodeFunctor {
 public:
-    virtual UnicodeFunctor* clone() const override {return NULL;}
+    virtual UnicodeFunctor* clone() const override {return nullptr;}
     static UClassID getStaticClassID(void) {return (UClassID)&MyUnicodeFunctorTestClassID;}
     virtual UClassID getDynamicClassID(void) const override {return getStaticClassID();}
     virtual void setData(const TransliterationRuleData*) override {}
@@ -983,11 +983,11 @@ public:
 
 void TransliteratorAPITest::TestUnicodeFunctor() {
     MyUnicodeFunctorTestClass myClass;
-    if (myClass.toMatcher() != NULL) {
-        errln("FAIL: UnicodeFunctor::toMatcher did not return NULL");
+    if (myClass.toMatcher() != nullptr) {
+        errln("FAIL: UnicodeFunctor::toMatcher did not return nullptr");
     }
-    if (myClass.toReplacer() != NULL) {
-        errln("FAIL: UnicodeFunctor::toReplacer did not return NULL");
+    if (myClass.toReplacer() != nullptr) {
+        errln("FAIL: UnicodeFunctor::toReplacer did not return nullptr");
     }
 }
 

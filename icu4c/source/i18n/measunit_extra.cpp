@@ -148,7 +148,7 @@ const struct UnitPrefixStrings {
  *     int32_t *unitCategories[ARR_SIZE];
  *     SimpleUnitIdentifiersSink identifierSink(gSerializedUnitCategoriesTrie, unitIdentifiers,
  *                                              unitCategories, ARR_SIZE, b, kTrieValueOffset);
- *     LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
+ *     LocalUResourceBundlePointer unitsBundle(ures_openDirect(nullptr, "units", &status));
  *     ures_getAllItemsWithFallback(unitsBundle.getAlias(), "convertUnits", identifierSink, status);
  */
 class SimpleUnitIdentifiersSink : public icu::ResourceSink {

@@ -55,32 +55,32 @@ static UOption options[]={
     UOPTION_HELP_H,
     UOPTION_HELP_QUESTION_MARK,
 /* 2 */    UOPTION_ENCODING,
-/* 3 */    { "to-stdout", NULL, NULL, NULL, 'c', UOPT_NO_ARG, 0 } ,
-/* 4 */    { "truncate", NULL, NULL, NULL, 't', UOPT_OPTIONAL_ARG, 0 },
+/* 3 */    { "to-stdout", nullptr, nullptr, nullptr, 'c', UOPT_NO_ARG, 0 } ,
+/* 4 */    { "truncate", nullptr, nullptr, nullptr, 't', UOPT_OPTIONAL_ARG, 0 },
 /* 5 */    UOPTION_VERBOSE,
 /* 6 */    UOPTION_DESTDIR,
 /* 7 */    UOPTION_SOURCEDIR,
-/* 8 */    { "bom", NULL, NULL, NULL, 0, UOPT_NO_ARG, 0 },
+/* 8 */    { "bom", nullptr, nullptr, nullptr, 0, UOPT_NO_ARG, 0 },
 /* 9 */    UOPTION_ICUDATADIR,
 /* 10 */   UOPTION_VERSION,
-/* 11 */   { "suppressAliases", NULL, NULL, NULL, 'A', UOPT_NO_ARG, 0 },
+/* 11 */   { "suppressAliases", nullptr, nullptr, nullptr, 'A', UOPT_NO_ARG, 0 },
 };
 
 static UBool verbose = false;
 static UBool suppressAliases = false;
-static UFILE *ustderr = NULL;
+static UFILE *ustderr = nullptr;
 
 extern int
 main(int argc, char* argv[]) {
-    const char *encoding = NULL;
-    const char *outputDir = NULL; /* NULL = no output directory, use current */
+    const char *encoding = nullptr;
+    const char *outputDir = nullptr; /* nullptr = no output directory, use current */
     const char *inputDir  = ".";
     int tostdout = 0;
     int prbom = 0;
 
     const char *pname;
 
-    UResourceBundle *bundle = NULL;
+    UResourceBundle *bundle = nullptr;
     int32_t i = 0;
 
     const char* arg;
@@ -141,7 +141,7 @@ main(int argc, char* argv[]) {
 
     if(options[4].doesOccur) {
         opt_truncate = true;
-        if(options[4].value != NULL) {
+        if(options[4].value != nullptr) {
             truncsize = atoi(options[4].value); /* user defined printable size */
         } else {
             truncsize = DERB_DEFAULT_TRUNC; /* we'll use default omitting size */
@@ -175,7 +175,7 @@ main(int argc, char* argv[]) {
     }
 
     fflush(stderr); // use ustderr now.
-    ustderr = u_finit(stderr, NULL, NULL);
+    ustderr = u_finit(stderr, nullptr, nullptr);
 
     for (i = 1; i < argc; ++i) {
         static const UChar sp[] = { 0x0020 }; /* " " */
@@ -191,7 +191,7 @@ main(int argc, char* argv[]) {
         {
             const char *p = findBasename(arg);
             const char *q = uprv_strrchr(p, '.');
-            if (q == NULL) {
+            if (q == nullptr) {
                 locale.append(p, status);
             } else {
                 locale.append(p, (int32_t)(q - p), status);
@@ -202,7 +202,7 @@ main(int argc, char* argv[]) {
         }
 
         icu::CharString infile;
-        const char *thename = NULL;
+        const char *thename = nullptr;
         UBool fromICUData = !uprv_strcmp(inputDir, "-");
         if (!fromICUData) {
             UBool absfilename = *arg == U_FILE_SEP_CHAR;
@@ -217,12 +217,12 @@ main(int argc, char* argv[]) {
             } else {
                 const char *q = uprv_strrchr(arg, U_FILE_SEP_CHAR);
 #if U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR
-                if (q == NULL) {
+                if (q == nullptr) {
                     q = uprv_strrchr(arg, U_FILE_ALT_SEP_CHAR);
                 }
 #endif
                 infile.append(inputDir, status);
-                if(q != NULL) {
+                if(q != nullptr) {
                     infile.appendPathPart(icu::StringPiece(arg, (int32_t)(q - arg)), status);
                 }
                 if (U_FAILURE(status)) {
@@ -237,7 +237,7 @@ main(int argc, char* argv[]) {
             bundle = ures_open(fromICUData ? 0 : inputDir, locale.data(), &status);
         }
         if (U_SUCCESS(status)) {
-            UFILE *out = NULL;
+            UFILE *out = nullptr;
 
             const char *filename = 0;
             const char *ext = 0;
@@ -266,7 +266,7 @@ main(int argc, char* argv[]) {
                     return status;
                 }
 
-                out = u_fopen(thefile.data(), "w", NULL, encoding);
+                out = u_fopen(thefile.data(), "w", nullptr, encoding);
                 if (!out) {
                   u_fprintf(ustderr, "%s: couldn't create %s\n", pname, thefile.data());
                   u_fclose(ustderr);
@@ -400,7 +400,7 @@ static void printOutAlias(UFILE *out,  UResourceBundle *parent, Resource r, cons
         static const UChar openStr[] = { 0x003A, 0x0061, 0x006C, 0x0069, 0x0061, 0x0073, 0x0020, 0x007B, 0x0020, 0x0022 }; /* ":alias { \"" */
         static const UChar closeStr[] = { 0x0022, 0x0020, 0x007D, 0x0020 }; /* "\" } " */
         printIndent(out, indent);
-        if(key != NULL) {
+        if(key != nullptr) {
             printCString(out, key, -1);
         }
         printString(out, openStr, UPRV_LENGTHOF(openStr));
@@ -441,7 +441,7 @@ static void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent
                 len = truncsize/2;
             }
             printIndent(out, indent);
-            if(key != NULL) {
+            if(key != nullptr) {
                 static const UChar openStr[] = { 0x0020, 0x007B, 0x0020, 0x0022 }; /* " { \"" */
                 static const UChar closeStr[] = { 0x0022, 0x0020, 0x007D }; /* "\" }" */
                 printCString(out, key, (int32_t)uprv_strlen(key));
@@ -473,7 +473,7 @@ static void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent
             UChar num[20];
 
             printIndent(out, indent);
-            if(key != NULL) {
+            if(key != nullptr) {
                 printCString(out, key, -1);
             }
             printString(out, openStr, UPRV_LENGTHOF(openStr));
@@ -503,7 +503,7 @@ static void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent
                 static const UChar openStr[] = { 0x003A, 0x0062, 0x0069, 0x006E, 0x0061, 0x0072, 0x0079, 0x0020, 0x007B, 0x0020 }; /* ":binary { " */
                 static const UChar closeStr[] = { 0x0020, 0x007D, 0x0020 }; /* " } " */
                 printIndent(out, indent);
-                if(key != NULL) {
+                if(key != nullptr) {
                     printCString(out, key, -1);
                 }
                 printString(out, openStr, UPRV_LENGTHOF(openStr));
@@ -530,7 +530,7 @@ static void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent
                 UChar num[20];
 
                 printIndent(out, indent);
-                if(key != NULL) {
+                if(key != nullptr) {
                     printCString(out, key, -1);
                 }
                 printString(out, openStr, UPRV_LENGTHOF(openStr));
@@ -561,10 +561,10 @@ static void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent
             static const UChar openStr[] = { 0x007B }; /* "{" */
             static const UChar closeStr[] = { 0x007D, '\n' }; /* "}\n" */
 
-            UResourceBundle *t = NULL;
+            UResourceBundle *t = nullptr;
             ures_resetIterator(resource);
             printIndent(out, indent);
-            if(key != NULL) {
+            if(key != nullptr) {
                 printCString(out, key, -1);
             }
             printString(out, openStr, UPRV_LENGTHOF(openStr));

@@ -1782,9 +1782,9 @@ void DateIntervalFormatTest::testTicket11985() {
 // Ticket 11669 - thread safety of DateIntervalFormat::format(). This test failed before
 //                the implementation was fixed.
 
-static const DateIntervalFormat *gIntervalFormatter = NULL;      // The Formatter to be used concurrently by test threads.
-static const DateInterval *gInterval = NULL;                     // The date interval to be formatted concurrently.
-static const UnicodeString *gExpectedResult = NULL;
+static const DateIntervalFormat *gIntervalFormatter = nullptr;      // The Formatter to be used concurrently by test threads.
+static const DateInterval *gInterval = nullptr;                     // The date interval to be formatted concurrently.
+static const UnicodeString *gExpectedResult = nullptr;
 
 void DateIntervalFormatTest::threadFunc11669(int32_t threadNum) {
     (void)threadNum;
@@ -1834,9 +1834,9 @@ void DateIntervalFormatTest::testTicket11669() {
     threads.start();
     threads.join();
 
-    gInterval = NULL;             // Don't leave dangling pointers lying around. Not strictly necessary.
-    gIntervalFormatter = NULL;
-    gExpectedResult = NULL;
+    gInterval = nullptr;             // Don't leave dangling pointers lying around. Not strictly necessary.
+    gIntervalFormatter = nullptr;
+    gExpectedResult = nullptr;
 }
 
 

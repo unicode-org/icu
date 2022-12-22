@@ -191,7 +191,7 @@ const UnicodeString* ParseData::lookup(const UnicodeString& name) const {
 const UnicodeFunctor* ParseData::lookupMatcher(UChar32 ch) const {
     // Note that we cannot use data.lookupSet() because the
     // set array has not been constructed yet.
-    const UnicodeFunctor* set = NULL;
+    const UnicodeFunctor* set = nullptr;
     int32_t i = ch - data->variablesBase;
     if (i >= 0 && i < variablesVector->size()) {
         int32_t j = ch - data->variablesBase;
@@ -231,7 +231,7 @@ UBool ParseData::isMatcher(UChar32 ch) {
     int32_t i = ch - data->variablesBase;
     if (i >= 0 && i < variablesVector->size()) {
         UnicodeFunctor *f = (UnicodeFunctor*) variablesVector->elementAt(i);
-        return f != NULL && f->toMatcher() != NULL;
+        return f != nullptr && f->toMatcher() != nullptr;
     }
     return true;
 }
@@ -246,7 +246,7 @@ UBool ParseData::isReplacer(UChar32 ch) {
     int i = ch - data->variablesBase;
     if (i >= 0 && i < variablesVector->size()) {
         UnicodeFunctor *f = (UnicodeFunctor*) variablesVector->elementAt(i);
-        return f != NULL && f->toReplacer() != NULL;
+        return f != nullptr && f->toReplacer() != nullptr;
     }
     return true;
 }
@@ -420,7 +420,7 @@ int32_t RuleHalf::parseSection(const UnicodeString& rule, int32_t pos, int32_t l
             // whitespace likely to be seen in code.
             continue;
         }
-        if (u_strchr(HALF_ENDERS, c) != NULL) {
+        if (u_strchr(HALF_ENDERS, c) != nullptr) {
             if (isSegment) {
                 // Unclosed segment
                 return syntaxError(U_UNCLOSED_SEGMENT, rule, start, status);
@@ -538,7 +538,7 @@ int32_t RuleHalf::parseSection(const UnicodeString& rule, int32_t pos, int32_t l
                 StringMatcher* m =
                     new StringMatcher(buf, bufSegStart, buf.length(),
                                       segmentNumber, *parser.curData);
-                if (m == NULL) {
+                if (m == nullptr) {
                     return syntaxError(U_MEMORY_ALLOCATION_ERROR, rule, start, status);
                 }
                 
@@ -555,14 +555,14 @@ int32_t RuleHalf::parseSection(const UnicodeString& rule, int32_t pos, int32_t l
                 TransliteratorIDParser::SingleID* single =
                     TransliteratorIDParser::parseFilterID(rule, iref);
                 // The next character MUST be a segment open
-                if (single == NULL ||
+                if (single == nullptr ||
                     !ICU_Utility::parseChar(rule, iref, SEGMENT_OPEN)) {
                     return syntaxError(U_INVALID_FUNCTION, rule, start, status);
                 }
                 
                 Transliterator *t = single->createInstance();
                 delete single;
-                if (t == NULL) {
+                if (t == nullptr) {
                     return syntaxError(U_INVALID_FUNCTION, rule, start, status);
                 }
                 
@@ -579,7 +579,7 @@ int32_t RuleHalf::parseSection(const UnicodeString& rule, int32_t pos, int32_t l
                 buf.extractBetween(bufSegStart, buf.length(), output);
                 FunctionReplacer *r =
                     new FunctionReplacer(t, new StringReplacer(output, parser.curData));
-                if (r == NULL) {
+                if (r == nullptr) {
                     return syntaxError(U_MEMORY_ALLOCATION_ERROR, rule, start, status);
                 }
                 
@@ -673,7 +673,7 @@ int32_t RuleHalf::parseSection(const UnicodeString& rule, int32_t pos, int32_t l
 
                 UnicodeFunctor *m =
                     new StringMatcher(buf, qstart, qlimit, 0, *parser.curData);
-                if (m == NULL) {
+                if (m == nullptr) {
                     return syntaxError(U_MEMORY_ALLOCATION_ERROR, rule, start, status);
                 }
                 int32_t min = 0;
@@ -690,7 +690,7 @@ int32_t RuleHalf::parseSection(const UnicodeString& rule, int32_t pos, int32_t l
                 //    do nothing -- min, max already set
                 }
                 m = new Quantifier(m, min, max);
-                if (m == NULL) {
+                if (m == nullptr) {
                     return syntaxError(U_MEMORY_ALLOCATION_ERROR, rule, start, status);
                 }
                 buf.truncate(qstart);
@@ -833,9 +833,9 @@ variablesVector(statusReturn),
 segmentObjects(statusReturn)
 {
     idBlockVector.setDeleter(uprv_deleteUObject);
-    curData = NULL;
-    compoundFilter = NULL;
-    parseData = NULL;
+    curData = nullptr;
+    compoundFilter = nullptr;
+    parseData = nullptr;
     variableNames.setValueDeleter(uprv_deleteUObject);
 }
 
@@ -867,7 +867,7 @@ TransliteratorParser::parse(const UnicodeString& rules,
  */ 
 UnicodeSet* TransliteratorParser::orphanCompoundFilter() {
     UnicodeSet* f = compoundFilter;
-    compoundFilter = NULL;
+    compoundFilter = nullptr;
     return f;
 }
 
@@ -902,26 +902,26 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
     }
 
     idBlockVector.removeAllElements();
-    curData = NULL;
+    curData = nullptr;
     direction = theDirection;
     ruleCount = 0;
 
     delete compoundFilter;
-    compoundFilter = NULL;
+    compoundFilter = nullptr;
 
     while (!variablesVector.isEmpty()) {
         delete (UnicodeFunctor*)variablesVector.orphanElementAt(0);
     }
     variableNames.removeAll();
     parseData = new ParseData(0, &variablesVector, &variableNames);
-    if (parseData == NULL) {
+    if (parseData == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
 
     dotStandIn = (UChar) -1;
 
-    UnicodeString *tempstr = NULL; // used for memory allocation error checking
+    UnicodeString *tempstr = nullptr; // used for memory allocation error checking
     UnicodeString str; // scratch
     UnicodeString idBlockResult;
     int32_t pos = 0;
@@ -932,7 +932,7 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
     // and it is the offset to the _start_ of the compound filter
     // pattern.  Otherwise it is the offset to the _limit_ of the
     // compound filter pattern within idBlockResult.
-    compoundFilter = NULL;
+    compoundFilter = nullptr;
     int32_t compoundFilterOffset = -1;
 
     while (pos < limit && U_SUCCESS(status)) {
@@ -974,7 +974,7 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
             int32_t p = pos;
             
             if (!parsingIDs) {
-                if (curData != NULL) {
+                if (curData != nullptr) {
                     U_ASSERT(!dataVector.hasDeleter());
                     if (direction == UTRANS_FORWARD)
                         dataVector.addElement(curData, status);
@@ -983,7 +983,7 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
                     if (U_FAILURE(status)) {
                         delete curData;
                     }
-                    curData = NULL;
+                    curData = nullptr;
                 }
                 parsingIDs = true;
             }
@@ -1003,12 +1003,12 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
             } else {
                 // Couldn't parse an ID.  Try to parse a global filter
                 int32_t withParens = -1;
-                UnicodeSet* f = TransliteratorIDParser::parseGlobalFilter(rule, p, direction, withParens, NULL);
-                if (f != NULL) {
+                UnicodeSet* f = TransliteratorIDParser::parseGlobalFilter(rule, p, direction, withParens, nullptr);
+                if (f != nullptr) {
                     if (ICU_Utility::parseChar(rule, p, END_OF_RULE)
                         && (direction == UTRANS_FORWARD) == (withParens == 0))
                     {
-                        if (compoundFilter != NULL) {
+                        if (compoundFilter != nullptr) {
                             // Multiple compound filters
                             syntaxError(U_MULTIPLE_COMPOUND_FILTERS, rule, pos, status);
                             delete f;
@@ -1030,8 +1030,8 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
         } else {
             if (parsingIDs) {
                 tempstr = new UnicodeString(idBlockResult);
-                // NULL pointer check
-                if (tempstr == NULL) {
+                // nullptr pointer check
+                if (tempstr == nullptr) {
                     status = U_MEMORY_ALLOCATION_ERROR;
                     return;
                 }
@@ -1046,8 +1046,8 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
                 idBlockResult.remove();
                 parsingIDs = false;
                 curData = new TransliterationRuleData(status);
-                // NULL pointer check
-                if (curData == NULL) {
+                // nullptr pointer check
+                if (curData == nullptr) {
                     status = U_MEMORY_ALLOCATION_ERROR;
                     return;
                 }
@@ -1075,8 +1075,8 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
 
     if (parsingIDs && idBlockResult.length() > 0) {
         tempstr = new UnicodeString(idBlockResult);
-        // NULL pointer check
-        if (tempstr == NULL) {
+        // nullptr pointer check
+        if (tempstr == nullptr) {
             // TODO: Testing, forcing this path, shows many memory leaks. ICU-21701
             //       intltest translit/TransliteratorTest/TestInstantiation
             status = U_MEMORY_ALLOCATION_ERROR;
@@ -1090,7 +1090,7 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
             return;
         }
     }
-    else if (!parsingIDs && curData != NULL) {
+    else if (!parsingIDs && curData != nullptr) {
         if (direction == UTRANS_FORWARD) {
             dataVector.addElement(curData, status);
         } else {
@@ -1112,8 +1112,8 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
                 data->variables = 0;
             } else {
                 data->variables = (UnicodeFunctor**)uprv_malloc(data->variablesLength * sizeof(UnicodeFunctor*));
-                // NULL pointer check
-                if (data->variables == NULL) {
+                // nullptr pointer check
+                if (data->variables == nullptr) {
                     status = U_MEMORY_ALLOCATION_ERROR;
                     return;
                 }
@@ -1128,9 +1128,9 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
             data->variableNames.removeAll();
             int32_t p = UHASH_FIRST;
             const UHashElement* he = variableNames.nextElement(p);
-            while (he != NULL) {
+            while (he != nullptr) {
                 UnicodeString* tempus = ((UnicodeString*)(he->value.pointer))->clone();
-                if (tempus == NULL) {
+                if (tempus == nullptr) {
                     status = U_MEMORY_ALLOCATION_ERROR;
                     return;
                 }
@@ -1142,7 +1142,7 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
         variablesVector.removeAllElements();   // keeps them from getting deleted when we succeed
 
         // Index the rules
-        if (compoundFilter != NULL) {
+        if (compoundFilter != nullptr) {
             if ((direction == UTRANS_FORWARD && compoundFilterOffset != 1) ||
                 (direction == UTRANS_REVERSE && compoundFilterOffset != ruleCount)) {
                 status = U_MISPLACED_COMPOUND_FILTER;
@@ -1218,7 +1218,7 @@ static const UChar PRAGMA_NFC_RULES[] = {0x7E,0x6E,0x66,0x63,0x20,0x72,0x75,0x6C
  */
 UBool TransliteratorParser::resemblesPragma(const UnicodeString& rule, int32_t pos, int32_t limit) {
     // Must start with /use\s/i
-    return ICU_Utility::parsePattern(rule, pos, limit, UnicodeString(true, PRAGMA_USE, 4), NULL) >= 0;
+    return ICU_Utility::parsePattern(rule, pos, limit, UnicodeString(true, PRAGMA_USE, 4), nullptr) >= 0;
 }
 
 /**
@@ -1255,13 +1255,13 @@ int32_t TransliteratorParser::parsePragma(const UnicodeString& rule, int32_t pos
         return p;
     }
     
-    p = ICU_Utility::parsePattern(rule, pos, limit, UnicodeString(true, PRAGMA_NFD_RULES, -1), NULL);
+    p = ICU_Utility::parsePattern(rule, pos, limit, UnicodeString(true, PRAGMA_NFD_RULES, -1), nullptr);
     if (p >= 0) {
         pragmaNormalizeRules(UNORM_NFD);
         return p;
     }
     
-    p = ICU_Utility::parsePattern(rule, pos, limit, UnicodeString(true, PRAGMA_NFC_RULES, -1), NULL);
+    p = ICU_Utility::parsePattern(rule, pos, limit, UnicodeString(true, PRAGMA_NFC_RULES, -1), nullptr);
     if (p >= 0) {
         pragmaNormalizeRules(UNORM_NFC);
         return p;
@@ -1305,7 +1305,7 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
         return start;
     }
 
-    if (pos == limit || u_strchr(gOPERATORS, (op = rule.charAt(--pos))) == NULL) {
+    if (pos == limit || u_strchr(gOPERATORS, (op = rule.charAt(--pos))) == nullptr) {
         return syntaxError(U_MISSING_OPERATOR, rule, start, status);
     }
     ++pos;
@@ -1366,8 +1366,8 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
         } 
         // We allow anything on the right, including an empty string.
         UnicodeString* value = new UnicodeString(right->text);
-        // NULL pointer check
-        if (value == NULL) {
+        // nullptr pointer check
+        if (value == nullptr) {
             return syntaxError(U_MEMORY_ALLOCATION_ERROR, rule, start, status);
         }
         variableNames.put(undefinedVariableName, value, status);
@@ -1393,7 +1393,7 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
         }
     }
     for (i=0; i<segmentObjects.size(); ++i) {
-        if (segmentObjects.elementAt(i) == NULL) {
+        if (segmentObjects.elementAt(i) == nullptr) {
             syntaxError(U_INTERNAL_TRANSLITERATOR_ERROR, rule, start, status); // will never happen
         }
     }
@@ -1451,11 +1451,11 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
     }
 
     // Flatten segment objects vector to an array
-    UnicodeFunctor** segmentsArray = NULL;
+    UnicodeFunctor** segmentsArray = nullptr;
     if (segmentObjects.size() > 0) {
         segmentsArray = (UnicodeFunctor **)uprv_malloc(segmentObjects.size() * sizeof(UnicodeFunctor *));
         // Null pointer check
-        if (segmentsArray == NULL) {
+        if (segmentsArray == nullptr) {
             return syntaxError(U_MEMORY_ALLOCATION_ERROR, rule, start, status);
         }
         segmentObjects.toArray((void**) segmentsArray);
@@ -1469,7 +1469,7 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
             curData,
             status);
     //Null pointer check
-    if (temptr == NULL) {
+    if (temptr == nullptr) {
         uprv_free(segmentsArray);
         return syntaxError(U_MEMORY_ALLOCATION_ERROR, rule, start, status);
     }
@@ -1527,7 +1527,7 @@ UChar TransliteratorParser::parseSet(const UnicodeString& rule,
                                           UErrorCode& status) {
     UnicodeSet* set = new UnicodeSet(rule, pos, USET_IGNORE_SPACE, parseData, status);
     // Null pointer check
-    if (set == NULL) {
+    if (set == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return (UChar)0x0000; // Return empty character with error.
     }
@@ -1582,7 +1582,7 @@ UChar TransliteratorParser::getSegmentStandin(int32_t seg, UErrorCode& status) {
         // Set a placeholder in the primary variables vector that will be
         // filled in later by setSegmentObject().  We know that we will get
         // called first because setSegmentObject() will call us.
-        variablesVector.addElement((void*) NULL, status);
+        variablesVector.addElement((void*) nullptr, status);
         segmentStandins.setCharAt(seg-1, c);
     }
     return c;
@@ -1603,8 +1603,8 @@ void TransliteratorParser::setSegmentObject(int32_t seg, StringMatcher* adopted,
         return;
     }
     int32_t index = getSegmentStandin(seg, status) - curData->variablesBase;
-    if (segmentObjects.elementAt(seg-1) != NULL ||
-        variablesVector.elementAt(index) != NULL) {
+    if (segmentObjects.elementAt(seg-1) != nullptr ||
+        variablesVector.elementAt(index) != nullptr) {
         // should never happen
         if (U_SUCCESS(status)) {status = U_INTERNAL_TRANSLITERATOR_ERROR;}
         return;
@@ -1622,7 +1622,7 @@ UChar TransliteratorParser::getDotStandIn(UErrorCode& status) {
     if (dotStandIn == (UChar) -1) {
         UnicodeSet* tempus = new UnicodeSet(UnicodeString(true, DOT_SET, -1), status);
         // Null pointer check.
-        if (tempus == NULL) {
+        if (tempus == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return (UChar)0x0000;
         }
@@ -1639,7 +1639,7 @@ void TransliteratorParser::appendVariableDef(const UnicodeString& name,
                                                   UnicodeString& buf,
                                                   UErrorCode& status) {
     const UnicodeString* s = (const UnicodeString*) variableNames.get(name);
-    if (s == NULL) {
+    if (s == nullptr) {
         // We allow one undefined variable so that variable definition
         // statements work.  For the first undefined variable we return
         // the special placeholder variableLimit-1, and save the variable

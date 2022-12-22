@@ -168,7 +168,7 @@ UBool processCollator()
     if (opt_rules != 0) {
 		u_unescape(opt_rules, rules, 100);
         collator = ucol_openRules(rules, -1, UCOL_OFF, UCOL_TERTIARY, 
-			                  NULL, &status);
+			                  nullptr, &status);
     }
     else {
         collator = ucol_open(opt_locale, &status);

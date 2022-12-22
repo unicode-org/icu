@@ -42,7 +42,7 @@ void LSTMBETest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
 //--------------------------------------------------------------------------------------
 
 LSTMBETest::LSTMBETest() {
-    fTestParams = NULL;
+    fTestParams = nullptr;
 }
 
 

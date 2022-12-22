@@ -72,7 +72,7 @@ RBDataMap::RBDataMap(UResourceBundle *headers, UResourceBundle *data, UErrorCode
 void RBDataMap::init(UResourceBundle *data, UErrorCode &status) {
   int32_t i = 0;
   fData->removeAll();
-  UResourceBundle *t = NULL;
+  UResourceBundle *t = nullptr;
   for(i = 0; i < ures_getSize(data); i++) {
     t = ures_getByIndex(data, i, t, &status);
     fData->put(UnicodeString(ures_getKey(t), -1, US_INV), new ResourceBundle(t, status), status);
@@ -84,8 +84,8 @@ void RBDataMap::init(UResourceBundle *headers, UResourceBundle *data, UErrorCode
 {
   int32_t i = 0;
   fData->removeAll();
-  UResourceBundle *t = NULL;
-  const UChar *key = NULL;
+  UResourceBundle *t = nullptr;
+  const UChar *key = nullptr;
   int32_t keyLen = 0;
   if(ures_getSize(headers) == ures_getSize(data)) {
     for(i = 0; i < ures_getSize(data); i++) {
@@ -103,16 +103,16 @@ void RBDataMap::init(UResourceBundle *headers, UResourceBundle *data, UErrorCode
 const ResourceBundle *RBDataMap::getItem(const char* key, UErrorCode &status) const
 {
   if(U_FAILURE(status)) {
-    return NULL;
+    return nullptr;
   }
 
   UnicodeString hashKey(key, -1, US_INV);
   const ResourceBundle *r = (ResourceBundle *)fData->get(hashKey);
-  if(r != NULL) {
+  if(r != nullptr) {
     return r;
   } else {
     status = U_MISSING_RESOURCE_ERROR;
-    return NULL;
+    return nullptr;
   }
 }
 
@@ -154,7 +154,7 @@ RBDataMap::getIntVector(int32_t &length, const char *key, UErrorCode &status) co
   if(U_SUCCESS(status)) {
     return r->getIntVector(length, status);
   } else {
-    return NULL;
+    return nullptr;
   }
 }
 
@@ -164,7 +164,7 @@ RBDataMap::getBinary(int32_t &length, const char *key, UErrorCode &status) const
   if(U_SUCCESS(status)) {
     return r->getBinary(length, status);
   } else {
-    return NULL;
+    return nullptr;
   }
 }
 
@@ -186,7 +186,7 @@ const UnicodeString* RBDataMap::getStringArray(int32_t& count, const char* key, 
 
     count = r->getSize();
     if(count <= 0) {
-      return NULL;
+      return nullptr;
     }
 
     UnicodeString *result = new UnicodeString[count];
@@ -195,7 +195,7 @@ const UnicodeString* RBDataMap::getStringArray(int32_t& count, const char* key, 
     }
     return result;
   } else {
-    return NULL;
+    return nullptr;
   }
 }
 
@@ -207,7 +207,7 @@ const int32_t* RBDataMap::getIntArray(int32_t& count, const char* key, UErrorCod
 
     count = r->getSize();
     if(count <= 0) {
-      return NULL;
+      return nullptr;
     }
 
     int32_t *result = new int32_t[count];
@@ -218,7 +218,7 @@ const int32_t* RBDataMap::getIntArray(int32_t& count, const char* key, UErrorCod
     }
     return result;
   } else {
-    return NULL;
+    return nullptr;
   }
 }
 

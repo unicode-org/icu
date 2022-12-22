@@ -49,7 +49,7 @@ void XMLFile::writeIndent() {
 
 XMLElement::XMLElement(XMLFile &f, const char *name, const char *attribs, bool single) : file(f), name(name), single(single) {
     char outs[200];
-    if(attribs!=NULL) {
+    if(attribs!=nullptr) {
         sprintf(outs,"<%s %s", name, attribs);
     } else {
         sprintf(outs, "<%s", name);

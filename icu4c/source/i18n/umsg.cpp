@@ -90,7 +90,7 @@ u_vformatMessage(   const char  *locale,
 
 {
     //argument checking deferred to subsequent method calls
-    UMessageFormat *fmt = umsg_open(pattern,patternLength,locale,NULL,status);
+    UMessageFormat *fmt = umsg_open(pattern,patternLength,locale,nullptr,status);
     int32_t retVal = umsg_vformat(fmt,result,resultLength,ap,status);
     umsg_close(fmt);
     return retVal;
@@ -172,7 +172,7 @@ u_vparseMessage(const char  *locale,
                 UErrorCode  *status)
 {
     //argument checking deferred to subsequent method calls
-    UMessageFormat *fmt = umsg_open(pattern,patternLength,locale,NULL,status);
+    UMessageFormat *fmt = umsg_open(pattern,patternLength,locale,nullptr,status);
     int32_t count = 0;
     umsg_vparse(fmt,source,sourceLength,&count,ap,status);
     umsg_close(fmt);
@@ -230,17 +230,17 @@ umsg_open(  const UChar     *pattern,
             UErrorCode      *status)
 {
     //check arguments
-    if(status==NULL || U_FAILURE(*status))
+    if(status==nullptr || U_FAILURE(*status))
     {
       return 0;
     }
-    if(pattern==NULL||patternLength<-1){
+    if(pattern==nullptr||patternLength<-1){
         *status=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
 
     UParseError tErr;
-    if(parseError==NULL)
+    if(parseError==nullptr)
     {
         parseError = &tErr;
     }
@@ -249,9 +249,9 @@ umsg_open(  const UChar     *pattern,
     UnicodeString patString(patternLength == -1, pattern, len);
 
     MessageFormat* retVal = new MessageFormat(patString,Locale(locale),*parseError,*status);
-    if(retVal == NULL) {
+    if(retVal == nullptr) {
         *status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+        return nullptr;
     }
     if (U_SUCCESS(*status) && MessageFormatAdapter::hasArgTypeConflicts(*retVal)) {
         *status = U_ARGUMENT_TYPE_MISMATCH;
@@ -263,7 +263,7 @@ U_CAPI void U_EXPORT2
 umsg_close(UMessageFormat* format)
 {
     //check arguments
-    if(format==NULL){
+    if(format==nullptr){
         return;
     }
     delete (MessageFormat*) format;
@@ -274,12 +274,12 @@ umsg_clone(const UMessageFormat *fmt,
            UErrorCode *status)
 {
     //check arguments
-    if(status==NULL || U_FAILURE(*status)){
-        return NULL;
+    if(status==nullptr || U_FAILURE(*status)){
+        return nullptr;
     }
-    if(fmt==NULL){
+    if(fmt==nullptr){
         *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
+        return nullptr;
     }
     UMessageFormat retVal = (UMessageFormat)((MessageFormat*)fmt)->clone();
     if(retVal == 0) {
@@ -293,7 +293,7 @@ U_CAPI void  U_EXPORT2
 umsg_setLocale(UMessageFormat *fmt, const char* locale)
 {
     //check arguments
-    if(fmt==NULL){
+    if(fmt==nullptr){
         return;
     }
     ((MessageFormat*)fmt)->setLocale(Locale(locale));   
@@ -303,7 +303,7 @@ U_CAPI const char*  U_EXPORT2
 umsg_getLocale(const UMessageFormat *fmt)
 {
     //check arguments
-    if(fmt==NULL){
+    if(fmt==nullptr){
         return "";
     }
     return ((const MessageFormat*)fmt)->getLocale().getName();
@@ -318,15 +318,15 @@ umsg_applyPattern(UMessageFormat *fmt,
 {
     //check arguments
     UParseError tErr;
-    if(status ==NULL||U_FAILURE(*status)){
+    if(status ==nullptr||U_FAILURE(*status)){
         return ;
     }
-    if(fmt==NULL || (pattern==NULL && patternLength!=0) || patternLength<-1) {
+    if(fmt==nullptr || (pattern==nullptr && patternLength!=0) || patternLength<-1) {
         *status=U_ILLEGAL_ARGUMENT_ERROR;
         return ;
     }
 
-    if(parseError==NULL){
+    if(parseError==nullptr){
       parseError = &tErr;
     }
 
@@ -341,18 +341,18 @@ umsg_toPattern(const UMessageFormat *fmt,
                UErrorCode* status)
 {
     //check arguments
-    if(status ==NULL||U_FAILURE(*status)){
+    if(status ==nullptr||U_FAILURE(*status)){
         return -1;
     }
-    if(fmt==NULL||resultLength<0 || (resultLength>0 && result==0)){
+    if(fmt==nullptr||resultLength<0 || (resultLength>0 && result==0)){
         *status=U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
 
 
     UnicodeString res;
-    if(!(result==NULL && resultLength==0)) {
-        // NULL destination for pure preflighting: empty dummy string
+    if(!(result==nullptr && resultLength==0)) {
+        // nullptr destination for pure preflighting: empty dummy string
         // otherwise, alias the destination buffer
         res.setTo(result, 0, resultLength);
     }
@@ -397,7 +397,7 @@ umsg_vformat(   const UMessageFormat *fmt,
     {
         return -1;
     }
-    if(fmt==NULL||resultLength<0 || (resultLength>0 && result==0)) {
+    if(fmt==nullptr||resultLength<0 || (resultLength>0 && result==0)) {
         *status=U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
@@ -512,11 +512,11 @@ umsg_vparse(const UMessageFormat *fmt,
             UErrorCode     *status)
 {
     //check arguments
-    if(status==NULL||U_FAILURE(*status))
+    if(status==nullptr||U_FAILURE(*status))
     {
         return;
     }
-    if(fmt==NULL||source==NULL || sourceLength<-1 || count==NULL){
+    if(fmt==nullptr||source==nullptr || sourceLength<-1 || count==nullptr){
         *status=U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -623,11 +623,11 @@ int32_t umsg_autoQuoteApostrophe(const UChar* pattern,
     int32_t braceCount = 0;
     int32_t len = 0;
 
-    if (ec == NULL || U_FAILURE(*ec)) {
+    if (ec == nullptr || U_FAILURE(*ec)) {
         return -1;
     }
 
-    if (pattern == NULL || patternLength < -1 || (dest == NULL && destCapacity > 0)) {
+    if (pattern == nullptr || patternLength < -1 || (dest == nullptr && destCapacity > 0)) {
         *ec = U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }

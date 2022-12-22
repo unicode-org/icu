@@ -92,7 +92,7 @@ typedef struct u_scanf_spec_info {
     UBool   fIsShort;       /* h flag  */
     UBool   fIsLong;        /* l flag  */
     UBool   fIsLongLong;    /* ll flag  */
-    UBool   fIsString;      /* true if this is a NULL-terminated string. */
+    UBool   fIsString;      /* true if this is a NUL-terminated string. */
 } u_scanf_spec_info;
 
 
@@ -277,7 +277,7 @@ u_scanf_parse_spec (const UChar     *fmt,
 #define UFMT_USTRING        {ufmt_ustring, u_scanf_ustring_handler}
 
 
-#define UFMT_EMPTY {ufmt_empty, NULL}
+#define UFMT_EMPTY {ufmt_empty, nullptr}
 
 /**
  * A u_scanf handler function.  
@@ -885,7 +885,7 @@ u_scanf_string_handler(UFILE        *input,
 
             /* convert the character to the default codepage */
             ucnv_fromUnicode(conv, &alias, limit, &source, source + 1,
-                NULL, true, &status);
+                nullptr, true, &status);
 
             if(U_FAILURE(status)) {
                 /* clean up */
@@ -1402,7 +1402,7 @@ u_scanf_parse(UFILE     *f,
                 break;
             }
             else if(spec.fInfo.fSkipArg) {
-                args.ptrValue = NULL;
+                args.ptrValue = nullptr;
             }
             else {
                 switch(info) {
@@ -1423,7 +1423,7 @@ u_scanf_parse(UFILE     *f,
 
                 default:
                     /* else args is ignored */
-                    args.ptrValue = NULL;
+                    args.ptrValue = nullptr;
                     break;
                 }
             }

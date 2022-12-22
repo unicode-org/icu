@@ -2177,10 +2177,10 @@ PatternMap::getPatternFromBasePattern(const UnicodeString& basePattern, UBool& s
 
 
 // Find the pattern from the given skeleton.
-// At least when this is called from getBestRaw & addPattern (in which case specifiedSkeletonPtr is non-NULL),
+// At least when this is called from getBestRaw & addPattern (in which case specifiedSkeletonPtr is non-nullptr),
 // the comparison should be based on skeleton.original (which is unique and tied to the distance measurement in bestRaw)
 // and not skeleton.baseOriginal (which is not unique); otherwise we may pick a different skeleton than the one with the
-// optimum distance value in getBestRaw. When this is called from public getRedundants (specifiedSkeletonPtr is NULL),
+// optimum distance value in getBestRaw. When this is called from public getRedundants (specifiedSkeletonPtr is nullptr),
 // for now it will continue to compare based on baseOriginal so as not to change the behavior unnecessarily.
 const UnicodeString *
 PatternMap::getPatternFromSkeleton(const PtnSkeleton& skeleton, const PtnSkeleton** specifiedSkeletonPtr) const { // key to search for

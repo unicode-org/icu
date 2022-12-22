@@ -6003,7 +6003,7 @@ void NumberFormatterApiTest::microPropsInternals() {
     MicroProps copyConstructed(mp);
     MicroProps copyAssigned;
     int64_t *resizeResult = mp.mixedMeasures.resize(4, 4);
-    assertTrue("Resize success", resizeResult != NULL);
+    assertTrue("Resize success", resizeResult != nullptr);
     copyAssigned = mp;
 
     assertTrue("MicroProps success status", U_SUCCESS(mp.mixedMeasures.status));

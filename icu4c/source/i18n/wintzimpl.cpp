@@ -41,12 +41,12 @@ static UBool getSystemTimeInformation(TimeZone *tz, SYSTEMTIME &daylightDate, SY
     UErrorCode status = U_ZERO_ERROR;
     UBool result = true;
     BasicTimeZone *btz = (BasicTimeZone*)tz; // we should check type
-    InitialTimeZoneRule *initial = NULL;
-    AnnualTimeZoneRule *std = NULL, *dst = NULL;
+    InitialTimeZoneRule *initial = nullptr;
+    AnnualTimeZoneRule *std = nullptr, *dst = nullptr;
 
     btz->getSimpleRulesNear(uprv_getUTCtime(), initial, std, dst, status);
     if (U_SUCCESS(status)) {
-        if (std == NULL || dst == NULL) {
+        if (std == nullptr || dst == nullptr) {
             bias = -1 * (initial->getRawOffset()/60000);
             standardBias = 0;
             daylightBias = 0;
@@ -122,7 +122,7 @@ static UBool getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar
     UnicodeString id = UnicodeString(icuid, length);
     TimeZone *tz = TimeZone::createTimeZone(id);
     
-    if (tz != NULL) {
+    if (tz != nullptr) {
         int32_t bias;
         int32_t daylightBias;
         int32_t standardBias;

@@ -34,7 +34,7 @@ namespace {
 UnicodeString joinLabelsAndAppend(AlphabeticIndex::ImmutableIndex &index, UnicodeString &dest) {
     int32_t oldLength = dest.length();
     const AlphabeticIndex::Bucket *bucket;
-    for (int32_t i = 0; (bucket = index.getBucket(i)) != NULL; ++i) {
+    for (int32_t i = 0; (bucket = index.getBucket(i)) != nullptr; ++i) {
         if (dest.length() > oldLength) {
             dest.append((UChar)0x3A);  // ':'
         }
@@ -233,10 +233,10 @@ void AlphabeticIndexTest::APITest() {
         TEST_CHECK_STATUS;
     }
 
-    index->addRecord(adam, NULL, status);
-    index->addRecord(baker, NULL, status);
-    index->addRecord(charlie, NULL, status);
-    index->addRecord(chad, NULL, status);
+    index->addRecord(adam, nullptr, status);
+    index->addRecord(baker, nullptr, status);
+    index->addRecord(charlie, nullptr, status);
+    index->addRecord(chad, nullptr, status);
     TEST_CHECK_STATUS;
     int itemCount = 0;
     index->resetBucketIterator(status);
@@ -386,7 +386,7 @@ void AlphabeticIndexTest::ManyLocalesTest() {
             // std::string ss;
             // std::cout << ":" << label.toUTF8String(ss);
             const AlphabeticIndex::Bucket *bucket = immIndex->getBucket(bucketIndex);
-            TEST_ASSERT(bucket != NULL);
+            TEST_ASSERT(bucket != nullptr);
             assertEquals("bucket label vs. immutable: locale=" + UnicodeString(localeName) +
                          " index=" + bucketIndex,
                          label, bucket->getLabel());
@@ -398,8 +398,8 @@ void AlphabeticIndexTest::ManyLocalesTest() {
         // std::cout << ":" << std::endl;
 
         TEST_ASSERT(immIndex->getBucketCount() == bucketIndex);
-        TEST_ASSERT(immIndex->getBucket(-1) == NULL);
-        TEST_ASSERT(immIndex->getBucket(bucketIndex) == NULL);
+        TEST_ASSERT(immIndex->getBucket(-1) == nullptr);
+        TEST_ASSERT(immIndex->getBucket(bucketIndex) == nullptr);
     }
 }
 
@@ -432,7 +432,7 @@ static const char *pinyinTestData[] = {
         "x", "\\u5915", "\\u5438", "\\u6bbe", //
         "y", "\\u4e2b", "\\u82bd", "\\u8574", //
         "z", "\\u5e00", "\\u707d", "\\u5c0a",
-        NULL
+        nullptr
     };
 
 void AlphabeticIndexTest::HackPinyinTest() {
@@ -442,7 +442,7 @@ void AlphabeticIndexTest::HackPinyinTest() {
 
     UnicodeString names[UPRV_LENGTHOF(pinyinTestData)];
     int32_t  nameCount;
-    for (nameCount=0; pinyinTestData[nameCount] != NULL; nameCount++) {
+    for (nameCount=0; pinyinTestData[nameCount] != nullptr; nameCount++) {
         names[nameCount] = UnicodeString(pinyinTestData[nameCount], -1, UnicodeString::kInvariant).unescape();
         aindex.addRecord(names[nameCount], &names[nameCount], status);
         TEST_CHECK_STATUS; 
@@ -663,9 +663,9 @@ void AlphabeticIndexTest::TestNoLabels() {
     TEST_CHECK_STATUS;
     AlphabeticIndex index(coll.orphan(), status);
     TEST_CHECK_STATUS;
-    index.addRecord(UnicodeString((UChar)0x897f), NULL, status);
-    index.addRecord("i", NULL, status);
-    index.addRecord(UnicodeString((UChar)0x03B1), NULL, status);
+    index.addRecord(UnicodeString((UChar)0x897f), nullptr, status);
+    index.addRecord("i", nullptr, status);
+    index.addRecord(UnicodeString((UChar)0x03B1), nullptr, status);
     assertEquals("getBucketCount()", 1, index.getBucketCount(status));  // ...
     TEST_ASSERT(index.nextBucket(status));
     assertEquals("underflow label type", (int32_t)U_ALPHAINDEX_UNDERFLOW, index.getBucketLabelType());
@@ -675,7 +675,7 @@ void AlphabeticIndexTest::TestNoLabels() {
 void AlphabeticIndexTest::TestChineseZhuyin() {
     UErrorCode status = U_ZERO_ERROR;
     char loc[100];
-    uloc_forLanguageTag("zh-u-co-zhuyin", loc, UPRV_LENGTHOF(loc), NULL, &status);
+    uloc_forLanguageTag("zh-u-co-zhuyin", loc, UPRV_LENGTHOF(loc), nullptr, &status);
     AlphabeticIndex index(loc, status);
     LocalPointer<AlphabeticIndex::ImmutableIndex> immIndex(index.buildImmutableIndex(status));
     TEST_CHECK_STATUS; 

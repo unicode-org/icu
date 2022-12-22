@@ -732,7 +732,7 @@ handleGeneratedSpaces(UChar *dest, int32_t sourceLength,
 
     int32_t i = 0, j = 0;
     int32_t count = 0;
-    UChar *tempbuffer=NULL;
+    UChar *tempbuffer=nullptr;
 
     int lamAlefOption = 0;
     int tashkeelOption = 0;
@@ -748,8 +748,8 @@ handleGeneratedSpaces(UChar *dest, int32_t sourceLength,
     }
 
     tempbuffer = (UChar *)uprv_malloc((sourceLength+1)*U_SIZEOF_UCHAR);
-    /* Test for NULL */
-    if(tempbuffer == NULL) {
+    /* Test for nullptr */
+    if(tempbuffer == nullptr) {
         *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
         return 0;
     }
@@ -903,12 +903,12 @@ static int32_t
 expandCompositCharAtBegin(UChar *dest, int32_t sourceLength, int32_t destSize,UErrorCode *pErrorCode) {
     int32_t      i = 0,j = 0;
     int32_t      countl = 0;
-    UChar    *tempbuffer=NULL;
+    UChar    *tempbuffer=nullptr;
 
     tempbuffer = (UChar *)uprv_malloc((sourceLength+1)*U_SIZEOF_UCHAR);
 
-    /* Test for NULL */
-    if(tempbuffer == NULL) {
+    /* Test for nullptr */
+    if(tempbuffer == nullptr) {
         *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
         return 0;
     }
@@ -966,11 +966,11 @@ expandCompositCharAtEnd(UChar *dest, int32_t sourceLength, int32_t destSize,UErr
     int32_t      countr = 0;
     int32_t  inpsize = sourceLength;
 
-    UChar    *tempbuffer=NULL;
+    UChar    *tempbuffer=nullptr;
     tempbuffer = (UChar *)uprv_malloc((sourceLength+1)*U_SIZEOF_UCHAR);
 
-    /* Test for NULL */
-    if(tempbuffer == NULL) {
+    /* Test for nullptr */
+    if(tempbuffer == nullptr) {
         *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
          return 0;
     }
@@ -1086,7 +1086,7 @@ expandCompositChar(UChar *dest, int32_t sourceLength,
 
     int32_t      i = 0,j = 0;
 
-    UChar    *tempbuffer=NULL;
+    UChar    *tempbuffer=nullptr;
     int yehHamzaOption = 0;
     int seenTailOption = 0;
     int lamAlefOption = 0;
@@ -1156,8 +1156,8 @@ expandCompositChar(UChar *dest, int32_t sourceLength,
             destSize = calculateSize(dest,sourceLength,destSize,options);
             tempbuffer = (UChar *)uprv_malloc((destSize+1)*U_SIZEOF_UCHAR);
 
-            /* Test for NULL */
-            if(tempbuffer == NULL) {
+            /* Test for nullptr */
+            if(tempbuffer == nullptr) {
                 *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
                 return 0;
             }
@@ -1427,12 +1427,12 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
     struct  uShapeVariables shapeVars = { OLD_TAIL_CHAR,U_SHAPE_LAMALEF_BEGIN,U_SHAPE_LAMALEF_END,U_SHAPE_TASHKEEL_BEGIN,U_SHAPE_TASHKEEL_END,0};
 
     /* usual error checking */
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+    if(pErrorCode==nullptr || U_FAILURE(*pErrorCode)) {
         return 0;
     }
 
-    /* make sure that no reserved options values are used; allow dest==NULL only for preflighting */
-    if( source==NULL || sourceLength<-1 || (dest==NULL && destCapacity!=0) || destCapacity<0 ||
+    /* make sure that no reserved options values are used; allow dest==nullptr only for preflighting */
+    if( source==nullptr || sourceLength<-1 || (dest==nullptr && destCapacity!=0) || destCapacity<0 ||
                 (((options&U_SHAPE_TASHKEEL_MASK) > 0) &&
                  ((options&U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED) == U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED) ) ||
                 (((options&U_SHAPE_TASHKEEL_MASK) > 0) &&
@@ -1478,7 +1478,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
     }
 
     /* check that source and destination do not overlap */
-    if( dest!=NULL &&
+    if( dest!=nullptr &&
         ((source<=dest && dest<source+sourceLength) ||
          (dest<=source && source<dest+destCapacity))) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -1494,7 +1494,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
 
     if((options&U_SHAPE_LETTERS_MASK)!=U_SHAPE_LETTERS_NOOP) {
         UChar buffer[300];
-        UChar *tempbuffer, *tempsource = NULL;
+        UChar *tempbuffer, *tempsource = nullptr;
         int32_t outputSize, spacesCountl=0, spacesCountr=0;
 
         if((options&U_SHAPE_AGGREGATE_TASHKEEL_MASK)>0) {
@@ -1511,7 +1511,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
             UChar prevLink, currLink = 0;
             int newSourceLength = 0;
             tempsource = (UChar *)uprv_malloc(2*sourceLength*U_SIZEOF_UCHAR);
-            if(tempsource == NULL) {
+            if(tempsource == nullptr) {
                 *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
                 return 0;
             }
@@ -1545,7 +1545,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
 
         if(outputSize>destCapacity) {
             *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-                if (tempsource != NULL) uprv_free(tempsource);
+                if (tempsource != nullptr) uprv_free(tempsource);
             return outputSize;
         }
 
@@ -1564,15 +1564,15 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
         } else {
             tempbuffer = (UChar *)uprv_malloc(outputSize*U_SIZEOF_UCHAR);
 
-            /*Test for NULL*/
-            if(tempbuffer == NULL) {
+            /*Test for nullptr*/
+            if(tempbuffer == nullptr) {
                 *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
-                if (tempsource != NULL) uprv_free(tempsource);
+                if (tempsource != nullptr) uprv_free(tempsource);
                 return 0;
             }
         }
         u_memcpy(tempbuffer, source, sourceLength);
-        if (tempsource != NULL){
+        if (tempsource != nullptr){
             uprv_free(tempsource);
         }
 

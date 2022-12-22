@@ -314,7 +314,7 @@ const UChar *ThaiWordbreakTest::readFile(char *fileName, int32_t &charCount)
     
     f = fopen(fileName, "rb");
     
-    if( f == NULL ) {
+    if( f == nullptr ) {
         fprintf(stderr,"Couldn't open %s reason: %s \n", fileName, strerror(errno));
         return 0;
     }
@@ -353,7 +353,7 @@ const UChar *ThaiWordbreakTest::readFile(char *fileName, int32_t &charCount)
     
     myText.extract(1, myText.length(), buffer);
     charCount--;  // skip the BOM
-    buffer[charCount] = 0;    // NULL terminate for easier reading in the debugger
+    buffer[charCount] = 0;    // NUL terminate for easier reading in the debugger
     
     return buffer;
 }

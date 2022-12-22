@@ -32,30 +32,30 @@
 
 /* mutexed access to a shared default converter ----------------------------- */
 
-static UConverter *gDefaultConverter = NULL;
+static UConverter *gDefaultConverter = nullptr;
 
 U_CAPI UConverter* U_EXPORT2
 u_getDefaultConverter(UErrorCode *status)
 {
-    UConverter *converter = NULL;
+    UConverter *converter = nullptr;
     
-    if (gDefaultConverter != NULL) {
-        icu::umtx_lock(NULL);
+    if (gDefaultConverter != nullptr) {
+        icu::umtx_lock(nullptr);
         
         /* need to check to make sure it wasn't taken out from under us */
-        if (gDefaultConverter != NULL) {
+        if (gDefaultConverter != nullptr) {
             converter = gDefaultConverter;
-            gDefaultConverter = NULL;
+            gDefaultConverter = nullptr;
         }
-        icu::umtx_unlock(NULL);
+        icu::umtx_unlock(nullptr);
     }
 
     /* if the cache was empty, create a converter */
-    if(converter == NULL) {
-        converter = ucnv_open(NULL, status);
+    if(converter == nullptr) {
+        converter = ucnv_open(nullptr, status);
         if(U_FAILURE(*status)) {
             ucnv_close(converter);
-            converter = NULL;
+            converter = nullptr;
         }
     }
 
@@ -65,20 +65,20 @@ u_getDefaultConverter(UErrorCode *status)
 U_CAPI void U_EXPORT2
 u_releaseDefaultConverter(UConverter *converter)
 {
-    if(gDefaultConverter == NULL) {
-        if (converter != NULL) {
+    if(gDefaultConverter == nullptr) {
+        if (converter != nullptr) {
             ucnv_reset(converter);
         }
         ucnv_enableCleanup();
-        icu::umtx_lock(NULL);
-        if(gDefaultConverter == NULL) {
+        icu::umtx_lock(nullptr);
+        if(gDefaultConverter == nullptr) {
             gDefaultConverter = converter;
-            converter = NULL;
+            converter = nullptr;
         }
-        icu::umtx_unlock(NULL);
+        icu::umtx_unlock(nullptr);
     }
 
-    if(converter != NULL) {
+    if(converter != nullptr) {
         ucnv_close(converter);
     }
 }
@@ -86,21 +86,21 @@ u_releaseDefaultConverter(UConverter *converter)
 U_CAPI void U_EXPORT2
 u_flushDefaultConverter()
 {
-    UConverter *converter = NULL;
+    UConverter *converter = nullptr;
     
-    if (gDefaultConverter != NULL) {
-        icu::umtx_lock(NULL);
+    if (gDefaultConverter != nullptr) {
+        icu::umtx_lock(nullptr);
         
         /* need to check to make sure it wasn't taken out from under us */
-        if (gDefaultConverter != NULL) {
+        if (gDefaultConverter != nullptr) {
             converter = gDefaultConverter;
-            gDefaultConverter = NULL;
+            gDefaultConverter = nullptr;
         }
-        icu::umtx_unlock(NULL);
+        icu::umtx_unlock(nullptr);
     }
 
     /* if the cache was populated, flush it */
-    if(converter != NULL) {
+    if(converter != nullptr) {
          ucnv_close(converter);
     }
 }
@@ -136,14 +136,14 @@ u_uastrncpy(UChar *ucs1,
   UChar *target = ucs1;
   UErrorCode err = U_ZERO_ERROR;
   UConverter *cnv = u_getDefaultConverter(&err);
-  if(U_SUCCESS(err) && cnv != NULL) {
+  if(U_SUCCESS(err) && cnv != nullptr) {
     ucnv_reset(cnv);
     ucnv_toUnicode(cnv,
                    &target,
                    ucs1+n,
                    &s2,
                    s2+u_astrnlen(s2, n),
-                   NULL,
+                   nullptr,
                    true,
                    &err);
     ucnv_reset(cnv); /* be good citizens */
@@ -166,7 +166,7 @@ u_uastrcpy(UChar *ucs1,
 {
   UErrorCode err = U_ZERO_ERROR;
   UConverter *cnv = u_getDefaultConverter(&err);
-  if(U_SUCCESS(err) && cnv != NULL) {
+  if(U_SUCCESS(err) && cnv != nullptr) {
     ucnv_toUChars(cnv,
                     ucs1,
                     MAX_STRLEN,
@@ -208,14 +208,14 @@ u_austrncpy(char *s1,
   char *target = s1;
   UErrorCode err = U_ZERO_ERROR;
   UConverter *cnv = u_getDefaultConverter(&err);
-  if(U_SUCCESS(err) && cnv != NULL) {
+  if(U_SUCCESS(err) && cnv != nullptr) {
     ucnv_reset(cnv);
     ucnv_fromUnicode(cnv,
                   &target,
                   s1+n,
                   &ucs2,
                   ucs2+u_ustrnlen(ucs2, n),
-                  NULL,
+                  nullptr,
                   true,
                   &err);
     ucnv_reset(cnv); /* be good citizens */
@@ -238,7 +238,7 @@ u_austrcpy(char *s1,
 {
   UErrorCode err = U_ZERO_ERROR;
   UConverter *cnv = u_getDefaultConverter(&err);
-  if(U_SUCCESS(err) && cnv != NULL) {
+  if(U_SUCCESS(err) && cnv != nullptr) {
     int32_t len = ucnv_fromUChars(cnv,
                   s1,
                   MAX_STRLEN,

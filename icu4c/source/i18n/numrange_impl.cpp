@@ -92,7 +92,7 @@ class NumberRangeDataSink : public ResourceSink {
 
 void getNumberRangeData(const char* localeName, const char* nsName, NumberRangeData& data, UErrorCode& status) {
     if (U_FAILURE(status)) { return; }
-    LocalUResourceBundlePointer rb(ures_open(NULL, localeName, &status));
+    LocalUResourceBundlePointer rb(ures_open(nullptr, localeName, &status));
     if (U_FAILURE(status)) { return; }
     NumberRangeDataSink sink(data);
 

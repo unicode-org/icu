@@ -2277,13 +2277,13 @@ StringEnumeration* MeasureUnit::getAvailableTypes(UErrorCode &errorCode) {
             gTypes, UPRV_LENGTHOF(gTypes), &errorCode);
     if (U_FAILURE(errorCode)) {
         uenum_close(uenum);
-        return NULL;
+        return nullptr;
     }
     StringEnumeration *result = new UStringEnumeration(uenum);
-    if (result == NULL) {
+    if (result == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         uenum_close(uenum);
-        return NULL;
+        return nullptr;
     }
     return result;
 }
@@ -2309,10 +2309,10 @@ bool MeasureUnit::findBySubType(StringPiece subType, MeasureUnit* output) {
 
 MeasureUnit *MeasureUnit::create(int typeId, int subTypeId, UErrorCode &status) {
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
     MeasureUnit *result = new MeasureUnit(typeId, subTypeId);
-    if (result == NULL) {
+    if (result == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
     }
     return result;

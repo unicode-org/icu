@@ -170,11 +170,11 @@ void LocaleDisplayNamesTest::TestUldnOpen() {
   UnicodeString str(result, len, kMaxResultSize);
   test_assert_equal("Deutsch (Deutschland)", str);
 
-  // make sure that NULL gives us the default locale as usual
-  ldn = uldn_open(NULL, ULDN_STANDARD_NAMES, &status);
+  // make sure that nullptr gives us the default locale as usual
+  ldn = uldn_open(nullptr, ULDN_STANDARD_NAMES, &status);
   const char *locale = uldn_getLocale(ldn);
   if(0 != uprv_strcmp(uloc_getDefault(), locale)) {
-    errln("uldn_getLocale(uldn_open(NULL))=%s != default locale %s\n", locale, uloc_getDefault());
+    errln("uldn_getLocale(uldn_open(nullptr))=%s != default locale %s\n", locale, uloc_getDefault());
   }
   uldn_close(ldn);
   test_assert(U_SUCCESS(status));
@@ -363,12 +363,12 @@ static const LocNameDispContextItem ctxtItems[] = {
     { "es", UDISPCTX_DIALECT_NAMES,  UDISPCTX_CAPITALIZATION_FOR_STANDALONE,            UDISPCTX_LENGTH_FULL,   en_GB, esFor_en_GB_DT },
     { "ru", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_STANDALONE,            UDISPCTX_LENGTH_FULL,   uz_Latn, ruFor_uz_Latn_T },
  #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
-    { NULL, (UDisplayContext)0,      (UDisplayContext)0,                                (UDisplayContext)0,     NULL,  NULL }
+    { nullptr, (UDisplayContext)0,      (UDisplayContext)0,                                (UDisplayContext)0,     nullptr,  nullptr }
 };
 
 void LocaleDisplayNamesTest::TestUldnDisplayContext() {
     const LocNameDispContextItem * ctxtItemPtr;
-    for (ctxtItemPtr = ctxtItems; ctxtItemPtr->displayLocale != NULL; ctxtItemPtr++) {
+    for (ctxtItemPtr = ctxtItems; ctxtItemPtr->displayLocale != nullptr; ctxtItemPtr++) {
         UDisplayContext contexts[3] = {ctxtItemPtr->dialectHandling, ctxtItemPtr->capitalization, ctxtItemPtr->displayLength};
         UErrorCode status = U_ZERO_ERROR;
         ULocaleDisplayNames * uldn = uldn_openForContext(ctxtItemPtr->displayLocale, contexts, 3, &status);

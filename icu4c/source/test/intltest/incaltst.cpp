@@ -119,7 +119,7 @@ void IntlCalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &n
 void
 IntlCalendarTest::TestTypes()
 {
-  Calendar *c = NULL;
+  Calendar *c = nullptr;
   UErrorCode status = U_ZERO_ERROR;
   int j;
   const char *locs [40] = { "en_US_VALLEYGIRL",     
@@ -134,7 +134,7 @@ IntlCalendarTest::TestTypes()
                             "th",       // th's default region is TH and buddhist is used as default for TH
                             "en_TH",    // Default calendar for any locales with region TH is buddhist
                             "en-TH-u-ca-gregory",
-                            NULL };
+                            nullptr };
   const char *types[40] = { "gregorian", 
                             "japanese",
                             "gregorian",
@@ -147,7 +147,7 @@ IntlCalendarTest::TestTypes()
                             "buddhist",           
                             "buddhist",           
                             "gregorian",
-                            NULL };
+                            nullptr };
 
   for(j=0;locs[j];j++) {
     logln(UnicodeString("Creating calendar of locale ")  + locs[j]);

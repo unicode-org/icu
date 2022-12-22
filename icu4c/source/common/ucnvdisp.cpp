@@ -43,17 +43,17 @@ ucnv_getDisplayName(const UConverter *cnv,
     UErrorCode localStatus = U_ZERO_ERROR;
 
     /* check arguments */
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+    if(pErrorCode==nullptr || U_FAILURE(*pErrorCode)) {
         return 0;
     }
 
-    if(cnv==NULL || displayNameCapacity<0 || (displayNameCapacity>0 && displayName==NULL)) {
+    if(cnv==nullptr || displayNameCapacity<0 || (displayNameCapacity>0 && displayName==nullptr)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
 
     /* open the resource bundle and get the display name string */
-    rb=ures_open(NULL, displayLocale, pErrorCode);
+    rb=ures_open(nullptr, displayLocale, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }

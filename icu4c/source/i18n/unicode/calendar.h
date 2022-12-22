@@ -302,7 +302,7 @@ public:
      *                 with U_ZERO_ERROR if created successfully, set to a failure result
      *                 otherwise. U_MISSING_RESOURCE_ERROR will be returned if the resource data
      *                 requests a calendar type which has not been installed.
-     * @return         A Calendar if created successfully. NULL otherwise.
+     * @return         A Calendar if created successfully. nullptr otherwise.
      * @stable ICU 2.0
      */
     static Calendar* U_EXPORT2 createInstance(UErrorCode& success);
@@ -316,7 +316,7 @@ public:
      * @param success      Indicates the success/failure of Calendar creation. Filled in
      *                     with U_ZERO_ERROR if created successfully, set to a failure result
      *                     otherwise.
-     * @return             A Calendar if created successfully. NULL otherwise.
+     * @return             A Calendar if created successfully. nullptr otherwise.
      * @stable ICU 2.0
      */
     static Calendar* U_EXPORT2 createInstance(TimeZone* zoneToAdopt, UErrorCode& success);
@@ -329,7 +329,7 @@ public:
      * @param success      Indicates the success/failure of Calendar creation. Filled in
      *                     with U_ZERO_ERROR if created successfully, set to a failure result
      *                     otherwise.
-     * @return             A Calendar if created successfully. NULL otherwise.
+     * @return             A Calendar if created successfully. nullptr otherwise.
      * @stable ICU 2.0
      */
     static Calendar* U_EXPORT2 createInstance(const TimeZone& zone, UErrorCode& success);
@@ -341,7 +341,7 @@ public:
      * @param success  Indicates the success/failure of Calendar creation. Filled in
      *                 with U_ZERO_ERROR if created successfully, set to a failure result
      *                 otherwise.
-     * @return         A Calendar if created successfully. NULL otherwise.
+     * @return         A Calendar if created successfully. nullptr otherwise.
      * @stable ICU 2.0
      */
     static Calendar* U_EXPORT2 createInstance(const Locale& aLocale, UErrorCode& success);
@@ -356,7 +356,7 @@ public:
      * @param success      Indicates the success/failure of Calendar creation. Filled in
      *                     with U_ZERO_ERROR if created successfully, set to a failure result
      *                     otherwise.
-     * @return             A Calendar if created successfully. NULL otherwise.
+     * @return             A Calendar if created successfully. nullptr otherwise.
      * @stable ICU 2.0
      */
     static Calendar* U_EXPORT2 createInstance(TimeZone* zoneToAdopt, const Locale& aLocale, UErrorCode& success);
@@ -370,7 +370,7 @@ public:
      * @param success      Indicates the success/failure of Calendar creation. Filled in
      *                     with U_ZERO_ERROR if created successfully, set to a failure result
      *                     otherwise.
-     * @return             A Calendar if created successfully. NULL otherwise.
+     * @return             A Calendar if created successfully. nullptr otherwise.
      * @stable ICU 2.0
      */
     static Calendar* U_EXPORT2 createInstance(const TimeZone& zone, const Locale& aLocale, UErrorCode& success);
@@ -826,7 +826,7 @@ public:
     /**
      * Sets the calendar's time zone to be the one passed in. The Calendar takes ownership
      * of the TimeZone; the caller is no longer responsible for deleting it.  If the
-     * given time zone is NULL, this function has no effect.
+     * given time zone is nullptr, this function has no effect.
      *
      * @param value  The given time zone.
      * @stable ICU 2.0
@@ -2183,7 +2183,7 @@ private:
 
     /**
      * Time zone affects the time calculation done by Calendar. Calendar subclasses use
-     * the time zone data to produce the local time. Always set; never NULL.
+     * the time zone data to produce the local time. Always set; never nullptr.
      */
     TimeZone*   fZone;
 
@@ -2465,7 +2465,7 @@ private:
 
 private:
     /**
-     * Cast TimeZone used by this object to BasicTimeZone, or NULL if the TimeZone
+     * Cast TimeZone used by this object to BasicTimeZone, or nullptr if the TimeZone
      * is not an instance of BasicTimeZone.
      */
     BasicTimeZone* getBasicTimeZone() const;

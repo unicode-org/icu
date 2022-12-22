@@ -54,7 +54,7 @@ void printArray(const char* const comment, const UChar UArray[][5], int32_t arra
 
 void printKeys(const char *comment, uint8_t keys[][32], int32_t keySize) {
   int32_t i = 0;
-  uint8_t *currentKey = NULL;
+  uint8_t *currentKey = nullptr;
   fprintf(stdout, "%s\n", comment);
   for(i = 0; i<keySize; i++) {
     currentKey = keys[i];

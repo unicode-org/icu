@@ -325,7 +325,7 @@ static int printConverters(const char *pname, const char *lookfor,
                             const char *standardName;
                             UBool isFirst = true;
                             UErrorCode enumError = U_ZERO_ERROR;
-                            while ((standardName = uenum_next(nameEnum, NULL, &enumError))) {
+                            while ((standardName = uenum_next(nameEnum, nullptr, &enumError))) {
                                 /* See if this alias is supported by this standard. */
                                 if (!strcmp(standardName, alias)) {
                                     if (!t) {
@@ -518,10 +518,10 @@ cnvSigType(UConverter *cnv) {
         ucnv_fromUnicode(cnv,
             &out, buffer + sizeof(buffer),
             &in, a + 1,
-            NULL, true, &err);
+            nullptr, true, &err);
         ucnv_resetFromUnicode(cnv);
 
-        if (NULL != ucnv_detectUnicodeSignature(buffer, (int32_t)(out - buffer), NULL, &err) &&
+        if (nullptr != ucnv_detectUnicodeSignature(buffer, (int32_t)(out - buffer), nullptr, &err) &&
             U_SUCCESS(err)
         ) {
             result = CNV_ADDS_FEFF;
@@ -534,7 +534,7 @@ cnvSigType(UConverter *cnv) {
 class ConvertFile {
 public:
     ConvertFile() :
-        buf(NULL), outbuf(NULL), fromoffsets(NULL),
+        buf(nullptr), outbuf(nullptr), fromoffsets(nullptr),
         bufsz(0), signature(0) {}
 
     void
@@ -650,7 +650,7 @@ ConvertFile::convertFile(const char *pname,
 #if !UCONFIG_NO_TRANSLITERATION
     // Create transliterator as needed.
 
-    if (translit != NULL && *translit) {
+    if (translit != nullptr && *translit) {
         UParseError parse;
         UnicodeString str(translit), pestr;
 
@@ -691,7 +691,7 @@ ConvertFile::convertFile(const char *pname,
 #endif
 
     // Create codepage converter. If the codepage or its aliases weren't
-    // available, it returns NULL and a failure code. We also set the
+    // available, it returns nullptr and a failure code. We also set the
     // callbacks, and return errors in the same way.
 
     convfrom = ucnv_open(fromcpage, &err);
@@ -770,7 +770,7 @@ ConvertFile::convertFile(const char *pname,
             // Use bufsz instead of u.getCapacity() for the targetLimit
             // so that we don't overflow fromoffsets[].
             ucnv_toUnicode(convfrom, &unibufp, unibuf + bufsz, &cbufp,
-                buf + rd, useOffsets ? fromoffsets : NULL, flush, &err);
+                buf + rd, useOffsets ? fromoffsets : nullptr, flush, &err);
 
             ulen = (int32_t)(unibufp - unibuf);
             u.releaseBuffer(U_SUCCESS(err) ? ulen : 0);
@@ -862,7 +862,7 @@ ConvertFile::convertFile(const char *pname,
             // while avoiding the slower keyboard mode.
             // The end-of-chunk characters are completely included in the
             // transformed string in case they are to be transformed themselves.
-            if (t != NULL) {
+            if (t != nullptr) {
                 UnicodeString out;
                 int32_t chunkLimit;
 
@@ -929,7 +929,7 @@ ConvertFile::convertFile(const char *pname,
                 ucnv_fromUnicode(convto, &bufp, outbuf + bufsz,
                                  &unibufbp,
                                  unibuf + ulen,
-                                 NULL, (UBool)(flush && fromSawEndOfBytes), &err);
+                                 nullptr, (UBool)(flush && fromSawEndOfBytes), &err);
 
                 // toSawEndOfUnicode indicates that ucnv_fromUnicode() is done
                 // converting all of the intermediate UChars.
@@ -977,7 +977,7 @@ ConvertFile::convertFile(const char *pname,
                         ferroffset = static_cast<int32_t>(infoffset + (prevbufp - buf) + fromoffset);
                         errtag = "problemCvtFromU";
                     } else {
-                        // Do not use fromoffsets if (t != NULL) because the Unicode text may
+                        // Do not use fromoffsets if (t != nullptr) because the Unicode text may
                         // be different from what the offsets refer to.
 
                         // output file offset

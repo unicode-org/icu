@@ -118,7 +118,7 @@ public:
 
     /**
      * Given a stand-in character, return the UnicodeFunctor that it
-     * represents, or NULL if it doesn't represent anything.
+     * represents, or nullptr if it doesn't represent anything.
      * @param standIn    the given stand-in character.
      * @return           the UnicodeFunctor that 'standIn' represents
      */
@@ -126,7 +126,7 @@ public:
 
     /**
      * Given a stand-in character, return the UnicodeMatcher that it
-     * represents, or NULL if it doesn't represent anything or if it
+     * represents, or nullptr if it doesn't represent anything or if it
      * represents something that is not a matcher.
      * @param standIn    the given stand-in character.
      * @return           return the UnicodeMatcher that 'standIn' represents
@@ -135,7 +135,7 @@ public:
 
     /**
      * Given a stand-in character, return the UnicodeReplacer that it
-     * represents, or NULL if it doesn't represent anything or if it
+     * represents, or nullptr if it doesn't represent anything or if it
      * represents something that is not a replacer.
      * @param standIn    the given stand-in character.
      * @return           return the UnicodeReplacer that 'standIn' represents

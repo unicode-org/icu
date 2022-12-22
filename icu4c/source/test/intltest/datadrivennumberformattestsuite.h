@@ -30,7 +30,7 @@ class DataDrivenNumberFormatTestSuite : public IntlTest {
  public:
      DataDrivenNumberFormatTestSuite() {
          for (int32_t i = 0; i < UPRV_LENGTHOF(fPreviousFormatters); ++i) {
-             fPreviousFormatters[i] = NULL;
+             fPreviousFormatters[i] = nullptr;
          }
      }
 

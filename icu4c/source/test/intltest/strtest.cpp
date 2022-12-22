@@ -265,13 +265,13 @@ void
 StringTest::TestStringPiece() {
     // Default constructor.
     StringPiece empty;
-    if(!empty.empty() || empty.data()!=NULL || empty.length()!=0 || empty.size()!=0) {
+    if(!empty.empty() || empty.data()!=nullptr || empty.length()!=0 || empty.size()!=0) {
         errln("StringPiece() failed");
     }
-    // Construct from NULL const char * pointer.
+    // Construct from nullptr const char * pointer.
     StringPiece null((const char *)nullptr);
-    if(!null.empty() || null.data()!=NULL || null.length()!=0 || null.size()!=0) {
-        errln("StringPiece(NULL) failed");
+    if(!null.empty() || null.data()!=nullptr || null.length()!=0 || null.size()!=0) {
+        errln("StringPiece(nullptr) failed");
     }
     // Construct from const char * pointer.
     static const char *abc_chars="abc";
@@ -359,7 +359,7 @@ StringTest::TestStringPiece() {
     // clear()
     sp=abcd;
     sp.clear();
-    if(!sp.empty() || sp.data()!=NULL || sp.length()!=0 || sp.size()!=0) {
+    if(!sp.empty() || sp.data()!=nullptr || sp.length()!=0 || sp.size()!=0) {
         errln("abcd.clear() failed");
     }
     // remove_prefix()
@@ -604,13 +604,13 @@ StringTest::TestByteSink() {
     char scratch[20];
     int32_t capacity = -1;
     char *dest = sink.GetAppendBuffer(0, 50, scratch, (int32_t)sizeof(scratch), &capacity);
-    if(dest != NULL || capacity != 0) {
-        errln("ByteSink.GetAppendBuffer(min_capacity<1) did not properly return NULL[0]");
+    if(dest != nullptr || capacity != 0) {
+        errln("ByteSink.GetAppendBuffer(min_capacity<1) did not properly return nullptr[0]");
         return;
     }
     dest = sink.GetAppendBuffer(10, 50, scratch, 9, &capacity);
-    if(dest != NULL || capacity != 0) {
-        errln("ByteSink.GetAppendBuffer(scratch_capacity<min_capacity) did not properly return NULL[0]");
+    if(dest != nullptr || capacity != 0) {
+        errln("ByteSink.GetAppendBuffer(scratch_capacity<min_capacity) did not properly return nullptr[0]");
         return;
     }
     dest = sink.GetAppendBuffer(5, 50, scratch, (int32_t)sizeof(scratch), &capacity);
@@ -635,13 +635,13 @@ StringTest::TestCheckedArrayByteSink() {
     char scratch[10];
     int32_t capacity = -1;
     char *dest = sink.GetAppendBuffer(0, 50, scratch, (int32_t)sizeof(scratch), &capacity);
-    if(dest != NULL || capacity != 0) {
-        errln("CheckedArrayByteSink.GetAppendBuffer(min_capacity<1) did not properly return NULL[0]");
+    if(dest != nullptr || capacity != 0) {
+        errln("CheckedArrayByteSink.GetAppendBuffer(min_capacity<1) did not properly return nullptr[0]");
         return;
     }
     dest = sink.GetAppendBuffer(10, 50, scratch, 9, &capacity);
-    if(dest != NULL || capacity != 0) {
-        errln("CheckedArrayByteSink.GetAppendBuffer(scratch_capacity<min_capacity) did not properly return NULL[0]");
+    if(dest != nullptr || capacity != 0) {
+        errln("CheckedArrayByteSink.GetAppendBuffer(scratch_capacity<min_capacity) did not properly return nullptr[0]");
         return;
     }
     dest = sink.GetAppendBuffer(10, 50, scratch, (int32_t)sizeof(scratch), &capacity);

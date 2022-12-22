@@ -34,10 +34,10 @@
 
 class UTS46Test : public IntlTest {
 public:
-    UTS46Test() : trans(NULL), nontrans(NULL) {}
+    UTS46Test() : trans(nullptr), nontrans(nullptr) {}
     virtual ~UTS46Test();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL) override;
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=nullptr) override;
     void TestAPI();
     void TestNotSTD3();
     void TestInvalidPunycodeDigits();
@@ -67,7 +67,7 @@ UTS46Test::~UTS46Test() {
 void UTS46Test::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
     if(exec) {
         logln("TestSuite UTS46Test: ");
-        if(trans==NULL) {
+        if(trans==nullptr) {
             IcuTestErrorCode errorCode(*this, "init/createUTS46Instance()");
             uint32_t commonOptions=
                 UIDNA_USE_STD3_RULES|UIDNA_CHECK_BIDI|
@@ -167,9 +167,9 @@ void UTS46Test::TestAPI() {
     char buffer[100];
     TestCheckedArrayByteSink sink(buffer, UPRV_LENGTHOF(buffer));
     errorCode=U_ZERO_ERROR;
-    nontrans->labelToUnicodeUTF8(StringPiece((const char *)NULL, 5), sink, info, errorCode);
+    nontrans->labelToUnicodeUTF8(StringPiece((const char *)nullptr, 5), sink, info, errorCode);
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR || sink.NumberOfBytesWritten()!=0) {
-        errln("N.labelToUnicodeUTF8(StringPiece(NULL, 5)) did not set illegal-argument-error ",
+        errln("N.labelToUnicodeUTF8(StringPiece(nullptr, 5)) did not set illegal-argument-error ",
               "or did output something - %s",
               u_errorName(errorCode));
     }

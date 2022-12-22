@@ -86,8 +86,8 @@ UCharsTrieElement::compareStringTo(const UCharsTrieElement &other, const Unicode
 }
 
 UCharsTrieBuilder::UCharsTrieBuilder(UErrorCode & /*errorCode*/)
-        : elements(NULL), elementsCapacity(0), elementsLength(0),
-          uchars(NULL), ucharsCapacity(0), ucharsLength(0) {}
+        : elements(nullptr), elementsCapacity(0), elementsLength(0),
+          uchars(nullptr), ucharsCapacity(0), ucharsLength(0) {}
 
 UCharsTrieBuilder::~UCharsTrieBuilder() {
     delete[] elements;
@@ -112,7 +112,7 @@ UCharsTrieBuilder::add(const UnicodeString &s, int32_t value, UErrorCode &errorC
             newCapacity=4*elementsCapacity;
         }
         UCharsTrieElement *newElements=new UCharsTrieElement[newCapacity];
-        if(newElements==NULL) {
+        if(newElements==nullptr) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
             return *this;
         }
@@ -145,13 +145,13 @@ U_CDECL_END
 UCharsTrie *
 UCharsTrieBuilder::build(UStringTrieBuildOption buildOption, UErrorCode &errorCode) {
     buildUChars(buildOption, errorCode);
-    UCharsTrie *newTrie=NULL;
+    UCharsTrie *newTrie=nullptr;
     if(U_SUCCESS(errorCode)) {
         newTrie=new UCharsTrie(uchars, uchars+(ucharsCapacity-ucharsLength));
-        if(newTrie==NULL) {
+        if(newTrie==nullptr) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
         } else {
-            uchars=NULL;  // The new trie now owns the array.
+            uchars=nullptr;  // The new trie now owns the array.
             ucharsCapacity=0;
         }
     }
@@ -173,7 +173,7 @@ UCharsTrieBuilder::buildUChars(UStringTrieBuildOption buildOption, UErrorCode &e
     if(U_FAILURE(errorCode)) {
         return;
     }
-    if(uchars!=NULL && ucharsLength>0) {
+    if(uchars!=nullptr && ucharsLength>0) {
         // Already built.
         return;
     }
@@ -213,7 +213,7 @@ UCharsTrieBuilder::buildUChars(UStringTrieBuildOption buildOption, UErrorCode &e
     if(ucharsCapacity<capacity) {
         uprv_free(uchars);
         uchars=static_cast<UChar *>(uprv_malloc(capacity*2));
-        if(uchars==NULL) {
+        if(uchars==nullptr) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
             ucharsCapacity=0;
             return;
@@ -221,7 +221,7 @@ UCharsTrieBuilder::buildUChars(UStringTrieBuildOption buildOption, UErrorCode &e
         ucharsCapacity=capacity;
     }
     StringTrieBuilder::build(buildOption, elementsLength, errorCode);
-    if(uchars==NULL) {
+    if(uchars==nullptr) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
     }
 }
@@ -321,7 +321,7 @@ UCharsTrieBuilder::createLinearMatchNode(int32_t i, int32_t unitIndex, int32_t l
 
 UBool
 UCharsTrieBuilder::ensureCapacity(int32_t length) {
-    if(uchars==NULL) {
+    if(uchars==nullptr) {
         return false;  // previous memory allocation had failed
     }
     if(length>ucharsCapacity) {
@@ -330,10 +330,10 @@ UCharsTrieBuilder::ensureCapacity(int32_t length) {
             newCapacity*=2;
         } while(newCapacity<=length);
         UChar *newUChars=static_cast<UChar *>(uprv_malloc(newCapacity*2));
-        if(newUChars==NULL) {
+        if(newUChars==nullptr) {
             // unable to allocate memory
             uprv_free(uchars);
-            uchars=NULL;
+            uchars=nullptr;
             ucharsCapacity=0;
             return false;
         }

@@ -76,7 +76,7 @@ public:
         if(rangeIndex<UPRV_LENGTHOF(ranges)) {
             return ranges+rangeIndex++;
         } else {
-            return NULL;
+            return nullptr;
         }
     }
 private:
@@ -123,7 +123,7 @@ Normalizer2DataBuilder::setUnicodeVersion(const char *v) {
 }
 
 Norm *Normalizer2DataBuilder::checkNormForMapping(Norm *p, UChar32 c) {
-    if(p!=NULL) {
+    if(p!=nullptr) {
         if(p->mappingType!=Norm::NONE) {
             if( overrideHandling==OVERRIDE_NONE ||
                 (overrideHandling==OVERRIDE_PREVIOUS && p->mappingPhase==phase)
@@ -135,7 +135,7 @@ Norm *Normalizer2DataBuilder::checkNormForMapping(Norm *p, UChar32 c) {
                 exit(U_INVALID_FORMAT_ERROR);
             }
             delete p->mapping;
-            p->mapping=NULL;
+            p->mapping=nullptr;
         }
         p->mappingPhase=phase;
     }
@@ -154,7 +154,7 @@ void Normalizer2DataBuilder::setCC(UChar32 c, uint8_t cc) {
 
 static UBool isWellFormed(const UnicodeString &s) {
     UErrorCode errorCode=U_ZERO_ERROR;
-    u_strToUTF8(NULL, 0, NULL, toUCharPtr(s.getBuffer()), s.length(), &errorCode);
+    u_strToUTF8(nullptr, 0, nullptr, toUCharPtr(s.getBuffer()), s.length(), &errorCode);
     return U_SUCCESS(errorCode) || errorCode==U_BUFFER_OVERFLOW_ERROR;
 }
 
@@ -360,13 +360,13 @@ void Normalizer2DataBuilder::postProcess(Norm &norm) {
         if(norm.combinesBack) {
             norm.error="combines-back and decomposes, not possible in Unicode normalization";
         } else if(norm.mappingType==Norm::ROUND_TRIP) {
-            if(norm.compositions!=NULL) {
+            if(norm.compositions!=nullptr) {
                 norm.type=Norm::YES_NO_COMBINES_FWD;
             } else {
                 norm.type=Norm::YES_NO_MAPPING_ONLY;
             }
         } else {  // one-way mapping
-            if(norm.compositions!=NULL) {
+            if(norm.compositions!=nullptr) {
                 norm.error="combines-forward and has a one-way mapping, "
                            "not possible in Unicode normalization";
             } else if(buffer.isEmpty()) {
@@ -509,7 +509,7 @@ void Normalizer2DataBuilder::setHangulData(UMutableCPTrie *norm16Trie) {
     HangulIterator hi;
     const HangulIterator::Range *range;
     // Check that none of the Hangul/Jamo code points have data.
-    while((range=hi.nextRange())!=NULL) {
+    while((range=hi.nextRange())!=nullptr) {
         for(UChar32 c=range->start; c<=range->end; ++c) {
             if(umutablecptrie_get(norm16Trie, c)>Normalizer2Impl::INERT) {
                 fprintf(stderr,
@@ -780,8 +780,8 @@ void Normalizer2DataBuilder::writeBinaryFile(const char *filename) {
 
     IcuToolErrorCode errorCode("gennorm2/writeBinaryFile()");
     UNewDataMemory *pData=
-        udata_create(NULL, NULL, filename, &dataInfo,
-                     haveCopyright ? U_COPYRIGHT_STRING : NULL, errorCode);
+        udata_create(nullptr, nullptr, filename, &dataInfo,
+                     haveCopyright ? U_COPYRIGHT_STRING : nullptr, errorCode);
     if(errorCode.isFailure()) {
         fprintf(stderr, "gennorm2 error: unable to create the output file %s - %s\n",
                 filename, errorCode.errorName());
@@ -813,14 +813,14 @@ Normalizer2DataBuilder::writeCSourceFile(const char *filename) {
     CharString path(filename, (int32_t)(basename-filename), errorCode);
     CharString dataName(basename, errorCode);
     const char *extension=strrchr(basename, '.');
-    if(extension!=NULL) {
+    if(extension!=nullptr) {
         dataName.truncate((int32_t)(extension-basename));
     }
     const char *name=dataName.data();
     errorCode.assertSuccess();
 
     FILE *f=usrc_create(path.data(), basename, 2016, "icu/source/tools/gennorm2/n2builder.cpp");
-    if(f==NULL) {
+    if(f==nullptr) {
         fprintf(stderr, "gennorm2/writeCSourceFile() error: unable to create the output file %s\n",
                 filename);
         exit(U_FILE_ACCESS_ERROR);

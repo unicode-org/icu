@@ -35,7 +35,7 @@ static void _fb_trace(const char *m, const UnicodeString *s, UBool b, int32_t d,
   if(s) {
     s->extract(0,s->length(),buf,2048);
   } else {
-    strcpy(buf,"NULL");
+    strcpy(buf,"nullptr");
   }
   fprintf(stderr,"%s:%d: %s. s='%s'(%p), b=%c, d=%d\n",
           f, l, m, buf, (const void*)s, b?'T':'F',(int)d);

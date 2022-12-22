@@ -350,7 +350,7 @@ GregorianCalendar::setGregorianChange(UDate date, UErrorCode& status)
     // Normalize the year so BC values are represented as 0 and negative
     // values.
     GregorianCalendar *cal = new GregorianCalendar(getTimeZone(), status);
-    /* test for NULL */
+    /* test for nullptr */
     if (cal == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;

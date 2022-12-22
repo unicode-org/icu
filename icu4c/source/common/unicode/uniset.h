@@ -297,8 +297,8 @@ private:
     int32_t len = 1; // length of list used; 1 <= len <= capacity
     uint8_t fFlags = 0;         // Bit flag (see constants above)
 
-    BMPSet *bmpSet = nullptr; // The set is frozen iff either bmpSet or stringSpan is not NULL.
-    UChar32* buffer = nullptr; // internal buffer, may be NULL
+    BMPSet *bmpSet = nullptr; // The set is frozen iff either bmpSet or stringSpan is not nullptr.
+    UChar32* buffer = nullptr; // internal buffer, may be nullptr
     int32_t bufferCapacity = 0; // capacity of buffer
 
     /**
@@ -432,7 +432,7 @@ public:
      * @param options bitmask for options to apply to the pattern.
      * Valid options are USET_IGNORE_SPACE and USET_CASE_INSENSITIVE.
      * @param symbols a symbol table mapping variable names to values
-     * and stand-in characters to UnicodeSets; may be NULL
+     * and stand-in characters to UnicodeSets; may be nullptr
      * @param status returns <code>U_ILLEGAL_ARGUMENT_ERROR</code> if the pattern
      * contains a syntax error.
      * @internal
@@ -452,7 +452,7 @@ public:
      * @param options bitmask for options to apply to the pattern.
      * Valid options are USET_IGNORE_SPACE and USET_CASE_INSENSITIVE.
      * @param symbols a symbol table mapping variable names to values
-     * and stand-in characters to UnicodeSets; may be NULL
+     * and stand-in characters to UnicodeSets; may be nullptr
      * @param status input-output error code
      * @stable ICU 2.8
      */
@@ -647,7 +647,7 @@ public:
      * @param options bitmask for options to apply to the pattern.
      * Valid options are USET_IGNORE_SPACE and USET_CASE_INSENSITIVE.
      * @param symbols a symbol table mapping variable names to
-     * values and stand-ins to UnicodeSets; may be NULL
+     * values and stand-ins to UnicodeSets; may be nullptr
      * @param status returns <code>U_ILLEGAL_ARGUMENT_ERROR</code> if the pattern
      * contains a syntax error.
      *<em> Empties the set passed before applying the pattern.</em>
@@ -685,7 +685,7 @@ public:
      * @param options bitmask for options to apply to the pattern.
      * Valid options are USET_IGNORE_SPACE and USET_CASE_INSENSITIVE.
      * @param symbols a symbol table mapping variable names to
-     * values and stand-ins to UnicodeSets; may be NULL
+     * values and stand-ins to UnicodeSets; may be nullptr
      * @param status returns <code>U_ILLEGAL_ARGUMENT_ERROR</code> if the pattern
      * contains a syntax error.
      * @return a reference to this
@@ -1488,7 +1488,7 @@ public:
      * bits followed by least significant 16 bits.
      *
      * @param dest pointer to buffer of destCapacity 16-bit integers.
-     * May be NULL only if destCapacity is zero.
+     * May be nullptr only if destCapacity is zero.
      * @param destCapacity size of dest, or zero.  Must not be negative.
      * @param ec error code.  Will be set to U_INDEX_OUTOFBOUNDS_ERROR
      * if n+2*m > 0x7FFF.  Will be set to U_BUFFER_OVERFLOW_ERROR if
@@ -1718,7 +1718,7 @@ inline bool UnicodeSet::operator!=(const UnicodeSet& o) const {
 }
 
 inline UBool UnicodeSet::isFrozen() const {
-    return (UBool)(bmpSet!=NULL || stringSpan!=NULL);
+    return (UBool)(bmpSet!=nullptr || stringSpan!=nullptr);
 }
 
 inline UBool UnicodeSet::containsSome(UChar32 start, UChar32 end) const {

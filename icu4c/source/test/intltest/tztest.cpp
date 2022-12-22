@@ -433,7 +433,7 @@ TimeZoneTest::TestGetAvailableIDs913()
     int32_t s_length;
     StringEnumeration* s = TimeZone::createEnumeration(ec);
     LocalPointer<StringEnumeration> tmp1(TimeZone::createEnumeration(), ec);
-    if (U_FAILURE(ec) || s == NULL) {
+    if (U_FAILURE(ec) || s == nullptr) {
         dataerrln("Unable to create TimeZone enumeration");
         return;
     }
@@ -446,13 +446,13 @@ TimeZoneTest::TestGetAvailableIDs913()
         if ((i & 1) == 0) {
             buf += *s->snext(ec);
         } else {
-            buf += UnicodeString(s->next(NULL, ec), "");
+            buf += UnicodeString(s->next(nullptr, ec), "");
         }
 
         if((i % 5) == 4) {
             // replace s with a clone of itself
             StringEnumeration *s2 = s->clone();
-            if(s2 == NULL || s_length != s2->count(ec)) {
+            if(s2 == nullptr || s_length != s2->count(ec)) {
                 errln("TimezoneEnumeration.clone() failed");
             } else {
                 delete s;
@@ -566,46 +566,46 @@ TimeZoneTest::TestGetAvailableIDsNew()
     char region[4] = {0};
     int32_t zoneCount;
 
-    any = canonical = canonicalLoc = any_US = canonical_US = canonicalLoc_US = any_W5 = any_CA_W5 = any_US_E14 = NULL;
+    any = canonical = canonicalLoc = any_US = canonical_US = canonicalLoc_US = any_W5 = any_CA_W5 = any_US_E14 = nullptr;
     
-    any = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_ANY, NULL, NULL, ec);
+    any = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_ANY, nullptr, nullptr, ec);
     if (U_FAILURE(ec)) {
         dataerrln("Failed to create enumeration for ANY");
         goto cleanup;
     }
 
-    canonical = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_CANONICAL, NULL, NULL, ec);
+    canonical = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_CANONICAL, nullptr, nullptr, ec);
     if (U_FAILURE(ec)) {
         errln("Failed to create enumeration for CANONICAL");
         goto cleanup;
     }
 
-    canonicalLoc = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_CANONICAL_LOCATION, NULL, NULL, ec);
+    canonicalLoc = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_CANONICAL_LOCATION, nullptr, nullptr, ec);
     if (U_FAILURE(ec)) {
         errln("Failed to create enumeration for CANONICALLOC");
         goto cleanup;
     }
 
-    any_US = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_ANY, "US", NULL, ec);
+    any_US = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_ANY, "US", nullptr, ec);
     if (U_FAILURE(ec)) {
         errln("Failed to create enumeration for ANY_US");
         goto cleanup;
     }
 
-    canonical_US = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_CANONICAL, "US", NULL, ec);
+    canonical_US = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_CANONICAL, "US", nullptr, ec);
     if (U_FAILURE(ec)) {
         errln("Failed to create enumeration for CANONICAL_US");
         goto cleanup;
     }
 
-    canonicalLoc_US = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_CANONICAL_LOCATION, "US", NULL, ec);
+    canonicalLoc_US = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_CANONICAL_LOCATION, "US", nullptr, ec);
     if (U_FAILURE(ec)) {
         errln("Failed to create enumeration for CANONICALLOC_US");
         goto cleanup;
     }
 
     rawOffset = (-5)*60*60*1000;
-    any_W5 = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_ANY, NULL, &rawOffset, ec);
+    any_W5 = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_ANY, nullptr, &rawOffset, ec);
     if (U_FAILURE(ec)) {
         errln("Failed to create enumeration for ANY_W5");
         goto cleanup;
@@ -639,10 +639,10 @@ TimeZoneTest::TestGetAvailableIDsNew()
 
     // And ID in any set, but not in canonical set must not be a canonical ID
     any->reset(ec);
-    while ((id1 = any->snext(ec)) != NULL) {
+    while ((id1 = any->snext(ec)) != nullptr) {
         UBool found = false;
         canonical->reset(ec);
-        while ((id2 = canonical->snext(ec)) != NULL) {
+        while ((id2 = canonical->snext(ec)) != nullptr) {
             if (*id1 == *id2) {
                 found = true;
                 break;
@@ -671,7 +671,7 @@ TimeZoneTest::TestGetAvailableIDsNew()
 
     // canonical set must contains only canonical IDs
     canonical->reset(ec);
-    while ((id1 = canonical->snext(ec)) != NULL) {
+    while ((id1 = canonical->snext(ec)) != nullptr) {
         TimeZone::getCanonicalID(*id1, canonicalID, isSystemID, ec);
         if (U_FAILURE(ec)) {
             break;
@@ -690,7 +690,7 @@ TimeZoneTest::TestGetAvailableIDsNew()
 
     // canonicalLoc set must contain only canonical location IDs
     canonicalLoc->reset(ec);
-    while ((id1 = canonicalLoc->snext(ec)) != NULL) {
+    while ((id1 = canonicalLoc->snext(ec)) != nullptr) {
         TimeZone::getRegion(*id1, region, sizeof(region), ec);
         if (U_FAILURE(ec)) {
             break;
@@ -706,7 +706,7 @@ TimeZoneTest::TestGetAvailableIDsNew()
 
     // any_US must contain only US zones
     any_US->reset(ec);
-    while ((id1 = any_US->snext(ec)) != NULL) {
+    while ((id1 = any_US->snext(ec)) != nullptr) {
         TimeZone::getRegion(*id1, region, sizeof(region), ec);
         if (U_FAILURE(ec)) {
             break;
@@ -722,7 +722,7 @@ TimeZoneTest::TestGetAvailableIDsNew()
 
     // any_W5 must contain only GMT-05:00 zones
     any_W5->reset(ec);
-    while ((id1 = any_W5->snext(ec)) != NULL) {
+    while ((id1 = any_W5->snext(ec)) != nullptr) {
         TimeZone *tz = TimeZone::createTimeZone(*id1);
         if (tz->getRawOffset() != (-5)*60*60*1000) {
             errln((UnicodeString)"FAIL: ANY_W5 contains a zone whose offset is not -05:00: " + *id1);
@@ -764,10 +764,10 @@ TimeZoneTest::checkContainsAll(StringEnumeration *s1, const char *name1,
 
     s2->reset(ec);
 
-    while ((id2 = s2->snext(ec)) != NULL) {
+    while ((id2 = s2->snext(ec)) != nullptr) {
         UBool found = false;
         s1->reset(ec);
-        while ((id1 = s1->snext(ec)) != NULL) {
+        while ((id1 = s1->snext(ec)) != nullptr) {
             if (*id1 == *id2) {
                 found = true;
                 break;
@@ -1382,7 +1382,7 @@ TimeZoneTest::TestAliasedNames()
 
     int32_t i, j, k, loc;
     UnicodeString fromName, toName;
-    TimeZone *from = NULL, *to = NULL;
+    TimeZone *from = nullptr, *to = nullptr;
     for(i = 0; i < UPRV_LENGTHOF(kData); i++) {
         from = TimeZone::createTimeZone(kData[i].from);
         to = TimeZone::createTimeZone(kData[i].to);
@@ -1538,12 +1538,12 @@ TimeZoneTest::TestDisplayName()
     // *** REVISIT SRL how in the world do I check this? looks java specific.
     // Now be smart -- check to see if zh resource is even present.
     // If not, we expect the en fallback behavior.
-    ResourceBundle enRB(NULL,
+    ResourceBundle enRB(nullptr,
                             Locale::getEnglish(), status);
     if(U_FAILURE(status))
         dataerrln("Couldn't get ResourceBundle for en - %s", u_errorName(status));
 
-    ResourceBundle mtRB(NULL,
+    ResourceBundle mtRB(nullptr,
                          mt_MT, status);
     //if(U_FAILURE(status))
     //    errln("Couldn't get ResourceBundle for mt_MT");
@@ -1804,13 +1804,13 @@ void TimeZoneTest::TestCountries() {
     }
     for(i=0;i<n;++i){
         const UnicodeString* id1 = s1->snext(ec);
-        if(id1==NULL || U_FAILURE(ec)){
+        if(id1==nullptr || U_FAILURE(ec)){
             errln("Failed to fetch next from TimeZone enumeration. Length returned : %i Current Index: %i", n,i);
         }
         TimeZone* tz1 = TimeZone::createTimeZone(*id1);
         for(int j=0; j<n;++j){
             const UnicodeString* id2 = s2->snext(ec);
-            if(id2==NULL || U_FAILURE(ec)){
+            if(id2==nullptr || U_FAILURE(ec)){
                 errln("Failed to fetch next from TimeZone enumeration. Length returned : %i Current Index: %i", n,i);
             }
             TimeZone* tz2 = TimeZone::createTimeZone(*id2);
@@ -2357,7 +2357,7 @@ static struct   {
       {"Europe/London",       "en", true, TimeZone::SHORT, "GMT+1" /*"BST"*/},
       {"Europe/London",       "en", true, TimeZone::LONG,  "British Summer Time"},
 
-      {NULL, NULL, false, TimeZone::SHORT, NULL}   // NULL values terminate list
+      {nullptr, nullptr, false, TimeZone::SHORT, nullptr}   // nullptr values terminate list
     };
 
 void TimeZoneTest::TestDisplayNamesMeta() {
@@ -2366,7 +2366,7 @@ void TimeZoneTest::TestDisplayNamesMeta() {
     if (failure(status, "GregorianCalendar", true)) return;
 
     UBool sawAnError = false;
-    for (int testNum   = 0; zoneDisplayTestData[testNum].zoneName != NULL; testNum++) {
+    for (int testNum   = 0; zoneDisplayTestData[testNum].zoneName != nullptr; testNum++) {
         Locale locale  = Locale::createFromName(zoneDisplayTestData[testNum].localeName);
         TimeZone *zone = TimeZone::createTimeZone(zoneDisplayTestData[testNum].zoneName);
         UnicodeString displayName;
@@ -2377,7 +2377,7 @@ void TimeZoneTest::TestDisplayNamesMeta() {
         if (displayName != zoneDisplayTestData[testNum].expectedDisplayName) {
             char  name[100];
             UErrorCode status = U_ZERO_ERROR;
-            displayName.extract(name, 100, NULL, status);
+            displayName.extract(name, 100, nullptr, status);
             if (isDevelopmentBuild) {
                 sawAnError = true;
                 dataerrln("Incorrect time zone display name.  zone = \"%s\",\n"

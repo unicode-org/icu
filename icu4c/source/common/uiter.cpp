@@ -74,7 +74,7 @@ static const UCharIterator noopIterator={
     noopCurrent,
     noopCurrent,
     noopCurrent,
-    NULL,
+    nullptr,
     noopGetState,
     noopSetState
 };
@@ -185,9 +185,9 @@ stringIteratorGetState(const UCharIterator *iter) {
 
 static void U_CALLCONV
 stringIteratorSetState(UCharIterator *iter, uint32_t state, UErrorCode *pErrorCode) {
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+    if(pErrorCode==nullptr || U_FAILURE(*pErrorCode)) {
         /* do nothing */
-    } else if(iter==NULL) {
+    } else if(iter==nullptr) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
     } else if((int32_t)state<iter->start || iter->limit<(int32_t)state) {
         *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
@@ -205,7 +205,7 @@ static const UCharIterator stringIterator={
     stringIteratorCurrent,
     stringIteratorNext,
     stringIteratorPrevious,
-    NULL,
+    nullptr,
     stringIteratorGetState,
     stringIteratorSetState
 };
@@ -291,7 +291,7 @@ static const UCharIterator utf16BEIterator={
     utf16BEIteratorCurrent,
     utf16BEIteratorNext,
     utf16BEIteratorPrevious,
-    NULL,
+    nullptr,
     stringIteratorGetState,
     stringIteratorSetState
 };
@@ -323,9 +323,9 @@ utf16BE_strlen(const char *s) {
 
 U_CAPI void U_EXPORT2
 uiter_setUTF16BE(UCharIterator *iter, const char *s, int32_t length) {
-    if(iter!=NULL) {
+    if(iter!=nullptr) {
         /* allow only even-length strings (the input length counts bytes) */
-        if(s!=NULL && (length==-1 || (length>=0 && IS_EVEN(length)))) {
+        if(s!=nullptr && (length==-1 || (length>=0 && IS_EVEN(length)))) {
             /* length/=2, except that >>=1 also works for -1 (-1/2==0, -1>>1==-1) */
             length>>=1;
 
@@ -445,9 +445,9 @@ characterIteratorGetState(const UCharIterator *iter) {
 
 static void U_CALLCONV
 characterIteratorSetState(UCharIterator *iter, uint32_t state, UErrorCode *pErrorCode) {
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+    if(pErrorCode==nullptr || U_FAILURE(*pErrorCode)) {
         /* do nothing */
-    } else if(iter==NULL || iter->context==NULL) {
+    } else if(iter==nullptr || iter->context==nullptr) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
     } else if((int32_t)state<((CharacterIterator *)(iter->context))->startIndex() || ((CharacterIterator *)(iter->context))->endIndex()<(int32_t)state) {
         *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
@@ -465,7 +465,7 @@ static const UCharIterator characterIteratorWrapper={
     characterIteratorCurrent,
     characterIteratorNext,
     characterIteratorPrevious,
-    NULL,
+    nullptr,
     characterIteratorGetState,
     characterIteratorSetState
 };
@@ -529,7 +529,7 @@ static const UCharIterator replaceableIterator={
     replaceableIteratorCurrent,
     replaceableIteratorNext,
     replaceableIteratorPrevious,
-    NULL,
+    nullptr,
     stringIteratorGetState,
     stringIteratorSetState
 };
@@ -951,9 +951,9 @@ utf8IteratorSetState(UCharIterator *iter,
                      uint32_t state,
                      UErrorCode *pErrorCode)
 {
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+    if(pErrorCode==nullptr || U_FAILURE(*pErrorCode)) {
         /* do nothing */
-    } else if(iter==NULL) {
+    } else if(iter==nullptr) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
     } else if(state==utf8IteratorGetState(iter)) {
         /* setting to the current state: no-op */
@@ -995,7 +995,7 @@ static const UCharIterator utf8Iterator={
     utf8IteratorCurrent,
     utf8IteratorNext,
     utf8IteratorPrevious,
-    NULL,
+    nullptr,
     utf8IteratorGetState,
     utf8IteratorSetState
 };
@@ -1085,7 +1085,7 @@ uiter_previous32(UCharIterator *iter) {
 
 U_CAPI uint32_t U_EXPORT2
 uiter_getState(const UCharIterator *iter) {
-    if(iter==NULL || iter->getState==NULL) {
+    if(iter==nullptr || iter->getState==nullptr) {
         return UITER_NO_STATE;
     } else {
         return iter->getState(iter);
@@ -1094,11 +1094,11 @@ uiter_getState(const UCharIterator *iter) {
 
 U_CAPI void U_EXPORT2
 uiter_setState(UCharIterator *iter, uint32_t state, UErrorCode *pErrorCode) {
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+    if(pErrorCode==nullptr || U_FAILURE(*pErrorCode)) {
         /* do nothing */
-    } else if(iter==NULL) {
+    } else if(iter==nullptr) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-    } else if(iter->setState==NULL) {
+    } else if(iter->setState==nullptr) {
         *pErrorCode=U_UNSUPPORTED_ERROR;
     } else {
         iter->setState(iter, state, pErrorCode);

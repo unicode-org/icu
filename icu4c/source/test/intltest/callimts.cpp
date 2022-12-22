@@ -301,7 +301,7 @@ CalendarLimitTest::doTheoreticalLimitsTest(Calendar& cal, UBool leapMonth) {
 void
 CalendarLimitTest::doLimitsTest(Calendar& cal, UDate startDate, int32_t endTime) {
     int32_t testTime = quick ? ( endTime / 40 ) : endTime;
-    doLimitsTest(cal, NULL /*default fields*/, startDate, testTime);
+    doLimitsTest(cal, nullptr /*default fields*/, startDate, testTime);
 }
 
 void
@@ -347,7 +347,7 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
     }
     logln((UnicodeString)"Start: " + startDate);
 
-    if (fieldsToTest == NULL) {
+    if (fieldsToTest == nullptr) {
         fieldsToTest = FIELDS;
     }
 

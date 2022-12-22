@@ -70,7 +70,7 @@ public:
             capacity=(int32_t)sizeof(staticList);
         } else {
             UBool *l=(UBool *)uprv_malloc(maxLength);
-            if(l!=NULL) {
+            if(l!=nullptr) {
                 list=l;
                 capacity=maxLength;
             }
@@ -168,7 +168,7 @@ static int32_t
 getUTF8Length(const UChar *s, int32_t length) {
     UErrorCode errorCode=U_ZERO_ERROR;
     int32_t length8=0;
-    u_strToUTF8(NULL, 0, &length8, s, length, &errorCode);
+    u_strToUTF8(nullptr, 0, &length8, s, length, &errorCode);
     if(U_SUCCESS(errorCode) || errorCode==U_BUFFER_OVERFLOW_ERROR) {
         return length8;
     } else {
@@ -204,8 +204,8 @@ makeSpanLengthByte(int32_t spanLength) {
 UnicodeSetStringSpan::UnicodeSetStringSpan(const UnicodeSet &set,
                                            const UVector &setStrings,
                                            uint32_t which)
-        : spanSet(0, 0x10ffff), pSpanNotSet(NULL), strings(setStrings),
-          utf8Lengths(NULL), spanLengths(NULL), utf8(NULL),
+        : spanSet(0, 0x10ffff), pSpanNotSet(nullptr), strings(setStrings),
+          utf8Lengths(nullptr), spanLengths(nullptr), utf8(nullptr),
           utf8Length(0),
           maxLength16(0), maxLength8(0),
           all((UBool)(which==ALL)) {
@@ -283,7 +283,7 @@ UnicodeSetStringSpan::UnicodeSetStringSpan(const UnicodeSet &set,
         utf8Lengths=staticLengths;
     } else {
         utf8Lengths=(int32_t *)uprv_malloc(allocSize);
-        if(utf8Lengths==NULL) {
+        if(utf8Lengths==nullptr) {
             maxLength16=maxLength8=0;  // Prevent usage by making needsStringSpanUTF16/8() return false.
             return;  // Out of memory.
         }
@@ -395,8 +395,8 @@ UnicodeSetStringSpan::UnicodeSetStringSpan(const UnicodeSet &set,
 // Copy constructor. Assumes which==ALL for a frozen set.
 UnicodeSetStringSpan::UnicodeSetStringSpan(const UnicodeSetStringSpan &otherStringSpan,
                                            const UVector &newParentSetStrings)
-        : spanSet(otherStringSpan.spanSet), pSpanNotSet(NULL), strings(newParentSetStrings),
-          utf8Lengths(NULL), spanLengths(NULL), utf8(NULL),
+        : spanSet(otherStringSpan.spanSet), pSpanNotSet(nullptr), strings(newParentSetStrings),
+          utf8Lengths(nullptr), spanLengths(nullptr), utf8(nullptr),
           utf8Length(otherStringSpan.utf8Length),
           maxLength16(otherStringSpan.maxLength16), maxLength8(otherStringSpan.maxLength8),
           all(true) {
@@ -414,7 +414,7 @@ UnicodeSetStringSpan::UnicodeSetStringSpan(const UnicodeSetStringSpan &otherStri
         utf8Lengths=staticLengths;
     } else {
         utf8Lengths=(int32_t *)uprv_malloc(allocSize);
-        if(utf8Lengths==NULL) {
+        if(utf8Lengths==nullptr) {
             maxLength16=maxLength8=0;  // Prevent usage by making needsStringSpanUTF16/8() return false.
             return;  // Out of memory.
         }
@@ -426,21 +426,21 @@ UnicodeSetStringSpan::UnicodeSetStringSpan(const UnicodeSetStringSpan &otherStri
 }
 
 UnicodeSetStringSpan::~UnicodeSetStringSpan() {
-    if(pSpanNotSet!=NULL && pSpanNotSet!=&spanSet) {
+    if(pSpanNotSet!=nullptr && pSpanNotSet!=&spanSet) {
         delete pSpanNotSet;
     }
-    if(utf8Lengths!=NULL && utf8Lengths!=staticLengths) {
+    if(utf8Lengths!=nullptr && utf8Lengths!=staticLengths) {
         uprv_free(utf8Lengths);
     }
 }
 
 void UnicodeSetStringSpan::addToSpanNotSet(UChar32 c) {
-    if(pSpanNotSet==NULL || pSpanNotSet==&spanSet) {
+    if(pSpanNotSet==nullptr || pSpanNotSet==&spanSet) {
         if(spanSet.contains(c)) {
             return;  // Nothing to do.
         }
         UnicodeSet *newSet=spanSet.cloneAsThawed();
-        if(newSet==NULL) {
+        if(newSet==nullptr) {
             return;  // Out of memory.
         } else {
             pSpanNotSet=newSet;

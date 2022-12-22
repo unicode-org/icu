@@ -555,7 +555,7 @@ CompactDecimalFormat*
 CompactDecimalFormatTest::createCDFInstance(const Locale& locale, UNumberCompactStyle style, UErrorCode& status) {
   CompactDecimalFormat* result = CompactDecimalFormat::createInstance(locale, style, status);
   if (U_FAILURE(status)) {
-    return NULL;
+    return nullptr;
   }
   // All tests are written for two significant digits, so we explicitly set here
   // in case default significant digits change.

@@ -57,7 +57,7 @@ private:
 public:
     StringSearchPerformanceTest(int32_t argc, const char *argv[], UErrorCode &status);
     ~StringSearchPerformanceTest();
-    virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL);
+    virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = nullptr);
     UPerfFunction* Test_ICU_Forward_Search();
     UPerfFunction* Test_ICU_Backward_Search();
 };

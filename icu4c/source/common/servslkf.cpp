@@ -57,7 +57,7 @@ SimpleLocaleKeyFactory::SimpleLocaleKeyFactory(UObject* objToAdopt,
 SimpleLocaleKeyFactory::~SimpleLocaleKeyFactory()
 {
   delete _obj;
-  _obj = NULL;
+  _obj = nullptr;
 }
 
 UObject*
@@ -73,7 +73,7 @@ SimpleLocaleKeyFactory::create(const ICUServiceKey& key, const ICUService* servi
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 //UBool

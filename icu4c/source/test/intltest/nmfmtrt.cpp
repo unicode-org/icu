@@ -92,7 +92,7 @@ NumberFormatRoundTripTest::start()
 
     UErrorCode status = U_ZERO_ERROR;
 
-    NumberFormat *fmt = NULL;
+    NumberFormat *fmt = nullptr;
 
     logln("Default Locale");
 
@@ -186,7 +186,7 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
         // the double will stay in range.
         //if(fmt->getMultipler() == 1)
         DecimalFormat *df = dynamic_cast<DecimalFormat *>(fmt);
-        if(df != NULL)
+        if(df != nullptr)
         {
 #if !(U_PF_OS390 <= U_PLATFORM && U_PLATFORM <= U_PF_OS400)
             /* DBL_MAX/2 is here because randomDouble does a *2 in the math */
@@ -234,7 +234,7 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt, const Formattable& value)
 {
     fmt->setMaximumFractionDigits(999);
     DecimalFormat *df = dynamic_cast<DecimalFormat *>(fmt);
-    if(df != NULL) {
+    if(df != nullptr) {
         df->setRoundingIncrement(0.0);
     }
     UErrorCode status = U_ZERO_ERROR;

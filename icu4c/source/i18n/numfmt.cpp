@@ -109,38 +109,38 @@ const int32_t icu::NumberFormat::gDefaultMaxIntegerDigits = 2000000000;
 const int32_t icu::NumberFormat::gDefaultMinIntegerDigits = 127;
 
 static const UChar * const gLastResortNumberPatterns[UNUM_FORMAT_STYLE_COUNT] = {
-    NULL,  // UNUM_PATTERN_DECIMAL
+    nullptr,  // UNUM_PATTERN_DECIMAL
     gLastResortDecimalPat,  // UNUM_DECIMAL
     gLastResortCurrencyPat,  // UNUM_CURRENCY
     gLastResortPercentPat,  // UNUM_PERCENT
     gLastResortScientificPat,  // UNUM_SCIENTIFIC
-    NULL,  // UNUM_SPELLOUT
-    NULL,  // UNUM_ORDINAL
-    NULL,  // UNUM_DURATION
+    nullptr,  // UNUM_SPELLOUT
+    nullptr,  // UNUM_ORDINAL
+    nullptr,  // UNUM_DURATION
     gLastResortDecimalPat,  // UNUM_NUMBERING_SYSTEM
-    NULL,  // UNUM_PATTERN_RULEBASED
+    nullptr,  // UNUM_PATTERN_RULEBASED
     gLastResortIsoCurrencyPat,  // UNUM_CURRENCY_ISO
     gLastResortPluralCurrencyPat,  // UNUM_CURRENCY_PLURAL
     gLastResortAccountingCurrencyPat, // UNUM_CURRENCY_ACCOUNTING
     gLastResortCurrencyPat,  // UNUM_CASH_CURRENCY 
-    NULL,  // UNUM_DECIMAL_COMPACT_SHORT
-    NULL,  // UNUM_DECIMAL_COMPACT_LONG
+    nullptr,  // UNUM_DECIMAL_COMPACT_SHORT
+    nullptr,  // UNUM_DECIMAL_COMPACT_LONG
     gLastResortCurrencyPat,  // UNUM_CURRENCY_STANDARD
 };
 
 // Keys used for accessing resource bundles
 
 static const icu::number::impl::CldrPatternStyle gFormatCldrStyles[UNUM_FORMAT_STYLE_COUNT] = {
-    /* NULL */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_PATTERN_DECIMAL
+    /* nullptr */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_PATTERN_DECIMAL
     icu::number::impl::CLDR_PATTERN_STYLE_DECIMAL,  // UNUM_DECIMAL
     icu::number::impl::CLDR_PATTERN_STYLE_CURRENCY,  // UNUM_CURRENCY
     icu::number::impl::CLDR_PATTERN_STYLE_PERCENT,  // UNUM_PERCENT
     icu::number::impl::CLDR_PATTERN_STYLE_SCIENTIFIC,  // UNUM_SCIENTIFIC
-    /* NULL */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_SPELLOUT
-    /* NULL */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_ORDINAL
-    /* NULL */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_DURATION
-    /* NULL */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_NUMBERING_SYSTEM
-    /* NULL */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_PATTERN_RULEBASED
+    /* nullptr */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_SPELLOUT
+    /* nullptr */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_ORDINAL
+    /* nullptr */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_DURATION
+    /* nullptr */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_NUMBERING_SYSTEM
+    /* nullptr */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_PATTERN_RULEBASED
     // For UNUM_CURRENCY_ISO and UNUM_CURRENCY_PLURAL,
     // the pattern is the same as the pattern of UNUM_CURRENCY
     // except for replacing the single currency sign with
@@ -149,17 +149,17 @@ static const icu::number::impl::CldrPatternStyle gFormatCldrStyles[UNUM_FORMAT_S
     icu::number::impl::CLDR_PATTERN_STYLE_CURRENCY,  // UNUM_CURRENCY_PLURAL
     icu::number::impl::CLDR_PATTERN_STYLE_ACCOUNTING,  // UNUM_CURRENCY_ACCOUNTING
     icu::number::impl::CLDR_PATTERN_STYLE_CURRENCY,  // UNUM_CASH_CURRENCY
-    /* NULL */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_DECIMAL_COMPACT_SHORT
-    /* NULL */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_DECIMAL_COMPACT_LONG
+    /* nullptr */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_DECIMAL_COMPACT_SHORT
+    /* nullptr */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_DECIMAL_COMPACT_LONG
     icu::number::impl::CLDR_PATTERN_STYLE_CURRENCY,  // UNUM_CURRENCY_STANDARD
 };
 
 // Static hashtable cache of NumberingSystem objects used by NumberFormat
-static UHashtable * NumberingSystem_cache = NULL;
+static UHashtable * NumberingSystem_cache = nullptr;
 static icu::UInitOnce gNSCacheInitOnce {};
 
 #if !UCONFIG_NO_SERVICE
-static icu::ICULocaleService* gService = NULL;
+static icu::ICULocaleService* gService = nullptr;
 static icu::UInitOnce gServiceInitOnce {};
 #endif
 
@@ -177,14 +177,14 @@ static UBool U_CALLCONV numfmt_cleanup(void) {
     gServiceInitOnce.reset();
     if (gService) {
         delete gService;
-        gService = NULL;
+        gService = nullptr;
     }
 #endif
     gNSCacheInitOnce.reset();
     if (NumberingSystem_cache) {
         // delete NumberingSystem_cache;
         uhash_close(NumberingSystem_cache);
-        NumberingSystem_cache = NULL;
+        NumberingSystem_cache = nullptr;
     }
     return true;
 }
@@ -222,7 +222,7 @@ SimpleNumberFormatFactory::getSupportedIDs(int32_t &count, UErrorCode& status) c
         return &_id;
     }
     count = 0;
-    return NULL;
+    return nullptr;
 }
 #endif /* #if !UCONFIG_NO_SERVICE */
 
@@ -504,9 +504,9 @@ ArgExtractor::iso(void) const {
 ArgExtractor::ArgExtractor(const NumberFormat& /*nf*/, const Formattable& obj, UErrorCode& /*status*/)
   : num(&obj), fWasCurrency(false) {
 
-    const UObject* o = obj.getObject(); // most commonly o==NULL
+    const UObject* o = obj.getObject(); // most commonly o==nullptr
     const CurrencyAmount* amt;
-    if (o != NULL && (amt = dynamic_cast<const CurrencyAmount*>(o)) != NULL) {
+    if (o != nullptr && (amt = dynamic_cast<const CurrencyAmount*>(o)) != nullptr) {
         // getISOCurrency() returns a pointer to internal storage, so we
         // copy it to retain it across the call to setCurrency().
         //const UChar* curr = amt->getISOCurrency();
@@ -575,7 +575,7 @@ NumberFormat::format(const Formattable& obj,
       return cloneFmt->format(*n, appendTo, pos, status);
     }
 
-    if (n->isNumeric() && n->getDecimalQuantity() != NULL) {
+    if (n->isNumeric() && n->getDecimalQuantity() != nullptr) {
         // Decimal Number.  We will have a DigitList available if the value was
         //   set to a decimal number, or if the value originated with a parse.
         //
@@ -630,7 +630,7 @@ NumberFormat::format(const Formattable& obj,
       return cloneFmt->format(*n, appendTo, posIter, status);
     }
 
-    if (n->isNumeric() && n->getDecimalQuantity() != NULL) {
+    if (n->isNumeric() && n->getDecimalQuantity() != nullptr) {
         // Decimal Number
         format(*n->getDecimalQuantity(), appendTo, posIter, status);
     } else {
@@ -745,7 +745,7 @@ CurrencyAmount* NumberFormat::parseCurrency(const UnicodeString& text,
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 // -------------------------------------
@@ -878,7 +878,7 @@ public:
     NFFactory(NumberFormatFactory* delegate)
         : LocaleKeyFactory(delegate->visible() ? VISIBLE : INVISIBLE)
         , _delegate(delegate)
-        , _ids(NULL)
+        , _ids(nullptr)
     {
     }
 
@@ -893,12 +893,12 @@ public:
             int32_t kind = lkey.kind();
 
             UObject* result = _delegate->createFormat(loc, (UNumberFormatStyle)kind);
-            if (result == NULL) {
-                result = service->getKey((ICUServiceKey&)key /* cast away const */, NULL, this, status);
+            if (result == nullptr) {
+                result = service->getKey((ICUServiceKey&)key /* cast away const */, nullptr, this, status);
             }
             return result;
         }
-        return NULL;
+        return nullptr;
     }
 
 protected:
@@ -922,7 +922,7 @@ protected:
             }
             return _ids;
         }
-        return NULL;
+        return nullptr;
     }
 };
 
@@ -965,7 +965,7 @@ ICUNumberFormatService::~ICUNumberFormatService() {}
 // -------------------------------------
 
 static void U_CALLCONV initNumberFormatService() {
-    U_ASSERT(gService == NULL);
+    U_ASSERT(gService == nullptr);
     ucln_i18n_registerCleanup(UCLN_I18N_NUMFMT, numfmt_cleanup);
     gService = new ICUNumberFormatService();
 }
@@ -978,7 +978,7 @@ getNumberFormatService(void)
 }
 
 static UBool haveService() {
-    return !gServiceInitOnce.isReset() && (getNumberFormatService() != NULL);
+    return !gServiceInitOnce.isReset() && (getNumberFormatService() != nullptr);
 }
 
 // -------------------------------------
@@ -993,12 +993,12 @@ NumberFormat::registerFactory(NumberFormatFactory* toAdopt, UErrorCode& status)
     ICULocaleService *service = getNumberFormatService();
     if (service) {
         NFFactory *tempnnf = new NFFactory(toAdopt);
-        if (tempnnf != NULL) {
+        if (tempnnf != nullptr) {
             return service->registerFactory(tempnnf, status);
         }
     }
     status = U_MEMORY_ALLOCATION_ERROR;
-    return NULL;
+    return nullptr;
 }
 
 // -------------------------------------
@@ -1025,7 +1025,7 @@ NumberFormat::getAvailableLocales(void)
   if (service) {
       return service->getAvailableLocales();
   }
-  return NULL; // no way to return error condition
+  return nullptr; // no way to return error condition
 }
 #endif /* UCONFIG_NO_SERVICE */
 // -------------------------------------
@@ -1057,11 +1057,11 @@ NumberFormat::createInstance(const Locale& loc, UNumberFormatStyle kind, UErrorC
     }
     const SharedNumberFormat *shared = createSharedInstance(loc, kind, status);
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
     NumberFormat *result = (*shared)->clone();
     shared->removeRef();
-    if (result == NULL) {
+    if (result == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
     }
     return result;
@@ -1200,7 +1200,7 @@ void NumberFormat::getEffectiveCurrency(UChar* result, UErrorCode& ec) const {
         result[3] = 0;
     } else {
         const char* loc = getLocaleID(ULOC_VALID_LOCALE, ec);
-        if (loc == NULL) {
+        if (loc == nullptr) {
             loc = uloc_getDefault();
         }
         ucurr_forLocale(loc, result, 4, &ec);
@@ -1239,16 +1239,16 @@ UDisplayContext NumberFormat::getContext(UDisplayContextType type, UErrorCode& s
 // or percent) for the desired locale.
 
 static void U_CALLCONV nscacheInit() {
-    U_ASSERT(NumberingSystem_cache == NULL);
+    U_ASSERT(NumberingSystem_cache == nullptr);
     ucln_i18n_registerCleanup(UCLN_I18N_NUMFMT, numfmt_cleanup);
     UErrorCode status = U_ZERO_ERROR;
     NumberingSystem_cache = uhash_open(uhash_hashLong,
                                        uhash_compareLong,
-                                       NULL,
+                                       nullptr,
                                        &status);
     if (U_FAILURE(status)) {
         // Number Format code will run with no cache if creation fails.
-        NumberingSystem_cache = NULL;
+        NumberingSystem_cache = nullptr;
         return;
     }
     uhash_setValueDeleter(NumberingSystem_cache, deleteNumberingSystem);
@@ -1261,13 +1261,13 @@ const SharedNumberFormat *LocaleCacheKey<SharedNumberFormat>::createObject(
     NumberFormat *nf = NumberFormat::internalCreateInstance(
             localeId, UNUM_DECIMAL, status);
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
     SharedNumberFormat *result = new SharedNumberFormat(nf);
-    if (result == NULL) {
+    if (result == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         delete nf;
-        return NULL;
+        return nullptr;
     }
     result->addRef();
     return result;
@@ -1276,20 +1276,20 @@ const SharedNumberFormat *LocaleCacheKey<SharedNumberFormat>::createObject(
 const SharedNumberFormat* U_EXPORT2
 NumberFormat::createSharedInstance(const Locale& loc, UNumberFormatStyle kind, UErrorCode& status) {
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
     if (kind != UNUM_DECIMAL) {
         status = U_UNSUPPORTED_ERROR;
-        return NULL;
+        return nullptr;
     }
-    const SharedNumberFormat *result = NULL;
+    const SharedNumberFormat *result = nullptr;
     UnifiedCache::getByLocale(loc, result, status);
     return result;
 }
 
 UBool
 NumberFormat::isStyleSupported(UNumberFormatStyle style) {
-    return gLastResortNumberPatterns[style] != NULL;
+    return gLastResortNumberPatterns[style] != nullptr;
 }
 
 NumberFormat*
@@ -1304,11 +1304,11 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
                            UNumberFormatStyle style,
                            UBool mustBeDecimalFormat,
                            UErrorCode& status) {
-    if (U_FAILURE(status)) return NULL;
+    if (U_FAILURE(status)) return nullptr;
 
     if (style < 0 || style >= UNUM_FORMAT_STYLE_COUNT) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
+        return nullptr;
     }
     
     // For the purposes of general number formatting, UNUM_NUMBERING_SYSTEM should behave the same
@@ -1327,7 +1327,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
     // because this method does not take a pattern string.
     if (!isStyleSupported(style)) {
         status = U_UNSUPPORTED_ERROR;
-        return NULL;
+        return nullptr;
     }
 
 #if U_PLATFORM_USES_ONLY_WIN32_API
@@ -1369,15 +1369,15 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
 
     // Get cached numbering system
     LocalPointer<NumberingSystem> ownedNs;
-    NumberingSystem *ns = NULL;
-    if (NumberingSystem_cache != NULL) {
+    NumberingSystem *ns = nullptr;
+    if (NumberingSystem_cache != nullptr) {
         // TODO: Bad hash key usage, see ticket #8504.
         int32_t hashKey = desiredLocale.hashCode();
 
         static UMutex nscacheMutex;
         Mutex lock(&nscacheMutex);
         ns = (NumberingSystem *)uhash_iget(NumberingSystem_cache, hashKey);
-        if (ns == NULL) {
+        if (ns == nullptr) {
             ns = NumberingSystem::createInstance(desiredLocale,status);
             uhash_iput(NumberingSystem_cache, hashKey, (void*)ns, &status);
         }
@@ -1388,25 +1388,25 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
 
     // check results of getting a numbering system
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
 
     if (mustBeDecimalFormat && ns->isAlgorithmic()) {
         status = U_UNSUPPORTED_ERROR;
-        return NULL;
+        return nullptr;
     }
 
     LocalPointer<DecimalFormatSymbols> symbolsToAdopt;
     UnicodeString pattern;
-    LocalUResourceBundlePointer ownedResource(ures_open(NULL, desiredLocale.getName(), &status));
+    LocalUResourceBundlePointer ownedResource(ures_open(nullptr, desiredLocale.getName(), &status));
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
     else {
         // Loads the decimal symbols of the desired locale.
         symbolsToAdopt.adoptInsteadAndCheckErrorCode(new DecimalFormatSymbols(desiredLocale, status), status);
         if (U_FAILURE(status)) {
-            return NULL;
+            return nullptr;
         }
 
         // Load the pattern from data using the common library function
@@ -1418,12 +1418,12 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         pattern = UnicodeString(true, patternPtr, -1);
     }
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
     if(style==UNUM_CURRENCY || style == UNUM_CURRENCY_ISO || style == UNUM_CURRENCY_ACCOUNTING 
         || style == UNUM_CASH_CURRENCY || style == UNUM_CURRENCY_STANDARD){
         const UChar* currPattern = symbolsToAdopt->getCurrencyPattern();
-        if(currPattern!=NULL){
+        if(currPattern!=nullptr){
             pattern.setTo(currPattern, u_strlen(currPattern));
         }
     }
@@ -1458,9 +1458,9 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         }
 
         RuleBasedNumberFormat *r = new RuleBasedNumberFormat(desiredRulesType,nsLoc,status);
-        if (r == NULL) {
+        if (r == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
+            return nullptr;
         }
         r->setDefaultRuleSet(nsRuleSetName,status);
         f.adoptInstead(r);
@@ -1504,7 +1504,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
     f->setLocaleIDs(ures_getLocaleByType(ownedResource.getAlias(), ULOC_VALID_LOCALE, &status),
                     ures_getLocaleByType(ownedResource.getAlias(), ULOC_ACTUAL_LOCALE, &status));
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
     return f.orphan();
 }

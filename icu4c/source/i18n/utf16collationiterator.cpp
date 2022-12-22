@@ -32,7 +32,7 @@ UTF16CollationIterator::UTF16CollationIterator(const UTF16CollationIterator &oth
         : CollationIterator(other),
           start(newText),
           pos(newText + (other.pos - other.start)),
-          limit(other.limit == NULL ? NULL : newText + (other.limit - other.start)) {
+          limit(other.limit == nullptr ? nullptr : newText + (other.limit - other.start)) {
 }
 
 UTF16CollationIterator::~UTF16CollationIterator() {}
@@ -76,7 +76,7 @@ UTF16CollationIterator::handleGetTrailSurrogate() {
 
 UBool
 UTF16CollationIterator::foundNULTerminator() {
-    if(limit == NULL) {
+    if(limit == nullptr) {
         limit = --pos;
         return true;
     } else {
@@ -90,7 +90,7 @@ UTF16CollationIterator::nextCodePoint(UErrorCode & /*errorCode*/) {
         return U_SENTINEL;
     }
     UChar32 c = *pos;
-    if(c == 0 && limit == NULL) {
+    if(c == 0 && limit == nullptr) {
         limit = pos;
         return U_SENTINEL;
     }
@@ -123,7 +123,7 @@ void
 UTF16CollationIterator::forwardNumCodePoints(int32_t num, UErrorCode & /*errorCode*/) {
     while(num > 0 && pos != limit) {
         UChar32 c = *pos;
-        if(c == 0 && limit == NULL) {
+        if(c == 0 && limit == nullptr) {
             limit = pos;
             break;
         }
@@ -153,15 +153,15 @@ FCDUTF16CollationIterator::FCDUTF16CollationIterator(const FCDUTF16CollationIter
         : UTF16CollationIterator(other),
           rawStart(newText),
           segmentStart(newText + (other.segmentStart - other.rawStart)),
-          segmentLimit(other.segmentLimit == NULL ? NULL : newText + (other.segmentLimit - other.rawStart)),
-          rawLimit(other.rawLimit == NULL ? NULL : newText + (other.rawLimit - other.rawStart)),
+          segmentLimit(other.segmentLimit == nullptr ? nullptr : newText + (other.segmentLimit - other.rawStart)),
+          rawLimit(other.rawLimit == nullptr ? nullptr : newText + (other.rawLimit - other.rawStart)),
           nfcImpl(other.nfcImpl),
           normalized(other.normalized),
           checkDir(other.checkDir) {
     if(checkDir != 0 || other.start == other.segmentStart) {
         start = newText + (other.start - other.rawStart);
         pos = newText + (other.pos - other.rawStart);
-        limit = other.limit == NULL ? NULL : newText + (other.limit - other.rawStart);
+        limit = other.limit == nullptr ? nullptr : newText + (other.limit - other.rawStart);
     } else {
         start = normalized.getBuffer();
         pos = start + (other.pos - other.start);
@@ -239,7 +239,7 @@ FCDUTF16CollationIterator::handleNextCE32(UChar32 &c, UErrorCode &errorCode) {
 
 UBool
 FCDUTF16CollationIterator::foundNULTerminator() {
-    if(limit == NULL) {
+    if(limit == nullptr) {
         limit = rawLimit = --pos;
         return true;
     } else {
@@ -265,7 +265,7 @@ FCDUTF16CollationIterator::nextCodePoint(UErrorCode &errorCode) {
                     }
                     c = *pos++;
                 }
-            } else if(c == 0 && limit == NULL) {
+            } else if(c == 0 && limit == nullptr) {
                 limit = rawLimit = --pos;
                 return U_SENTINEL;
             }

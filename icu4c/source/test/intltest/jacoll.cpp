@@ -27,7 +27,7 @@ CollationKanaTest::CollationKanaTest()
         errcheckln(status, __FILE__ "failed to create! err " + UnicodeString(u_errorName(status)));
         /* if it wasn't already: */
         delete myCollation;
-        myCollation = NULL;
+        myCollation = nullptr;
         return;
     }
 }

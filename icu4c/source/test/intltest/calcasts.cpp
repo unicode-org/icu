@@ -176,7 +176,7 @@ void CalendarCaseTest::IslamicCivil()
      };
     UnicodeString result;
     DateFormat *fmt = DateFormat::createDateInstance(DateFormat::kFull, Locale("ar_JO@calendar=islamic-civil"));
-    if (fmt == NULL) {
+    if (fmt == nullptr) {
         dataerrln("Error calling DateFormat::createDateInstance");
         delete c;
         return;

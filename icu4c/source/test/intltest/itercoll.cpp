@@ -92,11 +92,11 @@ void CollationIteratorTest::TestPrevious(/* char* par */)
 
     // Test with a contracting character sequence
     UnicodeString source;
-    RuleBasedCollator *c1 = NULL;
+    RuleBasedCollator *c1 = nullptr;
     c1 = new RuleBasedCollator(
         (UnicodeString)"&a,A < b,B < c,C, d,D < z,Z < ch,cH,Ch,CH", status);
 
-    if (c1 == NULL || U_FAILURE(status))
+    if (c1 == nullptr || U_FAILURE(status))
     {
         errln("Couldn't create a RuleBasedCollator with a contracting sequence.");
         delete c1;
@@ -110,10 +110,10 @@ void CollationIteratorTest::TestPrevious(/* char* par */)
     delete c1;
 
     // Test with an expanding character sequence
-    RuleBasedCollator *c2 = NULL;
+    RuleBasedCollator *c2 = nullptr;
     c2 = new RuleBasedCollator((UnicodeString)"&a < b < c/abd < d", status);
 
-    if (c2 == NULL || U_FAILURE(status))
+    if (c2 == nullptr || U_FAILURE(status))
     {
         errln("Couldn't create a RuleBasedCollator with an expanding sequence.");
         delete c2;
@@ -127,10 +127,10 @@ void CollationIteratorTest::TestPrevious(/* char* par */)
     delete c2;
 
     // Now try both
-    RuleBasedCollator *c3 = NULL;
+    RuleBasedCollator *c3 = nullptr;
     c3 = new RuleBasedCollator((UnicodeString)"&a < b < c/aba < d < z < ch", status);
 
-    if (c3 == NULL || U_FAILURE(status))
+    if (c3 == nullptr || U_FAILURE(status))
     {
         errln("Couldn't create a RuleBasedCollator with both an expanding and a contracting sequence.");
         delete c3;
@@ -392,7 +392,7 @@ void CollationIteratorTest::TestClearBuffers(/* char* par */)
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *c = new RuleBasedCollator((UnicodeString)"&a < b < c & ab = d", status);
 
-    if (c == NULL || U_FAILURE(status))
+    if (c == nullptr || U_FAILURE(status))
     {
         errln("Couldn't create a RuleBasedCollator.");
         delete c;
@@ -461,7 +461,7 @@ void CollationIteratorTest::TestAssignment()
     RuleBasedCollator *coll = 
         (RuleBasedCollator *)Collator::createInstance(status);
 
-    if (coll == NULL || U_FAILURE(status))
+    if (coll == nullptr || U_FAILURE(status))
     {
         errln("Couldn't create a default collator.");
         return;
@@ -540,7 +540,7 @@ void CollationIteratorTest::TestConstructors()
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *coll = 
         (RuleBasedCollator *)Collator::createInstance(status);
-    if (coll == NULL || U_FAILURE(status))
+    if (coll == nullptr || U_FAILURE(status))
     {
         errln("Couldn't create a default collator.");
         return;
@@ -597,7 +597,7 @@ void CollationIteratorTest::TestStrengthOrder()
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *coll = 
         (RuleBasedCollator *)Collator::createInstance(status);
-    if (coll == NULL || U_FAILURE(status))
+    if (coll == nullptr || U_FAILURE(status))
     {
         errln("Couldn't create a default collator.");
         return;
@@ -607,7 +607,7 @@ void CollationIteratorTest::TestStrengthOrder()
     CollationElementIterator *iter = 
         coll->createCollationElementIterator(test1);
 
-    if (iter == NULL) {
+    if (iter == nullptr) {
         errln("Couldn't create a collation element iterator from default collator");
         return;
     }

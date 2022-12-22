@@ -164,7 +164,7 @@ GLUE_SYM ( Collator ) :: create (const Locale &loc, const char */*ver*/) {
         strcat(locBuf,kwvBuf);
     }
     UCollator * uc =  OICU_ucol_open( locBuf, status);
-    if(U_FAILURE(status)) return NULL; // TODO: ERR?
+    if(U_FAILURE(status)) return nullptr; // TODO: ERR?
     Collator *c =  new GLUE_SYM( Collator ) ( uc );
 #if COLL_FE_DEBUG
     fprintf(stderr, "VCF " ICUGLUE_VER_STR " ucol_open=%s ->> %p\n", locBuf, c);
@@ -179,11 +179,11 @@ Collator* GLUE_SYM ( Collator ) :: clone() const  {
 #if COLL_FE_DEBUG
     fprintf(stderr, "VCF " ICUGLUE_VER_STR " clone %p -> " , this);
 #endif
-    UCollator *clc = OICU_ucol_safeClone( _this, NULL, 0, &status);
+    UCollator *clc = OICU_ucol_safeClone( _this, nullptr, 0, &status);
 #if COLL_FE_DEBUG
     fprintf(stderr, "VCF " ICUGLUE_VER_STR " .. safeclone %s _this %p-> %p " , u_errorName(status), _this, clc);
 #endif
-    if(U_FAILURE(status)||clc==NULL) return NULL;
+    if(U_FAILURE(status)||clc==nullptr) return nullptr;
     Collator *c = new GLUE_SYM( Collator ) ( clc );
 #if COLL_FE_DEBUG
     fprintf(stderr, "VCF " ICUGLUE_VER_STR " .. wrap(%p) -> %p\n", clc, c);
@@ -391,7 +391,7 @@ Collator *VersionCollatorFactory::createCollator(const Locale &loc) {
     fprintf(stderr,  "VCF:CC %s\n", loc.getName());
 #endif
     int32_t len = loc.getKeywordValue("sp", provider, 200, status);
-    if(U_FAILURE(status)||len==0) return NULL;
+    if(U_FAILURE(status)||len==0) return nullptr;
 #if COLL_FE_DEBUG
     fprintf(stderr,  "VCF:KWV> %s/%d\n", u_errorName(status), len);
 #endif
@@ -399,7 +399,7 @@ Collator *VersionCollatorFactory::createCollator(const Locale &loc) {
 #if COLL_FE_DEBUG
     fprintf(stderr,  "VCF:KWV %s\n", provider);
 #endif
-    if(strncmp(provider,"icu",3)) return NULL;
+    if(strncmp(provider,"icu",3)) return nullptr;
     const char *icuver=provider+3;
 #if COLL_FE_DEBUG
     fprintf(stderr,  "VCF:ICUV %s\n", icuver);
@@ -422,16 +422,16 @@ Collator *VersionCollatorFactory::createCollator(const Locale &loc) {
     fprintf(stderr,  "VCF:CC %s failed\n", loc.getName());
 #endif
 
-    return NULL;
+    return nullptr;
 }
 
 
-static const UnicodeString *gLocales = NULL;
+static const UnicodeString *gLocales = nullptr;
 static  int32_t gLocCount = 0; 
 
 const UnicodeString
 *VersionCollatorFactory::getSupportedIDs(int32_t &count, UErrorCode &/*status*/) {
-  if(gLocales==NULL) {
+  if(gLocales==nullptr) {
     count = 0;
     
     
@@ -471,7 +471,7 @@ const UnicodeString
 #include <stdio.h>
 #include <unicode/uversion.h>
 
-static URegistryKey rk = NULL;
+static URegistryKey rk = nullptr;
 
 void coll_provider_register(UErrorCode &status) {
   rk = Collator::registerFactory(new VersionCollatorFactory(), status);

@@ -62,7 +62,7 @@ public:
      * @param isPrimary [output] true if the zone is the primary zone for the country
      * @return A reference to the result country
      */
-    static UnicodeString& U_EXPORT2 getCanonicalCountry(const UnicodeString &tzid, UnicodeString &country, UBool *isPrimary = NULL);
+    static UnicodeString& U_EXPORT2 getCanonicalCountry(const UnicodeString &tzid, UnicodeString &country, UBool *isPrimary = nullptr);
 
     /**
      * Returns a CLDR metazone ID for the given Olson tzid and time.
@@ -78,13 +78,13 @@ public:
     static const UVector* U_EXPORT2 getAvailableMetazoneIDs();
 
     /**
-     * Returns the pointer to the persistent time zone ID string, or NULL if the given tzid is not in the
+     * Returns the pointer to the persistent time zone ID string, or nullptr if the given tzid is not in the
      * tz database. This method is useful when you maintain persistent zone IDs without duplication.
      */
     static const UChar* U_EXPORT2 findTimeZoneID(const UnicodeString& tzid);
 
     /**
-     * Returns the pointer to the persistent meta zone ID string, or NULL if the given mzid is not available.
+     * Returns the pointer to the persistent meta zone ID string, or nullptr if the given mzid is not available.
      * This method is useful when you maintain persistent meta zone IDs without duplication.
      */
     static const UChar* U_EXPORT2 findMetaZoneID(const UnicodeString& mzid);

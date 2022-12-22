@@ -465,12 +465,12 @@ U_CDECL_END
 static const UConverterImpl _UTF32BEImpl = {
     UCNV_UTF32_BigEndian,
 
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
 
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
 
     T_UConverter_toUnicode_UTF32_BE,
     T_UConverter_toUnicode_UTF32_BE_OFFSET_LOGIC,
@@ -478,14 +478,14 @@ static const UConverterImpl _UTF32BEImpl = {
     T_UConverter_fromUnicode_UTF32_BE_OFFSET_LOGIC,
     T_UConverter_getNextUChar_UTF32_BE,
 
-    NULL,
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
     ucnv_getNonSurrogateUnicodeSet,
 
-    NULL,
-    NULL
+    nullptr,
+    nullptr
 };
 
 /* The 1232 CCSID refers to any version of Unicode with any endianness of UTF-32 */
@@ -960,12 +960,12 @@ U_CDECL_END
 static const UConverterImpl _UTF32LEImpl = {
     UCNV_UTF32_LittleEndian,
 
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
 
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
 
     T_UConverter_toUnicode_UTF32_LE,
     T_UConverter_toUnicode_UTF32_LE_OFFSET_LOGIC,
@@ -973,14 +973,14 @@ static const UConverterImpl _UTF32LEImpl = {
     T_UConverter_fromUnicode_UTF32_LE_OFFSET_LOGIC,
     T_UConverter_getNextUChar_UTF32_LE,
 
-    NULL,
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
     ucnv_getNonSurrogateUnicodeSet,
 
-    NULL,
-    NULL
+    nullptr,
+    nullptr
 };
 
 /* The 1232 CCSID refers to any version of Unicode with any endianness of UTF-32 */
@@ -1126,7 +1126,7 @@ _UTF32ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
         case 8:
             /* call UTF-32BE */
             pArgs->source=source;
-            if(offsets==NULL) {
+            if(offsets==nullptr) {
                 T_UConverter_toUnicode_UTF32_BE(pArgs, pErrorCode);
             } else {
                 T_UConverter_toUnicode_UTF32_BE_OFFSET_LOGIC(pArgs, pErrorCode);
@@ -1136,7 +1136,7 @@ _UTF32ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
         case 9:
             /* call UTF-32LE */
             pArgs->source=source;
-            if(offsets==NULL) {
+            if(offsets==nullptr) {
                 T_UConverter_toUnicode_UTF32_LE(pArgs, pErrorCode);
             } else {
                 T_UConverter_toUnicode_UTF32_LE_OFFSET_LOGIC(pArgs, pErrorCode);
@@ -1149,7 +1149,7 @@ _UTF32ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     }
 
     /* add BOM size to offsets - see comment at offsetDelta declaration */
-    if(offsets!=NULL && offsetDelta!=0) {
+    if(offsets!=nullptr && offsetDelta!=0) {
         int32_t *offsetsLimit=pArgs->offsets;
         while(offsets<offsetsLimit) {
             *offsets++ += offsetDelta;
@@ -1202,11 +1202,11 @@ U_CDECL_END
 static const UConverterImpl _UTF32Impl = {
     UCNV_UTF32,
 
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
 
     _UTF32Open,
-    NULL,
+    nullptr,
     _UTF32Reset,
 
     _UTF32ToUnicodeWithOffsets,
@@ -1220,14 +1220,14 @@ static const UConverterImpl _UTF32Impl = {
 #endif
     _UTF32GetNextUChar,
 
-    NULL, /* ### TODO implement getStarters for all Unicode encodings?! */
-    NULL,
-    NULL,
-    NULL,
+    nullptr, /* ### TODO implement getStarters for all Unicode encodings?! */
+    nullptr,
+    nullptr,
+    nullptr,
     ucnv_getNonSurrogateUnicodeSet,
 
-    NULL,
-    NULL
+    nullptr,
+    nullptr
 };
 
 /* The 1236 CCSID refers to any version of Unicode with a BOM sensitive endianness of UTF-32 */

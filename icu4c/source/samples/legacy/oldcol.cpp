@@ -44,10 +44,10 @@ int32_t getSortKey_legacy(const char *locale, const UChar *string, int32_t sLen,
 
 // This one can be used for passing to qsort function
 // Not thread safe or anything
-static UCollator *compareCollator = NULL;
+static UCollator *compareCollator = nullptr;
 
 int compare_legacy(const void *string1, const void *string2) {
-  if(compareCollator != NULL) {
+  if(compareCollator != nullptr) {
     UCollationResult res = ucol_strcoll(compareCollator, (UChar *) string1, -1, (UChar *) string2, -1);
     if(res == UCOL_LESS) {
       return -1;
@@ -75,15 +75,15 @@ void initCollator_legacy(const char *locale) {
 }
 
 void closeCollator_legacy(void) {
-  if(compareCollator != NULL)
+  if(compareCollator != nullptr)
   {
     ucol_close(compareCollator);
   }
   else
   {
-    fprintf(stderr, "closeCollator_legacy(): collator was already NULL!\n");
+    fprintf(stderr, "closeCollator_legacy(): collator was already nullptr!\n");
   }
-  compareCollator = NULL;
+  compareCollator = nullptr;
 }
 
 

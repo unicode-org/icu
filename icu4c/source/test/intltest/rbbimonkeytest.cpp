@@ -61,7 +61,7 @@ BreakRules::BreakRules(RBBIMonkeyImpl *monkeyImpl, UErrorCode &status)  :
         fMonkeyImpl(monkeyImpl), fBreakRules(status), fType(UBRK_COUNT) {
     fCharClasses.adoptInstead(uhash_open(uhash_hashUnicodeString,
                                          uhash_compareUnicodeString,
-                                         NULL,      // value comparator.
+                                         nullptr,      // value comparator.
                                          &status));
     if (U_FAILURE(status)) {
         return;
@@ -135,7 +135,7 @@ CharClass *BreakRules::addCharClass(const UnicodeString &name, const UnicodeStri
         printf("epandedDef: %s\n", CStr(expandedDef)());
     }
 
-    LocalPointer<UnicodeSet> s(new UnicodeSet(expandedDef, USET_IGNORE_SPACE, NULL, status), status);
+    LocalPointer<UnicodeSet> s(new UnicodeSet(expandedDef, USET_IGNORE_SPACE, nullptr, status), status);
     if (U_FAILURE(status)) {
         IntlTest::gTest->errln("%s:%d: error %s creating UnicodeSet %s\n    Expanded set definition: %s",
                                __FILE__, __LINE__, u_errorName(status), CStr(name)(), CStr(expandedDef)());
@@ -147,7 +147,7 @@ CharClass *BreakRules::addCharClass(const UnicodeString &name, const UnicodeStri
                                                         cclass,                    // Value, owned by hash table.
                                                         &status));
 
-    if (previousClass != NULL) {
+    if (previousClass != nullptr) {
         // Duplicate class def.
         // These are legitimate, they are adjustments of an existing class.
         // TODO: will need to keep the old around when we handle tailorings.
@@ -256,9 +256,9 @@ bool BreakRules::setKeywordParameter(const UnicodeString &keyword, const Unicode
 
 RuleBasedBreakIterator *BreakRules::createICUBreakIterator(UErrorCode &status) {
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
-    RuleBasedBreakIterator *bi = NULL;
+    RuleBasedBreakIterator *bi = nullptr;
     switch(fType) {
         case UBRK_CHARACTER:
             bi = dynamic_cast<RuleBasedBreakIterator *>(BreakIterator::createCharacterInstance(fLocale, status));
@@ -292,7 +292,7 @@ void BreakRules::compileRules(UCHARBUF *rules, UErrorCode &status) {
         }
         int32_t lineLength = 0;
         const UChar *lineBuf = ucbuf_readline(rules, &lineLength, &status);
-        if (lineBuf == NULL) {
+        if (lineBuf == nullptr) {
             break;
         }
         UnicodeString line(lineBuf, lineLength);
@@ -345,8 +345,8 @@ void BreakRules::compileRules(UCHARBUF *rules, UErrorCode &status) {
 
     UnicodeSet otherSet((UChar32)0, 0x10ffff);
     int32_t pos = UHASH_FIRST;
-    const UHashElement *el = NULL;
-    while ((el = uhash_nextElement(fCharClasses.getAlias(), &pos)) != NULL) {
+    const UHashElement *el = nullptr;
+    while ((el = uhash_nextElement(fCharClasses.getAlias(), &pos)) != nullptr) {
         const UnicodeString *ccName = static_cast<const UnicodeString *>(el->key.pointer);
         CharClass *cclass = static_cast<CharClass *>(el->value.pointer);
         // printf("    Adding %s\n", CStr(*ccName)());
@@ -383,7 +383,7 @@ const CharClass *BreakRules::getClassForChar(UChar32 c, int32_t *iter) const {
            return cc;
        }
     }
-    return NULL;
+    return nullptr;
 }
 
 //---------------------------------------------------------------------------------------
@@ -453,7 +453,7 @@ void MonkeyTestData::set(BreakRules *rules, IntlTest::icu_rand &rand, UErrorCode
     bool    initialMatch = true;             // True at start of text, and immediately after each boundary,
                                              // for control over rule chaining.
     while (strIdx < fString.length()) {
-        BreakRule *matchingRule = NULL;
+        BreakRule *matchingRule = nullptr;
         UBool      hasBreak = false;
         int32_t ruleNum = 0;
         int32_t matchStart = 0;
@@ -482,7 +482,7 @@ void MonkeyTestData::set(BreakRules *rules, IntlTest::icu_rand &rand, UErrorCode
                 }
             }
         }
-        if (matchingRule == NULL) {
+        if (matchingRule == nullptr) {
             // No reference rule matched. This is an error in the rules that should never happen.
             IntlTest::gTest->errln("%s:%d Trouble with monkey test reference rules at position %d. ",
                  __FILE__, __LINE__, strIdx);
@@ -908,11 +908,11 @@ void RBBIMonkeyTest::testMonkey() {
 
     const char *tests[] = {"grapheme.txt", "word.txt", "line.txt", "line_cj.txt", "sentence.txt", "line_normal.txt",
                            "line_normal_cj.txt", "line_loose.txt", "line_loose_cj.txt", "word_POSIX.txt",
-                           NULL };
+                           nullptr };
     CharString testNameFromParams;
     if (getStringParam("rules", params, testNameFromParams, status)) {
         tests[0] = testNameFromParams.data();
-        tests[1] = NULL;
+        tests[1] = nullptr;
     }
 
     int64_t loopCount = quick? 100 : 5000;
@@ -945,7 +945,7 @@ void RBBIMonkeyTest::testMonkey() {
     // Each set of break rules to be tested is run in a separate thread.
     // Each thread/set of rules gets a separate RBBIMonkeyImpl object.
     int32_t i;
-    for (i=0; tests[i] != NULL; ++i) {
+    for (i=0; tests[i] != nullptr; ++i) {
         logln("beginning testing of %s", tests[i]);
         LocalPointer<RBBIMonkeyImpl> test(new RBBIMonkeyImpl(status));
         if (U_FAILURE(status)) {
@@ -984,7 +984,7 @@ UBool  RBBIMonkeyTest::getIntParam(UnicodeString name, UnicodeString &params, in
         // The param exists.  Convert the string to an int.
         CharString str;
         str.append(CStr(m.group(1, status))(), -1, status);
-        val = strtol(str.data(),  NULL, 10);
+        val = strtol(str.data(),  nullptr, 10);
 
         // Delete this parameter from the params string.
         m.reset();

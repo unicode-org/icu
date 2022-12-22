@@ -450,7 +450,7 @@ CalendarTest::TestGenericAPI()
         ((Calendar *)cal)->roll(UCAL_HOUR, (int32_t)100, status);
         ((Calendar *)cal)->clear(UCAL_HOUR);
 #if !UCONFIG_NO_SERVICE
-        URegistryKey key = cal->registerFactory(NULL, status);
+        URegistryKey key = cal->registerFactory(nullptr, status);
         cal->unregister(key, status);
 #endif
     }
@@ -472,7 +472,7 @@ CalendarTest::TestGenericAPI()
         UBool containsHebrew = false;
         const char *charValue;
         int32_t valueLength;
-        while ((charValue = values->next(&valueLength, status)) != NULL) {
+        while ((charValue = values->next(&valueLength, status)) != nullptr) {
             if (valueLength == 6 && uprv_strcmp(charValue, "hebrew") == 0) {
                 containsHebrew = true;
             }
@@ -485,7 +485,7 @@ CalendarTest::TestGenericAPI()
         containsHebrew = false;
         UnicodeString hebrew = UNICODE_STRING_SIMPLE("hebrew");
         const UChar *ucharValue;
-        while ((ucharValue = values->unext(&valueLength, status)) != NULL) {
+        while ((ucharValue = values->unext(&valueLength, status)) != nullptr) {
             UnicodeString value(false, ucharValue, valueLength);
             if (value == hebrew) {
                 containsHebrew = true;
@@ -498,7 +498,7 @@ CalendarTest::TestGenericAPI()
         values->reset(status);
         containsHebrew = false;
         const UnicodeString *stringValue;
-        while ((stringValue = values->snext(status)) != NULL) {
+        while ((stringValue = values->snext(status)) != nullptr) {
             if (*stringValue == hebrew) {
                 containsHebrew = true;
             }
@@ -1970,11 +1970,11 @@ void CalendarTest::TestDebug()
                 logln("Testing count+1:");
             }
                   const char *name = udbg_enumName((UDebugEnumType)t,i);
-                  if(name==NULL) {
+                  if(name==nullptr) {
                           if(i==count || t>UDBG_HIGHEST_CONTIGUOUS_ENUM  ) {
                                 logln(" null name - expected.\n");
                           } else {
-                                errln("FAIL: udbg_enumName(%d,%d) returned NULL", t, i);
+                                errln("FAIL: udbg_enumName(%d,%d) returned nullptr", t, i);
                           }
                           name = "(null)";
                   }
@@ -2012,7 +2012,7 @@ const char *CalendarTest::testLocaleID(int32_t i)
   case 12: return "hu_HU@calendar=buddhist";
   case 13: return "hu_HU@calendar=islamic";
   case 14: return "en_US@calendar=japanese";
-  default: return NULL;
+  default: return nullptr;
   }
 }
 
@@ -2021,7 +2021,7 @@ int32_t CalendarTest::testLocaleCount()
   static int32_t gLocaleCount = -1;
   if(gLocaleCount < 0) {
     int32_t i;
-    for(i=0;testLocaleID(i) != NULL;i++) {
+    for(i=0;testLocaleID(i) != nullptr;i++) {
       // do nothing
     }
     gLocaleCount = i;
@@ -2035,7 +2035,7 @@ static UDate doMinDateOfCalendar(Calendar* adopt, UBool &isGregorian, UErrorCode
   adopt->clear();
   adopt->set(UCAL_EXTENDED_YEAR, adopt->getActualMinimum(UCAL_EXTENDED_YEAR, status));
   UDate ret = adopt->getTime(status);
-  isGregorian = dynamic_cast<GregorianCalendar*>(adopt) != NULL;
+  isGregorian = dynamic_cast<GregorianCalendar*>(adopt) != nullptr;
   delete adopt;
   return ret;
 }
@@ -2083,7 +2083,7 @@ void CalendarTest::Test3785()
     UnicodeString exp2 = UNICODE_STRING_SIMPLE("Mon 1 Rajab 1433 AH, 01:47:04");
 
     LocalUDateFormatPointer df(udat_open(UDAT_NONE, UDAT_NONE, "en@calendar=islamic", uzone.getTerminatedBuffer(),
-                                         uzone.length(), NULL, 0, &status));
+                                         uzone.length(), nullptr, 0, &status));
     if (df.isNull() || U_FAILURE(status)) return;
 
     UChar upattern[64];
@@ -2094,7 +2094,7 @@ void CalendarTest::Test3785()
     UDate ud0 = 1337557623000.0;
 
     status = U_ZERO_ERROR;
-    udat_format(df.getAlias(), ud0, ubuffer, 1024, NULL, &status);
+    udat_format(df.getAlias(), ud0, ubuffer, 1024, nullptr, &status);
     if (U_FAILURE(status)) {
         errln("Error formatting date 1\n");
         return;
@@ -2108,7 +2108,7 @@ void CalendarTest::Test3785()
     ud0 += 1000.0; // add one second
 
     status = U_ZERO_ERROR;
-    udat_format(df.getAlias(), ud0, ubuffer, 1024, NULL, &status);
+    udat_format(df.getAlias(), ud0, ubuffer, 1024, nullptr, &status);
     if (U_FAILURE(status)) {
         errln("Error formatting date 2\n");
         return;
@@ -2200,7 +2200,7 @@ void CalendarTest::TestISO8601() {
         "en_US@calendar=Iso8601",
         "th_TH@calendar=iso8601",
         "ar_EG@calendar=iso8601",
-        NULL
+        nullptr
     };
 
     int32_t TEST_DATA[][3] = {
@@ -2214,7 +2214,7 @@ void CalendarTest::TestISO8601() {
         {0, 0, 0},
     };
 
-    for (int i = 0; TEST_LOCALES[i] != NULL; i++) {
+    for (int i = 0; TEST_LOCALES[i] != nullptr; i++) {
         UErrorCode status = U_ZERO_ERROR;
         Calendar *cal = Calendar::createInstance(TEST_LOCALES[i], status);
         if (U_FAILURE(status)) {
@@ -2402,7 +2402,7 @@ static const RepeatedWallTimeTestData RPDATA[] =
     {"Australia/Lord_Howe", CalFields(2011,4,3,2,0,0),      CalFields(2011,4,2,15,30,0),    CalFields(2011,4,2,15,30,0)},
     {"Australia/Lord_Howe", CalFields(2011,4,3,2,0,1),      CalFields(2011,4,2,15,30,1),    CalFields(2011,4,2,15,30,1)},
 
-    {NULL,                  CalFields(0,0,0,0,0,0),         CalFields(0,0,0,0,0,0),          CalFields(0,0,0,0,0,0)}
+    {nullptr,                  CalFields(0,0,0,0,0,0),         CalFields(0,0,0,0,0,0),          CalFields(0,0,0,0,0,0)}
 };
 
 void CalendarTest::TestRepeatedWallTime(void) {
@@ -2420,7 +2420,7 @@ void CalendarTest::TestRepeatedWallTime(void) {
     calLast.setRepeatedWallTimeOption(UCAL_WALLTIME_LAST);
     calFirst.setRepeatedWallTimeOption(UCAL_WALLTIME_FIRST);
 
-    for (int32_t i = 0; RPDATA[i].tzid != NULL; i++) {
+    for (int32_t i = 0; RPDATA[i].tzid != nullptr; i++) {
         char buf[32];
         TimeZone *tz = TimeZone::createTimeZone(RPDATA[i].tzid);
 
@@ -2500,7 +2500,7 @@ static SkippedWallTimeTestData SKDATA[] =
     {"Pacific/Apia",        CalFields(2011,12,30,23,59,59), false,  CalFields(2011,12,31,9,59,59),  CalFields(2011,12,30,9,59,59),  CalFields(2011,12,30,10,0,0)},
     {"Pacific/Apia",        CalFields(2011,12,31,0,0,0),    true,   CalFields(2011,12,30,10,0,0),   CalFields(2011,12,30,10,0,0),   CalFields(2011,12,30,10,0,0)},
 
-    {NULL,                  CalFields(0,0,0,0,0,0),         true,   CalFields(0,0,0,0,0,0),         CalFields(0,0,0,0,0,0),         CalFields(0,0,0,0,0,0)}
+    {nullptr,                  CalFields(0,0,0,0,0,0),         true,   CalFields(0,0,0,0,0,0),         CalFields(0,0,0,0,0,0),         CalFields(0,0,0,0,0,0)}
 };
 
 
@@ -2521,7 +2521,7 @@ void CalendarTest::TestSkippedWallTime(void) {
     calFirst.setSkippedWallTimeOption(UCAL_WALLTIME_FIRST);
     calNextAvail.setSkippedWallTimeOption(UCAL_WALLTIME_NEXT_VALID);
 
-    for (int32_t i = 0; SKDATA[i].tzid != NULL; i++) {
+    for (int32_t i = 0; SKDATA[i].tzid != nullptr; i++) {
         UDate d;
         char buf[32];
         TimeZone *tz = TimeZone::createTimeZone(SKDATA[i].tzid);
@@ -3783,7 +3783,7 @@ static const TestAddAcrossZoneTransitionData AAZTDATA[] =
     {"Australia/Lord_Howe",     CalFields(2013,10,5,2,15,0,0),      1,      UCAL_WALLTIME_NEXT_VALID,
                                 CalFields(2013,10,6,2,30,0,0)},
 
-    {NULL, CalFields(0,0,0,0,0,0,0), 0, UCAL_WALLTIME_LAST, CalFields(0,0,0,0,0,0,0)}
+    {nullptr, CalFields(0,0,0,0,0,0,0), 0, UCAL_WALLTIME_LAST, CalFields(0,0,0,0,0,0,0)}
 };
 
 void CalendarTest::TestAddAcrossZoneTransition() {

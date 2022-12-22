@@ -66,7 +66,7 @@ class FieldsSet {
        * @return the number of valid parsed fields on success, or a negative number on failure.
        */
       int32_t parseFrom(const U_NAMESPACE_QUALIFIER UnicodeString& str, UErrorCode& status) {
-          return parseFrom(str,NULL,status);
+          return parseFrom(str,nullptr,status);
       }
 
       /**

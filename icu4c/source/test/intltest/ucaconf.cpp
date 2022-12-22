@@ -25,8 +25,8 @@
 #include "uparse.h"
 
 UCAConformanceTest::UCAConformanceTest() :
-rbUCA(NULL),
-testFile(NULL),
+rbUCA(nullptr),
+testFile(nullptr),
 status(U_ZERO_ERROR)
 {
     UCA = (RuleBasedCollator *)Collator::createInstance(Locale::getRoot(), status);
@@ -184,24 +184,24 @@ void UCAConformanceTest::testConformance(const Collator *coll)
     }
 
     logln("-prop:ucaconfnosortkeys=1 turns off getSortKey() in UCAConformanceTest");
-    UBool withSortKeys = getProperty("ucaconfnosortkeys") == NULL;
+    UBool withSortKeys = getProperty("ucaconfnosortkeys") == nullptr;
 
     int32_t line = 0;
 
     UChar b1[1024], b2[1024];
-    UChar *buffer = b1, *oldB = NULL;
+    UChar *buffer = b1, *oldB = nullptr;
 
     char lineB1[1024], lineB2[1024];
     char *lineB = lineB1, *oldLineB = lineB2;
 
     uint8_t sk1[1024], sk2[1024];
-    uint8_t *oldSk = NULL, *newSk = sk1;
+    uint8_t *oldSk = nullptr, *newSk = sk1;
 
     int32_t oldLen = 0;
     int32_t oldBlen = 0;
     uint32_t first = 0;
 
-    while (fgets(lineB, 1024, testFile) != NULL) {
+    while (fgets(lineB, 1024, testFile) != nullptr) {
         // remove trailing whitespace
         u_rtrim(lineB);
 
@@ -224,7 +224,7 @@ void UCAConformanceTest::testConformance(const Collator *coll)
 
         int32_t resLen = withSortKeys ? coll->getSortKey(buffer, buflen, newSk, 1024) : 0;
 
-        if(oldSk != NULL) {
+        if(oldSk != nullptr) {
             UBool ok=true;
             int32_t skres = withSortKeys ? strcmp((char *)oldSk, (char *)newSk) : 0;
             int32_t cmpres = coll->compare(oldB, oldBlen, buffer, buflen, status);

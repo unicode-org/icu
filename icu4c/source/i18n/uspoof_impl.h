@@ -277,7 +277,7 @@ class SpoofData: public UMemory {
     SpoofDataHeader             *fRawData;          // Ptr to the raw memory-mapped data
     UBool                       fDataOwned;         // True if the raw data is owned, and needs
                                                     //  to be deleted when refcount goes to zero.
-    UDataMemory                 *fUDM;              // If not NULL, our data came from a
+    UDataMemory                 *fUDM;              // If not nullptr, our data came from a
                                                     //   UDataMemory, which we must close when
                                                     //   we are done.
 

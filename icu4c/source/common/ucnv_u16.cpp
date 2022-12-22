@@ -102,7 +102,7 @@ _UTF16BEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
         target[3]=(uint8_t)trail;
         target+=4;
         targetCapacity-=4;
-        if(offsets!=NULL) {
+        if(offsets!=nullptr) {
             *offsets++=-1;
             *offsets++=-1;
             *offsets++=-1;
@@ -123,7 +123,7 @@ _UTF16BEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
         count>>=1;
         length-=count;
 
-        if(offsets==NULL) {
+        if(offsets==nullptr) {
             while(count>0) {
                 c=*source++;
                 if(U16_IS_SINGLE(c)) {
@@ -310,7 +310,7 @@ _UTF16BEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                 if(U16_IS_SINGLE(c)) {
                     /* output the BMP code point */
                     *target++=c;
-                    if(offsets!=NULL) {
+                    if(offsets!=nullptr) {
                         *offsets++=-1;
                     }
                     --targetCapacity;
@@ -332,7 +332,7 @@ _UTF16BEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                     *target++=c;
                     if(targetCapacity>=2) {
                         *target++=trail;
-                        if(offsets!=NULL) {
+                        if(offsets!=nullptr) {
                             *offsets++=-1;
                             *offsets++=-1;
                         }
@@ -384,7 +384,7 @@ _UTF16BEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
         length-=count;
         count>>=1;
         targetCapacity-=count;
-        if(offsets==NULL) {
+        if(offsets==nullptr) {
             do {
                 c=((UChar)source[0]<<8)|source[1];
                 source+=2;
@@ -452,7 +452,7 @@ _UTF16BEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                     source+=2;
                     length-=2;
                     *target++=c;
-                    if(offsets!=NULL) {
+                    if(offsets!=nullptr) {
                         *offsets++=sourceIndex;
                     }
                     cnv->UCharErrorBuffer[0]=trail;
@@ -610,11 +610,11 @@ U_CDECL_END
 static const UConverterImpl _UTF16BEImpl={
     UCNV_UTF16_BigEndian,
 
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
 
     _UTF16BEOpen,
-    NULL,
+    nullptr,
     _UTF16BEReset,
 
     _UTF16BEToUnicodeWithOffsets,
@@ -623,14 +623,14 @@ static const UConverterImpl _UTF16BEImpl={
     _UTF16BEFromUnicodeWithOffsets,
     _UTF16BEGetNextUChar,
 
-    NULL,
+    nullptr,
     _UTF16BEGetName,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
     ucnv_getNonSurrogateUnicodeSet,
 
-    NULL,
-    NULL
+    nullptr,
+    nullptr
 };
 
 static const UConverterStaticData _UTF16BEStaticData={
@@ -703,7 +703,7 @@ _UTF16LEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
         target[3]=(uint8_t)(trail>>8);
         target+=4;
         targetCapacity-=4;
-        if(offsets!=NULL) {
+        if(offsets!=nullptr) {
             *offsets++=-1;
             *offsets++=-1;
             *offsets++=-1;
@@ -724,7 +724,7 @@ _UTF16LEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
         count>>=1;
         length-=count;
 
-        if(offsets==NULL) {
+        if(offsets==nullptr) {
             while(count>0) {
                 c=*source++;
                 if(U16_IS_SINGLE(c)) {
@@ -911,7 +911,7 @@ _UTF16LEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                 if(U16_IS_SINGLE(c)) {
                     /* output the BMP code point */
                     *target++=c;
-                    if(offsets!=NULL) {
+                    if(offsets!=nullptr) {
                         *offsets++=-1;
                     }
                     --targetCapacity;
@@ -933,7 +933,7 @@ _UTF16LEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                     *target++=c;
                     if(targetCapacity>=2) {
                         *target++=trail;
-                        if(offsets!=NULL) {
+                        if(offsets!=nullptr) {
                             *offsets++=-1;
                             *offsets++=-1;
                         }
@@ -985,7 +985,7 @@ _UTF16LEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
         length-=count;
         count>>=1;
         targetCapacity-=count;
-        if(offsets==NULL) {
+        if(offsets==nullptr) {
             do {
                 c=((UChar)source[1]<<8)|source[0];
                 source+=2;
@@ -1053,7 +1053,7 @@ _UTF16LEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                     source+=2;
                     length-=2;
                     *target++=c;
-                    if(offsets!=NULL) {
+                    if(offsets!=nullptr) {
                         *offsets++=sourceIndex;
                     }
                     cnv->UCharErrorBuffer[0]=trail;
@@ -1211,11 +1211,11 @@ U_CDECL_END
 static const UConverterImpl _UTF16LEImpl={
     UCNV_UTF16_LittleEndian,
 
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
 
     _UTF16LEOpen,
-    NULL,
+    nullptr,
     _UTF16LEReset,
 
     _UTF16LEToUnicodeWithOffsets,
@@ -1224,14 +1224,14 @@ static const UConverterImpl _UTF16LEImpl={
     _UTF16LEFromUnicodeWithOffsets,
     _UTF16LEGetNextUChar,
 
-    NULL,
+    nullptr,
     _UTF16LEGetName,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
     ucnv_getNonSurrogateUnicodeSet,
 
-    NULL,
-    NULL
+    nullptr,
+    nullptr
 };
 
 
@@ -1447,7 +1447,7 @@ _UTF16ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     }
 
     /* add BOM size to offsets - see comment at offsetDelta declaration */
-    if(offsets!=NULL && offsetDelta!=0) {
+    if(offsets!=nullptr && offsetDelta!=0) {
         int32_t *offsetsLimit=pArgs->offsets;
         while(offsets<offsetsLimit) {
             *offsets++ += offsetDelta;
@@ -1493,11 +1493,11 @@ U_CDECL_END
 static const UConverterImpl _UTF16Impl = {
     UCNV_UTF16,
 
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
 
     _UTF16Open,
-    NULL,
+    nullptr,
     _UTF16Reset,
 
     _UTF16ToUnicodeWithOffsets,
@@ -1506,14 +1506,14 @@ static const UConverterImpl _UTF16Impl = {
     _UTF16PEFromUnicodeWithOffsets,
     _UTF16GetNextUChar,
 
-    NULL, /* ### TODO implement getStarters for all Unicode encodings?! */
+    nullptr, /* ### TODO implement getStarters for all Unicode encodings?! */
     _UTF16GetName,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
     ucnv_getNonSurrogateUnicodeSet,
 
-    NULL,
-    NULL
+    nullptr,
+    nullptr
 };
 
 static const UConverterStaticData _UTF16StaticData = {
@@ -1538,11 +1538,11 @@ const UConverterSharedData _UTF16Data =
 static const UConverterImpl _UTF16v2Impl = {
     UCNV_UTF16,
 
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
 
     _UTF16Open,
-    NULL,
+    nullptr,
     _UTF16Reset,
 
     _UTF16ToUnicodeWithOffsets,
@@ -1551,14 +1551,14 @@ static const UConverterImpl _UTF16v2Impl = {
     _UTF16BEFromUnicodeWithOffsets,
     _UTF16GetNextUChar,
 
-    NULL, /* ### TODO implement getStarters for all Unicode encodings?! */
+    nullptr, /* ### TODO implement getStarters for all Unicode encodings?! */
     _UTF16GetName,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
     ucnv_getNonSurrogateUnicodeSet,
 
-    NULL,
-    NULL
+    nullptr,
+    nullptr
 };
 
 static const UConverterStaticData _UTF16v2StaticData = {

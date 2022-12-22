@@ -100,7 +100,7 @@ CollationBaseDataBuilder::~CollationBaseDataBuilder() {
 void
 CollationBaseDataBuilder::init(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
-    if(trie != NULL) {
+    if(trie != nullptr) {
         errorCode = U_INVALID_STATE_ERROR;
         return;
     }

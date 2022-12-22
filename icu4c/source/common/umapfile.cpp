@@ -171,7 +171,7 @@ typedef HANDLE MemoryMap;
             return false;
         }
 
-        // Note: We use NULL/nullptr for lpAttributes parameter below.
+        // Note: We use nullptr/nullptr for lpAttributes parameter below.
         // This means our handle cannot be inherited and we will get the default security descriptor.
         /* create an unnamed Windows file-mapping object for the specified file */
         map = CreateFileMappingW(file, nullptr, PAGE_READONLY, 0, 0, nullptr);

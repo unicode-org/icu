@@ -22,7 +22,7 @@
 
 // see LocaleUtility::getAvailableLocaleNames
 static icu::UInitOnce   LocaleUtilityInitOnce {};
-static icu::Hashtable * LocaleUtility_cache = NULL;
+static icu::Hashtable * LocaleUtility_cache = nullptr;
 
 #define UNDERSCORE_CHAR ((UChar)0x005f)
 #define AT_SIGN_CHAR    ((UChar)64)
@@ -39,7 +39,7 @@ U_CDECL_BEGIN
 static UBool U_CALLCONV service_cleanup(void) {
     if (LocaleUtility_cache) {
         delete LocaleUtility_cache;
-        LocaleUtility_cache = NULL;
+        LocaleUtility_cache = nullptr;
     }
     return true;
 }
@@ -47,15 +47,15 @@ static UBool U_CALLCONV service_cleanup(void) {
 
 static void U_CALLCONV locale_utility_init(UErrorCode &status) {
     using namespace icu;
-    U_ASSERT(LocaleUtility_cache == NULL);
+    U_ASSERT(LocaleUtility_cache == nullptr);
     ucln_common_registerCleanup(UCLN_COMMON_SERVICE, service_cleanup);
     LocaleUtility_cache = new Hashtable(status);
     if (U_FAILURE(status)) {
         delete LocaleUtility_cache;
-        LocaleUtility_cache = NULL;
+        LocaleUtility_cache = nullptr;
         return;
     }
-    if (LocaleUtility_cache == NULL) {
+    if (LocaleUtility_cache == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -69,7 +69,7 @@ U_NAMESPACE_BEGIN
 UnicodeString&
 LocaleUtility::canonicalLocaleString(const UnicodeString* id, UnicodeString& result)
 {
-  if (id == NULL) {
+  if (id == nullptr) {
     result.setToBogus();
   } else {
     // Fix case only (no other changes) up to the first '@' or '.' or
@@ -214,45 +214,45 @@ LocaleUtility::getAvailableLocaleNames(const UnicodeString& bundleID)
     UErrorCode status = U_ZERO_ERROR;
     umtx_initOnce(LocaleUtilityInitOnce, locale_utility_init, status);
     Hashtable *cache = LocaleUtility_cache;
-    if (cache == NULL) {
+    if (cache == nullptr) {
         // Catastrophic failure.
-        return NULL;
+        return nullptr;
     }
 
     Hashtable* htp;
-    umtx_lock(NULL);
+    umtx_lock(nullptr);
     htp = (Hashtable*) cache->get(bundleID);
-    umtx_unlock(NULL);
+    umtx_unlock(nullptr);
 
-    if (htp == NULL) {
+    if (htp == nullptr) {
         htp = new Hashtable(status);
         if (htp && U_SUCCESS(status)) {
             CharString cbundleID;
             cbundleID.appendInvariantChars(bundleID, status);
-            const char* path = cbundleID.isEmpty() ? NULL : cbundleID.data();
+            const char* path = cbundleID.isEmpty() ? nullptr : cbundleID.data();
             icu::LocalUEnumerationPointer uenum(ures_openAvailableLocales(path, &status));
             for (;;) {
-                const UChar* id = uenum_unext(uenum.getAlias(), NULL, &status);
-                if (id == NULL) {
+                const UChar* id = uenum_unext(uenum.getAlias(), nullptr, &status);
+                if (id == nullptr) {
                     break;
                 }
                 htp->put(UnicodeString(id), (void*)htp, status);
             }
             if (U_FAILURE(status)) {
                 delete htp;
-                return NULL;
+                return nullptr;
             }
-            umtx_lock(NULL);
+            umtx_lock(nullptr);
             Hashtable *t = static_cast<Hashtable *>(cache->get(bundleID));
-            if (t != NULL) {
+            if (t != nullptr) {
                 // Another thread raced through this code, creating the cache entry first.
                 // Discard ours and return theirs.
-                umtx_unlock(NULL);
+                umtx_unlock(nullptr);
                 delete htp;
                 htp = t;
             } else {
                 cache->put(bundleID, (void*)htp, status);
-                umtx_unlock(NULL);
+                umtx_unlock(nullptr);
             }
         }
     }

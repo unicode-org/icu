@@ -494,7 +494,7 @@ void RTTest::test(const UnicodeString& sourceRangeVal,
     this->toTarget.addAll(okAnyway);
 
     this->roundtripExclusionsSet.clear();
-    if (roundtripExclusions != NULL && strlen(roundtripExclusions) > 0) {
+    if (roundtripExclusions != nullptr && strlen(roundtripExclusions) > 0) {
         this->roundtripExclusionsSet.applyPattern(UnicodeString(roundtripExclusions, -1, US_INV), status);
         if (U_FAILURE(status)) {
             parent->errln("FAIL: UnicodeSet::applyPattern(%s)", roundtripExclusions);
@@ -513,12 +513,12 @@ void RTTest::test(const UnicodeString& sourceRangeVal,
 
     if (errorCount > 0) {
         char str[100];
-        int32_t length = transliteratorID.extract(str, 100, NULL, status);
+        int32_t length = transliteratorID.extract(str, 100, nullptr, status);
         str[length] = 0;
         parent->errln("FAIL: %s errors: %d %s", str, errorCount, (errorCount > errorLimit ? " (at least!)" : " ")); // + ", see " + logFileName);
     } else {
         char str[100];
-        int32_t length = transliteratorID.extract(str, 100, NULL, status);
+        int32_t length = transliteratorID.extract(str, 100, nullptr, status);
         str[length] = 0;
         parent->logln("%s ok", str);
     }
@@ -544,18 +544,18 @@ void RTTest::test2(UBool quickRt, int32_t density) {
     TransliteratorPointer sourceToTarget(
         Transliterator::createInstance(transliteratorID, UTRANS_FORWARD, parseError,
                                        status));
-    if ((Transliterator *)sourceToTarget == NULL) {
+    if ((Transliterator *)sourceToTarget == nullptr) {
         parent->dataerrln("FAIL: createInstance(" + transliteratorID +
-                   ") returned NULL. Error: " + u_errorName(status)
+                   ") returned nullptr. Error: " + u_errorName(status)
                    + "\n\tpreContext : " + prettify(parseError.preContext) 
                    + "\n\tpostContext : " + prettify(parseError.postContext));
         
                 return;
     }
     TransliteratorPointer targetToSource(sourceToTarget->createInverse(status));
-    if ((Transliterator *)targetToSource == NULL) {
+    if ((Transliterator *)targetToSource == nullptr) {
         parent->errln("FAIL: " + transliteratorID +
-                   ".createInverse() returned NULL. Error:" + u_errorName(status)          
+                   ".createInverse() returned nullptr. Error:" + u_errorName(status)          
                    + "\n\tpreContext : " + prettify(parseError.preContext) 
                    + "\n\tpostContext : " + prettify(parseError.postContext));
         return;
@@ -994,7 +994,7 @@ void TransliteratorRoundTripTest::TestJamo() {
     t.test(UnicodeString("[a-zA-Z]", ""), 
            UnicodeString("[\\u1100-\\u1112 \\u1161-\\u1175 \\u11A8-\\u11C2]", 
                          ""), 
-           NULL, this, quick, legal);
+           nullptr, this, quick, legal);
     delete legal;
 }
 
@@ -1004,7 +1004,7 @@ void TransliteratorRoundTripTest::TestHangul() {
     if (quick) t.setPairLimit(1000);
     t.test(UnicodeString("[a-zA-Z]", ""), 
            UnicodeString("[\\uAC00-\\uD7A4]", ""), 
-           NULL, this, quick, legal, 1);
+           nullptr, this, quick, legal, 1);
     delete legal;
 }
 
@@ -1247,7 +1247,7 @@ void TransliteratorRoundTripTest::TestCyrillic() {
     Legal *legal = new Legal();
 
     test.test(UnicodeString("[a-zA-Z\\u0110\\u0111\\u02BA\\u02B9]", ""), 
-              UnicodeString("[[\\u0400-\\u045F] & [:Age=3.2:]]", ""), NULL, this, quick, 
+              UnicodeString("[[\\u0400-\\u045F] & [:Age=3.2:]]", ""), nullptr, this, quick, 
               legal);
 
     delete legal;
@@ -1332,7 +1332,7 @@ void TransliteratorRoundTripTest::TestDevanagariLatin() {
         UErrorCode status = U_ZERO_ERROR;
         UParseError parseError;
         TransliteratorPointer t1(Transliterator::createInstance("[\\u0964-\\u0965\\u0981-\\u0983\\u0985-\\u098C\\u098F-\\u0990\\u0993-\\u09A8\\u09AA-\\u09B0\\u09B2\\u09B6-\\u09B9\\u09BC\\u09BE-\\u09C4\\u09C7-\\u09C8\\u09CB-\\u09CD\\u09D7\\u09DC-\\u09DD\\u09DF-\\u09E3\\u09E6-\\u09FA];NFD;Bengali-InterIndic;InterIndic-Gujarati;NFC;",UTRANS_FORWARD, parseError, status));
-        if((Transliterator *)t1 != NULL){
+        if((Transliterator *)t1 != nullptr){
             TransliteratorPointer t2(t1->createInverse(status));
             if(U_FAILURE(status)){
                 errln("FAIL: could not create the Inverse:-( \n");
@@ -1590,13 +1590,13 @@ static const char * const interIndicArray[] = {
     "[\\u0BF0\\u0BF1\\u0BF2]" /*roundtrip exclusions*/,
 
     "Latin-Telugu",latinForIndic, "[:Telugu:]", 
-    NULL /*roundtrip exclusions*/,
+    nullptr /*roundtrip exclusions*/,
 
     "Latin-Kannada",latinForIndic, "[:Kannada:]", 
-    NULL /*roundtrip exclusions*/,
+    nullptr /*roundtrip exclusions*/,
 
     "Latin-Malayalam",latinForIndic, "[:Malayalam:]", 
-    NULL /*roundtrip exclusions*/  
+    nullptr /*roundtrip exclusions*/  
 };
 
 void TransliteratorRoundTripTest::TestDebug(const char* name,const char fromSet[],

@@ -425,7 +425,7 @@ void ICU_Utility::appendToRule(UnicodeString& rule,
                                const UnicodeMatcher* matcher,
                                UBool escapeUnprintable,
                                UnicodeString& quoteBuf) {
-    if (matcher != NULL) {
+    if (matcher != nullptr) {
         UnicodeString pat;
         appendToRule(rule, matcher->toPattern(pat, escapeUnprintable),
                      true, escapeUnprintable, quoteBuf);

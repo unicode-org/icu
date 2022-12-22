@@ -47,7 +47,7 @@
 class DictionaryTriePerfTest : public UPerfTest {
 public:
     DictionaryTriePerfTest(int32_t argc, const char *argv[], UErrorCode &status)
-            : UPerfTest(argc, argv, NULL, 0, "", status), numTextLines(0) {
+            : UPerfTest(argc, argv, nullptr, 0, "", status), numTextLines(0) {
         if(hasFile()) {
             getLines(status);
             for(int32_t i=0; i<numLines; ++i) {
@@ -66,11 +66,11 @@ public:
         }
     }
 
-    virtual UPerfFunction *runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL);
+    virtual UPerfFunction *runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=nullptr);
 
     const char *getSourceDir() const { return sourceDir; }
 
-    UBool hasFile() const { return ucharBuf!=NULL; }
+    UBool hasFile() const { return ucharBuf!=nullptr; }
     const ULine *getCachedLines() const { return lines; }
     int32_t getNumLines() const { return numLines; }
     int32_t numTextLines;  // excluding comment lines
@@ -406,7 +406,7 @@ ucharsTrieMatches(UCharsTrie &trie,
 class UCharsTrieDictLookup : public DictLookup {
 public:
     UCharsTrieDictLookup(const DictionaryTriePerfTest &perfTest)
-            : DictLookup(perfTest), trie(NULL) {
+            : DictLookup(perfTest), trie(nullptr) {
         IcuToolErrorCode errorCode("UCharsTrieDictLookup()");
         builder=new UCharsTrieBuilder(errorCode);
         const ULine *lines=perf.getCachedLines();
@@ -508,7 +508,7 @@ static UBool thaiWordToBytes(const UChar *s, int32_t length,
 class BytesTrieDictLookup : public DictLookup {
 public:
     BytesTrieDictLookup(const DictionaryTriePerfTest &perfTest)
-            : DictLookup(perfTest), trie(NULL), noDict(false) {
+            : DictLookup(perfTest), trie(nullptr), noDict(false) {
         IcuToolErrorCode errorCode("BytesTrieDictLookup()");
         builder=new BytesTrieBuilder(errorCode);
         CharString str;
@@ -703,7 +703,7 @@ UPerfFunction *DictionaryTriePerfTest::runIndexedTest(int32_t index, UBool exec,
             break;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 int main(int argc, const char *argv[]) {

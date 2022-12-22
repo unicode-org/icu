@@ -85,7 +85,7 @@ ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
         args->targetLimit,
         source,
         sourceLimit,
-        NULL, /* no offsets */
+        nullptr, /* no offsets */
         false, /* no flush */
         err);
 
@@ -140,7 +140,7 @@ ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
                          newTargetLimit,
                          source,
                          sourceLimit,
-                         NULL,
+                         nullptr,
                          false,
                          &err2);
 
@@ -205,7 +205,7 @@ ucnv_cbFromUWriteSub (UConverterFromUnicodeArgs *args,
         return;
     }
 
-    if(converter->sharedData->impl->writeSub!=NULL) {
+    if(converter->sharedData->impl->writeSub!=nullptr) {
         converter->sharedData->impl->writeSub(args, offsetIndex, err);
     }
     else if(converter->subChar1!=0 && (uint16_t)converter->invalidUCharBuffer[0]<=(uint16_t)0xffu) {

@@ -23,7 +23,7 @@
 #include "unicode/tzrule.h"
 
 // --- The cache --
-static icu::TimeZone *gDangiCalendarZoneAstroCalc = NULL;
+static icu::TimeZone *gDangiCalendarZoneAstroCalc = nullptr;
 static icu::UInitOnce gDangiCalendarInitOnce {};
 
 /**
@@ -36,7 +36,7 @@ U_CDECL_BEGIN
 static UBool calendar_dangi_cleanup(void) {
     if (gDangiCalendarZoneAstroCalc) {
         delete gDangiCalendarZoneAstroCalc;
-        gDangiCalendarZoneAstroCalc = NULL;
+        gDangiCalendarZoneAstroCalc = nullptr;
     }
     gDangiCalendarInitOnce.reset();
     return true;

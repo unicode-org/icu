@@ -43,7 +43,7 @@ int32_t ExtraData::writeMapping(UChar32 c, const Norm &norm, UnicodeString &data
     // Write the mapping & raw mapping extraData.
     int32_t firstUnit=length|(norm.trailCC<<8);
     int32_t preMappingLength=0;
-    if(norm.rawMapping!=NULL) {
+    if(norm.rawMapping!=nullptr) {
         UnicodeString &rm=*norm.rawMapping;
         int32_t rmLength=rm.length();
         if(rmLength>Normalizer2Impl::MAPPING_LENGTH_MASK) {
@@ -138,7 +138,7 @@ void ExtraData::writeCompositions(UChar32 c, const Norm &norm, UnicodeString &da
         const CompositionPair &pair=pairs[i];
         // 22 bits for the composite character and whether it combines forward.
         UChar32 compositeAndFwd=pair.composite<<1;
-        if(norms.getNormRef(pair.composite).compositions!=NULL) {
+        if(norms.getNormRef(pair.composite).compositions!=nullptr) {
             compositeAndFwd|=1;  // The composite character also combines-forward.
         }
         // Encode most pairs in two units and some in three.
