@@ -12,7 +12,7 @@
 /**
  * Purpose: create local or static fe_verlist such as:
  * 
- *   const char *fe_verlist[] = { "4_2", "4_2_3", ..., NULL }; 
+ *   const char *fe_verlist[] = { "4_2", "4_2_3", ..., nullptr };
  */
 
 #if defined(GLUE_VER)
@@ -23,6 +23,6 @@ const char *fe_verlist[] = {
 #define GLUE_VER(x)  #x  ,
 #include "icuglue/glver.h"
 #undef GLUE_VER
-    NULL
+    nullptr
 };
 

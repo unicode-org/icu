@@ -68,7 +68,7 @@ static uint64_t randomInt64(void)
     int32_t i;
 
     if (!initialized) {
-        srand((unsigned)time(NULL));
+        srand((unsigned)time(nullptr));
         initialized = true;
     }
 
@@ -88,7 +88,7 @@ static double randomDouble(void)
     double ran = 0;
 
     if (!initialized) {
-        srand((unsigned)time(NULL));
+        srand((unsigned)time(nullptr));
         initialized = true;
     }
 #if 0
@@ -122,7 +122,7 @@ static uint32_t randomInt32(void)
     int32_t i;
 
     if (!initialized) {
-        srand((unsigned)time(NULL));
+        srand((unsigned)time(nullptr));
         initialized = true;
     }
 
@@ -143,7 +143,7 @@ static UnicodeString &getWindowsFormat(int32_t lcid, UBool currency, UnicodeStri
 
     nBuffer[0] = 0x0000;
 
-    /* Due to the arguments causing a result to be <= 23 characters (+2 for NULL and minus),
+    /* Due to the arguments causing a result to be <= 23 characters (+2 for nullptr and minus),
     we don't need to reallocate the buffer. */
     va_start(args, fmt);
     result = _vsnwprintf(nBuffer, STACK_BUFFER_SIZE, fmt, args);
@@ -189,31 +189,31 @@ static UnicodeString &getWindowsFormat(int32_t lcid, UBool currency, UnicodeStri
     buffer[0] = 0x0000;
 
     if (currency) {
-        result = GetCurrencyFormatW(lcid, 0, nBuffer, NULL, buffer, STACK_BUFFER_SIZE);
+        result = GetCurrencyFormatW(lcid, 0, nBuffer, nullptr, buffer, STACK_BUFFER_SIZE);
 
         if (result == 0) {
             DWORD lastError = GetLastError();
 
             if (lastError == ERROR_INSUFFICIENT_BUFFER) {
-                int newLength = GetCurrencyFormatW(lcid, 0, nBuffer, NULL, NULL, 0);
+                int newLength = GetCurrencyFormatW(lcid, 0, nBuffer, nullptr, nullptr, 0);
 
                 buffer = NEW_ARRAY(wchar_t, newLength);
                 buffer[0] = 0x0000;
-                GetCurrencyFormatW(lcid, 0, nBuffer, NULL, buffer, newLength);
+                GetCurrencyFormatW(lcid, 0, nBuffer, nullptr, buffer, newLength);
             }
         }
     } else {
-        result = GetNumberFormatW(lcid, 0, nBuffer, NULL, buffer, STACK_BUFFER_SIZE);
+        result = GetNumberFormatW(lcid, 0, nBuffer, nullptr, buffer, STACK_BUFFER_SIZE);
 
         if (result == 0) {
             DWORD lastError = GetLastError();
 
             if (lastError == ERROR_INSUFFICIENT_BUFFER) {
-                int newLength = GetNumberFormatW(lcid, 0, nBuffer, NULL, NULL, 0);
+                int newLength = GetNumberFormatW(lcid, 0, nBuffer, nullptr, nullptr, 0);
 
                 buffer = NEW_ARRAY(wchar_t, newLength);
                 buffer[0] = 0x0000;
-                GetNumberFormatW(lcid, 0, nBuffer, NULL, buffer, newLength);
+                GetNumberFormatW(lcid, 0, nBuffer, nullptr, buffer, newLength);
             }
         }
     }
@@ -281,8 +281,8 @@ void Win32NumberTest::testLocales(NumberFormatTest *log)
         UErrorCode status = U_ZERO_ERROR;
         char localeID[128];
 
-        // NULL localeID means ICU didn't recognize the lcid
-        if (lcidRecords[i].localeID == NULL) {
+        // nullptr localeID means ICU didn't recognize the lcid
+        if (lcidRecords[i].localeID == nullptr) {
             continue;
         }
 
@@ -319,7 +319,7 @@ void Win32NumberTest::testLocales(NumberFormatTest *log)
         testLocale(lcidRecords[i].localeID, lcidRecords[i].lcid, wcf, true,  log);
 
 #if 0
-        char *old_locale = strdup(setlocale(LC_ALL, NULL));
+        char *old_locale = strdup(setlocale(LC_ALL, nullptr));
         
         setlocale(LC_ALL, "German");
 

@@ -86,31 +86,31 @@ TestZIDEnumeration::TestZIDEnumeration(UBool all)
         tzenum = TimeZone::createEnumeration(status);
         len = tzenum->count(status);
     } else {
-        tzenum = NULL;
+        tzenum = nullptr;
         len = UPRV_LENGTHOF(TESTZIDS);
     }
 }
 
 TestZIDEnumeration::~TestZIDEnumeration() {
-    if (tzenum != NULL) {
+    if (tzenum != nullptr) {
         delete tzenum;
     }
 }
 
 const UnicodeString*
 TestZIDEnumeration::snext(UErrorCode& status) {
-    if (tzenum != NULL) {
+    if (tzenum != nullptr) {
         return tzenum->snext(status);
     } else if (U_SUCCESS(status) && idx < len) {
         unistr = UnicodeString(TESTZIDS[idx++], "");
         return &unistr;
     }
-    return NULL;
+    return nullptr;
 }
 
 void
 TestZIDEnumeration::reset(UErrorCode& status) {
-    if (tzenum != NULL) {
+    if (tzenum != nullptr) {
         tzenum->reset(status);
     } else {
         idx = 0;
@@ -610,7 +610,7 @@ TimeZoneRuleTest::TestOlsonTransition(void) {
     TestZIDEnumeration tzenum(!quick);
     while (true) {
         const UnicodeString *tzid = tzenum.snext(status);
-        if (tzid == NULL) {
+        if (tzid == nullptr) {
             break;
         }
         if (U_FAILURE(status)) {
@@ -645,7 +645,7 @@ TimeZoneRuleTest::TestRBTZTransition(void) {
     TestZIDEnumeration tzenum(!quick);
     while (true) {
         const UnicodeString *tzid = tzenum.snext(status);
-        if (tzid == NULL) {
+        if (tzid == nullptr) {
             break;
         }
         if (U_FAILURE(status)) {
@@ -782,7 +782,7 @@ TimeZoneRuleTest::TestVTimeZoneRoundTrip(void) {
     TestZIDEnumeration tzenum(!quick);
     while (true) {
         const UnicodeString *tzid = tzenum.snext(status);
-        if (tzid == NULL) {
+        if (tzid == nullptr) {
             break;
         }
         if (U_FAILURE(status)) {
@@ -793,7 +793,7 @@ TimeZoneRuleTest::TestVTimeZoneRoundTrip(void) {
         VTimeZone *vtz_org = VTimeZone::createVTimeZoneByID(*tzid);
         vtz_org->setTZURL("http://source.icu-project.org/timezone");
         vtz_org->setLastModified(Calendar::getNow());
-        VTimeZone *vtz_new = NULL;
+        VTimeZone *vtz_new = nullptr;
         UnicodeString vtzdata;
         // Write out VTIMEZONE data
         vtz_org->write(vtzdata, status);
@@ -854,9 +854,9 @@ TimeZoneRuleTest::TestVTimeZoneRoundTrip(void) {
                     }
                 }
             }
-            if (vtz_new != NULL) {
+            if (vtz_new != nullptr) {
                 delete vtz_new;
-                vtz_new = NULL;
+                vtz_new = nullptr;
             }
         }
         delete tz;
@@ -882,7 +882,7 @@ TimeZoneRuleTest::TestVTimeZoneRoundTripPartial(void) {
     TestZIDEnumeration tzenum(!quick);
     while (true) {
         const UnicodeString *tzid = tzenum.snext(status);
-        if (tzid == NULL) {
+        if (tzid == nullptr) {
             break;
         }
         if (U_FAILURE(status)) {
@@ -891,7 +891,7 @@ TimeZoneRuleTest::TestVTimeZoneRoundTripPartial(void) {
         }
         BasicTimeZone *tz = (BasicTimeZone*)TimeZone::createTimeZone(*tzid);
         VTimeZone *vtz_org = VTimeZone::createVTimeZoneByID(*tzid);
-        VTimeZone *vtz_new = NULL;
+        VTimeZone *vtz_new = nullptr;
         UnicodeString vtzdata;
 
         for (int32_t i = 0; STARTYEARS[i] != 0; i++) {
@@ -946,9 +946,9 @@ TimeZoneRuleTest::TestVTimeZoneRoundTripPartial(void) {
                     }
                 }
             }
-            if (vtz_new != NULL) {
+            if (vtz_new != nullptr) {
                 delete vtz_new;
-                vtz_new = NULL;
+                vtz_new = nullptr;
             }
         }
         delete tz;
@@ -978,7 +978,7 @@ TimeZoneRuleTest::TestVTimeZoneSimpleWrite(void) {
     TestZIDEnumeration tzenum(!quick);
     while (true) {
         const UnicodeString *tzid = tzenum.snext(status);
-        if (tzid == NULL) {
+        if (tzid == nullptr) {
             break;
         }
         if (U_FAILURE(status)) {
@@ -986,7 +986,7 @@ TimeZoneRuleTest::TestVTimeZoneSimpleWrite(void) {
             break;
         }
         VTimeZone *vtz_org = VTimeZone::createVTimeZoneByID(*tzid);
-        VTimeZone *vtz_new = NULL;
+        VTimeZone *vtz_new = nullptr;
         UnicodeString vtzdata;
 
         for (int32_t i = 0; TESTDATES[i][0] != 0; i++) {
@@ -1018,9 +1018,9 @@ TimeZoneRuleTest::TestVTimeZoneSimpleWrite(void) {
                     }
                 }
             }
-            if (vtz_new != NULL) {
+            if (vtz_new != nullptr) {
                 delete vtz_new;
-                vtz_new = NULL;
+                vtz_new = nullptr;
             }
         }
         delete vtz_org;
@@ -1047,7 +1047,7 @@ TimeZoneRuleTest::TestVTimeZoneHeaderProps(void) {
     // Roundtrip conversion
     UnicodeString vtzdata;
     vtz->write(vtzdata, status);
-    VTimeZone *newvtz1 = NULL;
+    VTimeZone *newvtz1 = nullptr;
     if (U_FAILURE(status)) {
         errln("FAIL: error returned while writing VTIMEZONE data 1");
         return;
@@ -1118,7 +1118,7 @@ TimeZoneRuleTest::TestGetSimpleRules(void) {
     for (int32_t i = 0; i < numTimes ; i++) {
         while (true) {
             const UnicodeString *tzid = tzenum.snext(status);
-            if (tzid == NULL) {
+            if (tzid == nullptr) {
                 break;
             }
             if (U_FAILURE(status)) {
@@ -1126,21 +1126,21 @@ TimeZoneRuleTest::TestGetSimpleRules(void) {
                 break;
             }
             BasicTimeZone *tz = (BasicTimeZone*)TimeZone::createTimeZone(*tzid);
-            initial = NULL;
-            std = dst = NULL;
+            initial = nullptr;
+            std = dst = nullptr;
             tz->getSimpleRulesNear(testTimes[i], initial, std, dst, status);
             if (U_FAILURE(status)) {
                 errln("FAIL: getSimpleRules failed.");
                 break;
             }
-            if (initial == NULL) {
-                errln("FAIL: initial rule must not be NULL");
+            if (initial == nullptr) {
+                errln("FAIL: initial rule must not be nullptr");
                 break;
-            } else if (!((std == NULL && dst == NULL) || (std != NULL && dst != NULL))) {
+            } else if (!((std == nullptr && dst == nullptr) || (std != nullptr && dst != nullptr))) {
                 errln("FAIL: invalid std/dst pair.");
                 break;
             }
-            if (std != NULL) {
+            if (std != nullptr) {
                 const DateTimeRule *dtr = std->getRule();
                 if (dtr->getDateRuleType() != DateTimeRule::DOW) {
                     errln("FAIL: simple std rull must use DateTimeRule::DOW as date rule.");
@@ -1162,7 +1162,7 @@ TimeZoneRuleTest::TestGetSimpleRules(void) {
             }
             // Create an RBTZ from the rules and compare the offsets at the date
             RuleBasedTimeZone *rbtz = new RuleBasedTimeZone(*tzid, initial);
-            if (std != NULL) {
+            if (std != nullptr) {
                 rbtz->addTransitionRule(std, status);
                 if (U_FAILURE(status)) {
                     errln("FAIL: couldn't add std rule.");
@@ -1518,7 +1518,7 @@ TimeZoneRuleTest::TestSimpleTimeZoneCoverage(void) {
     UBool avail1, avail2;
     UErrorCode status = U_ZERO_ERROR;
     const TimeZoneRule *trrules[2];
-    const InitialTimeZoneRule *ir = NULL;
+    const InitialTimeZoneRule *ir = nullptr;
     int32_t numTzRules;
 
     // BasicTimeZone API implementation in SimpleTimeZone
@@ -1548,7 +1548,7 @@ TimeZoneRuleTest::TestSimpleTimeZoneCoverage(void) {
     if (numTzRules != 0) {
         errln("FAIL: Incorrect transition rule count");
     }
-    if (ir == NULL || ir->getRawOffset() != stz1->getRawOffset()) {
+    if (ir == nullptr || ir->getRawOffset() != stz1->getRawOffset()) {
         errln("FAIL: Bad initial time zone rule");
     }
 
@@ -1577,8 +1577,8 @@ TimeZoneRuleTest::TestSimpleTimeZoneCoverage(void) {
     }
 
     numTzRules = 2;
-    trrules[0] = NULL;
-    trrules[1] = NULL;
+    trrules[0] = nullptr;
+    trrules[1] = nullptr;
     stz1->getTimeZoneRules(ir, trrules, numTzRules, status);
     if (U_FAILURE(status)) {
         errln("FAIL: getTimeZoneRules failed");
@@ -1586,13 +1586,13 @@ TimeZoneRuleTest::TestSimpleTimeZoneCoverage(void) {
     if (numTzRules != 2) {
         errln("FAIL: Incorrect transition rule count");
     }
-    if (ir == NULL || ir->getRawOffset() != stz1->getRawOffset()) {
+    if (ir == nullptr || ir->getRawOffset() != stz1->getRawOffset()) {
         errln("FAIL: Bad initial time zone rule");
     }
-    if (trrules[0] == NULL || trrules[0]->getRawOffset() != stz1->getRawOffset()) {
+    if (trrules[0] == nullptr || trrules[0]->getRawOffset() != stz1->getRawOffset()) {
         errln("FAIL: Bad transition rule 0");
     }
-    if (trrules[1] == NULL || trrules[1]->getRawOffset() != stz1->getRawOffset()) {
+    if (trrules[1] == nullptr || trrules[1]->getRawOffset() != stz1->getRawOffset()) {
         errln("FAIL: Bad transition rule 1");
     }
 
@@ -1771,7 +1771,7 @@ TimeZoneRuleTest::TestVTimeZoneCoverage(void) {
     // Creation from BasicTimeZone
     //
     status = U_ZERO_ERROR;
-    VTimeZone *vtzFromBasic = NULL;
+    VTimeZone *vtzFromBasic = nullptr;
     SimpleTimeZone *simpleTZ = new SimpleTimeZone(28800000, "Asia/Singapore");
     simpleTZ->setStartYear(1970);
     simpleTZ->setStartRule(0,  // month
@@ -1784,7 +1784,7 @@ TimeZoneRuleTest::TestVTimeZoneCoverage(void) {
         goto end_basic_tz_test;
     }
     vtzFromBasic = VTimeZone::createVTimeZoneFromBasicTimeZone(*simpleTZ, status);
-    if (U_FAILURE(status) || vtzFromBasic == NULL) {
+    if (U_FAILURE(status) || vtzFromBasic == nullptr) {
         dataerrln("File %s, line %d, failed with status = %s", __FILE__, __LINE__, u_errorName(status));
         goto end_basic_tz_test;
     }
@@ -1828,7 +1828,7 @@ TimeZoneRuleTest::TestVTimeZoneParse(void) {
     // Trying to create VTimeZone from empty data
     UnicodeString emptyData;
     VTimeZone *empty = VTimeZone::createVTimeZone(emptyData, status);
-    if (U_SUCCESS(status) || empty != NULL) {
+    if (U_SUCCESS(status) || empty != nullptr) {
         delete empty;
         errln("FAIL: Non-null VTimeZone is returned for empty VTIMEZONE data");
     }
@@ -1862,7 +1862,7 @@ TimeZoneRuleTest::TestVTimeZoneParse(void) {
         0
     };
     VTimeZone *tokyo = VTimeZone::createVTimeZone(asiaTokyo, status);
-    if (U_FAILURE(status) || tokyo == NULL) {
+    if (U_FAILURE(status) || tokyo == nullptr) {
         errln("FAIL: Failed to create a VTimeZone tokyo");
     } else {
         // Check ID
@@ -1927,7 +1927,7 @@ TimeZoneRuleTest::TestVTimeZoneParse(void) {
     };
 
     VTimeZone *foo = VTimeZone::createVTimeZone(fooData, status);
-    if (U_FAILURE(status) || foo == NULL) {
+    if (U_FAILURE(status) || foo == nullptr) {
         errln("FAIL: Failed to create a VTimeZone foo");
     } else {
         // Write VTIMEZONE data
@@ -2183,7 +2183,7 @@ TimeZoneRuleTest::TestVTimeZoneWrapper(void) {
 #if 0
     // local variables
     UBool b;
-    UChar * data = NULL;
+    UChar * data = nullptr;
     int32_t length = 0;
     int32_t i;
     UDate result;

@@ -260,7 +260,7 @@ int32_t getScriptProps(UScriptCode script) {
 U_CAPI int32_t U_EXPORT2
 uscript_getSampleString(UScriptCode script, UChar *dest, int32_t capacity, UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) { return 0; }
-    if(capacity < 0 || (capacity > 0 && dest == NULL)) {
+    if(capacity < 0 || (capacity > 0 && dest == nullptr)) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }

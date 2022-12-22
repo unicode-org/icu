@@ -197,7 +197,7 @@ public:
      * Change the size of this vector as follows: If newSize is
      * smaller, then truncate the array, possibly deleting held
      * elements for i >= newSize.  If newSize is larger, grow the
-     * array, filling in new slots with NULL.
+     * array, filling in new slots with nullptr.
      */
     void setSize(int32_t newSize, UErrorCode &status);
 

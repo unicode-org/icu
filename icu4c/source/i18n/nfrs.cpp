@@ -143,7 +143,7 @@ NFRuleSet::NFRuleSet(RuleBasedNumberFormat *_owner, UnicodeString* descriptions,
   , fIsParseable(true)
 {
     for (int32_t i = 0; i < NON_NUMERICAL_RULE_LENGTH; ++i) {
-        nonNumericalRules[i] = NULL;
+        nonNumericalRules[i] = nullptr;
     }
 
     if (U_FAILURE(status)) {
@@ -303,7 +303,7 @@ void NFRuleSet::setBestFractionRule(int32_t originalIndex, NFRule *newRule, UBoo
         fractionRules.add(newRule);
     }
     NFRule *bestResult = nonNumericalRules[originalIndex];
-    if (bestResult == NULL) {
+    if (bestResult == nullptr) {
         nonNumericalRules[originalIndex] = newRule;
     }
     else {
@@ -535,7 +535,7 @@ NFRuleSet::findNormalRule(int64_t number) const
             }
         }
         if (hi == 0) { // bad rule set, minimum base > 0
-            return NULL; // want to throw exception here
+            return nullptr; // want to throw exception here
         }
 
         NFRule *result = rules[hi - 1];
@@ -547,7 +547,7 @@ NFRuleSet::findNormalRule(int64_t number) const
         // return
         if (result->shouldRollBack(number)) {
             if (hi == 1) { // bad rule set, no prior rule to rollback to from this base
-                return NULL;
+                return nullptr;
             }
             result = rules[hi - 2];
         }
@@ -671,7 +671,7 @@ NFRuleSet::findFractionRuleSetRule(double number) const
 static void dumpUS(FILE* f, const UnicodeString& us) {
   int len = us.length();
   char* buf = (char *)uprv_malloc((len+1)*sizeof(char)); //new char[len+1];
-  if (buf != NULL) {
+  if (buf != nullptr) {
 	  us.extract(0, len, buf);
 	  buf[len] = 0;
 	  fprintf(f, "%s", buf);

@@ -312,7 +312,7 @@ class LocalPointerTest : public IntlTest {
 public:
     LocalPointerTest() {}
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL) override;
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=nullptr) override;
 
     void TestLocalPointer();
     void TestLocalPointerMoveSwap();
@@ -353,8 +353,8 @@ void LocalPointerTest::TestLocalPointer() {
     // constructor
     LocalPointer<UnicodeString> s(new UnicodeString((UChar32)0x50005));
     // isNULL(), isValid(), operator==(), operator!=()
-    if(s.isNull() || !s.isValid() || s==NULL || !(s!=NULL)) {
-        errln("LocalPointer constructor or NULL test failure");
+    if(s.isNull() || !s.isValid() || s==nullptr || !(s!=nullptr)) {
+        errln("LocalPointer constructor or nullptr test failure");
         return;
     }
     // getAlias(), operator->, operator*
@@ -367,7 +367,7 @@ void LocalPointerTest::TestLocalPointer() {
         errln("LocalPointer adoptInstead(U+FFFC) failure");
     }
     UnicodeString *orphan=s.orphan();
-    if(orphan==NULL || orphan->length()!=1 || s.isValid() || s!=NULL) {
+    if(orphan==nullptr || orphan->length()!=1 || s.isValid() || s!=nullptr) {
         errln("LocalPointer orphan() failure");
     }
     delete orphan;
@@ -376,7 +376,7 @@ void LocalPointerTest::TestLocalPointer() {
         errln("LocalPointer adoptInstead(empty) failure");
     }
 
-    // LocalPointer(p, errorCode) sets U_MEMORY_ALLOCATION_ERROR if p==NULL.
+    // LocalPointer(p, errorCode) sets U_MEMORY_ALLOCATION_ERROR if p==nullptr.
     UErrorCode errorCode = U_ZERO_ERROR;
     LocalPointer<CharString> csx(new CharString("some chars", errorCode), errorCode);
     if(csx.isNull() && U_SUCCESS(errorCode)) {
@@ -397,19 +397,19 @@ void LocalPointerTest::TestLocalPointer() {
         return;
     }
     errorCode = U_ZERO_ERROR;
-    csx.adoptInsteadAndCheckErrorCode(NULL, errorCode);
+    csx.adoptInsteadAndCheckErrorCode(nullptr, errorCode);
     if(errorCode != U_MEMORY_ALLOCATION_ERROR) {
-        errln("adoptInsteadAndCheckErrorCode(NULL, errorCode) did not set U_MEMORY_ALLOCATION_ERROR");
+        errln("adoptInsteadAndCheckErrorCode(nullptr, errorCode) did not set U_MEMORY_ALLOCATION_ERROR");
         return;
     }
     if(csx.isValid()) {
-        errln("adoptInsteadAndCheckErrorCode(NULL, errorCode) kept the object");
+        errln("adoptInsteadAndCheckErrorCode(nullptr, errorCode) kept the object");
         return;
     }
     errorCode = U_ZERO_ERROR;
-    LocalPointer<CharString> null(NULL, errorCode);
+    LocalPointer<CharString> null(nullptr, errorCode);
     if(errorCode != U_MEMORY_ALLOCATION_ERROR) {
-        errln("LocalPointer(NULL, errorCode) did not set U_MEMORY_ALLOCATION_ERROR");
+        errln("LocalPointer(nullptr, errorCode) did not set U_MEMORY_ALLOCATION_ERROR");
         return;
     }
 
@@ -487,7 +487,7 @@ void LocalPointerTest::TestLocalArray() {
         errln("LocalArray adoptInstead() failure");
     }
 
-    // LocalArray(p, errorCode) sets U_MEMORY_ALLOCATION_ERROR if p==NULL.
+    // LocalArray(p, errorCode) sets U_MEMORY_ALLOCATION_ERROR if p==nullptr.
     UErrorCode errorCode = U_ZERO_ERROR;
     LocalArray<UnicodeString> ua(new UnicodeString[3], errorCode);
     if(ua.isNull() && U_SUCCESS(errorCode)) {
@@ -509,19 +509,19 @@ void LocalPointerTest::TestLocalArray() {
         return;
     }
     errorCode = U_ZERO_ERROR;
-    ua.adoptInsteadAndCheckErrorCode(NULL, errorCode);
+    ua.adoptInsteadAndCheckErrorCode(nullptr, errorCode);
     if(errorCode != U_MEMORY_ALLOCATION_ERROR) {
-        errln("adoptInsteadAndCheckErrorCode(NULL, errorCode) did not set U_MEMORY_ALLOCATION_ERROR");
+        errln("adoptInsteadAndCheckErrorCode(nullptr, errorCode) did not set U_MEMORY_ALLOCATION_ERROR");
         return;
     }
     if(ua.isValid()) {
-        errln("adoptInsteadAndCheckErrorCode(NULL, errorCode) kept the array");
+        errln("adoptInsteadAndCheckErrorCode(nullptr, errorCode) kept the array");
         return;
     }
     errorCode = U_ZERO_ERROR;
-    LocalArray<UnicodeString> null(NULL, errorCode);
+    LocalArray<UnicodeString> null(nullptr, errorCode);
     if(errorCode != U_MEMORY_ALLOCATION_ERROR) {
-        errln("LocalArray(NULL, errorCode) did not set U_MEMORY_ALLOCATION_ERROR");
+        errln("LocalArray(nullptr, errorCode) did not set U_MEMORY_ALLOCATION_ERROR");
         return;
     }
 
@@ -593,7 +593,7 @@ void LocalPointerTest::TestLocalXyzPointer() {
 
     static const char *const encoding="ISO-8859-1";
     LocalUConverterSelectorPointer sel(
-        ucnvsel_open(&encoding, 1, NULL, UCNV_ROUNDTRIP_SET, errorCode));
+        ucnvsel_open(&encoding, 1, nullptr, UCNV_ROUNDTRIP_SET, errorCode));
     if(errorCode.errIfFailureAndReset("ucnvsel_open()")) {
         return;
     }
@@ -603,7 +603,7 @@ void LocalPointerTest::TestLocalXyzPointer() {
     }
 
 #if !UCONFIG_NO_FORMATTING
-    LocalUCalendarPointer cal(ucal_open(NULL, 0, "root", UCAL_GREGORIAN, errorCode));
+    LocalUCalendarPointer cal(ucal_open(nullptr, 0, "root", UCAL_GREGORIAN, errorCode));
     if(errorCode.errDataIfFailureAndReset("ucal_open()")) {
         return;
     }
@@ -632,7 +632,7 @@ void LocalPointerTest::TestLocalXyzPointer() {
 
     UnicodeString hello=UNICODE_STRING_SIMPLE("Hello {0}!");
     LocalUMessageFormatPointer msg(
-        umsg_open(hello.getBuffer(), hello.length(), "root", NULL, errorCode));
+        umsg_open(hello.getBuffer(), hello.length(), "root", nullptr, errorCode));
     if(errorCode.errIfFailureAndReset("umsg_open()")) {
         return;
     }
@@ -669,7 +669,7 @@ void LocalPointerTest::TestLocalXyzPointer() {
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
     UnicodeString pattern=UNICODE_STRING_SIMPLE("abc|xy+z");
     LocalURegularExpressionPointer regex(
-        uregex_open(pattern.getBuffer(), pattern.length(), 0, NULL, errorCode));
+        uregex_open(pattern.getBuffer(), pattern.length(), 0, nullptr, errorCode));
     if(errorCode.errIfFailureAndReset("uregex_open()")) {
         return;
     }
@@ -682,7 +682,7 @@ void LocalPointerTest::TestLocalXyzPointer() {
 #if !UCONFIG_NO_TRANSLITERATION
     UnicodeString id=UNICODE_STRING_SIMPLE("Grek-Latn");
     LocalUTransliteratorPointer trans(
-        utrans_openU(id.getBuffer(), id.length(), UTRANS_FORWARD, NULL, 0, NULL, errorCode));
+        utrans_openU(id.getBuffer(), id.length(), UTRANS_FORWARD, nullptr, 0, nullptr, errorCode));
     if(errorCode.errIfFailureAndReset("utrans_open()")) {
         return;
     }
@@ -745,38 +745,38 @@ void LocalPointerTest::TestLocalXyzPointerMoveSwap() {
 #endif /* !UCONFIG_NO_NORMALIZATION */
 }
 
-// Try LocalXyzPointer types with NULL pointers.
+// Try LocalXyzPointer types with nullptr pointers.
 void LocalPointerTest::TestLocalXyzPointerNull() {
     {
         IcuTestErrorCode errorCode(*this, "TestLocalXyzPointerNull/LocalUConverterSelectorPointer");
         static const char *const encoding="ISO-8859-1";
         LocalUConverterSelectorPointer null;
         LocalUConverterSelectorPointer sel(
-            ucnvsel_open(&encoding, 1, NULL, UCNV_ROUNDTRIP_SET, errorCode));
-        sel.adoptInstead(NULL);
+            ucnvsel_open(&encoding, 1, nullptr, UCNV_ROUNDTRIP_SET, errorCode));
+        sel.adoptInstead(nullptr);
     }
 #if !UCONFIG_NO_FORMATTING
     {
         IcuTestErrorCode errorCode(*this, "TestLocalXyzPointerNull/LocalUCalendarPointer");
         LocalUCalendarPointer null;
-        LocalUCalendarPointer cal(ucal_open(NULL, 0, "root", UCAL_GREGORIAN, errorCode));
+        LocalUCalendarPointer cal(ucal_open(nullptr, 0, "root", UCAL_GREGORIAN, errorCode));
         if(!errorCode.errDataIfFailureAndReset("ucal_open()")) {
-            cal.adoptInstead(NULL);
+            cal.adoptInstead(nullptr);
         }
     }
     {
         IcuTestErrorCode errorCode(*this, "TestLocalXyzPointerNull/LocalUDateTimePatternGeneratorPointer");
         LocalUDateTimePatternGeneratorPointer null;
         LocalUDateTimePatternGeneratorPointer patgen(udatpg_open("root", errorCode));
-        patgen.adoptInstead(NULL);
+        patgen.adoptInstead(nullptr);
     }
     {
         IcuTestErrorCode errorCode(*this, "TestLocalXyzPointerNull/LocalUMessageFormatPointer");
         UnicodeString hello=UNICODE_STRING_SIMPLE("Hello {0}!");
         LocalUMessageFormatPointer null;
         LocalUMessageFormatPointer msg(
-            umsg_open(hello.getBuffer(), hello.length(), "root", NULL, errorCode));
-        msg.adoptInstead(NULL);
+            umsg_open(hello.getBuffer(), hello.length(), "root", nullptr, errorCode));
+        msg.adoptInstead(nullptr);
     }
 #endif /* !UCONFIG_NO_FORMATTING */
 
@@ -786,9 +786,9 @@ void LocalPointerTest::TestLocalXyzPointerNull() {
         UnicodeString pattern=UNICODE_STRING_SIMPLE("abc|xy+z");
         LocalURegularExpressionPointer null;
         LocalURegularExpressionPointer regex(
-            uregex_open(pattern.getBuffer(), pattern.length(), 0, NULL, errorCode));
+            uregex_open(pattern.getBuffer(), pattern.length(), 0, nullptr, errorCode));
         if(!errorCode.errDataIfFailureAndReset("urege_open()")) {
-            regex.adoptInstead(NULL);
+            regex.adoptInstead(nullptr);
         }
     }
 #endif /* !UCONFIG_NO_REGULAR_EXPRESSIONS */
@@ -799,9 +799,9 @@ void LocalPointerTest::TestLocalXyzPointerNull() {
         UnicodeString id=UNICODE_STRING_SIMPLE("Grek-Latn");
         LocalUTransliteratorPointer null;
         LocalUTransliteratorPointer trans(
-            utrans_openU(id.getBuffer(), id.length(), UTRANS_FORWARD, NULL, 0, NULL, errorCode));
+            utrans_openU(id.getBuffer(), id.length(), UTRANS_FORWARD, nullptr, 0, nullptr, errorCode));
         if(!errorCode.errDataIfFailureAndReset("utrans_openU()")) {
-            trans.adoptInstead(NULL);
+            trans.adoptInstead(nullptr);
         }
     }
 #endif /* !UCONFIG_NO_TRANSLITERATION */
@@ -831,7 +831,7 @@ void LocalPointerTest::TestLocalXyzStdUniquePtr() {
 class EnumSetTest : public IntlTest {
 public:
   EnumSetTest() {}
-  virtual void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL) override;
+  virtual void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=nullptr) override;
   void TestEnumSet();
 };
 

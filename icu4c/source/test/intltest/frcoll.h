@@ -28,7 +28,7 @@ public:
 
     CollationFrenchTest();
     virtual ~CollationFrenchTest();
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 
     // perform tests with strength SECONDARY
     void TestSecondary(/* char* par */);

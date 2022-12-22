@@ -71,7 +71,7 @@ public:
      *                  was returned cannot render all of the text.
      *
      * @return an <code>LEFontInstance</code> for the sub font which can render the characters, or
-     *         <code>NULL</code> if there is an error.
+     *         <code>nullptr</code> if there is an error.
      *
      * @see LEScripts.h
      */
@@ -133,7 +133,7 @@ private:
 
 inline const void *ScriptCompositeFontInstance::getFontTable(LETag /*tableTag*/) const
 {
-    return NULL;
+    return nullptr;
 }
 
 // Can't get units per EM without knowing which sub-font, so

@@ -506,7 +506,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         return;
     }
     TimeZone *zone = TimeZone::createTimeZone(UnicodeString("ECT"));
-    if (zone==NULL) {
+    if (zone==nullptr) {
         dataerrln("ERROR: Could not create TimeZone ECT");
         delete gen;
         delete format;
@@ -746,7 +746,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
             return;
         }
         TimeZone *enZone = TimeZone::createTimeZone(UnicodeString("ECT/GMT"));
-        if (enZone==NULL) {
+        if (enZone==nullptr) {
             dataerrln("ERROR: Could not create TimeZone ECT");
             delete patGen;
             return;
@@ -824,13 +824,13 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     testPattern=test->getBestPattern(UnicodeString("MMMMdd"), status);
     conflictingStatus = test->addPattern(UnicodeString("HH:mm"), true, conflictingPattern, status);
     conflictingStatus = test->addPattern(UnicodeString("MMMMMdd"), true, conflictingPattern, status); //duplicate pattern
-    StringEnumeration *output=NULL;
+    StringEnumeration *output=nullptr;
     output = test->getRedundants(status);
     expectedResult=UnicodeString("MMMMd");
-    if (output != NULL) {
+    if (output != nullptr) {
         output->reset(status);
         const UnicodeString *dupPattern=output->snext(status);
-        if ( (dupPattern==NULL) || (*dupPattern != expectedResult) ) {
+        if ( (dupPattern==nullptr) || (*dupPattern != expectedResult) ) {
             errln("ERROR: Fail in getRedundants !\n");
         }
     }
@@ -1018,7 +1018,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAllFieldPatterns(/*char *par*/)
         "en",
         "en@calendar=japanese",
         "en@calendar=chinese",
-        NULL // terminator
+        nullptr // terminator
     };
     AllFieldsTestItem testData[] = {
         //pat   fieldLengths    generated pattern must
@@ -1077,7 +1077,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAllFieldPatterns(/*char *par*/)
 
     const char ** localeNamesPtr = localeNames;
     const char * localeName;
-    while ( (localeName = *localeNamesPtr++) != NULL) {
+    while ( (localeName = *localeNamesPtr++) != nullptr) {
         UErrorCode status = U_ZERO_ERROR;
         Locale locale = Locale::createFromName(localeName);
         DateTimePatternGenerator * dtpg = DateTimePatternGenerator::createInstance(locale, status);
@@ -1188,7 +1188,7 @@ void IntlTestDateTimePatternGeneratorAPI::testC() {
     for (int32_t i = 0; i < numTests; ++i) {
         DateTimePatternGenerator *gen = DateTimePatternGenerator::createInstance(
                 Locale::forLanguageTag(tests[i][0], status), status);
-        if (gen == NULL) {
+        if (gen == nullptr) {
             dataerrln("FAIL: DateTimePatternGenerator::createInstance failed for %s", tests[i][0]);
             return;
         }
@@ -1373,7 +1373,7 @@ void IntlTestDateTimePatternGeneratorAPI::testJjMapping() {
             continue;
         }
         const SimpleDateFormat* sdfmt;
-        if ((sdfmt = dynamic_cast<const SimpleDateFormat*>(reinterpret_cast<const DateFormat*>(dfmt.getAlias()))) == NULL) {
+        if ((sdfmt = dynamic_cast<const SimpleDateFormat*>(reinterpret_cast<const DateFormat*>(dfmt.getAlias()))) == nullptr) {
             continue;
         }
         UnicodeString shortPattern;
@@ -1615,7 +1615,7 @@ void IntlTestDateTimePatternGeneratorAPI::testBestPattern() {
             LocalPointer<DateFormat> df(DateFormat::createDateInstance(DateFormat::kFull, testCases[i].localeID));
             SimpleDateFormat* sdf = dynamic_cast<SimpleDateFormat*>(df.getAlias());
             
-            if (sdf != NULL) {
+            if (sdf != nullptr) {
                 sdf->toPattern(actualPattern);
             }
         }

@@ -29,7 +29,7 @@ SimpleFwdCharIterator::SimpleFwdCharIterator(const UnicodeString& s) {
     fHashCode = kInvalidHashCode;
     fLen = s.length();
     fStart = new UChar[fLen];
-    if(fStart == NULL) {
+    if(fStart == nullptr) {
         fBogus = true;
     } else {
         fEnd = fStart+fLen;
@@ -49,7 +49,7 @@ SimpleFwdCharIterator::SimpleFwdCharIterator(UChar *s, int32_t len, UBool adopt)
 
     if(adopt == false) {
         fStart = new UChar[fLen];
-        if(fStart == NULL) {
+        if(fStart == nullptr) {
             fBogus = true;
         } else {
             uprv_memcpy(fStart, s, fLen);
@@ -102,7 +102,7 @@ int32_t SimpleFwdCharIterator::hashCode(void) const {
 }
         
 UClassID SimpleFwdCharIterator::getDynamicClassID(void) const {
-    return NULL;
+    return nullptr;
 }
 
 UChar SimpleFwdCharIterator::nextPostInc(void) {

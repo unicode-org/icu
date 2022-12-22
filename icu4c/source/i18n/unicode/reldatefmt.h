@@ -428,7 +428,7 @@ public:
      * @param locale the locale
      * @param nfToAdopt Constructed object takes ownership of this pointer.
      *   It is an error for caller to delete this pointer or change its
-     *   contents after calling this constructor. Caller may pass NULL for
+     *   contents after calling this constructor. Caller may pass nullptr for
      *   this argument if they want default number format behavior.
      * @param style the format style. The UDAT_RELATIVE bit field has no effect.
      * @param capitalizationContext A value from UDisplayContext that pertains to

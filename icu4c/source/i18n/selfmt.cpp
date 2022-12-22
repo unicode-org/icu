@@ -61,7 +61,7 @@ SelectFormat::applyPattern(const UnicodeString& newPattern, UErrorCode& status) 
       return;
     }
 
-    msgPattern.parseSelectStyle(newPattern, NULL, status);
+    msgPattern.parseSelectStyle(newPattern, nullptr, status);
     if (U_FAILURE(status)) {
         msgPattern.clear();
     }

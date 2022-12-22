@@ -82,7 +82,7 @@ UnicodeString::UnicodeString(const char *src, int32_t srcLength,
     fUnion.fFields.fLengthAndFlags = kShortString;
     if(U_SUCCESS(errorCode)) {
         // check arguments
-        if(src==NULL) {
+        if(src==nullptr) {
             // treat as an empty string, do nothing more
         } else if(srcLength<-1) {
             errorCode=U_ILLEGAL_ARGUMENT_ERROR;

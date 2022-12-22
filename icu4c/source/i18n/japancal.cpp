@@ -84,7 +84,7 @@ UBool JapaneseCalendar::enableTentativeEra() {
     }
 #else
     char *envVarVal = getenv(TENTATIVE_ERA_VAR_NAME);
-    if (envVarVal != NULL && uprv_stricmp(envVarVal, "true") == 0) {
+    if (envVarVal != nullptr && uprv_stricmp(envVarVal, "true") == 0) {
         includeTentativeEra = true;
     }
 #endif

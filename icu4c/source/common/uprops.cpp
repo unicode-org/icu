@@ -794,10 +794,10 @@ uprops_addPropertyStarts(UPropertySource src, const USetAdder *sa, UErrorCode *p
 
 U_CAPI int32_t U_EXPORT2
 u_getFC_NFKC_Closure(UChar32 c, UChar *dest, int32_t destCapacity, UErrorCode *pErrorCode) {
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+    if(pErrorCode==nullptr || U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(destCapacity<0 || (dest==NULL && destCapacity>0)) {
+    if(destCapacity<0 || (dest==nullptr && destCapacity>0)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }

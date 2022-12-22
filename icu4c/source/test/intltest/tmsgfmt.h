@@ -22,7 +22,7 @@
  */
 class TestMessageFormat: public IntlTest {
 public:
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 
     /**
      * regression test for a specific bug regarding ChoiceFormat boundaries

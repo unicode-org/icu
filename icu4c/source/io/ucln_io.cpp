@@ -45,7 +45,7 @@ static UBool U_CALLCONV io_cleanup(void)
         if (gCleanupFunctions[libType])
         {
             gCleanupFunctions[libType]();
-            gCleanupFunctions[libType] = NULL;
+            gCleanupFunctions[libType] = nullptr;
         }
     }
 #if !UCLN_NO_AUTO_CLEANUP && (defined(UCLN_AUTO_ATEXIT) || defined(UCLN_AUTO_LOCAL))

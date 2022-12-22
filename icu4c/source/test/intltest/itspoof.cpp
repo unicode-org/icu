@@ -341,7 +341,7 @@ U_DEFINE_LOCAL_OPEN_POINTER(LocalStdioFilePointer, FILE, fclose);
 //
 void IntlTestSpoof::testConfData() {
     char buffer[2000];
-    if (getUnidataPath(buffer) == NULL) {
+    if (getUnidataPath(buffer) == nullptr) {
         errln("Skipping test spoof/testConfData. Unable to find path to source/data/unidata/.");
         return;
     }
@@ -596,7 +596,7 @@ void IntlTestSpoof::testRestrictionLevel() {
             uspoof_setAllowedChars(sc, allowedChars.toUSet(), &status);
             uspoof_setRestrictionLevel(sc, levelSetInSpoofChecker);
             uspoof_setChecks(sc, USPOOF_RESTRICTION_LEVEL, &status);
-            int32_t actualValue = uspoof_checkUnicodeString(sc, testString, NULL, &status);
+            int32_t actualValue = uspoof_checkUnicodeString(sc, testString, nullptr, &status);
             
             // we want to fail if the text is (say) MODERATE and the testLevel is ASCII
             int32_t expectedValue = 0;
@@ -613,7 +613,7 @@ void IntlTestSpoof::testRestrictionLevel() {
             uspoof_setAllowedChars(sc, allowedChars.toUSet(), &status);
             uspoof_setRestrictionLevel(sc, levelSetInSpoofChecker);
             uspoof_setChecks(sc, USPOOF_AUX_INFO | USPOOF_RESTRICTION_LEVEL, &status);
-            int32_t result = uspoof_checkUnicodeString(sc, testString, NULL, &status);
+            int32_t result = uspoof_checkUnicodeString(sc, testString, nullptr, &status);
             TEST_ASSERT_SUCCESS(status);
             if (U_SUCCESS(status)) {
                 TEST_ASSERT_EQ(expectedLevel, result & USPOOF_RESTRICTION_LEVEL_MASK);
@@ -692,7 +692,7 @@ void IntlTestSpoof::testBug12825() {
     TEST_ASSERT_SUCCESS(status);
     uspoof_setChecks(sc.getAlias(), USPOOF_ALL_CHECKS | USPOOF_AUX_INFO, &status);
     TEST_ASSERT_SUCCESS(status);
-    uspoof_checkUnicodeString(sc.getAlias(), UnicodeString("\\u30FB").unescape(), NULL, &status);
+    uspoof_checkUnicodeString(sc.getAlias(), UnicodeString("\\u30FB").unescape(), nullptr, &status);
     TEST_ASSERT_SUCCESS(status);
 }
 

@@ -103,7 +103,7 @@ public:
             : trie(d->trie),
               data(d),
               cesIndex(0),
-              skipped(NULL),
+              skipped(nullptr),
               numCpFwd(-1),
               isNumeric(numeric) {}
 

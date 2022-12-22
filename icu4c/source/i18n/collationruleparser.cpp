@@ -58,9 +58,9 @@ CollationRuleParser::Importer::~Importer() {}
 CollationRuleParser::CollationRuleParser(const CollationData *base, UErrorCode &errorCode)
         : nfd(*Normalizer2::getNFDInstance(errorCode)),
           nfc(*Normalizer2::getNFCInstance(errorCode)),
-          rules(NULL), baseData(base), settings(NULL),
-          parseError(NULL), errorReason(NULL),
-          sink(NULL), importer(NULL),
+          rules(nullptr), baseData(base), settings(nullptr),
+          parseError(nullptr), errorReason(nullptr),
+          sink(nullptr), importer(nullptr),
           ruleIndex(0) {
 }
 
@@ -75,13 +75,13 @@ CollationRuleParser::parse(const UnicodeString &ruleString,
     if(U_FAILURE(errorCode)) { return; }
     settings = &outSettings;
     parseError = outParseError;
-    if(parseError != NULL) {
+    if(parseError != nullptr) {
         parseError->line = 0;
         parseError->offset = -1;
         parseError->preContext[0] = 0;
         parseError->postContext[0] = 0;
     }
-    errorReason = NULL;
+    errorReason = nullptr;
     parse(ruleString, errorCode);
 }
 
@@ -638,14 +638,14 @@ CollationRuleParser::parseSetting(UErrorCode &errorCode) {
                 setParseError("expected language tag in [import langTag]", errorCode);
                 return;
             }
-            if(importer == NULL) {
+            if(importer == nullptr) {
                 setParseError("[import langTag] is not supported", errorCode);
             } else {
                 UnicodeString importedRules;
                 importer->getRules(baseID, length > 0 ? collationType : "standard",
                                    importedRules, errorReason, errorCode);
                 if(U_FAILURE(errorCode)) {
-                    if(errorReason == NULL) {
+                    if(errorReason == nullptr) {
                         errorReason = "[import langTag] failed";
                     }
                     setErrorContext();
@@ -655,7 +655,7 @@ CollationRuleParser::parseSetting(UErrorCode &errorCode) {
                 int32_t outerRuleIndex = ruleIndex;
                 parse(importedRules, errorCode);
                 if(U_FAILURE(errorCode)) {
-                    if(parseError != NULL) {
+                    if(parseError != nullptr) {
                         parseError->offset = outerRuleIndex;
                     }
                 }
@@ -825,12 +825,12 @@ CollationRuleParser::setParseError(const char *reason, UErrorCode &errorCode) {
     // rather than U_PARSE_ERROR;
     errorCode = U_INVALID_FORMAT_ERROR;
     errorReason = reason;
-    if(parseError != NULL) { setErrorContext(); }
+    if(parseError != nullptr) { setErrorContext(); }
 }
 
 void
 CollationRuleParser::setErrorContext() {
-    if(parseError == NULL) { return; }
+    if(parseError == nullptr) { return; }
 
     // Note: This relies on the calling code maintaining the ruleIndex
     // at a position that is useful for debugging.

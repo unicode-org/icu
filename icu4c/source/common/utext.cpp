@@ -434,7 +434,7 @@ utext_extract(UText *ut,
 
 U_CAPI UBool U_EXPORT2
 utext_equals(const UText *a, const UText *b) {
-    if (a==NULL || b==NULL ||
+    if (a==nullptr || b==nullptr ||
         a->magic != UTEXT_MAGIC ||
         b->magic != UTEXT_MAGIC) {
             // Null or invalid arguments don't compare equal to anything.
@@ -527,7 +527,7 @@ utext_clone(UText *dest, const UText *src, UBool deep, UBool readOnly, UErrorCod
     if (U_FAILURE(*status)) {
         return result;
     }
-    if (result == NULL) {
+    if (result == nullptr) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return result;
     }
@@ -580,16 +580,16 @@ utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status) {
         return ut;
     }
 
-    if (ut == NULL) {
+    if (ut == nullptr) {
         // We need to heap-allocate storage for the new UText
         int32_t spaceRequired = sizeof(UText);
         if (extraSpace > 0) {
             spaceRequired = sizeof(ExtendedUText) + extraSpace - sizeof(std::max_align_t);
         }
         ut = (UText *)uprv_malloc(spaceRequired);
-        if (ut == NULL) {
+        if (ut == nullptr) {
             *status = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
+            return nullptr;
         } else {
             *ut = emptyText;
             ut->flags |= UTEXT_HEAP_ALLOCATED;
@@ -607,7 +607,7 @@ utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status) {
         }
         // If the ut is already open and there's a provider supplied close
         //   function, call it.
-        if ((ut->flags & UTEXT_OPEN) && ut->pFuncs->close != NULL)  {
+        if ((ut->flags & UTEXT_OPEN) && ut->pFuncs->close != nullptr)  {
             ut->pFuncs->close(ut);
         }
         ut->flags &= ~UTEXT_OPEN;
@@ -622,7 +622,7 @@ utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status) {
                 ut->extraSize = 0;
             }
             ut->pExtra = uprv_malloc(extraSpace);
-            if (ut->pExtra == NULL) {
+            if (ut->pExtra == nullptr) {
                 *status = U_MEMORY_ALLOCATION_ERROR;
             } else {
                 ut->extraSize = extraSpace;
@@ -635,11 +635,11 @@ utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status) {
 
         // Initialize all remaining fields of the UText.
         //
-        ut->context             = NULL;
-        ut->chunkContents       = NULL;
-        ut->p                   = NULL;
-        ut->q                   = NULL;
-        ut->r                   = NULL;
+        ut->context             = nullptr;
+        ut->chunkContents       = nullptr;
+        ut->p                   = nullptr;
+        ut->q                   = nullptr;
+        ut->r                   = nullptr;
         ut->a                   = 0;
         ut->b                   = 0;
         ut->c                   = 0;
@@ -652,8 +652,8 @@ utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status) {
         ut->privA               = 0;
         ut->privB               = 0;
         ut->privC               = 0;
-        ut->privP               = NULL;
-        if (ut->pExtra!=NULL && ut->extraSize>0)
+        ut->privP               = nullptr;
+        if (ut->pExtra!=nullptr && ut->extraSize>0)
             uprv_memset(ut->pExtra, 0, ut->extraSize);
 
     }
@@ -663,7 +663,7 @@ utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status) {
 
 U_CAPI UText * U_EXPORT2
 utext_close(UText *ut) {
-    if (ut==NULL ||
+    if (ut==nullptr ||
         ut->magic != UTEXT_MAGIC ||
         (ut->flags & UTEXT_OPEN) == 0)
     {
@@ -674,7 +674,7 @@ utext_close(UText *ut) {
 
     // If the provider gave us a close function, call it now.
     // This will clean up anything allocated specifically by the provider.
-    if (ut->pFuncs->close != NULL) {
+    if (ut->pFuncs->close != nullptr) {
         ut->pFuncs->close(ut);
     }
     ut->flags &= ~UTEXT_OPEN;
@@ -683,7 +683,7 @@ utext_close(UText *ut) {
     //   delete it.
     if (ut->flags & UTEXT_EXTRA_HEAP_ALLOCATED) {
         uprv_free(ut->pExtra);
-        ut->pExtra = NULL;
+        ut->pExtra = nullptr;
         ut->flags &= ~UTEXT_EXTRA_HEAP_ALLOCATED;
         ut->extraSize = 0;
     }
@@ -691,7 +691,7 @@ utext_close(UText *ut) {
     // Zero out function table of the closed UText.  This is a defensive move,
     //   intended to cause applications that inadvertently use a closed
     //   utext to crash with null pointer errors.
-    ut->pFuncs        = NULL;
+    ut->pFuncs        = nullptr;
 
     if (ut->flags & UTEXT_HEAP_ALLOCATED) {
         // This UText was allocated by UText setup.  We need to free it.
@@ -699,7 +699,7 @@ utext_close(UText *ut) {
         //  tries to reopen another UText using the deleted storage.
         ut->magic = 0;
         uprv_free(ut);
-        ut = NULL;
+        ut = nullptr;
     }
     return ut;
 }
@@ -772,7 +772,7 @@ static void adjustPointer(UText *dest, const void **destPtr, const UText *src) {
 static UText * U_CALLCONV
 shallowTextClone(UText * dest, const UText * src, UErrorCode * status) {
     if (U_FAILURE(*status)) {
-        return NULL;
+        return nullptr;
     }
     int32_t  srcExtraSize = src->extraSize;
 
@@ -941,7 +941,7 @@ utf8TextAccess(UText *ut, int64_t index, UBool forward) {
     //         return;
     //
     const uint8_t *s8=(const uint8_t *)ut->context;
-    UTF8Buf *u8b = NULL;
+    UTF8Buf *u8b = nullptr;
     int32_t  length = ut->b;         // Length of original utf-8
     int32_t  ix= (int32_t)index;     // Requested index, trimmed to 32 bits.
     int32_t  mapIndex = 0;
@@ -1425,7 +1425,7 @@ utext_strFromUTF8(UChar *dest,
 {
 
     UChar *pDest = dest;
-    UChar *pDestLimit = (dest!=NULL)?(dest+destCapacity):NULL;
+    UChar *pDestLimit = (dest!=nullptr)?(dest+destCapacity):nullptr;
     UChar32 ch=0;
     int32_t index = 0;
     int32_t reqLength = 0;
@@ -1484,7 +1484,7 @@ utf8TextExtract(UText *ut,
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(destCapacity<0 || (dest==NULL && destCapacity>0)) {
+    if(destCapacity<0 || (dest==nullptr && destCapacity>0)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -1579,7 +1579,7 @@ utf8TextClone(UText *dest, const UText *src, UBool deep, UErrorCode *status)
     if (deep && U_SUCCESS(*status)) {
         int32_t  len = (int32_t)utext_nativeLength((UText *)src);
         char *copyStr = (char *)uprv_malloc(len+1);
-        if (copyStr == NULL) {
+        if (copyStr == nullptr) {
             *status = U_MEMORY_ALLOCATION_ERROR;
         } else {
             uprv_memcpy(copyStr, src->context, len+1);
@@ -1599,7 +1599,7 @@ utf8TextClose(UText *ut) {
     if (ut->providerProperties & I32_FLAG(UTEXT_PROVIDER_OWNS_TEXT)) {
         char *s = (char *)ut->context;
         uprv_free(s);
-        ut->context = NULL;
+        ut->context = nullptr;
     }
 }
 
@@ -1614,14 +1614,14 @@ static const struct UTextFuncs utf8Funcs =
     utf8TextLength,
     utf8TextAccess,
     utf8TextExtract,
-    NULL,                /* replace*/
-    NULL,                /* copy   */
+    nullptr,                /* replace*/
+    nullptr,                /* copy   */
     utf8TextMapOffsetToNative,
     utf8TextMapIndexToUTF16,
     utf8TextClose,
-    NULL,                // spare 1
-    NULL,                // spare 2
-    NULL                 // spare 3
+    nullptr,                // spare 1
+    nullptr,                // spare 2
+    nullptr                 // spare 3
 };
 
 
@@ -1630,15 +1630,15 @@ static const char gEmptyString[] = {0};
 U_CAPI UText * U_EXPORT2
 utext_openUTF8(UText *ut, const char *s, int64_t length, UErrorCode *status) {
     if(U_FAILURE(*status)) {
-        return NULL;
+        return nullptr;
     }
-    if(s==NULL && length==0) {
+    if(s==nullptr && length==0) {
         s = gEmptyString;
     }
 
-    if(s==NULL || length<-1 || length>INT32_MAX) {
+    if(s==nullptr || length<-1 || length>INT32_MAX) {
         *status=U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
+        return nullptr;
     }
 
     ut = utext_setup(ut, sizeof(UTF8Buf) * 2, status);
@@ -1701,7 +1701,7 @@ repTextClone(UText *dest, const UText *src, UBool deep, UErrorCode *status) {
 
     // For deep clones, make a copy of the Replaceable.
     //  The copied Replaceable storage is owned by the newly created UText clone.
-    //  A non-NULL pointer in UText.p is the signal to the close() function to delete
+    //  A non-nullptr pointer in UText.p is the signal to the close() function to delete
     //    it.
     //
     if (deep && U_SUCCESS(*status)) {
@@ -1724,7 +1724,7 @@ repTextClose(UText *ut) {
     if (ut->providerProperties & I32_FLAG(UTEXT_PROVIDER_OWNS_TEXT)) {
         Replaceable *rep = (Replaceable *)ut->context;
         delete rep;
-        ut->context = NULL;
+        ut->context = nullptr;
     }
 }
 
@@ -1865,7 +1865,7 @@ repTextExtract(UText *ut,
     if(U_FAILURE(*status)) {
         return 0;
     }
-    if(destCapacity<0 || (dest==NULL && destCapacity>0)) {
+    if(destCapacity<0 || (dest==nullptr && destCapacity>0)) {
         *status=U_ILLEGAL_ARGUMENT_ERROR;
     }
     if(start>limit) {
@@ -1908,7 +1908,7 @@ repTextReplace(UText *ut,
     if(U_FAILURE(*status)) {
         return 0;
     }
-    if(src==NULL && length!=0) {
+    if(src==nullptr && length!=0) {
         *status=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -2025,12 +2025,12 @@ static const struct UTextFuncs repFuncs =
     repTextExtract,
     repTextReplace,
     repTextCopy,
-    NULL,              // MapOffsetToNative,
-    NULL,              // MapIndexToUTF16,
+    nullptr,              // MapOffsetToNative,
+    nullptr,              // MapIndexToUTF16,
     repTextClose,
-    NULL,              // spare 1
-    NULL,              // spare 2
-    NULL               // spare 3
+    nullptr,              // spare 1
+    nullptr,              // spare 2
+    nullptr               // spare 3
 };
 
 
@@ -2038,11 +2038,11 @@ U_CAPI UText * U_EXPORT2
 utext_openReplaceable(UText *ut, Replaceable *rep, UErrorCode *status)
 {
     if(U_FAILURE(*status)) {
-        return NULL;
+        return nullptr;
     }
-    if(rep==NULL) {
+    if(rep==nullptr) {
         *status=U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
+        return nullptr;
     }
     ut = utext_setup(ut, sizeof(ReplExtra), status);
     if(U_FAILURE(*status)) {
@@ -2077,7 +2077,7 @@ U_CDECL_END
 //         Use of UText data members:
 //            context    pointer to UnicodeString
 //            p          pointer to UnicodeString IF this UText owns the string
-//                       and it must be deleted on close().  NULL otherwise.
+//                       and it must be deleted on close().  nullptr otherwise.
 //
 //------------------------------------------------------------------------------
 
@@ -2091,7 +2091,7 @@ unistrTextClone(UText *dest, const UText *src, UBool deep, UErrorCode *status) {
 
     // For deep clones, make a copy of the UnicodeSring.
     //  The copied UnicodeString storage is owned by the newly created UText clone.
-    //  A non-NULL pointer in UText.p is the signal to the close() function to delete
+    //  A non-nullptr pointer in UText.p is the signal to the close() function to delete
     //    the UText.
     //
     if (deep && U_SUCCESS(*status)) {
@@ -2113,7 +2113,7 @@ unistrTextClose(UText *ut) {
     if (ut->providerProperties & I32_FLAG(UTEXT_PROVIDER_OWNS_TEXT)) {
         UnicodeString *str = (UnicodeString *)ut->context;
         delete str;
-        ut->context = NULL;
+        ut->context = nullptr;
     }
 }
 
@@ -2147,7 +2147,7 @@ unistrTextExtract(UText *t,
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(destCapacity<0 || (dest==NULL && destCapacity>0)) {
+    if(destCapacity<0 || (dest==nullptr && destCapacity>0)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
     }
     if(start<0 || start>limit) {
@@ -2159,7 +2159,7 @@ unistrTextExtract(UText *t,
     int32_t limit32 = limit<length ? us->getChar32Start((int32_t)limit) : length;
 
     length=limit32-start32;
-    if (destCapacity>0 && dest!=NULL) {
+    if (destCapacity>0 && dest!=nullptr) {
         int32_t trimmedLength = length;
         if(trimmedLength>destCapacity) {
             trimmedLength=destCapacity;
@@ -2184,7 +2184,7 @@ unistrTextReplace(UText *ut,
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(src==NULL && length!=0) {
+    if(src==nullptr && length!=0) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
     }
     if(start>limit) {
@@ -2279,12 +2279,12 @@ static const struct UTextFuncs unistrFuncs =
     unistrTextExtract,
     unistrTextReplace,
     unistrTextCopy,
-    NULL,                // MapOffsetToNative,
-    NULL,                // MapIndexToUTF16,
+    nullptr,                // MapOffsetToNative,
+    nullptr,                // MapIndexToUTF16,
     unistrTextClose,
-    NULL,                // spare 1
-    NULL,                // spare 2
-    NULL                 // spare 3
+    nullptr,                // spare 1
+    nullptr,                // spare 2
+    nullptr                 // spare 3
 };
 
 
@@ -2308,7 +2308,7 @@ utext_openConstUnicodeString(UText *ut, const UnicodeString *s, UErrorCode *stat
     if (U_SUCCESS(*status) && s->isBogus()) {
         // The UnicodeString is bogus, but we still need to detach the UText
         //   from whatever it was hooked to before, if anything.
-        utext_openUChars(ut, NULL, 0, status);
+        utext_openUChars(ut, nullptr, 0, status);
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return ut;
     }
@@ -2351,7 +2351,7 @@ ucstrTextClone(UText *dest, const UText * src, UBool deep, UErrorCode * status) 
 
     // For deep clones, make a copy of the string.
     //  The copied storage is owned by the newly created clone.
-    //  A non-NULL pointer in UText.p is the signal to the close() function to delete
+    //  A non-nullptr pointer in UText.p is the signal to the close() function to delete
     //    it.
     //
     if (deep && U_SUCCESS(*status)) {
@@ -2361,7 +2361,7 @@ ucstrTextClone(UText *dest, const UText * src, UBool deep, UErrorCode * status) 
         // The cloned string IS going to be NUL terminated, whether or not the original was.
         const UChar *srcStr = (const UChar *)src->context;
         UChar *copyStr = (UChar *)uprv_malloc((len+1) * sizeof(UChar));
-        if (copyStr == NULL) {
+        if (copyStr == nullptr) {
             *status = U_MEMORY_ALLOCATION_ERROR;
         } else {
             int64_t i;
@@ -2385,7 +2385,7 @@ ucstrTextClose(UText *ut) {
     if (ut->providerProperties & I32_FLAG(UTEXT_PROVIDER_OWNS_TEXT)) {
         UChar *s = (UChar *)ut->context;
         uprv_free(s);
-        ut->context = NULL;
+        ut->context = nullptr;
     }
 }
 
@@ -2511,7 +2511,7 @@ ucstrTextExtract(UText *ut,
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(destCapacity<0 || (dest==NULL && destCapacity>0) || start>limit) {
+    if(destCapacity<0 || (dest==nullptr && destCapacity>0) || start>limit) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -2596,14 +2596,14 @@ static const struct UTextFuncs ucstrFuncs =
     ucstrTextLength,
     ucstrTextAccess,
     ucstrTextExtract,
-    NULL,              // Replace
-    NULL,              // Copy
-    NULL,              // MapOffsetToNative,
-    NULL,              // MapIndexToUTF16,
+    nullptr,              // Replace
+    nullptr,              // Copy
+    nullptr,              // MapOffsetToNative,
+    nullptr,              // MapIndexToUTF16,
     ucstrTextClose,
-    NULL,              // spare 1
-    NULL,              // spare 2
-    NULL,              // spare 3
+    nullptr,              // spare 1
+    nullptr,              // spare 2
+    nullptr,              // spare 3
 };
 
 U_CDECL_END
@@ -2613,14 +2613,14 @@ static const UChar gEmptyUString[] = {0};
 U_CAPI UText * U_EXPORT2
 utext_openUChars(UText *ut, const UChar *s, int64_t length, UErrorCode *status) {
     if (U_FAILURE(*status)) {
-        return NULL;
+        return nullptr;
     }
-    if(s==NULL && length==0) {
+    if(s==nullptr && length==0) {
         s = gEmptyUString;
     }
-    if (s==NULL || length < -1 || length>INT32_MAX) {
+    if (s==nullptr || length < -1 || length>INT32_MAX) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
+        return nullptr;
     }
     ut = utext_setup(ut, 0, status);
     if (U_SUCCESS(*status)) {
@@ -2667,7 +2667,7 @@ charIterTextClose(UText *ut) {
     //  owns it.  This occurs if the UText was created by cloning.
     CharacterIterator *ci = (CharacterIterator *)ut->r;
     delete ci;
-    ut->r = NULL;
+    ut->r = nullptr;
 }
 
 static int64_t U_CALLCONV
@@ -2697,7 +2697,7 @@ charIterTextAccess(UText *ut, int64_t index, UBool  forward) {
     // Find the native index of the start of the buffer containing what we want.
     neededIndex -= neededIndex % CIBufSize;
 
-    UChar *buf = NULL;
+    UChar *buf = nullptr;
     UBool  needChunkSetup = true;
     int    i;
     if (ut->chunkNativeStart == neededIndex) {
@@ -2748,13 +2748,13 @@ charIterTextAccess(UText *ut, int64_t index, UBool  forward) {
 static UText * U_CALLCONV
 charIterTextClone(UText *dest, const UText *src, UBool deep, UErrorCode * status) {
     if (U_FAILURE(*status)) {
-        return NULL;
+        return nullptr;
     }
 
     if (deep) {
         // There is no CharacterIterator API for cloning the underlying text storage.
         *status = U_UNSUPPORTED_ERROR;
-        return NULL;
+        return nullptr;
     } else {
         CharacterIterator *srcCI =(CharacterIterator *)src->context;
         srcCI = srcCI->clone();
@@ -2780,7 +2780,7 @@ charIterTextExtract(UText *ut,
     if(U_FAILURE(*status)) {
         return 0;
     }
-    if(destCapacity<0 || (dest==NULL && destCapacity>0) || start>limit) {
+    if(destCapacity<0 || (dest==nullptr && destCapacity>0) || start>limit) {
         *status=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -2823,14 +2823,14 @@ static const struct UTextFuncs charIterFuncs =
     charIterTextLength,
     charIterTextAccess,
     charIterTextExtract,
-    NULL,                // Replace
-    NULL,                // Copy
-    NULL,                // MapOffsetToNative,
-    NULL,                // MapIndexToUTF16,
+    nullptr,                // Replace
+    nullptr,                // Copy
+    nullptr,                // MapOffsetToNative,
+    nullptr,                // MapIndexToUTF16,
     charIterTextClose,
-    NULL,                // spare 1
-    NULL,                // spare 2
-    NULL                 // spare 3
+    nullptr,                // spare 1
+    nullptr,                // spare 2
+    nullptr                 // spare 3
 };
 U_CDECL_END
 
@@ -2838,13 +2838,13 @@ U_CDECL_END
 U_CAPI UText * U_EXPORT2
 utext_openCharacterIterator(UText *ut, CharacterIterator *ci, UErrorCode *status) {
     if (U_FAILURE(*status)) {
-        return NULL;
+        return nullptr;
     }
 
     if (ci->startIndex() > 0) {
         // No support for CharacterIterators that do not start indexing from zero.
         *status = U_UNSUPPORTED_ERROR;
-        return NULL;
+        return nullptr;
     }
 
     // Extra space in UText for 2 buffers of CIBufSize UChars each.

@@ -73,7 +73,7 @@ RegexCompile::RegexCompile(RegexPattern *rxp, UErrorCode &status) :
 
     fMatchOpenParen   = -1;
     fMatchCloseParen  = -1;
-    fCaptureName      = NULL;
+    fCaptureName      = nullptr;
     fLastSetLiteral   = U_SENTINEL;
 
     if (U_SUCCESS(status) && U_FAILURE(rxp->fDeferredStatus)) {
@@ -91,7 +91,7 @@ static const UChar      chDash      = 0x2d;      // '-'
 //
 //------------------------------------------------------------------------------
 RegexCompile::~RegexCompile() {
-    delete fCaptureName;         // Normally will be NULL, but can exist if pattern
+    delete fCaptureName;         // Normally will be nullptr, but can exist if pattern
                                  //   compilation stops with a syntax error.
 }
 
@@ -141,7 +141,7 @@ void    RegexCompile::compile(
     }
 
     // There should be no pattern stuff in the RegexPattern object.  They can not be reused.
-    U_ASSERT(fRXPat->fPattern == NULL || utext_nativeLength(fRXPat->fPattern) == 0);
+    U_ASSERT(fRXPat->fPattern == nullptr || utext_nativeLength(fRXPat->fPattern) == 0);
 
     // Prepare the RegexPattern object to receive the compiled pattern.
     fRXPat->fPattern        = utext_clone(fRXPat->fPattern, pat, false, true, fStatus);
@@ -317,7 +317,7 @@ void    RegexCompile::compile(
     int32_t numSets = fRXPat->fSets->size();
     fRXPat->fSets8 = new Regex8BitSet[numSets];
     // Null pointer check.
-    if (fRXPat->fSets8 == NULL) {
+    if (fRXPat->fSets8 == nullptr) {
         e = *fStatus = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -430,7 +430,7 @@ UBool RegexCompile::doParseActions(int32_t action)
         // Scanning (?<letter.
         //   The first letter of the name will come through again under doConinueNamedCapture.
         fCaptureName = new UnicodeString();
-        if (fCaptureName == NULL) {
+        if (fCaptureName == nullptr) {
             error(U_MEMORY_ALLOCATION_ERROR);
         }
         break;
@@ -481,7 +481,7 @@ UBool RegexCompile::doParseActions(int32_t action)
             fRXPat->fGroupMap->addElement(varsLoc, *fStatus);
 
             // If this is a named capture group, add the name->group number mapping.
-            if (fCaptureName != NULL) {
+            if (fCaptureName != nullptr) {
                 if (!fRXPat->initNamedCaptureMap()) {
                     if (U_SUCCESS(*fStatus)) {
                         error(fRXPat->fDeferredStatus);
@@ -490,7 +490,7 @@ UBool RegexCompile::doParseActions(int32_t action)
                 }
                 int32_t groupNumber = fRXPat->fGroupMap->size();
                 int32_t previousMapping = uhash_puti(fRXPat->fNamedCaptureMap, fCaptureName, groupNumber, fStatus);
-                fCaptureName = NULL;    // hash table takes ownership of the name (key) string.
+                fCaptureName = nullptr;    // hash table takes ownership of the name (key) string.
                 if (previousMapping > 0 && U_SUCCESS(*fStatus)) {
                     error(U_REGEX_INVALID_CAPTURE_GROUP_NAME);
                 }
@@ -1333,9 +1333,9 @@ UBool RegexCompile::doParseActions(int32_t action)
         break;
 
     case doBeginNamedBackRef:
-        U_ASSERT(fCaptureName == NULL);
+        U_ASSERT(fCaptureName == nullptr);
         fCaptureName = new UnicodeString;
-        if (fCaptureName == NULL) {
+        if (fCaptureName == nullptr) {
             error(U_MEMORY_ALLOCATION_ERROR);
         }
         break;
@@ -1364,7 +1364,7 @@ UBool RegexCompile::doParseActions(int32_t action)
             }
         }
         delete fCaptureName;
-        fCaptureName = NULL;
+        fCaptureName = nullptr;
         break;
         }
        
@@ -1820,7 +1820,7 @@ UBool RegexCompile::doParseActions(int32_t action)
     case doSetPosixProp:
         {
             UnicodeSet *s = scanPosixProp();
-            if (s != NULL) {
+            if (s != nullptr) {
                 UnicodeSet *tos = (UnicodeSet *)fSetStack.peek();
                 tos->addAll(*s);
                 delete s;
@@ -1832,7 +1832,7 @@ UBool RegexCompile::doParseActions(int32_t action)
         //  Scanned a \p \P within [brackets].
         {
             UnicodeSet *s = scanProp();
-            if (s != NULL) {
+            if (s != nullptr) {
                 UnicodeSet *tos = (UnicodeSet *)fSetStack.peek();
                 tos->addAll(*s);
                 delete s;
@@ -2390,7 +2390,7 @@ void  RegexCompile::handleCloseParen() {
 //------------------------------------------------------------------------------
 void        RegexCompile::compileSet(UnicodeSet *theSet)
 {
-    if (theSet == NULL) {
+    if (theSet == nullptr) {
         return;
     }
     //  Remove any strings from the set.
@@ -4249,14 +4249,14 @@ UChar32  RegexCompile::scanNamedChar() {
 //             the scan position should be just after the '}'
 //
 //             Return a UnicodeSet, constructed from the \P pattern,
-//             or NULL if the pattern is invalid.
+//             or nullptr if the pattern is invalid.
 //
 //------------------------------------------------------------------------------
 UnicodeSet *RegexCompile::scanProp() {
-    UnicodeSet    *uset = NULL;
+    UnicodeSet    *uset = nullptr;
 
     if (U_FAILURE(*fStatus)) {
-        return NULL;
+        return nullptr;
     }
     (void)chLowerP;   // Suppress compiler unused variable warning.
     U_ASSERT(fC.fChar == chLowerP || fC.fChar == chP);
@@ -4266,7 +4266,7 @@ UnicodeSet *RegexCompile::scanProp() {
     nextChar(fC);
     if (fC.fChar != chLBrace) {
         error(U_REGEX_PROPERTY_SYNTAX);
-        return NULL;
+        return nullptr;
     }
     for (;;) {
         nextChar(fC);
@@ -4276,7 +4276,7 @@ UnicodeSet *RegexCompile::scanProp() {
         if (fC.fChar == -1) {
             // Hit the end of the input string without finding the closing '}'
             error(U_REGEX_PROPERTY_SYNTAX);
-            return NULL;
+            return nullptr;
         }
         propertyName.append(fC.fChar);
     }
@@ -4294,7 +4294,7 @@ UnicodeSet *RegexCompile::scanProp() {
 //             the scan position must be on the closing ']'
 //
 //             Return a UnicodeSet constructed from the pattern,
-//             or NULL if this is not a valid POSIX-style set expression.
+//             or nullptr if this is not a valid POSIX-style set expression.
 //             If not a property expression, restore the initial scan position
 //                (to the opening ':')
 //
@@ -4305,10 +4305,10 @@ UnicodeSet *RegexCompile::scanProp() {
 //
 //------------------------------------------------------------------------------
 UnicodeSet *RegexCompile::scanPosixProp() {
-    UnicodeSet    *uset = NULL;
+    UnicodeSet    *uset = nullptr;
 
     if (U_FAILURE(*fStatus)) {
-        return NULL;
+        return nullptr;
     }
 
     U_ASSERT(fC.fChar == chColon);
@@ -4412,7 +4412,7 @@ UnicodeSet *RegexCompile::createSetForProperty(const UnicodeString &propName, UB
         if (fModeFlags & UREGEX_CASE_INSENSITIVE) {
             usetFlags |= USET_CASE_INSENSITIVE;
         }
-        set.adoptInsteadAndCheckErrorCode(new UnicodeSet(setExpr, usetFlags, NULL, status), status);
+        set.adoptInsteadAndCheckErrorCode(new UnicodeSet(setExpr, usetFlags, nullptr, status), status);
         if (U_SUCCESS(status) || status == U_MEMORY_ALLOCATION_ERROR) {
             break;
         }
@@ -4610,8 +4610,8 @@ UnicodeSet *RegexCompile::createSetForProperty(const UnicodeString &propName, UB
 //            in the expression.
 //
 void RegexCompile::setEval(int32_t nextOp) {
-    UnicodeSet *rightOperand = NULL;
-    UnicodeSet *leftOperand  = NULL;
+    UnicodeSet *rightOperand = nullptr;
+    UnicodeSet *leftOperand  = nullptr;
     for (;;) {
         U_ASSERT(fSetOpStack.empty()==false);
         int32_t pendingSetOperation = fSetOpStack.peeki();

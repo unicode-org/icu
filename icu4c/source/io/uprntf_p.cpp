@@ -71,7 +71,7 @@
 #define UFMT_USTRING        {ufmt_ustring, u_printf_ustring_handler}
 
 
-#define UFMT_EMPTY {ufmt_empty, NULL}
+#define UFMT_EMPTY {ufmt_empty, nullptr}
 
 /**
  * A u_printf handler function.  
@@ -215,7 +215,7 @@ u_printf_string_handler(const u_printf_stream_handler  *handler,
             s = ufmt_defaultCPToUnicode(arg, argSize,
                     (UChar *)uprv_malloc(MAX_UCHAR_BUFFER_NEEDED(argSize)),
                     MAX_UCHAR_BUFFER_NEEDED(argSize));
-            if(s == NULL) {
+            if(s == nullptr) {
                 return 0;
             }
         }
@@ -764,7 +764,7 @@ u_printf_ustring_handler(const u_printf_stream_handler  *handler,
     const UChar *arg = (const UChar*)(args[0].ptrValue);
 
     /* allocate enough space for the buffer */
-    if (arg == NULL) {
+    if (arg == nullptr) {
         arg = gNullStr;
     }
     len = u_strlen(arg);
@@ -840,7 +840,7 @@ u_printf_scidbl_handler(const u_printf_stream_handler  *handler,
     else {
         format = u_locbund_getNumberFormat(formatBundle, UNUM_DECIMAL);
         /* Check for null pointer */
-        if (format == NULL) {
+        if (format == nullptr) {
             return 0;
         }
         maxSigDecimalDigits = unum_getAttribute(format, UNUM_MAX_SIGNIFICANT_DIGITS);
@@ -1059,9 +1059,9 @@ static const u_printf_info g_u_printf_infos[UPRINTF_NUM_FMT_HANDLERS] = {
             (s) == MOD_L
 /* Returns an array of the parsed argument type given in the format string. */
 static ufmt_args* parseArguments(const UChar *alias, va_list ap, UErrorCode *status) {
-    ufmt_args *arglist = NULL;
-    ufmt_type_info *typelist = NULL;
-    UBool *islonglong = NULL;
+    ufmt_args *arglist = nullptr;
+    ufmt_type_info *typelist = nullptr;
+    UBool *islonglong = nullptr;
     int32_t size = 0;
     int32_t pos = 0;
     UChar type;
@@ -1096,10 +1096,10 @@ static ufmt_args* parseArguments(const UChar *alias, va_list ap, UErrorCode *sta
 
             /* if there is no '$', don't read anything */
             if(*alias != SPEC_DOLLARSIGN) {
-                return NULL;
+                return nullptr;
             }
         } else {
-            return NULL;
+            return nullptr;
         }
 
         if (pos > size) {
@@ -1112,7 +1112,7 @@ static ufmt_args* parseArguments(const UChar *alias, va_list ap, UErrorCode *sta
     islonglong = (UBool*)uprv_malloc(sizeof(UBool) * size);
     arglist = (ufmt_args*)uprv_malloc(sizeof(ufmt_args) * size);
 
-    /* If malloc failed, return NULL */
+    /* If malloc failed, return nullptr */
     if (!typelist || !islonglong || !arglist) {
         if (typelist) {
             uprv_free(typelist);
@@ -1127,7 +1127,7 @@ static ufmt_args* parseArguments(const UChar *alias, va_list ap, UErrorCode *sta
         }
 
         *status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+        return nullptr;
     }
 
     /* reset alias back to the beginning */
@@ -1206,7 +1206,7 @@ static ufmt_args* parseArguments(const UChar *alias, va_list ap, UErrorCode *sta
             break;
         default:
             /* else args is ignored */
-            arglist[pos].ptrValue = NULL;
+            arglist[pos].ptrValue = nullptr;
             break;
         }
     }
@@ -1239,7 +1239,7 @@ u_printf_parse(const u_printf_stream_handler *streamHandler,
     const UChar *lastAlias;
     const UChar *orgAlias = fmt;
     /* parsed argument list */
-    ufmt_args *arglist = NULL; /* initialized it to avoid compiler warnings */
+    ufmt_args *arglist = nullptr; /* initialized it to avoid compiler warnings */
     UErrorCode status = U_ZERO_ERROR;
     if (!locStringContext || locStringContext->available >= 0) {
         /* get the parsed list of argument types */
@@ -1542,7 +1542,7 @@ u_printf_parse(const u_printf_stream_handler *streamHandler,
                     break;
                 default:
                     /* else args is ignored */
-                    args.ptrValue = NULL;
+                    args.ptrValue = nullptr;
                     break;
                 }
             } else { /* no positional argument specified */
@@ -1575,7 +1575,7 @@ u_printf_parse(const u_printf_stream_handler *streamHandler,
                     break;
                 default:
                     /* else args is ignored */
-                    args.ptrValue = NULL;
+                    args.ptrValue = nullptr;
                     break;
                 }
             }
@@ -1596,7 +1596,7 @@ u_printf_parse(const u_printf_stream_handler *streamHandler,
         }
     }
     /* delete parsed argument list */
-    if (arglist != NULL) {
+    if (arglist != nullptr) {
         uprv_free(arglist);
     }
     /* return # of characters in this format that have been parsed. */

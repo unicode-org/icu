@@ -248,7 +248,7 @@ res_read(ResourceData *pResData,
     if(U_FAILURE(*errorCode)) {
         return;
     }
-    if(!isAcceptable(formatVersion, NULL, NULL, pInfo)) {
+    if(!isAcceptable(formatVersion, nullptr, nullptr, pInfo)) {
         *errorCode=U_INVALID_FORMAT_ERROR;
         return;
     }
@@ -274,9 +274,9 @@ res_load(ResourceData *pResData,
 
 U_CFUNC void
 res_unload(ResourceData *pResData) {
-    if(pResData->data!=NULL) {
+    if(pResData->data!=nullptr) {
         udata_close(pResData->data);
-        pResData->data=NULL;
+        pResData->data=nullptr;
     }
 }
 
@@ -337,7 +337,7 @@ res_getStringNoTrace(const ResourceData *pResData, Resource res, int32_t *pLengt
         length=*p32++;
         p=(const UChar *)p32;
     } else {
-        p=NULL;
+        p=nullptr;
         length=0;
     }
     if(pLength) {
@@ -389,7 +389,7 @@ int32_t getStringArray(const ResourceData *pResData, const icu::ResourceArray &a
     if(U_FAILURE(errorCode)) {
         return 0;
     }
-    if(dest == NULL ? capacity != 0 : capacity < 0) {
+    if(dest == nullptr ? capacity != 0 : capacity < 0) {
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -405,7 +405,7 @@ int32_t getStringArray(const ResourceData *pResData, const icu::ResourceArray &a
         int32_t sLength;
         // No tracing: handled by the caller
         const UChar *s = res_getStringNoTrace(pResData, array.internalGetResource(pResData, i), &sLength);
-        if(s == NULL) {
+        if(s == nullptr) {
             errorCode = U_RESOURCE_TYPE_MISMATCH;
             return 0;
         }
@@ -426,7 +426,7 @@ res_getAlias(const ResourceData *pResData, Resource res, int32_t *pLength) {
         length=*p32++;
         p=(const UChar *)p32;
     } else {
-        p=NULL;
+        p=nullptr;
         length=0;
     }
     if(pLength) {
@@ -445,7 +445,7 @@ res_getBinaryNoTrace(const ResourceData *pResData, Resource res, int32_t *pLengt
         length=*p32++;
         p=(const uint8_t *)p32;
     } else {
-        p=NULL;
+        p=nullptr;
         length=0;
     }
     if(pLength) {
@@ -464,7 +464,7 @@ res_getIntVectorNoTrace(const ResourceData *pResData, Resource res, int32_t *pLe
         p= offset==0 ? (const int32_t *)&gEmpty32 : pResData->pRoot+offset;
         length=*p++;
     } else {
-        p=NULL;
+        p=nullptr;
         length=0;
     }
     if(pLength) {
@@ -507,10 +507,10 @@ UResType ResourceDataValue::getType() const {
 
 const UChar *ResourceDataValue::getString(int32_t &length, UErrorCode &errorCode) const {
     if(U_FAILURE(errorCode)) {
-        return NULL;
+        return nullptr;
     }
     const UChar *s = res_getString(fTraceInfo, &getData(), res, &length);
-    if(s == NULL) {
+    if(s == nullptr) {
         errorCode = U_RESOURCE_TYPE_MISMATCH;
     }
     return s;
@@ -518,10 +518,10 @@ const UChar *ResourceDataValue::getString(int32_t &length, UErrorCode &errorCode
 
 const UChar *ResourceDataValue::getAliasString(int32_t &length, UErrorCode &errorCode) const {
     if(U_FAILURE(errorCode)) {
-        return NULL;
+        return nullptr;
     }
     const UChar *s = res_getAlias(&getData(), res, &length);
-    if(s == NULL) {
+    if(s == nullptr) {
         errorCode = U_RESOURCE_TYPE_MISMATCH;
     }
     return s;
@@ -549,10 +549,10 @@ uint32_t ResourceDataValue::getUInt(UErrorCode &errorCode) const {
 
 const int32_t *ResourceDataValue::getIntVector(int32_t &length, UErrorCode &errorCode) const {
     if(U_FAILURE(errorCode)) {
-        return NULL;
+        return nullptr;
     }
     const int32_t *iv = res_getIntVector(fTraceInfo, &getData(), res, &length);
-    if(iv == NULL) {
+    if(iv == nullptr) {
         errorCode = U_RESOURCE_TYPE_MISMATCH;
     }
     return iv;
@@ -560,10 +560,10 @@ const int32_t *ResourceDataValue::getIntVector(int32_t &length, UErrorCode &erro
 
 const uint8_t *ResourceDataValue::getBinary(int32_t &length, UErrorCode &errorCode) const {
     if(U_FAILURE(errorCode)) {
-        return NULL;
+        return nullptr;
     }
     const uint8_t *b = res_getBinary(fTraceInfo, &getData(), res, &length);
-    if(b == NULL) {
+    if(b == nullptr) {
         errorCode = U_RESOURCE_TYPE_MISMATCH;
     }
     return b;
@@ -573,8 +573,8 @@ ResourceArray ResourceDataValue::getArray(UErrorCode &errorCode) const {
     if(U_FAILURE(errorCode)) {
         return ResourceArray();
     }
-    const uint16_t *items16 = NULL;
-    const Resource *items32 = NULL;
+    const uint16_t *items16 = nullptr;
+    const Resource *items32 = nullptr;
     uint32_t offset=RES_GET_OFFSET(res);
     int32_t length = 0;
     switch(RES_GET_TYPE(res)) {
@@ -599,10 +599,10 @@ ResourceTable ResourceDataValue::getTable(UErrorCode &errorCode) const {
     if(U_FAILURE(errorCode)) {
         return ResourceTable();
     }
-    const uint16_t *keys16 = NULL;
-    const int32_t *keys32 = NULL;
-    const uint16_t *items16 = NULL;
-    const Resource *items32 = NULL;
+    const uint16_t *keys16 = nullptr;
+    const int32_t *keys32 = nullptr;
+    const uint16_t *items16 = nullptr;
+    const Resource *items32 = nullptr;
     uint32_t offset = RES_GET_OFFSET(res);
     int32_t length = 0;
     switch(RES_GET_TYPE(res)) {
@@ -649,7 +649,7 @@ int32_t ResourceDataValue::getStringArrayOrStringAsArray(UnicodeString *dest, in
     if(U_FAILURE(errorCode)) {
         return 0;
     }
-    if(dest == NULL ? capacity != 0 : capacity < 0) {
+    if(dest == nullptr ? capacity != 0 : capacity < 0) {
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -659,7 +659,7 @@ int32_t ResourceDataValue::getStringArrayOrStringAsArray(UnicodeString *dest, in
     }
     int32_t sLength;
     const UChar *s = res_getString(fTraceInfo, &getData(), res, &sLength);
-    if(s != NULL) {
+    if(s != nullptr) {
         dest[0].setTo(true, s, sLength);
         return 1;
     }
@@ -674,7 +674,7 @@ UnicodeString ResourceDataValue::getStringOrFirstOfArray(UErrorCode &errorCode) 
     }
     int32_t sLength;
     const UChar *s = res_getString(fTraceInfo, &getData(), res, &sLength);
-    if(s != NULL) {
+    if(s != nullptr) {
         us.setTo(true, s, sLength);
         return us;
     }
@@ -685,7 +685,7 @@ UnicodeString ResourceDataValue::getStringOrFirstOfArray(UErrorCode &errorCode) 
     if(array.getSize() > 0) {
         // Tracing is already performed above (unimportant for trace that this is an array)
         s = res_getStringNoTrace(&getData(), array.internalGetResource(&getData(), 0), &sLength);
-        if(s != NULL) {
+        if(s != nullptr) {
             us.setTo(true, s, sLength);
             return us;
         }
@@ -714,7 +714,7 @@ res_getTableItemByKey(const ResourceData *pResData, Resource table,
     uint32_t offset=RES_GET_OFFSET(table);
     int32_t length;
     int32_t idx;
-    if(key == NULL || *key == NULL) {
+    if(key == nullptr || *key == nullptr) {
         return RES_BOGUS;
     }
     switch(RES_GET_TYPE(table)) {
@@ -771,7 +771,7 @@ res_getTableItemByIndex(const ResourceData *pResData, Resource table,
             length=*p++;
             if(indexR<length) {
                 const Resource *p32=(const Resource *)(p+length+(~length&1));
-                if(key!=NULL) {
+                if(key!=nullptr) {
                     *key=RES_GET_KEY16(pResData, p[indexR]);
                 }
                 return p32[indexR];
@@ -783,7 +783,7 @@ res_getTableItemByIndex(const ResourceData *pResData, Resource table,
         const uint16_t *p=pResData->p16BitUnits+offset;
         length=*p++;
         if(indexR<length) {
-            if(key!=NULL) {
+            if(key!=nullptr) {
                 *key=RES_GET_KEY16(pResData, p[indexR]);
             }
             return makeResourceFrom16(pResData, p[length+indexR]);
@@ -795,7 +795,7 @@ res_getTableItemByIndex(const ResourceData *pResData, Resource table,
             const int32_t *p= pResData->pRoot+offset;
             length=*p++;
             if(indexR<length) {
-                if(key!=NULL) {
+                if(key!=nullptr) {
                     *key=RES_GET_KEY32(pResData, p[indexR]);
                 }
                 return (Resource)p[length+indexR];
@@ -895,7 +895,7 @@ res_getArrayItem(const ResourceData *pResData, Resource array, int32_t indexR) {
 }
 
 uint32_t icu::ResourceArray::internalGetResource(const ResourceData *pResData, int32_t i) const {
-    if (items16 != NULL) {
+    if (items16 != nullptr) {
         return makeResourceFrom16(pResData, items16[i]);
     } else {
         return items32[i];
@@ -920,7 +920,7 @@ UBool icu::ResourceArray::getValue(int32_t i, icu::ResourceValue &value) const {
 U_CFUNC Resource
 res_findResource(const ResourceData *pResData, Resource r, char** path, const char** key) {
   char *pathP = *path, *nextSepP = *path;
-  char *closeIndex = NULL;
+  char *closeIndex = nullptr;
   Resource t1 = r;
   Resource t2;
   int32_t indexR = 0;
@@ -944,7 +944,7 @@ res_findResource(const ResourceData *pResData, Resource r, char** path, const ch
     /* if there are more separators, terminate string 
      * and set path to the remaining part of the string
      */
-    if(nextSepP != NULL) {
+    if(nextSepP != nullptr) {
       if(nextSepP == pathP) {
         // Empty key string.
         return RES_BOGUS;
@@ -967,7 +967,7 @@ res_findResource(const ResourceData *pResData, Resource r, char** path, const ch
       } else {
         t2 = RES_BOGUS; /* have an array, but don't have a valid index */
       }
-      *key = NULL;
+      *key = nullptr;
     } else { /* can't do much here, except setting t2 to bogus */
       t2 = RES_BOGUS;
     }
@@ -1109,7 +1109,7 @@ ures_swapResource(const UDataSwapper *ds,
 
         /* swap known formats */
 #if !UCONFIG_NO_COLLATION
-        if( key!=NULL &&  /* the binary is in a table */
+        if( key!=nullptr &&  /* the binary is in a table */
             (key!=gUnknownKey ?
                 /* its table key string is "%%CollationBin" */
                 0==ds->compareInvChars(ds, key, -1,
@@ -1139,7 +1139,7 @@ ures_swapResource(const UDataSwapper *ds,
                 qKey16=(uint16_t *)q;
                 count=ds->readUInt16(*pKey16);
 
-                pKey32=qKey32=NULL;
+                pKey32=qKey32=nullptr;
 
                 /* swap count */
                 ds->swapArray16(ds, pKey16++, 2, qKey16++, pErrorCode);
@@ -1151,7 +1151,7 @@ ures_swapResource(const UDataSwapper *ds,
                 qKey32=(int32_t *)q;
                 count=udata_readInt32(ds, *pKey32);
 
-                pKey16=qKey16=NULL;
+                pKey16=qKey16=nullptr;
 
                 /* swap count */
                 ds->swapArray32(ds, pKey32++, 4, qKey32++, pErrorCode);
@@ -1169,7 +1169,7 @@ ures_swapResource(const UDataSwapper *ds,
             /* recurse */
             for(i=0; i<count; ++i) {
                 const char *itemKey=gUnknownKey;
-                if(pKey16!=NULL) {
+                if(pKey16!=nullptr) {
                     int32_t keyOffset=ds->readUInt16(pKey16[i]);
                     if(keyOffset<pTempTable->localKeyLimit) {
                         itemKey=(const char *)outBundle+keyOffset;
@@ -1191,7 +1191,7 @@ ures_swapResource(const UDataSwapper *ds,
 
             if(pTempTable->majorFormatVersion>1 || ds->inCharset==ds->outCharset) {
                 /* no need to sort, just swap the offset/value arrays */
-                if(pKey16!=NULL) {
+                if(pKey16!=nullptr) {
                     ds->swapArray16(ds, pKey16, count*2, qKey16, pErrorCode);
                     ds->swapArray32(ds, p, count*4, q, pErrorCode);
                 } else {
@@ -1209,7 +1209,7 @@ ures_swapResource(const UDataSwapper *ds,
              * sorting indexes and sort that.
              * Then we permutate and copy/swap the actual values.
              */
-            if(pKey16!=NULL) {
+            if(pKey16!=nullptr) {
                 for(i=0; i<count; ++i) {
                     pTempTable->rows[i].keyIndex=ds->readUInt16(pKey16[i]);
                     pTempTable->rows[i].sortIndex=i;
@@ -1237,7 +1237,7 @@ ures_swapResource(const UDataSwapper *ds,
              * before the results are copied to the outBundle.
              */
             /* keys */
-            if(pKey16!=NULL) {
+            if(pKey16!=nullptr) {
                 uint16_t *rKey16;
 
                 if(pKey16!=qKey16) {
@@ -1301,7 +1301,7 @@ ures_swapResource(const UDataSwapper *ds,
             /* recurse */
             for(i=0; i<count; ++i) {
                 item=ds->readUInt32(p[i]);
-                ures_swapResource(ds, inBundle, outBundle, item, NULL, pTempTable, pErrorCode);
+                ures_swapResource(ds, inBundle, outBundle, item, nullptr, pTempTable, pErrorCode);
                 if(U_FAILURE(*pErrorCode)) {
                     udata_printError(ds, "ures_swapResource(array res=%08x)[%d].recurse(%08x) failed\n",
                                      res, i, item);
@@ -1345,7 +1345,7 @@ ures_swap(const UDataSwapper *ds,
 
     /* udata_swapDataHeader checks the arguments */
     headerSize=udata_swapDataHeader(ds, inData, length, outData, pErrorCode);
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+    if(pErrorCode==nullptr || U_FAILURE(*pErrorCode)) {
         return 0;
     }
 
@@ -1439,7 +1439,7 @@ ures_swap(const UDataSwapper *ds,
             tempTable.resFlags=stackResFlags;
         } else {
             tempTable.resFlags=(uint32_t *)uprv_malloc(resFlagsLength);
-            if(tempTable.resFlags==NULL) {
+            if(tempTable.resFlags==nullptr) {
                 udata_printError(ds, "ures_swap(): unable to allocate memory for tracking resources\n");
                 *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
                 return 0;
@@ -1476,7 +1476,7 @@ ures_swap(const UDataSwapper *ds,
             tempTable.resort=resort;
         } else {
             tempTable.rows=(Row *)uprv_malloc(maxTableLength*sizeof(Row)+maxTableLength*4);
-            if(tempTable.rows==NULL) {
+            if(tempTable.rows==nullptr) {
                 udata_printError(ds, "ures_swap(): unable to allocate memory for sorting tables (max length: %d)\n",
                                  maxTableLength);
                 *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
@@ -1489,7 +1489,7 @@ ures_swap(const UDataSwapper *ds,
         }
 
         /* swap the resources */
-        ures_swapResource(ds, inBundle, outBundle, rootRes, NULL, &tempTable, pErrorCode);
+        ures_swapResource(ds, inBundle, outBundle, rootRes, nullptr, &tempTable, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
             udata_printError(ds, "ures_swapResource(root res=%08x) failed\n",
                              rootRes);

@@ -50,7 +50,7 @@ ucase_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
     }
 
     /* add the start code point of each same-value range of the trie */
-    utrie2_enum(&ucase_props_singleton.trie, NULL, _enumPropertyStartsRange, sa);
+    utrie2_enum(&ucase_props_singleton.trie, nullptr, _enumPropertyStartsRange, sa);
 
     /* add code points with hardcoded properties, plus the ones following them */
 
@@ -279,7 +279,7 @@ ucase_addCaseClosure(UChar32 c, const USetAdder *sa) {
             closure=(const UChar *)pe+1; /* behind this slot, unless there are full case mappings */
         } else {
             closureLength=0;
-            closure=NULL;
+            closure=nullptr;
         }
 
         /* add the full case folding */
@@ -353,7 +353,7 @@ U_CFUNC UBool U_EXPORT2
 ucase_addStringCaseClosure(const UChar *s, int32_t length, const USetAdder *sa) {
     int32_t i, start, limit, result, unfoldRows, unfoldRowWidth, unfoldStringWidth;
 
-    if(ucase_props_singleton.unfold==NULL || s==NULL) {
+    if(ucase_props_singleton.unfold==nullptr || s==nullptr) {
         return false; /* no reverse case folding data, or no string */
     }
     if(length<=1) {
@@ -708,7 +708,7 @@ ucase_isCaseSensitive(UChar32 c) {
 #define is_sep(c) ((c)=='_' || (c)=='-' || (c)==0)
 
 /**
- * Requires non-NULL locale ID but otherwise does the equivalent of
+ * Requires non-nullptr locale ID but otherwise does the equivalent of
  * checking for language codes as if uloc_getLanguage() were called:
  * Accepts both 2- and 3-letter codes and accepts case variants.
  */
@@ -721,7 +721,7 @@ ucase_getCaseLocale(const char *locale) {
      * examined and copied/transformed.
      *
      * Because this code does not want to depend on uloc, the caller must
-     * pass in a non-NULL locale, i.e., may need to call uloc_getDefault().
+     * pass in a non-nullptr locale, i.e., may need to call uloc_getDefault().
      */
     char c=*locale++;
     // Fastpath for English "en" which is often used for default (=root locale) case mappings,
@@ -904,7 +904,7 @@ static UBool
 isFollowedByCasedLetter(UCaseContextIterator *iter, void *context, int8_t dir) {
     UChar32 c;
 
-    if(iter==NULL) {
+    if(iter==nullptr) {
         return false;
     }
 
@@ -929,7 +929,7 @@ isPrecededBySoftDotted(UCaseContextIterator *iter, void *context) {
     int32_t dotType;
     int8_t dir;
 
-    if(iter==NULL) {
+    if(iter==nullptr) {
         return false;
     }
 
@@ -986,7 +986,7 @@ isPrecededBy_I(UCaseContextIterator *iter, void *context) {
     int32_t dotType;
     int8_t dir;
 
-    if(iter==NULL) {
+    if(iter==nullptr) {
         return false;
     }
 
@@ -1010,7 +1010,7 @@ isFollowedByMoreAbove(UCaseContextIterator *iter, void *context) {
     int32_t dotType;
     int8_t dir;
 
-    if(iter==NULL) {
+    if(iter==nullptr) {
         return false;
     }
 
@@ -1033,7 +1033,7 @@ isFollowedByDotAbove(UCaseContextIterator *iter, void *context) {
     int32_t dotType;
     int8_t dir;
 
-    if(iter==NULL) {
+    if(iter==nullptr) {
         return false;
     }
 
@@ -1589,17 +1589,17 @@ ucase_hasBinaryProperty(UChar32 c, UProperty which) {
      * start sets for normalization and case mappings.
      */
     case UCHAR_CHANGES_WHEN_LOWERCASED:
-        return (UBool)(ucase_toFullLower(c, NULL, NULL, &resultString, UCASE_LOC_ROOT)>=0);
+        return (UBool)(ucase_toFullLower(c, nullptr, nullptr, &resultString, UCASE_LOC_ROOT)>=0);
     case UCHAR_CHANGES_WHEN_UPPERCASED:
-        return (UBool)(ucase_toFullUpper(c, NULL, NULL, &resultString, UCASE_LOC_ROOT)>=0);
+        return (UBool)(ucase_toFullUpper(c, nullptr, nullptr, &resultString, UCASE_LOC_ROOT)>=0);
     case UCHAR_CHANGES_WHEN_TITLECASED:
-        return (UBool)(ucase_toFullTitle(c, NULL, NULL, &resultString, UCASE_LOC_ROOT)>=0);
+        return (UBool)(ucase_toFullTitle(c, nullptr, nullptr, &resultString, UCASE_LOC_ROOT)>=0);
     /* case UCHAR_CHANGES_WHEN_CASEFOLDED: -- in uprops.c */
     case UCHAR_CHANGES_WHEN_CASEMAPPED:
         return (UBool)(
-            ucase_toFullLower(c, NULL, NULL, &resultString, UCASE_LOC_ROOT)>=0 ||
-            ucase_toFullUpper(c, NULL, NULL, &resultString, UCASE_LOC_ROOT)>=0 ||
-            ucase_toFullTitle(c, NULL, NULL, &resultString, UCASE_LOC_ROOT)>=0);
+            ucase_toFullLower(c, nullptr, nullptr, &resultString, UCASE_LOC_ROOT)>=0 ||
+            ucase_toFullUpper(c, nullptr, nullptr, &resultString, UCASE_LOC_ROOT)>=0 ||
+            ucase_toFullTitle(c, nullptr, nullptr, &resultString, UCASE_LOC_ROOT)>=0);
     default:
         return false;
     }

@@ -31,7 +31,7 @@ unumsys_openByName(const char *name, UErrorCode *status)
 {
     // createInstanceByName does NOT return immediately if status indicates error
     if (U_FAILURE(*status)) {
-        return NULL;
+        return nullptr;
     }
     return (UNumberingSystem*)NumberingSystem::createInstanceByName(name, *status);
 }

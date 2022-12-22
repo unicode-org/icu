@@ -312,20 +312,20 @@ ubidi_writeReverse(const UChar *src, int32_t srcLength,
                    UErrorCode *pErrorCode) {
     int32_t destLength;
 
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+    if(pErrorCode==nullptr || U_FAILURE(*pErrorCode)) {
         return 0;
     }
 
     /* more error checking */
-    if( src==NULL || srcLength<-1 ||
-        destSize<0 || (destSize>0 && dest==NULL))
+    if( src==nullptr || srcLength<-1 ||
+        destSize<0 || (destSize>0 && dest==nullptr))
     {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
 
     /* do input and output overlap? */
-    if( dest!=NULL &&
+    if( dest!=nullptr &&
         ((src>=dest && src<dest+destSize) ||
          (dest>=src && dest<src+srcLength)))
     {
@@ -363,21 +363,21 @@ ubidi_writeReordered(UBiDi *pBiDi,
     int32_t length, destCapacity;
     int32_t run, runCount, logicalStart, runLength;
 
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+    if(pErrorCode==nullptr || U_FAILURE(*pErrorCode)) {
         return 0;
     }
 
     /* more error checking */
-    if( pBiDi==NULL ||
-        (text=pBiDi->text)==NULL || (length=pBiDi->length)<0 ||
-        destSize<0 || (destSize>0 && dest==NULL))
+    if( pBiDi==nullptr ||
+        (text=pBiDi->text)==nullptr || (length=pBiDi->length)<0 ||
+        destSize<0 || (destSize>0 && dest==nullptr))
     {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
 
     /* do input and output overlap? */
-    if( dest!=NULL &&
+    if( dest!=nullptr &&
         ((text>=dest && text<dest+destSize) ||
          (dest>=text && dest<text+pBiDi->originalLength)))
     {
@@ -451,7 +451,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
                                              dest, destSize,
                                              options, pErrorCode);
                 }
-                if(dest!=NULL) {
+                if(dest!=nullptr) {
                   dest+=runLength;
                 }
                 destSize-=runLength;
@@ -495,7 +495,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
                     runLength=doWriteForward(src, runLength,
                                              dest, destSize,
                                              (uint16_t)(options&~UBIDI_DO_MIRRORING), pErrorCode);
-                    if(dest!=NULL) {
+                    if(dest!=nullptr) {
                       dest+=runLength;
                     }
                     destSize-=runLength;
@@ -539,7 +539,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
                     runLength=doWriteReverse(src, runLength,
                                              dest, destSize,
                                              options, pErrorCode);
-                    if(dest!=NULL) {
+                    if(dest!=nullptr) {
                       dest+=runLength;
                     }
                     destSize-=runLength;
@@ -578,7 +578,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
                                              dest, destSize,
                                              options, pErrorCode);
                 }
-                if(dest!=NULL) {
+                if(dest!=nullptr) {
                   dest+=runLength;
                 }
                 destSize-=runLength;
@@ -605,7 +605,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
                     runLength=doWriteReverse(src, runLength,
                                              dest, destSize,
                                              (uint16_t)(options&~UBIDI_DO_MIRRORING), pErrorCode);
-                    if(dest!=NULL) {
+                    if(dest!=nullptr) {
                       dest+=runLength;
                     }
                     destSize-=runLength;
@@ -627,7 +627,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
                     runLength=doWriteForward(src, runLength,
                                              dest, destSize,
                                              options, pErrorCode);
-                    if(dest!=NULL) {
+                    if(dest!=nullptr) {
                       dest+=runLength;
                     }
                     destSize-=runLength;

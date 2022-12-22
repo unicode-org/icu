@@ -36,7 +36,7 @@ public:
         directionBits(0), lineNumber(0), levelsCount(0), orderingCount(0),
         errorCount(0) {}
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL) override;
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=nullptr) override;
 
     void TestBidiTest();
     void TestBidiCharacterTest();
@@ -273,8 +273,8 @@ void BiDiConformanceTest::TestBidiTest() {
         return;
     }
     LocalUBiDiPointer ubidi(ubidi_open());
-    ubidi_setClassCallback(ubidi.getAlias(), biDiConfUBiDiClassCallback, NULL,
-                           NULL, NULL, errorCode);
+    ubidi_setClassCallback(ubidi.getAlias(), biDiConfUBiDiClassCallback, nullptr,
+                           nullptr, nullptr, errorCode);
     if(errorCode.errIfFailureAndReset("ubidi_setClassCallback()")) {
         return;
     }
@@ -284,11 +284,11 @@ void BiDiConformanceTest::TestBidiTest() {
     errorCount=0;
     // paraLevelName must be initialized in case the first non-comment line is in error
     paraLevelName="N/A";
-    while(errorCount<10 && fgets(line, (int)sizeof(line), bidiTestFile.getAlias())!=NULL) {
+    while(errorCount<10 && fgets(line, (int)sizeof(line), bidiTestFile.getAlias())!=nullptr) {
         ++lineNumber;
         // Remove trailing comments and whitespace.
         char *commentStart=strchr(line, '#');
-        if(commentStart!=NULL) {
+        if(commentStart!=nullptr) {
             *commentStart=0;
         }
         u_rtrim(line);
@@ -331,7 +331,7 @@ void BiDiConformanceTest::TestBidiTest() {
             for(int i=0; i<=3; ++i) {
                 if(bitset&(1<<i)) {
                     ubidi_setPara(ubidi.getAlias(), inputString.getBuffer(), inputString.length(),
-                                  paraLevels[i], NULL, errorCode);
+                                  paraLevels[i], nullptr, errorCode);
                     const UBiDiLevel *actualLevels=ubidi_getLevels(ubidi.getAlias(), errorCode);
                     if(errorCode.errIfFailureAndReset("ubidi_setPara() or ubidi_getLevels()")) {
                         errln("Input line %d: %s", (int)lineNumber, line);
@@ -446,13 +446,13 @@ void BiDiConformanceTest::TestBidiCharacterTest() {
     levelsCount=0;
     orderingCount=0;
     errorCount=0;
-    while(errorCount<20 && fgets(line, (int)sizeof(line), bidiTestFile.getAlias())!=NULL) {
+    while(errorCount<20 && fgets(line, (int)sizeof(line), bidiTestFile.getAlias())!=nullptr) {
         ++lineNumber;
         paraLevelName="N/A";
         inputString="N/A";
         // Remove trailing comments and whitespace.
         char *commentStart=strchr(line, '#');
-        if(commentStart!=NULL) {
+        if(commentStart!=nullptr) {
             *commentStart=0;
         }
         u_rtrim(line);
@@ -462,7 +462,7 @@ void BiDiConformanceTest::TestBidiCharacterTest() {
         }
         // Parse the code point string in field 0.
         UChar *buffer=inputString.getBuffer(200);
-        int32_t length=u_parseString(start, buffer, inputString.getCapacity(), NULL, errorCode);
+        int32_t length=u_parseString(start, buffer, inputString.getCapacity(), nullptr, errorCode);
         if(errorCode.errIfFailureAndReset("Invalid string in field 0")) {
             errln("Input line %d: %s", (int)lineNumber, line);
             inputString.remove();
@@ -470,7 +470,7 @@ void BiDiConformanceTest::TestBidiCharacterTest() {
         }
         inputString.releaseBuffer(length);
         start=strchr(start, ';');
-        if(start==NULL) {
+        if(start==nullptr) {
             errorCount++;
             errln("\nError on line %d: Missing ; separator on line: %s", (int)lineNumber, line);
             continue;
@@ -540,7 +540,7 @@ void BiDiConformanceTest::TestBidiCharacterTest() {
             orderingCount=-1;
 
         ubidi_setPara(ubidi.getAlias(), inputString.getBuffer(), inputString.length(),
-                      paraLevel, NULL, errorCode);
+                      paraLevel, nullptr, errorCode);
         const UBiDiLevel *actualLevels=ubidi_getLevels(ubidi.getAlias(), errorCode);
         if(errorCode.errIfFailureAndReset("ubidi_setPara() or ubidi_getLevels()")) {
             errln("Input line %d: %s", (int)lineNumber, line);

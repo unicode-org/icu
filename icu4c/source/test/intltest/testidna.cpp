@@ -405,7 +405,7 @@ static const struct ErrorCases{
     },
     { 
       {0},
-      NULL,
+      nullptr,
       U_ILLEGAL_ARGUMENT_ERROR,
       true, true, false
     }
@@ -423,7 +423,7 @@ void TestIDNA::debug(const UChar* src, int32_t srcLength, int32_t options){
     NamePrepTransform* trans = NamePrepTransform::createInstance(parseError,transStatus);
     int32_t prepOptions = (((options & UIDNA_ALLOW_UNASSIGNED) != 0) ? USPREP_ALLOW_UNASSIGNED: 0);
     LocalUStringPrepProfilePointer prep(usprep_openByType(USPREP_RFC3491_NAMEPREP,&prepStatus));
-    UChar *transOut=NULL, *prepOut=NULL;
+    UChar *transOut=nullptr, *prepOut=nullptr;
     int32_t transOutLength=0, prepOutLength=0;
     
     
@@ -458,21 +458,21 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
     UErrorCode status = U_ZERO_ERROR;
     UChar destStack[MAX_DEST_SIZE];
     int32_t destLen = 0;
-    UChar* dest = NULL;
-    int32_t expectedLen = (expected != NULL) ? u_strlen(expected) : 0;
+    UChar* dest = nullptr;
+    int32_t expectedLen = (expected != nullptr) ? u_strlen(expected) : 0;
     int32_t options = (useSTD3ASCIIRules == true) ? UIDNA_USE_STD3_RULES : UIDNA_DEFAULT;
     UParseError parseError;
     int32_t tSrcLen = 0; 
-    UChar* tSrc = NULL; 
+    UChar* tSrc = nullptr; 
 
-    if(src != NULL){
+    if(src != nullptr){
         tSrcLen = u_strlen(src);
         tSrc  =(UChar*) malloc( U_SIZEOF_UCHAR * tSrcLen );
         memcpy(tSrc,src,tSrcLen * U_SIZEOF_UCHAR);
     }
 
     // test null-terminated source and return value of number of UChars required
-    destLen = func(src,-1,NULL,0,options, &parseError , &status);
+    destLen = func(src,-1,nullptr,0,options, &parseError , &status);
     if (status == U_FILE_ACCESS_ERROR) {
         dataerrln("U_FILE_ACCESS_ERROR. Skipping the remainder of this test.");
         return;
@@ -506,7 +506,7 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
     } 
     if(testUnassigned ){
         status = U_ZERO_ERROR;
-        destLen = func(src,-1,NULL,0,options | UIDNA_ALLOW_UNASSIGNED, &parseError, &status);
+        destLen = func(src,-1,nullptr,0,options | UIDNA_ALLOW_UNASSIGNED, &parseError, &status);
         if(status == U_BUFFER_OVERFLOW_ERROR){
             status = U_ZERO_ERROR; // reset error code
             if(destLen+1 < MAX_DEST_SIZE){
@@ -541,7 +541,7 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
     status = U_ZERO_ERROR;
 
     // test source with lengthand return value of number of UChars required
-    destLen = func(tSrc, tSrcLen, NULL,0,options, &parseError, &status);
+    destLen = func(tSrc, tSrcLen, nullptr,0,options, &parseError, &status);
     if(status == U_BUFFER_OVERFLOW_ERROR){
         status = U_ZERO_ERROR; // reset error code
         if(destLen+1 < MAX_DEST_SIZE){
@@ -567,7 +567,7 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
     if(testUnassigned){
         status = U_ZERO_ERROR;
 
-        destLen = func(tSrc,tSrcLen,NULL,0,options | UIDNA_ALLOW_UNASSIGNED, &parseError, &status);
+        destLen = func(tSrc,tSrcLen,nullptr,0,options | UIDNA_ALLOW_UNASSIGNED, &parseError, &status);
 
         if(status == U_BUFFER_OVERFLOW_ERROR){
             status = U_ZERO_ERROR; // reset error code
@@ -595,7 +595,7 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
 
     status = U_ZERO_ERROR;
     if(testSTD3ASCIIRules==true){
-        destLen = func(src,-1,NULL,0,options | UIDNA_USE_STD3_RULES, &parseError, &status);
+        destLen = func(src,-1,nullptr,0,options | UIDNA_USE_STD3_RULES, &parseError, &status);
         if(status == U_BUFFER_OVERFLOW_ERROR){
             status = U_ZERO_ERROR; // reset error code
             if(destLen+1 < MAX_DEST_SIZE){
@@ -623,7 +623,7 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
 
         status = U_ZERO_ERROR;
 
-        destLen = func(tSrc,tSrcLen,NULL,0,options | UIDNA_USE_STD3_RULES, &parseError, &status);
+        destLen = func(tSrc,tSrcLen,nullptr,0,options | UIDNA_USE_STD3_RULES, &parseError, &status);
 
         if(status == U_BUFFER_OVERFLOW_ERROR){
             status = U_ZERO_ERROR; // reset error code
@@ -910,8 +910,8 @@ void TestIDNA::testErrorCases(const char* IDNToASCIIName, TestFunc IDNToASCII,
 
     for(int32_t i=0;i< UPRV_LENGTHOF(errorCases);i++){
         ErrorCases errorCase = errorCases[i];
-        UChar* src =NULL;
-        if(errorCase.ascii != NULL){
+        UChar* src =nullptr;
+        if(errorCase.ascii != nullptr){
             bufLen =  (int32_t)strlen(errorCase.ascii);
             u_charsToUChars(errorCase.ascii,buf, bufLen+1);
         }else{
@@ -932,7 +932,7 @@ void TestIDNA::testErrorCases(const char* IDNToASCIIName, TestFunc IDNToASCII,
                 errorCase.expected, false,true, IDNToASCII);
         }
         if(errorCase.testToUnicode ==true){
-            testAPI((src==NULL)? NULL : buf,src,
+            testAPI((src==nullptr)? nullptr : buf,src,
                     IDNToUnicodeName, errorCase.useSTD3ASCIIRules,
                     errorCase.expected, true, true, IDNToUnicode);   
         }
@@ -953,7 +953,7 @@ void TestIDNA::testConformance(const char* toASCIIName, TestFunc toASCII,
         const char* utf8Chars1 = conformanceTestCases[i].in;
         int32_t utf8Chars1Len = (int32_t)strlen(utf8Chars1);
         const char* utf8Chars2 = conformanceTestCases[i].out;
-        int32_t utf8Chars2Len = (utf8Chars2 == NULL) ? 0 : (int32_t)strlen(utf8Chars2);
+        int32_t utf8Chars2Len = (utf8Chars2 == nullptr) ? 0 : (int32_t)strlen(utf8Chars2);
 
         UErrorCode status = U_ZERO_ERROR;
         u_strFromUTF8(src,MAX_DEST_SIZE,&srcLen,utf8Chars1,utf8Chars1Len,&status);
@@ -961,7 +961,7 @@ void TestIDNA::testConformance(const char* toASCIIName, TestFunc toASCII,
             errln(UnicodeString("Conversion of UTF8 source in conformanceTestCases[") + i +UnicodeString( "].in ( ")+prettify(utf8Chars1) +UnicodeString(" ) failed. Error: ")+ UnicodeString(u_errorName(status)));
             continue;
         }
-        if(utf8Chars2 != NULL){
+        if(utf8Chars2 != nullptr){
             u_strFromUTF8(expected,MAX_DEST_SIZE,&expectedLen,utf8Chars2,utf8Chars2Len, &status);
             if(U_FAILURE(status)){
                 errln(UnicodeString("Conversion of UTF8 source in conformanceTestCases[") + i +UnicodeString( "].in ( ")+prettify(utf8Chars1) +UnicodeString(" ) failed. Error: ")+ UnicodeString(u_errorName(status)));
@@ -1335,7 +1335,7 @@ randul()
     static UBool initialized = false;
     if (!initialized)
     {
-        srand((unsigned)time(NULL));
+        srand((unsigned)time(nullptr));
         initialized = true;
     }
     // Assume rand has at least 12 bits of precision
@@ -1600,16 +1600,16 @@ void TestIDNA::TestDataFile(){
 
 TestIDNA::~TestIDNA(){
     delete gPrep;
-    gPrep = NULL;
+    gPrep = nullptr;
 }
 
 NamePrepTransform* TestIDNA::getInstance(UErrorCode& status){
-    if(gPrep == NULL){
+    if(gPrep == nullptr){
         UParseError parseError;
         gPrep = NamePrepTransform::createInstance(parseError, status);
-        if(gPrep == NULL){
+        if(gPrep == nullptr){
            //status = U_MEMORY_ALLOCATION_ERROR;
-           return NULL;
+           return nullptr;
         }
     }
     return gPrep;

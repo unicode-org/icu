@@ -86,7 +86,7 @@ static UChar* copySpec(const UChar* spec) {
     ++len;
     UChar *result = (UChar *)uprv_malloc(len*sizeof(UChar));
     // Check for memory allocation error. 
-    if (result != NULL) {
+    if (result != nullptr) {
     	uprv_memcpy(result, spec, (size_t)len*sizeof(result[0]));
     }
     return result;
@@ -144,7 +144,7 @@ void UnescapeTransliterator::registerIDs() {
  */
 UnescapeTransliterator::UnescapeTransliterator(const UnicodeString& newID,
                                                const UChar *newSpec) :
-    Transliterator(newID, NULL)
+    Transliterator(newID, nullptr)
 {
     this->spec = copySpec(newSpec);
 }

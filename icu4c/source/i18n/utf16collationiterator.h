@@ -62,7 +62,7 @@ protected:
     // Copy constructor only for subclasses which set the pointers.
     UTF16CollationIterator(const UTF16CollationIterator &other)
             : CollationIterator(other),
-              start(NULL), pos(NULL), limit(NULL) {}
+              start(nullptr), pos(nullptr), limit(nullptr) {}
 
     virtual uint32_t handleNextCE32(UChar32 &c, UErrorCode &errorCode) override;
 
@@ -75,7 +75,7 @@ protected:
     virtual void backwardNumCodePoints(int32_t num, UErrorCode &errorCode) override;
 
     // UTF-16 string pointers.
-    // limit can be NULL for NUL-terminated strings.
+    // limit can be nullptr for NUL-terminated strings.
     const UChar *start, *pos, *limit;
 };
 
@@ -87,7 +87,7 @@ public:
     FCDUTF16CollationIterator(const CollationData *data, UBool numeric,
                               const UChar *s, const UChar *p, const UChar *lim)
             : UTF16CollationIterator(data, numeric, s, p, lim),
-              rawStart(s), segmentStart(p), segmentLimit(NULL), rawLimit(lim),
+              rawStart(s), segmentStart(p), segmentLimit(nullptr), rawLimit(lim),
               nfcImpl(data->nfcImpl),
               checkDir(1) {}
 
@@ -146,7 +146,7 @@ private:
     UBool normalize(const UChar *from, const UChar *to, UErrorCode &errorCode);
 
     // Text pointers: The input text is [rawStart, rawLimit[
-    // where rawLimit can be NULL for NUL-terminated text.
+    // where rawLimit can be nullptr for NUL-terminated text.
     //
     // checkDir > 0:
     //
@@ -171,7 +171,7 @@ private:
     const UChar *rawStart;
     const UChar *segmentStart;
     const UChar *segmentLimit;
-    // rawLimit==NULL for a NUL-terminated string.
+    // rawLimit==nullptr for a NUL-terminated string.
     const UChar *rawLimit;
 
     const Normalizer2Impl &nfcImpl;

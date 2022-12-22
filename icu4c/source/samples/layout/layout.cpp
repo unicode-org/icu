@@ -57,7 +57,7 @@ void InitParagraph(HWND hwnd, Context *context)
 {
     SCROLLINFO si;
 
-    if (context->paragraph != NULL) {
+    if (context->paragraph != nullptr) {
         // FIXME: does it matter what we put in the ScrollInfo
         // if the window's been minimized?
         if (context->width > 0 && context->height > 0) {
@@ -86,30 +86,30 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
     wndclass.cbClsExtra    = 0;
     wndclass.cbWndExtra    = sizeof(LONG);
     wndclass.hInstance     = hInstance;
-    wndclass.hIcon         = LoadIcon(NULL, IDI_APPLICATION);
-    wndclass.hCursor       = LoadCursor(NULL, IDC_ARROW);
+    wndclass.hIcon         = LoadIcon(nullptr, IDI_APPLICATION);
+    wndclass.hCursor       = LoadCursor(nullptr, IDC_ARROW);
     wndclass.hbrBackground = (HBRUSH) GetStockObject(WHITE_BRUSH);
     wndclass.lpszMenuName  = szAppName;
     wndclass.lpszClassName = szAppName;
 
     if (!RegisterClass(&wndclass)) {
-        MessageBox(NULL, TEXT("This demo only runs on Windows 2000!"), szAppName, MB_ICONERROR);
+        MessageBox(nullptr, TEXT("This demo only runs on Windows 2000!"), szAppName, MB_ICONERROR);
 
         return 0;
     }
 
     hAccel = LoadAccelerators(hInstance, szAppName);
 
-    hwnd = CreateWindow(szAppName, NULL,
+    hwnd = CreateWindow(szAppName, nullptr,
                         WS_OVERLAPPEDWINDOW | WS_VSCROLL,
                         CW_USEDEFAULT, CW_USEDEFAULT,
                         600, 400,
-                        NULL, NULL, hInstance, NULL);
+                        nullptr, nullptr, hInstance, nullptr);
 
     ShowWindow(hwnd, iCmdShow);
     UpdateWindow(hwnd);
 
-    while (GetMessage(&msg, NULL, 0, 0)) {
+    while (GetMessage(&msg, nullptr, 0, 0)) {
         if (!TranslateAccelerator(hwnd, hAccel, &msg)) {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
@@ -125,10 +125,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
     HDC hdc;
     Context *context;
     static le_int32 windowCount = 0;
-    static GDIFontMap *fontMap = NULL;
-    static GDISurface *surface = NULL;
+    static GDIFontMap *fontMap = nullptr;
+    static GDISurface *surface = nullptr;
     static GDIGUISupport *guiSupport = new GDIGUISupport();
-    static ScriptCompositeFontInstance *font = NULL;
+    static ScriptCompositeFontInstance *font = nullptr;
 
     switch (message) {
     case WM_CREATE:
@@ -222,8 +222,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         context = (Context *) GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
-        if (context->paragraph != NULL && si.nPos != vertPos) {
-            ScrollWindow(hwnd, 0, context->paragraph->getLineHeight() * (vertPos - si.nPos), NULL, NULL);
+        if (context->paragraph != nullptr && si.nPos != vertPos) {
+            ScrollWindow(hwnd, 0, context->paragraph->getLineHeight() * (vertPos - si.nPos), nullptr, nullptr);
             UpdateWindow(hwnd);
         }
 
@@ -247,7 +247,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         context = (Context *) GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
-        if (context->paragraph != NULL) {
+        if (context->paragraph != nullptr) {
             surface->setHDC(hdc);
 
             // NOTE: si.nPos + si.nPage may include a partial line at the bottom
@@ -273,24 +273,24 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             ofn.lStructSize       = sizeof (OPENFILENAMEA);
             ofn.hwndOwner         = hwnd;
-            ofn.hInstance         = NULL;
+            ofn.hInstance         = nullptr;
             ofn.lpstrFilter       = szFilter;
-            ofn.lpstrCustomFilter = NULL;
+            ofn.lpstrCustomFilter = nullptr;
             ofn.nMaxCustFilter    = 0;
             ofn.nFilterIndex      = 0;
             ofn.lpstrFile         = szFileName;
             ofn.nMaxFile          = MAX_PATH;
             ofn.lpstrFileTitle    = szTitleName;
             ofn.nMaxFileTitle     = MAX_PATH;
-            ofn.lpstrInitialDir   = NULL;
-            ofn.lpstrTitle        = NULL;
+            ofn.lpstrInitialDir   = nullptr;
+            ofn.lpstrTitle        = nullptr;
             ofn.Flags             = OFN_HIDEREADONLY | OFN_PATHMUSTEXIST;
             ofn.nFileOffset       = 0;
             ofn.nFileExtension    = 0;
             ofn.lpstrDefExt       = "txt";
             ofn.lCustData         = 0L;
-            ofn.lpfnHook          = NULL;
-            ofn.lpTemplateName    = NULL;
+            ofn.lpfnHook          = nullptr;
+            ofn.lpTemplateName    = nullptr;
 
             szFileName[0] = '\0';
 
@@ -300,17 +300,17 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
                 Paragraph *newParagraph = Paragraph::paragraphFactory(szFileName, font, guiSupport);
 
-                if (newParagraph != NULL) {
+                if (newParagraph != nullptr) {
                     context = (Context *) GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
-                    if (context->paragraph != NULL) {
+                    if (context->paragraph != nullptr) {
                         delete context->paragraph;
                     }
 
                     context->paragraph = newParagraph;
                     InitParagraph(hwnd, context);
                     PrettyTitle(hwnd, szTitleName);
-                    InvalidateRect(hwnd, NULL, true);
+                    InvalidateRect(hwnd, nullptr, true);
 
                 }
             }
@@ -340,7 +340,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         context = (Context *) GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
-        if (context != NULL && context->paragraph != NULL) {
+        if (context != nullptr && context->paragraph != nullptr) {
             delete context->paragraph;
         }
 

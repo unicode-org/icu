@@ -29,7 +29,7 @@ public:
 
     CollationFinnishTest();
     virtual ~CollationFinnishTest();
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 
     // perform tests with strength PRIMARY
     void TestPrimary(/* char* par */);

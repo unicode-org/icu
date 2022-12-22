@@ -42,7 +42,7 @@
     while(len-->0){                                                                                                         \
         if(targetIndex < targetLength){                                                                                     \
             args->target[targetIndex] = (unsigned char) *strToAppend;                                                       \
-            if(args->offsets!=NULL){                                                                                        \
+            if(args->offsets!=nullptr){                                                                                        \
                 *(offsets++) = sourceIndex-1;                                                                               \
             }                                                                                                               \
             targetIndex++;                                                                                                  \
@@ -84,7 +84,7 @@ _HZOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
     cnv->mode=0;
     cnv->fromUChar32=0x0000;
     cnv->extraInfo = uprv_calloc(1, sizeof(UConverterDataHZ));
-    if(cnv->extraInfo != NULL){
+    if(cnv->extraInfo != nullptr){
         ((UConverterDataHZ*)cnv->extraInfo)->gbConverter = gbConverter;
     }
     else {
@@ -96,12 +96,12 @@ _HZOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
 
 static void  U_CALLCONV
 _HZClose(UConverter *cnv){
-    if(cnv->extraInfo != NULL) {
+    if(cnv->extraInfo != nullptr) {
         ucnv_close (((UConverterDataHZ *) (cnv->extraInfo))->gbConverter);
         if(!cnv->isExtraLocal) {
             uprv_free(cnv->extraInfo);
         }
-        cnv->extraInfo = NULL;
+        cnv->extraInfo = nullptr;
     }
 }
 
@@ -110,7 +110,7 @@ _HZReset(UConverter *cnv, UConverterResetChoice choice){
     if(choice<=UCNV_RESET_TO_UNICODE) {
         cnv->toUnicodeStatus = 0;
         cnv->mode=0;
-        if(cnv->extraInfo != NULL){
+        if(cnv->extraInfo != nullptr){
             ((UConverterDataHZ*)cnv->extraInfo)->isStateDBCS = false;
             ((UConverterDataHZ*)cnv->extraInfo)->isEmptySegment = false;
         }
@@ -118,7 +118,7 @@ _HZReset(UConverter *cnv, UConverterResetChoice choice){
     if(choice!=UCNV_RESET_TO_UNICODE) {
         cnv->fromUnicodeStatus= 0;
         cnv->fromUChar32=0x0000; 
-        if(cnv->extraInfo != NULL){
+        if(cnv->extraInfo != nullptr){
             ((UConverterDataHZ*)cnv->extraInfo)->isEscapeAppended = false;
             ((UConverterDataHZ*)cnv->extraInfo)->targetIndex = 0;
             ((UConverterDataHZ*)cnv->extraInfo)->sourceIndex = 0;
@@ -166,7 +166,7 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     tempBuf[1]=0;
 
     /* Calling code already handles this situation. */
-    /*if ((args->converter == NULL) || (args->targetLimit < args->target) || (mySourceLimit < args->source)){
+    /*if ((args->converter == nullptr) || (args->targetLimit < args->target) || (mySourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }*/
@@ -348,10 +348,10 @@ UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
     UBool isTargetUCharDBCS = (UBool) myConverterData->isTargetUCharDBCS;
     UBool oldIsTargetUCharDBCS;
     int len =0;
-    const char* escSeq=NULL;
+    const char* escSeq=nullptr;
     
     /* Calling code already handles this situation. */
-    /*if ((args->converter == NULL) || (args->targetLimit < myTarget) || (args->sourceLimit < args->source)){
+    /*if ((args->converter == nullptr) || (args->targetLimit < myTarget) || (args->sourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }*/
@@ -579,8 +579,8 @@ static const UConverterImpl _HZImpl={
 
     UCNV_HZ,
     
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
     
     _HZOpen,
     _HZClose,
@@ -590,15 +590,15 @@ static const UConverterImpl _HZImpl={
     UConverter_toUnicode_HZ_OFFSETS_LOGIC,
     UConverter_fromUnicode_HZ_OFFSETS_LOGIC,
     UConverter_fromUnicode_HZ_OFFSETS_LOGIC,
-    NULL,
+    nullptr,
     
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
     _HZ_WriteSub,
     _HZ_SafeClone,
     _HZ_GetUnicodeSet,
-    NULL,
-    NULL
+    nullptr,
+    nullptr
 };
 
 static const UConverterStaticData _HZStaticData={

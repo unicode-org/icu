@@ -43,10 +43,10 @@ int32_t getSortKey_current(const char *locale, const UChar *string, int32_t sLen
 
 // This one can be used for passing to qsort function
 // Not thread safe or anything
-static UCollator *compareCollator = NULL;
+static UCollator *compareCollator = nullptr;
 
 int compare_current(const void *string1, const void *string2) {
-  if(compareCollator != NULL) {
+  if(compareCollator != nullptr) {
     UCollationResult res = ucol_strcoll(compareCollator, (UChar *) string1, -1, (UChar *) string2, -1);
     if(res == UCOL_LESS) {
       return -1;
@@ -67,7 +67,7 @@ void initCollator_current(const char *locale) {
 
 void closeCollator_current(void) {
   ucol_close(compareCollator);
-  compareCollator = NULL;
+  compareCollator = nullptr;
 }
 
 

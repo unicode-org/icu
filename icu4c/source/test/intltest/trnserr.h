@@ -32,7 +32,7 @@
  */
 class TransliteratorErrorTest : public IntlTest {
 public:
-    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL) override;
+    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=nullptr) override;
 
     /*Tests the returned error codes on all the APIs according to the API documentation. */
     void TestTransliteratorErrors(void);

@@ -25,7 +25,7 @@ U_NAMESPACE_END
  * Test basic functionality of various API functions
  **/
 class DateIntervalFormatTest: public IntlTestWithFieldPosition {
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 
 public:
     /**

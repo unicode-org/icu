@@ -60,8 +60,8 @@ U_NAMESPACE_BEGIN
 
 class NativeItem {
 public:
-    NativeItem() : pItem(NULL), pInfo(NULL), bytes(NULL), swapped(NULL), length(0) {}
-    NativeItem(const Item *item, UDataSwapFn *swap) : swapped(NULL) {
+    NativeItem() : pItem(nullptr), pInfo(nullptr), bytes(nullptr), swapped(nullptr), length(0) {}
+    NativeItem(const Item *item, UDataSwapFn *swap) : swapped(nullptr) {
         setItem(item, swap);
     }
     ~NativeItem() {
@@ -101,7 +101,7 @@ public:
             ds->printErrorContext=stderr;
 
             swapped=new uint8_t[pItem->length];
-            if(swapped==NULL) {
+            if(swapped==nullptr) {
                 fprintf(stderr, "icupkg: unable to allocate memory for swapping \"%s\"\n", pItem->name);
                 exit(U_MEMORY_ALLOCATION_ERROR);
             }
@@ -135,7 +135,7 @@ makeTargetName(const char *itemName, const char *id, int32_t idLength, const cha
 
     // get the item basename
     itemID=strrchr(itemName, '/');
-    if(itemID!=NULL) {
+    if(itemID!=nullptr) {
         ++itemID;
     } else {
         itemID=itemName;
@@ -180,7 +180,7 @@ checkParent(const char *itemName, CheckDependency check, void *context,
 
     // get the item basename
     itemID=strrchr(itemName, '/');
-    if(itemID!=NULL) {
+    if(itemID!=nullptr) {
         ++itemID;
     } else {
         itemID=itemName;
@@ -188,7 +188,7 @@ checkParent(const char *itemName, CheckDependency check, void *context,
 
     // get the item suffix
     suffix=strrchr(itemID, '.');
-    if(suffix==NULL) {
+    if(suffix==nullptr) {
         // empty suffix, point to the end of the string
         suffix=strrchr(itemID, 0);
     }
@@ -287,7 +287,7 @@ ures_enumDependencies(const char *itemName,
     UBool doCheckParent = true;  // always remains true if depth>1
     switch(res_getPublicType(res)) {
     case URES_STRING:
-        if(depth==1 && inKey!=NULL &&
+        if(depth==1 && inKey!=nullptr &&
                 (0==strcmp(inKey, "%%ALIAS") || 0==strcmp(inKey, "%%Parent"))) {
             // Top-level %%ALIAS string:
             //   The alias resource bundle will be used instead of this one.
@@ -301,7 +301,7 @@ ures_enumDependencies(const char *itemName,
             checkAlias(itemName, res, alias, length, /*useResSuffix=*/ true,
                        check, context, pErrorCode);
             // If there is a %%ALIAS, then there should be nothing else in this resource bundle.
-        } else if(depth==2 && parentKey!=NULL && 0==strcmp(parentKey, "%%DEPENDENCY")) {
+        } else if(depth==2 && parentKey!=nullptr && 0==strcmp(parentKey, "%%DEPENDENCY")) {
             // Second-level %%DEPENDENCY string:
             // Explicit declaration of a dependency of this item on that one.
             // No tracing: build tool
@@ -351,7 +351,7 @@ ures_enumDependencies(const char *itemName,
                 Resource item=res_getArrayItem(pResData, res, i);
                 ures_enumDependencies(
                         itemName, pResData,
-                        item, NULL,
+                        item, nullptr,
                         inKey, depth+1,
                         check, context,
                         pkg,
@@ -427,7 +427,7 @@ ures_enumDependencies(const char *itemName, const UDataInfo *pInfo,
 
     UBool doCheckParent = ures_enumDependencies(
         itemName, &resData,
-        resData.rootRes, NULL, NULL, 0,
+        resData.rootRes, nullptr, nullptr, 0,
         check, context,
         pkg,
         pErrorCode);

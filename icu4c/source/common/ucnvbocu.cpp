@@ -456,7 +456,7 @@ fastSingle:
     }
     /* restore real values */
     targetCapacity=(int32_t)((const uint8_t *)pArgs->targetLimit-target);
-    sourceIndex=nextSourceIndex; /* wrong if offsets==NULL but does not matter */
+    sourceIndex=nextSourceIndex; /* wrong if offsets==nullptr but does not matter */
 
     /* regular loop for all cases */
     while(source<sourceLimit) {
@@ -1027,7 +1027,7 @@ fastSingle:
         ++source;
         --count;
     }
-    sourceIndex=nextSourceIndex; /* wrong if offsets==NULL but does not matter */
+    sourceIndex=nextSourceIndex; /* wrong if offsets==nullptr but does not matter */
 
     /* decode a sequence of single and lead bytes */
     while(source<sourceLimit) {
@@ -1371,27 +1371,27 @@ endloop:
 static const UConverterImpl _Bocu1Impl={
     UCNV_BOCU1,
 
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
 
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
 
     _Bocu1ToUnicode,
     _Bocu1ToUnicodeWithOffsets,
     _Bocu1FromUnicode,
     _Bocu1FromUnicodeWithOffsets,
-    NULL,
+    nullptr,
 
-    NULL,
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
     ucnv_getCompleteUnicodeSet,
 
-    NULL,
-    NULL
+    nullptr,
+    nullptr
 };
 
 static const UConverterStaticData _Bocu1StaticData={

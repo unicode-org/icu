@@ -59,7 +59,7 @@ uprint(const UChar *s,
 
 	/* perform the conversion */
 	ucnv_fromUnicode(converter, &myTarget,	myTarget + arraySize,
-			 &mySource, mySourceEnd, NULL,
+			 &mySource, mySourceEnd, nullptr,
 			 true, status);
 
 	/* Write the converted data to the FILE* */

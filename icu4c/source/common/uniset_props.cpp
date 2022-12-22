@@ -69,7 +69,7 @@ static icu::UInitOnce uni32InitOnce {};
  */
 static UBool U_CALLCONV uset_cleanup(void) {
     delete uni32Singleton;
-    uni32Singleton = NULL;
+    uni32Singleton = nullptr;
     uni32InitOnce.reset();
     return true;
 }
@@ -82,9 +82,9 @@ namespace {
 
 // Cache some sets for other services -------------------------------------- ***
 void U_CALLCONV createUni32Set(UErrorCode &errorCode) {
-    U_ASSERT(uni32Singleton == NULL);
+    U_ASSERT(uni32Singleton == nullptr);
     uni32Singleton = new UnicodeSet(UNICODE_STRING_SIMPLE("[:age=3.2:]"), errorCode);
-    if(uni32Singleton==NULL) {
+    if(uni32Singleton==nullptr) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
     } else {
         uni32Singleton->freeze();
@@ -162,10 +162,10 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern,
 UnicodeSet& UnicodeSet::applyPattern(const UnicodeString& pattern,
                                      UErrorCode& status) {
     // Equivalent to
-    //   return applyPattern(pattern, USET_IGNORE_SPACE, NULL, status);
+    //   return applyPattern(pattern, USET_IGNORE_SPACE, nullptr, status);
     // but without dependency on closeOver().
     ParsePosition pos(0);
-    applyPatternIgnoreSpace(pattern, pos, NULL, status);
+    applyPatternIgnoreSpace(pattern, pos, nullptr, status);
     if (U_FAILURE(status)) return *this;
 
     int32_t i = pos.getIndex();
@@ -193,7 +193,7 @@ UnicodeSet::applyPatternIgnoreSpace(const UnicodeString& pattern,
     // _applyPattern calls add() etc., which set pat to empty.
     UnicodeString rebuiltPat;
     RuleCharacterIterator chars(pattern, symbols, pos);
-    applyPattern(chars, symbols, rebuiltPat, USET_IGNORE_SPACE, NULL, 0, status);
+    applyPattern(chars, symbols, rebuiltPat, USET_IGNORE_SPACE, nullptr, 0, status);
     if (U_FAILURE(status)) return;
     if (chars.inVariable()) {
         // syntaxError(chars, "Extra chars in variable value");
@@ -356,7 +356,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
                 const UnicodeFunctor *m = symbols->lookupMatcher(c);
                 if (m != 0) {
                     const UnicodeSet *ms = dynamic_cast<const UnicodeSet *>(m);
-                    if (ms == NULL) {
+                    if (ms == nullptr) {
                         ec = U_MALFORMED_SET;
                         return;
                     }

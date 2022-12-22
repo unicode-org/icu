@@ -103,11 +103,11 @@ u_vsscanf_u(const UChar *buffer,
     int32_t         converted;
     UFILE           inStr;
 
-    inStr.fConverter = NULL;
-    inStr.fFile = NULL;
+    inStr.fConverter = nullptr;
+    inStr.fFile = nullptr;
     inStr.fOwnFile = false;
 #if !UCONFIG_NO_TRANSLITERATION
-    inStr.fTranslit = NULL;
+    inStr.fTranslit = nullptr;
 #endif
     inStr.fUCBuffer[0] = 0;
     inStr.str.fBuffer = (UChar *)buffer;

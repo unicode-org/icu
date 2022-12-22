@@ -178,7 +178,7 @@ ufmt_utop(const UChar     *buffer,
     /* initialize variables */
     count      = 0;
     offset     = 0;
-    result.ptr = NULL;
+    result.ptr = nullptr;
 
     /* Skip the leading zeros */
     while(buffer[count] == DIGIT_0 || u_isspace(buffer[count])) {
@@ -243,7 +243,7 @@ ufmt_defaultCPToUnicode(const char *s, int32_t sSize,
         
         alias = target;
         ucnv_toUnicode(defConverter, &alias, alias + tSize, &s, s + sSize - 1, 
-            NULL, true, &status);
+            nullptr, true, &status);
         
         
         /* add the null terminator */

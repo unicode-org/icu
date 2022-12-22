@@ -79,15 +79,15 @@ public:
      *                   matching words to be found.
      *  @param lengths   output array, filled with the lengths of the matches, in order,
      *                   from shortest to longest. Lengths are in native indexing units
-     *                   of the UText. May be NULL.
+     *                   of the UText. May be nullptr.
      *  @param cpLengths output array, filled with the lengths of the matches, in order,
      *                   from shortest to longest. Lengths are the number of Unicode code points.
-     *                   May be NULL.
+     *                   May be nullptr.
      *  @param values    Output array, filled with the values associated with the words found.
-     *                   May be NULL.
+     *                   May be nullptr.
      *  @param prefix    Output parameter, the code point length of the prefix match, even if that
      *                   prefix didn't lead to a complete word. Will always be >= the cpLength
-     *                   of the longest complete word matched. May be NULL.
+     *                   of the longest complete word matched. May be nullptr.
      *  @return          Number of matching words found.
      */
     virtual int32_t matches(UText *text, int32_t maxLength, int32_t limit,

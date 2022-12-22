@@ -63,7 +63,7 @@ Appendable::getAppendBuffer(int32_t minCapacity,
                             int32_t *resultCapacity) {
     if(minCapacity<1 || scratchCapacity<minCapacity) {
         *resultCapacity=0;
-        return NULL;
+        return nullptr;
     }
     *resultCapacity=scratchCapacity;
     return scratch;

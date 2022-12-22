@@ -307,7 +307,7 @@ private:
 };
 
 CasePropsBuilder::CasePropsBuilder(UErrorCode &errorCode)
-        : excProps(NULL), excPropsCount(0), maxFullLength(U16_MAX_LENGTH), pTrie(NULL) {
+        : excProps(nullptr), excPropsCount(0), maxFullLength(U16_MAX_LENGTH), pTrie(nullptr) {
     // This builder encodes the following properties.
     relevantProps.
         add(UCHAR_CANONICAL_COMBINING_CLASS).  // 0 vs. 230 vs. other
@@ -340,7 +340,7 @@ CasePropsBuilder::CasePropsBuilder(UErrorCode &errorCode)
         return;
     }
     excProps=new ExcProps *[MAX_EXC_COUNT];
-    if(excProps==NULL) {
+    if(excProps==nullptr) {
         fprintf(stderr,
                 "genprops error: casepropsbuilder out of memory allocating "
                 "the array of exceptions properties\n");
@@ -524,7 +524,7 @@ CasePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
             return;
         }
         ExcProps *newExcProps=new ExcProps(props);
-        if(newExcProps==NULL) {
+        if(newExcProps==nullptr) {
             fprintf(stderr,
                     "genprops error: casepropsbuilder out of memory allocating "
                     "exceptions properties\n");
@@ -588,7 +588,7 @@ CasePropsBuilder::makeExcProps(UChar32 c, uint32_t value, UErrorCode &errorCode)
         return 0;
     }
     LocalPointer<ExcProps> newExcProps(new ExcProps);
-    if(newExcProps==NULL) {
+    if(newExcProps==nullptr) {
         fprintf(stderr,
                 "genprops error: casepropsbuilder out of memory allocating "
                 "exceptions properties\n");
@@ -635,7 +635,7 @@ CasePropsBuilder::makeUnfoldData(UErrorCode &errorCode) {
     int32_t unfoldRows=unfoldLength/UGENCASE_UNFOLD_WIDTH-1;
     UChar *unfoldBuffer=unfold.getBuffer(-1);
     uprv_sortArray(unfoldBuffer+UGENCASE_UNFOLD_WIDTH, unfoldRows, UGENCASE_UNFOLD_WIDTH*2,
-                   compareUnfold, NULL, false, &errorCode);
+                   compareUnfold, nullptr, false, &errorCode);
 
     /* make unique-string rows by merging adjacent ones' code point columns */
 
@@ -1187,7 +1187,7 @@ CasePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
 
     FILE *f=usrc_create(path, "ucase_props_data.h", 2016,
                         "icu/tools/unicode/c/genprops/casepropsbuilder.cpp");
-    if(f==NULL) {
+    if(f==nullptr) {
         errorCode=U_FILE_ACCESS_ERROR;
         return;
     }
@@ -1203,7 +1203,7 @@ CasePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
         "",
         "};\n\n");
     usrc_writeUTrie2Arrays(f,
-        "static const uint16_t ucase_props_trieIndex[%ld]={\n", NULL,
+        "static const uint16_t ucase_props_trieIndex[%ld]={\n", nullptr,
         pTrie,
         "\n};\n\n");
     usrc_writeArray(f,
@@ -1218,14 +1218,14 @@ CasePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
         "\n};\n\n");
     fputs(
         "static const UCaseProps ucase_props_singleton={\n"
-        "  NULL,\n"
+        "  nullptr,\n"
         "  ucase_props_indexes,\n"
         "  ucase_props_exceptions,\n"
         "  ucase_props_unfold,\n",
         f);
     usrc_writeUTrie2Struct(f,
         "  {\n",
-        pTrie, "ucase_props_trieIndex", NULL,
+        pTrie, "ucase_props_trieIndex", nullptr,
         "  },\n");
     usrc_writeArray(f, "  { ", dataInfo.formatVersion, 8, 4, "", " }\n");
     fputs("};\n\n"
@@ -1238,7 +1238,7 @@ CasePropsBuilder::writeBinaryData(const char *path, UBool withCopyright, UErrorC
     if(U_FAILURE(errorCode)) { return; }
 
     UNewDataMemory *pData=udata_create(path, "icu", "ucase", &dataInfo,
-                                       withCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
+                                       withCopyright ? U_COPYRIGHT_STRING : nullptr, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "genprops: udata_create(%s, ucase.icu) failed - %s\n",
                 path, u_errorName(errorCode));
@@ -1267,9 +1267,9 @@ CasePropsBuilder::writeBinaryData(const char *path, UBool withCopyright, UErrorC
 
 PropsBuilder *
 createCasePropsBuilder(UErrorCode &errorCode) {
-    if(U_FAILURE(errorCode)) { return NULL; }
+    if(U_FAILURE(errorCode)) { return nullptr; }
     PropsBuilder *pb=new CasePropsBuilder(errorCode);
-    if(pb==NULL) {
+    if(pb==nullptr) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
     }
     return pb;

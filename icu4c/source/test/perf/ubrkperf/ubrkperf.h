@@ -25,7 +25,7 @@ protected:
   UErrorCode m_status_;
 public:
   ICUBreakFunction(const char *locale, const char *mode, const UChar *file, int32_t file_len) :
-      m_brkIt_(NULL),
+      m_brkIt_(nullptr),
       m_file_(file),
       m_fileLen_(file_len),
       m_noBreaks_(-1),
@@ -123,7 +123,7 @@ public:
   ~BreakIteratorPerformanceTest();
 
   virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec,
-    const char* &name, char* par = NULL);     
+    const char* &name, char* par = nullptr);
 
   UPerfFunction* TestICUForward();
   UPerfFunction* TestICUIsBound();

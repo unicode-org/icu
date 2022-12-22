@@ -328,7 +328,7 @@ static UText* regextst_openUTF8FromInvariant(UText *ut, const char *inv, int64_t
     fprintf(stderr, "%s:%d Error: INV_BUFSIZ #defined to be %d but needs to be at least %d.\n",
             __FILE__, __LINE__, INV_BUFSIZ, (inv_next+length+1));
     *status = U_MEMORY_ALLOCATION_ERROR;
-    return NULL;
+    return nullptr;
   }
 
   unsigned char *buf = (unsigned char*)inv_buf+inv_next;
@@ -368,8 +368,8 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
     const UnicodeString inputText(text, -1, US_INV);
     UErrorCode          status  = U_ZERO_ERROR;
     UParseError         pe;
-    RegexPattern        *REPattern = NULL;
-    RegexMatcher        *REMatcher = NULL;
+    RegexPattern        *REPattern = nullptr;
+    RegexMatcher        *REMatcher = nullptr;
     UBool               retVal     = true;
 
     UnicodeString patString(pat, -1, US_INV);
@@ -427,12 +427,12 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
 UBool RegexTest::doRegexLMTestUTF8(const char *pat, const char *text, UBool looking, UBool match, int32_t line) {
     UText               pattern    = UTEXT_INITIALIZER;
     int32_t             inputUTF8Length;
-    char                *textChars = NULL;
+    char                *textChars = nullptr;
     UText               inputText  = UTEXT_INITIALIZER;
     UErrorCode          status     = U_ZERO_ERROR;
     UParseError         pe;
-    RegexPattern        *REPattern = NULL;
-    RegexMatcher        *REMatcher = NULL;
+    RegexPattern        *REPattern = nullptr;
+    RegexMatcher        *REMatcher = nullptr;
     UBool               retVal     = true;
 
     regextst_openUTF8FromInvariant(&pattern, pat, -1, &status);
@@ -446,9 +446,9 @@ UBool RegexTest::doRegexLMTestUTF8(const char *pat, const char *text, UBool look
     UnicodeString inputString(text, -1, US_INV);
     UnicodeString unEscapedInput = inputString.unescape();
     LocalUConverterPointer UTF8Converter(ucnv_open("UTF8", &status));
-    ucnv_setFromUCallBack(UTF8Converter.getAlias(), UCNV_FROM_U_CALLBACK_STOP, NULL, NULL, NULL, &status);
+    ucnv_setFromUCallBack(UTF8Converter.getAlias(), UCNV_FROM_U_CALLBACK_STOP, nullptr, nullptr, nullptr, &status);
 
-    inputUTF8Length = unEscapedInput.extract(NULL, 0, UTF8Converter.getAlias(), status);
+    inputUTF8Length = unEscapedInput.extract(nullptr, 0, UTF8Converter.getAlias(), status);
     if (U_FAILURE(status) && status != U_BUFFER_OVERFLOW_ERROR) {
         // UTF-8 does not allow unpaired surrogates, so this could actually happen
         logln("RegexTest unable to convert input to UTF8 at line %d.  Status = %s\n", line, u_errorName(status));
@@ -521,7 +521,7 @@ void RegexTest::regex_err(const char *pat, int32_t errLine, int32_t errCol,
 
     UErrorCode          status         = U_ZERO_ERROR;
     UParseError         pe;
-    RegexPattern        *callerPattern = NULL;
+    RegexPattern        *callerPattern = nullptr;
 
     //
     //  Compile the caller's pattern
@@ -1802,12 +1802,12 @@ void RegexTest::API_Pattern() {
     pat1 = RegexPattern::compile("(Hello, world)*",  pe, status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(pat1->getDynamicClassID() == RegexPattern::getStaticClassID());
-    REGEX_ASSERT(pat1->getDynamicClassID() != NULL);
+    REGEX_ASSERT(pat1->getDynamicClassID() != nullptr);
     UnicodeString Hello("Hello, world.");
     RegexMatcher *m = pat1->matcher(Hello, status);
     REGEX_ASSERT(pat1->getDynamicClassID() != m->getDynamicClassID());
     REGEX_ASSERT(m->getDynamicClassID() == RegexMatcher::getStaticClassID());
-    REGEX_ASSERT(m->getDynamicClassID() != NULL);
+    REGEX_ASSERT(m->getDynamicClassID() != nullptr);
     delete m;
     delete pat1;
 
@@ -1852,7 +1852,7 @@ void RegexTest::API_Match_UTF8() {
         REGEX_VERBOSE_TEXT(&input1);
         regextst_openUTF8FromInvariant(&input2, "not abc", -1, &status);
         REGEX_VERBOSE_TEXT(&input2);
-        utext_openUChars(&empty, NULL, 0, &status);
+        utext_openUChars(&empty, nullptr, 0, &status);
 
         int32_t input1Len = static_cast<int32_t>(strlen("abcdef this is a test")); /* TODO: why not nativelen (input1) ? */
         int32_t input2Len = static_cast<int32_t>(strlen("not abc"));
@@ -2030,7 +2030,7 @@ void RegexTest::API_Match_UTF8() {
         //const char str_0123456789[] = { 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x00 }; /* 0123456789 */
         //  Test shallow-clone API
         int64_t   group_len;
-        result = matcher->group((UText *)NULL, group_len, status);
+        result = matcher->group((UText *)nullptr, group_len, status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT_UTEXT_UTF8(str_0123456789, result);
         utext_close(result);
@@ -2043,7 +2043,7 @@ void RegexTest::API_Match_UTF8() {
         utext_openUnicodeString(&destText, &dest, &status);
 
         int64_t length;
-        result = matcher->group(0, NULL, length, status);
+        result = matcher->group(0, nullptr, length, status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT_UTEXT_UTF8(str_0123456789, result);
         utext_close(result);
@@ -2055,7 +2055,7 @@ void RegexTest::API_Match_UTF8() {
         REGEX_ASSERT_UTEXT_INVARIANT("0123456789", result);
 
         // Capture Group 1 == "234567"
-        result = matcher->group(1, NULL, length, status);
+        result = matcher->group(1, nullptr, length, status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(utext_getNativeIndex(result) == 2);
         REGEX_ASSERT(length == 6);
@@ -2071,7 +2071,7 @@ void RegexTest::API_Match_UTF8() {
         utext_close(result);
 
         // Capture Group 2 == "45"
-        result = matcher->group(2, NULL, length, status);
+        result = matcher->group(2, nullptr, length, status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(utext_getNativeIndex(result) == 4);
         REGEX_ASSERT(length == 2);
@@ -2087,7 +2087,7 @@ void RegexTest::API_Match_UTF8() {
         utext_close(result);
 
         // Capture Group 3 == "89"
-        result = matcher->group(3, NULL, length, status);
+        result = matcher->group(3, nullptr, length, status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(utext_getNativeIndex(result) == 8);
         REGEX_ASSERT(length == 2);
@@ -2450,7 +2450,7 @@ void RegexTest::API_Replace_UTF8() {
     const char str_yz[] = { 0x79, 0x7a, 0x00 }; /* yz */
     utext_openUTF8(&replText, str_yz, -1, &status);
     REGEX_VERBOSE_TEXT(&replText);
-    result = matcher->replaceFirst(&replText, NULL, status);
+    result = matcher->replaceFirst(&replText, nullptr, status);
     REGEX_CHECK_STATUS;
     const char str_yzabcabc[] = { 0x2e, 0x79, 0x7a, 0x2e, 0x2e, 0x61, 0x62, 0x63, 0x2e, 0x2e, 0x2e, 0x61, 0x62, 0x63, 0x2e, 0x2e, 0x00 }; /* .yz..abc...abc.. */
     REGEX_ASSERT_UTEXT_UTF8(str_yzabcabc, result);
@@ -2460,13 +2460,13 @@ void RegexTest::API_Replace_UTF8() {
     REGEX_ASSERT(result == &destText);
     REGEX_ASSERT_UTEXT_UTF8(str_yzabcabc, result);
 
-    result = matcher->replaceAll(&replText, NULL, status);
+    result = matcher->replaceAll(&replText, nullptr, status);
     REGEX_CHECK_STATUS;
     const char str_yzyzyz[] = { 0x2e, 0x79, 0x7a, 0x2e, 0x2e, 0x79, 0x7a, 0x2e, 0x2e, 0x2e, 0x79, 0x7a, 0x2e, 0x2e, 0x00 }; /* .yz..yz...yz.. */
     REGEX_ASSERT_UTEXT_UTF8(str_yzyzyz, result);
     utext_close(result);
 
-    utext_replace(&destText, 0, utext_nativeLength(&destText), NULL, 0, &status);
+    utext_replace(&destText, 0, utext_nativeLength(&destText), nullptr, 0, &status);
     result = matcher->replaceAll(&replText, &destText, status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(result == &destText);
@@ -2479,7 +2479,7 @@ void RegexTest::API_Replace_UTF8() {
     utext_openUTF8(&dataText, str_abxabxabx, -1, &status);
     matcher->reset(&dataText);
 
-    result = matcher->replaceFirst(&replText, NULL, status);
+    result = matcher->replaceFirst(&replText, nullptr, status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT_UTEXT_UTF8(str_abxabxabx, result);
     utext_close(result);
@@ -2488,11 +2488,11 @@ void RegexTest::API_Replace_UTF8() {
     REGEX_ASSERT(result == &destText);
     REGEX_ASSERT_UTEXT_UTF8(str_abxabxabx, result);
 
-    result = matcher->replaceAll(&replText, NULL, status);
+    result = matcher->replaceAll(&replText, nullptr, status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT_UTEXT_UTF8(str_abxabxabx, result);
     utext_close(result);
-    utext_replace(&destText, 0, utext_nativeLength(&destText), NULL, 0, &status);
+    utext_replace(&destText, 0, utext_nativeLength(&destText), nullptr, 0, &status);
     result = matcher->replaceAll(&replText, &destText, status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(result == &destText);
@@ -2501,10 +2501,10 @@ void RegexTest::API_Replace_UTF8() {
     //
     // Empty source string
     //
-    utext_openUTF8(&dataText, NULL, 0, &status);
+    utext_openUTF8(&dataText, nullptr, 0, &status);
     matcher->reset(&dataText);
 
-    result = matcher->replaceFirst(&replText, NULL, status);
+    result = matcher->replaceFirst(&replText, nullptr, status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT_UTEXT_UTF8("", result);
     utext_close(result);
@@ -2513,7 +2513,7 @@ void RegexTest::API_Replace_UTF8() {
     REGEX_ASSERT(result == &destText);
     REGEX_ASSERT_UTEXT_UTF8("", result);
 
-    result = matcher->replaceAll(&replText, NULL, status);
+    result = matcher->replaceAll(&replText, nullptr, status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT_UTEXT_UTF8("", result);
     utext_close(result);
@@ -2528,8 +2528,8 @@ void RegexTest::API_Replace_UTF8() {
     utext_openUTF8(&dataText, data, -1, &status); // ".abc..abc...abc.."
     matcher->reset(&dataText);
 
-    utext_openUTF8(&replText, NULL, 0, &status);
-    result = matcher->replaceFirst(&replText, NULL, status);
+    utext_openUTF8(&replText, nullptr, 0, &status);
+    result = matcher->replaceFirst(&replText, nullptr, status);
     REGEX_CHECK_STATUS;
     const char str_abcabc[] = { 0x2e, 0x2e, 0x2e, 0x61, 0x62, 0x63, 0x2e, 0x2e, 0x2e, 0x61, 0x62, 0x63, 0x2e, 0x2e, 0x00 }; /* ...abc...abc.. */
     REGEX_ASSERT_UTEXT_UTF8(str_abcabc, result);
@@ -2539,12 +2539,12 @@ void RegexTest::API_Replace_UTF8() {
     REGEX_ASSERT(result == &destText);
     REGEX_ASSERT_UTEXT_UTF8(str_abcabc, result);
 
-    result = matcher->replaceAll(&replText, NULL, status);
+    result = matcher->replaceAll(&replText, nullptr, status);
     REGEX_CHECK_STATUS;
     const char str_dots[] = { 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x2e, 0x00 }; /* ........ */
     REGEX_ASSERT_UTEXT_UTF8(str_dots, result);
     utext_close(result);
-    utext_replace(&destText, 0, utext_nativeLength(&destText), NULL, 0, &status);
+    utext_replace(&destText, 0, utext_nativeLength(&destText), nullptr, 0, &status);
     result = matcher->replaceAll(&replText, &destText, status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(result == &destText);
@@ -2559,21 +2559,21 @@ void RegexTest::API_Replace_UTF8() {
 
     const char str_xyz[] = { 0x78, 0x79, 0x7a, 0x00 }; /* xyz */
     utext_openUTF8(&replText, str_xyz, -1, &status);
-    result = matcher->replaceFirst(&replText, NULL, status);
+    result = matcher->replaceFirst(&replText, nullptr, status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT_UTEXT_UTF8(str_xyz, result);
     utext_close(result);
-    utext_replace(&destText, 0, utext_nativeLength(&destText), NULL, 0, &status);
+    utext_replace(&destText, 0, utext_nativeLength(&destText), nullptr, 0, &status);
     result = matcher->replaceFirst(&replText, &destText, status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(result == &destText);
     REGEX_ASSERT_UTEXT_UTF8(str_xyz, result);
 
-    result = matcher->replaceAll(&replText, NULL, status);
+    result = matcher->replaceAll(&replText, nullptr, status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT_UTEXT_UTF8(str_xyz, result);
     utext_close(result);
-    utext_replace(&destText, 0, utext_nativeLength(&destText), NULL, 0, &status);
+    utext_replace(&destText, 0, utext_nativeLength(&destText), nullptr, 0, &status);
     result = matcher->replaceAll(&replText, &destText, status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(result == &destText);
@@ -2594,12 +2594,12 @@ void RegexTest::API_Replace_UTF8() {
 
     const char str_11[] = { 0x24, 0x31, 0x24, 0x31, 0x00 }; /* $1$1 */
     utext_openUTF8(&replText, str_11, -1, &status);
-    result = matcher2->replaceFirst(&replText, NULL, status);
+    result = matcher2->replaceFirst(&replText, nullptr, status);
     REGEX_CHECK_STATUS;
     const char str_bcbcdefg[] = { 0x62, 0x63, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x00 }; /* bcbcdefg */
     REGEX_ASSERT_UTEXT_UTF8(str_bcbcdefg, result);
     utext_close(result);
-    utext_replace(&destText, 0, utext_nativeLength(&destText), NULL, 0, &status);
+    utext_replace(&destText, 0, utext_nativeLength(&destText), nullptr, 0, &status);
     result = matcher2->replaceFirst(&replText, &destText, status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(result == &destText);
@@ -2608,12 +2608,12 @@ void RegexTest::API_Replace_UTF8() {
     const char str_v[24] = { 0x54, 0x68, 0x65, 0x20, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x20, 0x6f, 0x66, 0x20, 0x5c, 0x24, 0x31, 0x20, 0x69, 0x73, 0x20, 0x24, 0x31, 0x2e, 0x00 }; /* The value of \$1 is $1. */
     utext_openUTF8(&replText, str_v, -1, &status);
     REGEX_VERBOSE_TEXT(&replText);
-    result = matcher2->replaceFirst(&replText, NULL, status);
+    result = matcher2->replaceFirst(&replText, nullptr, status);
     REGEX_CHECK_STATUS;
     const char str_Thevalueof1isbcdefg[] = { 0x54, 0x68, 0x65, 0x20, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x20, 0x6f, 0x66, 0x20, 0x24, 0x31, 0x20, 0x69, 0x73, 0x20, 0x62, 0x63, 0x2e, 0x64, 0x65, 0x66, 0x67, 0x00 }; /* The value of $1 is bc.defg */
     REGEX_ASSERT_UTEXT_UTF8(str_Thevalueof1isbcdefg, result);
     utext_close(result);
-    utext_replace(&destText, 0, utext_nativeLength(&destText), NULL, 0, &status);
+    utext_replace(&destText, 0, utext_nativeLength(&destText), nullptr, 0, &status);
     result = matcher2->replaceFirst(&replText, &destText, status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(result == &destText);
@@ -2623,12 +2623,12 @@ void RegexTest::API_Replace_UTF8() {
                0x66, 0x2c, 0x20, 0x6e, 0x6f, 0x20, 0x67, 0x72, 0x6f, 0x75, 0x70, 0x20, 0x6e, 0x75, 0x6d, 0x62,
                0x65, 0x72, 0x20, 0x5c, 0x24, 0x5c, 0x24, 0x5c, 0x24, 0x00 }; /* \$ by itself, no group number \$\$\$ */
     utext_openUTF8(&replText, str_byitselfnogroupnumber, -1, &status);
-    result = matcher2->replaceFirst(&replText, NULL, status);
+    result = matcher2->replaceFirst(&replText, nullptr, status);
     REGEX_CHECK_STATUS;
     const char str_byitselfnogroupnumberdefg[] = { 0x24, 0x20, 0x62, 0x79, 0x20, 0x69, 0x74, 0x73, 0x65, 0x6c, 0x66, 0x2c, 0x20, 0x6e, 0x6f, 0x20, 0x67, 0x72, 0x6f, 0x75, 0x70, 0x20, 0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x20, 0x24, 0x24, 0x24, 0x64, 0x65, 0x66, 0x67, 0x00 }; /* $ by itself, no group number $$$defg */
     REGEX_ASSERT_UTEXT_UTF8(str_byitselfnogroupnumberdefg, result);
     utext_close(result);
-    utext_replace(&destText, 0, utext_nativeLength(&destText), NULL, 0, &status);
+    utext_replace(&destText, 0, utext_nativeLength(&destText), nullptr, 0, &status);
     result = matcher2->replaceFirst(&replText, &destText, status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(result == &destText);
@@ -2643,22 +2643,22 @@ void RegexTest::API_Replace_UTF8() {
     supplDigitChars[25] = 0x8F;
     utext_openUTF8(&replText, (char *)supplDigitChars, -1, &status);
 
-    result = matcher2->replaceFirst(&replText, NULL, status);
+    result = matcher2->replaceFirst(&replText, nullptr, status);
     REGEX_CHECK_STATUS;
     const char str_SupplementalDigit1bcdefg[] = { 0x53, 0x75, 0x70, 0x70, 0x6c, 0x65, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x6c, 0x20, 0x44, 0x69, 0x67, 0x69, 0x74, 0x20, 0x31, 0x20, 0x62, 0x63, 0x2e, 0x64, 0x65, 0x66, 0x67, 0x00 }; /* Supplemental Digit 1 bc.defg */
     REGEX_ASSERT_UTEXT_UTF8(str_SupplementalDigit1bcdefg, result);
     utext_close(result);
-    utext_replace(&destText, 0, utext_nativeLength(&destText), NULL, 0, &status);
+    utext_replace(&destText, 0, utext_nativeLength(&destText), nullptr, 0, &status);
     result = matcher2->replaceFirst(&replText, &destText, status);
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(result == &destText);
     REGEX_ASSERT_UTEXT_UTF8(str_SupplementalDigit1bcdefg, result);
     const char str_badcapturegroupnumber5[] = { 0x62, 0x61, 0x64, 0x20, 0x63, 0x61, 0x70, 0x74, 0x75, 0x72, 0x65, 0x20, 0x67, 0x72, 0x6f, 0x75, 0x70, 0x20, 0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x20, 0x24, 0x35, 0x2e, 0x2e, 0x2e,  0x00 }; /* bad capture group number $5..." */
     utext_openUTF8(&replText, str_badcapturegroupnumber5, -1, &status);
-    REGEX_ASSERT_FAIL((result = matcher2->replaceFirst(&replText, NULL, status)), U_INDEX_OUTOFBOUNDS_ERROR);
+    REGEX_ASSERT_FAIL((result = matcher2->replaceFirst(&replText, nullptr, status)), U_INDEX_OUTOFBOUNDS_ERROR);
 //    REGEX_ASSERT_UTEXT_UTF8("abcdefg", result);
     utext_close(result);
-    utext_replace(&destText, 0, utext_nativeLength(&destText), NULL, 0, &status);
+    utext_replace(&destText, 0, utext_nativeLength(&destText), nullptr, 0, &status);
     REGEX_ASSERT_FAIL((result = matcher2->replaceFirst(&replText, &destText, status)), U_INDEX_OUTOFBOUNDS_ERROR);
     REGEX_ASSERT(result == &destText);
 //    REGEX_ASSERT_UTEXT_UTF8("abcdefg", result);
@@ -2673,12 +2673,12 @@ void RegexTest::API_Replace_UTF8() {
         utext_openUTF8(&replText, str_u0043, -1, &status);
         matcher->reset(&dataText);
 
-        result = matcher->replaceAll(&replText, NULL, status);
+        result = matcher->replaceAll(&replText, nullptr, status);
         REGEX_CHECK_STATUS;
         const char str_C1C2C3[] = { 0x2d, 0x2d, 0x43, 0x2d, 0x2d, 0x20, 0x31, 0x20, 0x2d, 0x2d, 0x43, 0x2d, 0x2d, 0x20, 0x32, 0x20, 0x2d, 0x2d, 0x43, 0x2d, 0x2d, 0x20, 0x33, 0x00 }; /* --C-- 1 --C-- 2 --C-- 3 */
         REGEX_ASSERT_UTEXT_UTF8(str_C1C2C3, result);
         utext_close(result);
-        utext_replace(&destText, 0, utext_nativeLength(&destText), NULL, 0, &status);
+        utext_replace(&destText, 0, utext_nativeLength(&destText), nullptr, 0, &status);
         result = matcher->replaceAll(&replText, &destText, status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(result == &destText);
@@ -2698,11 +2698,11 @@ void RegexTest::API_Replace_UTF8() {
         expected[4] = 0x80;
         expected[5] = 0x80;
 
-        result = matcher->replaceAll(&replText, NULL, status);
+        result = matcher->replaceAll(&replText, nullptr, status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT_UTEXT_UTF8((char *)expected, result);
         utext_close(result);
-        utext_replace(&destText, 0, utext_nativeLength(&destText), NULL, 0, &status);
+        utext_replace(&destText, 0, utext_nativeLength(&destText), nullptr, 0, &status);
         result = matcher->replaceAll(&replText, &destText, status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(result == &destText);
@@ -3094,10 +3094,10 @@ void RegexTest::API_Pattern_UTF8() {
         status = U_ZERO_ERROR;
         RegexMatcher matcher(UnicodeString("(:)"), 0, status);
         UnicodeString stringToSplit("first:second:third");
-        UText *textToSplit = utext_openUnicodeString(NULL, &stringToSplit, &status);
+        UText *textToSplit = utext_openUnicodeString(nullptr, &stringToSplit, &status);
         REGEX_CHECK_STATUS;
 
-        UText *splits[10] = {NULL};
+        UText *splits[10] = {nullptr};
         int32_t numFields = matcher.split(textToSplit, splits, UPRV_LENGTHOF(splits), status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(numFields == 5);
@@ -3106,12 +3106,12 @@ void RegexTest::API_Pattern_UTF8() {
         REGEX_ASSERT_UTEXT_INVARIANT("second", splits[2]);
         REGEX_ASSERT_UTEXT_INVARIANT(":", splits[3]);
         REGEX_ASSERT_UTEXT_INVARIANT("third", splits[4]);
-        REGEX_ASSERT(splits[5] == NULL);
+        REGEX_ASSERT(splits[5] == nullptr);
 
         for (int i=0; i<UPRV_LENGTHOF(splits); i++) {
             if (splits[i]) {
                 utext_close(splits[i]);
-                splits[i] = NULL;
+                splits[i] = nullptr;
             }
         }
         utext_close(textToSplit);
@@ -3152,7 +3152,7 @@ RegexTest::getPath(char buffer[2048], const char *filename) {
     const char *testDataDirectory = IntlTest::getSourceTestData(status);
     if (U_FAILURE(status)) {
         errln("ERROR: loadTestData() failed - %s", u_errorName(status));
-        return NULL;
+        return nullptr;
     }
 
     strcpy(buffer, testDataDirectory);
@@ -3170,7 +3170,7 @@ void RegexTest::Extended() {
     //  Open and read the test data file.
     //
     srcPath=getPath(tdd, "regextst.txt");
-    if(srcPath==NULL) {
+    if(srcPath==nullptr) {
         return; /* something went wrong, error already output */
     }
 
@@ -3347,17 +3347,17 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     UnicodeString       deTaggedInput;
 
     int32_t             patternUTF8Length,      inputUTF8Length;
-    char                *patternChars  = NULL, *inputChars = NULL;
+    char                *patternChars  = nullptr, *inputChars = nullptr;
     UText               patternText    = UTEXT_INITIALIZER;
     UText               inputText      = UTEXT_INITIALIZER;
-    UConverter          *UTF8Converter = NULL;
+    UConverter          *UTF8Converter = nullptr;
 
     UErrorCode          status         = U_ZERO_ERROR;
     UParseError         pe;
-    RegexPattern        *parsePat      = NULL;
-    RegexMatcher        *parseMatcher  = NULL;
-    RegexPattern        *callerPattern = NULL, *UTF8Pattern = NULL;
-    RegexMatcher        *matcher       = NULL, *UTF8Matcher = NULL;
+    RegexPattern        *parsePat      = nullptr;
+    RegexMatcher        *parseMatcher  = nullptr;
+    RegexPattern        *callerPattern = nullptr, *UTF8Pattern = nullptr;
+    RegexMatcher        *matcher       = nullptr, *UTF8Matcher = nullptr;
     UVector             groupStarts(status);
     UVector             groupEnds(status);
     UVector             groupStartsUTF8(status);
@@ -3425,9 +3425,9 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     }
 
     UTF8Converter = ucnv_open("UTF8", &status);
-    ucnv_setFromUCallBack(UTF8Converter, UCNV_FROM_U_CALLBACK_STOP, NULL, NULL, NULL, &status);
+    ucnv_setFromUCallBack(UTF8Converter, UCNV_FROM_U_CALLBACK_STOP, nullptr, nullptr, nullptr, &status);
 
-    patternUTF8Length = pattern.extract(NULL, 0, UTF8Converter, status);
+    patternUTF8Length = pattern.extract(nullptr, 0, UTF8Converter, status);
     status = U_ZERO_ERROR; // buffer overflow
     patternChars = new char[patternUTF8Length+1];
     pattern.extract(patternChars, patternUTF8Length+1, UTF8Converter, status);
@@ -3458,7 +3458,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
         }
     }
 
-    if (UTF8Pattern == NULL) {
+    if (UTF8Pattern == nullptr) {
         // UTF-8 does not allow unpaired surrogates, so this could actually happen without being a failure of the engine
         logln("Unable to create UTF-8 pattern, skipping UTF-8 tests for %s:%d", srcPath, line);
         status = U_ZERO_ERROR;
@@ -3552,8 +3552,8 @@ void RegexTest::regex_find(const UnicodeString &pattern,
         matcher->setTrace(true);
     }
 
-    if (UTF8Pattern != NULL) {
-        inputUTF8Length = deTaggedInput.extract(NULL, 0, UTF8Converter, status);
+    if (UTF8Pattern != nullptr) {
+        inputUTF8Length = deTaggedInput.extract(nullptr, 0, UTF8Converter, status);
         status = U_ZERO_ERROR; // buffer overflow
         inputChars = new char[inputUTF8Length+1];
         deTaggedInput.extract(inputChars, inputUTF8Length+1, UTF8Converter, status);
@@ -3564,7 +3564,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
             REGEX_CHECK_STATUS_L(line);
         }
 
-        if (UTF8Matcher == NULL) {
+        if (UTF8Matcher == nullptr) {
             // UTF-8 does not allow unpaired surrogates, so this could actually happen without being a failure of the engine
             logln("Unable to create UTF-8 matcher, skipping UTF-8 tests for %s:%d", srcPath, line);
             status = U_ZERO_ERROR;
@@ -3574,7 +3574,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     //
     //  Generate native indices for UTF8 versions of region and capture group info
     //
-    if (UTF8Matcher != NULL) {
+    if (UTF8Matcher != nullptr) {
         if (flags.indexOf((UChar)0x74) >= 0) {   //  't' trace flag
             UTF8Matcher->setTrace(true);
         }
@@ -3613,20 +3613,20 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     if (regionStart>=0) {
        matcher->region(regionStart, regionEnd, status);
        REGEX_CHECK_STATUS_L(line);
-       if (UTF8Matcher != NULL) {
+       if (UTF8Matcher != nullptr) {
            UTF8Matcher->region(regionStartUTF8, regionEndUTF8, status);
            REGEX_CHECK_STATUS_L(line);
        }
     }
     if (flags.indexOf((UChar)0x61) >= 0) {   //  'a' anchoring bounds flag
         matcher->useAnchoringBounds(false);
-        if (UTF8Matcher != NULL) {
+        if (UTF8Matcher != nullptr) {
             UTF8Matcher->useAnchoringBounds(false);
         }
     }
     if (flags.indexOf((UChar)0x62) >= 0) {   //  'b' transparent bounds flag
         matcher->useTransparentBounds(true);
-        if (UTF8Matcher != NULL) {
+        if (UTF8Matcher != nullptr) {
             UTF8Matcher->useTransparentBounds(true);
         }
     }
@@ -3641,17 +3641,17 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     for (i=0; i<numFinds; i++) {
         if (useMatchesFunc) {
             isMatch = matcher->matches(status);
-            if (UTF8Matcher != NULL) {
+            if (UTF8Matcher != nullptr) {
                isUTF8Match = UTF8Matcher->matches(status);
             }
         } else  if (useLookingAtFunc) {
             isMatch = matcher->lookingAt(status);
-            if (UTF8Matcher != NULL) {
+            if (UTF8Matcher != nullptr) {
                 isUTF8Match = UTF8Matcher->lookingAt(status);
             }
         } else {
             isMatch = matcher->find();
-            if (UTF8Matcher != NULL) {
+            if (UTF8Matcher != nullptr) {
                 isUTF8Match = UTF8Matcher->find();
             }
         }
@@ -3676,7 +3676,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
         dataerrln("Error at line %d:  Match expected, but none found.", line);
         failed = true;
         goto cleanupAndReturn;
-    } else if (UTF8Matcher != NULL && isUTF8Match == false && groupStarts.size() != 0) {
+    } else if (UTF8Matcher != nullptr && isUTF8Match == false && groupStarts.size() != 0) {
         errln("Error at line %d:  Match expected, but none found. (UTF8)", line);
         failed = true;
         goto cleanupAndReturn;
@@ -3704,7 +3704,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
                 line, i, expectedStart, matcher->start(i, status));
             failed = true;
             goto cleanupAndReturn;  // Good chance of subsequent bogus errors.  Stop now.
-        } else if (UTF8Matcher != NULL && UTF8Matcher->start(i, status) != expectedStartUTF8) {
+        } else if (UTF8Matcher != nullptr && UTF8Matcher->start(i, status) != expectedStartUTF8) {
             errln("Error at line %d: incorrect start position for group %d.  Expected %d, got %d (UTF8)",
                   line, i, expectedStartUTF8, UTF8Matcher->start(i, status));
             failed = true;
@@ -3719,7 +3719,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
             failed = true;
             // Error on end position;  keep going; real error is probably yet to come as group
             //   end positions work from end of the input data towards the front.
-        } else if (UTF8Matcher != NULL && UTF8Matcher->end(i, status) != expectedEndUTF8) {
+        } else if (UTF8Matcher != nullptr && UTF8Matcher->end(i, status) != expectedEndUTF8) {
             errln("Error at line %d: incorrect end position for group %d.  Expected %d, got %d (UTF8)",
                   line, i, expectedEndUTF8, UTF8Matcher->end(i, status));
             failed = true;
@@ -3732,7 +3732,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
             line, groupStarts.size()-1, matcher->groupCount());
         failed = true;
         }
-    else if (UTF8Matcher != NULL && UTF8Matcher->groupCount()+1 < groupStarts.size()) {
+    else if (UTF8Matcher != nullptr && UTF8Matcher->groupCount()+1 < groupStarts.size()) {
         errln("Error at line %d: Expected %d capture groups, found %d. (UTF8)",
               line, groupStarts.size()-1, UTF8Matcher->groupCount());
         failed = true;
@@ -3742,7 +3742,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
         matcher->requireEnd() == true) {
         errln("Error at line %d: requireEnd() returned true.  Expected false", line);
         failed = true;
-    } else if (UTF8Matcher != NULL && (flags.indexOf((UChar)0x59) >= 0) &&   //  'Y' flag:  RequireEnd() == false
+    } else if (UTF8Matcher != nullptr && (flags.indexOf((UChar)0x59) >= 0) &&   //  'Y' flag:  RequireEnd() == false
         UTF8Matcher->requireEnd() == true) {
         errln("Error at line %d: requireEnd() returned true.  Expected false (UTF8)", line);
         failed = true;
@@ -3752,7 +3752,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
         matcher->requireEnd() == false) {
         errln("Error at line %d: requireEnd() returned false.  Expected true", line);
         failed = true;
-    } else if (UTF8Matcher != NULL && (flags.indexOf((UChar)0x79) >= 0) &&   //  'Y' flag:  RequireEnd() == false
+    } else if (UTF8Matcher != nullptr && (flags.indexOf((UChar)0x79) >= 0) &&   //  'Y' flag:  RequireEnd() == false
         UTF8Matcher->requireEnd() == false) {
         errln("Error at line %d: requireEnd() returned false.  Expected true (UTF8)", line);
         failed = true;
@@ -3762,7 +3762,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
         matcher->hitEnd() == true) {
         errln("Error at line %d: hitEnd() returned true.  Expected false", line);
         failed = true;
-    } else if (UTF8Matcher != NULL && (flags.indexOf((UChar)0x5A) >= 0) &&   //  'Z' flag:  hitEnd() == false
+    } else if (UTF8Matcher != nullptr && (flags.indexOf((UChar)0x5A) >= 0) &&   //  'Z' flag:  hitEnd() == false
                UTF8Matcher->hitEnd() == true) {
         errln("Error at line %d: hitEnd() returned true.  Expected false (UTF8)", line);
         failed = true;
@@ -3772,7 +3772,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
         matcher->hitEnd() == false) {
         errln("Error at line %d: hitEnd() returned false.  Expected true", line);
         failed = true;
-    } else if (UTF8Matcher != NULL && (flags.indexOf((UChar)0x7A) >= 0) &&   //  'z' flag:  hitEnd() == true
+    } else if (UTF8Matcher != nullptr && (flags.indexOf((UChar)0x7A) >= 0) &&   //  'z' flag:  hitEnd() == true
                UTF8Matcher->hitEnd() == false) {
         errln("Error at line %d: hitEnd() returned false.  Expected true (UTF8)", line);
         failed = true;
@@ -3919,7 +3919,7 @@ void RegexTest::PerlTests() {
     //  Open and read the test data file.
     //
     srcPath=getPath(tdd, "re_tests.txt");
-    if(srcPath==NULL) {
+    if(srcPath==nullptr) {
         return; /* something went wrong, error already output */
     }
 
@@ -4276,21 +4276,21 @@ void RegexTest::PerlTestsUTF8() {
     UParseError pe;
     LocalUConverterPointer UTF8Converter(ucnv_open("UTF-8", &status));
     UText       patternText = UTEXT_INITIALIZER;
-    char       *patternChars = NULL;
+    char       *patternChars = nullptr;
     int32_t     patternLength;
     int32_t     patternCapacity = 0;
     UText       inputText = UTEXT_INITIALIZER;
-    char       *inputChars = NULL;
+    char       *inputChars = nullptr;
     int32_t     inputLength;
     int32_t     inputCapacity = 0;
 
-    ucnv_setFromUCallBack(UTF8Converter.getAlias(), UCNV_FROM_U_CALLBACK_STOP, NULL, NULL, NULL, &status);
+    ucnv_setFromUCallBack(UTF8Converter.getAlias(), UCNV_FROM_U_CALLBACK_STOP, nullptr, nullptr, nullptr, &status);
 
     //
     //  Open and read the test data file.
     //
     srcPath=getPath(tdd, "re_tests.txt");
-    if(srcPath==NULL) {
+    if(srcPath==nullptr) {
         return; /* something went wrong, error already output */
     }
 
@@ -4721,8 +4721,8 @@ void RegexTest::Callbacks() {
         REGEX_CHECK_STATUS;
         matcher.getMatchCallback(returnedFn, returnedContext, status);
         REGEX_CHECK_STATUS;
-        REGEX_ASSERT(returnedFn == NULL);
-        REGEX_ASSERT(returnedContext == NULL);
+        REGEX_ASSERT(returnedFn == nullptr);
+        REGEX_ASSERT(returnedContext == nullptr);
     }
 
    {
@@ -4825,8 +4825,8 @@ void RegexTest::FindProgressCallbacks() {
         REGEX_CHECK_STATUS;
         matcher.getFindProgressCallback(returnedFn, returnedContext, status);
         REGEX_CHECK_STATUS;
-        REGEX_ASSERT(returnedFn == NULL);
-        REGEX_ASSERT(returnedContext == NULL);
+        REGEX_ASSERT(returnedFn == nullptr);
+        REGEX_ASSERT(returnedContext == nullptr);
     }
 
    {
@@ -4926,7 +4926,7 @@ void RegexTest::PreAllocatedUTextCAPI () {
         utext_openUChars(&text2, text2Chars, -1, &status);
 
         regextst_openUTF8FromInvariant(&patternText, "abc*d", -1, &status);
-        re = uregex_openUText(&patternText, 0, NULL, &status);
+        re = uregex_openUText(&patternText, 0, nullptr, &status);
 
         /* First set a UText */
         uregex_setUText(re, &text1, &status);
@@ -4972,7 +4972,7 @@ void RegexTest::PreAllocatedUTextCAPI () {
         //                  0         1         2         3         4
 
         status = U_ZERO_ERROR;
-        re = uregex_openC("abc(.*?)def", 0, NULL, &status);
+        re = uregex_openC("abc(.*?)def", 0, nullptr, &status);
         REGEX_CHECK_STATUS;
 
         uregex_setText(re, text1, -1, &status);
@@ -5022,13 +5022,13 @@ void RegexTest::PreAllocatedUTextCAPI () {
         u_uastrncpy(text2, "No match here.",  UPRV_LENGTHOF(text2)/2);
         regextst_openUTF8FromInvariant(&replText, "<$1>", -1, &status);
 
-        re = uregex_openC("x(.*?)x", 0, NULL, &status);
+        re = uregex_openC("x(.*?)x", 0, nullptr, &status);
         REGEX_CHECK_STATUS;
 
         /*  Normal case, with match */
         uregex_setText(re, text1, -1, &status);
         REGEX_CHECK_STATUS;
-        utext_replace(&bufferText, 0, utext_nativeLength(&bufferText), NULL, 0, &status);
+        utext_replace(&bufferText, 0, utext_nativeLength(&bufferText), nullptr, 0, &status);
         REGEX_CHECK_STATUS;
         result = uregex_replaceFirstUText(re, &replText, &bufferText, &status);
         REGEX_CHECK_STATUS;
@@ -5037,7 +5037,7 @@ void RegexTest::PreAllocatedUTextCAPI () {
 
         /* No match.  Text should copy to output with no changes.  */
         uregex_setText(re, text2, -1, &status);
-        utext_replace(&bufferText, 0, utext_nativeLength(&bufferText), NULL, 0, &status);
+        utext_replace(&bufferText, 0, utext_nativeLength(&bufferText), nullptr, 0, &status);
         result = uregex_replaceFirstUText(re, &replText, &bufferText, &status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(result == &bufferText);
@@ -5046,7 +5046,7 @@ void RegexTest::PreAllocatedUTextCAPI () {
         /* Unicode escapes */
         uregex_setText(re, text1, -1, &status);
         regextst_openUTF8FromInvariant(&replText, "\\\\\\u0041$1\\U00000042\\$\\a", -1, &status);
-        utext_replace(&bufferText, 0, utext_nativeLength(&bufferText), NULL, 0, &status);
+        utext_replace(&bufferText, 0, utext_nativeLength(&bufferText), nullptr, 0, &status);
         result = uregex_replaceFirstUText(re, &replText, &bufferText, &status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(result == &bufferText);
@@ -5071,12 +5071,12 @@ void RegexTest::PreAllocatedUTextCAPI () {
         u_uastrncpy(text2, "No match here.",  sizeof(text2)/2);
         regextst_openUTF8FromInvariant(&replText, "<$1>", -1, &status);
 
-        re = uregex_openC("x(.*?)x", 0, NULL, &status);
+        re = uregex_openC("x(.*?)x", 0, nullptr, &status);
         REGEX_CHECK_STATUS;
 
         /*  Normal case, with match */
         uregex_setText(re, text1, -1, &status);
-        utext_replace(&bufferText, 0, utext_nativeLength(&bufferText), NULL, 0, &status);
+        utext_replace(&bufferText, 0, utext_nativeLength(&bufferText), nullptr, 0, &status);
         result = uregex_replaceAllUText(re, &replText, &bufferText, &status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(result == &bufferText);
@@ -5084,7 +5084,7 @@ void RegexTest::PreAllocatedUTextCAPI () {
 
         /* No match.  Text should copy to output with no changes.  */
         uregex_setText(re, text2, -1, &status);
-        utext_replace(&bufferText, 0, utext_nativeLength(&bufferText), NULL, 0, &status);
+        utext_replace(&bufferText, 0, utext_nativeLength(&bufferText), nullptr, 0, &status);
         result = uregex_replaceAllUText(re, &replText, &bufferText, &status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT(result == &bufferText);
@@ -5136,7 +5136,7 @@ void RegexTest::NamedCapture() {
     // After copying a pattern, named capture should still work in the copy.
     RegexPattern *copiedPat = new RegexPattern(*pat);
     REGEX_ASSERT(*copiedPat == *pat);
-    delete pat; pat = NULL;  // Delete original, copy should have no references back to it.
+    delete pat; pat = nullptr;  // Delete original, copy should have no references back to it.
 
     group = copiedPat->groupNumberFromName("five", -1, status);
     REGEX_CHECK_STATUS;
@@ -5234,7 +5234,7 @@ void RegexTest::NamedCapture() {
     //  TODO: factor out the test data.
 
     status = U_ZERO_ERROR;
-    URegularExpression *re = uregex_openC("..(?<one>m)(.)(.)", 0, NULL, &status);
+    URegularExpression *re = uregex_openC("..(?<one>m)(.)(.)", 0, nullptr, &status);
     REGEX_CHECK_STATUS;
     text = UnicodeString("abcmxyz");
     uregex_setText(re, text.getBuffer(), text.length(), &status);
@@ -5385,8 +5385,8 @@ void RegexTest::Bug7651() {
     //  It will cause a segfault if RegexMatcher tries to use fSmallData instead of malloc'ing the memory needed (see init2) for the pattern operator stack allocation.
     UnicodeString pattern2("((https?\\:\\/\\/|www\\.)\\S+(?<![\\!\\),\\.:;\\]\\u0080-\\uFFFF])|(?<![A-Za-z0-9_])[\\@\\uff20][A-Za-z0-9_]+(?:\\/[\\w\\-]+)?|(?<![A-Za-z0-9])[\\#\\uff03][A-Za-z0-9_][A-Za-z0-9_\\u00c0-\\u00d6\\u00c8-\\u00f6\\u00f8-\\u00ff]*|\\$[A-Za-z]+)");
     UnicodeString s("#ff @abcd This is test");
-    RegexPattern  *REPattern = NULL;
-    RegexMatcher  *REMatcher = NULL;
+    RegexPattern  *REPattern = nullptr;
+    RegexMatcher  *REMatcher = nullptr;
     UErrorCode status = U_ZERO_ERROR;
     UParseError pe;
 
@@ -5505,12 +5505,12 @@ void RegexTest::Bug10459() {
     UnicodeString patternString("(txt)");
     UnicodeString txtString("txt");
 
-    UText *utext_pat = utext_openUnicodeString(NULL, &patternString, &status);
+    UText *utext_pat = utext_openUnicodeString(nullptr, &patternString, &status);
     REGEX_CHECK_STATUS;
-    UText *utext_txt = utext_openUnicodeString(NULL, &txtString, &status);
+    UText *utext_txt = utext_openUnicodeString(nullptr, &txtString, &status);
     REGEX_CHECK_STATUS;
 
-    URegularExpression *icu_re = uregex_openUText(utext_pat, 0, NULL, &status);
+    URegularExpression *icu_re = uregex_openUText(utext_pat, 0, nullptr, &status);
     REGEX_CHECK_STATUS;
 
     uregex_setUText(icu_re, utext_txt, &status);
@@ -5588,7 +5588,7 @@ void RegexTest::TestCase11049(const char *pattern, const char *data, UBool expec
     UnicodeString dataString = UnicodeString(data).unescape();
     UChar *exactBuffer = new UChar[dataString.length()];
     dataString.extract(exactBuffer, dataString.length(), status);
-    UText *ut = utext_openUChars(NULL, exactBuffer, dataString.length(), &status);
+    UText *ut = utext_openUChars(nullptr, exactBuffer, dataString.length(), &status);
 
     LocalPointer<RegexMatcher> matcher(compiledPat->matcher(status));
     REGEX_CHECK_STATUS;
@@ -5604,7 +5604,7 @@ void RegexTest::TestCase11049(const char *pattern, const char *data, UBool expec
     //   Size of the original char * data (invariant charset) will be <= than the equivalent UTF-8
     //   because string.unescape() will only shrink it.
     char * utf8Buffer = new char[uprv_strlen(data)+1];
-    u_strToUTF8(utf8Buffer, static_cast<int32_t>(uprv_strlen(data)+1), NULL, dataString.getBuffer(), dataString.length(), &status);
+    u_strToUTF8(utf8Buffer, static_cast<int32_t>(uprv_strlen(data)+1), nullptr, dataString.getBuffer(), dataString.length(), &status);
     REGEX_CHECK_STATUS;
     ut = utext_openUTF8(ut, utf8Buffer, -1, &status);
     REGEX_CHECK_STATUS;
@@ -5671,7 +5671,7 @@ void RegexTest::TestBug11480() {
     //         indistinguishable from a group with a zero length match.)
 
     UErrorCode status = U_ZERO_ERROR;
-    URegularExpression *re = uregex_openC("(A)|(B)", 0, NULL, &status);
+    URegularExpression *re = uregex_openC("(A)|(B)", 0, nullptr, &status);
     REGEX_CHECK_STATUS;
     UnicodeString text = UNICODE_STRING_SIMPLE("A");
     uregex_setText(re, text.getBuffer(), text.length(), &status);
@@ -5734,7 +5734,7 @@ void RegexTest::TestBug12884() {
                           "carácter, sin importar la plataforma, sin importar el programa,"
                           "sin importar el idioma.");
     status = U_ZERO_ERROR;
-    LocalUTextPointer ut(utext_openUTF8(NULL, text8.data(), text8.length(), &status));
+    LocalUTextPointer ut(utext_openUTF8(nullptr, text8.data(), text8.length(), &status));
     REGEX_CHECK_STATUS;
     m.reset(ut.getAlias());
     m.find(status);

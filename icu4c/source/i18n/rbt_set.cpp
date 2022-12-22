@@ -296,7 +296,7 @@ void TransliterationRuleSet::freeze(UParseError& parseError,UErrorCode& status) 
      * Be careful not to call malloc(0).
      */
     int16_t* indexValue = (int16_t*) uprv_malloc( sizeof(int16_t) * (n > 0 ? n : 1) );
-    /* test for NULL */
+    /* test for nullptr */
     if (indexValue == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -336,11 +336,11 @@ void TransliterationRuleSet::freeze(UParseError& parseError,UErrorCode& status) 
 
     /* You can't do malloc(0)! */
     if (v.size() == 0) {
-        rules = NULL;
+        rules = nullptr;
         return;
     }
     rules = (TransliterationRule **)uprv_malloc(v.size() * sizeof(TransliterationRule *));
-    /* test for NULL */
+    /* test for nullptr */
     if (rules == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -417,7 +417,7 @@ UBool TransliterationRuleSet::transliterate(Replaceable& text,
     }
     // No match or partial match from any rule
     pos.start += U16_LENGTH(text.char32At(pos.start));
-    _debugOut("no match", NULL, text, pos);
+    _debugOut("no match", nullptr, text, pos);
     return true;
 }
 

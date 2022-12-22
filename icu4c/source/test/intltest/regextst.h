@@ -24,7 +24,7 @@ public:
     RegexTest();
     virtual ~RegexTest();
 
-    virtual void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    virtual void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 
     // The following are test functions that are visible from the intltest test framework.
     virtual void API_Match();

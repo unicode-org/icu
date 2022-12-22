@@ -39,7 +39,7 @@ UnicodeTest::UnicodeTest()
     unknownPropertyNames=new U_NAMESPACE_QUALIFIER Hashtable(errorCode);
     if(U_FAILURE(errorCode)) {
         delete unknownPropertyNames;
-        unknownPropertyNames=NULL;
+        unknownPropertyNames=nullptr;
     }
     // Ignore some property names altogether.
     for(int32_t i=0; i<UPRV_LENGTHOF(ignorePropNames); ++i) {
@@ -93,7 +93,7 @@ getTokenIndex(const char *const tokens[], int32_t countTokens, const char *s) {
     s=u_skipWhitespace(s);
     for(i=0; i<countTokens; ++i) {
         t=tokens[i];
-        if(t!=NULL) {
+        if(t!=nullptr) {
             for(j=0;; ++j) {
                 if(t[j]!=0) {
                     if(s[j]!=t[j]) {
@@ -187,7 +187,7 @@ derivedPropsLineFn(void *context,
     if(i<0) {
         UnicodeString propName(fields[1][0], (int32_t)(fields[1][1]-fields[1][0]));
         propName.trim();
-        if(me->unknownPropertyNames->find(propName)==NULL) {
+        if(me->unknownPropertyNames->find(propName)==nullptr) {
             UErrorCode errorCode=U_ZERO_ERROR;
             me->unknownPropertyNames->puti(propName, 1, errorCode);
             me->errln("UnicodeTest warning: unknown property name '%s' in DerivedCoreProperties.txt or DerivedNormalizationProps.txt\n", fields[1][0]);
@@ -212,7 +212,7 @@ void UnicodeTest::TestAdditionalProperties() {
     }
 
     char path[500];
-    if(getUnidataPath(path) == NULL) {
+    if(getUnidataPath(path) == nullptr) {
         errln("unable to find path to source/data/unidata/");
         return;
     }

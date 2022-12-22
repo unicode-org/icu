@@ -47,8 +47,8 @@ U_NAMESPACE_END
 class UTrie2PerfTest : public UPerfTest {
 public:
     UTrie2PerfTest(int32_t argc, const char *argv[], UErrorCode &status)
-            : UPerfTest(argc, argv, NULL, 0, "", status),
-              utf8(NULL), utf8Length(0), countInputCodePoints(0) {
+            : UPerfTest(argc, argv, nullptr, 0, "", status),
+              utf8(nullptr), utf8Length(0), countInputCodePoints(0) {
         if (U_SUCCESS(status)) {
 #if 0       // See comment at unorm_initUTrie2() forward declaration.
             unorm_initUTrie2(&status);
@@ -60,12 +60,12 @@ public:
                 countInputCodePoints = u_countChar32(buffer, bufferLen);
 
                 // Preflight the UTF-8 length and allocate utf8.
-                u_strToUTF8(NULL, 0, &utf8Length, buffer, bufferLen, &status);
+                u_strToUTF8(nullptr, 0, &utf8Length, buffer, bufferLen, &status);
                 if(status==U_BUFFER_OVERFLOW_ERROR) {
                     utf8=(char *)malloc(utf8Length);
-                    if(utf8!=NULL) {
+                    if(utf8!=nullptr) {
                         status=U_ZERO_ERROR;
-                        u_strToUTF8(utf8, utf8Length, NULL, buffer, bufferLen, &status);
+                        u_strToUTF8(utf8, utf8Length, nullptr, buffer, bufferLen, &status);
                     } else {
                         status=U_MEMORY_ALLOCATION_ERROR;
                     }
@@ -81,7 +81,7 @@ public:
         }
     }
 
-    virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = NULL);
+    virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = nullptr);
 
     const UChar *getBuffer() const { return buffer; }
     int32_t getBufferLen() const { return bufferLen; }
@@ -163,7 +163,7 @@ public:
         return new CheckFCDUTF8(testcase);
     }
     virtual void call(UErrorCode* pErrorCode) {
-        UBool isFCD=unorm_checkFCDUTF8((const uint8_t *)testcase.utf8, testcase.utf8Length, NULL);
+        UBool isFCD=unorm_checkFCDUTF8((const uint8_t *)testcase.utf8, testcase.utf8Length, nullptr);
         if(isFCD>1) {
             fprintf(stderr, "error: bogus result from unorm_checkFCDUTF8()\n");
         }
@@ -178,7 +178,7 @@ protected:
         UErrorCode errorCode=U_ZERO_ERROR;
         destCapacity=unorm_normalize(testcase.getBuffer(), testcase.getBufferLen(),
                                      UNORM_NFC, 0,
-                                     NULL, 0,
+                                     nullptr, 0,
                                      &errorCode);
         dest=new UChar[destCapacity];
     }
@@ -240,7 +240,7 @@ UPerfFunction* UTrie2PerfTest::runIndexedTest(int32_t index, UBool exec, const c
 #endif
         default: name = ""; break;
     }
-    return NULL;
+    return nullptr;
 }
 
 int main(int argc, const char *argv[]) {

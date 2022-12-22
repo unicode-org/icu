@@ -36,28 +36,28 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(EscapeTransliterator)
  */
 static Transliterator* _createEscUnicode(const UnicodeString& ID, Transliterator::Token /*context*/) {
     // Unicode: "U+10FFFF" hex, min=4, max=6
-    return new EscapeTransliterator(ID, UnicodeString(true, UNIPRE, 2), UnicodeString(), 16, 4, true, NULL);
+    return new EscapeTransliterator(ID, UnicodeString(true, UNIPRE, 2), UnicodeString(), 16, 4, true, nullptr);
 }
 static Transliterator* _createEscJava(const UnicodeString& ID, Transliterator::Token /*context*/) {
     // Java: "\\uFFFF" hex, min=4, max=4
-    return new EscapeTransliterator(ID, UnicodeString(true, BS_u, 2), UnicodeString(), 16, 4, false, NULL);
+    return new EscapeTransliterator(ID, UnicodeString(true, BS_u, 2), UnicodeString(), 16, 4, false, nullptr);
 }
 static Transliterator* _createEscC(const UnicodeString& ID, Transliterator::Token /*context*/) {
     // C: "\\uFFFF" hex, min=4, max=4; \\U0010FFFF hex, min=8, max=8
     return new EscapeTransliterator(ID, UnicodeString(true, BS_u, 2), UnicodeString(), 16, 4, true,
-             new EscapeTransliterator(UnicodeString(), UnicodeString(true, BS_U, 2), UnicodeString(), 16, 8, true, NULL));
+             new EscapeTransliterator(UnicodeString(), UnicodeString(true, BS_U, 2), UnicodeString(), 16, 8, true, nullptr));
 }
 static Transliterator* _createEscXML(const UnicodeString& ID, Transliterator::Token /*context*/) {
     // XML: "&#x10FFFF;" hex, min=1, max=6
-    return new EscapeTransliterator(ID, UnicodeString(true, XMLPRE, 3), UnicodeString(SEMI[0]), 16, 1, true, NULL);
+    return new EscapeTransliterator(ID, UnicodeString(true, XMLPRE, 3), UnicodeString(SEMI[0]), 16, 1, true, nullptr);
 }
 static Transliterator* _createEscXML10(const UnicodeString& ID, Transliterator::Token /*context*/) {
     // XML10: "&1114111;" dec, min=1, max=7 (not really "Any-Hex")
-    return new EscapeTransliterator(ID, UnicodeString(true, XML10PRE, 2), UnicodeString(SEMI[0]), 10, 1, true, NULL);
+    return new EscapeTransliterator(ID, UnicodeString(true, XML10PRE, 2), UnicodeString(SEMI[0]), 10, 1, true, nullptr);
 }
 static Transliterator* _createEscPerl(const UnicodeString& ID, Transliterator::Token /*context*/) {
     // Perl: "\\x{263A}" hex, min=1, max=6
-    return new EscapeTransliterator(ID, UnicodeString(true, PERLPRE, 3), UnicodeString(RBRACE[0]), 16, 1, true, NULL);
+    return new EscapeTransliterator(ID, UnicodeString(true, PERLPRE, 3), UnicodeString(RBRACE[0]), 16, 1, true, nullptr);
 }
 
 /**
@@ -91,7 +91,7 @@ EscapeTransliterator::EscapeTransliterator(const UnicodeString& newID,
                          int32_t _radix, int32_t _minDigits,
                          UBool _grokSupplementals,
                          EscapeTransliterator* adoptedSupplementalHandler) :
-    Transliterator(newID, NULL)
+    Transliterator(newID, nullptr)
 {
     this->prefix = _prefix;
     this->suffix = _suffix;
@@ -112,7 +112,7 @@ EscapeTransliterator::EscapeTransliterator(const EscapeTransliterator& o) :
     minDigits(o.minDigits),
     grokSupplementals(o.grokSupplementals) {
     supplementalHandler = (o.supplementalHandler != 0) ?
-        new EscapeTransliterator(*o.supplementalHandler) : NULL;
+        new EscapeTransliterator(*o.supplementalHandler) : nullptr;
 }
 
 EscapeTransliterator::~EscapeTransliterator() {
@@ -145,7 +145,7 @@ void EscapeTransliterator::handleTransliterate(Replaceable& text,
         int32_t c = grokSupplementals ? text.char32At(start) : text.charAt(start);
         int32_t charLen = grokSupplementals ? U16_LENGTH(c) : 1;
 
-        if ((c & 0xFFFF0000) != 0 && supplementalHandler != NULL) {
+        if ((c & 0xFFFF0000) != 0 && supplementalHandler != nullptr) {
             buf.truncate(0);
             buf.append(supplementalHandler->prefix);
             ICU_Utility::appendNumber(buf, c, supplementalHandler->radix,

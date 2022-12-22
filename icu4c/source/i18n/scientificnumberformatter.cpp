@@ -101,22 +101,22 @@ ScientificNumberFormatter *ScientificNumberFormatter::createInstance(
     LocalPointer<DecimalFormat> fmt(fmtToAdopt);
     LocalPointer<Style> style(styleToAdopt);
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
     ScientificNumberFormatter *result =
             new ScientificNumberFormatter(
                     fmt.getAlias(),
                     style.getAlias(),
                     status);
-    if (result == NULL) {
+    if (result == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+        return nullptr;
     }
     fmt.orphan();
     style.orphan();
     if (U_FAILURE(status)) {
         delete result;
-        return NULL;
+        return nullptr;
     }
     return result;
 }
@@ -246,12 +246,12 @@ ScientificNumberFormatter::ScientificNumberFormatter(
     if (U_FAILURE(status)) {
         return;
     }
-    if (fDecimalFormat == NULL || fStyle == NULL) {
+    if (fDecimalFormat == nullptr || fStyle == nullptr) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
     const DecimalFormatSymbols *sym = fDecimalFormat->getDecimalFormatSymbols();
-    if (sym == NULL) {
+    if (sym == nullptr) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -262,8 +262,8 @@ ScientificNumberFormatter::ScientificNumberFormatter(
         const ScientificNumberFormatter &other)
         : UObject(other),
           fPreExponent(other.fPreExponent),
-          fDecimalFormat(NULL),
-          fStyle(NULL) {
+          fDecimalFormat(nullptr),
+          fStyle(nullptr) {
     fDecimalFormat = static_cast<DecimalFormat *>(
             other.fDecimalFormat->clone());
     fStyle = other.fStyle->clone();

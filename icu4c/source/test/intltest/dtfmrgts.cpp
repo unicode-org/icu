@@ -85,7 +85,7 @@ void DateFormatRegressionTest::Test4029195(void)
         return;
     }
     UnicodeString pat;
-    if(sdf == NULL){
+    if(sdf == nullptr){
         dataerrln("Error calling DateFormat::createDateTimeInstance");
         return;
     }
@@ -134,7 +134,7 @@ void DateFormatRegressionTest::Test4052408(void)
 
     DateFormat *fmt = DateFormat::createDateTimeInstance(DateFormat::SHORT,
                                                 DateFormat::SHORT, Locale::getUS());
-    if (fmt == NULL) {
+    if (fmt == nullptr) {
         dataerrln("Error calling DateFormat::createDateTimeInstance");
         return;
     }
@@ -440,13 +440,13 @@ void DateFormatRegressionTest::Test4065240(void)
         TimeZone::adoptDefault(TimeZone::createTimeZone("EST"));
         curDate = date(98, 0, 1);
         shortdate = DateFormat::createDateInstance(DateFormat::SHORT);
-        if (shortdate == NULL){
+        if (shortdate == nullptr){
             dataerrln("Error calling DateFormat::createDateInstance");
             return;
         }
 
         fulldate = DateFormat::createDateTimeInstance(DateFormat::LONG, DateFormat::LONG);
-        if (fulldate == NULL){
+        if (fulldate == nullptr){
             dataerrln("Error calling DateFormat::createDateTimeInstance");
             return;
         }
@@ -466,7 +466,7 @@ void DateFormatRegressionTest::Test4065240(void)
 
         // Check to see if the resource is present; if not, we can't test
         ResourceBundle *bundle = new ResourceBundle(
-            NULL, *curLocale, status);
+            nullptr, *curLocale, status);
         failure(status, "new ResourceBundle");
             //(UnicodeString) "java.text.resources.DateFormatZoneData", curLocale);
 
@@ -510,7 +510,7 @@ void DateFormatRegressionTest::Test4071441(void)
     DateFormat *fmtA = DateFormat::createInstance();
     DateFormat *fmtB = DateFormat::createInstance();
 
-    if (fmtA == NULL || fmtB == NULL){
+    if (fmtA == nullptr || fmtB == nullptr){
         dataerrln("Error calling DateFormat::createInstance");
         delete fmtA;
         delete fmtB;
@@ -1223,7 +1223,7 @@ void DateFormatRegressionTest::Test714(void)
     DateFormat *fmt = DateFormat::createDateTimeInstance(DateFormat::NONE,
                                                          DateFormat::MEDIUM,
                                                          Locale::getUS());
-    if (fmt == NULL) {
+    if (fmt == nullptr) {
         dataerrln("Error calling DateFormat::createDateTimeInstance");
         return;
     }
@@ -1274,7 +1274,7 @@ public:
     wom(xwom),
     dow(xdow),
     data(xdata,""),
-    normalized((xnormalized==NULL)?xdata:xnormalized,"")
+    normalized((xnormalized==nullptr)?xdata:xnormalized,"")
   { }
 };
 
@@ -1288,21 +1288,21 @@ void DateFormatRegressionTest::Test1684(void)
   // 22 23 24 25 26 27 28  19 20 21 22 23 24 25  20 21 22 23 24 25 26
   // 29 30 31              26 27 28 29 30 31     27 28 29 30 31      
   Test1684Data *tests[] = {
-    new Test1684Data(2001, 8,  6,  2001,8,2,UCAL_MONDAY,    "2001 08 02 Mon", NULL),
-    new Test1684Data(2001, 8,  7,  2001,8,2,UCAL_TUESDAY,   "2001 08 02 Tue", NULL),
-    new Test1684Data(2001, 8,  5,/*12,*/ 2001,8,2,UCAL_SUNDAY,    "2001 08 02 Sun", NULL),
+    new Test1684Data(2001, 8,  6,  2001,8,2,UCAL_MONDAY,    "2001 08 02 Mon", nullptr),
+    new Test1684Data(2001, 8,  7,  2001,8,2,UCAL_TUESDAY,   "2001 08 02 Tue", nullptr),
+    new Test1684Data(2001, 8,  5,/*12,*/ 2001,8,2,UCAL_SUNDAY,    "2001 08 02 Sun", nullptr),
     new Test1684Data(2001, 8,6, /*7,  30,*/ 2001,7,6,UCAL_MONDAY,    "2001 07 06 Mon", "2001 08 02 Mon"),
     new Test1684Data(2001, 8,7, /*7,  31,*/ 2001,7,6,UCAL_TUESDAY,   "2001 07 06 Tue", "2001 08 02 Tue"),
     new Test1684Data(2001, 8,  5,  2001,7,6,UCAL_SUNDAY,    "2001 07 06 Sun", "2001 08 02 Sun"),
     new Test1684Data(2001, 7,  30, 2001,8,1,UCAL_MONDAY,    "2001 08 01 Mon", "2001 07 05 Mon"),
     new Test1684Data(2001, 7,  31, 2001,8,1,UCAL_TUESDAY,   "2001 08 01 Tue", "2001 07 05 Tue"),
     new Test1684Data(2001, 7,29, /*8,  5,*/  2001,8,1,UCAL_SUNDAY,    "2001 08 01 Sun", "2001 07 05 Sun"),
-    new Test1684Data(2001, 12, 31, 2001,12,6,UCAL_MONDAY,   "2001 12 06 Mon", NULL),
-    new Test1684Data(2002, 1,  1,  2002,1,1,UCAL_TUESDAY,   "2002 01 01 Tue", NULL),
-    new Test1684Data(2002, 1,  2,  2002,1,1,UCAL_WEDNESDAY, "2002 01 01 Wed", NULL),
-    new Test1684Data(2002, 1,  3,  2002,1,1,UCAL_THURSDAY,  "2002 01 01 Thu", NULL),
-    new Test1684Data(2002, 1,  4,  2002,1,1,UCAL_FRIDAY,    "2002 01 01 Fri", NULL),
-    new Test1684Data(2002, 1,  5,  2002,1,1,UCAL_SATURDAY,  "2002 01 01 Sat", NULL),
+    new Test1684Data(2001, 12, 31, 2001,12,6,UCAL_MONDAY,   "2001 12 06 Mon", nullptr),
+    new Test1684Data(2002, 1,  1,  2002,1,1,UCAL_TUESDAY,   "2002 01 01 Tue", nullptr),
+    new Test1684Data(2002, 1,  2,  2002,1,1,UCAL_WEDNESDAY, "2002 01 01 Wed", nullptr),
+    new Test1684Data(2002, 1,  3,  2002,1,1,UCAL_THURSDAY,  "2002 01 01 Thu", nullptr),
+    new Test1684Data(2002, 1,  4,  2002,1,1,UCAL_FRIDAY,    "2002 01 01 Fri", nullptr),
+    new Test1684Data(2002, 1,  5,  2002,1,1,UCAL_SATURDAY,  "2002 01 01 Sat", nullptr),
     new Test1684Data(2001,12,30, /*2002, 1,  6,*/  2002,1,1,UCAL_SUNDAY,    "2002 01 01 Sun", "2001 12 06 Sun")
   };
 
@@ -1493,7 +1493,7 @@ void DateFormatRegressionTest::TestParsing(void) {
     }
 
     Calendar *cal = new GregorianCalendar(status);
-    if (cal == NULL || U_FAILURE(status)) {
+    if (cal == nullptr || U_FAILURE(status)) {
         errln("Unable to create calendar - %s", u_errorName(status));
         return;
     }
@@ -1641,7 +1641,7 @@ void DateFormatRegressionTest::TestT10619(void) {
         { "en",     true,       UnicodeString("6 Jan 08 2008"), UnicodeString("eee MMM dd yyyy"),   UnicodeString("Sat Jan 08 2008") },
         { "en",     false,      UnicodeString("6 Jan 09 2008"), UnicodeString("eee MMM dd yyyy"),   UnicodeString("") },
         // terminator
-        { NULL,     true,       UnicodeString(""),              UnicodeString(""),                  UnicodeString("") }                
+        { nullptr,     true,       UnicodeString(""),              UnicodeString(""),                  UnicodeString("") }                
     };
     UErrorCode status = U_ZERO_ERROR;
     Calendar* cal = Calendar::createInstance(status);
@@ -1650,7 +1650,7 @@ void DateFormatRegressionTest::TestT10619(void) {
     } else {
         cal->setTime(july022008, status);
         const TestDateFormatLeniencyItem * itemPtr;
-        for (itemPtr = items; itemPtr->locale != NULL; itemPtr++ ) {
+        for (itemPtr = items; itemPtr->locale != nullptr; itemPtr++ ) {
                                             
             Locale locale = Locale::createFromName(itemPtr->locale);
             status = U_ZERO_ERROR;

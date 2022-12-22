@@ -495,8 +495,8 @@ UnicodeStringTest::TestExtract()
     // convert test4 back to Unicode for comparison
     UnicodeString test4b(test4, 12);
 
-    if (test1.extract(11, 12, (char *)NULL) != 12) {
-        errln("UnicodeString.extract(NULL) failed to return the correct size of destination buffer.");
+    if (test1.extract(11, 12, (char *)nullptr) != 12) {
+        errln("UnicodeString.extract(nullptr) failed to return the correct size of destination buffer.");
     }
     if (test1.extract(11, -1, test6) != 0) {
         errln("UnicodeString.extract(-1) failed to stop reading the string.");
@@ -522,8 +522,8 @@ UnicodeStringTest::TestExtract()
     }
 
     // test preflighting and overflows with invariant conversion
-    if (test1.extract(0, 10, (char *)NULL, "") != 10) {
-        errln("UnicodeString.extract(0, 10, (char *)NULL, \"\") != 10");
+    if (test1.extract(0, 10, (char *)nullptr, "") != 10) {
+        errln("UnicodeString.extract(0, 10, (char *)nullptr, \"\") != 10");
     }
 
     test4[2] = (char)0xff;
@@ -545,9 +545,9 @@ UnicodeStringTest::TestExtract()
         int32_t length;
 
         errorCode=U_ZERO_ERROR;
-        length=s.extract((UChar *)NULL, 0, errorCode);
+        length=s.extract((UChar *)nullptr, 0, errorCode);
         if(errorCode!=U_BUFFER_OVERFLOW_ERROR || length!=s.length()) {
-            errln("UnicodeString.extract(NULL, 0)==%d (%s) expected %d (U_BUFFER_OVERFLOW_ERROR)", length, s.length(), u_errorName(errorCode));
+            errln("UnicodeString.extract(nullptr, 0)==%d (%s) expected %d (U_BUFFER_OVERFLOW_ERROR)", length, s.length(), u_errorName(errorCode));
         }
 
         errorCode=U_ZERO_ERROR;
@@ -594,10 +594,10 @@ UnicodeStringTest::TestExtract()
 
         if(U_SUCCESS(errorCode)) {
             // test preflighting
-            if( (length=s.extract(NULL, 0, cnv, errorCode))!=13 ||
+            if( (length=s.extract(nullptr, 0, cnv, errorCode))!=13 ||
                 errorCode!=U_BUFFER_OVERFLOW_ERROR
             ) {
-                errln("UnicodeString::extract(NULL, UConverter) preflighting failed (length=%ld, %s)",
+                errln("UnicodeString::extract(nullptr, UConverter) preflighting failed (length=%ld, %s)",
                       length, u_errorName(errorCode));
             }
             errorCode=U_ZERO_ERROR;
@@ -610,11 +610,11 @@ UnicodeStringTest::TestExtract()
 
             // try error cases
             errorCode=U_ZERO_ERROR;
-            if( s.extract(NULL, 2, cnv, errorCode)==13 || U_SUCCESS(errorCode)) {
+            if( s.extract(nullptr, 2, cnv, errorCode)==13 || U_SUCCESS(errorCode)) {
                 errln("UnicodeString::extract(UConverter) succeeded with an illegal destination");
             }
             errorCode=U_ILLEGAL_ARGUMENT_ERROR;
-            if( s.extract(NULL, 0, cnv, errorCode)==13 || U_SUCCESS(errorCode)) {
+            if( s.extract(nullptr, 0, cnv, errorCode)==13 || U_SUCCESS(errorCode)) {
                 errln("UnicodeString::extract(UConverter) succeeded with a previous error code");
             }
             errorCode=U_ZERO_ERROR;
@@ -1403,7 +1403,7 @@ UnicodeStringTest::TestCountChar32(void) {
         }
 
         // test u_countChar32() with bad input
-        if(u_countChar32(NULL, 5)!=0 || u_countChar32(buffer, -2)!=0) {
+        if(u_countChar32(nullptr, 5)!=0 || u_countChar32(buffer, -2)!=0) {
             errln("u_countChar32(bad input) failed (returned non-zero counts)");
         }
     }
@@ -1457,7 +1457,7 @@ UnicodeStringTest::TestBogus() {
         errln("A string returned true for isBogus()!");
     }
 
-    // NULL pointers are treated like empty strings
+    // nullptr pointers are treated like empty strings
     // use other illegal arguments to make a bogus string
     test3.setTo(false, test1.getBuffer(), -2);
     if(!test3.isBogus()) {
@@ -1620,7 +1620,7 @@ UnicodeStringTest::TestBogus() {
         errln("normal=bogus failed to make the left string bogus");
     }
 
-    // test that NULL primitive input string values are treated like
+    // test that nullptr primitive input string values are treated like
     // empty strings, not errors (bogus)
     test2.setTo((UChar32)0x10005);
     if(test2.insert(1, nullptr, 1).length()!=2) {
@@ -1629,19 +1629,19 @@ UnicodeStringTest::TestBogus() {
 
     UErrorCode errorCode=U_ZERO_ERROR;
     UnicodeString
-        test4((const UChar *)NULL),
-        test5(true, (const UChar *)NULL, 1),
-        test6((UChar *)NULL, 5, 5),
-        test7((const char *)NULL, 3, NULL, errorCode);
+        test4((const UChar *)nullptr),
+        test5(true, (const UChar *)nullptr, 1),
+        test6((UChar *)nullptr, 5, 5),
+        test7((const char *)nullptr, 3, nullptr, errorCode);
     if(test4.isBogus() || test5.isBogus() || test6.isBogus() || test7.isBogus()) {
-        errln("a constructor set to bogus for a NULL input string, should be empty");
+        errln("a constructor set to bogus for a nullptr input string, should be empty");
     }
 
-    test4.setTo(NULL, 3);
-    test5.setTo(true, (const UChar *)NULL, 1);
-    test6.setTo((UChar *)NULL, 5, 5);
+    test4.setTo(nullptr, 3);
+    test5.setTo(true, (const UChar *)nullptr, 1);
+    test6.setTo((UChar *)nullptr, 5, 5);
     if(test4.isBogus() || test5.isBogus() || test6.isBogus()) {
-        errln("a setTo() set to bogus for a NULL input string, should be empty");
+        errln("a setTo() set to bogus for a nullptr input string, should be empty");
     }
 
     // test that bogus==bogus<any
@@ -1692,7 +1692,7 @@ public:
             return &unistr;
         }
 
-        return NULL;
+        return nullptr;
     }
 
     virtual void reset(UErrorCode& /*status*/) override {
@@ -1729,13 +1729,13 @@ UnicodeStringTest::TestStringEnumeration() {
         status=U_ZERO_ERROR;
         pc=ten.next(&length, status);
         s=UnicodeString(testEnumStrings[i], "");
-        if(U_FAILURE(status) || pc==NULL || length!=s.length() || UnicodeString(pc, length, "")!=s) {
+        if(U_FAILURE(status) || pc==nullptr || length!=s.length() || UnicodeString(pc, length, "")!=s) {
             errln("StringEnumeration.next(%d) failed", i);
         }
     }
     status=U_ZERO_ERROR;
-    if(ten.next(&length, status)!=NULL) {
-        errln("StringEnumeration.next(done)!=NULL");
+    if(ten.next(&length, status)!=nullptr) {
+        errln("StringEnumeration.next(done)!=nullptr");
     }
 
     // test the unext() default implementation
@@ -1744,18 +1744,18 @@ UnicodeStringTest::TestStringEnumeration() {
         status=U_ZERO_ERROR;
         pu=ten.unext(&length, status);
         s=UnicodeString(testEnumStrings[i], "");
-        if(U_FAILURE(status) || pu==NULL || length!=s.length() || UnicodeString(true, pu, length)!=s) {
+        if(U_FAILURE(status) || pu==nullptr || length!=s.length() || UnicodeString(true, pu, length)!=s) {
             errln("StringEnumeration.unext(%d) failed", i);
         }
     }
     status=U_ZERO_ERROR;
-    if(ten.unext(&length, status)!=NULL) {
-        errln("StringEnumeration.unext(done)!=NULL");
+    if(ten.unext(&length, status)!=nullptr) {
+        errln("StringEnumeration.unext(done)!=nullptr");
     }
 
-    // test that the default clone() implementation works, and returns NULL
-    if(ten.clone()!=NULL) {
-        errln("StringEnumeration.clone()!=NULL");
+    // test that the default clone() implementation works, and returns nullptr
+    if(ten.clone()!=nullptr) {
+        errln("StringEnumeration.clone()!=nullptr");
     }
 
     // test that uenum_openFromStringEnumeration() works
@@ -1763,7 +1763,7 @@ UnicodeStringTest::TestStringEnumeration() {
     StringEnumeration *newTen = new TestEnumeration;
     status=U_ZERO_ERROR;
     UEnumeration *uten = uenum_openFromStringEnumeration(newTen, &status);
-    if (uten==NULL || U_FAILURE(status)) {
+    if (uten==nullptr || U_FAILURE(status)) {
         errln("fail at file %s, line %d, UErrorCode is %s\n", __FILE__, __LINE__, u_errorName(status));
         return;
     }
@@ -1772,13 +1772,13 @@ UnicodeStringTest::TestStringEnumeration() {
     for(i=0; i<UPRV_LENGTHOF(testEnumStrings); ++i) {
         status=U_ZERO_ERROR;
         pc=uenum_next(uten, &length, &status);
-        if(U_FAILURE(status) || pc==NULL || strcmp(pc, testEnumStrings[i]) != 0) {
+        if(U_FAILURE(status) || pc==nullptr || strcmp(pc, testEnumStrings[i]) != 0) {
             errln("File %s, line %d, StringEnumeration.next(%d) failed", __FILE__, __LINE__, i);
         }
     }
     status=U_ZERO_ERROR;
-    if(uenum_next(uten, &length, &status)!=NULL) {
-        errln("File %s, line %d, uenum_next(done)!=NULL");
+    if(uenum_next(uten, &length, &status)!=nullptr) {
+        errln("File %s, line %d, uenum_next(done)!=nullptr");
     }
 
     // test the uenum_unext()
@@ -1787,13 +1787,13 @@ UnicodeStringTest::TestStringEnumeration() {
         status=U_ZERO_ERROR;
         pu=uenum_unext(uten, &length, &status);
         s=UnicodeString(testEnumStrings[i], "");
-        if(U_FAILURE(status) || pu==NULL || length!=s.length() || UnicodeString(true, pu, length)!=s) {
+        if(U_FAILURE(status) || pu==nullptr || length!=s.length() || UnicodeString(true, pu, length)!=s) {
             errln("File %s, Line %d, uenum_unext(%d) failed", __FILE__, __LINE__, i);
         }
     }
     status=U_ZERO_ERROR;
-    if(uenum_unext(uten, &length, &status)!=NULL) {
-        errln("File %s, Line %d, uenum_unext(done)!=NULL" __FILE__, __LINE__);
+    if(uenum_unext(uten, &length, &status)!=nullptr) {
+        errln("File %s, Line %d, uenum_unext(done)!=nullptr" __FILE__, __LINE__);
     }
 
     uenum_close(uten);
@@ -2079,12 +2079,12 @@ UnicodeStringTest::doTestAppendable(UnicodeString &dest, Appendable &app) {
         errln("Appendable.append(...) failed");
     }
     buffer=app.getAppendBuffer(0, 3, scratch, 3, &capacity);
-    if(buffer!=NULL || capacity!=0) {
+    if(buffer!=nullptr || capacity!=0) {
         errln("Appendable.getAppendBuffer(min=0) failed");
     }
     capacity=1;
     buffer=app.getAppendBuffer(3, 3, scratch, 2, &capacity);
-    if(buffer!=NULL || capacity!=0) {
+    if(buffer!=nullptr || capacity!=0) {
         errln("Appendable.getAppendBuffer(scratch<min) failed");
     }
 }

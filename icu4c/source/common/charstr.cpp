@@ -113,7 +113,7 @@ CharString &CharString::append(const char *s, int32_t sLength, UErrorCode &error
     if(U_FAILURE(errorCode)) {
         return *this;
     }
-    if(sLength<-1 || (s==NULL && sLength!=0)) {
+    if(sLength<-1 || (s==nullptr && sLength!=0)) {
         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return *this;
     }
@@ -181,7 +181,7 @@ char *CharString::getAppendBuffer(int32_t minCapacity,
                                   UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) {
         resultCapacity=0;
-        return NULL;
+        return nullptr;
     }
     int32_t appendCapacity=buffer.getCapacity()-len-1;  // -1 for NUL
     if(appendCapacity>=minCapacity) {
@@ -193,7 +193,7 @@ char *CharString::getAppendBuffer(int32_t minCapacity,
         return buffer.getAlias()+len;
     }
     resultCapacity=0;
-    return NULL;
+    return nullptr;
 }
 
 CharString &CharString::appendInvariantChars(const UnicodeString &s, UErrorCode &errorCode) {
@@ -226,8 +226,8 @@ UBool CharString::ensureCapacity(int32_t capacity,
         if(desiredCapacityHint==0) {
             desiredCapacityHint=capacity+buffer.getCapacity();
         }
-        if( (desiredCapacityHint<=capacity || buffer.resize(desiredCapacityHint, len+1)==NULL) &&
-            buffer.resize(capacity, len+1)==NULL
+        if( (desiredCapacityHint<=capacity || buffer.resize(desiredCapacityHint, len+1)==nullptr) &&
+            buffer.resize(capacity, len+1)==nullptr
         ) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
             return false;

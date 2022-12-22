@@ -39,7 +39,7 @@ static NumberFormat *nfWithPattern(const char *pattern) {
     DecimalFormat *result = new DecimalFormat(
             upattern, new DecimalFormatSymbols("fr", status), status);
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
 
     return result;
@@ -101,7 +101,7 @@ void NumberFormatSpecificationTest::TestBasicPatterns() {
 
 void NumberFormatSpecificationTest::TestNfSetters() {
     LocalPointer<NumberFormat> nf(nfWithPattern("#,##0.##"));
-    if (nf == NULL) {
+    if (nf == nullptr) {
         dataerrln("Error creating NumberFormat");
         return;
     }

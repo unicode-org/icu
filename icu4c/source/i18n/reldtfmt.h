@@ -273,7 +273,7 @@ private:
      * Get the string at a specific offset.
      * @param day day offset ( -1, 0, 1, etc.. )
      * @param len on output, length of string.
-     * @return the string, or NULL if none at that location.
+     * @return the string, or nullptr if none at that location.
      */
     const UChar *getStringForDay(int32_t day, int32_t &len, UErrorCode &status) const;
 
@@ -294,7 +294,7 @@ private:
 
     /**
      * initializes fCalendar from parameters.  Returns fCalendar as a convenience.
-     * @param adoptZone  Zone to be adopted, or NULL for TimeZone::createDefault().
+     * @param adoptZone  Zone to be adopted, or nullptr for TimeZone::createDefault().
      * @param locale Locale of the calendar
      * @param status Error code
      * @return the newly constructed fCalendar

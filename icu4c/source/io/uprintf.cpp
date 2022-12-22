@@ -40,22 +40,22 @@
 
 U_NAMESPACE_USE
 
-static UFILE *gStdOut = NULL;
+static UFILE *gStdOut = nullptr;
 static UInitOnce gStdOutInitOnce {};
 
 static UBool U_CALLCONV uprintf_cleanup(void)
 {
-    if (gStdOut != NULL) {
+    if (gStdOut != nullptr) {
         u_fclose(gStdOut);
-        gStdOut = NULL;
+        gStdOut = nullptr;
     }
     gStdOutInitOnce.reset();
     return true;
 }
 
 static void U_CALLCONV u_stdout_init() {
-    U_ASSERT(gStdOut ==  NULL);
-    gStdOut = u_finit(stdout, NULL, NULL);
+    U_ASSERT(gStdOut ==  nullptr);
+    gStdOut = u_finit(stdout, nullptr, nullptr);
     ucln_io_registerCleanup(UCLN_IO_PRINTF, &uprintf_cleanup);
 }
 
@@ -209,7 +209,7 @@ u_vfprintf_u(    UFILE        *f,
     int32_t          written = 0;   /* haven't written anything yet */
 
     /* parse and print the whole format string */
-    u_printf_parse(&g_stream_handler, patternSpecification, f, NULL, &f->str.fBundle, &written, ap);
+    u_printf_parse(&g_stream_handler, patternSpecification, f, nullptr, &f->str.fBundle, &written, ap);
 
     /* return # of UChars written */
     return written;

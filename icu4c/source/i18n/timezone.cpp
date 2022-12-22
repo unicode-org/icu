@@ -112,7 +112,7 @@ static const UChar         UNKNOWN_ZONE_ID[] = {0x45, 0x74, 0x63, 0x2F, 0x55, 0x
 static const int32_t       GMT_ID_LENGTH = 3;
 static const int32_t       UNKNOWN_ZONE_ID_LENGTH = 11;
 
-static icu::TimeZone* DEFAULT_ZONE = NULL;
+static icu::TimeZone* DEFAULT_ZONE = nullptr;
 static icu::UInitOnce gDefaultZoneInitOnce {};
 
 alignas(icu::SimpleTimeZone)
@@ -127,9 +127,9 @@ static UBool gStaticZonesInitialized = false; // Whether the static zones are in
 static char TZDATA_VERSION[16];
 static icu::UInitOnce gTZDataVersionInitOnce {};
 
-static int32_t* MAP_SYSTEM_ZONES = NULL;
-static int32_t* MAP_CANONICAL_SYSTEM_ZONES = NULL;
-static int32_t* MAP_CANONICAL_SYSTEM_LOCATION_ZONES = NULL;
+static int32_t* MAP_SYSTEM_ZONES = nullptr;
+static int32_t* MAP_CANONICAL_SYSTEM_ZONES = nullptr;
+static int32_t* MAP_CANONICAL_SYSTEM_LOCATION_ZONES = nullptr;
 
 static int32_t LEN_SYSTEM_ZONES = 0;
 static int32_t LEN_CANONICAL_SYSTEM_ZONES = 0;
@@ -144,7 +144,7 @@ static UBool U_CALLCONV timeZone_cleanup(void)
 {
     U_NAMESPACE_USE
     delete DEFAULT_ZONE;
-    DEFAULT_ZONE = NULL;
+    DEFAULT_ZONE = nullptr;
     gDefaultZoneInitOnce.reset();
 
     if (gStaticZonesInitialized) {
@@ -223,12 +223,12 @@ static int32_t findInStringArray(UResourceBundle* array, const UnicodeString& id
  * Fetch a specific zone by name.  Replaces the getByKey call.
  * @param top Top timezone resource
  * @param id Time zone ID
- * @param oldbundle Bundle for reuse (or NULL).   see 'ures_open()'
+ * @param oldbundle Bundle for reuse (or nullptr).   see 'ures_open()'
  * @return the zone's bundle if found, or undefined if error.  Reuses oldbundle.
  */
 static UResourceBundle* getZoneByName(const UResourceBundle* top, const UnicodeString& id, UResourceBundle *oldbundle, UErrorCode& status) {
     // load the Rules object
-    UResourceBundle *tmp = ures_getByKey(top, kNAMES, NULL, &status);
+    UResourceBundle *tmp = ures_getByKey(top, kNAMES, nullptr, &status);
 
     // search for the string
     int32_t idx = findInStringArray(tmp, id, status);
@@ -237,7 +237,7 @@ static UResourceBundle* getZoneByName(const UResourceBundle* top, const UnicodeS
         // not found
         status = U_MISSING_RESOURCE_ERROR;
         //ures_close(oldbundle);
-        //oldbundle = NULL;
+        //oldbundle = nullptr;
     } else {
         U_DEBUG_TZ_MSG(("gzbn: oldbundle= size %d, type %d, %s\n", ures_getSize(tmp), ures_getType(tmp), u_errorName(status)));
         tmp = ures_getByKey(top, kZONES, tmp, &status); // get Zones object from top
@@ -248,7 +248,7 @@ static UResourceBundle* getZoneByName(const UResourceBundle* top, const UnicodeS
     ures_close(tmp);
     if(U_FAILURE(status)) {
         //ures_close(oldbundle);
-        return NULL;
+        return nullptr;
     } else {
         return oldbundle;
     }
@@ -291,7 +291,7 @@ static UResourceBundle* openOlsonResource(const UnicodeString& id,
     if (ures_getType(&res) == URES_INT) {
         int32_t deref = ures_getInt(&res, &ec) + 0;
         U_DEBUG_TZ_MSG(("getInt: %s - type is %d\n", u_errorName(ec), ures_getType(&res)));
-        UResourceBundle *ares = ures_getByKey(top, kZONES, NULL, &ec); // dereference Zones section
+        UResourceBundle *ares = ures_getByKey(top, kZONES, nullptr, &ec); // dereference Zones section
         ures_getByIndex(ares, deref, &res, &ec);
         ures_close(ares);
         U_DEBUG_TZ_MSG(("alias to #%d (%s) - %s\n", deref, "??", u_errorName(ec)));
@@ -389,7 +389,7 @@ namespace {
 TimeZone*
 createSystemTimeZone(const UnicodeString& id, UErrorCode& ec) {
     if (U_FAILURE(ec)) {
-        return NULL;
+        return nullptr;
     }
     TimeZone* z = 0;
     StackUResourceBundle res;
@@ -398,7 +398,7 @@ createSystemTimeZone(const UnicodeString& id, UErrorCode& ec) {
     U_DEBUG_TZ_MSG(("post-err=%s\n", u_errorName(ec)));
     if (U_SUCCESS(ec)) {
         z = new OlsonTimeZone(top, res.getAlias(), id, ec);
-        if (z == NULL) {
+        if (z == nullptr) {
             ec = U_MEMORY_ALLOCATION_ERROR;
             U_DEBUG_TZ_MSG(("cstz: olson time zone failed to initialize - err %s\n", u_errorName(ec)));
         }
@@ -407,7 +407,7 @@ createSystemTimeZone(const UnicodeString& id, UErrorCode& ec) {
     if (U_FAILURE(ec)) {
         U_DEBUG_TZ_MSG(("cstz: failed to create, err %s\n", u_errorName(ec)));
         delete z;
-        z = NULL;
+        z = nullptr;
     }
     return z;
 }
@@ -433,16 +433,16 @@ TimeZone::createTimeZone(const UnicodeString& ID)
      * all else fails, we return GMT, which is probably not what the
      * user wants, but at least is a functioning TimeZone object.
      *
-     * We cannot return NULL, because that would break compatibility
+     * We cannot return nullptr, because that would break compatibility
      * with the JDK.
      */
     TimeZone* result = createSystemTimeZone(ID);
 
-    if (result == NULL) {
+    if (result == nullptr) {
         U_DEBUG_TZ_MSG(("failed to load system time zone with id - falling to custom"));
         result = createCustomTimeZone(ID);
     }
-    if (result == NULL) {
+    if (result == nullptr) {
         U_DEBUG_TZ_MSG(("failed to load time zone with id - falling to Etc/Unknown(GMT)"));
         const TimeZone& unknown = getUnknown();
         // Unknown zone uses statically allocated memory, so creation of it can never fail due to OOM.
@@ -477,7 +477,7 @@ TimeZone::detectHostTimeZone()
     // Invert sign because UNIX semantics are backwards
     rawOffset = uprv_timezone() * -U_MILLIS_PER_SECOND;
 
-    TimeZone* hostZone = NULL;
+    TimeZone* hostZone = nullptr;
 
     UnicodeString hostStrID(hostID, -1, US_INV);
 
@@ -496,18 +496,18 @@ TimeZone::detectHostTimeZone()
 #endif
 
     int32_t hostIDLen = hostStrID.length();
-    if (hostZone != NULL && rawOffset != hostZone->getRawOffset()
+    if (hostZone != nullptr && rawOffset != hostZone->getRawOffset()
         && (3 <= hostIDLen && hostIDLen <= 4))
     {
         // Uh oh. This probably wasn't a good id.
         // It was probably an ambiguous abbreviation
         delete hostZone;
-        hostZone = NULL;
+        hostZone = nullptr;
     }
 
     // Construct a fixed standard zone with the host's ID
     // and raw offset.
-    if (hostZone == NULL && hostDetectionSucceeded) {
+    if (hostZone == nullptr && hostDetectionSucceeded) {
         hostZone = new SimpleTimeZone(rawOffset, hostStrID);
     }
 
@@ -516,7 +516,7 @@ TimeZone::detectHostTimeZone()
     // Note: This is extremely unlikely situation. If
     // new SimpleTimeZone(...) above fails, the following
     // code may also fail.
-    if (hostZone == NULL) {
+    if (hostZone == nullptr) {
         // Unknown zone uses static allocated memory, so it must always exist.
         // However, clone() allocates memory and can fail.
         hostZone = TimeZone::getUnknown().clone();
@@ -531,8 +531,8 @@ static UMutex gDefaultZoneMutex;
 
 /**
  * Initialize DEFAULT_ZONE from the system default time zone.  
- * Upon return, DEFAULT_ZONE will not be NULL, unless operator new()
- * returns NULL.
+ * Upon return, DEFAULT_ZONE will not be nullptr, unless operator new()
+ * returns nullptr.
  */
 static void U_CALLCONV initDefault()
 {
@@ -541,7 +541,7 @@ static void U_CALLCONV initDefault()
     Mutex lock(&gDefaultZoneMutex);
     // If setDefault() has already been called we can skip getting the
     // default zone information from the system.
-    if (DEFAULT_ZONE != NULL) {
+    if (DEFAULT_ZONE != nullptr) {
         return;
     }
     
@@ -560,7 +560,7 @@ static void U_CALLCONV initDefault()
 
     TimeZone *default_zone = TimeZone::detectHostTimeZone();
 
-    U_ASSERT(DEFAULT_ZONE == NULL);
+    U_ASSERT(DEFAULT_ZONE == nullptr);
 
     DEFAULT_ZONE = default_zone;
 }
@@ -573,7 +573,7 @@ TimeZone::createDefault()
     umtx_initOnce(gDefaultZoneInitOnce, initDefault);
     {
         Mutex lock(&gDefaultZoneMutex);
-        return (DEFAULT_ZONE != NULL) ? DEFAULT_ZONE->clone() : NULL;
+        return (DEFAULT_ZONE != nullptr) ? DEFAULT_ZONE->clone() : nullptr;
     }
 }
 
@@ -600,7 +600,7 @@ TimeZone::forLocaleOrDefault(const Locale& locale)
 void U_EXPORT2
 TimeZone::adoptDefault(TimeZone* zone)
 {
-    if (zone != NULL)
+    if (zone != nullptr)
     {
         {
             Mutex lock(&gDefaultZoneMutex);
@@ -630,7 +630,7 @@ static void U_CALLCONV initMap(USystemTimeZoneType type, UErrorCode& ec) {
     if (U_SUCCESS(ec)) {
         int32_t size = ures_getSize(res);
         int32_t *m = (int32_t *)uprv_malloc(size * sizeof(int32_t));
-        if (m == NULL) {
+        if (m == nullptr) {
             ec = U_MEMORY_ALLOCATION_ERROR;
         } else {
             int32_t numEntries = 0;
@@ -669,7 +669,7 @@ static void U_CALLCONV initMap(USystemTimeZoneType type, UErrorCode& ec) {
             if (U_SUCCESS(ec)) {
                 int32_t *tmp = m;
                 m = (int32_t *)uprv_realloc(tmp, numEntries * sizeof(int32_t));
-                if (m == NULL) {
+                if (m == nullptr) {
                     // realloc failed.. use the original one even it has unused
                     // area at the end
                     m = tmp;
@@ -677,17 +677,17 @@ static void U_CALLCONV initMap(USystemTimeZoneType type, UErrorCode& ec) {
 
                 switch(type) {
                 case UCAL_ZONE_TYPE_ANY:
-                    U_ASSERT(MAP_SYSTEM_ZONES == NULL);
+                    U_ASSERT(MAP_SYSTEM_ZONES == nullptr);
                     MAP_SYSTEM_ZONES = m;
                     LEN_SYSTEM_ZONES = numEntries;
                     break;
                 case UCAL_ZONE_TYPE_CANONICAL:
-                    U_ASSERT(MAP_CANONICAL_SYSTEM_ZONES == NULL);
+                    U_ASSERT(MAP_CANONICAL_SYSTEM_ZONES == nullptr);
                     MAP_CANONICAL_SYSTEM_ZONES = m;
                     LEN_CANONICAL_SYSTEM_ZONES = numEntries;
                     break;
                 case UCAL_ZONE_TYPE_CANONICAL_LOCATION:
-                    U_ASSERT(MAP_CANONICAL_SYSTEM_LOCATION_ZONES == NULL);
+                    U_ASSERT(MAP_CANONICAL_SYSTEM_LOCATION_ZONES == nullptr);
                     MAP_CANONICAL_SYSTEM_LOCATION_ZONES = m;
                     LEN_CANONICAL_SYSTEM_LOCATION_ZONES = numEntries;
                     break;
@@ -756,7 +756,7 @@ class TZEnumeration : public StringEnumeration {
 private:
 
     // Map into to zones.  Our results are zone[map[i]] for
-    // i=0..len-1, where zone[i] is the i-th Olson zone.  If map==NULL
+    // i=0..len-1, where zone[i] is the i-th Olson zone.  If map==nullptr
     // then our results are zone[i] for i=0..len-1.  Len will be zero
     // if the zone data could not be loaded.
     int32_t* map;
@@ -766,13 +766,13 @@ private:
 
     TZEnumeration(int32_t* mapData, int32_t mapLen, UBool adoptMapData) : pos(0) {
         map = mapData;
-        localMap = adoptMapData ? mapData : NULL;
+        localMap = adoptMapData ? mapData : nullptr;
         len = mapLen;
     }
 
     UBool getID(int32_t i, UErrorCode& ec) {
         int32_t idLen = 0;
-        const UChar* id = NULL;
+        const UChar* id = nullptr;
         UResourceBundle *top = ures_openDirect(0, kZONEINFO, &ec);
         top = ures_getByKey(top, kNAMES, top, &ec); // dereference Zones section
         id = ures_getStringByIndex(top, i, &idLen, &ec);
@@ -789,9 +789,9 @@ private:
     static int32_t* getMap(USystemTimeZoneType type, int32_t& len, UErrorCode& ec) {
         len = 0;
         if (U_FAILURE(ec)) {
-            return NULL;
+            return nullptr;
         }
-        int32_t* m = NULL;
+        int32_t* m = nullptr;
         switch (type) {
         case UCAL_ZONE_TYPE_ANY:
             umtx_initOnce(gSystemZonesInitOnce, &initMap, type, ec);
@@ -810,7 +810,7 @@ private:
             break;
         default:
             ec = U_ILLEGAL_ARGUMENT_ERROR;
-            m = NULL;
+            m = nullptr;
             len = 0;
             break;
         }
@@ -824,28 +824,28 @@ public:
 
     static TZEnumeration* create(USystemTimeZoneType type, const char* region, const int32_t* rawOffset, UErrorCode& ec) {
         if (U_FAILURE(ec)) {
-            return NULL;
+            return nullptr;
         }
 
         int32_t baseLen;
         int32_t *baseMap = getMap(type, baseLen, ec);
 
         if (U_FAILURE(ec)) {
-            return NULL;
+            return nullptr;
         }
 
         // If any additional conditions are available,
         // create instance local map filtered by the conditions.
 
-        int32_t *filteredMap = NULL;
+        int32_t *filteredMap = nullptr;
         int32_t numEntries = 0;
 
-        if (region != NULL || rawOffset != NULL) {
+        if (region != nullptr || rawOffset != nullptr) {
             int32_t filteredMapSize = DEFAULT_FILTERED_MAP_SIZE;
             filteredMap = (int32_t *)uprv_malloc(filteredMapSize * sizeof(int32_t));
-            if (filteredMap == NULL) {
+            if (filteredMap == nullptr) {
                 ec = U_MEMORY_ALLOCATION_ERROR;
-                return NULL;
+                return nullptr;
             }
 
             // Walk through the base map
@@ -857,7 +857,7 @@ public:
                 if (U_FAILURE(ec)) {
                     break;
                 }
-                if (region != NULL) {
+                if (region != nullptr) {
                     // Filter by region
                     char tzregion[4]; // max 3 letters + null term
                     TimeZone::getRegion(id, tzregion, sizeof(tzregion), ec);
@@ -869,7 +869,7 @@ public:
                         continue;
                     }
                 }
-                if (rawOffset != NULL) {
+                if (rawOffset != nullptr) {
                     // Filter by raw offset
                     // Note: This is VERY inefficient
                     TimeZone *z = createSystemTimeZone(id, ec);
@@ -887,7 +887,7 @@ public:
                 if (filteredMapSize <= numEntries) {
                     filteredMapSize += MAP_INCREMENT_SIZE;
                     int32_t *tmp = (int32_t *)uprv_realloc(filteredMap, filteredMapSize * sizeof(int32_t));
-                    if (tmp == NULL) {
+                    if (tmp == nullptr) {
                         ec = U_MEMORY_ALLOCATION_ERROR;
                         break;
                     } else {
@@ -900,37 +900,37 @@ public:
 
             if (U_FAILURE(ec)) {
                 uprv_free(filteredMap);
-                filteredMap = NULL;
+                filteredMap = nullptr;
             }
 
             ures_close(res);
         }
 
-        TZEnumeration *result = NULL;
+        TZEnumeration *result = nullptr;
         if (U_SUCCESS(ec)) {
             // Finally, create a new enumeration instance
-            if (filteredMap == NULL) {
+            if (filteredMap == nullptr) {
                 result = new TZEnumeration(baseMap, baseLen, false);
             } else {
                 result = new TZEnumeration(filteredMap, numEntries, true);
-                filteredMap = NULL;
+                filteredMap = nullptr;
             }
-            if (result == NULL) {
+            if (result == nullptr) {
                 ec = U_MEMORY_ALLOCATION_ERROR;
             }
         }
 
-        if (filteredMap != NULL) {
+        if (filteredMap != nullptr) {
             uprv_free(filteredMap);
         }
 
         return result;
     }
 
-    TZEnumeration(const TZEnumeration &other) : StringEnumeration(), map(NULL), localMap(NULL), len(0), pos(0) {
-        if (other.localMap != NULL) {
+    TZEnumeration(const TZEnumeration &other) : StringEnumeration(), map(nullptr), localMap(nullptr), len(0), pos(0) {
+        if (other.localMap != nullptr) {
             localMap = (int32_t *)uprv_malloc(other.len * sizeof(int32_t));
-            if (localMap != NULL) {
+            if (localMap != nullptr) {
                 len = other.len;
                 uprv_memcpy(localMap, other.localMap, len * sizeof(int32_t));
                 pos = other.pos;
@@ -938,11 +938,11 @@ public:
             } else {
                 len = 0;
                 pos = 0;
-                map = NULL;
+                map = nullptr;
             }
         } else {
             map = other.map;
-            localMap = NULL;
+            localMap = nullptr;
             len = other.len;
             pos = other.pos;
         }
@@ -959,7 +959,7 @@ public:
     }
 
     virtual const UnicodeString* snext(UErrorCode& status) override {
-        if (U_SUCCESS(status) && map != NULL && pos < len) {
+        if (U_SUCCESS(status) && map != nullptr && pos < len) {
             getID(map[pos], status);
             ++pos;
             return &unistr;
@@ -977,7 +977,7 @@ public:
 };
 
 TZEnumeration::~TZEnumeration() {
-    if (localMap != NULL) {
+    if (localMap != nullptr) {
         uprv_free(localMap);
     }
 }
@@ -995,17 +995,17 @@ TimeZone::createTimeZoneIDEnumeration(
 
 StringEnumeration* U_EXPORT2
 TimeZone::createEnumeration(UErrorCode& status) {
-    return TZEnumeration::create(UCAL_ZONE_TYPE_ANY, NULL, NULL, status);
+    return TZEnumeration::create(UCAL_ZONE_TYPE_ANY, nullptr, nullptr, status);
 }
 
 StringEnumeration* U_EXPORT2
 TimeZone::createEnumerationForRawOffset(int32_t rawOffset, UErrorCode& status) {
-    return TZEnumeration::create(UCAL_ZONE_TYPE_ANY, NULL, &rawOffset, status);
+    return TZEnumeration::create(UCAL_ZONE_TYPE_ANY, nullptr, &rawOffset, status);
 }
 
 StringEnumeration* U_EXPORT2
 TimeZone::createEnumerationForRegion(const char* region, UErrorCode& status) {
-    return TZEnumeration::create(UCAL_ZONE_TYPE_ANY, region, NULL, status);
+    return TZEnumeration::create(UCAL_ZONE_TYPE_ANY, region, nullptr, status);
 }
 
 //
@@ -1070,7 +1070,7 @@ TimeZone::getEquivalentID(const UnicodeString& id, int32_t index) {
         }
     }
     if (zone >= 0) {
-        UResourceBundle *ares = ures_getByKey(top, kNAMES, NULL, &ec); // dereference Zones section
+        UResourceBundle *ares = ures_getByKey(top, kNAMES, nullptr, &ec); // dereference Zones section
         if (U_SUCCESS(ec)) {
             int32_t idLen = 0;
             const UChar* id2 = ures_getStringByIndex(ares, zone, &idLen, &ec);
@@ -1094,16 +1094,16 @@ TimeZone::getEquivalentID(const UnicodeString& id, int32_t index) {
 
 const UChar*
 TimeZone::findID(const UnicodeString& id) {
-    const UChar *result = NULL;
+    const UChar *result = nullptr;
     UErrorCode ec = U_ZERO_ERROR;
-    UResourceBundle *rb = ures_openDirect(NULL, kZONEINFO, &ec);
+    UResourceBundle *rb = ures_openDirect(nullptr, kZONEINFO, &ec);
 
     // resolve zone index by name
-    UResourceBundle *names = ures_getByKey(rb, kNAMES, NULL, &ec);
+    UResourceBundle *names = ures_getByKey(rb, kNAMES, nullptr, &ec);
     int32_t idx = findInStringArray(names, id, ec);
-    result = ures_getStringByIndex(names, idx, NULL, &ec);
+    result = ures_getStringByIndex(names, idx, nullptr, &ec);
     if (U_FAILURE(ec)) {
-        result = NULL;
+        result = nullptr;
     }
     ures_close(names);
     ures_close(rb);
@@ -1113,14 +1113,14 @@ TimeZone::findID(const UnicodeString& id) {
 
 const UChar*
 TimeZone::dereferOlsonLink(const UnicodeString& id) {
-    const UChar *result = NULL;
+    const UChar *result = nullptr;
     UErrorCode ec = U_ZERO_ERROR;
-    UResourceBundle *rb = ures_openDirect(NULL, kZONEINFO, &ec);
+    UResourceBundle *rb = ures_openDirect(nullptr, kZONEINFO, &ec);
 
     // resolve zone index by name
-    UResourceBundle *names = ures_getByKey(rb, kNAMES, NULL, &ec);
+    UResourceBundle *names = ures_getByKey(rb, kNAMES, nullptr, &ec);
     int32_t idx = findInStringArray(names, id, ec);
-    result = ures_getStringByIndex(names, idx, NULL, &ec);
+    result = ures_getStringByIndex(names, idx, nullptr, &ec);
 
     // open the zone bundle by index
     ures_getByKey(rb, kZONES, rb, &ec);
@@ -1130,7 +1130,7 @@ TimeZone::dereferOlsonLink(const UnicodeString& id) {
         if (ures_getType(rb) == URES_INT) {
             // this is a link - dereference the link
             int32_t deref = ures_getInt(rb, &ec);
-            const UChar* tmp = ures_getStringByIndex(names, deref, NULL, &ec);
+            const UChar* tmp = ures_getStringByIndex(names, deref, nullptr, &ec);
             if (U_SUCCESS(ec)) {
                 result = tmp;
             }
@@ -1152,18 +1152,18 @@ TimeZone::getRegion(const UnicodeString& id) {
 const UChar*
 TimeZone::getRegion(const UnicodeString& id, UErrorCode& status) {
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
-    const UChar *result = NULL;
-    UResourceBundle *rb = ures_openDirect(NULL, kZONEINFO, &status);
+    const UChar *result = nullptr;
+    UResourceBundle *rb = ures_openDirect(nullptr, kZONEINFO, &status);
 
     // resolve zone index by name
-    UResourceBundle *res = ures_getByKey(rb, kNAMES, NULL, &status);
+    UResourceBundle *res = ures_getByKey(rb, kNAMES, nullptr, &status);
     int32_t idx = findInStringArray(res, id, status);
 
     // get region mapping
     ures_getByKey(rb, kREGIONS, res, &status);
-    const UChar *tmp = ures_getStringByIndex(res, idx, NULL, &status);
+    const UChar *tmp = ures_getStringByIndex(res, idx, nullptr, &status);
     if (U_SUCCESS(status)) {
         result = tmp;
     }
@@ -1185,13 +1185,13 @@ TimeZone::getRegion(const UnicodeString& id, char *region, int32_t capacity, UEr
         return 0;
     }
 
-    const UChar *uregion = NULL;
+    const UChar *uregion = nullptr;
     // "Etc/Unknown" is not a system zone ID,
     // but in the zone data
     if (id.compare(UNKNOWN_ZONE_ID, UNKNOWN_ZONE_ID_LENGTH) != 0) {
         uregion = getRegion(id);
     }
-    if (uregion == NULL) {
+    if (uregion == nullptr) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -1348,7 +1348,7 @@ TimeZone::createCustomTimeZone(const UnicodeString& id)
         int32_t offset = sign * ((hour * 60 + min) * 60 + sec) * 1000;
         return new SimpleTimeZone(offset, customID);
     }
-    return NULL;
+    return nullptr;
 }
 
 UnicodeString&
@@ -1539,7 +1539,7 @@ static void U_CALLCONV initTZDataVersion(UErrorCode &status) {
     ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONE, timeZone_cleanup);
     int32_t len = 0;
     StackUResourceBundle bundle;
-    ures_openDirectFillIn(bundle.getAlias(), NULL, kZONEINFO, &status);
+    ures_openDirectFillIn(bundle.getAlias(), nullptr, kZONEINFO, &status);
     const UChar *tzver = ures_getStringByKey(bundle.getAlias(), kTZVERSION, &len, &status);
 
     if (U_SUCCESS(status)) {
@@ -1613,14 +1613,14 @@ TimeZone::getWindowsID(const UnicodeString& id, UnicodeString& winid, UErrorCode
         return winid;
     }
 
-    UResourceBundle *mapTimezones = ures_openDirect(NULL, "windowsZones", &status);
+    UResourceBundle *mapTimezones = ures_openDirect(nullptr, "windowsZones", &status);
     ures_getByKey(mapTimezones, "mapTimezones", mapTimezones, &status);
 
     if (U_FAILURE(status)) {
         return winid;
     }
 
-    UResourceBundle *winzone = NULL;
+    UResourceBundle *winzone = nullptr;
     UBool found = false;
     while (ures_hasNext(mapTimezones) && !found) {
         winzone = ures_getNextResource(mapTimezones, winzone, &status);
@@ -1630,7 +1630,7 @@ TimeZone::getWindowsID(const UnicodeString& id, UnicodeString& winid, UErrorCode
         if (ures_getType(winzone) != URES_TABLE) {
             continue;
         }
-        UResourceBundle *regionalData = NULL;
+        UResourceBundle *regionalData = nullptr;
         while (ures_hasNext(winzone) && !found) {
             regionalData = ures_getNextResource(winzone, regionalData, &status);
             if (U_FAILURE(status)) {
@@ -1649,7 +1649,7 @@ TimeZone::getWindowsID(const UnicodeString& id, UnicodeString& winid, UErrorCode
             UBool hasNext = true;
             while (hasNext) {
                 const UChar *end = u_strchr(start, (UChar)0x20);
-                if (end == NULL) {
+                if (end == nullptr) {
                     end = tzids + len;
                     hasNext = false;
                 }
@@ -1678,7 +1678,7 @@ TimeZone::getIDForWindowsID(const UnicodeString& winid, const char* region, Unic
         return id;
     }
 
-    UResourceBundle *zones = ures_openDirect(NULL, "windowsZones", &status);
+    UResourceBundle *zones = ures_openDirect(nullptr, "windowsZones", &status);
     ures_getByKey(zones, "mapTimezones", zones, &status);
     if (U_FAILURE(status)) {
         ures_close(zones);
@@ -1702,7 +1702,7 @@ TimeZone::getIDForWindowsID(const UnicodeString& winid, const char* region, Unic
         return id;
     }
 
-    const UChar *tzid = NULL;
+    const UChar *tzid = nullptr;
     int32_t len = 0;
     UBool gotID = false;
     if (region) {
@@ -1711,7 +1711,7 @@ TimeZone::getIDForWindowsID(const UnicodeString& winid, const char* region, Unic
         if (U_SUCCESS(tmperr)) {
             // first ID delimited by space is the default one
             const UChar *end = u_strchr(tzids, (UChar)0x20);
-            if (end == NULL) {
+            if (end == nullptr) {
                 id.setTo(tzids, -1);
             } else {
                 id.setTo(tzids, static_cast<int32_t>(end - tzids));

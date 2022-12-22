@@ -253,7 +253,7 @@ void ScriptSet::setScriptExtensions(UChar32 codePoint, UErrorCode& status) {
             codePoint, scripts.getAlias(), scripts.getCapacity(), &internalStatus);
         if (internalStatus == U_BUFFER_OVERFLOW_ERROR) {
             // Need to allocate more space
-            if (scripts.resize(script_count) == NULL) {
+            if (scripts.resize(script_count) == nullptr) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return;
             }

@@ -92,18 +92,18 @@ struct CharacterNode {
     UBool    fHasValuesVector;
     UBool    fPadding;
 
-    // No value:   fValues == NULL               and  fHasValuesVector == false
+    // No value:   fValues == nullptr            and  fHasValuesVector == false
     // One value:  fValues == value              and  fHasValuesVector == false
     // >=2 values: fValues == UVector of values  and  fHasValuesVector == true
 };
 
 inline UBool CharacterNode::hasValues() const {
-    return (UBool)(fValues != NULL);
+    return (UBool)(fValues != nullptr);
 }
 
 inline int32_t CharacterNode::countValues() const {
     return
-        fValues == NULL ? 0 :
+        fValues == nullptr ? 0 :
         !fHasValuesVector ? 1 :
         ((const UVector *)fValues)->size();
 }
@@ -249,7 +249,7 @@ public:
 
     TimeZoneNames::MatchInfoCollection* find(const UnicodeString& text, int32_t start, uint32_t types, UErrorCode& status) const override;
 
-    // When TZDBNames for the metazone is not available, this method returns NULL,
+    // When TZDBNames for the metazone is not available, this method returns nullptr,
     // but does NOT set U_MISSING_RESOURCE_ERROR to status.
     static const TZDBNames* getMetaZoneNames(const UnicodeString& mzId, UErrorCode& status);
 

@@ -35,7 +35,7 @@ uset_openPattern(const UChar* pattern, int32_t patternLength,
 {
     UnicodeString pat(patternLength==-1, pattern, patternLength);
     UnicodeSet* set = new UnicodeSet(pat, *ec);
-    /* test for NULL */
+    /* test for nullptr */
     if(set == 0) {
         *ec = U_MEMORY_ALLOCATION_ERROR;
         return 0;
@@ -43,7 +43,7 @@ uset_openPattern(const UChar* pattern, int32_t patternLength,
 
     if (U_FAILURE(*ec)) {
         delete set;
-        set = NULL;
+        set = nullptr;
     }
     return (USet*) set;
 }
@@ -54,8 +54,8 @@ uset_openPatternOptions(const UChar* pattern, int32_t patternLength,
                  UErrorCode* ec)
 {
     UnicodeString pat(patternLength==-1, pattern, patternLength);
-    UnicodeSet* set = new UnicodeSet(pat, options, NULL, *ec);
-    /* test for NULL */
+    UnicodeSet* set = new UnicodeSet(pat, options, nullptr, *ec);
+    /* test for nullptr */
     if(set == 0) {
         *ec = U_MEMORY_ALLOCATION_ERROR;
         return 0;
@@ -63,7 +63,7 @@ uset_openPatternOptions(const UChar* pattern, int32_t patternLength,
 
     if (U_FAILURE(*ec)) {
         delete set;
-        set = NULL;
+        set = nullptr;
     }
     return (USet*) set;
 }
@@ -77,14 +77,14 @@ uset_applyPattern(USet *set,
 
     // status code needs to be checked since we 
     // dereference it
-    if(status == NULL || U_FAILURE(*status)){
+    if(status == nullptr || U_FAILURE(*status)){
         return 0;
     }
 
     // check only the set paramenter
-    // if pattern is NULL or null terminate
+    // if pattern is nullptr or NUL terminated
     // UnicodeString constructor takes care of it
-    if(set == NULL){
+    if(set == nullptr){
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -93,7 +93,7 @@ uset_applyPattern(USet *set,
 
     ParsePosition pos;
    
-    ((UnicodeSet*) set)->applyPattern(pat, pos, options, NULL, *status);
+    ((UnicodeSet*) set)->applyPattern(pat, pos, options, nullptr, *status);
     
     return pos.getIndex();
 }

@@ -22,11 +22,11 @@
 
 U_NAMESPACE_USE
 
-static UnicodeString **strs = NULL;
+static UnicodeString **strs = nullptr;
 
 static const UnicodeString&  _fieldString(UDebugEnumType type, int32_t field, UnicodeString& fillin) {
     const char *str = udbg_enumName(type, field);
-    if(str == NULL) {
+    if(str == nullptr) {
         return fillin.remove();
     } else {
         return fillin = UnicodeString(str, -1, US_INV);
@@ -35,12 +35,12 @@ static const UnicodeString&  _fieldString(UDebugEnumType type, int32_t field, Un
 
 U_CDECL_BEGIN
 static void udbg_cleanup(void) {
-    if(strs != NULL) {
+    if(strs != nullptr) {
         for(int t=0;t<=UDBG_ENUM_COUNT;t++) {
             delete [] strs[t];
         }
         delete[] strs;
-        strs = NULL;
+        strs = nullptr;
     }
 }
 
@@ -56,7 +56,7 @@ static void udbg_register_cleanup(void) {
 U_CDECL_END
 
 static void udbg_setup(void) {
-    if(strs == NULL) {
+    if(strs == nullptr) {
         udbg_register_cleanup();
         //fprintf(stderr,"Initializing string cache..\n");
         //fflush(stderr);
@@ -77,7 +77,7 @@ static void udbg_setup(void) {
 
 
 U_TOOLUTIL_API const UnicodeString& U_EXPORT2 udbg_enumString(UDebugEnumType type, int32_t field) {
-    if(strs == NULL ) {
+    if(strs == nullptr ) {
         udbg_setup();
     }
     if(type<0||type>=UDBG_ENUM_COUNT) {

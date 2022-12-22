@@ -406,7 +406,7 @@ TimeArrayTimeZoneRule::TimeArrayTimeZoneRule(const UnicodeString& name,
                                              int32_t numStartTimes,
                                              DateTimeRule::TimeRuleType timeRuleType)
 : TimeZoneRule(name, rawOffset, dstSavings), fTimeRuleType(timeRuleType),
-  fStartTimes(NULL) {
+  fStartTimes(nullptr) {
     UErrorCode status = U_ZERO_ERROR;
     initStartTimes(startTimes, numStartTimes, status);
     //TODO - status?
@@ -414,7 +414,7 @@ TimeArrayTimeZoneRule::TimeArrayTimeZoneRule(const UnicodeString& name,
 
 
 TimeArrayTimeZoneRule::TimeArrayTimeZoneRule(const TimeArrayTimeZoneRule& source)
-: TimeZoneRule(source), fTimeRuleType(source.fTimeRuleType), fStartTimes(NULL) {
+: TimeZoneRule(source), fTimeRuleType(source.fTimeRuleType), fStartTimes(nullptr) {
     UErrorCode status = U_ZERO_ERROR;
     initStartTimes(source.fStartTimes, source.fNumStartTimes, status);
     //TODO - status?
@@ -422,7 +422,7 @@ TimeArrayTimeZoneRule::TimeArrayTimeZoneRule(const TimeArrayTimeZoneRule& source
 
 
 TimeArrayTimeZoneRule::~TimeArrayTimeZoneRule() {
-    if (fStartTimes != NULL && fStartTimes != fLocalStartTimes) {
+    if (fStartTimes != nullptr && fStartTimes != fLocalStartTimes) {
         uprv_free(fStartTimes);
     }
 }
@@ -521,7 +521,7 @@ UBool
 TimeArrayTimeZoneRule::getFirstStart(int32_t prevRawOffset,
                                              int32_t prevDSTSavings,
                                              UDate& result) const {
-    if (fNumStartTimes <= 0 || fStartTimes == NULL) {
+    if (fNumStartTimes <= 0 || fStartTimes == nullptr) {
         return false;
     }
     result = getUTC(fStartTimes[0], prevRawOffset, prevDSTSavings);
@@ -532,7 +532,7 @@ UBool
 TimeArrayTimeZoneRule::getFinalStart(int32_t prevRawOffset,
                                      int32_t prevDSTSavings,
                                      UDate& result) const {
-    if (fNumStartTimes <= 0 || fStartTimes == NULL) {
+    if (fNumStartTimes <= 0 || fStartTimes == nullptr) {
         return false;
     }
     result = getUTC(fStartTimes[fNumStartTimes - 1], prevRawOffset, prevDSTSavings);
@@ -582,13 +582,13 @@ TimeArrayTimeZoneRule::getPreviousStart(UDate base,
 UBool
 TimeArrayTimeZoneRule::initStartTimes(const UDate source[], int32_t size, UErrorCode& status) {
     // Free old array
-    if (fStartTimes != NULL && fStartTimes != fLocalStartTimes) {
+    if (fStartTimes != nullptr && fStartTimes != fLocalStartTimes) {
         uprv_free(fStartTimes);
     }
     // Allocate new one if needed
     if (size > TIMEARRAY_STACK_BUFFER_SIZE) {
         fStartTimes = (UDate*)uprv_malloc(sizeof(UDate)*size);
-        if (fStartTimes == NULL) {
+        if (fStartTimes == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             fNumStartTimes = 0;
             return false;
@@ -599,9 +599,9 @@ TimeArrayTimeZoneRule::initStartTimes(const UDate source[], int32_t size, UError
     uprv_memcpy(fStartTimes, source, sizeof(UDate)*size);
     fNumStartTimes = size;
     // Sort dates
-    uprv_sortArray(fStartTimes, fNumStartTimes, (int32_t)sizeof(UDate), compareDates, NULL, true, &status);
+    uprv_sortArray(fStartTimes, fNumStartTimes, (int32_t)sizeof(UDate), compareDates, nullptr, true, &status);
     if (U_FAILURE(status)) {
-        if (fStartTimes != NULL && fStartTimes != fLocalStartTimes) {
+        if (fStartTimes != nullptr && fStartTimes != fLocalStartTimes) {
             uprv_free(fStartTimes);
         }
         fNumStartTimes = 0;

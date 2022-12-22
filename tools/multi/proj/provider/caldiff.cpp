@@ -82,11 +82,11 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
             continue;
           }
           
-          // int32_t len = udat_format(dat, stuff, outchars, 200, NULL, &subStatus); 
+          // int32_t len = udat_format(dat, stuff, outchars, 200, nullptr, &subStatus); 
           
           // //printf("\n");
           //char utf8[200];
-          // u_strToUTF8(utf8, 200, NULL, outchars, len, &subStatus);
+          // u_strToUTF8(utf8, 200, nullptr, outchars, len, &subStatus);
           
           sprintf(outchars, " cal: mindays=%d firstday=%d ", (int)cal->getMinimalDaysInFirstWeek(), (int)cal->getFirstDayOfWeek());
           int32_t len = strlen(outchars);

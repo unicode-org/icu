@@ -372,7 +372,7 @@ public:
       *  access the text without impacting any break iterator operations,
       *  but the underlying text itself must not be altered.
       *
-      * @param fillIn A UText to be filled in.  If NULL, a new UText will be
+      * @param fillIn A UText to be filled in.  If nullptr, a new UText will be
       *           allocated to hold the result.
       * @param status receives any error codes.
       * @return   The current UText for this break iterator.  If an input
@@ -592,7 +592,7 @@ public:
      *  tricky.  Use clone() instead.
      *
      * @param stackBuffer  The pointer to the memory into which the cloned object
-     *                     should be placed.  If NULL,  allocate heap memory
+     *                     should be placed.  If nullptr,  allocate heap memory
      *                     for the cloned object.
      * @param BufferSize   The size of the buffer.  If zero, return the required
      *                     buffer size, but do not clone the object.  If the

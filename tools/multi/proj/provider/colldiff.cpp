@@ -83,7 +83,7 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
             strcat(xbuf2,locID);
             strcat(xbuf2,"/");
             //printf(" -> %s\n", xbuf2);
-            UCollator *col = ucol_openFromShortString(xbuf2, false,NULL, &subStatus);
+            UCollator *col = ucol_openFromShortString(xbuf2, false,nullptr, &subStatus);
 #else
             UCollator *col = ucol_open(locID, &subStatus);
 #endif
@@ -95,7 +95,7 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
 
             char xbuf3[200];
             {
-              int32_t def = ucol_getShortDefinitionString(col,locID/*NULL*/,xbuf3,200,&subStatus);
+              int32_t def = ucol_getShortDefinitionString(col,locID/*nullptr*/,xbuf3,200,&subStatus);
               if(U_FAILURE(subStatus)) {
                 printf("Err getting short string name: %s\n", u_errorName(subStatus));
               } else {
@@ -122,12 +122,12 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
             printf("\n");
 
             char xbuf4[200];
-            UCollator *col2 = ucol_openFromShortString(xbuf3, false, NULL, &subStatus);
+            UCollator *col2 = ucol_openFromShortString(xbuf3, false, nullptr, &subStatus);
             if(U_FAILURE(subStatus)) {
               printf("Err opening from new short string : %s\n", u_errorName(subStatus));
               continue;
             } else {
-              int32_t def4 = ucol_getShortDefinitionString(col,locID/*NULL*/,xbuf4,200,&subStatus);
+              int32_t def4 = ucol_getShortDefinitionString(col,locID/*nullptr*/,xbuf4,200,&subStatus);
               if(strcmp(xbuf4,xbuf3)) {
                 printf(" --> reopened = %s (%s)\n", xbuf4, u_errorName(subStatus));
               }

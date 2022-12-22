@@ -368,7 +368,7 @@ int32_t UnitPreferenceMetadata::compareTo(const UnitPreferenceMetadata &other, b
 
 // TODO: this may be unnecessary. Fold into ConversionRates class? Or move to anonymous namespace?
 void U_I18N_API getAllConversionRates(MaybeStackVector<ConversionRateInfo> &result, UErrorCode &status) {
-    LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
+    LocalUResourceBundlePointer unitsBundle(ures_openDirect(nullptr, "units", &status));
     ConversionRateDataSink sink(&result);
     ures_getAllItemsWithFallback(unitsBundle.getAlias(), "convertUnits", sink, status);
 }
@@ -384,7 +384,7 @@ const ConversionRateInfo *ConversionRates::extractConversionInfo(StringPiece sou
 }
 
 U_I18N_API UnitPreferences::UnitPreferences(UErrorCode &status) {
-    LocalUResourceBundlePointer unitsBundle(ures_openDirect(NULL, "units", &status));
+    LocalUResourceBundlePointer unitsBundle(ures_openDirect(nullptr, "units", &status));
     UnitPreferencesSink sink(&unitPrefs_, &metadata_);
     ures_getAllItemsWithFallback(unitsBundle.getAlias(), "unitPreferenceData", sink, status);
 }

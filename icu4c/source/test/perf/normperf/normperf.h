@@ -84,13 +84,13 @@ public:
         numLines = srcNumLines;
         uselen = _uselen;
         mode = _mode;
-        src = NULL;
+        src = nullptr;
         srcLen = 0;
         line_mode = true;
     }
     QuickCheckPerfFunction(QuickCheckFn func, const UChar* source,int32_t sourceLen, UNormalizationMode _mode, int32_t opts, UBool _uselen) : options(opts) {
         fn = func;
-        lines = NULL;
+        lines = nullptr;
         numLines = 0;
         uselen = _uselen;
         mode = _mode;
@@ -154,13 +154,13 @@ public:
         uselen = _uselen;
         destLen = DEST_BUFFER_CAPACITY;
         pDest = dest;
-        src = NULL;
+        src = nullptr;
         srcLen = 0;
         line_mode = true;
     }
     NormPerfFunction(NormFn func, int32_t opts, const UChar* source,int32_t sourceLen,UBool _uselen) : options(opts) {
         fn = func;
-        lines = NULL;
+        lines = nullptr;
         numLines = 0;
         uselen = _uselen;
         destLen = sourceLen*3;
@@ -197,7 +197,7 @@ public:
 
     NormalizerPerformanceTest(int32_t argc, const char* argv[], UErrorCode& status);
     ~NormalizerPerformanceTest();
-    virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec,const char* &name, char* par = NULL);     
+    virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec,const char* &name, char* par = nullptr);
     /* NFC performance */
     UPerfFunction* TestICU_NFC_NFD_Text();
     UPerfFunction* TestICU_NFC_NFC_Text();

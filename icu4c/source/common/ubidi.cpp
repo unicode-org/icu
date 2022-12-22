@@ -135,21 +135,21 @@ ubidi_openSized(int32_t maxLength, int32_t maxRunCount, UErrorCode *pErrorCode) 
     UBiDi *pBiDi;
 
     /* check the argument values */
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return NULL;
+    if(pErrorCode==nullptr || U_FAILURE(*pErrorCode)) {
+        return nullptr;
     } else if(maxLength<0 || maxRunCount<0) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;    /* invalid arguments */
+        return nullptr;    /* invalid arguments */
     }
 
     /* allocate memory for the object */
     pBiDi=(UBiDi *)uprv_malloc(sizeof(UBiDi));
-    if(pBiDi==NULL) {
+    if(pBiDi==nullptr) {
         *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+        return nullptr;
     }
 
-    /* reset the object, all pointers NULL, all flags false, all sizes 0 */
+    /* reset the object, all pointers nullptr, all flags false, all sizes 0 */
     uprv_memset(pBiDi, 0, sizeof(UBiDi));
 
     /* allocate memory for arrays as requested */
@@ -178,18 +178,18 @@ ubidi_openSized(int32_t maxLength, int32_t maxRunCount, UErrorCode *pErrorCode) 
         return pBiDi;
     } else {
         ubidi_close(pBiDi);
-        return NULL;
+        return nullptr;
     }
 }
 
 /*
- * We are allowed to allocate memory if memory==NULL or
+ * We are allowed to allocate memory if memory==nullptr or
  * mayAllocate==true for each array that we need.
  * We also try to grow memory as needed if we
  * allocate it.
  *
  * Assume sizeNeeded>0.
- * If *pMemory!=NULL, then assume *pSize>0.
+ * If *pMemory!=nullptr, then assume *pSize>0.
  *
  * ### this realloc() may unnecessarily copy the old data,
  * which we know we don't need any more;
@@ -199,9 +199,9 @@ U_CFUNC UBool
 ubidi_getMemory(BidiMemoryForAllocation *bidiMem, int32_t *pSize, UBool mayAllocate, int32_t sizeNeeded) {
     void **pMemory = (void **)bidiMem;
     /* check for existing memory */
-    if(*pMemory==NULL) {
+    if(*pMemory==nullptr) {
         /* we need to allocate memory */
-        if(mayAllocate && (*pMemory=uprv_malloc(sizeNeeded))!=NULL) {
+        if(mayAllocate && (*pMemory=uprv_malloc(sizeNeeded))!=nullptr) {
             *pSize=sizeNeeded;
             return true;
         } else {
@@ -222,7 +222,7 @@ ubidi_getMemory(BidiMemoryForAllocation *bidiMem, int32_t *pSize, UBool mayAlloc
              * realloc, but it is needed when adding runs using getRunsMemory()
              * in setParaRunsOnly()
              */
-            if((memory=uprv_realloc(*pMemory, sizeNeeded))!=NULL) {
+            if((memory=uprv_realloc(*pMemory, sizeNeeded))!=nullptr) {
                 *pMemory=memory;
                 *pSize=sizeNeeded;
                 return true;
@@ -236,27 +236,27 @@ ubidi_getMemory(BidiMemoryForAllocation *bidiMem, int32_t *pSize, UBool mayAlloc
 
 U_CAPI void U_EXPORT2
 ubidi_close(UBiDi *pBiDi) {
-    if(pBiDi!=NULL) {
-        pBiDi->pParaBiDi=NULL;          /* in case one tries to reuse this block */
-        if(pBiDi->dirPropsMemory!=NULL) {
+    if(pBiDi!=nullptr) {
+        pBiDi->pParaBiDi=nullptr;          /* in case one tries to reuse this block */
+        if(pBiDi->dirPropsMemory!=nullptr) {
             uprv_free(pBiDi->dirPropsMemory);
         }
-        if(pBiDi->levelsMemory!=NULL) {
+        if(pBiDi->levelsMemory!=nullptr) {
             uprv_free(pBiDi->levelsMemory);
         }
-        if(pBiDi->openingsMemory!=NULL) {
+        if(pBiDi->openingsMemory!=nullptr) {
             uprv_free(pBiDi->openingsMemory);
         }
-        if(pBiDi->parasMemory!=NULL) {
+        if(pBiDi->parasMemory!=nullptr) {
             uprv_free(pBiDi->parasMemory);
         }
-        if(pBiDi->runsMemory!=NULL) {
+        if(pBiDi->runsMemory!=nullptr) {
             uprv_free(pBiDi->runsMemory);
         }
-        if(pBiDi->isolatesMemory!=NULL) {
+        if(pBiDi->isolatesMemory!=nullptr) {
             uprv_free(pBiDi->isolatesMemory);
         }
-        if(pBiDi->insertPoints.points!=NULL) {
+        if(pBiDi->insertPoints.points!=nullptr) {
             uprv_free(pBiDi->insertPoints.points);
         }
 
@@ -268,7 +268,7 @@ ubidi_close(UBiDi *pBiDi) {
 
 U_CAPI void U_EXPORT2
 ubidi_setInverse(UBiDi *pBiDi, UBool isInverse) {
-    if(pBiDi!=NULL) {
+    if(pBiDi!=nullptr) {
         pBiDi->isInverse=isInverse;
         pBiDi->reorderingMode = isInverse ? UBIDI_REORDER_INVERSE_NUMBERS_AS_L
                                           : UBIDI_REORDER_DEFAULT;
@@ -277,7 +277,7 @@ ubidi_setInverse(UBiDi *pBiDi, UBool isInverse) {
 
 U_CAPI UBool U_EXPORT2
 ubidi_isInverse(UBiDi *pBiDi) {
-    if(pBiDi!=NULL) {
+    if(pBiDi!=nullptr) {
         return pBiDi->isInverse;
     } else {
         return false;
@@ -301,7 +301,7 @@ ubidi_isInverse(UBiDi *pBiDi) {
  */
 U_CAPI void U_EXPORT2
 ubidi_setReorderingMode(UBiDi *pBiDi, UBiDiReorderingMode reorderingMode) {
-    if ((pBiDi!=NULL) && (reorderingMode >= UBIDI_REORDER_DEFAULT)
+    if ((pBiDi!=nullptr) && (reorderingMode >= UBIDI_REORDER_DEFAULT)
                         && (reorderingMode < UBIDI_REORDER_COUNT)) {
         pBiDi->reorderingMode = reorderingMode;
         pBiDi->isInverse = (UBool)(reorderingMode == UBIDI_REORDER_INVERSE_NUMBERS_AS_L);
@@ -310,7 +310,7 @@ ubidi_setReorderingMode(UBiDi *pBiDi, UBiDiReorderingMode reorderingMode) {
 
 U_CAPI UBiDiReorderingMode U_EXPORT2
 ubidi_getReorderingMode(UBiDi *pBiDi) {
-    if (pBiDi!=NULL) {
+    if (pBiDi!=nullptr) {
         return pBiDi->reorderingMode;
     } else {
         return UBIDI_REORDER_DEFAULT;
@@ -322,14 +322,14 @@ ubidi_setReorderingOptions(UBiDi *pBiDi, uint32_t reorderingOptions) {
     if (reorderingOptions & UBIDI_OPTION_REMOVE_CONTROLS) {
         reorderingOptions&=~UBIDI_OPTION_INSERT_MARKS;
     }
-    if (pBiDi!=NULL) {
+    if (pBiDi!=nullptr) {
         pBiDi->reorderingOptions=reorderingOptions;
     }
 }
 
 U_CAPI uint32_t U_EXPORT2
 ubidi_getReorderingOptions(UBiDi *pBiDi) {
-    if (pBiDi!=NULL) {
+    if (pBiDi!=nullptr) {
         return pBiDi->reorderingOptions;
     } else {
         return 0;
@@ -344,7 +344,7 @@ int32_t length){
     UChar32 uchar;
     UCharDirection dir;
 
-    if( text==NULL || length<-1 ){
+    if( text==nullptr || length<-1 ){
         return UBIDI_NEUTRAL;
     }
 
@@ -1797,7 +1797,7 @@ addPoint(UBiDi *pBiDi, int32_t pos, int32_t flag)
     if (pInsertPoints->capacity == 0)
     {
         pInsertPoints->points=static_cast<Point *>(uprv_malloc(sizeof(Point)*FIRSTALLOC));
-        if (pInsertPoints->points == NULL)
+        if (pInsertPoints->points == nullptr)
         {
             pInsertPoints->errorCode=U_MEMORY_ALLOCATION_ERROR;
             return;
@@ -1809,7 +1809,7 @@ addPoint(UBiDi *pBiDi, int32_t pos, int32_t flag)
         Point * savePoints=pInsertPoints->points;
         pInsertPoints->points=static_cast<Point *>(uprv_realloc(pInsertPoints->points,
                                            pInsertPoints->capacity*2*sizeof(Point)));
-        if (pInsertPoints->points == NULL)
+        if (pInsertPoints->points == nullptr)
         {
             pInsertPoints->points=savePoints;
             pInsertPoints->errorCode=U_MEMORY_ALLOCATION_ERROR;
@@ -2331,8 +2331,8 @@ ubidi_setContext(UBiDi *pBiDi,
                  UErrorCode *pErrorCode) {
     /* check the argument values */
     RETURN_VOID_IF_NULL_OR_FAILING_ERRCODE(pErrorCode);
-    if(pBiDi==NULL || proLength<-1 || epiLength<-1 ||
-       (prologue==NULL && proLength!=0) || (epilogue==NULL && epiLength!=0)) {
+    if(pBiDi==nullptr || proLength<-1 || epiLength<-1 ||
+       (prologue==nullptr && proLength!=0) || (epilogue==nullptr && epiLength!=0)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -2364,7 +2364,7 @@ setParaSuccess(UBiDi *pBiDi) {
 static void
 setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
                 UBiDiLevel paraLevel, UErrorCode *pErrorCode) {
-    int32_t *runsOnlyMemory = NULL;
+    int32_t *runsOnlyMemory = nullptr;
     int32_t *visualMap;
     UChar *visualText;
     int32_t saveLength, saveTrailingWSStart;
@@ -2381,12 +2381,12 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
 
     pBiDi->reorderingMode=UBIDI_REORDER_DEFAULT;
     if(length==0) {
-        ubidi_setPara(pBiDi, text, length, paraLevel, NULL, pErrorCode);
+        ubidi_setPara(pBiDi, text, length, paraLevel, nullptr, pErrorCode);
         goto cleanup3;
     }
     /* obtain memory for mapping table and visual text */
     runsOnlyMemory=static_cast<int32_t *>(uprv_malloc(length*(sizeof(int32_t)+sizeof(UChar)+sizeof(UBiDiLevel))));
-    if(runsOnlyMemory==NULL) {
+    if(runsOnlyMemory==nullptr) {
         *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
         goto cleanup3;
     }
@@ -2399,7 +2399,7 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
         pBiDi->reorderingOptions|=UBIDI_OPTION_REMOVE_CONTROLS;
     }
     paraLevel&=1;                       /* accept only 0 or 1 */
-    ubidi_setPara(pBiDi, text, length, paraLevel, NULL, pErrorCode);
+    ubidi_setPara(pBiDi, text, length, paraLevel, nullptr, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
         goto cleanup3;
     }
@@ -2437,7 +2437,7 @@ setParaRunsOnly(UBiDi *pBiDi, const UChar *text, int32_t length,
      */
     saveMayAllocateText=pBiDi->mayAllocateText;
     pBiDi->mayAllocateText=false;
-    ubidi_setPara(pBiDi, visualText, visualLength, paraLevel, NULL, pErrorCode);
+    ubidi_setPara(pBiDi, visualText, visualLength, paraLevel, nullptr, pErrorCode);
     pBiDi->mayAllocateText=saveMayAllocateText;
     ubidi_getRuns(pBiDi, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
@@ -2559,7 +2559,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
 
     /* check the argument values */
     RETURN_VOID_IF_NULL_OR_FAILING_ERRCODE(pErrorCode);
-    if(pBiDi==NULL || text==NULL || length<-1 ||
+    if(pBiDi==nullptr || text==nullptr || length<-1 ||
        (paraLevel>UBIDI_MAX_EXPLICIT_LEVEL && paraLevel<UBIDI_DEFAULT_LTR)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -2576,16 +2576,16 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
     }
 
     /* initialize the UBiDi structure */
-    pBiDi->pParaBiDi=NULL;          /* mark unfinished setPara */
+    pBiDi->pParaBiDi=nullptr;          /* mark unfinished setPara */
     pBiDi->text=text;
     pBiDi->length=pBiDi->originalLength=pBiDi->resultLength=length;
     pBiDi->paraLevel=paraLevel;
     pBiDi->direction=(UBiDiDirection)(paraLevel&1);
     pBiDi->paraCount=1;
 
-    pBiDi->dirProps=NULL;
-    pBiDi->levels=NULL;
-    pBiDi->runs=NULL;
+    pBiDi->dirProps=nullptr;
+    pBiDi->levels=nullptr;
+    pBiDi->runs=nullptr;
     pBiDi->insertPoints.size=0;         /* clean up from last call */
     pBiDi->insertPoints.confirmed=0;    /* clean up from last call */
 
@@ -2640,7 +2640,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
     pBiDi->trailingWSStart=length;  /* the levels[] will reflect the WS run */
 
     /* are explicit levels specified? */
-    if(embeddingLevels==NULL) {
+    if(embeddingLevels==nullptr) {
         /* no: determine explicit levels according to the (Xn) rules */\
         if(getLevelsMemory(pBiDi, length)) {
             pBiDi->levels=pBiDi->levelsMemory;
@@ -2737,7 +2737,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
          * Examples for "insignificant" ones are empty embeddings
          * LRE-PDF, LRE-RLE-PDF-PDF, etc.
          */
-        if(embeddingLevels==NULL && pBiDi->paraCount<=1 &&
+        if(embeddingLevels==nullptr && pBiDi->paraCount<=1 &&
                                    !(pBiDi->flags&DIRPROP_FLAG_MULTI_RUNS)) {
             resolveImplicitLevels(pBiDi, 0, length,
                                     GET_LR_FROM_LEVEL(GET_PARALEVEL(pBiDi, 0)),
@@ -2856,14 +2856,14 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
 
 U_CAPI void U_EXPORT2
 ubidi_orderParagraphsLTR(UBiDi *pBiDi, UBool orderParagraphsLTR) {
-    if(pBiDi!=NULL) {
+    if(pBiDi!=nullptr) {
         pBiDi->orderParagraphsLTR=orderParagraphsLTR;
     }
 }
 
 U_CAPI UBool U_EXPORT2
 ubidi_isOrderParagraphsLTR(UBiDi *pBiDi) {
-    if(pBiDi!=NULL) {
+    if(pBiDi!=nullptr) {
         return pBiDi->orderParagraphsLTR;
     } else {
         return false;
@@ -2884,7 +2884,7 @@ ubidi_getText(const UBiDi *pBiDi) {
     if(IS_VALID_PARA_OR_LINE(pBiDi)) {
         return pBiDi->text;
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -2952,13 +2952,13 @@ ubidi_getParagraphByIndex(const UBiDi *pBiDi, int32_t paraIndex,
     } else {
         paraStart=0;
     }
-    if(pParaStart!=NULL) {
+    if(pParaStart!=nullptr) {
         *pParaStart=paraStart;
     }
-    if(pParaLimit!=NULL) {
+    if(pParaLimit!=nullptr) {
         *pParaLimit=pBiDi->paras[paraIndex].limit;
     }
-    if(pParaLevel!=NULL) {
+    if(pParaLevel!=nullptr) {
         *pParaLevel=GET_PARALEVEL(pBiDi, paraStart);
     }
 }
@@ -2987,7 +2987,7 @@ ubidi_setClassCallback(UBiDi *pBiDi, UBiDiClassCallback *newFn,
                        const void **oldContext, UErrorCode *pErrorCode)
 {
     RETURN_VOID_IF_NULL_OR_FAILING_ERRCODE(pErrorCode);
-    if(pBiDi==NULL) {
+    if(pBiDi==nullptr) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -3006,7 +3006,7 @@ ubidi_setClassCallback(UBiDi *pBiDi, UBiDiClassCallback *newFn,
 U_CAPI void U_EXPORT2
 ubidi_getClassCallback(UBiDi *pBiDi, UBiDiClassCallback **fn, const void **context)
 {
-    if(pBiDi==NULL) {
+    if(pBiDi==nullptr) {
         return;
     }
     if( fn )
@@ -3024,7 +3024,7 @@ ubidi_getCustomizedClass(UBiDi *pBiDi, UChar32 c)
 {
     UCharDirection dir;
 
-    if( pBiDi->fnClassCallback == NULL ||
+    if( pBiDi->fnClassCallback == nullptr ||
         (dir = (*pBiDi->fnClassCallback)(pBiDi->coClassCallback, c)) == U_BIDI_CLASS_DEFAULT )
     {
         dir = ubidi_getClass(c);

@@ -43,25 +43,25 @@ udtitvfmt_open(const char*  locale,
                UErrorCode*  status)
 {
     if (U_FAILURE(*status)) {
-        return NULL;
+        return nullptr;
     }
-    if ((skeleton == NULL ? skeletonLength != 0 : skeletonLength < -1) ||
-        (tzID == NULL ? tzIDLength != 0 : tzIDLength < -1)
+    if ((skeleton == nullptr ? skeletonLength != 0 : skeletonLength < -1) ||
+        (tzID == nullptr ? tzIDLength != 0 : tzIDLength < -1)
     ) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
+        return nullptr;
     }
     UnicodeString skel((UBool)(skeletonLength == -1), skeleton, skeletonLength);
     LocalPointer<DateIntervalFormat> formatter(
             DateIntervalFormat::createInstance(skel, Locale(locale), *status));
     if (U_FAILURE(*status)) {
-        return NULL;
+        return nullptr;
     }
     if(tzID != 0) {
         TimeZone *zone = TimeZone::createTimeZone(UnicodeString((UBool)(tzIDLength == -1), tzID, tzIDLength));
-        if(zone == NULL) {
+        if(zone == nullptr) {
             *status = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
+            return nullptr;
         }
         formatter->adoptTimeZone(zone);
     }
@@ -88,13 +88,13 @@ udtitvfmt_format(const UDateIntervalFormat* formatter,
     if (U_FAILURE(*status)) {
         return -1;
     }
-    if (result == NULL ? resultCapacity != 0 : resultCapacity < 0) {
+    if (result == nullptr ? resultCapacity != 0 : resultCapacity < 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
     UnicodeString res;
-    if (result != NULL) {
-        // NULL destination for pure preflighting: empty dummy string
+    if (result != nullptr) {
+        // nullptr destination for pure preflighting: empty dummy string
         // otherwise, alias the destination buffer (copied from udat_format)
         res.setTo(result, 0, resultCapacity);
     }

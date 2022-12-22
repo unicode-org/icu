@@ -100,10 +100,10 @@ void CompoundTransliteratorTest::TestConstruction(){
    {
     /*Test Jitterbug 914 */
     UErrorCode err = U_ZERO_ERROR;
-    CompoundTransliterator  cpdTrans(UnicodeString("Latin-Hangul"),UTRANS_REVERSE,NULL,parseError,err);
+    CompoundTransliterator  cpdTrans(UnicodeString("Latin-Hangul"),UTRANS_REVERSE,nullptr,parseError,err);
     UnicodeString newID =cpdTrans.getID();
     if(newID!=UnicodeString("Hangul-Latin")){
-        errln(UnicodeString("Test for Jitterbug 914 for cpdTrans(UnicodeString(\"Latin-Hangul\"),UTRANS_REVERSE,NULL,err) failed"));
+        errln(UnicodeString("Test for Jitterbug 914 for cpdTrans(UnicodeString(\"Latin-Hangul\"),UTRANS_REVERSE,nullptr,err) failed"));
     }
    }
    delete t1;
@@ -216,7 +216,7 @@ void CompoundTransliteratorTest::TestGetCount(){
 
     /* Quick test getTargetSet(), only test that it doesn't die.  TODO:  a better test. */
     UnicodeSet ts;
-    UnicodeSet *retUS = NULL;
+    UnicodeSet *retUS = nullptr;
     retUS = &ct1->getTargetSet(ts);
     if (retUS != &ts || ts.size() == 0) {
         errln("CompoundTransliterator::getTargetSet() failed.\n");
@@ -224,7 +224,7 @@ void CompoundTransliteratorTest::TestGetCount(){
 
     /* Quick test getSourceSet(), only test that it doesn't die.  TODO:  a better test. */
     UnicodeSet ss;
-    retUS = NULL;
+    retUS = nullptr;
     retUS = &ct1->getSourceSet(ss);
     if (retUS != &ss || ss.size() == 0) {
         errln("CompoundTransliterator::getSourceSet() failed.\n");

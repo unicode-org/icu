@@ -43,9 +43,9 @@ struct CollationData;
 class TailoredSet : public UMemory {
 public:
     TailoredSet(UnicodeSet *t)
-            : data(NULL), baseData(NULL),
+            : data(nullptr), baseData(nullptr),
               tailored(t),
-              suffix(NULL),
+              suffix(nullptr),
               errorCode(U_ZERO_ERROR) {}
 
     void forData(const CollationData *d, UErrorCode &errorCode);
@@ -94,12 +94,12 @@ public:
     };
 
     ContractionsAndExpansions(UnicodeSet *con, UnicodeSet *exp, CESink *s, UBool prefixes)
-            : data(NULL),
+            : data(nullptr),
               contractions(con), expansions(exp),
               sink(s),
               addPrefixes(prefixes),
               checkTailored(0),
-              suffix(NULL),
+              suffix(nullptr),
               errorCode(U_ZERO_ERROR) {}
 
     void forData(const CollationData *d, UErrorCode &errorCode);

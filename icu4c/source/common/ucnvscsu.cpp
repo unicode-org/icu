@@ -200,8 +200,8 @@ _SCSUOpen(UConverter *cnv,
         return;
     }
     cnv->extraInfo=uprv_malloc(sizeof(SCSUData));
-    if(cnv->extraInfo!=NULL) {
-        if(locale!=NULL && locale[0]=='j' && locale[1]=='a' && (locale[2]==0 || locale[2]=='_')) {
+    if(cnv->extraInfo!=nullptr) {
+        if(locale!=nullptr && locale[0]=='j' && locale[1]=='a' && (locale[2]==0 || locale[2]=='_')) {
             ((SCSUData *)cnv->extraInfo)->locale=l_ja;
         } else {
             ((SCSUData *)cnv->extraInfo)->locale=lGeneric;
@@ -218,11 +218,11 @@ _SCSUOpen(UConverter *cnv,
 
 static void U_CALLCONV
 _SCSUClose(UConverter *cnv) {
-    if(cnv->extraInfo!=NULL) {
+    if(cnv->extraInfo!=nullptr) {
         if(!cnv->isExtraLocal) {
             uprv_free(cnv->extraInfo);
         }
-        cnv->extraInfo=NULL;
+        cnv->extraInfo=nullptr;
     }
 }
 
@@ -295,7 +295,7 @@ fastSingle:
                 if(b<=0x7f) {
                     /* write US-ASCII graphic character or DEL */
                     *target++=(UChar)b;
-                    if(offsets!=NULL) {
+                    if(offsets!=nullptr) {
                         *offsets++=sourceIndex;
                     }
                 } else {
@@ -303,7 +303,7 @@ fastSingle:
                     uint32_t c=scsu->toUDynamicOffsets[dynamicWindow]+(b&0x7f);
                     if(c<=0xffff) {
                         *target++=(UChar)c;
-                        if(offsets!=NULL) {
+                        if(offsets!=nullptr) {
                             *offsets++=sourceIndex;
                         }
                     } else {
@@ -311,13 +311,13 @@ fastSingle:
                         *target++=(UChar)(0xd7c0+(c>>10));
                         if(target<targetLimit) {
                             *target++=(UChar)(0xdc00|(c&0x3ff));
-                            if(offsets!=NULL) {
+                            if(offsets!=nullptr) {
                                 *offsets++=sourceIndex;
                                 *offsets++=sourceIndex;
                             }
                         } else {
                             /* target overflow */
-                            if(offsets!=NULL) {
+                            if(offsets!=nullptr) {
                                 *offsets++=sourceIndex;
                             }
                             cnv->UCharErrorBuffer[0]=(UChar)(0xdc00|(c&0x3ff));
@@ -348,7 +348,7 @@ singleByteMode:
                 if((1UL<<b)&0x2601 /* binary 0010 0110 0000 0001, check for b==0xd || b==0xa || b==9 || b==0 */) {
                     /* CR/LF/TAB/NUL */
                     *target++=(UChar)b;
-                    if(offsets!=NULL) {
+                    if(offsets!=nullptr) {
                         *offsets++=sourceIndex;
                     }
                     sourceIndex=nextSourceIndex;
@@ -393,7 +393,7 @@ singleByteMode:
                 break;
             case quotePairTwo:
                 *target++=(UChar)((byteOne<<8)|b);
-                if(offsets!=NULL) {
+                if(offsets!=nullptr) {
                     *offsets++=sourceIndex;
                 }
                 sourceIndex=nextSourceIndex;
@@ -403,7 +403,7 @@ singleByteMode:
                 if(b<0x80) {
                     /* all static offsets are in the BMP */
                     *target++=(UChar)(staticOffsets[quoteWindow]+b);
-                    if(offsets!=NULL) {
+                    if(offsets!=nullptr) {
                         *offsets++=sourceIndex;
                     }
                 } else {
@@ -411,7 +411,7 @@ singleByteMode:
                     uint32_t c=scsu->toUDynamicOffsets[quoteWindow]+(b&0x7f);
                     if(c<=0xffff) {
                         *target++=(UChar)c;
-                        if(offsets!=NULL) {
+                        if(offsets!=nullptr) {
                             *offsets++=sourceIndex;
                         }
                     } else {
@@ -419,13 +419,13 @@ singleByteMode:
                         *target++=(UChar)(0xd7c0+(c>>10));
                         if(target<targetLimit) {
                             *target++=(UChar)(0xdc00|(c&0x3ff));
-                            if(offsets!=NULL) {
+                            if(offsets!=nullptr) {
                                 *offsets++=sourceIndex;
                                 *offsets++=sourceIndex;
                             }
                         } else {
                             /* target overflow */
-                            if(offsets!=NULL) {
+                            if(offsets!=nullptr) {
                                 *offsets++=sourceIndex;
                             }
                             cnv->UCharErrorBuffer[0]=(UChar)(0xdc00|(c&0x3ff));
@@ -479,7 +479,7 @@ singleByteMode:
 fastUnicode:
             while(source+1<sourceLimit && target<targetLimit && (uint8_t)((b=*source)-UC0)>(Urs-UC0)) {
                 *target++=(UChar)((b<<8)|source[1]);
-                if(offsets!=NULL) {
+                if(offsets!=nullptr) {
                     *offsets++=sourceIndex;
                 }
                 sourceIndex=nextSourceIndex;
@@ -543,7 +543,7 @@ fastUnicode:
                 break;
             case quotePairTwo:
                 *target++=(UChar)((byteOne<<8)|b);
-                if(offsets!=NULL) {
+                if(offsets!=nullptr) {
                     *offsets++=sourceIndex;
                 }
                 sourceIndex=nextSourceIndex;
@@ -1076,7 +1076,7 @@ loop:
             if((c-0x20)<=0x5f) {
                 /* pass US-ASCII graphic character through */
                 *target++=(uint8_t)c;
-                if(offsets!=NULL) {
+                if(offsets!=nullptr) {
                     *offsets++=sourceIndex;
                 }
                 --targetCapacity;
@@ -1084,7 +1084,7 @@ loop:
                 if((1UL<<c)&0x2601 /* binary 0010 0110 0000 0001, check for b==0xd || b==0xa || b==9 || b==0 */) {
                     /* CR/LF/TAB/NUL */
                     *target++=(uint8_t)c;
-                    if(offsets!=NULL) {
+                    if(offsets!=nullptr) {
                         *offsets++=sourceIndex;
                     }
                     --targetCapacity;
@@ -1097,7 +1097,7 @@ loop:
             } else if((delta=c-currentOffset)<=0x7f) {
                 /* use the current dynamic window */
                 *target++=(uint8_t)(delta|0x80);
-                if(offsets!=NULL) {
+                if(offsets!=nullptr) {
                     *offsets++=sourceIndex;
                 }
                 --targetCapacity;
@@ -1135,7 +1135,7 @@ getTrailSingle:
                 if((delta=c-currentOffset)<=0x7f) {
                     /* use the current dynamic window */
                     *target++=(uint8_t)(delta|0x80);
-                    if(offsets!=NULL) {
+                    if(offsets!=nullptr) {
                         *offsets++=sourceIndex;
                     }
                     --targetCapacity;
@@ -1161,7 +1161,7 @@ getTrailSingle:
                     /* change to Unicode mode and output this (lead, trail) pair */
                     isSingleByteMode=false;
                     *target++=(uint8_t)SCU;
-                    if(offsets!=NULL) {
+                    if(offsets!=nullptr) {
                         *offsets++=sourceIndex;
                     }
                     --targetCapacity;
@@ -1255,7 +1255,7 @@ getTrailSingle:
                 if(targetCapacity>=2) {
                     *target++=(uint8_t)(c>>8);
                     *target++=(uint8_t)c;
-                    if(offsets!=NULL) {
+                    if(offsets!=nullptr) {
                         *offsets++=sourceIndex;
                         *offsets++=sourceIndex;
                     }
@@ -1392,7 +1392,7 @@ outputBytes:
     /* write the output character bytes from c and length [code copied from ucnvmbcs.c] */
     /* from the first if in the loop we know that targetCapacity>0 */
     if(length<=targetCapacity) {
-        if(offsets==NULL) {
+        if(offsets==nullptr) {
             switch(length) {
                 /* each branch falls through to the next one */
             case 4:
@@ -1480,19 +1480,19 @@ outputBytes:
             /* each branch falls through to the next one */
         case 3:
             *target++=(uint8_t)(c>>16);
-            if(offsets!=NULL) {
+            if(offsets!=nullptr) {
                 *offsets++=sourceIndex;
             }
             U_FALLTHROUGH;
         case 2:
             *target++=(uint8_t)(c>>8);
-            if(offsets!=NULL) {
+            if(offsets!=nullptr) {
                 *offsets++=sourceIndex;
             }
             U_FALLTHROUGH;
         case 1:
             *target++=(uint8_t)c;
-            if(offsets!=NULL) {
+            if(offsets!=nullptr) {
                 *offsets++=sourceIndex;
             }
             U_FALLTHROUGH;
@@ -2000,8 +2000,8 @@ U_CDECL_END
 static const UConverterImpl _SCSUImpl={
     UCNV_SCSU,
 
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
 
     _SCSUOpen,
     _SCSUClose,
@@ -2011,15 +2011,15 @@ static const UConverterImpl _SCSUImpl={
     _SCSUToUnicodeWithOffsets,
     _SCSUFromUnicode,
     _SCSUFromUnicodeWithOffsets,
-    NULL,
+    nullptr,
 
-    NULL,
+    nullptr,
     _SCSUGetName,
-    NULL,
+    nullptr,
     _SCSUSafeClone,
     ucnv_getCompleteUnicodeSet,
-    NULL,
-    NULL
+    nullptr,
+    nullptr
 };
 
 static const UConverterStaticData _SCSUStaticData={

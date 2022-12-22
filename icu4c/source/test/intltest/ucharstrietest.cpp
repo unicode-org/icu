@@ -37,7 +37,7 @@ public:
     UCharsTrieTest();
     virtual ~UCharsTrieTest();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL) override;
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=nullptr) override;
     void TestBuilder();
     void TestEmpty();
     void Test_a();
@@ -84,7 +84,7 @@ extern IntlTest *createUCharsTrieTest() {
     return new UCharsTrieTest();
 }
 
-UCharsTrieTest::UCharsTrieTest() : builder_(NULL) {
+UCharsTrieTest::UCharsTrieTest() : builder_(nullptr) {
     IcuTestErrorCode errorCode(*this, "UCharsTrieTest()");
     builder_=new UCharsTrieBuilder(errorCode);
 }
@@ -807,7 +807,7 @@ UCharsTrie *UCharsTrieTest::buildTrie(const StringAndValue data[], int32_t dataL
         errln("builder.buildUnicodeString() before & after build() returned same array");
     }
     if(errorCode.isFailure()) {
-        return NULL;
+        return nullptr;
     }
     // Tries from either build() method should be identical but
     // UCharsTrie does not implement equals().

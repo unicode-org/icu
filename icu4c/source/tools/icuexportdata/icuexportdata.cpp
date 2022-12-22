@@ -547,14 +547,14 @@ void computeDecompositions(const char* basename,
     const Normalizer2* mainNormalizer;
     const Normalizer2* nfdNormalizer = Normalizer2::getNFDInstance(status);
     const Normalizer2* nfcNormalizer = Normalizer2::getNFCInstance(status);
-    FILE* f = NULL;
+    FILE* f = nullptr;
     std::vector<uint32_t> nonRecursive32;
     LocalUMutableCPTriePointer nonRecursiveBuilder(umutablecptrie_open(0, 0, status));
 
     if (uprv_strcmp(basename, "nfkd") == 0) {
         mainNormalizer = Normalizer2::getNFKDInstance(status);
     } else if (uprv_strcmp(basename, "uts46d") == 0) {
-        mainNormalizer = Normalizer2::getInstance(NULL, "uts46", UNORM2_COMPOSE, status);
+        mainNormalizer = Normalizer2::getInstance(nullptr, "uts46", UNORM2_COMPOSE, status);
     } else {
         mainNormalizer = nfdNormalizer;
         f = prepareOutputFile("decompositionex");
@@ -1019,13 +1019,13 @@ int exportUprops(int argc, char* argv[]) {
             }
             UProperty uprop = static_cast<UProperty>(i);
             const char* propName = u_getPropertyName(uprop, U_SHORT_PROPERTY_NAME);
-            if (propName == NULL) {
+            if (propName == nullptr) {
                 propName = u_getPropertyName(uprop, U_LONG_PROPERTY_NAME);
-                if (propName != NULL && VERBOSE) {
+                if (propName != nullptr && VERBOSE) {
                     std::cerr << "Note: falling back to long name for: " << propName << std::endl;
                 }
             }
-            if (propName != NULL) {
+            if (propName != nullptr) {
                 propNames.push_back(propName);
             } else {
                 std::cerr << "Warning: Could not find name for: " << uprop << std::endl;
@@ -1149,7 +1149,7 @@ int exportCase(int argc, char* argv[]) {
     const UTrie2* caseTrie = &caseProps->trie;
 
     AddRangeHelper helper = { builder.getAlias() };
-    utrie2_enum(caseTrie, NULL, addRangeToUCPTrie, &helper);
+    utrie2_enum(caseTrie, nullptr, addRangeToUCPTrie, &helper);
 
     UCPTrieValueWidth width = UCPTRIE_VALUE_BITS_16;
     LocalUCPTriePointer utrie(umutablecptrie_buildImmutable(

@@ -473,9 +473,9 @@ StringCaseTest::TestCasingImpl(const UnicodeString &input,
     IcuTestErrorCode errorCode(*this, "TestCasingImpl");
     LocalUCaseMapPointer csm(ucasemap_open(localeID, options, errorCode));
 #if !UCONFIG_NO_BREAK_ITERATION
-    if(iter!=NULL) {
+    if(iter!=nullptr) {
         // Clone the break iterator so that the UCaseMap can safely adopt it.
-        UBreakIterator *clone=ubrk_safeClone((UBreakIterator *)iter, NULL, NULL, errorCode);
+        UBreakIterator *clone=ubrk_safeClone((UBreakIterator *)iter, nullptr, nullptr, errorCode);
         ucasemap_setBreakIterator(csm.getAlias(), clone, errorCode);
     }
 #endif
@@ -549,7 +549,7 @@ StringCaseTest::TestCasing() {
                 errln("TestCasing failed to createTestData(%s) - %s", dataNames[whichCase], u_errorName(status));
                 break;
             }
-            const DataMap *myCase = NULL;
+            const DataMap *myCase = nullptr;
             while(casingTest->nextCase(myCase, status)) {
                 input = myCase->getString("Input", status);
                 output = myCase->getString("Output", status);
@@ -563,13 +563,13 @@ StringCaseTest::TestCasing() {
                 if(whichCase==TEST_TITLE) {
                     type = myCase->getInt("Type", status);
                     if(type>=0) {
-                        iter.adoptInstead(ubrk_open((UBreakIteratorType)type, cLocaleID, NULL, 0, &status));
+                        iter.adoptInstead(ubrk_open((UBreakIteratorType)type, cLocaleID, nullptr, 0, &status));
                     } else if(type==-2) {
                         // Open a trivial break iterator that only delivers { 0, length }
                         // or even just { 0 } as boundaries.
                         static const UChar rules[] = { 0x2e, 0x2a, 0x3b };  // ".*;"
                         UParseError parseError;
-                        iter.adoptInstead(ubrk_openRules(rules, UPRV_LENGTHOF(rules), NULL, 0, &parseError, &status));
+                        iter.adoptInstead(ubrk_openRules(rules, UPRV_LENGTHOF(rules), nullptr, 0, &parseError, &status));
                     }
                 }
 #endif
@@ -598,7 +598,7 @@ StringCaseTest::TestCasing() {
                 }
 
 #if !UCONFIG_NO_BREAK_ITERATION
-                iter.adoptInstead(NULL);
+                iter.adoptInstead(nullptr);
 #endif
             }
         }
@@ -608,9 +608,9 @@ StringCaseTest::TestCasing() {
     // more tests for API coverage
     status=U_ZERO_ERROR;
     input=UNICODE_STRING_SIMPLE("sTrA\\u00dfE").unescape();
-    (result=input).toTitle(NULL);
+    (result=input).toTitle(nullptr);
     if(result!=UNICODE_STRING_SIMPLE("Stra\\u00dfe").unescape()) {
-        dataerrln("UnicodeString::toTitle(NULL) failed.");
+        dataerrln("UnicodeString::toTitle(nullptr) failed.");
     }
 #endif
 }
@@ -952,7 +952,7 @@ StringCaseTest::TestLongUpper() {
     UnicodeString s(length, (UChar32)0x390, length);
     UnicodeString result;
     UChar *dest = result.getBuffer(length + 1);
-    if (s.isBogus() || dest == NULL) {
+    if (s.isBogus() || dest == nullptr) {
         logln("Out of memory, unable to run this test on this machine.");
         return;
     }
@@ -1023,7 +1023,7 @@ void StringCaseTest::TestBufferOverflow() {
     UnicodeString data("hello world");
     int32_t result;
 #if !UCONFIG_NO_BREAK_ITERATION
-    result = ucasemap_toTitle(csm.getAlias(), NULL, 0, data.getBuffer(), data.length(), errorCode);
+    result = ucasemap_toTitle(csm.getAlias(), nullptr, 0, data.getBuffer(), data.length(), errorCode);
     if (errorCode.get() != U_BUFFER_OVERFLOW_ERROR || result != data.length()) {
         errln("%s:%d ucasemap_toTitle(\"hello world\") failed: "
               "expected (U_BUFFER_OVERFLOW_ERROR, %d), got (%s, %d)",
@@ -1035,7 +1035,7 @@ void StringCaseTest::TestBufferOverflow() {
     std::string data_utf8;
     data.toUTF8String(data_utf8);
 #if !UCONFIG_NO_BREAK_ITERATION
-    result = ucasemap_utf8ToTitle(csm.getAlias(), NULL, 0, data_utf8.c_str(), static_cast<int32_t>(data_utf8.length()), errorCode);
+    result = ucasemap_utf8ToTitle(csm.getAlias(), nullptr, 0, data_utf8.c_str(), static_cast<int32_t>(data_utf8.length()), errorCode);
     if (errorCode.get() != U_BUFFER_OVERFLOW_ERROR || result != (int32_t)data_utf8.length()) {
         errln("%s:%d ucasemap_toTitle(\"hello world\") failed: "
               "expected (U_BUFFER_OVERFLOW_ERROR, %d), got (%s, %d)",

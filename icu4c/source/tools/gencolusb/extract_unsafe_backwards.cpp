@@ -43,7 +43,7 @@ int main(int argc, const char *argv[]) {
     
     UErrorCode preflightCode = U_ZERO_ERROR;
     // preflight
-    int32_t serializedCount = unsafeBackwardSet->serialize(NULL,0,preflightCode);
+    int32_t serializedCount = unsafeBackwardSet->serialize(nullptr,0,preflightCode);
     if(U_FAILURE(preflightCode) && preflightCode != U_BUFFER_OVERFLOW_ERROR) {
       fprintf(stderr, "Err: %s preflighting unicode set\n", u_errorName(preflightCode));
       return 1;

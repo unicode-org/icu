@@ -130,7 +130,7 @@ FILE     *fDefaultDump;
 
 const char *progName = "colprobe";
 
-const char *gLocale = NULL;
+const char *gLocale = nullptr;
 int32_t platformIndex = -1;
 int32_t gPlatformNo = 0;
 int32_t gPlatformIndexes[10];
@@ -482,7 +482,7 @@ checkCaseOrdering(void) {
 void
 getExemplars(const char *locale, UnicodeSet &exemplars, UErrorCode &status) {
   // first we fill out structures with exemplar characters.
-  UResourceBundle *res = ures_open(NULL, locale, &status);
+  UResourceBundle *res = ures_open(nullptr, locale, &status);
   UnicodeString exemplarString = ures_getUnicodeStringByKey(res, "ExemplarCharacters", &status);
   exemplars.clear();
   exemplars.applyPattern(exemplarString, status);
@@ -545,7 +545,7 @@ setFiles(const char *name, UErrorCode &status) {
   getFileNames(name, tailoringName, tailoringDumpName, defaultName, defaultDumpName, diffName);
   if(options[PLATFORM].doesOccur && !options[DIFF].doesOccur) {  
     if(createDir(platforms[gPlatformIndexes[0]].name) == 0) {
-      tailoringBundle = new UPrinter(tailoringName, "en", "utf-8", NULL, false);
+      tailoringBundle = new UPrinter(tailoringName, "en", "utf-8", nullptr, false);
       fTailoringDump = fopen(tailoringDumpName, "wb");
     } else {
       status = U_FILE_ACCESS_ERROR;
@@ -555,7 +555,7 @@ setFiles(const char *name, UErrorCode &status) {
 
   if(options[REFERENCE].doesOccur && !options[DIFF].doesOccur) {
     if(createDir(platforms[gRefNum].name) == 0) {
-      referenceBundle = new UPrinter(defaultName, "en", "utf-8", NULL, false);
+      referenceBundle = new UPrinter(defaultName, "en", "utf-8", nullptr, false);
       fDefaultDump = fopen(defaultDumpName, "wb");
     } else {
       status = U_FILE_ACCESS_ERROR;
@@ -565,7 +565,7 @@ setFiles(const char *name, UErrorCode &status) {
 
   if((options[PLATFORM].doesOccur && options[REFERENCE].doesOccur) || options[DIFF].doesOccur) {
     if(createDir(platforms[gPlatformIndexes[0]].name) == 0) {
-      bundle = new UPrinter(diffName, "en", "utf-8", NULL, false);
+      bundle = new UPrinter(diffName, "en", "utf-8", nullptr, false);
     }
   }
   if(options[DIFF].doesOccur) {
@@ -648,7 +648,7 @@ processCollator(UCollator *col, UErrorCode &status) {
   int32_t ruleStringLength = ucol_getRulesEx(gCol, UCOL_TAILORING_ONLY, ruleString, 16384);
   logger->log(UnicodeString(ruleString, ruleStringLength), true);
   const char *locale = ucol_getLocale(gCol, ULOC_REQUESTED_LOCALE, &status);
-  if(locale == NULL) {
+  if(locale == nullptr) {
     locale = "en";
   }
   strcpy(myLoc, locale);
@@ -710,7 +710,7 @@ processCollator(UCollator *col, UErrorCode &status) {
     debug->log("\n*** Final order\n\n");
     debug->log(lines.toPrettyString(true, true), true);
     lines.toFile(fTailoringDump, true, status);
-    tailoringBundle->log(lines.toOutput(outputFormat, myLoc, platforms[gPlatformIndexes[0]].name, NULL, true, true, hanAppears), true);
+    tailoringBundle->log(lines.toOutput(outputFormat, myLoc, platforms[gPlatformIndexes[0]].name, nullptr, true, true, hanAppears), true);
     //debug->off();
 
     if(options[REFERENCE].doesOccur) {
@@ -725,7 +725,7 @@ processCollator(UCollator *col, UErrorCode &status) {
       logger->log("\n*** Detecting ordering for reference\n\n");
       SortedLines RefLines(exemplarUSet, gExcludeSet, RefProbe, logger, debug);
       RefLines.analyse(status);
-      referenceBundle->log(RefLines.toOutput(outputFormat, myLoc, platforms[gRefNum].name, NULL, true, true, false), true);
+      referenceBundle->log(RefLines.toOutput(outputFormat, myLoc, platforms[gRefNum].name, nullptr, true, true, false), true);
       RefLines.toFile(fDefaultDump, true, status);
 
       lines.reduceDifference(RefLines);
@@ -740,7 +740,7 @@ processCollator(UCollator *col, UErrorCode &status) {
     SortedLines RefLines(exemplarUSet, gExcludeSet, RefProbe, logger, debug);
     RefLines.analyse(status);
     logger->log(RefLines.toPrettyString(true), true);
-    referenceBundle->log(RefLines.toOutput(outputFormat, myLoc, platforms[gRefNum].name, NULL, true, true, false), true);
+    referenceBundle->log(RefLines.toOutput(outputFormat, myLoc, platforms[gRefNum].name, nullptr, true, true, false), true);
   }
   if(hanAppears) {
     // there are Han characters. This is a huge block. The best we can do is to just sort it, compare to empty
@@ -756,8 +756,8 @@ processCollator(UCollator *col, UErrorCode &status) {
     han.classifyRepertoire();
     han.getBounds(status);
     tailoringBundle->log("Han ordering:<br>\n");
-    tailoringBundle->log(han.toOutput(outputFormat, myLoc, platforms[gPlatformIndexes[0]].name, NULL, true, false, false), true);
-    bundle->log(han.toOutput(outputFormat, myLoc, platforms[gPlatformIndexes[0]].name, NULL, true, false, false), true);
+    tailoringBundle->log(han.toOutput(outputFormat, myLoc, platforms[gPlatformIndexes[0]].name, nullptr, true, false, false), true);
+    bundle->log(han.toOutput(outputFormat, myLoc, platforms[gPlatformIndexes[0]].name, nullptr, true, false, false), true);
   }
   ucol_close(gCol);
 }
@@ -770,13 +770,13 @@ processLocale(const char *locale, UErrorCode &status) {
     return;
   }
 
-  debug->log("Locale %s (LCID:%06X, unix:%s)\n", locale, gWinLCID, setlocale(LC_COLLATE, NULL));
+  debug->log("Locale %s (LCID:%06X, unix:%s)\n", locale, gWinLCID, setlocale(LC_COLLATE, nullptr));
   tailoringBundle->log("// Ordering for locale %s (LCID:%06X, unix:%s), platform %s reference %s<br>\n", 
-    locale, gWinLCID, setlocale(LC_COLLATE, NULL), 
+    locale, gWinLCID, setlocale(LC_COLLATE, nullptr), 
     platforms[gPlatformIndexes[0]].name, platforms[gRefNum].name);
   if(options[REFERENCE].doesOccur) {
     referenceBundle->log("// Reference for locale %s (LCID:%06X, unix:%s), platform %s reference %s<br>\n", 
-      locale, gWinLCID, setlocale(LC_COLLATE, NULL), 
+      locale, gWinLCID, setlocale(LC_COLLATE, nullptr), 
       platforms[gPlatformIndexes[0]].name, platforms[gRefNum].name);
   }
 
@@ -790,9 +790,9 @@ UBool
 hasCollationElements(const char *locName) {
 
   UErrorCode status = U_ZERO_ERROR;
-  UResourceBundle *ColEl = NULL;
+  UResourceBundle *ColEl = nullptr;
 
-  UResourceBundle *loc = ures_open(NULL, locName, &status);;
+  UResourceBundle *loc = ures_open(nullptr, locName, &status);;
 
   if(U_SUCCESS(status)) {
     status = U_ZERO_ERROR;
@@ -893,7 +893,7 @@ main(int argc,
         }
       } else { // do the loop through all the locales
         int32_t noOfLoc = uloc_countAvailable();
-        const char *locName = NULL;
+        const char *locName = nullptr;
         for(i = 0; i<noOfLoc; i++) {
           status = U_ZERO_ERROR;
           locName = uloc_getAvailable(i);

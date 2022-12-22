@@ -43,7 +43,7 @@ using namespace icu;
 // helper functions -------------------------------------------------------- ***
 
 // default converter for the platform encoding
-static UConverter *cnv=NULL;
+static UConverter *cnv=nullptr;
 
 static void
 printUString(const char *announce, const UChar *s, int32_t length) {
@@ -289,7 +289,7 @@ static void demoCaseMapInC() {
      * has bit flag options instead, by design of the Unicode SpecialCasing.txt UCD file.
      *
      * Also, string titlecasing requires a BreakIterator to find starts of words.
-     * The sample code here passes in a NULL pointer; u_strToTitle() will open and close a default
+     * The sample code here passes in a nullptr pointer; u_strToTitle() will open and close a default
      * titlecasing BreakIterator automatically.
      * For production code where many strings are titlecased it would be more efficient
      * to open a BreakIterator externally and pass it in.
@@ -330,7 +330,7 @@ static void demoCaseMapInC() {
     }
     /* titlecase/English */
     errorCode=U_ZERO_ERROR;
-    length=u_strToTitle(buffer, UPRV_LENGTHOF(buffer), input, -1, NULL, "en", &errorCode);
+    length=u_strToTitle(buffer, UPRV_LENGTHOF(buffer), input, -1, nullptr, "en", &errorCode);
     if(U_SUCCESS(errorCode)) {
         printUString("full-titlecased/en: ", buffer, length);
     } else {
@@ -338,7 +338,7 @@ static void demoCaseMapInC() {
     }
     /* titlecase/Turkish */
     errorCode=U_ZERO_ERROR;
-    length=u_strToTitle(buffer, UPRV_LENGTHOF(buffer), input, -1, NULL, "tr", &errorCode);
+    length=u_strToTitle(buffer, UPRV_LENGTHOF(buffer), input, -1, nullptr, "tr", &errorCode);
     if(U_SUCCESS(errorCode)) {
         printUString("full-titlecased/tr: ", buffer, length);
     } else {
@@ -402,9 +402,9 @@ static void demoCaseMapInCPlusPlus() {
     /* uppercase/Turkish */
     printUnicodeString("full-uppercased/tr: ", (t=s).toUpper(tr));
     /* titlecase/English */
-    printUnicodeString("full-titlecased/en: ", (t=s).toTitle(NULL, en));
+    printUnicodeString("full-titlecased/en: ", (t=s).toTitle(nullptr, en));
     /* titlecase/Turkish */
-    printUnicodeString("full-titlecased/tr: ", (t=s).toTitle(NULL, tr));
+    printUnicodeString("full-titlecased/tr: ", (t=s).toTitle(nullptr, tr));
     /* case-folde/default */
     printUnicodeString("full-case-folded/default: ", (t=s).foldCase(U_FOLD_CASE_DEFAULT));
     /* case-folde/Turkic */
@@ -597,13 +597,13 @@ main(int argc, const char *argv[]) {
     // This will currently affect only the printUString() function, see the code above.
     // printUnicodeString() could use this, too, by changing to an extract() overload
     // that takes a UConverter argument.
-    cnv=ucnv_open(NULL, &errorCode);
+    cnv=ucnv_open(nullptr, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "error %s opening the default converter\n", u_errorName(errorCode));
         return errorCode;
     }
 
-    ucnv_setFromUCallBack(cnv, UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_ESCAPE_C, NULL, NULL, &errorCode);
+    ucnv_setFromUCallBack(cnv, UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_ESCAPE_C, nullptr, nullptr, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "error %s setting the escape callback in the default converter\n", u_errorName(errorCode));
         ucnv_close(cnv);

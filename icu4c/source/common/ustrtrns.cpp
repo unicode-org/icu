@@ -53,22 +53,22 @@ u_strFromUTF32WithSub(UChar *dest,
 
     /* args check */
     if(U_FAILURE(*pErrorCode)){
-        return NULL;
+        return nullptr;
     }
-    if( (src==NULL && srcLength!=0) || srcLength < -1 ||
-        (destCapacity<0) || (dest == NULL && destCapacity > 0) ||
+    if( (src==nullptr && srcLength!=0) || srcLength < -1 ||
+        (destCapacity<0) || (dest == nullptr && destCapacity > 0) ||
         subchar > 0x10ffff || U_IS_SURROGATE(subchar)
     ) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
+        return nullptr;
     }
 
-    if(pNumSubstitutions != NULL) {
+    if(pNumSubstitutions != nullptr) {
         *pNumSubstitutions = 0;
     }
 
     pDest = dest;
-    destLimit = (dest!=NULL)?(dest + destCapacity):NULL;
+    destLimit = (dest!=nullptr)?(dest + destCapacity):nullptr;
     reqLength = 0;
     numSubstitutions = 0;
 
@@ -89,7 +89,7 @@ u_strFromUTF32WithSub(UChar *dest,
             while(*++srcLimit != 0) {}
         }
     } else {
-      srcLimit = (src!=NULL)?(src + srcLength):NULL;
+      srcLimit = (src!=nullptr)?(src + srcLength):nullptr;
     }
 
     /* convert with length */
@@ -105,7 +105,7 @@ u_strFromUTF32WithSub(UChar *dest,
                 }
                 break;
             } else if(0x10000 <= ch && ch <= 0x10ffff) {
-                if(pDest!=NULL && ((pDest + 2) <= destLimit)) {
+                if(pDest!=nullptr && ((pDest + 2) <= destLimit)) {
                     *pDest++ = U16_LEAD(ch);
                     *pDest++ = U16_TRAIL(ch);
                 } else {
@@ -115,7 +115,7 @@ u_strFromUTF32WithSub(UChar *dest,
             } else if((ch = subchar) < 0) {
                 /* surrogate code point, or not a Unicode code point at all */
                 *pErrorCode = U_INVALID_CHAR_FOUND;
-                return NULL;
+                return nullptr;
             } else {
                 ++numSubstitutions;
             }
@@ -126,7 +126,7 @@ u_strFromUTF32WithSub(UChar *dest,
     if(pDestLength) {
         *pDestLength = reqLength;
     }
-    if(pNumSubstitutions != NULL) {
+    if(pNumSubstitutions != nullptr) {
         *pNumSubstitutions = numSubstitutions;
     }
 
@@ -146,7 +146,7 @@ u_strFromUTF32(UChar *dest,
     return u_strFromUTF32WithSub(
             dest, destCapacity, pDestLength,
             src, srcLength,
-            U_SENTINEL, NULL,
+            U_SENTINEL, nullptr,
             pErrorCode);
 }
 
@@ -168,22 +168,22 @@ u_strToUTF32WithSub(UChar32 *dest,
 
     /* args check */
     if(U_FAILURE(*pErrorCode)){
-        return NULL;
+        return nullptr;
     }
-    if( (src==NULL && srcLength!=0) || srcLength < -1 ||
-        (destCapacity<0) || (dest == NULL && destCapacity > 0) ||
+    if( (src==nullptr && srcLength!=0) || srcLength < -1 ||
+        (destCapacity<0) || (dest == nullptr && destCapacity > 0) ||
         subchar > 0x10ffff || U_IS_SURROGATE(subchar)
     ) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
+        return nullptr;
     }
 
-    if(pNumSubstitutions != NULL) {
+    if(pNumSubstitutions != nullptr) {
         *pNumSubstitutions = 0;
     }
 
     pDest = dest;
-    destLimit = (dest!=NULL)?(dest + destCapacity):NULL;
+    destLimit = (dest!=nullptr)?(dest + destCapacity):nullptr;
     reqLength = 0;
     numSubstitutions = 0;
 
@@ -203,7 +203,7 @@ u_strToUTF32WithSub(UChar32 *dest,
             while(*++srcLimit != 0) {}
         }
     } else {
-        srcLimit = (src!=NULL)?(src + srcLength):NULL;
+        srcLimit = (src!=nullptr)?(src + srcLength):nullptr;
     }
 
     /* convert with length */
@@ -217,7 +217,7 @@ u_strToUTF32WithSub(UChar32 *dest,
         } else if((ch = subchar) < 0) {
             /* unpaired surrogate */
             *pErrorCode = U_INVALID_CHAR_FOUND;
-            return NULL;
+            return nullptr;
         } else {
             ++numSubstitutions;
         }
@@ -232,7 +232,7 @@ u_strToUTF32WithSub(UChar32 *dest,
     if(pDestLength) {
         *pDestLength = reqLength;
     }
-    if(pNumSubstitutions != NULL) {
+    if(pNumSubstitutions != nullptr) {
         *pNumSubstitutions = numSubstitutions;
     }
 
@@ -252,7 +252,7 @@ u_strToUTF32(UChar32 *dest,
     return u_strToUTF32WithSub(
             dest, destCapacity, pDestLength,
             src, srcLength,
-            U_SENTINEL, NULL,
+            U_SENTINEL, nullptr,
             pErrorCode);
 }
 
@@ -266,17 +266,17 @@ u_strFromUTF8WithSub(UChar *dest,
               UErrorCode *pErrorCode){
     /* args check */
     if(U_FAILURE(*pErrorCode)) {
-        return NULL;
+        return nullptr;
     }
-    if( (src==NULL && srcLength!=0) || srcLength < -1 ||
-        (destCapacity<0) || (dest == NULL && destCapacity > 0) ||
+    if( (src==nullptr && srcLength!=0) || srcLength < -1 ||
+        (destCapacity<0) || (dest == nullptr && destCapacity > 0) ||
         subchar > 0x10ffff || U_IS_SURROGATE(subchar)
     ) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
+        return nullptr;
     }
 
-    if(pNumSubstitutions!=NULL) {
+    if(pNumSubstitutions!=nullptr) {
         *pNumSubstitutions=0;
     }
     UChar *pDest = dest;
@@ -328,7 +328,7 @@ u_strFromUTF8WithSub(UChar *dest,
                     (c)=utf8_nextCharSafeBody((const uint8_t *)src, &(i), -1, c, -1);
                     if(c<0 && (++numSubstitutions, c = subchar) < 0) {
                         *pErrorCode = U_INVALID_CHAR_FOUND;
-                        return NULL;
+                        return nullptr;
                     } else if(c<=0xFFFF) {
                         *(pDest++)=(UChar)c;
                     } else {
@@ -368,7 +368,7 @@ u_strFromUTF8WithSub(UChar *dest,
                     (c)=utf8_nextCharSafeBody((const uint8_t *)src, &(i), -1, c, -1);
                     if(c<0 && (++numSubstitutions, c = subchar) < 0) {
                         *pErrorCode = U_INVALID_CHAR_FOUND;
-                        return NULL;
+                        return nullptr;
                     }
                     reqLength += U16_LENGTH(c);
                 }
@@ -433,7 +433,7 @@ u_strFromUTF8WithSub(UChar *dest,
                         (c)=utf8_nextCharSafeBody((const uint8_t *)src, &(i), srcLength, c, -1);
                         if(c<0 && (++numSubstitutions, c = subchar) < 0) {
                             *pErrorCode = U_INVALID_CHAR_FOUND;
-                            return NULL;
+                            return nullptr;
                         } else if(c<=0xFFFF) {
                             *(pDest++)=(UChar)c;
                         } else {
@@ -470,7 +470,7 @@ u_strFromUTF8WithSub(UChar *dest,
                     (c)=utf8_nextCharSafeBody((const uint8_t *)src, &(i), srcLength, c, -1);
                     if(c<0 && (++numSubstitutions, c = subchar) < 0) {
                         *pErrorCode = U_INVALID_CHAR_FOUND;
-                        return NULL;
+                        return nullptr;
                     } else if(c<=0xFFFF) {
                         *(pDest++)=(UChar)c;
                     } else {
@@ -512,7 +512,7 @@ u_strFromUTF8WithSub(UChar *dest,
                     (c)=utf8_nextCharSafeBody((const uint8_t *)src, &(i), srcLength, c, -1);
                     if(c<0 && (++numSubstitutions, c = subchar) < 0) {
                         *pErrorCode = U_INVALID_CHAR_FOUND;
-                        return NULL;
+                        return nullptr;
                     }
                     reqLength += U16_LENGTH(c);
                 }
@@ -522,7 +522,7 @@ u_strFromUTF8WithSub(UChar *dest,
 
     reqLength+=(int32_t)(pDest - dest);
 
-    if(pNumSubstitutions!=NULL) {
+    if(pNumSubstitutions!=nullptr) {
         *pNumSubstitutions=numSubstitutions;
     }
 
@@ -546,7 +546,7 @@ u_strFromUTF8(UChar *dest,
     return u_strFromUTF8WithSub(
             dest, destCapacity, pDestLength,
             src, srcLength,
-            U_SENTINEL, NULL,
+            U_SENTINEL, nullptr,
             pErrorCode);
 }
 
@@ -564,19 +564,19 @@ u_strFromUTF8Lenient(UChar *dest,
 
     /* args check */
     if(U_FAILURE(*pErrorCode)){
-        return NULL;
+        return nullptr;
     }
         
-    if( (src==NULL && srcLength!=0) || srcLength < -1 ||
-        (destCapacity<0) || (dest == NULL && destCapacity > 0)
+    if( (src==nullptr && srcLength!=0) || srcLength < -1 ||
+        (destCapacity<0) || (dest == nullptr && destCapacity > 0)
     ) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
+        return nullptr;
     }
 
     if(srcLength < 0) {
         /* Transform a NUL-terminated string. */
-        UChar *pDestLimit = (dest!=NULL)?(dest+destCapacity):NULL;
+        UChar *pDestLimit = (dest!=nullptr)?(dest+destCapacity):nullptr;
         uint8_t t1, t2, t3; /* trail bytes */
 
         while(((ch = *pSrc) != 0) && (pDest < pDestLimit)) {
@@ -662,7 +662,7 @@ u_strFromUTF8Lenient(UChar *dest,
             break;
         }
     } else /* srcLength >= 0 */ {
-      const uint8_t *pSrcLimit = (pSrc!=NULL)?(pSrc + srcLength):NULL;
+      const uint8_t *pSrcLimit = (pSrc!=nullptr)?(pSrc + srcLength):nullptr;
 
         /*
          * This function requires that if srcLength is given, then it must be
@@ -670,11 +670,11 @@ u_strFromUTF8Lenient(UChar *dest,
          * destination buffer overflow in the loop.
          */
         if(destCapacity < srcLength) {
-            if(pDestLength != NULL) {
+            if(pDestLength != nullptr) {
                 *pDestLength = srcLength; /* this likely overestimates the true destLength! */
             }
             *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
-            return NULL;
+            return nullptr;
         }
 
         if((pSrcLimit - pSrc) >= 4) {
@@ -800,23 +800,23 @@ u_strToUTF8WithSub(char *dest,
     int32_t reqLength=0;
     uint32_t ch=0,ch2=0;
     uint8_t *pDest = (uint8_t *)dest;
-    uint8_t *pDestLimit = (pDest!=NULL)?(pDest + destCapacity):NULL;
+    uint8_t *pDestLimit = (pDest!=nullptr)?(pDest + destCapacity):nullptr;
     int32_t numSubstitutions;
 
     /* args check */
     if(U_FAILURE(*pErrorCode)){
-        return NULL;
+        return nullptr;
     }
         
-    if( (pSrc==NULL && srcLength!=0) || srcLength < -1 ||
-        (destCapacity<0) || (dest == NULL && destCapacity > 0) ||
+    if( (pSrc==nullptr && srcLength!=0) || srcLength < -1 ||
+        (destCapacity<0) || (dest == nullptr && destCapacity > 0) ||
         subchar > 0x10ffff || U_IS_SURROGATE(subchar)
     ) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
+        return nullptr;
     }
 
-    if(pNumSubstitutions!=NULL) {
+    if(pNumSubstitutions!=nullptr) {
         *pNumSubstitutions=0;
     }
     numSubstitutions=0;
@@ -861,7 +861,7 @@ u_strToUTF8WithSub(char *dest,
                 } else {
                     /* Unicode 3.2 forbids surrogate code points in UTF-8 */
                     *pErrorCode = U_INVALID_CHAR_FOUND;
-                    return NULL;
+                    return nullptr;
                 }
 
                 length = U8_LENGTH(ch);
@@ -890,11 +890,11 @@ u_strToUTF8WithSub(char *dest,
             } else {
                 /* Unicode 3.2 forbids surrogate code points in UTF-8 */
                 *pErrorCode = U_INVALID_CHAR_FOUND;
-                return NULL;
+                return nullptr;
             }
         }
     } else {
-        const UChar *pSrcLimit = (pSrc!=NULL)?(pSrc+srcLength):NULL;
+        const UChar *pSrcLimit = (pSrc!=nullptr)?(pSrc+srcLength):nullptr;
         int32_t count;
 
         /* Faster loop without ongoing checking for pSrcLimit and pDestLimit. */
@@ -955,7 +955,7 @@ u_strToUTF8WithSub(char *dest,
                             ++numSubstitutions;
                         } else {
                             *pErrorCode = U_INVALID_CHAR_FOUND;
-                            return NULL;
+                            return nullptr;
                         }
 
                         /* convert and append*/
@@ -1003,7 +1003,7 @@ u_strToUTF8WithSub(char *dest,
                 } else {
                     /* Unicode 3.2 forbids surrogate code points in UTF-8 */
                     *pErrorCode = U_INVALID_CHAR_FOUND;
-                    return NULL;
+                    return nullptr;
                 }
 
                 length = U8_LENGTH(ch);
@@ -1033,14 +1033,14 @@ u_strToUTF8WithSub(char *dest,
             } else {
                 /* Unicode 3.2 forbids surrogate code points in UTF-8 */
                 *pErrorCode = U_INVALID_CHAR_FOUND;
-                return NULL;
+                return nullptr;
             }
         }
     }
 
     reqLength+=(int32_t)(pDest - (uint8_t *)dest);
 
-    if(pNumSubstitutions!=NULL) {
+    if(pNumSubstitutions!=nullptr) {
         *pNumSubstitutions=numSubstitutions;
     }
 
@@ -1063,7 +1063,7 @@ u_strToUTF8(char *dest,
     return u_strToUTF8WithSub(
             dest, destCapacity, pDestLength,
             pSrc, srcLength,
-            U_SENTINEL, NULL,
+            U_SENTINEL, nullptr,
             pErrorCode);
 }
 
@@ -1078,17 +1078,17 @@ u_strFromJavaModifiedUTF8WithSub(
         UErrorCode *pErrorCode) {
     /* args check */
     if(U_FAILURE(*pErrorCode)) {
-        return NULL;
+        return nullptr;
     }
-    if( (src==NULL && srcLength!=0) || srcLength < -1 ||
-        (dest==NULL && destCapacity!=0) || destCapacity<0 ||
+    if( (src==nullptr && srcLength!=0) || srcLength < -1 ||
+        (dest==nullptr && destCapacity!=0) || destCapacity<0 ||
         subchar > 0x10ffff || U_IS_SURROGATE(subchar)
     ) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
+        return nullptr;
     }
 
-    if(pNumSubstitutions!=NULL) {
+    if(pNumSubstitutions!=nullptr) {
         *pNumSubstitutions=0;
     }
     UChar *pDest = dest;
@@ -1185,7 +1185,7 @@ u_strFromJavaModifiedUTF8WithSub(
 
                 if(subchar < 0) {
                     *pErrorCode = U_INVALID_CHAR_FOUND;
-                    return NULL;
+                    return nullptr;
                 } else if(subchar > 0xffff && --count == 0) {
                     /*
                      * We need to write two UChars, adjusted count for that,
@@ -1234,7 +1234,7 @@ u_strFromJavaModifiedUTF8WithSub(
 
             if(subchar < 0) {
                 *pErrorCode = U_INVALID_CHAR_FOUND;
-                return NULL;
+                return nullptr;
             } else {
                 /* function call for error cases */
                 utf8_nextCharSafeBody((const uint8_t *)src, &(i), srcLength, ch, -1);
@@ -1285,7 +1285,7 @@ u_strFromJavaModifiedUTF8WithSub(
 
             if(subchar < 0) {
                 *pErrorCode = U_INVALID_CHAR_FOUND;
-                return NULL;
+                return nullptr;
             } else {
                 /* function call for error cases */
                 utf8_nextCharSafeBody((const uint8_t *)src, &(i), srcLength, ch, -1);
@@ -1295,7 +1295,7 @@ u_strFromJavaModifiedUTF8WithSub(
         }
     }
 
-    if(pNumSubstitutions!=NULL) {
+    if(pNumSubstitutions!=nullptr) {
         *pNumSubstitutions=numSubstitutions;
     }
 
@@ -1326,13 +1326,13 @@ u_strToJavaModifiedUTF8(
 
     /* args check */
     if(U_FAILURE(*pErrorCode)){
-        return NULL;
+        return nullptr;
     }
-    if( (src==NULL && srcLength!=0) || srcLength < -1 ||
-        (dest==NULL && destCapacity!=0) || destCapacity<0
+    if( (src==nullptr && srcLength!=0) || srcLength < -1 ||
+        (dest==nullptr && destCapacity!=0) || destCapacity<0
     ) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
+        return nullptr;
     }
 
     if(srcLength==-1) {
@@ -1355,7 +1355,7 @@ u_strToJavaModifiedUTF8(
     }
 
     /* Faster loop without ongoing checking for pSrcLimit and pDestLimit. */
-    pSrcLimit = (src!=NULL)?(src+srcLength):NULL;
+    pSrcLimit = (src!=nullptr)?(src+srcLength):nullptr;
     for(;;) {
         count = (int32_t)(pDestLimit - pDest);
         srcLength = (int32_t)(pSrcLimit - src);

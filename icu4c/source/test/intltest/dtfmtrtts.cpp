@@ -238,7 +238,7 @@ void DateFormatRoundTripTest::test(const Locale& loc)
         if(TEST_TABLE[itable++]) {
             logln("Testing style " + UnicodeString(styleName((DateFormat::EStyle)style)));
             DateFormat *df = DateFormat::createDateInstance((DateFormat::EStyle)style, loc);
-            if(df == NULL) {
+            if(df == nullptr) {
               errln(UnicodeString("Could not DF::createDateInstance ") + UnicodeString(styleName((DateFormat::EStyle)style)) +      " Locale: " + loc.getDisplayName(temp));
             } else {
               test(df, loc);
@@ -251,7 +251,7 @@ void DateFormatRoundTripTest::test(const Locale& loc)
         if (TEST_TABLE[itable++]) {
             logln("Testing style " + UnicodeString(styleName((DateFormat::EStyle)style)));
             DateFormat *df = DateFormat::createTimeInstance((DateFormat::EStyle)style, loc);
-            if(df == NULL) {
+            if(df == nullptr) {
               errln(UnicodeString("Could not DF::createTimeInstance ") + UnicodeString(styleName((DateFormat::EStyle)style)) + " Locale: " + loc.getDisplayName(temp));
             } else {
               test(df, loc, true);
@@ -265,7 +265,7 @@ void DateFormatRoundTripTest::test(const Locale& loc)
             if(TEST_TABLE[itable++]) {
                 logln("Testing dstyle" + UnicodeString(styleName((DateFormat::EStyle)dstyle)) + ", tstyle" + UnicodeString(styleName((DateFormat::EStyle)tstyle)) );
                 DateFormat *df = DateFormat::createDateTimeInstance((DateFormat::EStyle)dstyle, (DateFormat::EStyle)tstyle, loc);
-                if(df == NULL) {
+                if(df == nullptr) {
                     dataerrln(UnicodeString("Could not DF::createDateTimeInstance ") + UnicodeString(styleName((DateFormat::EStyle)dstyle)) + ", tstyle" + UnicodeString(styleName((DateFormat::EStyle)tstyle))    + "Locale: " + loc.getDisplayName(temp));
                 } else {
                     test(df, loc);
@@ -286,7 +286,7 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
     
     UBool isGregorian = false;
     UErrorCode minStatus = U_ZERO_ERROR;
-    if(fmt->getCalendar() == NULL) {
+    if(fmt->getCalendar() == nullptr) {
       errln((UnicodeString)"DateFormatRoundTripTest::test, DateFormat getCalendar() returns null for " + origLocale.getName());
       return;
     } 

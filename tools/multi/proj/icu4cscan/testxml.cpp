@@ -54,11 +54,11 @@ void usageAndDie(int retCode) {
 
 /*U_CAPI void U_EXPORT2*/
 static void _versionFromUString(UVersionInfo versionArray, const UChar *versionString) {
-    if(versionArray==NULL) {
+    if(versionArray==nullptr) {
         return;
     }
 
-    if(versionString!=NULL) {
+    if(versionString!=nullptr) {
         char verchars[U_MAX_VERSION_LENGTH+1];
         u_UCharsToChars(versionString, verchars, U_MAX_VERSION_LENGTH);
         u_versionFromString(versionArray, verchars);
@@ -68,7 +68,7 @@ static void _versionFromUString(UVersionInfo versionArray, const UChar *versionS
 /*U_CAPI void U_EXPORT2*/
 static void _getCLDRVersionDirect(UVersionInfo versionArray, UErrorCode *status) {
     UResourceBundle *resindx;
-    resindx = ures_openDirect(NULL, "supplementalData", status);
+    resindx = ures_openDirect(nullptr, "supplementalData", status);
     if(!U_FAILURE(*status)) {
 //        fprintf(stderr, "Err: could not open res_index, %s\n", u_errorName(status));
 //        fflush(stderr);
@@ -94,7 +94,7 @@ static void _getCLDRVersionDirect(UVersionInfo versionArray, UErrorCode *status)
 /*U_CAPI void U_EXPORT2*/
 static void _getCLDRVersionOld(UVersionInfo versionArray, UErrorCode *status) {
     UResourceBundle *resindx;
-    resindx = ures_openDirect(NULL, "res_index", status);
+    resindx = ures_openDirect(nullptr, "res_index", status);
     if(!U_FAILURE(*status)) {
 //        fprintf(stderr, "Err: could not open res_index, %s\n", u_errorName(status));
 //        fflush(stderr);
@@ -119,9 +119,9 @@ static void _getCLDRVersionOld(UVersionInfo versionArray, UErrorCode *status) {
 
 int could_open(const char *locale, char *comments) {
     char tmp[200];
-    UResourceBundle *rb = NULL;
+    UResourceBundle *rb = nullptr;
     UErrorCode status = U_ZERO_ERROR;
-    rb = ures_open(NULL, locale, &status);
+    rb = ures_open(nullptr, locale, &status);
     if(U_FAILURE(status)) {
         sprintf(tmp, " open:%s", u_errorName(status));
         strcat(comments, tmp);
@@ -135,7 +135,7 @@ int could_open(const char *locale, char *comments) {
 }
 int col_could_open(const char *locale, char *comments) {
     char tmp[200];
-    UCollator *rb = NULL;
+    UCollator *rb = nullptr;
     UErrorCode status = U_ZERO_ERROR;
     rb = ucol_open(locale, &status);
     if(U_FAILURE(status)) {
@@ -217,13 +217,13 @@ UDateFormatSymbolType scanArray[] = {
 //    UDAT_NARROW_MONTHS,
 };
 
-int *starts = NULL;
+int *starts = nullptr;
 
-UChar ***rootdata = NULL;
+UChar ***rootdata = nullptr;
 
 void initroot(UErrorCode *status) {
   UDateFormat *fmt;
-  fmt = udat_open(UDAT_DEFAULT, UDAT_DEFAULT, "root", NULL, -1,NULL,0, status);
+  fmt = udat_open(UDAT_DEFAULT, UDAT_DEFAULT, "root", nullptr, -1,nullptr,0, status);
   rootdata = (UChar***)malloc((sizeof(scanArray)/sizeof(scanArray[0]))*sizeof(rootdata[0]));
   starts = (int*)malloc((sizeof(scanArray)/sizeof(scanArray[0]))*sizeof(starts[0]));
   for(int i=0;U_SUCCESS(*status)&&i<sizeof(scanArray)/sizeof(scanArray[0]);i++) {
@@ -269,8 +269,8 @@ date(const UChar *tz,
   int tf=0; // total found
   int tl = 0;
 
-  fmt = udat_open(style, style, locale, tz, -1,NULL,0, status);
-  if ( format != NULL ) {
+  fmt = udat_open(style, style, locale, tz, -1,nullptr,0, status);
+  if ( format != nullptr ) {
      u_charsToUChars(format,uFormat,strlen(format)),
      udat_applyPattern(fmt,false,uFormat,strlen(format));
   }
@@ -344,12 +344,12 @@ static void writeOkComments(XMLFile &xf, int ok, const char *comments, const cha
 
 int could_fmt_dow(const char *locale, char *comments) {
     char tmp[200];
-//    UResourceBundle *rb = NULL;
+//    UResourceBundle *rb = nullptr;
     UErrorCode status = U_ZERO_ERROR;
         
-    date(NULL,
+    date(nullptr,
          UDAT_LONG,
-     NULL,
+     nullptr,
      locale, comments,
      &status);
 
@@ -420,7 +420,7 @@ int main (int argc, char **  argv) {
 #if (U_ICU_VERSION_MAJOR_NUM > 2) || ((U_ICU_VERSION_MAJOR_NUM>1)&&(U_ICU_VERSION_MINOR_NUM>5))
 		u_init(&status);
 #else
-		ures_open(NULL, "en_US", &status);
+		ures_open(nullptr, "en_US", &status);
 #endif
 		fprintf(stderr, " Init: %s\n", u_errorName(status));
 

@@ -34,11 +34,11 @@ U_NAMESPACE_USE
 /**
  * Verify that fmt is a SimpleDateFormat. Invalid error if not.
  * @param fmt the UDateFormat, definitely a DateFormat, maybe something else
- * @param status error code, will be set to failure if there is a failure or the fmt is NULL.
+ * @param status error code, will be set to failure if there is a failure or the fmt is nullptr.
  */
 static void verifyIsSimpleDateFormat(const UDateFormat* fmt, UErrorCode *status) {
    if(U_SUCCESS(*status) &&
-       dynamic_cast<const SimpleDateFormat*>(reinterpret_cast<const DateFormat*>(fmt))==NULL) {
+       dynamic_cast<const SimpleDateFormat*>(reinterpret_cast<const DateFormat*>(fmt))==nullptr) {
        *status = U_ILLEGAL_ARGUMENT_ERROR;
    }
 }
@@ -97,34 +97,34 @@ udat_toCalendarDateField(UDateFormatField field) {
 }
 
 /* For now- one opener. */
-static UDateFormatOpener gOpener = NULL;
+static UDateFormatOpener gOpener = nullptr;
 
 U_CAPI void U_EXPORT2
 udat_registerOpener(UDateFormatOpener opener, UErrorCode *status)
 {
   if(U_FAILURE(*status)) return;
-  umtx_lock(NULL);
-  if(gOpener==NULL) {
+  umtx_lock(nullptr);
+  if(gOpener==nullptr) {
     gOpener = opener;
   } else {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
   }
-  umtx_unlock(NULL);
+  umtx_unlock(nullptr);
 }
 
 U_CAPI UDateFormatOpener U_EXPORT2
 udat_unregisterOpener(UDateFormatOpener opener, UErrorCode *status)
 {
-  if(U_FAILURE(*status)) return NULL;
-  UDateFormatOpener oldOpener = NULL;
-  umtx_lock(NULL);
-  if(gOpener==NULL || gOpener!=opener) {
+  if(U_FAILURE(*status)) return nullptr;
+  UDateFormatOpener oldOpener = nullptr;
+  umtx_lock(nullptr);
+  if(gOpener==nullptr || gOpener!=opener) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
   } else {
     oldOpener=gOpener;
-    gOpener=NULL;
+    gOpener=nullptr;
   }
-  umtx_unlock(NULL);
+  umtx_unlock(nullptr);
   return oldOpener;
 }
 
@@ -144,9 +144,9 @@ udat_open(UDateFormatStyle  timeStyle,
     if(U_FAILURE(*status)) {
         return 0;
     }
-    if(gOpener!=NULL) { // if it's registered
+    if(gOpener!=nullptr) { // if it's registered
       fmt = (DateFormat*) (*gOpener)(timeStyle,dateStyle,locale,tzID,tzIDLength,pattern,patternLength,status);
-      if(fmt!=NULL) {
+      if(fmt!=nullptr) {
         return (UDateFormat*)fmt;
       } // else fall through.
     }
@@ -228,14 +228,14 @@ udat_format(    const    UDateFormat*    format,
     if(U_FAILURE(*status)) {
         return -1;
     }
-    if (result == NULL ? resultLength != 0 : resultLength < 0) {
+    if (result == nullptr ? resultLength != 0 : resultLength < 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
 
     UnicodeString res;
-    if (result != NULL) {
-        // NULL destination for pure preflighting: empty dummy string
+    if (result != nullptr) {
+        // nullptr destination for pure preflighting: empty dummy string
         // otherwise, alias the destination buffer
         res.setTo(result, 0, resultLength);
     }
@@ -266,14 +266,14 @@ udat_formatCalendar(const UDateFormat*  format,
     if(U_FAILURE(*status)) {
         return -1;
     }
-    if (result == NULL ? resultLength != 0 : resultLength < 0) {
+    if (result == nullptr ? resultLength != 0 : resultLength < 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
 
     UnicodeString res;
-    if (result != NULL) {
-        // NULL destination for pure preflighting: empty dummy string
+    if (result != nullptr) {
+        // nullptr destination for pure preflighting: empty dummy string
         // otherwise, alias the destination buffer
         res.setTo(result, 0, resultLength);
     }
@@ -304,14 +304,14 @@ udat_formatForFields(    const    UDateFormat*    format,
     if(U_FAILURE(*status)) {
         return -1;
     }
-    if (result == NULL ? resultLength != 0 : resultLength < 0) {
+    if (result == nullptr ? resultLength != 0 : resultLength < 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
 
     UnicodeString res;
-    if (result != NULL) {
-        // NULL destination for pure preflighting: empty dummy string
+    if (result != nullptr) {
+        // nullptr destination for pure preflighting: empty dummy string
         // otherwise, alias the destination buffer
         res.setTo(result, 0, resultLength);
     }
@@ -332,14 +332,14 @@ udat_formatCalendarForFields(const UDateFormat*  format,
     if(U_FAILURE(*status)) {
         return -1;
     }
-    if (result == NULL ? resultLength != 0 : resultLength < 0) {
+    if (result == nullptr ? resultLength != 0 : resultLength < 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
 
     UnicodeString res;
-    if (result != NULL) {
-        // NULL destination for pure preflighting: empty dummy string
+    if (result != nullptr) {
+        // nullptr destination for pure preflighting: empty dummy string
         // otherwise, alias the destination buffer
         res.setTo(result, 0, resultLength);
     }
@@ -363,7 +363,7 @@ udat_parse(    const    UDateFormat*        format,
     int32_t stackParsePos = 0;
     UDate res;
 
-    if(parsePos == NULL) {
+    if(parsePos == nullptr) {
         parsePos = &stackParsePos;
     }
 
@@ -395,7 +395,7 @@ udat_parseCalendar(const    UDateFormat*    format,
     ParsePosition pp;
     int32_t stackParsePos = 0;
 
-    if(parsePos == NULL) {
+    if(parsePos == nullptr) {
         parsePos = &stackParsePos;
     }
 
@@ -481,7 +481,7 @@ udat_adoptNumberFormatForFields(           UDateFormat*    fmt,
     verifyIsSimpleDateFormat(fmt, status);
     if (U_FAILURE(*status)) return;
     
-    if (fields!=NULL) {
+    if (fields!=nullptr) {
         UnicodeString overrideFields(fields);
         ((SimpleDateFormat*)fmt)->adoptNumberFormat(overrideFields, (NumberFormat*)numberFormatToSet, *status);
     }
@@ -542,14 +542,14 @@ udat_toPattern(    const   UDateFormat     *fmt,
     if(U_FAILURE(*status)) {
         return -1;
     }
-    if (result == NULL ? resultLength != 0 : resultLength < 0) {
+    if (result == nullptr ? resultLength != 0 : resultLength < 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
 
     UnicodeString res;
-    if (result != NULL) {
-        // NULL destination for pure preflighting: empty dummy string
+    if (result != nullptr) {
+        // nullptr destination for pure preflighting: empty dummy string
         // otherwise, alias the destination buffer
         res.setTo(result, 0, resultLength);
     }
@@ -557,12 +557,12 @@ udat_toPattern(    const   UDateFormat     *fmt,
     const DateFormat *df=reinterpret_cast<const DateFormat *>(fmt);
     const SimpleDateFormat *sdtfmt=dynamic_cast<const SimpleDateFormat *>(df);
     const RelativeDateFormat *reldtfmt;
-    if (sdtfmt!=NULL) {
+    if (sdtfmt!=nullptr) {
         if(localized)
             sdtfmt->toLocalizedPattern(res, *status);
         else
             sdtfmt->toPattern(res);
-    } else if (!localized && (reldtfmt=dynamic_cast<const RelativeDateFormat *>(df))!=NULL) {
+    } else if (!localized && (reldtfmt=dynamic_cast<const RelativeDateFormat *>(df))!=nullptr) {
         reldtfmt->toPattern(res, *status);
     } else {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -605,15 +605,15 @@ udat_getSymbols(const   UDateFormat     *fmt,
     const DateFormatSymbols *syms;
     const SimpleDateFormat* sdtfmt;
     const RelativeDateFormat* rdtfmt;
-    if ((sdtfmt = dynamic_cast<const SimpleDateFormat*>(reinterpret_cast<const DateFormat*>(fmt))) != NULL) {
+    if ((sdtfmt = dynamic_cast<const SimpleDateFormat*>(reinterpret_cast<const DateFormat*>(fmt))) != nullptr) {
         syms = sdtfmt->getDateFormatSymbols();
-    } else if ((rdtfmt = dynamic_cast<const RelativeDateFormat*>(reinterpret_cast<const DateFormat*>(fmt))) != NULL) {
+    } else if ((rdtfmt = dynamic_cast<const RelativeDateFormat*>(reinterpret_cast<const DateFormat*>(fmt))) != nullptr) {
         syms = rdtfmt->getDateFormatSymbols();
     } else {
         return -1;
     }
     int32_t count = 0;
-    const UnicodeString *res = NULL;
+    const UnicodeString *res = nullptr;
 
     switch(type) {
     case UDAT_ERAS:
@@ -647,8 +647,8 @@ udat_getSymbols(const   UDateFormat     *fmt,
     case UDAT_LOCALIZED_CHARS:
         {
             UnicodeString res1;
-            if(!(result==NULL && resultLength==0)) {
-                // NULL destination for pure preflighting: empty dummy string
+            if(!(result==nullptr && resultLength==0)) {
+                // nullptr destination for pure preflighting: empty dummy string
                 // otherwise, alias the destination buffer
                 res1.setTo(result, 0, resultLength);
             }
@@ -760,9 +760,9 @@ udat_countSymbols(    const    UDateFormat                *fmt,
     const DateFormatSymbols *syms;
     const SimpleDateFormat* sdtfmt;
     const RelativeDateFormat* rdtfmt;
-    if ((sdtfmt = dynamic_cast<const SimpleDateFormat*>(reinterpret_cast<const DateFormat*>(fmt))) != NULL) {
+    if ((sdtfmt = dynamic_cast<const SimpleDateFormat*>(reinterpret_cast<const DateFormat*>(fmt))) != nullptr) {
         syms = sdtfmt->getDateFormatSymbols();
-    } else if ((rdtfmt = dynamic_cast<const RelativeDateFormat*>(reinterpret_cast<const DateFormat*>(fmt))) != NULL) {
+    } else if ((rdtfmt = dynamic_cast<const RelativeDateFormat*>(reinterpret_cast<const DateFormat*>(fmt))) != nullptr) {
         syms = rdtfmt->getDateFormatSymbols();
     } else {
         return 0;
@@ -927,10 +927,10 @@ public:
         setSymbol(UnicodeString *array, int32_t count, int32_t index,
         const UChar *value, int32_t valueLength, UErrorCode &errorCode)
     {
-        if(array!=NULL) {
+        if(array!=nullptr) {
             if(index>=count) {
                 errorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-            } else if(value==NULL) {
+            } else if(value==nullptr) {
                 errorCode=U_ILLEGAL_ARGUMENT_ERROR;
             } else {
                 array[index].setTo(value, valueLength);
@@ -1253,11 +1253,11 @@ udat_getLocaleByType(const UDateFormat *fmt,
                      ULocDataLocaleType type,
                      UErrorCode* status)
 {
-    if (fmt == NULL) {
+    if (fmt == nullptr) {
         if (U_SUCCESS(*status)) {
             *status = U_ILLEGAL_ARGUMENT_ERROR;
         }
-        return NULL;
+        return nullptr;
     }
     return ((Format*)fmt)->getLocaleID(type, *status);
 }
@@ -1285,11 +1285,11 @@ udat_getContext(const UDateFormat* fmt, UDisplayContextType type, UErrorCode* st
 /**
  * Verify that fmt is a RelativeDateFormat. Invalid error if not.
  * @param fmt the UDateFormat, definitely a DateFormat, maybe something else
- * @param status error code, will be set to failure if there is a failure or the fmt is NULL.
+ * @param status error code, will be set to failure if there is a failure or the fmt is nullptr.
  */
 static void verifyIsRelativeDateFormat(const UDateFormat* fmt, UErrorCode *status) {
    if(U_SUCCESS(*status) &&
-       dynamic_cast<const RelativeDateFormat*>(reinterpret_cast<const DateFormat*>(fmt))==NULL) {
+       dynamic_cast<const RelativeDateFormat*>(reinterpret_cast<const DateFormat*>(fmt))==nullptr) {
        *status = U_ILLEGAL_ARGUMENT_ERROR;
    }
 }
@@ -1305,14 +1305,14 @@ udat_toPatternRelativeDate(const UDateFormat *fmt,
     if(U_FAILURE(*status)) {
         return -1;
     }
-    if (result == NULL ? resultLength != 0 : resultLength < 0) {
+    if (result == nullptr ? resultLength != 0 : resultLength < 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
 
     UnicodeString datePattern;
-    if (result != NULL) {
-        // NULL destination for pure preflighting: empty dummy string
+    if (result != nullptr) {
+        // nullptr destination for pure preflighting: empty dummy string
         // otherwise, alias the destination buffer
         datePattern.setTo(result, 0, resultLength);
     }
@@ -1330,14 +1330,14 @@ udat_toPatternRelativeTime(const UDateFormat *fmt,
     if(U_FAILURE(*status)) {
         return -1;
     }
-    if (result == NULL ? resultLength != 0 : resultLength < 0) {
+    if (result == nullptr ? resultLength != 0 : resultLength < 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
 
     UnicodeString timePattern;
-    if (result != NULL) {
-        // NULL destination for pure preflighting: empty dummy string
+    if (result != nullptr) {
+        // nullptr destination for pure preflighting: empty dummy string
         // otherwise, alias the destination buffer
         timePattern.setTo(result, 0, resultLength);
     }

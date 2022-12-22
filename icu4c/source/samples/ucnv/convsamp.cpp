@@ -325,7 +325,7 @@ UErrorCode convsample_05()
   printf("input bytes %d / min chars %d = %d UChars\n",
          BUFFERSIZE, ucnv_getMinCharSize(conv), uBufSize);
   uBuf = (UChar*)malloc(uBufSize * sizeof(UChar));
-  assert(uBuf!=NULL);
+  assert(uBuf!=nullptr);
 
   // grab another buffer's worth
   while((!feof(f)) && 
@@ -341,7 +341,7 @@ UErrorCode convsample_05()
         targetLimit = uBuf + uBufSize;
         
         ucnv_toUnicode(conv, &target, targetLimit, 
-                       &source, sourceLimit, NULL,
+                       &source, sourceLimit, nullptr,
                        feof(f)?true:false,         /* pass 'flush' when eof */
                                    /* is true (when no more data will come) */
                        &status);
@@ -575,7 +575,7 @@ UErrorCode convsample_13()
   const char *source, *sourceLimit;
   UChar32 target;
   UErrorCode status = U_ZERO_ERROR;
-  UConverter *conv = NULL;
+  UConverter *conv = nullptr;
   int32_t srcCount=0;
   int32_t dstCount=0;
   
@@ -622,12 +622,12 @@ UBool convsample_20_didSubstitute(const char *source)
 {
   UChar uchars[100];
   char bytes[100];
-  UConverter *conv = NULL;
+  UConverter *conv = nullptr;
   UErrorCode status = U_ZERO_ERROR;
   uint32_t len, len2;
   UBool  flagVal;
   
-  FromUFLAGContext * context = NULL;
+  FromUFLAGContext * context = nullptr;
 
   printf("\n\n==============================================\n"
          "Sample 20: C: Test for substitution using callbacks\n");
@@ -716,18 +716,18 @@ UBool convsample_21_didSubstitute(const char *source)
 {
   UChar uchars[100];
   char bytes[100];
-  UConverter *conv = NULL, *cloneCnv = NULL;
+  UConverter *conv = nullptr, *cloneCnv = nullptr;
   UErrorCode status = U_ZERO_ERROR;
   uint32_t len, len2;
   UBool  flagVal = false;
   UConverterFromUCallback junkCB;
   
-  FromUFLAGContext *flagCtx = NULL, 
-                   *cloneFlagCtx = NULL;
+  FromUFLAGContext *flagCtx = nullptr, 
+                   *cloneFlagCtx = nullptr;
 
-  debugCBContext   *debugCtx1 = NULL,
-                   *debugCtx2 = NULL,
-                   *cloneDebugCtx = NULL;
+  debugCBContext   *debugCtx1 = nullptr,
+                   *debugCtx2 = nullptr,
+                   *cloneDebugCtx = nullptr;
 
   printf("\n\n==============================================\n"
          "Sample 21: C: Test for substitution w/ callbacks & clones \n");
@@ -775,7 +775,7 @@ UBool convsample_21_didSubstitute(const char *source)
   flagCtx->subContext    =  debugCtx2;
 
   debugCtx2->subCallback =  UCNV_FROM_U_CALLBACK_SUBSTITUTE;
-  debugCtx2->subContext  = NULL;
+  debugCtx2->subContext  = nullptr;
 
   /* Set our special callback */
 
@@ -794,7 +794,7 @@ UBool convsample_21_didSubstitute(const char *source)
          debugCtx1->subContext, flagCtx, debugCtx2, debugCtx2->subCallback);
 #endif
 
-  cloneCnv = ucnv_safeClone(conv, NULL, NULL, &status);
+  cloneCnv = ucnv_safeClone(conv, nullptr, nullptr, &status);
 
   U_ASSERT(status);
 
@@ -810,21 +810,21 @@ UBool convsample_21_didSubstitute(const char *source)
 
   U_ASSERT(status);
   /* Now, we have to extract the context */
-  cloneDebugCtx = NULL;
-  cloneFlagCtx  = NULL;
+  cloneDebugCtx = nullptr;
+  cloneFlagCtx  = nullptr;
 
   ucnv_getFromUCallBack(cloneCnv, &junkCB, (const void **)&cloneDebugCtx);
-  if(cloneDebugCtx != NULL) {
+  if(cloneDebugCtx != nullptr) {
       cloneFlagCtx = (FromUFLAGContext*) cloneDebugCtx -> subContext;
   }
 
   printf("Cloned converter chain: %p -> %p[debug1] -> %p[flag] -> %p[debug2] -> substitute\n",
-         cloneCnv, cloneDebugCtx, cloneFlagCtx, cloneFlagCtx?cloneFlagCtx->subContext:NULL );
+         cloneCnv, cloneDebugCtx, cloneFlagCtx, cloneFlagCtx?cloneFlagCtx->subContext:nullptr );
 
   len2 = ucnv_fromUChars(cloneCnv, bytes, 100, uchars, len, &status);
   U_ASSERT(status);
 
-  if(cloneFlagCtx != NULL) {
+  if(cloneFlagCtx != nullptr) {
       flagVal = cloneFlagCtx->flag;  /* it's about to go away when we close the cnv */
   } else {
       printf("** Warning, couldn't get the subcallback \n");
@@ -884,7 +884,7 @@ UErrorCode convsample_40()
   UChar *target;
   UChar *targetLimit;
   int32_t uBufSize = 0;
-  UConverter *conv = NULL;
+  UConverter *conv = nullptr;
   UErrorCode status = U_ZERO_ERROR;
   uint32_t inbytes=0, total=0;
 
@@ -911,7 +911,7 @@ UErrorCode convsample_40()
   printf("input bytes %d / min chars %d = %d UChars\n",
          BUFFERSIZE, ucnv_getMinCharSize(conv), uBufSize);
   uBuf = (UChar*)malloc(uBufSize * sizeof(UChar));
-  assert(uBuf!=NULL);
+  assert(uBuf!=nullptr);
 
   // grab another buffer's worth
   while((!feof(f)) && 
@@ -929,7 +929,7 @@ UErrorCode convsample_40()
         targetLimit = uBuf + uBufSize;
         
         ucnv_toUnicode( conv, &target, targetLimit, 
-                       &source, sourceLimit, NULL,
+                       &source, sourceLimit, nullptr,
                        feof(f)?true:false,         /* pass 'flush' when eof */
                                    /* is true (when no more data will come) */
                          &status);
@@ -989,7 +989,7 @@ UErrorCode convsample_46()
   char *targetLimit;
 
   int32_t bufSize = 0;
-  UConverter *conv = NULL;
+  UConverter *conv = nullptr;
   UErrorCode status = U_ZERO_ERROR;
   uint32_t inchars=0, total=0;
 
@@ -1016,7 +1016,7 @@ UErrorCode convsample_46()
   printf("input UChars[16] %d * max charsize %d = %d bytes output buffer\n",
          BUFFERSIZE, ucnv_getMaxCharSize(conv), bufSize);
   buf = (char*)malloc(bufSize * sizeof(char));
-  assert(buf!=NULL);
+  assert(buf!=nullptr);
 
   // grab another buffer's worth
   while((!feof(f)) && 
@@ -1034,7 +1034,7 @@ UErrorCode convsample_46()
         targetLimit = buf + bufSize;
         
         ucnv_fromUnicode( conv, &target, targetLimit, 
-                       &source, sourceLimit, NULL,
+                       &source, sourceLimit, nullptr,
                        feof(f)?true:false,         /* pass 'flush' when eof */
                                    /* is true (when no more data will come) */
                          &status);
@@ -1083,18 +1083,18 @@ void convsample_50() {
   char input[] = { '\xEF','\xBB', '\xBF','\x41','\x42','\x43' };
   int32_t signatureLength = 0;
   const char *encoding = ucnv_detectUnicodeSignature(input,sizeof(input),&signatureLength,&err);
-  UConverter *conv = NULL;
+  UConverter *conv = nullptr;
   UChar output[100];
   UChar *target = output, *out;
   const char *source = input;
-  if(encoding!=NULL && U_SUCCESS(err)){
+  if(encoding!=nullptr && U_SUCCESS(err)){
     // should signature be discarded ?
     conv = ucnv_open(encoding, &err);
     // do the conversion
     ucnv_toUnicode(conv,
                    &target, output + UPRV_LENGTHOF(output),
                    &source, input + sizeof(input),
-                   NULL, true, &err);
+                   nullptr, true, &err);
     out = output;
     if (discardSignature){
       ++out; // ignore initial U+FEFF

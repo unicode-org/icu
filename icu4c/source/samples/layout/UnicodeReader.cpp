@@ -41,7 +41,7 @@ const UChar *UnicodeReader::readFile(const char *fileName, GUISupport *guiSuppor
     
     f = fopen(fileName, "rb");
     
-    if( f == NULL ) {
+    if( f == nullptr ) {
         sprintf(errorMessage,"Couldn't open %s: %s \n", fileName, strerror(errno));
         guiSupport->postErrorMessage(errorMessage, "Text File Error");
         return 0;
@@ -116,7 +116,7 @@ const UChar *UnicodeReader::readFile(const char *fileName, GUISupport *guiSuppor
     }
     
     myText.extract(0, myText.length(), charBuffer);
-    charBuffer[charCount] = 0;    // NULL terminate for easier reading in the debugger
+    charBuffer[charCount] = 0;    // NUL terminate for easier reading in the debugger
     
     return charBuffer;
 }

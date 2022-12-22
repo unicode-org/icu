@@ -54,7 +54,7 @@ void CollationServiceTest::TestRegister()
         Collator *clone = frcol->clone();
         URegistryKey key = Collator::registerInstance(frcol, US, status);
         // frcol has been adopted. We must not use it any more, nor rely on its attributes.
-        frcol = NULL;
+        frcol = nullptr;
 
         Collator* ncol = Collator::createInstance(US_FOO, status);
         if (*clone != *ncol) {
@@ -77,7 +77,7 @@ void CollationServiceTest::TestRegister()
         if (loc != US) {
             errln(UnicodeString("actual locale for en_US_FOO is not en_US but ") + loc.getName());
         }
-        delete ncol; ncol = NULL;
+        delete ncol; ncol = nullptr;
 
         if (!Collator::unregister(key, status)) {
             errln("failed to unregister french collator");
@@ -87,7 +87,7 @@ void CollationServiceTest::TestRegister()
         if (*uscol != *ncol) {
             errln("collator after unregister does not match original");
         }
-        delete ncol; ncol = NULL;
+        delete ncol; ncol = nullptr;
     }
 
     // recreate frcol
@@ -102,7 +102,7 @@ void CollationServiceTest::TestRegister()
         Collator* fucol = Collator::createInstance(fu_FU, status);
         Collator *clone = frcol->clone();
         URegistryKey key = Collator::registerInstance(frcol, fu_FU, status);
-        frcol = NULL;  // frcol has been adopted.
+        frcol = nullptr;  // frcol has been adopted.
         Collator* ncol = Collator::createInstance(fu_FU_FOO, status);
         if (*clone != *ncol) {
             errln("register of fr collator for fu_FU failed");
@@ -114,7 +114,7 @@ void CollationServiceTest::TestRegister()
         UBool found = false;
         const UnicodeString* locStr, *ls2;
         for (locStr = localeEnum->snext(status);
-        !found && locStr != NULL;
+        !found && locStr != nullptr;
         locStr = localeEnum->snext(status)) {
             //
             if (locName == *locStr) {
@@ -122,14 +122,14 @@ void CollationServiceTest::TestRegister()
             }
         }
 
-        StringEnumeration *le2 = NULL;
+        StringEnumeration *le2 = nullptr;
         localeEnum->reset(status);
         int32_t i, count;
         count = localeEnum->count(status);
         for(i = 0; i < count; ++i) {
             if(i == count / 2) {
                 le2 = localeEnum->clone();
-                if(le2 == NULL || count != le2->count(status)) {
+                if(le2 == nullptr || count != le2->count(status)) {
                     errln("ServiceEnumeration.clone() failed");
                     break;
                 }
@@ -192,7 +192,7 @@ void CollationServiceTest::TestRegister()
         if (nloc != fu_FU) {
             errln(UnicodeString("asked for nloc valid locale after close and got") + nloc.getName());
         }
-        delete ncol; ncol = NULL;
+        delete ncol; ncol = nullptr;
 
         if (fufu.isValid()) {
             const char* nlocstr = ucol_getLocaleByType(fufu.getAlias(), ULOC_VALID_LOCALE, &status);
@@ -205,9 +205,9 @@ void CollationServiceTest::TestRegister()
         if (*fucol != *ncol) {
             errln("collator after unregister does not match original fu_FU");
         }
-        delete uscol; uscol = NULL;
-        delete ncol; ncol = NULL;
-        delete fucol; fucol = NULL;
+        delete uscol; uscol = nullptr;
+        delete ncol; ncol = nullptr;
+        delete fucol; fucol = nullptr;
     }
 #endif
 }
@@ -264,14 +264,14 @@ class TestFactory : public CollatorFactory {
         return *p;
       }
     }
-    return NULL;
+    return nullptr;
   }
 
 public:
   TestFactory(CollatorInfo** _info)
     : info(_info)
     , count(0)
-    , ids(NULL)
+    , ids(nullptr)
   {
     CollatorInfo** p;
     for (p = info; *p; ++p) {}
@@ -291,7 +291,7 @@ public:
     if (ci) {
       return ci->collator->clone();
     }
-    return NULL;
+    return nullptr;
   }
 
   virtual UnicodeString& getDisplayName(const Locale& objectLocale,
@@ -314,7 +314,7 @@ public:
         if (!ids) {
           status = U_MEMORY_ALLOCATION_ERROR;
           _count = 0;
-          return NULL;
+          return nullptr;
         }
 
         for (int i = 0; i < count; ++i) {
@@ -325,7 +325,7 @@ public:
       _count = count;
       return ids;
     }
-    return NULL;
+    return nullptr;
   }
 
   virtual inline UClassID getDynamicClassID() const override {
@@ -381,10 +381,10 @@ void CollationServiceTest::TestRegisterFactory(void)
         return;
     }
 
-    info[0] = new CollatorInfo(Locale::getUS(), frcol, NULL);
-    info[1] = new CollatorInfo(Locale::getFrance(), gecol, NULL);
+    info[0] = new CollatorInfo(Locale::getUS(), frcol, nullptr);
+    info[1] = new CollatorInfo(Locale::getFrance(), gecol, nullptr);
     info[2] = new CollatorInfo(fu_FU, jpcol, fuFUNames);
-    info[3] = NULL;
+    info[3] = nullptr;
 
     TestFactory* factory = new TestFactory(info);
     if (!factory) {
@@ -407,7 +407,7 @@ void CollationServiceTest::TestRegisterFactory(void)
         if (*frcol != *ncol) {
             errln("frcoll for en_US failed");
         }
-        delete ncol; ncol = NULL;
+        delete ncol; ncol = nullptr;
 
         ncol = Collator::createInstance(fu_FU_FOO, status);
         if (*jpcol != *ncol) {
@@ -425,14 +425,14 @@ void CollationServiceTest::TestRegisterFactory(void)
         if (loc != fu_FU) {
             errln(UnicodeString("valid locale for fu_FU_FOO is not fu_FU but ") + loc.getName());
         }
-        delete ncol; ncol = NULL;
+        delete ncol; ncol = nullptr;
 
         UnicodeString locName = fu_FU.getName();
         StringEnumeration* localeEnum = Collator::getAvailableLocales();
         UBool found = false;
         const UnicodeString* locStr;
         for (locStr = localeEnum->snext(status);
-            !found && locStr != NULL;
+            !found && locStr != nullptr;
             locStr = localeEnum->snext(status))
         {
             if (locName == *locStr) {
@@ -479,7 +479,7 @@ void CollationServiceTest::TestRegisterFactory(void)
 /**
  * Iterate through the given iterator, checking to see that all the strings
  * in the expected array are present.
- * @param expected array of strings we expect to see, or NULL
+ * @param expected array of strings we expect to see, or nullptr
  * @param expectedCount number of elements of expected, or 0
  */
 int32_t CollationServiceTest::checkStringEnumeration(const char* msg,
@@ -494,7 +494,7 @@ int32_t CollationServiceTest::checkStringEnumeration(const char* msg,
     int32_t seenMask = 0;
     for (;; ++i) {
         const UnicodeString* s = iter.snext(ec);
-        if (!assertSuccess("snext", ec) || s == NULL)
+        if (!assertSuccess("snext", ec) || s == nullptr)
             break;
         if (i != 0)
             buf.append(UNICODE_STRING_SIMPLE(", "));
@@ -502,7 +502,7 @@ int32_t CollationServiceTest::checkStringEnumeration(const char* msg,
         // check expected list
         for (int32_t j=0, bit=1; j<expectedCount; ++j, bit<<=1) {
             if ((seenMask&bit)==0) {
-                UnicodeString exp(expected[j], (char*)NULL);
+                UnicodeString exp(expected[j], (char*)nullptr);
                 if (*s == exp) {
                     seenMask |= bit;
                     logln((UnicodeString)"Ok: \"" + exp + "\" seen");
@@ -519,8 +519,8 @@ int32_t CollationServiceTest::checkStringEnumeration(const char* msg,
     assertTrue("count verified", i==n);
     iter.reset(ec);
     for (;; ++idxAfterReset) {
-        const UChar *s = iter.unext(NULL, ec);
-        if (!assertSuccess("unext", ec) || s == NULL)
+        const UChar *s = iter.unext(nullptr, ec);
+        if (!assertSuccess("unext", ec) || s == nullptr)
             break;
         if (idxAfterReset != 0)
             buffAfterReset.append(UNICODE_STRING_SIMPLE(", "));
@@ -546,8 +546,8 @@ int32_t CollationServiceTest::checkStringEnumeration(const char* msg,
 #if !UCONFIG_NO_SERVICE
 int32_t CollationServiceTest::checkAvailable(const char* msg) {
     StringEnumeration *iter = Collator::getAvailableLocales();
-    if (!assertTrue("getAvailableLocales != NULL", iter!=NULL)) return -1;
-    int32_t n = checkStringEnumeration(msg, *iter, NULL, 0);
+    if (!assertTrue("getAvailableLocales != nullptr", iter!=nullptr)) return -1;
+    int32_t n = checkStringEnumeration(msg, *iter, nullptr, 0);
     delete iter;
     return n;
 }
@@ -569,13 +569,13 @@ static const int32_t KWVAL_COUNT = UPRV_LENGTHOF(KWVAL);
 void CollationServiceTest::TestSeparateTree() {
     UErrorCode ec = U_ZERO_ERROR;
     StringEnumeration *iter = Collator::getKeywords(ec);
-    if (!assertTrue("getKeywords != NULL", iter!=NULL)) return;
+    if (!assertTrue("getKeywords != nullptr", iter!=nullptr)) return;
     if (!assertSuccess("getKeywords", ec)) return;
     checkStringEnumeration("getKeywords", *iter, KW, KW_COUNT);
     delete iter;
 
     iter = Collator::getKeywordValues(KW[0], ec);
-    if (!assertTrue("getKeywordValues != NULL", iter!=NULL, false, true)) return;
+    if (!assertTrue("getKeywordValues != nullptr", iter!=nullptr, false, true)) return;
     if (!assertSuccess("getKeywordValues", ec)) return;
     checkStringEnumeration("getKeywordValues", *iter, KWVAL, KWVAL_COUNT);
     delete iter;

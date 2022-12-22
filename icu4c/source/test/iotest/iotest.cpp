@@ -39,34 +39,34 @@ public:
     static void cleanUp() {
         if (fgTestDataPath) {
             free(fgTestDataPath);
-            fgTestDataPath = NULL;
+            fgTestDataPath = nullptr;
         }
     }
     virtual void errln( const UnicodeString &message ) override {
         char buffer[4000];
         message.extract(0, message.length(), buffer, sizeof(buffer));
-        buffer[3999] = 0; /* NULL terminate */
+        buffer[3999] = 0; /* NUL terminate */
         log_err(buffer);
     }
 
     virtual void logln( const UnicodeString &message ) override {
         char buffer[4000];
         message.extract(0, message.length(), buffer, sizeof(buffer));
-        buffer[3999] = 0; /* NULL terminate */
+        buffer[3999] = 0; /* NUL terminate */
         log_info(buffer);
     }
 
     virtual void dataerrln( const UnicodeString &message ) override {
         char buffer[4000];
         message.extract(0, message.length(), buffer, sizeof(buffer));
-        buffer[3999] = 0; /* NULL terminate */
+        buffer[3999] = 0; /* NUL terminate */
         log_data_err(buffer);
     }
 
     static const char * pathToDataDirectory(void)
     {
 
-        if(fgDataDir != NULL) {
+        if(fgDataDir != nullptr) {
             return fgDataDir;
         }
 
@@ -98,12 +98,12 @@ public:
             /*   Only Windows should end up here, so looking for '\' is safe.   */
             for (i=1; i<=3; i++) {
                 pBackSlash = strrchr(p, U_FILE_SEP_CHAR);
-                if (pBackSlash != NULL) {
+                if (pBackSlash != nullptr) {
                     *pBackSlash = 0;        /* Truncate the string at the '\'   */
                 }
             }
 
-            if (pBackSlash != NULL) {
+            if (pBackSlash != nullptr) {
                 /* We found and truncated three names from the path.
                 *  Now append "source\data" and set the environment
                 */
@@ -129,10 +129,10 @@ public:
     }
 
     static const char* loadTestData(UErrorCode& err){
-        if( fgTestDataPath == NULL){
-            const char*      directory=NULL;
-            UResourceBundle* test =NULL;
-            char* tdpath=NULL;
+        if( fgTestDataPath == nullptr){
+            const char*      directory=nullptr;
+            UResourceBundle* test =nullptr;
+            char* tdpath=nullptr;
             const char* tdrelativepath;
 
 #if defined (U_TOPBUILDDIR)
@@ -171,8 +171,8 @@ public:
     }
 };
 
-const char* DataDrivenLogger::fgDataDir = NULL;
-char* DataDrivenLogger::fgTestDataPath = NULL;
+const char* DataDrivenLogger::fgDataDir = nullptr;
+char* DataDrivenLogger::fgTestDataPath = nullptr;
 
 #if !UCONFIG_NO_FORMATTING && !UCONFIG_NO_FILE_IO
 static int64_t
@@ -742,7 +742,7 @@ static void addAllTests(TestNode** root) {
 /* returns the path to icu/source/data/out */
 static const char *ctest_dataOutDir()
 {
-    static const char *dataOutDir = NULL;
+    static const char *dataOutDir = nullptr;
 
     if(dataOutDir) {
         return dataOutDir;
@@ -776,12 +776,12 @@ static const char *ctest_dataOutDir()
         /*   Only Windows should end up here, so looking for '\' is safe.   */
         for (i=1; i<=3; i++) {
             pBackSlash = strrchr(p, U_FILE_SEP_CHAR);
-            if (pBackSlash != NULL) {
+            if (pBackSlash != nullptr) {
                 *pBackSlash = 0;        /* Truncate the string at the '\'   */
             }
         }
 
-        if (pBackSlash != NULL) {
+        if (pBackSlash != nullptr) {
             /* We found and truncated three names from the path.
              *  Now append "source\data" and set the environment
              */
@@ -819,7 +819,7 @@ static void ctest_setICU_DATA() {
     /* No location for the data dir was identifiable.
      *   Add other fallbacks for the test data location here if the need arises
      */
-    if (getenv("ICU_DATA") == NULL) {
+    if (getenv("ICU_DATA") == nullptr) {
         /* If ICU_DATA isn't set, set it to the usual location */
         u_setDataDirectory(ctest_dataOutDir());
     }
@@ -847,7 +847,7 @@ U_CDECL_END
 int main(int argc, char* argv[])
 {
     int32_t nerrors = 0;
-    TestNode *root = NULL;
+    TestNode *root = nullptr;
     UErrorCode errorCode = U_ZERO_ERROR;
     UDate startTime, endTime;
     int32_t diffTime;

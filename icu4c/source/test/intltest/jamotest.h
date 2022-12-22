@@ -31,7 +31,7 @@ public:
     virtual ~JamoTest();
 private:
     void runIndexedTest(int32_t index, UBool exec, const char* &name,
-                        char* par=NULL) override;
+                        char* par=nullptr) override;
 
     void TestJamo(void);
     

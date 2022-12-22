@@ -41,7 +41,7 @@ namespace {
 UnicodeString select(const PluralRules &rules, const Formattable& obj, const NumberFormat& fmt, UErrorCode& status) {
     if (U_SUCCESS(status)) {
         const DecimalFormat *decFmt = dynamic_cast<const DecimalFormat *>(&fmt);
-        if (decFmt != NULL) {
+        if (decFmt != nullptr) {
             number::impl::DecimalQuantity dq;
             decFmt->formatToDecimalQuantity(obj, dq, status);
             if (U_SUCCESS(status)) {
@@ -86,7 +86,7 @@ uplrules_select(const UPluralRules *uplrules,
     if (U_FAILURE(*status)) {
         return 0;
     }
-    if (keyword == NULL ? capacity != 0 : capacity < 0) {
+    if (keyword == nullptr ? capacity != 0 : capacity < 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -103,7 +103,7 @@ uplrules_selectFormatted(const UPluralRules *uplrules,
     if (U_FAILURE(*status)) {
         return 0;
     }
-    if (keyword == NULL ? capacity != 0 : capacity < 0) {
+    if (keyword == nullptr ? capacity != 0 : capacity < 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -125,7 +125,7 @@ uplrules_selectForRange(const UPluralRules *uplrules,
     if (U_FAILURE(*status)) {
         return 0;
     }
-    if (keyword == NULL ? capacity != 0 : capacity < 0) {
+    if (keyword == nullptr ? capacity != 0 : capacity < 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -147,7 +147,7 @@ uplrules_selectWithFormat(const UPluralRules *uplrules,
     }
     const PluralRules* plrules = reinterpret_cast<const PluralRules*>(uplrules);
     const NumberFormat* nf = reinterpret_cast<const NumberFormat*>(fmt);
-    if (plrules == NULL || nf == NULL || ((keyword == NULL)? capacity != 0 : capacity < 0)) {
+    if (plrules == nullptr || nf == nullptr || ((keyword == nullptr)? capacity != 0 : capacity < 0)) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -161,20 +161,20 @@ uplrules_getKeywords(const UPluralRules *uplrules,
                      UErrorCode *status)
 {
     if (U_FAILURE(*status)) {
-        return NULL;
+        return nullptr;
     }
     const PluralRules* plrules = reinterpret_cast<const PluralRules*>(uplrules);
-    if (plrules == NULL) {
+    if (plrules == nullptr) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
+        return nullptr;
     }
     StringEnumeration *senum = plrules->getKeywords(*status);
     if (U_FAILURE(*status)) {
-        return NULL;
+        return nullptr;
     }
-    if (senum == NULL) {
+    if (senum == nullptr) {
         *status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+        return nullptr;
     }
     return uenum_openFromStringEnumeration(senum, status);
 }

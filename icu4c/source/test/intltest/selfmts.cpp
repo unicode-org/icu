@@ -130,7 +130,7 @@ void SelectFormatTest::selectFormatUnitTest(/*char *par*/)
     assertEquals("should use first occurrence of the 'other' keyword", "bar", format_result);
 
     delete selFmt;
-    selFmt = NULL;
+    selFmt = nullptr;
 
     logln("SelectFormat Unit Test : Creating format object for Testing applying various patterns");
     status = U_ZERO_ERROR;
@@ -185,7 +185,7 @@ void SelectFormatTest::selectFormatUnitTest(/*char *par*/)
     };
 
     delete selFmt;
-    selFmt = NULL;
+    selFmt = nullptr;
 
     selFmt = new SelectFormat( SIMPLE_PATTERN , status); 
     for (int32_t i = 0; i < UPRV_LENGTHOF(keywords); i++ ){
@@ -209,7 +209,7 @@ void SelectFormatTest::selectFormatAPITest(/*char *par*/)
   const UnicodeString SIMPLE_PATTERN(SIMPLE_PATTERN_STRING); /* Don't static init this! */
     int numOfConstructors =3;
     UErrorCode status[3];
-    SelectFormat* selFmt[3] = { NULL, NULL, NULL };
+    SelectFormat* selFmt[3] = { nullptr, nullptr, nullptr };
 
     // ========= Test constructors
     logln("SelectFormat API test: Testing SelectFormat constructors ...");
@@ -236,12 +236,12 @@ void SelectFormatTest::selectFormatAPITest(/*char *par*/)
     logln("SelectFormat API test: Testing clone and == operator ...");
     if ( U_SUCCESS(status[0])  ) {
         selFmt[1] = selFmt[0]->clone();
-        if (selFmt[1]!=NULL) {
+        if (selFmt[1]!=nullptr) {
             if ( *selFmt[1] != *selFmt[0] ) {
                 errln("ERROR: SelectFormat API test clone test failed!");
             }
         } else {
-          errln("ERROR: SelectFormat API test clone test failed with NULL!");
+          errln("ERROR: SelectFormat API test clone test failed with nullptr!");
           return;
         }
     } else {
@@ -254,7 +254,7 @@ void SelectFormatTest::selectFormatAPITest(/*char *par*/)
     selFmt[2]= new SelectFormat(SIMPLE_PATTERN, status[2]);
     if ( U_SUCCESS(status[2]) ) {
         *selFmt[1] = *selFmt[2];
-        if (selFmt[1]!=NULL) {
+        if (selFmt[1]!=nullptr) {
             if ( (*selFmt[1] != *selFmt[2]) ) {
                 errln("ERROR: SelectFormat API test assignment operator test failed!");
             }

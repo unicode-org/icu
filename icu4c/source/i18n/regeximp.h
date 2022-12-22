@@ -343,7 +343,7 @@ inline void  Regex8BitSet::add(UChar32 c) {
 }
 
 inline void Regex8BitSet::init(const UnicodeSet *s) {
-    if (s != NULL) {
+    if (s != nullptr) {
         for (int32_t i=0; i<=255; i++) {
             if (s->contains(i)) {
                 this->add(i);

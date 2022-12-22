@@ -2407,7 +2407,7 @@ void CalendarRegressionTest::TestT5555()
     UErrorCode ec = U_ZERO_ERROR;
     Calendar *cal = Calendar::createInstance(ec);
 
-    if (cal == NULL || U_FAILURE(ec)) {
+    if (cal == nullptr || U_FAILURE(ec)) {
         dataerrln("FAIL: Calendar::createInstance(): %s", u_errorName(ec));
         delete cal;
         return;
@@ -2474,13 +2474,13 @@ typedef struct {
 static const CoptEthCalLocale copEthCalLocales[] = {
     { "en@calendar=coptic",   0    },
     { "en@calendar=ethiopic", 276  },
-    { NULL,                   0    } // terminator
+    { nullptr,                0    } // terminator
 };
 
 void CalendarRegressionTest::TestT6745()
 {
     const CoptEthCalLocale * testLocalePtr;
-    for ( testLocalePtr = copEthCalLocales; testLocalePtr->locale != NULL; ++testLocalePtr) {
+    for ( testLocalePtr = copEthCalLocales; testLocalePtr->locale != nullptr; ++testLocalePtr) {
         UErrorCode status = U_ZERO_ERROR;
         Calendar *cal = Calendar::createInstance(Locale(testLocalePtr->locale), status);
         if ( U_FAILURE(status) ) {
@@ -2519,7 +2519,7 @@ void CalendarRegressionTest::TestT6745()
 void CalendarRegressionTest::TestLeapFieldDifference() {
     UErrorCode ec = U_ZERO_ERROR;
     Calendar* cal = Calendar::createInstance(ec);
-    if (cal == NULL || U_FAILURE(ec)) {
+    if (cal == nullptr || U_FAILURE(ec)) {
         dataerrln("FAIL: Calendar::createInstance(): %s", u_errorName(ec));
         delete cal;
         return;
@@ -2699,21 +2699,21 @@ void CalendarRegressionTest::TestTimeZoneTransitionAdd() {
     UnicodeString buf1, buf2;
 
     const UChar* id;
-    while ((id = tz->unext(NULL, ec)) != NULL && U_SUCCESS(ec)) {
+    while ((id = tz->unext(nullptr, ec)) != nullptr && U_SUCCESS(ec)) {
         if (U_FAILURE(ec)) {
             errln("FAIL: StringEnumeration::unext");
             break;
         }
 
         TimeZone *t = TimeZone::createTimeZone(id);
-        if (t == NULL) {
+        if (t == nullptr) {
             errln("FAIL: TimeZone::createTimeZone");
             break;
         }
         dateFormat.setTimeZone(*t);
 
         Calendar *cal = Calendar::createInstance(t, locale, ec);
-        if (cal == NULL || U_FAILURE(ec)) {
+        if (cal == nullptr || U_FAILURE(ec)) {
             errln("FAIL: Calendar::createTimeZone");
             delete cal;
             break;

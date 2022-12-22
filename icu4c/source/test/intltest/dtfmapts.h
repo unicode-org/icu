@@ -22,7 +22,7 @@
  * verifies that it works on a basic level.
  */
 class IntlTestDateFormatAPI: public IntlTest {
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 
 private:
     /**

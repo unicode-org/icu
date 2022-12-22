@@ -78,7 +78,7 @@ void CollationMonkeyTest::TestCollationKey(/* char* par */)
         return;
     }
 
-    srand( (unsigned)time( NULL ) );
+    srand( (unsigned)time( nullptr ) );
     int32_t s = checkValue(rand() % source.length());
     int32_t t = checkValue(rand() % source.length());
     int32_t slen = checkValue((rand() - source.length()) % source.length());
@@ -153,7 +153,7 @@ CollationMonkeyTest::TestCompare(/* char* par */)
     /* Seed the random-number generator with current time so that
      * the numbers will be different every time we run.
      */
-    srand( (unsigned)time( NULL ) );
+    srand( (unsigned)time( nullptr ) );
     int32_t s = checkValue(rand() % source.length());
     int32_t t = checkValue(rand() % source.length());
     int32_t slen = checkValue((rand() - source.length()) % source.length());

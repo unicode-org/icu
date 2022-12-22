@@ -803,7 +803,7 @@ const DecimalFormatSymbols* DecimalFormat::getDecimalFormatSymbols(void) const {
 
 void DecimalFormat::adoptDecimalFormatSymbols(DecimalFormatSymbols* symbolsToAdopt) {
     if (symbolsToAdopt == nullptr) {
-        return; // do not allow caller to set fields->symbols to NULL
+        return; // do not allow caller to set fields->symbols to nullptr
     }
     // we must take ownership of symbolsToAdopt, even in a failure case.
     LocalPointer<DecimalFormatSymbols> dfs(symbolsToAdopt);

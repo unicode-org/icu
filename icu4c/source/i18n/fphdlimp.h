@@ -65,7 +65,7 @@ class FieldPositionOnlyHandler : public FieldPositionHandler {
 // exported as U_I18N_API for tests
 
 class U_I18N_API FieldPositionIteratorHandler : public FieldPositionHandler {
-  FieldPositionIterator* iter; // can be NULL
+  FieldPositionIterator* iter; // can be nullptr
   UVector32* vec;
   UErrorCode status;
   UFieldCategory fCategory;

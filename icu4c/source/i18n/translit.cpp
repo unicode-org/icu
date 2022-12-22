@@ -163,7 +163,7 @@ Transliterator::Transliterator(const Transliterator& other) :
 }
 
 Transliterator* Transliterator::clone() const {
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -474,7 +474,7 @@ void Transliterator::filteredTransliterate(Replaceable& text,
     
     for (;;) {
 
-        if (filter != NULL) {
+        if (filter != nullptr) {
             // Narrow the range to be transliterated to the first segment
             // of unfiltered characters at or after index.start.
 
@@ -666,7 +666,7 @@ void Transliterator::filteredTransliterate(Replaceable& text,
             globalLimit += delta;
         }
 
-        if (filter == NULL || isIncrementalRun) {
+        if (filter == nullptr || isIncrementalRun) {
             break;
         }
 
@@ -840,13 +840,13 @@ const UnicodeFilter* Transliterator::getFilter(void) const {
 
 /**
  * Returns the filter used by this transliterator, or
- * <tt>NULL</tt> if this transliterator uses no filter.  The
+ * <tt>nullptr</tt> if this transliterator uses no filter.  The
  * caller must eventually delete the result.  After this call,
- * this transliterator's filter is set to <tt>NULL</tt>.
+ * this transliterator's filter is set to <tt>nullptr</tt>.
  */
 UnicodeFilter* Transliterator::orphanFilter(void) {
     UnicodeFilter *result = filter;
-    filter = NULL;
+    filter = nullptr;
     return result;
 }
 
@@ -921,7 +921,7 @@ Transliterator::createInstance(const UnicodeString& ID,
     UnicodeString canonID;
     UVector list(status);
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
 
     UnicodeSet* globalFilter = nullptr;
@@ -930,17 +930,17 @@ Transliterator::createInstance(const UnicodeString& ID,
     if (!TransliteratorIDParser::parseCompoundID(ID, dir, canonID, list, globalFilter)) {
         status = U_INVALID_ID;
         delete globalFilter;
-        return NULL;
+        return nullptr;
     }
     LocalPointer<UnicodeSet> lpGlobalFilter(globalFilter);
     
     TransliteratorIDParser::instantiateList(list, status);
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
     
     U_ASSERT(list.size() > 0);
-    Transliterator* t = NULL;
+    Transliterator* t = nullptr;
     
     if (list.size() > 1 || canonID.indexOf(ID_DELIM) >= 0) {
         // [NOTE: If it's a compoundID, we instantiate a CompoundTransliterator even if it only
@@ -954,7 +954,7 @@ Transliterator::createInstance(const UnicodeString& ID,
         t = (Transliterator*)list.elementAt(0);
     }
     // Check null pointer
-    if (t != NULL) {
+    if (t != nullptr) {
         t->setID(canonID);
         if (lpGlobalFilter.isValid()) {
             t->adoptFilter(lpGlobalFilter.orphan());
@@ -1029,12 +1029,12 @@ Transliterator* Transliterator::createBasicInstance(const UnicodeString& id,
         if (U_FAILURE(ec)) {
             delete t;
             delete alias;
-            t = NULL;
+            t = nullptr;
             break;
         }
     }
 
-    if (t != NULL && canon != NULL) {
+    if (t != nullptr && canon != nullptr) {
         t->setID(*canon);
     }
 
@@ -1056,7 +1056,7 @@ Transliterator::createFromRules(const UnicodeString& ID,
                                 UParseError& parseError,
                                 UErrorCode& status)
 {
-    Transliterator* t = NULL;
+    Transliterator* t = nullptr;
 
     TransliteratorParser parser(status);
     parser.parse(rules, dir, parseError, status);
@@ -1077,7 +1077,7 @@ Transliterator::createFromRules(const UnicodeString& ID,
         // been munged from reverse into forward mode, if
         // necessary, so instantiate the ID in the forward
         // direction.
-        if (parser.compoundFilter != NULL) {
+        if (parser.compoundFilter != nullptr) {
             UnicodeString filterPattern;
             parser.compoundFilter->toPattern(filterPattern, false);
             t = createInstance(filterPattern + UnicodeString(ID_DELIM)
@@ -1087,7 +1087,7 @@ Transliterator::createFromRules(const UnicodeString& ID,
             t = createInstance(*((UnicodeString*)parser.idBlockVector.elementAt(0)), UTRANS_FORWARD, parseError, status);
 
 
-        if (t != NULL) {
+        if (t != nullptr) {
             t->setID(ID);
         }
     }
@@ -1110,7 +1110,7 @@ Transliterator::createFromRules(const UnicodeString& ID,
                         delete temp;
                         return nullptr;
                     }
-                    if (temp != NULL && typeid(*temp) != typeid(NullTransliterator)) {
+                    if (temp != nullptr && typeid(*temp) != typeid(NullTransliterator)) {
                         transliterators.addElement(temp, status);
                         if (U_FAILURE(status)) {
                             delete temp;
@@ -1126,8 +1126,8 @@ Transliterator::createFromRules(const UnicodeString& ID,
                 // TODO: Should passNumber be turned into a decimal-string representation (1 -> "1")?
                 RuleBasedTransliterator* temprbt = new RuleBasedTransliterator(UnicodeString(CompoundTransliterator::PASS_STRING) + UnicodeString(passNumber++),
                         data, true);
-                // Check if NULL before adding it to transliterators to avoid future usage of NULL pointer.
-                if (temprbt == NULL) {
+                // Check if nullptr before adding it to transliterators to avoid future usage of nullptr pointer.
+                if (temprbt == nullptr) {
                     if (U_SUCCESS(status)) {
                         status = U_MEMORY_ALLOCATION_ERROR;
                     }
@@ -1146,12 +1146,12 @@ Transliterator::createFromRules(const UnicodeString& ID,
 
         t = new CompoundTransliterator(transliterators, passNumber - 1, parseError, status);
         // Null pointer check
-        if (t != NULL) {
+        if (t != nullptr) {
             t->setID(ID);
             t->adoptFilter(parser.orphanCompoundFilter());
         }
     }
-    if (U_SUCCESS(status) && t == NULL) {
+    if (U_SUCCESS(status) && t == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
     }
     return t;
@@ -1182,7 +1182,7 @@ UnicodeString& Transliterator::toRules(UnicodeString& rulesSource,
 
 int32_t Transliterator::countElements() const {
     const CompoundTransliterator* ct = dynamic_cast<const CompoundTransliterator*>(this);
-    return ct != NULL ? ct->getCount() : 0;
+    return ct != nullptr ? ct->getCount() : 0;
 }
 
 const Transliterator& Transliterator::getElement(int32_t index, UErrorCode& ec) const {
@@ -1190,7 +1190,7 @@ const Transliterator& Transliterator::getElement(int32_t index, UErrorCode& ec) 
         return *this;
     }
     const CompoundTransliterator* cpd = dynamic_cast<const CompoundTransliterator*>(this);
-    int32_t n = (cpd == NULL) ? 1 : cpd->getCount();
+    int32_t n = (cpd == nullptr) ? 1 : cpd->getCount();
     if (index < 0 || index >= n) {
         ec = U_INDEX_OUTOFBOUNDS_ERROR;
         return *this;
@@ -1201,15 +1201,15 @@ const Transliterator& Transliterator::getElement(int32_t index, UErrorCode& ec) 
 
 UnicodeSet& Transliterator::getSourceSet(UnicodeSet& result) const {
     handleGetSourceSet(result);
-    if (filter != NULL) {
+    if (filter != nullptr) {
         UnicodeSet* filterSet = dynamic_cast<UnicodeSet*>(filter);
         UBool deleteFilterSet = false;
         // Most, but not all filters will be UnicodeSets.  Optimize for
         // the high-runner case.
-        if (filterSet == NULL) {
+        if (filterSet == nullptr) {
             filterSet = new UnicodeSet();
             // Check null pointer
-            if (filterSet == NULL) {
+            if (filterSet == nullptr) {
                 return result;
             }
             deleteFilterSet = true;
@@ -1340,26 +1340,26 @@ int32_t U_EXPORT2 Transliterator::countAvailableIDs(void) {
  * range, the result of getAvailableID(0) is returned.
  */
 const UnicodeString& U_EXPORT2 Transliterator::getAvailableID(int32_t index) {
-    const UnicodeString* result = NULL;
+    const UnicodeString* result = nullptr;
     umtx_lock(&registryMutex);
     UErrorCode ec = U_ZERO_ERROR;
     if (HAVE_REGISTRY(ec)) {
         result = &registry->getAvailableID(index);
     }
     umtx_unlock(&registryMutex);
-    U_ASSERT(result != NULL); // fail if no registry
+    U_ASSERT(result != nullptr); // fail if no registry
     return *result;
 }
 
 StringEnumeration* U_EXPORT2 Transliterator::getAvailableIDs(UErrorCode& ec) {
-    if (U_FAILURE(ec)) return NULL;
-    StringEnumeration* result = NULL;
+    if (U_FAILURE(ec)) return nullptr;
+    StringEnumeration* result = nullptr;
     umtx_lock(&registryMutex);
     if (HAVE_REGISTRY(ec)) {
         result = registry->getAvailableIDs();
     }
     umtx_unlock(&registryMutex);
-    if (result == NULL) {
+    if (result == nullptr) {
         ec = U_INTERNAL_TRANSLITERATOR_ERROR;
     }
     return result;
@@ -1525,7 +1525,7 @@ UBool Transliterator::initializeRegistry(UErrorCode &status) {
 
     UErrorCode lstatus = U_ZERO_ERROR;
     UResourceBundle *bundle, *transIDs, *colBund;
-    bundle = ures_open(U_ICUDATA_TRANSLIT, NULL/*open default locale*/, &lstatus);
+    bundle = ures_open(U_ICUDATA_TRANSLIT, nullptr/*open default locale*/, &lstatus);
     transIDs = ures_getByKey(bundle, RB_RULE_BASED_IDS, 0, &lstatus);
     const UnicodeString T_PART = UNICODE_STRING_SIMPLE("-t-");
 
@@ -1546,7 +1546,7 @@ UBool Transliterator::initializeRegistry(UErrorCode &status) {
                     ures_close(colBund);
                     continue;
                 }
-                UResourceBundle* res = ures_getNextResource(colBund, NULL, &lstatus);
+                UResourceBundle* res = ures_getNextResource(colBund, nullptr, &lstatus);
                 const char* typeStr = ures_getKey(res);
                 UChar type;
                 u_charsToUChars(typeStr, &type, 1);
@@ -1602,12 +1602,12 @@ UBool Transliterator::initializeRegistry(UErrorCode &status) {
      BreakTransliterator* tempBreakTranslit         = new BreakTransliterator();
 #endif
     // Check for null pointers
-    if (tempNullTranslit == NULL || tempLowercaseTranslit == NULL || tempUppercaseTranslit == NULL ||
-        tempTitlecaseTranslit == NULL || tempUnicodeTranslit == NULL || 
+    if (tempNullTranslit == nullptr || tempLowercaseTranslit == nullptr || tempUppercaseTranslit == nullptr ||
+        tempTitlecaseTranslit == nullptr || tempUnicodeTranslit == nullptr || 
 #if !UCONFIG_NO_BREAK_ITERATION
-        tempBreakTranslit == NULL ||
+        tempBreakTranslit == nullptr ||
 #endif
-        tempNameUnicodeTranslit == NULL )
+        tempNameUnicodeTranslit == nullptr )
     {
         delete tempNullTranslit;
         delete tempLowercaseTranslit;
@@ -1620,7 +1620,7 @@ UBool Transliterator::initializeRegistry(UErrorCode &status) {
 #endif
         // Since there was an error, remove registry
         delete registry;
-        registry = NULL;
+        registry = nullptr;
 
         status = U_MEMORY_ALLOCATION_ERROR;
         return 0;
@@ -1668,7 +1668,7 @@ U_CFUNC UBool utrans_transliterator_cleanup(void) {
     TransliteratorIDParser::cleanup();
     if (registry) {
         delete registry;
-        registry = NULL;
+        registry = nullptr;
     }
     return true;
 }

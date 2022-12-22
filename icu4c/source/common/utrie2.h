@@ -619,7 +619,7 @@ public:
 
 class ForwardUTrie2StringIterator : public UTrie2StringIterator {
 public:
-    // Iteration limit l can be NULL.
+    // Iteration limit l can be nullptr.
     // In that case, the caller must detect c==0 and stop.
     ForwardUTrie2StringIterator(const UTrie2 *t, const UChar *p, const UChar *l) :
         UTrie2StringIterator(t, p), limit(l) {}

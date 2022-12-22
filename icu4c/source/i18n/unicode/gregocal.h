@@ -88,7 +88,7 @@ U_NAMESPACE_BEGIN
  *     cout << "Current Time" << endl;
  *
  *     // create a Pacific Standard Time time zone
- *     SimpleTimeZone* pdt = new SimpleTimeZone(-8 * 60 * 60 * 1000, ids->unext(NULL, success)));
+ *     SimpleTimeZone* pdt = new SimpleTimeZone(-8 * 60 * 60 * 1000, ids->unext(nullptr, success)));
  *
  *     // set up rules for daylight savings time
  *     pdt->setStartRule(UCAL_MARCH, 1, UCAL_SUNDAY, 2 * 60 * 60 * 1000);

@@ -42,7 +42,7 @@
 StringSearchTest::StringSearchTest() 
 #if !UCONFIG_NO_BREAK_ITERATION
 :
-    m_en_wordbreaker_(NULL), m_en_characterbreaker_(NULL)
+    m_en_wordbreaker_(nullptr), m_en_characterbreaker_(nullptr)
 #endif
 {
 #if !UCONFIG_NO_BREAK_ITERATION
@@ -112,9 +112,9 @@ void StringSearchTest::runIndexedTest(int32_t index, UBool exec,
 {
 #if !UCONFIG_NO_BREAK_ITERATION
     UBool areBroken = false;
-    if (m_en_us_ == NULL && m_fr_fr_ == NULL && m_de_ == NULL &&
-        m_es_ == NULL && m_en_wordbreaker_ == NULL &&
-        m_en_characterbreaker_ == NULL && exec) {
+    if (m_en_us_ == nullptr && m_fr_fr_ == nullptr && m_de_ == nullptr &&
+        m_es_ == nullptr && m_en_wordbreaker_ == nullptr &&
+        m_en_characterbreaker_ == nullptr && exec) {
         areBroken = true;
     }
 
@@ -182,7 +182,7 @@ void StringSearchTest::runIndexedTest(int32_t index, UBool exec,
 
 RuleBasedCollator * StringSearchTest::getCollator(const char *collator)
 {
-    if (collator == NULL) {
+    if (collator == nullptr) {
         return m_en_us_;
     }
     if (strcmp(collator, "fr") == 0) {
@@ -202,10 +202,10 @@ RuleBasedCollator * StringSearchTest::getCollator(const char *collator)
 BreakIterator * StringSearchTest::getBreakIterator(const char *breaker)
 {
 #if UCONFIG_NO_BREAK_ITERATION
-    return NULL;
+    return nullptr;
 #else
-    if (breaker == NULL) {
-        return NULL;
+    if (breaker == nullptr) {
+        return nullptr;
     }
     if (strcmp(breaker, "wordbreaker") == 0) {
         return m_en_wordbreaker_;
@@ -482,7 +482,7 @@ UBool StringSearchTest::assertEqual(const SearchData *search)
     pattern.setTo(temp);
 
 #if !UCONFIG_NO_BREAK_ITERATION
-    if (breaker != NULL) {
+    if (breaker != nullptr) {
         breaker->setText(text);
     }
 #endif
@@ -541,7 +541,7 @@ UBool StringSearchTest::assertCanonicalEqual(const SearchData *search)
     pattern.setTo(temp);
 
 #if !UCONFIG_NO_BREAK_ITERATION
-    if (breaker != NULL) {
+    if (breaker != nullptr) {
         breaker->setText(text);
     }
 #endif
@@ -594,7 +594,7 @@ UBool StringSearchTest::assertEqualWithAttribute(const SearchData *search,
     pattern.setTo(temp);
 
 #if !UCONFIG_NO_BREAK_ITERATION
-    if (breaker != NULL) {
+    if (breaker != nullptr) {
         breaker->setText(text);
     }
 #endif
@@ -630,23 +630,23 @@ void StringSearchTest::TestOpenClose()
     StringCharacterIterator  chariter(text);
 
     /* testing null arguments */
-    result = new StringSearch(pattern, text, NULL, NULL, status);
+    result = new StringSearch(pattern, text, nullptr, nullptr, status);
     if (U_SUCCESS(status)) {
-        errln("Error: NULL arguments should produce an error");
+        errln("Error: nullptr arguments should produce an error");
     }
     delete result;
 
     chariter.setText(text);
     status = U_ZERO_ERROR;
-    result = new StringSearch(pattern, chariter, NULL, NULL, status);
+    result = new StringSearch(pattern, chariter, nullptr, nullptr, status);
     if (U_SUCCESS(status)) {
-        errln("Error: NULL arguments should produce an error");
+        errln("Error: nullptr arguments should produce an error");
     }
     delete result;
 
     // No-op: text.append(0, 0x1); -- what was intended here?
     status = U_ZERO_ERROR;
-    result = new StringSearch(pattern, text, NULL, NULL, status);
+    result = new StringSearch(pattern, text, nullptr, nullptr, status);
     if (U_SUCCESS(status)) {
         errln("Error: Empty pattern should produce an error");
     }
@@ -654,7 +654,7 @@ void StringSearchTest::TestOpenClose()
 
     chariter.setText(text);
     status = U_ZERO_ERROR;
-    result = new StringSearch(pattern, chariter, NULL, NULL, status);
+    result = new StringSearch(pattern, chariter, nullptr, nullptr, status);
     if (U_SUCCESS(status)) {
         errln("Error: Empty pattern should produce an error");
     }
@@ -663,7 +663,7 @@ void StringSearchTest::TestOpenClose()
     text.remove();
     pattern.append(temp);
     status = U_ZERO_ERROR;
-    result = new StringSearch(pattern, text, NULL, NULL, status);
+    result = new StringSearch(pattern, text, nullptr, nullptr, status);
     if (U_SUCCESS(status)) {
         errln("Error: Empty text should produce an error");
     }
@@ -671,7 +671,7 @@ void StringSearchTest::TestOpenClose()
 
     chariter.setText(text);
     status = U_ZERO_ERROR;
-    result = new StringSearch(pattern, chariter, NULL, NULL, status);
+    result = new StringSearch(pattern, chariter, nullptr, nullptr, status);
     if (U_SUCCESS(status)) {
         errln("Error: Empty text should produce an error");
     }
@@ -679,45 +679,45 @@ void StringSearchTest::TestOpenClose()
 
     text.append(temp);
     status = U_ZERO_ERROR;
-    result = new StringSearch(pattern, text, NULL, NULL, status);
+    result = new StringSearch(pattern, text, nullptr, nullptr, status);
     if (U_SUCCESS(status)) {
-        errln("Error: NULL arguments should produce an error");
+        errln("Error: nullptr arguments should produce an error");
     }
     delete result;
 
     chariter.setText(text);
     status = U_ZERO_ERROR;
-    result = new StringSearch(pattern, chariter, NULL, NULL, status);
+    result = new StringSearch(pattern, chariter, nullptr, nullptr, status);
     if (U_SUCCESS(status)) {
-        errln("Error: NULL arguments should produce an error");
+        errln("Error: nullptr arguments should produce an error");
     }
     delete result;
 
     status = U_ZERO_ERROR;
-    result = new StringSearch(pattern, text, m_en_us_, NULL, status);
+    result = new StringSearch(pattern, text, m_en_us_, nullptr, status);
     if (U_FAILURE(status)) {
-        errln("Error: NULL break iterator is valid for opening search");
+        errln("Error: nullptr break iterator is valid for opening search");
     }
     delete result;
 
     status = U_ZERO_ERROR;
-    result = new StringSearch(pattern, chariter, m_en_us_, NULL, status);
+    result = new StringSearch(pattern, chariter, m_en_us_, nullptr, status);
     if (U_FAILURE(status)) {
-        errln("Error: NULL break iterator is valid for opening search");
+        errln("Error: nullptr break iterator is valid for opening search");
     }
     delete result;
 
     status = U_ZERO_ERROR;
-    result = new StringSearch(pattern, text, Locale::getEnglish(), NULL, status);
-    if (U_FAILURE(status) || result == NULL) {
-        errln("Error: NULL break iterator is valid for opening search");
+    result = new StringSearch(pattern, text, Locale::getEnglish(), nullptr, status);
+    if (U_FAILURE(status) || result == nullptr) {
+        errln("Error: nullptr break iterator is valid for opening search");
     }
     delete result;
 
     status = U_ZERO_ERROR;
-    result = new StringSearch(pattern, chariter, Locale::getEnglish(), NULL, status);
+    result = new StringSearch(pattern, chariter, Locale::getEnglish(), nullptr, status);
     if (U_FAILURE(status)) {
-        errln("Error: NULL break iterator is valid for opening search");
+        errln("Error: nullptr break iterator is valid for opening search");
     }
     delete result;
 
@@ -729,7 +729,7 @@ void StringSearchTest::TestOpenClose()
     delete result;
 
     status = U_ZERO_ERROR;
-    result = new StringSearch(pattern, chariter, m_en_us_, NULL, status);
+    result = new StringSearch(pattern, chariter, m_en_us_, nullptr, status);
     if (U_FAILURE(status)) {
         errln("Error: Break iterator is valid for opening search");
     }
@@ -751,7 +751,7 @@ void StringSearchTest::TestInitialization()
     text.append(temp);
     text.append(temp);
     text.append(temp);
-    result = new StringSearch(pattern, text, m_en_us_, NULL, status);
+    result = new StringSearch(pattern, text, m_en_us_, nullptr, status);
     if (U_FAILURE(status)) {
         errln("Error opening search %s", u_errorName(status));
     }
@@ -786,7 +786,7 @@ void StringSearchTest::TestInitialization()
     for (count = 0; count < 512; count ++) {
         pattern.append(temp);
     }
-    result = new StringSearch(pattern, text, m_en_us_, NULL, status);
+    result = new StringSearch(pattern, text, m_en_us_, nullptr, status);
     if (*result != *result) {
         errln("Error: string search object expected to match itself");
     }
@@ -814,7 +814,7 @@ void StringSearchTest::TestInitialization()
 void StringSearchTest::TestBasic()
 {
     int count = 0;
-    while (BASIC[count].text != NULL) {
+    while (BASIC[count].text != nullptr) {
         //printf("count %d", count);
         if (!assertEqual(&BASIC[count])) {
             infoln("Error at test number %d", count);
@@ -832,14 +832,14 @@ void StringSearchTest::TestNormExact()
         errln("Error setting collation normalization %s", 
               u_errorName(status));
     }
-    while (BASIC[count].text != NULL) {
+    while (BASIC[count].text != nullptr) {
         if (!assertEqual(&BASIC[count])) {
             infoln("Error at test number %d", count);
         }
         count ++;
     }
     count = 0;
-    while (NORMEXACT[count].text != NULL) {
+    while (NORMEXACT[count].text != nullptr) {
         if (!assertEqual(&NORMEXACT[count])) {
             infoln("Error at test number %d", count);
         }
@@ -847,7 +847,7 @@ void StringSearchTest::TestNormExact()
     }
     m_en_us_->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_OFF, status);
     count = 0;
-    while (NONNORMEXACT[count].text != NULL) {
+    while (NONNORMEXACT[count].text != nullptr) {
         if (!assertEqual(&NONNORMEXACT[count])) {
             infoln("Error at test number %d", count);
         }
@@ -858,7 +858,7 @@ void StringSearchTest::TestNormExact()
 void StringSearchTest::TestStrength()
 {
     int count = 0;
-    while (STRENGTH[count].text != NULL) {
+    while (STRENGTH[count].text != nullptr) {
         if (!assertEqual(&STRENGTH[count])) {
             infoln("Error at test number %d", count);
         }
@@ -879,14 +879,14 @@ void StringSearchTest::TestBreakIterator()
     pattern.setTo(temp, u_strlen(temp));
 
     UErrorCode status = U_ZERO_ERROR;
-    StringSearch *strsrch = new StringSearch(pattern, text, m_en_us_, NULL, 
+    StringSearch *strsrch = new StringSearch(pattern, text, m_en_us_, nullptr, 
                                              status);
     if (U_FAILURE(status)) {
         errln("Error opening string search %s", u_errorName(status));
     }
     
-    strsrch->setBreakIterator(NULL, status);
-    if (U_FAILURE(status) || strsrch->getBreakIterator() != NULL) {
+    strsrch->setBreakIterator(nullptr, status);
+    if (U_FAILURE(status) || strsrch->getBreakIterator() != nullptr) {
         errln("Error usearch_getBreakIterator returned wrong object");
     }
 
@@ -916,7 +916,7 @@ void StringSearchTest::TestBreakIterator()
         text.setTo(temp, u_strlen(temp));
         u_unescape(search->pattern, temp, 128);
         pattern.setTo(temp, u_strlen(temp));
-        if (breaker != NULL) {
+        if (breaker != nullptr) {
             breaker->setText(text);
         }
         collator->setStrength(getECollationStrength(search->strength));
@@ -925,7 +925,7 @@ void StringSearchTest::TestBreakIterator()
         if (U_FAILURE(status) || 
             strsrch->getBreakIterator() != breaker) {
             errln("Error setting break iterator");
-            if (strsrch != NULL) {
+            if (strsrch != nullptr) {
                 delete strsrch;
             }
         }
@@ -935,7 +935,7 @@ void StringSearchTest::TestBreakIterator()
         }
         search   = &(BREAKITERATOREXACT[count + 1]);
         breaker  = getBreakIterator(search->breaker);
-        if (breaker != NULL) {
+        if (breaker != nullptr) {
             breaker->setText(text);
         }
         strsrch->setBreakIterator(breaker, status);
@@ -952,7 +952,7 @@ void StringSearchTest::TestBreakIterator()
         count += 2;
     }
     count = 0;
-    while (BREAKITERATOREXACT[count].text != NULL) {
+    while (BREAKITERATOREXACT[count].text != nullptr) {
          if (!assertEqual(&BREAKITERATOREXACT[count])) {
              infoln("Error at test number %d", count);
          }
@@ -971,7 +971,7 @@ void StringSearchTest::TestVariable()
         errln("Error setting collation alternate attribute %s", 
               u_errorName(status));
     }
-    while (VARIABLE[count].text != NULL) {
+    while (VARIABLE[count].text != nullptr) {
         logln("variable %d", count);
         if (!assertEqual(&VARIABLE[count])) {
             infoln("Error at test number %d", count);
@@ -985,7 +985,7 @@ void StringSearchTest::TestVariable()
 void StringSearchTest::TestOverlap()
 {
     int count = 0;
-    while (OVERLAP[count].text != NULL) {
+    while (OVERLAP[count].text != nullptr) {
         if (!assertEqualWithAttribute(&OVERLAP[count], USEARCH_OFF, 
                                       USEARCH_ON)) {
             errln("Error at overlap test number %d", count);
@@ -993,7 +993,7 @@ void StringSearchTest::TestOverlap()
         count ++;
     }    
     count = 0;
-    while (NONOVERLAP[count].text != NULL) {
+    while (NONOVERLAP[count].text != nullptr) {
         if (!assertEqual(&NONOVERLAP[count])) {
             errln("Error at non overlap test number %d", count);
         }
@@ -1014,7 +1014,7 @@ void StringSearchTest::TestOverlap()
         RuleBasedCollator *collator = getCollator(search->collator);
         UErrorCode         status   = U_ZERO_ERROR;
         StringSearch      *strsrch  = new StringSearch(pattern, text, 
-                                                       collator, NULL, 
+                                                       collator, nullptr, 
                                                        status);
 
         strsrch->setAttribute(USEARCH_OVERLAP, USEARCH_ON, status);
@@ -1056,7 +1056,7 @@ void StringSearchTest::TestCollator()
     pattern.setTo(temp, u_strlen(temp));
 
     UErrorCode    status = U_ZERO_ERROR;
-    StringSearch *strsrch = new StringSearch(pattern, text, m_en_us_, NULL, 
+    StringSearch *strsrch = new StringSearch(pattern, text, m_en_us_, nullptr, 
                                              status);    
     if (U_FAILURE(status)) {
         errln("Error opening string search %s", u_errorName(status));
@@ -1122,13 +1122,13 @@ void StringSearchTest::TestPattern()
 
     m_en_us_->setStrength(getECollationStrength(PATTERN[0].strength));
     UErrorCode    status = U_ZERO_ERROR;
-    StringSearch *strsrch = new StringSearch(pattern, text, m_en_us_, NULL, 
+    StringSearch *strsrch = new StringSearch(pattern, text, m_en_us_, nullptr, 
                                              status);
 
     if (U_FAILURE(status)) {
         errln("Error opening string search %s", u_errorName(status));
         m_en_us_->setStrength(getECollationStrength(UCOL_TERTIARY));
-        if (strsrch != NULL) {
+        if (strsrch != nullptr) {
             delete strsrch;
         }
         return;
@@ -1138,7 +1138,7 @@ void StringSearchTest::TestPattern()
     }
     if (!assertEqualWithStringSearch(strsrch, &PATTERN[0])) {
         m_en_us_->setStrength(getECollationStrength(UCOL_TERTIARY));
-        if (strsrch != NULL) {
+        if (strsrch != nullptr) {
             delete strsrch;
         }
         return;
@@ -1150,7 +1150,7 @@ void StringSearchTest::TestPattern()
     if (pattern != strsrch->getPattern()) {
         errln("Error setting pattern");
         m_en_us_->setStrength(getECollationStrength(UCOL_TERTIARY));
-        if (strsrch != NULL) {
+        if (strsrch != nullptr) {
             delete strsrch;
         }
         return;
@@ -1161,7 +1161,7 @@ void StringSearchTest::TestPattern()
     }
     if (!assertEqualWithStringSearch(strsrch, &PATTERN[1])) {
         m_en_us_->setStrength(getECollationStrength(UCOL_TERTIARY));
-        if (strsrch != NULL) {
+        if (strsrch != nullptr) {
             delete strsrch;
         }
         return;
@@ -1173,7 +1173,7 @@ void StringSearchTest::TestPattern()
     if (pattern != strsrch->getPattern()) {
         errln("Error setting pattern");
         m_en_us_->setStrength(getECollationStrength(UCOL_TERTIARY));
-        if (strsrch != NULL) {
+        if (strsrch != nullptr) {
             delete strsrch;
         }
         return;
@@ -1184,7 +1184,7 @@ void StringSearchTest::TestPattern()
     }
     if (!assertEqualWithStringSearch(strsrch, &PATTERN[0])) {
         m_en_us_->setStrength(getECollationStrength(UCOL_TERTIARY));
-        if (strsrch != NULL) {
+        if (strsrch != nullptr) {
             delete strsrch;
         }
         return;
@@ -1200,7 +1200,7 @@ void StringSearchTest::TestPattern()
         errln("Error setting pattern with size 512, %s", u_errorName(status));
     }
     m_en_us_->setStrength(getECollationStrength(UCOL_TERTIARY));
-    if (strsrch != NULL) {
+    if (strsrch != nullptr) {
         delete strsrch;
     }
 }
@@ -1216,7 +1216,7 @@ void StringSearchTest::TestText()
     pattern.setTo(temp, u_strlen(temp));
 
     UErrorCode status = U_ZERO_ERROR;
-    StringSearch *strsrch = new StringSearch(pattern, text, m_en_us_, NULL, 
+    StringSearch *strsrch = new StringSearch(pattern, text, m_en_us_, nullptr, 
                                              status);
     if (U_FAILURE(status)) {
         errln("Error opening string search %s", u_errorName(status));
@@ -1267,7 +1267,7 @@ void StringSearchTest::TestText()
 void StringSearchTest::TestCompositeBoundaries()
 {
     int count = 0;
-    while (COMPOSITEBOUNDARIES[count].text != NULL) { 
+    while (COMPOSITEBOUNDARIES[count].text != nullptr) { 
         logln("composite %d", count);
         if (!assertEqual(&COMPOSITEBOUNDARIES[count])) {
             errln("Error at test number %d", count);
@@ -1282,7 +1282,7 @@ void StringSearchTest::TestGetSetOffset()
     UnicodeString  pattern("1234567890123456");
     UnicodeString  text("12345678901234567890123456789012");
     StringSearch  *strsrch = new StringSearch(pattern, text, m_en_us_, 
-                                              NULL, status);
+                                              nullptr, status);
     /* testing out of bounds error */
     strsrch->setOffset(-1, status);
     if (U_SUCCESS(status)) {
@@ -1293,7 +1293,7 @@ void StringSearchTest::TestGetSetOffset()
         errln("Error expecting set offset error");
     }
     int index   = 0;
-    while (BASIC[index].text != NULL) {
+    while (BASIC[index].text != nullptr) {
         UErrorCode  status      = U_ZERO_ERROR;
         SearchData  search      = BASIC[index ++];
         UChar       temp[128];
@@ -1358,7 +1358,7 @@ void StringSearchTest::TestGetSetAttribute()
     UErrorCode     status    = U_ZERO_ERROR;
     UnicodeString  pattern("pattern");
     UnicodeString  text("text");
-    StringSearch  *strsrch = new StringSearch(pattern, text, m_en_us_, NULL, 
+    StringSearch  *strsrch = new StringSearch(pattern, text, m_en_us_, nullptr, 
                                               status);
     if (U_FAILURE(status)) {
         errln("Error opening search %s", u_errorName(status));
@@ -1427,11 +1427,11 @@ void StringSearchTest::TestGetMatch()
     pattern.setTo(temp, u_strlen(temp));
 
     UErrorCode    status  = U_ZERO_ERROR;
-    StringSearch *strsrch = new StringSearch(pattern, text, m_en_us_, NULL, 
+    StringSearch *strsrch = new StringSearch(pattern, text, m_en_us_, nullptr, 
                                              status);
     if (U_FAILURE(status)) {
         errln("Error opening string search %s", u_errorName(status));
-        if (strsrch != NULL) {
+        if (strsrch != nullptr) {
             delete strsrch;
         }
         return;
@@ -1479,7 +1479,7 @@ void StringSearchTest::TestGetMatch()
 void StringSearchTest::TestSetMatch()
 {
     int count = 0;
-    while (MATCH[count].text != NULL) {
+    while (MATCH[count].text != nullptr) {
         SearchData     search = MATCH[count];
         UChar          temp[128];
         UErrorCode status = U_ZERO_ERROR;
@@ -1491,10 +1491,10 @@ void StringSearchTest::TestSetMatch()
         pattern.setTo(temp, u_strlen(temp));
 
         StringSearch *strsrch = new StringSearch(pattern, text, m_en_us_, 
-                                                 NULL, status);
+                                                 nullptr, status);
         if (U_FAILURE(status)) {
             errln("Error opening string search %s", u_errorName(status));
-            if (strsrch != NULL) {
+            if (strsrch != nullptr) {
                 delete strsrch;
             }
             return;
@@ -1550,11 +1550,11 @@ void StringSearchTest::TestReset()
     UErrorCode     status  = U_ZERO_ERROR;
     UnicodeString  text("fish fish");
     UnicodeString  pattern("s");
-    StringSearch  *strsrch = new StringSearch(pattern, text, m_en_us_, NULL, 
+    StringSearch  *strsrch = new StringSearch(pattern, text, m_en_us_, nullptr, 
                                               status);
     if (U_FAILURE(status)) {
         errln("Error opening string search %s", u_errorName(status));
-        if (strsrch != NULL) {
+        if (strsrch != nullptr) {
             delete strsrch;
         }
         return;
@@ -1585,7 +1585,7 @@ void StringSearchTest::TestReset()
 void StringSearchTest::TestSupplementary()
 {
     int count = 0;
-    while (SUPPLEMENTARY[count].text != NULL) {
+    while (SUPPLEMENTARY[count].text != nullptr) {
         if (!assertEqual(&SUPPLEMENTARY[count])) {
             errln("Error at test number %d", count);
         }
@@ -1608,14 +1608,14 @@ void StringSearchTest::TestContraction()
     }
     UnicodeString text("text");
     UnicodeString pattern("pattern");
-    StringSearch *strsrch = new StringSearch(pattern, text, collator, NULL, 
+    StringSearch *strsrch = new StringSearch(pattern, text, collator, nullptr, 
                                              status);
     if (U_FAILURE(status)) {
         errln("Error opening string search %s", u_errorName(status));
     }   
     
     int count = 0;
-    while (CONTRACTION[count].text != NULL) {
+    while (CONTRACTION[count].text != nullptr) {
         u_unescape(CONTRACTION[count].text, temp, 128);
         text.setTo(temp, u_strlen(temp));
         u_unescape(CONTRACTION[count].pattern, temp, 128);
@@ -1648,7 +1648,7 @@ void StringSearchTest::TestIgnorable()
     }
     UnicodeString pattern("pattern");
     UnicodeString text("text");
-    StringSearch *strsrch = new StringSearch(pattern, text, collator, NULL, 
+    StringSearch *strsrch = new StringSearch(pattern, text, collator, nullptr, 
                                              status);
     if (U_FAILURE(status)) {
         errln("Error opening string search %s", u_errorName(status));
@@ -1656,7 +1656,7 @@ void StringSearchTest::TestIgnorable()
         return;
     }   
     
-    while (IGNORABLE[count].text != NULL) {
+    while (IGNORABLE[count].text != nullptr) {
         u_unescape(IGNORABLE[count].text, temp, 128);
         text.setTo(temp, u_strlen(temp));
         u_unescape(IGNORABLE[count].pattern, temp, 128);
@@ -1677,8 +1677,8 @@ void StringSearchTest::TestDiacriticMatch()
 	UChar temp[128];
     UErrorCode status = U_ZERO_ERROR;
     int        count  = 0;
-    RuleBasedCollator* coll = NULL;
-    StringSearch *strsrch = NULL;
+    RuleBasedCollator* coll = nullptr;
+    StringSearch *strsrch = nullptr;
 
     UnicodeString pattern("pattern");
     UnicodeString text("text");
@@ -1686,7 +1686,7 @@ void StringSearchTest::TestDiacriticMatch()
     const SearchData *search; 
     
     search = &(DIACRITICMATCH[count]);
-    while (search->text != NULL) {
+    while (search->text != nullptr) {
    		coll = getCollator(search->collator);
     	coll->setStrength(getECollationStrength(search->strength));
     	strsrch = new StringSearch(pattern, text, coll, getBreakIterator(search->breaker), status);
@@ -1712,7 +1712,7 @@ void StringSearchTest::TestDiacriticMatch()
 void StringSearchTest::TestCanonical()
 {
     int count = 0;
-    while (BASICCANONICAL[count].text != NULL) {
+    while (BASICCANONICAL[count].text != nullptr) {
         if (!assertCanonicalEqual(&BASICCANONICAL[count])) {
             errln("Error at test number %d", count);
         }
@@ -1725,7 +1725,7 @@ void StringSearchTest::TestNormCanonical()
     UErrorCode status = U_ZERO_ERROR;
     m_en_us_->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
     int count = 0;
-    while (NORMCANONICAL[count].text != NULL) {
+    while (NORMCANONICAL[count].text != nullptr) {
         if (!assertCanonicalEqual(&NORMCANONICAL[count])) {
             errln("Error at test number %d", count);
         }
@@ -1737,7 +1737,7 @@ void StringSearchTest::TestNormCanonical()
 void StringSearchTest::TestStrengthCanonical()
 {
     int count = 0;
-    while (STRENGTHCANONICAL[count].text != NULL) {
+    while (STRENGTHCANONICAL[count].text != nullptr) {
         if (!assertCanonicalEqual(&STRENGTHCANONICAL[count])) {
             errln("Error at test number %d", count);
         }
@@ -1787,7 +1787,7 @@ void StringSearchTest::TestBreakIteratorCanonical()
         }
         search  = &(BREAKITERATOREXACT[count + 1]);
         breaker = getBreakIterator(search->breaker);
-        if (breaker == NULL) {
+        if (breaker == nullptr) {
             errln("Error creating BreakIterator");
             return;
         }
@@ -1808,7 +1808,7 @@ void StringSearchTest::TestBreakIteratorCanonical()
         count += 2;
     }
     count = 0;
-    while (BREAKITERATORCANONICAL[count].text != NULL) {
+    while (BREAKITERATORCANONICAL[count].text != nullptr) {
          if (!assertEqual(&BREAKITERATORCANONICAL[count])) {
              errln("Error at test number %d", count);
              return;
@@ -1828,7 +1828,7 @@ void StringSearchTest::TestVariableCanonical()
         errln("Error setting collation alternate attribute %s", 
               u_errorName(status));
     }
-    while (VARIABLE[count].text != NULL) {
+    while (VARIABLE[count].text != nullptr) {
         logln("variable %d", count);
         if (!assertCanonicalEqual(&VARIABLE[count])) {
             errln("Error at test number %d", count);
@@ -1842,7 +1842,7 @@ void StringSearchTest::TestVariableCanonical()
 void StringSearchTest::TestOverlapCanonical()
 {
     int count = 0;
-    while (OVERLAPCANONICAL[count].text != NULL) {
+    while (OVERLAPCANONICAL[count].text != nullptr) {
         if (!assertEqualWithAttribute(&OVERLAPCANONICAL[count], USEARCH_ON, 
                                       USEARCH_ON)) {
             errln("Error at overlap test number %d", count);
@@ -1850,7 +1850,7 @@ void StringSearchTest::TestOverlapCanonical()
         count ++;
     }    
     count = 0;
-    while (NONOVERLAP[count].text != NULL) {
+    while (NONOVERLAP[count].text != nullptr) {
         if (!assertCanonicalEqual(&NONOVERLAPCANONICAL[count])) {
             errln("Error at non overlap test number %d", count);
         }
@@ -1871,7 +1871,7 @@ void StringSearchTest::TestOverlapCanonical()
         pattern.setTo(temp, u_strlen(temp));
         RuleBasedCollator *collator = getCollator(search->collator);
         StringSearch *strsrch = new StringSearch(pattern, text, collator, 
-                                                 NULL, status);
+                                                 nullptr, status);
         strsrch->setAttribute(USEARCH_CANONICAL_MATCH, USEARCH_ON, status);
         strsrch->setAttribute(USEARCH_OVERLAP, USEARCH_ON, status);
         if (U_FAILURE(status) ||
@@ -1912,7 +1912,7 @@ void StringSearchTest::TestCollatorCanonical()
 
     UErrorCode    status  = U_ZERO_ERROR;
     StringSearch *strsrch = new StringSearch(pattern, text, m_en_us_, 
-                                             NULL, status);
+                                             nullptr, status);
     strsrch->setAttribute(USEARCH_CANONICAL_MATCH, USEARCH_ON, status);
     if (U_FAILURE(status)) {
         errln("Error opening string search %s", u_errorName(status));
@@ -1941,7 +1941,7 @@ void StringSearchTest::TestCollatorCanonical()
     strsrch->setAttribute(USEARCH_CANONICAL_MATCH, USEARCH_ON, status);
     if (!assertEqualWithStringSearch(strsrch, &COLLATORCANONICAL[1])) {
         delete strsrch;
-        if (tailored != NULL) {
+        if (tailored != nullptr) {
             delete tailored;
         }
 
@@ -1956,7 +1956,7 @@ void StringSearchTest::TestCollatorCanonical()
     if (!assertEqualWithStringSearch(strsrch, &COLLATORCANONICAL[0])) {
     }
     delete strsrch;
-    if (tailored != NULL) {
+    if (tailored != nullptr) {
         delete tailored;
     }
 }
@@ -1977,7 +1977,7 @@ void StringSearchTest::TestPatternCanonical()
                       getECollationStrength(PATTERNCANONICAL[0].strength));
 
     UErrorCode    status  = U_ZERO_ERROR;
-    StringSearch *strsrch = new StringSearch(pattern, text, m_en_us_, NULL, 
+    StringSearch *strsrch = new StringSearch(pattern, text, m_en_us_, nullptr, 
                                              status);
     strsrch->setAttribute(USEARCH_CANONICAL_MATCH, USEARCH_ON, status);
     if (U_FAILURE(status)) {
@@ -2024,7 +2024,7 @@ void StringSearchTest::TestPatternCanonical()
     }
 ENDTESTPATTERN:
     m_en_us_->setStrength(getECollationStrength(UCOL_TERTIARY));
-    if (strsrch != NULL) {
+    if (strsrch != nullptr) {
         delete strsrch;
     }
 }
@@ -2040,7 +2040,7 @@ void StringSearchTest::TestTextCanonical()
     pattern.setTo(temp, u_strlen(temp));
 
     UErrorCode    status  = U_ZERO_ERROR;
-    StringSearch *strsrch = new StringSearch(pattern, text, m_en_us_, NULL, 
+    StringSearch *strsrch = new StringSearch(pattern, text, m_en_us_, nullptr, 
                                              status);
     strsrch->setAttribute(USEARCH_CANONICAL_MATCH, USEARCH_ON, status);
 
@@ -2083,7 +2083,7 @@ void StringSearchTest::TestTextCanonical()
         goto ENDTESTPATTERN;
     }
 ENDTESTPATTERN:
-    if (strsrch != NULL) {
+    if (strsrch != nullptr) {
         delete strsrch;
     }
 }
@@ -2091,7 +2091,7 @@ ENDTESTPATTERN:
 void StringSearchTest::TestCompositeBoundariesCanonical()
 {
     int count = 0;
-    while (COMPOSITEBOUNDARIESCANONICAL[count].text != NULL) { 
+    while (COMPOSITEBOUNDARIESCANONICAL[count].text != nullptr) { 
         logln("composite %d", count);
         if (!assertCanonicalEqual(&COMPOSITEBOUNDARIESCANONICAL[count])) {
             errln("Error at test number %d", count);
@@ -2106,7 +2106,7 @@ void StringSearchTest::TestGetSetOffsetCanonical()
     UErrorCode     status  = U_ZERO_ERROR;
     UnicodeString  text("text");
     UnicodeString  pattern("pattern");
-    StringSearch  *strsrch = new StringSearch(pattern, text, m_en_us_, NULL, 
+    StringSearch  *strsrch = new StringSearch(pattern, text, m_en_us_, nullptr, 
                                               status);
     Collator *collator = strsrch->getCollator();
 
@@ -2124,9 +2124,9 @@ void StringSearchTest::TestGetSetOffsetCanonical()
     }
     int   index   = 0;
     UChar temp[128];
-    while (BASICCANONICAL[index].text != NULL) {
+    while (BASICCANONICAL[index].text != nullptr) {
         SearchData  search      = BASICCANONICAL[index ++];
-        if (BASICCANONICAL[index].text == NULL) {
+        if (BASICCANONICAL[index].text == nullptr) {
             /* skip the last one */
             break;
         }
@@ -2189,7 +2189,7 @@ bail:
 void StringSearchTest::TestSupplementaryCanonical()
 {
     int count = 0;
-    while (SUPPLEMENTARYCANONICAL[count].text != NULL) {
+    while (SUPPLEMENTARYCANONICAL[count].text != nullptr) {
         if (!assertCanonicalEqual(&SUPPLEMENTARYCANONICAL[count])) {
             errln("Error at test number %d", count);
         }
@@ -2213,7 +2213,7 @@ void StringSearchTest::TestContractionCanonical()
     }
     UnicodeString text("text");
     UnicodeString pattern("pattern");
-    StringSearch *strsrch = new StringSearch(pattern, text, collator, NULL, 
+    StringSearch *strsrch = new StringSearch(pattern, text, collator, nullptr, 
                                              status);
     strsrch->setAttribute(USEARCH_CANONICAL_MATCH, USEARCH_ON, status);
     if (U_FAILURE(status)) {
@@ -2221,7 +2221,7 @@ void StringSearchTest::TestContractionCanonical()
     }   
     
     int count = 0;
-    while (CONTRACTIONCANONICAL[count].text != NULL) {
+    while (CONTRACTIONCANONICAL[count].text != nullptr) {
         u_unescape(CONTRACTIONCANONICAL[count].text, temp, 128);
         text.setTo(temp, u_strlen(temp));
         u_unescape(CONTRACTIONCANONICAL[count].pattern, temp, 128);
@@ -2247,7 +2247,7 @@ void StringSearchTest::TestUClassID()
     UErrorCode     status    = U_ZERO_ERROR;
     UnicodeString  text("text");
     UnicodeString  pattern("pattern");
-    StringSearch  *strsrch = new StringSearch(pattern, text, m_en_us_, NULL, 
+    StringSearch  *strsrch = new StringSearch(pattern, text, m_en_us_, nullptr, 
                                               status);
     id = *((char *)strsrch->getDynamicClassID());
     if (id != 0) {
@@ -2405,7 +2405,7 @@ void StringSearchTest::TestSubclass()
 {
     UnicodeString text("abc abcd abc");
     UnicodeString pattern("abc");
-    TestSearch search(text, NULL, pattern);
+    TestSearch search(text, nullptr, pattern);
     TestSearch search2(search);
     int expected[] = {0, 4, 9};
     UErrorCode status = U_ZERO_ERROR; 
@@ -2454,7 +2454,7 @@ public:
     StubSearchIterator(){}
     virtual void setOffset(int32_t , UErrorCode &) override {}
     virtual int32_t getOffset(void) const override {return 0;}
-    virtual SearchIterator* safeClone(void) const override {return NULL;}
+    virtual SearchIterator* safeClone(void) const override {return nullptr;}
     virtual int32_t handleNext(int32_t , UErrorCode &) override {return 0;}
     virtual int32_t handlePrev(int32_t , UErrorCode &) override {return 0;}
     virtual UClassID getDynamicClassID() const override {

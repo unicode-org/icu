@@ -206,7 +206,7 @@ void StringMatcher::addMatchSetTo(UnicodeSet& toUnionTo) const {
     for (int32_t i=0; i<pattern.length(); i+=U16_LENGTH(ch)) {
         ch = pattern.char32At(i);
         const UnicodeMatcher* matcher = data->lookupMatcher(ch);
-        if (matcher == NULL) {
+        if (matcher == nullptr) {
             toUnionTo.add(ch);
         } else {
             matcher->addMatchSetTo(toUnionTo);
@@ -282,7 +282,7 @@ void StringMatcher::setData(const TransliterationRuleData* d) {
     while (i<pattern.length()) {
         UChar32 c = pattern.char32At(i);
         UnicodeFunctor* f = data->lookup(c);
-        if (f != NULL) {
+        if (f != nullptr) {
             f->setData(data);
         }
         i += U16_LENGTH(c);

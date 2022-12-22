@@ -261,13 +261,13 @@ static COMPOUND_TEXT_CONVERTERS findStateFromEscSeq(const char* source, const ch
 static void U_CALLCONV
 _CompoundTextOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode){
     cnv->extraInfo = uprv_malloc (sizeof (UConverterDataCompoundText));
-    if (cnv->extraInfo != NULL) {
+    if (cnv->extraInfo != nullptr) {
         UConverterDataCompoundText *myConverterData = (UConverterDataCompoundText *) cnv->extraInfo;
 
         UConverterNamePieces stackPieces;
         UConverterLoadArgs stackArgs=UCNV_LOAD_ARGS_INITIALIZER;
 
-        myConverterData->myConverterArray[COMPOUND_TEXT_SINGLE_0] = NULL;
+        myConverterData->myConverterArray[COMPOUND_TEXT_SINGLE_0] = nullptr;
         myConverterData->myConverterArray[COMPOUND_TEXT_SINGLE_1] = ucnv_loadSharedData("icu-internal-compound-s1", &stackPieces, &stackArgs, errorCode);
         myConverterData->myConverterArray[COMPOUND_TEXT_SINGLE_2] = ucnv_loadSharedData("icu-internal-compound-s2", &stackPieces, &stackArgs, errorCode);
         myConverterData->myConverterArray[COMPOUND_TEXT_SINGLE_3] = ucnv_loadSharedData("icu-internal-compound-s3", &stackPieces, &stackArgs, errorCode);
@@ -306,16 +306,16 @@ _CompoundTextClose(UConverter *converter) {
     UConverterDataCompoundText* myConverterData = (UConverterDataCompoundText*)(converter->extraInfo);
     int32_t i;
 
-    if (converter->extraInfo != NULL) {
+    if (converter->extraInfo != nullptr) {
         /*close the array of converter pointers and free the memory*/
         for (i = 0; i < NUM_OF_CONVERTERS; i++) {
-            if (myConverterData->myConverterArray[i] != NULL) {
+            if (myConverterData->myConverterArray[i] != nullptr) {
                 ucnv_unloadSharedDataIfReady(myConverterData->myConverterArray[i]);
             }
         }
 
         uprv_free(converter->extraInfo);
-        converter->extraInfo = NULL;
+        converter->extraInfo = nullptr;
     }
 }
 
@@ -474,7 +474,7 @@ UConverter_toUnicode_CompoundText_OFFSETS(UConverterToUnicodeArgs *args,
     COMPOUND_TEXT_CONVERTERS currentState, tmpState;
     int32_t sourceOffset = 0;
     UConverterDataCompoundText *myConverterData = (UConverterDataCompoundText *) args->converter->extraInfo;
-    UConverterSharedData* savedSharedData = NULL;
+    UConverterSharedData* savedSharedData = nullptr;
 
     UConverterToUnicodeArgs subArgs;
     int32_t minArgsSize;
@@ -602,8 +602,8 @@ static const UConverterImpl _CompoundTextImpl = {
 
     UCNV_COMPOUND_TEXT,
 
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
 
     _CompoundTextOpen,
     _CompoundTextClose,
@@ -613,15 +613,15 @@ static const UConverterImpl _CompoundTextImpl = {
     UConverter_toUnicode_CompoundText_OFFSETS,
     UConverter_fromUnicode_CompoundText_OFFSETS,
     UConverter_fromUnicode_CompoundText_OFFSETS,
-    NULL,
+    nullptr,
 
-    NULL,
+    nullptr,
     _CompoundTextgetName,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
     _CompoundText_GetUnicodeSet,
-    NULL,
-    NULL
+    nullptr,
+    nullptr
 };
 
 static const UConverterStaticData _CompoundTextStaticData = {

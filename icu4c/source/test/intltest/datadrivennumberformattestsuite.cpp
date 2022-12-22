@@ -188,7 +188,7 @@ UBool DataDrivenNumberFormatTestSuite::readLine(
         UCHARBUF *f, UErrorCode &status) {
     int32_t lineLength;
     const UChar *line = ucbuf_readline(f, &lineLength, &status);
-    if(line == NULL || U_FAILURE(status)) {
+    if(line == nullptr || U_FAILURE(status)) {
         if (U_FAILURE(status)) {
             errln("Error reading line from file.");
         }
@@ -269,7 +269,7 @@ UBool DataDrivenNumberFormatTestSuite::isFormatPass(
 
 UObject *DataDrivenNumberFormatTestSuite::newFormatter(
         UErrorCode & /*status*/) {
-    return NULL;
+    return nullptr;
 }
 
 UBool DataDrivenNumberFormatTestSuite::isToPatternPass(

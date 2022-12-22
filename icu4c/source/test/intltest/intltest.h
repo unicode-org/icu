@@ -142,7 +142,7 @@ public:
     IntlTest();
     // TestLog has a virtual destructor.
 
-    virtual UBool runTest( char* name = NULL, char* par = NULL, char *baseName = NULL); // not to be overridden
+    virtual UBool runTest( char* name = nullptr, char* par = nullptr, char *baseName = nullptr); // not to be overridden
 
     virtual UBool setVerbose( UBool verbose = true );
     virtual UBool setNoErrMsg( UBool no_err_msg = true );
@@ -287,13 +287,13 @@ public:
     virtual const char* getProperty(const char* prop);
 
     /* JUnit-like assertions. Each returns true if it succeeds. */
-    UBool assertTrue(const char* message, UBool condition, UBool quiet=false, UBool possibleDataError=false, const char *file=NULL, int line=0);
+    UBool assertTrue(const char* message, UBool condition, UBool quiet=false, UBool possibleDataError=false, const char *file=nullptr, int line=0);
     UBool assertFalse(const char* message, UBool condition, UBool quiet=false, UBool possibleDataError=false);
     /**
      * @param possibleDataError - if true, use dataerrln instead of errcheckln on failure
      * @return true on success, false on failure.
      */
-    UBool assertSuccess(const char* message, UErrorCode ec, UBool possibleDataError=false, const char *file=NULL, int line=0);
+    UBool assertSuccess(const char* message, UErrorCode ec, UBool possibleDataError=false, const char *file=nullptr, int line=0);
     UBool assertEquals(const char* message, const UnicodeString& expected,
                        const UnicodeString& actual, UBool possibleDataError=false);
     UBool assertEquals(const char* message, const char* expected, const char* actual);
@@ -357,7 +357,7 @@ public:
         const std::vector<std::string>& expected, const std::vector<std::string>& actual);
     UBool assertNotEquals(const UnicodeString& message, int32_t expectedNot, int32_t actual);
 
-    virtual void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ); // override !
+    virtual void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ); // override !
 
     virtual UBool runTestLoop( char* testname, char* par, char *baseName );
 

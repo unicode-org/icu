@@ -268,7 +268,7 @@ void DateFormatTest::TestWallyWedel()
     StringEnumeration* ids = TimeZone::createEnumeration(status);
     if (U_FAILURE(status)) {
         dataerrln("Unable to create TimeZone enumeration.");
-        if (sdf != NULL) {
+        if (sdf != nullptr) {
             delete sdf;
         }
         return;
@@ -362,7 +362,7 @@ DateFormatTest::TestEquals()
 {
     DateFormat* fmtA = DateFormat::createDateTimeInstance(DateFormat::MEDIUM, DateFormat::FULL);
     DateFormat* fmtB = DateFormat::createDateTimeInstance(DateFormat::MEDIUM, DateFormat::FULL);
-    if ( fmtA == NULL || fmtB == NULL){
+    if ( fmtA == nullptr || fmtB == nullptr){
         dataerrln("Error calling DateFormat::createDateTimeInstance");
         delete fmtA;
         delete fmtB;
@@ -600,7 +600,7 @@ void DateFormatTest::TestFieldPosition() {
         DateFormat* df = dateFormats[j];
         df->setTimeZone(*PT);
         SimpleDateFormat* sdtfmt = dynamic_cast<SimpleDateFormat*>(df);
-        if (sdtfmt != NULL) {
+        if (sdtfmt != nullptr) {
             logln(" Pattern = " + sdtfmt->toPattern(buf.remove()));
         } else {
             logln(" Pattern = ? (not a SimpleDateFormat)");
@@ -642,7 +642,7 @@ void DateFormatTest::TestFieldPosition() {
     // test null posIter
     buf.remove();
     UErrorCode status = U_ZERO_ERROR;
-    dateFormats[0]->format(aug13, buf, NULL, status);
+    dateFormats[0]->format(aug13, buf, nullptr, status);
     // if we didn't crash, we succeeded.
 
     for (i=0; i<COUNT; ++i) {
@@ -829,7 +829,7 @@ DateFormatTest::TestCzechMonths459()
 {
     UErrorCode status = U_ZERO_ERROR;
     DateFormat* fmt = DateFormat::createDateInstance(DateFormat::FULL, Locale("cs", "", ""));
-    if (fmt == NULL){
+    if (fmt == nullptr){
         dataerrln("Error calling DateFormat::createDateInstance()");
         return;
     }
@@ -912,7 +912,7 @@ DateFormatTest::TestDayOfYearPattern195()
     UDate expected = date(year, month, day);
     logln((UnicodeString)"Test Date: " + dateToString(today));
     SimpleDateFormat* sdf = (SimpleDateFormat*)DateFormat::createDateInstance();
-    if (sdf == NULL){
+    if (sdf == nullptr){
         dataerrln("Error calling DateFormat::createDateInstance()");
         return;
     }
@@ -989,7 +989,7 @@ DateFormatTest::TestBadInput135()
     };
     int32_t strings_length = UPRV_LENGTHOF(strings);
     DateFormat *longFmt = DateFormat::createDateTimeInstance(DateFormat::LONG, DateFormat::MEDIUM, Locale::getEnglish());
-    if(longFmt==NULL) {
+    if(longFmt==nullptr) {
       dataerrln("could not create date time instance");
       return;
     }
@@ -1001,7 +1001,7 @@ DateFormatTest::TestBadInput135()
             for (int32_t k = 0; k < looks_length;++k) {
                 DateFormat::EStyle timeLook = looks[k];
                 DateFormat *df = DateFormat::createDateTimeInstance(dateLook, timeLook);
-                if (df == NULL){
+                if (df == nullptr){
                     dataerrln("Error calling DateFormat::createDateTimeInstance()");
                     continue;
                 }
@@ -1017,7 +1017,7 @@ DateFormatTest::TestBadInput135()
                         UnicodeString format;
                         UnicodeString pattern;
                         SimpleDateFormat* sdtfmt = dynamic_cast<SimpleDateFormat*>(df);
-                        if (sdtfmt != NULL) {
+                        if (sdtfmt != nullptr) {
                             sdtfmt->toPattern(pattern);
                         }
                         longFmt->format(when, format);
@@ -1335,7 +1335,7 @@ DateFormatTest::TestLocaleDateFormat() // Bug 495
     UnicodeString expectedUS ( u"Monday, September 15, 1997 at 12:00:00\u202FAM Pacific Daylight Time", -1 );
     logln((UnicodeString)"Date set to : " + dateToString(testDate));
     UnicodeString out;
-    if (dfUS == NULL || dfFrench == NULL){
+    if (dfUS == nullptr || dfFrench == nullptr){
         dataerrln("Error calling DateFormat::createDateTimeInstance)");
         delete dfUS;
         delete dfFrench;
@@ -1369,7 +1369,7 @@ DateFormatTest::TestFormattingLocaleTimeSeparator()
             DateFormat::SHORT, Locale("ar", "EG")));
 
     const LocalPointer<DateFormat> dfLatn(DateFormat::createTimeInstance(
-            DateFormat::SHORT, Locale("ar", "EG", NULL, "numbers=latn")));
+            DateFormat::SHORT, Locale("ar", "EG", nullptr, "numbers=latn")));
 
     if (dfLatn.isNull() || dfArab.isNull()) {
         dataerrln("Error calling DateFormat::createTimeInstance()");
@@ -1408,14 +1408,14 @@ void DateFormatTest::TestDateFormatCalendar() {
 
     /* Create a formatter for date fields. */
     date = DateFormat::createDateInstance(DateFormat::kShort, Locale::getUS());
-    if (date == NULL) {
+    if (date == nullptr) {
         dataerrln("FAIL: createDateInstance failed");
         goto FAIL;
     }
 
     /* Create a formatter for time fields. */
     time = DateFormat::createTimeInstance(DateFormat::kShort, Locale::getUS());
-    if (time == NULL) {
+    if (time == nullptr) {
         errln("FAIL: createTimeInstance failed");
         goto FAIL;
     }
@@ -1423,14 +1423,14 @@ void DateFormatTest::TestDateFormatCalendar() {
     /* Create a full format for output */
     full = DateFormat::createDateTimeInstance(DateFormat::kFull, DateFormat::kFull,
                                               Locale::getUS());
-    if (full == NULL) {
+    if (full == nullptr) {
         errln("FAIL: createInstance failed");
         goto FAIL;
     }
 
     /* Create a calendar */
     cal = Calendar::createInstance(Locale::getUS(), ec);
-    if (cal == NULL || U_FAILURE(ec)) {
+    if (cal == nullptr || U_FAILURE(ec)) {
         errln((UnicodeString)"FAIL: Calendar::createInstance failed with " +
               u_errorName(ec));
         goto FAIL;
@@ -1486,38 +1486,38 @@ void DateFormatTest::TestSpaceParsing() {
     const char* DATA[] = {
         "yyyy MM dd HH:mm:ss",
 
-        // pattern, input, expected parse or NULL if expect parse failure
+        // pattern, input, expected parse or nullptr if expect parse failure
         "MMMM d yy", " 04 05 06",  "2006 04 05 00:00:00",
-        NULL,        "04 05 06",   "2006 04 05 00:00:00",
+        nullptr,        "04 05 06",   "2006 04 05 00:00:00",
 
         "MM d yy",   " 04 05 06",    "2006 04 05 00:00:00",
-        NULL,        "04 05 06",     "2006 04 05 00:00:00",
-        NULL,        "04/05/06",     "2006 04 05 00:00:00",
-        NULL,        "04-05-06",     "2006 04 05 00:00:00",
-        NULL,        "04.05.06",     "2006 04 05 00:00:00",
-        NULL,        "04 / 05 / 06", "2006 04 05 00:00:00",
-        NULL,        "Apr / 05/ 06", "2006 04 05 00:00:00",
-        NULL,        "Apr-05-06",    "2006 04 05 00:00:00",
-        NULL,        "Apr 05, 2006", "2006 04 05 00:00:00",
+        nullptr,        "04 05 06",     "2006 04 05 00:00:00",
+        nullptr,        "04/05/06",     "2006 04 05 00:00:00",
+        nullptr,        "04-05-06",     "2006 04 05 00:00:00",
+        nullptr,        "04.05.06",     "2006 04 05 00:00:00",
+        nullptr,        "04 / 05 / 06", "2006 04 05 00:00:00",
+        nullptr,        "Apr / 05/ 06", "2006 04 05 00:00:00",
+        nullptr,        "Apr-05-06",    "2006 04 05 00:00:00",
+        nullptr,        "Apr 05, 2006", "2006 04 05 00:00:00",
 
         "MMMM d yy", " Apr 05 06", "2006 04 05 00:00:00",
-        NULL,        "Apr 05 06",  "2006 04 05 00:00:00",
-        NULL,        "Apr05 06",   "2006 04 05 00:00:00",
+        nullptr,        "Apr 05 06",  "2006 04 05 00:00:00",
+        nullptr,        "Apr05 06",   "2006 04 05 00:00:00",
 
         "hh:mm:ss a", "12:34:56 PM", "1970 01 01 12:34:56",
-        NULL,         "12:34:56PM",  "1970 01 01 12:34:56",
-        NULL,         "12.34.56PM",  "1970 01 01 12:34:56",
-        NULL,         "12 : 34 : 56  PM", "1970 01 01 12:34:56",
+        nullptr,         "12:34:56PM",  "1970 01 01 12:34:56",
+        nullptr,         "12.34.56PM",  "1970 01 01 12:34:56",
+        nullptr,         "12 : 34 : 56  PM", "1970 01 01 12:34:56",
 
         "MM d yy 'at' hh:mm:ss a", "04/05/06 12:34:56 PM", "2006 04 05 12:34:56",
 
         "MMMM dd yyyy hh:mm a", "September 27, 1964 21:56 PM", "1964 09 28 09:56:00",
-        NULL,                   "November 4, 2008 0:13 AM",    "2008 11 04 00:13:00",
+        nullptr,                   "November 4, 2008 0:13 AM",    "2008 11 04 00:13:00",
 
         "HH'h'mm'min'ss's'", "12h34min56s", "1970 01 01 12:34:56",
-        NULL,                "12h34mi56s",  "1970 01 01 12:34:56",
-        NULL,                "12h34m56s",   "1970 01 01 12:34:56",
-        NULL,                "12:34:56",    "1970 01 01 12:34:56"
+        nullptr,                "12h34mi56s",  "1970 01 01 12:34:56",
+        nullptr,                "12h34m56s",   "1970 01 01 12:34:56",
+        nullptr,                "12:34:56",    "1970 01 01 12:34:56"
     };
     const int32_t DATA_len = UPRV_LENGTHOF(DATA);
 
@@ -1531,13 +1531,13 @@ void DateFormatTest::TestExactCountFormat() {
     const char* DATA[] = {
         "yyyy MM dd HH:mm:ss",
 
-        // pattern, input, expected parse or NULL if expect parse failure
+        // pattern, input, expected parse or nullptr if expect parse failure
         "HHmmss", "123456", "1970 01 01 12:34:56",
-        NULL,     "12345",  "1970 01 01 01:23:45",
-        NULL,     "1234",   NULL,
-        NULL,     "00-05",  NULL,
-        NULL,     "12-34",  NULL,
-        NULL,     "00+05",  NULL,
+        nullptr,     "12345",  "1970 01 01 01:23:45",
+        nullptr,     "1234",   nullptr,
+        nullptr,     "00-05",  nullptr,
+        nullptr,     "12-34",  nullptr,
+        nullptr,     "00+05",  nullptr,
         "ahhmm",  "PM730",  "1970 01 01 19:30:00",
     };
     const int32_t DATA_len = UPRV_LENGTHOF(DATA);
@@ -1556,7 +1556,7 @@ void DateFormatTest::TestWhiteSpaceParsing() {
 
         // Pattern space run should parse input text space run
         "MM   d yy",   " 04 01 03",    "2003 04 01",
-        NULL,          " 04  01   03 ", "2003 04 01",
+        nullptr,          " 04  01   03 ", "2003 04 01",
     };
     const int32_t DATA_len = UPRV_LENGTHOF(DATA);
 
@@ -1931,11 +1931,11 @@ void DateFormatTest::TestQuarters()
  *
  * followed by test cases, each of which is 3 array elements:
  *
- * [i]   = pattern, or NULL to reuse prior pattern
+ * [i]   = pattern, or nullptr to reuse prior pattern
  * [i+1] = input string
  * [i+2] = expected parse result (parsed with pattern [0])
  *
- * If expect parse failure, then [i+2] should be NULL.
+ * If expect parse failure, then [i+2] should be nullptr.
  */
 void DateFormatTest::expectParse(const char** data, int32_t data_length,
                                  const Locale& loc) {
@@ -1952,14 +1952,14 @@ void DateFormatTest::expectParse(const char** data, int32_t data_length,
         return;
     }
 
-    const char* currentPat = NULL;
+    const char* currentPat = nullptr;
     while (i<data_length) {
         const char* pattern  = data[i++];
         const char* input    = data[i++];
         const char* expected = data[i++];
 
         ec = U_ZERO_ERROR;
-        if (pattern != NULL) {
+        if (pattern != nullptr) {
             fmt.applyPattern(pattern);
             currentPat = pattern;
         }
@@ -1975,7 +1975,7 @@ void DateFormatTest::expectParse(const char** data, int32_t data_length,
         UErrorCode ec2 = U_ZERO_ERROR;
         UDate exp = FAIL;
         UnicodeString expstr(FAIL_STR);
-        if (expected != NULL) {
+        if (expected != nullptr) {
             expstr = expected;
             exp = ref.parse(expstr, ec2);
             if (U_FAILURE(ec2)) {
@@ -2039,7 +2039,7 @@ void DateFormatTest::expect(const char** data, int32_t data_length,
     UnicodeString currentPat;
     while (i<data_length) {
         const char* pattern  = data[i++];
-        if (pattern != NULL) {
+        if (pattern != nullptr) {
             fmt.applyPattern(pattern);
             currentPat = pattern;
         }
@@ -2144,7 +2144,7 @@ void DateFormatTest::expectFormat(const char** data, int32_t data_length,
 
     while (i<data_length) {
         const char* pattern  = data[i++];
-        if (pattern != NULL) {
+        if (pattern != nullptr) {
             fmt.applyPattern(pattern);
             currentPat = pattern;
         }
@@ -2411,29 +2411,29 @@ void DateFormatTest::TestRelative(int daysdelta,
     Locale en("en");
     DateFormat *fullrelative = DateFormat::createDateInstance(DateFormat::kFullRelative, loc);
 
-    if (fullrelative == NULL) {
-        dataerrln("DateFormat::createDateInstance(DateFormat::kFullRelative, %s) returned NULL", loc.getName());
+    if (fullrelative == nullptr) {
+        dataerrln("DateFormat::createDateInstance(DateFormat::kFullRelative, %s) returned nullptr", loc.getName());
         return;
     }
 
     DateFormat *full         = DateFormat::createDateInstance(DateFormat::kFull        , loc);
 
-    if (full == NULL) {
-        errln("DateFormat::createDateInstance(DateFormat::kFull, %s) returned NULL", loc.getName());
+    if (full == nullptr) {
+        errln("DateFormat::createDateInstance(DateFormat::kFull, %s) returned nullptr", loc.getName());
         return;
     }
 
     DateFormat *en_full =         DateFormat::createDateInstance(DateFormat::kFull,         en);
 
-    if (en_full == NULL) {
-        errln("DateFormat::createDateInstance(DateFormat::kFull, en) returned NULL");
+    if (en_full == nullptr) {
+        errln("DateFormat::createDateInstance(DateFormat::kFull, en) returned nullptr");
         return;
     }
 
     DateFormat *en_fulltime =         DateFormat::createDateTimeInstance(DateFormat::kFull,DateFormat::kFull,en);
 
-    if (en_fulltime == NULL) {
-        errln("DateFormat::createDateTimeInstance(DateFormat::kFull, DateFormat::kFull, en) returned NULL");
+    if (en_fulltime == nullptr) {
+        errln("DateFormat::createDateTimeInstance(DateFormat::kFull, DateFormat::kFull, en) returned nullptr");
         return;
     }
 
@@ -2452,7 +2452,7 @@ void DateFormatTest::TestRelative(int daysdelta,
     ASSERT_OK(status);
 
     // calculate the expected string
-    if(expectChars != NULL) {
+    if(expectChars != nullptr) {
         expect = expectChars;
     } else {
         full->format(*c, expect, pos); // expected = normal full
@@ -2498,12 +2498,12 @@ void DateFormatTest::TestRelative(void)
     TestRelative( 0, en, "today");
     TestRelative(-1, en, "yesterday");
     TestRelative( 1, en, "tomorrow");
-    TestRelative( 2, en, NULL);
-    TestRelative( -2, en, NULL);
-    TestRelative( 3, en, NULL);
-    TestRelative( -3, en, NULL);
-    TestRelative( 300, en, NULL);
-    TestRelative( -300, en, NULL);
+    TestRelative( 2, en, nullptr);
+    TestRelative( -2, en, nullptr);
+    TestRelative( 3, en, nullptr);
+    TestRelative( -3, en, nullptr);
+    TestRelative( 300, en, nullptr);
+    TestRelative( -300, en, nullptr);
 }
 
 void DateFormatTest::TestRelativeClone(void)
@@ -2516,7 +2516,7 @@ void DateFormatTest::TestRelativeClone(void)
     Locale loc("en");
     UDate now = Calendar::getNow();
     DateFormat *full = DateFormat::createDateInstance(DateFormat::kFullRelative, loc);
-    if (full == NULL) {
+    if (full == nullptr) {
         dataerrln("FAIL: Can't create Relative date instance");
         return;
     }
@@ -2524,7 +2524,7 @@ void DateFormatTest::TestRelativeClone(void)
     full->format(now, result1, status);
     Format *fullClone = full->clone();
     delete full;
-    full = NULL;
+    full = nullptr;
 
     UnicodeString result2;
     fullClone->format(now, result2, status);
@@ -2546,7 +2546,7 @@ void DateFormatTest::TestHostClone(void)
     Locale loc("en_US@compat=host");
     UDate now = Calendar::getNow();
     DateFormat *full = DateFormat::createDateInstance(DateFormat::kFull, loc);
-    if (full == NULL) {
+    if (full == nullptr) {
         dataerrln("FAIL: Can't create host date instance");
         return;
     }
@@ -2554,7 +2554,7 @@ void DateFormatTest::TestHostClone(void)
     full->format(now, result1, status);
     Format *fullClone = full->clone();
     delete full;
-    full = NULL;
+    full = nullptr;
 
     UnicodeString result2;
     fullClone->format(now, result2, status);
@@ -2585,7 +2585,7 @@ void DateFormatTest::TestHebrewClone(void)
     LocalPointer<Format> fmtClone(fmt->clone());
 
     // free fmt to be sure that fmtClone is independent of fmt.
-    fmt.adoptInstead(NULL);
+    fmt.adoptInstead(nullptr);
 
     UnicodeString result2;
     fmtClone->format(now, result2, status);
@@ -2598,11 +2598,11 @@ void DateFormatTest::TestHebrewClone(void)
 static UBool getActualAndValidLocales(
         const Format &fmt, Locale &valid, Locale &actual) {
     const SimpleDateFormat* dat = dynamic_cast<const SimpleDateFormat*>(&fmt);
-    if (dat == NULL) {
+    if (dat == nullptr) {
         return false;
     }
     const DateFormatSymbols *sym = dat->getDateFormatSymbols();
-    if (sym == NULL) {
+    if (sym == nullptr) {
         return false;
     }
     UErrorCode status = U_ZERO_ERROR;
@@ -2633,7 +2633,7 @@ void DateFormatTest::TestDateFormatSymbolsClone(void)
     LocalPointer<Format> fmtClone(fmt->clone());
 
     // Free fmt to be sure that fmtClone is really independent of fmt.
-    fmt.adoptInstead(NULL);
+    fmt.adoptInstead(nullptr);
     Locale valid2;
     Locale actual2;
     if (!getActualAndValidLocales(*fmtClone, valid2, actual2)) {
@@ -3417,7 +3417,7 @@ void DateFormatTest::TestTimeZoneDisplayName()
         { "en_HK", "Europe/Paris", "2004-01-15T00:00:00Z", "z", "GMT+1", "+1:00"},
         { "en_HK", "Europe/Paris", "2004-07-15T00:00:00Z", "z", "GMT+2", "+2:00"},
 
-        { NULL, NULL, NULL, NULL, NULL, NULL },
+        { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr },
     };
 
     UErrorCode status = U_ZERO_ERROR;
@@ -3545,11 +3545,11 @@ void DateFormatTest::TestRoundtripWithCalendar(void) {
 //        Calendar::createInstance(*tz, Locale("und@calendar=hebrew"), status),
         Calendar::createInstance(*tz, Locale("und@calendar=islamic"), status),
         Calendar::createInstance(*tz, Locale("und@calendar=japanese"), status),
-        NULL
+        nullptr
     };
     if (U_FAILURE(status)) {
         dataerrln("Failed to initialize calendars: %s", u_errorName(status));
-        for (int i = 0; calendars[i] != NULL; i++) {
+        for (int i = 0; calendars[i] != nullptr; i++) {
             delete calendars[i];
         }
         return;
@@ -3565,7 +3565,7 @@ void DateFormatTest::TestRoundtripWithCalendar(void) {
 //        DateFormat::createDateTimeInstance(DateFormat::kFull, DateFormat::kFull, Locale("he_IL@calendar=hebrew")),
         DateFormat::createDateTimeInstance(DateFormat::kFull, DateFormat::kFull, Locale("ar_EG@calendar=islamic")),
 //        DateFormat::createDateTimeInstance(DateFormat::kFull, DateFormat::kFull, Locale("ja_JP@calendar=japanese")),
-        NULL
+        nullptr
     };
 
     UDate d = Calendar::getNow();
@@ -3573,7 +3573,7 @@ void DateFormatTest::TestRoundtripWithCalendar(void) {
     FieldPosition fpos;
     ParsePosition ppos;
 
-    for (int i = 0; formatters[i] != NULL; i++) {
+    for (int i = 0; formatters[i] != nullptr; i++) {
         buf.remove();
         fpos.setBeginIndex(0);
         fpos.setEndIndex(0);
@@ -3584,7 +3584,7 @@ void DateFormatTest::TestRoundtripWithCalendar(void) {
         formatters[i]->format(*calendars[i], buf, fpos);
         UnicodeString refStr(buf);
 
-        for (int j = 0; calendars[j] != NULL; j++) {
+        for (int j = 0; calendars[j] != nullptr; j++) {
             if (j == i) {
                 continue;
             }
@@ -3614,7 +3614,7 @@ void DateFormatTest::TestRoundtripWithCalendar(void) {
         // used by the formatter
         formatters[i]->parse(refStr, *calendars[i], ppos);
 
-        for (int j = 0; calendars[j] != NULL; j++) {
+        for (int j = 0; calendars[j] != nullptr; j++) {
             if (j == i) {
                 continue;
             }
@@ -3647,10 +3647,10 @@ void DateFormatTest::TestRoundtripWithCalendar(void) {
 
     delete tz;
     delete gmt;
-    for (int i = 0; calendars[i] != NULL; i++) {
+    for (int i = 0; calendars[i] != nullptr; i++) {
         delete calendars[i];
     }
-    for (int i = 0; formatters[i] != NULL; i++) {
+    for (int i = 0; formatters[i] != nullptr; i++) {
         delete formatters[i];
     }
 }
@@ -3662,7 +3662,7 @@ void DateFormatTest::TestRelativeError(void)
     Locale en("en");
 
     DateFormat *en_reltime_reldate =         DateFormat::createDateTimeInstance(DateFormat::kFullRelative,DateFormat::kFullRelative,en);
-    if(en_reltime_reldate == NULL) {
+    if(en_reltime_reldate == nullptr) {
         logln("PASS: rel date/rel time failed");
     } else {
         errln("FAIL: rel date/rel time created, should have failed.");
@@ -3785,9 +3785,9 @@ void DateFormatTest::Test6726(void)
     DateFormat* fmtl = DateFormat::createDateTimeInstance(DateFormat::LONG, DateFormat::FULL, loc);
     DateFormat* fmtm = DateFormat::createDateTimeInstance(DateFormat::MEDIUM, DateFormat::FULL, loc);
     DateFormat* fmts = DateFormat::createDateTimeInstance(DateFormat::SHORT, DateFormat::FULL, loc);
-    if (fmtf == NULL || fmtl == NULL || fmtm == NULL || fmts == NULL) {
-        dataerrln("Unable to create DateFormat. got NULL.");
-        /* It may not be true that if one is NULL all is NULL.  Just to be safe. */
+    if (fmtf == nullptr || fmtl == nullptr || fmtm == nullptr || fmts == nullptr) {
+        dataerrln("Unable to create DateFormat. got nullptr.");
+        /* It may not be true that if one is nullptr all is nullptr.  Just to be safe. */
         delete fmtf;
         delete fmtl;
         delete fmtm;
@@ -3877,8 +3877,8 @@ void DateFormatTest::Test6880() {
     }
 
     DateFormat *fmt = DateFormat::createTimeInstance(DateFormat::kFull, Locale("zh"));
-    if (fmt == NULL) {
-        dataerrln("Unable to create DateFormat. Got NULL.");
+    if (fmt == nullptr) {
+        dataerrln("Unable to create DateFormat. Got nullptr.");
         return;
     }
     fmt->adoptTimeZone(tz);
@@ -3937,10 +3937,10 @@ void DateFormatTest::TestNumberAsStringParsing()
         { "ko", true,  false, CharsToUnicodeString("y\\uB144 M\\uC6D4 d\\uC77C"), CharsToUnicodeString("2009\\uB144 7\\uC6D4 14\\uC77C") },
         { "ko", false, false, CharsToUnicodeString("y\\uB144 MMM d\\uC77C"),      CharsToUnicodeString("2009\\uB144 7\\uC6D4 14\\uC77C") },
         { "ko", true,  false, CharsToUnicodeString("y\\uB144 MMM d\\uC77C"),      CharsToUnicodeString("2009\\uB144 7\\uC6D4 14\\uC77C") }, // #8820 fixes test failure
-        { NULL, false, false, UnicodeString(""),                                  UnicodeString("")                   }
+        { nullptr, false, false, UnicodeString(""),                                  UnicodeString("")                   }
     };
     const NumAsStringItem * itemPtr;
-    for (itemPtr = items; itemPtr->localeStr != NULL; itemPtr++ ) {
+    for (itemPtr = items; itemPtr->localeStr != nullptr; itemPtr++ ) {
         Locale locale = Locale::createFromName(itemPtr->localeStr);
         UErrorCode status = U_ZERO_ERROR;
         SimpleDateFormat formatter(itemPtr->datePattern, locale, status);
@@ -3989,7 +3989,7 @@ void DateFormatTest::TestISOEra() {
     SimpleDateFormat *fmt1 = new SimpleDateFormat(UnicodeString("GGG yyyy-MM-dd'T'HH:mm:ss'Z"), status);
     failure(status, "new SimpleDateFormat", true);
     if (status == U_MISSING_RESOURCE_ERROR) {
-        if (fmt1 != NULL) {
+        if (fmt1 != nullptr) {
             delete fmt1;
         }
         return;
@@ -4187,7 +4187,7 @@ void DateFormatTest::TestMonthPatterns()
                                                             CharsToUnicodeString("29. 4. 2."),
                                                             CharsToUnicodeString("29. 5. 1.") } },
         // terminator
-        { NULL,                       0,                  { UnicodeString(""), UnicodeString(""), UnicodeString("") } }
+        { nullptr,                       0,                  { UnicodeString(""), UnicodeString(""), UnicodeString("") } }
     };
 
     //.                               style: -1        -2            -3       -4
@@ -4198,12 +4198,12 @@ void DateFormatTest::TestMonthPatterns()
     Calendar * rootChineseCalendar = Calendar::createInstance(rootChineseCalLocale, status);
     if (U_SUCCESS(status)) {
         const MonthPatternItem * itemPtr;
-        for (itemPtr = items; itemPtr->locale != NULL; itemPtr++ ) {
+        for (itemPtr = items; itemPtr->locale != nullptr; itemPtr++ ) {
             Locale locale = Locale::createFromName(itemPtr->locale);
             DateFormat * dmft = (itemPtr->style >= 0)?
                     DateFormat::createDateInstance((DateFormat::EStyle)itemPtr->style, locale):
                     new SimpleDateFormat(customPatterns[-itemPtr->style - 1], locale, status);
-            if ( dmft != NULL ) {
+            if ( dmft != nullptr ) {
                 if (U_SUCCESS(status)) {
                     const ChineseCalTestDate * datePtr = dates;
                     int32_t idate;
@@ -4280,7 +4280,7 @@ void DateFormatTest::TestContext()
         { "cs", UnicodeString("LLLL y"), UDISPCTX_CAPITALIZATION_FOR_STANDALONE,            CharsToUnicodeString("\\u010Dervenec 2008") },
 #endif
         // terminator
-        { NULL, UnicodeString(""),       (UDisplayContext)0, UnicodeString("") }
+        { nullptr, UnicodeString(""),       (UDisplayContext)0, UnicodeString("") }
     };
     UErrorCode status = U_ZERO_ERROR;
     Calendar* cal = Calendar::createInstance(status);
@@ -4289,7 +4289,7 @@ void DateFormatTest::TestContext()
     } else {
         cal->setTime(july022008, status);
         const TestContextItem * itemPtr;
-        for (itemPtr = items; itemPtr->locale != NULL; itemPtr++ ) {
+        for (itemPtr = items; itemPtr->locale != nullptr; itemPtr++ ) {
            Locale locale = Locale::createFromName(itemPtr->locale);
            status = U_ZERO_ERROR;
            SimpleDateFormat * sdmft = new SimpleDateFormat(itemPtr->pattern, locale, status);
@@ -4381,10 +4381,10 @@ void DateFormatTest::TestNonGregoFmtParse()
         { "ja@calendar=japanese", DateFormat::kNone, CharsToUnicodeString("r(Gy)\\u5E74M\\u6708d\\u65E5"), cafti_ja_japanese_custGy },
         { "ja@calendar=japanese", DateFormat::kNone, CharsToUnicodeString("r\\u5E74M\\u6708d\\u65E5"),     cafti_ja_japanese_custNoGy },
         { "en@calendar=islamic",  DateFormat::kNone, UnicodeString("d MMM y G, r"),     cafti_en_islamic_cust },
-        { NULL, DateFormat::kNone, UnicodeString(""), NULL } // terminator
+        { nullptr, DateFormat::kNone, UnicodeString(""), nullptr } // terminator
     };
     const TestNonGregoItem * itemPtr;
-    for (itemPtr = items; itemPtr->locale != NULL; itemPtr++) {
+    for (itemPtr = items; itemPtr->locale != nullptr; itemPtr++) {
         Locale locale = Locale::createFromName(itemPtr->locale);
         LocalPointer<DateFormat> dfmt;
         UErrorCode status = U_ZERO_ERROR;
@@ -4457,10 +4457,10 @@ void DateFormatTest::TestFormatsWithNumberSystems()
         { "zh@calendar=chinese",      DateFormat::kLong, CharsToUnicodeString("rU\\u5E74MMMd"), CharsToUnicodeString("2015\\u4E59\\u672A\\u5E74\\u5341\\u4E00\\u6708\\u5EFF\\u4E00") },
         { "zh_Hant@calendar=chinese", DateFormat::kLong, CharsToUnicodeString("rU\\u5E74MMMd"), CharsToUnicodeString("2015\\u4E59\\u672A\\u5E74\\u51AC\\u6708\\u5EFF\\u4E00") },
         { "ja@calendar=chinese", DateFormat::kLong, CharsToUnicodeString("U\\u5E74MMMd\\u65E5"), CharsToUnicodeString("\\u4E59\\u672A\\u5E74\\u5341\\u4E00\\u6708\\u4E8C\\u4E00\\u65E5") },
-        { NULL, DateFormat::kNone, UnicodeString(""), UnicodeString("") },
+        { nullptr, DateFormat::kNone, UnicodeString(""), UnicodeString("") },
     };
     const TestFmtWithNumSysItem * itemPtr;
-    for (itemPtr = items; itemPtr->localeID != NULL; itemPtr++) {
+    for (itemPtr = items; itemPtr->localeID != nullptr; itemPtr++) {
         char bExpected[kBBufMax];
         char bResult[kBBufMax];
         UErrorCode status = U_ZERO_ERROR;
@@ -4481,7 +4481,7 @@ void DateFormatTest::TestFormatsWithNumberSystems()
             continue;
         }
         UnicodeString getFormat;
-        sdfmt->format(*(cal.getAlias()), getFormat, NULL, status);
+        sdfmt->format(*(cal.getAlias()), getFormat, nullptr, status);
         if (U_FAILURE(status)) {
             errln("DateFormat::format fails for locale %s, status %s", itemPtr->localeID, u_errorName(status));
             continue;
@@ -4589,7 +4589,7 @@ void DateFormatTest::TestDateFormatLeniency() {
         { "en",     true,       UnicodeString("2008-Jan--02"),  UnicodeString("yyyy-MMM' -- 'dd"),  UnicodeString("2008-Jan -- 02") },
         { "en",     false,      UnicodeString("2008-Jan--02"),  UnicodeString("yyyy-MMM' -- 'dd"),  UnicodeString("") },
         // terminator
-        { NULL,     true,       UnicodeString(""),              UnicodeString(""),                  UnicodeString("") }
+        { nullptr,     true,       UnicodeString(""),              UnicodeString(""),                  UnicodeString("") }
     };
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar> cal(Calendar::createInstance(status));
@@ -4600,7 +4600,7 @@ void DateFormatTest::TestDateFormatLeniency() {
     cal->setTime(july022008, status);
     const TestDateFormatLeniencyItem * itemPtr;
     LocalPointer<SimpleDateFormat> sdmft;
-    for (itemPtr = items; itemPtr->locale != NULL; itemPtr++ ) {
+    for (itemPtr = items; itemPtr->locale != nullptr; itemPtr++ ) {
 
        Locale locale = Locale::createFromName(itemPtr->locale);
        status = U_ZERO_ERROR;
@@ -4698,7 +4698,7 @@ void DateFormatTest::TestParseMultiPatternMatch() {
     }
     const TestMultiPatternMatchItem * itemPtr;
     DateFormat* sdmft = DateFormat::createDateInstance();
-    if (sdmft == NULL) {
+    if (sdmft == nullptr) {
         dataerrln(UnicodeString("FAIL: Unable to create DateFormat"));
         return;
     }
@@ -4743,7 +4743,7 @@ void DateFormatTest::TestParseLeniencyAPIs() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<DateFormat> dateFormat(DateFormat::createDateInstance());
     DateFormat *fmt = dateFormat.getAlias();
-    if (fmt == NULL) {
+    if (fmt == nullptr) {
         dataerrln("Failed calling dateFormat.getAlias()");
         return;
     }

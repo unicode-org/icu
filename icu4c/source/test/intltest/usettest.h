@@ -34,7 +34,7 @@ public:
     ~UnicodeSetTest();
 
 private:
-    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL) override;
+    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=nullptr) override;
 
     void Testj2268();
 

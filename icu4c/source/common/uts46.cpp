@@ -201,22 +201,22 @@ IDNA *
 IDNA::createUTS46Instance(uint32_t options, UErrorCode &errorCode) {
     if(U_SUCCESS(errorCode)) {
         IDNA *idna=new UTS46(options, errorCode);
-        if(idna==NULL) {
+        if(idna==nullptr) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
         } else if(U_FAILURE(errorCode)) {
             delete idna;
-            idna=NULL;
+            idna=nullptr;
         }
         return idna;
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 
 // UTS46 implementation ---------------------------------------------------- ***
 
 UTS46::UTS46(uint32_t opt, UErrorCode &errorCode)
-        : uts46Norm2(*Normalizer2::getInstance(NULL, "uts46", UNORM2_COMPOSE, errorCode)),
+        : uts46Norm2(*Normalizer2::getInstance(nullptr, "uts46", UNORM2_COMPOSE, errorCode)),
           options(opt) {}
 
 UTS46::~UTS46() {}
@@ -311,7 +311,7 @@ UTS46::process(const UnicodeString &src,
         return dest;
     }
     const UChar *srcArray=src.getBuffer();
-    if(&dest==&src || srcArray==NULL) {
+    if(&dest==&src || srcArray==nullptr) {
         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
         dest.setToBogus();
         return dest;
@@ -325,7 +325,7 @@ UTS46::process(const UnicodeString &src,
         return dest;
     }
     UChar *destArray=dest.getBuffer(srcLength);
-    if(destArray==NULL) {
+    if(destArray==nullptr) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
         return dest;
     }
@@ -412,7 +412,7 @@ UTS46::processUTF8(StringPiece src,
     }
     const char *srcArray=src.data();
     int32_t srcLength=src.length();
-    if(srcArray==NULL && srcLength!=0) {
+    if(srcArray==nullptr && srcLength!=0) {
         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -605,7 +605,7 @@ UTS46::mapDevChars(UnicodeString &dest, int32_t labelStart, int32_t mappingStart
     }
     int32_t length=dest.length();
     UChar *s=dest.getBuffer(dest[mappingStart]==0xdf ? length+1 : length);
-    if(s==NULL) {
+    if(s==nullptr) {
         errorCode=U_MEMORY_ALLOCATION_ERROR;
         return length;
     }
@@ -624,7 +624,7 @@ UTS46::mapDevChars(UnicodeString &dest, int32_t labelStart, int32_t mappingStart
                 if(length==capacity) {
                     dest.releaseBuffer(length);
                     s=dest.getBuffer(length+1);
-                    if(s==NULL) {
+                    if(s==nullptr) {
                         errorCode=U_MEMORY_ALLOCATION_ERROR;
                         return length;
                     }
@@ -726,7 +726,7 @@ UTS46::processLabel(UnicodeString &dest,
         }
         wasPunycode=true;
         UChar *unicodeBuffer=fromPunycode.getBuffer(-1);  // capacity==-1: most labels should fit
-        if(unicodeBuffer==NULL) {
+        if(unicodeBuffer==nullptr) {
             // Should never occur if we used capacity==-1 which uses the internal buffer.
             errorCode=U_MEMORY_ALLOCATION_ERROR;
             return labelLength;
@@ -734,18 +734,18 @@ UTS46::processLabel(UnicodeString &dest,
         UErrorCode punycodeErrorCode=U_ZERO_ERROR;
         int32_t unicodeLength=u_strFromPunycode(label+4, labelLength-4,
                                                 unicodeBuffer, fromPunycode.getCapacity(),
-                                                NULL, &punycodeErrorCode);
+                                                nullptr, &punycodeErrorCode);
         if(punycodeErrorCode==U_BUFFER_OVERFLOW_ERROR) {
             fromPunycode.releaseBuffer(0);
             unicodeBuffer=fromPunycode.getBuffer(unicodeLength);
-            if(unicodeBuffer==NULL) {
+            if(unicodeBuffer==nullptr) {
                 errorCode=U_MEMORY_ALLOCATION_ERROR;
                 return labelLength;
             }
             punycodeErrorCode=U_ZERO_ERROR;
             unicodeLength=u_strFromPunycode(label+4, labelLength-4,
                                             unicodeBuffer, fromPunycode.getCapacity(),
-                                            NULL, &punycodeErrorCode);
+                                            nullptr, &punycodeErrorCode);
         }
         fromPunycode.releaseBuffer(unicodeLength);
         if(U_FAILURE(punycodeErrorCode)) {
@@ -869,7 +869,7 @@ UTS46::processLabel(UnicodeString &dest,
                 // Contains non-ASCII characters.
                 UnicodeString punycode;
                 UChar *buffer=punycode.getBuffer(63);  // 63==maximum DNS label length
-                if(buffer==NULL) {
+                if(buffer==nullptr) {
                     errorCode=U_MEMORY_ALLOCATION_ERROR;
                     return destLabelLength;
                 }
@@ -879,18 +879,18 @@ UTS46::processLabel(UnicodeString &dest,
                 buffer[3]=0x2d;
                 int32_t punycodeLength=u_strToPunycode(label, labelLength,
                                                       buffer+4, punycode.getCapacity()-4,
-                                                      NULL, &errorCode);
+                                                      nullptr, &errorCode);
                 if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
                     errorCode=U_ZERO_ERROR;
                     punycode.releaseBuffer(4);
                     buffer=punycode.getBuffer(4+punycodeLength);
-                    if(buffer==NULL) {
+                    if(buffer==nullptr) {
                         errorCode=U_MEMORY_ALLOCATION_ERROR;
                         return destLabelLength;
                     }
                     punycodeLength=u_strToPunycode(label, labelLength,
                                                   buffer+4, punycode.getCapacity()-4,
-                                                  NULL, &errorCode);
+                                                  nullptr, &errorCode);
                 }
                 punycodeLength+=4;
                 punycode.releaseBuffer(punycodeLength);
@@ -1341,13 +1341,13 @@ checkArgs(const void *label, int32_t length,
         return false;
     }
     // sizeof(UIDNAInfo)=16 in the first API version.
-    if(pInfo==NULL || pInfo->size<16) {
+    if(pInfo==nullptr || pInfo->size<16) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return false;
     }
-    if( (label==NULL ? length!=0 : length<-1) ||
-        (dest==NULL ? capacity!=0 : capacity<0) ||
-        (dest==label && label!=NULL)
+    if( (label==nullptr ? length!=0 : length<-1) ||
+        (dest==nullptr ? capacity!=0 : capacity<0) ||
+        (dest==label && label!=nullptr)
     ) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return false;

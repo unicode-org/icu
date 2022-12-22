@@ -19,7 +19,7 @@ public:
     NewResourceBundleTest();
     virtual ~NewResourceBundleTest();
     
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = nullptr ) override;
 
     /** 
      * Perform several extensive tests using the subtest routine testTag

@@ -34,7 +34,7 @@ JamoTest::JamoTest()
 
     if (U_FAILURE(status)) {
         delete NAME_JAMO;
-        NAME_JAMO = NULL;
+        NAME_JAMO = nullptr;
     }
     status = U_ZERO_ERROR;
     JAMO_NAME = Transliterator::createFromRules("Jamo-Name",
@@ -42,7 +42,7 @@ JamoTest::JamoTest()
                                             UTRANS_REVERSE, parseError, status);
     if (U_FAILURE(status)) {
         delete JAMO_NAME;
-        JAMO_NAME = NULL;
+        JAMO_NAME = nullptr;
     }
 }
 
@@ -90,40 +90,40 @@ JamoTest::TestJamo() {
         // Jamo-Latin to yield output L2.
         
         // Column 3 is expected value of L2.  If the expected
-        // value of L2 is L1, then L2 is NULL.
+        // value of L2 is L1, then L2 is nullptr.
 
                 // add tests for the update to fix problems where it didn't follow the standard
                 // see also http://www.unicode.org/cldr/data/charts/transforms/Latin-Hangul.html
-                "gach", "(Gi)(A)(Cf)", NULL,
-                "geumhui", "(Gi)(EU)(Mf)(Hi)(YI)", NULL,
-                "choe", "(Ci)(OE)", NULL,
-                "wo", "(IEUNG)(WEO)", NULL,
+                "gach", "(Gi)(A)(Cf)", nullptr,
+                "geumhui", "(Gi)(EU)(Mf)(Hi)(YI)", nullptr,
+                "choe", "(Ci)(OE)", nullptr,
+                "wo", "(IEUNG)(WEO)", nullptr,
                 "Wonpil", "(IEUNG)(WEO)(Nf)(Pi)(I)(L)", "wonpil",
                 "GIPPEUM", "(Gi)(I)(BB)(EU)(Mf)", "gippeum",
                 "EUTTEUM", "(IEUNG)(EU)(DD)(EU)(Mf)", "eutteum",
                 "KKOTNAE", "(GGi)(O)(Tf)(Ni)(AE)", "kkotnae",
-                "gaga", "(Gi)(A)(Gi)(A)", NULL,
-                "gag-a", "(Gi)(A)(Gf)(IEUNG)(A)", NULL,
-                "gak-ka", "(Gi)(A)(Kf)(Ki)(A)", NULL,
-                "gakka", "(Gi)(A)(GGi)(A)", NULL,
-                "gakk-a", "(Gi)(A)(GGf)(IEUNG)(A)", NULL,
-                "gakkka", "(Gi)(A)(GGf)(Ki)(A)", NULL,
-                "gak-kka", "(Gi)(A)(Kf)(GGi)(A)", NULL,
+                "gaga", "(Gi)(A)(Gi)(A)", nullptr,
+                "gag-a", "(Gi)(A)(Gf)(IEUNG)(A)", nullptr,
+                "gak-ka", "(Gi)(A)(Kf)(Ki)(A)", nullptr,
+                "gakka", "(Gi)(A)(GGi)(A)", nullptr,
+                "gakk-a", "(Gi)(A)(GGf)(IEUNG)(A)", nullptr,
+                "gakkka", "(Gi)(A)(GGf)(Ki)(A)", nullptr,
+                "gak-kka", "(Gi)(A)(Kf)(GGi)(A)", nullptr,
 
-        "bab", "(Bi)(A)(Bf)", NULL,
+        "bab", "(Bi)(A)(Bf)", nullptr,
         "babb", "(Bi)(A)(Bf)(Bi)(EU)", "babbeu",
         "babbba", "(Bi)(A)(Bf)(Bi)(EU)(Bi)(A)", "babbeuba",
         "bagg", "(Bi)(A)(Gf)(Gi)(EU)", "baggeu",
         "baggga", "(Bi)(A)(Gf)(Gi)(EU)(Gi)(A)", "baggeuga",
         //"bag" SEP "gga", "(Bi)(A)(Gf)" SEP "(Gi)(EU)(Gi)(A)", "bag" SEP "geuga",
-        "kabsa", "(Ki)(A)(Bf)(Si)(A)", NULL,
-        "kabska", "(Ki)(A)(BS)(Ki)(A)", NULL,
+        "kabsa", "(Ki)(A)(Bf)(Si)(A)", nullptr,
+        "kabska", "(Ki)(A)(BS)(Ki)(A)", nullptr,
         "gabsbka", "(Gi)(A)(BS)(Bi)(EU)(Ki)(A)", "gabsbeuka", // not (Kf)
         "gga", "(Gi)(EU)(Gi)(A)", "geuga",
         "bsa", "(Bi)(EU)(Si)(A)", "beusa",
         "agg", "(IEUNG)(A)(Gf)(Gi)(EU)", "aggeu",
-        "agga", "(IEUNG)(A)(Gf)(Gi)(A)", NULL,
-        "la", "(R)(A)", NULL,
+        "agga", "(IEUNG)(A)(Gf)(Gi)(A)", nullptr,
+        "la", "(R)(A)", nullptr,
         "bs", "(Bi)(EU)(Sf)", "beus",
         "kalgga", "(Ki)(A)(L)(Gi)(EU)(Gi)(A)", "kalgeuga",
         
@@ -136,7 +136,7 @@ JamoTest::TestJamo() {
     int32_t i;
     for (i=0; i<CASE_length; i+=3) {
         UnicodeString jamo = nameToJamo(CASE[i+1]);
-        if (CASE[i+2] == NULL) {
+        if (CASE[i+2] == nullptr) {
             expect(*latinJamo, CASE[i], jamo, *jamoLatin);
         } else {
             // Handle case where round-trip is expected to fail
@@ -159,7 +159,7 @@ void JamoTest::TestPiecemeal(void) {
     UnicodeString latin("mic");
     UnicodeString latin2("mich");
 
-    Transliterator *t = NULL;
+    Transliterator *t = nullptr;
     UErrorCode status = U_ZERO_ERROR;
 
     t = Transliterator::createInstance("NFD", UTRANS_FORWARD, status); // was Hangul-Jamo
@@ -379,13 +379,13 @@ JamoTest::TestRealText() {
     if (latinJamo == 0 || jamoHangul == 0 || U_FAILURE(status)) {
         delete latinJamo;
         delete jamoHangul;
-        dataerrln("FAIL: createInstance returned NULL - %s", u_errorName(status));
+        dataerrln("FAIL: createInstance returned nullptr - %s", u_errorName(status));
         return;
     }
     Transliterator* jamoLatin = latinJamo->createInverse(status);
     Transliterator* hangulJamo = jamoHangul->createInverse(status);
     if (jamoLatin == 0 || hangulJamo == 0) {
-        errln("FAIL: createInverse returned NULL");
+        errln("FAIL: createInverse returned nullptr");
         delete latinJamo;
         delete jamoLatin;
         delete jamoHangul;

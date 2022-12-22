@@ -40,7 +40,7 @@ NamePrepTransform* NamePrepTransform::createInstance(UParseError& parseError, UE
     NamePrepTransform* transform = new NamePrepTransform(parseError, status);
     if(U_FAILURE(status)){
         delete transform;
-        return NULL;
+        return nullptr;
     }
     return transform;
 }
@@ -127,11 +127,11 @@ UBool NamePrepTransform::isProhibited(UChar32 ch){
 
 NamePrepTransform::~NamePrepTransform(){
     delete mapping;
-    mapping = NULL;
+    mapping = nullptr;
     
     //close the bundle
     ures_close(bundle);
-    bundle = NULL;
+    bundle = nullptr;
 }
 
 
@@ -145,7 +145,7 @@ int32_t NamePrepTransform::map(const UChar* src, int32_t srcLength,
         return 0;
     }
     //check arguments
-    if(src==NULL || srcLength<-1 || (dest==NULL && destCapacity!=0)) {
+    if(src==nullptr || srcLength<-1 || (dest==nullptr && destCapacity!=0)) {
         status=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -191,7 +191,7 @@ int32_t NamePrepTransform::process( const UChar* src, int32_t srcLength,
     }
     
     //check arguments
-    if(src==NULL || srcLength<-1 || (dest==NULL && destCapacity!=0)) {
+    if(src==nullptr || srcLength<-1 || (dest==nullptr && destCapacity!=0)) {
         status=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }

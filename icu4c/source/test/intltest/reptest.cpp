@@ -244,8 +244,8 @@ void ReplaceableTest::TestReplaceableClass(void) {
     // improve API/code coverage
     NoopReplaceable noop;
     Replaceable *p;
-    if((p=noop.clone())!=NULL) {
-        errln("Replaceable::clone() does not return NULL");
+    if((p=noop.clone())!=nullptr) {
+        errln("Replaceable::clone() does not return nullptr");
         delete p;
     }
 
@@ -257,16 +257,16 @@ void ReplaceableTest::TestReplaceableClass(void) {
     // UMemory/UObject/Replaceable assignment operators
     NoopReplaceable noop2;
     noop2=noop;
-    if((p=noop2.clone())!=NULL) {
-        errln("noop2.Replaceable::clone() does not return NULL");
+    if((p=noop2.clone())!=nullptr) {
+        errln("noop2.Replaceable::clone() does not return nullptr");
         delete p;
     }
 
     // try to call the compiler-provided
     // UMemory/UObject/Replaceable copy constructors
     NoopReplaceable noop3(noop);
-    if((p=noop3.clone())!=NULL) {
-        errln("noop3.Replaceable::clone() does not return NULL");
+    if((p=noop3.clone())!=nullptr) {
+        errln("noop3.Replaceable::clone() does not return nullptr");
         delete p;
     }
 }
@@ -290,7 +290,7 @@ void ReplaceableTest::check(const UnicodeString& transliteratorName,
 
         // test clone()
         TestReplaceable *tr2 = tr->clone();
-        if(tr2 != NULL) {
+        if(tr2 != nullptr) {
             delete tr;
             tr = tr2;
         }

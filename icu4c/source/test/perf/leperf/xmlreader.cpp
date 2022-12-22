@@ -143,7 +143,7 @@ void readTestFile(const char *testFilePath, TestCaseCallback callback)
     UXMLParser  *parser = UXMLParser::createParser(status);
     UXMLElement *root   = parser->parseFile(testFilePath, status);
 
-    if (root == NULL) {
+    if (root == nullptr) {
         log_err("Could not open the test data file: %s\n", testFilePath);
         delete parser;
         return;
@@ -169,14 +169,14 @@ void readTestFile(const char *testFilePath, TestCaseCallback callback)
     const UXMLElement *testCase;
     int32_t tc = 0;
 
-    while((testCase = root->nextChildElement(tc)) != NULL) {
+    while((testCase = root->nextChildElement(tc)) != nullptr) {
         if (testCase->getTagName().compare(test_case) == 0) {
             char *id = getCString(testCase->getAttribute(id_attr));
             char *script    = getCString(testCase->getAttribute(script_attr));
             char *lang      = getCString(testCase->getAttribute(lang_attr));
-            char *fontName  = NULL;
-			char *fontVer   = NULL;
-			char *fontCksum = NULL;
+            char *fontName  = nullptr;
+			char *fontVer   = nullptr;
+			char *fontCksum = nullptr;
             const UXMLElement *element;
             int32_t ec = 0;
             int32_t charCount = 0;
@@ -185,7 +185,7 @@ void readTestFile(const char *testFilePath, TestCaseCallback callback)
             le_int32 languageCode = -1;
             UnicodeString text, glyphs, indices, positions;
             int32_t glyphCount = 0, indexCount = 0, positionCount = 0;
-            TestResult expected = {0, NULL, NULL, NULL};
+            TestResult expected = {0, nullptr, nullptr, nullptr};
 
             uscript_getCode(script, &scriptCode, 1, &status);
             if (LE_FAILURE(status)) {
@@ -193,7 +193,7 @@ void readTestFile(const char *testFilePath, TestCaseCallback callback)
                 goto free_c_strings;
             }
 
-            if (lang != NULL) {
+            if (lang != nullptr) {
                 languageCode = getLanguageCode(lang);
 
                 if (languageCode < 0) {
@@ -202,7 +202,7 @@ void readTestFile(const char *testFilePath, TestCaseCallback callback)
                 }
             }
 
-            while((element = testCase->nextChildElement(ec)) != NULL) {
+            while((element = testCase->nextChildElement(ec)) != nullptr) {
                 UnicodeString tag = element->getTagName();
 
                 // TODO: make sure that each element is only used once.

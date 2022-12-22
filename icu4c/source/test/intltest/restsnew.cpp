@@ -186,7 +186,7 @@ randul()
     static UBool initialized = false;
     if (!initialized)
     {
-        srand((unsigned)time(NULL));
+        srand((unsigned)time(nullptr));
         initialized = true;
     }
     // Assume rand has at least 12 bits of precision
@@ -222,7 +222,7 @@ NewResourceBundleTest::NewResourceBundleTest()
 : pass(0),
   fail(0)
 {
-    if (param[5].locale == NULL) {
+    if (param[5].locale == nullptr) {
         param[0].locale = new Locale("root");
         param[1].locale = new Locale("te");
         param[2].locale = new Locale("te", "IN");
@@ -238,7 +238,7 @@ NewResourceBundleTest::~NewResourceBundleTest()
         int idx;
         for (idx = 0; idx < UPRV_LENGTHOF(param); idx++) {
             delete param[idx].locale;
-            param[idx].locale = NULL;
+            param[idx].locale = nullptr;
         }
     }
 }
@@ -513,7 +513,7 @@ NewResourceBundleTest::TestOtherAPI(){
 
     logln("Testing ResourceBundle(UErrorCode)\n");
     ResourceBundle defaultresource(err);
-    ResourceBundle explicitdefaultresource(NULL, Locale::getDefault(), err);
+    ResourceBundle explicitdefaultresource(nullptr, Locale::getDefault(), err);
     if(U_FAILURE(err)){
         errcheckln(err, "Construction of default resourcebundle failed - %s", u_errorName(err));
         return;
@@ -567,7 +567,7 @@ NewResourceBundleTest::TestOtherAPI(){
 
     logln("Testing C like UnicodeString APIs\n");
 
-    UResourceBundle *testCAPI = NULL, *bundle = NULL, *rowbundle = NULL, *temp = NULL;
+    UResourceBundle *testCAPI = nullptr, *bundle = nullptr, *rowbundle = nullptr, *temp = nullptr;
     err = U_ZERO_ERROR;
     const char* data[]={
         "string_in_Root_te_te_IN",   "1",
@@ -598,7 +598,7 @@ NewResourceBundleTest::TestOtherAPI(){
             err=U_ZERO_ERROR;
             bundle = ures_getByKey(testCAPI, data[i], bundle, &err); 
             if(!U_FAILURE(err)){
-                const char* key = NULL;
+                const char* key = nullptr;
                 action = "te_IN";
                 action +=".getKey()";
 
@@ -654,7 +654,7 @@ NewResourceBundleTest::TestOtherAPI(){
         assertTrue("ures_getUnicodeString(failure).isBogus()",
                    ures_getUnicodeString(testCAPI, &failure).isBogus());
         assertTrue("ures_getNextUnicodeString(failure).isBogus()",
-                   ures_getNextUnicodeString(testCAPI, NULL, &failure).isBogus());
+                   ures_getNextUnicodeString(testCAPI, nullptr, &failure).isBogus());
         assertTrue("ures_getUnicodeStringByIndex(failure).isBogus()",
                    ures_getUnicodeStringByIndex(testCAPI, 999, &failure).isBogus());
         assertTrue("ures_getUnicodeStringByKey(failure).isBogus()",
@@ -986,7 +986,7 @@ NewResourceBundleTest::testTag(const char* frag,
 
             for(index=0; index <tag_count; index++){
                 ResourceBundle tagelement=tags.get(index, status);
-                const char *tkey=NULL;
+                const char *tkey=nullptr;
                 UnicodeString value=tagelement.getNextString(&tkey, status);
                 UnicodeString key(tkey);
                 logln("tag = " + key + ", value = " + value );
@@ -1072,7 +1072,7 @@ NewResourceBundleTest::TestNewTypes() {
     char action[256];
     const char* testdatapath;
     UErrorCode status = U_ZERO_ERROR;
-    uint8_t *binResult = NULL;
+    uint8_t *binResult = nullptr;
     int32_t len = 0;
     int32_t i = 0;
     int32_t intResult = 0;
@@ -1222,7 +1222,7 @@ void
 NewResourceBundleTest::TestGetByFallback() {
     UErrorCode status = U_ZERO_ERROR;
 
-    ResourceBundle heRes(NULL, "he", status);
+    ResourceBundle heRes(nullptr, "he", status);
 
     heRes.getWithFallback("calendar", status).getWithFallback("islamic-civil", status).getWithFallback("DateTime", status);
     if(U_SUCCESS(status)) {
@@ -1236,7 +1236,7 @@ NewResourceBundleTest::TestGetByFallback() {
     }
     status = U_ZERO_ERROR;
 
-    ResourceBundle rootRes(NULL, "root", status);
+    ResourceBundle rootRes(nullptr, "root", status);
     rootRes.getWithFallback("calendar", status).getWithFallback("islamic-civil", status).getWithFallback("DateTime", status);
     if(U_SUCCESS(status)) {
         errln("Root's Islamic-civil's DateTime resource exists. How did it get here?\n");
@@ -1430,7 +1430,7 @@ void NewResourceBundleTest::TestIntervalAliasFallbacks() {
 
     for (int lidx = 0; lidx < UPRV_LENGTHOF(locales); lidx++) {
         UErrorCode status = U_ZERO_ERROR;
-        UResourceBundle *rb = ures_open(NULL, locales[lidx], &status);
+        UResourceBundle *rb = ures_open(nullptr, locales[lidx], &status);
         if (U_FAILURE(status)) {
             errln("Cannot open bundle for locale %s", locales[lidx]);
             break;

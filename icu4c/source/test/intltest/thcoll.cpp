@@ -340,7 +340,7 @@ UnicodeString& CollationThaiTest::parseChars(UnicodeString& result,
     return result = CharsToUnicodeString(chars);
 }
 
-UCollator *thaiColl = NULL;
+UCollator *thaiColl = nullptr;
 
 U_CDECL_BEGIN
 static int U_CALLCONV

@@ -40,7 +40,7 @@ using namespace icu;
 //
 //  The following variables contain parameters that may be set from the command line.
 //
-const char *pattern = NULL;     // The regular expression
+const char *pattern = nullptr;     // The regular expression
 int        firstFileNum;        //  argv index of the first file name
 UBool      displayFileName = false;
 UBool      displayLineNum  = false;
@@ -313,7 +313,7 @@ void readFile(const char *name) {
             u_errorName(status));
         return;
     }
-    if(encoding!=NULL ){
+    if(encoding!=nullptr ){
         charDataStart  += signatureLength;
         rawFileLen     -= signatureLength;
     }
@@ -333,7 +333,7 @@ void readFile(const char *name) {
     //  Preflight first to determine required buffer size.
     //
     uint32_t destCap = ucnv_toUChars(conv,
-                       NULL,           //  dest,
+                       nullptr,           //  dest,
                        0,              //  destCapacity,
                        charDataStart,
                        rawFileLen,
@@ -426,7 +426,7 @@ void printMatch() {
 
     // If we haven't already created a converter for output, do it now.
     if (outConverter == 0) {
-        outConverter = ucnv_open(NULL, &status);
+        outConverter = ucnv_open(nullptr, &status);
         if (U_FAILURE(status)) {
             fprintf(stderr, "ugrep:  Error opening default converter: \"%s\"\n",
                 u_errorName(status));

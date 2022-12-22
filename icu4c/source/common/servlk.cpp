@@ -41,8 +41,8 @@ LocaleKey::createWithCanonicalFallback(const UnicodeString* primaryID,
                                        int32_t kind,
                                        UErrorCode& status)
 {
-    if (primaryID == NULL || U_FAILURE(status)) {
-        return NULL;
+    if (primaryID == nullptr || U_FAILURE(status)) {
+        return nullptr;
     }
     UnicodeString canonicalPrimaryID;
     LocaleUtility::canonicalLocaleString(primaryID, canonicalPrimaryID);
@@ -61,7 +61,7 @@ LocaleKey::LocaleKey(const UnicodeString& primaryID,
 {
     _fallbackID.setToBogus();
     if (_primaryID.length() != 0) {
-        if (canonicalFallbackID != NULL && _primaryID != *canonicalFallbackID) {
+        if (canonicalFallbackID != nullptr && _primaryID != *canonicalFallbackID) {
             _fallbackID = *canonicalFallbackID;
         }
     }

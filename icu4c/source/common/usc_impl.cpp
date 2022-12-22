@@ -191,17 +191,17 @@ sameScript(UScriptCode scriptOne, UScriptCode scriptTwo)
 U_CAPI UScriptRun * U_EXPORT2
 uscript_openRun(const UChar *src, int32_t length, UErrorCode *pErrorCode)
 {
-    UScriptRun *result = NULL;
+    UScriptRun *result = nullptr;
 
-    if (pErrorCode == NULL || U_FAILURE(*pErrorCode)) {
-        return NULL;
+    if (pErrorCode == nullptr || U_FAILURE(*pErrorCode)) {
+        return nullptr;
     }
 
     result = (UScriptRun *)uprv_malloc(sizeof (UScriptRun));
 
-    if (result == NULL) {
+    if (result == nullptr) {
         *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+        return nullptr;
     }
 
     uscript_setRunText(result, src, length, pErrorCode);
@@ -209,7 +209,7 @@ uscript_openRun(const UChar *src, int32_t length, UErrorCode *pErrorCode)
     /* Release the UScriptRun if uscript_setRunText() returns an error */
     if (U_FAILURE(*pErrorCode)) {
         uprv_free(result);
-        result = NULL;
+        result = nullptr;
     }
 
     return result;
@@ -218,7 +218,7 @@ uscript_openRun(const UChar *src, int32_t length, UErrorCode *pErrorCode)
 U_CAPI void U_EXPORT2
 uscript_closeRun(UScriptRun *scriptRun)
 {
-    if (scriptRun != NULL) {
+    if (scriptRun != nullptr) {
         uprv_free(scriptRun);
     }
 }
@@ -226,7 +226,7 @@ uscript_closeRun(UScriptRun *scriptRun)
 U_CAPI void U_EXPORT2
 uscript_resetRun(UScriptRun *scriptRun)
 {
-    if (scriptRun != NULL) {
+    if (scriptRun != nullptr) {
         scriptRun->scriptStart = 0;
         scriptRun->scriptLimit = 0;
         scriptRun->scriptCode  = USCRIPT_INVALID_CODE;
@@ -239,11 +239,11 @@ uscript_resetRun(UScriptRun *scriptRun)
 U_CAPI void U_EXPORT2
 uscript_setRunText(UScriptRun *scriptRun, const UChar *src, int32_t length, UErrorCode *pErrorCode)
 {
-    if (pErrorCode == NULL || U_FAILURE(*pErrorCode)) {
+    if (pErrorCode == nullptr || U_FAILURE(*pErrorCode)) {
         return;
     }
 
-    if (scriptRun == NULL || length < 0 || ((src == NULL) != (length == 0))) {
+    if (scriptRun == nullptr || length < 0 || ((src == nullptr) != (length == 0))) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -260,7 +260,7 @@ uscript_nextRun(UScriptRun *scriptRun, int32_t *pRunStart, int32_t *pRunLimit, U
     UErrorCode error = U_ZERO_ERROR;
 
     /* if we've fallen off the end of the text, we're done */
-    if (scriptRun == NULL || scriptRun->scriptLimit >= scriptRun->textLength) {
+    if (scriptRun == nullptr || scriptRun->scriptLimit >= scriptRun->textLength) {
         return false;
     }
     
@@ -345,15 +345,15 @@ uscript_nextRun(UScriptRun *scriptRun, int32_t *pRunStart, int32_t *pRunLimit, U
     }
 
 
-    if (pRunStart != NULL) {
+    if (pRunStart != nullptr) {
         *pRunStart = scriptRun->scriptStart;
     }
 
-    if (pRunLimit != NULL) {
+    if (pRunLimit != nullptr) {
         *pRunLimit = scriptRun->scriptLimit;
     }
 
-    if (pRunScript != NULL) {
+    if (pRunScript != nullptr) {
         *pRunScript = scriptRun->scriptCode;
     }
 

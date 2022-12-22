@@ -75,12 +75,12 @@ NormalizerConformanceTest::openNormalizationTestFile(const char *filename) {
 
     // look inside ICU_DATA first
     folder=pathToDataDirectory();
-    if(folder!=NULL) {
+    if(folder!=nullptr) {
         strcpy(unidataPath, folder);
         strcat(unidataPath, "unidata" U_FILE_SEP_STRING);
         strcat(unidataPath, filename);
         input=T_FileStream_open(unidataPath, "rb");
-        if(input!=NULL) {
+        if(input!=nullptr) {
             return input;
         }
     }
@@ -95,7 +95,7 @@ NormalizerConformanceTest::openNormalizationTestFile(const char *filename) {
                      U_FILE_SEP_STRING "data" U_FILE_SEP_STRING "unidata" U_FILE_SEP_STRING);
         strcat(unidataPath, filename);
         input=T_FileStream_open(unidataPath, "rb");
-        if(input!=NULL) {
+        if(input!=nullptr) {
             return input;
         }
     }
@@ -108,7 +108,7 @@ NormalizerConformanceTest::openNormalizationTestFile(const char *filename) {
         strcat(unidataPath, U_FILE_SEP_STRING);
         strcat(unidataPath, filename);
         input=T_FileStream_open(unidataPath, "rb");
-        if(input!=NULL) {
+        if(input!=nullptr) {
             return input;
         }
     }
@@ -121,7 +121,7 @@ NormalizerConformanceTest::openNormalizationTestFile(const char *filename) {
         strcat(unidataPath, U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING);
         strcat(unidataPath, filename);
         input=T_FileStream_open(unidataPath, "rb");
-        if(input!=NULL) {
+        if(input!=nullptr) {
             return input;
         }
     }
@@ -131,20 +131,20 @@ NormalizerConformanceTest::openNormalizationTestFile(const char *filename) {
     strcpy(unidataPath, U_TOPSRCDIR U_FILE_SEP_STRING "data" U_FILE_SEP_STRING "unidata" U_FILE_SEP_STRING);
     strcat(unidataPath, filename);
     input=T_FileStream_open(unidataPath, "rb");
-    if(input!=NULL) {
+    if(input!=nullptr) {
         return input;
     }
 
     strcpy(unidataPath, U_TOPSRCDIR U_FILE_SEP_STRING "test" U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING);
     strcat(unidataPath, filename);
     input=T_FileStream_open(unidataPath, "rb");
-    if(input!=NULL) {
+    if(input!=nullptr) {
         return input;
     }
 #endif
 
     dataerrln("Failed to open %s", filename);
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -168,7 +168,7 @@ void NormalizerConformanceTest::TestConformance(FileStream *input, int32_t optio
     int32_t failCount = 0;
     UChar32 c;
 
-    if(input==NULL) {
+    if(input==nullptr) {
         return;
     }
 
@@ -598,7 +598,7 @@ UBool NormalizerConformanceTest::assertEqual(const char *op, const char *op2,
 UBool NormalizerConformanceTest::hexsplit(const char *s, char delimiter,
                                           UnicodeString output[], int32_t outputLength) {
     const char *t = s;
-    char *end = NULL;
+    char *end = nullptr;
     UChar32 c;
     int32_t i;
     for (i=0; i<outputLength; ++i) {

@@ -32,9 +32,9 @@ UPerfFunction* DateTimeRoundTripPerfTest::runIndexedTest(int32_t index, UBool ex
         TESTCASE(3,RoundTripLocale21);    // 21 locales w/ reverse order
         default: 
             name = ""; 
-            return NULL;
+            return nullptr;
     }
-    return NULL;
+    return nullptr;
 
 }
 

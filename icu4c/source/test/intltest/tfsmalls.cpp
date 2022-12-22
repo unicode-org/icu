@@ -21,7 +21,7 @@
 #include "unicode/fieldpos.h"
 #include "unicode/fmtable.h"
 
-/*static UBool chkstatus( UErrorCode &status, char* msg = NULL )
+/*static UBool chkstatus( UErrorCode &status, char* msg = nullptr )
 {
     UBool ok = (status == U_ZERO_ERROR);
     if (!ok) it_errln( msg );
@@ -294,7 +294,7 @@ void test_Formattable( void )
     
     res_array = fta.getArray(res_cnt, status = U_ZERO_ERROR);
     if (status == U_INVALID_FORMAT_ERROR){
-        if (res_cnt == 0 && res_array == NULL){
+        if (res_cnt == 0 && res_array == nullptr){
             it_logln("FT getArray with status tested on non array");
         } else {
             it_errln("*** FT getArray with status return values are not consistent");

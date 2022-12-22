@@ -66,31 +66,31 @@ static const UChar INTL_CURRENCY_SYMBOL_STR[] = {0xa4, 0xa4, 0};
 static const char *gNumberElementKeys[DecimalFormatSymbols::kFormatSymbolCount] = {
     "decimal",
     "group",
-    NULL, /* #11897: the <list> symbol is NOT the pattern separator symbol */
+    nullptr, /* #11897: the <list> symbol is NOT the pattern separator symbol */
     "percentSign",
-    NULL, /* Native zero digit is deprecated from CLDR - get it from the numbering system */
-    NULL, /* Pattern digit character is deprecated from CLDR - use # by default always */
+    nullptr, /* Native zero digit is deprecated from CLDR - get it from the numbering system */
+    nullptr, /* Pattern digit character is deprecated from CLDR - use # by default always */
     "minusSign",
     "plusSign",
-    NULL, /* currency symbol - Wait until we know the currency before loading from CLDR */
-    NULL, /* intl currency symbol - Wait until we know the currency before loading from CLDR */
+    nullptr, /* currency symbol - Wait until we know the currency before loading from CLDR */
+    nullptr, /* intl currency symbol - Wait until we know the currency before loading from CLDR */
     "currencyDecimal",
     "exponential",
     "perMille",
-    NULL, /* Escape padding character - not in CLDR */
+    nullptr, /* Escape padding character - not in CLDR */
     "infinity",
     "nan",
-    NULL, /* Significant digit symbol - not in CLDR */
+    nullptr, /* Significant digit symbol - not in CLDR */
     "currencyGroup",
-    NULL, /* one digit - get it from the numbering system */
-    NULL, /* two digit - get it from the numbering system */
-    NULL, /* three digit - get it from the numbering system */
-    NULL, /* four digit - get it from the numbering system */
-    NULL, /* five digit - get it from the numbering system */
-    NULL, /* six digit - get it from the numbering system */
-    NULL, /* seven digit - get it from the numbering system */
-    NULL, /* eight digit - get it from the numbering system */
-    NULL, /* nine digit - get it from the numbering system */
+    nullptr, /* one digit - get it from the numbering system */
+    nullptr, /* two digit - get it from the numbering system */
+    nullptr, /* three digit - get it from the numbering system */
+    nullptr, /* four digit - get it from the numbering system */
+    nullptr, /* five digit - get it from the numbering system */
+    nullptr, /* six digit - get it from the numbering system */
+    nullptr, /* seven digit - get it from the numbering system */
+    nullptr, /* eight digit - get it from the numbering system */
+    nullptr, /* nine digit - get it from the numbering system */
     "superscriptingExponent", /* Multiplication (x) symbol for exponents */
     "approximatelySign" /* Approximately sign symbol */
 };
@@ -124,9 +124,9 @@ DecimalFormatSymbols::DecimalFormatSymbols()
 
 DecimalFormatSymbols*
 DecimalFormatSymbols::createWithLastResortData(UErrorCode& status) {
-    if (U_FAILURE(status)) { return NULL; }
+    if (U_FAILURE(status)) { return nullptr; }
     DecimalFormatSymbols* sym = new DecimalFormatSymbols();
-    if (sym == NULL) {
+    if (sym == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
     }
     return sym;
@@ -238,7 +238,7 @@ struct DecFmtSymDataSink : public ResourceSink {
         if (U_FAILURE(errorCode)) { return; }
         for (int32_t j = 0; symbolsTable.getKeyAndValue(j, key, value); ++j) {
             for (int32_t i=0; i<DecimalFormatSymbols::kFormatSymbolCount; i++) {
-                if (gNumberElementKeys[i] != NULL && uprv_strcmp(key, gNumberElementKeys[i]) == 0) {
+                if (gNumberElementKeys[i] != nullptr && uprv_strcmp(key, gNumberElementKeys[i]) == 0) {
                     if (!seenSymbol[i]) {
                         seenSymbol[i] = true;
                         dfs.setSymbol(
@@ -388,9 +388,9 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
 
     // Open resource bundles
     const char* locStr = loc.getName();
-    LocalUResourceBundlePointer resource(ures_open(NULL, locStr, &status));
+    LocalUResourceBundlePointer resource(ures_open(nullptr, locStr, &status));
     LocalUResourceBundlePointer numberElementsRes(
-        ures_getByKeyWithFallback(resource.getAlias(), gNumberElements, NULL, &status));
+        ures_getByKeyWithFallback(resource.getAlias(), gNumberElements, nullptr, &status));
 
     if (U_FAILURE(status)) {
         if ( useLastResortData ) {
@@ -545,7 +545,7 @@ void DecimalFormatSymbols::setCurrency(const UChar* currency, UErrorCode& status
     UErrorCode localStatus = U_ZERO_ERROR;
     LocalUResourceBundlePointer rbTop(ures_open(U_ICUDATA_CURR, locale.getName(), &localStatus));
     LocalUResourceBundlePointer rb(
-        ures_getByKeyWithFallback(rbTop.getAlias(), "Currencies", NULL, &localStatus));
+        ures_getByKeyWithFallback(rbTop.getAlias(), "Currencies", nullptr, &localStatus));
     ures_getByKeyWithFallback(rb.getAlias(), cc, rb.getAlias(), &localStatus);
     if(U_SUCCESS(localStatus) && ures_getSize(rb.getAlias())>2) { // the length is 3 if more data is present
         ures_getByIndex(rb.getAlias(), 2, rb.getAlias(), &localStatus);

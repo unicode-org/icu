@@ -195,7 +195,7 @@ _ISCIIOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode) {
 
     cnv->extraInfo = uprv_malloc(sizeof(UConverterDataISCII));
 
-    if (cnv->extraInfo != NULL) {
+    if (cnv->extraInfo != nullptr) {
         int32_t len=0;
         UConverterDataISCII *converterData=
                 (UConverterDataISCII *) cnv->extraInfo;
@@ -223,7 +223,7 @@ _ISCIIOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode) {
             converterData->prevToUnicodeStatus = 0x0000;
         } else {
             uprv_free(cnv->extraInfo);
-            cnv->extraInfo = NULL;
+            cnv->extraInfo = nullptr;
             *errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         }
 
@@ -234,11 +234,11 @@ _ISCIIOpen(UConverter *cnv, UConverterLoadArgs *pArgs, UErrorCode *errorCode) {
 
 static void U_CALLCONV
 _ISCIIClose(UConverter *cnv) {
-    if (cnv->extraInfo!=NULL) {
+    if (cnv->extraInfo!=nullptr) {
         if (!cnv->isExtraLocal) {
             uprv_free(cnv->extraInfo);
         }
-        cnv->extraInfo=NULL;
+        cnv->extraInfo=nullptr;
     }
 }
 
@@ -248,7 +248,7 @@ _ISCIIgetName(const UConverter* cnv) {
         UConverterDataISCII* myData= (UConverterDataISCII*)cnv->extraInfo;
         return myData->name;
     }
-    return NULL;
+    return nullptr;
 }
 
 static void U_CALLCONV
@@ -908,7 +908,7 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC(
     uint16_t range = 0;
     UBool deltaChanged = false;
 
-    if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)) {
+    if ((args->converter == nullptr) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)) {
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -1185,14 +1185,14 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args, UErrorCo
     uint32_t targetUniChar = 0x0000;
     uint8_t sourceChar = 0x0000;
     UConverterDataISCII* data;
-    UChar32* toUnicodeStatus=NULL;
+    UChar32* toUnicodeStatus=nullptr;
     UChar32 tempTargetUniChar = 0x0000;
-    UChar* contextCharToUnicode= NULL;
+    UChar* contextCharToUnicode= nullptr;
     UBool found;
     int i; 
     int offset = 0;
 
-    if ((args->converter == NULL) || (target < args->target) || (source < args->source)) {
+    if ((args->converter == nullptr) || (target < args->target) || (source < args->source)) {
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -1589,8 +1589,8 @@ static const UConverterImpl _ISCIIImpl={
 
     UCNV_ISCII,
 
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
 
     _ISCIIOpen,
     _ISCIIClose,
@@ -1600,15 +1600,15 @@ static const UConverterImpl _ISCIIImpl={
     UConverter_toUnicode_ISCII_OFFSETS_LOGIC,
     UConverter_fromUnicode_ISCII_OFFSETS_LOGIC,
     UConverter_fromUnicode_ISCII_OFFSETS_LOGIC,
-    NULL,
+    nullptr,
 
-    NULL,
+    nullptr,
     _ISCIIgetName,
-    NULL,
+    nullptr,
     _ISCII_SafeClone,
     _ISCIIGetUnicodeSet,
-    NULL,
-    NULL
+    nullptr,
+    nullptr
 };
 
 static const UConverterStaticData _ISCIIStaticData={

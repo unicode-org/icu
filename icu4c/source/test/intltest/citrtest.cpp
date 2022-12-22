@@ -58,7 +58,7 @@ public:
     }
 
     virtual SCharacterIterator* clone(void) const override {
-        return NULL;
+        return nullptr;
     }
     virtual int32_t hashCode(void) const override {
         return DONE;
@@ -947,13 +947,13 @@ void CharIterTest::TestUCharIterator() {
 
     /* Testing function coverage on bad input */
     UErrorCode status = U_ZERO_ERROR;
-    uiter_setString(&sIter, NULL, 1);
+    uiter_setString(&sIter, nullptr, 1);
     uiter_setState(&sIter, 1, &status);
     if (status != U_UNSUPPORTED_ERROR) {
         errln("error: uiter_setState returned %s instead of U_UNSUPPORTED_ERROR", u_errorName(status));
     }
     status = U_ZERO_ERROR;
-    uiter_setState(NULL, 1, &status);
+    uiter_setState(nullptr, 1, &status);
     if (status != U_ILLEGAL_ARGUMENT_ERROR) {
         errln("error: uiter_setState returned %s instead of U_ILLEGAL_ARGUMENT_ERROR", u_errorName(status));
     }
@@ -1093,7 +1093,7 @@ public:
     }
 
     virtual CharacterIterator *clone() const override {
-        return NULL;
+        return nullptr;
     }
 
     virtual UChar last() override {

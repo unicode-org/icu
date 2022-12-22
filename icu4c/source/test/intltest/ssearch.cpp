@@ -112,7 +112,7 @@ const char *SSearchTest::getPath(char buffer[2048], const char *filename) {
 
     if (U_FAILURE(status) || strlen(testDataDirectory) + strlen(filename) + 1 >= PATH_BUFFER_SIZE) {
         errln("ERROR: getPath() failed - %s", u_errorName(status));
-        return NULL;
+        return nullptr;
     }
 
     strcpy(buffer, testDataDirectory);
@@ -128,7 +128,7 @@ void SSearchTest::searchTest()
     char path[PATH_BUFFER_SIZE];
     const char *testFilePath = getPath(path, "ssearch.xml");
 
-    if (testFilePath == NULL) {
+    if (testFilePath == nullptr) {
         return; /* Couldn't get path: error message already output. */
     }
 
@@ -141,7 +141,7 @@ void SSearchTest::searchTest()
     }
 
     const UnicodeString *debugTestCase = root->getAttribute("debug");
-    if (debugTestCase != NULL) {
+    if (debugTestCase != nullptr) {
 //       setenv("USEARCH_DEBUG", "1", 1);
     }
 
@@ -149,7 +149,7 @@ void SSearchTest::searchTest()
     const UXMLElement *testCase;
     int32_t tc = 0;
 
-    while((testCase = root->nextChildElement(tc)) != NULL) {
+    while((testCase = root->nextChildElement(tc)) != nullptr) {
 
         if (testCase->getTagName().compare("test-case") != 0) {
             errln("ssearch, unrecognized XML Element in test file");
@@ -157,12 +157,12 @@ void SSearchTest::searchTest()
         }
         const UnicodeString *id       = testCase->getAttribute("id");
         *testId = 0;
-        if (id != NULL) {
+        if (id != nullptr) {
             id->extract(0, id->length(), testId,  sizeof(testId), US_INV);
         }
 
         // If debugging test case has been specified and this is not it, skip to next.
-        if (id!=NULL && debugTestCase!=NULL && *id != *debugTestCase) {
+        if (id!=nullptr && debugTestCase!=nullptr && *id != *debugTestCase) {
             continue;
         }
         //
@@ -171,7 +171,7 @@ void SSearchTest::searchTest()
         //
         const UnicodeString *strength = testCase->getAttribute("strength");
         UColAttributeValue collatorStrength = UCOL_PRIMARY;
-        if      (strength==NULL)          { collatorStrength = UCOL_TERTIARY;}
+        if      (strength==nullptr)          { collatorStrength = UCOL_TERTIARY;}
         else if (*strength=="PRIMARY")    { collatorStrength = UCOL_PRIMARY;}
         else if (*strength=="SECONDARY")  { collatorStrength = UCOL_SECONDARY;}
         else if (*strength=="TERTIARY")   { collatorStrength = UCOL_TERTIARY;}
@@ -191,8 +191,8 @@ void SSearchTest::searchTest()
         //
         UColAttributeValue normalize = UCOL_OFF;
         const UnicodeString *norm = testCase->getAttribute("norm");
-        TEST_ASSERT (norm==NULL || *norm=="ON" || *norm=="OFF");
-        if (norm!=NULL && *norm=="ON") {
+        TEST_ASSERT (norm==nullptr || *norm=="ON" || *norm=="OFF");
+        if (norm!=nullptr && *norm=="ON") {
             normalize = UCOL_ON;
         }
 
@@ -201,18 +201,18 @@ void SSearchTest::searchTest()
         //
         UColAttributeValue alternateHandling = UCOL_NON_IGNORABLE;
         const UnicodeString *alt = testCase->getAttribute("alternate_handling");
-        TEST_ASSERT (alt == NULL || *alt == "SHIFTED" || *alt == "NON_IGNORABLE");
-        if (alt != NULL && *alt == "SHIFTED") {
+        TEST_ASSERT (alt == nullptr || *alt == "SHIFTED" || *alt == "NON_IGNORABLE");
+        if (alt != nullptr && *alt == "SHIFTED") {
             alternateHandling = UCOL_SHIFTED;
         }
 
         const UnicodeString defLocale("en");
         char  clocale[100];
         const UnicodeString *locale   = testCase->getAttribute("locale");
-        if (locale == NULL || locale->length()==0) {
+        if (locale == nullptr || locale->length()==0) {
             locale = &defLocale;
         }
-        locale->extract(0, locale->length(), clocale, sizeof(clocale), NULL);
+        locale->extract(0, locale->length(), clocale, sizeof(clocale), nullptr);
 
 
         UnicodeString  text;
@@ -224,8 +224,8 @@ void SSearchTest::searchTest()
         int32_t                nodeCount = 0;
 
         n = testCase->getChildElement("pattern");
-        TEST_ASSERT(n != NULL);
-        if (n==NULL) {
+        TEST_ASSERT(n != nullptr);
+        if (n==nullptr) {
             continue;
         }
         text = n->getText(false);
@@ -234,7 +234,7 @@ void SSearchTest::searchTest()
         nodeCount++;
 
         n = testCase->getChildElement("pre");
-        if (n!=NULL) {
+        if (n!=nullptr) {
             text = n->getText(false);
             text = text.unescape();
             target.append(text);
@@ -242,7 +242,7 @@ void SSearchTest::searchTest()
         }
 
         n = testCase->getChildElement("m");
-        if (n!=NULL) {
+        if (n!=nullptr) {
             expectedMatchStart = target.length();
             text = n->getText(false);
             text = text.unescape();
@@ -252,7 +252,7 @@ void SSearchTest::searchTest()
         }
 
         n = testCase->getChildElement("post");
-        if (n!=NULL) {
+        if (n!=nullptr) {
             text = n->getText(false);
             text = text.unescape();
             target.append(text);
@@ -273,7 +273,7 @@ void SSearchTest::searchTest()
         LocalUStringSearchPointer uss(usearch_openFromCollator(pattern.getBuffer(), pattern.length(),
                                                                target.getBuffer(), target.length(),
                                                                collator.getAlias(),
-                                                               NULL,     // the break iterator
+                                                               nullptr,     // the break iterator
                                                                &status));
 
         TEST_ASSERT_SUCCESS(status);
@@ -311,7 +311,7 @@ void SSearchTest::searchTest()
         uss.adoptInstead(usearch_openFromCollator(pattern.getBuffer(), pattern.length(),
             target.getBuffer(), target.length(),
             collator.getAlias(),
-            NULL,
+            nullptr,
             &status));
 
         //
@@ -362,13 +362,13 @@ private:
 };
 
 OrderList::OrderList()
-  : list(NULL),  listMax(16), listSize(0)
+  : list(nullptr),  listMax(16), listSize(0)
 {
     list = new Order[listMax];
 }
 
 OrderList::OrderList(UCollator *coll, const UnicodeString &string, int32_t stringOffset)
-    : list(NULL), listMax(16), listSize(0)
+    : list(nullptr), listMax(16), listSize(0)
 {
     UErrorCode status = U_ZERO_ERROR;
     UCollationElements *elems = ucol_openElements(coll, string.getBuffer(), string.length(), &status);
@@ -435,7 +435,7 @@ void OrderList::add(int32_t order, int32_t low, int32_t high)
 const Order *OrderList::get(int32_t index) const
 {
     if (index >= listSize) {
-        return NULL;
+        return nullptr;
     }
 
     return &list[index];
@@ -445,7 +445,7 @@ int32_t OrderList::getLowOffset(int32_t index) const
 {
     const Order *order = get(index);
 
-    if (order != NULL) {
+    if (order != nullptr) {
         return order->lowOffset;
     }
 
@@ -456,7 +456,7 @@ int32_t OrderList::getHighOffset(int32_t index) const
 {
     const Order *order = get(index);
 
-    if (order != NULL) {
+    if (order != nullptr) {
         return order->highOffset;
     }
 
@@ -467,7 +467,7 @@ int32_t OrderList::getOrder(int32_t index) const
 {
     const Order *order = get(index);
 
-    if (order != NULL) {
+    if (order != nullptr) {
         return order->order;
     }
 
@@ -731,7 +731,7 @@ static UnicodeString &escape(const UnicodeString &string, UnicodeString &buffer)
 void SSearchTest::sharpSTest()
 {
     UErrorCode status = U_ZERO_ERROR;
-    UCollator *coll = NULL;
+    UCollator *coll = nullptr;
     UnicodeString lp  = "fuss";
     UnicodeString sp = "fu\\u00DF";
     UnicodeString targets[]  = {"fu\\u00DF", "fu\\u00DFball", "1fu\\u00DFball", "12fu\\u00DFball", "123fu\\u00DFball", "1234fu\\u00DFball",
@@ -739,7 +739,7 @@ void SSearchTest::sharpSTest()
                                 "fuss", "ffuss", "fufuss", "fusfuss", "1fuss", "12fuss", "123fuss", "1234fuss", "fu\\u00DF", "1fu\\u00DF", "12fu\\u00DF", "123fu\\u00DF", "1234fu\\u00DF"};
     int32_t start = -1, end = -1;
 
-    coll = ucol_openFromShortString("LEN_S1", false, NULL, &status);
+    coll = ucol_openFromShortString("LEN_S1", false, nullptr, &status);
     TEST_ASSERT_SUCCESS(status);
 
     UnicodeString lpUnescaped = lp.unescape();
@@ -748,13 +748,13 @@ void SSearchTest::sharpSTest()
     LocalUStringSearchPointer ussLong(usearch_openFromCollator(lpUnescaped.getBuffer(), lpUnescaped.length(),
                                                            lpUnescaped.getBuffer(), lpUnescaped.length(),   // actual test data will be set later
                                                            coll,
-                                                           NULL,     // the break iterator
+                                                           nullptr,     // the break iterator
                                                            &status));
 
     LocalUStringSearchPointer ussShort(usearch_openFromCollator(spUnescaped.getBuffer(), spUnescaped.length(),
                                                            spUnescaped.getBuffer(), spUnescaped.length(),   // actual test data will be set later
                                                            coll,
-                                                           NULL,     // the break iterator
+                                                           nullptr,     // the break iterator
                                                            &status));
     TEST_ASSERT_SUCCESS(status);
 
@@ -788,19 +788,19 @@ void SSearchTest::sharpSTest()
 void SSearchTest::goodSuffixTest()
 {
     UErrorCode status = U_ZERO_ERROR;
-    UCollator *coll = NULL;
+    UCollator *coll = nullptr;
     UnicodeString pat = /*"gcagagag"*/ "fxeld";
     UnicodeString target = /*"gcatcgcagagagtatacagtacg"*/ "cloveldfxeld";
     int32_t start = -1, end = -1;
     UBool bFound;
 
-    coll = ucol_open(NULL, &status);
+    coll = ucol_open(nullptr, &status);
     TEST_ASSERT_SUCCESS(status);
 
     LocalUStringSearchPointer ss(usearch_openFromCollator(pat.getBuffer(), pat.length(),
                                                           target.getBuffer(), target.length(),
                                                           coll,
-                                                          NULL,     // the break iterator
+                                                          nullptr,     // the break iterator
                                                           &status));
     TEST_ASSERT_SUCCESS(status);
 
@@ -934,7 +934,7 @@ const char *cPattern = "maketh houndes ete hem";
     LocalUStringSearchPointer uss(usearch_openFromCollator(uPattern.getBuffer(), uPattern.length(),
                                                            target.getBuffer(), target.length(),
                                                            collator.getAlias(),
-                                                           NULL,     // the break iterator
+                                                           nullptr,     // the break iterator
                                                            &status));
     TEST_ASSERT_SUCCESS(status);
 
@@ -944,7 +944,7 @@ const char *cPattern = "maketh houndes ete hem";
 
     // Find the match position usgin strstr
     const char *pm = strstr(longishText, cPattern);
-    TEST_ASSERT_M(pm!=NULL, "No pattern match with strstr");
+    TEST_ASSERT_M(pm!=nullptr, "No pattern match with strstr");
     int32_t  refMatchPos = (int32_t)(pm - longishText);
     int32_t  icuMatchPos;
     int32_t  icuMatchEnd;
@@ -1117,7 +1117,7 @@ UnicodeString &StringSetMonkey::generateAlternative(const UnicodeString &testCas
         int32_t ce = ceList.get(offset);
         const StringList *strings = collData->getStringList(ce);
 
-        if (strings == NULL) {
+        if (strings == nullptr) {
             return alternate.append(testCase);
         }
 
@@ -1125,8 +1125,8 @@ UnicodeString &StringSetMonkey::generateAlternative(const UnicodeString &testCas
         int32_t tries = 0;
 
         // find random string that generates the same CEList
-        const CEList *ceList2 = NULL;
-        const UnicodeString *string = NULL;
+        const CEList *ceList2 = nullptr;
+        const UnicodeString *string = nullptr;
               UBool matches = false;
 
         do {
@@ -1294,7 +1294,7 @@ static int32_t  getIntParam(UnicodeString name, UnicodeString &params, int32_t d
         }
 
         params.extract(m.start(1, status), paramLength, valString, sizeof(valString));
-        val = uprv_strtol(valString,  NULL, 10);
+        val = uprv_strtol(valString,  nullptr, 10);
 
         // Delete this parameter from the params string.
         m.reset();
@@ -1322,7 +1322,7 @@ int32_t SSearchTest::monkeyTestCase(UCollator *coll, const UnicodeString &testCa
     LocalUStringSearchPointer uss(usearch_openFromCollator(pattern.getBuffer(), pattern.length(),
                                                            testCase.getBuffer(), testCase.length(),
                                                            coll,
-                                                           NULL,     // the break iterator
+                                                           nullptr,     // the break iterator
                                                            &status));
 
     // **** TODO: find *all* matches, not just first one ****
@@ -1365,8 +1365,8 @@ void SSearchTest::monkeyTest(char *params)
 {
     // ook!
     UErrorCode status = U_ZERO_ERROR;
-  //UCollator *coll = ucol_open(NULL, &status);
-    UCollator *coll = ucol_openFromShortString("S1", false, NULL, &status);
+  //UCollator *coll = ucol_open(nullptr, &status);
+    UCollator *coll = ucol_openFromShortString("S1", false, nullptr, &status);
 
     if (U_FAILURE(status)) {
         errcheckln(status, "Failed to create collator in MonkeyTest! - %s", u_errorName(status));
@@ -1412,7 +1412,7 @@ void SSearchTest::monkeyTest(char *params)
     int32_t firstStrength = 0;
     int32_t lastStrength  = strengthCount - 1; //*/ 0;
 
-    if (params != NULL) {
+    if (params != nullptr) {
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
         UnicodeString p(params);
 
@@ -1438,7 +1438,7 @@ void SSearchTest::monkeyTest(char *params)
             // Each option is stripped out of the option string as it is processed.
             // All options have been checked.  The option string should have been completely emptied..
             char buf[100];
-            p.extract(buf, sizeof(buf), NULL, status);
+            p.extract(buf, sizeof(buf), nullptr, status);
             buf[sizeof(buf)-1] = 0;
             errln("Unrecognized or extra parameter:  %s\n", buf);
             return;

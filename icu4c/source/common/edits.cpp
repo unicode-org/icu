@@ -233,7 +233,7 @@ UBool Edits::growArray() {
         return false;
     }
     uint16_t *newArray = (uint16_t *)uprv_malloc((size_t)newCapacity * 2);
-    if (newArray == NULL) {
+    if (newArray == nullptr) {
         errorCode_ = U_MEMORY_ALLOCATION_ERROR;
         return false;
     }

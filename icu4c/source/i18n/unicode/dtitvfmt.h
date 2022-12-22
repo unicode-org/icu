@@ -588,7 +588,7 @@ public:
      *                  If parse fails, return contents are undefined.
      * @param parse_pos The position to start parsing at. Since no parsing
      *                  is supported, upon return this param is unchanged.
-     * @return          A newly created Formattable* object, or NULL
+     * @return          A newly created Formattable* object, or nullptr
      *                  on failure.  The caller owns this and should
      *                  delete it when done.
      * @internal ICU 4.0
@@ -995,8 +995,8 @@ private:
                              const UnicodeString* skeleton,
                              const UnicodeString* bestSkeleton,
                              int8_t differenceInfo,
-                             UnicodeString* extendedSkeleton = NULL,
-                             UnicodeString* extendedBestSkeleton = NULL);
+                             UnicodeString* extendedSkeleton = nullptr,
+                             UnicodeString* extendedBestSkeleton = nullptr);
 
     /**
      * Adjust field width in best match interval pattern to match

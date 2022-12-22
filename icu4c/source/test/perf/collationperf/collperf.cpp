@@ -836,7 +836,7 @@ void doForwardIterTest(UBool haslen) {
     printf("performance test on strings from file -----------\n");
 
     UChar dummytext[] = {0, 0};
-    UCollationElements *iter = ucol_openElements(gCol, NULL, 0, &error);
+    UCollationElements *iter = ucol_openElements(gCol, nullptr, 0, &error);
     ucol_setText(iter, dummytext, 1, &error);
     
     gCount = 0;
@@ -998,7 +998,7 @@ void doBackwardIterTest(UBool haslen) {
     
     printf("performance test on strings from file -----------\n");
 
-    UCollationElements *iter = ucol_openElements(gCol, NULL, 0, &error);
+    UCollationElements *iter = ucol_openElements(gCol, nullptr, 0, &error);
     UChar dummytext[] = {0, 0};
     ucol_setText(iter, dummytext, 1, &error);
 
@@ -1234,7 +1234,7 @@ UCharFile::UCharFile(const char * fileName) {
     fName                = fileName;
     fFile                = fopen(fName, "rb");
     fPending2ndSurrogate = 0;
-    if (fFile == NULL) {
+    if (fFile == nullptr) {
         fprintf(stderr, "Can not open file \"%s\"\n", opt_fName);
         fError = true;
         return;
@@ -1396,7 +1396,7 @@ UCollator *openRulesCollator() {
             tmp = buf;
             bufLen += 10000;
             buf = (UChar *)realloc(buf, bufLen);
-            if (buf == NULL) {
+            if (buf == nullptr) {
                 free(tmp);
                 return 0;
             }
@@ -1406,7 +1406,7 @@ UCollator *openRulesCollator() {
 
     UErrorCode    status = U_ZERO_ERROR;
     UCollator *coll = ucol_openRules(buf, u_strlen(buf), UCOL_OFF,
-                                         UCOL_DEFAULT_STRENGTH, NULL, &status);
+                                         UCOL_DEFAULT_STRENGTH, nullptr, &status);
     if (U_FAILURE(status)) {
         fprintf(stderr, "ICU ucol_openRules() open failed.: %d\n", status);
         return 0;

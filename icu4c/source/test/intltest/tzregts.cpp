@@ -1159,7 +1159,7 @@ TimeZoneRegressionTest::TestJDK12API()
  * SimpleTimeZone allows invalid DOM values.
  */
 void TimeZoneRegressionTest::Test4184229() {
-    SimpleTimeZone* zone = NULL;
+    SimpleTimeZone* zone = nullptr;
     UErrorCode status = U_ZERO_ERROR;
     zone = new SimpleTimeZone(0, "A", 0, -1, 0, 0, 0, 0, 0, 0, status);
     if(U_SUCCESS(status)){

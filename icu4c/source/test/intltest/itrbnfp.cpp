@@ -98,7 +98,7 @@ IntlTestRBNFParse::TestParse() {
     "===",
     "=foo=",
 
-    NULL,
+    nullptr,
   };
 
   // these rules would throw exceptions when formatting, if we could throw exceptions
@@ -107,14 +107,14 @@ IntlTestRBNFParse::TestParse() {
     "11: << x", // formatting a multiple of 10 causes rollback rule to fail
     "%%foo: 0 foo; 10: =%%bar=; %%bar: 0: bar; 10: =%%foo=;",
 
-    NULL,
+    nullptr,
   };
 
   // none of these rules should crash the formatter
   const char** allrules[] = {
     okrules,
     exceptrules,
-    NULL,
+    nullptr,
   };
 
   for (int j = 0; allrules[j]; ++j) {

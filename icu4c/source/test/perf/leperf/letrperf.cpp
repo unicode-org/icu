@@ -160,22 +160,22 @@ int main() {
   {
     double oldTime = runTime;
     runTime = 0.25;
-    showTime(time_null, NULL); 
-    showTime(time_null, NULL); 
-    showTime(time_null, NULL); 
-    showTime(time_null, NULL); 
+    showTime(time_null, nullptr); 
+    showTime(time_null, nullptr); 
+    showTime(time_null, nullptr); 
+    showTime(time_null, nullptr); 
     runTime = oldTime;
   }
   puts("-- ready to start --");
 
 
-  showTime(time_null, NULL); 
+  showTime(time_null, nullptr); 
   showTime(time_obj, (void*)oo);
   showTime(time_obj2, (void*)oo);
   showTime(time_letr1, (void*)oo2);
   showTime(time_letr2, (void*)oo2);
   showTime(time_letr3, (void*)oo2);
-  showTime(time_null, NULL);
+  showTime(time_null, nullptr);
   
   delete [] items;
   delete oo;

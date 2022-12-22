@@ -126,12 +126,12 @@ param[] =
     // "IN" means inherits
     // "NE" or "ne" means "does not exist"
 
-    { "root",       NULL,   U_ZERO_ERROR,             e_Root,      { true, false, false }, { true, false, false } },
-    { "te",         NULL,   U_ZERO_ERROR,             e_te,        { false, true, false }, { true, true, false } },
-    { "te_IN",      NULL,   U_ZERO_ERROR,             e_te_IN,     { false, false, true }, { true, true, true } },
-    { "te_NE",      NULL,   U_USING_FALLBACK_WARNING, e_te,        { false, true, false }, { true, true, false } },
-    { "te_IN_NE",   NULL,   U_USING_FALLBACK_WARNING, e_te_IN,     { false, false, true }, { true, true, true } },
-    { "ne",         NULL,   U_USING_DEFAULT_WARNING,  e_Root,      { true, false, false }, { true, false, false } }
+    { "root",       nullptr,   U_ZERO_ERROR,             e_Root,      { true, false, false }, { true, false, false } },
+    { "te",         nullptr,   U_ZERO_ERROR,             e_te,        { false, true, false }, { true, true, false } },
+    { "te_IN",      nullptr,   U_ZERO_ERROR,             e_te_IN,     { false, false, true }, { true, true, true } },
+    { "te_NE",      nullptr,   U_USING_FALLBACK_WARNING, e_te,        { false, true, false }, { true, true, false } },
+    { "te_IN_NE",   nullptr,   U_USING_FALLBACK_WARNING, e_te_IN,     { false, false, true }, { true, true, true } },
+    { "ne",         nullptr,   U_USING_DEFAULT_WARNING,  e_Root,      { true, false, false }, { true, false, false } }
 };
 
 static const int32_t bundles_count = UPRV_LENGTHOF(param);
@@ -148,7 +148,7 @@ randul()
     static UBool initialized = false;
     if (!initialized)
     {
-        srand((unsigned)time(NULL));
+        srand((unsigned)time(nullptr));
         initialized = true;
     }
     // Assume rand has at least 12 bits of precision
@@ -184,7 +184,7 @@ ResourceBundleTest::ResourceBundleTest()
 : pass(0),
   fail(0)
 {
-    if (param[5].locale == NULL) {
+    if (param[5].locale == nullptr) {
         param[0].locale = new Locale("root");
         param[1].locale = new Locale("te");
         param[2].locale = new Locale("te", "IN");
@@ -200,7 +200,7 @@ ResourceBundleTest::~ResourceBundleTest()
         int idx;
         for (idx = 0; idx < UPRV_LENGTHOF(param); idx++) {
             delete param[idx].locale;
-            param[idx].locale = NULL;
+            param[idx].locale = nullptr;
         }
     }
 }
@@ -520,7 +520,7 @@ ResourceBundleTest::TestExemplar(){
     UErrorCode status = U_ZERO_ERROR;
     for(;locIndex<locCount;locIndex++){
         const char* locale = uloc_getAvailable(locIndex);
-        UResourceBundle *resb =ures_open(NULL,locale,&status);
+        UResourceBundle *resb =ures_open(nullptr,locale,&status);
         if(U_SUCCESS(status) && status!=U_USING_FALLBACK_WARNING && status!=U_USING_DEFAULT_WARNING){
             int32_t len=0;
             const UChar* strSet = ures_getStringByKey(resb,"ExemplarCharacters",&len,&status);

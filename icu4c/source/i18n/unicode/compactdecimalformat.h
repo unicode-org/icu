@@ -141,7 +141,7 @@ public:
      * This method will fail if this format is not a currency format,
      * that is, if it does not contain the currency pattern symbol
      * (U+00A4) in its prefix or suffix. This implementation always returns
-     * NULL.
+     * nullptr.
      *
      * @param text the string to parse
      * @param pos  input-output position; on input, the position within text
@@ -150,7 +150,7 @@ public:
      *             If the parse fails, the position in unchanged upon output.
      * @return     if parse succeeds, a pointer to a newly-created CurrencyAmount
      *             object (owned by the caller) containing information about
-     *             the parsed currency; if parse fails, this is NULL.
+     *             the parsed currency; if parse fails, this is nullptr.
      * @internal
      */
     CurrencyAmount* parseCurrency(const UnicodeString& text, ParsePosition& pos) const U_OVERRIDE;

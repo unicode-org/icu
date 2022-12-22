@@ -17,7 +17,7 @@ public:
     LocaleDisplayNamesTest();
     virtual ~LocaleDisplayNamesTest();
 
-    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = NULL) override;
+    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = nullptr) override;
 
 #if !UCONFIG_NO_FORMATTING
     /**

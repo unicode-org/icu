@@ -64,13 +64,13 @@ toIDNA2003(const UStringPrepProfile *prep, UChar32 c, icu::UnicodeString &destSt
     UChar *dest;
     int32_t destLength;
     dest=destString.getBuffer(32);
-    if(dest==NULL) {
+    if(dest==nullptr) {
         return false;
     }
     UErrorCode errorCode=U_ZERO_ERROR;
     destLength=usprep_prepare(prep, src, srcLength,
                               dest, destString.getCapacity(),
-                              USPREP_DEFAULT, NULL, &errorCode);
+                              USPREP_DEFAULT, nullptr, &errorCode);
     destString.releaseBuffer(destLength);
     if(errorCode==U_STRINGPREP_PROHIBITED_ERROR) {
         return -1;
@@ -158,7 +158,7 @@ main(int argc, const char *argv[]) {
     // derived sets
     icu::LocalUStringPrepProfilePointer namePrep(usprep_openByType(USPREP_RFC3491_NAMEPREP, errorCode));
     const icu::Normalizer2 *nfkc_cf=
-        icu::Normalizer2::getInstance(NULL, "nfkc_cf", UNORM2_COMPOSE, errorCode);
+        icu::Normalizer2::getInstance(nullptr, "nfkc_cf", UNORM2_COMPOSE, errorCode);
     errorCode.assertSuccess();
 
     // HACK: The StringPrep API performs a BiDi check according to the data.
@@ -207,7 +207,7 @@ main(int argc, const char *argv[]) {
         addAll(unassignedSet);
 
     const icu::Normalizer2 *nfd=
-        icu::Normalizer2::getInstance(NULL, "nfc", UNORM2_DECOMPOSE, errorCode);
+        icu::Normalizer2::getInstance(nullptr, "nfc", UNORM2_DECOMPOSE, errorCode);
     errorCode.assertSuccess();
 
     icu::UnicodeSet ignoredSet;  // will be a subset of mappedSet

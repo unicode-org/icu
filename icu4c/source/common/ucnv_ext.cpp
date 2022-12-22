@@ -132,7 +132,7 @@ ucnv_extMatchToU(const int32_t *cx, int8_t sisoState,
     int32_t i, j, idx, length, matchLength;
     uint8_t b;
 
-    if(cx==NULL || cx[UCNV_EXT_TO_U_LENGTH]<=0) {
+    if(cx==nullptr || cx[UCNV_EXT_TO_U_LENGTH]<=0) {
         return 0; /* no extension data, no match */
     }
 
@@ -343,7 +343,7 @@ ucnv_extSimpleMatchToU(const int32_t *cx,
     /* try to match */
     match=ucnv_extMatchToU(cx, -1,
                            source, length,
-                           NULL, 0,
+                           nullptr, 0,
                            &value,
                            useFallback, true);
     if(match==length) {
@@ -508,7 +508,7 @@ ucnv_extFindFromU(const UChar *fromUSection, int32_t length, UChar u) {
 }
 
 /*
- * @param cx pointer to extension data; if NULL, returns 0
+ * @param cx pointer to extension data; if nullptr, returns 0
  * @param firstCP the first code point before all the other UChars
  * @param pre UChars that must match; !initialMatch: partial match with them
  * @param preLength length of pre, >=0
@@ -544,7 +544,7 @@ ucnv_extMatchFromU(const int32_t *cx,
     int32_t i, j, idx, length, matchLength;
     UChar c;
 
-    if(cx==NULL) {
+    if(cx==nullptr) {
         return 0; /* no extension data, no match */
     }
 
@@ -759,7 +759,7 @@ ucnv_extInitialMatchFromU(UConverter *cnv, const int32_t *cx,
 
     /* try to match */
     match=ucnv_extMatchFromU(cx, cp,
-                             NULL, 0,
+                             nullptr, 0,
                              *src, (int32_t)(srcLimit-*src),
                              &value,
                              cnv->useFallback, flush);
@@ -819,8 +819,8 @@ ucnv_extSimpleMatchFromU(const int32_t *cx,
     /* try to match */
     match=ucnv_extMatchFromU(cx,
                              cp,
-                             NULL, 0,
-                             NULL, 0,
+                             nullptr, 0,
+                             nullptr, 0,
                              &value,
                              useFallback, true);
     if(match>=2) {
@@ -1044,7 +1044,7 @@ ucnv_extGetUnicodeSet(const UConverterSharedData *sharedData,
     int32_t length;
 
     cx=sharedData->mbcs.extIndexes;
-    if(cx==NULL) {
+    if(cx==nullptr) {
         return;
     }
 

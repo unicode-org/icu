@@ -82,7 +82,7 @@ _Latin1ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
             source+=8;
         } while(--count>0);
 
-        if(offsets!=NULL) {
+        if(offsets!=nullptr) {
             do {
                 offsets[0]=sourceIndex++;
                 offsets[1]=sourceIndex++;
@@ -108,7 +108,7 @@ _Latin1ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     pArgs->target=target;
 
     /* set offsets */
-    if(offsets!=NULL) {
+    if(offsets!=nullptr) {
         while(length>0) {
             *offsets++=sourceIndex++;
             --length;
@@ -233,7 +233,7 @@ _Latin1FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
         count=loops-count;
         targetCapacity-=16*count;
 
-        if(offsets!=NULL) {
+        if(offsets!=nullptr) {
             oldTarget+=16*count;
             while(count>0) {
                 *offsets++=sourceIndex++;
@@ -300,7 +300,7 @@ getTrail:
 noMoreInput:
 
     /* set offsets since the start */
-    if(offsets!=NULL) {
+    if(offsets!=nullptr) {
         size_t count=target-oldTarget;
         while(count>0) {
             *offsets++=sourceIndex++;
@@ -438,12 +438,12 @@ U_CDECL_END
 static const UConverterImpl _Latin1Impl={
     UCNV_LATIN_1,
 
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
 
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
 
     _Latin1ToUnicodeWithOffsets,
     _Latin1ToUnicodeWithOffsets,
@@ -451,13 +451,13 @@ static const UConverterImpl _Latin1Impl={
     _Latin1FromUnicodeWithOffsets,
     _Latin1GetNextUChar,
 
-    NULL,
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
     _Latin1GetUnicodeSet,
 
-    NULL,
+    nullptr,
     ucnv_Latin1FromUTF8
 };
 
@@ -536,7 +536,7 @@ _ASCIIToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
         count=loops-count;
         targetCapacity-=count*8;
 
-        if(offsets!=NULL) {
+        if(offsets!=nullptr) {
             oldTarget+=count*8;
             while(count>0) {
                 offsets[0]=sourceIndex++;
@@ -572,7 +572,7 @@ _ASCIIToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     }
 
     /* set offsets since the start */
-    if(offsets!=NULL) {
+    if(offsets!=nullptr) {
         size_t count=target-oldTarget;
         while(count>0) {
             *offsets++=sourceIndex++;
@@ -717,12 +717,12 @@ U_CDECL_END
 static const UConverterImpl _ASCIIImpl={
     UCNV_US_ASCII,
 
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
 
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
 
     _ASCIIToUnicodeWithOffsets,
     _ASCIIToUnicodeWithOffsets,
@@ -730,13 +730,13 @@ static const UConverterImpl _ASCIIImpl={
     _Latin1FromUnicodeWithOffsets,
     _ASCIIGetNextUChar,
 
-    NULL,
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
     _ASCIIGetUnicodeSet,
 
-    NULL,
+    nullptr,
     ucnv_ASCIIFromUTF8
 };
 

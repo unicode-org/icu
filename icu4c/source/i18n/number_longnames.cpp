@@ -606,7 +606,7 @@ class DerivedComponents {
      */
     DerivedComponents(const Locale &locale, const char *feature, const char *structure) {
         StackUResourceBundle derivationsBundle, stackBundle;
-        ures_openDirectFillIn(derivationsBundle.getAlias(), NULL, "grammaticalFeatures", &status);
+        ures_openDirectFillIn(derivationsBundle.getAlias(), nullptr, "grammaticalFeatures", &status);
         ures_getByKey(derivationsBundle.getAlias(), "grammaticalData", derivationsBundle.getAlias(),
                       &status);
         ures_getByKey(derivationsBundle.getAlias(), "derivations", derivationsBundle.getAlias(),
@@ -695,7 +695,7 @@ class DerivedComponents {
 UnicodeString
 getDeriveCompoundRule(Locale locale, const char *feature, const char *structure, UErrorCode &status) {
     StackUResourceBundle derivationsBundle, stackBundle;
-    ures_openDirectFillIn(derivationsBundle.getAlias(), NULL, "grammaticalFeatures", &status);
+    ures_openDirectFillIn(derivationsBundle.getAlias(), nullptr, "grammaticalFeatures", &status);
     ures_getByKey(derivationsBundle.getAlias(), "grammaticalData", derivationsBundle.getAlias(),
                   &status);
     ures_getByKey(derivationsBundle.getAlias(), "derivations", derivationsBundle.getAlias(), &status);
@@ -1529,7 +1529,7 @@ void LongNameHandler::multiSimpleFormatsToModifiers(const UnicodeString *leadFor
 
 void LongNameHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micros,
                                       UErrorCode &status) const {
-    if (parent != NULL) {
+    if (parent != nullptr) {
         parent->processQuantity(quantity, micros, status);
     }
     StandardPlural::Form pluralForm = utils::getPluralSafe(micros.rounder, rules, quantity, status);
@@ -1726,12 +1726,12 @@ LongNameMultiplexer *LongNameMultiplexer::forMeasureUnits(const Locale &loc,
         result->fMeasureUnits[i] = unit;
         if (unit.getComplexity(status) == UMEASURE_UNIT_MIXED) {
             MixedUnitLongNameHandler *mlnh = result->fMixedUnitHandlers.createAndCheckErrorCode(status);
-            MixedUnitLongNameHandler::forMeasureUnit(loc, unit, width, unitDisplayCase, rules, NULL,
+            MixedUnitLongNameHandler::forMeasureUnit(loc, unit, width, unitDisplayCase, rules, nullptr,
                                                      mlnh, status);
             result->fHandlers[i] = mlnh;
         } else {
             LongNameHandler *lnh = result->fLongNameHandlers.createAndCheckErrorCode(status);
-            LongNameHandler::forMeasureUnit(loc, unit, width, unitDisplayCase, rules, NULL, lnh, status);
+            LongNameHandler::forMeasureUnit(loc, unit, width, unitDisplayCase, rules, nullptr, lnh, status);
             result->fHandlers[i] = lnh;
         }
         if (U_FAILURE(status)) {
