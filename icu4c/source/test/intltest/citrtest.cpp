@@ -63,20 +63,20 @@ public:
     virtual int32_t hashCode(void) const override {
         return DONE;
     }
-    virtual UChar nextPostInc(void) override { return text.charAt(pos++);}
+    virtual char16_t nextPostInc(void) override { return text.charAt(pos++);}
     virtual UChar32 next32PostInc(void) override {return text.char32At(pos++);}
     virtual UBool hasNext() override { return true;}
-    virtual UChar first() override {return DONE;}
+    virtual char16_t first() override {return DONE;}
     virtual UChar32 first32() override {return DONE;}
-    virtual UChar last() override {return DONE;}
+    virtual char16_t last() override {return DONE;}
     virtual UChar32 last32() override {return DONE;}
-    virtual UChar setIndex(int32_t /*pos*/) override {return DONE;}
+    virtual char16_t setIndex(int32_t /*pos*/) override {return DONE;}
     virtual UChar32 setIndex32(int32_t /*pos*/) override {return DONE;}
-    virtual UChar current() const override {return DONE;}
+    virtual char16_t current() const override {return DONE;}
     virtual UChar32 current32() const override {return DONE;}
-    virtual UChar next() override {return DONE;}
+    virtual char16_t next() override {return DONE;}
     virtual UChar32 next32() override {return DONE;}
-    virtual UChar previous() override {return DONE;}
+    virtual char16_t previous() override {return DONE;}
     virtual UChar32 previous32() override {return DONE;}
     virtual int32_t move(int32_t delta,CharacterIterator::EOrigin origin) override {
         switch(origin) {
@@ -378,7 +378,7 @@ void CharIterTest::TestConstructionAndEqualityUChariter() {
 void CharIterTest::TestIteration() {
     UnicodeString text("Now is the time for all good men to come to the aid of their country.");
 
-    UChar c;
+    char16_t c;
     int32_t i;
     {
         StringCharacterIterator   iter(text, 5);
@@ -550,7 +550,7 @@ void CharIterTest::TestIteration() {
 
 //Tests for new API for utf-16 support 
 void CharIterTest::TestIterationUChar32() {
-    UChar textChars[]={ 0x0061, 0x0062, 0xd841, 0xdc02, 0x20ac, 0xd7ff, 0xd842, 0xdc06, 0xd801, 0xdc00, 0x0061, 0x0000};
+    char16_t textChars[]={ 0x0061, 0x0062, 0xd841, 0xdc02, 0x20ac, 0xd7ff, 0xd842, 0xdc06, 0xd801, 0xdc00, 0x0061, 0x0000};
     UnicodeString text(textChars);
     UChar32 c;
     int32_t i;
@@ -976,7 +976,7 @@ public:
     }
 
     // useful stuff, mostly dummy but testing coverage and subclassability
-    virtual UChar nextPostInc() override {
+    virtual char16_t nextPostInc() override {
         if(pos<UPRV_LENGTHOF(s)) {
             return s[pos++];
         } else {
@@ -998,7 +998,7 @@ public:
         return pos<UPRV_LENGTHOF(s);
     }
 
-    virtual UChar first() override {
+    virtual char16_t first() override {
         pos=0;
         return s[0];
     }
@@ -1011,7 +1011,7 @@ public:
         return c;
     }
 
-    virtual UChar setIndex(int32_t position) override {
+    virtual char16_t setIndex(int32_t position) override {
         if(0<=position && position<=UPRV_LENGTHOF(s)) {
             pos=position;
             if(pos<UPRV_LENGTHOF(s)) {
@@ -1033,7 +1033,7 @@ public:
         return DONE;
     }
 
-    virtual UChar current() const override {
+    virtual char16_t current() const override {
         if(pos<UPRV_LENGTHOF(s)) {
             return s[pos];
         } else {
@@ -1051,7 +1051,7 @@ public:
         }
     }
 
-    virtual UChar next() override {
+    virtual char16_t next() override {
         if(pos<UPRV_LENGTHOF(s) && ++pos<UPRV_LENGTHOF(s)) {
             return s[pos];
         } else {
@@ -1096,7 +1096,7 @@ public:
         return nullptr;
     }
 
-    virtual UChar last() override {
+    virtual char16_t last() override {
         return 0;
     }
 
@@ -1104,7 +1104,7 @@ public:
         return 0;
     }
 
-    virtual UChar previous() override {
+    virtual char16_t previous() override {
         return 0;
     }
 
@@ -1131,7 +1131,7 @@ public:
 
 private:
     // dummy string data
-    UChar s[4];
+    char16_t s[4];
 
     static const char fgClassID;
 };
@@ -1152,10 +1152,10 @@ public:
     }
 
 private:
-    static const UChar u[3];
+    static const char16_t u[3];
 };
 
-const UChar SubUCharCharIter::u[3]={ 0x61, 0x62, 0x63 };
+const char16_t SubUCharCharIter::u[3]={ 0x61, 0x62, 0x63 };
 
 void CharIterTest::TestCharIteratorSubClasses() {
     SubCharIter *p;

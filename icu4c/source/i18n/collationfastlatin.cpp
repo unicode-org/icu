@@ -107,8 +107,8 @@ CollationFastLatin::getOptions(const CollationData *data, const CollationSetting
 
 int32_t
 CollationFastLatin::compareUTF16(const uint16_t *table, const uint16_t *primaries, int32_t options,
-                                 const UChar *left, int32_t leftLength,
-                                 const UChar *right, int32_t rightLength) {
+                                 const char16_t *left, int32_t leftLength,
+                                 const char16_t *right, int32_t rightLength) {
     // This is a modified copy of CollationCompare::compareUpToQuaternary(),
     // optimized for common Latin text.
     // Keep them in sync!
@@ -854,7 +854,7 @@ CollationFastLatin::lookupUTF8Unsafe(const uint16_t *table, UChar32 c,
 
 uint32_t
 CollationFastLatin::nextPair(const uint16_t *table, UChar32 c, uint32_t ce,
-                             const UChar *s16, const uint8_t *s8, int32_t &sIndex, int32_t &sLength) {
+                             const char16_t *s16, const uint8_t *s8, int32_t &sIndex, int32_t &sLength) {
     if(ce >= MIN_LONG || ce < CONTRACTION) {
         return ce;  // simple or special mini CE
     } else if(ce >= EXPANSION) {

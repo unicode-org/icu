@@ -58,7 +58,7 @@ findLikelySubtags(const char* localeID,
 
     if (!U_FAILURE(*err)) {
         int32_t resLen = 0;
-        const UChar* s = nullptr;
+        const char16_t* s = nullptr;
         UErrorCode tmpErr = U_ZERO_ERROR;
         icu::LocalUResourceBundlePointer subtags(ures_openDirect(nullptr, "likelySubtags", &tmpErr));
         if (U_SUCCESS(tmpErr)) {

@@ -156,7 +156,7 @@ public:
                           UErrorCode &errorCode);
 
     CharString &appendInvariantChars(const UnicodeString &s, UErrorCode &errorCode);
-    CharString &appendInvariantChars(const UChar* uchars, int32_t ucharsLen, UErrorCode& errorCode);
+    CharString &appendInvariantChars(const char16_t* uchars, int32_t ucharsLen, UErrorCode& errorCode);
 
     /**
      * Appends a filename/path part, e.g., a directory name.

@@ -33,7 +33,7 @@ U_NAMESPACE_USE
 U_CAPI UBreakIterator* U_EXPORT2
 ubrk_open(UBreakIteratorType type,
       const char *locale,
-      const UChar *text,
+      const char16_t *text,
       int32_t textLength,
       UErrorCode *status)
 {
@@ -94,9 +94,9 @@ ubrk_open(UBreakIteratorType type,
 //
 //------------------------------------------------------------------------------
 U_CAPI UBreakIterator* U_EXPORT2
-ubrk_openRules(  const UChar        *rules,
+ubrk_openRules(  const char16_t     *rules,
                        int32_t       rulesLength,
-                 const UChar        *text,
+                 const char16_t     *text,
                        int32_t       textLength,
                        UParseError  *parseErr,
                        UErrorCode   *status)  {
@@ -122,7 +122,7 @@ ubrk_openRules(  const UChar        *rules,
 
 U_CAPI UBreakIterator* U_EXPORT2
 ubrk_openBinaryRules(const uint8_t *binaryRules, int32_t rulesLength,
-                     const UChar *  text, int32_t textLength,
+                     const char16_t *  text, int32_t textLength,
                      UErrorCode *   status)
 {
     if (U_FAILURE(*status)) {
@@ -188,14 +188,14 @@ ubrk_close(UBreakIterator *bi)
 
 U_CAPI void U_EXPORT2
 ubrk_setText(UBreakIterator* bi,
-             const UChar*    text,
+             const char16_t*    text,
              int32_t         textLength,
              UErrorCode*     status)
 {
     UText  ut = UTEXT_INITIALIZER;
     utext_openUChars(&ut, text, textLength, status);
     ((BreakIterator*)bi)->setText(&ut, *status);
-    // A stack allocated UText wrapping a UChar * string
+    // A stack allocated UText wrapping a char16_t * string
     //   can be dumped without explicitly closing it.
 }
 

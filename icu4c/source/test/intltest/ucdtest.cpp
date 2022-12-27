@@ -351,7 +351,7 @@ void UnicodeTest::TestConsistency() {
     UnicodeSet set1, set2;
     if (nfcImpl->getCanonStartSet(0x49, set1)) {
         /* enumerate all characters that are plausible to be latin letters */
-        for(UChar start=0xa0; start<0x2000; ++start) {
+        for(char16_t start=0xa0; start<0x2000; ++start) {
             UnicodeString decomp=nfd->normalize(UnicodeString(start), errorCode);
             if(decomp.length()>1 && decomp[0]==0x49) {
                 set2.add(start);
@@ -548,11 +548,11 @@ void UnicodeTest::TestEmojiProperties() {
 
 namespace {
 
-UBool hbp(const UChar *s, int32_t length, UProperty which) {
+UBool hbp(const char16_t *s, int32_t length, UProperty which) {
     return u_stringHasBinaryProperty(s, length, which);
 }
 
-UBool hbp(const UChar *s, UProperty which) {
+UBool hbp(const char16_t *s, UProperty which) {
     return u_stringHasBinaryProperty(s, -1, which);
 }
 

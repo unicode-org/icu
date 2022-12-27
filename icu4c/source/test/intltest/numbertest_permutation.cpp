@@ -171,7 +171,7 @@ outerEnd:
     int32_t lineNumber = 1;
     int32_t lineLength;
     for (const auto& actualLine : resultLines) {
-        const UChar* lineBuf = ucbuf_readline(f.getAlias(), &lineLength, status);
+        const char16_t* lineBuf = ucbuf_readline(f.getAlias(), &lineLength, status);
         if (lineBuf == nullptr) {
             errln("More lines generated than are in the data file!");
             break;

@@ -68,7 +68,7 @@ u_get_stdout()
 
 static int32_t U_EXPORT2
 u_printf_write(void          *context,
-               const UChar   *str,
+               const char16_t   *str,
                int32_t       count)
 {
     return u_file_write(str, count, (UFILE *)context);
@@ -77,7 +77,7 @@ u_printf_write(void          *context,
 static int32_t
 u_printf_pad_and_justify(void                        *context,
                          const u_printf_spec_info    *info,
-                         const UChar                 *result,
+                         const char16_t              *result,
                          int32_t                     resultLen)
 {
     UFILE   *output = (UFILE *)context;
@@ -138,7 +138,7 @@ u_printf(const char *patternSpecification,
 
 U_CAPI int32_t U_EXPORT2 
 u_fprintf_u(    UFILE        *f,
-            const UChar    *patternSpecification,
+            const char16_t *patternSpecification,
             ... )
 {
     va_list ap;
@@ -152,7 +152,7 @@ u_fprintf_u(    UFILE        *f,
 }
 
 U_CAPI int32_t U_EXPORT2
-u_printf_u(const UChar *patternSpecification,
+u_printf_u(const char16_t *patternSpecification,
            ...)
 {
     va_list ap;
@@ -169,13 +169,13 @@ u_vfprintf(    UFILE        *f,
            va_list        ap)
 {
     int32_t count;
-    UChar *pattern;
-    UChar buffer[UFMT_DEFAULT_BUFFER_SIZE];
+    char16_t *pattern;
+    char16_t buffer[UFMT_DEFAULT_BUFFER_SIZE];
     size_t size = strlen(patternSpecification) + 1;
 
     /* convert from the default codepage to Unicode */
     if (size >= MAX_UCHAR_BUFFER_SIZE(buffer)) {
-        pattern = (UChar *)uprv_malloc(size * sizeof(UChar));
+        pattern = (char16_t *)uprv_malloc(size * sizeof(char16_t));
         if(pattern == 0) {
             return 0;
         }
@@ -203,7 +203,7 @@ static const u_printf_stream_handler g_stream_handler = {
 
 U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_vfprintf_u(    UFILE        *f,
-             const UChar    *patternSpecification,
+             const char16_t *patternSpecification,
              va_list        ap)
 {
     int32_t          written = 0;   /* haven't written anything yet */

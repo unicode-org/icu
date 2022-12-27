@@ -155,7 +155,7 @@ void CollationServiceTest::TestRegister()
         UnicodeString displayName;
         Collator::getDisplayName(fu_FU, displayName);
         /* The locale display pattern for the locale ja, ko, and zh are different. */
-        const UChar zh_fuFU_Array[] = { 0x0066, 0x0075, 0xff08, 0x0046, 0x0055, 0xff09, 0 };
+        const char16_t zh_fuFU_Array[] = { 0x0066, 0x0075, 0xff08, 0x0046, 0x0055, 0xff09, 0 };
         const UnicodeString zh_fuFU(zh_fuFU_Array);
         const Locale& defaultLocale = Locale::getDefault();
         if (displayName != "fu (FU)" &&
@@ -519,7 +519,7 @@ int32_t CollationServiceTest::checkStringEnumeration(const char* msg,
     assertTrue("count verified", i==n);
     iter.reset(ec);
     for (;; ++idxAfterReset) {
-        const UChar *s = iter.unext(nullptr, ec);
+        const char16_t *s = iter.unext(nullptr, ec);
         if (!assertSuccess("unext", ec) || s == nullptr)
             break;
         if (idxAfterReset != 0)

@@ -28,10 +28,10 @@
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 
-extern "C" void test_current(UChar data[][5], uint32_t size, uint32_t maxLen, uint8_t keys[][32]);
-extern "C" void test_legacy(UChar data[][5], uint32_t size, uint32_t maxlen, uint8_t keys[][32]);
+extern "C" void test_current(char16_t data[][5], uint32_t size, uint32_t maxLen, uint8_t keys[][32]);
+extern "C" void test_legacy(char16_t data[][5], uint32_t size, uint32_t maxlen, uint8_t keys[][32]);
 
-void printZTUChar(const UChar *str) {
+void printZTUChar(const char16_t *str) {
   while(*str != 0) {
     if(*str > 0x1F && *str < 0x80) {
       fprintf(stdout, "%c", (*str) & 0xFF);
@@ -42,7 +42,7 @@ void printZTUChar(const UChar *str) {
   }
 }
 
-void printArray(const char* const comment, const UChar UArray[][5], int32_t arraySize) {
+void printArray(const char* const comment, const char16_t UArray[][5], int32_t arraySize) {
   fprintf (stdout, "%s\n", comment);
   int32_t i = 0;
   for(i = 0; i<arraySize; i++) {
@@ -89,7 +89,7 @@ int main(int, const char * const *) {
   };
 #endif
 
-  static UChar uTest[4][5];
+  static char16_t uTest[4][5];
 
   static uint8_t keys[4][32];
 

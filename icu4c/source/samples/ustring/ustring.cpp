@@ -46,7 +46,7 @@ using namespace icu;
 static UConverter *cnv=nullptr;
 
 static void
-printUString(const char *announce, const UChar *s, int32_t length) {
+printUString(const char *announce, const char16_t *s, int32_t length) {
     static char out[200];
     UChar32 c;
     int32_t i;
@@ -113,7 +113,7 @@ printUnicodeString(const char *announce, const UnicodeString &s) {
 
 static void
 demo_utf_h_macros() {
-    static UChar input[]={ 0x0061, 0xd800, 0xdc00, 0xdbff, 0xdfff, 0x0062 };
+    static char16_t input[]={ 0x0061, 0xd800, 0xdc00, 0xdbff, 0xdfff, 0x0062 };
     UChar32 c;
     int32_t i;
     UBool isError;
@@ -158,10 +158,10 @@ demo_utf_h_macros() {
 static void demo_C_Unicode_strings() {
     printf("\n* demo_C_Unicode_strings() --------- ***\n\n");
 
-    static const UChar text[]={ 0x41, 0x42, 0x43, 0 };          /* "ABC" */
-    static const UChar appendText[]={ 0x61, 0x62, 0x63, 0 };    /* "abc" */
-    static const UChar cmpText[]={ 0x61, 0x53, 0x73, 0x43, 0 }; /* "aSsC" */
-    UChar buffer[32];
+    static const char16_t text[]={ 0x41, 0x42, 0x43, 0 };          /* "ABC" */
+    static const char16_t appendText[]={ 0x61, 0x62, 0x63, 0 };    /* "abc" */
+    static const char16_t cmpText[]={ 0x61, 0x53, 0x73, 0x43, 0 }; /* "aSsC" */
+    char16_t buffer[32];
     int32_t compare;
     int32_t length=u_strlen(text); /* length=3 */
 
@@ -200,13 +200,13 @@ static void demoCaseMapInC() {
      *   "<sharp s> <small lig. ffi>"
      *   "<small final sigma><small sigma><capital sigma>"
      */
-    static const UChar input[]={
+    static const char16_t input[]={
         0x61, 0x42, 0x3a3,
         0x69, 0x49, 0x131, 0x130, 0x20,
         0xdf, 0x20, 0xfb03,
         0x3c2, 0x3c3, 0x3a3, 0
     };
-    UChar buffer[32];
+    char16_t buffer[32];
 
     UErrorCode errorCode;
     UChar32 c;
@@ -372,7 +372,7 @@ static void demoCaseMapInCPlusPlus() {
      *   "<sharp s> <small lig. ffi>"
      *   "<small final sigma><small sigma><capital sigma>"
      */
-    static const UChar input[]={
+    static const char16_t input[]={
         0x61, 0x42, 0x3a3,
         0x69, 0x49, 0x131, 0x130, 0x20,
         0xdf, 0x20, 0xfb03,
@@ -413,10 +413,10 @@ static void demoCaseMapInCPlusPlus() {
 
 // sample code for UnicodeString storage models ----------------------------- ***
 
-static const UChar readonly[]={
+static const char16_t readonly[]={
     0x61, 0x31, 0x20ac
 };
-static UChar writeable[]={
+static char16_t writeable[]={
     0x62, 0x32, 0xdbc0, 0xdc01 // includes a surrogate pair for a supplementary code point
 };
 static char out[100];
@@ -454,7 +454,7 @@ demoUnicodeStringStorage() {
     two=one;
     printf("length of longer string copy: %d\n", two.length());
 
-    // * UnicodeString using readonly-alias to a const UChar array
+    // * UnicodeString using readonly-alias to a const char16_t array
     // construct a string that aliases a readonly buffer
     UnicodeString three(false, readonly, UPRV_LENGTHOF(readonly));
     printUnicodeString("readonly-alias string: ", three);
@@ -480,7 +480,7 @@ demoUnicodeStringStorage() {
     printf("verify that a regular copy of a readonly alias uses a different buffer pointer: %d (should be 0)\n",
         one.getBuffer()==two.getBuffer());
 
-    // * UnicodeString using writeable-alias to a non-const UChar array
+    // * UnicodeString using writeable-alias to a non-const char16_t array
     UnicodeString four(writeable, UPRV_LENGTHOF(writeable), UPRV_LENGTHOF(writeable));
     printUnicodeString("writeable-alias string: ", four);
     // a modification writes through to the buffer
@@ -501,7 +501,7 @@ demoUnicodeStringStorage() {
     one.setTo(writeable, UPRV_LENGTHOF(writeable), UPRV_LENGTHOF(writeable));
     // grow the string - it will not fit into the backing buffer any more
     // and will get copied before modification
-    one.append((UChar)0x40);
+    one.append((char16_t)0x40);
     // shrink it back so it would fit
     one.truncate(one.length()-1);
     // we still operate on the copy
@@ -538,9 +538,9 @@ demoUnicodeStringInit() {
     UnicodeString invariantOnly=UNICODE_STRING("such characters are safe 123 %-.", 32);
 
     /*
-     * In C, we need two macros: one to declare the UChar[] array, and
+     * In C, we need two macros: one to declare the char16_t[] array, and
      * one to populate it; the second one is a noop on platforms where
-     * wchar_t is compatible with UChar and ASCII-based.
+     * wchar_t is compatible with char16_t and ASCII-based.
      * The length of the string literal must be counted for both macros.
      */
     /* declare the invString array for the string */
@@ -552,15 +552,15 @@ demoUnicodeStringInit() {
     printf("C and C++ Unicode strings are equal: %d\n", invariantOnly==UnicodeString(true, invString, 32));
 
     /*
-     * convert between char * and UChar * strings that
+     * convert between char * and char16_t * strings that
      * contain only invariant characters
      */
     static const char *cs1="such characters are safe 123 %-.";
-    static UChar us1[40];
+    static char16_t us1[40];
     static char cs2[40];
     u_charsToUChars(cs1, us1, 33); /* include the terminating NUL */
     u_UCharsToChars(us1, cs2, 33);
-    printf("char * -> UChar * -> char * with only "
+    printf("char * -> char16_t * -> char * with only "
            "invariant characters: \"%s\"\n",
            cs2);
 
@@ -575,9 +575,9 @@ demoUnicodeStringInit() {
 
     /*
      * C: convert and unescape a char * string with only invariant
-     * characters to fill a UChar * string
+     * characters to fill a char16_t * string
      */
-    UChar buffer[200];
+    char16_t buffer[200];
     int32_t length;
     length=u_unescape(
         "Sch\\u00f6nes Auto: \\u20ac 11240.\\fPrivates Zeichen: \\U00102345\\n",

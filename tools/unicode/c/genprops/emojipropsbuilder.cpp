@@ -353,7 +353,7 @@ void EmojiPropsBuilder::parsePropsOfStringsLine(char *fields[][2], UErrorCode &e
         // 23F0          ; Basic_Emoji                  ; alarm clock
         // 23F1 FE0F     ; Basic_Emoji                  ; stopwatch
         uint32_t first;
-        UChar s[100];
+        char16_t s[100];
         int32_t length = u_parseString(rangeOrString, s, UPRV_LENGTHOF(s), &first, &errorCode);
         if (U_FAILURE(errorCode)) { return; }
         if (length == 0) {

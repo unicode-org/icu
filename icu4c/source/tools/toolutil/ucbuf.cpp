@@ -39,9 +39,9 @@
 #define CONTEXT_LEN 20
 
 struct UCHARBUF {
-    UChar* buffer;
-    UChar* currentPos;
-    UChar* bufLimit;
+    char16_t* buffer;
+    char16_t* currentPos;
+    char16_t* bufLimit;
     int32_t bufCapacity;
     int32_t remaining;
     int32_t signatureLength;
@@ -56,8 +56,8 @@ ucbuf_autodetect_fs(FileStream* in, const char** cp, UConverter** conv, int32_t*
     char start[8];
     int32_t numRead;
 
-    UChar target[1]={ 0 };
-    UChar* pTarget;
+    char16_t target[1]={ 0 };
+    char16_t* pTarget;
     const char* pStart;
 
     /* read a few bytes */
@@ -161,8 +161,8 @@ ucbuf_autodetect(const char* fileName, const char** cp,UConverter** conv, int32_
 /* fill the uchar buffer */
 static UCHARBUF*
 ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* error){
-    UChar* pTarget=nullptr;
-    UChar* target=nullptr;
+    char16_t* pTarget=nullptr;
+    char16_t* target=nullptr;
     const char* source=nullptr;
     char  carr[MAX_IN_BUF] = {'\0'};
     char* cbuf =  carr;
@@ -175,11 +175,11 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* error){
     /* check if we arrived here without exhausting the buffer*/
     if(buf->currentPos<buf->bufLimit){
         offset = (int32_t)(buf->bufLimit-buf->currentPos);
-        memmove(buf->buffer,buf->currentPos,offset* sizeof(UChar));
+        memmove(buf->buffer,buf->currentPos,offset* sizeof(char16_t));
     }
 
 #ifdef UCBUF_DEBUG
-    memset(pTarget+offset,0xff,sizeof(UChar)*(MAX_IN_BUF-offset));
+    memset(pTarget+offset,0xff,sizeof(char16_t)*(MAX_IN_BUF-offset));
 #endif
     if(buf->isBuffered){
         cbufSize = MAX_IN_BUF;
@@ -320,7 +320,7 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* error){
 
 
 
-/* get a UChar from the stream*/
+/* get a char16_t from the stream*/
 U_CAPI int32_t U_EXPORT2
 ucbuf_getc(UCHARBUF* buf,UErrorCode* error){
     if(error==nullptr || U_FAILURE(*error)){
@@ -364,8 +364,8 @@ ucbuf_getc32(UCHARBUF* buf,UErrorCode* error){
     return retVal;
 }
 
-/* u_unescapeAt() callback to return a UChar*/
-static UChar U_CALLCONV
+/* u_unescapeAt() callback to return a char16_t*/
+static char16_t U_CALLCONV
 _charAt(int32_t offset, void *context) {
     return ((UCHARBUF*) context)->currentPos[offset];
 }
@@ -504,7 +504,7 @@ ucbuf_open(const char* fileName,const char** cp,UBool showWarning, UBool buffere
         }else{
             buf->bufCapacity=buf->remaining+buf->signatureLength+1/*for terminating nul*/;               
         }
-        buf->buffer=(UChar*) uprv_malloc(U_SIZEOF_UCHAR * buf->bufCapacity );
+        buf->buffer=(char16_t*) uprv_malloc(U_SIZEOF_UCHAR * buf->bufCapacity );
         if (buf->buffer == nullptr) {
             *error = U_MEMORY_ALLOCATION_ERROR;
             ucbuf_close(buf);
@@ -551,7 +551,7 @@ ucbuf_ungetc(int32_t c,UCHARBUF* buf){
     }
 }
 
-/* frees the resources of UChar* buffer */
+/* frees the resources of char16_t* buffer */
 static void
 ucbuf_closebuf(UCHARBUF* buf){
     uprv_free(buf->buffer);
@@ -585,8 +585,8 @@ ucbuf_rewind(UCHARBUF* buf,UErrorCode* error){
 
         ucnv_resetToUnicode(buf->conv);
         if(buf->signatureLength>0) {
-            UChar target[1]={ 0 };
-            UChar* pTarget;
+            char16_t target[1]={ 0 };
+            char16_t* pTarget;
             char start[8];
             const char* pStart;
             int32_t numRead;
@@ -623,7 +623,7 @@ ucbuf_size(UCHARBUF* buf){
     return 0;
 }
 
-U_CAPI const UChar* U_EXPORT2
+U_CAPI const char16_t* U_EXPORT2
 ucbuf_getBuffer(UCHARBUF* buf,int32_t* len,UErrorCode* error){
     if(error==nullptr || U_FAILURE(*error)){
         return nullptr;
@@ -698,7 +698,7 @@ ucbuf_resolveFileName(const char* inputDir, const char* fileName, char* target, 
  * to CR+LF combination which needs to be 
  * handled separately
  */
-static UBool ucbuf_isCharNewLine(UChar c){
+static UBool ucbuf_isCharNewLine(char16_t c){
     switch(c){
     case 0x000A: /* LF  */
     case 0x000D: /* CR  */
@@ -712,11 +712,11 @@ static UBool ucbuf_isCharNewLine(UChar c){
     }
 }
 
-U_CAPI const UChar* U_EXPORT2
+U_CAPI const char16_t* U_EXPORT2
 ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
-    UChar* temp = buf->currentPos;
-    UChar* savePos =nullptr;
-    UChar c=0x0000;
+    char16_t* temp = buf->currentPos;
+    char16_t* savePos =nullptr;
+    char16_t c=0x0000;
     if(buf->isBuffered){
         /* The input is buffered we have to do more
         * for returning a pointer U_TRUNCATED_CHAR_FOUND

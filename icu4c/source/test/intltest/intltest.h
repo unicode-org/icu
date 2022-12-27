@@ -32,7 +32,7 @@ U_NAMESPACE_USE
 //-----------------------------------------------------------------------------
 //convenience classes to ease porting code that uses the Java
 //string-concatenation operator (moved from findword test by rtg)
-UnicodeString UCharToUnicodeString(UChar c);
+UnicodeString UCharToUnicodeString(char16_t c);
 UnicodeString Int64ToUnicodeString(int64_t num);
 UnicodeString DoubleToUnicodeString(double num);
 //UnicodeString operator+(const UnicodeString& left, int64_t num); // Some compilers don't allow this because of the long type.
@@ -421,7 +421,7 @@ public:
     virtual const char* getTestDataPath(UErrorCode& err) override;
     static const char* getSourceTestData(UErrorCode& err);
     static char *getUnidataPath(char path[]);
-    UChar *ReadAndConvertFile(const char *fileName, int &ulen, const char *encoding, UErrorCode &status);
+    char16_t *ReadAndConvertFile(const char *fileName, int &ulen, const char *encoding, UErrorCode &status);
 
 
 // static members

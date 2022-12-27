@@ -235,7 +235,7 @@ u_parseCodePoints(const char *s,
  */
 U_CAPI int32_t U_EXPORT2
 u_parseString(const char *s,
-              UChar *dest, int32_t destCapacity,
+              char16_t *dest, int32_t destCapacity,
               uint32_t *pFirst,
               UErrorCode *pErrorCode) {
     char *end;

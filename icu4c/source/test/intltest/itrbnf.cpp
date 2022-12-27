@@ -93,7 +93,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
 void IntlTestRBNF::TestHebrewFraction() {
 
     // this is the expected output for 123.45, with no '<' in it.
-    UChar text1[] = { 
+    char16_t text1[] = {
         0x05de, 0x05d0, 0x05d4, 0x0020, 
         0x05e2, 0x05e9, 0x05e8, 0x05d9, 0x05dd, 0x0020,
         0x05d5, 0x05e9, 0x05dc, 0x05d5, 0x05e9, 0x0020, 
@@ -101,7 +101,7 @@ void IntlTestRBNF::TestHebrewFraction() {
         0x05d0, 0x05e8, 0x05d1, 0x05e2, 0x0020,
         0x05d7, 0x05de, 0x05e9, 0x0000,
     };
-    UChar text2[] = { 
+    char16_t text2[] = {
         0x05DE, 0x05D0, 0x05D4, 0x0020, 
         0x05E2, 0x05E9, 0x05E8, 0x05D9, 0x05DD, 0x0020, 
         0x05D5, 0x05E9, 0x05DC, 0x05D5, 0x05E9, 0x0020, 
@@ -202,12 +202,12 @@ IntlTestRBNF::TestAPI() {
       LocalUResourceBundlePointer ruleSets(ures_getByKey(rbnfRules.getAlias(), "SpelloutRules", nullptr, &status));
       UnicodeString desc;
       while (ures_hasNext(ruleSets.getAlias())) {
-           const UChar* currentString = ures_getNextString(ruleSets.getAlias(), &len, nullptr, &status);
+           const char16_t* currentString = ures_getNextString(ruleSets.getAlias(), &len, nullptr, &status);
            ruleLen += len;
            desc.append(currentString);
       }
 
-      const UChar *spelloutRules = desc.getTerminatedBuffer();
+      const char16_t *spelloutRules = desc.getTerminatedBuffer();
 
       if(U_FAILURE(status) || ruleLen == 0 || spelloutRules == nullptr) {
         errln("Unable to access the rules string!");
@@ -457,14 +457,14 @@ void IntlTestRBNF::TestFractionalRuleSet()
     int len = fracRules.length();
     int change = 2;
     for (int i = 0; i < len; ++i) {
-        UChar ch = fracRules.charAt(i);
+        char16_t ch = fracRules.charAt(i);
         if (ch == '\n') {
             change = 2; // change ok
         } else if (ch == ':') {
             change = 1; // change, but once we hit a non-space char, don't change
         } else if (ch == ' ') {
             if (change != 0) {
-                fracRules.setCharAt(i, (UChar)0x200e);
+                fracRules.setCharAt(i, (char16_t)0x200e);
             }
         } else {
             if (change == 1) {
@@ -1099,12 +1099,12 @@ void IntlTestRBNF::TestLLong()
 #endif
 
     // u_atoll
-    const UChar uempty[] = { 0 };
-    const UChar uzero[] = { 0x30, 0 };
-    const UChar uneg_one[] = { 0x2d, 0x31, 0 };
-    const UChar uneg_12345[] = { 0x2d, 0x31, 0x32, 0x33, 0x34, 0x35, 0 };
-    const UChar ubig1[] = { 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x30, 0 };
-    const UChar ubig2[] = { 0x66, 0x46, 0x66, 0x46, 0x66, 0x46, 0x66, 0x46, 0x66, 0x46, 0x66, 0x46, 0x66, 0x46, 0x66, 0x46, 0 };
+    const char16_t uempty[] = { 0 };
+    const char16_t uzero[] = { 0x30, 0 };
+    const char16_t uneg_one[] = { 0x2d, 0x31, 0 };
+    const char16_t uneg_12345[] = { 0x2d, 0x31, 0x32, 0x33, 0x34, 0x35, 0 };
+    const char16_t ubig1[] = { 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x30, 0 };
+    const char16_t ubig2[] = { 0x66, 0x46, 0x66, 0x46, 0x66, 0x46, 0x66, 0x46, 0x66, 0x46, 0x66, 0x46, 0x66, 0x46, 0x66, 0x46, 0 };
     LLAssert(llong::utoll(uempty) == llong(0, 0));
     LLAssert(llong::utoll(uzero) == llong(0, 0));
     LLAssert(llong::utoll(uneg_one) == llong(0xffffffff, 0xffffffff));
@@ -1127,7 +1127,7 @@ void IntlTestRBNF::TestLLong()
     logln("Testing u_lltoa");
     // u_lltoa
     {
-        UChar buf[64];
+        char16_t buf[64];
         LLAssert((llong(0, 0).lltou(buf, (uint32_t)sizeof(buf)) == 1) && (u_strcmp(buf, uzero) == 0));
         LLAssert((llong(0xffffffff, 0xffffffff).lltou(buf, (uint32_t)sizeof(buf)) == 2) && (u_strcmp(buf, uneg_one) == 0));
         LLAssert(((-llong(0, 12345)).lltou(buf, (uint32_t)sizeof(buf)) == 6) && (u_strcmp(buf, uneg_12345) == 0));
@@ -2323,7 +2323,7 @@ void IntlTestRBNF::TestCompactDecimalFormatStyle() {
 void IntlTestRBNF::TestParseFailure() {
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedNumberFormat rbnf(URBNF_SPELLOUT, Locale::getJapanese(), status);
-    static const UChar* testData[] = {
+    static const char16_t* testData[] = {
         u"・・・・・・・・・・・・・・・・・・・・・・・・"
     };
     if (assertSuccess("", status, true, __FILE__, __LINE__)) {

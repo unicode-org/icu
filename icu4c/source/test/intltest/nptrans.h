@@ -70,7 +70,7 @@ public :
      * that that a character be mapped to nothing, mapped to one 
      * other character or to a string of other characters.
      *
-     * @param src           Pointer to UChar buffer containing a single label
+     * @param src           Pointer to char16_t buffer containing a single label
      * @param srcLength     Number of characters in the source label
      * @param dest          Pointer to the destination buffer to receive the output
      * @param destCapacity  The capacity of destination array
@@ -81,8 +81,8 @@ public :
      *                      Must fulfill U_SUCCESS before the function call.
      * @return The number of UChars in the destination buffer
      */
-    int32_t map(const UChar* src, int32_t srcLength, 
-                        UChar* dest, int32_t destCapacity, 
+    int32_t map(const char16_t* src, int32_t srcLength,
+                        char16_t* dest, int32_t destCapacity,
                         UBool allowUnassigned,
                         UParseError* parseError,
                         UErrorCode& status );
@@ -91,7 +91,7 @@ public :
      * Prepare the input stream with for use. This operation maps, normalizes(NFKC),
      * checks for prohited and BiDi characters in the order defined by RFC 3454
      * 
-     * @param src           Pointer to UChar buffer containing a single label
+     * @param src           Pointer to char16_t buffer containing a single label
      * @param srcLength     Number of characters in the source label
      * @param dest          Pointer to the destination buffer to receive the output
      * @param destCapacity  The capacity of destination array
@@ -102,8 +102,8 @@ public :
      *                      Must fulfill U_SUCCESS before the function call.
      * @return The number of UChars in the destination buffer
      */
-    int32_t process(const UChar* src, int32_t srcLength, 
-                            UChar* dest, int32_t destCapacity, 
+    int32_t process(const char16_t* src, int32_t srcLength,
+                            char16_t* dest, int32_t destCapacity,
                             UBool allowUnassigned,
                             UParseError* parseError,
                             UErrorCode& status );

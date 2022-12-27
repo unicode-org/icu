@@ -449,7 +449,7 @@ main(int argc,
             }
             // The PseudoListResource constructor call did not allocate further memory.
             assert(U_SUCCESS(status));
-            const UChar *p = (const UChar *)(pRoot + keysTop);
+            const char16_t *p = (const char16_t *)(pRoot + keysTop);
             int32_t remaining = stringUnitsLength;
             do {
                 int32_t first = *p;

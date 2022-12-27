@@ -232,7 +232,7 @@ void RBBITest::TestBug3818() {
     UErrorCode  status = U_ZERO_ERROR;
 
     // Four Thai words...
-    static const UChar thaiWordData[] = {  0x0E43,0x0E2B,0x0E0D,0x0E48, 0x0E43,0x0E2B,0x0E0D,0x0E48,
+    static const char16_t thaiWordData[] = {  0x0E43,0x0E2B,0x0E0D,0x0E48, 0x0E43,0x0E2B,0x0E0D,0x0E48,
                                            0x0E43,0x0E2B,0x0E0D,0x0E48, 0x0E43,0x0E2B,0x0E0D,0x0E48, 0 };
     UnicodeString  thaiStr(thaiWordData);
 
@@ -752,7 +752,7 @@ void RBBITest::TestExtended() {
     testFileName.append("rbbitst.txt", -1, status);
 
     int    len;
-    UChar *testFile = ReadAndConvertFile(testFileName.data(), len, "UTF-8", status);
+    char16_t *testFile = ReadAndConvertFile(testFileName.data(), len, "UTF-8", status);
     if (U_FAILURE(status)) {
         errln("%s:%d Error %s opening file rbbitst.txt", __FILE__, __LINE__, u_errorName(status));
         return;
@@ -788,7 +788,7 @@ void RBBITest::TestExtended() {
 
     for (charIdx = 0; charIdx < len; ) {
         status = U_ZERO_ERROR;
-        UChar  c = testString.charAt(charIdx);
+        char16_t  c = testString.charAt(charIdx);
         charIdx++;
         if (c == u'\r' && charIdx<len && testString.charAt(charIdx) == u'\n') {
             // treat CRLF as a unit
@@ -1250,7 +1250,7 @@ UBool RBBITest::testCaseIsKnownIssue(const UnicodeString &testCase, const char *
     static struct TestCase {
         const char *fTicketNum;
         const char *fFileName;
-        const UChar *fString;
+        const char16_t *fString;
     } badTestCases[] = {
         {"10666", "GraphemeBreakTest.txt", u"\u0020\u0020\u0033"},    // Fake example, for illustration.
         // The following tests were originally for
@@ -1326,7 +1326,7 @@ void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *
     logln("Opening data file %s\n", fileName);
 
     int    len;
-    UChar *testFile = ReadAndConvertFile(testFileName, len, "UTF-8", status);
+    char16_t *testFile = ReadAndConvertFile(testFileName, len, "UTF-8", status);
     if (status != U_FILE_ACCESS_ERROR) {
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT(testFile != nullptr);
@@ -3607,7 +3607,7 @@ void RBBITest::TestWordBoundary(void)
                 __FILE__, __LINE__, u_errorName(status));
         return;
     }
-    UChar         str[50];
+    char16_t      str[50];
     static const char *strlist[] =
     {
     "\\u200e\\U000e0072\\u0a4b\\U000e003f\\ufd2b\\u2027\\u002e\\u002e",
@@ -3688,7 +3688,7 @@ void RBBITest::TestLineBreaks(void)
     UErrorCode    status = U_ZERO_ERROR;
     BreakIterator *bi = BreakIterator::createLineInstance(locale, status);
     const int32_t  STRSIZE = 50;
-    UChar         str[STRSIZE];
+    char16_t      str[STRSIZE];
     static const char *strlist[] =
     {
      "\\u300f\\ufdfc\\ub798\\u2011\\u2011\\u0020\\u0b43\\u002d\\ubeec\\ufffc",
@@ -3779,7 +3779,7 @@ void RBBITest::TestSentBreaks(void)
     Locale        locale("en");
     UErrorCode    status = U_ZERO_ERROR;
     BreakIterator *bi = BreakIterator::createSentenceInstance(locale, status);
-    UChar         str[200];
+    char16_t      str[200];
     static const char *strlist[] =
     {
      "Now\ris\nthe\r\ntime\n\rfor\r\r",
@@ -4390,7 +4390,7 @@ void RBBITest::TestBug12797() {
 
 void RBBITest::TestBug12918() {
     // This test triggers an assertion failure in dictbe.cpp
-    const UChar *crasherString = u"\u3325\u4a16";
+    const char16_t *crasherString = u"\u3325\u4a16";
     UErrorCode status = U_ZERO_ERROR;
     UBreakIterator* iter = ubrk_open(UBRK_WORD, nullptr, crasherString, -1, &status);
     if (U_FAILURE(status)) {
@@ -4445,7 +4445,7 @@ void RBBITest::TestEmoji() {
     logln("Opening data file %s\n", testFileName.data());
 
     int    len;
-    UChar *testFile = ReadAndConvertFile(testFileName.data(), len, "UTF-8", status);
+    char16_t *testFile = ReadAndConvertFile(testFileName.data(), len, "UTF-8", status);
     if (U_FAILURE(status) || testFile == nullptr) {
         errln("%s:%s %s while opening emoji-test.txt", __FILE__, __LINE__, u_errorName(status));
         return;
@@ -4820,7 +4820,7 @@ void RBBITest::TestDebugRules() {
     path.appendPathPart("rules", status);
     path.appendPathPart("line.txt", status);
     int    len;
-    std::unique_ptr<UChar []> testFile(ReadAndConvertFile(path.data(), len, "UTF-8", status));
+    std::unique_ptr<char16_t []> testFile(ReadAndConvertFile(path.data(), len, "UTF-8", status));
     if (!assertSuccess(WHERE, status)) {
         return;
     }
@@ -4844,13 +4844,13 @@ void RBBITest::testTrieStateTable(int32_t numChar, bool expectedTrieWidthIn8Bits
     int32_t expectedStateRowBits = expectedStateRowIn8Bits ? RBBI_8BITS_ROWS : 0;
     // Text are duplicate characters from U+4E00 to U+4FFF
     UnicodeString text;
-    for (UChar c = 0x4e00; c < 0x5000; c++) {
+    for (char16_t c = 0x4e00; c < 0x5000; c++) {
         text.append(c).append(c);
     }
     // Generate rule which will caused length+4 character classes and
     // length+3 states
     UnicodeString rules(u"!!quoted_literals_only;");
-    for (UChar c = 0x4e00; c < 0x4e00 + numChar; c++) {
+    for (char16_t c = 0x4e00; c < 0x4e00 + numChar; c++) {
         rules.append(u'\'').append(c).append(c).append(u"';");
     }
     rules.append(u".;");
@@ -4966,7 +4966,7 @@ void RBBITest::TestTable_8_16_Bits() {
     // and as test data to check matching behavior. A break rule consisting of the first 120
     // characters of testStr will match the first 120 chars of the full-length testStr.
     UnicodeString testStr;
-    for (UChar c=0x3000; c<0x3200; ++c) {
+    for (char16_t c=0x3000; c<0x3200; ++c) {
         testStr.append(c);
     }
 
@@ -5355,7 +5355,7 @@ void RBBITest::runLSTMTestFromFile(const char* filename, UScriptCode script) {
     testFileName.append(filename, -1, status);
 
     int len;
-    UChar *testFile = ReadAndConvertFile(testFileName.data(), len, "UTF-8", status);
+    char16_t *testFile = ReadAndConvertFile(testFileName.data(), len, "UTF-8", status);
     if (U_FAILURE(status)) {
         errln("%s:%d Error %s opening test file %s", __FILE__, __LINE__, u_errorName(status), filename);
         return;

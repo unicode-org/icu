@@ -148,7 +148,7 @@ static void strToInt(
     }
     int64_t value = 0;
     for (int32_t i = start; i < len; ++i) {
-        UChar ch = str[i];
+        char16_t ch = str[i];
         if (ch < 0x30 || ch > 0x39) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
@@ -161,12 +161,12 @@ static void strToInt(
 
 static void intToStr(
         const void *intPtr, UnicodeString &appendTo) {
-    UChar buffer[20];
+    char16_t buffer[20];
     // int64_t such that all int32_t values can be negated
     int64_t xSigned = *static_cast<const int32_t *>(intPtr);
     uint32_t x;
     if (xSigned < 0) {
-        appendTo.append((UChar)0x2D);
+        appendTo.append((char16_t)0x2D);
         x = static_cast<uint32_t>(-xSigned);
     } else {
         x = static_cast<uint32_t>(xSigned);

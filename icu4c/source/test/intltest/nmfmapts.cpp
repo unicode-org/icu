@@ -330,9 +330,9 @@ IntlTestNumberFormatAPI::testRegistration()
     } else {
         float n = 1234.567f;
         UnicodeString res0, res1, res2, res3, res4, res5;
-        UChar ures3[50];
-        UChar ures4[50];
-        UChar ures5[50];
+        char16_t ures3[50];
+        char16_t ures4[50];
+        char16_t ures5[50];
 
         f0->format(n, res0);
         f1->format(n, res1);

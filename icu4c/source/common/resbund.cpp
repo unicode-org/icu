@@ -253,7 +253,7 @@ ResourceBundle::clone() const {
 
 UnicodeString ResourceBundle::getString(UErrorCode& status) const {
     int32_t len = 0;
-    const UChar *r = ures_getString(fResource, &len, &status);
+    const char16_t *r = ures_getString(fResource, &len, &status);
     return UnicodeString(true, r, len);
 }
 
@@ -311,13 +311,13 @@ ResourceBundle ResourceBundle::getNext(UErrorCode& status) {
 
 UnicodeString ResourceBundle::getNextString(UErrorCode& status) {
     int32_t len = 0;
-    const UChar* r = ures_getNextString(fResource, &len, 0, &status);
+    const char16_t* r = ures_getNextString(fResource, &len, 0, &status);
     return UnicodeString(true, r, len);
 }
 
 UnicodeString ResourceBundle::getNextString(const char ** key, UErrorCode& status) {
     int32_t len = 0;
-    const UChar* r = ures_getNextString(fResource, &len, key, &status);
+    const char16_t* r = ures_getNextString(fResource, &len, key, &status);
     return UnicodeString(true, r, len);
 }
 
@@ -335,7 +335,7 @@ ResourceBundle ResourceBundle::get(int32_t indexR, UErrorCode& status) const {
 
 UnicodeString ResourceBundle::getStringEx(int32_t indexS, UErrorCode& status) const {
     int32_t len = 0;
-    const UChar* r = ures_getStringByIndex(fResource, indexS, &len, &status);
+    const char16_t* r = ures_getStringByIndex(fResource, indexS, &len, &status);
     return UnicodeString(true, r, len);
 }
 
@@ -363,7 +363,7 @@ ResourceBundle ResourceBundle::getWithFallback(const char* key, UErrorCode& stat
 }
 UnicodeString ResourceBundle::getStringEx(const char* key, UErrorCode& status) const {
     int32_t len = 0;
-    const UChar* r = ures_getStringByKey(fResource, key, &len, &status);
+    const char16_t* r = ures_getStringByKey(fResource, key, &len, &status);
     return UnicodeString(true, r, len);
 }
 

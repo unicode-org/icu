@@ -136,22 +136,22 @@ public:
      *
      * @see ures_getString()
      */
-    virtual const UChar *getString(int32_t &length, UErrorCode &errorCode) const = 0;
+    virtual const char16_t *getString(int32_t &length, UErrorCode &errorCode) const = 0;
 
     inline UnicodeString getUnicodeString(UErrorCode &errorCode) const {
         int32_t len = 0;
-        const UChar *r = getString(len, errorCode);
+        const char16_t *r = getString(len, errorCode);
         return UnicodeString(true, r, len);
     }
 
     /**
      * Sets U_RESOURCE_TYPE_MISMATCH if this is not an alias resource.
      */
-    virtual const UChar *getAliasString(int32_t &length, UErrorCode &errorCode) const = 0;
+    virtual const char16_t *getAliasString(int32_t &length, UErrorCode &errorCode) const = 0;
 
     inline UnicodeString getAliasUnicodeString(UErrorCode &errorCode) const {
         int32_t len = 0;
-        const UChar *r = getAliasString(len, errorCode);
+        const char16_t *r = getAliasString(len, errorCode);
         return UnicodeString(true, r, len);
     }
 

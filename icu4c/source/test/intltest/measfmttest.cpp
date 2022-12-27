@@ -4359,7 +4359,7 @@ void MeasureFormatTest::TestGram() {
 }
 
 void MeasureFormatTest::TestCurrencies() {
-    UChar USD[4] = {};
+    char16_t USD[4] = {};
     u_uastrcpy(USD, "USD");
     UErrorCode status = U_ZERO_ERROR;
     CurrencyUnit USD_unit(USD, status);

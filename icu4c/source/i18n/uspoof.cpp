@@ -368,7 +368,7 @@ uspoof_setAllowedUnicodeSet(USpoofChecker *sc, const UnicodeSet *chars, UErrorCo
 
 U_CAPI int32_t U_EXPORT2
 uspoof_check(const USpoofChecker *sc,
-             const UChar *id, int32_t length,
+             const char16_t *id, int32_t length,
              int32_t *position,
              UErrorCode *status) {
 
@@ -384,7 +384,7 @@ uspoof_check(const USpoofChecker *sc,
 
 U_CAPI int32_t U_EXPORT2
 uspoof_check2(const USpoofChecker *sc,
-    const UChar* id, int32_t length,
+    const char16_t* id, int32_t length,
     USpoofCheckResult* checkResult,
     UErrorCode *status) {
 
@@ -435,8 +435,8 @@ uspoof_check2UTF8(const USpoofChecker *sc,
 
 U_CAPI int32_t U_EXPORT2
 uspoof_areConfusable(const USpoofChecker *sc,
-                     const UChar *id1, int32_t length1,
-                     const UChar *id2, int32_t length2,
+                     const char16_t *id1, int32_t length1,
+                     const char16_t *id2, int32_t length2,
                      UErrorCode *status) {
     SpoofImpl::validateThis(sc, *status);
     if (U_FAILURE(*status)) {
@@ -677,8 +677,8 @@ uspoof_check2UnicodeString(const USpoofChecker *sc,
 U_CAPI int32_t U_EXPORT2
 uspoof_getSkeleton(const USpoofChecker *sc,
                    uint32_t type,
-                   const UChar *id,  int32_t length,
-                   UChar *dest, int32_t destCapacity,
+                   const char16_t *id,  int32_t length,
+                   char16_t *dest, int32_t destCapacity,
                    UErrorCode *status) {
 
     SpoofImpl::validateThis(sc, *status);

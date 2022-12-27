@@ -78,8 +78,8 @@ void StringTest::TestSizeofTypes(void) {
     if(2!=sizeof(uint16_t)) {
         errln("2!=sizeof(uint16_t)");
     }
-    if(2!=sizeof(UChar)) {
-        errln("2!=sizeof(UChar)");
+    if(2!=sizeof(char16_t)) {
+        errln("2!=sizeof(char16_t)");
     }
     if(1!=sizeof(int8_t)) {
         errln("1!=sizeof(int8_t)");

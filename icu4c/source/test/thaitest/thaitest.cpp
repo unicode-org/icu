@@ -40,7 +40,7 @@ public:
     // The constructor:
     // text  - pointer to an array of UChars to iterate over
     // count - the number of UChars in text
-    SpaceBreakIterator(const UChar *text, int32_t count);
+    SpaceBreakIterator(const char16_t *text, int32_t count);
 
     // the destructor
     ~SpaceBreakIterator();
@@ -61,8 +61,8 @@ private:
     // The underlying BreakIterator
     BreakIterator *fBreakIter;
 
-    // address of the UChar array
-    const UChar *fText;
+    // address of the char16_t array
+    const char16_t *fText;
 
     // number of UChars in fText
     int32_t fTextCount;
@@ -87,12 +87,12 @@ class ThaiWordbreakTest
 {
 public:
     // The main constructor:
-    // spaces       - pointer to a UChar array for the text with spaces
+    // spaces       - pointer to a char16_t array for the text with spaces
     // spaceCount   - the number of characters in the spaces array
-    // noSpaces     - pointer to a UChar array for the text without spaces
+    // noSpaces     - pointer to a char16_t array for the text without spaces
     // noSpaceCount - the number of characters in the noSpaces array
     // verbose      - report all breaks if true, otherwise just report differences
-    ThaiWordbreakTest(const UChar *spaces, int32_t spaceCount, const UChar *noSpaces, int32_t noSpaceCount, UBool verbose);
+    ThaiWordbreakTest(const char16_t *spaces, int32_t spaceCount, const char16_t *noSpaces, int32_t noSpaceCount, UBool verbose);
     ~ThaiWordbreakTest();
 
     // returns the number of breaks that are in the spaces array
@@ -109,28 +109,28 @@ public:
     // reads the input Unicode text file:
     // fileName  - the path name of the file
     // charCount - set to the number of UChars read from the file
-    // returns   - the address of the UChar array containing the characters
-    static const UChar *readFile(char *fileName, int32_t &charCount);
+    // returns   - the address of the char16_t array containing the characters
+    static const char16_t *readFile(char *fileName, int32_t &charCount);
 
-    // removes spaces form the input UChar array:
-    // spaces        - pointer to the input UChar array
+    // removes spaces form the input char16_t array:
+    // spaces        - pointer to the input char16_t array
     // count         - number of UChars in the spaces array
     // nonSpaceCount - the number of UChars in the result array
-    // returns       - the address of the UChar array with spaces removed
-    static const UChar *crunchSpaces(const UChar *spaces, int32_t count, int32_t &nonSpaceCount);
+    // returns       - the address of the char16_t array with spaces removed
+    static const char16_t *crunchSpaces(const char16_t *spaces, int32_t count, int32_t &nonSpaceCount);
 
 private:
     // The no arg constructor - private so clients can't call it
     ThaiWordbreakTest();
 
     // This does the actual comparison:
-    // spaces - the address of the UChar array for the text with spaces
+    // spaces - the address of the char16_t array for the text with spaces
     // spaceCount - the number of UChars in the spaces array
-    // noSpaces   - the address of the UChar array for the text without spaces
+    // noSpaces   - the address of the char16_t array for the text without spaces
     // noSpaceCount - the number of UChars in the noSpaces array
     // returns      - true if all breaks match, false otherwise
-    UBool compareWordBreaks(const UChar *spaces, int32_t spaceCount,
-                            const UChar *noSpaces, int32_t noSpaceCount);
+    UBool compareWordBreaks(const char16_t *spaces, int32_t spaceCount,
+                            const char16_t *noSpaces, int32_t noSpaceCount);
 
     // helper method to report a break in the spaces
     // array that's not found in the noSpaces array
@@ -158,8 +158,8 @@ private:
 /*
  * The main constructor: it calls compareWordBreaks and reports any differences
  */
-ThaiWordbreakTest::ThaiWordbreakTest(const UChar *spaces, int32_t spaceCount,
-                                     const UChar *noSpaces, int32_t noSpaceCount, UBool verbose)
+ThaiWordbreakTest::ThaiWordbreakTest(const char16_t *spaces, int32_t spaceCount,
+                                     const char16_t *noSpaces, int32_t noSpaceCount, UBool verbose)
 : fBreaksNotFound(0), fInvalidBreaks(0), fWordCount(0), fVerbose(verbose)
 {
     compareWordBreaks(spaces, spaceCount, noSpaces, noSpaceCount);
@@ -213,8 +213,8 @@ inline int32_t ThaiWordbreakTest::getWordCount()
  * and a word instance of a Thai BreakIterator to iterate over the text
  * without spaces.
  */
-UBool ThaiWordbreakTest::compareWordBreaks(const UChar *spaces, int32_t spaceCount,
-                                           const UChar *noSpaces, int32_t noSpaceCount)
+UBool ThaiWordbreakTest::compareWordBreaks(const char16_t *spaces, int32_t spaceCount,
+                                           const char16_t *noSpaces, int32_t noSpaceCount)
 {
     UBool result = true;
     Locale thai("th");
@@ -304,12 +304,12 @@ void ThaiWordbreakTest::foundInvalidBreak(int32_t br)
  * Read the text from a file. The text must start with a Unicode Byte
  * Order Mark (BOM) so that we know what order to read the bytes in.
  */
-const UChar *ThaiWordbreakTest::readFile(char *fileName, int32_t &charCount)
+const char16_t *ThaiWordbreakTest::readFile(char *fileName, int32_t &charCount)
 {
     FILE *f;
     int32_t fileSize;
     
-    UChar *buffer;
+    char16_t *buffer;
     char *bufferChars;
     
     f = fopen(fileName, "rb");
@@ -345,7 +345,7 @@ const UChar *ThaiWordbreakTest::readFile(char *fileName, int32_t &charCount)
     delete[] bufferChars;
     
     charCount = myText.length();
-    buffer = new UChar[charCount];
+    buffer = new char16_t[charCount];
     if(buffer == 0) {
         fprintf(stderr,"Couldn't get memory for reading %s reason: %s \n", fileName, strerror(errno));
         return 0;
@@ -359,13 +359,13 @@ const UChar *ThaiWordbreakTest::readFile(char *fileName, int32_t &charCount)
 }
 
 /*
- * Remove spaces from the input UChar array.
+ * Remove spaces from the input char16_t array.
  *
  * We check explicitly for a Unicode code value of 0x0020
  * because Unicode::isSpaceChar returns true for CR, LF, etc.
  *
  */
-const UChar *ThaiWordbreakTest::crunchSpaces(const UChar *spaces, int32_t count, int32_t &nonSpaceCount)
+const char16_t *ThaiWordbreakTest::crunchSpaces(const char16_t *spaces, int32_t count, int32_t &nonSpaceCount)
 {
     int32_t i, out, spaceCount;
 
@@ -377,7 +377,7 @@ const UChar *ThaiWordbreakTest::crunchSpaces(const UChar *spaces, int32_t count,
     }
 
     nonSpaceCount = count - spaceCount;
-    UChar *noSpaces = new UChar[nonSpaceCount];
+    char16_t *noSpaces = new char16_t[nonSpaceCount];
 
     if (noSpaces == 0) {
         fprintf(stderr, "Couldn't allocate memory for the space stripped text.\n");
@@ -396,7 +396,7 @@ const UChar *ThaiWordbreakTest::crunchSpaces(const UChar *spaces, int32_t count,
 /*
  * Generate a text file with spaces in it from a file without.
  */
-int generateFile(const UChar *chars, int32_t length) {
+int generateFile(const char16_t *chars, int32_t length) {
     Locale root("");
     UCharCharacterIterator *noSpaceIter = new UCharCharacterIterator(chars, length);
     UErrorCode status = U_ZERO_ERROR;
@@ -406,7 +406,7 @@ int generateFile(const UChar *chars, int32_t length) {
     breakIter->adoptText(noSpaceIter);
     char outbuf[1024];
     int32_t strlength;
-    UChar bom = 0xFEFF;
+    char16_t bom = 0xFEFF;
     
     printf("%s", u_strToUTF8(outbuf, sizeof(outbuf), &strlength, &bom, 1, &status));
     int32_t prevbreak = 0;
@@ -464,7 +464,7 @@ int main(int argc, char **argv)
     }
 
     int32_t spaceCount, nonSpaceCount;
-    const UChar *spaces, *noSpaces;
+    const char16_t *spaces, *noSpaces;
 
     spaces = ThaiWordbreakTest::readFile(fileName, spaceCount);
 
@@ -495,7 +495,7 @@ int main(int argc, char **argv)
  * The main constructor. Clear all the counts and construct a default
  * word instance of a BreakIterator.
  */
-SpaceBreakIterator::SpaceBreakIterator(const UChar *text, int32_t count)
+SpaceBreakIterator::SpaceBreakIterator(const char16_t *text, int32_t count)
   : fBreakIter(0), fText(text), fTextCount(count), fWordCount(0), fSpaceCount(0), fDone(false)
 {
     UCharCharacterIterator *iter = new UCharCharacterIterator(text, count);

@@ -54,9 +54,9 @@
 #include "cstring.h"
 #include "uinvchar.h"
 
-static const UChar TARGET_SEP  = 0x002D; /*-*/
-static const UChar ID_DELIM    = 0x003B; /*;*/
-static const UChar VARIANT_SEP = 0x002F; // '/'
+static const char16_t TARGET_SEP  = 0x002D; /*-*/
+static const char16_t ID_DELIM    = 0x003B; /*;*/
+static const char16_t VARIANT_SEP = 0x002F; // '/'
 
 /**
  * Prefix for resource bundle key for the display name for a
@@ -132,7 +132,7 @@ Transliterator::Transliterator(const UnicodeString& theID,
     maximumContextLength(0)
 {
     // NUL-terminate the ID string, which is a non-aliased copy.
-    ID.append((UChar)0);
+    ID.append((char16_t)0);
     ID.truncate(ID.length()-1);
 }
 
@@ -153,7 +153,7 @@ Transliterator::Transliterator(const Transliterator& other) :
     maximumContextLength(other.maximumContextLength)
 {
     // NUL-terminate the ID string, which is a non-aliased copy.
-    ID.append((UChar)0);
+    ID.append((char16_t)0);
     ID.truncate(ID.length()-1);
 
     if (other.filter != 0) {
@@ -1456,11 +1456,11 @@ UnicodeString& Transliterator::_getAvailableVariant(int32_t index,
  * @deprecated the new architecture provides filtering at the top
  * level.  This method will be removed Dec 31 2001.
  */
-UChar Transliterator::filteredCharAt(const Replaceable& text, int32_t i) const {
-    UChar c;
+char16_t Transliterator::filteredCharAt(const Replaceable& text, int32_t i) const {
+    char16_t c;
     const UnicodeFilter* localFilter = getFilter();
     return (localFilter == 0) ? text.charAt(i) :
-        (localFilter->contains(c = text.charAt(i)) ? c : (UChar)0xFFFE);
+        (localFilter->contains(c = text.charAt(i)) ? c : (char16_t)0xFFFE);
 }
 
 #endif
@@ -1548,12 +1548,12 @@ UBool Transliterator::initializeRegistry(UErrorCode &status) {
                 }
                 UResourceBundle* res = ures_getNextResource(colBund, nullptr, &lstatus);
                 const char* typeStr = ures_getKey(res);
-                UChar type;
+                char16_t type;
                 u_charsToUChars(typeStr, &type, 1);
 
                 if (U_SUCCESS(lstatus)) {
                     int32_t len = 0;
-                    const UChar *resString;
+                    const char16_t *resString;
                     switch (type) {
                     case 0x66: // 'f'
                     case 0x69: // 'i'

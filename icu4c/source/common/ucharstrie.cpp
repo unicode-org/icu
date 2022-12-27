@@ -30,7 +30,7 @@ UCharsTrie::~UCharsTrie() {
 
 UStringTrieResult
 UCharsTrie::current() const {
-    const UChar *pos=pos_;
+    const char16_t *pos=pos_;
     if(pos==nullptr) {
         return USTRINGTRIE_NO_MATCH;
     } else {
@@ -59,7 +59,7 @@ UCharsTrie::nextForCodePoint(UChar32 cp) {
 }
 
 UStringTrieResult
-UCharsTrie::branchNext(const UChar *pos, int32_t length, int32_t uchar) {
+UCharsTrie::branchNext(const char16_t *pos, int32_t length, int32_t uchar) {
     // Branch according to the current unit.
     if(length==0) {
         length=*pos++;
@@ -121,7 +121,7 @@ UCharsTrie::branchNext(const UChar *pos, int32_t length, int32_t uchar) {
 }
 
 UStringTrieResult
-UCharsTrie::nextImpl(const UChar *pos, int32_t uchar) {
+UCharsTrie::nextImpl(const char16_t *pos, int32_t uchar) {
     int32_t node=*pos++;
     for(;;) {
         if(node<kMinLinearMatch) {
@@ -153,7 +153,7 @@ UCharsTrie::nextImpl(const UChar *pos, int32_t uchar) {
 
 UStringTrieResult
 UCharsTrie::next(int32_t uchar) {
-    const UChar *pos=pos_;
+    const char16_t *pos=pos_;
     if(pos==nullptr) {
         return USTRINGTRIE_NO_MATCH;
     }
@@ -176,12 +176,12 @@ UCharsTrie::next(int32_t uchar) {
 
 UStringTrieResult
 UCharsTrie::next(ConstChar16Ptr ptr, int32_t sLength) {
-    const UChar *s=ptr;
+    const char16_t *s=ptr;
     if(sLength<0 ? *s==0 : sLength==0) {
         // Empty input.
         return current();
     }
-    const UChar *pos=pos_;
+    const char16_t *pos=pos_;
     if(pos==nullptr) {
         return USTRINGTRIE_NO_MATCH;
     }
@@ -282,8 +282,8 @@ UCharsTrie::next(ConstChar16Ptr ptr, int32_t sLength) {
     }
 }
 
-const UChar *
-UCharsTrie::findUniqueValueFromBranch(const UChar *pos, int32_t length,
+const char16_t *
+UCharsTrie::findUniqueValueFromBranch(const char16_t *pos, int32_t length,
                                       UBool haveUniqueValue, int32_t &uniqueValue) {
     while(length>kMaxBranchLinearSubNodeLength) {
         ++pos;  // ignore the comparison unit
@@ -321,7 +321,7 @@ UCharsTrie::findUniqueValueFromBranch(const UChar *pos, int32_t length,
 }
 
 UBool
-UCharsTrie::findUniqueValue(const UChar *pos, UBool haveUniqueValue, int32_t &uniqueValue) {
+UCharsTrie::findUniqueValue(const char16_t *pos, UBool haveUniqueValue, int32_t &uniqueValue) {
     int32_t node=*pos++;
     for(;;) {
         if(node<kMinLinearMatch) {
@@ -365,7 +365,7 @@ UCharsTrie::findUniqueValue(const UChar *pos, UBool haveUniqueValue, int32_t &un
 
 int32_t
 UCharsTrie::getNextUChars(Appendable &out) const {
-    const UChar *pos=pos_;
+    const char16_t *pos=pos_;
     if(pos==nullptr) {
         return 0;
     }
@@ -397,7 +397,7 @@ UCharsTrie::getNextUChars(Appendable &out) const {
 }
 
 void
-UCharsTrie::getNextBranchUChars(const UChar *pos, int32_t length, Appendable &out) {
+UCharsTrie::getNextBranchUChars(const char16_t *pos, int32_t length, Appendable &out) {
     while(length>kMaxBranchLinearSubNodeLength) {
         ++pos;  // ignore the comparison unit
         getNextBranchUChars(jumpByDelta(pos), length>>1, out);

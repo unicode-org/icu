@@ -25,7 +25,7 @@ U_NAMESPACE_BEGIN
 ******************************************************************
 */
 
-const UChar ICUServiceKey::PREFIX_DELIMITER = 0x002F;   /* '/' */
+const char16_t ICUServiceKey::PREFIX_DELIMITER = 0x002F;   /* '/' */
 
 ICUServiceKey::ICUServiceKey(const UnicodeString& id) 
 : _id(id) {
@@ -558,7 +558,7 @@ outerEnd:
 
             if (actualReturn != nullptr) {
                 // strip null prefix
-                if (result->actualDescriptor.indexOf((UChar)0x2f) == 0) { // U+002f=slash (/)
+                if (result->actualDescriptor.indexOf((char16_t)0x2f) == 0) { // U+002f=slash (/)
                     actualReturn->remove();
                     actualReturn->append(result->actualDescriptor, 
                         1, 

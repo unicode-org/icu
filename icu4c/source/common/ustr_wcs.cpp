@@ -33,7 +33,7 @@
 #define _BUFFER_CAPACITY_MULTIPLIER 2
 
 #if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32)
-// TODO: We should use CharString for char buffers and UnicodeString for UChar buffers.
+// TODO: We should use CharString for char buffers and UnicodeString for char16_t buffers.
 // Then we could change this to work only with wchar_t buffers.
 static inline UBool 
 u_growAnyBufferFromStatic(void *context,
@@ -65,7 +65,7 @@ static wchar_t*
 _strToWCS(wchar_t *dest, 
            int32_t destCapacity,
            int32_t *pDestLength,
-           const UChar *src, 
+           const char16_t *src,
            int32_t srcLength,
            UErrorCode *pErrorCode){
 
@@ -79,8 +79,8 @@ _strToWCS(wchar_t *dest,
     int32_t intTargetCapacity=0;
     int count=0,retVal=0;
     
-    const UChar *pSrcLimit =nullptr;
-    const UChar *pSrc = src;
+    const char16_t *pSrcLimit =nullptr;
+    const char16_t *pSrc = src;
 
     conv = u_getDefaultConverter(pErrorCode);
     
@@ -232,7 +232,7 @@ U_CAPI wchar_t* U_EXPORT2
 u_strToWCS(wchar_t *dest, 
            int32_t destCapacity,
            int32_t *pDestLength,
-           const UChar *src, 
+           const char16_t *src,
            int32_t srcLength,
            UErrorCode *pErrorCode){
 
@@ -254,13 +254,13 @@ u_strToWCS(wchar_t *dest,
         srcLength = u_strlen(src);
     }
     if(0 < srcLength && srcLength <= destCapacity){
-        u_memcpy((UChar *)dest, src, srcLength);
+        u_memcpy((char16_t *)dest, src, srcLength);
     }
     if(pDestLength){
        *pDestLength = srcLength;
     }
 
-    u_terminateUChars((UChar *)dest,destCapacity,srcLength,pErrorCode);
+    u_terminateUChars((char16_t *)dest,destCapacity,srcLength,pErrorCode);
 
     return dest;
 
@@ -279,8 +279,8 @@ u_strToWCS(wchar_t *dest,
 
 #if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32)
 /* helper function */
-static UChar* 
-_strFromWCS( UChar   *dest,
+static char16_t*
+_strFromWCS( char16_t   *dest,
              int32_t destCapacity, 
              int32_t *pDestLength,
              const wchar_t *src,
@@ -289,11 +289,11 @@ _strFromWCS( UChar   *dest,
 {
     int32_t retVal =0, count =0 ;
     UConverter* conv = nullptr;
-    UChar* pTarget = nullptr;
-    UChar* pTargetLimit = nullptr;
-    UChar* target = nullptr;
+    char16_t* pTarget = nullptr;
+    char16_t* pTargetLimit = nullptr;
+    char16_t* target = nullptr;
     
-    UChar uStack [_STACK_BUFFER_CAPACITY];
+    char16_t uStack [_STACK_BUFFER_CAPACITY];
 
     wchar_t wStack[_STACK_BUFFER_CAPACITY];
     wchar_t* pWStack = wStack;
@@ -482,8 +482,8 @@ cleanup:
 }
 #endif
 
-U_CAPI UChar* U_EXPORT2
-u_strFromWCS(UChar   *dest,
+U_CAPI char16_t* U_EXPORT2
+u_strFromWCS(char16_t   *dest,
              int32_t destCapacity, 
              int32_t *pDestLength,
              const wchar_t *src,
@@ -506,10 +506,10 @@ u_strFromWCS(UChar   *dest,
 #ifdef U_WCHAR_IS_UTF16
     /* wchar_t is UTF-16 just do a memcpy */
     if(srcLength == -1){
-        srcLength = u_strlen((const UChar *)src);
+        srcLength = u_strlen((const char16_t *)src);
     }
     if(0 < srcLength && srcLength <= destCapacity){
-        u_memcpy(dest, (const UChar *)src, srcLength);
+        u_memcpy(dest, (const char16_t *)src, srcLength);
     }
     if(pDestLength){
        *pDestLength = srcLength;

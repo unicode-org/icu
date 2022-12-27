@@ -40,14 +40,14 @@
 #include <stdio.h>
 #endif
 
-// UChar constants
-static const UChar LOCALE_SEP  = 95; // '_'
-//static const UChar ID_SEP      = 0x002D; /*-*/
-//static const UChar VARIANT_SEP = 0x002F; // '/'
+// char16_t constants
+static const char16_t LOCALE_SEP  = 95; // '_'
+//static const char16_t ID_SEP      = 0x002D; /*-*/
+//static const char16_t VARIANT_SEP = 0x002F; // '/'
 
 // String constants
-static const UChar ANY[] = { 0x41, 0x6E, 0x79, 0 }; // Any
-static const UChar LAT[] = { 0x4C, 0x61, 0x74, 0 }; // Lat
+static const char16_t ANY[] = { 0x41, 0x6E, 0x79, 0 }; // Any
+static const char16_t LAT[] = { 0x4C, 0x61, 0x74, 0 }; // Lat
 
 // empty string
 #define NO_VARIANT UnicodeString()
@@ -141,8 +141,8 @@ Transliterator* TransliteratorAlias::create(UParseError& pe,
             // to see whether there really are ID blocks at the beginning and end (by looking for U+FFFF, which
             // marks the position where an anonymous transliterator goes) and adjust accordingly
             int32_t anonymousRBTs = transes->size();
-            UnicodeString noIDBlock((UChar)(0xffff));
-            noIDBlock += ((UChar)(0xffff));
+            UnicodeString noIDBlock((char16_t)(0xffff));
+            noIDBlock += ((char16_t)(0xffff));
             int32_t pos = aliasesOrRules.indexOf(noIDBlock);
             while (pos >= 0) {
                 pos = aliasesOrRules.indexOf(noIDBlock, pos + 1);
@@ -150,7 +150,7 @@ Transliterator* TransliteratorAlias::create(UParseError& pe,
 
             UVector transliterators(uprv_deleteUObject, nullptr, ec);
             UnicodeString idBlock;
-            int32_t blockSeparatorPos = aliasesOrRules.indexOf((UChar)(0xffff));
+            int32_t blockSeparatorPos = aliasesOrRules.indexOf((char16_t)(0xffff));
             while (blockSeparatorPos >= 0) {
                 aliasesOrRules.extract(0, blockSeparatorPos, idBlock);
                 aliasesOrRules.remove(0, blockSeparatorPos + 1);
@@ -158,7 +158,7 @@ Transliterator* TransliteratorAlias::create(UParseError& pe,
                     transliterators.adoptElement(Transliterator::createInstance(idBlock, UTRANS_FORWARD, pe, ec), ec);
                 if (!transes->isEmpty())
                     transliterators.adoptElement(transes->orphanElementAt(0), ec);
-                blockSeparatorPos = aliasesOrRules.indexOf((UChar)(0xffff));
+                blockSeparatorPos = aliasesOrRules.indexOf((char16_t)(0xffff));
             }
             if (!aliasesOrRules.isEmpty())
                 transliterators.adoptElement(Transliterator::createInstance(aliasesOrRules, UTRANS_FORWARD, pe, ec), ec);
@@ -626,7 +626,7 @@ Transliterator* TransliteratorRegistry::reget(const UnicodeString& ID,
                     if (U_FAILURE(status)) {
                         delete data;
                     }
-                    entry->stringArg += (UChar)0xffff;  // use U+FFFF to mark position of RBTs in ID block
+                    entry->stringArg += (char16_t)0xffff;  // use U+FFFF to mark position of RBTs in ID block
                 }
             }
         }
@@ -1086,11 +1086,11 @@ TransliteratorEntry* TransliteratorRegistry::findInStaticStore(const Translitera
 }
 
 // As of 2.0, resource bundle keys cannot contain '_'
-static const UChar TRANSLITERATE_TO[] = {84,114,97,110,115,108,105,116,101,114,97,116,101,84,111,0}; // "TransliterateTo"
+static const char16_t TRANSLITERATE_TO[] = {84,114,97,110,115,108,105,116,101,114,97,116,101,84,111,0}; // "TransliterateTo"
 
-static const UChar TRANSLITERATE_FROM[] = {84,114,97,110,115,108,105,116,101,114,97,116,101,70,114,111,109,0}; // "TransliterateFrom"
+static const char16_t TRANSLITERATE_FROM[] = {84,114,97,110,115,108,105,116,101,114,97,116,101,70,114,111,109,0}; // "TransliterateFrom"
 
-static const UChar TRANSLITERATE[] = {84,114,97,110,115,108,105,116,101,114,97,116,101,0}; // "Transliterate"
+static const char16_t TRANSLITERATE[] = {84,114,97,110,115,108,105,116,101,114,97,116,101,0}; // "Transliterate"
 
 /**
  * Attempt to find an entry in a single resource bundle.  This is

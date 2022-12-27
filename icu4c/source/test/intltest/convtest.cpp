@@ -208,7 +208,7 @@ ConversionTest::TestFromUnicode() {
     TestDataModule *dataModule;
     TestData *testData;
     const DataMap *testCase;
-    const UChar *p;
+    const char16_t *p;
     UErrorCode errorCode;
     int32_t i, length;
 
@@ -263,7 +263,7 @@ ConversionTest::TestFromUnicode() {
                 s=testCase->getString("callback", errorCode);
                 cc.setSub=0; // default: no subchar
 
-                if((index=s.indexOf((UChar)0))>0) {
+                if((index=s.indexOf((char16_t)0))>0) {
                     // read NUL-separated subchar first, if any
                     // copy the subchar from Latin-1 characters
                     // start after the NUL
@@ -286,7 +286,7 @@ ConversionTest::TestFromUnicode() {
 
                     // remove the NUL and subchar from s
                     s.truncate(index);
-                } else if((index=s.indexOf((UChar)0x3d))>0) /* '=' */ {
+                } else if((index=s.indexOf((char16_t)0x3d))>0) /* '=' */ {
                     // read a substitution string, separated by an equal sign
                     p=s.getBuffer()+index+1;
                     length=s.length()-(index+1);
@@ -349,7 +349,7 @@ ConversionTest::TestFromUnicode() {
     }
 }
 
-static const UChar ellipsis[]={ 0x2e, 0x2e, 0x2e };
+static const char16_t ellipsis[]={ 0x2e, 0x2e, 0x2e };
 
 void
 ConversionTest::TestGetUnicodeSet() {
@@ -476,7 +476,7 @@ U_CDECL_BEGIN
 static void U_CALLCONV
 getUnicodeSetCallback(const void *context,
                       UConverterFromUnicodeArgs * /*fromUArgs*/,
-                      const UChar* /*codeUnits*/,
+                      const char16_t* /*codeUnits*/,
                       int32_t /*length*/,
                       UChar32 codePoint,
                       UConverterCallbackReason reason,
@@ -500,35 +500,35 @@ ConversionTest::TestGetUnicodeSet2() {
         cpLimit=0x110000;
         s0Length=0x10000+0x200000;  // BMP + surrogate pairs
     }
-    UChar *s0=new UChar[s0Length];
+    char16_t *s0=new char16_t[s0Length];
     if(s0==nullptr) {
         return;
     }
-    UChar *s=s0;
+    char16_t *s=s0;
     UChar32 c;
-    UChar c2;
+    char16_t c2;
     // low BMP
     for(c=0; c<=0xd7ff; ++c) {
-        *s++=(UChar)c;
+        *s++=(char16_t)c;
     }
     // trail surrogates
     for(c=0xdc00; c<=0xdfff; ++c) {
-        *s++=(UChar)c;
+        *s++=(char16_t)c;
     }
     // lead surrogates
     // (after trails so that there is not even one surrogate pair in between)
     for(c=0xd800; c<=0xdbff; ++c) {
-        *s++=(UChar)c;
+        *s++=(char16_t)c;
     }
     // high BMP
     for(c=0xe000; c<=0xffff; ++c) {
-        *s++=(UChar)c;
+        *s++=(char16_t)c;
     }
     // supplementary code points = surrogate pairs
     if(cpLimit==0x110000) {
         for(c=0xd800; c<=0xdbff; ++c) {
             for(c2=0xdc00; c2<=0xdfff; ++c2) {
-                *s++=(UChar)c;
+                *s++=(char16_t)c;
                 *s++=c2;
             }
         }
@@ -578,7 +578,7 @@ ConversionTest::TestGetUnicodeSet2() {
             do {
                 char *t=buffer;
                 flush=(UBool)(s==s0+s0Length);
-                ucnv_fromUnicode(cnv.getAlias(), &t, buffer+sizeof(buffer), (const UChar **)&s, s0+s0Length, nullptr, flush, &errorCode);
+                ucnv_fromUnicode(cnv.getAlias(), &t, buffer+sizeof(buffer), (const char16_t **)&s, s0+s0Length, nullptr, flush, &errorCode);
                 if(U_FAILURE(errorCode)) {
                     if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
                         errorCode=U_ZERO_ERROR;
@@ -729,10 +729,10 @@ ConversionTest::TestUTF8ToUTF8Overflow() {
     char result[20];
     char *target = result;
     const char *targetLimit = result + sizeof(result);
-    UChar buffer16[20];
-    UChar *pivotSource = buffer16;
-    UChar *pivotTarget = buffer16;
-    const UChar *pivotLimit = buffer16 + UPRV_LENGTHOF(buffer16);
+    char16_t buffer16[20];
+    char16_t *pivotSource = buffer16;
+    char16_t *pivotTarget = buffer16;
+    const char16_t *pivotLimit = buffer16 + UPRV_LENGTHOF(buffer16);
     int32_t length;
 
     // Convert with insufficient target capacity.
@@ -866,10 +866,10 @@ ConversionTest::TestUTF8ToUTF8Streaming() {
     char* target = result;
     const char* targetLimit = result + targetLen;
 
-    UChar buffer16[20];
-    UChar* pivotSource = buffer16;
-    UChar* pivotTarget = buffer16;
-    const UChar* pivotLimit = buffer16 + UPRV_LENGTHOF(buffer16);
+    char16_t buffer16[20];
+    char16_t* pivotSource = buffer16;
+    char16_t* pivotTarget = buffer16;
+    const char16_t* pivotLimit = buffer16 + UPRV_LENGTHOF(buffer16);
 
     int32_t length;
     ucnv_convertEx(cnv2.getAlias(), cnv1.getAlias(),
@@ -944,7 +944,7 @@ printBytes(const uint8_t *bytes, int32_t length, char *out) {
 }
 
 static char *
-printUnicode(const UChar *unicode, int32_t length, char *out) {
+printUnicode(const char16_t *unicode, int32_t length, char *out) {
     UChar32 c;
     int32_t i;
 
@@ -1006,12 +1006,12 @@ printOffsets(const int32_t *offsets, int32_t length, char *out) {
 
 static int32_t
 stepToUnicode(ConversionCase &cc, UConverter *cnv,
-              UChar *result, int32_t resultCapacity,
+              char16_t *result, int32_t resultCapacity,
               int32_t *resultOffsets, /* also resultCapacity */
               int32_t step,
               UErrorCode *pErrorCode) {
     const char *source, *sourceLimit, *bytesLimit;
-    UChar *target, *targetLimit, *resultLimit;
+    char16_t *target, *targetLimit, *resultLimit;
     UBool flush;
 
     source=(const char *)cc.bytes;
@@ -1126,7 +1126,7 @@ stepToUnicode(ConversionCase &cc, UConverter *cnv,
                     break;
                 }
                 if(c<=0xffff) {
-                    *target++=(UChar)c;
+                    *target++=(char16_t)c;
                 } else {
                     *target++=U16_LEAD(c);
                     if(target==resultLimit) {
@@ -1141,7 +1141,7 @@ stepToUnicode(ConversionCase &cc, UConverter *cnv,
                     ++step;
                 }
             } else /* step is even */ {
-                // allow only one UChar output
+                // allow only one char16_t output
                 targetLimit=target<resultLimit ? target+1 : resultLimit;
 
                 // as with ucnv_getNextUChar(), we always flush (if we go to bytesLimit)
@@ -1218,7 +1218,7 @@ ConversionTest::ToUnicodeCase(ConversionCase &cc, UConverterToUCallback callback
     }
 
     int32_t resultOffsets[256];
-    UChar result[256];
+    char16_t result[256];
     int32_t resultLength;
     UBool ok;
 
@@ -1279,7 +1279,7 @@ ConversionTest::ToUnicodeCase(ConversionCase &cc, UConverterToUCallback callback
             errln("toUnicode[%d](%s) Conversion wrote too much to offsets at index %d",
                 cc.caseNr, cc.charset, resultLength);
         }
-        if (result[resultLength] != (UChar)-1) {
+        if (result[resultLength] != (char16_t)-1) {
             errln("toUnicode[%d](%s) Conversion wrote too much to result at index %d",
                 cc.caseNr, cc.charset, resultLength);
         }
@@ -1328,7 +1328,7 @@ ConversionTest::ToUnicodeCase(ConversionCase &cc, UConverterToUCallback callback
 
 UBool
 ConversionTest::checkToUnicode(ConversionCase &cc, UConverter *cnv, const char *name,
-                               const UChar *result, int32_t resultLength,
+                               const char16_t *result, int32_t resultLength,
                                const int32_t *resultOffsets,
                                UErrorCode resultErrorCode) {
     char resultInvalidChars[8];
@@ -1417,8 +1417,8 @@ stepFromUTF8(ConversionCase &cc,
              int32_t step,
              UErrorCode *pErrorCode) {
     const char *source, *sourceLimit, *utf8Limit;
-    UChar pivotBuffer[32];
-    UChar *pivotSource, *pivotTarget, *pivotLimit;
+    char16_t pivotBuffer[32];
+    char16_t *pivotSource, *pivotTarget, *pivotLimit;
     char *target, *targetLimit, *resultLimit;
     UBool flush;
 
@@ -1522,7 +1522,7 @@ stepFromUnicode(ConversionCase &cc, UConverter *cnv,
                 int32_t *resultOffsets, /* also resultCapacity */
                 int32_t step,
                 UErrorCode *pErrorCode) {
-    const UChar *source, *sourceLimit, *unicodeLimit;
+    const char16_t *source, *sourceLimit, *unicodeLimit;
     char *target, *targetLimit, *resultLimit;
     UBool flush;
 
@@ -1786,7 +1786,7 @@ ConversionTest::checkFromUnicode(ConversionCase &cc, UConverter *cnv, const char
                                  const uint8_t *result, int32_t resultLength,
                                  const int32_t *resultOffsets,
                                  UErrorCode resultErrorCode) {
-    UChar resultInvalidUChars[8];
+    char16_t resultInvalidUChars[8];
     int8_t resultInvalidLength;
     UErrorCode errorCode;
 

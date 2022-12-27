@@ -282,7 +282,7 @@ BytesTrieBuilder::getElementStringLength(int32_t i) const {
     return elements[i].getStringLength(*strings);
 }
 
-UChar
+char16_t
 BytesTrieBuilder::getElementUnit(int32_t i, int32_t byteIndex) const {
     return (uint8_t)elements[i].charAt(byteIndex, *strings);
 }
@@ -329,7 +329,7 @@ BytesTrieBuilder::skipElementsBySomeUnits(int32_t i, int32_t byteIndex, int32_t 
 }
 
 int32_t
-BytesTrieBuilder::indexOfElementWithNextUnit(int32_t i, int32_t byteIndex, UChar byte) const {
+BytesTrieBuilder::indexOfElementWithNextUnit(int32_t i, int32_t byteIndex, char16_t byte) const {
     char b=(char)byte;
     while(b==elements[i].charAt(byteIndex, *strings)) {
         ++i;

@@ -320,7 +320,7 @@ void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
 /**
  * Splits a UnicodeString
  */
-UnicodeString* CompoundTransliteratorTest::split(const UnicodeString& str, UChar seperator, int32_t& count) {
+UnicodeString* CompoundTransliteratorTest::split(const UnicodeString& str, char16_t seperator, int32_t& count) {
 
     //get the count
     int32_t i;

@@ -20,7 +20,7 @@
 #include "testutil.h"
 #include "intltest.h"
 
-static const UChar HEX[] = u"0123456789ABCDEF";
+static const char16_t HEX[] = u"0123456789ABCDEF";
 
 UnicodeString &TestUtility::appendHex(UnicodeString &buf, UChar32 ch) {
     if (ch >= 0x10000) {
@@ -46,7 +46,7 @@ UnicodeString TestUtility::hex(const UnicodeString& s) {
     return hex(s, u',');
 }
 
-UnicodeString TestUtility::hex(const UnicodeString& s, UChar sep) {
+UnicodeString TestUtility::hex(const UnicodeString& s, char16_t sep) {
     UnicodeString result;
     if (s.isEmpty()) return result;
     UChar32 c;

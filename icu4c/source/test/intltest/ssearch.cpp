@@ -1077,7 +1077,7 @@ void StringSetMonkey::append(UnicodeString &testCase, UnicodeString &alternate)
     int32_t itemCount = uset_getItemCount(set), len = 0;
     int32_t index = m_rand() % itemCount;
     UChar32 rangeStart = 0, rangeEnd = 0;
-    UChar buffer[16];
+    char16_t buffer[16];
     UErrorCode err = U_ZERO_ERROR;
 
     len = uset_getItem(set, index, &rangeStart, &rangeEnd, buffer, 16, &err);

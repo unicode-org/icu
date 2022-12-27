@@ -130,7 +130,7 @@ static const int32_t kPARTIAL = (1<<0); //< partial - need to run through forwar
 static const int32_t kMATCH   = (1<<1); //< exact match - skip this one.
 static const int32_t kSuppressInReverse = (1<<0);
 static const int32_t kAddToForward = (1<<1);
-static const UChar   kFULLSTOP = 0x002E; // '.'
+static const char16_t kFULLSTOP = 0x002E; // '.'
 
 /**
  * Shared data for SimpleFilteredSentenceBreakIterator
@@ -289,11 +289,11 @@ SimpleFilteredSentenceBreakIterator::breakExceptionAt(int32_t n) {
     // Assume a space is following the '.'  (so we handle the case:  "Mr. /Brown")
     if(utext_previous32(fText.getAlias())==u' ') {  // TODO: skip a class of chars here??
       // TODO only do this the 1st time?
-      //if(debug2) u_printf("skipping prev: |%C| \n", (UChar)uch);
+      //if(debug2) u_printf("skipping prev: |%C| \n", (char16_t)uch);
     } else {
-      //if(debug2) u_printf("not skipping prev: |%C| \n", (UChar)uch);
+      //if(debug2) u_printf("not skipping prev: |%C| \n", (char16_t)uch);
       utext_next32(fText.getAlias());
-      //if(debug2) u_printf(" -> : |%C| \n", (UChar)uch);
+      //if(debug2) u_printf(" -> : |%C| \n", (char16_t)uch);
     }
 
     {
@@ -309,20 +309,20 @@ SimpleFilteredSentenceBreakIterator::breakExceptionAt(int32_t n) {
             if(!USTRINGTRIE_HAS_NEXT(r)) {
                 break;
             }
-            //if(debug2) u_printf("rev< /%C/ cont?%d @%d\n", (UChar)uch, r, utext_getNativeIndex(fText.getAlias()));
+            //if(debug2) u_printf("rev< /%C/ cont?%d @%d\n", (char16_t)uch, r, utext_getNativeIndex(fText.getAlias()));
         }
     }
 
     //if(bestValue >= 0) {
-        //if(debug2) u_printf("rev<+/%C/+end of seq.. r=%d, bestPosn=%d, bestValue=%d\n", (UChar)uch, r, bestPosn, bestValue);
+        //if(debug2) u_printf("rev<+/%C/+end of seq.. r=%d, bestPosn=%d, bestValue=%d\n", (char16_t)uch, r, bestPosn, bestValue);
     //}
 
     if(bestPosn>=0) {
-      //if(debug2) u_printf("rev< /%C/ end of seq.. r=%d, bestPosn=%d, bestValue=%d\n", (UChar)uch, r, bestPosn, bestValue);
+      //if(debug2) u_printf("rev< /%C/ end of seq.. r=%d, bestPosn=%d, bestValue=%d\n", (char16_t)uch, r, bestPosn, bestValue);
 
       //if(USTRINGTRIE_MATCHES(r)) {  // matched - so, now what?
       //int32_t bestValue = iter.getValue();
-      ////if(debug2) u_printf("rev< /%C/ matched, skip..%d  bestValue=%d\n", (UChar)uch, r, bestValue);
+      ////if(debug2) u_printf("rev< /%C/ matched, skip..%d  bestValue=%d\n", (char16_t)uch, r, bestValue);
 
       if(bestValue == kMATCH) { // exact match!
         //if(debug2) u_printf(" exact backward match\n");
@@ -340,15 +340,15 @@ SimpleFilteredSentenceBreakIterator::breakExceptionAt(int32_t n) {
         UChar32 uch;
         while((uch=utext_next32(fText.getAlias()))!=U_SENTINEL &&
               USTRINGTRIE_HAS_NEXT(rfwd=iter.nextForCodePoint(uch))) {
-          //if(debug2) u_printf("fwd> /%C/ cont?%d @%d\n", (UChar)uch, rfwd, utext_getNativeIndex(fText.getAlias()));
+          //if(debug2) u_printf("fwd> /%C/ cont?%d @%d\n", (char16_t)uch, rfwd, utext_getNativeIndex(fText.getAlias()));
         }
         if(USTRINGTRIE_MATCHES(rfwd)) {
-          //if(debug2) u_printf("fwd> /%C/ == forward match!\n", (UChar)uch);
+          //if(debug2) u_printf("fwd> /%C/ == forward match!\n", (char16_t)uch);
           // only full matches here, nothing to check
           // skip the next:
             return kExceptionHere;
         } else {
-          //if(debug2) u_printf("fwd> /%C/ no match.\n", (UChar)uch);
+          //if(debug2) u_printf("fwd> /%C/ no match.\n", (char16_t)uch);
           // no match (no exception) -return the 'underlying' break
           return kNoExceptionHere;
         }
@@ -356,7 +356,7 @@ SimpleFilteredSentenceBreakIterator::breakExceptionAt(int32_t n) {
         return kNoExceptionHere; // internal error and/or no forwards trie
       }
     } else {
-      //if(debug2) u_printf("rev< /%C/ .. no match..%d\n", (UChar)uch, r);  // no best match
+      //if(debug2) u_printf("rev< /%C/ .. no match..%d\n", (char16_t)uch, r);  // no best match
       return kNoExceptionHere; // No match - so exit. Not an exception.
     }
 }

@@ -158,7 +158,7 @@ public:
      * @param count - the number of code points in the array
      * @param status - will be set if any errors occur. 
      */
-    void add(const UChar *chars, int32_t count, UErrorCode &status);
+    void add(const char16_t *chars, int32_t count, UErrorCode &status);
 
     /**
      * Get a particular string from the list.

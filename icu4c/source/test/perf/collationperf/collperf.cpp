@@ -85,7 +85,7 @@ const char gUsageString[] =
 //  Stubs for Windows API functions when building on UNIXes.
 //
 typedef int DWORD;
-inline int CompareStringW(DWORD, DWORD, UChar *, int, UChar *, int) {return 0;}
+inline int CompareStringW(DWORD, DWORD, char16_t *, int, char16_t *, int) {return 0;}
 #include <sys/time.h>
 unsigned long timeGetTime() {
     struct timeval t;
@@ -94,7 +94,7 @@ unsigned long timeGetTime() {
     val += t.tv_usec / 1000;
     return val;
 }
-inline int LCMapStringW(DWORD, DWORD, UChar *, int, UChar *, int) {return 0;}
+inline int LCMapStringW(DWORD, DWORD, char16_t *, int, char16_t *, int) {return 0;}
 const int LCMAP_SORTKEY = 0;
 #define MAKELCID(a,b) 0
 const int SORT_DEFAULT = 0;
@@ -194,7 +194,7 @@ OptSpec opts[] = {
 //      one of these structs.
 //
 struct  Line {
-    UChar     *name;
+    char16_t  *name;
     int        len;
     char      *winSortKey;
     char      *icuSortKey;
@@ -393,7 +393,7 @@ void doKeyGen()
                 for (iLoop=0; iLoop < opt_iLoopCount; iLoop++) {
                     LCMapStringW(gWinLCID, LCMAP_SORTKEY,
                         gFileLines[line].name, len,
-                        (UChar *)gFileLines[line].winSortKey, 5000);    // TODO  something with length.
+                        (char16_t *)gFileLines[line].winSortKey, 5000);    // TODO  something with length.
                 }
             }
         }
@@ -487,7 +487,7 @@ void doBinarySearch()
         if (opt_strcmp || opt_strcmpCPO) 
         {
             unsigned long startTime = timeGetTime();
-            typedef int32_t (U_EXPORT2 *PF)(const UChar *, const UChar *);
+            typedef int32_t (U_EXPORT2 *PF)(const char16_t *, const char16_t *);
             PF pf = u_strcmp;
             if (opt_strcmpCPO) {pf = u_strcmpCodePointOrder;}
             //if (opt_strcmp && opt_win) {pf = (PF)wcscmp;}   // Damn the difference between int32_t and int
@@ -835,7 +835,7 @@ void doForwardIterTest(UBool haslen) {
     }
     printf("performance test on strings from file -----------\n");
 
-    UChar dummytext[] = {0, 0};
+    char16_t dummytext[] = {0, 0};
     UCollationElements *iter = ucol_openElements(gCol, nullptr, 0, &error);
     ucol_setText(iter, dummytext, 1, &error);
     
@@ -844,7 +844,7 @@ void doForwardIterTest(UBool haslen) {
     while (count < opt_loopCount) {
         int linecount = 0;
         while (linecount < gNumFileLines) {
-            UChar *str = gFileLines[linecount].name;
+            char16_t *str = gFileLines[linecount].name;
             int strlen = haslen?gFileLines[linecount].len:-1;
             ucol_setText(iter, str, strlen, &error);
             while (ucol_next(iter, &error) != UCOL_NULLORDER) {
@@ -864,7 +864,7 @@ void doForwardIterTest(UBool haslen) {
     while (count < opt_loopCount) {
         int linecount = 0;
         while (linecount < gNumFileLines) {
-            UChar *str = gFileLines[linecount].name;
+            char16_t *str = gFileLines[linecount].name;
             int strlen = haslen?gFileLines[linecount].len:-1;
             ucol_setText(iter, str, strlen, &error);
             linecount ++;
@@ -883,7 +883,7 @@ void doForwardIterTest(UBool haslen) {
 
     printf("performance test on skipped-5 concatenated strings from file -----------\n");
 
-    UChar *str;
+    char16_t *str;
     int    strlen = 0;
     // appending all the strings
     int linecount = 0;
@@ -892,7 +892,7 @@ void doForwardIterTest(UBool haslen) {
                                       u_strlen(gFileLines[linecount].name);
         linecount ++;
     }
-    str = (UChar *)malloc(sizeof(UChar) * strlen);
+    str = (char16_t *)malloc(sizeof(char16_t) * strlen);
     int strindex = 0;
     linecount = 0;
     while (strindex < strlen) {
@@ -900,7 +900,7 @@ void doForwardIterTest(UBool haslen) {
         len += haslen?gFileLines[linecount].len:
                                       u_strlen(gFileLines[linecount].name);
         memcpy(str + strindex, gFileLines[linecount].name, 
-               sizeof(UChar) * len);
+               sizeof(char16_t) * len);
         strindex += len;
         linecount ++;
     }
@@ -999,7 +999,7 @@ void doBackwardIterTest(UBool haslen) {
     printf("performance test on strings from file -----------\n");
 
     UCollationElements *iter = ucol_openElements(gCol, nullptr, 0, &error);
-    UChar dummytext[] = {0, 0};
+    char16_t dummytext[] = {0, 0};
     ucol_setText(iter, dummytext, 1, &error);
 
     gCount = 0;
@@ -1007,7 +1007,7 @@ void doBackwardIterTest(UBool haslen) {
     while (count < opt_loopCount) {
         int linecount = 0;
         while (linecount < gNumFileLines) {
-            UChar *str = gFileLines[linecount].name;
+            char16_t *str = gFileLines[linecount].name;
             int strlen = haslen?gFileLines[linecount].len:-1;
             ucol_setText(iter, str, strlen, &error);
             while (ucol_previous(iter, &error) != UCOL_NULLORDER) {
@@ -1028,7 +1028,7 @@ void doBackwardIterTest(UBool haslen) {
     while (count < opt_loopCount) {
         int linecount = 0;
         while (linecount < gNumFileLines) {
-            UChar *str = gFileLines[linecount].name;
+            char16_t *str = gFileLines[linecount].name;
             int strlen = haslen?gFileLines[linecount].len:-1;
             ucol_setText(iter, str, strlen, &error);
             linecount ++;
@@ -1047,7 +1047,7 @@ void doBackwardIterTest(UBool haslen) {
 
     printf("performance test on skipped-5 concatenated strings from file -----------\n");
 
-    UChar *str;
+    char16_t *str;
     int    strlen = 0;
     // appending all the strings
     int linecount = 0;
@@ -1056,7 +1056,7 @@ void doBackwardIterTest(UBool haslen) {
                                       u_strlen(gFileLines[linecount].name);
         linecount ++;
     }
-    str = (UChar *)malloc(sizeof(UChar) * strlen);
+    str = (char16_t *)malloc(sizeof(char16_t) * strlen);
     int strindex = 0;
     linecount = 0;
     while (strindex < strlen) {
@@ -1064,7 +1064,7 @@ void doBackwardIterTest(UBool haslen) {
         len += haslen?gFileLines[linecount].len:
                                       u_strlen(gFileLines[linecount].name);
         memcpy(str + strindex, gFileLines[linecount].name, 
-               sizeof(UChar) * len);
+               sizeof(char16_t) * len);
         strindex += len;
         linecount ++;
     }
@@ -1211,7 +1211,7 @@ class UCharFile {
 public:
     UCharFile(const char *fileName);
     ~UCharFile();
-    UChar   get();
+    char16_t   get();
     UBool   eof() {return fEof;};
     UBool   error() {return fError;};
     
@@ -1223,7 +1223,7 @@ private:
     const char   *fName;
     UBool        fEof;
     UBool        fError;
-    UChar        fPending2ndSurrogate;
+    char16_t     fPending2ndSurrogate;
     
     enum {UTF16LE, UTF16BE, UTF8} fEncoding;
 };
@@ -1268,8 +1268,8 @@ UCharFile::~UCharFile() {
 
 
 
-UChar UCharFile::get() {
-    UChar   c;
+char16_t UCharFile::get() {
+    char16_t   c;
     switch (fEncoding) {
     case UTF16LE:
         {
@@ -1303,7 +1303,7 @@ UChar UCharFile::get() {
                 break;
             }
             
-            int ch = fgetc(fFile);   // Note:  c and ch are separate cause eof test doesn't work on UChar type.
+            int ch = fgetc(fFile);   // Note:  c and ch are separate cause eof test doesn't work on char16_t type.
             if (ch == EOF) {
                 c = 0;
                 fEof = true;
@@ -1344,13 +1344,13 @@ UChar UCharFile::get() {
             i = 0;
             uint32_t  cp;
             U8_NEXT_UNSAFE(bytes, i, cp);
-            c = (UChar)cp;
+            c = (char16_t)cp;
             
             if (cp >= 0x10000) {
                 // The code point needs to be broken up into a utf-16 surrogate pair.
                 //  Process first half this time through the main loop, and
                 //   remember the other half for the next time through.
-                UChar utf16Buf[3];
+                char16_t utf16Buf[3];
                 i = 0;
                 UTF16_APPEND_CHAR_UNSAFE(utf16Buf, i, cp);
                 fPending2ndSurrogate = utf16Buf[1];
@@ -1379,8 +1379,8 @@ UCollator *openRulesCollator() {
     }
 
     int  bufLen = 10000;
-    UChar *buf = (UChar *)malloc(bufLen * sizeof(UChar));
-    UChar *tmp;
+    char16_t *buf = (char16_t *)malloc(bufLen * sizeof(char16_t));
+    char16_t *tmp;
     int i = 0;
 
     for(;;) {
@@ -1395,7 +1395,7 @@ UCollator *openRulesCollator() {
         if (i >= bufLen) {
             tmp = buf;
             bufLen += 10000;
-            buf = (UChar *)realloc(buf, bufLen);
+            buf = (char16_t *)realloc(buf, bufLen);
             if (buf == nullptr) {
                 free(tmp);
                 return 0;
@@ -1546,7 +1546,7 @@ int main(int argc, const char** argv) {
 
     const int MAXLINES = 100000;
     gFileLines = new Line[MAXLINES];
-    UChar buf[1024];
+    char16_t buf[1024];
     int   column = 0;
 
     //  Read the file, split into lines, and save in memory.
@@ -1554,7 +1554,7 @@ int main(int argc, const char** argv) {
     //    (The number of bytes read from file per loop iteration depends on external encoding.)
     for (;;) {
 
-        UChar c = f.get();
+        char16_t c = f.get();
         if (f.error()){
             exit(-1);
         }
@@ -1570,9 +1570,9 @@ int main(int argc, const char** argv) {
         if (f.eof() || c == 0x0a || c==0x2028) {  // Unipad inserts 2028 line separators!
             buf[column++] = 0;
             if (column > 1) {
-                gFileLines[gNumFileLines].name  = new UChar[column];
+                gFileLines[gNumFileLines].name  = new char16_t[column];
                 gFileLines[gNumFileLines].len   = column-1;
-                memcpy(gFileLines[gNumFileLines].name, buf, column * sizeof(UChar));
+                memcpy(gFileLines[gNumFileLines].name, buf, column * sizeof(char16_t));
                 gNumFileLines++;
                 column = 0;
                 if (gNumFileLines >= MAXLINES) {
@@ -1636,7 +1636,7 @@ int main(int argc, const char** argv) {
          t=LCMapStringW(gWinLCID, LCMAP_SORTKEY, gFileLines[line].name, -1, buf, sizeof(buf));
          gFileLines[line].winSortKey  = new char[t];
          if (t > (int32_t)sizeof(buf)) {
-             t = LCMapStringW(gWinLCID, LCMAP_SORTKEY, gFileLines[line].name, -1, (UChar *)(gFileLines[line].winSortKey), t);
+             t = LCMapStringW(gWinLCID, LCMAP_SORTKEY, gFileLines[line].name, -1, (char16_t *)(gFileLines[line].winSortKey), t);
          }
          else
          {
@@ -1669,7 +1669,7 @@ int main(int argc, const char** argv) {
         int  i;
         for (line=0; line<gNumFileLines; line++) {
             for (i=0;;i++) {
-                UChar  c = gFileLines[line].name[i];
+                char16_t  c = gFileLines[line].name[i];
                 if (c == 0)
                     break;
                 if (c < 0x20 || c > 0x7e) {

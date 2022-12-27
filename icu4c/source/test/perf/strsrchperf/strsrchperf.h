@@ -16,14 +16,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-typedef void (*StrSrchFn)(UStringSearch* srch, const UChar* src,int32_t srcLen, const UChar* pttrn, int32_t pttrnLen, UErrorCode* status);
+typedef void (*StrSrchFn)(UStringSearch* srch, const char16_t* src,int32_t srcLen, const char16_t* pttrn, int32_t pttrnLen, UErrorCode* status);
 
 class StringSearchPerfFunction : public UPerfFunction {
 private:
     StrSrchFn fn;
-    const UChar* src;
+    const char16_t* src;
     int32_t srcLen;
-    const UChar* pttrn;
+    const char16_t* pttrn;
     int32_t pttrnLen;
     UStringSearch* srch;
     
@@ -36,7 +36,7 @@ public:
         return (long) srcLen;
     }
     
-    StringSearchPerfFunction(StrSrchFn func, UStringSearch* search, const UChar* source,int32_t sourceLen, const UChar* pattern, int32_t patternLen) {
+    StringSearchPerfFunction(StrSrchFn func, UStringSearch* search, const char16_t* source,int32_t sourceLen, const char16_t* pattern, int32_t patternLen) {
         fn = func;
         src = source;
         srcLen = sourceLen;
@@ -48,9 +48,9 @@ public:
 
 class StringSearchPerformanceTest : public UPerfTest {
 private:
-    const UChar* src;
+    const char16_t* src;
     int32_t srcLen;
-    UChar* pttrn;
+    char16_t* pttrn;
     int32_t pttrnLen;
     UStringSearch* srch;
     
@@ -63,7 +63,7 @@ public:
 };
 
 
-void ICUForwardSearch(UStringSearch *srch, const UChar* source, int32_t sourceLen, const UChar* pattern, int32_t patternLen, UErrorCode* status) {
+void ICUForwardSearch(UStringSearch *srch, const char16_t* source, int32_t sourceLen, const char16_t* pattern, int32_t patternLen, UErrorCode* status) {
     int32_t match;
     
     match = usearch_first(srch, status);
@@ -72,7 +72,7 @@ void ICUForwardSearch(UStringSearch *srch, const UChar* source, int32_t sourceLe
     }
 }
 
-void ICUBackwardSearch(UStringSearch *srch, const UChar* source, int32_t sourceLen, const UChar* pattern, int32_t patternLen, UErrorCode* status) {
+void ICUBackwardSearch(UStringSearch *srch, const char16_t* source, int32_t sourceLen, const char16_t* pattern, int32_t patternLen, UErrorCode* status) {
     int32_t match;
     
     match = usearch_last(srch, status);

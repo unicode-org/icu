@@ -505,8 +505,8 @@ Collator::EComparisonResult Collator::compare(const UnicodeString& source,
 }
 
 // implement deprecated, previously abstract method
-Collator::EComparisonResult Collator::compare(const UChar* source, int32_t sourceLength,
-                                    const UChar* target, int32_t targetLength) 
+Collator::EComparisonResult Collator::compare(const char16_t* source, int32_t sourceLength,
+                                    const char16_t* target, int32_t targetLength)
                                     const
 {
     UErrorCode ec = U_ZERO_ERROR;

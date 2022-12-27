@@ -173,33 +173,33 @@ void Win32DateTimeTest::testLocales(DateFormatTest *log)
         wdf->format(icuNow, udBuffer);
         wtf->format(icuNow, utBuffer);
 
-        if (ubBuffer.indexOf((const UChar *)wdBuffer, wdLength - 1, 0) < 0) {
+        if (ubBuffer.indexOf((const char16_t *)wdBuffer, wdLength - 1, 0) < 0) {
             UnicodeString baseName(wlocale.getBaseName());
-            UnicodeString expected((const UChar *)wdBuffer);
+            UnicodeString expected((const char16_t *)wdBuffer);
 
             log->errln("DateTime format error for locale " + baseName + ": expected date \"" + expected +
                        "\" got \"" + ubBuffer + "\"");
         }
 
-        if (ubBuffer.indexOf((const UChar *)wtBuffer, wtLength - 1, 0) < 0) {
+        if (ubBuffer.indexOf((const char16_t *)wtBuffer, wtLength - 1, 0) < 0) {
             UnicodeString baseName(wlocale.getBaseName());
-            UnicodeString expected((const UChar *)wtBuffer);
+            UnicodeString expected((const char16_t *)wtBuffer);
 
             log->errln("DateTime format error for locale " + baseName + ": expected time \"" + expected +
                        "\" got \"" + ubBuffer + "\"");
         }
 
-        if (udBuffer.compare((const UChar *)wdBuffer) != 0) {
+        if (udBuffer.compare((const char16_t *)wdBuffer) != 0) {
             UnicodeString baseName(wlocale.getBaseName());
-            UnicodeString expected((const UChar *)wdBuffer);
+            UnicodeString expected((const char16_t *)wdBuffer);
 
             log->errln("Date format error for locale " + baseName + ": expected \"" + expected +
                        "\" got \"" + udBuffer + "\"");
         }
 
-        if (utBuffer.compare((const UChar *)wtBuffer) != 0) {
+        if (utBuffer.compare((const char16_t *)wtBuffer) != 0) {
             UnicodeString baseName(wlocale.getBaseName());
-            UnicodeString expected((const UChar *)wtBuffer);
+            UnicodeString expected((const char16_t *)wtBuffer);
 
             log->errln("Time format error for locale " + baseName + ": expected \"" + expected +
                        "\" got \"" + utBuffer + "\"");

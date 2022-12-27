@@ -651,7 +651,7 @@ void LocaleMatcherTest::testDataDriven() {
         return;
     }
     int32_t lineLength;
-    const UChar *p;
+    const char16_t *p;
     UnicodeString line;
     TestCase test;
     int32_t numPassed = 0;

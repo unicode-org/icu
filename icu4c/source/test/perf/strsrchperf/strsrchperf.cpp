@@ -38,7 +38,7 @@ StringSearchPerformanceTest::StringSearchPerformanceTest(int32_t argc, const cha
     start = ubrk_preceding(brk, 1000);
     end = ubrk_following(brk, start);
     pttrnLen = end - start;
-    UChar* temp = (UChar*)malloc(sizeof(UChar)*(pttrnLen));
+    char16_t* temp = (char16_t*)malloc(sizeof(char16_t)*(pttrnLen));
     for (int i = 0; i < pttrnLen; i++) {
         temp[i] = src[start++];
     }
@@ -49,7 +49,7 @@ StringSearchPerformanceTest::StringSearchPerformanceTest(int32_t argc, const cha
     start = 0;
 
     for(end = start; ; end += 1) {
-        UChar ch = src[end];
+        char16_t ch = src[end];
 
         if (ch == 0x000A || ch == 0x000D || ch == 0x2028) {
             break;
@@ -57,7 +57,7 @@ StringSearchPerformanceTest::StringSearchPerformanceTest(int32_t argc, const cha
     }
 
     pttrnLen = end - start;
-    UChar* temp = (UChar*)malloc(sizeof(UChar)*(pttrnLen));
+    char16_t* temp = (char16_t*)malloc(sizeof(char16_t)*(pttrnLen));
     for (int i = 0; i < pttrnLen; i++) {
         temp[i] = src[start++];
     }

@@ -198,7 +198,7 @@ OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
 
         // Process final rule and data, if any
         if (U_SUCCESS(ec)) {
-            const UChar *ruleIdUStr = ures_getStringByKey(res, kFINALRULE, &len, &ec);
+            const char16_t *ruleIdUStr = ures_getStringByKey(res, kFINALRULE, &len, &ec);
             ures_getByKey(res, kFINALRAW, r.getAlias(), &ec);
             int32_t ruleRaw = ures_getInt(r.getAlias(), &ec);
             ures_getByKey(res, kFINALYEAR, r.getAlias(), &ec);

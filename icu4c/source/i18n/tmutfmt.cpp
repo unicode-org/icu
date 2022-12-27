@@ -24,24 +24,24 @@
 #include "unicode/msgfmt.h"
 #include "uassert.h"
 
-#define LEFT_CURLY_BRACKET  ((UChar)0x007B)
-#define RIGHT_CURLY_BRACKET ((UChar)0x007D)
-#define SPACE             ((UChar)0x0020)
-#define DIGIT_ZERO        ((UChar)0x0030)
-#define LOW_S             ((UChar)0x0073)
-#define LOW_M             ((UChar)0x006D)
-#define LOW_I             ((UChar)0x0069)
-#define LOW_N             ((UChar)0x006E)
-#define LOW_H             ((UChar)0x0068)
-#define LOW_W             ((UChar)0x0077)
-#define LOW_D             ((UChar)0x0064)
-#define LOW_Y             ((UChar)0x0079)
-#define LOW_Z             ((UChar)0x007A)
-#define LOW_E             ((UChar)0x0065)
-#define LOW_R             ((UChar)0x0072)
-#define LOW_O             ((UChar)0x006F)
-#define LOW_N             ((UChar)0x006E)
-#define LOW_T             ((UChar)0x0074)
+#define LEFT_CURLY_BRACKET  ((char16_t)0x007B)
+#define RIGHT_CURLY_BRACKET ((char16_t)0x007D)
+#define SPACE             ((char16_t)0x0020)
+#define DIGIT_ZERO        ((char16_t)0x0030)
+#define LOW_S             ((char16_t)0x0073)
+#define LOW_M             ((char16_t)0x006D)
+#define LOW_I             ((char16_t)0x0069)
+#define LOW_N             ((char16_t)0x006E)
+#define LOW_H             ((char16_t)0x0068)
+#define LOW_W             ((char16_t)0x0077)
+#define LOW_D             ((char16_t)0x0064)
+#define LOW_Y             ((char16_t)0x0079)
+#define LOW_Z             ((char16_t)0x007A)
+#define LOW_E             ((char16_t)0x0065)
+#define LOW_R             ((char16_t)0x0072)
+#define LOW_O             ((char16_t)0x006F)
+#define LOW_N             ((char16_t)0x006E)
+#define LOW_T             ((char16_t)0x0074)
 
 
 //TODO: define in compile time
@@ -68,17 +68,17 @@ static const char gTimeUnitMinute[] = "minute";
 static const char gTimeUnitSecond[] = "second";
 static const char gPluralCountOther[] = "other";
 
-static const UChar DEFAULT_PATTERN_FOR_SECOND[] = {LEFT_CURLY_BRACKET, DIGIT_ZERO, RIGHT_CURLY_BRACKET, SPACE, LOW_S, 0};
-static const UChar DEFAULT_PATTERN_FOR_MINUTE[] = {LEFT_CURLY_BRACKET, DIGIT_ZERO, RIGHT_CURLY_BRACKET, SPACE, LOW_M, LOW_I, LOW_N, 0};
-static const UChar DEFAULT_PATTERN_FOR_HOUR[] = {LEFT_CURLY_BRACKET, DIGIT_ZERO, RIGHT_CURLY_BRACKET, SPACE, LOW_H, 0};
-static const UChar DEFAULT_PATTERN_FOR_WEEK[] = {LEFT_CURLY_BRACKET, DIGIT_ZERO, RIGHT_CURLY_BRACKET, SPACE, LOW_W, 0};
-static const UChar DEFAULT_PATTERN_FOR_DAY[] = {LEFT_CURLY_BRACKET, DIGIT_ZERO, RIGHT_CURLY_BRACKET, SPACE, LOW_D, 0};
-static const UChar DEFAULT_PATTERN_FOR_MONTH[] = {LEFT_CURLY_BRACKET, DIGIT_ZERO, RIGHT_CURLY_BRACKET, SPACE, LOW_M, 0};
-static const UChar DEFAULT_PATTERN_FOR_YEAR[] = {LEFT_CURLY_BRACKET, DIGIT_ZERO, RIGHT_CURLY_BRACKET, SPACE, LOW_Y, 0};
+static const char16_t DEFAULT_PATTERN_FOR_SECOND[] = {LEFT_CURLY_BRACKET, DIGIT_ZERO, RIGHT_CURLY_BRACKET, SPACE, LOW_S, 0};
+static const char16_t DEFAULT_PATTERN_FOR_MINUTE[] = {LEFT_CURLY_BRACKET, DIGIT_ZERO, RIGHT_CURLY_BRACKET, SPACE, LOW_M, LOW_I, LOW_N, 0};
+static const char16_t DEFAULT_PATTERN_FOR_HOUR[] = {LEFT_CURLY_BRACKET, DIGIT_ZERO, RIGHT_CURLY_BRACKET, SPACE, LOW_H, 0};
+static const char16_t DEFAULT_PATTERN_FOR_WEEK[] = {LEFT_CURLY_BRACKET, DIGIT_ZERO, RIGHT_CURLY_BRACKET, SPACE, LOW_W, 0};
+static const char16_t DEFAULT_PATTERN_FOR_DAY[] = {LEFT_CURLY_BRACKET, DIGIT_ZERO, RIGHT_CURLY_BRACKET, SPACE, LOW_D, 0};
+static const char16_t DEFAULT_PATTERN_FOR_MONTH[] = {LEFT_CURLY_BRACKET, DIGIT_ZERO, RIGHT_CURLY_BRACKET, SPACE, LOW_M, 0};
+static const char16_t DEFAULT_PATTERN_FOR_YEAR[] = {LEFT_CURLY_BRACKET, DIGIT_ZERO, RIGHT_CURLY_BRACKET, SPACE, LOW_Y, 0};
 
-static const UChar PLURAL_COUNT_ZERO[] = {LOW_Z, LOW_E, LOW_R, LOW_O, 0};
-static const UChar PLURAL_COUNT_ONE[] = {LOW_O, LOW_N, LOW_E, 0};
-static const UChar PLURAL_COUNT_TWO[] = {LOW_T, LOW_W, LOW_O, 0};
+static const char16_t PLURAL_COUNT_ZERO[] = {LOW_Z, LOW_E, LOW_R, LOW_O, 0};
+static const char16_t PLURAL_COUNT_ONE[] = {LOW_O, LOW_N, LOW_E, 0};
+static const char16_t PLURAL_COUNT_TWO[] = {LOW_T, LOW_W, LOW_O, 0};
 
 TimeUnitFormat::TimeUnitFormat(UErrorCode& status) {
     initMeasureFormat(Locale::getDefault(), UMEASFMT_WIDTH_WIDE, nullptr, status);
@@ -567,7 +567,7 @@ TimeUnitFormat::searchInLocaleChain(UTimeUnitFormatStyle style, const char* key,
         LocalUResourceBundlePointer unitsRes(ures_getByKey(rb.getAlias(), key, nullptr, &status));
         const char* timeUnitName = getTimeUnitName(srcTimeUnitField, status);
         LocalUResourceBundlePointer countsToPatternRB(ures_getByKey(unitsRes.getAlias(), timeUnitName, nullptr, &status));
-        const UChar* pattern;
+        const char16_t* pattern;
         int32_t      ptLength;
         pattern = ures_getStringByKeyWithFallback(countsToPatternRB.getAlias(), searchPluralCount, &ptLength, &status);
         if (U_SUCCESS(status)) {
@@ -625,7 +625,7 @@ TimeUnitFormat::searchInLocaleChain(UTimeUnitFormatStyle style, const char* key,
     if ( uprv_strcmp(searchPluralCount, gPluralCountOther) == 0 ) {
         // set default fall back the same as the resource in root
         LocalPointer<MessageFormat> messageFormat;
-        const UChar *pattern = nullptr;
+        const char16_t *pattern = nullptr;
         if ( srcTimeUnitField == TimeUnit::UTIMEUNIT_SECOND ) {
             pattern = DEFAULT_PATTERN_FOR_SECOND;
         } else if ( srcTimeUnitField == TimeUnit::UTIMEUNIT_MINUTE ) {

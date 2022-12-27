@@ -63,9 +63,9 @@ NamePrepTransform::NamePrepTransform(UParseError& parseError, UErrorCode& status
     if(lbundle.isValid() && U_SUCCESS(status)){
         // create the mapping transliterator
         int32_t ruleLen = 0;
-        const UChar* ruleUChar = ures_getStringByKey(lbundle.getAlias(), "MapNFKC",&ruleLen, &status);
+        const char16_t* ruleUChar = ures_getStringByKey(lbundle.getAlias(), "MapNFKC",&ruleLen, &status);
         int32_t mapRuleLen = 0;
-        const UChar *mapRuleUChar = ures_getStringByKey(lbundle.getAlias(), "MapNoNormalization", &mapRuleLen, &status);
+        const char16_t *mapRuleUChar = ures_getStringByKey(lbundle.getAlias(), "MapNoNormalization", &mapRuleLen, &status);
         UnicodeString rule(mapRuleUChar, mapRuleLen);
         rule.append(ruleUChar, ruleLen);
 
@@ -77,7 +77,7 @@ NamePrepTransform::NamePrepTransform(UParseError& parseError, UErrorCode& status
 
         //create the unassigned set
         int32_t patternLen =0;
-        const UChar* pattern = ures_getStringByKey(lbundle.getAlias(),"UnassignedSet",&patternLen, &status);
+        const char16_t* pattern = ures_getStringByKey(lbundle.getAlias(),"UnassignedSet",&patternLen, &status);
         unassigned.applyPattern(UnicodeString(pattern, patternLen), status);
 
         //create prohibited set
@@ -91,7 +91,7 @@ NamePrepTransform::NamePrepTransform(UParseError& parseError, UErrorCode& status
         }
 
         if(U_SUCCESS(status)){
-            if(prohibited.contains((UChar) 0x644)){
+            if(prohibited.contains((char16_t) 0x644)){
                 printf("The string contains 0x644 ... !!\n");
             }
             UnicodeString temp;
@@ -135,8 +135,8 @@ NamePrepTransform::~NamePrepTransform(){
 }
 
 
-int32_t NamePrepTransform::map(const UChar* src, int32_t srcLength, 
-                        UChar* dest, int32_t destCapacity, 
+int32_t NamePrepTransform::map(const char16_t* src, int32_t srcLength,
+                        char16_t* dest, int32_t destCapacity,
                         UBool allowUnassigned,
                         UParseError* /*parseError*/,
                         UErrorCode& status ){
@@ -155,7 +155,7 @@ int32_t NamePrepTransform::map(const UChar* src, int32_t srcLength,
     // transliteration also performs NFKC
     mapping->transliterate(rsource);
     
-    const UChar* buffer = rsource.getBuffer();
+    const char16_t* buffer = rsource.getBuffer();
     int32_t bufLen = rsource.length();
     // check if unassigned
     if(allowUnassigned == false){
@@ -180,8 +180,8 @@ int32_t NamePrepTransform::map(const UChar* src, int32_t srcLength,
 
 #define MAX_BUFFER_SIZE 300
 
-int32_t NamePrepTransform::process( const UChar* src, int32_t srcLength, 
-                                    UChar* dest, int32_t destCapacity, 
+int32_t NamePrepTransform::process( const char16_t* src, int32_t srcLength,
+                                    char16_t* dest, int32_t destCapacity,
                                     UBool allowUnassigned,
                                     UParseError* parseError,
                                     UErrorCode& status ){
@@ -197,7 +197,7 @@ int32_t NamePrepTransform::process( const UChar* src, int32_t srcLength,
     }
 
     UnicodeString b1String;
-    UChar *b1 = b1String.getBuffer(MAX_BUFFER_SIZE);
+    char16_t *b1 = b1String.getBuffer(MAX_BUFFER_SIZE);
     int32_t b1Len;
 
     int32_t b1Index = 0;

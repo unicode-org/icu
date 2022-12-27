@@ -47,7 +47,7 @@ using namespace std;
 #else
 #define _UNICODE
 typedef int DWORD;
-inline int FoldStringW(DWORD dwMapFlags, const UChar* lpSrcStr,int cchSrc, UChar* lpDestStr,int cchDest);
+inline int FoldStringW(DWORD dwMapFlags, const char16_t* lpSrcStr,int cchSrc, char16_t* lpDestStr,int cchDest);
 #endif
 
 class BreakItFunction : public UPerfFunction
@@ -637,19 +637,19 @@ public:
                 return UnicodeString(buf, "");
             }
         case Formattable::kString:
-            return UnicodeString((UChar)U_DQUOTE).append(f.getString()).append((UChar)U_DQUOTE);
+            return UnicodeString((char16_t)U_DQUOTE).append(f.getString()).append((char16_t)U_DQUOTE);
         case Formattable::kArray:
             {
                 int32_t i, count;
                 const Formattable* array = f.getArray(count);
-                UnicodeString result((UChar)U_LEFT_SQUARE_BRACKET);
+                UnicodeString result((char16_t)U_LEFT_SQUARE_BRACKET);
                 for (i=0; i<count; ++i) {
                     if (i > 0) {
-                        (result += (UChar)U_COMMA) += (UChar)U_SPACE;
+                        (result += (char16_t)U_COMMA) += (char16_t)U_SPACE;
                     }
                     result += formattableToString(array[i]);
                 }
-                result += (UChar)U_RIGHT_SQUARE_BRACKET;
+                result += (char16_t)U_RIGHT_SQUARE_BRACKET;
                 return result;
             }
         default:

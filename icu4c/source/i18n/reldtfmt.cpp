@@ -34,7 +34,7 @@ U_NAMESPACE_BEGIN
 struct URelativeString {
     int32_t offset;         /** offset of this item, such as, the relative date **/
     int32_t len;            /** length of the string **/
-    const UChar* string;    /** string, or nullptr if not set **/
+    const char16_t* string;    /** string, or nullptr if not set **/
 };
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RelativeDateFormat)
@@ -149,7 +149,7 @@ bool RelativeDateFormat::operator==(const Format& other) const {
     return false;
 }
 
-static const UChar APOSTROPHE = (UChar)0x0027;
+static const char16_t APOSTROPHE = (char16_t)0x0027;
 
 UnicodeString& RelativeDateFormat::format(  Calendar& cal,
                                 UnicodeString& appendTo,
@@ -164,7 +164,7 @@ UnicodeString& RelativeDateFormat::format(  Calendar& cal,
 
     // look up string
     int32_t len = 0;
-    const UChar *theString = getStringForDay(dayDiff, len, status);
+    const char16_t *theString = getStringForDay(dayDiff, len, status);
     if(U_SUCCESS(status) && (theString!=nullptr)) {
         // found a relative string
         relativeDayString.setTo(theString, len);
@@ -347,7 +347,7 @@ RelativeDateFormat::parse(const UnicodeString& text, UErrorCode& status) const
 }
 
 
-const UChar *RelativeDateFormat::getStringForDay(int32_t day, int32_t &len, UErrorCode &status) const {
+const char16_t *RelativeDateFormat::getStringForDay(int32_t day, int32_t &len, UErrorCode &status) const {
     if(U_FAILURE(status)) {
         return nullptr;
     }
@@ -512,7 +512,7 @@ RelDateFmtDataSink::~RelDateFmtDataSink() {}
 }  // Namespace
 
 
-static const UChar patItem1[] = {0x7B,0x31,0x7D}; // "{1}"
+static const char16_t patItem1[] = {0x7B,0x31,0x7D}; // "{1}"
 static const int32_t patItem1Len = 3;
 
 void RelativeDateFormat::loadDates(UErrorCode &status) {
@@ -534,7 +534,7 @@ void RelativeDateFormat::loadDates(UErrorCode &status) {
                 }
             }
 
-            const UChar *resStr = ures_getStringByIndex(dateTimePatterns.getAlias(), glueIndex, &resStrLen, &status);
+            const char16_t *resStr = ures_getStringByIndex(dateTimePatterns.getAlias(), glueIndex, &resStrLen, &status);
             if (U_SUCCESS(status) && resStrLen >= patItem1Len && u_strncmp(resStr,patItem1,patItem1Len)==0) {
                 fCombinedHasDateAtStart = true;
             }

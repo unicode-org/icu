@@ -558,7 +558,7 @@ PluralFormatTest::pluralFormatExtendedTest(void) {
   UErrorCode status = U_ZERO_ERROR;
   UnicodeString fmtString(fmt, -1, US_INV);
   PluralFormat pf(Locale::getEnglish(), fmtString, status);
-  MessageFormat mf(UNICODE_STRING_SIMPLE("{0,plural,").append(fmtString).append((UChar)0x7d /* '}' */),
+  MessageFormat mf(UNICODE_STRING_SIMPLE("{0,plural,").append(fmtString).append((char16_t)0x7d /* '}' */),
                    Locale::getEnglish(), status);
   Formattable args;
   FieldPosition ignore;

@@ -42,9 +42,9 @@ class TestReplaceable : public Replaceable {
     UnicodeString chars;
     UnicodeString styles;
     
-    static const UChar NO_STYLE;
+    static const char16_t NO_STYLE;
 
-    static const UChar NO_STYLE_MARK;
+    static const char16_t NO_STYLE_MARK;
 
     /**
      * The address of this static class variable serves as this class's ID
@@ -64,7 +64,7 @@ public:
                 if (text.charAt(i) == NO_STYLE_MARK) {
                     s.append(NO_STYLE);
                 } else {
-                    s.append((UChar)(i + 0x0031));
+                    s.append((char16_t)(i + 0x0031));
                 }
             }
         }
@@ -112,7 +112,7 @@ protected:
         return chars.length();
     }
 
-    virtual UChar getCharAt(int32_t offset) const override {
+    virtual char16_t getCharAt(int32_t offset) const override {
         return chars.charAt(offset);
     }
 
@@ -121,7 +121,7 @@ protected:
     }
 
     void fixStyles(int32_t start, int32_t limit, int32_t newLen) {
-        UChar newStyle = NO_STYLE;
+        char16_t newStyle = NO_STYLE;
         if (start != limit && styles.charAt(start) != NO_STYLE) {
             newStyle = styles.charAt(start);
         } else if (start > 0 && getCharAt(start-1) != NO_STYLE_MARK) {
@@ -161,9 +161,9 @@ protected:
 
 const char TestReplaceable::fgClassID=0;
 
-const UChar TestReplaceable::NO_STYLE  = 0x005F;
+const char16_t TestReplaceable::NO_STYLE  = 0x005F;
 
-const UChar TestReplaceable::NO_STYLE_MARK = 0xFFFF;
+const char16_t TestReplaceable::NO_STYLE_MARK = 0xFFFF;
 
 void
 ReplaceableTest::runIndexedTest(int32_t index, UBool exec,
@@ -183,7 +183,7 @@ public:
         return 0;
     }
 
-    virtual UChar getCharAt(int32_t /*offset*/) const override {
+    virtual char16_t getCharAt(int32_t /*offset*/) const override {
         return 0xffff;
     }
 
@@ -213,7 +213,7 @@ private:
 const char NoopReplaceable::fgClassID=0;
 
 void ReplaceableTest::TestReplaceableClass(void) {
-    UChar rawTestArray[][6] = {
+    char16_t rawTestArray[][6] = {
         {0x0041, 0x0042, 0x0043, 0x0044, 0x0000, 0x0000}, // ABCD
         {0x0061, 0x0062, 0x0063, 0x0064, 0x00DF, 0x0000}, // abcd\u00DF
         {0x0061, 0x0042, 0x0043, 0x0044, 0x0000, 0x0000}, // aBCD

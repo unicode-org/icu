@@ -453,7 +453,7 @@ static const UDataInfo dataInfo = {
 
     U_IS_BIG_ENDIAN,
     U_CHARSET_FAMILY,
-    sizeof(UChar),
+    sizeof(char16_t),
     0,
 
     { PNAME_SIG_0, PNAME_SIG_1, PNAME_SIG_2, PNAME_SIG_3 },

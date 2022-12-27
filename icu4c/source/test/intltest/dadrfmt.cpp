@@ -328,11 +328,11 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
 
 void DataDrivenFormatTest::processTest(TestData *testData) {
     //Format *cal= nullptr;
-    //const UChar *arguments= nullptr;
+    //const char16_t *arguments= nullptr;
     //int32_t argLen = 0;
     char testType[256] = "";
     const DataMap *settings= nullptr;
-    //const UChar *type= nullptr;
+    //const char16_t *type= nullptr;
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString testSetting;
     int n = 0;

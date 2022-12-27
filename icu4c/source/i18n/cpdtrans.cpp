@@ -22,15 +22,15 @@
 #include "cmemory.h"
 
 // keep in sync with Transliterator
-//static const UChar ID_SEP   = 0x002D; /*-*/
-static const UChar ID_DELIM = 0x003B; /*;*/
-static const UChar NEWLINE  = 10;
+//static const char16_t ID_SEP   = 0x002D; /*-*/
+static const char16_t ID_DELIM = 0x003B; /*;*/
+static const char16_t NEWLINE  = 10;
 
-static const UChar COLON_COLON[] = {0x3A, 0x3A, 0}; //"::"
+static const char16_t COLON_COLON[] = {0x3A, 0x3A, 0}; //"::"
 
 U_NAMESPACE_BEGIN
 
-const UChar CompoundTransliterator::PASS_STRING[] = { 0x0025, 0x0050, 0x0061, 0x0073, 0x0073, 0 }; // "%Pass"
+const char16_t CompoundTransliterator::PASS_STRING[] = { 0x0025, 0x0050, 0x0061, 0x0073, 0x0073, 0 }; // "%Pass"
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CompoundTransliterator)
 
@@ -385,7 +385,7 @@ void CompoundTransliterator::adoptTransliterators(Transliterator* adoptedTransli
 /**
  * Append c to buf, unless buf is empty or buf already ends in c.
  */
-static void _smartAppend(UnicodeString& buf, UChar c) {
+static void _smartAppend(UnicodeString& buf, char16_t c) {
     if (buf.length() != 0 &&
         buf.charAt(buf.length() - 1) != c) {
         buf.append(c);

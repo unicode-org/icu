@@ -165,7 +165,7 @@ private:
 
 // Get the number of UTF-8 bytes for a UTF-16 (sub)string.
 static int32_t
-getUTF8Length(const UChar *s, int32_t length) {
+getUTF8Length(const char16_t *s, int32_t length) {
     UErrorCode errorCode=U_ZERO_ERROR;
     int32_t length8=0;
     u_strToUTF8(nullptr, 0, &length8, s, length, &errorCode);
@@ -180,7 +180,7 @@ getUTF8Length(const UChar *s, int32_t length) {
 
 // Append the UTF-8 version of the string to t and return the appended UTF-8 length.
 static int32_t
-appendUTF8(const UChar *s, int32_t length, uint8_t *t, int32_t capacity) {
+appendUTF8(const char16_t *s, int32_t length, uint8_t *t, int32_t capacity) {
     UErrorCode errorCode=U_ZERO_ERROR;
     int32_t length8=0;
     u_strToUTF8((char *)t, capacity, &length8, s, length, &errorCode);
@@ -229,7 +229,7 @@ UnicodeSetStringSpan::UnicodeSetStringSpan(const UnicodeSet &set,
     UBool someRelevant=false;
     for(i=0; i<stringsLength; ++i) {
         const UnicodeString &string=*(const UnicodeString *)strings.elementAt(i);
-        const UChar *s16=string.getBuffer();
+        const char16_t *s16=string.getBuffer();
         int32_t length16=string.length();
         if (length16==0) {
             continue;  // skip the empty string
@@ -312,7 +312,7 @@ UnicodeSetStringSpan::UnicodeSetStringSpan(const UnicodeSet &set,
 
     for(i=0; i<stringsLength; ++i) {
         const UnicodeString &string=*(const UnicodeString *)strings.elementAt(i);
-        const UChar *s16=string.getBuffer();
+        const char16_t *s16=string.getBuffer();
         int32_t length16=string.length();
         spanLength=spanSet.span(s16, length16, USET_SPAN_CONTAINED);
         if(spanLength<length16 && length16>0) {  // Relevant string.
@@ -451,7 +451,7 @@ void UnicodeSetStringSpan::addToSpanNotSet(UChar32 c) {
 
 // Compare strings without any argument checks. Requires length>0.
 static inline UBool
-matches16(const UChar *s, const UChar *t, int32_t length) {
+matches16(const char16_t *s, const char16_t *t, int32_t length) {
     do {
         if(*s++!=*t++) {
             return false;
@@ -474,7 +474,7 @@ matches8(const uint8_t *s, const uint8_t *t, int32_t length) {
 // at code point boundaries.
 // That is, each edge of a match must not be in the middle of a surrogate pair.
 static inline UBool
-matches16CPB(const UChar *s, int32_t start, int32_t limit, const UChar *t, int32_t length) {
+matches16CPB(const char16_t *s, int32_t start, int32_t limit, const char16_t *t, int32_t length) {
     s+=start;
     limit-=start;
     return matches16(s, t, length) &&
@@ -485,8 +485,8 @@ matches16CPB(const UChar *s, int32_t start, int32_t limit, const UChar *t, int32
 // Does the set contain the next code point?
 // If so, return its length; otherwise return its negative length.
 static inline int32_t
-spanOne(const UnicodeSet &set, const UChar *s, int32_t length) {
-    UChar c=*s, c2;
+spanOne(const UnicodeSet &set, const char16_t *s, int32_t length) {
+    char16_t c=*s, c2;
     if(c>=0xd800 && c<=0xdbff && length>=2 && U16_IS_TRAIL(c2=s[1])) {
         return set.contains(U16_GET_SUPPLEMENTARY(c, c2)) ? 2 : -2;
     }
@@ -494,8 +494,8 @@ spanOne(const UnicodeSet &set, const UChar *s, int32_t length) {
 }
 
 static inline int32_t
-spanOneBack(const UnicodeSet &set, const UChar *s, int32_t length) {
-    UChar c=s[length-1], c2;
+spanOneBack(const UnicodeSet &set, const char16_t *s, int32_t length) {
+    char16_t c=s[length-1], c2;
     if(c>=0xdc00 && c<=0xdfff && length>=2 && U16_IS_LEAD(c2=s[length-2])) {
         return set.contains(U16_GET_SUPPLEMENTARY(c2, c)) ? 2 : -2;
     }
@@ -634,7 +634,7 @@ spanOneBackUTF8(const UnicodeSet &set, const uint8_t *s, int32_t length) {
  *     Stop if spanLength==0, otherwise continue the loop.
  */
 
-int32_t UnicodeSetStringSpan::span(const UChar *s, int32_t length, USetSpanCondition spanCondition) const {
+int32_t UnicodeSetStringSpan::span(const char16_t *s, int32_t length, USetSpanCondition spanCondition) const {
     if(spanCondition==USET_SPAN_NOT_CONTAINED) {
         return spanNot(s, length);
     }
@@ -659,7 +659,7 @@ int32_t UnicodeSetStringSpan::span(const UChar *s, int32_t length, USetSpanCondi
                     continue;  // Irrelevant string. (Also the empty string.)
                 }
                 const UnicodeString &string=*(const UnicodeString *)strings.elementAt(i);
-                const UChar *s16=string.getBuffer();
+                const char16_t *s16=string.getBuffer();
                 int32_t length16=string.length();
                 U_ASSERT(length>0);
 
@@ -699,7 +699,7 @@ int32_t UnicodeSetStringSpan::span(const UChar *s, int32_t length, USetSpanCondi
                 // to find the match from the earliest start.
 
                 const UnicodeString &string=*(const UnicodeString *)strings.elementAt(i);
-                const UChar *s16=string.getBuffer();
+                const char16_t *s16=string.getBuffer();
                 int32_t length16=string.length();
                 if (length16==0) {
                     continue;  // skip the empty string
@@ -798,7 +798,7 @@ int32_t UnicodeSetStringSpan::span(const UChar *s, int32_t length, USetSpanCondi
     }
 }
 
-int32_t UnicodeSetStringSpan::spanBack(const UChar *s, int32_t length, USetSpanCondition spanCondition) const {
+int32_t UnicodeSetStringSpan::spanBack(const char16_t *s, int32_t length, USetSpanCondition spanCondition) const {
     if(spanCondition==USET_SPAN_NOT_CONTAINED) {
         return spanNotBack(s, length);
     }
@@ -827,7 +827,7 @@ int32_t UnicodeSetStringSpan::spanBack(const UChar *s, int32_t length, USetSpanC
                     continue;  // Irrelevant string. (Also the empty string.)
                 }
                 const UnicodeString &string=*(const UnicodeString *)strings.elementAt(i);
-                const UChar *s16=string.getBuffer();
+                const char16_t *s16=string.getBuffer();
                 int32_t length16=string.length();
                 U_ASSERT(length>0);
 
@@ -869,7 +869,7 @@ int32_t UnicodeSetStringSpan::spanBack(const UChar *s, int32_t length, USetSpanC
                 // to find the match from the latest end.
 
                 const UnicodeString &string=*(const UnicodeString *)strings.elementAt(i);
-                const UChar *s16=string.getBuffer();
+                const char16_t *s16=string.getBuffer();
                 int32_t length16=string.length();
                 if (length16==0) {
                     continue;  // skip the empty string
@@ -1346,7 +1346,7 @@ int32_t UnicodeSetStringSpan::spanBackUTF8(const uint8_t *s, int32_t length, USe
  *     when there is not actually a match for such a set string.
  */
 
-int32_t UnicodeSetStringSpan::spanNot(const UChar *s, int32_t length) const {
+int32_t UnicodeSetStringSpan::spanNot(const char16_t *s, int32_t length) const {
     int32_t pos=0, rest=length;
     int32_t i, stringsLength=strings.size();
     do {
@@ -1372,7 +1372,7 @@ int32_t UnicodeSetStringSpan::spanNot(const UChar *s, int32_t length) const {
                 continue;  // Irrelevant string. (Also the empty string.)
             }
             const UnicodeString &string=*(const UnicodeString *)strings.elementAt(i);
-            const UChar *s16=string.getBuffer();
+            const char16_t *s16=string.getBuffer();
             int32_t length16=string.length();
             U_ASSERT(length>0);
             if(length16<=rest && matches16CPB(s, pos, length, s16, length16)) {
@@ -1389,7 +1389,7 @@ int32_t UnicodeSetStringSpan::spanNot(const UChar *s, int32_t length) const {
     return length;  // Reached the end of the string.
 }
 
-int32_t UnicodeSetStringSpan::spanNotBack(const UChar *s, int32_t length) const {
+int32_t UnicodeSetStringSpan::spanNotBack(const char16_t *s, int32_t length) const {
     int32_t pos=length;
     int32_t i, stringsLength=strings.size();
     do {
@@ -1416,7 +1416,7 @@ int32_t UnicodeSetStringSpan::spanNotBack(const UChar *s, int32_t length) const 
                 continue;  // Irrelevant string. (Also the empty string.)
             }
             const UnicodeString &string=*(const UnicodeString *)strings.elementAt(i);
-            const UChar *s16=string.getBuffer();
+            const char16_t *s16=string.getBuffer();
             int32_t length16=string.length();
             U_ASSERT(length>0);
             if(length16<=pos && matches16CPB(s, pos-length16, length, s16, length16)) {

@@ -265,7 +265,7 @@ static void
 testAllCodepoints(TestIDNA& test){
     /*
     {
-        UChar str[19] = {            
+        char16_t str[19] = {
                             0xC138, 0xACC4, 0xC758, 0xBAA8, 0xB4E0, 0xC0AC, 0xB78C, 0xB4E4, 0xC774,
                             0x070F,//prohibited
                             0xD55C, 0xAD6D, 0xC5B4, 0xB97C, 0xC774, 0xD574, 0xD55C, 0xB2E4, 0xBA74
@@ -385,8 +385,8 @@ compareMapping(uint32_t codepoint, uint32_t* mapping,int32_t mapLength,
                     pTestIDNA->errln("Did not get the expected result. Expected: 0x%04X Got: 0x%04X \n", mapping[i], mappingData[index+i]);
                 }
             }else{
-                UChar lead  = U16_LEAD(mapping[i]);
-                UChar trail = U16_TRAIL(mapping[i]);
+                char16_t lead  = U16_LEAD(mapping[i]);
+                char16_t trail = U16_TRAIL(mapping[i]);
                 if(mappingData[index+i] != lead ||
                     mappingData[index+i+1] != trail){
                     pTestIDNA->errln( "Did not get the expected result. Expected: 0x%04X 0x%04X  Got: 0x%04X 0x%04X", lead, trail, mappingData[index+i], mappingData[index+i+1]);
@@ -411,7 +411,7 @@ compareFlagsForRange(uint32_t start, uint32_t end,
     int32_t value=0;
 /*
     // supplementary code point 
-    UChar __lead16=U16_LEAD(0x2323E);
+    char16_t __lead16=U16_LEAD(0x2323E);
     int32_t __offset;
 
     // get data for lead surrogate 

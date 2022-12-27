@@ -105,10 +105,10 @@ static char gStrBuf[256];
 
 // Static data and constants
 
-static const UChar         WORLD[] = {0x30, 0x30, 0x31, 0x00}; /* "001" */
+static const char16_t      WORLD[] = {0x30, 0x30, 0x31, 0x00}; /* "001" */
 
-static const UChar         GMT_ID[] = {0x47, 0x4D, 0x54, 0x00}; /* "GMT" */
-static const UChar         UNKNOWN_ZONE_ID[] = {0x45, 0x74, 0x63, 0x2F, 0x55, 0x6E, 0x6B, 0x6E, 0x6F, 0x77, 0x6E, 0x00}; /* "Etc/Unknown" */
+static const char16_t      GMT_ID[] = {0x47, 0x4D, 0x54, 0x00}; /* "GMT" */
+static const char16_t      UNKNOWN_ZONE_ID[] = {0x45, 0x74, 0x63, 0x2F, 0x55, 0x6E, 0x6B, 0x6E, 0x6F, 0x77, 0x6E, 0x00}; /* "Etc/Unknown" */
 static const int32_t       GMT_ID_LENGTH = 3;
 static const int32_t       UNKNOWN_ZONE_ID_LENGTH = 11;
 
@@ -181,7 +181,7 @@ U_NAMESPACE_BEGIN
 static int32_t findInStringArray(UResourceBundle* array, const UnicodeString& id, UErrorCode &status)
 {
     UnicodeString copy;
-    const UChar *u;
+    const char16_t *u;
     int32_t len;
 
     int32_t start = 0;
@@ -655,7 +655,7 @@ static void U_CALLCONV initMap(USystemTimeZoneType type, UErrorCode& ec) {
                     }
                 }
                 if (type == UCAL_ZONE_TYPE_CANONICAL_LOCATION) {
-                    const UChar *region = TimeZone::getRegion(id, ec);
+                    const char16_t *region = TimeZone::getRegion(id, ec);
                     if (U_FAILURE(ec)) {
                         break;
                     }
@@ -772,7 +772,7 @@ private:
 
     UBool getID(int32_t i, UErrorCode& ec) {
         int32_t idLen = 0;
-        const UChar* id = nullptr;
+        const char16_t* id = nullptr;
         UResourceBundle *top = ures_openDirect(0, kZONEINFO, &ec);
         top = ures_getByKey(top, kNAMES, top, &ec); // dereference Zones section
         id = ures_getStringByIndex(top, i, &idLen, &ec);
@@ -1073,7 +1073,7 @@ TimeZone::getEquivalentID(const UnicodeString& id, int32_t index) {
         UResourceBundle *ares = ures_getByKey(top, kNAMES, nullptr, &ec); // dereference Zones section
         if (U_SUCCESS(ec)) {
             int32_t idLen = 0;
-            const UChar* id2 = ures_getStringByIndex(ares, zone, &idLen, &ec);
+            const char16_t* id2 = ures_getStringByIndex(ares, zone, &idLen, &ec);
             result.fastCopyFrom(UnicodeString(true, id2, idLen));
             U_DEBUG_TZ_MSG(("gei(%d) -> %d, len%d, %s\n", index, zone, result.length(), u_errorName(ec)));
         }
@@ -1092,9 +1092,9 @@ TimeZone::getEquivalentID(const UnicodeString& id, int32_t index) {
 
 // These methods are used by ZoneMeta class only.
 
-const UChar*
+const char16_t*
 TimeZone::findID(const UnicodeString& id) {
-    const UChar *result = nullptr;
+    const char16_t *result = nullptr;
     UErrorCode ec = U_ZERO_ERROR;
     UResourceBundle *rb = ures_openDirect(nullptr, kZONEINFO, &ec);
 
@@ -1111,9 +1111,9 @@ TimeZone::findID(const UnicodeString& id) {
 }
 
 
-const UChar*
+const char16_t*
 TimeZone::dereferOlsonLink(const UnicodeString& id) {
-    const UChar *result = nullptr;
+    const char16_t *result = nullptr;
     UErrorCode ec = U_ZERO_ERROR;
     UResourceBundle *rb = ures_openDirect(nullptr, kZONEINFO, &ec);
 
@@ -1130,7 +1130,7 @@ TimeZone::dereferOlsonLink(const UnicodeString& id) {
         if (ures_getType(rb) == URES_INT) {
             // this is a link - dereference the link
             int32_t deref = ures_getInt(rb, &ec);
-            const UChar* tmp = ures_getStringByIndex(names, deref, nullptr, &ec);
+            const char16_t* tmp = ures_getStringByIndex(names, deref, nullptr, &ec);
             if (U_SUCCESS(ec)) {
                 result = tmp;
             }
@@ -1143,18 +1143,18 @@ TimeZone::dereferOlsonLink(const UnicodeString& id) {
     return result;
 }
 
-const UChar*
+const char16_t*
 TimeZone::getRegion(const UnicodeString& id) {
     UErrorCode status = U_ZERO_ERROR;
     return getRegion(id, status);
 }
 
-const UChar*
+const char16_t*
 TimeZone::getRegion(const UnicodeString& id, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return nullptr;
     }
-    const UChar *result = nullptr;
+    const char16_t *result = nullptr;
     UResourceBundle *rb = ures_openDirect(nullptr, kZONEINFO, &status);
 
     // resolve zone index by name
@@ -1163,7 +1163,7 @@ TimeZone::getRegion(const UnicodeString& id, UErrorCode& status) {
 
     // get region mapping
     ures_getByKey(rb, kREGIONS, res, &status);
-    const UChar *tmp = ures_getStringByIndex(res, idx, nullptr, &status);
+    const char16_t *tmp = ures_getStringByIndex(res, idx, nullptr, &status);
     if (U_SUCCESS(status)) {
         result = tmp;
     }
@@ -1185,7 +1185,7 @@ TimeZone::getRegion(const UnicodeString& id, char *region, int32_t capacity, UEr
         return 0;
     }
 
-    const UChar *uregion = nullptr;
+    const char16_t *uregion = nullptr;
     // "Etc/Unknown" is not a system zone ID,
     // but in the zone data
     if (id.compare(UNKNOWN_ZONE_ID, UNKNOWN_ZONE_ID_LENGTH) != 0) {
@@ -1495,33 +1495,33 @@ TimeZone::formatCustomID(int32_t hour, int32_t min, int32_t sec,
     id.setTo(GMT_ID, GMT_ID_LENGTH);
     if (hour | min | sec) {
         if (negative) {
-            id += (UChar)MINUS;
+            id += (char16_t)MINUS;
         } else {
-            id += (UChar)PLUS;
+            id += (char16_t)PLUS;
         }
 
         if (hour < 10) {
-            id += (UChar)ZERO_DIGIT;
+            id += (char16_t)ZERO_DIGIT;
         } else {
-            id += (UChar)(ZERO_DIGIT + hour/10);
+            id += (char16_t)(ZERO_DIGIT + hour/10);
         }
-        id += (UChar)(ZERO_DIGIT + hour%10);
-        id += (UChar)COLON;
+        id += (char16_t)(ZERO_DIGIT + hour%10);
+        id += (char16_t)COLON;
         if (min < 10) {
-            id += (UChar)ZERO_DIGIT;
+            id += (char16_t)ZERO_DIGIT;
         } else {
-            id += (UChar)(ZERO_DIGIT + min/10);
+            id += (char16_t)(ZERO_DIGIT + min/10);
         }
-        id += (UChar)(ZERO_DIGIT + min%10);
+        id += (char16_t)(ZERO_DIGIT + min%10);
 
         if (sec) {
-            id += (UChar)COLON;
+            id += (char16_t)COLON;
             if (sec < 10) {
-                id += (UChar)ZERO_DIGIT;
+                id += (char16_t)ZERO_DIGIT;
             } else {
-                id += (UChar)(ZERO_DIGIT + sec/10);
+                id += (char16_t)(ZERO_DIGIT + sec/10);
             }
-            id += (UChar)(ZERO_DIGIT + sec%10);
+            id += (char16_t)(ZERO_DIGIT + sec%10);
         }
     }
     return id;
@@ -1540,7 +1540,7 @@ static void U_CALLCONV initTZDataVersion(UErrorCode &status) {
     int32_t len = 0;
     StackUResourceBundle bundle;
     ures_openDirectFillIn(bundle.getAlias(), nullptr, kZONEINFO, &status);
-    const UChar *tzver = ures_getStringByKey(bundle.getAlias(), kTZVERSION, &len, &status);
+    const char16_t *tzver = ures_getStringByKey(bundle.getAlias(), kTZVERSION, &len, &status);
 
     if (U_SUCCESS(status)) {
         if (len >= (int32_t)sizeof(TZDATA_VERSION)) {
@@ -1640,15 +1640,15 @@ TimeZone::getWindowsID(const UnicodeString& id, UnicodeString& winid, UErrorCode
                 continue;
             }
             int32_t len;
-            const UChar *tzids = ures_getString(regionalData, &len, &status);
+            const char16_t *tzids = ures_getString(regionalData, &len, &status);
             if (U_FAILURE(status)) {
                 break;
             }
 
-            const UChar *start = tzids;
+            const char16_t *start = tzids;
             UBool hasNext = true;
             while (hasNext) {
-                const UChar *end = u_strchr(start, (UChar)0x20);
+                const char16_t *end = u_strchr(start, (char16_t)0x20);
                 if (end == nullptr) {
                     end = tzids + len;
                     hasNext = false;
@@ -1702,15 +1702,15 @@ TimeZone::getIDForWindowsID(const UnicodeString& winid, const char* region, Unic
         return id;
     }
 
-    const UChar *tzid = nullptr;
+    const char16_t *tzid = nullptr;
     int32_t len = 0;
     UBool gotID = false;
     if (region) {
-        const UChar *tzids = ures_getStringByKey(zones, region, &len, &tmperr); // use tmperr, because
+        const char16_t *tzids = ures_getStringByKey(zones, region, &len, &tmperr); // use tmperr, because
                                                                                 // regional mapping is optional
         if (U_SUCCESS(tmperr)) {
             // first ID delimited by space is the default one
-            const UChar *end = u_strchr(tzids, (UChar)0x20);
+            const char16_t *end = u_strchr(tzids, (char16_t)0x20);
             if (end == nullptr) {
                 id.setTo(tzids, -1);
             } else {

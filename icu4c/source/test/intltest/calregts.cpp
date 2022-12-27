@@ -2698,7 +2698,7 @@ void CalendarRegressionTest::TestTimeZoneTransitionAdd() {
 
     UnicodeString buf1, buf2;
 
-    const UChar* id;
+    const char16_t* id;
     while ((id = tz->unext(nullptr, ec)) != nullptr && U_SUCCESS(ec)) {
         if (U_FAILURE(ec)) {
             errln("FAIL: StringEnumeration::unext");

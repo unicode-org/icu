@@ -34,9 +34,9 @@
 #define OUTPUT_CAPACITY INPUT_CAPACITY
 
 static char utf8[INPUT_CAPACITY];
-static UChar pivot[INTERMEDIATE_CAPACITY];
+static char16_t pivot[INTERMEDIATE_CAPACITY];
 
-static UChar output[OUTPUT_CAPACITY];
+static char16_t output[OUTPUT_CAPACITY];
 static char intermediate[OUTPUT_CAPACITY];
 
 static int32_t utf8Length, encodedLength, outputLength, countInputCodePoints;
@@ -95,7 +95,7 @@ public:
 
     virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = nullptr);
 
-    const UChar *getBuffer() const { return buffer; }
+    const char16_t *getBuffer() const { return buffer; }
     int32_t getBufferLen() const { return bufferLen; }
 
     const char *charset;
@@ -107,7 +107,7 @@ U_CDECL_BEGIN
 static void U_CALLCONV
 fromUCallback(const void *context,
               UConverterFromUnicodeArgs *fromUArgs,
-              const UChar *codeUnits,
+              const char16_t *codeUnits,
               int32_t length,
               UChar32 codePoint,
               UConverterCallbackReason reason,
@@ -144,7 +144,7 @@ public:
     }
 
     const UtfPerformanceTest &testcase;
-    const UChar *input;
+    const char16_t *input;
     int32_t inputLength;
     UErrorCode errorCode;
     UConverter *cnv;
@@ -165,8 +165,8 @@ public:
         }
     }
     virtual void call(UErrorCode* pErrorCode){
-        const UChar *pIn, *pInLimit;
-        UChar *pOut, *pOutLimit;
+        const char16_t *pIn, *pInLimit;
+        char16_t *pOut, *pOutLimit;
         char *pInter, *pInterLimit;
         const char *p;
         UBool flush;
@@ -232,7 +232,7 @@ public:
         }
     }
     virtual void call(UErrorCode* pErrorCode){
-        const UChar *pIn, *pInLimit;
+        const char16_t *pIn, *pInLimit;
         char *pInter, *pInterLimit;
 
         ucnv_resetFromUnicode(cnv);
@@ -287,7 +287,7 @@ public:
     virtual void call(UErrorCode* pErrorCode){
         const char *pIn, *pInLimit;
         char *pInter, *pInterLimit;
-        UChar *pivotSource, *pivotTarget, *pivotLimit;
+        char16_t *pivotSource, *pivotTarget, *pivotLimit;
 
         ucnv_resetToUnicode(utf8Cnv);
         ucnv_resetFromUnicode(cnv);

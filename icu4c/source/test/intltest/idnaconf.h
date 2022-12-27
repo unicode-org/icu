@@ -28,7 +28,7 @@ private:
     void Test(void);
 
     // for test file handling
-    UChar* base;
+    char16_t* base;
     int len ;
     int curOffset;
 

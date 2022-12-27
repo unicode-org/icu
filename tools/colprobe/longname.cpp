@@ -14,7 +14,7 @@ int main(int argc,
   UConverter *conv = ucnv_open("utf8", &status);
 
   
-  UChar UBuffer[256];
+  char16_t UBuffer[256];
   int32_t uBufLen = 0;
   char buffer[256];
   int32_t bufLen = 0;

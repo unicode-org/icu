@@ -188,7 +188,7 @@ private:
                   uint32_t whichSpans,
                   const char *testName, int32_t index);
     void testSpanBothUTFs(const UnicodeSetWithStrings *sets[4],
-                          const UChar *s16, int32_t length16,
+                          const char16_t *s16, int32_t length16,
                           uint32_t whichSpans,
                           const char *testName, int32_t index);
     void testSpanContents(const UnicodeSetWithStrings *sets[4], uint32_t whichSpans, const char *testName);

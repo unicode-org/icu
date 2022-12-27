@@ -146,7 +146,7 @@ UXMLParser::UXMLParser(UErrorCode &status) :
 
       fNames(status),
       fElementStack(status),
-      fOneLF((UChar)0x0a)        // Plain new-line string, used in new line normalization.
+      fOneLF((char16_t)0x0a)        // Plain new-line string, used in new line normalization.
       {
       }
 
@@ -168,7 +168,7 @@ UXMLParser::parseFile(const char *filename, UErrorCode &errorCode) {
     const char *charset, *pb;
     UnicodeString src;
     UConverter *cnv;
-    UChar *buffer, *pu;
+    char16_t *buffer, *pu;
     int32_t fileLength, bytesLength, length, capacity;
     UBool flush;
 
@@ -235,7 +235,7 @@ UXMLParser::parseFile(const char *filename, UErrorCode &errorCode) {
         if(mXMLDecl.reset(src).lookingAt(0, errorCode)) {
             int32_t declEnd=mXMLDecl.end(errorCode);
             // go beyond <?xml
-            int32_t pos=src.indexOf((UChar)x_l)+1;
+            int32_t pos=src.indexOf((char16_t)x_l)+1;
 
             mAttrValue.reset(src);
             while(pos<declEnd && mAttrValue.lookingAt(pos, errorCode)) {  // loop runs once per attribute on this element.
@@ -514,7 +514,7 @@ UXMLParser::createElement(RegexMatcher  &mEl, UErrorCode &status) {
 
         // Next change all xml white space chars to plain \u0020 spaces.
         mAttrNormalizer.reset(attValue);
-        UnicodeString oneSpace((UChar)0x0020);
+        UnicodeString oneSpace((char16_t)0x0020);
         attValue = mAttrNormalizer.replaceAll(oneSpace, status);
 
         // Replace character entities.
@@ -595,15 +595,15 @@ UXMLParser::replaceCharRefs(UnicodeString &s, UErrorCode &status) {
     //      which is flagged by start() of that group not being -1.
     while (mAmps.find()) {
         if (mAmps.start(1, status) != -1) {
-            replacement.setTo((UChar)x_AMP);
+            replacement.setTo((char16_t)x_AMP);
         } else if (mAmps.start(2, status) != -1) {
-            replacement.setTo((UChar)x_LT);
+            replacement.setTo((char16_t)x_LT);
         } else if (mAmps.start(3, status) != -1) {
-            replacement.setTo((UChar)x_GT);
+            replacement.setTo((char16_t)x_GT);
         } else if (mAmps.start(4, status) != -1) {
-            replacement.setTo((UChar)x_APOS);
+            replacement.setTo((char16_t)x_APOS);
         } else if (mAmps.start(5, status) != -1) {
-            replacement.setTo((UChar)x_QUOT);
+            replacement.setTo((char16_t)x_QUOT);
         } else if (mAmps.start(6, status) != -1) {
             UnicodeString hexString = mAmps.group(6, status);
             UChar32 val = 0;
@@ -639,7 +639,7 @@ UXMLParser::error(const char *message, UErrorCode &status) {
     int  line = 0;
     int  ci = 0;
     while (ci < fPos && ci>=0) {
-        ci = src.indexOf((UChar)0x0a, ci+1);
+        ci = src.indexOf((char16_t)0x0a, ci+1);
         line++;
     }
     fprintf(stderr, "Error: %s at line %d\n", message, line);

@@ -29,7 +29,7 @@ UnaccentTransliterator::~UnaccentTransliterator() {
 /**
  * Remove accents from a character using Normalizer.
  */
-UChar UnaccentTransliterator::unaccent(UChar c) const {
+char16_t UnaccentTransliterator::unaccent(char16_t c) const {
     UnicodeString str(c);
     UErrorCode status = U_ZERO_ERROR;
     UnaccentTransliterator* t = (UnaccentTransliterator*)this;
@@ -38,7 +38,7 @@ UChar UnaccentTransliterator::unaccent(UChar c) const {
     if (U_FAILURE(status)) {
         return c;
     }
-    return (UChar) t->normalizer.next();
+    return (char16_t) t->normalizer.next();
 }
 
 /**
@@ -49,8 +49,8 @@ void UnaccentTransliterator::handleTransliterate(Replaceable& text,
                                                  UBool incremental) const {
     UnicodeString str("a");
     while (index.start < index.limit) {
-        UChar c = text.charAt(index.start);
-        UChar d = unaccent(c);
+        char16_t c = text.charAt(index.start);
+        char16_t d = unaccent(c);
         if (c != d) {
             str.setCharAt(0, d);
             text.handleReplaceBetween(index.start, index.start+1, str);

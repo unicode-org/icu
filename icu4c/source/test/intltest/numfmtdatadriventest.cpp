@@ -83,7 +83,7 @@ static void adjustDecimalFormat(const NumberFormatTestTuple& tuple, DecimalForma
     if (tuple.currencyFlag) {
         UErrorCode status = U_ZERO_ERROR;
         UnicodeString currency(tuple.currency);
-        const UChar* terminatedCurrency = currency.getTerminatedBuffer();
+        const char16_t* terminatedCurrency = currency.getTerminatedBuffer();
         fmt.setCurrency(terminatedCurrency, status);
         if (U_FAILURE(status)) {
             appendErrorMessage.append("Error setting currency.");

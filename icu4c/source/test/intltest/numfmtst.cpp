@@ -73,8 +73,8 @@ using namespace icu::number;
 
 //#define NUMFMTST_DEBUG 1
 
-static const UChar EUR[] = {69,85,82,0}; // "EUR"
-static const UChar ISO_CURRENCY_USD[] = {0x55, 0x53, 0x44, 0}; // "USD"
+static const char16_t EUR[] = {69,85,82,0}; // "EUR"
+static const char16_t ISO_CURRENCY_USD[] = {0x55, 0x53, 0x44, 0}; // "USD"
 
 
 // *****************************************************************************
@@ -315,7 +315,7 @@ public:
         return appendTo;
     }
     virtual UnicodeString& format(int32_t ,UnicodeString& appendTo,FieldPosition& ) const override {
-        return appendTo.append((UChar)0x0033);
+        return appendTo.append((char16_t)0x0033);
     }
     virtual UnicodeString& format(int64_t number,UnicodeString& appendTo,FieldPosition& pos) const override {
         return NumberFormat::format(number, appendTo, pos);
@@ -840,7 +840,7 @@ NumberFormatTest::TestCurrencySign(void)
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols* sym = new DecimalFormatSymbols(Locale::getUS(), status);
     UnicodeString pat;
-    UChar currency = 0x00A4;
+    char16_t currency = 0x00A4;
     if (U_FAILURE(status)) {
         errcheckln(status, "Fail to create DecimalFormatSymbols - %s", u_errorName(status));
         delete sym;
@@ -883,7 +883,7 @@ NumberFormatTest::TestCurrencySign(void)
 
 // -------------------------------------
 
-static UChar toHexString(int32_t i) { return (UChar)(i + (i < 10 ? 0x30 : (0x41 - 10))); }
+static char16_t toHexString(int32_t i) { return (char16_t)(i + (i < 10 ? 0x30 : (0x41 - 10))); }
 
 UnicodeString&
 NumberFormatTest::escape(UnicodeString& s)
@@ -891,10 +891,10 @@ NumberFormatTest::escape(UnicodeString& s)
     UnicodeString buf;
     for (int32_t i=0; i<s.length(); ++i)
     {
-        UChar c = s[(int32_t)i];
-        if (c <= (UChar)0x7F) buf += c;
+        char16_t c = s[(int32_t)i];
+        if (c <= (char16_t)0x7F) buf += c;
         else {
-            buf += (UChar)0x5c; buf += (UChar)0x55;
+            buf += (char16_t)0x5c; buf += (char16_t)0x55;
             buf += toHexString((c & 0xF000) >> 12);
             buf += toHexString((c & 0x0F00) >> 8);
             buf += toHexString((c & 0x00F0) >> 4);
@@ -1767,10 +1767,10 @@ void NumberFormatTest::TestPad(void) {
   /*  fmt.setPadCharacter((UnicodeString)"^^^");
     expectPad(fmt, "*^^^#", DecimalFormat::kPadBeforePrefix, 3, (UnicodeString)"^^^");
     padString.remove();
-    padString.append((UChar)0x0061);
-    padString.append((UChar)0x0302);
+    padString.append((char16_t)0x0061);
+    padString.append((char16_t)0x0302);
     fmt.setPadCharacter(padString);
-    UChar patternChars[]={0x002a, 0x0061, 0x0302, 0x0061, 0x0302, 0x0023, 0x0000};
+    char16_t patternChars[]={0x002a, 0x0061, 0x0302, 0x0061, 0x0302, 0x0023, 0x0000};
     UnicodeString pattern(patternChars);
     expectPad(fmt, pattern , DecimalFormat::kPadBeforePrefix, 4, padString);
  */
@@ -1788,7 +1788,7 @@ void NumberFormatTest::TestPatterns2(void) {
     DecimalFormat fmt("#", US, status);
     CHECK(status, "DecimalFormat constructor");
 
-    UChar hat = 0x005E; /*^*/
+    char16_t hat = 0x005E; /*^*/
 
     expectPad(fmt, "*^#", DecimalFormat::kPadBeforePrefix, 1, hat);
     expectPad(fmt, "$*^#", DecimalFormat::kPadAfterPrefix, 2, hat);
@@ -1797,11 +1797,11 @@ void NumberFormatTest::TestPatterns2(void) {
     expectPad(fmt, "$*^$#", ILLEGAL);
     expectPad(fmt, "#$*^$", ILLEGAL);
     expectPad(fmt, "'pre'#,##0*x'post'", DecimalFormat::kPadBeforeSuffix,
-              12, (UChar)0x0078 /*x*/);
+              12, (char16_t)0x0078 /*x*/);
     expectPad(fmt, "''#0*x", DecimalFormat::kPadBeforeSuffix,
-              3, (UChar)0x0078 /*x*/);
+              3, (char16_t)0x0078 /*x*/);
     expectPad(fmt, "'I''ll'*a###.##", DecimalFormat::kPadAfterPrefix,
-              10, (UChar)0x0061 /*a*/);
+              10, (char16_t)0x0061 /*a*/);
 
     fmt.applyPattern("AA#,##0.00ZZ", status);
     CHECK(status, "applyPattern");
@@ -1891,7 +1891,7 @@ void NumberFormatTest::TestSurrogateSupport(void) {
     expect2(new DecimalFormat("##0.000", custom, status),
            1.25, expStr, status);
 
-    custom.setSymbol(DecimalFormatSymbols::kZeroDigitSymbol, (UChar)0x30);
+    custom.setSymbol(DecimalFormatSymbols::kZeroDigitSymbol, (char16_t)0x30);
     custom.setSymbol(DecimalFormatSymbols::kCurrencySymbol, "units of money");
     custom.setSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol, "money separator");
     patternStr = UNICODE_STRING_SIMPLE("0.00 \\u00A4' in your bank account'");
@@ -1955,11 +1955,11 @@ void NumberFormatTest::TestCurrencyPatterns(void) {
 void NumberFormatTest::TestRegCurrency(void) {
 #if !UCONFIG_NO_SERVICE
     UErrorCode status = U_ZERO_ERROR;
-    UChar USD[4];
+    char16_t USD[4];
     ucurr_forLocale("en_US", USD, 4, &status);
-    UChar YEN[4];
+    char16_t YEN[4];
     ucurr_forLocale("ja_JP", YEN, 4, &status);
-    UChar TMP[4];
+    char16_t TMP[4];
 
     if(U_FAILURE(status)) {
         errcheckln(status, "Unable to get currency for locale, error %s", u_errorName(status));
@@ -2001,10 +2001,10 @@ void NumberFormatTest::TestCurrencyNames(void) {
     // Do a basic check of getName()
     // USD { "US$", "US Dollar"            } // 04/04/1792-
     UErrorCode ec = U_ZERO_ERROR;
-    static const UChar USD[] = {0x55, 0x53, 0x44, 0}; /*USD*/
-    static const UChar USX[] = {0x55, 0x53, 0x58, 0}; /*USX*/
-    static const UChar CAD[] = {0x43, 0x41, 0x44, 0}; /*CAD*/
-    static const UChar ITL[] = {0x49, 0x54, 0x4C, 0}; /*ITL*/
+    static const char16_t USD[] = {0x55, 0x53, 0x44, 0}; /*USD*/
+    static const char16_t USX[] = {0x55, 0x53, 0x58, 0}; /*USX*/
+    static const char16_t CAD[] = {0x43, 0x41, 0x44, 0}; /*CAD*/
+    static const char16_t ITL[] = {0x49, 0x54, 0x4C, 0}; /*ITL*/
     UBool isChoiceFormat;
     int32_t len;
     const UBool possibleDataError = true;
@@ -2147,21 +2147,21 @@ void NumberFormatTest::TestCurrencyVariants(){
         status.setScope(cas.isoCode);
         UBool choiceFormatIgnored;
         int32_t lengthIgnored;
-        const UChar* actualShort = ucurr_getName(
+        const char16_t* actualShort = ucurr_getName(
             cas.isoCode,
             cas.locale,
             UCURR_SYMBOL_NAME,
             &choiceFormatIgnored,
             &lengthIgnored,
             status);
-        const UChar* actualFormal = ucurr_getName(
+        const char16_t* actualFormal = ucurr_getName(
             cas.isoCode,
             cas.locale,
             UCURR_FORMAL_SYMBOL_NAME,
             &choiceFormatIgnored,
             &lengthIgnored,
             status);
-        const UChar* actualVarant = ucurr_getName(
+        const char16_t* actualVarant = ucurr_getName(
             cas.isoCode,
             cas.locale,
             UCURR_VARIANT_SYMBOL_NAME,
@@ -2169,7 +2169,7 @@ void NumberFormatTest::TestCurrencyVariants(){
             &lengthIgnored,
             status);
         status.errIfFailureAndReset();
-        const UChar* actualNarrow = ucurr_getName(
+        const char16_t* actualNarrow = ucurr_getName(
             cas.isoCode,
             cas.locale,
             UCURR_NARROW_SYMBOL_NAME,
@@ -2190,24 +2190,24 @@ void NumberFormatTest::TestCurrencyVariants(){
 
 void NumberFormatTest::TestCurrencyUnit(void){
     UErrorCode ec = U_ZERO_ERROR;
-    static const UChar USD[]  = u"USD";
+    static const char16_t USD[]  = u"USD";
     static const char USD8[]  =  "USD";
-    static const UChar BAD[]  = u"???";
-    static const UChar BAD2[] = u"??A";
-    static const UChar XXX[]  = u"XXX";
+    static const char16_t BAD[]  = u"???";
+    static const char16_t BAD2[] = u"??A";
+    static const char16_t XXX[]  = u"XXX";
     static const char XXX8[]  =  "XXX";
-    static const UChar XYZ[]  = u"XYZ";
+    static const char16_t XYZ[]  = u"XYZ";
     static const char XYZ8[]  =  "XYZ";
-    static const UChar INV[]  = u"{$%";
+    static const char16_t INV[]  = u"{$%";
     static const char INV8[]  =  "{$%";
-    static const UChar ZZZ[]  = u"zz";
+    static const char16_t ZZZ[]  = u"zz";
     static const char ZZZ8[]  = "zz";
-    static const UChar JPY[]  = u"JPY";
+    static const char16_t JPY[]  = u"JPY";
     static const char JPY8[]  =  "JPY";
-    static const UChar jpy[]  = u"jpy";
+    static const char16_t jpy[]  = u"jpy";
     static const char jpy8[]  =  "jpy";
 
-    UChar* EUR = (UChar*) malloc(6);
+    char16_t* EUR = (char16_t*) malloc(6);
     EUR[0] = u'E';
     EUR[1] = u'U';
     EUR[2] = u'R';
@@ -2350,7 +2350,7 @@ void NumberFormatTest::TestCurrencyUnit(void){
 
 void NumberFormatTest::TestCurrencyAmount(void){
     UErrorCode ec = U_ZERO_ERROR;
-    static const UChar USD[] = {85, 83, 68, 0}; /*USD*/
+    static const char16_t USD[] = {85, 83, 68, 0}; /*USD*/
     CurrencyAmount ca(9, USD, ec);
     assertSuccess("CurrencyAmount", ec);
 
@@ -2387,9 +2387,9 @@ void NumberFormatTest::TestSymbolsWithBadLocale(void) {
         Locale locBad(localeName);
         assertTrue(WHERE, !locBad.isBogus());
         UErrorCode status = U_ZERO_ERROR;
-        UnicodeString intlCurrencySymbol((UChar)0xa4);
+        UnicodeString intlCurrencySymbol((char16_t)0xa4);
 
-        intlCurrencySymbol.append((UChar)0xa4);
+        intlCurrencySymbol.append((char16_t)0xa4);
 
         logln("Current locale is %s", Locale::getDefault().getName());
         Locale::setDefault(locBad, status);
@@ -2433,7 +2433,7 @@ void NumberFormatTest::TestAdoptDecimalFormatSymbols(void) {
         return;
     }
     UnicodeString pat(" #,##0.00");
-    pat.insert(0, (UChar)0x00A4);
+    pat.insert(0, (char16_t)0x00A4);
     DecimalFormat fmt(pat, sym, ec);
     if (U_FAILURE(ec)) {
         errln("Fail: DecimalFormat constructor");
@@ -2584,7 +2584,7 @@ static int32_t keywordIndex(const UnicodeString& tok) {
  */
 static void parseCurrencyAmount(const UnicodeString& str,
                                 const NumberFormat& fmt,
-                                UChar delim,
+                                char16_t delim,
                                 Formattable& result,
                                 UErrorCode& ec) {
     UnicodeString num, cur;
@@ -2720,14 +2720,14 @@ void NumberFormatTest::TestCases() {
             // fpc: <loc or '-'> <curr.amt> <exp. string> <exp. curr.amt>
             if (!tokens.next(currAmt, ec)) goto error;
             if (!tokens.next(str, ec)) goto error;
-            parseCurrencyAmount(currAmt, *ref, (UChar)0x2F/*'/'*/, n, ec);
+            parseCurrencyAmount(currAmt, *ref, (char16_t)0x2F/*'/'*/, n, ec);
             if (assertSuccess("parseCurrencyAmount", ec)) {
                 assertEquals(where + "getCurrencyFormat(" + mloc + ").format(" + currAmt + ")",
                              str, mfmt->format(n, out.remove(), ec));
                 assertSuccess("format", ec);
             }
             if (!tokens.next(currAmt, ec)) goto error;
-            parseCurrencyAmount(currAmt, *ref, (UChar)0x2F/*'/'*/, n, ec);
+            parseCurrencyAmount(currAmt, *ref, (char16_t)0x2F/*'/'*/, n, ec);
             if (assertSuccess("parseCurrencyAmount", ec)) {
                 Formattable m;
 
@@ -2990,8 +2990,8 @@ void NumberFormatTest::expectCurrency(NumberFormat& nf, const Locale& locale,
                                       double value, const UnicodeString& string) {
     UErrorCode ec = U_ZERO_ERROR;
     DecimalFormat& fmt = * (DecimalFormat*) &nf;
-    const UChar DEFAULT_CURR[] = {45/*-*/,0};
-    UChar curr[4];
+    const char16_t DEFAULT_CURR[] = {45/*-*/,0};
+    char16_t curr[4];
     u_strcpy(curr, DEFAULT_CURR);
     if (*locale.getLanguage() != 0) {
         ucurr_forLocale(locale.getName(), curr, 4, &ec);
@@ -3042,7 +3042,7 @@ void NumberFormatTest::expectPad(DecimalFormat& fmt, const UnicodeString& pat,
     expectPad(fmt, pat, pos, 0, (UnicodeString)"");
 }
 void NumberFormatTest::expectPad(DecimalFormat& fmt, const UnicodeString& pat,
-                                 int32_t pos, int32_t width, UChar pad) {
+                                 int32_t pos, int32_t width, char16_t pad) {
     expectPad(fmt, pat, pos, width, UnicodeString(pad));
 }
 void NumberFormatTest::expectPad(DecimalFormat& fmt, const UnicodeString& pat,
@@ -3076,8 +3076,8 @@ void NumberFormatTest::expectPad(DecimalFormat& fmt, const UnicodeString& pat,
 // This test is flaky b/c the symbols for CNY and JPY are equivalent in this locale  - FIXME
 void NumberFormatTest::TestCompatibleCurrencies() {
 /*
-    static const UChar JPY[] = {0x4A, 0x50, 0x59, 0};
-    static const UChar CNY[] = {0x43, 0x4E, 0x59, 0};
+    static const char16_t JPY[] = {0x4A, 0x50, 0x59, 0};
+    static const char16_t CNY[] = {0x43, 0x4E, 0x59, 0};
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<NumberFormat> fmt(
         NumberFormat::createCurrencyInstance(Locale::getUS(), status));
@@ -3112,7 +3112,7 @@ void NumberFormatTest::TestCompatibleCurrencies() {
 */
 }
 
-void NumberFormatTest::expectParseCurrency(const NumberFormat &fmt, const UChar* currency, double amount, const char *text) {
+void NumberFormatTest::expectParseCurrency(const NumberFormat &fmt, const char16_t* currency, double amount, const char *text) {
     ParsePosition ppos;
     UnicodeString utext = ctou(text);
     LocalPointer<CurrencyAmount> currencyAmount(fmt.parseCurrency(utext, ppos));
@@ -3240,7 +3240,7 @@ void NumberFormatTest::TestCurrencyFormat()
     MeasureFormat *cloneObj;
     UnicodeString str;
     Formattable toFormat, result;
-    static const UChar ISO_CODE[4] = {0x0047, 0x0042, 0x0050, 0};
+    static const char16_t ISO_CODE[4] = {0x0047, 0x0042, 0x0050, 0};
 
     Locale  saveDefaultLocale = Locale::getDefault();
     Locale::setDefault( Locale::getUK(), status );
@@ -3632,9 +3632,9 @@ NumberFormatTest::TestMultiCurrencySign() {
         {"zh_CN", "\\u00A4#,##0.00;(\\u00A4#,##0.00)", "1", "\\u00A51.00", "CNY\\u00A01.00", "\\u4EBA\\u6C11\\u5E01\\u00A01.00"}
     };
 
-    const UChar doubleCurrencySign[] = {0xA4, 0xA4, 0};
+    const char16_t doubleCurrencySign[] = {0xA4, 0xA4, 0};
     UnicodeString doubleCurrencyStr(doubleCurrencySign);
-    const UChar tripleCurrencySign[] = {0xA4, 0xA4, 0xA4, 0};
+    const char16_t tripleCurrencySign[] = {0xA4, 0xA4, 0xA4, 0};
     UnicodeString tripleCurrencyStr(tripleCurrencySign);
 
     for (uint32_t i=0; i<UPRV_LENGTHOF(DATA); ++i) {
@@ -3788,7 +3788,7 @@ NumberFormatTest::TestDecimalFormatCurrencyParse() {
         return;
     }
     UnicodeString pat;
-    UChar currency = 0x00A4;
+    char16_t currency = 0x00A4;
     // "\xA4#,##0.00;-\xA4#,##0.00"
     pat.append(currency).append(currency).append(currency).append("#,##0.00;-").append(currency).append(currency).append(currency).append("#,##0.00");
     DecimalFormat* fmt = new DecimalFormat(pat, sym, status);
@@ -3876,7 +3876,7 @@ NumberFormatTest::TestCurrencyIsoPluralFormat() {
             dataerrln((UnicodeString)"can not create instance, locale:" + localeString + ", style: " + k + " - " + u_errorName(status));
             continue;
         }
-        UChar currencyCode[4];
+        char16_t currencyCode[4];
         u_charsToUChars(currencyISOCode, currencyCode, 4);
         numFmt->setCurrency(currencyCode, status);
         if (U_FAILURE(status)) {
@@ -3991,7 +3991,7 @@ for (;;) {
             dataerrln((UnicodeString)"can not create instance, locale:" + localeString + ", style: " + k + " - " + u_errorName(status));
             continue;
         }
-        UChar currencyCode[4];
+        char16_t currencyCode[4];
         u_charsToUChars(currencyISOCode, currencyCode, 4);
         numFmt->setCurrency(currencyCode, status);
         if (U_FAILURE(status)) {
@@ -7140,7 +7140,7 @@ NumberFormatTest::Test9087(void)
     U_STRING_DECL(nanstr,"NAN",3);
     U_STRING_INIT(nanstr,"NAN",3);
 
-    UChar outputbuf[50] = {0};
+    char16_t outputbuf[50] = {0};
     UErrorCode status = U_ZERO_ERROR;
     UNumberFormat* fmt = unum_open(UNUM_PATTERN_DECIMAL,pattern,1,nullptr,nullptr,&status);
     if ( U_FAILURE(status) ) {
@@ -7338,10 +7338,10 @@ UBool NumberFormatTest::testFormattableAsUFormattable(const char *file, int line
       UnicodeString str;
       f.getString(str);
       int32_t len;
-      const UChar* uch = ufmt_getUChars(u, &len, &valueStatus);
+      const char16_t* uch = ufmt_getUChars(u, &len, &valueStatus);
       if(U_SUCCESS(valueStatus)) {
         UnicodeString str2(uch, len);
-        assertTrue("UChar* NUL-terminated", uch[len]==0);
+        assertTrue("char16_t* NUL-terminated", uch[len]==0);
         exactMatch = (str == str2);
       }
       triedExact = true;
@@ -7700,7 +7700,7 @@ void NumberFormatTest::TestCustomCurrencySignAndSeparator() {
     custom.setSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol, ":");
 
     UnicodeString pat(" #,##0.00");
-    pat.insert(0, (UChar)0x00A4);
+    pat.insert(0, (char16_t)0x00A4);
 
     DecimalFormat fmt(pat, custom, status);
     CHECK(status, "DecimalFormat constructor");
@@ -8246,7 +8246,7 @@ void NumberFormatTest::TestCurrencyUsage() {
 
     // Test the currency change
     // 1st time for getter/setter, 2nd time for factory method
-    const UChar CUR_PKR[] = {0x50, 0x4B, 0x52, 0};
+    const char16_t CUR_PKR[] = {0x50, 0x4B, 0x52, 0};
     for(int i=0; i<2; i++){
         status = U_ZERO_ERROR;
         if(i == 0){
@@ -8445,7 +8445,7 @@ void NumberFormatTest::TestFractionalDigitsForCurrency() {
         dataerrln("Error creating NumberFormat - %s", u_errorName(status));
         return;
     }
-    UChar JPY[] = {0x4A, 0x50, 0x59, 0x0};
+    char16_t JPY[] = {0x4A, 0x50, 0x59, 0x0};
     fmt->setCurrency(JPY, status);
     if (!assertSuccess("", status)) {
         return;
@@ -8602,7 +8602,7 @@ void NumberFormatTest::Test13737_ParseScientificStrict() {
 
 void NumberFormatTest::Test11376_getAndSetPositivePrefix() {
     {
-        const UChar USD[] = {0x55, 0x53, 0x44, 0x0};
+        const char16_t USD[] = {0x55, 0x53, 0x44, 0x0};
         UErrorCode status = U_ZERO_ERROR;
         LocalPointer<NumberFormat> fmt(
                 NumberFormat::createCurrencyInstance("en", status));
@@ -8622,7 +8622,7 @@ void NumberFormatTest::Test11376_getAndSetPositivePrefix() {
         assertSuccess("", status);
     }
     {
-        const UChar USD[] = {0x55, 0x53, 0x44, 0x0};
+        const char16_t USD[] = {0x55, 0x53, 0x44, 0x0};
         UErrorCode status = U_ZERO_ERROR;
         LocalPointer<NumberFormat> fmt(
                 NumberFormat::createInstance("en", UNUM_CURRENCY_PLURAL, status));
@@ -8731,7 +8731,7 @@ void NumberFormatTest::Test11649_toPatternWithMultiCurrency() {
     if (!assertSuccess("", status)) {
         return;
     }
-    static UChar USD[] = {0x55, 0x53, 0x44, 0x0};
+    static char16_t USD[] = {0x55, 0x53, 0x44, 0x0};
     fmt.setCurrency(USD);
     UnicodeString appendTo;
 
@@ -8778,7 +8778,7 @@ void NumberFormatTest::Test13391_chakmaParsing() {
         dataerrln("%s %d Chakma df is null",  __FILE__, __LINE__);
         return;
     }
-    const UChar* expected = u"\U00011137\U00011138,\U00011139\U0001113A\U0001113B";
+    const char16_t* expected = u"\U00011137\U00011138,\U00011139\U0001113A\U0001113B";
     UnicodeString actual;
     df->format(12345, actual, status);
     assertSuccess("Should not fail when formatting in ccp", status);
@@ -8789,7 +8789,7 @@ void NumberFormatTest::Test13391_chakmaParsing() {
     assertSuccess("Should not fail when parsing in ccp", status);
     assertEquals("Should parse to 12345 in ccp", 12345, result);
 
-    const UChar* expectedScientific = u"\U00011137.\U00011139E\U00011138";
+    const char16_t* expectedScientific = u"\U00011137.\U00011139E\U00011138";
     UnicodeString actualScientific;
     df.adoptInstead(static_cast<DecimalFormat*>(
         NumberFormat::createScientificInstance(Locale("ccp"), status)));
@@ -9381,7 +9381,7 @@ void NumberFormatTest::Test11649_DecFmtCurrencies() {
     pattern = pattern.unescape();
     DecimalFormat fmt(pattern, status);
     if (!assertSuccess("", status, true, __FILE__, __LINE__)) { return; }
-    static const UChar USD[] = u"USD";
+    static const char16_t USD[] = u"USD";
     fmt.setCurrency(USD);
     UnicodeString appendTo;
 

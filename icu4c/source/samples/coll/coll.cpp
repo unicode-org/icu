@@ -142,8 +142,8 @@ UBool processOptions(int argc, const char **argv, OptSpec opts[])
  */
 int strcmp() 
 {
-	UChar source[100];
-	UChar target[100];
+	char16_t source[100];
+	char16_t target[100];
 	u_unescape(opt_source, source, 100);
 	u_unescape(opt_target, target, 100);
     UCollationResult result = ucol_strcoll(collator, source, -1, target, -1);
@@ -163,7 +163,7 @@ UBool processCollator()
 {
 	// Set up an ICU collator
     UErrorCode status = U_ZERO_ERROR;
-	UChar rules[100];
+	char16_t rules[100];
 
     if (opt_rules != 0) {
 		u_unescape(opt_rules, rules, 100);

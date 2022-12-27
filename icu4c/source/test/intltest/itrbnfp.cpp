@@ -149,8 +149,8 @@ IntlTestRBNFParse::testfmt(RuleBasedNumberFormat* formatter, double val, UErrorC
     UnicodeString us;
     formatter->format((const Formattable)val, us, status);
     if (U_SUCCESS(status)) {
-        us.insert(0, (UChar)'"');
-        us.append((UChar)'"');
+        us.insert(0, (char16_t)'"');
+        us.append((char16_t)'"');
         logln(us);
     } else {
         logln("error: could not format %g, returned status: %d", val, status);
@@ -162,8 +162,8 @@ IntlTestRBNFParse::testfmt(RuleBasedNumberFormat* formatter, int val, UErrorCode
     UnicodeString us;
     formatter->format((const Formattable)(int32_t)val, us, status);
     if (U_SUCCESS(status)) {
-        us.insert(0, (UChar)'"');
-        us.append((UChar)'"');
+        us.insert(0, (char16_t)'"');
+        us.append((char16_t)'"');
         logln(us);
     } else {
         logln("error: could not format %d, returned status: %d", val, status);

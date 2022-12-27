@@ -24,9 +24,9 @@
 static icu::UInitOnce   LocaleUtilityInitOnce {};
 static icu::Hashtable * LocaleUtility_cache = nullptr;
 
-#define UNDERSCORE_CHAR ((UChar)0x005f)
-#define AT_SIGN_CHAR    ((UChar)64)
-#define PERIOD_CHAR     ((UChar)46)
+#define UNDERSCORE_CHAR ((char16_t)0x005f)
+#define AT_SIGN_CHAR    ((char16_t)64)
+#define PERIOD_CHAR     ((char16_t)46)
 
 /*
  ******************************************************************
@@ -94,14 +94,14 @@ LocaleUtility::canonicalLocaleString(const UnicodeString* id, UnicodeString& res
       n = end;
     }
     for (; i < n; ++i) {
-      UChar c = result.charAt(i);
+      char16_t c = result.charAt(i);
       if (c >= 0x0041 && c <= 0x005a) {
         c += 0x20;
         result.setCharAt(i, c);
       }
     }
     for (n = end; i < n; ++i) {
-      UChar c = result.charAt(i);
+      char16_t c = result.charAt(i);
       if (c >= 0x0061 && c <= 0x007a) {
         c -= 0x20;
         result.setCharAt(i, c);
@@ -112,7 +112,7 @@ LocaleUtility::canonicalLocaleString(const UnicodeString* id, UnicodeString& res
 
 #if 0
     // This code does a proper full level 2 canonicalization of id.
-    // It's nasty to go from UChar to char to char to UChar -- but
+    // It's nasty to go from char16_t to char to char to char16_t -- but
     // that's what you have to do to use the uloc_canonicalize
     // function on UnicodeStrings.
 
@@ -172,7 +172,7 @@ LocaleUtility::initLocaleFromName(const UnicodeString& id, Locale& result)
         int32_t prev, i;
         prev = 0;
         for(;;) {
-            i = id.indexOf((UChar)0x40, prev);
+            i = id.indexOf((char16_t)0x40, prev);
             if(i < 0) {
                 // no @ between prev and the rest of the string
                 id.extract(prev, INT32_MAX, buffer + prev, BUFLEN - prev, US_INV);
@@ -232,7 +232,7 @@ LocaleUtility::getAvailableLocaleNames(const UnicodeString& bundleID)
             const char* path = cbundleID.isEmpty() ? nullptr : cbundleID.data();
             icu::LocalUEnumerationPointer uenum(ures_openAvailableLocales(path, &status));
             for (;;) {
-                const UChar* id = uenum_unext(uenum.getAlias(), nullptr, &status);
+                const char16_t* id = uenum_unext(uenum.getAlias(), nullptr, &status);
                 if (id == nullptr) {
                     break;
                 }

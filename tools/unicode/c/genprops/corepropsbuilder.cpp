@@ -95,7 +95,7 @@ Formally, the file contains the following structures:
 
     P  const uint32_t props32[i1-i0];
     E  const uint32_t exceptions[i2-i1];
-    U  const UChar uchars[2*(i3-i2)];
+    U  const char16_t uchars[2*(i3-i2)];
 
     AT serialized trie for additional properties (byte size: 4*(i4-i3))
     PV const uint32_t propsVectors[(i6-i4)/i5][i5]==uint32_t propsVectors[i6-i4];
@@ -729,11 +729,11 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
     ) {
         UnicodeString codes;  // vector of 16-bit UScriptCode values
         UnicodeSetIterator iter(props.scx);
-        while(iter.next()) { codes.append((UChar)iter.getCodepoint()); }
+        while(iter.next()) { codes.append((char16_t)iter.getCodepoint()); }
 
         // Set bit 15 on the last script code, for termination.
         int32_t length=codes.length();
-        codes.setCharAt(length-1, (UChar)(codes[length-1]|0x8000));
+        codes.setCharAt(length-1, (char16_t)(codes[length-1]|0x8000));
         // Find this list of codes in the Script_Extensions data so far, or add this list.
         int32_t index=scriptExtensions.indexOf(codes);
         if(index<0) {
@@ -752,7 +752,7 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
             // Store an additional pair of 16-bit units for an unusual main Script code
             // together with the Script_Extensions index.
             UnicodeString codeIndexPair;
-            codeIndexPair.append((UChar)script).append((UChar)index);
+            codeIndexPair.append((char16_t)script).append((char16_t)index);
             index=scriptExtensions.indexOf(codeIndexPair);
             if(index<0) {
                 index=scriptExtensions.length();
@@ -831,7 +831,7 @@ CorePropsBuilder::build(UErrorCode &errorCode) {
 
     /* round up scriptExtensions to multiple of 4 bytes */
     if(scriptExtensions.length()&1) {
-        scriptExtensions.append((UChar)0);
+        scriptExtensions.append((char16_t)0);
     }
 
     /* set indexes */

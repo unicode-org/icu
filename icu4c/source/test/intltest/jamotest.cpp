@@ -154,7 +154,7 @@ JamoTest::TestJamo() {
  * latin and back.
  */
 void JamoTest::TestPiecemeal(void) {
-    UnicodeString hangul; hangul.append((UChar)0xBC0F);
+    UnicodeString hangul; hangul.append((char16_t)0xBC0F);
     UnicodeString jamo = nameToJamo("(Mi)(I)(Cf)");
     UnicodeString latin("mic");
     UnicodeString latin2("mich");

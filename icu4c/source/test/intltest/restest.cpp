@@ -22,7 +22,7 @@
 
 //***************************************************************************************
 
-static const UChar kErrorUChars[] = { 0x45, 0x52, 0x52, 0x4f, 0x52, 0 };
+static const char16_t kErrorUChars[] = { 0x45, 0x52, 0x52, 0x4f, 0x52, 0 };
 static const int32_t kErrorLength = 5;
 
 //***************************************************************************************
@@ -523,7 +523,7 @@ ResourceBundleTest::TestExemplar(){
         UResourceBundle *resb =ures_open(nullptr,locale,&status);
         if(U_SUCCESS(status) && status!=U_USING_FALLBACK_WARNING && status!=U_USING_DEFAULT_WARNING){
             int32_t len=0;
-            const UChar* strSet = ures_getStringByKey(resb,"ExemplarCharacters",&len,&status);
+            const char16_t* strSet = ures_getStringByKey(resb,"ExemplarCharacters",&len,&status);
             UnicodeSet set(strSet,status);
             if(U_FAILURE(status)){
                 errln("Could not construct UnicodeSet from pattern for ExemplarCharacters in locale : %s. Error: %s",locale,u_errorName(status));

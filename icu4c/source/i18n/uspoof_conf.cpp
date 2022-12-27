@@ -227,7 +227,7 @@ void ConfusabledataBuilder::buildConfusableData(SpoofImpl * spImpl, const char *
 void ConfusabledataBuilder::build(const char * confusables, int32_t confusablesLen,
                UErrorCode &status) {
 
-    // Convert the user input data from UTF-8 to UChar (UTF-16)
+    // Convert the user input data from UTF-8 to char16_t (UTF-16)
     int32_t inputLen = 0;
     if (U_FAILURE(status)) {
         return;
@@ -237,7 +237,7 @@ void ConfusabledataBuilder::build(const char * confusables, int32_t confusablesL
         return;
     }
     status = U_ZERO_ERROR;
-    fInput = static_cast<UChar *>(uprv_malloc((inputLen+1) * sizeof(UChar)));
+    fInput = static_cast<char16_t *>(uprv_malloc((inputLen+1) * sizeof(char16_t)));
     if (fInput == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -459,8 +459,8 @@ void ConfusabledataBuilder::outputData(UErrorCode &status) {
     uint32_t stringsLength = fStringTable->length();
     // Reserve an extra space so the string will be nul-terminated.  This is
     // only a convenience, for when debugging; it is not needed otherwise.
-    UChar *strings =
-        static_cast<UChar *>(fSpoofImpl->fSpoofData->reserveSpace(stringsLength*sizeof(UChar)+2, status));
+    char16_t *strings =
+        static_cast<char16_t *>(fSpoofImpl->fSpoofData->reserveSpace(stringsLength*sizeof(char16_t)+2, status));
     if (U_FAILURE(status)) {
         return;
     }

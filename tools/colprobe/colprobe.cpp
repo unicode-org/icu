@@ -49,7 +49,7 @@
 //  Stubs for Windows API functions when building on UNIXes.
 //
 typedef int DWORD;
-inline int CompareStringW(DWORD, DWORD, UChar *, int, UChar *, int) {return 0;};
+inline int CompareStringW(DWORD, DWORD, char16_t *, int, char16_t *, int) {return 0;};
 #include <sys/time.h>
 unsigned long timeGetTime() {
     struct timeval t;
@@ -58,7 +58,7 @@ unsigned long timeGetTime() {
     val += t.tv_usec / 1000;
     return val;
 };
-inline int LCMapStringW(DWORD, DWORD, UChar *, int, UChar *, int) {return 0;};
+inline int LCMapStringW(DWORD, DWORD, char16_t *, int, char16_t *, int) {return 0;};
 const int LCMAP_SORTKEY = 0;
 #define MAKELCID(a,b) 0
 const int SORT_DEFAULT = 0;
@@ -84,7 +84,7 @@ Hashtable     gElements(false);
 Hashtable     gExpansions(false);
 CompareFn gComparer;
 
-const UChar separatorChar = 0x0030;
+const char16_t separatorChar = 0x0030;
 
 UFILE *out = nullptr;
 UFILE *err = nullptr;
@@ -286,10 +286,10 @@ void processArgs(int argc, char* argv[], UErrorCode &status)
 
 }
 
-void printRules(const UChar *name, int32_t len, UFILE *file) {
+void printRules(const char16_t *name, int32_t len, UFILE *file) {
   // very rudimentary pretty rules print
   int32_t i = 0;
-  UChar toPrint[16384];
+  char16_t toPrint[16384];
   int32_t toPrintIndex = 0;
   for(i = 0; i < len; i++) {
     if(name[i] == 0x0026) {
@@ -314,7 +314,7 @@ void printRules(const UChar *name, int32_t len, UFILE *file) {
 
 }
 
-void escapeString(const UChar *name, int32_t len, UFILE *file) {
+void escapeString(const char16_t *name, int32_t len, UFILE *file) {
   u_fprintf(file, "%U", name);
 /*
   int32_t j = 0;
@@ -365,7 +365,7 @@ setArray(Line **array, Hashtable *table = &gElements) {
   return size;
 }
 
-UBool trySwamped(Line **smaller, Line **greater, UChar chars[2], CompareFn comparer) {
+UBool trySwamped(Line **smaller, Line **greater, char16_t chars[2], CompareFn comparer) {
   u_strcpy(gSource->name, (*smaller)->name);
   gSource->name[(*smaller)->len] = separatorChar;
   gSource->name[(*smaller)->len+1] = chars[0];
@@ -385,7 +385,7 @@ UBool trySwamped(Line **smaller, Line **greater, UChar chars[2], CompareFn compa
   }
 }
 
-UBool trySwamps(Line **smaller, Line **greater, UChar chars[2], CompareFn comparer) {
+UBool trySwamps(Line **smaller, Line **greater, char16_t chars[2], CompareFn comparer) {
   gSource->name[0] = chars[0];
   gSource->name[1] = separatorChar;
   u_strcpy(gSource->name+2, (*smaller)->name);
@@ -407,28 +407,28 @@ UColAttributeValue
 probeStrength(Line** prevLine, Line **currLine, CompareFn comparer) {
   // Primary swamps secondary
   // have pairs where [0] 2> [1]
-  UChar primSwamps[][2] = {
+  char16_t primSwamps[][2] = {
     { 0x00E0, 0x0061 },
     { 0x0450, 0x0435 },
     { 0x31a3, 0x310d }
   };
   // Secondary swamps tertiary
   // have pairs where [0] 3> [1]
-  UChar secSwamps[][2] = {
+  char16_t secSwamps[][2] = {
     { 0x0053, 0x0073 },
     { 0x0415, 0x0435 },
     { 0x31b6, 0x310e }
   };
   // Secondary is swamped by primary
   // have pairs where [0] 1> [1]
-  UChar secSwamped[][2] = {
+  char16_t secSwamped[][2] = {
     { 0x0062, 0x0061 },
     { 0x0436, 0x0454 },
     { 0x310e, 0x310d }
   };
   // Tertiary is swamped by secondary
   // have pairs where [0] 2> [1]
-  UChar terSwamped[][2] = {
+  char16_t terSwamped[][2] = {
     { 0x00E0, 0x0061 },
     { 0x0450, 0x0435 },
     { 0x31a3, 0x310d }
@@ -699,7 +699,7 @@ positionExpansions(Line **gLines, int32_t size, CompareFn comparer) {
             // check for craziness such as s = ss/s
             // such line would consist of previous (or next) concatenated with the expansion value
             // make a test
-            UChar fullString[256];
+            char16_t fullString[256];
             u_strcpy(fullString, toMove->previous->name);
             u_strcat(fullString, toMove->expansionString);
             if(u_strcmp(fullString, toMove->name) == 0) {
@@ -711,7 +711,7 @@ positionExpansions(Line **gLines, int32_t size, CompareFn comparer) {
               u_fprintf(log, "\n");
             } 
           } else if(toMove->next->strength == UCOL_IDENTICAL) {
-            UChar fullString[256];
+            char16_t fullString[256];
             u_strcpy(fullString, toMove->next->name);
             u_strcat(fullString, toMove->expansionString);
             if(u_strcmp(fullString, toMove->name) == 0) {
@@ -1244,7 +1244,7 @@ constructAndAnalyze(Line **gLines, Line *lines, int32_t size, CompareFn comparer
 // Check whether upper case comes before lower case or vice-versa
 int32_t 
 checkCaseOrdering(void) {
-  UChar stuff[][3] = {
+  char16_t stuff[][3] = {
     { 0x0061, separatorChar, 0x0061}, //"aa",
     { 0x0061, separatorChar, 0x0041 }, //"a\\u00E0",
     { 0x0041, separatorChar, 0x0061 }, //"\\u00E0a",
@@ -1288,7 +1288,7 @@ checkCaseOrdering(void) {
 // Check whether the secondaries are in the straight or reversed order
 int32_t 
 checkSecondaryOrdering(void) {
-  UChar stuff[][5] = {
+  char16_t stuff[][5] = {
     { 0x0061, separatorChar, 0x0061, separatorChar, 0x00E0 }, //"aa",
     { 0x0061, separatorChar, 0x00E0, separatorChar, 0x0061 }, //"a\\u00E0",
     { 0x00E0, separatorChar, 0x0061, separatorChar, 0x0061 }, //"\\u00E0a",
@@ -1514,7 +1514,7 @@ void
 processCollator(UCollator *col, UErrorCode &status) {
   int32_t i = 0;
   gCol = col;
-  UChar ruleString[16384];
+  char16_t ruleString[16384];
   int32_t ruleStringLength = ucol_getRulesEx(gCol, UCOL_TAILORING_ONLY, ruleString, 16384);
   if(!gQuiet) {
     u_fprintf(out, "ICU rules:\n");
@@ -1677,8 +1677,8 @@ main(int argc,
 
   if(gRulesStdin) {
     char buffer[1024];
-    UChar ruleBuffer[16384];
-    UChar *rules = ruleBuffer;
+    char16_t ruleBuffer[16384];
+    char16_t *rules = ruleBuffer;
     int32_t maxRuleLen = 16384;
     int32_t rLen = 0;
     while(gets(buffer)) {

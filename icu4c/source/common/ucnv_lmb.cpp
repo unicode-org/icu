@@ -298,8 +298,8 @@ ambiguous mappings: */
 
 static const struct _UniLMBCSGrpMap  
 {
-   const UChar uniStartRange;
-   const UChar uniEndRange;
+   const char16_t uniStartRange;
+   const char16_t uniEndRange;
    const ulmbcs_byte_t  GrpType;
 } UniLMBCSGrpMap[]
 =
@@ -445,7 +445,7 @@ static const struct _UniLMBCSGrpMap
 };
    
 static ulmbcs_byte_t 
-FindLMBCSUniRange(UChar uniChar)
+FindLMBCSUniRange(char16_t uniChar)
 {
    const struct _UniLMBCSGrpMap * pTable = UniLMBCSGrpMap;
 
@@ -748,7 +748,7 @@ LMBCSConversionWorker (
    UConverterDataLMBCS * extraInfo,    /* subconverters, opt & locale groups */
    ulmbcs_byte_t group,                /* The group to try */
    ulmbcs_byte_t  * pStartLMBCS,              /* where to put the results */
-   UChar * pUniChar,                   /* The input unicode character */
+   char16_t * pUniChar,                   /* The input unicode character */
    ulmbcs_byte_t * lastConverterIndex, /* output: track last successful group used */
    UBool * groups_tried                /* output: track any unsuccessful groups */
 )   
@@ -824,7 +824,7 @@ LMBCSConversionWorker (
 know we are writing LMBCS using the Unicode group
 */
 static size_t 
-LMBCSConvertUni(ulmbcs_byte_t * pLMBCS, UChar uniChar)  
+LMBCSConvertUni(ulmbcs_byte_t * pLMBCS, char16_t uniChar)
 {
      /* encode into LMBCS Unicode range */
    uint8_t LowCh =   (uint8_t)(uniChar & 0x00FF);
@@ -853,7 +853,7 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
                   UErrorCode*     err)
 {
    ulmbcs_byte_t lastConverterIndex = 0;
-   UChar uniChar;
+   char16_t uniChar;
    ulmbcs_byte_t  LMBCS[ULMBCS_CHARSIZE_MAX];
    ulmbcs_byte_t  * pLMBCS;
    int32_t bytes_written;
@@ -1085,7 +1085,7 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
 
 
 /* A function to call when we are looking at the Unicode group byte in LMBCS */
-static UChar
+static char16_t
 GetUniFromLMBCSUni(char const ** ppLMBCSin)  /* Called with LMBCS-style Unicode byte stream */
 {
    uint8_t  HighCh = *(*ppLMBCSin)++;  /* Big-endian Unicode in LMBCS compatibility group*/
@@ -1096,7 +1096,7 @@ GetUniFromLMBCSUni(char const ** ppLMBCSin)  /* Called with LMBCS-style Unicode 
       HighCh = LowCh;
       LowCh = 0; /* zero-byte in LSB special character */
    }
-   return (UChar)((HighCh << 8) | LowCh);
+   return (char16_t)((HighCh << 8) | LowCh);
 }
 
 
@@ -1264,7 +1264,7 @@ _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
                      UErrorCode*    err)
 {
    char LMBCS [ULMBCS_CHARSIZE_MAX];
-   UChar uniChar;    /* one output UNICODE char */
+   char16_t uniChar;    /* one output UNICODE char */
    const char * saveSource; /* beginning of current code point */
    const char * pStartLMBCS = args->source;  /* beginning of whole string */
    const char * errSource = nullptr; /* pointer to actual input in case an error occurs */
@@ -1292,7 +1292,7 @@ _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
         args->source = errSource = LMBCS;
         args->sourceLimit = LMBCS+size_old+size_new;
         savebytes = (int8_t)(size_old+size_new);
-        uniChar = (UChar) _LMBCSGetNextUCharWorker(args, err);
+        uniChar = (char16_t) _LMBCSGetNextUCharWorker(args, err);
         args->source = saveSource + ((args->source - LMBCS) - size_old);
         args->sourceLimit = saveSourceLimit;
 
@@ -1314,7 +1314,7 @@ _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
       else
       {
          errSource = saveSource;
-         uniChar = (UChar) _LMBCSGetNextUCharWorker(args, err);
+         uniChar = (char16_t) _LMBCSGetNextUCharWorker(args, err);
          savebytes = (int8_t)(args->source - saveSource);
       }
       if (U_SUCCESS(*err))

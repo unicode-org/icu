@@ -651,7 +651,7 @@ void RBBIAPITest::TestQuoteGrouping() {
 //      Test word break rule status constants.
 //
 void RBBIAPITest::TestRuleStatus() {
-     UChar str[30];
+     char16_t str[30];
      //no longer test Han or hiragana breaking here: ruleStatusVec would return nothing
      // changed UBRK_WORD_KANA to UBRK_WORD_IDEO
      u_unescape("plain word 123.45 \\u30a1\\u30a2 ",
@@ -1125,8 +1125,8 @@ void RBBIAPITest::TestRefreshInputText() {
      *    runs BreakIterator::next() repeatedly, moving the text in the middle of the sequence.
      *    The right set of boundaries should still be found.
      */
-    UChar testStr[]  = {0x20, 0x41, 0x20, 0x42, 0x20, 0x43, 0x20, 0x44, 0x0};  /* = " A B C D"  */
-    UChar movedStr[] = {0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,  0};
+    char16_t testStr[]  = {0x20, 0x41, 0x20, 0x42, 0x20, 0x43, 0x20, 0x44, 0x0};  /* = " A B C D"  */
+    char16_t movedStr[] = {0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,  0};
     UErrorCode status = U_ZERO_ERROR;
     UText ut1 = UTEXT_INITIALIZER;
     UText ut2 = UTEXT_INITIALIZER;
@@ -1168,7 +1168,7 @@ void RBBIAPITest::TestRefreshInputText() {
 
 #if !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_FILTERED_BREAK_ITERATION
 static void prtbrks(BreakIterator* brk, const UnicodeString &ustr, IntlTest &it) {
-  static const UChar PILCROW=0x00B6, CHSTR=0x3010, CHEND=0x3011; // lenticular brackets
+  static const char16_t PILCROW=0x00B6, CHSTR=0x3010, CHEND=0x3011; // lenticular brackets
   it.logln(UnicodeString("String:'")+ustr+UnicodeString("'"));
 
   int32_t *pos = new int32_t[ustr.length()];
@@ -1184,16 +1184,16 @@ static void prtbrks(BreakIterator* brk, const UnicodeString &ustr, IntlTest &it)
     }
   }
   UnicodeString out;
-  out.append((UChar)CHSTR);
+  out.append((char16_t)CHSTR);
   int32_t prev = 0;
   for(int32_t i=0;i<posCount;i++) {
     int32_t n=pos[i];
     out.append(ustr.tempSubString(prev,n-prev));
-    out.append((UChar)PILCROW);
+    out.append((char16_t)PILCROW);
     prev=n;
   }
   out.append(ustr.tempSubString(prev,ustr.length()-prev));
-  out.append((UChar)CHEND);
+  out.append((char16_t)CHEND);
   it.logln(out);
 
   out.remove();

@@ -52,7 +52,7 @@ CollationGermanTest::~CollationGermanTest()
     delete myCollation;
 }
 
-const UChar CollationGermanTest::testSourceCases[][CollationGermanTest::MAX_TOKEN_LEN] =
+const char16_t CollationGermanTest::testSourceCases[][CollationGermanTest::MAX_TOKEN_LEN] =
 {
     {0x47, 0x72, 0x00F6, 0x00DF, 0x65, 0},
     {0x61, 0x62, 0x63, 0},
@@ -68,7 +68,7 @@ const UChar CollationGermanTest::testSourceCases[][CollationGermanTest::MAX_TOKE
     {0x53, 0x74, 0x72, 0x61, 0x00DF, 0x65, 0}
 };
 
-const UChar CollationGermanTest::testTargetCases[][CollationGermanTest::MAX_TOKEN_LEN] =
+const char16_t CollationGermanTest::testTargetCases[][CollationGermanTest::MAX_TOKEN_LEN] =
 {
     {0x47, 0x72, 0x6f, 0x73, 0x73, 0x69, 0x73, 0x74, 0},
     {0x61, 0x0308, 0x62, 0x63, 0},

@@ -275,7 +275,7 @@ private:
      * @param len on output, length of string.
      * @return the string, or nullptr if none at that location.
      */
-    const UChar *getStringForDay(int32_t day, int32_t &len, UErrorCode &status) const;
+    const char16_t *getStringForDay(int32_t day, int32_t &len, UErrorCode &status) const;
 
     /**
      * Load the Date string array

@@ -85,17 +85,17 @@ uenum_count(UEnumeration* en, UErrorCode* status)
 }
 
 /* Don't call this directly. Only uenum_unext should be calling this. */
-U_CAPI const UChar* U_EXPORT2
+U_CAPI const char16_t* U_EXPORT2
 uenum_unextDefault(UEnumeration* en,
             int32_t* resultLength,
             UErrorCode* status)
 {
-    UChar *ustr = nullptr;
+    char16_t *ustr = nullptr;
     int32_t len = 0;
     if (en->next != nullptr) {
         const char *cstr = en->next(en, &len, status);
         if (cstr != nullptr) {
-            ustr = (UChar*) _getBuffer(en, (len+1) * sizeof(UChar));
+            ustr = (char16_t*) _getBuffer(en, (len+1) * sizeof(char16_t));
             if (ustr == nullptr) {
                 *status = U_MEMORY_ALLOCATION_ERROR;
             } else {
@@ -119,7 +119,7 @@ uenum_nextDefault(UEnumeration* en,
 {
     if (en->uNext != nullptr) {
         char *tempCharVal;
-        const UChar *tempUCharVal = en->uNext(en, resultLength, status);
+        const char16_t *tempUCharVal = en->uNext(en, resultLength, status);
         if (tempUCharVal == nullptr) {
             return nullptr;
         }
@@ -137,7 +137,7 @@ uenum_nextDefault(UEnumeration* en,
     }
 }
 
-U_CAPI const UChar* U_EXPORT2
+U_CAPI const char16_t* U_EXPORT2
 uenum_unext(UEnumeration* en,
             int32_t* resultLength,
             UErrorCode* status)

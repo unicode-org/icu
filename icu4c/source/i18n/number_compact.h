@@ -28,7 +28,7 @@ class CompactData : public MultiplierProducer {
 
     int32_t getMultiplier(int32_t magnitude) const U_OVERRIDE;
 
-    const UChar *getPattern(
+    const char16_t *getPattern(
         int32_t magnitude,
         const PluralRules *rules,
         const DecimalQuantity &dq) const;
@@ -36,7 +36,7 @@ class CompactData : public MultiplierProducer {
     void getUniquePatterns(UVector &output, UErrorCode &status) const;
 
   private:
-    const UChar *patterns[(COMPACT_MAX_DIGITS + 1) * StandardPlural::COUNT];
+    const char16_t *patterns[(COMPACT_MAX_DIGITS + 1) * StandardPlural::COUNT];
     int8_t multipliers[COMPACT_MAX_DIGITS + 1];
     int8_t largestMagnitude;
     UBool isEmpty;
@@ -54,7 +54,7 @@ class CompactData : public MultiplierProducer {
 
 struct CompactModInfo {
     const ImmutablePatternModifier *mod;
-    const UChar* patternString;
+    const char16_t* patternString;
 };
 
 class CompactHandler : public MicroPropsGenerator, public UMemory {

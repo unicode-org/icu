@@ -176,7 +176,7 @@ char* DataDrivenLogger::fgTestDataPath = nullptr;
 
 #if !UCONFIG_NO_FORMATTING && !UCONFIG_NO_FILE_IO
 static int64_t
-uto64(const UChar     *buffer)
+uto64(const char16_t  *buffer)
 {
     uint64_t result = 0;
     /* iterate through buffer */
@@ -184,7 +184,7 @@ uto64(const UChar     *buffer)
         /* read the next digit */
         result *= 16u;
         if (!u_isxdigit(*buffer)) {
-            log_err("\\u%04X is not a valid hex digit for this test\n", (UChar)*buffer);
+            log_err("\\u%04X is not a valid hex digit for this test\n", (char16_t)*buffer);
         }
         result += *buffer - 0x0030 - (*buffer >= 0x0041 ? (*buffer >= 0x0061 ? 39 : 7) : 0);
         buffer++;
@@ -202,14 +202,14 @@ static void U_CALLCONV DataDrivenPrintf(void)
     TestData *testData;
     const DataMap *testCase;
     DataDrivenLogger logger;
-    UChar uBuffer[512];
+    char16_t uBuffer[512];
     char cBuffer[512];
     char cFormat[sizeof(cBuffer)];
     char cExpected[sizeof(cBuffer)];
     UnicodeString tempStr;
-    UChar format[512];
-    UChar expectedResult[512];
-    UChar argument[512];
+    char16_t format[512];
+    char16_t expectedResult[512];
+    char16_t argument[512];
     int32_t i;
     int8_t i8;
     int16_t i16;
@@ -287,7 +287,7 @@ static void U_CALLCONV DataDrivenPrintf(void)
                     uBufferLenReturned = u_sprintf_u(uBuffer, format, cBuffer);
                     uFileBufferLenReturned = u_fprintf_u(testFile.getAlias(), format, cBuffer);
                     break;
-                case 0x53:  // 'S' UChar *
+                case 0x53:  // 'S' char16_t *
                     uBufferLenReturned = u_sprintf_u(uBuffer, format, argument);
                     uFileBufferLenReturned = u_fprintf_u(testFile.getAlias(), format, argument);
                     break;
@@ -405,13 +405,13 @@ static void U_CALLCONV DataDrivenScanf(void)
     TestData *testData;
     const DataMap *testCase;
     DataDrivenLogger logger;
-    UChar uBuffer[512];
+    char16_t uBuffer[512];
     char cBuffer[512];
     char cExpected[sizeof(cBuffer)];
     UnicodeString tempStr;
-    UChar format[512];
-    UChar expectedResult[512];
-    UChar argument[512];
+    char16_t format[512];
+    char16_t expectedResult[512];
+    char16_t argument[512];
     int32_t i;
     int8_t i8, expected8;
     int16_t i16, expected16;
@@ -520,13 +520,13 @@ static void U_CALLCONV DataDrivenScanf(void)
                         log_err("error in scanf char * string. Got \"%s\" Expected \"%s\". Test case = %d\n", cBuffer, cExpected, i);
                     }
                     break;
-                case 0x53:  // 'S' UChar *
+                case 0x53:  // 'S' char16_t *
                     uBufferLenReturned = u_sscanf_u(argument, format, uBuffer);
                     //uFileBufferLenReturned = u_fscanf_u(testFile, format, argument);
                     if (u_strcmp(uBuffer, expectedResult) != 0) {
                         u_austrcpy(cExpected, format);
                         u_austrcpy(cBuffer, uBuffer);
-                        log_err("error in scanf UChar * string %s Got: \"%s\". Test case = %d\n", cExpected, cBuffer, i);
+                        log_err("error in scanf char16_t * string %s Got: \"%s\". Test case = %d\n", cExpected, cBuffer, i);
                     }
                     break;
                 default:
@@ -607,14 +607,14 @@ static void U_CALLCONV DataDrivenPrintfPrecision(void)
     TestData *testData;
     const DataMap *testCase;
     DataDrivenLogger logger;
-    UChar uBuffer[512];
+    char16_t uBuffer[512];
     char cBuffer[512];
     char cFormat[sizeof(cBuffer)];
     char cExpected[sizeof(cBuffer)];
     UnicodeString tempStr;
-    UChar format[512];
-    UChar expectedResult[512];
-    UChar argument[512];
+    char16_t format[512];
+    char16_t expectedResult[512];
+    char16_t argument[512];
     int32_t precision;
     int32_t i;
     int8_t i8;
@@ -678,7 +678,7 @@ static void U_CALLCONV DataDrivenPrintfPrecision(void)
                     u_austrncpy(cBuffer, uBuffer, sizeof(cBuffer));
                     uBufferLenReturned = u_sprintf_u(uBuffer, format, precision, cBuffer);
                     break;
-                case 0x53:  // 'S' UChar *
+                case 0x53:  // 'S' char16_t *
                     uBufferLenReturned = u_sprintf_u(uBuffer, format, precision, argument);
                     break;
                 default:

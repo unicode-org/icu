@@ -21,7 +21,7 @@ int32_t
 DataMap::utoi(const UnicodeString &s) const
 {
   char ch[256];
-  const UChar *u = toUCharPtr(s.getBuffer());
+  const char16_t *u = toUCharPtr(s.getBuffer());
   int32_t len = s.length();
   u_UCharsToChars(u, ch, len);
   ch[len] = 0; /* include terminating \0 */
@@ -85,7 +85,7 @@ void RBDataMap::init(UResourceBundle *headers, UResourceBundle *data, UErrorCode
   int32_t i = 0;
   fData->removeAll();
   UResourceBundle *t = nullptr;
-  const UChar *key = nullptr;
+  const char16_t *key = nullptr;
   int32_t keyLen = 0;
   if(ures_getSize(headers) == ures_getSize(data)) {
     for(i = 0; i < ures_getSize(data); i++) {

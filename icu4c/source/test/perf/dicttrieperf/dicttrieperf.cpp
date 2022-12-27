@@ -56,7 +56,7 @@ public:
                     ++numTextLines;
                     // Remove trailing CR LF.
                     int32_t len=lines[i].len;
-                    UChar c;
+                    char16_t c;
                     while(len>0 && ((c=lines[i].name[len-1])==0xa || c==0xd)) {
                         --len;
                     }
@@ -352,7 +352,7 @@ ucharsTrieMatches(UCharsTrie &trie,
     UChar32 c=utext_next32(text);
     // Notes:
     // a) CompactTrieDictionary::matches() does not check for U_SENTINEL.
-    // b) It also ignores non-BMP code points by casting to UChar!
+    // b) It also ignores non-BMP code points by casting to char16_t!
     if(c<0) {
         return 0;
     }
@@ -380,7 +380,7 @@ ucharsTrieMatches(UCharsTrie &trie,
         UChar32 c=utext_next32(text);
         // Notes:
         // a) CompactTrieDictionary::matches() does not check for U_SENTINEL.
-        // b) It also ignores non-BMP code points by casting to UChar!
+        // b) It also ignores non-BMP code points by casting to char16_t!
         if(c<0) {
             break;
         }
@@ -490,10 +490,10 @@ static inline int32_t thaiCharToByte(UChar32 c) {
     }
 }
 
-static UBool thaiWordToBytes(const UChar *s, int32_t length,
+static UBool thaiWordToBytes(const char16_t *s, int32_t length,
                              CharString &str, UErrorCode &errorCode) {
     for(int32_t i=0; i<length; ++i) {
-        UChar c=s[i];
+        char16_t c=s[i];
         int32_t b=thaiCharToByte(c);
         if(b>=0) {
             str.append((char)b, errorCode);
@@ -621,7 +621,7 @@ public:
         const ULine *lines=perf.getCachedLines();
         int32_t numLines=perf.getNumLines();
         for(int32_t i=0; i<numLines; ++i) {
-            const UChar *line=lines[i].name;
+            const char16_t *line=lines[i].name;
             // Skip comment lines (start with a character below 'A').
             if(line[0]<0x41) {
                 continue;

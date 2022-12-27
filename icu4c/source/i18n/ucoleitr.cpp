@@ -272,7 +272,7 @@ U_NAMESPACE_END
 
 U_CAPI UCollationElements* U_EXPORT2
 ucol_openElements(const UCollator  *coll,
-                  const UChar      *text,
+                  const char16_t   *text,
                         int32_t    textLength,
                         UErrorCode *status)
 {
@@ -476,7 +476,7 @@ ucol_getMaxExpansion(const UCollationElements *elems,
 
 U_CAPI void U_EXPORT2
 ucol_setText(      UCollationElements *elems,
-             const UChar              *text,
+             const char16_t           *text,
                    int32_t            textLength,
                    UErrorCode         *status)
 {

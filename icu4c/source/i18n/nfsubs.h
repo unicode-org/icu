@@ -234,7 +234,7 @@ public:
      * substitutions of this type.  Used by toString().
      * @return This substitution's token character.
      */
-    virtual UChar tokenChar() const = 0;
+    virtual char16_t tokenChar() const = 0;
     
     /**
      * Returns true if this is a modulus substitution.  (We didn't do this

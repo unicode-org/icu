@@ -63,9 +63,9 @@ char const *opt_source      = "International Components for Unicode";
 char const *opt_pattern     = "Unicode";
 UCollator * collator   = 0;
 UStringSearch * search = 0;
-UChar rules[100];
-UChar source[100];
-UChar pattern[100];
+char16_t rules[100];
+char16_t source[100];
+char16_t pattern[100];
 
 /** 
  * Definitions for the command line options

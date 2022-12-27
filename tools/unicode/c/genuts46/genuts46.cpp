@@ -58,10 +58,10 @@ void ExitingErrorCode::handleFailure() const {
 
 static int
 toIDNA2003(const UStringPrepProfile *prep, UChar32 c, icu::UnicodeString &destString) {
-    UChar src[2];
+    char16_t src[2];
     int32_t srcLength=0;
     U16_APPEND_UNSAFE(src, srcLength, c);
-    UChar *dest;
+    char16_t *dest;
     int32_t destLength;
     dest=destString.getBuffer(32);
     if(dest==nullptr) {
@@ -100,7 +100,7 @@ printLine(UChar32 start, UChar32 end, Status status, const icu::UnicodeString &m
     printf("; %s", statusNames[status]);
     if(status==MAPPED || status==DEVIATION || !mapping.isEmpty()) {
         printf(" ;");
-        const UChar *buffer=mapping.getBuffer();
+        const char16_t *buffer=mapping.getBuffer();
         int32_t length=mapping.length();
         int32_t i=0;
         UChar32 c;

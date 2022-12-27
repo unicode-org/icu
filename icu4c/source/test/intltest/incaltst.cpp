@@ -36,7 +36,7 @@ static UnicodeString escape( const UnicodeString&src)
   UnicodeString dst;
     dst.remove();
     for (int32_t i = 0; i < src.length(); ++i) {
-        UChar c = src[i];
+        char16_t c = src[i];
         if(c < 0x0080) 
             dst += c;
         else {

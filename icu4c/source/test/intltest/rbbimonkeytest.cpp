@@ -195,11 +195,11 @@ void BreakRules::addRule(const UnicodeString &name, const UnicodeString &definit
     // Replace the divide sign (\u00f7) with a regular expression named capture.
     // When running the rules, a match that includes this group means we found a break position.
 
-    int32_t dividePos = thisRule->fExpandedRule.indexOf((UChar)0x00f7);
+    int32_t dividePos = thisRule->fExpandedRule.indexOf((char16_t)0x00f7);
     if (dividePos >= 0) {
         thisRule->fExpandedRule.replace(dividePos, 1, UnicodeString("(?<BreakPosition>)"));
     }
-    if (thisRule->fExpandedRule.indexOf((UChar)0x00f7) != -1) {
+    if (thisRule->fExpandedRule.indexOf((char16_t)0x00f7) != -1) {
         status = U_ILLEGAL_ARGUMENT_ERROR;   // TODO: produce a good error message.
     }
 
@@ -207,7 +207,7 @@ void BreakRules::addRule(const UnicodeString &name, const UnicodeString &definit
     // Regular expression set expressions don't accept this. Substitute with [^\u0000-\U0010ffff], which
     // also matches nothing.
 
-    static const UChar emptySet[] = {(UChar)0x5b, (UChar)0x5d, 0};
+    static const char16_t emptySet[] = {(char16_t)0x5b, (char16_t)0x5d, 0};
     int32_t where = 0;
     while ((where = thisRule->fExpandedRule.indexOf(emptySet, 2, 0)) >= 0) {
         thisRule->fExpandedRule.replace(where, 2, UnicodeString("[^\\u0000-\\U0010ffff]"));
@@ -291,7 +291,7 @@ void BreakRules::compileRules(UCHARBUF *rules, UErrorCode &status) {
             return;
         }
         int32_t lineLength = 0;
-        const UChar *lineBuf = ucbuf_readline(rules, &lineLength, &status);
+        const char16_t *lineBuf = ucbuf_readline(rules, &lineLength, &status);
         if (lineBuf == nullptr) {
             break;
         }
@@ -446,7 +446,7 @@ void MonkeyTestData::set(BreakRules *rules, IntlTest::icu_rand &rand, UErrorCode
 
     // Apply reference rules to find the expected breaks.
 
-    fExpectedBreaks.setCharAt(0, (UChar)1);  // Force an expected break before the start of the text.
+    fExpectedBreaks.setCharAt(0, (char16_t)1);  // Force an expected break before the start of the text.
                                              // ICU always reports a break there.
                                              // The reference rules do not have a means to do so.
     int32_t strIdx = 0;
@@ -501,9 +501,9 @@ void MonkeyTestData::set(BreakRules *rules, IntlTest::icu_rand &rand, UErrorCode
         // Record which rule matched over the length of the match.
         for (int i = matchStart; i < matchEnd; i++) {
             if (fRuleForPosition.charAt(i) == 0) {
-                fRuleForPosition.setCharAt(i, (UChar)ruleNum);
+                fRuleForPosition.setCharAt(i, (char16_t)ruleNum);
             } else {
-                f2ndRuleForPos.setCharAt(i, (UChar)ruleNum);
+                f2ndRuleForPos.setCharAt(i, (char16_t)ruleNum);
             }
         }
 
@@ -520,7 +520,7 @@ void MonkeyTestData::set(BreakRules *rules, IntlTest::icu_rand &rand, UErrorCode
                 status =  U_INVALID_FORMAT_ERROR;
                 break;
             }
-            fExpectedBreaks.setCharAt(breakPos, (UChar)1);
+            fExpectedBreaks.setCharAt(breakPos, (char16_t)1);
             // printf("recording break at %d\n", breakPos);
             // For the next iteration, pick up applying rules immediately after the break,
             // which may differ from end of the match. The matching rule may have included
@@ -556,7 +556,7 @@ void MonkeyTestData::clearActualBreaks() {
     // Actual Breaks length is one longer than the data string length, allowing
     //    for breaks before the first and after the last character in the data.
     for (int32_t i=0; i<=fString.length(); i++) {
-        fActualBreaks.append((UChar)0);
+        fActualBreaks.append((char16_t)0);
     }
 }
 

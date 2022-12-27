@@ -179,14 +179,14 @@ constexpr int32_t DECODE_MAX_CHARS=2000;
 
 // encode
 U_CAPI int32_t
-u_strToPunycode(const UChar *src, int32_t srcLength,
-                UChar *dest, int32_t destCapacity,
+u_strToPunycode(const char16_t *src, int32_t srcLength,
+                char16_t *dest, int32_t destCapacity,
                 const UBool *caseFlags,
                 UErrorCode *pErrorCode) {
 
     int32_t cpBuffer[ENCODE_MAX_CODE_UNITS];
     int32_t n, delta, handledCPCount, basicLength, destLength, bias, j, m, q, k, t, srcCPCount;
-    UChar c, c2;
+    char16_t c, c2;
 
     /* argument checking */
     if(pErrorCode==nullptr || U_FAILURE(*pErrorCode)) {
@@ -371,13 +371,13 @@ u_strToPunycode(const UChar *src, int32_t srcLength,
 
 // decode
 U_CAPI int32_t
-u_strFromPunycode(const UChar *src, int32_t srcLength,
-                  UChar *dest, int32_t destCapacity,
+u_strFromPunycode(const char16_t *src, int32_t srcLength,
+                  char16_t *dest, int32_t destCapacity,
                   UBool *caseFlags,
                   UErrorCode *pErrorCode) {
     int32_t n, destLength, i, bias, basicLength, j, in, oldi, w, k, digit, t,
             destCPCount, firstSupplementaryIndex, cpLength;
-    UChar b;
+    char16_t b;
 
     /* argument checking */
     if(pErrorCode==nullptr || U_FAILURE(*pErrorCode)) {
@@ -421,7 +421,7 @@ u_strFromPunycode(const UChar *src, int32_t srcLength,
         }
 
         if(j<destCapacity) {
-            dest[j]=(UChar)b;
+            dest[j]=(char16_t)b;
 
             if(caseFlags!=nullptr) {
                 caseFlags[j]=IS_BASIC_UPPERCASE(b);
@@ -550,7 +550,7 @@ u_strFromPunycode(const UChar *src, int32_t srcLength,
                 U16_FWD_N(dest, codeUnitIndex, destLength, i-codeUnitIndex);
             }
 
-            /* use the UChar index codeUnitIndex instead of the code point index i */
+            /* use the char16_t index codeUnitIndex instead of the code point index i */
             if(codeUnitIndex<destLength) {
                 uprv_memmove(dest+codeUnitIndex+cpLength,
                              dest+codeUnitIndex,
@@ -563,7 +563,7 @@ u_strFromPunycode(const UChar *src, int32_t srcLength,
             }
             if(cpLength==1) {
                 /* BMP, insert one code unit */
-                dest[codeUnitIndex]=(UChar)n;
+                dest[codeUnitIndex]=(char16_t)n;
             } else {
                 /* supplementary character, insert two code units */
                 dest[codeUnitIndex]=U16_LEAD(n);

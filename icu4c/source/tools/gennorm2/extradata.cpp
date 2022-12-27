@@ -53,7 +53,7 @@ int32_t ExtraData::writeMapping(UChar32 c, const Norm &norm, UnicodeString &data
                     (long)c, Normalizer2Impl::MAPPING_LENGTH_MASK);
             exit(U_INVALID_FORMAT_ERROR);
         }
-        UChar rm0=rm.charAt(0);
+        char16_t rm0=rm.charAt(0);
         if( rmLength==length-1 &&
             // 99: overlong substring lengths get pinned to remainder lengths anyway
             0==rm.compare(1, 99, m, 2, 99) &&
@@ -71,18 +71,18 @@ int32_t ExtraData::writeMapping(UChar32 c, const Norm &norm, UnicodeString &data
         } else {
             // Store the raw mapping with its length.
             dataString.append(rm);
-            dataString.append((UChar)rmLength);
+            dataString.append((char16_t)rmLength);
             preMappingLength=rmLength+1;
         }
         firstUnit|=Normalizer2Impl::MAPPING_HAS_RAW_MAPPING;
     }
     int32_t cccLccc=norm.cc|(norm.leadCC<<8);
     if(cccLccc!=0) {
-        dataString.append((UChar)cccLccc);
+        dataString.append((char16_t)cccLccc);
         ++preMappingLength;
         firstUnit|=Normalizer2Impl::MAPPING_HAS_CCC_LCCC_WORD;
     }
-    dataString.append((UChar)firstUnit);
+    dataString.append((char16_t)firstUnit);
     dataString.append(m);
     return preMappingLength;
 }
@@ -165,9 +165,9 @@ void ExtraData::writeCompositions(UChar32 c, const Norm &norm, UnicodeString &da
         if(i==(length-1)) {
             firstUnit|=Normalizer2Impl::COMP_1_LAST_TUPLE;
         }
-        dataString.append((UChar)firstUnit).append((UChar)secondUnit);
+        dataString.append((char16_t)firstUnit).append((char16_t)secondUnit);
         if(thirdUnit>=0) {
-            dataString.append((UChar)thirdUnit);
+            dataString.append((char16_t)thirdUnit);
         }
     }
 }

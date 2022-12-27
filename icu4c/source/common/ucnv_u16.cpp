@@ -52,12 +52,12 @@ static void  U_CALLCONV
 _UTF16BEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                                UErrorCode *pErrorCode) {
     UConverter *cnv;
-    const UChar *source;
+    const char16_t *source;
     char *target;
     int32_t *offsets;
 
     uint32_t targetCapacity, length, sourceIndex;
-    UChar c, trail;
+    char16_t c, trail;
     char overflow[4];
 
     source=pArgs->source;
@@ -92,7 +92,7 @@ _UTF16BEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
     /* c!=0 indicates in several places outside the main loops that a surrogate was found */
 
-    if((c=(UChar)cnv->fromUChar32)!=0 && U16_IS_TRAIL(trail=*source) && targetCapacity>=4) {
+    if((c=(char16_t)cnv->fromUChar32)!=0 && U16_IS_TRAIL(trail=*source) && targetCapacity>=4) {
         /* the last buffer ended with a lead surrogate, output the surrogate pair */
         ++source;
         --length;
@@ -257,11 +257,11 @@ _UTF16BEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                              UErrorCode *pErrorCode) {
     UConverter *cnv;
     const uint8_t *source;
-    UChar *target;
+    char16_t *target;
     int32_t *offsets;
 
     uint32_t targetCapacity, length, count, sourceIndex;
-    UChar c, trail;
+    char16_t c, trail;
 
     if(pArgs->converter->mode<8) {
         _UTF16ToUnicodeWithOffsets(pArgs, pErrorCode);
@@ -287,7 +287,7 @@ _UTF16BEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     sourceIndex=0;
     c=0;
 
-    /* complete a partial UChar or pair from the last call */
+    /* complete a partial char16_t or pair from the last call */
     if(cnv->toUnicodeStatus!=0) {
         /*
          * special case: single byte from a previous buffer,
@@ -306,7 +306,7 @@ _UTF16BEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
             ++sourceIndex;
             --length;
             if(count==2) {
-                c=((UChar)p[0]<<8)|p[1];
+                c=((char16_t)p[0]<<8)|p[1];
                 if(U16_IS_SINGLE(c)) {
                     /* output the BMP code point */
                     *target++=c;
@@ -325,8 +325,8 @@ _UTF16BEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                     break;
                 }
             } else if(count==4) {
-                c=((UChar)p[0]<<8)|p[1];
-                trail=((UChar)p[2]<<8)|p[3];
+                c=((char16_t)p[0]<<8)|p[1];
+                trail=((char16_t)p[2]<<8)|p[3];
                 if(U16_IS_TRAIL(trail)) {
                     /* output the surrogate pair */
                     *target++=c;
@@ -386,12 +386,12 @@ _UTF16BEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
         targetCapacity-=count;
         if(offsets==nullptr) {
             do {
-                c=((UChar)source[0]<<8)|source[1];
+                c=((char16_t)source[0]<<8)|source[1];
                 source+=2;
                 if(U16_IS_SINGLE(c)) {
                     *target++=c;
                 } else if(U16_IS_SURROGATE_LEAD(c) && count>=2 &&
-                          U16_IS_TRAIL(trail=((UChar)source[0]<<8)|source[1])
+                          U16_IS_TRAIL(trail=((char16_t)source[0]<<8)|source[1])
                 ) {
                     source+=2;
                     --count;
@@ -403,14 +403,14 @@ _UTF16BEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
             } while(--count>0);
         } else {
             do {
-                c=((UChar)source[0]<<8)|source[1];
+                c=((char16_t)source[0]<<8)|source[1];
                 source+=2;
                 if(U16_IS_SINGLE(c)) {
                     *target++=c;
                     *offsets++=sourceIndex;
                     sourceIndex+=2;
                 } else if(U16_IS_SURROGATE_LEAD(c) && count>=2 &&
-                          U16_IS_TRAIL(trail=((UChar)source[0]<<8)|source[1])
+                          U16_IS_TRAIL(trail=((char16_t)source[0]<<8)|source[1])
                 ) {
                     source+=2;
                     --count;
@@ -447,7 +447,7 @@ _UTF16BEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
 
         if(U16_IS_SURROGATE_LEAD(c)) {
             if(length>=2) {
-                if(U16_IS_TRAIL(trail=((UChar)source[0]<<8)|source[1])) {
+                if(U16_IS_TRAIL(trail=((char16_t)source[0]<<8)|source[1])) {
                     /* output the surrogate pair, will overflow (see conditions comment above) */
                     source+=2;
                     length-=2;
@@ -509,7 +509,7 @@ _UTF16BEGetNextUChar(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
     }
 
     if(s+2>sourceLimit) {
-        /* only one byte: truncated UChar */
+        /* only one byte: truncated char16_t */
         pArgs->converter->toUBytes[0]=*s++;
         pArgs->converter->toULength=1;
         pArgs->source=(const char *)s;
@@ -517,7 +517,7 @@ _UTF16BEGetNextUChar(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
         return 0xffff;
     }
 
-    /* get one UChar */
+    /* get one char16_t */
     c=((UChar32)*s<<8)|s[1];
     s+=2;
 
@@ -525,10 +525,10 @@ _UTF16BEGetNextUChar(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
     if(U_IS_SURROGATE(c)) {
         if(U16_IS_SURROGATE_LEAD(c)) {
             if(s+2<=sourceLimit) {
-                UChar trail;
+                char16_t trail;
 
-                /* get a second UChar and see if it is a trail surrogate */
-                trail=((UChar)*s<<8)|s[1];
+                /* get a second char16_t and see if it is a trail surrogate */
+                trail=((char16_t)*s<<8)|s[1];
                 if(U16_IS_TRAIL(trail)) {
                     c=U16_GET_SUPPLEMENTARY(c, trail);
                     s+=2;
@@ -653,12 +653,12 @@ static void  U_CALLCONV
 _UTF16LEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                                UErrorCode *pErrorCode) {
     UConverter *cnv;
-    const UChar *source;
+    const char16_t *source;
     char *target;
     int32_t *offsets;
 
     uint32_t targetCapacity, length, sourceIndex;
-    UChar c, trail;
+    char16_t c, trail;
     char overflow[4];
 
     source=pArgs->source;
@@ -693,7 +693,7 @@ _UTF16LEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
     /* c!=0 indicates in several places outside the main loops that a surrogate was found */
 
-    if((c=(UChar)cnv->fromUChar32)!=0 && U16_IS_TRAIL(trail=*source) && targetCapacity>=4) {
+    if((c=(char16_t)cnv->fromUChar32)!=0 && U16_IS_TRAIL(trail=*source) && targetCapacity>=4) {
         /* the last buffer ended with a lead surrogate, output the surrogate pair */
         ++source;
         --length;
@@ -858,11 +858,11 @@ _UTF16LEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                              UErrorCode *pErrorCode) {
     UConverter *cnv;
     const uint8_t *source;
-    UChar *target;
+    char16_t *target;
     int32_t *offsets;
 
     uint32_t targetCapacity, length, count, sourceIndex;
-    UChar c, trail;
+    char16_t c, trail;
 
     if(pArgs->converter->mode<8) {
         _UTF16ToUnicodeWithOffsets(pArgs, pErrorCode);
@@ -888,7 +888,7 @@ _UTF16LEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     sourceIndex=0;
     c=0;
 
-    /* complete a partial UChar or pair from the last call */
+    /* complete a partial char16_t or pair from the last call */
     if(cnv->toUnicodeStatus!=0) {
         /*
          * special case: single byte from a previous buffer,
@@ -907,7 +907,7 @@ _UTF16LEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
             ++sourceIndex;
             --length;
             if(count==2) {
-                c=((UChar)p[1]<<8)|p[0];
+                c=((char16_t)p[1]<<8)|p[0];
                 if(U16_IS_SINGLE(c)) {
                     /* output the BMP code point */
                     *target++=c;
@@ -926,8 +926,8 @@ _UTF16LEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                     break;
                 }
             } else if(count==4) {
-                c=((UChar)p[1]<<8)|p[0];
-                trail=((UChar)p[3]<<8)|p[2];
+                c=((char16_t)p[1]<<8)|p[0];
+                trail=((char16_t)p[3]<<8)|p[2];
                 if(U16_IS_TRAIL(trail)) {
                     /* output the surrogate pair */
                     *target++=c;
@@ -987,12 +987,12 @@ _UTF16LEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
         targetCapacity-=count;
         if(offsets==nullptr) {
             do {
-                c=((UChar)source[1]<<8)|source[0];
+                c=((char16_t)source[1]<<8)|source[0];
                 source+=2;
                 if(U16_IS_SINGLE(c)) {
                     *target++=c;
                 } else if(U16_IS_SURROGATE_LEAD(c) && count>=2 &&
-                          U16_IS_TRAIL(trail=((UChar)source[1]<<8)|source[0])
+                          U16_IS_TRAIL(trail=((char16_t)source[1]<<8)|source[0])
                 ) {
                     source+=2;
                     --count;
@@ -1004,14 +1004,14 @@ _UTF16LEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
             } while(--count>0);
         } else {
             do {
-                c=((UChar)source[1]<<8)|source[0];
+                c=((char16_t)source[1]<<8)|source[0];
                 source+=2;
                 if(U16_IS_SINGLE(c)) {
                     *target++=c;
                     *offsets++=sourceIndex;
                     sourceIndex+=2;
                 } else if(U16_IS_SURROGATE_LEAD(c) && count>=2 &&
-                          U16_IS_TRAIL(trail=((UChar)source[1]<<8)|source[0])
+                          U16_IS_TRAIL(trail=((char16_t)source[1]<<8)|source[0])
                 ) {
                     source+=2;
                     --count;
@@ -1048,7 +1048,7 @@ _UTF16LEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
 
         if(U16_IS_SURROGATE_LEAD(c)) {
             if(length>=2) {
-                if(U16_IS_TRAIL(trail=((UChar)source[1]<<8)|source[0])) {
+                if(U16_IS_TRAIL(trail=((char16_t)source[1]<<8)|source[0])) {
                     /* output the surrogate pair, will overflow (see conditions comment above) */
                     source+=2;
                     length-=2;
@@ -1110,7 +1110,7 @@ _UTF16LEGetNextUChar(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
     }
 
     if(s+2>sourceLimit) {
-        /* only one byte: truncated UChar */
+        /* only one byte: truncated char16_t */
         pArgs->converter->toUBytes[0]=*s++;
         pArgs->converter->toULength=1;
         pArgs->source=(const char *)s;
@@ -1118,7 +1118,7 @@ _UTF16LEGetNextUChar(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
         return 0xffff;
     }
 
-    /* get one UChar */
+    /* get one char16_t */
     c=((UChar32)s[1]<<8)|*s;
     s+=2;
 
@@ -1126,10 +1126,10 @@ _UTF16LEGetNextUChar(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
     if(U_IS_SURROGATE(c)) {
         if(U16_IS_SURROGATE_LEAD(c)) {
             if(s+2<=sourceLimit) {
-                UChar trail;
+                char16_t trail;
 
-                /* get a second UChar and see if it is a trail surrogate */
-                trail=((UChar)s[1]<<8)|*s;
+                /* get a second char16_t and see if it is a trail surrogate */
+                trail=((char16_t)s[1]<<8)|*s;
                 if(U16_IS_TRAIL(trail)) {
                     c=U16_GET_SUPPLEMENTARY(c, trail);
                     s+=2;

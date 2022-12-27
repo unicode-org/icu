@@ -718,7 +718,7 @@ readAnElement(char *line,
     if (pipePointer != nullptr) {
         // Read the prefix string which precedes the actual string.
         input.append(startCodePoint, (int32_t)(pipePointer - startCodePoint), *status);
-        UChar *prefixChars = prefix.getBuffer(32);
+        char16_t *prefixChars = prefix.getBuffer(32);
         int32_t prefixSize =
             u_parseString(input.data(),
                           prefixChars, prefix.getCapacity(),
@@ -737,7 +737,7 @@ readAnElement(char *line,
 
     // Read the string which gets the CE(s) assigned.
     input.append(startCodePoint, (int32_t)(endCodePoint - startCodePoint), *status);
-    UChar *uchars = s.getBuffer(32);
+    char16_t *uchars = s.getBuffer(32);
     int32_t cSize =
         u_parseString(input.data(),
                       uchars, s.getCapacity(),
@@ -1183,7 +1183,7 @@ buildAndWriteBaseData(CollationBaseDataBuilder &builder,
 static void
 setLeadSurrogatesForAssociatedSupplementary(UnicodeSet &bmp, const UnicodeSet &supp) {
     UChar32 c = 0x10000;
-    for(UChar lead = 0xd800; lead < 0xdc00; ++lead, c += 0x400) {
+    for(char16_t lead = 0xd800; lead < 0xdc00; ++lead, c += 0x400) {
         if(supp.containsSome(c, c + 0x3ff)) {
             bmp.add(lead);
         }

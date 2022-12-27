@@ -79,7 +79,7 @@ SortedLines::getBounds(UErrorCode &status) {
   //u_strcpy(UB[strength], toSort[size-1]->name);
   // a different solution for bounds: go from end and see if the guys on the top
   // cause duplication for things
-  UChar dupch[] = { 0x0020, 0x0030, 0x0042, 0x0051, 0x0062, 0x0071, 0x0391, 0x0396, 0x03b1, 0x03b6 };
+  char16_t dupch[] = { 0x0020, 0x0030, 0x0042, 0x0051, 0x0062, 0x0071, 0x0391, 0x0396, 0x03b1, 0x03b6 };
   j = 1;
   Line dup;
   Line bound;
@@ -489,7 +489,7 @@ int32_t SortedLines::detectContractions(Line **firstRep, int32_t firstSize,
   int i = 0, j = 0, k = 0;
   Line lower, upper, trial, toAdd, helper;
   UChar32 firstStart, firstEnd, secondStart;
-  UChar NFCTrial[256];
+  char16_t NFCTrial[256];
   int32_t NFCTrialLen = 0;
   UBool thai;
   i = -1;
@@ -2002,8 +2002,8 @@ void
 SortedLines::removeDecompositionsFromRepertoire() {
   UnicodeSetIterator repertoireIter(repertoire);
   UErrorCode status = U_ZERO_ERROR;
-  UChar string[256];
-  UChar composed[256];
+  char16_t string[256];
+  char16_t composed[256];
   int32_t len = 0, compLen = 0;
   UnicodeString compString;
   UnicodeSet toRemove;

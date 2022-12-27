@@ -61,9 +61,9 @@ static UnicodeString& _formatInput(UnicodeString &appendTo,
         input.extractBetween(pos.start, pos.limit, c);
         input.extractBetween(pos.limit, pos.contextLimit, d);
         input.extractBetween(pos.contextLimit, input.length(), e);
-        appendTo.append(a).append((UChar)123/*{*/).append(b).
-            append((UChar)124/*|*/).append(c).append((UChar)124/*|*/).append(d).
-            append((UChar)125/*}*/).append(e);
+        appendTo.append(a).append((char16_t)123/*{*/).append(b).
+            append((char16_t)124/*|*/).append(c).append((char16_t)124/*|*/).append(d).
+            append((char16_t)125/*}*/).append(e);
     } else {
         appendTo.append("INVALID UTransPosition");
         //appendTo.append((UnicodeString)"INVALID UTransPosition {cs=" +
@@ -78,7 +78,7 @@ static UnicodeString& _formatInput(UnicodeString &appendTo,
 UnicodeString& _appendHex(uint32_t number,
                           int32_t digits,
                           UnicodeString& target) {
-    static const UChar digitString[] = {
+    static const char16_t digitString[] = {
         0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39,
         0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0
     };
@@ -115,7 +115,7 @@ inline void _debugOut(const char* msg, TransliterationRule* rule,
     if (rule) {
         UnicodeString r;
         rule->toRule(r, true);
-        buf.append((UChar)32).append(r);
+        buf.append((char16_t)32).append(r);
     }
     buf.append(UnicodeString(" => ", ""));
     UnicodeString* text = (UnicodeString*)&theText;
@@ -431,7 +431,7 @@ UnicodeString& TransliterationRuleSet::toRules(UnicodeString& ruleSource,
     ruleSource.truncate(0);
     for (i=0; i<count; ++i) {
         if (i != 0) {
-            ruleSource.append((UChar) 0x000A /*\n*/);
+            ruleSource.append((char16_t) 0x000A /*\n*/);
         }
         TransliterationRule *r =
             (TransliterationRule*) ruleVector->elementAt(i);

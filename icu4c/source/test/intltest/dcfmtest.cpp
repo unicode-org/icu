@@ -218,7 +218,7 @@ void DecimalFormatTest::DataDrivenTests() {
     }
 
     int32_t    len;
-    UChar *testData = ReadAndConvertFile(srcPath, len, "utf-8", status);
+    char16_t *testData = ReadAndConvertFile(srcPath, len, "utf-8", status);
     if (U_FAILURE(status)) {
         return; /* something went wrong, error already output */
     }

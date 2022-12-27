@@ -125,9 +125,9 @@ Calendar* GLUE_SYM ( Calendar ) :: clone(void) const {
 // GLUE_SYM ( DateFormat ) :: create(UDateFormatStyle  timeStyle,
 //                                                     UDateFormatStyle  dateStyle,
 //                                                     const char        *locale,
-//                                                     const UChar       *tzID,
+//                                                     const char16_t    *tzID,
 //                                                     int32_t           tzIDLength,
-//                                                     const UChar       *pattern,
+//                                                     const char16_t    *pattern,
 //                                                     int32_t           patternLength,
 //                                                     UErrorCode        *status,
 //                                   const Locale &loc, const char */*ver*/) {
@@ -175,7 +175,7 @@ int32_t GLUE_SYM ( Calendar ) :: appendAvailable(UnicodeString* strs, int32_t i,
 #if CAL_FE_DEBUG
          { 
             char foo[999];
-            const UChar *ss = strs[i+j].getTerminatedBuffer();
+            const char16_t *ss = strs[i+j].getTerminatedBuffer();
             u_austrcpy(foo, ss);
             fprintf(stderr,  "VCF " ICUGLUE_VER_STR " appending [%d+%d=%d] <<%s>>\n", i, j, i+j, foo);
         }
@@ -213,9 +213,9 @@ public:
   // virtual Calendar *createFormat(UCalendarStyle  timeStyle,
   //                                  UCalendarStyle  dateStyle,
   //                                  const char        *locale,
-  //                                  const UChar       *tzID,
+  //                                  const char16_t    *tzID,
   //                                  int32_t           tzIDLength,
-  //                                  const UChar       *pattern,
+  //                                  const char16_t    *pattern,
   //                                  int32_t           patternLength,
   //                                  UErrorCode        *status);
   virtual void* getDynamicClassID() const; 

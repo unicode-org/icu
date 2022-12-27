@@ -1716,7 +1716,7 @@ uprv_getMaxCharNameLength() {
  */
 static void
 charSetToUSet(uint32_t cset[8], const USetAdder *sa) {
-    UChar us[256];
+    char16_t us[256];
     char cs[256];
 
     int32_t i, length;
@@ -1736,12 +1736,12 @@ charSetToUSet(uint32_t cset[8], const USetAdder *sa) {
         }
     }
 
-    /* convert the char string to a UChar string */
+    /* convert the char string to a char16_t string */
     u_charsToUChars(cs, us, length);
 
-    /* add each UChar to the USet */
+    /* add each char16_t to the USet */
     for(i=0; i<length; ++i) {
-        if(us[i]!=0 || cs[i]==0) { /* non-invariant chars become (UChar)0 */
+        if(us[i]!=0 || cs[i]==0) { /* non-invariant chars become (char16_t)0 */
             sa->add(sa->set, us[i]);
         }
     }

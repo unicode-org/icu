@@ -220,7 +220,7 @@ class SimpleUnitIdentifiersSink : public icu::ResourceSink {
                 break;
             }
             int32_t len;
-            const UChar* uTarget = value.getString(len, status);
+            const char16_t* uTarget = value.getString(len, status);
             CharString target;
             target.appendInvariantChars(uTarget, len, status);
             if (U_FAILURE(status)) { return; }
@@ -255,15 +255,15 @@ class SimpleUnitIdentifiersSink : public icu::ResourceSink {
  *
  * For example: "kilogram" -> "mass", "meter-per-second" -> "speed".
  *
- * In C++ unitQuantity values are collected in order into a UChar* array, while
+ * In C++ unitQuantity values are collected in order into a char16_t* array, while
  * unitQuantity keys are added added to a TrieBuilder, with associated values
- * being the index into the aforementioned UChar* array.
+ * being the index into the aforementioned char16_t* array.
  */
 class CategoriesSink : public icu::ResourceSink {
   public:
     /**
      * Constructor.
-     * @param out Array of UChar* to which unitQuantity values will be saved.
+     * @param out Array of char16_t* to which unitQuantity values will be saved.
      *     The pointers returned  not owned: they point directly at the resource
      *     strings in static memory.
      * @param outSize The size of the `out` array.
@@ -271,7 +271,7 @@ class CategoriesSink : public icu::ResourceSink {
      *     each unitQuantity will be added, each with value being the offset
      *     into `out`.
      */
-    explicit CategoriesSink(const UChar **out, int32_t &outSize, BytesTrieBuilder &trieBuilder)
+    explicit CategoriesSink(const char16_t **out, int32_t &outSize, BytesTrieBuilder &trieBuilder)
         : outQuantitiesArray(out), outSize(outSize), trieBuilder(trieBuilder), outIndex(0) {}
 
     void put(const char * /*key*/, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) override {
@@ -305,7 +305,7 @@ class CategoriesSink : public icu::ResourceSink {
     }
 
   private:
-    const UChar **outQuantitiesArray;
+    const char16_t **outQuantitiesArray;
     int32_t &outSize;
     BytesTrieBuilder &trieBuilder;
 
@@ -327,11 +327,11 @@ int32_t *gSimpleUnitCategories = nullptr;
 
 char *gSerializedUnitExtrasStemTrie = nullptr;
 
-// Array of UChar* pointing at the unit categories (aka "quantities", aka
+// Array of char16_t* pointing at the unit categories (aka "quantities", aka
 // "types"), as found in the `unitQuantities` resource. The array memory itself
-// is owned by this pointer, but the individual UChar* in that array point at
+// is owned by this pointer, but the individual char16_t* in that array point at
 // static memory.
-const UChar **gCategories = nullptr;
+const char16_t **gCategories = nullptr;
 // Number of items in `gCategories`.
 int32_t gCategoriesCount = 0;
 // Serialized BytesTrie for mapping from base units to indices into gCategories.
@@ -362,8 +362,8 @@ void U_CALLCONV initUnitExtras(UErrorCode& status) {
         ures_getByKey(unitsBundle.getAlias(), CATEGORY_TABLE_NAME, nullptr, &status));
     if (U_FAILURE(status)) { return; }
     gCategoriesCount = unitQuantities.getAlias()->fSize;
-    size_t quantitiesMallocSize = sizeof(UChar *) * gCategoriesCount;
-    gCategories = static_cast<const UChar **>(uprv_malloc(quantitiesMallocSize));
+    size_t quantitiesMallocSize = sizeof(char16_t *) * gCategoriesCount;
+    gCategories = static_cast<const char16_t **>(uprv_malloc(quantitiesMallocSize));
     if (gCategories == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;

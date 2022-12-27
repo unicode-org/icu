@@ -171,7 +171,7 @@ public:
     static UClassID U_EXPORT2 getStaticClassID();
 
     /* @internal */
-    static const UChar PASS_STRING[];
+    static const char16_t PASS_STRING[];
 
 private:
 

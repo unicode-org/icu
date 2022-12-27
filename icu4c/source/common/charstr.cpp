@@ -200,7 +200,7 @@ CharString &CharString::appendInvariantChars(const UnicodeString &s, UErrorCode 
     return appendInvariantChars(s.getBuffer(), s.length(), errorCode);
 }
 
-CharString &CharString::appendInvariantChars(const UChar* uchars, int32_t ucharsLen, UErrorCode &errorCode) {
+CharString &CharString::appendInvariantChars(const char16_t* uchars, int32_t ucharsLen, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) {
         return *this;
     }

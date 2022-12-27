@@ -282,7 +282,7 @@ class U_I18N_API OlsonTimeZone: public BasicTimeZone {
      * Internal API returning the canonical ID of this zone.
      * This ID won't be affected by setID().
      */
-    const UChar *getCanonicalID() const;
+    const char16_t *getCanonicalID() const;
 
 private:
     /**
@@ -382,7 +382,7 @@ private:
     /*
      * Canonical (CLDR) ID of this zone
      */
-    const UChar *canonicalID;
+    const char16_t *canonicalID;
 
     /* BasicTimeZone support */
     void clearTransitionRules(void);
@@ -441,7 +441,7 @@ OlsonTimeZone::initialDstOffset() const {
     return typeOffsets[1];
 }
 
-inline const UChar*
+inline const char16_t*
 OlsonTimeZone::getCanonicalID() const {
     return canonicalID;
 }

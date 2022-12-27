@@ -1389,7 +1389,7 @@ static BOOL U_CALLCONV getIcuDataDirectoryUnderWindowsDirectory(char* directoryB
         UErrorCode status = U_ZERO_ERROR;
         int32_t windowsPathUtf8Len = 0;
         u_strToUTF8(windowsPathUtf8, static_cast<int32_t>(UPRV_LENGTHOF(windowsPathUtf8)),
-            &windowsPathUtf8Len, reinterpret_cast<const UChar*>(windowsPath), -1, &status);
+            &windowsPathUtf8Len, reinterpret_cast<const char16_t*>(windowsPath), -1, &status);
 
         if (U_SUCCESS(status) && (status != U_STRING_NOT_TERMINATED_WARNING) &&
             (windowsPathUtf8Len < (UPRV_LENGTHOF(windowsPathUtf8) - 1))) {
@@ -2269,7 +2269,7 @@ u_versionFromString(UVersionInfo versionArray, const char *versionString) {
 }
 
 U_CAPI void U_EXPORT2
-u_versionFromUString(UVersionInfo versionArray, const UChar *versionString) {
+u_versionFromUString(UVersionInfo versionArray, const char16_t *versionString) {
     if(versionArray!=nullptr && versionString!=nullptr) {
         char versionChars[U_MAX_VERSION_STRING_LENGTH+1];
         int32_t len = u_strlen(versionString);
