@@ -29,7 +29,7 @@
 
 class UPrinter {
   UFILE *out;
-  UChar buffer[256];
+  char16_t buffer[256];
   UBool _on;
   char _locale[256];
 public:
@@ -37,7 +37,7 @@ public:
   UPrinter(const char *name, const char *locale, const char *encoding, UTransliterator *trans, UBool transliterateNonPrintable);
   ~UPrinter();
   void log(const UnicodeString &string, UBool nl = false);
-  void log(const UChar *string, UBool nl = false);
+  void log(const char16_t *string, UBool nl = false);
   //void log(const char *string, UBool nl = false);
   void log(const Line *line, UBool nl = false);
   void log(const char *fmt, ...);

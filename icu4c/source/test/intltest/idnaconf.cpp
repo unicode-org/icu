@@ -26,20 +26,20 @@
 #include "idnaconf.h"
 #include "charstr.h"
 
-static const UChar C_TAG[] = {0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0}; // =====
-static const UChar C_NAMEZONE[] = {0x6E, 0x61, 0x6D, 0x65, 0x7A, 0x6F, 0x6E, 0x65, 0}; // namezone 
-static const UChar C_NAMEBASE[] = {0x6E, 0x61, 0x6D, 0x65, 0x62, 0x61, 0x73, 0x65, 0}; // namebase 
+static const char16_t C_TAG[] = {0x3D, 0x3D, 0x3D, 0x3D, 0x3D, 0}; // =====
+static const char16_t C_NAMEZONE[] = {0x6E, 0x61, 0x6D, 0x65, 0x7A, 0x6F, 0x6E, 0x65, 0}; // namezone
+static const char16_t C_NAMEBASE[] = {0x6E, 0x61, 0x6D, 0x65, 0x62, 0x61, 0x73, 0x65, 0}; // namebase
 
-static const UChar C_TYPE[] = {0x74, 0x79, 0x70, 0x65, 0}; // type
-static const UChar C_TOASCII[]  =  {0x74, 0x6F, 0x61, 0x73, 0x63, 0x69, 0x69, 0};       // toascii
-static const UChar C_TOUNICODE[] = {0x74, 0x6F, 0x75, 0x6E, 0x69, 0x63, 0x6F, 0x64, 0x65, 0}; // tounicode
+static const char16_t C_TYPE[] = {0x74, 0x79, 0x70, 0x65, 0}; // type
+static const char16_t C_TOASCII[]  =  {0x74, 0x6F, 0x61, 0x73, 0x63, 0x69, 0x69, 0};       // toascii
+static const char16_t C_TOUNICODE[] = {0x74, 0x6F, 0x75, 0x6E, 0x69, 0x63, 0x6F, 0x64, 0x65, 0}; // tounicode
 
-static const UChar C_PASSFAIL[] = {0x70, 0x61, 0x73, 0x73, 0x66, 0x61, 0x69, 0x6C, 0}; // passfail
-static const UChar C_PASS[] = {0x70, 0x61, 0x73, 0x73, 0}; // pass
-static const UChar C_FAIL[] = {0x66, 0x61, 0x69, 0x6C, 0}; // fail
+static const char16_t C_PASSFAIL[] = {0x70, 0x61, 0x73, 0x73, 0x66, 0x61, 0x69, 0x6C, 0}; // passfail
+static const char16_t C_PASS[] = {0x70, 0x61, 0x73, 0x73, 0}; // pass
+static const char16_t C_FAIL[] = {0x66, 0x61, 0x69, 0x6C, 0}; // fail
 
-static const UChar C_DESC[] = {0x64, 0x65, 0x73, 0x63, 0}; // desc
-static const UChar C_USESTD3ASCIIRULES[] = {0x55, 0x73, 0x65, 0x53, 0x54, 0x44, 
+static const char16_t C_DESC[] = {0x64, 0x65, 0x73, 0x63, 0}; // desc
+static const char16_t C_USESTD3ASCIIRULES[] = {0x55, 0x73, 0x65, 0x53, 0x54, 0x44,
        0x33, 0x41, 0x53, 0x43, 0x49, 0x49, 0x52, 0x75, 0x6C, 0x65, 0x73, 0}; // UseSTD3ASCIIRules
 
 IdnaConfTest::IdnaConfTest(){
@@ -58,9 +58,9 @@ IdnaConfTest::~IdnaConfTest(){
 #if !UCONFIG_NO_IDNA
 
 int IdnaConfTest::isNewlineMark(){
-    static const UChar LF        = 0x0a;
-    static const UChar CR        = 0x0d;
-    UChar c = base[curOffset];
+    static const char16_t LF        = 0x0a;
+    static const char16_t CR        = 0x0d;
+    char16_t c = base[curOffset];
     // CR LF
     if ( c == CR && curOffset + 1 < len && base[curOffset + 1] == LF){
         return 2;
@@ -84,7 +84,7 @@ int IdnaConfTest::isNewlineMark(){
 UBool IdnaConfTest::ReadOneLine(UnicodeString& buf){
     if ( !(curOffset < len) ) return false; // stream end
 
-    static const UChar BACKSLASH = 0x5c;
+    static const char16_t BACKSLASH = 0x5c;
     buf.remove();
     int t = 0;
     while (curOffset < len){
@@ -92,7 +92,7 @@ UBool IdnaConfTest::ReadOneLine(UnicodeString& buf){
             curOffset += t;
             break;
         }
-        UChar c = base[curOffset];
+        char16_t c = base[curOffset];
         if (c == BACKSLASH && curOffset < len -1){  // escaped new line mark
             if ((t = isNewlineMark())){
                 curOffset += 1 + t;  // BACKSLAH and NewlineMark
@@ -116,9 +116,9 @@ UBool IdnaConfTest::ReadOneLine(UnicodeString& buf){
  * and, of course, will shift tail elements.
  */
 void IdnaConfTest::ExplainCodePointTag(UnicodeString& buf){
-    buf.append((UChar)0);    // add a terminal NUL
-    UChar* bufBase = buf.getBuffer(buf.length());
-    UChar* p = bufBase;
+    buf.append((char16_t)0);    // add a terminal NUL
+    char16_t* bufBase = buf.getBuffer(buf.length());
+    char16_t* p = bufBase;
     while (*p != 0){
         if ( *p != 0x3C){    // <
             *bufBase++ = *p++;
@@ -153,8 +153,8 @@ void IdnaConfTest::Call(){
         errln("Incomplete record");
     } else {
         UErrorCode status = U_ZERO_ERROR;
-        UChar result[200] = {0,};   // simple life
-        const UChar *p = namebase.getTerminatedBuffer();
+        char16_t result[200] = {0,};   // simple life
+        const char16_t *p = namebase.getTerminatedBuffer();
         const int p_len = namebase.length();
 
         if (type == 0 && option == 0){
@@ -239,7 +239,7 @@ void IdnaConfTest::Test(void){
             Call();
        } else {
             // explain      key:value
-            int p = s.indexOf((UChar)0x3A);    // :
+            int p = s.indexOf((char16_t)0x3A);    // :
             key.setTo(s,0,p).trim();
             value.setTo(s,p+1).trim();
             if (key.compare(C_TYPE, -1) == 0){
@@ -260,7 +260,7 @@ void IdnaConfTest::Test(void){
                 } else {
                     option = 0;
                 }
-                id.setTo(value, 0, value.indexOf((UChar)0x20));    // space
+                id.setTo(value, 0, value.indexOf((char16_t)0x20));    // space
             } else if (key.compare(C_NAMEZONE, -1) == 0){
                 ExplainCodePointTag(value);
                 namezone.setTo(value);

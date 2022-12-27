@@ -31,7 +31,7 @@ U_NAMESPACE_BEGIN
 
 using number::impl::DecimalQuantity;
 
-static const UChar OTHER_STRING[] = {
+static const char16_t OTHER_STRING[] = {
     0x6F, 0x74, 0x68, 0x65, 0x72, 0  // "other"
 };
 

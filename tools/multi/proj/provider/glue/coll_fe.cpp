@@ -57,9 +57,9 @@
     virtual Collator* clone() const;                                    \
     virtual UCollationResult compare(const UnicodeString&, const UnicodeString&, UErrorCode&) const; \
     virtual UCollationResult compare(const UnicodeString&, const UnicodeString&, int32_t, UErrorCode&) const; \
-    virtual UCollationResult compare(const UChar*, int32_t, const UChar*, int32_t, UErrorCode&) const; \
+    virtual UCollationResult compare(const char16_t*, int32_t, const char16_t*, int32_t, UErrorCode&) const; \
     virtual CollationKey& getCollationKey(const UnicodeString&, CollationKey&, UErrorCode&) const; \
-    virtual CollationKey& getCollationKey(const UChar*, int32_t, CollationKey&, UErrorCode&) const; \
+    virtual CollationKey& getCollationKey(const char16_t*, int32_t, CollationKey&, UErrorCode&) const; \
     virtual int32_t hashCode() const;                                   \
     virtual CONST_BEFORE_50_0_2 Locale getLocale(ULocDataLocaleType, UErrorCode&) const; \
     virtual ECollationStrength getStrength() const;                     \
@@ -67,13 +67,13 @@
     virtual void getVersion(uint8_t*) const;                            \
     virtual void setAttribute(UColAttribute, UColAttributeValue, UErrorCode&) ; \
     virtual UColAttributeValue getAttribute(UColAttribute, UErrorCode&) CONST_AFTER_50_0_2; \
-    virtual uint32_t setVariableTop(const UChar*, int32_t, UErrorCode&); \
+    virtual uint32_t setVariableTop(const char16_t*, int32_t, UErrorCode&); \
     virtual uint32_t setVariableTop(const UnicodeString REF_AFTER_50_0_2, UErrorCode&);        \
     virtual void setVariableTop(uint32_t, UErrorCode&);                 \
     virtual uint32_t getVariableTop(UErrorCode&) const;                 \
     virtual Collator* safeClone() CONST_AFTER_50_0_2 ;                                      \
     virtual int32_t getSortKey(const UnicodeString&, uint8_t*, int32_t) const; \
-    virtual int32_t getSortKey(const UChar*, int32_t, uint8_t*, int32_t) const; \
+    virtual int32_t getSortKey(const char16_t*, int32_t, uint8_t*, int32_t) const; \
   public: static int32_t countAvailable();                              \
   public: static int32_t appendAvailable(UnicodeString* strs, int32_t i, int32_t count); \
   public: virtual int32_t internalGetShortDefinitionString(const char *locale, char *buffer, int32_t capacity, UErrorCode &status) const; \
@@ -142,7 +142,7 @@ GLUE_SYM ( Collator ) :: ~ GLUE_SYM(Collator) () {
 #if 0
 U_CFUNC int32_t U_CALLCONV
 GLUE_SYM ( glue_calcSortKey) (const    UCollator    *coll,
-        const    UChar        *source,
+        const    char16_t     *source,
         int32_t        sourceLength,
         uint8_t        **result,
         uint32_t        resultLength,
@@ -203,7 +203,7 @@ UCollationResult GLUE_SYM ( Collator ) :: compare(const UnicodeString&, const Un
 }
 
 
-UCollationResult GLUE_SYM ( Collator ) :: compare(const UChar* s, int32_t sl, const UChar* d , int32_t dl, UErrorCode&/*e*/ ) const  {
+UCollationResult GLUE_SYM ( Collator ) :: compare(const char16_t* s, int32_t sl, const char16_t* d , int32_t dl, UErrorCode&/*e*/ ) const  {
     return OICU_ucol_strcoll(_this, s, sl, d, dl);
 }
 
@@ -219,7 +219,7 @@ return kk;
 }
 
 
-CollationKey& GLUE_SYM ( Collator ) :: getCollationKey(const UChar*, int32_t, CollationKey&, UErrorCode&) const  {
+CollationKey& GLUE_SYM ( Collator ) :: getCollationKey(const char16_t*, int32_t, CollationKey&, UErrorCode&) const  {
     fprintf(stderr,  "VCF " ICUGLUE_VER_STR " GKK2 - notimp");
 return kk;
 }
@@ -259,7 +259,7 @@ return (UColAttributeValue)0;
 }
 
 
-uint32_t GLUE_SYM ( Collator ) :: setVariableTop(const UChar*, int32_t, UErrorCode&)  {
+uint32_t GLUE_SYM ( Collator ) :: setVariableTop(const char16_t*, int32_t, UErrorCode&)  {
 return 0;
 }
 
@@ -293,7 +293,7 @@ int32_t GLUE_SYM ( Collator ) :: getSortKey(const UnicodeString& s, uint8_t*buf,
 
 
 
-int32_t GLUE_SYM ( Collator ) :: getSortKey(const UChar*s, int32_t l, uint8_t*d, int32_t b) const  {
+int32_t GLUE_SYM ( Collator ) :: getSortKey(const char16_t*s, int32_t l, uint8_t*d, int32_t b) const  {
 #if COLL_FE_DEBUG
     fprintf(stderr,  "VCF " ICUGLUE_VER_STR " GKS");
 #endif
@@ -352,7 +352,7 @@ int32_t GLUE_SYM ( Collator ) :: appendAvailable(UnicodeString* strs, int32_t i,
 #if COLL_FE_DEBUG
          { 
             char foo[999];
-            const UChar *ss = strs[i+j].getTerminatedBuffer();
+            const char16_t *ss = strs[i+j].getTerminatedBuffer();
             u_austrcpy(foo, ss);
             debugfprintf((stderr,  "VCF " ICUGLUE_VER_STR " appending [%d+%d=%d] <<%s>>\n", i, j, i+j, foo));
         }

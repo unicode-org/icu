@@ -26,7 +26,7 @@
 #include "util.h"
 #include "putilimp.h"
 
-static const UChar FORWARD_OP[] = {32,62,32,0}; // " > "
+static const char16_t FORWARD_OP[] = {32,62,32,0}; // " > "
 
 U_NAMESPACE_BEGIN
 
@@ -481,27 +481,27 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
 
     // Emit start anchor
     if ((flags & ANCHOR_START) != 0) {
-        rule.append((UChar)94/*^*/);
+        rule.append((char16_t)94/*^*/);
     }
 
     // Emit the input pattern
     ICU_Utility::appendToRule(rule, anteContext, escapeUnprintable, quoteBuf);
 
     if (emitBraces) {
-        ICU_Utility::appendToRule(rule, (UChar) 0x007B /*{*/, true, escapeUnprintable, quoteBuf);
+        ICU_Utility::appendToRule(rule, (char16_t) 0x007B /*{*/, true, escapeUnprintable, quoteBuf);
     }
 
     ICU_Utility::appendToRule(rule, key, escapeUnprintable, quoteBuf);
 
     if (emitBraces) {
-        ICU_Utility::appendToRule(rule, (UChar) 0x007D /*}*/, true, escapeUnprintable, quoteBuf);
+        ICU_Utility::appendToRule(rule, (char16_t) 0x007D /*}*/, true, escapeUnprintable, quoteBuf);
     }
 
     ICU_Utility::appendToRule(rule, postContext, escapeUnprintable, quoteBuf);
 
     // Emit end anchor
     if ((flags & ANCHOR_END) != 0) {
-        rule.append((UChar)36/*$*/);
+        rule.append((char16_t)36/*$*/);
     }
 
     ICU_Utility::appendToRule(rule, UnicodeString(true, FORWARD_OP, 3), true, escapeUnprintable, quoteBuf);
@@ -511,7 +511,7 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
     ICU_Utility::appendToRule(rule, output->toReplacer()->toReplacerPattern(str, escapeUnprintable),
                               true, escapeUnprintable, quoteBuf);
 
-    ICU_Utility::appendToRule(rule, (UChar) 0x003B /*;*/, true, escapeUnprintable, quoteBuf);
+    ICU_Utility::appendToRule(rule, (char16_t) 0x003B /*;*/, true, escapeUnprintable, quoteBuf);
 
     return rule;
 }

@@ -39,7 +39,7 @@ U_NAMESPACE_USE
 
 U_CAPI UNumberFormat* U_EXPORT2
 unum_open(  UNumberFormatStyle    style,  
-            const    UChar*    pattern,
+            const    char16_t*    pattern,
             int32_t            patternLength,
             const    char*     locale,
             UParseError*       parseErr,
@@ -175,7 +175,7 @@ unum_clone(const UNumberFormat *fmt,
 U_CAPI int32_t U_EXPORT2
 unum_format(    const    UNumberFormat*    fmt,
         int32_t           number,
-        UChar*            result,
+        char16_t*            result,
         int32_t           resultLength,
         UFieldPosition    *pos,
         UErrorCode*       status)
@@ -186,7 +186,7 @@ unum_format(    const    UNumberFormat*    fmt,
 U_CAPI int32_t U_EXPORT2
 unum_formatInt64(const UNumberFormat* fmt,
         int64_t         number,
-        UChar*          result,
+        char16_t*          result,
         int32_t         resultLength,
         UFieldPosition *pos,
         UErrorCode*     status)
@@ -219,7 +219,7 @@ unum_formatInt64(const UNumberFormat* fmt,
 U_CAPI int32_t U_EXPORT2
 unum_formatDouble(    const    UNumberFormat*  fmt,
             double          number,
-            UChar*          result,
+            char16_t*          result,
             int32_t         resultLength,
             UFieldPosition  *pos, /* 0 if ignore */
             UErrorCode*     status)
@@ -252,7 +252,7 @@ unum_formatDouble(    const    UNumberFormat*  fmt,
 U_CAPI int32_t U_EXPORT2
 unum_formatDoubleForFields(const UNumberFormat* format,
                            double number,
-                           UChar* result,
+                           char16_t* result,
                            int32_t resultLength,
                            UFieldPositionIterator* fpositer,
                            UErrorCode* status)
@@ -281,7 +281,7 @@ U_CAPI int32_t U_EXPORT2
 unum_formatDecimal(const    UNumberFormat*  fmt,
             const char *    number,
             int32_t         length,
-            UChar*          result,
+            char16_t*          result,
             int32_t         resultLength,
             UFieldPosition  *pos, /* 0 if ignore */
             UErrorCode*     status) {
@@ -324,8 +324,8 @@ unum_formatDecimal(const    UNumberFormat*  fmt,
 U_CAPI int32_t U_EXPORT2 
 unum_formatDoubleCurrency(const UNumberFormat* fmt,
                           double number,
-                          UChar* currency,
-                          UChar* result,
+                          char16_t* currency,
+                          char16_t* result,
                           int32_t resultLength,
                           UFieldPosition* pos, /* ignored if 0 */
                           UErrorCode* status) {
@@ -362,7 +362,7 @@ unum_formatDoubleCurrency(const UNumberFormat* fmt,
 static void
 parseRes(Formattable& res,
          const   UNumberFormat*  fmt,
-         const   UChar*          text,
+         const   char16_t*          text,
          int32_t         textLength,
          int32_t         *parsePos /* 0 = start */,
          UErrorCode      *status)
@@ -390,7 +390,7 @@ parseRes(Formattable& res,
 
 U_CAPI int32_t U_EXPORT2
 unum_parse(    const   UNumberFormat*  fmt,
-        const   UChar*          text,
+        const   char16_t*          text,
         int32_t         textLength,
         int32_t         *parsePos /* 0 = start */,
         UErrorCode      *status)
@@ -402,7 +402,7 @@ unum_parse(    const   UNumberFormat*  fmt,
 
 U_CAPI int64_t U_EXPORT2
 unum_parseInt64(    const   UNumberFormat*  fmt,
-        const   UChar*          text,
+        const   char16_t*          text,
         int32_t         textLength,
         int32_t         *parsePos /* 0 = start */,
         UErrorCode      *status)
@@ -414,7 +414,7 @@ unum_parseInt64(    const   UNumberFormat*  fmt,
 
 U_CAPI double U_EXPORT2
 unum_parseDouble(    const   UNumberFormat*  fmt,
-            const   UChar*          text,
+            const   char16_t*          text,
             int32_t         textLength,
             int32_t         *parsePos /* 0 = start */,
             UErrorCode      *status)
@@ -426,7 +426,7 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
 
 U_CAPI int32_t U_EXPORT2
 unum_parseDecimal(const UNumberFormat*  fmt,
-            const UChar*    text,
+            const char16_t*    text,
             int32_t         textLength,
             int32_t         *parsePos /* 0 = start */,
             char            *outBuf,
@@ -459,10 +459,10 @@ unum_parseDecimal(const UNumberFormat*  fmt,
 
 U_CAPI double U_EXPORT2
 unum_parseDoubleCurrency(const UNumberFormat* fmt,
-                         const UChar* text,
+                         const char16_t* text,
                          int32_t textLength,
                          int32_t* parsePos, /* 0 = start */
-                         UChar* currency,
+                         char16_t* currency,
                          UErrorCode* status) {
     double doubleVal = 0.0;
     currency[0] = 0;
@@ -641,7 +641,7 @@ unum_setDoubleAttribute(    UNumberFormat*          fmt,
 U_CAPI int32_t U_EXPORT2
 unum_getTextAttribute(const UNumberFormat*  fmt,
             UNumberFormatTextAttribute      tag,
-            UChar*                          result,
+            char16_t*                          result,
             int32_t                         resultLength,
             UErrorCode*                     status)
 {
@@ -696,7 +696,7 @@ unum_getTextAttribute(const UNumberFormat*  fmt,
             int32_t count = rbnf->getNumberOfRuleSetNames();
             for (int i = 0; i < count; ++i) {
                 res += rbnf->getRuleSetName(i);
-                res += (UChar)0x003b; // semicolon
+                res += (char16_t)0x003b; // semicolon
             }
         } else {
             *status = U_UNSUPPORTED_ERROR;
@@ -710,7 +710,7 @@ unum_getTextAttribute(const UNumberFormat*  fmt,
 U_CAPI void U_EXPORT2
 unum_setTextAttribute(    UNumberFormat*                    fmt,
             UNumberFormatTextAttribute      tag,
-            const    UChar*                            newValue,
+            const    char16_t*                            newValue,
             int32_t                            newValueLength,
             UErrorCode                        *status)
 {
@@ -764,7 +764,7 @@ unum_setTextAttribute(    UNumberFormat*                    fmt,
 U_CAPI int32_t U_EXPORT2
 unum_toPattern(    const    UNumberFormat*          fmt,
         UBool                  isPatternLocalized,
-        UChar*                  result,
+        char16_t*                  result,
         int32_t                 resultLength,
         UErrorCode*             status)
 {
@@ -796,7 +796,7 @@ unum_toPattern(    const    UNumberFormat*          fmt,
 U_CAPI int32_t U_EXPORT2
 unum_getSymbol(const UNumberFormat *fmt,
                UNumberFormatSymbol symbol,
-               UChar *buffer,
+               char16_t *buffer,
                int32_t size,
                UErrorCode *status)
 {
@@ -823,7 +823,7 @@ unum_getSymbol(const UNumberFormat *fmt,
 U_CAPI void U_EXPORT2
 unum_setSymbol(UNumberFormat *fmt,
                UNumberFormatSymbol symbol,
-               const UChar *value,
+               const char16_t *value,
                int32_t length,
                UErrorCode *status)
 {
@@ -850,7 +850,7 @@ unum_setSymbol(UNumberFormat *fmt,
 U_CAPI void U_EXPORT2
 unum_applyPattern(  UNumberFormat  *fmt,
                     UBool          localized,
-                    const UChar    *pattern,
+                    const char16_t *pattern,
                     int32_t        patternLength,
                     UParseError    *parseError,
                     UErrorCode*    status)
@@ -867,7 +867,7 @@ unum_applyPattern(  UNumberFormat  *fmt,
     }
     
     int32_t len = (patternLength == -1 ? u_strlen(pattern) : patternLength);
-    const UnicodeString pat((UChar*)pattern, len, len);
+    const UnicodeString pat((char16_t*)pattern, len, len);
 
     // Verify if the object passed is a DecimalFormat object
     NumberFormat* nf = reinterpret_cast<NumberFormat*>(fmt);
@@ -920,7 +920,7 @@ unum_getContext(const UNumberFormat *fmt, UDisplayContextType type, UErrorCode* 
 U_CAPI UFormattable * U_EXPORT2
 unum_parseToUFormattable(const UNumberFormat* fmt,
                          UFormattable *result,
-                         const UChar* text,
+                         const char16_t* text,
                          int32_t textLength,
                          int32_t* parsePos, /* 0 = start */
                          UErrorCode* status) {
@@ -944,7 +944,7 @@ unum_parseToUFormattable(const UNumberFormat* fmt,
 U_CAPI int32_t U_EXPORT2
 unum_formatUFormattable(const UNumberFormat* fmt,
                         const UFormattable *number,
-                        UChar *result,
+                        char16_t *result,
                         int32_t resultLength,
                         UFieldPosition *pos, /* ignored if 0 */
                         UErrorCode *status) {

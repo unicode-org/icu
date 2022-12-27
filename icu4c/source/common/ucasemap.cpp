@@ -136,7 +136,7 @@ namespace {
 
 /* append a full case mapping result, see UCASE_MAX_STRING_LENGTH */
 inline UBool
-appendResult(int32_t cpLength, int32_t result, const UChar *s,
+appendResult(int32_t cpLength, int32_t result, const char16_t *s,
              ByteSink &sink, uint32_t options, icu::Edits *edits, UErrorCode &errorCode) {
     U_ASSERT(U_SUCCESS(errorCode));
 
@@ -292,7 +292,7 @@ void toLower(int32_t caseLocale, uint32_t options,
             break;
         }
         // slow path
-        const UChar *s;
+        const char16_t *s;
         if (caseLocale >= 0) {
             csc->cpStart = cpStart;
             csc->cpLimit = srcIndex;
@@ -402,7 +402,7 @@ void toUpper(int32_t caseLocale, uint32_t options,
         // slow path
         csc->cpStart = cpStart;
         csc->cpLimit = srcIndex;
-        const UChar *s;
+        const char16_t *s;
         c = ucase_toFullUpper(c, utf8_caseContextIterator, csc, &s, caseLocale);
         if (c >= 0) {
             ByteSinkUtil::appendUnchanged(src + prev, cpStart - prev,
@@ -580,7 +580,7 @@ ucasemap_internalUTF8ToTitle(
                 if(c>=0) {
                     csc.cpStart=titleStart;
                     csc.cpLimit=titleLimit;
-                    const UChar *s;
+                    const char16_t *s;
                     c=ucase_toFullTitle(c, utf8_caseContextIterator, &csc, &s, caseLocale);
                     if (!appendResult(titleLimit-titleStart, c, s, sink, options, edits, errorCode)) {
                         return;
@@ -783,7 +783,7 @@ void toUpper(uint32_t options,
                 }
             }
         } else if(c>=0) {
-            const UChar *s;
+            const char16_t *s;
             c=ucase_toFullUpper(c, nullptr, nullptr, &s, UCASE_LOC_GREEK);
             if (!appendResult(nextIndex - i, c, s, sink, options, edits, errorCode)) {
                 return;

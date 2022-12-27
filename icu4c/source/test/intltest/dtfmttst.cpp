@@ -140,7 +140,7 @@ void DateFormatTest::TestPatterns() {
         const char *actualPattern;
         const char *expectedPattern;
         const char *localeID;
-        const UChar *expectedLocalPattern;
+        const char16_t *expectedLocalPattern;
     } EXPECTED[] = {
         {UDAT_YEAR, "y", "en",u"y"},
 
@@ -420,7 +420,7 @@ DateFormatTest::TestTwoDigitYearDSTParse(void)
 
 // -------------------------------------
 
-UChar toHexString(int32_t i) { return (UChar)(i + (i < 10 ? 0x30 : (0x41 - 10))); }
+char16_t toHexString(int32_t i) { return (char16_t)(i + (i < 10 ? 0x30 : (0x41 - 10))); }
 
 UnicodeString&
 DateFormatTest::escape(UnicodeString& s)
@@ -428,10 +428,10 @@ DateFormatTest::escape(UnicodeString& s)
     UnicodeString buf;
     for (int32_t i=0; i<s.length(); ++i)
     {
-        UChar c = s[(int32_t)i];
-        if (c <= (UChar)0x7F) buf += c;
+        char16_t c = s[(int32_t)i];
+        if (c <= (char16_t)0x7F) buf += c;
         else {
-            buf += (UChar)0x5c; buf += (UChar)0x55;
+            buf += (char16_t)0x5c; buf += (char16_t)0x55;
             buf += toHexString((c & 0xF000) >> 12);
             buf += toHexString((c & 0x0F00) >> 8);
             buf += toHexString((c & 0x00F0) >> 4);
@@ -533,7 +533,7 @@ void DateFormatTest::TestFieldPosition() {
     dateFormats[1] = DateFormat::createDateTimeInstance(DateFormat::kFull, DateFormat::kFull, Locale::getFrance());
     // Make the pattern "G y M d..."
     buf.remove().append(PATTERN_CHARS);
-    for (j=buf.length()-1; j>=0; --j) buf.insert(j, (UChar)32/*' '*/);
+    for (j=buf.length()-1; j>=0; --j) buf.insert(j, (char16_t)32/*' '*/);
     dateFormats[2] = new SimpleDateFormat(buf, Locale::getUS(), ec);
     // Make the pattern "GGGG yyyy MMMM dddd..."
     for (j=buf.length()-1; j>=0; j-=2) {
@@ -3802,11 +3802,11 @@ void DateFormatTest::Test6726(void)
 
 
     logln("strm.charAt(10)=%04X wanted 0x20\n", strm.charAt(10));
-    if (strm.charAt(10) != UChar(0x0020)) {
+    if (strm.charAt(10) != char16_t(0x0020)) {
       errln((UnicodeString)"FAIL: Improper formatted date: " + strm );
     }
     logln("strs.charAt(10)=%04X wanted 0x20\n", strs.charAt(8));
-    if (strs.charAt(10)  != UChar(0x0020)) {
+    if (strs.charAt(10)  != char16_t(0x0020)) {
         errln((UnicodeString)"FAIL: Improper formatted date: " + strs);
     }
 
@@ -4808,7 +4808,7 @@ void DateFormatTest::TestNumberFormatOverride() {
         fmt->adoptNumberFormat(fields, check_nf, status);
         assertSuccess("adoptNumberFormat check_nf", status);
 
-        const NumberFormat* get_nf = fmt->getNumberFormatForField((UChar)0x004D /*'M'*/);
+        const NumberFormat* get_nf = fmt->getNumberFormatForField((char16_t)0x004D /*'M'*/);
         if (get_nf != check_nf) errln("FAIL: getter and setter do not work");
     }
     NumberFormat* check_nf = NumberFormat::createInstance(Locale("en_US"), status);
@@ -5005,7 +5005,7 @@ void DateFormatTest::TestPatternFromSkeleton() {
     static const struct {
         const Locale& locale;
         const char* const skeleton;
-        const UChar* const pattern;
+        const char16_t* const pattern;
     } TESTDATA[] = {
         // Ticket #11985
         {Locale::getEnglish(), "jjmm", u"h:mm\u202Fa"},

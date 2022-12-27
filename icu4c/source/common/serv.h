@@ -74,7 +74,7 @@ class U_COMMON_API ICUServiceKey : public UObject {
   const UnicodeString _id;
 
  protected:
-  static const UChar PREFIX_DELIMITER;
+  static const char16_t PREFIX_DELIMITER;
 
  public:
 

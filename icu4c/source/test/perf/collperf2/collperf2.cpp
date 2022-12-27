@@ -45,7 +45,7 @@ struct CompactArrays{\
     int32_t lengthOf(int i) const {return index[i+1] - index[i] - 1; } /*exclude terminating NUL*/  \
 };
 
-COMPACT_ARRAY(CA_uchar, UChar)
+COMPACT_ARRAY(CA_uchar, char16_t)
 COMPACT_ARRAY(CA_char, char)
 
 #define MAX_TEST_STRINGS_FOR_PERMUTING 1000
@@ -1179,7 +1179,7 @@ const CA_uchar* CollPerf2Test::getData16(UErrorCode &status)
     if (data16) return data16;
 
     CA_uchar* d16 = new CA_uchar();
-    const UChar *line = nullptr;
+    const char16_t *line = nullptr;
     int32_t len = 0;
     int32_t numData = 0;
 
@@ -1196,7 +1196,7 @@ const CA_uchar* CollPerf2Test::getData16(UErrorCode &status)
             continue; // skip empty/comment line
         } else {
             d16->append_one(len);
-            UChar *p = d16->last();
+            char16_t *p = d16->last();
             u_memcpy(p, line, len - 1);  // exclude the CR
             p[len - 1] = 0;  // NUL-terminate
 
@@ -1232,20 +1232,20 @@ const CA_uchar* CollPerf2Test::getModData16(UErrorCode &status)
     CA_uchar* modData16 = new CA_uchar();
 
     for (int32_t i = 0; i < d16->count; i++) {
-        const UChar *s = d16->dataOf(i);
+        const char16_t *s = d16->dataOf(i);
         int32_t len = d16->lengthOf(i) + 1; // including NUL terminator
 
         modData16->append_one(len);
         u_memcpy(modData16->last(), s, len);
 
         // replacing the last character with a different character
-        UChar *lastChar = &modData16->last()[len -2];
+        char16_t *lastChar = &modData16->last()[len -2];
         for (int32_t j = i + 1; j != i; j++) {
             if (j >= d16->count) {
                 j = 0;
             }
-            const UChar *s1 = d16->dataOf(j);
-            UChar lastChar1 = s1[d16->lengthOf(j) - 1];
+            const char16_t *s1 = d16->dataOf(j);
+            char16_t lastChar1 = s1[d16->lengthOf(j) - 1];
             if (*lastChar != lastChar1) {
                 *lastChar = lastChar1;
                 break;
@@ -1340,7 +1340,7 @@ CA_uchar* CollPerf2Test::sortData16(const CA_uchar* d16,
     LocalPointer<CA_uchar> newD16(new CA_uchar());
     for (int32_t i = 0; i < d16->count; i++) {
         int32_t j = indexes[i];
-        const UChar* s = d16->dataOf(j);
+        const char16_t* s = d16->dataOf(j);
         int32_t len = d16->lengthOf(j);
         int32_t capacity = len + 1;  // including NUL terminator
         newD16->append_one(capacity);
@@ -1360,7 +1360,7 @@ CA_char* CollPerf2Test::getData8FromData16(const CA_uchar* d16, UErrorCode &stat
     // UTF-16 -> UTF-8 conversion
     LocalPointer<CA_char> d8(new CA_char());
     for (int32_t i = 0; i < d16->count; i++) {
-        const UChar *s16 = d16->dataOf(i);
+        const char16_t *s16 = d16->dataOf(i);
         int32_t length16 = d16->lengthOf(i);
 
         // get length in UTF-8

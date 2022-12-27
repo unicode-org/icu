@@ -157,7 +157,7 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                                                             UErrorCode* err){
     char tempBuf[2];
     const char *mySource = ( char *) args->source;
-    UChar *myTarget = args->target;
+    char16_t *myTarget = args->target;
     const char *mySourceLimit = args->sourceLimit;
     UChar32 targetUniChar = 0x0000;
     int32_t mySourceChar = 0x0000;
@@ -188,7 +188,7 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                     if(args->offsets) {
                         args->offsets[myTarget - args->target]=(int32_t)(mySource - args->source - 2);
                     }
-                    *(myTarget++)=(UChar)mySourceChar;
+                    *(myTarget++)=(char16_t)mySourceChar;
                     myData->isEmptySegment = false;
                     continue;
                 case UCNV_OPEN_BRACE:
@@ -288,7 +288,7 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                     args->converter->mode = UCNV_TILDE;
                     continue;
                 } else if(mySourceChar <= 0x7f) {
-                    targetUniChar = (UChar)mySourceChar;  /* ASCII */
+                    targetUniChar = (char16_t)mySourceChar;  /* ASCII */
                     myData->isEmptySegment = false; /* the segment has something valid */
                 } else {
                     targetUniChar = 0xffff;
@@ -300,7 +300,7 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                     args->offsets[myTarget - args->target]=(int32_t)(mySource - args->source - 1-(myData->isStateDBCS));
                 }
 
-                *(myTarget++)=(UChar)targetUniChar;
+                *(myTarget++)=(char16_t)targetUniChar;
             }
             else /* targetUniChar>=0xfffe */ {
                 if(targetUniChar == 0xfffe){
@@ -335,7 +335,7 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
 static void  U_CALLCONV
 UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                                                       UErrorCode * err){
-    const UChar *mySource = args->source;
+    const char16_t *mySource = args->source;
     char *myTarget = args->target;
     int32_t* offsets = args->offsets;
     int32_t mySourceIndex = 0;
@@ -363,7 +363,7 @@ UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
         targetUniChar = missingCharMarker;
         if (myTargetIndex < targetLength){
             
-            mySourceChar = (UChar) mySource[mySourceIndex++];
+            mySourceChar = (char16_t) mySource[mySourceIndex++];
             
 
             oldIsTargetUCharDBCS = isTargetUCharDBCS;
@@ -453,7 +453,7 @@ getTrail:
                         /*look ahead to find the trail surrogate*/
                         if(mySourceIndex <  mySourceLength) {
                             /* test the following code unit */
-                            UChar trail=(UChar) args->source[mySourceIndex];
+                            char16_t trail=(char16_t) args->source[mySourceIndex];
                             if(U16_IS_TRAIL(trail)) {
                                 ++mySourceIndex;
                                 mySourceChar=U16_GET_SUPPLEMENTARY(args->converter->fromUChar32, trail);

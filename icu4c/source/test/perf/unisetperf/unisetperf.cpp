@@ -80,7 +80,7 @@ public:
 
                 if(verbose) {
                     printf("code points:%ld  len16:%ld  len8:%ld  spans:%ld  "
-                           "cp/span:%.3g  UChar/span:%.3g  B/span:%.3g  B/cp:%.3g\n",
+                           "cp/span:%.3g  char16_t/span:%.3g  B/span:%.3g  B/cp:%.3g\n",
                            (long)countInputCodePoints, (long)bufferLen, (long)utf8Length, (long)spanCount,
                            (double)countInputCodePoints/spanCount, (double)bufferLen/spanCount, (double)utf8Length/spanCount,
                            (double)utf8Length/countInputCodePoints);
@@ -96,7 +96,7 @@ public:
     // If the very first character is in the set, then one additional
     // not-span is counted.
     void countSpans() {
-        const UChar *s=getBuffer();
+        const char16_t *s=getBuffer();
         int32_t length=getBufferLen();
         int32_t i=0;
         UBool tf=false;
@@ -106,7 +106,7 @@ public:
             ++spanCount;
         }
     }
-    int32_t span(const UChar *s, int32_t length, int32_t start, UBool tf) const {
+    int32_t span(const char16_t *s, int32_t length, int32_t start, UBool tf) const {
         UChar32 c;
         int32_t prev;
         while((prev=start)<length) {
@@ -118,7 +118,7 @@ public:
         return prev;
     }
 
-    const UChar *getBuffer() const { return buffer; }
+    const char16_t *getBuffer() const { return buffer; }
     int32_t getBufferLen() const { return bufferLen; }
 
     char *utf8;
@@ -177,7 +177,7 @@ public:
     }
     virtual void call(UErrorCode* pErrorCode) {
         const UnicodeSet &set=testcase.set;
-        const UChar *s=testcase.getBuffer();
+        const char16_t *s=testcase.getBuffer();
         int32_t length=testcase.getBufferLen();
         int32_t count=0;
         int32_t i=0;
@@ -192,7 +192,7 @@ public:
                     (long)count, (long)testcase.spanCount);
         }
     }
-    static int32_t span(const UnicodeSet &set, const UChar *s, int32_t length, UBool tf) {
+    static int32_t span(const UnicodeSet &set, const char16_t *s, int32_t length, UBool tf) {
         UChar32 c;
         int32_t start=0, prev;
         while((prev=start)<length) {
@@ -210,19 +210,19 @@ protected:
     SpanUTF16(const UnicodeSetPerformanceTest &testcase) : Command(testcase) {
         // Verify that the frozen set is equal to the unfrozen one.
         UnicodeSet set;
-        UChar utf16[2];
+        char16_t utf16[2];
         UChar32 c, c2;
 
         for(c=0; c<=0xffff; ++c) {
-            utf16[0]=(UChar)c;
+            utf16[0]=(char16_t)c;
             if(testcase.set.span(utf16, 1, USET_SPAN_CONTAINED)>0) {
                 set.add(c);
             }
         }
         for(c=0xd800; c<=0xdbff; ++c) {
-            utf16[0]=(UChar)c;
+            utf16[0]=(char16_t)c;
             for(c2=0xdc00; c2<=0xdfff; ++c2) {
-                utf16[1]=(UChar)c2;
+                utf16[1]=(char16_t)c2;
                 if(testcase.set.span(utf16, 2, USET_SPAN_CONTAINED)>0) {
                     set.add(U16_GET_SUPPLEMENTARY(c, c2));
                 }
@@ -239,7 +239,7 @@ public:
     }
     virtual void call(UErrorCode* pErrorCode) {
         const UnicodeSet &set=testcase.set;
-        const UChar *s=testcase.getBuffer();
+        const char16_t *s=testcase.getBuffer();
         int32_t length=testcase.getBufferLen();
         int32_t count=0;
         int32_t i=0;
@@ -261,19 +261,19 @@ protected:
     SpanBackUTF16(const UnicodeSetPerformanceTest &testcase) : Command(testcase) {
         // Verify that the frozen set is equal to the unfrozen one.
         UnicodeSet set;
-        UChar utf16[2];
+        char16_t utf16[2];
         UChar32 c, c2;
 
         for(c=0; c<=0xffff; ++c) {
-            utf16[0]=(UChar)c;
+            utf16[0]=(char16_t)c;
             if(testcase.set.spanBack(utf16, 1, USET_SPAN_CONTAINED)==0) {
                 set.add(c);
             }
         }
         for(c=0xd800; c<=0xdbff; ++c) {
-            utf16[0]=(UChar)c;
+            utf16[0]=(char16_t)c;
             for(c2=0xdc00; c2<=0xdfff; ++c2) {
-                utf16[1]=(UChar)c2;
+                utf16[1]=(char16_t)c2;
                 if(testcase.set.spanBack(utf16, 2, USET_SPAN_CONTAINED)==0) {
                     set.add(U16_GET_SUPPLEMENTARY(c, c2));
                 }
@@ -290,7 +290,7 @@ public:
     }
     virtual void call(UErrorCode* pErrorCode) {
         const UnicodeSet &set=testcase.set;
-        const UChar *s=testcase.getBuffer();
+        const char16_t *s=testcase.getBuffer();
         int32_t length=testcase.getBufferLen();
         int32_t count=0;
         /*

@@ -128,7 +128,7 @@ U_NAMESPACE_USE
 
 /* stack element for previous-level source/decomposition pointers */
 struct CmpEquivLevel {
-    const UChar *start, *s, *limit;
+    const char16_t *start, *s, *limit;
 };
 typedef struct CmpEquivLevel CmpEquivLevel;
 
@@ -140,27 +140,27 @@ typedef struct CmpEquivLevel CmpEquivLevel;
 
 /* internal function */
 static int32_t
-unorm_cmpEquivFold(const UChar *s1, int32_t length1,
-                   const UChar *s2, int32_t length2,
+unorm_cmpEquivFold(const char16_t *s1, int32_t length1,
+                   const char16_t *s2, int32_t length2,
                    uint32_t options,
                    UErrorCode *pErrorCode) {
     const Normalizer2Impl *nfcImpl;
 
     /* current-level start/limit - s1/s2 as current */
-    const UChar *start1, *start2, *limit1, *limit2;
+    const char16_t *start1, *start2, *limit1, *limit2;
 
     /* decomposition and case folding variables */
-    const UChar *p;
+    const char16_t *p;
     int32_t length;
 
     /* stacks of previous-level start/current/limit */
     CmpEquivLevel stack1[2], stack2[2];
 
     /* buffers for algorithmic decompositions */
-    UChar decomp1[4], decomp2[4];
+    char16_t decomp1[4], decomp2[4];
 
     /* case folding buffers, only use current-level start/limit */
-    UChar fold1[UCASE_MAX_STRING_LENGTH+1], fold2[UCASE_MAX_STRING_LENGTH+1];
+    char16_t fold1[UCASE_MAX_STRING_LENGTH+1], fold2[UCASE_MAX_STRING_LENGTH+1];
 
     /* track which is the current level per string */
     int32_t level1, level2;
@@ -277,7 +277,7 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
         /* get complete code points for c1, c2 for lookups if either is a surrogate */
         cp1=c1;
         if(U_IS_SURROGATE(c1)) {
-            UChar c;
+            char16_t c;
 
             if(U_IS_SURROGATE_LEAD(c1)) {
                 if(s1!=limit1 && U16_IS_TRAIL(c=*s1)) {
@@ -293,7 +293,7 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
 
         cp2=c2;
         if(U_IS_SURROGATE(c2)) {
-            UChar c;
+            char16_t c;
 
             if(U_IS_SURROGATE_LEAD(c2)) {
                 if(s2!=limit2 && U16_IS_TRAIL(c=*s2)) {
@@ -529,7 +529,7 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
 }
 
 static
-UBool _normalize(const Normalizer2 *n2, const UChar *s, int32_t length,
+UBool _normalize(const Normalizer2 *n2, const char16_t *s, int32_t length,
                 UnicodeString &normalized, UErrorCode *pErrorCode) {
     UnicodeString str(length<0, s, length);
 
@@ -558,8 +558,8 @@ UBool _normalize(const Normalizer2 *n2, const UChar *s, int32_t length,
 }
 
 U_CAPI int32_t U_EXPORT2
-unorm_compare(const UChar *s1, int32_t length1,
-              const UChar *s2, int32_t length2,
+unorm_compare(const char16_t *s1, int32_t length1,
+              const char16_t *s2, int32_t length2,
               uint32_t options,
               UErrorCode *pErrorCode) {
     /* argument checking */

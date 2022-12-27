@@ -102,7 +102,7 @@ const uint32_t severeErrors=
     UIDNA_ERROR_INVALID_ACE_LABEL;
 
 static UBool isASCII(const UnicodeString &str) {
-    const UChar *s=str.getBuffer();
+    const char16_t *s=str.getBuffer();
     int32_t length=str.length();
     for(int32_t i=0; i<length; ++i) {
         if(s[i]>=0x80) {
@@ -852,7 +852,7 @@ void UTS46Test::TestSomeCases() {
         ) {
             continue;
         }
-        if(aN.indexOf((UChar)0x2e)<0) {
+        if(aN.indexOf((char16_t)0x2e)<0) {
             if(aN!=aNL || aNInfo.getErrors()!=aNLInfo.getErrors()) {
                 prettify(aN).extract(0, 0x7fffffff, buffer, UPRV_LENGTHOF(buffer));
                 prettify(aNL).extract(0, 0x7fffffff, buffer2, UPRV_LENGTHOF(buffer2));
@@ -868,7 +868,7 @@ void UTS46Test::TestSomeCases() {
                 continue;
             }
         }
-        if(aT.indexOf((UChar)0x2e)<0) {
+        if(aT.indexOf((char16_t)0x2e)<0) {
             if(aT!=aTL || aTInfo.getErrors()!=aTLInfo.getErrors()) {
                 prettify(aT).extract(0, 0x7fffffff, buffer, UPRV_LENGTHOF(buffer));
                 prettify(aTL).extract(0, 0x7fffffff, buffer2, UPRV_LENGTHOF(buffer2));
@@ -884,7 +884,7 @@ void UTS46Test::TestSomeCases() {
                 continue;
             }
         }
-        if(uN.indexOf((UChar)0x2e)<0) {
+        if(uN.indexOf((char16_t)0x2e)<0) {
             if(uN!=uNL || uNInfo.getErrors()!=uNLInfo.getErrors()) {
                 prettify(uN).extract(0, 0x7fffffff, buffer, UPRV_LENGTHOF(buffer));
                 prettify(uNL).extract(0, 0x7fffffff, buffer2, UPRV_LENGTHOF(buffer2));
@@ -900,7 +900,7 @@ void UTS46Test::TestSomeCases() {
                 continue;
             }
         }
-        if(uT.indexOf((UChar)0x2e)<0) {
+        if(uT.indexOf((char16_t)0x2e)<0) {
             if(uT!=uTL || uTInfo.getErrors()!=uTLInfo.getErrors()) {
                 prettify(uT).extract(0, 0x7fffffff, buffer, UPRV_LENGTHOF(buffer));
                 prettify(uTL).extract(0, 0x7fffffff, buffer2, UPRV_LENGTHOF(buffer2));

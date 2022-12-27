@@ -669,7 +669,7 @@ CollationBuilder::addRelation(int32_t strength, const UnicodeString &prefix,
     // It does not work with certain types of contextual mappings.
     int32_t nfdLength = nfdString.length();
     if(nfdLength >= 2) {
-        UChar c = nfdString.charAt(0);
+        char16_t c = nfdString.charAt(0);
         if(Hangul::isJamoL(c) || Hangul::isJamoV(c)) {
             // While handling a Hangul syllable, contractions starting with Jamo L or V
             // would not see the following Jamo of that syllable.
@@ -1030,7 +1030,7 @@ CollationBuilder::setCaseBits(const UnicodeString &nfdString,
 
     int64_t cases = 0;
     if(numTailoredPrimaries > 0) {
-        const UChar *s = nfdString.getBuffer();
+        const char16_t *s = nfdString.getBuffer();
         UTF16CollationIterator baseCEs(baseData, false, s, s, s + nfdString.length());
         int32_t baseCEsLength = baseCEs.fetchCEs(errorCode) - 1;
         if(U_FAILURE(errorCode)) {
@@ -1641,7 +1641,7 @@ U_NAMESPACE_END
 U_NAMESPACE_USE
 
 U_CAPI UCollator * U_EXPORT2
-ucol_openRules(const UChar *rules, int32_t rulesLength,
+ucol_openRules(const char16_t *rules, int32_t rulesLength,
                UColAttributeValue normalizationMode, UCollationStrength strength,
                UParseError *parseError, UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) { return nullptr; }
@@ -1676,13 +1676,13 @@ ucol_getUnsafeSet( const UCollator *coll,
                   USet *unsafe,
                   UErrorCode *status)
 {
-    UChar buffer[internalBufferSize];
+    char16_t buffer[internalBufferSize];
     int32_t len = 0;
 
     uset_clear(unsafe);
 
     // cccpattern = "[[:^tccc=0:][:^lccc=0:]]", unfortunately variant
-    static const UChar cccpattern[25] = { 0x5b, 0x5b, 0x3a, 0x5e, 0x74, 0x63, 0x63, 0x63, 0x3d, 0x30, 0x3a, 0x5d,
+    static const char16_t cccpattern[25] = { 0x5b, 0x5b, 0x3a, 0x5e, 0x74, 0x63, 0x63, 0x63, 0x3d, 0x30, 0x3a, 0x5d,
                                     0x5b, 0x3a, 0x5e, 0x6c, 0x63, 0x63, 0x63, 0x3d, 0x30, 0x3a, 0x5d, 0x5d, 0x00 };
 
     // add chars that fail the fcd check

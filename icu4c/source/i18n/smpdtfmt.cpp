@@ -95,16 +95,16 @@ U_NAMESPACE_BEGIN
 // GMT-minutes. For instance, in France the time zone is GMT+60.
 // Also accepted are GMT+H:MM or GMT-H:MM.
 // Currently not being used
-//static const UChar gGmt[]      = {0x0047, 0x004D, 0x0054, 0x0000};         // "GMT"
-//static const UChar gGmtPlus[]  = {0x0047, 0x004D, 0x0054, 0x002B, 0x0000}; // "GMT+"
-//static const UChar gGmtMinus[] = {0x0047, 0x004D, 0x0054, 0x002D, 0x0000}; // "GMT-"
-//static const UChar gDefGmtPat[]       = {0x0047, 0x004D, 0x0054, 0x007B, 0x0030, 0x007D, 0x0000}; /* GMT{0} */
-//static const UChar gDefGmtNegHmsPat[] = {0x002D, 0x0048, 0x0048, 0x003A, 0x006D, 0x006D, 0x003A, 0x0073, 0x0073, 0x0000}; /* -HH:mm:ss */
-//static const UChar gDefGmtNegHmPat[]  = {0x002D, 0x0048, 0x0048, 0x003A, 0x006D, 0x006D, 0x0000}; /* -HH:mm */
-//static const UChar gDefGmtPosHmsPat[] = {0x002B, 0x0048, 0x0048, 0x003A, 0x006D, 0x006D, 0x003A, 0x0073, 0x0073, 0x0000}; /* +HH:mm:ss */
-//static const UChar gDefGmtPosHmPat[]  = {0x002B, 0x0048, 0x0048, 0x003A, 0x006D, 0x006D, 0x0000}; /* +HH:mm */
-//static const UChar gUt[]       = {0x0055, 0x0054, 0x0000};  // "UT"
-//static const UChar gUtc[]      = {0x0055, 0x0054, 0x0043, 0x0000};  // "UT"
+//static const char16_t gGmt[]      = {0x0047, 0x004D, 0x0054, 0x0000};         // "GMT"
+//static const char16_t gGmtPlus[]  = {0x0047, 0x004D, 0x0054, 0x002B, 0x0000}; // "GMT+"
+//static const char16_t gGmtMinus[] = {0x0047, 0x004D, 0x0054, 0x002D, 0x0000}; // "GMT-"
+//static const char16_t gDefGmtPat[]       = {0x0047, 0x004D, 0x0054, 0x007B, 0x0030, 0x007D, 0x0000}; /* GMT{0} */
+//static const char16_t gDefGmtNegHmsPat[] = {0x002D, 0x0048, 0x0048, 0x003A, 0x006D, 0x006D, 0x003A, 0x0073, 0x0073, 0x0000}; /* -HH:mm:ss */
+//static const char16_t gDefGmtNegHmPat[]  = {0x002D, 0x0048, 0x0048, 0x003A, 0x006D, 0x006D, 0x0000}; /* -HH:mm */
+//static const char16_t gDefGmtPosHmsPat[] = {0x002B, 0x0048, 0x0048, 0x003A, 0x006D, 0x006D, 0x003A, 0x0073, 0x0073, 0x0000}; /* +HH:mm:ss */
+//static const char16_t gDefGmtPosHmPat[]  = {0x002B, 0x0048, 0x0048, 0x003A, 0x006D, 0x006D, 0x0000}; /* +HH:mm */
+//static const char16_t gUt[]       = {0x0055, 0x0054, 0x0000};  // "UT"
+//static const char16_t gUtc[]      = {0x0055, 0x0054, 0x0043, 0x0000};  // "UT"
 
 typedef enum GmtPatSize {
     kGmtLen = 3,
@@ -160,7 +160,7 @@ static const int8_t kTimeFieldsCount = 10;
 
 // This is a pattern-of-last-resort used when we can't load a usable pattern out
 // of a resource.
-static const UChar gDefaultPattern[] =
+static const char16_t gDefaultPattern[] =
 {
     0x79, 0x4D, 0x4D, 0x64, 0x64, 0x20, 0x68, 0x68, 0x3A, 0x6D, 0x6D, 0x20, 0x61, 0
 };  /* "yMMdd hh:mm a" */
@@ -168,13 +168,13 @@ static const UChar gDefaultPattern[] =
 // This prefix is designed to NEVER MATCH real text, in order to
 // suppress the parsing of negative numbers.  Adjust as needed (if
 // this becomes valid Unicode).
-static const UChar SUPPRESS_NEGATIVE_PREFIX[] = {0xAB00, 0};
+static const char16_t SUPPRESS_NEGATIVE_PREFIX[] = {0xAB00, 0};
 
 /**
  * These are the tags we expect to see in normal resource bundle files associated
  * with a locale.
  */
-static const UChar QUOTE = 0x27; // Single quote
+static const char16_t QUOTE = 0x27; // Single quote
 
 /*
  * The field range check bias for each UDateFormatField.
@@ -649,7 +649,7 @@ SimpleDateFormat::operator==(const Format& other) const
 }
 
 //----------------------------------------------------------------------
-static const UChar* timeSkeletons[4] = {
+static const char16_t* timeSkeletons[4] = {
     u"jmmsszzzz",   // kFull
     u"jmmssz",      // kLong
     u"jmmss",       // kMedium
@@ -714,7 +714,7 @@ void SimpleDateFormat::construct(EStyle timeStyle,
         return;
     }
 
-    const UChar *resStr,*ovrStr;
+    const char16_t *resStr,*ovrStr;
     int32_t resStrLen,ovrStrLen = 0;
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
@@ -1059,14 +1059,14 @@ SimpleDateFormat::_format(Calendar& cal, UnicodeString& appendTo,
     }
 
     UBool inQuote = false;
-    UChar prevCh = 0;
+    char16_t prevCh = 0;
     int32_t count = 0;
     int32_t fieldNum = 0;
     UDisplayContext capitalizationContext = getContext(UDISPCTX_TYPE_CAPITALIZATION, status);
 
     // loop through the pattern string character by character
     for (int32_t i = 0; i < fPattern.length() && U_SUCCESS(status); ++i) {
-        UChar ch = fPattern[i];
+        char16_t ch = fPattern[i];
 
         // Use subFormat() to format a repeated pattern character
         // when a different pattern or non-pattern character is seen
@@ -1079,7 +1079,7 @@ SimpleDateFormat::_format(Calendar& cal, UnicodeString& appendTo,
             // Consecutive single quotes are a single quote literal,
             // either outside of quotes or between quotes
             if ((i+1) < fPattern.length() && fPattern[i+1] == QUOTE) {
-                appendTo += (UChar)QUOTE;
+                appendTo += (char16_t)QUOTE;
                 ++i;
             } else {
                 inQuote = ! inQuote;
@@ -1131,7 +1131,7 @@ SimpleDateFormat::fgCalendarFieldToLevel[] =
     /*A?.*/ 40, 0, 0
 };
 
-int32_t SimpleDateFormat::getLevelFromChar(UChar ch) {
+int32_t SimpleDateFormat::getLevelFromChar(char16_t ch) {
     // Map date field LETTER into calendar field level.
     // the larger the level, the smaller the field unit.
     // NOTE: if new fields adds in, the table needs to update.
@@ -1161,7 +1161,7 @@ int32_t SimpleDateFormat::getLevelFromChar(UChar ch) {
     return ch < UPRV_LENGTHOF(mapCharToLevel) ? mapCharToLevel[ch] : -1;
 }
 
-UBool SimpleDateFormat::isSyntaxChar(UChar ch) {
+UBool SimpleDateFormat::isSyntaxChar(char16_t ch) {
     static const UBool mapCharToIsSyntax[] = {
         //
         false, false, false, false, false, false, false, false,
@@ -1358,7 +1358,7 @@ SimpleDateFormat::processOverrideString(const Locale &locale, const UnicodeStrin
     NSOverride *overrideList = nullptr;
 
     while (moreToProcess) {
-        int32_t delimiterPosition = str.indexOf((UChar)ULOC_KEYWORD_ITEM_SEPARATOR_UNICODE,start);
+        int32_t delimiterPosition = str.indexOf((char16_t)ULOC_KEYWORD_ITEM_SEPARATOR_UNICODE,start);
         if (delimiterPosition == -1) {
             moreToProcess = false;
             len = str.length() - start;
@@ -1366,7 +1366,7 @@ SimpleDateFormat::processOverrideString(const Locale &locale, const UnicodeStrin
             len = delimiterPosition - start;
         }
         UnicodeString currentString(str,start,len);
-        int32_t equalSignPosition = currentString.indexOf((UChar)ULOC_KEYWORD_ASSIGN_UNICODE,0);
+        int32_t equalSignPosition = currentString.indexOf((char16_t)ULOC_KEYWORD_ASSIGN_UNICODE,0);
         if (equalSignPosition == -1) { // Simple override string such as "hebrew"
             nsName.setTo(currentString);
             ovrField.setToBogus();
@@ -1750,7 +1750,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     case UDAT_TIMEZONE_ISO_FIELD: // 'X'
     case UDAT_TIMEZONE_ISO_LOCAL_FIELD: // 'x'
         {
-            UChar zsbuf[ZONE_NAME_U16_MAX];
+            char16_t zsbuf[ZONE_NAME_U16_MAX];
             UnicodeString zoneString(zsbuf, 0, UPRV_LENGTHOF(zsbuf));
             const TimeZone& tz = cal.getTimeZone();
             UDate date = cal.getTime(status);
@@ -2113,7 +2113,7 @@ void SimpleDateFormat::adoptNumberFormat(const UnicodeString& fields, NumberForm
         return;
     }
     for (int i=0; i<fields.length(); i++) {
-        UChar field = fields.charAt(i);
+        char16_t field = fields.charAt(i);
         // if the pattern character is unrecognized, signal an error and bail out
         UDateFormatField patternCharIndex = DateFormatSymbols::getPatternCharIndex(field);
         if (patternCharIndex == UDAT_FIELD_COUNT) {
@@ -2130,7 +2130,7 @@ void SimpleDateFormat::adoptNumberFormat(const UnicodeString& fields, NumberForm
 }
 
 const NumberFormat *
-SimpleDateFormat::getNumberFormatForField(UChar field) const {
+SimpleDateFormat::getNumberFormatForField(char16_t field) const {
     UDateFormatField index = DateFormatSymbols::getPatternCharIndex(field);
     if (index == UDAT_FIELD_COUNT) {
         return nullptr;
@@ -2185,7 +2185,7 @@ SimpleDateFormat::zeroPaddingNumber(
  * Return true if the given format character, occurring count
  * times, represents a numeric field.
  */
-UBool SimpleDateFormat::isNumeric(UChar formatChar, int32_t count) {
+UBool SimpleDateFormat::isNumeric(char16_t formatChar, int32_t count) {
     return DateFormatSymbols::isNumericPatternChar(formatChar, count);
 }
 
@@ -2195,7 +2195,7 @@ SimpleDateFormat::isAtNumericField(const UnicodeString &pattern, int32_t pattern
         // not at any field
         return false;
     }
-    UChar ch = pattern.charAt(patternOffset);
+    char16_t ch = pattern.charAt(patternOffset);
     UDateFormatField f = DateFormatSymbols::getPatternCharIndex(ch);
     if (f == UDAT_FIELD_COUNT) {
         // not at any field
@@ -2212,7 +2212,7 @@ SimpleDateFormat::isAfterNonNumericField(const UnicodeString &pattern, int32_t p
         // not after any field
         return false;
     }
-    UChar ch = pattern.charAt(--patternOffset);
+    char16_t ch = pattern.charAt(--patternOffset);
     UDateFormatField f = DateFormatSymbols::getPatternCharIndex(ch);
     if (f == UDAT_FIELD_COUNT) {
         // not after any field
@@ -2286,7 +2286,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
     }
 
     for (int32_t i=0; i<fPattern.length(); ++i) {
-        UChar ch = fPattern.charAt(i);
+        char16_t ch = fPattern.charAt(i);
 
         // Handle alphabetic field characters.
         if (!inQuote && isSyntaxChar(ch)) {
@@ -2359,7 +2359,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
 
                     if (i+1 < fPattern.length()) {
                         // move to next pattern character
-                        UChar c = fPattern.charAt(i+1);
+                        char16_t c = fPattern.charAt(i+1);
 
                         // check for whitespace
                         if (PatternProps::isWhiteSpace(c)) {
@@ -2730,7 +2730,7 @@ UBool SimpleDateFormat::matchLiterals(const UnicodeString &pattern,
 
     // scan pattern looking for contiguous literal characters
     for ( ; i < pattern.length(); i += 1) {
-        UChar ch = pattern.charAt(i);
+        char16_t ch = pattern.charAt(i);
 
         if (!inQuote && isSyntaxChar(ch)) {
             break;
@@ -2777,7 +2777,7 @@ UBool SimpleDateFormat::matchLiterals(const UnicodeString &pattern,
             int32_t tStart = t;
 
             while (t < text.length()) {
-                UChar tch = text.charAt(t);
+                char16_t tch = text.charAt(t);
 
                 if (!u_isUWhiteSpace(tch) && !PatternProps::isWhiteSpace(tch)) {
                     break;
@@ -2814,7 +2814,7 @@ UBool SimpleDateFormat::matchLiterals(const UnicodeString &pattern,
                 }
                 // if it is actual whitespace and we're whitespace lenient it's OK
 
-                UChar wsc = text.charAt(t);
+                char16_t wsc = text.charAt(t);
                 if(PatternProps::isWhiteSpace(wsc)) {
                     // Lenient mode and it's just whitespace we skip it
                     ++t;
@@ -2845,7 +2845,7 @@ UBool SimpleDateFormat::matchLiterals(const UnicodeString &pattern,
         }
 
         for (t = textOffset; t < text.length(); t += 1) {
-            UChar ch = text.charAt(t);
+            char16_t ch = text.charAt(t);
 
             if (ignorables == nullptr || !ignorables->contains(ch)) {
                 break;
@@ -3007,7 +3007,7 @@ SimpleDateFormat::set2DigitYearStart(UDate d, UErrorCode& status)
  * Private member function that converts the parsed date strings into
  * timeFields. Returns -start (for ParsePosition) if failed.
  */
-int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UChar ch, int32_t count,
+int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, char16_t ch, int32_t count,
                            UBool obeyCount, UBool allowNegative, UBool ambiguousYear[], int32_t& saveHebrewMonth, Calendar& cal,
                            int32_t patLoc, MessageFormat * numericLeapMonthFormatter, UTimeZoneFormatTimeType *tzTimeType,
                            int32_t *dayPeriod) const
@@ -3712,8 +3712,8 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     // so we should not get here. Leave support in for future definition.
     case UDAT_TIME_SEPARATOR_FIELD:
         {
-            static const UChar def_sep = DateFormatSymbols::DEFAULT_TIME_SEPARATOR;
-            static const UChar alt_sep = DateFormatSymbols::ALTERNATE_TIME_SEPARATOR;
+            static const char16_t def_sep = DateFormatSymbols::DEFAULT_TIME_SEPARATOR;
+            static const char16_t alt_sep = DateFormatSymbols::ALTERNATE_TIME_SEPARATOR;
 
             // Try matching a time separator.
             int32_t count_sep = 1;
@@ -3967,7 +3967,7 @@ void SimpleDateFormat::translatePattern(const UnicodeString& originalPattern,
     translatedPattern.remove();
     UBool inQuote = false;
     for (int32_t i = 0; i < originalPattern.length(); ++i) {
-        UChar c = originalPattern[i];
+        char16_t c = originalPattern[i];
         if (inQuote) {
             if (c == QUOTE) {
                 inQuote = false;
@@ -4182,9 +4182,9 @@ SimpleDateFormat::isFieldUnitIgnored(const UnicodeString& pattern,
                                      UCalendarDateFields field) {
     int32_t fieldLevel = fgCalendarFieldToLevel[field];
     int32_t level;
-    UChar ch;
+    char16_t ch;
     UBool inQuote = false;
-    UChar prevCh = 0;
+    char16_t prevCh = 0;
     int32_t count = 0;
 
     for (int32_t i = 0; i < pattern.length(); ++i) {
@@ -4349,7 +4349,7 @@ SimpleDateFormat::compareSimpleAffix(const UnicodeString& affix,
 
 int32_t
 SimpleDateFormat::skipPatternWhiteSpace(const UnicodeString& text, int32_t pos) const {
-    const UChar* s = text.getBuffer();
+    const char16_t* s = text.getBuffer();
     return (int32_t)(PatternProps::skipWhiteSpace(s + pos, text.length() - pos) - s);
 }
 
@@ -4388,7 +4388,7 @@ void SimpleDateFormat::parsePattern() {
     int len = fPattern.length();
     UBool inQuote = false;
     for (int32_t i = 0; i < len; ++i) {
-        UChar ch = fPattern[i];
+        char16_t ch = fPattern[i];
         if (ch == QUOTE) {
             inQuote = !inQuote;
         }

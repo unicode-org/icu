@@ -156,7 +156,7 @@ static const uint32_t IS_SHIFTED = 1;
 static const uint32_t FROM_RULES = 2;
 
 static UBool
-skipLineBecauseOfBug(const UChar *s, int32_t length, uint32_t flags) {
+skipLineBecauseOfBug(const char16_t *s, int32_t length, uint32_t flags) {
     // Add temporary exceptions here if there are ICU bugs, until we can fix them.
     // For examples see the ICU 52 version of this file.
     (void)s;
@@ -188,8 +188,8 @@ void UCAConformanceTest::testConformance(const Collator *coll)
 
     int32_t line = 0;
 
-    UChar b1[1024], b2[1024];
-    UChar *buffer = b1, *oldB = nullptr;
+    char16_t b1[1024], b2[1024];
+    char16_t *buffer = b1, *oldB = nullptr;
 
     char lineB1[1024], lineB2[1024];
     char *lineB = lineB1, *oldLineB = lineB2;

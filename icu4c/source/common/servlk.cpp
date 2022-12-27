@@ -21,9 +21,9 @@
 #include "charstr.h"
 #include "uassert.h"
 
-#define UNDERSCORE_CHAR ((UChar)0x005f)
-#define AT_SIGN_CHAR    ((UChar)64)
-#define PERIOD_CHAR     ((UChar)46)
+#define UNDERSCORE_CHAR ((char16_t)0x005f)
+#define AT_SIGN_CHAR    ((char16_t)64)
+#define PERIOD_CHAR     ((char16_t)46)
 
 U_NAMESPACE_BEGIN
 
@@ -74,7 +74,7 @@ LocaleKey::~LocaleKey() {}
 UnicodeString&
 LocaleKey::prefix(UnicodeString& result) const {
     if (_kind != KIND_ANY) {
-        UChar buffer[64];
+        char16_t buffer[64];
         uprv_itou(buffer, 64, _kind, 10, 0);
         UnicodeString temp(buffer);
         result.append(temp);

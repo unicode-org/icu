@@ -305,7 +305,7 @@ public:
      *
      * @internal
      */
-    void setCurrency(const UChar* currency, UErrorCode& status);
+    void setCurrency(const char16_t* currency, UErrorCode& status);
 #endif  // U_HIDE_INTERNAL_API
 
     /**

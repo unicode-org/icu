@@ -405,11 +405,11 @@ bool SpoofImpl::isIllegalCombiningDotLeadCharacter(UChar32 cp) const {
 
 
 // Convert a text format hex number.  Utility function used by builder code.  Static.
-// Input: UChar *string text.  Output: a UChar32
+// Input: char16_t *string text.  Output: a UChar32
 // Input has been pre-checked, and will have no non-hex chars.
 // The number must fall in the code point range of 0..0x10ffff
 // Static Function.
-UChar32 SpoofImpl::ScanHex(const UChar *s, int32_t start, int32_t limit, UErrorCode &status) {
+UChar32 SpoofImpl::ScanHex(const char16_t *s, int32_t start, int32_t limit, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return 0;
     }
@@ -694,7 +694,7 @@ void SpoofData::initPtrs(UErrorCode &status) {
         fCFUValues = (uint16_t *)((char *)fRawData + fRawData->fCFUStringIndex);
     }
     if (fRawData->fCFUStringTable != 0) {
-        fCFUStrings = (UChar *)((char *)fRawData + fRawData->fCFUStringTable);
+        fCFUStrings = (char16_t *)((char *)fRawData + fRawData->fCFUStringTable);
     }
 }
 
@@ -806,7 +806,7 @@ int32_t SpoofData::appendValueTo(int32_t index, UnicodeString& dest) const {
     // an index into the string table (for longer strings)
     uint16_t value = fCFUValues[index];
     if (stringLength == 1) {
-        dest.append((UChar)value);
+        dest.append((char16_t)value);
     } else {
         dest.append(fCFUStrings + value, stringLength);
     }

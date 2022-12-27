@@ -63,7 +63,7 @@ UBool CaseFoldingUTextIterator::inExpansion() {
 
 
 
-CaseFoldingUCharIterator::CaseFoldingUCharIterator(const UChar *chars, int64_t start, int64_t limit) :
+CaseFoldingUCharIterator::CaseFoldingUCharIterator(const char16_t *chars, int64_t start, int64_t limit) :
    fChars(chars), fIndex(start), fLimit(limit), fFoldChars(nullptr), fFoldLength(0) {
 }
 

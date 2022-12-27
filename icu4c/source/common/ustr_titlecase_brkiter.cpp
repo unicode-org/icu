@@ -165,8 +165,8 @@ BreakIterator *ustrcase_getTitleBreakIterator(
 
 int32_t CaseMap::toTitle(
         const char *locale, uint32_t options, BreakIterator *iter,
-        const UChar *src, int32_t srcLength,
-        UChar *dest, int32_t destCapacity, Edits *edits,
+        const char16_t *src, int32_t srcLength,
+        char16_t *dest, int32_t destCapacity, Edits *edits,
         UErrorCode &errorCode) {
     LocalPointer<BreakIterator> ownedIter;
     iter = ustrcase_getTitleBreakIterator(nullptr, locale, options, iter, ownedIter, errorCode);
@@ -187,8 +187,8 @@ U_NAMESPACE_END
 U_NAMESPACE_USE
 
 U_CAPI int32_t U_EXPORT2
-u_strToTitle(UChar *dest, int32_t destCapacity,
-             const UChar *src, int32_t srcLength,
+u_strToTitle(char16_t *dest, int32_t destCapacity,
+             const char16_t *src, int32_t srcLength,
              UBreakIterator *titleIter,
              const char *locale,
              UErrorCode *pErrorCode) {
@@ -210,8 +210,8 @@ u_strToTitle(UChar *dest, int32_t destCapacity,
 
 U_CAPI int32_t U_EXPORT2
 ucasemap_toTitle(UCaseMap *csm,
-                 UChar *dest, int32_t destCapacity,
-                 const UChar *src, int32_t srcLength,
+                 char16_t *dest, int32_t destCapacity,
+                 const char16_t *src, int32_t srcLength,
                  UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) {
         return 0;

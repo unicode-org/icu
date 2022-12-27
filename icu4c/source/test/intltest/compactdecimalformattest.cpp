@@ -254,7 +254,7 @@ private:
     void CheckLocale(
         const Locale& locale, UNumberCompactStyle style,
         const ExpectedResult* expectedResults, int32_t expectedResultLength);
-    void CheckLocaleWithCurrency(const Locale& locale, UNumberCompactStyle style, const UChar* currency,
+    void CheckLocaleWithCurrency(const Locale& locale, UNumberCompactStyle style, const char16_t* currency,
                                  const ExpectedResult* expectedResults, int32_t expectedResultLength);
     void CheckExpectedResult(
         const CompactDecimalFormat* cdf, const ExpectedResult* expectedResult,
@@ -520,7 +520,7 @@ void CompactDecimalFormatTest::CheckLocale(const Locale& locale, UNumberCompactS
 }
 
 void CompactDecimalFormatTest::CheckLocaleWithCurrency(const Locale& locale, UNumberCompactStyle style,
-                                                       const UChar* currency,
+                                                       const char16_t* currency,
                                                        const ExpectedResult* expectedResults,
                                                        int32_t expectedResultLength) {
     UErrorCode status = U_ZERO_ERROR;

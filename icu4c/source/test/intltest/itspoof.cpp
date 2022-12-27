@@ -293,7 +293,7 @@ static UnicodeString parseHex(const UnicodeString &in) {
     UnicodeString result;
     UChar32 cc = 0;
     for (int32_t i=0; i<in.length(); i++) {
-        UChar c = in.charAt(i);
+        char16_t c = in.charAt(i);
         if (c == 0x20) {   // Space
             if (cc > 0) {
                result.append(cc);
@@ -328,10 +328,10 @@ static void appendHexUChar(UnicodeString &dest, UChar32 c) {
         int hexDigit = (c>>bitNum) & 0x0f;
         if (hexDigit != 0 || doZeroes) {
             doZeroes = true;
-            dest.append((UChar)(hexDigit<=9? hexDigit + 0x30: hexDigit -10 + 0x41));
+            dest.append((char16_t)(hexDigit<=9? hexDigit + 0x30: hexDigit -10 + 0x41));
         }
     }
-    dest.append((UChar)0x20);
+    dest.append((char16_t)0x20);
 }
 
 U_DEFINE_LOCAL_OPEN_POINTER(LocalStdioFilePointer, FILE, fclose);

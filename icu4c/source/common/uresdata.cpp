@@ -62,8 +62,8 @@ static const struct {
 
 static const struct {
     int32_t length;
-    UChar nul;
-    UChar pad;
+    char16_t nul;
+    char16_t pad;
 } gEmptyString={ 0, 0, 0 };
 
 /*
@@ -307,17 +307,17 @@ res_getPublicType(Resource res) {
     return (UResType)gPublicTypes[RES_GET_TYPE(res)];
 }
 
-U_CAPI const UChar * U_EXPORT2
+U_CAPI const char16_t * U_EXPORT2
 res_getStringNoTrace(const ResourceData *pResData, Resource res, int32_t *pLength) {
-    const UChar *p;
+    const char16_t *p;
     uint32_t offset=RES_GET_OFFSET(res);
     int32_t length;
     if(RES_GET_TYPE(res)==URES_STRING_V2) {
         int32_t first;
         if((int32_t)offset<pResData->poolStringIndexLimit) {
-            p=(const UChar *)pResData->poolBundleStrings+offset;
+            p=(const char16_t *)pResData->poolBundleStrings+offset;
         } else {
-            p=(const UChar *)pResData->p16BitUnits+(offset-pResData->poolStringIndexLimit);
+            p=(const char16_t *)pResData->p16BitUnits+(offset-pResData->poolStringIndexLimit);
         }
         first=*p;
         if(!U16_IS_TRAIL(first)) {
@@ -335,7 +335,7 @@ res_getStringNoTrace(const ResourceData *pResData, Resource res, int32_t *pLengt
     } else if(res==offset) /* RES_GET_TYPE(res)==URES_STRING */ {
         const int32_t *p32= res==0 ? &gEmptyString.length : pResData->pRoot+res;
         length=*p32++;
-        p=(const UChar *)p32;
+        p=(const char16_t *)p32;
     } else {
         p=nullptr;
         length=0;
@@ -361,14 +361,14 @@ UBool isNoInheritanceMarker(const ResourceData *pResData, Resource res) {
     } else if (res == offset) {
         const int32_t *p32=pResData->pRoot+res;
         int32_t length=*p32;
-        const UChar *p=(const UChar *)p32;
+        const char16_t *p=(const char16_t *)p32;
         return length == 3 && p[2] == 0x2205 && p[3] == 0x2205 && p[4] == 0x2205;
     } else if (RES_GET_TYPE(res) == URES_STRING_V2) {
-        const UChar *p;
+        const char16_t *p;
         if((int32_t)offset<pResData->poolStringIndexLimit) {
-            p=(const UChar *)pResData->poolBundleStrings+offset;
+            p=(const char16_t *)pResData->poolBundleStrings+offset;
         } else {
-            p=(const UChar *)pResData->p16BitUnits+(offset-pResData->poolStringIndexLimit);
+            p=(const char16_t *)pResData->p16BitUnits+(offset-pResData->poolStringIndexLimit);
         }
         int32_t first=*p;
         if (first == 0x2205) {  // implicit length
@@ -404,7 +404,7 @@ int32_t getStringArray(const ResourceData *pResData, const icu::ResourceArray &a
     for(int32_t i = 0; i < length; ++i) {
         int32_t sLength;
         // No tracing: handled by the caller
-        const UChar *s = res_getStringNoTrace(pResData, array.internalGetResource(pResData, i), &sLength);
+        const char16_t *s = res_getStringNoTrace(pResData, array.internalGetResource(pResData, i), &sLength);
         if(s == nullptr) {
             errorCode = U_RESOURCE_TYPE_MISMATCH;
             return 0;
@@ -416,15 +416,15 @@ int32_t getStringArray(const ResourceData *pResData, const icu::ResourceArray &a
 
 }  // namespace
 
-U_CAPI const UChar * U_EXPORT2
+U_CAPI const char16_t * U_EXPORT2
 res_getAlias(const ResourceData *pResData, Resource res, int32_t *pLength) {
-    const UChar *p;
+    const char16_t *p;
     uint32_t offset=RES_GET_OFFSET(res);
     int32_t length;
     if(RES_GET_TYPE(res)==URES_ALIAS) {
         const int32_t *p32= offset==0 ? &gEmptyString.length : pResData->pRoot+offset;
         length=*p32++;
-        p=(const UChar *)p32;
+        p=(const char16_t *)p32;
     } else {
         p=nullptr;
         length=0;
@@ -505,22 +505,22 @@ UResType ResourceDataValue::getType() const {
     return res_getPublicType(res);
 }
 
-const UChar *ResourceDataValue::getString(int32_t &length, UErrorCode &errorCode) const {
+const char16_t *ResourceDataValue::getString(int32_t &length, UErrorCode &errorCode) const {
     if(U_FAILURE(errorCode)) {
         return nullptr;
     }
-    const UChar *s = res_getString(fTraceInfo, &getData(), res, &length);
+    const char16_t *s = res_getString(fTraceInfo, &getData(), res, &length);
     if(s == nullptr) {
         errorCode = U_RESOURCE_TYPE_MISMATCH;
     }
     return s;
 }
 
-const UChar *ResourceDataValue::getAliasString(int32_t &length, UErrorCode &errorCode) const {
+const char16_t *ResourceDataValue::getAliasString(int32_t &length, UErrorCode &errorCode) const {
     if(U_FAILURE(errorCode)) {
         return nullptr;
     }
-    const UChar *s = res_getAlias(&getData(), res, &length);
+    const char16_t *s = res_getAlias(&getData(), res, &length);
     if(s == nullptr) {
         errorCode = U_RESOURCE_TYPE_MISMATCH;
     }
@@ -658,7 +658,7 @@ int32_t ResourceDataValue::getStringArrayOrStringAsArray(UnicodeString *dest, in
         return 1;
     }
     int32_t sLength;
-    const UChar *s = res_getString(fTraceInfo, &getData(), res, &sLength);
+    const char16_t *s = res_getString(fTraceInfo, &getData(), res, &sLength);
     if(s != nullptr) {
         dest[0].setTo(true, s, sLength);
         return 1;
@@ -673,7 +673,7 @@ UnicodeString ResourceDataValue::getStringOrFirstOfArray(UErrorCode &errorCode) 
         return us;
     }
     int32_t sLength;
-    const UChar *s = res_getString(fTraceInfo, &getData(), res, &sLength);
+    const char16_t *s = res_getString(fTraceInfo, &getData(), res, &sLength);
     if(s != nullptr) {
         us.setTo(true, s, sLength);
         return us;
@@ -1041,7 +1041,7 @@ enum {
 static const char *const gUnknownKey="";
 
 /* resource table key for collation binaries: "%%CollationBin" */
-static const UChar gCollationBinKey[]={
+static const char16_t gCollationBinKey[]={
     0x25, 0x25,
     0x43, 0x6f, 0x6c, 0x6c, 0x61, 0x74, 0x69, 0x6f, 0x6e,
     0x42, 0x69, 0x6e,
@@ -1098,7 +1098,7 @@ ures_swapResource(const UDataSwapper *ds,
         count=udata_readInt32(ds, (int32_t)*p);
         /* swap length */
         ds->swapArray32(ds, p, 4, q, pErrorCode);
-        /* swap each UChar (the terminating NUL would not change) */
+        /* swap each char16_t (the terminating NUL would not change) */
         ds->swapArray16(ds, p+1, 2*count, q+1, pErrorCode);
         break;
     case URES_BINARY:

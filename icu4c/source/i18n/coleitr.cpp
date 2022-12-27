@@ -234,7 +234,7 @@ void CollationElementIterator::setOffset(int32_t newOffset,
     if (0 < newOffset && newOffset < string_.length()) {
         int32_t offset = newOffset;
         do {
-            UChar c = string_.charAt(offset);
+            char16_t c = string_.charAt(offset);
             if (!rbc_->isUnsafe(c) ||
                     (U16_IS_LEAD(c) && !rbc_->isUnsafe(string_.char32At(offset)))) {
                 break;
@@ -278,7 +278,7 @@ void CollationElementIterator::setText(const UnicodeString& source,
     }
 
     string_ = source;
-    const UChar *s = string_.getBuffer();
+    const char16_t *s = string_.getBuffer();
     CollationIterator *newIter;
     UBool numeric = rbc_->settings->isNumeric();
     if (rbc_->settings->dontCheckFCD()) {

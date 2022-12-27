@@ -196,7 +196,7 @@ ucol_mergeSortkeys(const uint8_t *src1, int32_t src1Length,
 
 U_CAPI int32_t U_EXPORT2
 ucol_getSortKey(const    UCollator    *coll,
-        const    UChar        *source,
+        const    char16_t     *source,
         int32_t        sourceLength,
         uint8_t        *result,
         int32_t        resultLength)
@@ -320,7 +320,7 @@ ucol_getMaxVariable(const UCollator *coll) {
 }
 
 U_CAPI uint32_t  U_EXPORT2
-ucol_setVariableTop(UCollator *coll, const UChar *varTop, int32_t len, UErrorCode *status) {
+ucol_setVariableTop(UCollator *coll, const char16_t *varTop, int32_t len, UErrorCode *status) {
     if(U_FAILURE(*status) || coll == nullptr) {
         return 0;
     }
@@ -445,9 +445,9 @@ ucol_strcollIter( const UCollator    *coll,
 /*                                                                      */
 U_CAPI UCollationResult U_EXPORT2
 ucol_strcoll( const UCollator    *coll,
-              const UChar        *source,
+              const char16_t     *source,
               int32_t            sourceLength,
-              const UChar        *target,
+              const char16_t     *target,
               int32_t            targetLength)
 {
     UTRACE_ENTRY(UTRACE_UCOL_STRCOLL);
@@ -496,9 +496,9 @@ ucol_strcollUTF8(
 /* convenience function for comparing strings */
 U_CAPI UBool U_EXPORT2
 ucol_greater(    const    UCollator        *coll,
-        const    UChar            *source,
+        const    char16_t         *source,
         int32_t            sourceLength,
-        const    UChar            *target,
+        const    char16_t         *target,
         int32_t            targetLength)
 {
     return (ucol_strcoll(coll, source, sourceLength, target, targetLength)
@@ -508,9 +508,9 @@ ucol_greater(    const    UCollator        *coll,
 /* convenience function for comparing strings */
 U_CAPI UBool U_EXPORT2
 ucol_greaterOrEqual(    const    UCollator    *coll,
-            const    UChar        *source,
+            const    char16_t     *source,
             int32_t        sourceLength,
-            const    UChar        *target,
+            const    char16_t     *target,
             int32_t        targetLength)
 {
     return (ucol_strcoll(coll, source, sourceLength, target, targetLength)
@@ -520,9 +520,9 @@ ucol_greaterOrEqual(    const    UCollator    *coll,
 /* convenience function for comparing strings */
 U_CAPI UBool U_EXPORT2
 ucol_equal(        const    UCollator        *coll,
-            const    UChar            *source,
+            const    char16_t         *source,
             int32_t            sourceLength,
-            const    UChar            *target,
+            const    char16_t         *target,
             int32_t            targetLength)
 {
     return (ucol_strcoll(coll, source, sourceLength, target, targetLength)
@@ -548,7 +548,7 @@ ucol_getUCAVersion(const UCollator* coll, UVersionInfo info) {
     }
 }
 
-U_CAPI const UChar * U_EXPORT2
+U_CAPI const char16_t * U_EXPORT2
 ucol_getRules(const UCollator *coll, int32_t *length) {
     const RuleBasedCollator *rbc = RuleBasedCollator::rbcFromUCollator(coll);
     // OK to crash if coll==nullptr: We do not want to check "this" pointers.
@@ -558,13 +558,13 @@ ucol_getRules(const UCollator *coll, int32_t *length) {
         *length = rules.length();
         return rules.getBuffer();
     }
-    static const UChar _NUL = 0;
+    static const char16_t _NUL = 0;
     *length = 0;
     return &_NUL;
 }
 
 U_CAPI int32_t U_EXPORT2
-ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen) {
+ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, char16_t *buffer, int32_t bufferLen) {
     UnicodeString rules;
     const RuleBasedCollator *rbc = RuleBasedCollator::rbcFromUCollator(coll);
     if(rbc != nullptr || coll == nullptr) {

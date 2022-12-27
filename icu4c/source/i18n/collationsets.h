@@ -58,12 +58,12 @@ public:
 
 private:
     void compare(UChar32 c, uint32_t ce32, uint32_t baseCE32);
-    void comparePrefixes(UChar32 c, const UChar *p, const UChar *q);
-    void compareContractions(UChar32 c, const UChar *p, const UChar *q);
+    void comparePrefixes(UChar32 c, const char16_t *p, const char16_t *q);
+    void compareContractions(UChar32 c, const char16_t *p, const char16_t *q);
 
-    void addPrefixes(const CollationData *d, UChar32 c, const UChar *p);
+    void addPrefixes(const CollationData *d, UChar32 c, const char16_t *p);
     void addPrefix(const CollationData *d, const UnicodeString &pfx, UChar32 c, uint32_t ce32);
-    void addContractions(UChar32 c, const UChar *p);
+    void addContractions(UChar32 c, const char16_t *p);
     void addSuffix(UChar32 c, const UnicodeString &sfx);
     void add(UChar32 c);
 

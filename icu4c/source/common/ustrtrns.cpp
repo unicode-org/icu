@@ -36,8 +36,8 @@
 #include "ustr_imp.h"
 #include "uassert.h"
 
-U_CAPI UChar* U_EXPORT2 
-u_strFromUTF32WithSub(UChar *dest,
+U_CAPI char16_t* U_EXPORT2
+u_strFromUTF32WithSub(char16_t *dest,
                int32_t destCapacity,
                int32_t *pDestLength,
                const UChar32 *src,
@@ -46,8 +46,8 @@ u_strFromUTF32WithSub(UChar *dest,
                UErrorCode *pErrorCode) {
     const UChar32 *srcLimit;
     UChar32 ch;
-    UChar *destLimit;
-    UChar *pDest;
+    char16_t *destLimit;
+    char16_t *pDest;
     int32_t reqLength;
     int32_t numSubstitutions;
 
@@ -78,7 +78,7 @@ u_strFromUTF32WithSub(UChar *dest,
               ((uint32_t)ch < 0xd800 || (0xe000 <= ch && ch <= 0xffff))) {
             ++src;
             if(pDest < destLimit) {
-                *pDest++ = (UChar)ch;
+                *pDest++ = (char16_t)ch;
             } else {
                 ++reqLength;
             }
@@ -99,7 +99,7 @@ u_strFromUTF32WithSub(UChar *dest,
             /* usually "loops" once; twice only for writing subchar */
             if((uint32_t)ch < 0xd800 || (0xe000 <= ch && ch <= 0xffff)) {
                 if(pDest < destLimit) {
-                    *pDest++ = (UChar)ch;
+                    *pDest++ = (char16_t)ch;
                 } else {
                     ++reqLength;
                 }
@@ -136,8 +136,8 @@ u_strFromUTF32WithSub(UChar *dest,
     return dest;
 }
 
-U_CAPI UChar* U_EXPORT2 
-u_strFromUTF32(UChar *dest,
+U_CAPI char16_t* U_EXPORT2
+u_strFromUTF32(char16_t *dest,
                int32_t destCapacity, 
                int32_t *pDestLength,
                const UChar32 *src,
@@ -154,13 +154,13 @@ U_CAPI UChar32* U_EXPORT2
 u_strToUTF32WithSub(UChar32 *dest,
              int32_t destCapacity,
              int32_t *pDestLength,
-             const UChar *src,
+             const char16_t *src,
              int32_t srcLength,
              UChar32 subchar, int32_t *pNumSubstitutions,
              UErrorCode *pErrorCode) {
-    const UChar *srcLimit;
+    const char16_t *srcLimit;
     UChar32 ch;
-    UChar ch2;
+    char16_t ch2;
     UChar32 *destLimit;
     UChar32 *pDest;
     int32_t reqLength;
@@ -246,7 +246,7 @@ U_CAPI UChar32* U_EXPORT2
 u_strToUTF32(UChar32 *dest, 
              int32_t destCapacity,
              int32_t *pDestLength,
-             const UChar *src, 
+             const char16_t *src,
              int32_t srcLength,
              UErrorCode *pErrorCode) {
     return u_strToUTF32WithSub(
@@ -256,8 +256,8 @@ u_strToUTF32(UChar32 *dest,
             pErrorCode);
 }
 
-U_CAPI UChar* U_EXPORT2
-u_strFromUTF8WithSub(UChar *dest,
+U_CAPI char16_t* U_EXPORT2
+u_strFromUTF8WithSub(char16_t *dest,
               int32_t destCapacity,
               int32_t *pDestLength,
               const char* src,
@@ -279,8 +279,8 @@ u_strFromUTF8WithSub(UChar *dest,
     if(pNumSubstitutions!=nullptr) {
         *pNumSubstitutions=0;
     }
-    UChar *pDest = dest;
-    UChar *pDestLimit = dest+destCapacity;
+    char16_t *pDest = dest;
+    char16_t *pDestLimit = dest+destCapacity;
     int32_t reqLength = 0;
     int32_t numSubstitutions=0;
 
@@ -309,7 +309,7 @@ u_strFromUTF8WithSub(UChar *dest,
             // modified copy of U8_NEXT()
             ++i;
             if(U8_IS_SINGLE(c)) {
-                *pDest++=(UChar)c;
+                *pDest++=(char16_t)c;
             } else {
                 uint8_t __t1, __t2;
                 if( /* handle U+0800..U+FFFF inline */
@@ -330,7 +330,7 @@ u_strFromUTF8WithSub(UChar *dest,
                         *pErrorCode = U_INVALID_CHAR_FOUND;
                         return nullptr;
                     } else if(c<=0xFFFF) {
-                        *(pDest++)=(UChar)c;
+                        *(pDest++)=(char16_t)c;
                     } else {
                         *(pDest++)=U16_LEAD(c);
                         if(pDest<pDestLimit) {
@@ -381,7 +381,7 @@ u_strFromUTF8WithSub(UChar *dest,
         for(;;) {
             /*
              * Each iteration of the inner loop progresses by at most 3 UTF-8
-             * bytes and one UChar, for most characters.
+             * bytes and one char16_t, for most characters.
              * For supplementary code points (4 & 2), which are rare,
              * there is an additional adjustment.
              */
@@ -402,7 +402,7 @@ u_strFromUTF8WithSub(UChar *dest,
                 // modified copy of U8_NEXT()
                 c = (uint8_t)src[i++];
                 if(U8_IS_SINGLE(c)) {
-                    *pDest++=(UChar)c;
+                    *pDest++=(char16_t)c;
                 } else {
                     uint8_t __t1, __t2;
                     if( /* handle U+0800..U+FFFF inline */
@@ -435,7 +435,7 @@ u_strFromUTF8WithSub(UChar *dest,
                             *pErrorCode = U_INVALID_CHAR_FOUND;
                             return nullptr;
                         } else if(c<=0xFFFF) {
-                            *(pDest++)=(UChar)c;
+                            *(pDest++)=(char16_t)c;
                         } else {
                             *(pDest++)=U16_LEAD(c);
                             *(pDest++)=U16_TRAIL(c);
@@ -449,7 +449,7 @@ u_strFromUTF8WithSub(UChar *dest,
             // modified copy of U8_NEXT()
             c = (uint8_t)src[i++];
             if(U8_IS_SINGLE(c)) {
-                *pDest++=(UChar)c;
+                *pDest++=(char16_t)c;
             } else {
                 uint8_t __t1, __t2;
                 if( /* handle U+0800..U+FFFF inline */
@@ -472,7 +472,7 @@ u_strFromUTF8WithSub(UChar *dest,
                         *pErrorCode = U_INVALID_CHAR_FOUND;
                         return nullptr;
                     } else if(c<=0xFFFF) {
-                        *(pDest++)=(UChar)c;
+                        *(pDest++)=(char16_t)c;
                     } else {
                         *(pDest++)=U16_LEAD(c);
                         if(pDest<pDestLimit) {
@@ -536,8 +536,8 @@ u_strFromUTF8WithSub(UChar *dest,
     return dest;
 }
 
-U_CAPI UChar* U_EXPORT2
-u_strFromUTF8(UChar *dest,
+U_CAPI char16_t* U_EXPORT2
+u_strFromUTF8(char16_t *dest,
               int32_t destCapacity,
               int32_t *pDestLength,
               const char* src,
@@ -550,14 +550,14 @@ u_strFromUTF8(UChar *dest,
             pErrorCode);
 }
 
-U_CAPI UChar * U_EXPORT2
-u_strFromUTF8Lenient(UChar *dest,
+U_CAPI char16_t * U_EXPORT2
+u_strFromUTF8Lenient(char16_t *dest,
                      int32_t destCapacity,
                      int32_t *pDestLength,
                      const char *src,
                      int32_t srcLength,
                      UErrorCode *pErrorCode) {
-    UChar *pDest = dest;
+    char16_t *pDest = dest;
     UChar32 ch;
     int32_t reqLength = 0;
     uint8_t* pSrc = (uint8_t*) src;
@@ -576,7 +576,7 @@ u_strFromUTF8Lenient(UChar *dest,
 
     if(srcLength < 0) {
         /* Transform a NUL-terminated string. */
-        UChar *pDestLimit = (dest!=nullptr)?(dest+destCapacity):nullptr;
+        char16_t *pDestLimit = (dest!=nullptr)?(dest+destCapacity):nullptr;
         uint8_t t1, t2, t3; /* trail bytes */
 
         while(((ch = *pSrc) != 0) && (pDest < pDestLimit)) {
@@ -586,21 +586,21 @@ u_strFromUTF8Lenient(UChar *dest,
                  * a single-byte sequence for better character boundary
                  * resynchronization after illegal sequences.
                  */
-                *pDest++=(UChar)ch;
+                *pDest++=(char16_t)ch;
                 ++pSrc;
                 continue;
             } else if(ch < 0xe0) { /* U+0080..U+07FF */
                 if((t1 = pSrc[1]) != 0) {
                     /* 0x3080 = (0xc0 << 6) + 0x80 */
-                    *pDest++ = (UChar)((ch << 6) + t1 - 0x3080);
+                    *pDest++ = (char16_t)((ch << 6) + t1 - 0x3080);
                     pSrc += 2;
                     continue;
                 }
             } else if(ch < 0xf0) { /* U+0800..U+FFFF */
                 if((t1 = pSrc[1]) != 0 && (t2 = pSrc[2]) != 0) {
-                    /* no need for (ch & 0xf) because the upper bits are truncated after <<12 in the cast to (UChar) */
+                    /* no need for (ch & 0xf) because the upper bits are truncated after <<12 in the cast to (char16_t) */
                     /* 0x2080 = (0x80 << 6) + 0x80 */
-                    *pDest++ = (UChar)((ch << 12) + (t1 << 6) + t2 - 0x2080);
+                    *pDest++ = (char16_t)((ch << 12) + (t1 << 6) + t2 - 0x2080);
                     pSrc += 3;
                     continue;
                 }
@@ -689,15 +689,15 @@ u_strFromUTF8Lenient(UChar *dest,
                      * a single-byte sequence for better character boundary
                      * resynchronization after illegal sequences.
                      */
-                    *pDest++=(UChar)ch;
+                    *pDest++=(char16_t)ch;
                 } else if(ch < 0xe0) { /* U+0080..U+07FF */
                     /* 0x3080 = (0xc0 << 6) + 0x80 */
-                    *pDest++ = (UChar)((ch << 6) + *pSrc++ - 0x3080);
+                    *pDest++ = (char16_t)((ch << 6) + *pSrc++ - 0x3080);
                 } else if(ch < 0xf0) { /* U+0800..U+FFFF */
-                    /* no need for (ch & 0xf) because the upper bits are truncated after <<12 in the cast to (UChar) */
+                    /* no need for (ch & 0xf) because the upper bits are truncated after <<12 in the cast to (char16_t) */
                     /* 0x2080 = (0x80 << 6) + 0x80 */
                     ch = (ch << 12) + (*pSrc++ << 6);
-                    *pDest++ = (UChar)(ch + *pSrc++ - 0x2080);
+                    *pDest++ = (char16_t)(ch + *pSrc++ - 0x2080);
                 } else /* f0..f4 */ { /* U+10000..U+10FFFF */
                     /* 0x3c82080 = (0xf0 << 18) + (0x80 << 12) + (0x80 << 6) + 0x80 */
                     ch = (ch << 18) + (*pSrc++ << 12);
@@ -719,20 +719,20 @@ u_strFromUTF8Lenient(UChar *dest,
                  * a single-byte sequence for better character boundary
                  * resynchronization after illegal sequences.
                  */
-                *pDest++=(UChar)ch;
+                *pDest++=(char16_t)ch;
                 continue;
             } else if(ch < 0xe0) { /* U+0080..U+07FF */
                 if(pSrc < pSrcLimit) {
                     /* 0x3080 = (0xc0 << 6) + 0x80 */
-                    *pDest++ = (UChar)((ch << 6) + *pSrc++ - 0x3080);
+                    *pDest++ = (char16_t)((ch << 6) + *pSrc++ - 0x3080);
                     continue;
                 }
             } else if(ch < 0xf0) { /* U+0800..U+FFFF */
                 if((pSrcLimit - pSrc) >= 2) {
-                    /* no need for (ch & 0xf) because the upper bits are truncated after <<12 in the cast to (UChar) */
+                    /* no need for (ch & 0xf) because the upper bits are truncated after <<12 in the cast to (char16_t) */
                     /* 0x2080 = (0x80 << 6) + 0x80 */
                     ch = (ch << 12) + (*pSrc++ << 6);
-                    *pDest++ = (UChar)(ch + *pSrc++ - 0x2080);
+                    *pDest++ = (char16_t)(ch + *pSrc++ - 0x2080);
                     pSrc += 3;
                     continue;
                 }
@@ -793,7 +793,7 @@ U_CAPI char* U_EXPORT2
 u_strToUTF8WithSub(char *dest,
             int32_t destCapacity,
             int32_t *pDestLength,
-            const UChar *pSrc,
+            const char16_t *pSrc,
             int32_t srcLength,
             UChar32 subchar, int32_t *pNumSubstitutions,
             UErrorCode *pErrorCode){
@@ -894,14 +894,14 @@ u_strToUTF8WithSub(char *dest,
             }
         }
     } else {
-        const UChar *pSrcLimit = (pSrc!=nullptr)?(pSrc+srcLength):nullptr;
+        const char16_t *pSrcLimit = (pSrc!=nullptr)?(pSrc+srcLength):nullptr;
         int32_t count;
 
         /* Faster loop without ongoing checking for pSrcLimit and pDestLimit. */
         for(;;) {
             /*
              * Each iteration of the inner loop progresses by at most 3 UTF-8
-             * bytes and one UChar, for most characters.
+             * bytes and one char16_t, for most characters.
              * For supplementary code points (4 & 2), which are rare,
              * there is an additional adjustment.
              */
@@ -1057,7 +1057,7 @@ U_CAPI char* U_EXPORT2
 u_strToUTF8(char *dest,
             int32_t destCapacity,
             int32_t *pDestLength,
-            const UChar *pSrc,
+            const char16_t *pSrc,
             int32_t srcLength,
             UErrorCode *pErrorCode){
     return u_strToUTF8WithSub(
@@ -1067,9 +1067,9 @@ u_strToUTF8(char *dest,
             pErrorCode);
 }
 
-U_CAPI UChar* U_EXPORT2
+U_CAPI char16_t* U_EXPORT2
 u_strFromJavaModifiedUTF8WithSub(
-        UChar *dest,
+        char16_t *dest,
         int32_t destCapacity,
         int32_t *pDestLength,
         const char *src,
@@ -1091,8 +1091,8 @@ u_strFromJavaModifiedUTF8WithSub(
     if(pNumSubstitutions!=nullptr) {
         *pNumSubstitutions=0;
     }
-    UChar *pDest = dest;
-    UChar *pDestLimit = dest+destCapacity;
+    char16_t *pDest = dest;
+    char16_t *pDestLimit = dest+destCapacity;
     int32_t reqLength = 0;
     int32_t numSubstitutions=0;
 
@@ -1103,7 +1103,7 @@ u_strFromJavaModifiedUTF8WithSub(
          */
         UChar32 c;
         while(((c = (uint8_t)*src) != 0) && c <= 0x7f && (pDest < pDestLimit)) {
-            *pDest++=(UChar)c;
+            *pDest++=(char16_t)c;
             ++src;
         }
         if(c == 0) {
@@ -1140,7 +1140,7 @@ u_strFromJavaModifiedUTF8WithSub(
         }
         /*
          * Each iteration of the inner loop progresses by at most 3 UTF-8
-         * bytes and one UChar.
+         * bytes and one char16_t.
          */
         if(subchar > 0xFFFF) {
             break;
@@ -1159,7 +1159,7 @@ u_strFromJavaModifiedUTF8WithSub(
         do {
             ch = (uint8_t)src[i++];
             if(U8_IS_SINGLE(ch)) {
-                *pDest++=(UChar)ch;
+                *pDest++=(char16_t)ch;
             } else {
                 if(ch >= 0xe0) {
                     if( /* handle U+0000..U+FFFF inline */
@@ -1167,8 +1167,8 @@ u_strFromJavaModifiedUTF8WithSub(
                         (t1 = (uint8_t)(src[i] - 0x80)) <= 0x3f &&
                         (t2 = (uint8_t)(src[i+1] - 0x80)) <= 0x3f
                     ) {
-                        /* no need for (ch & 0xf) because the upper bits are truncated after <<12 in the cast to (UChar) */
-                        *pDest++ = (UChar)((ch << 12) | (t1 << 6) | t2);
+                        /* no need for (ch & 0xf) because the upper bits are truncated after <<12 in the cast to (char16_t) */
+                        *pDest++ = (char16_t)((ch << 12) | (t1 << 6) | t2);
                         i += 2;
                         continue;
                     }
@@ -1177,7 +1177,7 @@ u_strFromJavaModifiedUTF8WithSub(
                         ch >= 0xc0 &&
                         (t1 = (uint8_t)(src[i] - 0x80)) <= 0x3f
                     ) {
-                        *pDest++ = (UChar)(((ch & 0x1f) << 6) | t1);
+                        *pDest++ = (char16_t)(((ch & 0x1f) << 6) | t1);
                         ++i;
                         continue;
                     }
@@ -1197,7 +1197,7 @@ u_strFromJavaModifiedUTF8WithSub(
                     /* function call for error cases */
                     utf8_nextCharSafeBody((const uint8_t *)src, &(i), srcLength, ch, -1);
                     ++numSubstitutions;
-                    *(pDest++)=(UChar)subchar;
+                    *(pDest++)=(char16_t)subchar;
                 }
             }
         } while(--count > 0);
@@ -1206,7 +1206,7 @@ u_strFromJavaModifiedUTF8WithSub(
     while(i < srcLength && (pDest < pDestLimit)) {
         ch = (uint8_t)src[i++];
         if(U8_IS_SINGLE(ch)){
-            *pDest++=(UChar)ch;
+            *pDest++=(char16_t)ch;
         } else {
             if(ch >= 0xe0) {
                 if( /* handle U+0000..U+FFFF inline */
@@ -1215,8 +1215,8 @@ u_strFromJavaModifiedUTF8WithSub(
                     (t1 = (uint8_t)(src[i] - 0x80)) <= 0x3f &&
                     (t2 = (uint8_t)(src[i+1] - 0x80)) <= 0x3f
                 ) {
-                    /* no need for (ch & 0xf) because the upper bits are truncated after <<12 in the cast to (UChar) */
-                    *pDest++ = (UChar)((ch << 12) | (t1 << 6) | t2);
+                    /* no need for (ch & 0xf) because the upper bits are truncated after <<12 in the cast to (char16_t) */
+                    *pDest++ = (char16_t)((ch << 12) | (t1 << 6) | t2);
                     i += 2;
                     continue;
                 }
@@ -1226,7 +1226,7 @@ u_strFromJavaModifiedUTF8WithSub(
                     i < srcLength &&
                     (t1 = (uint8_t)(src[i] - 0x80)) <= 0x3f
                 ) {
-                    *pDest++ = (UChar)(((ch & 0x1f) << 6) | t1);
+                    *pDest++ = (char16_t)(((ch & 0x1f) << 6) | t1);
                     ++i;
                     continue;
                 }
@@ -1240,7 +1240,7 @@ u_strFromJavaModifiedUTF8WithSub(
                 utf8_nextCharSafeBody((const uint8_t *)src, &(i), srcLength, ch, -1);
                 ++numSubstitutions;
                 if(subchar<=0xFFFF) {
-                    *(pDest++)=(UChar)subchar;
+                    *(pDest++)=(char16_t)subchar;
                 } else {
                     *(pDest++)=U16_LEAD(subchar);
                     if(pDest<pDestLimit) {
@@ -1314,14 +1314,14 @@ u_strToJavaModifiedUTF8(
         char *dest,
         int32_t destCapacity,
         int32_t *pDestLength,
-        const UChar *src, 
+        const char16_t *src,
         int32_t srcLength,
         UErrorCode *pErrorCode) {
     int32_t reqLength=0;
     uint32_t ch=0;
     uint8_t *pDest = (uint8_t *)dest;
     uint8_t *pDestLimit = pDest + destCapacity;
-    const UChar *pSrcLimit;
+    const char16_t *pSrcLimit;
     int32_t count;
 
     /* args check */
@@ -1361,7 +1361,7 @@ u_strToJavaModifiedUTF8(
         srcLength = (int32_t)(pSrcLimit - src);
         if(count >= srcLength && srcLength > 0 && *src <= 0x7f) {
             /* fast ASCII loop */
-            const UChar *prevSrc = src;
+            const char16_t *prevSrc = src;
             int32_t delta;
             while(src < pSrcLimit && (ch = *src) <= 0x7f && ch != 0) {
                 *pDest++=(uint8_t)ch;
@@ -1373,7 +1373,7 @@ u_strToJavaModifiedUTF8(
         }
         /*
          * Each iteration of the inner loop progresses by at most 3 UTF-8
-         * bytes and one UChar.
+         * bytes and one char16_t.
          */
         count /= 3;
         if(count > srcLength) {

@@ -99,7 +99,7 @@ static UDataInfo dataInfo= {
 
     U_IS_BIG_ENDIAN,
     U_CHARSET_FAMILY,
-    sizeof(UChar),
+    sizeof(char16_t),
     0,
 
     {0x52, 0x65, 0x73, 0x42},     /* dataFormat="ResB" */
@@ -269,7 +269,7 @@ void PseudoListResource::add(SResource *res) {
 }
 
 StringBaseResource::StringBaseResource(SRBRoot *bundle, const char *tag, int8_t type,
-                                       const UChar *value, int32_t len,
+                                       const char16_t *value, int32_t len,
                                        const UString* comment, UErrorCode &errorCode)
         : SResource(bundle, tag, type, comment, errorCode) {
     if (len == 0 && gFormatVersion > 1) {
@@ -301,7 +301,7 @@ StringBaseResource::StringBaseResource(SRBRoot *bundle, int8_t type,
 }
 
 // Pool bundle string, alias the buffer. Guaranteed NUL-terminated and not empty.
-StringBaseResource::StringBaseResource(int8_t type, const UChar *value, int32_t len,
+StringBaseResource::StringBaseResource(int8_t type, const char16_t *value, int32_t len,
                                        UErrorCode &errorCode)
         : SResource(nullptr, nullptr, type, nullptr, errorCode), fString(true, value, len) {
     assert(len > 0);
@@ -430,7 +430,7 @@ StringResource::handlePreflightStrings(SRBRoot *bundle, UHashtable *stringSet,
     if (bundle->fStringsForm != STRINGS_UTF16_V1) {
         int32_t len = length();
         if (len <= MAX_IMPLICIT_STRING_LENGTH &&
-                !U16_IS_TRAIL(fString[0]) && fString.indexOf((UChar)0) < 0) {
+                !U16_IS_TRAIL(fString[0]) && fString.indexOf((char16_t)0) < 0) {
             /*
              * This string will be stored without an explicit length.
              * Runtime will detect !U16_IS_TRAIL(s[0]) and call u_strlen().
@@ -542,7 +542,7 @@ StringResource::handleWrite16(SRBRoot * /*bundle*/) {
 void
 ContainerResource::writeAllRes16(SRBRoot *bundle) {
     for (SResource *current = fFirst; current != nullptr; current = current->fNext) {
-        bundle->f16BitUnits.append((UChar)current->fRes16);
+        bundle->f16BitUnits.append((char16_t)current->fRes16);
     }
     fWritten = true;
 }
@@ -562,7 +562,7 @@ ArrayResource::handleWrite16(SRBRoot *bundle) {
     }
     if (fCount <= 0xffff && res16 >= 0 && gFormatVersion > 1) {
         fRes = URES_MAKE_RESOURCE(URES_ARRAY16, bundle->f16BitUnits.length());
-        bundle->f16BitUnits.append((UChar)fCount);
+        bundle->f16BitUnits.append((char16_t)fCount);
         writeAllRes16(bundle);
     }
 }
@@ -589,9 +589,9 @@ TableResource::handleWrite16(SRBRoot *bundle) {
         if (res16 >= 0 && gFormatVersion > 1) {
             /* 16-bit count, key offsets and values */
             fRes = URES_MAKE_RESOURCE(URES_TABLE16, bundle->f16BitUnits.length());
-            bundle->f16BitUnits.append((UChar)fCount);
+            bundle->f16BitUnits.append((char16_t)fCount);
             for (SResource *current = fFirst; current != nullptr; current = current->fNext) {
-                bundle->f16BitUnits.append((UChar)current->fKey16);
+                bundle->f16BitUnits.append((char16_t)current->fKey16);
             }
             writeAllRes16(bundle);
         } else {
@@ -938,7 +938,7 @@ void SRBRoot::write(const char *outputDir, const char *outputPkg,
         return;
     }
     if (f16BitUnits.length() & 1) {
-        f16BitUnits.append((UChar)0xaaaa);  /* pad to multiple of 4 bytes */
+        f16BitUnits.append((char16_t)0xaaaa);  /* pad to multiple of 4 bytes */
     }
 
     byteOffset = fKeysTop + f16BitUnits.length() * 2;
@@ -1103,13 +1103,13 @@ ArrayResource* array_open(struct SRBRoot *bundle, const char *tag, const struct 
     return U_SUCCESS(*status) ? res.orphan() : nullptr;
 }
 
-struct SResource *string_open(struct SRBRoot *bundle, const char *tag, const UChar *value, int32_t len, const struct UString* comment, UErrorCode *status) {
+struct SResource *string_open(struct SRBRoot *bundle, const char *tag, const char16_t *value, int32_t len, const struct UString* comment, UErrorCode *status) {
     LocalPointer<SResource> res(
             new StringResource(bundle, tag, value, len, comment, *status), *status);
     return U_SUCCESS(*status) ? res.orphan() : nullptr;
 }
 
-struct SResource *alias_open(struct SRBRoot *bundle, const char *tag, UChar *value, int32_t len, const struct UString* comment, UErrorCode *status) {
+struct SResource *alias_open(struct SRBRoot *bundle, const char *tag, char16_t *value, int32_t len, const struct UString* comment, UErrorCode *status) {
     LocalPointer<SResource> res(
             new AliasResource(bundle, tag, value, len, comment, *status), *status);
     return U_SUCCESS(*status) ? res.orphan() : nullptr;
@@ -1149,7 +1149,7 @@ SRBRoot::SRBRoot(const UString *comment, UBool isPoolBundle, UErrorCode &errorCo
     if (gFormatVersion > 1) {
         // f16BitUnits must start with a zero for empty resources.
         // We might be able to omit it if there are no empty 16-bit resources.
-        f16BitUnits.append((UChar)0);
+        f16BitUnits.append((char16_t)0);
     }
 
     fKeys = (char *) uprv_malloc(sizeof(char) * KEY_SPACE_SIZE);
@@ -1200,7 +1200,7 @@ SRBRoot::~SRBRoot() {
 
 /* Misc Functions */
 
-void SRBRoot::setLocale(UChar *locale, UErrorCode &errorCode) {
+void SRBRoot::setLocale(char16_t *locale, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) {
         return;
     }
@@ -1506,10 +1506,10 @@ static int32_t U_CALLCONV
 compareStringSuffixes(const void * /*context*/, const void *l, const void *r) {
     const StringResource *left = *((const StringResource **)l);
     const StringResource *right = *((const StringResource **)r);
-    const UChar *lStart = left->getBuffer();
-    const UChar *lLimit = lStart + left->length();
-    const UChar *rStart = right->getBuffer();
-    const UChar *rLimit = rStart + right->length();
+    const char16_t *lStart = left->getBuffer();
+    const char16_t *lLimit = lStart + left->length();
+    const char16_t *rStart = right->getBuffer();
+    const char16_t *rLimit = rStart + right->length();
     int32_t diff;
     /* compare keys in reverse character order */
     while (lStart < lLimit && rStart < rLimit) {
@@ -1555,22 +1555,22 @@ StringResource::writeUTF16v2(int32_t base, UnicodeString &dest) {
     case 0:
         break;
     case 1:
-        dest.append((UChar)(0xdc00 + len));
+        dest.append((char16_t)(0xdc00 + len));
         break;
     case 2:
-        dest.append((UChar)(0xdfef + (len >> 16)));
-        dest.append((UChar)len);
+        dest.append((char16_t)(0xdfef + (len >> 16)));
+        dest.append((char16_t)len);
         break;
     case 3:
-        dest.append((UChar)0xdfff);
-        dest.append((UChar)(len >> 16));
-        dest.append((UChar)len);
+        dest.append((char16_t)0xdfff);
+        dest.append((char16_t)(len >> 16));
+        dest.append((char16_t)len);
         break;
     default:
         break;  /* will not occur */
     }
     dest.append(fString);
-    dest.append((UChar)0);
+    dest.append((char16_t)0);
 }
 
 void

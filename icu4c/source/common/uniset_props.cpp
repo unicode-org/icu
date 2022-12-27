@@ -108,7 +108,7 @@ uniset_getUnicode32Instance(UErrorCode &errorCode) {
 
 static inline UBool
 isPerlOpen(const UnicodeString &pattern, int32_t pos) {
-    UChar c;
+    char16_t c;
     return pattern.charAt(pos)==u'\\' && ((c=pattern.charAt(pos+1))==u'p' || c==u'P');
 }
 
@@ -209,7 +209,7 @@ UnicodeSet::applyPatternIgnoreSpace(const UnicodeString& pattern,
  */
 UBool UnicodeSet::resemblesPattern(const UnicodeString& pattern, int32_t pos) {
     return ((pos+1) < pattern.length() &&
-            pattern.charAt(pos) == (UChar)91/*[*/) ||
+            pattern.charAt(pos) == (char16_t)91/*[*/) ||
         resemblesPropertyPattern(pattern, pos);
 }
 
@@ -287,7 +287,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
     // lastItem: 0=none, 1=char, 2=set
     int8_t lastItem = 0, mode = 0;
     UChar32 lastChar = 0;
-    UChar op = 0;
+    char16_t op = 0;
 
     UBool invert = false;
 
@@ -471,7 +471,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
             case u'-':
                 if (op == 0) {
                     if (lastItem != 0) {
-                        op = (UChar) c;
+                        op = (char16_t) c;
                         continue;
                     } else {
                         // Treat final trailing '-' as a literal
@@ -490,7 +490,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
                 return;
             case u'&':
                 if (lastItem == 2 && op == 0) {
-                    op = (UChar) c;
+                    op = (char16_t) c;
                     continue;
                 }
                 // syntaxError(chars, "'&' not after set");
@@ -561,7 +561,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
                         }
                         add(U_ETHER);
                         usePat = true;
-                        patLocal.append((UChar) SymbolTable::SYMBOL_REF);
+                        patLocal.append((char16_t) SymbolTable::SYMBOL_REF);
                         patLocal.append(u']');
                         mode = 2;
                         continue;
@@ -1044,7 +1044,7 @@ UnicodeSet& UnicodeSet::applyPropertyPattern(const UnicodeString& pattern,
             invert = true;
         }
     } else if (isPerlOpen(pattern, pos) || isNameOpen(pattern, pos)) {
-        UChar c = pattern.charAt(pos+1);
+        char16_t c = pattern.charAt(pos+1);
         invert = (c == u'P');
         isName = (c == u'N');
         pos += 2;

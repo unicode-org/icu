@@ -52,7 +52,7 @@ UBool      displayLineNum  = false;
 const char *fileName;      
 int         fileLen;              // Length, in UTF-16 Code Units.  
 
-UChar      *ucharBuf = 0;         // Buffer, holds converted file.  (Simple minded program, always reads
+char16_t   *ucharBuf = 0;         // Buffer, holds converted file.  (Simple minded program, always reads
                                   //   the whole file at once.
 
 char       *charBuf = 0;          // Buffer, for original, unconverted file data.
@@ -329,7 +329,7 @@ void readFile(const char *name) {
     }
 
     //
-    // Convert the file data to UChar.
+    // Convert the file data to char16_t.
     //  Preflight first to determine required buffer size.
     //
     uint32_t destCap = ucnv_toUChars(conv,
@@ -344,7 +344,7 @@ void readFile(const char *name) {
     };
     
     status = U_ZERO_ERROR;
-    ucharBuf = (UChar *)realloc(ucharBuf, (destCap+1) * sizeof(UChar));
+    ucharBuf = (char16_t *)realloc(ucharBuf, (destCap+1) * sizeof(char16_t));
     ucnv_toUChars(conv,
         ucharBuf,           //  dest,
         destCap+1,
@@ -390,7 +390,7 @@ void nextLine(int  startPos) {
         if (lineEnd >= fileLen) {
             return;
         }
-        UChar c = ucharBuf[lineEnd];
+        char16_t c = ucharBuf[lineEnd];
         lineEnd++;
         if (c == 0x0a   ||       // Line Feed
             c == 0x0c   ||       // Form Feed

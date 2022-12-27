@@ -41,13 +41,13 @@ U_NAMESPACE_BEGIN
 int8_t
 UnicodeString::doCaseCompare(int32_t start,
                              int32_t length,
-                             const UChar *srcChars,
+                             const char16_t *srcChars,
                              int32_t srcStart,
                              int32_t srcLength,
                              uint32_t options) const
 {
   // compare illegal string values
-  // treat const UChar *srcChars==nullptr as an empty string
+  // treat const char16_t *srcChars==nullptr as an empty string
   if(isBogus()) {
     return -1;
   }
@@ -60,7 +60,7 @@ UnicodeString::doCaseCompare(int32_t start,
   }
 
   // get the correct pointer
-  const UChar *chars = getArrayStart();
+  const char16_t *chars = getArrayStart();
 
   chars += start;
   if(srcStart!=0) {
@@ -98,8 +98,8 @@ UnicodeString::caseMap(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITER
     return *this;
   }
 
-  UChar oldBuffer[2 * US_STACKBUF_SIZE];
-  UChar *oldArray;
+  char16_t oldBuffer[2 * US_STACKBUF_SIZE];
+  char16_t *oldArray;
   int32_t oldLength = length();
   int32_t newLength;
   UBool writable = isBufferWritable();
@@ -115,7 +115,7 @@ UnicodeString::caseMap(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITER
   if (writable ? oldLength <= UPRV_LENGTHOF(oldBuffer) : oldLength < US_STACKBUF_SIZE) {
     // Short string: Copy the contents into a temporary buffer and
     // case-map back into the current array, or into the stack buffer.
-    UChar *buffer = getArrayStart();
+    char16_t *buffer = getArrayStart();
     int32_t capacity;
     oldArray = oldBuffer;
     u_memcpy(oldBuffer, buffer, oldLength);
@@ -155,7 +155,7 @@ UnicodeString::caseMap(int32_t caseLocale, uint32_t options, UCASEMAP_BREAK_ITER
     // and often does not change its length.
     oldArray = getArrayStart();
     Edits edits;
-    UChar replacementChars[200];
+    char16_t replacementChars[200];
 #if !UCONFIG_NO_BREAK_ITERATION
     if (iter != nullptr) {
       oldString.setTo(false, oldArray, oldLength);

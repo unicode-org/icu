@@ -431,7 +431,7 @@ usprep_close(UStringPrepProfile* profile){
 }
 
 U_CFUNC void 
-uprv_syntaxError(const UChar* rules, 
+uprv_syntaxError(const char16_t* rules,
                  int32_t pos,
                  int32_t rulesLen,
                  UParseError* parseError){
@@ -502,11 +502,11 @@ getValues(uint16_t trieWord, int16_t& value, UBool& isIndex){
     return type;
 }
 
-// TODO: change to writing to UnicodeString not UChar *
+// TODO: change to writing to UnicodeString not char16_t *
 static int32_t 
 usprep_map(  const UStringPrepProfile* profile, 
-             const UChar* src, int32_t srcLength, 
-             UChar* dest, int32_t destCapacity,
+             const char16_t* src, int32_t srcLength,
+             char16_t* dest, int32_t destCapacity,
              int32_t options,
              UParseError* parseError,
              UErrorCode* status ){
@@ -581,7 +581,7 @@ usprep_map(  const UStringPrepProfile* profile,
         //copy the code point into destination
         if(ch <= 0xFFFF){
             if(destIndex < destCapacity ){
-                dest[destIndex] = (UChar)ch;
+                dest[destIndex] = (char16_t)ch;
             }
             destIndex++;
         }else{
@@ -637,8 +637,8 @@ usprep_map(  const UStringPrepProfile* profile,
 */
 U_CAPI int32_t U_EXPORT2
 usprep_prepare(   const UStringPrepProfile* profile,
-                  const UChar* src, int32_t srcLength, 
-                  UChar* dest, int32_t destCapacity,
+                  const char16_t* src, int32_t srcLength,
+                  char16_t* dest, int32_t destCapacity,
                   int32_t options,
                   UParseError* parseError,
                   UErrorCode* status ){
@@ -662,7 +662,7 @@ usprep_prepare(   const UStringPrepProfile* profile,
     }
     // map
     UnicodeString s1;
-    UChar *b1 = s1.getBuffer(srcLength);
+    char16_t *b1 = s1.getBuffer(srcLength);
     if(b1==nullptr){
         *status = U_MEMORY_ALLOCATION_ERROR;
         return 0;
@@ -706,7 +706,7 @@ usprep_prepare(   const UStringPrepProfile* profile,
     }
 
     // Prohibit and checkBiDi in one pass
-    const UChar *b2 = s2.getBuffer();
+    const char16_t *b2 = s2.getBuffer();
     int32_t b2Len = s2.length();
     UCharDirection direction=U_CHAR_DIRECTION_COUNT, firstCharDir=U_CHAR_DIRECTION_COUNT;
     UBool leftToRight=false, rightToLeft=false;

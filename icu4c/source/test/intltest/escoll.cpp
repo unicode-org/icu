@@ -45,7 +45,7 @@ CollationSpanishTest::~CollationSpanishTest()
     delete myCollation;
 }
 
-const UChar CollationSpanishTest::testSourceCases[][CollationSpanishTest::MAX_TOKEN_LEN] = {
+const char16_t CollationSpanishTest::testSourceCases[][CollationSpanishTest::MAX_TOKEN_LEN] = {
     {0x61, 0x6c, 0x69, 0x61, 0x73, 0},
     {0x45, 0x6c, 0x6c, 0x69, 0x6f, 0x74, 0},
     {0x48, 0x65, 0x6c, 0x6c, 0x6f, 0},
@@ -57,7 +57,7 @@ const UChar CollationSpanishTest::testSourceCases[][CollationSpanishTest::MAX_TO
     {0x48, 0x65, 0x6c, 0x6c, 0x6f, 0},
 };
 
-const UChar CollationSpanishTest::testTargetCases[][CollationSpanishTest::MAX_TOKEN_LEN] = {
+const char16_t CollationSpanishTest::testTargetCases[][CollationSpanishTest::MAX_TOKEN_LEN] = {
     {0x61, 0x6c, 0x6c, 0x69, 0x61, 0x73, 0},
     {0x45, 0x6d, 0x69, 0x6f, 0x74, 0},
     {0x68, 0x65, 0x6c, 0x6c, 0x4f, 0},

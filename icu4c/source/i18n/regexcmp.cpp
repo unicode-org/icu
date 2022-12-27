@@ -81,8 +81,8 @@ RegexCompile::RegexCompile(RegexPattern *rxp, UErrorCode &status) :
     }
 }
 
-static const UChar      chAmp       = 0x26;      // '&'
-static const UChar      chDash      = 0x2d;      // '-'
+static const char16_t   chAmp       = 0x26;      // '&'
+static const char16_t   chDash      = 0x2d;      // '-'
 
 
 //------------------------------------------------------------------------------
@@ -2620,7 +2620,7 @@ void  RegexCompile::findCaseInsensitiveStarters(UChar32 c, UnicodeSet *starterCh
         0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 
         0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x1, 0x1, 0x1, 0};
 
-    static const UChar RECaseFixData[] = {
+    static const char16_t RECaseFixData[] = {
         0x1e9a, 0xfb00, 0xfb01, 0xfb02, 0xfb03, 0xfb04, 0x1e96, 0x130, 0x1f0, 0xdf, 
         0x1e9e, 0xfb05, 0xfb06, 0x1e97, 0x1e98, 0x1e99, 0x149, 0x1fb4, 0x1fc4, 0x1fb3, 
         0x1fb6, 0x1fb7, 0x1fbc, 0x1fc3, 0x1fc6, 0x1fc7, 0x1fcc, 0x390, 0x1fd2, 0x1fd3, 
@@ -3944,25 +3944,25 @@ void RegexCompile::error(UErrorCode e) {
 //     Numeric because there is no portable way to enter them as literals.
 //     (Think EBCDIC).
 //
-static const UChar      chCR        = 0x0d;      // New lines, for terminating comments.
-static const UChar      chLF        = 0x0a;      // Line Feed
-static const UChar      chPound     = 0x23;      // '#', introduces a comment.
-static const UChar      chDigit0    = 0x30;      // '0'
-static const UChar      chDigit7    = 0x37;      // '9'
-static const UChar      chColon     = 0x3A;      // ':'
-static const UChar      chE         = 0x45;      // 'E'
-static const UChar      chQ         = 0x51;      // 'Q'
-//static const UChar      chN         = 0x4E;      // 'N'
-static const UChar      chP         = 0x50;      // 'P'
-static const UChar      chBackSlash = 0x5c;      // '\'  introduces a char escape
-//static const UChar      chLBracket  = 0x5b;      // '['
-static const UChar      chRBracket  = 0x5d;      // ']'
-static const UChar      chUp        = 0x5e;      // '^'
-static const UChar      chLowerP    = 0x70;
-static const UChar      chLBrace    = 0x7b;      // '{'
-static const UChar      chRBrace    = 0x7d;      // '}'
-static const UChar      chNEL       = 0x85;      //    NEL newline variant
-static const UChar      chLS        = 0x2028;    //    Unicode Line Separator
+static const char16_t   chCR        = 0x0d;      // New lines, for terminating comments.
+static const char16_t   chLF        = 0x0a;      // Line Feed
+static const char16_t   chPound     = 0x23;      // '#', introduces a comment.
+static const char16_t   chDigit0    = 0x30;      // '0'
+static const char16_t   chDigit7    = 0x37;      // '9'
+static const char16_t   chColon     = 0x3A;      // ':'
+static const char16_t   chE         = 0x45;      // 'E'
+static const char16_t   chQ         = 0x51;      // 'Q'
+//static const char16_t   chN         = 0x4E;      // 'N'
+static const char16_t   chP         = 0x50;      // 'P'
+static const char16_t   chBackSlash = 0x5c;      // '\'  introduces a char escape
+//static const char16_t   chLBracket  = 0x5b;      // '['
+static const char16_t   chRBracket  = 0x5d;      // ']'
+static const char16_t   chUp        = 0x5e;      // '^'
+static const char16_t   chLowerP    = 0x70;
+static const char16_t   chLBrace    = 0x7b;      // '{'
+static const char16_t   chRBrace    = 0x7d;      // '}'
+static const char16_t   chNEL       = 0x85;      //    NEL newline variant
+static const char16_t   chLS        = 0x2028;    //    Unicode Line Separator
 
 
 //------------------------------------------------------------------------------

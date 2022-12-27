@@ -91,10 +91,10 @@ The Management
 
 // Define character constants thusly to be EBCDIC-friendly
 enum {
-    LEFT_BRACE=((UChar)0x007B), /*{*/
-    PIPE      =((UChar)0x007C), /*|*/
-    ZERO      =((UChar)0x0030), /*0*/
-    UPPER_A   =((UChar)0x0041)  /*A*/
+    LEFT_BRACE=((char16_t)0x007B), /*{*/
+    PIPE      =((char16_t)0x007C), /*|*/
+    ZERO      =((char16_t)0x0030), /*0*/
+    UPPER_A   =((char16_t)0x0041)  /*A*/
 };
 
 TransliteratorTest::TransliteratorTest()
@@ -339,7 +339,7 @@ void TransliteratorTest::TestSimpleRules(void) {
     UParseError parseError;
     Transliterator *t = Transliterator::createFromRules(
         "<ID>",
-        UnicodeString("$dummy=").append((UChar)0xE100) +
+        UnicodeString("$dummy=").append((char16_t)0xE100) +
         UnicodeString(";"
                       "$vowel=[aeiouAEIOU];"
                       "$lu=[:Lu:];"
@@ -556,9 +556,9 @@ void TransliteratorTest::keyboardAux(const Transliterator& t,
         s.extractBetween(index.contextStart, index.start, b);
         s.extractBetween(index.start, s.length(), c);
         log.append(a).
-            append((UChar)LEFT_BRACE).
+            append((char16_t)LEFT_BRACE).
             append(b).
-            append((UChar)PIPE).
+            append((char16_t)PIPE).
             append(c);
         if (s == DATA[i+1] && U_SUCCESS(status)) {
             logln(log);
@@ -581,7 +581,7 @@ void TransliteratorTest::TestArabic(void) {
 //    };
 //    */
 //
-//    UChar ar_raw[] = {
+//    char16_t ar_raw[] = {
 //        0x062a, 0x062a, 0x0645, 0x062a, 0x0639, 0x0020, 0x0627,
 //        0x0644, 0x0644, 0x063a, 0x0629, 0x0020, 0x0627, 0x0644,
 //        0x0639, 0x0631, 0x0628, 0x0628, 0x064a, 0x0629, 0x0020,
@@ -662,7 +662,7 @@ class TestFilter : public UnicodeFilter {
         return new TestFilter(*this);
     }
     virtual UBool contains(UChar32 c) const override {
-        return c != (UChar)0x0063 /*c*/;
+        return c != (char16_t)0x0063 /*c*/;
     }
     // Stubs
     virtual UnicodeString& toPattern(UnicodeString& result,
@@ -744,8 +744,8 @@ void TransliteratorTest::TestPatternQuoting(void) {
     // Array of 3n items
     // Each item is <rules>, <input>, <expected output>
     const UnicodeString DATA[] = {
-        UnicodeString(UChar(0x4E01)) + ">'[male adult]'",
-        UnicodeString(UChar(0x4E01)),
+        UnicodeString(char16_t(0x4E01)) + ">'[male adult]'",
+        UnicodeString(char16_t(0x4E01)),
         "[male adult]"
     };
 
@@ -775,14 +775,14 @@ void TransliteratorTest::TestJ277(void) {
         return;
     }
 
-    UChar sigma = 0x3C3;
-    UChar upsilon = 0x3C5;
-    UChar nu = 0x3BD;
-//    UChar PHI = 0x3A6;
-    UChar alpha = 0x3B1;
-//    UChar omega = 0x3C9;
-//    UChar omicron = 0x3BF;
-//    UChar epsilon = 0x3B5;
+    char16_t sigma = 0x3C3;
+    char16_t upsilon = 0x3C5;
+    char16_t nu = 0x3BD;
+//    char16_t PHI = 0x3A6;
+    char16_t alpha = 0x3B1;
+//    char16_t omega = 0x3C9;
+//    char16_t omicron = 0x3BF;
+//    char16_t epsilon = 0x3B5;
 
     // sigma upsilon nu -> syn
     UnicodeString syn;
@@ -2945,16 +2945,16 @@ void TransliteratorTest::TestGurmukhiDevanagari(){
     expected= expected.unescape();
 
     while(vIter.next()){
-        src.setCharAt(0,(UChar) vIter.getCodepoint());
-        expected.setCharAt(0,(UChar) (vIter.getCodepoint()+0x0100));
+        src.setCharAt(0,(char16_t) vIter.getCodepoint());
+        expected.setCharAt(0,(char16_t) (vIter.getCodepoint()+0x0100));
         expect(*trans,src,expected);
     }
     
     expected.setCharAt(1,0x0A70);
     while(nvIter.next()){
         //src.setCharAt(0,(char) nvIter.codepoint);
-        src.setCharAt(0,(UChar)nvIter.getCodepoint());
-        expected.setCharAt(0,(UChar) (nvIter.getCodepoint()+0x0100));
+        src.setCharAt(0,(char16_t)nvIter.getCodepoint());
+        expected.setCharAt(0,(char16_t) (nvIter.getCodepoint()+0x0100));
         expect(*trans,src,expected);
     }
     delete trans;
@@ -3043,7 +3043,7 @@ void TransliteratorTest::TestParseError() {
     delete t;
     if (U_FAILURE(ec)) {
         UnicodeString err(pe.preContext);
-        err.append((UChar)124/*|*/).append(pe.postContext);
+        err.append((char16_t)124/*|*/).append(pe.postContext);
         if (err.indexOf("d << b") >= 0) {
             logln("Ok: " + err);
         } else {
@@ -3081,7 +3081,7 @@ void TransliteratorTest::TestOutputSet() {
     delete t;
     if (U_FAILURE(ec)) {
         UnicodeString err(pe.preContext);
-        err.append((UChar)124/*|*/).append(pe.postContext);
+        err.append((char16_t)124/*|*/).append(pe.postContext);
         logln("Ok: " + err);
         return;
     }
@@ -3100,7 +3100,7 @@ void TransliteratorTest::TestVariableRange() {
     delete t;
     if (U_FAILURE(ec)) {
         UnicodeString err(pe.preContext);
-        err.append((UChar)124/*|*/).append(pe.postContext);
+        err.append((char16_t)124/*|*/).append(pe.postContext);
         logln("Ok: " + err);
         return;
     }
@@ -3118,7 +3118,7 @@ void TransliteratorTest::TestInvalidPostContext() {
     delete t;
     if (U_FAILURE(ec)) {
         UnicodeString err(pe.preContext);
-        err.append((UChar)124/*|*/).append(pe.postContext);
+        err.append((char16_t)124/*|*/).append(pe.postContext);
         if (err.indexOf("a}b{c") >= 0) {
             logln("Ok: " + err);
         } else {
@@ -3196,10 +3196,10 @@ void TransliteratorTest::TestIDForms() {
     }
 }
 
-static const UChar SPACE[]   = {32,0};
-static const UChar NEWLINE[] = {10,0};
-static const UChar RETURN[]  = {13,0};
-static const UChar EMPTY[]   = {0};
+static const char16_t SPACE[]   = {32,0};
+static const char16_t NEWLINE[] = {10,0};
+static const char16_t RETURN[]  = {13,0};
+static const char16_t EMPTY[]   = {0};
 
 void TransliteratorTest::checkRules(const UnicodeString& label, Transliterator& t2,
                                     const UnicodeString& testRulesForward) {
@@ -3536,7 +3536,7 @@ void TransliteratorTest::TestSurrogateCasing (void) {
     // check that casing handles surrogates
     // titlecase is currently defective
     char buffer[20];
-    UChar buffer2[20];
+    char16_t buffer2[20];
     UChar32 dee;
     U16_GET(DESERET_dee,0, 0, DESERET_dee.length(), dee);
     UnicodeString DEE(u_totitle(dee));
@@ -4624,14 +4624,14 @@ void TransliteratorTest::TestRuleStripping() {
 #
 \uE001>\u0C01; # SIGN
     */
-    static const UChar rule[] = {
+    static const char16_t rule[] = {
         0x0023,0x0020,0x000D,0x000A,
         0xE001,0x003E,0x0C01,0x003B,0x0020,0x0023,0x0020,0x0053,0x0049,0x0047,0x004E,0
     };
-    static const UChar expectedRule[] = {
+    static const char16_t expectedRule[] = {
         0xE001,0x003E,0x0C01,0x003B,0
     };
-    UChar result[UPRV_LENGTHOF(rule)];
+    char16_t result[UPRV_LENGTHOF(rule)];
     UErrorCode status = U_ZERO_ERROR;
     int32_t len = utrans_stripRules(rule, UPRV_LENGTHOF(rule), result, &status);
     if (len != u_strlen(expectedRule)) {
@@ -4921,9 +4921,9 @@ UnicodeString& TransliteratorTest::formatInput(UnicodeString &appendTo,
         input.extractBetween(pos.start, pos.limit, c);
         input.extractBetween(pos.limit, pos.contextLimit, d);
         input.extractBetween(pos.contextLimit, input.length(), e);
-        appendTo.append(a).append((UChar)123/*{*/).append(b).
-            append((UChar)PIPE).append(c).append((UChar)PIPE).append(d).
-            append((UChar)125/*}*/).append(e);
+        appendTo.append(a).append((char16_t)123/*{*/).append(b).
+            append((char16_t)PIPE).append(c).append((char16_t)PIPE).append(d).
+            append((char16_t)125/*}*/).append(e);
     } else {
         appendTo.append((UnicodeString)"INVALID UTransPosition {cs=" +
                         pos.contextStart + ", s=" + pos.start + ", l=" +

@@ -80,7 +80,7 @@ uplrules_close(UPluralRules *uplrules)
 U_CAPI int32_t U_EXPORT2
 uplrules_select(const UPluralRules *uplrules,
                 double number,
-                UChar *keyword, int32_t capacity,
+                char16_t *keyword, int32_t capacity,
                 UErrorCode *status)
 {
     if (U_FAILURE(*status)) {
@@ -97,7 +97,7 @@ uplrules_select(const UPluralRules *uplrules,
 U_CAPI int32_t U_EXPORT2
 uplrules_selectFormatted(const UPluralRules *uplrules,
                 const UFormattedNumber* number,
-                UChar *keyword, int32_t capacity,
+                char16_t *keyword, int32_t capacity,
                 UErrorCode *status)
 {
     if (U_FAILURE(*status)) {
@@ -119,7 +119,7 @@ uplrules_selectFormatted(const UPluralRules *uplrules,
 U_CAPI int32_t U_EXPORT2
 uplrules_selectForRange(const UPluralRules *uplrules,
                 const UFormattedNumberRange* urange,
-                UChar *keyword, int32_t capacity,
+                char16_t *keyword, int32_t capacity,
                 UErrorCode *status)
 {
     if (U_FAILURE(*status)) {
@@ -139,7 +139,7 @@ U_CAPI int32_t U_EXPORT2
 uplrules_selectWithFormat(const UPluralRules *uplrules,
                           double number,
                           const UNumberFormat *fmt,
-                          UChar *keyword, int32_t capacity,
+                          char16_t *keyword, int32_t capacity,
                           UErrorCode *status)
 {
     if (U_FAILURE(*status)) {

@@ -22,7 +22,7 @@
 #include "unicode/dtfmtsym.h"
 #include "uassert.h"
 
-static const UChar kJPY[] = {0x4A, 0x50, 0x59};
+static const char16_t kJPY[] = {0x4A, 0x50, 0x59};
 
 static void fixNonBreakingSpace(UnicodeString &str) {
     for (int32_t i = 0; i < str.length(); ++i) {

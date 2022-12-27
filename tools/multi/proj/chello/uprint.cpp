@@ -24,7 +24,7 @@
 
 /* Print a ustring to the specified FILE* in the default codepage */
 U_CAPI void
-uprint(const UChar *s,
+uprint(const char16_t *s,
 	   FILE *f,
 	   UErrorCode *status)
 {
@@ -32,8 +32,8 @@ uprint(const UChar *s,
   UConverter *converter;
   char buf [BUF_SIZE];
   int32_t sourceLen;
-  const UChar *mySource;
-  const UChar *mySourceEnd;
+  const char16_t *mySource;
+  const char16_t *mySourceEnd;
   char *myTarget;
   int32_t arraySize;
 

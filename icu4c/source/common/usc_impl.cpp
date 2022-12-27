@@ -41,7 +41,7 @@ struct ParenStackEntry
 struct UScriptRun
 {
     int32_t textLength;
-    const UChar *textArray;
+    const char16_t *textArray;
 
     int32_t scriptStart;
     int32_t scriptLimit;
@@ -189,7 +189,7 @@ sameScript(UScriptCode scriptOne, UScriptCode scriptTwo)
 }
 
 U_CAPI UScriptRun * U_EXPORT2
-uscript_openRun(const UChar *src, int32_t length, UErrorCode *pErrorCode)
+uscript_openRun(const char16_t *src, int32_t length, UErrorCode *pErrorCode)
 {
     UScriptRun *result = nullptr;
 
@@ -237,7 +237,7 @@ uscript_resetRun(UScriptRun *scriptRun)
 }
 
 U_CAPI void U_EXPORT2
-uscript_setRunText(UScriptRun *scriptRun, const UChar *src, int32_t length, UErrorCode *pErrorCode)
+uscript_setRunText(UScriptRun *scriptRun, const char16_t *src, int32_t length, UErrorCode *pErrorCode)
 {
     if (pErrorCode == nullptr || U_FAILURE(*pErrorCode)) {
         return;
@@ -268,8 +268,8 @@ uscript_nextRun(UScriptRun *scriptRun, int32_t *pRunStart, int32_t *pRunLimit, U
     scriptRun->scriptCode = USCRIPT_COMMON;
 
     for (scriptRun->scriptStart = scriptRun->scriptLimit; scriptRun->scriptLimit < scriptRun->textLength; scriptRun->scriptLimit += 1) {
-        UChar   high = scriptRun->textArray[scriptRun->scriptLimit];
-        UChar32 ch   = high;
+        char16_t high = scriptRun->textArray[scriptRun->scriptLimit];
+        UChar32  ch   = high;
         UScriptCode sc;
         int32_t pairIndex;
 
@@ -278,7 +278,7 @@ uscript_nextRun(UScriptRun *scriptRun, int32_t *pRunStart, int32_t *pRunLimit, U
          * in the text, see if it's followed by a low surrogate
          */
         if (high >= 0xD800 && high <= 0xDBFF && scriptRun->scriptLimit < scriptRun->textLength - 1) {
-            UChar low = scriptRun->textArray[scriptRun->scriptLimit + 1];
+            char16_t low = scriptRun->textArray[scriptRun->scriptLimit + 1];
 
             /*
              * if it is followed by a low surrogate,

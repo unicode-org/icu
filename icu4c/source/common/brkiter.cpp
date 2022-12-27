@@ -60,7 +60,7 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, UErrorCode &st
     char ext[4]={'\0'};
     CharString actualLocale;
     int32_t size;
-    const UChar* brkfname = nullptr;
+    const char16_t* brkfname = nullptr;
     UResourceBundle brkRulesStack;
     UResourceBundle brkNameStack;
     UResourceBundle *brkRules = &brkRulesStack;
@@ -95,7 +95,7 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, UErrorCode &st
         if (U_SUCCESS(status) && brkfname) {
             actualLocale.append(ures_getLocaleInternal(brkName, &status), -1, status);
 
-            UChar* extStart=u_strchr(brkfname, 0x002e);
+            char16_t* extStart=u_strchr(brkfname, 0x002e);
             int len = 0;
             if (extStart != nullptr){
                 len = (int)(extStart-brkfname);

@@ -59,7 +59,7 @@ U_NAMESPACE_BEGIN
 
 namespace {
 
-static const UChar *rootRules = nullptr;
+static const char16_t *rootRules = nullptr;
 static int32_t rootRulesLength = 0;
 static UResourceBundle *rootBundle = nullptr;
 static UInitOnce gInitOnceUcolRes {};
@@ -124,7 +124,7 @@ CollationLoader::loadRules(const char *localeID, const char *collationType,
     LocalUResourceBundlePointer data(
             ures_getByKeyWithFallback(collations.getAlias(), type, nullptr, &errorCode));
     int32_t length;
-    const UChar *s =  ures_getStringByKey(data.getAlias(), "Sequence", &length, &errorCode);
+    const char16_t *s =  ures_getStringByKey(data.getAlias(), "Sequence", &length, &errorCode);
     if(U_FAILURE(errorCode)) { return; }
 
     // No string pointer aliasing so that we need not hold onto the resource bundle.
@@ -269,7 +269,7 @@ CollationLoader::loadFromBundle(UErrorCode &errorCode) {
         LocalUResourceBundlePointer def(
                 ures_getByKeyWithFallback(collations, "default", nullptr, &internalErrorCode));
         int32_t length;
-        const UChar *s = ures_getString(def.getAlias(), &length, &internalErrorCode);
+        const char16_t *s = ures_getString(def.getAlias(), &length, &internalErrorCode);
         if(U_SUCCESS(internalErrorCode) && 0 < length && length < UPRV_LENGTHOF(defaultType)) {
             u_UCharsToChars(s, defaultType, length + 1);
         } else {
@@ -401,7 +401,7 @@ CollationLoader::loadFromData(UErrorCode &errorCode) {
     {
         UErrorCode internalErrorCode = U_ZERO_ERROR;
         int32_t len;
-        const UChar *s = ures_getStringByKey(data, "Sequence", &len,
+        const char16_t *s = ures_getStringByKey(data, "Sequence", &len,
                                              &internalErrorCode);
         if(U_SUCCESS(internalErrorCode)) {
             t->rules.setTo(true, s, len);
@@ -427,7 +427,7 @@ CollationLoader::loadFromData(UErrorCode &errorCode) {
                 ures_getByKeyWithFallback(actualBundle.getAlias(), "collations/default", nullptr,
                                           &internalErrorCode));
         int32_t len;
-        const UChar *s = ures_getString(def.getAlias(), &len, &internalErrorCode);
+        const char16_t *s = ures_getString(def.getAlias(), &len, &internalErrorCode);
         if(U_SUCCESS(internalErrorCode) && len < UPRV_LENGTHOF(defaultType)) {
             u_UCharsToChars(s, defaultType, len + 1);
         } else {
@@ -522,7 +522,7 @@ ucol_open(const char *loc,
 U_CAPI int32_t U_EXPORT2
 ucol_getDisplayName(    const    char        *objLoc,
                     const    char        *dispLoc,
-                    UChar             *result,
+                    char16_t          *result,
                     int32_t         resultLength,
                     UErrorCode        *status)
 {

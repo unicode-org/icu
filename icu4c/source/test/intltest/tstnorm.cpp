@@ -487,7 +487,7 @@ void BasicNormalizerTest::TestVerisign(void) {
 // Internal utilities
 //
 
-UnicodeString BasicNormalizerTest::hex(UChar ch) {
+UnicodeString BasicNormalizerTest::hex(char16_t ch) {
     UnicodeString result;
     return appendHex(ch, 4, result);
 }
@@ -495,7 +495,7 @@ UnicodeString BasicNormalizerTest::hex(UChar ch) {
 UnicodeString BasicNormalizerTest::hex(const UnicodeString& s) {
     UnicodeString result;
     for (int i = 0; i < s.length(); ++i) {
-        if (i != 0) result += (UChar)0x2c/*,*/;
+        if (i != 0) result += (char16_t)0x2c/*,*/;
         appendHex(s[i], 4, result);
     }
     return result;
@@ -628,7 +628,7 @@ private:
 };
 
 void
-BasicNormalizerTest::TestPreviousNext(const UChar *src, int32_t srcLength,
+BasicNormalizerTest::TestPreviousNext(const char16_t *src, int32_t srcLength,
                                       const UChar32 *expect, int32_t expectLength,
                                       const int32_t *expectIndex, // its length=expectLength+1
                                       int32_t srcMiddle, int32_t expectMiddle,
@@ -718,7 +718,7 @@ BasicNormalizerTest::TestPreviousNext(const UChar *src, int32_t srcLength,
 void
 BasicNormalizerTest::TestPreviousNext() {
     // src and expect strings
-    static const UChar src[]={
+    static const char16_t src[]={
         U16_LEAD(0x2f999), U16_TRAIL(0x2f999),
         U16_LEAD(0x1d15f), U16_TRAIL(0x1d15f),
         0xc4,
@@ -741,7 +741,7 @@ BasicNormalizerTest::TestPreviousNext() {
     };
 
     // src and expect strings for regression test for j2911
-    static const UChar src_j2911[]={
+    static const char16_t src_j2911[]={
         U16_LEAD(0x2f999), U16_TRAIL(0x2f999),
         0xdd00, 0xd900, // unpaired surrogates - regression test for j2911
         0xc4,
@@ -1134,7 +1134,7 @@ BasicNormalizerTest::TestCompare() {
     }
 
     // test cases with i and I to make sure Turkic works
-    static const UChar iI[]={ 0x49, 0x69, 0x130, 0x131 };
+    static const char16_t iI[]={ 0x49, 0x69, 0x130, 0x131 };
     UnicodeSet iSet, set;
 
     UnicodeString s1, s2;

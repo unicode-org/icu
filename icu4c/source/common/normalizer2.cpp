@@ -327,8 +327,8 @@ unorm2_close(UNormalizer2 *norm2) {
 
 U_CAPI int32_t U_EXPORT2
 unorm2_normalize(const UNormalizer2 *norm2,
-                 const UChar *src, int32_t length,
-                 UChar *dest, int32_t capacity,
+                 const char16_t *src, int32_t length,
+                 char16_t *dest, int32_t capacity,
                  UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) {
         return 0;
@@ -361,8 +361,8 @@ unorm2_normalize(const UNormalizer2 *norm2,
 
 static int32_t
 normalizeSecondAndAppend(const UNormalizer2 *norm2,
-                         UChar *first, int32_t firstLength, int32_t firstCapacity,
-                         const UChar *second, int32_t secondLength,
+                         char16_t *first, int32_t firstLength, int32_t firstCapacity,
+                         const char16_t *second, int32_t secondLength,
                          UBool doNormalize,
                          UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) {
@@ -417,8 +417,8 @@ normalizeSecondAndAppend(const UNormalizer2 *norm2,
 
 U_CAPI int32_t U_EXPORT2
 unorm2_normalizeSecondAndAppend(const UNormalizer2 *norm2,
-                                UChar *first, int32_t firstLength, int32_t firstCapacity,
-                                const UChar *second, int32_t secondLength,
+                                char16_t *first, int32_t firstLength, int32_t firstCapacity,
+                                const char16_t *second, int32_t secondLength,
                                 UErrorCode *pErrorCode) {
     return normalizeSecondAndAppend(norm2,
                                     first, firstLength, firstCapacity,
@@ -428,8 +428,8 @@ unorm2_normalizeSecondAndAppend(const UNormalizer2 *norm2,
 
 U_CAPI int32_t U_EXPORT2
 unorm2_append(const UNormalizer2 *norm2,
-              UChar *first, int32_t firstLength, int32_t firstCapacity,
-              const UChar *second, int32_t secondLength,
+              char16_t *first, int32_t firstLength, int32_t firstCapacity,
+              const char16_t *second, int32_t secondLength,
               UErrorCode *pErrorCode) {
     return normalizeSecondAndAppend(norm2,
                                     first, firstLength, firstCapacity,
@@ -439,7 +439,7 @@ unorm2_append(const UNormalizer2 *norm2,
 
 U_CAPI int32_t U_EXPORT2
 unorm2_getDecomposition(const UNormalizer2 *norm2,
-                        UChar32 c, UChar *decomposition, int32_t capacity,
+                        UChar32 c, char16_t *decomposition, int32_t capacity,
                         UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) {
         return 0;
@@ -458,7 +458,7 @@ unorm2_getDecomposition(const UNormalizer2 *norm2,
 
 U_CAPI int32_t U_EXPORT2
 unorm2_getRawDecomposition(const UNormalizer2 *norm2,
-                           UChar32 c, UChar *decomposition, int32_t capacity,
+                           UChar32 c, char16_t *decomposition, int32_t capacity,
                            UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) {
         return 0;
@@ -487,7 +487,7 @@ unorm2_getCombiningClass(const UNormalizer2 *norm2, UChar32 c) {
 
 U_CAPI UBool U_EXPORT2
 unorm2_isNormalized(const UNormalizer2 *norm2,
-                    const UChar *s, int32_t length,
+                    const char16_t *s, int32_t length,
                     UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) {
         return 0;
@@ -502,7 +502,7 @@ unorm2_isNormalized(const UNormalizer2 *norm2,
 
 U_CAPI UNormalizationCheckResult U_EXPORT2
 unorm2_quickCheck(const UNormalizer2 *norm2,
-                  const UChar *s, int32_t length,
+                  const char16_t *s, int32_t length,
                   UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) {
         return UNORM_NO;
@@ -517,7 +517,7 @@ unorm2_quickCheck(const UNormalizer2 *norm2,
 
 U_CAPI int32_t U_EXPORT2
 unorm2_spanQuickCheckYes(const UNormalizer2 *norm2,
-                         const UChar *s, int32_t length,
+                         const char16_t *s, int32_t length,
                          UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) {
         return 0;

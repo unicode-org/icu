@@ -404,7 +404,7 @@ utrie2_printLengths(const UTrie2 *trie, const char *which) {
 U_CAPI UTrie2 * U_EXPORT2
 utrie2_cloneAsThawed(const UTrie2 *other, UErrorCode *pErrorCode) {
     NewTrieAndStatus context;
-    UChar lead;
+    char16_t lead;
 
     if(U_FAILURE(*pErrorCode)) {
         return nullptr;
@@ -448,7 +448,7 @@ utrie2_cloneAsThawed(const UTrie2 *other, UErrorCode *pErrorCode) {
 U_CAPI UTrie2 * U_EXPORT2
 utrie2_fromUTrie(const UTrie *trie1, uint32_t errorValue, UErrorCode *pErrorCode) {
     NewTrieAndStatus context;
-    UChar lead;
+    char16_t lead;
 
     if(U_FAILURE(*pErrorCode)) {
         return nullptr;

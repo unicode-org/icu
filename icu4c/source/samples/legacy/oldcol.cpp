@@ -31,7 +31,7 @@
 
 // Very simple example code - sticks a sortkey in the buffer
 // Not much error checking
-int32_t getSortKey_legacy(const char *locale, const UChar *string, int32_t sLen, uint8_t *buffer, int32_t bLen) {
+int32_t getSortKey_legacy(const char *locale, const char16_t *string, int32_t sLen, uint8_t *buffer, int32_t bLen) {
   UErrorCode status = U_ZERO_ERROR;
   UCollator *coll = ucol_open(locale, &status);
   if(U_FAILURE(status)) {
@@ -48,7 +48,7 @@ static UCollator *compareCollator = nullptr;
 
 int compare_legacy(const void *string1, const void *string2) {
   if(compareCollator != nullptr) {
-    UCollationResult res = ucol_strcoll(compareCollator, (UChar *) string1, -1, (UChar *) string2, -1);
+    UCollationResult res = ucol_strcoll(compareCollator, (char16_t *) string1, -1, (char16_t *) string2, -1);
     if(res == UCOL_LESS) {
       return -1;
     } else if(res == UCOL_GREATER) {
@@ -87,7 +87,7 @@ void closeCollator_legacy(void) {
 }
 
 
-extern "C" void test_legacy(UChar data[][5], uint32_t size, uint32_t maxlen, uint8_t keys[4][32]) {
+extern "C" void test_legacy(char16_t data[][5], uint32_t size, uint32_t maxlen, uint8_t keys[4][32]) {
   uint32_t i = 0;
   int32_t keySize = 0;
 
@@ -104,7 +104,7 @@ extern "C" void test_legacy(UChar data[][5], uint32_t size, uint32_t maxlen, uin
   fprintf(stderr, "Done sortkeys, doing qsort test\n");
 
   initCollator_legacy("ja");
-  qsort(data, size, maxlen*sizeof(UChar), compare_legacy);
+  qsort(data, size, maxlen*sizeof(char16_t), compare_legacy);
   closeCollator_legacy();
 
   fprintf(stderr, "Done legacy!\n");

@@ -117,7 +117,7 @@ static UBool getSystemTimeInformation(TimeZone *tz, SYSTEMTIME &daylightDate, SY
     return result;
 }
 
-static UBool getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid, int32_t length) {
+static UBool getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const char16_t *icuid, int32_t length) {
     UBool result = false;
     UnicodeString id = UnicodeString(icuid, length);
     TimeZone *tz = TimeZone::createTimeZone(id);
@@ -149,7 +149,7 @@ static UBool getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar
  * information to put into zoneInfo. This includes bias and standard time date and daylight saving date.
  */
 U_CAPI UBool U_EXPORT2
-uprv_getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid, int32_t length)
+uprv_getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const char16_t *icuid, int32_t length)
 {
     if (getWindowsTimeZoneInfo(zoneInfo, icuid, length)) {
         return true;

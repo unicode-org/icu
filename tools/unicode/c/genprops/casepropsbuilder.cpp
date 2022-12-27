@@ -93,7 +93,7 @@ The file contains the following structures:
 
     const uint16_t exceptions[exceptionsLength];
 
-    const UChar unfold[unfoldLength];
+    const char16_t unfold[unfoldLength];
 
 
 Trie data word:
@@ -328,8 +328,8 @@ CasePropsBuilder::CasePropsBuilder(UErrorCode &errorCode)
     // Write "unfold" meta data into the first row. Must be UGENCASE_UNFOLD_WIDTH UChars.
     unfold.
         append(0).
-        append((UChar)UGENCASE_UNFOLD_WIDTH).
-        append((UChar)UGENCASE_UNFOLD_STRING_WIDTH).
+        append((char16_t)UGENCASE_UNFOLD_WIDTH).
+        append((char16_t)UGENCASE_UNFOLD_STRING_WIDTH).
         append(0).
         append(0);
     U_ASSERT(unfold.length()==UGENCASE_UNFOLD_WIDTH);
@@ -620,20 +620,20 @@ CasePropsBuilder::makeExcProps(UChar32 c, uint32_t value, UErrorCode &errorCode)
 
 static int32_t U_CALLCONV
 compareUnfold(const void *context, const void *left, const void *right) {
-    return u_memcmp((const UChar *)left, (const UChar *)right, UGENCASE_UNFOLD_WIDTH);
+    return u_memcmp((const char16_t *)left, (const char16_t *)right, UGENCASE_UNFOLD_WIDTH);
 }
 
 void
 CasePropsBuilder::makeUnfoldData(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
 
-    UChar *p, *q;
+    char16_t *p, *q;
     int32_t i, j, k;
 
     /* sort the data */
     int32_t unfoldLength=unfold.length();
     int32_t unfoldRows=unfoldLength/UGENCASE_UNFOLD_WIDTH-1;
-    UChar *unfoldBuffer=unfold.getBuffer(-1);
+    char16_t *unfoldBuffer=unfold.getBuffer(-1);
     uprv_sortArray(unfoldBuffer+UGENCASE_UNFOLD_WIDTH, unfoldRows, UGENCASE_UNFOLD_WIDTH*2,
                    compareUnfold, nullptr, false, &errorCode);
 
@@ -666,7 +666,7 @@ CasePropsBuilder::makeUnfoldData(UErrorCode &errorCode) {
         }
     }
 
-    unfoldBuffer[UCASE_UNFOLD_ROWS]=(UChar)unfoldRows;
+    unfoldBuffer[UCASE_UNFOLD_ROWS]=(char16_t)unfoldRows;
 
     if(beVerbose) {
         puts("unfold data:");
@@ -859,7 +859,7 @@ CasePropsBuilder::makeCaseClosure(UErrorCode &errorCode) {
     /* use the "unfold" data to add mappings */
 
     /* p always points to the code points; this loop ignores the strings completely */
-    const UChar *p=unfold.getBuffer()+UGENCASE_UNFOLD_WIDTH+UGENCASE_UNFOLD_STRING_WIDTH;
+    const char16_t *p=unfold.getBuffer()+UGENCASE_UNFOLD_WIDTH+UGENCASE_UNFOLD_STRING_WIDTH;
     int32_t unfoldRows=unfold.length()/UGENCASE_UNFOLD_WIDTH-1;
 
     for(int32_t i=0; i<unfoldRows; p+=UGENCASE_UNFOLD_WIDTH, ++i) {
@@ -917,7 +917,7 @@ CasePropsBuilder::makeException(UChar32 c, uint32_t value, ExcProps &ep, UErrorC
     }
 
     /* copy and shift the soft-dotted and case-sensitive bits */
-    UChar excWord=(UChar)((value&(UCASE_DOT_MASK|UCASE_SENSITIVE))<<UCASE_EXC_DOT_SHIFT);
+    char16_t excWord=(char16_t)((value&(UCASE_DOT_MASK|UCASE_SENSITIVE))<<UCASE_EXC_DOT_SHIFT);
 
     UniProps &p=ep.props;
 
@@ -1035,28 +1035,28 @@ CasePropsBuilder::makeException(UChar32 c, uint32_t value, ExcProps &ep, UErrorC
 
     if(count==0) {
         /* No optional slots: Try to share excWord entries. */
-        int32_t excIndex=exceptions.indexOf((UChar)excWord);
+        int32_t excIndex=exceptions.indexOf((char16_t)excWord);
         if(excIndex>=0) {
             return excIndex;
         }
         /* not found */
         excIndex=exceptions.length();
-        exceptions.append((UChar)excWord);
+        exceptions.append((char16_t)excWord);
         return excIndex;
     } else {
         /* write slots */
         UnicodeString excString;
-        excString.append((UChar)0);  /* placeholder for excWord which will be stored at excIndex */
+        excString.append((char16_t)0);  /* placeholder for excWord which will be stored at excIndex */
 
         if(slotBits<=0xffff) {
             for(int32_t i=0; i<count; ++i) {
-                excString.append((UChar)slots[i]);
+                excString.append((char16_t)slots[i]);
             }
         } else {
             excWord|=UCASE_EXC_DOUBLE_SLOTS;
             for(int32_t i=0; i<count; ++i) {
-                excString.append((UChar)(slots[i]>>16));
-                excString.append((UChar)slots[i]);
+                excString.append((char16_t)(slots[i]>>16));
+                excString.append((char16_t)slots[i]);
             }
         }
 
@@ -1070,7 +1070,7 @@ CasePropsBuilder::makeException(UChar32 c, uint32_t value, ExcProps &ep, UErrorC
         excString.append(closureString);
 
         /* write the main exceptions word */
-        excString.setCharAt(0, (UChar)excWord);
+        excString.setCharAt(0, (char16_t)excWord);
 
         // Try to share data.
         if(count==1 && ep.delta!=0) {

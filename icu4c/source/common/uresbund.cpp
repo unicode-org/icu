@@ -602,7 +602,7 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
                 aliasres = res_getResource(&(r->fData), "%%ALIAS");
                 if (aliasres != RES_BOGUS) {
                     // No tracing: called during initial data loading
-                    const UChar *alias = res_getStringNoTrace(&(r->fData), aliasres, &aliasLen);
+                    const char16_t *alias = res_getStringNoTrace(&(r->fData), aliasres, &aliasLen);
                     if(alias != nullptr && aliasLen > 0) { /* if there is actual alias - unload and load new data */
                         u_UCharsToChars(alias, aliasName, aliasLen+1);
                         r->fAlias = init_entry(aliasName, path, status);
@@ -751,7 +751,7 @@ loadParentsExceptRoot(UResourceDataEntry *&t1,
         if (parentRes != RES_BOGUS) {  // An explicit parent was found.
             int32_t parentLocaleLen = 0;
             // No tracing: called during initial data loading
-            const UChar *parentLocaleName = res_getStringNoTrace(&(t1->fData), parentRes, &parentLocaleLen);
+            const char16_t *parentLocaleName = res_getStringNoTrace(&(t1->fData), parentRes, &parentLocaleLen);
             if(parentLocaleName != nullptr && 0 < parentLocaleLen && parentLocaleLen < nameCapacity) {
                 u_UCharsToChars(parentLocaleName, name, parentLocaleLen + 1);
                 if (uprv_strcmp(name, kRootLocaleName) == 0) {
@@ -1167,7 +1167,7 @@ UResourceBundle *getAliasTargetAsResourceBundle(
     if (U_FAILURE(*status)) { return resB; }
     U_ASSERT(RES_GET_TYPE(r) == URES_ALIAS);
     int32_t len = 0;
-    const UChar *alias = res_getAlias(&resData, r, &len);
+    const char16_t *alias = res_getAlias(&resData, r, &len);
     if(len <= 0) {
         // bad alias
         *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -1520,8 +1520,8 @@ UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle *origin
  * Functions to retrieve data from resource bundles.
  */
 
-U_CAPI const UChar* U_EXPORT2 ures_getString(const UResourceBundle* resB, int32_t* len, UErrorCode* status) {
-    const UChar *s;
+U_CAPI const char16_t* U_EXPORT2 ures_getString(const UResourceBundle* resB, int32_t* len, UErrorCode* status) {
+    const char16_t *s;
     if (status==nullptr || U_FAILURE(*status)) {
         return nullptr;
     }
@@ -1537,7 +1537,7 @@ U_CAPI const UChar* U_EXPORT2 ures_getString(const UResourceBundle* resB, int32_
 }
 
 static const char *
-ures_toUTF8String(const UChar *s16, int32_t length16,
+ures_toUTF8String(const char16_t *s16, int32_t length16,
                   char *dest, int32_t *pLength,
                   UBool forceCopy,
                   UErrorCode *status) {
@@ -1575,7 +1575,7 @@ ures_toUTF8String(const UChar *s16, int32_t length16,
         }
         if (!forceCopy && (length16 <= 0x2aaaaaaa)) {
             /*
-             * We know the string will fit into dest because each UChar turns
+             * We know the string will fit into dest because each char16_t turns
              * into at most three UTF-8 bytes. Fill the latter part of dest
              * so that callers do not expect to use dest as a string pointer,
              * hopefully leading to more robust code for when resource bundles
@@ -1604,7 +1604,7 @@ ures_getUTF8String(const UResourceBundle *resB,
                    UBool forceCopy,
                    UErrorCode *status) {
     int32_t length16;
-    const UChar *s16 = ures_getString(resB, &length16, status);
+    const char16_t *s16 = ures_getString(resB, &length16, status);
     return ures_toUTF8String(s16, length16, dest, pLength, forceCopy, status);
 }
 
@@ -1705,9 +1705,9 @@ U_CAPI int32_t U_EXPORT2 ures_getSize(const UResourceBundle *resB) {
   return resB->fSize;
 }
 
-static const UChar* ures_getStringWithAlias(const UResourceBundle *resB, Resource r, int32_t sIndex, int32_t *len, UErrorCode *status) {
+static const char16_t* ures_getStringWithAlias(const UResourceBundle *resB, Resource r, int32_t sIndex, int32_t *len, UErrorCode *status) {
   if(RES_GET_TYPE(r) == URES_ALIAS) {
-    const UChar* result = 0;
+    const char16_t* result = 0;
     UResourceBundle *tempRes = ures_getByIndex(resB, sIndex, nullptr, status);
     result = ures_getString(tempRes, len, status);
     ures_close(tempRes);
@@ -1731,7 +1731,7 @@ U_CAPI UBool U_EXPORT2 ures_hasNext(const UResourceBundle *resB) {
   return (UBool)(resB->fIndex < resB->fSize-1);
 }
 
-U_CAPI const UChar* U_EXPORT2 ures_getNextString(UResourceBundle *resB, int32_t* len, const char ** key, UErrorCode *status) {
+U_CAPI const char16_t* U_EXPORT2 ures_getNextString(UResourceBundle *resB, int32_t* len, const char ** key, UErrorCode *status) {
   Resource r = RES_BOGUS;
   
   if (status==nullptr || U_FAILURE(*status)) {
@@ -1878,7 +1878,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByIndex(const UResourceBundle *resB, i
     return fillIn;
 }
 
-U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB, int32_t indexS, int32_t* len, UErrorCode *status) {
+U_CAPI const char16_t* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB, int32_t indexS, int32_t* len, UErrorCode *status) {
     const char* key = nullptr;
     Resource r = RES_BOGUS;
 
@@ -1935,7 +1935,7 @@ ures_getUTF8StringByIndex(const UResourceBundle *resB,
                           UBool forceCopy,
                           UErrorCode *status) {
     int32_t length16;
-    const UChar *s16 = ures_getStringByIndex(resB, idx, &length16, status);
+    const char16_t *s16 = ures_getStringByIndex(resB, idx, &length16, status);
     return ures_toUTF8String(s16, length16, dest, pLength, forceCopy, status);
 }
 
@@ -2025,14 +2025,14 @@ ures_findSubResource(const UResourceBundle *resB, char* path, UResourceBundle *f
 
   return result;
 }
-U_CAPI const UChar* U_EXPORT2 
+U_CAPI const char16_t* U_EXPORT2
 ures_getStringByKeyWithFallback(const UResourceBundle *resB, 
                                 const char* inKey, 
                                 int32_t* len,
                                 UErrorCode *status) {
 
     UResourceBundle stack;
-    const UChar* retVal = nullptr;
+    const char16_t* retVal = nullptr;
     ures_initStackObject(&stack);
     ures_getByKeyWithFallback(resB, inKey, &stack, status);
     int32_t length;
@@ -2483,7 +2483,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
     return fillIn;
 }
 
-U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, const char* inKey, int32_t* len, UErrorCode *status) {
+U_CAPI const char16_t* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, const char* inKey, int32_t* len, UErrorCode *status) {
     Resource res = RES_BOGUS;
     UResourceDataEntry *dataEntry = nullptr;
     const char* key = inKey;
@@ -2513,7 +2513,7 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
                         return res_getString({resB, key}, &dataEntry->fData, res, len);
                     case URES_ALIAS:
                       {
-                        const UChar* result = 0;
+                        const char16_t* result = 0;
                         UResourceBundle *tempRes = ures_getByKey(resB, inKey, nullptr, status);
                         result = ures_getString(tempRes, len, status);
                         ures_close(tempRes);
@@ -2535,7 +2535,7 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
                 return res_getString({resB, key}, &resB->getResData(), res, len);
             case URES_ALIAS:
               {
-                const UChar* result = 0;
+                const char16_t* result = 0;
                 UResourceBundle *tempRes = ures_getByKey(resB, inKey, nullptr, status);
                 result = ures_getString(tempRes, len, status);
                 ures_close(tempRes);
@@ -2573,7 +2573,7 @@ ures_getUTF8StringByKey(const UResourceBundle *resB,
                         UBool forceCopy,
                         UErrorCode *status) {
     int32_t length16;
-    const UChar *s16 = ures_getStringByKey(resB, key, &length16, status);
+    const char16_t *s16 = ures_getStringByKey(resB, key, &length16, status);
     return ures_toUTF8String(s16, length16, dest, pLength, forceCopy, status);
 }
 
@@ -2805,7 +2805,7 @@ ures_getVersionNumberInternal(const UResourceBundle *resourceBundle)
         int32_t minor_len = 0;
         int32_t len;
 
-        const UChar* minor_version = ures_getStringByKey(resourceBundle, kVersionTag, &minor_len, &status);
+        const char16_t* minor_version = ures_getStringByKey(resourceBundle, kVersionTag, &minor_len, &status);
         
         /* Determine the length of of the final version string.  This is */
         /* the length of the major part + the length of the separator */
@@ -3039,7 +3039,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
         } else if(subStatus == U_ZERO_ERROR) {
             ures_getByKey(res,resName,&bund1, &subStatus);
             if(subStatus == U_ZERO_ERROR) {
-                const UChar *defUstr;
+                const char16_t *defUstr;
                 int32_t defLen;
                 /* look for default item */
 #if defined(URES_TREE_DEBUG)
@@ -3114,7 +3114,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
                     }
                         /* now, recalculate default kw if need be */
                         if(uprv_strlen(defLoc) > uprv_strlen(full)) {
-                          const UChar *defUstr;
+                          const char16_t *defUstr;
                           int32_t defLen;
                           /* look for default item */
 #if defined(URES_TREE_DEBUG)
@@ -3190,7 +3190,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
                         
                         /* now, recalculate default kw if need be */
                         if(uprv_strlen(defLoc) > uprv_strlen(full)) {
-                          const UChar *defUstr;
+                          const char16_t *defUstr;
                           int32_t defLen;
                           /* look for default item */
 #if defined(URES_TREE_DEBUG)
@@ -3451,7 +3451,7 @@ ures_getParentBundle(const UResourceBundle* res){
 
 U_CAPI void U_EXPORT2
 ures_getVersionByKey(const UResourceBundle* res, const char *key, UVersionInfo ver, UErrorCode *status) {
-  const UChar *str;
+  const char16_t *str;
   int32_t len;
   str = ures_getStringByKey(res, key, &len, status);
   if(U_SUCCESS(*status)) {

@@ -205,11 +205,11 @@ class UnitPreferencesSink : public ResourceSink {
                         for (int32_t i = 0; unitPref.getKeyAndValue(i, key, value); ++i) {
                             if (uprv_strcmp(key, "unit") == 0) {
                                 int32_t length;
-                                const UChar *u = value.getString(length, status);
+                                const char16_t *u = value.getString(length, status);
                                 up->unit.appendInvariantChars(u, length, status);
                             } else if (uprv_strcmp(key, "geq") == 0) {
                                 int32_t length;
-                                const UChar *g = value.getString(length, status);
+                                const char16_t *g = value.getString(length, status);
                                 CharString geq;
                                 geq.appendInvariantChars(g, length, status);
                                 DecimalQuantity dq;

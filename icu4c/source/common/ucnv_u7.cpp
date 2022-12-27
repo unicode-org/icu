@@ -212,8 +212,8 @@ _UTF7ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                           UErrorCode *pErrorCode) {
     UConverter *cnv;
     const uint8_t *source, *sourceLimit;
-    UChar *target;
-    const UChar *targetLimit;
+    char16_t *target;
+    const char16_t *targetLimit;
     int32_t *offsets;
 
     uint8_t *bytes;
@@ -320,10 +320,10 @@ unicodeMode:
                      * base64Value==-1 for any legal character except base64 and minus sign, or
                      * base64Value==-3 for illegal characters:
                      * 1. In either case, leave Unicode mode.
-                     * 2.1. If we ended with an incomplete UChar or none after the +, then
+                     * 2.1. If we ended with an incomplete char16_t or none after the +, then
                      *      generate an error for the preceding erroneous sequence and deal with
                      *      the current (possibly illegal) character next time through.
-                     * 2.2. Else the current char comes after a complete UChar, which was already
+                     * 2.2. Else the current char comes after a complete char16_t, which was already
                      *      pushed to the output buf, so:
                      * 2.2.1. If the current char is legal, just save it for processing next time.
                      *        It may be for example, a plus which we need to deal with in direct mode.
@@ -339,14 +339,14 @@ unicodeMode:
                         *pErrorCode=U_ILLEGAL_CHAR_FOUND;
                         break;
                     } else if(bits!=0) {
-                        /* bits are illegally left over, a UChar is incomplete */
+                        /* bits are illegally left over, a char16_t is incomplete */
                         /* don't include current char (legal or illegal) in error seq */
                         --source;
                         --byteIndex;
                         *pErrorCode=U_ILLEGAL_CHAR_FOUND;
                         break;
                     } else {
-                        /* previous UChar was complete */
+                        /* previous char16_t was complete */
                         if(base64Value==-3) {
                             /* current character is illegal, deal with it here */
                             *pErrorCode=U_ILLEGAL_CHAR_FOUND;
@@ -374,7 +374,7 @@ unicodeMode:
                         ++base64Counter;
                         break;
                     case 2:
-                        *target++=(UChar)((bits<<4)|(base64Value>>2));
+                        *target++=(char16_t)((bits<<4)|(base64Value>>2));
                         if(offsets!=nullptr) {
                             *offsets++=sourceIndex;
                             sourceIndex=nextSourceIndex-1;
@@ -385,7 +385,7 @@ unicodeMode:
                         base64Counter=3;
                         break;
                     case 5:
-                        *target++=(UChar)((bits<<2)|(base64Value>>4));
+                        *target++=(char16_t)((bits<<2)|(base64Value>>4));
                         if(offsets!=nullptr) {
                             *offsets++=sourceIndex;
                             sourceIndex=nextSourceIndex-1;
@@ -396,7 +396,7 @@ unicodeMode:
                         base64Counter=6;
                         break;
                     case 7:
-                        *target++=(UChar)((bits<<6)|base64Value);
+                        *target++=(char16_t)((bits<<6)|base64Value);
                         if(offsets!=nullptr) {
                             *offsets++=sourceIndex;
                             sourceIndex=nextSourceIndex;
@@ -421,7 +421,7 @@ unicodeMode:
                     } else {
                         /* absorb the minus and leave the Unicode Mode */
                         if(bits!=0) {
-                            /* bits are illegally left over, a UChar is incomplete */
+                            /* bits are illegally left over, a char16_t is incomplete */
                             *pErrorCode=U_ILLEGAL_CHAR_FOUND;
                             break;
                         }
@@ -462,12 +462,12 @@ static void U_CALLCONV
 _UTF7FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                             UErrorCode *pErrorCode) {
     UConverter *cnv;
-    const UChar *source, *sourceLimit;
+    const char16_t *source, *sourceLimit;
     uint8_t *target, *targetLimit;
     int32_t *offsets;
 
     int32_t length, targetCapacity, sourceIndex;
-    UChar c;
+    char16_t c;
 
     /* UTF-7 state */
     const UBool *encodeDirectly;
@@ -896,8 +896,8 @@ _IMAPToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                           UErrorCode *pErrorCode) {
     UConverter *cnv;
     const uint8_t *source, *sourceLimit;
-    UChar *target;
-    const UChar *targetLimit;
+    char16_t *target;
+    const char16_t *targetLimit;
     int32_t *offsets;
 
     uint8_t *bytes;
@@ -914,7 +914,7 @@ _IMAPToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
 
     int32_t sourceIndex, nextSourceIndex;
 
-    UChar c;
+    char16_t c;
     uint8_t b;
 
     /* set up the local pointers */
@@ -1021,7 +1021,7 @@ unicodeMode:
                         ++base64Counter;
                         break;
                     case 2:
-                        c=(UChar)((bits<<4)|(base64Value>>2));
+                        c=(char16_t)((bits<<4)|(base64Value>>2));
                         if(isLegalIMAP(c)) {
                             /* illegal */
                             inDirectMode=true;
@@ -1039,7 +1039,7 @@ unicodeMode:
                         base64Counter=3;
                         break;
                     case 5:
-                        c=(UChar)((bits<<2)|(base64Value>>4));
+                        c=(char16_t)((bits<<2)|(base64Value>>4));
                         if(isLegalIMAP(c)) {
                             /* illegal */
                             inDirectMode=true;
@@ -1057,7 +1057,7 @@ unicodeMode:
                         base64Counter=6;
                         break;
                     case 7:
-                        c=(UChar)((bits<<6)|base64Value);
+                        c=(char16_t)((bits<<6)|base64Value);
                         if(isLegalIMAP(c)) {
                             /* illegal */
                             inDirectMode=true;
@@ -1089,7 +1089,7 @@ unicodeMode:
                     } else {
                         /* absorb the minus and leave the Unicode Mode */
                         if(bits!=0 || (base64Counter!=0 && base64Counter!=3 && base64Counter!=6)) {
-                            /* bits are illegally left over, a UChar is incomplete */
+                            /* bits are illegally left over, a char16_t is incomplete */
                             /* base64Counter other than 0, 3, 6 means non-minimal zero-padding, also illegal */
                             *pErrorCode=U_ILLEGAL_CHAR_FOUND;
                             break;
@@ -1163,12 +1163,12 @@ static void U_CALLCONV
 _IMAPFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                             UErrorCode *pErrorCode) {
     UConverter *cnv;
-    const UChar *source, *sourceLimit;
+    const char16_t *source, *sourceLimit;
     uint8_t *target, *targetLimit;
     int32_t *offsets;
 
     int32_t length, targetCapacity, sourceIndex;
-    UChar c;
+    char16_t c;
     uint8_t b;
 
     /* UTF-7 state */

@@ -35,10 +35,10 @@
 U_CAPI int32_t U_EXPORT2
 ucnv_getDisplayName(const UConverter *cnv,
                     const char *displayLocale,
-                    UChar *displayName, int32_t displayNameCapacity,
+                    char16_t *displayName, int32_t displayNameCapacity,
                     UErrorCode *pErrorCode) {
     UResourceBundle *rb;
-    const UChar *name;
+    const char16_t *name;
     int32_t length;
     UErrorCode localStatus = U_ZERO_ERROR;
 

@@ -19,12 +19,12 @@
 class ICUBreakFunction : public UPerfFunction {
 protected:
   BreakIterator *m_brkIt_;
-  const UChar *m_file_;
+  const char16_t *m_file_;
   int32_t m_fileLen_;
   int32_t m_noBreaks_;
   UErrorCode m_status_;
 public:
-  ICUBreakFunction(const char *locale, const char *mode, const UChar *file, int32_t file_len) :
+  ICUBreakFunction(const char *locale, const char *mode, const char16_t *file, int32_t file_len) :
       m_brkIt_(nullptr),
       m_file_(file),
       m_fileLen_(file_len),
@@ -60,7 +60,7 @@ public:
 
 class ICUIsBound : public ICUBreakFunction {
 public:
-  ICUIsBound(const char *locale, const char *mode, const UChar *file, int32_t file_len) :
+  ICUIsBound(const char *locale, const char *mode, const char16_t *file, int32_t file_len) :
       ICUBreakFunction(locale, mode, file, file_len)
   {
     m_noBreaks_ = 0;
@@ -87,7 +87,7 @@ public:
 
 class ICUForward : public ICUBreakFunction {
 public:
-  ICUForward(const char *locale, const char *mode, const UChar *file, int32_t file_len) :
+  ICUForward(const char *locale, const char *mode, const char16_t *file, int32_t file_len) :
       ICUBreakFunction(locale, mode, file, file_len)
   {
     m_noBreaks_ = 0;
@@ -115,7 +115,7 @@ public:
 class BreakIteratorPerformanceTest : public UPerfTest {
 private:
   const char* m_mode_;
-  const UChar* m_file_;
+  const char16_t* m_file_;
   int32_t m_fileLen_;
 
 public:

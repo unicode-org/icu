@@ -74,32 +74,32 @@ static inline void debugout(UnicodeString s) {
 
 // If no number pattern can be located for a locale, this is the last
 // resort. The patterns are same as the ones in root locale.
-static const UChar gLastResortDecimalPat[] = {
+static const char16_t gLastResortDecimalPat[] = {
     0x23, 0x2C, 0x23, 0x23, 0x30, 0x2E, 0x23, 0x23, 0x23, 0 /* "#,##0.###" */
 };
-static const UChar gLastResortCurrencyPat[] = {
+static const char16_t gLastResortCurrencyPat[] = {
     0xA4, 0xA0, 0x23, 0x2C, 0x23, 0x23, 0x30, 0x2E, 0x30, 0x30, 0 /* "\u00A4\u00A0#,##0.00" */
 };
-static const UChar gLastResortPercentPat[] = {
+static const char16_t gLastResortPercentPat[] = {
     0x23, 0x2C, 0x23, 0x23, 0x30, 0x25, 0 /* "#,##0%" */
 };
-static const UChar gLastResortScientificPat[] = {
+static const char16_t gLastResortScientificPat[] = {
     0x23, 0x45, 0x30, 0 /* "#E0" */
 };
-static const UChar gLastResortIsoCurrencyPat[] = {
+static const char16_t gLastResortIsoCurrencyPat[] = {
     0xA4, 0xA4, 0xA0, 0x23, 0x2C, 0x23, 0x23, 0x30, 0x2E, 0x30, 0x30, 0  /* "\u00A4\u00A4\u00A0#,##0.00" */
 };
-static const UChar gLastResortPluralCurrencyPat[] = {
+static const char16_t gLastResortPluralCurrencyPat[] = {
     0x23, 0x2C, 0x23, 0x23, 0x30, 0x2E, 0x23, 0x23, 0x23, 0x20, 0xA4, 0xA4, 0xA4, 0 /* "#,##0.### \u00A4\u00A4\u00A4*/
 };
-static const UChar gLastResortAccountingCurrencyPat[] =  {
+static const char16_t gLastResortAccountingCurrencyPat[] =  {
     0xA4, 0xA0, 0x23, 0x2C, 0x23, 0x23, 0x30, 0x2E, 0x30, 0x30, 0 /* "\u00A4\u00A0#,##0.00" */
 };
 
-static const UChar gSingleCurrencySign[] = {0xA4, 0};
-static const UChar gDoubleCurrencySign[] = {0xA4, 0xA4, 0};
+static const char16_t gSingleCurrencySign[] = {0xA4, 0};
+static const char16_t gDoubleCurrencySign[] = {0xA4, 0xA4, 0};
 
-static const UChar gSlash = 0x2f;
+static const char16_t gSlash = 0x2f;
 
 // If the maximum base 10 exponent were 4, then the largest number would
 // be 99,999 which has 5 digits.
@@ -108,7 +108,7 @@ static const UChar gSlash = 0x2f;
 const int32_t icu::NumberFormat::gDefaultMaxIntegerDigits = 2000000000;
 const int32_t icu::NumberFormat::gDefaultMinIntegerDigits = 127;
 
-static const UChar * const gLastResortNumberPatterns[UNUM_FORMAT_STYLE_COUNT] = {
+static const char16_t * const gLastResortNumberPatterns[UNUM_FORMAT_STYLE_COUNT] = {
     nullptr,  // UNUM_PATTERN_DECIMAL
     gLastResortDecimalPat,  // UNUM_DECIMAL
     gLastResortCurrencyPat,  // UNUM_CURRENCY
@@ -474,7 +474,7 @@ NumberFormat::format(StringPiece decimalNum,
 */
 class ArgExtractor {
   const Formattable* num;
-  UChar save[4];
+  char16_t save[4];
   UBool fWasCurrency;
 
  public:
@@ -482,7 +482,7 @@ class ArgExtractor {
   ~ArgExtractor();
 
   const Formattable* number(void) const;
-  const UChar *iso(void) const;
+  const char16_t *iso(void) const;
   UBool wasCurrency(void) const;
 };
 
@@ -496,7 +496,7 @@ ArgExtractor::wasCurrency(void) const {
   return fWasCurrency;
 }
 
-inline const UChar *
+inline const char16_t *
 ArgExtractor::iso(void) const {
   return save;
 }
@@ -509,7 +509,7 @@ ArgExtractor::ArgExtractor(const NumberFormat& /*nf*/, const Formattable& obj, U
     if (o != nullptr && (amt = dynamic_cast<const CurrencyAmount*>(o)) != nullptr) {
         // getISOCurrency() returns a pointer to internal storage, so we
         // copy it to retain it across the call to setCurrency().
-        //const UChar* curr = amt->getISOCurrency();
+        //const char16_t* curr = amt->getISOCurrency();
         u_strcpy(save, amt->getISOCurrency());
         num = &amt->getNumber();
         fWasCurrency=true;
@@ -564,7 +564,7 @@ NumberFormat::format(const Formattable& obj,
 
     ArgExtractor arg(*this, obj, status);
     const Formattable *n = arg.number();
-    const UChar *iso = arg.iso();
+    const char16_t *iso = arg.iso();
 
     if(arg.wasCurrency() && u_strcmp(iso, getCurrency())) {
       // trying to format a different currency.
@@ -619,7 +619,7 @@ NumberFormat::format(const Formattable& obj,
 
     ArgExtractor arg(*this, obj, status);
     const Formattable *n = arg.number();
-    const UChar *iso = arg.iso();
+    const char16_t *iso = arg.iso();
 
     if(arg.wasCurrency() && u_strcmp(iso, getCurrency())) {
       // trying to format a different currency.
@@ -733,7 +733,7 @@ CurrencyAmount* NumberFormat::parseCurrency(const UnicodeString& text,
     int32_t start = pos.getIndex();
     parse(text, parseResult, pos);
     if (pos.getIndex() != start) {
-        UChar curr[4];
+        char16_t curr[4];
         UErrorCode ec = U_ZERO_ERROR;
         getEffectiveCurrency(curr, ec);
         if (U_SUCCESS(ec)) {
@@ -1177,7 +1177,7 @@ NumberFormat::setMinimumFractionDigits(int32_t newValue)
 
 // -------------------------------------
 
-void NumberFormat::setCurrency(const UChar* theCurrency, UErrorCode& ec) {
+void NumberFormat::setCurrency(const char16_t* theCurrency, UErrorCode& ec) {
     if (U_FAILURE(ec)) {
         return;
     }
@@ -1193,8 +1193,8 @@ const char16_t* NumberFormat::getCurrency() const {
     return fCurrency;
 }
 
-void NumberFormat::getEffectiveCurrency(UChar* result, UErrorCode& ec) const {
-    const UChar* c = getCurrency();
+void NumberFormat::getEffectiveCurrency(char16_t* result, UErrorCode& ec) const {
+    const char16_t* c = getCurrency();
     if (*c != 0) {
         u_strncpy(result, c, 3);
         result[3] = 0;
@@ -1422,7 +1422,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
     }
     if(style==UNUM_CURRENCY || style == UNUM_CURRENCY_ISO || style == UNUM_CURRENCY_ACCOUNTING 
         || style == UNUM_CASH_CURRENCY || style == UNUM_CURRENCY_STANDARD){
-        const UChar* currPattern = symbolsToAdopt->getCurrencyPattern();
+        const char16_t* currPattern = symbolsToAdopt->getCurrencyPattern();
         if(currPattern!=nullptr){
             pattern.setTo(currPattern, u_strlen(currPattern));
         }

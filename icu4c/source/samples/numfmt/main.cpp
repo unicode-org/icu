@@ -145,7 +145,7 @@ setNumberFormatCurrency_2_4(NumberFormat &nf, const char *currency, UErrorCode &
         double roundingIncrement;
 
         // Unicode string with the desired currency display symbol or name
-        UChar symbol[16];
+        char16_t symbol[16];
     } currencyMap[]={
         { "USD", 2, 0.0, { 0x24, 0 } },
         { "GBP", 2, 0.0, { 0xa3, 0 } },
@@ -201,7 +201,7 @@ setNumberFormatCurrency_2_6(NumberFormat &nf, const char *currency, UErrorCode &
     }
 
     // invariant-character conversion to UChars (see utypes.h and putil.h)
-    UChar uCurrency[4];
+    char16_t uCurrency[4];
     u_charsToUChars(currency, uCurrency, 4);
 
     // set the currency
@@ -269,7 +269,7 @@ showCurrencyFormatting(UBool useICU26API) {
             // output=formatted currency value
             output.remove();
             nf->format(12345678.93, output);
-            output+=(UChar)0x0a; // '\n'
+            output+=(char16_t)0x0a; // '\n'
             uprintf(output);
         }
     }

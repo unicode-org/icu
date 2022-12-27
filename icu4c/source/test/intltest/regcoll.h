@@ -242,7 +242,7 @@ private:
     // Internal utilities
     //
     void compareArray(Collator &c,
-                    const UChar tests[][CollationRegressionTest::MAX_TOKEN_LEN],
+                    const char16_t tests[][CollationRegressionTest::MAX_TOKEN_LEN],
                     int32_t testCount);
 
     void assertEqual(CollationElementIterator &i1, CollationElementIterator &i2);

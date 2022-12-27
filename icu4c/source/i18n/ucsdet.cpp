@@ -172,7 +172,7 @@ ucsdet_enableInputFilter(UCharsetDetector *ucsd, UBool filter)
 
 U_CAPI  int32_t U_EXPORT2
 ucsdet_getUChars(const UCharsetMatch *ucsm,
-                 UChar *buf, int32_t cap, UErrorCode *status)
+                 char16_t *buf, int32_t cap, UErrorCode *status)
 {
     if(U_FAILURE(*status)) {
         return 0;

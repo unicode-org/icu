@@ -587,7 +587,7 @@ UnicodeString RegexPattern::pattern() const {
         UnicodeString result;
 
         status = U_ZERO_ERROR;
-        UChar *resultChars = result.getBuffer(len16);
+        char16_t *resultChars = result.getBuffer(len16);
         utext_extract(fPattern, 0, nativeLen, resultChars, len16, &status); // unterminated warning
         result.releaseBuffer(len16);
 

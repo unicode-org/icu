@@ -96,20 +96,20 @@ StringPerformanceTest::StringPerformanceTest(int32_t argc, const char *argv[],
         filelines_ = new ULine[numLines];
         for (int i =0; i < numLines; i++) {
             len = filelines[i].len;
-            filelines_[i].name  = new UChar[len];
+            filelines_[i].name  = new char16_t[len];
             filelines_[i].len   = len;
             memcpy(filelines_[i].name, filelines[i].name, len * U_SIZEOF_UCHAR);
         }
 
     }else if(bulk_mode){
         int32_t srcLen = 0;
-        const UChar* src = getBuffer(srcLen,status);
+        const char16_t* src = getBuffer(srcLen,status);
         if(U_FAILURE(status)){
             fprintf(stderr, "FAILED to read buffer from file and create UPerfTest object. Error: %s\n", u_errorName(status));
             return;
         }
 
-        StrBuffer = new UChar[srcLen];
+        StrBuffer = new char16_t[srcLen];
         StrBufferLen = srcLen;
         memcpy(StrBuffer, src, srcLen * U_SIZEOF_UCHAR);
 

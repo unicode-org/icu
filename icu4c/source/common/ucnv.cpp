@@ -48,7 +48,7 @@
 
 typedef struct UAmbiguousConverter {
     const char *name;
-    const UChar variant5c;
+    const char16_t variant5c;
 } UAmbiguousConverter;
 
 static const UAmbiguousConverter ambiguousConverters[]={
@@ -89,9 +89,9 @@ ucnv_openPackage   (const char *packageName, const char *converterName, UErrorCo
     return ucnv_createConverterFromPackage(packageName, converterName,  err);
 }
 
-/*Extracts the UChar* to a char* and calls through createConverter */
+/*Extracts the char16_t* to a char* and calls through createConverter */
 U_CAPI UConverter*   U_EXPORT2
-ucnv_openU (const UChar * name,
+ucnv_openU (const char16_t * name,
                          UErrorCode * err)
 {
     char asciiName[UCNV_MAX_CONVERTER_NAME_LENGTH];
@@ -479,7 +479,7 @@ ucnv_setSubstChars (UConverter * converter,
 
 U_CAPI void U_EXPORT2
 ucnv_setSubstString(UConverter *cnv,
-                    const UChar *s,
+                    const char16_t *s,
                     int32_t length,
                     UErrorCode *err) {
     alignas(UConverter) char cloneBuffer[U_CNV_SAFECLONE_BUFFERSIZE];
@@ -517,7 +517,7 @@ ucnv_setSubstString(UConverter *cnv,
         if (length > UCNV_ERROR_BUFFER_LENGTH) {
             /*
              * Should not occur. The converter should output at least one byte
-             * per UChar, which means that ucnv_fromUChars() should catch all
+             * per char16_t, which means that ucnv_fromUChars() should catch all
              * overflows.
              */
             *err = U_BUFFER_OVERFLOW_ERROR;
@@ -833,7 +833,7 @@ static void
 _fromUnicodeWithCallback(UConverterFromUnicodeArgs *pArgs, UErrorCode *err) {
     UConverterFromUnicode fromUnicode;
     UConverter *cnv;
-    const UChar *s;
+    const char16_t *s;
     char *t;
     int32_t *offsets;
     int32_t sourceIndex;
@@ -841,8 +841,8 @@ _fromUnicodeWithCallback(UConverterFromUnicodeArgs *pArgs, UErrorCode *err) {
     UBool converterSawEndOfInput, calledCallback;
 
     /* variables for m:n conversion */
-    UChar replay[UCNV_EXT_MAX_UCHARS];
-    const UChar *realSource, *realSourceLimit;
+    char16_t replay[UCNV_EXT_MAX_UCHARS];
+    const char16_t *realSource, *realSourceLimit;
     int32_t realSourceIndex;
     UBool realFlush;
 
@@ -1176,12 +1176,12 @@ ucnv_outputOverflowFromUnicode(UConverter *cnv,
 U_CAPI void U_EXPORT2
 ucnv_fromUnicode(UConverter *cnv,
                  char **target, const char *targetLimit,
-                 const UChar **source, const UChar *sourceLimit,
+                 const char16_t **source, const char16_t *sourceLimit,
                  int32_t *offsets,
                  UBool flush,
                  UErrorCode *err) {
     UConverterFromUnicodeArgs args;
-    const UChar *s;
+    const char16_t *s;
     char *t;
 
     /* check parameters */
@@ -1200,10 +1200,10 @@ ucnv_fromUnicode(UConverter *cnv,
     if ((const void *)U_MAX_PTR(sourceLimit) == (const void *)sourceLimit) {
         /*
         Prevent code from going into an infinite loop in case we do hit this
-        limit. The limit pointer is expected to be on a UChar * boundary.
+        limit. The limit pointer is expected to be on a char16_t * boundary.
         This also prevents the next argument check from failing.
         */
-        sourceLimit = (const UChar *)(((const char *)sourceLimit) - 1);
+        sourceLimit = (const char16_t *)(((const char *)sourceLimit) - 1);
     }
 
     /*
@@ -1222,8 +1222,8 @@ ucnv_fromUnicode(UConverter *cnv,
      * consumed or the target filled (unless an error occurs).
      * An adjustment would be targetLimit=t+0x7fffffff; for example.
      *
-     * 3) Make sure that the user didn't incorrectly cast a UChar * pointer
-     * to a char * pointer and provide an incomplete UChar code unit.
+     * 3) Make sure that the user didn't incorrectly cast a char16_t * pointer
+     * to a char * pointer and provide an incomplete char16_t code unit.
      */
     if (sourceLimit<s || targetLimit<t ||
         ((size_t)(sourceLimit-s)>(size_t)0x3fffffff && sourceLimit>s) ||
@@ -1279,7 +1279,7 @@ _toUnicodeWithCallback(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
     UConverterToUnicode toUnicode;
     UConverter *cnv;
     const char *s;
-    UChar *t;
+    char16_t *t;
     int32_t *offsets;
     int32_t sourceIndex;
     int32_t errorInputLength;
@@ -1568,11 +1568,11 @@ _toUnicodeWithCallback(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
  */
 static UBool
 ucnv_outputOverflowToUnicode(UConverter *cnv,
-                             UChar **target, const UChar *targetLimit,
+                             char16_t **target, const char16_t *targetLimit,
                              int32_t **pOffsets,
                              UErrorCode *err) {
     int32_t *offsets;
-    UChar *overflow, *t;
+    char16_t *overflow, *t;
     int32_t i, length;
 
     t=*target;
@@ -1621,14 +1621,14 @@ ucnv_outputOverflowToUnicode(UConverter *cnv,
 
 U_CAPI void U_EXPORT2
 ucnv_toUnicode(UConverter *cnv,
-               UChar **target, const UChar *targetLimit,
+               char16_t **target, const char16_t *targetLimit,
                const char **source, const char *sourceLimit,
                int32_t *offsets,
                UBool flush,
                UErrorCode *err) {
     UConverterToUnicodeArgs args;
     const char *s;
-    UChar *t;
+    char16_t *t;
 
     /* check parameters */
     if(err==nullptr || U_FAILURE(*err)) {
@@ -1646,10 +1646,10 @@ ucnv_toUnicode(UConverter *cnv,
     if ((const void *)U_MAX_PTR(targetLimit) == (const void *)targetLimit) {
         /*
         Prevent code from going into an infinite loop in case we do hit this
-        limit. The limit pointer is expected to be on a UChar * boundary.
+        limit. The limit pointer is expected to be on a char16_t * boundary.
         This also prevents the next argument check from failing.
         */
-        targetLimit = (const UChar *)(((const char *)targetLimit) - 1);
+        targetLimit = (const char16_t *)(((const char *)targetLimit) - 1);
     }
 
     /*
@@ -1668,8 +1668,8 @@ ucnv_toUnicode(UConverter *cnv,
      * consumed or the target filled (unless an error occurs).
      * An adjustment would be sourceLimit=t+0x7fffffff; for example.
      *
-     * 3) Make sure that the user didn't incorrectly cast a UChar * pointer
-     * to a char * pointer and provide an incomplete UChar code unit.
+     * 3) Make sure that the user didn't incorrectly cast a char16_t * pointer
+     * to a char * pointer and provide an incomplete char16_t code unit.
      */
     if (sourceLimit<s || targetLimit<t ||
         ((size_t)(sourceLimit-s)>(size_t)0x7fffffff && sourceLimit>s) ||
@@ -1723,9 +1723,9 @@ ucnv_toUnicode(UConverter *cnv,
 U_CAPI int32_t U_EXPORT2
 ucnv_fromUChars(UConverter *cnv,
                 char *dest, int32_t destCapacity,
-                const UChar *src, int32_t srcLength,
+                const char16_t *src, int32_t srcLength,
                 UErrorCode *pErrorCode) {
-    const UChar *srcLimit;
+    const char16_t *srcLimit;
     char *originalDest, *destLimit;
     int32_t destLength;
 
@@ -1778,11 +1778,11 @@ ucnv_fromUChars(UConverter *cnv,
 
 U_CAPI int32_t U_EXPORT2
 ucnv_toUChars(UConverter *cnv,
-              UChar *dest, int32_t destCapacity,
+              char16_t *dest, int32_t destCapacity,
               const char *src, int32_t srcLength,
               UErrorCode *pErrorCode) {
     const char *srcLimit;
-    UChar *originalDest, *destLimit;
+    char16_t *originalDest, *destLimit;
     int32_t destLength;
 
     /* check arguments */
@@ -1816,7 +1816,7 @@ ucnv_toUChars(UConverter *cnv,
         /* if an overflow occurs, then get the preflighting length */
         if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR)
         {
-            UChar buffer[1024];
+            char16_t buffer[1024];
 
             destLimit=buffer+UPRV_LENGTHOF(buffer);
             do {
@@ -1841,7 +1841,7 @@ ucnv_getNextUChar(UConverter *cnv,
                   const char **source, const char *sourceLimit,
                   UErrorCode *err) {
     UConverterToUnicodeArgs args;
-    UChar buffer[U16_MAX_LENGTH];
+    char16_t buffer[U16_MAX_LENGTH];
     const char *s;
     UChar32 c;
     int32_t i, length;
@@ -1883,7 +1883,7 @@ ucnv_getNextUChar(UConverter *cnv,
 
     /* flush the target overflow buffer */
     if(cnv->UCharErrorBufferLength>0) {
-        UChar *overflow;
+        char16_t *overflow;
 
         overflow=cnv->UCharErrorBuffer;
         i=0;
@@ -1949,7 +1949,7 @@ ucnv_getNextUChar(UConverter *cnv,
             }
         }
 
-        /* convert to one UChar in buffer[0], or handle getNextUChar() errors */
+        /* convert to one char16_t in buffer[0], or handle getNextUChar() errors */
         _toUnicodeWithCallback(&args, err);
 
         if(*err==U_BUFFER_OVERFLOW_ERROR) {
@@ -1960,7 +1960,7 @@ ucnv_getNextUChar(UConverter *cnv,
         length=(int32_t)(args.target-buffer);
     } else {
         /* write the lead surrogate from the overflow buffer */
-        buffer[0]=(UChar)c;
+        buffer[0]=(char16_t)c;
         args.target=buffer+1;
         i=0;
         length=1;
@@ -1982,7 +1982,7 @@ ucnv_getNextUChar(UConverter *cnv,
             /* consume c=buffer[0], done */
         } else {
             /* got a lead surrogate, see if a trail surrogate follows */
-            UChar c2;
+            char16_t c2;
 
             if(cnv->UCharErrorBufferLength>0) {
                 /* got overflow output from the conversion */
@@ -2045,13 +2045,13 @@ U_CAPI void U_EXPORT2
 ucnv_convertEx(UConverter *targetCnv, UConverter *sourceCnv,
                char **target, const char *targetLimit,
                const char **source, const char *sourceLimit,
-               UChar *pivotStart, UChar **pivotSource,
-               UChar **pivotTarget, const UChar *pivotLimit,
+               char16_t *pivotStart, char16_t **pivotSource,
+               char16_t **pivotTarget, const char16_t *pivotLimit,
                UBool reset, UBool flush,
                UErrorCode *pErrorCode) {
-    UChar pivotBuffer[CHUNK_SIZE];
-    const UChar *myPivotSource;
-    UChar *myPivotTarget;
+    char16_t pivotBuffer[CHUNK_SIZE];
+    const char16_t *myPivotSource;
+    char16_t *myPivotTarget;
     const char *s;
     char *t;
 
@@ -2100,7 +2100,7 @@ ucnv_convertEx(UConverter *targetCnv, UConverter *sourceCnv,
 
         /* use the stack pivot buffer */
         myPivotSource=myPivotTarget=pivotStart=pivotBuffer;
-        pivotSource=(UChar **)&myPivotSource;
+        pivotSource=(char16_t **)&myPivotSource;
         pivotTarget=&myPivotTarget;
         pivotLimit=pivotBuffer+CHUNK_SIZE;
     } else if(  pivotStart>=pivotLimit ||
@@ -2229,7 +2229,7 @@ ucnv_convertEx(UConverter *targetCnv, UConverter *sourceCnv,
             _fromUnicodeWithCallback(&fromUArgs, pErrorCode);
             if(U_FAILURE(*pErrorCode)) {
                 /* target overflow, or conversion error */
-                *pivotSource=(UChar *)fromUArgs.source;
+                *pivotSource=(char16_t *)fromUArgs.source;
                 break;
             }
 
@@ -2405,8 +2405,8 @@ ucnv_internalConvert(UConverter *outConverter, UConverter *inConverter,
                      char *target, int32_t targetCapacity,
                      const char *source, int32_t sourceLength,
                      UErrorCode *pErrorCode) {
-    UChar pivotBuffer[CHUNK_SIZE];
-    UChar *pivot, *pivot2;
+    char16_t pivotBuffer[CHUNK_SIZE];
+    char16_t *pivot, *pivot2;
 
     char *myTarget;
     const char *sourceLimit;
@@ -2660,11 +2660,11 @@ static const UAmbiguousConverter *ucnv_getAmbiguous(const UConverter *cnv)
 
 U_CAPI void  U_EXPORT2
 ucnv_fixFileSeparator(const UConverter *cnv, 
-                      UChar* source, 
+                      char16_t* source,
                       int32_t sourceLength) {
     const UAmbiguousConverter *a;
     int32_t i;
-    UChar variant5c;
+    char16_t variant5c;
 
     if(cnv==nullptr || source==nullptr || sourceLength<=0 || (a=ucnv_getAmbiguous(cnv))==nullptr)
     {
@@ -2724,7 +2724,7 @@ ucnv_getInvalidChars (const UConverter * converter,
 
 U_CAPI void  U_EXPORT2
 ucnv_getInvalidUChars (const UConverter * converter,
-                       UChar *errChars,
+                       char16_t *errChars,
                        int8_t * len,
                        UErrorCode * err)
 {

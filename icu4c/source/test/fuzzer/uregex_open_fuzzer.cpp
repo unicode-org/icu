@@ -15,8 +15,8 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   UParseError pe = { 0 };
   UErrorCode status = U_ZERO_ERROR;
 
-  URegularExpression* re = uregex_open(reinterpret_cast<const UChar*>(data),
-                                       static_cast<int>(size) / sizeof(UChar),
+  URegularExpression* re = uregex_open(reinterpret_cast<const char16_t*>(data),
+                                       static_cast<int>(size) / sizeof(char16_t),
                                        0, &pe, &status);
 
   if (re)

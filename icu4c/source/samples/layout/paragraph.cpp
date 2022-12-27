@@ -264,7 +264,7 @@ Paragraph *Paragraph::paragraphFactory(const char *fileName, const LEFontInstanc
 {
     LEErrorCode status  = LE_NO_ERROR;
     le_int32 charCount;
-    const UChar *text = UnicodeReader::readFile(fileName, guiSupport, charCount);
+    const char16_t *text = UnicodeReader::readFile(fileName, guiSupport, charCount);
     Paragraph *result = nullptr;
 
     if (text == nullptr) {

@@ -1331,7 +1331,7 @@ void DateIntervalFormatTest::testContext() {
         const char * skeleton;
         UDisplayContext context;
         const UDate  deltaDate;
-        const UChar* expectResult;
+        const char16_t* expectResult;
     } DateIntervalContextItem;
     static const DateIntervalContextItem testItems[] = {
         { "cs",    "MMMEd",    CAP_NONE,  60.0*_DAY,  u"po 27. 9. – pá 26. 11." },

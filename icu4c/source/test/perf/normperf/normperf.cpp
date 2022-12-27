@@ -74,7 +74,7 @@ UPerfFunction* NormalizerPerformanceTest::runIndexedTest(int32_t index, UBool ex
 
 }
 
-void NormalizerPerformanceTest::normalizeInput(ULine* dest,const UChar* src ,int32_t srcLen,UNormalizationMode mode, int32_t options){
+void NormalizerPerformanceTest::normalizeInput(ULine* dest,const char16_t* src ,int32_t srcLen,UNormalizationMode mode, int32_t options){
     int32_t reqLen = 0;
     UErrorCode status = U_ZERO_ERROR;
     for(;;){
@@ -82,7 +82,7 @@ void NormalizerPerformanceTest::normalizeInput(ULine* dest,const UChar* src ,int
         reqLen=unorm_normalize(src,srcLen,mode, options,nullptr,0,&status);
         if(status==U_BUFFER_OVERFLOW_ERROR){
             status=U_ZERO_ERROR;
-            dest->name = new UChar[reqLen+1];
+            dest->name = new char16_t[reqLen+1];
             reqLen= unorm_normalize(src,srcLen,mode, options,dest->name,reqLen+1,&status);
             dest->len=reqLen;
             break;
@@ -91,16 +91,16 @@ void NormalizerPerformanceTest::normalizeInput(ULine* dest,const UChar* src ,int
         }
     }
 }
-UChar* NormalizerPerformanceTest::normalizeInput(int32_t& len, const UChar* src ,int32_t srcLen,UNormalizationMode mode, int32_t options){
+char16_t* NormalizerPerformanceTest::normalizeInput(int32_t& len, const char16_t* src ,int32_t srcLen,UNormalizationMode mode, int32_t options){
     int32_t reqLen = 0;
     UErrorCode status = U_ZERO_ERROR;
-    UChar* dest = nullptr;
+    char16_t* dest = nullptr;
     for(;;){
         /* pure pre-flight */
         reqLen=unorm_normalize(src,srcLen,mode, options,nullptr,0,&status);
         if(status==U_BUFFER_OVERFLOW_ERROR){
             status=U_ZERO_ERROR;
-            dest = new UChar[reqLen+1];
+            dest = new char16_t[reqLen+1];
             reqLen= unorm_normalize(src,srcLen,mode, options,dest,reqLen+1,&status);
             len=reqLen;
             break;
@@ -156,7 +156,7 @@ NormalizerPerformanceTest::NormalizerPerformanceTest(int32_t argc, const char* a
         }
     }else if(bulk_mode){
         int32_t srcLen = 0;
-        const UChar* src = getBuffer(srcLen,status);
+        const char16_t* src = getBuffer(srcLen,status);
         NFDBufferLen = 0;
         NFCBufferLen = 0;
 

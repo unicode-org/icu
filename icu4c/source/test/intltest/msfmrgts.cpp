@@ -640,9 +640,9 @@ void MessageFormatRegressionTest::Test4094906()
 {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString pattern("-");
-    pattern += (UChar) 0x221E;
+    pattern += (char16_t) 0x221E;
     pattern += "<are negative|0<are no or fraction|1#is one|1<is 1+|";
-    pattern += (UChar) 0x221E;
+    pattern += (char16_t) 0x221E;
     pattern += "<are many.";
 
     ChoiceFormat *fmt = new ChoiceFormat(pattern, status);

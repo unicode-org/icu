@@ -53,7 +53,7 @@ void usageAndDie(int retCode) {
 }
 
 /*U_CAPI void U_EXPORT2*/
-static void _versionFromUString(UVersionInfo versionArray, const UChar *versionString) {
+static void _versionFromUString(UVersionInfo versionArray, const char16_t *versionString) {
     if(versionArray==nullptr) {
         return;
     }
@@ -73,7 +73,7 @@ static void _getCLDRVersionDirect(UVersionInfo versionArray, UErrorCode *status)
 //        fprintf(stderr, "Err: could not open res_index, %s\n", u_errorName(status));
 //        fflush(stderr);
 //    } else {
-        const UChar *cldrver;
+        const char16_t *cldrver;
         int32_t len;
         cldrver = ures_getStringByKey(resindx, "cldrVersion", &len, status);
         if(!U_FAILURE(*status)) {
@@ -99,7 +99,7 @@ static void _getCLDRVersionOld(UVersionInfo versionArray, UErrorCode *status) {
 //        fprintf(stderr, "Err: could not open res_index, %s\n", u_errorName(status));
 //        fflush(stderr);
 //    } else {
-        const UChar *cldrver;
+        const char16_t *cldrver;
         int32_t len;
         cldrver = ures_getStringByKey(resindx, "CLDRVersion", &len, status);
         if(!U_FAILURE(*status)) {
@@ -219,17 +219,17 @@ UDateFormatSymbolType scanArray[] = {
 
 int *starts = nullptr;
 
-UChar ***rootdata = nullptr;
+char16_t ***rootdata = nullptr;
 
 void initroot(UErrorCode *status) {
   UDateFormat *fmt;
   fmt = udat_open(UDAT_DEFAULT, UDAT_DEFAULT, "root", nullptr, -1,nullptr,0, status);
-  rootdata = (UChar***)malloc((sizeof(scanArray)/sizeof(scanArray[0]))*sizeof(rootdata[0]));
+  rootdata = (char16_t***)malloc((sizeof(scanArray)/sizeof(scanArray[0]))*sizeof(rootdata[0]));
   starts = (int*)malloc((sizeof(scanArray)/sizeof(scanArray[0]))*sizeof(starts[0]));
   for(int i=0;U_SUCCESS(*status)&&i<sizeof(scanArray)/sizeof(scanArray[0]);i++) {
     int thisCount = udat_countSymbols(fmt, scanArray[i]);
     rootdata[i]=0;
-    rootdata[i]=(UChar**)malloc(thisCount*sizeof(rootdata[i][0]));
+    rootdata[i]=(char16_t**)malloc(thisCount*sizeof(rootdata[i][0]));
     switch(scanArray[i]) {
         case UDAT_WEEKDAYS:
         case UDAT_SHORT_WEEKDAYS:
@@ -239,7 +239,7 @@ void initroot(UErrorCode *status) {
             starts[i]=0;
     }
     for(int j=starts[i];U_SUCCESS(*status)&&j<thisCount;j++) {
-        rootdata[i][j]=(UChar*)malloc(1024);
+        rootdata[i][j]=(char16_t*)malloc(1024);
         int sz =  
         udat_getSymbols(fmt,
             scanArray[i],
@@ -253,16 +253,16 @@ void initroot(UErrorCode *status) {
 
 /* Format the date */
 static void
-date(const UChar *tz,
+date(const char16_t *tz,
      UDateFormatStyle style,
      char *format,
      const char *locale, char *comments,
      UErrorCode *status)
 {
-  UChar *s = 0;
+  char16_t *s = 0;
   int32_t len = 0;
   UDateFormat *fmt;
-  UChar uFormat[100];
+  char16_t uFormat[100];
   char tmp[200];
   
   int tc=0; // total count
@@ -277,7 +277,7 @@ date(const UChar *tz,
   len = udat_format(fmt, ucal_getNow(), 0, len, 0, status);
   if(*status == U_BUFFER_OVERFLOW_ERROR) {
     *status = U_ZERO_ERROR;
-    s = (UChar*) malloc(sizeof(UChar) * (len+1));
+    s = (char16_t*) malloc(sizeof(char16_t) * (len+1));
     if(s == 0) goto finish;
     udat_format(fmt, ucal_getNow(), s, len + 1, 0, status);
     if(U_FAILURE(*status)) goto finish;
@@ -289,7 +289,7 @@ date(const UChar *tz,
   /* print a trailing newline */
   //printf("\n");
   /* count bits */
-  UChar outbuf[1024];
+  char16_t outbuf[1024];
   for(int i=0;U_SUCCESS(*status)&&i<sizeof(scanArray)/sizeof(scanArray[0]);i++) {
     int thisCount = udat_countSymbols(fmt, scanArray[i]);
     tc += thisCount;

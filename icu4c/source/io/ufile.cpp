@@ -168,7 +168,7 @@ u_fopen(const char    *filename,
 #endif
 
 U_CAPI UFILE* U_EXPORT2
-u_fopen_u(const UChar   *filename,
+u_fopen_u(const char16_t   *filename,
         const char    *perm,
         const char    *locale,
         const char    *codepage)
@@ -216,7 +216,7 @@ u_fopen_u(const UChar   *filename,
 
 
 U_CAPI UFILE* U_EXPORT2
-u_fstropen(UChar *stringBuf,
+u_fstropen(char16_t *stringBuf,
            int32_t      capacity,
            const char  *locale)
 {

@@ -67,7 +67,7 @@ public:
     Hashtable variableNames;
 
     /**
-     * Map category variable (UChar) to set (UnicodeFunctor).
+     * Map category variable (char16_t) to set (UnicodeFunctor).
      * Variables that correspond to a set of characters are mapped
      * from variable name to a stand-in character in data.variableNames.
      * The stand-in then serves as a key in this hash to lookup the
@@ -91,7 +91,7 @@ public:
      * variablesBase through variablesBase +
      * variablesLength - 1 represent UnicodeFunctor objects.
      */
-    UChar variablesBase;
+    char16_t variablesBase;
 
     /**
      * The length of variables.

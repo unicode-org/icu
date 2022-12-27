@@ -119,7 +119,7 @@ UBool BiDiConformanceTest::parseOrdering(const char *start) {
     return true;
 }
 
-static const UChar charFromBiDiClass[U_CHAR_DIRECTION_COUNT]={
+static const char16_t charFromBiDiClass[U_CHAR_DIRECTION_COUNT]={
     0x6c,   // 'l' for L
     0x52,   // 'R' for R
     0x33,   // '3' for EN
@@ -461,7 +461,7 @@ void BiDiConformanceTest::TestBidiCharacterTest() {
             continue;  // Skip empty and comment-only lines.
         }
         // Parse the code point string in field 0.
-        UChar *buffer=inputString.getBuffer(200);
+        char16_t *buffer=inputString.getBuffer(200);
         int32_t length=u_parseString(start, buffer, inputString.getCapacity(), nullptr, errorCode);
         if(errorCode.errIfFailureAndReset("Invalid string in field 0")) {
             errln("Input line %d: %s", (int)lineNumber, line);
@@ -562,7 +562,7 @@ void BiDiConformanceTest::TestBidiCharacterTest() {
     }
 }
 
-static UChar printLevel(UBiDiLevel level) {
+static char16_t printLevel(UBiDiLevel level) {
     if(level<UBIDI_DEFAULT_LTR) {
         return 0x30+level;
     } else {
@@ -607,11 +607,11 @@ UBool BiDiConformanceTest::checkLevels(const UBiDiLevel actualLevels[], int32_t 
         UnicodeString els("Expected levels:   ");
         int32_t i;
         for(i=0; i<levelsCount; ++i) {
-            els.append((UChar)0x20).append(printLevel(levels[i]));
+            els.append((char16_t)0x20).append(printLevel(levels[i]));
         }
         UnicodeString als("Actual   levels:   ");
         for(i=0; i<actualCount; ++i) {
-            als.append((UChar)0x20).append(printLevel(actualLevels[i]));
+            als.append((char16_t)0x20).append(printLevel(actualLevels[i]));
         }
         errln(els);
         errln(als);
@@ -659,13 +659,13 @@ UBool BiDiConformanceTest::checkOrdering(UBiDi *ubidi) {
         printErrorLine();
         UnicodeString eord("Expected ordering: ");
         for(i=0; i<orderingCount; ++i) {
-            eord.append((UChar)0x20).append((UChar)(0x30+ordering[i]));
+            eord.append((char16_t)0x20).append((char16_t)(0x30+ordering[i]));
         }
         UnicodeString aord("Actual   ordering: ");
         for(i=0; i<resultLength; ++i) {
             int32_t logicalIndex=ubidi_getLogicalIndex(ubidi, i, errorCode);
             if(levels[logicalIndex]<UBIDI_DEFAULT_LTR) {
-                aord.append((UChar)0x20).append((UChar)(0x30+logicalIndex));
+                aord.append((char16_t)0x20).append((char16_t)(0x30+logicalIndex));
             }
         }
         errln(eord);

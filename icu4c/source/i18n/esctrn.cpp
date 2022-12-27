@@ -20,14 +20,14 @@
 
 U_NAMESPACE_BEGIN
 
-static const UChar UNIPRE[] = {85,43,0}; // "U+"
-static const UChar BS_u[] = {92,117,0}; // "\\u"
-static const UChar BS_U[] = {92,85,0}; // "\\U"
-static const UChar XMLPRE[] = {38,35,120,0}; // "&#x"
-static const UChar XML10PRE[] = {38,35,0}; // "&#"
-static const UChar PERLPRE[] = {92,120,123,0}; // "\\x{"
-static const UChar SEMI[] = {59,0}; // ";"
-static const UChar RBRACE[] = {125,0}; // "}"
+static const char16_t UNIPRE[] = {85,43,0}; // "U+"
+static const char16_t BS_u[] = {92,117,0}; // "\\u"
+static const char16_t BS_U[] = {92,85,0}; // "\\U"
+static const char16_t XMLPRE[] = {38,35,120,0}; // "&#x"
+static const char16_t XML10PRE[] = {38,35,0}; // "&#"
+static const char16_t PERLPRE[] = {92,120,123,0}; // "\\x{"
+static const char16_t SEMI[] = {59,0}; // ";"
+static const char16_t RBRACE[] = {125,0}; // "}"
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(EscapeTransliterator)
 

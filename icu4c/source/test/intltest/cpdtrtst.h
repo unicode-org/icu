@@ -49,7 +49,7 @@ public:
     /**
      * Splits a UnicodeString
      */
-    UnicodeString* split(const UnicodeString& str, UChar seperator, int32_t& count);
+    UnicodeString* split(const UnicodeString& str, char16_t seperator, int32_t& count);
 
     void expect(const CompoundTransliterator& t,
                 const UnicodeString& source,

@@ -44,7 +44,7 @@ CollationCurrencyTest::~CollationCurrencyTest()
 void CollationCurrencyTest::currencyTest(/*char *par*/)
 {
     // All the currency symbols, in collation order
-    static const UChar currency[][2] =
+    static const char16_t currency[][2] =
     {
       { 0x00A4, 0x0000}, /*00A4; L; [14 36, 03, 03]    # [082B.0020.0002] # CURRENCY SIGN*/
       { 0x00A2, 0x0000}, /*00A2; L; [14 38, 03, 03]    # [082C.0020.0002] # CENT SIGN*/

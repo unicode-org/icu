@@ -76,7 +76,7 @@ int main(int argc, const char *argv[]) {
     }
 
 
-    const UChar *buf = pattern.getBuffer();
+    const char16_t *buf = pattern.getBuffer();
     int32_t needed = pattern.length();
 
     // print
@@ -118,7 +118,7 @@ int main(int argc, const char *argv[]) {
 #if PATTERN
   printf("#define COLLUNSAFE_PATTERN 1\n");
   printf("static const int32_t collunsafe_len = %d;\n", needed);
-  printf("static const UChar collunsafe_pattern[collunsafe_len] = {\n");
+  printf("static const char16_t collunsafe_pattern[collunsafe_len] = {\n");
   for(int i=0;i<needed;i++) {
     if( (i>0) && (i%8 == 0) ) {
       printf(" // %d\n", i);

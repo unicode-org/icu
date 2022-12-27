@@ -155,7 +155,7 @@ static UDataInfo dataInfo={
 
     U_IS_BIG_ENDIAN,
     U_CHARSET_FAMILY,
-    sizeof(UChar),
+    sizeof(char16_t),
     0,
 
     {0x75, 0x6e, 0x61, 0x6d},     /* dataFormat="unam" */

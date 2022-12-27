@@ -55,35 +55,35 @@
 // class MessageFormat
 // *****************************************************************************
 
-#define SINGLE_QUOTE      ((UChar)0x0027)
-#define COMMA             ((UChar)0x002C)
-#define LEFT_CURLY_BRACE  ((UChar)0x007B)
-#define RIGHT_CURLY_BRACE ((UChar)0x007D)
+#define SINGLE_QUOTE      ((char16_t)0x0027)
+#define COMMA             ((char16_t)0x002C)
+#define LEFT_CURLY_BRACE  ((char16_t)0x007B)
+#define RIGHT_CURLY_BRACE ((char16_t)0x007D)
 
 //---------------------------------------
 // static data
 
-static const UChar ID_NUMBER[]    = {
+static const char16_t ID_NUMBER[]    = {
     0x6E, 0x75, 0x6D, 0x62, 0x65, 0x72, 0  /* "number" */
 };
-static const UChar ID_DATE[]      = {
+static const char16_t ID_DATE[]      = {
     0x64, 0x61, 0x74, 0x65, 0              /* "date" */
 };
-static const UChar ID_TIME[]      = {
+static const char16_t ID_TIME[]      = {
     0x74, 0x69, 0x6D, 0x65, 0              /* "time" */
 };
-static const UChar ID_SPELLOUT[]  = {
+static const char16_t ID_SPELLOUT[]  = {
     0x73, 0x70, 0x65, 0x6c, 0x6c, 0x6f, 0x75, 0x74, 0 /* "spellout" */
 };
-static const UChar ID_ORDINAL[]   = {
+static const char16_t ID_ORDINAL[]   = {
     0x6f, 0x72, 0x64, 0x69, 0x6e, 0x61, 0x6c, 0 /* "ordinal" */
 };
-static const UChar ID_DURATION[]  = {
+static const char16_t ID_DURATION[]  = {
     0x64, 0x75, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0 /* "duration" */
 };
 
 // MessageFormat Type List  Number, Date, Time or Choice
-static const UChar * const TYPE_IDS[] = {
+static const char16_t * const TYPE_IDS[] = {
     ID_NUMBER,
     ID_DATE,
     ID_TIME,
@@ -93,21 +93,21 @@ static const UChar * const TYPE_IDS[] = {
     nullptr,
 };
 
-static const UChar ID_EMPTY[]     = {
+static const char16_t ID_EMPTY[]     = {
     0 /* empty string, used for default so that null can mark end of list */
 };
-static const UChar ID_CURRENCY[]  = {
+static const char16_t ID_CURRENCY[]  = {
     0x63, 0x75, 0x72, 0x72, 0x65, 0x6E, 0x63, 0x79, 0  /* "currency" */
 };
-static const UChar ID_PERCENT[]   = {
+static const char16_t ID_PERCENT[]   = {
     0x70, 0x65, 0x72, 0x63, 0x65, 0x6E, 0x74, 0        /* "percent" */
 };
-static const UChar ID_INTEGER[]   = {
+static const char16_t ID_INTEGER[]   = {
     0x69, 0x6E, 0x74, 0x65, 0x67, 0x65, 0x72, 0        /* "integer" */
 };
 
 // NumberFormat modifier list, default, currency, percent or integer
-static const UChar * const NUMBER_STYLE_IDS[] = {
+static const char16_t * const NUMBER_STYLE_IDS[] = {
     ID_EMPTY,
     ID_CURRENCY,
     ID_PERCENT,
@@ -115,21 +115,21 @@ static const UChar * const NUMBER_STYLE_IDS[] = {
     nullptr,
 };
 
-static const UChar ID_SHORT[]     = {
+static const char16_t ID_SHORT[]     = {
     0x73, 0x68, 0x6F, 0x72, 0x74, 0        /* "short" */
 };
-static const UChar ID_MEDIUM[]    = {
+static const char16_t ID_MEDIUM[]    = {
     0x6D, 0x65, 0x64, 0x69, 0x75, 0x6D, 0  /* "medium" */
 };
-static const UChar ID_LONG[]      = {
+static const char16_t ID_LONG[]      = {
     0x6C, 0x6F, 0x6E, 0x67, 0              /* "long" */
 };
-static const UChar ID_FULL[]      = {
+static const char16_t ID_FULL[]      = {
     0x66, 0x75, 0x6C, 0x6C, 0              /* "full" */
 };
 
 // DateFormat modifier list, default, short, medium, long or full
-static const UChar * const DATE_STYLE_IDS[] = {
+static const char16_t * const DATE_STYLE_IDS[] = {
     ID_EMPTY,
     ID_SHORT,
     ID_MEDIUM,
@@ -148,11 +148,11 @@ static const icu::DateFormat::EStyle DATE_STYLES[] = {
 
 static const int32_t DEFAULT_INITIAL_CAPACITY = 10;
 
-static const UChar NULL_STRING[] = {
+static const char16_t NULL_STRING[] = {
     0x6E, 0x75, 0x6C, 0x6C, 0  // "null"
 };
 
-static const UChar OTHER_STRING[] = {
+static const char16_t OTHER_STRING[] = {
     0x6F, 0x74, 0x68, 0x65, 0x72, 0  // "other"
 };
 
@@ -177,7 +177,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(FormatNameEnumeration)
  * the given UnicodeString.
  */
 static UnicodeString& itos(int32_t i, UnicodeString& appendTo) {
-    UChar temp[16];
+    char16_t temp[16];
     uprv_itou(temp,16,i,10,0); // 10 == radix
     appendTo.append(temp, -1);
     return appendTo;
@@ -194,7 +194,7 @@ public:
         app.appendString(s.getBuffer(), s.length());
         len += s.length();
     }
-    void append(const UChar* s, const int32_t sLength) {
+    void append(const char16_t* s, const int32_t sLength) {
         app.appendString(s, sLength);
         len += sLength;
     }
@@ -1554,9 +1554,9 @@ MessageFormat::autoQuoteApostrophe(const UnicodeString& pattern, UErrorCode& sta
     UnicodeString result;
     if (U_SUCCESS(status)) {
         int32_t plen = pattern.length();
-        const UChar* pat = pattern.getBuffer();
+        const char16_t* pat = pattern.getBuffer();
         int32_t blen = plen * 2 + 1; // space for null termination, convenience
-        UChar* buf = result.getBuffer(blen);
+        char16_t* buf = result.getBuffer(blen);
         if (buf == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
         } else {
@@ -1781,14 +1781,14 @@ Format* MessageFormat::createAppropriateFormat(UnicodeString& type, UnicodeStrin
 //-------------------------------------
 // Finds the string, s, in the string array, list.
 int32_t MessageFormat::findKeyword(const UnicodeString& s,
-                                   const UChar * const *list)
+                                   const char16_t * const *list)
 {
     if (s.isEmpty()) {
         return 0; // default
     }
 
     int32_t length = s.length();
-    const UChar *ps = PatternProps::trimWhiteSpace(s.getBuffer(), length);
+    const char16_t *ps = PatternProps::trimWhiteSpace(s.getBuffer(), length);
     UnicodeString buffer(false, ps, length);
     // Trims the space characters and turns all characters
     // in s to lower case.

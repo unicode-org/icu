@@ -68,7 +68,7 @@ static const UDataInfo dataInfo={
 
     U_IS_BIG_ENDIAN,
     U_CHARSET_FAMILY,
-    sizeof(UChar),
+    sizeof(char16_t),
     0,
 
     {0x43, 0x6d, 0x6e, 0x44},     /* dataFormat="CmnD" */

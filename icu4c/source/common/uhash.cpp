@@ -928,7 +928,7 @@ uhash_tokp(void* p) {
 
 U_CAPI int32_t U_EXPORT2
 uhash_hashUChars(const UHashTok key) {
-    const UChar *s = (const UChar *)key.pointer;
+    const char16_t *s = (const char16_t *)key.pointer;
     return s == nullptr ? 0 : ustr_hashUCharsN(s, u_strlen(s));
 }
 
@@ -1002,8 +1002,8 @@ uhash_equals(const UHashtable* hash1, const UHashtable* hash2){
 
 U_CAPI UBool U_EXPORT2
 uhash_compareUChars(const UHashTok key1, const UHashTok key2) {
-    const UChar *p1 = (const UChar*) key1.pointer;
-    const UChar *p2 = (const UChar*) key2.pointer;
+    const char16_t *p1 = (const char16_t*) key1.pointer;
+    const char16_t *p2 = (const char16_t*) key2.pointer;
     if (p1 == p2) {
         return true;
     }

@@ -204,7 +204,7 @@ swapFormatVersion3(const UDataSwapper *ds,
 
         /* swap the contractions */
         if(header.contractionSize!=0) {
-            /* contractionIndex: UChar[] */
+            /* contractionIndex: char16_t[] */
             ds->swapArray16(ds, inBytes+header.contractionIndex, header.contractionSize*2,
                                outBytes+header.contractionIndex, pErrorCode);
 

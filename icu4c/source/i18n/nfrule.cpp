@@ -62,43 +62,43 @@ NFRule::~NFRule()
     rulePatternFormat = nullptr;
 }
 
-static const UChar gLeftBracket = 0x005b;
-static const UChar gRightBracket = 0x005d;
-static const UChar gColon = 0x003a;
-static const UChar gZero = 0x0030;
-static const UChar gNine = 0x0039;
-static const UChar gSpace = 0x0020;
-static const UChar gSlash = 0x002f;
-static const UChar gGreaterThan = 0x003e;
-static const UChar gLessThan = 0x003c;
-static const UChar gComma = 0x002c;
-static const UChar gDot = 0x002e;
-static const UChar gTick = 0x0027;
-//static const UChar gMinus = 0x002d;
-static const UChar gSemicolon = 0x003b;
-static const UChar gX = 0x0078;
+static const char16_t gLeftBracket = 0x005b;
+static const char16_t gRightBracket = 0x005d;
+static const char16_t gColon = 0x003a;
+static const char16_t gZero = 0x0030;
+static const char16_t gNine = 0x0039;
+static const char16_t gSpace = 0x0020;
+static const char16_t gSlash = 0x002f;
+static const char16_t gGreaterThan = 0x003e;
+static const char16_t gLessThan = 0x003c;
+static const char16_t gComma = 0x002c;
+static const char16_t gDot = 0x002e;
+static const char16_t gTick = 0x0027;
+//static const char16_t gMinus = 0x002d;
+static const char16_t gSemicolon = 0x003b;
+static const char16_t gX = 0x0078;
 
-static const UChar gMinusX[] =                  {0x2D, 0x78, 0};    /* "-x" */
-static const UChar gInf[] =                     {0x49, 0x6E, 0x66, 0}; /* "Inf" */
-static const UChar gNaN[] =                     {0x4E, 0x61, 0x4E, 0}; /* "NaN" */
+static const char16_t gMinusX[] =                  {0x2D, 0x78, 0};    /* "-x" */
+static const char16_t gInf[] =                     {0x49, 0x6E, 0x66, 0}; /* "Inf" */
+static const char16_t gNaN[] =                     {0x4E, 0x61, 0x4E, 0}; /* "NaN" */
 
-static const UChar gDollarOpenParenthesis[] =   {0x24, 0x28, 0}; /* "$(" */
-static const UChar gClosedParenthesisDollar[] = {0x29, 0x24, 0}; /* ")$" */
+static const char16_t gDollarOpenParenthesis[] =   {0x24, 0x28, 0}; /* "$(" */
+static const char16_t gClosedParenthesisDollar[] = {0x29, 0x24, 0}; /* ")$" */
 
-static const UChar gLessLess[] =                {0x3C, 0x3C, 0};    /* "<<" */
-static const UChar gLessPercent[] =             {0x3C, 0x25, 0};    /* "<%" */
-static const UChar gLessHash[] =                {0x3C, 0x23, 0};    /* "<#" */
-static const UChar gLessZero[] =                {0x3C, 0x30, 0};    /* "<0" */
-static const UChar gGreaterGreater[] =          {0x3E, 0x3E, 0};    /* ">>" */
-static const UChar gGreaterPercent[] =          {0x3E, 0x25, 0};    /* ">%" */
-static const UChar gGreaterHash[] =             {0x3E, 0x23, 0};    /* ">#" */
-static const UChar gGreaterZero[] =             {0x3E, 0x30, 0};    /* ">0" */
-static const UChar gEqualPercent[] =            {0x3D, 0x25, 0};    /* "=%" */
-static const UChar gEqualHash[] =               {0x3D, 0x23, 0};    /* "=#" */
-static const UChar gEqualZero[] =               {0x3D, 0x30, 0};    /* "=0" */
-static const UChar gGreaterGreaterGreater[] =   {0x3E, 0x3E, 0x3E, 0}; /* ">>>" */
+static const char16_t gLessLess[] =                {0x3C, 0x3C, 0};    /* "<<" */
+static const char16_t gLessPercent[] =             {0x3C, 0x25, 0};    /* "<%" */
+static const char16_t gLessHash[] =                {0x3C, 0x23, 0};    /* "<#" */
+static const char16_t gLessZero[] =                {0x3C, 0x30, 0};    /* "<0" */
+static const char16_t gGreaterGreater[] =          {0x3E, 0x3E, 0};    /* ">>" */
+static const char16_t gGreaterPercent[] =          {0x3E, 0x25, 0};    /* ">%" */
+static const char16_t gGreaterHash[] =             {0x3E, 0x23, 0};    /* ">#" */
+static const char16_t gGreaterZero[] =             {0x3E, 0x30, 0};    /* ">0" */
+static const char16_t gEqualPercent[] =            {0x3D, 0x25, 0};    /* "=%" */
+static const char16_t gEqualHash[] =               {0x3D, 0x23, 0};    /* "=#" */
+static const char16_t gEqualZero[] =               {0x3D, 0x30, 0};    /* "=0" */
+static const char16_t gGreaterGreaterGreater[] =   {0x3E, 0x3E, 0x3E, 0}; /* ">>>" */
 
-static const UChar * const RULE_PREFIXES[] = {
+static const char16_t * const RULE_PREFIXES[] = {
     gLessLess, gLessPercent, gLessHash, gLessZero,
     gGreaterGreater, gGreaterPercent,gGreaterHash, gGreaterZero,
     gEqualPercent, gEqualHash, gEqualZero, nullptr
@@ -270,8 +270,8 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
         // for one of the special rules.  If it does, set the base
         // value to the correct identifier value
         int descriptorLength = descriptor.length();
-        UChar firstChar = descriptor.charAt(0);
-        UChar lastChar = descriptor.charAt(descriptorLength - 1);
+        char16_t firstChar = descriptor.charAt(0);
+        char16_t lastChar = descriptor.charAt(descriptorLength - 1);
         if (firstChar >= gZero && firstChar <= gNine && lastChar != gX) {
             // if the rule descriptor begins with a digit, it's a descriptor
             // for a normal rule
@@ -279,7 +279,7 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
             // just build up the value as we encounter the digits.
             int64_t val = 0;
             p = 0;
-            UChar c = gSpace;
+            char16_t c = gSpace;
 
             // begin parsing the descriptor: copy digits
             // into "tempValue", skip periods, commas, and spaces,
@@ -490,7 +490,7 @@ NFRule::extractSubstitution(const NFRuleSet* ruleSet,
         // otherwise the substitution token ends with the same character
         // it began with
     } else {
-        UChar c = fRuleText.charAt(subStart);
+        char16_t c = fRuleText.charAt(subStart);
         subEnd = fRuleText.indexOf(c, subStart + 1);
         // special case for '<%foo<<'
         if (c == gLessThan && subEnd != -1 && subEnd < fRuleText.length() - 1 && fRuleText.charAt(subEnd+1) == c) {
@@ -650,7 +650,7 @@ NFRule::operator==(const NFRule& rhs) const
 */
 static void util_append64(UnicodeString& result, int64_t n)
 {
-    UChar buffer[256];
+    char16_t buffer[256];
     int32_t len = util64_tou(n, buffer, sizeof(buffer));
     UnicodeString temp(buffer, len);
     result.append(temp);

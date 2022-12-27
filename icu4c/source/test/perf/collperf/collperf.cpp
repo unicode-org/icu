@@ -55,12 +55,12 @@ struct CompactArrays{\
     int32_t lengthOf(int i){return index[i+1] - index[i] - 1; }	/*exclude terminating NUL*/  \
 };
 
-//typedef CompactArrays<UChar> CA_uchar;
+//typedef CompactArrays<char16_t> CA_uchar;
 //typedef CompactArrays<char> CA_char;
 //typedef CompactArrays<uint8_t> CA_uint8;
 //typedef CompactArrays<WCHAR> CA_win_wchar;
 
-COMPATCT_ARRAY(CA_uchar, UChar)
+COMPATCT_ARRAY(CA_uchar, char16_t)
 COMPATCT_ARRAY(CA_char, char)
 COMPATCT_ARRAY(CA_uint8, uint8_t)
 COMPATCT_ARRAY(CA_win_wchar, WCHAR)
@@ -70,7 +70,7 @@ struct DataIndex {
     static DWORD        win_langid;     // for qsort callback function
     static UCollator *  col;            // for qsort callback function
     uint8_t *   icu_key;
-    UChar *     icu_data;
+    char16_t *     icu_data;
     int32_t     icu_data_len;
     char*       posix_key;
     char*       posix_data;
@@ -147,7 +147,7 @@ public:
     CmdIter(UErrorCode & status, UCollator * col, int32_t count, CA_uchar *data, Func fn, int32_t,int32_t)
         :count(count), data(data), fn(fn){
             exec_count = 0;
-            UChar dummytext[] = {0, 0};
+            char16_t dummytext[] = {0, 0};
             iter = ucol_openElements(col, nullptr, 0, &status);
             ucol_setText(iter, dummytext, 1, &status);
         }
@@ -188,7 +188,7 @@ public:
 class CmdIterAll : public UPerfFunction {
     typedef	void (CmdIterAll::* Func)(UErrorCode* status);
     int32_t     count;
-    UChar *     data;
+    char16_t *     data;
     Func        fn;
     UCollationElements *iter;
     int32_t     exec_count;
@@ -199,7 +199,7 @@ public:
     ~CmdIterAll(){
         ucol_closeElements(iter);
     }
-    CmdIterAll(UErrorCode & status, UCollator * col, int32_t count,  UChar * data, CALL call,int32_t,int32_t)
+    CmdIterAll(UErrorCode & status, UCollator * col, int32_t count,  char16_t * data, CALL call,int32_t,int32_t)
         :count(count),data(data)
     {
         exec_count = 0;
@@ -495,7 +495,7 @@ public:
     UCollator *     col;
     DWORD           win_langid;
 
-    UChar * icu_data_all;
+    char16_t * icu_data_all;
     int32_t icu_data_all_len;
 
     int32_t         count;
@@ -753,7 +753,7 @@ public:
         icu_data = new CA_uchar();
 
         // Following code is borrowed from UPerfTest::getLines();
-        const UChar*    line=nullptr;
+        const char16_t*    line=nullptr;
         int32_t         len =0;
         for (;;) {
             line = ucbuf_readline(ucharBuf,&len,&status);
@@ -768,7 +768,7 @@ public:
                 continue; //skip empty line
             } else {
                 icu_data->append_one(len);
-                memcpy(icu_data->last(), line, len * sizeof(UChar));
+                memcpy(icu_data->last(), line, len * sizeof(char16_t));
                 icu_data->last()[len -1] = 0;
             }
         }
@@ -783,7 +783,7 @@ public:
         icu_data_all_len =  icu_data->index[count]; // includes all NULs
         icu_data_all_len -= count;  // excludes all NULs
         icu_data_all_len += 1;      // the terminal NUL
-        icu_data_all = new UChar[icu_data_all_len];
+        icu_data_all = new char16_t[icu_data_all_len];
         icu_data_all[icu_data_all_len - 1] = 0; //the terminal NUL
 
         icu_key  = new CA_uint8;
@@ -796,12 +796,12 @@ public:
         DataIndex::col        = col;
 
 
-        UChar * p = icu_data_all;
+        char16_t * p = icu_data_all;
         int32_t s;
         int32_t t;
         for (int i=0; i < count; i++) {
             // ICU all data
-            s = sizeof(UChar) * icu_data->lengthOf(i);
+            s = sizeof(char16_t) * icu_data->lengthOf(i);
             memcpy(p, icu_data->dataOf(i), s);
             p += icu_data->lengthOf(i);
 

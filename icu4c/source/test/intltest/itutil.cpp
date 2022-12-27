@@ -362,7 +362,7 @@ void LocalPointerTest::TestLocalPointer() {
         errln("LocalPointer access failure");
     }
     // adoptInstead(), orphan()
-    s.adoptInstead(new UnicodeString((UChar)0xfffc));
+    s.adoptInstead(new UnicodeString((char16_t)0xfffc));
     if(s->length()!=1) {
         errln("LocalPointer adoptInstead(U+FFFC) failure");
     }
@@ -423,8 +423,8 @@ void moveFrom(T &dest, T &src) {
 }
 
 void LocalPointerTest::TestLocalPointerMoveSwap() {
-    UnicodeString *p1 = new UnicodeString((UChar)0x61);
-    UnicodeString *p2 = new UnicodeString((UChar)0x62);
+    UnicodeString *p1 = new UnicodeString((char16_t)0x61);
+    UnicodeString *p2 = new UnicodeString((char16_t)0x62);
     LocalPointer<UnicodeString> s1(p1);
     LocalPointer<UnicodeString> s2(p2);
     s1.swap(s2);
@@ -475,14 +475,14 @@ void LocalPointerTest::TestLocalArray() {
     // constructor
     LocalArray<UnicodeString> a(new UnicodeString[2]);
     // operator[]()
-    a[0].append((UChar)0x61);
+    a[0].append((char16_t)0x61);
     a[1].append((UChar32)0x60006);
     if(a[0].length()!=1 || a[1].length()!=2) {
         errln("LocalArray access failure");
     }
     // adoptInstead()
     a.adoptInstead(new UnicodeString[4]);
-    a[3].append((UChar)0x62).append((UChar)0x63).reverse();
+    a[3].append((char16_t)0x62).append((char16_t)0x63).reverse();
     if(a[3].length()!=2 || a[3][1]!=0x62) {
         errln("LocalArray adoptInstead() failure");
     }

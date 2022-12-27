@@ -151,7 +151,7 @@ enum PlaceholderPosition { PH_EMPTY, PH_NONE, PH_BEGINNING, PH_MIDDLE, PH_END };
 void extractCorePattern(const UnicodeString &pattern,
                         UnicodeString &coreUnit,
                         PlaceholderPosition &placeholderPosition,
-                        UChar &joinerChar) {
+                        char16_t &joinerChar) {
     joinerChar = 0;
     int32_t len = pattern.length();
     if (pattern.startsWith(u"{0}", 3)) {
@@ -209,7 +209,7 @@ getGenderForBuiltin(const Locale &locale, const MeasureUnit &builtinUnit, UError
 
     UErrorCode localStatus = status;
     int32_t resultLen = 0;
-    const UChar *result =
+    const char16_t *result =
         ures_getStringByKeyWithFallback(unitsBundle.getAlias(), key.data(), &resultLen, &localStatus);
     if (U_SUCCESS(localStatus)) {
         status = localStatus;
@@ -560,7 +560,7 @@ UnicodeString getCompoundValue(StringPiece compoundKey,
 
     UErrorCode localStatus = status;
     int32_t len = 0;
-    const UChar *ptr =
+    const char16_t *ptr =
         ures_getStringByKeyWithFallback(unitsBundle.getAlias(), key.data(), &len, &localStatus);
     if (U_FAILURE(localStatus) && width != UNUM_UNIT_WIDTH_SHORT) {
         // Fall back to short, which contains more compound data
@@ -759,7 +759,7 @@ UnicodeString getDerivedGender(Locale locale,
 ////////////////////////
 
 // TODO: promote this somewhere? It's based on patternprops.cpp' trimWhitespace
-const UChar *trimSpaceChars(const UChar *s, int32_t &length) {
+const char16_t *trimSpaceChars(const char16_t *s, int32_t &length) {
     if (length <= 0 || (!u_isJavaSpaceChar(s[0]) && !u_isJavaSpaceChar(s[length - 1]))) {
         return s;
     }
@@ -1053,7 +1053,7 @@ void LongNameHandler::forArbitraryUnit(const Locale &loc,
         }
         UnicodeString denominatorPattern = denominatorFormatter.getTextWithNoArguments();
         int32_t trimmedLen = denominatorPattern.length();
-        const UChar *trimmed = trimSpaceChars(denominatorPattern.getBuffer(), trimmedLen);
+        const char16_t *trimmed = trimSpaceChars(denominatorPattern.getBuffer(), trimmedLen);
         UnicodeString denominatorString(false, trimmed, trimmedLen);
         // 9. If the denominatorString is empty, set result to
         //    [numeratorString], otherwise set result to format(perPattern,
@@ -1144,7 +1144,7 @@ void LongNameHandler::processPatternTimes(MeasureUnitImpl &&productUnit,
     }
 
     PlaceholderPosition globalPlaceholder[ARRAY_LENGTH];
-    UChar globalJoinerChar = 0;
+    char16_t globalJoinerChar = 0;
     // Numbered list items are from the algorithms at
     // https://unicode.org/reports/tr35/tr35-general.html#compound-units:
     //
@@ -1341,7 +1341,7 @@ void LongNameHandler::processPatternTimes(MeasureUnitImpl &&productUnit,
             // 4.6. Extract(corePattern, coreUnit, placeholder, placeholderPosition) from that pattern.
             UnicodeString coreUnit;
             PlaceholderPosition placeholderPosition;
-            UChar joinerChar;
+            char16_t joinerChar;
             extractCorePattern(getWithPlural(singleUnitArray, plural, status), coreUnit,
                                placeholderPosition, joinerChar);
 

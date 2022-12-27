@@ -37,7 +37,7 @@ CollationKanaTest::~CollationKanaTest()
     delete myCollation;
 }
 
-const UChar CollationKanaTest::testSourceCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
+const char16_t CollationKanaTest::testSourceCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
     {0xff9E, 0x0000},
     {0x3042, 0x0000},
     {0x30A2, 0x0000},
@@ -46,7 +46,7 @@ const UChar CollationKanaTest::testSourceCases[][CollationKanaTest::MAX_TOKEN_LE
     {0x30A2, 0x30FC, 0x30C8, 0x0000}                               /*  6 */
 };
 
-const UChar CollationKanaTest::testTargetCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
+const char16_t CollationKanaTest::testTargetCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
     {0xFF9F, 0x0000},
     {0x30A2, 0x0000},
     {0x3042, 0x3042, 0x0000},
@@ -64,35 +64,35 @@ const Collator::EComparisonResult CollationKanaTest::results[] = {
     Collator::LESS,    //Collator::GREATER /* Prolonged sound mark sorts BEFORE equivalent vowel (ICU 2.0)*//*  6 */
 };
 
-const UChar CollationKanaTest::testBaseCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
+const char16_t CollationKanaTest::testBaseCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
   {0x30AB, 0x0000},
   {0x30AB, 0x30AD, 0x0000},
   {0x30AD, 0x0000},
   {0x30AD, 0x30AD, 0x0000}
 };
 
-const UChar CollationKanaTest::testPlainDakutenHandakutenCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
+const char16_t CollationKanaTest::testPlainDakutenHandakutenCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
   {0x30CF, 0x30AB, 0x0000},
   {0x30D0, 0x30AB, 0x0000},
   {0x30CF, 0x30AD, 0x0000},
   {0x30D0, 0x30AD, 0x0000}
 };
 
-const UChar CollationKanaTest::testSmallLargeCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
+const char16_t CollationKanaTest::testSmallLargeCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
   {0x30C3, 0x30CF, 0x0000},
   {0x30C4, 0x30CF, 0x0000},
   {0x30C3, 0x30D0, 0x0000},
   {0x30C4, 0x30D0, 0x0000}
 };
 
-const UChar CollationKanaTest::testKatakanaHiraganaCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
+const char16_t CollationKanaTest::testKatakanaHiraganaCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
   {0x3042, 0x30C3, 0x0000},
   {0x30A2, 0x30C3, 0x0000},
   {0x3042, 0x30C4, 0x0000},
   {0x30A2, 0x30C4, 0x0000}
 };
 
-const UChar CollationKanaTest::testChooonKigooCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
+const char16_t CollationKanaTest::testChooonKigooCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
   /*0*/ {0x30AB, 0x30FC, 0x3042, 0x0000},
   /*1*/ {0x30AB, 0x30FC, 0x30A2, 0x0000},
   /*2*/ {0x30AB, 0x30A4, 0x3042, 0x0000},

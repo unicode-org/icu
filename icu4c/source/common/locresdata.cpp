@@ -41,7 +41,7 @@
  * default locale because that would result in a mix of languages that is
  * unpredictable to the programmer and most likely useless.
  */
-U_CAPI const UChar * U_EXPORT2
+U_CAPI const char16_t * U_EXPORT2
 uloc_getTableStringWithFallback(const char *path, const char *locale,
                               const char *tableKey, const char *subTableKey,
                               const char *itemKey,
@@ -49,7 +49,7 @@ uloc_getTableStringWithFallback(const char *path, const char *locale,
                               UErrorCode *pErrorCode)
 {
 /*    char localeBuffer[ULOC_FULLNAME_CAPACITY*4];*/
-    const UChar *item=nullptr;
+    const char16_t *item=nullptr;
     UErrorCode errorCode;
     char explicitFallbackName[ULOC_FULLNAME_CAPACITY] = {0};
 
@@ -117,7 +117,7 @@ uloc_getTableStringWithFallback(const char *path, const char *locale,
 
             /* still can't figure out ?.. try the fallback mechanism */
             int32_t len = 0;
-            const UChar* fallbackLocale =  nullptr;
+            const char16_t* fallbackLocale =  nullptr;
             *pErrorCode = errorCode;
             errorCode = U_ZERO_ERROR;
 
@@ -162,7 +162,7 @@ _uloc_getOrientationHelper(const char* localeId,
         uloc_canonicalize(localeId, localeBuffer, sizeof(localeBuffer), status);
 
         if (!U_FAILURE(*status)) {
-            const UChar* const value =
+            const char16_t* const value =
                 uloc_getTableStringWithFallback(
                     nullptr,
                     localeBuffer,

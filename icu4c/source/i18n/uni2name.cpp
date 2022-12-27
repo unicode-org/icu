@@ -26,8 +26,8 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UnicodeNameTransliterator)
 
-static const UChar OPEN_DELIM[] = {92,78,123,0}; // "\N{"
-static const UChar CLOSE_DELIM  = 125; // "}"
+static const char16_t OPEN_DELIM[] = {92,78,123,0}; // "\N{"
+static const char16_t CLOSE_DELIM  = 125; // "}"
 #define OPEN_DELIM_LEN 3
 
 /**

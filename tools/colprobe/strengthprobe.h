@@ -34,11 +34,11 @@
 
 class StrengthProbe {
 public:
-  UChar SE;
-  UChar B0;
-  UChar B1;
-  UChar B2;
-  UChar B3;
+  char16_t SE;
+  char16_t B0;
+  char16_t B1;
+  char16_t B2;
+  char16_t B3;
 private:
   Line utilFirst;
   Line utilSecond;
@@ -46,10 +46,10 @@ private:
   Line *utilSecondP;
   Line contractionUtilFirst;
   Line contractionUtilSecond;
-  UBool probePrefix(const Line &x, const Line &y, UChar first, UChar second);
-  UBool probeSuffix(const Line &x, const Line &y, UChar first, UChar second);
-  UBool probePrefixNoSep(const Line &x, const Line &y, UChar first, UChar second);
-  UBool probeSuffixNoSep(const Line &x, const Line &y, UChar first, UChar second);
+  UBool probePrefix(const Line &x, const Line &y, char16_t first, char16_t second);
+  UBool probeSuffix(const Line &x, const Line &y, char16_t first, char16_t second);
+  UBool probePrefixNoSep(const Line &x, const Line &y, char16_t first, char16_t second);
+  UBool probeSuffixNoSep(const Line &x, const Line &y, char16_t first, char16_t second);
 
   UBool frenchSecondary;
 
@@ -58,8 +58,8 @@ public:
   GetSortKeyFn skgetter;
   
   StrengthProbe() {};
-  StrengthProbe(CompareFn comparer, GetSortKeyFn getter, UChar SE = 0x0030, UChar B0 = 0x0061, UChar B1 = 0x0062, UChar B2 = 0x00E1, UChar B3 = 0x0041); //, UChar LB = 0x0039, UChar UB = 0xfa29);
-  int setProbeChars(UChar B0, UChar B1, UChar B2, UChar B3);
+  StrengthProbe(CompareFn comparer, GetSortKeyFn getter, char16_t SE = 0x0030, char16_t B0 = 0x0061, char16_t B1 = 0x0062, char16_t B2 = 0x00E1, char16_t B3 = 0x0041); //, char16_t LB = 0x0039, char16_t UB = 0xfa29);
+  int setProbeChars(char16_t B0, char16_t B1, char16_t B2, char16_t B3);
   int checkSanity();
   StrengthProbe(const StrengthProbe &that);
   StrengthProbe &operator=(const StrengthProbe &that);
@@ -76,7 +76,7 @@ public:
     return skgetter(l.name, l.len, buffer, buffCap);
   };
 
-  int getSortKey(UChar *string, int32_t sLen, uint8_t *buffer, int32_t buffCap) {
+  int getSortKey(char16_t *string, int32_t sLen, uint8_t *buffer, int32_t buffCap) {
     return skgetter(string, sLen, buffer, buffCap);
   };
  

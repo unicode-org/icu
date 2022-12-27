@@ -214,14 +214,14 @@ checkParent(const char *itemName, CheckDependency check, void *context,
 
 // get dependencies from resource bundles ---------------------------------- ***
 
-static const UChar SLASH=0x2f;
+static const char16_t SLASH=0x2f;
 
 /*
  * Check for the alias from the string or alias resource res.
  */
 static void
 checkAlias(const char *itemName,
-           Resource res, const UChar *alias, int32_t length, UBool useResSuffix,
+           Resource res, const char16_t *alias, int32_t length, UBool useResSuffix,
            CheckDependency check, void *context, UErrorCode *pErrorCode) {
     int32_t i;
 
@@ -297,7 +297,7 @@ ures_enumDependencies(const char *itemName,
             doCheckParent = false;
             // No tracing: build tool
             int32_t length;
-            const UChar *alias=res_getStringNoTrace(pResData, res, &length);
+            const char16_t *alias=res_getStringNoTrace(pResData, res, &length);
             checkAlias(itemName, res, alias, length, /*useResSuffix=*/ true,
                        check, context, pErrorCode);
             // If there is a %%ALIAS, then there should be nothing else in this resource bundle.
@@ -306,7 +306,7 @@ ures_enumDependencies(const char *itemName,
             // Explicit declaration of a dependency of this item on that one.
             // No tracing: build tool
             int32_t length;
-            const UChar *alias=res_getStringNoTrace(pResData, res, &length);
+            const char16_t *alias=res_getStringNoTrace(pResData, res, &length);
             checkAlias(itemName, res, alias, length, /*useResSuffix=*/ false,
                        check, context, pErrorCode);
         }
@@ -315,7 +315,7 @@ ures_enumDependencies(const char *itemName,
     case URES_ALIAS:
         {
             int32_t length;
-            const UChar *alias=res_getAlias(pResData, res, &length);
+            const char16_t *alias=res_getAlias(pResData, res, &length);
             checkAlias(itemName, res, alias, length, true, check, context, pErrorCode);
         }
         break;

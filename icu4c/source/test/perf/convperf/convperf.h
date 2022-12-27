@@ -30,8 +30,8 @@ private:
     UConverter* conv;
     const char* src;
     int32_t srcLen;
-    UChar* target;
-    UChar* targetLimit;
+    char16_t* target;
+    char16_t* targetLimit;
     
 public:
     ICUToUnicodePerfFunction(const char* name,  const char* source, int32_t sourceLen, UErrorCode& status){
@@ -48,7 +48,7 @@ public:
                                         source, srcLen, &status);
         if(status==U_BUFFER_OVERFLOW_ERROR) {
             status=U_ZERO_ERROR;
-            target=(UChar*)malloc((reqdLen) * U_SIZEOF_UCHAR*2);
+            target=(char16_t*)malloc((reqdLen) * U_SIZEOF_UCHAR*2);
             targetLimit = target + reqdLen;
             if(target == nullptr){
                 status = U_MEMORY_ALLOCATION_ERROR;
@@ -59,7 +59,7 @@ public:
     virtual void call(UErrorCode* status){
         const char* mySrc = src;
         const char* sourceLimit = src + srcLen;
-        UChar* myTarget = target;
+        char16_t* myTarget = target;
         ucnv_toUnicode(conv, &myTarget, targetLimit, &mySrc, sourceLimit, nullptr, true, status);
     }
     virtual long getOperationsPerIteration(void){
@@ -73,14 +73,14 @@ public:
 class ICUFromUnicodePerfFunction : public UPerfFunction{
 private:
     UConverter* conv;
-    const UChar* src;
+    const char16_t* src;
     int32_t srcLen;
     char* target;
     char* targetLimit;
     const char* name;
     
 public:
-    ICUFromUnicodePerfFunction(const char* name,  const UChar* source, int32_t sourceLen, UErrorCode& status){
+    ICUFromUnicodePerfFunction(const char* name,  const char16_t* source, int32_t sourceLen, UErrorCode& status){
         conv = ucnv_open(name,&status);
         src = source;
         srcLen = sourceLen;
@@ -103,8 +103,8 @@ public:
         }
     }
     virtual void call(UErrorCode* status){
-        const UChar* mySrc = src;
-        const UChar* sourceLimit = src + srcLen;
+        const char16_t* mySrc = src;
+        const char16_t* sourceLimit = src + srcLen;
         char* myTarget = target;
         ucnv_fromUnicode(conv,&myTarget, targetLimit, &mySrc, sourceLimit, nullptr, true, status);
     }

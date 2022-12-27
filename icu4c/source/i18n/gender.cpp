@@ -145,7 +145,7 @@ const GenderInfo* GenderInfo::loadInstance(const Locale& locale, UErrorCode& sta
   int32_t resLen = 0;
   const char* curLocaleName = locale.getName();
   UErrorCode key_status = U_ZERO_ERROR;
-  const UChar* s = ures_getStringByKey(locRes.getAlias(), curLocaleName, &resLen, &key_status);
+  const char16_t* s = ures_getStringByKey(locRes.getAlias(), curLocaleName, &resLen, &key_status);
   if (s == nullptr) {
     key_status = U_ZERO_ERROR;
     char parentLocaleName[ULOC_FULLNAME_CAPACITY];

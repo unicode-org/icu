@@ -484,7 +484,7 @@ CalendarTest::TestGenericAPI()
         values->reset(status);
         containsHebrew = false;
         UnicodeString hebrew = UNICODE_STRING_SIMPLE("hebrew");
-        const UChar *ucharValue;
+        const char16_t *ucharValue;
         while ((ucharValue = values->unext(&valueLength, status)) != nullptr) {
             UnicodeString value(false, ucharValue, valueLength);
             if (value == hebrew) {
@@ -2086,11 +2086,11 @@ void CalendarTest::Test3785()
                                          uzone.length(), nullptr, 0, &status));
     if (df.isNull() || U_FAILURE(status)) return;
 
-    UChar upattern[64];
+    char16_t upattern[64];
     u_uastrcpy(upattern, "EEE d MMMM y G, HH:mm:ss");
     udat_applyPattern(df.getAlias(), false, upattern, u_strlen(upattern));
 
-    UChar ubuffer[1024];
+    char16_t ubuffer[1024];
     UDate ud0 = 1337557623000.0;
 
     status = U_ZERO_ERROR;
@@ -3420,7 +3420,7 @@ static const GregoUmmAlQuraMap guMappings[] = {
   {    0, 0, 0,      0, 0, 0 }, // terminator
 };
 
-static const UChar zoneSA[] = {0x41,0x73,0x69,0x61,0x2F,0x52,0x69,0x79,0x61,0x64,0x68,0}; // "Asia/Riyadh"
+static const char16_t zoneSA[] = {0x41,0x73,0x69,0x61,0x2F,0x52,0x69,0x79,0x61,0x64,0x68,0}; // "Asia/Riyadh"
 
 void CalendarTest::TestIslamicUmAlQura() {
 

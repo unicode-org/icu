@@ -252,7 +252,7 @@ CollationDataReader::read(const CollationTailoring *base, const uint8_t *inBytes
             errorCode = U_INVALID_FORMAT_ERROR;  // Tailored contexts without tailored trie.
             return;
         }
-        data->contexts = reinterpret_cast<const UChar *>(inBytes + offset);
+        data->contexts = reinterpret_cast<const char16_t *>(inBytes + offset);
         data->contextsLength = length / 2;
     }
 
@@ -317,7 +317,7 @@ CollationDataReader::read(const CollationTailoring *base, const uint8_t *inBytes
         // Mark each lead surrogate as "unsafe"
         // if any of its 1024 associated supplementary code points is "unsafe".
         UChar32 c = 0x10000;
-        for(UChar lead = 0xd800; lead < 0xdc00; ++lead, c += 0x400) {
+        for(char16_t lead = 0xd800; lead < 0xdc00; ++lead, c += 0x400) {
             if(!tailoring.unsafeBackwardSet->containsNone(c, c + 0x3ff)) {
                 tailoring.unsafeBackwardSet->add(lead);
             }

@@ -345,7 +345,7 @@ UCollator *thaiColl = nullptr;
 U_CDECL_BEGIN
 static int U_CALLCONV
 StrCmp(const void *p1, const void *p2) {
-  return ucol_strcoll(thaiColl, *(UChar **) p1, -1,  *(UChar **)p2, -1);
+  return ucol_strcoll(thaiColl, *(char16_t **) p1, -1,  *(char16_t **)p2, -1);
 }
 U_CDECL_END
 
@@ -362,9 +362,9 @@ void CollationThaiTest::TestInvalidThai(void) {
     "\\u0E01\\u0E44\\u0E44\\u0E01",
   };
 
-  UChar strings[LINES][20];
+  char16_t strings[LINES][20];
 
-  UChar *toSort[LINES];
+  char16_t *toSort[LINES];
 
   int32_t i = 0, j = 0, len = 0;
 
@@ -385,7 +385,7 @@ void CollationThaiTest::TestInvalidThai(void) {
     toSort[i] = strings[i];
   }
 
-  qsort (toSort, LINES, sizeof (UChar *), StrCmp);
+  qsort (toSort, LINES, sizeof (char16_t *), StrCmp);
 
   for (i=0; i < LINES; i++)
   {

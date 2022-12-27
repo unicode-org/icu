@@ -253,7 +253,7 @@ static void getCalendarKeyword(const UnicodeString &id, char *targetBuffer, int3
     int32_t calKeyLen = calendarKeyword.length();
     int32_t keyLen = 0;
 
-    int32_t keywordIdx = id.indexOf((UChar)0x003D); /* '=' */
+    int32_t keywordIdx = id.indexOf((char16_t)0x003D); /* '=' */
     if (id[0] == 0x40/*'@'*/
         && id.compareBetween(1, keywordIdx+1, calendarKeyword, 0, calKeyLen) == 0)
     {
@@ -314,7 +314,7 @@ static ECalType getCalendarTypeForLocale(const char *locid) {
     if (U_SUCCESS(status) && order != nullptr) {
         // the first calendar type is the default for the region
         int32_t len = 0;
-        const UChar *uCalType = ures_getStringByIndex(order, 0, &len, &status);
+        const char16_t *uCalType = ures_getStringByIndex(order, 0, &len, &status);
         if (len < (int32_t)sizeof(calTypeBuf)) {
             u_UCharsToChars(uCalType, calTypeBuf, len);
             *(calTypeBuf + len) = 0; // terminate;
@@ -432,7 +432,7 @@ protected:
     {
         if (U_SUCCESS(status)) {
             for(int32_t i=0;gCalTypes[i] != nullptr;i++) {
-                UnicodeString id((UChar)0x40); /* '@' a variant character */
+                UnicodeString id((char16_t)0x40); /* '@' a variant character */
                 id.append(UNICODE_STRING_SIMPLE("calendar="));
                 id.append(UnicodeString(gCalTypes[i], -1, US_INV));
                 result.put(id, (void*)this, status);
@@ -502,7 +502,7 @@ protected:
         if (ret == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
         } else {
-            ret->append((UChar)0x40); // '@' is a variant character
+            ret->append((char16_t)0x40); // '@' is a variant character
             ret->append(UNICODE_STRING("calendar=", 9));
             ret->append(UnicodeString(gCalTypes[getCalendarTypeForLocale(loc.getName())], -1, US_INV));
         }

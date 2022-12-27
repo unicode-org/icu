@@ -40,11 +40,11 @@ public:
     void TestExtra(/* char* par */);
 
 private:
-    static const UChar testSourceCases[][MAX_TOKEN_LEN];
-    static const UChar testTargetCases[][MAX_TOKEN_LEN];
-    static const UChar testBugs[][MAX_TOKEN_LEN];
+    static const char16_t testSourceCases[][MAX_TOKEN_LEN];
+    static const char16_t testTargetCases[][MAX_TOKEN_LEN];
+    static const char16_t testBugs[][MAX_TOKEN_LEN];
     static const Collator::EComparisonResult results[];
-    static const UChar testAcute[][MAX_TOKEN_LEN];
+    static const char16_t testAcute[][MAX_TOKEN_LEN];
 
     Collator *myCollation;
 };

@@ -78,7 +78,7 @@ struct SRBRoot {
     void write(const char *outputDir, const char *outputPkg,
                char *writtenFilename, int writtenFilenameLen, UErrorCode &errorCode);
 
-    void setLocale(UChar *locale, UErrorCode &errorCode);
+    void setLocale(char16_t *locale, UErrorCode &errorCode);
     int32_t addTag(const char *tag, UErrorCode &errorCode);
 
     const char *getKeyString(int32_t key) const;
@@ -149,9 +149,9 @@ TableResource *table_open(struct SRBRoot *bundle, const char *tag, const struct 
 
 ArrayResource *array_open(struct SRBRoot *bundle, const char *tag, const struct UString* comment, UErrorCode *status);
 
-struct SResource *string_open(struct SRBRoot *bundle, const char *tag, const UChar *value, int32_t len, const struct UString* comment, UErrorCode *status);
+struct SResource *string_open(struct SRBRoot *bundle, const char *tag, const char16_t *value, int32_t len, const struct UString* comment, UErrorCode *status);
 
-struct SResource *alias_open(struct SRBRoot *bundle, const char *tag, UChar *value, int32_t len, const struct UString* comment, UErrorCode *status);
+struct SResource *alias_open(struct SRBRoot *bundle, const char *tag, char16_t *value, int32_t len, const struct UString* comment, UErrorCode *status);
 
 IntVectorResource *intvector_open(struct SRBRoot *bundle, const char *tag,  const struct UString* comment, UErrorCode *status);
 
@@ -319,14 +319,14 @@ public:
 class StringBaseResource : public SResource {
 public:
     StringBaseResource(SRBRoot *bundle, const char *tag, int8_t type,
-                       const UChar *value, int32_t len,
+                       const char16_t *value, int32_t len,
                        const UString* comment, UErrorCode &errorCode);
     StringBaseResource(SRBRoot *bundle, int8_t type,
                        const icu::UnicodeString &value, UErrorCode &errorCode);
-    StringBaseResource(int8_t type, const UChar *value, int32_t len, UErrorCode &errorCode);
+    StringBaseResource(int8_t type, const char16_t *value, int32_t len, UErrorCode &errorCode);
     virtual ~StringBaseResource();
 
-    const UChar *getBuffer() const { return icu::toUCharPtr(fString.getBuffer()); }
+    const char16_t *getBuffer() const { return icu::toUCharPtr(fString.getBuffer()); }
     int32_t length() const { return fString.length(); }
 
     virtual void handlePreWrite(uint32_t *byteOffset) override;
@@ -338,7 +338,7 @@ public:
 
 class StringResource : public StringBaseResource {
 public:
-    StringResource(SRBRoot *bundle, const char *tag, const UChar *value, int32_t len,
+    StringResource(SRBRoot *bundle, const char *tag, const char16_t *value, int32_t len,
                    const UString* comment, UErrorCode &errorCode)
             : StringBaseResource(bundle, tag, URES_STRING, value, len, comment, errorCode),
               fSame(nullptr), fSuffixOffset(0),
@@ -348,7 +348,7 @@ public:
               fSame(nullptr), fSuffixOffset(0),
               fNumCopies(0), fNumUnitsSaved(0), fNumCharsForLength(0) {}
     StringResource(int32_t poolStringIndex, int8_t numCharsForLength,
-                   const UChar *value, int32_t length,
+                   const char16_t *value, int32_t length,
                    UErrorCode &errorCode)
             : StringBaseResource(URES_STRING, value, length, errorCode),
               fSame(nullptr), fSuffixOffset(0),
@@ -377,7 +377,7 @@ public:
 
 class AliasResource : public StringBaseResource {
 public:
-    AliasResource(SRBRoot *bundle, const char *tag, const UChar *value, int32_t len,
+    AliasResource(SRBRoot *bundle, const char *tag, const char16_t *value, int32_t len,
                   const UString* comment, UErrorCode &errorCode)
             : StringBaseResource(bundle, tag, URES_ALIAS, value, len, comment, errorCode) {}
     virtual ~AliasResource();

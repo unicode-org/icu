@@ -145,7 +145,7 @@ public:
     
     ULine* getLines(UErrorCode& status);
 
-    const UChar* getBuffer(int32_t& len,UErrorCode& status);
+    const char16_t* getBuffer(int32_t& len,UErrorCode& status);
 
 protected:
     UPerfTest(int32_t argc, const char* argv[], UErrorCode& status);
@@ -177,7 +177,7 @@ protected:
     ULine*       lines;
     int32_t      numLines;
     UBool        line_mode;
-    UChar* buffer;
+    char16_t* buffer;
     int32_t      bufferLen;
     UBool        verbose;
     UBool        bulk_mode;

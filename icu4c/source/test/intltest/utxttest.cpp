@@ -104,9 +104,9 @@ void  UTextTest::TextTest() {
         for (j=0; j<i; j++) {
             if (j+0x30 == 0x5c) {
                 // backslash.  Needs to be escaped
-                s.append((UChar)0x5c);
+                s.append((char16_t)0x5c);
             }
-            s.append(UChar(j+0x30));
+            s.append(char16_t(j+0x30));
         }
         TestString(s);
     }
@@ -115,7 +115,7 @@ void  UTextTest::TextTest() {
    //    looking for glitches at buffer boundaries
     for (i=1; i<60; i++) {
         s.truncate(0);
-        s.append((UChar)0x41);
+        s.append((char16_t)0x41);
         for (j=0; j<i; j++) {
             s.append(UChar32(j+0x11000));
         }
@@ -188,9 +188,9 @@ void UTextTest::TestString(const UnicodeString &s) {
     cpMap[j].nativeIdx = i;   // position following the last char in utf-16 string.
 
 
-    // UChar * test, null terminated
+    // char16_t * test, null terminated
     status = U_ZERO_ERROR;
-    UChar *buf = new UChar[saLen+1];
+    char16_t *buf = new char16_t[saLen+1];
     sa.extract(buf, saLen+1, status);
     TEST_SUCCESS(status);
     ut = utext_openUChars(nullptr, buf, -1, &status);
@@ -199,9 +199,9 @@ void UTextTest::TestString(const UnicodeString &s) {
     utext_close(ut);
     delete [] buf;
 
-    // UChar * test, with length
+    // char16_t * test, with length
     status = U_ZERO_ERROR;
-    buf = new UChar[saLen+1];
+    buf = new char16_t[saLen+1];
     sa.extract(buf, saLen+1, status);
     TEST_SUCCESS(status);
     ut = utext_openUChars(nullptr, buf, saLen, &status);
@@ -238,7 +238,7 @@ void UTextTest::TestString(const UnicodeString &s) {
 
     // Character Iterator Tests
     status = U_ZERO_ERROR;
-    const UChar *cbuf = sa.getBuffer();
+    const char16_t *cbuf = sa.getBuffer();
     CharacterIterator *ci = new UCharCharacterIterator(cbuf, saLen, status);
     TEST_SUCCESS(status);
     ut = utext_openCharacterIterator(nullptr, ci, &status);
@@ -510,7 +510,7 @@ void UTextTest::TestReplace(
     //
     // Do the replace on the UText under test
     //
-    const UChar *rs = repStr.getBuffer();
+    const char16_t *rs = repStr.getBuffer();
     int32_t  rsLen = repStr.length();
     int32_t actualDelta = utext_replace(targetUT, nativeStart, nativeLimit, rs, rsLen, &status);
     int32_t expectedDelta = repStr.length() - (nativeLimit - nativeStart);
@@ -799,7 +799,7 @@ void UTextTest::TestAccessNoClone(const UnicodeString &us, UText *ut, int cpCoun
     // Extract
     //
     int bufSize = us.length() + 10;
-    UChar *buf = new UChar[bufSize];
+    char16_t *buf = new char16_t[bufSize];
     status = U_ZERO_ERROR;
     expectedLen = us.length();
     len = utext_extract(ut, 0, utlen, buf, bufSize, &status);
@@ -881,7 +881,7 @@ void UTextTest::ErrorTest()
         UText ut = UTEXT_INITIALIZER;
         UText  *utp;
         UnicodeString s1("Hello, World");
-        UChar s2[] = {(UChar)0x41, (UChar)0x42, (UChar)0};
+        char16_t s2[] = {(char16_t)0x41, (char16_t)0x42, (char16_t)0};
         const char  *s3 = "\x66\x67\x68";
 
         utp = utext_openUnicodeString(&ut, &s1, &status);
@@ -951,7 +951,7 @@ void UTextTest::ErrorTest()
         c = utext_char32At(ut, 6);
         TEST_ASSERT(c == 0x43);
 
-        UChar buf[10];
+        char16_t buf[10];
         int n = utext_extract(ut, 0, 9, buf, 10, &status);
         TEST_SUCCESS(status);
         TEST_ASSERT(n==7);
@@ -975,7 +975,7 @@ void UTextTest::ErrorTest()
         UnicodeString sa("Hello, this is a string");
         UBool  isExpensive;
 
-        UChar sb[100];
+        char16_t sb[100];
         memset(sb, 0x20, sizeof(sb));
         sb[99] = 0;
 
@@ -1056,7 +1056,7 @@ void UTextTest::ErrorTest()
         //   Extract from i to i+1, which may be zero or one code points,
         //     depending on whether the indices straddle a cp boundary.
         for (i=0; i<startMapLimit; i++) {
-            UChar buf[3];
+            char16_t buf[3];
             status = U_ZERO_ERROR;
             int32_t  extractedLen = utext_extract(ut, i, i+1, buf, 3, &status);
             TEST_SUCCESS(status);
@@ -1125,7 +1125,7 @@ void UTextTest::ErrorTest()
         //   Extract from i to i+1, which may be zero or one code points,
         //     depending on whether the indices straddle a cp boundary.
         for (i=0; i<startMapLimit; i++) {
-            UChar buf[3];
+            char16_t buf[3];
             status = U_ZERO_ERROR;
             int32_t  extractedLen = utext_extract(ut, i, i+1, buf, 3, &status);
             TEST_SUCCESS(status);
@@ -1193,7 +1193,7 @@ void UTextTest::ErrorTest()
         //   Extract from i to i+1, which may be zero or one code points,
         //     depending on whether the indices straddle a cp boundary.
         for (i=0; i<startMapLimit; i++) {
-            UChar buf[3];
+            char16_t buf[3];
             status = U_ZERO_ERROR;
             int32_t  extractedLen = utext_extract(ut, i, i+1, buf, 3, &status);
             TEST_SUCCESS(status);
@@ -1217,7 +1217,7 @@ void UTextTest::FreezeTest() {
 
     UnicodeString  ustr("Hello, World.");
     const char u8str[] = {char(0x31), (char)0x32, (char)0x33, 0};
-    const UChar u16str[] = {(UChar)0x31, (UChar)0x32, (UChar)0x44, 0};
+    const char16_t u16str[] = {(char16_t)0x31, (char16_t)0x32, (char16_t)0x44, 0};
 
     UErrorCode status = U_ZERO_ERROR;
     UText  *ut        = nullptr;
@@ -1312,7 +1312,7 @@ U_CDECL_BEGIN
 static UBool U_CALLCONV
 fragTextAccess(UText *ut, int64_t index, UBool forward) {
     const UnicodeString *us = (const UnicodeString *)ut->context;
-    UChar  c;
+    char16_t  c;
     int32_t length = us->length();
     if (forward && index>=0 && index<length) {
         c = us->charAt((int32_t)index);
@@ -1384,7 +1384,7 @@ openFragmentedUnicodeString(UText *ut, UnicodeString *s, UErrorCode *status) {
     fragmentFuncs.clone  = cloneFragmentedUnicodeString;
     ut->pFuncs = &fragmentFuncs;
 
-    ut->chunkContents = (UChar *)&ut->b;
+    ut->chunkContents = (char16_t *)&ut->b;
     ut->pFuncs->access(ut, 0, true);
     return ut;
 }
@@ -1410,7 +1410,7 @@ void UTextTest::Ticket5560() {
 	UText ut2 = UTEXT_INITIALIZER;
 
 	utext_openUTF8(&ut1, s1, -1, &status);
-	UChar c = utext_next32(&ut1);
+	char16_t c = utext_next32(&ut1);
 	TEST_ASSERT(c == 0x41);  // c == 'A'
 
 	utext_clone(&ut2, &ut1, true, false, &status);
@@ -1435,7 +1435,7 @@ void UTextTest::Ticket5560() {
 //
 void UTextTest::Ticket6847() {
     const int STRLEN = 90;
-    UChar s[STRLEN+1];
+    char16_t s[STRLEN+1];
     u_memset(s, 0x41, STRLEN);
     s[STRLEN] = 0;
 
@@ -1509,7 +1509,7 @@ void UTextTest::Ticket10983() {
     utext_close(ut);
 }
 
-// Ticket 12130 - extract on a UText wrapping a null terminated UChar * string
+// Ticket 12130 - extract on a UText wrapping a null terminated char16_t * string
 //                leaves the iteration position set incorrectly when the
 //                actual string length is not yet known.
 //
@@ -1528,10 +1528,10 @@ void UTextTest::Ticket12130() {
         "symbols in common use.";
 
     UnicodeString str(text8);
-    const UChar *ustr = str.getTerminatedBuffer();
+    const char16_t *ustr = str.getTerminatedBuffer();
     UText ut = UTEXT_INITIALIZER;
     utext_openUChars(&ut, ustr, -1, &status);
-    UChar extractBuffer[50];
+    char16_t extractBuffer[50];
 
     for (int32_t startIdx = 0; startIdx<str.length(); ++startIdx) {
         int32_t endIdx = startIdx + 20;

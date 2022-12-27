@@ -32,14 +32,14 @@ struct ConversionCase {
     /* setup */
     int32_t caseNr;
     const char *charset, *cbopt, *name;
-    UChar subString[16];
+    char16_t subString[16];
     char subchar[8];
     int8_t setSub;
 
     /* input and expected output */
     const uint8_t *bytes;
     int32_t bytesLength;
-    const UChar *unicode;
+    const char16_t *unicode;
     int32_t unicodeLength;
     const int32_t *offsets;
 
@@ -52,12 +52,12 @@ struct ConversionCase {
     UBool fallbacks;
     UErrorCode outErrorCode;
     const uint8_t *invalidChars;
-    const UChar *invalidUChars;
+    const char16_t *invalidUChars;
     int32_t invalidLength;
 
     /* actual output */
     uint8_t resultBytes[200];
-    UChar resultUnicode[200];
+    char16_t resultUnicode[200];
     int32_t resultOffsets[200];
     int32_t resultLength;
 
@@ -88,7 +88,7 @@ private:
 
     UBool
     checkToUnicode(ConversionCase &cc, UConverter *cnv, const char *name,
-                   const UChar *result, int32_t resultLength,
+                   const char16_t *result, int32_t resultLength,
                    const int32_t *resultOffsets,
                    UErrorCode resultErrorCode);
 

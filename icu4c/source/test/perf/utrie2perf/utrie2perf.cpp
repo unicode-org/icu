@@ -83,7 +83,7 @@ public:
 
     virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = nullptr);
 
-    const UChar *getBuffer() const { return buffer; }
+    const char16_t *getBuffer() const { return buffer; }
     int32_t getBufferLen() const { return bufferLen; }
 
     char *utf8;
@@ -180,7 +180,7 @@ protected:
                                      UNORM_NFC, 0,
                                      nullptr, 0,
                                      &errorCode);
-        dest=new UChar[destCapacity];
+        dest=new char16_t[destCapacity];
     }
     ~ToNFC() {
         delete [] dest;
@@ -202,7 +202,7 @@ public:
     }
 
 private:
-    UChar *dest;
+    char16_t *dest;
     int32_t destCapacity;
 };
 
@@ -214,7 +214,7 @@ public:
         return new GetBiDiClass(testcase);
     }
     virtual void call(UErrorCode* pErrorCode) {
-        const UChar *buffer=testcase.getBuffer();
+        const char16_t *buffer=testcase.getBuffer();
         int32_t length=testcase.getBufferLen();
         UChar32 c;
         int32_t i;

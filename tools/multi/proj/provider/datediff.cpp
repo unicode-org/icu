@@ -57,7 +57,7 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
     for(uint32_t s=0;s<sizeof(styles)/sizeof(styles[0]);s++) {
       for(int l=0;l<LOCALE_COUNT;l++) {
         printf("\n");
-        UChar oldChars[200];
+        char16_t oldChars[200];
         int32_t oldLen = -1;
         for(int v=0;v<=expected;v++) {
           
@@ -72,7 +72,7 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
           printf("%18s : ", locID);
           
           UErrorCode subStatus = U_ZERO_ERROR;
-          UChar outchars[200];
+          char16_t outchars[200];
           
           UDateFormat *dat = udat_open(styles[s],styles[s], locID, nullptr, -1, nullptr, 0, &subStatus);
           

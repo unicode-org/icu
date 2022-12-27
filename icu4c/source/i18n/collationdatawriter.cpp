@@ -302,9 +302,9 @@ CollationDataWriter::write(UBool isBase, const UVersionInfo dataVersion,
     UnicodeString scripts;
     indexes[CollationDataReader::IX_SCRIPTS_OFFSET] = totalSize;
     if(isBase) {
-        scripts.append((UChar)data.numScripts);
-        scripts.append(reinterpret_cast<const UChar *>(data.scriptsIndex), data.numScripts + 16);
-        scripts.append(reinterpret_cast<const UChar *>(data.scriptStarts), data.scriptStartsLength);
+        scripts.append((char16_t)data.numScripts);
+        scripts.append(reinterpret_cast<const char16_t *>(data.scriptsIndex), data.numScripts + 16);
+        scripts.append(reinterpret_cast<const char16_t *>(data.scriptStarts), data.scriptStartsLength);
         totalSize += scripts.length() * 2;
     }
 

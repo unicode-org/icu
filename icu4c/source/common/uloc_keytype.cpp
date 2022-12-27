@@ -269,7 +269,7 @@ initFromResourceBundle(UErrorCode& sts) {
                     while (ures_hasNext(typeAliasResByKey.getAlias()) && U_SUCCESS(sts)) {
                         int32_t toLen;
                         typeAliasDataEntry.adoptInstead(ures_getNextResource(typeAliasResByKey.getAlias(), typeAliasDataEntry.orphan(), &sts));
-                        const UChar* to = ures_getString(typeAliasDataEntry.getAlias(), &toLen, &sts);
+                        const char16_t* to = ures_getString(typeAliasDataEntry.getAlias(), &toLen, &sts);
                         if (U_FAILURE(sts)) {
                             break;
                         }
@@ -310,7 +310,7 @@ initFromResourceBundle(UErrorCode& sts) {
                     while (ures_hasNext(bcpTypeAliasResByKey.getAlias()) && U_SUCCESS(sts)) {
                         int32_t toLen;
                         bcpTypeAliasDataEntry.adoptInstead(ures_getNextResource(bcpTypeAliasResByKey.getAlias(), bcpTypeAliasDataEntry.orphan(), &sts));
-                        const UChar* to = ures_getString(bcpTypeAliasDataEntry.getAlias(), &toLen, &sts);
+                        const char16_t* to = ures_getString(bcpTypeAliasDataEntry.getAlias(), &toLen, &sts);
                         if (U_FAILURE(sts)) {
                             break;
                         }

@@ -90,7 +90,7 @@ struct U_I18N_API CollationData : public UMemory {
      * Returns the CE32 from two contexts words.
      * Access to the defaultCE32 for contraction and prefix matching.
      */
-    static uint32_t readCE32(const UChar *p) {
+    static uint32_t readCE32(const char16_t *p) {
         return ((uint32_t)p[0] << 16) | p[1];
     }
 
@@ -178,7 +178,7 @@ struct U_I18N_API CollationData : public UMemory {
     /** Array of CE values for expansions and OFFSET_TAG. */
     const int64_t *ces;
     /** Array of prefix and contraction-suffix matching data. */
-    const UChar *contexts;
+    const char16_t *contexts;
     /** Base collation data, or nullptr if this data itself is a base. */
     const CollationData *base;
     /**

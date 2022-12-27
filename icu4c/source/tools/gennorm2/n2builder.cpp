@@ -596,7 +596,7 @@ LocalUCPTriePointer Normalizer2DataBuilder::processData() {
     // Pad the maybeYesCompositions length to a multiple of 4,
     // so that NO_NO_DELTA bits 2..1 can be used without subtracting the center.
     while(extra.maybeYesCompositions.length()&3) {
-        extra.maybeYesCompositions.append((UChar)0);
+        extra.maybeYesCompositions.append((char16_t)0);
     }
     extraData.insert(0, extra.maybeYesCompositions);
     indexes[Normalizer2Impl::IX_MIN_MAYBE_YES]=
@@ -605,7 +605,7 @@ LocalUCPTriePointer Normalizer2DataBuilder::processData() {
 
     // Pad to even length for 4-byte alignment of following data.
     if(extraData.length()&1) {
-        extraData.append((UChar)0);
+        extraData.append((char16_t)0);
     }
 
     int32_t minNoNoDelta=getMinNoNoDelta();

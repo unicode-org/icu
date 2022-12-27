@@ -264,13 +264,13 @@ udata_writeString(UNewDataMemory *pData, const char *s, int32_t length) {
 }
 
 U_CAPI void U_EXPORT2
-udata_writeUString(UNewDataMemory *pData, const UChar *s, int32_t length) {
+udata_writeUString(UNewDataMemory *pData, const char16_t *s, int32_t length) {
     if(pData!=nullptr && pData->file!=nullptr) {
         if(length==-1) {
             length=u_strlen(s);
         }
         if(length>0) {
-            T_FileStream_write(pData->file, s, length*sizeof(UChar));
+            T_FileStream_write(pData->file, s, length*sizeof(char16_t));
         }
     }
 }

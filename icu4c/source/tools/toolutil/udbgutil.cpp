@@ -475,7 +475,7 @@ paramCldrVersion(const USystemParams * /* param */, char *target, int32_t target
 U_CAPI  int32_t
 paramTimezoneDefault(const USystemParams * /* param */, char *target, int32_t targetCapacity, UErrorCode *status) {
   if(U_FAILURE(*status))return 0;
-  UChar buf[100];
+  char16_t buf[100];
   char buf2[100];
   int32_t len;
 
@@ -614,7 +614,7 @@ class KnownIssues {
 public:
   KnownIssues();
   ~KnownIssues();
-  void add(const char *ticket, const char *where, const UChar *msg, UBool *firstForTicket, UBool *firstForWhere);
+  void add(const char *ticket, const char *where, const char16_t *msg, UBool *firstForTicket, UBool *firstForWhere);
   void add(const char *ticket, const char *where, const char *msg, UBool *firstForTicket, UBool *firstForWhere);
   UBool print();
 private:
@@ -649,7 +649,7 @@ static std::string mapTicketId(const char *ticketStr) {
   return ticket;
 }
 
-void KnownIssues::add(const char *ticketStr, const char *where, const UChar *msg, UBool *firstForTicket, UBool *firstForWhere)
+void KnownIssues::add(const char *ticketStr, const char *where, const char16_t *msg, UBool *firstForTicket, UBool *firstForWhere)
 {
   const std::string ticket = mapTicketId(ticketStr);
   if(fTable.find(ticket) == fTable.end()) {
@@ -729,7 +729,7 @@ UBool KnownIssues::print()
   return true;
 }
 
-U_CAPI void *udbg_knownIssue_openU(void *ptr, const char *ticket, char *where, const UChar *msg, UBool *firstForTicket,
+U_CAPI void *udbg_knownIssue_openU(void *ptr, const char *ticket, char *where, const char16_t *msg, UBool *firstForTicket,
                                    UBool *firstForWhere) {
   KnownIssues *t = static_cast<KnownIssues*>(ptr);
   if(t==nullptr) {

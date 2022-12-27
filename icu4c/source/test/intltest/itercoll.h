@@ -93,7 +93,7 @@ private:
 
     struct ExpansionRecord
     {
-        UChar character;
+        char16_t character;
         int32_t count;
     };
 

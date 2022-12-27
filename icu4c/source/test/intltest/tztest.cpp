@@ -1059,7 +1059,7 @@ void TimeZoneTest::TestShortZoneIDs()
  */
 UnicodeString& TimeZoneTest::formatOffset(int32_t offset, UnicodeString &rv) {
     rv.remove();
-    UChar sign = 0x002B;
+    char16_t sign = 0x002B;
     if (offset < 0) {
         sign = 0x002D;
         offset = -offset;
@@ -1070,30 +1070,30 @@ UnicodeString& TimeZoneTest::formatOffset(int32_t offset, UnicodeString &rv) {
     int32_t m = offset % 60;
     int32_t h = offset / 60;
 
-    rv += (UChar)(sign);
+    rv += (char16_t)(sign);
     if (h >= 10) {
-        rv += (UChar)(0x0030 + (h/10));
+        rv += (char16_t)(0x0030 + (h/10));
     } else {
-        rv += (UChar)0x0030;
+        rv += (char16_t)0x0030;
     }
-    rv += (UChar)(0x0030 + (h%10));
+    rv += (char16_t)(0x0030 + (h%10));
 
-    rv += (UChar)0x003A; /* ':' */
+    rv += (char16_t)0x003A; /* ':' */
     if (m >= 10) {
-        rv += (UChar)(0x0030 + (m/10));
+        rv += (char16_t)(0x0030 + (m/10));
     } else {
-        rv += (UChar)0x0030;
+        rv += (char16_t)0x0030;
     }
-    rv += (UChar)(0x0030 + (m%10));
+    rv += (char16_t)(0x0030 + (m%10));
 
     if (s) {
-        rv += (UChar)0x003A; /* ':' */
+        rv += (char16_t)0x003A; /* ':' */
         if (s >= 10) {
-            rv += (UChar)(0x0030 + (s/10));
+            rv += (char16_t)(0x0030 + (s/10));
         } else {
-            rv += (UChar)0x0030;
+            rv += (char16_t)0x0030;
         }
-        rv += (UChar)(0x0030 + (s%10));
+        rv += (char16_t)(0x0030 + (s%10));
     }
     return rv;
 }
@@ -1104,7 +1104,7 @@ UnicodeString& TimeZoneTest::formatOffset(int32_t offset, UnicodeString &rv) {
  */
 UnicodeString& TimeZoneTest::formatTZID(int32_t offset, UnicodeString &rv) {
     rv.remove();
-    UChar sign = 0x002B;
+    char16_t sign = 0x002B;
     if (offset < 0) {
         sign = 0x002D;
         offset = -offset;
@@ -1116,29 +1116,29 @@ UnicodeString& TimeZoneTest::formatTZID(int32_t offset, UnicodeString &rv) {
     int32_t h = offset / 60;
 
     rv += "GMT";
-    rv += (UChar)(sign);
+    rv += (char16_t)(sign);
     if (h >= 10) {
-        rv += (UChar)(0x0030 + (h/10));
+        rv += (char16_t)(0x0030 + (h/10));
     } else {
-        rv += (UChar)0x0030;
+        rv += (char16_t)0x0030;
     }
-    rv += (UChar)(0x0030 + (h%10));
-    rv += (UChar)0x003A;
+    rv += (char16_t)(0x0030 + (h%10));
+    rv += (char16_t)0x003A;
     if (m >= 10) {
-        rv += (UChar)(0x0030 + (m/10));
+        rv += (char16_t)(0x0030 + (m/10));
     } else {
-        rv += (UChar)0x0030;
+        rv += (char16_t)0x0030;
     }
-    rv += (UChar)(0x0030 + (m%10));
+    rv += (char16_t)(0x0030 + (m%10));
 
     if (s) {
-        rv += (UChar)0x003A;
+        rv += (char16_t)0x003A;
         if (s >= 10) {
-            rv += (UChar)(0x0030 + (s/10));
+            rv += (char16_t)(0x0030 + (s/10));
         } else {
-            rv += (UChar)0x0030;
+            rv += (char16_t)0x0030;
         }
-        rv += (UChar)(0x0030 + (s%10));
+        rv += (char16_t)(0x0030 + (s%10));
     }
     return rv;
 }

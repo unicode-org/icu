@@ -40,7 +40,7 @@ namespace {
  * Prefix string for Chinese index buckets.
  * See http://unicode.org/repos/cldr/trunk/specs/ldml/tr35-collation.html#Collation_Indexes
  */
-const UChar BASE[1] = { 0xFDD0 };
+const char16_t BASE[1] = { 0xFDD0 };
 const int32_t BASE_LENGTH = 1;
 
 UBool isOneLabelBetterThanOther(const Normalizer2 &nfkdNormalizer,
@@ -376,19 +376,19 @@ const UnicodeString &fixLabel(const UnicodeString &current, UnicodeString &temp)
     if (!current.startsWith(BASE, BASE_LENGTH)) {
         return current;
     }
-    UChar rest = current.charAt(BASE_LENGTH);
+    char16_t rest = current.charAt(BASE_LENGTH);
     if (0x2800 < rest && rest <= 0x28FF) { // stroke count
         int32_t count = rest-0x2800;
-        temp.setTo((UChar)(0x30 + count % 10));
+        temp.setTo((char16_t)(0x30 + count % 10));
         if (count >= 10) {
             count /= 10;
-            temp.insert(0, (UChar)(0x30 + count % 10));
+            temp.insert(0, (char16_t)(0x30 + count % 10));
             if (count >= 10) {
                 count /= 10;
-                temp.insert(0, (UChar)(0x30 + count));
+                temp.insert(0, (char16_t)(0x30 + count));
             }
         }
-        return temp.append((UChar)0x5283);
+        return temp.append((char16_t)0x5283);
     }
     return temp.setTo(current, BASE_LENGTH);
 }
@@ -492,7 +492,7 @@ BucketList *AlphabeticIndex::createBucketList(UErrorCode &errorCode) const {
         bucketList->adoptElement(bucket.orphan(), errorCode);
         if (U_FAILURE(errorCode)) { return nullptr; }
         // Remember ASCII and Pinyin buckets for Pinyin redirects.
-        UChar c;
+        char16_t c;
         if (current.length() == 1 && 0x41 <= (c = current.charAt(0)) && c <= 0x5A) {  // A-Z
             asciiBuckets[c - 0x41] = (Bucket *)bucketList->lastElement();
         } else if (current.length() == BASE_LENGTH + 1 && current.startsWith(BASE, BASE_LENGTH) &&
@@ -522,7 +522,7 @@ BucketList *AlphabeticIndex::createBucketList(UErrorCode &errorCode) const {
                     // For example, after ... Q R S Sch we add Sch\uFFFF->S
                     // and after ... Q R S Sch Sch\uFFFF St we add St\uFFFF->S.
                     bucket.adoptInsteadAndCheckErrorCode(new Bucket(emptyString_,
-                        UnicodeString(current).append((UChar)0xFFFF),
+                        UnicodeString(current).append((char16_t)0xFFFF),
                         U_ALPHAINDEX_NORMAL),
                         errorCode);
                     if (U_FAILURE(errorCode)) {
@@ -760,7 +760,7 @@ UBool AlphabeticIndex::addChineseIndexCharacters(UErrorCode &errorCode) {
     while (iter.next()) {
         const UnicodeString &s = iter.getString();
         U_ASSERT (s.startsWith(BASE, BASE_LENGTH));
-        UChar c = s.charAt(s.length() - 1);
+        char16_t c = s.charAt(s.length() - 1);
         if (0x41 <= c && c <= 0x5A) {  // A-Z
             // There are Pinyin labels, add ASCII A-Z labels as well.
             initialLabels_->add(0x41, 0x5A);  // A-Z
@@ -774,7 +774,7 @@ UBool AlphabeticIndex::addChineseIndexCharacters(UErrorCode &errorCode) {
 /*
  * Return the string with interspersed CGJs. Input must have more than 2 codepoints.
  */
-static const UChar CGJ = 0x034F;
+static const char16_t CGJ = 0x034F;
 UnicodeString AlphabeticIndex::separated(const UnicodeString &item) {
     UnicodeString result;
     if (item.length() == 0) {
@@ -880,7 +880,7 @@ void AlphabeticIndex::init(const Locale *locale, UErrorCode &status) {
         return;
     }
 
-    inflowLabel_.setTo((UChar)0x2026);    // Ellipsis
+    inflowLabel_.setTo((char16_t)0x2026);    // Ellipsis
     overflowLabel_ = inflowLabel_;
     underflowLabel_ = inflowLabel_;
 

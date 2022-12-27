@@ -36,9 +36,9 @@
   public:  static DateFormat *create(UDateFormatStyle  timeStyle, \
                                                     UDateFormatStyle  dateStyle, \
                                                     const char        *locale, \
-                                                    const UChar       *tzID, \
+                                                    const char16_t    *tzID, \
                                                     int32_t           tzIDLength, \
-                                                    const UChar       *pattern,  \
+                                                    const char16_t    *pattern,  \
                                                     int32_t           patternLength,  \
                                                       UErrorCode        *status, const Locale &loc, const char *ver); \
   private: UDateFormat *_this; GLUE_SYM_V( DateFormat, x ) ( UDateFormat* tn ); \
@@ -87,9 +87,9 @@ DateFormat *
 GLUE_SYM ( DateFormat ) :: create(UDateFormatStyle  timeStyle,
                                                     UDateFormatStyle  dateStyle,
                                                     const char        *locale,
-                                                    const UChar       *tzID,
+                                                    const char16_t    *tzID,
                                                     int32_t           tzIDLength,
-                                                    const UChar       *pattern,
+                                                    const char16_t    *pattern,
                                                     int32_t           patternLength,
                                                     UErrorCode        *status,
                                   const Locale &loc, const char */*ver*/) {
@@ -117,7 +117,7 @@ UnicodeString& GLUE_SYM (DateFormat ) :: format(  Calendar& cal, UnicodeString& 
 #endif
   int32_t len = appendTo.length();
 
-  UChar junk[200];
+  char16_t junk[200];
   UErrorCode status = U_ZERO_ERROR;
 
   UFieldPosition pos2;
@@ -170,7 +170,7 @@ int32_t GLUE_SYM ( DateFormat ) :: appendAvailable(UnicodeString* strs, int32_t 
 #if DATE_FE_DEBUG
          { 
             char foo[999];
-            const UChar *ss = strs[i+j].getTerminatedBuffer();
+            const char16_t *ss = strs[i+j].getTerminatedBuffer();
             u_austrcpy(foo, ss);
             //            fprintf(stderr,  "VCF " ICUGLUE_VER_STR " appending [%d+%d=%d] <<%s>>\n", i, j, i+j, foo);
         }
@@ -204,9 +204,9 @@ public:
   virtual DateFormat *createFormat(UDateFormatStyle  timeStyle,
                                    UDateFormatStyle  dateStyle,
                                    const char        *locale,
-                                   const UChar       *tzID,
+                                   const char16_t    *tzID,
                                    int32_t           tzIDLength,
-                                   const UChar       *pattern,
+                                   const char16_t    *pattern,
                                    int32_t           patternLength,
                                    UErrorCode        *status);
   virtual const UnicodeString *getSupportedIDs(int32_t &count, UErrorCode &status);
@@ -219,9 +219,9 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION( VersionDateFormatFactory )
 DateFormat *VersionDateFormatFactory::createFormat(UDateFormatStyle  timeStyle,
                                                     UDateFormatStyle  dateStyle,
                                                     const char        *locale,
-                                                    const UChar       *tzID,
+                                                    const char16_t    *tzID,
                                                     int32_t           tzIDLength,
-                                                    const UChar       *pattern,
+                                                    const char16_t    *pattern,
                                                     int32_t           patternLength,
                                                        UErrorCode        *status) {
     Locale loc(locale);
@@ -312,9 +312,9 @@ static VersionDateFormatFactory vdf;
 extern "C" UDateFormat *versionDateFormatOpener(UDateFormatStyle  timeStyle,
                                                     UDateFormatStyle  dateStyle,
                                                     const char        *locale,
-                                                    const UChar       *tzID,
+                                                    const char16_t    *tzID,
                                                     int32_t           tzIDLength,
-                                                    const UChar       *pattern,
+                                                    const char16_t    *pattern,
                                                     int32_t           patternLength,
                                                        UErrorCode        *status) {
   DateFormat *df = vdf.createFormat(timeStyle,dateStyle,locale,tzID,tzIDLength,pattern,patternLength,status);

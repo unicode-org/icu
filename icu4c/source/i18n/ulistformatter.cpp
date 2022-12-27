@@ -67,7 +67,7 @@ UPRV_FORMATTED_VALUE_CAPI_AUTO_IMPL(
 
 
 static UnicodeString* getUnicodeStrings(
-        const UChar* const strings[],
+        const char16_t* const strings[],
         const int32_t* stringLengths,
         int32_t stringCount,
         UnicodeString* length4StackBuffer,
@@ -101,10 +101,10 @@ static UnicodeString* getUnicodeStrings(
 
 U_CAPI int32_t U_EXPORT2
 ulistfmt_format(const UListFormatter* listfmt,
-                const UChar* const strings[],
+                const char16_t* const strings[],
                 const int32_t *    stringLengths,
                 int32_t            stringCount,
-                UChar*             result,
+                char16_t*             result,
                 int32_t            resultCapacity,
                 UErrorCode*        status)
 {
@@ -136,7 +136,7 @@ ulistfmt_format(const UListFormatter* listfmt,
 U_CAPI void U_EXPORT2
 ulistfmt_formatStringsToResult(
                 const UListFormatter* listfmt,
-                const UChar* const strings[],
+                const char16_t* const strings[],
                 const int32_t *    stringLengths,
                 int32_t            stringCount,
                 UFormattedList*    uresult,

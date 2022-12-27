@@ -83,7 +83,7 @@ const UFormattedNumberRangeData* number::impl::validateUFormattedNumberRange(
 
 U_CAPI UNumberRangeFormatter* U_EXPORT2
 unumrf_openForSkeletonWithCollapseAndIdentityFallback(
-        const UChar* skeleton,
+        const char16_t* skeleton,
         int32_t skeletonLen,
         UNumberRangeCollapse collapse,
         UNumberRangeIdentityFallback identityFallback,

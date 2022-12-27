@@ -34,7 +34,7 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(BreakTransliterator)
 
-static const UChar SPACE       = 32;  // ' '
+static const char16_t SPACE       = 32;  // ' '
 
 
 /**
