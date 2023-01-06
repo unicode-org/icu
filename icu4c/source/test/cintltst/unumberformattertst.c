@@ -12,6 +12,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include "unicode/unumberformatter.h"
+#include "unicode/usimplenumberformatter.h"
 #include "unicode/umisc.h"
 #include "unicode/unum.h"
 #include "unicode/ustring.h"
@@ -24,6 +25,10 @@ static void TestSkeletonFormatToString(void);
 static void TestSkeletonFormatToFields(void);
 
 static void TestExampleCode(void);
+
+static void TestSimpleNumberFormatterExample(void);
+
+static void TestSimpleNumberFormatterFull(void);
 
 static void TestFormattedValue(void);
 
@@ -45,6 +50,8 @@ void addUNumberFormatterTest(TestNode** root) {
     TESTCASE(TestSkeletonFormatToString);
     TESTCASE(TestSkeletonFormatToFields);
     TESTCASE(TestExampleCode);
+    TESTCASE(TestSimpleNumberFormatterExample);
+    TESTCASE(TestSimpleNumberFormatterFull);
     TESTCASE(TestFormattedValue);
     TESTCASE(TestSkeletonParseError);
     TESTCASE(TestToDecimalNumber);
@@ -209,6 +216,60 @@ static void TestExampleCode() {
     unumf_close(uformatter);
     unumf_closeResult(uresult);
     uprv_free(buffer);
+}
+
+
+static void TestSimpleNumberFormatterExample() {
+    // This is the example in usimplenumberformatter.h
+    UErrorCode ec = U_ZERO_ERROR;
+    USimpleNumberFormatter* uformatter = usnumf_openForLocale("bn", &ec);
+    USimpleNumber* unumber = usnum_openForInt64(1000007, &ec);
+    UFormattedNumber* uresult = unumf_openResult(&ec);
+    usnumf_format(uformatter, unumber, uresult, &ec);
+    int32_t len;
+    const UChar* str = ufmtval_getString(unumf_resultAsValue(uresult, &ec), &len, &ec);
+    if (assertSuccess("Formatting end-to-end 1", &ec)) {
+        assertUEquals("Should produce a result in Bangla digits", u"১০,০০,০০৭", str);
+    }
+
+    // Cleanup:
+    unumf_closeResult(uresult);
+    usnum_close(unumber);
+    usnumf_close(uformatter);
+}
+
+
+static void TestSimpleNumberFormatterFull() {
+    UErrorCode ec = U_ZERO_ERROR;
+    USimpleNumberFormatter* uformatter = usnumf_openForLocaleAndGroupingStrategy("de-CH", UNUM_GROUPING_ON_ALIGNED, &ec);
+    UFormattedNumber* uresult = unumf_openResult(&ec);
+
+    usnumf_formatInt64(uformatter, 4321, uresult, &ec);
+    int32_t len;
+    const UChar* str = str = ufmtval_getString(unumf_resultAsValue(uresult, &ec), &len, &ec);
+    if (assertSuccess("Formatting end-to-end 2", &ec)) {
+        assertUEquals("Should produce a result with Swiss symbols", u"4’321", str);
+    }
+
+    USimpleNumber* unumber = usnum_openForInt64(1000007, &ec);
+    usnum_setToInt64(unumber, 98765, &ec);
+    usnum_multiplyByPowerOfTen(unumber, -2, &ec);
+    usnum_roundTo(unumber, -1, UNUM_ROUND_HALFDOWN, &ec);
+    usnum_setMinimumIntegerDigits(unumber, 4, &ec);
+    usnum_setMinimumFractionDigits(unumber, 3, &ec);
+    usnum_truncateStart(unumber, 1, &ec);
+    usnum_setSign(unumber, UNUM_SIMPLE_NUMBER_PLUS_SIGN, &ec);
+
+    usnumf_format(uformatter, unumber, uresult, &ec);
+    str = ufmtval_getString(unumf_resultAsValue(uresult, &ec), &len, &ec);
+    if (assertSuccess("Formatting end-to-end 3", &ec)) {
+        assertUEquals("Should produce a result with mutated number", u"+0’007.600", str);
+    }
+
+    // Cleanup:
+    unumf_closeResult(uresult);
+    usnum_close(unumber);
+    usnumf_close(uformatter);
 }
 
 

@@ -255,13 +255,22 @@ unumf_close(UNumberFormatter* f) {
 
 U_CAPI USimpleNumber* U_EXPORT2
 usnum_openForInt64(int64_t value, UErrorCode* ec) {
-    auto* impl = new USimpleNumberData();
-    if (impl == nullptr) {
+    auto* number = new USimpleNumberData();
+    if (number == nullptr) {
         *ec = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
     }
-    impl->fNumber = SimpleNumber::forInt64(value, *ec);
-    return impl->exportForC();
+    number->fNumber = SimpleNumber::forInt64(value, *ec);
+    return number->exportForC();
+}
+
+U_CAPI void U_EXPORT2
+usnum_setToInt64(USimpleNumber* unumber, int64_t value, UErrorCode* ec) {
+    auto* number = USimpleNumberData::validate(unumber, *ec);
+    if (U_FAILURE(*ec)) {
+        return;
+    }
+    number->fNumber = SimpleNumber::forInt64(value, *ec);
 }
 
 U_CAPI void U_EXPORT2
@@ -342,7 +351,7 @@ usnumf_openForLocaleAndGroupingStrategy(
 }
 
 U_CAPI void U_EXPORT2
-usnumf_formatAndAdoptNumber(
+usnumf_format(
         const USimpleNumberFormatter* uformatter,
         USimpleNumber* unumber,
         UFormattedNumber* uresult,
@@ -351,12 +360,13 @@ usnumf_formatAndAdoptNumber(
     auto* number = USimpleNumberData::validate(unumber, *ec);
     auto* result = UFormattedNumberApiHelper::validate(uresult, *ec);
     if (U_FAILURE(*ec)) {
-        delete number;
         return;
     }
     auto localResult = formatter->fFormatter.format(std::move(number->fNumber), *ec);
-    result->setTo(std::move(localResult)); 
-    delete number;
+    if (U_FAILURE(*ec)) {
+        return;
+    }
+    result->setTo(std::move(localResult));
 }
 
 U_CAPI void U_EXPORT2
