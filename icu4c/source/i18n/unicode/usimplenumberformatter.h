@@ -18,6 +18,8 @@
  * These functions render locale-aware number strings but without the bells and whistles found in
  * other number formatting APIs such as those in unumberformatter.h, like units and currencies.
  *
+ * Example using C++ helpers:
+ *
  * <pre>
  * LocalUSimpleNumberFormatterPointer uformatter(usnumf_openForLocale("de-CH", status));
  * LocalUFormattedNumberPointer uresult(unumf_openResult(status));
@@ -25,6 +27,26 @@
  * assertEquals("",
  *     u"55",
  *     ufmtval_getString(unumf_resultAsValue(uresult.getAlias(), status), nullptr, status));
+ * </pre>
+ *
+ * Example using pure C:
+ * 
+ * <pre>
+ * UErrorCode ec = U_ZERO_ERROR;
+ * USimpleNumberFormatter* uformatter = usnumf_openForLocale("bn", &ec);
+ * USimpleNumber* unumber = usnum_openForInt64(1000007, &ec);
+ * UFormattedNumber* uresult = unumf_openResult(&ec);
+ * usnumf_format(uformatter, unumber, uresult, &ec);
+ * int32_t len;
+ * const UChar* str = ufmtval_getString(unumf_resultAsValue(uresult, &ec), &len, &ec);
+ * if (assertSuccess("Formatting end-to-end", &ec)) {
+ *     assertUEquals("Should produce a result in Bangla digits", u"১০,০০,০০৭", str);
+ * }
+
+ * // Cleanup:
+ * unumf_closeResult(uresult);
+ * usnum_close(unumber);
+ * usnumf_close(uformatter);
  * </pre>
  */
 
@@ -83,6 +105,17 @@ typedef struct USimpleNumberFormatter USimpleNumberFormatter;
  */
 U_CAPI USimpleNumber* U_EXPORT2
 usnum_openForInt64(int64_t value, UErrorCode* ec);
+
+
+/**
+ * Overwrites the value in a USimpleNumber to an int64_t.
+ *
+ * This can be used to reset the number value after formatting.
+ *
+ * @draft ICU 73
+ */
+U_CAPI void U_EXPORT2
+usnum_setToInt64(USimpleNumber* unumber, int64_t value, UErrorCode* ec);
 
 
 /**
@@ -175,14 +208,13 @@ usnumf_openForLocaleAndGroupingStrategy(
 /**
  * Formats a number using this SimpleNumberFormatter.
  *
- * The USimpleNumber is adopted and must not be freed after calling this function,
- * even if the function sets an error code. If you use LocalUSimpleNumberPointer,
- * call `.orphan()` when passing it to this function.
+ * The USimpleNumber is cleared after calling this function. It can be re-used via
+ * usnum_setToInt64.
  *
  * @draft ICU 73
  */
 U_CAPI void U_EXPORT2
-usnumf_formatAndAdoptNumber(
+usnumf_format(
     const USimpleNumberFormatter* uformatter,
     USimpleNumber* unumber,
     UFormattedNumber* uresult,

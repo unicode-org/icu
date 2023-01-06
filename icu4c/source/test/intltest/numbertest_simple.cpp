@@ -185,21 +185,45 @@ void SimpleNumberFormatterTest::testCAPI() {
         ufmtval_getString(unumf_resultAsValue(uresult.getAlias(), status), nullptr, status));
 
     LocalUSimpleNumberPointer unumber(usnum_openForInt64(44, status));
-    usnumf_formatAndAdoptNumber(uformatter.getAlias(), unumber.orphan(), uresult.getAlias(), status);
+    usnumf_format(uformatter.getAlias(), unumber.getAlias(), uresult.getAlias(), status);
     assertEquals("",
         u"44",
         ufmtval_getString(unumf_resultAsValue(uresult.getAlias(), status), nullptr, status));
 
-    unumber.adoptInstead(usnum_openForInt64(2335, status));
+    // Can't re-use a number without setting it again
+    usnumf_format(uformatter.getAlias(), unumber.getAlias(), uresult.getAlias(), status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+    usnum_multiplyByPowerOfTen(unumber.getAlias(), 0, status);
+    status.expectErrorAndReset(U_INVALID_STATE_ERROR);
+
+    usnum_setToInt64(unumber.getAlias(), 2335, status);
     usnum_multiplyByPowerOfTen(unumber.getAlias(), -2, status);
     usnum_roundTo(unumber.getAlias(), -1, UNUM_ROUND_HALFEVEN, status);
     usnum_truncateStart(unumber.getAlias(), 1, status);
     usnum_setMinimumFractionDigits(unumber.getAlias(), 3, status);
     usnum_setMinimumIntegerDigits(unumber.getAlias(), 3, status);
-    usnumf_formatAndAdoptNumber(uformatter.getAlias(), unumber.orphan(), uresult.getAlias(), status);
+    usnumf_format(uformatter.getAlias(), unumber.getAlias(), uresult.getAlias(), status);
     assertEquals("",
         u"003.400",
         ufmtval_getString(unumf_resultAsValue(uresult.getAlias(), status), nullptr, status));
+
+    // Setting twice should overwrite the first value
+    usnum_setToInt64(unumber.getAlias(), 1111, status);
+    usnum_setToInt64(unumber.getAlias(), 2222, status);
+    usnumf_format(uformatter.getAlias(), unumber.getAlias(), uresult.getAlias(), status);
+    assertEquals("",
+        u"2’222",
+        ufmtval_getString(unumf_resultAsValue(uresult.getAlias(), status), nullptr, status));
+
+    {
+        // This is the exact example in usimplenumberformatter.h
+        LocalUSimpleNumberFormatterPointer uformatter(usnumf_openForLocale("de-CH", status));
+        LocalUFormattedNumberPointer uresult(unumf_openResult(status));
+        usnumf_formatInt64(uformatter.getAlias(), 55, uresult.getAlias(), status);
+        assertEquals("",
+            u"55",
+            ufmtval_getString(unumf_resultAsValue(uresult.getAlias(), status), nullptr, status));
+    }
 }
 
 
