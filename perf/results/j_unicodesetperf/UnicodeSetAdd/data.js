@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1671687929352,
+  "lastUpdate": 1673049939994,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -3928,6 +3928,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "UnicodeSetAdd",
             "value": 14.59067200839085,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "tkoeppe@google.com",
+            "name": "Thomas Köppe",
+            "username": "tkoeppe"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "0c6d7fc98d0bf6967d2eb952cc686771c2cac78b",
+          "message": "ICU-22222 Add explicit instantiation declarations\n\nWe exclude these declarations from MSVC, where they don't work because\nthe don't interact well with the U_I18N_API import/export macros",
+          "timestamp": "2023-01-07T00:03:38Z",
+          "tree_id": "735d5cc385901dc54bbd88e8ab504e957dc72a50",
+          "url": "https://github.com/unicode-org/icu/commit/0c6d7fc98d0bf6967d2eb952cc686771c2cac78b"
+        },
+        "date": 1673049927095,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "UnicodeSetAdd",
+            "value": 10.513613661297764,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
