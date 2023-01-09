@@ -300,6 +300,13 @@ public final class LdmlConverter {
                 System.out.println("(skipping " + id + " until ICU-20997 is fixed)");
                 continue;
             }
+            // Now that former CLDR see locales are in common, there are some language
+            // variants that are not at a high enough coverage level to pick up.
+            // TODO need a better way of handling this.
+             if (id.contains("POLYTON")) {
+                System.out.println("(skipping " + id + ", insufficient coverage level)");
+                continue;
+            }
 
             IcuData icuData = new IcuData(id, true);
 

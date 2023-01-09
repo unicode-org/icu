@@ -614,8 +614,8 @@ void DateFormatTest::TestFieldPosition() {
             df->format(aug13, buf, pos);
             UnicodeString field;
             buf.extractBetween(pos.getBeginIndex(), pos.getEndIndex(), field);
-            assertEquals((UnicodeString)"field #" + i + " " + DATEFORMAT_FIELD_NAMES[i],
-                         ctou(EXPECTED[exp]), field);
+            assertEquals((UnicodeString)"localeidx #" + j + " field #" + i + " " +
+                         DATEFORMAT_FIELD_NAMES[i], ctou(EXPECTED[exp]), field);
         }
 
         // test FieldPositionIterator API
@@ -631,8 +631,8 @@ void DateFormatTest::TestFieldPosition() {
             int32_t i = fp.getField();
             UnicodeString field;
             buf.extractBetween(fp.getBeginIndex(), fp.getEndIndex(), field);
-            assertEquals((UnicodeString)"field #" + i + " " + DATEFORMAT_FIELD_NAMES[i],
-                         ctou(EXPECTED[expBase + i]), field);
+            assertEquals((UnicodeString)"localeidx #" + j + " field #" + i + " " +
+                         DATEFORMAT_FIELD_NAMES[i], ctou(EXPECTED[expBase + i]), field);
           }
 
         }
@@ -2052,7 +2052,7 @@ void DateFormatTest::expect(const char** data, int32_t data_length,
             const char* string = data[i++];
             UDate date = ref.parse(ctou(datestr), ec);
             if (!assertSuccess("parse", ec)) return;
-            assertEquals((UnicodeString)"\"" + currentPat + "\".format(" + datestr + ")",
+            assertEquals((UnicodeString)"loc " + ctou(loc.getName()) + " \"" + currentPat + "\".format(" + datestr + ")",
                          ctou(string),
                          fmt.format(date, str.remove()));
             // 'p'
@@ -2061,7 +2061,7 @@ void DateFormatTest::expect(const char** data, int32_t data_length,
             if (!assertSuccess("parse", ec)) return;
             UDate parsedate = fmt.parse(ctou(string), ec);
             if (assertSuccess((UnicodeString)"\"" + currentPat + "\".parse(" + string + ")", ec)) {
-                assertEquals((UnicodeString)"\"" + currentPat + "\".parse(" + string + ")",
+                assertEquals((UnicodeString)"loc " + ctou(loc.getName()) + " \"" + currentPat + "\".parse(" + string + ")",
                              univ.format(date, str.remove()),
                              univ.format(parsedate, str2.remove()));
             }
@@ -2075,13 +2075,13 @@ void DateFormatTest::expect(const char** data, int32_t data_length,
             if (!assertSuccess("parse", ec)) return;
             UDate parsedate = fmt.parse(ctou(string), ec);
             if (assertSuccess((UnicodeString)"\"" + currentPat + "\".parse(" + string + ")", ec)) {
-                assertEquals((UnicodeString)"\"" + currentPat + "\".parse(" + string + ")",
+                assertEquals((UnicodeString)"loc " + ctou(loc.getName()) + " \"" + currentPat + "\".parse(" + string + ")",
                              univ.format(date, str.remove()),
                              univ.format(parsedate, str2.remove()));
             }
             // 'f'
             string = data[i++];
-            assertEquals((UnicodeString)"\"" + currentPat + "\".format(" + datestr + ")",
+            assertEquals((UnicodeString)"loc " + ctou(loc.getName()) + " \"" + currentPat + "\".format(" + datestr + ")",
                          ctou(string),
                          fmt.format(date, str.remove()));
         }
@@ -2091,13 +2091,13 @@ void DateFormatTest::expect(const char** data, int32_t data_length,
             const char* string   = data[i++];
             UDate date = ref.parse(ctou(datestr), ec);
             if (!assertSuccess("parse", ec)) return;
-            assertEquals((UnicodeString)"\"" + currentPat + "\".format(" + datestr + ")",
+            assertEquals((UnicodeString)"loc " + ctou(loc.getName()) + " \"" + currentPat + "\".format(" + datestr + ")",
                          ctou(string),
                          fmt.format(date, str.remove()));
 
             UDate parsedate = fmt.parse(string, ec);
             if (assertSuccess((UnicodeString)"\"" + currentPat + "\".parse(" + string + ")", ec)) {
-                assertEquals((UnicodeString)"\"" + currentPat + "\".parse(" + string + ")",
+                assertEquals((UnicodeString)"loc " + ctou(loc.getName()) + " \"" + currentPat + "\".parse(" + string + ")",
                              univ.format(date, str.remove()),
                              univ.format(parsedate, str2.remove()));
             }
@@ -2153,7 +2153,7 @@ void DateFormatTest::expectFormat(const char** data, int32_t data_length,
         const char* string = data[i++];
         UDate date = ref.parse(ctou(datestr), ec);
         if (!assertSuccess("parse", ec)) return;
-        assertEquals((UnicodeString)"\"" + currentPat + "\".format(" + datestr + ")",
+        assertEquals((UnicodeString)"loc " + ctou(loc.getName()) + " \"" + currentPat + "\".format(" + datestr + ")",
                         ctou(string),
                         fmt.format(date, str.remove()));
     }

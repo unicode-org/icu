@@ -7846,31 +7846,5 @@ zh_Hant{
                 "zh",
             }
         }
-        namePattern{
-            givenFirst-long-addressing-formal{"{surname} {prefix}"}
-            givenFirst-long-addressing-informal{"{given-informal}"}
-            givenFirst-medium-addressing-formal{"{surname} {prefix}"}
-            givenFirst-medium-addressing-informal{"{given-informal}"}
-            givenFirst-short-addressing-formal{"{surname} {prefix}"}
-            givenFirst-short-addressing-informal{"{given-informal}"}
-            sorting-long-referring-formal{"{surname}{given}{given2}"}
-            sorting-long-referring-informal{"{surname}{given-informal}"}
-            sorting-medium-referring-formal{"{surname}{given}"}
-            sorting-medium-referring-informal{"{surname}{given-informal}"}
-            sorting-short-referring-formal{"{surname}{given}"}
-            sorting-short-referring-informal{"{surname}{given-informal}"}
-            surnameFirst-long-addressing-formal{"{surname}{suffix}"}
-            surnameFirst-long-addressing-informal{"{given-informal}"}
-            surnameFirst-long-referring-formal{"{surname}{given}{given2}{suffix}"}
-            surnameFirst-long-referring-informal{"{surname}{given-informal}"}
-            surnameFirst-medium-addressing-formal{"{surname}{suffix}"}
-            surnameFirst-medium-addressing-informal{"{given-informal}"}
-            surnameFirst-medium-referring-formal{"{surname}{given}{given2}{suffix}"}
-            surnameFirst-medium-referring-informal{"{surname}{given-informal}"}
-            surnameFirst-short-addressing-formal{"{surname}{suffix}"}
-            surnameFirst-short-addressing-informal{"{given-informal}"}
-            surnameFirst-short-referring-formal{"{surname}{given}{given2}"}
-            surnameFirst-short-referring-informal{"{surname}{given}"}
-        }
     }
 }

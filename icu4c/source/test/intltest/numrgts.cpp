@@ -1002,7 +1002,7 @@ void NumberFormatRegressionTest::Test4071005 (void)
     if (tempString == expectedDefault) {
         logln ("Bug 4071005 default test passed.");
     } else {
-        errln(UnicodeString("Failed:") +
+        errln(UnicodeString("Failed: fr_CA") +
         " Expected " + expectedDefault +
         " Received " + tempString );
     }
@@ -1016,7 +1016,7 @@ void NumberFormatRegressionTest::Test4071005 (void)
     if (tempString == expectedCurrency) {
         logln ("Bug 4071005 currency test passed.");
     } else {
-        errln(UnicodeString("Failed:") +
+        errln(UnicodeString("Failed: fr_CA") +
         " Expected " + expectedCurrency +
         " Received " + tempString );
     }
@@ -1030,7 +1030,7 @@ void NumberFormatRegressionTest::Test4071005 (void)
     if (tempString == expectedPercent) {
         logln ("Bug 4071005 percentage test passed.");
     } else {
-        errln(UnicodeString("Failed:") +
+        errln(UnicodeString("Failed: fr_CA") +
         " Expected " + expectedPercent +
         " Received " + tempString );
     }
