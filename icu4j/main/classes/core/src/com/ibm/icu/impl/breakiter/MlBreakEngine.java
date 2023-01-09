@@ -24,60 +24,11 @@ public class MlBreakEngine {
 
     private static final int INVALID = '|';
     private static final String INVALID_STRING = "|";
-    private static final int MAX_FEATURE = 26;
+    private static final int MAX_FEATURE = 13;
     private UnicodeSet fDigitOrOpenPunctuationOrAlphabetSet;
     private UnicodeSet fClosePunctuationSet;
     private HashMap<String, Integer> fModel;
-
     private int fNegativeSum;
-
-    static class Element {
-        private int character;
-        private String ublock;
-
-        /**
-         * Default constructor.
-         */
-        public Element() {
-            character = 0;
-            ublock = null;
-        }
-
-        /**
-         * Set the character and its unicode block.
-         *
-         * @param ch  A unicode character.
-         * @param str The unicode block of the character.
-         */
-        public void setCharAndUblock(int ch, String str) {
-            Assert.assrt(str.length() <= 3);
-            this.character = ch;
-            ublock = str;
-        }
-
-        /**
-         * Get the unicode character.
-         *
-         * @return The unicode character.
-         */
-        public int getCharacter() {
-            return character;
-        }
-
-        /**
-         * Get the unicode character's unicode block.
-         *
-         * @return The unicode block.
-         */
-        public String getUblock() {
-            return ublock;
-        }
-    }
-
-    private static boolean isValid(Element element) {
-        String ublock = element.getUblock();
-        return ublock.length() != 1 || (int) ublock.charAt(0) != INVALID;
-    }
 
     /**
      * Constructor for Chinese and Japanese phrase breaking.
@@ -114,12 +65,10 @@ public class MlBreakEngine {
             return 0;
         }
         ArrayList<Integer> boundary = new ArrayList<Integer>(numCodePts);
-        int ch;
-        String ublock;
         // The ML model groups six char to evaluate if the 4th char is a breakpoint.
         // Like a sliding window, the elementList removes the first char and appends the new char
         // from inString in each iteration so that its size always remains at six.
-        Element elementList[] = new Element[6];
+        int elementList[] = new int[6];
         initElementList(inString, elementList, numCodePts);
 
         // Add a break for the start.
@@ -130,10 +79,7 @@ public class MlBreakEngine {
                 break;
             }
             shiftLeftOne(elementList);
-
-            ch = (i + 3) < numCodePts ? next32(inString) : INVALID;
-            ublock = (ch != INVALID) ? getUnicodeBlock(ch) : INVALID_STRING;
-            elementList[5].setCharAndUblock(ch, ublock);
+            elementList[5] = (i + 3) < numCodePts ? next32(inString) : INVALID;
         }
 
         // Add a break for the end if there is not one there already.
@@ -181,11 +127,10 @@ public class MlBreakEngine {
         return correctedNumBreaks;
     }
 
-    private void shiftLeftOne(Element[] elementList) {
+    private void shiftLeftOne(int[] elementList) {
         int length = elementList.length;
         for (int i = 1; i < length; i++) {
-            elementList[i - 1].character = elementList[i].character;
-            elementList[i - 1].ublock = elementList[i].ublock;
+            elementList[i - 1] = elementList[i];
         }
     }
 
@@ -196,14 +141,14 @@ public class MlBreakEngine {
      * @param index       The breakpoint index to be evaluated.
      * @param boundary    An list including the index of the breakpoint.
      */
-    private void evaluateBreakpoint(Element[] elementList, int index, ArrayList<Integer> boundary) {
+    private void evaluateBreakpoint(int[] elementList, int index, ArrayList<Integer> boundary) {
         String[] featureList = new String[MAX_FEATURE];
-        final int w1 = elementList[0].getCharacter();
-        final int w2 = elementList[1].getCharacter();
-        final int w3 = elementList[2].getCharacter();
-        final int w4 = elementList[3].getCharacter();
-        final int w5 = elementList[4].getCharacter();
-        final int w6 = elementList[5].getCharacter();
+        final int w1 = elementList[0];
+        final int w2 = elementList[1];
+        final int w3 = elementList[2];
+        final int w4 = elementList[3];
+        final int w5 = elementList[4];
+        final int w6 = elementList[5];
 
         StringBuilder sb = new StringBuilder();
         int idx = 0;
@@ -265,76 +210,7 @@ public class MlBreakEngine {
             featureList[idx++] = sb.append("TW4:").appendCodePoint(w4).appendCodePoint(
                     w5).appendCodePoint(w6).toString();
         }
-        if (isValid(elementList[0])) {
-            sb.setLength(0);
-            featureList[idx++] = sb.append("UB1:").append(elementList[0].getUblock()).toString();
-        }
-        if (isValid(elementList[1])) {
-            sb.setLength(0);
-            featureList[idx++] = sb.append("UB2:").append(elementList[1].getUblock()).toString();
-        }
-        if (isValid(elementList[2])) {
-            sb.setLength(0);
-            featureList[idx++] = sb.append("UB3:").append(elementList[2].getUblock()).toString();
-        }
-        if (isValid(elementList[3])) {
-            sb.setLength(0);
-            featureList[idx++] = sb.append("UB4:").append(elementList[3].getUblock()).toString();
-        }
-        if (isValid(elementList[4])) {
-            sb.setLength(0);
-            featureList[idx++] = sb.append("UB5:").append(elementList[4].getUblock()).toString();
-        }
-        if (isValid(elementList[5])) {
-            sb.setLength(0);
-            featureList[idx++] = sb.append("UB6:").append(elementList[5].getUblock()).toString();
-        }
-        if (isValid(elementList[1]) && isValid(elementList[2])) {
-            sb.setLength(0);
-            featureList[idx++] = sb.append("BB1:").
-                    append(elementList[1].getUblock()).
-                    append(elementList[2].getUblock()).toString();
-        }
-        if (isValid(elementList[2]) && isValid(elementList[3])) {
-            sb.setLength(0);
-            featureList[idx++] = sb.append("BB2:").
-                    append(elementList[2].getUblock()).
-                    append(elementList[3].getUblock()).toString();
-        }
-        if (isValid(elementList[3]) && isValid(elementList[4])) {
-            sb.setLength(0);
-            featureList[idx++] = sb.append("BB3:").
-                    append(elementList[3].getUblock()).
-                    append(elementList[4].getUblock()).toString();
-        }
-        if (isValid(elementList[0]) && isValid(elementList[1]) && isValid(elementList[2])) {
-            sb.setLength(0);
-            featureList[idx++] = sb.append("TB1:").
-                    append(elementList[0].getUblock()).
-                    append(elementList[1].getUblock()).
-                    append(elementList[2].getUblock()).toString();
-        }
-        if (isValid(elementList[1]) && isValid(elementList[2]) && isValid(elementList[3])) {
-            sb.setLength(0);
-            featureList[idx++] = sb.append("TB2:").
-                    append(elementList[1].getUblock()).
-                    append(elementList[2].getUblock()).
-                    append(elementList[3].getUblock()).toString();
-        }
-        if (isValid(elementList[2]) && isValid(elementList[3]) && isValid(elementList[4])) {
-            sb.setLength(0);
-            featureList[idx++] = sb.append("TB3:").
-                    append(elementList[2].getUblock()).
-                    append(elementList[3].getUblock()).
-                    append(elementList[4].getUblock()).toString();
-        }
-        if (isValid(elementList[3]) && isValid(elementList[4]) && isValid(elementList[5])) {
-            sb.setLength(0);
-            featureList[idx++] = sb.append("TB4:").
-                    append(elementList[3].getUblock()).
-                    append(elementList[4].getUblock()).
-                    append(elementList[5].getUblock()).toString();
-        }
+
         int score = fNegativeSum;
         for (int j = 0; j < idx; j++) {
             if (fModel.containsKey(featureList[j])) {
@@ -350,12 +226,11 @@ public class MlBreakEngine {
      * Initialize the element list from the input string.
      *
      * @param inString    A input string to be segmented.
-     * @param elementList A list to store the first six characters and their unicode block codes.
+     * @param elementList A list to store the first six characters.
      * @param numCodePts  The number of code points of input string
      * @return The number of the code units of the first six characters in inString.
      */
-    private int initElementList(CharacterIterator inString, Element[] elementList,
-            int numCodePts) {
+    private int initElementList(CharacterIterator inString, int[] elementList, int numCodePts) {
         int index = 0;
         inString.setIndex(index);
         int w1, w2, w3, w4, w5, w6;
@@ -363,58 +238,27 @@ public class MlBreakEngine {
         if (numCodePts > 0) {
             w3 = current32(inString);
             index += Character.charCount(w3);
+            if (numCodePts > 1) {
+                w4 = next32(inString);
+                index += Character.charCount(w3);
+                if (numCodePts > 2) {
+                    w5 = next32(inString);
+                    index += Character.charCount(w5);
+                    if (numCodePts > 3) {
+                        w6 = next32(inString);
+                        index += Character.charCount(w6);
+                    }
+                }
+            }
         }
-        if (numCodePts > 1) {
-            w4 = next32(inString);
-            index += Character.charCount(w3);
-        }
-        if (numCodePts > 2) {
-            w5 = next32(inString);
-            index += Character.charCount(w5);
-        }
-        if (numCodePts > 3) {
-            w6 = next32(inString);
-            index += Character.charCount(w6);
-        }
-
-        final String b1 = INVALID_STRING;
-        final String b2 = b1;
-        final String b3 = getUnicodeBlock(w3);
-        final String b4 = getUnicodeBlock(w4);
-        final String b5 = getUnicodeBlock(w5);
-        final String b6 = getUnicodeBlock(w6);
-
-        elementList[0] = new Element();
-        elementList[0].setCharAndUblock(w1, b1);
-        elementList[1] = new Element();
-        elementList[1].setCharAndUblock(w2, b2);
-        elementList[2] = new Element();
-        elementList[2].setCharAndUblock(w3, b3);
-        elementList[3] = new Element();
-        elementList[3].setCharAndUblock(w4, b4);
-        elementList[4] = new Element();
-        elementList[4].setCharAndUblock(w5, b5);
-        elementList[5] = new Element();
-        elementList[5].setCharAndUblock(w6, b6);
+        elementList[0] = w1;
+        elementList[1] = w2;
+        elementList[2] = w3;
+        elementList[3] = w4;
+        elementList[4] = w5;
+        elementList[5] = w6;
 
         return index;
-    }
-
-    /**
-     * Get the character's unicode block code defined in UBlockCode.
-     *
-     * @param ch A char.
-     * @return The unicode block code which is 3 digits with '0' added in the beginning if the code
-     * is less than 3 digits.
-     */
-    private String getUnicodeBlock(int ch) {
-        int blockId = UCharacter.UnicodeBlock.of(ch).getID();
-        if (blockId == UCharacter.UnicodeBlock.NO_BLOCK.getID()
-                || blockId == UCharacter.UnicodeBlock.INVALID_CODE_ID) {
-            return INVALID_STRING;
-        } else {
-            return String.format("%03d", blockId);
-        }
     }
 
     /**

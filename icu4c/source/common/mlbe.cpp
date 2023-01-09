@@ -18,28 +18,6 @@
 
 U_NAMESPACE_BEGIN
 
-Element::Element() : length(0) {}
-
-void Element::setCharAndUblock(UChar32 ch, const UnicodeString &idx) {
-    character = ch;
-    U_ASSERT(idx.length() <= 3);
-    length = idx.length();
-    idx.extract(0, length, ublock);
-    ublock[length] = '\0';
-}
-
-UChar32 Element::getCharacter() const {
-    return character;
-}
-
-char16_t* Element::getUblock() const {
-    return (char16_t*)ublock;
-}
-
-uint16_t Element::getLength() const {
-    return length;
-}
-
 MlBreakEngine::MlBreakEngine(const UnicodeSet &digitOrOpenPunctuationOrAlphabetSet,
                                  const UnicodeSet &closePunctuationSet, UErrorCode &status)
     : fDigitOrOpenPunctuationOrAlphabetSet(digitOrOpenPunctuationOrAlphabetSet),
@@ -56,12 +34,8 @@ MlBreakEngine::~MlBreakEngine() {}
 
 namespace {
     const char16_t INVALID = u'|';
-    const int32_t MAX_FEATURE = 26;
-    const int32_t MAX_FEATURE_LENGTH = 14;
-
-    bool isValid(const Element& element) {
-        return element.getLength() != 1 || element.getUblock()[0] != INVALID;
-    }
+    const int32_t MAX_FEATURE = 13;
+    const int32_t MAX_FEATURE_LENGTH = 11;
 
     void concatChar(const char16_t *str, const UChar32 *arr, int32_t length, char16_t *feature, UErrorCode &status) {
         if (U_FAILURE(status)) {
@@ -73,11 +47,6 @@ namespace {
         }
         U_ASSERT(result.length() < MAX_FEATURE_LENGTH);
         result.extract(feature, MAX_FEATURE_LENGTH, status);  // NUL-terminates
-    }
-
-    void writeString(const UnicodeString &str, char16_t *feature, UErrorCode &status) {
-        U_ASSERT(str.length() < MAX_FEATURE_LENGTH);
-        str.extract(feature, MAX_FEATURE_LENGTH, status);  // NUL-terminates
     }
 }
 
@@ -98,12 +67,11 @@ int32_t MlBreakEngine::divideUpRange(UText *inText, int32_t rangeStart, int32_t 
         return 0;
     }
     int32_t numBreaks = 0;
-    UChar32 ch;
     UnicodeString index;
     // The ML model groups six char to evaluate if the 4th char is a breakpoint.
     // Like a sliding window, the elementList removes the first char and appends the new char from
     // inString in each iteration so that its size always remains at six.
-    Element elementList[6];
+    UChar32 elementList[6];
 
     int32_t codeUts = initElementList(inString, elementList, status);
     int32_t length = inString.countChar32();
@@ -117,12 +85,10 @@ int32_t MlBreakEngine::divideUpRange(UText *inText, int32_t rangeStart, int32_t 
         evaluateBreakpoint(elementList, i, numBreaks, boundary, status);
         if (i + 1 >= inString.countChar32()) break;
         // Remove the first element and append a new element
-        uprv_memmove(elementList, elementList + 1, 5 * sizeof(Element));
-        ch = inString.countChar32(0, codeUts) < length ? inString.char32At(codeUts) : INVALID;
-        index = (ch != INVALID) ? getUnicodeBlock(ch, status) : UnicodeString(INVALID);
-        elementList[5].setCharAndUblock(ch, index);
-        if (ch != INVALID) {
-            codeUts += U16_LENGTH(ch);
+        uprv_memmove(elementList, elementList + 1, 5 * sizeof(UChar32));
+        elementList[5] = inString.countChar32(0, codeUts) < length ? inString.char32At(codeUts) : INVALID;
+        if (elementList[5] != INVALID) {
+            codeUts += U16_LENGTH(elementList[5]);
         }
     }
     if (U_FAILURE(status)) return 0;
@@ -176,7 +142,7 @@ int32_t MlBreakEngine::divideUpRange(UText *inText, int32_t rangeStart, int32_t 
     return correctedNumBreaks;
 }
 
-void MlBreakEngine::evaluateBreakpoint(Element* elementList, int32_t index, int32_t &numBreaks,
+void MlBreakEngine::evaluateBreakpoint(UChar32* elementList, int32_t index, int32_t &numBreaks,
                                          UVector32 &boundary, UErrorCode &status) const {
     char16_t featureList[MAX_FEATURE][MAX_FEATURE_LENGTH];
     if (U_FAILURE(status)) {
@@ -186,12 +152,12 @@ void MlBreakEngine::evaluateBreakpoint(Element* elementList, int32_t index, int3
     UChar32 arr[4] = {-1, -1, -1, -1};
     int32_t length = 0, listLength = 0;
 
-    const UChar32 w1 = elementList[0].getCharacter();
-    const UChar32 w2 = elementList[1].getCharacter();
-    const UChar32 w3 = elementList[2].getCharacter();
-    const UChar32 w4 = elementList[3].getCharacter();
-    const UChar32 w5 = elementList[4].getCharacter();
-    const UChar32 w6 = elementList[5].getCharacter();
+    const UChar32 w1 = elementList[0];
+    const UChar32 w2 = elementList[1];
+    const UChar32 w3 = elementList[2];
+    const UChar32 w4 = elementList[3];
+    const UChar32 w5 = elementList[4];
+    const UChar32 w6 = elementList[5];
 
     length = 1;
     if (w1 != INVALID) {
@@ -259,82 +225,6 @@ void MlBreakEngine::evaluateBreakpoint(Element* elementList, int32_t index, int3
         arr[2] = w6;
         concatChar(u"TW4:", arr, length, featureList[listLength++], status);
     }
-    if (isValid(elementList[0])) {
-        writeString(UnicodeString(u"UB1:").append(elementList[0].getUblock(), 0,
-                                                  elementList[0].getLength()),
-                    featureList[listLength++], status);
-    }
-    if (isValid(elementList[1])) {
-        writeString(UnicodeString(u"UB2:").append(elementList[1].getUblock(), 0,
-                                                  elementList[1].getLength()),
-                    featureList[listLength++], status);
-    }
-    if (isValid(elementList[2])) {
-        writeString(UnicodeString(u"UB3:").append(elementList[2].getUblock(), 0,
-                                                  elementList[2].getLength()),
-                    featureList[listLength++], status);
-    }
-    if (isValid(elementList[3])) {
-        writeString(UnicodeString(u"UB4:").append(elementList[3].getUblock(), 0,
-                                                  elementList[3].getLength()),
-                    featureList[listLength++], status);
-    }
-    if (isValid(elementList[4])) {
-        writeString(UnicodeString(u"UB5:").append(elementList[4].getUblock(), 0,
-                                                  elementList[4].getLength()),
-                    featureList[listLength++], status);
-    }
-    if (isValid(elementList[5])) {
-        writeString(UnicodeString(u"UB6:").append(elementList[5].getUblock(), 0,
-                                                  elementList[5].getLength()),
-                    featureList[listLength++], status);
-    }
-    if (isValid(elementList[1]) && isValid(elementList[2])) {
-        writeString(UnicodeString(u"BB1:")
-                        .append(elementList[1].getUblock(), 0, elementList[1].getLength())
-                        .append(elementList[2].getUblock(), 0, elementList[2].getLength()),
-                    featureList[listLength++], status);
-    }
-    if (isValid(elementList[2]) && isValid(elementList[3])) {
-        writeString(UnicodeString(u"BB2:")
-                        .append(elementList[2].getUblock(), 0, elementList[2].getLength())
-                        .append(elementList[3].getUblock(), 0, elementList[3].getLength()),
-                    featureList[listLength++], status);
-    }
-    if (isValid(elementList[3]) && isValid(elementList[4])) {
-        writeString(UnicodeString(u"BB3:")
-                        .append(elementList[3].getUblock(), 0, elementList[3].getLength())
-                        .append(elementList[4].getUblock(), 0, elementList[4].getLength()),
-                    featureList[listLength++], status);
-    }
-    if (isValid(elementList[0]) && isValid(elementList[1]) && isValid(elementList[2])) {
-        writeString(UnicodeString(u"TB1:")
-                        .append(elementList[0].getUblock(), 0, elementList[0].getLength())
-                        .append(elementList[1].getUblock(), 0, elementList[1].getLength())
-                        .append(elementList[2].getUblock(), 0, elementList[2].getLength()),
-                    featureList[listLength++], status);
-    }
-    if (isValid(elementList[1]) && isValid(elementList[2]) && isValid(elementList[3])) {
-        writeString(UnicodeString(u"TB2:")
-                        .append(elementList[1].getUblock(), 0, elementList[1].getLength())
-                        .append(elementList[2].getUblock(), 0, elementList[2].getLength())
-                        .append(elementList[3].getUblock(), 0, elementList[3].getLength()),
-                    featureList[listLength++], status);
-    }
-    if (isValid(elementList[2]) && isValid(elementList[3]) && isValid(elementList[4])) {
-        writeString(UnicodeString(u"TB3:")
-                        .append(elementList[2].getUblock(), 0, elementList[2].getLength())
-                        .append(elementList[3].getUblock(), 0, elementList[3].getLength())
-                        .append(elementList[4].getUblock(), 0, elementList[4].getLength()),
-                    featureList[listLength++], status);
-    }
-    if (isValid(elementList[3]) && isValid(elementList[4]) && isValid(elementList[5])) {
-        writeString(UnicodeString(u"TB4:")
-                        .append(elementList[3].getUblock(), 0, elementList[3].getLength())
-                        .append(elementList[4].getUblock(), 0, elementList[4].getLength())
-                        .append(elementList[5].getUblock(), 0, elementList[5].getLength()),
-                    featureList[listLength++], status);
-    }
     if (U_FAILURE(status)) {
         return;
     }
@@ -351,7 +241,7 @@ void MlBreakEngine::evaluateBreakpoint(Element* elementList, int32_t index, int3
     }
 }
 
-int32_t MlBreakEngine::initElementList(const UnicodeString &inString, Element* elementList,
+int32_t MlBreakEngine::initElementList(const UnicodeString &inString, UChar32* elementList,
                                          UErrorCode &status) const {
     if (U_FAILURE(status)) {
         return 0;
@@ -363,50 +253,27 @@ int32_t MlBreakEngine::initElementList(const UnicodeString &inString, Element* e
     if (length > 0) {
         w3 = inString.char32At(0);
         index += U16_LENGTH(w3);
+        if (length > 1) {
+            w4 = inString.char32At(index);
+            index += U16_LENGTH(w4);
+            if (length > 2) {
+                w5 = inString.char32At(index);
+                index += U16_LENGTH(w5);
+                if (length > 3) {
+                    w6 = inString.char32At(index);
+                    index += U16_LENGTH(w6);
+                }
+            }
+        }
     }
-    if (length > 1) {
-        w4 = inString.char32At(index);
-        index += U16_LENGTH(w4);
-    }
-    if (length > 2) {
-        w5 = inString.char32At(index);
-        index += U16_LENGTH(w5);
-    }
-    if (length > 3) {
-        w6 = inString.char32At(index);
-        index += U16_LENGTH(w6);
-    }
-
-    const UnicodeString b1(INVALID);
-    const UnicodeString b2(b1);
-    const UnicodeString b3(getUnicodeBlock(w3, status));
-    const UnicodeString b4(getUnicodeBlock(w4, status));
-    const UnicodeString b5(getUnicodeBlock(w5, status));
-    const UnicodeString b6(getUnicodeBlock(w6, status));
-
-    elementList[0].setCharAndUblock(w1, b1);
-    elementList[1].setCharAndUblock(w2, b2);
-    elementList[2].setCharAndUblock(w3, b3);
-    elementList[3].setCharAndUblock(w4, b4);
-    elementList[4].setCharAndUblock(w5, b5);
-    elementList[5].setCharAndUblock(w6, b6);
+    elementList[0] = w1;
+    elementList[1] = w2;
+    elementList[2] = w3;
+    elementList[3] = w4;
+    elementList[4] = w5;
+    elementList[5] = w6;
 
     return index;
-}
-
-UnicodeString MlBreakEngine::getUnicodeBlock(UChar32 ch, UErrorCode &status) const {
-    if (U_FAILURE(status)) {
-        return UnicodeString(INVALID);
-    }
-
-    UBlockCode block = ublock_getCode(ch);
-    if (block == UBLOCK_NO_BLOCK || block == UBLOCK_INVALID_CODE) {
-        return UnicodeString(INVALID);
-    } else {
-        UnicodeString empty;
-        // Same as sprintf("%03d", block)
-        return ICU_Utility::appendNumber(empty, (int32_t)block, 10, 3);
-    }
 }
 
 void MlBreakEngine::loadMLModel(UErrorCode &error) {
