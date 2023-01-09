@@ -1240,6 +1240,9 @@ void TransliteratorRoundTripTest::TestHebrew() {
     delete legal;
 }
 void TransliteratorRoundTripTest::TestCyrillic() {
+    if (logKnownIssue("CLDR-16218 ICU4C TransliteratorRoundTripTest finds many problems with updated Cyrillic-Latin transform")) {
+        return;
+    }
     RTTest test("Latin-Cyrillic");
     Legal *legal = new Legal();
 

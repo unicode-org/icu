@@ -3060,58 +3060,22 @@ uk{
             }
         }
         namePattern{
-            givenFirst-long-addressing-informal{"{given-informal} {surname} {surname2}"}
-            givenFirst-long-monogram-formal{
-                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-monogram-a"
-                "llCaps}{surname2-monogram-allCaps}"
-            }
-            givenFirst-long-monogram-informal{"{given-informal-monogram-allCaps}{surname-monogram-allCaps}"}
-            givenFirst-long-referring-informal{"{given-informal} {surname} {surname2}"}
-            givenFirst-medium-addressing-formal{"{prefix} {given} {given2-initial} {surname} {surname2} {suffix}"}
-            givenFirst-medium-addressing-informal{"{given-informal} {surname} {surname2}"}
-            givenFirst-medium-monogram-formal{
-                "{given-monogram-allCaps}{given2-monogram-allCaps}{surname-monogram-a"
-                "llCaps}{surname2-monogram-allCaps}"
-            }
-            givenFirst-medium-monogram-informal{
-                "{given-informal-monogram-allCaps}{surname-monogram-allCaps}{surname2"
-                "-monogram-allCaps}"
-            }
-            givenFirst-medium-referring-formal{"{prefix} {given} {given2-initial} {surname} {surname2} {suffix}"}
-            givenFirst-medium-referring-informal{"{given-informal} {surname} {surname2}"}
-            givenFirst-short-addressing-formal{"{prefix} {surname}"}
-            givenFirst-short-addressing-informal{"{given-informal}"}
-            givenFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
-            givenFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
-            givenFirst-short-referring-formal{
-                "{prefix} {given-initial} {given2-initial} {surname} {surname2} {suff"
-                "ix}"
-            }
-            givenFirst-short-referring-informal{"{given-informal} {surname-initial}"}
-            sorting-long-referring-formal{"{surname} {surname2}, {given} {given2} {suffix} {prefix}"}
+            sorting-long-referring-formal{"{surname} {surname2}, {given} {given2} {credentials} {title}"}
             sorting-long-referring-informal{"{surname} {surname2}, {given-informal}"}
             sorting-medium-referring-formal{
-                "{surname} {surname2}, {given-initial} {given2-initial} {suffix} {pre"
-                "fix}"
+                "{surname} {surname2}, {given-initial} {given2-initial} {credentials}"
+                " {title}"
             }
             sorting-medium-referring-informal{"{surname} {surname2}, {given-informal-initial}"}
             sorting-short-referring-formal{"{surname} {surname2}, {given-initial} {given2-initial}"}
-            sorting-short-referring-informal{"{surname} {given-informal}"}
-            surnameFirst-long-addressing-formal{"{prefix} {surname}"}
-            surnameFirst-long-addressing-informal{"{given-informal}"}
+            surnameFirst-long-addressing-formal{"{title} {surname}"}
             surnameFirst-long-monogram-formal{
                 "{surname-monogram-allCaps}{given-monogram-allCaps}{given2-monogram-a"
                 "llCaps}"
             }
-            surnameFirst-long-monogram-informal{
-                "{surname-monogram-allCaps}{surname2-monogram-allCaps}{given-informal"
-                "-monogram-allCaps}"
-            }
-            surnameFirst-long-referring-formal{"{prefix} {surname} {surname2} {given} {given2} {suffix}"}
-            surnameFirst-long-referring-informal{"{surname} {surname2} {given-informal}"}
             surnameFirst-medium-addressing-formal{
-                "{prefix} {surname} {surname2} {given-initial} {given2-initial} {suff"
-                "ix}"
+                "{title} {surname} {surname2} {given-initial} {given2-initial} {crede"
+                "ntials}"
             }
             surnameFirst-medium-addressing-informal{"{surname-initial} {surname2-initial}{given-informal}"}
             surnameFirst-medium-monogram-formal{
@@ -3122,7 +3086,6 @@ uk{
                 "{surname-monogram-allCaps}{surname2-monogram-allCaps}{given-informal"
                 "-monogram-allCaps}"
             }
-            surnameFirst-medium-referring-formal{"{prefix} {surname} {surname2} {given} {given2-initial} {suffix}"}
             surnameFirst-medium-referring-informal{"{surname} {surname2} {given} {given2-initial}"}
             surnameFirst-short-addressing-formal{"{surname} {surname2} {given-initial} {given2-initial}"}
             surnameFirst-short-addressing-informal{"{surname} {surname2} {given-informal-initial}"}
@@ -3135,8 +3098,8 @@ uk{
                 "-monogram-allCaps}"
             }
             surnameFirst-short-referring-formal{
-                "{prefix} {surname} {surname2} {given-initial} {given2-initial} {suff"
-                "ix}"
+                "{title} {surname} {surname2} {given-initial} {given2-initial} {crede"
+                "ntials}"
             }
             surnameFirst-short-referring-informal{"{surname} {surname2} {given-informal-initial}"}
         }

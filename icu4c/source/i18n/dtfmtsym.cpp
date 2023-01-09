@@ -2259,24 +2259,48 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     }
 
     // Load day periods
+    fAbbreviatedDayPeriods = loadDayPeriodStrings(calendarSink,
+                            buildResourcePath(path, gDayPeriodTag, gNamesFormatTag, gNamesAbbrTag, status),
+                            fAbbreviatedDayPeriodsCount, status);
+
     fWideDayPeriods = loadDayPeriodStrings(calendarSink,
                             buildResourcePath(path, gDayPeriodTag, gNamesFormatTag, gNamesWideTag, status),
                             fWideDayPeriodsCount, status);
     fNarrowDayPeriods = loadDayPeriodStrings(calendarSink,
                             buildResourcePath(path, gDayPeriodTag, gNamesFormatTag, gNamesNarrowTag, status),
                             fNarrowDayPeriodsCount, status);
-    fAbbreviatedDayPeriods = loadDayPeriodStrings(calendarSink,
-                            buildResourcePath(path, gDayPeriodTag, gNamesFormatTag, gNamesAbbrTag, status),
-                            fAbbreviatedDayPeriodsCount, status);
+
+    fStandaloneAbbreviatedDayPeriods = loadDayPeriodStrings(calendarSink,
+                            buildResourcePath(path, gDayPeriodTag, gNamesStandaloneTag, gNamesAbbrTag, status),
+                            fStandaloneAbbreviatedDayPeriodsCount, status);
+
     fStandaloneWideDayPeriods = loadDayPeriodStrings(calendarSink,
                             buildResourcePath(path, gDayPeriodTag, gNamesStandaloneTag, gNamesWideTag, status),
                             fStandaloneWideDayPeriodsCount, status);
     fStandaloneNarrowDayPeriods = loadDayPeriodStrings(calendarSink,
                             buildResourcePath(path, gDayPeriodTag, gNamesStandaloneTag, gNamesNarrowTag, status),
                             fStandaloneNarrowDayPeriodsCount, status);
-    fStandaloneAbbreviatedDayPeriods = loadDayPeriodStrings(calendarSink,
-                            buildResourcePath(path, gDayPeriodTag, gNamesStandaloneTag, gNamesAbbrTag, status),
-                            fStandaloneAbbreviatedDayPeriodsCount, status);
+
+    // Fill in for missing/bogus items (dayPeriods are a map so single items might be missing)
+    if (U_SUCCESS(status)) {
+        for (int32_t dpidx = 0; dpidx < fAbbreviatedDayPeriodsCount; ++dpidx) {
+            if (dpidx < fWideDayPeriodsCount && fWideDayPeriods != NULL && fWideDayPeriods[dpidx].isBogus()) {
+                fWideDayPeriods[dpidx].fastCopyFrom(fAbbreviatedDayPeriods[dpidx]);
+            }
+            if (dpidx < fNarrowDayPeriodsCount && fNarrowDayPeriods != NULL && fNarrowDayPeriods[dpidx].isBogus()) {
+                fNarrowDayPeriods[dpidx].fastCopyFrom(fAbbreviatedDayPeriods[dpidx]);
+            }
+            if (dpidx < fStandaloneAbbreviatedDayPeriodsCount && fStandaloneAbbreviatedDayPeriods != NULL && fStandaloneAbbreviatedDayPeriods[dpidx].isBogus()) {
+                fStandaloneAbbreviatedDayPeriods[dpidx].fastCopyFrom(fAbbreviatedDayPeriods[dpidx]);
+            }
+            if (dpidx < fStandaloneWideDayPeriodsCount && fStandaloneWideDayPeriods != NULL && fStandaloneWideDayPeriods[dpidx].isBogus()) {
+                fStandaloneWideDayPeriods[dpidx].fastCopyFrom(fStandaloneAbbreviatedDayPeriods[dpidx]);
+            }
+            if (dpidx < fStandaloneNarrowDayPeriodsCount && fStandaloneNarrowDayPeriods != NULL && fStandaloneNarrowDayPeriods[dpidx].isBogus()) {
+                fStandaloneNarrowDayPeriods[dpidx].fastCopyFrom(fStandaloneAbbreviatedDayPeriods[dpidx]);
+            }
+        }
+    }
 
     U_LOCALE_BASED(locBased, *this);
     // if we make it to here, the resource data is cool, and we can get everything out
@@ -2352,12 +2376,20 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
         initField(&fNarrowAmPms, fNarrowAmPmsCount, calendarSink,
                   buildResourcePath(path, gAmPmMarkersAbbrTag, status), status);
     }
+    if(status == U_MISSING_RESOURCE_ERROR) {
+        status = U_ZERO_ERROR;
+        assignArray(fNarrowAmPms, fNarrowAmPmsCount, fAmPms, fAmPmsCount);
+    }
 
     // Load quarters
     initField(&fQuarters, fQuartersCount, calendarSink,
               buildResourcePath(path, gQuartersTag, gNamesFormatTag, gNamesWideTag, status), status);
     initField(&fShortQuarters, fShortQuartersCount, calendarSink,
               buildResourcePath(path, gQuartersTag, gNamesFormatTag, gNamesAbbrTag, status), status);
+    if(status == U_MISSING_RESOURCE_ERROR) {
+        status = U_ZERO_ERROR;
+        assignArray(fShortQuarters, fShortQuartersCount, fQuarters, fQuartersCount);
+    }
 
     initField(&fStandaloneQuarters, fStandaloneQuartersCount, calendarSink,
               buildResourcePath(path, gQuartersTag, gNamesStandaloneTag, gNamesWideTag, status), status);

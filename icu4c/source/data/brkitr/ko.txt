@@ -12,9 +12,4 @@ ko{
         line_strict:process(dependency){"line_cj.brk"}
         line_strict_phrase:process(dependency){"line_phrase_cj.brk"}
     }
-// Korean particles should be added here and dictbe.cpp needs to be adjusted
-// once a Korean dictionary is added. Even without a Korean dictionary,
-// Korean particle list can be used when a Korean word written in CJK ideographs
-// or a Korean word in Hangul and a closing puncutation mark is followed by a Korean
-// particle. Examples include: "大韓民國은  民主共和國이다", "『님의 침묵』이" .
 }

@@ -427,6 +427,7 @@
              -->
         <outputDirectories root="${outDir}" forceDelete="${forceDelete}">
             <dir name="brkitr">
+                <retain path="adaboost"/>
                 <retain path="dictionaries"/>
                 <retain path="lstm"/>
                 <retain path="rules"/>

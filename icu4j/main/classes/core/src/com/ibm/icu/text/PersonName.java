@@ -30,12 +30,13 @@ public interface PersonName {
     @Deprecated
     enum NameField {
         /**
-         * Contains titles and other words that precede the actual name, such as "Mr."
-         * @internal ICU 72 technology preview
+         * Contains titles such as "Mr.", "Dr." (in English these typically
+         * precede the name)
+         * @internal ICU 73 technology preview
          * @deprecated This API is for technology preview only.
          */
         @Deprecated
-        PREFIX("prefix"),
+        TITLE("title"),
 
         /**
          * The given name.  May contain more than one token.
@@ -73,13 +74,22 @@ public interface PersonName {
         SURNAME2("surname2"),
 
         /**
-         * Generational and professional qualifiers that generally follow the actual name,
-         * such as "Jr." or "M.D."
-         * @internal ICU 72 technology preview
+         * Generational qualifiers that in English generally follow the actual name,
+         * such as "Jr." or "III".
+         * @internal ICU 73 technology preview
          * @deprecated This API is for technology preview only.
          */
         @Deprecated
-        SUFFIX("suffix"),
+        GENERATION("generation"),
+
+        /**
+         * Professional qualifiers that in English generally follow the actual name,
+         * such as "M.D." or "J.D.".
+         * @internal ICU 73 technology preview
+         * @deprecated This API is for technology preview only.
+         */
+        @Deprecated
+        CREDENTIALS("credentials"),
 
         /**
          * The preferred field order for the name.  PersonName objects generally shouldn't provide

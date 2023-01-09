@@ -2010,7 +2010,6 @@ kk{
             givenFirst-medium-addressing-informal{"{given-informal}"}
             givenFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
             givenFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
-            givenFirst-medium-referring-formal{"{given} {surname}"}
             givenFirst-medium-referring-informal{"{given-informal}"}
             givenFirst-short-addressing-formal{"{surname}"}
             givenFirst-short-addressing-informal{"{given-informal}"}
@@ -2020,7 +2019,6 @@ kk{
             givenFirst-short-referring-informal{"{given-informal}"}
             sorting-long-referring-formal{"{given}"}
             sorting-long-referring-informal{"{surname}, {given-informal}"}
-            sorting-medium-referring-formal{"{given}"}
             sorting-medium-referring-informal{"{surname}, {given-informal}"}
             sorting-short-referring-formal{"{given-initial}"}
             sorting-short-referring-informal{"{surname}, {given-informal}"}
@@ -2034,7 +2032,6 @@ kk{
             surnameFirst-medium-addressing-informal{"{given-informal}"}
             surnameFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
             surnameFirst-medium-monogram-informal{"{given-informal-monogram-allCaps}"}
-            surnameFirst-medium-referring-formal{"{surname} {given}"}
             surnameFirst-medium-referring-informal{"{surname} {given-informal}"}
             surnameFirst-short-addressing-formal{"{surname}"}
             surnameFirst-short-addressing-informal{"{given-informal}"}

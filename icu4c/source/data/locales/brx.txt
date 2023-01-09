@@ -271,7 +271,7 @@ brx{
                 d{"d"}
                 h{"a h"}
                 hm{"a h:mm"}
-                hms{"a h:mm:ss"}
+                hms{"a h:mm:ss"}
                 ms{"mm:ss"}
                 y{"G y"}
                 yM{"M/y"}
@@ -485,7 +485,7 @@ brx{
                 Md{"M/d"}
                 d{"d"}
                 h{"a नि h"}
-                hms{"h:mm:ss a"}
+                hms{"h:mm:ss a"}
                 hmsv{"a नि h:mm:ss v"}
                 hmv{"a h:mm v"}
                 ms{"mm:ss"}

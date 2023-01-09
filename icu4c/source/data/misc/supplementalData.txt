@@ -2175,7 +2175,7 @@ supplementalData:table(nofallback){
             "islamic-tbla",
         }
     }
-    cldrVersion{"42"}
+    cldrVersion{"43"}
     codeMappings{
         {
             "AA",
@@ -12048,6 +12048,12 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        ajp{
+            primary{
+                scripts{"Arab"}
+                territories{"JO"}
+            }
+        }
         ak{
             primary{
                 scripts{"Latn"}
@@ -14981,6 +14987,7 @@ supplementalData:table(nofallback){
         lmo{
             primary{
                 scripts{"Latn"}
+                territories{"IT"}
             }
         }
         ln{
@@ -15913,13 +15920,13 @@ supplementalData:table(nofallback){
         pap{
             primary{
                 scripts{"Latn"}
-                territories{
-                    "AW",
-                    "CW",
-                }
+                territories{"CW"}
             }
             secondary{
-                territories{"BQ"}
+                territories{
+                    "AW",
+                    "BQ",
+                }
             }
         }
         pau{
@@ -29647,6 +29654,9 @@ supplementalData:table(nofallback){
             }
         }
         IL{
+            ajp{
+                populationShareF:int{49165000}
+            }
             am{
                 populationShareF:int{47590000}
             }
@@ -30204,6 +30214,9 @@ supplementalData:table(nofallback){
             }
         }
         JO{
+            ajp{
+                populationShareF:int{49514000}
+            }
             ar{
                 officialStatus{"official"}
                 populationShareF:int{50100000}
@@ -30704,7 +30717,7 @@ supplementalData:table(nofallback){
                 populationShareF:int{48490000}
                 writingShareF:int{48500000}
             }
-            rif_Latn{
+            rif_Tfng{
                 populationShareF:int{48490000}
                 writingShareF:int{48500000}
             }
@@ -31433,7 +31446,7 @@ supplementalData:table(nofallback){
                 officialStatus{"official"}
                 populationShareF:int{50100000}
             }
-            rif_Latn{
+            rif{
                 populationShareF:int{48120000}
             }
             territoryF:intvector{
@@ -31948,6 +31961,9 @@ supplementalData:table(nofallback){
             }
         }
         PS{
+            ajp{
+                populationShareF:int{49830000}
+            }
             ar{
                 officialStatus{"official"}
                 populationShareF:int{50100000}
@@ -34159,6 +34175,13 @@ supplementalData:table(nofallback){
             preferred{"H"}
         }
         CV{
+            allowed{
+                "H",
+                "hB",
+            }
+            preferred{"H"}
+        }
+        CW{
             allowed{
                 "H",
                 "hB",

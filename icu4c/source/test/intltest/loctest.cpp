@@ -2095,7 +2095,7 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
             "pa_PK"
         }, {
             "pap",
-            "pap_Latn_AW",
+            "pap_Latn_CW",
             "pap"
         }, {
             "pau",
@@ -3800,7 +3800,7 @@ LocaleTest::TestAddLikelyAndMinimizeSubtags() {
         }, {
             "und_CW",
             "pap_Latn_CW",
-            "pap_CW"
+            "pap"
         }, {
             "zh_Hant",
             "zh_Hant_TW",

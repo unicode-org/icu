@@ -1845,6 +1845,7 @@ km{
         metric{"រង្វាស់​ប្រវែង"}
     }
     personNames{
+        foreignSpaceReplacement{""}
         nameOrderLocales{
             givenFirst{"und"}
             surnameFirst{
