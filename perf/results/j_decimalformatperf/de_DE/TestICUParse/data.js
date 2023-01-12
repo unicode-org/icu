@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1673379576172,
+  "lastUpdate": 1673542969148,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -4018,6 +4018,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 341.7816954330377,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "pedberg@unicode.org",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "committer": {
+            "email": "42151464+pedberg-icu@users.noreply.github.com",
+            "name": "Peter Edberg",
+            "username": "pedberg-icu"
+          },
+          "distinct": true,
+          "id": "ad82a6693acdab6adde7499853bb9bb5befc6fc3",
+          "message": "ICU-22220 integrate root exemplarCities chnages for CLDR release-43-m0 to ICU main",
+          "timestamp": "2023-01-12T08:57:35-08:00",
+          "tree_id": "e154680212a1754592fc958909b26f7ae8f91b4f",
+          "url": "https://github.com/unicode-org/icu/commit/ad82a6693acdab6adde7499853bb9bb5befc6fc3"
+        },
+        "date": 1673542954461,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 441.91090597585645,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
