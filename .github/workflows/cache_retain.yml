@@ -1,0 +1,48 @@
+# Copyright (C) 2023 and later: Unicode, Inc. and others.
+# License & terms of use: http://www.unicode.org/copyright.html
+#
+# This workflow is designed to keep specific caches on the main
+# branch from getting evicted according to the Github Actions policy
+# (currently in 2023: 7 days) in cases where the cost to construct
+# the cache is high, especially in cases where there is flakiness
+# (ex: network loss / throttling when downloading artifacts) involved in
+# constructing the cache.
+#
+# Preventing a cache from eviction using this workflow requires that:
+#  - the cache is not too big that it starves other caches 
+#    from using the shared cache quota for the repository
+#  - the cache key is specific enough to avoid cache collisions, according
+#    to good cache key design
+#  - the cache key is not overly specific to cause unnecessary cache misses
+#    (resulting in duplicate caches values, thereby wasting space), according
+#    to good cache key design
+#  - For more details, see: https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows
+
+name: Retain Specific Caches
+
+on:
+  schedule:
+    # Because the Github Actions cache eviction policy is every 7 days,
+    # this cron schedule is set to run every 6 days to ensure retention
+    - cron: '0 12 0/6 * *'
+
+jobs:
+  retain-maven-cache:
+    name: Run all tests with Maven
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+          cache: maven
+      - name: Run Maven unit & integration tests
+        run: |
+          cd icu4j/maven-build;
+          mvn --batch-mode verify
