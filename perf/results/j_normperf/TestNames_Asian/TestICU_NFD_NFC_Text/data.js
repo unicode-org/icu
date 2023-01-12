@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1673545552336,
+  "lastUpdate": 1673545615898,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -8398,6 +8398,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 15.901326341963362,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "89c1700424ee903718fad955c240017d6431d0eb",
+          "message": "ICU-22093 Polish for SimpleNumberFormatter\n\nSee #2277",
+          "timestamp": "2023-01-12T11:38:27-06:00",
+          "tree_id": "283a2331ea8afbfeeeb7839b7168bd93a6c70077",
+          "url": "https://github.com/unicode-org/icu/commit/89c1700424ee903718fad955c240017d6431d0eb"
+        },
+        "date": 1673545599630,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 15.389323806109287,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
