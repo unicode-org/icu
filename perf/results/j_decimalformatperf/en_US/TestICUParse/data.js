@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1673545522326,
+  "lastUpdate": 1673642745998,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -4258,6 +4258,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 460.54789514660854,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "2007e135f1e78711247b2f0ab440dec54307cfe9",
+          "message": "ICU-12811 Add CI workflow to retain caches that are flaky/costly to init\n\nSee #2281",
+          "timestamp": "2023-01-13T12:36:48-08:00",
+          "tree_id": "2a21451602d4cf3110e614b1f01632ea5d99cabf",
+          "url": "https://github.com/unicode-org/icu/commit/2007e135f1e78711247b2f0ab440dec54307cfe9"
+        },
+        "date": 1673642728386,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 473.6068511806288,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
