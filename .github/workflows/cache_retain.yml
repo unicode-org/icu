@@ -24,7 +24,7 @@ on:
   schedule:
     # Because the Github Actions cache eviction policy is every 7 days,
     # this cron schedule is set to run every 6 days to ensure retention
-    - cron: '0 12 0/6 * *'
+    - cron: '0 12 */6 * *'
 
 jobs:
   retain-maven-cache:
