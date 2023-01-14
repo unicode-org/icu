@@ -1088,7 +1088,7 @@ static std::condition_variable *gCTConditionVar = nullptr;
 template<> U_EXPORT
 const UCTMultiThreadItem *LocaleCacheKey<UCTMultiThreadItem>::createObject(
         const void *context, UErrorCode &status) const {
-    const UnifiedCache *cacheContext = (const UnifiedCache *) context;
+    const UnifiedCache *cacheContext = static_cast<const UnifiedCache*>(context);
 
     if (uprv_strcmp(fLoc.getLanguage(), fLoc.getName()) != 0) {
         const UCTMultiThreadItem *result = nullptr;

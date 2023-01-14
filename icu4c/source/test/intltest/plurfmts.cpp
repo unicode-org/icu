@@ -240,8 +240,8 @@ void PluralFormatTest::pluralFormatUnitTest(/*char *par*/)
             errln("ERROR:  PluralFormat failed to apply pattern- "+patternTestData[i]);
             continue;
         }
-        numberFormatTest(&plFmt, numFmt.getAlias(), 1, 10, (UnicodeString *)&patternOddTestResult[i], 
-                         (UnicodeString *)&patternEvenTestResult[i], overwrite[i], &message);
+        numberFormatTest(&plFmt, numFmt.getAlias(), 1, 10, dynamic_cast<UnicodeString *>(&patternOddTestResult[i]), 
+                         dynamic_cast<UnicodeString *>(&patternEvenTestResult[i]), overwrite[i], &message);
     }
     
     // ======= Test set locale

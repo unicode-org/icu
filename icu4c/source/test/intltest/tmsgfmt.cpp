@@ -139,7 +139,7 @@ void TestMessageFormat::testBug3()
         logln(locale[i].getDisplayName(buffer));
         UErrorCode success = U_ZERO_ERROR;
 //        form = (DecimalFormat*)NumberFormat::createCurrencyInstance(locale[i], success);
-        form = (DecimalFormat*)NumberFormat::createInstance(locale[i], success);
+        form = dynamic_cast<DecimalFormat*>(NumberFormat::createInstance(locale[i], success));
         if (U_FAILURE(success)) {
             errln("Err: Number Format ");
             logln("Number format creation failed.");

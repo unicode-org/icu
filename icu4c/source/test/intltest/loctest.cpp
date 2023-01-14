@@ -1192,8 +1192,8 @@ void
 LocaleTest::TestThaiCurrencyFormat()
 {
     UErrorCode status = U_ZERO_ERROR;
-    DecimalFormat *thaiCurrency = (DecimalFormat*)NumberFormat::createCurrencyInstance(
-                    Locale("th", "TH"), status);
+    DecimalFormat *thaiCurrency = dynamic_cast<DecimalFormat*>(NumberFormat::createCurrencyInstance(
+                    Locale("th", "TH"), status));
     UnicodeString posPrefix(u"\u0E3F");
     UnicodeString temp;
 

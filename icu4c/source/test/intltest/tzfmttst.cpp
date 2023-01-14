@@ -275,7 +275,7 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
                             status = U_ZERO_ERROR;
                         } else if (outtzid != canonical) {
                             // Canonical ID did not match - check the rules
-                            if (!((BasicTimeZone*)&outtz)->hasEquivalentTransitions((BasicTimeZone&)*tz, low, high, true, status)) {
+                            if (!(dynamic_cast<const BasicTimeZone*>(&outtz))->hasEquivalentTransitions(dynamic_cast<BasicTimeZone&>(*tz), low, high, true, status)) {
                                 if (canonical.indexOf((char16_t)0x27 /*'/'*/) == -1) {
                                     // Exceptional cases, such as CET, EET, MET and WET
                                     logln((UnicodeString)"Canonical round trip failed (as expected); tz=" + *tzid
@@ -613,7 +613,7 @@ void TimeZoneFormatTest::RunTimeRoundTripTests(int32_t threadNumber) {
                 continue;
             }
 
-            BasicTimeZone *tz = (BasicTimeZone*) TimeZone::createTimeZone(*tzid);
+            BasicTimeZone *tz = dynamic_cast<BasicTimeZone*>(TimeZone::createTimeZone(*tzid));
             sdf->setTimeZone(*tz);
 
             UDate t = gLocaleData->START_TIME;

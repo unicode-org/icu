@@ -626,7 +626,7 @@ void SSearchTest::offsetTest()
 
     int32_t testCount = UPRV_LENGTHOF(test);
     UErrorCode status = U_ZERO_ERROR;
-    RuleBasedCollator *col = (RuleBasedCollator *) Collator::createInstance(Locale::getEnglish(), status);
+    RuleBasedCollator *col = dynamic_cast<RuleBasedCollator*>(Collator::createInstance(Locale::getEnglish(), status));
     if (U_FAILURE(status)) {
         errcheckln(status, "Failed to create collator in offsetTest! - %s", u_errorName(status));
         return;

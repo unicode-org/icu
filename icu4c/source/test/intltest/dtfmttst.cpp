@@ -715,7 +715,7 @@ DateFormatTest::tryPat994(SimpleDateFormat* format, const char* pat, const char*
         else
         {
             UnicodeString f;
-            ((DateFormat*)format)->format(date, f);
+            (dynamic_cast<DateFormat*>(format))->format(date, f);
             logln(UnicodeString(" parse(") + str + ") -> " + dateToString(date));
             logln((UnicodeString)" format -> " + f);
             if (expected == null ||
@@ -753,12 +753,12 @@ DateFormatTest::TestRunTogetherPattern985()
         return;
     }
     UDate date1 = Calendar::getNow();
-    ((DateFormat*)formatter)->format(date1, now);
+    (dynamic_cast<DateFormat*>(formatter))->format(date1, now);
     logln(now);
     ParsePosition pos(0);
     UDate date2 = formatter->parse(now, pos);
     if (date2 == 0) then = UnicodeString("Parse stopped at ") + pos.getIndex();
-    else ((DateFormat*)formatter)->format(date2, then);
+    else (dynamic_cast<DateFormat*>(formatter))->format(date2, then);
     logln(then);
     if (!(date2 == date1)) errln((UnicodeString)"FAIL");
     delete formatter;
@@ -803,7 +803,7 @@ DateFormatTest::testIt917(SimpleDateFormat* fmt, UnicodeString& str, UDate expec
     logln((UnicodeString)"pattern=" + fmt->toPattern(pattern) + "   string=" + str);
     Formattable o;
     //try {
-        ((Format*)fmt)->parseObject(str, o, status);
+        dynamic_cast<Format*>(fmt)->parseObject(str, o, status);
     //}
     if (U_FAILURE(status)) return;
     //catch(ParseException e) {
@@ -812,7 +812,8 @@ DateFormatTest::testIt917(SimpleDateFormat* fmt, UnicodeString& str, UDate expec
     //}
     logln((UnicodeString)"Parsed object: " + dateToString(o.getDate()));
     if (!(o.getDate() == expected)) errln((UnicodeString)"FAIL: Expected " + dateToString(expected));
-    UnicodeString formatted; ((Format*)fmt)->format(o, formatted, status);
+    UnicodeString formatted;
+    fmt->format(o, formatted, status);
     logln((UnicodeString)"Formatted string: " + formatted);
     if (!(formatted == str)) errln((UnicodeString)"FAIL: Expected " + str);
     if (U_FAILURE(status)) errln((UnicodeString)"FAIL: UErrorCode received during test: " + (int32_t)status);
@@ -835,7 +836,7 @@ DateFormatTest::TestCzechMonths459()
     }
 
     UnicodeString pattern;
-    logln((UnicodeString)"Pattern " + ((SimpleDateFormat*) fmt)->toPattern(pattern));
+    logln((UnicodeString)"Pattern " + (dynamic_cast<SimpleDateFormat*>(fmt))->toPattern(pattern));
     UDate june = date(97, UCAL_JUNE, 15);
     UDate july = date(97, UCAL_JULY, 15);
     UnicodeString juneStr; fmt->format(june, juneStr);
@@ -911,7 +912,7 @@ DateFormatTest::TestDayOfYearPattern195()
     int32_t year,month,day,hour,min,sec; dateToFields(today,year,month,day,hour,min,sec);
     UDate expected = date(year, month, day);
     logln((UnicodeString)"Test Date: " + dateToString(today));
-    SimpleDateFormat* sdf = (SimpleDateFormat*)DateFormat::createDateInstance();
+    SimpleDateFormat* sdf = dynamic_cast<SimpleDateFormat*>(DateFormat::createDateInstance());
     if (sdf == nullptr){
         dataerrln("Error calling DateFormat::createDateInstance()");
         return;
@@ -931,13 +932,13 @@ DateFormatTest::tryPattern(SimpleDateFormat& sdf, UDate d, const char* pattern, 
     if (pattern != 0) sdf.applyPattern(pattern);
     UnicodeString thePat;
     logln((UnicodeString)"pattern: " + sdf.toPattern(thePat));
-    UnicodeString formatResult; (*(DateFormat*)&sdf).format(d, formatResult);
+    UnicodeString formatResult; (*dynamic_cast<DateFormat*>(&sdf)).format(d, formatResult);
     logln((UnicodeString)" format -> " + formatResult);
     // try {
         UDate d2 = sdf.parse(formatResult, status);
         logln((UnicodeString)" parse(" + formatResult + ") -> " + dateToString(d2));
         if (d2 != expected) errln((UnicodeString)"FAIL: Expected " + dateToString(expected));
-        UnicodeString format2; (*(DateFormat*)&sdf).format(d2, format2);
+        UnicodeString format2; (*dynamic_cast<DateFormat*>(&sdf)).format(d2, format2);
         logln((UnicodeString)" format -> " + format2);
         if (!(formatResult == format2)) errln((UnicodeString)"FAIL: Round trip drift");
     //}
@@ -963,7 +964,7 @@ DateFormatTest::TestQuotePattern161()
         return;
     }
     UDate currentTime_1 = date(97, UCAL_AUGUST, 13, 10, 42, 28);
-    UnicodeString dateString; ((DateFormat*)formatter)->format(currentTime_1, dateString);
+    UnicodeString dateString; (dynamic_cast<DateFormat*>(formatter))->format(currentTime_1, dateString);
     UnicodeString exp("08/13/1997 at 10:42:28 AM ");
     logln((UnicodeString)"format(" + dateToString(currentTime_1) + ") = " + dateString);
     if (0 != dateString.compareBetween(0, exp.length(), exp, 0, exp.length())) errln((UnicodeString)"FAIL: Expected " + exp);
@@ -1145,7 +1146,7 @@ DateFormatTest::TestBadInput135a()
         }
         else {
           UnicodeString result;
-          ((DateFormat*)dateParse)->format(date, result);
+          (dynamic_cast<DateFormat*>(dateParse))->format(date, result);
           logln((UnicodeString)"Parsed \"" + s + "\" using \"" + dateParse->toPattern(thePat) + "\" to: " + result);
           if (expected == 0)
             errln((UnicodeString)"FAIL: Expected parse failure, got " + result);
@@ -1196,7 +1197,7 @@ DateFormatTest::parse2DigitYear(DateFormat& fmt, const char* str, UDate expected
     //try {
         UDate d = fmt.parse(str, status);
         UnicodeString thePat;
-        logln(UnicodeString("Parsing \"") + str + "\" with " + ((SimpleDateFormat*)&fmt)->toPattern(thePat) +
+        logln(UnicodeString("Parsing \"") + str + "\" with " + (dynamic_cast<SimpleDateFormat*>(&fmt))->toPattern(thePat) +
             "  => " + dateToString(d));
         if (d != expected) errln((UnicodeString)"FAIL: Expected " + expected);
     //}
@@ -4475,7 +4476,7 @@ void DateFormatTest::TestFormatsWithNumberSystems()
             dataerrln("Calendar::setTime fails for locale %s, date %.1f, status %s", itemPtr->localeID, date, u_errorName(status));
             continue;
         }
-        LocalPointer<SimpleDateFormat> sdfmt(static_cast<SimpleDateFormat *>(DateFormat::createDateInstance(itemPtr->style, locale)));
+        LocalPointer<SimpleDateFormat> sdfmt(dynamic_cast<SimpleDateFormat *>(DateFormat::createDateInstance(itemPtr->style, locale)));
         if (sdfmt.isNull()) {
             dataerrln("DateFormat::createDateInstance fails for locale %s", itemPtr->localeID);
             continue;
@@ -4558,7 +4559,7 @@ UBool DateFormatTest::showParse(DateFormat &format, const UnicodeString &formatt
     UDate parsed = format.parse(formattedString, parsePosition);
     UBool ok = TEST_DATE == parsed && parsePosition.getIndex() == formattedString.length();
     UnicodeString pattern;
-    static_cast<SimpleDateFormat &>(format).toPattern(pattern);
+    dynamic_cast<SimpleDateFormat &>(format).toPattern(pattern);
     if (ok) {
         logln(pattern + "  parsed: " + formattedString);
     } else {
@@ -4705,7 +4706,7 @@ void DateFormatTest::TestParseMultiPatternMatch() {
     for (itemPtr = items; itemPtr->parseString != "--end--"; itemPtr++ ) {
        status = U_ZERO_ERROR;
        ParsePosition pos(0);
-       ((SimpleDateFormat*) sdmft)->applyPattern(itemPtr->pattern);
+       (dynamic_cast<SimpleDateFormat*>(sdmft))->applyPattern(itemPtr->pattern);
        if (U_FAILURE(status)) {
            dataerrln("Unable to create SimpleDateFormat - %s", u_errorName(status));
            continue;
@@ -5053,7 +5054,7 @@ void DateFormatTest::TestPatternFromSkeleton() {
             return;
         }
         UnicodeString pattern;
-        static_cast<const SimpleDateFormat*>(fmt.getAlias())->toPattern(pattern);
+        dynamic_cast<const SimpleDateFormat*>(fmt.getAlias())->toPattern(pattern);
         assertEquals("Format pattern", TESTDATA[i].pattern, pattern);
     }
 }

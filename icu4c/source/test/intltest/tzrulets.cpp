@@ -428,7 +428,7 @@ TimeZoneRuleTest::TestHistoricalRuleBasedTimeZone(void) {
     UErrorCode status = U_ZERO_ERROR;
 
     // Compare to America/New_York with equivalent RBTZ
-    BasicTimeZone *ny = (BasicTimeZone*)TimeZone::createTimeZone("America/New_York");
+    BasicTimeZone *ny = dynamic_cast<BasicTimeZone*>(TimeZone::createTimeZone("America/New_York"));
 
     //RBTZ
     InitialTimeZoneRule *ir = new InitialTimeZoneRule("EST", -5*HOUR, 0);
@@ -617,7 +617,7 @@ TimeZoneRuleTest::TestOlsonTransition(void) {
             errln("FAIL: error returned while enumerating timezone IDs.");
             break;
         }
-        BasicTimeZone *tz = (BasicTimeZone*)TimeZone::createTimeZone(*tzid);
+        BasicTimeZone *tz = dynamic_cast<BasicTimeZone*>(TimeZone::createTimeZone(*tzid));
         for (int32_t i = 0; TESTYEARS[i][0] != 0 || TESTYEARS[i][1] != 0; i++) {
             UDate lo = getUTCMillis(TESTYEARS[i][0], UCAL_JANUARY, 1);
             UDate hi = getUTCMillis(TESTYEARS[i][1], UCAL_JANUARY, 1);
@@ -652,7 +652,7 @@ TimeZoneRuleTest::TestRBTZTransition(void) {
             errln("FAIL: error returned while enumerating timezone IDs.");
             break;
         }
-        BasicTimeZone *tz = (BasicTimeZone*)TimeZone::createTimeZone(*tzid);
+        BasicTimeZone *tz = dynamic_cast<BasicTimeZone*>(TimeZone::createTimeZone(*tzid));
         int32_t ruleCount = tz->countTransitionRules(status);
 
         const InitialTimeZoneRule *initial;
@@ -701,9 +701,9 @@ TimeZoneRuleTest::TestHasEquivalentTransitions(void) {
     // America/New_York and America/Indiana/Indianapolis are equivalent
     // since 2006
     UErrorCode status = U_ZERO_ERROR;
-    BasicTimeZone *newyork = (BasicTimeZone*)TimeZone::createTimeZone("America/New_York");
-    BasicTimeZone *indianapolis = (BasicTimeZone*)TimeZone::createTimeZone("America/Indiana/Indianapolis");
-    BasicTimeZone *gmt_5 = (BasicTimeZone*)TimeZone::createTimeZone("Etc/GMT+5");
+    BasicTimeZone *newyork = dynamic_cast<BasicTimeZone*>(TimeZone::createTimeZone("America/New_York"));
+    BasicTimeZone *indianapolis = dynamic_cast<BasicTimeZone*>(TimeZone::createTimeZone("America/Indiana/Indianapolis"));
+    BasicTimeZone *gmt_5 = dynamic_cast<BasicTimeZone*>(TimeZone::createTimeZone("Etc/GMT+5"));
 
     UDate jan1_1971 = getUTCMillis(1971, UCAL_JANUARY, 1);
     UDate jan1_2005 = getUTCMillis(2005, UCAL_JANUARY, 1);
@@ -754,7 +754,7 @@ TimeZoneRuleTest::TestHasEquivalentTransitions(void) {
 
     // America/New_York and America/Los_Angeles has same DST start rules, but
     // raw offsets are different
-    BasicTimeZone *losangeles = (BasicTimeZone*)TimeZone::createTimeZone("America/Los_Angeles");
+    BasicTimeZone *losangeles = dynamic_cast<BasicTimeZone*>(TimeZone::createTimeZone("America/Los_Angeles"));
     if (newyork->hasEquivalentTransitions(*losangeles, jan1_2006, jan1_2011, true, status)) {
         dataerrln("FAIL: New_York is not equivalent to Los Angeles, but returned true");
     }
@@ -789,7 +789,7 @@ TimeZoneRuleTest::TestVTimeZoneRoundTrip(void) {
             errln("FAIL: error returned while enumerating timezone IDs.");
             break;
         }
-        BasicTimeZone *tz = (BasicTimeZone*)TimeZone::createTimeZone(*tzid);
+        BasicTimeZone *tz = dynamic_cast<BasicTimeZone*>(TimeZone::createTimeZone(*tzid));
         VTimeZone *vtz_org = VTimeZone::createVTimeZoneByID(*tzid);
         vtz_org->setTZURL("http://source.icu-project.org/timezone");
         vtz_org->setLastModified(Calendar::getNow());
@@ -889,7 +889,7 @@ TimeZoneRuleTest::TestVTimeZoneRoundTripPartial(void) {
             errln("FAIL: error returned while enumerating timezone IDs.");
             break;
         }
-        BasicTimeZone *tz = (BasicTimeZone*)TimeZone::createTimeZone(*tzid);
+        BasicTimeZone *tz = dynamic_cast<BasicTimeZone*>(TimeZone::createTimeZone(*tzid));
         VTimeZone *vtz_org = VTimeZone::createVTimeZoneByID(*tzid);
         VTimeZone *vtz_new = nullptr;
         UnicodeString vtzdata;
@@ -1125,7 +1125,7 @@ TimeZoneRuleTest::TestGetSimpleRules(void) {
                 errln("FAIL: error returned while enumerating timezone IDs.");
                 break;
             }
-            BasicTimeZone *tz = (BasicTimeZone*)TimeZone::createTimeZone(*tzid);
+            BasicTimeZone *tz = dynamic_cast<BasicTimeZone*>(TimeZone::createTimeZone(*tzid));
             initial = nullptr;
             std = dst = nullptr;
             tz->getSimpleRulesNear(testTimes[i], initial, std, dst, status);
@@ -1618,7 +1618,7 @@ TimeZoneRuleTest::TestVTimeZoneCoverage(void) {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString TZID("Europe/Moscow");
 
-    BasicTimeZone *otz = (BasicTimeZone*)TimeZone::createTimeZone(TZID);
+    BasicTimeZone *otz = dynamic_cast<BasicTimeZone*>(TimeZone::createTimeZone(TZID));
     VTimeZone *vtz = VTimeZone::createVTimeZoneByID(TZID);
 
     // getOffset(era, year, month, day, dayOfWeek, milliseconds, ec)

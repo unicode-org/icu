@@ -449,12 +449,13 @@ protected:
             fprintf(stderr, "::create - not a LocaleKey!\n");
         }
 #endif
-        const LocaleKey& lkey = (LocaleKey&)key;
+        const LocaleKey* lkey = dynamic_cast<const LocaleKey*>(&key);
+        U_ASSERT(lkey != nullptr);
         Locale curLoc;  // current locale
         Locale canLoc;  // Canonical locale
 
-        lkey.currentLocale(curLoc);
-        lkey.canonicalLocale(canLoc);
+        lkey->currentLocale(curLoc);
+        lkey->canonicalLocale(canLoc);
 
         char keyword[ULOC_FULLNAME_CAPACITY];
         UnicodeString str;
@@ -494,9 +495,10 @@ protected:
            return nullptr;
         }
 
-        LocaleKey &lkey = (LocaleKey&)key;
+        const LocaleKey *lkey = dynamic_cast<const LocaleKey*>(&key);
+        U_ASSERT(lkey != nullptr);
         Locale loc;
-        lkey.currentLocale(loc);
+        lkey->currentLocale(loc);
 
         UnicodeString *ret = new UnicodeString();
         if (ret == nullptr) {
@@ -541,7 +543,7 @@ public:
         if (U_FAILURE(status)) {
            return nullptr;
         }
-        LocaleKey& lkey = (LocaleKey&)key;
+        LocaleKey& lkey = static_cast<LocaleKey&>(const_cast<ICUServiceKey&>(key));
         //int32_t kind = lkey.kind();
 
         Locale loc;

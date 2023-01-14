@@ -87,7 +87,7 @@ void test_FieldPosition_example( void )
     int32_t dNumSize = UPRV_LENGTHOF(doubleNum);
 
     UErrorCode status = U_ZERO_ERROR;
-    DecimalFormat* fmt = (DecimalFormat*) NumberFormat::createInstance(status);
+    DecimalFormat* fmt = dynamic_cast<DecimalFormat*>(NumberFormat::createInstance(status));
     if (U_FAILURE(status)) {
         it_dataerrln("NumberFormat::createInstance() error");
         return;

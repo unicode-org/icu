@@ -156,8 +156,8 @@ CollationAPITest::TestProperty(/* char* par */)
     doAssert((name == UnicodeString("English (United States)")), "getDisplayName failed if this is an English machine");
 #endif
     delete col; col = 0;
-    RuleBasedCollator *rcol = (RuleBasedCollator *)Collator::createInstance("da_DK",
-                                                                            success);
+    RuleBasedCollator *rcol = dynamic_cast<RuleBasedCollator*>(Collator::createInstance("da_DK",
+                                                                            success));
     if (U_FAILURE(success)) {
         errcheckln(success, "Collator::createInstance(\"da_DK\") failed - %s", u_errorName(success));
         return;
@@ -201,7 +201,7 @@ CollationAPITest::TestProperty(/* char* par */)
         return;
     }
 
-    doAssert(((RuleBasedCollator *)junk)->getRules().isEmpty(),
+    doAssert((dynamic_cast<RuleBasedCollator*>(junk))->getRules().isEmpty(),
                "The root collation should be returned for an unsupported language.");
     Collator *frCol = Collator::createInstance(Locale::getCanadaFrench(), success);
     if (U_FAILURE(success))
@@ -278,7 +278,7 @@ CollationAPITest::TestRuleBasedColl()
 
     status = U_ZERO_ERROR;
     Locale locale("aa", "AA");
-    col3 = (RuleBasedCollator *)Collator::createInstance(locale, status);
+    col3 = dynamic_cast<RuleBasedCollator*>(Collator::createInstance(locale, status));
     if (U_FAILURE(status)) {
         errln("Fallback Collator creation failed.: %s\n");
         return;
@@ -289,7 +289,7 @@ CollationAPITest::TestRuleBasedColl()
     delete col3;
 
     status = U_ZERO_ERROR;
-    col3 = (RuleBasedCollator *)Collator::createInstance(status);
+    col3 = dynamic_cast<RuleBasedCollator*>(Collator::createInstance(status));
     if (U_FAILURE(status)) {
         errln("Default Collator creation failed.: %s\n");
         return;
@@ -338,7 +338,7 @@ CollationAPITest::TestRules()
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString rules;
 
-    coll = (RuleBasedCollator *)Collator::createInstance(Locale::getEnglish(), status);
+    coll = dynamic_cast<RuleBasedCollator*>(Collator::createInstance(Locale::getEnglish(), status));
     if (U_FAILURE(status)) {
         errcheckln(status, "English Collator creation failed. - %s", u_errorName(status));
         return;
@@ -646,14 +646,14 @@ CollationAPITest::TestElemIter(/* char* par */)
     UnicodeString testString1("XFILE What subset of all possible test cases has the highest probability of detecting the most errors?");
     UnicodeString testString2("Xf_ile What subset of all possible test cases has the lowest probability of detecting the least errors?");
     logln("Constructors and comparison testing....");
-    CollationElementIterator *iterator1 = ((RuleBasedCollator*)col)->createCollationElementIterator(testString1);
+    CollationElementIterator *iterator1 = (dynamic_cast<RuleBasedCollator*>(col))->createCollationElementIterator(testString1);
 
     CharacterIterator *chariter=new StringCharacterIterator(testString1);
-    CollationElementIterator *coliter=((RuleBasedCollator*)col)->createCollationElementIterator(*chariter);
+    CollationElementIterator *coliter = (dynamic_cast<RuleBasedCollator*>(col))->createCollationElementIterator(*chariter);
 
     // copy ctor
-    CollationElementIterator *iterator2 = ((RuleBasedCollator*)col)->createCollationElementIterator(testString1);
-    CollationElementIterator *iterator3 = ((RuleBasedCollator*)col)->createCollationElementIterator(testString2);
+    CollationElementIterator *iterator2 = (dynamic_cast<RuleBasedCollator*>(col))->createCollationElementIterator(testString1);
+    CollationElementIterator *iterator3 = (dynamic_cast<RuleBasedCollator*>(col))->createCollationElementIterator(testString2);
 
     int32_t offset = iterator1->getOffset();
     if (offset != 0) {
@@ -861,13 +861,13 @@ CollationAPITest::TestOperators(/* char* par */)
     doAssert((*col3 == *col5), "Cloned collation objects not equal");
     doAssert((*col4 != *col5), "Two cloned collations compared equal");
 
-    const UnicodeString& defRules = ((RuleBasedCollator*)col3)->getRules();
+    const UnicodeString& defRules = (dynamic_cast<RuleBasedCollator*>(col3))->getRules();
     RuleBasedCollator* col6 = new RuleBasedCollator(defRules, success);
     if (U_FAILURE(success)) {
         errln("Creating default collation with rules failed.");
         return;
     }
-    doAssert((((RuleBasedCollator*)col3)->getRules() == col6->getRules()), "Default collator getRules failed");
+    doAssert(((dynamic_cast<RuleBasedCollator*>(col3))->getRules() == col6->getRules()), "Default collator getRules failed");
 
     success = U_ZERO_ERROR;
     RuleBasedCollator *col7 = new RuleBasedCollator(ruleset2, Collator::TERTIARY, success);
@@ -922,13 +922,13 @@ CollationAPITest::TestDuplicate(/* char* par */)
         return;
     }
     doAssert((*col1 != *col3), "Cloned object is equal to some dummy");
-    *col3 = *((RuleBasedCollator*)col1);
+    *col3 = *(dynamic_cast<RuleBasedCollator*>(col1));
     doAssert((*col1 == *col3), "Copied object is not equal to the original");
 
     UCollationResult res;
     UnicodeString first((char16_t)0x0061);
     UnicodeString second((char16_t)0x0062);
-    UnicodeString copiedEnglishRules(((RuleBasedCollator*)col1)->getRules());
+    UnicodeString copiedEnglishRules((dynamic_cast<RuleBasedCollator*>(col1))->getRules());
 
     delete col1;
 
@@ -937,9 +937,9 @@ CollationAPITest::TestDuplicate(/* char* par */)
     if(res != UCOL_LESS) {
         errln("a should be less then b after tailoring");
     }
-    if (((RuleBasedCollator*)col2)->getRules() != copiedEnglishRules) {
+    if ((dynamic_cast<RuleBasedCollator*>(col2))->getRules() != copiedEnglishRules) {
         errln(UnicodeString("English rule difference. ")
-            + copiedEnglishRules + UnicodeString("\ngetRules=") + ((RuleBasedCollator*)col2)->getRules());
+            + copiedEnglishRules + UnicodeString("\ngetRules=") + (dynamic_cast<RuleBasedCollator*>(col2))->getRules());
     }
     res = col3->compare(first, second, status);
     if(res != UCOL_LESS) {
@@ -1963,7 +1963,7 @@ void CollationAPITest::TestUClassID()
     }
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *coll 
-        = (RuleBasedCollator *)Collator::createInstance(status);
+        = dynamic_cast<RuleBasedCollator*>(Collator::createInstance(status));
     if(U_FAILURE(status)) {
       delete coll;
       errcheckln(status, "Collator creation failed with %s", u_errorName(status));
@@ -2322,7 +2322,7 @@ void CollationAPITest::TestNullptrCharTailoring()
 void CollationAPITest::TestClone() {
     logln("\ninit c0");
     UErrorCode status = U_ZERO_ERROR;
-    RuleBasedCollator* c0 = (RuleBasedCollator*)Collator::createInstance(status);
+    RuleBasedCollator* c0 = dynamic_cast<RuleBasedCollator*>(Collator::createInstance(status));
 
     if (U_FAILURE(status)) {
         errcheckln(status, "Collator::CreateInstance(status) failed with %s", u_errorName(status));
@@ -2333,7 +2333,7 @@ void CollationAPITest::TestClone() {
     dump("c0", c0, status);
 
     logln("\ninit c1");
-    RuleBasedCollator* c1 = (RuleBasedCollator*)Collator::createInstance(status);
+    RuleBasedCollator* c1 = dynamic_cast<RuleBasedCollator*>(Collator::createInstance(status));
     c1->setStrength(Collator::TERTIARY);
     UColAttributeValue val = c1->getAttribute(UCOL_CASE_FIRST, status);
     if(val == UCOL_LOWER_FIRST){

@@ -526,7 +526,7 @@ RuleBasedTimeZone::hasSameRules(const TimeZone& other) const {
     if (typeid(*this) != typeid(other)) {
         return false;
     }
-    const RuleBasedTimeZone& that = (const RuleBasedTimeZone&)other;
+    const RuleBasedTimeZone& that = static_cast<const RuleBasedTimeZone&>(other);
     if (*fInitialRule != *(that.fInitialRule)) {
         return false;
     }
@@ -549,8 +549,8 @@ RuleBasedTimeZone::getNextTransition(UDate base, UBool inclusive, TimeZoneTransi
     UBool found = findNext(base, inclusive, transitionTime, fromRule, toRule);
     if (found) {
         result.setTime(transitionTime);
-        result.setFrom((const TimeZoneRule&)*fromRule);
-        result.setTo((const TimeZoneRule&)*toRule);
+        result.setFrom(*fromRule);
+        result.setTo(*toRule);
         return true;
     }
     return false;
@@ -568,8 +568,8 @@ RuleBasedTimeZone::getPreviousTransition(UDate base, UBool inclusive, TimeZoneTr
     UBool found = findPrev(base, inclusive, transitionTime, fromRule, toRule);
     if (found) {
         result.setTime(transitionTime);
-        result.setFrom((const TimeZoneRule&)*fromRule);
-        result.setTo((const TimeZoneRule&)*toRule);
+        result.setFrom(*fromRule);
+        result.setTo(*toRule);
         return true;
     }
     return false;

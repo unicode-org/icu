@@ -64,7 +64,7 @@ UObject*
 SimpleLocaleKeyFactory::create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const
 {
     if (U_SUCCESS(status)) {
-        const LocaleKey& lkey = (const LocaleKey&)key;
+        const LocaleKey& lkey = static_cast<const LocaleKey&>(key);
         if (_kind == LocaleKey::KIND_ANY || _kind == lkey.kind()) {
             UnicodeString keyID;
             lkey.currentID(keyID);

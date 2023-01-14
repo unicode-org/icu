@@ -248,8 +248,8 @@ UnicodeString CanonicalIteratorTest::getReadable(const UnicodeString &s) {
 
 U_CFUNC int U_CALLCONV
 compareUnicodeStrings(const void *s1, const void *s2) {
-  UnicodeString **st1 = (UnicodeString **)s1;
-  UnicodeString **st2 = (UnicodeString **)s2;
+  UnicodeString **st1 = static_cast<UnicodeString **>(const_cast<void*>(s1));
+  UnicodeString **st2 = static_cast<UnicodeString **>(const_cast<void*>(s2));
 
   return (*st1)->compare(**st2);
 }
@@ -270,7 +270,7 @@ UnicodeString CanonicalIteratorTest::collectionToString(Hashtable *col) {
     //while (it.hasNext()) 
     while (ne != nullptr) {
       //String item = (String) it.next();
-      UnicodeString *item = (UnicodeString *)(ne->value.pointer);
+      UnicodeString *item = static_cast<UnicodeString *>(ne->value.pointer);
       resArray[i++] = item;
       ne = col->nextElement(el);
     }

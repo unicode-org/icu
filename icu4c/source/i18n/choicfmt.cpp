@@ -137,7 +137,7 @@ ChoiceFormat::operator==(const Format& that) const
 {
     if (this == &that) return true;
     if (!NumberFormat::operator==(that)) return false;
-    ChoiceFormat& thatAlias = (ChoiceFormat&)that;
+    const ChoiceFormat& thatAlias = static_cast<const ChoiceFormat&>(that);
     return msgPattern == thatAlias.msgPattern;
 }
 

@@ -557,7 +557,7 @@ void AlphabeticIndexTest::TestIndexCharactersList() {
 void AlphabeticIndexTest::TestHaniFirst() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<RuleBasedCollator> coll(
-        static_cast<RuleBasedCollator *>(Collator::createInstance(Locale::getRoot(), status)));
+        dynamic_cast<RuleBasedCollator *>(Collator::createInstance(Locale::getRoot(), status)));
 
     if (U_FAILURE(status)) {
         dataerrln("Failed Collator::createInstance call - %s", u_errorName(status));
@@ -587,7 +587,7 @@ void AlphabeticIndexTest::TestHaniFirst() {
 void AlphabeticIndexTest::TestPinyinFirst() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<RuleBasedCollator> coll(
-        static_cast<RuleBasedCollator *>(Collator::createInstance(Locale::getChinese(), status)));
+        dynamic_cast<RuleBasedCollator *>(Collator::createInstance(Locale::getChinese(), status)));
     if (U_FAILURE(status)) {
         dataerrln("Failed Collator::createInstance call - %s", u_errorName(status));
         return;
@@ -659,7 +659,7 @@ void AlphabeticIndexTest::TestSchSt() {
 void AlphabeticIndexTest::TestNoLabels() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<RuleBasedCollator> coll(
-        static_cast<RuleBasedCollator *>(Collator::createInstance(Locale::getRoot(), status)));
+        dynamic_cast<RuleBasedCollator *>(Collator::createInstance(Locale::getRoot(), status)));
     TEST_CHECK_STATUS;
     AlphabeticIndex index(coll.orphan(), status);
     TEST_CHECK_STATUS;

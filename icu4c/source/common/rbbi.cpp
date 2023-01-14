@@ -362,7 +362,7 @@ RuleBasedBreakIterator::operator==(const BreakIterator& that) const {
     // and does not implement an equality function that would otherwise be
     // checked at this point.
 
-    const RuleBasedBreakIterator& that2 = (const RuleBasedBreakIterator&) that;
+    const RuleBasedBreakIterator& that2 = static_cast<const RuleBasedBreakIterator&>(that);
 
     if (!utext_equals(&fText, &that2.fText)) {
         // The two break iterators are operating on different text,

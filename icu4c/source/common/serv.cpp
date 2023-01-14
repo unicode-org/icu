@@ -941,7 +941,7 @@ ICUService::acceptsListener(const EventListener& l) const
 void 
 ICUService::notifyListener(EventListener& l) const 
 {
-    ((ServiceListener&)l).serviceChanged(*this);
+    (static_cast<ServiceListener&>(l)).serviceChanged(*this);
 }
 
 UnicodeString&

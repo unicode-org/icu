@@ -4315,7 +4315,7 @@ void MeasureFormatTest::Test10219FractionalPlurals() {
     for (int j = 0; j < UPRV_LENGTHOF(values); j++) {
         for (int i = 0; i < UPRV_LENGTHOF(expected[j]); i++) {
             DecimalFormat *df =
-                (DecimalFormat *) NumberFormat::createInstance(en, status);
+                  dynamic_cast<DecimalFormat *>(NumberFormat::createInstance(en, status));
             if (U_FAILURE(status)) {
                 dataerrln("Error creating Number format - %s", u_errorName(status));
                 return;

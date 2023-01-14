@@ -2030,7 +2030,7 @@ void RegexTest::API_Match_UTF8() {
         //const char str_0123456789[] = { 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x00 }; /* 0123456789 */
         //  Test shallow-clone API
         int64_t   group_len;
-        result = matcher->group((UText *)nullptr, group_len, status);
+        result = matcher->group(nullptr, group_len, status);
         REGEX_CHECK_STATUS;
         REGEX_ASSERT_UTEXT_UTF8(str_0123456789, result);
         utext_close(result);
@@ -4697,7 +4697,7 @@ struct callBackContext {
 U_CDECL_BEGIN
 static UBool U_CALLCONV
 testCallBackFn(const void *context, int32_t steps) {
-    callBackContext  *info = (callBackContext *)context;
+    callBackContext  *info = static_cast<callBackContext *>(const_cast<void*>(context));
     if (info->lastSteps+1 != steps) {
         info->test->errln("incorrect steps in callback.  Expected %d, got %d\n", info->lastSteps+1, steps);
     }

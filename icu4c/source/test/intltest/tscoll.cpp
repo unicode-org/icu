@@ -254,7 +254,7 @@ IntlTestCollator::doTest(Collator* col, const UnicodeString &source, const Unico
     }
 
     UErrorCode status = U_ZERO_ERROR;
-    LocalPointer<CollationElementIterator> c(((RuleBasedCollator *)col)->createCollationElementIterator(source));
+    LocalPointer<CollationElementIterator> c((dynamic_cast<RuleBasedCollator *>(col))->createCollationElementIterator(source));
     logln("Testing iterating source: "+source);
     backAndForth(*c);
     c->setText(target, status);

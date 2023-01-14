@@ -1947,7 +1947,7 @@ void NumberFormatRegressionTest::Test4145457() {
         return;
     }
 
-    DecimalFormatSymbols *sym = (DecimalFormatSymbols*) nf->getDecimalFormatSymbols();
+    DecimalFormatSymbols *sym = const_cast<DecimalFormatSymbols*>(nf->getDecimalFormatSymbols());
     sym->setSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol, (char16_t)/*'\''*/0x0027);
     nf->setDecimalFormatSymbols(*sym);
     double pi = 3.14159;
@@ -2443,7 +2443,7 @@ void NumberFormatRegressionTest::Test4212072(void) {
             if (U_FAILURE(status)) {
                 continue;
             }
-            DecimalFormat *df = (DecimalFormat*) nf;
+            DecimalFormat *df = dynamic_cast<DecimalFormat*>(nf);
 
             // Test toPattern/applyPattern round trip
             UnicodeString pat;
@@ -2509,7 +2509,7 @@ void NumberFormatRegressionTest::Test4212072(void) {
  */
 void NumberFormatRegressionTest::Test4216742(void) {
     UErrorCode status = U_ZERO_ERROR;
-    DecimalFormat *fmt = (DecimalFormat*) NumberFormat::createInstance(Locale::getUS(), status);
+    DecimalFormat *fmt = dynamic_cast<DecimalFormat*>(NumberFormat::createInstance(Locale::getUS(), status));
     if (failure(status, "createInstance", Locale::getUS(), true)){
         delete fmt;
         return;
@@ -2584,7 +2584,7 @@ void NumberFormatRegressionTest::Test4161100(void) {
     nf->format(a, s);
     UnicodeString pat;
     logln(UnicodeString() + a + " x " +
-          ((DecimalFormat*) nf)->toPattern(pat) + " = " + s);
+          (dynamic_cast<DecimalFormat*>(nf))->toPattern(pat) + " = " + s);
     if (s != UnicodeString("-0.1")) {
         errln("FAIL");
     }

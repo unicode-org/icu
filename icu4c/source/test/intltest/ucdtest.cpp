@@ -172,7 +172,7 @@ derivedPropsLineFn(void *context,
                    char *fields[][2], int32_t /* fieldCount */,
                    UErrorCode *pErrorCode)
 {
-    UnicodeTest *me=(UnicodeTest *)context;
+    UnicodeTest *me=static_cast<UnicodeTest*>(context);
     uint32_t start, end;
     int32_t i;
 

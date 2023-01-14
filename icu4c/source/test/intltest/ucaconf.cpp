@@ -29,7 +29,7 @@ rbUCA(nullptr),
 testFile(nullptr),
 status(U_ZERO_ERROR)
 {
-    UCA = (RuleBasedCollator *)Collator::createInstance(Locale::getRoot(), status);
+    UCA = dynamic_cast<RuleBasedCollator*>(Collator::createInstance(Locale::getRoot(), status));
     if(U_FAILURE(status)) {
         dataerrln("Error - UCAConformanceTest: Unable to open UCA collator! - %s", u_errorName(status));
     }

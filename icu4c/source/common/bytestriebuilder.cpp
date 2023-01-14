@@ -351,13 +351,13 @@ BytesTrieBuilder::BTLinearMatchNode::operator==(const Node &other) const {
     if(!LinearMatchNode::operator==(other)) {
         return false;
     }
-    const BTLinearMatchNode &o=(const BTLinearMatchNode &)other;
+    const BTLinearMatchNode &o=static_cast<const BTLinearMatchNode &>(other);
     return 0==uprv_memcmp(s, o.s, length);
 }
 
 void
 BytesTrieBuilder::BTLinearMatchNode::write(StringTrieBuilder &builder) {
-    BytesTrieBuilder &b=(BytesTrieBuilder &)builder;
+    BytesTrieBuilder &b=static_cast<BytesTrieBuilder &>(builder);
     next->write(builder);
     b.write(s, length);
     offset=b.write(b.getMinLinearMatch()+length-1);

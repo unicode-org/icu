@@ -26,7 +26,7 @@ CollationIteratorTest::CollationIteratorTest()
  : test1("What subset of all possible test cases?", ""),
    test2("has the highest probability of detecting", "")
 {
-    en_us = (RuleBasedCollator *)Collator::createInstance(Locale::getUS(), status);
+    en_us = dynamic_cast<RuleBasedCollator*>(Collator::createInstance(Locale::getUS(), status));
     if(U_FAILURE(status)) {
       delete en_us;
       en_us = 0;
@@ -150,7 +150,7 @@ void CollationIteratorTest::TestPrevious(/* char* par */)
     if(U_FAILURE(status)){
         errln("Couldn't create a collator");
     }
-    iter = ((RuleBasedCollator*)c4)->createCollationElementIterator(source);
+    iter = (dynamic_cast<RuleBasedCollator*>(c4))->createCollationElementIterator(source);
     backAndForth(*iter);
     delete iter;
     delete c4;
@@ -158,7 +158,7 @@ void CollationIteratorTest::TestPrevious(/* char* par */)
     source= CharsToUnicodeString("\\u0061\\u30CF\\u3099\\u30FC");
     Collator *c5 = Collator::createInstance(Locale("ja", "JP", ""), status);
 
-    iter = ((RuleBasedCollator*)c5)->createCollationElementIterator(source);
+    iter = (dynamic_cast<RuleBasedCollator*>(c5))->createCollationElementIterator(source);
     if(U_FAILURE(status)){
         errln("Couldn't create Japanese collator\n");
     }
@@ -332,7 +332,7 @@ void CollationIteratorTest::TestSetText(/* char* par */)
         || iter1->next(status) != (int32_t)CollationElementIterator::NULLORDER) {
         errln("Empty string should have no CEs.");
     }
-    ((StringCharacterIterator *)chariter)->setText(empty);
+    (dynamic_cast<StringCharacterIterator*>(chariter))->setText(empty);
     iter1->setText(*chariter, status);
     if (U_FAILURE(status) 
         || iter1->next(status) != (int32_t)CollationElementIterator::NULLORDER) {
@@ -459,7 +459,7 @@ void CollationIteratorTest::TestAssignment()
 {
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *coll = 
-        (RuleBasedCollator *)Collator::createInstance(status);
+        dynamic_cast<RuleBasedCollator*>(Collator::createInstance(status));
 
     if (coll == nullptr || U_FAILURE(status))
     {
@@ -539,7 +539,7 @@ void CollationIteratorTest::TestConstructors()
 {
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *coll = 
-        (RuleBasedCollator *)Collator::createInstance(status);
+        dynamic_cast<RuleBasedCollator*>(Collator::createInstance(status));
     if (coll == nullptr || U_FAILURE(status))
     {
         errln("Couldn't create a default collator.");
@@ -596,7 +596,7 @@ void CollationIteratorTest::TestStrengthOrder()
 
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *coll = 
-        (RuleBasedCollator *)Collator::createInstance(status);
+        dynamic_cast<RuleBasedCollator*>(Collator::createInstance(status));
     if (coll == nullptr || U_FAILURE(status))
     {
         errln("Couldn't create a default collator.");

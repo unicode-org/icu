@@ -260,7 +260,7 @@ public:
     }
 
     virtual UObject* handleDefault(const ICUServiceKey& key, UnicodeString* /*actualID*/, UErrorCode& status) const override {
-        LocaleKey& lkey = (LocaleKey&)key;
+        LocaleKey& lkey = static_cast<LocaleKey&>(const_cast<ICUServiceKey&>(key));
         int32_t kind = lkey.kind();
         Locale loc;
         lkey.currentLocale(loc);

@@ -539,8 +539,8 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     delete format;
 
     // get a pattern and modify it
-    format = (SimpleDateFormat *)DateFormat::createDateTimeInstance(DateFormat::kFull, DateFormat::kFull,
-                                                                  deLocale);
+    format = dynamic_cast<SimpleDateFormat*>(DateFormat::createDateTimeInstance(DateFormat::kFull, DateFormat::kFull,
+                                                                  deLocale));
     format->setTimeZone(*zone);
     UnicodeString pattern;
     pattern = format->toPattern(pattern);
@@ -751,8 +751,8 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
             delete patGen;
             return;
         }
-        SimpleDateFormat *enFormat = (SimpleDateFormat *)DateFormat::createDateTimeInstance(DateFormat::kFull,
-                         DateFormat::kFull, Locale::getEnglish());
+        SimpleDateFormat *enFormat = dynamic_cast<SimpleDateFormat*>(DateFormat::createDateTimeInstance(DateFormat::kFull,
+                         DateFormat::kFull, Locale::getEnglish()));
         enFormat->setTimeZone(*enZone);
         while (patternTests2[dataIndex].length() > 0) {
             logln(patternTests2[dataIndex]);
@@ -844,7 +844,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     ptrSkeletonEnum->reset(status);
     count=ptrSkeletonEnum->count(status);
     for (i=0; i<count; ++i) {
-        ptrSkeleton = (UnicodeString *)ptrSkeletonEnum->snext(status);
+        ptrSkeleton = const_cast<UnicodeString *>(ptrSkeletonEnum->snext(status));
         returnPattern = test->getPatternForSkeleton(*ptrSkeleton);
         if ( returnPattern != testSkeletonsResults[i] ) {
             errln(UnicodeString("ERROR: Unexpected result from getSkeletons and getPatternForSkeleton\nGot: ") + returnPattern
@@ -858,7 +858,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     }
     count=ptrBaseSkeletonEnum->count(status);
     for (i=0; i<count; ++i) {
-        ptrSkeleton = (UnicodeString *)ptrBaseSkeletonEnum->snext(status);
+        ptrSkeleton = const_cast<UnicodeString *>(ptrBaseSkeletonEnum->snext(status));
         if ( *ptrSkeleton != testBaseSkeletonsResults[i] ) {
             errln("ERROR: Unexpected result from getBaseSkeletons() !\n");
         }

@@ -134,7 +134,7 @@ void TimeUnitTest::testBasic() {
                 UnicodeString formatted;
                 Formattable formattable;
                 formattable.adoptObject(source);
-                formatted = ((Format*)formats[style])->format(formattable, formatted, status);
+                formatted = (dynamic_cast<Format*>(formats[style]))->format(formattable, formatted, status);
                 if (!assertSuccess("format()", status)) return;
 #ifdef TUFMTTS_DEBUG
                 char formatResult[1000];
@@ -142,16 +142,16 @@ void TimeUnitTest::testBasic() {
                 std::cout << "format result: " << formatResult << "\n";
 #endif
                 Formattable result;
-                ((Format*)formats[style])->parseObject(formatted, result, status);
+                (dynamic_cast<Format*>(formats[style]))->parseObject(formatted, result, status);
                 if (!assertSuccess("parseObject()", status)) return;
-                if (!tmaEqual(*((TimeUnitAmount *)result.getObject()), *((TimeUnitAmount *) formattable.getObject()))) {
+                if (!tmaEqual(*(dynamic_cast<const TimeUnitAmount*>(result.getObject())), *(dynamic_cast<const TimeUnitAmount*>(formattable.getObject())))) {
                     dataerrln("No round trip: ");
                 }
                 // other style parsing
                 Formattable result_1;
-                ((Format*)formats[1-style])->parseObject(formatted, result_1, status);
+                (dynamic_cast<Format*>(formats[1-style]))->parseObject(formatted, result_1, status);
                 if (!assertSuccess("parseObject()", status)) return;
-                if (!tmaEqual(*((TimeUnitAmount *)result_1.getObject()), *((TimeUnitAmount *) formattable.getObject()))) {
+                if (!tmaEqual(*(dynamic_cast<const TimeUnitAmount*>(result_1.getObject())), *(dynamic_cast<const TimeUnitAmount*>(formattable.getObject())))) {
                     dataerrln("No round trip: ");
                 }
             }
@@ -410,7 +410,7 @@ void TimeUnitTest::testGreekWithFallback() {
                     UnicodeString str;
 
                     fmt.adoptObject(tamt.orphan());
-                    str = ((Format *)tfmt.getAlias())->format(fmt, str, status);
+                    str = (dynamic_cast<Format*>(tfmt.getAlias()))->format(fmt, str, status);
                     if (!assertSuccess("formatting relative time failed", status)) {
 #ifdef TUFMTTS_DEBUG
                         std::cout <<  "Failed to format" << "\n";
@@ -469,7 +469,7 @@ void TimeUnitTest::test10219Plurals() {
         dataerrln("generating TimeUnitFormat Object failed: %s", u_errorName(status));
         return;
     }
-    LocalPointer<DecimalFormat> nf((DecimalFormat *) NumberFormat::createInstance(usLocale, status));
+    LocalPointer<DecimalFormat> nf(dynamic_cast<DecimalFormat*>(NumberFormat::createInstance(usLocale, status)));
     if (U_FAILURE(status)) {
         dataerrln("generating NumberFormat Object failed: %s", u_errorName(status));
         return;

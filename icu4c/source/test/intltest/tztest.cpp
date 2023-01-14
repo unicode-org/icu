@@ -110,7 +110,7 @@ TimeZoneTest::TestGenericAPI()
 
     SimpleTimeZone copy(*zone);
     if (!(copy == *zone)) errln("FAIL: copy constructor or operator== failed");
-    copy = *(SimpleTimeZone*)zoneclone;
+    copy = *dynamic_cast<SimpleTimeZone*>(zoneclone);
     if (!(copy == *zoneclone)) errln("FAIL: assignment operator or operator== failed");
 
     TimeZone* saveDefault = TimeZone::createDefault();

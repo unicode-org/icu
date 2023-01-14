@@ -297,7 +297,7 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
     } 
     //logln(UnicodeString("Min date is ") + fullFormat(minDate)  + " for " + origLocale.getName());
 
-    pat = ((SimpleDateFormat*)fmt)->toPattern(pat);
+    pat = dynamic_cast<SimpleDateFormat*>(fmt)->toPattern(pat);
 
     // NOTE TO MAINTAINER
     // This indexOf check into the pattern needs to be refined to ignore

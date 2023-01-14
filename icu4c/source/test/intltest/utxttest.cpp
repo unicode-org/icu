@@ -1264,7 +1264,7 @@ void UTextTest::FreezeTest() {
     TEST_ASSERT(status == U_NO_WRITE_PERMISSION);
 
     status = U_ZERO_ERROR;
-    ut = utext_openConstUnicodeString(ut, (const UnicodeString *)&ustr, &status);
+    ut = utext_openConstUnicodeString(ut, &ustr, &status);
     TEST_SUCCESS(status);
     writable = utext_isWritable(ut);
     TEST_ASSERT(writable == false);
@@ -1311,8 +1311,8 @@ void UTextTest::FreezeTest() {
 U_CDECL_BEGIN
 static UBool U_CALLCONV
 fragTextAccess(UText *ut, int64_t index, UBool forward) {
-    const UnicodeString *us = (const UnicodeString *)ut->context;
-    char16_t  c;
+    const UnicodeString *us = static_cast<const UnicodeString *>(ut->context);
+    char16_t c;
     int32_t length = us->length();
     if (forward && index>=0 && index<length) {
         c = us->charAt((int32_t)index);
@@ -1362,7 +1362,7 @@ cloneFragmentedUnicodeString(UText *dest, const UText *src, UBool deep, UErrorCo
         *status = U_UNSUPPORTED_ERROR;
         return nullptr;
     }
-    dest = utext_openUnicodeString(dest, (UnicodeString *)src->context, status);
+    dest = utext_openUnicodeString(dest, static_cast<UnicodeString *>(const_cast<void*>(src->context)), status);
     utext_setNativeIndex(dest, utext_getNativeIndex(src));
     return dest;
 }

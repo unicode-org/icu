@@ -1635,7 +1635,7 @@ public:
      * SymbolTable API
      */
     virtual const UnicodeString* lookup(const UnicodeString& s) const override {
-        return (const UnicodeString*) contents.get(s);
+        return static_cast<const UnicodeString*>(contents.get(s));
     }
 
     /**

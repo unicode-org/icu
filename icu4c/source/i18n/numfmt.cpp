@@ -887,14 +887,15 @@ public:
     virtual UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const override
     {
         if (handlesKey(key, status)) {
-            const LocaleKey& lkey = (const LocaleKey&)key;
+            const LocaleKey* lkey = dynamic_cast<const LocaleKey*>(&key);
+            U_ASSERT(lkey != nullptr);
             Locale loc;
-            lkey.canonicalLocale(loc);
-            int32_t kind = lkey.kind();
+            lkey->canonicalLocale(loc);
+            int32_t kind = lkey->kind();
 
             UObject* result = _delegate->createFormat(loc, (UNumberFormatStyle)kind);
             if (result == nullptr) {
-                result = service->getKey((ICUServiceKey&)key /* cast away const */, nullptr, this, status);
+                result = service->getKey(const_cast<ICUServiceKey&>(key) /* cast away const */, nullptr, this, status);
             }
             return result;
         }
@@ -948,10 +949,11 @@ public:
     }
 
     virtual UObject* handleDefault(const ICUServiceKey& key, UnicodeString* /* actualID */, UErrorCode& status) const override {
-        LocaleKey& lkey = (LocaleKey&)key;
-        int32_t kind = lkey.kind();
+        const LocaleKey* lkey = dynamic_cast<const LocaleKey*>(&key);
+        U_ASSERT(lkey != nullptr);
+        int32_t kind = lkey->kind();
         Locale loc;
-        lkey.currentLocale(loc);
+        lkey->currentLocale(loc);
         return NumberFormat::makeInstance(loc, (UNumberFormatStyle)kind, status);
     }
 
