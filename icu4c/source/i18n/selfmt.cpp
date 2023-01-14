@@ -172,7 +172,7 @@ SelectFormat::operator==(const Format& other) const {
     if (!Format::operator==(other)) {
         return false;
     }
-    const SelectFormat& o = (const SelectFormat&)other;
+    const SelectFormat& o = static_cast<const SelectFormat&>(other);
     return msgPattern == o.msgPattern;
 }
 

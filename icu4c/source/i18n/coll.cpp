@@ -137,7 +137,7 @@ ICUCollatorFactory::~ICUCollatorFactory() {}
 UObject*
 ICUCollatorFactory::create(const ICUServiceKey& key, const ICUService* /* service */, UErrorCode& status) const {
     if (handlesKey(key, status)) {
-        const LocaleKey& lkey = (const LocaleKey&)key;
+        const LocaleKey& lkey = static_cast<const LocaleKey&>(key);
         Locale loc;
         // make sure the requested locale is correct
         // default LocaleFactory uses currentLocale since that's the one vetted by handlesKey
@@ -167,7 +167,8 @@ public:
     }
     
     virtual UObject* handleDefault(const ICUServiceKey& key, UnicodeString* actualID, UErrorCode& status) const override {
-        LocaleKey& lkey = (LocaleKey&)key;
+        const LocaleKey* lkey = dynamic_cast<const LocaleKey*>(&key);
+        U_ASSERT(lkey != nullptr);
         if (actualID) {
             // Ugly Hack Alert! We return an empty actualID to signal
             // to callers that this is a default object, not a "real"
@@ -175,7 +176,7 @@ public:
             actualID->truncate(0);
         }
         Locale loc("");
-        lkey.canonicalLocale(loc);
+        lkey->canonicalLocale(loc);
         return Collator::makeInstance(loc, status);
     }
     
@@ -746,9 +747,10 @@ UObject*
 CFactory::create(const ICUServiceKey& key, const ICUService* /* service */, UErrorCode& status) const
 {
     if (handlesKey(key, status)) {
-        const LocaleKey& lkey = (const LocaleKey&)key;
+        const LocaleKey* lkey = dynamic_cast<const LocaleKey*>(&key);
+        U_ASSERT(lkey != nullptr);
         Locale validLoc;
-        lkey.currentLocale(validLoc);
+        lkey->currentLocale(validLoc);
         return _delegate->createCollator(validLoc);
     }
     return nullptr;

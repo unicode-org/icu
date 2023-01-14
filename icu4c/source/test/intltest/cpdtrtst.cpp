@@ -194,7 +194,7 @@ void CompoundTransliteratorTest::TestGetCount(){
     UParseError parseError;
     CompoundTransliterator *ct1=new CompoundTransliterator("Halfwidth-Fullwidth;Fullwidth-Halfwidth", parseError, status);
     CompoundTransliterator *ct2=new CompoundTransliterator("Any-Hex;Hex-Any;Cyrillic-Latin;Latin-Cyrillic", parseError, status);
-    CompoundTransliterator *ct3=(CompoundTransliterator*)ct1;
+    CompoundTransliterator *ct3=ct1;
     if (U_FAILURE(status)) {
         dataerrln("FAILED: CompoundTransliterator constructor failed - %s", u_errorName(status));
         return;
@@ -297,7 +297,7 @@ void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
     }*/
     logln("Testing adoptTransliterator() API of CompoundTransliterator");
     UnicodeString ID3("Latin-Katakana");
-    Transliterator **transarray2=(Transliterator **)uprv_malloc(sizeof(Transliterator*)*1);
+    Transliterator **transarray2=static_cast<Transliterator **>(uprv_malloc(sizeof(Transliterator*)*1));
     transarray2[0] = Transliterator::createInstance(ID3,UTRANS_FORWARD,parseError,status);
     if (transarray2[0] != 0) {
         ct1->adoptTransliterators(transarray2, 1);

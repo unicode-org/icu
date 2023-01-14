@@ -439,7 +439,7 @@ void unitsTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount, U
     if (U_FAILURE(*pErrorCode)) {
         return;
     }
-    UnitsTestContext *ctx = (UnitsTestContext *)context;
+    UnitsTestContext *ctx = static_cast<UnitsTestContext *>(context);
     UnitsTest *unitsTest = ctx->unitsTest;
     (void)fieldCount; // unused UParseLineFn variable
     IcuTestErrorCode status(*unitsTest, "unitsTestDatalineFn");
@@ -902,7 +902,7 @@ void checkOutput(UnitsTest *unitsTest, const char *msg, ExpectedOutput expected,
 void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fieldCount,
                                    UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) return;
-    UnitsTest *unitsTest = (UnitsTest *)context;
+    UnitsTest *unitsTest = static_cast<UnitsTest *>(context);
     IcuTestErrorCode status(*unitsTest, "unitPreferencesTestDatalineFn");
 
     if (!unitsTest->assertTrue(u"unitPreferencesTestDataLineFn expects 9 fields for simple and 11 "

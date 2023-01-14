@@ -482,7 +482,7 @@ getUnicodeSetCallback(const void *context,
                       UConverterCallbackReason reason,
                       UErrorCode *pErrorCode) {
     if(reason<=UCNV_IRREGULAR) {
-        ((UnicodeSet *)context)->remove(codePoint);  // the converter cannot convert this code point
+        static_cast<UnicodeSet *>(const_cast<void*>(context))->remove(codePoint);  // the converter cannot convert this code point
         *pErrorCode=U_ZERO_ERROR;                    // skip
     }  // else ignore the reset, close and clone calls.
 }

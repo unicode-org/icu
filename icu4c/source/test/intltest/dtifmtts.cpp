@@ -327,7 +327,7 @@ void DateIntervalFormatTest::testAPI() {
     Formattable fmttable;
     status = U_ZERO_ERROR;
     // TODO: why do I need cast?
-    ((Format*)dtitvfmt)->parseObject(res, fmttable, status);
+    (dynamic_cast<Format*>(dtitvfmt))->parseObject(res, fmttable, status);
     if ( status != U_INVALID_FORMAT_ERROR ) {
         dataerrln("ERROR: parse should set U_INVALID_FORMAT_ERROR - exiting");
         return;
@@ -1775,7 +1775,7 @@ void DateIntervalFormatTest::testTicket11985() {
         return;
     }
     UnicodeString pattern;
-    static_cast<const SimpleDateFormat*>(fmt->getDateFormat())->toPattern(pattern);
+    dynamic_cast<const SimpleDateFormat*>(fmt->getDateFormat())->toPattern(pattern);
     assertEquals("Format pattern", u"h:mm\u202Fa", pattern);
 }
 

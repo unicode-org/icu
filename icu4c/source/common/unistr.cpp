@@ -527,7 +527,7 @@ UnicodeString::copyFrom(const UnicodeString &src, UBool fastCopy) {
   case kLongString:
     // src uses a refCounted string buffer, use that buffer with refCount
     // src is const, use a cast - we don't actually change it
-    ((UnicodeString &)src).addRef();
+    const_cast<UnicodeString &>(src).addRef();
     // copy all fields, share the reference-counted buffer
     fUnion.fFields.fArray = src.fUnion.fFields.fArray;
     fUnion.fFields.fCapacity = src.fUnion.fFields.fCapacity;

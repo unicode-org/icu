@@ -211,9 +211,10 @@ bool StringSearch::operator==(const SearchIterator &that) const
         return true;
     }
     if (SearchIterator::operator ==(that)) {
-        StringSearch &thatsrch = (StringSearch &)that;
-        return (this->m_pattern_ == thatsrch.m_pattern_ &&
-                this->m_strsrch_->collator == thatsrch.m_strsrch_->collator);
+        const StringSearch *thatsrch = dynamic_cast<const StringSearch *>(&that);
+        if (thatsrch == nullptr) return false;
+        return (this->m_pattern_ == thatsrch->m_pattern_ &&
+                this->m_strsrch_->collator == thatsrch->m_strsrch_->collator);
     }
     return false;
 }

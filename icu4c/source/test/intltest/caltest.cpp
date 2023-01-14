@@ -447,8 +447,8 @@ CalendarTest::TestGenericAPI()
     if (failure(status, "Calendar::createInstance #6")) {
         return;
     }else {
-        ((Calendar *)cal)->roll(UCAL_HOUR, (int32_t)100, status);
-        ((Calendar *)cal)->clear(UCAL_HOUR);
+        cal->roll(UCAL_HOUR, (int32_t)100, status);
+        cal->clear(UCAL_HOUR);
 #if !UCONFIG_NO_SERVICE
         URegistryKey key = cal->registerFactory(nullptr, status);
         cal->unregister(key, status);
@@ -3428,10 +3428,10 @@ void CalendarTest::TestIslamicUmAlQura() {
     Locale umalquraLoc("ar_SA@calendar=islamic-umalqura");
     Locale gregoLoc("ar_SA@calendar=gregorian");
     TimeZone* tzSA = TimeZone::createTimeZone(UnicodeString(true, zoneSA, -1));
-    Calendar* tstCal = Calendar::createInstance(*((const TimeZone *)tzSA), umalquraLoc, status);
-    Calendar* gregCal = Calendar::createInstance(*((const TimeZone *)tzSA), gregoLoc, status);
+    Calendar* tstCal = Calendar::createInstance(*tzSA, umalquraLoc, status);
+    Calendar* gregCal = Calendar::createInstance(*tzSA, gregoLoc, status);
 
-    IslamicCalendar* iCal = (IslamicCalendar*)tstCal;
+    IslamicCalendar* iCal = dynamic_cast<IslamicCalendar*>(tstCal);
     if(uprv_strcmp(iCal->getType(), "islamic-umalqura") != 0) {
         errln("wrong type of calendar created - %s", iCal->getType());
     }

@@ -75,7 +75,7 @@ UCharCharacterIterator::operator==(const ForwardCharacterIterator& that) const {
         return false;
     }
 
-    UCharCharacterIterator&    realThat = (UCharCharacterIterator&)that;
+    const UCharCharacterIterator&    realThat = static_cast<const UCharCharacterIterator&>(that);
 
     return text == realThat.text
         && textLength == realThat.textLength

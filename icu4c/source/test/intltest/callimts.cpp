@@ -109,7 +109,7 @@ CalendarLimitTest::TestCalendarExtremeLimit()
        return;
     }
     fmt->adoptCalendar(cal);
-    ((SimpleDateFormat*) fmt)->applyPattern("HH:mm:ss.SSS Z, EEEE, MMMM d, yyyy G");
+    (dynamic_cast<SimpleDateFormat*>(fmt))->applyPattern("HH:mm:ss.SSS Z, EEEE, MMMM d, yyyy G");
 
 
     // This test used to test the algorithmic limits of the dates that

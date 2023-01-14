@@ -241,7 +241,7 @@ void CharIterTest::TestConstructionAndEquality() {
     if (*test1 != *test2 || *test1 == *test5)
         errln("setIndex() failed");
 
-    *((StringCharacterIterator*)test1) = *((StringCharacterIterator*)test3);
+    *(test1) = *(dynamic_cast<StringCharacterIterator*>(test3));
     if (*test1 != *test3 || *test1 == *test5)
         errln("operator= failed");
 

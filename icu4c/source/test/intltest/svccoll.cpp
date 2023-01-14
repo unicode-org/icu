@@ -241,7 +241,7 @@ CollatorInfo::~CollatorInfo() {
 UnicodeString&
 CollatorInfo::getDisplayName(const Locale& displayLocale, UnicodeString& name) const {
   if (displayNames) {
-    UnicodeString* val = (UnicodeString*)displayNames->get(displayLocale.getName());
+    UnicodeString* val = static_cast<UnicodeString*>(displayNames->get(displayLocale.getName()));
     if (val) {
       name = *val;
       return name;

@@ -377,7 +377,7 @@ void CollationThaiTest::TestInvalidThai(void) {
     return;
   }
 
-  CollationElementIterator* c = ((RuleBasedCollator *)coll)->createCollationElementIterator( iteratorText );
+  CollationElementIterator* c = (dynamic_cast<RuleBasedCollator*>(coll))->createCollationElementIterator( iteratorText );
 
   for(i = 0; i < UPRV_LENGTHOF(tests); i++) {
     len = u_unescape(tests[i], strings[i], 20);

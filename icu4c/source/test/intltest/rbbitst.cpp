@@ -1206,28 +1206,28 @@ void RBBITest::TestUnicodeFiles() {
     RuleBasedBreakIterator  *bi;
     UErrorCode               status = U_ZERO_ERROR;
 
-    bi =  (RuleBasedBreakIterator *)BreakIterator::createCharacterInstance(Locale::getEnglish(), status);
+    bi =  dynamic_cast<RuleBasedBreakIterator*>(BreakIterator::createCharacterInstance(Locale::getEnglish(), status));
     TEST_ASSERT_SUCCESS(status);
     if (U_SUCCESS(status)) {
         runUnicodeTestData("GraphemeBreakTest.txt", bi);
     }
     delete bi;
 
-    bi =  (RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::getEnglish(), status);
+    bi =  dynamic_cast<RuleBasedBreakIterator*>(BreakIterator::createWordInstance(Locale::getEnglish(), status));
     TEST_ASSERT_SUCCESS(status);
     if (U_SUCCESS(status)) {
         runUnicodeTestData("WordBreakTest.txt", bi);
     }
     delete bi;
 
-    bi =  (RuleBasedBreakIterator *)BreakIterator::createSentenceInstance(Locale::getEnglish(), status);
+    bi =  dynamic_cast<RuleBasedBreakIterator*>(BreakIterator::createSentenceInstance(Locale::getEnglish(), status));
     TEST_ASSERT_SUCCESS(status);
     if (U_SUCCESS(status)) {
         runUnicodeTestData("SentenceBreakTest.txt", bi);
     }
     delete bi;
 
-    bi =  (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getEnglish(), status);
+    bi =  dynamic_cast<RuleBasedBreakIterator*>(BreakIterator::createLineInstance(Locale::getEnglish(), status));
     TEST_ASSERT_SUCCESS(status);
     if (U_SUCCESS(status)) {
         runUnicodeTestData("LineBreakTest.txt", bi);
@@ -1562,7 +1562,7 @@ std::string RBBIMonkeyKind::getAppliedRule(int32_t position){
 std::string RBBIMonkeyKind::classNameFromCodepoint(const UChar32 c) {
     // Simply iterate through charClasses to find character's class
     for (int aClassNum = 0; aClassNum < charClasses()->size(); aClassNum++) {
-        UnicodeSet *classSet = (UnicodeSet *)charClasses()->elementAt(aClassNum);
+        UnicodeSet *classSet = static_cast<UnicodeSet *>(charClasses()->elementAt(aClassNum));
         if (classSet->contains(c)) {
             return classNames[aClassNum];
         }
@@ -3993,7 +3993,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
 
     // Verify that the character classes all have at least one member.
     for (i=0; i<numCharClasses; i++) {
-        UnicodeSet *s = (UnicodeSet *)chClasses->elementAt(i);
+        UnicodeSet *s = static_cast<UnicodeSet *>(chClasses->elementAt(i));
         if (s == nullptr || s->size() == 0) {
             errln("Character Class #%d is null or of zero size.", i);
             return;
@@ -4316,10 +4316,10 @@ void RBBITest::TestBug9983(void)  {
                                        "\\u0000").unescape();
 
     UErrorCode status = U_ZERO_ERROR;
-    LocalPointer<RuleBasedBreakIterator> brkiter(static_cast<RuleBasedBreakIterator *>(
+    LocalPointer<RuleBasedBreakIterator> brkiter(dynamic_cast<RuleBasedBreakIterator *>(
         BreakIterator::createWordInstance(Locale::getRoot(), status)));
     TEST_ASSERT_SUCCESS(status);
-    LocalPointer<RuleBasedBreakIterator> brkiterPOSIX(static_cast<RuleBasedBreakIterator *>(
+    LocalPointer<RuleBasedBreakIterator> brkiterPOSIX(dynamic_cast<RuleBasedBreakIterator *>(
         BreakIterator::createWordInstance(Locale::createFromName("en_US_POSIX"), status)));
     TEST_ASSERT_SUCCESS(status);
     if (U_FAILURE(status)) {
@@ -4521,8 +4521,8 @@ void RBBITest::TestEmoji() {
 
 void RBBITest::TestBug12519() {
     UErrorCode status = U_ZERO_ERROR;
-    LocalPointer<RuleBasedBreakIterator> biEn((RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::getEnglish(), status));
-    LocalPointer<RuleBasedBreakIterator> biFr((RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::getFrance(), status));
+    LocalPointer<RuleBasedBreakIterator> biEn(dynamic_cast<RuleBasedBreakIterator*>(BreakIterator::createWordInstance(Locale::getEnglish(), status)));
+    LocalPointer<RuleBasedBreakIterator> biFr(dynamic_cast<RuleBasedBreakIterator*>(BreakIterator::createWordInstance(Locale::getFrance(), status)));
     if (!assertSuccess(WHERE, status)) {
         dataerrln("%s %d status = %s", __FILE__, __LINE__, u_errorName(status));
         return;
@@ -4540,7 +4540,7 @@ void RBBITest::TestBug12519() {
     assertTrue(WHERE, *biFr == *cloneFr);
     assertTrue(WHERE, Locale::getFrench() == cloneFr->getLocale(ULOC_VALID_LOCALE, status));
 
-    LocalPointer<RuleBasedBreakIterator>biDe((RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getGerman(), status));
+    LocalPointer<RuleBasedBreakIterator>biDe(dynamic_cast<RuleBasedBreakIterator*>(BreakIterator::createLineInstance(Locale::getGerman(), status)));
     UnicodeString text("Hallo Welt");
     biDe->setText(text);
     assertTrue(WHERE "before assignment of \"biDe = biFr\", they should be different, but are equal.", *biFr != *biDe);
@@ -4570,7 +4570,7 @@ void RBBITest::TestTableRedundancies() {
     UErrorCode status = U_ZERO_ERROR;
 
     LocalPointer<RuleBasedBreakIterator> bi (
-        (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getEnglish(), status));
+        dynamic_cast<RuleBasedBreakIterator*>(BreakIterator::createLineInstance(Locale::getEnglish(), status)));
     assertSuccess(WHERE, status);
     if (U_FAILURE(status)) return;
 
@@ -4586,7 +4586,7 @@ void RBBITest::TestTableRedundancies() {
     for (int32_t column = 0; column < numCharClasses; column++) {
         UnicodeString s;
         for (int32_t r = 1; r < (int32_t)fwtbl->fNumStates; r++) {
-            RBBIStateTableRow  *row = (RBBIStateTableRow *) (fwtbl->fTableData + (fwtbl->fRowLen * r));
+            RBBIStateTableRow  *row = reinterpret_cast<RBBIStateTableRow *>(const_cast<char*>(fwtbl->fTableData + (fwtbl->fRowLen * r)));
             s.append(in8Bits ? row->r8.fNextState[column] : row->r16.fNextState[column]);
         }
         columns.push_back(s);
@@ -4607,7 +4607,7 @@ void RBBITest::TestTableRedundancies() {
     std::vector<UnicodeString> rows;
     for (int32_t r=0; r < (int32_t)fwtbl->fNumStates; r++) {
         UnicodeString s;
-        RBBIStateTableRow  *row = (RBBIStateTableRow *) (fwtbl->fTableData + (fwtbl->fRowLen * r));
+        RBBIStateTableRow  *row = reinterpret_cast<RBBIStateTableRow *>(const_cast<char*>((fwtbl->fTableData + (fwtbl->fRowLen * r))));
         if (in8Bits) {
             s.append(row->r8.fAccepting);
             s.append(row->r8.fLookAhead);
@@ -4641,7 +4641,7 @@ void RBBITest::TestTableRedundancies() {
 void RBBITest::TestBug13447() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<RuleBasedBreakIterator> bi(
-        (RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::getEnglish(), status));
+        dynamic_cast<RuleBasedBreakIterator*>(BreakIterator::createWordInstance(Locale::getEnglish(), status)));
     assertSuccess(WHERE, status);
     if (U_FAILURE(status)) return;
     UnicodeString data(u"1234");
@@ -4665,20 +4665,20 @@ void RBBITest::TestBug13447() {
 void RBBITest::TestReverse() {
     UErrorCode status = U_ZERO_ERROR;
 
-    TestReverse(std::unique_ptr<RuleBasedBreakIterator>((RuleBasedBreakIterator *)
-            BreakIterator::createCharacterInstance(Locale::getEnglish(), status)));
+    TestReverse(std::unique_ptr<RuleBasedBreakIterator>(dynamic_cast<RuleBasedBreakIterator*>(
+            BreakIterator::createCharacterInstance(Locale::getEnglish(), status))));
     assertSuccess(WHERE, status, true);
     status = U_ZERO_ERROR;
-    TestReverse(std::unique_ptr<RuleBasedBreakIterator>((RuleBasedBreakIterator *)
-            BreakIterator::createWordInstance(Locale::getEnglish(), status)));
+    TestReverse(std::unique_ptr<RuleBasedBreakIterator>(dynamic_cast<RuleBasedBreakIterator*>(
+            BreakIterator::createWordInstance(Locale::getEnglish(), status))));
     assertSuccess(WHERE, status, true);
     status = U_ZERO_ERROR;
-    TestReverse(std::unique_ptr<RuleBasedBreakIterator>((RuleBasedBreakIterator *)
-            BreakIterator::createLineInstance(Locale::getEnglish(), status)));
+    TestReverse(std::unique_ptr<RuleBasedBreakIterator>(dynamic_cast<RuleBasedBreakIterator*>(
+            BreakIterator::createLineInstance(Locale::getEnglish(), status))));
     assertSuccess(WHERE, status, true);
     status = U_ZERO_ERROR;
-    TestReverse(std::unique_ptr<RuleBasedBreakIterator>((RuleBasedBreakIterator *)
-            BreakIterator::createSentenceInstance(Locale::getEnglish(), status)));
+    TestReverse(std::unique_ptr<RuleBasedBreakIterator>(dynamic_cast<RuleBasedBreakIterator*>(
+            BreakIterator::createSentenceInstance(Locale::getEnglish(), status))));
     assertSuccess(WHERE, status, true);
 }
 
@@ -4743,8 +4743,8 @@ void RBBITest::TestReverse(std::unique_ptr<RuleBasedBreakIterator>bi) {
 
 void RBBITest::TestBug13692() {
     UErrorCode status = U_ZERO_ERROR;
-    LocalPointer<RuleBasedBreakIterator> bi ((RuleBasedBreakIterator *)
-            BreakIterator::createWordInstance(Locale::getEnglish(), status), status);
+    LocalPointer<RuleBasedBreakIterator> bi (dynamic_cast<RuleBasedBreakIterator*>(
+            BreakIterator::createWordInstance(Locale::getEnglish(), status)), status);
     if (!assertSuccess(WHERE, status, true)) {
         return;
     }
@@ -4778,8 +4778,8 @@ void RBBITest::TestProperties() {
 //
 void RBBITest::TestDebug(void) {
     UErrorCode status = U_ZERO_ERROR;
-    LocalPointer<RuleBasedBreakIterator> bi ((RuleBasedBreakIterator *)
-            BreakIterator::createCharacterInstance(Locale::getEnglish(), status), status);
+    LocalPointer<RuleBasedBreakIterator> bi (dynamic_cast<RuleBasedBreakIterator*>(
+            BreakIterator::createCharacterInstance(Locale::getEnglish(), status)), status);
     if (!assertSuccess(WHERE, status, true)) {
         return;
     }
@@ -5495,7 +5495,7 @@ void RBBITest::TestRandomAccess() {
 
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<RuleBasedBreakIterator> bi(
-            (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getEnglish(), status),
+          dynamic_cast<RuleBasedBreakIterator*>(BreakIterator::createLineInstance(Locale::getEnglish(), status)),
             status);
     if (!assertSuccess(WHERE, status)) { return; };
 

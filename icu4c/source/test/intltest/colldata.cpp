@@ -238,7 +238,7 @@ U_CDECL_BEGIN
 static void U_CALLCONV
 deleteStringList(void *obj)
 {
-    StringList *strings = (StringList *) obj;
+    StringList *strings = static_cast<StringList *>(obj);
 
     delete strings;
 }
@@ -301,7 +301,7 @@ void CEToStringsMap::put(uint32_t ce, UnicodeString *string, UErrorCode &status)
 
 StringList *CEToStringsMap::getStringList(uint32_t ce) const
 {
-    return (StringList *) uhash_iget(map, ce);
+    return static_cast<StringList *>(uhash_iget(map, ce));
 }
 
 void CEToStringsMap::putStringList(uint32_t ce, StringList *stringList, UErrorCode &status)

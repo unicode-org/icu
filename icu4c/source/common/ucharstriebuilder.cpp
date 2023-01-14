@@ -298,7 +298,7 @@ UCharsTrieBuilder::UCTLinearMatchNode::operator==(const Node &other) const {
     if(!LinearMatchNode::operator==(other)) {
         return false;
     }
-    const UCTLinearMatchNode &o=(const UCTLinearMatchNode &)other;
+    const UCTLinearMatchNode &o=static_cast<const UCTLinearMatchNode &>(other);
     return 0==u_memcmp(s, o.s, length);
 }
 

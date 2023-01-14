@@ -440,7 +440,7 @@ StringCaseTest::TestCasingImpl(const UnicodeString &input,
 #if !UCONFIG_NO_BREAK_ITERATION
     case TEST_TITLE:
         name="toTitle";
-        result.toTitle((BreakIterator *)iter, locale, options);
+        result.toTitle(static_cast<BreakIterator *>(iter), locale, options);
         break;
 #endif
     case TEST_FOLD:
@@ -458,7 +458,7 @@ StringCaseTest::TestCasingImpl(const UnicodeString &input,
 #if !UCONFIG_NO_BREAK_ITERATION
     if(whichCase==TEST_TITLE && options==0) {
         result=input;
-        result.toTitle((BreakIterator *)iter, locale);
+        result.toTitle(static_cast<BreakIterator *>(iter), locale);
         if(result!=output) {
             dataerrln("error: UnicodeString.toTitle(options=0) got a wrong result for a test case from casing.res");
         }
@@ -475,7 +475,7 @@ StringCaseTest::TestCasingImpl(const UnicodeString &input,
 #if !UCONFIG_NO_BREAK_ITERATION
     if(iter!=nullptr) {
         // Clone the break iterator so that the UCaseMap can safely adopt it.
-        UBreakIterator *clone=ubrk_safeClone((UBreakIterator *)iter, nullptr, nullptr, errorCode);
+        UBreakIterator *clone=ubrk_safeClone(static_cast<UBreakIterator *>(iter), nullptr, nullptr, errorCode);
         ucasemap_setBreakIterator(csm.getAlias(), clone, errorCode);
     }
 #endif

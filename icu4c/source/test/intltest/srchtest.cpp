@@ -48,10 +48,10 @@ StringSearchTest::StringSearchTest()
 #if !UCONFIG_NO_BREAK_ITERATION
     UErrorCode    status = U_ZERO_ERROR;
     
-    m_en_us_ = (RuleBasedCollator *)Collator::createInstance("en_US", status);
-    m_fr_fr_ = (RuleBasedCollator *)Collator::createInstance("fr_FR", status);
-    m_de_    = (RuleBasedCollator *)Collator::createInstance("de_DE", status);
-    m_es_    = (RuleBasedCollator *)Collator::createInstance("es_ES", status);
+    m_en_us_ = dynamic_cast<RuleBasedCollator*>(Collator::createInstance("en_US", status));
+    m_fr_fr_ = dynamic_cast<RuleBasedCollator*>(Collator::createInstance("fr_FR", status));
+    m_de_    = dynamic_cast<RuleBasedCollator*>(Collator::createInstance("de_DE", status));
+    m_es_    = dynamic_cast<RuleBasedCollator*>(Collator::createInstance("es_ES", status));
     if(U_FAILURE(status)) {
       delete m_en_us_;
       delete m_fr_fr_;
@@ -67,7 +67,7 @@ StringSearchTest::StringSearchTest()
 
     
     UnicodeString rules;
-    rules.setTo(((RuleBasedCollator *)m_de_)->getRules());
+    rules.setTo(m_de_->getRules());
     char16_t extrarules[128];
     u_unescape(EXTRACOLLATIONRULE, extrarules, 128);
     rules.append(extrarules, u_strlen(extrarules));
@@ -75,7 +75,7 @@ StringSearchTest::StringSearchTest()
 
     m_de_ = new RuleBasedCollator(rules, status);
 
-    rules.setTo(((RuleBasedCollator *)m_es_)->getRules());
+    rules.setTo(m_es_->getRules());
     rules.append(extrarules, u_strlen(extrarules));
         
     delete m_es_;
@@ -487,7 +487,7 @@ UBool StringSearchTest::assertEqual(const SearchData *search)
     }
 #endif
     collator->setStrength(getECollationStrength(search->strength));
-    strsrch = new StringSearch(pattern, text, (RuleBasedCollator *)collator, 
+    strsrch = new StringSearch(pattern, text, dynamic_cast<RuleBasedCollator*>(collator), 
                                breaker, status);
     if (U_FAILURE(status)) {
         errln("Error opening string search %s", u_errorName(status));
@@ -547,7 +547,7 @@ UBool StringSearchTest::assertCanonicalEqual(const SearchData *search)
 #endif
     collator->setStrength(getECollationStrength(search->strength));
     collator->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
-    strsrch = new StringSearch(pattern, text, (RuleBasedCollator *)collator, 
+    strsrch = new StringSearch(pattern, text, dynamic_cast<RuleBasedCollator*>(collator), 
                                breaker, status);
     strsrch->setAttribute(USEARCH_CANONICAL_MATCH, USEARCH_ON, status);
     if (U_FAILURE(status)) {
@@ -599,7 +599,7 @@ UBool StringSearchTest::assertEqualWithAttribute(const SearchData *search,
     }
 #endif
     collator->setStrength(getECollationStrength(search->strength));
-    strsrch = new StringSearch(pattern, text, (RuleBasedCollator *)collator, 
+    strsrch = new StringSearch(pattern, text, dynamic_cast<RuleBasedCollator*>(collator), 
                                breaker, status);
     strsrch->setAttribute(USEARCH_CANONICAL_MATCH, canonical, status);
     strsrch->setAttribute(USEARCH_OVERLAP, overlap, status);

@@ -944,7 +944,7 @@ RuleBasedNumberFormat::operator==(const Format& other) const
     }
 
     if (typeid(*this) == typeid(other)) {
-        const RuleBasedNumberFormat& rhs = (const RuleBasedNumberFormat&)other;
+        const RuleBasedNumberFormat& rhs = static_cast<const RuleBasedNumberFormat&>(other);
         // test for capitalization info equality is adequately handled
         // by the NumberFormat test for fCapitalizationContext equality;
         // the info here is just derived from that.

@@ -80,7 +80,7 @@ void DateFormatRegressionTest::Test4029195(void)
     UDate today = Calendar::getNow();
     logln((UnicodeString) "today: " + today);
 
-    SimpleDateFormat *sdf = (SimpleDateFormat*) DateFormat::createDateInstance();
+    SimpleDateFormat *sdf = dynamic_cast<SimpleDateFormat*>(DateFormat::createDateInstance());
     if (failure(status, "SimpleDateFormat::createDateInstance")) {
         return;
     }
@@ -518,8 +518,8 @@ void DateFormatRegressionTest::Test4071441(void)
     }
 
     // {sfb} Is it OK to cast away const here?
-    Calendar *calA = (Calendar*) fmtA->getCalendar();
-    Calendar *calB = (Calendar*) fmtB->getCalendar();
+    Calendar *calA = const_cast<Calendar*>(fmtA->getCalendar());
+    Calendar *calB = const_cast<Calendar*>(fmtB->getCalendar());
     if(!calA || !calB) {
       errln("Couldn't get proper calendars, exiting");
       delete fmtA;
@@ -1140,7 +1140,7 @@ void DateFormatRegressionTest::Test4182066(void) {
             actStr.append("null");
         } else {
             // Yuck: See j25
-            ((DateFormat*)&dispFmt)->format(actual, actStr);
+            (dynamic_cast<DateFormat*>(&dispFmt))->format(actual, actStr);
         }
 
         if (expected == actual) {
@@ -1151,7 +1151,7 @@ void DateFormatRegressionTest::Test4182066(void) {
                 expStr.append("null");
             } else {
                 // Yuck: See j25
-                ((DateFormat*)&dispFmt)->format(expected, expStr);
+                (dynamic_cast<DateFormat*>(&dispFmt))->format(expected, expStr);
             }
             out.append("FAIL: " + str + " => " + actStr
                        + ", expected " + expStr + "\n");
@@ -1175,13 +1175,13 @@ DateFormatRegressionTest::Test4210209(void) {
     UnicodeString pattern("MMM d, yyyy");
     SimpleDateFormat sfmt(pattern, Locale::getUS(), status);
     SimpleDateFormat sdisp("MMM dd yyyy GG", Locale::getUS(), status);
-    DateFormat& fmt = *(DateFormat*)&sfmt; // Yuck: See j25
-    DateFormat& disp = *(DateFormat*)&sdisp; // Yuck: See j25
+    DateFormat& fmt = *dynamic_cast<DateFormat*>(&sfmt); // Yuck: See j25
+    DateFormat& disp = *dynamic_cast<DateFormat*>(&sdisp); // Yuck: See j25
     if (U_FAILURE(status)) {
         dataerrln("Couldn't create SimpleDateFormat - %s", u_errorName(status));
         return;
     }
-    Calendar* calx = (Calendar*)fmt.getCalendar(); // cast away const!
+    Calendar* calx = const_cast<Calendar*>(fmt.getCalendar()); // cast away const!
     calx->setLenient(false);
     UDate d = date(2000-1900, UCAL_FEBRUARY, 29);
     UnicodeString s, ss;

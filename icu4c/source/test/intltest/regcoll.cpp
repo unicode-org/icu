@@ -24,7 +24,7 @@ CollationRegressionTest::CollationRegressionTest()
 {
     UErrorCode status = U_ZERO_ERROR;
 
-    en_us = (RuleBasedCollator *)Collator::createInstance(Locale::getUS(), status);
+    en_us = dynamic_cast<RuleBasedCollator*>(Collator::createInstance(Locale::getUS(), status));
     if(U_FAILURE(status)) {
       delete en_us;
       en_us = 0;
@@ -370,7 +370,7 @@ void CollationRegressionTest::Test4062418(/* char* par */)
 
     RuleBasedCollator *c = nullptr;
 
-    c = (RuleBasedCollator *) Collator::createInstance(Locale::getCanadaFrench(), status);
+    c = dynamic_cast<RuleBasedCollator*>(Collator::createInstance(Locale::getCanadaFrench(), status));
 
     if (c == nullptr || U_FAILURE(status))
     {
@@ -450,7 +450,7 @@ void CollationRegressionTest::Test4066696(/* char* par */)
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *c = nullptr;
 
-    c = (RuleBasedCollator *)Collator::createInstance(Locale::getCanadaFrench(), status);
+    c = dynamic_cast<RuleBasedCollator*>(Collator::createInstance(Locale::getCanadaFrench(), status));
 
     if (c == nullptr || U_FAILURE(status))
     {
@@ -599,7 +599,7 @@ void CollationRegressionTest::Test4087241(/* char* par */)
     Locale da_DK("da", "DK");
     RuleBasedCollator *c = nullptr;
 
-    c = (RuleBasedCollator *) Collator::createInstance(da_DK, status);
+    c = dynamic_cast<RuleBasedCollator*>(Collator::createInstance(da_DK, status));
 
     if (c == nullptr || U_FAILURE(status))
     {

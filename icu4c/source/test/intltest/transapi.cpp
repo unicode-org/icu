@@ -807,7 +807,7 @@ void TransliteratorAPITest::TestGetAdoptFilter(){
     doTest(message, got, exp);
          
     logln("Testing round trip");
-    t->adoptFilter((UnicodeFilter*)u);
+    t->adoptFilter(const_cast<UnicodeFilter*>(u));
     if(t->getFilter() == nullptr)
        logln("OK: adoptFilter and getFilter round trip worked");
     else

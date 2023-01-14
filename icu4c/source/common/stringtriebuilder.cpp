@@ -404,7 +404,7 @@ StringTrieBuilder::FinalValueNode::operator==(const Node &other) const {
     if(!Node::operator==(other)) {
         return false;
     }
-    const FinalValueNode &o=(const FinalValueNode &)other;
+    const FinalValueNode &o=static_cast<const FinalValueNode &>(other);
     return value==o.value;
 }
 
@@ -421,7 +421,7 @@ StringTrieBuilder::ValueNode::operator==(const Node &other) const {
     if(!Node::operator==(other)) {
         return false;
     }
-    const ValueNode &o=(const ValueNode &)other;
+    const ValueNode &o=static_cast<const ValueNode &>(other);
     return hasValue==o.hasValue && (!hasValue || value==o.value);
 }
 
@@ -433,7 +433,7 @@ StringTrieBuilder::IntermediateValueNode::operator==(const Node &other) const {
     if(!ValueNode::operator==(other)) {
         return false;
     }
-    const IntermediateValueNode &o=(const IntermediateValueNode &)other;
+    const IntermediateValueNode &o=static_cast<const IntermediateValueNode &>(other);
     return next==o.next;
 }
 
@@ -459,7 +459,7 @@ StringTrieBuilder::LinearMatchNode::operator==(const Node &other) const {
     if(!ValueNode::operator==(other)) {
         return false;
     }
-    const LinearMatchNode &o=(const LinearMatchNode &)other;
+    const LinearMatchNode &o=static_cast<const LinearMatchNode &>(other);
     return length==o.length && next==o.next;
 }
 
@@ -479,7 +479,7 @@ StringTrieBuilder::ListBranchNode::operator==(const Node &other) const {
     if(!Node::operator==(other)) {
         return false;
     }
-    const ListBranchNode &o=(const ListBranchNode &)other;
+    const ListBranchNode &o=static_cast<const ListBranchNode &>(other);
     for(int32_t i=0; i<length; ++i) {
         if(units[i]!=o.units[i] || values[i]!=o.values[i] || equal[i]!=o.equal[i]) {
             return false;
@@ -558,7 +558,7 @@ StringTrieBuilder::SplitBranchNode::operator==(const Node &other) const {
     if(!Node::operator==(other)) {
         return false;
     }
-    const SplitBranchNode &o=(const SplitBranchNode &)other;
+    const SplitBranchNode &o=static_cast<const SplitBranchNode &>(other);
     return unit==o.unit && lessThan==o.lessThan && greaterOrEqual==o.greaterOrEqual;
 }
 
@@ -592,7 +592,7 @@ StringTrieBuilder::BranchHeadNode::operator==(const Node &other) const {
     if(!ValueNode::operator==(other)) {
         return false;
     }
-    const BranchHeadNode &o=(const BranchHeadNode &)other;
+    const BranchHeadNode &o=static_cast<const BranchHeadNode &>(other);
     return length==o.length && next==o.next;
 }
 

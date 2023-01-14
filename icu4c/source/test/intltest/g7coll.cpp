@@ -111,7 +111,7 @@ void G7CollationTest::TestG7Locales(/* char* par */)
             continue;
         }
 
-        const UnicodeString &rules = ((RuleBasedCollator*)myCollation.getAlias())->getRules();
+        const UnicodeString &rules = (dynamic_cast<RuleBasedCollator*>(myCollation.getAlias()))->getRules();
         if (rules.isEmpty() &&
                 (locale == Locale::getCanadaFrench() || locale == Locale::getJapanese())) {
             dataerrln("%s Collator missing rule string", locale.getName());
@@ -156,7 +156,7 @@ void G7CollationTest::TestDemo1(/* char* par */)
       errcheckln(status, "Couldn't instantiate collator. Error: %s", u_errorName(status));
       return;
     }
-    const UnicodeString baseRules = ((RuleBasedCollator*)col)->getRules();
+    const UnicodeString baseRules = (dynamic_cast<RuleBasedCollator*>(col))->getRules();
     UnicodeString newRules(" & Z < p, P");
     newRules.insert(0, baseRules);
     RuleBasedCollator *myCollation = new RuleBasedCollator(newRules, status);
@@ -190,7 +190,7 @@ void G7CollationTest::TestDemo2(/* char* par */)
       errcheckln(status, "Couldn't instantiate collator. Error: %s", u_errorName(status));
       return;
     }
-    const UnicodeString baseRules = ((RuleBasedCollator*)col)->getRules();
+    const UnicodeString baseRules = (dynamic_cast<RuleBasedCollator*>(col))->getRules();
     UnicodeString newRules("& C < ch , cH, Ch, CH");
     newRules.insert(0, baseRules);
     RuleBasedCollator *myCollation = new RuleBasedCollator(newRules, status);
@@ -224,7 +224,7 @@ void G7CollationTest::TestDemo3(/* char* par */)
       delete col;
       return;
     }
-    const UnicodeString baseRules = ((RuleBasedCollator*)col)->getRules();
+    const UnicodeString baseRules = (dynamic_cast<RuleBasedCollator*>(col))->getRules();
     UnicodeString newRules = "& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'";
     newRules.insert(0, baseRules);
     RuleBasedCollator *myCollation = new RuleBasedCollator(newRules, status);
@@ -259,7 +259,7 @@ void G7CollationTest::TestDemo4(/* char* par */)
       return;
     }
 
-    const UnicodeString baseRules = ((RuleBasedCollator*)col)->getRules();
+    const UnicodeString baseRules = (dynamic_cast<RuleBasedCollator*>(col))->getRules();
     UnicodeString newRules = " & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' ";
     newRules.insert(0, baseRules);
     RuleBasedCollator *myCollation = new RuleBasedCollator(newRules, status);

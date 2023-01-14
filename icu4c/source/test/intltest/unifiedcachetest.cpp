@@ -34,7 +34,7 @@ U_NAMESPACE_BEGIN
 template<> U_EXPORT
 const UCTItem *LocaleCacheKey<UCTItem>::createObject(
         const void *context, UErrorCode &status) const {
-    const UnifiedCache *cacheContext = (const UnifiedCache *) context;
+    const UnifiedCache *cacheContext = static_cast<const UnifiedCache *>(context);
     if (uprv_strcmp(fLoc.getName(), "zh") == 0) {
         status = U_MISSING_RESOURCE_ERROR;
         return nullptr;
