@@ -399,10 +399,10 @@ static Calendar *createStandardCalendar(ECalType calType, const Locale &loc, UEr
             cal.adoptInsteadAndCheckErrorCode(new DangiCalendar(loc, status), status);
             break;
         case CALTYPE_TIBETAN:
-            cal.adoptInsteadAndCheckErrorCode(new TibetanCalendar(loc, status, TibetanCalendar::PHUGPA), status);
+            cal.adoptInsteadAndCheckErrorCode(new TibetanCalendar(loc, status), status);
             break;
         case CALTYPE_TIBETAN_TSURPHU:
-            cal.adoptInsteadAndCheckErrorCode(new TibetanCalendar(loc, status, TibetanCalendar::TSURPHU), status);
+            cal.adoptInsteadAndCheckErrorCode(new TibetanTsurphuCalendar(loc, status), status);
             break;
         default:
             status = U_UNSUPPORTED_ERROR;

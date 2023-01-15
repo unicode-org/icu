@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2003-2021, International Business Machines Corporation 
+ * Copyright (c) 2003-2023, International Business Machines Corporation 
  * and others. All Rights Reserved.
  ********************************************************************
  * Calendar Case Test is a type of CalendarTest which compares the 
@@ -505,7 +505,7 @@ void CalendarCaseTest::Tibetan() {
 
     //Testing Phugpa calculations 
 
-    static const TestCase tests1[] = {
+    static const TestCase tests[] = {
 
     // A huge list of test cases to make sure that computeTime and computeFields
     // work properly for a wide range of data in the Tibetan calendar.
@@ -550,13 +550,16 @@ void CalendarCaseTest::Tibetan() {
     Calendar *c = Calendar::createInstance("bo_IN@calendar=tibetan", status);
     if (failure(status, "Calendar::createInstance", TRUE)) return;
     c->setLenient(TRUE);
-    doTestCases(tests1, c);
+    doTestCases(tests, c);
     delete c;
 
+}
+
+void CalendarCaseTest::TibetanTsurphu() {
 
     //Testing Tsurphu calculations 
 
-    static const TestCase tests2[] = {
+    static const TestCase tests[] = {
 
     // A huge list of test cases to make sure that computeTime and computeFields
     // work properly for a wide range of data in the Tibetan calendar.
@@ -572,7 +575,7 @@ void CalendarCaseTest::Tibetan() {
     c = Calendar::createInstance("bo_IN@calendar=tibetan-tsurphu", status);
     if (failure(status, "Calendar::createInstance", TRUE)) return;
     c->setLenient(TRUE);
-    doTestCases(tests2, c);
+    doTestCases(tests, c);
 
     delete c;
 
