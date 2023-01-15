@@ -65,7 +65,7 @@ There are a few different ways to download the ICU4J releases.
 
 *   **Official Release:**
     If you want to use ICU4J (as opposed to developing it), your best bet is to download an official, packaged version of the ICU4J library files. These versions are tested more thoroughly than day-to-day development builds, and they are packaged in jar files for convenient download.
-    *   [ICU Download page](http://www.icu-project.org/download/)
+    *   [ICU Download page](https://icu.unicode.org/download)
     *   Maven repository:
 
 ~~~
@@ -89,9 +89,9 @@ There are a few different ways to download the ICU4J releases.
 ~~~
 
 *   **GitHub Source Repository:**
-    If you are interested in developing features, patches, or bug fixes for ICU4J, you should probably be working with the latest version of the ICU4J source code. You will need to clone and checkout the code from our GitHub repository to ensure that you have the most recent version of all of the files. There are several ways to do this. Please follow the directions that are contained on the [Source Repository page](http://www.icu-project.org/repository/) for details.
+    If you are interested in developing features, patches, or bug fixes for ICU4J, you should probably be working with the latest version of the ICU4J source code. You will need to clone and checkout the code from our GitHub repository to ensure that you have the most recent version of all of the files. There are several ways to do this. Please follow the directions that are contained on the [Source Repository page](https://icu.unicode.org/repository) for details.
 
-For more details on how to download ICU4J directly from the web site, please see the ICU download page at [http://www.icu-project.org/download/](http://www.icu-project.org/download/)
+For more details on how to download ICU4J directly from the web site, please see the ICU download page at [https://icu.unicode.org/download](https://icu.unicode.org/download)
 
 ## The Structure and Contents of ICU4J
 
@@ -322,7 +322,7 @@ For more information, read the Ant documentation and the **build.xml** file.
 
 > :point_right: **Note**: If you get an OutOfMemoryError when you are running <tt>"ant check"</tt>, you can set the heap size of the jvm by setting the environment variable JVM_OPTIONS to the appropriate java options.
 
-> :point_right: **Note**: **Eclipse users:** See the ICU4J site for information on [how to configure Eclipse](http://site.icu-project.org/setup/eclipse) to build and develop ICU4J on Eclipse IDE.
+> :point_right: **Note**: **Eclipse users:** See the ICU4J site for information on [how to configure Eclipse](https://icu.unicode.org/setup/eclipse) to build and develop ICU4J on Eclipse IDE.
 
 > :point_right: **Note**: To install and configure ICU4J Locale Service Provider, please refer the user guide page [ICU4J Locale Service Provider](./locale-service-provider).
 
@@ -423,13 +423,13 @@ You can optionally configure ICU4J date and time service classes to use underlyi
 
 ## Where to Find More Information
 
-[http://www.icu-project.org/](http://www.icu-project.org/) is the home page of International Components for Unicode development project
+[https://icu.unicode.org/](https://icu.unicode.org/) is the home page of International Components for Unicode development project
 
 ## Submitting Comments, Requesting Features and Reporting Bugs
 
 Your comments are important to making ICU4J successful. We are committed to investigate any bug reports or suggestions, and will use your feedback to help plan future releases.
 
-To submit comments, request features and report bugs, please see [ICU bug database information](http://site.icu-project.org/bugs) or contact us through the [ICU Support mailing list](http://site.icu-project.org/contacts). While we are not able to respond individually to each comment, we do review all comments.
+To submit comments, request features and report bugs, please see [ICU bug database information](https://icu.unicode.org/bugs) or contact us through the [ICU Support mailing list](https://icu.unicode.org/contacts). While we are not able to respond individually to each comment, we do review all comments.
 
 * * *
 

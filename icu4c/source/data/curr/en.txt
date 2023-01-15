@@ -801,7 +801,7 @@ en{
         }
         PHP{
             "₱",
-            "Philippine Piso",
+            "Philippine Peso",
         }
         PKR{
             "PKR",
@@ -825,7 +825,7 @@ en{
         }
         QAR{
             "QAR",
-            "Qatari Rial",
+            "Qatari Riyal",
         }
         RHD{
             "RHD",
@@ -899,9 +899,13 @@ en{
             "SKK",
             "Slovak Koruna",
         }
+        SLE{
+            "SLE",
+            "Sierra Leonean Leone",
+        }
         SLL{
             "SLL",
-            "Sierra Leonean Leone",
+            "Sierra Leonean Leone (1964—2022)",
         }
         SOS{
             "SOS",
@@ -1046,6 +1050,10 @@ en{
         VEB{
             "VEB",
             "Venezuelan Bolívar (1871–2008)",
+        }
+        VED{
+            "VED",
+            "Bolívar Soberano",
         }
         VEF{
             "VEF",
@@ -2014,8 +2022,8 @@ en{
             other{"Papua New Guinean kina"}
         }
         PHP{
-            one{"Philippine piso"}
-            other{"Philippine pisos"}
+            one{"Philippine peso"}
+            other{"Philippine pesos"}
         }
         PKR{
             one{"Pakistani rupee"}
@@ -2038,8 +2046,8 @@ en{
             other{"Paraguayan guaranis"}
         }
         QAR{
-            one{"Qatari rial"}
-            other{"Qatari rials"}
+            one{"Qatari riyal"}
+            other{"Qatari riyals"}
         }
         RHD{
             one{"Rhodesian dollar"}
@@ -2113,9 +2121,13 @@ en{
             one{"Slovak koruna"}
             other{"Slovak korunas"}
         }
-        SLL{
+        SLE{
             one{"Sierra Leonean leone"}
             other{"Sierra Leonean leones"}
+        }
+        SLL{
+            one{"Sierra Leonean leone (1964—2022)"}
+            other{"Sierra Leonean leones (1964—2022)"}
         }
         SOS{
             one{"Somali shilling"}
@@ -2260,6 +2272,10 @@ en{
         VEB{
             one{"Venezuelan bolívar (1871–2008)"}
             other{"Venezuelan bolívars (1871–2008)"}
+        }
+        VED{
+            one{"Bolívar Soberano"}
+            other{"Bolívar Soberanos"}
         }
         VEF{
             one{"Venezuelan bolívar (2008–2018)"}

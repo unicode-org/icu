@@ -1223,6 +1223,9 @@ sr{
         "Pacific:Johnston"{
             ec{"Џонстон"}
         }
+        "Pacific:Kanton"{
+            ec{"Кантон"}
+        }
         "Pacific:Kiritimati"{
             ec{"Киритимати"}
         }
@@ -1946,6 +1949,9 @@ sr{
             ld{"Јекатеринбург, летње време"}
             lg{"Јекатеринбург време"}
             ls{"Јекатеринбург, стандардно време"}
+        }
+        "meta:Yukon"{
+            ls{"Јукон"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

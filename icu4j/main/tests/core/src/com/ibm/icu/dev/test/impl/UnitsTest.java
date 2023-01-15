@@ -20,11 +20,13 @@ import com.ibm.icu.impl.Pair;
 import com.ibm.icu.impl.units.ComplexUnitsConverter;
 import com.ibm.icu.impl.units.ConversionRates;
 import com.ibm.icu.impl.units.MeasureUnitImpl;
+import com.ibm.icu.impl.units.UnitPreferences;
 import com.ibm.icu.impl.units.UnitsConverter;
+import com.ibm.icu.impl.units.UnitsData;
 import com.ibm.icu.impl.units.UnitsRouter;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
-
+import com.ibm.icu.util.ULocale;
 
 public class UnitsTest {
 
@@ -88,7 +90,7 @@ public class UnitsTest {
                 0),
 
             // A minimal nudge under 2.0, rounding up to 2.0 ft, 0 in.
-            // TODO(icu-units#108): this matches double precision calculations
+            // TODO(ICU-21861): this matches double precision calculations
             // from C++, but BigDecimal is in use: do we want Java to be more
             // precise than C++?
             new TestCase(
@@ -114,7 +116,7 @@ public class UnitsTest {
             // 1e-16 light years is 0.946073 meters.
 
             // A 2.1 meter nudge under 2.0 light years, rounding up to 2.0 ly, 0 m.
-            // TODO(icu-units#108): this matches double precision calculations
+            // TODO(ICU-21861): this matches double precision calculations
             // from C++, but BigDecimal is in use: do we want Java to be more
             // precise than C++?
             new TestCase("light-year", "light-year-and-meter",
@@ -123,7 +125,7 @@ public class UnitsTest {
                                         new Measure(0, MeasureUnit.METER)},
                          0),
 
-            // // TODO(icu-units#108): figure out precision thresholds for BigDecimal?
+            // // TODO(ICU-21861): figure out precision thresholds for BigDecimal?
             // // This test passes in C++ due to double-precision rounding.
             // // A 2.1 meter nudge under 1.0 light years, rounding up to 1.0 ly, 0 m.
             // new TestCase("light-year", "light-year-and-meter",
@@ -132,27 +134,34 @@ public class UnitsTest {
             //                             new Measure(0, MeasureUnit.METER)},
             //              0),
 
-            // 1e-15 light years is 9.46073 meters (calculated using "bc" and
-            // the CLDR conversion factor). With double-precision maths in C++,
+            // 1e-15 light years is 9.4607304725808 (calculated using "bc" and
+            // the CLDR conversion factor)¹. With double-precision maths in C++,
             // we get 10.5. In this case, we're off by a bit more than 1 meter.
             // With Java BigDecimal, we get accurate results.
+            // ¹With CLDR 42 conversions we get a more accurate and precise value for meters.
             new TestCase("light-year", "light-year-and-meter", BigDecimal.valueOf(1.0 + 1e-15),
                          new Measure[] {new Measure(1, MeasureUnit.LIGHT_YEAR),
-                                        new Measure(9.46073, MeasureUnit.METER)},
+                                        new Measure(9.4607304725808, MeasureUnit.METER)},
                          0 /* meters, precision */),
 
-            // TODO(icu-units#108): reconsider whether epsilon rounding is desirable:
+            // TODO(ICU-21861): reconsider whether epsilon rounding is desirable:
             //
-            // 2e-16 light years is 1.892146 meters. For C++ double, we consider
+            // 2e-16 light years is 1.89214609451616 meters¹. For C++ double, we consider
             // this in the noise, and thus expect a 0. (This test fails when
             // 2e-16 is increased to 4e-16.) For Java, using BigDecimal, we
             // actually get a good result.
+            // ¹With CLDR 42 conversions we get a more accurate and precise value for meters.
             new TestCase("light-year", "light-year-and-meter", BigDecimal.valueOf(1.0 + 2e-16),
                          new Measure[] {new Measure(1, MeasureUnit.LIGHT_YEAR),
-                                        new Measure(1.892146, MeasureUnit.METER)},
-                         0),
-        };
+                                        new Measure(1.89214609451616, MeasureUnit.METER)},
+                         0 /* meters, precision */),
 
+            // Negative numbers
+            new TestCase(
+                "yard", "mile-and-yard", BigDecimal.valueOf(-1800),
+                new Measure[] {new Measure(-1, MeasureUnit.MILE), new Measure(-40, MeasureUnit.YARD)},
+                1e-10),
+        };
 
         ConversionRates rates = new ConversionRates();
         MeasureUnit input, output;
@@ -169,8 +178,6 @@ public class UnitsTest {
             ComplexUnitsConverter converter2 = new ComplexUnitsConverter(testCase.input, testCase.output);
             testCase.testATestCase(converter2);
         }
-
-        // TODO(icu-units#63): test negative numbers!
     }
 
 
@@ -369,6 +376,36 @@ public class UnitsTest {
     }
 
     @Test
+    public void testGetUnitCategory() {
+        class TestCase {
+            final MeasureUnitImpl unit;
+            final String expectedCategory;
+
+            TestCase(String unitId, String expectedCategory) {
+                this.unit = MeasureUnitImpl.forIdentifier(unitId);
+                this.expectedCategory  = expectedCategory;
+            }
+        }
+
+        TestCase testCases[] = {
+                new TestCase("kilogram-per-cubic-meter", "mass-density"),
+                new TestCase("cubic-meter-per-kilogram", "specific-volume"),
+                new TestCase("meter-per-second", "speed"),
+                new TestCase("second-per-meter", "speed"),
+                new TestCase("mile-per-gallon", "consumption"),
+                new TestCase("liter-per-100-kilometer", "consumption"),
+                new TestCase("cubic-meter-per-meter", "consumption"),
+                new TestCase("meter-per-cubic-meter", "consumption"),
+                new TestCase("kilogram-meter-per-square-meter-square-second", "pressure"),
+        };
+
+        UnitsData data = new UnitsData();
+        for (TestCase test : testCases) {
+            assertEquals(test.expectedCategory, data.getCategory(test.unit));
+        }
+    }
+
+    @Test
     public void testConverter() {
         class TestData {
             final String sourceIdentifier;
@@ -436,6 +473,21 @@ public class UnitsTest {
                 // Fuel Consumption
                 new TestData("cubic-meter-per-meter", "mile-per-gallon", 2.1383143939394E-6, 1.1),
                 new TestData("cubic-meter-per-meter", "mile-per-gallon", 2.6134953703704E-6, 0.9),
+                new TestData("liter-per-100-kilometer", "mile-per-gallon", 6.6, 35.6386),
+                // // TODO(ICU-21988): we should probably return something other than "0":
+                // new TestData("liter-per-100-kilometer", "mile-per-gallon", 0, 0),
+                // new TestData("mile-per-gallon", "liter-per-100-kilometer", 0, 0),
+                // // TODO(ICU-21988): deal with infinity input in Java?
+                // new TestData("mile-per-gallon", "liter-per-100-kilometer", INFINITY, 0),
+                // We skip testing -Inf, because the inverse conversion loses the sign:
+                // new TestData("mile-per-gallon", "liter-per-100-kilometer", -INFINITY, 0),
+                // Test Aliases
+                // Alias is just another name to the same unit. Therefore, converting
+                // between them should be the same.
+                new TestData("foodcalorie", "kilocalorie", 1.0, 1.0),
+                new TestData("dot-per-centimeter", "pixel-per-centimeter", 1.0, 1.0),
+                new TestData("dot-per-inch", "pixel-per-inch", 1.0, 1.0),
+                new TestData("dot", "pixel", 1.0, 1.0),
         };
 
         ConversionRates conversionRates = new ConversionRates();
@@ -443,45 +495,32 @@ public class UnitsTest {
             MeasureUnitImpl source = MeasureUnitImpl.forIdentifier(test.sourceIdentifier);
             MeasureUnitImpl target = MeasureUnitImpl.forIdentifier(test.targetIdentifier);
 
-            UnitsConverter converter = new UnitsConverter(source, target, conversionRates);
-
             double maxDelta = 1e-6 * Math.abs(test.expected.doubleValue());
             if (test.expected.doubleValue() == 0) {
                 maxDelta = 1e-12;
             }
+            double inverseMaxDelta = 1e-6 * Math.abs(test.input.doubleValue());
+            if (test.input.doubleValue() == 0) {
+                inverseMaxDelta = 1e-12;
+            }
+
+            UnitsConverter converter = new UnitsConverter(source, target, conversionRates);
             assertEquals("testConverter: " + test.sourceIdentifier + " to " + test.targetIdentifier,
                     test.expected.doubleValue(), converter.convert(test.input).doubleValue(),
                     maxDelta);
-
-            maxDelta = 1e-6 * Math.abs(test.input.doubleValue());
-            if (test.input.doubleValue() == 0) {
-                maxDelta = 1e-12;
-            }
             assertEquals(
                     "testConverter inverse: " + test.targetIdentifier + " back to " + test.sourceIdentifier,
                     test.input.doubleValue(), converter.convertInverse(test.expected).doubleValue(),
-                    maxDelta);
+                    inverseMaxDelta);
 
-
-            // TODO: Test UnitsConverter created using CLDR separately.
             // Test UnitsConverter created by CLDR unit identifiers
             UnitsConverter converter2 = new UnitsConverter(test.sourceIdentifier, test.targetIdentifier);
-
-            maxDelta = 1e-6 * Math.abs(test.expected.doubleValue());
-            if (test.expected.doubleValue() == 0) {
-                maxDelta = 1e-12;
-            }
             assertEquals("testConverter2: " + test.sourceIdentifier + " to " + test.targetIdentifier,
                     test.expected.doubleValue(), converter2.convert(test.input).doubleValue(),
                     maxDelta);
-
-            maxDelta = 1e-6 * Math.abs(test.input.doubleValue());
-            if (test.input.doubleValue() == 0) {
-                maxDelta = 1e-12;
-            }
             assertEquals("testConverter2 inverse: " + test.targetIdentifier + " back to " + test.sourceIdentifier,
                     test.input.doubleValue(), converter2.convertInverse(test.expected).doubleValue(),
-                    maxDelta);
+                    inverseMaxDelta);
         }
     }
 
@@ -574,6 +613,7 @@ public class UnitsTest {
              */
             String category;
             String usage;
+            ULocale locale;
             String region;
             Pair<String, MeasureUnitImpl> inputUnit;
             BigDecimal input;
@@ -612,6 +652,7 @@ public class UnitsTest {
                 this.category = category;
                 this.usage = usage;
                 this.region = region;
+                this.locale = new ULocale("und-" + this.region);
                 this.inputUnit = Pair.of(inputUnitString, MeasureUnitImpl.UnitsParser.parseForIdentifier(inputUnitString));
                 this.input = new BigDecimal(inputValue);
                 for (Pair<String, String> output :
@@ -628,8 +669,8 @@ public class UnitsTest {
                     outputUnits.add(unit.second);
                 }
                 return "TestCase: " + category + ", " + usage + ", " + region + "; Input: " + input +
-                    " " + inputUnit.first + "; Expected Values: " + expectedInOrder +
-                    ", Expected Units: " + outputUnits;
+                        " " + inputUnit.first + "; Expected Values: " + expectedInOrder +
+                        ", Expected Units: " + outputUnits;
             }
         }
 
@@ -647,7 +688,8 @@ public class UnitsTest {
         }
 
         for (TestCase testCase : tests) {
-            UnitsRouter router = new UnitsRouter(testCase.inputUnit.second, testCase.region, testCase.usage);
+            UnitsRouter router = new UnitsRouter(testCase.inputUnit.second, testCase.locale,
+                    testCase.usage);
             List<Measure> measures = router.route(testCase.input, null).complexConverterResult.measures;
 
             assertEquals("For " + testCase.toString() + ", Measures size must be the same as expected units",
@@ -668,7 +710,7 @@ public class UnitsTest {
 
         // Test UnitsRouter created with CLDR units identifiers.
         for (TestCase testCase : tests) {
-            UnitsRouter router = new UnitsRouter(testCase.inputUnit.first, testCase.region, testCase.usage);
+            UnitsRouter router = new UnitsRouter(testCase.inputUnit.first, testCase.locale, testCase.usage);
             List<Measure> measures = router.route(testCase.input, null).complexConverterResult.measures;
 
             assertEquals("Measures size must be the same as expected units",
@@ -687,5 +729,74 @@ public class UnitsTest {
             }
         }
 
+    }
+
+    /**
+     * This test is dependent upon CLDR Data: when the preferences change, the test
+     * may fail: see the constants for expected Max/Min unit identifiers, for US and
+     * World, and for Roads and default lengths.
+     */
+    @Test
+    public void testGetPreferencesFor() {
+        final String USRoadMax = "mile";
+        final String USRoadMin = "foot";
+        final String USLenMax = "mile";
+        final String USLenMin = "inch";
+        final String WorldRoadMax = "kilometer";
+        final String WorldRoadMin = "meter";
+        final String WorldLenMax = "kilometer";
+        final String WorldLenMin = "centimeter";
+        class TestCase {
+            final String name;
+            final String category;
+            final String usage;
+            final String region;
+            final String expectedBiggest;
+            final String expectedSmallest;
+
+            public TestCase(String name, String category, String usage, String region, String expectedBiggest, String expectedSmallest) {
+                this.name = name;
+                this.category = category;
+                this.usage = usage;
+                this.region = region;
+                this.expectedBiggest = expectedBiggest;
+                this.expectedSmallest = expectedSmallest;
+            }
+        }
+
+        TestCase testCases[] = {
+                new TestCase("US road", "length", "road", "US", USRoadMax, USRoadMin),
+                new TestCase("001 road", "length", "road", "001", WorldRoadMax, WorldRoadMin),
+                new TestCase("US lengths", "length", "default", "US", USLenMax, USLenMin),
+                new TestCase("001 lengths", "length", "default", "001", WorldLenMax, WorldLenMin),
+                new TestCase("XX road falls back to 001", "length", "road", "XX", WorldRoadMax, WorldRoadMin),
+                new TestCase("XX default falls back to 001", "length", "default", "XX", WorldLenMax, WorldLenMin),
+                new TestCase("Unknown usage US", "length", "foobar", "US", USLenMax, USLenMin),
+                new TestCase("Unknown usage 001", "length", "foobar", "XX", WorldLenMax, WorldLenMin),
+                new TestCase("Fallback", "length", "person-height-xyzzy", "DE", "centimeter", "centimeter"),
+                new TestCase("Fallback twice", "length", "person-height-xyzzy-foo", "DE", "centimeter",
+                        "centimeter"),
+                // Confirming results for some unitPreferencesTest.txt test cases
+                new TestCase("001 area", "area", "default", "001", "square-kilometer", "square-centimeter"),
+                new TestCase("GB area", "area", "default", "GB", "square-mile", "square-inch"),
+                new TestCase("001 area geograph", "area", "geograph", "001", "square-kilometer", "square-kilometer"),
+                new TestCase("GB area geograph", "area", "geograph", "GB", "square-mile", "square-mile"),
+                new TestCase("CA person-height", "length", "person-height", "CA", "foot-and-inch", "inch"),
+                new TestCase("AT person-height", "length", "person-height", "AT", "meter-and-centimeter",
+                        "meter-and-centimeter"),
+        };
+
+        UnitsData data = new UnitsData();
+        for (TestCase t : testCases) {
+            ULocale locale = new ULocale("und-" + t.region);
+            UnitPreferences.UnitPreference prefs[] = data.getPreferencesFor(t.category, t.usage,
+                    locale);
+            if (prefs.length > 0) {
+                assertEquals(t.name + " - max unit", t.expectedBiggest, prefs[0].getUnit());
+                assertEquals(t.name + " - min unit", t.expectedSmallest, prefs[prefs.length - 1].getUnit());
+            } else {
+                fail(t.name + ": failed to find preferences");
+            }
+        }
     }
 }

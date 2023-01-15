@@ -326,7 +326,7 @@ class CharsetASCII extends CharsetICU {
              * if the character is a lead surrogate, we need to call encodeTrail to attempt to match
              * it up with a trail surrogate. if not, the character is unmappable.
              */
-            return (UTF16.isSurrogate((char) ch))
+            return (UTF16.isSurrogate(ch))
                     ? encodeTrail(source, (char) ch, flush)
                     : CoderResult.unmappableForLength(1);
         }

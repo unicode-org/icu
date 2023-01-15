@@ -67,7 +67,7 @@ utrace_exit(int32_t fnNumber, int32_t returnType, ...) {
             fmt = gExitFmtPtrStatus;
             break;
         default:
-            UPRV_UNREACHABLE;
+            UPRV_UNREACHABLE_EXIT;
         }
 
         va_start(args, returnType);
@@ -436,7 +436,7 @@ utrace_cleanup() {
     pTraceDataFunc  = NULL;
     utrace_level    = UTRACE_OFF;
     gTraceContext   = NULL;
-    return TRUE;
+    return true;
 }
 
 

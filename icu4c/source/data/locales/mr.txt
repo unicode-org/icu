@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 mr{
-    AuxExemplarCharacters{"[\u200C\u200D]"}
+    AuxExemplarCharacters{"[\u200C\u200D \u0944]"}
     Ellipsis{
         final{"{0}…"}
         initial{"…{0}"}
@@ -14,7 +14,7 @@ mr{
     ExemplarCharacters{
         "[\u093C ॐ \u0902 \u0901 ः अ आ इ ई उ ऊ ऋ ऌ ऍ ए ऐ ऑ ओ औ क ख ग घ ङ च छ ज झ ञ ट "
         "ठ ड ढ ण त थ द ध न प फ ब भ म य र ऱ ल व श ष स ह ळ ऽ ा ि ी \u0941 \u0942 "
-        "\u0943 \u0944 \u0945 \u0947 \u0948 ॉ ो ौ \u094D]"
+        "\u0943 \u0945 \u0947 \u0948 ॉ ो ौ \u094D]"
     }
     ExemplarCharactersIndex{
         "[\u200D ॐ \u0902 ः अ आ इ ई उ ऊ ऋ ऌ ए ऐ ऑ ओ औ क ख ग घ ङ च छ ज झ ञ ट ठ ड ढ ण त"
@@ -28,6 +28,8 @@ mr{
         deva{
             patterns{
                 currencyFormat{"¤#,##0.00"}
+                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
+                currencyFormat%noCurrency{"#,##0.00"}
                 decimalFormat{"#,##,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"[#E0]"}
@@ -55,6 +57,8 @@ mr{
             }
             patterns{
                 accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
+                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##,##0.###"}
                 percentFormat{"#,##0%"}
@@ -163,6 +167,56 @@ mr{
                         other{"¤00 पद्म"}
                     }
                 }
+                currencyFormat%alphaNextToNumber{
+                    1000{
+                        one{"¤ 0 ह"}
+                        other{"¤ 0 ह"}
+                    }
+                    10000{
+                        one{"¤ 00 ह"}
+                        other{"¤ 00 ह"}
+                    }
+                    100000{
+                        one{"¤ 0 लाख"}
+                        other{"¤ 0 लाख"}
+                    }
+                    1000000{
+                        one{"¤ 00 लाख"}
+                        other{"¤ 00 लाख"}
+                    }
+                    10000000{
+                        one{"¤ 0 कोटी"}
+                        other{"¤ 0 कोटी"}
+                    }
+                    100000000{
+                        one{"¤ 00 कोटी"}
+                        other{"¤ 00 कोटी"}
+                    }
+                    1000000000{
+                        one{"¤ 0 अब्ज"}
+                        other{"¤ 0 अब्ज"}
+                    }
+                    10000000000{
+                        one{"¤ 00 अब्ज"}
+                        other{"¤ 00 अब्ज"}
+                    }
+                    100000000000{
+                        one{"¤ 0 खर्व"}
+                        other{"¤ 0 खर्व"}
+                    }
+                    1000000000000{
+                        one{"¤ 00 खर्व"}
+                        other{"¤ 00 खर्व"}
+                    }
+                    10000000000000{
+                        one{"¤ 0 पद्म"}
+                        other{"¤ 0 पद्म"}
+                    }
+                    100000000000000{
+                        one{"¤ 00 पद्म"}
+                        other{"¤ 00 पद्म"}
+                    }
+                }
                 decimalFormat{
                     1000{
                         one{"0 ह"}
@@ -230,6 +284,20 @@ mr{
             }
         }
         minimalPairs{
+            case{
+                ablative{"{0} त्याचे प्रयत्न चालू होते"}
+                accusative{"दर {0} येऊन तो विचारणा करत होता"}
+                dative{"{0} तो गावाला गेला आह"}
+                ergative{"{0} काय फरक पडणार?"}
+                genitive{"{0} कार्यक्रम होता"}
+                locative{"{0} काम पूर्ण होईल"}
+                nominative{"{0} मजेत गेले"}
+            }
+            gender{
+                feminine{"ती {0} खूप महत्वाची होती"}
+                masculine{"तो {0} खूप महत्वाचा होता"}
+                neuter{"ते {0} खूप महत्वाचे होते"}
+            }
             ordinal{
                 few{"{0}थे उजवे वळण घ्या."}
                 one{"{0}ले उजवे वळण घ्या."}
@@ -493,6 +561,12 @@ mr{
                 "d MMM, y G",
                 "d/M/y GGGGG",
                 "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimePatterns%atTime{
                 "{1} {0} वाजता",
                 "{1} {0} वाजता",
                 "{1}, {0}",
@@ -524,6 +598,7 @@ mr{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d MMM, y G"}
                 GyMMMd{"d MMM, y G"}
+                GyMd{"d/M/y GGGGG"}
                 H{"HH"}
                 Hm{"H-mm"}
                 Hms{"H-mm-ss"}
@@ -668,6 +743,12 @@ mr{
                 "d MMM, y",
                 "d/M/yy",
                 "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimePatterns%atTime{
                 "{1} रोजी {0}",
                 "{1} रोजी {0}",
                 "{1}, {0}",
@@ -702,6 +783,7 @@ mr{
                 GyMMM{"MMM G y"}
                 GyMMMEd{"E, d MMM, G y"}
                 GyMMMd{"d MMM, G y"}
+                GyMd{"GGGGG d/M/y"}
                 H{"HH"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
@@ -825,7 +907,6 @@ mr{
                     abbreviated{
                         afternoon1{"दुपार"}
                         evening1{"संध्याकाळ"}
-                        evening2{"सायंकाळ"}
                         midnight{"मध्यरात्र"}
                         morning1{"पहाट"}
                         morning2{"सकाळ"}
@@ -835,7 +916,6 @@ mr{
                     narrow{
                         afternoon1{"दु"}
                         evening1{"सं"}
-                        evening2{"सा"}
                         midnight{"म.रा."}
                         morning1{"प"}
                         morning2{"स"}
@@ -845,7 +925,6 @@ mr{
                     wide{
                         afternoon1{"दुपार"}
                         evening1{"संध्याकाळ"}
-                        evening2{"सायंकाळ"}
                         midnight{"मध्यरात्र"}
                         morning1{"पहाट"}
                         morning2{"सकाळ"}
@@ -858,7 +937,6 @@ mr{
                         afternoon1{"दुपार"}
                         am{"AM"}
                         evening1{"संध्याकाळ"}
-                        evening2{"सायंकाळ"}
                         midnight{"मध्यरात्र"}
                         morning1{"पहाट"}
                         morning2{"सकाळ"}
@@ -870,7 +948,6 @@ mr{
                         afternoon1{"दु"}
                         am{"AM"}
                         evening1{"सं"}
-                        evening2{"सा"}
                         midnight{"म.रा."}
                         morning1{"प"}
                         morning2{"स"}
@@ -882,7 +959,6 @@ mr{
                         afternoon1{"दुपार"}
                         am{"AM"}
                         evening1{"संध्याकाळ"}
-                        evening2{"सायंकाळ"}
                         midnight{"मध्यरात्र"}
                         morning1{"पहाट"}
                         morning2{"सकाळ"}
@@ -894,11 +970,11 @@ mr{
             }
             eras{
                 abbreviated{
-                    "इ. स. पू.",
+                    "ई. स. पू.",
                     "इ. स.",
                 }
                 abbreviated%variant{
-                    "इ. स. पू. युग",
+                    "ई. स. पू. युग",
                     "ख्रि. यु.",
                 }
                 wide{
@@ -911,6 +987,15 @@ mr{
                 }
             }
             intervalFormats{
+                GyMEd{
+                    G{"GGGGG dd-MM-y, E – GGGGG dd-MM-y, E"}
+                    M{"GGGGG dd-MM-y, E – dd-MM-y, E"}
+                    d{"GGGGG dd-MM-y, E – dd-MM-y, E"}
+                    y{"GGGGG dd-MM-y, E – dd-MM-y, E"}
+                }
+                GyMd{
+                    y{"GGGGG dd-MM-y – dd-MM-y"}
+                }
                 H{
                     H{"HH – HH"}
                 }
@@ -2559,6 +2644,23 @@ mr{
             stricter{
                 "[,٫︐﹐，]",
                 "[.․﹒．｡]",
+            }
+        }
+    }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "mr",
+            }
+            surnameFirst{
+                "ko",
+                "si",
+                "ta",
+                "te",
+                "vi",
+                "yue",
+                "zh",
             }
         }
     }

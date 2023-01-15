@@ -23,7 +23,7 @@
  */
 class TimeZoneBoundaryTest: public CalendarTimeZoneTest {
     // IntlTest override
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par ) override;
 public: // package
 
     TimeZoneBoundaryTest();

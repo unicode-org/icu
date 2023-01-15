@@ -48,6 +48,8 @@ void NewResourceBundleTest::runIndexedTest( int32_t index, UBool exec, const cha
     TESTCASE_AUTO(TestTrace);
 #endif
 
+    TESTCASE_AUTO(TestOpenDirectFillIn);
+    TESTCASE_AUTO(TestStackReuse);
     TESTCASE_AUTO_END;
 }
 
@@ -162,12 +164,12 @@ param[] =
     // "IN" means inherits
     // "NE" or "ne" means "does not exist"
 
-    { "root",       0,   U_ZERO_ERROR,             e_Root,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } },
-    { "te",         0,   U_ZERO_ERROR,             e_te,        { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE  } },
-    { "te_IN",      0,   U_ZERO_ERROR,             e_te_IN,     { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE   } },
-    { "te_NE",      0,   U_USING_FALLBACK_WARNING, e_te,        { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE  } },
-    { "te_IN_NE",   0,   U_USING_FALLBACK_WARNING, e_te_IN,     { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE   } },
-    { "ne",         0,   U_USING_DEFAULT_WARNING,  e_Root,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
+    { "root",       0,   U_ZERO_ERROR,             e_Root,      { true, false, false }, { true, false, false } },
+    { "te",         0,   U_ZERO_ERROR,             e_te,        { false, true, false }, { true, true, false  } },
+    { "te_IN",      0,   U_ZERO_ERROR,             e_te_IN,     { false, false, true }, { true, true, true   } },
+    { "te_NE",      0,   U_USING_FALLBACK_WARNING, e_te,        { false, true, false }, { true, true, false  } },
+    { "te_IN_NE",   0,   U_USING_FALLBACK_WARNING, e_te_IN,     { false, false, true }, { true, true, true   } },
+    { "ne",         0,   U_USING_DEFAULT_WARNING,  e_Root,      { true, false, false }, { true, false, false } }
 };
 
 static int32_t bundles_count = UPRV_LENGTHOF(param);
@@ -181,11 +183,11 @@ static int32_t bundles_count = UPRV_LENGTHOF(param);
 static uint32_t
 randul()
 {
-    static UBool initialized = FALSE;
+    static UBool initialized = false;
     if (!initialized)
     {
         srand((unsigned)time(NULL));
-        initialized = TRUE;
+        initialized = true;
     }
     // Assume rand has at least 12 bits of precision
     uint32_t l = 0;
@@ -260,14 +262,14 @@ NewResourceBundleTest::TestResourceBundles()
         Locale::setDefault(Locale("en_US"), status);
     }
 
-    testTag("only_in_Root", TRUE, FALSE, FALSE);
-    testTag("only_in_te", FALSE, TRUE, FALSE);
-    testTag("only_in_te_IN", FALSE, FALSE, TRUE);
-    testTag("in_Root_te", TRUE, TRUE, FALSE);
-    testTag("in_Root_te_te_IN", TRUE, TRUE, TRUE);
-    testTag("in_Root_te_IN", TRUE, FALSE, TRUE);
-    testTag("in_te_te_IN", FALSE, TRUE, TRUE);
-    testTag("nonexistent", FALSE, FALSE, FALSE);
+    testTag("only_in_Root", true, false, false);
+    testTag("only_in_te", false, true, false);
+    testTag("only_in_te_IN", false, false, true);
+    testTag("in_Root_te", true, true, false);
+    testTag("in_Root_te_te_IN", true, true, true);
+    testTag("in_Root_te_IN", true, false, true);
+    testTag("in_te_te_IN", false, true, true);
+    testTag("nonexistent", false, false, false);
     logln("Passed: %d\nFailed: %d", pass, fail);
 
     /* Restore the default locale for the other tests. */
@@ -467,7 +469,7 @@ equalRB(ResourceBundle &a, ResourceBundle &b) {
             a.getString(status)==b.getString(status) :
             type==URES_INT ?
                 a.getInt(status)==b.getInt(status) :
-                TRUE;
+                true;
 }
 
 void
@@ -703,7 +705,7 @@ NewResourceBundleTest::testTag(const char* frag,
     if(U_FAILURE(status))
     {
         dataerrln("Could not load testdata.dat %s " + UnicodeString(u_errorName(status)));
-        return FALSE;
+        return false;
     }
 
     for (i=0; i<bundles_count; ++i)
@@ -769,7 +771,7 @@ NewResourceBundleTest::testTag(const char* frag,
         status = U_ZERO_ERROR;
         UnicodeString string = theBundle.getStringEx(tag, status);
         if(U_FAILURE(status)) {
-            string.setTo(TRUE, kErrorUChars, kErrorLength);
+            string.setTo(true, kErrorUChars, kErrorLength);
         }
 
         CONFIRM_UErrorCode(status, expected_resource_status);
@@ -1397,22 +1399,10 @@ void NewResourceBundleTest::TestFilter() {
     }
 }
 
-/*
- * The following test for ICU-20706 has infinite loops on certain inputs for
- * locales and calendars.  In order to unblock the build (ICU-21055), those
- * specific values are temporarily removed.
- * The issue of the infinite loops and its blocking dependencies were captured
- * in ICU-21080.
- */
-
 void NewResourceBundleTest::TestIntervalAliasFallbacks() {
     const char* locales[] = {
-        // Thee will not cause infinity loop
         "en",
         "ja",
-
-        // These will cause infinity loop
-#if 0
         "fr_CA",
         "en_150",
         "es_419",
@@ -1424,15 +1414,10 @@ void NewResourceBundleTest::TestIntervalAliasFallbacks() {
         "zh_Hant",
         "zh_Hant_TW",
         "zh_TW",
-#endif
     };
     const char* calendars[] = {
-        // These won't cause infinity loop
         "gregorian",
         "chinese",
-
-        // These will cause infinity loop
-#if 0
         "islamic",
         "islamic-civil",
         "islamic-tbla",
@@ -1441,7 +1426,6 @@ void NewResourceBundleTest::TestIntervalAliasFallbacks() {
         "islamic-rgsa",
         "japanese",
         "roc",
-#endif
     };
 
     for (int lidx = 0; lidx < UPRV_LENGTHOF(locales); lidx++) {
@@ -1456,10 +1440,8 @@ void NewResourceBundleTest::TestIntervalAliasFallbacks() {
             key.append("calendar/", status);
             key.append(calendars[cidx], status);
             key.append("/intervalFormats/fallback", status);
-            if (! logKnownIssue("20400")) {
-                int32_t resStrLen = 0;
-                ures_getStringByKeyWithFallback(rb, key.data(), &resStrLen, &status);
-            }
+            int32_t resStrLen = 0;
+            ures_getStringByKeyWithFallback(rb, key.data(), &resStrLen, &status);
             if (U_FAILURE(status)) {
                 errln("Cannot ures_getStringByKeyWithFallback('%s') on locale %s",
                       key.data(), locales[lidx]);
@@ -1550,5 +1532,61 @@ void NewResourceBundleTest::TestTrace() {
 
 #endif
 
-//eof
+void NewResourceBundleTest::TestOpenDirectFillIn() {
+    // Test that ures_openDirectFillIn() opens a stack allocated resource bundle, similar to ures_open().
+    // Since ures_openDirectFillIn is just a wrapper function, this is just a very basic test copied from
+    // the crestst.c/TestOpenDirect test.
+    // ICU-20769: This test was moved to C++ intltest while
+    // turning UResourceBundle from a C struct into a C++ class.
+    IcuTestErrorCode errorCode(*this, "TestOpenDirectFillIn");
+    UResourceBundle *item;
+    UResourceBundle idna_rules;
+    ures_initStackObject(&idna_rules);
 
+    ures_openDirectFillIn(&idna_rules, loadTestData(errorCode), "idna_rules", errorCode);
+    if(errorCode.errDataIfFailureAndReset("ures_openDirectFillIn(\"idna_rules\") failed\n")) {
+        return;
+    }
+
+    if(0!=uprv_strcmp("idna_rules", ures_getLocale(&idna_rules, errorCode))) {
+        errln("ures_openDirectFillIn(\"idna_rules\").getLocale()!=idna_rules");
+    }
+    errorCode.reset();
+
+    /* try an item in idna_rules, must work */
+    item=ures_getByKey(&idna_rules, "UnassignedSet", nullptr, errorCode);
+    if(errorCode.errDataIfFailureAndReset("translit_index.getByKey(local key) failed\n")) {
+        // pass
+    } else {
+        ures_close(item);
+    }
+
+    /* try an item in root, must fail */
+    item=ures_getByKey(&idna_rules, "ShortLanguage", nullptr, errorCode);
+    if(errorCode.isFailure()) {
+        errorCode.reset();
+    } else {
+        errln("idna_rules.getByKey(root key) succeeded but should have failed!");
+        ures_close(item);
+    }
+    ures_close(&idna_rules);
+}
+
+void NewResourceBundleTest::TestStackReuse() {
+    // This test will crash if this doesn't work. Results don't need testing.
+    // ICU-20769: This test was moved to C++ intltest while
+    // turning UResourceBundle from a C struct into a C++ class.
+    IcuTestErrorCode errorCode(*this, "TestStackReuse");
+    UResourceBundle table;
+    UResourceBundle *rb = ures_open(nullptr, "en_US", errorCode);
+
+    if(errorCode.errDataIfFailureAndReset("Could not load en_US locale.\n")) {
+        return;
+    }
+    ures_initStackObject(&table);
+    ures_getByKeyWithFallback(rb, "Types", &table, errorCode);
+    ures_getByKeyWithFallback(&table, "collation", &table, errorCode);
+    ures_close(rb);
+    ures_close(&table);
+    errorCode.reset();  // ignore U_MISSING_RESOURCE_ERROR etc.
+}

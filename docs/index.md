@@ -12,7 +12,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 # ICU Documentation
 
-[![ICU logo](https://github.com/unicode-org/icu-docs/raw/main/img/iculogo_64.png)](http://site.icu-project.org/)
+[![ICU logo](https://github.com/unicode-org/icu-docs/raw/main/img/iculogo_64.png)](https://icu.unicode.org/)
 
 ## ICU User Guide
 

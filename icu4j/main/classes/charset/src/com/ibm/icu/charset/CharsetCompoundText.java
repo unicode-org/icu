@@ -375,8 +375,8 @@ class CharsetCompoundText extends CharsetICU {
                     tmpTargetBuffer.limit(3);
 
                     /* check if the char is a First surrogate */
-                    if (UTF16.isSurrogate((char)sourceChar) || gotoGetTrail) {
-                        if (UTF16.isLeadSurrogate((char)sourceChar) || gotoGetTrail) {
+                    if (UTF16.isSurrogate(sourceChar) || gotoGetTrail) {
+                        if (UTF16.isLeadSurrogate(sourceChar) || gotoGetTrail) {
 // getTrail label
                             /* reset gotoGetTrail flag*/
                              gotoGetTrail = false;
@@ -388,7 +388,7 @@ class CharsetCompoundText extends CharsetICU {
                                 source.position(source.position()-1);
                                 if (UTF16.isTrailSurrogate(trail)) {
                                     source.get();
-                                    sourceChar = UCharacter.getCodePoint((char)sourceChar, trail);
+                                    sourceChar = UCharacter.getCodePoint(sourceChar, trail);
                                     fromUChar32 = 0x00;
                                     /* convert this supplementary code point */
                                     /* exit this condition tree */

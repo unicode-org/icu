@@ -30,6 +30,8 @@ ur{
         arabext{
             patterns{
                 currencyFormat{"¤#,##0.00"}
+                currencyFormat%alphaNextToNumber{"¤ #,##0.00"}
+                currencyFormat%noCurrency{"#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
@@ -59,7 +61,10 @@ ur{
             }
             patterns{
                 accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
-                currencyFormat{"¤ #,##0.00"}
+                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"¤#,##0.00"}
+                currencyPatternAppendISO{"{0} ¤¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
@@ -167,6 +172,12 @@ ur{
                         other{"¤ 000 ٹریلین"}
                     }
                 }
+                currencyFormat%alphaNextToNumber{
+                    1000000000000{
+                        one{"¤ 0 ٹریلین"}
+                        other{"¤ 0 ٹریلین"}
+                    }
+                }
                 decimalFormat{
                     1000{
                         one{"0 ہزار"}
@@ -235,6 +246,14 @@ ur{
             }
         }
         minimalPairs{
+            case{
+                nominative{"دن باقی ہے۔ {0}"}
+                oblique{"باقی {0} دن۔"}
+            }
+            gender{
+                feminine{"{0} دنوں کی وارنٹی"}
+                masculine{"استعمال کے {0} دن"}
+            }
             ordinal{
                 other{"دایاں موڑ نمبر {0} مڑیں۔"}
             }
@@ -440,6 +459,12 @@ ur{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimePatterns%atTime{
+                "{1} {0}",
+                "{1} کو {0}",
+                "{1}، {0}",
+                "{1}، {0}",
+            }
             DateTimeSkeletons{
                 "ahmmsszzzz",
                 "ahmmssz",
@@ -466,6 +491,7 @@ ur{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E، d MMM، y G"}
                 GyMMMd{"d MMM، y G"}
+                GyMd{"d/M/y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -664,6 +690,12 @@ ur{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimePatterns%atTime{
+                "{1} کو {0}",
+                "{1} کو {0}",
+                "{1}، {0}",
+                "{1}، {0}",
+            }
             DateTimeSkeletons{
                 "ahmmsszzzz",
                 "ahmmssz",
@@ -693,6 +725,7 @@ ur{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E، d MMM، y G"}
                 GyMMMd{"d MMM، y G"}
+                GyMd{"d/M/y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -1260,67 +1293,98 @@ ur{
             monthNames{
                 format{
                     abbreviated{
-                        "چتررا",
-                        "ویساکھا",
-                        "جیہائشہ",
-                        "اسدھا",
-                        "سراؤنا",
-                        "بھدرا",
+                        "چیت",
+                        "بیساکھ",
+                        "جیٹھ",
+                        "اساڑھ",
+                        "ساون",
+                        "بھادوں",
                         "اسوینا",
-                        "کارتیکا",
-                        "اگراہانا",
-                        "پوسا",
-                        "میگا",
-                        "پھالگنا",
+                        "کاتک",
+                        "اگہن",
+                        "پوس",
+                        "ماگھ",
+                        "پھاگن",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
                     }
                     wide{
-                        "چتررا",
-                        "ویساکھا",
-                        "جیہائشہ",
-                        "اسدھا",
-                        "سراؤنا",
-                        "بھدرا",
+                        "چیت",
+                        "بیساکھ",
+                        "جیٹھ",
+                        "اساڑھ",
+                        "ساون",
+                        "بھادوں",
                         "اسوینا",
-                        "کارتیکا",
-                        "اگراہانا",
-                        "پوسا",
-                        "میگا",
-                        "پھالگنا",
+                        "کاتِک",
+                        "اگہن",
+                        "پوس",
+                        "ماگھ",
+                        "پھاگن",
                     }
                 }
                 stand-alone{
                     abbreviated{
-                        "چتررا",
-                        "ویساکھا",
-                        "جیہائشہ",
-                        "اسدھا",
-                        "سراؤنا",
-                        "بھدرا",
+                        "چیت",
+                        "بیساکھ",
+                        "جیٹھ",
+                        "اساڑھ",
+                        "ساون",
+                        "بھادوں",
                         "اسوینا",
-                        "کارتیکا",
-                        "اگراہانا",
-                        "پوسا",
-                        "میگا",
-                        "پھالگنا",
+                        "کاتِک",
+                        "اگہن",
+                        "پوس",
+                        "ماگھ",
+                        "پھاگن",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
                     }
                     wide{
-                        "چتررا",
-                        "ویساکھا",
-                        "جیہائشہ",
-                        "اسدھا",
-                        "سراؤنا",
-                        "بھدرا",
+                        "چیت",
+                        "بیساکھ",
+                        "جیٹھ",
+                        "اساڑھ",
+                        "ساون",
+                        "بھادوں",
                         "اسوینا",
-                        "کارتیکا",
-                        "اگراہانا",
-                        "پوسا",
-                        "میگا",
-                        "پھالگنا",
+                        "کاتِک",
+                        "اگہن",
+                        "پوس",
+                        "ماگھ",
+                        "پھاگن",
                     }
                 }
             }
         }
         islamic{
+            availableFormats{
+                GyMd{"d/M/y GGGGG"}
+            }
             eras{
                 abbreviated{
                     "ہجری",
@@ -2477,6 +2541,29 @@ ur{
             stricter{
                 "[,٫︐﹐，]",
                 "[.․﹒．｡]",
+            }
+        }
+    }
+    personNames{
+        foreignSpaceReplacement{" "}
+        initialPattern{
+            initial{"{0}."}
+            initialSequence{"{0} {1}"}
+        }
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "ur",
+            }
+            surnameFirst{
+                "ja",
+                "ko",
+                "si",
+                "ta",
+                "te",
+                "vi",
+                "yue",
+                "zh",
             }
         }
     }

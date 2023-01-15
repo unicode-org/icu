@@ -40,7 +40,7 @@ import com.ibm.icu.util.ULocale;
  * StringSearch ensures that language eccentricity can be
  * handled, e.g. for the German collator, characters &szlig; and SS will be matched
  * if case is chosen to be ignored.
- * See the <a href="http://source.icu-project.org/repos/icu/icuhtml/trunk/design/collation/ICU_collation_design.htm">
+ * See the <a href="https://htmlpreview.github.io/?https://github.com/unicode-org/icu-docs/blob/main/design/collation/ICU_collation_design.htm">
  * "ICU Collation Design Document"</a> for more information.
  * <p>
  * There are 2 match options for selection:<br>
@@ -866,7 +866,7 @@ public final class StringSearch extends SearchIterator {
      * Checks for identical match
      * @param start offset of possible match
      * @param end offset of possible match
-     * @return TRUE if identical match is found
+     * @return true if identical match is found
      */
     private boolean checkIdentical(int start, int end) {
         if (strength_ != Collator.IDENTICAL) {
@@ -914,7 +914,7 @@ public final class StringSearch extends SearchIterator {
     }
 
     /*
-     * Returns TRUE if index is on a break boundary. If the UStringSearch
+     * Returns true if index is on a break boundary. If the UStringSearch
      * has an external break iterator, test using that, otherwise test
      * using the internal character break iterator.
      */

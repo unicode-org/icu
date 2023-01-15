@@ -919,7 +919,7 @@ ur{
             ec{"اسٹینلے"}
         }
         "Australia:Adelaide"{
-            ec{"اڈیلائڈ"}
+            ec{"ایڈیلیڈ"}
         }
         "Australia:Brisbane"{
             ec{"برسبین"}
@@ -1222,6 +1222,9 @@ ur{
         }
         "Pacific:Johnston"{
             ec{"جانسٹن"}
+        }
+        "Pacific:Kanton"{
+            ec{"کانٹن"}
         }
         "Pacific:Kiritimati"{
             ec{"کریتیماٹی"}
@@ -1897,6 +1900,9 @@ ur{
             ld{"یکاٹیرِنبرگ سمر ٹائم"}
             lg{"یکاٹیرِنبرگ ٹائم"}
             ls{"یکاٹیرِنبرگ اسٹینڈرڈ ٹائم"}
+        }
+        "meta:Yukon"{
+            ls{"یوکون ٹائم"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT {0}"}

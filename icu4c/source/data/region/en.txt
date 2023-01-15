@@ -267,7 +267,7 @@ en{
         TM{"Turkmenistan"}
         TN{"Tunisia"}
         TO{"Tonga"}
-        TR{"Turkey"}
+        TR{"Türkiye"}
         TT{"Trinidad & Tobago"}
         TV{"Tuvalu"}
         TW{"Taiwan"}
@@ -315,7 +315,9 @@ en{
         CV{"Cabo Verde"}
         CZ{"Czech Republic"}
         FK{"Falkland Islands (Islas Malvinas)"}
+        NZ{"Aotearoa New Zealand"}
         SZ{"Swaziland"}
         TL{"East Timor"}
+        TR{"Turkey"}
     }
 }

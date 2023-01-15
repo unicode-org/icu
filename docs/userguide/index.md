@@ -12,7 +12,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 # ICU User Guide
 
-[![ICU logo](https://github.com/unicode-org/icu-docs/raw/main/img/iculogo_64.png)](http://site.icu-project.org/)
+[![ICU logo](https://github.com/unicode-org/icu-docs/raw/main/img/iculogo_64.png)](https://icu.unicode.org/)
 
 This User Guide provides information on i18n topics for which ICU has services, and
 includes details that go beyond the C, C++, and Java API docs (and avoids some duplication between them).

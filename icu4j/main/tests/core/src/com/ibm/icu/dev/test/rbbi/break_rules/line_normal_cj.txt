@@ -20,7 +20,7 @@
 #         line-break=normal (BCP47 -u-lb-normal) as defined for Chinese & Japanese.
 #         It sets characters of class CJ to behave like ID.
 #         In addition, it allows breaks:
-#         * before hyphens 2010 & 2013 (both BA) and 301C, 30A0 (both NS)
+#         * before 301C, 30A0 (both NS)
 #         It allows breaking before 201C and after 201D, for zh_Hans, zh_Hant, and ja.
 
 type = line;
@@ -28,8 +28,7 @@ locale = ja@lb=normal;
 
 AI = [:LineBreak =  Ambiguous:];
 AL = [:LineBreak =  Alphabetic:];
-BAX = [\u2010 \u2013];
-BA = [[:LineBreak =  Break_After:] - BAX];
+BA = [:LineBreak =  Break_After:];
 HH = [\u2010];      # \u2010 is HYPHEN, default line break is BA.
 BB = [:LineBreak =  Break_Before:];
 BK = [:LineBreak =  Mandatory_Break:];
@@ -79,6 +78,9 @@ ZWJ = [:LineBreak =  ZWJ:];
 
 OP30 = [OP - [\p{ea=F}\p{ea=W}\p{ea=H}]];
 CP30 = [CP - [\p{ea=F}\p{ea=W}\p{ea=H}]];
+
+# The redundant-looking inner brackets are required for the current parser in the test code.
+ExtPictUnassigned = [[\p{Extended_Pictographic}]&[\p{Cn}]];
 
 # LB1 - Resolve AI, CB, CJ, SA, SG, and XX into other line breaking classes
 AL = [AL AI SG XX ];
@@ -151,7 +153,7 @@ LB11.3:      WJ CM* [^CM];
 
 LB12:        GL CM* [^CM];
 
-LB12a:       [^SP BA BAX HY] CM* GL;
+LB12a:       [^SP BA HY] CM* GL;
 
 # LB 13 Do not break before ‘]’ or ‘!’ or ‘/’, even after spaces.
 LB13.1: [^SP] CM* [CL CP EX SY];
@@ -179,12 +181,9 @@ LB20.09:     ^(HY | HH) CM* AL;
 
 # Note: Rule 21a must come before 21 to prevent 21.1 from matching HL BA, then
 #       not picking up the continuing match after the BA from 21a.
-# TODO: For CJ tailorings (with BAX) does this rule want to include BAX? If so,
-#       should "HL BAX" not break when followed by a CB? Thats what the current
-#       rules do, which is why "[^CM CB]?" includes the ?.
-LB21a:       HL CM* (HY | BA | BAX) CM* [^CM CB]?;
+LB21a:       HL CM* (HY | BA) CM* [^CM CB]?;
 
-# DO allow breaks here before $BAXcm and $NSXcm, so don't include them
+# DO allow breaks here before $NSXcm, so don't include it
 LB21.1:      . CM* [BA HY NS];
 LB21.2:      BB CM* [^CM CB];
 
@@ -223,8 +222,9 @@ LB30a.1:     RI CM* RI         ÷ [^BK CR LF NL SP ZW WJ CL CP EX IS SY GL QU BA
 LB30a.2:     RI CM* RI CM* CMS ÷ [^BK CR LF NL SP ZW WJ CL CP EX IS SY GL QU BA HY NS IN CM];
 LB30a.3:     RI CM* RI CM* [BK CR LF NL SP ZW WJ GL CL CP EX IS SY QU BA HY NS IN ZWJ]?;
 
-# LB30b Do not break between Emoji Base and Emoji Modifier
-LB30b:       EB CM* EM;
+# LB30b Do not break between Emoji Base (or potential emoji) and Emoji Modifier
+LB30b.1:       EB CM* EM;
+LB30b.2:       ExtPictUnassigned CM* EM;
 
 # LB31 Break Everywhere Else.
 #      Include combining marks

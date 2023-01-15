@@ -31,7 +31,7 @@ public:
 
 private:
     void runIndexedTest(int32_t index, UBool exec, const char* &name,
-                        char* par=NULL);
+                        char* par=NULL) override;
 
     void TestInstantiation(void);
     

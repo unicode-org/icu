@@ -61,7 +61,7 @@ public:
     /**
      * Get the text contents of the element.
      * Append the contents of all text child nodes.
-     * @param recurse If TRUE, also recursively appends the contents of all
+     * @param recurse If true, also recursively appends the contents of all
      *        text child nodes of element children.
      * @return The text contents.
      */
@@ -116,7 +116,7 @@ public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      */
-    virtual UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const override;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
@@ -188,7 +188,7 @@ public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      */
-    virtual UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const override;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.

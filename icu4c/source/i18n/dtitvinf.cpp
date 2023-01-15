@@ -50,7 +50,6 @@ U_NAMESPACE_BEGIN
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DateIntervalInfo)
 
 static const char gCalendarTag[]="calendar";
-static const char gGenericTag[]="generic";
 static const char gGregorianTag[]="gregorian";
 static const char gIntervalDateTimePatternTag[]="intervalFormats";
 static const char gFallbackPatternTag[]="fallback";
@@ -165,13 +164,13 @@ DateIntervalInfo::~DateIntervalInfo() {
 }
 
 
-UBool
+bool
 DateIntervalInfo::operator==(const DateIntervalInfo& other) const {
-    UBool equal = (
+    bool equal = (
       fFallbackIntervalPattern == other.fFallbackIntervalPattern &&
       fFirstDateInPtnIsLaterDate == other.fFirstDateInPtnIsLaterDate );
 
-    if ( equal == TRUE ) {
+    if ( equal ) {
         equal = fIntervalPatterns->equals(*(other.fIntervalPatterns));
     }
 
@@ -240,7 +239,7 @@ struct DateIntervalInfo::DateIntervalSink : public ResourceSink {
             : dateIntervalInfo(diInfo), nextCalendarType(currentCalendarType, -1, US_INV) { }
     virtual ~DateIntervalSink();
 
-    virtual void put(const char *key, ResourceValue &value, UBool /*noFallback*/, UErrorCode &errorCode) {
+    virtual void put(const char *key, ResourceValue &value, UBool /*noFallback*/, UErrorCode &errorCode) override {
         if (U_FAILURE(errorCode)) { return; }
 
         // Iterate over all the calendar entries and only pick the 'intervalFormats' table.
@@ -402,7 +401,7 @@ DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& status)
     char         localeWithCalendarKey[ULOC_LOCALE_IDENTIFIER_CAPACITY];
     // obtain a locale that always has the calendar key value that should be used
     (void)ures_getFunctionalEquivalent(localeWithCalendarKey, ULOC_LOCALE_IDENTIFIER_CAPACITY, nullptr,
-                                     "calendar", "calendar", locName, nullptr, FALSE, &status);
+                                     "calendar", "calendar", locName, nullptr, false, &status);
     localeWithCalendarKey[ULOC_LOCALE_IDENTIFIER_CAPACITY-1] = 0; // ensure null termination
     // now get the calendar key value from that locale
     int32_t calendarTypeLen = uloc_getKeywordValue(localeWithCalendarKey, "calendar", calendarType,
@@ -435,27 +434,10 @@ DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& status)
         if ( U_SUCCESS(status) ) {
             resStr = ures_getStringByKeyWithFallback(itvDtPtnResource, gFallbackPatternTag,
                                                      &resStrLen, &status);
-            if ( U_FAILURE(status) ) {
-                // Try to find "fallback" from "generic" to work around the bug in
-                // ures_getByKeyWithFallback
-                UErrorCode localStatus = U_ZERO_ERROR;
-                UResourceBundle *genericCalBundle =
-                    ures_getByKeyWithFallback(calBundle, gGenericTag, nullptr, &localStatus);
-                UResourceBundle *genericItvDtPtnResource =
-                    ures_getByKeyWithFallback(
-                        genericCalBundle, gIntervalDateTimePatternTag, nullptr, &localStatus);
-                resStr = ures_getStringByKeyWithFallback(
-                    genericItvDtPtnResource, gFallbackPatternTag, &resStrLen, &localStatus);
-                ures_close(genericItvDtPtnResource);
-                ures_close(genericCalBundle);
-                if ( U_SUCCESS(localStatus) ) {
-                    status = U_USING_FALLBACK_WARNING;;
-                }
-            }
         }
 
         if ( U_SUCCESS(status) && (resStr != nullptr)) {
-            UnicodeString pattern = UnicodeString(TRUE, resStr, resStrLen);
+            UnicodeString pattern = UnicodeString(true, resStr, resStrLen);
             setFallbackIntervalPattern(pattern, status);
         }
         ures_close(itvDtPtnResource);
@@ -467,7 +449,7 @@ DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& status)
         const UnicodeString &calendarTypeToUseUString = sink.getNextCalendarType();
 
         // Already loaded calendar types
-        Hashtable loadedCalendarTypes(FALSE, status);
+        Hashtable loadedCalendarTypes(false, status);
 
         if (U_SUCCESS(status)) {
             while (!calendarTypeToUseUString.isBogus()) {
@@ -522,7 +504,7 @@ DateIntervalInfo::setIntervalPatternInternally(const UnicodeString& skeleton,
     }
 
     patternsOfOneSkeleton[index] = intervalPattern;
-    if ( emptyHash == TRUE ) {
+    if ( emptyHash ) {
         fIntervalPatterns->put(skeleton, patternsOfOneSkeleton, status);
     }
 }
@@ -756,7 +738,7 @@ U_CDECL_BEGIN
  *
  * @param val1  one value in comparison
  * @param val2  the other value in comparison
- * @return      TRUE if 2 values are the same, FALSE otherwise
+ * @return      true if 2 values are the same, false otherwise
  */
 static UBool U_CALLCONV dtitvinfHashTableValueComparator(UHashTok val1, UHashTok val2);
 
@@ -764,9 +746,9 @@ static UBool
 U_CALLCONV dtitvinfHashTableValueComparator(UHashTok val1, UHashTok val2) {
     const UnicodeString* pattern1 = (UnicodeString*)val1.pointer;
     const UnicodeString* pattern2 = (UnicodeString*)val2.pointer;
-    UBool ret = TRUE;
+    UBool ret = true;
     int8_t i;
-    for ( i = 0; i < DateIntervalInfo::kMaxIntervalPatternIndex && ret == TRUE; ++i ) {
+    for ( i = 0; i < DateIntervalInfo::kMaxIntervalPatternIndex && ret ; ++i ) {
         ret = (pattern1[i] == pattern2[i]);
     }
     return ret;
@@ -781,7 +763,7 @@ DateIntervalInfo::initHash(UErrorCode& status) {
         return nullptr;
     }
     Hashtable* hTable;
-    if ( (hTable = new Hashtable(FALSE, status)) == nullptr ) {
+    if ( (hTable = new Hashtable(false, status)) == nullptr ) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
     }

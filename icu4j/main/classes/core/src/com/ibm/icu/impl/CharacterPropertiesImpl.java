@@ -70,6 +70,10 @@ public final class CharacterPropertiesImpl {
             case UCharacterProperty.SRC_VO:
                 UCharacterProperty.ulayout_addPropertyStarts(src, incl);
                 break;
+            case UCharacterProperty.SRC_EMOJI: {
+                EmojiProps.INSTANCE.addPropertyStarts(incl);
+                break;
+            }
             default:
                 throw new IllegalStateException("getInclusions(unknown src " + src + ")");
             }

@@ -183,10 +183,10 @@ static UBool getString(
     int32_t len = 0;
     const UChar *resStr = ures_getString(resource, &len, &status);
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
-    result.setTo(TRUE, resStr, len);
-    return TRUE;
+    result.setTo(true, resStr, len);
+    return true;
 }
 
 static UnicodeString loadNumericDateFormatterPattern(
@@ -239,7 +239,7 @@ static NumericDateFormatters *loadNumericDateFormatters(
     return result;
 }
 
-template<> U_I18N_API
+template<> 
 const MeasureFormatCacheData *LocaleCacheKey<MeasureFormatCacheData>::createObject(
         const void * /*unused*/, UErrorCode &status) const {
     const char *localeId = fLoc.getName();
@@ -427,12 +427,12 @@ MeasureFormat::~MeasureFormat() {
     delete listFormatter;
 }
 
-UBool MeasureFormat::operator==(const Format &other) const {
+bool MeasureFormat::operator==(const Format &other) const {
     if (this == &other) { // Same object, equal
-        return TRUE;
+        return true;
     }
     if (!Format::operator==(other)) {
-        return FALSE;
+        return false;
     }
     const MeasureFormat &rhs = static_cast<const MeasureFormat &>(other);
 
@@ -441,7 +441,7 @@ UBool MeasureFormat::operator==(const Format &other) const {
 
     // differing widths aren't equivalent
     if (fWidth != rhs.fWidth) {
-        return FALSE;
+        return false;
     }
     // Width the same check locales.
     // We don't need to check locales if both objects have same cache.
@@ -451,10 +451,10 @@ UBool MeasureFormat::operator==(const Format &other) const {
         const char *rhsLocaleId = rhs.getLocaleID(status);
         if (U_FAILURE(status)) {
             // On failure, assume not equal
-            return FALSE;
+            return false;
         }
         if (uprv_strcmp(localeId, rhsLocaleId) != 0) {
-            return FALSE;
+            return false;
         }
     }
     // Locales same, check NumberFormat if shared data differs.
@@ -645,7 +645,7 @@ void MeasureFormat::adoptNumberFormat(
 
 UBool MeasureFormat::setMeasureFormatLocale(const Locale &locale, UErrorCode &status) {
     if (U_FAILURE(status) || locale == getLocale(status)) {
-        return FALSE;
+        return false;
     }
     initMeasureFormat(locale, fWidth, NULL, status);
     return U_SUCCESS(status);
@@ -769,7 +769,7 @@ UnicodeString &MeasureFormat::formatNumeric(
 
     FormattedStringBuilder fsb;
 
-    UBool protect = FALSE;
+    UBool protect = false;
     const int32_t patternLength = pattern.length();
     for (int32_t i = 0; i < patternLength; i++) {
         char16_t c = pattern[i];

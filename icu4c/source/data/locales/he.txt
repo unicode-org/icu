@@ -40,8 +40,8 @@ he{
                 range{"{0}–{1}"}
             }
             patterns{
-                accountingFormat{"#,##0.00 ¤"}
-                currencyFormat{"‏#,##0.00 ¤;‏-#,##0.00 ¤"}
+                accountingFormat{"‏#,##0.00 ‏¤;‏-#,##0.00 ‏¤"}
+                currencyFormat{"‏#,##0.00 ‏¤;‏-#,##0.00 ‏¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
@@ -197,6 +197,80 @@ he{
                         two{"¤000T‏"}
                     }
                 }
+                currencyFormat%alphaNextToNumber{
+                    1000{
+                        many{"¤ 0K‏"}
+                        one{"¤ 0K‏"}
+                        other{"¤ 0K‏"}
+                        two{"¤ 0K‏"}
+                    }
+                    10000{
+                        many{"¤ 00K‏"}
+                        one{"¤ 00K‏"}
+                        other{"¤ 00K‏"}
+                        two{"¤ 00K‏"}
+                    }
+                    100000{
+                        many{"¤ 000K‏"}
+                        one{"¤ 000K‏"}
+                        other{"¤ 000K‏"}
+                        two{"¤ 000K‏"}
+                    }
+                    1000000{
+                        many{"¤ 0M‏"}
+                        one{"¤ 0M‏"}
+                        other{"¤ 0M‏"}
+                        two{"¤ 0M‏"}
+                    }
+                    10000000{
+                        many{"¤ 00M‏"}
+                        one{"¤ 00M‏"}
+                        other{"¤ 00M‏"}
+                        two{"¤ 00M‏"}
+                    }
+                    100000000{
+                        many{"¤ 000M‏"}
+                        one{"¤ 000M‏"}
+                        other{"¤ 000M‏"}
+                        two{"¤ 000M‏"}
+                    }
+                    1000000000{
+                        many{"¤ 0B‏"}
+                        one{"¤ 0B‏"}
+                        other{"¤ 0B‏"}
+                        two{"¤ 0B‏"}
+                    }
+                    10000000000{
+                        many{"¤ 00B‏"}
+                        one{"¤ 00B‏"}
+                        other{"¤ 00B‏"}
+                        two{"¤ 00B‏"}
+                    }
+                    100000000000{
+                        many{"¤ 000B‏"}
+                        one{"¤ 000B‏"}
+                        other{"¤ 000B‏"}
+                        two{"¤ 000B‏"}
+                    }
+                    1000000000000{
+                        many{"¤ 0T‏"}
+                        one{"¤ 0T‏"}
+                        other{"¤ 0T‏"}
+                        two{"¤ 0T‏"}
+                    }
+                    10000000000000{
+                        many{"¤ 00T‏"}
+                        one{"¤ 00T‏"}
+                        other{"¤ 00T‏"}
+                        two{"¤ 00T‏"}
+                    }
+                    100000000000000{
+                        many{"¤ 000T‏"}
+                        one{"¤ 000T‏"}
+                        other{"¤ 000T‏"}
+                        two{"¤ 000T‏"}
+                    }
+                }
                 decimalFormat{
                     1000{
                         many{"0K‏"}
@@ -288,14 +362,18 @@ he{
             }
         }
         minimalPairs{
+            gender{
+                feminine{"ה{0} הראשונה היא הקובעת"}
+                masculine{"ה{0} הראשון הוא הקובע"}
+            }
             ordinal{
                 other{"פנה ימינה בפנייה ה-{0}"}
             }
             plural{
-                many{"{0} שנה"}
-                one{"שנה"}
-                other{"{0} שנים"}
-                two{"שנתיים"}
+                many{"{0} יום"}
+                one{"יום"}
+                other{"{0} ימים"}
+                two{"יומיים"}
             }
         }
         minimumGroupingDigits{"1"}
@@ -313,6 +391,17 @@ he{
                 }
                 wide{
                     "הספירה הבודהיסטית",
+                }
+            }
+            intervalFormats{
+                yMMMEd{
+                    d{"E, d בMMM – E, d בMMM y G"}
+                    y{"E, d, בMMM, y – E, d בMMM, y G"}
+                }
+                yMMMd{
+                    M{"d בMMM – d בMMM y G"}
+                    d{"d–d בMMM y G"}
+                    y{"d בMMM y – d בMMM y G"}
                 }
             }
         }
@@ -551,6 +640,12 @@ he{
                 "d בMMM y G",
                 "d.M.y GGGGG",
                 "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimePatterns%atTime{
                 "{1} בשעה {0}",
                 "{1} בשעה {0}",
                 "{1}, {0}",
@@ -582,6 +677,7 @@ he{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d בMMM y G"}
                 GyMMMd{"d בMMM y G"}
+                GyMd{"d/M/y GGGGG"}
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
@@ -762,6 +858,12 @@ he{
                 "d בMMM y",
                 "d.M.y",
                 "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimePatterns%atTime{
                 "{1} בשעה {0}",
                 "{1} בשעה {0}",
                 "{1}, {0}",
@@ -796,6 +898,7 @@ he{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d בMMM y G"}
                 GyMMMd{"d בMMM y G"}
+                GyMd{"d/M/y GGGGG"}
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
@@ -991,6 +1094,10 @@ he{
                 abbreviated%variant{
                     "BCE",
                     "CE",
+                }
+                narrow{
+                    "לפני",
+                    "אחריי",
                 }
                 wide{
                     "לפני הספירה",
@@ -1302,8 +1409,8 @@ he{
                     "hebr",
                 }
                 "{1}, {0}",
-                "{1} בשעה {0}",
-                "{1} בשעה {0}",
+                "{1}, {0}",
+                "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
             }
@@ -1343,6 +1450,7 @@ he{
                 MMMMd{"d בMMMM"}
                 MMMd{"d בMMMM"}
                 Md{"d בMMMM"}
+                y{"y"}
                 yyyyM{"MMMM y"}
                 yyyyMEd{"E, d בMMMM y"}
                 yyyyMMM{"MMMM y"}
@@ -1350,6 +1458,8 @@ he{
                 yyyyMMMM{"MMMM y"}
                 yyyyMMMd{"d בMMMM y"}
                 yyyyMd{"d בMMMM y"}
+                yyyyQQQ{"QQQ y בשעה G"}
+                yyyyQQQQ{"QQQQ y בשעה G"}
             }
             eras{
                 abbreviated{
@@ -1360,6 +1470,87 @@ he{
                 }
                 wide{
                     "לבריאת העולם",
+                }
+            }
+            intervalFormats{
+                Bh{
+                    B{"h בB – h בB"}
+                    h{"h–h בB"}
+                }
+                Gy{
+                    y{"y – y G"}
+                }
+                Hm{
+                    H{"HH:mm – HH:mm"}
+                    m{"HH:mm – HH:mm"}
+                }
+                M{
+                    M{"MMM – MMM"}
+                }
+                MEd{
+                    M{"E d בMMM – E d בMMM"}
+                    d{"E d בMMM – E d בMMM"}
+                }
+                MMM{
+                    M{"MMM–MMM"}
+                }
+                MMMEd{
+                    M{"E d בMMM – E d בMMM"}
+                    d{"E d בMMM – E d בMMM"}
+                }
+                MMMd{
+                    M{"d בMMM – d בMMM"}
+                    d{"d–d בMMM"}
+                }
+                Md{
+                    M{"d בMMM – d בMMM"}
+                    d{"d – d בMMM"}
+                }
+                fallback{"{0} – {1}"}
+                h{
+                    a{"h a – h a"}
+                    h{"h – h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    m{"h:mm – h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm – h:mm a v"}
+                    m{"h:mm – h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h – h a v"}
+                }
+                yM{
+                    M{"MMM y – MMM y"}
+                    y{"MMM y – MMM y"}
+                }
+                yMEd{
+                    M{"E d בMMM – E d בMMM y"}
+                    d{"E d בMMM – E d בMMM y"}
+                    y{"E d בMMM y – E d בMMM y"}
+                }
+                yMMMEd{
+                    M{"E d בMMM – E d בMMM y"}
+                    d{"E d בMMM – E d בMMM y"}
+                    y{"E d בMMM y – E d בMMM y"}
+                }
+                yMMMM{
+                    M{"MMMM–MMMM y"}
+                    y{"MMMM y – MMMM y"}
+                }
+                yMMMd{
+                    M{"d בMMM – d בMMM y"}
+                    d{"d–d בMMM y"}
+                    y{"d בMMM y – d בMMM y"}
+                }
+                yMd{
+                    M{"d בMMMM – d בMMMM y"}
+                    d{"d – d בMMM y"}
+                    y{"d בMMM y – d בMMM y"}
                 }
             }
             monthNames{
@@ -1579,8 +1770,8 @@ he{
                 "d בMMM y G",
                 "dd/MM/yy GGGGG",
                 "{1}, {0}",
-                "{1} בשעה {0}",
-                "{1} בשעה {0}",
+                "{1}, {0}",
+                "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
             }
@@ -1628,7 +1819,7 @@ he{
             }
             eras{
                 abbreviated{
-                    "שנת היג׳רה",
+                    "הג׳רה",
                 }
                 wide{
                     "שנת היג׳רה",
@@ -2420,6 +2611,9 @@ he{
         }
         minute-narrow{
             dn{"דק׳"}
+            relative{
+                "0"{"דקה זו"}
+            }
             relativeTime{
                 future{
                     many{"בעוד {0} דק׳"}
@@ -2437,6 +2631,9 @@ he{
         }
         minute-short{
             dn{"דק׳"}
+            relative{
+                "0"{"דקה זו"}
+            }
             relativeTime{
                 future{
                     many{"בעוד {0} דק׳"}
@@ -3194,7 +3391,7 @@ he{
     listPattern{
         or{
             2{"{0} או {1}"}
-            end{"{0}, או {1}"}
+            end{"{0} או {1}"}
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
@@ -3218,7 +3415,7 @@ he{
         }
         unit{
             2{"{0}, {1}"}
-            end{"{0} ו{1}"}
+            end{"{0} ו-{1}"}
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
@@ -3269,6 +3466,20 @@ he{
             stricter{
                 "[,٫︐﹐，]",
                 "[.․﹒．｡]",
+            }
+        }
+    }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "he",
+            }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
             }
         }
     }

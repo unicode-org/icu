@@ -442,7 +442,7 @@ gl{
         }
         LSL{
             "LSL",
-            "Loti de Lesoto",
+            "loti de Lesoto",
         }
         LTL{
             "LTL",
@@ -946,7 +946,6 @@ gl{
         ZMW{"ZK"}
     }
     Currencies%variant{
-        GEL{"₾"}
         TRY{"TL"}
     }
     CurrencyPlurals{
@@ -1350,6 +1349,10 @@ gl{
             one{"dólar liberiano"}
             other{"dólares liberianos"}
         }
+        LSL{
+            one{"loti de Lesoto"}
+            other{"lotis de Lesoto"}
+        }
         LTL{
             one{"litas lituana"}
             other{"litas lituanas"}
@@ -1368,7 +1371,7 @@ gl{
         }
         MDL{
             one{"leu moldavo"}
-            other{"leus moldavos"}
+            other{"lei moldavos"}
         }
         MGA{
             one{"ariary malgaxe"}
@@ -1572,7 +1575,7 @@ gl{
         }
         SZL{
             one{"lilangeni de Swazilandia"}
-            other{"lilangenis de Eswatini"}
+            other{"lilangenis de Swazilandia"}
         }
         THB{
             one{"baht tailandés"}

@@ -17,8 +17,7 @@ The code currently provided in the solution file is the answer to the exercises,
   Pre-requisite:
   1. All the hardware and software requirements from Day 1.
   2. Attended or fully understand Day 1 material.
-  3. Read through the ICU user's guide at
-  http://www.icu-project.org/userguide/.
+  3. Read through the ICU user's guide at https://unicode-org.github.io/icu/userguide/.
 
   #Transformation Support
   10:45am - 12:00pm

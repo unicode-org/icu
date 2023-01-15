@@ -137,9 +137,9 @@ static void strToInt(
     }
     int32_t len = str.length();
     int32_t start = 0;
-    UBool neg = FALSE;
+    UBool neg = false;
     if (len > 0 && str[0] == 0x2D) { // negative
-        neg = TRUE;
+        neg = true;
         start = 1;
     }
     if (start == len) {
@@ -346,19 +346,19 @@ NumberFormatTestTuple::setField(
         const UnicodeString &fieldValue,
         UErrorCode &status) {
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
     if (fieldId == kNumberFormatTestTupleFieldCount) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
-        return FALSE;
+        return false;
     }
     gFieldData[fieldId].ops->toValue(
             fieldValue, getMutableFieldAddress(fieldId), status);
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
-    setFlag(fieldId, TRUE);
-    return TRUE;
+    setFlag(fieldId, true);
+    return true;
 }
 
 UBool
@@ -366,20 +366,20 @@ NumberFormatTestTuple::clearField(
         ENumberFormatTestTupleField fieldId, 
         UErrorCode &status) {
     if (U_FAILURE(status)) {
-        return FALSE;
+        return false;
     }
     if (fieldId == kNumberFormatTestTupleFieldCount) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
-        return FALSE;
+        return false;
     }
-    setFlag(fieldId, FALSE);
-    return TRUE;
+    setFlag(fieldId, false);
+    return true;
 }
 
 void
 NumberFormatTestTuple::clear() {
     for (int32_t i = 0; i < kNumberFormatTestTupleFieldCount; ++i) {
-        setFlag(i, FALSE);
+        setFlag(i, false);
     }
 }
 
@@ -387,7 +387,7 @@ UnicodeString &
 NumberFormatTestTuple::toString(
         UnicodeString &appendTo) const {
     appendTo.append("{");
-    UBool first = TRUE;
+    UBool first = true;
     for (int32_t i = 0; i < kNumberFormatTestTupleFieldCount; ++i) {
         if (!isFlag(i)) {
             continue;
@@ -395,7 +395,7 @@ NumberFormatTestTuple::toString(
         if (!first) {
             appendTo.append(", ");
         }
-        first = FALSE;
+        first = false;
         appendTo.append(gFieldData[i].name);
         appendTo.append(": ");
         gFieldData[i].ops->toString(getFieldAddress(i), appendTo);

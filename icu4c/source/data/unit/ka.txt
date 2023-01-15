@@ -160,6 +160,11 @@ ka{
             }
         }
         concentr{
+            item{
+                dnam{"ერთეული"}
+                one{"{0} ერთეული"}
+                other{"{0} ერთეული"}
+            }
             karat{
                 dnam{"კარატი"}
                 one{"{0} კარატი"}
@@ -327,6 +332,12 @@ ka{
                 one{"{0} ნანოწამი"}
                 other{"{0} ნანოწამი"}
             }
+            quarter{
+                dnam{"კვარტალი"}
+                one{"{0} კვარტალი"}
+                other{"{0} კვარტალი"}
+                per{"{0}/კვარტალში"}
+            }
             second{
                 dnam{"წამი"}
                 one{"{0} წამი"}
@@ -413,6 +424,13 @@ ka{
                 dnam{"აშშ თერმი"}
                 one{"{0} აშშ თერმი"}
                 other{"{0} აშშ თერმი"}
+            }
+        }
+        force{
+            kilowatt-hour-per-100-kilometer{
+                dnam{"კვტსთ/100კმ"}
+                one{"{0} კვტსთ/100კმ"}
+                other{"{0} კვტსთ/100კმ"}
             }
         }
         frequency{
@@ -651,11 +669,6 @@ ka{
                 other{"{0} კილოგრამი"}
                 per{"{0} კილოგრამში"}
             }
-            metric-ton{
-                dnam{"მეტრული ტონა"}
-                one{"{0} მეტრული ტონა"}
-                other{"{0} მეტრული ტონა"}
-            }
             microgram{
                 dnam{"მიკროგრამი"}
                 one{"მიკროგრამი"}
@@ -697,6 +710,11 @@ ka{
                 dnam{"ტონა"}
                 one{"{0} ტონა"}
                 other{"{0} ტ"}
+            }
+            tonne{
+                dnam{"მეტრული ტონა"}
+                one{"{0} მეტრული ტონა"}
+                other{"{0} მეტრული ტონა"}
             }
         }
         power{
@@ -1120,6 +1138,10 @@ ka{
             }
         }
         concentr{
+            item{
+                one{"{0} ერთე."}
+                other{"{0} ერთე."}
+            }
             percent{
                 dnam{"%"}
                 one{"{0}%"}
@@ -1165,6 +1187,13 @@ ka{
                 dnam{"თვე"}
                 one{"{0} თვე"}
                 other{"{0} თვე"}
+                per{"{0}/თ."}
+            }
+            quarter{
+                dnam{"კვარტ"}
+                one{"{0} კვარტ"}
+                other{"{0} კვარტ"}
+                per{"{0}/კვარტ"}
             }
             second{
                 dnam{"წმ"}
@@ -1180,6 +1209,12 @@ ka{
                 dnam{"წ"}
                 one{"{0} წ"}
                 other{"{0} წ"}
+            }
+        }
+        force{
+            kilowatt-hour-per-100-kilometer{
+                one{"{0} კვტსთ/100კმ"}
+                other{"{0} კვტსთ/100კმ"}
             }
         }
         length{
@@ -1471,6 +1506,11 @@ ka{
             }
         }
         concentr{
+            item{
+                dnam{"ერთეული"}
+                one{"{0} ერთე."}
+                other{"{0} ერთე."}
+            }
             karat{
                 dnam{"კარატი"}
                 one{"{0} კარ."}
@@ -1638,6 +1678,12 @@ ka{
                 one{"{0} ნწმ"}
                 other{"{0} ნწმ"}
             }
+            quarter{
+                dnam{"კვარტ"}
+                one{"{0} კვარტ"}
+                other{"{0} კვარტ"}
+                per{"{0}/კვარტ"}
+            }
             second{
                 dnam{"წმ"}
                 one{"{0} წმ"}
@@ -1724,6 +1770,13 @@ ka{
                 dnam{"აშშ თერმი"}
                 one{"{0} აშშ თერმი"}
                 other{"{0} აშშ თერმი"}
+            }
+        }
+        force{
+            kilowatt-hour-per-100-kilometer{
+                dnam{"კვტსთ/100კმ"}
+                one{"{0} კვტსთ/100კმ"}
+                other{"{0} კვტსთ/100კმ"}
             }
         }
         frequency{
@@ -1957,11 +2010,6 @@ ka{
                 other{"{0} კგ"}
                 per{"{0}/კგ"}
             }
-            metric-ton{
-                dnam{"მტ"}
-                one{"{0} მტ"}
-                other{"{0} მტ"}
-            }
             microgram{
                 dnam{"მკგ"}
                 one{"{0} მკგ"}
@@ -1998,6 +2046,11 @@ ka{
                 dnam{"ტონა"}
                 one{"{0} ტ"}
                 other{"{0} ტ"}
+            }
+            tonne{
+                dnam{"მტ"}
+                one{"{0} მტ"}
+                other{"{0} მტ"}
             }
         }
         power{

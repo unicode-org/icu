@@ -31,7 +31,7 @@ public abstract class FractionPrecision extends Precision {
      *            How to disambiguate between fraction digits and significant digits.
      * @return A precision for chaining or passing to the NumberFormatter precision() setter.
      *
-     * @draft ICU 69
+     * @stable ICU 69
      */
     public Precision withSignificantDigits(
             int minSignificantDigits,
@@ -41,7 +41,7 @@ public abstract class FractionPrecision extends Precision {
                 maxSignificantDigits >= minSignificantDigits &&
                 maxSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return constructFractionSignificant(
-                this, minSignificantDigits, maxSignificantDigits, priority);
+                this, minSignificantDigits, maxSignificantDigits, priority, false);
         } else {
             throw new IllegalArgumentException("Significant digits must be between 1 and "
                     + RoundingUtils.MAX_INT_FRAC_SIG
@@ -74,7 +74,7 @@ public abstract class FractionPrecision extends Precision {
     public Precision withMinDigits(int minSignificantDigits) {
         if (minSignificantDigits >= 1 && minSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return constructFractionSignificant(
-                this, 1, minSignificantDigits, NumberFormatter.RoundingPriority.RELAXED);
+                this, 1, minSignificantDigits, NumberFormatter.RoundingPriority.RELAXED, true);
         } else {
             throw new IllegalArgumentException("Significant digits must be between 1 and "
                     + RoundingUtils.MAX_INT_FRAC_SIG
@@ -107,7 +107,7 @@ public abstract class FractionPrecision extends Precision {
     public Precision withMaxDigits(int maxSignificantDigits) {
         if (maxSignificantDigits >= 1 && maxSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
             return constructFractionSignificant(
-                this, 1, maxSignificantDigits, NumberFormatter.RoundingPriority.STRICT);
+                this, 1, maxSignificantDigits, NumberFormatter.RoundingPriority.STRICT, true);
         } else {
             throw new IllegalArgumentException("Significant digits must be between 1 and "
                     + RoundingUtils.MAX_INT_FRAC_SIG

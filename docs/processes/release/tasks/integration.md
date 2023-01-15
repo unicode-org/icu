@@ -143,15 +143,28 @@ should be investigated and fixed.
 To do this, build and test normally, then replace the ICU data shared library
 with the stubdata library and run the tests again with the -w option.
 
-On Linux (adjust the version number, 60.1 in this example, as required)
+Using an in-source build on Linux:
 
 ```sh
 cd icu4c/source
-cp stubdata/libicudata.so.60.1 lib/
+./runConfigureICU Linux
+make -j2 check
+rm lib/libicudata.so*
+cp -P stubdata/libicudata.so* lib/
 cd test/intltest
 INTLTEST_OPTS=-w make check
 cd ../cintltst
 CINTLTST_OPTS=-w make check
+```
+
+For debugging (for example using gdb) you cannot use `make check`. You need
+to set the `LD_LIBRARY_PATH` for the lib folder and then run
+`./cintltst -w` or `./intltest -w` etc. in the debugger.
+Example (in-source build on Linux):
+```sh
+cd test/cintltst
+export LD_LIBRARY_PATH=../../lib:../../tools/ctestfw
+./cintltst -w
 ```
 
 ### ICU4J

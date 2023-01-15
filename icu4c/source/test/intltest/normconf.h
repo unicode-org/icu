@@ -28,7 +28,7 @@ class NormalizerConformanceTest : public IntlTest {
     NormalizerConformanceTest();
     virtual ~NormalizerConformanceTest();
 
-    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL);
+    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL) override;
 
     /**
      * Test the conformance of Normalizer to
@@ -100,7 +100,7 @@ class NormalizerConformanceTest : public IntlTest {
      * thrown.  If there are too many the extras are ignored.
      *
      * @param buf scratch buffer
-     * @return FALSE upon failure
+     * @return false upon failure
      */
     UBool hexsplit(const char *s, char delimiter,
                    UnicodeString output[], int32_t outputLength);

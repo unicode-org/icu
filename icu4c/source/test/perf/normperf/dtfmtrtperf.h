@@ -143,7 +143,7 @@ public:
         const Locale *LOCALES;
         LOCALES = testLocales;
 
-        StringEnumeration *tzids = TimeZone::createEnumeration();
+        StringEnumeration *tzids = TimeZone::createEnumeration(*status);
         if (U_FAILURE(*status)) {
             //errln("tzids->count failed");
             return;

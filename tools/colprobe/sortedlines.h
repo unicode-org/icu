@@ -57,12 +57,12 @@ public:
   ~SortedLines();
   void analyse(UErrorCode &status);
 
-  void sort(UBool setStrengths = TRUE, UBool link = FALSE);
-  void sort(Line **sortingArray, int32_t sizeToSort, UBool setStrengths = TRUE, UBool link = FALSE);
+  void sort(UBool setStrengths = true, UBool link = false);
+  void sort(Line **sortingArray, int32_t sizeToSort, UBool setStrengths = true, UBool link = false);
 
   Line *getFirst();
   Line *getLast();
-  void add(Line *line, UBool linkIn = FALSE);
+  void add(Line *line, UBool linkIn = false);
   void insert(Line *line, int32_t index);
   Line *getNext();
   Line *getPrevious();
@@ -73,9 +73,9 @@ public:
 
   int32_t detectExpansions();
   
-  UnicodeString toString(UBool useLinks = FALSE);
+  UnicodeString toString(UBool useLinks = false);
   UnicodeString toStringFromEmpty();
-  UnicodeString toPrettyString(UBool useLinks, UBool printSortKeys = FALSE);
+  UnicodeString toPrettyString(UBool useLinks, UBool printSortKeys = false);
   UnicodeString toOutput(const char *format, 
                          const char *locale, const char *platform, const char *reference, 
                          UBool useLinks, UBool initialize, UBool moreToCome);

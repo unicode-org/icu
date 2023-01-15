@@ -26,7 +26,7 @@ import com.ibm.icu.util.ULocale;
 @RunWith(JUnit4.class)
 public class TimeZoneNameTest extends TestFmwk {
 
-    private static final Set<String> ProblematicZones = new HashSet<String>();
+    private static final Set<String> ProblematicZones = new HashSet<>();
     static {
         // Since tzdata2013e, Pacific/Johnston is defined as below:
         //

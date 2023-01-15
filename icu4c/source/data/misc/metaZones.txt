@@ -305,9 +305,7 @@ metaZones:table(nofallback){
             EG{"Africa/Cairo"}
             FI{"Europe/Helsinki"}
             GR{"Europe/Athens"}
-            JO{"Asia/Amman"}
             LB{"Asia/Beirut"}
-            SY{"Asia/Damascus"}
         }
         Europe_Further_Eastern{
             001{"Europe/Minsk"}
@@ -710,6 +708,167 @@ metaZones:table(nofallback){
         Yukon{
             001{"America/Whitehorse"}
         }
+    }
+    metazoneIds{
+        acre{"Acre"}
+        afce{"Africa_Central"}
+        afea{"Africa_Eastern"}
+        afgh{"Afghanistan"}
+        afso{"Africa_Southern"}
+        afwe{"Africa_Western"}
+        alam{"Almaty"}
+        alas{"Alaska"}
+        amaz{"Amazon"}
+        amce{"America_Central"}
+        amea{"America_Eastern"}
+        ammo{"America_Mountain"}
+        ampa{"America_Pacific"}
+        anad{"Anadyr"}
+        apia{"Apia"}
+        aqta{"Aqtau"}
+        aqto{"Aqtobe"}
+        arab{"Arabian"}
+        arge{"Argentina"}
+        arme{"Armenia"}
+        arwe{"Argentina_Western"}
+        atla{"Atlantic"}
+        auce{"Australia_Central"}
+        aucw{"Australia_CentralWestern"}
+        auea{"Australia_Eastern"}
+        auwe{"Australia_Western"}
+        azer{"Azerbaijan"}
+        azor{"Azores"}
+        bang{"Bangladesh"}
+        bhut{"Bhutan"}
+        boli{"Bolivia"}
+        bras{"Brasilia"}
+        brun{"Brunei"}
+        case{"Casey"}
+        cave{"Cape_Verde"}
+        cham{"Chamorro"}
+        chat{"Chatham"}
+        chil{"Chile"}
+        chin{"China"}
+        choi{"Choibalsan"}
+        chri{"Christmas"}
+        coco{"Cocos"}
+        colo{"Colombia"}
+        cook{"Cook"}
+        cuba{"Cuba"}
+        davi{"Davis"}
+        dumo{"DumontDUrville"}
+        east{"Easter"}
+        eati{"East_Timor"}
+        ecua{"Ecuador"}
+        euce{"Europe_Central"}
+        euea{"Europe_Eastern"}
+        eufe{"Europe_Further_Eastern"}
+        euwe{"Europe_Western"}
+        falk{"Falkland"}
+        fiji{"Fiji"}
+        frgu{"French_Guiana"}
+        frso{"French_Southern"}
+        gala{"Galapagos"}
+        gamb{"Gambier"}
+        geor{"Georgia"}
+        giis{"Gilbert_Islands"}
+        grea{"Greenland_Eastern"}
+        grwe{"Greenland_Western"}
+        guam{"Guam"}
+        gulf{"Gulf"}
+        guya{"Guyana"}
+        haal{"Hawaii_Aleutian"}
+        hoko{"Hong_Kong"}
+        hovd{"Hovd"}
+        ince{"Indonesia_Central"}
+        indi{"India"}
+        indo{"Indochina"}
+        inea{"Indonesia_Eastern"}
+        inoc{"Indian_Ocean"}
+        inwe{"Indonesia_Western"}
+        iran{"Iran"}
+        irku{"Irkutsk"}
+        isra{"Israel"}
+        japa{"Japan"}
+        kaea{"Kazakhstan_Eastern"}
+        kamc{"Kamchatka"}
+        kawe{"Kazakhstan_Western"}
+        kore{"Korea"}
+        kosr{"Kosrae"}
+        kras{"Krasnoyarsk"}
+        kyrg{"Kyrgystan"}
+        lank{"Lanka"}
+        liis{"Line_Islands"}
+        loho{"Lord_Howe"}
+        maca{"Macau"}
+        macq{"Macquarie"}
+        maga{"Magadan"}
+        mais{"Marshall_Islands"}
+        mala{"Malaysia"}
+        mald{"Maldives"}
+        marq{"Marquesas"}
+        maur{"Mauritius"}
+        maws{"Mawson"}
+        meno{"Mexico_Northwest"}
+        mepa{"Mexico_Pacific"}
+        mgmt{"GMT"}
+        mong{"Mongolia"}
+        mosc{"Moscow"}
+        myan{"Myanmar"}
+        naur{"Nauru"}
+        neca{"New_Caledonia"}
+        nepa{"Nepal"}
+        newf{"Newfoundland"}
+        neze{"New_Zealand"}
+        niue{"Niue"}
+        noma{"North_Mariana"}
+        norf{"Norfolk"}
+        noro{"Noronha"}
+        novo{"Novosibirsk"}
+        omsk{"Omsk"}
+        paki{"Pakistan"}
+        pala{"Palau"}
+        pang{"Papua_New_Guinea"}
+        para{"Paraguay"}
+        peru{"Peru"}
+        phil{"Philippines"}
+        phis{"Phoenix_Islands"}
+        pimi{"Pierre_Miquelon"}
+        pitc{"Pitcairn"}
+        pona{"Ponape"}
+        pyon{"Pyongyang"}
+        qyzy{"Qyzylorda"}
+        reun{"Reunion"}
+        roth{"Rothera"}
+        sakh{"Sakhalin"}
+        sama{"Samara"}
+        samo{"Samoa"}
+        seyc{"Seychelles"}
+        sing{"Singapore"}
+        soge{"South_Georgia"}
+        solo{"Solomon"}
+        suri{"Suriname"}
+        syow{"Syowa"}
+        tahi{"Tahiti"}
+        taip{"Taipei"}
+        taji{"Tajikistan"}
+        toke{"Tokelau"}
+        tong{"Tonga"}
+        truk{"Truk"}
+        turk{"Turkmenistan"}
+        tuva{"Tuvalu"}
+        urug{"Uruguay"}
+        uzbe{"Uzbekistan"}
+        vanu{"Vanuatu"}
+        vene{"Venezuela"}
+        vlad{"Vladivostok"}
+        volg{"Volgograd"}
+        vost{"Vostok"}
+        wake{"Wake"}
+        wall{"Wallis"}
+        yaku{"Yakutsk"}
+        yeka{"Yekaterinburg"}
+        yuko{"Yukon"}
     }
     metazoneInfo{
         "Africa:Abidjan"{
@@ -1494,6 +1653,33 @@ metaZones:table(nofallback){
             {
                 "Mexico_Pacific",
                 "1998-04-05 09:00",
+                "2022-10-30 08:00",
+            }
+            {
+                "America_Central",
+                "2022-10-30 08:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Ciudad_Juarez"{
+            {
+                "America_Central",
+                "1970-01-01 00:00",
+                "1998-04-05 09:00",
+            }
+            {
+                "Mexico_Pacific",
+                "1998-04-05 09:00",
+                "2022-10-30 08:00",
+            }
+            {
+                "America_Central",
+                "2022-10-30 08:00",
+                "2022-11-30 06:00",
+            }
+            {
+                "America_Mountain",
+                "2022-11-30 06:00",
                 "9999-12-31 23:59",
             }
         }
@@ -2205,6 +2391,11 @@ metaZones:table(nofallback){
             {
                 "America_Mountain",
                 "1998-04-05 09:00",
+                "2022-10-30 08:00",
+            }
+            {
+                "America_Central",
+                "2022-10-30 08:00",
                 "9999-12-31 23:59",
             }
         }
@@ -2215,13 +2406,8 @@ metaZones:table(nofallback){
         }
         "America:Pangnirtung"{
             {
-                "Atlantic",
-                "1970-01-01 00:00",
-                "1995-04-02 06:00",
-            }
-            {
                 "America_Eastern",
-                "1995-04-02 06:00",
+                "1970-01-01 00:00",
                 "1999-10-31 06:00",
             }
             {
@@ -2678,6 +2864,8 @@ metaZones:table(nofallback){
         "Asia:Amman"{
             {
                 "Europe_Eastern",
+                "1970-01-01 00:00",
+                "2022-10-27 22:00",
             }
         }
         "Asia:Anadyr"{
@@ -2865,6 +3053,8 @@ metaZones:table(nofallback){
         "Asia:Damascus"{
             {
                 "Europe_Eastern",
+                "1970-01-01 00:00",
+                "2022-10-27 21:00",
             }
         }
         "Asia:Dhaka"{
@@ -3972,16 +4162,11 @@ metaZones:table(nofallback){
             {
                 "Moscow",
                 "1970-01-01 00:00",
-                "1990-06-30 23:00",
-            }
-            {
-                "Europe_Central",
-                "1990-06-30 23:00",
-                "1991-03-31 02:00",
+                "1990-06-30 22:00",
             }
             {
                 "Europe_Eastern",
-                "1991-03-31 02:00",
+                "1990-06-30 22:00",
                 "9999-12-31 23:59",
             }
         }
@@ -4041,11 +4226,11 @@ metaZones:table(nofallback){
             {
                 "Moscow",
                 "1970-01-01 00:00",
-                "1991-03-30 23:00",
+                "1990-06-30 22:00",
             }
             {
                 "Europe_Eastern",
-                "1991-03-30 23:00",
+                "1990-06-30 22:00",
                 "9999-12-31 23:59",
             }
         }

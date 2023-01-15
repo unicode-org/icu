@@ -51,7 +51,7 @@ For some languages, multiple collation types are available; for example,
 "de-u-co-phonebk" / "de@collation=phonebook". They can be enumerated via
 `Collator::getKeywordValuesForLocale()`. See also the list of available collation
 tailorings in the online [ICU Collation
-Demo](http://demo.icu-project.org/icu-bin/collation.html).
+Demo](https://icu4c-demos.unicode.org/icu-bin/collation.html).
 
 Starting with ICU 54, collation attributes can be specified via locale keywords
 as well, in the old locale extension syntax ("el@colCaseFirst=upper") or in
@@ -345,7 +345,7 @@ for short strings.
 
 The byte values used in several ICU versions for sort keys and collation
 elements are documented in the [“Special Byte Values” design
-doc](http://site.icu-project.org/design/collation/bytes) on the ICU site.
+doc](https://icu.unicode.org/design/collation/bytes) on the ICU site.
 
 ### Sort Key Output Buffer
 
@@ -695,7 +695,7 @@ API is provided. Each attribute has its own setter API of the form
 1.  Ken Whistler, Markus Scherer: "Unicode Technical Standard #10, Unicode Collation
     Algorithm" (<http://www.unicode.org/reports/tr10/>)
 
-2.  ICU Design doc: "Collation v2" (<http://site.icu-project.org/design/collation/v2>)
+2.  ICU Design doc: "Collation v2" (<https://icu.unicode.org/design/collation/v2>)
 
 3.  Mark Davis: "ICU Collation Design Document"
     (<https://htmlpreview.github.io/?https://github.com/unicode-org/icu-docs/blob/main/design/collation/ICU_collation_design.htm>)

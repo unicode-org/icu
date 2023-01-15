@@ -335,6 +335,10 @@ uz{
             "LRD",
             "Liberiya dollari",
         }
+        LSL{
+            "LSL",
+            "Lesoto lotisi",
+        }
         LTL{
             "LTL",
             "Litva liti",
@@ -749,7 +753,6 @@ uz{
         ZMW{"ZK"}
     }
     Currencies%variant{
-        GEL{"₾"}
         TRY{"TL"}
     }
     CurrencyPlurals{
@@ -1084,6 +1087,10 @@ uz{
         LRD{
             one{"Liberiya dollari"}
             other{"Liberiya dollari"}
+        }
+        LSL{
+            one{"Lesoto lotisi"}
+            other{"Lesoto lotisi"}
         }
         LTL{
             one{"Litva liti"}

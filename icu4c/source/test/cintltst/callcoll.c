@@ -31,8 +31,9 @@
  * equlivalent to word 'one'. 
  */
 
-#include <string.h>
+#include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "unicode/utypes.h"
 
@@ -150,7 +151,7 @@ void uprv_appendByteToHexString(char *dst, uint8_t val) {
 static char* U_EXPORT2 sortKeyToString(const UCollator *coll, const uint8_t *sortkey, char *buffer, uint32_t *len) {
     int32_t strength = UCOL_PRIMARY;
     uint32_t res_size = 0;
-    UBool doneCase = FALSE;
+    UBool doneCase = false;
     UErrorCode errorCode = U_ZERO_ERROR;
 
     char *current = buffer;
@@ -166,9 +167,9 @@ static char* U_EXPORT2 sortKeyToString(const UCollator *coll, const uint8_t *sor
             uprv_appendByteToHexString(current, *currentSk++);
             uprv_strcat(current, " ");
         }
-        if(ucol_getAttribute(coll, UCOL_CASE_LEVEL, &errorCode) == UCOL_ON && strength == UCOL_SECONDARY && doneCase == FALSE) {
-            doneCase = TRUE;
-        } else if(ucol_getAttribute(coll, UCOL_CASE_LEVEL, &errorCode) == UCOL_OFF || doneCase == TRUE || strength != UCOL_SECONDARY) {
+        if(ucol_getAttribute(coll, UCOL_CASE_LEVEL, &errorCode) == UCOL_ON && strength == UCOL_SECONDARY && doneCase == false) {
+            doneCase = true;
+        } else if(ucol_getAttribute(coll, UCOL_CASE_LEVEL, &errorCode) == UCOL_OFF || doneCase == true || strength != UCOL_SECONDARY) {
             strength ++;
         }
         if (*currentSk) {
@@ -226,10 +227,10 @@ UBool hasCollationElements(const char *locName) {
     loc = ures_getByKey(loc, "collations", loc, &status);
     ures_close(loc);
     if(status == U_ZERO_ERROR) { /* do the test - there are real elements */
-      return TRUE;
+      return true;
     }
   }
-  return FALSE;
+  return false;
 }
 
 static UCollationResult compareUsingPartials(UCollator *coll, const UChar source[], int32_t sLen, const UChar target[], int32_t tLen, int32_t pieceSize, UErrorCode *status) {
@@ -1302,15 +1303,15 @@ find(UEnumeration* list, const char* str, UErrorCode* status){
     const char* value = NULL;
     int32_t length=0;
     if(U_FAILURE(*status)){
-        return FALSE;
+        return false;
     }
     uenum_reset(list, status);
     while( (value= uenum_next(list, &length, status))!=NULL){
         if(strcmp(value, str)==0){
-            return TRUE;
+            return true;
         }
     }
-    return FALSE;
+    return false;
 }*/
 
 static void TestJ5298(void)

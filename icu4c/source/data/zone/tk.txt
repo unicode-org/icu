@@ -1217,6 +1217,9 @@ tk{
         "Pacific:Johnston"{
             ec{"Jonston"}
         }
+        "Pacific:Kanton"{
+            ec{"Kanton"}
+        }
         "Pacific:Kiritimati"{
             ec{"Kiritimati"}
         }
@@ -1876,6 +1879,9 @@ tk{
             ld{"Ýekaterinburg tomusky wagty"}
             lg{"Ýekaterinburg wagty"}
             ls{"Ýekaterinburg standart wagty"}
+        }
+        "meta:Yukon"{
+            ls{"Ýukon wagty"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

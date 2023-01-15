@@ -907,6 +907,44 @@ public class DecimalQuantityTest extends TestFmwk {
         }
     }
 
+    @Test
+    public void testDecimalQuantityParseFormatRoundTrip() {
+        Object[] casesData = {
+                // number string
+                "0",
+                "1",
+                "1.0",
+                "1.00",
+                "1.1",
+                "1.10",
+                "-1.10",
+                "0.0",
+                "1c5",
+                "1.0c5",
+                "1.1c5",
+                "1.10c5",
+                "0.00",
+                "0.1",
+                "1c-1",
+                "1.0c-1"
+        };
+
+        for (Object caseDatum : casesData) {
+            String numStr = (String) caseDatum;
+            DecimalQuantity dq = DecimalQuantity_DualStorageBCD.fromExponentString(numStr);
+            String roundTrip = dq.toExponentString();
+
+            assertEquals("DecimalQuantity format(parse(s)) should equal original s", numStr, roundTrip);
+        }
+
+        assertEquals("Zero ignored for visible exponent",
+                "1",
+                DecimalQuantity_DualStorageBCD.fromExponentString("1c0").toExponentString());
+        assertEquals("Zero ignored for visible exponent",
+                "1.0",
+                DecimalQuantity_DualStorageBCD.fromExponentString("1.0c0").toExponentString());
+    }
+
     static boolean doubleEquals(double d1, double d2) {
         return (Math.abs(d1 - d2) < 1e-6) || (Math.abs((d1 - d2) / d1) < 1e-6);
     }

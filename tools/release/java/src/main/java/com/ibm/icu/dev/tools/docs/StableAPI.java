@@ -352,6 +352,10 @@ public class StableAPI {
                             }
                             // always truncate to major # for comparing tags.
                             result = truncVersion;
+                            if (maj >= 71) {
+                              // Clear minor and micro version in API change report.
+                              milestoneOf = "";
+                            }
                         } else {
                             // old scheme - 1.0.* .. 4.8.*
                             String truncVersion = "ICU " + maj + "." + min;
@@ -548,11 +552,12 @@ public class StableAPI {
                                       //  TODO: notify about this difference, separately
                 "[ ]*U_NOEXCEPT", "", // remove U_NOEXCEPT (this was fixed in Doxyfile, but fixing here so it is
                                       //  retroactive)
-                "[ ]*U_OVERRIDE", "", // remove U_OVERRIDE
+                "[ ]*(override|U_OVERRIDE)", "", // remove U_OVERRIDE and override
                 // Simplify possibly-covariant functions to void*
                 "^([^\\* ]+)\\*(.*)::(clone|safeClone|cloneAsThawed|freeze|createBufferClone)\\((.*)", "void*$2::$3($4",
                 "\\s+$", "", // remove trailing spaces.
-                "^U_NAMESPACE_END ", "" // Bug in processing of uspoof.h
+                "^U_NAMESPACE_END ", "", // Bug in processing of uspoof.h
+                "\\bUBool\\b", "bool"
         };
 
         /**

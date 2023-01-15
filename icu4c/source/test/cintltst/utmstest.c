@@ -17,6 +17,7 @@
 #include "cintltst.h"
 #include "cmemory.h"
 
+#include <stdbool.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -44,11 +45,11 @@ static uint64_t randomInt64(void)
 {
     int64_t ran = 0;
     int32_t i;
-    static UBool initialized = FALSE;
+    static UBool initialized = false;
 
     if (!initialized) {
         srand((unsigned)time(NULL));
-        initialized = TRUE;
+        initialized = true;
     }
 
     /* Assume rand has at least 12 bits of precision */

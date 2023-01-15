@@ -67,7 +67,7 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 Update the API documentation to have correct @draft/@stable/@deprecated labels.
 See the [User Guide, ICU Architectural Design, ICU API
-compatibility](http://userguide.icu-project.org/design#TOC-ICU-API-compatibility).
+compatibility](https://unicode-org.github.io/icu/userguide/icu/design#icu-api-compatibility).
 
 On ICU4J, run
 [com.ibm.icu.dev.tool.docs.CheckTags](https://github.com/unicode-org/icu/blob/main/icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/CheckTags.java)
@@ -247,7 +247,7 @@ Same for `@obsolete` & <code>#ifndef U_HIDE_<b>OBSOLETE</b>_API</code> ..
 
 <span style="background-color:yellow">For more details (and cautions) see the
 Coding Guidelines section [C/C++ Hiding Un-@stable
-APIs](http://userguide.icu-project.org/dev/codingguidelines#TOC-C-C-Hiding-Un--stable-APIs).</span>
+APIs](https://unicode-org.github.io/icu/userguide/dev/codingguidelines#cc-hiding-un-stable-apis).</span>
 
 ### Task
 
@@ -311,7 +311,7 @@ and make sure ICU4J adequately covers the JDK API for the classes we replicate.
 
 ---
 
-## Build API documentations
+## Build API documentation
 
 ### **ICU4C**
 
@@ -321,7 +321,7 @@ javadoc files. Create icu4c-X_X_X-docs.zip
 **Note: for ICU4C 49m2 or later, requires Doxygen 1.7.5.1 or later ( see
 [ICU-8862](https://unicode-org.atlassian.net/browse/ICU-8862) )**
 
-#### Steps:
+#### Create the ICU4C docs zip file:
 
 1.  Go to .../icu4c/source
 2.  Generate the API document pages:<br>
@@ -329,41 +329,47 @@ javadoc files. Create icu4c-X_X_X-docs.zip
 3.  The generated API docs are in <path>/icu4c/source/doc/html/<br>
     `cd <path>/icu4c/source/doc/html/`
 4.  Create a zip file, e.g.,<br>
-    `zip /tmp/icu4c641 * # '641' needs to be replaced by the respective release label.`
-5.  ~~Upload this zip file to the GitHub release page. For the live API docs, see below.~~
+    `tar cvfz /tmp/icu4c72rc.tar.gz * # Note: label the file apropriately for the release.
 
-DRAFT:
 
-5.  Follow directions in [How to update ICU docs](https://unicode-org.github.io/icu-docs/HOWTO-Update.html)
+#### Create a PR for ICU4C docs using the docs zip file
 
-    a. First, bring main branch of icu-docs fork up to date.
+1.  Follow directions in [How to update ICU docs](https://unicode-org.github.io/icu-docs/HOWTO-Update.html)
 
-    b. Copy the zip file to personal fork of icu-docs in apidoc/released/icu4c
-    (or dev if not a release)
+    a. First, bring the `main` branch of your icu-docs local copy up to date.
 
-    c. Unzip the file, replacing all documentation
+    b. Create and switch to a feature branch based of the latest `main`.  Ex: `git checkout -b ICU-<TICKET-NUMBER>`.
 
-    d. Remove the zip file
+    c. Go to the directory for the version of interest, either
+       `apidoc/dev/icu4c` (release candicate) or `apidoc/released/icu4c`
+       (general release.)
 
-    e. \`git add .\`
+    d. Be sure that you are in the right directory. Then, remove all the files
+        in this directory, e.g., `rm -rf *`. (Remember "git restore" is a good friend!)
+     
+    e. Unzip the tar file from above, replacing all documentation. Ex: `tar xvfz /tmp/icu4c72rc.tar.gz`
 
-    f. \`git commit -m "ICU-<TICKET-NUMBER> Update ICU4C API reference docs for
-    XX.Y"<br>
-    Example: ["ICU-21546 Update ICU4C API reference docs for 69.1"](https://github.com/unicode-org/icu-docs/pull/25)
+    e. Remove the zip file if it's in the folder.
 
-    g. \`git push origin main\`
+    f. `git add .`.  Note that this may remove some old files. That's correct behavior.
 
-    h. Create Pull Request at personal github fork for icu-docs from main into
-    unicode-ort/icu-docs main branch
+    h. `git commit -m "ICU-<TICKET-NUMBER> Update ICU4C API reference docs for
+    XX.Y"`<br>
+    Example: [ICU-21546 Update ICU4C API reference docs for 69.1](https://github.com/unicode-org/icu-docs/pull/25)
 
-    i. Request review
+    i. `git push origin ICU-<TICKET-NUMBER>`
 
-Note: This is also referenced below '[Upload API documentations](docs.md)' for how to make the API docs public.
+    j. Create Pull Request from your personal github fork of icu-docs from your newly-pushed branch `ICU-<TICKET-NUMBER>` with a destination of
+    the `unicode-org/icu-docs` repo's `main` branch
+
+    k. Request a review and submit the PR when approved.
+
+Note: This is also referenced below [Upload API documentations](docs.md#upload-api-documentations) for how to make the API docs public.
 
 ### ICU4J
 
 **Note:** JCite must be installed for building ICU4J documentation:
-<http://site.icu-project.org/setup/java/ant#TOC-Building-ICU4J-API-Reference-Document-with-JCite>
+<https://icu.unicode.org/setup/java/ant#TOC-Building-ICU4J-API-Reference-Document-with-JCite>
 
 Build the API documentation pages for the new release:
 
@@ -374,7 +380,7 @@ ant releaseDocs
 #### Alternative method:
 
 **Note:** JCite must be installed for building ICU4J documentation:
-<http://site.icu-project.org/setup/java/ant#TOC-Building-ICU4J-API-Reference-Document-with-JCite>
+<https://icu.unicode.org/setup/java/ant#TOC-Building-ICU4J-API-Reference-Document-with-JCite>
 
 Use the release target
 
@@ -387,14 +393,12 @@ which generate all release files.
 *   Upload the output files including icu4j-docs.jar to the release page first,
 *   Then update the live API docs from the generated docs.jar.
 
-See '[Upload API documentations](docs.md)' below for how to make the API docs public.
+See [Upload API documentations](docs.md#upload-api-documentations) below for how to make the API docs public.
 
 ### Upload API documentations
 
 See <https://unicode-org.github.io/icu-docs/HOWTO-Update.html> for instructions
 to upload to <https://unicode-org.github.io/icu-docs/>
-
----
 
 ### Update the Readme.html for GA
 

@@ -510,7 +510,7 @@ public class CompatibilityTest extends TestFmwk {
         GregorianCalendar c = new GregorianCalendar();
         logln("With cutoff " + c.getGregorianChange());
         logln(" isLeapYear(1800) = " + (b=c.isLeapYear(1800)));
-        logln(" (should be FALSE)");
+        logln(" (should be false)");
         if (b != false) errln("FAIL");
         java.util.Calendar tempcal = java.util.Calendar.getInstance();
         tempcal.clear();
@@ -518,7 +518,7 @@ public class CompatibilityTest extends TestFmwk {
         c.setGregorianChange(tempcal.getTime()); // Jan 1 1900
         logln("With cutoff " + c.getGregorianChange());
         logln(" isLeapYear(1800) = " + (b=c.isLeapYear(1800)));
-        logln(" (should be TRUE)");
+        logln(" (should be true)");
         if (b != true) errln("FAIL");
     }
 

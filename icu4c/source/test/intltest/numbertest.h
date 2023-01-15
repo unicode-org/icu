@@ -42,7 +42,7 @@ class AffixUtilsTest : public IntlTest {
     void testInvalid();
     void testUnescapeWithSymbolProvider();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
 
   private:
     UnicodeString unescapeWithDefaults(const SymbolProvider &defaultProvider, UnicodeString input,
@@ -66,13 +66,18 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     void unitUsageSkeletons();
     void unitCurrency();
     void unitInflections();
+    void unitNounClass();
     void unitGender();
+    void unitNotConvertible();
     void unitPercent();
+    void unitLocaleTags();
     void percentParity();
     void roundingFraction();
     void roundingFigures();
     void roundingFractionFigures();
     void roundingOther();
+    void roundingIncrementRegressionTest();
+    void roundingPriorityCoverageTest();
     void grouping();
     void padding();
     void integerWidth();
@@ -97,8 +102,9 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     void toObject();
     void toDecimalNumber();
     void microPropsInternals();
-
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+    void formatUnitsAliases();
+    
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
 
   private:
     CurrencyUnit USD;
@@ -204,8 +210,9 @@ class DecimalQuantityTest : public IntlTest {
     void testNickelRounding();
     void testScientificAndCompactSuppressedExponent();
     void testSuppressedExponentUnchangedByInitialScaling();
+    void testDecimalQuantityParseFormatRoundTrip();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
 
   private:
     void assertDoubleEquals(UnicodeString message, double a, double b);
@@ -218,7 +225,7 @@ class DoubleConversionTest : public IntlTest {
   public:
     void testDoubleConversionApi();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
 };
 
 class ModifiersTest : public IntlTest {
@@ -228,7 +235,7 @@ class ModifiersTest : public IntlTest {
     void testSimpleModifier();
     void testCurrencySpacingEnabledModifier();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
 
   private:
     void assertModifierEquals(const Modifier &mod, int32_t expectedPrefixLength, bool expectedStrong,
@@ -246,21 +253,22 @@ class PatternModifierTest : public IntlTest {
     void testPatternWithNoPlaceholder();
     void testMutableEqualsImmutable();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
 
   private:
     UnicodeString getPrefix(const MutablePatternModifier &mod, UErrorCode &status);
     UnicodeString getSuffix(const MutablePatternModifier &mod, UErrorCode &status);
 };
 
-class PatternStringTest : public IntlTest {
+class PatternStringTest : public IntlTestWithFieldPosition {
   public:
     void testLocalized();
     void testToPatternSimple();
     void testExceptionOnInvalid();
     void testBug13117();
+    void testCurrencyDecimal();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
 
   private:
 };
@@ -277,7 +285,7 @@ class NumberParserTest : public IntlTest {
     void test20360_BidiOverflow();
     void testInfiniteRecursion();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
 };
 
 class NumberSkeletonTest : public IntlTest {
@@ -294,7 +302,7 @@ class NumberSkeletonTest : public IntlTest {
     void perUnitInArabic();
     void perUnitToSkeleton();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
 
   private:
     void expectedErrorSkeleton(const char16_t** cases, int32_t casesLen);
@@ -310,16 +318,22 @@ class NumberRangeFormatterTest : public IntlTestWithFieldPosition {
     void testCollapse();
     void testIdentity();
     void testDifferentFormatters();
+    void testNaNInfinity();
     void testPlurals();
     void testFieldPositions();
     void testCopyMove();
     void toObject();
     void testGetDecimalNumbers();
+    void test21684_Performance();
+    void test21358_SignPosition();
+    void test21683_StateLeak();
+    void testCreateLNRFFromNumberingSystemInSkeleton();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
 
   private:
     CurrencyUnit USD;
+    CurrencyUnit CHF;
     CurrencyUnit GBP;
     CurrencyUnit PTE;
 
@@ -351,11 +365,23 @@ class NumberRangeFormatterTest : public IntlTestWithFieldPosition {
       const char16_t* expected);
 };
 
+class SimpleNumberFormatterTest : public IntlTestWithFieldPosition {
+  public:
+    void testBasic();
+    void testWithOptions();
+    void testSymbols();
+    void testSign();
+    void testCopyMove();
+    void testCAPI();
+
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
+};
+
 class NumberPermutationTest : public IntlTest {
   public:
     void testPermutations();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
 };
 
 
@@ -373,7 +399,7 @@ class NumberPermutationTest : public IntlTest {
 
 class NumberTest : public IntlTest {
   public:
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) {
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override {
         if (exec) {
             logln("TestSuite NumberTest: ");
         }
@@ -389,7 +415,8 @@ class NumberTest : public IntlTest {
         TESTCLASS(7, NumberParserTest);
         TESTCLASS(8, NumberSkeletonTest);
         TESTCLASS(9, NumberRangeFormatterTest);
-        TESTCLASS(10, NumberPermutationTest);
+        TESTCLASS(10, SimpleNumberFormatterTest);
+        TESTCLASS(11, NumberPermutationTest);
         default: name = ""; break; // needed to end loop
         }
     }

@@ -27,6 +27,11 @@ si{
     }
     MoreInformation{"?"}
     NumberElements{
+        arab{
+            symbols{
+                timeSeparator{":"}
+            }
+        }
         default{"latn"}
         latn{
             miscPatterns{
@@ -37,7 +42,10 @@ si{
             }
             patterns{
                 accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
+                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
+                currencyPatternAppendISO{"{0} ¤¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#"}
@@ -145,6 +153,56 @@ si{
                         other{"¤ට්‍රි000"}
                     }
                 }
+                currencyFormat%alphaNextToNumber{
+                    1000{
+                        one{"¤ ද0"}
+                        other{"¤ ද0"}
+                    }
+                    10000{
+                        one{"¤ ද00"}
+                        other{"¤ ද00"}
+                    }
+                    100000{
+                        one{"¤ ද000"}
+                        other{"¤ ද000"}
+                    }
+                    1000000{
+                        one{"¤ මි0"}
+                        other{"¤ මි0"}
+                    }
+                    10000000{
+                        one{"¤ මි00"}
+                        other{"¤ මි00"}
+                    }
+                    100000000{
+                        one{"¤ මි000"}
+                        other{"¤ මි000"}
+                    }
+                    1000000000{
+                        one{"¤ බි0"}
+                        other{"¤ බි0"}
+                    }
+                    10000000000{
+                        one{"¤ බි00"}
+                        other{"¤ බි00"}
+                    }
+                    100000000000{
+                        one{"¤ බි000"}
+                        other{"¤ බි000"}
+                    }
+                    1000000000000{
+                        one{"¤ ට්‍රි0"}
+                        other{"¤ ට්‍රි0"}
+                    }
+                    10000000000000{
+                        one{"¤ ට්‍රි00"}
+                        other{"¤ ට්‍රි00"}
+                    }
+                    100000000000000{
+                        one{"¤ ට්‍රි000"}
+                        other{"¤ ට්‍රි000"}
+                    }
+                }
                 decimalFormat{
                     1000{
                         one{"ද0"}
@@ -240,6 +298,12 @@ si{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimePatterns%atTime{
+                "{1} දින {0}",
+                "{1} දින {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
             DateTimeSkeletons{
                 "HHmmsszzzz",
                 "HHmmssz",
@@ -266,6 +330,7 @@ si{
                 GyMMM{"G y MMM"}
                 GyMMMEd{"G y MMM d, E"}
                 GyMMMd{"G y MMM d"}
+                GyMd{"GGGGG y-MM-dd"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -464,6 +529,12 @@ si{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimePatterns%atTime{
+                "{1} දින {0}",
+                "{1} දින {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
             DateTimeSkeletons{
                 "HHmmsszzzz",
                 "HHmmssz",
@@ -493,6 +564,7 @@ si{
                 GyMMM{"G y MMM"}
                 GyMMMEd{"G y MMM d, E"}
                 GyMMMd{"G y MMM d"}
+                GyMd{"GGGGG y-MM-dd"}
                 H{"HH"}
                 Hm{"HH.mm"}
                 Hms{"HH.mm.ss"}
@@ -1954,6 +2026,25 @@ si{
             stricter{
                 "[,٫︐﹐，]",
                 "[.․﹒．｡]",
+            }
+        }
+    }
+    personNames{
+        foreignSpaceReplacement{" "}
+        initialPattern{
+            initial{"{0}."}
+            initialSequence{"{0} {1}"}
+        }
+        nameOrderLocales{
+            givenFirst{"und"}
+            surnameFirst{
+                "ko",
+                "si",
+                "ta",
+                "te",
+                "vi",
+                "yue",
+                "zh",
             }
         }
     }

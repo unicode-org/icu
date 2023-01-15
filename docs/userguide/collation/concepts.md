@@ -611,7 +611,7 @@ otherwise stated, the examples use the UCA alone with default settings.
 ### Main References
 
 1.  For a full list of supported locales in ICU, see [Locale
-    Explorer](http://demo.icu-project.org/icu-bin/locexp) , which also contains
+    Explorer](https://icu4c-demos.unicode.org/icu-bin/locexp) , which also contains
     an on-line demo showing sorting for each locale. The demo allows you to try
     different attribute values, to see how they affect sorting.
 

@@ -66,7 +66,8 @@ public class RegexUtilitiesTest extends TestFmwk {
         UnicodeSet requiresQuote = new UnicodeSet("[\\$\\&\\-\\:\\[\\\\\\]\\^\\{\\}[:pattern_whitespace:]]");
         boolean skip = TestFmwk.getExhaustiveness() < 10;
         for (int cp = 0; cp < 0x110000; ++cp) {
-            if (cp > 0xFF && skip && (cp % 37 != 0)) {
+            // Do always test U+1FFFE to cover UnicodeSet escaping a supplementary noncharacter.
+            if (cp > 0xFF && skip && (cp % 37 != 0) && cp != 0x1fffe) {
                 continue;
             }
             String cpString = UTF16.valueOf(cp);
@@ -79,8 +80,15 @@ public class RegexUtilitiesTest extends TestFmwk {
                 errln(e.getMessage());
                 continue;
             }
-            final String expected = "[" + s + "]";
-            assertEquals("Doubled character works" + hex.transform(s), expected, pattern);
+            String expected = "[" + s + "]";  // Try this first for faster testing.
+            boolean ok = pattern.equals(expected);
+            if (!ok) {
+                // Escape like in UnicodeSet, and change supplementary escapes to Java regex syntax.
+                expected = new UnicodeSet(expected).toPattern(false).
+                        replaceAll("\\\\U00([0-9a-fA-F]{6})", "\\\\x{$1}");
+                ok = pattern.equals(expected);
+            }
+            assertTrue("Doubled character works " + hex.transform(s), ok);
 
             // verify that we can create a regex pattern and use as expected
             String shouldNotMatch = UTF16.valueOf((cp + 1) % 0x110000);

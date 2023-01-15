@@ -17,7 +17,7 @@
 
 class PluralMapForPluralMapTest : public PluralMap<UnicodeString> {
 public:
-    UBool operator==(const PluralMapForPluralMapTest &other) {
+    bool operator==(const PluralMapForPluralMapTest &other) {
         return equals(other, strEqual);
     }
 private:
@@ -36,7 +36,7 @@ public:
     void TestIterate();
     void TestEqual();
     void TestCopyAndAssign();
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0) override;
     void addVariant(
             PluralMapBase::Category v,
             const UnicodeString &value,

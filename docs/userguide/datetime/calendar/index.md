@@ -38,25 +38,23 @@ information correctly:
 In addition to these, ICU has other `Calendar` subclasses to support
 non-gregorian calendars including:
 
-*   Japanese
-
 *   Buddhist
 
 *   Chinese
 
-*   Persian
+*   Coptic
 
-*   Indian
-
-*   Islamic
+*   Ethiopic
 
 *   Hebrew
 
 *   Indian
 
-*   Coptic
+*   Islamic
 
-*   Ethiopic
+*   Japanese
+
+*   Persian
 
 The `Calendar` class is designed to support additional calendar systems in the future.
 

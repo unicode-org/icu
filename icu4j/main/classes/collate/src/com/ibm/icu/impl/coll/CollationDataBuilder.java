@@ -54,7 +54,7 @@ final class CollationDataBuilder {  // not final in C++
         trie = null;
         ce32s = new UVector32();
         ce64s = new UVector64();
-        conditionalCE32s = new ArrayList<ConditionalCE32>();
+        conditionalCE32s = new ArrayList<>();
         modified = false;
         fastLatinEnabled = false;
         fastLatinBuilder = null;
@@ -385,13 +385,25 @@ final class CollationDataBuilder {  // not final in C++
          * When fetching CEs from the builder, the contexts are built into their runtime form
          * so that the normal collation implementation can process them.
          * The result is cached in the list head. It is reset when the contexts are modified.
+         * All of these builtCE32 are invalidated by clearContexts(),
+         * via incrementing the contextsEra.
          */
         int builtCE32;
+        /**
+         * The "era" of building intermediate contexts when the above builtCE32 was set.
+         * When the array of cached, temporary contexts overflows, then clearContexts()
+         * removes them all and invalidates the builtCE32 that used to point to built tries.
+         */
+        int era = -1;
         /**
          * Index of the next ConditionalCE32.
          * Negative for the end of the list.
          */
         int next;
+        // Note: We could create a separate class for all of the contextual mappings for
+        // a code point, with the builtCE32, the era, and a list of the actual mappings.
+        // The class that represents one mapping would then not need to
+        // store those fields in each element.
     }
 
     protected int getCE32FromOffsetCE32(boolean fromBase, int c, int ce32) {
@@ -415,7 +427,7 @@ final class CollationDataBuilder {  // not final in C++
         for(int i = 0; i < length; ++i) {
             if(ce32 == ce32s.elementAti(i)) { return i; }
         }
-        ce32s.addElement(ce32);  
+        ce32s.addElement(ce32);
         return length;
     }
 
@@ -989,19 +1001,16 @@ final class CollationDataBuilder {  // not final in C++
 
     protected void clearContexts() {
         contexts.setLength(0);
-        UnicodeSetIterator iter = new UnicodeSetIterator(contextChars);
-        while(iter.next()) {
-            assert(iter.codepoint != UnicodeSetIterator.IS_STRING);
-            int ce32 = trie.get(iter.codepoint);
-            assert(isBuilderContextCE32(ce32));
-            getConditionalCE32ForCE32(ce32).builtCE32 = Collation.NO_CE32;
-        }
+        // Incrementing the contexts build "era" invalidates all of the builtCE32
+        // from before this clearContexts() call.
+        // Simpler than finding and resetting all of those fields.
+        ++contextsEra;
     }
 
     protected void buildContexts() {
         // Ignore abandoned lists and the cached builtCE32,
         // and build all contexts from scratch.
-        contexts.setLength(0);
+        clearContexts();
         UnicodeSetIterator iter = new UnicodeSetIterator(contextChars);
         while(iter.next()) {
             assert(iter.codepoint != UnicodeSetIterator.IS_STRING);
@@ -1021,8 +1030,12 @@ final class CollationDataBuilder {  // not final in C++
         assert(!head.hasContext());
         // The list head must be followed by one or more nodes that all do have context.
         assert(head.next >= 0);
-        CharsTrieBuilder prefixBuilder = new CharsTrieBuilder();
-        CharsTrieBuilder contractionBuilder = new CharsTrieBuilder();
+        CharsTrieBuilder prefixBuilder = null;
+        CharsTrieBuilder contractionBuilder = null;
+        // This outer loop goes from each prefix to the next.
+        // For each prefix it finds the one or more same-prefix entries (firstCond..lastCond).
+        // If there are multiple suffixes for the same prefix,
+        // then an inner loop builds a contraction trie for them.
         for(ConditionalCE32 cond = head;; cond = getConditionalCE32(cond.next)) {
             // After the list head, the prefix or suffix can be empty, but not both.
             assert(cond == head || cond.hasContext());
@@ -1031,11 +1044,22 @@ final class CollationDataBuilder {  // not final in C++
             String prefixString = prefix.toString();
             // Collect all contraction suffixes for one prefix.
             ConditionalCE32 firstCond = cond;
-            ConditionalCE32 lastCond = cond;
-            while(cond.next >= 0 &&
-                    (cond = getConditionalCE32(cond.next)).context.startsWith(prefixString)) {
+            ConditionalCE32 lastCond;
+            do {
                 lastCond = cond;
-            }
+                // Clear the defaultCE32 fields as we go.
+                // They are left over from building a previous version of this list of contexts.
+                //
+                // One of the code paths below may copy a preceding defaultCE32
+                // into its emptySuffixCE32.
+                // If a new suffix has been inserted before what used to be
+                // the firstCond for its prefix, then that previous firstCond could still
+                // contain an outdated defaultCE32 from an earlier buildContext() and
+                // result in an incorrect emptySuffixCE32.
+                // So we reset all defaultCE32 before reading and setting new values.
+                cond.defaultCE32 = Collation.NO_CE32;
+            } while(cond.next >= 0 &&
+                    (cond = getConditionalCE32(cond.next)).context.startsWith(prefixString));
             int ce32;
             int suffixStart = prefixLength + 1;  // == prefix.length()
             if(lastCond.context.length() == suffixStart) {
@@ -1045,7 +1069,11 @@ final class CollationDataBuilder {  // not final in C++
                 cond = lastCond;
             } else {
                 // Build the contractions trie.
-                contractionBuilder.clear();
+                if(contractionBuilder == null) {
+                    contractionBuilder = new CharsTrieBuilder();
+                } else {
+                    contractionBuilder.clear();
+                }
                 // Entry for an empty suffix, to be stored before the trie.
                 int emptySuffixCE32 = Collation.NO_CE32;  // Will always be set to a real value.
                 int flags = 0;
@@ -1114,6 +1142,9 @@ final class CollationDataBuilder {  // not final in C++
             } else {
                 prefix.delete(0, 1);  // Remove the length unit.
                 prefix.reverse();
+                if(prefixBuilder == null) {
+                    prefixBuilder = new CharsTrieBuilder();
+                }
                 prefixBuilder.add(prefix, ce32);
                 if(cond.next < 0) { break; }
             }
@@ -1304,7 +1335,7 @@ final class CollationDataBuilder {  // not final in C++
                 return builder.trie.get(jamo);
             } else {
                 ConditionalCE32 cond = builder.getConditionalCE32ForCE32(ce32);
-                if(cond.builtCE32 == Collation.NO_CE32) {
+                if(cond.builtCE32 == Collation.NO_CE32 || cond.era != builder.contextsEra) {
                     // Build the context-sensitive mappings into their runtime form and cache the result.
                     try {
                         cond.builtCE32 = builder.buildContext(cond);
@@ -1312,6 +1343,7 @@ final class CollationDataBuilder {  // not final in C++
                         builder.clearContexts();
                         cond.builtCE32 = builder.buildContext(cond);
                     }
+                    cond.era = builder.contextsEra;
                     builderData.contexts = builder.contexts.toString();
                 }
                 return cond.builtCE32;
@@ -1345,6 +1377,13 @@ final class CollationDataBuilder {  // not final in C++
     protected UnicodeSet contextChars = new UnicodeSet();
     // Serialized UCharsTrie structures for finalized contexts.
     protected StringBuilder contexts = new StringBuilder();
+    /**
+     * The "era" of building intermediate contexts.
+     * When the array of cached, temporary contexts overflows, then clearContexts()
+     * removes them all and invalidates the builtCE32 that used to point to built tries.
+     * See {@link ConditionalCE32#era}.
+     */
+    private int contextsEra = 0;
     protected UnicodeSet unsafeBackwardSet = new UnicodeSet();
     protected boolean modified;
 

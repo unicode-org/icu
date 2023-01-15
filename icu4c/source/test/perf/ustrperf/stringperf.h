@@ -92,7 +92,7 @@ public:
 
     virtual void call(UErrorCode* status)
     {
-        if(line_mode_==TRUE){
+        if(line_mode_==true){
             if(uselen_){
                 for(int32_t i = 0; i< numLines_; i++){
                     if (fnType_==Fn_ICU) {
@@ -129,7 +129,7 @@ public:
 
     virtual long getOperationsPerIteration()
     {
-        if(line_mode_==TRUE){
+        if(line_mode_==true){
             return numLines_;
         }else{
             return 1;
@@ -144,7 +144,7 @@ public:
         wlines_=NULL;
         numLines_=srcNumLines;
         uselen_=uselen;
-        line_mode_=TRUE;
+        line_mode_=true;
         src_ = NULL;
         srcLen_ = 0;
         wsrc_ = NULL;
@@ -168,7 +168,7 @@ public:
         wlines_=NULL;
         numLines_=srcNumLines;
         uselen_=uselen;
-        line_mode_=TRUE;
+        line_mode_=true;
         src_ = NULL;
         srcLen_ = 0;
         wsrc_ = NULL;
@@ -191,7 +191,7 @@ public:
         wlines_=NULL;
         numLines_=0;
         uselen_=uselen;
-        line_mode_=FALSE;
+        line_mode_=false;
         src_ = new UChar[sourceLen];
         memcpy(src_, source, sourceLen * U_SIZEOF_UCHAR);
         srcLen_ = sourceLen;
@@ -213,7 +213,7 @@ public:
         wlines_=NULL;
         numLines_=0;
         uselen_=uselen;
-        line_mode_=FALSE;
+        line_mode_=false;
         src_ = new UChar[sourceLen];
         memcpy(src_, source, sourceLen * U_SIZEOF_UCHAR);
         srcLen_ = sourceLen;
@@ -444,7 +444,6 @@ inline void catenate(const UChar* src,int32_t srcLen, UnicodeString s0)
 
     utimer_getTime(&mystop);
     double mytime = utimer_getDeltaSeconds(&mystart,&mystop);
-    printf("\nmytime=%f \n", mytime);
 
     *catICU += uCatenate_STR;
 }
@@ -533,7 +532,6 @@ inline void StdLibCatenate(const wchar_t* src,int32_t srcLen, stlstring s0)
 
     utimer_getTime(&mystop);
     double mytime = utimer_getDeltaSeconds(&mystart,&mystop);
-    printf("\nmytime=%f \n", mytime);
 
 }
 

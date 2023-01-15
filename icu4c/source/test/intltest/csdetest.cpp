@@ -109,6 +109,10 @@ void CharsetDetectionTest::runIndexedTest( int32_t index, UBool exec, const char
             if (exec) Ticket6954Test();
             break;
 
+       case 10: name = "Ticket21823Test";
+            if (exec) Ticket21823Test();
+            break;
+
         default: name = "";
             break; //needed to end loop
     }
@@ -283,13 +287,13 @@ void CharsetDetectionTest::ConstructionTest()
 
     while ((activeName = uenum_next(eActive.getAlias(), NULL, status))) {
         // the charset must be included in all list
-        UBool found = FALSE;
+        UBool found = false;
 
         const char *name = NULL;
         uenum_reset(e.getAlias(), status);
         while ((name = uenum_next(e.getAlias(), NULL, status))) {
             if (strcmp(activeName, name) == 0) {
-                found = TRUE;
+                found = true;
                 break;
             }
         }
@@ -299,10 +303,10 @@ void CharsetDetectionTest::ConstructionTest()
         }
 
         // some charsets are disabled by default
-        found = FALSE;
+        found = false;
         for (int32_t i = 0; defDisabled[i] != 0; i++) {
             if (strcmp(activeName, defDisabled[i]) == 0) {
-                found = TRUE;
+                found = true;
                 break;
             }
         }
@@ -415,10 +419,10 @@ void CharsetDetectionTest::InputFilterTest()
     const UCharsetMatch *match;
     const char *lang, *name;
 
-    ucsdet_enableInputFilter(csd, TRUE);
+    ucsdet_enableInputFilter(csd, true);
 
     if (!ucsdet_isInputFilterEnabled(csd)) {
-        errln("ucsdet_enableInputFilter(csd, TRUE) did not enable input filter!");
+        errln("ucsdet_enableInputFilter(csd, true) did not enable input filter!");
     }
 
 
@@ -443,7 +447,7 @@ void CharsetDetectionTest::InputFilterTest()
     }
 
 turn_off:
-    ucsdet_enableInputFilter(csd, FALSE);
+    ucsdet_enableInputFilter(csd, false);
     ucsdet_setText(csd, bytes, byteLength, &status);
     match = ucsdet_detect(csd, &status);
 
@@ -550,7 +554,7 @@ void CharsetDetectionTest::DetectionTest()
         if (testCase->getTagName().compare(test_case) == 0) {
             const UnicodeString *id = testCase->getAttribute(id_attr);
             const UnicodeString *encodings = testCase->getAttribute(enc_attr);
-            const UnicodeString  text = testCase->getText(TRUE);
+            const UnicodeString  text = testCase->getText(true);
             int32_t encodingCount;
             UnicodeString *encodingList = split(*encodings, CH_SPACE, encodingCount);
 
@@ -622,10 +626,10 @@ void CharsetDetectionTest::IBM424Test()
     char *bytes_r = extractBytes(s2, "IBM424", brLength);
     
     UCharsetDetector *csd = ucsdet_open(&status);
-	ucsdet_setDetectableCharset(csd, "IBM424_rtl", TRUE, &status);
-	ucsdet_setDetectableCharset(csd, "IBM424_ltr", TRUE, &status);
-	ucsdet_setDetectableCharset(csd, "IBM420_rtl", TRUE, &status);
-	ucsdet_setDetectableCharset(csd, "IBM420_ltr", TRUE, &status);
+	ucsdet_setDetectableCharset(csd, "IBM424_rtl", true, &status);
+	ucsdet_setDetectableCharset(csd, "IBM424_ltr", true, &status);
+	ucsdet_setDetectableCharset(csd, "IBM420_rtl", true, &status);
+	ucsdet_setDetectableCharset(csd, "IBM420_ltr", true, &status);
     if (U_FAILURE(status)) {
         errln("Error opening charset detector. - %s", u_errorName(status));
     }
@@ -715,10 +719,10 @@ void CharsetDetectionTest::IBM420Test()
     if (U_FAILURE(status)) {
         errln("Error opening charset detector. - %s", u_errorName(status));
     }
-	ucsdet_setDetectableCharset(csd, "IBM424_rtl", TRUE, &status);
-	ucsdet_setDetectableCharset(csd, "IBM424_ltr", TRUE, &status);
-	ucsdet_setDetectableCharset(csd, "IBM420_rtl", TRUE, &status);
-	ucsdet_setDetectableCharset(csd, "IBM420_ltr", TRUE, &status);
+	ucsdet_setDetectableCharset(csd, "IBM424_rtl", true, &status);
+	ucsdet_setDetectableCharset(csd, "IBM424_ltr", true, &status);
+	ucsdet_setDetectableCharset(csd, "IBM420_rtl", true, &status);
+	ucsdet_setDetectableCharset(csd, "IBM420_ltr", true, &status);
     const UCharsetMatch *match;
     const char *name;
 
@@ -838,4 +842,23 @@ void CharsetDetectionTest::Ticket6954Test() {
     TEST_ASSERT_SUCCESS(status);
     TEST_ASSERT(strcmp(name1, "windows-1252")==0);
 #endif
+}
+
+
+// Ticket 21823 - Issue with Charset Detector for ill-formed input strings. 
+//                Its fix involves returning a failure based error code 
+//                (U_INVALID_CHAR_FOUND) incase no charsets appear to match the input data.
+void CharsetDetectionTest::Ticket21823Test() {
+    UErrorCode status = U_ZERO_ERROR;
+    std::string str = "\x80";
+    UCharsetDetector* csd = ucsdet_open(&status);
+
+    ucsdet_setText(csd, str.data(), str.length(), &status);
+    const UCharsetMatch* match = ucsdet_detect(csd, &status);
+
+    if (match == NULL) {
+        TEST_ASSERT(U_FAILURE(status));
+    }
+
+    ucsdet_close(csd);
 }

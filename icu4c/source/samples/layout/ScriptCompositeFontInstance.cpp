@@ -63,7 +63,7 @@ le_bool ScriptCompositeFontInstance::getGlyphPoint(LEGlyphID glyph, le_int32 poi
         return font->getGlyphPoint(LE_GET_GLYPH(glyph), pointNumber, point);
     }
 
-    return FALSE;
+    return false;
 }
 
 const LEFontInstance *ScriptCompositeFontInstance::getSubFont(const LEUnicode chars[], le_int32 *offset, le_int32 limit, le_int32 script, LEErrorCode &success) const

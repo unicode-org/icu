@@ -79,7 +79,7 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
 
     if (other.fPatternString == NULL) {
         fPatternString = NULL;
-        fPattern = utext_clone(fPattern, other.fPattern, FALSE, TRUE, &fDeferredStatus);
+        fPattern = utext_clone(fPattern, other.fPattern, false, true, &fDeferredStatus);
     } else {
         fPatternString = new UnicodeString(*(other.fPatternString));
         if (fPatternString == NULL) {
@@ -131,7 +131,7 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
             fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
             break;
         }
-        fSets->addElementX(newSet, fDeferredStatus);
+        fSets->addElement(newSet, fDeferredStatus);
         fSets8[i] = other.fSets8[i];
     }
 
@@ -179,7 +179,7 @@ void RegexPattern::init() {
     fInitialChars     = NULL;
     fInitialChar      = 0;
     fInitialChars8    = NULL;
-    fNeedsAltInput    = FALSE;
+    fNeedsAltInput    = false;
     fNamedCaptureMap  = NULL;
 
     fPattern          = NULL; // will be set later
@@ -291,13 +291,13 @@ RegexPattern  *RegexPattern::clone() const {
 //                                 characters can still be considered different.
 //
 //--------------------------------------------------------------------------
-UBool   RegexPattern::operator ==(const RegexPattern &other) const {
+bool    RegexPattern::operator ==(const RegexPattern &other) const {
     if (this->fFlags == other.fFlags && this->fDeferredStatus == other.fDeferredStatus) {
         if (this->fPatternString != NULL && other.fPatternString != NULL) {
             return *(this->fPatternString) == *(other.fPatternString);
         } else if (this->fPattern == NULL) {
             if (other.fPattern == NULL) {
-                return TRUE;
+                return true;
             }
         } else if (other.fPattern != NULL) {
             UTEXT_SETNATIVEINDEX(this->fPattern, 0);
@@ -305,7 +305,7 @@ UBool   RegexPattern::operator ==(const RegexPattern &other) const {
             return utext_equals(this->fPattern, other.fPattern);
         }
     }
-    return FALSE;
+    return false;
 }
 
 //---------------------------------------------------------------------
@@ -524,7 +524,7 @@ UBool U_EXPORT2 RegexPattern::matches(const UnicodeString   &regex,
                     UParseError     &pe,
                     UErrorCode      &status) {
 
-    if (U_FAILURE(status)) {return FALSE;}
+    if (U_FAILURE(status)) {return false;}
 
     UBool         retVal;
     RegexPattern *pat     = NULL;
@@ -548,9 +548,9 @@ UBool U_EXPORT2 RegexPattern::matches(UText                *regex,
                     UParseError     &pe,
                     UErrorCode      &status) {
 
-    if (U_FAILURE(status)) {return FALSE;}
+    if (U_FAILURE(status)) {return false;}
 
-    UBool         retVal  = FALSE;
+    UBool         retVal  = false;
     RegexPattern *pat     = NULL;
     RegexMatcher *matcher = NULL;
 
@@ -788,7 +788,7 @@ void   RegexPattern::dumpOp(int32_t index) const {
         {
             UnicodeString s;
             UnicodeSet *set = (UnicodeSet *)fSets->elementAt(val);
-            set->toPattern(s, TRUE);
+            set->toPattern(s, true);
             printf("%s", CStr(s)());
         }
         break;
@@ -802,7 +802,7 @@ void   RegexPattern::dumpOp(int32_t index) const {
                 val &= ~URX_NEG_SET;
             }
             UnicodeSet &set = RegexStaticSets::gStaticSets->fPropSets[val];
-            set.toPattern(s, TRUE);
+            set.toPattern(s, true);
             printf("%s", CStr(s)());
         }
         break;
@@ -833,7 +833,7 @@ void RegexPattern::dumpPattern() const {
         printf("   Initial match string: \"%s\"\n", CStr(initialString)());
     } else if (fStartType == START_SET) {
         UnicodeString s;
-        fInitialChars->toPattern(s, TRUE);
+        fInitialChars->toPattern(s, true);
         printf("    Match First Chars: %s\n", CStr(s)());
 
     } else if (fStartType == START_CHAR) {

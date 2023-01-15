@@ -9,7 +9,7 @@
 
 # If this converter alias table looks very confusing, a much easier to
 # understand view can be found at this demo:
-# http://demo.icu-project.org/icu-bin/convexp
+# https://icu4c-demos.unicode.org/icu-bin/convexp
 
 # IMPORTANT NOTE
 #

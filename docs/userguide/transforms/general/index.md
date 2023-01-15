@@ -63,7 +63,7 @@ example, "~~Αλφaβ~~ητικός" will retain the strikethrough in transliter
 characteristics such as font type and color.*
 
 For an online demonstration of ICU transliteration, see
-<http://demo.icu-project.org/icu-bin/translit> .
+<https://icu4c-demos.unicode.org/icu-bin/translit> .
 
 ## Script Transliteration
 
@@ -1264,8 +1264,7 @@ regular expressions can't account for the interaction and ordering of characters
 and rules. (You can, however, simulate the regex behavior with transform rules
 by using a transform rule to split the conversion rules into passes.)
 
-For more details on constructing rules, see the [Transliterator Rule
-Tutorial](rules.md) .
+For more details on constructing rules, see the [Transliterator Rule Tutorial](./rules.md).
 
 ## Script Transliterator Sources
 
@@ -1286,15 +1285,14 @@ in the transliteration.
 ### Korean
 
 There are many romanizations of Korean. The default transliteration follows the
-[Korean Ministry of Culture & Tourism
-Transliteration](http://www.korea.net/korea/kor_loca.asp?code=A020303)
-regulations with the clause 8 variant for reversibility:
+[National Institute of Korean Language](https://www.korean.go.kr/front_eng/roman/roman_01.do)
+guidelines on Romanization of Korean with the clause 8 variant for reversibility:
 
-8. When it is necessary to convert Romanized Korean back to Hangul in special
-cases such as in academic articles, Romanization is done according to Hangul
-spelling and not pronunciation. Each Hangul letter is Romanized as explained in
+8. When it is necessary to convert Romanized Korean back to Hangeul in special
+cases such as in academic articles, Romanization is done according to Hangeul
+spelling and not pronunciation. Each Hangeul letter is Romanized as explained in
 section 2 except that ㄱ, ㄷ, ㅂ, ㄹ are always written as g, d, b, l. When ㅇ has no
-sound value, it is replaced by a hyphen may also be used when it is necessary to
+sound value, it is replaced by a hyphen. It may also be used when it is necessary to
 distinguish between syllables.
 
 There is one other variation: an apostrophe is used instead of a hyphen, since

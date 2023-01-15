@@ -1207,9 +1207,6 @@ vi{
         USD{"$"}
         XCD{"$"}
     }
-    Currencies%variant{
-        GEL{"₾"}
-    }
     CurrencyPlurals{
         AED{
             other{"Dirham UAE"}
@@ -1459,6 +1456,9 @@ vi{
         }
         LRD{
             other{"Đô la Liberia"}
+        }
+        LSL{
+            other{"Loti Lesotho"}
         }
         LTL{
             other{"litas Lít-va"}

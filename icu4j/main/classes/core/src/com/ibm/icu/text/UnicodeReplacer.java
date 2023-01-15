@@ -48,7 +48,7 @@ interface UnicodeReplacer {
      * result of calling this function is passed to the appropriate
      * parser, typically TransliteratorParser, it will produce another
      * replacer that is equal to this one.
-     * @param escapeUnprintable if TRUE then convert unprintable
+     * @param escapeUnprintable if true then convert unprintable
      * character to their hex escape representations, \\uxxxx or
      * \\Uxxxxxxxx.  Unprintable characters are defined by
      * Utility.isUnprintable().

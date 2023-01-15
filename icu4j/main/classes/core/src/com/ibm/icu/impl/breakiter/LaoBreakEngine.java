@@ -30,27 +30,24 @@ public class LaoBreakEngine extends DictionaryBreakEngine {
     private static final byte LAO_MIN_WORD = 2;
 
     private DictionaryMatcher fDictionary;
-    private static UnicodeSet fLaoWordSet;
-    private static UnicodeSet fEndWordSet;
-    private static UnicodeSet fBeginWordSet;
-    private static UnicodeSet fMarkSet;
+    private UnicodeSet fEndWordSet;
+    private UnicodeSet fBeginWordSet;
+    private UnicodeSet fMarkSet;
 
-    static {
+    public LaoBreakEngine() throws IOException {
         // Initialize UnicodeSets
-        fLaoWordSet = new UnicodeSet();
-        fMarkSet = new UnicodeSet();
-        fBeginWordSet = new UnicodeSet();
-
-        fLaoWordSet.applyPattern("[[:Laoo:]&[:LineBreak=SA:]]");
-        fLaoWordSet.compact();
-
-        fMarkSet.applyPattern("[[:Laoo:]&[:LineBreak=SA:]&[:M:]]");
+        UnicodeSet laoWordSet = new UnicodeSet("[[:Laoo:]&[:LineBreak=SA:]]");
+        fMarkSet = new UnicodeSet("[[:Laoo:]&[:LineBreak=SA:]&[:M:]]");
         fMarkSet.add(0x0020);
-        fEndWordSet = new UnicodeSet(fLaoWordSet);
+        fBeginWordSet = new UnicodeSet(
+            0x0E81, 0x0EAE,  // basic consonants (including holes for corresponding Thai characters)
+            0x0EC0, 0x0EC4,  // prefix vowels
+            0x0EDC, 0x0EDD); // digraph consonants (no Thai equivalent)
+
+        laoWordSet.compact();
+
+        fEndWordSet = new UnicodeSet(laoWordSet);
         fEndWordSet.remove(0x0EC0, 0x0EC4); // prefix vowels
-        fBeginWordSet.add(0x0E81, 0x0EAE); // basic consonants (including holes for corresponding Thai characters)
-        fBeginWordSet.add(0x0EDC, 0x0EDD); // digraph consonants (no Thai equivalent)
-        fBeginWordSet.add(0x0EC0, 0x0EC4); // prefix vowels
 
         // Compact for caching
         fMarkSet.compact();
@@ -58,14 +55,12 @@ public class LaoBreakEngine extends DictionaryBreakEngine {
         fBeginWordSet.compact();
 
         // Freeze the static UnicodeSet
-        fLaoWordSet.freeze();
+        laoWordSet.freeze();
         fMarkSet.freeze();
         fEndWordSet.freeze();
         fBeginWordSet.freeze();
-    }
 
-    public LaoBreakEngine() throws IOException {
-        setCharacters(fLaoWordSet);
+        setCharacters(laoWordSet);
         // Initialize dictionary
         fDictionary = DictionaryData.loadDictionaryFor("Laoo");
     }
@@ -90,7 +85,7 @@ public class LaoBreakEngine extends DictionaryBreakEngine {
 
     @Override
     public int divideUpDictionaryRange(CharacterIterator fIter, int rangeStart, int rangeEnd,
-            DequeI foundBreaks) {
+            DequeI foundBreaks, boolean isPhraseBreaking) {
 
 
         if ((rangeEnd - rangeStart) < LAO_MIN_WORD) {

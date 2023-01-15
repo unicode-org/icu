@@ -166,6 +166,11 @@
     ; /convertUnits/$1/factor ; values="$3"
     ; /convertUnits/$1/offset ; values=$4
 
+# note the following will go into metadata.txt, not units.txt
+//supplementalData/metadata/alias/(unit|usage)Alias[@type="(%A)"][@replacement="(%A)"][@reason="(%A)"]
+     ; /alias/$1/$2/reason ; values="$4"
+     ; /alias/$1/$2/replacement ; values="$3"
+
 # Quoting "$1" and "$2" in the output lets $3 expand space-separated regions: only the first unquoted output supports such expansion.
 //supplementalData/unitPreferenceData/unitPreferences[@category="(%W)"][@usage="(%A)"]/unitPreference[@regions="(%A)"]
     ; /unitPreferenceData/"$1"/"$2"/$3/<FIFO>/unit
@@ -231,6 +236,7 @@
 //supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@from="(%A)"][@mzone="(%W)"] ; /metazoneInfo/"$1"/<$2> ; values=$3 "$2" "9999-12-31 23:59"
 //supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@from="(%A)"][@to="(%A)"][@mzone="(%W)"] ; /metazoneInfo/"$1"/<$2> ; values=$4 "$2" "$3"
 //supplementalData/metaZones/metazoneInfo/timezone[@type="(%W)"]/usesMetazone[@to="(%A)"][@mzone="(%W)"] ; /metazoneInfo/"$1"/<1970-01-01 00:00> ; values=$3 "1970-01-01 00:00" "$2"
+//supplementalData/metaZones/metazoneIds/metazoneId[@shortId="(%A)"][@longId="(%A)"][@deprecated="false"] ; /metazoneIds/$1 ; values=$2
 
 //supplementalData/primaryZones/primaryZone[@iso3166="(%W)"] ; /primaryZones/$1 ; values={value}
 
@@ -254,11 +260,17 @@
 # locale info
 //supplementalData/parentLocales/parentLocale[@parent="(%A)"][@locales="(%A)"] ; /parentLocales/$1 ; values=$2
 
+# personName formats
+//supplementalData/personNamesDefaults/nameOrderLocalesDefault[@order="(%A)"] ; /personNamesDefaults/nameOrderLocalesDefault/$1 ; values={value}
+
 # supplementalMetadata.xml (metadata.txt)
 //supplementalData/metadata/defaultContent[@locales="(%A)"] ; /defaultContent ; values=$1
 //supplementalData/metadata/alias/(language|script|territory|subdivision|variant)Alias[@type="(%A)"][@replacement="(%A)"][@reason="(%A)"]
      ; /alias/$1/$2/reason ; values="$4"
      ; /alias/$1/$2/replacement ; values="$3"
+# Also note that there are paths in units.xml (above) like
+# //supplementalData/metadata/alias/(unit|usage)Alias[@type="(%A)"]
+# which will go into metadata.txt
 
 # Region codes used by ICU's Region class
 # Specify the value explicitly so that the LDMLConverter will split it.

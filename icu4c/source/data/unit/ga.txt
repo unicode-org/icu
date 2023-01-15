@@ -157,6 +157,10 @@ ga{
         }
         compound{
             1024p1{"cibi-{0}"}
+            1024p2{"mebi{0}"}
+            1024p4{"tebi{0}"}
+            1024p7{"zebi{0}"}
+            1024p8{"yobe{0}"}
             10p-1{"deici{0}"}
             10p-12{"pici{0}"}
             10p-15{"feimti{0}"}
@@ -507,6 +511,15 @@ ga{
                 other{"{0} nanashoicind"}
                 two{"{0} nanashoicind"}
             }
+            quarter{
+                dnam{"ceathrúna"}
+                few{"{0} cna"}
+                many{"{0} cna"}
+                one{"{0} ceathrú"}
+                other{"{0} ceathrúna"}
+                per{"{0}/c"}
+                two{"{0} cna"}
+            }
             second{
                 dnam{"soicindí"}
                 few{"{0} shoicind"}
@@ -644,6 +657,14 @@ ga{
             }
         }
         force{
+            kilowatt-hour-per-100-kilometer{
+                dnam{"cileavatuair in aghaidh 100 ciliméadar"}
+                few{"{0} kWh/100km"}
+                many{"{0} kWh/100km"}
+                one{"cileavatuair in aghaidh 100 ciliméadar"}
+                other{"{0} cileavatuair in aghaidh 100 ciliméadar"}
+                two{"{0} cileavatuair in aghaidh 100 cilliméadar"}
+            }
             newton{
                 dnam{"niútain"}
                 few{"{0} N"}
@@ -1029,14 +1050,6 @@ ga{
                 per{"{0} sa chileagram"}
                 two{"{0} chileagram"}
             }
-            metric-ton{
-                dnam{"tonnaí méadracha"}
-                few{"{0} thonna mhéadracha"}
-                many{"{0} dtonna mhéadracha"}
-                one{"{0} tonna méadrach"}
-                other{"{0} tonna méadrach"}
-                two{"{0} thonna mhéadracha"}
-            }
             microgram{
                 dnam{"micreagraim"}
                 few{"{0} mhicreagram"}
@@ -1102,6 +1115,14 @@ ga{
                 one{"{0} tonna gearr"}
                 other{"{0} tonna gearr"}
                 two{"{0} thonna ghearra"}
+            }
+            tonne{
+                dnam{"tonnaí méadracha"}
+                few{"{0} thonna mhéadracha"}
+                many{"{0} dtonna mhéadracha"}
+                one{"{0} tonna méadrach"}
+                other{"{0} tonna méadrach"}
+                two{"{0} thonna mhéadracha"}
             }
         }
         power{
@@ -2004,6 +2025,15 @@ ga{
                 other{"{0}ns"}
                 two{"{0}ns"}
             }
+            quarter{
+                dnam{"ctú"}
+                few{"{0} cna"}
+                many{"{0} cna"}
+                one{"{0} ctú"}
+                other{"{0} ctú"}
+                per{"{0}/c"}
+                two{"{0} cna"}
+            }
             second{
                 dnam{"soic"}
                 few{"{0}s"}
@@ -2354,14 +2384,6 @@ ga{
                 per{"{0}/kg"}
                 two{"{0}kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                few{"{0}t"}
-                many{"{0}t"}
-                one{"{0}t"}
-                other{"{0}t"}
-                two{"{0}t"}
-            }
             microgram{
                 dnam{"μg"}
                 few{"{0}μg"}
@@ -2419,6 +2441,14 @@ ga{
                 one{"{0} t.g."}
                 other{"{0} t.g."}
                 two{"{0} t.g."}
+            }
+            tonne{
+                dnam{"t"}
+                few{"{0}t"}
+                many{"{0}t"}
+                one{"{0}t"}
+                other{"{0}t"}
+                two{"{0}t"}
             }
         }
         power{
@@ -2482,11 +2512,11 @@ ga{
             }
             inch-ofhg{
                 dnam{"orlaí Hg"}
-                few{"{0}\u0022 Hg"}
-                many{"{0}\u0022 Hg"}
-                one{"{0}\u0022 Hg"}
-                other{"{0}\u0022 Hg"}
-                two{"{0}\u0022 Hg"}
+                few{"{0}″ Hg"}
+                many{"{0}″ Hg"}
+                one{"{0}″ Hg"}
+                other{"{0}″ Hg"}
+                two{"{0}″ Hg"}
             }
             millibar{
                 dnam{"mbar"}
@@ -3230,6 +3260,15 @@ ga{
                 other{"{0} ns"}
                 two{"{0} ns"}
             }
+            quarter{
+                dnam{"ctú"}
+                few{"{0} cna"}
+                many{"{0} cna"}
+                one{"{0} ctú"}
+                other{"{0} cna"}
+                per{"{0}/c"}
+                two{"{0} cna"}
+            }
             second{
                 dnam{"soic"}
                 few{"{0} shoic"}
@@ -3686,14 +3725,6 @@ ga{
                 per{"{0}/kg"}
                 two{"{0} kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                few{"{0} t"}
-                many{"{0} t"}
-                one{"{0} t"}
-                other{"{0} t"}
-                two{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 few{"{0} μg"}
@@ -3759,6 +3790,14 @@ ga{
                 one{"{0} t.g."}
                 other{"{0} t.g."}
                 two{"{0} t.g."}
+            }
+            tonne{
+                dnam{"t"}
+                few{"{0} t"}
+                many{"{0} t"}
+                one{"{0} t"}
+                other{"{0} t"}
+                two{"{0} t"}
             }
         }
         power{

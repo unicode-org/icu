@@ -28,6 +28,7 @@
 #ifdef __cplusplus
 
 #include "capi_helper.h"
+#include "umutex.h"
 
 U_NAMESPACE_BEGIN
 
@@ -93,7 +94,7 @@ public:
     static UChar32 ScanHex(const UChar *s, int32_t start, int32_t limit, UErrorCode &status);
 
     static UClassID U_EXPORT2 getStaticClassID(void);
-    virtual UClassID getDynamicClassID(void) const;
+    virtual UClassID getDynamicClassID(void) const override;
 
     //
     // Data Members

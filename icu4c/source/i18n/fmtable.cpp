@@ -53,7 +53,7 @@ using number::impl::DecimalQuantity;
 // NOTE: These inlines assume that all fObjects are in fact instances
 // of the Measure class, which is true as of 3.0.  [alan]
 
-// Return TRUE if *a == *b.
+// Return true if *a == *b.
 static inline UBool objectEquals(const UObject* a, const UObject* b) {
     // LATER: return *a == *b;
     return *((const Measure*) a) == *((const Measure*) b);
@@ -65,7 +65,7 @@ static inline UObject* objectClone(const UObject* a) {
     return ((const Measure*) a)->clone();
 }
 
-// Return TRUE if *a is an instance of Measure.
+// Return true if *a is an instance of Measure.
 static inline UBool instanceOfMeasure(const UObject* a) {
     return dynamic_cast<const Measure*>(a) != NULL;
 }
@@ -275,18 +275,18 @@ Formattable::operator=(const Formattable& source)
 
 // -------------------------------------
 
-UBool
+bool
 Formattable::operator==(const Formattable& that) const
 {
     int32_t i;
 
-    if (this == &that) return TRUE;
+    if (this == &that) return true;
 
-    // Returns FALSE if the data types are different.
-    if (fType != that.fType) return FALSE;
+    // Returns false if the data types are different.
+    if (fType != that.fType) return false;
 
     // Compares the actual data values.
-    UBool equal = TRUE;
+    bool equal = true;
     switch (fType) {
     case kDate:
         equal = (fValue.fDate == that.fValue.fDate);
@@ -303,20 +303,20 @@ Formattable::operator==(const Formattable& that) const
         break;
     case kArray:
         if (fValue.fArrayAndCount.fCount != that.fValue.fArrayAndCount.fCount) {
-            equal = FALSE;
+            equal = false;
             break;
         }
         // Checks each element for equality.
         for (i=0; i<fValue.fArrayAndCount.fCount; ++i) {
             if (fValue.fArrayAndCount.fArray[i] != that.fValue.fArrayAndCount.fArray[i]) {
-                equal = FALSE;
+                equal = false;
                 break;
             }
         }
         break;
     case kObject:
         if (fValue.fObject == NULL || that.fValue.fObject == NULL) {
-            equal = FALSE;
+            equal = false;
         } else {
             equal = objectEquals(fValue.fObject, that.fValue.fObject);
         }
@@ -382,9 +382,9 @@ Formattable::isNumeric() const {
     case kDouble:
     case kLong:
     case kInt64:
-        return TRUE;
+        return true;
     default:
-        return FALSE;
+        return false;
     }
 }
 

@@ -15,7 +15,7 @@
   <description>
     icu4j-charset is a supplemental library for icu4j, implementing Java Charset SPI.
   </description>
-  <url>http://icu-project.org/</url>
+  <url>https://icu.unicode.org/</url>
   <inceptionYear>2001</inceptionYear>
 
   <licenses>

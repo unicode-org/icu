@@ -757,7 +757,6 @@ ta{
         ZMW{"ZK"}
     }
     Currencies%variant{
-        GEL{"₾"}
         TRY{"TL"}
     }
     CurrencyPlurals{
@@ -1092,6 +1091,10 @@ ta{
         LRD{
             one{"லைபீரியன் டாலர்"}
             other{"லைபீரியன் டாலர்கள்"}
+        }
+        LSL{
+            one{"லெசோதோ லோட்டி"}
+            other{"லெசோதோ லோட்டிகள்"}
         }
         LTL{
             one{"லிதுவேனியன் லிடாஸ்"}

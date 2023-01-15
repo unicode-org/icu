@@ -22,7 +22,7 @@
  **/
 class DateFormatTest: public CalendarTimeZoneTest {
     // IntlTest override
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par ) override;
 public:
     /**
      * Verify that patterns have the correct values and could produce
@@ -266,6 +266,7 @@ public:
     void TestParseRegression13744();
     void TestAdoptCalendarLeak();
     void Test20741_ABFields();
+    void Test22023_UTCWithMinusZero();
 
 private:
     UBool showParse(DateFormat &format, const UnicodeString &formattedString);

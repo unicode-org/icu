@@ -26,10 +26,10 @@
 // class NumberFormatRoundTripTest
 // *****************************************************************************
 
-UBool NumberFormatRoundTripTest::verbose                  = FALSE;
-UBool NumberFormatRoundTripTest::STRING_COMPARE           = TRUE;
-UBool NumberFormatRoundTripTest::EXACT_NUMERIC_COMPARE    = FALSE;
-UBool NumberFormatRoundTripTest::DEBUG_VAR                = FALSE;
+UBool NumberFormatRoundTripTest::verbose                  = false;
+UBool NumberFormatRoundTripTest::STRING_COMPARE           = true;
+UBool NumberFormatRoundTripTest::EXACT_NUMERIC_COMPARE    = false;
+UBool NumberFormatRoundTripTest::DEBUG_VAR                = false;
 double NumberFormatRoundTripTest::MAX_ERROR               = 1e-14;
 double NumberFormatRoundTripTest::max_numeric_error       = 0.0;
 double NumberFormatRoundTripTest::min_numeric_error       = 1.0;
@@ -54,10 +54,10 @@ NumberFormatRoundTripTest::failure(UErrorCode status, const char* msg, UBool pos
         } else {
             errln(UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status));
         }
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 uint32_t
@@ -97,19 +97,19 @@ NumberFormatRoundTripTest::start()
     logln("Default Locale");
 
     fmt = NumberFormat::createInstance(status);
-    if (!failure(status, "NumberFormat::createInstance", TRUE)){
+    if (!failure(status, "NumberFormat::createInstance", true)){
         test(fmt);
     }
     delete fmt;
 
     fmt = NumberFormat::createCurrencyInstance(status);
-    if (!failure(status, "NumberFormat::createCurrencyInstance", TRUE)){
+    if (!failure(status, "NumberFormat::createCurrencyInstance", true)){
         test(fmt);
     }
     delete fmt;
 
     fmt = NumberFormat::createPercentInstance(status);
-    if (!failure(status, "NumberFormat::createPercentInstance", TRUE)){
+    if (!failure(status, "NumberFormat::createPercentInstance", true)){
         test(fmt);
     }
     delete fmt;
@@ -270,14 +270,14 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt, const Formattable& value)
     if(STRING_COMPARE) {
         if (s != s2) {
             errln("*** STRING ERROR \"" + escape(s) + "\" != \"" + escape(s2) + "\"");
-            show = TRUE;
+            show = true;
         }
     }
 
     if(EXACT_NUMERIC_COMPARE) {
         if(value != n) {
             errln("*** NUMERIC ERROR");
-            show = TRUE;
+            show = true;
         }
     }
     else {
@@ -286,7 +286,7 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt, const Formattable& value)
 
         if(error > MAX_ERROR) {
             errln(UnicodeString("*** NUMERIC ERROR ") + error);
-            show = TRUE;
+            show = true;
         }
 
         if (error > max_numeric_error) 

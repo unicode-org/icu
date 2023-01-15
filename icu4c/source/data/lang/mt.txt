@@ -440,7 +440,7 @@ mt{
         teo{"Teso"}
         ter{"Tereno"}
         tet{"Tetum"}
-        tg{"Tajik"}
+        tg{"Taġik"}
         th{"Tajlandiż"}
         ti{"Tigrinya"}
         tig{"Tigre"}
@@ -511,6 +511,8 @@ mt{
     }
     Languages%short{
         az{"Ażeri"}
+        en_GB{"Ingliż (UK)"}
+        en_US{"Ingliż (US)"}
     }
     Scripts{
         Arab{"Għarbi"}

@@ -22,10 +22,12 @@ def generate(config, io, common_vars):
 
     requests += generate_cnvalias(config, io, common_vars)
     requests += generate_ulayout(config, io, common_vars)
+    requests += generate_uemoji(config, io, common_vars)
     requests += generate_confusables(config, io, common_vars)
     requests += generate_conversion_mappings(config, io, common_vars)
     requests += generate_brkitr_brk(config, io, common_vars)
     requests += generate_brkitr_lstm(config, io, common_vars)
+    requests += generate_brkitr_adaboost(config, io, common_vars)
     requests += generate_stringprep(config, io, common_vars)
     requests += generate_brkitr_dictionaries(config, io, common_vars)
     requests += generate_normalization(config, io, common_vars)
@@ -181,7 +183,9 @@ def generate_brkitr_brk(config, io, common_vars):
         RepeatedExecutionRequest(
             name = "brkitr_brk",
             category = "brkitr_rules",
-            dep_targets = [DepTarget("cnvalias"), DepTarget("ulayout"), DepTarget("lstm_res")],
+            dep_targets =
+                [DepTarget("cnvalias"),
+                    DepTarget("ulayout"), DepTarget("uemoji"), DepTarget("lstm_res"), DepTarget("adaboost_res")],
             input_files = input_files,
             output_files = output_files,
             tool = IcuTool("genbrk"),
@@ -354,6 +358,25 @@ def generate_ulayout(config, io, common_vars):
     ]
 
 
+def generate_uemoji(config, io, common_vars):
+    # Unicode emoji properties
+    basename = "uemoji"
+    input_file = InFile("in/%s.icu" % basename)
+    output_file = OutFile("%s.icu" % basename)
+    return [
+        SingleExecutionRequest(
+            name = basename,
+            category = basename,
+            dep_targets = [],
+            input_files = [input_file],
+            output_files = [output_file],
+            tool = IcuTool("icupkg"),
+            args = "-t{ICUDATA_CHAR} {IN_DIR}/{INPUT_FILES[0]} {OUT_DIR}/{OUTPUT_FILES[0]}",
+            format_with = {}
+        )
+    ]
+
+
 def generate_misc(config, io, common_vars):
     # Misc Data Res Files
     input_files = [InFile(filename) for filename in io.glob("misc/*.txt")]
@@ -474,6 +497,32 @@ def generate_brkitr_lstm(config, io, common_vars):
             output_files = output_files,
             tool = IcuTool("genrb"),
             args = "-s {IN_DIR}/brkitr/lstm -d {OUT_DIR}/brkitr -i {OUT_DIR} "
+                "-k "
+                "{INPUT_BASENAME}",
+            format_with = {
+            },
+            repeat_with = {
+                "INPUT_BASENAME": utils.SpaceSeparatedList(input_basenames)
+            }
+        )
+    ]
+
+def generate_brkitr_adaboost(config, io, common_vars):
+    input_files = [InFile(filename) for filename in io.glob("brkitr/adaboost/*.txt")]
+    input_basenames = [v.filename[16:] for v in input_files]
+    output_files = [
+        OutFile("brkitr/%s.res" % v[:-4])
+        for v in input_basenames
+    ]
+    return [
+        RepeatedOrSingleExecutionRequest(
+            name = "adaboost_res",
+            category = "brkitr_adaboost",
+            dep_targets = [],
+            input_files = input_files,
+            output_files = output_files,
+            tool = IcuTool("genrb"),
+            args = "-s {IN_DIR}/brkitr/adaboost -d {OUT_DIR}/brkitr -i {OUT_DIR} "
                 "-k "
                 "{INPUT_BASENAME}",
             format_with = {

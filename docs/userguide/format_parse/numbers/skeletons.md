@@ -231,7 +231,7 @@ the API docs for UNumberRoundingPriority.
 | `.##/@@@r` | Same as above, but pad trailing zeros <br/> to at least 3 significant digits | `Precision::maxFraction(2)` <br/> `.withSignificantDigits(3, 3, RELAXED)` |
 | `.00/@##` | Exactly 2 fraction digits, but do not <br/> display more than 3 significant digits | `Precision::fixedFraction(2)` <br/> `.withMaxDigits(3)` |
 | `.00/@##s` | Same as above | `Precision::fixedFraction(2)` <br/> `.withSignificantDigits(1, 3, STRICT)` |
-| `.00/@##s` | Same as above, but pad trailing zeros <br/> to at least 3 significant digits | `Precision::fixedFraction(2)` <br/> `.withSignificantDigits(3, 3, STRICT)` |
+| `.00/@@@s` | Same as above, but pad trailing zeros <br/> to at least 3 significant digits | `Precision::fixedFraction(2)` <br/> `.withSignificantDigits(3, 3, STRICT)` |
 
 Precisely, the option follows the syntax of the significant digits stem (see below),
 but one of the following must be true:
@@ -299,6 +299,7 @@ integer digits):
 | `integer-width/##0` | - | Between 1 and 3 <br/> integer digits | `IntegerWidth::zeroFillTo(1)` <br/> `.truncateAt(3)`
 | `integer-width/00` | - | Exactly 2 <br/> integer digits | `IntegerWidth::zeroFillTo(2)` <br/> `.truncateAt(2)` |
 | `integer-width/*` | - | Zero or more <br/> integer digits | `IntegerWidth::zeroFillTo(0) `
+| `integer-width-trunc` | - | Zero integer digits | `IntegerWidth::zeroFillTo(0)` <br/> `.truncateAt(0)`
 
 The long-form option starts with either a single `*` symbol, signaling no limit
 on the number of integer digits (no *`truncateAt`*), or zero or more `#` symbols.
@@ -309,6 +310,8 @@ symbols plus the number of `0` symbols.
 
 The concise skeleton is simply one or more `0` characters. This supports
 minimum integer digits but not maximum integer digits.
+
+The special stem `integer-width-trunc` covers the case when both *`truncateAt`* and *`zeroFillTo`* are zero.
 
 ***Prior to ICU 67***, use the symbol `+` instead of `*`.
 

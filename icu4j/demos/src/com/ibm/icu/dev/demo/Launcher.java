@@ -100,7 +100,7 @@ public class Launcher extends DemoApplet {
             }
             add(BorderLayout.NORTH, new Label(
                    "ICU Demos * ICU version "+VersionInfo.ICU_VERSION +
-                   " * http://icu-project.org "+javaVersion));
+                   " * https://icu.unicode.org/ "+javaVersion));
             add(BorderLayout.SOUTH,statusLabel);
             // set up an initial status.
             showStatus(buttonList.length+" demos ready. ");

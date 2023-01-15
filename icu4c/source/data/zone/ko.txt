@@ -1223,6 +1223,9 @@ ko{
         "Pacific:Johnston"{
             ec{"존스톤"}
         }
+        "Pacific:Kanton"{
+            ec{"칸톤"}
+        }
         "Pacific:Kiritimati"{
             ec{"키리티마티"}
         }
@@ -1930,6 +1933,9 @@ ko{
             ld{"예카테린부르크 하계 표준시"}
             lg{"예카테린부르크 시간"}
             ls{"예카테린부르크 표준시"}
+        }
+        "meta:Yukon"{
+            ls{"유콘 시간"}
         }
         fallbackFormat{"{1}({0})"}
         gmtFormat{"GMT{0}"}

@@ -41,7 +41,7 @@ int main(int argc, const char *argv[])
     if (U_FAILURE(status)){
         return status;
     }
-    if (test.run() == FALSE){
+    if (test.run() == false){
         fprintf(stderr, "FAILED: Tests could not be run please check the "
             "arguments.\n");
         return -1;
@@ -81,7 +81,6 @@ CharPerformanceTest::CharPerformanceTest(int32_t argc, const char *argv[],
     else {
         MAX_ = 0xffff;
     }
-    printf("MAX_ size will be 0x%x\n", MAX_);
     if (options[MIN_OPTION_].doesOccur) {
         MIN_ = atoi(options[MIN_OPTION_].value);
     }

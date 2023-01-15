@@ -33,13 +33,13 @@ class UPrinter {
   UBool _on;
   char _locale[256];
 public:
-  UPrinter(FILE *file, const char *locale, const char *encoding, UBool transliterateNonPrintable=TRUE);
+  UPrinter(FILE *file, const char *locale, const char *encoding, UBool transliterateNonPrintable=true);
   UPrinter(const char *name, const char *locale, const char *encoding, UTransliterator *trans, UBool transliterateNonPrintable);
   ~UPrinter();
-  void log(const UnicodeString &string, UBool nl = FALSE);
-  void log(const UChar *string, UBool nl = FALSE);
-  //void log(const char *string, UBool nl = FALSE);
-  void log(const Line *line, UBool nl = FALSE);
+  void log(const UnicodeString &string, UBool nl = false);
+  void log(const UChar *string, UBool nl = false);
+  //void log(const char *string, UBool nl = false);
+  void log(const Line *line, UBool nl = false);
   void log(const char *fmt, ...);
   void off(void);
   void on(void);

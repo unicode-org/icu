@@ -19,6 +19,7 @@
 
 #if !UCONFIG_NO_COLLATION
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -73,6 +74,7 @@ void addCollAPITest(TestNode** root)
     /*addTest(root, &TestGetDefaultRules, "tscoll/capitst/TestGetDefaultRules");*/
     addTest(root, &TestDecomposition, "tscoll/capitst/TestDecomposition");
     addTest(root, &TestSafeClone, "tscoll/capitst/TestSafeClone");
+    addTest(root, &TestClone, "tscoll/capitst/TestClone");
     addTest(root, &TestCloneBinary, "tscoll/capitst/TestCloneBinary");
     addTest(root, &TestGetSetAttr, "tscoll/capitst/TestGetSetAttr");
     addTest(root, &TestBounds, "tscoll/capitst/TestBounds");
@@ -90,6 +92,7 @@ void addCollAPITest(TestNode** root)
     addTest(root, &TestBengaliSortKey, "tscoll/capitst/TestBengaliSortKey");
     addTest(root, &TestGetKeywordValuesForLocale, "tscoll/capitst/TestGetKeywordValuesForLocale");
     addTest(root, &TestStrcollNull, "tscoll/capitst/TestStrcollNull");
+    addTest(root, &TestLocaleIDWithUnderscoreAndExtension, "tscoll/capitst/TestLocaleIDWithUnderscoreAndExtension");
 }
 
 void TestGetSetAttr(void) {
@@ -529,7 +532,7 @@ void TestRuleBasedColl()
         log_err("ERROR: CollationElement iterator creation failed.: %s\n", myErrorName(status));
         return;
     }
-    while (TRUE) {
+    while (true) {
         /* testing with en since thai has its own tailoring */
         int32_t ce = ucol_next(iter1, &status);
         int32_t ce2 = ucol_next(iter2, &status);
@@ -780,6 +783,124 @@ void TestSafeClone() {
         bufferSize = U_COL_SAFECLONE_BUFFERSIZE;
         err = U_ZERO_ERROR;
         someClonedCollators[idx] = ucol_safeClone(someCollators[idx], buffer[idx], &bufferSize, &err);
+        if (U_FAILURE(err)) {
+            log_err("FAIL: Unable to clone collator %d - %s\n", idx, u_errorName(err));
+            continue;
+        }
+        if (!ucol_equals(someClonedCollators[idx], someCollators[idx])) {
+            log_err("FAIL: Cloned collator is not equal to original at index = %d.\n", idx);
+        }
+
+        /* Check the usability */
+        ucol_setStrength(someCollators[idx], UCOL_PRIMARY);
+        ucol_setAttribute(someCollators[idx], UCOL_CASE_LEVEL, UCOL_OFF, &err);
+
+        doAssert( (ucol_equal(someCollators[idx], test1, u_strlen(test1), test2, u_strlen(test2))), "Result should be \"abcda\" == \"abCda\"");
+
+        /* Close the original to make sure that the clone is usable. */
+        ucol_close(someCollators[idx]);
+
+        ucol_setStrength(someClonedCollators[idx], UCOL_TERTIARY);
+        ucol_setAttribute(someClonedCollators[idx], UCOL_CASE_LEVEL, UCOL_OFF, &err);
+        doAssert( (ucol_greater(someClonedCollators[idx], test1, u_strlen(test1), test2, u_strlen(test2))), "Result should be \"abCda\" >>> \"abcda\" ");
+
+        ucol_close(someClonedCollators[idx]);
+    }
+}
+
+void TestClone() {
+    UChar test1[6];
+    UChar test2[6];
+    static const UChar umlautUStr[] = {0x00DC, 0};
+    static const UChar oeStr[] = {0x0055, 0x0045, 0};
+    UCollator * someCollators [CLONETEST_COLLATOR_COUNT];
+    UCollator * someClonedCollators [CLONETEST_COLLATOR_COUNT];
+    UCollator * col = NULL;
+    UErrorCode err = U_ZERO_ERROR;
+    int8_t idx = 6;    /* Leave this here to test buffer alignment in memory*/
+    const char sampleRuleChars[] = "&Z < CH";
+    UChar sampleRule[sizeof(sampleRuleChars)];
+
+    u_uastrcpy(test1, "abCda");
+    u_uastrcpy(test2, "abcda");
+    u_uastrcpy(sampleRule, sampleRuleChars);
+
+    /* one default collator & two complex ones */
+    someCollators[0] = ucol_open("en_US", &err);
+    someCollators[1] = ucol_open("ko", &err);
+    someCollators[2] = ucol_open("ja_JP", &err);
+    someCollators[3] = ucol_openRules(sampleRule, -1, UCOL_ON, UCOL_TERTIARY, NULL, &err);
+    if(U_FAILURE(err)) {
+        for (idx = 0; idx < CLONETEST_COLLATOR_COUNT; idx++) {
+            ucol_close(someCollators[idx]);
+        }
+        log_data_err("Couldn't open one or more collators\n");
+        return;
+    }
+
+    /* Check the various error & informational states: */
+
+    /* Null status - just returns NULL */
+    if (NULL != ucol_clone(someCollators[0], NULL))
+    {
+        log_err("FAIL: Cloned Collator failed to deal correctly with null status\n");
+    }
+    /* error status - should return 0 & keep error the same */
+    err = U_MEMORY_ALLOCATION_ERROR;
+    if (NULL != ucol_clone(someCollators[0], &err) || err != U_MEMORY_ALLOCATION_ERROR)
+    {
+        log_err("FAIL: Cloned Collator failed to deal correctly with incoming error status\n");
+    }
+    err = U_ZERO_ERROR;
+
+    /* Verify we can use this run-time calculated size */
+    if (NULL == (col = ucol_clone(someCollators[0], &err)) || U_FAILURE(err))
+    {
+        log_err("FAIL: Collator can't be cloned.\n");
+    }
+    if (col) ucol_close(col);
+
+    if (NULL == (col = ucol_clone(someCollators[0], &err)) || err != U_ZERO_ERROR)
+    {
+        log_err("FAIL: Cloned Collator failed to deal correctly\n");
+    }
+    if (col) ucol_close(col);
+    err = U_ZERO_ERROR;
+
+    /* Null Collator - return NULL & set U_ILLEGAL_ARGUMENT_ERROR */
+    if (NULL != ucol_clone(NULL, &err) || err != U_ILLEGAL_ARGUMENT_ERROR)
+    {
+        log_err("FAIL: Cloned Collator failed to deal correctly with null Collator pointer\n");
+    }
+    err = U_ZERO_ERROR;
+
+    /* Test that a cloned collator doesn't accidentally use UCA. */
+    col=ucol_open("de@collation=phonebook", &err);
+    someClonedCollators[0] = ucol_clone(col, &err);
+    doAssert( (ucol_greater(col, umlautUStr, u_strlen(umlautUStr), oeStr, u_strlen(oeStr))), "Original German phonebook collation sorts differently than expected");
+    doAssert( (ucol_greater(someClonedCollators[0], umlautUStr, u_strlen(umlautUStr), oeStr, u_strlen(oeStr))), "Cloned German phonebook collation sorts differently than expected");
+    if (!ucol_equals(someClonedCollators[0], col)) {
+        log_err("FAIL: Cloned German phonebook collator is not equal to original.\n");
+    }
+    ucol_close(col);
+    ucol_close(someClonedCollators[0]);
+
+    err = U_ZERO_ERROR;
+
+    /* change orig & clone & make sure they are independent */
+
+    for (idx = 0; idx < CLONETEST_COLLATOR_COUNT; idx++)
+    {
+        ucol_setStrength(someCollators[idx], UCOL_IDENTICAL);
+        err = U_ZERO_ERROR;
+        ucol_close(ucol_clone(someCollators[idx], &err));
+        if (err != U_ZERO_ERROR) {
+            log_err("FAIL: collator number %d was not allocated.\n", idx);
+            log_err("FAIL: status of Collator[%d] is %d  (hex: %x).\n", idx, err, err);
+        }
+
+        err = U_ZERO_ERROR;
+        someClonedCollators[idx] = ucol_clone(someCollators[idx], &err);
         if (U_FAILURE(err)) {
             log_err("FAIL: Unable to clone collator %d - %s\n", idx, u_errorName(err));
             continue;
@@ -2076,7 +2197,7 @@ static void TestShortString(void)
             locale = NULL;
         }
 
-        coll = ucol_openFromShortString(testCases[i].input, FALSE, &parseError, &status);
+        coll = ucol_openFromShortString(testCases[i].input, false, &parseError, &status);
         if(status != testCases[i].expectedStatus) {
             log_err_status(status, "Got status '%s' that is different from expected '%s' for '%s'\n",
                 u_errorName(status), u_errorName(testCases[i].expectedStatus), testCases[i].input);
@@ -2092,7 +2213,7 @@ static void TestShortString(void)
             }
 
             ucol_normalizeShortDefinitionString(testCases[i].input, normalizedBuffer, 256, &parseError, &status);
-            fromNormalized = ucol_openFromShortString(normalizedBuffer, FALSE, &parseError, &status);
+            fromNormalized = ucol_openFromShortString(normalizedBuffer, false, &parseError, &status);
             ucol_getShortDefinitionString(fromNormalized, locale, fromNormalizedBuffer, 256, &status);
 
             if(strcmp(fromShortBuffer, fromNormalizedBuffer)) {
@@ -2134,9 +2255,9 @@ doSetsTest(const char *locale, const USet *ref, USet *set, const char* inSet, co
     if(!uset_containsAll(ref, set)) {
         log_err("%s: Some stuff from %s is not present in the set\n", locale, inSet);
         uset_removeAll(set, ref);
-        bufLen = uset_toPattern(set, buffer, UPRV_LENGTHOF(buffer), TRUE, status);
+        bufLen = uset_toPattern(set, buffer, UPRV_LENGTHOF(buffer), true, status);
         log_info("    missing: %s\n", aescstrdup(buffer, bufLen));
-        bufLen = uset_toPattern(ref, buffer, UPRV_LENGTHOF(buffer), TRUE, status);
+        bufLen = uset_toPattern(ref, buffer, UPRV_LENGTHOF(buffer), true, status);
         log_info("    total: size=%i  %s\n", uset_getItemCount(ref), aescstrdup(buffer, bufLen));
     }
 
@@ -2231,9 +2352,9 @@ TestGetContractionsAndUnsafes(void)
             log_err_status(status, "Unable to open collator for locale %s ==> %s\n", tests[i].locale, u_errorName(status));
             continue;
         }
-        ucol_getContractionsAndExpansions(coll, conts, exp, TRUE, &status);
+        ucol_getContractionsAndExpansions(coll, conts, exp, true, &status);
         doSetsTest(tests[i].locale, conts, set, tests[i].inConts, tests[i].outConts, &status);
-        setLen = uset_toPattern(conts, buffer, setBufferLen, TRUE, &status);
+        setLen = uset_toPattern(conts, buffer, setBufferLen, true, &status);
         if(U_SUCCESS(status)) {
             /*log_verbose("Contractions %i: %s\n", uset_getItemCount(conts), aescstrdup(buffer, setLen));*/
         } else {
@@ -2241,7 +2362,7 @@ TestGetContractionsAndUnsafes(void)
             status = U_ZERO_ERROR;
         }
         doSetsTest(tests[i].locale, exp, set, tests[i].inExp, tests[i].outExp, &status);
-        setLen = uset_toPattern(exp, buffer, setBufferLen, TRUE, &status);
+        setLen = uset_toPattern(exp, buffer, setBufferLen, true, &status);
         if(U_SUCCESS(status)) {
             /*log_verbose("Expansions %i: %s\n", uset_getItemCount(exp), aescstrdup(buffer, setLen));*/
         } else {
@@ -2252,7 +2373,7 @@ TestGetContractionsAndUnsafes(void)
         noConts = ucol_getUnsafeSet(coll, conts, &status);
         (void)noConts;   /* Suppress set but not used warning */
         doSetsTest(tests[i].locale, conts, set, tests[i].unsafeCodeUnits, tests[i].safeCodeUnits, &status);
-        setLen = uset_toPattern(conts, buffer, setBufferLen, TRUE, &status);
+        setLen = uset_toPattern(conts, buffer, setBufferLen, true, &status);
         if(U_SUCCESS(status)) {
             log_verbose("Unsafe %i: %s\n", uset_getItemCount(exp), aescstrdup(buffer, setLen));
         } else {
@@ -2400,10 +2521,10 @@ static UBool uenum_contains(UEnumeration *e, const char *s, UErrorCode *status) 
     uenum_reset(e, status);
     while(((t = uenum_next(e, NULL, status)) != NULL) && U_SUCCESS(*status)) {
         if(uprv_strcmp(s, t) == 0) {
-            return TRUE;
+            return true;
         }
     }
-    return FALSE;
+    return false;
 }
 
 static void TestGetKeywordValuesForLocale(void) {
@@ -2431,14 +2552,14 @@ static void TestGetKeywordValuesForLocale(void) {
     UEnumeration *keywordValues = NULL;
     int32_t i, n, size;
     const char *locale = NULL, *value = NULL;
-    UBool errorOccurred = FALSE;
+    UBool errorOccurred = false;
 
     for (i = 0; i < UPRV_LENGTHOF(PREFERRED) && !errorOccurred; i++) {
         locale = PREFERRED[i][0];
         value = NULL;
         size = 0;
 
-        keywordValues = ucol_getKeywordValuesForLocale("collation", locale, TRUE, &status);
+        keywordValues = ucol_getKeywordValuesForLocale("collation", locale, true, &status);
         if (keywordValues == NULL || U_FAILURE(status)) {
             log_err_status(status, "Error getting keyword values: %s\n", u_errorName(status));
             break;
@@ -2452,7 +2573,7 @@ static void TestGetKeywordValuesForLocale(void) {
                     log_err("Keyword value \"%s\" missing for locale: %s\n", value, locale);
                 } else {
                     log_err("While getting keyword value from locale: %s got this error: %s\n", locale, u_errorName(status));
-                    errorOccurred = TRUE;
+                    errorOccurred = true;
                     break;
                 }
             }
@@ -2563,6 +2684,20 @@ static void TestStrcollNull(void) {
     }
 
     ucol_close(coll);
+}
+
+static void TestLocaleIDWithUnderscoreAndExtension(void) {
+    UErrorCode err = U_ZERO_ERROR;
+    UCollator* c1 = ucol_open("en-US-u-kn-true", &err);
+    UCollator* c2 = ucol_open("en_US-u-kn-true", &err);
+    
+    if (assertSuccess("Failed to create collators", &err)) {
+        assertTrue("Comparison using \"normal\" collator failed", !ucol_greater(c1, u"2", -1, u"10", -1));
+        assertTrue("Comparison using \"bad\" collator failed", !ucol_greater(c2, u"2", -1, u"10", -1));
+    }
+    
+    ucol_close(c1);
+    ucol_close(c2);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */

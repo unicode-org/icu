@@ -20,7 +20,7 @@
 #include "uprinter.h"
 
 UPrinter::UPrinter(FILE *file, const char *locale, const char *encoding, UBool transliterateNonPrintable) {
-  _on = TRUE;
+  _on = true;
   out = u_finit(file, locale, encoding);
   strcpy(_locale, locale);
   if(transliterateNonPrintable) {
@@ -31,7 +31,7 @@ UPrinter::UPrinter(FILE *file, const char *locale, const char *encoding, UBool t
 };
 
 UPrinter::UPrinter(const char *name, const char *locale, const char *encoding, UTransliterator *trans, UBool transliterateNonPrintable) {
-  _on = TRUE;
+  _on = true;
   out = u_fopen(name, "wb", locale, encoding);
   u_fputc(0xFEFF, out); // emit a BOM
   strcpy(_locale, locale);
@@ -109,10 +109,10 @@ void UPrinter::log(const char *fmt, ...)
 
 void
 UPrinter::on(void) {
-  _on = TRUE;
+  _on = true;
 }
 
 void
 UPrinter::off(void) {
-  _on = FALSE;
+  _on = false;
 }

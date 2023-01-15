@@ -174,7 +174,7 @@ public:
      * @return         true if other is semantically equal to this.
      * @stable ICU 2.0
      */
-    UBool operator==(const DateFormatSymbols& other) const;
+    bool operator==(const DateFormatSymbols& other) const;
 
     /**
      * Return true if another object is semantically unequal to this one.
@@ -183,7 +183,7 @@ public:
      * @return         true if other is semantically unequal to this.
      * @stable ICU 2.0
      */
-    UBool operator!=(const DateFormatSymbols& other) const { return !operator==(other); }
+    bool operator!=(const DateFormatSymbols& other) const { return !operator==(other); }
 
     /**
      * Gets abbreviated era strings. For example: "AD" and "BC".
@@ -628,7 +628,7 @@ public:
      *
      * @stable ICU 2.2
      */
-    virtual UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const override;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
@@ -920,7 +920,7 @@ private:
     char validLocale[ULOC_FULLNAME_CAPACITY];
     char actualLocale[ULOC_FULLNAME_CAPACITY];
 
-    DateFormatSymbols(); // default constructor not implemented
+    DateFormatSymbols() = delete; // default constructor not implemented
 
     /**
      * Called by the constructors to actually load data from the resources

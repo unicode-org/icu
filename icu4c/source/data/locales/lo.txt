@@ -119,6 +119,8 @@ lo{
             }
             patterns{
                 accountingFormat{"¤#,##0.00;¤-#,##0.00"}
+                accountingFormat%alphaNextToNumber{"¤ #,##0.00;¤ -#,##0.00"}
+                accountingFormat%noCurrency{"#,##0.00"}
                 currencyFormat{"¤#,##0.00;¤-#,##0.00"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#"}
@@ -200,6 +202,44 @@ lo{
                     }
                     100000000000000{
                         other{"¤000 ລ້ານລ້ານ"}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
+                    1000{
+                        other{"¤ 0 ພັນ"}
+                    }
+                    10000{
+                        other{"¤ 00 ພັນ"}
+                    }
+                    100000{
+                        other{"¤ 000 ພັນ"}
+                    }
+                    1000000{
+                        other{"¤ 0 ລ້ານ"}
+                    }
+                    10000000{
+                        other{"¤ 00 ລ້ານ"}
+                    }
+                    100000000{
+                        other{"¤ 000 ລ້ານ"}
+                    }
+                    1000000000{
+                        other{"¤ 0 ຕື້"}
+                    }
+                    10000000000{
+                        other{"¤ 00 ຕື້"}
+                    }
+                    100000000000{
+                        other{"¤ 000 ຕື້"}
+                    }
+                    1000000000000{
+                        other{"¤ 0 ລ້ານລ້ານ"}
+                    }
+                    10000000000000{
+                        other{"¤ 00 ລ້ານລ້ານ"}
+                    }
+                    100000000000000{
+                        other{"¤ 000 ລ້ານລ້ານ"}
                     }
                 }
                 decimalFormat{
@@ -730,6 +770,7 @@ lo{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, MMM d, y G"}
                 GyMMMd{"G d MMM y"}
+                GyMd{"d/M/GGGGG y"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -933,6 +974,7 @@ lo{
                 GyMMM{"MMM, G y"}
                 GyMMMEd{"E d MMMM, G y"}
                 GyMMMd{"d MMMM, G y"}
+                GyMd{"d/M/GGGGG y"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -2858,5 +2900,20 @@ lo{
         UK{"ສະຫະລາດຊະອານາຈັກອັງກິດ"}
         US{"ສະຫະລັດອາເມລິກາ"}
         metric{"ເມທຣິກ"}
+    }
+    personNames{
+        foreignSpaceReplacement{""}
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "lo",
+            }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
     }
 }

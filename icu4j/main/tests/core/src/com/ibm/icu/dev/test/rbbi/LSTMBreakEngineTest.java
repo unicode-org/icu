@@ -80,7 +80,7 @@ public class LSTMBreakEngineTest extends TestFmwk {
                     int length = fields[1].length();
                     CharacterIterator input = new StringCharacterIterator(fields[1]);
                     DictionaryBreakEngine.DequeI foundBreaks = new DictionaryBreakEngine.DequeI();
-                    int ret = engine.findBreaks(input, 0, length, foundBreaks);
+                    int ret = engine.findBreaks(input, 0, length, foundBreaks, false);
                     StringBuilder sb = new StringBuilder();
                     sb.append('{');
                     for (int i = 0; i < foundBreaks.size(); i++) {

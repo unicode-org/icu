@@ -182,8 +182,8 @@ public class TimeUnitTest extends TestFmwk {
                 "1 έτος",
                 // "el_GR" 1 short
                 "1 δευτ.",
-                "1 λεπ.",
-                "1 ώρα",
+                "1 λ.",
+                "1 ώ.",
                 "1 ημέρα",
                 "1 εβδ.",
                 "1 μήν.",
@@ -198,8 +198,8 @@ public class TimeUnitTest extends TestFmwk {
                 "7 έτη",
                 // "el_GR" 7 short
                 "7 δευτ.",
-                "7 λεπ.",
-                "7 ώρ.",		    // hour (other)
+                "7 λ.",
+                "7 ώ.",		        // hour (other)
                 "7 ημέρες",
                 "7 εβδ.",
                 "7 μήν.",
@@ -214,8 +214,8 @@ public class TimeUnitTest extends TestFmwk {
                 "1 έτος",
                 // "el" 1 short
                 "1 δευτ.",
-                "1 λεπ.",
-                "1 ώρα",
+                "1 λ.",
+                "1 ώ.",
                 "1 ημέρα",
                 "1 εβδ.",
                 "1 μήν.",
@@ -230,8 +230,8 @@ public class TimeUnitTest extends TestFmwk {
                 "7 έτη",
                 // "el" 7 short
                 "7 δευτ.",
-                "7 λεπ.",
-                "7 ώρ.",		    // hour (other)
+                "7 λ.",
+                "7 ώ.",		        // hour (other)
                 "7 ημέρες",
                 "7 εβδ.",
                 "7 μήν.",

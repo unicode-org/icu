@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
+import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.util.MeasureUnit;
 
 public class UnitsConverter {
@@ -48,8 +49,9 @@ public class UnitsConverter {
      */
     public UnitsConverter(MeasureUnitImpl source, MeasureUnitImpl target, ConversionRates conversionRates) {
         Convertibility convertibility = extractConvertibility(source, target, conversionRates);
-        // TODO(icu-units#82): throw exception if conversion between incompatible types was requested?
-        assert (convertibility == Convertibility.CONVERTIBLE || convertibility == Convertibility.RECIPROCAL);
+        if (convertibility != Convertibility.CONVERTIBLE && convertibility != Convertibility.RECIPROCAL) {
+            throw new IllegalIcuArgumentException("input units must be convertible or reciprocal");
+        }
 
         Factor sourceToBase = conversionRates.getFactorToBase(source);
         Factor targetToBase = conversionRates.getFactorToBase(target);
@@ -113,10 +115,8 @@ public class UnitsConverter {
         if (this.reciprocal) {
             // We should see no offsets for reciprocal conversions - they don't make sense:
             assert offset == BigDecimal.ZERO;
-            if (result == BigDecimal.ZERO) {
-                // TODO: demonstrate the resulting behaviour in tests... and
-                // figure out desired behaviour. (Theoretical result should be
-                // infinity, not 0, but BigDecimal does not support infinity.)
+            if (result.compareTo(BigDecimal.ZERO) == 0) {
+                // TODO(ICU-21988): determine desirable behaviour
                 return BigDecimal.ZERO;
             }
             result = BigDecimal.ONE.divide(result, DECIMAL128);
@@ -129,10 +129,8 @@ public class UnitsConverter {
         if (this.reciprocal) {
             // We should see no offsets for reciprocal conversions - they don't make sense:
             assert offset == BigDecimal.ZERO;
-            if (result == BigDecimal.ZERO) {
-                // TODO: demonstrate the resulting behaviour in tests... and
-                // figure out desired behaviour. (Theoretical result should be
-                // infinity, not 0, but BigDecimal does not support infinity.)
+            if (result.compareTo(BigDecimal.ZERO) == 0) {
+                // TODO(ICU-21988): determine desirable behaviour
                 return BigDecimal.ZERO;
             }
             result = BigDecimal.ONE.divide(result, DECIMAL128);
@@ -189,6 +187,12 @@ public class UnitsConverter {
         private int exponentGlucoseMolarMass = 0;
         /** Exponent for the item per mole conversion rate constant */
         private int exponentItemPerMole = 0;
+        /** Exponent for the meters per AU conversion rate constant */
+        private int exponentMetersPerAU = 0;
+        /** Exponent for the sec per julian year conversion rate constant */
+        private int exponentSecPerJulianYear = 0;
+        /** Exponent for the speed of light meters per second" conversion rate constant */
+        private int exponentSpeedOfLightMetersPerSecond = 0;
 
         /**
          * Creates Empty Factor
@@ -242,6 +246,9 @@ public class UnitsConverter {
             result.exponentLbToKg = this.exponentLbToKg;
             result.exponentGlucoseMolarMass = this.exponentGlucoseMolarMass;
             result.exponentItemPerMole = this.exponentItemPerMole;
+            result.exponentMetersPerAU = this.exponentMetersPerAU;
+            result.exponentSecPerJulianYear = this.exponentSecPerJulianYear;
+            result.exponentSpeedOfLightMetersPerSecond = this.exponentSpeedOfLightMetersPerSecond;
 
             return result;
         }
@@ -269,6 +276,9 @@ public class UnitsConverter {
             resultCollector.multiply(new BigDecimal("0.45359237"), this.exponentLbToKg);
             resultCollector.multiply(new BigDecimal("180.1557"), this.exponentGlucoseMolarMass);
             resultCollector.multiply(new BigDecimal("6.02214076E+23"), this.exponentItemPerMole);
+            resultCollector.multiply(new BigDecimal("149597870700"), this.exponentMetersPerAU);
+            resultCollector.multiply(new BigDecimal("31557600"), this.exponentSecPerJulianYear);
+            resultCollector.multiply(new BigDecimal("299792458"), this.exponentSpeedOfLightMetersPerSecond);
 
             return resultCollector.factorNum.divide(resultCollector.factorDen, DECIMAL128);
         }
@@ -325,6 +335,10 @@ public class UnitsConverter {
             result.exponentLbToKg = this.exponentLbToKg * power;
             result.exponentGlucoseMolarMass = this.exponentGlucoseMolarMass * power;
             result.exponentItemPerMole = this.exponentItemPerMole * power;
+            result.exponentMetersPerAU = this.exponentMetersPerAU * power;
+            result.exponentSecPerJulianYear = this.exponentSecPerJulianYear * power;
+            result.exponentSpeedOfLightMetersPerSecond =
+                this.exponentSpeedOfLightMetersPerSecond * power;
 
             return result;
         }
@@ -343,6 +357,10 @@ public class UnitsConverter {
             result.exponentGlucoseMolarMass =
                 this.exponentGlucoseMolarMass - other.exponentGlucoseMolarMass;
             result.exponentItemPerMole = this.exponentItemPerMole - other.exponentItemPerMole;
+            result.exponentMetersPerAU = this.exponentMetersPerAU - other.exponentMetersPerAU;
+            result.exponentSecPerJulianYear = this.exponentSecPerJulianYear - other.exponentSecPerJulianYear;
+            result.exponentSpeedOfLightMetersPerSecond =
+                this.exponentSpeedOfLightMetersPerSecond - other.exponentSpeedOfLightMetersPerSecond;
 
             return result;
         }
@@ -361,6 +379,10 @@ public class UnitsConverter {
             result.exponentGlucoseMolarMass =
                 this.exponentGlucoseMolarMass + other.exponentGlucoseMolarMass;
             result.exponentItemPerMole = this.exponentItemPerMole + other.exponentItemPerMole;
+            result.exponentMetersPerAU = this.exponentMetersPerAU + other.exponentMetersPerAU;
+            result.exponentSecPerJulianYear = this.exponentSecPerJulianYear + other.exponentSecPerJulianYear;
+            result.exponentSpeedOfLightMetersPerSecond =
+                this.exponentSpeedOfLightMetersPerSecond + other.exponentSpeedOfLightMetersPerSecond;
 
             return result;
         }
@@ -404,9 +426,15 @@ public class UnitsConverter {
                 this.exponentGlucoseMolarMass += power;
             } else if ("item_per_mole".equals(entity)) {
                 this.exponentItemPerMole += power;
+            } else if ("meters_per_AU".equals(entity)) {
+                this.exponentMetersPerAU += power;
             } else if ("PI".equals(entity)) {
                 this.exponentPi += power;
-            } else {
+             } else if ("sec_per_julian_year".equals(entity)) {
+                this.exponentSecPerJulianYear += power;
+            } else if ("speed_of_light_meters_per_second".equals(entity)) {
+                this.exponentSpeedOfLightMetersPerSecond += power;
+           } else {
                 BigDecimal decimalEntity = new BigDecimal(entity).pow(power, DECIMAL128);
                 this.factorNum = this.factorNum.multiply(decimalEntity);
             }

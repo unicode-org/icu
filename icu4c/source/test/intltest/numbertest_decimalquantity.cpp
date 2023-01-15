@@ -33,6 +33,7 @@ void DecimalQuantityTest::runIndexedTest(int32_t index, UBool exec, const char *
         TESTCASE_AUTO(testNickelRounding);
         TESTCASE_AUTO(testScientificAndCompactSuppressedExponent);
         TESTCASE_AUTO(testSuppressedExponentUnchangedByInitialScaling);
+        TESTCASE_AUTO(testDecimalQuantityParseFormatRoundTrip);
     TESTCASE_AUTO_END;
 }
 
@@ -101,8 +102,11 @@ void DecimalQuantityTest::testDecimalQuantityBehaviorStandalone() {
     assertToStringAndHealth(fq, u"<DecimalQuantity 2:-3 long 987654321E-6>");
     fq.roundToInfinity();
     assertToStringAndHealth(fq, u"<DecimalQuantity 2:-3 long 987654321E-6>");
-    fq.roundToIncrement(0.005, RoundingMode::UNUM_ROUND_HALFEVEN, status);
+    fq.roundToIncrement(4, -3, RoundingMode::UNUM_ROUND_HALFEVEN, status);
     assertSuccess("Rounding to increment", status);
+    assertToStringAndHealth(fq, u"<DecimalQuantity 2:-3 long 987656E-3>");
+    fq.roundToNickel(-3, RoundingMode::UNUM_ROUND_HALFEVEN, status);
+    assertSuccess("Rounding to nickel", status);
     assertToStringAndHealth(fq, u"<DecimalQuantity 2:-3 long 987655E-3>");
     fq.roundToMagnitude(-2, RoundingMode::UNUM_ROUND_HALFEVEN, status);
     assertSuccess("Rounding to magnitude", status);
@@ -317,7 +321,7 @@ void DecimalQuantityTest::testUseApproximateDoubleWhenAble() {
                  {1.235, 3, RoundingMode::UNUM_ROUND_CEILING, true}};
 
     UErrorCode status = U_ZERO_ERROR;
-    for (TestCase cas : cases) {
+    for (const TestCase& cas : cases) {
         DecimalQuantity fq;
         fq.setToDouble(cas.d);
         assertTrue("Should be using approximate double", !fq.isExplicitExactDouble());
@@ -623,7 +627,7 @@ void DecimalQuantityTest::testScientificAndCompactSuppressedExponent() {
         // test the actual computed values of the plural operands
 
         double expectedNOperand = cas.expectedDouble;
-        double expectedIOperand = cas.expectedLong;
+        double expectedIOperand = static_cast<double>(cas.expectedLong);
         double expectedEOperand = cas.expectedSuppressedScientificExponent;
         double expectedCOperand = cas.expectedSuppressedCompactExponent;
         double actualNOperand = dq.getPluralOperand(PLURAL_OPERAND_N);
@@ -719,6 +723,54 @@ void DecimalQuantityTest::testSuppressedExponentUnchangedByInitialScaling() {
                 compactCOperand + 3,
                 compactScaledCOperand);
     }
+}
+
+
+void DecimalQuantityTest::testDecimalQuantityParseFormatRoundTrip() {
+    IcuTestErrorCode status(*this, "testDecimalQuantityParseFormatRoundTrip");
+    
+    struct TestCase {
+        UnicodeString numberString;
+    } cases[] = {
+        // number string
+        { u"0" },
+        { u"1" },
+        { u"1.0" },
+        { u"1.00" },
+        { u"1.1" },
+        { u"1.10" },
+        { u"-1.10" },
+        { u"0.0" },
+        { u"1c5" },
+        { u"1.0c5" },
+        { u"1.1c5" },
+        { u"1.10c5" },
+        { u"0.00" },
+        { u"0.1" },
+        { u"1c-1" },
+        { u"1.0c-1" }
+    };
+
+    for (const auto& cas : cases) {
+        UnicodeString numberString = cas.numberString;
+
+        DecimalQuantity dq = DecimalQuantity::fromExponentString(numberString, status);
+        UnicodeString roundTrip = dq.toExponentString();
+
+        assertEquals("DecimalQuantity format(parse(s)) should equal original s", numberString, roundTrip);
+    }
+
+    DecimalQuantity dq = DecimalQuantity::fromExponentString(u"1c0", status);
+    assertEquals("Zero ignored for visible exponent",
+                u"1",
+                dq.toExponentString());
+
+    dq.clear();
+    dq = DecimalQuantity::fromExponentString(u"1.0c0", status);
+    assertEquals("Zero ignored for visible exponent",
+                u"1.0",
+                dq.toExponentString());
+
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

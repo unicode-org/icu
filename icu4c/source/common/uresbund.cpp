@@ -49,7 +49,7 @@ TODO: This cache should probably be removed when the deprecated code is
       completely removed.
 */
 static UHashtable *cache = NULL;
-static icu::UInitOnce gCacheInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gCacheInitOnce {};
 
 static UMutex resbMutex;
 
@@ -85,10 +85,207 @@ static UBool chopLocale(char *name) {
 
     if(i != NULL) {
         *i = '\0';
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
+}
+
+static UBool hasVariant(const char* localeID) {
+    UErrorCode err = U_ZERO_ERROR;
+    int32_t variantLength = uloc_getVariant(localeID, NULL, 0, &err);
+    return variantLength != 0;
+}
+
+// This file contains the tables for doing locale fallback, which are generated
+// by the CLDR-to-ICU process directly from the CLDR data.  This file should only
+// ever be included from here.
+#define INCLUDED_FROM_URESBUND_CPP
+#include "localefallback_data.h"
+
+static const char* performFallbackLookup(const char* key,
+                                         const char* keyStrs,
+                                         const char* valueStrs,
+                                         const int32_t* lookupTable,
+                                         int32_t lookupTableLength) {
+    const int32_t* bottom = lookupTable;
+    const int32_t* top = lookupTable + lookupTableLength;
+
+    while (bottom < top) {
+        // Effectively, divide by 2 and round down to an even index
+        const int32_t* middle = bottom + (((top - bottom) / 4) * 2);
+        const char* entryKey = &(keyStrs[*middle]);
+        int32_t strcmpResult = uprv_strcmp(key, entryKey);
+        if (strcmpResult == 0) {
+            return &(valueStrs[middle[1]]);
+        } else if (strcmpResult < 0) {
+            top = middle;
+        } else {
+            bottom = middle + 2;
+        }
+    }
+    return nullptr;
+}
+
+static CharString getDefaultScript(const CharString& language, const CharString& region) {
+    const char* defaultScript = nullptr;
+    UErrorCode err = U_ZERO_ERROR;
+    
+    // the default script will be "Latn" if we don't find the locale ID in the tables
+    CharString result("Latn", err);
+    
+    // if we were passed both language and region, make them into a locale ID and look that up in the default
+    // script table
+    if (!region.isEmpty()) {
+        CharString localeID;
+        localeID.append(language, err).append("_", err).append(region, err);
+        if (U_FAILURE(err)) {
+            return result;
+        }
+        defaultScript = performFallbackLookup(localeID.data(), dsLocaleIDChars, scriptCodeChars, defaultScriptTable, UPRV_LENGTHOF(defaultScriptTable));
+    }
+    
+    // if we didn't find anything, look up just the language in the default script table
+    if (defaultScript == nullptr) {
+        defaultScript = performFallbackLookup(language.data(), dsLocaleIDChars, scriptCodeChars, defaultScriptTable, UPRV_LENGTHOF(defaultScriptTable));
+    }
+    
+    // if either lookup above succeeded, copy the result from "defaultScript" into "result"; otherwise, return "Latn"
+    if (defaultScript != nullptr) {
+        result.clear();
+        result.append(defaultScript, err);
+    }
+    return result;
+}
+
+enum UResOpenType {
+    /**
+     * Open a resource bundle for the locale;
+     * if there is not even a base language bundle, then fall back to the default locale;
+     * if there is no bundle for that either, then load the root bundle.
+     *
+     * This is the default bundle loading behavior.
+     */
+    URES_OPEN_LOCALE_DEFAULT_ROOT,
+    // TODO: ICU ticket #11271 "consistent default locale across locale trees"
+    // Add an option to look at the main locale tree for whether to
+    // fall back to root directly (if the locale has main data) or
+    // fall back to the default locale first (if the locale does not even have main data).
+    /**
+     * Open a resource bundle for the locale;
+     * if there is not even a base language bundle, then load the root bundle;
+     * never fall back to the default locale.
+     *
+     * This is used for algorithms that have good pan-Unicode default behavior,
+     * such as case mappings, collation, and segmentation (BreakIterator).
+     */
+    URES_OPEN_LOCALE_ROOT,
+    /**
+     * Open a resource bundle for the exact bundle name as requested;
+     * no fallbacks, do not load parent bundles.
+     *
+     * This is used for supplemental (non-locale) data.
+     */
+    URES_OPEN_DIRECT
+};
+typedef enum UResOpenType UResOpenType;
+
+/**
+ *  Internal function, determines the search path for resource bundle files.
+ *  Currently, this function is used only by findFirstExisting() to help search for resource bundle files when a bundle for the specified
+ *  locale doesn't exist.  The code that supports inheritance of resources between existing resource bundle files continues to
+ *  use chopLocale() below.
+ *  @param name In-out parameter: On input, the locale ID to get a parent locale ID for (this is a locale's base name, without keywords); on output, the
+ *  requested parent locale ID.
+ *  @param origName The original locale ID the caller of findFirstExisting() requested.  This is the same as `name` on the first call to this function,
+ *  but as findFirstExisting() ascends the resource bundle's parent tree, this parameter will continue to be the original locale ID requested.
+ */
+static bool getParentLocaleID(char *name, const char *origName, UResOpenType openType) {
+    // early out if the locale ID has a variant code or ends with _
+    size_t nameLen = uprv_strlen(name);
+    if (!nameLen || name[nameLen - 1] == '_' || hasVariant(name)) {
+        return chopLocale(name);
+    }
+    
+    UErrorCode err = U_ZERO_ERROR;
+    const char* tempNamePtr = name;
+    CharString language = ulocimp_getLanguage(tempNamePtr, &tempNamePtr, err);
+    if (*tempNamePtr == '_') {
+        ++tempNamePtr;
+    }
+    CharString script = ulocimp_getScript(tempNamePtr, &tempNamePtr, err);
+    if (*tempNamePtr == '_') {
+        ++tempNamePtr;
+    }
+    CharString region = ulocimp_getCountry(tempNamePtr, &tempNamePtr, err);
+    CharString workingLocale;
+    if (U_FAILURE(err)) {
+        // hopefully this never happens...
+        return chopLocale(name);
+    }
+    
+    // if the open type is URES_OPEN_LOCALE_DEFAULT_ROOT, first look the locale ID up in the parent locale table;
+    // if that table specifies a parent for it, return that  (we don't do this for the other open types-- if we're not
+    // falling back through the system default locale, we also want to do straight truncation fallback instead
+    // of looking things up in the parent locale table-- see https://www.unicode.org/reports/tr35/tr35.html#Parent_Locales:
+    // "Collation data, however, is an exception...")
+    if (openType == URES_OPEN_LOCALE_DEFAULT_ROOT) {
+        const char* parentID = performFallbackLookup(name, parentLocaleChars, parentLocaleChars, parentLocaleTable, UPRV_LENGTHOF(parentLocaleTable));
+        if (parentID != NULL) {
+            uprv_strcpy(name, parentID);
+            return true;
+        }
+    }
+
+    // if it's not in the parent locale table, figure out the fallback script algorithmically
+    // (see CLDR-15265 for an explanation of the algorithm)
+    if (!script.isEmpty() && !region.isEmpty()) {
+        // if "name" has both script and region, is the script the default script?
+        // - if so, remove it and keep the region
+        // - if not, remove the region and keep the script
+        if (getDefaultScript(language, region) == script.toStringPiece()) {
+            workingLocale.append(language, err).append("_", err).append(region, err);
+        } else {
+            workingLocale.append(language, err).append("_", err).append(script, err);
+        }
+    } else if (!region.isEmpty()) {
+        // if "name" has region but not script, did the original locale ID specify a script?
+        // - if yes, replace the region with the script from the original locale ID
+        // - if no, replace the region with the default script for that language and region
+        UErrorCode err = U_ZERO_ERROR;
+        tempNamePtr = origName;
+        CharString origNameLanguage = ulocimp_getLanguage(tempNamePtr, &tempNamePtr, err);
+        if (*tempNamePtr == '_') {
+            ++tempNamePtr;
+        }
+        CharString origNameScript = ulocimp_getScript(origName, nullptr, err);
+        if (!origNameScript.isEmpty()) {
+            workingLocale.append(language, err).append("_", err).append(origNameScript, err);
+        } else {
+            workingLocale.append(language, err).append("_", err).append(getDefaultScript(language, region), err);
+        }
+    } else if (!script.isEmpty()) {
+        // if "name" has script but not region (and our open type if URES_OPEN_LOCALE_DEFAULT_ROOT), is the script
+        // the default script for the language?
+        // - if so, remove it from the locale ID
+        // - if not, return false to continue up the chain
+        // (we don't do this for other open types for the same reason we don't look things up in the parent
+        // locale table for other open types-- see the reference to UTS #35 above)
+        if (openType != URES_OPEN_LOCALE_DEFAULT_ROOT || getDefaultScript(language, CharString()) == script.toStringPiece()) {
+            workingLocale.append(language, err);
+        } else {
+            return false;
+        }
+    } else {
+        // if "name" just contains a language code, return false so the calling code falls back to "root"
+        return false;
+    }
+    if (U_SUCCESS(err) && !workingLocale.isEmpty()) {
+        uprv_strcpy(name, workingLocale.data());
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -113,47 +310,49 @@ static void entryIncrease(UResourceDataEntry *entry) {
 }
 
 /**
- *  Internal function. Tries to find a resource in given Resource 
+ *  Internal function. Tries to find a resource in given Resource
  *  Bundle, as well as in its parents
  */
-static const ResourceData *getFallbackData(const UResourceBundle* resBundle, const char* * resTag, UResourceDataEntry* *realData, Resource *res, UErrorCode *status) {
-    UResourceDataEntry *resB = resBundle->fData;
+static UResourceDataEntry *getFallbackData(
+        const UResourceBundle *resBundle,
+        const char **resTag, Resource *res, UErrorCode *status) {
+    UResourceDataEntry *dataEntry = resBundle->fData;
     int32_t indexR = -1;
     int32_t i = 0;
     *res = RES_BOGUS;
-    if(resB != NULL) {
-        if(resB->fBogus == U_ZERO_ERROR) { /* if this resource is real, */
-            *res = res_getTableItemByKey(&(resB->fData), resB->fData.rootRes, &indexR, resTag); /* try to get data from there */
-            i++;
-        }
-        if(resBundle->fHasFallback == TRUE) {
-            while(*res == RES_BOGUS && resB->fParent != NULL) { /* Otherwise, we'll look in parents */
-                resB = resB->fParent;
-                if(resB->fBogus == U_ZERO_ERROR) {
-                    i++;
-                    *res = res_getTableItemByKey(&(resB->fData), resB->fData.rootRes, &indexR, resTag);
-                }
-            }
-        }
-
-        if(*res != RES_BOGUS) { /* If the resource is found in parents, we need to adjust the error */
-            if(i>1) {
-                if(uprv_strcmp(resB->fName, uloc_getDefault())==0 || uprv_strcmp(resB->fName, kRootLocaleName)==0) {
-                    *status = U_USING_DEFAULT_WARNING;
-                } else {
-                    *status = U_USING_FALLBACK_WARNING;
-                }
-            }
-            *realData = resB;
-            return (&(resB->fData));
-        } else { /* If resource is not found, we need to give an error */
-            *status = U_MISSING_RESOURCE_ERROR;
-            return NULL;
-        }
-    } else {
-            *status = U_MISSING_RESOURCE_ERROR;
-            return NULL;
+    if(dataEntry == nullptr) {
+        *status = U_MISSING_RESOURCE_ERROR;
+        return nullptr;
     }
+    if(dataEntry->fBogus == U_ZERO_ERROR) { /* if this resource is real, */
+        *res = res_getTableItemByKey(&(dataEntry->fData), dataEntry->fData.rootRes, &indexR, resTag); /* try to get data from there */
+        i++;
+    }
+    if(resBundle->fHasFallback) {
+        // Otherwise, we'll look in parents.
+        while(*res == RES_BOGUS && dataEntry->fParent != nullptr) {
+            dataEntry = dataEntry->fParent;
+            if(dataEntry->fBogus == U_ZERO_ERROR) {
+                i++;
+                *res = res_getTableItemByKey(&(dataEntry->fData), dataEntry->fData.rootRes, &indexR, resTag);
+            }
+        }
+    }
+
+    if(*res == RES_BOGUS) {
+        // If the resource is not found, we need to give an error.
+        *status = U_MISSING_RESOURCE_ERROR;
+        return nullptr;
+    }
+    // If the resource is found in parents, we need to adjust the error.
+    if(i>1) {
+        if(uprv_strcmp(dataEntry->fName, uloc_getDefault())==0 || uprv_strcmp(dataEntry->fName, kRootLocaleName)==0) {
+            *status = U_USING_DEFAULT_WARNING;
+        } else {
+            *status = U_USING_FALLBACK_WARNING;
+        }
+    }
+    return dataEntry;
 }
 
 static void
@@ -197,7 +396,7 @@ static int32_t ures_flushCache()
     }
 
     do {
-        deletedMore = FALSE;
+        deletedMore = false;
         /*creates an enumeration to iterate through every element in the table */
         pos = UHASH_FIRST;
         while ((e = uhash_nextElement(cache, &pos)) != NULL)
@@ -214,7 +413,7 @@ static int32_t ures_flushCache()
 
             if (resB->fCountExisting == 0) {
                 rbDeletedNum++;
-                deletedMore = TRUE;
+                deletedMore = true;
                 uhash_removeElement(cache, e);
                 free_entry(resB);
             }
@@ -232,7 +431,7 @@ static int32_t ures_flushCache()
 #include <stdio.h>
 
 U_CAPI UBool U_EXPORT2 ures_dumpCacheContents(void) {
-  UBool cacheNotEmpty = FALSE;
+  UBool cacheNotEmpty = false;
   int32_t pos = UHASH_FIRST;
   const UHashElement *e;
   UResourceDataEntry *resB;
@@ -240,11 +439,11 @@ U_CAPI UBool U_EXPORT2 ures_dumpCacheContents(void) {
     Mutex lock(&resbMutex);
     if (cache == NULL) {
       fprintf(stderr,"%s:%d: RB Cache is NULL.\n", __FILE__, __LINE__);
-      return FALSE;
+      return false;
     }
 
     while ((e = uhash_nextElement(cache, &pos)) != NULL) {
-      cacheNotEmpty=TRUE;
+      cacheNotEmpty=true;
       resB = (UResourceDataEntry *) e->value.pointer;
       fprintf(stderr,"%s:%d: RB Cache: Entry @0x%p, refcount %d, name %s:%s.  Pool 0x%p, alias 0x%p, parent 0x%p\n",
               __FILE__, __LINE__,
@@ -270,7 +469,7 @@ static UBool U_CALLCONV ures_cleanup(void)
         cache = NULL;
     }
     gCacheInitOnce.reset();
-    return TRUE;
+    return true;
 }
 
 /** INTERNAL: Initializes the cache for resources */
@@ -318,7 +517,7 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
     const char *name;
     char aliasName[100] = { 0 };
     int32_t aliasLen = 0;
-    /*UBool isAlias = FALSE;*/
+    /*UBool isAlias = false;*/
     /*UHashTok hashkey; */
 
     if(U_FAILURE(*status)) {
@@ -461,20 +660,21 @@ getPoolEntry(const char *path, UErrorCode *status) {
 /* INTERNAL: */
 /*   CAUTION:  resbMutex must be locked when calling this function! */
 static UResourceDataEntry *
-findFirstExisting(const char* path, char* name,
-                  UBool *isRoot, UBool *hasChopped, UBool *isDefault, UErrorCode* status) {
+findFirstExisting(const char* path, char* name, const char* defaultLocale, UResOpenType openType,
+                  UBool *isRoot, UBool *foundParent, UBool *isDefault, UErrorCode* status) {
     UResourceDataEntry *r = NULL;
-    UBool hasRealData = FALSE;
-    const char *defaultLoc = uloc_getDefault();
-    *hasChopped = TRUE; /* we're starting with a fresh name */
+    UBool hasRealData = false;
+    *foundParent = true; /* we're starting with a fresh name */
+    char origName[ULOC_FULLNAME_CAPACITY];
 
-    while(*hasChopped && !hasRealData) {
+    uprv_strcpy(origName, name);
+    while(*foundParent && !hasRealData) {
         r = init_entry(name, path, status);
         /* Null pointer test */
         if (U_FAILURE(*status)) {
             return NULL;
         }
-        *isDefault = (UBool)(uprv_strncmp(name, defaultLoc, uprv_strlen(name)) == 0);
+        *isDefault = (UBool)(uprv_strncmp(name, defaultLocale, uprv_strlen(name)) == 0);
         hasRealData = (UBool)(r->fBogus == U_ZERO_ERROR);
         if(!hasRealData) {
             /* this entry is not real. We will discard it. */
@@ -493,8 +693,14 @@ findFirstExisting(const char* path, char* name,
         *isRoot = (UBool)(uprv_strcmp(name, kRootLocaleName) == 0);
 
         /*Fallback data stuff*/
-        *hasChopped = chopLocale(name);
-        if (*hasChopped && *name == '\0') {
+        if (!hasRealData) {
+            *foundParent = getParentLocaleID(name, origName, openType);
+        } else {
+            // we've already found a real resource file; what we return to the caller is the parent
+            // locale ID for inheritance, which should come from chopLocale(), not getParentLocaleID()
+            *foundParent = chopLocale(name);
+        }
+        if (*foundParent && *name == '\0') {
             uprv_strcpy(name, "und");
         }
     }
@@ -512,13 +718,13 @@ static void ures_setIsStackObject( UResourceBundle* resB, UBool state) {
 }
 
 static UBool ures_isStackObject(const UResourceBundle* resB) {
-  return((resB->fMagic1 == MAGIC1 && resB->fMagic2 == MAGIC2)?FALSE:TRUE);
+  return((resB->fMagic1 == MAGIC1 && resB->fMagic2 == MAGIC2)?false:true);
 }
 
 
 U_CFUNC void ures_initStackObject(UResourceBundle* resB) {
   uprv_memset(resB, 0, sizeof(UResourceBundle));
-  ures_setIsStackObject(resB, TRUE);
+  ures_setIsStackObject(resB, true);
 }
 
 U_NAMESPACE_BEGIN
@@ -537,8 +743,8 @@ static UBool  // returns U_SUCCESS(*status)
 loadParentsExceptRoot(UResourceDataEntry *&t1,
                       char name[], int32_t nameCapacity,
                       UBool usingUSRData, char usrDataPath[], UErrorCode *status) {
-    if (U_FAILURE(*status)) { return FALSE; }
-    UBool checkParent = TRUE;
+    if (U_FAILURE(*status)) { return false; }
+    UBool checkParent = true;
     while (checkParent && t1->fParent == NULL && !t1->fData.noFallback &&
             res_getResource(&t1->fData,"%%ParentIsRoot") == RES_BOGUS) {
         Resource parentRes = res_getResource(&t1->fData, "%%Parent");
@@ -549,7 +755,7 @@ loadParentsExceptRoot(UResourceDataEntry *&t1,
             if(parentLocaleName != NULL && 0 < parentLocaleLen && parentLocaleLen < nameCapacity) {
                 u_UCharsToChars(parentLocaleName, name, parentLocaleLen + 1);
                 if (uprv_strcmp(name, kRootLocaleName) == 0) {
-                    return TRUE;
+                    return true;
                 }
             }
         }
@@ -558,7 +764,7 @@ loadParentsExceptRoot(UResourceDataEntry *&t1,
         UResourceDataEntry *t2 = init_entry(name, t1->fPath, &parentStatus);
         if (U_FAILURE(parentStatus)) {
             *status = parentStatus;
-            return FALSE;
+            return false;
         }
         UResourceDataEntry *u2 = NULL;
         UErrorCode usrStatus = U_ZERO_ERROR;
@@ -567,7 +773,7 @@ loadParentsExceptRoot(UResourceDataEntry *&t1,
             // If we failed due to out-of-memory, report that to the caller and exit early.
             if (usrStatus == U_MEMORY_ALLOCATION_ERROR) {
                 *status = usrStatus;
-                return FALSE;
+                return false;
             }
         }
 
@@ -584,54 +790,22 @@ loadParentsExceptRoot(UResourceDataEntry *&t1,
         t1 = t2;
         checkParent = chopLocale(name) || mayHaveParent(name);
     }
-    return TRUE;
+    return true;
 }
 
 static UBool  // returns U_SUCCESS(*status)
 insertRootBundle(UResourceDataEntry *&t1, UErrorCode *status) {
-    if (U_FAILURE(*status)) { return FALSE; }
+    if (U_FAILURE(*status)) { return false; }
     UErrorCode parentStatus = U_ZERO_ERROR;
     UResourceDataEntry *t2 = init_entry(kRootLocaleName, t1->fPath, &parentStatus);
     if (U_FAILURE(parentStatus)) {
         *status = parentStatus;
-        return FALSE;
+        return false;
     }
     t1->fParent = t2;
     t1 = t2;
-    return TRUE;
+    return true;
 }
-
-enum UResOpenType {
-    /**
-     * Open a resource bundle for the locale;
-     * if there is not even a base language bundle, then fall back to the default locale;
-     * if there is no bundle for that either, then load the root bundle.
-     *
-     * This is the default bundle loading behavior.
-     */
-    URES_OPEN_LOCALE_DEFAULT_ROOT,
-    // TODO: ICU ticket #11271 "consistent default locale across locale trees"
-    // Add an option to look at the main locale tree for whether to
-    // fall back to root directly (if the locale has main data) or
-    // fall back to the default locale first (if the locale does not even have main data).
-    /**
-     * Open a resource bundle for the locale;
-     * if there is not even a base language bundle, then load the root bundle;
-     * never fall back to the default locale.
-     *
-     * This is used for algorithms that have good pan-Unicode default behavior,
-     * such as case mappings, collation, and segmentation (BreakIterator).
-     */
-    URES_OPEN_LOCALE_ROOT,
-    /**
-     * Open a resource bundle for the exact bundle name as requested;
-     * no fallbacks, do not load parent bundles.
-     *
-     * This is used for supplemental (non-locale) data.
-     */
-    URES_OPEN_DIRECT
-};
-typedef enum UResOpenType UResOpenType;
 
 static UResourceDataEntry *entryOpen(const char* path, const char* localeID,
                                      UResOpenType openType, UErrorCode* status) {
@@ -639,10 +813,10 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID,
     UErrorCode intStatus = U_ZERO_ERROR;
     UResourceDataEntry *r = NULL;
     UResourceDataEntry *t1 = NULL;
-    UBool isDefault = FALSE;
-    UBool isRoot = FALSE;
-    UBool hasRealData = FALSE;
-    UBool hasChopped = TRUE;
+    UBool isDefault = false;
+    UBool isRoot = false;
+    UBool hasRealData = false;
+    UBool hasChopped = true;
     UBool usingUSRData = U_USE_USRDATA && ( path == NULL || uprv_strncmp(path,U_ICUDATA_NAME,8) == 0);
 
     char name[ULOC_FULLNAME_CAPACITY];
@@ -669,10 +843,13 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID,
         }
     }
  
+    // Note: We need to query the default locale *before* locking resbMutex.
+    const char *defaultLocale = uloc_getDefault();
+
     Mutex lock(&resbMutex);    // Lock resbMutex until the end of this function.
 
     /* We're going to skip all the locales that do not have any data */
-    r = findFirstExisting(path, name, &isRoot, &hasChopped, &isDefault, &intStatus);
+    r = findFirstExisting(path, name, defaultLocale, openType, &isRoot, &hasChopped, &isDefault, &intStatus);
 
     // If we failed due to out-of-memory, report the failure and exit early.
     if (intStatus == U_MEMORY_ALLOCATION_ERROR) {
@@ -682,7 +859,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID,
 
     if(r != NULL) { /* if there is one real locale, we can look for parents. */
         t1 = r;
-        hasRealData = TRUE;
+        hasRealData = true;
         if ( usingUSRData ) {  /* This code inserts user override data into the inheritance chain */
             UErrorCode usrStatus = U_ZERO_ERROR;
             UResourceDataEntry *u1 = init_entry(t1->fName, usrDataPath, &usrStatus);
@@ -712,8 +889,8 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID,
     /* if that is the case, we need to chain in the default locale   */
     if(r==NULL && openType == URES_OPEN_LOCALE_DEFAULT_ROOT && !isDefault && !isRoot) {
         /* insert default locale */
-        uprv_strcpy(name, uloc_getDefault());
-        r = findFirstExisting(path, name, &isRoot, &hasChopped, &isDefault, &intStatus);
+        uprv_strcpy(name, defaultLocale);
+        r = findFirstExisting(path, name, defaultLocale, openType, &isRoot, &hasChopped, &isDefault, &intStatus);
         // If we failed due to out-of-memory, report the failure and exit early.
         if (intStatus == U_MEMORY_ALLOCATION_ERROR) {
             *status = intStatus;
@@ -722,8 +899,8 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID,
         intStatus = U_USING_DEFAULT_WARNING;
         if(r != NULL) { /* the default locale exists */
             t1 = r;
-            hasRealData = TRUE;
-            isDefault = TRUE;
+            hasRealData = true;
+            isDefault = true;
             // TODO: Why not if (usingUSRData) { ... } like in the non-default-locale code path?
             if ((hasChopped || mayHaveParent(name)) && !isRoot) {
                 if (!loadParentsExceptRoot(t1, name, UPRV_LENGTHOF(name), usingUSRData, usrDataPath, status)) {
@@ -737,7 +914,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID,
     /* present */
     if(r == NULL) {
         uprv_strcpy(name, kRootLocaleName);
-        r = findFirstExisting(path, name, &isRoot, &hasChopped, &isDefault, &intStatus);
+        r = findFirstExisting(path, name, defaultLocale, openType, &isRoot, &hasChopped, &isDefault, &intStatus);
         // If we failed due to out-of-memory, report the failure and exit early.
         if (intStatus == U_MEMORY_ALLOCATION_ERROR) {
             *status = intStatus;
@@ -746,7 +923,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID,
         if(r != NULL) {
             t1 = r;
             intStatus = U_USING_DEFAULT_WARNING;
-            hasRealData = TRUE;
+            hasRealData = true;
         } else { /* we don't even have the root locale */
             *status = U_MISSING_RESOURCE_ERROR;
             goto finish;
@@ -791,7 +968,17 @@ entryOpenDirect(const char* path, const char* localeID, UErrorCode* status) {
         return NULL;
     }
 
+    // Note: We need to query the default locale *before* locking resbMutex.
+    // If the localeID is NULL, then we want to use the default locale.
+    if (localeID == NULL) {
+        localeID = uloc_getDefault();
+    } else if (*localeID == 0) {
+        // If the localeID is "", then we want to use the root locale.
+        localeID = kRootLocaleName;
+    }
+
     Mutex lock(&resbMutex);
+
     // findFirstExisting() without fallbacks.
     UResourceDataEntry *r = init_entry(localeID, path, status);
     if(U_SUCCESS(*status)) {
@@ -812,7 +999,7 @@ entryOpenDirect(const char* path, const char* localeID, UErrorCode* status) {
         char name[ULOC_FULLNAME_CAPACITY];
         uprv_strcpy(name, localeID);
         if(!chopLocale(name) || uprv_strcmp(name, kRootLocaleName) == 0 ||
-                loadParentsExceptRoot(t1, name, UPRV_LENGTHOF(name), FALSE, NULL, status)) {
+                loadParentsExceptRoot(t1, name, UPRV_LENGTHOF(name), false, NULL, status)) {
             if(uprv_strcmp(t1->fName, kRootLocaleName) != 0 && t1->fParent == NULL) {
                 insertRootBundle(t1, status);
             }
@@ -942,7 +1129,7 @@ ures_closeBundle(UResourceBundle* resB, UBool freeBundleObj)
         }
         ures_freeResPath(resB);
 
-        if(ures_isStackObject(resB) == FALSE && freeBundleObj) {
+        if(ures_isStackObject(resB) == false && freeBundleObj) {
             uprv_free(resB);
         }
 #if 0 /*U_DEBUG*/
@@ -957,246 +1144,273 @@ ures_closeBundle(UResourceBundle* resB, UBool freeBundleObj)
 U_CAPI void  U_EXPORT2
 ures_close(UResourceBundle* resB)
 {
-    ures_closeBundle(resB, TRUE);
+    ures_closeBundle(resB, true);
 }
 
-static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r, 
-                                         const char *key, int32_t idx, UResourceDataEntry *realData, 
-                                         const UResourceBundle *parent, int32_t noAlias,
-                                         UResourceBundle *resB, UErrorCode *status) 
-{
+namespace {
+
+UResourceBundle *init_resb_result(
+        UResourceDataEntry *dataEntry, Resource r, const char *key, int32_t idx,
+        UResourceDataEntry *validLocaleDataEntry, const char *containerResPath,
+        int32_t recursionDepth,
+        UResourceBundle *resB, UErrorCode *status);
+
+// TODO: Try to refactor further, so that we output a dataEntry + Resource + (optionally) resPath,
+// rather than a UResourceBundle.
+// May need to entryIncrease() the resulting dataEntry.
+UResourceBundle *getAliasTargetAsResourceBundle(
+        const ResourceData &resData, Resource r, const char *key, int32_t idx,
+        UResourceDataEntry *validLocaleDataEntry, const char *containerResPath,
+        int32_t recursionDepth,
+        UResourceBundle *resB, UErrorCode *status) {
+    // TODO: When an error occurs: Should we return nullptr vs. resB?
+    if (U_FAILURE(*status)) { return resB; }
+    U_ASSERT(RES_GET_TYPE(r) == URES_ALIAS);
+    int32_t len = 0;
+    const UChar *alias = res_getAlias(&resData, r, &len);
+    if(len <= 0) {
+        // bad alias
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return resB;
+    }
+
+    // Copy the UTF-16 alias string into an invariant-character string.
+    //
+    // We do this so that res_findResource() can modify the path,
+    // which allows us to remove redundant _res_findResource() variants
+    // in uresdata.c.
+    // res_findResource() now NUL-terminates each segment so that table keys
+    // can always be compared with strcmp() instead of strncmp().
+    // Saves code there and simplifies testing and code coverage.
+    //
+    // markus 2003oct17
+    CharString chAlias;
+    chAlias.appendInvariantChars(alias, len, *status);
+    if (U_FAILURE(*status)) {
+        return nullptr;
+    }
+
+    // We have an alias, now let's cut it up.
+    const char *path = nullptr, *locale = nullptr, *keyPath = nullptr;
+    if(chAlias[0] == RES_PATH_SEPARATOR) {
+        // There is a path included.
+        char *chAliasData = chAlias.data();
+        char *sep = chAliasData + 1;
+        path = sep;
+        sep = uprv_strchr(sep, RES_PATH_SEPARATOR);
+        if(sep != nullptr) {
+            *sep++ = 0;
+        }
+        if(uprv_strcmp(path, "LOCALE") == 0) {
+            // This is an XPath alias, starting with "/LOCALE/".
+            // It contains the path to a resource which should be looked up
+            // starting in the valid locale.
+            // TODO: Can/should we forbid a /LOCALE alias without key path?
+            //   It seems weird to alias to the same path, just starting from the valid locale.
+            //   That will often yield an infinite loop.
+            keyPath = sep;
+            // Read from the valid locale which we already have.
+            path = locale = nullptr;
+        } else {
+            if(uprv_strcmp(path, "ICUDATA") == 0) { /* want ICU data */
+                path = nullptr;
+            }
+            if (sep == nullptr) {
+                // TODO: This ends up using the root bundle. Can/should we forbid this?
+                locale = "";
+            } else {
+                locale = sep;
+                sep = uprv_strchr(sep, RES_PATH_SEPARATOR);
+                if(sep != nullptr) {
+                    *sep++ = 0;
+                }
+                keyPath = sep;
+            }
+        }
+    } else {
+        // No path, start with a locale.
+        char *sep = chAlias.data();
+        locale = sep;
+        sep = uprv_strchr(sep, RES_PATH_SEPARATOR);
+        if(sep != nullptr) {
+            *sep++ = 0;
+        }
+        keyPath = sep;
+        path = validLocaleDataEntry->fPath;
+    }
+
+    // Got almost everything, let's try to open.
+    // First, open the bundle with real data.
+    LocalUResourceBundlePointer mainRes;
+    UResourceDataEntry *dataEntry;
+    if (locale == nullptr) {
+        // alias = /LOCALE/keyPath
+        // Read from the valid locale which we already have.
+        dataEntry = validLocaleDataEntry;
+    } else {
+        UErrorCode intStatus = U_ZERO_ERROR;
+        // TODO: Shouldn't we use ures_open() for locale data bundles (!noFallback)?
+        mainRes.adoptInstead(ures_openDirect(path, locale, &intStatus));
+        if(U_FAILURE(intStatus)) {
+            // We failed to open the resource bundle we're aliasing to.
+            *status = intStatus;
+            return resB;
+        }
+        dataEntry = mainRes->fData;
+    }
+
+    const char* temp = nullptr;
+    if(keyPath == nullptr) {
+        // No key path. This means that we are going to to use the corresponding resource from
+        // another bundle.
+        // TODO: Why the special code path?
+        //   Why not put together a key path from containerResPath + key or idx,
+        //   as a comment below suggests, and go into the regular code branch?
+        // First, we are going to get a corresponding container
+        // resource to the one we are searching.
+        r = dataEntry->fData.rootRes;
+        if(containerResPath) {
+            chAlias.clear().append(containerResPath, *status);
+            if (U_FAILURE(*status)) {
+                return nullptr;
+            }
+            char *aKey = chAlias.data();
+            // TODO: should res_findResource() return a new dataEntry, too?
+            r = res_findResource(&dataEntry->fData, r, &aKey, &temp);
+        }
+        if(key) {
+            // We need to make keyPath from the containerResPath and
+            // current key, if there is a key associated.
+            chAlias.clear().append(key, *status);
+            if (U_FAILURE(*status)) {
+                return nullptr;
+            }
+            char *aKey = chAlias.data();
+            r = res_findResource(&dataEntry->fData, r, &aKey, &temp);
+        } else if(idx != -1) {
+            // If there is no key, but there is an index, try to get by the index.
+            // Here we have either a table or an array, so get the element.
+            int32_t type = RES_GET_TYPE(r);
+            if(URES_IS_TABLE(type)) {
+                const char *aKey;
+                r = res_getTableItemByIndex(&dataEntry->fData, r, idx, &aKey);
+            } else { /* array */
+                r = res_getArrayItem(&dataEntry->fData, r, idx);
+            }
+        }
+        if(r != RES_BOGUS) {
+            resB = init_resb_result(
+                dataEntry, r, temp, -1, validLocaleDataEntry, nullptr, recursionDepth+1,
+                resB, status);
+        } else {
+            *status = U_MISSING_RESOURCE_ERROR;
+        }
+    } else {
+        // This one is a bit trickier.
+        // We start finding keys, but after we resolve one alias, the path might continue.
+        // Consider:
+        //     aliastest:alias { "testtypes/anotheralias/Sequence" }
+        //     anotheralias:alias { "/ICUDATA/sh/CollationElements" }
+        // aliastest resource should finally have the sequence, not collation elements.
+        CharString pathBuf(keyPath, *status);
+        if (U_FAILURE(*status)) {
+            return nullptr;
+        }
+        char *myPath = pathBuf.data();
+        containerResPath = nullptr;
+        // Now we have fallback following here.
+        for(;;) {
+            r = dataEntry->fData.rootRes;
+            // TODO: Move  containerResPath = nullptr  to here,
+            // consistent with restarting from the rootRes of another bundle?!
+
+            // This loop handles 'found' resources over several levels.
+            while(*myPath && U_SUCCESS(*status)) {
+                r = res_findResource(&(dataEntry->fData), r, &myPath, &temp);
+                if(r == RES_BOGUS) {
+                    // No resource found, we don't really want to look anymore on this level.
+                    break;
+                }
+                // Found a resource, but it might be an indirection.
+                resB = init_resb_result(
+                    dataEntry, r, temp, -1,
+                    validLocaleDataEntry, containerResPath, recursionDepth+1,
+                    resB, status);
+                if (U_FAILURE(*status)) {
+                    break;
+                }
+                if (temp == nullptr || uprv_strcmp(keyPath, temp) != 0) {
+                    // The call to init_resb_result() above will set resB->fKeyPath to be
+                    // the same as resB->fKey,
+                    // throwing away any additional path elements if we had them --
+                    // if the key path wasn't just a single resource ID, clear out
+                    // the bundle's key path and re-set it to be equal to keyPath.
+                    ures_freeResPath(resB);
+                    ures_appendResPath(resB, keyPath, (int32_t)uprv_strlen(keyPath), status);
+                    if(resB->fResPath[resB->fResPathLen-1] != RES_PATH_SEPARATOR) {
+                        ures_appendResPath(resB, RES_PATH_SEPARATOR_S, 1, status);
+                    }
+                    if (U_FAILURE(*status)) {
+                        break;
+                    }
+                }
+                r = resB->fRes; /* switch to a new resource, possibly a new tree */
+                dataEntry = resB->fData;
+                containerResPath = resB->fResPath;
+            }
+            if (U_FAILURE(*status) || r != RES_BOGUS) {
+                break;
+            }
+            // Fall back to the parent bundle, if there is one.
+            dataEntry = dataEntry->fParent;
+            if (dataEntry == nullptr) {
+                *status = U_MISSING_RESOURCE_ERROR;
+                break;
+            }
+            // Copy the same keyPath again.
+            myPath = pathBuf.data();
+            uprv_strcpy(myPath, keyPath);
+        }
+    }
+    if(mainRes.getAlias() == resB) {
+        mainRes.orphan();
+    }
+    ResourceTracer(resB).maybeTrace("getalias");
+    return resB;
+}
+
+// Recursive function, should be called only by itself, by its simpler wrapper,
+// or by getAliasTargetAsResourceBundle().
+UResourceBundle *init_resb_result(
+        UResourceDataEntry *dataEntry, Resource r, const char *key, int32_t idx,
+        UResourceDataEntry *validLocaleDataEntry, const char *containerResPath,
+        int32_t recursionDepth,
+        UResourceBundle *resB, UErrorCode *status) {
+    // TODO: When an error occurs: Should we return nullptr vs. resB?
     if(status == NULL || U_FAILURE(*status)) {
         return resB;
     }
-    if (parent == NULL) {
+    if (validLocaleDataEntry == nullptr) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
-    if(RES_GET_TYPE(r) == URES_ALIAS) { /* This is an alias, need to exchange with real data */
-        if(noAlias < URES_MAX_ALIAS_LEVEL) { 
-            int32_t len = 0;
-            const UChar *alias = res_getAlias(rdata, r, &len); 
-            if(len > 0) {
-                /* we have an alias, now let's cut it up */
-                char stackAlias[200];
-                char *chAlias = NULL, *path = NULL, *locale = NULL, *keyPath = NULL;
-                int32_t capacity;
-
-                /*
-                * Allocate enough space for both the char * version
-                * of the alias and parent->fResPath.
-                *
-                * We do this so that res_findResource() can modify the path,
-                * which allows us to remove redundant _res_findResource() variants
-                * in uresdata.c.
-                * res_findResource() now NUL-terminates each segment so that table keys
-                * can always be compared with strcmp() instead of strncmp().
-                * Saves code there and simplifies testing and code coverage.
-                *
-                * markus 2003oct17
-                */
-                ++len; /* count the terminating NUL */
-                if(parent->fResPath != NULL) {
-                    capacity = (int32_t)uprv_strlen(parent->fResPath) + 1;
-                } else {
-                    capacity = 0;
-                }
-                if(capacity < len) {
-                    capacity = len;
-                }
-                if(capacity <= (int32_t)sizeof(stackAlias)) {
-                    capacity = (int32_t)sizeof(stackAlias);
-                    chAlias = stackAlias;
-                } else {
-                    chAlias = (char *)uprv_malloc(capacity);
-                    /* test for NULL */
-                    if(chAlias == NULL) {
-                        *status = U_MEMORY_ALLOCATION_ERROR;
-                        return NULL;
-                    }
-                }
-                u_UCharsToChars(alias, chAlias, len);
-
-                if(*chAlias == RES_PATH_SEPARATOR) {
-                    /* there is a path included */
-                    locale = uprv_strchr(chAlias+1, RES_PATH_SEPARATOR);
-                    if(locale == NULL) {
-                        locale = uprv_strchr(chAlias, 0); /* avoid locale == NULL to make code below work */
-                    } else {
-                        *locale = 0;
-                        locale++;
-                    }
-                    path = chAlias+1;
-                    if(uprv_strcmp(path, "LOCALE") == 0) {
-                        /* this is an XPath alias, starting with "/LOCALE/" */
-                        /* it contains the path to a resource which should be looked up */
-                        /* starting in the requested locale */
-                        keyPath = locale; 
-                        locale = parent->fTopLevelData->fName; /* this is the requested locale's name */
-                        path = realData->fPath; /* we will be looking in the same package */
-                    } else {
-                        if(uprv_strcmp(path, "ICUDATA") == 0) { /* want ICU data */
-                            path = NULL;
-                        }
-                        keyPath = uprv_strchr(locale, RES_PATH_SEPARATOR);
-                        if(keyPath) {
-                            *keyPath = 0;
-                            keyPath++;
-                        }
-                    }
-                } else {
-                    /* no path, start with a locale */
-                    locale = chAlias;
-                    keyPath = uprv_strchr(locale, RES_PATH_SEPARATOR);
-                    if(keyPath) {
-                        *keyPath = 0;
-                        keyPath++;
-                    }
-                    path = realData->fPath;
-                }
-
-
-                {
-                    /* got almost everything, let's try to open */
-                    /* first, open the bundle with real data */
-                    UResourceBundle *result = resB;
-                    const char* temp = NULL;
-                    UErrorCode intStatus = U_ZERO_ERROR;
-                    UResourceBundle *mainRes = ures_openDirect(path, locale, &intStatus); 
-                    if(U_SUCCESS(intStatus)) {
-                        if(keyPath == NULL) {
-                            /* no key path. This means that we are going to 
-                            * to use the corresponding resource from
-                            * another bundle
-                            */
-                            /* first, we are going to get a corresponding parent 
-                            * resource to the one we are searching.
-                            */
-                            char *aKey = parent->fResPath;
-                            if(aKey) {
-                                uprv_strcpy(chAlias, aKey); /* allocated large enough above */
-                                aKey = chAlias;
-                                r = res_findResource(&(mainRes->fResData), mainRes->fRes, &aKey, &temp);
-                            } else {
-                                r = mainRes->fRes;
-                            }
-                            if(key) {
-                                /* we need to make keyPath from parent's fResPath and
-                                * current key, if there is a key associated
-                                */
-                                len = (int32_t)(uprv_strlen(key) + 1);
-                                if(len > capacity) {
-                                    capacity = len;
-                                    if(chAlias == stackAlias) {
-                                        chAlias = (char *)uprv_malloc(capacity);
-                                    } else {
-                                        chAlias = (char *)uprv_realloc(chAlias, capacity);
-                                    }
-                                    if(chAlias == NULL) {
-                                        ures_close(mainRes);
-                                        *status = U_MEMORY_ALLOCATION_ERROR;
-                                        return NULL;
-                                    }
-                                }
-                                uprv_memcpy(chAlias, key, len);
-                                aKey = chAlias;
-                                r = res_findResource(&(mainRes->fResData), r, &aKey, &temp);
-                            } else if(idx != -1) {
-                                /* if there is no key, but there is an index, try to get by the index */
-                                /* here we have either a table or an array, so get the element */
-                                int32_t type = RES_GET_TYPE(r);
-                                if(URES_IS_TABLE(type)) {
-                                    r = res_getTableItemByIndex(&(mainRes->fResData), r, idx, (const char **)&aKey);
-                                } else { /* array */
-                                    r = res_getArrayItem(&(mainRes->fResData), r, idx);
-                                }
-                            }
-                            if(r != RES_BOGUS) {
-                                result = init_resb_result(&(mainRes->fResData), r, temp, -1, mainRes->fData, mainRes, noAlias+1, resB, status);
-                            } else {
-                                *status = U_MISSING_RESOURCE_ERROR;
-                                result = resB;
-                            }
-                        } else {
-                            /* this one is a bit trickier. 
-                            * we start finding keys, but after we resolve one alias, the path might continue.
-                            * Consider: 
-                            *     aliastest:alias { "testtypes/anotheralias/Sequence" }
-                            *     anotheralias:alias { "/ICUDATA/sh/CollationElements" }
-                            * aliastest resource should finally have the sequence, not collation elements.
-                            */
-                            UResourceDataEntry *dataEntry = mainRes->fData;
-                            char stackPath[URES_MAX_BUFFER_SIZE];
-                            char *pathBuf = stackPath, *myPath = pathBuf;
-                            if(uprv_strlen(keyPath) >= UPRV_LENGTHOF(stackPath)) {
-                                pathBuf = (char *)uprv_malloc((uprv_strlen(keyPath)+1)*sizeof(char));
-                                if(pathBuf == NULL) {
-                                    *status = U_MEMORY_ALLOCATION_ERROR;
-                                    ures_close(mainRes);
-                                    return NULL;
-                                }
-                            }
-                            uprv_strcpy(pathBuf, keyPath);
-                            result = mainRes;
-                            /* now we have fallback following here */
-                            do {
-                                r = dataEntry->fData.rootRes;     
-                                /* this loop handles 'found' resources over several levels */
-                                while(*myPath && U_SUCCESS(*status)) {
-                                    r = res_findResource(&(dataEntry->fData), r, &myPath, &temp);
-                                    if(r != RES_BOGUS) { /* found a resource, but it might be an indirection */
-                                        resB = init_resb_result(&(dataEntry->fData), r, temp, -1, dataEntry, result, noAlias+1, resB, status);
-                                        result = resB;
-                                        if(result) {
-                                            r = result->fRes; /* switch to a new resource, possibly a new tree */
-                                            dataEntry = result->fData;
-                                        }
-                                    } else { /* no resource found, we don't really want to look anymore on this level */
-                                        break;
-                                    }
-                                }
-                                dataEntry = dataEntry->fParent;
-                                uprv_strcpy(pathBuf, keyPath);
-                                myPath = pathBuf;
-                            } while(r == RES_BOGUS && dataEntry != NULL);
-                            if(r == RES_BOGUS) {
-                                *status = U_MISSING_RESOURCE_ERROR;
-                                result = resB;
-                            }
-                            if(pathBuf != stackPath) {
-                                uprv_free(pathBuf);
-                            }
-                        }
-                    } else { /* we failed to open the resource we're aliasing to */
-                        *status = intStatus;
-                    }
-                    if(chAlias != stackAlias) {
-                        uprv_free(chAlias);
-                    }
-                    if(mainRes != result) {
-                        ures_close(mainRes);
-                    }
-                    ResourceTracer(resB).maybeTrace("getalias");
-                    return result;
-                }
-            } else {
-                /* bad alias, should be an error */ 
-                *status = U_ILLEGAL_ARGUMENT_ERROR;
-                return resB;
-            }
-        } else {
+    if(RES_GET_TYPE(r) == URES_ALIAS) {
+        // This is an alias, need to exchange with real data.
+        if(recursionDepth >= URES_MAX_ALIAS_LEVEL) {
             *status = U_TOO_MANY_ALIASES_ERROR;
             return resB;
         }
+        return getAliasTargetAsResourceBundle(
+            dataEntry->fData, r, key, idx,
+            validLocaleDataEntry, containerResPath, recursionDepth, resB, status);
     }
     if(resB == NULL) {
         resB = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
-        /* test for NULL */
         if (resB == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             return NULL;
         }
-        ures_setIsStackObject(resB, FALSE);
+        ures_setIsStackObject(resB, false);
         resB->fResPath = NULL;
         resB->fResPathLen = 0;
     } else {
@@ -1213,24 +1427,24 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
         treated the same
         */
         /*
-        if(ures_isStackObject(resB) != FALSE) {
+        if(ures_isStackObject(resB) != false) {
         ures_initStackObject(resB);
         }
         */
-        if(parent != resB) {
+        if(containerResPath != resB->fResPath) {
             ures_freeResPath(resB);
         }
     }
-    resB->fData = realData;
+    resB->fData = dataEntry;
     entryIncrease(resB->fData);
-    resB->fHasFallback = FALSE;
-    resB->fIsTopLevel = FALSE;
+    resB->fHasFallback = false;
+    resB->fIsTopLevel = false;
     resB->fIndex = -1;
     resB->fKey = key; 
-    /*resB->fParentRes = parent;*/
-    resB->fTopLevelData = parent->fTopLevelData;
-    if(parent->fResPath && parent != resB) {
-        ures_appendResPath(resB, parent->fResPath, parent->fResPathLen, status);
+    resB->fValidLocaleDataEntry = validLocaleDataEntry;
+    if(containerResPath != resB->fResPath) {
+        ures_appendResPath(
+            resB, containerResPath, static_cast<int32_t>(uprv_strlen(containerResPath)), status);
     }
     if(key != NULL) {
         ures_appendResPath(resB, key, (int32_t)uprv_strlen(key), status);
@@ -1253,12 +1467,22 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
 
     resB->fVersion = NULL;
     resB->fRes = r;
-    /*resB->fParent = parent->fRes;*/
-    uprv_memmove(&resB->fResData, rdata, sizeof(ResourceData));
-    resB->fSize = res_countArrayItems(&(resB->fResData), resB->fRes);
+    resB->fSize = res_countArrayItems(&resB->getResData(), resB->fRes);
     ResourceTracer(resB).trace("get");
     return resB;
 }
+
+UResourceBundle *init_resb_result(
+        UResourceDataEntry *dataEntry, Resource r, const char *key, int32_t idx,
+        // validLocaleDataEntry + containerResPath
+        const UResourceBundle *container,
+        UResourceBundle *resB, UErrorCode *status) {
+    return init_resb_result(
+        dataEntry, r, key, idx,
+        container->fValidLocaleDataEntry, container->fResPath, 0, resB, status);
+}
+
+}  // namespace
 
 UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle *original, UErrorCode *status) {
     UBool isStackObject;
@@ -1267,7 +1491,7 @@ UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle *origin
     }
     if(original != NULL) {
         if(r == NULL) {
-            isStackObject = FALSE;
+            isStackObject = false;
             r = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
             /* test for NULL */
             if (r == NULL) {
@@ -1276,7 +1500,7 @@ UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle *origin
             }
         } else {
             isStackObject = ures_isStackObject(r);
-            ures_closeBundle(r, FALSE);
+            ures_closeBundle(r, false);
         }
         uprv_memcpy(r, original, sizeof(UResourceBundle));
         r->fResPath = NULL;
@@ -1305,7 +1529,7 @@ U_CAPI const UChar* U_EXPORT2 ures_getString(const UResourceBundle* resB, int32_
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
-    s = res_getString({resB}, &(resB->fResData), resB->fRes, len);
+    s = res_getString({resB}, &resB->getResData(), resB->fRes, len);
     if (s == NULL) {
         *status = U_RESOURCE_TYPE_MISMATCH;
     }
@@ -1358,7 +1582,7 @@ ures_toUTF8String(const UChar *s16, int32_t length16,
              * may store UTF-8 natively.
              * (In which case dest would not be used at all.)
              *
-             * We do not do this if forceCopy=TRUE because then the caller
+             * We do not do this if forceCopy=true because then the caller
              * expects the string to start exactly at dest.
              *
              * The test above for <= 0x2aaaaaaa prevents overflows.
@@ -1394,7 +1618,7 @@ U_CAPI const uint8_t* U_EXPORT2 ures_getBinary(const UResourceBundle* resB, int3
     *status = U_ILLEGAL_ARGUMENT_ERROR;
     return NULL;
   }
-  p = res_getBinary({resB}, &(resB->fResData), resB->fRes, len);
+  p = res_getBinary({resB}, &resB->getResData(), resB->fRes, len);
   if (p == NULL) {
     *status = U_RESOURCE_TYPE_MISMATCH;
   }
@@ -1411,7 +1635,7 @@ U_CAPI const int32_t* U_EXPORT2 ures_getIntVector(const UResourceBundle* resB, i
     *status = U_ILLEGAL_ARGUMENT_ERROR;
     return NULL;
   }
-  p = res_getIntVector({resB}, &(resB->fResData), resB->fRes, len);
+  p = res_getIntVector({resB}, &resB->getResData(), resB->fRes, len);
   if (p == NULL) {
     *status = U_RESOURCE_TYPE_MISMATCH;
   }
@@ -1489,7 +1713,7 @@ static const UChar* ures_getStringWithAlias(const UResourceBundle *resB, Resourc
     ures_close(tempRes);
     return result;
   } else {
-    return res_getString({resB, sIndex}, &(resB->fResData), r, len); 
+    return res_getString({resB, sIndex}, &resB->getResData(), r, len); 
   }
 }
 
@@ -1502,7 +1726,7 @@ U_CAPI void U_EXPORT2 ures_resetIterator(UResourceBundle *resB){
 
 U_CAPI UBool U_EXPORT2 ures_hasNext(const UResourceBundle *resB) {
   if(resB == NULL) {
-    return FALSE;
+    return false;
   }
   return (UBool)(resB->fIndex < resB->fSize-1);
 }
@@ -1525,18 +1749,18 @@ U_CAPI const UChar* U_EXPORT2 ures_getNextString(UResourceBundle *resB, int32_t*
     switch(RES_GET_TYPE(resB->fRes)) {
     case URES_STRING:
     case URES_STRING_V2:
-      return res_getString({resB}, &(resB->fResData), resB->fRes, len);
+      return res_getString({resB}, &resB->getResData(), resB->fRes, len);
     case URES_TABLE:
     case URES_TABLE16:
     case URES_TABLE32:
-      r = res_getTableItemByIndex(&(resB->fResData), resB->fRes, resB->fIndex, key);
+      r = res_getTableItemByIndex(&resB->getResData(), resB->fRes, resB->fIndex, key);
       if(r == RES_BOGUS && resB->fHasFallback) {
         /* TODO: do the fallback */
       }
       return ures_getStringWithAlias(resB, r, resB->fIndex, len, status);
     case URES_ARRAY:
     case URES_ARRAY16:
-      r = res_getArrayItem(&(resB->fResData), resB->fRes, resB->fIndex);
+      r = res_getArrayItem(&resB->getResData(), resB->fRes, resB->fIndex);
       if(r == RES_BOGUS && resB->fHasFallback) {
         /* TODO: do the fallback */
       }
@@ -1585,18 +1809,18 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getNextResource(UResourceBundle *resB, UR
         case URES_TABLE:
         case URES_TABLE16:
         case URES_TABLE32:
-            r = res_getTableItemByIndex(&(resB->fResData), resB->fRes, resB->fIndex, &key);
+            r = res_getTableItemByIndex(&resB->getResData(), resB->fRes, resB->fIndex, &key);
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
-            return init_resb_result(&(resB->fResData), r, key, resB->fIndex, resB->fData, resB, 0, fillIn, status);
+            return init_resb_result(resB->fData, r, key, resB->fIndex, resB, fillIn, status);
         case URES_ARRAY:
         case URES_ARRAY16:
-            r = res_getArrayItem(&(resB->fResData), resB->fRes, resB->fIndex);
+            r = res_getArrayItem(&resB->getResData(), resB->fRes, resB->fIndex);
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
-            return init_resb_result(&(resB->fResData), r, key, resB->fIndex, resB->fData, resB, 0, fillIn, status);
+            return init_resb_result(resB->fData, r, key, resB->fIndex, resB, fillIn, status);
         default:
             /*return NULL;*/
             return fillIn;
@@ -1631,18 +1855,18 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByIndex(const UResourceBundle *resB, i
         case URES_TABLE:
         case URES_TABLE16:
         case URES_TABLE32:
-            r = res_getTableItemByIndex(&(resB->fResData), resB->fRes, indexR, &key);
+            r = res_getTableItemByIndex(&resB->getResData(), resB->fRes, indexR, &key);
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
-            return init_resb_result(&(resB->fResData), r, key, indexR, resB->fData, resB, 0, fillIn, status);
+            return init_resb_result(resB->fData, r, key, indexR, resB, fillIn, status);
         case URES_ARRAY:
         case URES_ARRAY16:
-            r = res_getArrayItem(&(resB->fResData), resB->fRes, indexR);
+            r = res_getArrayItem(&resB->getResData(), resB->fRes, indexR);
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
-            return init_resb_result(&(resB->fResData), r, key, indexR, resB->fData, resB, 0, fillIn, status);
+            return init_resb_result(resB->fData, r, key, indexR, resB, fillIn, status);
         default:
             /*return NULL;*/
             return fillIn;
@@ -1670,18 +1894,18 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB,
         switch(RES_GET_TYPE(resB->fRes)) {
         case URES_STRING:
         case URES_STRING_V2:
-            return res_getString({resB}, &(resB->fResData), resB->fRes, len);
+            return res_getString({resB}, &resB->getResData(), resB->fRes, len);
         case URES_TABLE:
         case URES_TABLE16:
         case URES_TABLE32:
-            r = res_getTableItemByIndex(&(resB->fResData), resB->fRes, indexS, &key);
+            r = res_getTableItemByIndex(&resB->getResData(), resB->fRes, indexS, &key);
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
             return ures_getStringWithAlias(resB, r, indexS, len, status);
         case URES_ARRAY:
         case URES_ARRAY16:
-            r = res_getArrayItem(&(resB->fResData), resB->fRes, indexS);
+            r = res_getArrayItem(&resB->getResData(), resB->fRes, indexS);
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
@@ -1789,9 +2013,9 @@ ures_findSubResource(const UResourceBundle *resB, char* path, UResourceBundle *f
   /* this loop is here because aliasing is resolved on this level, not on res level */
   /* so, when we encounter an alias, it is not an aggregate resource, so we return */
   do {
-    res = res_findResource(&(resB->fResData), resB->fRes, &path, &key); 
+    res = res_findResource(&resB->getResData(), resB->fRes, &path, &key); 
     if(res != RES_BOGUS) {
-        result = init_resb_result(&(resB->fResData), res, key, -1, resB->fData, resB, 0, fillIn, status);
+        result = init_resb_result(resB->fData, res, key, -1, resB, fillIn, status);
         resB = result;
     } else {
         *status = U_MISSING_RESOURCE_ERROR;
@@ -1859,13 +2083,85 @@ static Resource getTableItemByKeyPath(const ResourceData *pResData, Resource tab
   return resource;
 }
 
-U_CAPI UResourceBundle* U_EXPORT2 
-ures_getByKeyWithFallback(const UResourceBundle *resB, 
-                          const char* inKey, 
-                          UResourceBundle *fillIn, 
+static void createPath(const char* origResPath,
+                       int32_t     origResPathLen,
+                       const char* resPath,
+                       int32_t     resPathLen,
+                       const char* inKey,
+                       CharString& path,
+                       UErrorCode* status) {
+    // This is a utility function used by ures_getByKeyWithFallback() below.  This function builds a path from
+    // resPath and inKey, returning the result in `path`.  Originally, this function just cleared `path` and
+    // appended resPath and inKey to it, but that caused problems for horizontal inheritance.
+    //
+    // In normal cases, resPath is the same as origResPath, but if ures_getByKeyWithFallback() has followed an
+    // alias, resPath may be different from origResPath.  Not only may the existing path elements be different,
+    // but resPath may also have MORE path elements than origResPath did.  If it does, those additional path
+    // elements SUPERSEDE the corresponding elements of inKey.  So this code counts the number of elements in
+    // resPath and origResPath and, for each path element in resPath that doesn't have a counterpart in origResPath,
+    // deletes a path element from the beginning of inKey.  The remainder of inKey is then appended to
+    // resPath to form the result.  (We're not using uprv_strchr() here because resPath and origResPath may
+    // not be zero-terminated.)
+    path.clear();
+    const char* key = inKey;
+    if (resPathLen > 0) {
+        path.append(resPath, resPathLen, *status);
+        if (U_SUCCESS(*status)) {
+            const char* resPathLimit = resPath + resPathLen;
+            const char* origResPathLimit = origResPath + origResPathLen;
+            const char* resPathPtr = resPath;
+            const char* origResPathPtr = origResPath;
+            
+            // Remove from the beginning of resPath the number of segments that are contained in origResPath.
+            // If origResPath has MORE segments than resPath, this will leave resPath as the empty string.
+            while (origResPathPtr < origResPathLimit && resPathPtr < resPathLimit) {
+                while (origResPathPtr < origResPathLimit && *origResPathPtr != RES_PATH_SEPARATOR) {
+                    ++origResPathPtr;
+                }
+                if (origResPathPtr < origResPathLimit && *origResPathPtr == RES_PATH_SEPARATOR) {
+                    ++origResPathPtr;
+                }
+                while (resPathPtr < resPathLimit && *resPathPtr != RES_PATH_SEPARATOR) {
+                    ++resPathPtr;
+                }
+                if (resPathPtr < resPathLimit && *resPathPtr == RES_PATH_SEPARATOR) {
+                    ++resPathPtr;
+                }
+            }
+            
+            // New remove from the beginning of `key` the number of segments remaining in resPath.
+            // If resPath has more segments than `key` does, `key` will end up empty.
+            while (resPathPtr < resPathLimit && *key != '\0') {
+                while (resPathPtr < resPathLimit && *resPathPtr != RES_PATH_SEPARATOR) {
+                    ++resPathPtr;
+                }
+                if (resPathPtr < resPathLimit && *resPathPtr == RES_PATH_SEPARATOR) {
+                    ++resPathPtr;
+                }
+                while (*key != '\0' && *key != RES_PATH_SEPARATOR) {
+                    ++key;
+                }
+                if (*key == RES_PATH_SEPARATOR) {
+                    ++key;
+                }
+            }
+        }
+        // Finally, append what's left of `key` to `path`.  What you end up with here is `resPath`, plus
+        // any pieces of `key` that aren't superseded by `resPath`.
+        // Or, to put it another way, calculate <#-segments-in-key> - (<#-segments-in-resPath> - <#-segments-in-origResPath>),
+        // and append that many segments from the end of `key` to `resPath` to produce the result.
+        path.append(key, *status);
+    } else {
+        path.append(inKey, *status);
+    }
+}
+
+U_CAPI UResourceBundle* U_EXPORT2
+ures_getByKeyWithFallback(const UResourceBundle *resB,
+                          const char* inKey,
+                          UResourceBundle *fillIn,
                           UErrorCode *status) {
     Resource res = RES_BOGUS, rootRes = RES_BOGUS;
-    /*UResourceDataEntry *realData = NULL;*/
     UResourceBundle *helper = NULL;
 
     if (status==NULL || U_FAILURE(*status)) {
@@ -1878,24 +2174,32 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
 
     int32_t type = RES_GET_TYPE(resB->fRes);
     if(URES_IS_TABLE(type)) {
-        res = getTableItemByKeyPath(&(resB->fResData), resB->fRes, inKey);
+        const char* origResPath = resB->fResPath;
+        int32_t origResPathLen = resB->fResPathLen;
+        res = getTableItemByKeyPath(&resB->getResData(), resB->fRes, inKey);
         const char* key = inKey;
+        bool didRootOnce = false;
         if(res == RES_BOGUS) {
             UResourceDataEntry *dataEntry = resB->fData;
             CharString path;
             char *myPath = NULL;
             const char* resPath = resB->fResPath;
             int32_t len = resB->fResPathLen;
-            while(res == RES_BOGUS && dataEntry->fParent != NULL) { /* Otherwise, we'll look in parents */
-                dataEntry = dataEntry->fParent;
+            while(res == RES_BOGUS && (dataEntry->fParent != NULL || !didRootOnce)) { /* Otherwise, we'll look in parents */
+                if (dataEntry->fParent != NULL) {
+                    dataEntry = dataEntry->fParent;
+                } else {
+                    // We can't just stop when we get to a bundle whose fParent is NULL.  That'll work most of the time,
+                    // but if the bundle that the caller passed to us was "root" (which happens in getAllItemsWithFallback(),
+                    // this function will drop right out without doing anything if "root" doesn't contain the exact key path
+                    // specified.  In that case, we need one extra time through this loop to make sure we follow any
+                    // applicable aliases at the root level.
+                    didRootOnce = true;
+                }
                 rootRes = dataEntry->fData.rootRes;
 
                 if(dataEntry->fBogus == U_ZERO_ERROR) {
-                    path.clear();
-                    if (len > 0) {
-                        path.append(resPath, len, *status);
-                    }
-                    path.append(inKey, *status);
+                    createPath(origResPath, origResPathLen, resPath, len, inKey, path, status);
                     if (U_FAILURE(*status)) {
                         ures_close(helper);
                         return fillIn;
@@ -1906,8 +2210,8 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
                         res = res_findResource(&(dataEntry->fData), rootRes, &myPath, &key);
                         if (RES_GET_TYPE(res) == URES_ALIAS && *myPath) {
                             /* We hit an alias, but we didn't finish following the path. */
-                            helper = init_resb_result(&(dataEntry->fData), res, NULL, -1, dataEntry, resB, 0, helper, status); 
-                            /*helper = init_resb_result(&(dataEntry->fData), res, inKey, -1, dataEntry, resB, 0, helper, status);*/
+                            helper = init_resb_result(dataEntry, res, NULL, -1, resB, helper, status);
+                            /*helper = init_resb_result(dataEntry, res, inKey, -1, resB, helper, status);*/
                             if(helper) {
                               dataEntry = helper->fData;
                               rootRes = helper->fRes;
@@ -1923,7 +2227,7 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
                     } while(*myPath); /* Continue until the whole path is consumed */
                 }
             }
-            /*const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);*/
+            /*dataEntry = getFallbackData(resB, &key, &res, status);*/
             if(res != RES_BOGUS) {
               /* check if resB->fResPath gives the right name here */
                 if(uprv_strcmp(dataEntry->fName, uloc_getDefault())==0 || uprv_strcmp(dataEntry->fName, kRootLocaleName)==0) {
@@ -1932,12 +2236,31 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
                     *status = U_USING_FALLBACK_WARNING;
                 }
 
-                fillIn = init_resb_result(&(dataEntry->fData), res, inKey, -1, dataEntry, resB, 0, fillIn, status);
+                fillIn = init_resb_result(dataEntry, res, key, -1, resB, fillIn, status);
+                if (resPath != nullptr) {
+                    createPath(origResPath, origResPathLen, resPath, len, inKey, path, status);
+                } else {
+                    const char* separator = nullptr;
+                    if (fillIn->fResPath != nullptr) {
+                        separator = uprv_strchr(fillIn->fResPath, RES_PATH_SEPARATOR);
+                    }
+                    if (separator != nullptr && separator[1] != '\0') {
+                        createPath(origResPath, origResPathLen, fillIn->fResPath,
+                                   static_cast<int32_t>(uprv_strlen(fillIn->fResPath)), inKey, path, status);
+                    } else {
+                        createPath(origResPath, origResPathLen, "", 0, inKey, path, status);
+                    }
+                }
+                ures_freeResPath(fillIn);
+                ures_appendResPath(fillIn, path.data(), path.length(), status);
+                if(fillIn->fResPath[fillIn->fResPathLen-1] != RES_PATH_SEPARATOR) {
+                    ures_appendResPath(fillIn, RES_PATH_SEPARATOR_S, 1, status);
+                }
             } else {
                 *status = U_MISSING_RESOURCE_ERROR;
             }
         } else {
-            fillIn = init_resb_result(&(resB->fResData), res, key, -1, resB->fData, resB, 0, fillIn, status);
+            fillIn = init_resb_result(resB->fData, res, key, -1, resB, fillIn, status);
         }
     } 
     else {
@@ -1951,8 +2274,7 @@ namespace {
 
 void getAllItemsWithFallback(
         const UResourceBundle *bundle, ResourceDataValue &value,
-        ResourceSink &sink,
-        UErrorCode &errorCode) {
+        ResourceSink &sink, UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) { return; }
     // We recursively enumerate child-first,
     // only storing parent items in the absence of child items.
@@ -1964,7 +2286,8 @@ void getAllItemsWithFallback(
     // When the sink sees the no-fallback/no-inheritance marker,
     // then it would remove the parent's item.
     // We would deserialize parent values even though they are overridden in a child bundle.
-    value.setData(&bundle->fResData);
+    value.setData(bundle->getResData());
+    value.setValidLocaleDataEntry(bundle->fValidLocaleDataEntry);
     UResourceDataEntry *parentEntry = bundle->fData->fParent;
     UBool hasParent = parentEntry != NULL && U_SUCCESS(parentEntry->fBogus);
     value.setResource(bundle->fRes, ResourceTracer(bundle));
@@ -1978,36 +2301,74 @@ void getAllItemsWithFallback(
         // TODO: See if we can refactor ures_getByKeyWithFallback()
         // and pull out an inner function that takes and returns a UResourceDataEntry
         // so that we need not create UResourceBundle objects.
-        UResourceBundle parentBundle;
-        ures_initStackObject(&parentBundle);
-        parentBundle.fTopLevelData = parentBundle.fData = parentEntry;
-        // TODO: What is the difference between bundle fData and fTopLevelData?
-        uprv_memcpy(&parentBundle.fResData, &parentEntry->fData, sizeof(ResourceData));
-        // TODO: Try to replace bundle.fResData with just using bundle.fData->fData.
-        parentBundle.fHasFallback = !parentBundle.fResData.noFallback;
-        parentBundle.fIsTopLevel = TRUE;
-        parentBundle.fRes = parentBundle.fResData.rootRes;
-        parentBundle.fSize = res_countArrayItems(&(parentBundle.fResData), parentBundle.fRes);
-        parentBundle.fIndex = -1;
+        StackUResourceBundle parentBundle;
+        UResourceBundle &parentRef = parentBundle.ref();
+        parentRef.fData = parentEntry;
+        parentRef.fValidLocaleDataEntry = bundle->fValidLocaleDataEntry;
+        parentRef.fHasFallback = !parentRef.getResData().noFallback;
+        parentRef.fIsTopLevel = true;
+        parentRef.fRes = parentRef.getResData().rootRes;
+        parentRef.fSize = res_countArrayItems(&parentRef.getResData(), parentRef.fRes);
+        parentRef.fIndex = -1;
         entryIncrease(parentEntry);
 
         // Look up the container item in the parent bundle.
-        UResourceBundle containerBundle;
-        ures_initStackObject(&containerBundle);
+        StackUResourceBundle containerBundle;
         const UResourceBundle *rb;
         UErrorCode pathErrorCode = U_ZERO_ERROR;  // Ignore if parents up to root do not have this path.
         if (bundle->fResPath == NULL || *bundle->fResPath == 0) {
-            rb = &parentBundle;
+            rb = parentBundle.getAlias();
         } else {
-            rb = ures_getByKeyWithFallback(&parentBundle, bundle->fResPath,
-                                           &containerBundle, &pathErrorCode);
+            rb = ures_getByKeyWithFallback(parentBundle.getAlias(), bundle->fResPath,
+                                           containerBundle.getAlias(), &pathErrorCode);
         }
         if (U_SUCCESS(pathErrorCode)) {
             getAllItemsWithFallback(rb, value, sink, errorCode);
         }
-        ures_close(&containerBundle);
-        ures_close(&parentBundle);
     }
+}
+
+struct GetAllChildrenSink : public ResourceSink {
+    // Destination sink
+    ResourceSink& dest;
+
+    GetAllChildrenSink(ResourceSink& dest)
+        : dest(dest) {}
+    virtual ~GetAllChildrenSink() override;
+    virtual void put(const char *key, ResourceValue &value, UBool isRoot,
+           UErrorCode &errorCode) override {
+        ResourceTable itemsTable = value.getTable(errorCode);
+        if (U_FAILURE(errorCode)) { return; }
+        for (int32_t i = 0; itemsTable.getKeyAndValue(i, key, value); ++i) {
+            if (value.getType() == URES_ALIAS) {
+                ResourceDataValue& rdv = static_cast<ResourceDataValue&>(value);
+                StackUResourceBundle stackTempBundle;
+                UResourceBundle* aliasRB = getAliasTargetAsResourceBundle(rdv.getData(), rdv.getResource(), nullptr, -1,
+                                                                          rdv.getValidLocaleDataEntry(), nullptr, 0,
+                                                                          stackTempBundle.getAlias(), &errorCode);
+                if (U_SUCCESS(errorCode)) {
+                    ResourceDataValue aliasedValue;
+                    aliasedValue.setData(aliasRB->getResData());
+                    aliasedValue.setValidLocaleDataEntry(aliasRB->fValidLocaleDataEntry);
+                    aliasedValue.setResource(aliasRB->fRes, ResourceTracer(aliasRB));
+                    dest.put(key, aliasedValue, isRoot, errorCode);
+                }
+            } else {
+                dest.put(key, value, isRoot, errorCode);
+            }
+            if (U_FAILURE(errorCode)) { return; }
+        }
+    }
+};
+
+// Virtual destructors must be defined out of line.
+GetAllChildrenSink::~GetAllChildrenSink() {}
+
+U_CAPI void U_EXPORT2
+ures_getAllChildrenWithFallback(const UResourceBundle *bundle, const char *path,
+                                icu::ResourceSink &sink, UErrorCode &errorCode) {
+    GetAllChildrenSink allChildrenSink(sink);
+    ures_getAllItemsWithFallback(bundle, path, allChildrenSink, errorCode);
 }
 
 }  // namespace
@@ -2040,7 +2401,8 @@ ures_getValueWithFallback(const UResourceBundle *bundle, const char *path,
             return;
         }
     }
-    value.setData(&rb->fResData);
+    value.setData(rb->getResData());
+    value.setValidLocaleDataEntry(rb->fValidLocaleDataEntry);
     value.setResource(rb->fRes, ResourceTracer(rb));
 }
 
@@ -2070,7 +2432,7 @@ ures_getAllItemsWithFallback(const UResourceBundle *bundle, const char *path,
 
 U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, const char* inKey, UResourceBundle *fillIn, UErrorCode *status) {
     Resource res = RES_BOGUS;
-    UResourceDataEntry *realData = NULL;
+    UResourceDataEntry *dataEntry = NULL;
     const char *key = inKey;
 
     if (status==NULL || U_FAILURE(*status)) {
@@ -2084,14 +2446,14 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
     int32_t type = RES_GET_TYPE(resB->fRes);
     if(URES_IS_TABLE(type)) {
         int32_t t;
-        res = res_getTableItemByKey(&(resB->fResData), resB->fRes, &t, &key);
+        res = res_getTableItemByKey(&resB->getResData(), resB->fRes, &t, &key);
         if(res == RES_BOGUS) {
             key = inKey;
-            if(resB->fHasFallback == TRUE) {
-                const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);
+            if(resB->fHasFallback) {
+                dataEntry = getFallbackData(resB, &key, &res, status);
                 if(U_SUCCESS(*status)) {
-                  /* check if resB->fResPath gives the right name here */
-                    return init_resb_result(rd, res, key, -1, realData, resB, 0, fillIn, status);
+                    /* check if resB->fResPath gives the right name here */
+                    return init_resb_result(dataEntry, res, key, -1, resB, fillIn, status);
                 } else {
                     *status = U_MISSING_RESOURCE_ERROR;
                 }
@@ -2099,17 +2461,17 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
                 *status = U_MISSING_RESOURCE_ERROR;
             }
         } else {
-            return init_resb_result(&(resB->fResData), res, key, -1, resB->fData, resB, 0, fillIn, status);
+            return init_resb_result(resB->fData, res, key, -1, resB, fillIn, status);
         }
     } 
 #if 0
     /* this is a kind of TODO item. If we have an array with an index table, we could do this. */
     /* not currently */
-    else if(RES_GET_TYPE(resB->fRes) == URES_ARRAY && resB->fHasFallback == TRUE) {
+    else if(RES_GET_TYPE(resB->fRes) == URES_ARRAY && resB->fHasFallback == true) {
         /* here should go a first attempt to locate the key using index table */
-        const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);
+        dataEntry = getFallbackData(resB, &key, &res, status);
         if(U_SUCCESS(*status)) {
-            return init_resb_result(rd, res, key, realData, resB, fillIn, status);
+            return init_resb_result(dataEntry, res, key, resB, fillIn, status);
         } else {
             *status = U_MISSING_RESOURCE_ERROR;
         }
@@ -2123,7 +2485,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
 
 U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, const char* inKey, int32_t* len, UErrorCode *status) {
     Resource res = RES_BOGUS;
-    UResourceDataEntry *realData = NULL;
+    UResourceDataEntry *dataEntry = NULL;
     const char* key = inKey;
 
     if (status==NULL || U_FAILURE(*status)) {
@@ -2138,17 +2500,17 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
     if(URES_IS_TABLE(type)) {
         int32_t t=0;
 
-        res = res_getTableItemByKey(&(resB->fResData), resB->fRes, &t, &key);
+        res = res_getTableItemByKey(&resB->getResData(), resB->fRes, &t, &key);
 
         if(res == RES_BOGUS) {
             key = inKey;
-            if(resB->fHasFallback == TRUE) {
-                const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);
+            if(resB->fHasFallback) {
+                dataEntry = getFallbackData(resB, &key, &res, status);
                 if(U_SUCCESS(*status)) {
                     switch (RES_GET_TYPE(res)) {
                     case URES_STRING:
                     case URES_STRING_V2:
-                        return res_getString({resB, key}, rd, res, len);
+                        return res_getString({resB, key}, &dataEntry->fData, res, len);
                     case URES_ALIAS:
                       {
                         const UChar* result = 0;
@@ -2170,7 +2532,7 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
             switch (RES_GET_TYPE(res)) {
             case URES_STRING:
             case URES_STRING_V2:
-                return res_getString({resB, key}, &(resB->fResData), res, len);
+                return res_getString({resB, key}, &resB->getResData(), res, len);
             case URES_ALIAS:
               {
                 const UChar* result = 0;
@@ -2187,9 +2549,9 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
 #if 0 
     /* this is a kind of TODO item. If we have an array with an index table, we could do this. */
     /* not currently */   
-    else if(RES_GET_TYPE(resB->fRes) == URES_ARRAY && resB->fHasFallback == TRUE) {
+    else if(RES_GET_TYPE(resB->fRes) == URES_ARRAY && resB->fHasFallback == true) {
         /* here should go a first attempt to locate the key using index table */
-        const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);
+        dataEntry = getFallbackData(resB, &key, &res, status);
         if(U_SUCCESS(*status)) {
             // TODO: Tracing
             return res_getString(rd, res, len);
@@ -2258,7 +2620,7 @@ ures_getLocaleByType(const UResourceBundle* resourceBundle,
         case ULOC_ACTUAL_LOCALE:
             return resourceBundle->fData->fName;
         case ULOC_VALID_LOCALE:
-            return resourceBundle->fTopLevelData->fName;
+            return resourceBundle->fValidLocaleDataEntry->fName;
         case ULOC_REQUESTED_LOCALE:
         default:
             *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -2321,20 +2683,19 @@ ures_openWithType(UResourceBundle *r, const char* path, const char* localeID,
             *status = U_MEMORY_ALLOCATION_ERROR;
             return NULL;
         }
-        isStackObject = FALSE;
+        isStackObject = false;
     } else {  // fill-in
         isStackObject = ures_isStackObject(r);
-        ures_closeBundle(r, FALSE);
+        ures_closeBundle(r, false);
     }
     uprv_memset(r, 0, sizeof(UResourceBundle));
     ures_setIsStackObject(r, isStackObject);
 
-    r->fTopLevelData = r->fData = entry;
-    uprv_memcpy(&r->fResData, &entry->fData, sizeof(ResourceData));
-    r->fHasFallback = openType != URES_OPEN_DIRECT && !r->fResData.noFallback;
-    r->fIsTopLevel = TRUE;
-    r->fRes = r->fResData.rootRes;
-    r->fSize = res_countArrayItems(&(r->fResData), r->fRes);
+    r->fValidLocaleDataEntry = r->fData = entry;
+    r->fHasFallback = openType != URES_OPEN_DIRECT && !r->getResData().noFallback;
+    r->fIsTopLevel = true;
+    r->fRes = r->getResData().rootRes;
+    r->fSize = res_countArrayItems(&r->getResData(), r->fRes);
     r->fIndex = -1;
 
     ResourceTracer(r).traceOpen();
@@ -2410,8 +2771,8 @@ ures_countArrayItems(const UResourceBundle* resourceBundle,
     }
     ures_getByKey(resourceBundle, resourceKey, &resData, status);
     
-    if(resData.fResData.data != NULL) {
-        int32_t result = res_countArrayItems(&resData.fResData, resData.fRes);
+    if(resData.getResData().data != NULL) {
+        int32_t result = res_countArrayItems(&resData.getResData(), resData.fRes);
         ures_close(&resData);
         return result;
     } else {
@@ -2607,10 +2968,10 @@ static UBool isLocaleInList(UEnumeration *locEnum, const char *locToSearch, UErr
     const char *loc;
     while ((loc = uenum_next(locEnum, NULL, status)) != NULL) {
         if (uprv_strcmp(loc, locToSearch) == 0) {
-            return TRUE;
+            return true;
         }
     }
-    return FALSE;
+    return false;
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -2648,7 +3009,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
 
     if(isAvailable) { 
         UEnumeration *locEnum = ures_openAvailableLocales(path, &subStatus);
-        *isAvailable = TRUE;
+        *isAvailable = true;
         if (U_SUCCESS(subStatus)) {
             *isAvailable = isLocaleInList(locEnum, parent, &subStatus);
         }
@@ -2666,7 +3027,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
         if(((subStatus == U_USING_FALLBACK_WARNING) ||
             (subStatus == U_USING_DEFAULT_WARNING)) && isAvailable)
         {
-            *isAvailable = FALSE;
+            *isAvailable = false;
         }
         isAvailable = NULL; /* only want to set this the first time around */
         
@@ -2722,7 +3083,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
         subStatus = U_ZERO_ERROR;
         res = ures_open(path, parent, &subStatus);
         if((subStatus == U_USING_FALLBACK_WARNING) && isAvailable) {
-            *isAvailable = FALSE;
+            *isAvailable = false;
         }
         isAvailable = NULL; /* only want to set this the first time around */
         
@@ -2803,7 +3164,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
             subStatus = U_ZERO_ERROR;
             res = ures_open(path, parent, &subStatus);
             if((subStatus == U_USING_FALLBACK_WARNING) && isAvailable) {
-                *isAvailable = FALSE;
+                *isAvailable = false;
             }
             isAvailable = NULL; /* only want to set this the first time around */
             
@@ -3036,32 +3397,32 @@ ures_equal(const UResourceBundle* res1, const UResourceBundle* res2){
         return (res1->fKey==res2->fKey);
     }else{
         if(uprv_strcmp(res1->fKey, res2->fKey)!=0){
-            return FALSE;
+            return false;
         }
     }
     if(uprv_strcmp(res1->fData->fName, res2->fData->fName)!=0){
-        return FALSE;
+        return false;
     }
     if(res1->fData->fPath == NULL||  res2->fData->fPath==NULL){
         return (res1->fData->fPath == res2->fData->fPath);
     }else{
         if(uprv_strcmp(res1->fData->fPath, res2->fData->fPath)!=0){
-            return FALSE;
+            return false;
         }
     }
     if(uprv_strcmp(res1->fData->fParent->fName, res2->fData->fParent->fName)!=0){
-        return FALSE;
+        return false;
     }
     if(uprv_strcmp(res1->fData->fParent->fPath, res2->fData->fParent->fPath)!=0){
-        return FALSE;
+        return false;
     }
     if(uprv_strncmp(res1->fResPath, res2->fResPath, res1->fResPathLen)!=0){
-        return FALSE;
+        return false;
     }
     if(res1->fRes != res2->fRes){
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 U_CAPI UResourceBundle* U_EXPORT2
 ures_clone(const UResourceBundle* res, UErrorCode* status){

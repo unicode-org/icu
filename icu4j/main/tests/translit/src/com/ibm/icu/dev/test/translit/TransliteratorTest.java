@@ -596,11 +596,11 @@ public class TransliteratorTest extends TestFmwk {
         //|        }
         //|        UnicodeString out(data[i]);
         //|        gl->transliterate(out);
-        //|        bool_t ok = TRUE;
+        //|        bool_t ok = true;
         //|        if (data[i].length() >= 2 && out.length() >= 2 &&
         //|            u_isupper(data[i].charAt(0)) && u_islower(data[i].charAt(1))) {
         //|            if (!(u_isupper(out.charAt(0)) && u_islower(out.charAt(1)))) {
-        //|                ok = FALSE;
+        //|                ok = false;
         //|            }
         //|        }
         //|        if (ok) {

@@ -42,6 +42,7 @@ void PropsBuilder::setUnicodeVersion(const UVersionInfo) {}
 void PropsBuilder::setAlgNamesRange(UChar32, UChar32,
                                     const char *, const char *, UErrorCode &) {}
 void PropsBuilder::setProps(const UniProps &, const UnicodeSet &, UErrorCode &) {}
+void PropsBuilder::parseUnidataFiles(const char *, UErrorCode &) {}
 void PropsBuilder::build(UErrorCode &) {}
 void PropsBuilder::writeCSourceFile(const char *, UErrorCode &) {}
 void PropsBuilder::writeJavaSourceFile(const char *, UErrorCode &) {}
@@ -108,6 +109,7 @@ main(int argc, char* argv[]) {
     LocalPointer<PropsBuilder> bidiPropsBuilder(createBiDiPropsBuilder(errorCode));
     LocalPointer<PropsBuilder> casePropsBuilder(createCasePropsBuilder(errorCode));
     LocalPointer<PropsBuilder> layoutPropsBuilder(createLayoutPropsBuilder(errorCode));
+    LocalPointer<PropsBuilder> emojiPropsBuilder(createEmojiPropsBuilder(errorCode));
     LocalPointer<PropsBuilder> namesPropsBuilder(createNamesPropsBuilder(errorCode));
     if(errorCode.isFailure()) {
         fprintf(stderr, "genprops: unable to create PropsBuilders - %s\n", errorCode.errorName());
@@ -122,8 +124,10 @@ main(int argc, char* argv[]) {
     CharString icuSourceData(icuSource, errorCode);
     icuSourceData.appendPathPart("data", errorCode);
 
-    CharString ppucdPath(icuSourceData, errorCode);
-    ppucdPath.appendPathPart("unidata", errorCode);
+    CharString unidataPath(icuSourceData, errorCode);
+    unidataPath.appendPathPart("unidata", errorCode);
+
+    CharString ppucdPath(unidataPath, errorCode);
     ppucdPath.appendPathPart("ppucd.txt", errorCode);
 
     PreparsedUCD ppucd(ppucdPath.data(), errorCode);
@@ -151,6 +155,7 @@ main(int argc, char* argv[]) {
             bidiPropsBuilder->setProps(*props, newValues, errorCode);
             casePropsBuilder->setProps(*props, newValues, errorCode);
             layoutPropsBuilder->setProps(*props, newValues, errorCode);
+            emojiPropsBuilder->setProps(*props, newValues, errorCode);
             namesPropsBuilder->setProps(*props, newValues, errorCode);
         } else if(lineType==PreparsedUCD::UNICODE_VERSION_LINE) {
             const UVersionInfo &version=ppucd.getUnicodeVersion();
@@ -158,6 +163,7 @@ main(int argc, char* argv[]) {
             bidiPropsBuilder->setUnicodeVersion(version);
             casePropsBuilder->setUnicodeVersion(version);
             layoutPropsBuilder->setUnicodeVersion(version);
+            emojiPropsBuilder->setUnicodeVersion(version);
             namesPropsBuilder->setUnicodeVersion(version);
         } else if(lineType==PreparsedUCD::ALG_NAMES_RANGE_LINE) {
             UChar32 start, end;
@@ -175,10 +181,19 @@ main(int argc, char* argv[]) {
         }
     }
 
+    emojiPropsBuilder->parseUnidataFiles(unidataPath.data(), errorCode);
+
+    if (!beQuiet) { puts(""); }
     corePropsBuilder->build(errorCode);
+    if (!beQuiet) { puts(""); }
     bidiPropsBuilder->build(errorCode);
+    if (!beQuiet) { puts(""); }
     casePropsBuilder->build(errorCode);
+    if (!beQuiet) { puts(""); }
     layoutPropsBuilder->build(errorCode);
+    if (!beQuiet) { puts(""); }
+    emojiPropsBuilder->build(errorCode);
+    if (!beQuiet) { puts(""); }
     namesPropsBuilder->build(errorCode);
     if(errorCode.isFailure()) {
         fprintf(stderr, "genprops error: failure finalizing the data - %s\n",
@@ -205,6 +220,7 @@ main(int argc, char* argv[]) {
     casePropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
     namesPropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
     layoutPropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
+    emojiPropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
 
     return errorCode;
 }

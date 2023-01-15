@@ -64,7 +64,7 @@ public class MeasureUnitThreadTest extends TestFmwk {
     }
 
     // Race in formatMeasures with width NUMERIC:
-    // http://bugs.icu-project.org/trac/ticket/13606
+    // https://unicode-org.atlassian.net/browse/ICU-13606
     @Test
     public void NumericRaceTest() throws InterruptedException {
         NumericMeasureThread t1 = new NumericMeasureThread(new Measure[] {

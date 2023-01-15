@@ -5,264 +5,222 @@
  License & terms of use: http://www.unicode.org/copyright.html
 -->
 
-# ICU4C API Comparison: ICU 68 (update #1: 68.2) with ICU 69
+# ICU4C API Comparison: ICU 71 with ICU 72
 
 > _Note_ Markdown format of this document is new for ICU 65.
 
-- [Removed from ICU 68](#removed)
-- [Deprecated or Obsoleted in ICU 69](#deprecated)
-- [Changed in  ICU 69](#changed)
-- [Promoted to stable in ICU 69](#promoted)
-- [Added in ICU 69](#added)
-- [Other existing drafts in ICU 69](#other)
+- [Removed from ICU 71](#removed)
+- [Deprecated or Obsoleted in ICU 72](#deprecated)
+- [Changed in  ICU 72](#changed)
+- [Promoted to stable in ICU 72](#promoted)
+- [Added in ICU 72](#added)
+- [Other existing drafts in ICU 72](#other)
 - [Signature Simplifications](#simplifications)
 
 ## Removed
 
-Removed from ICU 68
+Removed from ICU 71
   
-| File | API | ICU 68 | ICU 69 |
+| File | API | ICU 71 | ICU 72 |
 |---|---|---|---|
-| listformatter.h | <tt>static</tt> ListFormatter* icu::ListFormatter::createInstance(const Locale&amp;, const char*, UErrorCode&amp;) |  Internal | (missing)
-| measunit.h | MeasureUnit icu::MeasureUnit::withSIPrefix(UMeasureSIPrefix, UErrorCode&amp;) const |  DraftICU 67 | (missing)
-| measunit.h | UMeasureSIPrefix icu::MeasureUnit::getSIPrefix(UErrorCode&amp;) const |  DraftICU 67 | (missing)
-| numberformatter.h | Usage&amp; icu::number::impl::Usage::operator=(Usage&amp;&amp;) |  Internal | (missing)
-| numberformatter.h | Usage&amp; icu::number::impl::Usage::operator=(const Usage&amp;) |  Internal | (missing)
-| numberformatter.h | bool icu::number::impl::Usage::isSet() const |  Internal | (missing)
-| numberformatter.h | icu::number::impl::Usage::Usage(Usage&amp;&amp;) |  Internal | (missing)
-| numberformatter.h | icu::number::impl::Usage::Usage(const Usage&amp;) |  Internal | (missing)
-| numberformatter.h | icu::number::impl::Usage::~Usage() |  Internal | (missing)
-| numberformatter.h | int16_t icu::number::impl::Usage::length() const |  Internal | (missing)
-| numberformatter.h | void icu::number::impl::Usage::set(StringPiece) |  Internal | (missing)
-| numberrangeformatter.h | UnicodeString icu::number::FormattedNumberRange::getFirstDecimal(UErrorCode&amp;) const |  DeprecatedICU 68 | (missing)
-| numberrangeformatter.h | UnicodeString icu::number::FormattedNumberRange::getSecondDecimal(UErrorCode&amp;) const |  DeprecatedICU 68 | (missing)
-| rbtz.h | void icu::RuleBasedTimeZone::getOffsetFromLocal(UDate, int32_t, int32_t, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const |  Internal | (missing)
-| simpletz.h | void icu::SimpleTimeZone::getOffsetFromLocal(UDate, int32_t, int32_t, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const |  Internal | (missing)
+| calendar.h | bool icu::Calendar::isSet(EDateFields) const |  DeprecatedICU 2.6 | (missing)
+| calendar.h | int32_t icu::Calendar::get(EDateFields, UErrorCode&amp;) const |  DeprecatedICU 2.6 | (missing)
+| calendar.h | int32_t icu::Calendar::getActualMaximum(EDateFields, UErrorCode&amp;) const |  DeprecatedICU 2.6 | (missing)
+| calendar.h | void icu::Calendar::clear(EDateFields) |  DeprecatedICU 2.6 | (missing)
+| calendar.h | void icu::Calendar::set(EDateFields, int32_t) |  DeprecatedICU 2.6 | (missing)
+| calendar.h | void icu::Calendar::setFirstDayOfWeek(EDaysOfWeek) |  DeprecatedICU 2.6 | (missing)
+| dtptngen.h | <tt>static</tt> DateTimePatternGenerator* icu::DateTimePatternGenerator::internalMakeInstance(const Locale&amp;, UErrorCode&amp;) |  Internal | (missing)
+| gregocal.h | int32_t icu::GregorianCalendar::getActualMaximum(EDateFields) const |  DeprecatedICU 2.6 | (missing)
+| numberformatter.h | NounClass icu::number::FormattedNumber::getNounClass(UErrorCode&amp;) const |  DraftICU 71 | (missing)
+| numberformatter.h | const char* icu::number::FormattedNumber::getGender(UErrorCode&amp;) const |  Deprecated | (missing)
+| plurrule.h | int32_t icu::PluralRules::getSamples(const UnicodeString&amp;, FixedDecimal*, int32_t, UErrorCode&amp;) |  Internal | (missing)
+| plurrule.h | <tt>static</tt> bool icu::PluralRules::hasOverride(const Locale&amp;) |  Internal | (missing)
+| tzrule.h | bool icu::InitialTimeZoneRule::getStartInYear(int32_t, int32_t, int32_t, UDate&amp;) const |  StableICU 3.8 | (missing)
 
 ## Deprecated
 
-Deprecated or Obsoleted in ICU 69
+Deprecated or Obsoleted in ICU 72
   
-| File | API | ICU 68 | ICU 69 |
+| File | API | ICU 71 | ICU 72 |
 |---|---|---|---|
-| ubrk.h | UBreakIterator* ubrk_safeClone(const UBreakIterator*, void*, int32_t*, UErrorCode*) |  StableICU 2.0 | DeprecatedICU 69
 
 ## Changed
 
-Changed in  ICU 69 (old, new)
+Changed in  ICU 72 (old, new)
 
 
   
-| File | API | ICU 68 | ICU 69 |
+| File | API | ICU 71 | ICU 72 |
 |---|---|---|---|
-| bytestream.h | void icu::ByteSink::AppendU8(const char*, int32_t) |  Draft→StableICU 67
-| bytestream.h | void icu::ByteSink::AppendU8(const char8_t*, int32_t) |  Draft→StableICU 67
-| dtptngen.h | UDateFormatHourCycle icu::DateTimePatternGenerator::getDefaultHourCycle(UErrorCode&amp;) const |  Draft→StableICU 67
-| localematcher.h | Builder&amp; icu::LocaleMatcher::Builder::setDirection(ULocMatchDirection) |  Draft→StableICU 67
-| localematcher.h | <tt>enum</tt> ULocMatchDirection::ULOCMATCH_DIRECTION_ONLY_TWO_WAY |  Draft→StableICU 67
-| localematcher.h | <tt>enum</tt> ULocMatchDirection::ULOCMATCH_DIRECTION_WITH_ONE_WAY |  Draft→StableICU 67
-| locid.h | void icu::Locale::canonicalize(UErrorCode&amp;) |  Draft→StableICU 67
-| measunit.h | MeasureUnit icu::MeasureUnit::product(const MeasureUnit&amp;, UErrorCode&amp;) const |  Draft→StableICU 67
-| measunit.h | MeasureUnit icu::MeasureUnit::reciprocal(UErrorCode&amp;) const |  Draft→StableICU 67
-| measunit.h | MeasureUnit icu::MeasureUnit::withDimensionality(int32_t, UErrorCode&amp;) const |  Draft→StableICU 67
-| measunit.h | MeasureUnit&amp; icu::MeasureUnit::operator=(MeasureUnit&amp;&amp;) noexcept |  Draft→StableICU 67
-| measunit.h | UMeasureUnitComplexity icu::MeasureUnit::getComplexity(UErrorCode&amp;) const |  Draft→StableICU 67
-| measunit.h | const char* icu::MeasureUnit::getIdentifier() const |  Draft→StableICU 67
-| measunit.h | icu::MeasureUnit::MeasureUnit(MeasureUnit&amp;&amp;) noexcept |  Draft→StableICU 67
-| measunit.h | int32_t icu::MeasureUnit::getDimensionality(UErrorCode&amp;) const |  Draft→StableICU 67
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::forIdentifier(StringPiece, UErrorCode&amp;) |  Draft→StableICU 67
-| stringpiece.h | icu::StringPiece::StringPiece(const char8_t*) |  Draft→StableICU 67
-| stringpiece.h | icu::StringPiece::StringPiece(const char8_t*, int32_t) |  Draft→StableICU 67
-| stringpiece.h | icu::StringPiece::StringPiece(const std::u8string&amp;) |  Draft→StableICU 67
-| stringpiece.h | icu::StringPiece::StringPiece(std::nullptr_t) |  Draft→StableICU 67
-| stringpiece.h | int32_t icu::StringPiece::compare(StringPiece) |  Draft→StableICU 67
-| stringpiece.h | int32_t icu::StringPiece::find(StringPiece, int32_t) |  Draft→StableICU 67
-| stringpiece.h | void icu::StringPiece::set(const char8_t*) |  Draft→StableICU 67
-| stringpiece.h | void icu::StringPiece::set(const char8_t*, int32_t) |  Draft→StableICU 67
-| translit.h | UnicodeSet&amp; icu::Transliterator::getSourceSet(UnicodeSet&amp;) const |   _untagged _  | StableICU 2.4
-| translit.h | <tt>static</tt> UnicodeString&amp; icu::Transliterator::getDisplayName(const UnicodeString&amp;, UnicodeString&amp;) |   _untagged _  | StableICU 2.0
-| translit.h | void icu::Transliterator::finishTransliteration(Replaceable&amp;, UTransPosition&amp;) const |   _untagged _  | StableICU 2.0
-| translit.h | void icu::Transliterator::transliterate(Replaceable&amp;, UTransPosition&amp;, UErrorCode&amp;) const |   _untagged _  | StableICU 2.0
-| ubrk.h | UBreakIterator* ubrk_safeClone(const UBreakIterator*, void*, int32_t*, UErrorCode*) |  StableICU 2.0 | DeprecatedICU 69
-| udat.h | <tt>enum</tt> UDateFormatHourCycle::UDAT_HOUR_CYCLE_11 |  Draft→StableICU 67
-| udat.h | <tt>enum</tt> UDateFormatHourCycle::UDAT_HOUR_CYCLE_12 |  Draft→StableICU 67
-| udat.h | <tt>enum</tt> UDateFormatHourCycle::UDAT_HOUR_CYCLE_23 |  Draft→StableICU 67
-| udat.h | <tt>enum</tt> UDateFormatHourCycle::UDAT_HOUR_CYCLE_24 |  Draft→StableICU 67
-| udateintervalformat.h | void udtitvfmt_formatCalendarToResult(const UDateIntervalFormat*, UCalendar*, UCalendar*, UFormattedDateInterval*, UErrorCode*) |  Draft→StableICU 67
-| udateintervalformat.h | void udtitvfmt_formatToResult(const UDateIntervalFormat*, UDate, UDate, UFormattedDateInterval*, UErrorCode*) |  Draft→StableICU 67
-| udatpg.h | UDateFormatHourCycle udatpg_getDefaultHourCycle(const UDateTimePatternGenerator*, UErrorCode*) |  Draft→StableICU 67
-| utrace.h | <tt>enum</tt> UTraceFunctionNumber::UTRACE_UBRK_CREATE_BREAK_ENGINE |  Draft→StableICU 67
-| utrace.h | <tt>enum</tt> UTraceFunctionNumber::UTRACE_UBRK_CREATE_CHARACTER |  Draft→StableICU 67
-| utrace.h | <tt>enum</tt> UTraceFunctionNumber::UTRACE_UBRK_CREATE_LINE |  Draft→StableICU 67
-| utrace.h | <tt>enum</tt> UTraceFunctionNumber::UTRACE_UBRK_CREATE_SENTENCE |  Draft→StableICU 67
-| utrace.h | <tt>enum</tt> UTraceFunctionNumber::UTRACE_UBRK_CREATE_TITLE |  Draft→StableICU 67
-| utrace.h | <tt>enum</tt> UTraceFunctionNumber::UTRACE_UBRK_CREATE_WORD |  Draft→StableICU 67
-| utrace.h | <tt>enum</tt> UTraceFunctionNumber::UTRACE_UBRK_START |  Draft→StableICU 67
+| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getItem() |  Draft→StableICU 70
+| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getKilowattHourPer100Kilometer() |  Draft→StableICU 70
+| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createItem(UErrorCode&amp;) |  Draft→StableICU 70
+| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createKilowattHourPer100Kilometer(UErrorCode&amp;) |  Draft→StableICU 70
+| numberformatter.h | Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::unitDisplayCase(StringPiece) const&amp; |  InternalICU 69 | Internal
+| numberformatter.h | Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::unitDisplayCase(StringPiece)&amp;&amp; |  InternalICU 69 | Internal
+| numberrangeformatter.h | icu::number::FormattedNumberRange::FormattedNumberRange() |  Draft→StableICU 70
+| uchar.h | bool u_stringHasBinaryProperty(const UChar*, int32_t, UProperty) |  Draft→StableICU 70
+| uchar.h | <tt>enum</tt> UProperty::UCHAR_BASIC_EMOJI |  Draft→StableICU 70
+| uchar.h | <tt>enum</tt> UProperty::UCHAR_EMOJI_KEYCAP_SEQUENCE |  Draft→StableICU 70
+| uchar.h | <tt>enum</tt> UProperty::UCHAR_RGI_EMOJI_FLAG_SEQUENCE |  Draft→StableICU 70
+| uchar.h | <tt>enum</tt> UProperty::UCHAR_RGI_EMOJI_MODIFIER_SEQUENCE |  Draft→StableICU 70
+| uchar.h | <tt>enum</tt> UProperty::UCHAR_RGI_EMOJI_TAG_SEQUENCE |  Draft→StableICU 70
+| uchar.h | <tt>enum</tt> UProperty::UCHAR_RGI_EMOJI_ZWJ_SEQUENCE |  Draft→StableICU 70
+| uchar.h | <tt>enum</tt> UProperty::UCHAR_RGI_EMOJI |  Draft→StableICU 70
+| udat.h | <tt>enum</tt> UDateFormatSymbolType::UDAT_NARROW_QUARTERS |  Draft→StableICU 70
+| udat.h | <tt>enum</tt> UDateFormatSymbolType::UDAT_STANDALONE_NARROW_QUARTERS |  Draft→StableICU 70
+| uformattedvalue.h | <tt>enum</tt> UFieldCategory::UFIELD_CATEGORY_NUMBER_RANGE_SPAN |  Draft→StableICU 69
+| uniset.h | bool icu::UnicodeSet::hasStrings() const |  Draft→StableICU 70
+| uset.h | bool uset_hasStrings(const USet*) |  Draft→StableICU 70
+| uset.h | int32_t uset_getRangeCount(const USet*) |  Draft→StableICU 70
+| usetiter.h | UnicodeSetIterator &amp; icu::UnicodeSetIterator::skipToStrings() |  Draft→StableICU 70
 
 ## Promoted
 
-Promoted to stable in ICU 69
+Promoted to stable in ICU 72
   
-| File | API | ICU 68 | ICU 69 |
+| File | API | ICU 71 | ICU 72 |
 |---|---|---|---|
-| bytestream.h | void icu::ByteSink::AppendU8(const char*, int32_t) |  Draft→StableICU 67
-| bytestream.h | void icu::ByteSink::AppendU8(const char8_t*, int32_t) |  Draft→StableICU 67
-| dtptngen.h | UDateFormatHourCycle icu::DateTimePatternGenerator::getDefaultHourCycle(UErrorCode&amp;) const |  Draft→StableICU 67
-| localematcher.h | Builder&amp; icu::LocaleMatcher::Builder::setDirection(ULocMatchDirection) |  Draft→StableICU 67
-| localematcher.h | <tt>enum</tt> ULocMatchDirection::ULOCMATCH_DIRECTION_ONLY_TWO_WAY |  Draft→StableICU 67
-| localematcher.h | <tt>enum</tt> ULocMatchDirection::ULOCMATCH_DIRECTION_WITH_ONE_WAY |  Draft→StableICU 67
-| locid.h | void icu::Locale::canonicalize(UErrorCode&amp;) |  Draft→StableICU 67
-| measunit.h | MeasureUnit icu::MeasureUnit::product(const MeasureUnit&amp;, UErrorCode&amp;) const |  Draft→StableICU 67
-| measunit.h | MeasureUnit icu::MeasureUnit::reciprocal(UErrorCode&amp;) const |  Draft→StableICU 67
-| measunit.h | MeasureUnit icu::MeasureUnit::withDimensionality(int32_t, UErrorCode&amp;) const |  Draft→StableICU 67
-| measunit.h | MeasureUnit&amp; icu::MeasureUnit::operator=(MeasureUnit&amp;&amp;) noexcept |  Draft→StableICU 67
-| measunit.h | UMeasureUnitComplexity icu::MeasureUnit::getComplexity(UErrorCode&amp;) const |  Draft→StableICU 67
-| measunit.h | const char* icu::MeasureUnit::getIdentifier() const |  Draft→StableICU 67
-| measunit.h | icu::MeasureUnit::MeasureUnit(MeasureUnit&amp;&amp;) noexcept |  Draft→StableICU 67
-| measunit.h | int32_t icu::MeasureUnit::getDimensionality(UErrorCode&amp;) const |  Draft→StableICU 67
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::forIdentifier(StringPiece, UErrorCode&amp;) |  Draft→StableICU 67
-| stringpiece.h | icu::StringPiece::StringPiece(const char8_t*) |  Draft→StableICU 67
-| stringpiece.h | icu::StringPiece::StringPiece(const char8_t*, int32_t) |  Draft→StableICU 67
-| stringpiece.h | icu::StringPiece::StringPiece(const std::u8string&amp;) |  Draft→StableICU 67
-| stringpiece.h | icu::StringPiece::StringPiece(std::nullptr_t) |  Draft→StableICU 67
-| stringpiece.h | int32_t icu::StringPiece::compare(StringPiece) |  Draft→StableICU 67
-| stringpiece.h | int32_t icu::StringPiece::find(StringPiece, int32_t) |  Draft→StableICU 67
-| stringpiece.h | void icu::StringPiece::set(const char8_t*) |  Draft→StableICU 67
-| stringpiece.h | void icu::StringPiece::set(const char8_t*, int32_t) |  Draft→StableICU 67
-| translit.h | UnicodeSet&amp; icu::Transliterator::getSourceSet(UnicodeSet&amp;) const |   _untagged _  | StableICU 2.4
-| translit.h | <tt>static</tt> UnicodeString&amp; icu::Transliterator::getDisplayName(const UnicodeString&amp;, UnicodeString&amp;) |   _untagged _  | StableICU 2.0
-| translit.h | void icu::Transliterator::finishTransliteration(Replaceable&amp;, UTransPosition&amp;) const |   _untagged _  | StableICU 2.0
-| translit.h | void icu::Transliterator::transliterate(Replaceable&amp;, UTransPosition&amp;, UErrorCode&amp;) const |   _untagged _  | StableICU 2.0
-| udat.h | <tt>enum</tt> UDateFormatHourCycle::UDAT_HOUR_CYCLE_11 |  Draft→StableICU 67
-| udat.h | <tt>enum</tt> UDateFormatHourCycle::UDAT_HOUR_CYCLE_12 |  Draft→StableICU 67
-| udat.h | <tt>enum</tt> UDateFormatHourCycle::UDAT_HOUR_CYCLE_23 |  Draft→StableICU 67
-| udat.h | <tt>enum</tt> UDateFormatHourCycle::UDAT_HOUR_CYCLE_24 |  Draft→StableICU 67
-| udateintervalformat.h | void udtitvfmt_formatCalendarToResult(const UDateIntervalFormat*, UCalendar*, UCalendar*, UFormattedDateInterval*, UErrorCode*) |  Draft→StableICU 67
-| udateintervalformat.h | void udtitvfmt_formatToResult(const UDateIntervalFormat*, UDate, UDate, UFormattedDateInterval*, UErrorCode*) |  Draft→StableICU 67
-| udatpg.h | UDateFormatHourCycle udatpg_getDefaultHourCycle(const UDateTimePatternGenerator*, UErrorCode*) |  Draft→StableICU 67
-| utrace.h | <tt>enum</tt> UTraceFunctionNumber::UTRACE_UBRK_CREATE_BREAK_ENGINE |  Draft→StableICU 67
-| utrace.h | <tt>enum</tt> UTraceFunctionNumber::UTRACE_UBRK_CREATE_CHARACTER |  Draft→StableICU 67
-| utrace.h | <tt>enum</tt> UTraceFunctionNumber::UTRACE_UBRK_CREATE_LINE |  Draft→StableICU 67
-| utrace.h | <tt>enum</tt> UTraceFunctionNumber::UTRACE_UBRK_CREATE_SENTENCE |  Draft→StableICU 67
-| utrace.h | <tt>enum</tt> UTraceFunctionNumber::UTRACE_UBRK_CREATE_TITLE |  Draft→StableICU 67
-| utrace.h | <tt>enum</tt> UTraceFunctionNumber::UTRACE_UBRK_CREATE_WORD |  Draft→StableICU 67
-| utrace.h | <tt>enum</tt> UTraceFunctionNumber::UTRACE_UBRK_START |  Draft→StableICU 67
+| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getItem() |  Draft→StableICU 70
+| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getKilowattHourPer100Kilometer() |  Draft→StableICU 70
+| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createItem(UErrorCode&amp;) |  Draft→StableICU 70
+| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createKilowattHourPer100Kilometer(UErrorCode&amp;) |  Draft→StableICU 70
+| numberrangeformatter.h | icu::number::FormattedNumberRange::FormattedNumberRange() |  Draft→StableICU 70
+| uchar.h | bool u_stringHasBinaryProperty(const UChar*, int32_t, UProperty) |  Draft→StableICU 70
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_ARABIC_EXTENDED_C |  (missing) | StableICU 72| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_H |  (missing) | StableICU 72| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_CYRILLIC_EXTENDED_D |  (missing) | StableICU 72| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_DEVANAGARI_EXTENDED_A |  (missing) | StableICU 72| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_KAKTOVIK_NUMERALS |  (missing) | StableICU 72| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_KAWI |  (missing) | StableICU 72| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_NAG_MUNDARI |  (missing) | StableICU 72| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UProperty::UCHAR_BASIC_EMOJI |  Draft→StableICU 70
+| uchar.h | <tt>enum</tt> UProperty::UCHAR_EMOJI_KEYCAP_SEQUENCE |  Draft→StableICU 70
+| uchar.h | <tt>enum</tt> UProperty::UCHAR_RGI_EMOJI_FLAG_SEQUENCE |  Draft→StableICU 70
+| uchar.h | <tt>enum</tt> UProperty::UCHAR_RGI_EMOJI_MODIFIER_SEQUENCE |  Draft→StableICU 70
+| uchar.h | <tt>enum</tt> UProperty::UCHAR_RGI_EMOJI_TAG_SEQUENCE |  Draft→StableICU 70
+| uchar.h | <tt>enum</tt> UProperty::UCHAR_RGI_EMOJI_ZWJ_SEQUENCE |  Draft→StableICU 70
+| uchar.h | <tt>enum</tt> UProperty::UCHAR_RGI_EMOJI |  Draft→StableICU 70
+| udat.h | <tt>enum</tt> UDateFormatSymbolType::UDAT_NARROW_QUARTERS |  Draft→StableICU 70
+| udat.h | <tt>enum</tt> UDateFormatSymbolType::UDAT_STANDALONE_NARROW_QUARTERS |  Draft→StableICU 70
+| uformattedvalue.h | <tt>enum</tt> UFieldCategory::UFIELD_CATEGORY_NUMBER_RANGE_SPAN |  Draft→StableICU 69
+| uniset.h | bool icu::UnicodeSet::hasStrings() const |  Draft→StableICU 70
+| uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_KAWI |  (missing) | StableICU 72| *(Born Stable)* |
+| uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_NAG_MUNDARI |  (missing) | StableICU 72| *(Born Stable)* |
+| uset.h | bool uset_hasStrings(const USet*) |  Draft→StableICU 70
+| uset.h | int32_t uset_getRangeCount(const USet*) |  Draft→StableICU 70
+| usetiter.h | UnicodeSetIterator &amp; icu::UnicodeSetIterator::skipToStrings() |  Draft→StableICU 70
 
 ## Added
 
-Added in ICU 69
+Added in ICU 72
   
-| File | API | ICU 68 | ICU 69 |
+| File | API | ICU 71 | ICU 72 |
 |---|---|---|---|
-| basictz.h | void icu::BasicTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const |  (missing) | DraftICU 69
-| measunit.h | MeasureUnit icu::MeasureUnit::withPrefix(UMeasurePrefix, UErrorCode&amp;) const |  (missing) | DraftICU 69
-| measunit.h | UMeasurePrefix icu::MeasureUnit::getPrefix(UErrorCode&amp;) const |  (missing) | DraftICU 69
-| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getMilligramOfglucosePerDeciliter() |  (missing) | DraftICU 69
-| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createMilligramOfglucosePerDeciliter(UErrorCode&amp;) |  (missing) | DraftICU 69
-| numberformatter.h | Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::unitDisplayCase(StringPiece) const&amp; |  (missing) | InternalICU 69
-| numberformatter.h | Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::unitDisplayCase(StringPiece)&amp;&amp; |  (missing) | InternalICU 69
-| numberformatter.h | Precision icu::number::FractionPrecision::withSignificantDigits(int32_t, int32_t, UNumberRoundingPriority) const |  (missing) | DraftICU 69
-| numberformatter.h | Precision icu::number::Precision::trailingZeroDisplay(UNumberTrailingZeroDisplay) const |  (missing) | DraftICU 69
-| numberformatter.h | StringProp&amp; icu::number::impl::StringProp::operator=(StringProp&amp;&amp;) |  (missing) | Internal
-| numberformatter.h | StringProp&amp; icu::number::impl::StringProp::operator=(const StringProp&amp;) |  (missing) | Internal
-| numberformatter.h | bool icu::number::impl::StringProp::isSet() const |  (missing) | Internal
-| numberformatter.h | const char* icu::number::FormattedNumber::getGender(UErrorCode&amp;) const |  (missing) | InternalICU 69
-| numberformatter.h | icu::number::impl::StringProp::StringProp(StringProp&amp;&amp;) |  (missing) | Internal
-| numberformatter.h | icu::number::impl::StringProp::StringProp(const StringProp&amp;) |  (missing) | Internal
-| numberformatter.h | icu::number::impl::StringProp::~StringProp() |  (missing) | Internal
-| numberformatter.h | int16_t icu::number::impl::StringProp::length() const |  (missing) | Internal
-| numberformatter.h | void icu::number::impl::StringProp::set(StringPiece) |  (missing) | Internal
-| rbtz.h | void icu::RuleBasedTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const |  (missing) | DraftICU 69
-| simpletz.h | void icu::SimpleTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const |  (missing) | DraftICU 69
-| ubrk.h | UBreakIterator* ubrk_clone(const UBreakIterator*, UErrorCode*) |  (missing) | DraftICU 69
-| ucal.h | <tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_DAYLIGHT_FORMER |  (missing) | DraftICU 69
-| ucal.h | <tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_DAYLIGHT_LATTER |  (missing) | DraftICU 69
-| ucal.h | <tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_FORMER |  (missing) | DraftICU 69
-| ucal.h | <tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_LATTER |  (missing) | DraftICU 69
-| ucal.h | <tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_STANDARD_FORMER |  (missing) | DraftICU 69
-| ucal.h | <tt>enum</tt> UTimeZoneLocalOption::UCAL_TZ_LOCAL_STANDARD_LATTER |  (missing) | DraftICU 69
-| ucal.h | void ucal_getTimeZoneOffsetFromLocal(const UCalendar*, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t*, int32_t*, UErrorCode*) |  (missing) | DraftICU 69
-| uformattedvalue.h | <tt>enum</tt> UFieldCategory::UFIELD_CATEGORY_NUMBER_RANGE_SPAN |  (missing) | DraftICU 69
-| uniset.h | UnicodeSet&amp; icu::UnicodeSet::retain(const UnicodeString&amp;) |  (missing) | DraftICU 69
-| unum.h | <tt>enum</tt> UNumberFormatRoundingMode::UNUM_ROUND_HALF_CEILING |  (missing) | DraftICU 69
-| unum.h | <tt>enum</tt> UNumberFormatRoundingMode::UNUM_ROUND_HALF_FLOOR |  (missing) | DraftICU 69
-| unum.h | <tt>enum</tt> UNumberFormatRoundingMode::UNUM_ROUND_HALF_ODD |  (missing) | DraftICU 69
-| unumberformatter.h | <tt>enum</tt> UNumberRoundingPriority::UNUM_ROUNDING_PRIORITY_RELAXED |  (missing) | DraftICU 69
-| unumberformatter.h | <tt>enum</tt> UNumberRoundingPriority::UNUM_ROUNDING_PRIORITY_STRICT |  (missing) | DraftICU 69
-| unumberformatter.h | <tt>enum</tt> UNumberSignDisplay::UNUM_SIGN_ACCOUNTING_NEGATIVE |  (missing) | DraftICU 69
-| unumberformatter.h | <tt>enum</tt> UNumberSignDisplay::UNUM_SIGN_NEGATIVE |  (missing) | DraftICU 69
-| unumberformatter.h | <tt>enum</tt> UNumberTrailingZeroDisplay::UNUM_TRAILING_ZERO_AUTO |  (missing) | DraftICU 69
-| unumberformatter.h | <tt>enum</tt> UNumberTrailingZeroDisplay::UNUM_TRAILING_ZERO_HIDE_IF_WHOLE |  (missing) | DraftICU 69
-| uset.h | void uset_complementAllCodePoints(USet*, const UChar*, int32_t) |  (missing) | DraftICU 69
-| uset.h | void uset_complementRange(USet*, UChar32, UChar32) |  (missing) | DraftICU 69
-| uset.h | void uset_complementString(USet*, const UChar*, int32_t) |  (missing) | DraftICU 69
-| uset.h | void uset_removeAllCodePoints(USet*, const UChar*, int32_t) |  (missing) | DraftICU 69
-| uset.h | void uset_retainAllCodePoints(USet*, const UChar*, int32_t) |  (missing) | DraftICU 69
-| uset.h | void uset_retainString(USet*, const UChar*, int32_t) |  (missing) | DraftICU 69
-| vtzone.h | void icu::VTimeZone::getOffsetFromLocal(UDate, UTimeZoneLocalOption, UTimeZoneLocalOption, int32_t&amp;, int32_t&amp;, UErrorCode&amp;) const |  (missing) | DraftICU 69
+| displayoptions.h | Builder icu::DisplayOptions::copyToBuilder() const |  (missing) | DraftICU 72
+| displayoptions.h | Builder&amp; icu::DisplayOptions::Builder::setCapitalization(UDisplayOptionsCapitalization) |  (missing) | DraftICU 72
+| displayoptions.h | Builder&amp; icu::DisplayOptions::Builder::setDisplayLength(UDisplayOptionsDisplayLength) |  (missing) | DraftICU 72
+| displayoptions.h | Builder&amp; icu::DisplayOptions::Builder::setGrammaticalCase(UDisplayOptionsGrammaticalCase) |  (missing) | DraftICU 72
+| displayoptions.h | Builder&amp; icu::DisplayOptions::Builder::setNameStyle(UDisplayOptionsNameStyle) |  (missing) | DraftICU 72
+| displayoptions.h | Builder&amp; icu::DisplayOptions::Builder::setNounClass(UDisplayOptionsNounClass) |  (missing) | DraftICU 72
+| displayoptions.h | Builder&amp; icu::DisplayOptions::Builder::setPluralCategory(UDisplayOptionsPluralCategory) |  (missing) | DraftICU 72
+| displayoptions.h | Builder&amp; icu::DisplayOptions::Builder::setSubstituteHandling(UDisplayOptionsSubstituteHandling) |  (missing) | DraftICU 72
+| displayoptions.h | DisplayOptions icu::DisplayOptions::Builder::build() |  (missing) | DraftICU 72
+| displayoptions.h | DisplayOptions&amp; icu::DisplayOptions::operator=(DisplayOptions&amp;&amp;) noexcept=default |  (missing) | DraftICU 72
+| displayoptions.h | DisplayOptions&amp; icu::DisplayOptions::operator=(const DisplayOptions&amp;)=default |  (missing) | DraftICU 72
+| displayoptions.h | UDisplayOptionsCapitalization icu::DisplayOptions::getCapitalization() const |  (missing) | DraftICU 72
+| displayoptions.h | UDisplayOptionsDisplayLength icu::DisplayOptions::getDisplayLength() const |  (missing) | DraftICU 72
+| displayoptions.h | UDisplayOptionsGrammaticalCase icu::DisplayOptions::getGrammaticalCase() const |  (missing) | DraftICU 72
+| displayoptions.h | UDisplayOptionsNameStyle icu::DisplayOptions::getNameStyle() const |  (missing) | DraftICU 72
+| displayoptions.h | UDisplayOptionsNounClass icu::DisplayOptions::getNounClass() const |  (missing) | DraftICU 72
+| displayoptions.h | UDisplayOptionsPluralCategory icu::DisplayOptions::getPluralCategory() const |  (missing) | DraftICU 72
+| displayoptions.h | UDisplayOptionsSubstituteHandling icu::DisplayOptions::getSubstituteHandling() const |  (missing) | DraftICU 72
+| displayoptions.h | icu::DisplayOptions::DisplayOptions(const DisplayOptions&amp;)=default |  (missing) | DraftICU 72
+| displayoptions.h | <tt>static</tt> Builder icu::DisplayOptions::builder() |  (missing) | DraftICU 72
+| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getQuarter() |  (missing) | DraftICU 72
+| measunit.h | <tt>static</tt> MeasureUnit icu::MeasureUnit::getTonne() |  (missing) | DraftICU 72
+| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createQuarter(UErrorCode&amp;) |  (missing) | DraftICU 72
+| measunit.h | <tt>static</tt> MeasureUnit* icu::MeasureUnit::createTonne(UErrorCode&amp;) |  (missing) | DraftICU 72
+| numberformatter.h | Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::displayOptions(const DisplayOptions&amp;) const&amp; |  (missing) | DraftICU 72
+| numberformatter.h | Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::displayOptions(const DisplayOptions&amp;)&amp;&amp; |  (missing) | DraftICU 72
+| numberformatter.h | UDisplayOptionsNounClass icu::number::FormattedNumber::getNounClass(UErrorCode&amp;) const |  (missing) | DraftICU 72
+| platform.h | <tt>#define</tt> U_HIDDEN |  (missing) | Internal
+| plurrule.h | int32_t icu::PluralRules::getSamples(const UnicodeString&amp;, DecimalQuantity*, int32_t, UErrorCode&amp;) |  (missing) | Internal
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_ARABIC_EXTENDED_C |  (missing) | StableICU 72| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_H |  (missing) | StableICU 72| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_CYRILLIC_EXTENDED_D |  (missing) | StableICU 72| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_DEVANAGARI_EXTENDED_A |  (missing) | StableICU 72| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_KAKTOVIK_NUMERALS |  (missing) | StableICU 72| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_KAWI |  (missing) | StableICU 72| *(Born Stable)* |
+| uchar.h | <tt>enum</tt> UBlockCode::UBLOCK_NAG_MUNDARI |  (missing) | StableICU 72| *(Born Stable)* |
+| udisplayoptions.h | UDisplayOptionsGrammaticalCase udispopt_fromGrammaticalCaseIdentifier(const char*) |  (missing) | DraftICU 72
+| udisplayoptions.h | UDisplayOptionsNounClass udispopt_fromNounClassIdentifier(const char*) |  (missing) | DraftICU 72
+| udisplayoptions.h | UDisplayOptionsPluralCategory udispopt_fromPluralCategoryIdentifier(const char*) |  (missing) | DraftICU 72
+| udisplayoptions.h | const char* udispopt_getGrammaticalCaseIdentifier(UDisplayOptionsGrammaticalCase) |  (missing) | DraftICU 72
+| udisplayoptions.h | const char* udispopt_getNounClassIdentifier(UDisplayOptionsNounClass) |  (missing) | DraftICU 72
+| udisplayoptions.h | const char* udispopt_getPluralCategoryIdentifier(UDisplayOptionsPluralCategory) |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsCapitalization::UDISPOPT_CAPITALIZATION_BEGINNING_OF_SENTENCE |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsCapitalization::UDISPOPT_CAPITALIZATION_MIDDLE_OF_SENTENCE |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsCapitalization::UDISPOPT_CAPITALIZATION_STANDALONE |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsCapitalization::UDISPOPT_CAPITALIZATION_UI_LIST_OR_MENU |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsCapitalization::UDISPOPT_CAPITALIZATION_UNDEFINED |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsDisplayLength::UDISPOPT_DISPLAY_LENGTH_FULL |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsDisplayLength::UDISPOPT_DISPLAY_LENGTH_SHORT |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsDisplayLength::UDISPOPT_DISPLAY_LENGTH_UNDEFINED |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_ABLATIVE |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_ACCUSATIVE |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_COMITATIVE |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_DATIVE |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_ERGATIVE |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_GENITIVE |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_INSTRUMENTAL |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_LOCATIVE_COPULATIVE |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_LOCATIVE |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_NOMINATIVE |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_OBLIQUE |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_PREPOSITIONAL |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_SOCIATIVE |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_UNDEFINED |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsGrammaticalCase::UDISPOPT_GRAMMATICAL_CASE_VOCATIVE |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsNameStyle::UDISPOPT_NAME_STYLE_DIALECT_NAMES |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsNameStyle::UDISPOPT_NAME_STYLE_STANDARD_NAMES |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsNameStyle::UDISPOPT_NAME_STYLE_UNDEFINED |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_ANIMATE |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_COMMON |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_FEMININE |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_INANIMATE |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_MASCULINE |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_NEUTER |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_OTHER |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_PERSONAL |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsNounClass::UDISPOPT_NOUN_CLASS_UNDEFINED |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_FEW |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_MANY |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_ONE |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_OTHER |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_TWO |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_UNDEFINED |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsPluralCategory::UDISPOPT_PLURAL_CATEGORY_ZERO |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsSubstituteHandling::UDISPOPT_SUBSTITUTE_HANDLING_NO_SUBSTITUTE |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsSubstituteHandling::UDISPOPT_SUBSTITUTE_HANDLING_SUBSTITUTE |  (missing) | DraftICU 72
+| udisplayoptions.h | <tt>enum</tt> UDisplayOptionsSubstituteHandling::UDISPOPT_SUBSTITUTE_HANDLING_UNDEFINED |  (missing) | DraftICU 72
+| unum.h | bool unum_hasAttribute(const UNumberFormat*, UNumberFormatAttribute) |  (missing) | DraftICU 72
+| uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_KAWI |  (missing) | StableICU 72| *(Born Stable)* |
+| uscript.h | <tt>enum</tt> UScriptCode::USCRIPT_NAG_MUNDARI |  (missing) | StableICU 72| *(Born Stable)* |
 
 ## Other
 
-Other existing drafts in ICU 69
+Other existing drafts in ICU 72
 
-| File | API | ICU 68 | ICU 69 |
+| File | API | ICU 71 | ICU 72 |
 |---|---|---|---|
-| dtitvfmt.h |  UDisplayContext icu::DateIntervalFormat::getContext(UDisplayContextType, UErrorCode&amp;) const | DraftICU 68 | 
-| dtitvfmt.h |  void icu::DateIntervalFormat::setContext(UDisplayContext, UErrorCode&amp;) | DraftICU 68 | 
-| localematcher.h |  Builder&amp; icu::LocaleMatcher::Builder::setMaxDistance(const Locale&amp;, const Locale&amp;) | DraftICU 68 | 
-| localematcher.h |  Builder&amp; icu::LocaleMatcher::Builder::setNoDefaultLocale() | DraftICU 68 | 
-| localematcher.h |  UBool icu::LocaleMatcher::isMatch(const Locale&amp;, const Locale&amp;, UErrorCode&amp;) const | DraftICU 68 | 
+| dtptngen.h |  const UnicodeString&amp; icu::DateTimePatternGenerator::getDateTimeFormat(UDateFormatStyle, UErrorCode&amp;) const | DraftICU 71 | 
+| dtptngen.h |  void icu::DateTimePatternGenerator::setDateTimeFormat(UDateFormatStyle, const UnicodeString&amp;, UErrorCode&amp;) | DraftICU 71 | 
 | measfmt.h |  void icu::MeasureFormat::parseObject(const UnicodeString&amp;, Formattable&amp;, ParsePosition&amp;) const | DraftICU 53 | 
-| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getCandela() | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getDessertSpoon() | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getDessertSpoonImperial() | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getDot() | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getDram() | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getDrop() | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getEarthRadius() | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getGrain() | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getJigger() | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getLumen() | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getPinch() | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit icu::MeasureUnit::getQuartImperial() | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createCandela(UErrorCode&amp;) | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createDessertSpoon(UErrorCode&amp;) | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createDessertSpoonImperial(UErrorCode&amp;) | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createDot(UErrorCode&amp;) | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createDram(UErrorCode&amp;) | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createDrop(UErrorCode&amp;) | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createEarthRadius(UErrorCode&amp;) | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createGrain(UErrorCode&amp;) | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createJigger(UErrorCode&amp;) | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createLumen(UErrorCode&amp;) | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createPinch(UErrorCode&amp;) | DraftICU 68 | 
-| measunit.h |  <tt>static</tt> MeasureUnit* icu::MeasureUnit::createQuartImperial(UErrorCode&amp;) | DraftICU 68 | 
-| measunit.h |  std::pair&lt; LocalArray&lt; MeasureUnit &gt;, int32_t &gt; icu::MeasureUnit::splitToSingleUnits(UErrorCode&amp;) const | DraftICU 68 | 
-| numberformatter.h |  Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::usage(StringPiece) const&amp; | DraftICU 68 | 
-| numberformatter.h |  Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::usage(StringPiece)&amp;&amp; | DraftICU 68 | 
-| numberformatter.h |  MeasureUnit icu::number::FormattedNumber::getOutputUnit(UErrorCode&amp;) const | DraftICU 68 | 
-| numberrangeformatter.h |  std::pair&lt; StringClass, StringClass &gt; icu::number::FormattedNumberRange::getDecimalNumbers(UErrorCode&amp;) const | DraftICU 68 | 
-| plurrule.h |  UnicodeString icu::PluralRules::select(const number::FormattedNumberRange&amp;, UErrorCode&amp;) const | DraftICU 68 | 
-| ucurr.h |  <tt>enum</tt> UCurrNameStyle::UCURR_FORMAL_SYMBOL_NAME | DraftICU 68 | 
-| ucurr.h |  <tt>enum</tt> UCurrNameStyle::UCURR_VARIANT_SYMBOL_NAME | DraftICU 68 | 
-| udateintervalformat.h |  UDisplayContext udtitvfmt_getContext(const UDateIntervalFormat*, UDisplayContextType, UErrorCode*) | DraftICU 68 | 
-| udateintervalformat.h |  void udtitvfmt_setContext(UDateIntervalFormat*, UDisplayContext, UErrorCode*) | DraftICU 68 | 
-| unum.h |  <tt>enum</tt> UNumberFormatMinimumGroupingDigits::UNUM_MINIMUM_GROUPING_DIGITS_AUTO | DraftICU 68 | 
-| unum.h |  <tt>enum</tt> UNumberFormatMinimumGroupingDigits::UNUM_MINIMUM_GROUPING_DIGITS_MIN2 | DraftICU 68 | 
-| unumberformatter.h |  <tt>enum</tt> UNumberUnitWidth::UNUM_UNIT_WIDTH_FORMAL | DraftICU 68 | 
-| unumberformatter.h |  <tt>enum</tt> UNumberUnitWidth::UNUM_UNIT_WIDTH_VARIANT | DraftICU 68 | 
-| unumberformatter.h |  int32_t unumf_resultToDecimalNumber(const UFormattedNumber*, char*, int32_t, UErrorCode*) | DraftICU 68 | 
-| unumberrangeformatter.h |  UFormattedNumberRange* unumrf_openResult(UErrorCode*) | DraftICU 68 | 
-| unumberrangeformatter.h |  UNumberRangeFormatter* unumrf_openForSkeletonWithCollapseAndIdentityFallback(const UChar*, int32_t, UNumberRangeCollapse, UNumberRangeIdentityFallback, const char*, UParseError*, UErrorCode*) | DraftICU 68 | 
-| unumberrangeformatter.h |  UNumberRangeIdentityResult unumrf_resultGetIdentityResult(const UFormattedNumberRange*, UErrorCode*) | DraftICU 68 | 
-| unumberrangeformatter.h |  const UFormattedValue* unumrf_resultAsValue(const UFormattedNumberRange*, UErrorCode*) | DraftICU 68 | 
-| unumberrangeformatter.h |  int32_t unumrf_resultGetFirstDecimalNumber(const UFormattedNumberRange*, char*, int32_t, UErrorCode*) | DraftICU 68 | 
-| unumberrangeformatter.h |  int32_t unumrf_resultGetSecondDecimalNumber(const UFormattedNumberRange*, char*, int32_t, UErrorCode*) | DraftICU 68 | 
-| unumberrangeformatter.h |  void unumrf_close(UNumberRangeFormatter*) | DraftICU 68 | 
-| unumberrangeformatter.h |  void unumrf_closeResult(UFormattedNumberRange*) | DraftICU 68 | 
-| unumberrangeformatter.h |  void unumrf_formatDecimalRange(const UNumberRangeFormatter*, const char*, int32_t, const char*, int32_t, UFormattedNumberRange*, UErrorCode*) | DraftICU 68 | 
-| unumberrangeformatter.h |  void unumrf_formatDoubleRange(const UNumberRangeFormatter*, double, double, UFormattedNumberRange*, UErrorCode*) | DraftICU 68 | 
-| upluralrules.h |  int32_t uplrules_selectForRange(const UPluralRules*, const struct UFormattedNumberRange*, UChar*, int32_t, UErrorCode*) | DraftICU 68 | 
+| numberformatter.h |  <tt>static</tt> IncrementPrecision icu::number::Precision::incrementExact(uint64_t, int16_t) | DraftICU 71 | 
+| udatpg.h |  const UChar* udatpg_getDateTimeFormatForStyle(const UDateTimePatternGenerator*, UDateFormatStyle, int32_t*, UErrorCode*) | DraftICU 71 | 
+| udatpg.h |  void udatpg_setDateTimeFormatForStyle(UDateTimePatternGenerator*, UDateFormatStyle, const UChar*, int32_t, UErrorCode*) | DraftICU 71 | 
+| unum.h |  <tt>enum</tt> UNumberFormatFields::UNUM_APPROXIMATELY_SIGN_FIELD | DraftICU 71 | 
 | uregex.h |  <tt>enum</tt> URegexpFlag::UREGEX_CANON_EQ | DraftICU 2.4 | 
 
 ## Simplifications
@@ -273,7 +231,7 @@ This section shows cases where the signature was "simplified" for the sake of co
 
 ## Colophon
 
-Contents generated by StableAPI tool on Thu Mar 11 16:09:31 PST 2021
+Contents generated by StableAPI tool on Thu Oct 06 11:06:50 PDT 2022
 
 Copyright © 2019 and later: Unicode, Inc. and others.
 License & terms of use: http://www.unicode.org/copyright.html

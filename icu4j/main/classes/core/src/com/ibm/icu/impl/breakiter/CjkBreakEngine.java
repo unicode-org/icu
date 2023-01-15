@@ -11,46 +11,79 @@ package com.ibm.icu.impl.breakiter;
 import static com.ibm.icu.impl.CharacterIteration.DONE32;
 import static com.ibm.icu.impl.CharacterIteration.current32;
 import static com.ibm.icu.impl.CharacterIteration.next32;
+import static com.ibm.icu.impl.CharacterIteration.previous32;
 
 import java.io.IOException;
 import java.text.CharacterIterator;
+import java.util.HashSet;
 
 import com.ibm.icu.impl.Assert;
+import com.ibm.icu.impl.ICUConfig;
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSetIterator;
+import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.UResourceBundleIterator;
 
 public class CjkBreakEngine extends DictionaryBreakEngine {
-    private static final UnicodeSet fHangulWordSet = new UnicodeSet();
-    private static final UnicodeSet fHanWordSet = new UnicodeSet();
-    private static final UnicodeSet fKatakanaWordSet = new UnicodeSet();
-    private static final UnicodeSet fHiraganaWordSet = new UnicodeSet();
-    static {
-        fHangulWordSet.applyPattern("[\\uac00-\\ud7a3]");
-        fHanWordSet.applyPattern("[:Han:]");
-        fKatakanaWordSet.applyPattern("[[:Katakana:]\\uff9e\\uff9f]");
-        fHiraganaWordSet.applyPattern("[:Hiragana:]");
-
-        // freeze them all
-        fHangulWordSet.freeze();
-        fHanWordSet.freeze();
-        fKatakanaWordSet.freeze();
-        fHiraganaWordSet.freeze();
-    }
-
+    private UnicodeSet fHangulWordSet;
+    private UnicodeSet fDigitOrOpenPunctuationOrAlphabetSet;
+    private UnicodeSet fClosePunctuationSet;
     private DictionaryMatcher fDictionary = null;
+    private HashSet<String> fSkipSet;
+    private MlBreakEngine fMlBreakEngine;
+    private boolean isCj = false;
 
     public CjkBreakEngine(boolean korean) throws IOException {
+        fHangulWordSet = new UnicodeSet("[\\uac00-\\ud7a3]");
+        fHangulWordSet.freeze();
+        // Digit, open punctuation and Alphabetic characters.
+        fDigitOrOpenPunctuationOrAlphabetSet = new UnicodeSet("[[:Nd:][:Pi:][:Ps:][:Alphabetic:]]");
+        fDigitOrOpenPunctuationOrAlphabetSet.freeze();
+
+        fClosePunctuationSet = new UnicodeSet("[[:Pc:][:Pd:][:Pe:][:Pf:][:Po:]]");
+        fClosePunctuationSet.freeze();
+        fSkipSet = new HashSet<String>();
+
         fDictionary = DictionaryData.loadDictionaryFor("Hira");
         if (korean) {
             setCharacters(fHangulWordSet);
         } else { //Chinese and Japanese
-            UnicodeSet cjSet = new UnicodeSet();
-            cjSet.addAll(fHanWordSet);
-            cjSet.addAll(fKatakanaWordSet);
-            cjSet.addAll(fHiraganaWordSet);
-            cjSet.add(0xFF70); // HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK
-            cjSet.add(0x30FC); // KATAKANA-HIRAGANA PROLONGED SOUND MARK
+            isCj = true;
+            UnicodeSet cjSet = new UnicodeSet("[[:Han:][:Hiragana:][:Katakana:]\\u30fc\\uff70\\uff9e\\uff9f]");
             setCharacters(cjSet);
+            if (Boolean.parseBoolean(
+                    ICUConfig.get("com.ibm.icu.impl.breakiter.useMLPhraseBreaking", "false"))) {
+                fMlBreakEngine = new MlBreakEngine(fDigitOrOpenPunctuationOrAlphabetSet,
+                        fClosePunctuationSet);
+            } else {
+                initializeJapanesePhraseParamater();
+            }
+        }
+    }
+
+    private void initializeJapanesePhraseParamater() {
+        loadJapaneseExtensions();
+        loadHiragana();
+    }
+
+    private void loadJapaneseExtensions() {
+        UResourceBundle rb = UResourceBundle.getBundleInstance(ICUData.ICU_BRKITR_BASE_NAME, "ja");
+        final String tag = "extensions";
+        UResourceBundle bundle = rb.get(tag);
+        UResourceBundleIterator iterator = bundle.getIterator();
+        while (iterator.hasNext()) {
+            fSkipSet.add(iterator.nextString());
+        }
+    }
+
+    private void loadHiragana() {
+        UnicodeSet hiraganaWordSet = new UnicodeSet("[:Hiragana:]");
+        hiraganaWordSet.freeze();
+        UnicodeSetIterator iterator = new UnicodeSetIterator(hiraganaWordSet);
+        while (iterator.next()) {
+            fSkipSet.add(iterator.getString());
         }
     }
 
@@ -84,7 +117,7 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
 
     @Override
     public int divideUpDictionaryRange(CharacterIterator inText, int startPos, int endPos,
-            DequeI foundBreaks) {
+            DequeI foundBreaks, boolean isPhraseBreaking) {
         if (startPos >= endPos) {
             return 0;
         }
@@ -126,6 +159,15 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
                 numCodePts++;
                 index = normalizer.getIndex();
                 charPositions[numCodePts] = index;
+            }
+        }
+        // Use ML phrase breaking
+        if (Boolean.parseBoolean(
+                ICUConfig.get("com.ibm.icu.impl.breakiter.useMLPhraseBreaking", "false"))) {
+            // PhraseBreaking is supported in ja and ko; MlBreakEngine only supports ja.
+            if (isPhraseBreaking && isCj) {
+                return fMlBreakEngine.divideUpRange(inText, startPos, endPos, text,
+                        numCodePts, charPositions, foundBreaks);
             }
         }
 
@@ -214,6 +256,26 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
         if (bestSnlp[numCodePts] == kint32max) {
             t_boundary[numBreaks] = numCodePts;
             numBreaks++;
+        } else if (isPhraseBreaking) {
+            t_boundary[numBreaks] = numCodePts;
+            numBreaks++;
+            int prevIdx = numCodePts;
+            int codeUnitIdx = 0, prevCodeUnitIdx = 0, length = 0;
+            for (int i = prev[numCodePts]; i > 0; i = prev[i]) {
+                codeUnitIdx = prenormstr.offsetByCodePoints(0, i);
+                prevCodeUnitIdx = prenormstr.offsetByCodePoints(0, prevIdx);
+                length =  prevCodeUnitIdx - codeUnitIdx;
+                prevIdx = i;
+                String pattern = getPatternFromText(text, s, codeUnitIdx, length);
+                // Keep the breakpoint if the pattern is not in the fSkipSet and continuous Katakana
+                // characters don't occur.
+                text.setIndex(codeUnitIdx);
+                if (!fSkipSet.contains(pattern)
+                        && (!isKatakana(current32(text)) || !isKatakana(previous32(text)))) {
+                    t_boundary[numBreaks] = i;
+                    numBreaks++;
+                }
+            }
         } else {
             for (int i = numCodePts; i > 0; i = prev[i]) {
                 t_boundary[numBreaks] = i;
@@ -227,20 +289,57 @@ public class CjkBreakEngine extends DictionaryBreakEngine {
         }
 
         int correctedNumBreaks = 0;
+        int previous = -1;
         for (int i = numBreaks - 1; i >= 0; i--) {
             int pos = charPositions[t_boundary[i]] + startPos;
-            if (!(foundBreaks.contains(pos) || pos == startPos)) {
-                foundBreaks.push(charPositions[t_boundary[i]] + startPos);
-                correctedNumBreaks++;
+            // In phrase breaking, there has to be a breakpoint between Cj character and close
+            // punctuation.
+            // E.g.［携帯電話］正しい選択 -> ［携帯▁電話］▁正しい▁選択 -> breakpoint between ］ and 正
+            inText.setIndex(pos);
+            if (pos > previous) {
+                if (pos != startPos
+                        || (isPhraseBreaking && pos > 0
+                        && fClosePunctuationSet.contains(previous32(inText)))) {
+                    foundBreaks.push(charPositions[t_boundary[i]] + startPos);
+                    correctedNumBreaks++;
+                }
             }
+            previous = pos;
         }
 
         if (!foundBreaks.isEmpty() && foundBreaks.peek() == endPos) {
-            foundBreaks.pop();
-            correctedNumBreaks--;
+            // In phrase breaking, there has to be a breakpoint between Cj character and
+            // the number/open punctuation.
+            // E.g. る文字「そうだ、京都」->る▁文字▁「そうだ、▁京都」-> breakpoint between 字 and「
+            // E.g. 乗車率９０％程度だろうか -> 乗車▁率▁９０％▁程度だろうか -> breakpoint between 率 and ９
+            // E.g. しかもロゴがＵｎｉｃｏｄｅ！ -> しかも▁ロゴが▁Ｕｎｉｃｏｄｅ！-> breakpoint between が and Ｕ
+            if (isPhraseBreaking) {
+                inText.setIndex(endPos);
+                int current = current32(inText);
+                if (current != DONE32 && !fDigitOrOpenPunctuationOrAlphabetSet.contains(current)) {
+                    foundBreaks.pop();
+                    correctedNumBreaks--;
+                }
+            } else {
+                foundBreaks.pop();
+                correctedNumBreaks--;
+            }
         }
         if (!foundBreaks.isEmpty())
             inText.setIndex(foundBreaks.peek());
         return correctedNumBreaks;
+    }
+
+    private String getPatternFromText(CharacterIterator text, StringBuffer sb, int start,
+            int length) {
+        sb.setLength(0);
+        if (length > 0) {
+            text.setIndex(start);
+            sb.append(text.current());
+            for (int i = 1; i < length; i++) {
+                sb.append(text.next());
+            }
+        }
+        return sb.toString();
     }
 }

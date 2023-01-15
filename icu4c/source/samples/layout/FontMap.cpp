@@ -27,7 +27,7 @@ FontMap::FontMap(const char *fileName, le_int16 pointSize, GUISupport *guiSuppor
     : fPointSize(pointSize), fFontCount(0), fAscent(0), fDescent(0), fLeading(0), fGUISupport(guiSupport)
 {
     le_int32 defaultFont = -1, i, script;
-    le_bool haveFonts = FALSE;
+    le_bool haveFonts = false;
 
 /**/
     for (i = 0; i < scriptCodeCount; i += 1) {
@@ -70,7 +70,7 @@ FontMap::FontMap(const char *fileName, le_int16 pointSize, GUISupport *guiSuppor
 
         if (strcmp(scriptName, "DEFAULT") == 0) {
             defaultFont = getFontIndex(fontName);
-            haveFonts = TRUE;
+            haveFonts = true;
             continue;
         }
 
@@ -91,7 +91,7 @@ FontMap::FontMap(const char *fileName, le_int16 pointSize, GUISupport *guiSuppor
         }
 
         fFontIndices[script] = getFontIndex(fontName);
-        haveFonts = TRUE;
+        haveFonts = true;
     }
 
     if (defaultFont >= 0) {

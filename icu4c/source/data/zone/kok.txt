@@ -1217,6 +1217,9 @@ kok{
         "Pacific:Johnston"{
             ec{"जॉन्स्टन"}
         }
+        "Pacific:Kanton"{
+            ec{"कांटोन"}
+        }
         "Pacific:Kiritimati"{
             ec{"किरितिमाती"}
         }
@@ -1877,6 +1880,9 @@ kok{
             ld{"येकातेरिनबर्ग ग्रीष्म वेळ"}
             lg{"येकातेरिनबर्ग वेळ"}
             ls{"येकातेरिनबर्ग प्रमाणित वेळ"}
+        }
+        "meta:Yukon"{
+            ls{"युकॉन वेळ"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

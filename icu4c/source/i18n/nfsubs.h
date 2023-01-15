@@ -74,7 +74,7 @@ public:
      * @param rhs    the object to be compared with.
      * @return       true if the given Format objects are semantically equal.
      */
-    virtual UBool operator==(const NFSubstitution& rhs) const;
+    virtual bool operator==(const NFSubstitution& rhs) const;
 
     /**
      * Return true if the given Format objects are semantically unequal.
@@ -82,7 +82,7 @@ public:
      * @param rhs    the object to be compared with.
      * @return       true if the given Format objects are semantically unequal.
      */
-    UBool operator!=(const NFSubstitution& rhs) const { return !operator==(rhs); }
+    bool operator!=(const NFSubstitution& rhs) const { return !operator==(rhs); }
     
     /**
      * Sets the substitution's divisor.  Used by NFRule.setBaseValue().
@@ -245,12 +245,12 @@ public:
     virtual UBool isModulusSubstitution() const;
     
 private:
-    NFSubstitution(const NFSubstitution &other); // forbid copying of this class
-    NFSubstitution &operator=(const NFSubstitution &other); // forbid copying of this class
+    NFSubstitution(const NFSubstitution &other) = delete; // forbid copying of this class
+    NFSubstitution &operator=(const NFSubstitution &other) = delete; // forbid copying of this class
 
 public:
     static UClassID getStaticClassID(void);
-    virtual UClassID getDynamicClassID(void) const;
+    virtual UClassID getDynamicClassID(void) const override;
 };
 
 U_NAMESPACE_END

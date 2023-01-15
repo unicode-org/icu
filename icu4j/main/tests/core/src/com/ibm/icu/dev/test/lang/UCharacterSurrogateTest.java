@@ -78,50 +78,58 @@ public final class UCharacterSurrogateTest extends TestFmwk {
 
     @Test
     public void TestIsHighSurrogate() {
-        if (UCharacter
-                .isHighSurrogate((char) (UCharacter.MIN_HIGH_SURROGATE - 1)))
+        // Test with both int & char values.
+        if (UCharacter.isHighSurrogate(UCharacter.MIN_HIGH_SURROGATE - 1) ||
+                UCharacter.isHighSurrogate((char) (UCharacter.MIN_HIGH_SURROGATE - 1)))
             errln("0xd7ff");
         if (!UCharacter.isHighSurrogate(UCharacter.MIN_HIGH_SURROGATE))
             errln("0xd800");
         if (!UCharacter.isHighSurrogate(UCharacter.MAX_HIGH_SURROGATE))
             errln("0xdbff");
-        if (UCharacter
-                .isHighSurrogate((char) (UCharacter.MAX_HIGH_SURROGATE + 1)))
+        if (UCharacter.isHighSurrogate(UCharacter.MAX_HIGH_SURROGATE + 1) ||
+                UCharacter.isHighSurrogate((char) (UCharacter.MAX_HIGH_SURROGATE + 1)))
             errln("0xdc00");
     }
 
     @Test
     public void TestIsLowSurrogate() {
-        if (UCharacter
-                .isLowSurrogate((char) (UCharacter.MIN_LOW_SURROGATE - 1)))
+        // Test with both int & char values.
+        if (UCharacter.isLowSurrogate(UCharacter.MIN_LOW_SURROGATE - 1) ||
+                UCharacter.isLowSurrogate((char) (UCharacter.MIN_LOW_SURROGATE - 1)))
             errln("0xdbff");
         if (!UCharacter.isLowSurrogate(UCharacter.MIN_LOW_SURROGATE))
             errln("0xdc00");
         if (!UCharacter.isLowSurrogate(UCharacter.MAX_LOW_SURROGATE))
             errln("0xdfff");
-        if (UCharacter
-                .isLowSurrogate((char) (UCharacter.MAX_LOW_SURROGATE + 1)))
+        if (UCharacter.isLowSurrogate(UCharacter.MAX_LOW_SURROGATE + 1) ||
+                UCharacter.isLowSurrogate((char) (UCharacter.MAX_LOW_SURROGATE + 1)))
             errln("0xe000");
     }
 
     @Test
     public void TestIsSurrogatePair() {
+        // Test with both int & char values.
         if (UCharacter.isSurrogatePair(
-                (char) (UCharacter.MIN_HIGH_SURROGATE - 1),
-                UCharacter.MIN_LOW_SURROGATE))
+                UCharacter.MIN_HIGH_SURROGATE - 1, UCharacter.MIN_LOW_SURROGATE) ||
+                UCharacter.isSurrogatePair(
+                        (char) (UCharacter.MIN_HIGH_SURROGATE - 1), UCharacter.MIN_LOW_SURROGATE))
             errln("0xd7ff,0xdc00");
         if (UCharacter.isSurrogatePair(
-                (char) (UCharacter.MAX_HIGH_SURROGATE + 1),
-                UCharacter.MIN_LOW_SURROGATE))
+                UCharacter.MAX_HIGH_SURROGATE + 1, UCharacter.MIN_LOW_SURROGATE) ||
+                UCharacter.isSurrogatePair(
+                        (char) (UCharacter.MAX_HIGH_SURROGATE + 1), UCharacter.MIN_LOW_SURROGATE))
             errln("0xd800,0xdc00");
-        if (UCharacter.isSurrogatePair(UCharacter.MIN_HIGH_SURROGATE,
-                (char) (UCharacter.MIN_LOW_SURROGATE - 1)))
+        if (UCharacter.isSurrogatePair(
+                UCharacter.MIN_HIGH_SURROGATE, UCharacter.MIN_LOW_SURROGATE - 1) ||
+                UCharacter.isSurrogatePair(
+                        UCharacter.MIN_HIGH_SURROGATE, (char) (UCharacter.MIN_LOW_SURROGATE - 1)))
             errln("0xd800,0xdbff");
-        if (UCharacter.isSurrogatePair(UCharacter.MIN_HIGH_SURROGATE,
-                (char) (UCharacter.MAX_LOW_SURROGATE + 1)))
+        if (UCharacter.isSurrogatePair(
+                UCharacter.MIN_HIGH_SURROGATE, UCharacter.MAX_LOW_SURROGATE + 1) ||
+                UCharacter.isSurrogatePair(
+                        UCharacter.MIN_HIGH_SURROGATE, (char) (UCharacter.MAX_LOW_SURROGATE + 1)))
             errln("0xd800,0xe000");
-        if (!UCharacter.isSurrogatePair(UCharacter.MIN_HIGH_SURROGATE,
-                UCharacter.MIN_LOW_SURROGATE))
+        if (!UCharacter.isSurrogatePair(UCharacter.MIN_HIGH_SURROGATE, UCharacter.MIN_LOW_SURROGATE))
             errln("0xd800,0xdc00");
     }
 
@@ -157,6 +165,9 @@ public final class UCharacterSurrogateTest extends TestFmwk {
                 errln(Integer.toHexString(pairs[i]) + ", " + pairs[i + 1]);
                 break;
             }
+            // Also test with int values.
+            int cp2 = UCharacter.toCodePoint(pairs[i], pairs[i + 1]);
+            assertEquals("pairs at " + i, cp, cp2);
         }
     }
 

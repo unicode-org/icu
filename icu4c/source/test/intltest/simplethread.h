@@ -79,7 +79,7 @@ class ThreadPool : public ThreadPoolBase {
         ThreadPoolBase(test, howMany), fRunFnPtr(runFnPtr) {}
     virtual ~ThreadPool() {}
   private:
-    virtual void callFn(int32_t param) {
+    virtual void callFn(int32_t param) override {
         TestClass *test = dynamic_cast<TestClass *>(fIntlTest);
         (test->*fRunFnPtr)(param);
     }

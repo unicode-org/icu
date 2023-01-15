@@ -20,12 +20,35 @@
 
 #include <stdio.h>
 #include <time.h>
+
+// The C99 standard suggested that C++ implementations not define PRId64 etc. constants
+// unless this macro is defined.
+// See the Notes at https://en.cppreference.com/w/cpp/types/integer .
+// Similar to defining __STDC_LIMIT_MACROS in unicode/ptypes.h .
+#ifndef __STDC_FORMAT_MACROS
+#   define __STDC_FORMAT_MACROS
+#endif
+#include <cinttypes>
+
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "unicode/ucptrie.h"
+#include "unicode/errorcode.h"
+#include "unicode/uniset.h"
+#include "unicode/usetiter.h"
+#include "unicode/utf16.h"
 #include "utrie2.h"
 #include "cstring.h"
 #include "writesrc.h"
+#include "util.h"
+
+U_NAMESPACE_BEGIN
+
+ValueNameGetter::~ValueNameGetter() {}
+
+U_NAMESPACE_END
+
+U_NAMESPACE_USE
 
 static FILE *
 usrc_createWithoutHeader(const char *path, const char *filename) {
@@ -130,12 +153,14 @@ usrc_writeArray(FILE *f,
     const uint8_t *p8;
     const uint16_t *p16;
     const uint32_t *p32;
-    uint32_t value;
+    const int64_t *p64; // Signed due to TOML!
+    int64_t value; // Signed due to TOML!
     int32_t i, col;
 
     p8=NULL;
     p16=NULL;
     p32=NULL;
+    p64=NULL;
     switch(width) {
     case 8:
         p8=(const uint8_t *)p;
@@ -145,6 +170,9 @@ usrc_writeArray(FILE *f,
         break;
     case 32:
         p32=(const uint32_t *)p;
+        break;
+    case 64:
+        p64=(const int64_t *)p;
         break;
     default:
         fprintf(stderr, "usrc_writeArray(width=%ld) unrecognized width\n", (long)width);
@@ -173,11 +201,14 @@ usrc_writeArray(FILE *f,
         case 32:
             value=p32[i];
             break;
+        case 64:
+            value=p64[i];
+            break;
         default:
             value=0; /* unreachable */
             break;
         }
-        fprintf(f, value<=9 ? "%lu" : "0x%lx", (unsigned long)value);
+        fprintf(f, value<=9 ? "%" PRId64 : "0x%" PRIx64, value);
     }
     if(postfix!=NULL) {
         fputs(postfix, f);
@@ -238,7 +269,7 @@ usrc_writeUTrie2Struct(FILE *f,
         "    0x%lx,\n"          /* errorValue */
         "    0x%lx,\n"          /* highStart */
         "    0x%lx,\n"          /* highValueIndex */
-        "    NULL, 0, FALSE, FALSE, 0, NULL\n",
+        "    NULL, 0, false, false, 0, NULL\n",
         (long)pTrie->indexLength, (long)pTrie->dataLength,
         (short)pTrie->index2NullOffset, (short)pTrie->dataNullOffset,
         (long)pTrie->initialValue, (long)pTrie->errorValue,
@@ -328,13 +359,12 @@ usrc_writeUCPTrie(FILE *f, const char *name, const UCPTrie *pTrie, UTargetSyntax
         sprintf(line3, "\n};\n\n");
         break;
     case UPRV_TARGET_SYNTAX_TOML:
-        fprintf(f, "name = \"%s\"\n", name);
         sprintf(line, "index = [\n  ");
         sprintf(line2, "data_%d = [\n  ", (int)width);
         sprintf(line3, "\n]\n");
         break;
     default:
-        UPRV_UNREACHABLE;
+        UPRV_UNREACHABLE_EXIT;
     }
     usrc_writeUCPTrieArrays(f, line, line2, pTrie, line3, syntax);
 
@@ -352,9 +382,70 @@ usrc_writeUCPTrie(FILE *f, const char *name, const UCPTrie *pTrie, UTargetSyntax
         line4[0] = 0;
         break;
     default:
-        UPRV_UNREACHABLE;
+        UPRV_UNREACHABLE_EXIT;
     }
     usrc_writeUCPTrieStruct(f, line, pTrie, line2, line3, line4, syntax);
+}
+
+U_CAPI void U_EXPORT2
+usrc_writeUnicodeSet(
+        FILE *f,
+        const USet *pSet,
+        UTargetSyntax syntax) {
+    // ccode is not yet supported
+    U_ASSERT(syntax == UPRV_TARGET_SYNTAX_TOML);
+
+    // Write out a list of ranges
+    const UnicodeSet* set = UnicodeSet::fromUSet(pSet);
+    UnicodeSetIterator it(*set);
+    fprintf(f, "# Inclusive ranges of the code points in the set.\n");
+    fprintf(f, "ranges = [\n");
+    bool seenFirstString = false;
+    while (it.nextRange()) {
+        if (it.isString()) {
+            if (!seenFirstString) {
+                seenFirstString = true;
+                fprintf(f, "]\nstrings = [\n");
+            }
+            const UnicodeString& str = it.getString();
+            fprintf(f, "  ");
+            usrc_writeStringAsASCII(f, str.getBuffer(), str.length(), syntax);
+            fprintf(f, ",\n");
+        } else {
+            U_ASSERT(!seenFirstString);
+            UChar32 start = it.getCodepoint();
+            UChar32 end = it.getCodepointEnd();
+            fprintf(f, "  [0x%x, 0x%x],\n", start, end);
+        }
+    }
+    fprintf(f, "]\n");
+}
+
+U_CAPI void U_EXPORT2
+usrc_writeUCPMap(
+        FILE *f,
+        const UCPMap *pMap,
+        icu::ValueNameGetter *valueNameGetter,
+        UTargetSyntax syntax) {
+    // ccode is not yet supported
+    U_ASSERT(syntax == UPRV_TARGET_SYNTAX_TOML);
+    (void) syntax; // silence unused variable errors
+
+    // Print out list of ranges
+    UChar32 start = 0, end;
+    uint32_t value;
+    fprintf(f, "# Code points `a` through `b` have value `v`, corresponding to `name`.\n");
+    fprintf(f, "ranges = [\n");
+    while ((end = ucpmap_getRange(pMap, start, UCPMAP_RANGE_NORMAL, 0, nullptr, nullptr, &value)) >= 0) {
+        if (valueNameGetter != nullptr) {
+            const char *name = valueNameGetter->getName(value);
+            fprintf(f, "  {a=0x%x, b=0x%x, v=%u, name=\"%s\"},\n", start, end, value, name);
+        } else {
+            fprintf(f, "  {a=0x%x, b=0x%x, v=%u},\n", start, end, value);
+        }
+        start = end + 1;
+    }
+    fprintf(f, "]\n");
 }
 
 U_CAPI void U_EXPORT2
@@ -394,4 +485,31 @@ usrc_writeArrayOfMostlyInvChars(FILE *f,
     if(postfix!=NULL) {
         fputs(postfix, f);
     }
+}
+
+U_CAPI void U_EXPORT2
+usrc_writeStringAsASCII(FILE *f,
+        const UChar* ptr, int32_t length,
+        UTargetSyntax) {
+    // For now, assume all UTargetSyntax values are valid here.
+    fprintf(f, "\"");
+    int32_t i = 0;
+    UChar32 cp;
+    while (i < length) {
+        U16_NEXT(ptr, i, length, cp);
+        if (cp == u'"') {
+            fprintf(f, "\\\"");
+        } else if (ICU_Utility::isUnprintable(cp)) {
+            UnicodeString u16result;
+            ICU_Utility::escapeUnprintable(u16result, cp);
+            std::string u8result;
+            u16result.toUTF8String(u8result);
+            fprintf(f, "%s", u8result.data());
+        } else {
+            U_ASSERT(cp < 0x80);
+            char s[2] = {static_cast<char>(cp), 0};
+            fprintf(f, "%s", s);
+        }
+    }
+    fprintf(f, "\"");
 }

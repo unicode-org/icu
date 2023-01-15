@@ -95,6 +95,7 @@ lo{
             1024p5{"pebi{0}"}
             1024p6{"exbi{0}"}
             1024p7{"zebi{0}"}
+            1024p8{"yobe{0}"}
             10p-1{"ເດຊີ{0}"}
             10p-12{"ປິໂກ{0}"}
             10p-15{"ເຟມໂຕ{0}"}
@@ -132,6 +133,10 @@ lo{
             }
         }
         concentr{
+            item{
+                dnam{"ອັນ"}
+                other{"{0} ອັນ"}
+            }
             karat{
                 dnam{"ກະຣັດ"}
                 other{"{0} ກະຣັດ"}
@@ -277,6 +282,11 @@ lo{
                 dnam{"ນາ​ໂນ​ວິ​ນາ​ທີ"}
                 other{"{0} ນາ​ໂນ​ວິ​ນາ​ທີ"}
             }
+            quarter{
+                dnam{"ໄຕມາດ"}
+                other{"{0} ໄຕມາດ"}
+                per{"{0}/ໄຕມາດ"}
+            }
             second{
                 dnam{"ວິນາທີ"}
                 other{"{0} ວິນາທີ"}
@@ -346,6 +356,10 @@ lo{
             }
         }
         force{
+            kilowatt-hour-per-100-kilometer{
+                dnam{"ກິໂລວັດໂມງຕໍ່ 100 ກິໂລແມັດ"}
+                other{"{0} ກິໂລວັດໂມງຕໍ່ 100 ກິໂລແມັດ"}
+            }
             newton{
                 dnam{"ນິວ​ເຕິນ"}
                 other{"{0} ນິວ​ເຕິນ"}
@@ -511,10 +525,6 @@ lo{
                 other{"{0} ກິໂລກຣາມ"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 other{"{0} μg"}
@@ -548,6 +558,10 @@ lo{
             ton{
                 dnam{"ໂຕນ"}
                 other{"{0} ໂຕນ"}
+            }
+            tonne{
+                dnam{"t"}
+                other{"{0} t"}
             }
         }
         power{
@@ -804,7 +818,6 @@ lo{
             }
             square-meter{
                 dnam{"ແມັດ²"}
-                other{"{0} ແມັດ²"}
             }
             square-mile{
                 other{"{0} mi²"}
@@ -841,6 +854,10 @@ lo{
             }
         }
         concentr{
+            item{
+                dnam{"ອັນ"}
+                other{"{0} ອັນ"}
+            }
             percent{
                 dnam{"%"}
                 other{"{0}%"}
@@ -850,6 +867,10 @@ lo{
             liter-per-100-kilometer{
                 dnam{"ລ/ 100 ກມ"}
                 other{"{0} ລ / 100 ກມ"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mpg UK"}
+                other{"{0} m/gUK"}
             }
         }
         coordinate{
@@ -893,6 +914,11 @@ lo{
                 other{"{0} ປ"}
             }
         }
+        force{
+            kilowatt-hour-per-100-kilometer{
+                other{"{0}kWh/100km"}
+            }
+        }
         length{
             centimeter{
                 dnam{"ຊມ"}
@@ -904,7 +930,6 @@ lo{
             }
             inch{
                 dnam{"ນິ້ວ"}
-                other{"{0} ນ"}
             }
             kilometer{
                 dnam{"ກມ"}
@@ -919,16 +944,11 @@ lo{
                 other{"{0} ມ"}
             }
             mile{
-                dnam{"ໄມ"}
                 other{"{0} ໄມ"}
             }
             millimeter{
                 dnam{"ມມ"}
                 other{"{0} ມມ"}
-            }
-            picometer{
-                dnam{"pm"}
-                other{"{0} pm"}
             }
             yard{
                 dnam{"ຫລາ"}
@@ -958,9 +978,6 @@ lo{
             kilowatt{
                 other{"{0} kW"}
             }
-            watt{
-                other{"{0} W"}
-            }
         }
         pressure{
             hectopascal{
@@ -983,9 +1000,6 @@ lo{
             meter-per-second{
                 other{"{0} m/s"}
             }
-            mile-per-hour{
-                other{"{0} mi/h"}
-            }
         }
         temperature{
             celsius{
@@ -998,11 +1012,17 @@ lo{
             }
         }
         volume{
-            cubic-kilometer{
-                other{"{0} km³"}
-            }
             cubic-mile{
                 other{"{0} mi³"}
+            }
+            dessert-spoon-imperial{
+                other{"{0}dsp-Imp"}
+            }
+            fluid-ounce-imperial{
+                other{"{0} fl oz Im"}
+            }
+            gallon-imperial{
+                other{"{0} galIm"}
             }
             liter{
                 dnam{"ລິດ"}
@@ -1114,6 +1134,10 @@ lo{
             per{"{0}/{1}"}
         }
         concentr{
+            item{
+                dnam{"ອັນ"}
+                other{"{0} ອັນ"}
+            }
             karat{
                 dnam{"ກະຣັດ"}
                 other{"{0} kt"}
@@ -1250,6 +1274,11 @@ lo{
             nanosecond{
                 dnam{"ນາ​ໂນ​ວິ​"}
                 other{"{0} ນນ​ວິ"}
+            }
+            quarter{
+                dnam{"ໄຕມາດ"}
+                other{"{0} ໄຕມາດ"}
+                per{"{0}/ໄຕມາດ"}
             }
             second{
                 dnam{"ວິ."}
@@ -1443,10 +1472,6 @@ lo{
                 other{"{0} ກິໂລ"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 other{"{0} μg"}
@@ -1472,6 +1497,10 @@ lo{
             ton{
                 dnam{"ຕ"}
                 other{"{0} ຕ"}
+            }
+            tonne{
+                dnam{"t"}
+                other{"{0} t"}
             }
         }
         power{

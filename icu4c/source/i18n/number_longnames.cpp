@@ -259,20 +259,16 @@ class InflectedPluralSink : public ResourceSink {
 
     // See ResourceSink::put().
     void put(const char *key, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) U_OVERRIDE {
-        ResourceTable pluralsTable = value.getTable(status);
+        int32_t pluralIndex = getIndex(key, status);
         if (U_FAILURE(status)) { return; }
-        for (int32_t i = 0; pluralsTable.getKeyAndValue(i, key, value); ++i) {
-            int32_t pluralIndex = getIndex(key, status);
-            if (U_FAILURE(status)) { return; }
-            if (!outArray[pluralIndex].isBogus()) {
-                // We already have a pattern
-                continue;
-            }
-            ResourceTable genderTable = value.getTable(status);
-            ResourceTable caseTable; // This instance has to outlive `value`
-            if (loadForPluralForm(genderTable, caseTable, value, status)) {
-                outArray[pluralIndex] = value.getUnicodeString(status);
-            }
+        if (!outArray[pluralIndex].isBogus()) {
+            // We already have a pattern
+            return;
+        }
+        ResourceTable genderTable = value.getTable(status);
+        ResourceTable caseTable; // This instance has to outlive `value`
+        if (loadForPluralForm(genderTable, caseTable, value, status)) {
+            outArray[pluralIndex] = value.getUnicodeString(status);
         }
     }
 
@@ -370,18 +366,11 @@ void getInflectedMeasureData(StringPiece subKey,
     key.append(subKey, status);
 
     UErrorCode localStatus = status;
-    ures_getAllItemsWithFallback(unitsBundle.getAlias(), key.data(), sink, localStatus);
+    ures_getAllChildrenWithFallback(unitsBundle.getAlias(), key.data(), sink, localStatus);
     if (width == UNUM_UNIT_WIDTH_SHORT) {
         status = localStatus;
         return;
     }
-
-    // TODO(ICU-13353): The fallback to short does not work in ICU4C.
-    // Manually fall back to short (this is done automatically in Java).
-    key.clear();
-    key.append("unitsShort/", status);
-    key.append(subKey, status);
-    ures_getAllItemsWithFallback(unitsBundle.getAlias(), key.data(), sink, status);
 }
 
 class PluralTableSink : public ResourceSink {
@@ -396,20 +385,16 @@ class PluralTableSink : public ResourceSink {
     }
 
     void put(const char *key, ResourceValue &value, UBool /*noFallback*/, UErrorCode &status) U_OVERRIDE {
-        ResourceTable pluralsTable = value.getTable(status);
-        if (U_FAILURE(status)) { return; }
-        for (int32_t i = 0; pluralsTable.getKeyAndValue(i, key, value); ++i) {
-            if (uprv_strcmp(key, "case") == 0) {
-                continue;
-            }
-            int32_t index = getIndex(key, status);
-            if (U_FAILURE(status)) { return; }
-            if (!outArray[index].isBogus()) {
-                continue;
-            }
-            outArray[index] = value.getUnicodeString(status);
-            if (U_FAILURE(status)) { return; }
+        if (uprv_strcmp(key, "case") == 0) {
+            return;
         }
+        int32_t index = getIndex(key, status);
+        if (U_FAILURE(status)) { return; }
+        if (!outArray[index].isBogus()) {
+            return;
+        }
+        outArray[index] = value.getUnicodeString(status);
+        if (U_FAILURE(status)) { return; }
     }
 
   private:
@@ -446,13 +431,33 @@ void getMeasureData(const Locale &locale,
     subKey.append(unit.getType(), status);
     subKey.append("/", status);
 
+    // Check if unitSubType is an alias or not.
+    LocalUResourceBundlePointer aliasBundle(ures_open(U_ICUDATA_ALIAS, "metadata", &status));
+
+    UErrorCode aliasStatus = status;
+    StackUResourceBundle aliasFillIn;
+    CharString aliasKey;
+    aliasKey.append("alias/unit/", aliasStatus);
+    aliasKey.append(unit.getSubtype(), aliasStatus);
+    aliasKey.append("/replacement", aliasStatus);
+    ures_getByKeyWithFallback(aliasBundle.getAlias(), aliasKey.data(), aliasFillIn.getAlias(),
+                              &aliasStatus);
+    CharString unitSubType;
+    if (!U_FAILURE(aliasStatus)) {
+        // This means the subType is an alias. Then, replace unitSubType with the replacement.
+        auto replacement = ures_getUnicodeString(aliasFillIn.getAlias(), &status);
+        unitSubType.appendInvariantChars(replacement, status);
+    } else {
+        unitSubType.append(unit.getSubtype(), status);
+    }
+
     // Map duration-year-person, duration-week-person, etc. to duration-year, duration-week, ...
     // TODO(ICU-20400): Get duration-*-person data properly with aliases.
-    int32_t subtypeLen = static_cast<int32_t>(uprv_strlen(unit.getSubtype()));
-    if (subtypeLen > 7 && uprv_strcmp(unit.getSubtype() + subtypeLen - 7, "-person") == 0) {
-        subKey.append({unit.getSubtype(), subtypeLen - 7}, status);
+    int32_t subtypeLen = static_cast<int32_t>(uprv_strlen(unitSubType.data()));
+    if (subtypeLen > 7 && uprv_strcmp(unitSubType.data() + subtypeLen - 7, "-person") == 0) {
+        subKey.append({unitSubType.data(), subtypeLen - 7}, status);
     } else {
-        subKey.append({unit.getSubtype(), subtypeLen}, status);
+        subKey.append({unitSubType.data(), subtypeLen}, status);
     }
 
     if (width != UNUM_UNIT_WIDTH_FULL_NAME) {
@@ -490,7 +495,7 @@ void getMeasureData(const Locale &locale,
         // getInflectedMeasureData after homogenizing data format? Find a unit
         // test case that demonstrates the incorrect fallback logic (via
         // regional variant of an inflected language?)
-        ures_getAllItemsWithFallback(unitsBundle.getAlias(), caseKey.data(), sink, localStatus);
+        ures_getAllChildrenWithFallback(unitsBundle.getAlias(), caseKey.data(), sink, localStatus);
     }
 
     // TODO(icu-units#138): our fallback logic is not spec-compliant: we
@@ -499,20 +504,13 @@ void getMeasureData(const Locale &locale,
     // either get the spec changed, or add unit tests that warn us if
     // case="nominative" data differs from no-case data?
     UErrorCode localStatus = U_ZERO_ERROR;
-    ures_getAllItemsWithFallback(unitsBundle.getAlias(), key.data(), sink, localStatus);
+    ures_getAllChildrenWithFallback(unitsBundle.getAlias(), key.data(), sink, localStatus);
     if (width == UNUM_UNIT_WIDTH_SHORT) {
         if (U_FAILURE(localStatus)) {
             status = localStatus;
         }
         return;
     }
-
-    // TODO(ICU-13353): The fallback to short does not work in ICU4C.
-    // Manually fall back to short (this is done automatically in Java).
-    key.clear();
-    key.append("unitsShort", status);
-    key.append(subKey, status);
-    ures_getAllItemsWithFallback(unitsBundle.getAlias(), key.data(), sink, status);
 }
 
 // NOTE: outArray MUST have a length of at least ARRAY_LENGTH.
@@ -523,7 +521,7 @@ void getCurrencyLongNameData(const Locale &locale, const CurrencyUnit &currency,
     PluralTableSink sink(outArray);
     LocalUResourceBundlePointer unitsBundle(ures_open(U_ICUDATA_CURR, locale.getName(), &status));
     if (U_FAILURE(status)) { return; }
-    ures_getAllItemsWithFallback(unitsBundle.getAlias(), "CurrencyUnitPatterns", sink, status);
+    ures_getAllChildrenWithFallback(unitsBundle.getAlias(), "CurrencyUnitPatterns", sink, status);
     if (U_FAILURE(status)) { return; }
     for (int32_t i = 0; i < StandardPlural::Form::COUNT; i++) {
         UnicodeString &pattern = outArray[i];
@@ -1571,7 +1569,7 @@ void MixedUnitLongNameHandler::forMeasureUnit(const Locale &loc,
     for (int32_t i = 0; i < fillIn->fMixedUnitCount; i++) {
         // Grab data for each of the components.
         UnicodeString *unitData = &fillIn->fMixedUnitData[i * ARRAY_LENGTH];
-        // TODO(CLDR-14502): check from the CLDR-14502 ticket whether this
+        // TODO(CLDR-14582): check from the CLDR-14582 ticket whether this
         // propagation of unitDisplayCase is correct:
         getMeasureData(loc, impl.singleUnits[i]->build(status), width, unitDisplayCase, unitData,
                        status);
@@ -1702,7 +1700,7 @@ const Modifier *MixedUnitLongNameHandler::getModifier(Signum /*signum*/,
     // TODO(icu-units#28): investigate this method when investigating where
     // ModifierStore::getModifier() gets used. To be sure it remains
     // unreachable:
-    UPRV_UNREACHABLE;
+    UPRV_UNREACHABLE_EXIT;
     return nullptr;
 }
 

@@ -10,7 +10,7 @@ import java.util.Arrays;
 /**
  * Mutable Unicode code point trie.
  * Fast map from Unicode code points (U+0000..U+10FFFF) to 32-bit integer values.
- * For details see http://site.icu-project.org/design/struct/utrie
+ * For details see https://icu.unicode.org/design/struct/utrie
  *
  * <p>Setting values (especially ranges) and lookup is fast.
  * The mutable trie is only somewhat space-efficient.

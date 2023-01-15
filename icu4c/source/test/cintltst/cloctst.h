@@ -88,6 +88,7 @@ static void TestGetAvailableLocalesByType(void);
 
  static void TestCanonicalization(void);
  static void TestCanonicalizationBuffer(void);
+static  void TestCanonicalization21749StackUseAfterScope(void);
 
  static void TestDisplayKeywords(void);
 

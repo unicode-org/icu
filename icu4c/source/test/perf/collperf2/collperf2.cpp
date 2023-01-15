@@ -794,7 +794,7 @@ public:
             : CollPerfFunction(coll, ucoll), d16(data16),
               source(new UnicodeString*[d16->count]) {
         for (int32_t i = 0; i < d16->count; ++i) {
-            source[i] = new UnicodeString(TRUE, d16->dataOf(i), d16->lengthOf(i));
+            source[i] = new UnicodeString(true, d16->dataOf(i), d16->lengthOf(i));
         }
     }
     virtual ~UniStrCollPerfFunction();
@@ -837,7 +837,7 @@ void UniStrSort::call(UErrorCode* status) {
     int32_t count = d16->count;
     memcpy(dest, source, count * sizeof(UnicodeString *));
     uprv_sortArray(dest, count, (int32_t)sizeof(UnicodeString *),
-                   UniStrCollatorComparator, &cc, TRUE, status);
+                   UniStrCollatorComparator, &cc, true, status);
     ops = cc.counter;
 }
 
@@ -922,7 +922,7 @@ void StringPieceSortCpp::call(UErrorCode* status) {
     int32_t count = d8->count;
     memcpy(dest, source, count * sizeof(StringPiece));
     uprv_sortArray(dest, count, (int32_t)sizeof(StringPiece),
-                   StringPieceCollatorComparator, &cc, TRUE, status);
+                   StringPieceCollatorComparator, &cc, true, status);
     ops = cc.counter;
 }
 
@@ -946,7 +946,7 @@ void StringPieceSortC::call(UErrorCode* status) {
     int32_t count = d8->count;
     memcpy(dest, source, count * sizeof(StringPiece));
     uprv_sortArray(dest, count, (int32_t)sizeof(StringPiece),
-                   StringPieceUCollatorComparator, &cc, TRUE, status);
+                   StringPieceUCollatorComparator, &cc, true, status);
     ops = cc.counter;
 }
 
@@ -1333,7 +1333,7 @@ CA_uchar* CollPerf2Test::sortData16(const CA_uchar* d16,
     for (int32_t i = 0; i < d16->count; ++i) {
         indexes[i] = i;
     }
-    uprv_sortArray(indexes.getAlias(), d16->count, 4, cmp, context, TRUE, &status);
+    uprv_sortArray(indexes.getAlias(), d16->count, 4, cmp, context, true, &status);
     if (U_FAILURE(status)) return NULL;
 
     // Copy the strings in sorted order into a new array.
@@ -1443,7 +1443,7 @@ CollPerf2Test::runIndexedTest(int32_t index, UBool exec, const char *&name, char
 UPerfFunction* CollPerf2Test::TestStrcoll()
 {
     UErrorCode status = U_ZERO_ERROR;
-    Strcoll *testCase = new Strcoll(coll, getData16(status), TRUE /* useLen */);
+    Strcoll *testCase = new Strcoll(coll, getData16(status), true /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
         return NULL;
@@ -1454,7 +1454,7 @@ UPerfFunction* CollPerf2Test::TestStrcoll()
 UPerfFunction* CollPerf2Test::TestStrcollNull()
 {
     UErrorCode status = U_ZERO_ERROR;
-    Strcoll *testCase = new Strcoll(coll, getData16(status), FALSE /* useLen */);
+    Strcoll *testCase = new Strcoll(coll, getData16(status), false /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
         return NULL;
@@ -1465,7 +1465,7 @@ UPerfFunction* CollPerf2Test::TestStrcollNull()
 UPerfFunction* CollPerf2Test::TestStrcollSimilar()
 {
     UErrorCode status = U_ZERO_ERROR;
-    Strcoll_2 *testCase = new Strcoll_2(coll, getData16(status), getModData16(status), TRUE /* useLen */);
+    Strcoll_2 *testCase = new Strcoll_2(coll, getData16(status), getModData16(status), true /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
         return NULL;
@@ -1476,7 +1476,7 @@ UPerfFunction* CollPerf2Test::TestStrcollSimilar()
 UPerfFunction* CollPerf2Test::TestStrcollUTF8()
 {
     UErrorCode status = U_ZERO_ERROR;
-    StrcollUTF8 *testCase = new StrcollUTF8(coll, getData8(status), TRUE /* useLen */);
+    StrcollUTF8 *testCase = new StrcollUTF8(coll, getData8(status), true /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
         return NULL;
@@ -1487,7 +1487,7 @@ UPerfFunction* CollPerf2Test::TestStrcollUTF8()
 UPerfFunction* CollPerf2Test::TestStrcollUTF8Null()
 {
     UErrorCode status = U_ZERO_ERROR;
-    StrcollUTF8 *testCase = new StrcollUTF8(coll, getData8(status),FALSE /* useLen */);
+    StrcollUTF8 *testCase = new StrcollUTF8(coll, getData8(status),false /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
         return NULL;
@@ -1498,7 +1498,7 @@ UPerfFunction* CollPerf2Test::TestStrcollUTF8Null()
 UPerfFunction* CollPerf2Test::TestStrcollUTF8Similar()
 {
     UErrorCode status = U_ZERO_ERROR;
-    StrcollUTF8_2 *testCase = new StrcollUTF8_2(coll, getData8(status), getModData8(status), TRUE /* useLen */);
+    StrcollUTF8_2 *testCase = new StrcollUTF8_2(coll, getData8(status), getModData8(status), true /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
         return NULL;
@@ -1509,7 +1509,7 @@ UPerfFunction* CollPerf2Test::TestStrcollUTF8Similar()
 UPerfFunction* CollPerf2Test::TestGetSortKey()
 {
     UErrorCode status = U_ZERO_ERROR;
-    GetSortKey *testCase = new GetSortKey(coll, getData16(status), TRUE /* useLen */);
+    GetSortKey *testCase = new GetSortKey(coll, getData16(status), true /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
         return NULL;
@@ -1520,7 +1520,7 @@ UPerfFunction* CollPerf2Test::TestGetSortKey()
 UPerfFunction* CollPerf2Test::TestGetSortKeyNull()
 {
     UErrorCode status = U_ZERO_ERROR;
-    GetSortKey *testCase = new GetSortKey(coll, getData16(status), FALSE /* useLen */);
+    GetSortKey *testCase = new GetSortKey(coll, getData16(status), false /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
         return NULL;
@@ -1641,7 +1641,7 @@ UPerfFunction* CollPerf2Test::TestNextSortKeyPartUTF8_32x2()
 UPerfFunction* CollPerf2Test::TestCppCompare()
 {
     UErrorCode status = U_ZERO_ERROR;
-    CppCompare *testCase = new CppCompare(collObj, getData16(status), TRUE /* useLen */);
+    CppCompare *testCase = new CppCompare(collObj, getData16(status), true /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
         return NULL;
@@ -1652,7 +1652,7 @@ UPerfFunction* CollPerf2Test::TestCppCompare()
 UPerfFunction* CollPerf2Test::TestCppCompareNull()
 {
     UErrorCode status = U_ZERO_ERROR;
-    CppCompare *testCase = new CppCompare(collObj, getData16(status), FALSE /* useLen */);
+    CppCompare *testCase = new CppCompare(collObj, getData16(status), false /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
         return NULL;
@@ -1663,7 +1663,7 @@ UPerfFunction* CollPerf2Test::TestCppCompareNull()
 UPerfFunction* CollPerf2Test::TestCppCompareSimilar()
 {
     UErrorCode status = U_ZERO_ERROR;
-    CppCompare_2 *testCase = new CppCompare_2(collObj, getData16(status), getModData16(status), TRUE /* useLen */);
+    CppCompare_2 *testCase = new CppCompare_2(collObj, getData16(status), getModData16(status), true /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
         return NULL;
@@ -1674,7 +1674,7 @@ UPerfFunction* CollPerf2Test::TestCppCompareSimilar()
 UPerfFunction* CollPerf2Test::TestCppCompareUTF8()
 {
     UErrorCode status = U_ZERO_ERROR;
-    CppCompareUTF8 *testCase = new CppCompareUTF8(collObj, getData8(status), TRUE /* useLen */);
+    CppCompareUTF8 *testCase = new CppCompareUTF8(collObj, getData8(status), true /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
         return NULL;
@@ -1685,7 +1685,7 @@ UPerfFunction* CollPerf2Test::TestCppCompareUTF8()
 UPerfFunction* CollPerf2Test::TestCppCompareUTF8Null()
 {
     UErrorCode status = U_ZERO_ERROR;
-    CppCompareUTF8 *testCase = new CppCompareUTF8(collObj, getData8(status), FALSE /* useLen */);
+    CppCompareUTF8 *testCase = new CppCompareUTF8(collObj, getData8(status), false /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
         return NULL;
@@ -1696,7 +1696,7 @@ UPerfFunction* CollPerf2Test::TestCppCompareUTF8Null()
 UPerfFunction* CollPerf2Test::TestCppCompareUTF8Similar()
 {
     UErrorCode status = U_ZERO_ERROR;
-    CppCompareUTF8_2 *testCase = new CppCompareUTF8_2(collObj, getData8(status), getModData8(status), TRUE /* useLen */);
+    CppCompareUTF8_2 *testCase = new CppCompareUTF8_2(collObj, getData8(status), getModData8(status), true /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
         return NULL;
@@ -1707,7 +1707,7 @@ UPerfFunction* CollPerf2Test::TestCppCompareUTF8Similar()
 UPerfFunction* CollPerf2Test::TestCppGetCollationKey()
 {
     UErrorCode status = U_ZERO_ERROR;
-    CppGetCollationKey *testCase = new CppGetCollationKey(collObj, getData16(status), TRUE /* useLen */);
+    CppGetCollationKey *testCase = new CppGetCollationKey(collObj, getData16(status), true /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
         return NULL;
@@ -1718,7 +1718,7 @@ UPerfFunction* CollPerf2Test::TestCppGetCollationKey()
 UPerfFunction* CollPerf2Test::TestCppGetCollationKeyNull()
 {
     UErrorCode status = U_ZERO_ERROR;
-    CppGetCollationKey *testCase = new CppGetCollationKey(collObj, getData16(status), FALSE /* useLen */);
+    CppGetCollationKey *testCase = new CppGetCollationKey(collObj, getData16(status), false /* useLen */);
     if (U_FAILURE(status)) {
         delete testCase;
         return NULL;
@@ -1798,7 +1798,7 @@ int main(int argc, const char *argv[])
         return status;
     }
 
-    if (test.run() == FALSE){
+    if (test.run() == false){
         fprintf(stderr, "FAILED: Tests could not be run please check the arguments.\n");
         return -1;
     }

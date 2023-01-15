@@ -92,8 +92,8 @@ private:
         int32_t length;
 
     private:
-        CEBuffer(const CEBuffer &);
-        void operator=(const CEBuffer &);
+        CEBuffer(const CEBuffer &) = delete;
+        void operator=(const CEBuffer &) = delete;
 
         MaybeStackArray<int64_t, INITIAL_CAPACITY> buffer;
     };
@@ -109,8 +109,8 @@ public:
 
     virtual ~CollationIterator();
 
-    virtual UBool operator==(const CollationIterator &other) const;
-    inline UBool operator!=(const CollationIterator &other) const {
+    virtual bool operator==(const CollationIterator &other) const;
+    inline bool operator!=(const CollationIterator &other) const {
         return !operator==(other);
     }
 

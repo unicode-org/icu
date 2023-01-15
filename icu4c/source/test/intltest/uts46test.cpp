@@ -37,7 +37,7 @@ public:
     UTS46Test() : trans(NULL), nontrans(NULL) {}
     virtual ~UTS46Test();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL) override;
     void TestAPI();
     void TestNotSTD3();
     void TestInvalidPunycodeDigits();
@@ -106,22 +106,22 @@ static UBool isASCII(const UnicodeString &str) {
     int32_t length=str.length();
     for(int32_t i=0; i<length; ++i) {
         if(s[i]>=0x80) {
-            return FALSE;
+            return false;
         }
     }
-    return TRUE;
+    return true;
 }
 
 class TestCheckedArrayByteSink : public CheckedArrayByteSink {
 public:
     TestCheckedArrayByteSink(char* outbuf, int32_t capacity)
-            : CheckedArrayByteSink(outbuf, capacity), calledFlush(FALSE) {}
-    virtual CheckedArrayByteSink& Reset() {
+            : CheckedArrayByteSink(outbuf, capacity), calledFlush(false) {}
+    virtual CheckedArrayByteSink& Reset() override {
         CheckedArrayByteSink::Reset();
-        calledFlush = FALSE;
+        calledFlush = false;
         return *this;
     }
-    virtual void Flush() { calledFlush = TRUE; }
+    virtual void Flush() override { calledFlush = true; }
     UBool calledFlush;
 };
 
@@ -1045,13 +1045,13 @@ void UTS46Test::checkIdnaTestResult(const char *line, const char *type,
                                     const char *status, const IDNAInfo &info) {
     // An error in toUnicode or toASCII is indicated by a value in square brackets,
     // such as "[B5 B6]".
-    UBool expectedHasErrors = FALSE;
+    UBool expectedHasErrors = false;
     if (*status != 0) {
         if (*status != u'[') {
             errln("%s  status field does not start with '[': %s\n    %s", type, status, line);
         }
         if (strcmp(status, reinterpret_cast<const char*>(u8"[]")) != 0) {
-            expectedHasErrors = TRUE;
+            expectedHasErrors = true;
         }
     }
     if (expectedHasErrors != info.hasErrors()) {

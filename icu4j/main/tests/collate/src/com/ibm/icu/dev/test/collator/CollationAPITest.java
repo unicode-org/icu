@@ -1702,4 +1702,17 @@ public class CollationAPITest extends TestFmwk {
             errln("unexpected exception for tailoring many characters at the end of symbols: " + e);
         }
     }
+
+    @Test
+    public void TestBogusLocaleID() {
+        try {
+            Collator c1 = Collator.getInstance(new ULocale("en-US-u-kn-true"));
+            Collator c2 = Collator.getInstance(new ULocale("en_US-u-kn-true"));
+
+            assertTrue("Comparison using \"normal\" collator failed", c1.compare("2", "10") < 0);
+            assertTrue("Comparison using \"bad\" collator failed", c2.compare("2", "10") < 0);
+        } catch (Exception e) {
+            errln("Exception creating collators: " + e);
+        }
+    }
 }

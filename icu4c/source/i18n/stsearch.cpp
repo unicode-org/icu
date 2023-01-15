@@ -205,17 +205,17 @@ StringSearch & StringSearch::operator=(const StringSearch &that)
     return *this;
 }
 
-UBool StringSearch::operator==(const SearchIterator &that) const
+bool StringSearch::operator==(const SearchIterator &that) const
 {
     if (this == &that) {
-        return TRUE;
+        return true;
     }
     if (SearchIterator::operator ==(that)) {
         StringSearch &thatsrch = (StringSearch &)that;
         return (this->m_pattern_ == thatsrch.m_pattern_ &&
                 this->m_strsrch_->collator == thatsrch.m_strsrch_->collator);
     }
-    return FALSE;
+    return false;
 }
 
 // public get and set methods ----------------------------------------

@@ -544,11 +544,6 @@ zu{
                 other{"{0} kg"}
                 per{"{0}kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -580,6 +575,11 @@ zu{
                 dnam{"tn"}
                 one{"{0} tn"}
                 other{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{
@@ -900,12 +900,20 @@ zu{
                 one{"{0}%"}
                 other{"{0}%"}
             }
+            permillion{
+                one{"{0} ppm"}
+                other{"{0}ppm"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
                 dnam{"L/100km"}
                 one{"{0}L/100km"}
                 other{"{0}L/100km"}
+            }
+            mile-per-gallon-imperial{
+                one{"{0}m/gUK"}
+                other{"{0}m/gUK"}
             }
         }
         coordinate{
@@ -955,6 +963,12 @@ zu{
                 dnam{"y"}
                 one{"{0} y"}
                 other{"{0} y"}
+            }
+        }
+        force{
+            kilowatt-hour-per-100-kilometer{
+                one{"{0}kWh/100km"}
+                other{"{0}kWh/100km"}
             }
         }
         length{
@@ -1010,6 +1024,26 @@ zu{
             }
         }
         volume{
+            dessert-spoon-imperial{
+                one{"{0}dsp-Imp"}
+                other{"{0}dsp-Imp"}
+            }
+            dram{
+                dnam{"fl.dr."}
+            }
+            drop{
+                dnam{"dr"}
+                one{"{0}dr"}
+                other{"{0}dr"}
+            }
+            fluid-ounce-imperial{
+                one{"{0}fl oz Im"}
+                other{"{0}fl oz Im"}
+            }
+            gallon-imperial{
+                one{"{0}galIm"}
+                other{"{0}galIm"}
+            }
             liter{
                 dnam{"l"}
                 one{"{0} l"}
@@ -1538,11 +1572,6 @@ zu{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -1574,6 +1603,11 @@ zu{
                 dnam{"tn"}
                 one{"{0} tn"}
                 other{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{

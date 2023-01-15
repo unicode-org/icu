@@ -730,7 +730,7 @@ it{
         }
         PLN{
             "PLN",
-            "złoty polacco",
+            "zloty polacco",
         }
         PLZ{
             "PLZ",
@@ -1201,7 +1201,6 @@ it{
         ZMW{"ZK"}
     }
     Currencies%variant{
-        GEL{"ლ"}
         TRY{"TL"}
     }
     CurrencyPlurals{
@@ -1545,6 +1544,10 @@ it{
             one{"dollaro liberiano"}
             other{"dollari liberiani"}
         }
+        LSL{
+            one{"loti del Lesotho"}
+            other{"maloti del Lesotho"}
+        }
         LTL{
             one{"litas lituano"}
             other{"litas lituani"}
@@ -1674,8 +1677,8 @@ it{
             other{"rupie pakistane"}
         }
         PLN{
-            one{"złoty polacco"}
-            other{"złoty polacchi"}
+            one{"zloty polacco"}
+            other{"zloty polacchi"}
         }
         PLZ{
             one{"złoty polacco (1950–1995)"}

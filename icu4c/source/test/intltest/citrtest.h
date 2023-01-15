@@ -19,7 +19,7 @@ class CharIterTest: public IntlTest {
 public:
     CharIterTest();
     
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
 
     /**
      * Test Constructors and operators ==, != and a few other methods

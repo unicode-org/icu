@@ -222,7 +222,9 @@ Note that the examples may not reflect current CLDR data.
 | `E` | day of week | `E,` `EE`, or `EEE`<br/>`EEEE`<br/>`EEEEE`<br/>`EEEEEE` | Tue<br/>Tuesday<br/>T<br/>Tu |
 | `e` | local day of week<br/>example: if Monday is 1st day, Tuesday is 2nd ) | `e` or `ee`<br/>`eee`<br/>`eeee`<br/>`eeeee`<br/>`eeeeee` | 2<br/>Tue<br/>Tuesday<br/>T<br/>Tu |
 | `c` | stand-alone local day of week | `c` or `cc`<br/>`ccc`<br/>`cccc`<br/>`ccccc`<br/>`cccccc` | 2<br/>Tue<br/>Tuesday<br/>T<br/>Tu |
-| `a` | am/pm marker | `a` | pm |
+| `a` | AM or PM | `a`, `aa`, or `aaa`<br/>`aaaa`<br/>`aaaaa` | PM [abbrev]<br/>PM [wide]<br/>p |
+| `b` | am, pm, noon, midnight | `b`, `bb`, or `bbb`<br/>`bbbb`<br/>`bbbbb` | mid.<br/>midnight<br/>md |
+| `B` | flexible day periods | `B`, `BB`, or `BBB`<br/>`BBBB`<br/>`BBBBB` | at night [abbrev]<br/>at night [wide]<br/>at night [narrow] |
 | `h` | hour in am/pm (1~12) | `h`<br/>`hh` | 7<br/>07 |
 | `H` | hour in day (0~23) | `H`<br/>`HH` | 0<br/>00 |
 | `k` | hour in day (1~24) | `k`<br/>`kk` | 24<br/>24 |

@@ -23,7 +23,7 @@
 
 class ScientificNumberFormatterTest : public IntlTest {
 public:
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0) override;
 private:
     void TestBasic();
     void TestFarsi();
@@ -172,7 +172,7 @@ void ScientificNumberFormatterTest::TestPlusSignInExponentSuperscript() {
 void ScientificNumberFormatterTest::TestFixedDecimalMarkup() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<DecimalFormat> decfmt((DecimalFormat *) NumberFormat::createInstance("en", status));
-    if (assertSuccess("NumberFormat::createInstance", status, TRUE) == FALSE) {
+    if (assertSuccess("NumberFormat::createInstance", status, true) == false) {
         return;
     }
     LocalPointer<ScientificNumberFormatter> fmt(
@@ -194,7 +194,7 @@ void ScientificNumberFormatterTest::TestFixedDecimalMarkup() {
 void ScientificNumberFormatterTest::TestFixedDecimalSuperscript() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<DecimalFormat> decfmt((DecimalFormat *) NumberFormat::createInstance("en", status));
-    if (assertSuccess("NumberFormat::createInstance", status, TRUE) == FALSE) {
+    if (assertSuccess("NumberFormat::createInstance", status, true) == false) {
         return;
     }
     LocalPointer<ScientificNumberFormatter> fmt(

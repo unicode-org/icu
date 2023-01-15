@@ -101,7 +101,7 @@ void SelectFormatTest::selectFormatUnitTest(/*char *par*/)
     VERBOSE_USTRING(SIMPLE_PATTERN);
     SelectFormat* selFmt = new SelectFormat( SIMPLE_PATTERN , status); 
     if (U_FAILURE(status)) {
-        dataerrln("ERROR: SelectFormat Unit Test constructor failed in unit tests.- exitting");
+        dataerrln("ERROR: SelectFormat Unit Test constructor failed in unit tests.- exiting");
         return;
     }
 
@@ -137,7 +137,7 @@ void SelectFormatTest::selectFormatUnitTest(/*char *par*/)
     selFmt = new SelectFormat( SIMPLE_PATTERN , status); 
     //SelectFormat* selFmt1 = new SelectFormat( SIMPLE_PATTERN , status); 
     if (U_FAILURE(status)) {
-        errln("ERROR: SelectFormat Unit Test constructor failed in unit tests.- exitting");
+        errln("ERROR: SelectFormat Unit Test constructor failed in unit tests.- exiting");
         return;
     }
 
@@ -272,7 +272,7 @@ void SelectFormatTest::selectFormatAPITest(/*char *par*/)
     UErrorCode status1 = U_ZERO_ERROR;
     SelectFormat* selFmt1 = new SelectFormat( SIMPLE_PATTERN , status1); 
     if( U_FAILURE(status1)) {
-        errln("ERROR: SelectFormat constructor failed in staticClassID test! Exitting");
+        errln("ERROR: SelectFormat constructor failed in staticClassID test! Exiting");
         return;
     }
 

@@ -4,7 +4,7 @@
 
 if [[ -z $1 ]]; then
 	echo "Pass the current version tag of double-conversion as the first argument to this script";
-	echo "To pull the latest changes, use 'main'"
+	echo "To pull the latest changes, use 'master'"
 	exit 1;
 fi
 

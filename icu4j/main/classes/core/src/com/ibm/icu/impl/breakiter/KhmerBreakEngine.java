@@ -33,24 +33,20 @@ public class KhmerBreakEngine extends DictionaryBreakEngine {
 
 
     private DictionaryMatcher fDictionary;
-    private static UnicodeSet fKhmerWordSet;
-    private static UnicodeSet fEndWordSet;
-    private static UnicodeSet fBeginWordSet;
-    private static UnicodeSet fMarkSet;
+    private UnicodeSet fEndWordSet;
+    private UnicodeSet fBeginWordSet;
+    private UnicodeSet fMarkSet;
 
-    static {
+    public KhmerBreakEngine() throws IOException {
         // Initialize UnicodeSets
-        fKhmerWordSet = new UnicodeSet();
-        fMarkSet = new UnicodeSet();
-        fBeginWordSet = new UnicodeSet();
-
-        fKhmerWordSet.applyPattern("[[:Khmer:]&[:LineBreak=SA:]]");
-        fKhmerWordSet.compact();
-
-        fMarkSet.applyPattern("[[:Khmer:]&[:LineBreak=SA:]&[:M:]]");
+        UnicodeSet khmerWordSet = new UnicodeSet("[[:Khmer:]&[:LineBreak=SA:]]");
+        fMarkSet = new UnicodeSet("[[:Khmer:]&[:LineBreak=SA:]&[:M:]]");
         fMarkSet.add(0x0020);
-        fEndWordSet = new UnicodeSet(fKhmerWordSet);
-        fBeginWordSet.add(0x1780, 0x17B3);
+        fBeginWordSet = new UnicodeSet(0x1780, 0x17B3);
+
+        khmerWordSet.compact();
+
+        fEndWordSet = new UnicodeSet(khmerWordSet);
         fEndWordSet.remove(0x17D2); // KHMER SIGN COENG that combines some following characters
 
         // Compact for caching
@@ -59,14 +55,12 @@ public class KhmerBreakEngine extends DictionaryBreakEngine {
         fBeginWordSet.compact();
 
         // Freeze the static UnicodeSet
-        fKhmerWordSet.freeze();
+        khmerWordSet.freeze();
         fMarkSet.freeze();
         fEndWordSet.freeze();
         fBeginWordSet.freeze();
-    }
 
-    public KhmerBreakEngine() throws IOException {
-        setCharacters(fKhmerWordSet);
+        setCharacters(khmerWordSet);
         // Initialize dictionary
         fDictionary = DictionaryData.loadDictionaryFor("Khmr");
     }
@@ -91,7 +85,7 @@ public class KhmerBreakEngine extends DictionaryBreakEngine {
 
     @Override
     public int divideUpDictionaryRange(CharacterIterator fIter, int rangeStart, int rangeEnd,
-            DequeI foundBreaks) {
+            DequeI foundBreaks, boolean isPhraseBreaking) {
 
         if ((rangeEnd - rangeStart) < KHMER_MIN_WORD_SPAN) {
             return 0;  // Not enough characters for word

@@ -102,7 +102,7 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
         // trail surrogate, check for surrogates
 
         int ch = current();
-        if(UTF16.isLeadSurrogate((char)ch)){
+        if(UTF16.isLeadSurrogate(ch)){
             // advance the index to get the next code point
             next();
             // due to post increment semantics current() after next()
@@ -111,7 +111,7 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
             // current should never change the current index so back off
             previous();
 
-            if(UTF16.isTrailSurrogate((char)ch2)){
+            if(UTF16.isTrailSurrogate(ch2)){
                 // we found a surrogate pair
                 return Character.toCodePoint((char)ch, (char)ch2);
             }

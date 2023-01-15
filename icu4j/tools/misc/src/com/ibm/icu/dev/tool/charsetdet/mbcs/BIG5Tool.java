@@ -198,7 +198,7 @@ public class BIG5Tool {
             //   Output the list of characters formatted for pasting into a
             //     Java source code array initializer.
             //     Resort into order based on the character code value, not
-            //      on frequency of occurence.
+            //      on frequency of occurrence.
             //
             List  charList = new ArrayList();
             
@@ -228,7 +228,7 @@ public class BIG5Tool {
     
     //
     //  This is a little class containing a
-    //    multi-byte character value and an occurence count for that char.
+    //    multi-byte character value and an occurrence count for that char.
     //  Instances of this class are kept in the collection that accumulates statistics
     //
     //  WARNING:  this class's natural ordering (from Comparable) and equals()
@@ -244,7 +244,7 @@ public class BIG5Tool {
         }
 
         // Equals needs to work with a map, with the charCode as the key.
-        //   For insertion/lookup, we care about the char code only, not the occurence count.
+        //   For insertion/lookup, we care about the char code only, not the occurrence count.
         public boolean equals(Object other) {
             ChEl o = (ChEl)other;
             return o.charCode == this.charCode;
@@ -256,7 +256,7 @@ public class BIG5Tool {
             return charCode;
         }
 
-        // We want to be able to sort the results by frequency of occurence
+        // We want to be able to sort the results by frequency of occurrence
         //   Compare backwards.  We want most frequent chars first.
         public int compareTo(Object other) {
             ChEl o = (ChEl)other;

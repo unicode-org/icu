@@ -54,7 +54,7 @@ public:
   UBool operator!=(const Line &other) const;
   void setToConcat(const Line *first, const Line *second);
   void setName(const UChar* name, int32_t len);
-  UnicodeString toString(UBool pretty = FALSE);
+  UnicodeString toString(UBool pretty = false);
   UnicodeString toBundleString();
   UnicodeString toHTMLString();
   int32_t write(char *buff, int32_t buffLen, UErrorCode &status);
@@ -62,7 +62,7 @@ public:
   
 
   UnicodeString strengthIndent(UColAttributeValue strength, int indentSize, UnicodeString &result);
-  UnicodeString strengthToString(UColAttributeValue strength, UBool pretty, UBool html = FALSE);
+  UnicodeString strengthToString(UColAttributeValue strength, UBool pretty, UBool html = false);
   UnicodeString stringToName(UChar *string, int32_t len);
   void setTo(const UnicodeString &string);
   void setTo(const UChar32 n);

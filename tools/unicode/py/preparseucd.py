@@ -1,4 +1,4 @@
-#!/usr/bin/python -B
+#!/usr/bin/python3 -B
 # -*- coding: utf-8 -*-
 # © 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html
@@ -353,7 +353,10 @@ def SetPropertyValue(pname, vname, start, end):
 
 _stripped_cp_re = re.compile("([0-9a-fA-F]+)$")
 _stripped_range_re = re.compile("([0-9a-fA-F]+)\.\.([0-9a-fA-F]+)$")
+# Default value for all of Unicode.
 _missing_re = re.compile("# *@missing: *0000\.\.10FFFF *; *(.+)$")
+# Default value for some range.
+_missing2_re = re.compile("# *@missing: *(.+)$")
 
 def ReadUCDLines(in_file, want_ranges=True, want_other=False,
                  want_comments=False, want_missing=False):
@@ -365,6 +368,7 @@ def ReadUCDLines(in_file, want_ranges=True, want_other=False,
     line = line.strip()
     if not line: continue
     if line.startswith("#"):  # whole-line comment
+      parse_data = False
       if want_missing:
         match = _missing_re.match(line)
         if match:
@@ -372,8 +376,15 @@ def ReadUCDLines(in_file, want_ranges=True, want_other=False,
           for i in range(len(fields)): fields[i] = fields[i].strip()
           yield ("missing", line, fields)
           continue
-      if want_comments: yield ("comment", line)
-      continue
+        match = _missing2_re.match(line)
+        if match:
+          # Strip the "missing" comment prefix and fall through to
+          # parse the remainder of the line like regular data.
+          parse_data = True
+          line = match.group(1)
+      if not parse_data:
+        if want_comments: yield ("comment", line)
+        continue
     comment_start = line.find("#")  # inline comment
     if comment_start >= 0:
       line = line[:comment_start].rstrip()
@@ -407,6 +418,15 @@ def AddBinaryProperty(short_name, long_name):
   _properties[long_name] = prop
   _properties[NormPropName(short_name)] = prop
   _properties[NormPropName(long_name)] = prop
+
+
+def AddSingleNameBinaryProperty(name):
+  # For some properties, the short name is the same as the long name.
+  _null_values[name] = False
+  bin_prop = _properties["Math"]
+  prop = ("Binary", [name, name], bin_prop[2], bin_prop[3])
+  _properties[name] = prop
+  _properties[NormPropName(name)] = prop
 
 
 def AddPOSIXBinaryProperty(name):
@@ -521,13 +541,21 @@ def ParsePropertyAliases(in_file):
   AddBinaryProperty("nfcinert", "NFC_Inert")
   AddBinaryProperty("nfkcinert", "NFKC_Inert")
   AddBinaryProperty("segstart", "Segment_Starter")
-  # http://www.unicode.org/reports/tr51/#Emoji_Properties
+  # https://www.unicode.org/reports/tr51/#Emoji_Properties
   AddBinaryProperty("Emoji", "Emoji")
   AddBinaryProperty("EPres", "Emoji_Presentation")
   AddBinaryProperty("EMod", "Emoji_Modifier")
   AddBinaryProperty("EBase", "Emoji_Modifier_Base")
   AddBinaryProperty("EComp", "Emoji_Component")
   AddBinaryProperty("ExtPict", "Extended_Pictographic")
+  # https://www.unicode.org/reports/tr51/#Emoji_Sets
+  AddSingleNameBinaryProperty("Basic_Emoji")
+  AddSingleNameBinaryProperty("Emoji_Keycap_Sequence")
+  AddSingleNameBinaryProperty("RGI_Emoji_Modifier_Sequence")
+  AddSingleNameBinaryProperty("RGI_Emoji_Flag_Sequence")
+  AddSingleNameBinaryProperty("RGI_Emoji_Tag_Sequence")
+  AddSingleNameBinaryProperty("RGI_Emoji_ZWJ_Sequence")
+  AddSingleNameBinaryProperty("RGI_Emoji")
   # C/POSIX character classes that do not have Unicode property [value] aliases.
   # See uchar.h.
   AddPOSIXBinaryProperty("alnum")
@@ -1033,7 +1061,7 @@ def CompactBlock(b, i):
         # For two values with the same savings, pick the one that compares lower,
         # to make this deterministic (avoid flip-flopping).
         if (savings > max_savings or
-            (savings == max_savings and value < max_value)):
+            (savings > 0 and savings == max_savings and value < max_value)):
           max_value = value
           max_count = count
           max_savings = savings
@@ -1609,6 +1637,8 @@ _files = {
   "DerivedNumericValues.txt": (DontCopy, ParseDerivedNumericValues),
   "EastAsianWidth.txt": (DontCopy, ParseEastAsianWidth),
   "emoji-data.txt": (DontCopy, ParseNamedProperties),
+  "emoji-sequences.txt": (CopyOnly,),
+  "emoji-zwj-sequences.txt": (CopyOnly,),
   "GraphemeBreakProperty.txt": (DontCopy, ParseGraphemeBreakProperty),
   "GraphemeBreakTest-cldr.txt": (CopyOnly, "testdata"),
   "IdnaTestV2.txt": (CopyOnly, "testdata"),

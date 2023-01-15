@@ -26,9 +26,9 @@
 #include "unicode/utypes.h"
 #include "unicode/uenum.h"
 
-/**    
+/**
  * \file
- * \brief  C API: Locale 
+ * \brief C API: Locale ID functionality similar to C++ class Locale
  *
  * <h2> ULoc C API for Locale </h2>
  * A <code>Locale</code> represents a specific geographical, political,
@@ -841,7 +841,7 @@ typedef enum ULocAvailableType {
    * @internal
    */
   ULOC_AVAILABLE_COUNT
-#endif
+#endif  /* U_HIDE_INTERNAL_API */
 } ULocAvailableType;
 
 /**

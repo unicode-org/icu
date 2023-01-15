@@ -33,6 +33,7 @@ hy{
             }
             patterns{
                 accountingFormat{"#,##0.00 ¤"}
+                accountingFormat%noCurrency{"#,##0.00"}
                 currencyFormat{"#,##0.00 ¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -208,13 +209,20 @@ hy{
             }
         }
         minimalPairs{
+            case{
+                ablative{"Վախենում եմ այդ {0}"}
+                dative{"Սպասում եմ այդ {0}"}
+                instrumental{"Հպարտանում եմ այդ {0}"}
+                locative{"Երկրի պտույտը {0}"}
+                nominative{"Մնացել է {0}"}
+            }
             ordinal{
                 one{"Թեքվեք աջ {0}-ին խաչմերուկից:"}
                 other{"Թեքվեք աջ {0}-րդ խաչմերուկից:"}
             }
             plural{
-                one{"այդ {0} ժամը"}
-                other{"այդ {0} ժամերը"}
+                one{"այդ {0} պանակը"}
+                other{"այդ {0} պանակները"}
             }
         }
         minimumGroupingDigits{"1"}
@@ -264,6 +272,7 @@ hy{
                 GyMMM{"G y թ․ MMM"}
                 GyMMMEd{"G y թ․ MMM d, E"}
                 GyMMMd{"G y թ․ MMM d"}
+                GyMd{"dd.MM.y GGGGG"}
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
@@ -452,7 +461,8 @@ hy{
                 Gy{"G y թ."}
                 GyMMM{"G y թ. MMM"}
                 GyMMMEd{"G y թ. MMM d, E"}
-                GyMMMd{"d MMM, y թ."}
+                GyMMMd{"G y թ․ MMM d"}
+                GyMd{"dd.MM.y GGGGG"}
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
@@ -930,11 +940,11 @@ hy{
         animals_nature{"կենդանիներ կամ բնություն"}
         arrows{"սլաք"}
         body{"մարմին"}
-        box_drawing{"Կեղծ գրաֆիկա"}
+        box_drawing{"նիշ գծագրում"}
         braille{"բրայլ"}
         building{"շենք"}
         bullets_stars{"պարբերակ կամ աստղանիշ"}
-        consonantal_jamo{"Ջամո բաղաձայններ"}
+        consonantal_jamo{"ջամո բաղաձայններ"}
         currency_symbols{"արժույթի նշան"}
         dash_connector{"անջատման կամ միության գծիկ"}
         digits{"թվանշան"}
@@ -1859,5 +1869,23 @@ hy{
         UK{"Անգլիական"}
         US{"Ամերիկյան"}
         metric{"Մետրական"}
+    }
+    personNames{
+        initialPattern{
+            initial{"{0}․"}
+            initialSequence{"{0} {1}"}
+        }
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "hy",
+            }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
     }
 }

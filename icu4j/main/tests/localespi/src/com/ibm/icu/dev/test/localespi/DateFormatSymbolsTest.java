@@ -32,28 +32,19 @@ public class DateFormatSymbolsTest extends TestFmwk {
             }
 
             DateFormatSymbols dfs = DateFormatSymbols.getInstance(loc);
-
             boolean isIcuImpl = (dfs instanceof com.ibm.icu.impl.jdkadapter.DateFormatSymbolsICU);
 
             if (TestUtil.isICUExtendedLocale(loc)) {
                 if (!isIcuImpl) {
                     errln("FAIL: getInstance returned JDK DateFormatSymbols for locale " + loc);
                 }
-            } else {
-                if (isIcuImpl) {
-                    logln("INFO: getInstance returned ICU DateFormatSymbols for locale " + loc);
-                }
+            } else if (isIcuImpl) {
+                logln("INFO: getInstance returned ICU DateFormatSymbols for locale " + loc);
                 Locale iculoc = TestUtil.toICUExtendedLocale(loc);
                 DateFormatSymbols dfsIcu = DateFormatSymbols.getInstance(iculoc);
-                if (isIcuImpl) {
-                    if (!dfs.equals(dfsIcu)) {
-                        errln("FAIL: getInstance returned ICU DateFormatSymbols for locale " + loc
-                                + ", but different from the one for locale " + iculoc);
-                    }
-                } else {
-                    if (!(dfsIcu instanceof com.ibm.icu.impl.jdkadapter.DateFormatSymbolsICU)) {
-                        errln("FAIL: getInstance returned JDK DateFormatSymbols for locale " + iculoc);
-                    }
+                if (!dfs.equals(dfsIcu)) {
+                    errln("FAIL: getInstance returned ICU DateFormatSymbols for locale " + loc
+                            + ", but different from the one for locale " + iculoc);
                 }
             }
         }

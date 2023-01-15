@@ -17,7 +17,7 @@
 #         line-break=normal (BCP47 -u-lb-normal) as defined for Chinese & Japanese.
 #         It sets characters of class CJ to behave like ID.
 #         In addition, it allows breaks:
-#         * before hyphens 2010 & 2013 (both BA) and 301C, 30A0 (both NS)
+#         * before 301C, 30A0 (both NS)
 #         It allows breaking before 201C and after 201D, for zh_Hans, zh_Hant, and ja.
 
 #
@@ -29,8 +29,7 @@
 
 $AI = [:LineBreak =  Ambiguous:];
 $AL = [:LineBreak =  Alphabetic:];
-$BAX = [\u2010 \u2013];
-$BA = [[:LineBreak =  Break_After:] - $BAX];
+$BA = [:LineBreak =  Break_After:];
 $HH = [\u2010];     # \u2010 is HYPHEN, default line break is BA.
 $BB = [:LineBreak =  Break_Before:];
 $BK = [:LineBreak =  Mandatory_Break:];
@@ -81,6 +80,8 @@ $ZWJ = [:LineBreak = ZWJ:];
 
 $OP30 = [$OP - [\p{ea=F}\p{ea=W}\p{ea=H}]];
 $CP30 = [$CP - [\p{ea=F}\p{ea=W}\p{ea=H}]];
+
+$ExtPictUnassigned = [\p{Extended_Pictographic} & \p{Cn}];
 
 # By LB9, a ZWJ also behaves as a CM. Including it in the definition of CM avoids having to explicitly
 #         list it in the numerous rules that use CM.
@@ -182,7 +183,7 @@ $GL $CM* .;
 # LB 12a  Do not break before NBSP and related characters ...
 #            [^SP BA HY] x GL
 #
-[[$LB8NonBreaks] - [$SP $BA $BAX $HY]] $CM* $GL;
+[[$LB8NonBreaks] - [$SP $BA $HY]] $CM* $GL;
 ^$CM+ $GL;
 
 
@@ -280,7 +281,7 @@ $LB20NonBreaks = [$LB18NonBreaks - $CB];
 # LB 21        x   (BA | HY | NS)
 #           BB x
 #
-# DO allow breaks here before $BAX and $NSX, so don't include them
+# DO allow breaks here before $NSX, so don't include it
 $LB20NonBreaks $CM* ($BA | $HY | $NS);
 
 
@@ -292,7 +293,7 @@ $BB $CM* $LB20NonBreaks;
 # LB 21a Don't break after Hebrew + Hyphen
 #   HL (HY | BA) x
 #
-$HL $CM* ($HY | $BA | $BAX) $CM* [^$CB]?;
+$HL $CM* ($HY | $BA) $CM* [^$CB]?;
 
 # LB 21b (forward) Don't break between SY and HL
 # (break between HL and SY already disallowed by LB 13 above)
@@ -362,8 +363,9 @@ $RI $CM* $RI $CM* [$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $
 #       because of the chain-out behavior difference. The rule must chain out only from the [set characters],
 #       not from the preceding $RI or $CM, which it would be able to do if the set were optional.
 
-# LB 30b Do not break between an Emoji Base and an Emoji Modifier
+# LB30b Do not break between an emoji base (or potential emoji) and an emoji modifier.
 $EB $CM* $EM;
+$ExtPictUnassigned $CM* $EM;
 
 # LB 31 Break everywhere else.
 #       Match a single code point if no other rule applies.

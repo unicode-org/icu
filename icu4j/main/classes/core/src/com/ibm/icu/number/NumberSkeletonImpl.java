@@ -96,6 +96,7 @@ class NumberSkeletonImpl {
         STEM_ROUNDING_MODE_HALF_DOWN,
         STEM_ROUNDING_MODE_HALF_UP,
         STEM_ROUNDING_MODE_UNNECESSARY,
+        STEM_INTEGER_WIDTH_TRUNC,
         STEM_GROUP_OFF,
         STEM_GROUP_MIN2,
         STEM_GROUP_AUTO,
@@ -174,6 +175,7 @@ class NumberSkeletonImpl {
         b.add("rounding-mode-half-down", StemEnum.STEM_ROUNDING_MODE_HALF_DOWN.ordinal());
         b.add("rounding-mode-half-up", StemEnum.STEM_ROUNDING_MODE_HALF_UP.ordinal());
         b.add("rounding-mode-unnecessary", StemEnum.STEM_ROUNDING_MODE_UNNECESSARY.ordinal());
+        b.add("integer-width-trunc", StemEnum.STEM_INTEGER_WIDTH_TRUNC.ordinal());
         b.add("group-off", StemEnum.STEM_GROUP_OFF.ordinal());
         b.add("group-min2", StemEnum.STEM_GROUP_MIN2.ordinal());
         b.add("group-auto", StemEnum.STEM_GROUP_AUTO.ordinal());
@@ -749,6 +751,11 @@ class NumberSkeletonImpl {
         case STEM_ROUNDING_MODE_UNNECESSARY:
             checkNull(macros.roundingMode, segment);
             macros.roundingMode = StemToObject.roundingMode(stem);
+            return ParseState.STATE_NULL;
+
+        case STEM_INTEGER_WIDTH_TRUNC:
+            checkNull(macros.integerWidth, segment);
+            macros.integerWidth = IntegerWidth.zeroFillTo(0).truncateAt(0);
             return ParseState.STATE_NULL;
 
         case STEM_GROUP_OFF:
@@ -1328,8 +1335,9 @@ class NumberSkeletonImpl {
                 // @, @@, @@@
                 maxSig = minSig;
             }
-            RoundingPriority priority;
+            FractionPrecision oldRounder = (FractionPrecision) macros.precision;
             if (offset < segment.length()) {
+                RoundingPriority priority;
                 if (maxSig == -1) {
                     throw new SkeletonSyntaxException(
                         "Invalid digits option: Wildcard character not allowed with the priority annotation", segment);
@@ -1348,21 +1356,18 @@ class NumberSkeletonImpl {
                     throw new SkeletonSyntaxException(
                         "Invalid digits option for fraction rounder", segment);
                 }
+                macros.precision = oldRounder.withSignificantDigits(minSig, maxSig, priority);
             } else if (maxSig == -1) {
                 // withMinDigits
-                maxSig = minSig;
-                minSig = 1;
-                priority = RoundingPriority.RELAXED;
+                macros.precision = oldRounder.withMinDigits(minSig);
             } else if (minSig == 1) {
                 // withMaxDigits
-                priority = RoundingPriority.STRICT;
+                macros.precision = oldRounder.withMaxDigits(maxSig);
             } else {
                 throw new SkeletonSyntaxException(
                     "Invalid digits option: Priority annotation required", segment);
             }
 
-            FractionPrecision oldRounder = (FractionPrecision) macros.precision;
-            macros.precision = oldRounder.withSignificantDigits(minSig, maxSig, priority);
             return true;
         }
 
@@ -1570,11 +1575,19 @@ class NumberSkeletonImpl {
                 Precision.FracSigRounderImpl impl = (Precision.FracSigRounderImpl) macros.precision;
                 BlueprintHelpers.generateFractionStem(impl.minFrac, impl.maxFrac, sb);
                 sb.append('/');
-                BlueprintHelpers.generateDigitsStem(impl.minSig, impl.maxSig, sb);
-                if (impl.priority == RoundingPriority.RELAXED) {
-                    sb.append('r');
+                if (impl.retain) {
+                    if (impl.priority == RoundingPriority.RELAXED) {
+                        BlueprintHelpers.generateDigitsStem(impl.maxSig, -1, sb);
+                    } else {
+                        BlueprintHelpers.generateDigitsStem(1, impl.maxSig, sb);
+                    }
                 } else {
-                    sb.append('s');
+                    BlueprintHelpers.generateDigitsStem(impl.minSig, impl.maxSig, sb);
+                    if (impl.priority == RoundingPriority.RELAXED) {
+                        sb.append('r');
+                    } else {
+                        sb.append('s');
+                    }
                 }
             } else if (macros.precision instanceof Precision.IncrementRounderImpl) {
                 Precision.IncrementRounderImpl impl = (Precision.IncrementRounderImpl) macros.precision;
@@ -1622,6 +1635,10 @@ class NumberSkeletonImpl {
         private static boolean integerWidth(MacroProps macros, StringBuilder sb) {
             if (macros.integerWidth.equals(IntegerWidth.DEFAULT)) {
                 return false; // Default
+            }
+            if (macros.integerWidth.minInt == 0 && macros.integerWidth.maxInt == 0) {
+                sb.append("integer-width-trunc");
+                return true;
             }
             sb.append("integer-width/");
             BlueprintHelpers.generateIntegerWidthOption(macros.integerWidth.minInt,

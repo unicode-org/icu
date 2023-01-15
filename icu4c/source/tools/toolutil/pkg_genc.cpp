@@ -252,11 +252,11 @@ checkAssemblyHeaderName(const char* optAssembly) {
         if (uprv_strcmp(optAssembly, assemblyHeader[idx].name) == 0) {
             assemblyHeaderIndex = idx;
             hexType = assemblyHeader[idx].hexType; /* set the hex type */
-            return TRUE;
+            return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 
@@ -315,12 +315,11 @@ writeAssemblyCode(
             exit(U_ILLEGAL_ARGUMENT_ERROR);
         }
         uprv_strcpy(outFilePath, buffer.chars);
-    }
-
 #if defined (WINDOWS_WITH_GNUC) && U_PLATFORM != U_PF_CYGWIN
-    /* Need to fix the file separator character when using MinGW. */
-    swapFileSepChar(outFilePath, U_FILE_SEP_CHAR, '/');
+        /* Need to fix the file separator character when using MinGW. */
+        swapFileSepChar(outFilePath, U_FILE_SEP_CHAR, '/');
 #endif
+    }
 
     if(optEntryPoint != NULL) {
         uprv_strcpy(entry, optEntryPoint);
@@ -390,6 +389,7 @@ U_CAPI void U_EXPORT2
 writeCCode(
         const char *filename,
         const char *destdir,
+        const char *optEntryPoint,
         const char *optName,
         const char *optFilename,
         char *outFilePath,
@@ -433,12 +433,21 @@ writeCCode(
             exit(U_ILLEGAL_ARGUMENT_ERROR);
         }
         uprv_strcpy(outFilePath, buffer);
+#if defined (WINDOWS_WITH_GNUC) && U_PLATFORM != U_PF_CYGWIN
+        /* Need to fix the file separator character when using MinGW. */
+        swapFileSepChar(outFilePath, U_FILE_SEP_CHAR, '/');
+#endif
     }
 
     out=T_FileStream_open(buffer, "w");
     if(out==NULL) {
         fprintf(stderr, "genccode: unable to open output file %s\n", buffer);
         exit(U_FILE_ACCESS_ERROR);
+    }
+
+    if(optEntryPoint != NULL) {
+        uprv_strcpy(entry, optEntryPoint);
+        uprv_strcat(entry, "_dat");
     }
 
     /* turn dashes or dots in the entry name into underscores */
@@ -778,7 +787,7 @@ getArchitecture(uint16_t *pCPU, uint16_t *pBits, UBool *pIsBigEndian, const char
         *pIsBigEndian=(UBool)(U_IS_BIG_ENDIAN ? ELFDATA2MSB : ELFDATA2LSB);
 #elif U_PLATFORM_HAS_WIN32_API
         // Windows always runs in little-endian mode.
-        *pIsBigEndian = FALSE;
+        *pIsBigEndian = false;
 
         // Note: The various _M_<arch> macros are predefined by the MSVC compiler based
         // on the target compilation architecture.
@@ -865,7 +874,7 @@ getArchitecture(uint16_t *pCPU, uint16_t *pBits, UBool *pIsBigEndian, const char
      */
     *pBits= *pCPU==IMAGE_FILE_MACHINE_I386 ? 32 : 64;
     /* Windows always runs on little-endian CPUs. */
-    *pIsBigEndian=FALSE;
+    *pIsBigEndian=false;
 #else
 #   error "Unknown platform for CAN_GENERATE_OBJECTS."
 #endif

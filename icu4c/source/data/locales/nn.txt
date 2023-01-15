@@ -4,14 +4,11 @@
 nn{
     %%Parent{"no"}
     AuxExemplarCharacters{"[á ǎ č ç đ è ê ń ñ ŋ š ŧ ü ž ä ö]"}
-    ExemplarCharactersPunctuation{
-        "[\\- ‐ ‑ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ "
-        "′ ″]"
-    }
     NumberElements{
         latn{
             patterns{
                 accountingFormat{"#,##0.00 ¤"}
+                accountingFormat%noCurrency{"#,##0.00"}
                 currencyFormat{"#,##0.00 ¤"}
             }
             patternsLong{
@@ -59,6 +56,11 @@ nn{
             }
         }
         minimalPairs{
+            gender{
+                feminine{"Det tek ei heil {0} å …"}
+                masculine{"Min {0} han har tre kantar"}
+                neuter{"Mitt {0} det har tre kantar"}
+            }
             ordinal{
                 other{"Ta {0}. sving til høgre."}
             }
@@ -70,21 +72,6 @@ nn{
     }
     calendar{
         generic{
-            DateTimePatterns{
-                "'kl'. HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d. MMMM y G",
-                "d. MMMM y G",
-                "d. MMM y G",
-                "d.M.y G",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
             intervalFormats{
                 MEd{
                     M{"E dd.MM.–E dd.MM."}
@@ -97,7 +84,6 @@ nn{
                     M{"dd.MM.–dd.MM."}
                     d{"dd.MM.–dd.MM."}
                 }
-                fallback{"{0} – {1}"}
                 yM{
                     M{"MM.y–MM.y G"}
                     y{"MM.y–MM.y G"}
@@ -118,15 +104,7 @@ nn{
             }
         }
         gregorian{
-            AmPmMarkers{
-                "formiddag",
-                "ettermiddag",
-            }
             AmPmMarkersAbbr{
-                "f.m.",
-                "e.m.",
-            }
-            AmPmMarkersNarrow{
                 "f.m.",
                 "e.m.",
             }
@@ -148,7 +126,6 @@ nn{
             availableFormats{
                 EHm{"E HH:mm"}
                 EHms{"E HH:mm:ss"}
-                MEd{"E d.M"}
                 MMMMW{
                     one{"'veke' W 'i' MMMM"}
                     other{"'veke' W 'i' MMMM"}
@@ -207,15 +184,6 @@ nn{
                         "fre",
                         "lau",
                     }
-                    narrow{
-                        "S",
-                        "M",
-                        "T",
-                        "O",
-                        "T",
-                        "F",
-                        "L",
-                    }
                     short{
                         "sø.",
                         "må.",
@@ -237,52 +205,40 @@ nn{
                 }
             }
             dayPeriod{
-                stand-alone{
-                    abbreviated{
-                        am{"f.m."}
-                        pm{"e.m."}
+                format{
+                    wide{
+                        afternoon1{"på ettermiddagen"}
+                        evening1{"på kvelden"}
+                        midnight{"midnatt"}
+                        morning1{"på morgonen"}
+                        morning2{"på formiddagen"}
+                        night1{"på natta"}
                     }
+                }
+                stand-alone{
                     narrow{
                         am{"f.m."}
                         pm{"e.m."}
                     }
                     wide{
-                        am{"f.m."}
-                        pm{"e.m."}
+                        afternoon1{"ettermiddag"}
+                        evening1{"kveld"}
+                        morning1{"morgon"}
+                        morning2{"formiddag"}
+                        night1{"natt"}
                     }
                 }
             }
             eras{
-                abbreviated%variant{
-                    "f.v.t.",
-                    "v.t.",
-                }
-                wide{
-                    "f.Kr.",
-                    "e.Kr.",
-                }
                 wide%variant{
-                    "f.v.t.",
-                    "v.t.",
+                    "før vår tidsrekning",
+                    "etter vår tidsrekning",
                 }
             }
             intervalFormats{
                 Md{
                     M{"dd.MM–dd.MM"}
                     d{"dd.MM–dd.MM"}
-                }
-                fallback{"{0} – {1}"}
-                h{
-                    a{"h a – h a"}
-                }
-                hm{
-                    a{"h:mm a – h:mm a"}
-                }
-                hmv{
-                    a{"h:mm a – h:mm a v"}
-                }
-                hv{
-                    a{"h a – h a v"}
                 }
             }
             monthNames{
@@ -348,7 +304,6 @@ nn{
         heart{"hjarte"}
         historic_scripts{"historiske skriftsystem"}
         ideographic_desc_characters{"ideografiske beskrivande teikn"}
-        japanese_kana{"japanske kana"}
         keycap{"tastar"}
         leftwards_arrows{"piler som peiker til venstre"}
         leftwards_rightwards_arrows{"piler som peiker til venstre og høgre"}
@@ -370,7 +325,7 @@ nn{
         rightwards_arrows{"piler som peiker til høgre"}
         sign_standard_symbols{"teikn eller symbol"}
         small_form_variant{"små variantar"}
-        smileys_people{"smilefjes og personar"}
+        smileys_people{"smilefjes og menneske"}
         south_asian_scripts{"sørasiatiske skriftsystem"}
         southeast_asian_scripts{"søraustasiatiske skriftsystem"}
         spacing{"med breidd"}
@@ -400,6 +355,11 @@ nn{
             }
         }
         day-narrow{
+            relative{
+                "-1"{"i går"}
+                "0"{"i dag"}
+                "1"{"i morgon"}
+            }
             relativeTime{
                 past{
                     one{"–{0} d."}
@@ -408,6 +368,11 @@ nn{
             }
         }
         day-short{
+            relative{
+                "-1"{"i går"}
+                "0"{"i dag"}
+                "1"{"i morgon"}
+            }
             relativeTime{
                 past{
                     one{"for {0} d. sidan"}
@@ -584,6 +549,11 @@ nn{
             }
         }
         month-narrow{
+            relative{
+                "-1"{"førre md."}
+                "0"{"denne md."}
+                "1"{"neste md."}
+            }
             relativeTime{
                 past{
                     one{"–{0} md."}
@@ -593,6 +563,11 @@ nn{
         }
         month-short{
             dn{"md."}
+            relative{
+                "-1"{"førre md."}
+                "0"{"denne md."}
+                "1"{"neste md."}
+            }
             relativeTime{
                 past{
                     one{"for {0} md. sidan"}
@@ -614,6 +589,14 @@ nn{
                 past{
                     one{"for {0} kvartal sidan"}
                     other{"for {0} kvartal sidan"}
+                }
+            }
+        }
+        quarter-narrow{
+            relativeTime{
+                past{
+                    one{"–{0} kv."}
+                    other{"–{0} kv."}
                 }
             }
         }
@@ -920,6 +903,11 @@ nn{
         }
         week-narrow{
             dn{"v."}
+            relative{
+                "-1"{"førre veke"}
+                "0"{"denne veka"}
+                "1"{"neste veke"}
+            }
             relativePeriod{"v. m. {0}"}
             relativeTime{
                 future{
@@ -934,6 +922,12 @@ nn{
         }
         week-short{
             dn{"veke"}
+            relative{
+                "-1"{"førre veke"}
+                "0"{"denne veka"}
+                "1"{"neste veke"}
+            }
+            relativePeriod{"veka med {0}"}
             relativeTime{
                 future{
                     one{"om {0} v."}
@@ -1011,6 +1005,14 @@ nn{
             end{"{0} {1}"}
             middle{"{0} {1}"}
             start{"{0} {1}"}
+        }
+    }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "nn",
+            }
         }
     }
 }

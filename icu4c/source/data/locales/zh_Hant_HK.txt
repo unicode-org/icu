@@ -147,10 +147,15 @@ zh_Hant_HK{
             }
             availableFormats{
                 Ed{"d日E"}
+                GyMMMM{"r(U)年MMMM"}
+                GyMMMMEd{"r(U)年MMMMd日 E"}
+                GyMMMMd{"r(U)年MMMMd日"}
                 H{"HH"}
                 h{"ah時"}
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
+                yyyyMMMMEd{"r(U)年MMMMd日 E"}
+                yyyyMMMMd{"r(U)年MMMMd日"}
             }
             intervalFormats{
                 h{
@@ -348,7 +353,6 @@ zh_Hant_HK{
             availableFormats{
                 Ed{"d日E"}
                 Ehm{"E ah:mm"}
-                Ehms{"E ah:mm:ss"}
                 Gy{"Gy年"}
                 GyMMM{"Gy年M月"}
                 GyMMMEd{"Gy年M月d日E"}
@@ -356,9 +360,6 @@ zh_Hant_HK{
                 MEd{"d/M（E）"}
                 MMMEd{"M月d日E"}
                 Md{"d/M"}
-                h{"ah時"}
-                hm{"ah:mm"}
-                hms{"ah:mm:ss"}
                 y{"Gy年"}
                 yyyy{"Gy年"}
                 yyyyM{"Gy/M"}
@@ -567,21 +568,17 @@ zh_Hant_HK{
                     d{"d/M 至 d/M"}
                 }
                 h{
-                    a{"ah時至ah時"}
                     h{"ah時至h時"}
                 }
                 hm{
-                    a{"ah:mm至ah:mm"}
                     h{"ah:mm至h:mm"}
                     m{"ah:mm至h:mm"}
                 }
                 hmv{
-                    a{"ah:mm至ah:mm [v]"}
                     h{"ah:mm至h:mm [v]"}
                     m{"ah:mm至h:mm [v]"}
                 }
                 hv{
-                    a{"ah時至ah時 [v]"}
                     h{"ah時至h時 [v]"}
                 }
                 yM{

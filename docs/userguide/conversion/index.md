@@ -122,7 +122,7 @@ Unicode.
     3.  ICU's conversion table repository contains hundreds of Unicode
         conversion tables from a number of common vendors and platforms as well
         as comparisons between these conversion tables:
-        <http://icu-project.org/charts/charset/> .
+        <https://icu.unicode.org/charts/charset> .
 
     4.  Do not trust codepage documentation that is not machine-readable, for
         example nice-looking charts: They are usually incomplete and out of
@@ -141,7 +141,7 @@ Unicode.
         references](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/ucnv_8h.html) .
 
     7.  For data exchange (rather than pure display), turn off fallback
-        mappings: `ucnv_setFallback(cnv, FALSE)`;
+        mappings: `ucnv_setFallback(cnv, false)`;
 
     8.  For some text formats, especially XML and HTML, it is possible to set an
         "escape callback" function that turns unmappable Unicode code points

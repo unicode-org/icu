@@ -23,7 +23,7 @@
 class CalendarRegressionTest: public IntlTest {
 
     // IntlTest override
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par ) override;
 public:
     void test4100311(void);
     void test4074758(void);
@@ -81,12 +81,16 @@ public:
     void TestPersianCalOverflow(void);
     void TestIslamicCalOverflow(void);
     void TestWeekOfYear13548(void);
+    void TestUTCWrongAMPM22023(void);
+    void TestAsiaManilaAfterSetGregorianChange22043(void);
 
     void Test13745(void);
 
     void printdate(GregorianCalendar *cal, const char *string);
     void dowTest(UBool lenient) ;
 
+    void VerifyGetStayInBound(double test_value);
+    void VerifyNoAssertWithSetGregorianChange(const char* timezone);
 
     static UDate getAssociatedDate(UDate d, UErrorCode& status);
     static UDate makeDate(int32_t y, int32_t m = 0, int32_t d = 0, int32_t hr = 0, int32_t min = 0, int32_t sec = 0);

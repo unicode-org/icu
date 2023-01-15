@@ -199,6 +199,8 @@ fi
 #AC_CHECK_PROG(AUTOCONF, autoconf, autoconf, true)
 #AC_CHECK_PROG(STRIP, strip, strip, true)
 
+m4_ifndef([AX_CHECK_COMPILE_FLAG], [AC_MSG_ERROR(['autoconf-archive' is missing])])
+
 # TODO(ICU-20301): Remove fallback to Python 2.
 AC_CHECK_PROGS(PYTHON, python3 "py -3" python "py")
 AC_SUBST(PYTHON)
@@ -527,11 +529,6 @@ if [[ "$GXX" = yes ]]; then
         else
             CXXFLAGS="$OLD_CXXFLAGS"
         fi
-        case "${host}" in
-        *-*-solaris*)
-            CXXFLAGS="$OLD_CXXFLAGS"
-            ;;
-        esac
     fi
 fi
 
@@ -1317,6 +1314,16 @@ fi
 # Now that we're done using CPPFLAGS etc. for tests, we can change it
 # for build.
 
+AC_LANG_PUSH([C++])
+# Silence a Clang warning about ambiguous operators with C++20 rewritten
+# expressions that possibly or maybe even probably is a mistake (ICU-20973).
+AX_CHECK_COMPILE_FLAG(
+  [-Wambiguous-reversed-operator],
+  [CXXFLAGS+=" -Wno-ambiguous-reversed-operator"],
+  [],
+  [-Werror])
+AC_LANG_POP([C++])
+
 if test "${CC}" = "clang"; then
    CLANGCFLAGS="-Qunused-arguments -Wno-parentheses-equality"
 else
@@ -1379,6 +1386,7 @@ AC_CONFIG_FILES([icudefs.mk \
 		tools/icupkg/Makefile \
 		tools/icuswap/Makefile \
 		tools/pkgdata/Makefile \
+		tools/icuexportdata/Makefile \
 		tools/tzcode/Makefile \
 		tools/gencfu/Makefile \
 		tools/escapesrc/Makefile \

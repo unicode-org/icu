@@ -175,6 +175,9 @@ final class NumberPropertyMapper {
             if (PatternStringUtils.ignoreRoundingIncrement(roundingIncrement, maxFrac)) {
                 rounding = Precision.constructFraction(minFrac, maxFrac);
             } else {
+                if (minFrac > roundingIncrement.scale()) {
+                    roundingIncrement = roundingIncrement.setScale(minFrac);
+                }
                 rounding = Precision.constructIncrement(roundingIncrement);
             }
         } else if (explicitMinMaxSig) {
@@ -298,8 +301,6 @@ final class NumberPropertyMapper {
             } else {
                 macros.notation = Notation.compactShort();
             }
-            // Do not forward the affix provider.
-            macros.affixProvider = null;
         }
 
         /////////////////

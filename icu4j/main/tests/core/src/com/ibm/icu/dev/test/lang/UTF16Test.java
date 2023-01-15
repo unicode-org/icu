@@ -480,26 +480,35 @@ public final class UTF16Test extends TestFmwk
     @Test
     public void TestGetCharCountSurrogate()
     {
-        if (UTF16.getCharCount(0x61) != 1 ||
-        UTF16.getCharCount(0x10000) != 2) {
-        errln("FAIL getCharCount result failure");
+        if (UTF16.getCharCount(0x61) != 1 || UTF16.getCharCount(0x10000) != 2) {
+            errln("FAIL getCharCount result failure");
         }
+        // ICU-21655 (ICU 70) widened the surrogate functions from char to int.
+        // Test with both types, in case someone like Android retains binary-compatibility overloads.
         if (UTF16.getLeadSurrogate(0x61) != 0 ||
-        UTF16.getTrailSurrogate(0x61) != 0x61 ||
-        UTF16.isLeadSurrogate((char)0x61) ||
-        UTF16.isTrailSurrogate((char)0x61) ||
-        UTF16.getLeadSurrogate(0x10000) != 0xd800 ||
-        UTF16.getTrailSurrogate(0x10000) != 0xdc00 ||
-        UTF16.isLeadSurrogate((char)0xd800) != true ||
-        UTF16.isTrailSurrogate((char)0xd800) ||
-        UTF16.isLeadSurrogate((char)0xdc00) ||
-        UTF16.isTrailSurrogate((char)0xdc00) != true) {
-        errln("FAIL *Surrogate result failure");
+                UTF16.getTrailSurrogate(0x61) != 0x61 ||
+                UTF16.isLeadSurrogate((char)0x61) ||
+                UTF16.isTrailSurrogate((char)0x61) ||
+                UTF16.isLeadSurrogate(0x61) ||
+                UTF16.isTrailSurrogate(0x61) ||
+                UTF16.getLeadSurrogate(0x10000) != 0xd800 ||
+                UTF16.getTrailSurrogate(0x10000) != 0xdc00 ||
+                UTF16.isLeadSurrogate((char)0xd800) != true ||
+                UTF16.isTrailSurrogate((char)0xd800) ||
+                UTF16.isLeadSurrogate((char)0xdc00) ||
+                UTF16.isTrailSurrogate((char)0xdc00) != true ||
+                UTF16.isLeadSurrogate(0xd800) != true ||
+                UTF16.isTrailSurrogate(0xd800) ||
+                UTF16.isLeadSurrogate(0xdc00) ||
+                UTF16.isTrailSurrogate(0xdc00) != true) {
+            errln("FAIL *Surrogate result failure");
         }
 
         if (UTF16.isSurrogate((char)0x61) || !UTF16.isSurrogate((char)0xd800)
-            || !UTF16.isSurrogate((char)0xdc00)) {
-        errln("FAIL isSurrogate result failure");
+                || !UTF16.isSurrogate((char)0xdc00)
+                || UTF16.isSurrogate(0x61) || !UTF16.isSurrogate(0xd800)
+                || !UTF16.isSurrogate(0xdc00)) {
+            errln("FAIL isSurrogate result failure");
         }
     }
 

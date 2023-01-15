@@ -111,6 +111,8 @@ yue_Hans{
             }
             patterns{
                 accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
+                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -1160,6 +1162,12 @@ yue_Hans{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimePatterns%atTime{
+                "{1} {0}",
+                "{1}{0}",
+                "{1}{0}",
+                "{1} {0}",
+            }
             DateTimeSkeletons{
                 "HHmmsszzzz",
                 "HHmmssz",
@@ -1384,6 +1392,12 @@ yue_Hans{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+                "{1} {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1}{0}",
+                "{1}{0}",
+                "{1}{0}",
                 "{1} {0}",
             }
             DateTimeSkeletons{
@@ -3571,5 +3585,10 @@ yue_Hans{
         UK{"英制"}
         US{"美制"}
         metric{"公制"}
+    }
+    personNames{
+        initialPattern{
+            initial{"{0}"}
+        }
     }
 }

@@ -65,7 +65,7 @@ void UVectorTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
 } UPRV_BLOCK_MACRO_END
 
 #define TEST_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN {\
-    if ((expr)==FALSE) {\
+    if ((expr)==false) {\
         errln("UVectorTest failure at line %d.\n", __LINE__);\
     }\
 } UPRV_BLOCK_MACRO_END
@@ -124,6 +124,21 @@ void UVectorTest::UVector_API() {
     TEST_ASSERT(a->contains((int32_t)15));
     TEST_ASSERT(!a->contains((int32_t)5));
     delete a;
+
+    status = U_ZERO_ERROR;
+    UVector vec(status);
+    vec.setDeleter(uprv_deleteUObject);
+    vec.adoptElement(new UnicodeString(), status);
+    vec.adoptElement(new UnicodeString(), status);
+    assertSuccess(WHERE, status);
+    assertEquals(WHERE, 2, vec.size());
+
+    // With an incoming error, adoptElement will not add to the vector,
+    // and will delete the object. Failure here will show as a memory leak.
+    status = U_ILLEGAL_ARGUMENT_ERROR;
+    vec.adoptElement(new UnicodeString(), status);
+    assertEquals(WHERE, U_ILLEGAL_ARGUMENT_ERROR, status);
+    assertEquals(WHERE, 2, vec.size());
 }
 
 void UVectorTest::UStack_API() {
@@ -166,7 +181,7 @@ void UVectorTest::UStack_API() {
 
 U_CDECL_BEGIN
 static UBool U_CALLCONV neverTRUE(const UElement /*key1*/, const UElement /*key2*/) {
-    return FALSE;
+    return false;
 }
 
 U_CDECL_END
@@ -186,7 +201,7 @@ void UVectorTest::Hashtable_API() {
     Hashtable b(status);
     TEST_ASSERT((!a->equals(b)));
     TEST_ASSERT((b.puti("b", 2, status) == 0));
-    TEST_ASSERT((!a->equals(b))); // Without a value comparator, this will be FALSE by default.
+    TEST_ASSERT((!a->equals(b))); // Without a value comparator, this will be false by default.
     b.setValueComparator(uhash_compareLong);
     TEST_ASSERT((!a->equals(b)));
     a->setValueComparator(uhash_compareLong);

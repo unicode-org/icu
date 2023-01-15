@@ -11,6 +11,7 @@ he{
         acceleration{
             g-force{
                 dnam{"כוח ג׳י"}
+                gender{"masculine"}
                 many{"{0} כוחות ג׳י"}
                 one{"כוח ג׳י אחד"}
                 other{"{0} כוחות ג׳י"}
@@ -18,6 +19,7 @@ he{
             }
             meter-per-square-second{
                 dnam{"מטר לשנייה בריבוע"}
+                gender{"masculine"}
                 many{"{0} מטר לשנייה בריבוע"}
                 one{"{0} מטר לשנייה בריבוע"}
                 other{"{0} מטר לשנייה בריבוע"}
@@ -27,6 +29,7 @@ he{
         angle{
             arc-minute{
                 dnam{"דקות קשת"}
+                gender{"feminine"}
                 many{"{0} דקות קשת"}
                 one{"דקת קשת {0}"}
                 other{"{0} דקות קשת"}
@@ -34,6 +37,7 @@ he{
             }
             arc-second{
                 dnam{"שניות קשת"}
+                gender{"feminine"}
                 many{"{0} שניות קשת"}
                 one{"שניית קשת {0}"}
                 other{"{0} שניות קשת"}
@@ -41,6 +45,7 @@ he{
             }
             degree{
                 dnam{"מעלות"}
+                gender{"feminine"}
                 many{"{0} מעלות"}
                 one{"מעלה אחת"}
                 other{"{0} מעלות"}
@@ -48,6 +53,7 @@ he{
             }
             radian{
                 dnam{"רדיאנים"}
+                gender{"masculine"}
                 many{"{0} רדיאנים"}
                 one{"רדיאן אחד"}
                 other{"{0} רדיאנים"}
@@ -55,6 +61,7 @@ he{
             }
             revolution{
                 dnam{"סיבוב"}
+                gender{"masculine"}
                 many{"{0} סיבובים"}
                 one{"סיבוב {0}"}
                 other{"{0} סיבובים"}
@@ -78,6 +85,7 @@ he{
             }
             hectare{
                 dnam{"הקטאר"}
+                gender{"masculine"}
                 many{"{0} הקטאר"}
                 one{"הקטאר {0}"}
                 other{"{0} הקטאר"}
@@ -85,6 +93,7 @@ he{
             }
             square-centimeter{
                 dnam{"סנטימטר רבוע"}
+                gender{"masculine"}
                 many{"{0} סנטימטר רבוע"}
                 one{"סנטימטר רבוע {0}"}
                 other{"{0} סנטימטר רבוע"}
@@ -108,6 +117,7 @@ he{
             }
             square-kilometer{
                 dnam{"קילומטר רבוע"}
+                gender{"masculine"}
                 many{"{0} קילומטר רבוע"}
                 one{"קילומטר רבוע {0}"}
                 other{"{0} קילומטר רבוע"}
@@ -116,6 +126,7 @@ he{
             }
             square-meter{
                 dnam{"מטר רבוע"}
+                gender{"masculine"}
                 many{"{0} מטר רבוע"}
                 one{"מטר רבוע {0}"}
                 other{"{0} מטר רבוע"}
@@ -178,14 +189,23 @@ he{
                     _{
                         _{"{0} בריבוע"}
                     }
+                    feminine{
+                        _{"{0} בריבוע"}
+                    }
                 }
                 other{
                     _{
                         _{"{0} בריבוע"}
                     }
+                    feminine{
+                        _{"{0} בריבוע"}
+                    }
                 }
                 two{
                     _{
+                        _{"{0} בריבוע"}
+                    }
+                    feminine{
                         _{"{0} בריבוע"}
                     }
                 }
@@ -200,9 +220,15 @@ he{
                     _{
                         _{"{0} מעוקב"}
                     }
+                    feminine{
+                        _{"{0} מעוקב"}
+                    }
                 }
                 other{
                     _{
+                        _{"{0} מעוקב"}
+                    }
+                    feminine{
                         _{"{0} מעוקב"}
                     }
                 }
@@ -210,12 +236,24 @@ he{
                     _{
                         _{"{0} מעוקב"}
                     }
+                    feminine{
+                        _{"{0} מעוקב"}
+                    }
                 }
             }
         }
         concentr{
+            item{
+                dnam{"פריטים"}
+                gender{"masculine"}
+                many{"{0} פריטים"}
+                one{"פריט {0}"}
+                other{"{0} פריטים"}
+                two{"{0} פריטים"}
+            }
             karat{
                 dnam{"קראט"}
+                gender{"masculine"}
                 many{"{0} קראט"}
                 one{"קראט אחד"}
                 other{"{0} קראט"}
@@ -230,6 +268,7 @@ he{
             }
             millimole-per-liter{
                 dnam{"מילימול/ליטר"}
+                gender{"masculine"}
                 many{"{0} מילימול/ליטר"}
                 one{"{0} מילימול/ליטר"}
                 other{"{0} מילימול/ליטר"}
@@ -237,6 +276,7 @@ he{
             }
             mole{
                 dnam{"מול"}
+                gender{"masculine"}
                 many{"{0} מול"}
                 one{"{0} מול"}
                 other{"{0} מול"}
@@ -244,6 +284,7 @@ he{
             }
             percent{
                 dnam{"אחוז"}
+                gender{"masculine"}
                 many{"{0} אחוז"}
                 one{"{0} אחוז"}
                 other{"{0} אחוז"}
@@ -251,6 +292,7 @@ he{
             }
             permille{
                 dnam{"פרומיל"}
+                gender{"masculine"}
                 many{"{0} פרומיל"}
                 one{"{0} פרומיל"}
                 other{"{0} פרומיל"}
@@ -258,6 +300,7 @@ he{
             }
             permillion{
                 dnam{"חלקים למיליון"}
+                gender{"masculine"}
                 many{"{0} חלקים למיליון"}
                 one{"{0} חלקים למיליון"}
                 other{"{0} חלקים למיליון"}
@@ -265,6 +308,7 @@ he{
             }
             permyriad{
                 dnam{"רבבית"}
+                gender{"feminine"}
                 many{"{0} רבביות"}
                 one{"רבבית {0}"}
                 other{"{0} רבביות"}
@@ -274,6 +318,7 @@ he{
         consumption{
             liter-per-100-kilometer{
                 dnam{"ליטר/100 ק״מ"}
+                gender{"masculine"}
                 many{"{0} ליטר/100 ק״מ"}
                 one{"ליטר/100 ק״מ"}
                 other{"{0} ליטר/100 ק״מ"}
@@ -281,6 +326,7 @@ he{
             }
             liter-per-kilometer{
                 dnam{"ליטרים/קילומטר"}
+                gender{"masculine"}
                 many{"{0} ליטרים/קילומטר"}
                 one{"{0} ליטר/קילומטר"}
                 other{"{0} ליטרים/קילומטר"}
@@ -311,13 +357,15 @@ he{
         digital{
             bit{
                 dnam{"ביט"}
-                many{"ביט {0}"}
-                one{"ביט {0}"}
-                other{"ביט {0}"}
-                two{"ביט {0}"}
+                gender{"masculine"}
+                many{"{0} ביט"}
+                one{"{0} ביט"}
+                other{"{0} ביט"}
+                two{"{0} ביט"}
             }
             byte{
                 dnam{"בייט"}
+                gender{"masculine"}
                 many{"{0} בייט"}
                 one{"{0} בייט"}
                 other{"{0} בייט"}
@@ -325,6 +373,7 @@ he{
             }
             gigabit{
                 dnam{"ג׳יגה-ביט"}
+                gender{"masculine"}
                 many{"{0} ג'יגה-ביט"}
                 one{"{0} ג'יגה-ביט"}
                 other{"{0} ג'יגה-ביט"}
@@ -332,6 +381,7 @@ he{
             }
             gigabyte{
                 dnam{"ג׳יגה-בייט"}
+                gender{"masculine"}
                 many{"{0} ג׳יגה-בייט"}
                 one{"{0} ג׳יגה-בייט"}
                 other{"{0} ג׳יגה-בייט"}
@@ -339,6 +389,7 @@ he{
             }
             kilobit{
                 dnam{"קילוביט"}
+                gender{"masculine"}
                 many{"{0} קילוביט"}
                 one{"{0} קילוביט"}
                 other{"{0} קילוביט"}
@@ -346,6 +397,7 @@ he{
             }
             kilobyte{
                 dnam{"קילו-בייט"}
+                gender{"masculine"}
                 many{"{0} קילו-בייט"}
                 one{"{0} קילו-בייט"}
                 other{"{0} קילו-בייט"}
@@ -353,13 +405,15 @@ he{
             }
             megabit{
                 dnam{"מגה-ביט"}
-                many{"מגה-ביט {0}"}
-                one{"מגה-ביט {0}"}
-                other{"מגה-ביט {0}"}
-                two{"מגה-ביט {0}"}
+                gender{"masculine"}
+                many{"{0} מגה-ביט"}
+                one{"{0} מגה-ביט"}
+                other{"{0} מגה-ביט"}
+                two{"{0} מגה-ביט"}
             }
             megabyte{
                 dnam{"מגה-בייט"}
+                gender{"masculine"}
                 many{"{0} מגה-בייט"}
                 one{"מגה-בייט"}
                 other{"{0} מגה-בייט"}
@@ -367,6 +421,7 @@ he{
             }
             petabyte{
                 dnam{"פטה-בייט"}
+                gender{"masculine"}
                 many{"{0} פטה-בייט"}
                 one{"{0} פטה-בייט"}
                 other{"{0} פטה-בייט"}
@@ -374,13 +429,15 @@ he{
             }
             terabit{
                 dnam{"טרה-ביט"}
-                many{"טרה-ביט {0}"}
-                one{"טרה-ביט {0}"}
-                other{"טרה-ביט {0}"}
-                two{"טרה-ביט {0}"}
+                gender{"masculine"}
+                many{"{0} טרה-ביט"}
+                one{"{0} טרה-ביט"}
+                other{"{0} טרה-ביט"}
+                two{"{0} טרה-ביט"}
             }
             terabyte{
                 dnam{"טרה-בייט"}
+                gender{"masculine"}
                 many{"טרה-בייט {0}"}
                 one{"טרה-בייט {0}"}
                 other{"טרה-בייט {0}"}
@@ -390,6 +447,7 @@ he{
         duration{
             century{
                 dnam{"מאות"}
+                gender{"feminine"}
                 many{"{0} מאות"}
                 one{"מאה {0}"}
                 other{"{0} מאות"}
@@ -397,14 +455,19 @@ he{
             }
             day{
                 dnam{"ימים"}
+                gender{"masculine"}
                 many{"{0} יום"}
                 one{"יום {0}"}
                 other{"{0} ימים"}
                 per{"{0}/יום"}
                 two{"יומיים"}
             }
+            day-person{
+                gender{"masculine"}
+            }
             decade{
                 dnam{"עשורים"}
+                gender{"masculine"}
                 many{"{0} עשורים"}
                 one{"עשור {0}"}
                 other{"{0} עשורים"}
@@ -412,6 +475,7 @@ he{
             }
             hour{
                 dnam{"שעות"}
+                gender{"feminine"}
                 many{"{0} שעות"}
                 one{"שעה"}
                 other{"{0} שעות"}
@@ -420,6 +484,7 @@ he{
             }
             microsecond{
                 dnam{"מיליוניות שנייה"}
+                gender{"feminine"}
                 many{"{0} מיליוניות שנייה"}
                 one{"{0} מיליונית שנייה"}
                 other{"{0} מיליוניות שנייה"}
@@ -427,6 +492,7 @@ he{
             }
             millisecond{
                 dnam{"אלפיות השניה"}
+                gender{"feminine"}
                 many{"{0} אלפיות שנייה"}
                 one{"אלפית שנייה {0}"}
                 other{"{0} אלפיות שנייה"}
@@ -434,6 +500,7 @@ he{
             }
             minute{
                 dnam{"דקות"}
+                gender{"feminine"}
                 many{"{0} דקות"}
                 one{"דקה"}
                 other{"{0} דקות"}
@@ -442,6 +509,7 @@ he{
             }
             month{
                 dnam{"חודשים"}
+                gender{"masculine"}
                 many{"{0} חודשים"}
                 one{"חודש"}
                 other{"{0} חודשים"}
@@ -450,13 +518,23 @@ he{
             }
             nanosecond{
                 dnam{"ננו שניות"}
+                gender{"feminine"}
                 many{"{0} ננו שניות"}
                 one{"{0} ננו שנייה"}
                 other{"{0} ננו שניות"}
                 two{"{0} ננו שניות"}
             }
+            quarter{
+                dnam{"רבעונים"}
+                gender{"masculine"}
+                many{"{0} רבעונים"}
+                one{"{0} רבעון"}
+                other{"{0} רבעונים"}
+                two{"{0} רבעונים"}
+            }
             second{
                 dnam{"שניות"}
+                gender{"feminine"}
                 many{"‏{0} שניות"}
                 one{"שניה"}
                 other{"{0} שניות"}
@@ -465,6 +543,7 @@ he{
             }
             week{
                 dnam{"שבועות"}
+                gender{"masculine"}
                 many{"{0} שבועות"}
                 one{"שבוע"}
                 other{"{0} שבועות"}
@@ -473,6 +552,7 @@ he{
             }
             year{
                 dnam{"שנים"}
+                gender{"feminine"}
                 many{"{0} שנים"}
                 one{"שנה"}
                 other{"{0} שנים"}
@@ -483,6 +563,7 @@ he{
         electric{
             ampere{
                 dnam{"אמפר"}
+                gender{"masculine"}
                 many{"{0} אמפר"}
                 one{"אמפר {0}"}
                 other{"{0} אמפר"}
@@ -490,6 +571,7 @@ he{
             }
             milliampere{
                 dnam{"מיליאמפר"}
+                gender{"masculine"}
                 many{"{0} מיליאמפר"}
                 one{"מיליאמפר {0}"}
                 other{"{0} מיליאמפר"}
@@ -497,6 +579,7 @@ he{
             }
             ohm{
                 dnam{"ohms"}
+                gender{"masculine"}
                 many{"{0} ohms"}
                 one{"{0} ohm"}
                 other{"{0} ohms"}
@@ -504,6 +587,7 @@ he{
             }
             volt{
                 dnam{"וולט"}
+                gender{"masculine"}
                 many{"{0} וולט"}
                 one{"וולט {0}"}
                 other{"{0} וולט"}
@@ -520,6 +604,7 @@ he{
             }
             calorie{
                 dnam{"קלוריות"}
+                gender{"feminine"}
                 many{"{0} קלוריות"}
                 one{"קלוריה {0}"}
                 other{"{0} קלוריות"}
@@ -541,6 +626,7 @@ he{
             }
             joule{
                 dnam{"ג׳אול"}
+                gender{"masculine"}
                 many{"{0} ג׳אול"}
                 one{"{0} ג׳אול"}
                 other{"{0} ג׳אול"}
@@ -555,6 +641,7 @@ he{
             }
             kilojoule{
                 dnam{"קילו ג׳אול"}
+                gender{"masculine"}
                 many{"{0} קילו ג׳אול"}
                 one{"קילו ג׳אול {0}"}
                 other{"{0} קילו ג׳אול"}
@@ -562,6 +649,7 @@ he{
             }
             kilowatt-hour{
                 dnam{"קילוואט־שעה"}
+                gender{"masculine"}
                 many{"{0} קילוואט-שעה"}
                 one{"קילוואט־שעה {0}"}
                 other{"{0} קילוואט-שעה"}
@@ -572,8 +660,17 @@ he{
             }
         }
         force{
+            kilowatt-hour-per-100-kilometer{
+                dnam{"קילוואט/שעה ל-100 קילומטר"}
+                gender{"masculine"}
+                many{"{0} קילוואט/שעה ל-100 קילומטר"}
+                one{"{0} קילוואט/שעה ל-100 קילומטר"}
+                other{"{0} קילוואט/שעה ל-100 קילומטר"}
+                two{"{0} קילוואט/שעה ל-100 קילומטר"}
+            }
             newton{
                 dnam{"ניוטון"}
+                gender{"masculine"}
                 many{"{0} ניוטון"}
                 one{"{0} ניוטון"}
                 other{"{0} ניוטון"}
@@ -590,6 +687,7 @@ he{
         frequency{
             gigahertz{
                 dnam{"ג׳יגה-הרץ"}
+                gender{"masculine"}
                 many{"{0} ג׳יגה-הרץ"}
                 one{"ג׳יגה-הרץ {0}"}
                 other{"{0} ג׳יגה-הרץ"}
@@ -597,6 +695,7 @@ he{
             }
             hertz{
                 dnam{"הרץ"}
+                gender{"masculine"}
                 many{"{0} הרץ"}
                 one{"הרץ {0}"}
                 other{"{0} הרץ"}
@@ -604,6 +703,7 @@ he{
             }
             kilohertz{
                 dnam{"קילו-הרץ"}
+                gender{"masculine"}
                 many{"{0} קילו-הרץ"}
                 one{"קילו-הרץ {0}"}
                 other{"{0} קילו-הרץ"}
@@ -611,6 +711,7 @@ he{
             }
             megahertz{
                 dnam{"מגה-הרץ"}
+                gender{"masculine"}
                 many{"{0} מגה-הרץ"}
                 one{"מגה-הרץ {0}"}
                 other{"{0} מגה-הרץ"}
@@ -641,6 +742,7 @@ he{
             }
             em{
                 dnam{"קו מפריד מסוג em"}
+                gender{"masculine"}
                 many{"‎{0} em ‎"}
                 one{"‎{0} em ‎"}
                 other{"‎{0} ems ‎"}
@@ -648,6 +750,7 @@ he{
             }
             megapixel{
                 dnam{"מגה-פיקסל"}
+                gender{"masculine"}
                 many{"‎{0} MP ‎"}
                 one{"‎{0} MP ‎"}
                 other{"‎{0} MP ‎"}
@@ -655,6 +758,7 @@ he{
             }
             pixel{
                 dnam{"פיקסלים"}
+                gender{"masculine"}
                 many{"‎{0} px ‎"}
                 one{"‎{0} px ‎"}
                 other{"‎{0} px ‎"}
@@ -662,6 +766,7 @@ he{
             }
             pixel-per-centimeter{
                 dnam{"פיקסלים לסנטימטר"}
+                gender{"masculine"}
                 many{"‎{0} ppcm‎"}
                 one{"‎{0} ppcm‎"}
                 other{"‎{0} ppcm‎"}
@@ -685,6 +790,7 @@ he{
             }
             centimeter{
                 dnam{"סנטימטרים"}
+                gender{"masculine"}
                 many{"{0} סנטימטרים"}
                 one{"סנטימטר {0}"}
                 other{"{0} סנטימטרים"}
@@ -693,6 +799,7 @@ he{
             }
             decimeter{
                 dnam{"דצימטר"}
+                gender{"masculine"}
                 many{"{0} דצימטרים"}
                 one{"דצימטר אחד"}
                 other{"{0} דצימטרים"}
@@ -737,6 +844,7 @@ he{
             }
             kilometer{
                 dnam{"קילומטרים"}
+                gender{"masculine"}
                 many{"{0} קילומטרים"}
                 one{"קילומטר {0}"}
                 other{"{0} קילומטרים"}
@@ -752,6 +860,7 @@ he{
             }
             meter{
                 dnam{"מטרים"}
+                gender{"masculine"}
                 many{"{0} מטרים"}
                 one{"מטר {0}"}
                 other{"{0} מטרים"}
@@ -760,6 +869,7 @@ he{
             }
             micrometer{
                 dnam{"מיקרומטרים"}
+                gender{"masculine"}
                 many{"{0} מיקרומטרים"}
                 one{"מיקרומטר {0}"}
                 other{"{0} מיקרומטרים"}
@@ -774,6 +884,7 @@ he{
             }
             mile-scandinavian{
                 dnam{"מייל-סקנדינביה"}
+                gender{"masculine"}
                 many{"{0} מייל-סקנדינביה"}
                 one{"מייל-סקנדינביה {0}"}
                 other{"{0} מייל-סקנדינביה"}
@@ -781,6 +892,7 @@ he{
             }
             millimeter{
                 dnam{"מילימטרים"}
+                gender{"masculine"}
                 many{"{0} מילימטרים"}
                 one{"מילימטר {0}"}
                 other{"{0} מילימטרים"}
@@ -788,6 +900,7 @@ he{
             }
             nanometer{
                 dnam{"ננומטרים"}
+                gender{"masculine"}
                 many{"{0} ננומטרים"}
                 one{"ננומטר {0}"}
                 other{"{0} ננומטרים"}
@@ -809,6 +922,7 @@ he{
             }
             picometer{
                 dnam{"פיקומטרים"}
+                gender{"masculine"}
                 many{"{0} פיקומטרים"}
                 one{"פיקומטר {0}"}
                 other{"{0} פיקומטרים"}
@@ -839,6 +953,7 @@ he{
         light{
             candela{
                 dnam{"קנדלה"}
+                gender{"feminine"}
                 many{"{0} קנדלה"}
                 one{"קנדלה"}
                 other{"{0} קנדלה"}
@@ -846,6 +961,7 @@ he{
             }
             lumen{
                 dnam{"לומן"}
+                gender{"masculine"}
                 many{"{0} לומן"}
                 one{"לומן {0}"}
                 other{"{0} לומן"}
@@ -853,6 +969,7 @@ he{
             }
             lux{
                 dnam{"לוקס"}
+                gender{"masculine"}
                 many{"{0} לוקס"}
                 one{"לוקס אחד"}
                 other{"{0} לוקס"}
@@ -865,6 +982,7 @@ he{
         mass{
             carat{
                 dnam{"קרט"}
+                gender{"masculine"}
                 many{"{0} קרט"}
                 one{"קרט אחד"}
                 other{"{0} קרט"}
@@ -893,6 +1011,7 @@ he{
             }
             gram{
                 dnam{"גרם"}
+                gender{"masculine"}
                 many{"{0} גרם"}
                 one{"גרם {0}"}
                 other{"{0} גרם"}
@@ -901,21 +1020,16 @@ he{
             }
             kilogram{
                 dnam{"קילוגרם"}
+                gender{"masculine"}
                 many{"{0} קילוגרם"}
                 one{"קילוגרם {0}"}
                 other{"{0} קילוגרם"}
                 per{"{0}/קילוגרם"}
                 two{"{0} קילוגרם"}
             }
-            metric-ton{
-                dnam{"טון מטרי"}
-                many{"{0} טון מטרי"}
-                one{"טון מטרי אחד"}
-                other{"{0} טון מטרי"}
-                two{"שני טון מטרי"}
-            }
             microgram{
                 dnam{"מיקרוגרם"}
+                gender{"masculine"}
                 many{"{0} מיקרוגרם"}
                 one{"מיקרוגרם אחד"}
                 other{"{0} מיקרוגרם"}
@@ -923,6 +1037,7 @@ he{
             }
             milligram{
                 dnam{"מיליגרם"}
+                gender{"masculine"}
                 many{"{0} מיליגרם"}
                 one{"מיליגרם אחד"}
                 other{"{0} מיליגרם"}
@@ -968,14 +1083,23 @@ he{
             ton{
                 dnam{"טונות"}
                 many{"{0} טונות"}
-                one{"טון אחד"}
+                one{"טונה אחת"}
                 other{"{0} טונות"}
-                two{"שני טונות"}
+                two{"שתי טונות"}
+            }
+            tonne{
+                dnam{"טון מטרי"}
+                gender{"masculine"}
+                many{"{0} טון מטרי"}
+                one{"טון מטרי אחד"}
+                other{"{0} טון מטרי"}
+                two{"שני טון מטרי"}
             }
         }
         power{
             gigawatt{
                 dnam{"ג׳יגה ואט"}
+                gender{"masculine"}
                 many{"{0} ג׳יגה ואט"}
                 one{"ג׳יגה ואט {0}"}
                 other{"{0} ג׳יגה ואט"}
@@ -990,6 +1114,7 @@ he{
             }
             kilowatt{
                 dnam{"קילוואט"}
+                gender{"masculine"}
                 many{"{0} קילוואט"}
                 one{"קילוואט {0}"}
                 other{"{0} קילוואט"}
@@ -997,6 +1122,7 @@ he{
             }
             megawatt{
                 dnam{"מגה ואט"}
+                gender{"masculine"}
                 many{"{0} מגה ואט"}
                 one{"מגה ואט {0}"}
                 other{"{0} מגה ואט"}
@@ -1004,6 +1130,7 @@ he{
             }
             milliwatt{
                 dnam{"מיליוואט"}
+                gender{"masculine"}
                 many{"{0} מיליוואט"}
                 one{"מיליוואט {0}"}
                 other{"{0} מיליוואט"}
@@ -1011,6 +1138,7 @@ he{
             }
             watt{
                 dnam{"ואט"}
+                gender{"masculine"}
                 many{"{0} ואט"}
                 one{"ואט {0}"}
                 other{"{0} ואט"}
@@ -1020,6 +1148,7 @@ he{
         pressure{
             atmosphere{
                 dnam{"אטמוספרות"}
+                gender{"feminine"}
                 many{"{0} אטמוספרה"}
                 one{"{0} אטמוספרה"}
                 other{"{0} אטמוספרות"}
@@ -1027,6 +1156,7 @@ he{
             }
             bar{
                 dnam{"בר"}
+                gender{"masculine"}
                 many{"{0} בר"}
                 one{"{0} בר"}
                 other{"{0} בר"}
@@ -1034,6 +1164,7 @@ he{
             }
             hectopascal{
                 dnam{"הקטופסקל"}
+                gender{"masculine"}
                 many{"{0} הקטופסקל"}
                 one{"הקטופסקל {0}"}
                 other{"{0} הקטופסקל"}
@@ -1048,6 +1179,7 @@ he{
             }
             kilopascal{
                 dnam{"קילו-פסקל"}
+                gender{"masculine"}
                 many{"{0} קילו-פסקל"}
                 one{"{0} קילו-פסקל"}
                 other{"{0} קילו-פסקל"}
@@ -1055,6 +1187,7 @@ he{
             }
             megapascal{
                 dnam{"מגה-פסקל"}
+                gender{"masculine"}
                 many{"{0} מגה-פסקל"}
                 one{"{0} מגה-פסקל"}
                 other{"{0} מגה-פסקל"}
@@ -1062,6 +1195,7 @@ he{
             }
             millibar{
                 dnam{"מיליבר"}
+                gender{"masculine"}
                 many{"{0} מיליבר"}
                 one{"{0} מיליבר"}
                 other{"{0} מיליבר"}
@@ -1076,6 +1210,7 @@ he{
             }
             pascal{
                 dnam{"פסקל"}
+                gender{"masculine"}
                 many{"{0} פסקל"}
                 one{"{0} פסקל"}
                 other{"{0} פסקל"}
@@ -1092,6 +1227,7 @@ he{
         speed{
             kilometer-per-hour{
                 dnam{"קילומטר לשעה"}
+                gender{"masculine"}
                 many{"{0} קילומטר לשעה"}
                 one{"{0} קילומטר לשעה"}
                 other{"{0} קילומטר לשעה"}
@@ -1106,6 +1242,7 @@ he{
             }
             meter-per-second{
                 dnam{"מטר לשנייה"}
+                gender{"masculine"}
                 many{"{0} מטר לשנייה"}
                 one{"{0} מטר לשנייה"}
                 other{"{0} מטר לשנייה"}
@@ -1122,6 +1259,7 @@ he{
         temperature{
             celsius{
                 dnam{"מעלות צלזיוס"}
+                gender{"feminine"}
                 many{"{0} מעלות צלזיוס"}
                 one{"מעלת צלזיוס {0}"}
                 other{"{0} מעלות צלזיוס"}
@@ -1136,6 +1274,7 @@ he{
             }
             generic{
                 dnam{"°"}
+                gender{"feminine"}
                 many{"{0}°"}
                 one{"{0}°"}
                 other{"{0}°"}
@@ -1143,6 +1282,7 @@ he{
             }
             kelvin{
                 dnam{"מעלות קלווין"}
+                gender{"feminine"}
                 many{"{0} קלווין"}
                 one{"קלווין {0}"}
                 other{"{0} קלווין"}
@@ -1152,6 +1292,7 @@ he{
         torque{
             newton-meter{
                 dnam{"ניוטון-מטר"}
+                gender{"masculine"}
                 many{"{0} ניוטון-מטר"}
                 one{"{0} ניוטון-מטר"}
                 other{"{0} ניוטון-מטר"}
@@ -1189,6 +1330,7 @@ he{
             }
             centiliter{
                 dnam{"סנטיליטר"}
+                gender{"masculine"}
                 many{"{0} סנטיליטר"}
                 one{"סנטיליטר {0}"}
                 other{"{0} סנטיליטר"}
@@ -1196,6 +1338,7 @@ he{
             }
             cubic-centimeter{
                 dnam{"סנטימטר מעוקב"}
+                gender{"masculine"}
                 many{"{0} סנטימטר מעוקב"}
                 one{"סנטימטר מעוקב {0}"}
                 other{"{0} סנטימטר מעוקב"}
@@ -1218,6 +1361,7 @@ he{
             }
             cubic-kilometer{
                 dnam{"קילומטר מעוקב"}
+                gender{"masculine"}
                 many{"{0} קילומטר מעוקב"}
                 one{"קילומטר מעוקב {0}"}
                 other{"{0} קילומטר מעוקב"}
@@ -1225,6 +1369,7 @@ he{
             }
             cubic-meter{
                 dnam{"מטר מעוקב"}
+                gender{"masculine"}
                 many{"{0} מטר מעוקב"}
                 one{"מטר מעוקב {0}"}
                 other{"{0} מטר מעוקב"}
@@ -1254,6 +1399,7 @@ he{
             }
             cup-metric{
                 dnam{"כוס מידה מטרית"}
+                gender{"feminine"}
                 many{"{0} כ׳ מידה מטרית"}
                 one{"כוס מידה מטרית {0}"}
                 other{"{0} כ׳ מידה מטרית"}
@@ -1261,6 +1407,7 @@ he{
             }
             deciliter{
                 dnam{"דציליטר"}
+                gender{"masculine"}
                 many{"{0} דציליטר"}
                 one{"דציליטר {0}"}
                 other{"{0} דציליטר"}
@@ -1326,6 +1473,7 @@ he{
             }
             hectoliter{
                 dnam{"הקטוליטר"}
+                gender{"masculine"}
                 many{"{0} הקטוליטר"}
                 one{"הקטוליטר {0}"}
                 other{"{0} הקטוליטר"}
@@ -1340,6 +1488,7 @@ he{
             }
             liter{
                 dnam{"ליטר"}
+                gender{"masculine"}
                 many{"{0} ליטר"}
                 one{"ליטר {0}"}
                 other{"{0} ליטר"}
@@ -1348,6 +1497,7 @@ he{
             }
             megaliter{
                 dnam{"מגה ליטר"}
+                gender{"masculine"}
                 many{"{0} מגה ליטר"}
                 one{"מגה ליטר {0}"}
                 other{"{0} מגה ליטר"}
@@ -1355,6 +1505,7 @@ he{
             }
             milliliter{
                 dnam{"מיליליטר"}
+                gender{"masculine"}
                 many{"{0} מיליליטר"}
                 one{"מיליליטר {0}"}
                 other{"{0} מיליליטר"}
@@ -1376,6 +1527,7 @@ he{
             }
             pint-metric{
                 dnam{"פינט מטרי"}
+                gender{"masculine"}
                 many{"{0} פינט מטרי"}
                 one{"פינט מטרי {0}"}
                 other{"{0} פינט מטרי"}
@@ -1509,6 +1661,13 @@ he{
             per{"{0}/{1}"}
         }
         concentr{
+            item{
+                dnam{"פריט"}
+                many{"{0} פר'"}
+                one{"פריט {0}"}
+                other{"{0} פר'"}
+                two{"{0} פר'"}
+            }
             percent{
                 dnam{"%"}
                 many{"{0}%"}
@@ -1527,10 +1686,6 @@ he{
             }
             mile-per-gallon{
                 dnam{"מייל/גלון"}
-                many{"{0} מייל/גלון"}
-                one{"{0} מייל/גלון"}
-                other{"{0} מייל/גלון"}
-                two{"{0} מייל/גלון"}
             }
         }
         coordinate{
@@ -1542,11 +1697,10 @@ he{
         }
         digital{
             bit{
-                dnam{"סיבית"}
-                many{"{0} סיביות"}
-                one{"סיבית {0}"}
-                other{"{0} סיביות"}
-                two{"{0} סיביות"}
+                many{"{0} ביט"}
+                one{"{0} ביט"}
+                other{"{0} ביט"}
+                two{"{0} ביט"}
             }
             gigabyte{
                 dnam{"ג״ב"}
@@ -1561,6 +1715,12 @@ he{
                 one{"ק״ב {0}"}
                 other{"{0} ק״ב"}
                 two{"{0} ק״ב"}
+            }
+            megabyte{
+                many{"{0} מ״ב"}
+                one{"{0} מ״ב"}
+                other{"{0} מ״ב"}
+                two{"{0} מ״ב"}
             }
         }
         duration{
@@ -1623,6 +1783,9 @@ he{
                 other{"{0} ns"}
                 two{"{0} ns"}
             }
+            quarter{
+                dnam{"רבעונים"}
+            }
             second{
                 dnam{"שנ׳"}
                 many{"{0} שנ׳"}
@@ -1646,6 +1809,24 @@ he{
                 other{"{0} ש′"}
                 per{"{0}/שנה"}
                 two{"{0} ש′"}
+            }
+        }
+        force{
+            kilowatt-hour-per-100-kilometer{
+                dnam{"kWh/100km"}
+                many{"{0} kWh/100km"}
+                one{"{0} kWh/100km"}
+                other{"{0} kWh"}
+                two{"{0} קוט\u0022ש/100 ק\u0022מ"}
+            }
+        }
+        graphics{
+            dot{
+                dnam{"נק׳ קטנה"}
+                many{"{0} נק' ק'"}
+                one{"{0} נק' ק'"}
+                other{"{0} נק' ק'"}
+                two{"{0} נק' ק'"}
             }
         }
         length{
@@ -1805,13 +1986,6 @@ he{
                 per{"{0}/ק״ג"}
                 two{"{0}kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                many{"{0} t"}
-                one{"{0} t"}
-                other{"{0} t"}
-                two{"{0} t"}
-            }
             microgram{
                 dnam{"מק״ג"}
                 many{"{0} מק״ג"}
@@ -1828,11 +2002,7 @@ he{
             }
             ounce{
                 dnam{"oz"}
-                many{"{0} אונקיות"}
-                one{"אונקיה {0}"}
-                other{"{0} אונקיות"}
                 per{"{0}/oz"}
-                two{"{0} אונקיות"}
             }
             ounce-troy{
                 dnam{"oz t"}
@@ -1843,18 +2013,21 @@ he{
             }
             pound{
                 dnam{"פאונד"}
-                many{"{0} ליבראות"}
-                one{"ליברה {0}"}
-                other{"{0} ליבראות"}
                 per{"{0}/lb"}
-                two{"{0} ליבראות"}
             }
             ton{
-                dnam{"טון"}
+                dnam{"טונה"}
                 many{"{0} ט׳"}
                 one{"ט׳ {0}"}
                 other{"{0} ט׳"}
                 two{"{0} ט׳"}
+            }
+            tonne{
+                dnam{"t"}
+                many{"{0} t"}
+                one{"{0} t"}
+                other{"{0} t"}
+                two{"{0} t"}
             }
         }
         power{
@@ -1986,6 +2159,19 @@ he{
                 one{"{0} mi³"}
                 other{"{0} mi³"}
                 two{"{0} mi³"}
+            }
+            dessert-spoon-imperial{
+                many{"{0} dstspn"}
+                one{"{0}dsp-Imp"}
+                other{"{0}dsp-Imp"}
+                two{"{0}dsp-Imp"}
+            }
+            gallon-imperial{
+                many{"{0}/galIm"}
+                one{"{0}/galIm"}
+                other{"{0}/galIm"}
+                per{"{0}/galIm"}
+                two{"{0}/galIm"}
             }
             liter{
                 dnam{"ליטר"}
@@ -2151,6 +2337,13 @@ he{
             times{"{0}⋅{1}"}
         }
         concentr{
+            item{
+                dnam{"פריט"}
+                many{"{0} פריטים"}
+                one{"פריט {0}"}
+                other{"{0} פריטים"}
+                two{"{0} פריטים"}
+            }
             karat{
                 dnam{"kt"}
                 many{"{0} kt"}
@@ -2234,10 +2427,10 @@ he{
         digital{
             bit{
                 dnam{"ביט"}
-                many{"ביט {0}"}
-                one{"ביט {0}"}
-                other{"ביט {0}"}
-                two{"ביט {0}"}
+                many{"{0} ביט"}
+                one{"{0} ביט"}
+                other{"{0} ביט"}
+                two{"{0} ביט"}
             }
             byte{
                 dnam{"בייט"}
@@ -2378,6 +2571,9 @@ he{
                 other{"{0} ns"}
                 two{"{0} ns"}
             }
+            quarter{
+                dnam{"רבעונים"}
+            }
             second{
                 dnam{"שנ׳"}
                 many{"{0} שנ׳"}
@@ -2478,6 +2674,15 @@ he{
                 one{"{0} קוט״ש"}
                 other{"{0} קוט״ש"}
                 two{"{0} קוט״ש"}
+            }
+        }
+        force{
+            kilowatt-hour-per-100-kilometer{
+                dnam{"קוט״ש/100 ק״מ"}
+                many{"{0} קוט\u0022ש/100 ק\u0022מ"}
+                one{"{0} קוט\u0022ש/100 ק\u0022מ"}
+                other{"{0} קוט\u0022ש/100 ק\u0022מ"}
+                two{"{0} קוט\u0022ש/100 ק\u0022מ"}
             }
         }
         frequency{
@@ -2740,13 +2945,6 @@ he{
                 per{"{0}/ק״ג"}
                 two{"{0} ק״ג"}
             }
-            metric-ton{
-                dnam{"t"}
-                many{"{0} t"}
-                one{"{0} t"}
-                other{"{0} t"}
-                two{"{0} t"}
-            }
             microgram{
                 dnam{"מק״ג"}
                 many{"{0} מק״ג"}
@@ -2792,11 +2990,18 @@ he{
                 two{"{0} סטון"}
             }
             ton{
-                dnam{"טון"}
+                dnam{"טונה"}
                 many{"{0} ט׳"}
                 one{"ט׳ {0}"}
                 other{"{0} ט׳"}
                 two{"{0} ט׳"}
+            }
+            tonne{
+                dnam{"t"}
+                many{"{0} t"}
+                one{"{0} t"}
+                other{"{0} t"}
+                two{"{0} t"}
             }
         }
         power{

@@ -283,7 +283,7 @@ int main(int argc, const char* argv[]){
     }
 	//cout << "Done initializing!\n" << endl;
     
-    if(test.run()==FALSE){
+    if(test.run()==false){
 		cout << "run failed!" << endl;
         fprintf(stderr,"FAILED: Tests could not be run please check the arguments.\n");
         return -1;

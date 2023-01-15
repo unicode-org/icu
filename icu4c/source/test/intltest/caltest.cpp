@@ -48,7 +48,7 @@
 } UPRV_BLOCK_MACRO_END
 
 #define TEST_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN { \
-    if ((expr)==FALSE) { \
+    if ((expr)==false) { \
         errln("%s:%d: Test failure \n", __FILE__, __LINE__); \
     } \
 } UPRV_BLOCK_MACRO_END
@@ -353,6 +353,34 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
             TestTimeZoneInLocale();
           }
           break;
+#define CASE(num, NAME) \
+        case num: \
+          name = #NAME; \
+          if(exec) { \
+            logln(#NAME "---"); logln(""); \
+            NAME(); \
+          } \
+          break;
+
+        CASE(38, TestBasicConversionISO8601);
+        CASE(39, TestBasicConversionJapanese);
+        CASE(40, TestBasicConversionBuddhist);
+        CASE(41, TestBasicConversionTaiwan);
+        CASE(42, TestBasicConversionPersian);
+        CASE(43, TestBasicConversionIslamic);
+        CASE(44, TestBasicConversionIslamicTBLA);
+        CASE(45, TestBasicConversionIslamicCivil);
+        CASE(46, TestBasicConversionIslamicRGSA);
+        CASE(47, TestBasicConversionIslamicUmalqura);
+        CASE(48, TestBasicConversionHebrew);
+        CASE(49, TestBasicConversionChinese);
+        CASE(50, TestBasicConversionDangi);
+        CASE(51, TestBasicConversionIndian);
+        CASE(52, TestBasicConversionCoptic);
+        CASE(53, TestBasicConversionEthiopic);
+        CASE(54, TestBasicConversionEthiopicAmeteAlem);
+
+#undef CASE
         default: name = ""; break;
     }
 }
@@ -399,7 +427,7 @@ CalendarTest::TestGenericAPI()
     UErrorCode status = U_ZERO_ERROR;
     UDate d;
     UnicodeString str;
-    UBool eq = FALSE,b4 = FALSE,af = FALSE;
+    UBool eq = false,b4 = false,af = false;
 
     UDate when = date(90, UCAL_APRIL, 15);
 
@@ -408,7 +436,7 @@ CalendarTest::TestGenericAPI()
 
     SimpleTimeZone *zone = new SimpleTimeZone(tzoffset, tzid);
     Calendar *cal = Calendar::createInstance(zone->clone(), status);
-    if (failure(status, "Calendar::createInstance #1", TRUE)) return;
+    if (failure(status, "Calendar::createInstance #1", true)) return;
 
     if (*zone != cal->getTimeZone()) errln("FAIL: Calendar::getTimeZone failed");
 
@@ -438,7 +466,7 @@ CalendarTest::TestGenericAPI()
         U_FAILURE(status)) errln("FAIL: equals/before/after failed after setTime(+1000)");
 
     logln("cal->roll(UCAL_SECOND)");
-    cal->roll(UCAL_SECOND, (UBool) TRUE, status);
+    cal->roll(UCAL_SECOND, (UBool) true, status);
     logln(UnicodeString("cal=")  +cal->getTime(status)  + UnicodeString(calToStr(*cal)));
     cal->roll(UCAL_SECOND, (int32_t)0, status);
     logln(UnicodeString("cal=")  +cal->getTime(status)  + UnicodeString(calToStr(*cal)));
@@ -634,16 +662,16 @@ CalendarTest::TestGenericAPI()
     }
 
     LocalPointer<StringEnumeration> values(
-        Calendar::getKeywordValuesForLocale("calendar", Locale("he"), FALSE, status));
+        Calendar::getKeywordValuesForLocale("calendar", Locale("he"), false, status));
     if (values.isNull() || U_FAILURE(status)) {
         dataerrln("FAIL: Calendar::getKeywordValuesForLocale(he): %s", u_errorName(status));
     } else {
-        UBool containsHebrew = FALSE;
+        UBool containsHebrew = false;
         const char *charValue;
         int32_t valueLength;
         while ((charValue = values->next(&valueLength, status)) != NULL) {
             if (valueLength == 6 && strcmp(charValue, "hebrew") == 0) {
-                containsHebrew = TRUE;
+                containsHebrew = true;
             }
         }
         if (!containsHebrew) {
@@ -651,13 +679,13 @@ CalendarTest::TestGenericAPI()
         }
 
         values->reset(status);
-        containsHebrew = FALSE;
+        containsHebrew = false;
         UnicodeString hebrew = UNICODE_STRING_SIMPLE("hebrew");
         const UChar *ucharValue;
         while ((ucharValue = values->unext(&valueLength, status)) != NULL) {
-            UnicodeString value(FALSE, ucharValue, valueLength);
+            UnicodeString value(false, ucharValue, valueLength);
             if (value == hebrew) {
-                containsHebrew = TRUE;
+                containsHebrew = true;
             }
         }
         if (!containsHebrew) {
@@ -665,11 +693,11 @@ CalendarTest::TestGenericAPI()
         }
 
         values->reset(status);
-        containsHebrew = FALSE;
+        containsHebrew = false;
         const UnicodeString *stringValue;
         while ((stringValue = values->snext(status)) != NULL) {
             if (*stringValue == hebrew) {
-                containsHebrew = TRUE;
+                containsHebrew = true;
             }
         }
         if (!containsHebrew) {
@@ -690,7 +718,7 @@ CalendarTest::TestRog()
 {
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar* gc = new GregorianCalendar(status);
-    if (failure(status, "new GregorianCalendar", TRUE)) return;
+    if (failure(status, "new GregorianCalendar", true)) return;
     int32_t year = 1997, month = UCAL_APRIL, date = 1;
     gc->set(year, month, date);
     gc->set(UCAL_HOUR_OF_DAY, 23);
@@ -716,15 +744,15 @@ CalendarTest::TestRog()
 void
 CalendarTest::TestDOW943()
 {
-    dowTest(FALSE);
-    dowTest(TRUE);
+    dowTest(false);
+    dowTest(true);
 }
 
 void CalendarTest::dowTest(UBool lenient)
 {
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar* cal = new GregorianCalendar(status);
-    if (failure(status, "new GregorianCalendar", TRUE)) return;
+    if (failure(status, "new GregorianCalendar", true)) return;
     logln("cal - Aug 12, 1997\n");
     cal->set(1997, UCAL_AUGUST, 12);
     cal->getTime(status);
@@ -756,7 +784,7 @@ CalendarTest::TestClonesUnique908()
 {
     UErrorCode status = U_ZERO_ERROR;
     Calendar *c = Calendar::createInstance(status);
-    if (failure(status, "Calendar::createInstance", TRUE)) return;
+    if (failure(status, "Calendar::createInstance", true)) return;
     Calendar *d = c->clone();
     c->set(UCAL_MILLISECOND, 123);
     d->set(UCAL_MILLISECOND, 456);
@@ -781,18 +809,18 @@ CalendarTest::TestGregorianChange768()
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString str;
     GregorianCalendar* c = new GregorianCalendar(status);
-    if (failure(status, "new GregorianCalendar", TRUE)) return;
+    if (failure(status, "new GregorianCalendar", true)) return;
     logln(UnicodeString("With cutoff ") + dateToString(c->getGregorianChange(), str));
     b = c->isLeapYear(1800);
     logln(UnicodeString(" isLeapYear(1800) = ") + (b ? "true" : "false"));
-    logln(UnicodeString(" (should be FALSE)"));
+    logln(UnicodeString(" (should be false)"));
     if (b) errln("FAIL");
     c->setGregorianChange(date(0, 0, 1), status);
     if (U_FAILURE(status)) { errln("GregorianCalendar::setGregorianChange failed"); return; }
     logln(UnicodeString("With cutoff ") + dateToString(c->getGregorianChange(), str));
     b = c->isLeapYear(1800);
     logln(UnicodeString(" isLeapYear(1800) = ") + (b ? "true" : "false"));
-    logln(UnicodeString(" (should be TRUE)"));
+    logln(UnicodeString(" (should be true)"));
     if (!b) errln("FAIL");
     delete c;
 }
@@ -807,8 +835,8 @@ CalendarTest::TestDisambiguation765()
 {
     UErrorCode status = U_ZERO_ERROR;
     Calendar *c = Calendar::createInstance("en_US", status);
-    if (failure(status, "Calendar::createInstance", TRUE)) return;
-    c->setLenient(FALSE);
+    if (failure(status, "Calendar::createInstance", true)) return;
+    c->setLenient(false);
     c->clear();
     c->set(UCAL_YEAR, 1997);
     c->set(UCAL_MONTH, UCAL_JUNE);
@@ -957,7 +985,7 @@ CalendarTest::test4064654(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString str;
     Calendar *gmtcal = Calendar::createInstance(status);
-    if (failure(status, "Calendar::createInstance", TRUE)) return;
+    if (failure(status, "Calendar::createInstance", true)) return;
     gmtcal->adoptTimeZone(TimeZone::createTimeZone("Africa/Casablanca"));
     gmtcal->set(yr, mo - 1, dt, hr, mn, sc);
     gmtcal->set(UCAL_MILLISECOND, 0);
@@ -1000,7 +1028,7 @@ CalendarTest::TestAddSetOrder621()
     UDate d = date(97, 4, 14, 13, 23, 45);
     UErrorCode status = U_ZERO_ERROR;
     Calendar *cal = Calendar::createInstance(status);
-    if (failure(status, "Calendar::createInstance", TRUE)) return;
+    if (failure(status, "Calendar::createInstance", true)) return;
 
     cal->setTime(d, status);
     if (U_FAILURE(status)) {
@@ -1072,7 +1100,7 @@ CalendarTest::TestAdd520()
     int32_t y = 1997, m = UCAL_FEBRUARY, d = 1;
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar *temp = new GregorianCalendar(y, m, d, status);
-    if (failure(status, "new GregorianCalendar", TRUE)) return;
+    if (failure(status, "new GregorianCalendar", true)) return;
     check520(temp, y, m, d);
     temp->add(UCAL_YEAR, 1, status);
     if (U_FAILURE(status)) { errln("Calendar::add failed"); return; }
@@ -1109,7 +1137,7 @@ CalendarTest::TestAddRollExtensive()
     int32_t y = 1997, m = UCAL_FEBRUARY, d = 1, hr = 1, min = 1, sec = 0, ms = 0;
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar *temp = new GregorianCalendar(y, m, d, status);
-    if (failure(status, "new GregorianCalendar", TRUE)) return;
+    if (failure(status, "new GregorianCalendar", true)) return;
 
     temp->set(UCAL_HOUR, hr);
     temp->set(UCAL_MINUTE, min);
@@ -1244,7 +1272,7 @@ CalendarTest::TestFieldSet4781()
     // try {
         UErrorCode status = U_ZERO_ERROR;
         GregorianCalendar *g = new GregorianCalendar(status);
-        if (failure(status, "new GregorianCalendar", TRUE)) return;
+        if (failure(status, "new GregorianCalendar", true)) return;
         GregorianCalendar *g2 = new GregorianCalendar(status);
         if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
         g2->set(UCAL_HOUR, 12, status);
@@ -1268,7 +1296,7 @@ void
 CalendarTest::TestSerialize337()
 {
     Calendar cal = Calendar::getInstance();
-    UBool ok = FALSE;
+    UBool ok = false;
     try {
         FileOutputStream f = new FileOutputStream(FILENAME);
         ObjectOutput s = new ObjectOutputStream(f);
@@ -1317,7 +1345,7 @@ CalendarTest::TestSecondsZero121()
 {
     UErrorCode status = U_ZERO_ERROR;
     Calendar *cal = new GregorianCalendar(status);
-    if (failure(status, "new GregorianCalendar", TRUE)) return;
+    if (failure(status, "new GregorianCalendar", true)) return;
     cal->setTime(Calendar::getNow(), status);
     if (U_FAILURE(status)) { errln("Calendar::setTime failed"); return; }
     cal->set(UCAL_SECOND, 0);
@@ -1348,7 +1376,7 @@ CalendarTest::TestAddSetGet0610()
     UErrorCode status = U_ZERO_ERROR;
     {
         Calendar *calendar = new GregorianCalendar(status);
-        if (failure(status, "new GregorianCalendar", TRUE)) return;
+        if (failure(status, "new GregorianCalendar", true)) return;
         calendar->set(1993, UCAL_JANUARY, 4);
         logln("1A) " + value(calendar));
         calendar->add(UCAL_DATE, 1, status);
@@ -1414,7 +1442,7 @@ CalendarTest::TestFields060()
     int32_t dDate = 22;
     GregorianCalendar *calendar = 0;
     calendar = new GregorianCalendar(year, month, dDate, status);
-    if (failure(status, "new GregorianCalendar", TRUE)) return;
+    if (failure(status, "new GregorianCalendar", true)) return;
     for (int32_t i = 0; i < EXPECTED_FIELDS_length;) {
         UCalendarDateFields field = (UCalendarDateFields)EXPECTED_FIELDS[i++];
         int32_t expected = EXPECTED_FIELDS[i++];
@@ -1451,7 +1479,7 @@ CalendarTest::TestEpochStartFields()
     UErrorCode status = U_ZERO_ERROR;
     TimeZone *z = TimeZone::createDefault();
     Calendar *c = Calendar::createInstance(status);
-    if (failure(status, "Calendar::createInstance", TRUE)) return;
+    if (failure(status, "Calendar::createInstance", true)) return;
     UDate d = - z->getRawOffset();
     GregorianCalendar *gc = new GregorianCalendar(status);
     if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
@@ -1506,7 +1534,7 @@ CalendarTest::TestDOWProgression()
 {
     UErrorCode status = U_ZERO_ERROR;
     Calendar *cal = new GregorianCalendar(1972, UCAL_OCTOBER, 26, status);
-    if (failure(status, "new GregorianCalendar", TRUE)) return;
+    if (failure(status, "new GregorianCalendar", true)) return;
     marchByDelta(cal, 24);
     delete cal;
 }
@@ -1525,7 +1553,7 @@ CalendarTest::TestDOW_LOCALandYEAR_WOY()
     UErrorCode status = U_ZERO_ERROR;
     int32_t times = 20;
     Calendar *cal=Calendar::createInstance(Locale::getGermany(), status);
-    if (failure(status, "Calendar::createInstance", TRUE)) return;
+    if (failure(status, "Calendar::createInstance", true)) return;
     SimpleDateFormat *sdf=new SimpleDateFormat(UnicodeString("YYYY'-W'ww-ee"), Locale::getGermany(), status);
     if (U_FAILURE(status)) { dataerrln("Couldn't create SimpleDateFormat - %s", u_errorName(status)); return; }
 
@@ -1816,7 +1844,7 @@ void CalendarTest::TestWOY(void) {
 
     GregorianCalendar cal(status);
     SimpleDateFormat fmt(UnicodeString("EEE MMM dd yyyy', WOY' w"), status);
-    if (failure(status, "Cannot construct calendar/format", TRUE)) return;
+    if (failure(status, "Cannot construct calendar/format", true)) return;
 
     UCalendarDaysOfWeek fdw = (UCalendarDaysOfWeek) 0;
 
@@ -2041,7 +2069,7 @@ void CalendarTest::TestYWOY()
    UErrorCode status = U_ZERO_ERROR;
 
    GregorianCalendar cal(status);
-   if (failure(status, "construct GregorianCalendar", TRUE)) return;
+   if (failure(status, "construct GregorianCalendar", true)) return;
 
    cal.setFirstDayOfWeek(UCAL_SUNDAY);
    cal.setMinimalDaysInFirstWeek(1);
@@ -2099,7 +2127,7 @@ void CalendarTest::TestJD()
   static const int32_t kEpochStartAsJulianDay = 2440588;
   UErrorCode status = U_ZERO_ERROR;
   GregorianCalendar cal(status);
-  if (failure(status, "construct GregorianCalendar", TRUE)) return;
+  if (failure(status, "construct GregorianCalendar", true)) return;
   cal.setTimeZone(*TimeZone::getGMT());
   cal.clear();
   jd = cal.get(UCAL_JULIAN_DAY, status);
@@ -2226,7 +2254,7 @@ void CalendarTest::Test6703()
 
     Locale loc1("en@calendar=fubar");
     cal = Calendar::createInstance(loc1, status);
-    if (failure(status, "Calendar::createInstance", TRUE)) return;
+    if (failure(status, "Calendar::createInstance", true)) return;
     delete cal;
 
     status = U_ZERO_ERROR;
@@ -2257,7 +2285,7 @@ void CalendarTest::Test3785()
 
     UChar upattern[64];
     u_uastrcpy(upattern, "EEE d MMMM y G, HH:mm:ss");
-    udat_applyPattern(df.getAlias(), FALSE, upattern, u_strlen(upattern));
+    udat_applyPattern(df.getAlias(), false, upattern, u_strlen(upattern));
 
     UChar ubuffer[1024];
     UDate ud0 = 1337557623000.0;
@@ -2300,7 +2328,7 @@ void CalendarTest::Test1624() {
 
         for (int32_t month = HebrewCalendar::TISHRI; month <= HebrewCalendar::ELUL; month++) {
             // skip the adar 1 month if year is not a leap year
-            if (HebrewCalendar::isLeapYear(year) == FALSE && month == HebrewCalendar::ADAR_1) {
+            if (HebrewCalendar::isLeapYear(year) == false && month == HebrewCalendar::ADAR_1) {
                 continue;
             }
             int32_t day = 15;
@@ -2309,7 +2337,7 @@ void CalendarTest::Test1624() {
             int32_t monthHC = hc.get(UCAL_MONTH,status);
             int32_t yearHC = hc.get(UCAL_YEAR,status);
 
-            if (failure(status, "HebrewCalendar.get()", TRUE)) continue;
+            if (failure(status, "HebrewCalendar.get()", true)) continue;
 
             if (dayHC != day) {
                 errln(" ==> day %d incorrect, should be: %d\n",dayHC,day);
@@ -2390,8 +2418,8 @@ void CalendarTest::TestISO8601() {
             errln("Error: Failed to create a calendar for locale: %s", TEST_LOCALES[i]);
             continue;
         }
-        if (uprv_strcmp(cal->getType(), "gregorian") != 0) {
-            errln("Error: Gregorian calendar is not used for locale: %s", TEST_LOCALES[i]);
+        if (uprv_strcmp(cal->getType(), "iso8601") != 0) {
+            errln("Error: iso8601 calendar is not used for locale: %s", TEST_LOCALES[i]);
             continue;
         }
         for (int j = 0; TEST_DATA[j][0] != 0; j++) {
@@ -2475,8 +2503,8 @@ public:
     CalFields(const Calendar& cal, UErrorCode& status);
     void setTo(Calendar& cal) const;
     char* toString(char* buf, int32_t len) const;
-    UBool operator==(const CalFields& rhs) const;
-    UBool operator!=(const CalFields& rhs) const;
+    bool operator==(const CalFields& rhs) const;
+    bool operator!=(const CalFields& rhs) const;
     UBool isEquivalentTo(const Calendar& cal, UErrorCode& status) const;
 
 private:
@@ -2519,7 +2547,7 @@ CalFields::toString(char* buf, int32_t len) const {
     return buf;
 }
 
-UBool
+bool
 CalFields::operator==(const CalFields& rhs) const {
     return year == rhs.year
         && month == rhs.month
@@ -2530,7 +2558,7 @@ CalFields::operator==(const CalFields& rhs) const {
         && ms == rhs.ms;
 }
 
-UBool
+bool
 CalFields::operator!=(const CalFields& rhs) const {
     return !(*this == rhs);
 }
@@ -2656,20 +2684,20 @@ typedef struct {
 static SkippedWallTimeTestData SKDATA[] =
 {
      // Time zone           Input wall time                 valid?  WALLTIME_LAST in GMT            WALLTIME_FIRST in GMT           WALLTIME_NEXT_VALID in GMT
-    {"America/New_York",    CalFields(2011,3,13,1,59,59),   TRUE,   CalFields(2011,3,13,6,59,59),   CalFields(2011,3,13,6,59,59),   CalFields(2011,3,13,6,59,59)},
-    {"America/New_York",    CalFields(2011,3,13,2,0,0),     FALSE,  CalFields(2011,3,13,7,0,0),     CalFields(2011,3,13,6,0,0),     CalFields(2011,3,13,7,0,0)},
-    {"America/New_York",    CalFields(2011,3,13,2,1,0),     FALSE,  CalFields(2011,3,13,7,1,0),     CalFields(2011,3,13,6,1,0),     CalFields(2011,3,13,7,0,0)},
-    {"America/New_York",    CalFields(2011,3,13,2,30,0),    FALSE,  CalFields(2011,3,13,7,30,0),    CalFields(2011,3,13,6,30,0),    CalFields(2011,3,13,7,0,0)},
-    {"America/New_York",    CalFields(2011,3,13,2,59,59),   FALSE,  CalFields(2011,3,13,7,59,59),   CalFields(2011,3,13,6,59,59),   CalFields(2011,3,13,7,0,0)},
-    {"America/New_York",    CalFields(2011,3,13,3,0,0),     TRUE,   CalFields(2011,3,13,7,0,0),     CalFields(2011,3,13,7,0,0),     CalFields(2011,3,13,7,0,0)},
+    {"America/New_York",    CalFields(2011,3,13,1,59,59),   true,   CalFields(2011,3,13,6,59,59),   CalFields(2011,3,13,6,59,59),   CalFields(2011,3,13,6,59,59)},
+    {"America/New_York",    CalFields(2011,3,13,2,0,0),     false,  CalFields(2011,3,13,7,0,0),     CalFields(2011,3,13,6,0,0),     CalFields(2011,3,13,7,0,0)},
+    {"America/New_York",    CalFields(2011,3,13,2,1,0),     false,  CalFields(2011,3,13,7,1,0),     CalFields(2011,3,13,6,1,0),     CalFields(2011,3,13,7,0,0)},
+    {"America/New_York",    CalFields(2011,3,13,2,30,0),    false,  CalFields(2011,3,13,7,30,0),    CalFields(2011,3,13,6,30,0),    CalFields(2011,3,13,7,0,0)},
+    {"America/New_York",    CalFields(2011,3,13,2,59,59),   false,  CalFields(2011,3,13,7,59,59),   CalFields(2011,3,13,6,59,59),   CalFields(2011,3,13,7,0,0)},
+    {"America/New_York",    CalFields(2011,3,13,3,0,0),     true,   CalFields(2011,3,13,7,0,0),     CalFields(2011,3,13,7,0,0),     CalFields(2011,3,13,7,0,0)},
 
-    {"Pacific/Apia",        CalFields(2011,12,29,23,59,59), TRUE,   CalFields(2011,12,30,9,59,59),  CalFields(2011,12,30,9,59,59),  CalFields(2011,12,30,9,59,59)},
-    {"Pacific/Apia",        CalFields(2011,12,30,0,0,0),    FALSE,  CalFields(2011,12,30,10,0,0),   CalFields(2011,12,29,10,0,0),   CalFields(2011,12,30,10,0,0)},
-    {"Pacific/Apia",        CalFields(2011,12,30,12,0,0),   FALSE,  CalFields(2011,12,30,22,0,0),   CalFields(2011,12,29,22,0,0),   CalFields(2011,12,30,10,0,0)},
-    {"Pacific/Apia",        CalFields(2011,12,30,23,59,59), FALSE,  CalFields(2011,12,31,9,59,59),  CalFields(2011,12,30,9,59,59),  CalFields(2011,12,30,10,0,0)},
-    {"Pacific/Apia",        CalFields(2011,12,31,0,0,0),    TRUE,   CalFields(2011,12,30,10,0,0),   CalFields(2011,12,30,10,0,0),   CalFields(2011,12,30,10,0,0)},
+    {"Pacific/Apia",        CalFields(2011,12,29,23,59,59), true,   CalFields(2011,12,30,9,59,59),  CalFields(2011,12,30,9,59,59),  CalFields(2011,12,30,9,59,59)},
+    {"Pacific/Apia",        CalFields(2011,12,30,0,0,0),    false,  CalFields(2011,12,30,10,0,0),   CalFields(2011,12,29,10,0,0),   CalFields(2011,12,30,10,0,0)},
+    {"Pacific/Apia",        CalFields(2011,12,30,12,0,0),   false,  CalFields(2011,12,30,22,0,0),   CalFields(2011,12,29,22,0,0),   CalFields(2011,12,30,10,0,0)},
+    {"Pacific/Apia",        CalFields(2011,12,30,23,59,59), false,  CalFields(2011,12,31,9,59,59),  CalFields(2011,12,30,9,59,59),  CalFields(2011,12,30,10,0,0)},
+    {"Pacific/Apia",        CalFields(2011,12,31,0,0,0),    true,   CalFields(2011,12,30,10,0,0),   CalFields(2011,12,30,10,0,0),   CalFields(2011,12,30,10,0,0)},
 
-    {NULL,                  CalFields(0,0,0,0,0,0),         TRUE,   CalFields(0,0,0,0,0,0),         CalFields(0,0,0,0,0,0),         CalFields(0,0,0,0,0,0)}
+    {NULL,                  CalFields(0,0,0,0,0,0),         true,   CalFields(0,0,0,0,0,0),         CalFields(0,0,0,0,0,0),         CalFields(0,0,0,0,0,0)}
 };
 
 
@@ -2833,8 +2861,8 @@ void CalendarTest::TestTimeZoneInLocale(void) {
         { "my-u-ca-islamic-umalqura-tz-kzala", "Asia/Almaty",                "islamic-umalqura" },
         { "lo-u-ca-islamic-tbla-tz-bmbda",     "Atlantic/Bermuda",           "islamic-tbla" },
         { "km-u-ca-islamic-civil-tz-aqplm",    "Antarctica/Palmer",          "islamic-civil" },
-        { "kk-u-ca-islamic-rgsa-tz-usanc",     "America/Anchorage",          "islamic" },
-        { "ar-u-ca-iso8601-tz-bjptn",          "Africa/Porto-Novo",          "gregorian" },
+        { "kk-u-ca-islamic-rgsa-tz-usanc",     "America/Anchorage",          "islamic-rgsa" },
+        { "ar-u-ca-iso8601-tz-bjptn",          "Africa/Porto-Novo",          "iso8601" },
         { "he-u-ca-japanese-tz-tzdar",         "Africa/Dar_es_Salaam",       "japanese" },
         { "bs-u-ca-persian-tz-etadd",          "Africa/Addis_Ababa",         "persian" },
         { "it-u-ca-roc-tz-aruaq",              "America/Argentina/San_Juan", "roc" },
@@ -2849,7 +2877,7 @@ void CalendarTest::TestTimeZoneInLocale(void) {
 
         LocalPointer<Calendar> calendar(
                 Calendar::createInstance(locale, status));
-        if (failure(status, "Calendar::createInstance", TRUE)) continue;
+        if (failure(status, "Calendar::createInstance", true)) continue;
 
         assertEquals("TimeZone from Calendar::createInstance",
                      expected, calendar->getTimeZone().getID(actual));
@@ -2859,9 +2887,289 @@ void CalendarTest::TestTimeZoneInLocale(void) {
     }
 }
 
+void CalendarTest::AsssertCalendarFieldValue(
+    Calendar* cal, double time, const char* type,
+    int32_t era, int32_t year, int32_t month, int32_t week_of_year,
+    int32_t week_of_month, int32_t date, int32_t day_of_year, int32_t day_of_week,
+    int32_t day_of_week_in_month, int32_t am_pm, int32_t hour, int32_t hour_of_day,
+    int32_t minute, int32_t second, int32_t millisecond, int32_t zone_offset,
+    int32_t dst_offset, int32_t year_woy, int32_t dow_local, int32_t extended_year,
+    int32_t julian_day, int32_t milliseconds_in_day, int32_t is_leap_month) {
+
+    UErrorCode status = U_ZERO_ERROR;
+    cal->setTime(time, status);
+    assertEquals("getType", type, cal->getType());
+
+    assertEquals("UCAL_ERA", era, cal->get(UCAL_ERA, status));
+    assertEquals("UCAL_YEAR", year, cal->get(UCAL_YEAR, status));
+    assertEquals("UCAL_MONTH", month, cal->get(UCAL_MONTH, status));
+    assertEquals("UCAL_WEEK_OF_YEAR", week_of_year, cal->get(UCAL_WEEK_OF_YEAR, status));
+    assertEquals("UCAL_WEEK_OF_MONTH", week_of_month, cal->get(UCAL_WEEK_OF_MONTH, status));
+    assertEquals("UCAL_DATE", date, cal->get(UCAL_DATE, status));
+    assertEquals("UCAL_DAY_OF_YEAR", day_of_year, cal->get(UCAL_DAY_OF_YEAR, status));
+    assertEquals("UCAL_DAY_OF_WEEK", day_of_week, cal->get(UCAL_DAY_OF_WEEK, status));
+    assertEquals("UCAL_DAY_OF_WEEK_IN_MONTH", day_of_week_in_month, cal->get(UCAL_DAY_OF_WEEK_IN_MONTH, status));
+    assertEquals("UCAL_AM_PM", am_pm, cal->get(UCAL_AM_PM, status));
+    assertEquals("UCAL_HOUR", hour, cal->get(UCAL_HOUR, status));
+    assertEquals("UCAL_HOUR_OF_DAY", hour_of_day, cal->get(UCAL_HOUR_OF_DAY, status));
+    assertEquals("UCAL_MINUTE", minute, cal->get(UCAL_MINUTE, status));
+    assertEquals("UCAL_SECOND", second, cal->get(UCAL_SECOND, status));
+    assertEquals("UCAL_MILLISECOND", millisecond, cal->get(UCAL_MILLISECOND, status));
+    assertEquals("UCAL_ZONE_OFFSET", zone_offset, cal->get(UCAL_ZONE_OFFSET, status));
+    assertEquals("UCAL_DST_OFFSET", dst_offset, cal->get(UCAL_DST_OFFSET, status));
+    assertEquals("UCAL_YEAR_WOY", year_woy, cal->get(UCAL_YEAR_WOY, status));
+    assertEquals("UCAL_DOW_LOCAL", dow_local, cal->get(UCAL_DOW_LOCAL, status));
+    assertEquals("UCAL_EXTENDED_YEAR", extended_year, cal->get(UCAL_EXTENDED_YEAR, status));
+    assertEquals("UCAL_JULIAN_DAY", julian_day, cal->get(UCAL_JULIAN_DAY, status));
+    assertEquals("UCAL_MILLISECONDS_IN_DAY", milliseconds_in_day, cal->get(UCAL_MILLISECONDS_IN_DAY, status));
+    assertEquals("UCAL_IS_LEAP_MONTH", is_leap_month, cal->get(UCAL_IS_LEAP_MONTH, status));
+}
+
+static constexpr double test_time = 1667277891323; // Nov 1, 2022 4:44:51 GMT
+
+void CalendarTest::TestBasicConversionGregorian(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=gregorian"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Gregorian calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "gregorian",
+        1, 2022, 10, 45, 1, 1, 305, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 2022, 3, 2022, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionISO8601(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=iso8601"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get ISO8601 calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "iso8601",
+        1, 2022, 10, 44, 1, 1, 305, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 2022, 2, 2022, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionJapanese(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=japanese"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Japanese calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "japanese",
+        236, 4, 10, 45, 1, 1, 305, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 2022, 3, 2022, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionBuddhist(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=buddhist"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Buddhist calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "buddhist",
+        0, 2565, 10, 45, 1, 1, 305, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 2022, 3, 2022, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionTaiwan(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=roc"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Taiwan calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "roc",
+        1, 111, 10, 45, 1, 1, 305, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 2022, 3, 2022, 2459885, 17091323, 0);
+
+}
+void CalendarTest::TestBasicConversionPersian(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=persian"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Persian calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "persian",
+        0, 1401, 7, 33, 2, 10, 226, 3, 2, 0, 4, 4, 44, 51,
+        323, 0, 0, 1401, 3, 1401, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionIslamic(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=islamic"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Islamic calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "islamic",
+        0, 1444, 3, 15, 2, 7, 96, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 1444, 3, 1444, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionIslamicTBLA(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=islamic-tbla"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get IslamicTBLA calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "islamic-tbla",
+        0, 1444, 3, 15, 2, 7, 96, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 1444, 3, 1444, 2459885, 17091323, 0);
+
+}
+void CalendarTest::TestBasicConversionIslamicCivil(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=islamic-civil"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get IslamicCivil calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "islamic-civil",
+        0, 1444, 3, 15, 2, 6, 95, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 1444, 3, 1444, 2459885, 17091323, 0);
+
+}
+void CalendarTest::TestBasicConversionIslamicRGSA(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=islamic-rgsa"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get IslamicRGSA calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "islamic-rgsa",
+        0, 1444, 3, 15, 2, 7, 96, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 1444, 3, 1444, 2459885, 17091323, 0);
+
+}
+void CalendarTest::TestBasicConversionIslamicUmalqura(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=islamic-umalqura"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get IslamicUmalqura calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "islamic-umalqura",
+        0, 1444, 3, 15, 2, 7, 95, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 1444, 3, 1444, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionHebrew(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=hebrew"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Hebrew calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "hebrew",
+        0, 5783, 1, 6, 2, 7, 37, 3, 1, 0, 4, 4, 44, 51,
+        323, 0, 0, 5783, 3, 5783, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionChinese(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=chinese"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Chinese calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "chinese",
+        78, 39, 9, 40, 2, 8, 274, 3, 2, 0, 4, 4, 44, 51,
+        323, 0, 0, 4659, 3, 4659, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionDangi(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=dangi"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Dangi calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "dangi",
+        78, 39, 9, 40, 2, 8, 274, 3, 2, 0, 4, 4, 44, 51,
+        323, 0, 0, 4355, 3, 4355, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionIndian(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=indian"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Indian calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "indian",
+        0, 1944, 7, 33, 2, 10, 225, 3, 2, 0, 4, 4, 44, 51,
+        323, 0, 0, 1944, 3, 1944, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionCoptic(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=coptic"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Coptic calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "coptic",
+        1, 1739, 1, 8, 4, 22, 52, 3, 4, 0, 4, 4, 44, 51,
+        323, 0, 0, 1739, 3, 1739, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionEthiopic(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=ethiopic"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get Ethiopic calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "ethiopic",
+        1, 2015, 1, 8, 4, 22, 52, 3, 4, 0, 4, 4, 44, 51,
+        323, 0, 0, 2015, 3, 2015, 2459885, 17091323, 0);
+}
+void CalendarTest::TestBasicConversionEthiopicAmeteAlem(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(icu::Calendar::createInstance(
+        *TimeZone::getGMT(), Locale("en@calendar=ethiopic-amete-alem"), status));
+    if (U_FAILURE(status)) {
+        errln("Fail: Cannot get EthiopicAmeteAlem calendar");
+        return;
+    }
+    AsssertCalendarFieldValue(
+        cal.getAlias(), test_time, "ethiopic-amete-alem",
+        0, 7515, 1, 8, 4, 22, 52, 3, 4, 0, 4, 4, 44, 51,
+        323, 0, 0, 2015, 3, 2015, 2459885, 17091323, 0);
+}
+
+
 void CalendarTest::setAndTestCalendar(Calendar* cal, int32_t initMonth, int32_t initDay, int32_t initYear, UErrorCode& status) {
         cal->clear();
-        cal->setLenient(FALSE);
+        cal->setLenient(false);
         cal->set(initYear, initMonth, initDay);
         int32_t day = cal->get(UCAL_DAY_OF_MONTH, status);
         int32_t month = cal->get(UCAL_MONTH, status);
@@ -3316,7 +3624,7 @@ void CalendarTest::TestIslamicUmAlQura() {
     UErrorCode status = U_ZERO_ERROR;
     Locale umalquraLoc("ar_SA@calendar=islamic-umalqura");
     Locale gregoLoc("ar_SA@calendar=gregorian");
-    TimeZone* tzSA = TimeZone::createTimeZone(UnicodeString(TRUE, zoneSA, -1));
+    TimeZone* tzSA = TimeZone::createTimeZone(UnicodeString(true, zoneSA, -1));
     Calendar* tstCal = Calendar::createInstance(*((const TimeZone *)tzSA), umalquraLoc, status);
     Calendar* gregCal = Calendar::createInstance(*((const TimeZone *)tzSA), gregoLoc, status);
 
@@ -3330,7 +3638,7 @@ void CalendarTest::TestIslamicUmAlQura() {
     //int32_t lastYear = 1480;    // the whole shootin' match
 
     tstCal->clear();
-    tstCal->setLenient(FALSE);
+    tstCal->setLenient(false);
 
     int32_t day=0, month=0, year=0, initDay = 27, initMonth = IslamicCalendar::RAJAB, initYear = 1434;
 
@@ -3351,7 +3659,7 @@ void CalendarTest::TestIslamicUmAlQura() {
         month = tstCal->get(UCAL_MONTH,status);
         year = tstCal->get(UCAL_YEAR,status);
         TEST_CHECK_STATUS;
-        tstCal->roll(UCAL_DAY_OF_MONTH, (UBool)TRUE, status);
+        tstCal->roll(UCAL_DAY_OF_MONTH, (UBool)true, status);
         TEST_CHECK_STATUS;
     }
 
@@ -3459,11 +3767,11 @@ void CalendarTest::TestIslamicTabularDates() {
 void CalendarTest::TestHebrewMonthValidation() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Calendar>  cal(Calendar::createInstance(Locale::createFromName("he_IL@calendar=hebrew"), status));
-    if (failure(status, "Calendar::createInstance, locale:he_IL@calendar=hebrew", TRUE)) return;
+    if (failure(status, "Calendar::createInstance, locale:he_IL@calendar=hebrew", true)) return;
     Calendar *pCal = cal.getAlias();
 
     UDate d;
-    pCal->setLenient(FALSE);
+    pCal->setLenient(false);
 
     // 5776 is a leap year and has month Adar I
     pCal->set(5776, HebrewCalendar::ADAR_1, 1);

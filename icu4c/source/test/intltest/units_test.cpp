@@ -41,7 +41,7 @@ class UnitsTest : public IntlTest {
   public:
     UnitsTest() {}
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL) override;
 
     void testUnitConstantFreshness();
     void testExtractConvertibility();
@@ -325,6 +325,21 @@ void UnitsTest::testConverter() {
         // Fuel Consumption
         {"cubic-meter-per-meter", "mile-per-gallon", 2.1383143939394E-6, 1.1},
         {"cubic-meter-per-meter", "mile-per-gallon", 2.6134953703704E-6, 0.9},
+        {"liter-per-100-kilometer", "mile-per-gallon", 6.6, 35.6386},
+        {"liter-per-100-kilometer", "mile-per-gallon", 0, uprv_getInfinity()},
+        {"mile-per-gallon", "liter-per-100-kilometer", 0, uprv_getInfinity()},
+        {"mile-per-gallon", "liter-per-100-kilometer", uprv_getInfinity(), 0},
+        // We skip testing -Inf, because the inverse conversion loses the sign:
+        // {"mile-per-gallon", "liter-per-100-kilometer", -uprv_getInfinity(), 0},
+
+        // Test Aliases
+        // Alias is just another name to the same unit. Therefore, converting
+        // between them should be the same.
+        {"foodcalorie", "kilocalorie", 1.0, 1.0},
+        {"dot-per-centimeter", "pixel-per-centimeter", 1.0, 1.0},
+        {"dot-per-inch", "pixel-per-inch", 1.0, 1.0},
+        {"dot", "pixel", 1.0, 1.0},
+
     };
 
     for (const auto &testCase : testCases) {
@@ -339,54 +354,42 @@ void UnitsTest::testConverter() {
             continue;
         }
 
+        double maxDelta = 1e-6 * uprv_fabs(testCase.expectedValue);
+        if (testCase.expectedValue == 0) {
+            maxDelta = 1e-12;
+        }
+        double inverseMaxDelta = 1e-6 * uprv_fabs(testCase.inputValue);
+        if (testCase.inputValue == 0) {
+            inverseMaxDelta = 1e-12;
+        }
+
         ConversionRates conversionRates(status);
         if (status.errIfFailureAndReset("conversionRates(status)")) {
             continue;
         }
+
         UnitsConverter converter(source, target, conversionRates, status);
         if (status.errIfFailureAndReset("UnitsConverter(<%s>, <%s>, ...)", testCase.source,
                                         testCase.target)) {
             continue;
         }
-
-        double maxDelta = 1e-6 * uprv_fabs(testCase.expectedValue);
-        if (testCase.expectedValue == 0) {
-            maxDelta = 1e-12;
-        }
         assertEqualsNear(UnicodeString("testConverter: ") + testCase.source + " to " + testCase.target,
                          testCase.expectedValue, converter.convert(testCase.inputValue), maxDelta);
-
-        maxDelta = 1e-6 * uprv_fabs(testCase.inputValue);
-        if (testCase.inputValue == 0) {
-            maxDelta = 1e-12;
-        }
         assertEqualsNear(
             UnicodeString("testConverter inverse: ") + testCase.target + " back to " + testCase.source,
-            testCase.inputValue, converter.convertInverse(testCase.expectedValue), maxDelta);
+            testCase.inputValue, converter.convertInverse(testCase.expectedValue), inverseMaxDelta);
 
-
-        // TODO: Test UnitsConverter created using CLDR separately.
         // Test UnitsConverter created by CLDR unit identifiers
         UnitsConverter converter2(testCase.source, testCase.target, status);
         if (status.errIfFailureAndReset("UnitsConverter(<%s>, <%s>, ...)", testCase.source,
                                         testCase.target)) {
             continue;
         }
-
-        maxDelta = 1e-6 * uprv_fabs(testCase.expectedValue);
-        if (testCase.expectedValue == 0) {
-            maxDelta = 1e-12;
-        }
         assertEqualsNear(UnicodeString("testConverter2: ") + testCase.source + " to " + testCase.target,
                          testCase.expectedValue, converter2.convert(testCase.inputValue), maxDelta);
-
-        maxDelta = 1e-6 * uprv_fabs(testCase.inputValue);
-        if (testCase.inputValue == 0) {
-            maxDelta = 1e-12;
-        }
         assertEqualsNear(
             UnicodeString("testConverter2 inverse: ") + testCase.target + " back to " + testCase.source,
-            testCase.inputValue, converter2.convertInverse(testCase.expectedValue), maxDelta);
+            testCase.inputValue, converter2.convertInverse(testCase.expectedValue), inverseMaxDelta);
     }
 }
 
@@ -638,6 +641,16 @@ void UnitsTest::testComplexUnitsConverter() {
           Measure(2.1, MeasureUnit::createMeter(status), status)},
          2,
          0.001},
+
+        // Negative numbers
+        {"Negative number conversion",
+         "yard",
+         "mile-and-yard",
+         -1800,
+         {Measure(-1, MeasureUnit::createMile(status), status),
+          Measure(-40, MeasureUnit::createYard(status), status)},
+         2,
+         1e-10},
     };
     status.assertSuccess();
 
@@ -685,11 +698,7 @@ void UnitsTest::testComplexUnitsConverter() {
         ComplexUnitsConverter converter2( testCase.input, testCase.output, status);
         testATestCase(converter2, "ComplexUnitsConverter #1 " , testCase);
     }
-    
-    
     status.assertSuccess();
-
-    // TODO(icu-units#63): test negative numbers!
 }
 
 void UnitsTest::testComplexUnitsConverterSorting() {
@@ -939,7 +948,11 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
         return;
     }
 
-    UnitsRouter router(inputMeasureUnit, region, usage, status);
+    CharString localeID;
+    localeID.append("und-", status); // append undefined language.
+    localeID.append(region, status);
+    Locale locale(localeID.data());
+    UnitsRouter router(inputMeasureUnit, locale, usage, status);
     if (status.errIfFailureAndReset("UnitsRouter(<%s>, \"%.*s\", \"%.*s\", status)",
                                     inputMeasureUnit.getIdentifier(), region.length(), region.data(),
                                     usage.length(), usage.data())) {
@@ -967,7 +980,7 @@ void unitPreferencesTestDataLineFn(void *context, char *fields[][2], int32_t fie
 
     // Test UnitsRouter created with CLDR units identifiers.
     CharString inputUnitIdentifier(inputUnit, status);
-    UnitsRouter router2(inputUnitIdentifier.data(), region, usage, status);
+    UnitsRouter router2(inputUnitIdentifier.data(), locale, usage, status);
     if (status.errIfFailureAndReset("UnitsRouter2(<%s>, \"%.*s\", \"%.*s\", status)",
                                     inputUnitIdentifier.data(), region.length(), region.data(),
                                     usage.length(), usage.data())) {

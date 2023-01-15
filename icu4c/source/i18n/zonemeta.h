@@ -18,11 +18,11 @@
 
 U_NAMESPACE_BEGIN
 
-typedef struct OlsonToMetaMappingEntry {
+struct OlsonToMetaMappingEntry : public UMemory {
     const UChar *mzid; // const because it's a reference to a resource bundle string.
     UDate from;
     UDate to;
-} OlsonToMetaMappingEntry;
+};
 
 class UVector;
 class TimeZone;
@@ -113,7 +113,7 @@ public:
     static const UChar* U_EXPORT2 getShortID(const UnicodeString& id);
 
 private:
-    ZoneMeta(); // Prevent construction.
+    ZoneMeta() = delete; // Prevent construction.
     static UVector* createMetazoneMappings(const UnicodeString &tzid);
     static UnicodeString& formatCustomID(uint8_t hour, uint8_t min, uint8_t sec, UBool negative, UnicodeString& id);
     static const UChar* getShortIDFromCanonical(const UChar* canonicalID);

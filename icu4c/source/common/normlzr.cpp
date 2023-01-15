@@ -108,7 +108,7 @@ int32_t Normalizer::hashCode() const
     return text->hashCode() + fUMode + fOptions + buffer.hashCode() + bufferPos + currentIndex + nextIndex;
 }
     
-UBool Normalizer::operator==(const Normalizer& that) const
+bool Normalizer::operator==(const Normalizer& that) const
 {
     return
         this==&that ||
@@ -205,7 +205,7 @@ Normalizer::isNormalized(const UnicodeString& source,
             return n2->isNormalized(source, status);
         }
     } else {
-        return FALSE;
+        return false;
     }
 }
 
@@ -483,7 +483,7 @@ Normalizer::nextNormalize() {
     currentIndex=nextIndex;
     text->setIndex(nextIndex);
     if(!text->hasNext()) {
-        return FALSE;
+        return false;
     }
     // Skip at least one character so we make progress.
     UnicodeString segment(text->next32PostInc());
@@ -507,7 +507,7 @@ Normalizer::previousNormalize() {
     nextIndex=currentIndex;
     text->setIndex(currentIndex);
     if(!text->hasPrevious()) {
-        return FALSE;
+        return false;
     }
     UnicodeString segment;
     while(text->hasPrevious()) {

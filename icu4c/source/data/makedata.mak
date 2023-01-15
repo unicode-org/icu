@@ -12,14 +12,14 @@
 
 ##############################################################################
 # Keep the following in sync with the version - see common/unicode/uvernum.h
-U_ICUDATA_NAME=icudt70
+U_ICUDATA_NAME=icudt73
 ##############################################################################
 !IF "$(UWP)" == "UWP"
 # Optionally change the name of the data file for the UWP version.
-U_ICUDATA_NAME=icudt70
+U_ICUDATA_NAME=icudt73
 !ENDIF
 U_ICUDATA_ENDIAN_SUFFIX=l
-UNICODE_VERSION=14.0
+UNICODE_VERSION=15.0
 ICU_LIB_TARGET=$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll
 
 #  ICUMAKE
@@ -74,22 +74,22 @@ COREDATA_TS=$(ICUTMP)\coredata.timestamp
 ARM_CROSSBUILD_TS=
 
 #  ICUCOL
-#       The directory that contains colfiles.mk files along with *.txt collation data files
+#       The directory that contains *.txt collation data files
 #
 ICUCOL=coll
 
 #  ICURBNF
-#       The directory that contains rbnffiles.mk files along with *.txt RBNF data files
+#       The directory that contains *.txt RBNF data files
 #
 ICURBNF=rbnf
 
 #  ICUTRNS
-#       The directory that contains trfiles.mk files along with *.txt transliterator files
+#       The directory that contains *.txt transliterator files
 #
 ICUTRNS=translit
 
 #  ICUBRK
-#       The directory that contains resfiles.mk files along with *.txt break iterator files
+#       The directory that contains *.txt break iterator files
 #
 ICUBRK=brkitr
 
@@ -142,13 +142,20 @@ TESTDATABLD=$(ICUP)\source\test\testdata\out\build
 ICUTOOLS=$(ICUP)\source\tools
 !MESSAGE ICU tools path is $(ICUTOOLS)
 
+NATIVE_ARM=
+!IF "$(PROCESSOR_ARCHITECTURE)" == "ARM64" || "$(PROCESSOR_ARCHITEW6432)" == "ARM64"
+NATIVE_ARM=ARM64
+!ELSE IF "$(PROCESSOR_ARCHITECTURE)" == "ARM" || "$(PROCESSOR_ARCHITEW6432)" == "ARM"
+NATIVE_ARM=ARM
+!ENDIF
+
 #   ARM_CROSS_BUILD
 #       In order to support cross-compiling for ARM/ARM64 using the x64 tools
 #       we need to know if we're building the ARM/ARM64 data DLL, otherwise
 #       the existence of the x64 bits will cause us to think we are already done.
 #    Note: This is only for the "regular" builds, the UWP builds have a separate project file entirely.
 ARM_CROSS_BUILD=
-!IF "$(UWP)" == ""
+!IF "$(UWP)" == "" && "$(NATIVE_ARM)" == ""
 !IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM\Debug"
 ARM_CROSS_BUILD=ARM
 ARM_CROSSBUILD_TS=$(ICUTMP)\$(ARM_CROSS_BUILD).timestamp
@@ -185,6 +192,18 @@ CFGTOOLS=x64\Debug
 !IF "$(CFG)" == "x86\Release" || "$(CFG)" == "x86\Debug"
 PATH = $(ICUP)\bin;$(PATH)
 ICUPBIN=$(ICUP)\bin
+# Use these path whether or not it's UWP build.
+!ELSE IF "$(NATIVE_ARM)" != ""
+!IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM\Debug"
+PATH = $(ICUP)\binARM;$(PATH)
+ICUPBIN=$(ICUP)\binARM
+!ELSE IF "$(CFG)" == "ARM64\Release" || "$(CFG)" == "ARM64\Debug"
+PATH = $(ICUP)\binARM64;$(PATH)
+ICUPBIN=$(ICUP)\binARM64
+!ELSE
+!ERROR Cross-build from ARM to x86 is not supported!
+!ENDIF
+# Build x86_64 or cross-build ARM
 !ELSE
 PATH = $(ICUP)\bin64;$(PATH)
 ICUPBIN=$(ICUP)\bin64

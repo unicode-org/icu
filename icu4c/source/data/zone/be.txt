@@ -1223,6 +1223,9 @@ be{
         "Pacific:Johnston"{
             ec{"Джонстан"}
         }
+        "Pacific:Kanton"{
+            ec{"Кантон"}
+        }
         "Pacific:Kiritimati"{
             ec{"Кірыцімаці"}
         }
@@ -1882,6 +1885,9 @@ be{
             ld{"Екацярынбургскі летні час"}
             lg{"Екацярынбургскі час"}
             ls{"Екацярынбургскі стандартны час"}
+        }
+        "meta:Yukon"{
+            ls{"Час Юкана"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

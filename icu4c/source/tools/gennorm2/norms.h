@@ -27,11 +27,11 @@ U_NAMESPACE_BEGIN
 
 class BuilderReorderingBuffer {
 public:
-    BuilderReorderingBuffer() : fLength(0), fLastStarterIndex(-1), fDidReorder(FALSE) {}
+    BuilderReorderingBuffer() : fLength(0), fLastStarterIndex(-1), fDidReorder(false) {}
     void reset() {
         fLength=0;
         fLastStarterIndex=-1;
-        fDidReorder=FALSE;
+        fDidReorder=false;
     }
     int32_t length() const { return fLength; }
     UBool isEmpty() const { return fLength==0; }
@@ -97,7 +97,7 @@ struct Norm {
      * Set after most processing is done.
      *
      * Corresponds to the rows in the chart on
-     * http://site.icu-project.org/design/normalization/custom
+     * https://icu.unicode.org/design/normalization/custom
      * in numerical (but reverse visual) order.
      *
      * YES_NO means composition quick check=yes, decomposition QC=no -- etc.
@@ -202,7 +202,7 @@ public:
 
 class Decomposer : public Norms::Enumerator {
 public:
-    Decomposer(Norms &n) : Norms::Enumerator(n), didDecompose(FALSE) {}
+    Decomposer(Norms &n) : Norms::Enumerator(n), didDecompose(false) {}
     /** Decomposes each character of the current mapping. Sets didDecompose if any. */
     void rangeHandler(UChar32 start, UChar32 end, Norm &norm) U_OVERRIDE;
     UBool didDecompose;

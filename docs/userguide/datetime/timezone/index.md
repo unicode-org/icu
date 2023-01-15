@@ -246,7 +246,7 @@ sources for general information on building ICU.
 ### Update the time zone data for ICU4J
 
 The [ICU4J Time Zone Update Update
-Utility](http://site.icu-project.org/download/icutzu) automates the process of
+Utility](https://icu.unicode.org/download/icutzu) automates the process of
 updating ICU4J jar files with the latest time zone data. Instructions for use
 are [here](https://htmlpreview.github.io/?https://github.com/unicode-org/icu-data/blob/main/tzdata/tzu/readme.html).
 

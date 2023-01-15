@@ -194,7 +194,7 @@ public class ConformanceTest extends TestFmwk {
             pass = false;
         }
         if(!field[0].equals(field[1]) && Normalizer.isNormalized(field[0], Normalizer.NFC, options)) {
-            errln("Normalizer error: isNormalized(s, Normalizer.NFC) is TRUE");
+            errln("Normalizer error: isNormalized(s, Normalizer.NFC) is true");
             pass = false;
         }
         if(!Normalizer.isNormalized(field[3], Normalizer.NFKC, options)) {
@@ -202,7 +202,7 @@ public class ConformanceTest extends TestFmwk {
             pass = false;
         }
         if(!field[0].equals(field[3]) && Normalizer.isNormalized(field[0], Normalizer.NFKC, options)) {
-            errln("Normalizer error: isNormalized(s, Normalizer.NFKC) is TRUE");
+            errln("Normalizer error: isNormalized(s, Normalizer.NFKC) is true");
             pass = false;
         }
         // test api that takes a char[]

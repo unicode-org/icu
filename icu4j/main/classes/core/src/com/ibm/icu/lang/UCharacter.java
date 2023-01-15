@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.ibm.icu.impl.CaseMapImpl;
+import com.ibm.icu.impl.EmojiProps;
 import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.Trie2;
 import com.ibm.icu.impl.UBiDiProps;
@@ -85,7 +86,7 @@ import com.ibm.icu.util.VersionInfo;
  * <p>
  * Further detail on differences can be determined using the program
  *        <a href=
- * "http://source.icu-project.org/repos/icu/icu4j/trunk/src/com/ibm/icu/dev/test/lang/UCharacterCompare.java">
+ * "https://github.com/unicode-org/icu/blob/main/icu4j/main/tests/core/src/com/ibm/icu/dev/test/lang/UCharacterCompare.java">
  *        com.ibm.icu.dev.test.lang.UCharacterCompare</a>
  * <p>
  * In addition to Java compatibility functions, which calculate derived properties,
@@ -99,9 +100,9 @@ import com.ibm.icu.util.VersionInfo;
  * For more information see
  * <a href="http://www.unicode/org/ucd/">"About the Unicode Character Database"</a>
  * (http://www.unicode.org/ucd/)
- * and the <a href="http://www.icu-project.org/userguide/properties.html">ICU
+ * and the <a href="https://unicode-org.github.io/icu/userguide/strings/properties">ICU
  * User Guide chapter on Properties</a>
- * (http://www.icu-project.org/userguide/properties.html).
+ * (https://unicode-org.github.io/icu/userguide/strings/properties).
  * <p>
  * There are also functions that provide easy migration from C/POSIX functions
  * like isblank(). Their use is generally discouraged because the C/POSIX
@@ -160,6 +161,28 @@ import com.ibm.icu.util.VersionInfo;
 
 public final class UCharacter implements ECharacterCategory, ECharacterDirection
 {
+    /**
+     * Lead surrogate bitmask
+     */
+    private static final int LEAD_SURROGATE_BITMASK = 0xFFFFFC00;
+
+    /**
+     * Trail surrogate bitmask
+     */
+    private static final int TRAIL_SURROGATE_BITMASK = 0xFFFFFC00;
+
+    /**
+     * Lead surrogate bits
+     */
+    private static final int LEAD_SURROGATE_BITS = 0xD800;
+
+    /**
+     * Trail surrogate bits
+     */
+    private static final int TRAIL_SURROGATE_BITS = 0xDC00;
+
+    private static final int U16_SURROGATE_OFFSET = ((0xd800 << 10) + 0xdc00 - 0x10000);
+
     // public inner classes ----------------------------------------------
 
     /**
@@ -1269,6 +1292,23 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 70 */
         public static final int ZNAMENNY_MUSICAL_NOTATION_ID = 320; /*[1CF00]*/
 
+        // New blocks in Unicode 15.0
+
+        /** @stable ICU 72 */
+        public static final int ARABIC_EXTENDED_C_ID = 321; /*[10EC0]*/
+        /** @stable ICU 72 */
+        public static final int CJK_UNIFIED_IDEOGRAPHS_EXTENSION_H_ID = 322; /*[31350]*/
+        /** @stable ICU 72 */
+        public static final int CYRILLIC_EXTENDED_D_ID = 323; /*[1E030]*/
+        /** @stable ICU 72 */
+        public static final int DEVANAGARI_EXTENDED_A_ID = 324; /*[11B00]*/
+        /** @stable ICU 72 */
+        public static final int KAKTOVIK_NUMERALS_ID = 325; /*[1D2C0]*/
+        /** @stable ICU 72 */
+        public static final int KAWI_ID = 326; /*[11F00]*/
+        /** @stable ICU 72 */
+        public static final int NAG_MUNDARI_ID = 327; /*[1E4D0]*/
+
         /**
          * One more than the highest normal UnicodeBlock value.
          * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.BLOCK).
@@ -1276,7 +1316,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
         @Deprecated
-        public static final int COUNT = 321;
+        public static final int COUNT = 328;
 
         // blocks objects ---------------------------------------------------
 
@@ -2682,6 +2722,30 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final UnicodeBlock ZNAMENNY_MUSICAL_NOTATION =
                 new UnicodeBlock("ZNAMENNY_MUSICAL_NOTATION",
                         ZNAMENNY_MUSICAL_NOTATION_ID); /*[1CF00]*/
+
+        // New blocks in Unicode 15.0
+
+        /** @stable ICU 72 */
+        public static final UnicodeBlock ARABIC_EXTENDED_C =
+                new UnicodeBlock("ARABIC_EXTENDED_C", ARABIC_EXTENDED_C_ID); /*[10EC0]*/
+        /** @stable ICU 72 */
+        public static final UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_H =
+                new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_H",
+                        CJK_UNIFIED_IDEOGRAPHS_EXTENSION_H_ID); /*[31350]*/
+        /** @stable ICU 72 */
+        public static final UnicodeBlock CYRILLIC_EXTENDED_D =
+                new UnicodeBlock("CYRILLIC_EXTENDED_D", CYRILLIC_EXTENDED_D_ID); /*[1E030]*/
+        /** @stable ICU 72 */
+        public static final UnicodeBlock DEVANAGARI_EXTENDED_A =
+                new UnicodeBlock("DEVANAGARI_EXTENDED_A", DEVANAGARI_EXTENDED_A_ID); /*[11B00]*/
+        /** @stable ICU 72 */
+        public static final UnicodeBlock KAKTOVIK_NUMERALS =
+                new UnicodeBlock("KAKTOVIK_NUMERALS", KAKTOVIK_NUMERALS_ID); /*[1D2C0]*/
+        /** @stable ICU 72 */
+        public static final UnicodeBlock KAWI = new UnicodeBlock("KAWI", KAWI_ID); /*[11F00]*/
+        /** @stable ICU 72 */
+        public static final UnicodeBlock NAG_MUNDARI =
+                new UnicodeBlock("NAG_MUNDARI", NAG_MUNDARI_ID); /*[1E4D0]*/
 
         /**
          * @stable ICU 2.4
@@ -4598,7 +4662,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Full case mappings are applied by the case mapping functions
      * that take String parameters rather than code points (int).
      * See also the User Guide chapter on C/POSIX migration:
-     * http://www.icu-project.org/userguide/posix.html#case_mappings
+     * https://unicode-org.github.io/icu/userguide/icu/posix#case-mappings
      *
      * @param ch code point whose lowercase equivalent is to be retrieved
      * @return the lowercase equivalent code point
@@ -4647,7 +4711,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Full case mappings are applied by the case mapping functions
      * that take String parameters rather than code points (int).
      * See also the User Guide chapter on C/POSIX migration:
-     * http://www.icu-project.org/userguide/posix.html#case_mappings
+     * https://unicode-org.github.io/icu/userguide/icu/posix#case-mappings
      *
      * @param ch code point  whose title case is to be retrieved
      * @return titlecase code point
@@ -4670,7 +4734,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Full case mappings are applied by the case mapping functions
      * that take String parameters rather than code points (int).
      * See also the User Guide chapter on C/POSIX migration:
-     * http://www.icu-project.org/userguide/posix.html#case_mappings
+     * https://unicode-org.github.io/icu/userguide/icu/posix#case-mappings
      *
      * @param ch code point whose uppercase is to be retrieved
      * @return uppercase code point
@@ -5266,19 +5330,21 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /**
      * {@icu} Returns a code point corresponding to the two surrogate code units.
      *
-     * @param lead the lead char
-     * @param trail the trail char
-     * @return code point if surrogate characters are valid.
+     * @param lead the lead unit
+     *        (In ICU 2.1-69 the type of both parameters was <code>char</code>.)
+     * @param trail the trail unit
+     * @return code point if lead and trail form a valid surrogate pair.
      * @exception IllegalArgumentException thrown when the code units do
-     *            not form a valid code point
-     * @stable ICU 2.1
+     *            not form a valid surrogate pair
+     * @stable ICU 70
+     * @see #toCodePoint(int, int)
      */
-    public static int getCodePoint(char lead, char trail)
+    public static int getCodePoint(int lead, int trail)
     {
-        if (Character.isSurrogatePair(lead, trail)) {
-            return Character.toCodePoint(lead, trail);
+        if (isHighSurrogate(lead) && isLowSurrogate(trail)) {
+            return toCodePoint(lead, trail);
         }
-        throw new IllegalArgumentException("Illegal surrogate characters");
+        throw new IllegalArgumentException("Not a valid surrogate pair");
     }
 
     /**
@@ -5539,7 +5605,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Full case mappings are applied by the case mapping functions
      * that take String parameters rather than code points (int).
      * See also the User Guide chapter on C/POSIX migration:
-     * http://www.icu-project.org/userguide/posix.html#case_mappings
+     * https://unicode-org.github.io/icu/userguide/icu/posix#case-mappings
      *
      * @param ch             the character to be converted
      * @param defaultmapping Indicates whether the default mappings defined in
@@ -5611,7 +5677,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Full case mappings are applied by the case mapping functions
      * that take String parameters rather than code points (int).
      * See also the User Guide chapter on C/POSIX migration:
-     * http://www.icu-project.org/userguide/posix.html#case_mappings
+     * https://unicode-org.github.io/icu/userguide/icu/posix#case-mappings
      *
      * @param ch the character to be converted
      * @param options A bit set for special processing. Currently the recognised options
@@ -5894,6 +5960,43 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static boolean hasBinaryProperty(int ch, int property)
     {
         return UCharacterProperty.INSTANCE.hasBinaryProperty(ch, property);
+    }
+
+    /**
+     * {@icu} Returns true if the property is true for the string.
+     * Same as {@link #hasBinaryProperty(int, int)}
+     * if the string contains exactly one code point.
+     *
+     * <p>Most properties apply only to single code points.
+     * <a href="https://www.unicode.org/reports/tr51/#Emoji_Sets">UTS #51 Unicode Emoji</a>
+     * defines several properties of strings.
+     *
+     * @param s String to test.
+     * @param property UProperty selector constant, identifies which binary property to check.
+     *        Must be BINARY_START&lt;=which&lt;BINARY_LIMIT.
+     * @return true or false according to the binary Unicode property value for the string.
+     *         Also false if <code>property</code> is out of bounds or if the Unicode version
+     *         does not have data for the property at all.
+     *
+     * @see com.ibm.icu.lang.UProperty
+     * @see CharacterProperties#getBinaryPropertySet(int)
+     * @stable ICU 70
+     */
+    public static boolean hasBinaryProperty(CharSequence s, int property) {
+        int length = s.length();
+        if (length == 1) {
+            return hasBinaryProperty(s.charAt(0), property);  // single code point
+        } else if (length == 2) {
+            // first code point
+            int c = Character.codePointAt(s, 0);
+            if (Character.charCount(c) == length) {
+                return hasBinaryProperty(c, property);  // single code point
+            }
+        }
+        // Only call into EmojiProps for a relevant property,
+        // so that we not unnecessarily try to load its data file.
+        return UProperty.BASIC_EMOJI <= property && property <= UProperty.RGI_EMOJI &&
+            EmojiProps.INSTANCE.hasBinaryProperty(s, property);
     }
 
     /**
@@ -6180,37 +6283,43 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * Same as {@link Character#isHighSurrogate}.
+     * Same as {@link Character#isHighSurrogate},
+     * except that the ICU version accepts <code>int</code> for code points.
      *
-     * @param ch the char to check
-     * @return true if ch is a high (lead) surrogate
-     * @stable ICU 3.0
+     * @param codePoint the code point to check
+     *        (In ICU 3.0-69 the type of this parameter was <code>char</code>.)
+     * @return true if codePoint is a high (lead) surrogate
+     * @stable ICU 70
      */
-    public static boolean isHighSurrogate(char ch) {
-        return Character.isHighSurrogate(ch);
+    public static boolean isHighSurrogate(int codePoint) {
+        return (codePoint & LEAD_SURROGATE_BITMASK) == LEAD_SURROGATE_BITS;
     }
 
     /**
-     * Same as {@link Character#isLowSurrogate}.
+     * Same as {@link Character#isLowSurrogate},
+     * except that the ICU version accepts <code>int</code> for code points.
      *
-     * @param ch the char to check
-     * @return true if ch is a low (trail) surrogate
-     * @stable ICU 3.0
+     * @param codePoint the code point to check
+     *        (In ICU 3.0-69 the type of this parameter was <code>char</code>.)
+     * @return true if codePoint is a low (trail) surrogate
+     * @stable ICU 70
      */
-    public static boolean isLowSurrogate(char ch) {
-        return Character.isLowSurrogate(ch);
+    public static boolean isLowSurrogate(int codePoint) {
+        return (codePoint & TRAIL_SURROGATE_BITMASK) == TRAIL_SURROGATE_BITS;
     }
 
     /**
-     * Same as {@link Character#isSurrogatePair}.
+     * Same as {@link Character#isSurrogatePair},
+     * except that the ICU version accepts <code>int</code> for code points.
      *
-     * @param high the high (lead) char
-     * @param low the low (trail) char
+     * @param high the high (lead) unit
+     *        (In ICU 3.0-69 the type of both parameters was <code>char</code>.)
+     * @param low the low (trail) unit
      * @return true if high, low form a surrogate pair
-     * @stable ICU 3.0
+     * @stable ICU 70
      */
-    public static final boolean isSurrogatePair(char high, char low) {
-        return Character.isSurrogatePair(high, low);
+    public static final boolean isSurrogatePair(int high, int low) {
+        return isHighSurrogate(high) && isLowSurrogate(low);
     }
 
     /**
@@ -6227,17 +6336,21 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * Same as {@link Character#toCodePoint}.
+     * Same as {@link Character#toCodePoint},
+     * except that the ICU version accepts <code>int</code> for code points.
      * Returns the code point represented by the two surrogate code units.
      * This does not check the surrogate pair for validity.
      *
      * @param high the high (lead) surrogate
+     *        (In ICU 3.0-69 the type of both parameters was <code>char</code>.)
      * @param low the low (trail) surrogate
      * @return the code point formed by the surrogate pair
-     * @stable ICU 3.0
+     * @stable ICU 70
+     * @see #getCodePoint(int, int)
      */
-    public static final int toCodePoint(char high, char low) {
-        return Character.toCodePoint(high, low);
+    public static final int toCodePoint(int high, int low) {
+        // see ICU4C U16_GET_SUPPLEMENTARY()
+        return (high << 10) + low - U16_SURROGATE_OFFSET;
     }
 
     /**

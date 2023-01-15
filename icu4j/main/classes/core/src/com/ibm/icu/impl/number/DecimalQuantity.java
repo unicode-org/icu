@@ -143,6 +143,11 @@ public interface DecimalQuantity extends PluralRules.IFixedDecimal {
     public void adjustExponent(int delta);
 
     /**
+     * Resets the DecimalQuantity to the value before adjustMagnitude and adjustExponent.
+     */
+    public void resetExponent();
+
+    /**
      * @return Whether the value represented by this {@link DecimalQuantity} is
      * zero, infinity, or NaN.
      */
@@ -224,6 +229,12 @@ public interface DecimalQuantity extends PluralRules.IFixedDecimal {
      * Returns the string in "plain" format (no exponential notation) using ASCII digits.
      */
     public String toPlainString();
+
+    /**
+     * Returns the string using ASCII digits and using exponential notation for non-zero
+     * exponents, following the UTS 35 specification for plural rule samples.
+     */
+    public String toExponentString();
 
     /**
      * Like clone, but without the restrictions of the Cloneable interface clone.

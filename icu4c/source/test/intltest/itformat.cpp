@@ -77,6 +77,7 @@ extern IntlTest *createStringSegmentTest();
 extern IntlTest *createUnitsDataTest();
 extern IntlTest *createUnitsTest();
 extern IntlTest *createUnitsRouterTest();
+extern IntlTest *createDisplayOptionsTest();
 
 
 #define TESTCLASS(id, TestClass)          \
@@ -274,6 +275,15 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
             logln("UnitsRouterTest test---");
             logln((UnicodeString)"");
             LocalPointer<IntlTest> test(createUnitsRouterTest());
+            callTest(*test, par);
+          }
+          break;
+        case 59:
+          name = "DisplayOptionsTest";
+          if (exec) {
+            logln("DisplayOptionsTest test---");
+            logln((UnicodeString)"");
+            LocalPointer<IntlTest> test(createDisplayOptionsTest());
             callTest(*test, par);
           }
           break;

@@ -17,7 +17,7 @@ public:
     LocaleTest();
     virtual ~LocaleTest();
     
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
 
     /**
      * Test methods to set and get data fields
@@ -160,6 +160,7 @@ public:
     void TestNullDereferenceWrite21597();
     void TestLongLocaleSetKeywordAssign();
     void TestLongLocaleSetKeywordMoveAssign();
+    void TestSierraLeoneCurrency21997();
 
 private:
     void _checklocs(const char* label,

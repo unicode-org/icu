@@ -16,7 +16,7 @@ class StaticUnicodeSetsTest : public IntlTest {
     void testSetCoverage();
     void testNonEmpty();
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0) override;
 
   private:
     void assertInSet(const UnicodeString& localeName, const UnicodeString &setName,
@@ -61,7 +61,7 @@ void StaticUnicodeSetsTest::testSetCoverage() {
     UnicodeSet grouping;
     grouping.addAll(decimals);
     grouping.addAll(*get(unisets::OTHER_GROUPING_SEPARATORS));
-    decimals.freeze();
+    grouping.freeze();
 
     const UnicodeSet &plusSign = *get(unisets::PLUS_SIGN);
     const UnicodeSet &minusSign = *get(unisets::MINUS_SIGN);
@@ -79,6 +79,7 @@ void StaticUnicodeSetsTest::testSetCoverage() {
         assertSuccess(UnicodeString("Making DFS for ") + localeName, status);
 
 #define ASSERT_IN_SET(name, foo) assertInSet(localeName, UnicodeString("" #name ""), name, foo)
+
         ASSERT_IN_SET(decimals, dfs.getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol));
         ASSERT_IN_SET(grouping, dfs.getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol));
         ASSERT_IN_SET(plusSign, dfs.getConstSymbol(DecimalFormatSymbols::kPlusSignSymbol));
@@ -96,7 +97,7 @@ void StaticUnicodeSetsTest::testNonEmpty() {
         }
         const UnicodeSet* uset = get(static_cast<unisets::Key>(i));
         // Can fail if no data:
-        assertFalse(UnicodeString("Set should not be empty: ") + i, uset->isEmpty(), FALSE, TRUE);
+        assertFalse(UnicodeString("Set should not be empty: ") + i, uset->isEmpty(), false, true);
     }
 }
 

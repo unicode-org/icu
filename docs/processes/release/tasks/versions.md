@@ -26,7 +26,27 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 For reference, see the section in the User Guide about Version numbers here:
 
-<http://userguide.icu-project.org/design#TOC-Version-Numbers-in-ICU>
+<https://unicode-org.github.io/icu/userguide/icu/design#version-numbers-in-icu>
+
+### ICU Version Number for Front load, RC and GA tasks
+
+The process of releasing a new ICU version (E.G. ICU 70.1) is divided in three phases:
+* Front loading tasks
+* Release Candidate (RC) tasks
+* General Availability (GA) tasks
+
+As of ICU 70, the ICU Version number changes for each of these tasks.
+
+When "front loading" tasks, the version number will consist of a Major number, Minor number, and a Patch number. 
+For example: ICU version 70.0.1
+
+For the RC and GA tasks, the ICU version number will consist of a Major number and a Minor number.
+For example: ICU version 70.1
+
+This means that when updating from the front load tasks to the RC tasks, files such as 
+[icu4c/source/common/unicode/uvernum.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/unicode/uvernum.h)
+need to be correspondingly updated. See below for more files to be updated and steps to be followed.
+
 
 ### ICU Data
 
@@ -53,15 +73,13 @@ Edit icuver.txt directly.
 
 1.  The instructions for updating the version number are in
     [icu4c/source/common/unicode/uvernum.h](https://github.com/unicode-org/icu/blob/main/icu4c/source/common/unicode/uvernum.h).
-2.  [icu4c/source/stubdata/stubdata.vcxproj](https://github.com/unicode-org/icu/blob/main/icu4c/source/stubdata/stubdata.vcxproj)
-    and
-    [icu4c/source/data/makedata.mak](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/makedata.mak)
-    may also need to updated with the correct version for icudt.
-3.  After uvernum.h is updated, the Windows project files should be updated by
-    running the UNIX makefile target '**update-windows-makefiles**' in
-    icu/source.
-    *   You will need to rerun "./configure" first though before you can run the
-        command "make update-windows-makefiles".
+2.  [icu4c/source/data/makedata.mak](https://github.com/unicode-org/icu/blob/main/icu4c/source/data/makedata.mak)
+    also needs to be updated with the correct version for `U_ICUDATA_NAME` (icudt).
+3.  After `uvernum.h` is updated, the file [Build.Windows.IcuVersion.props](https://github.com/unicode-org/icu/blob/main/icu4c/source/allinone/Build.Windows.IcuVersion.props) should be updated.
+    This can be done by hand, or by running the UNIX makefile target '**update-windows-makefiles**'
+    in `icu4c/source`.
+    *   You will need to rerun "`./configure`" first though before you can run the
+        command "`make update-windows-makefiles`".
     *   Note: You can use MSYS+MinGW to run the UNIX makefile on Windows
         platforms as well.
 4.  As well, the ICU4C "configure" script should be updated so that it reflects
@@ -122,7 +140,7 @@ For updating ICU version numbers, follow the steps below.
         54rc. For official releases, use full version numbers using under bar as the
         separator, e.g. "54_1", "54_1_1".
     *   api.doc.version: The version displayed in API reference doc - use full
-        version number such as "60.1" for official releases, "60 Milestone 1" for
+        version number such as "60.1" for official and RC releases, "60 Milestone 1" for
         milestone 1.
     *   maven.pom.ver: The version used in ICU pom.xml files. Use full version
         number such as "60.1" for official releases, "61.1-SNAPSHOT" until 61.1
@@ -164,7 +182,7 @@ For updating ICU version numbers, follow the steps below.
         UNICODE_7_0 = getInstance(7, 0, 0, 0);
     <b>
         ICU_VERSION = getInstance(54, 1, 0, 0);
-        ICU_DATA_VERSION = getInstance(54, 1, 0, 0);</b>
+        ICU_DATA_VERSION = ICU_VERSION;</b>
         UNICODE_VERSION = UNICODE_7_0;
 
         UCOL_RUNTIME_VERSION = getInstance(8);
@@ -286,7 +304,7 @@ file here:
 ## Data File *Format* Versions
 
 Make sure data file **format** versions are updated. See
-<http://userguide.icu-project.org/icudata#TOC-ICU-Data-File-Formats>
+<https://unicode-org.github.io/icu/userguide/icu_data/#icu-data-file-formats>
 
 For Unicode data files, it is also useful to look at recent tools-tree changes:
 [icu/commits/main/tools/unicode](https://github.com/unicode-org/icu/commits/main/tools/unicode)

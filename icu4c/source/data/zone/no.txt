@@ -1024,9 +1024,6 @@ no{
         "Europe:Kaliningrad"{
             ec{"Kaliningrad"}
         }
-        "Europe:Kiev"{
-            ec{"Kiev"}
-        }
         "Europe:Kirov"{
             ec{"Kirov"}
         }
@@ -1222,6 +1219,9 @@ no{
         }
         "Pacific:Johnston"{
             ec{"Johnston"}
+        }
+        "Pacific:Kanton"{
+            ec{"Kantonøya"}
         }
         "Pacific:Kiritimati"{
             ec{"Kiritimati"}
@@ -1970,6 +1970,9 @@ no{
             ld{"sommertid for Jekaterinburg"}
             lg{"tidssone for Jekaterinburg"}
             ls{"normaltid for Jekaterinburg"}
+        }
+        "meta:Yukon"{
+            ls{"tidssone for Yukon"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

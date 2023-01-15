@@ -232,7 +232,7 @@ It has been replaced by the maxVariable option.
 - `[normalization on]`
 
 Turns on or off the UCOL_NORMALIZATION_MODE attribute.
-If set to on, a quick check and neccessary normalization will be performed.
+If set to on, a quick check and necessary normalization will be performed.
 
 #### strength
 - `[strength 1]`
@@ -1005,7 +1005,7 @@ the `--omitCollationRules` option to the relevant `genrb` invocations
 (for ICU 53..63, in icu4c/source/data/Makefile.in)
 or, since ICU 64, with a [data filter config file](../../icu_data/buildtool.md).
 (See for example the relevant
-[ICU integration test instructions](http://site.icu-project.org/processes/release/tasks/integration#TOC-Verify-that-ICU4C-tests-pass-without-collation-rule-strings).)
+[ICU integration test instructions](https://icu.unicode.org/processes/release/tasks/integration#TOC-Verify-that-ICU4C-tests-pass-without-collation-rule-strings).)
 
 If the tailoring rules are needed but the 150kB or so of "UCA rules" are not,
 then the line

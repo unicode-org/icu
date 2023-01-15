@@ -38,7 +38,7 @@ in particular. For further information, see:
 
 3.  [IBM® Globalization](http://www.ibm.com/software/globalization/)
 
-Go to the [online ICU demos](http://demo.icu-project.org/icu-bin/icudemos) to
+Go to the [online ICU demos](https://icu4c-demos.unicode.org/icu-bin/icudemos) to
 see how a Unicode-based server application can handle text in many languages and
 many encodings.
 

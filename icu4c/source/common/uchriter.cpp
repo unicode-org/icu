@@ -66,13 +66,13 @@ UCharCharacterIterator::operator=(const UCharCharacterIterator& that) {
 UCharCharacterIterator::~UCharCharacterIterator() {
 }
 
-UBool
+bool
 UCharCharacterIterator::operator==(const ForwardCharacterIterator& that) const {
     if (this == &that) {
-        return TRUE;
+        return true;
     }
     if (typeid(*this) != typeid(that)) {
-        return FALSE;
+        return false;
     }
 
     UCharCharacterIterator&    realThat = (UCharCharacterIterator&)that;
@@ -171,7 +171,7 @@ UCharCharacterIterator::nextPostInc() {
 
 UBool
 UCharCharacterIterator::hasNext() {
-    return (UBool)(pos < end ? TRUE : FALSE);
+    return (UBool)(pos < end ? true : false);
 }
 
 UChar
@@ -185,7 +185,7 @@ UCharCharacterIterator::previous() {
 
 UBool
 UCharCharacterIterator::hasPrevious() {
-    return (UBool)(pos > begin ? TRUE : FALSE);
+    return (UBool)(pos > begin ? true : false);
 }
 
 UChar32

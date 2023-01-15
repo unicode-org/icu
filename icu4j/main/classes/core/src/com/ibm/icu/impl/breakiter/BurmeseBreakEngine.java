@@ -31,24 +31,16 @@ public class BurmeseBreakEngine extends DictionaryBreakEngine {
     private static final byte BURMESE_MIN_WORD = 2;
 
     private DictionaryMatcher fDictionary;
-    private static UnicodeSet fBurmeseWordSet;
-    private static UnicodeSet fEndWordSet;
-    private static UnicodeSet fBeginWordSet;
-    private static UnicodeSet fMarkSet;
+    private UnicodeSet fEndWordSet;
+    private UnicodeSet fBeginWordSet;
+    private UnicodeSet fMarkSet;
 
-    static {
+    public BurmeseBreakEngine() throws IOException {
         // Initialize UnicodeSets
-        fBurmeseWordSet = new UnicodeSet();
-        fMarkSet = new UnicodeSet();
-        fBeginWordSet = new UnicodeSet();
-
-        fBurmeseWordSet.applyPattern("[[:Mymr:]&[:LineBreak=SA:]]");
-        fBurmeseWordSet.compact();
-
-        fMarkSet.applyPattern("[[:Mymr:]&[:LineBreak=SA:]&[:M:]]");
+        fBeginWordSet = new UnicodeSet(0x1000, 0x102A);      // basic consonants and independent vowels
+        fEndWordSet = new UnicodeSet("[[:Mymr:]&[:LineBreak=SA:]]");
+        fMarkSet = new UnicodeSet("[[:Mymr:]&[:LineBreak=SA:]&[:M:]]");
         fMarkSet.add(0x0020);
-        fEndWordSet = new UnicodeSet(fBurmeseWordSet);
-        fBeginWordSet.add(0x1000, 0x102A);      // basic consonants and independent vowels
 
         // Compact for caching
         fMarkSet.compact();
@@ -56,14 +48,11 @@ public class BurmeseBreakEngine extends DictionaryBreakEngine {
         fBeginWordSet.compact();
 
         // Freeze the static UnicodeSet
-        fBurmeseWordSet.freeze();
         fMarkSet.freeze();
         fEndWordSet.freeze();
         fBeginWordSet.freeze();
-    }
 
-    public BurmeseBreakEngine() throws IOException {
-        setCharacters(fBurmeseWordSet);
+        setCharacters(fEndWordSet);
         // Initialize dictionary
         fDictionary = DictionaryData.loadDictionaryFor("Mymr");
     }
@@ -88,7 +77,7 @@ public class BurmeseBreakEngine extends DictionaryBreakEngine {
 
     @Override
     public int divideUpDictionaryRange(CharacterIterator fIter, int rangeStart, int rangeEnd,
-            DequeI foundBreaks) {
+            DequeI foundBreaks, boolean isPhraseBreaking) {
 
 
         if ((rangeEnd - rangeStart) < BURMESE_MIN_WORD) {

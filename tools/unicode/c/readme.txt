@@ -13,7 +13,7 @@ data files (text, source code and binary) for use in ICU.
 They are used during the Unicode beta period and after a Unicode release.
 
 For a log of actions and changes for recent Unicode version upgrades of ICU, see
-http://bugs.icu-project.org/trac/browser/icu/trunk/source/data/unidata/changes.txt
+https://github.com/unicode-org/icu/blob/main/icu4c/source/data/unidata/changes.txt
 
 Since the Unicode 5.2 upgrade, these tools have been moved out of the ICU source
 tree to here. They have not been fully tested and probably need some more work

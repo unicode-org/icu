@@ -22,8 +22,8 @@
 #include "cmemory.h"
 #include "umutex.h"
 #include <float.h>
-#include "gregoimp.h" // Math
-#include "astro.h" // CalendarAstronomer
+#include "gregoimp.h" // ClockMath
+#include "astro.h" // CalendarCache
 #include "uhash.h"
 #include "ucln_in.h"
 
@@ -140,7 +140,7 @@ U_CDECL_BEGIN
 static UBool calendar_hebrew_cleanup(void) {
     delete gCache;
     gCache = NULL;
-    return TRUE;
+    return true;
 }
 U_CDECL_END
 
@@ -239,7 +239,7 @@ void HebrewCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& 
                   }
                   month -= ELUL+1;
                   ++year;
-                  acrossAdar1 = TRUE;
+                  acrossAdar1 = true;
               }
           } else {
               acrossAdar1 = (month > ADAR_1); // started after ADAR_1?
@@ -253,7 +253,7 @@ void HebrewCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& 
                   }
                   month += ELUL+1;
                   --year;
-                  acrossAdar1 = TRUE;
+                  acrossAdar1 = true;
               }
           }
           set(UCAL_MONTH, month);
@@ -666,17 +666,21 @@ int32_t HebrewCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UB
     return (int) (day + 347997);
 }
 
-UBool
-HebrewCalendar::inDaylightTime(UErrorCode& status) const
+constexpr uint32_t kHebrewRelatedYearDiff = -3760;
+
+int32_t HebrewCalendar::getRelatedYear(UErrorCode &status) const
 {
-    // copied from GregorianCalendar
-    if (U_FAILURE(status) || !getTimeZone().useDaylightTime()) 
-        return FALSE;
+    int32_t year = get(UCAL_EXTENDED_YEAR, status);
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+    return year + kHebrewRelatedYearDiff;
+}
 
-    // Force an update of the state of the Calendar.
-    ((HebrewCalendar*)this)->complete(status); // cast away const
-
-    return (UBool)(U_SUCCESS(status) ? (internalGet(UCAL_DST_OFFSET) != 0) : FALSE);
+void HebrewCalendar::setRelatedYear(int32_t year)
+{
+    // set extended year
+    set(UCAL_EXTENDED_YEAR, year - kHebrewRelatedYearDiff);
 }
 
 /**
@@ -686,11 +690,11 @@ HebrewCalendar::inDaylightTime(UErrorCode& status) const
  */
 static UDate           gSystemDefaultCenturyStart       = DBL_MIN;
 static int32_t         gSystemDefaultCenturyStartYear   = -1;
-static icu::UInitOnce  gSystemDefaultCenturyInit        = U_INITONCE_INITIALIZER;
+static icu::UInitOnce  gSystemDefaultCenturyInit        {};
 
 UBool HebrewCalendar::haveDefaultCentury() const
 {
-    return TRUE;
+    return true;
 }
 
 static void U_CALLCONV initializeSystemDefaultCentury()

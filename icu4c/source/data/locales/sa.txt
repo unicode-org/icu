@@ -59,6 +59,12 @@ sa{
                 "G d MMM y",
                 "G d/M/y",
                 "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimePatterns%atTime{
                 "{1} तेन {0}",
                 "{1} तेन {0}",
                 "{1}, {0}",
@@ -73,6 +79,9 @@ sa{
                 "GyMMMMd",
                 "GyMMMd",
                 "GyMd",
+            }
+            intervalFormats{
+                fallback{"{0}-{1}"}
             }
         }
         gregorian{
@@ -98,6 +107,12 @@ sa{
                 "d MMM y",
                 "d/M/yy",
                 "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimePatterns%atTime{
                 "{1} तदा {0}",
                 "{1} तदा {0}",
                 "{1}, {0}",
@@ -268,7 +283,7 @@ sa{
                     "CE",
                 }
                 abbreviated%variant{
-                    "ईसवी पूर्व",
+                    "इ.स.पू.",
                     "संवत्",
                 }
                 wide{
@@ -515,10 +530,14 @@ sa{
             }
         }
         day-narrow{
-            dn{"दिवा"}
+            dn{"दिनम्"}
+            relative{
+                "-1"{"ह्यः"}
+                "0"{"अद्य"}
+                "1"{"श्वः"}
+            }
         }
         day-short{
-            dn{"अहन्"}
             relative{
                 "-1"{"ह्यः"}
                 "0"{"अद्य"}
@@ -608,8 +627,25 @@ sa{
         }
     }
     measurementSystemNames{
-        UK{"यूके"}
-        US{"यूएस"}
+        UK{"सं.अ."}
+        US{"सं.रा."}
         metric{"छन्दोमान"}
+    }
+    personNames{
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "sa",
+            }
+            surnameFirst{
+                "ko",
+                "si",
+                "ta",
+                "te",
+                "vi",
+                "yue",
+                "zh",
+            }
+        }
     }
 }

@@ -160,6 +160,11 @@ as{
             }
         }
         concentr{
+            item{
+                dnam{"আইটেমসমূহ"}
+                one{"{0} টা আইটেম"}
+                other{"{0} টা আইটেম"}
+            }
             karat{
                 dnam{"কেৰেট"}
                 one{"{0} কেৰেট"}
@@ -337,6 +342,11 @@ as{
                 one{"{0} নেনোছেকেণ্ড"}
                 other{"{0} নেনোছেকেণ্ড"}
             }
+            quarter{
+                dnam{"কোৱাৰ্টাৰ্ছ"}
+                one{"{0} কোৱাৰ্টাৰ"}
+                other{"{0} কোৱাৰ্টাৰ"}
+            }
             second{
                 dnam{"ছেকেণ্ড"}
                 one{"{0} ছেকেণ্ড"}
@@ -426,6 +436,11 @@ as{
             }
         }
         force{
+            kilowatt-hour-per-100-kilometer{
+                dnam{"প্ৰতি 100 কিলোমিটাৰত কিলোৱাট-ঘণ্টা"}
+                one{"প্ৰতি 100 কিলোমিটাৰত {0} কিলোৱাট-ঘণ্টা"}
+                other{"প্ৰতি 100 কিলোমিটাৰত {0} কিলোৱাট-ঘণ্টা"}
+            }
             newton{
                 dnam{"নিউটন"}
                 one{"{0} নিউটন"}
@@ -631,11 +646,6 @@ as{
                 other{"{0} কিলোগ্ৰাম"}
                 per{"{0} প্ৰতি কিলোগ্ৰাম"}
             }
-            metric-ton{
-                dnam{"মেট্রিক টন"}
-                one{"{0} মেট্রিক টন"}
-                other{"{0} মেট্ৰিক টন"}
-            }
             microgram{
                 dnam{"মাইক্ৰোগ্ৰাম"}
                 one{"{0} মাইক্ৰোগ্ৰাম"}
@@ -677,6 +687,11 @@ as{
                 dnam{"টন"}
                 one{"{0} টন"}
                 other{"{0} টন"}
+            }
+            tonne{
+                dnam{"মেট্রিক টন"}
+                one{"{0} মেট্রিক টন"}
+                other{"{0} মেট্ৰিক টন"}
             }
         }
         power{
@@ -804,7 +819,7 @@ as{
                 other{"{0} নিউটন-মিটাৰ"}
             }
             pound-force-foot{
-                dnam{"পাউণ্ড-ফুট"}
+                dnam{"পাউণ্ড-বল-ফুট"}
                 one{"{0} পাউণ্ড-ফুট"}
                 other{"{0} পাউণ্ড-ফুট"}
             }
@@ -1020,10 +1035,20 @@ as{
             per{"{0}/{1}"}
         }
         concentr{
+            item{
+                dnam{"আইটেম"}
+                one{"{0} টা আইটেম"}
+                other{"{0} টা আইটেম"}
+            }
             percent{
                 dnam{"%"}
                 one{"{0}%"}
                 other{"{0}%"}
+            }
+            permillion{
+                dnam{"ppm"}
+                one{"{0}ppm"}
+                other{"{0}ppm"}
             }
         }
         consumption{
@@ -1065,6 +1090,10 @@ as{
                 dnam{"মাহ"}
                 one{"{0} মাহ"}
                 other{"{0} মাহ"}
+            }
+            quarter{
+                one{"{0}q"}
+                other{"{0}q"}
             }
             second{
                 dnam{"ছেকেণ্ড"}
@@ -1266,6 +1295,11 @@ as{
             per{"{0}/{1}"}
         }
         concentr{
+            item{
+                dnam{"আইটেম"}
+                one{"{0} টা আইটেম"}
+                other{"{0} টা আইটেম"}
+            }
             karat{
                 dnam{"কেৰেট"}
                 one{"{0} কেৰেট"}
@@ -1443,6 +1477,12 @@ as{
                 one{"{0} নেঃ ছেঃ"}
                 other{"{0} নেঃ ছেঃ"}
             }
+            quarter{
+                dnam{"কোৱাৰ্টাৰ"}
+                one{"{0} qtr"}
+                other{"{0} qtrs"}
+                per{"{0}/q"}
+            }
             second{
                 dnam{"ছেকেণ্ড"}
                 one{"{0} ছেকেণ্ড"}
@@ -1532,6 +1572,11 @@ as{
             }
         }
         force{
+            kilowatt-hour-per-100-kilometer{
+                dnam{"kWh/100km"}
+                one{"{0} kWh/100km"}
+                other{"{0} kWh/100km"}
+            }
             newton{
                 dnam{"নিউটন"}
                 one{"{0} N"}
@@ -1722,11 +1767,6 @@ as{
                 other{"{0} কিঃ গ্ৰাঃ"}
                 per{"{0}/কিঃ গ্ৰাঃ"}
             }
-            metric-ton{
-                dnam{"ট"}
-                one{"{0} ট"}
-                other{"{0} ট"}
-            }
             microgram{
                 dnam{"মাঃ গ্ৰাঃ"}
                 one{"{0} মাঃ গ্ৰাঃ"}
@@ -1768,6 +1808,11 @@ as{
                 dnam{"টন"}
                 one{"{0} টন"}
                 other{"{0} টন"}
+            }
+            tonne{
+                dnam{"ট"}
+                one{"{0} ট"}
+                other{"{0} ট"}
             }
         }
         power{

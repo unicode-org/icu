@@ -529,7 +529,7 @@ pl{
         }
         LSL{
             "LSL",
-            "loti Lesoto",
+            "loti lesotyjskie",
         }
         LTL{
             "LTL",
@@ -1075,9 +1075,6 @@ pl{
     Currencies%narrow{
         RON{"lej"}
         TWD{"NT$"}
-    }
-    Currencies%variant{
-        GEL{"₾"}
     }
     CurrencyPlurals{
         ADP{
@@ -1667,6 +1664,12 @@ pl{
             many{"dolarów liberyjskich"}
             one{"dolar liberyjski"}
             other{"dolara liberyjskiego"}
+        }
+        LSL{
+            few{"loti lesotyjskie"}
+            many{"loti lesotyjskich"}
+            one{"loti lesotyjskie"}
+            other{"loti lesotyjskiego"}
         }
         LTL{
             few{"lity litewskie"}

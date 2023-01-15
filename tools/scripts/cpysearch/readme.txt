@@ -15,4 +15,4 @@ cpyscan.pl    searches for all files that don't have any copyright
     https://raw.githubusercontent.com/unicode-org/icu/main/.cpyskip.txt
 
 more docs on copyright scan at:
-   http://site.icu-project.org/processes/copyright-scan
+   https://icu.unicode.org/processes/copyright-scan

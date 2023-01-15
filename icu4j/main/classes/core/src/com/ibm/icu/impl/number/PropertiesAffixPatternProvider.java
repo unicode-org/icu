@@ -8,6 +8,7 @@ public class PropertiesAffixPatternProvider implements AffixPatternProvider {
     private final String negPrefix;
     private final String negSuffix;
     private final boolean isCurrencyPattern;
+    private final boolean currencyAsDecimal;
 
     public static AffixPatternProvider forProperties(DecimalFormatProperties properties) {
         if (properties.getCurrencyPluralInfo() == null) {
@@ -84,7 +85,10 @@ public class PropertiesAffixPatternProvider implements AffixPatternProvider {
             AffixUtils.hasCurrencySymbols(ppp) ||
             AffixUtils.hasCurrencySymbols(psp) ||
             AffixUtils.hasCurrencySymbols(npp) ||
-            AffixUtils.hasCurrencySymbols(nsp));
+            AffixUtils.hasCurrencySymbols(nsp) ||
+            properties.getCurrencyAsDecimal());
+
+        currencyAsDecimal = properties.getCurrencyAsDecimal();
     }
 
     @Override
@@ -148,6 +152,11 @@ public class PropertiesAffixPatternProvider implements AffixPatternProvider {
     @Override
     public boolean hasBody() {
         return true;
+    }
+
+    @Override
+    public boolean currencyAsDecimal() {
+        return currencyAsDecimal;
     }
 
     @Override

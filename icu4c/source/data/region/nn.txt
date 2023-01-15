@@ -14,7 +14,6 @@ nn{
         151{"Aust-Europa"}
         AE{"Dei sameinte arabiske emirata"}
         AT{"Austerrike"}
-        BL{"Saint Barthélemy"}
         BY{"Kviterussland"}
         CC{"Kokosøyane"}
         CD{"Kongo-Kinshasa"}
@@ -52,7 +51,11 @@ nn{
         XA{"pseudospråk – aksentar"}
         XB{"pseudospråk – RTL"}
     }
+    Countries%short{
+        UN{"SN"}
+    }
     Countries%variant{
+        CI{"Elfenbeinskysten"}
         FK{"Falklandsøyane (Islas Malvinas)"}
         TL{"Aust-Timor"}
     }

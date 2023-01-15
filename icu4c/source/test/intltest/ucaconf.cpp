@@ -162,7 +162,7 @@ skipLineBecauseOfBug(const UChar *s, int32_t length, uint32_t flags) {
     (void)s;
     (void)length;
     (void)flags;
-    return FALSE;
+    return false;
 }
 
 static UCollationResult
@@ -225,7 +225,7 @@ void UCAConformanceTest::testConformance(const Collator *coll)
         int32_t resLen = withSortKeys ? coll->getSortKey(buffer, buflen, newSk, 1024) : 0;
 
         if(oldSk != NULL) {
-            UBool ok=TRUE;
+            UBool ok=true;
             int32_t skres = withSortKeys ? strcmp((char *)oldSk, (char *)newSk) : 0;
             int32_t cmpres = coll->compare(oldB, oldBlen, buffer, buflen, status);
             int32_t cmpres2 = coll->compare(buffer, buflen, oldB, oldBlen, status);
@@ -234,7 +234,7 @@ void UCAConformanceTest::testConformance(const Collator *coll)
                 errln("Compare result not symmetrical on line %i: "
                       "previous vs. current (%d) / current vs. previous (%d)",
                       line, cmpres, cmpres2);
-                ok = FALSE;
+                ok = false;
             }
 
             // TODO: Compare with normalization turned off if the input passes the FCD test.
@@ -242,7 +242,7 @@ void UCAConformanceTest::testConformance(const Collator *coll)
             if(withSortKeys && cmpres != normalizeResult(skres)) {
                 errln("Difference between coll->compare (%d) and sortkey compare (%d) on line %i",
                       cmpres, skres, line);
-                ok = FALSE;
+                ok = false;
             }
 
             int32_t res = cmpres;
@@ -256,7 +256,7 @@ void UCAConformanceTest::testConformance(const Collator *coll)
             }
             if(res > 0) {
                 errln("Line %i is not greater or equal than previous line", line);
-                ok = FALSE;
+                ok = false;
             }
 
             if(!ok) {

@@ -1217,6 +1217,9 @@ pcm{
         "Pacific:Johnston"{
             ec{"Jọ́nstun"}
         }
+        "Pacific:Kanton"{
+            ec{"Kanton"}
+        }
         "Pacific:Kiritimati"{
             ec{"Kritímáti"}
         }
@@ -1876,6 +1879,9 @@ pcm{
             ld{"Yẹketẹrínbug Họ́t Sízin Taim"}
             lg{"Yẹketẹrínbug Taim"}
             ls{"Yẹketẹrínbug Fíksd Taim"}
+        }
+        "meta:Yukon"{
+            ls{"Yukón Taim"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

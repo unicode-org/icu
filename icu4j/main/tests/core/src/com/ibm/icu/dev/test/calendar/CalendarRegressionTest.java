@@ -1939,11 +1939,11 @@ public class CalendarRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
 
                 DateFormat.getTimeInstance(DateFormat.SHORT, loc),
                 "DateFormat.getTimeInstance(DateFormat.SHORT, loc)",
-                "5:43 PM",
+                "5:43\u202FPM",
 
                 DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.SHORT, loc),
                 "DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.SHORT, loc)",
-                "Thursday, April 5, 2001 at 5:43 PM",
+                "Thursday, April 5, 2001 at 5:43\u202FPM",
 
                 DateFormat.getDateInstance(cal, DateFormat.SHORT, loc),
                 "DateFormat.getDateInstance(cal, DateFormat.SHORT, loc)",
@@ -1951,19 +1951,19 @@ public class CalendarRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
 
                 DateFormat.getTimeInstance(cal, DateFormat.SHORT, loc),
                 "DateFormat.getTimeInstance(cal, DateFormat.SHORT, loc)",
-                "5:43 PM",
+                "5:43\u202FPM",
 
                 DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.SHORT, loc),
                 "DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.SHORT, loc)",
-                "Thursday, April 5, 2001 at 5:43 PM",
+                "Thursday, April 5, 2001 at 5:43\u202FPM",
 
                 cal.getDateTimeFormat(DateFormat.SHORT, DateFormat.FULL, loc),
                 "cal.getDateTimeFormat(DateFormat.SHORT, DateFormat.FULL, loc)",
-                "4/5/01, 5:43:53 PM Pacific Daylight Time",
+                "4/5/01, 5:43:53\u202FPM Pacific Daylight Time",
 
                 cal.getDateTimeFormat(DateFormat.FULL, DateFormat.SHORT, loc),
                 "cal.getDateTimeFormat(DateFormat.FULL, DateFormat.SHORT, loc)",
-                "Thursday, April 5, 2001 at 5:43 PM",
+                "Thursday, April 5, 2001 at 5:43\u202FPM",
             };
             for (int i=0; i<DATA.length; i+=3) {
                 DateFormat df = (DateFormat) DATA[i];
@@ -2619,5 +2619,26 @@ public class CalendarRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
                          TESTS[i][2], cal.getType());
         }
     }
+
+    void VerifyNoAssertWithSetGregorianChange(String timezone) {
+        TimeZone zone = TimeZone.getTimeZone(timezone);
+        GregorianCalendar cal = new GregorianCalendar(zone, Locale.ENGLISH);
+        cal.setTime(new Date());
+        // The beginning of ECMAScript time, namely -(2**53)
+        long startOfTime = -9007199254740992L;
+
+        cal.setGregorianChange(new Date(startOfTime));
+        cal.get(Calendar.ZONE_OFFSET);
+        cal.get(Calendar.DST_OFFSET);
+    }
+
+    @Test
+    public void TestAsiaManilaAfterSetGregorianChange22043() {
+        VerifyNoAssertWithSetGregorianChange("Asia/Manila");
+        for (String id : TimeZone.getAvailableIDs()) {
+            VerifyNoAssertWithSetGregorianChange(id);
+        }
+    }
+
 }
 //eof

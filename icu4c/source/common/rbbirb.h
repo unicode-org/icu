@@ -54,8 +54,8 @@ public:                                       //   of these structs for each ent
     ~RBBISymbolTableEntry();
 
 private:
-    RBBISymbolTableEntry(const RBBISymbolTableEntry &other); // forbid copying of this class
-    RBBISymbolTableEntry &operator=(const RBBISymbolTableEntry &other); // forbid copying of this class
+    RBBISymbolTableEntry(const RBBISymbolTableEntry &other) = delete; // forbid copying of this class
+    RBBISymbolTableEntry &operator=(const RBBISymbolTableEntry &other) = delete; // forbid copying of this class
 };
 
 
@@ -73,10 +73,10 @@ private:
 
 public:
     //  API inherited from class SymbolTable
-    virtual const UnicodeString*  lookup(const UnicodeString& s) const;
-    virtual const UnicodeFunctor* lookupMatcher(UChar32 ch) const;
+    virtual const UnicodeString*  lookup(const UnicodeString& s) const override;
+    virtual const UnicodeFunctor* lookupMatcher(UChar32 ch) const override;
     virtual UnicodeString parseReference(const UnicodeString& text,
-                                         ParsePosition& pos, int32_t limit) const;
+                                         ParsePosition& pos, int32_t limit) const override;
 
     //  Additional Functions
     RBBISymbolTable(RBBIRuleScanner *, const UnicodeString &fRules, UErrorCode &status);
@@ -177,8 +177,8 @@ public:
     RBBIDataHeader                *flattenData();    // Create the flattened (runtime format)
                                                      // data tables..
 private:
-    RBBIRuleBuilder(const RBBIRuleBuilder &other); // forbid copying of this class
-    RBBIRuleBuilder &operator=(const RBBIRuleBuilder &other); // forbid copying of this class
+    RBBIRuleBuilder(const RBBIRuleBuilder &other) = delete; // forbid copying of this class
+    RBBIRuleBuilder &operator=(const RBBIRuleBuilder &other) = delete; // forbid copying of this class
 };
 
 

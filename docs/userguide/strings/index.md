@@ -382,7 +382,7 @@ a new naming scheme.
 
 The documentation of the old macros has been removed. If you need it, see a User
 Guide version from ICU 4.2 or earlier (see the [download
-page](http://site.icu-project.org/download)).
+page](https://icu.unicode.org/download)).
 
 C Unicode String Literals
 
@@ -445,7 +445,7 @@ when it is constructed from a NULL `UChar *` pointer, then the UnicodeString
 object becomes "bogus". This can be tested with the isBogus() function. A
 UnicodeString can be put into the "bogus" state explicitly with the setToBogus()
 function. This is different from an empty string (although a "bogus" string also
-returns TRUE from isEmpty()) and may be used equivalently to NULL in `UChar *` C
+returns true from isEmpty()) and may be used equivalently to NULL in `UChar *` C
 APIs (or null references in Java, or NULL values in SQL). A string remains
 "bogus" until a non-bogus string value is assigned to it. For complete details
 of the behavior of "bogus" strings see the description of the setToBogus()

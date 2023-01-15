@@ -331,6 +331,10 @@ ig{
             "LRD",
             "Ego Dollar obodo Liberia",
         }
+        LSL{
+            "LSL",
+            "Ego loti obodo Lesotho",
+        }
         LYD{
             "LYD",
             "Ego Dinar obodo Libya",
@@ -706,6 +710,9 @@ ig{
         }
         LBP{
             other{"Ego Pound Obodo Lebanon"}
+        }
+        LSL{
+            other{"Ego loti obodo Lesotho"}
         }
         MDL{
             other{"Ego leu mba Moldova"}

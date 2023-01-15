@@ -83,7 +83,7 @@ then
 else
     if grep -q "^ticket:${to}[^0-9]" ${TMPF}.1;
     then
-        echo "r${rev} already references ticket:${to} - exitting." >&2
+        echo "r${rev} already references ticket:${to} - exiting." >&2
         exit 0
     else
         echo "Error: r${rev} doesn't pertain to ticket:${from} - was this already fixed?" >&2

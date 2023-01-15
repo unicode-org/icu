@@ -320,14 +320,14 @@ void
 TimeUnitFormat::setup(UErrorCode& err) {
     initDataMembers(err);
 
-    UVector pluralCounts(0, uhash_compareUnicodeString, 6, err);
+    UVector pluralCounts(nullptr, uhash_compareUnicodeString, 6, err);
     LocalPointer<StringEnumeration> keywords(getPluralRules().getKeywords(err), err);
     if (U_FAILURE(err)) {
         return;
     }
     UnicodeString* pluralCount;
     while ((pluralCount = const_cast<UnicodeString*>(keywords->snext(err))) != NULL) {
-      pluralCounts.addElementX(pluralCount, err);
+      pluralCounts.addElement(pluralCount, err);
     }
     readFromCurrentLocale(UTMUTFMT_FULL_STYLE, gUnitsTag, pluralCounts, err);
     checkConsistency(UTMUTFMT_FULL_STYLE, gUnitsTag, err);
@@ -358,16 +358,16 @@ struct TimeUnitFormatReadSink : public ResourceSink {
     TimeUnitFormatReadSink(TimeUnitFormat *timeUnitFormatObj,
             const UVector &pluralCounts, UTimeUnitFormatStyle style) :
             timeUnitFormatObj(timeUnitFormatObj), pluralCounts(pluralCounts),
-            style(style), beenHere(FALSE){}
+            style(style), beenHere(false){}
 
     virtual ~TimeUnitFormatReadSink();
 
-    virtual void put(const char *key, ResourceValue &value, UBool, UErrorCode &errorCode) {
+    virtual void put(const char *key, ResourceValue &value, UBool, UErrorCode &errorCode) override {
         // Skip all put() calls except the first one -- discard all fallback data.
         if (beenHere) {
             return;
         } else {
-            beenHere = TRUE;
+            beenHere = true;
         }
 
         ResourceTable units = value.getTable(errorCode);
@@ -573,7 +573,7 @@ TimeUnitFormat::searchInLocaleChain(UTimeUnitFormatStyle style, const char* key,
         if (U_SUCCESS(status)) {
             //found
             LocalPointer<MessageFormat> messageFormat(
-                new MessageFormat(UnicodeString(TRUE, pattern, ptLength), getLocale(err), err), err);
+                new MessageFormat(UnicodeString(true, pattern, ptLength), getLocale(err), err), err);
             if (U_FAILURE(err)) {
                 return;
             }
@@ -643,7 +643,7 @@ TimeUnitFormat::searchInLocaleChain(UTimeUnitFormatStyle style, const char* key,
         }
         if (pattern != NULL) {
             messageFormat.adoptInsteadAndCheckErrorCode(
-                     new MessageFormat(UnicodeString(TRUE, pattern, -1), getLocale(err), err), err);
+                     new MessageFormat(UnicodeString(true, pattern, -1), getLocale(err), err), err);
         }
         if (U_FAILURE(err)) {
             return;
@@ -742,7 +742,7 @@ U_CDECL_BEGIN
  *
  * @param val1  one value in comparison
  * @param val2  the other value in comparison
- * @return      TRUE if 2 values are the same, FALSE otherwise
+ * @return      true if 2 values are the same, false otherwise
  */
 static UBool U_CALLCONV tmutfmtHashTableValueComparator(UHashTok val1, UHashTok val2);
 
@@ -761,7 +761,7 @@ TimeUnitFormat::initHash(UErrorCode& status) {
         return NULL;
     }
     Hashtable* hTable;
-    if ( (hTable = new Hashtable(TRUE, status)) == NULL ) {
+    if ( (hTable = new Hashtable(true, status)) == NULL ) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }

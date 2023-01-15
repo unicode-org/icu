@@ -17,7 +17,7 @@
 
 /**
  * \file
- * \brief C-compatible API for localized number range formatting.
+ * \brief C API: Localized number range formatting
  *
  * This is the C-compatible version of the NumberRangeFormatter API. C++ users
  * should include unicode/numberrangeformatter.h and use the proper C++ APIs.
@@ -193,7 +193,7 @@ typedef enum UNumberRangeIdentityResult {
      * @internal
      */
     UNUM_IDENTITY_RESULT_COUNT
-#endif
+#endif  /* U_HIDE_INTERNAL_API */
 
 } UNumberRangeIdentityResult;
 

@@ -82,7 +82,7 @@ int IdnaConfTest::isNewlineMark(){
  *
  */
 UBool IdnaConfTest::ReadOneLine(UnicodeString& buf){
-    if ( !(curOffset < len) ) return FALSE; // stream end
+    if ( !(curOffset < len) ) return false; // stream end
 
     static const UChar BACKSLASH = 0x5c;
     buf.remove();
@@ -102,7 +102,7 @@ UBool IdnaConfTest::ReadOneLine(UnicodeString& buf){
         buf.append(c);
         curOffset++;
     }
-    return TRUE;
+    return true;
 }
 
 //

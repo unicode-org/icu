@@ -22,7 +22,7 @@
 
 /**
  * \file
- * \brief  C++ API:  Regular Expressions
+ * \brief C++ API: Regular Expressions
  *
  * The ICU API for processing regular expressions consists of two classes,
  *  `RegexPattern` and `RegexMatcher`.
@@ -119,7 +119,7 @@ public:
      * @return true if the objects are equivalent.
      * @stable ICU 2.4
      */
-    UBool           operator==(const RegexPattern& that) const;
+    bool            operator==(const RegexPattern& that) const;
 
     /**
      * Comparison operator.  Two RegexPattern objects are considered equal if they
@@ -129,7 +129,7 @@ public:
      * @return true if the objects are different.
      * @stable ICU 2.4
      */
-    inline UBool    operator!=(const RegexPattern& that) const {return ! operator ==(that);}
+    inline bool     operator!=(const RegexPattern& that) const {return ! operator ==(that);}
 
     /**
      * Assignment operator.  After assignment, this RegexPattern will behave identically
@@ -361,7 +361,7 @@ private:
      *
      */
     RegexMatcher *matcher(const char16_t *input,
-        UErrorCode          &status) const;
+        UErrorCode          &status) const = delete;
 public:
 
 
@@ -569,7 +569,7 @@ public:
      *
      * @stable ICU 2.4
      */
-    virtual UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const override;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
@@ -749,7 +749,7 @@ private:
      * `utext_openUChars(UText *ut, const char16_t *text, int64_t textLength, UErrorCode *status);`
      */
     RegexMatcher(const UnicodeString &regexp, const char16_t *input,
-        uint32_t flags, UErrorCode &status);
+        uint32_t flags, UErrorCode &status) = delete;
 public:
 
 
@@ -1157,7 +1157,7 @@ private:
      * `utext_openUChars(UText *ut, const char16_t *text, int64_t textLength, UErrorCode *status);`
      *
      */
-    RegexMatcher &reset(const char16_t *input);
+    RegexMatcher &reset(const char16_t *input) = delete;
 public:
 
    /**
@@ -1746,15 +1746,15 @@ public:
      *
      * @stable ICU 2.2
      */
-    virtual UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const override;
 
 private:
     // Constructors and other object boilerplate are private.
     // Instances of RegexMatcher can not be assigned, copied, cloned, etc.
-    RegexMatcher();                  // default constructor not implemented
+    RegexMatcher() = delete;                  // default constructor not implemented
     RegexMatcher(const RegexPattern *pat);
-    RegexMatcher(const RegexMatcher &other);
-    RegexMatcher &operator =(const RegexMatcher &rhs);
+    RegexMatcher(const RegexMatcher &other) = delete;
+    RegexMatcher &operator =(const RegexMatcher &rhs) = delete;
     void init(UErrorCode &status);                      // Common initialization
     void init2(UText *t, UErrorCode &e);  // Common initialization, part 2.
 

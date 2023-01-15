@@ -1224,6 +1224,9 @@ zh_Hant{
         "Pacific:Johnston"{
             ec{"強斯頓"}
         }
+        "Pacific:Kanton"{
+            ec{"坎頓島"}
+        }
         "Pacific:Kiritimati"{
             ec{"基里地馬地島"}
         }
@@ -1962,6 +1965,9 @@ zh_Hant{
             ld{"葉卡捷琳堡夏令時間"}
             lg{"葉卡捷琳堡時間"}
             ls{"葉卡捷琳堡標準時間"}
+        }
+        "meta:Yukon"{
+            ls{"育空地區時間"}
         }
         fallbackFormat{"{1}（{0}）"}
         gmtFormat{"GMT{0}"}

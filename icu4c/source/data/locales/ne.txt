@@ -2,9 +2,8 @@
 // License & terms of use: http://www.unicode.org/copyright.html
 // Generated using tools/cldr/cldr-to-icu/build-icu-data.xml
 ne{
-    AuxExemplarCharacters{"[\u200C\u200D]"}
+    AuxExemplarCharacters{"[\u200C\u200D \u0944]"}
     Ellipsis{
-        final{"{0}…"}
         initial{"…{0}"}
         medial{"{0}…{1}"}
         word-final{"{0} …"}
@@ -14,7 +13,7 @@ ne{
     ExemplarCharacters{
         "[\u093C \u0901 \u0902 ः ॐ अ आ इ ई उ ऊ ऋ ऌ ऍ ए ऐ ऑ ओ औ क ख ग घ ङ च छ ज झ ञ ट "
         "ठ ड ढ ण त थ द ध न प फ ब भ म य र ल ळ व श ष स ह ऽ ा ि ी \u0941 \u0942 \u0943 "
-        "\u0944 \u0945 \u0947 \u0948 ॉ ो ौ \u094D]"
+        "\u0945 \u0947 \u0948 ॉ ो ौ \u094D]"
     }
     ExemplarCharactersIndex{
         "[अ आ इ ई उ ऊ ऋ ए ऐ ओ औ क ख ग घ ङ च छ ज झ ञ ट ठ ड ढ ण त थ द ध न प फ ब भ म य र"
@@ -28,6 +27,7 @@ ne{
         deva{
             patterns{
                 currencyFormat{"¤ #,##,##0.00"}
+                currencyFormat%noCurrency{"#,##,##0.00"}
                 decimalFormat{"#,##,##0.###"}
                 percentFormat{"#,##,##0%"}
                 scientificFormat{"#E0"}
@@ -55,9 +55,11 @@ ne{
             }
             patterns{
                 accountingFormat{"¤ #,##,##0.00"}
+                accountingFormat%noCurrency{"#,##,##0.00"}
                 currencyFormat{"¤ #,##,##0.00"}
+                currencyPatternAppendISO{"{0} ¤¤"}
                 decimalFormat{"#,##,##0.###"}
-                percentFormat{"#,##,##0%"}
+                percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
             }
             patternsLong{
@@ -236,8 +238,8 @@ ne{
                 other{"{0} औं दायाँ घुम्ति लिनुहोस्"}
             }
             plural{
-                one{"तपाईँसँग {0} निम्तो छ"}
-                other{"तपाईँसँग {0} निम्ता छन््"}
+                one{"तपाईंसँग {0} निम्तो छ"}
+                other{"तपाईंसँग {0} निम्ता छन्"}
             }
         }
         minimumGroupingDigits{"1"}
@@ -255,10 +257,16 @@ ne{
                 "G y MMM d",
                 "GGGGG y-MM-dd",
                 "{1},{0}",
-                "{1}{0}मा",
-                "{1}{0}मा",
+                "{1}, {0}",
+                "{1}, {0}",
                 "{1},{0}",
                 "{1},{0}",
+            }
+            DateTimePatterns%atTime{
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
             }
             DateTimeSkeletons{
                 "HHmmsszzzz",
@@ -286,6 +294,7 @@ ne{
                 GyMMM{"G y MMM"}
                 GyMMMEd{"G y MMM d, E"}
                 GyMMMd{"G y MMM d"}
+                GyMd{"M/d/y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -405,6 +414,12 @@ ne{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            DateTimePatterns%atTime{
+                "{1}: {0}",
+                "{1}: {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
             DateTimeSkeletons{
                 "HHmmsszzzz",
                 "HHmmssz",
@@ -434,6 +449,7 @@ ne{
                 GyMMM{"G y MMM"}
                 GyMMMEd{"G y MMM d, E"}
                 GyMMMd{"G y MMM d"}
+                GyMd{"M/d/y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -635,6 +651,13 @@ ne{
                 }
             }
             intervalFormats{
+                Gy{
+                    G{"y G – y G"}
+                    y{"y – y G"}
+                }
+                GyM{
+                    G{"M/y G – M/y G"}
+                }
                 H{
                     H{"HH–HH"}
                 }
@@ -863,9 +886,43 @@ ne{
             }
         }
         indian{
+            eras{
+                abbreviated{
+                    "साक",
+                }
+            }
             monthNames{
                 format{
+                    abbreviated{
+                        "चै",
+                        "बै",
+                        "जे",
+                        "अ",
+                        "श्रा",
+                        "भा",
+                        "अश्वि",
+                        "का",
+                        "मं",
+                        "पौ",
+                        "मा",
+                        "फा",
+                    }
+                    narrow{
+                        "१",
+                        "२",
+                        "३",
+                        "४",
+                        "५",
+                        "६",
+                        "७",
+                        "८",
+                        "९",
+                        "१०",
+                        "११",
+                        "१२",
+                    }
                     wide{
+                        "चैत",
                         "वैशाख",
                         "जेठ",
                         "असार",
@@ -877,7 +934,50 @@ ne{
                         "पुस",
                         "माघ",
                         "फागुन",
-                        "चैत",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "चै",
+                        "बै",
+                        "जे",
+                        "अ",
+                        "श्रा",
+                        "भा",
+                        "अश्वि",
+                        "का",
+                        "मं",
+                        "पौ",
+                        "मा",
+                        "फा",
+                    }
+                    narrow{
+                        "१",
+                        "२",
+                        "३",
+                        "४",
+                        "५",
+                        "६",
+                        "७",
+                        "८",
+                        "९",
+                        "१०",
+                        "११",
+                        "१२",
+                    }
+                    wide{
+                        "चेत्र",
+                        "वैसाख",
+                        "जेष्ठ",
+                        "आषाढ",
+                        "श्रावन",
+                        "भाद्र",
+                        "आश्विन",
+                        "कार्तिक",
+                        "मंसिर",
+                        "पौष",
+                        "माघ",
+                        "फाल्गुन",
                     }
                 }
             }
@@ -1847,6 +1947,28 @@ ne{
             stricter{
                 "[,٫︐﹐，]",
                 "[.․﹒．｡]",
+            }
+        }
+    }
+    personNames{
+        foreignSpaceReplacement{" "}
+        initialPattern{
+            initial{"{0}."}
+            initialSequence{"{0} {1}"}
+        }
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "ne",
+            }
+            surnameFirst{
+                "ko",
+                "si",
+                "ta",
+                "te",
+                "vi",
+                "yue",
+                "zh",
             }
         }
     }

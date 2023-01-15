@@ -36,13 +36,13 @@
 } UPRV_BLOCK_MACRO_END
 
 #define TEST_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN { \
-    if ((expr)==FALSE) { \
+    if ((expr)==false) { \
         errln("Test Failure at file %s, line %d: \"%s\" is false.", __FILE__, __LINE__, #expr); \
     } \
 } UPRV_BLOCK_MACRO_END
 
 #define TEST_ASSERT_MSG(expr, msg) UPRV_BLOCK_MACRO_BEGIN { \
-    if ((expr)==FALSE) { \
+    if ((expr)==false) { \
         dataerrln("Test Failure at file %s, line %d, %s: \"%s\" is false.", __FILE__, __LINE__, msg, #expr); \
     } \
 } UPRV_BLOCK_MACRO_END
@@ -320,14 +320,14 @@ static UnicodeString parseHex(const UnicodeString &in) {
 // Minimum of 4 digits, no leading zeroes for positions 5 and up.
 //
 static void appendHexUChar(UnicodeString &dest, UChar32 c) {
-    UBool   doZeroes = FALSE;    
+    UBool   doZeroes = false;    
     for (int bitNum=28; bitNum>=0; bitNum-=4) {
         if (bitNum <= 12) {
-            doZeroes = TRUE;
+            doZeroes = true;
         }
         int hexDigit = (c>>bitNum) & 0x0f;
         if (hexDigit != 0 || doZeroes) {
-            doZeroes = TRUE;
+            doZeroes = true;
             dest.append((UChar)(hexDigit<=9? hexDigit + 0x30: hexDigit -10 + 0x41));
         }
     }
@@ -386,7 +386,7 @@ void IntlTestSpoof::testConfData() {
 
         UnicodeString rawExpected = parseHex(parseLine.group(2, status));
         UnicodeString expected;
-        Normalizer::decompose(rawExpected, FALSE /*NFD*/, 0, expected, status);
+        Normalizer::decompose(rawExpected, false /*NFD*/, 0, expected, status);
         TEST_ASSERT_SUCCESS(status);
 
         int32_t skeletonType = 0;
@@ -440,7 +440,7 @@ void IntlTestSpoof::testScriptSet() {
     TEST_ASSERT_SUCCESS(status);
     TEST_ASSERT(!(s1 == s2));
     TEST_ASSERT(s1.test(USCRIPT_ARABIC, status));
-    TEST_ASSERT(s1.test(USCRIPT_GREEK, status) == FALSE);
+    TEST_ASSERT(s1.test(USCRIPT_GREEK, status) == false);
 
     status = U_ZERO_ERROR;
     s1.reset(USCRIPT_ARABIC, status);
@@ -512,7 +512,7 @@ void IntlTestSpoof::testScriptSet() {
           case 1: TEST_ASSERT_EQ(USCRIPT_VAI, n); break;
           case 2: TEST_ASSERT_EQ(USCRIPT_AFAKA, n); break;
           case 3: TEST_ASSERT_EQ(-1, (int32_t)n); break;
-          default: TEST_ASSERT(FALSE);
+          default: TEST_ASSERT(false);
         }
     }
     TEST_ASSERT_SUCCESS(status);

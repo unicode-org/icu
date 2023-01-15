@@ -343,7 +343,7 @@ public class LSTMBreakEngine extends DictionaryBreakEngine {
 
     @Override
     public int divideUpDictionaryRange(CharacterIterator fIter, int rangeStart, int rangeEnd,
-            DequeI foundBreaks) {
+            DequeI foundBreaks, boolean isPhraseBreaking) {
         int beginSize = foundBreaks.size();
 
         if ((rangeEnd - rangeStart) < MIN_WORD_SPAN) {

@@ -129,7 +129,7 @@ int32_t SelectFormat::findSubMessage(const MessagePattern& pattern, int32_t part
     if (U_FAILURE(ec)) {
         return 0;
     }
-    UnicodeString other(FALSE, SELECT_KEYWORD_OTHER, 5);
+    UnicodeString other(false, SELECT_KEYWORD_OTHER, 5);
     int32_t count = pattern.countParts();
     int32_t msgStart=0;
     // Iterate over (ARG_SELECTOR, message) pairs until ARG_LIMIT or end of select-only pattern.
@@ -164,19 +164,19 @@ SelectFormat::operator=(const SelectFormat& other) {
     return *this;
 }
 
-UBool
+bool
 SelectFormat::operator==(const Format& other) const {
     if (this == &other) {
-        return TRUE;
+        return true;
     }
     if (!Format::operator==(other)) {
-        return FALSE;
+        return false;
     }
     const SelectFormat& o = (const SelectFormat&)other;
     return msgPattern == o.msgPattern;
 }
 
-UBool
+bool
 SelectFormat::operator!=(const Format& other) const {
     return  !operator==(other);
 }

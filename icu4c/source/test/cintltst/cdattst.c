@@ -34,6 +34,7 @@
 #include "cmemory.h"
 
 #include <math.h>
+#include <stdbool.h>
 
 static void TestExtremeDates(void);
 static void TestAllLocales(void);
@@ -45,6 +46,7 @@ static void TestFormatForFields(void);
 static void TestForceGannenNumbering(void);
 static void TestMapDateToCalFields(void);
 static void TestNarrowQuarters(void);
+static void TestExtraneousCharacters(void);
 
 void addDateForTest(TestNode** root);
 
@@ -67,6 +69,7 @@ void addDateForTest(TestNode** root)
     TESTCASE(TestForceGannenNumbering);
     TESTCASE(TestMapDateToCalFields);
     TESTCASE(TestNarrowQuarters);
+    TESTCASE(TestExtraneousCharacters);
 }
 /* Testing the DateFormat API */
 static void TestDateFormat()
@@ -79,7 +82,7 @@ static void TestDateFormat()
     const UCalendar *cal;
     const UNumberFormat *numformat1, *numformat2;
     UNumberFormat *adoptNF;
-    UChar temp[50];
+    UChar temp[80];
     int32_t numlocales;
     UDate d1;
     int i;
@@ -165,7 +168,7 @@ static void TestDateFormat()
 
     /*Testing udat_format()*/
     log_verbose("\nTesting the udat_format() function of date format\n");
-    u_uastrcpy(temp, "7/10/96, 4:05 PM");
+    u_strcpy(temp, u"7/10/96, 4:05\u202FPM");
     /*format using def */
     resultlength=0;
     resultlengthneeded=udat_format(def, d, NULL, resultlength, NULL, &status);
@@ -198,7 +201,7 @@ static void TestDateFormat()
     }
     /*format using fr */
 
-    u_unescape("10 juil. 1996, 16:05:28 heure d\\u2019\\u00E9t\\u00E9 du Pacifique", temp, 50);
+    u_unescape("10 juil. 1996, 16:05:28 heure d\\u2019\\u00E9t\\u00E9 du Pacifique nord-am\\u00E9ricain", temp, 80);
     if(result != NULL) {
         free(result);
         result = NULL;
@@ -234,7 +237,7 @@ static void TestDateFormat()
 
     /*Testing parsing using udat_parse()*/
     log_verbose("\nTesting parsing using udat_parse()\n");
-    u_uastrcpy(temp,"2/3/76, 2:50 AM");
+    u_strcpy(temp, u"2/3/76, 2:50\u202FAM");
     parsepos=0;
     status=U_ZERO_ERROR;
 
@@ -282,17 +285,17 @@ static void TestDateFormat()
 
         /*Testing applyPattern and toPattern */
     log_verbose("\nTesting applyPattern and toPattern()\n");
-    udat_applyPattern(def1, FALSE, temp, u_strlen(temp));
+    udat_applyPattern(def1, false, temp, u_strlen(temp));
     log_verbose("Extracting the pattern\n");
 
     resultlength=0;
-    resultlengthneeded=udat_toPattern(def1, FALSE, NULL, resultlength, &status);
+    resultlengthneeded=udat_toPattern(def1, false, NULL, resultlength, &status);
     if(status==U_BUFFER_OVERFLOW_ERROR)
     {
         status=U_ZERO_ERROR;
         resultlength=resultlengthneeded + 1;
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
-        udat_toPattern(def1, FALSE, result, resultlength, &status);
+        udat_toPattern(def1, false, result, resultlength, &status);
     }
     if(U_FAILURE(status))
     {
@@ -495,7 +498,7 @@ static void TestRelativeDateFormat()
         } else if ( u_strstr(strTime, minutesPatn) == NULL || dtpatLen != u_strlen(strTime) ) {
             log_err("udat_toPatternRelativeTime timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) time pattern incorrect\n", *stylePtr );
         }
-        dtpatLen = udat_toPattern(fmtRelDateTime, FALSE, strDateTime, kDateAndTimeOutMax, &status);
+        dtpatLen = udat_toPattern(fmtRelDateTime, false, strDateTime, kDateAndTimeOutMax, &status);
         if ( U_FAILURE(status) ) {
             log_err("udat_toPattern timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
             status = U_ZERO_ERROR;
@@ -507,7 +510,7 @@ static void TestRelativeDateFormat()
             log_err("udat_applyPatternRelative timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
             status = U_ZERO_ERROR;
         } else {
-            udat_toPattern(fmtRelDateTime, FALSE, strDateTime, kDateAndTimeOutMax, &status);
+            udat_toPattern(fmtRelDateTime, false, strDateTime, kDateAndTimeOutMax, &status);
             if ( U_FAILURE(status) ) {
                 log_err("udat_toPattern timeStyle SHORT dateStyle (%d | UDAT_RELATIVE) fails, error %s\n", *stylePtr, myErrorName(status) );
                 status = U_ZERO_ERROR;
@@ -715,13 +718,13 @@ free(pattern);
     log_verbose("\nTesting setSymbols\n");
     /*applying the pattern so that setSymbolss works */
     resultlength=0;
-    resultlengthout=udat_toPattern(fr, FALSE, NULL, resultlength, &status);
+    resultlengthout=udat_toPattern(fr, false, NULL, resultlength, &status);
     if(status==U_BUFFER_OVERFLOW_ERROR)
     {
         status=U_ZERO_ERROR;
         resultlength=resultlengthout + 1;
         pattern=(UChar*)malloc(sizeof(UChar) * resultlength);
-        udat_toPattern(fr, FALSE, pattern, resultlength, &status);
+        udat_toPattern(fr, false, pattern, resultlength, &status);
     }
     if(U_FAILURE(status))
     {
@@ -729,9 +732,9 @@ free(pattern);
             myErrorName(status) );
     }
 
-    udat_applyPattern(def, FALSE, pattern, u_strlen(pattern));
+    udat_applyPattern(def, false, pattern, u_strlen(pattern));
     resultlength=0;
-    resultlengthout=udat_toPattern(def, FALSE, NULL, resultlength,&status);
+    resultlengthout=udat_toPattern(def, false, NULL, resultlength,&status);
     if(status==U_BUFFER_OVERFLOW_ERROR)
     {
         status=U_ZERO_ERROR;
@@ -741,7 +744,7 @@ free(pattern);
             result = NULL;
         }
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
-        udat_toPattern(fr, FALSE,result, resultlength, &status);
+        udat_toPattern(fr, false,result, resultlength, &status);
     }
     if(U_FAILURE(status))
     {
@@ -941,10 +944,10 @@ static void TestDateFormatCalendar() {
                 u_errorName(ec));
         goto FAIL;
     }
-    expected = "5:45 PM";
-    u_uastrcpy(uExpected, expected);
+    u_strcpy(uExpected, u"5:45\u202FPM");
+    u_austrcpy(cbuf, uExpected);
     if (u_strlen(uExpected) != len1 || u_strncmp(uExpected, buf1, len1) != 0) {
-        log_err("FAIL: udat_formatCalendar(17:45), expected: %s", expected);
+        log_err("FAIL: udat_formatCalendar(17:45), expected: %s", cbuf);
     }
 
     /* Check result */
@@ -1248,14 +1251,14 @@ static UBool _aux1ExtremeDates(UDateFormat* fmt, UDate date,
                                UChar* buf, int32_t buflen, char* cbuf,
                                UErrorCode* ec) {
     int32_t len = udat_format(fmt, date, buf, buflen, 0, ec);
-    if (!assertSuccess("udat_format", ec)) return FALSE;
+    if (!assertSuccess("udat_format", ec)) return false;
     u_austrncpy(cbuf, buf, buflen);
     if (len < 4) {
         log_err("FAIL: udat_format(%g) => \"%s\"\n", date, cbuf);
     } else {
         log_verbose("udat_format(%g) => \"%s\"\n", date, cbuf);
     }
-    return TRUE;
+    return true;
 }
 
 /**
@@ -1271,7 +1274,7 @@ static UBool _aux2ExtremeDates(UDateFormat* fmt, UDate small, UDate large,
     /* Logarithmic midpoint; see below */
     UDate mid = (UDate) exp((log(small) + log(large)) / 2);
     if (count == EXTREME_DATES_DEPTH) {
-        return TRUE;
+        return true;
     }
     return
         _aux1ExtremeDates(fmt, mid, buf, buflen, cbuf, ec) &&
@@ -1386,11 +1389,11 @@ static void TestRelativeCrash(void) {
             }
         }
         {
-            /* Now udat_toPattern works for relative date formatters, unless localized is TRUE */
+            /* Now udat_toPattern works for relative date formatters, unless localized is true */
             UErrorCode subStatus = U_ZERO_ERROR;
             what = "udat_toPattern";
             log_verbose("Trying %s on a relative date..\n", what);
-            udat_toPattern(icudf, TRUE,NULL,0, &subStatus);
+            udat_toPattern(icudf, true,NULL,0, &subStatus);
             if(subStatus == expectStatus) {
                 log_verbose("Success: did not crash on %s, but got %s.\n", what, u_errorName(subStatus));
             } else {
@@ -1401,7 +1404,7 @@ static void TestRelativeCrash(void) {
             UErrorCode subStatus = U_ZERO_ERROR;
             what = "udat_applyPattern";
             log_verbose("Trying %s on a relative date..\n", what);
-            udat_applyPattern(icudf, FALSE,tzName,-1);
+            udat_applyPattern(icudf, false,tzName,-1);
             subStatus = U_ILLEGAL_ARGUMENT_ERROR; /* what it should be, if this took an errorcode. */
             if(subStatus == expectStatus) {
                 log_verbose("Success: did not crash on %s, but got %s.\n", what, u_errorName(subStatus));
@@ -1750,7 +1753,7 @@ static void TestParseErrorReturnValue(void) {
     UCalendar* cal;
 
     df = udat_open(UDAT_DEFAULT, UDAT_DEFAULT, NULL, NULL, -1, NULL, -1, &status);
-    if (!assertSuccessCheck("udat_open()", &status, TRUE)) {
+    if (!assertSuccessCheck("udat_open()", &status, true)) {
         return;
     }
 
@@ -1871,7 +1874,7 @@ static void TestFormatForFields(void) {
                 }
             }
 
-            udat_applyPattern(udfmt, FALSE, patNoFields, -1);
+            udat_applyPattern(udfmt, false, patNoFields, -1);
             status = U_ZERO_ERROR;
             ulen = udat_formatForFields(udfmt, date2015Feb25, ubuf, kUBufFieldsLen, fpositer, &status);
             if ( U_FAILURE(status) ) {
@@ -2007,14 +2010,34 @@ static void TestNarrowQuarters(void) {
         
         if (assertSuccess("Parsing date failed", &err)) {
             if (patternIsStandaloneQuarter) {
-                assertIntEquals("Wrong parsing result", expectedStandaloneParsedDate, parsedDate);
+                assertDoubleEquals("Wrong parsing result", expectedStandaloneParsedDate, parsedDate);
             } else {
-                assertIntEquals("Wrong parsing result", expectedFormatParsedDate, parsedDate);
+                assertDoubleEquals("Wrong parsing result", expectedFormatParsedDate, parsedDate);
             }
         }
         
         udat_close(df);
     }
+}
+
+static void TestExtraneousCharacters(void) {
+    // regression test for ICU-21802
+    UErrorCode err = U_ZERO_ERROR;
+    UCalendar* cal = ucal_open(u"UTC", -1, "en_US", UCAL_GREGORIAN, &err);
+    UDateFormat* df = udat_open(UDAT_PATTERN, UDAT_PATTERN, "en_US", u"UTC", -1, u"yyyyMMdd", -1, &err);
+    
+    if (assertSuccess("Failed to create date formatter and calendar", &err)) {
+        udat_setLenient(df, false);
+
+        udat_parseCalendar(df, cal, u"2021", -1, NULL, &err);
+        assertTrue("Success parsing '2021'", err == U_PARSE_ERROR);
+        
+        err = U_ZERO_ERROR;
+        udat_parseCalendar(df, cal, u"2021-", -1, NULL, &err);
+        assertTrue("Success parsing '2021-'", err == U_PARSE_ERROR);
+    }
+    udat_close(df);
+    ucal_close(cal);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

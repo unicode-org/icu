@@ -75,6 +75,7 @@ class LanguageBreakEngine : public UMemory {
                               int32_t startPos,
                               int32_t endPos,
                               UVector32 &foundBreaks,
+                              UBool isPhraseBreaking,
                               UErrorCode &status) const = 0;
 
 };
@@ -176,7 +177,7 @@ class UnhandledEngine : public LanguageBreakEngine {
   * @return true if this engine handles the particular character and break
   * type.
   */
-  virtual UBool handles(UChar32 c) const;
+  virtual UBool handles(UChar32 c) const override;
 
  /**
   * <p>Find any breaks within a run in the supplied text.</p>
@@ -194,7 +195,8 @@ class UnhandledEngine : public LanguageBreakEngine {
                               int32_t startPos,
                               int32_t endPos,
                               UVector32 &foundBreaks,
-                              UErrorCode &status) const;
+                              UBool isPhraseBreaking,
+                              UErrorCode &status) const override;
 
  /**
   * <p>Tell the engine to handle a particular character and break type.</p>
@@ -247,7 +249,7 @@ class ICULanguageBreakFactory : public LanguageBreakFactory {
   * sought.
   * @return A LanguageBreakEngine with the desired characteristics, or 0.
   */
-  virtual const LanguageBreakEngine *getEngineFor(UChar32 c);
+  virtual const LanguageBreakEngine *getEngineFor(UChar32 c) override;
 
 protected:
  /**
@@ -264,7 +266,7 @@ protected:
    * <p>Create a DictionaryMatcher for the specified script and break type.</p>
    * @param script An ISO 15924 script code that identifies the dictionary to be
    * created.
-   * @return A DictionaryMatcher with the desired characteristics, or NULL.
+   * @return A DictionaryMatcher with the desired characteristics, or nullptr.
    */
   virtual DictionaryMatcher *loadDictionaryMatcherFor(UScriptCode script);
 };

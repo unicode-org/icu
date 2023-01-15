@@ -1223,6 +1223,9 @@ am{
         "Pacific:Johnston"{
             ec{"ጆንስተን"}
         }
+        "Pacific:Kanton"{
+            ec{"ካንቶን"}
+        }
         "Pacific:Kiritimati"{
             ec{"ኪሪቲማቲ"}
         }
@@ -1897,6 +1900,9 @@ am{
             ld{"የየካተሪንበርግ የበጋ ሰዓት አቆጣጠር"}
             lg{"የየካተሪንበርግ ሰዓት አቆጣጠር"}
             ls{"የየካተሪንበርግ መደበኛ ሰዓት አቆጣጠር"}
+        }
+        "meta:Yukon"{
+            ls{"የዩኮን ጊዜ"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"ጂ ኤም ቲ{0}"}

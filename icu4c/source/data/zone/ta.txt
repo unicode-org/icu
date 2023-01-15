@@ -1223,6 +1223,9 @@ ta{
         "Pacific:Johnston"{
             ec{"ஜோன்ஸ்டன்"}
         }
+        "Pacific:Kanton"{
+            ec{"கேன்டன்"}
+        }
         "Pacific:Kiritimati"{
             ec{"கிரிடிமாட்டி"}
         }
@@ -1937,6 +1940,9 @@ ta{
             ld{"யேகாடெரின்பர்க் கோடை நேரம்"}
             lg{"யேகாடெரின்பர்க் நேரம்"}
             ls{"யேகாடெரின்பர்க் நிலையான நேரம்"}
+        }
+        "meta:Yukon"{
+            ls{"யூகோன் நேரம்"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

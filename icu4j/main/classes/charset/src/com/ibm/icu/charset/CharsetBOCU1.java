@@ -254,7 +254,7 @@ class CharsetBOCU1 extends CharsetICU {
          * what we need here.
          * This macro adjust the results so that the modulo-value m is always >=0.
          *
-         * For positive n, the if() condition is always FALSE.
+         * For positive n, the if() condition is always false.
          *
          * @param n Number to be split into quotient and rest.
          *          Will be modified to contain the quotient.
@@ -473,7 +473,7 @@ class CharsetBOCU1 extends CharsetICU {
                 if(UTF16.isTrailSurrogate(trail)){
                     source.position(source.position()+1);
                     ++nextSourceIndex;
-                    c=UCharacter.getCodePoint((char)c, trail);
+                    c=UCharacter.getCodePoint(c, trail);
                 }
             } else {
                 /*no more input*/
@@ -518,7 +518,7 @@ class CharsetBOCU1 extends CharsetICU {
                             continue;
                         }
 
-                        if(UTF16.isLeadSurrogate((char)c)){
+                        if(UTF16.isLeadSurrogate(c)){
                             getTrail(source, target, offsets);
                             if(checkNegative){
                                 break;

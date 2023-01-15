@@ -46,6 +46,9 @@ public class MicroProps implements Cloneable, MicroPropsGenerator {
     public boolean useCurrency;
     public String gender;
 
+    // Currency symbol to be used as the decimal separator
+    public String currencyAsDecimal;
+
     // Internal fields:
     private final boolean immutable;
 

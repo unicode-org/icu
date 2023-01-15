@@ -813,9 +813,9 @@ class CharsetSCSU extends CharsetICU{
                             offsets.put(sourceIndex);
                         }
                         --targetCapacity;
-                    } else if(AfterGetTrail || UTF16.isSurrogate((char)c)){
+                    } else if(AfterGetTrail || UTF16.isSurrogate(c)){
                         if(!AfterGetTrail){
-                            if(UTF16.isLeadSurrogate((char)c)){
+                            if(UTF16.isLeadSurrogate(c)){
                                 label = getTrail(source, target, offsets);
                                 if(label==EndLoop){
                                     return label;
@@ -1058,7 +1058,7 @@ class CharsetSCSU extends CharsetICU{
                 if(UTF16.isTrailSurrogate(trail)){
                     source.position(source.position()+1);
                     ++nextSourceIndex;
-                    c = UCharacter.getCodePoint((char)c, trail);
+                    c = UCharacter.getCodePoint(c, trail);
                     label = Loop;
                 } else {
                     /*this is unmatched lead code unit (1st Surrogate)*/
@@ -1078,7 +1078,7 @@ class CharsetSCSU extends CharsetICU{
             int label = EndLoop;
             AfterGetTrailUnicode = true;
             /*c is surrogate*/
-            if(UTF16.isLeadSurrogate((char)c)){
+            if(UTF16.isLeadSurrogate(c)){
       // getTrailUnicode:
                 lead = (char)c;
                 if(source.hasRemaining()){
@@ -1087,7 +1087,7 @@ class CharsetSCSU extends CharsetICU{
                     if(UTF16.isTrailSurrogate(trail)){
                         source.get();
                         ++nextSourceIndex;
-                        c = UCharacter.getCodePoint((char)c, trail);
+                        c = UCharacter.getCodePoint(c, trail);
                         /*convert this surrogate code point*/
                         /*exit this condition tree*/
                     } else {

@@ -25,6 +25,7 @@ void LocaleBuilderTest::runIndexedTest( int32_t index, UBool exec, const char* &
     TESTCASE_AUTO(TestAddUnicodeLocaleAttributeIllFormed);
     TESTCASE_AUTO(TestLocaleBuilder);
     TESTCASE_AUTO(TestLocaleBuilderBasic);
+    TESTCASE_AUTO(TestLocaleBuilderBasicWithExtensionsOnDefaultLocale);
     TESTCASE_AUTO(TestPosixCases);
     TESTCASE_AUTO(TestSetExtensionOthers);
     TESTCASE_AUTO(TestSetExtensionPU);
@@ -61,7 +62,7 @@ void LocaleBuilderTest::Verify(LocaleBuilder& bld, const char* expected, const c
         errln(msg, u_errorName(copyStatus));
     }
     if (!bld.copyErrorTo(errorStatus) || errorStatus != U_ILLEGAL_ARGUMENT_ERROR) {
-        errln("Should always get the previous error and return FALSE");
+        errln("Should always get the previous error and return false");
     }
     Locale loc = bld.build(status);
     if (U_FAILURE(status)) {
@@ -361,6 +362,25 @@ void LocaleBuilderTest::TestLocaleBuilderBasic() {
     bld.setRegion("");
     Verify(bld, "zh",
            "setRegion('') got Error: %s\n");
+}
+
+void LocaleBuilderTest::TestLocaleBuilderBasicWithExtensionsOnDefaultLocale() {
+    // Change the default locale to one with extension tags.
+    UErrorCode status = U_ZERO_ERROR;
+    Locale originalDefault;
+    Locale::setDefault(Locale::createFromName("en-US-u-hc-h12"), status);
+    if (U_FAILURE(status)) {
+        errln("ERROR: Could not change the default locale");
+        return;
+    }
+
+    // Invoke the basic test now that the default locale has been changed.
+    TestLocaleBuilderBasic();
+
+    Locale::setDefault(originalDefault, status);
+    if (U_FAILURE(status)) {
+        errln("ERROR: Could not restore the default locale");
+    }
 }
 
 void LocaleBuilderTest::TestSetLanguageWellFormed() {

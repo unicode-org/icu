@@ -27,7 +27,7 @@ public class MutablePatternModifierTest {
     public void basic() {
         MutablePatternModifier mod = new MutablePatternModifier(false);
         mod.setPatternInfo(PatternStringParser.parseToPatternInfo("a0b"), null);
-        mod.setPatternAttributes(SignDisplay.AUTO, false);
+        mod.setPatternAttributes(SignDisplay.AUTO, false, false);
         mod.setSymbols(DecimalFormatSymbols.getInstance(ULocale.ENGLISH),
                 Currency.getInstance("USD"),
                 UnitWidth.SHORT,
@@ -36,7 +36,7 @@ public class MutablePatternModifierTest {
         mod.setNumberProperties(Signum.POS, null);
         assertEquals("a", getPrefix(mod));
         assertEquals("b", getSuffix(mod));
-        mod.setPatternAttributes(SignDisplay.ALWAYS, false);
+        mod.setPatternAttributes(SignDisplay.ALWAYS, false, false);
         assertEquals("+a", getPrefix(mod));
         assertEquals("b", getSuffix(mod));
         mod.setNumberProperties(Signum.POS_ZERO, null);
@@ -45,22 +45,27 @@ public class MutablePatternModifierTest {
         mod.setNumberProperties(Signum.NEG_ZERO, null);
         assertEquals("-a", getPrefix(mod));
         assertEquals("b", getSuffix(mod));
-        mod.setPatternAttributes(SignDisplay.EXCEPT_ZERO, false);
+        mod.setPatternAttributes(SignDisplay.EXCEPT_ZERO, false, false);
         assertEquals("a", getPrefix(mod));
         assertEquals("b", getSuffix(mod));
         mod.setNumberProperties(Signum.NEG, null);
         assertEquals("-a", getPrefix(mod));
         assertEquals("b", getSuffix(mod));
-        mod.setPatternAttributes(SignDisplay.NEVER, false);
+        mod.setPatternAttributes(SignDisplay.NEVER, false, false);
         assertEquals("a", getPrefix(mod));
         assertEquals("b", getSuffix(mod));
 
+        mod.setPatternAttributes(SignDisplay.AUTO, false, true);
+        mod.setNumberProperties(Signum.POS, null);
+        assertEquals("Pattern a0b", "~a", getPrefix(mod));
+        assertEquals("Pattern a0b", "b", getSuffix(mod));
+
         mod.setPatternInfo(PatternStringParser.parseToPatternInfo("a0b;c-0d"), null);
-        mod.setPatternAttributes(SignDisplay.AUTO, false);
+        mod.setPatternAttributes(SignDisplay.AUTO, false, false);
         mod.setNumberProperties(Signum.POS, null);
         assertEquals("a", getPrefix(mod));
         assertEquals("b", getSuffix(mod));
-        mod.setPatternAttributes(SignDisplay.ALWAYS, false);
+        mod.setPatternAttributes(SignDisplay.ALWAYS, false, false);
         assertEquals("c+", getPrefix(mod));
         assertEquals("d", getSuffix(mod));
         mod.setNumberProperties(Signum.POS_ZERO, null);
@@ -69,13 +74,13 @@ public class MutablePatternModifierTest {
         mod.setNumberProperties(Signum.NEG_ZERO, null);
         assertEquals("c-", getPrefix(mod));
         assertEquals("d", getSuffix(mod));
-        mod.setPatternAttributes(SignDisplay.EXCEPT_ZERO, false);
+        mod.setPatternAttributes(SignDisplay.EXCEPT_ZERO, false, false);
         assertEquals("a", getPrefix(mod));
         assertEquals("b", getSuffix(mod));
         mod.setNumberProperties(Signum.NEG, null);
         assertEquals("c-", getPrefix(mod));
         assertEquals("d", getSuffix(mod));
-        mod.setPatternAttributes(SignDisplay.NEVER, false);
+        mod.setPatternAttributes(SignDisplay.NEVER, false, false);
         assertEquals("a", getPrefix(mod));
         assertEquals("b", getSuffix(mod));
     }
@@ -84,7 +89,7 @@ public class MutablePatternModifierTest {
     public void mutableEqualsImmutable() {
         MutablePatternModifier mod = new MutablePatternModifier(false);
         mod.setPatternInfo(PatternStringParser.parseToPatternInfo("a0b;c-0d"), null);
-        mod.setPatternAttributes(SignDisplay.AUTO, false);
+        mod.setPatternAttributes(SignDisplay.AUTO, false, false);
         mod.setSymbols(DecimalFormatSymbols.getInstance(ULocale.ENGLISH), null, UnitWidth.SHORT, null);
         DecimalQuantity fq = new DecimalQuantity_DualStorageBCD(1);
 
@@ -102,7 +107,7 @@ public class MutablePatternModifierTest {
         FormattedStringBuilder nsb3 = new FormattedStringBuilder();
         MicroProps micros3 = new MicroProps(false);
         mod.addToChain(micros3);
-        mod.setPatternAttributes(SignDisplay.ALWAYS, false);
+        mod.setPatternAttributes(SignDisplay.ALWAYS, false, false);
         mod.processQuantity(fq);
         micros3.modMiddle.apply(nsb3, 0, 0);
 
@@ -114,7 +119,7 @@ public class MutablePatternModifierTest {
     public void patternWithNoPlaceholder() {
         MutablePatternModifier mod = new MutablePatternModifier(false);
         mod.setPatternInfo(PatternStringParser.parseToPatternInfo("abc"), null);
-        mod.setPatternAttributes(SignDisplay.AUTO, false);
+        mod.setPatternAttributes(SignDisplay.AUTO, false, false);
         mod.setSymbols(DecimalFormatSymbols.getInstance(ULocale.ENGLISH),
                 Currency.getInstance("USD"),
                 UnitWidth.SHORT,

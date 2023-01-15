@@ -952,7 +952,17 @@ public class DecimalQuantity_SimpleStorage implements DecimalQuantity {
   }
 
   @Override
+  public void resetExponent() {
+      adjustMagnitude(origPrimaryScale);
+      origPrimaryScale = 0;
+  }
+
+  @Override
   public boolean isHasIntegerValue() {
     return scaleBigDecimal(toBigDecimal()) >= 0;
+  }
+
+  @Override public String toExponentString() {
+    return this.toPlainString();
   }
 }

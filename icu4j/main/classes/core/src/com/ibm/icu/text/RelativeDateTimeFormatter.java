@@ -757,7 +757,7 @@ public final class RelativeDateTimeFormatter {
         // In the meantime do a quick bring-up by calling the old format method. When the
         // new CLDR data is available, update the data storage accordingly, rewrite this
         // to use it directly, and rewrite the old format method to call this new one;
-        // that is covered by http://bugs.icu-project.org/trac/ticket/12171.
+        // that is covered by https://unicode-org.atlassian.net/browse/ICU-12171.
         RelativeUnit relunit = RelativeUnit.SECONDS;
         switch (unit) {
             case YEAR:      relunit = RelativeUnit.YEARS; break;
@@ -911,7 +911,7 @@ public final class RelativeDateTimeFormatter {
         // In the meantime do a quick bring-up by calling the old format method. When the
         // new CLDR data is available, update the data storage accordingly, rewrite this
         // to use it directly, and rewrite the old format method to call this new one;
-        // that is covered by http://bugs.icu-project.org/trac/ticket/12171.
+        // that is covered by https://unicode-org.atlassian.net/browse/ICU-12171.
         boolean useNumeric = true;
         Direction direction = Direction.THIS;
         if (offset > -2.1 && offset < 2.1) {
@@ -1502,28 +1502,9 @@ public final class RelativeDateTimeFormatter {
             this.ulocale = ulocale;
         }
 
-        private String getDateTimePattern(ICUResourceBundle r) {
-            String calType = r.getStringWithFallback("calendar/default");
-            if (calType == null || calType.equals("")) {
-                calType = "gregorian";
-            }
-            String resourcePath = "calendar/" + calType + "/DateTimePatterns";
-            ICUResourceBundle patternsRb = r.findWithFallback(resourcePath);
-            if (patternsRb == null && calType.equals("gregorian")) {
-                // Try with gregorian.
-                patternsRb = r.findWithFallback("calendar/gregorian/DateTimePatterns");
-            }
-            if (patternsRb == null || patternsRb.getSize() < 9) {
-                // Undefined or too few elements.
-                return "{1} {0}";
-            } else {
-                int elementType = patternsRb.get(8).getType();
-                if (elementType == UResourceBundle.ARRAY) {
-                    return patternsRb.get(8).getString(0);
-                } else {
-                    return patternsRb.getString(8);
-                }
-            }
+        private String getDateTimePattern() {
+            Calendar cal = Calendar.getInstance(ulocale);
+            return Calendar.getDateAtTimePattern(cal, ulocale, DateFormat.MEDIUM);
         }
 
         public RelativeDateTimeFormatterData load() {
@@ -1551,7 +1532,7 @@ public final class RelativeDateTimeFormatter {
 
             return new RelativeDateTimeFormatterData(
                     sink.qualitativeUnitMap, sink.styleRelUnitPatterns,
-                    getDateTimePattern(r));
+                    getDateTimePattern());
         }
     }
 

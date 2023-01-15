@@ -186,6 +186,9 @@
     <ClCompile Include="indiancal.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="iso8601cal.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="islamcal.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -609,6 +612,9 @@
     <ClCompile Include="number_currencysymbols.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="number_simple.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="number_skeletons.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -673,6 +679,9 @@
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="units_router.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="displayoptions.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
   </ItemGroup>
@@ -849,6 +858,9 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="indiancal.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="iso8601cal.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="islamcal.h">

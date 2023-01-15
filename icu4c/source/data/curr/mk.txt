@@ -1017,7 +1017,6 @@ mk{
         ZMW{"ZK"}
     }
     Currencies%variant{
-        GEL{"₾"}
         TRY{"TL"}
     }
     CurrencyPlurals{
@@ -1352,6 +1351,10 @@ mk{
         LRD{
             one{"Либериски долар"}
             other{"Либериски долари"}
+        }
+        LSL{
+            one{"Лесотски лоти"}
+            other{"Лесотски лоти"}
         }
         LTL{
             one{"Литваниска лита"}

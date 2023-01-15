@@ -497,7 +497,7 @@ DecimalFormat* DecimalFormat::clone() const {
     return nullptr;
 }
 
-UBool DecimalFormat::operator==(const Format& other) const {
+bool DecimalFormat::operator==(const Format& other) const {
     auto* otherDF = dynamic_cast<const DecimalFormat*>(&other);
     if (otherDF == nullptr) {
         return false;
@@ -1077,7 +1077,7 @@ void DecimalFormat::setFormatWidth(int32_t width) {
 UnicodeString DecimalFormat::getPadCharacterString() const {
     if (fields == nullptr || fields->properties.padString.isBogus()) {
         // Readonly-alias the static string kFallbackPaddingString
-        return {TRUE, kFallbackPaddingString, -1};
+        return {true, kFallbackPaddingString, -1};
     } else {
         return fields->properties.padString;
     }
@@ -1322,6 +1322,7 @@ UnicodeString& DecimalFormat::toPattern(UnicodeString& result) const {
         !tprops.currency.isNull() ||
         !tprops.currencyPluralInfo.fPtr.isNull() ||
         !tprops.currencyUsage.isNull() ||
+        tprops.currencyAsDecimal ||
         AffixUtils::hasCurrencySymbols(tprops.positivePrefixPattern, localStatus) ||
         AffixUtils::hasCurrencySymbols(tprops.positiveSuffixPattern, localStatus) ||
         AffixUtils::hasCurrencySymbols(tprops.negativePrefixPattern, localStatus) ||

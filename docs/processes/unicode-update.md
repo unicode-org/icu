@@ -57,7 +57,7 @@ various Unicode Tools, as noted in the change log.
 
 Note: We have looked at using the [UCD XML](https://www.unicode.org/ucd/#UCDinXML) files,
 but decided against it and instead developed a simpler format for a combined Unicode data file.
-See http://site.icu-project.org/design/props/ppucd#TOC-Why-not-UCD-XML-files-
+See https://icu.unicode.org/design/props/ppucd#TOC-Why-not-UCD-XML-files-
 (There was an outdated, experimental, partial UCD XML parser here:
 <https://github.com/unicode-org/icu-docs/tree/main/design/properties/genudata>)
 

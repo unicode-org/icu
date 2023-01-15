@@ -316,17 +316,29 @@ _getStringOrCopyKey(const char *path, const char *locale,
             /* see comment about closing rb near "return item;" in _res_getTableStringWithFallback() */
         }
     } else {
+        bool isLanguageCode = (uprv_strncmp(tableKey, _kLanguages, 9) == 0);
         /* Language code should not be a number. If it is, set the error code. */
-        if (!uprv_strncmp(tableKey, "Languages", 9) && uprv_strtol(itemKey, NULL, 10)) {
+        if (isLanguageCode && uprv_strtol(itemKey, NULL, 10)) {
             *pErrorCode = U_MISSING_RESOURCE_ERROR;
         } else {
             /* second-level item, use special fallback */
             s=uloc_getTableStringWithFallback(path, locale,
-                                               tableKey, 
+                                               tableKey,
                                                subTableKey,
                                                itemKey,
                                                &length,
                                                pErrorCode);
+            if (U_FAILURE(*pErrorCode) && isLanguageCode && itemKey != nullptr) {
+                // convert itemKey locale code to canonical form and try again, ICU-20870
+                *pErrorCode = U_ZERO_ERROR;
+                Locale canonKey = Locale::createCanonical(itemKey);
+                s=uloc_getTableStringWithFallback(path, locale,
+                                                    tableKey,
+                                                    subTableKey,
+                                                    canonKey.getName(),
+                                                    &length,
+                                                    pErrorCode);
+            }
         }
     }
 
@@ -502,11 +514,11 @@ uloc_getDisplayName(const char *locale,
     UChar formatCloseParen        = 0x0029; // )
     UChar formatReplaceCloseParen = 0x005D; // ]
 
-    UBool haveLang = TRUE; /* assume true, set false if we find we don't have
+    UBool haveLang = true; /* assume true, set false if we find we don't have
                               a lang component in the locale */
-    UBool haveRest = TRUE; /* assume true, set false if we find we don't have
+    UBool haveRest = true; /* assume true, set false if we find we don't have
                               any other component in the locale */
-    UBool retry = FALSE; /* set true if we need to retry, see below */
+    UBool retry = false; /* set true if we need to retry, see below */
 
     int32_t langi = 0; /* index of the language substitution (0 or 1), virtually always 0 */
 
@@ -613,7 +625,7 @@ uloc_getDisplayName(const char *locale,
         }
 
         for(int32_t subi=0,resti=0;subi<2;) { /* iterate through patterns 0 and 1*/
-            UBool subdone = FALSE; /* set true when ready to move to next substitution */
+            UBool subdone = false; /* set true when ready to move to next substitution */
 
             /* prep p and cap for calls to get display components, pin cap to 0 since
                they complain if cap is negative */
@@ -631,10 +643,10 @@ uloc_getDisplayName(const char *locale,
                     length+=langLen;
                     haveLang=langLen>0;
                 }
-                subdone=TRUE;
+                subdone=true;
             } else { /* {1} */
                 if(!haveRest) {
-                    subdone=TRUE;
+                    subdone=true;
                 } else {
                     int32_t len; /* length of component (plus other stuff) we just fetched */
                     switch(resti++) {
@@ -655,7 +667,7 @@ uloc_getDisplayName(const char *locale,
                             const char* kw=uenum_next(kenum.getAlias(), &len, pErrorCode);
                             if (kw == NULL) {
                                 len=0; /* mark that we didn't add a component */
-                                subdone=TRUE;
+                                subdone=true;
                             } else {
                                 /* incorporating this behavior into the loop made it even more complex,
                                    so just special case it here */
@@ -760,7 +772,7 @@ uloc_getDisplayName(const char *locale,
                             /* would have fit, but didn't because of pattern prefix. */
                             sub0Pos=0; /* stops initial padding (and a second retry,
                                           so we won't end up here again) */
-                            retry=TRUE;
+                            retry=true;
                         }
                     }
                 }

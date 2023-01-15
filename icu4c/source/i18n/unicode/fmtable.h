@@ -182,7 +182,7 @@ public:
      * @return        true if other are equal to this, false otherwise.
      * @stable ICU 2.0
      */
-    UBool          operator==(const Formattable &other) const;
+    bool           operator==(const Formattable &other) const;
 
     /**
      * Equality operator.
@@ -190,7 +190,7 @@ public:
      * @return        true if other are unequal to this, false otherwise.
      * @stable ICU 2.0
      */
-    UBool          operator!=(const Formattable& other) const
+    bool           operator!=(const Formattable& other) const
       { return !operator==(other); }
 
     /**
@@ -587,7 +587,7 @@ public:
      *
      * @stable ICU 2.2
      */
-    virtual UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const override;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.

@@ -30,7 +30,7 @@ public:
 
     CollationEnglishTest();
     virtual ~CollationEnglishTest();
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
 
     // performs test with strength PRIMARY
     void TestPrimary(/* char* par */);

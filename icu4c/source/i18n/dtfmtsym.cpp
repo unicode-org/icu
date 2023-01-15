@@ -272,7 +272,7 @@ DateFormatSymbols::DateFormatSymbols(const Locale& locale,
 DateFormatSymbols::DateFormatSymbols(UErrorCode& status)
     : UObject()
 {
-  initializeData(Locale::getDefault(), NULL, status, TRUE);
+  initializeData(Locale::getDefault(), NULL, status, true);
 }
 
 
@@ -287,7 +287,7 @@ DateFormatSymbols::DateFormatSymbols(const Locale& locale,
 DateFormatSymbols::DateFormatSymbols(const char *type, UErrorCode& status)
     : UObject()
 {
-  initializeData(Locale::getDefault(), type, status, TRUE);
+  initializeData(Locale::getDefault(), type, status, true);
 }
 
 DateFormatSymbols::DateFormatSymbols(const DateFormatSymbols& other)
@@ -333,7 +333,7 @@ void
 DateFormatSymbols::createZoneStrings(const UnicodeString *const * otherStrings)
 {
     int32_t row, col;
-    UBool failed = FALSE;
+    UBool failed = false;
 
     fZoneStrings = (UnicodeString **)uprv_malloc(fZoneStringsRowCount * sizeof(UnicodeString *));
     if (fZoneStrings != NULL) {
@@ -341,7 +341,7 @@ DateFormatSymbols::createZoneStrings(const UnicodeString *const * otherStrings)
         {
             fZoneStrings[row] = newUnicodeStringArray(fZoneStringsColCount);
             if (fZoneStrings[row] == NULL) {
-                failed = TRUE;
+                failed = true;
                 break;
             }
             for (col=0; col<fZoneStringsColCount; ++col) {
@@ -530,21 +530,21 @@ DateFormatSymbols::arrayCompare(const UnicodeString* array1,
                                 const UnicodeString* array2,
                                 int32_t count)
 {
-    if (array1 == array2) return TRUE;
+    if (array1 == array2) return true;
     while (count>0)
     {
         --count;
-        if (array1[count] != array2[count]) return FALSE;
+        if (array1[count] != array2[count]) return false;
     }
-    return TRUE;
+    return true;
 }
 
-UBool
+bool
 DateFormatSymbols::operator==(const DateFormatSymbols& other) const
 {
     // First do cheap comparisons
     if (this == &other) {
-        return TRUE;
+        return true;
     }
     if (fErasCount == other.fErasCount &&
         fEraNamesCount == other.fEraNamesCount &&
@@ -625,22 +625,22 @@ DateFormatSymbols::operator==(const DateFormatSymbols& other) const
             // Compare the contents of fZoneStrings
             if (fZoneStrings == NULL && other.fZoneStrings == NULL) {
                 if (fZSFLocale == other.fZSFLocale) {
-                    return TRUE;
+                    return true;
                 }
             } else if (fZoneStrings != NULL && other.fZoneStrings != NULL) {
                 if (fZoneStringsRowCount == other.fZoneStringsRowCount
                     && fZoneStringsColCount == other.fZoneStringsColCount) {
-                    UBool cmpres = TRUE;
+                    bool cmpres = true;
                     for (int32_t i = 0; (i < fZoneStringsRowCount) && cmpres; i++) {
                         cmpres = arrayCompare(fZoneStrings[i], other.fZoneStrings[i], fZoneStringsColCount);
                     }
                     return cmpres;
                 }
             }
-            return FALSE;
+            return false;
         }
     }
-    return FALSE;
+    return false;
 }
 
 //------------------------------------------------------
@@ -1334,7 +1334,7 @@ DateFormatSymbols::initZoneStringsArray(void) {
             i++;
         }
 
-    } while (FALSE);
+    } while (false);
 
     if (U_FAILURE(status)) {
         if (zarray) {
@@ -1422,7 +1422,7 @@ static const uint64_t kNumericFieldsForCount12 =
 UBool U_EXPORT2
 DateFormatSymbols::isNumericField(UDateFormatField f, int32_t count) {
     if (f == UDAT_FIELD_COUNT) {
-        return FALSE;
+        return false;
     }
     uint64_t flag = ((uint64_t)1 << f);
     return ((kNumericFieldsAlways & flag) != 0 || ((kNumericFieldsForCount12 & flag) != 0 && count < 3));
@@ -1524,7 +1524,7 @@ struct CalendarDataSink : public ResourceSink {
 
     // Initializes CalendarDataSink with default values
     CalendarDataSink(UErrorCode& status)
-    :   arrays(FALSE, status), arraySizes(FALSE, status), maps(FALSE, status),
+    :   arrays(false, status), arraySizes(false, status), maps(false, status),
         mapRefs(),
         aliasPathPairs(uprv_deleteUObject, uhash_compareUnicodeString, status),
         currentCalendarType(), nextCalendarType(),
@@ -1545,7 +1545,7 @@ struct CalendarDataSink : public ResourceSink {
         aliasPathPairs.removeAllElements();
     }
 
-    virtual void put(const char *key, ResourceValue &value, UBool, UErrorCode &errorCode) {
+    virtual void put(const char *key, ResourceValue &value, UBool, UErrorCode &errorCode) override {
         if (U_FAILURE(errorCode)) { return; }
         U_ASSERT(!currentCalendarType.isEmpty());
 
@@ -1574,26 +1574,20 @@ struct CalendarDataSink : public ResourceSink {
                                                        errorCode);
                     if (U_FAILURE(errorCode)) { return; }
                 }
-                LocalPointer<UnicodeString> aliasRelativePathCopy(new UnicodeString(aliasRelativePath), errorCode);
-                resourcesToVisitNext->addElementX(aliasRelativePathCopy.getAlias(), errorCode);
+                LocalPointer<UnicodeString> aliasRelativePathCopy(aliasRelativePath.clone(), errorCode);
+                resourcesToVisitNext->adoptElement(aliasRelativePathCopy.orphan(), errorCode);
                 if (U_FAILURE(errorCode)) { return; }
-                // Only release ownership after resourcesToVisitNext takes it (no error happened):
-                aliasRelativePathCopy.orphan();
                 continue;
 
             } else if (aliasType == SAME_CALENDAR) {
                 // Register same-calendar alias
                 if (arrays.get(aliasRelativePath) == NULL && maps.get(aliasRelativePath) == NULL) {
-                    LocalPointer<UnicodeString> aliasRelativePathCopy(new UnicodeString(aliasRelativePath), errorCode);
-                    aliasPathPairs.addElementX(aliasRelativePathCopy.getAlias(), errorCode);
+                    LocalPointer<UnicodeString> aliasRelativePathCopy(aliasRelativePath.clone(), errorCode);
+                    aliasPathPairs.adoptElement(aliasRelativePathCopy.orphan(), errorCode);
                     if (U_FAILURE(errorCode)) { return; }
-                    // Only release ownership after aliasPathPairs takes it (no error happened):
-                    aliasRelativePathCopy.orphan();
-                    LocalPointer<UnicodeString> keyUStringCopy(new UnicodeString(keyUString), errorCode);
-                    aliasPathPairs.addElementX(keyUStringCopy.getAlias(), errorCode);
+                    LocalPointer<UnicodeString> keyUStringCopy(keyUString.clone(), errorCode);
+                    aliasPathPairs.adoptElement(keyUStringCopy.orphan(), errorCode);
                     if (U_FAILURE(errorCode)) { return; }
-                    // Only release ownership after aliasPathPairs takes it (no error happened):
-                    keyUStringCopy.orphan();
                 }
                 continue;
             }
@@ -1696,7 +1690,7 @@ struct CalendarDataSink : public ResourceSink {
                 // We are on a leaf, store the map elements into the stringMap
                 if (i == 0) {
                     // mapRefs will keep ownership of 'stringMap':
-                    stringMap = mapRefs.create(FALSE, errorCode);
+                    stringMap = mapRefs.create(false, errorCode);
                     if (stringMap == NULL) {
                         errorCode = U_MEMORY_ALLOCATION_ERROR;
                         return;
@@ -1709,7 +1703,7 @@ struct CalendarDataSink : public ResourceSink {
                 int32_t valueStringSize;
                 const UChar *valueString = value.getString(valueStringSize, errorCode);
                 if (U_FAILURE(errorCode)) { return; }
-                LocalPointer<UnicodeString> valueUString(new UnicodeString(TRUE, valueString, valueStringSize), errorCode);
+                LocalPointer<UnicodeString> valueUString(new UnicodeString(true, valueString, valueStringSize), errorCode);
                 stringMap->put(keyUString, valueUString.orphan(), errorCode);
                 if (U_FAILURE(errorCode)) { return; }
                 continue;
@@ -1723,7 +1717,7 @@ struct CalendarDataSink : public ResourceSink {
             // In cyclicNameSets ignore everything but years/format/abbreviated
             // and zodiacs/format/abbreviated
             if (path.startsWith(kCyclicNameSetsTagUChar, UPRV_LENGTHOF(kCyclicNameSetsTagUChar))) {
-                UBool skip = TRUE;
+                UBool skip = true;
                 int32_t startIndex = UPRV_LENGTHOF(kCyclicNameSetsTagUChar);
                 int32_t length = 0;
                 if (startIndex == path.length()
@@ -1738,7 +1732,7 @@ struct CalendarDataSink : public ResourceSink {
                         length = 0;
                         if (startIndex == path.length()
                             || path.compare(startIndex, (length = UPRV_LENGTHOF(kAbbrTagUChar)), kAbbrTagUChar, 0, UPRV_LENGTHOF(kAbbrTagUChar)) == 0) {
-                            skip = FALSE;
+                            skip = false;
                         }
                     }
                 }
@@ -1760,16 +1754,12 @@ struct CalendarDataSink : public ResourceSink {
             if (U_FAILURE(errorCode)) { return; }
             if (aliasType == SAME_CALENDAR) {
                 // Store the alias path and the current path on aliasPathPairs
-                LocalPointer<UnicodeString> aliasRelativePathCopy(new UnicodeString(aliasRelativePath), errorCode);
-                aliasPathPairs.addElementX(aliasRelativePathCopy.getAlias(), errorCode);
+                LocalPointer<UnicodeString> aliasRelativePathCopy(aliasRelativePath.clone(), errorCode);
+                aliasPathPairs.adoptElement(aliasRelativePathCopy.orphan(), errorCode);
                 if (U_FAILURE(errorCode)) { return; }
-                // Only release ownership after aliasPathPairs takes it (no error happened):
-                aliasRelativePathCopy.orphan();
-                LocalPointer<UnicodeString> pathCopy(new UnicodeString(path), errorCode);
-                aliasPathPairs.addElementX(pathCopy.getAlias(), errorCode);
+                LocalPointer<UnicodeString> pathCopy(path.clone(), errorCode);
+                aliasPathPairs.adoptElement(pathCopy.orphan(), errorCode);
                 if (U_FAILURE(errorCode)) { return; }
-                // Only release ownership after aliasPathPairs takes it (no error happened):
-                pathCopy.orphan();
 
                 // Drop the latest key on the path and continue
                 path.retainBetween(0, pathLength);
@@ -1864,7 +1854,7 @@ initField(UnicodeString **field, int32_t& length, const UChar *data, LastResortS
             for(int32_t i = 0; i<length; i++) {
                 // readonly aliases - all "data" strings are constant
                 // -1 as length for variable-length strings (gLastResortDayNames[0] is empty)
-                (*(field)+i)->setTo(TRUE, data+(i*((int32_t)strLen)), -1);
+                (*(field)+i)->setTo(true, data+(i*((int32_t)strLen)), -1);
             }
         }
         else {
@@ -1921,7 +1911,7 @@ initLeapMonthPattern(UnicodeString *field, int32_t index, CalendarDataSink &sink
         UnicodeString pathUString(path.data(), -1, US_INV);
         Hashtable *leapMonthTable = static_cast<Hashtable*>(sink.maps.get(pathUString));
         if (leapMonthTable != NULL) {
-            UnicodeString leapLabel(FALSE, kLeapTagUChar, UPRV_LENGTHOF(kLeapTagUChar));
+            UnicodeString leapLabel(false, kLeapTagUChar, UPRV_LENGTHOF(kLeapTagUChar));
             UnicodeString *leapMonthPattern = static_cast<UnicodeString*>(leapMonthTable->get(leapLabel));
             if (leapMonthPattern != NULL) {
                 field[index].fastCopyFrom(*leapMonthPattern);
@@ -2132,7 +2122,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
         if (status == U_MISSING_RESOURCE_ERROR) {
             ures_close(ctb);
             if (uprv_strcmp(calendarTypeCArray, gGregorianTag) != 0) {
-                calendarType.setTo(FALSE, kGregorianTagUChar, UPRV_LENGTHOF(kGregorianTagUChar));
+                calendarType.setTo(false, kGregorianTagUChar, UPRV_LENGTHOF(kGregorianTagUChar));
                 calendarSink.visitAllResources();
                 status = oldStatus;
                 continue;
@@ -2155,7 +2145,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
 
         // Gregorian is always the last fallback
         if (calendarType.isBogus()) {
-            calendarType.setTo(FALSE, kGregorianTagUChar, UPRV_LENGTHOF(kGregorianTagUChar));
+            calendarType.setTo(false, kGregorianTagUChar, UPRV_LENGTHOF(kGregorianTagUChar));
             calendarSink.visitAllResources();
         }
     }
@@ -2269,24 +2259,48 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     }
 
     // Load day periods
+    fAbbreviatedDayPeriods = loadDayPeriodStrings(calendarSink,
+                            buildResourcePath(path, gDayPeriodTag, gNamesFormatTag, gNamesAbbrTag, status),
+                            fAbbreviatedDayPeriodsCount, status);
+
     fWideDayPeriods = loadDayPeriodStrings(calendarSink,
                             buildResourcePath(path, gDayPeriodTag, gNamesFormatTag, gNamesWideTag, status),
                             fWideDayPeriodsCount, status);
     fNarrowDayPeriods = loadDayPeriodStrings(calendarSink,
                             buildResourcePath(path, gDayPeriodTag, gNamesFormatTag, gNamesNarrowTag, status),
                             fNarrowDayPeriodsCount, status);
-    fAbbreviatedDayPeriods = loadDayPeriodStrings(calendarSink,
-                            buildResourcePath(path, gDayPeriodTag, gNamesFormatTag, gNamesAbbrTag, status),
-                            fAbbreviatedDayPeriodsCount, status);
+
+    fStandaloneAbbreviatedDayPeriods = loadDayPeriodStrings(calendarSink,
+                            buildResourcePath(path, gDayPeriodTag, gNamesStandaloneTag, gNamesAbbrTag, status),
+                            fStandaloneAbbreviatedDayPeriodsCount, status);
+
     fStandaloneWideDayPeriods = loadDayPeriodStrings(calendarSink,
                             buildResourcePath(path, gDayPeriodTag, gNamesStandaloneTag, gNamesWideTag, status),
                             fStandaloneWideDayPeriodsCount, status);
     fStandaloneNarrowDayPeriods = loadDayPeriodStrings(calendarSink,
                             buildResourcePath(path, gDayPeriodTag, gNamesStandaloneTag, gNamesNarrowTag, status),
                             fStandaloneNarrowDayPeriodsCount, status);
-    fStandaloneAbbreviatedDayPeriods = loadDayPeriodStrings(calendarSink,
-                            buildResourcePath(path, gDayPeriodTag, gNamesStandaloneTag, gNamesAbbrTag, status),
-                            fStandaloneAbbreviatedDayPeriodsCount, status);
+
+    // Fill in for missing/bogus items (dayPeriods are a map so single items might be missing)
+    if (U_SUCCESS(status)) {
+        for (int32_t dpidx = 0; dpidx < fAbbreviatedDayPeriodsCount; ++dpidx) {
+            if (dpidx < fWideDayPeriodsCount && fWideDayPeriods != NULL && fWideDayPeriods[dpidx].isBogus()) {
+                fWideDayPeriods[dpidx].fastCopyFrom(fAbbreviatedDayPeriods[dpidx]);
+            }
+            if (dpidx < fNarrowDayPeriodsCount && fNarrowDayPeriods != NULL && fNarrowDayPeriods[dpidx].isBogus()) {
+                fNarrowDayPeriods[dpidx].fastCopyFrom(fAbbreviatedDayPeriods[dpidx]);
+            }
+            if (dpidx < fStandaloneAbbreviatedDayPeriodsCount && fStandaloneAbbreviatedDayPeriods != NULL && fStandaloneAbbreviatedDayPeriods[dpidx].isBogus()) {
+                fStandaloneAbbreviatedDayPeriods[dpidx].fastCopyFrom(fAbbreviatedDayPeriods[dpidx]);
+            }
+            if (dpidx < fStandaloneWideDayPeriodsCount && fStandaloneWideDayPeriods != NULL && fStandaloneWideDayPeriods[dpidx].isBogus()) {
+                fStandaloneWideDayPeriods[dpidx].fastCopyFrom(fStandaloneAbbreviatedDayPeriods[dpidx]);
+            }
+            if (dpidx < fStandaloneNarrowDayPeriodsCount && fStandaloneNarrowDayPeriods != NULL && fStandaloneNarrowDayPeriods[dpidx].isBogus()) {
+                fStandaloneNarrowDayPeriods[dpidx].fastCopyFrom(fStandaloneAbbreviatedDayPeriods[dpidx]);
+            }
+        }
+    }
 
     U_LOCALE_BASED(locBased, *this);
     // if we make it to here, the resource data is cool, and we can get everything out
@@ -2362,12 +2376,20 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
         initField(&fNarrowAmPms, fNarrowAmPmsCount, calendarSink,
                   buildResourcePath(path, gAmPmMarkersAbbrTag, status), status);
     }
+    if(status == U_MISSING_RESOURCE_ERROR) {
+        status = U_ZERO_ERROR;
+        assignArray(fNarrowAmPms, fNarrowAmPmsCount, fAmPms, fAmPmsCount);
+    }
 
     // Load quarters
     initField(&fQuarters, fQuartersCount, calendarSink,
               buildResourcePath(path, gQuartersTag, gNamesFormatTag, gNamesWideTag, status), status);
     initField(&fShortQuarters, fShortQuartersCount, calendarSink,
               buildResourcePath(path, gQuartersTag, gNamesFormatTag, gNamesAbbrTag, status), status);
+    if(status == U_MISSING_RESOURCE_ERROR) {
+        status = U_ZERO_ERROR;
+        assignArray(fShortQuarters, fShortQuartersCount, fQuarters, fQuartersCount);
+    }
 
     initField(&fStandaloneQuarters, fStandaloneQuartersCount, calendarSink,
               buildResourcePath(path, gQuartersTag, gNamesStandaloneTag, gNamesWideTag, status), status);
@@ -2396,14 +2418,14 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     /*
     // fastCopyFrom()/setTo() - see assignArray comments
     resStr = ures_getStringByKey(fResourceBundle, gLocalPatternCharsTag, &len, &status);
-    fLocalPatternChars.setTo(TRUE, resStr, len);
+    fLocalPatternChars.setTo(true, resStr, len);
     // If the locale data does not include new pattern chars, use the defaults
     // TODO: Consider making this an error, since this may add conflicting characters.
     if (len < PATTERN_CHARS_LEN) {
-        fLocalPatternChars.append(UnicodeString(TRUE, &gPatternChars[len], PATTERN_CHARS_LEN-len));
+        fLocalPatternChars.append(UnicodeString(true, &gPatternChars[len], PATTERN_CHARS_LEN-len));
     }
     */
-    fLocalPatternChars.setTo(TRUE, gPatternChars, PATTERN_CHARS_LEN);
+    fLocalPatternChars.setTo(true, gPatternChars, PATTERN_CHARS_LEN);
 
     // Format wide weekdays -> fWeekdays
     // {sfb} fixed to handle 1-based weekdays
@@ -2504,7 +2526,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
             initField(&fStandaloneQuarters, fStandaloneQuartersCount, (const UChar *)gLastResortQuarters, kQuarterNum, kQuarterLen, status);
             initField(&fStandaloneShortQuarters, fStandaloneShortQuartersCount, (const UChar *)gLastResortQuarters, kQuarterNum, kQuarterLen, status);
             initField(&fStandaloneNarrowQuarters, fStandaloneNarrowQuartersCount, (const UChar *)gLastResortQuarters, kQuarterNum, kQuarterLen, status);
-            fLocalPatternChars.setTo(TRUE, gPatternChars, PATTERN_CHARS_LEN);
+            fLocalPatternChars.setTo(true, gPatternChars, PATTERN_CHARS_LEN);
         }
     }
 

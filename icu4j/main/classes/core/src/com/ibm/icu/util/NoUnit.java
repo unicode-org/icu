@@ -7,7 +7,7 @@ import com.ibm.icu.number.NumberFormatter;
 /**
  * Dimensionless unit for percent and permille.
  * @see NumberFormatter
- * @draft ICU 68
+ * @stable ICU 68
  */
 public final class NoUnit {
     /**
@@ -17,7 +17,7 @@ public final class NoUnit {
      *
      * Since ICU 68, this constant equals null.
      *
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public static final MeasureUnit BASE = null;
 
@@ -28,7 +28,7 @@ public final class NoUnit {
      *
      * Since ICU 68, this constant is equivalent to MeasureUnit.PERCENT.
      *
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public static final MeasureUnit PERCENT = MeasureUnit.PERCENT;
 
@@ -39,7 +39,7 @@ public final class NoUnit {
      *
      * Since ICU 68, this constant is equivalent to MeasureUnit.PERMILLE.
      *
-     * @draft ICU 68
+     * @stable ICU 68
      */
     public static final MeasureUnit PERMILLE = MeasureUnit.PERMILLE;
 

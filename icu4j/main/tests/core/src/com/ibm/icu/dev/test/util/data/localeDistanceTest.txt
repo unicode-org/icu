@@ -30,7 +30,7 @@ zh-Hans ; 	en ; 	100
 
 en-US ; 	en-AU ; 	5  # across clusters
 en-VI ; 	en-GU ; 	4	# within cluster
-en-AU ; 	en-CA ; 	4	# within cluster
+en-AU ; 	en-CA ; 	5	# across cluster
 
 # testScript
 en-CA ; 	en-Cyrl ; 	100

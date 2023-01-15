@@ -94,6 +94,8 @@ ja{
             }
             patterns{
                 accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
+                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -137,6 +139,21 @@ ja{
                     100000000000000{
                         other{"000兆"}
                     }
+                    1000000000000000{
+                        other{"0000兆"}
+                    }
+                    10000000000000000{
+                        other{"0京"}
+                    }
+                    100000000000000000{
+                        other{"00京"}
+                    }
+                    1000000000000000000{
+                        other{"000京"}
+                    }
+                    10000000000000000000{
+                        other{"0000京"}
+                    }
                 }
             }
             patternsShort{
@@ -177,6 +194,71 @@ ja{
                     100000000000000{
                         other{"¤000兆"}
                     }
+                    1000000000000000{
+                        other{"¤0000兆"}
+                    }
+                    10000000000000000{
+                        other{"¤0京"}
+                    }
+                    100000000000000000{
+                        other{"¤00京"}
+                    }
+                    1000000000000000000{
+                        other{"¤000京"}
+                    }
+                    10000000000000000000{
+                        other{"¤0000京"}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
+                    10000{
+                        other{"¤ 0万"}
+                    }
+                    100000{
+                        other{"¤ 00万"}
+                    }
+                    1000000{
+                        other{"¤ 000万"}
+                    }
+                    10000000{
+                        other{"¤ 0000万"}
+                    }
+                    100000000{
+                        other{"¤ 0億"}
+                    }
+                    1000000000{
+                        other{"¤ 00億"}
+                    }
+                    10000000000{
+                        other{"¤ 000億"}
+                    }
+                    100000000000{
+                        other{"¤ 0000億"}
+                    }
+                    1000000000000{
+                        other{"¤ 0兆"}
+                    }
+                    10000000000000{
+                        other{"¤ 00兆"}
+                    }
+                    100000000000000{
+                        other{"¤ 000兆"}
+                    }
+                    1000000000000000{
+                        other{"¤ 0000兆"}
+                    }
+                    10000000000000000{
+                        other{"¤ 0京"}
+                    }
+                    100000000000000000{
+                        other{"¤ 00京"}
+                    }
+                    1000000000000000000{
+                        other{"¤ 000京"}
+                    }
+                    10000000000000000000{
+                        other{"¤ 0000京"}
+                    }
                 }
                 decimalFormat{
                     1000{
@@ -214,6 +296,21 @@ ja{
                     }
                     100000000000000{
                         other{"000兆"}
+                    }
+                    1000000000000000{
+                        other{"0000兆"}
+                    }
+                    10000000000000000{
+                        other{"0京"}
+                    }
+                    100000000000000000{
+                        other{"00京"}
+                    }
+                    1000000000000000000{
+                        other{"000京"}
+                    }
+                    10000000000000000000{
+                        other{"0000京"}
                     }
                 }
             }
@@ -380,6 +477,9 @@ ja{
                 GyMMM{"U年MMM"}
                 GyMMMEEEEd{"U年MMMd日EEEE"}
                 GyMMMEd{"U年MMMd日(E)"}
+                GyMMMM{"r(U)年MMMM"}
+                GyMMMMEd{"r(U)年MMMMd日(E)"}
+                GyMMMMd{"r(U)年MMMMd日"}
                 GyMMMd{"U年MMMd日"}
                 GyMd{"U-M-d"}
                 H{"H時"}
@@ -413,6 +513,8 @@ ja{
                 yyyyMMMEEEEd{"U年MMMd日EEEE"}
                 yyyyMMMEd{"U年MMMd日(E)"}
                 yyyyMMMM{"U年MMMM"}
+                yyyyMMMMEd{"r(U)年MMMMd日(E)"}
+                yyyyMMMMd{"r(U)年MMMMd日"}
                 yyyyMMMd{"U年MMMd日"}
                 yyyyMd{"U年M月d日"}
                 yyyyQQQ{"U年QQQ"}
@@ -1501,7 +1603,7 @@ ja{
                 GyMMMEEEEd{"Gy年M月d日EEEE"}
                 GyMMMEd{"Gy年M月d日(E)"}
                 GyMMMd{"Gy年M月d日"}
-                GyMd{"GGGGGy/M/d"}
+                GyMd{"Gy/M/d"}
                 H{"H時"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
@@ -3995,6 +4097,19 @@ ja{
             stricter{
                 "[,٫︐﹐，]",
                 "[.․﹒．｡]",
+            }
+        }
+    }
+    personNames{
+        foreignSpaceReplacement{"・"}
+        nameOrderLocales{
+            surnameFirst{
+                "hu",
+                "ja",
+                "ko",
+                "vi",
+                "yue",
+                "zh",
             }
         }
     }

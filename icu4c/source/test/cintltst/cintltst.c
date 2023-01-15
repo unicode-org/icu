@@ -17,8 +17,9 @@
 
 /*The main root for C API tests*/
 
-#include <stdlib.h>
+#include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
@@ -46,7 +47,7 @@
 /* Array used as a queue */
 static void * ctst_allocated_stuff[CTST_MAX_ALLOC] = {0};
 static int ctst_allocated = 0;
-static UBool ctst_free = FALSE;
+static UBool ctst_free = false;
 static int ctst_allocated_total = 0;
 
 #define CTST_LEAK_CHECK 1
@@ -112,12 +113,12 @@ int main(int argc, const char* const argv[])
      *  Whether or not this test succeeds, we want to cleanup and reinitialize
      *  with a data path so that data loading from individual files can be tested.
      */
-    defaultDataFound = TRUE;
+    defaultDataFound = true;
     u_init(&errorCode);
     if (U_FAILURE(errorCode)) {
         fprintf(stderr,
             "#### Note:  ICU Init without build-specific setDataDirectory() failed. %s\n", u_errorName(errorCode));
-        defaultDataFound = FALSE;
+        defaultDataFound = false;
     }
     u_cleanup();
 #ifdef URES_DEBUG
@@ -162,7 +163,7 @@ int main(int argc, const char* const argv[])
                     "*** Check the ICU_DATA environment variable and \n"
                     "*** check that the data files are present.\n", warnOrErr);
             if(!getTestOption(WARN_ON_MISSING_DATA_OPTION)) {
-                fprintf(stderr, "*** Exitting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
+                fprintf(stderr, "*** Exiting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
                 u_cleanup();
                 return 1;
             }
@@ -178,7 +179,7 @@ int main(int argc, const char* const argv[])
                     "*** Check the ICU_DATA environment variable and \n"
                     "*** check that the data files are present.\n", warnOrErr);
             if(!getTestOption(WARN_ON_MISSING_DATA_OPTION)) {
-                fprintf(stderr, "*** Exitting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
+                fprintf(stderr, "*** Exiting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
                 u_cleanup();
                 return 1;
             }
@@ -197,7 +198,7 @@ int main(int argc, const char* const argv[])
             fprintf(stderr,
                     "*** %s! Can not open a resource bundle for the default locale %s\n", warnOrErr, uloc_getDefault());
             if(!getTestOption(WARN_ON_MISSING_DATA_OPTION)) {
-                fprintf(stderr, "*** Exitting.  Use the '-w' option if data files were\n"
+                fprintf(stderr, "*** Exiting.  Use the '-w' option if data files were\n"
                     "*** purposely removed, to continue test anyway.\n");
                 u_cleanup();
                 return 1;
@@ -379,7 +380,10 @@ const char *ctest_dataOutDir()
     */
 #if defined (U_TOPBUILDDIR)
     {
-        dataOutDir = U_TOPBUILDDIR "data"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+        dataOutDir = U_TOPBUILDDIR
+                "data" U_FILE_SEP_STRING
+                "out" U_FILE_SEP_STRING
+                "build" U_FILE_SEP_STRING;
     }
 #else
 
@@ -467,16 +471,16 @@ UBool ctest_resetICU() {
     u_cleanup();
     if (!initArgs(gOrigArgc, gOrigArgv, NULL, NULL)) {
         /* Error already displayed. */
-        return FALSE;
+        return false;
     }
     u_setDataDirectory(dataDir);
     free(dataDir);
     u_init(&status);
     if (U_FAILURE(status)) {
         log_err_status(status, "u_init failed with %s\n", u_errorName(status));
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 UChar* CharsToUChars(const char* str) {
@@ -527,7 +531,7 @@ char *aescstrdup(const UChar* unichars,int32_t length){
     target = newString;
     targetLimit = newString+sizeof(char) * 8 * (length +1);
     ucnv_setFromUCallBack(conv, UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_ESCAPE_C, &cb, &p, &errorCode);
-    ucnv_fromUnicode(conv,&target,targetLimit, &unichars, (UChar*)(unichars+length),NULL,TRUE,&errorCode);
+    ucnv_fromUnicode(conv,&target,targetLimit, &unichars, (UChar*)(unichars+length),NULL,true,&errorCode);
     ucnv_close(conv);
     *target = '\0';
     return newString;
@@ -539,7 +543,10 @@ const char* loadTestData(UErrorCode* err){
         UResourceBundle* test =NULL;
         char* tdpath=NULL;
         const char* tdrelativepath;
-#if defined (U_TOPBUILDDIR)
+#if defined (APPLE_XCODE_BUILD)
+        tdrelativepath = "";
+        directory = U_TOPBUILDDIR;
+#elif defined (U_TOPBUILDDIR)
         tdrelativepath = "test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
         directory = U_TOPBUILDDIR;
 #else
@@ -547,7 +554,7 @@ const char* loadTestData(UErrorCode* err){
         directory= ctest_dataOutDir();
 #endif
 
-        tdpath = (char*) ctst_malloc(sizeof(char) *(( strlen(directory) * strlen(tdrelativepath)) + 10));
+        tdpath = (char*) ctst_malloc(sizeof(char) *(( strlen(directory) + strlen(tdrelativepath)) + 10));
 
 
         /* u_getDataDirectory shoul return \source\data ... set the
@@ -659,7 +666,7 @@ void *ctst_malloc(size_t size) {
   ctst_allocated_total++;
     if(ctst_allocated >= CTST_MAX_ALLOC - 1) {
         ctst_allocated = 0;
-        ctst_free = TRUE;
+        ctst_free = true;
     }
     if(ctst_allocated_stuff[ctst_allocated]) {
         free(ctst_allocated_stuff[ctst_allocated]);
@@ -670,7 +677,7 @@ void *ctst_malloc(size_t size) {
 #ifdef CTST_LEAK_CHECK
 static void ctst_freeAll() {
     int i;
-    if(ctst_free == FALSE) { /* only free up to the allocated mark */
+    if(ctst_free == false) { /* only free up to the allocated mark */
         for(i=0; i<ctst_allocated; i++) {
             free(ctst_allocated_stuff[i]);
             ctst_allocated_stuff[i] = NULL;
@@ -695,14 +702,14 @@ U_CFUNC UBool assertSuccessCheck(const char* msg, UErrorCode* ec, UBool possible
         } else {
             log_err_status(*ec, "FAIL: %s (%s)\n", msg, u_errorName(*ec));
         }
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 U_CFUNC UBool assertSuccess(const char* msg, UErrorCode* ec) {
     U_ASSERT(ec!=NULL);
-    return assertSuccessCheck(msg, ec, FALSE);
+    return assertSuccessCheck(msg, ec, false);
 }
 
 /* if 'condition' is a UBool, the compiler complains bitterly about
@@ -730,14 +737,14 @@ U_CFUNC UBool assertEquals(const char* message, const char* expected,
     if (uprv_strcmp(expected, actual) != 0) {
         log_err("FAIL: %s; got \"%s\"; expected \"%s\"\n",
                 message, actual, expected);
-        return FALSE;
+        return false;
     }
 #ifdef VERBOSE_ASSERTIONS
     else {
         log_verbose("Ok: %s; got \"%s\"\n", message, actual);
     }
 #endif
-    return TRUE;
+    return true;
 }
 
 U_CFUNC UBool assertUEquals(const char* message, const UChar* expected,
@@ -752,7 +759,7 @@ U_CFUNC UBool assertUEquals(const char* message, const UChar* expected,
         if (expected[i] != actual[i]) {
             log_err("FAIL: %s; got \"%s\"; expected \"%s\"\n",
                     message, austrdup(actual), austrdup(expected));
-            return FALSE;
+            return false;
         }
         UChar curr = expected[i];
         U_ASSERT(curr == actual[i]);
@@ -763,35 +770,48 @@ U_CFUNC UBool assertUEquals(const char* message, const UChar* expected,
 #ifdef VERBOSE_ASSERTIONS
     log_verbose("Ok: %s; got \"%s\"\n", message, austrdup(actual));
 #endif
-    return TRUE;
+    return true;
 }
 
 U_CFUNC UBool assertIntEquals(const char* message, int64_t expected, int64_t actual) {
     if (expected != actual) {
         log_err("FAIL: %s; got \"%d\"; expected \"%d\"\n",
                 message, actual, expected);
-        return FALSE;
+        return false;
     }
 #ifdef VERBOSE_ASSERTIONS
     else {
         log_verbose("Ok: %s; got \"%d\"\n", message, actual);
     }
 #endif
-    return TRUE;
+    return true;
 }
 
 U_CFUNC UBool assertPtrEquals(const char* message, const void* expected, const void* actual) {
     if (expected != actual) {
         log_err("FAIL: %s; got 0x%llx; expected 0x%llx\n",
                 message, actual, expected);
-        return FALSE;
+        return false;
     }
 #ifdef VERBOSE_ASSERTIONS
     else {
         log_verbose("Ok: %s; got 0x%llx\n", message, actual);
     }
 #endif
-    return TRUE;
+    return true;
+}
+
+U_CFUNC UBool assertDoubleEquals(const char *message, double expected, double actual) {
+    if (expected != actual) {
+        log_err("FAIL: %s; got \"%f\"; expected \"%f\"\n", message, actual, expected);
+        return false;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        log_verbose("Ok: %s; got \"%f\"\n", message, actual);
+    }
+#endif
+    return true;
 }
 
 #endif

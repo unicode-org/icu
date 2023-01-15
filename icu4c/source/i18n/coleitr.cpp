@@ -137,17 +137,17 @@ int32_t CollationElementIterator::next(UErrorCode& status)
     return firstHalf;
 }
 
-UBool CollationElementIterator::operator!=(
+bool CollationElementIterator::operator!=(
                                   const CollationElementIterator& other) const
 {
     return !(*this == other);
 }
 
-UBool CollationElementIterator::operator==(
+bool CollationElementIterator::operator==(
                                     const CollationElementIterator& that) const
 {
     if (this == &that) {
-        return TRUE;
+        return true;
     }
 
     return
@@ -398,8 +398,8 @@ class MaxExpSink : public ContractionsAndExpansions::CESink {
 public:
     MaxExpSink(UHashtable *h, UErrorCode &ec) : maxExpansions(h), errorCode(ec) {}
     virtual ~MaxExpSink();
-    virtual void handleCE(int64_t /*ce*/) {}
-    virtual void handleExpansion(const int64_t ces[], int32_t length) {
+    virtual void handleCE(int64_t /*ce*/) override {}
+    virtual void handleExpansion(const int64_t ces[], int32_t length) override {
         if (length <= 1) {
             // We do not need to add single CEs into the map.
             return;
@@ -440,7 +440,7 @@ CollationElementIterator::computeMaxExpansions(const CollationData *data, UError
                                            uhash_compareLong, &errorCode);
     if (U_FAILURE(errorCode)) { return NULL; }
     MaxExpSink sink(maxExpansions, errorCode);
-    ContractionsAndExpansions(NULL, NULL, &sink, TRUE).forData(data, errorCode);
+    ContractionsAndExpansions(NULL, NULL, &sink, true).forData(data, errorCode);
     if (U_FAILURE(errorCode)) {
         uhash_close(maxExpansions);
         return NULL;

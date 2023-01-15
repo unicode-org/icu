@@ -1223,6 +1223,9 @@ sq{
         "Pacific:Johnston"{
             ec{"Xhonston"}
         }
+        "Pacific:Kanton"{
+            ec{"Kanton"}
+        }
         "Pacific:Kiritimati"{
             ec{"Kiritimat"}
         }
@@ -1939,6 +1942,9 @@ sq{
             ld{"Ora verore e Ekaterinburgut"}
             lg{"Ora e Ekaterinburgut"}
             ls{"Ora standarde e Ekaterinburgut"}
+        }
+        "meta:Yukon"{
+            ls{"Ora e Jukonit"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

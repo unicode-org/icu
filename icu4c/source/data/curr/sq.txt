@@ -335,6 +335,10 @@ sq{
             "LRD",
             "Dollari liberian",
         }
+        LSL{
+            "LSL",
+            "Lota lesotiane",
+        }
         LTL{
             "LTL",
             "Lita lituaneze",
@@ -680,7 +684,7 @@ sq{
         DKK{"DKK"}
         DOP{"DOP"}
         EGP{"EGP"}
-        EUR{"EUR"}
+        EUR{"€"}
         FJD{"FJD"}
         FKP{"FKP"}
         GBP{"GBP"}
@@ -1084,6 +1088,10 @@ sq{
         LRD{
             one{"dollar liberian"}
             other{"dollarë liberian"}
+        }
+        LSL{
+            one{"lotë lesotiane"}
+            other{"lota lesotiane"}
         }
         LTL{
             one{"litë lituaneze"}

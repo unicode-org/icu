@@ -55,7 +55,7 @@ void IntlTestSimpleDateFormatAPI::testAPI(/*char *par*/)
 
     SimpleDateFormat def(status);
     if(U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create SimpleDateFormat (default) - exitting");
+        dataerrln("ERROR: Could not create SimpleDateFormat (default) - exiting");
         return;
     }
 
@@ -84,7 +84,7 @@ void IntlTestSimpleDateFormatAPI::testAPI(/*char *par*/)
     status = U_ZERO_ERROR;
     SimpleDateFormat cust1(pattern, symbols, status);
     if(U_FAILURE(status)) {
-        dataerrln("ERROR: Could not create SimpleDateFormat (pattern, symbols*) - exitting");
+        dataerrln("ERROR: Could not create SimpleDateFormat (pattern, symbols*) - exiting");
         return;
     }
 

@@ -148,7 +148,7 @@ public class PluralFormatTest extends TestFmwk {
       changes.put(new Integer(1), "one");
       changes.put(new Integer(2), "few");
       changes.put(new Integer(20), "other");
-      changes.put(new Integer(101), "other");
+      changes.put(new Integer(101), "few");
       changes.put(new Integer(102), "few");
       changes.put(new Integer(120), "other");
       helperTestRules(localeIDs, testPattern, changes);
@@ -324,7 +324,7 @@ public class PluralFormatTest extends TestFmwk {
         }
     }
 
-    /* Test for http://bugs.icu-project.org/trac/ticket/13151 */
+    /* Test for https://unicode-org.atlassian.net/browse/ICU-13151 */
     @Test
     public void TestFractionRounding() {
         NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);

@@ -35,9 +35,9 @@ UBool CalendarTimeZoneTest::failure(UErrorCode status, const char* msg, UBool po
         } else {
             errcheckln(status, UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status));
         }
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 DateFormat*   CalendarTimeZoneTest::getDateFormat()

@@ -23,16 +23,16 @@
 #include "cstr.h"
 #include "utxttest.h"
 
-static UBool  gFailed = FALSE;
+static UBool  gFailed = false;
 static int    gTestNum = 0;
 
 // Forward decl
 UText *openFragmentedUnicodeString(UText *ut, UnicodeString *s, UErrorCode *status);
 
 #define TEST_ASSERT(x) UPRV_BLOCK_MACRO_BEGIN { \
-    if ((x)==FALSE) { \
+    if ((x)==false) { \
         errln("Test #%d failure in file %s at line %d\n", gTestNum, __FILE__, __LINE__); \
-        gFailed = TRUE; \
+        gFailed = true; \
     } \
 } UPRV_BLOCK_MACRO_END
 
@@ -41,7 +41,7 @@ UText *openFragmentedUnicodeString(UText *ut, UnicodeString *s, UErrorCode *stat
     if (U_FAILURE(status)) { \
         errln("Test #%d failure in file %s at line %d. Error = \"%s\"\n", \
               gTestNum, __FILE__, __LINE__, u_errorName(status)); \
-        gFailed = TRUE; \
+        gFailed = true; \
     } \
 } UPRV_BLOCK_MACRO_END
 
@@ -300,7 +300,7 @@ void UTextTest::TestString(const UnicodeString &s) {
 //     The UText is deep-cloned prior to each operation, so that the original UText remains unchanged.
 //
 void UTextTest::TestCMR(const UnicodeString &us, UText *ut, int cpCount, m *nativeMap, m *u16Map) {
-    TEST_ASSERT(utext_isWritable(ut) == TRUE);
+    TEST_ASSERT(utext_isWritable(ut) == true);
 
     int  srcLengthType;       // Loop variables for selecting the position and length
     int  srcPosType;          //   of the block to operate on within the source text.
@@ -368,12 +368,12 @@ void UTextTest::TestCMR(const UnicodeString &us, UText *ut, int cpCount, m *nati
                 u16Limit    = u16Map[srcIndex+srcLength].nativeIdx;
                 u16Dest     = u16Map[destIndex].nativeIdx;
 
-                gFailed = FALSE;
-                TestCopyMove(us, ut, FALSE,
+                gFailed = false;
+                TestCopyMove(us, ut, false,
                     nativeStart, nativeLimit, nativeDest,
                     u16Start, u16Limit, u16Dest);
 
-                TestCopyMove(us, ut, TRUE,
+                TestCopyMove(us, ut, true,
                     nativeStart, nativeLimit, nativeDest,
                     u16Start, u16Limit, u16Dest);
 
@@ -413,13 +413,13 @@ void UTextTest::TestCopyMove(const UnicodeString &us, UText *ut, UBool move,
     UErrorCode      status   = U_ZERO_ERROR;
     UText          *targetUT = NULL;
     gTestNum++;
-    gFailed = FALSE;
+    gFailed = false;
 
     //
     //  clone the UText.  The test will be run in the cloned copy
     //  so that we don't alter the original.
     //
-    targetUT = utext_clone(NULL, ut, TRUE, FALSE, &status);
+    targetUT = utext_clone(NULL, ut, true, false, &status);
     TEST_SUCCESS(status);
     UnicodeString targetUS(us);    // And copy the reference string.
 
@@ -464,7 +464,7 @@ void UTextTest::TestCopyMove(const UnicodeString &us, UText *ut, UBool move,
             }
         }
         int64_t expectedNativeLength = utext_nativeLength(ut);
-        if (move == FALSE) {
+        if (move == false) {
             expectedNativeLength += nativeLimit - nativeStart;
         }
         uti = utext_getNativeIndex(targetUT);
@@ -491,13 +491,13 @@ void UTextTest::TestReplace(
     UErrorCode      status   = U_ZERO_ERROR;
     UText          *targetUT = NULL;
     gTestNum++;
-    gFailed = FALSE;
+    gFailed = false;
 
     //
     //  clone the target UText.  The test will be run in the cloned copy
     //  so that we don't alter the original.
     //
-    targetUT = utext_clone(NULL, ut, TRUE, FALSE, &status);
+    targetUT = utext_clone(NULL, ut, true, false, &status);
     TEST_SUCCESS(status);
     UnicodeString targetUS(us);    // And copy the reference string.
 
@@ -560,7 +560,7 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
     // Re-run tests on a shallow clone.
     utext_setNativeIndex(ut, 0);
     UErrorCode status = U_ZERO_ERROR;
-    UText *shallowClone = utext_clone(NULL, ut, FALSE /*deep*/, FALSE /*readOnly*/, &status);
+    UText *shallowClone = utext_clone(NULL, ut, false /*deep*/, false /*readOnly*/, &status);
     TEST_SUCCESS(status);
     TestAccessNoClone(us, shallowClone, cpCount, cpMap);
 
@@ -571,7 +571,7 @@ void UTextTest::TestAccess(const UnicodeString &us, UText *ut, int cpCount, m *c
     //
     status = U_ZERO_ERROR;
     utext_setNativeIndex(shallowClone, 0);
-    UText *deepClone = utext_clone(NULL, shallowClone, TRUE, FALSE, &status);
+    UText *deepClone = utext_clone(NULL, shallowClone, true, false, &status);
     utext_close(shallowClone);
     if (status != U_UNSUPPORTED_ERROR) {
         TEST_SUCCESS(status);
@@ -982,17 +982,17 @@ void UTextTest::ErrorTest()
         UText *uta = utext_openUnicodeString(NULL, &sa, &status);
         TEST_SUCCESS(status);
         isExpensive = utext_isLengthExpensive(uta);
-        TEST_ASSERT(isExpensive == FALSE);
+        TEST_ASSERT(isExpensive == false);
         utext_close(uta);
 
         UText *utb = utext_openUChars(NULL, sb, -1, &status);
         TEST_SUCCESS(status);
         isExpensive = utext_isLengthExpensive(utb);
-        TEST_ASSERT(isExpensive == TRUE);
+        TEST_ASSERT(isExpensive == true);
         int64_t  len = utext_nativeLength(utb);
         TEST_ASSERT(len == 99);
         isExpensive = utext_isLengthExpensive(utb);
-        TEST_ASSERT(isExpensive == FALSE);
+        TEST_ASSERT(isExpensive == false);
         utext_close(utb);
     }
 
@@ -1226,49 +1226,49 @@ void UTextTest::FreezeTest() {
     ut = utext_openUTF8(ut, u8str, -1, &status);
     TEST_SUCCESS(status);
     UBool writable = utext_isWritable(ut);
-    TEST_ASSERT(writable == FALSE);
-    utext_copy(ut, 1, 2, 0, TRUE, &status);
+    TEST_ASSERT(writable == false);
+    utext_copy(ut, 1, 2, 0, true, &status);
     TEST_ASSERT(status == U_NO_WRITE_PERMISSION);
 
     status = U_ZERO_ERROR;
     ut = utext_openUChars(ut, u16str, -1, &status);
     TEST_SUCCESS(status);
     writable = utext_isWritable(ut);
-    TEST_ASSERT(writable == FALSE);
-    utext_copy(ut, 1, 2, 0, TRUE, &status);
+    TEST_ASSERT(writable == false);
+    utext_copy(ut, 1, 2, 0, true, &status);
     TEST_ASSERT(status == U_NO_WRITE_PERMISSION);
 
     status = U_ZERO_ERROR;
     ut = utext_openUnicodeString(ut, &ustr, &status);
     TEST_SUCCESS(status);
     writable = utext_isWritable(ut);
-    TEST_ASSERT(writable == TRUE);
+    TEST_ASSERT(writable == true);
     utext_freeze(ut);
     writable = utext_isWritable(ut);
-    TEST_ASSERT(writable == FALSE);
-    utext_copy(ut, 1, 2, 0, TRUE, &status);
+    TEST_ASSERT(writable == false);
+    utext_copy(ut, 1, 2, 0, true, &status);
     TEST_ASSERT(status == U_NO_WRITE_PERMISSION);
 
     status = U_ZERO_ERROR;
     ut = utext_openUnicodeString(ut, &ustr, &status);
     TEST_SUCCESS(status);
-    ut2 = utext_clone(ut2, ut, FALSE, FALSE, &status);  // clone with readonly = false
+    ut2 = utext_clone(ut2, ut, false, false, &status);  // clone with readonly = false
     TEST_SUCCESS(status);
     writable = utext_isWritable(ut2);
-    TEST_ASSERT(writable == TRUE);
-    ut2 = utext_clone(ut2, ut, FALSE, TRUE, &status);  // clone with readonly = true
+    TEST_ASSERT(writable == true);
+    ut2 = utext_clone(ut2, ut, false, true, &status);  // clone with readonly = true
     TEST_SUCCESS(status);
     writable = utext_isWritable(ut2);
-    TEST_ASSERT(writable == FALSE);
-    utext_copy(ut2, 1, 2, 0, TRUE, &status);
+    TEST_ASSERT(writable == false);
+    utext_copy(ut2, 1, 2, 0, true, &status);
     TEST_ASSERT(status == U_NO_WRITE_PERMISSION);
 
     status = U_ZERO_ERROR;
     ut = utext_openConstUnicodeString(ut, (const UnicodeString *)&ustr, &status);
     TEST_SUCCESS(status);
     writable = utext_isWritable(ut);
-    TEST_ASSERT(writable == FALSE);
-    utext_copy(ut, 1, 2, 0, TRUE, &status);
+    TEST_ASSERT(writable == false);
+    utext_copy(ut, 1, 2, 0, true, &status);
     TEST_ASSERT(status == U_NO_WRITE_PERMISSION);
 
     // Deep Clone of a frozen UText should re-enable writing in the copy.
@@ -1276,10 +1276,10 @@ void UTextTest::FreezeTest() {
     ut = utext_openUnicodeString(ut, &ustr, &status);
     TEST_SUCCESS(status);
     utext_freeze(ut);
-    ut2 = utext_clone(ut2, ut, TRUE, FALSE, &status);   // deep clone
+    ut2 = utext_clone(ut2, ut, true, false, &status);   // deep clone
     TEST_SUCCESS(status);
     writable = utext_isWritable(ut2);
-    TEST_ASSERT(writable == TRUE);
+    TEST_ASSERT(writable == true);
 
 
     // Deep clone of a frozen UText, where the base type is intrinsically non-writable,
@@ -1288,10 +1288,10 @@ void UTextTest::FreezeTest() {
     ut = utext_openUChars(ut, u16str, -1, &status);
     TEST_SUCCESS(status);
     utext_freeze(ut);
-    ut2 = utext_clone(ut2, ut, TRUE, FALSE, &status);   // deep clone
+    ut2 = utext_clone(ut2, ut, true, false, &status);   // deep clone
     TEST_SUCCESS(status);
     writable = utext_isWritable(ut2);
-    TEST_ASSERT(writable == FALSE);
+    TEST_ASSERT(writable == false);
 
     // cleanup
     utext_close(ut);
@@ -1385,7 +1385,7 @@ openFragmentedUnicodeString(UText *ut, UnicodeString *s, UErrorCode *status) {
     ut->pFuncs = &fragmentFuncs;
 
     ut->chunkContents = (UChar *)&ut->b;
-    ut->pFuncs->access(ut, 0, TRUE);
+    ut->pFuncs->access(ut, 0, true);
     return ut;
 }
 
@@ -1413,7 +1413,7 @@ void UTextTest::Ticket5560() {
 	UChar c = utext_next32(&ut1);
 	TEST_ASSERT(c == 0x41);  // c == 'A'
 
-	utext_clone(&ut2, &ut1, TRUE, FALSE, &status);
+	utext_clone(&ut2, &ut1, true, false, &status);
 	TEST_SUCCESS(status);
     c = utext_next32(&ut2);
 	TEST_ASSERT(c == 0x42);  // c == 'B'
@@ -1471,9 +1471,9 @@ void UTextTest::Ticket10562() {
     const char *utf8_string = "\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41\x41";
     UText *utf8Text = utext_openUTF8(NULL, utf8_string, -1, &status);
     TEST_SUCCESS(status);
-    UText *deepClone = utext_clone(NULL, utf8Text, TRUE, FALSE, &status);
+    UText *deepClone = utext_clone(NULL, utf8Text, true, false, &status);
     TEST_SUCCESS(status);
-    UText *shallowClone = utext_clone(NULL, deepClone, FALSE, FALSE, &status);
+    UText *shallowClone = utext_clone(NULL, deepClone, false, false, &status);
     TEST_SUCCESS(status);
     utext_close(shallowClone);
     utext_close(deepClone);
@@ -1483,9 +1483,9 @@ void UTextTest::Ticket10562() {
     UnicodeString usString("Hello, World.");
     UText *usText = utext_openUnicodeString(NULL, &usString, &status);
     TEST_SUCCESS(status);
-    UText *usDeepClone = utext_clone(NULL, usText, TRUE, FALSE, &status);
+    UText *usDeepClone = utext_clone(NULL, usText, true, false, &status);
     TEST_SUCCESS(status);
-    UText *usShallowClone = utext_clone(NULL, usDeepClone, FALSE, FALSE, &status);
+    UText *usShallowClone = utext_clone(NULL, usDeepClone, false, false, &status);
     TEST_SUCCESS(status);
     utext_close(usShallowClone);
     utext_close(usDeepClone);
@@ -1502,7 +1502,7 @@ void UTextTest::Ticket10983() {
     TEST_SUCCESS(status);
 
     status = U_INVALID_STATE_ERROR;
-    UText *cloned = utext_clone(NULL, ut, TRUE, TRUE, &status);
+    UText *cloned = utext_clone(NULL, ut, true, true, &status);
     TEST_ASSERT(cloned == NULL);
     TEST_ASSERT(status == U_INVALID_STATE_ERROR);
 

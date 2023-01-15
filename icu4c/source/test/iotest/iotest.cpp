@@ -42,21 +42,21 @@ public:
             fgTestDataPath = NULL;
         }
     }
-    virtual void errln( const UnicodeString &message ) {
+    virtual void errln( const UnicodeString &message ) override {
         char buffer[4000];
         message.extract(0, message.length(), buffer, sizeof(buffer));
         buffer[3999] = 0; /* NULL terminate */
         log_err(buffer);
     }
 
-    virtual void logln( const UnicodeString &message ) {
+    virtual void logln( const UnicodeString &message ) override {
         char buffer[4000];
         message.extract(0, message.length(), buffer, sizeof(buffer));
         buffer[3999] = 0; /* NULL terminate */
         log_info(buffer);
     }
 
-    virtual void dataerrln( const UnicodeString &message ) {
+    virtual void dataerrln( const UnicodeString &message ) override {
         char buffer[4000];
         message.extract(0, message.length(), buffer, sizeof(buffer));
         buffer[3999] = 0; /* NULL terminate */
@@ -166,7 +166,7 @@ public:
         return fgTestDataPath;
     }
 
-    virtual const char* getTestDataPath(UErrorCode& err) {
+    virtual const char* getTestDataPath(UErrorCode& err) override {
         return loadTestData(err);
     }
 };

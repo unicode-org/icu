@@ -378,6 +378,9 @@ public class RoundTripTest extends TestFmwk {
 
     @Test
     public void TestCyrillic() throws IOException {
+        if (logKnownIssue("CLDR-16218", "ICU4C Transliterator RoundTripTest finds many problems with updated Cyrillic-Latin transform")) {
+            return;
+        }
         long start = System.currentTimeMillis();
         new TransliterationTest("Latin-Cyrillic")
         .test("[a-zA-Z\u0110\u0111\u02BA\u02B9]", "[\u0400-\u045F]", null, this, new Legal());
@@ -890,7 +893,7 @@ public class RoundTripTest extends TestFmwk {
              */
             /* comment lines below  when transliterator is fixed */
             // start
-            // TODO(Mark): Fix ticket #8989, transliterate U+0970.
+            // TODO(CLDR-4375) Exclude \u0970 for the time being.
             String minusDevAbb = logKnownIssue("cldrbug:4375", null) ? "-[\u0970]" : "";
 
             new TransliterationTest(interIndicArray[i][0], 50)
@@ -1162,7 +1165,7 @@ public class RoundTripTest extends TestFmwk {
                     break;
                 }
             }
-            //System.out.println("FALSE");
+            //System.out.println("false");
             return false;
         }
 

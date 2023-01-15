@@ -32,7 +32,7 @@ upgrade to a new ICU release.
 
 ## Current Process
 
-See <http://site.icu-project.org/processes/contribute>.
+See <https://icu.unicode.org/processes/contribute>.
 
 ## Historical
 

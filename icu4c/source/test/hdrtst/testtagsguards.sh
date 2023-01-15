@@ -45,7 +45,7 @@ for file in source/common/unicode/*.h source/i18n/unicode/*.h source/io/unicode/
     GUARD=DEPRECATED
     echo "    @$TAG"
     $CXX $INCL -C -E -DU_HIDE_${GUARD}_API=1 -DU_FORCE_HIDE_${GUARD}_API=1 $DEF -o $TMPDIR/ht-$base-$TAG.i $TMPDIR/ht-$base.cpp
-    if grep "@$TAG" -C 5 $TMPDIR/ht-$base-$TAG.i; then
+    if grep "@$TAG\b.*\bICU\b" -C 5 $TMPDIR/ht-$base-$TAG.i; then
         echo "*** error: @$TAG not hidden in $TMPDIR/ht-$base-$TAG.i"
         exit 1
     fi

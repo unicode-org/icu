@@ -59,6 +59,8 @@ ko{
             }
             patterns{
                 accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
+                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -141,6 +143,44 @@ ko{
                     }
                     100000000000000{
                         other{"¤000조"}
+                    }
+                }
+                currencyFormat%alphaNextToNumber{
+                    1000{
+                        other{"¤ 0천"}
+                    }
+                    10000{
+                        other{"¤ 0만"}
+                    }
+                    100000{
+                        other{"¤ 00만"}
+                    }
+                    1000000{
+                        other{"¤ 000만"}
+                    }
+                    10000000{
+                        other{"¤ 0000만"}
+                    }
+                    100000000{
+                        other{"¤ 0억"}
+                    }
+                    1000000000{
+                        other{"¤ 00억"}
+                    }
+                    10000000000{
+                        other{"¤ 000억"}
+                    }
+                    100000000000{
+                        other{"¤ 0000억"}
+                    }
+                    1000000000000{
+                        other{"¤ 0조"}
+                    }
+                    10000000000000{
+                        other{"¤ 00조"}
+                    }
+                    100000000000000{
+                        other{"¤ 000조"}
                     }
                 }
                 decimalFormat{
@@ -273,6 +313,9 @@ ko{
                 GyMMM{"r년(U년) MMM"}
                 GyMMMEEEEd{"r년(U년) MMM d일 EEEE"}
                 GyMMMEd{"r년(U년) MMM d일 (E)"}
+                GyMMMM{"r년(U년) MMMM"}
+                GyMMMMEd{"r년(U년) MMMM d일 (E)"}
+                GyMMMMd{"r년(U년) MMMM d일"}
                 GyMMMd{"r년 MMM d일"}
                 H{"H시"}
                 Hm{"HH:mm"}
@@ -305,6 +348,8 @@ ko{
                 yyyyMMMEEEEd{"r년(U년) MMM d일 EEEE"}
                 yyyyMMMEd{"r년(U년) MMM d일 (E)"}
                 yyyyMMMM{"r년(U년) MMMM"}
+                yyyyMMMMEd{"r년(U년) MMMM d일(E)"}
+                yyyyMMMMd{"r년(U년) MMMM d일"}
                 yyyyMMMd{"r년 MMM d일"}
                 yyyyMd{"r. M. d."}
                 yyyyQQQ{"r년(U년) QQQ"}
@@ -1014,6 +1059,7 @@ ko{
                 GyMMMEEEEd{"G y년 M월 d일 EEEE"}
                 GyMMMEd{"G y년 M월 d일 (E)"}
                 GyMMMd{"G y년 M월 d일"}
+                GyMd{"GGGGG y/M/d"}
                 H{"H시"}
                 HHmmss{"HH:mm:ss"}
                 Hm{"HH:mm"}
@@ -1260,6 +1306,7 @@ ko{
                 GyMMMEEEEd{"G y년 MMM d일 EEEE"}
                 GyMMMEd{"G y년 MMM d일 (E)"}
                 GyMMMd{"G y년 MMM d일"}
+                GyMd{"GGGGG y/M/d"}
                 H{"H시"}
                 HHmmss{"HH:mm:ss"}
                 Hm{"HH:mm"}
@@ -1461,8 +1508,8 @@ ko{
                     "서기",
                 }
                 wide%variant{
-                    "BCE",
-                    "CE",
+                    "기원전",
+                    "서기",
                 }
             }
             intervalFormats{
@@ -3077,6 +3124,18 @@ ko{
             stricter{
                 "[,٫︐﹐，]",
                 "[.․﹒．｡]",
+            }
+        }
+    }
+    personNames{
+        nameOrderLocales{
+            surnameFirst{
+                "hu",
+                "ja",
+                "ko",
+                "vi",
+                "yue",
+                "zh",
             }
         }
     }

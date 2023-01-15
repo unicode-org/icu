@@ -422,6 +422,19 @@ public class LocaleDataTest extends TestFmwk{
         assertEquals("End quotes are not equals", fr_FR.getDelimiter(LocaleData.QUOTATION_END), fr_CH.getDelimiter(LocaleData.QUOTATION_END));
         assertNotEquals("Alt start quotes are equal", fr_FR.getDelimiter(LocaleData.ALT_QUOTATION_START), fr_CH.getDelimiter(LocaleData.ALT_QUOTATION_START));
         assertNotEquals("Alt end quotes are equals", fr_FR.getDelimiter(LocaleData.ALT_QUOTATION_END), fr_CH.getDelimiter(LocaleData.ALT_QUOTATION_END));
+ 
+        // ICU-21332 Add items from TestDelimiters() in cldrtest.c
+        final String[][] localesAndDelimiters = {
+                { "fr_CA", "«", "»" },
+                { "de_CH", "„", "“" },
+                { "es_MX", "“", "”" },
+                { "ja",    "「", "」" },
+        };
+        for (String[] localeAndDelimiters: localesAndDelimiters) {
+            LocaleData locData = LocaleData.getInstance(new ULocale(localeAndDelimiters[0]));
+            assertEquals("Locale " + localeAndDelimiters[0] + ", do not get expected start quote", locData.getDelimiter(LocaleData.QUOTATION_START), localeAndDelimiters[1]);
+            assertEquals("Locale " + localeAndDelimiters[0] + ", do not get expected end quote", locData.getDelimiter(LocaleData.QUOTATION_END), localeAndDelimiters[2]);
+       }
     }
 
     @Test

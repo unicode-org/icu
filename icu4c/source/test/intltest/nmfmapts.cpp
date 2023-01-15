@@ -260,7 +260,7 @@ class NFTestFactory : public SimpleNumberFormatFactory {
 
 public:
     NFTestFactory() 
-        : SimpleNumberFormatFactory(SRC_LOC, TRUE)
+        : SimpleNumberFormatFactory(SRC_LOC, true)
     {
         UErrorCode status = U_ZERO_ERROR;
         currencyStyle = NumberFormat::createInstance(SWAP_LOC, status);
@@ -271,7 +271,7 @@ public:
         delete currencyStyle;
     }
     
-    virtual NumberFormat* createFormat(const Locale& /* loc */, UNumberFormatStyle formatType)
+    virtual NumberFormat* createFormat(const Locale& /* loc */, UNumberFormatStyle formatType) override
     {
         if (formatType == UNUM_CURRENCY) {
             return currencyStyle->clone();
@@ -279,7 +279,7 @@ public:
         return NULL;
     }
 
-   virtual inline UClassID getDynamicClassID() const
+   virtual inline UClassID getDynamicClassID() const override
    {
        return (UClassID)&gID;
    }

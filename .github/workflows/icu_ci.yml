@@ -30,8 +30,8 @@ jobs:
            # Regex note: (?! ... ) is a negative lookahead. Succeed if the pattern is not present. 
           set +o pipefail && make doc 2>&1 | tee doxygen.log && ( ! grep -P 'warning:(?! .* file .?Doxyfile)' doxygen.log )
 
-  # Java7 ICU4J build and unit test
-  java7-icu4j-build-and-test:
+  # Java8 ICU4J build and unit test
+  java8-icu4j-build-and-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout and setup
@@ -40,40 +40,73 @@ jobs:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v3
         with:
+          distribution: 'temurin'
           java-version: '8'
-      - name: Cache for Java 7 tarball
-        id: cache-java7
-        uses: actions/cache@v2
-        with:
-          path: java7-tarball
-          key: ${{ runner.os }}-java7-tarball
-      - name: Download Java 7
-        if: steps.cache-java7.outputs.cache-hit != 'true'
-        run: |
-          mkdir -p java7-tarball
-          download_url="https://download.java.net/openjdk/jdk7u75/ri/openjdk-7u75-b13-linux-x64-18_dec_2014.tar.gz"
-          wget -O java7-tarball/java_package.tar.gz $download_url
-          pushd java7-tarball
-          gunzip java_package.tar.gz
-          tar xvf java_package.tar
-          popd
-      - name: Configure Ant build to use Java 7 JRE
-        run: |
-          echo "java7.bootclasspath" > $RUNNER_TEMP/draft
-          ls java7-tarball/java-se-7u75-ri/jre/lib/*.jar|paste -sd ":" - >> $RUNNER_TEMP/draft
-          paste -sd "=" < $RUNNER_TEMP/draft >  icu4j/build-local.properties
       - name: ICU4J
         run: |
           cd icu4j;
           ant init;
           ant check;
+          ant localespiCheck
       - name: List failures (if any)
         run: |
           [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`;
         if: ${{ failure() }}
 
+  # Java8 ICU4J build and unit tests using Maven
+  # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+  # Run `test` to execute unit tests and ensure it is possible for tests to run even without packaging submodule
+  # dependencies as jar files
+  java8-icu4j-test-maven:
+    name: Run unit tests with Maven using JDK 8
+    runs-on: ubuntu-latest
+    # Make this unit test target job depend on a later phase target job to prevent race condition when
+    # trying to persist the Maven cache to the Github cache, knowing that artifacts needed for
+    # the later phase `verify` are a superset of the artifacts needed for the earlier phase `test`.
+    needs: java8-icu4j-verify-maven
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+          cache: maven
+      - name: Run Maven test
+        run: |
+          cd icu4j/maven-build;
+          mvn --batch-mode test
+
+  # Run `verify` to ensure that `package` (creating .jar files) and `integration-test` (special setup for localespi tests) work
+  java8-icu4j-verify-maven:
+    name: Run integration tests with Maven using JDK 8
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+          cache: maven
+      # The Maven `verify` phase causes the following to happen first, and in order:
+      # build/compile (`compile`), unit tests (`test`), Jar building (`package`),
+      # integration tests, if any (`integration-test`)
+      - name: Run Maven verify
+        run: |
+          cd icu4j/maven-build;
+          mvn --batch-mode verify
 
   # ICU4J build and unit test under Java11
   java11-icu4j-build-and-test:
@@ -85,14 +118,16 @@ jobs:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v3
         with:
+          distribution: 'temurin'
           java-version: '11'
       - name: ICU4J
         run: |
           cd icu4j;
           ant init;
           ant check;
+          ant localespiCheck
       - name: List failures (if any)
         run: |
           [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`;
@@ -108,14 +143,16 @@ jobs:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v3
         with:
+          distribution: 'temurin'
           java-version: '16'
       - name: ICU4J
         run: |
           cd icu4j;
           ant init;
           ant check;
+          ant localespiCheck
       - name: List failures (if any)
         run: |
           [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`;
@@ -131,8 +168,9 @@ jobs:
           lfs: true
       - name: Checkout lfs objects
         run: git lfs pull
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v3
         with:
+          distribution: 'temurin'
           java-version: '11'
       - name: Config LSTM and Rebuild data jar
         run: |
@@ -146,6 +184,39 @@ jobs:
           cd icu4j;
           ant init;
           ant check;
+          ant localespiCheck
+      - name: List failures (if any)
+        run: |
+          [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`;
+        if: ${{ failure() }}
+
+  # ICU4J build and unit test under adaboost
+  adaboost-icu4j-build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and setup
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Checkout lfs objects
+        run: git lfs pull
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+      - name: Config Adaboost and Rebuild data jar
+        run: |
+          cd icu4c/source;
+          ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data ICU_DATA_FILTER_FILE=../../.github/adaboost.json CPPFLAGS=-DUCONFIG_USE_ML_PHRASE_BREAKING=1 ./runConfigureICU --enable-debug --disable-release Linux -disable-layoutex;
+          make clean;
+          make -j2 ICU4J_ROOT=../../../icu4j icu4j-data-install;
+          cd ../..
+      - name: ICU4J
+        run: |
+          cd icu4j;
+          ant init;
+          ant -Dcom.ibm.icu.impl.breakiter.useMLPhraseBreaking=true check;
+          ant localespiCheck
       - name: List failures (if any)
         run: |
           [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`;
@@ -285,13 +356,35 @@ jobs:
           make -j2 check;
           rm lib/libicudata.so*;
           cp -P stubdata/libicudata.so* lib;
+
           cd test/cintltst;
           echo 'Running ICU4C cintltst with stubdata.';
           # Note: 'Elapsed Time: ' is printed by makefile upon final success.
-          CINTLTST_OPTS=-w make check 2>&1 | grep 'Elapsed Time: ';
+          CINTLTST_OPTS=-w make check 2>&1 | tee stubdata_ctest.log;
+          if ! grep 'Elapsed Time: ' stubdata_ctest.log
+          then
+            echo
+            echo cintltst run with stubdata failed
+            echo
+            echo See
+            echo https://unicode-org.github.io/icu/processes/release/tasks/integration.html#run-tests-without-icu-data
+            echo for how to reproduce and debug the failure
+            exit 1
+          fi
+
           cd ../intltest;
           echo 'Running ICU4C intltest with stubdata.';
-          INTLTEST_OPTS=-w make check 2>&1 | grep 'Elapsed Time: '
+          INTLTEST_OPTS=-w make check 2>&1 | tee stubdata_intltest.log;
+          if ! grep 'Elapsed Time: ' stubdata_intltest.log
+          then
+            echo
+            echo intltest run with stubdata failed
+            echo
+            echo See
+            echo https://unicode-org.github.io/icu/processes/release/tasks/integration.html#run-tests-without-icu-data
+            echo for how to reproduce and debug the failure
+            exit 1
+          fi
 
   # Test U_CHARSET_IS_UTF8
   u-charset-is-utf8-test:
@@ -322,6 +415,17 @@ jobs:
       - run: |
           cd icu4c/source;
           ICU_DATA_FILTER_FILE=../../.github/lstm_for_th_my.json ./runConfigureICU --enable-debug --disable-release Linux -disable-layoutex;
+          make clean;
+          make -j2 check
+
+  # Test adaboost
+  adaboost-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          cd icu4c/source;
+          ICU_DATA_FILTER_FILE=../../.github/adaboost.json CPPFLAGS=-DUCONFIG_USE_ML_PHRASE_BREAKING=1 ./runConfigureICU --enable-debug --disable-release Linux -disable-layoutex;
           make clean;
           make -j2 check
 
@@ -373,9 +477,69 @@ jobs:
       - uses: actions/checkout@v2
       - run: python3 tools/scripts/uconfig_vars_test.py -u
 
-# Run header tests with UCONFIG_NO_XXX variations.
+  # Run header tests with UCONFIG_NO_XXX variations.
   uconfig_variation-check-all-header-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: python3 tools/scripts/uconfig_vars_test.py -p
+
+  # Build Unicode update tools
+  unicode-update-tools:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: bazelbuild/setup-bazelisk@v1
+    - name: Mount bazel cache
+      uses: actions/cache@v2
+      with:
+        path: "~/.cache/bazel"
+        key: ${{ runner.os }}-bazel
+
+    - name: Generate the data
+      run: |
+        export ICU_SRC=`pwd`;
+        icu4c/source/data/unidata/generate.sh;
+        if $?
+        then
+          echo
+          echo Build of Unicode update tools failed.
+          echo See
+          echo https://unicode-org.github.io/icu/processes/unicode-update#bazel-build-process
+          echo for how to reproduce and debug the failure
+          exit 1
+        fi
+
+        git diff --exit-code;
+        if $?
+        then
+          echo
+          echo ICU unicode data has changed!
+          echo Did you forget to include the changed data files in this PR?
+          exit 1
+        fi
+
+# Build and run ICU4C samples
+  icu4c-test-samples:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v2
+
+      - name: ICU4C configure and build
+        run: |
+          # Perform an out-of-source build of icu4c
+          mkdir /tmp/icu_samples
+          cd icu4c/source
+          ./runConfigureICU Linux -prefix=/tmp/icu_samples
+          make install
+          # Reference the paths in the new build
+          cd samples
+          # To clean all the test binaries
+          make clean-samples-recursive
+          # To rebuild them all
+          echo "Make all samples"
+          PATH=$PATH:/tmp/icu_samples/bin LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tmp/icu_samples/lib make all-samples-recursive
+          # To run all tests serially
+          echo "Run all samples"
+          pwd
+          PATH=$PATH:/tmp/icu_samples/bin LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tmp/icu_samples/lib make check-samples-recursive                  

@@ -286,6 +286,9 @@
     <ClCompile Include="numbertest_parse.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="displayoptions_test.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="numbertest_doubleconversion.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -293,6 +296,9 @@
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="numbertest_range.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="numbertest_simple.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="numbertest_permutation.cpp">

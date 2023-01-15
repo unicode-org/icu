@@ -16,7 +16,6 @@
 #include "mutex.h"
 #include <float.h>
 #include "gregoimp.h" // Math
-#include "astro.h" // CalendarAstronomer
 #include "uhash.h"
 
 // Debugging
@@ -110,7 +109,7 @@ static UBool isGregorianLeap(int32_t year)
  */
 int32_t IndianCalendar::handleGetMonthLength(int32_t eyear, int32_t month) const {
    if (month < 0 || month > 11) {
-      eyear += ClockMath::floorDivide(month, 12, month);
+      eyear += ClockMath::floorDivide(month, 12, &month);
    }
 
    if (isGregorianLeap(eyear + INDIAN_ERA_START) && month == 0) {
@@ -210,7 +209,7 @@ int32_t IndianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UB
 
     // If the month is out of range, adjust it into range, and adjust the extended year accordingly
    if (month < 0 || month > 11) {
-      eyear += (int32_t)ClockMath::floorDivide(month, 12, month);
+      eyear += (int32_t)ClockMath::floorDivide(month, 12, &month);
    }
 
    if(month == 12){
@@ -298,20 +297,22 @@ void IndianCalendar::handleComputeFields(int32_t julianDay, UErrorCode&  /* stat
    internalSet(UCAL_DAY_OF_YEAR, yday + 1); // yday is 0-based
 }    
 
-UBool
-IndianCalendar::inDaylightTime(UErrorCode& status) const
+constexpr uint32_t kIndianRelatedYearDiff = 79;
+
+int32_t IndianCalendar::getRelatedYear(UErrorCode &status) const
 {
-    // copied from GregorianCalendar
-    if (U_FAILURE(status) || !getTimeZone().useDaylightTime()) {
-        return FALSE;
+    int32_t year = get(UCAL_EXTENDED_YEAR, status);
+    if (U_FAILURE(status)) {
+        return 0;
     }
-
-    // Force an update of the state of the Calendar.
-    ((IndianCalendar*)this)->complete(status); // cast away const
-
-    return (UBool)(U_SUCCESS(status) ? (internalGet(UCAL_DST_OFFSET) != 0) : FALSE);
+    return year + kIndianRelatedYearDiff;
 }
 
+void IndianCalendar::setRelatedYear(int32_t year)
+{
+    // set extended year
+    set(UCAL_EXTENDED_YEAR, year - kIndianRelatedYearDiff);
+}
 
 /**
  * The system maintains a static default century start date and Year.  They are
@@ -320,12 +321,12 @@ IndianCalendar::inDaylightTime(UErrorCode& status) const
  */
 static UDate           gSystemDefaultCenturyStart       = DBL_MIN;
 static int32_t         gSystemDefaultCenturyStartYear   = -1;
-static icu::UInitOnce  gSystemDefaultCenturyInit        = U_INITONCE_INITIALIZER;
+static icu::UInitOnce  gSystemDefaultCenturyInit        {};
 
 
 UBool IndianCalendar::haveDefaultCentury() const
 {
-    return TRUE;
+    return true;
 }
 
 static void U_CALLCONV

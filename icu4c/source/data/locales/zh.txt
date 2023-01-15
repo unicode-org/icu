@@ -344,6 +344,8 @@ zh{
             }
             patterns{
                 accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
+                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -927,6 +929,9 @@ zh{
                 Gy{"rU年"}
                 GyMMM{"rU年MMM"}
                 GyMMMEd{"rU年MMMdE"}
+                GyMMMM{"rU年MMMM"}
+                GyMMMMEd{"rU年MMMdE"}
+                GyMMMMd{"rU年MMMMd"}
                 GyMMMd{"r年MMMd"}
                 H{"HH"}
                 Hm{"HH:mm"}
@@ -955,6 +960,8 @@ zh{
                 yyyyMMM{"rU年MMM"}
                 yyyyMMMEd{"rU年MMMdE"}
                 yyyyMMMM{"rU年MMMM"}
+                yyyyMMMMEd{"rU年MMMMdE"}
+                yyyyMMMMd{"rU年MMMMd"}
                 yyyyMMMd{"r年MMMd"}
                 yyyyMd{"r年MMMd"}
                 yyyyQQQ{"rU年QQQQ"}
@@ -5062,6 +5069,10 @@ zh{
             middle{"{0}、{1}"}
             start{"{0}、{1}"}
         }
+        standard-narrow{
+            2{"{0}、{1}"}
+            end{"{0}、{1}"}
+        }
         standard-short{
             2{"{0}和{1}"}
             end{"{0}和{1}"}
@@ -5121,6 +5132,22 @@ zh{
             stricter{
                 "[,٫︐﹐，]",
                 "[.․﹒．｡]",
+            }
+        }
+    }
+    personNames{
+        foreignSpaceReplacement{"·"}
+        initialPattern{
+            initial{"{0}"}
+        }
+        nameOrderLocales{
+            surnameFirst{
+                "hu",
+                "ja",
+                "ko",
+                "vi",
+                "yue",
+                "zh",
             }
         }
     }

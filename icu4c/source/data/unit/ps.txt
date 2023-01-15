@@ -152,6 +152,11 @@ ps{
             }
         }
         concentr{
+            item{
+                dnam{"توکي"}
+                one{"{0} توکی"}
+                other{"{0} توکی"}
+            }
             karat{
                 dnam{"قيراط"}
                 one{"{0} قيراط"}
@@ -314,6 +319,9 @@ ps{
                 dnam{"نينو ثانيې"}
                 one{"{0} ns"}
                 other{"{0} ns"}
+            }
+            quarter{
+                dnam{"ربعه"}
             }
             second{
                 dnam{"ثانيې"}
@@ -589,11 +597,6 @@ ps{
                 other{"{0} کيلو ګرامز"}
                 per{"{0} في کيلو ګرام"}
             }
-            metric-ton{
-                dnam{"ميټرک ټنز"}
-                one{"{0} ميټرک ټن"}
-                other{"{0} ميټرک ټنز"}
-            }
             microgram{
                 dnam{"مايکرو ګرامز"}
                 one{"{0} مايکرو ګرام"}
@@ -630,6 +633,11 @@ ps{
                 dnam{"ټنز"}
                 one{"{0} ټن"}
                 other{"{0} ټنز"}
+            }
+            tonne{
+                dnam{"ميټرک ټنز"}
+                one{"{0} ميټرک ټن"}
+                other{"{0} ميټرک ټنز"}
             }
         }
         power{
@@ -704,7 +712,6 @@ ps{
                 dnam{"پاسکیلز"}
             }
             pound-force-per-square-inch{
-                dnam{"پاونډز في مربع انچ"}
                 one{"{0} پاونډ في مربع انچ"}
                 other{"{0} پاونډز في مربع انچ"}
             }
@@ -744,8 +751,6 @@ ps{
             }
             generic{
                 dnam{"°"}
-                one{"{0}°"}
-                other{"{0}°"}
             }
             kelvin{
                 dnam{"کيلونز"}
@@ -843,7 +848,6 @@ ps{
                 other{"{0} ډرام"}
             }
             drop{
-                dnam{"څاڅک"}
                 one{"{0} څاڅک"}
                 other{"{0} څاڅک"}
             }
@@ -940,6 +944,11 @@ ps{
             }
         }
         concentr{
+            item{
+                dnam{"توکی"}
+                one{"{0} توکی"}
+                other{"{0} توکی"}
+            }
             percent{
                 dnam{"سلنه"}
                 one{"{0}%"}
@@ -951,6 +960,9 @@ ps{
                 dnam{"L/100km"}
                 one{"{0} L/100km"}
                 other{"{0} L/100km"}
+            }
+            mile-per-gallon-imperial{
+                dnam{"mpg UK"}
             }
         }
         coordinate{
@@ -985,6 +997,10 @@ ps{
                 dnam{"مياشت"}
                 one{"{0} m"}
                 other{"{0} m"}
+                per{"{0}/m"}
+            }
+            quarter{
+                dnam{"qtr"}
             }
             second{
                 dnam{"sec"}
@@ -1000,6 +1016,12 @@ ps{
                 dnam{"yr"}
                 one{"{0} y"}
                 other{"{0} y"}
+            }
+        }
+        force{
+            kilowatt-hour-per-100-kilometer{
+                one{"{0} kWh/100km"}
+                other{"{0}kWh/100km"}
             }
         }
         length{
@@ -1051,6 +1073,18 @@ ps{
             }
         }
         volume{
+            dessert-spoon-imperial{
+                one{"{0}dsp-Imp"}
+                other{"{0}dsp-Imp"}
+            }
+            fluid-ounce-imperial{
+                one{"{0}fl oz Im"}
+                other{"{0}fl oz Im"}
+            }
+            gallon-imperial{
+                one{"{0}galIm"}
+                other{"{0}galIm"}
+            }
             liter{
                 dnam{"لیټر"}
                 one{"{0}L"}
@@ -1203,6 +1237,11 @@ ps{
             }
         }
         concentr{
+            item{
+                dnam{"توکی"}
+                one{"{0} توکی"}
+                other{"{0} توکی"}
+            }
             karat{
                 dnam{"قيراط"}
                 one{"{0} kt"}
@@ -1351,11 +1390,6 @@ ps{
                 other{"{0} h"}
                 per{"{0}/h"}
             }
-            microsecond{
-                dnam{"μs"}
-                one{"{0} μs"}
-                other{"{0} μs"}
-            }
             millisecond{
                 dnam{"ms"}
                 one{"{0} ms"}
@@ -1377,6 +1411,9 @@ ps{
                 dnam{"ns"}
                 one{"{0} ns"}
                 other{"{0} ns"}
+            }
+            quarter{
+                dnam{"qtr"}
             }
             second{
                 dnam{"ثانيې"}
@@ -1654,11 +1691,6 @@ ps{
                 other{"{0} kg"}
                 per{"{0}/kg"}
             }
-            metric-ton{
-                dnam{"t"}
-                one{"{0} t"}
-                other{"{0} t"}
-            }
             microgram{
                 dnam{"μg"}
                 one{"{0} μg"}
@@ -1693,6 +1725,11 @@ ps{
                 dnam{"ټنز"}
                 one{"{0} tn"}
                 other{"{0} tn"}
+            }
+            tonne{
+                dnam{"t"}
+                one{"{0} t"}
+                other{"{0} t"}
             }
         }
         power{
@@ -1915,7 +1952,6 @@ ps{
                 dnam{"Imp. gal"}
                 one{"{0} gal Imp."}
                 other{"{0} gal Imp."}
-                per{"{0}/gal Imp."}
             }
             hectoliter{
                 dnam{"hL"}

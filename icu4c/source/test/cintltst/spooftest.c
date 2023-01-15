@@ -22,8 +22,9 @@
 #include "unicode/utypes.h"
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_NORMALIZATION
 
-#include <stdlib.h>
+#include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "unicode/uspoof.h"
 #include "unicode/ustring.h"
@@ -38,7 +39,7 @@
 } UPRV_BLOCK_MACRO_END
 
 #define TEST_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN { \
-    if ((expr)==FALSE) { \
+    if ((expr)==false) { \
         log_err("Test Failure at file %s, line %d: \"%s\" is false.\n", __FILE__, __LINE__, #expr); \
     } \
 } UPRV_BLOCK_MACRO_END
@@ -610,12 +611,12 @@ static void TestUSpoofCAPI(void) {
 
         inclusions = uspoof_getInclusionSet(&status);
         TEST_ASSERT_SUCCESS(status);
-        TEST_ASSERT_EQ(TRUE, uset_isFrozen(inclusions));
+        TEST_ASSERT_EQ(true, uset_isFrozen(inclusions));
 
         status = U_ZERO_ERROR;
         recommended = uspoof_getRecommendedSet(&status);
         TEST_ASSERT_SUCCESS(status);
-        TEST_ASSERT_EQ(TRUE, uset_isFrozen(recommended));
+        TEST_ASSERT_EQ(true, uset_isFrozen(recommended));
     TEST_TEARDOWN;
 
 }

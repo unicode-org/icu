@@ -221,7 +221,7 @@ UXMLParser::parseFile(const char *filename, UErrorCode &errorCode) {
             cnv,
             &pu, buffer+src.getCapacity(),
             &pb, bytes+bytesLength,
-            NULL, TRUE, &errorCode);
+            NULL, true, &errorCode);
         src.releaseBuffer(U_SUCCESS(errorCode) ? (int32_t)(pu-buffer) : 0);
         ucnv_close(cnv);
         cnv=NULL;
@@ -272,7 +272,7 @@ UXMLParser::parseFile(const char *filename, UErrorCode &errorCode) {
     capacity=fileLength;        // estimated capacity
     src.getBuffer(capacity);
     src.releaseBuffer(0);       // zero length
-    flush=FALSE;
+    flush=false;
     for(;;) {
         // convert contents of bytes[bytesLength]
         pb=bytes;
@@ -289,7 +289,7 @@ UXMLParser::parseFile(const char *filename, UErrorCode &errorCode) {
             ucnv_toUnicode(
                 cnv, &pu, buffer+src.getCapacity(),
                 &pb, bytes+bytesLength,
-                NULL, FALSE, &errorCode);
+                NULL, false, &errorCode);
             src.releaseBuffer(U_SUCCESS(errorCode) ? (int32_t)(pu-buffer) : 0);
             if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
                 errorCode=U_ZERO_ERROR;
@@ -311,7 +311,7 @@ UXMLParser::parseFile(const char *filename, UErrorCode &errorCode) {
         bytesLength=T_FileStream_read(f, bytes, (int32_t)sizeof(bytes));
         if(bytesLength==0) {
             // reached end of file, convert once more to flush the converter
-            flush=TRUE;
+            flush=true;
         }
     }
 
@@ -373,7 +373,7 @@ UXMLParser::parse(const UnicodeString &src, UErrorCode &status) {
         root = createElement(mXMLElemEmpty, status);
         fPos = mXMLElemEmpty.end(status);
     } else {
-        if (mXMLElemStart.lookingAt(fPos, status) == FALSE) {
+        if (mXMLElemStart.lookingAt(fPos, status) == false) {
             error("Root Element expected", status);
             goto errorExit;
         }
@@ -391,7 +391,7 @@ UXMLParser::parse(const UnicodeString &src, UErrorCode &status) {
             // Nested Element Start
             if (mXMLElemStart.lookingAt(fPos, status)) {
                 UXMLElement *t = createElement(mXMLElemStart, status);
-                el->fChildren.addElementX(t, status);
+                el->fChildren.addElement(t, status);
                 t->fParent = el;
                 fElementStack.push(el, status);
                 el = t;
@@ -403,11 +403,11 @@ UXMLParser::parse(const UnicodeString &src, UErrorCode &status) {
             UnicodeString s = scanContent(status);
             if (s.length() > 0) {
                 mXMLSP.reset(s);
-                if (mXMLSP.matches(status) == FALSE) {
+                if (mXMLSP.matches(status) == false) {
                     // This chunk of text contains something other than just
                     //  white space. Make a child node for it.
                     replaceCharRefs(s, status);
-                    el->fChildren.addElementX(s.clone(), status);
+                    el->fChildren.addElement(s.clone(), status);
                 }
                 mXMLSP.reset(src);    // The matchers need to stay set to the main input string.
                 continue;
@@ -445,7 +445,7 @@ UXMLParser::parse(const UnicodeString &src, UErrorCode &status) {
             // Empty Element.  Stored as a child of the current element, but not stacked.
             if (mXMLElemEmpty.lookingAt(fPos, status)) {
                 UXMLElement *t = createElement(mXMLElemEmpty, status);
-                el->fChildren.addElementX(t, status);
+                el->fChildren.addElement(t, status);
                 continue;
             }
 
@@ -521,8 +521,8 @@ UXMLParser::createElement(RegexMatcher  &mEl, UErrorCode &status) {
         replaceCharRefs(attValue, status);
 
         // Save the attribute name and value in our document structure.
-        el->fAttNames.addElementX((void *)intern(attName, status), status);
-        el->fAttValues.addElementX(attValue.clone(), status);
+        el->fAttNames.addElement((void *)intern(attName, status), status);
+        el->fAttValues.addElement(attValue.clone(), status);
         pos = mAttrValue.end(2, status);
     }
     fPos = mEl.end(0, status);

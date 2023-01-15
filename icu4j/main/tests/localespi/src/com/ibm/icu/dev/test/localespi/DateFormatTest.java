@@ -50,21 +50,13 @@ public class DateFormatTest extends TestFmwk {
             if (!isIcuImpl) {
                 errln("FAIL: " + method[0] + " returned JDK DateFormat for locale " + loc);
             }
-        } else {
-            if (isIcuImpl) {
-                logln("INFO: " + method[0] + " returned ICU DateFormat for locale " + loc);
-            }
+        } else if (isIcuImpl) {
+            logln("INFO: " + method[0] + " returned ICU DateFormat for locale " + loc);
             Locale iculoc = TestUtil.toICUExtendedLocale(loc);
             DateFormat dfIcu = getJDKInstance(dstyle, tstyle, iculoc, null);
-            if (isIcuImpl) {
-                if (!df.equals(dfIcu)) {
-                    errln("FAIL: " + method[0] + " returned ICU DateFormat for locale " + loc
-                            + ", but different from the one for locale " + iculoc);
-                }
-            } else {
-                if (!(dfIcu instanceof com.ibm.icu.impl.jdkadapter.SimpleDateFormatICU)) {
-                    errln("FAIL: " + method[0] + " returned JDK DateFormat for locale " + iculoc);
-                }
+            if (!df.equals(dfIcu)) {
+                errln("FAIL: " + method[0] + " returned ICU DateFormat for locale " + loc
+                        + ", but different from the one for locale " + iculoc);
             }
         }
     }

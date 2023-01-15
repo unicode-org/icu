@@ -68,7 +68,7 @@ How Expensive Is It?
  </icuSystemParams>
 </tests>
 ** Appendix II: Analysis.csv
-http://bugs.icu-project.org/trac/ticket/8653,"""Control"", linux i7 
+https://unicode-org.atlassian.net/browse/ICU-8653,"""Control"", linux i7 
 Intel(R) Core(TM) i7-2720QM CPU @ 2.20GHz",MacBook 2.4ghz (Core2D),MacBook 2GhzCore2,AIX Power,MB 2.4 Variance,MB 2 variance,AIX Variance
 SieveTest (=1.0),1,1,1,1,0.00%,0.00%,0.00%
 NullTest (=0.0),0,0,0,0.08,#DIV/0!,#DIV/0!,#DIV/0!

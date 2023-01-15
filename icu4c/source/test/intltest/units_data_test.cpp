@@ -5,7 +5,9 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "cstring.h"
 #include "measunit_impl.h"
+#include "unicode/locid.h"
 #include "units_data.h"
 
 #include "intltest.h"
@@ -17,9 +19,10 @@ class UnitsDataTest : public IntlTest {
   public:
     UnitsDataTest() {}
 
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = NULL) override;
 
     void testGetUnitCategory();
+    // This is a sanity check that only exists in ICU4C.
     void testGetAllConversionRates();
     void testGetPreferencesFor();
 };
@@ -43,17 +46,20 @@ void UnitsDataTest::testGetUnitCategory() {
         {"kilogram-per-cubic-meter", "mass-density"},
         {"cubic-meter-per-kilogram", "specific-volume"},
         {"meter-per-second", "speed"},
-        // TODO(icu-units#130): inverse-speed
-        // {"second-per-meter", "speed"},
-        // Consumption specifically supports inverse units (mile-per-galon,
-        // liter-per-100-kilometer):
+        {"second-per-meter", "speed"},
+        // TODO: add this test cases once the `getUnitCategory` accepts any `MeasureUnit` and not only
+        // base units.
+        // Tests are:
+        // {"liter-per-100-kilometer", "consumption"},
+        // {"mile-per-gallon", "consumption"},
         {"cubic-meter-per-meter", "consumption"},
         {"meter-per-cubic-meter", "consumption"},
+        {"kilogram-meter-per-square-meter-square-second", "pressure"},
     };
 
     IcuTestErrorCode status(*this, "testGetUnitCategory");
     for (const auto &t : testCases) {
-        CharString category = getUnitQuantity(t.unit, status);
+        CharString category = getUnitQuantity(MeasureUnitImpl::forIdentifier(t.unit, status), status);
         if (!status.errIfFailureAndReset("getUnitCategory(%s)", t.unit)) {
             assertEquals("category", t.expectedCategory, category.data());
         }
@@ -114,8 +120,7 @@ void UnitsDataTest::testGetPreferencesFor() {
         {"Unknown usage US", "length", "foobar", "US", USLenMax, USLenMin},
         {"Unknown usage 001", "length", "foobar", "XX", WorldLenMax, WorldLenMin},
         {"Fallback", "length", "person-height-xyzzy", "DE", "centimeter", "centimeter"},
-        {"Fallback twice", "length", "person-height-xyzzy-foo", "DE", "centimeter",
-         "centimeter"},
+        {"Fallback twice", "length", "person-height-xyzzy-foo", "DE", "centimeter", "centimeter"},
         // Confirming results for some unitPreferencesTest.txt test cases
         {"001 area", "area", "default", "001", "square-kilometer", "square-centimeter"},
         {"GB area", "area", "default", "GB", "square-mile", "square-inch"},
@@ -136,18 +141,20 @@ void UnitsDataTest::testGetPreferencesFor() {
 
     for (const auto &t : testCases) {
         logln(t.name);
-        const UnitPreference *const *prefs;
-        int32_t prefsCount;
-        preferences.getPreferencesFor(t.category, t.usage, t.region, prefs, prefsCount, status);
+        CharString localeID;
+        localeID.append("und-", status); // append undefined language.
+        localeID.append(t.region, status);
+        Locale locale(localeID.data());
+        auto unitPrefs = preferences.getPreferencesFor(t.category, t.usage, locale, status);
         if (status.errIfFailureAndReset("getPreferencesFor(\"%s\", \"%s\", \"%s\", ...", t.category,
                                         t.usage, t.region)) {
             continue;
         }
-        if (prefsCount > 0) {
+        if (unitPrefs.length() > 0) {
             assertEquals(UnicodeString(t.name) + " - max unit", t.expectedBiggest,
-                         prefs[0]->unit.data());
+                         unitPrefs[0]->unit.data());
             assertEquals(UnicodeString(t.name) + " - min unit", t.expectedSmallest,
-                         prefs[prefsCount - 1]->unit.data());
+                         unitPrefs[unitPrefs.length() - 1]->unit.data());
         } else {
             errln(UnicodeString(t.name) + ": failed to find preferences");
         }

@@ -49,6 +49,7 @@ void ListFormatterTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestContextual);
     TESTCASE_AUTO(TestNextPosition);
     TESTCASE_AUTO(TestInt32Overflow);
+    TESTCASE_AUTO(Test21871);
     TESTCASE_AUTO_END;
 }
 
@@ -71,14 +72,14 @@ void ListFormatterTest::ExpectPositions(
     ConstrainedFieldPosition cfp;
     cfp.constrainCategory(UFIELD_CATEGORY_LIST);
     if (tupleCount > 10) {
-      assertTrue("internal error, tupleCount too large", FALSE);
+      assertTrue("internal error, tupleCount too large", false);
     } else {
         for (int i = 0; i < tupleCount; ++i) {
-            found[i] = FALSE;
+            found[i] = false;
         }
     }
     while (iter.nextPosition(cfp, status)) {
-        UBool ok = FALSE;
+        UBool ok = false;
         int32_t id = cfp.getField();
         int32_t start = cfp.getStart();
         int32_t limit = cfp.getLimit();
@@ -90,17 +91,17 @@ void ListFormatterTest::ExpectPositions(
                 continue;
             }
             if (values[i*3] == id && values[i*3+1] == start && values[i*3+2] == limit) {
-                found[i] = ok = TRUE;
+                found[i] = ok = true;
                 break;
             }
         }
         assertTrue((UnicodeString)"found [" + attrString(id) + "," + start + "," + limit + "]", ok);
     }
     // check that all were found
-    UBool ok = TRUE;
+    UBool ok = true;
     for (int i = 0; i < tupleCount; ++i) {
         if (!found[i]) {
-            ok = FALSE;
+            ok = false;
             assertTrue((UnicodeString) "missing [" + attrString(values[i*3]) + "," + values[i*3+1] +
                        "," + values[i*3+2] + "]", found[i]);
         }
@@ -152,7 +153,7 @@ UBool ListFormatterTest::RecordFourCases(const Locale& locale, UnicodeString one
     LocalPointer<ListFormatter> formatter(ListFormatter::createInstance(locale, errorCode));
     if (U_FAILURE(errorCode)) {
         dataerrln("ListFormatter::createInstance(\"%s\", errorCode) failed in RecordFourCases: %s", locale.getName(), u_errorName(errorCode));
-        return FALSE;
+        return false;
     }
     UnicodeString input1[] = {one};
     formatter->format(input1, 1, results[0], errorCode);
@@ -164,9 +165,9 @@ UBool ListFormatterTest::RecordFourCases(const Locale& locale, UnicodeString one
     formatter->format(input4, 4, results[3], errorCode);
     if (U_FAILURE(errorCode)) {
         errln("RecordFourCases failed: %s", u_errorName(errorCode));
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 void ListFormatterTest::TestRoot() {
@@ -276,7 +277,7 @@ void ListFormatterTest::RunTestFieldPositionIteratorWithNItemsPatternShift(
         const char* testName) {
     IcuTestErrorCode errorCode(*this, testName);
     LocalPointer<ListFormatter> formatter(ListFormatter::createInstance(
-        Locale("ur", "IN"),
+        Locale("ur", "IN"), // in CLDR 41 alpha1 the "backwards order" patterns in this and other locales were removed.
         ULISTFMT_TYPE_UNITS,
         ULISTFMT_WIDTH_NARROW,
         errorCode));
@@ -329,21 +330,21 @@ void ListFormatterTest::TestFieldPositionIteratorWith3Items() {
 }
 
 void ListFormatterTest::TestFieldPositionIteratorWith3ItemsPatternShift() {
-    //  0         1
-    //  012345678901234
-    // "cc bbb a"
+    // Note: In CLDR 41 alpha1 the "backwards order" patterns in ur_IN (and one or two
+    // other locales) were removed, ur_IN now just inherits list patterns from ur.
+    // So this test may no longer be interesting.
     UnicodeString data[3] = {"a", "bbb", "cc"};
     int32_t expected[] = {
-        ULISTFMT_ELEMENT_FIELD, 7, 8,
-        ULISTFMT_LITERAL_FIELD, 6, 7,
+        ULISTFMT_ELEMENT_FIELD, 0, 1,
+        ULISTFMT_LITERAL_FIELD, 1, 3,
         ULISTFMT_ELEMENT_FIELD, 3, 6,
-        ULISTFMT_LITERAL_FIELD, 2, 3,
-        ULISTFMT_ELEMENT_FIELD, 0, 2
+        ULISTFMT_LITERAL_FIELD, 6, 12,
+        ULISTFMT_ELEMENT_FIELD, 12, 14
     };
     int32_t tupleCount = sizeof(expected)/(3 * sizeof(*expected));
     RunTestFieldPositionIteratorWithNItemsPatternShift(
         data, 3, expected, tupleCount,
-        u"cc bbb a",
+        u"a، bbb، اور cc",
         "TestFieldPositionIteratorWith3ItemsPatternShift");
 }
 
@@ -365,19 +366,19 @@ void ListFormatterTest::TestFieldPositionIteratorWith2Items() {
 }
 
 void ListFormatterTest::TestFieldPositionIteratorWith2ItemsPatternShift() {
-    //  0         1
-    //  01234567890
-    // "cc bbb"
+    // Note: In CLDR 41 alpha1 the "backwards order" patterns in ur_IN (and one or two
+    // other locales) were removed, ur_IN now just inherits list patterns from ur.
+    // So this test may no longer be interesting.
     UnicodeString data[2] = {"bbb", "cc"};
     int32_t expected[] = {
-        ULISTFMT_ELEMENT_FIELD, 3, 6,
-        ULISTFMT_LITERAL_FIELD, 2, 3,
-        ULISTFMT_ELEMENT_FIELD, 0, 2
+        ULISTFMT_ELEMENT_FIELD, 0, 3,
+        ULISTFMT_LITERAL_FIELD, 3, 8,
+        ULISTFMT_ELEMENT_FIELD, 8, 10
     };
     int32_t tupleCount = sizeof(expected)/(3 * sizeof(*expected));
     RunTestFieldPositionIteratorWithNItemsPatternShift(
         data, 2, expected, tupleCount,
-        u"cc bbb",
+        u"bbb اور cc",
         "TestFieldPositionIteratorWith2ItemsPatternShift");
 }
 
@@ -838,6 +839,32 @@ void ListFormatterTest::TestInt32Overflow() {
     FormattedList result = fmt->formatStringsToValue(
         inputs.data(), static_cast<int32_t>(inputs.size()), status);
     status.expectErrorAndReset(U_INPUT_TOO_LONG_ERROR);
+}
+
+
+void ListFormatterTest::Test21871() {
+    IcuTestErrorCode status(*this, "Test21871");
+    LocalPointer<ListFormatter> fmt(ListFormatter::createInstance("en", status), status);
+    {
+        UnicodeString strings[] = {{u"A"}, {u""}};
+        FormattedList result = fmt->formatStringsToValue(strings, 2, status);
+        ConstrainedFieldPosition cfp;
+        cfp.constrainField(UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD);
+        assertTrue("nextPosition 1", result.nextPosition(cfp, status));
+        assertEquals("start", cfp.getStart(), 0);
+        assertEquals("limit", cfp.getLimit(), 1);
+        assertFalse("nextPosition 2", result.nextPosition(cfp, status));
+    }
+    {
+        UnicodeString strings[] = {{u""}, {u"B"}};
+        FormattedList result = fmt->formatStringsToValue(strings, 2, status);
+        ConstrainedFieldPosition cfp;
+        cfp.constrainField(UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD);
+        assertTrue("nextPosition 1", result.nextPosition(cfp, status));
+        assertEquals("start", cfp.getStart(), 5);
+        assertEquals("limit", cfp.getLimit(), 6);
+        assertFalse("nextPosition 2", result.nextPosition(cfp, status));
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

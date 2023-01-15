@@ -17,12 +17,12 @@
 
 class IntlTestUtilities: public IntlTest {
 public:
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ) override;
 };
 
 class ErrorCodeTest: public IntlTest {
 public:
-    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = NULL);
+    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = NULL) override;
     void TestErrorCode();
     void TestSubclass();
     void TestIcuTestErrorCode();

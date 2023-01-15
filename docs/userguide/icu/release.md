@@ -22,11 +22,11 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 ## What Is New In The Current Release?
 
-See the [ICU download page](http://site.icu-project.org/download/) to find the subpage for the current release.
+See the [ICU download page](https://icu.unicode.org/download/) to find the subpage for the current release.
 
 The subpage for the current release will contain information on changes since the last release, bug fixes, known issues, changes to supported platforms and build environments, and migration issues for existing applications migrating from previous ICU releases. The page will also include an API Change Report, both for ICU4C and ICU4J, for a complete list of APIs added, removed, or changed in this release.
 
-Changes in previous releases can also be found the main [ICU download page](http://site.icu-project.org/download) in its version-specific subpages.
+Changes in previous releases can also be found the main [ICU download page](https://icu.unicode.org/download) in its version-specific subpages.
 
 ## License Information
 

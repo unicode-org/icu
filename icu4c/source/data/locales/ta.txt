@@ -33,7 +33,9 @@ ta{
             }
             patterns{
                 accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
-                currencyFormat{"¤ #,##,##0.00"}
+                accountingFormat%alphaNextToNumber{"¤ #,##0.00;(¤ #,##0.00)"}
+                accountingFormat%noCurrency{"#,##0.00;(#,##0.00)"}
+                currencyFormat{"¤#,##,##0.00"}
                 decimalFormat{"#,##,##0.###"}
                 percentFormat{"#,##,##0%"}
                 scientificFormat{"#E0"}
@@ -141,6 +143,16 @@ ta{
                         other{"¤ 000டி"}
                     }
                 }
+                currencyFormat%alphaNextToNumber{
+                    1000000000{
+                        one{"¤ 0பி"}
+                        other{"¤ 0பி"}
+                    }
+                    100000000000{
+                        one{"¤ 000பி"}
+                        other{"¤ 000பி"}
+                    }
+                }
                 decimalFormat{
                     1000{
                         one{"0ஆ"}
@@ -208,6 +220,12 @@ ta{
             }
         }
         minimalPairs{
+            case{
+                ablative{"… என்பதிலிருந்து {0} …"}
+                accusative{"… என்பதை {0} … ஆல் பெருக்குதல்"}
+                dative{"… என்பதற்கு {0} …"}
+                nominative{"{0} ரூ. 50 மதிப்புடையது"}
+            }
             ordinal{
                 other{"{0}வது வலது திருப்பத்தை எடு."}
             }
@@ -220,7 +238,8 @@ ta{
         native{"tamldec"}
         tamldec{
             patterns{
-                currencyFormat{"¤ #,##,##0.00"}
+                currencyFormat{"¤#,##0.00"}
+                currencyFormat%noCurrency{"#,##,##0.00"}
                 decimalFormat{"#,##,##0.###"}
                 percentFormat{"#,##,##0%"}
                 scientificFormat{"#E0"}
@@ -546,8 +565,14 @@ ta{
                 "d MMM, y G",
                 "d/M/y GGGGG",
                 "{1}, {0}",
-                "{1} அன்று {0}",
                 "{1} {0}",
+                "{1} {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1} அன்று {0}",
+                "{1} அன்று {0}",
                 "{1}, {0}",
                 "{1}, {0}",
             }
@@ -577,6 +602,7 @@ ta{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d MMM, y G"}
                 GyMMMd{"d MMM, y G"}
+                GyMd{"d/M/y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -725,8 +751,14 @@ ta{
                 "d MMM, y",
                 "d/M/yy",
                 "{1}, {0}",
-                "{1} ’அன்று’ {0}",
-                "{1} ’அன்று’ {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            DateTimePatterns%atTime{
+                "{1} அன்று {0}",
+                "{1} அன்று {0}",
                 "{1}, {0}",
                 "{1}, {0}",
             }
@@ -759,6 +791,7 @@ ta{
                 GyMMM{"G y MMM"}
                 GyMMMEd{"G y MMM d, E"}
                 GyMMMd{"G y MMM d"}
+                GyMd{"d/M/y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -1360,6 +1393,9 @@ ta{
             }
         }
         islamic{
+            availableFormats{
+                GyMd{"d/M/y GGGGG"}
+            }
             eras{
                 abbreviated{
                     "AH",
@@ -2226,7 +2262,7 @@ ta{
                     other{"{0} செவ்வாய்களில்"}
                 }
                 past{
-                    one{"{0} செவ்வாய்களுக்கு முன்"}
+                    one{"செவ். முன்பு"}
                     other{"{0} செவ். முன்பு"}
                 }
             }
@@ -2473,6 +2509,7 @@ ta{
             start{"{0}, {1}"}
         }
         unit{
+            end{"{0}, {1}"}
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
@@ -2483,6 +2520,8 @@ ta{
             start{"{0} {1}"}
         }
         unit-short{
+            2{"{0}, {1}"}
+            end{"{0}, {1}"}
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
@@ -2521,6 +2560,21 @@ ta{
             stricter{
                 "[,٫︐﹐，]",
                 "[.․﹒．｡]",
+            }
+        }
+    }
+    personNames{
+        foreignSpaceReplacement{" "}
+        nameOrderLocales{
+            givenFirst{"und"}
+            surnameFirst{
+                "ko",
+                "si",
+                "ta",
+                "te",
+                "vi",
+                "yue",
+                "zh",
             }
         }
     }

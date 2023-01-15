@@ -68,4 +68,9 @@ public class CurrencyPluralInfoAffixProvider implements AffixPatternProvider {
     public boolean hasBody() {
         return affixesByPlural[StandardPlural.OTHER.ordinal()].hasBody();
     }
+
+    @Override
+    public boolean currencyAsDecimal() {
+        return affixesByPlural[StandardPlural.OTHER.ordinal()].currencyAsDecimal();
+    }
 }

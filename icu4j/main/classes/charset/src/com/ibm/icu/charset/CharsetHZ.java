@@ -342,7 +342,7 @@ class CharsetHZ extends CharsetICU {
                         /* Handle surrogates */
                         /* check if the char is a First surrogate */
 
-                        if (UTF16.isSurrogate((char) mySourceChar)) {
+                        if (UTF16.isSurrogate(mySourceChar)) {
                             // use that handy handleSurrogates method everyone's been talking about!
                             CoderResult cr = handleSurrogates(source, (char) mySourceChar);
                             return (cr != null) ? cr : CoderResult.unmappableForLength(2);

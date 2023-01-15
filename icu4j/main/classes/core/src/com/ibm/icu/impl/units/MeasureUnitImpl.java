@@ -67,9 +67,42 @@ public class MeasureUnitImpl {
         MeasureUnitImpl result = new MeasureUnitImpl();
         result.complexity = this.complexity;
         result.identifier = this.identifier;
-        for (SingleUnitImpl single : this.singleUnits) {
-            result.singleUnits.add(single.copy());
+        for (SingleUnitImpl singleUnit : this.singleUnits) {
+            result.singleUnits.add(singleUnit.copy());
         }
+        return result;
+    }
+
+    /**
+     * Returns a simplified version of the unit.
+     * NOTE: the simplification happen when there are two units equals in their base unit and their
+     * prefixes.
+     *
+     * Example 1: "square-meter-per-meter" --> "meter"
+     * Example 2: "square-millimeter-per-meter" --> "square-millimeter-per-meter"
+     */
+    public MeasureUnitImpl copyAndSimplify() {
+        MeasureUnitImpl result = new MeasureUnitImpl();
+        for (SingleUnitImpl singleUnit : this.getSingleUnits()) {
+            // This `for` loop will cause time complexity to be O(n^2).
+            // However, n is very small (number of units, generally, at maximum equal to 10)
+            boolean unitExist = false;
+            for (SingleUnitImpl resultSingleUnit : result.getSingleUnits()) {
+                if(resultSingleUnit.getSimpleUnitID().compareTo(singleUnit.getSimpleUnitID()) == 0
+                &&
+                        resultSingleUnit.getPrefix().getIdentifier().compareTo(singleUnit.getPrefix().getIdentifier()) == 0
+                ) {
+                    unitExist = true;
+                    resultSingleUnit.setDimensionality(resultSingleUnit.getDimensionality() + singleUnit.getDimensionality());
+                    break;
+                }
+            }
+
+            if(!unitExist) {
+                result.appendSingleUnit(singleUnit);
+            }
+        }
+
         return result;
     }
 
@@ -382,7 +415,7 @@ public class MeasureUnitImpl {
         private int fIndex = 0;
         // Set to true when we've seen a "-per-" or a "per-", after which all units
         // are in the denominator. Until we find an "-and-", at which point the
-        // identifier is invalid pending TODO(CLDR-13700).
+        // identifier is invalid pending TODO(CLDR-13701).
         private boolean fAfterPer = false;
         // If an "-and-" was parsed prior to finding the "single
         //     * unit", sawAnd is set to true. If not, it is left as is.
@@ -516,7 +549,7 @@ public class MeasureUnitImpl {
          * <p>
          *
          * @throws IllegalArgumentException if we parse both compound units and "-and-", since mixed
-         *                                  compound units are not yet supported - TODO(CLDR-13700).
+         *                                  compound units are not yet supported - TODO(CLDR-13701).
          */
         private SingleUnitImpl nextSingleUnit() {
             SingleUnitImpl result = new SingleUnitImpl();
@@ -552,7 +585,7 @@ public class MeasureUnitImpl {
                     case PER:
                         if (fSawAnd) {
                             throw new IllegalArgumentException("Mixed compound units not yet supported");
-                            // TODO(CLDR-13700).
+                            // TODO(CLDR-13701).
                         }
 
                         fAfterPer = true;
@@ -567,7 +600,7 @@ public class MeasureUnitImpl {
 
                     case AND:
                         if (fAfterPer) {
-                            // not yet supported, TODO(CLDR-13700).
+                            // not yet supported, TODO(CLDR-13701).
                             throw new IllegalArgumentException("Can't start with \"-and-\", and mixed compound units");
                         }
                         fSawAnd = true;

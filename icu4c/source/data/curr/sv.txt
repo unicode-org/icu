@@ -33,7 +33,7 @@ sv{
         }
         ANG{
             "ANG",
-            "Antillergulden",
+            "antillergulden",
         }
         AOA{
             "AOA",
@@ -1313,7 +1313,6 @@ sv{
         ZMW{"ZK"}
     }
     Currencies%variant{
-        GEL{"₾"}
         TRY{"TL"}
     }
     CurrencyPlurals{
@@ -1346,8 +1345,8 @@ sv{
             other{"armeniska dram"}
         }
         ANG{
-            one{"Antillergulden"}
-            other{"Antillergulden"}
+            one{"antillergulden"}
+            other{"antillergulden"}
         }
         AOA{
             one{"angolansk kwanza"}
@@ -1419,7 +1418,7 @@ sv{
         }
         BBD{
             one{"barbadisk dollar"}
-            other{"barbadisk dollar"}
+            other{"barbadiska dollar"}
         }
         BDT{
             one{"bangladeshisk taka"}
@@ -1463,7 +1462,7 @@ sv{
         }
         BMD{
             one{"bermudisk dollar"}
-            other{"bermudisk dollar"}
+            other{"bermudiska dollar"}
         }
         BND{
             one{"bruneisk dollar"}
@@ -1839,7 +1838,7 @@ sv{
         }
         JMD{
             one{"Jamaica-dollar"}
-            other{"jamaicansk dollar"}
+            other{"jamaicanska dollar"}
         }
         JOD{
             one{"jordansk dinar"}
@@ -1887,7 +1886,7 @@ sv{
         }
         KYD{
             one{"caymansk dollar"}
-            other{"caymansk dollar"}
+            other{"caymanska dollar"}
         }
         KZT{
             one{"kazakisk tenge"}
@@ -2203,7 +2202,7 @@ sv{
         }
         SHP{
             one{"sankthelenskt pund"}
-            other{"sankthelenskt pund"}
+            other{"sankthelenska pund"}
         }
         SIT{
             one{"slovensk tolar"}
@@ -2303,7 +2302,7 @@ sv{
         }
         TWD{
             one{"taiwanesisk dollar"}
-            other{"taiwanesisk dollar"}
+            other{"taiwanesiska dollar"}
         }
         TZS{
             one{"tanzanisk shilling"}
@@ -2327,7 +2326,7 @@ sv{
         }
         USD{
             one{"amerikansk dollar"}
-            other{"amerikansk dollar"}
+            other{"amerikanska dollar"}
         }
         USN{
             one{"US-dollar (nästa dag)"}

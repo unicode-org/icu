@@ -6,32 +6,70 @@ nn{
     units{
         acceleration{
             g-force{
+                case{
+                    genitive{
+                        one{"{0} g-krafts"}
+                        other{"{0} g-krefters"}
+                    }
+                }
+                gender{"feminine"}
                 one{"{0} g-kraft"}
                 other{"{0} g-krefter"}
             }
             meter-per-square-second{
+                case{
+                    genitive{
+                        one{"{0} meter per kvadratsekunds"}
+                        other{"{0} meter per kvadratsekunds"}
+                    }
+                }
                 one{"{0} meter per sekund²"}
                 other{"{0} meter per sekund²"}
             }
         }
         angle{
             arc-minute{
+                case{
+                    genitive{
+                        one{"{0} bogeminutts"}
+                        other{"{0} bogeminutts"}
+                    }
+                }
                 dnam{"bogeminutt"}
                 one{"{0} bogeminutt"}
                 other{"{0} bogeminutt"}
             }
             arc-second{
+                case{
+                    genitive{
+                        one{"{0} bogesekunds"}
+                        other{"{0} bogesekunds"}
+                    }
+                }
                 dnam{"bogesekund"}
                 one{"{0} bogesekund"}
                 other{"{0} bogesekund"}
             }
             radian{
+                case{
+                    genitive{
+                        one{"{0} radians"}
+                        other{"{0} radianars"}
+                    }
+                }
                 dnam{"radianar"}
                 one{"{0} radian"}
                 other{"{0} radianar"}
             }
             revolution{
+                case{
+                    genitive{
+                        one{"{0} omdreiings"}
+                        other{"{0} omdreiingars"}
+                    }
+                }
                 dnam{"omdreiing"}
+                gender{"feminine"}
                 one{"{0} omdreiing"}
                 other{"{0} omdreiingar"}
             }
@@ -43,6 +81,10 @@ nn{
                 other{"{0} kvadrattommar"}
             }
             square-mile{
+                dnam{"engelske kvadratmil"}
+                gender{"feminine"}
+                one{"{0} engelsk kvadratmil"}
+                other{"{0} engelske kvadratmil"}
                 per{"{0} per engelske kvadratmil"}
             }
         }
@@ -50,14 +92,42 @@ nn{
             times{"{0}{1}"}
         }
         concentr{
+            item{
+                case{
+                    genitive{
+                        one{"{0} items"}
+                        other{"{0} elements"}
+                    }
+                }
+                dnam{"element"}
+                one{"{0} element"}
+                other{"{0} element"}
+            }
+            millimole-per-liter{
+                gender{"neuter"}
+            }
             permillion{
-                dnam{"milliondelar"}
-                one{"{0} milliondel"}
+                case{
+                    genitive{
+                        one{"{0} del per millions"}
+                        other{"{0} delar per millions"}
+                    }
+                }
+                dnam{"delar per million"}
+                one{"{0} del per million"}
                 other{"{0} milliondelar"}
             }
         }
         consumption{
+            mile-per-gallon{
+                dnam{"engelske mil per gallon"}
+                gender{"feminine"}
+                one{"{0} engelsk mil per gallon"}
+                other{"{0} engelske mil per gallon"}
+            }
             mile-per-gallon-imperial{
+                dnam{"engelske mil per britiske gallon"}
+                gender{"feminine"}
                 one{"{0} engelsk mil per britiske gallon"}
                 other{"{0} engelske mil per britiske gallon"}
             }
@@ -67,46 +137,103 @@ nn{
         }
         duration{
             century{
+                case{
+                    genitive{
+                        one{"{0} hundreårs"}
+                        other{"{0} hundreårs"}
+                    }
+                }
                 dnam{"hundreår"}
                 one{"{0} hundreår"}
                 other{"{0} hundreår"}
             }
             hour{
+                case{
+                    genitive{
+                        one{"{0} times"}
+                        other{"{0} timars"}
+                    }
+                }
                 dnam{"timar"}
+                one{"{0} time"}
+                other{"{0} timar"}
             }
             microsecond{
+                case{
+                    genitive{
+                        one{"{0} mikrosekunds"}
+                        other{"{0} mikrosekunds"}
+                    }
+                }
                 dnam{"mikrosekund"}
                 one{"{0} mikrosekund"}
                 other{"{0} mikrosekund"}
             }
             millisecond{
+                case{
+                    genitive{
+                        one{"{0} millisekunds"}
+                        other{"{0} millisekunds"}
+                    }
+                }
                 dnam{"millisekund"}
                 one{"{0} millisekund"}
                 other{"{0} millisekund"}
             }
             minute{
+                case{
+                    genitive{
+                        one{"{0} minutts"}
+                        other{"{0} minutts"}
+                    }
+                }
                 dnam{"minutt"}
                 one{"{0} minutt"}
                 other{"{0} minutt"}
             }
             month{
+                case{
+                    genitive{
+                        one{"{0} månads"}
+                        other{"{0} månadars"}
+                    }
+                }
                 dnam{"månadar"}
                 one{"{0} månad"}
                 other{"{0} månadar"}
                 per{"{0} per månad"}
             }
             nanosecond{
+                case{
+                    genitive{
+                        one{"{0} nanosekunds"}
+                        other{"{0} nanosekunds"}
+                    }
+                }
                 dnam{"nanosekund"}
                 one{"{0} nanosekund"}
                 other{"{0} nanosekund"}
             }
             second{
+                case{
+                    genitive{
+                        one{"{0} sekunds"}
+                        other{"{0} sekunds"}
+                    }
+                }
                 dnam{"sekund"}
                 one{"{0} sekund"}
                 other{"{0} sekund"}
             }
             week{
+                case{
+                    genitive{
+                        one{"{0} vekes"}
+                        other{"{0} vekers"}
+                    }
+                }
                 dnam{"veker"}
+                gender{"feminine"}
                 one{"{0} veke"}
                 other{"{0} veker"}
                 per{"{0} per veke"}
@@ -114,6 +241,12 @@ nn{
         }
         electric{
             ampere{
+                case{
+                    genitive{
+                        one{"{0} amperes"}
+                        other{"{0} amperes"}
+                    }
+                }
                 one{"{0} ampere"}
                 other{"{0} ampere"}
             }
@@ -125,6 +258,12 @@ nn{
                 other{"{0} British thermal units"}
             }
             calorie{
+                case{
+                    genitive{
+                        one{"{0} kaloris"}
+                        other{"{0} kaloriars"}
+                    }
+                }
                 dnam{"kaloriar"}
                 one{"{0} kalori"}
                 other{"{0} kaloriar"}
@@ -135,6 +274,12 @@ nn{
                 other{"{0} kaloriar"}
             }
             joule{
+                case{
+                    genitive{
+                        one{"{0} joules"}
+                        other{"{0} joules"}
+                    }
+                }
                 one{"{0} joule"}
                 other{"{0} joule"}
             }
@@ -144,9 +289,22 @@ nn{
                 other{"{0} kilokaloriar"}
             }
             kilowatt-hour{
+                case{
+                    genitive{
+                        one{"{0} kilowattimes"}
+                        other{"{0} kilowattimers"}
+                    }
+                }
                 dnam{"kilowattimar"}
                 one{"{0} kilowattime"}
                 other{"{0} kilowattimar"}
+            }
+        }
+        force{
+            pound-force{
+                dnam{"poundforce"}
+                one{"{0} poundforce"}
+                other{"{0} poundforce"}
             }
         }
         graphics{
@@ -165,16 +323,34 @@ nn{
                 other{"{0} punkt per tomme"}
             }
             megapixel{
+                case{
+                    genitive{
+                        one{"{0} megapiksels"}
+                        other{"{0} megapikslars"}
+                    }
+                }
                 dnam{"megapikslar"}
                 one{"{0} megapiksel"}
                 other{"{0} megapikslar"}
             }
             pixel{
+                case{
+                    genitive{
+                        one{"{0} piksels"}
+                        other{"{0} pikslars"}
+                    }
+                }
                 dnam{"pikslar"}
                 one{"{0} piksel"}
                 other{"{0} pikslar"}
             }
             pixel-per-centimeter{
+                case{
+                    genitive{
+                        one{"{0} piksel per centimeters"}
+                        other{"{0} pikslar per centimeters"}
+                    }
+                }
                 dnam{"pikslar per centimeter"}
                 one{"{0} piksel per centimeter"}
                 other{"{0} pikslar per centimeter"}
@@ -205,8 +381,22 @@ nn{
                 one{"{0} tomme"}
                 other{"{0} tommar"}
             }
+            mile{
+                dnam{"engelske mil"}
+                one{"{0} engelsk mil"}
+                other{"{0} engelske mil"}
+            }
+            mile-scandinavian{
+                gender{"feminine"}
+            }
             nanometer{
-                one{"{0} nm"}
+                case{
+                    genitive{
+                        one{"{0} nanometers"}
+                        other{"{0} nanometers"}
+                    }
+                }
+                one{"{0} nanometer"}
                 other{"{0} nm"}
             }
             point{
@@ -238,6 +428,9 @@ nn{
                 one{"{0} jordmasse"}
                 other{"{0} jordmassar"}
             }
+            ounce{
+                gender{"feminine"}
+            }
             solar-mass{
                 dnam{"solmassar"}
                 one{"{0} solmasse"}
@@ -255,6 +448,12 @@ nn{
         }
         pressure{
             atmosphere{
+                case{
+                    genitive{
+                        one{"{0} atmosfæres"}
+                        other{"{0} atmosfærers"}
+                    }
+                }
                 dnam{"atmosfærar"}
                 one{"{0} atmosfære"}
                 other{"{0} atmosfærar"}
@@ -266,23 +465,25 @@ nn{
             }
         }
         speed{
-            kilometer-per-hour{
-                one{"{0} kilometer per time"}
-                other{"{0} kilomeer per time"}
+            mile-per-hour{
+                dnam{"engelske mil per time"}
+                gender{"feminine"}
             }
         }
         temperature{
             generic{
+                case{
+                    genitive{
+                        one{"{0} grads"}
+                        other{"{0} graders"}
+                    }
+                }
                 dnam{"°"}
                 one{"{0}°"}
                 other{"{0}°"}
             }
         }
         torque{
-            newton-meter{
-                one{"{0} newtonmeter"}
-                other{"{0} newtonmeter"}
-            }
             pound-force-foot{
                 dnam{"pound-feet"}
                 one{"{0} pound-force-foot"}
@@ -291,7 +492,8 @@ nn{
         }
         volume{
             bushel{
-                dnam{"bushels"}
+                one{"{0} bushel"}
+                other{"{0} bushels"}
             }
             cubic-inch{
                 dnam{"kubikktommar"}
@@ -299,7 +501,9 @@ nn{
                 other{"{0} kubikktommar"}
             }
             cubic-mile{
-                one{"{0} engelske kubikkmil"}
+                dnam{"engelske kubikkmil"}
+                gender{"feminine"}
+                one{"{0} kubikkmile"}
                 other{"{0} engelske kubikkmil"}
             }
             cubic-yard{
@@ -312,17 +516,25 @@ nn{
                 other{"{0} koppar"}
             }
             cup-metric{
+                case{
+                    genitive{
+                        one{"{0} metrisk kopps"}
+                        other{"{0} metriske koppers"}
+                    }
+                }
                 dnam{"metriske koppar"}
                 one{"{0} metrisk kopp"}
                 other{"{0} metriske koppar"}
             }
             dessert-spoon{
                 dnam{"dessertskei"}
+                gender{"feminine"}
                 one{"{0} dessertskei"}
                 other{"{0} dessertskeier"}
             }
             dessert-spoon-imperial{
                 dnam{"britisk dessertskei"}
+                gender{"feminine"}
                 one{"{0} britisk dessertskei"}
                 other{"{0} britisk dessertskei"}
             }
@@ -331,30 +543,39 @@ nn{
                 one{"{0} drope"}
                 other{"{0} dropar"}
             }
+            fluid-ounce{
+                gender{"feminine"}
+            }
+            fluid-ounce-imperial{
+                gender{"feminine"}
+            }
             gallon-imperial{
                 per{"{0} per britiske gallon"}
             }
+            pinch{
+                gender{"feminine"}
+            }
             tablespoon{
                 dnam{"matskeier"}
+                gender{"feminine"}
                 one{"{0} matskei"}
                 other{"{0} matskeier"}
             }
             teaspoon{
                 dnam{"teskeier"}
+                gender{"feminine"}
                 one{"{0} teskei"}
                 other{"{0} teskeier"}
             }
         }
     }
     unitsNarrow{
-        area{
-            square-foot{
-                one{"{0} ft²"}
-                other{"{0} ft²"}
+        angle{
+            arc-minute{
+                dnam{"bogemin"}
             }
-            square-mile{
-                one{"{0} mi²"}
-                other{"{0} mi²"}
+            arc-second{
+                dnam{"bogesek"}
             }
         }
         compound{
@@ -366,8 +587,14 @@ nn{
             }
         }
         duration{
+            century{
+                dnam{"hå."}
+                one{"{0} hå."}
+                other{"{0} hå."}
+            }
             hour{
                 dnam{"timar"}
+                per{"{0}/h"}
             }
             millisecond{
                 dnam{"millisekund"}
@@ -387,28 +614,39 @@ nn{
                 dnam{"vk."}
                 one{"{0}v"}
                 other{"{0}v"}
+                per{"{0}/v"}
             }
         }
         length{
-            mile{
-                one{"{0} mi"}
-                other{"{0} mi"}
+            centimeter{
+                per{"{0}/cm"}
             }
-            yard{
-                one{"{0} yd"}
-                other{"{0} yd"}
+            decimeter{
+                dnam{"dm"}
+            }
+            kilometer{
+                per{"{0}/km"}
+            }
+            meter{
+                per{"{0}/m"}
+            }
+            micrometer{
+                dnam{"μm"}
+            }
+            nanometer{
+                dnam{"nm"}
+            }
+        }
+        mass{
+            ounce{
+                one{"{0} unse"}
+                other{"{0} unser"}
             }
         }
         pressure{
             inch-ofhg{
                 one{"{0} inHg"}
                 other{"{0} inHg"}
-            }
-        }
-        speed{
-            mile-per-hour{
-                one{"{0} mi/h"}
-                other{"{0} mi/h"}
             }
         }
         temperature{
@@ -418,12 +656,31 @@ nn{
             }
         }
         volume{
-            cubic-mile{
-                one{"{0} mi³"}
-                other{"{0} mi³"}
+            dessert-spoon{
+                dnam{"bs"}
+                one{"{0} bs"}
+                other{"{0} bs"}
+            }
+            dessert-spoon-imperial{
+                dnam{"brit. barneskei"}
+                one{"{0} imp. bs"}
+                other{"{0} imp. bs"}
+            }
+            drop{
+                one{"{0} dr"}
+                other{"{0} drope"}
+            }
+            fluid-ounce-imperial{
+                one{"{0} imp. fl oz"}
+                other{"{0} imp. fl oz"}
             }
             liter{
                 dnam{"liter"}
+            }
+            tablespoon{
+                dnam{"ms"}
+                one{"{0} ms"}
+                other{"{0} ms"}
             }
         }
     }
@@ -502,6 +759,11 @@ nn{
             }
         }
         duration{
+            century{
+                dnam{"hå."}
+                one{"{0} hå."}
+                other{"{0} hå."}
+            }
             hour{
                 dnam{"timar"}
             }
@@ -529,6 +791,11 @@ nn{
                 per{"{0}/v"}
             }
         }
+        force{
+            pound-force{
+                dnam{"poundforce"}
+            }
+        }
         graphics{
             dot-per-centimeter{
                 one{"{0} dpcm"}
@@ -554,8 +821,6 @@ nn{
             }
             fathom{
                 dnam{"famner"}
-                one{"{0} fmn"}
-                other{"{0} fmn"}
             }
             foot{
                 per{"{0}/ft"}
@@ -610,16 +875,10 @@ nn{
             }
         }
         volume{
-            bushel{
-                dnam{"bushels"}
-            }
             cubic-inch{
                 dnam{"tommar³"}
                 one{"{0} tomme³"}
                 other{"{0} tommar³"}
-            }
-            cubic-kilometer{
-                dnam{"kubikkilometer"}
             }
             cubic-mile{
                 dnam{"engelske mil³"}
@@ -642,12 +901,15 @@ nn{
             dessert-spoon-imperial{
                 dnam{"brit. dsskei"}
                 one{"{0} brit. dsskei"}
-                other{"{0} brit. dsskei"}
+                other{"{0} imp. bs"}
             }
             drop{
                 dnam{"drope"}
                 one{"{0} drope"}
-                other{"{0} dråpe"}
+                other{"{0} drope"}
+            }
+            fluid-ounce{
+                dnam{"væskeunse"}
             }
             fluid-ounce-imperial{
                 dnam{"britisk væskeunse"}

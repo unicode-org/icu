@@ -38,7 +38,7 @@ public:
 
     void IgnoreBytes(int32_t numIgnore) { ignore_ = numIgnore; }
 
-    virtual void Append(const char *bytes, int32_t n);
+    virtual void Append(const char *bytes, int32_t n) override;
     void Append(uint32_t b) {
         if (ignore_ > 0) {
             --ignore_;
@@ -52,7 +52,7 @@ public:
     virtual char *GetAppendBuffer(int32_t min_capacity,
                                   int32_t desired_capacity_hint,
                                   char *scratch, int32_t scratch_capacity,
-                                  int32_t *result_capacity);
+                                  int32_t *result_capacity) override;
     int32_t NumberOfBytesAppended() const { return appended_; }
 
     /**
@@ -116,7 +116,7 @@ public:
 private:
     friend struct CollationDataReader;
 
-    CollationKeys();  // no instantiation
+    CollationKeys() = delete;  // no instantiation
 
     // Secondary level: Compress up to 33 common weights as 05..25 or 25..45.
     static const uint32_t SEC_COMMON_LOW = Collation::COMMON_BYTE;

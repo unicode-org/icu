@@ -34,7 +34,7 @@ public:
     ~UnicodeSetTest();
 
 private:
-    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL);
+    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL) override;
 
     void Testj2268();
 
@@ -91,7 +91,7 @@ private:
 
     void TestStringSpan();
 
-    void TestUCAUnsafeBackwards();
+    void TestPatternWithSurrogates();
     void TestIntOverflow();
     void TestUnusedCcc();
     void TestDeepPattern();
@@ -99,6 +99,7 @@ private:
 
     void assertNext(UnicodeSetIterator &iter, const UnicodeString &expected);
     void TestSkipToStrings();
+    void TestPatternCodePointComplement();
 
 private:
 

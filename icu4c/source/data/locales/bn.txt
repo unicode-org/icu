@@ -30,6 +30,8 @@ bn{
         beng{
             patterns{
                 currencyFormat{"#,##,##0.00¤"}
+                currencyFormat%alphaNextToNumber{"#,##,##0.00 ¤"}
+                currencyFormat%noCurrency{"#,##,##0.00"}
                 decimalFormat{"#,##,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
@@ -58,7 +60,10 @@ bn{
             }
             patterns{
                 accountingFormat{"#,##,##0.00¤;(#,##,##0.00¤)"}
+                accountingFormat%alphaNextToNumber{"#,##,##0.00 ¤;(#,##,##0.00 ¤)"}
+                accountingFormat%noCurrency{"#,##,##0.00;(#,##,##0.00)"}
                 currencyFormat{"#,##,##0.00¤"}
+                currencyPatternAppendISO{"{0} ¤¤"}
                 decimalFormat{"#,##,##0.###"}
                 percentFormat{"#,##,##0%"}
                 scientificFormat{"#E0"}
@@ -166,6 +171,56 @@ bn{
                         other{"000 লা'.'কো'.'¤"}
                     }
                 }
+                currencyFormat%alphaNextToNumber{
+                    1000{
+                        one{"0 হা ¤"}
+                        other{"0 হা ¤"}
+                    }
+                    10000{
+                        one{"00 হা ¤"}
+                        other{"00 হা ¤"}
+                    }
+                    100000{
+                        one{"0 লা ¤"}
+                        other{"0 লা ¤"}
+                    }
+                    1000000{
+                        one{"00 লা ¤"}
+                        other{"00 লা ¤"}
+                    }
+                    10000000{
+                        one{"0 কো ¤"}
+                        other{"0 কো ¤"}
+                    }
+                    100000000{
+                        one{"00 কো ¤"}
+                        other{"00 কো ¤"}
+                    }
+                    1000000000{
+                        one{"000 কো ¤"}
+                        other{"000 কো ¤"}
+                    }
+                    10000000000{
+                        one{"0000 কো ¤"}
+                        other{"0000 কো ¤"}
+                    }
+                    100000000000{
+                        one{"00000 কো ¤"}
+                        other{"00000 কো ¤"}
+                    }
+                    1000000000000{
+                        one{"0 লা'.'কো'.' ¤"}
+                        other{"0 লা'.'কো'.' ¤"}
+                    }
+                    10000000000000{
+                        one{"00 লা'.'কো'.' ¤"}
+                        other{"00 লা'.'কো'.' ¤"}
+                    }
+                    100000000000000{
+                        one{"000 লা'.'কো'.' ¤"}
+                        other{"000 লা'.'কো'.' ¤"}
+                    }
+                }
                 decimalFormat{
                     1000{
                         one{"0 হা"}
@@ -233,6 +288,12 @@ bn{
             }
         }
         minimalPairs{
+            case{
+                accusative{"রবিবারকে আসার দিন হিসেবে ধরা হয় {0}"}
+                genitive{"রবিবারের সন্ধ্যায় {0} আসবে"}
+                locative{"রবিবারে {0} টায় আসবে"}
+                nominative{"রবিবারে {0} আসবে"}
+            }
             ordinal{
                 few{"ডান দিকে {0}র্থ বাঁকটি নিন।"}
                 many{"ডান দিকে {0}ষ্ঠ বাঁকটি নিন।"}
@@ -241,7 +302,7 @@ bn{
                 two{"ডান দিকে {0}য় বাঁকটি নিন।"}
             }
             plural{
-                one{"সসে {0}টি আপেল খেল, সেটা ভাল"}
+                one{"সসে {0}টি আপেল খেল, সেটি ভাল"}
                 other{"সসে {0}টি আপেল খেল, সেগুলি ভাল"}
             }
         }
@@ -502,6 +563,12 @@ bn{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimePatterns%atTime{
+                "{1} এ {0}",
+                "{1} এ {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
             DateTimeSkeletons{
                 "ahmmsszzzz",
                 "ahmmssz",
@@ -528,6 +595,7 @@ bn{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d MMM, y G"}
                 GyMMMd{"d MMM, y G"}
+                GyMd{"d/M/y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -569,10 +637,10 @@ bn{
                     y{"M/y – M/y GGGGG"}
                 }
                 GyMEd{
-                    G{"E, M/d/y GGGGG – E, M/d/y GGGGG"}
-                    M{"E, M/d/y – E, M/d/y GGGGG"}
-                    d{"E, M/d/y – E, M/d/y GGGGG"}
-                    y{"E, M/d/y – E, M/d/y GGGGG"}
+                    G{"E, d/M/y GGGGG – E, d/M/y GGGGG"}
+                    M{"E, d/M/y – E, d/M/y GGGGG"}
+                    d{"E, d/M/y – E, d/M/y GGGGG"}
+                    y{"E, d/M/y – E, d/M/y GGGGG"}
                 }
                 GyMMM{
                     G{"MMM y G – MMM y G"}
@@ -592,10 +660,10 @@ bn{
                     y{"MMM d, y – MMM d, y G"}
                 }
                 GyMd{
-                    G{"M/d/y GGGGG – M/d/y GGGGG"}
-                    M{"M/d/y – M/d/y GGGGG"}
-                    d{"M/d/y – M/d/y GGGGG"}
-                    y{"M/d/y – M/d/y GGGGG"}
+                    G{"d/M/y GGGGG – d/M/y GGGGG"}
+                    M{"d/M/y – d/M/y GGGGG"}
+                    d{"d/M/y – d/M/y GGGGG"}
+                    y{"d/M/y – d/M/y GGGGG"}
                 }
                 H{
                     H{"HH–HH"}
@@ -720,6 +788,12 @@ bn{
                 "{1} {0}",
                 "{1} {0}",
             }
+            DateTimePatterns%atTime{
+                "{1} এ {0}",
+                "{1} এ {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
             DateTimeSkeletons{
                 "ahmmsszzzz",
                 "ahmmssz",
@@ -749,6 +823,7 @@ bn{
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d MMM, y G"}
                 GyMMMd{"d MMM, y G"}
+                GyMd{"dd-MM-y GGGGG"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -887,12 +962,12 @@ bn{
                         night1{"রাত্রি"}
                     }
                     wide{
-                        afternoon1{"দুপুর"}
+                        afternoon1{"দুপুরবেলায়"}
                         afternoon2{"বিকাল"}
-                        evening1{"সন্ধ্যা"}
-                        morning1{"ভোর"}
-                        morning2{"সকাল"}
-                        night1{"রাত্রিতে"}
+                        evening1{"সন্ধ্যাবেলায়"}
+                        morning1{"ভোরবেলায়"}
+                        morning2{"সকালবেলায়"}
+                        night1{"রাত্রিবেলায়"}
                     }
                 }
                 stand-alone{
@@ -1085,15 +1160,15 @@ bn{
                         "জানু",
                         "ফেব",
                         "মার্চ",
-                        "এপ্রিল",
+                        "এপ্রি",
                         "মে",
                         "জুন",
-                        "জুলাই",
-                        "আগস্ট",
-                        "সেপ্টেম্বর",
-                        "অক্টোবর",
-                        "নভেম্বর",
-                        "ডিসেম্বর",
+                        "জুল",
+                        "আগ",
+                        "সেপ",
+                        "অক্টো",
+                        "নভে",
+                        "ডিসে",
                     }
                     narrow{
                         "জা",
@@ -1126,8 +1201,8 @@ bn{
                 }
                 stand-alone{
                     abbreviated{
-                        "জানুয়ারী",
-                        "ফেব্রুয়ারী",
+                        "জানু",
+                        "ফেব",
                         "মার্চ",
                         "এপ্রিল",
                         "মে",
@@ -2128,8 +2203,8 @@ bn{
             }
             relativeTime{
                 future{
-                    one{"{0} সোমবারেতে"}
-                    other{"{0} সোমবারেতে"}
+                    one{"{0} সোমবারে"}
+                    other{"{0} সোমবারে"}
                 }
                 past{
                     one{"{0} সোমবার আগে"}
@@ -2145,8 +2220,8 @@ bn{
             }
             relativeTime{
                 future{
-                    one{"{0} সোমবারেতে"}
-                    other{"{0} সোমবারেতে"}
+                    one{"{0} সোমবারে"}
+                    other{"{0} সোমবারে"}
                 }
                 past{
                     one{"{0} সোমবার আগে"}
@@ -2162,8 +2237,8 @@ bn{
             }
             relativeTime{
                 future{
-                    one{"{0} সোমবারেতে"}
-                    other{"{0} সোমবারেতে"}
+                    one{"{0} সোমবারে"}
+                    other{"{0} সোমবারে"}
                 }
                 past{
                     one{"{0} সোমবার আগে"}
@@ -2370,8 +2445,8 @@ bn{
             }
             relativeTime{
                 future{
-                    one{"{0} রবিবারেতে"}
-                    other{"{0} রবিবারেতে"}
+                    one{"{0} রবিবারে"}
+                    other{"{0} রবিবারে"}
                 }
                 past{
                     one{"{0} রবিবার আগে"}
@@ -2387,8 +2462,8 @@ bn{
             }
             relativeTime{
                 future{
-                    one{"{0} রবিবারেতে"}
-                    other{"{0} রবিবারেতে"}
+                    one{"{0} রবিবারে"}
+                    other{"{0} রবিবারে"}
                 }
                 past{
                     one{"{0} রবিবার আগে"}
@@ -2404,8 +2479,8 @@ bn{
             }
             relativeTime{
                 future{
-                    one{"{0} রবিবারেতে"}
-                    other{"{0} রবিবারেতে"}
+                    one{"{0} রবিবারে"}
+                    other{"{0} রবিবারে"}
                 }
                 past{
                     one{"{0} রবিবার আগে"}
@@ -2790,6 +2865,25 @@ bn{
             stricter{
                 "[,٫︐﹐，]",
                 "[.․﹒．｡]",
+            }
+        }
+    }
+    personNames{
+        foreignSpaceReplacement{" "}
+        initialPattern{
+            initial{"{0}."}
+            initialSequence{"{0} {1}"}
+        }
+        nameOrderLocales{
+            givenFirst{
+                "und",
+                "bn",
+            }
+            surnameFirst{
+                "ko",
+                "vi",
+                "yue",
+                "zh",
             }
         }
     }

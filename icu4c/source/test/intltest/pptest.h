@@ -21,7 +21,7 @@
  **/
 class ParsePositionTest: public IntlTest {
     // IntlTest override
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par ) override;
 public:
 
     void TestParsePosition(void);
@@ -30,7 +30,7 @@ public:
     void Test4109023(void);
 
 protected:
-    UBool failure(UErrorCode status, const char* msg, UBool possibleDataError=FALSE);
+    UBool failure(UErrorCode status, const char* msg, UBool possibleDataError=false);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
