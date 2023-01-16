@@ -35,6 +35,8 @@ U_NAMESPACE_BEGIN
 
 // leap months are represented as month number + 64
 
+// Original code created by Ashihs Patel during Google Summer of Code 2021.
+
 TibetanCalendar* TibetanCalendar::clone() const {
   return new TibetanCalendar(*this);
 }
@@ -43,9 +45,6 @@ TibetanCalendar::TibetanCalendar(const Locale& aLocale, UErrorCode& success)
   :   Calendar(TimeZone::forLocaleOrDefault(aLocale), aLocale, success)
 {
   setTimeInMillis(getNow(), success); // Call this again now that the vtable is set up properly.
-}
-
-TibetanCalendar::TibetanCalendar(const TibetanCalendar& other) : Calendar(other) {
 }
 
 TibetanCalendar::~TibetanCalendar()
@@ -59,7 +58,7 @@ TibetanCalendar::~TibetanCalendar()
  * @internal
  */
 const char *TibetanCalendar::getType() const {
-    return 'tibetan';
+    return "tibetan";
 }
 
 // Tsurphu is another widespread type of Tibetan calendar calculations
@@ -72,9 +71,6 @@ TibetanTsurphuCalendar::TibetanTsurphuCalendar(const Locale& aLocale, UErrorCode
   :   TibetanCalendar(aLocale, success)
 {
   setTimeInMillis(getNow(), success); // Call this again now that the vtable is set up properly.
-}
-
-TibetanTsurphuCalendar::TibetanTsurphuCalendar(const TibetanTsurphuCalendar& other) : TibetanCalendar(other) {
 }
 
 TibetanTsurphuCalendar::~TibetanTsurphuCalendar()
@@ -177,12 +173,12 @@ int32_t TibetanTsurphuCalendar::trueDate(int32_t day, int32_t monthCount) const 
  * @param month the month number
  * @param is_leap_month flag indicating whether or not the given month is leap month
  */
-int32_t TibetanCalendar::toMonthCount(int32_t eyear, int32_t month, int32_t is_leap_month) {
+int32_t TibetanCalendar::toMonthCount(int32_t eyear, int32_t month, int32_t is_leap_month) const {
 
     return floor((12*(eyear-127-PHUGPA_YEAR0) + month - PHUGPA_ALPHA - (1.0-12.0*S1)*is_leap_month)/(12.0*S1));
 }
 
-int32_t TibetanTsurphuCalendar::toMonthCount(int32_t eyear, int32_t month, int32_t is_leap_month) {
+int32_t TibetanTsurphuCalendar::toMonthCount(int32_t eyear, int32_t month, int32_t is_leap_month) const {
 
     return floor((12*(eyear-127-TSURPHU_YEAR0) + month - PHUGPA_ALPHA - (1.0-12.0*S1)*is_leap_month)/(12.0*S1));
 }
@@ -193,7 +189,7 @@ int32_t TibetanTsurphuCalendar::toMonthCount(int32_t eyear, int32_t month, int32
  * @param num the number to be divided
  * @param mod the number to be divided with
  */
-int32_t TibetanCalendar::amod(int32_t num, int32_t mod) {
+int32_t TibetanCalendar::amod(int32_t num, int32_t mod) const {
 
     if((num % mod) == 0) return mod;
     return (num % mod + mod) % mod;
