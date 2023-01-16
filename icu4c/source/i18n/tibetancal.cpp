@@ -35,6 +35,7 @@ U_NAMESPACE_BEGIN
 // [Janson] Janson, Svante. "Tibetan calendar mathematics." arXiv preprint arXiv:1401.6285 (2014).
 // http://www2.math.uu.se/~svante/papers/calendars/tibet.pdf
 
+// months are numbered starting from 1
 // leap months of year are represented using UCAL_IS_LEAP_MONTH
 // leap days of month are represented as day of month + 64 because there is no IS_LEAP_DAY field
 // rabjung (=60 years cycle) index is represented in UCAL_ERA
@@ -212,7 +213,7 @@ static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
     //           Minimum   Maximum
     { -5000000, -5000000,  5000000,  5000000}, // ERA 
     {        0,        0,       59,       59}, // YEAR
-    {        0,        0,       11,       11}, // MONTH
+    {        1,        1,       12,       12}, // MONTH
     {        1,        1,       50,       55}, // WEEK_OF_YEAR
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // WEEK_OF_MONTH
     {        1,        1,       93,       94}, // DAY_OF_MONTH
@@ -411,7 +412,7 @@ void TibetanCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status)
     internalSet(UCAL_ERA, cycleNumber);
     internalSet(UCAL_YEAR, yearInCycle);
     internalSet(UCAL_EXTENDED_YEAR, yearInCycle);
-    internalSet(UCAL_MONTH, tmonth-1);
+    internalSet(UCAL_MONTH, tmonth);
     internalSet(UCAL_DAY_OF_MONTH, tday);
     internalSet(UCAL_DAY_OF_YEAR, dayOfYear);
     internalSet(UCAL_JULIAN_DAY, julianDay);
@@ -468,7 +469,7 @@ void TibetanTsurphuCalendar::handleComputeFields(int32_t julianDay, UErrorCode &
     internalSet(UCAL_ERA, cycleNumber);
     internalSet(UCAL_YEAR, yearInCycle);
     internalSet(UCAL_EXTENDED_YEAR, yearInCycle);
-    internalSet(UCAL_MONTH, tmonth-1);
+    internalSet(UCAL_MONTH, tmonth);
     internalSet(UCAL_DAY_OF_MONTH, tday);
     internalSet(UCAL_DAY_OF_YEAR, dayOfYear);
     internalSet(UCAL_JULIAN_DAY,julianDay);
