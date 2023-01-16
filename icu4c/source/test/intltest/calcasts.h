@@ -62,6 +62,7 @@ class CalendarCaseTest: public CalendarTest {
   void Coptic();
   void Ethiopic();
   void Tibetan();
+  void TibetanTsurphu();
 };
 
 #endif

@@ -35,6 +35,7 @@ void CalendarCaseTest::runIndexedTest( int32_t index, UBool exec, const char* &n
     CASE(3,Coptic);
     CASE(4,Ethiopic);
     CASE(5,Tibetan);
+    CASE(6,TibetanTsurphu);
     default: name = ""; break;
     }
 }
@@ -507,8 +508,11 @@ void CalendarCaseTest::Tibetan() {
 
     static const TestCase tests[] = {
 
-    // A huge list of test cases to make sure that computeTime and computeFields
+    // Test cases to make sure that computeTime and computeFields
     // work properly for a wide range of data in the Tibetan calendar.
+    //
+    // Tests come from data produced by Edward Henning on
+    // http://kalacakra.org/calendar/tiblist.htm
     //
     // Julian Day   Era Year     Month         Day  WkDay Hour Min Sec
        {2458166.5,  0,  2145,         1,        1,  FRI,   0,  0,  0}, // Gregorian: 16/02/2018 - not a leap month - not a leap day - Losar
@@ -548,8 +552,8 @@ void CalendarCaseTest::Tibetan() {
 
     UErrorCode status = U_ZERO_ERROR;
     Calendar *c = Calendar::createInstance("bo_IN@calendar=tibetan", status);
-    if (failure(status, "Calendar::createInstance", TRUE)) return;
-    c->setLenient(TRUE);
+    if (failure(status, "Calendar::createInstance", true)) return;
+    c->setLenient(true);
     doTestCases(tests, c);
     delete c;
 
@@ -561,9 +565,7 @@ void CalendarCaseTest::TibetanTsurphu() {
 
     static const TestCase tests[] = {
 
-    // A huge list of test cases to make sure that computeTime and computeFields
-    // work properly for a wide range of data in the Tibetan calendar.
-    //
+    // Tests from http://kalacakra.org/calendar/tiblist2.htm
     // Julian Day   Era Year     Month         Day  WkDay Hour Min Sec
        {2451581.5,  0,  2127,         1,        1,  SUN,   0,  0,  0}, // Gregorian: 06/02/2000 - not a leap month - not a leap day - Losar
        {2453089.5,  1,  2131,         2,       68,  WED,   0,  0,  0}, // Gregorian: 24/03/2004 - not a leap month - leap day
@@ -571,10 +573,10 @@ void CalendarCaseTest::TibetanTsurphu() {
        {-1,-1,-1,-1,-1,-1,-1,-1,-1}
     };
 
-    status = U_ZERO_ERROR;
-    c = Calendar::createInstance("bo_IN@calendar=tibetan-tsurphu", status);
-    if (failure(status, "Calendar::createInstance", TRUE)) return;
-    c->setLenient(TRUE);
+    UErrorCode status = U_ZERO_ERROR;
+    Calendar *c = Calendar::createInstance("bo_IN@calendar=tibetan-tsurphu", status);
+    if (failure(status, "Calendar::createInstance", true)) return;
+    c->setLenient(true);
     doTestCases(tests, c);
 
     delete c;
