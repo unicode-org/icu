@@ -30,12 +30,17 @@ U_NAMESPACE_BEGIN
 
 // Implementation of the TibetanCalendar class
 
-// Ref: [Janson] Janson, Svante. "Tibetan calendar mathematics." arXiv preprint arXiv:1401.6285 (2014).
+// Refs:
+//
+// [Janson] Janson, Svante. "Tibetan calendar mathematics." arXiv preprint arXiv:1401.6285 (2014).
 // http://www2.math.uu.se/~svante/papers/calendars/tibet.pdf
 
-// leap months are represented as month number + 64
+// leap months of year are represented as month of year + 64
+// leap days of month are represented as day of month + 64
+// rabjung (=60 years cycle) index is represented in UCAL_ERA
 
 // Original code created by Ashihs Patel during Google Summer of Code 2021.
+// Questions can be addressed to Elie Roux.
 
 TibetanCalendar* TibetanCalendar::clone() const {
   return new TibetanCalendar(*this);
@@ -124,10 +129,10 @@ constexpr double A1 = 253.0 / 3528; // as in [Janson] (7.12 and A.27)
 constexpr double A2 = 1.0 / 28; // as in [Janson] (7.13)
 
 constexpr int32_t PHUGPA_YEAR0 = 806;
-constexpr double PHUGPA_ALPHA = 1 + 827.0 / 1005;
+constexpr double PHUGPA_ALPHA = 1 + 827.0 / 1005; // as in [Janson] (C.30)
 
 constexpr int32_t TSURPHU_YEAR0 = 1732;
-constexpr double TSURPHU_ALPHA = 2 + 1052.0 / 9045;
+constexpr double TSURPHU_ALPHA = 2 + 1903.0 / 18090; // as in [Janson] (C.44)
 
 
 /**
@@ -170,6 +175,7 @@ int32_t TibetanTsurphuCalendar::trueDate(int32_t day, int32_t monthCount) const 
 
 /**
  * Returns the month count(based on the epoch) from the given Tibetan year, month number and leap month indicator.
+ * See [Janson] appendix C.
  * @param month the month number
  * @param is_leap_month flag indicating whether or not the given month is leap month
  */
@@ -180,7 +186,7 @@ int32_t TibetanCalendar::toMonthCount(int32_t eyear, int32_t month, int32_t is_l
 
 int32_t TibetanTsurphuCalendar::toMonthCount(int32_t eyear, int32_t month, int32_t is_leap_month) const {
 
-    return floor((12*(eyear-127-TSURPHU_YEAR0) + month - PHUGPA_ALPHA - (1.0-12.0*S1)*is_leap_month)/(12.0*S1));
+    return floor((12*(eyear-127-TSURPHU_YEAR0) + month - TSURPHU_ALPHA - (1.0-12.0*S1)*is_leap_month)/(12.0*S1));
 }
 
 
