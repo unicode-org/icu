@@ -35,9 +35,10 @@ U_NAMESPACE_BEGIN
 // [Janson] Janson, Svante. "Tibetan calendar mathematics." arXiv preprint arXiv:1401.6285 (2014).
 // http://www2.math.uu.se/~svante/papers/calendars/tibet.pdf
 
-// leap months of year are represented as month of year + 64
-// leap days of month are represented as day of month + 64
+// leap months of year are represented using UCAL_IS_LEAP_MONTH
+// leap days of month are represented as day of month + 64 because there is no IS_LEAP_DAY field
 // rabjung (=60 years cycle) index is represented in UCAL_ERA
+// year in rabjung is represented in UCAL_YEAR and UCAL_EXTENDED_YEAR, starting at 0
 
 // Original code created by Ashihs Patel during Google Summer of Code 2021.
 // Questions can be addressed to Elie Roux.
@@ -196,8 +197,7 @@ int32_t TibetanTsurphuCalendar::toMonthCount(int32_t eyear, int32_t month, int32
  * @param mod the number to be divided with
  */
 int32_t TibetanCalendar::amod(int32_t num, int32_t mod) const {
-
-    if((num % mod) == 0) return mod;
+    if ((num % mod) == 0) return mod;
     return (num % mod + mod) % mod;
 }
 
@@ -210,12 +210,12 @@ int32_t TibetanCalendar::amod(int32_t num, int32_t mod) const {
 static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
     // Minimum  Greatest     Least    Maximum
     //           Minimum   Maximum
-    {        1,        1,    83333,    83333}, // ERA 
-    {        1,        1,       60,       60}, // YEAR
+    { -5000000, -5000000,  5000000,  5000000}, // ERA 
+    {        0,        0,       59,       59}, // YEAR
     {        0,        0,       11,       11}, // MONTH
     {        1,        1,       50,       55}, // WEEK_OF_YEAR
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // WEEK_OF_MONTH
-    {        1,        1,       29,       30}, // DAY_OF_MONTH
+    {        1,        1,       93,       94}, // DAY_OF_MONTH
     {        1,        1,      354,      384}, // DAY_OF_YEAR
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DAY_OF_WEEK
     {       -1,       -1,        5,        5}, // DAY_OF_WEEK_IN_MONTH
@@ -229,7 +229,7 @@ static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DST_OFFSET
     { -5000000, -5000000,  5000000,  5000000}, // YEAR_WOY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DOW_LOCAL
-    { -5000000, -5000000,  5000000,  5000000}, // EXTENDED_YEAR
+    {        0,        0,       59,       59}, // EXTENDED_YEAR
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // JULIAN_DAY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECONDS_IN_DAY
     {        0,        0,        1,        1}, // IS_LEAP_MONTH
@@ -245,13 +245,11 @@ static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
  * @stable ICU 2.8
  */
 int32_t TibetanCalendar::handleGetMonthLength(int32_t eyear, int32_t month) const {
-    int32_t is_leap_month = (month>=(1<<6) ? 1 : 0);
-    int32_t trueMonth = (is_leap_month ? (month-(1<<6)) : month);
-    int32_t monthCount = toMonthCount(eyear, trueMonth, is_leap_month);
+    int32_t is_leap_month = internalGet(UCAL_IS_LEAP_MONTH);
+    int32_t monthCount = toMonthCount(eyear, month, is_leap_month);
 
     int32_t thisStart = trueDate(30,monthCount-1);
     int32_t nextStart = trueDate(30,monthCount);
-
     return nextStart - thisStart;
 }
 
@@ -262,11 +260,9 @@ int32_t TibetanCalendar::handleGetMonthLength(int32_t eyear, int32_t month) cons
  */
  int32_t TibetanCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth) const {
      UErrorCode status = U_ZERO_ERROR;
- 
-     int32_t is_leap_month = (month>=(1<<6) ? 1 : 0);
-     int32_t trueMonth = (is_leap_month ? (month-(1<<6)) : month);
-     int32_t monthCount = toMonthCount(eyear, trueMonth, is_leap_month);
- 
+
+     int32_t is_leap_month = internalGet(UCAL_IS_LEAP_MONTH);
+     int32_t monthCount = toMonthCount(eyear, month, is_leap_month);
      return (int)(trueDate(30, monthCount-1));
  }
 
@@ -275,13 +271,15 @@ int32_t TibetanCalendar::handleGetMonthLength(int32_t eyear, int32_t month) cons
  * Override Calendar to handle leap months and leap days properly.
  */
 void TibetanCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
     switch (field) {
     case UCAL_MONTH:
         {
             int32_t month = internalGet(UCAL_MONTH);
-            int32_t is_leap_month = (month>=(1<<6) ? 1 : 0);
-            int32_t trueMonth = (is_leap_month ? (month-(1<<6)) : month);
-            int32_t monthCount = toMonthCount(internalGet(UCAL_YEAR), trueMonth, is_leap_month);
+            int32_t is_leap_month = internalGet(UCAL_IS_LEAP_MONTH);
+            int32_t monthCount = toMonthCount(internalGet(UCAL_YEAR), month, is_leap_month);
             int32_t julianDay = trueDate(internalGet(UCAL_DAY_OF_MONTH), monthCount + amount);
             handleComputeFields(julianDay, status); 
             break;
@@ -312,13 +310,15 @@ void TibetanCalendar::add(EDateFields field, int32_t amount, UErrorCode& status)
  * Override Calendar to handle leap months and leap days properly.
  */
 void TibetanCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& status) {
+    if(U_FAILURE(status)) {
+        return;
+    }
     switch (field) {
     case UCAL_MONTH:
         {
             int32_t month = internalGet(UCAL_MONTH);
-            int32_t is_leap_month = (month>=(1<<6) ? 1 : 0);
-            int32_t trueMonth = (is_leap_month ? (month-(1<<6)) : month);
-            int32_t monthCount = toMonthCount(internalGet(UCAL_YEAR), trueMonth, is_leap_month);     
+            int32_t is_leap_month = internalGet(UCAL_IS_LEAP_MONTH);
+            int32_t monthCount = toMonthCount(internalGet(UCAL_YEAR), month, is_leap_month);     
             int32_t julianDay = trueDate(internalGet(UCAL_DAY_OF_MONTH), monthCount + amount);
             handleComputeFields(julianDay, status); 
             break;
@@ -368,11 +368,11 @@ void TibetanCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status)
     int32_t jd1 = trueDate(amod(dn1, 30), floor((dn1 - 1)/30));
     int32_t jd2 = trueDate(amod(dn2, 30), floor((dn2 - 1)/30));
 
-    while (dn1 < dn2 - 1  && jd1 < jd2 - 1){
+    while (dn1 < dn2 - 1  && jd1 < jd2 - 1) {
         int32_t ndn = (dn1 + dn2)>>1;
         int32_t njd = trueDate(amod(ndn, 30), floor((ndn - 1)/30));
 
-        if (njd < julianDay){
+        if (njd < julianDay) {
             dn1 = ndn;
             jd1 = njd;
         } else {
@@ -381,7 +381,7 @@ void TibetanCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status)
         }
     }
 
-    if (jd1 == julianDay){
+    if (jd1 == julianDay) {
         jd2 = jd1;
         dn2 = dn1;
     }
@@ -396,23 +396,25 @@ void TibetanCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status)
     int32_t dayOfYear = julianDay - trueDate(30, toMonthCount(tyear - 1, 12, 0));
 
     int32_t cycleNumber = ceil((tyear-1153.0)/60.0);
-    int32_t yearNumber = amod(tyear-133,60);
+    int32_t yearInCycle = (tyear-133) % 60;
     
-    if(is_leap_day){
+    if (is_leap_day){
         tday += (1<<6);
     }
 
-    if(is_leap_month){
-        tmonth += (1<<6);
+    if (is_leap_month){
+        internalSet(UCAL_IS_LEAP_MONTH, 1);
+    } else {
+        internalSet(UCAL_IS_LEAP_MONTH, 0);
     }
 
     internalSet(UCAL_ERA, cycleNumber);
-    internalSet(UCAL_YEAR, yearNumber);
-    internalSet(UCAL_EXTENDED_YEAR, tyear);
-    internalSet(UCAL_MONTH, tmonth);
+    internalSet(UCAL_YEAR, yearInCycle);
+    internalSet(UCAL_EXTENDED_YEAR, yearInCycle);
+    internalSet(UCAL_MONTH, tmonth-1);
     internalSet(UCAL_DAY_OF_MONTH, tday);
     internalSet(UCAL_DAY_OF_YEAR, dayOfYear);
-    internalSet(UCAL_JULIAN_DAY,julianDay);
+    internalSet(UCAL_JULIAN_DAY, julianDay);
 }
 
 void TibetanTsurphuCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status) {
@@ -451,20 +453,22 @@ void TibetanTsurphuCalendar::handleComputeFields(int32_t julianDay, UErrorCode &
     int32_t dayOfYear = julianDay - trueDate(30, toMonthCount(tyear - 1, 12, 0));
 
     int32_t cycleNumber = ceil((tyear-1153.0)/60.0);
-    int32_t yearNumber = amod(tyear-133,60);
+    int32_t yearInCycle = (tyear-133) % 60;
     
-    if(is_leap_day){
+    if (is_leap_day){
         tday += (1<<6);
     }
 
-    if(is_leap_month){
-        tmonth += (1<<6);
+    if (is_leap_month){
+        internalSet(UCAL_IS_LEAP_MONTH, 1);
+    } else {
+        internalSet(UCAL_IS_LEAP_MONTH, 0);
     }
 
     internalSet(UCAL_ERA, cycleNumber);
-    internalSet(UCAL_YEAR, yearNumber);
-    internalSet(UCAL_EXTENDED_YEAR, tyear);
-    internalSet(UCAL_MONTH, tmonth);
+    internalSet(UCAL_YEAR, yearInCycle);
+    internalSet(UCAL_EXTENDED_YEAR, yearInCycle);
+    internalSet(UCAL_MONTH, tmonth-1);
     internalSet(UCAL_DAY_OF_MONTH, tday);
     internalSet(UCAL_DAY_OF_YEAR, dayOfYear);
     internalSet(UCAL_JULIAN_DAY,julianDay);
