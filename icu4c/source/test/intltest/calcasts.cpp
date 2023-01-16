@@ -515,38 +515,38 @@ void CalendarCaseTest::Tibetan() {
     // http://kalacakra.org/calendar/tiblist.htm
     //
     // Julian Day   Era Year     Month         Day  WkDay Hour Min Sec
-       {2458166.5,  17,    32,         1,        1,  FRI,   0,  0,  0}, // Gregorian: 16/02/2018 - not a leap month - not a leap day - Losar
-       {2432758.5,  16,    22,         6,       19,  SUN,   0,  0,  0}, // Gregorian: 25/07/1948 - not a leap month - not a leap day - Shakyamuni Buddha Day New Moon
-       {2361501.5,  13,     7,         5,       84,  WED,   0,  0,  0}, // Gregorian: 20/06/1753 - not a leap month - leap day
-       {1740676.5, -16,    47,         9,       16,  MON,   0,  0,  0}, // Gregorian: 15/09/0053 - not a leap month - not a leap day
-       {1807769.5, -13,    51,         5,       15,  SAT,   0,  0,  0}, // Gregorian: 27/05/0237 - not a leap month - not a leap day
-       {1849958.5, -11,    46,        12,        5,  SAT,   0,  0,  0}, // Gregorian: 29/11/0352 - not a leap month - not a leap day
-       {1896793.5,  -9,    55,         2,       69,  THU,   0,  0,  0}, // Gregorian: 20/02/0481 - not a leap month - leap day
-       {1919639.5,  -8,    57,         8,       24,  TUE,   0,  0,  0}, // Gregorian: 10/09/0543 - not a leap month - not a leap day
-       {1952574.5,  -6,    27,        11,        2,  TUE,   0,  0,  0}, // Gregorian: 12/11/0633 - not a leap month - not a leap day
-       {1975739.5,  -5,    31,         4,       15,  THU,   0,  0,  0}, // Gregorian: 15/04/0697 - not a leap month - not a leap day - Amitabha Buddha Day Full Moon
+       {2458165.5,  17,    32,         1,        1,  FRI,   0,  0,  0}, // Gregorian: 16/02/2018 - not a leap month - not a leap day - Losar
+       {2432757.5,  16,    22,         6,       19,  SUN,   0,  0,  0}, // Gregorian: 25/07/1948 - not a leap month - not a leap day - Shakyamuni Buddha Day New Moon
+       {2361500.5,  13,     7,         5,       84,  WED,   0,  0,  0}, // Gregorian: 20/06/1753 - not a leap month - leap day
+       {1740675.5, -16,    47,         9,       16,  MON,   0,  0,  0}, // Gregorian: 15/09/0053 - not a leap month - not a leap day
+       {1807768.5, -13,    51,         5,       15,  SAT,   0,  0,  0}, // Gregorian: 27/05/0237 - not a leap month - not a leap day
+       {1849957.5, -11,    46,        12,        5,  SAT,   0,  0,  0}, // Gregorian: 29/11/0352 - not a leap month - not a leap day
+       {1896792.5,  -9,    55,         2,       69,  THU,   0,  0,  0}, // Gregorian: 20/02/0481 - not a leap month - leap day
+       {1919638.5,  -8,    57,         8,       24,  TUE,   0,  0,  0}, // Gregorian: 10/09/0543 - not a leap month - not a leap day
+       {1952573.5,  -6,    27,        11,        2,  TUE,   0,  0,  0}, // Gregorian: 12/11/0633 - not a leap month - not a leap day
+       {1975738.5,  -5,    31,         4,       15,  THU,   0,  0,  0}, // Gregorian: 15/04/0697 - not a leap month - not a leap day - Amitabha Buddha Day Full Moon
 
-       {1995560.5,  -4,    25,         8,       22,  MON,   0,  0,  0}, // Gregorian: 23/07/0751 - leap month - not a leap day
-       {1995583.5,  -4,    25,         7,       15,  WED,   0,  0,  0}, // Gregorian: 15/08/0751 - not a leap month - not a leap day - Amitabha Buddha Day Full Moon
-       {2013762.5,  -3,    15,         5,        3,  WED,   0,  0,  0}, // Gregorian: 23/05/0801 - not a leap month - not a leap day
-       {2041047.5,  -2,    30,         3,        1,  TUE,   0,  0,  0}, // Gregorian: 04/02/0876 - leap month - not a leap day
-       {2053145.5,  -1,     3,         2,       21,  THU,   0,  0,  0}, // Gregorian: 21/03/0909 - not a leap month - not a leap day
-       {2085852.5,   0,    32,         9,        9,  SUN,   0,  0,  0}, // Gregorian: 07/10/0998 - not a leap month - not a leap day
-       {2095540.5,   0,    59,         3,       11,  SUN,   0,  0,  0}, // Gregorian: 17/04/1025 - not a leap month - not a leap day
-       {2150153.5,   3,    28,         9,       87,  SAT,   0,  0,  0}, // Gregorian: 26/10/1174 - not a leap month - leap day
-       {2176923.5,   4,    42,         1,        7,  MON,   0,  0,  0}, // Gregorian: 10/02/1248 - not a leap month - not a leap day
-       {2225643.5,   6,    55,         6,        2,  MON,   0,  0,  0}, // Gregorian: 02/07/1381 - not a leap month - not a leap day
+       {1995559.5,  -4,    25,         8,       22,  MON,   0,  0,  0}, // Gregorian: 23/07/0751 - leap month - not a leap day
+       {1995582.5,  -4,    25,         7,       15,  WED,   0,  0,  0}, // Gregorian: 15/08/0751 - not a leap month - not a leap day - Amitabha Buddha Day Full Moon
+       {2013761.5,  -3,    15,         5,        3,  WED,   0,  0,  0}, // Gregorian: 23/05/0801 - not a leap month - not a leap day
+       {2041046.5,  -2,    30,         3,        1,  TUE,   0,  0,  0}, // Gregorian: 04/02/0876 - leap month - not a leap day
+       {2053144.5,  -1,     3,         2,       21,  THU,   0,  0,  0}, // Gregorian: 21/03/0909 - not a leap month - not a leap day
+       {2085851.5,   0,    32,         9,        9,  SUN,   0,  0,  0}, // Gregorian: 07/10/0998 - not a leap month - not a leap day
+       {2095539.5,   0,    59,         3,       11,  SUN,   0,  0,  0}, // Gregorian: 17/04/1025 - not a leap month - not a leap day
+       {2150152.5,   3,    28,         9,       87,  SAT,   0,  0,  0}, // Gregorian: 26/10/1174 - not a leap month - leap day
+       {2176922.5,   4,    42,         1,        7,  MON,   0,  0,  0}, // Gregorian: 10/02/1248 - not a leap month - not a leap day
+       {2225642.5,   6,    55,         6,        2,  MON,   0,  0,  0}, // Gregorian: 02/07/1381 - not a leap month - not a leap day
 
-       {2247877.5,   7,    56,         3,       29,  WED,   0,  0,  0}, // Gregorian: 18/05/1442 - not a leap month - not a leap day - Dharmapala Day
-       {2304268.5,  10,    30,         8,       17,  TUE,   0,  0,  0}, // Gregorian: 08/10/1596 - not a leap month - not a leap day
-       {2327497.5,  11,    34,         4,        5,  FRI,   0,  0,  0}, // Gregorian: 14/05/1660 - not a leap month - not a leap day
-       {2372681.5,  13,    37,        12,        8,  THU,   0,  0,  0}, // Gregorian: 29/01/1784 - not a leap month - not a leap day - Medicine Buddha & Tara Day
-       {2401910.5,  14,    58,         1,        1,  MON,   0,  0,  0}, // Gregorian: 08/02/1864 - not a leap month - not a leap day - Losar
-       {2436066.5,  16,    31,         6,       20,  THU,   0,  0,  0}, // Gregorian: 15/08/1957 - not a leap month - not a leap day
-       {2473029.5,  18,    12,         7,       11,  SUN,   0,  0,  0}, // Gregorian: 27/10/2058 - not a leap month - not a leap day 
-       {2496850.5,  19,    17,        11,       30,  SUN,   0,  0,  0}, // Gregorian: 16/01/2124 - not a leap month - not a leap day - Shakyamuni Buddha Day New Moon
-       {2524704.5,  20,    34,         3,        7,  MON,   0,  0,  0}, // Gregorian: 21/04/2200 - not a leap month - not a leap day
-       {2567015.5,  22,    30,        12,       30,  THU,   0,  0,  0}, // Gregorian: 24/02/2316 - not a leap month - not a leap day - Shakyamuni Buddha Day New Moon
+       {2247876.5,   7,    56,         3,       29,  WED,   0,  0,  0}, // Gregorian: 18/05/1442 - not a leap month - not a leap day - Dharmapala Day
+       {2304267.5,  10,    30,         8,       17,  TUE,   0,  0,  0}, // Gregorian: 08/10/1596 - not a leap month - not a leap day
+       {2327496.5,  11,    34,         4,        5,  FRI,   0,  0,  0}, // Gregorian: 14/05/1660 - not a leap month - not a leap day
+       {2372680.5,  13,    37,        12,        8,  THU,   0,  0,  0}, // Gregorian: 29/01/1784 - not a leap month - not a leap day - Medicine Buddha & Tara Day
+       {2401909.5,  14,    58,         1,        1,  MON,   0,  0,  0}, // Gregorian: 08/02/1864 - not a leap month - not a leap day - Losar
+       {2436067.5,  16,    31,         6,       20,  THU,   0,  0,  0}, // Gregorian: 15/08/1957 - not a leap month - not a leap day
+       {2473028.5,  18,    12,         7,       11,  SUN,   0,  0,  0}, // Gregorian: 27/10/2058 - not a leap month - not a leap day 
+       {2496849.5,  19,    17,        11,       30,  SUN,   0,  0,  0}, // Gregorian: 16/01/2124 - not a leap month - not a leap day - Shakyamuni Buddha Day New Moon
+       {2524703.5,  20,    34,         3,        7,  MON,   0,  0,  0}, // Gregorian: 21/04/2200 - not a leap month - not a leap day
+       {2567014.5,  22,    30,        12,       30,  THU,   0,  0,  0}, // Gregorian: 24/02/2316 - not a leap month - not a leap day - Shakyamuni Buddha Day New Moon
        { -1,-1,-1,-1,-1,-1,-1,-1,-1 }
     };
 
@@ -567,9 +567,9 @@ void CalendarCaseTest::TibetanTsurphu() {
 
     // Tests from http://kalacakra.org/calendar/tiblist2.htm
     // Julian Day   Era Year     Month         Day  WkDay Hour Min Sec
-       {2451581.5,  17,    14,         1,        1,  SUN,   0,  0,  0}, // Gregorian: 06/02/2000 - not a leap month - not a leap day - Losar
-       {2453089.5,  17,    18,         2,       68,  WED,   0,  0,  0}, // Gregorian: 24/03/2004 - not a leap month - leap day
-       {2451998.5,  17,    15,         2,        4,  THU,   0,  0,  0}, // Gregorian: 29/03/2001 - not a leap month - not a leap day     
+       {2451580.5,  17,    14,         1,        1,  SUN,   0,  0,  0}, // Gregorian: 06/02/2000 - not a leap month - not a leap day - Losar
+       {2453088.5,  17,    18,         2,       68,  WED,   0,  0,  0}, // Gregorian: 24/03/2004 - not a leap month - leap day
+       {2451997.5,  17,    15,         2,        4,  THU,   0,  0,  0}, // Gregorian: 29/03/2001 - not a leap month - not a leap day     
        {-1,-1,-1,-1,-1,-1,-1,-1,-1}
     };
 
