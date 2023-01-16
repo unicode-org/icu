@@ -17,6 +17,7 @@
 #include <float.h>
 #include "gregoimp.h" // Math
 #include "uhash.h"
+#include <cmath>
 
 // Debugging
 #ifdef U_DEBUG_TIBETANCAL
@@ -262,7 +263,7 @@ int32_t TibetanCalendar::handleGetMonthLength(int32_t eyear, int32_t month) cons
  
      int32_t is_leap_month = (month>=(1<<6) ? 1 : 0);
      int32_t trueMonth = (is_leap_month ? (month-(1<<6)) : month);
-     int32_t monthCount = toMonthCount(eyear, trueDate, is_leap_month);
+     int32_t monthCount = toMonthCount(eyear, trueMonth, is_leap_month);
  
      return (int)(trueDate(30, monthCount-1));
  }
@@ -274,19 +275,22 @@ int32_t TibetanCalendar::handleGetMonthLength(int32_t eyear, int32_t month) cons
 void TibetanCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status) {
     switch (field) {
     case UCAL_MONTH:
-        int32_t month = internalGet(UCAL_MONTH);
-        int32_t is_leap_month = (month>=(1<<6) ? 1 : 0);
-        int32_t trueMonth = (is_leap_month ? (month-(1<<6)) : month);
-        int32_t monthCount = toMonthCount(eyear, trueMonth, is_leap_month);     
-        newMonthCount = monthCount + amount;
-        int32_t julianDay = trueDate(internalGet(UCAL_DAY_OF_MONTH),newMonthCount);
-        handleComputeFields(julianDay, status); 
-        break;
+        {
+            int32_t month = internalGet(UCAL_MONTH);
+            int32_t is_leap_month = (month>=(1<<6) ? 1 : 0);
+            int32_t trueMonth = (is_leap_month ? (month-(1<<6)) : month);
+            int32_t monthCount = toMonthCount(internalGet(UCAL_YEAR), trueMonth, is_leap_month);
+            int32_t julianDay = trueDate(internalGet(UCAL_DAY_OF_MONTH), monthCount + amount);
+            handleComputeFields(julianDay, status); 
+            break;
+        }
     case UCAL_DAY_OF_MONTH:
-        int32_t julianDay = internalGet(UCAL_JULIAN_DAY);
-        int32_t newJulianDay = julianDay + amount;
-        handleComputeFields(newJulianDay, status);
-        break;
+        {
+            int32_t julianDay = internalGet(UCAL_JULIAN_DAY);
+            int32_t newJulianDay = julianDay + amount;
+            handleComputeFields(newJulianDay, status);
+            break;
+        }
     default:
         Calendar::add(field, amount, status);
         break;
@@ -308,19 +312,22 @@ void TibetanCalendar::add(EDateFields field, int32_t amount, UErrorCode& status)
 void TibetanCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& status) {
     switch (field) {
     case UCAL_MONTH:
-        int32_t month = internalGet(UCAL_MONTH);
-        int32_t is_leap_month = (month>=(1<<6) ? 1 : 0);
-        int32_t trueMonth = (is_leap_month ? (month-(1<<6)) : month);
-        int32_t monthCount = toMonthCount(eyear, trueMonth, is_leap_month);     
-        newMonthCount = monthCount + amount;
-        int32_t julianDay = trueDate(internalGet(UCAL_DAY_OF_MONTH),newMonthCount);
-        handleComputeFields(julianDay, status); 
-        break;
+        {
+            int32_t month = internalGet(UCAL_MONTH);
+            int32_t is_leap_month = (month>=(1<<6) ? 1 : 0);
+            int32_t trueMonth = (is_leap_month ? (month-(1<<6)) : month);
+            int32_t monthCount = toMonthCount(internalGet(UCAL_YEAR), trueMonth, is_leap_month);     
+            int32_t julianDay = trueDate(internalGet(UCAL_DAY_OF_MONTH), monthCount + amount);
+            handleComputeFields(julianDay, status); 
+            break;
+        }
     case UCAL_DAY_OF_MONTH:
-        int32_t julianDay = internalGet(UCAL_JULIAN_DAY);
-        int32_t newJulianDay = julianDay + amount;
-        handleComputeFields(newJulianDay, status);
-        break;
+        {
+            int32_t julianDay_m = internalGet(UCAL_JULIAN_DAY);
+            int32_t newJulianDay = julianDay_m + amount;
+            handleComputeFields(newJulianDay, status);
+            break;
+        }
     default:
         Calendar::add(field, amount, status);
         break;
@@ -474,7 +481,7 @@ void TibetanTsurphuCalendar::handleComputeFields(int32_t julianDay, UErrorCode &
     } else {
         int32_t cycle = internalGet(UCAL_ERA, 1) - 1; // 0-based cycle
         // adjust to the instance specific epoch
-        year = cycle * 60 + internalGet(UCAL_YEAR, 1) - (fEpochYear - PHUGPA_YEAR0);
+        year = cycle * 60 + internalGet(UCAL_YEAR, 1) - (kEpochYear - PHUGPA_YEAR0);
     }
     return year;
  }
@@ -486,7 +493,7 @@ void TibetanTsurphuCalendar::handleComputeFields(int32_t julianDay, UErrorCode &
     } else {
         int32_t cycle = internalGet(UCAL_ERA, 1) - 1; // 0-based cycle
         // adjust to the instance specific epoch
-        year = cycle * 60 + internalGet(UCAL_YEAR, 1) - (fEpochYear - TSURPHU_YEAR0);
+        year = cycle * 60 + internalGet(UCAL_YEAR, 1) - (kEpochYear - TSURPHU_YEAR0);
     }
     return year;
  }
@@ -500,34 +507,19 @@ void TibetanTsurphuCalendar::handleComputeFields(int32_t julianDay, UErrorCode &
  }
 
 
-UBool
-TibetanCalendar::inDaylightTime(UErrorCode& status) const
-{
-    // copied from GregorianCalendar
-    if (U_FAILURE(status) || !getTimeZone().useDaylightTime()) {
-        return FALSE;
-    }
-
-    // Force an update of the state of the Calendar.
-    ((TibetanCalendar*)this)->complete(status); // cast away const
-
-    return (UBool)(U_SUCCESS(status) ? (internalGet(UCAL_DST_OFFSET) != 0) : FALSE);
-}
-
-
 /**
  * The system maintains a static default century start date and Year.  They are
- * initialized the first time they are used.  Once the system default century date
+ *  d the first time they are used.  Once the system default century date
  * and year are set, they do not change.
  */
 static UDate           gSystemDefaultCenturyStart       = DBL_MIN;
 static int32_t         gSystemDefaultCenturyStartYear   = -1;
-static icu::UInitOnce  gSystemDefaultCenturyInit        = U_INITONCE_INITIALIZER;
+static icu::UInitOnce  gSystemDefaultCenturyInit        = {};
 
 
 UBool TibetanCalendar::haveDefaultCentury() const
 {
-    return TRUE;
+    return true;
 }
 
 

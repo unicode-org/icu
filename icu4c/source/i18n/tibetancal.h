@@ -45,7 +45,7 @@ public:
    * Copy Constructor
    * @internal
    */
-  TibetanCalendar(const TibetanCalendar& other);
+  TibetanCalendar(const TibetanCalendar& other) = default;
 
 
   /**
@@ -55,7 +55,7 @@ public:
   virtual ~TibetanCalendar();
 
   // clone
-  virtual TibetanCalendar* clone() const;
+  virtual TibetanCalendar* clone() const override;
 
   /**
    * return the calendar type
@@ -63,7 +63,7 @@ public:
    * @return calendar type
    * @internal
    */
-  virtual const char * getType() const;
+  virtual const char * getType() const override;
 
 
 private:
@@ -93,9 +93,31 @@ int32_t toMonthCount(int32_t eyear, int32_t month, int32_t is_leap_month) const;
  */
 int32_t trueDate(int32_t day, int32_t monthCount) const;
 
+static void U_CALLCONV initializeSystemDefaultCentury(void);
 
+int32_t amod(int32_t num, int32_t mod);
 
 public:
+
+  /**
+   * @return   The class ID for this object. All objects of a given class have the
+   *           same class ID. Objects of other classes have different class IDs.
+   * @internal
+   */
+  virtual UClassID getDynamicClassID(void) const override;
+
+  /**
+   * Return the class ID for this class. This is useful only for comparing to a return
+   * value from getDynamicClassID(). For example:
+   *
+   *      Base* polymorphic_pointer = createPolymorphicObject();
+   *      if (polymorphic_pointer->getDynamicClassID() ==
+   *          Derived::getStaticClassID()) ...
+   *
+   * @return   The class ID for all objects of this class.
+   * @internal
+   */
+  /*U_I18N_API*/ static UClassID U_EXPORT2 getStaticClassID(void);
 
   /**
    * (Overrides Calendar) UDate Arithmetic function. Adds the specified (signed) amount
@@ -114,7 +136,7 @@ public:
   /**
    * @deprecated ICU 2.6 use UCalendarDateFields instead of EDateFields
    */
-  virtual void add(EDateFields field, int32_t amount, UErrorCode& status)
+  virtual void add(EDateFields field, int32_t amount, UErrorCode& status);
 
 
   /**
@@ -265,7 +287,7 @@ public:
    * Copy Constructor
    * @internal
    */
-  TibetanTsurphuCalendar(const TibetanTsurphuCalendar& other);
+  TibetanTsurphuCalendar(const TibetanTsurphuCalendar& other) = default;
 
 
   /**
@@ -275,7 +297,7 @@ public:
   virtual ~TibetanTsurphuCalendar();
 
   // clone
-  virtual TibetanTsurphuCalendar* clone() const;
+  virtual TibetanTsurphuCalendar* clone() const override;
 
   /**
    * return the calendar type
@@ -283,7 +305,7 @@ public:
    * @return calendar type
    * @internal
    */
-  virtual const char * getType() const;
+  virtual const char * getType() const override;
 
 
 private:
@@ -334,7 +356,7 @@ public:
   /**
    * @deprecated ICU 2.6 use UCalendarDateFields instead of EDateFields
    */
-  virtual void add(EDateFields field, int32_t amount, UErrorCode& status)
+  virtual void add(EDateFields field, int32_t amount, UErrorCode& status);
 
 
   /**
@@ -362,7 +384,7 @@ public:
   //----------------------------------------------------------------------
 
 private:
-    TibetanCalendar(); // default constructor not implemented
+    TibetanTsurphuCalendar(); // default constructor not implemented
 
 protected:
 
