@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1673982090838,
+  "lastUpdate": 1673983126463,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -4318,6 +4318,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 4.498145336596708,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "committer": {
+            "email": "elango@unicode.org",
+            "name": "Elango Cheran",
+            "username": "echeran"
+          },
+          "distinct": true,
+          "id": "d4ac09edbdc25feb06b3a011cbbb150b243d91f2",
+          "message": "ICU-12811 Replace local-maven-repo with data jar contents\n\nSee #2275",
+          "timestamp": "2023-01-17T11:09:29-08:00",
+          "tree_id": "6c93956c5a721a7c04b0e8045b60c405e9cb0169",
+          "url": "https://github.com/unicode-org/icu/commit/d4ac09edbdc25feb06b3a011cbbb150b243d91f2"
+        },
+        "date": 1673983113653,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 4.212871272667302,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
