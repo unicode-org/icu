@@ -21,6 +21,7 @@
 #include "unicode/ustring.h"
 #include "cstring.h"
 #include "unicode/localpointer.h"
+#include "chnsecal.h"
 #include "intltest.h"
 #include "coptccal.h"
 #include "ethpccal.h"
@@ -182,7 +183,8 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO(TestCalendarRollOrdinalMonth);
     TESTCASE_AUTO(TestLimitsOrdinalMonth);
     TESTCASE_AUTO(TestActualLimitsOrdinalMonth);
-
+    TESTCASE_AUTO(TestChineseCalendarMonthInSpecialYear);
+  
     TESTCASE_AUTO_END;
 }
 
@@ -5381,6 +5383,89 @@ void CalendarTest::TestActualLimitsOrdinalMonth(void) {
     }
 }
 
+// The Lunar year which majorty part fall into 1889 and the early part of 1890
+// should have no leap months, but currently ICU calculate and show there is
+// a Leap month after the 12th month and before the first month of the Chinese
+// Calendar which overlapping most of the 1890 year in Gregorian.
+//
+// We use the value from
+// https://ytliu0.github.io/ChineseCalendar/table_period.html?period=qing
+// and https://ytliu0.github.io/ChineseCalendar/index_chinese.html
+// as the expected value. The same results were given by many several other
+// sites not just his one.
+//
+// There should be a Leap month after the 2nd month of the Chinese Calendar year
+// mostly overlapping with 1890 and should have no leap month in the Chinese
+// Calendar year mostly overlapping with 1889.
+void CalendarTest::TestChineseCalendarMonthInSpecialYear(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar gc(status);
+    ChineseCalendar cal(Locale::getRoot(), status);
+    if (failure(status, "Constructor failed")) return;
+    struct TestCase {
+      int32_t gyear;
+      int32_t gmonth;
+      int32_t gdate;
+      int32_t cmonth; // 0-based month number: 1st month = 0, 2nd month = 1.
+      int32_t cdate;
+      bool cleapmonth;
+    } cases[] = {
+        // Gregorian             Chinese Calendar
+        // First some recent date
+        // From https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2022.pdf
+        { 2022, UCAL_DECEMBER, 15, 11-1, 22, false},
+        //                          ^-- m-1 to convert to 0-based month from 1-based.
+        // From https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2023.pdf
+        { 2023, UCAL_MARCH, 21, 2-1, 30, false},
+        { 2023, UCAL_MARCH, 22, 2-1, 1, true},
+        // We know there are some problematic year, especially those involved
+        // the rare cases of M11L and M12L.
+        // Check 1890 and 2033.
+        //
+        // 2033 has M11L
+        // From https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2033.pdf
+        { 2033, UCAL_DECEMBER, 21, 11-1, 30, false},
+        { 2033, UCAL_DECEMBER, 22, 11-1, 1, true},
+        // Here are the date we get from multiple external sources
+        // https://ytliu0.github.io/ChineseCalendar/index_chinese.html
+        // https://ytliu0.github.io/ChineseCalendar/table_period.html?period=qing
+        // There should have no leap 12th month in the year mostly overlapping
+        // 1889 but should have a leap 2th month in the year mostly overlapping
+        // with 1890.
+        { 1890, UCAL_JANUARY, 1, 12-1, 11, false},
+        { 1890, UCAL_JANUARY, 20, 12-1, 30, false},
+        { 1890, UCAL_JANUARY, 21, 1-1, 1, false},
+        { 1890, UCAL_FEBRUARY, 1, 1-1, 12, false},
+        { 1890, UCAL_FEBRUARY, 19, 2-1, 1, false},
+        { 1890, UCAL_MARCH, 1, 2-1, 11, false},
+        { 1890, UCAL_MARCH, 21, 2-1, 1, true},
+        { 1890, UCAL_APRIL, 1, 2-1, 12, true},
+        { 1890, UCAL_APRIL, 18, 2-1, 29, true},
+        { 1890, UCAL_APRIL, 19, 3-1, 1, false},
+        { 1890, UCAL_APRIL, 20, 3-1, 2, false},
+    };
+    for (auto& cas : cases) {
+        gc.set(cas.gyear, cas.gmonth, cas.gdate);
+        cal.setTime(gc.getTime(status), status);
+        if (failure(status, "getTime/setTime failed")) return;
+        int32_t actual_month = cal.get(UCAL_MONTH, status);
+        int32_t actual_date = cal.get(UCAL_DATE, status);
+        int32_t actual_in_leap_month = cal.get(UCAL_IS_LEAP_MONTH, status);
+        if (failure(status, "get failed")) return;
+        if (cas.cmonth != actual_month ||
+            cas.cdate != actual_date ||
+            cas.cleapmonth != (actual_in_leap_month != 0)) {
+            if (cas.gyear == 1890 &&
+                logKnownIssue("ICU-22230", "Problem between 1890/1/21 and 1890/4/18")) {
+                  continue;
+            }
+            errln("Fail: Gregorian(%d/%d/%d) should be Chinese %d%s/%d but got %d%s/%d",
+                  cas.gyear, cas.gmonth+1, cas.gdate,
+                  cas.cmonth+1, cas.cleapmonth ? "L" : "" , cas.cdate,
+                  actual_month+1, ((actual_in_leap_month != 0) ? "L" : ""), actual_date );
+        }
+    }
+}
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof

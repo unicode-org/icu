@@ -286,6 +286,7 @@ public: // package
         int32_t dst_offset, int32_t year_woy, int32_t dow_local, int32_t extended_year,
         int32_t julian_day, int32_t milliseconds_in_day, int32_t is_leap_month);
 
+    void TestChineseCalendarMonthInSpecialYear(void);
     void TestGregorianCalendarInTemporalLeapYear(void);
     void TestChineseCalendarInTemporalLeapYear(void);
     void TestDangiCalendarInTemporalLeapYear(void);
