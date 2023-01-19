@@ -3837,9 +3837,8 @@ u_getPropertyValueEnum(UProperty property,
 
 /**
  * Determines if the specified character is permissible as the
- * first character in an identifier according to Unicode
- * (The Unicode Standard, Version 3.0, chapter 5.16 Identifiers).
- * True for characters with general categories "L" (letters) and "Nl" (letter numbers).
+ * first character in an identifier as ID_Start according to
+ * Unicode® Standard Annex #31 UNICODE IDENTIFIER AND PATTERN SYNTAX
  *
  * Same as java.lang.Character.isUnicodeIdentifierStart().
  * Same as UCHAR_ID_START
@@ -3856,12 +3855,9 @@ U_CAPI UBool U_EXPORT2
 u_isIDStart(UChar32 c);
 
 /**
- * Determines if the specified character is permissible
- * in an identifier according to Java.
- * True for characters with general categories "L" (letters),
- * "Nl" (letter numbers), "Nd" (decimal digits),
- * "Mc" and "Mn" (combining marks), "Pc" (connecting punctuation), and
- * u_isIDIgnorable(c).
+ * Determines if the specified character is permissible as a
+ * character other than the first character in an identifier as ID_Continue
+ * according to Unicode® Standard Annex #31 UNICODE IDENTIFIER AND PATTERN SYNTAX
  *
  * Same as java.lang.Character.isUnicodeIdentifierPart().
  * Almost the same as Unicode's ID_Continue (UCHAR_ID_CONTINUE)
@@ -3869,7 +3865,8 @@ u_isIDStart(UChar32 c);
  * u_isIDIgnorable(c).
  *
  * @param c the code point to be tested
- * @return true if the code point may occur in an identifier according to Java
+ * @return true if the code point may occur in an identifier other than the
+ * first character.
  *
  * @see UCHAR_ID_CONTINUE
  * @see u_isIDStart

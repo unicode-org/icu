@@ -304,30 +304,6 @@ u_ispunct(UChar32 c) {
     return (UBool)((CAT_MASK(props)&U_GC_P_MASK)!=0);
 }
 
-/* Checks if the Unicode character can start a Unicode identifier.*/
-U_CAPI UBool U_EXPORT2
-u_isIDStart(UChar32 c) {
-    /* same as u_isalpha() */
-    uint32_t props;
-    GET_PROPS(c, props);
-    return (UBool)((CAT_MASK(props)&(U_GC_L_MASK|U_GC_NL_MASK))!=0);
-}
-
-/* Checks if the Unicode character can be a Unicode identifier part other than starting the
- identifier.*/
-U_CAPI UBool U_EXPORT2
-u_isIDPart(UChar32 c) {
-    uint32_t props;
-    GET_PROPS(c, props);
-    return (UBool)(
-           (CAT_MASK(props)&
-            (U_GC_ND_MASK|U_GC_NL_MASK|
-             U_GC_L_MASK|
-             U_GC_PC_MASK|U_GC_MC_MASK|U_GC_MN_MASK)
-           )!=0 ||
-           u_isIDIgnorable(c));
-}
-
 /*Checks if the Unicode character can be ignorable in a Java or Unicode identifier.*/
 U_CAPI UBool U_EXPORT2
 u_isIDIgnorable(UChar32 c) {

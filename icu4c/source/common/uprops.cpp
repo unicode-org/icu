@@ -423,6 +423,19 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
     }
 }
 
+/* Checks if the Unicode character can start a Unicode identifier.*/
+U_CAPI UBool U_EXPORT2
+u_isIDStart(UChar32 c) {
+    return u_hasBinaryProperty(c, UCHAR_ID_START);
+}
+
+/* Checks if the Unicode character can be a Unicode identifier part other than starting the
+ identifier.*/
+U_CAPI UBool U_EXPORT2
+u_isIDPart(UChar32 c) {
+    return u_hasBinaryProperty(c, UCHAR_ID_CONTINUE);
+}
+
 U_CAPI UBool U_EXPORT2
 u_stringHasBinaryProperty(const UChar *s, int32_t length, UProperty which) {
     if (s == nullptr && length != 0) { return false; }

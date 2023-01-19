@@ -351,7 +351,7 @@ group: uniset_core
 group: icu_utility_with_props
     util_props.o
   deps
-    icu_utility uchar ucase
+    icu_utility uchar ucase uprops
 
 group: icu_utility
     util.o
