@@ -928,9 +928,8 @@ static void createFileNames(UPKGOptions *o, const char mode, const char *version
         if (IN_DLL_MODE(mode)) {
             sprintf(libFileNames[LIB_FILE], "%s", libName);
         } else {
-            sprintf(libFileNames[LIB_FILE], "%s%s%s",
-                    (strstr(libName, "icudt") ? "lib" : ""),
-                    pkgDataFlags[LIBPREFIX],
+            sprintf(libFileNames[LIB_FILE], "%s%s",
+                    (strstr(libName, "libicudt") ? "" : pkgDataFlags[LIBPREFIX]),
                     libName);
         }
 #else
@@ -945,7 +944,9 @@ static void createFileNames(UPKGOptions *o, const char mode, const char *version
 
 #if U_PLATFORM == U_PF_MINGW
         // Name the import library lib*.dll.a
-        sprintf(libFileNames[LIB_FILE_MINGW], "lib%s.dll.a", libName);
+        sprintf(libFileNames[LIB_FILE_MINGW], "%s%s.dll.a",
+		        (strstr(libName, "libicudt") ? "" : pkgDataFlags[LIBPREFIX]),
+		        libName);
 #elif U_PLATFORM == U_PF_CYGWIN
         sprintf(libFileNames[LIB_FILE_CYGWIN], "cyg%s%s%s",
                 libName,
