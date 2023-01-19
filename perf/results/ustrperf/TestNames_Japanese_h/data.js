@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1674073705529,
+  "lastUpdate": 1674103551747,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -22558,6 +22558,102 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestScan2",
             "value": 44.7156,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "bb0e745e25c99cc57055caf45c81b95ef63b25d4",
+          "message": "ICU-22058 make pointer argument in floorDivide optional\n\nCheck the third argument and not set if it is a nullptr",
+          "timestamp": "2023-01-18T20:24:48-08:00",
+          "tree_id": "e8313c3668e355649f80e591a4e4f7eae184d1f8",
+          "url": "https://github.com/unicode-org/icu/commit/bb0e745e25c99cc57055caf45c81b95ef63b25d4"
+        },
+        "date": 1674103534412,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCtor",
+            "value": 20.6455,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor1",
+            "value": 23.1191,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor2",
+            "value": 26.9087,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCtor3",
+            "value": 37.2999,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign",
+            "value": 43.7603,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign1",
+            "value": 48.6046,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestAssign2",
+            "value": 25.5935,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestGetch",
+            "value": 16.9678,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestCatenate",
+            "value": 155.5703,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan",
+            "value": 27.7945,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan1",
+            "value": 58.8704,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          },
+          {
+            "name": "TestScan2",
+            "value": 49.0909,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
