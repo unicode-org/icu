@@ -34,20 +34,6 @@ MlBreakEngine::~MlBreakEngine() {}
 
 namespace {
     const char16_t INVALID = u'|';
-    const int32_t MAX_FEATURE = 13;
-    const int32_t MAX_FEATURE_LENGTH = 11;
-
-    void concatChar(const char16_t *str, const UChar32 *arr, int32_t length, char16_t *feature, UErrorCode &status) {
-        if (U_FAILURE(status)) {
-            return;
-        }
-        UnicodeString result(str);
-        for (int i = 0; i < length; i++) {
-            result.append(arr[i]);
-        }
-        U_ASSERT(result.length() < MAX_FEATURE_LENGTH);
-        result.extract(feature, MAX_FEATURE_LENGTH, status);  // NUL-terminates
-    }
 }
 
 int32_t MlBreakEngine::divideUpRange(UText *inText, int32_t rangeStart, int32_t rangeEnd,
@@ -144,96 +130,68 @@ int32_t MlBreakEngine::divideUpRange(UText *inText, int32_t rangeStart, int32_t 
 
 void MlBreakEngine::evaluateBreakpoint(UChar32* elementList, int32_t index, int32_t &numBreaks,
                                          UVector32 &boundary, UErrorCode &status) const {
-    char16_t featureList[MAX_FEATURE][MAX_FEATURE_LENGTH];
     if (U_FAILURE(status)) {
         return;
     }
 
-    UChar32 arr[4] = {-1, -1, -1, -1};
-    int32_t length = 0, listLength = 0;
-
-    const UChar32 w1 = elementList[0];
-    const UChar32 w2 = elementList[1];
-    const UChar32 w3 = elementList[2];
-    const UChar32 w4 = elementList[3];
-    const UChar32 w5 = elementList[4];
-    const UChar32 w6 = elementList[5];
-
-    length = 1;
-    if (w1 != INVALID) {
-        arr[0] = w1;
-        concatChar(u"UW1:", arr, length, featureList[listLength++], status);
-    }
-    if (w2 != INVALID) {
-        arr[0] = w2;
-        concatChar(u"UW2:", arr, length, featureList[listLength++], status);
-    }
-    if (w3 != INVALID) {
-        arr[0] = w3;
-        concatChar(u"UW3:", arr, length, featureList[listLength++], status);
-    }
-    if (w4 != INVALID) {
-        arr[0] = w4;
-        concatChar(u"UW4:", arr, length, featureList[listLength++], status);
-    }
-    if (w5 != INVALID) {
-        arr[0] = w5;
-        concatChar(u"UW5:", arr, length, featureList[listLength++], status);
-    }
-    if (w6 != INVALID) {
-        arr[0] = w6;
-        concatChar(u"UW6:", arr, length, featureList[listLength++], status);
-    }
-    length = 2;
-    if (w2 != INVALID && w3 != INVALID) {
-        arr[0] = w2;
-        arr[1] = w3;
-        concatChar(u"BW1:", arr, length, featureList[listLength++], status);
-    }
-    if (w3 != INVALID && w4 != INVALID) {
-        arr[0] = w3;
-        arr[1] = w4;
-        concatChar(u"BW2:", arr, length, featureList[listLength++], status);
-    }
-    if (w4 != INVALID && w5 != INVALID) {
-        arr[0] = w4;
-        arr[1] = w5;
-        concatChar(u"BW3:", arr, length, featureList[listLength++], status);
-    }
-    length = 3;
-    if (w1 != INVALID && w2 != INVALID && w3 != INVALID) {
-        arr[0] = w1;
-        arr[1] = w2;
-        arr[2] = w3;
-        concatChar(u"TW1:", arr, length, featureList[listLength++], status);
-    }
-    if (w2 != INVALID && w3 != INVALID && w4 != INVALID) {
-        arr[0] = w2;
-        arr[1] = w3;
-        arr[2] = w4;
-        concatChar(u"TW2:", arr, length, featureList[listLength++], status);
-    }
-    if (w3 != INVALID && w4 != INVALID && w5 != INVALID) {
-        arr[0] = w3;
-        arr[1] = w4;
-        arr[2] = w5;
-        concatChar(u"TW3:", arr, length, featureList[listLength++], status);
-    }
-    if (w4 != INVALID && w5 != INVALID && w6 != INVALID) {
-        arr[0] = w4;
-        arr[1] = w5;
-        arr[2] = w6;
-        concatChar(u"TW4:", arr, length, featureList[listLength++], status);
-    }
-    if (U_FAILURE(status)) {
-        return;
-    }
+    UnicodeString feature;
     int32_t score = fNegativeSum;
-    for (int32_t j = 0; j < listLength; j++) {
-        UnicodeString key(featureList[j]);
-        if (fModel.containsKey(key)) {
-            score += (2 * fModel.geti(key));
-        }
+
+    if (elementList[0] != INVALID) {
+        // When the key doesn't exist, Hashtable.geti(key) returns 0  and 2 * 0 = 0.
+        // So, we can skip to check whether fModel includes key featureList[j] or not.
+        score += (2 * fModel.geti(feature.setTo(u"UW1:", 4).append(elementList[0])));
+    }
+    if (elementList[1] != INVALID) {
+        score += (2 * fModel.geti(feature.setTo(u"UW2:", 4).append(elementList[1])));
+    }
+    if (elementList[2] != INVALID) {
+        score += (2 * fModel.geti(feature.setTo(u"UW3:", 4).append(elementList[2])));
+    }
+    if (elementList[3] != INVALID) {
+        score += (2 * fModel.geti(feature.setTo(u"UW4:", 4).append(elementList[3])));
+    }
+    if (elementList[4] != INVALID) {
+        score += (2 * fModel.geti(feature.setTo(u"UW5:", 4).append(elementList[4])));
+    }
+    if (elementList[5] != INVALID) {
+        score += (2 * fModel.geti(feature.setTo(u"UW6:", 4).append(elementList[5])));
+    }
+    if (elementList[1] != INVALID && elementList[2] != INVALID) {
+        score += (2 * fModel.geti(
+                          feature.setTo(u"BW1:", 4).append(elementList[1]).append(elementList[2])));
+    }
+    if (elementList[2] != INVALID && elementList[3] != INVALID) {
+        score += (2 * fModel.geti(
+                          feature.setTo(u"BW2:", 4).append(elementList[2]).append(elementList[3])));
+    }
+    if (elementList[3] != INVALID && elementList[4] != INVALID) {
+        score += (2 * fModel.geti(
+                          feature.setTo(u"BW3:", 4).append(elementList[3]).append(elementList[4])));
+    }
+    if (elementList[0] != INVALID && elementList[1] != INVALID && elementList[2] != INVALID) {
+        score += (2 * fModel.geti(feature.setTo(u"TW1:", 4)
+                                      .append(elementList[0])
+                                      .append(elementList[1])
+                                      .append(elementList[2])));
+    }
+    if (elementList[1] != INVALID && elementList[2] != INVALID && elementList[3] != INVALID) {
+        score += (2 * fModel.geti(feature.setTo(u"TW2:", 4)
+                                      .append(elementList[1])
+                                      .append(elementList[2])
+                                      .append(elementList[3])));
+    }
+    if (elementList[2] != INVALID && elementList[3] != INVALID && elementList[4] != INVALID) {
+        score += (2 * fModel.geti(feature.setTo(u"TW3:", 4)
+                                      .append(elementList[2])
+                                      .append(elementList[3])
+                                      .append(elementList[4])));
+    }
+    if (elementList[3] != INVALID && elementList[4] != INVALID && elementList[5] != INVALID) {
+        score += (2 * fModel.geti(feature.setTo(u"TW4:", 4)
+                                      .append(elementList[3])
+                                      .append(elementList[4])
+                                      .append(elementList[5])));
     }
     if (score > 0) {
         boundary.addElement(index, status);
