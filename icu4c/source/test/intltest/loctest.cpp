@@ -490,7 +490,7 @@ void LocaleTest::TestSimpleResourceInfo() {
             errln("  ISO-3 country code mismatch: " + temp
                 + " versus " + dataTable[CTRY3][i]);
 
-        sprintf(temp2, "%x", (int)testLocale.getLCID());
+        snprintf(temp2, sizeof(temp2), "%x", (int)testLocale.getLCID());
         if (UnicodeString(temp2) != dataTable[LCID][i])
             errln((UnicodeString)"  LCID mismatch: " + temp2 + " versus "
                 + dataTable[LCID][i]);

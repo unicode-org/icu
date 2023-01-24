@@ -650,9 +650,9 @@ write8str(FileStream *out, uint8_t byte, uint32_t column) {
     char s[8];
 
     if (byte > 7)
-        sprintf(s, "\\x%X", byte);
+        snprintf(s, sizeof(s), "\\x%X", byte);
     else
-        sprintf(s, "\\%X", byte);
+        snprintf(s, sizeof(s), "\\%X", byte);
 
     /* write the value, possibly with comma and newline */
     if(column==MAX_COLUMN) {

@@ -56,7 +56,7 @@ static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *
 
 static void setNuConvTestName(const char *codepage, const char *direction)
 {
-    sprintf(gNuConvTestName, "[Testing %s %s Unicode, InputBufSiz=%d, OutputBufSiz=%d]",
+    snprintf(gNuConvTestName, sizeof(gNuConvTestName),  "[Testing %s %s Unicode, InputBufSiz=%d, OutputBufSiz=%d]",
         codepage,
         direction,
         (int)gInBufferSize,
@@ -1290,8 +1290,8 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
         offset_str[0] = 0;
         for(ptr = junkout;ptr<targ;ptr++)
         {
-            sprintf(junk + strlen(junk), "0x%02x, ", (0xFF) & (unsigned int)*ptr);
-            sprintf(offset_str + strlen(offset_str), "0x%02x, ", (0xFF) & (unsigned int)junokout[ptr-junkout]);
+            snprintf(junk + strlen(junk), sizeof(junk)-strlen(junk), "0x%02x, ", (0xFF) & (unsigned int)*ptr);
+            snprintf(offset_str + strlen(offset_str), sizeof(offset_str)-strlen(offset_str), "0x%02x, ", (0xFF) & (unsigned int)junokout[ptr-junkout]);
         }
         
         log_verbose(junk);
@@ -1467,8 +1467,8 @@ static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *
 
         for(ptr = junkout;ptr<targ;ptr++)
         {
-            sprintf(junk + strlen(junk), "0x%04x, ", (0xFFFF) & (unsigned int)*ptr);
-            sprintf(offset_str + strlen(offset_str), "0x%04x, ", (0xFFFF) & (unsigned int)junokout[ptr-junkout]);
+            snprintf(junk + strlen(junk), sizeof(junk)-strlen(junk), "0x%04x, ", (0xFFFF) & (unsigned int)*ptr);
+            snprintf(offset_str + strlen(offset_str), sizeof(offset_str)-strlen(offset_str), "0x%04x, ", (0xFFFF) & (unsigned int)junokout[ptr-junkout]);
         }
         
         log_verbose(junk);

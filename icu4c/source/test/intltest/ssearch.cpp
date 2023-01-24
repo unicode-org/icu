@@ -28,7 +28,7 @@
 #include "ssearch.h"
 #include "xmlparser.h"
 
-#include <stdio.h>  // for sprintf
+#include <stdio.h>  // for snprintf
 
 char testId[100];
 
@@ -524,7 +524,7 @@ UBool OrderList::matchesAt(int32_t offset, const OrderList &other) const
     return true;
 }
 
-static char *printOffsets(char *buffer, OrderList &list)
+static char *printOffsets(char *buffer, size_t n, OrderList &list)
 {
     int32_t size = list.size();
     char *s = buffer;
@@ -533,16 +533,16 @@ static char *printOffsets(char *buffer, OrderList &list)
         const Order *order = list.get(i);
 
         if (i != 0) {
-            s += sprintf(s, ", ");
+            s += snprintf(s, n, ", ");
         }
 
-        s += sprintf(s, "(%d, %d)", order->lowOffset, order->highOffset);
+        s += snprintf(s, n, "(%d, %d)", order->lowOffset, order->highOffset);
     }
 
     return buffer;
 }
 
-static char *printOrders(char *buffer, OrderList &list)
+static char *printOrders(char *buffer, size_t n, OrderList &list)
 {
     int32_t size = list.size();
     char *s = buffer;
@@ -551,10 +551,10 @@ static char *printOrders(char *buffer, OrderList &list)
         const Order *order = list.get(i);
 
         if (i != 0) {
-            s += sprintf(s, ", ");
+            s += snprintf(s, n, ", ");
         }
 
-        s += sprintf(s, "%8.8X", order->order);
+        s += snprintf(s, n, "%8.8X", order->order);
     }
 
     return buffer;
@@ -673,20 +673,20 @@ void SSearchTest::offsetTest()
 
         if (forwardList.compare(backwardList)) {
             logln("Works with \"%s\"", test[i]);
-            logln("Forward offsets:  [%s]", printOffsets(buffer, forwardList));
-//          logln("Backward offsets: [%s]", printOffsets(buffer, backwardList));
+            logln("Forward offsets:  [%s]", printOffsets(buffer, sizeof(buffer), forwardList));
+//          logln("Backward offsets: [%s]", printOffsets(buffer, sizeof(buffer), backwardList));
 
-            logln("Forward CEs:  [%s]", printOrders(buffer, forwardList));
-//          logln("Backward CEs: [%s]", printOrders(buffer, backwardList));
+            logln("Forward CEs:  [%s]", printOrders(buffer, sizeof(buffer), forwardList));
+//          logln("Backward CEs: [%s]", printOrders(buffer, sizeof(buffer), backwardList));
 
             logln();
         } else {
             errln("Fails with \"%s\"", test[i]);
-            infoln("Forward offsets:  [%s]", printOffsets(buffer, forwardList));
-            infoln("Backward offsets: [%s]", printOffsets(buffer, backwardList));
+            infoln("Forward offsets:  [%s]", printOffsets(buffer, sizeof(buffer), forwardList));
+            infoln("Backward offsets: [%s]", printOffsets(buffer, sizeof(buffer), backwardList));
 
-            infoln("Forward CEs:  [%s]", printOrders(buffer, forwardList));
-            infoln("Backward CEs: [%s]", printOrders(buffer, backwardList));
+            infoln("Forward CEs:  [%s]", printOrders(buffer, sizeof(buffer), forwardList));
+            infoln("Backward CEs: [%s]", printOrders(buffer, sizeof(buffer), backwardList));
 
             infoln();
         }
@@ -711,9 +711,9 @@ static UnicodeString &escape(const UnicodeString &string, UnicodeString &buffer)
             char cbuffer[12];
 
             if (ch <= 0xFFFFL) {
-                sprintf(cbuffer, "\\u%4.4X", ch);
+                snprintf(cbuffer, sizeof(cbuffer), "\\u%4.4X", ch);
             } else {
-                sprintf(cbuffer, "\\U%8.8X", ch);
+                snprintf(cbuffer, sizeof(cbuffer), "\\U%8.8X", ch);
             }
 
             buffer.append(cbuffer);

@@ -109,7 +109,7 @@ void dumpLongs(FILE *file, const char *tag, le_int32 *longs, le_int32 count) {
             bufp = 0;
         }
 
-        bufp += sprintf(&lineBuffer[bufp], "0x%8.8X, ", longs[i]);
+        bufp += snprintf(&lineBuffer[bufp], sizeof(lineBuffer) - bufp, "0x%8.8X, ", longs[i]);
     }
 
     if (bufp != 0) {
@@ -132,7 +132,7 @@ void dumpFloats(FILE *file, const char *tag, float *floats, le_int32 count) {
             bufp = 0;
         }
 
-        bufp += sprintf(&lineBuffer[bufp], "%f, ", floats[i]);
+        bufp += snprintf(&lineBuffer[bufp], sizeof(lineBuffer) - bufp, "%f, ", floats[i]);
     }
 
     if (bufp != 0) {

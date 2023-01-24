@@ -503,7 +503,7 @@ static const char * dump_binline(uint8_t *bytes) {
   static char buf[512];
   int32_t i;
   for(i=0;i<13;i++) {
-    sprintf(buf+(i*3), "%02x ", bytes[i]);
+    snprintf(buf+(i*3), sizeof(buf)-(i*3), "%02x ", bytes[i]);
   }
   return buf;
 }

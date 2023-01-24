@@ -497,7 +497,7 @@ void BiDiConformanceTest::TestBidiCharacterTest() {
         }
         else if(paraDirection<0 && -paraDirection<=(UBIDI_MAX_EXPLICIT_LEVEL+1)) {
             paraLevel=(UBiDiLevel)(-paraDirection);
-            sprintf(levelNameString, "%d", (int)paraLevel);
+            snprintf(levelNameString, sizeof(levelNameString), "%d", (int)paraLevel);
             paraLevelName=levelNameString;
         }
         if(end<=start || (!U_IS_INV_WHITESPACE(*end) && *end!=';' && *end!=0) ||

@@ -1157,7 +1157,7 @@ static void TestICUDataName()
     }
 
     /* Only major number is needed. */
-    sprintf(expectDataName, "%s%d%c",
+    snprintf(expectDataName, sizeof(expectDataName), "%s%d%c",
                 "icudt",
                 (int)icuVersion[0],
                 typeChar);
@@ -1626,7 +1626,7 @@ TestSwapCase(UDataMemory *pData, const char *name,
 
 static void U_CALLCONV
 printErrorToString(void *context, const char *fmt, va_list args) {
-    vsprintf((char *)context, fmt, args);
+    vsnprintf((char *)context, 100, fmt, args);
 }
 
 #if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION

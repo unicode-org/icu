@@ -470,11 +470,11 @@ bytes_write_java(const BinaryResource *res, UErrorCode * /*status*/) {
 
 			if (byteArray[byteIterator] < 128)
 			{
-                sprintf(byteBuffer, byteDecl, byteArray[byteIterator]);
+                snprintf(byteBuffer, sizeof(byteBuffer), byteDecl, byteArray[byteIterator]);
 			}
 			else
 			{
-                sprintf(byteBuffer, byteDecl, (byteArray[byteIterator]-256));
+                snprintf(byteBuffer, sizeof(byteBuffer), byteDecl, (byteArray[byteIterator]-256));
 			}
 
             T_FileStream_write(out, byteBuffer, (int32_t)uprv_strlen(byteBuffer));

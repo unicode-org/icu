@@ -84,7 +84,7 @@ void ListFormatterTest::ExpectPositions(
         int32_t start = cfp.getStart();
         int32_t limit = cfp.getLimit();
         char buf[128];
-        sprintf(buf, "%24s %3d %3d %3d", attrString(id), id, start, limit);
+        snprintf(buf, sizeof(buf), "%24s %3d %3d %3d", attrString(id), id, start, limit);
         logln(buf);
         for (int i = 0; i < tupleCount; ++i) {
             if (found[i]) {

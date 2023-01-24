@@ -344,7 +344,7 @@ void addTestNewConvert(TestNode** root)
 
 static void setNuConvTestName(const char *codepage, const char *direction)
 {
-    sprintf(gNuConvTestName, "[Testing %s %s Unicode, InputBufSiz=%d, OutputBufSiz=%d]",
+    snprintf(gNuConvTestName, sizeof(gNuConvTestName), "[Testing %s %s Unicode, InputBufSiz=%d, OutputBufSiz=%d]",
         codepage,
         direction,
         (int)gInBufferSize,
@@ -456,8 +456,8 @@ static ETestConvertResult testConvertFromU( const UChar *source, int sourceLen, 
       junk[0] = 0;
       offset_str[0] = 0;
       for(ptr = junkout;ptr<targ;ptr++) {
-        sprintf(junk + strlen(junk), "0x%02x, ", (int)(0xFF & *ptr));
-        sprintf(offset_str + strlen(offset_str), "0x%02x, ", (int)(0xFF & junokout[ptr-junkout]));
+        snprintf(junk + strlen(junk), sizeof(junk)-strlen(junk), "0x%02x, ", (int)(0xFF & *ptr));
+        snprintf(offset_str + strlen(offset_str), sizeof(offset_str)-strlen(offset_str), "0x%02x, ", (int)(0xFF & junokout[ptr-junkout]));
       }
       
       log_verbose(junk);
@@ -619,8 +619,8 @@ static ETestConvertResult testConvertToU( const uint8_t *source, int sourcelen, 
 
         for(ptr = junkout;ptr<targ;ptr++)
         {
-            sprintf(junk + strlen(junk), "0x%04x, ", (0xFFFF) & (unsigned int)*ptr);
-            sprintf(offset_str + strlen(offset_str), "0x%04x, ", (0xFFFF) & (unsigned int)junokout[ptr-junkout]);
+            snprintf(junk + strlen(junk), sizeof(junk)-strlen(junk), "0x%04x, ", (0xFFFF) & (unsigned int)*ptr);
+            snprintf(offset_str + strlen(offset_str), sizeof(offset_str)-strlen(offset_str), "0x%04x, ", (0xFFFF) & (unsigned int)junokout[ptr-junkout]);
         }
 
         log_verbose(junk);

@@ -229,7 +229,7 @@ char * StringSearchTest::toCharString(const UnicodeString &text)
             result[index ++] = (char)ch;
         }
         else {
-            sprintf(result+index, "\\u%04x", ch);
+            snprintf(result+index, sizeof(result)-index, "\\u%04x", ch);
             index += 6; /* \uxxxx */
         }
     }

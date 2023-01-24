@@ -143,7 +143,7 @@ uprv_detectWindowsTimeZone()
             //
             // For example, a time zone that is 3 hours ahead of UTC (UTC+03:00) would have a Bias value of -180, and the
             // corresponding time zone ID would be "Etc/GMT-3". (So there is no need to negate utcOffsetMins below.)
-            int ret = snprintf(gmtOffsetTz, UPRV_LENGTHOF(gmtOffsetTz), "Etc/GMT%+ld", utcOffsetMins / 60);
+            int ret = snprintf(gmtOffsetTz, sizeof(gmtOffsetTz), "Etc/GMT%+ld", utcOffsetMins / 60);
             if (ret > 0 && ret < UPRV_LENGTHOF(gmtOffsetTz)) {
                 return uprv_strdup(gmtOffsetTz);
             }

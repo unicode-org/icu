@@ -256,7 +256,7 @@ void NormalizerConformanceTest::TestConformance(FileStream *input, int32_t optio
         }
 
         fields[0]=fields[1]=fields[2]=fields[3]=fields[4].setTo(c);
-        sprintf(lineBuf, "not mentioned code point U+%04lx", (long)c);
+        snprintf(lineBuf, sizeof(lineBuf), "not mentioned code point U+%04lx", (long)c);
 
         if (checkConformance(fields, lineBuf, options, status)) {
             ++passCount;

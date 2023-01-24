@@ -1539,7 +1539,7 @@ void DateIntervalFormatTest::expectUserDII(const char** data,
         char mesg[1000];
         PRINTMESG("interval format using user defined DateIntervalInfo\n");
         str.extract(0,  str.length(), result, "UTF-8");
-        sprintf(mesg, "interval date: %s\n", result);
+        snprintf(mesg, sizeof(mesg), "interval date: %s\n", result);
         PRINTMESG(mesg);
 #endif
         delete dtitvfmt;
@@ -1662,7 +1662,7 @@ void DateIntervalFormatTest::stress(const char** data, int32_t data_length,
 #ifdef DTIFMTTS_DEBUG
     char result[1000];
     char mesg[1000];
-    sprintf(mesg, "locale: %s\n", locName);
+    snprintf(mesg, sizeof(mesg), "locale: %s\n", locName);
     PRINTMESG(mesg);
 #endif
 
@@ -1672,7 +1672,7 @@ void DateIntervalFormatTest::stress(const char** data, int32_t data_length,
         const char* datestr = data[i++];
         const char* datestr_2 = data[i++];
 #ifdef DTIFMTTS_DEBUG
-        sprintf(mesg, "original date: %s - %s\n", datestr, datestr_2);
+        snprintf(mesg, sizeof(mesg), "original date: %s - %s\n", datestr, datestr_2);
         PRINTMESG(mesg)
 #endif
         UDate date = ref.parse(ctou(datestr), ec);
@@ -1706,10 +1706,10 @@ void DateIntervalFormatTest::stress(const char** data, int32_t data_length,
             if (!assertSuccess("format", ec)) return;
 #ifdef DTIFMTTS_DEBUG
             oneSkeleton.extract(0,  oneSkeleton.length(), result, "UTF-8");
-            sprintf(mesg, "interval by skeleton: %s\n", result);
+            snprintf(mesg, sizeof(mesg), "interval by skeleton: %s\n", result);
             PRINTMESG(mesg)
             str.extract(0,  str.length(), result, "UTF-8");
-            sprintf(mesg, "interval date: %s\n", result);
+            snprintf(mesg, sizeof(mesg), "interval date: %s\n", result);
             PRINTMESG(mesg)
 #endif
             delete dtitvfmt;
@@ -1733,7 +1733,7 @@ void DateIntervalFormatTest::stress(const char** data, int32_t data_length,
 #ifdef DTIFMTTS_DEBUG
             PRINTMESG("interval format using user defined DateIntervalInfo\n");
             str.extract(0,  str.length(), result, "UTF-8");
-            sprintf(mesg, "interval date: %s\n", result);
+            snprintf(mesg, sizeof(mesg), "interval date: %s\n", result);
             PRINTMESG(mesg)
 #endif
         } else {
