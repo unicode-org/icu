@@ -19,7 +19,7 @@
 #include "cstring.h"
 
 #include <float.h>
-#include <stdio.h>    // for sprintf
+#include <stdio.h>    // for snprintf
 #include <stdlib.h>
  
 // *****************************************************************************
@@ -358,7 +358,7 @@ NumberFormatRoundTripTest::escape(UnicodeString& s)
         } else {
             s += "+U";
             char temp[16];
-            sprintf(temp, "%4X", c);        // might not work
+            snprintf(temp, sizeof(temp), "%4X", c);        // might not work
             s += temp;
         }
     }

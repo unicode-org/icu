@@ -48,16 +48,16 @@ static char* U_EXPORT2 ucol_sortKeyToString(const UCollator *coll, const uint8_t
     uint8_t b;
 
     if (position + 1 < len)
-        position += sprintf(buffer + position, "[");
+        position += snprintf(buffer + position, len-position, "[");
     while ((b = *sortkey++) != 0) {
         if (b == 1 && position + 5 < len) {
-            position += sprintf(buffer + position, "%02X . ", b);
+            position += snprintf(buffer + position, len-position,  "%02X . ", b);
         } else if (b != 1 && position + 3 < len) {
-            position += sprintf(buffer + position, "%02X ", b);
+            position += snprintf(buffer + position, len-position, "%02X ", b);
         }
     }
     if (position + 3 < len)
-        position += sprintf(buffer + position, "%02X]", b);
+        position += snprintf(buffer + position, len-position, "%02X]", b);
     return buffer;
 }
 
@@ -1282,8 +1282,8 @@ void TestSortKey()
 
       for(i=0;i<sortklen;i++)
         {
-          sprintf(junk2+strlen(junk2), "%02X ",(int)( 0xFF & sortk2[i]));
-          sprintf(junk3+strlen(junk3), "%02X ",(int)( 0xFF & sortk3[i]));
+          snprintf(junk2+strlen(junk2), sizeof(junk2)-strlen(junk2), "%02X ",(int)( 0xFF & sortk2[i]));
+          snprintf(junk3+strlen(junk3), sizeof(junk3)-strlen(junk3), "%02X ",(int)( 0xFF & sortk3[i]));
         }
 
       log_verbose("%s\n", junk2);

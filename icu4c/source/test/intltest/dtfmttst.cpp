@@ -23,7 +23,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "caltest.h"  // for fieldName
-#include <stdio.h> // for sprintf
+#include <stdio.h> // for snprintf
 
 #if U_PLATFORM_USES_ONLY_WIN32_API
 #include "windttst.h"
@@ -2401,7 +2401,7 @@ void DateFormatTest::TestRelative(int daysdelta,
                                   const Locale& loc,
                                   const char *expectChars) {
     char banner[25];
-    sprintf(banner, "%d", daysdelta);
+    snprintf(banner, sizeof(banner), "%d", daysdelta);
     UnicodeString bannerStr(banner, "");
 
     UErrorCode status = U_ZERO_ERROR;

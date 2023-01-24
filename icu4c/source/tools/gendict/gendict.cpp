@@ -301,7 +301,7 @@ int  main(int argc, char **argv) {
     UErrorCode tempstatus = U_ZERO_ERROR;
 
     /* write message with just the name */ // potential for a buffer overflow here...
-    sprintf(msg, "gendict writes dummy %s because of UCONFIG_NO_BREAK_ITERATION and/or UCONFIG_NO_FILE_IO, see uconfig.h", outFileName);
+    snprintf(msg, sizeof(msg), "gendict writes dummy %s because of UCONFIG_NO_BREAK_ITERATION and/or UCONFIG_NO_FILE_IO, see uconfig.h", outFileName);
     fprintf(stderr, "%s\n", msg);
 
     /* write the dummy data file */

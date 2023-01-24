@@ -44,7 +44,7 @@
 
 static const char *tagAssert(const char *f, int32_t l, const char *msg) {
     static char _fileline[1000];
-    sprintf(_fileline, "%s:%d: ASSERT_TRUE(%s)", f, l, msg);
+    snprintf(_fileline, sizeof(_fileline), "%s:%d: ASSERT_TRUE(%s)", f, l, msg);
     return _fileline;
 }
 

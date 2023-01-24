@@ -2513,7 +2513,7 @@ CalFields::setTo(Calendar& cal) const {
 char*
 CalFields::toString(char* buf, int32_t len) const {
     char local[32];
-    sprintf(local, "%04d-%02d-%02d %02d:%02d:%02d.%03d", year, month, day, hour, min, sec, ms);
+    snprintf(local, sizeof(local), "%04d-%02d-%02d %02d:%02d:%02d.%03d", year, month, day, hour, min, sec, ms);
     uprv_strncpy(buf, local, len - 1);
     buf[len - 1] = 0;
     return buf;

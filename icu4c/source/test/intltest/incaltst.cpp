@@ -42,7 +42,7 @@ static UnicodeString escape( const UnicodeString&src)
         else {
             dst += UnicodeString("[");
             char buf [8];
-            sprintf(buf, "%#x", c);
+            snprintf(buf, sizeof(buf), "%#x", c);
             dst += UnicodeString(buf);
             dst += UnicodeString("]");
         }

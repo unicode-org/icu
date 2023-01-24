@@ -23,7 +23,7 @@
 #include "cbiditst.h"
 #include "cstring.h"
 #include <stdbool.h>
-/* the following include is needed for sprintf */
+/* the following include is needed for snprintf */
 #include <stdio.h>
 
 #define MAXLEN      MAX_STRING_LENGTH
@@ -4489,7 +4489,7 @@ testStreaming(void) {
                 mismatch |= (UBool)(j >= nPortions ||
                            processedLen != testData[i].portionLens[levelIndex][j]);
 
-                sprintf(processedLenStr + j * 4, "%4d", processedLen);
+                snprintf(processedLenStr + j * 4, sizeof(processedLenStr) - j * 4, "%4d", processedLen);
                 srcLen -= processedLen, pSrc += processedLen;
             }
 

@@ -192,7 +192,7 @@ static void doubleToStr(
         const void *doublePtr, UnicodeString &appendTo) {
     char buffer[256];
     double x = *static_cast<const double *>(doublePtr);
-    sprintf(buffer, "%f", x);
+    snprintf(buffer, sizeof(buffer), "%f", x);
     appendTo.append(buffer);
 }
 

@@ -1258,8 +1258,8 @@ void RelativeDateTimeFormatterTest::CheckExpectedResult(
     UnicodeString expected(expectedResult.expected, -1, US_INV);
     expected = expected.unescape();
     char buffer[256];
-    sprintf(
-            buffer,
+    snprintf(
+            buffer, sizeof(buffer),
             "%s, %f, %s, %s",
             description,
             expectedResult.value,
@@ -1287,8 +1287,8 @@ void RelativeDateTimeFormatterTest::CheckExpectedResult(
     UnicodeString expected(expectedResult.expected, -1, US_INV);
     expected = expected.unescape();
     char buffer[256];
-    sprintf(
-            buffer,
+    snprintf(
+            buffer, sizeof(buffer),
             "%s, %f, %s",
             description,
             expectedResult.value,
@@ -1310,8 +1310,8 @@ void RelativeDateTimeFormatterTest::CheckExpectedResult(
     UnicodeString expected(expectedResult.expected, -1, US_INV);
     expected = expected.unescape();
     char buffer[256];
-    sprintf(
-            buffer,
+    snprintf(
+            buffer, sizeof(buffer),
             "%s, %s, %s",
             description,
             DirectionStr(expectedResult.direction),

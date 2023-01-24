@@ -168,10 +168,10 @@ UnicodeString append(UnicodeString& result, const UObject* obj)
         } else if ((loc = dynamic_cast<const Locale*>(obj)) != NULL) {
             result.append(loc->getName());
         } else if ((i = dynamic_cast<const Integer*>(obj)) != NULL) {
-            sprintf(buffer, "%d", (int)i->_val);
+            snprintf(buffer, sizeof(buffer), "%d", (int)i->_val);
             result.append(buffer);
         } else {
-            sprintf(buffer, "%p", (const void*)obj);
+            snprintf(buffer, sizeof(buffer), "%p", (const void*)obj);
             result.append(buffer);
         }
     }

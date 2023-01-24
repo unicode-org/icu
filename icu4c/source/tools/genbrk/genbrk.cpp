@@ -179,7 +179,7 @@ int  main(int argc, char **argv) {
     char msg[1024];
 
     /* write message with just the name */
-    sprintf(msg, "genbrk writes dummy %s because of UCONFIG_NO_BREAK_ITERATION and/or UCONFIG_NO_FILE_IO, see uconfig.h", outFileName);
+    snprintf(msg, sizeof(msg), "genbrk writes dummy %s because of UCONFIG_NO_BREAK_ITERATION and/or UCONFIG_NO_FILE_IO, see uconfig.h", outFileName);
     fprintf(stderr, "%s\n", msg);
 
     /* write the dummy data file */

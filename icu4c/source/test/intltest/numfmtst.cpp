@@ -68,7 +68,7 @@ using icu::number::impl::DecimalQuantity;
 using namespace icu::number;
 
 //#define NUMFMTST_CACHE_DEBUG 1
-#include "stdio.h" /* for sprintf */
+#include "stdio.h" /* for snprintf */
 // #include "iostream"   // for cout
 
 //#define NUMFMTST_DEBUG 1
@@ -3123,7 +3123,7 @@ void NumberFormatTest::expectParseCurrency(const NumberFormat &fmt, const UChar*
     UErrorCode status = U_ZERO_ERROR;
 
     char theInfo[100];
-    sprintf(theInfo, "For locale %s, string \"%s\", currency ",
+    snprintf(theInfo, sizeof(theInfo), "For locale %s, string \"%s\", currency ",
             fmt.getLocale(ULOC_ACTUAL_LOCALE, status).getBaseName(),
             text);
     u_austrcpy(theInfo+uprv_strlen(theInfo), currency);
@@ -6662,7 +6662,7 @@ void NumberFormatTest::expectPositions(FieldPositionIterator& iter, int32_t *val
 
     // is there a logln using printf?
     char buf[128];
-    sprintf(buf, "%24s %3d %3d %3d", attrString(id), id, start, limit);
+    snprintf(buf, sizeof(buf), "%24s %3d %3d %3d", attrString(id), id, start, limit);
     logln(buf);
 
     for (int i = 0; i < tupleCount; ++i) {
@@ -8291,7 +8291,7 @@ void NumberFormatTest::TestCurrencyUsage() {
 void NumberFormatTest::TestDoubleLimit11439() {
     char  buf[50];
     for (int64_t num = MAX_INT64_IN_DOUBLE-10; num<=MAX_INT64_IN_DOUBLE; num++) {
-        sprintf(buf, "%lld", (long long)num);
+        snprintf(buf, sizeof(buf), "%lld", (long long)num);
         double fNum = 0.0;
         sscanf(buf, "%lf", &fNum);
         int64_t rtNum = static_cast<int64_t>(fNum);
@@ -8301,7 +8301,7 @@ void NumberFormatTest::TestDoubleLimit11439() {
         }
     }
     for (int64_t num = -MAX_INT64_IN_DOUBLE+10; num>=-MAX_INT64_IN_DOUBLE; num--) {
-        sprintf(buf, "%lld", (long long)num);
+        snprintf(buf, sizeof(buf), "%lld", (long long)num);
         double fNum = 0.0;
         sscanf(buf, "%lf", &fNum);
         int64_t rtNum = static_cast<int64_t>(fNum);
