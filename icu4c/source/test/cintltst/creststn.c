@@ -2843,7 +2843,7 @@ static void TestCLDRStyleAliases(void) {
       resource[0]='a';
       resource[1]='0'+i;
       resource[2]=0;
-      /* instead of sprintf(resource, "a%i", i); */
+      /* instead of snprintf(resource, "a%i", i); */
       a = ures_getByKeyWithFallback(alias, resource, a, &status);
       result = tres_getString(a, -1, NULL, &len, &status);
       u_charsToUChars(expects[i], expected, (int32_t)strlen(expects[i])+1);

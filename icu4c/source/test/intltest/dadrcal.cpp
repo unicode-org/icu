@@ -103,7 +103,7 @@ void DataDrivenCalendarTest::testOps(TestData *testData,
 
         // load parameters
         char theCase[200];
-        sprintf(theCase, "[case %d]", n);
+        snprintf(theCase, sizeof(theCase), "[case %d]", n);
         UnicodeString caseString(theCase, "");
         // build to calendar
         //             Headers { "locale","from","operation","params","to" }

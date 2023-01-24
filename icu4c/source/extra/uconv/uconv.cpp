@@ -804,7 +804,7 @@ ConvertFile::convertFile(const char *pname,
                 // length of the just consumed bytes -
                 // length of the error bytes
                 length =
-                    (int8_t)sprintf(pos, "%d",
+                    (int8_t)snprintf(pos, sizeof(pos), "%d",
                         (int)(infoffset + (cbufp - buf) - errorLength));
 
                 // output the bytes that caused the error
@@ -985,7 +985,7 @@ ConvertFile::convertFile(const char *pname,
                         errtag = "problemCvtFromUOut";
                     }
 
-                    length = (int8_t)sprintf(pos, "%u", (int)ferroffset);
+                    length = (int8_t)snprintf(pos, sizeof(pos), "%u", (int)ferroffset);
 
                     // output the code points that caused the error
                     UnicodeString str;

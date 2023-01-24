@@ -603,7 +603,7 @@ void IntlTestSpoof::testRestrictionLevel() {
             if (expectedLevel > levelSetInSpoofChecker) {
                 expectedValue |= USPOOF_RESTRICTION_LEVEL;
             }
-            sprintf(msgBuffer, "testNum = %d, levelIndex = %d, expected = %#x, actual = %#x",
+            snprintf(msgBuffer, sizeof(msgBuffer), "testNum = %d, levelIndex = %d, expected = %#x, actual = %#x",
                     testNum, levelIndex, expectedValue, actualValue);
             TEST_ASSERT_MSG(expectedValue == actualValue, msgBuffer);
             TEST_ASSERT_SUCCESS(status);
@@ -647,7 +647,7 @@ void IntlTestSpoof::testMixedNumbers() {
     UErrorCode status = U_ZERO_ERROR;
     for (int32_t testNum=0; testNum < UPRV_LENGTHOF(tests); testNum++) {
         char msgBuf[100];
-        sprintf(msgBuf, "testNum = %d ", testNum);
+        snprintf(msgBuf, sizeof(msgBuf), "testNum = %d ", testNum);
         Test &test = tests[testNum];
 
         status = U_ZERO_ERROR;

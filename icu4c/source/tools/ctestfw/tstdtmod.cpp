@@ -41,7 +41,7 @@ UBool IcuTestErrorCode::errIfFailureAndReset(const char *fmt, ...) {
         char buffer[4000];
         va_list ap;
         va_start(ap, fmt);
-        vsprintf(buffer, fmt, ap);
+        vsnprintf(buffer, sizeof(buffer), fmt, ap);
         va_end(ap);
         errlog(false, u"expected success", buffer);
         reset();
@@ -68,7 +68,7 @@ UBool IcuTestErrorCode::errDataIfFailureAndReset(const char *fmt, ...) {
         char buffer[4000];
         va_list ap;
         va_start(ap, fmt);
-        vsprintf(buffer, fmt, ap);
+        vsnprintf(buffer, sizeof(buffer), fmt, ap);
         va_end(ap);
         errlog(true, u"data: expected success", buffer);
         reset();
@@ -93,7 +93,7 @@ UBool IcuTestErrorCode::expectErrorAndReset(UErrorCode expectedError, const char
         char buffer[4000];
         va_list ap;
         va_start(ap, fmt);
-        vsprintf(buffer, fmt, ap);
+        vsnprintf(buffer, sizeof(buffer), fmt, ap);
         va_end(ap);
         errlog(false, UnicodeString(u"expected: ") + u_errorName(expectedError), buffer);
     }

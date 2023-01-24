@@ -11,7 +11,7 @@
 //
 //   Note: please... no character literals cast to UChars.. use (UChar)0xZZZZ
 
-#include <stdio.h>  // for sprintf
+#include <stdio.h>  // for snprintf
 
 #include "intltest.h"
 #include "alphaindextst.h"
@@ -647,11 +647,11 @@ void AlphabeticIndexTest::TestSchSt() {
         UnicodeString name = UnicodeString(testCase.name).unescape();
         UnicodeString label = UnicodeString(testCase.bucketLabel).unescape();
         char msg[100];
-        sprintf(msg, "getBucketIndex(%s)", testCase.name);
+        snprintf(msg, sizeof(msg), "getBucketIndex(%s)", testCase.name);
         assertEquals(msg, testCase.bucketIndex, index.getBucketIndex(name, status));
-        sprintf(msg, "immutable getBucketIndex(%s)", testCase.name);
+        snprintf(msg, sizeof(msg), "immutable getBucketIndex(%s)", testCase.name);
         assertEquals(msg, testCase.bucketIndex, immIndex->getBucketIndex(name, status));
-        sprintf(msg, "immutable bucket label (%s)", testCase.name);
+        snprintf(msg, sizeof(msg), "immutable bucket label (%s)", testCase.name);
         assertEquals(msg, label, immIndex->getBucket(testCase.bucketIndex)->getLabel());
     }
 }
@@ -698,7 +698,7 @@ void AlphabeticIndexTest::TestJapaneseKanji() {
     int32_t overflowIndex = immIndex->getBucketCount() - 1;
     for(int32_t i = 0; i < UPRV_LENGTHOF(kanji); ++i) {
         char msg[40];
-        sprintf(msg, "kanji[%d]=U+%04lX in overflow bucket", (int)i, (long)kanji[i]);
+        snprintf(msg, sizeof(msg), "kanji[%d]=U+%04lX in overflow bucket", (int)i, (long)kanji[i]);
         assertEquals(msg, overflowIndex, immIndex->getBucketIndex(UnicodeString(kanji[i]), status));
         TEST_CHECK_STATUS;
     }

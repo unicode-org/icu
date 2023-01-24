@@ -513,7 +513,7 @@ void CompactDecimalFormatTest::CheckLocale(const Locale& locale, UNumberCompactS
     return;
   }
   char description[256];
-  sprintf(description,"%s - %s", locale.getName(), StyleStr(style));
+  snprintf(description, sizeof(description), "%s - %s", locale.getName(), StyleStr(style));
   for (int32_t i = 0; i < expectedResultLength; i++) {
     CheckExpectedResult(cdf.getAlias(), &expectedResults[i], description);
   }
@@ -532,7 +532,7 @@ void CompactDecimalFormatTest::CheckLocaleWithCurrency(const Locale& locale, UNu
     cdf->setCurrency(currency, status);
     assertSuccess("Failed to set currency", status);
     char description[256];
-    sprintf(description,"%s - %s", locale.getName(), StyleStr(style));
+    snprintf(description, sizeof(description), "%s - %s", locale.getName(), StyleStr(style));
     for (int32_t i = 0; i < expectedResultLength; i++) {
         CheckExpectedResult(cdf.getAlias(), &expectedResults[i], description);
     }

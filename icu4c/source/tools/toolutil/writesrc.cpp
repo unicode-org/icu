@@ -354,14 +354,14 @@ usrc_writeUCPTrie(FILE *f, const char *name, const UCPTrie *pTrie, UTargetSyntax
 
     switch (syntax) {
     case UPRV_TARGET_SYNTAX_CCODE:
-        sprintf(line, "static const uint16_t %s_trieIndex[%%ld]={\n", name);
-        sprintf(line2, "static const uint%d_t %s_trieData[%%ld]={\n", (int)width, name);
-        sprintf(line3, "\n};\n\n");
+        snprintf(line, sizeof(line), "static const uint16_t %s_trieIndex[%%ld]={\n", name);
+        snprintf(line2, sizeof(line2), "static const uint%d_t %s_trieData[%%ld]={\n", (int)width, name);
+        snprintf(line3, sizeof(line3), "\n};\n\n");
         break;
     case UPRV_TARGET_SYNTAX_TOML:
-        sprintf(line, "index = [\n  ");
-        sprintf(line2, "data_%d = [\n  ", (int)width);
-        sprintf(line3, "\n]\n");
+        snprintf(line, sizeof(line), "index = [\n  ");
+        snprintf(line2, sizeof(line2), "data_%d = [\n  ", (int)width);
+        snprintf(line3, sizeof(line3), "\n]\n");
         break;
     default:
         UPRV_UNREACHABLE_EXIT;
@@ -370,10 +370,10 @@ usrc_writeUCPTrie(FILE *f, const char *name, const UCPTrie *pTrie, UTargetSyntax
 
     switch (syntax) {
     case UPRV_TARGET_SYNTAX_CCODE:
-        sprintf(line, "static const UCPTrie %s_trie={\n", name);
-        sprintf(line2, "%s_trieIndex", name);
-        sprintf(line3, "%s_trieData", name);
-        sprintf(line4, "};\n\n");
+        snprintf(line, sizeof(line), "static const UCPTrie %s_trie={\n", name);
+        snprintf(line2, sizeof(line2), "%s_trieIndex", name);
+        snprintf(line3, sizeof(line3), "%s_trieData", name);
+        snprintf(line4, sizeof(line4), "};\n\n");
         break;
     case UPRV_TARGET_SYNTAX_TOML:
         line[0] = 0;

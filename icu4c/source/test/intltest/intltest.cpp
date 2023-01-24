@@ -78,7 +78,7 @@ operator+(const UnicodeString& left,
     char buffer[64];    // nos changed from 10 to 64
     char danger = 'p';  // guard against overrunning the buffer (rtg)
 
-    sprintf(buffer, "%ld", num);
+    snprintf(buffer, sizeof(buffer), "%ld", num);
     assert(danger == 'p');
 
     return left + buffer;
@@ -91,7 +91,7 @@ operator+(const UnicodeString& left,
     char buffer[64];    // nos changed from 10 to 64
     char danger = 'p';  // guard against overrunning the buffer (rtg)
 
-    sprintf(buffer, "%lu", num);
+    snprintf(buffer, sizeof(buffer), "%lu", num);
     assert(danger == 'p');
 
     return left + buffer;
@@ -104,9 +104,9 @@ Int64ToUnicodeString(int64_t num)
     char danger = 'p';  // guard against overrunning the buffer (rtg)
 
 #if defined(_MSC_VER)
-    sprintf(buffer, "%I64d", num);
+    snprintf(buffer, sizeof(buffer), "%I64d", num);
 #else
-    sprintf(buffer, "%lld", (long long)num);
+    snprintf(buffer, sizeof(buffer), "%lld", (long long)num);
 #endif
     assert(danger == 'p');
 
@@ -119,7 +119,7 @@ DoubleToUnicodeString(double num)
     char buffer[64];    // nos changed from 10 to 64
     char danger = 'p';  // guard against overrunning the buffer (rtg)
 
-    sprintf(buffer, "%1.14e", num);
+    snprintf(buffer, sizeof(buffer), "%1.14e", num);
     assert(danger == 'p');
 
     return buffer;
@@ -137,7 +137,7 @@ operator+(const UnicodeString& left,
     //  53*log(2)/log(10) = 15.95
     // so there is no need to show more than 16 digits. [alan]
 
-    sprintf(buffer, "%.17g", num);
+    snprintf(buffer, sizeof(buffer), "%.17g", num);
     assert(danger == 'p');
 
     return left + buffer;
@@ -784,7 +784,7 @@ UBool IntlTest::runTestLoop( char* testname, char* par, char *baseName )
             lastErrorCount = errorCount;
             execCount++;
             char msg[256];
-            sprintf(msg, "%s {", name);
+            snprintf(msg, sizeof(msg), "%s {", name);
             LL_message(msg, true);
             UDate timeStart = uprv_getRawUTCtime();
             strcpy(saveBaseLoc,name);
@@ -798,7 +798,7 @@ UBool IntlTest::runTestLoop( char* testname, char* par, char *baseName )
             rval = true; // at least one test has been called
             char secs[256];
             if(!no_time) {
-              sprintf(secs, "%f", (timeStop-timeStart)/1000.0);
+              snprintf(secs, sizeof(secs), "%f", (timeStop-timeStart)/1000.0);
             } else {
               secs[0]=0;
             }
@@ -813,11 +813,11 @@ UBool IntlTest::runTestLoop( char* testname, char* par, char *baseName )
             saveBaseLoc[0]=0; /* reset path */
             
             if (lastErrorCount == errorCount) {
-                sprintf( msg, "   } OK:   %s ", name );
+                snprintf( msg, sizeof(msg),  "   } OK:   %s ", name );
                 if(!no_time) str_timeDelta(msg+strlen(msg),timeStop-timeStart);
                 lastTestFailed = false;
             }else{
-                sprintf(msg,  "   } ERRORS (%li) in %s", (long)(errorCount-lastErrorCount), name);
+                snprintf(msg, sizeof(msg), "   } ERRORS (%li) in %s", (long)(errorCount-lastErrorCount), name);
                 if(!no_time) str_timeDelta(msg+strlen(msg),timeStop-timeStart);
 
                 for(int i=0;i<LL_indentlevel;i++) {
@@ -967,15 +967,15 @@ void IntlTest::errcheckln(UErrorCode status, const UnicodeString &message ) {
     }
 }
 
-/* convenience functions that include sprintf formatting */
+/* convenience functions that include snprintf formatting */
 void IntlTest::log(const char *fmt, ...)
 {
     char buffer[4000];
     va_list ap;
 
     va_start(ap, fmt);
-    /* sprintf it just to make sure that the information is valid */
-    vsprintf(buffer, fmt, ap);
+    /* snprintf it just to make sure that the information is valid */
+    vsnprintf(buffer, sizeof(buffer), fmt, ap);
     va_end(ap);
     if( verbose ) {
         log(UnicodeString(buffer, (const char *)NULL));
@@ -988,8 +988,8 @@ void IntlTest::logln(const char *fmt, ...)
     va_list ap;
 
     va_start(ap, fmt);
-    /* sprintf it just to make sure that the information is valid */
-    vsprintf(buffer, fmt, ap);
+    /* snprintf it just to make sure that the information is valid */
+    vsnprintf(buffer, sizeof(buffer), fmt, ap);
     va_end(ap);
     if( verbose ) {
         logln(UnicodeString(buffer, (const char *)NULL));
@@ -1002,8 +1002,8 @@ UBool IntlTest::logKnownIssue(const char *ticket, const char *fmt, ...)
     va_list ap;
 
     va_start(ap, fmt);
-    /* sprintf it just to make sure that the information is valid */
-    vsprintf(buffer, fmt, ap);
+    /* snprintf it just to make sure that the information is valid */
+    vsnprintf(buffer, sizeof(buffer), fmt, ap);
     va_end(ap);
     return logKnownIssue(ticket, UnicodeString(buffer, (const char *)NULL));
 }
@@ -1033,15 +1033,15 @@ UBool IntlTest::logKnownIssue(const char *ticket, const UnicodeString &msg) {
   return true;
 }
 
-/* convenience functions that include sprintf formatting */
+/* convenience functions that include snprintf formatting */
 void IntlTest::info(const char *fmt, ...)
 {
     char buffer[4000];
     va_list ap;
 
     va_start(ap, fmt);
-    /* sprintf it just to make sure that the information is valid */
-    vsprintf(buffer, fmt, ap);
+    /* snprintf it just to make sure that the information is valid */
+    vsnprintf(buffer, sizeof(buffer), fmt, ap);
     va_end(ap);
     info(UnicodeString(buffer, (const char *)NULL));
 }
@@ -1052,8 +1052,8 @@ void IntlTest::infoln(const char *fmt, ...)
     va_list ap;
 
     va_start(ap, fmt);
-    /* sprintf it just to make sure that the information is valid */
-    vsprintf(buffer, fmt, ap);
+    /* snprintf it just to make sure that the information is valid */
+    vsnprintf(buffer, sizeof(buffer), fmt, ap);
     va_end(ap);
     infoln(UnicodeString(buffer, (const char *)NULL));
 }
@@ -1064,7 +1064,7 @@ void IntlTest::err(const char *fmt, ...)
     va_list ap;
 
     va_start(ap, fmt);
-    vsprintf(buffer, fmt, ap);
+    vsnprintf(buffer, sizeof(buffer), fmt, ap);
     va_end(ap);
     err(UnicodeString(buffer, (const char *)NULL));
 }
@@ -1075,7 +1075,7 @@ void IntlTest::errln(const char *fmt, ...)
     va_list ap;
 
     va_start(ap, fmt);
-    vsprintf(buffer, fmt, ap);
+    vsnprintf(buffer, sizeof(buffer), fmt, ap);
     va_end(ap);
     errln(UnicodeString(buffer, (const char *)NULL));
 }
@@ -1086,7 +1086,7 @@ void IntlTest::dataerrln(const char *fmt, ...)
     va_list ap;
 
     va_start(ap, fmt);
-    vsprintf(buffer, fmt, ap);
+    vsnprintf(buffer, sizeof(buffer), fmt, ap);
     va_end(ap);
     dataerrln(UnicodeString(buffer, (const char *)NULL));
 }
@@ -1097,7 +1097,7 @@ void IntlTest::errcheckln(UErrorCode status, const char *fmt, ...)
     va_list ap;
 
     va_start(ap, fmt);
-    vsprintf(buffer, fmt, ap);
+    vsnprintf(buffer, sizeof(buffer), fmt, ap);
     va_end(ap);
     
     if (status == U_FILE_ACCESS_ERROR || status == U_MISSING_RESOURCE_ERROR) {
@@ -1509,7 +1509,7 @@ main(int argc, char* argv[])
                 fprintf(stdout, "\n=== Handling test: %s: ===\n", name);
 
                 char baseName[1024];
-                sprintf(baseName, "/%s/", name);
+                snprintf(baseName, sizeof(baseName), "/%s/", name);
 
                 char* parameter = strchr( name, '@' );
                 if (parameter) {

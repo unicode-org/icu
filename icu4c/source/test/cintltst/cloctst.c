@@ -604,7 +604,7 @@ static void TestSimpleResourceInfo() {
             log_err("  ISO-3 Country code mismatch:  %s versus  %s\n",  austrdup(expected),
                 austrdup(dataTable[CTRY3][i]));
         }
-        sprintf(temp2, "%x", (int)uloc_getLCID(testLocale));
+        snprintf(temp2, sizeof(temp2), "%x", (int)uloc_getLCID(testLocale));
         if (strcmp(temp2, rawData2[LCID][i]) != 0) {
             log_err("LCID mismatch: %s versus %s\n", temp2 , rawData2[LCID][i]);
         }

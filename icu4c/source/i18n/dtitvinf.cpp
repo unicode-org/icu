@@ -547,7 +547,7 @@ DateIntervalInfo::getBestSkeleton(const UnicodeString& skeleton,
     char result_1[1000];
     char mesg[2000];
     skeleton.extract(0,  skeleton.length(), result, "UTF-8");
-    sprintf(mesg, "in getBestSkeleton: skeleton: %s; \n", result);
+    snprintf(mesg, sizeof(mesg), "in getBestSkeleton: skeleton: %s; \n", result);
     PRINTMESG(mesg)
 #endif
 
@@ -616,7 +616,7 @@ DateIntervalInfo::getBestSkeleton(const UnicodeString& skeleton,
         UnicodeString* newSkeleton = (UnicodeString*)keyTok.pointer;
 #ifdef DTITVINF_DEBUG
     skeleton->extract(0,  skeleton->length(), result, "UTF-8");
-    sprintf(mesg, "available skeletons: skeleton: %s; \n", result);
+    snprintf(mesg, sizeof(mesg), "available skeletons: skeleton: %s; \n", result);
     PRINTMESG(mesg)
 #endif
 

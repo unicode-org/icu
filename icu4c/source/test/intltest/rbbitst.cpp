@@ -4221,7 +4221,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
                     if (c >= 0x10000) {
                         format = "\\U%08x";
                     }
-                    sprintf(hexCodePoint, format.c_str(), c);
+                    snprintf(hexCodePoint, sizeof(hexCodePoint), format.c_str(), c);
 
                     // Get the class name and character name for the character.
                     char cName[200];
@@ -4229,7 +4229,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
                     u_charName(c, U_EXTENDED_CHAR_NAME, cName, sizeof(cName), &status);
 
                     char buffer[200];
-                    auto ret = snprintf(buffer, UPRV_LENGTHOF(buffer),
+                    auto ret = snprintf(buffer, sizeof(buffer),
                              "%4s %3i :  %1s  %1s  %10s  %-*s  %-40s  %-40s",
                              currentLineFlag.c_str(),
                              ci,

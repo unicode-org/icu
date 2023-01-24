@@ -27,7 +27,7 @@
 #include "cmemory.h"
 #if !UCONFIG_NO_BREAK_ITERATION
 #include "unicode/filteredbrk.h"
-#include <stdio.h> // for sprintf
+#include <stdio.h> // for snprintf
 #endif
 /**
  * API Test the RuleBasedBreakIterator class
@@ -1199,7 +1199,7 @@ static void prtbrks(BreakIterator* brk, const UnicodeString &ustr, IntlTest &it)
   out.remove();
   for(int32_t i=0;i<posCount;i++) {
     char tmp[100];
-    sprintf(tmp,"%d ",pos[i]);
+    snprintf(tmp, sizeof(tmp), "%d ",pos[i]);
     out.append(UnicodeString(tmp));
   }
   it.logln(out);

@@ -795,7 +795,7 @@ GenrbImporter::getRules(
 // Quick-and-dirty escaping function.
 // Assumes that we are on an ASCII-based platform.
 static void
-escape(const UChar *s, char *buffer) {
+escape(const UChar *s, char *buffer, size_t n) {
     int32_t length = u_strlen(s);
     int32_t i = 0;
     for (;;) {
@@ -808,7 +808,7 @@ escape(const UChar *s, char *buffer) {
             // printable ASCII
             *buffer++ = (char)c;  // assumes ASCII-based platform
         } else {
-            buffer += sprintf(buffer, "\\u%04X", (int)c);
+            buffer += snprintf(buffer, n, "\\u%04X", (int)c);
         }
     }
 }
@@ -1302,8 +1302,8 @@ addCollation(ParseState* state, TableResource  *result, const char *collationTyp
         if(parseError.preContext[0] != 0 || parseError.postContext[0] != 0) {
             // Print pre- and post-context.
             char preBuffer[100], postBuffer[100];
-            escape(parseError.preContext, preBuffer);
-            escape(parseError.postContext, postBuffer);
+            escape(parseError.preContext, preBuffer, sizeof(preBuffer));
+            escape(parseError.postContext, postBuffer, sizeof(postBuffer));
             error(line, "  error context: \"...%s\" ! \"%s...\"", preBuffer, postBuffer);
         }
         if(isStrict() || t.isNull()) {

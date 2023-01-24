@@ -226,7 +226,7 @@ operator<<( IntlTest&           stream,
             break;
         case Formattable::kDouble :
             char convert[20];
-            sprintf( convert, "%lf", obj.getDouble() );
+            snprintf( convert, sizeof(convert), "%lf", obj.getDouble() );
             stream << convert << "D";
             break;
         case Formattable::kLong :
@@ -1724,7 +1724,7 @@ void TestMessageFormat::testAutoQuoteApostrophe(void) {
             if (len >= BUF2_LEN) {
                 buf2[BUF2_LEN-1] = 0;
             }
-            sprintf(buf, "[%2d] test \"%s\": target (\"%s\") != result (\"%s\")\n", i/2, patterns[i], patterns[i+1], buf2);
+            snprintf(buf, sizeof(buf), "[%2d] test \"%s\": target (\"%s\") != result (\"%s\")\n", i/2, patterns[i], patterns[i+1], buf2);
             errln(buf);
         }
     }
