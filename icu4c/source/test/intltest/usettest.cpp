@@ -3792,7 +3792,8 @@ void UnicodeSetTest::TestSpan() {
             strcpy(testNameLimit, "bad_string");
             for(j=0; j<whichSpansCount; ++j) {
                 if(whichSpansCount>1) {
-                    sprintf(testNameLimit+10 /* strlen("bad_string") */,
+                    snprintf(testNameLimit+10 /* strlen("bad_string") */,
+                             sizeof(testName) - (testNameLimit+10-testName),
                             "%%0x%3x",
                             whichSpans[j]);
                 }
@@ -3803,7 +3804,8 @@ void UnicodeSetTest::TestSpan() {
             strcpy(testNameLimit, "contents");
             for(j=0; j<whichSpansCount; ++j) {
                 if(whichSpansCount>1) {
-                    sprintf(testNameLimit+8 /* strlen("contents") */,
+                    snprintf(testNameLimit+8 /* strlen("contents") */,
+                            sizeof(testName) - (testNameLimit+8-testName),
                             "%%0x%3x",
                             whichSpans[j]);
                 }
@@ -3814,7 +3816,8 @@ void UnicodeSetTest::TestSpan() {
             strcpy(testNameLimit, "test_string");
             for(j=0; j<whichSpansCount; ++j) {
                 if(whichSpansCount>1) {
-                    sprintf(testNameLimit+11 /* strlen("test_string") */,
+                    snprintf(testNameLimit+11 /* strlen("test_string") */,
+                            sizeof(testName) - (testNameLimit+11-testName),
                             "%%0x%3x",
                             whichSpans[j]);
                 }

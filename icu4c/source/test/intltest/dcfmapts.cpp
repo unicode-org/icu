@@ -653,7 +653,7 @@ void IntlTestDecimalFormatAPI::TestScale()
     auto lhs = (expect); \
     auto rhs = (actual); \
     char tmp[200]; \
-    sprintf(tmp, "(%g==%g)", (double)lhs, (double)rhs); \
+    snprintf(tmp, sizeof(tmp), "(%g==%g)", (double)lhs, (double)rhs); \
     assertTrue(tmp, (lhs==rhs), false, true, __FILE__, __LINE__); \
 } UPRV_BLOCK_MACRO_END
 

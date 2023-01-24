@@ -3523,11 +3523,11 @@ void TransliteratorTest::TestSpecialCases(void) {
     }
 }
 
-char* Char32ToEscapedChars(UChar32 ch, char* buffer) {
+char* Char32ToEscapedChars(UChar32 ch, char* buffer, size_t n) {
     if (ch <= 0xFFFF) {
-        sprintf(buffer, "\\u%04x", (int)ch);
+        snprintf(buffer, n, "\\u%04x", (int)ch);
     } else {
-        sprintf(buffer, "\\U%08x", (int)ch);
+        snprintf(buffer, n, "\\U%08x", (int)ch);
     }
     return buffer;
 }
@@ -3542,9 +3542,9 @@ void TransliteratorTest::TestSurrogateCasing (void) {
     UnicodeString DEE(u_totitle(dee));
     if (DEE != DESERET_DEE) {
         err("Fails titlecase of surrogates");
-        err(Char32ToEscapedChars(dee, buffer)); 
+        err(Char32ToEscapedChars(dee, buffer, sizeof(buffer))); 
         err(", ");
-        errln(Char32ToEscapedChars(DEE.char32At(0), buffer));
+        errln(Char32ToEscapedChars(DEE.char32At(0), buffer, sizeof(buffer)));
     }
         
     UnicodeString deeDEETest=DESERET_dee + DESERET_DEE;

@@ -557,7 +557,7 @@ UnicodeString& DateFormatRoundTripTest::escape(const UnicodeString& src, Unicode
         } else {
             dst += UnicodeString("[");
             char buf [12];
-            sprintf(buf, "%#04x", c);
+            snprintf(buf, sizeof(buf), "%#04x", c);
             dst += UnicodeString(buf);
             dst += UnicodeString("]");
         }

@@ -134,7 +134,7 @@ static void utextToPrintable(char *buf, int32_t bufLen, UText *text) {
       *bufPtr = c;
     } else {
 #if 0
-      sprintf(bufPtr,"U+%04X", c);
+      snprintf(bufPtr, bufLen - (bufPtr-buf), "U+%04X", c);
       bufPtr+= strlen(bufPtr)-1;
 #else
       *bufPtr = '%';
@@ -170,7 +170,7 @@ const char* RegexTest::extractToAssertBuf(const UnicodeString& message) {
         ASSERT_BUF[0]=0;
         for(int32_t i=0;i<buf.length();i++) {
           UChar ch = buf[i];
-          sprintf(ASSERT_BUF+strlen(ASSERT_BUF),"\\u%02x",ch);
+          snprintf(ASSERT_BUF+strlen(ASSERT_BUF), sizeof(ASSERT_BUF) - strlen(ASSERT_BUF), "\\u%02x",ch);
         }
       }
     }
@@ -5346,14 +5346,14 @@ void RegexTest::NamedCaptureLimits() {
     int32_t nn;
 
     for (nn=1; nn<goodLimit; nn++) {
-        sprintf(nnbuf, "(?<nn%d>)", nn);
+        snprintf(nnbuf, sizeof(nnbuf), "(?<nn%d>)", nn);
         pattern.append(UnicodeString(nnbuf, -1, US_INV));
     }
     UErrorCode status = U_ZERO_ERROR;
     RegexPattern *pat = RegexPattern::compile(pattern, 0, status);
     REGEX_CHECK_STATUS;
     for (nn=1; nn<goodLimit; nn++) {
-        sprintf(nnbuf, "nn%d", nn);
+        snprintf(nnbuf, sizeof(nnbuf), "nn%d", nn);
         int32_t groupNum = pat->groupNumberFromName(nnbuf, -1, status);
         REGEX_ASSERT(nn == groupNum);
         if (nn != groupNum) {
@@ -5364,7 +5364,7 @@ void RegexTest::NamedCaptureLimits() {
 
     pattern.remove();
     for (nn=1; nn<failLimit; nn++) {
-        sprintf(nnbuf, "(?<nn%d>)", nn);
+        snprintf(nnbuf, sizeof(nnbuf), "(?<nn%d>)", nn);
         pattern.append(UnicodeString(nnbuf, -1, US_INV));
     }
     status = U_ZERO_ERROR;

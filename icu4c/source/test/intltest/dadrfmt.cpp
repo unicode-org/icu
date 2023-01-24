@@ -126,7 +126,7 @@ void DataDrivenFormatTest::testConvertDate(TestData *testData,
         ++n;
 
         char theCase[200];
-        sprintf(theCase, "case %d:", n);
+        snprintf(theCase, sizeof(theCase), "case %d:", n);
         UnicodeString caseString(theCase, "");
         
         // load params

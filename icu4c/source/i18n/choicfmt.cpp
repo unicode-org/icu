@@ -175,10 +175,10 @@ ChoiceFormat::dtos(double value,
     char *itrPtr = temp;
     char *expPtr;
 
-    sprintf(temp, "%.*g", DBL_DIG, value);
+    snprintf(temp, sizeof(temp), "%.*g", DBL_DIG, value);
 
     /* Find and convert the decimal point.
-       Using setlocale on some machines will cause sprintf to use a comma for certain locales.
+       Using setlocale on some machines will cause snprintf to use a comma for certain locales.
     */
     while (*itrPtr && (*itrPtr == '-' || isdigit(*itrPtr))) {
         itrPtr++;

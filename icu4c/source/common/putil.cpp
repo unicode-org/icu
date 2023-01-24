@@ -1463,7 +1463,7 @@ static void U_CALLCONV dataDirectoryInitFn() {
 # endif
 # if defined(ICU_DATA_DIR_PREFIX_ENV_VAR)
         if (prefix != NULL) {
-            snprintf(datadir_path_buffer, PATH_MAX, "%s%s", prefix, path);
+            snprintf(datadir_path_buffer, sizeof(datadir_path_buffer), "%s%s", prefix, path);
             path=datadir_path_buffer;
         }
 # endif
@@ -1553,7 +1553,7 @@ static void U_CALLCONV TimeZoneDataDirInitFn(UErrorCode &status) {
 
 #if defined(ICU_TIMEZONE_FILES_DIR_PREFIX_ENV_VAR)
     if (prefix != NULL) {
-        snprintf(timezonefilesdir_path_buffer, PATH_MAX, "%s%s", prefix, dir);
+        snprintf(timezonefilesdir_path_buffer, sizeof(timezonefilesdir_path_buffer), "%s%s", prefix, dir);
         dir = timezonefilesdir_path_buffer;
     }
 #endif
@@ -2124,7 +2124,7 @@ int_getDefaultCodepage()
         }
         /* else use the default */
     }
-    sprintf(codepage,"ibm-%d", ccsid);
+    snprintf(codepage, sizeof(codepage), "ibm-%d", ccsid);
     return codepage;
 
 #elif U_PLATFORM == U_PF_OS390
@@ -2161,7 +2161,7 @@ int_getDefaultCodepage()
     // are between 3 and 19999
     if (codepageNumber > 0 && codepageNumber < 20000)
     {
-        sprintf(codepage, "windows-%ld", codepageNumber);
+        snprintf(codepage, sizeof(codepage), "windows-%ld", codepageNumber);
         return codepage;
     }
     // If the codepage number call failed then return UTF-8

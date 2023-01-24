@@ -283,7 +283,7 @@ RbnfRoundTripTest::doTest(const RuleBasedNumberFormat* formatter,
   double increment = 1;
   for (double i = lowLimit; i <= highLimit; i += increment) {
     if (count % 1000 == 0) {
-      sprintf(buf, "%.12g", i);
+      snprintf(buf, sizeof(buf), "%.12g", i);
       logln(buf);
     }
 
@@ -300,7 +300,7 @@ RbnfRoundTripTest::doTest(const RuleBasedNumberFormat* formatter,
     Formattable parseResult;
     formatter->parse(formatResult, parseResult, status);
     if (U_FAILURE(status)) {
-      sprintf(buf, "Round-trip status failure: %.12g, status: %d", i, status);
+      snprintf(buf, sizeof(buf), "Round-trip status failure: %.12g, status: %d", i, status);
       errln(buf);
       return;
     } else {
@@ -309,7 +309,7 @@ RbnfRoundTripTest::doTest(const RuleBasedNumberFormat* formatter,
         (double)parseResult.getLong();
 
       if (rt != i) {
-        sprintf(buf, "Round-trip failed: %.12g -> %.12g", i, rt);
+        snprintf(buf, sizeof(buf), "Round-trip failed: %.12g -> %.12g", i, rt);
         errln(buf);
         return;
       }
@@ -327,7 +327,7 @@ RbnfRoundTripTest::doTest(const RuleBasedNumberFormat* formatter,
       Formattable parseResult;
       formatter->parse(formatResult, parseResult, status);
       if (U_FAILURE(status)) {
-        sprintf(buf, "Round-trip status failure: %.12g, status: %d", d, status);
+        snprintf(buf, sizeof(buf), "Round-trip status failure: %.12g, status: %d", d, status);
         errln(buf);
         return;
       } else {
@@ -337,10 +337,10 @@ RbnfRoundTripTest::doTest(const RuleBasedNumberFormat* formatter,
 
         if (rt != d) {
           UnicodeString msg;
-          sprintf(buf, "Round-trip failed: %.12g -> ", d);
+          snprintf(buf, sizeof(buf), "Round-trip failed: %.12g -> ", d);
           msg.append(buf);
           msg.append(formatResult);
-          sprintf(buf, " -> %.12g", rt);
+          snprintf(buf, sizeof(buf), " -> %.12g", rt);
           msg.append(buf);
           errln(msg);
           return;

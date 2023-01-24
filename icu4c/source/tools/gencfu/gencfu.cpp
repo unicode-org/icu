@@ -193,7 +193,7 @@ int  main(int argc, char **argv) {
     char msg[1024];
 
     /* write message with just the name */
-    sprintf(msg, "gencfu writes dummy %s because of UCONFIG_NO_REGULAR_EXPRESSIONS and/or UCONFIG_NO_NORMALIZATION and/or UCONFIG_NO_FILE_IO, see uconfig.h", outFileName);
+    snprintf(msg, sizeof(msg), "gencfu writes dummy %s because of UCONFIG_NO_REGULAR_EXPRESSIONS and/or UCONFIG_NO_NORMALIZATION and/or UCONFIG_NO_FILE_IO, see uconfig.h", outFileName);
     fprintf(stderr, "%s\n", msg);
 
     /* write the dummy data file */

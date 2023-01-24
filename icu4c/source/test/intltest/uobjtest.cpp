@@ -113,7 +113,7 @@ UObject *UObjectTest::testClass(UObject *obj,
 
     if(ids_count >= MAX_CLASS_ID) {
         char count[100];
-        sprintf(count, " (currently %d) ", MAX_CLASS_ID);
+        snprintf(count, sizeof(count), " (currently %d) ", MAX_CLASS_ID);
         errln("FAIL: Fatal: Ran out of IDs! Increase MAX_CLASS_ID." + UnicodeString(count) + what);
         return obj;
     }
@@ -124,7 +124,7 @@ UObject *UObjectTest::testClass(UObject *obj,
 
     {
         char tmp[500];
-        sprintf(tmp, " [static=%p, dynamic=%p] ", staticID, dynamicID);
+        snprintf(tmp, sizeof(tmp), " [static=%p, dynamic=%p] ", staticID, dynamicID);
         logln(what + tmp);
     }
 
@@ -182,7 +182,7 @@ UObject *UObjectTest::testClassNoClassID(UObject *obj, const char *className, co
 
     {
         char tmp[500];
-        sprintf(tmp, " [dynamic=%p] ", dynamicID);
+        snprintf(tmp, sizeof(tmp), " [dynamic=%p] ", dynamicID);
         logln(what + tmp);
     }
 
@@ -497,7 +497,7 @@ void UObjectTest::testIDs()
     int i;
     for(i=0;i<ids_count;i++) {
         char junk[800];
-        sprintf(junk, " %4d:\t%p\t%s\t%s\n", 
+        snprintf(junk, sizeof(junk), " %4d:\t%p\t%s\t%s\n", 
             i, ids[i], ids_class[i], ids_factory[i]);
         logln(UnicodeString(junk));
     }

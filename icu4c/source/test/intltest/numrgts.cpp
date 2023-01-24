@@ -684,7 +684,7 @@ void NumberFormatRegressionTest::Test4087251 (void)
  */
 void NumberFormatRegressionTest::Test4090489 (void)
 {
-// {sfb} sprintf doesn't correctly handle the double, so there is nothing
+// {sfb} snprintf doesn't correctly handle the double, so there is nothing
 // that NumberFormat can do.  For some reason, it does not format the last 1.
 
 /*    UErrorCode status = U_ZERO_ERROR;
@@ -778,7 +778,7 @@ void NumberFormatRegressionTest::Test4092561 (void)
     }
     failure(status, "new DecimalFormat");
 
-    // {sfb} going to cheat here and use sprintf ??
+    // {sfb} going to cheat here and use snprintf ??
 
     /*UnicodeString str = Long.toString(Long.MIN_VALUE);
     logln("Long.MIN_VALUE : " + df.parse(str, new ParsePosition(0)).toString());
@@ -1575,7 +1575,7 @@ void NumberFormatRegressionTest::Test4106664(void)
         df->format(n, temp, pos));
     
     char buf [128];
-    sprintf(buf, "%g", bigN);
+    snprintf(buf, sizeof(buf), "%g", bigN);
     //logln("expected: " + bigN.toString());
     logln(UnicodeString("expected: ") + buf);
 
@@ -2095,7 +2095,7 @@ public String Now()
 void 
 NumberFormatRegressionTest::Test4162198(void) 
 {
-    // for some reason, DBL_MAX will not round trip. (bug in sprintf/atof)
+    // for some reason, DBL_MAX will not round trip. (bug in snprintf/atof)
     double dbl = INT32_MAX * 1000.0;
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *f = NumberFormat::createInstance(status);
@@ -2747,7 +2747,7 @@ void NumberFormatRegressionTest::TestJ691(void) {
 } UPRV_BLOCK_MACRO_END
 #define TEST_ASSERT_EQUALS(x,y) UPRV_BLOCK_MACRO_BEGIN { \
       char _msg[1000]; \
-      int32_t len = sprintf (_msg,"File %s, line %d: " #x "==" #y, __FILE__, __LINE__); \
+      int32_t len = snprintf (_msg, sizeof(_msg), "File %s, line %d: " #x "==" #y, __FILE__, __LINE__); \
       (void)len;                                                         \
       U_ASSERT(len < (int32_t) sizeof(_msg));                            \
       assertEquals((const char*) _msg, x,y);                             \

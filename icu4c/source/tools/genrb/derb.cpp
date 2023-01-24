@@ -391,7 +391,7 @@ static void printOutAlias(UFILE *out,  UResourceBundle *parent, Resource r, cons
     if(opt_truncate && len > truncsize) {
         char msg[128];
         printIndent(out, indent);
-        sprintf(msg, "// WARNING: this resource, size %li is truncated to %li\n",
+        snprintf(msg, sizeof(msg), "// WARNING: this resource, size %li is truncated to %li\n",
             (long)len, (long)truncsize/2);
         printCString(out, msg, -1);
         len = truncsize;
@@ -435,7 +435,7 @@ static void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent
             if(opt_truncate && len > truncsize) {
                 char msg[128];
                 printIndent(out, indent);
-                sprintf(msg, "// WARNING: this resource, size %li is truncated to %li\n",
+                snprintf(msg, sizeof(msg), "// WARNING: this resource, size %li is truncated to %li\n",
                         (long)len, (long)(truncsize/2));
                 printCString(out, msg, -1);
                 len = truncsize/2;
@@ -494,7 +494,7 @@ static void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent
             if(opt_truncate && len > truncsize) {
                 char msg[128];
                 printIndent(out, indent);
-                sprintf(msg, "// WARNING: this resource, size %li is truncated to %li\n",
+                snprintf(msg, sizeof(msg), "// WARNING: this resource, size %li is truncated to %li\n",
                         (long)len, (long)(truncsize/2));
                 printCString(out, msg, -1);
                 len = truncsize;
