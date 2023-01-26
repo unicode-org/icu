@@ -3948,6 +3948,29 @@ Calendar::setWeekData(const Locale& desiredLocale, const char *type, UErrorCode&
         } else {
             status = U_INVALID_FORMAT_ERROR;
         }
+
+        // Check if the locale has a "fw" u extension and we honor it if present.
+        // And we don't change the overal status, as the presence / lack of "fw" is not an error.
+        UErrorCode fwStatus = U_ZERO_ERROR;
+        char fwExt[ULOC_FULLNAME_CAPACITY] = "";
+        desiredLocale.getKeywordValue("fw", fwExt, ULOC_FULLNAME_CAPACITY, fwStatus);
+        if (U_SUCCESS(fwStatus)) {
+            if (uprv_strcmp(fwExt, "sun") == 0) {
+                fFirstDayOfWeek = UCAL_SUNDAY;
+            } else if (uprv_strcmp(fwExt, "mon") == 0) {
+                fFirstDayOfWeek = UCAL_MONDAY;
+            } else if (uprv_strcmp(fwExt, "tue") == 0) {
+                fFirstDayOfWeek = UCAL_TUESDAY;
+            } else if (uprv_strcmp(fwExt, "wed") == 0) {
+                fFirstDayOfWeek = UCAL_WEDNESDAY;
+            } else if (uprv_strcmp(fwExt, "thu") == 0) {
+                fFirstDayOfWeek = UCAL_THURSDAY;
+            } else if (uprv_strcmp(fwExt, "fri") == 0) {
+                fFirstDayOfWeek = UCAL_FRIDAY;
+            } else if (uprv_strcmp(fwExt, "sat") == 0) {
+                fFirstDayOfWeek = UCAL_SATURDAY;
+            }
+        }
     }
     ures_close(weekData);
     ures_close(rb);

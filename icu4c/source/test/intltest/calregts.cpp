@@ -99,6 +99,7 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(55,Test13745);
         CASE(56,TestUTCWrongAMPM22023);
         CASE(57,TestAsiaManilaAfterSetGregorianChange22043);
+        CASE(58,TestRespectUExtensionFw);
     default: name = ""; break;
     }
 }
@@ -3240,4 +3241,40 @@ void CalendarRegressionTest::TestWeekOfYear13548(void) {
     }
 }
 
+void CalendarRegressionTest::TestRespectUExtensionFw(void) { // ICU-22226
+    static const char* LOCALE_IDS[] = {
+        "en-US",
+        "en-US-u-fw-xyz",
+        "en-US-u-fw-sun",
+        "en-US-u-fw-mon",
+        "en-US-u-fw-thu",
+        "en-US-u-fw-sat"
+    };
+    static const UCalendarDaysOfWeek EXPECTED_VAL[] = {
+        UCAL_SUNDAY,
+        UCAL_SUNDAY,
+        UCAL_SUNDAY,
+        UCAL_MONDAY,
+        UCAL_THURSDAY,
+        UCAL_SATURDAY
+    };
+
+    int32_t EXPECTED_VAL_count = UPRV_LENGTHOF(EXPECTED_VAL);
+    assertEquals("The number of locales should be equal to the number of expected results.",
+        EXPECTED_VAL_count, UPRV_LENGTHOF(LOCALE_IDS));
+
+    for (int32_t i=0; i<EXPECTED_VAL_count; ++i) {
+        UErrorCode status = U_ZERO_ERROR;
+        const char * localeId = LOCALE_IDS[i];
+        UCalendarDaysOfWeek expected = EXPECTED_VAL[i];
+
+        Locale locale = Locale::forLanguageTag(localeId, status);
+        LocalPointer<Calendar> cal(Calendar::createInstance(locale, status));
+        UCalendarDaysOfWeek actual = cal->getFirstDayOfWeek(status);
+        failure(status, "Calendar::getFirstDayOfWeek(status)");
+
+        assertEquals((UnicodeString)"Calendar.getFirstDayOfWeek() ignores the 'fw' extension u in '"
+            + localeId + "' locale", expected, actual);
+    }
+}
 #endif /* #if !UCONFIG_NO_FORMATTING */

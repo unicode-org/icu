@@ -85,6 +85,7 @@ public:
     void TestAsiaManilaAfterSetGregorianChange22043(void);
 
     void Test13745(void);
+    void TestRespectUExtensionFw(void);
 
     void printdate(GregorianCalendar *cal, const char *string);
     void dowTest(UBool lenient) ;
