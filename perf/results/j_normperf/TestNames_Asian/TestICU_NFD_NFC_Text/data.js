@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1674718139805,
+  "lastUpdate": 1674718192570,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -8998,6 +8998,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 19.86833107396319,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "de0a28644b26e2a85ccb916480d338e6404ec3d6",
+          "message": "ICU-22251 Move sprintf to snprintf.\n\nSee #2291",
+          "timestamp": "2023-01-25T23:23:29-08:00",
+          "tree_id": "f024d8521b725c1f346bb12f9c76b84e930456dc",
+          "url": "https://github.com/unicode-org/icu/commit/de0a28644b26e2a85ccb916480d338e6404ec3d6"
+        },
+        "date": 1674718176706,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 17.15066350546693,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
