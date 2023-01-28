@@ -1179,4 +1179,20 @@ public final class ICUResourceBundleTest extends TestFmwk {
             assertEquals("Got wrong locale with LOCALE_ROOT", localeRootExpected, localeRootActual);
         }
     }
+
+    @Test
+    public void TestResourceBundleCrash() {
+        final String[] TEST_LOCALE_IDS = new String[] { "nb", "nn", "ht", "hi-Latn" };
+
+        ULocale oldDefaultLocale = ULocale.getDefault();
+        for (String localeID : TEST_LOCALE_IDS) {
+            ULocale locale = ULocale.forLanguageTag(localeID);
+            ULocale.setDefault(locale);
+            UResourceBundle rb = UResourceBundle.getBundleInstance(ICUData.ICU_TRANSLIT_BASE_NAME, locale);
+            assertTrue("Failed to retrieve a resource bundle for " + localeID, rb != null);
+            // the test is to make sure we fell back to root (or otherwise returned SOMETHING)-- all we're really trying to
+            // enrure is that we don't crash with a StackOverflowError when trying to retrieve the bundle
+        }
+        ULocale.setDefault(oldDefaultLocale);
+    }
 }
