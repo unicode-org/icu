@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1675154478146,
+  "lastUpdate": 1675438886181,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -4648,6 +4648,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 0.8113207617629539,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "a47717934aee8e9581aefa68a917f60a3348375c",
+          "message": "ICU-22252 Suppress Calendar Consistency\n\nSee #2298",
+          "timestamp": "2023-02-03T16:38:50+01:00",
+          "tree_id": "392f6888a8313682ef77f357b1874f8bbc63990e",
+          "url": "https://github.com/unicode-org/icu/commit/a47717934aee8e9581aefa68a917f60a3348375c"
+        },
+        "date": 1675438871154,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 0.6049619752374584,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
