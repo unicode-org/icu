@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1675455118480,
+  "lastUpdate": 1675455222062,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -9298,6 +9298,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 15.626867180821238,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "summersnow9403@gmail.com",
+            "name": "HanatoK",
+            "username": "HanatoK"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "fcd6e384bd283fc960f543ef9ff92ed775406671",
+          "message": "ICU-22194 Change CharacterIterator.DONE to CharacterIterator::DONE in\ndoc\n\nIn C++, the enum inside a class should be accessed by \"::\" instead of\n\".\".",
+          "timestamp": "2023-02-03T12:01:51-08:00",
+          "tree_id": "b8c2b713545549e678ff146f32156a79933b05e5",
+          "url": "https://github.com/unicode-org/icu/commit/fcd6e384bd283fc960f543ef9ff92ed775406671"
+        },
+        "date": 1675455205372,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 19.79498458954996,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
