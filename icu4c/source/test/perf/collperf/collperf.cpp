@@ -769,7 +769,7 @@ public:
             } else {
                 icu_data->append_one(len);
                 memcpy(icu_data->last(), line, len * sizeof(UChar));
-                icu_data->last()[len -1] = nullptr;
+                icu_data->last()[len -1] = 0;
             }
         }
         if(U_FAILURE(status)) return;
