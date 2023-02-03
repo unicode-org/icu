@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1675439019209,
+  "lastUpdate": 1675452342154,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -4378,6 +4378,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 2.2510858118881627,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "2e0d30cfcf43490d0d3a0026139256a7328a0183",
+          "message": "ICU-21833 Replace NULL with nullptr in all C++ code.",
+          "timestamp": "2023-02-03T20:20:38+01:00",
+          "tree_id": "63ac5877ca5497b3d64ffd8ac4e7d89d80f68bc2",
+          "url": "https://github.com/unicode-org/icu/commit/2e0d30cfcf43490d0d3a0026139256a7328a0183"
+        },
+        "date": 1675452326455,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 1.8039300101136138,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
