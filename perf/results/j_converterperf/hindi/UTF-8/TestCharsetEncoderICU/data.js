@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1675458739512,
+  "lastUpdate": 1675459141088,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -4798,6 +4798,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 4.729533831533896,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "allenwtsu@google.com",
+            "name": "allenwtsu",
+            "username": "allensu05"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "3f05361b4192d6d337c3dacc63a91f53c966da3e",
+          "message": "ICU-22100 Modify ML model to improve Japanese phrase breaking performance",
+          "timestamp": "2023-02-03T13:07:53-08:00",
+          "tree_id": "cd9867e63b7e7efbccbbc7b9093e57b6664d2cfc",
+          "url": "https://github.com/unicode-org/icu/commit/3f05361b4192d6d337c3dacc63a91f53c966da3e"
+        },
+        "date": 1675459125612,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 3.1925046361735974,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
