@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1675439388382,
+  "lastUpdate": 1675439473380,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -8998,6 +8998,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 12.314339522235663,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "a47717934aee8e9581aefa68a917f60a3348375c",
+          "message": "ICU-22252 Suppress Calendar Consistency\n\nSee #2298",
+          "timestamp": "2023-02-03T16:38:50+01:00",
+          "tree_id": "392f6888a8313682ef77f357b1874f8bbc63990e",
+          "url": "https://github.com/unicode-org/icu/commit/a47717934aee8e9581aefa68a917f60a3348375c"
+        },
+        "date": 1675439456276,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 12.228040204689188,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
