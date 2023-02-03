@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1675452375599,
+  "lastUpdate": 1675455019752,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -4528,6 +4528,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 7.759525216242053,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "summersnow9403@gmail.com",
+            "name": "HanatoK",
+            "username": "HanatoK"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "fcd6e384bd283fc960f543ef9ff92ed775406671",
+          "message": "ICU-22194 Change CharacterIterator.DONE to CharacterIterator::DONE in\ndoc\n\nIn C++, the enum inside a class should be accessed by \"::\" instead of\n\".\".",
+          "timestamp": "2023-02-03T12:01:51-08:00",
+          "tree_id": "b8c2b713545549e678ff146f32156a79933b05e5",
+          "url": "https://github.com/unicode-org/icu/commit/fcd6e384bd283fc960f543ef9ff92ed775406671"
+        },
+        "date": 1675455004992,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 9.231914468142552,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
