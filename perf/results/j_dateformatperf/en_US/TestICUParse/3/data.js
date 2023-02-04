@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1675459453403,
+  "lastUpdate": 1675472498134,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -4678,6 +4678,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICUParse",
             "value": 1429.6880839404296,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "08f14db4c45f6cbcf5b6b5d45131c98b7b64b57c",
+          "message": "ICU-22249 Fixed endless loop in ICUResourceBundle when you ask for a locale with a nonstandard parent and that locale\nis also the system default locale.",
+          "timestamp": "2023-02-03T16:49:24-08:00",
+          "tree_id": "8557245915c10c3a3c16f545d62f41e69b952160",
+          "url": "https://github.com/unicode-org/icu/commit/08f14db4c45f6cbcf5b6b5d45131c98b7b64b57c"
+        },
+        "date": 1675472482735,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICUParse",
+            "value": 1059.8850099067397,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
