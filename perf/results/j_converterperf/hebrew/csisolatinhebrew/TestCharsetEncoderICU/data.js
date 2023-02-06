@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1675708245240,
+  "lastUpdate": 1675716979499,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -4798,6 +4798,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetEncoderICU",
             "value": 3.9777280461370554,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "roubert@google.com",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "committer": {
+            "email": "fredrik@roubert.name",
+            "name": "Fredrik Roubert",
+            "username": "roubert"
+          },
+          "distinct": true,
+          "id": "9fd2742dfa5d78f3a5d14c603c85ed3dcf88a197",
+          "message": "ICU-21833 Replace UChar with char16_t in C++ code.",
+          "timestamp": "2023-02-06T21:53:20+01:00",
+          "tree_id": "691c225ac134d26e5a69d43c0a300f27b295c040",
+          "url": "https://github.com/unicode-org/icu/commit/9fd2742dfa5d78f3a5d14c603c85ed3dcf88a197"
+        },
+        "date": 1675716960534,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetEncoderICU",
+            "value": 4.880460073134863,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
