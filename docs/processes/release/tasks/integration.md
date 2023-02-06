@@ -249,7 +249,11 @@ examples.
 
 *Only available since ICU 54.*
 
-#### With ICU 64 and later:
+### With ICU 73 and later:
+
+This test is now performed automatically, based on the following instructions for ICU 64+.
+
+### With ICU 64 and later:
 
 *   Reconfigure ICU4C with
     <code><b>ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data</b>
@@ -268,7 +272,7 @@ examples.
     *   If you get very many test failures, double-check that you enabled
         unicore data in the ICU4C build (see first step).
 
-#### With ICU 55 through ICU 63:
+### With ICU 55 through ICU 63:
 
 *   Rebuild ICU4C with <code>make <b>INCLUDE_UNI_CORE_DATA=1</b> check</code> or
     similar, and provide a path only for the .dat file.
@@ -283,7 +287,7 @@ examples.
     *   The configuration option sets the `ICUConfig.properties` data path
     *   Verify that all tests pass.
 
-#### ICU 54 method:
+### ICU 54 method:
 
 In `icu4j-core/src/com/ibm/icu/ICUConfig.properties` set
 `com.ibm.icu.impl.ICUBinary.dataPath` to a list of paths with all of the ICU4C
