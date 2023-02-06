@@ -1904,12 +1904,6 @@ fo{
                 "und",
                 "fo",
             }
-            surnameFirst{
-                "ko",
-                "vi",
-                "yue",
-                "zh",
-            }
         }
     }
 }

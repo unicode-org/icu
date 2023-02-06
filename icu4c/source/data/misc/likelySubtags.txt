@@ -35,7 +35,6 @@ likelySubtags:table(nofallback){
     ahl{"ahl_Latn_ZZ"}
     aho{"aho_Ahom_IN"}
     ajg{"ajg_Latn_ZZ"}
-    ajp{"ajp_Arab_JO"}
     ajt{"ajt_Arab_TN"}
     ak{"ak_Latn_GH"}
     akk{"akk_Xsux_IQ"}
@@ -56,7 +55,7 @@ likelySubtags:table(nofallback){
     aoj{"aoj_Latn_ZZ"}
     aom{"aom_Latn_ZZ"}
     aoz{"aoz_Latn_ID"}
-    apc{"apc_Arab_ZZ"}
+    apc{"apc_Arab_SY"}
     apd{"apd_Arab_TG"}
     ape{"ape_Latn_ZZ"}
     apr{"apr_Latn_ZZ"}

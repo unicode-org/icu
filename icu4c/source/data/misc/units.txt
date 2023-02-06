@@ -522,6 +522,33 @@ units:table(nofallback){
                     }
                 }
             }
+            "floor"{
+                001{
+                    {
+                        unit{"square-meter"}
+                    }
+                }
+                CA{
+                    {
+                        unit{"square-foot"}
+                    }
+                }
+                GB{
+                    {
+                        unit{"square-foot"}
+                    }
+                }
+                MM{
+                    {
+                        unit{"square-foot"}
+                    }
+                }
+                US{
+                    {
+                        unit{"square-foot"}
+                    }
+                }
+            }
             "geograph"{
                 001{
                     {

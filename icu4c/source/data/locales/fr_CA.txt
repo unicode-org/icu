@@ -1053,4 +1053,11 @@ fr_CA{
             dn{"a"}
         }
     }
+    personNames{
+        namePattern{
+            sorting-long-referring-informal{"{surname-core}, {given-informal} {surname-prefix}"}
+            sorting-medium-referring-informal{"{surname-core}, {given-informal} {surname-prefix}"}
+            sorting-short-referring-informal{"{surname-core}, {given-informal} {surname-prefix}"}
+        }
+    }
 }

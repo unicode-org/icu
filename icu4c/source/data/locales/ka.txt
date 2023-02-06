@@ -1876,5 +1876,10 @@ ka{
                 "zh",
             }
         }
+        namePattern{
+            givenFirst-long-monogram-formal{"{given-monogram}{given2-monogram}{surname-monogram}"}
+            givenFirst-long-monogram-informal{"{given-informal-monogram}{surname-monogram}"}
+            surnameFirst-long-monogram-formal{"{surname-monogram}{given-monogram}{given2-monogram}"}
+        }
     }
 }

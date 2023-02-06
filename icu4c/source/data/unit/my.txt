@@ -912,6 +912,9 @@ my{
                 dnam{"L/100km"}
                 other{"{0} L/100km"}
             }
+            liter-per-kilometer{
+                dnam{"L/km"}
+            }
             mile-per-gallon-imperial{
                 other{"{0}m/gUK"}
             }
@@ -922,6 +925,15 @@ my{
             north{"{0}N"}
             south{"{0}S"}
             west{"{0}W"}
+        }
+        digital{
+            byte{
+                dnam{"B"}
+                other{"{0}B"}
+            }
+            gigabit{
+                dnam{"Gb"}
+            }
         }
         duration{
             day{
@@ -957,6 +969,11 @@ my{
                 other{"{0} နှစ်"}
             }
         }
+        electric{
+            ampere{
+                dnam{"amp"}
+            }
+        }
         energy{
             therm-us{
                 other{"{0}US therms"}
@@ -965,6 +982,14 @@ my{
         force{
             kilowatt-hour-per-100-kilometer{
                 other{"{0}kWh/100km"}
+            }
+            newton{
+                dnam{"N"}
+            }
+        }
+        frequency{
+            gigahertz{
+                dnam{"GHz"}
             }
         }
         graphics{
@@ -1043,6 +1068,15 @@ my{
                 other{"{0} yd"}
             }
         }
+        light{
+            lumen{
+                dnam{"lm"}
+                other{"{0}lm"}
+            }
+            solar-luminosity{
+                dnam{"L☉"}
+            }
+        }
         mass{
             gram{
                 dnam{"ဂရမ်"}
@@ -1075,10 +1109,15 @@ my{
                 other{"{0} hPa"}
             }
             inch-ofhg{
+                dnam{"″ Hg"}
                 other{"{0} inHg"}
             }
             millibar{
+                dnam{"mbar"}
                 other{"{0} mbar"}
+            }
+            pound-force-per-square-inch{
+                dnam{"psi"}
             }
         }
         speed{
@@ -1103,6 +1142,9 @@ my{
             }
         }
         volume{
+            barrel{
+                dnam{"စည်"}
+            }
             cubic-centimeter{
                 dnam{"cm³"}
             }
@@ -1121,12 +1163,21 @@ my{
             cubic-yard{
                 dnam{"yd³"}
             }
+            drop{
+                dnam{"စက်"}
+            }
             fluid-ounce-imperial{
+                dnam{"ဗြိတိသျှသုံး အရည်အောင်စ"}
                 other{"{0}fl oz Im"}
+            }
+            gallon-imperial{
+                other{"ယူကေ ဂါလံ {0} ဂါလံ"}
+                per{"{0}/ယူကေ ဂါလံ"}
             }
             liter{
                 dnam{"လီတာ"}
                 other{"{0}L"}
+                per{"{0}/လီတာ"}
             }
         }
     }

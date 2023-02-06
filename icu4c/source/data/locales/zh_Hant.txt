@@ -7846,5 +7846,34 @@ zh_Hant{
                 "zh",
             }
         }
+        namePattern{
+            givenFirst-long-addressing-formal{"{surname} {title}"}
+            givenFirst-long-addressing-informal{"{given-informal}"}
+            givenFirst-medium-addressing-formal{"{surname} {title}"}
+            givenFirst-medium-addressing-informal{"{given-informal}"}
+            givenFirst-short-addressing-formal{"{surname} {title}"}
+            givenFirst-short-addressing-informal{"{given-informal}"}
+            sorting-long-referring-formal{"{surname}{given}{given2}"}
+            sorting-long-referring-informal{"{surname}{given-informal}"}
+            sorting-medium-referring-formal{"{surname}{given}"}
+            sorting-medium-referring-informal{"{surname}{given-informal}"}
+            sorting-short-referring-formal{"{surname}{given}"}
+            sorting-short-referring-informal{"{surname}{given-informal}"}
+            surnameFirst-long-addressing-formal{"{surname}{title}"}
+            surnameFirst-long-addressing-informal{"{given-informal}"}
+            surnameFirst-long-referring-formal{"{surname}{given}{given2}{generation}{credentials}"}
+            surnameFirst-long-referring-informal{"{surname}{given-informal}"}
+            surnameFirst-medium-addressing-formal{"{surname}{title}"}
+            surnameFirst-medium-addressing-informal{"{given-informal}"}
+            surnameFirst-medium-monogram-formal{"{surname-monogram-allCaps}"}
+            surnameFirst-medium-referring-formal{"{surname}{given}{given2-initial}{generation}{credentials}"}
+            surnameFirst-medium-referring-informal{"{surname}{given-informal}"}
+            surnameFirst-short-addressing-formal{"{surname}{title}"}
+            surnameFirst-short-addressing-informal{"{given-informal}"}
+            surnameFirst-short-monogram-formal{"{surname-monogram-allCaps}"}
+            surnameFirst-short-monogram-informal{"{given-informal-monogram-allCaps}"}
+            surnameFirst-short-referring-formal{"{surname}{given}{given2}"}
+            surnameFirst-short-referring-informal{"{surname}{given}"}
+        }
     }
 }

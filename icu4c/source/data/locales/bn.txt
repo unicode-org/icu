@@ -2869,7 +2869,6 @@ bn{
         }
     }
     personNames{
-        foreignSpaceReplacement{" "}
         initialPattern{
             initial{"{0}."}
             initialSequence{"{0} {1}"}
@@ -2885,6 +2884,23 @@ bn{
                 "yue",
                 "zh",
             }
+        }
+        namePattern{
+            givenFirst-long-addressing-informal{"{given} {given2} {surname} {surname2}"}
+            givenFirst-long-referring-informal{"{given} {given2} {surname} {surname2}"}
+            givenFirst-medium-addressing-informal{"{given} {given2} {surname} {surname2}"}
+            givenFirst-medium-referring-informal{"{given} {given2} {surname} {surname2}"}
+            givenFirst-short-addressing-informal{"{given} {given2} {surname} {surname2}"}
+            givenFirst-short-referring-informal{"{given} {given2} {surname} {surname2}"}
+            sorting-long-referring-informal{"{surname} {surname2}, {given} {given2}"}
+            sorting-medium-referring-informal{"{surname} {surname2}, {given} {given2}"}
+            sorting-short-referring-informal{"{surname} {surname2}, {given} {given2}"}
+            surnameFirst-long-addressing-informal{"{surname} {surname2} {given} {given2}"}
+            surnameFirst-long-referring-informal{"{surname} {surname2} {given} {given2}"}
+            surnameFirst-medium-addressing-informal{"{surname} {surname2} {given} {given2}"}
+            surnameFirst-medium-referring-informal{"{surname} {surname2} {given} {given2}"}
+            surnameFirst-short-addressing-informal{"{surname} {surname2} {given} {given2}"}
+            surnameFirst-short-referring-informal{"{surname} {surname2} {given} {given2}"}
         }
     }
 }

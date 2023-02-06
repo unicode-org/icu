@@ -57,10 +57,10 @@ static const int32_t gOffsets[] = {
     430,
     436,
     446,
-    450,
-    454,
-    456,
-    490
+    451,
+    455,
+    457,
+    491
 };
 
 static const int32_t kCurrencyOffset = 5;
@@ -540,6 +540,7 @@ static const char * const gSubTypes[] = {
     "millimeter-ofhg",
     "pascal",
     "pound-force-per-square-inch",
+    "beaufort",
     "kilometer-per-hour",
     "knot",
     "meter-per-second",
@@ -1750,36 +1751,44 @@ MeasureUnit MeasureUnit::getPoundPerSquareInch() {
     return MeasureUnit(18, 9);
 }
 
-MeasureUnit *MeasureUnit::createKilometerPerHour(UErrorCode &status) {
+MeasureUnit *MeasureUnit::createBeaufort(UErrorCode &status) {
     return MeasureUnit::create(19, 0, status);
 }
 
-MeasureUnit MeasureUnit::getKilometerPerHour() {
+MeasureUnit MeasureUnit::getBeaufort() {
     return MeasureUnit(19, 0);
 }
 
-MeasureUnit *MeasureUnit::createKnot(UErrorCode &status) {
+MeasureUnit *MeasureUnit::createKilometerPerHour(UErrorCode &status) {
     return MeasureUnit::create(19, 1, status);
 }
 
-MeasureUnit MeasureUnit::getKnot() {
+MeasureUnit MeasureUnit::getKilometerPerHour() {
     return MeasureUnit(19, 1);
 }
 
-MeasureUnit *MeasureUnit::createMeterPerSecond(UErrorCode &status) {
+MeasureUnit *MeasureUnit::createKnot(UErrorCode &status) {
     return MeasureUnit::create(19, 2, status);
 }
 
-MeasureUnit MeasureUnit::getMeterPerSecond() {
+MeasureUnit MeasureUnit::getKnot() {
     return MeasureUnit(19, 2);
 }
 
-MeasureUnit *MeasureUnit::createMilePerHour(UErrorCode &status) {
+MeasureUnit *MeasureUnit::createMeterPerSecond(UErrorCode &status) {
     return MeasureUnit::create(19, 3, status);
 }
 
-MeasureUnit MeasureUnit::getMilePerHour() {
+MeasureUnit MeasureUnit::getMeterPerSecond() {
     return MeasureUnit(19, 3);
+}
+
+MeasureUnit *MeasureUnit::createMilePerHour(UErrorCode &status) {
+    return MeasureUnit::create(19, 4, status);
+}
+
+MeasureUnit MeasureUnit::getMilePerHour() {
+    return MeasureUnit(19, 4);
 }
 
 MeasureUnit *MeasureUnit::createCelsius(UErrorCode &status) {

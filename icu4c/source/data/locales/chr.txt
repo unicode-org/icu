@@ -534,8 +534,8 @@ chr{
                 MMM{"LLL"}
                 MMMEd{"E, MMM d"}
                 MMMMW{
-                    one{"’ᏒᎾᏙᏓᏆᏍᏗ’ W ’ᎾᎿ’ MMMM"}
-                    other{"’ᏒᎾᏙᏓᏆᏍᏗ’ W ’ᎾᎿ’ MMMM"}
+                    one{"ᏒᎾᏙᏓᏆᏍᏗ W ᎾᎿ MMMM"}
+                    other{"ᏒᎾᏙᏓᏆᏍᏗ W ᎾᎿ MMMM"}
                 }
                 MMMMd{"MMMM d"}
                 MMMd{"MMM d"}

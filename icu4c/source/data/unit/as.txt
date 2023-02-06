@@ -1003,6 +1003,12 @@ as{
         }
     }
     unitsNarrow{
+        angle{
+            arc-second{
+                one{"{0}″"}
+                other{"{0}″"}
+            }
+        }
         compound{
             1024p1{"কি{0}"}
             1024p2{"মি{0}"}
@@ -1064,6 +1070,11 @@ as{
             north{"{0} উঃ"}
             south{"{0} দঃ"}
             west{"{0} পঃ"}
+        }
+        digital{
+            megabit{
+                dnam{"মেঃ বাঃ"}
+            }
         }
         duration{
             day{

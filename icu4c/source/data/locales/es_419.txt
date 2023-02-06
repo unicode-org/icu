@@ -892,5 +892,11 @@ es_419{
             initial{"{0}."}
             initialSequence{"{0} {1}"}
         }
+        namePattern{
+            givenFirst-medium-referring-formal{"{given} {given2-initial} {surname} {credentials}"}
+            surnameFirst-long-addressing-formal{"{title} {surname} {surname2}"}
+            surnameFirst-long-referring-formal{"{surname} {surname2} {given} {given2} {credentials}"}
+            surnameFirst-medium-referring-formal{"{surname} {given} {given2-initial} {credentials}"}
+        }
     }
 }

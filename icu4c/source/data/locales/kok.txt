@@ -1823,10 +1823,6 @@ kok{
         metric{"मॅट्रिक"}
     }
     personNames{
-        initialPattern{
-            initial{"{0}."}
-            initialSequence{"{0} {1}"}
-        }
         nameOrderLocales{
             givenFirst{
                 "und",

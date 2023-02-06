@@ -185,10 +185,8 @@ public class PersonNameFormatterTest extends TestFmwk{
                 { "en_US", "LONG",   "MONOGRAM",   "INFORMAL", "",              "WV" },
 
                 // but Dutch monogram generation _does_ handle the prefix specially
-                //{ "nl_NL", "LONG",   "MONOGRAM",   "FORMAL",   "",              "WvP" }, // comment out while data missing
-                //{ "nl_NL", "LONG",   "MONOGRAM",   "INFORMAL", "",              "WvP" }, // comment out while data missing
-                { "nl_NL", "LONG",   "MONOGRAM",   "FORMAL",   "",              "WV" }, // temp result using root data
-                { "nl_NL", "LONG",   "MONOGRAM",   "INFORMAL", "",              "WV" }, // temp result using root data
+                { "nl_NL", "LONG",   "MONOGRAM",   "FORMAL",   "",              "WvP" },
+                { "nl_NL", "LONG",   "MONOGRAM",   "INFORMAL", "",              "WvP" },
             }),
             new NameAndTestCases("locale=en_US,given=Willem,surname=van der Plas", new String[][] {
                 // if we just use the "surname" field instead of "surname-prefix" and "surname-core", everything's
@@ -286,13 +284,12 @@ public class PersonNameFormatterTest extends TestFmwk{
             // in the right place.  This test checks to make sure we're using the right pattern based on which
             // fields are present in the actual name
             new NameAndTestCases("locale=es_ES,given=Andrés,given2=Manuel,surname=López,surname2=Obrador", new String[][] {
-                    { "es_ES", "LONG",   "REFERRING",  "FORMAL",   "",              "Andrés Manuel López Obrador" },
+                    { "es_ES", "LONG",   "REFERRING",  "FORMAL",   "",              "Andrés Manuel López" },
                     { "es_ES", "LONG",   "REFERRING",  "FORMAL",   "SORTING"    ,   "López Obrador, Andrés Manuel" },
             }),
             new NameAndTestCases("locale=es_ES,given=Andrés,given2=Manuel,surname=López", new String[][] {
                     { "es_ES", "LONG",   "REFERRING",  "FORMAL",   "",              "Andrés Manuel López" },
-                    //{ "es_ES", "LONG",   "REFERRING",  "FORMAL",   "SORTING"    ,   "López, Andrés Manuel" }, // comment out while data missing
-                    { "es_ES", "LONG",   "REFERRING",  "FORMAL",   "SORTING"    ,   "López Andrés Manuel" }, // temp result using root data
+                    { "es_ES", "LONG",   "REFERRING",  "FORMAL",   "SORTING"    ,   "López, Andrés Manuel" },
             }),
         }, false);
     }
@@ -356,11 +353,8 @@ public class PersonNameFormatterTest extends TestFmwk{
             // if the formatter locale doesn't use spaces and the name's locale doesn't either, just use
             // the native formatter
             new NameAndTestCases("locale=ja_JP,given=駿,surname=宮崎", new String[][] {
-                // (the Japanese name formatter actually inserts a space even for native names)
-                //{ "ja_JP", "LONG",   "REFERRING",  "FORMAL",   "",                "宮崎駿" }, // comment out while data missing
-                //{ "zh_CN", "LONG",   "REFERRING",  "FORMAL",   "",                "宮崎駿" }, // comment out while data missing
-                { "ja_JP", "LONG",   "REFERRING",  "FORMAL",   "",                "宮崎 駿" }, // temp result using root data
-                { "zh_CN", "LONG",   "REFERRING",  "FORMAL",   "",                "宮崎 駿" }, // temp result using root data
+                { "ja_JP", "LONG",   "REFERRING",  "FORMAL",   "",                "宮崎駿" },
+                { "zh_CN", "LONG",   "REFERRING",  "FORMAL",   "",                "宮崎 駿" },
             }),
 
             // if the formatter locale doesn't use spaces and the name's locale does, use the name locale's formatter,
