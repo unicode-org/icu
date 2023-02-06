@@ -103,14 +103,14 @@ class U_COMMON_API UCharsDictionaryMatcher : public DictionaryMatcher {
 public:
     // constructs a new UCharsDictionaryMatcher.
     // The UDataMemory * will be closed on this object's destruction.
-    UCharsDictionaryMatcher(const UChar *c, UDataMemory *f) : characters(c), file(f) { }
+    UCharsDictionaryMatcher(const char16_t *c, UDataMemory *f) : characters(c), file(f) { }
     virtual ~UCharsDictionaryMatcher();
     virtual int32_t matches(UText *text, int32_t maxLength, int32_t limit,
                             int32_t *lengths, int32_t *cpLengths, int32_t *values,
                             int32_t *prefix) const override;
     virtual int32_t getType() const override;
 private:
-    const UChar *characters;
+    const char16_t *characters;
     UDataMemory *file;
 };
 
