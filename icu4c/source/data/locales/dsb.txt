@@ -411,29 +411,29 @@ dsb{
                     y{"GGGGG y-MM-dd – y-MM-dd"}
                 }
                 M{
-                    M{"M. – M."}
+                    M{"M. – M."}
                 }
                 MEd{
-                    M{"E, d.M. – E, d.M."}
-                    d{"E, d.M. – E, d.M."}
+                    M{"E, d.M. – E, d.M."}
+                    d{"E, d.M. – E, d.M."}
                 }
                 MMM{
                     M{"LLL – LLL"}
                 }
                 MMMEd{
                     M{"E, d. MMM – E, d. MMM"}
-                    d{"E, d. – E, d. MMM"}
+                    d{"E, d. – E, d. MMM"}
                 }
                 MMMd{
                     M{"d. MMM – d. MMM"}
-                    d{"d. – d. MMM"}
+                    d{"d. – d. MMM"}
                 }
                 Md{
-                    M{"d.M. – d.M."}
-                    d{"d.M. – d.M."}
+                    M{"d.M. – d.M."}
+                    d{"d.M. – d.M."}
                 }
                 d{
-                    d{"d. – d."}
+                    d{"d. – d."}
                 }
                 fallback{"{0} – {1}"}
                 y{
@@ -454,7 +454,7 @@ dsb{
                 }
                 yMMMEd{
                     M{"E, d. MMM – E, d. MMM y G"}
-                    d{"E, d. – E, d. MMM y G"}
+                    d{"E, d. – E, d. MMM y G"}
                     y{"E, d. MMM y – E, d. MMM y G"}
                 }
                 yMMMM{
@@ -463,7 +463,7 @@ dsb{
                 }
                 yMMMd{
                     M{"d. MMM – d. MMM y G"}
-                    d{"d. – d. MMM y G"}
+                    d{"d. – d. MMM y G"}
                     y{"d. MMM y – d. MMM y G"}
                 }
                 yMd{
@@ -705,7 +705,7 @@ dsb{
                 }
                 GyMEd{
                     G{"E, dd.MM.y G – E, dd.MM.y G"}
-                    M{"E, dd.MM. – E, dd.MM.y G"}
+                    M{"E, dd.MM. – E, dd.MM.y G"}
                     d{"E, dd.MM.y – E, dd.MM.y G"}
                     y{"E, dd.MM.y – E, dd.MM.y G"}
                 }
@@ -717,7 +717,7 @@ dsb{
                 GyMMMEd{
                     G{"E, d. MMM y G – E, d. MMM y G"}
                     M{"E, d. MMM – E, d. MMM y G"}
-                    d{"E, d. – E, d. MMM y G"}
+                    d{"E, d. – E, d. MMM y G"}
                     y{"E, d. MMM y – E, d. MMM y G"}
                 }
                 GyMMMd{
@@ -728,7 +728,7 @@ dsb{
                 }
                 GyMd{
                     G{"dd.MM.y G – dd.MM.y G"}
-                    M{"dd.MM. – dd.MM.y G"}
+                    M{"dd.MM. – dd.MM.y G"}
                     d{"dd.–dd.MM.y G"}
                     y{"dd.MM.y – dd.MM.y G"}
                 }
@@ -747,29 +747,29 @@ dsb{
                     H{"H–H v"}
                 }
                 M{
-                    M{"M. – M."}
+                    M{"M. – M."}
                 }
                 MEd{
-                    M{"E, d.M. – E, d.M."}
-                    d{"E, d.M. – E, d.M."}
+                    M{"E, d.M. – E, d.M."}
+                    d{"E, d.M. – E, d.M."}
                 }
                 MMM{
                     M{"LLL – LLL"}
                 }
                 MMMEd{
                     M{"E, d. MMM – E, d. MMM"}
-                    d{"E, d. – E, d. MMM"}
+                    d{"E, d. – E, d. MMM"}
                 }
                 MMMd{
                     M{"d. MMM – d. MMM"}
-                    d{"d. – d. MMM"}
+                    d{"d. – d. MMM"}
                 }
                 Md{
-                    M{"d.M. – d.M."}
-                    d{"d.M. – d.M."}
+                    M{"d.M. – d.M."}
+                    d{"d.M. – d.M."}
                 }
                 d{
-                    d{"d. – d."}
+                    d{"d. – d."}
                 }
                 fallback{"{0} – {1}"}
                 h{
@@ -808,7 +808,7 @@ dsb{
                 }
                 yMMMEd{
                     M{"E, d. MMM – E, d. MMM y"}
-                    d{"E, d. – E, d. MMM y"}
+                    d{"E, d. – E, d. MMM y"}
                     y{"E, d. MMM y – E, d. MMM y"}
                 }
                 yMMMM{
@@ -817,7 +817,7 @@ dsb{
                 }
                 yMMMd{
                     M{"d. MMM – d. MMM y"}
-                    d{"d. – d. MMM y"}
+                    d{"d. – d. MMM y"}
                     y{"d. MMM y – d. MMM y"}
                 }
                 yMd{

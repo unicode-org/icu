@@ -4106,11 +4106,44 @@ ja{
             surnameFirst{
                 "hu",
                 "ja",
+                "km",
                 "ko",
+                "mn",
                 "vi",
                 "yue",
                 "zh",
             }
+        }
+        namePattern{
+            givenFirst-long-addressing-informal{"{given-informal} {surname}{title}"}
+            givenFirst-long-monogram-formal{"{given-monogram-allCaps}"}
+            givenFirst-long-referring-formal{"{given} {given2} {surname} {generation}{title}"}
+            givenFirst-long-referring-informal{"{given-informal} {surname}{title}"}
+            givenFirst-medium-addressing-formal{"{given} {surname}{title}"}
+            givenFirst-medium-addressing-informal{"{given-informal} {surname}{title}"}
+            givenFirst-medium-referring-informal{"{given-informal} {surname}{title}"}
+            givenFirst-short-addressing-formal{"{surname}{title}"}
+            givenFirst-short-addressing-informal{"{given-informal}{title}"}
+            givenFirst-short-referring-formal{"{given} {surname}{title}"}
+            givenFirst-short-referring-informal{"{given-informal} {surname}{title}"}
+            sorting-long-referring-formal{"{surname} {given2} {given}"}
+            sorting-long-referring-informal{"{surname} {given-informal}"}
+            sorting-medium-referring-informal{"{surname} {given-informal}"}
+            sorting-short-referring-formal{"{surname} {given}"}
+            sorting-short-referring-informal{"{surname} {given-informal}"}
+            surnameFirst-long-addressing-formal{"{surname}{given}{title}"}
+            surnameFirst-long-addressing-informal{"{surname}{given-informal}{title}"}
+            surnameFirst-long-monogram-formal{"{given-monogram-allCaps}"}
+            surnameFirst-long-referring-formal{"{surname}{given2}{given}{title}"}
+            surnameFirst-long-referring-informal{"{surname}{given-informal}{title}"}
+            surnameFirst-medium-addressing-formal{"{surname}{given}{title}"}
+            surnameFirst-medium-addressing-informal{"{surname}{given-informal}{title}"}
+            surnameFirst-medium-referring-formal{"{surname}{given}{title}"}
+            surnameFirst-medium-referring-informal{"{surname}{given-informal}{title}"}
+            surnameFirst-short-addressing-formal{"{surname}{title}"}
+            surnameFirst-short-addressing-informal{"{given-informal}{title}"}
+            surnameFirst-short-referring-formal{"{surname}{given}{title}"}
+            surnameFirst-short-referring-informal{"{surname}{given-informal}{title}"}
         }
     }
 }

@@ -551,15 +551,15 @@ public class DateIntervalFormatTest extends TestFmwk {
 
                 "de", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "EEEEdMMM", "Mittwoch, 10. Okt.\\u2009\\u2013\\u2009Samstag, 10. Nov.",
 
-                "de", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "EdMy", "Mi., 10.10. \\u2013 Sa., 10.11.2007",
+                "de", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "EdMy", "Mi., 10.10.\\u2009\\u2013\\u2009Sa., 10.11.2007",
 
-                "de", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "dM", "10.10. \\u2013 10.11.",
+                "de", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "dM", "10.10.\\u2009\\u2013\\u200910.11.",
 
                 "de", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "My", "10/2007\\u2009\\u2013\\u200911/2007",
 
-                "de", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "EdM", "Mi., 10.10. \\u2013 Sa., 10.11.",
+                "de", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "EdM", "Mi., 10.10.\\u2009\\u2013\\u2009Sa., 10.11.",
 
-                "de", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "d", "10.10. \\u2013 10.11.",
+                "de", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "d", "10.10.\\u2009\\u2013\\u200910.11.",
 
 
                 "de", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "M", "10–11",
@@ -572,7 +572,7 @@ public class DateIntervalFormatTest extends TestFmwk {
 
                 "de", "CE 2007 10 10 10:10:10", "CE 2007 11 10 10:10:10", "hms", "10.10.2007, 10:10:10\\u202FAM\\u2009\\u2013\\u200910.11.2007, 10:10:10\\u202FAM",
 
-                "de", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "EEEEdMMMy", "Samstag, 10. \\u2013 Dienstag, 20. Nov. 2007",
+                "de", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "EEEEdMMMy", "Samstag, 10.\\u2009\\u2013\\u2009Dienstag, 20. Nov. 2007",
 
                 "de", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "dMMMy", "10.\\u201320. Nov. 2007",
 
@@ -580,9 +580,9 @@ public class DateIntervalFormatTest extends TestFmwk {
 
                 "de", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "MMMy", "Nov. 2007",
 
-                "de", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "EEEEdMMM", "Samstag, 10. \\u2013 Dienstag, 20. Nov.",
+                "de", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "EEEEdMMM", "Samstag, 10.\\u2009\\u2013\\u2009Dienstag, 20. Nov.",
 
-                "de", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "EdMy", "Sa., 10. \\u2013 Di., 20.11.2007",
+                "de", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "EdMy", "Sa., 10.\\u2009\\u2013\\u2009Di., 20.11.2007",
 
                 "de", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "dMy", "10.\\u201320.11.2007",
 
@@ -590,7 +590,7 @@ public class DateIntervalFormatTest extends TestFmwk {
 
                 "de", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "My", "11/2007",
 
-                "de", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "EdM", "Sa., 10. \\u2013 Di., 20.11.",
+                "de", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "EdM", "Sa., 10.\\u2009\\u2013\\u2009Di., 20.11.",
 
                 "de", "CE 2007 11 10 10:10:10", "CE 2007 11 20 10:10:10", "d", "10.\\u201320.",
 
@@ -1007,16 +1007,16 @@ public class DateIntervalFormatTest extends TestFmwk {
         };
 
         final DateIntervalContextItem[] testItems = {
-           new DateIntervalContextItem( "cs", "MMMEd", DisplayContext.CAPITALIZATION_NONE,                      60*day, "po 27. 9. – pá 26. 11." ),
+           new DateIntervalContextItem( "cs", "MMMEd", DisplayContext.CAPITALIZATION_NONE,                      60*day, "po 27. 9.\u2009–\u2009pá 26. 11." ),
            new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_NONE,                      60*day, "září–listopad 2010" ),
            new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_NONE,                       1*day, "září 2010" ),
-           new DateIntervalContextItem( "cs", "MMMEd", DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, 60*day, "Po 27. 9. – pá 26. 11." ),
+           new DateIntervalContextItem( "cs", "MMMEd", DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, 60*day, "Po 27. 9.\u2009–\u2009pá 26. 11." ),
            new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, 60*day, "Září–listopad 2010" ),
            new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE,  1*day, "Září 2010" ),
-           new DateIntervalContextItem( "cs", "MMMEd", DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       60*day, "Po 27. 9. – pá 26. 11." ),
+           new DateIntervalContextItem( "cs", "MMMEd", DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       60*day, "Po 27. 9.\u2009–\u2009pá 26. 11." ),
            new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       60*day, "Září–listopad 2010" ),
            new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,        1*day, "Září 2010" ),
-           new DateIntervalContextItem( "cs", "MMMEd", DisplayContext.CAPITALIZATION_FOR_STANDALONE,            60*day, "po 27. 9. – pá 26. 11." ),
+           new DateIntervalContextItem( "cs", "MMMEd", DisplayContext.CAPITALIZATION_FOR_STANDALONE,            60*day, "po 27. 9.\u2009–\u2009pá 26. 11." ),
            new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_FOR_STANDALONE,            60*day, "září–listopad 2010" ),
            new DateIntervalContextItem( "cs", "yMMMM", DisplayContext.CAPITALIZATION_FOR_STANDALONE,             1*day, "září 2010" ),
         };

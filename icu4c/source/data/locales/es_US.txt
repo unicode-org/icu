@@ -353,27 +353,27 @@ es_US{
     personNames{
         namePattern{
             sorting-long-referring-formal{
-                "{surname} {surname2}, {title} {given} {given2} {credentials}",
+                "{surname}, {title} {given} {given2}",
                 "{surname} {surname2}, {given} {given2}",
             }
             sorting-long-referring-informal{
-                "{surname} {surname2}, {title} {given} {given2} {credentials}",
+                "{surname} {surname2}, {given-informal}",
                 "{surname} {surname2}, {given} {given2}",
             }
             sorting-medium-referring-formal{
-                "{surname} {surname2}, {title} {given} {given2} {credentials}",
+                "{surname}, {title} {given} {given2-initial}",
                 "{surname} {surname2}, {given} {given2}",
             }
             sorting-medium-referring-informal{
-                "{surname} {surname2}, {title} {given} {given2} {credentials}",
+                "{surname}, {given-informal}",
                 "{surname} {surname2}, {given} {given2}",
             }
             sorting-short-referring-formal{
-                "{surname} {surname2}, {title} {given} {given2} {credentials}",
+                "{surname}, {title} {given} {given2}",
                 "{surname} {surname2}, {given} {given2}",
             }
             sorting-short-referring-informal{
-                "{surname} {surname2}, {title} {given} {given2} {credentials}",
+                "{surname}, {given-informal}",
                 "{surname} {surname2}, {given} {given2}",
             }
         }

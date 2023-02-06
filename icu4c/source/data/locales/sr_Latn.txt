@@ -415,7 +415,7 @@ sr_Latn{
                 }
                 MMMEd{
                     M{"E, dd. MMM – E, dd. MMM"}
-                    d{"E, dd. – E, dd. MMM"}
+                    d{"E, dd. – E, dd. MMM"}
                 }
                 MMMd{
                     M{"d. MMM – d. MMM"}
@@ -470,15 +470,15 @@ sr_Latn{
                 }
                 yMMMM{
                     M{"MMMM – MMMM y. G"}
-                    y{"MMMM y. – MMMM y. G"}
+                    y{"MMMM y. – MMMM y. G"}
                 }
                 yMMMd{
                     M{"d. MMM – d. MMM y. G"}
                     d{"d–d. MMM y. G"}
-                    y{"d. MMM y. – d. MMM y. G"}
+                    y{"d. MMM y. – d. MMM y. G"}
                 }
                 yMd{
-                    M{"d.M.y. – d.M.y."}
+                    M{"d.M.y. – d.M.y."}
                     d{"d.M.y – d.M.y. GGGGG"}
                     y{"d.M.y – d.M.y. GGGGG"}
                 }
@@ -766,7 +766,7 @@ sr_Latn{
                 }
                 MMMEd{
                     M{"E, dd. MMM – E, dd. MMM"}
-                    d{"E, dd. – E, dd. MMM"}
+                    d{"E, dd. – E, dd. MMM"}
                 }
                 MMMd{
                     M{"dd. MMM – dd. MMM"}
@@ -803,35 +803,35 @@ sr_Latn{
                 }
                 yM{
                     M{"M – M. y."}
-                    y{"M.y. – M.y."}
+                    y{"M.y. – M.y."}
                 }
                 yMEd{
-                    M{"E, d. M. y. – E, d. M. y."}
-                    d{"E, d. M. y. – E, d. M. y."}
-                    y{"E, d. M. y. – E, d. M. y."}
+                    M{"E, d. M. y. – E, d. M. y."}
+                    d{"E, d. M. y. – E, d. M. y."}
+                    y{"E, d. M. y. – E, d. M. y."}
                 }
                 yMMM{
                     M{"MMM–MMM y."}
-                    y{"MMM y. – MMM y."}
+                    y{"MMM y. – MMM y."}
                 }
                 yMMMEd{
                     M{"E, dd. MMM – E, dd. MMM y."}
-                    d{"E, dd. – E, dd. MMM y."}
-                    y{"E, dd. MMM y. – E, dd. MMM y."}
+                    d{"E, dd. – E, dd. MMM y."}
+                    y{"E, dd. MMM y. – E, dd. MMM y."}
                 }
                 yMMMM{
                     M{"MMMM – MMMM y."}
-                    y{"MMMM y. – MMMM y."}
+                    y{"MMMM y. – MMMM y."}
                 }
                 yMMMd{
                     M{"dd. MMM – dd. MMM y."}
                     d{"dd.–dd. MMM y."}
-                    y{"dd. MMM y. – dd. MMM y."}
+                    y{"dd. MMM y. – dd. MMM y."}
                 }
                 yMd{
-                    M{"d. M. y. – d. M. y."}
-                    d{"d. M. y. – d. M. y."}
-                    y{"d. M. y. – d. M. y."}
+                    M{"d. M. y. – d. M. y."}
+                    d{"d. M. y. – d. M. y."}
+                    y{"d. M. y. – d. M. y."}
                 }
             }
             monthNames{

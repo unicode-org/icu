@@ -1152,6 +1152,10 @@ ne{
                 one{"{0}%"}
                 other{"{0}%"}
             }
+            permille{
+                one{"{0}‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100-kilometer{
@@ -1172,6 +1176,10 @@ ne{
                 dnam{"दिन"}
                 one{"{0} दिन"}
                 other{"{0} दिन"}
+            }
+            decade{
+                one{"{0} दशक"}
+                other{"{0} दशक"}
             }
             hour{
                 dnam{"घण्टा"}
@@ -1222,6 +1230,10 @@ ne{
             foot{
                 one{"{0}′"}
                 other{"{0}′"}
+            }
+            furlong{
+                one{"{0} फर"}
+                other{"{0}फर"}
             }
             inch{
                 one{"{0}″"}

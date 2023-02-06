@@ -467,7 +467,7 @@ ps{
                 MMM{"LLL"}
                 MMMEd{"E, MMM d"}
                 MMMMW{
-                    one{"اونۍ‘ W د MMMM‘"}
+                    one{"اونۍ W د MMMM"}
                     other{"اونۍ W د MMMM"}
                 }
                 MMMMd{"MMMM d"}

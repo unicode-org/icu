@@ -588,7 +588,6 @@ es_MX{
         UK{"imperial"}
     }
     personNames{
-        foreignSpaceReplacement{" "}
         namePattern{
             givenFirst-long-referring-formal{"{title} {given} {given2} {surname} {surname2}"}
         }

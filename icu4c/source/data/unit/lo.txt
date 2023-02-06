@@ -820,7 +820,11 @@ lo{
                 dnam{"ແມັດ²"}
             }
             square-mile{
+                dnam{"mi²"}
                 other{"{0} mi²"}
+            }
+            square-yard{
+                dnam{"yd²"}
             }
         }
         compound{
@@ -914,9 +918,24 @@ lo{
                 other{"{0} ປ"}
             }
         }
+        energy{
+            joule{
+                dnam{"ຈູນ"}
+            }
+        }
         force{
             kilowatt-hour-per-100-kilometer{
                 other{"{0}kWh/100km"}
+            }
+        }
+        graphics{
+            dot-per-centimeter{
+                dnam{"dpcm"}
+                other{"{0}dpcm"}
+            }
+            dot-per-inch{
+                dnam{"dpi"}
+                other{"{0}dpi"}
             }
         }
         length{
@@ -956,6 +975,9 @@ lo{
             }
         }
         mass{
+            carat{
+                dnam{"ກະຣັດ"}
+            }
             gram{
                 dnam{"ກຣາມ"}
                 other{"{0} ກຼ"}
@@ -969,6 +991,9 @@ lo{
             }
             pound{
                 other{"{0} ປ"}
+            }
+            stone{
+                dnam{"ສະໂຕນ"}
             }
         }
         power{
@@ -998,6 +1023,7 @@ lo{
                 dnam{"ກມ/ຊມ"}
             }
             meter-per-second{
+                dnam{"ມ/ວ"}
                 other{"{0} m/s"}
             }
         }
@@ -1016,7 +1042,11 @@ lo{
                 other{"{0} mi³"}
             }
             dessert-spoon-imperial{
+                dnam{"dsp Imp"}
                 other{"{0}dsp-Imp"}
+            }
+            dram{
+                dnam{"fl.dr."}
             }
             fluid-ounce-imperial{
                 other{"{0} fl oz Im"}

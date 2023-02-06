@@ -1807,5 +1807,9 @@ my{
                 "zh",
             }
         }
+        namePattern{
+            sorting-long-referring-formal{"{surname-core}၊ {given} {given2} {surname-prefix}"}
+            surnameFirst-long-referring-formal{"{surname} {given} {given2} {credentials}"}
+        }
     }
 }

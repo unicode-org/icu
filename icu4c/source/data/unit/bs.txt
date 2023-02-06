@@ -1293,6 +1293,9 @@ bs{
                 one{"{0} h"}
                 other{"{0} h"}
             }
+            microsecond{
+                dnam{"mikrosekunda"}
+            }
             millisecond{
                 dnam{"milisekunda"}
                 few{"{0} ms"}
@@ -1304,12 +1307,16 @@ bs{
                 few{"{0} m"}
                 one{"{0} m"}
                 other{"{0} m"}
+                per{"{0}/min"}
             }
             month{
                 dnam{"mjesec"}
                 few{"{0} mj."}
                 one{"{0} mj."}
                 other{"{0} mj."}
+            }
+            nanosecond{
+                dnam{"ns"}
             }
             second{
                 dnam{"sekunda"}
