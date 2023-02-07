@@ -645,7 +645,6 @@ class U_I18N_API Precision : public UMemory {
      */
     static IncrementPrecision increment(double roundingIncrement);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Version of `Precision::increment()` that takes an integer at a particular power of 10.
      *
@@ -667,10 +666,9 @@ class U_I18N_API Precision : public UMemory {
      * @param magnitude
      *            The power of 10 of the ones digit of the mantissa.
      * @return A precision for chaining or passing to the NumberFormatter precision() setter.
-     * @draft ICU 71
+     * @stable ICU 71
      */
     static IncrementPrecision incrementExact(uint64_t mantissa, int16_t magnitude);
-#endif // U_HIDE_DRAFT_API
 
     /**
      * Show numbers rounded and padded according to the rules for the currency unit. The most common
