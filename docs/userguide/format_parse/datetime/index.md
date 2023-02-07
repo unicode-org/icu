@@ -342,6 +342,14 @@ patterns for different locales:
 | es_ES  | `"d 'de' MMMM, H:mm"`                    | "2 de abril, 17:00"  |
 | ja_JP  | `"M月d日 H:mm"`                            | "4月2日 17:00"         |
 
+A full list of date and time symbols that can be used in skeleton strings
+(input to `DateTimePatternGenerator`) can be found in the 
+[UTS 35 (LDML) Date Field Symbol Table](https://unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table).
+
+Note: some date time symbols are intended only for use in skeleton strings, and are not intended
+to be used in pattern strings (output from `DateTimePatternGenerator`). Such symbols are noted accordingly
+in the table.
+
 The most important DateTimePatternGenerator methods are the varieties of
 getBestPattern.
 
