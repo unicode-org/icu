@@ -351,13 +351,11 @@ typedef enum UNumberFormatFields {
     UNUM_MEASURE_UNIT_FIELD,
     /** @stable ICU 64 */
     UNUM_COMPACT_FIELD,
-#ifndef U_HIDE_DRAFT_API
     /**
      * Approximately sign. In ICU 70, this was categorized under the generic SIGN field.
-     * @draft ICU 71
+     * @stable ICU 71
      */
     UNUM_APPROXIMATELY_SIGN_FIELD,
-#endif // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
