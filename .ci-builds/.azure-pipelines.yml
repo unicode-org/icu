@@ -2,11 +2,11 @@
 
 jobs:
 #-------------------------------------------------------------------------
-- job: ICU4J_OpenJDK_Ubuntu_1804
-  displayName: 'J: Linux OpenJDK (Ubuntu 18.04)'
+- job: ICU4J_OpenJDK_Ubuntu_2204
+  displayName: 'J: Linux OpenJDK (Ubuntu 22.04)'
   timeoutInMinutes: 20
   pool:
-    vmImage: 'ubuntu-18.04'
+    vmImage: 'ubuntu-22.04'
     demands: ant
   steps:
     - checkout: self
@@ -23,11 +23,11 @@ jobs:
       condition: failed() # only run if the build fails.
       displayName: 'List failures (if any)'
 #-------------------------------------------------------------------------
-- job: ICU4C_Clang_Ubuntu_1804
-  displayName: 'C: Linux Clang (Ubuntu 18.04)'
+- job: ICU4C_Clang_Ubuntu_2204
+  displayName: 'C: Linux Clang (Ubuntu 22.04)'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'ubuntu-18.04'
+    vmImage: 'ubuntu-22.04'
   steps:
     - checkout: self
       lfs: true
@@ -45,11 +45,11 @@ jobs:
         cd icu4c/source/test/cintltst && LANG=C.UTF-8 LD_LIBRARY_PATH=../../lib:../../tools/ctestfw ./cintltst /tsutil/cloctst/TestCDefaultLocale
       displayName: 'Test C.UTF-8 Default locale'
 #-------------------------------------------------------------------------
-- job: ICU4C_Clang_Ubuntu_DataFilter_1804
-  displayName: 'C: Linux Clang DataFilter (Ubuntu 18.04)'
+- job: ICU4C_Clang_Ubuntu_DataFilter_2204
+  displayName: 'C: Linux Clang DataFilter (Ubuntu 22.04)'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'ubuntu-18.04'
+    vmImage: 'ubuntu-22.04'
   steps:
     - checkout: self
       lfs: true
@@ -65,11 +65,11 @@ jobs:
         CC: clang
         CXX: clang++
 #-------------------------------------------------------------------------
-- job: ICU4C_Clang_Cpp14_Debug_Ubuntu_1804
-  displayName: 'C: Linux Clang C++17 Debug (Ubuntu 18.04)'
+- job: ICU4C_Clang_Cpp14_Debug_Ubuntu_2204
+  displayName: 'C: Linux Clang C++17 Debug (Ubuntu 22.04)'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'ubuntu-18.04'
+    vmImage: 'ubuntu-22.04'
   steps:
     - checkout: self
       lfs: true
@@ -612,11 +612,11 @@ jobs:
         CC: gcc
         CXX: g++
 #-------------------------------------------------------------------------
-- job: ICU4C_icuexportdata_Ubuntu_1804
+- job: ICU4C_icuexportdata_Ubuntu_2204
   displayName: 'C: Create Artifacts from icuexportdata'
   timeoutInMinutes: 30
   pool:
-    vmImage: 'ubuntu-18.04'
+    vmImage: 'ubuntu-22.04'
   steps:
     - checkout: self
       lfs: true

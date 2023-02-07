@@ -28,19 +28,19 @@ pr:
 
 jobs:
 #-------------------------------------------------------------------------
-- job: ICU4C_Clang_Valgrind_Ubuntu_1804
-  displayName: 'C: Linux Clang Valgrind (Ubuntu 18.04)'
+- job: ICU4C_Clang_Valgrind_Ubuntu_2004
+  displayName: 'C: Linux Clang Valgrind (Ubuntu 20.04)'
   timeoutInMinutes: 75
   pool:
-    vmImage: 'ubuntu-18.04'
+    vmImage: 'ubuntu-20.04'
   steps:
     - checkout: self
       lfs: true
       fetchDepth: 10
     - script: |
         set -ex
-        sudo apt -y update
-        sudo apt install -y valgrind
+        sudo apt-get -y update
+        sudo apt-get install -y valgrind
       displayName: 'Install valgrind'
       timeoutInMinutes: 5
     - script: |
