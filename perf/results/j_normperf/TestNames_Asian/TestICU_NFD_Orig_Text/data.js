@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1675727457695,
+  "lastUpdate": 1675735337941,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -4858,6 +4858,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_Orig_Text",
             "value": 15.920576370190977,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "committer": {
+            "email": "markus.icu@gmail.com",
+            "name": "Markus Scherer",
+            "username": "markusicu"
+          },
+          "distinct": true,
+          "id": "39dfee39b88a09fcafb33992a5495c4117490644",
+          "message": "ICU-22257 BRS doc: J with little-endian data automatic",
+          "timestamp": "2023-02-06T17:52:40-08:00",
+          "tree_id": "f7b750f20376f0be1ea10ec21548b44276a631e2",
+          "url": "https://github.com/unicode-org/icu/commit/39dfee39b88a09fcafb33992a5495c4117490644"
+        },
+        "date": 1675735322879,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_Orig_Text",
+            "value": 15.930622474455555,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
