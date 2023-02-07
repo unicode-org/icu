@@ -30,11 +30,11 @@ trigger:
 jobs:
 #-------------------------------------------------------------------------
 # Note: The exhaustive tests can take more than 1 hour to complete.
-- job: ICU4J_OpenJDK_Ubuntu_1804
-  displayName: 'J: Linux OpenJDK (Ubuntu 18.04)'
+- job: ICU4J_OpenJDK_Ubuntu_2204
+  displayName: 'J: Linux OpenJDK (Ubuntu 22.04)'
   timeoutInMinutes: 120
   pool:
-    vmImage: 'ubuntu-18.04'
+    vmImage: 'ubuntu-22.04'
     demands: ant
   steps:
     - checkout: self
@@ -52,11 +52,11 @@ jobs:
       timeoutInMinutes: 2
 #-------------------------------------------------------------------------
 # Note: The exhaustive tests can take more than 1 hour to complete.
-- job: ICU4C_Clang_Exhaustive_Ubuntu_1804
-  displayName: 'C: Linux Clang Exhaustive Tests (Ubuntu 18.04)'
+- job: ICU4C_Clang_Exhaustive_Ubuntu_2204
+  displayName: 'C: Linux Clang Exhaustive Tests (Ubuntu 22.04)'
   timeoutInMinutes: 120
   pool:
-    vmImage: 'ubuntu-18.04'
+    vmImage: 'ubuntu-22.04'
   steps:
     - checkout: self
       lfs: true
@@ -73,10 +73,10 @@ jobs:
 #-------------------------------------------------------------------------
 # Based on https://unicode-org.github.io/icu/processes/release/tasks/integration.html#test-icu4j-with-only-little-endian-icu4c-data
 - job: ICU4J_with_only_little_endian_ICU4C_data
-  displayName: 'CJ: ICU4J Linux Clang Tests little-endian ICU4C data (Ubuntu 18.04)'
+  displayName: 'CJ: ICU4J Linux Clang Tests little-endian ICU4C data (Ubuntu 22.04)'
   timeoutInMinutes: 50
   pool:
-    vmImage: 'ubuntu-18.04'
+    vmImage: 'ubuntu-22.04'
     demands: ant
   steps:
     - checkout: self
