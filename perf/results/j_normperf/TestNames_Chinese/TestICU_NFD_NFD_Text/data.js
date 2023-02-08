@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1675735256454,
+  "lastUpdate": 1675893267581,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -5128,6 +5128,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 3.692475389593232,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "ftang@google.com",
+            "name": "Frank Yung-Fong Tang",
+            "username": "FrankYFTang"
+          },
+          "distinct": true,
+          "id": "3f093b602a2de85c95249a057ab0bc5528bbda82",
+          "message": "ICU-22266 update OS version to 22.04 from 18.04\n\nUpdate configuration in main/.ci-builds from the deprecated 18.04\nto the newest 22.04\n\nSince vangrind has issue under 22.04 use 20.04 for vangrind for now.\n\nAlso use apt-get instead of apt since apt does not have a stable\ncommandline interface.",
+          "timestamp": "2023-02-08T13:43:14-08:00",
+          "tree_id": "cdf7cfee32d593132cafd9a0c17b0fe01060b715",
+          "url": "https://github.com/unicode-org/icu/commit/3f093b602a2de85c95249a057ab0bc5528bbda82"
+        },
+        "date": 1675893250509,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 3.6867536172715707,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
