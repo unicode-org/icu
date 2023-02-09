@@ -131,6 +131,29 @@ private:
 
 PropertyValueNameGetter::~PropertyValueNameGetter() {}
 
+// Dump an aliases = [...] key for properties with aliases
+void dumpPropertyAliases(UProperty uproperty, FILE* f) {
+    int i = U_LONG_PROPERTY_NAME + 1;
+
+    while(true) {
+        // The API works by having extra names after U_LONG_PROPERTY_NAME, sequentially,
+        // and returning null after that
+        const char* alias = u_getPropertyName(uproperty, (UPropertyNameChoice) i);
+        if (!alias) {
+            break;
+        }
+        if (i == U_LONG_PROPERTY_NAME + 1) {
+            fprintf(f, "aliases = [\"%s\"", alias);
+        } else {
+            fprintf(f, ", \"%s\"", alias);
+        }
+        i++;
+    }
+    if (i != U_LONG_PROPERTY_NAME + 1) {
+        fprintf(f, "]\n");
+    }
+}
+
 void dumpBinaryProperty(UProperty uproperty, FILE* f) {
     IcuToolErrorCode status("icuexportdata: dumpBinaryProperty");
     const char* fullPropName = u_getPropertyName(uproperty, U_LONG_PROPERTY_NAME);
@@ -141,6 +164,7 @@ void dumpBinaryProperty(UProperty uproperty, FILE* f) {
     fputs("[[binary_property]]\n", f);
     fprintf(f, "long_name = \"%s\"\n", fullPropName);
     if (shortPropName) fprintf(f, "short_name = \"%s\"\n", shortPropName);
+    dumpPropertyAliases(uproperty, f);
     usrc_writeUnicodeSet(f, uset, UPRV_TARGET_SYNTAX_TOML);
 }
 
@@ -154,13 +178,51 @@ void dumpEnumeratedProperty(UProperty uproperty, FILE* f) {
     fputs("[[enum_property]]\n", f);
     fprintf(f, "long_name = \"%s\"\n", fullPropName);
     if (shortPropName) fprintf(f, "short_name = \"%s\"\n", shortPropName);
+    dumpPropertyAliases(uproperty, f);
+
+    int32_t minValue = u_getIntPropertyMinValue(uproperty);
+    U_ASSERT(minValue >= 0);
+    int32_t maxValue = u_getIntPropertyMaxValue(uproperty);
+    U_ASSERT(maxValue >= 0);
+
+    fprintf(f, "values = [\n");
+    for (int v = minValue; v <= maxValue; v++) {
+        const char* fullValueName = u_getPropertyValueName(uproperty, v, U_LONG_PROPERTY_NAME);
+        const char* shortValueName = u_getPropertyValueName(uproperty, v, U_SHORT_PROPERTY_NAME);
+        if (!fullValueName) {
+            continue;
+        }
+        fprintf(f, "  {discr = %i, long = \"%s\"", v, fullValueName);
+        if (shortValueName) {
+            fprintf(f, ", short = \"%s\"", shortValueName);
+        }
+        int i = U_LONG_PROPERTY_NAME + 1;
+        while(true) {
+            // The API works by having extra names after U_LONG_PROPERTY_NAME, sequentially,
+            // and returning null after that
+            const char* alias = u_getPropertyValueName(uproperty, v, (UPropertyNameChoice) i);
+            if (!alias) {
+                break;
+            }
+            if (i == U_LONG_PROPERTY_NAME + 1) {
+                fprintf(f, ", aliases = [\"%s\"", alias);
+            } else {
+                fprintf(f, ", \"%s\"", alias);
+            }
+            i++;
+        }
+        if (i != U_LONG_PROPERTY_NAME + 1) {
+            fprintf(f, "]");
+        }
+        fprintf(f, "},\n");
+    }
+    fprintf(f, "]\n");
+
     PropertyValueNameGetter valueNameGetter(uproperty);
     usrc_writeUCPMap(f, umap, &valueNameGetter, UPRV_TARGET_SYNTAX_TOML);
     fputs("\n", f);
 
-    U_ASSERT(u_getIntPropertyMinValue(uproperty) >= 0);
-    int32_t maxValue = u_getIntPropertyMaxValue(uproperty);
-    U_ASSERT(maxValue >= 0);
+
     UCPTrieValueWidth width = UCPTRIE_VALUE_BITS_32;
     if (maxValue <= 0xff) {
         width = UCPTRIE_VALUE_BITS_8;
@@ -187,6 +249,7 @@ void dumpScriptExtensions(FILE* f) {
     const char* scxShortPropName = u_getPropertyName(UCHAR_SCRIPT_EXTENSIONS, U_SHORT_PROPERTY_NAME);
     fprintf(f, "long_name = \"%s\"\n", scxFullPropName);
     if (scxShortPropName) fprintf(f, "short_name = \"%s\"\n", scxShortPropName);
+    dumpPropertyAliases(UCHAR_SCRIPT_EXTENSIONS, f);
 
     // We want to use 16 bits for our exported trie of sc/scx data because we
     // need 12 bits to match the 12 bits of data stored for sc/scx in the trie
