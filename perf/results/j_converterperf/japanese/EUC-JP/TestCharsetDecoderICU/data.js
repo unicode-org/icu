@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1675990270818,
+  "lastUpdate": 1675993575322,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -5068,6 +5068,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestCharsetDecoderICU",
             "value": 0.012763207801315988,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ftang@chromium.org",
+            "name": "Frank Tang",
+            "username": "FrankYFTang"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "ec2d4b346edab4b803a85464a4ff170bf28cb417",
+          "message": "ICU-22251 Move sprintf to snprintf.\n\nSee #2291",
+          "timestamp": "2023-02-09T17:38:32-08:00",
+          "tree_id": "12cdd6a87c85ce8ed9bb454ea638ac0b1f3137b2",
+          "url": "https://github.com/unicode-org/icu/commit/ec2d4b346edab4b803a85464a4ff170bf28cb417"
+        },
+        "date": 1675993558083,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestCharsetDecoderICU",
+            "value": 0.013438065039329818,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
