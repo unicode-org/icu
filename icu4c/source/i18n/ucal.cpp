@@ -710,6 +710,7 @@ static const char * const CAL_TYPES[] = {
         "islamic-umalqura",
         "islamic-tbla",
         "islamic-rgsa",
+        "myanmar",
         nullptr
 };
 
