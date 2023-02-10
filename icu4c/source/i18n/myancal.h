@@ -1,4 +1,4 @@
-// © 2019 and later: Unicode, Inc. and others.
+// © 2023 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /*
  * File MYANCAL.H
@@ -30,6 +30,7 @@ U_NAMESPACE_BEGIN
  * The Myanmar calendar has been recalibrated over the years and has been in its current
  * era since 1951 CE. Additional months such as Late Tagu / Late Kason, and other concepts are
  * supported to accommodate older eras.
+ * Adapted from a C++ implementation by Yan Naing Aye https://github.com/yan9a/mmcal/tree/master/cpp
  *
  * @see GregorianCalendar
  *
