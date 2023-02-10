@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1675960695972,
+  "lastUpdate": 1675987229770,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -5038,6 +5038,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFD_Text",
             "value": 4.880860640488484,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "manishsmail@gmail.com",
+            "name": "Manish Goregaokar",
+            "username": "Manishearth"
+          },
+          "committer": {
+            "email": "shane@unicode.org",
+            "name": "Shane F. Carr",
+            "username": "sffc"
+          },
+          "distinct": true,
+          "id": "9f108554af3eea7739dd07598c8e681926dc9755",
+          "message": "ICU-22270 icuexportdata: Add property and property value names/aliases",
+          "timestamp": "2023-02-09T15:44:48-08:00",
+          "tree_id": "b51aea8d52b7d05eb29fabf01da950694fda57d0",
+          "url": "https://github.com/unicode-org/icu/commit/9f108554af3eea7739dd07598c8e681926dc9755"
+        },
+        "date": 1675987200728,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFD_Text",
+            "value": 5.441045257872717,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
