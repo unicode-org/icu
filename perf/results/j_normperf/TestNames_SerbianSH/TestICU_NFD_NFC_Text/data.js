@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1675990581161,
+  "lastUpdate": 1675990595254,
   "repoUrl": "https://github.com/unicode-org/icu",
   "entries": {
     "Benchmark": [
@@ -9898,6 +9898,36 @@ window.BENCHMARK_DATA = {
           {
             "name": "TestICU_NFD_NFC_Text",
             "value": 11.982807583274425,
+            "unit": "ns/iter",
+            "biggerIsBetter": false
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "richard_gillam@apple.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "committer": {
+            "email": "62772518+richgillam@users.noreply.github.com",
+            "name": "Rich Gillam",
+            "username": "richgillam"
+          },
+          "distinct": true,
+          "id": "288c4c7555915ce7b1fb675d94ddd495058fc039",
+          "message": "ICU-22220 ICU 73 API promotions (promoting ICU 71 and earlier)",
+          "timestamp": "2023-02-09T16:44:56-08:00",
+          "tree_id": "e313f0c03ca432bb9e7db57ab537d0cc87d4dc7f",
+          "url": "https://github.com/unicode-org/icu/commit/288c4c7555915ce7b1fb675d94ddd495058fc039"
+        },
+        "date": 1675990578057,
+        "tool": "ndjson",
+        "benches": [
+          {
+            "name": "TestICU_NFD_NFC_Text",
+            "value": 13.796624857340246,
             "unit": "ns/iter",
             "biggerIsBetter": false
           }
