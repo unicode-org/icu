@@ -103,9 +103,9 @@ class MyanmarCalendar : public Calendar {
 
  private:
   /**
-   * Determine whether a year is a common, little watat, or big watat year in the Myanmar calendar
+   * Determine whether a year is either a little watat or big watat year in the Myanmar calendar
    */
-  static int32_t isLeapYear(int32_t year);
+  static bool isLeapYear(int32_t year);
 
   /**
    * Return the day # on which the given year starts.  Days are counted
