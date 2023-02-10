@@ -7,40 +7,142 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * {@code MessageFormatter} is the next iteration of {@link com.ibm.icu.text.MessageFormat}.
+ * <h3>Overview of {@code MessageFormatter}</h3>
+ * 
+ * <p>In ICU4J, the {@code MessageFormatter} class is the next iteration of {@link com.ibm.icu.text.MessageFormat}.
+ * This new version will build on the lessons learned from using MessageFormat for 25 years
+ * in various environments, when used directly or as a base for other public APIs.</p>
  *
- * <p>This new version builds on what we learned from using {@code MessageFormat} for 20 years
- * in various environments, either exposed "as is" or as a base for other public APIs.</p>
- *
- * <p>It is more modular, easier to backport, and provides extension points to add new
- * formatters and selectors without having to modify the specification.</p>
- *
- * <p>We will be able to add formatters for intervals, relative times, lists, measurement units,
- * people names, and more, and support custom formatters implemented by developers
- * outside of ICU itself, for company or even product specific needs.</p>
- *
- * <p>MessageFormat 2 will support more complex grammatical features, such as gender, inflections,
- * and tagging parts of the message for style changes or speech.</p>
- *
- * <p>The reasoning for this effort is shared in the
+ * 
+ * <p>The effort to design a succesor to {@code MessageFormat} will result in a specification
+ * referred to as MessageFormat 2.0.
+ * The reasoning for this effort is shared in the
  * <a target="github" href="https://github.com/unicode-org/message-format-wg/blob/main/docs/why_mf_next.md">“Why
  * MessageFormat needs a successor”</a> document.</p>
  *
- * <p>The “MessageFormat 2” project, which develops the new data model, semantics, and syntax,
- * is hosted on <a target="github" href="https://github.com/unicode-org/message-format-wg">GitHub</a>.</p>
+ * <p>MessageFormat 2.0 will be more modular and easier to port and backport.
+ * It will also provide extension points via interfaces to allow users to supply new formatters and selectors without having to modify the specification.
+ * ICU will eventually include support for new formatters, such as intervals, relative time, lists, measurement units, personal names, and more,
+ * as well as the ability for users to supply their own custom implementations.
+ * These will potentially support use cases like grammatical gender, inflection, markup regimes (such as those require for text-to-speech),
+ * and other complex message management needs.</p>
  *
- * <p>The current specification for the syntax and data model can be found
+ * <p>The MessageFormat Working Group, which develops the new data model, semantics, and syntax,
+ * is hosted on <a target="github" href="https://github.com/unicode-org/message-format-wg">GitHub</a>.
+ * The current specification for the syntax and data model can be found
  * <a target="github" href="https://github.com/unicode-org/message-format-wg/blob/main/spec/syntax.md">here</a>.</p>
  *
- * <p>This tech preview implements enough of the {@code MessageFormat} functions to be useful,
+ * <p>This technical preview implements enough functions for {@code MessageFormatter} to be useful in many situations,
  * but the final set of functions and the parameters accepted by those functions is not yet finalized.</p>
  *
+ * <h3>Examples</h3>
+ * 
+ * <h4>Basic usage</h4>
+ * 
+ * <blockquote><pre>
+ * import static org.junit.Assert.assertEquals;
+ * import java.util.Date;
+ * import java.util.HashMap;
+ * import java.util.Locale;
+ * import java.util.Map;
+ * 
+ * import com.ibm.icu.message2.MessageFormatter;
+ * 
+ * @Test
+ * public void testMf2() {
+ *     final Locale enGb = Locale.forLanguageTag("en-GB");
+ *     Map<String, Object> arguments = new HashMap<>();
+ *     arguments.put("name", "John");
+ *     arguments.put("exp", new Date(1679971371000L));  // March 27, 2023, 7:42:51 PM
+ * 
+ *     MessageFormatter mf2 = MessageFormatter.builder()
+ *         .setPattern("{Hello {$name}, your card expires on {$exp :datetime skeleton=yMMMdE}!}")
+ *         .setLocale(enGb)
+ *         .build();
+ * 
+ *     assertEquals(
+ *         "Hello John, your card expires on Mon, 27 Mar 2023!",
+ *         mf2.formatToString(arguments));
+ * }
+ * </pre></blockquote>
+ * 
+ * <h4>Placeholder examples</h4>
+ * 
+ * <table border="1">
+ *   <tr>
+ *     <th>Code to set runtime value for placeholder</th>
+ *     <th>Examples of placeholder in message pattern</th>
+ *   </tr>
+ *   <tr>
+ *     <td>{@code arguments.put("name", "John")}</td>
+ *     <td>{@code &#125;$name&#126;}</td>
+ *   </tr>
+ *   <tr>
+ *     <td>{@code arguments.put("exp", new Date(…))}</td>
+ *     <td>{@code &#125;$exp :datetime skeleton=yMMMdE&#126;} <br/> {@code &#125;$exp :datetime datestyle=full&#126;}</td>
+ *   </tr>
+ *   <tr>
+ *     <td>{@code arguments.put("val", 3.141592653)}</td>
+ *     <td>{@code &#125;$val&#126;} <br/> {@code &#125;$val :number skeleton=(.####)&#126;}</td>
+ *   </tr>
+ *   <tr>
+ *     <td>No argument for fixed values known at build time</td>
+ *     <td>{@code &#125;(123456789.531) :number&#126;}</td>
+ *   </tr>
+ * </table>
+ * 
+ * <h4>Plural selection message</h4>
+ * 
+ * <blockquote><pre>
+ * @Test
+ * public void testMf2Selection() {
+ *    final String message = "match {$count :plural}\n"
+ *            + " when one {You have one notification.}\n"
+ *            + " when * {You have {$count} notifications.}\n";
+ *    final Locale enGb = Locale.forLanguageTag("en-GB");
+ *    Map<String, Object> arguments = new HashMap<>();
+ * 
+ * 
+ *    MessageFormatter mf2 = MessageFormatter.builder()
+ *        .setPattern(message)
+ *        .setLocale(enGb)
+ *        .build();
+ * 
+ * 
+ *    arguments.put("count", 1);
+ *    assertEquals(
+ *        "You have one notification.",
+ *        mf2.formatToString(arguments));
+ * 
+ * 
+ *    arguments.put("count", 42);
+ *    assertEquals(
+ *        "You have 42 notifications.",
+ *        mf2.formatToString(arguments));
+ * }
+ * </pre></blockquote>
+ * 
+ * <h4>Built-in formatter functions</h4>
+ * 
+ * <p>The tech preview implementation comes with formatters for numbers ({@code number}), 
+ * date / time ({@code datetime}), 
+ * plural selectors ({@code plural} and {@code selectordinal}),
+ * and general selector ({@code select}), 
+ * very similar to what MessageFormat offers.</p>
+ * 
+ * <p>The <a target="github" href="https://github.com/unicode-org/icu/tree/main/icu4j/main/tests/core/src/com/ibm/icu/dev/test/message2">ICU test code</a>
+ * covers most features, and has examples of how to make custom placeholder formatters;
+ * you can look for classes that implement {@code com.ibm.icu.message2.FormatterFactory}
+ * (they are named {@code Custom*Test.java}).</p>
+ * 
+ * <h3>Functions currently implemented</h3>
+ * 
  * <p>These are the functions interpreted right now:</p>
  *
  * <table border="1">
  * <tr>
  *   <td rowspan="4">{@code datetime}</td>
- *   <td>Similar to the ICU {@code "date"} and {@code "time"}.</td>
+ *   <td>Similar to MessageFormat's {@code date} and {@code time}.</td>
  * </tr>
  *
  *   <tr><td>{@code datestyle} and {@code timestyle}<br>
@@ -62,7 +164,7 @@ import java.util.Map;
  *
  * <tr>
  *   <td rowspan="4">{@code number}</td>
- *   <td>Similar to the ICU "number".</td>
+ *   <td>Similar to MessageFormat's {@code number}.</td>
  * </tr>
  *
  *   <tr><td>{@code skeleton}<br>
@@ -80,7 +182,7 @@ import java.util.Map;
  *
  * <tr>
  *   <td rowspan="3">{@code plural}</td>
- *   <td>Similar to the ICU {@code "plural"}.</td>
+ *   <td>Similar to MessageFormat's {@code plural}.</td>
  * </tr>
  *
  *   <tr><td>{@code skeleton}<br>
@@ -93,11 +195,11 @@ import java.util.Map;
  *
  * <tr>
  *   <td>{@code selectordinal}</td>
- *   <td>Similar to the ICU {@code "selectordinal"}.<br>
- * For now it accepts the same parameters as "plural", although there is no use case for them.<br>
- * TBD if this will be merged into "plural" (with some {@code kind} option) or not.</td></tr>
+ *   <td>Similar to MessageFormat's {@code selectordinal}.<br>
+ * For now it accepts the same parameters as {@code plural}, although there is no use case for them.<br>
+ * TBD if this will be merged into {@code plural} (with some {@code kind} option) or not.</td></tr>
  *
- * <tr><td>{@code select}</td><td>Literal match, same as the ICU4 {@code "select"}.</td></tr>
+ * <tr><td>{@code select}</td><td>Literal match, same as MessageFormat's {@code select}.</td></tr>
  * </table>
  *
  * @internal ICU 72 technology preview
