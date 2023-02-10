@@ -104,11 +104,13 @@ int32_t MyanmarCalendar::handleGetLimit(UCalendarDateFields field, ELimitType li
 //
 
 /**
- * Determine whether a Myanmar year is a leap year (big or little watat)
+ * Determine whether a Myanmar year is a leap year (either big or little watat)
  */
-UBool MyanmarCalendar::isLeapYear(int32_t year)
+bool MyanmarCalendar::isLeapYear(int32_t year)
 {
-    return false;
+    // long watat_type, waso_type;
+    // cal_watat(year, watat_type, waso_type);
+    return false; // watat_type > 0;
 }
 
 /**
@@ -116,7 +118,7 @@ UBool MyanmarCalendar::isLeapYear(int32_t year)
  * from the Myanmar epoch, origin 0.
  */
 int32_t MyanmarCalendar::yearStart(int32_t year) {
-    return handleComputeMonthStart(year,1,FALSE);
+    return handleComputeMonthStart(year, 1, false);
 }
 
 /**
@@ -127,7 +129,7 @@ int32_t MyanmarCalendar::yearStart(int32_t year) {
  * @param month The Myanmar month, 0-based
  */
 int32_t MyanmarCalendar::monthStart(int32_t year, int32_t month) const {
-    return handleComputeMonthStart(year,month,TRUE);
+    return handleComputeMonthStart(year, month, true);
 }
 
 //----------------------------------------------------------------------
@@ -144,17 +146,18 @@ int32_t MyanmarCalendar::handleGetMonthLength(int32_t extendedYear, int32_t mont
     // If the month is out of range, adjust it into range, and
     // modify the extended year value accordingly.
     // if (month < 0 || month > 12) {
-    //     extendedYear += ClockMath::floorDivide(month, 13, month);
+        // extendedYear += fmod(month, 13);
     // }
 
-    bool watat_year = isLeapYear(extendedYear);
-    if (watat_year) {
+    long watat_type, waso_type;
+    cal_watat(extendedYear, watat_type, waso_type);
+    if (watat_type == 0) {
       return kMyanmarMonthLength[month];
-    } else {
+    } else if (watat_type == 1) {
       return kMyanmarSmallLeapMonthLength[month];
-    } //else if (watat_year == 2) {
-      //return kMyanmarLargeLeapMonthLength[month];
-    //}
+    } else {
+      return kMyanmarLargeLeapMonthLength[month];
+    }
 }
 
 /**
@@ -162,15 +165,16 @@ int32_t MyanmarCalendar::handleGetMonthLength(int32_t extendedYear, int32_t mont
  */
 int32_t MyanmarCalendar::handleGetYearLength(int32_t extendedYear) const {
     int32_t leapStatus;
+    long watat_type, waso_type;
 
-    leapStatus = isLeapYear(extendedYear);
-    if (leapStatus) {
+    cal_watat(extendedYear, watat_type, waso_type);
+    if (watat_type == 0) {
       return 354;
-    } else { //if (leapStatus == 1) {
+    } else if (watat_type == 1) {
       return 384;
-    }// else if (leapStatus == 2) {
-    //  return 385;
-    //}
+    } else {
+      return 385;
+    }
 }
 
 void MyanmarCalendar::cal_my(int32_t myan_year, int32_t& myan_year_type, long& startOfTagu, long& full_moon_waso_2, long& addedOffset) const {
@@ -443,11 +447,11 @@ void MyanmarCalendar::cal_watat(int32_t myan_year, long& watat, long& full_moon_
 
 static UDate           gSystemDefaultCenturyStart       = DBL_MIN;
 static int32_t         gSystemDefaultCenturyStartYear   = -1;
-static icu::UInitOnce  gSystemDefaultCenturyInit        = U_INITONCE_INITIALIZER;
+static icu::UInitOnce  gSystemDefaultCenturyInit        = {};
 
 UBool MyanmarCalendar::haveDefaultCentury() const
 {
-    return TRUE;
+    return true;
 }
 
 static void U_CALLCONV initializeSystemDefaultCentury() {
