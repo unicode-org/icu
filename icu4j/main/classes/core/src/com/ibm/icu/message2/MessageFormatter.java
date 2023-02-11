@@ -79,11 +79,11 @@ import java.util.Map;
  *   </tr>
  *   <tr>
  *     <td>{@code arguments.put("exp", new Date(…))}</td>
- *     <td>{@code &#125;$exp :datetime skeleton=yMMMdE&#126;} <br/> {@code &#125;$exp :datetime datestyle=full&#126;}</td>
+ *     <td>{@code &#125;$exp :datetime skeleton=yMMMdE&#126;} <br> {@code &#125;$exp :datetime datestyle=full&#126;}</td>
  *   </tr>
  *   <tr>
  *     <td>{@code arguments.put("val", 3.141592653)}</td>
- *     <td>{@code &#125;$val&#126;} <br/> {@code &#125;$val :number skeleton=(.####)&#126;}</td>
+ *     <td>{@code &#125;$val&#126;} <br> {@code &#125;$val :number skeleton=(.####)&#126;}</td>
  *   </tr>
  *   <tr>
  *     <td>No argument for fixed values known at build time</td>
