@@ -146,32 +146,32 @@ constexpr double TSURPHU_ALPHA = 2 + 1903.0 / 18090; // as in [Janson] (C.44)
  */
 int32_t TibetanCalendar::trueDate(int32_t day, int32_t monthCount) const {
 
-    double meanDate =  monthCount*M1 + day*M2 + PHUGPA_M0;
-    double moonAnomaly = 28.0*(monthCount*A1 + day*A2 + PHUGPA_A0);
-    int32_t mu = moonTab((int)ceil(moonAnomaly)); 
-    int32_t md = moonTab((int)floor(moonAnomaly));
-    double moonEqu = (md + (moonAnomaly - floor(moonAnomaly))*(mu - md))/60.0;
-    double sunAnomaly = 12.0*(monthCount*S1 + day*S2 + PHUGPA_S0 - 1.0/4);
-    int32_t su = sunTab((int)ceil(sunAnomaly));
-    int32_t sd = sunTab((int)floor(sunAnomaly));
-    double sunEqu = (sd +(sunAnomaly - floor(sunAnomaly))*(su - sd))/60.0;
+    double meanDate =  monthCount * M1 + day * M2 + PHUGPA_M0;
+    double moonAnomaly = 28.0 * (monthCount * A1 + day * A2 + PHUGPA_A0);
+    int32_t mu = moonTab((int32_t) ceil(moonAnomaly)); 
+    int32_t md = moonTab((int32_t) floor(moonAnomaly));
+    double moonEqu = (md + (moonAnomaly - floor(moonAnomaly)) * (mu - md)) / 60.0;
+    double sunAnomaly = 12.0 * (monthCount * S1 + day * S2 + PHUGPA_S0 - 1.0 / 4);
+    int32_t su = sunTab((int32_t) ceil(sunAnomaly));
+    int32_t sd = sunTab((int32_t) floor(sunAnomaly));
+    double sunEqu = (sd + (sunAnomaly - floor(sunAnomaly)) * (su - sd)) / 60.0;
 
-    return (int)floor(meanDate + moonEqu - sunEqu);
+    return (int32_t) floor(meanDate + moonEqu - sunEqu);
 }
 
 int32_t TibetanTsurphuCalendar::trueDate(int32_t day, int32_t monthCount) const {
 
-    double meanDate =  monthCount*M1 + day*M2 + TSURPHU_M0;
-    double moonAnomaly = 28.0*(monthCount*A1 + day*A2 + TSURPHU_A0);
-    int32_t mu = moonTab((int)ceil(moonAnomaly)); 
-    int32_t md = moonTab((int)floor(moonAnomaly));
-    double moonEqu = (md + (moonAnomaly - floor(moonAnomaly))*(mu - md))/60.0;
-    double sunAnomaly = 12.0*(monthCount*S1 + day*S2 + TSURPHU_S0 - 1.0/4);
-    int32_t su = sunTab((int)ceil(sunAnomaly));
-    int32_t sd = sunTab((int)floor(sunAnomaly));
-    double sunEqu = (sd +(sunAnomaly - floor(sunAnomaly))*(su - sd))/60.0;
+    double meanDate =  monthCount * M1 + day * M2 + TSURPHU_M0;
+    double moonAnomaly = 28.0 * (monthCount * A1 + day * A2 + TSURPHU_A0);
+    int32_t mu = moonTab((int32_t) ceil(moonAnomaly)); 
+    int32_t md = moonTab((int32_t) floor(moonAnomaly));
+    double moonEqu = (md + (moonAnomaly - floor(moonAnomaly)) * (mu - md)) / 60.0;
+    double sunAnomaly = 12.0 * (monthCount * S1 + day * S2 + TSURPHU_S0 - 1.0 / 4);
+    int32_t su = sunTab((int32_t) ceil(sunAnomaly));
+    int32_t sd = sunTab((int32_t) floor(sunAnomaly));
+    double sunEqu = (sd + (sunAnomaly - floor(sunAnomaly)) * (su - sd)) / 60.0;
 
-    return (int)floor(meanDate + moonEqu - sunEqu);
+    return (int32_t) floor(meanDate + moonEqu - sunEqu);
 }
 
 
@@ -183,12 +183,12 @@ int32_t TibetanTsurphuCalendar::trueDate(int32_t day, int32_t monthCount) const 
  */
 int32_t TibetanCalendar::toMonthCount(int32_t eyear, int32_t month, int32_t is_leap_month) const {
 
-    return floor((12*(eyear-127-PHUGPA_YEAR0) + month - PHUGPA_ALPHA - (1.0-12.0*S1)*is_leap_month)/(12.0*S1));
+    return floor((12 * (eyear - 127 - PHUGPA_YEAR0) + month - PHUGPA_ALPHA - (1.0 - 12.0 * S1) * is_leap_month) / (12.0 * S1));
 }
 
 int32_t TibetanTsurphuCalendar::toMonthCount(int32_t eyear, int32_t month, int32_t is_leap_month) const {
 
-    return floor((12*(eyear-127-TSURPHU_YEAR0) + month - TSURPHU_ALPHA - (1.0-12.0*S1)*is_leap_month)/(12.0*S1));
+    return floor((12 * (eyear - 127 - TSURPHU_YEAR0) + month - TSURPHU_ALPHA - (1.0 - 12.0 * S1) * is_leap_month) / (12.0 * S1));
 }
 
 
@@ -234,6 +234,7 @@ static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // JULIAN_DAY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECONDS_IN_DAY
     {        0,        0,        1,        1}, // IS_LEAP_MONTH
+    {        0,        0,       11,       12}, // ORDINAL_MONTH
 };
 
 
@@ -249,8 +250,8 @@ int32_t TibetanCalendar::handleGetMonthLength(int32_t eyear, int32_t month) cons
     int32_t is_leap_month = internalGet(UCAL_IS_LEAP_MONTH);
     int32_t monthCount = toMonthCount(eyear, month, is_leap_month);
 
-    int32_t thisStart = trueDate(30,monthCount-1);
-    int32_t nextStart = trueDate(30,monthCount);
+    int32_t thisStart = trueDate(30, monthCount - 1);
+    int32_t nextStart = trueDate(30, monthCount);
     return nextStart - thisStart;
 }
 
@@ -259,12 +260,10 @@ int32_t TibetanCalendar::handleGetMonthLength(int32_t eyear, int32_t month) cons
  * Returns the Julian day of start of given month/year.
  * @internal
  */
- int32_t TibetanCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth) const {
-     UErrorCode status = U_ZERO_ERROR;
-
+ int32_t TibetanCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool) const {
      int32_t is_leap_month = internalGet(UCAL_IS_LEAP_MONTH);
      int32_t monthCount = toMonthCount(eyear, month, is_leap_month);
-     return (int)(trueDate(30, monthCount-1));
+     return (int)(trueDate(30, monthCount - 1));
  }
 
 
@@ -303,7 +302,7 @@ void TibetanCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode&
  * Override Calendar to handle leap months and leap days properly.
  */
 void TibetanCalendar::add(EDateFields field, int32_t amount, UErrorCode& status) {
-    add((UCalendarDateFields)field, amount, status);
+    add((UCalendarDateFields) field, amount, status);
 }
 
 
@@ -311,7 +310,7 @@ void TibetanCalendar::add(EDateFields field, int32_t amount, UErrorCode& status)
  * Override Calendar to handle leap months and leap days properly.
  */
 void TibetanCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& status) {
-    if(U_FAILURE(status)) {
+    if (U_FAILURE(status)) {
         return;
     }
     switch (field) {
@@ -361,17 +360,17 @@ void TibetanCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status
   * a calendar with the specified Julian/Gregorian cutover date.
   * @internal
   */
-void TibetanCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status) {
+void TibetanCalendar::handleComputeFields(int32_t julianDay, UErrorCode& ) {
     int32_t gyear = getGregorianYear();
-    int32_t dn1 = 1 + 30*toMonthCount(gyear + 126, 1, 1);
-    int32_t dn2 = 1 + 30*toMonthCount(gyear + 128, 1, 1);
+    int32_t dn1 = 1 + 30 * toMonthCount(gyear + 126, 1, 1);
+    int32_t dn2 = 1 + 30 * toMonthCount(gyear + 128, 1, 1);
 
-    int32_t jd1 = trueDate(amod(dn1, 30), floor((dn1 - 1)/30));
-    int32_t jd2 = trueDate(amod(dn2, 30), floor((dn2 - 1)/30));
+    int32_t jd1 = trueDate(amod(dn1, 30), floor((dn1 - 1) / 30));
+    int32_t jd2 = trueDate(amod(dn2, 30), floor((dn2 - 1) / 30));
 
     while (dn1 < dn2 - 1  && jd1 < jd2 - 1) {
-        int32_t ndn = (dn1 + dn2)>>1;
-        int32_t njd = trueDate(amod(ndn, 30), floor((ndn - 1)/30));
+        int32_t ndn = (dn1 + dn2) >> 1;
+        int32_t njd = trueDate(amod(ndn, 30), floor((ndn - 1) / 30));
 
         if (njd < julianDay) {
             dn1 = ndn;
@@ -386,21 +385,21 @@ void TibetanCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status)
         jd2 = jd1;
         dn2 = dn1;
     }
-    int32_t monthCount = (dn2-1)/30;
-    int32_t x = ceil(12*S1*monthCount + PHUGPA_ALPHA);
+    int32_t monthCount = (dn2 - 1) / 30;
+    int32_t x = ceil(12 * S1 * monthCount + PHUGPA_ALPHA);
 
     int32_t tmonth = amod(x, 12);
-    int32_t tyear = (x - tmonth)/12 + PHUGPA_YEAR0 + 127;
-    bool is_leap_month = (ceil(12*S1*(monthCount + 1) + PHUGPA_ALPHA) == x);
+    int32_t tyear = (x - tmonth) / 12 + PHUGPA_YEAR0 + 127;
+    bool is_leap_month = (ceil(12 * S1 * (monthCount + 1) + PHUGPA_ALPHA) == x);
     int32_t tday = amod(dn2, 30);
     bool is_leap_day = (jd2 > julianDay);
     int32_t dayOfYear = julianDay - trueDate(30, toMonthCount(tyear - 1, 12, 0));
 
-    int32_t cycleNumber = ceil((tyear-1153.0)/60.0);
-    int32_t yearInCycle = (tyear-133) % 60;
+    int32_t cycleNumber = ceil((tyear - 1153.0) / 60.0);
+    int32_t yearInCycle = (tyear - 133) % 60;
     
     if (is_leap_day){
-        tday += (1<<6);
+        tday += (1 << 6);
     }
 
     if (is_leap_month){
@@ -418,17 +417,17 @@ void TibetanCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status)
     internalSet(UCAL_JULIAN_DAY, julianDay);
 }
 
-void TibetanTsurphuCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status) {
+void TibetanTsurphuCalendar::handleComputeFields(int32_t julianDay, UErrorCode &) {
     int32_t gyear = getGregorianYear();
-    int32_t dn1 = 1 + 30*toMonthCount(gyear + 126, 1, 1);
-    int32_t dn2 = 1 + 30*toMonthCount(gyear + 128, 1, 1);
+    int32_t dn1 = 1 + 30 * toMonthCount(gyear + 126, 1, 1);
+    int32_t dn2 = 1 + 30 * toMonthCount(gyear + 128, 1, 1);
 
-    int32_t jd1 = trueDate(amod(dn1, 30), floor((dn1 - 1)/30));
-    int32_t jd2 = trueDate(amod(dn2, 30), floor((dn2 - 1)/30));
+    int32_t jd1 = trueDate(amod(dn1, 30), floor((dn1 - 1) / 30));
+    int32_t jd2 = trueDate(amod(dn2, 30), floor((dn2 - 1) / 30));
 
     while (dn1 < dn2 - 1  && jd1 < jd2 - 1){
-        int32_t ndn = (dn1 + dn2)>>1;
-        int32_t njd = trueDate(amod(ndn, 30), floor((ndn - 1)/30));
+        int32_t ndn = (dn1 + dn2) >> 1;
+        int32_t njd = trueDate(amod(ndn, 30), floor((ndn - 1) / 30));
 
         if (njd < julianDay){
             dn1 = ndn;
@@ -443,21 +442,21 @@ void TibetanTsurphuCalendar::handleComputeFields(int32_t julianDay, UErrorCode &
         jd2 = jd1;
         dn2 = dn1;
     }
-    int32_t monthCount = (dn2-1)/30;
-    int32_t x = ceil(12*S1*monthCount + TSURPHU_ALPHA);
+    int32_t monthCount = (dn2 - 1) / 30;
+    int32_t x = ceil(12 * S1 * monthCount + TSURPHU_ALPHA);
 
     int32_t tmonth = amod(x, 12);
-    int32_t tyear = (x - tmonth)/12 + TSURPHU_YEAR0 + 127;
-    bool is_leap_month = (ceil(12*S1*(monthCount + 1) + TSURPHU_ALPHA) == x);
+    int32_t tyear = (x - tmonth) / 12 + TSURPHU_YEAR0 + 127;
+    bool is_leap_month = (ceil(12 * S1 * (monthCount + 1) + TSURPHU_ALPHA) == x);
     int32_t tday = amod(dn2, 30);
     bool is_leap_day = (jd2 > julianDay);
     int32_t dayOfYear = julianDay - trueDate(30, toMonthCount(tyear - 1, 12, 0));
 
-    int32_t cycleNumber = ceil((tyear-1153.0)/60.0);
-    int32_t yearInCycle = (tyear-133) % 60;
+    int32_t cycleNumber = ceil((tyear - 1153.0) / 60.0);
+    int32_t yearInCycle = (tyear - 133) % 60;
     
     if (is_leap_day){
-        tday += (1<<6);
+        tday += (1 << 6);
     }
 
     if (is_leap_month){
