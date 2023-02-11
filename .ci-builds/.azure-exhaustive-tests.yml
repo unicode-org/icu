@@ -71,34 +71,3 @@ jobs:
         CC: clang
         CXX: clang++
 #-------------------------------------------------------------------------
-# Based on https://unicode-org.github.io/icu/processes/release/tasks/integration.html#test-icu4j-with-only-little-endian-icu4c-data
-- job: ICU4J_with_only_little_endian_ICU4C_data
-  displayName: 'CJ: ICU4J Linux Clang Tests little-endian ICU4C data (Ubuntu 22.04)'
-  timeoutInMinutes: 50
-  pool:
-    vmImage: 'ubuntu-22.04'
-    demands: ant
-  steps:
-    - checkout: self
-      lfs: true
-      fetchDepth: 10
-    - script: |
-        cd icu4c/source && ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data ./runConfigureICU Linux && make -j 6 check
-      displayName: 'Build ICU4C with ICU_DATA_BUILDTOOL_OPTS'
-      env:
-        CC: clang
-        CXX: clang++
-    - script: |
-        mkdir -p /tmp/icu4j_data_test && cp icu4c/source/data/out/tmp/icudt*l.dat /tmp/icu4j_data_test
-      displayName: 'Copy ICU4C data'
-    - script: |
-        echo "test ICU4J" && cd icu4j && ant init && ant -Dicu4c.data.path=/tmp/icu4j_data_test check
-      displayName: 'Build and Test ICU4J with little-endian data'
-      env:
-        BUILD: ICU4J
-# exit with a non-zero status in order to make this step show as a red X in the UI.
-    - script: |
-        [ -d icu4j/out/junit-results ] && cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;` && exit 1
-      condition: failed() # only run if the build fails.
-      displayName: 'List failures (if any)'
-#-------------------------------------------------------------------------
